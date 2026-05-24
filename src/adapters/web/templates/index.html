@@ -8,8 +8,17 @@
 {% block header_cp_right %}{{ army2_cp }}{% endblock %}
 
 {% block sidebar_left %}
-<h2>Armee 1</h2>
-<p class="placeholder">— leer —</p>
+<h2>{{ army.name }}</h2>
+{% for role, units in army.units_by_role().items() %}
+<div class="role-group">
+  <h3 class="role-label">{{ role }}</h3>
+  <ul class="unit-list">
+    {% for unit in units %}
+    <li>{{ unit.name_de }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -43,6 +52,15 @@
 {% endblock %}
 
 {% block sidebar_right %}
-<h2>Armee 2</h2>
-<p class="placeholder">— leer —</p>
+<h2>{{ army.name }}</h2>
+{% for role, units in army.units_by_role().items() %}
+<div class="role-group">
+  <h3 class="role-label">{{ role }}</h3>
+  <ul class="unit-list">
+    {% for unit in units %}
+    <li>{{ unit.name_de }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
 {% endblock %}

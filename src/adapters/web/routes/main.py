@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, current_app, render_template, request
 
 from src.domain.models.phase import PHASES
+from src.domain.ports.army_repository import ArmyRepository
 
 bp = Blueprint("main", __name__)
 
@@ -9,6 +10,9 @@ DEFAULT_MAX_ROUNDS = 5
 
 @bp.route("/")
 def index() -> str:
+    repo: ArmyRepository = current_app.army_repository  # type: ignore[attr-defined]
+    army = repo.get_army()
+
     try:
         phase_index = int(request.args.get("phase", 0))
     except ValueError:
@@ -59,6 +63,7 @@ def index() -> str:
             army1_cp=0,
             army2_vp=0,
             army2_cp=0,
+            army=army,
         )
 
     phase = PHASES[phase_index]
@@ -99,4 +104,5 @@ def index() -> str:
         army1_cp=0,
         army2_vp=0,
         army2_cp=0,
+        army=army,
     )

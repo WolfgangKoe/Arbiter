@@ -12,10 +12,14 @@
 
 ---
 
-## Ziel 2: Armeeverwaltung (nächstes Ziel)
+## Ziel 2: Armeeverwaltung ✅ abgeschlossen
 
-- [ ] YAML-Adapter: Units aus `data/wh40k_9e/necrons/units.yaml` laden
-- [ ] Domain-Modell: `Army`, `Unit` Klassen
-- [ ] Port: `ArmyRepository` Interface
-- [ ] Sidebars mit Armeedaten befüllen
-- [ ] Tests für YAML-Adapter und Domain-Modelle
+- [x] Domain-Modell: `Unit` + `BATTLEFIELD_ROLE_DE` in `src/domain/models/unit.py`
+- [x] Domain-Modell: `Army` + `units_by_role()` in `src/domain/models/army.py`
+- [x] Port: `ArmyRepository` ABC in `src/domain/ports/army_repository.py`
+- [x] YAML-Adapter: `NecronYamlArmyRepository` in `src/adapters/yaml/`
+- [x] DI in `create_app()` — Routes kennen nur den Port
+- [x] Sidebars befüllt mit Einheiten gruppiert nach Rolle (deutsch)
+- [x] CSS-Styles für `.role-group`, `.role-label`, `.unit-list`
+- [x] Architektur-Doku mit Mermaid in `docs/architecture.md`
+- [x] 35 Tests grün (17 neu + 18 bestehend)

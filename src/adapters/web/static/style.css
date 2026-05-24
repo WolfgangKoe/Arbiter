@@ -176,6 +176,32 @@ body {
     justify-content: center;
 }
 
+/* ── Army sidebar ────────────────────────────────────── */
+
+.role-group {
+    margin-bottom: 1rem;
+}
+
+.role-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #555577;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.unit-list {
+    list-style: none;
+    padding: 0;
+}
+
+.unit-list li {
+    font-size: 0.8rem;
+    color: #9090cc;
+    padding: 0.1rem 0;
+    border-bottom: 1px solid #1a1a33;
+}
+
 /* ── End game button ─────────────────────────────────── */
 
 .phase-controls {
