@@ -94,3 +94,42 @@ def test_custom_max_rounds_not_over_early(client: FlaskClient) -> None:
     response = client.get("/?round=3&phase=0&max_rounds=3")
     html = response.data.decode()
     assert "Spiel beendet" not in html
+
+
+# ── End game button ───────────────────────────────────────────────────────────
+
+
+def test_end_game_button_present_during_play(client: FlaskClient) -> None:
+    response = client.get("/?phase=3&round=2&max_rounds=5")
+    html = response.data.decode()
+    assert "Spiel beenden" in html
+
+
+def test_end_game_button_links_to_game_over_with_from_round(client: FlaskClient) -> None:
+    response = client.get("/?phase=3&round=2&max_rounds=5")
+    html = response.data.decode()
+    assert "from_round=2" in html
+
+
+def test_game_over_back_link_goes_to_moralphase_of_from_round(client: FlaskClient) -> None:
+    response = client.get("/?round=6&phase=0&from_round=3&max_rounds=5")
+    html = response.data.decode()
+    assert "phase=6&amp;round=3" in html
+
+
+def test_game_over_back_link_shows_from_round_number(client: FlaskClient) -> None:
+    response = client.get("/?round=6&phase=0&from_round=3&max_rounds=5")
+    html = response.data.decode()
+    assert "Runde 3" in html
+
+
+def test_game_over_back_link_defaults_to_max_rounds(client: FlaskClient) -> None:
+    response = client.get("/?round=6&phase=0&max_rounds=5")
+    html = response.data.decode()
+    assert "phase=6&amp;round=5" in html
+
+
+def test_natural_end_passes_from_round(client: FlaskClient) -> None:
+    response = client.get("/?phase=6&round=5&max_rounds=5")
+    html = response.data.decode()
+    assert "from_round=5" in html

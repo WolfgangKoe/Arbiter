@@ -17,22 +17,28 @@
 <div class="game-over">
     <div class="game-over-title">Spiel beendet</div>
     <div class="game-over-sub">{{ max_rounds }} Runden gespielt</div>
-    <a class="nav-btn restart-btn" href="{{ restart_url }}">Neues Spiel</a>
+    <div class="game-over-actions">
+        <a class="nav-btn" href="{{ back_url }}">← Runde {{ from_round }}, Moralphase</a>
+        <a class="nav-btn restart-btn" href="{{ restart_url }}">Neues Spiel</a>
+    </div>
 </div>
 {% else %}
-<nav class="phase-nav">
-    {% if prev_url %}
-        <a class="nav-btn" href="{{ prev_url }}">←</a>
-    {% else %}
-        <span class="nav-btn disabled">←</span>
-    {% endif %}
-    <span class="phase-counter">{{ phase.index + 1 }} / {{ total }}</span>
-    {% if next_url %}
-        <a class="nav-btn" href="{{ next_url }}">→</a>
-    {% else %}
-        <span class="nav-btn disabled">→</span>
-    {% endif %}
-</nav>
+<div class="phase-controls">
+    <nav class="phase-nav">
+        {% if prev_url %}
+            <a class="nav-btn" href="{{ prev_url }}">←</a>
+        {% else %}
+            <span class="nav-btn disabled">←</span>
+        {% endif %}
+        <span class="phase-counter">{{ phase.index + 1 }} / {{ total }}</span>
+        {% if next_url %}
+            <a class="nav-btn" href="{{ next_url }}">→</a>
+        {% else %}
+            <span class="nav-btn disabled">→</span>
+        {% endif %}
+    </nav>
+    <a class="end-game-btn" href="{{ end_game_url }}">Spiel beenden</a>
+</div>
 {% endif %}
 {% endblock %}
 

@@ -29,17 +29,25 @@ def index() -> str:
     game_over = round_num > max_rounds
 
     if game_over:
-        restart_url = f"/?phase=0&round=1&max_rounds={max_rounds}"
+        try:
+            from_round = int(request.args.get("from_round", max_rounds))
+        except ValueError:
+            from_round = max_rounds
+        from_round = max(1, min(from_round, max_rounds))
+
         return render_template(
             "index.html",
             game_over=True,
-            restart_url=restart_url,
+            restart_url=f"/?phase=0&round=1&max_rounds={max_rounds}",
+            back_url=f"/?phase=6&round={from_round}&max_rounds={max_rounds}",
+            from_round=from_round,
             round=max_rounds,
             max_rounds=max_rounds,
             phase=PHASES[0],
             total=len(PHASES),
             prev_url=None,
             next_url=None,
+            end_game_url=None,
             army1_vp=0,
             army1_cp=0,
             army2_vp=0,
@@ -60,7 +68,13 @@ def index() -> str:
     elif round_num < max_rounds:
         next_url = f"/?phase=0&round={round_num + 1}&max_rounds={max_rounds}"
     else:
-        next_url = f"/?round={max_rounds + 1}&phase=0&max_rounds={max_rounds}"
+        next_url = (
+            f"/?round={max_rounds + 1}&phase=0" f"&from_round={round_num}&max_rounds={max_rounds}"
+        )
+
+    end_game_url = (
+        f"/?round={max_rounds + 1}&phase=0" f"&from_round={round_num}&max_rounds={max_rounds}"
+    )
 
     return render_template(
         "index.html",
@@ -68,6 +82,7 @@ def index() -> str:
         total=len(PHASES),
         prev_url=prev_url,
         next_url=next_url,
+        end_game_url=end_game_url,
         round=round_num,
         max_rounds=max_rounds,
         game_over=False,
