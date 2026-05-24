@@ -1,0 +1,1510 @@
+schema: tabletop.weapon_catalog.v1
+game_system: wh40k_9e
+faction: necrons
+
+# Schicht 1 (Stammdaten) fuer Necron-Waffen, Codex 9e. Angelegt mit
+# NX-2a-Abschluss am 2026-05-23 ueber acht Batches:
+#   1 HQ-Charakter (#1-#28)
+#   2 Standardtrupp (#29-#32)
+#   3 Destroyer-Kult (#33-#38)
+#   4 Triarch & Gruftklingen (#39-#46)
+#   5 Canoptek (#47-#56)
+#   6 Fahrzeuge (#57-#66)
+#   7 C'tan + Cryptothralls (#67-#73)
+#   8 Forge World (#74-#82)
+# Eintragsnummer aus dem Rollup steht als Kommentar ueber jedem
+# Eintrag. Mehrmodi-Waffen liegen als EIN Eintrag mit profiles:-Liste
+# (Memory feedback-weapon-multimode-schema). Twin-Waffen sind eigen-
+# staendige Codex-Waffen mit eigenem Eintrag (Memory
+# feedback-bsdata-fallback-suche). DE-Felder fuehren die Codex-Soll-
+# Form, auch wo necrons.translations.de.yaml noch eine Drift-Form
+# fuehrt - die Sammelkorrektur dort folgt in NX-2c/e.
+
+entries:
+
+# ===== Batch 1 - HQ-Charakter =====================================
+
+# #1
+- id: wh40k_9e.necrons.weapon.staff_of_light
+  name_en: Staff of Light
+  name_de: Stab des Lichts
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 3
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #2
+- id: wh40k_9e.necrons.weapon.staff_of_the_destroyer
+  name_en: Staff of the Destroyer
+  name_de: Stab des Zerstörers
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 3
+      strength_de: "6"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+1"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+
+# #3
+- id: wh40k_9e.necrons.weapon.staff_of_stars
+  name_en: Staff of Stars
+  name_de: Stab der Sterne
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Sturm 9
+      strength_de: "6"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 3 zusätzliche Attacken mit dieser Waffe aus; es können nicht mehr als 3 Attacken mit dieser Waffe ausgeführt werden."
+
+# #4
+- id: wh40k_9e.necrons.weapon.staff_of_tomorrow
+  name_en: Staff of Tomorrow
+  name_de: Stab der Zukunft
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "W3"
+      abilities_de: "Gegen Attacken mit dieser Waffe können keine Rettungswürfe durchgeführt werden."
+
+# #5
+- id: wh40k_9e.necrons.weapon.aeonstave
+  name_en: Aeonstave
+  name_de: Stab der Äonen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm W3
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Explosiv. Gegen eine Attacke mit dieser Waffe können keine Rettungswürfe durchgeführt werden."
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Gegen Attacken mit dieser Waffe können keine Rettungswürfe durchgeführt werden."
+
+# #6
+- id: wh40k_9e.necrons.weapon.entropic_lance
+  name_en: Entropic Lance
+  name_de: Entropielanze
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 1
+      strength_de: "8"
+      ap: "-3"
+      damage: "W3+3"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "3"
+      abilities_de: "-"
+
+# #7
+- id: wh40k_9e.necrons.weapon.eldritch_lance
+  name_en: Eldritch Lance
+  name_de: Geisterspeer
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Sturm W3
+      strength_de: "8"
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-4"
+      damage: "2"
+      abilities_de: "-"
+
+# #8
+- id: wh40k_9e.necrons.weapon.abyssal_lance
+  name_en: Abyssal Lance
+  name_de: Abgrundlanze
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 3
+      strength_de: "4"
+      ap: "-3"
+      damage: "1"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "1"
+      abilities_de: "-"
+
+# #9
+- id: wh40k_9e.necrons.weapon.plasmic_lance
+  name_en: Plasmic Lance
+  name_de: Plasmalanze
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm W3
+      strength_de: "7"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+
+# #10
+- id: wh40k_9e.necrons.weapon.chronotendrils
+  name_en: Chronotendrils
+  name_de: Chronotentakel
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "0"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 3 zusätzliche Attacken mit dieser Waffe aus."
+
+# #11
+- id: wh40k_9e.necrons.weapon.impaling_legs
+  name_en: Impaling Legs
+  name_de: Aufspießende Beine
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 2 zusätzliche Attacken mit dieser Waffe aus."
+
+# #12
+- id: wh40k_9e.necrons.weapon.voidscythe
+  name_en: Voidscythe
+  name_de: Leerensense
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "x2"
+      ap: "-4"
+      damage: "3"
+      abilities_de: "Ziehe bei jeder Attacke, die mit dieser Waffe ausgeführt wird, 1 vom Trefferwurf dieser Attacke ab."
+
+# #13
+- id: wh40k_9e.necrons.weapon.voidblade
+  name_en: Voidblade
+  name_de: Leerenklinge
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 1 zusätzliche Attacke mit dieser Waffe aus."
+
+# #14
+- id: wh40k_9e.necrons.weapon.warscythe
+  name_en: Warscythe
+  name_de: Kriegssense
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-4"
+      damage: "2"
+      abilities_de: "-"
+
+# #15
+- id: wh40k_9e.necrons.weapon.hyperphase_sword
+  name_en: Hyperphase Sword
+  name_de: Hyperphasenschwert
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+1"
+      ap: "-3"
+      damage: "1"
+      abilities_de: "-"
+
+# #16
+- id: wh40k_9e.necrons.weapon.hyperphase_glaive
+  name_en: Hyperphase Glaive
+  name_de: Hyperphasengleve
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-3"
+      damage: "W3"
+      abilities_de: "-"
+
+# #17
+- id: wh40k_9e.necrons.weapon.gauntlet_of_fire
+  name_en: Gauntlet of Fire
+  name_de: Flammenfaust
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Sturm W6
+      strength_de: "5"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe trifft die Attacke das Ziel automatisch."
+
+# #18
+- id: wh40k_9e.necrons.weapon.empathic_obliterator
+  name_en: Empathic Obliterator
+  name_de: Empathischer Schockstab
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-1"
+      damage: "W3"
+      abilities_de: "Wird durch eine Attacke dieser Waffe ein CHARAKTER-Modell zerstört, erleidet jede feindliche Einheit innerhalb von 6 Zoll um den Träger W3 tödliche Verwundungen."
+
+# #19
+- id: wh40k_9e.necrons.weapon.tachyon_arrow
+  name_en: Tachyon Arrow
+  name_de: Tachyonenpfeil
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 120"
+      type_de: Sturm 1
+      strength_de: "12"
+      ap: "-5"
+      damage: "W6"
+      abilities_de: "Der Träger kann mit dieser Waffe nur einmal pro Schlacht schießen."
+
+# #20
+- id: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
+  name_en: Sceptre of Eternal Glory
+  name_de: Zepter der ewigen Glorie
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Sturm 3
+      strength_de: "8"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+4"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+
+# #21
+- id: wh40k_9e.necrons.weapon.scythe_of_dust
+  name_en: Scythe of Dust
+  name_de: Sense des Staubs
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+3"
+      ap: "-4"
+      damage: "3"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 4 zusätzliche Attacken mit dieser Waffe aus; es können nicht mehr als 4 Attacken mit dieser Waffe ausgeführt werden."
+
+# #22
+- id: wh40k_9e.necrons.weapon.annihilator_beam
+  name_en: Annihilator Beam
+  name_de: Vernichterstrahl
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 1
+      strength_de: "12"
+      ap: "-4"
+      damage: "6"
+      abilities_de: "-"
+
+# #23
+- id: wh40k_9e.necrons.weapon.enmitic_annihilator
+  name_en: Enmitic Annihilator
+  name_de: Inimica-Annihilator
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 2W3
+      strength_de: "6"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Explosiv."
+
+# #24
+- id: wh40k_9e.necrons.weapon.flensing_claw
+  name_en: Flensing Claw
+  name_de: Häuterklaue
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe führst du statt 1 zwei Trefferwürfe aus."
+
+# #25
+- id: wh40k_9e.necrons.weapon.hyperphase_harvester
+  name_en: Hyperphase Harvester
+  name_de: Hyperphasenschnitter
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-4"
+      damage: "3"
+      abilities_de: "Ziehe bei jeder Attacke, die mit dieser Waffe ausgeführt wird, 1 vom Trefferwurf dieser Attacke ab."
+
+# #26
+- id: wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
+  name_en: Enmitic Disintegrator Pistol
+  name_de: Inimica-Desintegratorpistole
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Pistole 1
+      strength_de: "6"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# #27
+- id: wh40k_9e.necrons.weapon.rod_of_covenant
+  name_en: Rod of Covenant
+  name_de: Eidstab
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Sturm 1
+      strength_de: "5"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+
+# #28
+- id: wh40k_9e.necrons.weapon.relic_gauss_blaster
+  name_en: Relic Gauss Blaster
+  name_de: Relikt-Gauss-Blaster
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schnellfeuer 2
+      strength_de: "5"
+      ap: "-2"
+      damage: "2"
+      abilities_de: "-"
+
+# ===== Batch 2 - Standardtrupp =====================================
+
+# #29
+- id: wh40k_9e.necrons.weapon.gauss_flayer
+  name_en: Gauss Flayer
+  name_de: Gauss-Desintegrator
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schnellfeuer 1
+      strength_de: "4"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# #30
+- id: wh40k_9e.necrons.weapon.gauss_reaper
+  name_en: Gauss Reaper
+  name_de: Gauss-Schnitter
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Sturm 2
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #31
+- id: wh40k_9e.necrons.weapon.gauss_blaster
+  name_en: Gauss Blaster
+  name_de: Gauss-Blaster
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schnellfeuer 1
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #32
+- id: wh40k_9e.necrons.weapon.tesla_carbine
+  name_en: Tesla Carbine
+  name_de: Tesla-Karabiner
+  grants_keywords: [TESLAWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Sturm 2
+      strength_de: "5"
+      ap: "0"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter Trefferwurf von 6 zwei zusätzliche Treffer."
+
+# ===== Batch 3 - Destroyer-Kult ====================================
+
+# #33
+- id: wh40k_9e.necrons.weapon.gauss_cannon
+  name_en: Gauss Cannon
+  name_de: Gauss-Kanone
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schwer 3
+      strength_de: "6"
+      ap: "-3"
+      damage: "W3"
+      abilities_de: "-"
+
+# #34
+- id: wh40k_9e.necrons.weapon.enmitic_exterminator
+  name_en: Enmitic Exterminator
+  name_de: Inimica-Exterminator
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 3W3
+      strength_de: "7"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Explosiv."
+
+# #35
+- id: wh40k_9e.necrons.weapon.gauss_destructor
+  name_en: Gauss Destructor
+  name_de: Gauss-Destruktor
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 1
+      strength_de: "10"
+      ap: "-4"
+      damage: "3W3"
+      abilities_de: "-"
+
+# #36
+- id: wh40k_9e.necrons.weapon.hyperphase_threshers
+  name_en: Hyperphase Threshers
+  name_de: Hyperphasendrescher
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "2"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 1 zusätzliche Attacke mit dieser Waffe aus."
+
+# #37
+- id: wh40k_9e.necrons.weapon.hyperphase_reap_blade
+  name_en: Hyperphase Reap-Blade
+  name_de: Hyperphasentodesklinge
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-4"
+      damage: "3"
+      abilities_de: "-"
+
+# #38
+- id: wh40k_9e.necrons.weapon.ophydian_claws
+  name_en: Ophydian Claws
+  name_de: Ophys-Klauen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er 2 zusätzliche Attacken mit dieser Waffe aus."
+
+# ===== Batch 4 - Triarch & Gruftklingen ============================
+
+# #39
+- id: wh40k_9e.necrons.weapon.particle_caster
+  name_en: Particle Caster
+  name_de: Partikelwerfer
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Pistole 2
+      strength_de: "6"
+      ap: "0"
+      damage: "1"
+      abilities_de: "-"
+
+# #40
+- id: wh40k_9e.necrons.weapon.heat_ray
+  name_en: Heat Ray
+  name_de: Hitzestrahler
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Dispersed
+      mode_de: gestreut
+      range: 12"
+      type_de: Schwer 2W6
+      strength_de: "5"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe trifft die Attacke das Ziel automatisch."
+    - mode: Focused
+      mode_de: gebündelt
+      range: 24"
+      type_de: Schwer 2
+      strength_de: "8"
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "Zielt eine Attacke mit dieser Waffe auf eine Einheit innerhalb halber Reichweite, hat diese Attacke einen Schadenswert von W6+2."
+
+# #41
+- id: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
+  name_en: Twin Heavy Gauss Cannon
+  name_de: Schwere Gauss-Zwillingskanone
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schwer 6
+      strength_de: "7"
+      ap: "-3"
+      damage: "W3"
+      abilities_de: "-"
+
+# #42
+- id: wh40k_9e.necrons.weapon.particle_shredder
+  name_en: Particle Shredder
+  name_de: Partikelkanone
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schwer 8
+      strength_de: "6"
+      ap: "-1"
+      damage: "2"
+      abilities_de: "-"
+
+# #43
+- id: wh40k_9e.necrons.weapon.stalkers_forelimbs
+  name_en: Stalker's Forelimbs
+  name_de: Jagdläufer-Vordergliedmaßen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "3"
+      abilities_de: "-"
+
+# #44
+- id: wh40k_9e.necrons.weapon.twin_gauss_blaster
+  name_en: Twin Gauss Blaster
+  name_de: Gauss-Zwillingsblaster
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schnellfeuer 2
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #45
+- id: wh40k_9e.necrons.weapon.twin_tesla_carbine
+  name_en: Twin Tesla Carbine
+  name_de: Tesla-Zwillingskarabiner
+  grants_keywords: [TESLAWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Sturm 4
+      strength_de: "5"
+      ap: "0"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter Trefferwurf von 6 zwei zusätzliche Treffer."
+
+# #46
+- id: wh40k_9e.necrons.weapon.particle_beamer
+  name_en: Particle Beamer
+  name_de: Partikelstrahler
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Sturm 6
+      strength_de: "5"
+      ap: "0"
+      damage: "1"
+      abilities_de: "-"
+
+# ===== Batch 5 - Canoptek ==========================================
+
+# #47
+- id: wh40k_9e.necrons.weapon.vicious_claws
+  name_en: Vicious Claws
+  name_de: Grausame Klauen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-2"
+      damage: "2"
+      abilities_de: "-"
+
+# #48
+- id: wh40k_9e.necrons.weapon.whip_coils
+  name_en: Whip Coils
+  name_de: Fesselspulen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe führst du statt 1 zwei Trefferwürfe aus."
+
+# #49
+- id: wh40k_9e.necrons.weapon.transdimensional_beamer
+  name_en: Transdimensional Beamer
+  name_de: Transdimensionsstrahler
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Sturm 1
+      strength_de: "4"
+      ap: "-3"
+      damage: "3"
+      abilities_de: "-"
+
+# #50
+- id: wh40k_9e.necrons.weapon.automaton_claws
+  name_en: Automaton Claws
+  name_de: Automaton-Klauen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+2"
+      ap: "-3"
+      damage: "2"
+      abilities_de: "-"
+
+# #51
+- id: wh40k_9e.necrons.weapon.atomiser_beam
+  name_en: Atomiser Beam
+  name_de: Atomisatorstrahl
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Sturm 3
+      strength_de: "6"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #52
+- id: wh40k_9e.necrons.weapon.reanimators_claws
+  name_en: Reanimator's Claws
+  name_de: Reanimatorklauen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #53
+- id: wh40k_9e.necrons.weapon.twin_gauss_flayer
+  name_en: Twin Gauss Flayer
+  name_de: Gauss-Zwillingsdesintegrator
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schnellfeuer 2
+      strength_de: "4"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# #54
+- id: wh40k_9e.necrons.weapon.doomsday_blaster
+  name_en: Doomsday Blaster
+  name_de: Dominator-Blaster
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: High Power
+      mode_de: Hohe Energie
+      range: 48"
+      type_de: Schwer W6
+      strength_de: "10"
+      ap: "-5"
+      damage: "W6"
+      abilities_de: "Explosiv. Der Träger kann nur Attacken mit diesem Profil ausführen, wenn er in seiner vorherigen Bewegungsphase stationär geblieben ist."
+    - mode: Low Power
+      mode_de: Niedrige Energie
+      range: 24"
+      type_de: Schwer W6
+      strength_de: "8"
+      ap: "-2"
+      damage: "W3"
+      abilities_de: "Explosiv."
+
+# #55
+- id: wh40k_9e.necrons.weapon.feeder_mandibles
+  name_en: Feeder Mandibles
+  name_de: Fresskiefer
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "0"
+      damage: "1"
+      abilities_de: "-"
+
+# #56
+- id: wh40k_9e.necrons.weapon.monomolecular_proboscis
+  name_en: Monomolecular Proboscis
+  name_de: Monomolekularer Stechrüssel
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# ===== Batch 6 - Fahrzeuge =========================================
+
+# #57
+- id: wh40k_9e.necrons.weapon.death_ray
+  name_en: Death Ray
+  name_de: Todesstrahl
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schwer 1
+      strength_de: "9"
+      ap: "-3"
+      damage: "W3+3"
+      abilities_de: "-"
+
+# #58
+- id: wh40k_9e.necrons.weapon.gauss_flux_arc
+  name_en: Gauss Flux Arc
+  name_de: Gauss-Fluxprojektor
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schnellfeuer 3
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #59
+- id: wh40k_9e.necrons.weapon.particle_whip
+  name_en: Particle Whip
+  name_de: Partikelgeschütz
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer W6
+      strength_de: "12"
+      ap: "-3"
+      damage: "3"
+      abilities_de: "Explosiv."
+
+# #60
+- id: wh40k_9e.necrons.weapon.portal_of_exile
+  name_en: Portal of Exile
+  name_de: Exilationsportal
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "3"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe trifft die Attacke das Ziel automatisch."
+
+# #61
+- id: wh40k_9e.necrons.weapon.gauss_flayer_array
+  name_en: Gauss Flayer Array
+  name_de: Gauss-Desintegratorphalanx
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schnellfeuer 5
+      strength_de: "4"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# #62
+- id: wh40k_9e.necrons.weapon.doomsday_cannon
+  name_en: Doomsday Cannon
+  name_de: Dominator-Kanone
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Low Power
+      mode_de: Niedrige Energie
+      range: 36"
+      type_de: Schwer W6
+      strength_de: "8"
+      ap: "-2"
+      damage: "W3"
+      abilities_de: "Explosiv."
+    - mode: High Power
+      mode_de: Hohe Energie
+      range: 72"
+      type_de: Schwer W6
+      strength_de: "10"
+      ap: "-5"
+      damage: "W6"
+      abilities_de: "Explosiv. Der Träger kann nur Attacken mit diesem Profil ausführen, wenn er in seiner vorherigen Bewegungsphase stationär geblieben ist."
+
+# #63
+- id: wh40k_9e.necrons.weapon.tesla_cannon
+  name_en: Tesla Cannon
+  name_de: Tesla-Kanone
+  grants_keywords: [TESLAWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 30"
+      type_de: Schwer 3
+      strength_de: "6"
+      ap: "0"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter Trefferwurf von 6 zwei zusätzliche Treffer."
+
+# #64
+- id: wh40k_9e.necrons.weapon.twin_tesla_destructor
+  name_en: Twin Tesla Destructor
+  name_de: Tesla-Zwillingsannihilator
+  grants_keywords: [TESLAWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 10
+      strength_de: "7"
+      ap: "0"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter Trefferwurf von 6 zwei zusätzliche Treffer."
+
+# #65
+- id: wh40k_9e.necrons.weapon.heavy_death_ray
+  name_en: Heavy Death Ray
+  name_de: Schwerer Todesstrahl
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 3
+      strength_de: "12"
+      ap: "-4"
+      damage: "W3+3"
+      abilities_de: "-"
+
+# #66
+- id: wh40k_9e.necrons.weapon.tesla_sphere
+  name_en: Tesla Sphere
+  name_de: Tesla-Sphäre
+  grants_keywords: [TESLAWAFFE]
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Sturm 4
+      strength_de: "7"
+      ap: "0"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter Trefferwurf von 6 zwei zusätzliche Treffer."
+
+# ===== Batch 7 - C'tan + Cryptothralls =============================
+
+# #67
+- id: wh40k_9e.necrons.weapon.scythe_of_the_nightbringer
+  name_en: Scythe of the Nightbringer
+  name_de: Sense des Todesbringers
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Reaping Sweep
+      mode_de: Weiter Schwung
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe führst du statt 1 zwei Trefferwürfe aus."
+    - mode: Entropic Blow
+      mode_de: Entropischer Hieb
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "x2"
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "Gegen Attacken mit dieser Waffe können keine Rettungswürfe durchgeführt werden."
+
+# #68
+- id: wh40k_9e.necrons.weapon.golden_fists
+  name_en: Golden Fists
+  name_de: Goldene Fäuste
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-3"
+      damage: "3"
+      abilities_de: "-"
+
+# #69
+- id: wh40k_9e.necrons.weapon.spear_of_the_void_dragon
+  name_en: Spear of the Void Dragon
+  name_de: Speer des Leeren Drachen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+3"
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe, die einem FAHRZEUG-Modell zugewiesen wird, hat diese Attacke einen Schadenswert von W3+3."
+    - mode: Shooting
+      range: 12"
+      type_de: Schwer 1
+      strength_de: "9"
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "Wird ein Treffer erzielt, ziehe eine gerade Linie vom nächstgelegenen Punkt der Base (oder des Rumpfs) des Trägers zum nächstgelegenen Modell der Zieleinheit. Führe gegen die Zieleinheit und jede weitere Einheit, durch die diese Linie verläuft, je einen Verwundungswurf aus. Bei jeder Attacke mit dieser Waffe, die einem FAHRZEUG-Modell zugewiesen wird, hat diese Attacke einen Schadenswert von W3+3."
+
+# #70
+- id: wh40k_9e.necrons.weapon.canoptek_tail_blades
+  name_en: Canoptek Tail Blades
+  name_de: Kanoptech-Schweifklingen
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Jedes Mal, wenn der Träger kämpft, führt er W6 zusätzliche Attacken mit dieser Waffe aus."
+
+# #71
+- id: wh40k_9e.necrons.weapon.crackling_tendrils
+  name_en: Crackling Tendrils
+  name_de: Knisternde Fangarme
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-4"
+      damage: "W6"
+      abilities_de: "-"
+
+# #72
+- id: wh40k_9e.necrons.weapon.scouring_eye
+  name_en: Scouring Eye
+  name_de: Umherstreifendes Auge
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 12"
+      type_de: Pistole 2
+      strength_de: "5"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "-"
+
+# #73
+- id: wh40k_9e.necrons.weapon.scythed_limbs
+  name_en: Scythed Limbs
+  name_de: Sensenglieder
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"
+
+# ===== Batch 8 - Forge World =======================================
+# Eigene DE-Setzungen (name_de_eigen: true), da nicht im Codex 9e DE.
+# BSData-Profile sind massgeblich; Source ist Forge World.
+
+# #74
+- id: wh40k_9e.necrons.weapon.singularity_generator
+  name_en: Singularity Generator
+  name_de: Singularitätsgenerator
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 36"
+      type_de: Schwer 3W3
+      strength_de: "8"
+      ap: "-3"
+      damage: "W6"
+      abilities_de: "Explosiv."
+
+# #75
+- id: wh40k_9e.necrons.weapon.synaptic_obliterator
+  name_en: Synaptic Obliterator
+  name_de: Synapsen-Annihilator
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 72"
+      type_de: Schwer W3
+      strength_de: "16"
+      ap: "-4"
+      damage: "6"
+      abilities_de: "-"
+
+# #76
+- id: wh40k_9e.necrons.weapon.transdimensional_projector
+  name_en: Transdimensional Projector
+  name_de: Transdimensionsprojektor
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schwer W6
+      strength_de: "6"
+      ap: "-2"
+      damage: "1"
+      abilities_de: "Explosiv."
+
+# #77
+- id: wh40k_9e.necrons.weapon.titanic_forelimbs
+  name_en: Titanic Forelimbs
+  name_de: Titanische Vordergliedmaßen
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Reaping Sweep
+      mode_de: Mähender Schwung
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: Träger
+      ap: "-1"
+      damage: "2"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe führst du statt 1 zwei Trefferwürfe aus."
+    - mode: Impaling Strike
+      mode_de: Aufspießender Stoß
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "x2"
+      ap: "-3"
+      damage: "5"
+      abilities_de: "-"
+
+# #78
+- id: wh40k_9e.necrons.weapon.tesseract_singularity_chamber
+  name_en: Tesseract Singularity Chamber
+  name_de: Tesseract-Singularitätskammer
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Particle Hurricane
+      mode_de: Partikelorkan
+      range: 12"
+      type_de: Sturm W6
+      strength_de: "4"
+      ap: "-3"
+      damage: "1"
+      abilities_de: "Bei jeder Attacke mit dieser Waffe trifft die Attacke automatisch. Ein Verwundungswurf von 2+ ist immer erfolgreich; gegen FAHRZEUG-Ziele ist nur ein Verwundungswurf von 6 immer erfolgreich."
+    - mode: Solar Fire
+      mode_de: Sonnenfeuer
+      range: 36"
+      type_de: Schwer W6
+      strength_de: "8"
+      ap: "-3"
+      damage: "W6"
+      abilities_de: "-"
+    - mode: Seismic Lash
+      mode_de: Seismische Geißel
+      range: 24"
+      type_de: Sturm W6
+      strength_de: "5"
+      ap: "-3"
+      damage: "3"
+      abilities_de: "-"
+
+# #79
+- id: wh40k_9e.necrons.weapon.tomb_sentinel_claws
+  name_en: Tomb Sentinel Claws
+  name_de: Klauen des Grabwächters
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+1"
+      ap: "-2"
+      damage: "2"
+      abilities_de: "-"
+
+# #80
+- id: wh40k_9e.necrons.weapon.exile_cannon
+  name_en: Exile Cannon
+  name_de: Verbannungskanone
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 18"
+      type_de: Schwer W6
+      strength_de: "10"
+      ap: "-4"
+      damage: "3"
+      abilities_de: "Explosiv."
+
+# #81
+- id: wh40k_9e.necrons.weapon.tomb_stalker_claws
+  name_en: Tomb Stalker Claws
+  name_de: Klauen des Grabpirschers
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: []
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Melee
+      range: Nahkampf
+      type_de: Nahkampf
+      strength_de: "+1"
+      ap: "-2"
+      damage: "2"
+      abilities_de: "-"
+
+# #82
+- id: wh40k_9e.necrons.weapon.gauss_slicer
+  name_en: Gauss Slicer
+  name_de: Gauss-Schneider
+  name_de_eigen: true
+  name_de_eigen_reason: "Forge World — eigene Setzung 2026-05-19"
+  grants_keywords: [GAUSSWAFFE]
+  source: { publication: Forge World }
+  verification_status: verified_nx2a_2026-05-23
+  profiles:
+    - mode: Shooting
+      range: 24"
+      type_de: Schnellfeuer 2
+      strength_de: "5"
+      ap: "-1"
+      damage: "1"
+      abilities_de: "-"

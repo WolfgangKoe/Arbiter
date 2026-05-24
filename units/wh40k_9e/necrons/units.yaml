@@ -1,0 +1,1775 @@
+schema: tabletop.units.v1
+game_system: wh40k_9e
+faction: Necrons
+rule_context:
+  edition: '9'
+  ruleset_mode: current
+units:
+- id: wh40k_9e.necrons.unit.annihilation_barge
+  name_en: Annihilation Barge
+  name_de: Vernichtungsbarke
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.annihilation_barge.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Annihilation Barge
+    - Quantum Shielding
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_cannon
+  - wh40k_9e.necrons.weapon.tesla_cannon
+  - wh40k_9e.necrons.weapon.twin_tesla_destructor
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Twin Tesla Destructor fix; Sekundaerwaffe Gauss Cannon XOR Tesla Cannon.'
+- id: wh40k_9e.necrons.unit.anrakyr_the_traveller
+  name_en: Anrakyr the Traveller
+  name_de: Anrakyr der Reisende
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.anrakyr_the_traveller.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Anrakyr the Traveller
+    - Dynastic Agent
+    - Noble
+    - Overlord
+    - Character
+    - Infantry
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.tachyon_arrow
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung (Codex-Character).'
+- id: wh40k_9e.necrons.unit.c_tan_shard_of_the_deceiver
+  name_en: C'tan Shard of the Deceiver
+  name_de: C'tan-Fragment des Deceivers
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.c_tan_shard_of_the_deceiver.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - C'tan Shard
+    - C'tan Shard of the Deceiver
+    - Monster
+    - Character
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.golden_fists
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; C''tan-Kraefte als NX-3 ctan_powers-Block.'
+- id: wh40k_9e.necrons.unit.c_tan_shard_of_the_nightbringer
+  name_en: C'tan Shard of the Nightbringer
+  name_de: C'tan-Fragment des Nachtschinders
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.c_tan_shard_of_the_nightbringer.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - C'tan Shard
+    - C'tan Shard of the Nightbringer
+    - Monster
+    - Character
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.scythe_of_the_nightbringer
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.c_tan_shard_of_the_void_dragon
+  name_en: C'tan Shard of the Void Dragon
+  name_de: C'tan-Fragment des Leeren Drachen
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.c_tan_shard_of_the_void_dragon.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - C'tan Shard
+    - C'tan Shard of the Void Dragon
+    - Monster
+    - Character
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.canoptek_tail_blades
+  - wh40k_9e.necrons.weapon.spear_of_the_void_dragon
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.canoptek_doomstalker
+  name_en: Canoptek Doomstalker
+  name_de: Kanoptech-Dominatorschreiter
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_doomstalker.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Canoptek Doomstalker
+    - Monster
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.doomsday_blaster
+  - wh40k_9e.necrons.weapon.twin_gauss_flayer
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+  name_en: Canoptek Plasmacyte
+  name_de: Kanoptech-Plasmazyte
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_plasmacyte.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Elites
+    other:
+    - Beast
+    - Canoptek Plasmacyte
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.monomolecular_proboscis
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.canoptek_reanimator
+  name_en: Canoptek Reanimator
+  name_de: Kanoptech-Reanimator
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_reanimator.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Elites
+    other:
+    - Canoptek Reanimator
+    - Monster
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.atomiser_beam
+  - wh40k_9e.necrons.weapon.reanimators_claws
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.canoptek_scarab_swarms
+  name_en: Canoptek Scarab Swarms
+  name_de: Kanoptech-Skarabäenschwärme
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_scarab_swarms.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: BSData-Catalog-Luecke: Fallback-Profil (Codex S. 102) maßgeblich.'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Canoptek Scarab Swarms
+    - Fly
+    - Swarm
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.feeder_mandibles
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.canoptek_spyders
+  name_en: Canoptek Spyders
+  name_de: Kanoptech-Spinnen
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_spyders.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Elites
+    other:
+    - Canoptek Spyders
+    - Monster
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.automaton_claws
+  wargear:
+  - wh40k_9e.necrons.wargear.fabricator_claw_array
+  - wh40k_9e.necrons.wargear.gloom_prism
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Automaton Claws fix; Fabricator Claw Array XOR Gloom Prism pro Modell (1-aus-2, BSData); Scarab Hive als intrinsische Unit-Ability in start_units.rules.yaml (OP-7).'
+- id: wh40k_9e.necrons.unit.canoptek_tomb_sentinel
+  name_en: Canoptek Tomb Sentinel
+  name_de: Kanoptech-Grabeswächter
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_tomb_sentinel.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Canoptek Tomb Sentinel
+    - Monster
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.exile_cannon
+  - wh40k_9e.necrons.weapon.tomb_sentinel_claws
+  wargear:
+  - wh40k_9e.necrons.wargear.gloom_prism
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung + Gloom Prism (Status fest/optional in NX-3).'
+- id: wh40k_9e.necrons.unit.canoptek_tombstalker
+  name_en: Canoptek Tombstalker
+  name_de: Kanoptech-Grabesjäger
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_tombstalker.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Canoptek Tombstalker
+    - Monster
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_slicer
+  - wh40k_9e.necrons.weapon.tomb_stalker_claws
+  wargear:
+  - wh40k_9e.necrons.wargear.gloom_prism
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung + Gloom Prism (Status fest/optional in NX-3).'
+- id: wh40k_9e.necrons.unit.canoptek_wraiths
+  name_en: Canoptek Wraiths
+  name_de: Kanoptech-Phantome
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.canoptek_wraiths.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Beast
+    - Canoptek Wraiths
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.vicious_claws
+  - wh40k_9e.necrons.weapon.whip_coils
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Vicious Claws fix; Whip Coils truppweite Option (F-56).'
+- id: wh40k_9e.necrons.unit.catacomb_command_barge
+  name_en: Catacomb Command Barge
+  name_de: Kommandogleiter
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.catacomb_command_barge.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Catacomb Command Barge
+    - Noble
+    - Overlord
+    - Quantum Shielding
+    - Vehicle
+    - Character
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_cannon
+  - wh40k_9e.necrons.weapon.hyperphase_sword
+  - wh40k_9e.necrons.weapon.staff_of_light
+  - wh40k_9e.necrons.weapon.tesla_cannon
+  - wh40k_9e.necrons.weapon.voidblade
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear:
+  - wh40k_9e.necrons.wargear.resurrection_orb
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Resurrection Orb optional; Fernkampf-Sekundaerwaffe (Gauss Cannon XOR Tesla Cannon) und Nahkampfwaffe 1-aus-n, Wahl-Logik in NX-3.'
+- id: wh40k_9e.necrons.unit.chronomancer
+  name_en: Chronomancer
+  name_de: Chronomant
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.chronomancer.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Character
+    - Chronomancer
+    - Cryptek
+    - Fly
+    - Infantry
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.aeonstave
+  - wh40k_9e.necrons.weapon.chronotendrils
+  - wh40k_9e.necrons.weapon.entropic_lance
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2a: Charakter-Kuratierung abgeschlossen.'
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Aeonstave XOR Entropic Lance (1-aus-2); Chronotendrils fix. Cryptek-Arkana-Schicht separat.'
+- id: wh40k_9e.necrons.unit.cryptothralls
+  name_en: Cryptothralls
+  name_de: Kryptoknechte
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.cryptothralls.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Canoptek
+    battlefield_role:
+    - Elites
+    other:
+    - Cryptothralls
+    - Infantry
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.scouring_eye
+  - wh40k_9e.necrons.weapon.scythed_limbs
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.deathmarks
+  name_en: Deathmarks
+  name_de: Neurojäger
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.deathmarks.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - Infantry
+    - Deathmarks
+    - Hyperspace Hunter
+    - Core
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons: []
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: NX-2a-Luecke: Synaptic Disintegrator fehlt in weapons.yaml; vor NX-2e nachtragen (Audit-Whitelist pending_nx2a_weapon_catalog).'
+- id: wh40k_9e.necrons.unit.doom_scythe
+  name_en: Doom Scythe
+  name_de: Todessichel
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.doom_scythe.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Flyer
+    other:
+    - Aircraft
+    - Doom Scythe
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.heavy_death_ray
+  - wh40k_9e.necrons.weapon.twin_tesla_destructor
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.doomsday_ark
+  name_en: Doomsday Ark
+  name_de: Weltuntergangs-Arche
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.doomsday_ark.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Doomsday Ark
+    - Quantum Shielding
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.doomsday_cannon
+  - wh40k_9e.necrons.weapon.gauss_flayer_array
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.flayed_ones
+  name_en: Flayed Ones
+  name_de: Albträume
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.flayed_ones.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - Infantry
+    - Flayed Ones
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons: []
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: NX-2a-Luecke: Flayer Claws fehlt in weapons.yaml; vor NX-2e nachtragen (Audit-Whitelist pending_nx2a_weapon_catalog).'
+- id: wh40k_9e.necrons.unit.ghost_ark
+  name_en: Ghost Ark
+  name_de: Geisterbarke
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.ghost_ark.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Dedicated Transport
+    other:
+    - Ghost Ark
+    - Quantum Shielding
+    - Vehicle
+    - Transport
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_flayer_array
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Zwei Gauss Flayer Arrays fest am Modell.'
+- id: wh40k_9e.necrons.unit.hexmark_destroyer
+  name_en: Hexmark Destroyer
+  name_de: Hexjäger-Zerstörer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.hexmark_destroyer.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - Elites
+    other:
+    - Character
+    - Hexmark Destroyer
+    - Hyperspace Hunter
+    - Infantry
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2a: Charakter-Kuratierung abgeschlossen.'
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.illuminor_szeras
+  name_en: Illuminor Szeras
+  name_de: Illuminor Szeras
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.illuminor_szeras.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Cryptek
+    - Dynastic Agent
+    - Illuminor Szeras
+    - Technomancer
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.eldritch_lance
+  - wh40k_9e.necrons.weapon.impaling_legs
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.immortals
+  name_en: Immortals
+  name_de: Unsterbliche
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.immortals.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Troops
+    other:
+    - Infantry
+    - Immortals
+    - Core
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_blaster
+  - wh40k_9e.necrons.weapon.tesla_carbine
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Gauss Blaster XOR Tesla Carbine, truppweite Wahl (F-121).'
+- id: wh40k_9e.necrons.unit.imotekh_the_stormlord
+  name_en: Imotekh the Stormlord
+  name_de: Imotekh der Sturmherr
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.imotekh_the_stormlord.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    - Sautekh
+    battlefield_role:
+    - HQ
+    other:
+    - Imotekh the Stormlord
+    - Noble
+    - Overlord
+    - Phaeron
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauntlet_of_fire
+  - wh40k_9e.necrons.weapon.staff_of_the_destroyer
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.lokhust_destroyers
+  name_en: Lokhust Destroyers
+  name_de: Lokhust-Zerstörer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.lokhust_destroyers.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Infantry
+    - Fly
+    - Lokhust Destroyers
+    - Lokhust Heavy Destroyers
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_cannon
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
+  name_en: Lokhust Heavy Destroyers
+  name_de: Lokhust-Schwerer-Zerstoerer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.lokhust_heavy_destroyers.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Lokhust Heavy Destroyers
+    - Infantry
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.enmitic_exterminator
+  - wh40k_9e.necrons.weapon.gauss_destructor
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Enmitic Exterminator XOR Gauss Destructor pro Modell.'
+- id: wh40k_9e.necrons.unit.lokhust_lord
+  name_en: Lokhust Lord
+  name_de: Lokhust-Lord
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.lokhust_lord.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - HQ
+    other:
+    - Lokhust Lord
+    - Infantry
+    - Character
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_sword
+  - wh40k_9e.necrons.weapon.staff_of_light
+  - wh40k_9e.necrons.weapon.voidblade
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear:
+  - wh40k_9e.necrons.wargear.phylactery
+  - wh40k_9e.necrons.wargear.resurrection_orb
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Phylactery XOR Resurrection Orb (max 1 von beiden); Phasenverzerrer als Phase-Shifter-unit_rule (F-80).'
+- id: wh40k_9e.necrons.unit.lord
+  name_en: Lord
+  name_de: Lord
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.lord.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Lord
+    - Noble
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_sword
+  - wh40k_9e.necrons.weapon.staff_of_light
+  - wh40k_9e.necrons.weapon.voidblade
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear:
+  - wh40k_9e.necrons.wargear.resurrection_orb
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Resurrection Orb optional (25 pts); Nahkampfwaffe 1-aus-n, Wahl-Logik in NX-3.'
+- id: wh40k_9e.necrons.unit.lychguard
+  name_en: Lychguard
+  name_de: Lychgarde
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.lychguard.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - Core
+    - Infantry
+    - Lychguard
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_sword
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear:
+  - wh40k_9e.necrons.wargear.dispersion_shield
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Warscythe XOR (Hyperphase Sword + Dispersion Shield), truppweite Wahl; Dispersion Shield Teil des Kombi-Upgrades.'
+- id: wh40k_9e.necrons.unit.monolith
+  name_en: Monolith
+  name_de: Monolith
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.monolith.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Lord of War
+    other:
+    - Monolith
+    - Vehicle
+    - Titanic
+    dynasty_selectable: []
+  profile_brackets:
+  - min_wounds: 13
+    max_wounds: 24
+    m: '8"'
+    ws: '6+'
+    bs: '3+'
+    a: '6'
+    effects: []
+  - min_wounds: 7
+    max_wounds: 12
+    m: '6"'
+    ws: '6+'
+    bs: '4+'
+    a: 'W6'
+    effects: []
+  - min_wounds: 1
+    max_wounds: 6
+    m: '4"'
+    ws: '6+'
+    bs: '5+'
+    a: 'W3'
+    effects: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.death_ray
+  - wh40k_9e.necrons.weapon.gauss_flux_arc
+  - wh40k_9e.necrons.weapon.particle_whip
+  - wh40k_9e.necrons.weapon.portal_of_exile
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Particle Whip XOR Death Ray (Hauptwaffe); Gauss Flux Arc 4x + Portal of Exile fest.'
+- id: wh40k_9e.necrons.unit.necron_warriors
+  name_en: Necron Warriors
+  name_de: Necron-Krieger
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.necron_warriors.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Gauss Flayer XOR Gauss Reaper pro Modell (F-99).'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Troops
+    other:
+    - Core
+    - Necron Warriors
+    - Infantry
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_flayer
+  - wh40k_9e.necrons.weapon.gauss_reaper
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.nemesor_zahndrekh
+  name_en: Nemesor Zahndrekh
+  name_de: Nemesor Zahndrekh
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.nemesor_zahndrekh.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    - Sautekh
+    battlefield_role:
+    - HQ
+    other:
+    - Nemesor Zahndrekh
+    - Noble
+    - Overlord
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.staff_of_light
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Phasenverzerrer-Save als Phase-Shifter-unit_rule (F-100).'
+- id: wh40k_9e.necrons.unit.night_scythe
+  name_en: Night Scythe
+  name_de: Nachtsichel
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.night_scythe.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Flyer
+    - Dedicated Transport
+    other:
+    - Aircraft
+    - Night Scythe
+    - Transport
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.twin_tesla_destructor
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.night_shroud
+  name_en: Night Shroud
+  name_de: Schattenschleier
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.night_shroud.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Flyer
+    other:
+    - Aircraft
+    - Night Shroud
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.twin_tesla_destructor
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Forge World.'
+- id: wh40k_9e.necrons.unit.obelisk
+  name_en: Obelisk
+  name_de: Obelisk
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.obelisk.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Lord of War
+    other:
+    - Obelisk
+    - Vehicle
+    - Titanic
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.tesla_sphere
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.ophydian_destroyers
+  name_en: Ophydian Destroyers
+  name_de: Ophys-Zerstörer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.ophydian_destroyers.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Infantry
+    - Ophydian Destroyers
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_reap_blade
+  - wh40k_9e.necrons.weapon.ophydian_claws
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Ophydian Claws fix; Hyperphasentodesklinge als zweite Wahl (F-104, im Catalog noch nicht abgebildet — Codex-Wahrheit).'
+- id: wh40k_9e.necrons.unit.orikan_the_diviner
+  name_en: Orikan the Diviner
+  name_de: Orikan der Seher
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.orikan_the_diviner.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Chronomancer
+    - Cryptek
+    - Dynastic Agent
+    - Orikan the Diviner
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.staff_of_tomorrow
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.overlord
+  name_en: Overlord
+  name_de: Hochlord
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.overlord.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Resurrection Orb optional (25 pts); Nahkampf- und Fernkampfwaffe je 1-aus-n, Wahl-Logik in NX-3.'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Noble
+    - Overlord
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_glaive
+  - wh40k_9e.necrons.weapon.hyperphase_sword
+  - wh40k_9e.necrons.weapon.staff_of_light
+  - wh40k_9e.necrons.weapon.tachyon_arrow
+  - wh40k_9e.necrons.weapon.voidblade
+  - wh40k_9e.necrons.weapon.voidscythe
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear:
+  - wh40k_9e.necrons.wargear.resurrection_orb
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.plasmancer
+  name_en: Plasmancer
+  name_de: Plasmant
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.plasmancer.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Cryptek
+    - Fly
+    - Plasmancer
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.plasmic_lance
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Cryptek-Arkana-Schicht separat.'
+- id: wh40k_9e.necrons.unit.psychomancer
+  name_en: Psychomancer
+  name_de: Psychomant
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.psychomancer.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Cryptek
+    - Fly
+    - Psychomancer
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.abyssal_lance
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Cryptek-Arkana-Schicht separat.'
+- id: wh40k_9e.necrons.unit.royal_warden
+  name_en: Royal Warden
+  name_de: Königswächter
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.royal_warden.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Character
+    - Infantry
+    - Royal Warden
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.relic_gauss_blaster
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2a: Charakter-Kuratierung abgeschlossen.'
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.seraptek_heavy_construct
+  name_en: Seraptek Heavy Construct
+  name_de: Seraptek-Schwerkonstrukt
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.seraptek_heavy_construct.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Lord of War
+    other:
+    - Seraptek Heavy Construct
+    - Titanic
+    - Vehicle
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.singularity_generator
+  - wh40k_9e.necrons.weapon.synaptic_obliterator
+  - wh40k_9e.necrons.weapon.titanic_forelimbs
+  - wh40k_9e.necrons.weapon.transdimensional_projector
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Forge World; Hauptwaffenpaar Singularity Generator XOR Transdimensional Projector (paarweise 2x); Synaptic Obliterator + Titanic Forelimbs fest.'
+- id: wh40k_9e.necrons.unit.skorpekh_destroyers
+  name_en: Skorpekh Destroyers
+  name_de: Skorpekh-Zerstörer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.skorpekh_destroyers.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Hyperphase Threshers fix; Hyperphase Reap-Blade als Skorpekh-Champion-Option.'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - Elites
+    other:
+    - Infantry
+    - Skorpekh Destroyers
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.hyperphase_reap_blade
+  - wh40k_9e.necrons.weapon.hyperphase_threshers
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.skorpekh_lord
+  name_en: Skorpekh Lord
+  name_de: Skorpekh-Lord
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.skorpekh_lord.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    - Destroyer Cult
+    battlefield_role:
+    - HQ
+    other:
+    - Character
+    - Infantry
+    - Skorpekh Lord
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.enmitic_annihilator
+  - wh40k_9e.necrons.weapon.flensing_claw
+  - wh40k_9e.necrons.weapon.hyperphase_harvester
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2a: Charakter-Kuratierung abgeschlossen.'
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.technomancer
+  name_en: Technomancer
+  name_de: Technomant
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.technomancer.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Canoptek Cloak XOR Canoptek Control Node (1-aus-2); Cryptek-Arkana-Schicht separat.'
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Cryptek
+    - Technomancer
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.staff_of_light
+  wargear:
+  - wh40k_9e.necrons.wargear.canoptek_cloak
+  - wh40k_9e.necrons.wargear.canoptek_control_node
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.tesseract_ark
+  name_en: Tesseract Ark
+  name_de: Tesserakt-Arche
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.tesseract_ark.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Heavy Support
+    other:
+    - Quantum Shielding
+    - Tesseract Ark
+    - Vehicle
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.gauss_cannon
+  - wh40k_9e.necrons.weapon.particle_beamer
+  - wh40k_9e.necrons.weapon.tesla_cannon
+  - wh40k_9e.necrons.weapon.tesseract_singularity_chamber
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Tesseract Singularity Chamber fix (Hauptwaffe mit 3 Modi); Sekundaerwaffenpaar gauss_cannon XOR particle_beamer XOR tesla_cannon (Forge World).'
+- id: wh40k_9e.necrons.unit.tesseract_vault
+  name_en: Tesseract Vault
+  name_de: Tesserakt-Gewölbe
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.tesseract_vault.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Lord of War
+    other:
+    - C'tan Shard
+    - Tesseract Vault
+    - Vehicle
+    - Titanic
+    - Fly
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.tesla_sphere
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Eingesperrte C''tan-Kraefte als NX-3 ctan_powers-Block.'
+- id: wh40k_9e.necrons.unit.the_silent_king
+  name_en: The Silent King
+  name_de: Der Stille König
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.the_silent_king.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    - Szarekhan
+    - Triarch
+    battlefield_role:
+    - Lord of War
+    other:
+    - Character
+    - Vehicle
+    - Noble
+    - Dynastic Agent
+    - Supreme Commander
+    - The Silent King
+    - Fly
+    - Phaeron
+    - Szarekh
+    - Triarchal Menhir
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.annihilator_beam
+  - wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
+  - wh40k_9e.necrons.weapon.scythe_of_dust
+  - wh40k_9e.necrons.weapon.staff_of_stars
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung (Silent King + zwei Triarchat-Menhire). verification_status verified_codex_transcription wegen BSData-Catalog-Luecke.'
+- id: wh40k_9e.necrons.unit.tomb_blades
+  name_en: Tomb Blades
+  name_de: Gruftklingen
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.tomb_blades.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - <Dynasty>
+    - Necrons
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Biker
+    - Fly
+    - Tomb Blades
+    - Core
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.particle_beamer
+  - wh40k_9e.necrons.weapon.twin_gauss_blaster
+  - wh40k_9e.necrons.weapon.twin_tesla_carbine
+  wargear:
+  - wh40k_9e.necrons.wargear.nebuloscope
+  - wh40k_9e.necrons.wargear.shadowloom
+  - wh40k_9e.necrons.wargear.shieldvanes
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Truppweite Wahl Fernkampfwaffe (1-aus-3); Wargear in beliebiger Kombination 0-3, NX-3 prueft Standard-Defaults.'
+- id: wh40k_9e.necrons.unit.transcendent_c_tan
+  name_en: Transcendent C'tan
+  name_de: Transzendenter C'tan
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.transcendent_c_tan.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - Elites
+    other:
+    - C'tan Shard
+    - Transcendent C'tan
+    - Monster
+    - Fly
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.crackling_tendrils
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Fractured-Personality-Auswahl als NX-3 ctan_powers-Block.'
+- id: wh40k_9e.necrons.unit.trazyn_the_infinite
+  name_en: Trazyn the Infinite
+  name_de: Trazyn der Unendliche
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.trazyn_the_infinite.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    battlefield_role:
+    - HQ
+    other:
+    - Dynastic Agent
+    - Noble
+    - Overlord
+    - Trazyn the Infinite
+    - Infantry
+    - Character
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.empathic_obliterator
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung.'
+- id: wh40k_9e.necrons.unit.triarch_praetorians
+  name_en: Triarch Praetorians
+  name_de: Triarch-Prätorianer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.triarch_praetorians.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    - Triarch
+    battlefield_role:
+    - Fast Attack
+    other:
+    - Infantry
+    - Fly
+    - Triarch Praetorians
+    - Dynastic Agent
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.particle_caster
+  - wh40k_9e.necrons.weapon.rod_of_covenant
+  - wh40k_9e.necrons.weapon.voidblade
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2b
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2b: Kuratierung abgeschlossen.'
+  - 'NX-2c: Rod of Covenant XOR (Particle Caster + Voidblade) pro Modell (F-119).'
+- id: wh40k_9e.necrons.unit.triarch_stalker
+  name_en: Triarch Stalker
+  name_de: Triarchat-Jagdläufer
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.triarch_stalker.yaml
+  curated_status: curated
+  notes:
+  - Kern-Einheit der aktiven Kreuzzugsstreitmacht.
+  - 'Welle 2c: Kuratierung abgeschlossen.'
+  - 'NX-2c: Stalker''s Forelimbs fix; Hauptwaffe 1-aus-3 (Heat Ray XOR Particle Shredder XOR Twin Heavy Gauss Cannon).'
+  keywords:
+    faction:
+    - Necrons
+    - Triarch
+    battlefield_role:
+    - Elites
+    other:
+    - Dynastic Agent
+    - Quantum Shielding
+    - Triarch Stalker
+    - Vehicle
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.heat_ray
+  - wh40k_9e.necrons.weapon.particle_shredder
+  - wh40k_9e.necrons.weapon.stalkers_forelimbs
+  - wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2c
+    review_method: baseline_automated
+- id: wh40k_9e.necrons.unit.vargard_obyron
+  name_en: Vargard Obyron
+  name_de: Vargard Obyron
+  source_catalog_file: data/catalog/wh40k_9e/imported/necrons.vargard_obyron.yaml
+  curated_status: curated
+  keywords:
+    faction:
+    - Necrons
+    - Sautekh
+    battlefield_role:
+    - HQ
+    other:
+    - Lord
+    - Vargard Obyron
+    - Infantry
+    - Character
+    - Noble
+    dynasty_selectable: []
+  weapon_source_strategy: catalog_entry
+  weapons:
+  - wh40k_9e.necrons.weapon.warscythe
+  wargear: []
+  curation:
+    rules_reviewed: true
+    stratagem_mapping_reviewed: true
+    weapon_profiles_reviewed: true
+    wave_completed: 2d
+    review_method: baseline_automated
+  notes:
+  - 'Welle 2d: Kuratierung abgeschlossen.'
+  - 'NX-2c: Fixe Ausruestung; Phasenverzerrer + Phylakterium als unit_rule (F-122).'
