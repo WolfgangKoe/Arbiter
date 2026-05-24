@@ -1,55 +1,56 @@
 # Projektziele — Arbiter
 
 ## Vision
-Arbiter ist ein WH40k-Battle-Tracker als Web-App (Flask), der Spieler durch eine Partie 9. Edition führt und Spielzustände (Leben, Phasen, Aktionen) verwaltet.
+
+Arbiter ist ein digitaler Spielbegleiter für WH40k 9. Edition (Streamlit).  
+Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwalten, Würfe berechnen.
 
 ---
 
-## Ziel 1 — Grundstruktur: Spielphasen-Navigation ✅ abgeschlossen
+## Ziel 1 — Grundstruktur & Layout ✅
 
-**Scope: minimal, keine Spiellogik, nur Layout und Navigation**
+3-Spalten-Layout mit eingeklappten Einheitenkarten, Phasen-Stepper und VP/CP-Header.
 
-### Layout
-```
-┌──────────────────────────────────────────────────────┐
-│  VP 0  CP 0      RUNDE 1 / 5      VP 0  CP 0        │
-│                  BEFEHLSPHASE                        │
-├─────────────┬────────────────────────┬───────────────┤
-│  Armee 1    │   ←  1 / 7  →         │  Armee 2      │
-│  (Sidebar)  │   [Spiel beenden]      │  (Sidebar)    │
-└─────────────┴────────────────────────┴───────────────┘
-```
-
-### 40k 9e Spielphasen (in Reihenfolge)
-1. Befehlsphase
-2. Bewegungsphase
-3. Psiphase
-4. Fernkampfphase
-5. Angriffphase
-6. Nahkampfphase
-7. Moralphase
-
-### Umgesetzte Features
-- [x] 3-Spalten-Layout: Sidebar links (Armee 1), Mitte (Navigation), Sidebar rechts (Armee 2)
-- [x] Header mit Rundenzähler (Runde X / Y), Siegpunkten (VP) und Befehlspunkten (CP) je Armee
-- [x] Phasen vorwärts und rückwärts durchklicken
-- [x] Rundenübergang: Moralphase → nächste Runde Befehlsphase
-- [x] Konfigurierbare maximale Rundenzahl (Standard: 5)
-- [x] "Spiel beenden"-Button springt jederzeit zum Abschluss-Screen
-- [x] Abschluss-Screen mit Rücksprung zur genauen Phase/Runde und Neustart-Button
-- [x] 21 automatisierte Tests (domain + routes)
-- [x] Streamlit-Prototyp bleibt unberührt in `prototype/`
+- [x] Header: VP · CP · Runde · aktive Phase · aktive Fraktion
+- [x] Linke Spalte: Necron-Einheiten als Akkordeon (eingeklappt)
+- [x] Rechte Spalte: Ork-Einheiten als Akkordeon (eingeklappt)
+- [x] Mitte: Phasen-Stepper + leere Phasenfläche + Navigation + Kampfprotokoll
+- [x] Phasen vorwärts/rückwärts, Rundenübergang, Spielreset
 
 ---
 
-## Ziel 2 — Armeeverwaltung (geplant)
-Armeen aus YAML-Dateien laden und in den Sidebars anzeigen (Name, Fraktion, Einheiten).
+## Ziel 2 — Einheitenstatus
 
-## Ziel 3 — Fernkampfphase (geplant)
-Schussangriffe berechnen (Treffer, Verwundung, Rüstung) analog Streamlit-Prototyp.
+Wunden und Modellverluste direkt auf den Karten verwalten.
 
-## Ziel 4 — Nahkampfphase (geplant)
-Nahkampfangriffe berechnen.
+- [ ] −1W / −D3 / −D6 / +1W auf jeder Einheitenkarte
+- [ ] Wundbalken und Modellzahl live aktualisieren
+- [ ] Einheit als "vernichtet" markieren wenn Wunden = 0
 
-## Ziel 5 — Moralphase & Spielende (geplant)
-Moraltests, Siegbedingungen, Spielzusammenfassung.
+---
+
+## Ziel 3 — Kampfphasen-Logik
+
+Schussphase und Kampfphase mit vollständiger Würfelkette.
+
+- [ ] Angreifer, Waffe, Ziel wählen
+- [ ] Treffer (BS/WS) → Verwundung (S vs T) → Rettungswurf (SV − AP) → Schaden
+- [ ] Ergebnis ins Kampfprotokoll schreiben und Wunden anwenden
+
+---
+
+## Ziel 4 — Armeelisten aus Daten laden
+
+Statt Hardcode: beide Armeen aus YAML/JSON laden.
+
+- [ ] `data/` Verzeichnis mit Armeelisten (YAML)
+- [ ] Beim Start Armee wählen oder laden
+- [ ] Beliebige Einheitenzusammensetzung möglich
+
+---
+
+## Ziel 5 — Spielende & Auswertung
+
+- [ ] VP-Bedingungen konfigurierbar
+- [ ] Siegbedingungen prüfen (nach Runde 5 oder bei Vernichtung)
+- [ ] Abschluss-Screen mit Zusammenfassung

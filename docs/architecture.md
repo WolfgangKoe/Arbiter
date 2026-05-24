@@ -1,95 +1,40 @@
 # Arbiter — Architektur
 
-## Übersicht: Ports & Adapters (Hexagonal)
+## Struktur
 
-```mermaid
-graph TD
-    subgraph Data
-        UY[units.yaml]
-    end
+```
+prototype/
+  app.py      ← Entry Point: set_page_config() + main()
+  models.py   ← Weapon, UnitData, NECRON_UNITS, ORK_UNITS, PHASES
+  engine.py   ← Spiellogik (Würfeln, Schaden, State-Management)
+  ui.py       ← Alle UI-Komponenten und Phasen-Renderer
 
-    subgraph Domain
-        AM[Army]
-        UM[Unit]
-        AR[ArmyRepository]
-    end
-
-    subgraph Adapters
-        NR[NecronYamlArmyRepository]
-        CA[create_app]
-        RT[routes]
-        TP[templates]
-    end
-
-    UY --> NR
-    NR -.->|implements| AR
-    NR --> AM
-    AM --> UM
-    CA -->|wires| NR
-    CA -->|wires| RT
-    AR --> RT
-    RT --> TP
+data/
+  wh40k_9e/   ← YAML-Rohdaten (für Ziel 4)
 ```
 
-*Waffen + Wargear werden in Ziel 3 als eigene Schicht ergänzt.*
+## Module
 
----
+| Datei | Inhalt |
+|-------|--------|
+| `models.py` | `Weapon`, `UnitData` Dataclasses; `NECRON_UNITS`, `ORK_UNITS`, `PHASES` |
+| `engine.py` | `parse_dice`, `wound_threshold`, `resolve_attack`, `apply_damage`, `heal_unit`, `add_log`, `init_state`, `reset_game`, `next_phase` |
+| `ui.py` | `unit_card`, `_shooting_ui`, alle `phase_*`-Funktionen, `PHASE_RENDERERS`, `main` |
+| `app.py` | `st.set_page_config()` + `from ui import main; main()` |
 
-## Schichten
+## Starten
 
-| Schicht | Pfad | Zweck |
-|---------|------|-------|
-| **Domain / Models** | `src/domain/models/` | Reine Datenklassen ohne Framework-Abhängigkeiten |
-| **Domain / Ports** | `src/domain/ports/` | Abstrakte Interfaces (ABCs), die Adapter implementieren |
-| **Adapter / YAML** | `src/adapters/yaml/` | Liest Spieldaten aus YAML-Dateien |
-| **Adapter / Web** | `src/adapters/web/` | Flask-Routen und HTML-Templates |
-| **Kompositionsraum** | `src/adapters/web/__init__.py` | Verdrahtet konkrete Adapter mit Ports (`create_app()`) |
+```bash
+streamlit run prototype/app.py
+```
 
-**Dependency Inversion:** Routen kennen nur `ArmyRepository` (Port). `NecronYamlArmyRepository` wird nie direkt in Routen importiert.
+## Datenfluss
 
----
-
-## YAML-Felder — Necrons
-
-### units.yaml — genutzt
-
-| Feld | Domain-Attribut |
-|------|----------------|
-| `id` | `Unit.id` |
-| `name_en` | `Unit.name_en` |
-| `name_de` | `Unit.name_de` |
-| `keywords.battlefield_role` | `Unit.roles` |
-| `keywords.other` | `Unit.keywords` |
-
-### units.yaml — ignoriert (Kurationsmeta)
-
-`curated_status` · `notes` · `curation` · `source_catalog_file` · `weapon_source_strategy` · `dynasty_selectable` · `weapons` · `wargear`
-
-*`weapons` und `wargear` werden in Ziel 3 geladen.*
-
----
-
-## Battlefield Roles — Deutsche Labels
-
-| YAML-Wert | Anzeige |
-|-----------|---------|
-| HQ | HQ |
-| Troops | Standard |
-| Elites | Elite |
-| Fast Attack | Sturm |
-| Heavy Support | Unterstützung |
-| Flyer | Flieger |
-| Dedicated Transport | Transporter |
-| Lord of War | Kriegskoloss |
-
-Definiert als `BATTLEFIELD_ROLE_DE` in `src/domain/models/unit.py`.
-
----
-
-## Geplante Erweiterungen
-
-| Ziel | Erweiterung |
-|------|------------|
-| **Ziel 3** | `Weapon`, `WeaponProfile`, `Wargear` in Domain; `weapons.yaml` + `wargear.yaml` im YAML-Adapter |
-| **Ziel 4** | Nahkampfwaffen-Berechnung |
-| **Ziel 5** | Spieler-Armeeliste (eigene Units statt Katalog) |
+```
+models.py          engine.py               ui.py
+──────────         ─────────               ─────
+UnitData    ──→    resolve_attack   ──→    phase_shooting()
+NECRON_UNITS ──→   apply_damage     ──→    unit_card()
+PHASES       ──→   next_phase       ──→    main()
+                   st.session_state ←──→   (shared state)
+```
