@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block header_round %}Runde {{ round }}{% if not game_over %} / {{ max_rounds }}{% endif %}{% endblock %}
+{% block header_phase %}{% if not game_over %}{{ phase.name }}{% endif %}{% endblock %}
+{% block header_vp_left %}{{ army1_vp }}{% endblock %}
+{% block header_cp_left %}{{ army1_cp }}{% endblock %}
+{% block header_vp_right %}{{ army2_vp }}{% endblock %}
+{% block header_cp_right %}{{ army2_cp }}{% endblock %}
+
+{% block sidebar_left %}
+<h2>Armee 1</h2>
+<p class="placeholder">— leer —</p>
+{% endblock %}
+
+{% block content %}
+{% if game_over %}
+<div class="game-over">
+    <div class="game-over-title">Spiel beendet</div>
+    <div class="game-over-sub">{{ max_rounds }} Runden gespielt</div>
+    <a class="nav-btn restart-btn" href="{{ restart_url }}">Neues Spiel</a>
+</div>
+{% else %}
+<nav class="phase-nav">
+    {% if prev_url %}
+        <a class="nav-btn" href="{{ prev_url }}">←</a>
+    {% else %}
+        <span class="nav-btn disabled">←</span>
+    {% endif %}
+    <span class="phase-counter">{{ phase.index + 1 }} / {{ total }}</span>
+    {% if next_url %}
+        <a class="nav-btn" href="{{ next_url }}">→</a>
+    {% else %}
+        <span class="nav-btn disabled">→</span>
+    {% endif %}
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block sidebar_right %}
+<h2>Armee 2</h2>
+<p class="placeholder">— leer —</p>
+{% endblock %}

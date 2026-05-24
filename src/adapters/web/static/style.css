@@ -1,0 +1,170 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: #0e0e1a;
+    color: #c8c8e8;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+
+.header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background: #12122a;
+    border-bottom: 1px solid #2a2a55;
+    padding: 0.75rem 1.5rem;
+    gap: 1rem;
+}
+
+.header-army {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-army--right {
+    justify-content: flex-end;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: #555577;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #a0a0ff;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.header-center {
+    text-align: center;
+}
+
+.round-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #555577;
+    text-transform: uppercase;
+}
+
+.header-phase {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #a0a0ff;
+    text-transform: uppercase;
+    margin-top: 0.1rem;
+}
+
+/* ── Main layout ─────────────────────────────────────── */
+
+.layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    flex: 1;
+}
+
+.sidebar {
+    background: #12122a;
+    border-right: 1px solid #2a2a55;
+    padding: 2rem 1.25rem;
+}
+
+.sidebar-right {
+    border-right: none;
+    border-left: 1px solid #2a2a55;
+}
+
+.sidebar h2 {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: #7070dd;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.placeholder {
+    color: #3a3a66;
+    font-size: 0.85rem;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Phase navigation ────────────────────────────────── */
+
+.phase-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.phase-counter {
+    font-size: 0.85rem;
+    color: #555577;
+    letter-spacing: 0.1em;
+    min-width: 3rem;
+    text-align: center;
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #4444aa;
+    border-radius: 4px;
+    color: #a0a0ff;
+    text-decoration: none;
+    font-size: 1.25rem;
+    transition: background 0.15s;
+}
+
+.nav-btn:hover {
+    background: #1e1e44;
+}
+
+.nav-btn.disabled {
+    border-color: #2a2a44;
+    color: #2a2a44;
+    cursor: default;
+}
+
+/* ── Game over ───────────────────────────────────────── */
+
+.game-over {
+    text-align: center;
+}
+
+.game-over-title {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #a0a0ff;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.game-over-sub {
+    font-size: 0.85rem;
+    color: #555577;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+}
+
+.restart-btn {
+    border-color: #7070dd;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+}

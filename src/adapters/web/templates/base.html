@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arbiter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <header class="header">
+        <div class="header-army">
+            <span class="stat-label">VP</span>
+            <span class="stat-value">{% block header_vp_left %}0{% endblock %}</span>
+            <span class="stat-label">CP</span>
+            <span class="stat-value">{% block header_cp_left %}0{% endblock %}</span>
+        </div>
+        <div class="header-center">
+            <div class="round-label">{% block header_round %}Runde 1{% endblock %}</div>
+            <div class="header-phase">{% block header_phase %}{% endblock %}</div>
+        </div>
+        <div class="header-army header-army--right">
+            <span class="stat-label">VP</span>
+            <span class="stat-value">{% block header_vp_right %}0{% endblock %}</span>
+            <span class="stat-label">CP</span>
+            <span class="stat-value">{% block header_cp_right %}0{% endblock %}</span>
+        </div>
+    </header>
+    <div class="layout">
+        <aside class="sidebar sidebar-left">{% block sidebar_left %}{% endblock %}</aside>
+        <main class="main">{% block content %}{% endblock %}</main>
+        <aside class="sidebar sidebar-right">{% block sidebar_right %}{% endblock %}</aside>
+    </div>
+</body>
+</html>
