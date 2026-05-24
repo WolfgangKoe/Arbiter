@@ -51,9 +51,10 @@ body {
 }
 
 .round-label {
-    font-size: 0.75rem;
+    font-size: 1.6rem;
+    font-weight: 600;
     letter-spacing: 0.15em;
-    color: #555577;
+    color: #7070dd;
     text-transform: uppercase;
 }
 

@@ -10,9 +10,9 @@ class Phase:
 PHASES: list[Phase] = [
     Phase(0, "Befehlsphase"),
     Phase(1, "Bewegungsphase"),
-    Phase(2, "Psychische Phase"),
-    Phase(3, "Schussphase"),
+    Phase(2, "Psiphase"),
+    Phase(3, "Fernkampfphase"),
     Phase(4, "Angriffphase"),
-    Phase(5, "Kampfphase"),
+    Phase(5, "Nahkampfphase"),
     Phase(6, "Moralphase"),
 ]

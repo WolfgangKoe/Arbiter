@@ -10,10 +10,10 @@ def test_phases_order() -> None:
     assert names == [
         "Befehlsphase",
         "Bewegungsphase",
-        "Psychische Phase",
-        "Schussphase",
+        "Psiphase",
+        "Fernkampfphase",
         "Angriffphase",
-        "Kampfphase",
+        "Nahkampfphase",
         "Moralphase",
     ]
 

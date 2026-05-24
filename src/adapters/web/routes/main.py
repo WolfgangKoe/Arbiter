@@ -35,12 +35,19 @@ def index() -> str:
             from_round = max_rounds
         from_round = max(1, min(from_round, max_rounds))
 
+        try:
+            from_phase = int(request.args.get("from_phase", len(PHASES) - 1))
+        except ValueError:
+            from_phase = len(PHASES) - 1
+        from_phase = max(0, min(from_phase, len(PHASES) - 1))
+
         return render_template(
             "index.html",
             game_over=True,
             restart_url=f"/?phase=0&round=1&max_rounds={max_rounds}",
-            back_url=f"/?phase=6&round={from_round}&max_rounds={max_rounds}",
+            back_url=f"/?phase={from_phase}&round={from_round}&max_rounds={max_rounds}",
             from_round=from_round,
+            from_phase_name=PHASES[from_phase].name,
             round=max_rounds,
             max_rounds=max_rounds,
             phase=PHASES[0],
@@ -69,11 +76,13 @@ def index() -> str:
         next_url = f"/?phase=0&round={round_num + 1}&max_rounds={max_rounds}"
     else:
         next_url = (
-            f"/?round={max_rounds + 1}&phase=0" f"&from_round={round_num}&max_rounds={max_rounds}"
+            f"/?round={max_rounds + 1}&phase=0"
+            f"&from_round={round_num}&from_phase={phase_index}&max_rounds={max_rounds}"
         )
 
     end_game_url = (
-        f"/?round={max_rounds + 1}&phase=0" f"&from_round={round_num}&max_rounds={max_rounds}"
+        f"/?round={max_rounds + 1}&phase=0"
+        f"&from_round={round_num}&from_phase={phase_index}&max_rounds={max_rounds}"
     )
 
     return render_template(
