@@ -8,59 +8,67 @@
 {% block header_cp_right %}{{ army2_cp }}{% endblock %}
 
 {% block sidebar_left %}
-<h2>{{ army.name }}</h2>
-{% for role, units in army.units_by_role().items() %}
-<div class="role-group">
-  <h3 class="role-label">{{ role }}</h3>
-  <ul class="unit-list">
+<h2 class="text-base tracking-widest text-arb-accent uppercase mb-3">{{ army1.name }}</h2>
+{% for role, units in army1.units_by_role().items() %}
+<div class="mb-4">
+  <h3 class="text-[0.65rem] tracking-[0.12em] text-arb-muted uppercase mb-1">{{ role }}</h3>
+  <ul class="grid grid-cols-1 gap-1 list-none">
     {% for unit in units %}
-    <li>{{ unit.name_de }}</li>
+    <li class="bg-arb-hover border-l-2 border-arb-accent px-2 py-1.5 rounded-sm">
+      <span class="text-[0.75rem] text-arb-text leading-snug block">{{ unit.name_de }}</span>
+      {% if unit.keywords %}<span class="text-[0.6rem] text-arb-muted tracking-wider">{{ unit.keywords | join(' · ') }}</span>{% endif %}
+    </li>
     {% endfor %}
   </ul>
 </div>
 {% endfor %}
+{% if not army1.units %}<p class="text-arb-dark text-sm">— keine Einheiten —</p>{% endif %}
 {% endblock %}
 
 {% block content %}
 {% if game_over %}
-<div class="game-over">
-    <div class="game-over-title">Spiel beendet</div>
-    <div class="game-over-sub">{{ max_rounds }} Runden gespielt</div>
-    <div class="game-over-actions">
-        <a class="nav-btn" href="{{ back_url }}">← Runde {{ from_round }}, {{ from_phase_name }}</a>
-        <a class="nav-btn restart-btn" href="{{ restart_url }}">Neues Spiel</a>
+<div class="text-center">
+    <div class="text-3xl font-semibold tracking-[0.2em] text-arb-accent-lt uppercase mb-2">Spiel beendet</div>
+    <div class="text-sm text-arb-muted tracking-widest mb-8">{{ max_rounds }} Runden gespielt</div>
+    <div class="flex gap-4 justify-center">
+        <a class="inline-block px-6 py-2 border border-arb-btn rounded text-arb-accent-lt text-xl hover:bg-arb-hover transition-colors" href="{{ back_url }}">← Runde {{ from_round }}, {{ from_phase_name }}</a>
+        <a class="inline-block px-6 py-2 border border-arb-accent rounded text-arb-accent-lt text-[0.95rem] tracking-widest hover:bg-arb-hover transition-colors" href="{{ restart_url }}">Neues Spiel</a>
     </div>
 </div>
 {% else %}
-<div class="phase-controls">
-    <nav class="phase-nav">
+<div class="flex flex-col items-center gap-8">
+    <nav class="flex items-center gap-6">
         {% if prev_url %}
-            <a class="nav-btn" href="{{ prev_url }}">←</a>
+            <a class="inline-block px-6 py-2 border border-arb-btn rounded text-arb-accent-lt text-xl hover:bg-arb-hover transition-colors" href="{{ prev_url }}">←</a>
         {% else %}
-            <span class="nav-btn disabled">←</span>
+            <span class="inline-block px-6 py-2 border border-[#3a3020] rounded text-[#3a3020] text-xl cursor-default">←</span>
         {% endif %}
-        <span class="phase-counter">{{ phase.index + 1 }} / {{ total }}</span>
+        <span class="text-sm text-arb-muted tracking-widest min-w-12 text-center">{{ phase.index + 1 }} / {{ total }}</span>
         {% if next_url %}
-            <a class="nav-btn" href="{{ next_url }}">→</a>
+            <a class="inline-block px-6 py-2 border border-arb-btn rounded text-arb-accent-lt text-xl hover:bg-arb-hover transition-colors" href="{{ next_url }}">→</a>
         {% else %}
-            <span class="nav-btn disabled">→</span>
+            <span class="inline-block px-6 py-2 border border-[#3a3020] rounded text-[#3a3020] text-xl cursor-default">→</span>
         {% endif %}
     </nav>
-    <a class="end-game-btn" href="{{ end_game_url }}">Spiel beenden</a>
+    <a class="text-[0.75rem] tracking-widest text-arb-dark uppercase border-b border-transparent hover:text-arb-red hover:border-arb-red transition-colors" href="{{ end_game_url }}">Spiel beenden</a>
 </div>
 {% endif %}
 {% endblock %}
 
 {% block sidebar_right %}
-<h2>{{ army.name }}</h2>
-{% for role, units in army.units_by_role().items() %}
-<div class="role-group">
-  <h3 class="role-label">{{ role }}</h3>
-  <ul class="unit-list">
+<h2 class="text-base tracking-widest text-arb-accent uppercase mb-3">{{ army2.name }}</h2>
+{% for role, units in army2.units_by_role().items() %}
+<div class="mb-4">
+  <h3 class="text-[0.65rem] tracking-[0.12em] text-arb-muted uppercase mb-1">{{ role }}</h3>
+  <ul class="grid grid-cols-1 gap-1 list-none">
     {% for unit in units %}
-    <li>{{ unit.name_de }}</li>
+    <li class="bg-arb-hover border-l-2 border-arb-accent px-2 py-1.5 rounded-sm">
+      <span class="text-[0.75rem] text-arb-text leading-snug block">{{ unit.name_de }}</span>
+      {% if unit.keywords %}<span class="text-[0.6rem] text-arb-muted tracking-wider">{{ unit.keywords | join(' · ') }}</span>{% endif %}
+    </li>
     {% endfor %}
   </ul>
 </div>
 {% endfor %}
+{% if not army2.units %}<p class="text-arb-dark text-sm">— keine Einheiten —</p>{% endif %}
 {% endblock %}

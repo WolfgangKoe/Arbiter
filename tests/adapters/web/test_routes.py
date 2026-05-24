@@ -12,7 +12,11 @@ def app() -> Flask:
 
 @pytest.fixture()
 def client(app: Flask) -> FlaskClient:
-    return app.test_client()
+    c = app.test_client()
+    with c.session_transaction() as sess:
+        sess["army1"] = {"name": "Armee 1", "unit_ids": []}
+        sess["army2"] = {"name": "Armee 2", "unit_ids": []}
+    return c
 
 
 # ── Phase navigation ──────────────────────────────────────────────────────────
@@ -22,7 +26,7 @@ def test_first_phase_has_no_prev(client: FlaskClient) -> None:
     response = client.get("/?phase=0&round=1")
     html = response.data.decode()
     assert response.status_code == 200
-    assert 'class="nav-btn disabled">←' in html
+    assert 'cursor-default">←' in html
 
 
 def test_first_phase_has_next(client: FlaskClient) -> None:
@@ -34,7 +38,7 @@ def test_first_phase_has_next(client: FlaskClient) -> None:
 def test_last_phase_has_no_next_on_last_round(client: FlaskClient) -> None:
     response = client.get("/?phase=6&round=5&max_rounds=5")
     html = response.data.decode()
-    assert 'class="nav-btn disabled">→' not in html  # next leads to game over, not disabled
+    assert 'cursor-default">→' not in html  # next leads to game over, not disabled
     assert "round=6" in html
 
 
