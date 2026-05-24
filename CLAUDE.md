@@ -97,6 +97,11 @@
 - **Mocking-Strategie**: Externe Abhängigkeiten (DB, API, Dateisystem) werden gemockt — interne Logik nicht
 - **Performance-Tests**: dort wo Skalierung relevant ist (z.B. Massenberechnungen)
 
+### Pflicht bei Flask-Erweiterungen
+- **Jede** neue Route, jedes neue Domain-Modell und jede neue Service-Funktion bekommt sofort Tests
+- Eine Erweiterung der Flask-App gilt erst als fertig, wenn die zugehörigen Tests grün sind
+- Struktur: `tests/domain/` für Modelle & Services, `tests/adapters/web/` für Routen
+
 ### Ablauf
 1. Test schreiben (TDD bevorzugt, aber nicht erzwungen)
 2. Test rot laufen lassen
