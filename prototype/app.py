@@ -1,7 +1,7 @@
-import streamlit as st
 import random
-from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
+from dataclasses import dataclass
+
+import streamlit as st
 
 st.set_page_config(
     page_title="WH40k 9th Ed. – Battle Tracker",
@@ -9,7 +9,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st.markdown("""
+st.markdown(
+    """
 <style>
     .stProgress > div > div { border-radius: 4px; }
     div[data-testid="metric-container"] { background: #1e1e2e; border-radius: 8px; padding: 8px; }
@@ -17,20 +18,23 @@ st.markdown("""
     .log-area { font-family: monospace; font-size: 12px; }
     h2 { margin-top: 0; }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ---------------------------------------------------------------------------
 # Data model
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Weapon:
     name: str
-    attacks: str       # "1", "D6", "2D6", etc.
-    skill: int         # target number (e.g. 3 means hits on 3+)
+    attacks: str  # "1", "D6", "2D6", etc.
+    skill: int  # target number (e.g. 3 means hits on 3+)
     strength: int
-    ap: int            # 0, -1, -2, … (negative = armour-piercing)
-    damage: str        # "1", "D3", "D6", etc.
+    ap: int  # 0, -1, -2, … (negative = armour-piercing)
+    damage: str  # "1", "D3", "D6", etc.
     abilities: str = ""
     is_melee: bool = False
 
@@ -39,16 +43,16 @@ class Weapon:
 class UnitData:
     uid: str
     name: str
-    count: int         # number of models
+    count: int  # number of models
     move: str
     toughness: int
-    save: int          # e.g. 3 means 3+
-    invuln: Optional[int]   # invulnerable save value or None
-    fnp: Optional[int]      # feel-no-pain value or None
-    wounds: int        # wounds per model
+    save: int  # e.g. 3 means 3+
+    invuln: int | None  # invulnerable save value or None
+    fnp: int | None  # feel-no-pain value or None
+    wounds: int  # wounds per model
     leadership: int
     oc: int
-    weapons: List[Weapon]
+    weapons: list[Weapon]
     abilities: str = ""
     keywords: str = ""
 
@@ -61,21 +65,38 @@ class UnitData:
 # Zarekhan'Sol – Patrol Detachment (Necrons, Nephrekh, 25PL / 485pts / 3CP)
 # Dynastic Code: Translocation Beams → alle Einheiten mit Dynastiecode: 6+ Invuln
 # ---------------------------------------------------------------------------
-NECRON_UNITS: List[UnitData] = [
+NECRON_UNITS: list[UnitData] = [
     UnitData(
         uid="overlord",
         name="Overlord (Warlord)",
-        count=1, move='6"', toughness=5, save=3, invuln=4, fnp=None,
-        wounds=5, leadership=10, oc=1,
+        count=1,
+        move='6"',
+        toughness=5,
+        save=3,
+        invuln=4,
+        fnp=None,
+        wounds=5,
+        leadership=10,
+        oc=1,
         weapons=[
             # Gauntlet: auto-hits (skill=1); statt Wund-Roll → D6 pro Modell, 6er = 1 MV
             Weapon(
-                "Gauntlet of the Conflagrator", "1", 1, 5, 0, "1",
+                "Gauntlet of the Conflagrator",
+                "1",
+                1,
+                5,
+                0,
+                "1",
                 "Auto-trifft! Kein Wundwurf: 1W6 pro Modell im Ziel, jede 6 = 1 MV (Rettungswürfe ignoriert)",
             ),
             # Voidscythe: S×2=10, AP-4, D3; -1 zum Treffen bereits eingerechnet (WS2+→3+)
             Weapon(
-                "Voidscythe", "4", 3, 10, -4, "3",
+                "Voidscythe",
+                "4",
+                3,
+                10,
+                -4,
+                "3",
                 "-1 zum Trefferwurf (bereits eingerechnet: WS2+ → 3+)",
                 is_melee=True,
             ),
@@ -83,19 +104,26 @@ NECRON_UNITS: List[UnitData] = [
         abilities=(
             "Living Metal (+1W/Befehlsphase) | Phase Shifter: 4+ Invuln | "
             "Warlord-Trait: Skin of Living Gold (-1 auf Trefferwürfe gegen diesen) | "
-            "My Will Be Done: 1 befreundete CORE-Einheit in 9\" +1 auf Trefferwürfe | "
-            "Relentless March (Aura): befreundete CORE in 6\" +1\" Bewegung | "
-            "Resurrection Orb: 1×/Spiel Reanimation-Protokoll für befreundete Einheit in 6\""
+            'My Will Be Done: 1 befreundete CORE-Einheit in 9" +1 auf Trefferwürfe | '
+            'Relentless March (Aura): befreundete CORE in 6" +1" Bewegung | '
+            'Resurrection Orb: 1×/Spiel Reanimation-Protokoll für befreundete Einheit in 6"'
         ),
         keywords="Infantry, Character, Noble, Overlord, Warlord",
     ),
     UnitData(
         uid="warriors",
         name="Necron Warriors ×10",
-        count=10, move='5"', toughness=4, save=4, invuln=6, fnp=None,
-        wounds=1, leadership=10, oc=2,
+        count=10,
+        move='5"',
+        toughness=4,
+        save=4,
+        invuln=6,
+        fnp=None,
+        wounds=1,
+        leadership=10,
+        oc=2,
         weapons=[
-            Weapon("Gauss Reaper", "2", 3, 5, -2, "1", "Assault 2, 12\""),
+            Weapon("Gauss Reaper", "2", 3, 5, -2, "1", 'Assault 2, 12"'),
             Weapon("Nahkampfwaffe", "1", 3, 4, 0, "1", is_melee=True),
         ],
         abilities=(
@@ -107,17 +135,36 @@ NECRON_UNITS: List[UnitData] = [
     UnitData(
         uid="skorpekh",
         name="Skorpekh Destroyers ×3",
-        count=3, move='8"', toughness=5, save=3, invuln=6, fnp=None,
-        wounds=3, leadership=10, oc=2,
+        count=3,
+        move='8"',
+        toughness=5,
+        save=3,
+        invuln=6,
+        fnp=None,
+        wounds=3,
+        leadership=10,
+        oc=2,
         weapons=[
             # 1 Modell: Reap-Blade; 2 Modelle: Threshers (beide wählbar)
             Weapon(
-                "Hyperphase Reap-Blade", "3", 3, 7, -4, "3",
-                "1 Modell (S: Profil+2=7)", is_melee=True,
+                "Hyperphase Reap-Blade",
+                "3",
+                3,
+                7,
+                -4,
+                "3",
+                "1 Modell (S: Profil+2=7)",
+                is_melee=True,
             ),
             Weapon(
-                "Hyperphase Threshers", "4", 3, 5, -3, "2",
-                "2 Modelle; +1 Angriff des Trägers pro Kampf", is_melee=True,
+                "Hyperphase Threshers",
+                "4",
+                3,
+                5,
+                -3,
+                "2",
+                "2 Modelle; +1 Angriff des Trägers pro Kampf",
+                is_melee=True,
             ),
         ],
         abilities=(
@@ -130,20 +177,34 @@ NECRON_UNITS: List[UnitData] = [
     UnitData(
         uid="triarch_stalker",
         name="Triarch Stalker",
-        count=1, move='10"', toughness=6, save=3, invuln=5, fnp=None,
-        wounds=12, leadership=10, oc=3,
+        count=1,
+        move='10"',
+        toughness=6,
+        save=3,
+        invuln=5,
+        fnp=None,
+        wounds=12,
+        leadership=10,
+        oc=3,
         weapons=[
             # Auto-trifft → skill=1
+            Weapon("Heat Ray (Dispersed)", "2D6", 1, 5, -1, "1", 'Auto-trifft! Heavy 2D6, 12"'),
             Weapon(
-                "Heat Ray (Dispersed)", "2D6", 1, 5, -1, "1",
-                "Auto-trifft! Heavy 2D6, 12\""
+                "Heat Ray (Focused)",
+                "2",
+                3,
+                8,
+                -4,
+                "D6",
+                'Heavy 2, 24"; innerhalb halbe Reichweite: D+D6+2',
             ),
             Weapon(
-                "Heat Ray (Focused)", "2", 3, 8, -4, "D6",
-                "Heavy 2, 24\"; innerhalb halbe Reichweite: D+D6+2"
-            ),
-            Weapon(
-                "Stalker's Forelimbs", "3", 3, 7, -2, "3",
+                "Stalker's Forelimbs",
+                "3",
+                3,
+                7,
+                -2,
+                "3",
                 is_melee=True,
             ),
         ],
@@ -151,18 +212,30 @@ NECRON_UNITS: List[UnitData] = [
             "Living Metal (+1W/Befehlsphase) | Quantum Shielding: 5+ Invuln + unmodif. Wundwürfe 1–3 scheitern immer | "
             "Targeting Relay: nach Treffer → befreundete NECRONS-Modelle wiederholen Trefferwürfe von 1 vs. dasselbe Ziel | "
             "DYNASTIC AGENT (kein Dynastiecode) | "
-            "Degradiert: 4–6W: M8\"/WS4+/BS4+ | 1–3W: M6\"/WS5+/BS5+"
+            'Degradiert: 4–6W: M8"/WS4+/BS4+ | 1–3W: M6"/WS5+/BS5+'
         ),
         keywords="Vehicle, Dynastic Agent, Triarch, Quantum Shielding, Core, Elites",
     ),
     UnitData(
         uid="scarabs",
         name="Canoptek Scarab Swarms ×3",
-        count=3, move='10"', toughness=3, save=6, invuln=6, fnp=None,
-        wounds=4, leadership=10, oc=0,
+        count=3,
+        move='10"',
+        toughness=3,
+        save=6,
+        invuln=6,
+        fnp=None,
+        wounds=4,
+        leadership=10,
+        oc=0,
         weapons=[
             Weapon(
-                "Feeder Mandibles", "4", 4, 3, 0, "1",
+                "Feeder Mandibles",
+                "4",
+                4,
+                3,
+                0,
+                "1",
                 "Unmodif. 6 zum Treffen = automatisch verwundet",
                 is_melee=True,
             ),
@@ -178,20 +251,37 @@ NECRON_UNITS: List[UnitData] = [
 # Ork-Armee – Patrol Detachment (Orks, Bad Moons, 25PL / 470pts / 1CP)
 # Clan Kultur: Bad Moons → +1 Angriff bei Schusswaffen wenn keine Bewegung
 # ---------------------------------------------------------------------------
-ORK_UNITS: List[UnitData] = [
+ORK_UNITS: list[UnitData] = [
     UnitData(
         uid="big_mek",
         name="Big Mek in Mega Armour",
-        count=1, move='4"', toughness=5, save=2, invuln=4, fnp=None,
-        wounds=6, leadership=7, oc=1,
+        count=1,
+        move='4"',
+        toughness=5,
+        save=2,
+        invuln=4,
+        fnp=None,
+        wounds=6,
+        leadership=7,
+        oc=1,
         weapons=[
             Weapon(
-                "Kustom Mega-Blasta", "1", 5, 8, -3, "D6",
-                "Assault 1, 24\"; unmodif. 1 zum Treffen = 1 MV an eigener Einheit",
+                "Kustom Mega-Blasta",
+                "1",
+                5,
+                8,
+                -3,
+                "D6",
+                'Assault 1, 24"; unmodif. 1 zum Treffen = 1 MV an eigener Einheit',
             ),
             Weapon(
-                "Tellyport Blasta", "D6", 5, 8, -3, "1",
-                "Assault D6, 18\"; unmodif. 1 zum Treffen = 1 MV an eigener Einheit",
+                "Tellyport Blasta",
+                "D6",
+                5,
+                8,
+                -3,
+                "1",
+                'Assault D6, 18"; unmodif. 1 zum Treffen = 1 MV an eigener Einheit',
             ),
         ],
         abilities=(
@@ -205,16 +295,34 @@ ORK_UNITS: List[UnitData] = [
     UnitData(
         uid="warboss",
         name="Warboss in Mega Armour (Warlord)",
-        count=1, move='4"', toughness=5, save=2, invuln=None, fnp=None,
-        wounds=7, leadership=8, oc=1,
+        count=1,
+        move='4"',
+        toughness=5,
+        save=2,
+        invuln=None,
+        fnp=None,
+        wounds=7,
+        leadership=8,
+        oc=1,
         weapons=[
             Weapon(
-                "Kustom Shoota", "4", 5, 4, 0, "1",
-                "Assault 4, 18\"",
+                "Kustom Shoota",
+                "4",
+                5,
+                4,
+                0,
+                "1",
+                'Assault 4, 18"',
             ),
             Weapon(
-                "Boss Klaw", "4", 2, 10, -3, "3",
-                "S×2 (Profil 5 → 10)", is_melee=True,
+                "Boss Klaw",
+                "4",
+                2,
+                10,
+                -3,
+                "3",
+                "S×2 (Profil 5 → 10)",
+                is_melee=True,
             ),
         ],
         abilities=(
@@ -226,46 +334,72 @@ ORK_UNITS: List[UnitData] = [
     UnitData(
         uid="boyz",
         name="Boyz ×10",
-        count=10, move='5"', toughness=4, save=6, invuln=None, fnp=None,
-        wounds=1, leadership=7, oc=2,
+        count=10,
+        move='5"',
+        toughness=4,
+        save=6,
+        invuln=None,
+        fnp=None,
+        wounds=1,
+        leadership=7,
+        oc=2,
         weapons=[
-            Weapon("Slugga", "1", 5, 4, 0, "1", "Pistol 1, 12\""),
-            Weapon("Shoota", "2", 5, 4, 0, "1", "Assault 2, 18\" (3 Modelle)"),
-            Weapon("Big Shoota", "3", 5, 5, 0, "1", "Assault 3, 36\" (1 Modell)"),
+            Weapon("Slugga", "1", 5, 4, 0, "1", 'Pistol 1, 12"'),
+            Weapon("Shoota", "2", 5, 4, 0, "1", 'Assault 2, 18" (3 Modelle)'),
+            Weapon("Big Shoota", "3", 5, 5, 0, "1", 'Assault 3, 36" (1 Modell)'),
             Weapon("Choppa", "2", 3, 4, -1, "1", "S+1 (User→4)", is_melee=True),
             Weapon("Power Klaw (Boss Nob)", "3", 3, 8, -3, "2", "S×2 (4→8)", is_melee=True),
         ],
         abilities=(
             "Mob Rule: statt Moraltest W6 würfeln, bei 1 stirbt 1 Modell zusätzlich, sonst bestanden | "
             "Besetzung: Boss Nob (W2, A3) + 1×Big Shoota + 3×Shoota + 5×Slugga&Choppa | "
-            "Stikkbombs: Handgranate 1, 6\", S3, AP0, D1"
+            'Stikkbombs: Handgranate 1, 6", S3, AP0, D1'
         ),
         keywords="Infantry, Core, Ork Boyz, Troops",
     ),
     UnitData(
         uid="gretchin",
         name="Gretchin ×10",
-        count=10, move='5"', toughness=2, save=6, invuln=None, fnp=None,
-        wounds=1, leadership=4, oc=1,
+        count=10,
+        move='5"',
+        toughness=2,
+        save=6,
+        invuln=None,
+        fnp=None,
+        wounds=1,
+        leadership=4,
+        oc=1,
         weapons=[
-            Weapon("Grot Blasta", "1", 5, 3, 0, "1", "Pistol 1, 12\""),
+            Weapon("Grot Blasta", "1", 5, 3, 0, "1", 'Pistol 1, 12"'),
         ],
         abilities=(
             "Objective Secured (wenn Runtherd in Reichweite) | "
-            "Cowardly (wenn keine befreundete Einheit in 6\": automatisch Moraltest fehlgeschlagen)"
+            'Cowardly (wenn keine befreundete Einheit in 6": automatisch Moraltest fehlgeschlagen)'
         ),
         keywords="Infantry, Gretchin, Troops",
     ),
     UnitData(
         uid="warbikers",
         name="Warbikers ×3",
-        count=3, move='14"', toughness=5, save=4, invuln=None, fnp=None,
-        wounds=2, leadership=7, oc=2,
+        count=3,
+        move='14"',
+        toughness=5,
+        save=4,
+        invuln=None,
+        fnp=None,
+        wounds=2,
+        leadership=7,
+        oc=2,
         weapons=[
             # 2 Dakkaguns pro Modell → 6 Schuss pro Modell
             Weapon(
-                "Dakkagun ×2", "6", 5, 5, 0, "1",
-                "2× Dakkagun á Assault 3 = 6 Schuss pro Modell, 18\""
+                "Dakkagun ×2",
+                "6",
+                5,
+                5,
+                0,
+                "1",
+                '2× Dakkagun á Assault 3 = 6 Schuss pro Modell, 18"',
             ),
             Weapon("Choppa", "2", 3, 4, -1, "1", "S+1", is_melee=True),
             Weapon("Big Choppa (Boss Nob)", "3", 3, 5, -1, "2", "S+2, Boss Nob", is_melee=True),
@@ -280,16 +414,28 @@ ORK_UNITS: List[UnitData] = [
     UnitData(
         uid="mek_gun",
         name="Mek Gun (Kustom Mega Kannon)",
-        count=1, move='3"', toughness=7, save=4, invuln=None, fnp=None,
-        wounds=4, leadership=4, oc=3,
+        count=1,
+        move='3"',
+        toughness=7,
+        save=4,
+        invuln=None,
+        fnp=None,
+        wounds=4,
+        leadership=4,
+        oc=3,
         weapons=[
             Weapon(
-                "Kustom Mega Kannon", "D6", 5, 8, -3, "D3",
-                "Heavy D6, 36\"; Blast (min. 3 Angriffe gegen 6+ Modelle)",
+                "Kustom Mega Kannon",
+                "D6",
+                5,
+                8,
+                -3,
+                "D3",
+                'Heavy D6, 36"; Blast (min. 3 Angriffe gegen 6+ Modelle)',
             ),
         ],
         abilities=(
-            "Artillery | Grot-Crew: wenn Gretchin-Einheit in 3\", +1 auf Trefferwürfe | "
+            'Artillery | Grot-Crew: wenn Gretchin-Einheit in 3", +1 auf Trefferwürfe | '
             "Schwerfällig: kann nicht Vorstoßen"
         ),
         keywords="Vehicle, Artillery, Mek Gun, Heavy Support",
@@ -297,18 +443,19 @@ ORK_UNITS: List[UnitData] = [
 ]
 
 PHASES = [
-    ("⚔️  Befehlsphase",    "command"),
-    ("🏃  Bewegungsphase",   "movement"),
-    ("🔮  Psiphase",         "psychic"),
-    ("🎯  Schussphase",      "shooting"),
-    ("💨  Sturmphase",       "charge"),
-    ("👊  Kampfphase",       "fight"),
-    ("😱  Moralphase",       "morale"),
+    ("⚔️  Befehlsphase", "command"),
+    ("🏃  Bewegungsphase", "movement"),
+    ("🔮  Psiphase", "psychic"),
+    ("🎯  Schussphase", "shooting"),
+    ("💨  Sturmphase", "charge"),
+    ("👊  Kampfphase", "fight"),
+    ("😱  Moralphase", "morale"),
 ]
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def parse_dice(s: str) -> int:
     s = str(s).upper().strip()
@@ -333,12 +480,14 @@ def wound_threshold(strength: int, toughness: int) -> int:
 
 
 def resolve_attack(
-    attacker: UnitData, atk_state: dict,
+    attacker: UnitData,
+    atk_state: dict,
     weapon: Weapon,
-    defender: UnitData, def_state: dict,
+    defender: UnitData,
+    def_state: dict,
     num_models: int,
-) -> Tuple[int, List[str]]:
-    msgs: List[str] = []
+) -> tuple[int, list[str]]:
+    msgs: list[str] = []
     total_attacks = parse_dice(weapon.attacks) * num_models
     skill_label = "WS" if weapon.is_melee else "BS"
     msgs.append(
@@ -358,7 +507,9 @@ def resolve_attack(
     thresh = wound_threshold(weapon.strength, defender.toughness)
     wound_rolls = [random.randint(1, 6) for _ in range(hits)]
     wounds = sum(1 for r in wound_rolls if r >= thresh)
-    msgs.append(f"Verwundungswürfe (S{weapon.strength} vs T{defender.toughness}, brauche {thresh}+): {wound_rolls} → **{wounds} Verwundungen**")
+    msgs.append(
+        f"Verwundungswürfe (S{weapon.strength} vs T{defender.toughness}, brauche {thresh}+): {wound_rolls} → **{wounds} Verwundungen**"
+    )
     if wounds == 0:
         msgs.append("Keine Verwundungen!")
         return 0, msgs
@@ -368,9 +519,13 @@ def resolve_attack(
     effective_save = armour_save
     if defender.invuln and defender.invuln < effective_save:
         effective_save = defender.invuln
-        msgs.append(f"Rüstungswurf durch AP{weapon.ap} auf {armour_save}+, Unverwundbarkeitsrettung {defender.invuln}+ greift")
+        msgs.append(
+            f"Rüstungswurf durch AP{weapon.ap} auf {armour_save}+, Unverwundbarkeitsrettung {defender.invuln}+ greift"
+        )
     else:
-        msgs.append(f"Rüstungswurf: {defender.save}+ mit AP{weapon.ap} → effektiv {effective_save}+")
+        msgs.append(
+            f"Rüstungswurf: {defender.save}+ mit AP{weapon.ap} → effektiv {effective_save}+"
+        )
 
     if effective_save > 6:
         failed = wounds
@@ -378,7 +533,9 @@ def resolve_attack(
     else:
         save_rolls = [random.randint(1, 6) for _ in range(wounds)]
         failed = sum(1 for r in save_rolls if r < effective_save)
-        msgs.append(f"Rettungswürfe ({effective_save}+): {save_rolls} → **{failed} fehlgeschlagen**")
+        msgs.append(
+            f"Rettungswürfe ({effective_save}+): {save_rolls} → **{failed} fehlgeschlagen**"
+        )
 
     if failed == 0:
         msgs.append("Alle Rettungswürfe erfolgreich!")
@@ -389,7 +546,9 @@ def resolve_attack(
         fnp_rolls = [random.randint(1, 6) for _ in range(failed)]
         survived = sum(1 for r in fnp_rolls if r >= defender.fnp)
         failed -= survived
-        msgs.append(f"Feel No Pain ({defender.fnp}+): {fnp_rolls} → {survived} gerettet, noch {failed} übrig")
+        msgs.append(
+            f"Feel No Pain ({defender.fnp}+): {fnp_rolls} → {survived} gerettet, noch {failed} übrig"
+        )
 
     # Damage
     total_dmg = sum(parse_dice(weapon.damage) for _ in range(failed))
@@ -434,6 +593,7 @@ def add_log(msg: str):
 # Session state init
 # ---------------------------------------------------------------------------
 
+
 def init_state():
     if "initialized" in st.session_state:
         return
@@ -465,6 +625,7 @@ def reset_game():
 # UI: unit card
 # ---------------------------------------------------------------------------
 
+
 def unit_card(unit: UnitData, state: dict, faction: str):
     destroyed = state["destroyed"]
     cur = state["current_wounds"]
@@ -475,7 +636,9 @@ def unit_card(unit: UnitData, state: dict, faction: str):
         color = "#555"
 
     title = f"~~{unit.name}~~" if destroyed else unit.name
-    subtitle = "💀 VERNICHTET" if destroyed else f"❤️ {cur}/{total} LP  ({models}/{unit.count} Modelle)"
+    subtitle = (
+        "💀 VERNICHTET" if destroyed else f"❤️ {cur}/{total} LP  ({models}/{unit.count} Modelle)"
+    )
 
     with st.expander(f"{title}  —  {subtitle}", expanded=not destroyed):
         if destroyed:
@@ -528,15 +691,14 @@ def unit_card(unit: UnitData, state: dict, faction: str):
                 st.rerun()
 
         # Weapons
-        st.caption(f"**Waffen:**")
+        st.caption("**Waffen:**")
         for w in unit.weapons:
             icon = "⚔️" if w.is_melee else "🎯"
             ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
             st.caption(
                 f"{icon} **{w.name}** | A{w.attacks} | "
                 f"{'WS' if w.is_melee else 'BS'}{w.skill}+ | S{w.strength} | "
-                f"{ap_str} | D{w.damage}"
-                + (f" | _{w.abilities}_" if w.abilities else "")
+                f"{ap_str} | D{w.damage}" + (f" | _{w.abilities}_" if w.abilities else "")
             )
 
         if unit.abilities:
@@ -547,11 +709,10 @@ def unit_card(unit: UnitData, state: dict, faction: str):
 # UI: phases
 # ---------------------------------------------------------------------------
 
+
 def phase_command():
     active = st.session_state.active
-    st.info(
-        "**Befehlsphase:** Erhalte 1 Befehlspunkt. Aktiviere Fähigkeiten. Nutze Strategeme."
-    )
+    st.info("**Befehlsphase:** Erhalte 1 Befehlspunkt. Aktiviere Fähigkeiten. Nutze Strategeme.")
     c1, c2 = st.columns(2)
     with c1:
         st.metric(f"CP {active}", st.session_state.cp[active])
@@ -595,7 +756,7 @@ def phase_movement():
     states = st.session_state.necron_units if active == "Necrons" else st.session_state.ork_units
 
     st.info(
-        "**Bewegungsphase:** Normal bewegen (bis M\"), Vorstoßen (+D6\", kein Schießen/Sturm), "
+        '**Bewegungsphase:** Normal bewegen (bis M"), Vorstoßen (+D6", kein Schießen/Sturm), '
         "Zurückweichen (kein Schießen/Sturm)."
     )
     alive = [(u, states[u.uid]) for u in units if not states[u.uid]["destroyed"]]
@@ -614,7 +775,7 @@ def phase_movement():
     with c2:
         if st.button("💨 Vorstoßen", key="mv_advance"):
             adv = random.randint(1, 6)
-            add_log(f"💨 {unit.name} stößt vor: +{adv}\" (kein Schießen/Sturm)")
+            add_log(f'💨 {unit.name} stößt vor: +{adv}" (kein Schießen/Sturm)')
             st.rerun()
     with c3:
         if st.button("🏃 Zurückweichen", key="mv_fallback"):
@@ -653,16 +814,29 @@ def phase_psychic():
             st.info(f"Abwehrwurf: {total}")
 
 
-def _shooting_ui(label_prefix: str, attacker_faction: str, defender_faction: str,
-                 is_melee: bool = False):
+def _shooting_ui(
+    label_prefix: str, attacker_faction: str, defender_faction: str, is_melee: bool = False
+):
     phase_label = "Nahkampf" if is_melee else "Schuss"
     attacker_units = NECRON_UNITS if attacker_faction == "Necrons" else ORK_UNITS
     defender_units = ORK_UNITS if attacker_faction == "Necrons" else NECRON_UNITS
-    atk_states = st.session_state.necron_units if attacker_faction == "Necrons" else st.session_state.ork_units
-    def_states = st.session_state.ork_units if attacker_faction == "Necrons" else st.session_state.necron_units
+    atk_states = (
+        st.session_state.necron_units
+        if attacker_faction == "Necrons"
+        else st.session_state.ork_units
+    )
+    def_states = (
+        st.session_state.ork_units
+        if attacker_faction == "Necrons"
+        else st.session_state.necron_units
+    )
 
-    alive_atk = [(u, atk_states[u.uid]) for u in attacker_units if not atk_states[u.uid]["destroyed"]]
-    alive_def = [(u, def_states[u.uid]) for u in defender_units if not def_states[u.uid]["destroyed"]]
+    alive_atk = [
+        (u, atk_states[u.uid]) for u in attacker_units if not atk_states[u.uid]["destroyed"]
+    ]
+    alive_def = [
+        (u, def_states[u.uid]) for u in defender_units if not def_states[u.uid]["destroyed"]
+    ]
 
     if not alive_atk or not alive_def:
         st.warning("Keine gültigen Einheiten für diesen Angriff!")
@@ -702,15 +876,18 @@ def _shooting_ui(label_prefix: str, attacker_faction: str, defender_faction: str
 
     max_models = max(1, atk_state["models"])
     if max_models > 1:
-        num = st.slider("Anzahl angreifender Modelle:", 1, max_models, max_models, key=f"{label_prefix}_num")
+        num = st.slider(
+            "Anzahl angreifender Modelle:", 1, max_models, max_models, key=f"{label_prefix}_num"
+        )
     else:
         num = 1
         st.caption("1 Modell verbleibt — greift mit allen Modellen an.")
 
-    btn_label = f"⚔️ ANGREIFEN!" if is_melee else "🎯 SCHIESSEN!"
+    btn_label = "⚔️ ANGREIFEN!" if is_melee else "🎯 SCHIESSEN!"
     if st.button(btn_label, type="primary", key=f"{label_prefix}_go"):
-        dmg, msgs = resolve_attack(atk_unit, atk_state, weapon, def_unit,
-                                   def_states[def_unit.uid], num)
+        dmg, msgs = resolve_attack(
+            atk_unit, atk_state, weapon, def_unit, def_states[def_unit.uid], num
+        )
         for m in msgs:
             add_log(m)
         if dmg > 0:
@@ -736,11 +913,15 @@ def phase_charge():
     defender = "Orks" if active == "Necrons" else "Necrons"
     atk_units = NECRON_UNITS if active == "Necrons" else ORK_UNITS
     def_units = ORK_UNITS if active == "Necrons" else NECRON_UNITS
-    atk_states = st.session_state.necron_units if active == "Necrons" else st.session_state.ork_units
-    def_states = st.session_state.ork_units if active == "Necrons" else st.session_state.necron_units
+    atk_states = (
+        st.session_state.necron_units if active == "Necrons" else st.session_state.ork_units
+    )
+    def_states = (
+        st.session_state.ork_units if active == "Necrons" else st.session_state.necron_units
+    )
 
     st.info(
-        "**Sturmphase:** Erkläre Sturm gegen Ziel innerhalb 12\". "
+        '**Sturmphase:** Erkläre Sturm gegen Ziel innerhalb 12". '
         "Würfle 2W6: Ergebnis muss ≥ Entfernung (in Zoll) sein. "
         "Verteidiger kann Überraschungsfeuer einsetzen (trifft auf 5+)."
     )
@@ -754,11 +935,13 @@ def phase_charge():
 
     col1, col2 = st.columns(2)
     with col1:
-        charger_sel = st.selectbox(f"Stürmende Einheit ({active}):",
-                                   [u.name for u, _ in alive_atk], key="chg_unit")
+        charger_sel = st.selectbox(
+            f"Stürmende Einheit ({active}):", [u.name for u, _ in alive_atk], key="chg_unit"
+        )
     with col2:
-        target_sel = st.selectbox(f"Ziel ({defender}):",
-                                  [u.name for u, _ in alive_def], key="chg_target")
+        target_sel = st.selectbox(
+            f"Ziel ({defender}):", [u.name for u, _ in alive_def], key="chg_target"
+        )
 
     dist = st.number_input("Entfernung zum Ziel (Zoll):", 1, 12, 6, key="chg_dist")
 
@@ -775,7 +958,9 @@ def phase_charge():
                 n = parse_dice(w.attacks) * target_state["models"]
                 rolls = [random.randint(1, 6) for _ in range(n)]
                 hits = sum(1 for r in rolls if r >= 5)
-                add_log(f"⚡ Überraschungsfeuer {target.name} mit {w.name}: {rolls} → {hits} Treffer (trifft auf 5+)")
+                add_log(
+                    f"⚡ Überraschungsfeuer {target.name} mit {w.name}: {rolls} → {hits} Treffer (trifft auf 5+)"
+                )
                 if hits:
                     st.warning(f"Überraschungsfeuer: **{hits} Treffer!**")
                 else:
@@ -789,11 +974,11 @@ def phase_charge():
             total = sum(rolls)
             ok = total >= dist
             result = "✅ STURM ERFOLGREICH" if ok else "❌ STURM GESCHEITERT"
-            add_log(f"💨 {charger_sel} stürmt: {rolls} = {total} vs {dist}\" → {result}")
+            add_log(f'💨 {charger_sel} stürmt: {rolls} = {total} vs {dist}" → {result}')
             if ok:
-                st.success(f"Sturm erfolgreich! ({total} ≥ {dist}\")")
+                st.success(f'Sturm erfolgreich! ({total} ≥ {dist}")')
             else:
-                st.error(f"Sturm gescheitert! ({total} < {dist}\")")
+                st.error(f'Sturm gescheitert! ({total} < {dist}")')
 
 
 def phase_fight():
@@ -816,7 +1001,9 @@ def phase_morale():
     # Defender tests morale (units that took losses)
     defender = "Orks" if active == "Necrons" else "Necrons"
     def_units = ORK_UNITS if active == "Necrons" else NECRON_UNITS
-    def_states = st.session_state.ork_units if active == "Necrons" else st.session_state.necron_units
+    def_states = (
+        st.session_state.ork_units if active == "Necrons" else st.session_state.necron_units
+    )
 
     st.info(
         "**Moralphase:** Einheiten die Modelle verloren haben müssen einen Moraltest bestehen. "
@@ -853,13 +1040,13 @@ def phase_morale():
 
 
 PHASE_RENDERERS = {
-    "command":  phase_command,
+    "command": phase_command,
     "movement": phase_movement,
-    "psychic":  phase_psychic,
+    "psychic": phase_psychic,
     "shooting": phase_shooting,
-    "charge":   phase_charge,
-    "fight":    phase_fight,
-    "morale":   phase_morale,
+    "charge": phase_charge,
+    "fight": phase_fight,
+    "morale": phase_morale,
 }
 
 
@@ -883,6 +1070,7 @@ def next_phase():
 # ---------------------------------------------------------------------------
 # Main layout
 # ---------------------------------------------------------------------------
+
 
 def main():
     init_state()
@@ -948,7 +1136,14 @@ def main():
         st.divider()
         st.markdown("### 📜 Kampfprotokoll")
         log_text = "\n".join(reversed(st.session_state.battle_log[-25:]))
-        st.text_area("", value=log_text, height=220, disabled=True, key="log_area", label_visibility="collapsed")
+        st.text_area(
+            "",
+            value=log_text,
+            height=220,
+            disabled=True,
+            key="log_area",
+            label_visibility="collapsed",
+        )
 
     # ── RIGHT: Necrons ───────────────────────────────────────────────────────
     with right:

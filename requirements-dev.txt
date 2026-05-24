@@ -1,0 +1,9 @@
+-r requirements.txt
+streamlit>=1.57
+black
+isort
+ruff
+mypy
+pre-commit
+pytest
+pytest-flask
