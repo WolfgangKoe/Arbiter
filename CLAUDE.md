@@ -47,6 +47,13 @@
 | **Explain Changes** | High-level summary at each step |
 | **Document Results** | Add review section to `.claude/tasks/todo.md` |
 
+### Branch-Strategie
+- **`main`** — stabiler Stand, nur per Pull Request von `dev`
+- **`dev`** — aktiver Entwicklungszweig, hier wird gearbeitet
+- Neue Features immer auf `dev` entwickeln
+- Kein direktes Committen auf `main`
+- Merge nach `main` nur wenn alle Tests grün sind
+
 ### Commit-Erinnerungen
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung aktiv auf einen Commit-Punkt hinweisen
 - Gute Commit-Punkte: neue Feature fertiggestellt, Bug behoben, Refactoring abgeschlossen, Konfiguration geändert
