@@ -9,8 +9,8 @@ from engine import (
     log_action,
     next_phase,
     reset_game,
+    set_charged,
     set_deployment,
-    set_in_melee,
     set_movement_status,
 )
 from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit
@@ -186,6 +186,7 @@ _BADGE_COLORS = {
     "STATIONARY": ("#6b5f44", "#1c1a14"),
     "RETREATED": ("#8b1a1a", "#1e1010"),
     "IN MELEE": ("#cc6644", "#2a1810"),
+    "CHARGED": ("#9b59b6", "#1a0a2a"),
     "RESERVE": ("#2a6a8b", "#101820"),
     "DESTROYED": ("#8b1a1a", "#1e1010"),
 }
@@ -202,14 +203,16 @@ def _badge(text: str) -> str:
 
 def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     parts = []
-    ms = state.get("movement_status", "normal")
+    ms = state.get("movement_status", "stationary")
     if ms == "advanced":
         parts.append(_badge("ADVANCED"))
     elif ms == "stationary":
         parts.append(_badge("STATIONARY"))
     elif ms == "retreated":
         parts.append(_badge("RETREATED"))
-    if state.get("in_melee"):
+    if state.get("charged_this_turn"):
+        parts.append(_badge("CHARGED"))
+    elif state.get("in_melee"):
         parts.append(_badge("IN MELEE"))
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
@@ -251,10 +254,12 @@ def _dynamic_setup(unit: Unit, state: dict, faction: str) -> None:  # type: igno
 
 
 def _dynamic_movement(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
-    if state.get("in_reserve") and st.session_state.round == 1:
-        st.caption("In Reserve — arrives from Round 2.")
+    if state.get("in_reserve"):
+        if st.session_state.round == 1:
+            st.caption("In Reserve — arrives from Round 2.")
+        else:
+            st.caption("In Reserve — can be deployed this turn.")
         return
-    ms = state.get("movement_status", "normal")
     st.caption(f"**M** {unit.move}")
     badges_html = _state_badges_html(state)
     if badges_html:
@@ -298,11 +303,11 @@ def _dynamic_shooting_target(unit: Unit, state: dict) -> None:  # type: ignore[t
 
 def _dynamic_fight(unit: Unit, state: dict, is_active: bool) -> None:  # type: ignore[type-arg]
     in_melee = state.get("in_melee")
-    ms = state.get("movement_status", "normal")
-    charged_this_turn = ms == "normal" and state.get("acted_this_phase")
     if not in_melee and not is_active:
         st.caption("No action possible.")
         return
+    if state.get("charged_this_turn"):
+        st.caption("**Fights first** (charged this turn).")
     melee = [w for w in unit.weapons if w.is_melee]
     if not melee:
         st.caption("No melee weapons.")
@@ -333,7 +338,13 @@ def _unit_dynamic_section(
 
     if phase_key == "setup":
         _dynamic_setup(unit, state, faction)
-    elif phase_key == "command":
+        return
+
+    if state.get("in_reserve") and phase_key != "movement":
+        st.caption("In Reserve — not on battlefield.")
+        return
+
+    if phase_key == "command":
         st.caption("No phase-specific actions.")
     elif phase_key == "movement":
         if is_active:
@@ -452,6 +463,7 @@ def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[ty
             st.markdown(badges_html, unsafe_allow_html=True)
 
         # Select / Target button (not in setup)
+        in_reserve = state.get("in_reserve", False)
         if phase_key != "setup":
             if is_active:
                 sel = st.session_state.selected_unit
@@ -459,7 +471,11 @@ def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[ty
                 btn_lbl = "◀ Selected" if is_sel else "▶ Select"
                 btn_type = "primary" if is_sel else "secondary"
                 if st.button(
-                    btn_lbl, key=f"sel_{faction}_{uid}", type=btn_type, use_container_width=True
+                    btn_lbl,
+                    key=f"sel_{faction}_{uid}",
+                    type=btn_type,
+                    use_container_width=True,
+                    disabled=in_reserve,
                 ):
                     st.session_state.selected_unit = None if is_sel else (faction, uid)
                     st.session_state.selected_target = None
@@ -470,7 +486,11 @@ def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[ty
                 btn_lbl = "◀ Targeted" if is_tgt else "▶ Target"
                 btn_type = "primary" if is_tgt else "secondary"
                 if st.button(
-                    btn_lbl, key=f"tgt_{faction}_{uid}", type=btn_type, use_container_width=True
+                    btn_lbl,
+                    key=f"tgt_{faction}_{uid}",
+                    type=btn_type,
+                    use_container_width=True,
+                    disabled=in_reserve,
                 ):
                     st.session_state.selected_target = None if is_tgt else (faction, uid)
                     st.rerun()
@@ -558,6 +578,8 @@ def phase_setup() -> None:
             "Necrons go first", key="setup_first_necrons", type=nc_type, use_container_width=True
         ):
             st.session_state.active = "Necrons"
+            st.session_state.first_player = "Necrons"
+            st.session_state.second_player = "Orks"
             st.rerun()
     with c2:
         ok_type = "primary" if active == "Orks" else "secondary"
@@ -565,6 +587,8 @@ def phase_setup() -> None:
             "Orks go first", key="setup_first_orks", type=ok_type, use_container_width=True
         ):
             st.session_state.active = "Orks"
+            st.session_state.first_player = "Orks"
+            st.session_state.second_player = "Necrons"
             st.rerun()
     st.caption(f"Currently selected: **{active}** go first.")
 
@@ -596,8 +620,21 @@ def _central_movement_actions(faction: str, uid: str) -> None:
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
 
-    if state.get("in_reserve") and st.session_state.round == 1:
-        st.warning("Unit is in Reserve — cannot move until Round 2.")
+    if state.get("in_reserve"):
+        if st.session_state.round == 1:
+            st.warning("Unit is in Reserve — cannot deploy until Round 2.")
+        else:
+            st.info("Unit is in Reserve — deploy from the board edge.")
+            if st.button(
+                "Deploy from Reserve",
+                key=f"deploy_reserve_{faction}_{uid}",
+                type="primary",
+                use_container_width=True,
+            ):
+                set_deployment(uid, faction, "normal")
+                set_movement_status(uid, faction, "normal")
+                log_action(st.session_state.round, "movement", unit.name, "deployed from reserve")
+                st.rerun()
         return
 
     st.markdown("Set movement status:")
@@ -709,9 +746,7 @@ def _central_charge_actions(faction: str, uid: str) -> None:
             type="primary",
             use_container_width=True,
         ):
-            set_in_melee(uid, faction, True)
-            set_in_melee(tgt_uid, tgt_faction, True)
-            state["acted_this_phase"] = True
+            set_charged(uid, faction, tgt_uid, tgt_faction)
             log_action(
                 st.session_state.round, "charge", unit.name, f"charged {tgt_unit.name} — success"
             )
@@ -730,6 +765,8 @@ def _central_fight_actions(faction: str, uid: str) -> None:
     in_melee = state.get("in_melee", False)
 
     st.markdown(f"**{unit.name}** — Fight")
+    if state.get("charged_this_turn"):
+        st.markdown("**Fights first** (charged this turn).")
     badges_html = _state_badges_html(state)
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
@@ -872,6 +909,19 @@ def phase_morale() -> None:
         _central_morale_info(*sel)
 
 
+def _setup_summary() -> None:
+    with st.expander("Setup Summary", expanded=False):
+        first = st.session_state.get("first_player", "Necrons")
+        second = st.session_state.get("second_player", "Orks")
+        st.caption(f"**First player:** {first}")
+        st.divider()
+        for faction in (first, second):
+            st.caption(f"**{faction}**")
+            for u in _units_for(faction):
+                d = _states_for(faction)[u.uid].get("deployment", "stationary")
+                st.caption(f"  {u.name}: {d}")
+
+
 PHASE_RENDERERS = {
     "setup": phase_setup,
     "command": phase_command,
@@ -944,7 +994,8 @@ def main() -> None:
     init_state()
 
     active = st.session_state.active
-    inactive = "Orks" if active == "Necrons" else "Necrons"
+    first = st.session_state.get("first_player", "Necrons")
+    second = st.session_state.get("second_player", "Orks")
     phase_idx = st.session_state.phase_idx
     phase_name, phase_key = PHASES[phase_idx]
 
@@ -952,7 +1003,7 @@ def main() -> None:
     left_hdr, center_hdr, right_hdr = st.columns([2.5, 5, 2.5], gap="medium")
 
     with left_hdr:
-        _score_group(active, "left")
+        _score_group(first, "left")
 
     with center_hdr:
         _, rst_c, _ = st.columns([2, 1, 2])
@@ -987,7 +1038,7 @@ def main() -> None:
                 st.session_state.selected_target = None
                 st.rerun()
         with phase_c:
-            active_label = "" if phase_key == "setup" else f" · {active}"
+            active_label = "" if phase_key == "setup" else f" · {active} active"
             st.markdown(
                 f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
                 f'letter-spacing:0.1em;color:#e8d5a3;text-transform:uppercase;padding:0.25rem 0;">'
@@ -1000,7 +1051,7 @@ def main() -> None:
                 st.rerun()
 
     with right_hdr:
-        _score_group(inactive, "right")
+        _score_group(second, "right")
 
     st.divider()
 
@@ -1029,16 +1080,18 @@ def main() -> None:
     # ── Three-column layout ──────────────────────────────────────────────────
     left, center, right = st.columns([1, 2, 1], gap="small")
 
-    # Active player on the left
+    # First player always left, second always right
     with left:
-        st.markdown(f"## {active}")
-        for unit in _units_for(active):
-            unit_card(unit, _states_for(active)[unit.uid], active)
+        st.markdown(f"## {first}")
+        for unit in _units_for(first):
+            unit_card(unit, _states_for(first)[unit.uid], first)
 
     with center:
         PHASE_RENDERERS[phase_key]()
+        if phase_key != "setup":
+            _setup_summary()
 
     with right:
-        st.markdown(f"## {inactive}")
-        for unit in _units_for(inactive):
-            unit_card(unit, _states_for(inactive)[unit.uid], inactive)
+        st.markdown(f"## {second}")
+        for unit in _units_for(second):
+            unit_card(unit, _states_for(second)[unit.uid], second)

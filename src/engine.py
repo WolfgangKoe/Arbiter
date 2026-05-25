@@ -142,12 +142,13 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         "current_wounds": u.wounds * u.count,
         "models": u.count,
         "destroyed": False,
-        "movement_status": "normal",  # normal | advanced | stationary | retreated
+        "movement_status": "stationary",  # normal | advanced | stationary | retreated
         "in_melee": False,
         "in_reserve": False,
-        "deployment": "normal",  # normal | stationary | reserve
+        "deployment": "stationary",  # normal | stationary | reserve
         "acted_this_phase": False,
         "lost_models_this_turn": 0,
+        "charged_this_turn": False,
     }
 
 
@@ -158,6 +159,8 @@ def init_state() -> None:
     st.session_state.round = 1
     st.session_state.phase_idx = 0  # starts at Setup
     st.session_state.active = "Necrons"
+    st.session_state.first_player = "Necrons"
+    st.session_state.second_player = "Orks"
     st.session_state.cp = {"Necrons": 3, "Orks": 3}
     st.session_state.vp = {"Necrons": 0, "Orks": 0}
     st.session_state.selected_unit = None  # (faction, uid) | None
@@ -200,6 +203,16 @@ def set_in_melee(uid: str, faction: str, value: bool) -> None:
     st.session_state[key][uid]["in_melee"] = value
 
 
+def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) -> None:
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    state = st.session_state[key][uid]
+    state["charged_this_turn"] = True
+    state["in_melee"] = True
+    state["acted_this_phase"] = True
+    tgt_key = "necron_units" if target_faction == "Necrons" else "ork_units"
+    st.session_state[tgt_key][target_uid]["in_melee"] = True
+
+
 def log_action(round_num: int, phase: str, unit_name: str, action: str) -> None:
     os.makedirs("data/log", exist_ok=True)
     log_file = os.path.join("data/log", "game_log.json")
@@ -231,9 +244,10 @@ def _reset_phase_state() -> None:
 def _reset_turn_state() -> None:
     for key in ("necron_units", "ork_units"):
         for state in st.session_state[key].values():
-            state["movement_status"] = "normal"
+            state["movement_status"] = "stationary"
             state["acted_this_phase"] = False
             state["lost_models_this_turn"] = 0
+            state["charged_this_turn"] = False
 
 
 def next_phase() -> None:
