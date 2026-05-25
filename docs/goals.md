@@ -7,29 +7,14 @@ Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwa
 
 ---
 
-## Ziel 1 — Grundstruktur & Layout ✅
-
-3-Spalten-Layout mit eingeklappten Einheitenkarten, Phasen-Stepper und VP/CP-Header.
-
----
-
-## Ziel 2 — Einheitenstatus ✅
-
-Wunden und Modellverluste direkt auf den Karten verwalten.
-
----
-
 ## Ziel 3 — Durchstich
 
-> **Regelgrundlage:** [`docs/rules/schlachtrunde.md`](rules/schlachtrunde.md) ist bindend.  
-> Vor der Implementierung einer Phase immer den zugehörigen Abschnitt einlesen.
+> **Regelgrundlage:** [`docs/rules/schlachtrunde.md`](rules/schlachtrunde.md) ist bindend.
 
 Kein Würfeln — nur Struktur, Zustandsanzeigen und Ablauf als Orientierung für den Spieler.
 
-### Offene Punkte
-
 **Befehlsphase**
-- [ ] Dynamische Karte: Layout-Diskussion ausstehend — wartet auf Einheitenkarte-Vorlage (Punkt 6)
+- [ ] Dynamische Karte: Layout-Diskussion ausstehend — wartet auf Einheitenkarte-Vorlage
 
 **Psiphase**
 - [ ] Dynamische Karte: Psikräfte + Warpenergiewert anzeigen (Daten fehlen noch im Modell)
