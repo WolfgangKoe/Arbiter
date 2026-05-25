@@ -54,6 +54,12 @@
 - Kein direktes Committen auf `main`
 - Merge nach `main` nur wenn alle Tests grün sind
 
+### Session-Wechsel
+- Bevor eine Session geclearet wird: **immer** `.claude/tasks/next_session.md` schreiben
+- Inhalt: aktueller Stand, was zuletzt gemacht wurde, nächster konkreter Schritt, offene Designfragen
+- Die Datei ist der Startprompt für die nächste Session — vollständig und selbsterklärend
+- Nach dem Schreiben den Pfad nennen, damit der Nutzer ihn kopieren kann
+
 ### Commit-Erinnerungen
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung aktiv auf einen Commit-Punkt hinweisen
 - Gute Commit-Punkte: neue Feature fertiggestellt, Bug behoben, Refactoring abgeschlossen, Konfiguration geändert

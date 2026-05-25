@@ -14,7 +14,7 @@ target-version = "py312"
 select = ["E", "F", "I", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
-"prototype/*" = ["E501", "F841"]
+"src/*" = ["E501", "F841"]
 
 [tool.mypy]
 python_version = "3.12"

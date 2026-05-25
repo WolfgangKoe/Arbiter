@@ -1,25 +1,55 @@
 # Todo — Arbiter
 
-## Ziel 1: Grundstruktur Spielphasen-Navigation ✅ abgeschlossen
+## Modulstruktur
 
-- [x] `src/domain/models/phase.py` — 7 Phasen als Konstante
-- [x] `src/adapters/web/templates/base.html` — 3-Spalten CSS Grid + Header
-- [x] `src/adapters/web/templates/index.html` — Phase, Navigation, Game Over
-- [x] `src/adapters/web/static/style.css` — minimales Dark-Theme-Layout
-- [x] `src/adapters/web/routes/main.py` — Spielfluss via Query-Parameter
-- [x] `run.py` — Flask-Einstiegspunkt (Port 5000)
-- [x] 21 Tests grün (`tests/domain/` + `tests/adapters/web/`)
+`engine.py` importiert Streamlit direkt — `apply_damage`/`heal_unit` schreiben in
+`st.session_state`. Pure functions nötig für Unit-Tests.
+
+```
+src/
+  domain/
+    models.py   ← Unit, Weapon, PHASES  (pure, kein Streamlit)
+    combat.py   ← parse_dice, wound_threshold, resolve_attack
+  session/
+    state.py    ← init_state, reset_game, apply_damage, heal_unit, next_phase, adjust_vp/cp
+  ui/
+    theme.py    ← CSS_THEME
+    unit_card.py
+    phases.py   ← PHASE_RENDERERS, phase_*
+    layout.py   ← main(), _score_group()
+```
+
+- [ ] `src/domain/combat.py` extrahieren
+- [ ] `src/session/state.py` extrahieren
+- [ ] `src/ui/` aufteilen
+- [ ] `engine.py` und `ui.py` entfernen
 
 ---
 
-## Ziel 2: Armeeverwaltung ✅ abgeschlossen
+## YAML-Datenquellen
 
-- [x] Domain-Modell: `Unit` + `BATTLEFIELD_ROLE_DE` in `src/domain/models/unit.py`
-- [x] Domain-Modell: `Army` + `units_by_role()` in `src/domain/models/army.py`
-- [x] Port: `ArmyRepository` ABC in `src/domain/ports/army_repository.py`
-- [x] YAML-Adapter: `NecronYamlArmyRepository` in `src/adapters/yaml/`
-- [x] DI in `create_app()` — Routes kennen nur den Port
-- [x] Sidebars befüllt mit Einheiten gruppiert nach Rolle (deutsch)
-- [x] CSS-Styles für `.role-group`, `.role-label`, `.unit-list`
-- [x] Architektur-Doku mit Mermaid in `docs/architecture.md`
-- [x] 35 Tests grün (17 neu + 18 bestehend)
+- [ ] `data/wh40k_9e/necrons/units.yaml` — Kampfstats (M/T/Sv/W/Ld/OC/Invuln)
+- [ ] `data/wh40k_9e/orks/units.yaml` — Kampfstats
+- [ ] `src/session/army_loader.py`: generischer YAML-Loader → `list[Unit]`
+- [ ] `NECRON_UNITS`/`ORK_UNITS` aus `models.py` entfernen
+
+---
+
+## HP-Anzeige Multi-Modell-Einheiten
+
+Offene Designfrage: Wunden bei Einheiten mit mehreren Modellen und mehreren Wunden pro Modell.
+
+- Option A: `Warriors: 8/10 Modelle` (Balken = Modelle)
+- Option B: `Skorpekh: 5/9 W` (Balken = Gesamtwunden)
+- Option C: `2 Modelle · letztes: 2/3 W` (kombiniert)
+
+→ Entscheidung offen.
+
+---
+
+## Phasen-Logik
+
+- [ ] Fernkampfphase: vollständiger Angriffs-Flow (Einheit → Waffe → Ziel → Würfeln)
+- [ ] Nahkampfphase: Nahkampf-Sequenz
+- [ ] Moralphase: Leadership-Test mit Modell-Verlust
+- [ ] Befehlsphase: CP-Ausgabe für Strategeme

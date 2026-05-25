@@ -1,8 +1,7 @@
-import random
-
 import streamlit as st
-from engine import add_log, apply_damage, heal_unit, init_state, next_phase, reset_game
-from models import NECRON_UNITS, ORK_UNITS, PHASES, UnitData
+
+from engine import adjust_cp, adjust_vp, apply_damage, heal_unit, init_state, next_phase, reset_game
+from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit
 
 CSS_THEME = """
 <style>
@@ -154,6 +153,12 @@ label, .stLabel { color: var(--arb-muted) !important; font-size: 0.7rem !importa
 
 /* Title override */
 [data-testid="stTitle"] { color: var(--arb-accent) !important; letter-spacing: 0.15em; text-transform: uppercase; }
+
+/* Hide Streamlit default toolbar (deploy button, hamburger menu) */
+header[data-testid="stHeader"] { display: none !important; }
+[data-testid="stToolbar"] { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
+
 </style>
 """
 
@@ -163,23 +168,32 @@ label, .stLabel { color: var(--arb-muted) !important; font-size: 0.7rem !importa
 # ---------------------------------------------------------------------------
 
 
-def unit_card(unit: UnitData, state: dict, faction: str) -> None:  # type: ignore[type-arg]
+def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
     destroyed = state["destroyed"]
     cur = state["current_wounds"]
     total = unit.wounds * unit.count
-    models = state["models"]
 
     with st.expander(unit.name if not destroyed else f"~~{unit.name}~~", expanded=False):
         if destroyed:
             st.caption("Einheit vernichtet.")
             return
 
-        st.caption(unit.keywords)
+        # Keywords: Fraktion (oben) und Typ (darunter), getrennt
+        if unit.faction_keywords:
+            st.caption(" · ".join(unit.faction_keywords))
+        if unit.other_keywords:
+            st.caption(
+                '<span style="color:#4a3f2a;font-size:0.65rem;">'
+                + " · ".join(unit.other_keywords)
+                + "</span>",
+                unsafe_allow_html=True,
+            )
 
+        # Einheitenprofil – Standard-40k-Abkürzungen
         sc = st.columns(7)
         for col, lbl, val in zip(
             sc,
-            ["M", "T", "Ret", "W", "FU", "LD", "OC"],
+            ["M", "T", "Sv", "W", "++", "Ld", "OC"],
             [
                 unit.move,
                 unit.toughness,
@@ -192,43 +206,33 @@ def unit_card(unit: UnitData, state: dict, faction: str) -> None:  # type: ignor
         ):
             col.metric(lbl, val)
 
+        # Lebenspunkte-Balken
         if total > 0:
             st.progress(cur / total)
 
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            if st.button("−1W", key=f"w1_{faction}_{unit.uid}"):
+        # Schaden-Buttons: einfaches +1 / −1
+        col_dmg, col_heal = st.columns(2)
+        with col_dmg:
+            if st.button("−1 W", key=f"dmg_{faction}_{unit.uid}"):
                 apply_damage(unit.uid, faction, 1, unit)
-                add_log(f"{unit.name} −1 Wunde ({state['current_wounds']-1}/{total})")
                 st.rerun()
-        with c2:
-            if st.button("−D3", key=f"wd3_{faction}_{unit.uid}"):
-                d = random.randint(1, 3)
-                apply_damage(unit.uid, faction, d, unit)
-                add_log(f"{unit.name} −{d} Wunden")
-                st.rerun()
-        with c3:
-            if st.button("−D6", key=f"wd6_{faction}_{unit.uid}"):
-                d = random.randint(1, 6)
-                apply_damage(unit.uid, faction, d, unit)
-                add_log(f"{unit.name} −{d} Wunden")
-                st.rerun()
-        with c4:
-            if st.button("+1W", key=f"h1_{faction}_{unit.uid}"):
+        with col_heal:
+            if st.button("+1 W", key=f"heal_{faction}_{unit.uid}"):
                 heal_unit(unit.uid, faction, 1, unit)
-                add_log(f"{unit.name} +1 Wunde geheilt")
                 st.rerun()
 
+        # Waffenprofil
         st.caption("**Waffen:**")
         for w in unit.weapons:
-            icon = "Nah" if w.is_melee else "Fern"
+            kind = "NK" if w.is_melee else "FK"
             ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
             st.caption(
-                f"[{icon}] **{w.name}** · A{w.attacks} · "
+                f"[{kind}] **{w.name}** · A{w.attacks} · "
                 f"{'WS' if w.is_melee else 'BS'}{w.skill}+ · S{w.strength} · "
                 f"{ap_str} · D{w.damage}" + (f" · _{w.abilities}_" if w.abilities else "")
             )
 
+        # Sonderregeln
         if unit.abilities:
             st.caption(f"*{unit.abilities}*")
 
@@ -297,62 +301,106 @@ PHASE_RENDERERS = {
 # ---------------------------------------------------------------------------
 
 
+_SCORE_LABEL_STYLE = (
+    "display:block;width:100%;text-align:center;font-size:1.6rem;font-weight:600;"
+    "letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;"
+)
+_SCORE_VALUE_STYLE = (
+    "display:block;width:100%;text-align:center;"
+    "font-size:2rem;font-weight:600;color:#e8d5a3;padding:0.2rem 0;"
+)
+
+
+def _score_group(faction: str, prefix: str) -> None:
+    """VP- und CP-Steuerung: Label oben, dann ▲ · Zahl · ▼ je Spalte."""
+    vp = st.session_state.vp[faction]
+    cp = st.session_state.cp[faction]
+
+    vp_col, cp_col = st.columns(2)
+
+    with vp_col:
+        st.markdown(f'<div style="{_SCORE_LABEL_STYLE}">VP</div>', unsafe_allow_html=True)
+        if st.button("▲", key=f"{prefix}_vp_up", use_container_width=True):
+            adjust_vp(faction, 1)
+            st.rerun()
+        st.markdown(f'<div style="{_SCORE_VALUE_STYLE}">{vp}</div>', unsafe_allow_html=True)
+        if st.button("▼", key=f"{prefix}_vp_dn", use_container_width=True):
+            adjust_vp(faction, -1)
+            st.rerun()
+
+    with cp_col:
+        st.markdown(f'<div style="{_SCORE_LABEL_STYLE}">CP</div>', unsafe_allow_html=True)
+        if st.button("▲", key=f"{prefix}_cp_up", use_container_width=True):
+            adjust_cp(faction, 1)
+            st.rerun()
+        st.markdown(f'<div style="{_SCORE_VALUE_STYLE}">{cp}</div>', unsafe_allow_html=True)
+        if st.button("▼", key=f"{prefix}_cp_dn", use_container_width=True):
+            adjust_cp(faction, -1)
+            st.rerun()
+
+
 def main() -> None:
     st.markdown(CSS_THEME, unsafe_allow_html=True)
     init_state()
 
-    # ── Header ──────────────────────────────────────────────────────────────
-    st.markdown(
-        f"""
-        <div style="
-            display:grid;
-            grid-template-columns:1fr auto 1fr;
-            align-items:center;
-            background:#1c1a14;
-            border-bottom:1px solid #2e2618;
-            padding:0.75rem 1.5rem;
-            margin-bottom:1rem;
-            gap:1rem;
-        ">
-            <div style="display:flex;align-items:center;gap:0.75rem;">
-                <span style="font-size:0.65rem;letter-spacing:0.1em;color:#6b5f44;text-transform:uppercase;">VP</span>
-                <span style="font-size:1.25rem;font-weight:600;color:#e8d5a3;">{st.session_state.vp["Necrons"]}</span>
-                <span style="font-size:0.65rem;letter-spacing:0.1em;color:#6b5f44;text-transform:uppercase;">CP</span>
-                <span style="font-size:1.25rem;font-weight:600;color:#e8d5a3;">{st.session_state.cp["Necrons"]}</span>
-                <span style="font-size:0.8rem;color:#b0a080;margin-left:0.25rem;">Necrons</span>
-            </div>
-            <div style="text-align:center;">
-                <div style="font-size:1.6rem;font-weight:600;letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;">
-                    Runde {st.session_state.round}
-                </div>
-                <div style="font-size:1.1rem;font-weight:600;letter-spacing:0.1em;color:#e8d5a3;text-transform:uppercase;">
-                    {PHASES[st.session_state.phase_idx][0]} · {st.session_state.active}
-                </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem;justify-content:flex-end;">
-                <span style="font-size:0.8rem;color:#b0a080;margin-right:0.25rem;">Orks</span>
-                <span style="font-size:0.65rem;letter-spacing:0.1em;color:#6b5f44;text-transform:uppercase;">VP</span>
-                <span style="font-size:1.25rem;font-weight:600;color:#e8d5a3;">{st.session_state.vp["Orks"]}</span>
-                <span style="font-size:0.65rem;letter-spacing:0.1em;color:#6b5f44;text-transform:uppercase;">CP</span>
-                <span style="font-size:1.25rem;font-weight:600;color:#e8d5a3;">{st.session_state.cp["Orks"]}</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # ── Header: [Score Necrons] [Mitte] [Score Orks] ─────────────────────────
+    left_hdr, center_hdr, right_hdr = st.columns([2.5, 5, 2.5], gap="medium")
 
-    # ── Three-column layout ──────────────────────────────────────────────────
+    with left_hdr:
+        _score_group("Necrons", "nc")
+
+    with center_hdr:
+        # Reset oben mittig
+        _, rst_c, _ = st.columns([2, 1, 2])
+        with rst_c:
+            if st.button("↺", key="reset_game", use_container_width=True):
+                reset_game()
+                st.rerun()
+
+        # Runde
+        st.markdown(
+            f'<div style="text-align:center;font-size:1.6rem;font-weight:600;'
+            f'letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;">'
+            f"Runde {st.session_state.round}</div>",
+            unsafe_allow_html=True,
+        )
+
+        # ← Phase · Fraktion →
+        phase_name, _ = PHASES[st.session_state.phase_idx]
+        prev_c, phase_c, next_c = st.columns([1, 5, 1])
+        with prev_c:
+            if st.button("←", key="prev_phase", type="primary", use_container_width=True):
+                st.session_state.phase_idx = max(0, st.session_state.phase_idx - 1)
+                st.rerun()
+        with phase_c:
+            st.markdown(
+                f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
+                f'letter-spacing:0.1em;color:#e8d5a3;text-transform:uppercase;padding:0.25rem 0;">'
+                f"{phase_name} · {st.session_state.active}</div>",
+                unsafe_allow_html=True,
+            )
+        with next_c:
+            if st.button("→", key="next_phase", type="primary", use_container_width=True):
+                next_phase()
+                st.rerun()
+
+    with right_hdr:
+        _score_group("Orks", "ok")
+
+    st.divider()
+
+    # ── Drei-Spalten-Layout ──────────────────────────────────────────────────
     left, center, right = st.columns([1, 2, 1], gap="small")
 
-    # ── LEFT: Necrons ────────────────────────────────────────────────────────
+    # ── LINKS: Necrons ───────────────────────────────────────────────────────
     with left:
         st.markdown("## Necrons")
         for unit in NECRON_UNITS:
             unit_card(unit, st.session_state.necron_units[unit.uid], "Necrons")
 
-    # ── CENTER: Phases ───────────────────────────────────────────────────────
+    # ── MITTE: Phasen ────────────────────────────────────────────────────────
     with center:
-        phase_name, phase_key = PHASES[st.session_state.phase_idx]
+        _, phase_key = PHASES[st.session_state.phase_idx]
 
         steps_html = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">'
         for i, (pn, _) in enumerate(PHASES):
@@ -371,37 +419,7 @@ def main() -> None:
 
         PHASE_RENDERERS[phase_key]()
 
-        st.divider()
-        nav1, nav2, nav3 = st.columns(3)
-        with nav1:
-            if st.button("← Vorherige Phase", key="prev_phase"):
-                st.session_state.phase_idx = max(0, st.session_state.phase_idx - 1)
-                st.rerun()
-        with nav2:
-            if st.button("Spiel zurücksetzen", key="reset_game"):
-                reset_game()
-                st.rerun()
-        with nav3:
-            if st.button("Nächste Phase →", key="next_phase", type="primary"):
-                next_phase()
-                st.rerun()
-
-        st.divider()
-        st.markdown(
-            '<span style="font-size:0.65rem;letter-spacing:0.1em;color:#6b5f44;text-transform:uppercase;">Kampfprotokoll</span>',
-            unsafe_allow_html=True,
-        )
-        log_text = "\n".join(reversed(st.session_state.battle_log[-25:]))
-        st.text_area(
-            "",
-            value=log_text,
-            height=200,
-            disabled=True,
-            key="log_area",
-            label_visibility="collapsed",
-        )
-
-    # ── RIGHT: Orks ──────────────────────────────────────────────────────────
+    # ── RECHTS: Orks ─────────────────────────────────────────────────────────
     with right:
         st.markdown("## Orks")
         for unit in ORK_UNITS:

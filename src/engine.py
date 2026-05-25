@@ -1,7 +1,8 @@
 import random
 
 import streamlit as st
-from models import NECRON_UNITS, ORK_UNITS, PHASES, UnitData, Weapon
+
+from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit, Weapon
 
 
 def parse_dice(s: str) -> int:
@@ -27,10 +28,10 @@ def wound_threshold(strength: int, toughness: int) -> int:
 
 
 def resolve_attack(
-    attacker: UnitData,
+    attacker: Unit,
     atk_state: dict,  # type: ignore[type-arg]
     weapon: Weapon,
-    defender: UnitData,
+    defender: Unit,
     def_state: dict,  # type: ignore[type-arg]
     num_models: int,
 ) -> tuple[int, list[str]]:
@@ -100,7 +101,7 @@ def resolve_attack(
     return total_dmg, msgs
 
 
-def apply_damage(uid: str, faction: str, dmg: int, unit: UnitData) -> None:
+def apply_damage(uid: str, faction: str, dmg: int, unit: Unit) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
     state["current_wounds"] = max(0, state["current_wounds"] - dmg)
@@ -114,7 +115,7 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: UnitData) -> None:
         state["models"] = 0
 
 
-def heal_unit(uid: str, faction: str, hp: int, unit: UnitData) -> None:
+def heal_unit(uid: str, faction: str, hp: int, unit: Unit) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
     max_hp = unit.wounds * unit.count
@@ -126,12 +127,6 @@ def heal_unit(uid: str, faction: str, hp: int, unit: UnitData) -> None:
         state["models"] = min(unit.count, full + partial)
 
 
-def add_log(msg: str) -> None:
-    st.session_state.battle_log.append(msg)
-    if len(st.session_state.battle_log) > 60:
-        st.session_state.battle_log = st.session_state.battle_log[-60:]
-
-
 def init_state() -> None:
     if "initialized" in st.session_state:
         return
@@ -139,11 +134,10 @@ def init_state() -> None:
     st.session_state.round = 1
     st.session_state.phase_idx = 0
     st.session_state.active = "Necrons"
-    st.session_state.battle_log = ["=== Spiel gestartet! ===", "Befehlsphase – Necrons Runde 1"]
     st.session_state.cp = {"Necrons": 3, "Orks": 3}
     st.session_state.vp = {"Necrons": 0, "Orks": 0}
 
-    def unit_state(u: UnitData) -> dict:  # type: ignore[type-arg]
+    def unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         return {"current_wounds": u.wounds * u.count, "models": u.count, "destroyed": False}
 
     st.session_state.necron_units = {u.uid: unit_state(u) for u in NECRON_UNITS}
@@ -155,18 +149,22 @@ def reset_game() -> None:
         del st.session_state[k]
 
 
+def adjust_vp(faction: str, delta: int) -> None:
+    st.session_state.vp[faction] = max(0, st.session_state.vp[faction] + delta)
+
+
+def adjust_cp(faction: str, delta: int) -> None:
+    st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
+
+
 def next_phase() -> None:
     st.session_state.phase_idx += 1
     if st.session_state.phase_idx >= len(PHASES):
         st.session_state.phase_idx = 0
         if st.session_state.active == "Necrons":
             st.session_state.active = "Orks"
-            add_log(f"--- Orks Runde {st.session_state.round} ---")
         else:
             st.session_state.active = "Necrons"
             st.session_state.round += 1
             st.session_state.cp["Necrons"] += 1
             st.session_state.cp["Orks"] += 1
-            add_log(f"=== RUNDE {st.session_state.round} beginnt! (je +1 CP) ===")
-    phase_name, _ = PHASES[st.session_state.phase_idx]
-    add_log(f"{phase_name} – {st.session_state.active}")
