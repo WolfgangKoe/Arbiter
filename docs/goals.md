@@ -62,25 +62,27 @@ Kein Würfeln — nur Struktur, Zustandsanzeigen und Ablauf als Orientierung fü
 ### Setup-Phase (vor der Schlachtrunde)
 → Regelreferenz: [schlachtrunde.md — Vor dem Spiel](rules/schlachtrunde.md)
 
-- [ ] Startspieler manuell bestimmen → Sidebars füllen sich korrekt (aktiver Spieler links)
-- [ ] Aufstellungsstatus pro Einheit wählen: Normal / Stationär / Reserve
-- [ ] Einheiten in Reserve: erst ab Runde 2 verfügbar
+- [x] Startspieler manuell bestimmen
+- [~] Sidebars fest auf Startspieler gebunden (BUG: wechseln noch mit `active`) → Fix nächste Session
+- [x] Aufstellungsstatus pro Einheit wählen: Normal / Stationär / Reserve (Dropdown in Karte)
+- [~] Default Deployment: soll `stationary` sein, nicht `normal` → Fix nächste Session
+- [ ] Einheiten in Reserve: erst ab Runde 2 auswählbar (Logik unvollständig)
 - [ ] Setup-Zusammenfassung jederzeit einsehbar (eingeklappt im Zentralbereich)
 
 ### Befehlsphase
 → Regelreferenz: [schlachtrunde.md — Befehlsphase](rules/schlachtrunde.md#1-befehlsphase)
 
-- [ ] CP +1 Button für aktiven Spieler
-- [ ] Hinweistext: phasenspezifische Regeln abhandeln
-- [ ] Dynamische Karte: keine phasenspezifischen Profilwerte (nur State-Badges)
+- [x] CP +1 Button für aktiven Spieler (`Grant +1 CP` im Zentralbereich)
+- [x] Hinweistext: Regelzusammenfassung im Zentralbereich (Stufe 1)
+- [ ] Dynamische Karte: nur State-Badges (Profilwerte immer sichtbar — Layout-Diskussion ausstehend)
 
 ### Bewegungsphase
 → Regelreferenz: [schlachtrunde.md — Bewegungsphase](rules/schlachtrunde.md#2-bewegungsphase)
 
-- [ ] Einheit wählen → Bewegungsstatus setzen: Normal / Vorgerückt / Stationär / Rückzug
-- [ ] Dynamische Karte: M-Wert anzeigen
-- [ ] Einheiten in Nahkampfreichweite (`in_melee = true`): nur Stationär oder Rückzug möglich
-- [ ] Vorgerückt / Rückzug → `movement_status` sperrt Einheit für Fernkampf und Angriff
+- [x] Einheit wählen → Bewegungsstatus setzen: Normal / Advance / Stationary / Retreat (Zentralbereich)
+- [x] Dynamische Karte: M-Wert anzeigen
+- [x] Einheiten in Nahkampfreichweite: Retreat-Button nur wenn `in_melee = true`
+- [x] Advanced / Retreated → sperrt Einheit für Fernkampf und Angriff
 
 ### Psiphase
 → Regelreferenz: [schlachtrunde.md — Psiphase](rules/schlachtrunde.md#3-psiphase)
@@ -92,36 +94,37 @@ Kein Würfeln — nur Struktur, Zustandsanzeigen und Ablauf als Orientierung fü
 ### Fernkampfphase
 → Regelreferenz: [schlachtrunde.md — Fernkampfphase](rules/schlachtrunde.md#4-fernkampfphase)
 
-- [ ] Schütze wählen (aktiver Spieler) → Ziel wählen (Gegner-Sidebar)
-- [ ] Dynamische Karte Schütze: Fernkampfwaffen mit Profil
-- [ ] Dynamische Karte Ziel: T · Sv · ++ anzeigen
-- [ ] Zentralbereich: Sequenzübersicht (Treffer → Verwundung → Rettung → Schaden), noch ohne Würfel
-- [ ] Einheiten ohne Fernkampfwaffe / Vorgerückt / Rückzug: „Keine Aktion möglich"
-- [ ] Im Nahkampf gebundene Einheiten entsprechend markieren
+- [x] Schütze wählen (aktiver Spieler) → Ziel wählen (Gegner-Sidebar via ▶ Target)
+- [x] Dynamische Karte Schütze: Fernkampfwaffen mit Profil + Restriktionen
+- [x] Dynamische Karte Ziel: T · Sv · ++ anzeigen
+- [x] Zentralbereich: Sequenzübersicht (Treffer → Verwundung → Rettung → Schaden), ohne Würfel
+- [x] Einheiten ohne Fernkampfwaffe / Advanced / Retreated: „No action possible"
+- [x] Im Nahkampf gebundene Einheiten: „No action possible"
 
 ### Angriffsphase
 → Regelreferenz: [schlachtrunde.md — Angriffsphase](rules/schlachtrunde.md#5-angriffsphase)
 
-- [ ] Angreifer wählen → Ziele in Reichweite (≤ 12 Zoll) anzeigen
-- [ ] Angriff bestätigen → `in_melee = true` für Angreifer und Ziel (nach erfolgreichem Angriff)
-- [ ] Einheiten, die Vorgerückt / Rückzug: „Keine Aktion möglich"
-- [ ] Dynamische Karte: keine spezifischen Profilwerte (State-Badges relevant)
+- [x] Angreifer wählen → Ziel wählen → Charge Success/Fail Button
+- [x] Charge Erfolg → `in_melee = true` für Angreifer und Ziel
+- [x] Einheiten mit Advanced/Retreated: „No action possible"
+- [ ] `charged_this_turn`-Flag fehlt noch → nötig für Nahkampfphase-Reihenfolge
 
 ### Nahkampfphase
 → Regelreferenz: [schlachtrunde.md — Nahkampfphase](rules/schlachtrunde.md#6-nahkampfphase)
 
-- [ ] Reihenfolge anzeigen: Einheiten mit Angriff zuerst, dann Gegner beginnt
-- [ ] Dynamische Karte: Nahkampfwaffen mit Profil
-- [ ] Einheiten ohne `in_melee` und ohne Angriff: „Keine Aktion möglich"
-- [ ] Sequenzübersicht analog Fernkampf (noch ohne Würfel)
+- [x] Angreifer + Ziel wählen → Waffensequenz im Zentralbereich
+- [x] Dynamische Karte: Nahkampfwaffen mit Profil
+- [x] Einheiten ohne `in_melee`: „No action possible"
+- [ ] Reihenfolge: Einheiten mit `charged_this_turn` kämpfen zuerst (fehlt, weil Flag fehlt)
+- [x] Sequenzübersicht analog Fernkampf (ohne Würfel)
 
 ### Moralphase
 → Regelreferenz: [schlachtrunde.md — Moralphase](rules/schlachtrunde.md#7-moralphase)
 
-- [ ] Einheiten mit Verlusten in dieser Runde auflisten
-- [ ] Ld-Wert pro Einheit anzeigen
-- [ ] Einheit mit 1 Modell: automatisch bestanden, überspringen
-- [ ] Dynamische Karte: Ld-Wert anzeigen
+- [x] Einheiten mit Verlusten in dieser Runde: Moraltest-Info im Zentralbereich
+- [x] Ld-Wert pro Einheit in dynamischer Karte anzeigen
+- [x] Einheit mit 1 Modell: „Auto-pass" anzeigen
+- [ ] Einheiten ohne Verluste: klar überspringen
 
 ---
 
