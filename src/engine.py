@@ -1,4 +1,7 @@
+import json
+import os
 import random
+from datetime import datetime
 
 import streamlit as st
 
@@ -101,9 +104,13 @@ def resolve_attack(
     return total_dmg, msgs
 
 
-def apply_damage(uid: str, faction: str, dmg: int, unit: Unit) -> None:
+def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
+    old_models = state["models"]
+    if not mortal and unit.count > 1 and state["models"] > 0 and state["current_wounds"] > 0:
+        front_hp = state["current_wounds"] - (state["models"] - 1) * unit.wounds
+        dmg = min(dmg, front_hp)
     state["current_wounds"] = max(0, state["current_wounds"] - dmg)
     if unit.wounds > 0:
         full_models = state["current_wounds"] // unit.wounds
@@ -113,6 +120,9 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit) -> None:
         state["destroyed"] = True
         state["current_wounds"] = 0
         state["models"] = 0
+    lost = old_models - state["models"]
+    if lost > 0:
+        state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + lost
 
 
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit) -> None:
@@ -127,21 +137,33 @@ def heal_unit(uid: str, faction: str, hp: int, unit: Unit) -> None:
         state["models"] = min(unit.count, full + partial)
 
 
+def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
+    return {
+        "current_wounds": u.wounds * u.count,
+        "models": u.count,
+        "destroyed": False,
+        "movement_status": "normal",  # normal | advanced | stationary | retreated
+        "in_melee": False,
+        "in_reserve": False,
+        "deployment": "normal",  # normal | stationary | reserve
+        "acted_this_phase": False,
+        "lost_models_this_turn": 0,
+    }
+
+
 def init_state() -> None:
     if "initialized" in st.session_state:
         return
     st.session_state.initialized = True
     st.session_state.round = 1
-    st.session_state.phase_idx = 0
+    st.session_state.phase_idx = 0  # starts at Setup
     st.session_state.active = "Necrons"
     st.session_state.cp = {"Necrons": 3, "Orks": 3}
     st.session_state.vp = {"Necrons": 0, "Orks": 0}
-
-    def unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
-        return {"current_wounds": u.wounds * u.count, "models": u.count, "destroyed": False}
-
-    st.session_state.necron_units = {u.uid: unit_state(u) for u in NECRON_UNITS}
-    st.session_state.ork_units = {u.uid: unit_state(u) for u in ORK_UNITS}
+    st.session_state.selected_unit = None  # (faction, uid) | None
+    st.session_state.selected_target = None  # (faction, uid) | None
+    st.session_state.necron_units = {u.uid: _unit_state(u) for u in NECRON_UNITS}
+    st.session_state.ork_units = {u.uid: _unit_state(u) for u in ORK_UNITS}
 
 
 def reset_game() -> None:
@@ -157,10 +179,71 @@ def adjust_cp(faction: str, delta: int) -> None:
     st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
 
 
+def set_deployment(uid: str, faction: str, deployment: str) -> None:
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    state = st.session_state[key][uid]
+    state["deployment"] = deployment
+    state["in_reserve"] = deployment == "reserve"
+
+
+def set_movement_status(uid: str, faction: str, status: str) -> None:
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    state = st.session_state[key][uid]
+    state["movement_status"] = status
+    state["acted_this_phase"] = True
+    if status == "retreated":
+        state["in_melee"] = False
+
+
+def set_in_melee(uid: str, faction: str, value: bool) -> None:
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    st.session_state[key][uid]["in_melee"] = value
+
+
+def log_action(round_num: int, phase: str, unit_name: str, action: str) -> None:
+    os.makedirs("data/log", exist_ok=True)
+    log_file = os.path.join("data/log", "game_log.json")
+    entry = {
+        "round": round_num,
+        "phase": phase,
+        "unit": unit_name,
+        "action": action,
+        "timestamp": datetime.now().isoformat(),
+    }
+    entries: list[dict] = []  # type: ignore[type-arg]
+    if os.path.exists(log_file):
+        with open(log_file) as f:
+            try:
+                entries = json.load(f)
+            except json.JSONDecodeError:
+                entries = []
+    entries.append(entry)
+    with open(log_file, "w") as f:
+        json.dump(entries, f, indent=2, ensure_ascii=False)
+
+
+def _reset_phase_state() -> None:
+    for key in ("necron_units", "ork_units"):
+        for state in st.session_state[key].values():
+            state["acted_this_phase"] = False
+
+
+def _reset_turn_state() -> None:
+    for key in ("necron_units", "ork_units"):
+        for state in st.session_state[key].values():
+            state["movement_status"] = "normal"
+            state["acted_this_phase"] = False
+            state["lost_models_this_turn"] = 0
+
+
 def next_phase() -> None:
-    st.session_state.phase_idx += 1
-    if st.session_state.phase_idx >= len(PHASES):
-        st.session_state.phase_idx = 0
+    idx = st.session_state.phase_idx
+    num = len(PHASES)
+
+    if idx == 0:  # Setup → first Command phase
+        st.session_state.phase_idx = 1
+        _reset_phase_state()
+    elif idx >= num - 1:  # Moralphase done → switch player
         if st.session_state.active == "Necrons":
             st.session_state.active = "Orks"
         else:
@@ -168,3 +251,11 @@ def next_phase() -> None:
             st.session_state.round += 1
             st.session_state.cp["Necrons"] += 1
             st.session_state.cp["Orks"] += 1
+        _reset_turn_state()
+        st.session_state.phase_idx = 1
+    else:
+        st.session_state.phase_idx = idx + 1
+        _reset_phase_state()
+
+    st.session_state.selected_unit = None
+    st.session_state.selected_target = None

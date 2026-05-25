@@ -1,6 +1,18 @@
 import streamlit as st
 
-from engine import adjust_cp, adjust_vp, apply_damage, heal_unit, init_state, next_phase, reset_game
+from engine import (
+    adjust_cp,
+    adjust_vp,
+    apply_damage,
+    heal_unit,
+    init_state,
+    log_action,
+    next_phase,
+    reset_game,
+    set_deployment,
+    set_in_melee,
+    set_movement_status,
+)
 from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit
 
 CSS_THEME = """
@@ -18,6 +30,8 @@ CSS_THEME = """
     --arb-hover:     #2a2316;
     --arb-red:       #8b1a1a;
     --arb-btn:       #5a4820;
+    --arb-green:     #4a7c3f;
+    --arb-blue:      #2a4a6a;
 }
 
 /* Background */
@@ -164,21 +178,212 @@ header[data-testid="stHeader"] { display: none !important; }
 
 
 # ---------------------------------------------------------------------------
+# Badge helpers
+# ---------------------------------------------------------------------------
+
+_BADGE_COLORS = {
+    "ADVANCED": ("#c9a84c", "#2e2618"),
+    "STATIONARY": ("#6b5f44", "#1c1a14"),
+    "RETREATED": ("#8b1a1a", "#1e1010"),
+    "IN MELEE": ("#cc6644", "#2a1810"),
+    "RESERVE": ("#2a6a8b", "#101820"),
+    "DESTROYED": ("#8b1a1a", "#1e1010"),
+}
+
+
+def _badge(text: str) -> str:
+    fg, bg = _BADGE_COLORS.get(text, ("#c9a84c", "#2e2618"))
+    return (
+        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
+        f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
+        f'font-weight:600;margin-right:3px;">{text}</span>'
+    )
+
+
+def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
+    parts = []
+    ms = state.get("movement_status", "normal")
+    if ms == "advanced":
+        parts.append(_badge("ADVANCED"))
+    elif ms == "stationary":
+        parts.append(_badge("STATIONARY"))
+    elif ms == "retreated":
+        parts.append(_badge("RETREATED"))
+    if state.get("in_melee"):
+        parts.append(_badge("IN MELEE"))
+    if state.get("in_reserve"):
+        parts.append(_badge("RESERVE"))
+    return "".join(parts)
+
+
+# ---------------------------------------------------------------------------
+# Unit lookup helpers
+# ---------------------------------------------------------------------------
+
+
+def _lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
+    units = NECRON_UNITS if faction == "Necrons" else ORK_UNITS
+    unit = next(u for u in units if u.uid == uid)
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    return unit, st.session_state[key][uid]
+
+
+# ---------------------------------------------------------------------------
+# Unit card — dynamic section per phase
+# ---------------------------------------------------------------------------
+
+
+def _dynamic_setup(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
+    opts = ["Normal", "Stationary", "Reserve"]
+    current = state.get("deployment", "normal").capitalize()
+    idx = opts.index(current) if current in opts else 0
+    chosen = st.selectbox(
+        "Deployment",
+        opts,
+        index=idx,
+        key=f"deploy_{faction}_{unit.uid}",
+    )
+    mapping = {"Normal": "normal", "Stationary": "stationary", "Reserve": "reserve"}
+    new_val = mapping[chosen]
+    if new_val != state.get("deployment", "normal"):
+        set_deployment(unit.uid, faction, new_val)
+        st.rerun()
+
+
+def _dynamic_movement(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
+    if state.get("in_reserve") and st.session_state.round == 1:
+        st.caption("In Reserve — arrives from Round 2.")
+        return
+    ms = state.get("movement_status", "normal")
+    st.caption(f"**M** {unit.move}")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+    else:
+        st.caption("Status: Normal")
+
+
+def _dynamic_shooting_attacker(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
+    ms = state.get("movement_status", "normal")
+    if ms == "advanced":
+        st.caption("⚠ Advanced — cannot shoot.")
+        return
+    if ms == "retreated":
+        st.caption("⚠ Retreated — cannot shoot.")
+        return
+    if state.get("in_melee"):
+        st.caption("⚠ In melee — cannot shoot.")
+        return
+    ranged = [w for w in unit.weapons if not w.is_melee]
+    if not ranged:
+        st.caption("No ranged weapons.")
+        return
+    for w in ranged:
+        ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
+        st.caption(
+            f"**{w.name}** · A{w.attacks} · BS{w.skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
+            + (f" · _{w.abilities}_" if w.abilities else "")
+        )
+
+
+def _dynamic_shooting_target(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
+    inv_str = f"{unit.invuln}+" if unit.invuln else "—"
+    fnp_str = f"{unit.fnp}+" if unit.fnp else "—"
+    cols = st.columns(4)
+    cols[0].metric("T", unit.toughness)
+    cols[1].metric("Sv", f"{unit.save}+")
+    cols[2].metric("++", inv_str)
+    cols[3].metric("FNP", fnp_str)
+
+
+def _dynamic_fight(unit: Unit, state: dict, is_active: bool) -> None:  # type: ignore[type-arg]
+    in_melee = state.get("in_melee")
+    ms = state.get("movement_status", "normal")
+    charged_this_turn = ms == "normal" and state.get("acted_this_phase")
+    if not in_melee and not is_active:
+        st.caption("No action possible.")
+        return
+    melee = [w for w in unit.weapons if w.is_melee]
+    if not melee:
+        st.caption("No melee weapons.")
+        return
+    for w in melee:
+        ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
+        st.caption(
+            f"**{w.name}** · A{w.attacks} · WS{w.skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
+            + (f" · _{w.abilities}_" if w.abilities else "")
+        )
+
+
+def _dynamic_morale(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
+    lost = state.get("lost_models_this_turn", 0)
+    if unit.count == 1:
+        st.caption("Single model — auto-pass.")
+        return
+    if lost == 0:
+        st.caption("No losses this turn — no test required.")
+        return
+    st.caption(f"**Ld** {unit.leadership} | Lost **{lost}** model(s) → morale test required.")
+
+
+def _unit_dynamic_section(
+    unit: Unit, state: dict, faction: str, phase_key: str, is_active: bool  # type: ignore[type-arg]
+) -> None:
+    is_psyker = any(kw.upper() == "PSYKER" for kw in unit.other_keywords + unit.faction_keywords)
+
+    if phase_key == "setup":
+        _dynamic_setup(unit, state, faction)
+    elif phase_key == "command":
+        st.caption("No phase-specific actions.")
+    elif phase_key == "movement":
+        if is_active:
+            _dynamic_movement(unit, state, faction)
+        else:
+            st.caption("—")
+    elif phase_key == "psychic":
+        if is_psyker:
+            st.caption("PSYKER — select to declare psychic powers.")
+        else:
+            st.caption("No action possible.")
+    elif phase_key == "shooting":
+        if is_active:
+            _dynamic_shooting_attacker(unit, state)
+        else:
+            _dynamic_shooting_target(unit, state)
+    elif phase_key == "charge":
+        if is_active:
+            ms = state.get("movement_status", "normal")
+            if ms in ("advanced", "retreated"):
+                st.caption(f"⚠ {ms.capitalize()} — cannot charge.")
+            else:
+                st.caption('Eligible to charge (≤ 12" from enemy).')
+        else:
+            st.caption("—")
+    elif phase_key == "fight":
+        _dynamic_fight(unit, state, is_active)
+    elif phase_key == "morale":
+        _dynamic_morale(unit, state)
+
+
+# ---------------------------------------------------------------------------
 # Unit card
 # ---------------------------------------------------------------------------
 
 
 def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
-    destroyed = state["destroyed"]
-    cur = state["current_wounds"]
-    total = unit.wounds * unit.count
+    phase_key = PHASES[st.session_state.phase_idx][1]
+    active = st.session_state.active
+    is_active = faction == active
 
-    with st.expander(unit.name if not destroyed else f"~~{unit.name}~~", expanded=False):
+    destroyed = state["destroyed"]
+    title = unit.name if not destroyed else f"~~{unit.name}~~"
+
+    with st.expander(title, expanded=False):
         if destroyed:
-            st.caption("Einheit vernichtet.")
+            st.caption("Destroyed.")
             return
 
-        # Keywords: Fraktion (oben) und Typ (darunter), getrennt
+        # Keywords
         if unit.faction_keywords:
             st.caption(" · ".join(unit.faction_keywords))
         if unit.other_keywords:
@@ -189,7 +394,7 @@ def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[ty
                 unsafe_allow_html=True,
             )
 
-        # Einheitenprofil – Standard-40k-Abkürzungen
+        # ── Permanent: stat profile ──────────────────────────────────────
         sc = st.columns(7)
         for col, lbl, val in zip(
             sc,
@@ -206,86 +411,469 @@ def unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[ty
         ):
             col.metric(lbl, val)
 
-        # Lebenspunkte-Balken
-        if total > 0:
-            st.progress(cur / total)
+        # HP display
+        cur = state["current_wounds"]
+        models_alive = state["models"]
+        if unit.count == 1:
+            st.caption(f"W: {cur}/{unit.wounds}")
+            st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
+        elif unit.wounds == 1:
+            st.caption(f"Models: {models_alive}/{unit.count}")
+            st.progress(models_alive / unit.count if unit.count > 0 else 0)
+        else:
+            front_hp = (cur - (models_alive - 1) * unit.wounds) if cur > 0 else 0
+            st.caption(f"Models: {models_alive}/{unit.count}")
+            st.progress(models_alive / unit.count if unit.count > 0 else 0)
+            st.caption(f"Current model: {front_hp}/{unit.wounds} W")
+            st.progress(front_hp / unit.wounds if unit.wounds > 0 else 0)
 
-        # Schaden-Buttons: einfaches +1 / −1
-        col_dmg, col_heal = st.columns(2)
-        with col_dmg:
-            if st.button("−1 W", key=f"dmg_{faction}_{unit.uid}"):
-                apply_damage(unit.uid, faction, 1, unit)
-                st.rerun()
-        with col_heal:
-            if st.button("+1 W", key=f"heal_{faction}_{unit.uid}"):
-                heal_unit(unit.uid, faction, 1, unit)
-                st.rerun()
+        # Damage buttons
+        uid = unit.uid
+        bc = st.columns(6)
+        for col, delta, label in zip(
+            bc, [-3, -2, -1, 1, 2, 3], ["−3", "−2", "−1", "+1", "+2", "+3"]
+        ):
+            with col:
+                is_mortal = delta == -1
+                if st.button(
+                    label,
+                    key=f"w{delta}_{faction}_{uid}",
+                    type="primary" if is_mortal else "secondary",
+                ):
+                    if delta < 0:
+                        apply_damage(uid, faction, -delta, unit, mortal=is_mortal)
+                    else:
+                        heal_unit(uid, faction, delta, unit)
+                    st.rerun()
 
-        # Waffenprofil
-        st.caption("**Waffen:**")
-        for w in unit.weapons:
-            kind = "NK" if w.is_melee else "FK"
-            ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
-            st.caption(
-                f"[{kind}] **{w.name}** · A{w.attacks} · "
-                f"{'WS' if w.is_melee else 'BS'}{w.skill}+ · S{w.strength} · "
-                f"{ap_str} · D{w.damage}" + (f" · _{w.abilities}_" if w.abilities else "")
-            )
+        # State badges
+        badges_html = _state_badges_html(state)
+        if badges_html and phase_key != "setup":
+            st.markdown(badges_html, unsafe_allow_html=True)
 
-        # Sonderregeln
+        # Select / Target button (not in setup)
+        if phase_key != "setup":
+            if is_active:
+                sel = st.session_state.selected_unit
+                is_sel = sel == (faction, uid)
+                btn_lbl = "◀ Selected" if is_sel else "▶ Select"
+                btn_type = "primary" if is_sel else "secondary"
+                if st.button(
+                    btn_lbl, key=f"sel_{faction}_{uid}", type=btn_type, use_container_width=True
+                ):
+                    st.session_state.selected_unit = None if is_sel else (faction, uid)
+                    st.session_state.selected_target = None
+                    st.rerun()
+            elif phase_key in ("shooting", "fight", "charge"):
+                tgt = st.session_state.selected_target
+                is_tgt = tgt == (faction, uid)
+                btn_lbl = "◀ Targeted" if is_tgt else "▶ Target"
+                btn_type = "primary" if is_tgt else "secondary"
+                if st.button(
+                    btn_lbl, key=f"tgt_{faction}_{uid}", type=btn_type, use_container_width=True
+                ):
+                    st.session_state.selected_target = None if is_tgt else (faction, uid)
+                    st.rerun()
+
+        # ── Dynamic section ──────────────────────────────────────────────
+        st.divider()
+        _unit_dynamic_section(unit, state, faction, phase_key, is_active)
+
+        # Abilities (always shown)
         if unit.abilities:
             st.caption(f"*{unit.abilities}*")
 
 
 # ---------------------------------------------------------------------------
-# Phase renderers
+# Central area — phase renderers (3-level: overview / unit selected / both selected)
 # ---------------------------------------------------------------------------
 
-
-_PHASE_INFO = {
-    "command": "Erhalte 1 Befehlspunkt. Aktiviere Fähigkeiten. Nutze Strategeme.",
-    "movement": 'Bewege Einheiten bis zu ihrem M-Wert. Vorstoßen: +D6", kein Schießen/Sturm danach.',
-    "psychic": "Psyker wirken Kräfte: 2W6 ≥ Psi-Stärke. Gegner kann mit 2W6 abwehren.",
-    "shooting": "Wähle Einheit → Waffe → Ziel. Treffer (BS) → Verwundung (S vs T) → Rettung (SV−AP) → Schaden.",
-    "charge": 'Erkläre Sturm gegen Ziel ≤ 12". Würfle 2W6: Ergebnis ≥ Entfernung = Sturm erfolgreich.',
-    "fight": "Gestürmte Einheiten kämpfen zuerst. Beide Seiten kämpfen. WS-Treffer → Verwundung → Rettung → Schaden.",
-    "morale": "Einheiten mit Verlusten: W6 + verbleibende Modelle ≥ Führungswert, sonst Modelle entfernen.",
+_PHASE_RULES = {
+    "command": (
+        "**Command Phase**\n\n"
+        "The active player receives **+1 CP** (Battle-forged armies). "
+        "Activate abilities and stratagems that trigger in the Command Phase."
+    ),
+    "movement": (
+        "**Movement Phase**\n\n"
+        "Select a unit and choose its movement type:\n"
+        '- **Normal** — move up to M"\n'
+        '- **Advance** — move up to M"+D6", cannot shoot or charge afterwards\n'
+        "- **Stationary** — do not move\n"
+        '- **Retreat** — only if in melee; move up to M", cannot shoot or charge afterwards'
+    ),
+    "psychic": (
+        "**Psychic Phase**\n\n"
+        "PSYKER units attempt to manifest psychic powers. "
+        "Roll **2D6** ≥ Warp Charge value to manifest. "
+        "Opponent may attempt to deny with their own PSYKER (2D6 > manifesting roll)."
+    ),
+    "shooting": (
+        "**Shooting Phase**\n\n"
+        "Select a unit to shoot, then select a target. "
+        "Units that Advanced or Retreated cannot shoot. "
+        "Units in melee cannot shoot.\n\n"
+        "Attack sequence: **Hit** (BS) → **Wound** (S vs T) → **Save** (Sv−AP) → **Damage**"
+    ),
+    "charge": (
+        "**Charge Phase**\n\n"
+        'Eligible units (≤ 12" from enemy, did not Advance or Retreat) may declare a charge. '
+        "Roll **2D6** — result must be ≥ distance to closest target model. "
+        "On success: move into melee range."
+    ),
+    "fight": (
+        "**Fight Phase**\n\n"
+        "Starting with the **non-active player**, both sides alternate selecting eligible units. "
+        "Units that charged this turn fight **before** other units. "
+        'Each unit: **Pile In** (up to 3") → **Melee attacks** → **Consolidate** (up to 3").'
+    ),
+    "morale": (
+        "**Morale Phase**\n\n"
+        "Units that suffered model losses this turn must take a morale test: "
+        "Roll **D6** + models lost. If result > Leadership: additional models flee (result − Ld).\n\n"
+        "Single-model units auto-pass."
+    ),
 }
 
 
-def _phase_placeholder(key: str) -> None:
-    st.info(_PHASE_INFO[key])
+def phase_setup() -> None:
+    st.markdown("### Setup")
+    st.info(
+        "Configure your armies before the battle begins.\n\n"
+        "1. **Select first player** — the active player takes their turn first each battle round.\n"
+        "2. **Set deployment** for each unit using the dropdowns in the unit cards:\n"
+        "   - **Normal** — deployed on the battlefield\n"
+        "   - **Stationary** — deployed but will not move in turn 1\n"
+        "   - **Reserve** — arrives from turn 2 onwards\n\n"
+        "When ready, click **→** to begin Battle Round 1."
+    )
+
+    st.markdown("---")
+    st.markdown("**First Player**")
+    active = st.session_state.active
+    c1, c2 = st.columns(2)
+    with c1:
+        nc_type = "primary" if active == "Necrons" else "secondary"
+        if st.button(
+            "Necrons go first", key="setup_first_necrons", type=nc_type, use_container_width=True
+        ):
+            st.session_state.active = "Necrons"
+            st.rerun()
+    with c2:
+        ok_type = "primary" if active == "Orks" else "secondary"
+        if st.button(
+            "Orks go first", key="setup_first_orks", type=ok_type, use_container_width=True
+        ):
+            st.session_state.active = "Orks"
+            st.rerun()
+    st.caption(f"Currently selected: **{active}** go first.")
+
+
+def _central_level1(phase_key: str) -> None:
+    rules = _PHASE_RULES.get(phase_key, "")
+    st.info(rules)
+
+
+def _central_command_actions(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    st.markdown(f"**{unit.name}**")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+    st.caption("No phase-specific unit actions in the Command Phase.")
+    if unit.abilities:
+        with st.expander("Abilities", expanded=False):
+            st.caption(unit.abilities)
+
+
+def _central_movement_actions(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    ms = state.get("movement_status", "normal")
+    in_melee = state.get("in_melee", False)
+
+    st.markdown(f"**{unit.name}** — M {unit.move}")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+
+    if state.get("in_reserve") and st.session_state.round == 1:
+        st.warning("Unit is in Reserve — cannot move until Round 2.")
+        return
+
+    st.markdown("Set movement status:")
+    cols = st.columns(4)
+    options = [
+        ("Normal", "normal", 'Move up to M"'),
+        ("Advance", "advanced", 'M"+D6", no shoot/charge'),
+        ("Stationary", "stationary", "Do not move"),
+        ("Retreat", "retreated", "Exit melee, no shoot/charge"),
+    ]
+    for col, (label, value, tip) in zip(cols, options):
+        with col:
+            disabled = value == "retreated" and not in_melee
+            btn_type = "primary" if ms == value else "secondary"
+            if st.button(
+                label,
+                key=f"mv_{faction}_{uid}_{value}",
+                type=btn_type,
+                disabled=disabled,
+                use_container_width=True,
+                help=tip,
+            ):
+                set_movement_status(uid, faction, value)
+                log_action(st.session_state.round, "movement", unit.name, f"movement: {value}")
+                st.rerun()
+
+    if in_melee and ms not in ("retreated", "stationary"):
+        st.caption("Unit is in melee — only Stationary or Retreat allowed.")
+
+
+def _central_shooting_actions(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    ms = state.get("movement_status", "normal")
+
+    st.markdown(f"**{unit.name}** — Shooting")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+
+    if ms == "advanced":
+        st.warning("Advanced this turn — cannot shoot.")
+        return
+    if ms == "retreated":
+        st.warning("Retreated this turn — cannot shoot.")
+        return
+    if state.get("in_melee"):
+        st.warning("Bound in melee — cannot shoot.")
+        return
+
+    ranged = [w for w in unit.weapons if not w.is_melee]
+    if not ranged:
+        st.warning("No ranged weapons — no action possible.")
+        return
+
+    tgt = st.session_state.selected_target
+    if tgt is None:
+        st.info("Select a **target** unit from the enemy sidebar (▶ Target).")
+        return
+
+    tgt_faction, tgt_uid = tgt
+    tgt_unit, tgt_state = _lookup(tgt_faction, tgt_uid)
+
+    st.markdown(f"**Target:** {tgt_unit.name}")
+    inv_display = f"{tgt_unit.invuln}+" if tgt_unit.invuln else "—"
+    st.markdown(f"T {tgt_unit.toughness} · Sv {tgt_unit.save}+ · ++ {inv_display}")
+    st.divider()
+    st.markdown("**Attack sequence** (for reference — roll dice on the table):")
+    for w in ranged:
+        thresh = _wound_thresh(w.strength, tgt_unit.toughness)
+        eff_save = min(tgt_unit.save + abs(w.ap), tgt_unit.invuln or 99)
+        save_str = f"{eff_save}+" if eff_save <= 6 else "none"
+        st.caption(
+            f"**{w.name}**: {w.attacks} att · hit on {w.skill}+ · "
+            f"wound on {thresh}+ · save {save_str} · D{w.damage}"
+        )
+    if st.button("Log Shooting Action", key=f"log_shoot_{faction}_{uid}", use_container_width=True):
+        log_action(st.session_state.round, "shooting", unit.name, f"shot at {tgt_unit.name}")
+        st.success("Action logged.")
+
+
+def _central_charge_actions(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    ms = state.get("movement_status", "normal")
+
+    st.markdown(f"**{unit.name}** — Charge")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+
+    if ms in ("advanced", "retreated"):
+        st.warning(f"{ms.capitalize()} this turn — cannot charge.")
+        return
+
+    tgt = st.session_state.selected_target
+    if tgt is None:
+        st.info("Select a **target** to charge from the enemy sidebar (▶ Target).")
+        return
+
+    tgt_faction, tgt_uid = tgt
+    tgt_unit, _ = _lookup(tgt_faction, tgt_uid)
+    st.markdown(f"**Target:** {tgt_unit.name}")
+    st.caption("Roll **2D6** — must equal or beat the distance to the target.")
+
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button(
+            "Charge Successful",
+            key=f"charge_ok_{faction}_{uid}",
+            type="primary",
+            use_container_width=True,
+        ):
+            set_in_melee(uid, faction, True)
+            set_in_melee(tgt_uid, tgt_faction, True)
+            state["acted_this_phase"] = True
+            log_action(
+                st.session_state.round, "charge", unit.name, f"charged {tgt_unit.name} — success"
+            )
+            st.session_state.selected_target = None
+            st.rerun()
+    with c2:
+        if st.button("Charge Failed", key=f"charge_fail_{faction}_{uid}", use_container_width=True):
+            log_action(
+                st.session_state.round, "charge", unit.name, f"charged {tgt_unit.name} — failed"
+            )
+            st.info("Charge failed — no movement.")
+
+
+def _central_fight_actions(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    in_melee = state.get("in_melee", False)
+
+    st.markdown(f"**{unit.name}** — Fight")
+    badges_html = _state_badges_html(state)
+    if badges_html:
+        st.markdown(badges_html, unsafe_allow_html=True)
+
+    if not in_melee:
+        st.warning("Not in melee — no action possible.")
+        return
+
+    tgt = st.session_state.selected_target
+    if tgt is None:
+        st.info("Select a **target** in melee from the enemy sidebar (▶ Target).")
+        return
+
+    tgt_faction, tgt_uid = tgt
+    tgt_unit, tgt_state = _lookup(tgt_faction, tgt_uid)
+    st.markdown(f"**Target:** {tgt_unit.name}")
+    inv_display = f"{tgt_unit.invuln}+" if tgt_unit.invuln else "—"
+    st.markdown(f"T {tgt_unit.toughness} · Sv {tgt_unit.save}+ · ++ {inv_display}")
+    st.divider()
+    melee = [w for w in unit.weapons if w.is_melee]
+    for w in melee:
+        thresh = _wound_thresh(w.strength, tgt_unit.toughness)
+        eff_save = min(tgt_unit.save + abs(w.ap), tgt_unit.invuln or 99)
+        save_str = f"{eff_save}+" if eff_save <= 6 else "none"
+        st.caption(
+            f"**{w.name}**: {w.attacks} att · WS{w.skill}+ · "
+            f"wound {thresh}+ · save {save_str} · D{w.damage}"
+        )
+    if st.button("Log Fight Action", key=f"log_fight_{faction}_{uid}", use_container_width=True):
+        log_action(st.session_state.round, "fight", unit.name, f"fought {tgt_unit.name}")
+        st.success("Action logged.")
+
+
+def _central_morale_info(faction: str, uid: str) -> None:
+    unit, state = _lookup(faction, uid)
+    lost = state.get("lost_models_this_turn", 0)
+
+    st.markdown(f"**{unit.name}**")
+    if unit.count == 1:
+        st.success("Single model — auto-pass.")
+        return
+    if lost == 0:
+        st.success("No losses this turn — no morale test.")
+        return
+    st.warning(
+        f"**Ld {unit.leadership}** | Lost **{lost}** model(s) this turn.\n\n"
+        f"Roll D6 + {lost}. If result > {unit.leadership}: remove (result − {unit.leadership}) additional model(s)."
+    )
+
+
+def _wound_thresh(strength: int, toughness: int) -> int:
+    if strength >= toughness * 2:
+        return 2
+    if strength > toughness:
+        return 3
+    if strength == toughness:
+        return 4
+    if strength * 2 <= toughness:
+        return 6
+    return 5
 
 
 def phase_command() -> None:
-    _phase_placeholder("command")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("command")
+        active = st.session_state.active
+        st.divider()
+        st.markdown(f"**+1 CP for {active}**")
+        if st.button("Grant +1 CP", key="cmd_cp", type="primary", use_container_width=True):
+            adjust_cp(active, 1)
+            log_action(st.session_state.round, "command", active, "+1 CP received")
+            st.rerun()
+    else:
+        _central_command_actions(*sel)
 
 
 def phase_movement() -> None:
-    _phase_placeholder("movement")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("movement")
+    else:
+        _central_movement_actions(*sel)
 
 
 def phase_psychic() -> None:
-    _phase_placeholder("psychic")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("psychic")
+    else:
+        faction, uid = sel
+        unit, state = _lookup(faction, uid)
+        is_psyker = any(
+            kw.upper() == "PSYKER" for kw in unit.other_keywords + unit.faction_keywords
+        )
+        st.markdown(f"**{unit.name}**")
+        if is_psyker:
+            st.info(
+                "PSYKER — declare Smite or psychic powers manually. Track results on the unit card."
+            )
+        else:
+            st.warning("Not a PSYKER — no action possible.")
 
 
 def phase_shooting() -> None:
-    _phase_placeholder("shooting")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("shooting")
+    else:
+        _central_shooting_actions(*sel)
 
 
 def phase_charge() -> None:
-    _phase_placeholder("charge")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("charge")
+    else:
+        _central_charge_actions(*sel)
 
 
 def phase_fight() -> None:
-    _phase_placeholder("fight")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("fight")
+        active = st.session_state.active
+        inactive = "Orks" if active == "Necrons" else "Necrons"
+        st.caption(
+            f"Fight order: **{inactive}** selects first (non-active player), "
+            f"then **{active}**. Units that charged fight before others."
+        )
+    else:
+        _central_fight_actions(*sel)
 
 
 def phase_morale() -> None:
-    _phase_placeholder("morale")
+    sel = st.session_state.selected_unit
+    if sel is None:
+        _central_level1("morale")
+    else:
+        _central_morale_info(*sel)
 
 
 PHASE_RENDERERS = {
+    "setup": phase_setup,
     "command": phase_command,
     "movement": phase_movement,
     "psychic": phase_psychic,
@@ -297,9 +885,8 @@ PHASE_RENDERERS = {
 
 
 # ---------------------------------------------------------------------------
-# Main layout
+# Score group
 # ---------------------------------------------------------------------------
-
 
 _SCORE_LABEL_STYLE = (
     "display:block;width:100%;text-align:center;font-size:1.6rem;font-weight:600;"
@@ -312,7 +899,6 @@ _SCORE_VALUE_STYLE = (
 
 
 def _score_group(faction: str, prefix: str) -> None:
-    """VP- und CP-Steuerung: Label oben, dann ▲ · Zahl · ▼ je Spalte."""
     vp = st.session_state.vp[faction]
     cp = st.session_state.cp[faction]
 
@@ -339,44 +925,73 @@ def _score_group(faction: str, prefix: str) -> None:
             st.rerun()
 
 
+# ---------------------------------------------------------------------------
+# Main layout
+# ---------------------------------------------------------------------------
+
+
+def _units_for(faction: str) -> list[Unit]:
+    return NECRON_UNITS if faction == "Necrons" else ORK_UNITS
+
+
+def _states_for(faction: str) -> dict:  # type: ignore[type-arg]
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    return st.session_state[key]
+
+
 def main() -> None:
     st.markdown(CSS_THEME, unsafe_allow_html=True)
     init_state()
 
-    # ── Header: [Score Necrons] [Mitte] [Score Orks] ─────────────────────────
+    active = st.session_state.active
+    inactive = "Orks" if active == "Necrons" else "Necrons"
+    phase_idx = st.session_state.phase_idx
+    phase_name, phase_key = PHASES[phase_idx]
+
+    # ── Header ───────────────────────────────────────────────────────────────
     left_hdr, center_hdr, right_hdr = st.columns([2.5, 5, 2.5], gap="medium")
 
     with left_hdr:
-        _score_group("Necrons", "nc")
+        _score_group(active, "left")
 
     with center_hdr:
-        # Reset oben mittig
         _, rst_c, _ = st.columns([2, 1, 2])
         with rst_c:
             if st.button("↺", key="reset_game", use_container_width=True):
                 reset_game()
                 st.rerun()
 
-        # Runde
+        round_label = "Setup" if phase_key == "setup" else f"Round {st.session_state.round}"
         st.markdown(
             f'<div style="text-align:center;font-size:1.6rem;font-weight:600;'
             f'letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;">'
-            f"Runde {st.session_state.round}</div>",
+            f"{round_label}</div>",
             unsafe_allow_html=True,
         )
 
-        # ← Phase · Fraktion →
-        phase_name, _ = PHASES[st.session_state.phase_idx]
         prev_c, phase_c, next_c = st.columns([1, 5, 1])
         with prev_c:
-            if st.button("←", key="prev_phase", type="primary", use_container_width=True):
-                st.session_state.phase_idx = max(0, st.session_state.phase_idx - 1)
+            prev_disabled = phase_idx == 0
+            if st.button(
+                "←",
+                key="prev_phase",
+                type="primary",
+                use_container_width=True,
+                disabled=prev_disabled,
+            ):
+                if phase_idx > 1:
+                    st.session_state.phase_idx = phase_idx - 1
+                else:
+                    st.session_state.phase_idx = 0
+                st.session_state.selected_unit = None
+                st.session_state.selected_target = None
                 st.rerun()
         with phase_c:
+            active_label = "" if phase_key == "setup" else f" · {active}"
             st.markdown(
                 f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
                 f'letter-spacing:0.1em;color:#e8d5a3;text-transform:uppercase;padding:0.25rem 0;">'
-                f"{phase_name} · {st.session_state.active}</div>",
+                f"{phase_name}{active_label}</div>",
                 unsafe_allow_html=True,
             )
         with next_c:
@@ -385,26 +1000,17 @@ def main() -> None:
                 st.rerun()
 
     with right_hdr:
-        _score_group("Orks", "ok")
+        _score_group(inactive, "right")
 
     st.divider()
 
-    # ── Drei-Spalten-Layout ──────────────────────────────────────────────────
-    left, center, right = st.columns([1, 2, 1], gap="small")
-
-    # ── LINKS: Necrons ───────────────────────────────────────────────────────
-    with left:
-        st.markdown("## Necrons")
-        for unit in NECRON_UNITS:
-            unit_card(unit, st.session_state.necron_units[unit.uid], "Necrons")
-
-    # ── MITTE: Phasen ────────────────────────────────────────────────────────
-    with center:
-        _, phase_key = PHASES[st.session_state.phase_idx]
-
+    # ── Phase stepper (only during battle) ──────────────────────────────────
+    if phase_key != "setup":
+        battle_phases = PHASES[1:]  # skip setup
         steps_html = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">'
-        for i, (pn, _) in enumerate(PHASES):
-            if i == st.session_state.phase_idx:
+        for i, (pn, _) in enumerate(battle_phases):
+            real_idx = i + 1
+            if real_idx == phase_idx:
                 steps_html += (
                     f'<span style="background:#2e2618;border:1px solid #c9a84c;border-radius:2px;'
                     f'padding:2px 8px;font-size:11px;color:#e8d5a3;letter-spacing:0.05em;">{pn}</span>'
@@ -415,12 +1021,24 @@ def main() -> None:
                     f'padding:2px 8px;font-size:11px;color:#4a3f2a;">{pn}</span>'
                 )
         steps_html += "</div>"
-        st.markdown(steps_html, unsafe_allow_html=True)
+        # render inside the center col — rebuild columns just for stepper
+        _, ctr, _ = st.columns([1, 2, 1])
+        with ctr:
+            st.markdown(steps_html, unsafe_allow_html=True)
 
+    # ── Three-column layout ──────────────────────────────────────────────────
+    left, center, right = st.columns([1, 2, 1], gap="small")
+
+    # Active player on the left
+    with left:
+        st.markdown(f"## {active}")
+        for unit in _units_for(active):
+            unit_card(unit, _states_for(active)[unit.uid], active)
+
+    with center:
         PHASE_RENDERERS[phase_key]()
 
-    # ── RECHTS: Orks ─────────────────────────────────────────────────────────
     with right:
-        st.markdown("## Orks")
-        for unit in ORK_UNITS:
-            unit_card(unit, st.session_state.ork_units[unit.uid], "Orks")
+        st.markdown(f"## {inactive}")
+        for unit in _units_for(inactive):
+            unit_card(unit, _states_for(inactive)[unit.uid], inactive)

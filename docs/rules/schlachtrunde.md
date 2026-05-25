@@ -1,5 +1,8 @@
 # Die Schlachtrunde
 
+> **Regelquelle:** [Wahapedia — WH40k 9th Edition Core Rules](https://wahapedia.ru/wh40k9ed/the-rules/core-rules/)  
+> Armeen, Einheiten und Fraktionsregeln ebenfalls unter: https://wahapedia.ru/wh40k9ed/
+
 Minute um blutige Minute tobt die Schlacht — von den ersten Eröffnungssalven über brutale Offensiven und verzweifelte Gegenangriffe bis hin zu den letzten flüchtigen Augenblicken, wenn der Sieg am seidenen Faden hängt.
 
 Warhammer 40.000 wird in einer Reihe von Schlachtrunden gespielt.

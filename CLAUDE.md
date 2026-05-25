@@ -8,6 +8,13 @@
 - Use plan mode for verification steps, not just building
 - Write detailed specs upfront to reduce ambiguity
 
+### Freigabe vor Umsetzung (PFLICHT)
+- **Niemals Code schreiben oder Dateien bearbeiten ohne vorherige explizite Freigabe durch den Nutzer**
+- Vor jeder Umsetzung: Plan beschreiben + **alle betroffenen Dateien auflisten**
+- Warten bis der Nutzer explizit zustimmt (z.B. „ja", „mach es", „ok")
+- Ausnahme: Der Nutzer gibt explizit „freien Lauf" für mehrere Schritte — dann darf ohne Einzelfreigabe implementiert werden
+- Auch bei kleinen, offensichtlichen Änderungen gilt diese Regel
+
 ### Subagent Strategy
 - Use subagents liberally to keep main context window clean
 - Offload research, exploration, and parallel analysis to subagents

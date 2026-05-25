@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 
 PHASES: list[tuple[str, str]] = [
+    ("Setup", "setup"),
     ("Befehlsphase", "command"),
     ("Bewegungsphase", "movement"),
     ("Psiphase", "psychic"),

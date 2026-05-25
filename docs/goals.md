@@ -19,145 +19,124 @@ Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwa
 
 ---
 
-## Ziel 2 — Einheitenstatus
+## Ziel 2 — Einheitenstatus ✅
 
 Wunden und Modellverluste direkt auf den Karten verwalten.
 
-- [ ] −1W / −D3 / −D6 / +1W auf jeder Einheitenkarte
-- [ ] Wundbalken und Modellzahl live aktualisieren
-- [ ] Einheit als „vernichtet" markieren wenn Wunden = 0
+- [x] 6 Schaden-Buttons (−3/−2/−1/+1/+2/+3) auf jeder Einheitenkarte
+- [x] −1 (tödliche Wunde, golden): läuft auf nächstes Modell über
+- [x] −2/−3 (normaler Schaden): wird am HP des aktuellen Modells gekappt
+- [x] Drei Anzeigemodi: 1 Modell / Mehrere à 1LP / Mehrere mit mehreren LP (2 Balken)
+- [x] Einheit als „vernichtet" markieren wenn Modellzahl = 0
 
 ---
 
-## Ziel 3 — Zentralbereich: Durchstich
+## Ziel 3 — Durchstich
 
-> **Regelgrundlage:** [`docs/rules/schlachtrunde.md`](rules/schlachtrunde.md)  
-> Jede Phase im Code entspricht einem Abschnitt dort. Vor der Implementierung einer Phase immer den zugehörigen Abschnitt einlesen.
+> **Regelgrundlage:** [`docs/rules/schlachtrunde.md`](rules/schlachtrunde.md) ist bindend.  
+> Vor der Implementierung einer Phase immer den zugehörigen Abschnitt einlesen.
 
-Jede der 7 Phasen zeigt die wesentlichen Informationen, die laut Grundregeln in ihr benötigt werden. Keine Würfellogik — nur Struktur, Status-Anzeigen und Ablauf als Orientierung für den Spieler.
+Kein Würfeln — nur Struktur, Zustandsanzeigen und Ablauf als Orientierung für den Spieler.
+
+### Kernprinzipien
+
+**Einheitenkarte** — zwei Sektionen:
+- **Permanent** (immer sichtbar): HP-Balken, Modellzahl, State-Badges (z.B. „Vorgerückt", „Im Nahkampf", „Reserve")
+- **Dynamisch** (phasenabhängig): nur die laut `schlachtrunde.md` relevanten Profilwerte. Hat eine Einheit in einer Phase keine Aktion: „Keine Aktion möglich."
+
+**Zentralbereich** — dreistufig:
+1. Keine Einheit gewählt → Phasenübersicht + Regelzusammenfassung
+2. Einheit gewählt (aktiver Spieler) → mögliche Aktionen für diese Einheit
+3. Zwei Einheiten gewählt (z.B. Schütze + Ziel) → Interaktionssequenz
+
+**Einheitenstate** — wird um folgende Felder erweitert:
+- `movement_status`: `normal` | `advanced` | `stationary` | `retreated`
+- `in_melee`: bool
+- `in_reserve`: bool
+- `acted_this_phase`: bool
+
+**Protokoll** — persistent als JSON in `data/log/`: Runde, Phase, Einheit, Aktion.
+
+---
+
+### Setup-Phase (vor der Schlachtrunde)
+→ Regelreferenz: [schlachtrunde.md — Vor dem Spiel](rules/schlachtrunde.md)
+
+- [ ] Startspieler manuell bestimmen → Sidebars füllen sich korrekt (aktiver Spieler links)
+- [ ] Aufstellungsstatus pro Einheit wählen: Normal / Stationär / Reserve
+- [ ] Einheiten in Reserve: erst ab Runde 2 verfügbar
+- [ ] Setup-Zusammenfassung jederzeit einsehbar (eingeklappt im Zentralbereich)
 
 ### Befehlsphase
 → Regelreferenz: [schlachtrunde.md — Befehlsphase](rules/schlachtrunde.md#1-befehlsphase)
-- [ ] BP-Anzeige mit Button „+1 BP (Schlachtordnung)" für den aktiven Spieler
-- [ ] Textkasten: „Handle etwaige phasenspezifische Regeln ab, dann weiter."
+
+- [ ] CP +1 Button für aktiven Spieler
+- [ ] Hinweistext: phasenspezifische Regeln abhandeln
+- [ ] Dynamische Karte: keine phasenspezifischen Profilwerte (nur State-Badges)
 
 ### Bewegungsphase
 → Regelreferenz: [schlachtrunde.md — Bewegungsphase](rules/schlachtrunde.md#2-bewegungsphase)
-- [ ] Liste aller Einheiten des aktiven Spielers mit Bewegungswert (B)
-- [ ] Statusbadge pro Einheit: Normale Bewegung / Vorrückt / Stationär / Rückzug (wählbar)
-- [ ] Hinweis: Einheiten in Nahkampfreichweite können nur Stationär bleiben oder sich zurückziehen
-- [ ] Einheiten, die Vorrückt oder Rückzug gewählt haben, als für Fernkampf/Angriff gesperrt markieren
+
+- [ ] Einheit wählen → Bewegungsstatus setzen: Normal / Vorgerückt / Stationär / Rückzug
+- [ ] Dynamische Karte: M-Wert anzeigen
+- [ ] Einheiten in Nahkampfreichweite (`in_melee = true`): nur Stationär oder Rückzug möglich
+- [ ] Vorgerückt / Rückzug → `movement_status` sperrt Einheit für Fernkampf und Angriff
 
 ### Psiphase
 → Regelreferenz: [schlachtrunde.md — Psiphase](rules/schlachtrunde.md#3-psiphase)
-- [ ] Liste aller PSIONIKER-Einheiten des aktiven Spielers
-- [ ] Pro Psioniker: verfügbare Psikräfte anzeigen (inkl. Warpenergiewert)
-- [ ] Schmetterschlag immer vorhanden; weitere aus Datenblatt
-- [ ] Statusanzeige: bereits manifestiert / noch nicht / gebannt
+
+- [ ] Nur PSIONIKER-Einheiten aktiv, Rest: „Keine Aktion möglich"
+- [ ] Dynamische Karte: Psikräfte + Warpenergiewert anzeigen
+- [ ] Status pro Kraft: manifestiert / nicht manifestiert / gebannt
 
 ### Fernkampfphase
 → Regelreferenz: [schlachtrunde.md — Fernkampfphase](rules/schlachtrunde.md#4-fernkampfphase)
-- [ ] Liste der schussfähigen Einheiten (nicht Vorrückt, nicht Rückzug — außer TITANISCH)
-- [ ] Pro Einheit: Fernkampfwaffen mit Typ, Reichweite, S, DS, SW anzeigen
-- [ ] Anzeige: „Im Nahkampf gebunden" wenn Einheit in Nahkampfreichweite
+
+- [ ] Schütze wählen (aktiver Spieler) → Ziel wählen (Gegner-Sidebar)
+- [ ] Dynamische Karte Schütze: Fernkampfwaffen mit Profil
+- [ ] Dynamische Karte Ziel: T · Sv · ++ anzeigen
+- [ ] Zentralbereich: Sequenzübersicht (Treffer → Verwundung → Rettung → Schaden), noch ohne Würfel
+- [ ] Einheiten ohne Fernkampfwaffe / Vorgerückt / Rückzug: „Keine Aktion möglich"
+- [ ] Im Nahkampf gebundene Einheiten entsprechend markieren
 
 ### Angriffsphase
 → Regelreferenz: [schlachtrunde.md — Angriffsphase](rules/schlachtrunde.md#5-angriffsphase)
-- [ ] Liste der angriffsfähigen Einheiten (innerhalb 12 Zoll, nicht Vorrückt/Rückzug)
-- [ ] Pro Einheit: mögliche Ziele anzeigen (feindliche Einheiten innerhalb 12 Zoll)
-- [ ] Hinweis: Ziele müssen nicht sichtbar sein
+
+- [ ] Angreifer wählen → Ziele in Reichweite (≤ 12 Zoll) anzeigen
+- [ ] Angriff bestätigen → `in_melee = true` für Angreifer und Ziel (nach erfolgreichem Angriff)
+- [ ] Einheiten, die Vorgerückt / Rückzug: „Keine Aktion möglich"
+- [ ] Dynamische Karte: keine spezifischen Profilwerte (State-Badges relevant)
 
 ### Nahkampfphase
 → Regelreferenz: [schlachtrunde.md — Nahkampfphase](rules/schlachtrunde.md#6-nahkampfphase)
-- [ ] Anzeige: aktiver Spieler beginnt NICHT — Gegner wählt zuerst
-- [ ] Liste aller nahkampffähigen Einheiten beider Seiten (in Nahkampfreichweite oder Angriffsbewegung ausgeführt)
-- [ ] Hervorhebung: Einheiten, die eine Angriffsbewegung ausgeführt haben, kämpfen zuerst
+
+- [ ] Reihenfolge anzeigen: Einheiten mit Angriff zuerst, dann Gegner beginnt
+- [ ] Dynamische Karte: Nahkampfwaffen mit Profil
+- [ ] Einheiten ohne `in_melee` und ohne Angriff: „Keine Aktion möglich"
+- [ ] Sequenzübersicht analog Fernkampf (noch ohne Würfel)
 
 ### Moralphase
 → Regelreferenz: [schlachtrunde.md — Moralphase](rules/schlachtrunde.md#7-moralphase)
-- [ ] Liste aller Einheiten, die in diesem Zug Modellverluste erlitten haben
-- [ ] Pro betroffener Einheit: Moralwert (Ld) anzeigen
-- [ ] Hinweis auf Testablauf: W6 + Verluste vs. Ld
+
+- [ ] Einheiten mit Verlusten in dieser Runde auflisten
+- [ ] Ld-Wert pro Einheit anzeigen
+- [ ] Einheit mit 1 Modell: automatisch bestanden, überspringen
+- [ ] Dynamische Karte: Ld-Wert anzeigen
 
 ---
 
-## Ziel 4 — Zentralbereich: Phasenlogik
+## Nächste Schritte (nach Ziel 3)
 
-Jede Phase erhält vollständige Würfel- und Regellogik. Reihenfolge entspricht der Spielabfolge.
+**Armeelisten aus Daten laden** — Einheiten und Werte werden aus YAML geladen statt hart im Code verdrahtet. Ziel: beliebige Armeen spielen können.
 
-### Befehlsphase
-- [ ] BP automatisch gutschreiben wenn Schlachtordnung aktiv
-- [ ] Missionsregeln (konfigurierbar) in der Phase auslösen können
+- [ ] `data/wh40k_9e/necrons/units.yaml` und `data/wh40k_9e/orks/units.yaml`
+- [ ] Generischer YAML-Loader in `src/`
+- [ ] Hardcodierte Listen aus `models.py` entfernen
+- [ ] Einheitenlogik so abstrahieren, dass sie armeenunabhängig funktioniert
 
-### Bewegungsphase
-- [ ] Vorrückenwurf (W6) würfeln und auf B addieren
-- [ ] Bewegungsstatus schreibt Einschränkungen in den State (gesperrt für Schuss/Angriff)
-- [ ] Verstärkungen aufstellen: Einheit aus Reserve auf das Feld setzen (Position, Regeln)
-
-### Psiphase
-- [ ] Psitest würfeln (2W6 ≥ Warpenergiewert): bestanden / misslingt
-- [ ] Doppel-1 / Doppel-6: Gefahren des Warp auslösen (W3 tödliche Verwundungen, ggf. Explosion)
-- [ ] Psibanntest: Gegner würfelt 2W6 gegen Psitestergebnis
-- [ ] Schmetterschlag-Schaden anwenden (W3 / W6 bei 11+)
-- [ ] Warpenergiewert-Steigerung bei mehrfachem Schmetterschlag in einer Phase
-
-### Fernkampfphase
-- [ ] Ziel wählen (sichtbar + in Reichweite prüfen)
-- [ ] Trefferwurf (W6 ≥ BF, Modifikator max. ±1)
-- [ ] Verwundungswurf (W6 nach S-vs-T-Tabelle, Modifikator max. ±1)
-- [ ] Attacke zuweisen (Spieler mit Zieleinheit; verwundetes Modell zuerst)
-- [ ] Schutzwurf (W6 + DS ≥ RW) oder Rettungswurf
-- [ ] Schaden anwenden (SW Lebenspunkte abziehen; überschüssiger Schaden verfällt)
-- [ ] Tödliche Verwundungen gesondert abhandeln (kein Schutzwurf, überschüssiger Schaden übertragen)
-- [ ] Schnelles Würfeln: gleiche Attacken zusammenfassen
-
-### Angriffsphase
-- [ ] Angriffswurf (2W6) würfeln
-- [ ] Angriff erfolgreich wenn Reichweite bis in Nahkampfreichweite aller Ziele reicht
-- [ ] Abwehrfeuer auslösen (nur unmodifizierter 6er trifft)
-- [ ] Heroische Intervention: Gegner bewegt CHARAKTERMODELL bis 3 Zoll näher
-
-### Nahkampfphase
-- [ ] Nachrücken: bis 3 Zoll, muss näher am nächsten Feind enden
-- [ ] Kämpfende Einheiten bestimmen (innerhalb 1 Zoll nach Nachrücken)
-- [ ] Vollständige Attackenkette (KG → S vs T → Zuweisung → RW → SW)
-- [ ] Abwechselnde Aktivierung korrekt umsetzen (Gegner beginnt; Angreifer zuerst)
-- [ ] Neuordnen nach dem Kampf
-
-### Moralphase
-- [ ] Moraltest würfeln (W6 + Modellverluste vs. Ld)
-- [ ] Modelle bei misslingendem Test entfernen (Differenz, mind. 1)
-- [ ] Einheiten mit 1 Modell überspringen
-
----
-
-## Ziel 5 — Zentralbereich: Armeeninteraktion
-
-Phasenübergreifende Mechaniken, bei denen beide Spieler aktiv eingebunden sind.
-
-- [ ] **Zielauswahl Fernkampf:** Angreifer wählt Einheit + Waffe; Verteidiger weist Attacken seinen Modellen zu (bei Mehrfachmodell-Einheiten)
-- [ ] **Sichtlinie prüfen:** visueller Hinweis welche feindlichen Einheiten für eine schießende Einheit in Reichweite und sichtbar sind
-- [ ] **Abwehrfeuer (Overwatch):** Gegner-Einheit schießt bei Angriffsansage zurück; nur 6er treffen
-- [ ] **Psibann:** Gegner-Psioniker versucht Psikraft zu bannen — beide Spieler würfeln nacheinander
-- [ ] **Heroische Intervention:** Gegner bewegt CHARAKTERMODELL in der eigenen Angriffsphase des aktiven Spielers
-- [ ] **Alternating Activation (Nahkampf):** klare UI, wer gerade dran ist; Spielerwechsel nach jeder Einheit
-- [ ] **Moraltest Zuschauen:** Gegner sieht welche Einheiten des aktiven Spielers gerade testen müssen
-- [ ] **Regeln außerhalb der Phase:** Fähigkeiten die „wie in Fernkampfphase" oder „wie in Nahkampfphase" wirken — korrekt mit/ohne Gefechtsoptionen abhandeln
-
----
-
-## Ziel 6 — Armeelisten aus Daten laden
-
-Statt Hardcode: beide Armeen aus YAML/JSON laden.
-
-- [ ] `data/` Verzeichnis mit Armeelisten (YAML)
-- [ ] Beim Start Armee wählen oder laden
-- [ ] Beliebige Einheitenzusammensetzung möglich
-
----
-
-## Ziel 7 — Spielende & Auswertung
+**Spielende & Auswertung**
 
 - [ ] VP-Bedingungen konfigurierbar
 - [ ] Siegbedingungen prüfen (nach Runde 5 oder bei Vernichtung)
 - [ ] Abschluss-Screen mit Zusammenfassung
+- [ ] Fortlaufendes Log aus `data/log/` anzeigen

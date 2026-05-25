@@ -1,0 +1,114 @@
+[
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Orks",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T20:52:56.744308"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Orks",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T20:52:59.979684"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Big Mek in Mega Armour",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-25T20:53:59.453462"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-25T20:54:10.677570"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Boyz ×10",
+    "action": "movement: stationary",
+    "timestamp": "2026-05-25T20:54:20.348785"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Gretchin ×10",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-25T20:54:38.966347"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Warbikers ×3",
+    "action": "movement: stationary",
+    "timestamp": "2026-05-25T20:54:45.043049"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Mek Gun (Kustom Mega Kannon)",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-25T20:54:51.084516"
+  },
+  {
+    "round": 1,
+    "phase": "shooting",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "shot at Necron Warriors ×10",
+    "timestamp": "2026-05-25T20:55:32.380850"
+  },
+  {
+    "round": 1,
+    "phase": "shooting",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "shot at Necron Warriors ×10",
+    "timestamp": "2026-05-25T20:55:41.657531"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Boyz ×10",
+    "action": "charged Overlord (Warlord) — success",
+    "timestamp": "2026-05-25T20:56:05.502010"
+  },
+  {
+    "round": 1,
+    "phase": "fight",
+    "unit": "Boyz ×10",
+    "action": "fought Overlord (Warlord)",
+    "timestamp": "2026-05-25T20:56:40.152181"
+  },
+  {
+    "round": 2,
+    "phase": "command",
+    "unit": "Necrons",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T20:57:02.701953"
+  },
+  {
+    "round": 2,
+    "phase": "command",
+    "unit": "Necrons",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T20:57:04.978580"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Necrons",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T21:07:54.484620"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Orks",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-25T21:08:04.089939"
+  }
+]
