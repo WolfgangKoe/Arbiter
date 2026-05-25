@@ -7,33 +7,48 @@ Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwa
 
 ---
 
-## Ziel 3 — Durchstich
+## UI Refactoring & Layout
 
-> **Regelgrundlage:** [`docs/rules/schlachtrunde.md`](rules/schlachtrunde.md) ist bindend.
+Ziel: Eine lesbare, übersichtliche Oberfläche, in der alle spielrelevanten Informationen zur richtigen Zeit am richtigen Ort erkennbar sind — so dass zwei Spieler eine Partie WH40k flüssig begleiten können, ohne in der App zu suchen.
 
-Kein Würfeln — nur Struktur, Zustandsanzeigen und Ablauf als Orientierung für den Spieler.
+**Voraussetzung:** Layout-Bilder vom Nutzer für folgende Komponenten:
 
-**Befehlsphase**
-- [ ] Dynamische Karte: Layout-Diskussion ausstehend — wartet auf Einheitenkarte-Vorlage
+- [ ] Einheitenkachel — Normalzustand
+- [ ] Einheitenkachel — Zustände (zerstört / Reserve / Nahkampf / Charged)
+- [ ] Top-Bar (Rundenanzeiger, Phasen-Stepper, VP/CP)
+- [ ] Zentralbereich — Befehlsphase (einfachste Phase)
+- [ ] Zentralbereich — Bewegungsphase mit ausgewählter Einheit
+- [ ] Zentralbereich — Fernkampf mit Schütze + Ziel
 
-**Psiphase**
-- [ ] Dynamische Karte: Psikräfte + Warpenergiewert anzeigen (Daten fehlen noch im Modell)
-- [ ] Status pro Kraft: manifestiert / nicht manifestiert / gebannt
+**Umsetzung (nach Lieferung der Bilder):**
+
+- [ ] `ui.py` in Komponenten aufsplitten (`ui/unit_card.py`, `ui/header.py`, `ui/central/`, …) — kein Behavior-Change, nur Struktur
+- [ ] UX-Anpassungen anhand der Layout-Bilder
+- [ ] `docs/architecture.md` aktualisieren
 
 ---
 
-## Nächste Schritte (nach Ziel 3)
+## Army Abstraction
 
-**Armeelisten aus Daten laden** — Einheiten und Werte werden aus YAML geladen statt hart im Code verdrahtet. Ziel: beliebige Armeen spielen können.
+Ziel: Armeen werden aus dem bestehenden YAML-Katalog (`data/wh40k_9e/<faction>/`) geladen. Im App-UI wählt der Spieler, welche Einheiten er in eine Partie mitbringt. Die Engine-Logik kennt keine hardcodierten Fraktionen mehr.
 
-- [ ] `data/wh40k_9e/necrons/units.yaml` und `data/wh40k_9e/orks/units.yaml`
-- [ ] Generischer YAML-Loader in `src/`
-- [ ] Hardcodierte Listen aus `models.py` entfernen
-- [ ] Einheitenlogik so abstrahieren, dass sie armeenunabhängig funktioniert
+Keywords aus dem Katalog steuern direkt das Verhalten in der App: welche Phasen eine Einheit nutzen kann, welche Aktionen sichtbar sind, welche Einschränkungen gelten. Neue Regelelemente (Relikte, Warlord-Traits) fügen sich in dieselbe Struktur ein.
 
-**Spielende & Auswertung**
+- [ ] YAML-Loader: liest `units.yaml` + `weapons.yaml`, löst Referenzen auf
+- [ ] In-App Army Builder: Einheiten aus Katalog wählen, Roster für eine Partie zusammenstellen
+- [ ] Engine-Logik armeeneutral: keine hardcodierten `"necron_units"`/`"ork_units"`-Keys mehr
+- [ ] Keyword-Dispatcher: zentrale Stelle, die Keywords auf Phasenverhalten mappt (`PSYKER` → Psiphase aktiv, `FLY` → Bewegungsregeln, …)
+- [ ] Necrons und Orks als erste vollständige Armeen im neuen System
 
-- [ ] VP-Bedingungen konfigurierbar
-- [ ] Siegbedingungen prüfen (nach Runde 5 oder bei Vernichtung)
-- [ ] Abschluss-Screen mit Zusammenfassung
-- [ ] Fortlaufendes Log aus `data/log/` anzeigen
+---
+
+## Phase Logic
+
+Ziel: Der Zentralbereich wird von einer reinen Regelanzeige zu echter Spiellogik. Werte beider Armeen fließen in Berechnungen ein, Zustände werden automatisch gesetzt, die App führt aktiv durch die Kampfsequenz.
+
+**Voraussetzung:** Army Abstraction abgeschlossen.
+
+- [ ] Treffersequenz im Zentralbereich vollständig geführt (Treffer → Verwundung → Rettung → Schaden)
+- [ ] Automatisches Setzen von Zuständen (z.B. `in_melee` nach Charge, `acted_this_phase` nach Aktion)
+- [ ] Spielende: Siegbedingungen prüfen, Abschluss-Screen
+- [ ] Spielprotokoll aus `data/log/` im UI anzeigen
