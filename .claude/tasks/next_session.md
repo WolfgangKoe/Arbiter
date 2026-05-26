@@ -3,10 +3,11 @@
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — aktuelle Projektziele (komplett neu strukturiert)
-3. `docs/architecture.md` — Zielarchitektur inkl. Backend-Erkenntnisse
-4. `docs/ui_layout.md` — UI-Wireframes und Komponentenspezifikation
-5. `src/models.py`, `src/engine.py`, `src/ui.py` — aktueller Stand des Codes
+2. `docs/goals.md` — aktuelle Projektziele
+3. `docs/architecture.md` — Zielarchitektur
+4. `src/uiLayout/unitCard.py` — neues unitCard-Layout (fertig)
+5. `src/gameObjects/loader.py` + `src/gameObjects/unit.py` — fertige gameObjects-Grundlage
+6. `src/uiLayout/gameActionsArea.py` — Phase-Renderer (Ziel der nächsten Ziele)
 
 ---
 
@@ -16,37 +17,59 @@
 Starten: `streamlit run src/app.py`
 
 ```
-src/          ← Streamlit-App (app.py, models.py, engine.py, ui.py)
-data/
-  wh40k_9e/  ← YAML-Katalog (necrons/, orks/)
-  log/        ← game_log.json
-docs/
-  goals.md              ← Projektziele
-  architecture.md       ← Zielarchitektur + Backend-Erkenntnisse
-  ui_layout.md          ← UI-Wireframes und Komponentenspezifikation
-  rules/
-    schlachtrunde.md    ← WH40k 9E Grundregeln (bindend)
+src/
+  app.py              ← Entry Point: init_state + render_game_header + 3-Spalten-Layout
+  uiLayout/           ← Alle UI-Komponenten (1A fertig)
+    gameHeader.py     ← CSS, VP/CP-Stepper (VP-Step=5, CP-Step=1), Phase-Nav
+    armyCard.py       ← Fraktions-Header (hardcoded Nephrekh/Bad Moons)
+    unitCard.py       ← Neues Layout: Name-Button (Select-Trigger), Keywords, LP/Model-Bars, Badges, Expander
+    detachmentCard.py ← Detachment-Header + Units-Liste (ohne Rollengroupierung)
+    armyList.py       ← armyCard + detachmentCard
+    gameActionsArea.py ← Phase-Dispatcher (alle phase_* Renderer aus alt-ui.py)
+    gameProtocoll.py  ← Setup-Summary (Stub)
+  gameObjects/        ← Pure Python, kein Streamlit (1B fertig)
+    unit.py           ← Unit Dataclass (neue Felder: id, name_en, keywords, models_min/max, bs, ws, ...)
+    weapon.py         ← Weapon Dataclass (alle Werte als str)
+    faction_property.py ← FactionProperty Dataclass
+    detachment.py     ← Detachment + DetachmentType + SlotConstraint Dataclasses
+    loader.py         ← load_army(), load_faction_properties(), load_detachment_types()
+  engine.py           ← UNVERÄNDERT (game logic)
+  models.py           ← UNVERÄNDERT (alte Unit/Weapon Klassen + hardcodierte Listen)
+  ui.py               ← Deprecated (nur Kommentar-Zeile)
+
+data/wh40k_9e/
+  necrons/
+    army.yaml         ← NEU: 5 Necron-Einheiten im gameObjects-Format
+    faction_properties.yaml ← Living Metal, Reanimation Protocols
+    subfaction_properties.yaml ← Nephrekh Translocation Beams
+  orks/
+    army.yaml         ← NEU: 6 Ork-Einheiten im gameObjects-Format
+  _shared/
+    detachment_types.yaml ← Patrol, Battalion, Brigade, Spearhead, Outrider, Vanguard, Air Wing
+
+tests/
+  gameObjects/
+    test_loader.py    ← 9 Tests (alle grün)
 ```
 
 ---
 
 ## Was in dieser Session erarbeitet wurde
 
-### Planung & Dokumentation (kein Code geändert)
+### Ziel 1A — `uiLayout/` Struktursplit ✅
 
-- **`docs/ui_layout.md`** (neu): Vollständige ASCII-Wireframes für alle 8 UI-Komponenten
-  (gameHeader, armyCard, unitCard, detachmentCard, armyList, gameActionsArea, gameProtocoll)
-  inkl. Properties, States, Interaktionslogik, TBDs
+- `src/ui.py` aufgeteilt in 7 `uiLayout/` Module
+- `app.py` auf neue Imports umgestellt
+- Neues `unitCard`-Layout: Name als Select-Trigger-Button (aktiver Spieler), Keywords als Badges, LP/Model-Fortschrittsbalken, State-Badges, collapsible Phase-Area mit Stats + Damage-Buttons + phasenspezifische Info
+- VP-Stepper auf Step=5 geändert
 
-- **`docs/architecture.md`** (komplett neu): Zielstruktur `uiLayout/` / `gameObjects/` / `gameMechanic/`,
-  Dataclass-Skelette (Unit, Weapon, FactionProperty, Detachment, Stratagem),
-  session_state-Schema, Interaction-Flow, Phase-Stubs für alle 7 Phasen,
-  Refactoring-Plan in 4 Phasen, Backend-Erkenntnisse
+### Ziel 1B — `gameObjects/` Foundation ✅
 
-- **`docs/goals.md`** (komplett neu): 4 Ziele, Ziel 1A + 1B explizit parallel
-
-- **`backend/`** gelöscht nach Extraktion der nützlichen Konzepte → `architecture.md`
-- **`Layout_Print/`** gelöscht — alle Skizzen sind in `ui_layout.md` überführt
+- Alle 4 Dataclasses erstellt (Unit, Weapon, FactionProperty, Detachment)
+- YAML-Loader erstellt (load_army, load_faction_properties, load_detachment_types)
+- 5 YAML-Datendateien erstellt (Necrons army, Orks army, Necron faction properties, subfaction properties, shared detachment types)
+- 9 Unit-Tests, alle grün
+- `models.py` unverändert (Migration auf gameObjects folgt in Ziel 2)
 
 ---
 
@@ -57,49 +80,48 @@ docs/
 | Grundstruktur & Layout | ✅ fertig |
 | Einheitenstatus (Wundverwaltung) | ✅ fertig |
 | Durchstich (Phasenstruktur, State, Zentralbereich) | ✅ fertig |
-| **Ziel 1A — uiLayout/ Struktursplit** | ⏳ bereit zum Starten |
-| **Ziel 1B — gameObjects/ Foundation** | ⏳ bereit zum Starten |
-| Ziel 2 — commandPhase | ⬜ nach 1B |
+| **Ziel 1A — uiLayout/ Struktursplit** | ✅ fertig |
+| **Ziel 1B — gameObjects/ Foundation** | ✅ fertig |
+| Ziel 2 — commandPhase | ⏳ bereit zum Starten |
 | Ziel 3 — Combat Loop | ⬜ nach 2 |
 
 ---
 
 ## Nächster konkreter Schritt
 
-**Ziel 1A und 1B parallel starten** — zwei unabhängige Subagenten.
+**Ziel 2 — `gameMechanic/` Einstieg: Command Phase**
 
-### Ziel 1A — `uiLayout/` Struktursplit (kein Behavior-Change)
-`src/ui.py` → `src/uiLayout/` aufteilen:
-- `gameHeader.py`, `armyCard.py`, `unitCard.py` (neues Layout per `ui_layout.md`),
-  `detachmentCard.py`, `armyList.py`, `gameProtocoll.py`, `gameActionsArea.py` (Stub)
-- `app.py` auf neue Imports umstellen
-- Alle Tests bleiben grün
+### Was Ziel 2 umfasst (aus docs/goals.md)
 
-### Ziel 1B — `gameObjects/` Foundation (pure Python, kein Streamlit)
-- Dataclasses: `unit.py`, `weapon.py`, `faction_property.py`, `detachment.py`
-- `loader.py`: liest YAML, löst Waffen-Referenzen auf
-- `data/wh40k_9e/_shared/detachment_types.yaml`
-- `data/wh40k_9e/necrons/faction_properties.yaml`
-- Necrons + Orks über Loader laden; hardcodierte Listen aus `models.py` entfernen
-- Unit-Tests
+- `gameMechanic/state.py` — session_state-Schema, `init_state`, `reset_game`, `next_phase` (aus engine.py herauslösen)
+- `gameMechanic/protocol.py` — Log-Append, Unveränderlichkeit nach Zug-Ende
+- `gameMechanic/commandPhase.py` — BP-Bonus, Living Metal Trigger (via gameObjects FactionProperty), CP-Verwaltung
+- `uiLayout/gameActionsArea.py` — Layout für commandPhase fertigstellen (aktuell hardcoded `_central_command_actions`)
+- Select-Logik in `unitCard.py` vollständig verdrahten (aktuell Stub bei Gegner-Einheiten)
+- `gameProtocoll.py` — Log-Einträge für commandPhase definieren und anzeigen
+- Tests für commandPhase (state transitions, FactionProperty-Trigger)
+
+### Wichtige offene Punkte vor Ziel 2 Start
+
+1. **models.py Migration**: `NECRON_UNITS` und `ORK_UNITS` sollen aus YAML geladen werden (aktuell noch hardcoded). Das passiert am besten parallel zu Ziel 2, wenn `uiLayout/` auf `gameObjects.Unit` umgestellt wird.
+
+2. **gameObjects.Unit ↔ models.Unit Inkompatibilität**: Die alten Felder (`uid`, `count`, `faction_keywords`, `other_keywords`, `skill`) unterscheiden sich von den neuen (`id`, `models_max`, `keywords`, `bs`). Dieser Schnitt muss koordiniert werden (entweder Compat-Properties auf gameObjects.Unit, oder alle uiLayout-Module auf neue Felder umstellen).
+
+3. **Living Metal Trigger**: In commandPhase soll `load_faction_properties("necrons")` die Properties holen und für jede Einheit mit dem Keyword "Living Metal" +1 Wunde vergeben. Die `engine.heal_unit()` Funktion bleibt dabei.
 
 ---
 
-## Wichtige Designentscheidungen aus dieser Session
+## Wichtige Designentscheidungen (aus letzter Session)
 
-1. **Select-Trigger**: Klick auf den Einheitennamen (nicht separater Button) → togglet `selected`-State → befüllt gameActionsArea
-2. **Select erst nach Setup**: `setup_complete == True` muss gesetzt sein
-3. **LP-Bar bleibt gekoppelt**: wounds + models bleiben zusammen wie jetzt; nur Wound-Change-Buttons wandern in gameActionsArea wenn Einheit selektiert
-4. **gameActionsArea = freie Fläche** bis gameMechanic pro Phase konzipiert ist; in 1A nur Stub-Container
-5. **VP-Stepper Intervall = 5**, CP-Intervall = 1 (beide Spieler gleich)
-6. **gameHeader zeigt zusätzlich**: gameSize (Patrol/Incursion/Strike Force/Onslaught), gameType (matched/open/crusade), initial CP abhängig von gameSize
-7. **gameProtocoll**: innerhalb laufenden Zuges zurück navigierbar; nach Zugende frozen
-8. **WeaponProfile aus backend/**: alle Werte als `str` (nicht `int`) — korrekt wegen Würfelausdrücken
-9. **rule_eligibility-Logik aus backend/** nicht neu schreiben — direkt adaptieren für Keyword-Dispatcher
+1. **Select-Trigger**: Name-Button (aktiver Spieler) togglet `selected_unit`. Target-Button (Gegner) bleibt im Expander.
+2. **Select erst nach Setup**: `phase_key != "setup"` ist bereits implementiert.
+3. **LP-Bar bleibt sichtbar**: immer, ohne Collapse.
+4. **gameActionsArea = aktuell**: alle phase_* Renderer aus alt-ui.py, keine neue Logik.
+5. **VP-Step = 5, CP-Step = 1**: implementiert.
 
 ---
 
 ## Offene Designfragen
 
 Dokumentiert in `docs/architecture.md` — Abschnitt "Open Design Questions".
-Wichtigste für die nächste Session: keine — 1A und 1B sind vollständig spezifiziert.
+Kritischste für Ziel 2: Fragen #5 (Log-Schema) und #6 (CP-Startwerte).
