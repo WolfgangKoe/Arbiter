@@ -263,8 +263,6 @@ def next_phase() -> None:
         else:
             st.session_state.active = "Necrons"
             st.session_state.round += 1
-            st.session_state.cp["Necrons"] += 1
-            st.session_state.cp["Orks"] += 1
         _reset_turn_state()
         st.session_state.phase_idx = 1
     else:

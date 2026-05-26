@@ -239,18 +239,24 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
     if kw_parts:
         st.markdown("".join(kw_parts), unsafe_allow_html=True)
 
-    # LP progress bar
     cur = state["current_wounds"]
-    max_hp = unit.wounds * unit.count
     models_alive = state["models"]
 
-    st.progress(cur / max_hp if max_hp > 0 else 0)
-    st.caption(f"LP {cur}/{max_hp}")
-
-    # Model progress bar (only for multi-model units)
-    if unit.count > 1:
+    if unit.count == 1:
+        # Single model: LP bar only
+        st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
+        st.caption(f"LP {cur}/{unit.wounds}")
+    elif unit.wounds == 1:
+        # Multi-model, 1 wound each: model bar only
         st.progress(models_alive / unit.count if unit.count > 0 else 0)
         st.caption(f"⬡ {models_alive}/{unit.count}")
+    else:
+        # Multi-model, multiple wounds: model bar + LP bar for front model
+        front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
+        st.progress(models_alive / unit.count)
+        st.caption(f"⬡ {models_alive}/{unit.count}")
+        st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
+        st.caption(f"LP {front_wounds}/{unit.wounds}")
 
     # State badges
     badges_html = _state_badges_html(state)
