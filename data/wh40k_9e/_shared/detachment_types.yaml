@@ -1,0 +1,151 @@
+detachment_types:
+  - id: patrol
+    name_en: Patrol
+    slots:
+      - role: HQ
+        min: 1
+        max: 2
+      - role: Troops
+        min: 0
+        max: 2
+      - role: Elites
+        min: 0
+        max: 2
+      - role: Fast Attack
+        min: 0
+        max: 2
+      - role: Heavy Support
+        min: 0
+        max: 2
+      - role: Flyer
+        min: 0
+        max: 1
+      - role: Dedicated Transport
+        min: 0
+        max: 2
+  - id: battalion
+    name_en: Battalion
+    slots:
+      - role: HQ
+        min: 2
+        max: 3
+      - role: Troops
+        min: 3
+        max: 5
+      - role: Elites
+        min: 0
+        max: 6
+      - role: Fast Attack
+        min: 0
+        max: 3
+      - role: Heavy Support
+        min: 0
+        max: 3
+      - role: Flyer
+        min: 0
+        max: 2
+      - role: Dedicated Transport
+        min: 0
+        max: 3
+  - id: brigade
+    name_en: Brigade
+    slots:
+      - role: HQ
+        min: 2
+        max: 5
+      - role: Troops
+        min: 3
+        max: 6
+      - role: Elites
+        min: 3
+        max: 5
+      - role: Fast Attack
+        min: 2
+        max: 5
+      - role: Heavy Support
+        min: 3
+        max: 5
+      - role: Flyer
+        min: 0
+        max: 2
+      - role: Dedicated Transport
+        min: 0
+        max: 3
+  - id: spearhead
+    name_en: Spearhead
+    slots:
+      - role: HQ
+        min: 1
+        max: 2
+      - role: Troops
+        min: 0
+        max: 1
+      - role: Elites
+        min: 0
+        max: 2
+      - role: Fast Attack
+        min: 0
+        max: 2
+      - role: Heavy Support
+        min: 3
+        max: -1
+      - role: Flyer
+        min: 0
+        max: 1
+      - role: Dedicated Transport
+        min: 0
+        max: 2
+  - id: outrider
+    name_en: Outrider
+    slots:
+      - role: HQ
+        min: 1
+        max: 2
+      - role: Troops
+        min: 0
+        max: 1
+      - role: Elites
+        min: 0
+        max: 2
+      - role: Fast Attack
+        min: 3
+        max: -1
+      - role: Heavy Support
+        min: 0
+        max: 2
+      - role: Flyer
+        min: 0
+        max: 1
+      - role: Dedicated Transport
+        min: 0
+        max: 2
+  - id: vanguard
+    name_en: Vanguard
+    slots:
+      - role: HQ
+        min: 1
+        max: 2
+      - role: Troops
+        min: 0
+        max: 1
+      - role: Elites
+        min: 3
+        max: -1
+      - role: Fast Attack
+        min: 0
+        max: 2
+      - role: Heavy Support
+        min: 0
+        max: 2
+      - role: Flyer
+        min: 0
+        max: 1
+      - role: Dedicated Transport
+        min: 0
+        max: 2
+  - id: air_wing
+    name_en: Air Wing
+    slots:
+      - role: Flyer
+        min: 3
+        max: -1

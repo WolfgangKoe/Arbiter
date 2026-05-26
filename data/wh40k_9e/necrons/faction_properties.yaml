@@ -1,0 +1,17 @@
+faction: Necrons
+faction_properties:
+  - id: necrons.faction.living_metal
+    name_en: Living Metal
+    triggers_phase: command
+    affects_parameter: wounds
+    ability_keyword: livingMetal
+    rule_text: "At the start of your Command phase, each NECRONS unit with this ability recovers 1 lost wound."
+    applies_to_keyword: Living Metal
+
+  - id: necrons.faction.reanimation_protocols
+    name_en: Reanimation Protocols
+    triggers_phase: command
+    affects_parameter: models
+    ability_keyword: reanimationProtocols
+    rule_text: "At the end of your Command phase, roll one D6 for each model that has been destroyed. On a 5+, that model is returned to the unit with 1 wound remaining."
+    applies_to_keyword: Reanimation Protocols

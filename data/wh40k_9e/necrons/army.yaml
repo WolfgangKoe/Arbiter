@@ -1,0 +1,236 @@
+faction: Necrons
+subfaction: Nephrekh
+units:
+  - id: wh40k_9e.necrons.unit.overlord
+    name_en: "Overlord (Warlord)"
+    name_de: "Overlord (Warlord)"
+    battlefield_role: [HQ]
+    keywords:
+      - Necrons
+      - Nephrekh
+      - Infantry
+      - Character
+      - Noble
+      - Overlord
+      - Warlord
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    move: "6\""
+    bs: "2+"
+    ws: "2+"
+    strength: 5
+    toughness: 5
+    save: 3
+    invuln_save: 4
+    leadership: 10
+    oc: 1
+    fnp: null
+    abilities: "Living Metal (+1W/Befehlsphase) | Phase Shifter: 4+ Invuln | Warlord-Trait: Skin of Living Gold (-1 auf Trefferwürfe gegen diesen) | My Will Be Done: 1 befreundete CORE-Einheit in 9\" +1 auf Trefferwürfe | Relentless March (Aura): befreundete CORE in 6\" +1\" Bewegung | Resurrection Orb: 1×/Spiel Reanimation-Protokoll für befreundete Einheit in 6\""
+    weapons:
+      - id: necrons.weapon.gauntlet_of_conflagrator
+        name_en: "Gauntlet of the Conflagrator"
+        weapon_type: Assault
+        range_inches: "12"
+        attacks: "1"
+        strength: "5"
+        ap: "0"
+        damage: "1"
+        abilities: "Auto-trifft! Kein Wundwurf: 1W6 pro Modell im Ziel, jede 6 = 1 MV (Rettungswürfe ignoriert)"
+        is_melee: false
+      - id: necrons.weapon.voidscythe
+        name_en: Voidscythe
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "4"
+        strength: "10"
+        ap: "-4"
+        damage: "3"
+        abilities: "-1 zum Trefferwurf (bereits eingerechnet: WS2+ → 3+)"
+        is_melee: true
+
+  - id: wh40k_9e.necrons.unit.warriors
+    name_en: "Necron Warriors ×10"
+    name_de: "Nekron-Krieger ×10"
+    battlefield_role: [Troops]
+    keywords:
+      - Necrons
+      - Nephrekh
+      - Infantry
+      - Core
+      - Necron Warriors
+    wounds: 1
+    models_min: 10
+    models_max: 10
+    move: "5\""
+    bs: "3+"
+    ws: "3+"
+    strength: 4
+    toughness: 4
+    save: 4
+    invuln_save: 6
+    leadership: 10
+    oc: 2
+    fnp: null
+    abilities: "Reanimation Protocols | Their Number Is Legion: RP-Würfe von 1 wiederholen | Objective Secured | Nephrekh: 6+ Invuln"
+    weapons:
+      - id: necrons.weapon.gauss_reaper
+        name_en: "Gauss Reaper"
+        weapon_type: "Assault 2"
+        range_inches: "12"
+        attacks: "2"
+        strength: "5"
+        ap: "-2"
+        damage: "1"
+        abilities: ""
+        is_melee: false
+      - id: necrons.weapon.close_combat
+        name_en: "Close Combat Weapon"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "1"
+        strength: "4"
+        ap: "0"
+        damage: "1"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.unit.skorpekh_destroyers
+    name_en: "Skorpekh Destroyers ×3"
+    name_de: "Skorpekh-Vernichter ×3"
+    battlefield_role: [Elites]
+    keywords:
+      - Necrons
+      - Nephrekh
+      - Infantry
+      - Core
+      - Destroyer Cult
+      - Skorpekh Destroyers
+    wounds: 3
+    models_min: 3
+    models_max: 3
+    move: "8\""
+    bs: "3+"
+    ws: "3+"
+    strength: 5
+    toughness: 5
+    save: 3
+    invuln_save: 6
+    leadership: 10
+    oc: 2
+    fnp: null
+    abilities: "Living Metal (+1W/Befehlsphase) | Reanimation Protocols | Hardwired for Destruction: Trefferwürfe von 1 wiederholen | Nephrekh: 6+ Invuln"
+    weapons:
+      - id: necrons.weapon.hyperphase_reap_blade
+        name_en: "Hyperphase Reap-Blade"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "3"
+        strength: "7"
+        ap: "-4"
+        damage: "3"
+        abilities: "1 Modell (S: Profil+2=7)"
+        is_melee: true
+      - id: necrons.weapon.hyperphase_threshers
+        name_en: "Hyperphase Threshers"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "4"
+        strength: "5"
+        ap: "-3"
+        damage: "2"
+        abilities: "2 Modelle; +1 Angriff des Trägers pro Kampf"
+        is_melee: true
+
+  - id: wh40k_9e.necrons.unit.triarch_stalker
+    name_en: "Triarch Stalker"
+    name_de: "Triarch-Stalker"
+    battlefield_role: [Heavy Support]
+    keywords:
+      - Necrons
+      - Vehicle
+      - Dynastic Agent
+      - Triarch
+      - Quantum Shielding
+      - Core
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    move: "10\""
+    bs: "3+"
+    ws: "3+"
+    strength: 7
+    toughness: 6
+    save: 3
+    invuln_save: 5
+    leadership: 10
+    oc: 3
+    fnp: null
+    abilities: "Living Metal (+1W/Befehlsphase) | Quantum Shielding: 5+ Invuln + unmodif. Wundwürfe 1–3 scheitern | Targeting Relay: nach Treffer → befreundete NECRONS wiederholen Trefferwürfe von 1 vs. dasselbe Ziel | Degradiert: 4–6W: M8\"/WS4+/BS4+ | 1–3W: M6\"/WS5+/BS5+"
+    weapons:
+      - id: necrons.weapon.heat_ray_dispersed
+        name_en: "Heat Ray (Dispersed)"
+        weapon_type: Heavy
+        range_inches: "12"
+        attacks: "2D6"
+        strength: "5"
+        ap: "-1"
+        damage: "1"
+        abilities: "Auto-trifft! Heavy 2D6, 12\""
+        is_melee: false
+      - id: necrons.weapon.heat_ray_focused
+        name_en: "Heat Ray (Focused)"
+        weapon_type: Heavy
+        range_inches: "24"
+        attacks: "2"
+        strength: "8"
+        ap: "-4"
+        damage: "D6"
+        abilities: "Heavy 2, 24\"; halbe Reichweite: D+D6+2"
+        is_melee: false
+      - id: necrons.weapon.stalkers_forelimbs
+        name_en: "Stalker's Forelimbs"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "3"
+        strength: "7"
+        ap: "-2"
+        damage: "3"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.unit.canoptek_scarabs
+    name_en: "Canoptek Scarab Swarms ×3"
+    name_de: "Canoptek Skarabäus-Schwärme ×3"
+    battlefield_role: [Fast Attack]
+    keywords:
+      - Necrons
+      - Nephrekh
+      - Swarm
+      - Canoptek
+      - Fly
+    wounds: 4
+    models_min: 3
+    models_max: 3
+    move: "10\""
+    bs: "4+"
+    ws: "4+"
+    strength: 3
+    toughness: 3
+    save: 6
+    invuln_save: 6
+    leadership: 10
+    oc: 0
+    fnp: null
+    abilities: "Living Metal (+1W/Befehlsphase) | Reanimation Protocols | Fly | Nephrekh: 6+ Invuln"
+    weapons:
+      - id: necrons.weapon.feeder_mandibles
+        name_en: "Feeder Mandibles"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "4"
+        strength: "3"
+        ap: "0"
+        damage: "1"
+        abilities: "Unmodif. 6 zum Treffen = automatisch verwundet"
+        is_melee: true
