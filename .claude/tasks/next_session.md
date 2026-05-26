@@ -3,31 +3,50 @@
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — aktuelle Projektziele
-3. `src/models.py` — Datenmodelle, PHASES
-4. `src/engine.py` — Spiellogik, State-Management
-5. `src/ui.py` — UI-Komponenten (~1000 Zeilen, wird refactored)
+2. `docs/goals.md` — aktuelle Projektziele (komplett neu strukturiert)
+3. `docs/architecture.md` — Zielarchitektur inkl. Backend-Erkenntnisse
+4. `docs/ui_layout.md` — UI-Wireframes und Komponentenspezifikation
+5. `src/models.py`, `src/engine.py`, `src/ui.py` — aktueller Stand des Codes
 
 ---
 
 ## Kontext
 
-**Arbiter** — WH40k 9th Edition Battle Tracker in Streamlit.  
+**Arbiter** — WH40k 9th Edition Battle Tracker in Streamlit.
 Starten: `streamlit run src/app.py`
 
 ```
 src/          ← Streamlit-App (app.py, models.py, engine.py, ui.py)
 data/
-  wh40k_9e/  ← YAML-Katalog (necrons/, orks/ — Einheiten + Waffen)
-  log/        ← game_log.json (Aktionsprotokoll)
+  wh40k_9e/  ← YAML-Katalog (necrons/, orks/)
+  log/        ← game_log.json
 docs/
-  goals.md              ← Projektziele (immer lesen!)
+  goals.md              ← Projektziele
+  architecture.md       ← Zielarchitektur + Backend-Erkenntnisse
+  ui_layout.md          ← UI-Wireframes und Komponentenspezifikation
   rules/
     schlachtrunde.md    ← WH40k 9E Grundregeln (bindend)
 ```
 
-**App-UI und spielbezogene Begriffe: Englisch.**  
-Austausch mit dem Nutzer: Deutsch.
+---
+
+## Was in dieser Session erarbeitet wurde
+
+### Planung & Dokumentation (kein Code geändert)
+
+- **`docs/ui_layout.md`** (neu): Vollständige ASCII-Wireframes für alle 8 UI-Komponenten
+  (gameHeader, armyCard, unitCard, detachmentCard, armyList, gameActionsArea, gameProtocoll)
+  inkl. Properties, States, Interaktionslogik, TBDs
+
+- **`docs/architecture.md`** (komplett neu): Zielstruktur `uiLayout/` / `gameObjects/` / `gameMechanic/`,
+  Dataclass-Skelette (Unit, Weapon, FactionProperty, Detachment, Stratagem),
+  session_state-Schema, Interaction-Flow, Phase-Stubs für alle 7 Phasen,
+  Refactoring-Plan in 4 Phasen, Backend-Erkenntnisse
+
+- **`docs/goals.md`** (komplett neu): 4 Ziele, Ziel 1A + 1B explizit parallel
+
+- **`backend/`** gelöscht nach Extraktion der nützlichen Konzepte → `architecture.md`
+- **`Layout_Print/`** gelöscht — alle Skizzen sind in `ui_layout.md` überführt
 
 ---
 
@@ -38,49 +57,49 @@ Austausch mit dem Nutzer: Deutsch.
 | Grundstruktur & Layout | ✅ fertig |
 | Einheitenstatus (Wundverwaltung) | ✅ fertig |
 | Durchstich (Phasenstruktur, State, Zentralbereich) | ✅ fertig |
-| UI Refactoring & Layout | ⏳ wartet auf Layout-Bilder vom Nutzer |
-| Army Abstraction | ⬜ bereit zum Starten |
-| Phase Logic | ⬜ nach Army Abstraction |
-
----
-
-## Was in der letzten Session umgesetzt wurde
-
-**Bug-Fixes & Ergänzungen (Commit `0d517ed`):**
-- Seitenleisten fest auf `first_player`/`second_player` — kein Swap mehr mit `active`
-- Deployment- und Movement-Status-Default: `"stationary"` statt `"normal"`
-- `charged_this_turn`-Flag: CHARGED-Badge, "Fights first"-Anzeige in Nahkampfphase
-- Reserve-Logik vollständig: Select/Target deaktiviert, Deploy-Button ab Runde 2
-- Setup-Summary-Expander in allen Kampfphasen sichtbar
-
-**Ziele überarbeitet (Commit `a27e77a`):**
-- `docs/goals.md` neu strukturiert: UI Refactoring, Army Abstraction, Phase Logic
+| **Ziel 1A — uiLayout/ Struktursplit** | ⏳ bereit zum Starten |
+| **Ziel 1B — gameObjects/ Foundation** | ⏳ bereit zum Starten |
+| Ziel 2 — commandPhase | ⬜ nach 1B |
+| Ziel 3 — Combat Loop | ⬜ nach 2 |
 
 ---
 
 ## Nächster konkreter Schritt
 
-**Zwei parallele Einstiegspunkte — je nachdem was der Nutzer mitbringt:**
+**Ziel 1A und 1B parallel starten** — zwei unabhängige Subagenten.
 
-### Option A — Nutzer bringt Layout-Bilder
-→ Mit **UI Refactoring** starten:
-1. `ui.py` strukturell aufsplitten (kein Behavior-Change):
-   - `ui/header.py` — Top-Bar, VP/CP, Phase-Stepper
-   - `ui/unit_card.py` — Einheitenkachel
-   - `ui/central/` — Phase-Renderer je Datei
-2. Dann UX-Anpassungen anhand der Bilder einbauen
+### Ziel 1A — `uiLayout/` Struktursplit (kein Behavior-Change)
+`src/ui.py` → `src/uiLayout/` aufteilen:
+- `gameHeader.py`, `armyCard.py`, `unitCard.py` (neues Layout per `ui_layout.md`),
+  `detachmentCard.py`, `armyList.py`, `gameProtocoll.py`, `gameActionsArea.py` (Stub)
+- `app.py` auf neue Imports umstellen
+- Alle Tests bleiben grün
 
-### Option B — Noch keine Bilder
-→ Mit **Army Abstraction** starten:
-1. YAML-Loader schreiben: `data/wh40k_9e/necrons/units.yaml` + `weapons.yaml` einlesen, Referenzen auflösen
-2. `models.py` auf geladene Daten umstellen (hardcodierte Listen raus)
-3. `engine.py` armeeneutral machen (keine `"necron_units"`/`"ork_units"`-Keys mehr)
-4. Keyword-Dispatcher: zentrale Stelle für Keyword → Phasenverhalten
+### Ziel 1B — `gameObjects/` Foundation (pure Python, kein Streamlit)
+- Dataclasses: `unit.py`, `weapon.py`, `faction_property.py`, `detachment.py`
+- `loader.py`: liest YAML, löst Waffen-Referenzen auf
+- `data/wh40k_9e/_shared/detachment_types.yaml`
+- `data/wh40k_9e/necrons/faction_properties.yaml`
+- Necrons + Orks über Loader laden; hardcodierte Listen aus `models.py` entfernen
+- Unit-Tests
+
+---
+
+## Wichtige Designentscheidungen aus dieser Session
+
+1. **Select-Trigger**: Klick auf den Einheitennamen (nicht separater Button) → togglet `selected`-State → befüllt gameActionsArea
+2. **Select erst nach Setup**: `setup_complete == True` muss gesetzt sein
+3. **LP-Bar bleibt gekoppelt**: wounds + models bleiben zusammen wie jetzt; nur Wound-Change-Buttons wandern in gameActionsArea wenn Einheit selektiert
+4. **gameActionsArea = freie Fläche** bis gameMechanic pro Phase konzipiert ist; in 1A nur Stub-Container
+5. **VP-Stepper Intervall = 5**, CP-Intervall = 1 (beide Spieler gleich)
+6. **gameHeader zeigt zusätzlich**: gameSize (Patrol/Incursion/Strike Force/Onslaught), gameType (matched/open/crusade), initial CP abhängig von gameSize
+7. **gameProtocoll**: innerhalb laufenden Zuges zurück navigierbar; nach Zugende frozen
+8. **WeaponProfile aus backend/**: alle Werte als `str` (nicht `int`) — korrekt wegen Würfelausdrücken
+9. **rule_eligibility-Logik aus backend/** nicht neu schreiben — direkt adaptieren für Keyword-Dispatcher
 
 ---
 
 ## Offene Designfragen
 
-1. **Einheitenkachel-Layout** — Nutzer hat noch kein Bild geliefert. Kein Code-Change ohne Vorlage.
-2. **Army Builder UI** — Wie wählt der Spieler Einheiten für eine Partie? Details noch offen, wird im Zuge von Army Abstraction geklärt.
-3. **Psiphase** — bewusst zurückgestellt. Läuft mit bis es gebraucht wird.
+Dokumentiert in `docs/architecture.md` — Abschnitt "Open Design Questions".
+Wichtigste für die nächste Session: keine — 1A und 1B sind vollständig spezifiziert.
