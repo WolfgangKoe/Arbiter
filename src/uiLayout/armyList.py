@@ -2,13 +2,14 @@
 
 import streamlit as st
 
-from models import NECRON_UNITS, ORK_UNITS, Unit
+from engine import _NECRON_UNITS, _ORK_UNITS
+from gameObjects.unit import Unit
 from uiLayout.armyCard import render_army_card
 from uiLayout.detachmentCard import render_detachment_card
 
 
 def _units_for(faction: str) -> list[Unit]:
-    return NECRON_UNITS if faction == "Necrons" else ORK_UNITS
+    return _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
 
 
 def _states_for(faction: str) -> dict:  # type: ignore[type-arg]

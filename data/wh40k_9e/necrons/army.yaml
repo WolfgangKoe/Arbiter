@@ -4,6 +4,7 @@ units:
   - id: wh40k_9e.necrons.unit.overlord
     name_en: "Overlord (Warlord)"
     name_de: "Overlord (Warlord)"
+    rules: [livingMetal, myWillBeDone, relentlessMarch, resurrectionOrb]
     battlefield_role: [HQ]
     keywords:
       - Necrons
@@ -52,6 +53,7 @@ units:
   - id: wh40k_9e.necrons.unit.warriors
     name_en: "Necron Warriors ×10"
     name_de: "Nekron-Krieger ×10"
+    rules: [reanimationProtocols, theirNumberIsLegion, objectiveSecured]
     battlefield_role: [Troops]
     keywords:
       - Necrons
@@ -98,6 +100,7 @@ units:
   - id: wh40k_9e.necrons.unit.skorpekh_destroyers
     name_en: "Skorpekh Destroyers ×3"
     name_de: "Skorpekh-Vernichter ×3"
+    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
     battlefield_role: [Elites]
     keywords:
       - Necrons
@@ -145,6 +148,7 @@ units:
   - id: wh40k_9e.necrons.unit.triarch_stalker
     name_en: "Triarch Stalker"
     name_de: "Triarch-Stalker"
+    rules: [livingMetal, targetingRelay, quantumShielding]
     battlefield_role: [Heavy Support]
     keywords:
       - Necrons
@@ -202,6 +206,7 @@ units:
   - id: wh40k_9e.necrons.unit.canoptek_scarabs
     name_en: "Canoptek Scarab Swarms ×3"
     name_de: "Canoptek Skarabäus-Schwärme ×3"
+    rules: [livingMetal, reanimationProtocols]
     battlefield_role: [Fast Attack]
     keywords:
       - Necrons

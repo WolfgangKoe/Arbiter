@@ -2,8 +2,7 @@
 
 import streamlit as st
 
-from engine import adjust_cp, adjust_vp, next_phase, reset_game
-from models import PHASES
+from engine import PHASES, adjust_cp, adjust_vp, next_phase, reset_game
 
 CSS_THEME = """
 <style>

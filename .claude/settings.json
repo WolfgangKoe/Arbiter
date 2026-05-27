@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter diff)",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter log --oneline -5)",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/engine.py src/uiLayout/unitCard.py tests/engine/)",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter commit -m ' *)",
+      "Bash(find /home/wolfgang/Dokumente/Arbiter -name \"*.md\" | sort && find /home/wolfgang/Dokumente -name \"schlachtrunden.md\" 2>/dev/null)",
+      "Read(//home/wolfgang/Dokumente/**)"
+    ]
+  }
+}

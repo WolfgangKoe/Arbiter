@@ -1,0 +1,18 @@
+faction: Necrons
+subfactions:
+  - id: nephrekh
+    name_en: Nephrekh
+    abilities:
+      - id: necrons.dynasty.nephrekh.translocation_beams
+        name_en: Translocation Beams
+        source: dynastic_code
+        rule_text: "Models in this unit have a 6+ invulnerable save."
+        trigger:
+          timing: persistent
+          phase: any
+          player: either
+        conditions: []
+        effect:
+          type: invuln_save
+          target: self
+          modifier: 6

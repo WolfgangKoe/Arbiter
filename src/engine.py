@@ -5,7 +5,23 @@ from datetime import datetime
 
 import streamlit as st
 
-from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit, Weapon
+from gameObjects.loader import load_army
+from gameObjects.unit import Unit
+from gameObjects.weapon import Weapon
+
+PHASES: list[tuple[str, str]] = [
+    ("Setup", "setup"),
+    ("Befehlsphase", "command"),
+    ("Bewegungsphase", "movement"),
+    ("Psiphase", "psychic"),
+    ("Fernkampfphase", "shooting"),
+    ("Angriffsphase", "charge"),
+    ("Nahkampfphase", "fight"),
+    ("Moralphase", "morale"),
+]
+
+_NECRON_UNITS = load_army("necrons")
+_ORK_UNITS = load_army("orks")
 
 
 def parse_dice(s: str) -> int:
@@ -40,20 +56,22 @@ def resolve_attack(
 ) -> tuple[int, list[str]]:
     msgs: list[str] = []
     total_attacks = parse_dice(weapon.attacks) * num_models
+    skill = int(attacker.ws.rstrip("+")) if weapon.is_melee else int(attacker.bs.rstrip("+"))
     skill_label = "WS" if weapon.is_melee else "BS"
     msgs.append(
-        f"**{attacker.name}** → **{weapon.name}** → **{defender.name}** "
+        f"**{attacker.name_en}** → **{weapon.name_en}** → **{defender.name_en}** "
         f"({num_models} Modelle, {total_attacks} Angriffe)"
     )
 
     hit_rolls = [random.randint(1, 6) for _ in range(total_attacks)]
-    hits = sum(1 for r in hit_rolls if r >= weapon.skill)
-    msgs.append(f"Trefferwürfe ({skill_label}{weapon.skill}+): {hit_rolls} → **{hits} Treffer**")
+    hits = sum(1 for r in hit_rolls if r >= skill)
+    msgs.append(f"Trefferwürfe ({skill_label}{skill}+): {hit_rolls} → **{hits} Treffer**")
     if hits == 0:
         msgs.append("Keine Treffer!")
         return 0, msgs
 
-    thresh = wound_threshold(weapon.strength, defender.toughness)
+    w_strength = int(weapon.strength) if str(weapon.strength).lstrip("-").isdigit() else 4
+    thresh = wound_threshold(w_strength, defender.toughness)
     wound_rolls = [random.randint(1, 6) for _ in range(hits)]
     wounds = sum(1 for r in wound_rolls if r >= thresh)
     msgs.append(
@@ -64,13 +82,14 @@ def resolve_attack(
         msgs.append("Keine Verwundungen!")
         return 0, msgs
 
-    armour_save = defender.save + abs(weapon.ap)
+    w_ap = int(weapon.ap)
+    armour_save = defender.save + abs(w_ap)
     effective_save = armour_save
-    if defender.invuln and defender.invuln < effective_save:
-        effective_save = defender.invuln
+    if defender.invuln_save and defender.invuln_save < effective_save:
+        effective_save = defender.invuln_save
         msgs.append(
             f"Rüstungswurf durch AP{weapon.ap} auf {armour_save}+, "
-            f"Unverwundbarkeitsrettung {defender.invuln}+ greift"
+            f"Unverwundbarkeitsrettung {defender.invuln_save}+ greift"
         )
     else:
         msgs.append(
@@ -108,14 +127,14 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = Fa
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
     old_models = state["models"]
-    if not mortal and unit.count > 1 and state["models"] > 0 and state["current_wounds"] > 0:
+    if not mortal and unit.models_max > 1 and state["models"] > 0 and state["current_wounds"] > 0:
         front_hp = state["current_wounds"] - (state["models"] - 1) * unit.wounds
         dmg = min(dmg, front_hp)
     state["current_wounds"] = max(0, state["current_wounds"] - dmg)
     if unit.wounds > 0:
         full_models = state["current_wounds"] // unit.wounds
         partial = 1 if state["current_wounds"] % unit.wounds > 0 else 0
-        state["models"] = min(unit.count, full_models + partial)
+        state["models"] = min(unit.models_max, full_models + partial)
     if state["current_wounds"] <= 0:
         state["destroyed"] = True
         state["current_wounds"] = 0
@@ -128,24 +147,24 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = Fa
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
-    max_hp = unit.wounds * unit.count
+    max_hp = unit.wounds * unit.models_max
     state["current_wounds"] = min(max_hp, state["current_wounds"] + hp)
     state["destroyed"] = state["current_wounds"] <= 0
     if unit.wounds > 0:
         full = state["current_wounds"] // unit.wounds
         partial = 1 if state["current_wounds"] % unit.wounds > 0 else 0
-        state["models"] = min(unit.count, full + partial)
+        state["models"] = min(unit.models_max, full + partial)
 
 
 def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
     return {
-        "current_wounds": u.wounds * u.count,
-        "models": u.count,
+        "current_wounds": u.wounds * u.models_max,
+        "models": u.models_max,
         "destroyed": False,
-        "movement_status": "stationary",  # normal | advanced | stationary | retreated
+        "movement_status": "stationary",
         "in_melee": False,
         "in_reserve": False,
-        "deployment": "stationary",  # normal | stationary | reserve
+        "deployment": "stationary",
         "acted_this_phase": False,
         "lost_models_this_turn": 0,
         "charged_this_turn": False,
@@ -157,16 +176,17 @@ def init_state() -> None:
         return
     st.session_state.initialized = True
     st.session_state.round = 1
-    st.session_state.phase_idx = 0  # starts at Setup
+    st.session_state.phase_idx = 0
     st.session_state.active = "Necrons"
     st.session_state.first_player = "Necrons"
     st.session_state.second_player = "Orks"
     st.session_state.cp = {"Necrons": 3, "Orks": 3}
     st.session_state.vp = {"Necrons": 0, "Orks": 0}
-    st.session_state.selected_unit = None  # (faction, uid) | None
-    st.session_state.selected_target = None  # (faction, uid) | None
-    st.session_state.necron_units = {u.uid: _unit_state(u) for u in NECRON_UNITS}
-    st.session_state.ork_units = {u.uid: _unit_state(u) for u in ORK_UNITS}
+    st.session_state.selected_unit = None
+    st.session_state.selected_target = None
+    st.session_state.resurrection_orb_used = False
+    st.session_state.necron_units = {u.id: _unit_state(u) for u in _NECRON_UNITS}
+    st.session_state.ork_units = {u.id: _unit_state(u) for u in _ORK_UNITS}
 
 
 def reset_game() -> None:

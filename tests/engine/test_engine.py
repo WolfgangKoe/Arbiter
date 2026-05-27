@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import engine  # noqa: E402
 from engine import apply_damage, heal_unit, next_phase, parse_dice, wound_threshold  # noqa: E402
-from models import Unit  # noqa: E402
+from gameObjects.unit import Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -54,52 +54,76 @@ def _unit_state_dict() -> dict:
 
 def _overlord() -> Unit:
     return Unit(
-        uid="overlord",
-        name="Overlord",
-        count=1,
+        id="wh40k_9e.necrons.unit.overlord",
+        name_en="Overlord",
+        name_de="Overlord",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["HQ"],
+        keywords=["Necrons"],
+        wounds=5,
+        models_min=1,
+        models_max=1,
         move='6"',
+        bs="3+",
+        ws="3+",
+        strength=5,
         toughness=5,
         save=3,
-        invuln=4,
-        fnp=None,
-        wounds=5,
+        invuln_save=4,
         leadership=10,
         oc=1,
-        weapons=[],
+        fnp=None,
     )
 
 
 def _warriors() -> Unit:
     return Unit(
-        uid="warriors",
-        name="Necron Warriors",
-        count=10,
+        id="wh40k_9e.necrons.unit.warriors",
+        name_en="Necron Warriors",
+        name_de="Nekron-Krieger",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["Troops"],
+        keywords=["Necrons", "Core"],
+        wounds=1,
+        models_min=10,
+        models_max=10,
         move='5"',
+        bs="3+",
+        ws="3+",
+        strength=4,
         toughness=4,
         save=4,
-        invuln=6,
-        fnp=None,
-        wounds=1,
+        invuln_save=6,
         leadership=10,
         oc=2,
-        weapons=[],
+        fnp=None,
     )
 
 
 def _skorpekh() -> Unit:
     return Unit(
-        uid="skorpekh",
-        name="Skorpekh Destroyers",
-        count=3,
+        id="wh40k_9e.necrons.unit.skorpekh_destroyers",
+        name_en="Skorpekh Destroyers",
+        name_de="Skorpekh-Vernichter",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["Elites"],
+        keywords=["Necrons", "Core"],
+        wounds=3,
+        models_min=3,
+        models_max=3,
         move='8"',
+        bs="3+",
+        ws="3+",
+        strength=5,
         toughness=5,
         save=3,
-        invuln=6,
-        fnp=None,
-        wounds=3,
+        invuln_save=6,
         leadership=10,
         oc=2,
-        weapons=[],
+        fnp=None,
     )
 
 
@@ -169,7 +193,7 @@ def test_apply_damage_1wound_models_caps_at_one_model() -> None:
     """3 regular damage on 1-wound models kills exactly 1 model — excess is lost per 9E rules."""
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 10,
                 "models": 10,
                 "destroyed": False,
@@ -177,8 +201,8 @@ def test_apply_damage_1wound_models_caps_at_one_model() -> None:
             }
         }
     )
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=False)
-    state = session["necron_units"]["warriors"]
+    apply_damage("wh40k_9e.necrons.unit.warriors", "Necrons", 3, _warriors(), mortal=False)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.warriors"]
     assert state["current_wounds"] == 9
     assert state["models"] == 9
     assert state["destroyed"] is False
@@ -188,7 +212,7 @@ def test_apply_damage_1wound_models_successive_hits_kill_multiple() -> None:
     """Applying damage three times separately kills three warriors (one per hit)."""
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 10,
                 "models": 10,
                 "destroyed": False,
@@ -196,10 +220,11 @@ def test_apply_damage_1wound_models_successive_hits_kill_multiple() -> None:
             }
         }
     )
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=False)
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=False)
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=False)
-    state = session["necron_units"]["warriors"]
+    uid = "wh40k_9e.necrons.unit.warriors"
+    apply_damage(uid, "Necrons", 3, _warriors(), mortal=False)
+    apply_damage(uid, "Necrons", 3, _warriors(), mortal=False)
+    apply_damage(uid, "Necrons", 3, _warriors(), mortal=False)
+    state = session["necron_units"][uid]
     assert state["current_wounds"] == 7
     assert state["models"] == 7
 
@@ -208,7 +233,7 @@ def test_apply_damage_mortal_wounds_kill_multiple_1wound_models() -> None:
     """Mortal wounds bypass the spillover cap and can kill multiple 1-wound models."""
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 10,
                 "models": 10,
                 "destroyed": False,
@@ -216,8 +241,8 @@ def test_apply_damage_mortal_wounds_kill_multiple_1wound_models() -> None:
             }
         }
     )
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=True)
-    state = session["necron_units"]["warriors"]
+    apply_damage("wh40k_9e.necrons.unit.warriors", "Necrons", 3, _warriors(), mortal=True)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.warriors"]
     assert state["current_wounds"] == 7
     assert state["models"] == 7
 
@@ -226,7 +251,7 @@ def test_apply_damage_multiwound_caps_damage_to_front_model() -> None:
     """5 damage on a partially wounded multi-wound unit only finishes the front model."""
     session = _make_session(
         necron_units={
-            "skorpekh": {
+            "wh40k_9e.necrons.unit.skorpekh_destroyers": {
                 "current_wounds": 7,
                 "models": 3,
                 "destroyed": False,
@@ -235,8 +260,10 @@ def test_apply_damage_multiwound_caps_damage_to_front_model() -> None:
         }
     )
     # front_hp = 7 - (3-1)*3 = 1 → dmg capped to 1
-    apply_damage("skorpekh", "Necrons", 5, _skorpekh(), mortal=False)
-    state = session["necron_units"]["skorpekh"]
+    apply_damage(
+        "wh40k_9e.necrons.unit.skorpekh_destroyers", "Necrons", 5, _skorpekh(), mortal=False
+    )
+    state = session["necron_units"]["wh40k_9e.necrons.unit.skorpekh_destroyers"]
     assert state["current_wounds"] == 6
     assert state["models"] == 2
 
@@ -245,7 +272,7 @@ def test_apply_damage_mortal_wound_bypasses_spillover_cap() -> None:
     """A mortal wound always removes exactly 1 wound regardless of model boundary."""
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 10,
                 "models": 10,
                 "destroyed": False,
@@ -253,8 +280,8 @@ def test_apply_damage_mortal_wound_bypasses_spillover_cap() -> None:
             }
         }
     )
-    apply_damage("warriors", "Necrons", 1, _warriors(), mortal=True)
-    state = session["necron_units"]["warriors"]
+    apply_damage("wh40k_9e.necrons.unit.warriors", "Necrons", 1, _warriors(), mortal=True)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.warriors"]
     assert state["current_wounds"] == 9
     assert state["models"] == 9
 
@@ -262,7 +289,7 @@ def test_apply_damage_mortal_wound_bypasses_spillover_cap() -> None:
 def test_apply_damage_single_model_reduces_lp_directly() -> None:
     session = _make_session(
         necron_units={
-            "overlord": {
+            "wh40k_9e.necrons.unit.overlord": {
                 "current_wounds": 5,
                 "models": 1,
                 "destroyed": False,
@@ -270,8 +297,8 @@ def test_apply_damage_single_model_reduces_lp_directly() -> None:
             }
         }
     )
-    apply_damage("overlord", "Necrons", 3, _overlord(), mortal=False)
-    state = session["necron_units"]["overlord"]
+    apply_damage("wh40k_9e.necrons.unit.overlord", "Necrons", 3, _overlord(), mortal=False)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.overlord"]
     assert state["current_wounds"] == 2
     assert state["models"] == 1
     assert state["destroyed"] is False
@@ -280,7 +307,7 @@ def test_apply_damage_single_model_reduces_lp_directly() -> None:
 def test_apply_damage_destroys_unit_when_hp_reaches_zero() -> None:
     session = _make_session(
         necron_units={
-            "overlord": {
+            "wh40k_9e.necrons.unit.overlord": {
                 "current_wounds": 2,
                 "models": 1,
                 "destroyed": False,
@@ -288,8 +315,8 @@ def test_apply_damage_destroys_unit_when_hp_reaches_zero() -> None:
             }
         }
     )
-    apply_damage("overlord", "Necrons", 5, _overlord(), mortal=False)
-    state = session["necron_units"]["overlord"]
+    apply_damage("wh40k_9e.necrons.unit.overlord", "Necrons", 5, _overlord(), mortal=False)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.overlord"]
     assert state["destroyed"] is True
     assert state["current_wounds"] == 0
     assert state["models"] == 0
@@ -298,7 +325,7 @@ def test_apply_damage_destroys_unit_when_hp_reaches_zero() -> None:
 def test_apply_damage_tracks_lost_models_this_turn() -> None:
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 10,
                 "models": 10,
                 "destroyed": False,
@@ -306,8 +333,8 @@ def test_apply_damage_tracks_lost_models_this_turn() -> None:
             }
         }
     )
-    apply_damage("warriors", "Necrons", 3, _warriors(), mortal=False)
-    state = session["necron_units"]["warriors"]
+    apply_damage("wh40k_9e.necrons.unit.warriors", "Necrons", 3, _warriors(), mortal=False)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.warriors"]
     assert state["lost_models_this_turn"] == 3  # 2 existing + 1 new (cap: only front model dies)
 
 
@@ -319,43 +346,43 @@ def test_apply_damage_tracks_lost_models_this_turn() -> None:
 def test_heal_unit_restores_wounds() -> None:
     session = _make_session(
         necron_units={
-            "overlord": {
+            "wh40k_9e.necrons.unit.overlord": {
                 "current_wounds": 3,
                 "models": 1,
                 "destroyed": False,
             }
         }
     )
-    heal_unit("overlord", "Necrons", 1, _overlord())
-    assert session["necron_units"]["overlord"]["current_wounds"] == 4
+    heal_unit("wh40k_9e.necrons.unit.overlord", "Necrons", 1, _overlord())
+    assert session["necron_units"]["wh40k_9e.necrons.unit.overlord"]["current_wounds"] == 4
 
 
 def test_heal_unit_caps_at_maximum_wounds() -> None:
     session = _make_session(
         necron_units={
-            "overlord": {
+            "wh40k_9e.necrons.unit.overlord": {
                 "current_wounds": 4,
                 "models": 1,
                 "destroyed": False,
             }
         }
     )
-    heal_unit("overlord", "Necrons", 10, _overlord())
-    assert session["necron_units"]["overlord"]["current_wounds"] == 5  # max = wounds*count = 5
+    heal_unit("wh40k_9e.necrons.unit.overlord", "Necrons", 10, _overlord())
+    assert session["necron_units"]["wh40k_9e.necrons.unit.overlord"]["current_wounds"] == 5
 
 
 def test_heal_unit_revives_destroyed_unit() -> None:
     session = _make_session(
         necron_units={
-            "overlord": {
+            "wh40k_9e.necrons.unit.overlord": {
                 "current_wounds": 0,
                 "models": 0,
                 "destroyed": True,
             }
         }
     )
-    heal_unit("overlord", "Necrons", 1, _overlord())
-    state = session["necron_units"]["overlord"]
+    heal_unit("wh40k_9e.necrons.unit.overlord", "Necrons", 1, _overlord())
+    state = session["necron_units"]["wh40k_9e.necrons.unit.overlord"]
     assert state["current_wounds"] == 1
     assert state["destroyed"] is False
     assert state["models"] == 1
@@ -364,15 +391,15 @@ def test_heal_unit_revives_destroyed_unit() -> None:
 def test_heal_unit_updates_model_count_for_multimodel() -> None:
     session = _make_session(
         necron_units={
-            "warriors": {
+            "wh40k_9e.necrons.unit.warriors": {
                 "current_wounds": 7,
                 "models": 7,
                 "destroyed": False,
             }
         }
     )
-    heal_unit("warriors", "Necrons", 3, _warriors())
-    state = session["necron_units"]["warriors"]
+    heal_unit("wh40k_9e.necrons.unit.warriors", "Necrons", 3, _warriors())
+    state = session["necron_units"]["wh40k_9e.necrons.unit.warriors"]
     assert state["current_wounds"] == 10
     assert state["models"] == 10
 
@@ -435,8 +462,8 @@ def test_next_phase_resets_selected_unit_and_target() -> None:
         active="Necrons",
         round=1,
         cp={"Necrons": 4, "Orks": 4},
-        selected_unit=("Necrons", "overlord"),
-        selected_target=("Orks", "big_mek"),
+        selected_unit=("Necrons", "wh40k_9e.necrons.unit.overlord"),
+        selected_target=("Orks", "wh40k_9e.orks.unit.big_mek"),
         necron_units={"u1": _unit_state_dict()},
         ork_units={"u2": _unit_state_dict()},
     )

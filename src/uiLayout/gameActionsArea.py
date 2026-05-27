@@ -3,13 +3,15 @@
 import streamlit as st
 
 from engine import (
-    adjust_cp,
+    _NECRON_UNITS,
+    _ORK_UNITS,
+    PHASES,
     log_action,
     set_charged,
     set_deployment,
     set_movement_status,
 )
-from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit
+from gameObjects.unit import Unit
 
 _PHASE_RULES: dict[str, str] = {
     "command": (
@@ -60,8 +62,8 @@ _PHASE_RULES: dict[str, str] = {
 
 
 def _lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
-    units = NECRON_UNITS if faction == "Necrons" else ORK_UNITS
-    unit = next(u for u in units if u.uid == uid)
+    units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
+    unit = next(u for u in units if u.id == uid)
     key = "necron_units" if faction == "Necrons" else "ork_units"
     return unit, st.session_state[key][uid]
 
@@ -121,7 +123,7 @@ def _central_level1(phase_key: str) -> None:
 
 def _central_command_actions(faction: str, uid: str) -> None:
     unit, state = _lookup(faction, uid)
-    st.markdown(f"**{unit.name}**")
+    st.markdown(f"**{unit.name_en}**")
     badges_html = _state_badges_html(state)
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
@@ -136,7 +138,7 @@ def _central_movement_actions(faction: str, uid: str) -> None:
     ms = state.get("movement_status", "normal")
     in_melee = state.get("in_melee", False)
 
-    st.markdown(f"**{unit.name}** — M {unit.move}")
+    st.markdown(f"**{unit.name_en}** — M {unit.move}")
     badges_html = _state_badges_html(state)
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
@@ -154,7 +156,9 @@ def _central_movement_actions(faction: str, uid: str) -> None:
             ):
                 set_deployment(uid, faction, "normal")
                 set_movement_status(uid, faction, "normal")
-                log_action(st.session_state.round, "movement", unit.name, "deployed from reserve")
+                log_action(
+                    st.session_state.round, "movement", unit.name_en, "deployed from reserve"
+                )
                 st.rerun()
         return
 
@@ -179,7 +183,7 @@ def _central_movement_actions(faction: str, uid: str) -> None:
                 help=tip,
             ):
                 set_movement_status(uid, faction, value)
-                log_action(st.session_state.round, "movement", unit.name, f"movement: {value}")
+                log_action(st.session_state.round, "movement", unit.name_en, f"movement: {value}")
                 st.rerun()
 
     if in_melee and ms not in ("retreated", "stationary"):
@@ -190,7 +194,7 @@ def _central_shooting_actions(faction: str, uid: str) -> None:
     unit, state = _lookup(faction, uid)
     ms = state.get("movement_status", "normal")
 
-    st.markdown(f"**{unit.name}** — Shooting")
+    st.markdown(f"**{unit.name_en}** — Shooting")
     badges_html = _state_badges_html(state)
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
@@ -218,21 +222,22 @@ def _central_shooting_actions(faction: str, uid: str) -> None:
     tgt_faction, tgt_uid = tgt
     tgt_unit, tgt_state = _lookup(tgt_faction, tgt_uid)
 
-    st.markdown(f"**Target:** {tgt_unit.name}")
-    inv_display = f"{tgt_unit.invuln}+" if tgt_unit.invuln else "—"
+    st.markdown(f"**Target:** {tgt_unit.name_en}")
+    inv_display = f"{tgt_unit.invuln_save}+" if tgt_unit.invuln_save else "—"
     st.markdown(f"T {tgt_unit.toughness} · Sv {tgt_unit.save}+ · ++ {inv_display}")
     st.divider()
     st.markdown("**Attack sequence** (for reference — roll dice on the table):")
     for w in ranged:
-        thresh = _wound_thresh(w.strength, tgt_unit.toughness)
-        eff_save = min(tgt_unit.save + abs(w.ap), tgt_unit.invuln or 99)
+        skill = int(unit.bs.rstrip("+"))
+        thresh = _wound_thresh(int(w.strength), tgt_unit.toughness)
+        eff_save = min(tgt_unit.save + abs(int(w.ap)), tgt_unit.invuln_save or 99)
         save_str = f"{eff_save}+" if eff_save <= 6 else "none"
         st.caption(
-            f"**{w.name}**: {w.attacks} att · hit on {w.skill}+ · "
+            f"**{w.name_en}**: {w.attacks} att · hit on {skill}+ · "
             f"wound on {thresh}+ · save {save_str} · D{w.damage}"
         )
     if st.button("Log Shooting Action", key=f"log_shoot_{faction}_{uid}", use_container_width=True):
-        log_action(st.session_state.round, "shooting", unit.name, f"shot at {tgt_unit.name}")
+        log_action(st.session_state.round, "shooting", unit.name_en, f"shot at {tgt_unit.name_en}")
         st.success("Action logged.")
 
 
@@ -240,7 +245,7 @@ def _central_charge_actions(faction: str, uid: str) -> None:
     unit, state = _lookup(faction, uid)
     ms = state.get("movement_status", "normal")
 
-    st.markdown(f"**{unit.name}** — Charge")
+    st.markdown(f"**{unit.name_en}** — Charge")
     badges_html = _state_badges_html(state)
     if badges_html:
         st.markdown(badges_html, unsafe_allow_html=True)
@@ -256,7 +261,7 @@ def _central_charge_actions(faction: str, uid: str) -> None:
 
     tgt_faction, tgt_uid = tgt
     tgt_unit, _ = _lookup(tgt_faction, tgt_uid)
-    st.markdown(f"**Target:** {tgt_unit.name}")
+    st.markdown(f"**Target:** {tgt_unit.name_en}")
     st.caption("Roll **2D6** — must equal or beat the distance to the target.")
 
     c1, c2 = st.columns(2)
@@ -269,14 +274,20 @@ def _central_charge_actions(faction: str, uid: str) -> None:
         ):
             set_charged(uid, faction, tgt_uid, tgt_faction)
             log_action(
-                st.session_state.round, "charge", unit.name, f"charged {tgt_unit.name} — success"
+                st.session_state.round,
+                "charge",
+                unit.name_en,
+                f"charged {tgt_unit.name_en} — success",
             )
             st.session_state.selected_target = None
             st.rerun()
     with c2:
         if st.button("Charge Failed", key=f"charge_fail_{faction}_{uid}", use_container_width=True):
             log_action(
-                st.session_state.round, "charge", unit.name, f"charged {tgt_unit.name} — failed"
+                st.session_state.round,
+                "charge",
+                unit.name_en,
+                f"charged {tgt_unit.name_en} — failed",
             )
             st.info("Charge failed — no movement.")
 
@@ -285,7 +296,7 @@ def _central_fight_actions(faction: str, uid: str) -> None:
     unit, state = _lookup(faction, uid)
     in_melee = state.get("in_melee", False)
 
-    st.markdown(f"**{unit.name}** — Fight")
+    st.markdown(f"**{unit.name_en}** — Fight")
     if state.get("charged_this_turn"):
         st.markdown("**Fights first** (charged this turn).")
     badges_html = _state_badges_html(state)
@@ -303,21 +314,22 @@ def _central_fight_actions(faction: str, uid: str) -> None:
 
     tgt_faction, tgt_uid = tgt
     tgt_unit, tgt_state = _lookup(tgt_faction, tgt_uid)
-    st.markdown(f"**Target:** {tgt_unit.name}")
-    inv_display = f"{tgt_unit.invuln}+" if tgt_unit.invuln else "—"
+    st.markdown(f"**Target:** {tgt_unit.name_en}")
+    inv_display = f"{tgt_unit.invuln_save}+" if tgt_unit.invuln_save else "—"
     st.markdown(f"T {tgt_unit.toughness} · Sv {tgt_unit.save}+ · ++ {inv_display}")
     st.divider()
     melee = [w for w in unit.weapons if w.is_melee]
     for w in melee:
-        thresh = _wound_thresh(w.strength, tgt_unit.toughness)
-        eff_save = min(tgt_unit.save + abs(w.ap), tgt_unit.invuln or 99)
+        skill = int(unit.ws.rstrip("+"))
+        thresh = _wound_thresh(int(w.strength), tgt_unit.toughness)
+        eff_save = min(tgt_unit.save + abs(int(w.ap)), tgt_unit.invuln_save or 99)
         save_str = f"{eff_save}+" if eff_save <= 6 else "none"
         st.caption(
-            f"**{w.name}**: {w.attacks} att · WS{w.skill}+ · "
+            f"**{w.name_en}**: {w.attacks} att · WS{skill}+ · "
             f"wound {thresh}+ · save {save_str} · D{w.damage}"
         )
     if st.button("Log Fight Action", key=f"log_fight_{faction}_{uid}", use_container_width=True):
-        log_action(st.session_state.round, "fight", unit.name, f"fought {tgt_unit.name}")
+        log_action(st.session_state.round, "fight", unit.name_en, f"fought {tgt_unit.name_en}")
         st.success("Action logged.")
 
 
@@ -325,8 +337,8 @@ def _central_morale_info(faction: str, uid: str) -> None:
     unit, state = _lookup(faction, uid)
     lost = state.get("lost_models_this_turn", 0)
 
-    st.markdown(f"**{unit.name}**")
-    if unit.count == 1:
+    st.markdown(f"**{unit.name_en}**")
+    if unit.models_max == 1:
         st.success("Single model — auto-pass.")
         return
     if lost == 0:
@@ -376,18 +388,14 @@ def phase_setup() -> None:
 
 
 def phase_command() -> None:
+    from gameMechanic.commandPhase import render_actions_command  # noqa: PLC0415
+
     sel = st.session_state.selected_unit
-    if sel is None:
-        _central_level1("command")
-        active = st.session_state.active
-        st.divider()
-        st.markdown(f"**+1 CP for {active}**")
-        if st.button("Grant +1 CP", key="cmd_cp", type="primary", use_container_width=True):
-            adjust_cp(active, 1)
-            log_action(st.session_state.round, "command", active, "+1 CP received")
-            st.rerun()
-    else:
+    if sel is not None:
         _central_command_actions(*sel)
+    else:
+        _central_level1("command")
+    render_actions_command(st.session_state)
 
 
 def phase_movement() -> None:
@@ -405,10 +413,8 @@ def phase_psychic() -> None:
     else:
         faction, uid = sel
         unit, state = _lookup(faction, uid)
-        is_psyker = any(
-            kw.upper() == "PSYKER" for kw in unit.other_keywords + unit.faction_keywords
-        )
-        st.markdown(f"**{unit.name}**")
+        is_psyker = any(kw.upper() == "PSYKER" for kw in unit.keywords)
+        st.markdown(f"**{unit.name_en}**")
         if is_psyker:
             st.info(
                 "PSYKER — declare Smite or psychic powers manually. Track results on the unit card."

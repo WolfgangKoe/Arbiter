@@ -7,6 +7,7 @@ from typing import Any
 
 import yaml
 
+from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.faction_property import FactionProperty
 from gameObjects.unit import Unit
@@ -54,6 +55,47 @@ def _unit_from_dict(d: dict[str, Any]) -> Unit:
         fnp=d.get("fnp"),
         weapons=[_weapon_from_dict(w) for w in d.get("weapons", [])],
         abilities=d.get("abilities", ""),
+        rules=d.get("rules", []),
+    )
+
+
+def _condition_from_dict(d: dict[str, Any]) -> Condition:
+    return Condition(
+        has_rules=d.get("has_rules"),
+        has_keywords=d.get("has_keywords"),
+        within_inches=d.get("within_inches"),
+        max_uses=d.get("max_uses"),
+        min_round=d.get("min_round"),
+        unit_not_destroyed=d.get("unit_not_destroyed", False),
+    )
+
+
+def _trigger_from_dict(d: dict[str, Any]) -> Trigger:
+    return Trigger(
+        timing=d["timing"],
+        phase=d["phase"],
+        player=d.get("player", "active"),
+        event=d.get("event"),
+    )
+
+
+def _ability_from_dict(d: dict[str, Any]) -> Ability:
+    return Ability(
+        id=d["id"],
+        name_en=d["name_en"],
+        source=d["source"],
+        rule_text=d["rule_text"],
+        trigger=_trigger_from_dict(d["trigger"]),
+        conditions=[_condition_from_dict(c) for c in d.get("conditions", [])],
+        effect=Effect(
+            type=d["effect"]["type"],
+            target=d["effect"]["target"],
+            amount=d["effect"].get("amount"),
+            stat=d["effect"].get("stat"),
+            modifier=d["effect"].get("modifier"),
+            handler=d["effect"].get("handler"),
+        ),
+        unit_id=d.get("unit_id"),
     )
 
 
@@ -72,25 +114,40 @@ def load_army(faction_dir: str) -> list[Unit]:
     return units
 
 
-def load_faction_properties(faction_dir: str) -> list[FactionProperty]:
-    """Load faction properties from data/wh40k_9e/<faction_dir>/faction_properties.yaml."""
-    path = _DATA_ROOT / faction_dir / "faction_properties.yaml"
+def load_faction_abilities(faction_dir: str) -> list[Ability]:
+    """Load faction abilities from data/wh40k_9e/<faction_dir>/faction_abilities.yaml."""
+    path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
     with open(path) as f:
         data = yaml.safe_load(f)
-    props = []
-    for pd in data.get("faction_properties", []):
-        props.append(
-            FactionProperty(
-                id=pd["id"],
-                name_en=pd["name_en"],
-                triggers_phase=pd["triggers_phase"],
-                affects_parameter=pd["affects_parameter"],
-                ability_keyword=pd["ability_keyword"],
-                rule_text=pd["rule_text"],
-                applies_to_keyword=pd.get("applies_to_keyword"),
-            )
-        )
-    return props
+    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+
+
+def load_unit_abilities(faction_dir: str) -> list[Ability]:
+    """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
+    path = _DATA_ROOT / faction_dir / "unit_abilities.yaml"
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+
+
+def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
+    """Load subfaction abilities from data/wh40k_9e/<faction_dir>/subfaction_abilities.yaml."""
+    path = _DATA_ROOT / faction_dir / "subfaction_abilities.yaml"
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    abilities: list[Ability] = []
+    for subfaction in data.get("subfactions", []):
+        abilities.extend(_ability_from_dict(a) for a in subfaction.get("abilities", []))
+    return abilities
+
+
+def load_faction_properties(faction_dir: str) -> list[FactionProperty]:
+    """Load faction abilities (compat shim — returns Ability objects under FactionProperty alias)."""
+    return load_faction_abilities(faction_dir)
 
 
 def load_detachment_types() -> list[DetachmentType]:

@@ -1,0 +1,37 @@
+faction: Necrons
+abilities:
+  - id: necrons.faction.living_metal
+    name_en: Living Metal
+    source: faction_rule
+    rule_text: "At the start of your Command phase, each model in this unit regains 1 lost wound."
+    trigger:
+      timing: phase_start
+      phase: command
+      player: active
+    conditions:
+      - has_rules: [livingMetal]
+    effect:
+      type: heal
+      target: self
+      amount: "1"
+
+  - id: necrons.faction.reanimation_protocols
+    name_en: Reanimation Protocols
+    source: faction_rule
+    rule_text: "Each time an enemy unit shoots or fights, after it makes its attacks, if any models
+      in this unit were destroyed but this unit was not destroyed, this unit's reanimation
+      protocols are enacted."
+    trigger:
+      timing: phase_reactive
+      phase:
+        - shooting
+        - fight
+      player: inactive
+      event: after_enemy_attack
+    conditions:
+      - has_rules: [reanimationProtocols]
+        unit_not_destroyed: true
+    effect:
+      type: reanimate
+      target: self
+      amount: D6_per_wound

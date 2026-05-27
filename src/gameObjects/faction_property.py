@@ -1,12 +1,4 @@
-from dataclasses import dataclass
+from gameObjects.ability import Ability
 
-
-@dataclass
-class FactionProperty:
-    id: str
-    name_en: str
-    triggers_phase: str  # "command" | "shooting" | etc.
-    affects_parameter: str  # "wounds" | "save" | etc.
-    ability_keyword: str  # e.g. "livingMetal"
-    rule_text: str
-    applies_to_keyword: str | None
+# Deprecated alias — will be removed after full migration to Ability.
+FactionProperty = Ability

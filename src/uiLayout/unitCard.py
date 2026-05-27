@@ -2,8 +2,8 @@
 
 import streamlit as st
 
-from engine import apply_damage, heal_unit, set_deployment
-from models import NECRON_UNITS, ORK_UNITS, PHASES, Unit
+from engine import PHASES, apply_damage, heal_unit, set_deployment
+from gameObjects.unit import Unit
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "ADVANCED": ("#c9a84c", "#2e2618"),
@@ -43,11 +43,9 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     return "".join(parts)
 
 
-def _lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
-    units = NECRON_UNITS if faction == "Necrons" else ORK_UNITS
-    unit = next(u for u in units if u.uid == uid)
+def _lookup_in_state(faction: str, uid: str) -> dict:  # type: ignore[type-arg]
     key = "necron_units" if faction == "Necrons" else "ork_units"
-    return unit, st.session_state[key][uid]
+    return st.session_state[key][uid]
 
 
 def _dynamic_setup(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
@@ -58,12 +56,12 @@ def _dynamic_setup(unit: Unit, state: dict, faction: str) -> None:  # type: igno
         "Deployment",
         opts,
         index=idx,
-        key=f"deploy_{faction}_{unit.uid}",
+        key=f"deploy_{faction}_{unit.id}",
     )
     mapping = {"Normal": "normal", "Stationary": "stationary", "Reserve": "reserve"}
     new_val = mapping[chosen]
     if new_val != state.get("deployment", "normal"):
-        set_deployment(unit.uid, faction, new_val)
+        set_deployment(unit.id, faction, new_val)
         st.rerun()
 
 
@@ -97,16 +95,18 @@ def _dynamic_shooting_attacker(unit: Unit, state: dict) -> None:  # type: ignore
     if not ranged:
         st.caption("No ranged weapons.")
         return
+    skill = int(unit.bs.rstrip("+"))
     for w in ranged:
-        ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
+        ap_int = int(w.ap)
+        ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
         st.caption(
-            f"**{w.name}** · A{w.attacks} · BS{w.skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
+            f"**{w.name_en}** · A{w.attacks} · BS{skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
             + (f" · _{w.abilities}_" if w.abilities else "")
         )
 
 
 def _dynamic_shooting_target(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
-    inv_str = f"{unit.invuln}+" if unit.invuln else "—"
+    inv_str = f"{unit.invuln_save}+" if unit.invuln_save else "—"
     fnp_str = f"{unit.fnp}+" if unit.fnp else "—"
     cols = st.columns(4)
     cols[0].metric("T", unit.toughness)
@@ -126,17 +126,19 @@ def _dynamic_fight(unit: Unit, state: dict, is_active: bool) -> None:  # type: i
     if not melee:
         st.caption("No melee weapons.")
         return
+    skill = int(unit.ws.rstrip("+"))
     for w in melee:
-        ap_str = f"AP{w.ap}" if w.ap != 0 else "AP0"
+        ap_int = int(w.ap)
+        ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
         st.caption(
-            f"**{w.name}** · A{w.attacks} · WS{w.skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
+            f"**{w.name_en}** · A{w.attacks} · WS{skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
             + (f" · _{w.abilities}_" if w.abilities else "")
         )
 
 
 def _dynamic_morale(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
     lost = state.get("lost_models_this_turn", 0)
-    if unit.count == 1:
+    if unit.models_max == 1:
         st.caption("Single model — auto-pass.")
         return
     if lost == 0:
@@ -148,7 +150,7 @@ def _dynamic_morale(unit: Unit, state: dict) -> None:  # type: ignore[type-arg]
 def _unit_dynamic_section(
     unit: Unit, state: dict, faction: str, phase_key: str, is_active: bool  # type: ignore[type-arg]
 ) -> None:
-    is_psyker = any(kw.upper() == "PSYKER" for kw in unit.other_keywords + unit.faction_keywords)
+    is_psyker = any(kw.upper() == "PSYKER" for kw in unit.keywords)
 
     if phase_key == "setup":
         _dynamic_setup(unit, state, faction)
@@ -196,18 +198,17 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
     is_active = faction == active
 
     destroyed = state["destroyed"]
-    uid = unit.uid
+    uid = unit.id
 
     if destroyed:
-        st.markdown(f"~~{unit.name}~~  *(DESTROYED)*")
+        st.markdown(f"~~{unit.name_en}~~  *(DESTROYED)*")
         return
 
-    # Name — select trigger for active player, plain text for enemy (stub: full wiring in Ziel 2)
     in_reserve = state.get("in_reserve", False)
     if phase_key != "setup" and is_active:
         sel = st.session_state.selected_unit
         is_sel = sel == (faction, uid)
-        btn_label = f"◀ {unit.name}" if is_sel else f"▶ {unit.name}"
+        btn_label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
         btn_type: str = "primary" if is_sel else "secondary"
         if st.button(
             btn_label,
@@ -220,52 +221,39 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
             st.session_state.selected_target = None
             st.rerun()
     else:
-        st.markdown(f"**{unit.name}**")
+        st.markdown(f"**{unit.name_en}**")
 
-    # Keywords as HTML badge spans
-    kw_parts = []
-    for kw in unit.faction_keywords:
-        kw_parts.append(
-            f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
-            f'padding:1px 5px;font-size:9px;color:#6b5f44;letter-spacing:0.05em;margin-right:2px;">'
-            f"{kw}</span>"
-        )
-    for kw in unit.other_keywords:
-        kw_parts.append(
-            f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
-            f'padding:1px 5px;font-size:9px;color:#4a3f2a;letter-spacing:0.05em;margin-right:2px;">'
-            f"{kw}</span>"
-        )
+    # Keywords as HTML badge spans (all keywords in one style)
+    kw_parts = [
+        f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
+        f'padding:1px 5px;font-size:9px;color:#6b5f44;letter-spacing:0.05em;margin-right:2px;">'
+        f"{kw}</span>"
+        for kw in unit.keywords
+    ]
     if kw_parts:
         st.markdown("".join(kw_parts), unsafe_allow_html=True)
 
     cur = state["current_wounds"]
     models_alive = state["models"]
 
-    if unit.count == 1:
-        # Single model: LP bar only
+    if unit.models_max == 1:
         st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
         st.caption(f"LP {cur}/{unit.wounds}")
     elif unit.wounds == 1:
-        # Multi-model, 1 wound each: model bar only
-        st.progress(models_alive / unit.count if unit.count > 0 else 0)
-        st.caption(f"⬡ {models_alive}/{unit.count}")
+        st.progress(models_alive / unit.models_max if unit.models_max > 0 else 0)
+        st.caption(f"⬡ {models_alive}/{unit.models_max}")
     else:
-        # Multi-model, multiple wounds: model bar + LP bar for front model
         front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
-        st.progress(models_alive / unit.count)
-        st.caption(f"⬡ {models_alive}/{unit.count}")
+        st.progress(models_alive / unit.models_max)
+        st.caption(f"⬡ {models_alive}/{unit.models_max}")
         st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
         st.caption(f"LP {front_wounds}/{unit.wounds}")
 
-    # State badges
     badges_html = _state_badges_html(state)
     if badges_html and phase_key != "setup":
         st.markdown(badges_html, unsafe_allow_html=True)
 
-    # Collapsible phase area
-    with st.expander(f"▾ {unit.name} — Info / Actions"):
-        # Stat block (7 columns)
+    with st.expander(f"▾ {unit.name_en} — Info / Actions"):
         sc = st.columns(7)
         for col, lbl, val in zip(
             sc,
@@ -275,14 +263,13 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                 unit.toughness,
                 f"{unit.save}+",
                 unit.wounds,
-                f"{unit.invuln}+" if unit.invuln else "—",
+                f"{unit.invuln_save}+" if unit.invuln_save else "—",
                 unit.leadership,
                 unit.oc,
             ],
         ):
             col.metric(lbl, val)
 
-        # Damage buttons
         bc = st.columns(6)
         for col, delta, label in zip(
             bc, [-3, -2, -1, 1, 2, 3], ["−3", "−2", "−1", "+1", "+2", "+3"]
@@ -300,7 +287,6 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                         heal_unit(uid, faction, delta, unit)
                     st.rerun()
 
-        # Target button for enemy units in combat phases
         if phase_key in ("shooting", "fight", "charge") and not is_active:
             tgt = st.session_state.selected_target
             is_tgt = tgt == (faction, uid)
@@ -317,10 +303,7 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                 st.rerun()
 
         st.divider()
-
-        # Dynamic phase section
         _unit_dynamic_section(unit, state, faction, phase_key, is_active)
 
-        # Abilities (always shown)
         if unit.abilities:
             st.caption(f"*{unit.abilities}*")
