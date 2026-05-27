@@ -3,49 +3,20 @@
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — Ziel 3b/3c + neue Blöcke
-3. `src/engine.py` — enter_melee, leave_melee, _unit_state, selected_targets
-4. `src/gameMechanic/phase_runner.py` + `_common.py`
-5. `src/gameMechanic/shootingPhase.py` + `fightPhase.py` — aktuelle Stubs
+2. `src/engine.py` — _unit_state, enter_melee, leave_melee, selected_targets
+3. `src/uiLayout/_common.py` — state_badges_html, render_player_column
+4. `src/uiLayout/unitCard.py` — _state_badges_html, target-toggle
+5. `src/gameMechanic/fightPhase.py` — Stub + _render_display
+6. `src/uiLayout/gameProtocoll.py` — aktueller Stand
+7. `data/log/game_log.json` — Format der Log-Einträge
 
 ---
 
 ## Kontext
 
-**Arbiter** — WH40k 9th Edition Battle Tracker in Streamlit.  
-Starten: `streamlit run src/app.py`  
+**Arbiter** — WH40k 9th Edition Battle Tracker in Streamlit.
+Starten: `streamlit run src/app.py`
 Aktueller Branch: `dev`
-
-```
-src/
-  app.py
-  engine.py                   ← _unit_state (movement_choice, melee_with),
-                                  enter_melee / leave_melee, selected_targets
-  constants/colors.py
-  uiLayout/
-    _common.py                ← state_badges_html (movement_choice), render_player_column
-    gameActionsArea.py
-    unitCard.py               ← selected_targets toggle, movement_choice badges
-    gameProtocoll.py / armyList.py / …
-  gameObjects/
-    ability.py / unit.py / weapon.py / loader.py / …
-  gameMechanic/
-    phase_handler.py
-    phase_runner.py
-    commandPhase.py
-    movementPhase.py          ← liest movement_choice für Button-Highlight
-    chargephase.py            ← Multi-Ziel-UI (selected_targets, enter_melee)
-    psychicPhase.py / moralePhase.py
-    shootingPhase.py          ← Stub (Ziel 3c)
-    fightPhase.py             ← Stub (Ziel 3c)
-    ability_engine.py
-
-data/wh40k_9e/
-  necrons/ (army.yaml, unit_abilities.yaml, …)
-  orks/ _shared/
-
-tests/ — 102 Tests, alle grün (Stand: Multi-Target-Block)
-```
 
 ---
 
@@ -53,68 +24,161 @@ tests/ — 102 Tests, alle grün (Stand: Multi-Target-Block)
 
 | Ziel | Status |
 |------|--------|
-| Ziel 1A — uiLayout/ Struktursplit | ✅ fertig |
-| Ziel 1B — gameObjects/ Foundation | ✅ fertig |
+| Ziel 1A/1B — Struktur + gameObjects | ✅ fertig |
 | Ziel 2 — commandPhase + Ability-System | ✅ fertig |
 | Ziel 3a — Phase-Infrastruktur | ✅ fertig |
-| **Bug 1 — STATIONARY/NORMAL Badge** | ✅ behoben (movement_choice) |
-| **Multi-Target-Block** | ✅ fertig (102 Tests grün) |
-| **Design-Block** | ⏳ parallel / eigene Session |
-| **Ziel 3b — combat.py** | ⏳ nächster Schritt |
-| **Ziel 3c — Shooting + Fight Phase** | ⏳ |
+| Bug 1 — NORMAL/STATIONARY Badge | ✅ behoben |
+| Multi-Target-Block | ✅ fertig (102 Tests grün) |
+| **4 neue Bugs (Session 2026-05-28)** | ⏳ nächste Session |
+| Design-Block — Farben | ⏳ eigene Session |
+| Ziel 3b — combat.py | ⏳ nach den Bugs |
+| Ziel 3c — Shooting + Fight Phase | ⏳ |
 
 ---
 
-## Was in der letzten Session implementiert wurde
+## SOFORT zu fixen: 4 Bugs (vor Ziel 3b)
 
-### Multi-Target-Block (commit: fb2fa0c)
+### Bug A — Badge-Konflikt: movement_choice + CHARGED
 
-**`engine.py`:**
-- `movement_choice: None | "normal" | "stationary" | "advanced" | "retreated"` in `_unit_state()`
-- `melee_with: list[str]` in `_unit_state()` — bidirektionale Melee-Verfolgung
-- `enter_melee(attacker_uid, attacker_faction, target_uid, target_faction)` — beide Seiten eintragen
-- `leave_melee(uid, faction)` — beide Seiten bereinigen; prüft ob Gegner noch andere Engagements hat
-- `set_charged()` ruft `enter_melee()` auf (kein manuelles `in_melee = True` mehr)
-- `set_movement_status(retreated)` ruft `leave_melee()` auf
-- `selected_target: tuple | None` → `selected_targets: list[tuple[str, str]]` überall
+**Problem:** Eine Einheit, die "Normal" bewegt und danach chargert, zeigt NORMAL + CHARGED gleichzeitig. Das ist inhaltlich falsch (Charge ist der relevante Zustand, Normal ist obsolet).
 
-**Badges:**
-- `state_badges_html()` + `_state_badges_html()` lesen `movement_choice` statt `turn_flags`
-- NORMAL + STATIONARY Badges jetzt sichtbar (Bug 1 behoben)
+**Fix:** In `state_badges_html()` und `_state_badges_html()` — Bewegungs-Badge überspringen wenn `charged=True`:
 
-**ChargePhase:**
-- Multi-Ziel-UI: beliebig viele Ziele per `▷`-Toggle wählbar
-- "Charge Successful" trägt alle Ziele als Melee-Engagement ein
+```python
+# In _common.py state_badges_html():
+mc = unit_state.get("movement_choice")
+flags = unit_state.get("turn_flags", {})
+# Bewegungs-Badge nur zeigen wenn Einheit NICHT gechargt hat
+if mc in _MOVEMENT_BADGE and not flags.get("charged"):
+    parts.append(_badge(_MOVEMENT_BADGE[mc]))
+```
 
-**Tests:** 29 neue Tests (test_state_badges.py, test_multi_target.py)
+**Dateien:** `src/uiLayout/_common.py`, `src/uiLayout/unitCard.py`
+**Tests:** `tests/engine/test_state_badges.py` — Test ergänzen: `test_charged_suppresses_movement_badge`
 
 ---
 
-## Nächster Schritt: Ziel 3b — combat.py
+### Bug B — Melee-Paare nicht in gameActionDisplayArea
 
-### Was ist combat.py?
+**Problem:** Nach einem Charge ist nicht sichtbar, welche Einheiten miteinander im Nahkampf sind. Die Fight-Phase-Anzeige zeigt keine Engagement-Übersicht.
 
-Eine eigenständige Datei `src/gameMechanic/combat.py` die die vollständige
-**Angriffs-Auflösung** nach WH40k 9E implementiert (P-08 AttackSequence).
+**Fix:** In `fightPhase.py` `_render_display()` — wenn kein Angreifer+Ziel selektiert: alle aktiven Melee-Paare durch Scan der unit states anzeigen.
 
-**Ablauf:**
-1. Anzahl Angriffe bestimmen (`attacks × models`)
-2. Trefferwürfe (`BS` oder `WS`, hit modifier)
-3. Verwundungswürfe (`wound_threshold(S, T)`)
-4. Rettungswürfe (`save + AP`, Invuln wenn besser)
-5. Feel No Pain (wenn vorhanden)
-6. Schaden summieren → gibt `(total_dmg, list[str])` zurück
+```python
+def _render_melee_pairs(state: dict) -> None:
+    """Show all active melee engagements from unit states."""
+    from engine import _NECRON_UNITS, _ORK_UNITS  # noqa
+    pairs: list[str] = []
+    necron_states = st.session_state.necron_units
+    ork_names = {u.id: u.name_en for u in _ORK_UNITS}
+    necron_names = {u.id: u.name_en for u in _NECRON_UNITS}
+    for uid, s in necron_states.items():
+        for enemy_uid in s.get("melee_with", []):
+            pairs.append(f"**{necron_names.get(uid, uid)}** ↔ **{ork_names.get(enemy_uid, enemy_uid)}**")
+    if pairs:
+        st.markdown("**Active Melee Engagements:**")
+        for p in pairs:
+            st.markdown(f"- {p}")
+    else:
+        st.info(PHASE_RULES["fight"])
+```
 
-**Signatur (geplant):**
+**Datei:** `src/gameMechanic/fightPhase.py`
+
+---
+
+### Bug C — Protocol zeigt kein Game-Log
+
+**Problem:** Tab "📋 Command Protocol" zeigt nur statischen Deployment-Snapshot, nicht die tatsächlich geloggten Aktionen aus `data/log/game_log.json`.
+
+**Format game_log.json** (pro Eintrag):
+```json
+{ "round": 1, "phase": "movement", "unit": "Big Mek in Mega Armour",
+  "action": "movement: advanced", "timestamp": "2026-05-25T..." }
+```
+
+**Fix:** `gameProtocoll.py` — `_render_command_protocol()` liest `game_log.json`, gruppiert nach Round+Phase, zeigt als expandable Sections:
+
+```python
+# Pseudocode:
+entries = load_game_log()  # list[dict] aus JSON
+grouped = group_by(entries, key=lambda e: (e["round"], e["phase"]))
+for (round_num, phase), items in sorted(grouped.items()):
+    with st.expander(f"R{round_num} · {phase.capitalize()}", expanded=False):
+        for item in items:
+            st.caption(f"**{item['unit']}**: {item['action']}")
+```
+
+**Datei:** `src/uiLayout/gameProtocoll.py`
+**Kein neuer Log-Mechanismus** — `engine.log_action()` bleibt unverändert.
+
+---
+
+### Bug D — LP-Buttons immer sichtbar (Zwischenfix vor Bug 3)
+
+**Problem:** Wound-Adjustment-Buttons erscheinen für jede selektierte Einheit, unabhängig von Phase. Das ist unübersichtlich.
+
+**Analyse der Abhängigkeit:**
+- Bug 3 (aus Plan) ist der saubere Weg: LP-Buttons nur bei `active_effect` (braucht Ziel 3c)
+- **Jetzt möglich ohne 3c:** LP-Buttons nur auf der **inaktiven** (Ziel-)Seite zeigen, nicht für die aktive Einheit
+  - Semantisch korrekt: Du trägst Schaden beim Gegner ein, nicht bei dir selbst
+  - Living Metal / Heilung: läuft über Command Phase Abilities (eigene Buttons)
+
+**Fix:** In `render_player_column()` — `wound_adjustment_buttons` nur im `else`-Zweig (inaktive Seite):
+
+```python
+# AKTIVE Seite (is_active == True):
+# ... active_content(...) anzeigen
+# wound_adjustment_buttons ENTFERNEN
+
+# INAKTIVE Seite (Ziele):
+# ... wound_adjustment_buttons BEHALTEN (pro Ziel)
+```
+
+**Datei:** `src/uiLayout/_common.py`
+**Hinweis:** Wenn später `active_effect` kommt (Bug 3 / nach 3c), wird auch die inaktive Seite konditioniert.
+
+---
+
+## Reihenfolge für nächste Session
+
+```
+1. Bug A — Badge-Konflikt (5 min)
+2. Bug B — Melee-Paare anzeigen (20 min)
+3. Bug C — Protocol-Log aus game_log.json (30 min)
+4. Bug D — LP-Buttons Zwischenfix (10 min)
+5. Tests aktualisieren (15 min)
+   └── test_state_badges.py: test_charged_suppresses_movement_badge
+6. Commit: "Fix UX bugs: badge conflict, melee display, protocol log, LP buttons"
+7. Ziel 3b — combat.py (≥40 Tests)
+```
+
+---
+
+## Designentscheidungen die NICHT rückgängig gemacht werden
+
+- `turn_flags` = Spielmechanik-Checks only
+- `movement_choice` = Display only; wird NICHT angezeigt wenn `charged=True`
+- `melee_with` bidirektional (enter_melee / leave_melee)
+- `selected_targets: list[tuple[str, str]]` — nie wieder single-target
+- `can_fight()` prüft `melee_with` ODER `charged` flag
+- LP-Buttons: aktive Seite KEIN Button; inaktive Seite (Ziele) ja — bis 3c active_effect kommt
+- `render_player_column()` bleibt in `_common.py`
+
+---
+
+## Ziel 3b — combat.py (nach den Bugs)
+
+`src/gameMechanic/combat.py` mit:
 ```python
 @dataclass
 class AttackParams:
-    attacks: str           # "D6", "3", "2D6", etc.
-    skill: int             # BS or WS (int, already stripped of "+")
+    attacks: str       # "D6", "3", etc.
+    skill: int         # BS/WS als int
     strength: int
-    ap: int                # negative, e.g. -1
-    damage: str            # "D3", "2", etc.
-    hit_modifier: int = 0  # +1 Advance-shoot, -1 etc.; "only_6s" → overwatch special
+    ap: int            # negativ z.B. -1
+    damage: str        # "D3", "2", etc.
+    hit_modifier: int = 0
     num_models: int = 1
 
 @dataclass
@@ -122,101 +186,20 @@ class DefendParams:
     toughness: int
     save: int
     invuln_save: int | None
-    fnp: int | None        # Feel No Pain (e.g. 5 → 5+)
+    fnp: int | None
 
 def resolve_attack(params: AttackParams, defender: DefendParams) -> tuple[int, list[str]]:
     """Returns (total_damage, log_messages)."""
 ```
 
-**Ziel: ≥ 40 Unit-Tests** für combat.py (kein Streamlit, rein mathematisch/logisch):
-```
-test_zero_attacks_returns_zero_damage
-test_all_hits_miss_returns_zero_damage
-test_all_wounds_fail_returns_zero_damage
-test_all_saves_pass_returns_zero_damage
-test_fnp_can_reduce_damage_to_zero
-test_invuln_used_when_better_than_armour
-test_double_strength_wounds_on_2plus
-...
-```
-
-### Ablauf 3b:
-
-1. `src/gameMechanic/combat.py` — `AttackParams`, `DefendParams`, `resolve_attack()`
-2. `tests/gameMechanic/test_combat.py` — ≥40 Tests
-3. Hilfsfunktionen `can_shoot(unit_state)` und `can_fight(unit_state)`:
-   ```python
-   def can_shoot(unit_state: dict) -> bool:
-       flags = unit_state["turn_flags"]
-       return not flags["advanced"] and not flags["retreated"] and not unit_state["in_melee"]
-
-   def can_fight(unit_state: dict) -> bool:
-       return bool(unit_state["melee_with"]) or unit_state["turn_flags"]["charged"]
-   ```
-
----
-
-## Ziel 3c — Shooting + Fight Phase (nach 3b)
-
-Sobald combat.py fertig: ShootingPhaseHandler + FightPhaseHandler vollständig implementieren.
-
-**ShootingPhase:**
-- `can_shoot(unit_state)` als Gate (Advanced/Retreated/in_melee sperren)
-- Ziel-Selektion aus `selected_targets[0]` (ein Ziel pro Schuss-Einheit, Ziel 4 für Mehrfach-Ziele)
-- Pro Waffe: `AttackParams` aus Waffendaten, `DefendParams` aus Zieleinheit
-- Ergebnis → `active_effect` setzen → LP-Buttons konditionieren (Bug 3)
-
-**FightPhase:**
-- `can_fight(unit_state)` als Gate
-- Einheiten die `charged == True` kämpfen zuerst
-- Ziel aus `selected_targets[0]` (muss in `melee_with` des Angreifers sein)
-- `melee_with`-Visualisierung in gameActionDisplayArea
-
----
-
-## Bug 3 — LP-Buttons Konditionierung (nach 3c)
-
-**Konzept:**
+Hilfsfunktionen (in `engine.py` oder `combat.py`):
 ```python
-# active_effect Struktur:
-{
-    "target_uid": "wh40k_9e.necrons.unit.warriors",
-    "target_faction": "Necrons",
-    "damage": 3,        # oder None wenn Spieler eingeben soll
-    "source": "shooting",  # "shooting" | "fight" | "mortal" | "psychic" | "ability"
-}
-```
-LP-Buttons nur anzeigen wenn `active_effect` gesetzt UND `target_uid == uid`.
+def can_shoot(unit_state: dict) -> bool:
+    flags = unit_state["turn_flags"]
+    return not flags["advanced"] and not flags["retreated"] and not unit_state["in_melee"]
 
----
-
-## Design-Block (parallel / eigene Session)
-
-Tailwind-Farbpalette als Python-Konstanten + durchgängiges Designkonzept.
-Details siehe letzte Session (unverändert).
-
----
-
-## Reihenfolge der nächsten Schritte
-
-```
-1. Ziel 3b — combat.py (≥40 Tests)           (~2-3h)
-2. Ziel 3c — Shooting + Fight Phase (voll)   (~2-3h)
-   └── nutzt can_shoot / can_fight
-   └── nutzt active_effect für LP-Buttons
-3. Bug 3 — LP-Buttons (nach 3c)              (~30min)
-4. Design-Block                               (eigene Session)
+def can_fight(unit_state: dict) -> bool:
+    return bool(unit_state["melee_with"]) or unit_state["turn_flags"]["charged"]
 ```
 
----
-
-## Designentscheidungen die NICHT rückgängig gemacht werden
-
-- `turn_flags` sind REIN für Spielmechanik-Checks (never display logic)
-- `movement_choice` ist REIN für Display (never game mechanic checks)
-- Ability-Flags leben in `active_buffs` / unit_state-Felder, NICHT in turn_flags
-- `melee_with` ist bidirektional — enter_melee und leave_melee pflegen BEIDE Seiten
-- `selected_targets` ist eine Liste — nie wieder single-target als Pattern
-- LP-Buttons werden nur bei aktivem `active_effect` für die Zieleinheit angezeigt
-- `render_player_column()` bleibt in `_common.py` als shared utility
-- `can_fight()` prüft `melee_with` (NICHT `in_melee` direkt), weil `melee_with` die Quelle der Wahrheit ist
+Ziel: ≥ 40 Tests in `tests/gameMechanic/test_combat.py`
