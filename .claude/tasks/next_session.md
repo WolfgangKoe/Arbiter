@@ -3,10 +3,12 @@
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/architecture.md` — Zielarchitektur (Abschnitt "Component Responsibilities" + "session_state Schema")
-3. `src/gameMechanic/ability_engine.py` + `src/gameMechanic/commandPhase.py`
-4. `src/engine.py` — aktueller Stand (vollständig auf gameObjects migriert)
-5. `src/uiLayout/gameActionsArea.py` — für den Einstieg in Ziel 3
+2. `docs/architecture.md` — aktualisiert: Colour System, session_state Schema, Stratagem-Modell
+3. `docs/ui_layout.md` — aktualisiert: §7 gameActionsArea (3-Section), §8 gameProtocoll (Tabs)
+4. `docs/processes.md` — **neu**: P-01…P-07 Mermaid-Prozessdiagramme
+5. `src/uiLayout/gameActionsArea.py` — refactored: firstPlayerArea / secondPlayerArea / DisplayArea
+6. `src/uiLayout/unitCard.py` — refactored: kein Expander, kein Statsblock, einzelner Selector-Button
+7. `src/gameMechanic/commandPhase.py` — Referenz für Ziel 3-Pattern
 
 ---
 
@@ -18,105 +20,106 @@ Aktueller Branch: `dev`
 
 ```
 src/
-  app.py              ← Entry Point
-  engine.py           ← Game Logic (gameObjects-native, models.py deprecated)
-  models.py           ← Deprecated (nur noch als Referenz, nicht mehr importiert)
+  app.py              ← Entry Point (unverändert)
+  engine.py           ← Game Logic + State Init
+  constants/
+    colors.py         ← Tailwind v3 Farbkonstanten (neu)
   uiLayout/
-    gameHeader.py / armyCard.py / unitCard.py / detachmentCard.py / armyList.py
-    gameActionsArea.py  ← Phase-Dispatcher (alle Phasen hier)
-    gameProtocoll.py
+    gameHeader.py / armyList.py / armyCard.py / detachmentCard.py
+    unitCard.py           ← refactored: kein Expander, ❤-LP-Bar, ⬡-Modell-Bar
+    gameActionsArea.py    ← refactored: firstPlayerArea | secondPlayerArea + DisplayArea
+    gameProtocoll.py      ← refactored: Tabs CommandProtocol | Stratagems
   gameObjects/
-    ability.py / unit.py / weapon.py / faction_property.py / detachment.py / loader.py
+    ability.py            ← Trigger.stage Feld hinzugefügt
+    stratagem.py          ← neu: Stratagem + stratagem_visibility()
+    unit.py / weapon.py / faction_property.py / loader.py
   gameMechanic/
     __init__.py
-    ability_engine.py   ← check_trigger, check_conditions, get_triggered_abilities
-    commandPhase.py     ← apply_living_metal, render_actions_command
+    ability_engine.py     ← check_trigger, check_conditions, get_triggered_abilities
+    commandPhase.py       ← apply_living_metal, resolve_command_start, render_actions_command
 
 data/wh40k_9e/
-  necrons/army.yaml + faction_abilities.yaml + unit_abilities.yaml
-         + subfaction_abilities.yaml
+  necrons/army.yaml + faction_abilities.yaml + unit_abilities.yaml + subfaction_abilities.yaml
   orks/army.yaml + faction_abilities.yaml
   _shared/detachment_types.yaml
 
 tests/
-  gameObjects/test_loader.py    ← 10 Tests (grün)
-  gameObjects/test_ability.py   ← 12 Tests (grün)
-  engine/test_engine.py         ← 31 Tests (grün)
-  gameMechanic/test_ability_engine.py  ← 14 Tests (grün)
-  gameMechanic/test_command_phase.py   ←  8 Tests (grün)
+  gameObjects/test_loader.py / test_ability.py
+  engine/test_engine.py
+  gameMechanic/test_ability_engine.py / test_command_phase.py
   — Total: 73 Tests, alle grün
 ```
 
 ---
 
-## Was bisher erarbeitet wurde
+## Was in dieser Session erarbeitet wurde
 
-### Ziel 2 — commandPhase ✅ (diese Session)
+### Architektur-Update (vollständig umgesetzt)
 
-**Ability-System vollständig implementiert:**
+**UI-Layout:**
+- `gameActionsArea` intern: `firstPlayerArea | secondPlayerArea` (50/50) + `gameActionDisplayArea` (full width)
+- `gameProtocoll` jetzt Tabs: `CommandProtocol | Stratagems`
+- `unitCard`: Expander entfernt, Stats-Tabelle entfernt, Wundbuttons entfernt
+  - Einziger Button: Einheitenname (Selektor)
+  - Eigene Einheit → `selected_unit`, Gegner → `selected_target`
+  - Im Setup: Klick zeigt Datenblatt (Stats + Waffen + Abilities) in DisplayArea
+- Wundbuttons jetzt in PlayerArea des betroffenen Spielers (nicht mehr auf unitCard)
 
-- `gameObjects/ability.py` — Datenmodell: `Ability`, `Trigger`, `Condition`, `Effect`
-- `gameObjects/unit.py` — `rules: list[str]` Feld hinzugefügt
-- `gameObjects/faction_property.py` — `FactionProperty = Ability` (Alias)
-- `gameObjects/loader.py` — `load_faction_abilities()`, `load_unit_abilities()`,
-  `load_subfaction_abilities()`, `_ability_from_dict()`, `rules`-Feld beim Unit-Loading
+**Neue Dateien:**
+- `src/constants/colors.py` — Tailwind-v3-Farbpaletten (Emerald/Neutral/Amber/Red/Blue) mit semantischen Aliases
+- `src/gameObjects/stratagem.py` — Stratagem-Dataclass + `stratagem_visibility()` (4 Zustände inkl. „bereits eingesetzt")
+- `docs/processes.md` — P-01 bis P-07 Mermaid-Prozessdiagramme
 
-**YAML-Dateien neu/umgebaut:**
-- `necrons/faction_abilities.yaml` — Living Metal + Reanimation Protocols
-- `necrons/unit_abilities.yaml` — My Will Be Done + Resurrection Orb
-- `necrons/subfaction_abilities.yaml` — Nephrekh Translocation Beams
-- `orks/faction_abilities.yaml` — leer (keine Faction Abilities im Scope)
-- `necrons/army.yaml` — `rules`-Felder zu allen 5 Einheiten
-
-**gameMechanic-Modul:**
-- `ability_engine.py` — `check_trigger()`, `check_conditions()`, `get_triggered_abilities()`
-- `commandPhase.py` — `apply_living_metal()`, `resolve_command_start()`,
-  `render_actions_command()` (Streamlit-UI)
-
-**Living Metal Semantik (wichtig!):**
-```python
-max_alive = unit_state["models"] * unit.wounds  # models_remaining, NICHT models_max
-# Verhindert, dass zerstörte Modelle zurückgezählt werden
-```
-
-**Vollständige Migration von `models.py` → `gameObjects`:**
-- `engine.py` — PHASES jetzt dort definiert; `_NECRON_UNITS`/`_ORK_UNITS` via `load_army()`
-- Session-State-Keys jetzt volle IDs: `"wh40k_9e.necrons.unit.overlord"` statt `"overlord"`
-- Alle 5 UI-Dateien migriert: `gameActionsArea`, `armyList`, `detachmentCard`, `unitCard`, `gameHeader`
-- Feldnamen: `unit.id`, `unit.name_en`, `unit.models_max`, `unit.invuln_save`, `w.name_en`
-- `weapon.skill` gibt es nicht mehr → `int(unit.bs.rstrip('+'))` / `int(unit.ws.rstrip('+'))`
+**Datenmodell:**
+- `Trigger.stage: str = "active"` — Phasenstadium für Ability-Trigger
+- YAML-Dateien aktualisiert mit `stage`-Feld
+- `session_state` neue Felder: `phase_stage`, `active_effect`, `my_will_be_done_active`, `active_buffs`, `models_lost_since_last_rp`
 
 ---
 
 ## Nächster konkreter Schritt: Ziel 3 — Shooting + Fight mit Ability-System
 
-**Scope Ziel 3:**
+### Parallelisierbarkeit
 
-| Feature | Beschreibung |
-|---|---|
-| Reanimation Protocols | Phase-reaktiv (nach feindlichem Angriff) — D6-Pool, Model-Rückholung |
-| My Will Be Done Effekt | `unit_state["my_will_be_done_active"]` → +1 hit_roll in `resolve_attack()` |
-| Resurrection Orb Auflösung | RP für Ziel-Einheit manuell triggern (1×/Spiel) |
-| `active_buffs` im unit_state | Feld für laufende Buffs: `list[str]` |
-| RP-UI | D6-Würfel pro LP zerstörter Modelle, Pool ≥ wounds → Modell zurück |
+Ziel 3 besteht aus zwei unabhängigen Strängen, die parallel implementiert werden können:
 
-**Reanimation Protocols Mechanik (detailliert):**
+**Strang B — Spiellogik (abhängig von abgeschlossenem Architektur-Refactoring ✅):**
+
+| Feature | Datei | Beschreibung |
+|---|---|---|
+| `resolve_attack()` mit MWBD | `engine.py` | `active_buffs` prüfen, Trefferwurf +1 wenn MWBD aktiv |
+| `shootingPhase.py` (neu) | `gameMechanic/` | Shooting-Logik + RP-Trigger |
+| `fightPhase.py` (neu) | `gameMechanic/` | Fight-Logik + RP-Trigger |
+| UI Shooting in PlayerArea | `gameActionsArea.py` | Angreifer-Area + Ziel-Area |
+| UI Fight in PlayerArea | `gameActionsArea.py` | Nahkampf-Area |
+| RP-UI in PlayerArea | `gameActionsArea.py` | D6-Pool + Bestätigung im inactive PlayerArea |
+
+**Strang C — Stratagem-Architektur (unabhängig von B, braucht YAML-Daten):**
+
+| Feature | Datei | Beschreibung |
+|---|---|---|
+| `necrons/stratagems.yaml` | `data/` | Skeleton mit 2–3 Necron-Stratagems |
+| YAML-Loader für Stratagems | `gameObjects/loader.py` | `load_stratagems()` |
+| Stratagems-Tab füllen | `gameProtocoll.py` | Echte GO-Liste statt Placeholder |
+
+### Reanimation Protocols Mechanik (Strang B, detailliert)
 
 Trigger: Nach jedem feindlichen Angriff (Shooting / Fight), wenn Modelle zerstört
 wurden aber die Einheit nicht vollständig vernichtet ist.
 
 ```
 Ablauf:
-1. Zerstörte Modelle seit letztem RP → Anzahl LP der zerstörten Modelle = RP-Pool
+1. models_lost_since_last_rp → Anzahl LP der zerstörten Modelle = RP-Pool
 2. Für jedes LP im Pool: W6 würfeln → bei 5+ wird 1 LP in den "healed pool"
-3. Wenn healed_pool ≥ wounds_per_model: Modell zurückkehren, models_remaining +1,
+3. Wenn healed_pool ≥ wounds_per_model: Modell zurückgekehrt, models +1,
    current_wounds += wounds_per_model, healed_pool -= wounds_per_model
 4. Their Number Is Legion: RP-Würfe von 1 wiederholen (für Warriors)
 ```
 
-Feld `models_lost_since_last_rp` im unit_state erforderlich.
+**UI-Entscheidung (aus Session-Diskussion):**
+Option B (Halbmanuell): App zeigt wie viele Würfel, Nutzer klickt "X LP gerettet".
 
-**My Will Be Done Effekt:**
+### My Will Be Done Effekt (Strang B)
 
 ```python
 # In resolve_attack() — wenn Angreifer my_will_be_done_active:
@@ -124,28 +127,39 @@ if atk_state.get("my_will_be_done_active") and not weapon.is_melee:
     hits = sum(1 for r in hit_rolls if r >= skill - 1)  # +1 zum Trefferwurf
 ```
 
-Oder sauberer: `active_buffs: list[str]` in unit_state, den resolve_attack() liest.
+Oder sauberer: `active_buffs: list[str]` in unit_state → `resolve_attack()` liest diese.
 
-**`_unit_state()` in engine.py erweitern:**
-```python
-"my_will_be_done_active": False,
-"active_buffs": [],
-"models_lost_since_last_rp": 0,
-```
+### Neue Dateien für Ziel 3
+
+| Datei | Inhalt |
+|---|---|
+| `src/gameMechanic/shootingPhase.py` | `resolve_shooting()` + `render_actions_shooting()` |
+| `src/gameMechanic/fightPhase.py` | `resolve_fight()` + `render_actions_fight()` |
+| `tests/gameMechanic/test_shooting_phase.py` | Unit-Tests Shooting |
+| `tests/gameMechanic/test_fight_phase.py` | Unit-Tests Fight |
+| `data/wh40k_9e/necrons/stratagems.yaml` | Skeleton (Strang C) |
 
 ---
 
-## Betroffene Dateien Ziel 3 (vorläufig)
+## Offene Designfragen
 
-| Datei | Änderung |
-|---|---|
-| `src/engine.py` | `_unit_state()` um neue Felder erweitern; `resolve_attack()` liest `active_buffs` |
-| `src/gameMechanic/commandPhase.py` | My Will Be Done reset am Rundenanfang |
-| `src/gameMechanic/shootingPhase.py` | neu — RP-Trigger nach Schuss |
-| `src/gameMechanic/fightPhase.py` | neu — RP-Trigger nach Nahkampf |
-| `src/uiLayout/gameActionsArea.py` | `phase_shooting()` + `phase_fight()` delegieren |
-| `data/wh40k_9e/necrons/army.yaml` | `models_lost_since_last_rp` kein YAML-Feld (nur state) |
-| Tests: 3–4 neue Dateien | |
+1. **RP-UI** (Ziel 3): Bestätigt: Option B — App zeigt Würfelanzahl, Nutzer bestätigt X gerettete LP.
+
+2. **My Will Be Done Reset**: Am Start der nächsten Command Phase zurücksetzen
+   → in `resolve_command_start()` oder `_reset_turn_state()`.
+
+3. **Command Protocols** (Ziel 4): 5 Protokolle, 2 Direktiven je, 1 pro Runde aktiv.
+   Benötigt eigene YAML + UI.
+
+4. **Stratagem-System** (Ziel 4 / Strang C): CP-Kosten, Timing-Bedingungen.
+   Datenmodell `gameObjects/stratagem.py` ist fertig. YAML + Loader fehlen noch.
+
+5. **Phase-Stage-Logik** (Ziel 3+): `phase_stage` ist im session_state vorhanden.
+   Die tatsächliche Weiter-Button-Logik (Start → Active → End) ist noch nicht implementiert.
+   Wird in Ziel 3 benötigt (RP triggert am Ende der Shooting/Fight-Phase).
+
+6. **Setup-Screen** (mittelfristig): Formales Setup mit Spielgröße, Missionstyp, OVP/OCP.
+   Aktuell: einfacher Setup-Screen mit First-Player-Auswahl + Deployment.
 
 ---
 
@@ -159,25 +173,7 @@ Oder sauberer: `active_buffs: list[str]` in unit_state, den resolve_attack() lie
 | Ziel 1A — uiLayout/ Struktursplit | ✅ fertig |
 | Ziel 1B — gameObjects/ Foundation | ✅ fertig |
 | Bug-Fixes + Engine-Tests | ✅ fertig |
-| **Ziel 2 — commandPhase + Ability-System** | ✅ fertig (73 Tests grün) |
+| Ziel 2 — commandPhase + Ability-System | ✅ fertig (73 Tests grün) |
+| **Architektur-Update** — UI-Refactoring, Farben, Stratagem-Modell, Prozessdoku | ✅ fertig |
 | **Ziel 3 — Shooting + Fight (RP, MWBD-Effekt)** | ⏳ nächster Schritt |
 | Ziel 4 — Command Protocols + Stratagems | ⬜ später |
-
----
-
-## Offene Designfragen
-
-1. **RP-UI** (Ziel 3): Wie viel automatisieren? Optionen:
-   - A) Vollautomatisch: App würfelt, zeigt Ergebnis, updated state
-   - B) Halbmanuell: App zeigt wie viele Würfel, Nutzer klickt "X LP gerettet"
-   - C) Nur Logging: Nutzer macht alles manuell, App trackt nur model count
-   → Empfehlung: B (Kompromiss, funktioniert auch ohne exakte Würfelanzahl)
-
-2. **My Will Be Done Reset**: Am Ende jeder Command Phase zurücksetzen, oder am Ende
-   des Turns? → Regeltext: "bis zum Start der nächsten Befehlsphase" → Reset in
-   `_reset_turn_state()` ODER am Start der nächsten Command Phase.
-
-3. **Command Protocols** (Ziel 4): 5 Protokolle, 2 Direktiven je, 1 pro Runde aktiv.
-   Benötigt eigene YAML + UI.
-
-4. **Stratagem-System** (Ziel 4): CP-Kosten, Timing-Bedingungen, `gameObjects/stratagem.py`.
