@@ -275,7 +275,8 @@ Typical army: 1 detachment. Large games (Onslaught): up to 3+ detachments.
 
 ## 7. gameActionsArea
 
-Center column. Three sections stacked vertically. Highest dynamic of all components.
+Center column, upper section. Two sections stacked vertically. Highest dynamic of all components.
+The `gameProtocoll` panel (Section 8) is rendered **below** this area as a separate component.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -289,10 +290,7 @@ Center column. Three sections stacked vertically. Highest dynamic of all compone
 │  gameActionDisplayArea (full width)                                     │
 │  Combined view of all effects (including passive auras).               │
 │  Modifier chain → final result. Phase rules text + attack summary.     │
-├────────────────────────────────────────────────────────────────────────┤
-│  [📋 Command Protocol]  [⚔️ Stratagems]                                 │
-│  Tab 1: round/phase log navigator                                      │
-│  Tab 2: GO list with visibility logic                                  │
+│  Setup: unit datasheet when a unit is selected.                        │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -313,7 +311,7 @@ Center column. Three sections stacked vertically. Highest dynamic of all compone
 
 | Phase | firstPlayerArea | secondPlayerArea | displayArea |
 |-------|-----------------|------------------|-------------|
-| setup | — | — | first-player selection + deployment instructions |
+| setup | — | — | unit datasheet (when unit selected) or setup instructions |
 | command | selected unit + ability buttons + heal | reactions / — | Living Metal results, CP |
 | movement | move type buttons + M" value | — | phase rules |
 | psychic | PSYKER + power + roll | target + deny | phase rules |
@@ -321,6 +319,17 @@ Center column. Three sections stacked vertically. Highest dynamic of all compone
 | charge | charge declaration + 2D6 | overwatch reaction | phase rules |
 | fight | melee attacker + weapons + wound buttons | defender + wound buttons | fight summary |
 | morale | morale test + result | — | phase rules |
+
+### Setup — unit datasheet in displayArea
+
+During Setup, clicking a unit name (via the selector button) shows that unit's full datasheet
+in the `gameActionDisplayArea`. This lets players review unit profiles before the game starts.
+
+**Datasheet content:** stats table (M · T · Sv · W · ++ · Ld · OC), weapon profiles with
+all attributes, keyword list, ability rule texts.
+
+The selector button in unitCard is active in setup phase for this purpose (unlike normal phases
+where it drives game actions). Deployment selectbox remains on the unitCard as before.
 
 ### Phase stages
 
@@ -337,33 +346,89 @@ The → arrow advances through stages first, then to the next phase (see [proces
 
 ## 8. gameProtocoll
 
-Center column, lower section. Collapsible. Shows the event log filtered by round and phase.
+Center column, lower section. Tabbed panel — two views, switchable.
+One view is never needed while using the other, so tabs are the right pattern.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  gameProtocoll                          [▼ collapse]     │
+│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
 │  ──────────────────────────────────────────────────────  │
-│  [Setup] │ [R1 ▼] │ [R2 ▼] │ [R3 ▼] │ ...              │
-│                [com] [mov] [psy] [sho] [cha] [fig] [mor] │
-│  ──────────────────────────────────────────────────────  │
-│  · log entry ...                                         │
-│  · log entry ...                                         │
-│  · ...                                                   │
-│                                      [⬇ Download log]   │
+│  (active tab content below)                              │
 └──────────────────────────────────────────────────────────┘
 ```
 
-### Navigation model
+---
+
+### 8a. Tab 1 — Command Protocol
+
+Shows the event log filtered by round and phase.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
+│  ──────────────────────────────────────────────────────  │
+│  Round 2  ·  Phase: Shooting                             │
+│  Active player: Necrons                                  │
+│  ──────────────────────────────────────────────────────  │
+│  [Setup] │ [R1 ▼] │ [R2 ▼] │ ...                        │
+│          [com] [mov] [psy] [sho] [cha] [fig] [mor]       │
+│  ──────────────────────────────────────────────────────  │
+│  · log entry ...                                         │
+│  · log entry ...                                         │
+│  · ...                                        [⬇ log]   │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### Navigation model
 
 - Top row: clickable round tabs — `[Setup]` `[R1]` `[R2]` `[R3]` ...
-- Sub-row: phase tabs for the selected round — `[com]` `[mov]` `[psy]` `[sho]` `[cha]` `[fig]` `[mor]`
+- Sub-row: phase tabs for the selected round — `[com]` `[mov]` ... `[mor]`
 - Clicking navigates the log view (read-only for past turns).
 
-### Immutability rules
+#### Immutability rules
 
-- **Within the current turn:** Navigating back to a previous phase shows its log and allows corrections (e.g., wrong move type, missed VP/CP adjustment). The log for that phase is still writable.
+- **Within the current turn:** Log for the current phase is still writable (corrections allowed).
 - **After a turn ends:** All log entries for that turn are frozen. No changes possible.
 - Enforcement is in `gameMechanic/protocol.py`.
+
+---
+
+### 8b. Tab 2 — Stratagems (Gefechtsoption / GO)
+
+Shows all Stratagems available to either player, filtered by current phase and conditions.
+No scrolling between both players' GOs is needed — the tab shows both.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
+│  ──────────────────────────────────────────────────────  │
+│  Necrons · CP: 4                                         │
+│  ──────────────────────────────────────────────────────  │
+│  [GO name]  CP 1                           [Use]         │  ← clickable
+│  [GO name]  CP 2                           [—]           │  ← greyed: CP insufficient
+│  [GO name]  CP 1  ✓ used                   [—]           │  ← greyed: used this phase
+│  ──────────────────────────────────────────────────────  │
+│  Orks · CP: 2                                            │
+│  [GO name]  CP 1  (reaction)               [Use]         │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### GO visibility rules (see also `docs/processes.md P-06`)
+
+| Display state | Condition |
+|---------------|-----------|
+| shown, **clickable** | conditions met + CP ≥ cost + not yet used this phase |
+| shown, **greyed** | conditions met + CP insufficient |
+| shown, **greyed** | conditions met + already used this phase |
+| **not shown** | conditions not met (wrong phase, stage, or keywords) |
+
+#### GO properties (from `gameObjects/stratagem.py`)
+
+Each GO has: `phase`, `stage` (start/active/end), `player` (active/inactive/both),
+`cp_cost`, `conditions` (keyword list), `once_per_phase`.
+
+The `player` field determines who can see and use the GO — a reactive GO (`player: "inactive"`)
+only appears for the non-active player and allows them to respond to the active player's action.
 
 ### What is logged per phase (TBD — to be defined as each phase is implemented)
 

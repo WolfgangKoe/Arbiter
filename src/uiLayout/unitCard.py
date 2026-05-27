@@ -72,7 +72,18 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
 
     # ── Name / Selector Button ─────────────────────────────────
     if phase_key == "setup":
-        st.markdown(f"**{unit.name_en}**")
+        # In setup: selector triggers datasheet display in gameActionDisplayArea
+        sel = st.session_state.selected_unit
+        is_sel = sel == (faction, uid)
+        label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
+        if st.button(
+            label,
+            key=f"sel_{faction}_{uid}",
+            type="primary" if is_sel else "secondary",
+            use_container_width=True,
+        ):
+            st.session_state.selected_unit = None if is_sel else (faction, uid)
+            st.rerun()
 
     elif is_active:
         sel = st.session_state.selected_unit
