@@ -92,6 +92,16 @@ Each file exports one render function: `render_<component>(props) -> None`.
 Components receive all data as arguments — no direct `st.session_state` reads inside components.
 No game logic in this layer.
 
+**gameActionsArea.py** is structured in three internal sections (see `docs/ui_layout.md §7`):
+1. `firstPlayerArea` | `secondPlayerArea` — 50/50 split; main interaction surface per player.
+2. `gameActionDisplayArea` — full-width combined effect view (passive, no buttons).
+3. `gameProtocoll` tabs — CommandProtocol log | Stratagems GO list.
+
+**unitCard.py** — single selector button per card. No expander, no stats table, no wound buttons.
+- Own unit: click = select (`selected_unit`)
+- Enemy unit: click = designate target (`selected_target`) in shooting/charge/fight phases
+- Wound adjustment buttons live in the PlayerArea of gameActionsArea, not on the card.
+
 ### gameObjects/
 
 Pure Python dataclasses. No Streamlit. No session_state.
@@ -176,6 +186,32 @@ class FactionProperty:
     applies_to_keyword: str | None   # e.g., "Living Metal" — only units with this keyword
 ```
 
+### Stratagem (Gefechtsoption / GO)
+
+```python
+@dataclass(frozen=True)
+class Stratagem:
+    id: str
+    name_en: str
+    cp_cost: int                              # 0 = free
+    phase: str                                # "command" | "movement" | ...
+    stage: Literal["start", "active", "end"]  # phase stage when it may be used
+    player: Literal["active", "inactive", "both"]
+    conditions: list[str]                     # keyword conditions for eligibility
+    rule_text: str
+    once_per_phase: bool = True
+```
+
+GO visibility (see `docs/processes.md P-06` and `gameObjects/stratagem.py`):
+
+| State | Condition |
+|-------|-----------|
+| shown, clickable | conditions met + CP ≥ cost + not yet used this phase |
+| shown, greyed | conditions met, but CP < cost OR already used this phase |
+| hidden | conditions not met |
+
+---
+
 **Example — Necron Living Metal:**
 ```yaml
 id: necrons.faction.living_metal
@@ -245,21 +281,36 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
         "p2": { ... },  # same structure
     },
 
+    # Phase stage (within the current phase)
+    "phase_stage":   Literal["start", "active", "end"],
+
+    # Active effect waiting for player confirmation (None when no effect is pending)
+    # Set by gameMechanic phase modules; cleared after player confirms.
+    "active_effect": dict | None,    # e.g. {"type": "heal", "target": uid, "amount": 1}
+
     # Unit runtime state (keyed by unit.id)
     "unit_state": {
         "<unit_id>": {
-            "wounds_remaining":   int,
-            "models_remaining":   int,
-            "deployment_status":  Literal["on_field", "reserve", "destroyed"],
-            "movement_status":    Literal["stationary", "moved", "advanced", "fell_back"],
-            "charged_this_turn":  bool,
-            "acted_this_phase":   bool,
-            "in_melee":           bool,
+            "current_wounds":             int,
+            "models":                     int,
+            "destroyed":                  bool,
+            "movement_status":            Literal["stationary", "normal", "advanced", "retreated"],
+            "in_melee":                   bool,
+            "in_reserve":                 bool,
+            "deployment":                 Literal["normal", "stationary", "reserve"],
+            "acted_this_phase":           bool,
+            "lost_models_this_turn":      int,
+            "charged_this_turn":          bool,
+            # Ability system
+            "my_will_be_done_active":     bool,
+            "active_buffs":               list[str],
+            "models_lost_since_last_rp":  int,
         }
     },
 
     # Selection
-    "selected_units": list[str],     # list of unit_ids currently selected
+    "selected_unit":   tuple[str, str] | None,  # (faction, unit_id)
+    "selected_target": tuple[str, str] | None,  # (faction, unit_id)
 
     # Protocol
     "game_log":       list[dict],    # append-only log entries; see protocol.py
@@ -407,6 +458,21 @@ Each phase must be individually designed before implementation. Below: known rul
 **gameActionsArea:** List of eligible units + morale test button + result + models-removed display
 
 **TBD:** Insane Bravery (CP spend to auto-pass), FEARLESS keyword, ATSKNF
+
+---
+
+## Colour System
+
+Tailwind v3 palette extracts — **no Tailwind framework dependency**.
+Defined in `src/constants/colors.py`. Injected once as custom CSS in `app.py`.
+
+| Alias | Colour | Use |
+|-------|--------|-----|
+| `COLOR_ACTION` | Emerald-500 `#10b981` | Own actions and positive effects |
+| `COLOR_STATUS` | Neutral-400 `#a3a3a3` | Neutral status information |
+| `COLOR_WARNING` | Amber-500 `#f59e0b` | Enemy presence, caution |
+| `COLOR_CRITICAL` | Red-500 `#ef4444` | Critical buttons and danger info |
+| `COLOR_EFFECT` | Blue-500 `#3b82f6` | Abilities, guidelines, passive effects |
 
 ---
 

@@ -10,6 +10,7 @@ abilities:
     trigger:
       timing: phase_any
       phase: command
+      stage: active
       player: active
     conditions:
       - has_keywords: [Core]
@@ -29,6 +30,7 @@ abilities:
     trigger:
       timing: phase_any
       phase: command
+      stage: active
       player: active
     conditions:
       - within_inches: 6

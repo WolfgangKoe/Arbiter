@@ -10,6 +10,7 @@ subfactions:
         trigger:
           timing: persistent
           phase: any
+          stage: active
           player: either
         conditions: []
         effect:

@@ -168,6 +168,10 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         "acted_this_phase": False,
         "lost_models_this_turn": 0,
         "charged_this_turn": False,
+        # Ability system
+        "my_will_be_done_active": False,
+        "active_buffs": [],
+        "models_lost_since_last_rp": 0,
     }
 
 
@@ -185,6 +189,10 @@ def init_state() -> None:
     st.session_state.selected_unit = None
     st.session_state.selected_target = None
     st.session_state.resurrection_orb_used = False
+    # Phase stage: "start" | "active" | "end"
+    st.session_state.phase_stage = "active"
+    # Active effect waiting for player confirmation (None when no effect pending)
+    st.session_state.active_effect = None
     st.session_state.necron_units = {u.id: _unit_state(u) for u in _NECRON_UNITS}
     st.session_state.ork_units = {u.id: _unit_state(u) for u in _ORK_UNITS}
 

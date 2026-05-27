@@ -10,9 +10,9 @@
 Three-column layout with a fixed top header. Each column scrolls independently.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────────────┐
 │                              gameHeader                                      │
-├──────────────────────┬──────────────────────────────┬───────────────────────┤
+├──────────────────────┬───────────────────────────────┬───────────────────────┤
 │   firstPlayer        │      gameActionsArea          │   secondPlayer        │
 │   (armyList)         │      (phase-dependent)        │   (armyList)          │
 │                      │                               │                       │
@@ -22,8 +22,8 @@ Three-column layout with a fixed top header. Each column scrolls independently.
 │  ┌────────────────┐  │                               │  ┌─────────────────┐  │
 │  │detachmentCard  │  │                               │  │ detachmentCard  │  │
 │  │  ┌──────────┐  │  │───────────────────────────────│  │  ┌───────────┐  │  │
-│  │  │ unitCard │  │  │       gameProtocoll            │  │  │ unitCard  │  │  │
-│  │  └──────────┘  │  │       (collapsible)            │  │  └───────────┘  │  │
+│  │  │ unitCard │  │  │       gameProtocoll           │  │  │ unitCard  │  │  │
+│  │  └──────────┘  │  │       (collapsible)           │  │  └───────────┘  │  │
 │  │  ┌──────────┐  │  │                               │  │  ┌───────────┐  │  │
 │  │  │ unitCard │  │  │                               │  │  │ unitCard  │  │  │
 │  │  └──────────┘  │  │                               │  │  └───────────┘  │  │
@@ -31,7 +31,7 @@ Three-column layout with a fixed top header. Each column scrolls independently.
 │  ┌────────────────┐  │                               │                       │
 │  │detachmentCard  │  │                               │                       │
 │  └────────────────┘  │                               │                       │
-└──────────────────────┴──────────────────────────────┴───────────────────────┘
+└──────────────────────┴───────────────────────────────┴───────────────────────┘
 ```
 
 **Column widths:** TBD — estimate ~25% / ~50% / ~25%
@@ -275,52 +275,63 @@ Typical army: 1 detachment. Large games (Onslaught): up to 3+ detachments.
 
 ## 7. gameActionsArea
 
-Center column, upper section. Completely replaced per phase. Highest dynamic of all components.
+Center column. Three sections stacked vertically. Highest dynamic of all components.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  gameActionsArea  [phase: movementPhase]                                  │
-│  ────────────────────────────────────────────────────────────────────── │
-│                                                                          │
-│   [  PHASE-SPECIFIC CONTENT                                           ]  │
-│   [  Rendered by gameMechanic/<phase>.py                              ]  │
-│   [  Two-column layout expected for most phases (TBD per phase)       ]  │
-│   [  Container only in uiLayout — logic lives in gameMechanic         ]  │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│  firstPlayerArea (50%)        │  secondPlayerArea (50%)                 │
+│  ─────────────────────────────────────────────────────────────────────│
+│  Main interaction surface     │  Main interaction surface               │
+│  for the first player:        │  for the second player:                 │
+│  active actions + reactions   │  active actions + reactions             │
+│  + wound adjustment buttons.  │  + wound adjustment buttons.            │
+├────────────────────────────────────────────────────────────────────────┤
+│  gameActionDisplayArea (full width)                                     │
+│  Combined view of all effects (including passive auras).               │
+│  Modifier chain → final result. Phase rules text + attack summary.     │
+├────────────────────────────────────────────────────────────────────────┤
+│  [📋 Command Protocol]  [⚔️ Stratagems]                                 │
+│  Tab 1: round/phase log navigator                                      │
+│  Tab 2: GO list with visibility logic                                  │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Design principles
 
-- Content is determined by: current phase + selected unit(s) + unit keywords + faction/subfaction properties + game state.
-- `uiLayout/gameActionsArea.py` is the container. It delegates to the relevant `gameMechanic/<phase>.py` render function.
-- Two-column layout expected (e.g., attacker left / target right) but not final — designed per phase.
-- Wound-change buttons appear here when a unit is selected (not on the unitCard).
+- **PlayerAreas** are the main interaction surface for each player.
+  - Active player: action buttons for selected unit (movement, charge, fight, abilities).
+  - Inactive player: target info + reaction buttons (overwatch, stratagems, etc.).
+  - Wound adjustment buttons appear in the relevant PlayerArea when an effect targets a unit.
+  - Both players may have active buttons simultaneously (e.g. active shoots, inactive reacts).
+- **gameActionDisplayArea** is a passive combined result view — not an interaction surface.
+  Shows how all effects (including auras) interact and what the final outcome is.
+- `uiLayout/gameActionsArea.py` owns the layout. Phase logic is delegated to
+  `gameMechanic/<phase>.py` render functions.
+- Wound-change buttons are **not** on the unitCard — they live in the PlayerArea.
 
-### Conceptual base value modification pattern (from sketch)
+### Per-phase content
 
-When a combat roll is involved:
+| Phase | firstPlayerArea | secondPlayerArea | displayArea |
+|-------|-----------------|------------------|-------------|
+| setup | — | — | first-player selection + deployment instructions |
+| command | selected unit + ability buttons + heal | reactions / — | Living Metal results, CP |
+| movement | move type buttons + M" value | — | phase rules |
+| psychic | PSYKER + power + roll | target + deny | phase rules |
+| shooting | attacker + weapon profiles + wound buttons | target T/Sv/++ + wound buttons | attack summary |
+| charge | charge declaration + 2D6 | overwatch reaction | phase rules |
+| fight | melee attacker + weapons + wound buttons | defender + wound buttons | fight summary |
+| morale | morale test + result | — | phase rules |
 
-```
-[unit profile]    ±  modifier    =   [ result ]
-[weapon profile]
-────────────────────────────────────────────────
-ability / inform.:   [+1]   [−1]
-```
+### Phase stages
 
-### Per-phase content sketch
+Each phase has three stages: **start → active → end**.
+The → arrow advances through stages first, then to the next phase (see [processes.md P-03](processes.md)).
 
-| Phase | Left area | Right area |
-|-------|-----------|------------|
-| command | selected unit + active abilities | heal preview, CP options |
-| movement | selected unit + move type options + M" value | reserve deploy (if applicable) |
-| psychic | PSYKER unit + power selector + roll | target unit + deny attempt |
-| shooting | attacker + weapon profile(s) + hit modifier | target unit + toughness/save + damage |
-| charge | selected unit + 2D6 roll trigger + range check | target unit(s) within 12" |
-| fight | active melee unit + weapon profiles + KG modifier | target unit + save + damage |
-| morale | units with model losses + D6+losses vs Ld | test result, models removed |
-
-> Each phase must be individually designed before implementation. This is a free canvas until then.
+| Stage  | Typical effects                                              |
+|--------|--------------------------------------------------------------|
+| start  | Automatic triggers: Living Metal, CP gain, protocol select   |
+| active | Manual player actions: movement, shooting, fight, abilities  |
+| end    | Reactive triggers: Reanimation Protocols, morale tests       |
 
 ---
 
