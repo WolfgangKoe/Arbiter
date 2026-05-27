@@ -99,11 +99,12 @@ def _inactive_target_stats(
 
 
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Display area — attack reference when attacker and target are selected."""
+    """Display area — attack reference when attacker and a target are selected."""
     sel = st.session_state.selected_unit
-    tgt = st.session_state.selected_target
-    if sel and tgt:
-        _display_attack_summary(sel, tgt, phase_key="shooting")
+    tgts: list[tuple[str, str]] = st.session_state.selected_targets
+    if sel and tgts:
+        # Show reference for the first selected target (Ziel 3c will handle per-weapon targeting).
+        _display_attack_summary(sel, tgts[0], phase_key="shooting")
         return
     st.info(PHASE_RULES["shooting"])
 

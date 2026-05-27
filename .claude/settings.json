@@ -6,7 +6,14 @@
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/engine.py src/uiLayout/unitCard.py tests/engine/)",
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter commit -m ' *)",
       "Bash(find /home/wolfgang/Dokumente/Arbiter -name \"*.md\" | sort && find /home/wolfgang/Dokumente -name \"schlachtrunden.md\" 2>/dev/null)",
-      "Read(//home/wolfgang/Dokumente/**)"
+      "Read(//home/wolfgang/Dokumente/**)",
+      "Bash(pkill -f \"streamlit\")",
+      "Bash(nohup streamlit run src/app.py --server.port 8501 --server.headless true)",
+      "Bash(xvfb-run -a google-chrome --headless --disable-gpu --no-sandbox --screenshot=/tmp/arbiter_screenshot.png --window-size=1400,900 --virtual-time-budget=5000 http://localhost:8501)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(DISPLAY=:0 google-chrome --headless=new --disable-gpu --no-sandbox --screenshot=/tmp/arbiter_screenshot.png --window-size=1400,900 http://localhost:8501)",
+      "Bash(DISPLAY=:0 google-chrome --headless=new --disable-gpu --no-sandbox --screenshot=/tmp/arbiter_screenshot2.png --window-size=1400,900 --virtual-time-budget=8000 http://localhost:8501)",
+      "Bash(curl -s http://localhost:8501/healthz)"
     ]
   }
 }

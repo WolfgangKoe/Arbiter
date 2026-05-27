@@ -46,6 +46,8 @@ def _unit_state_dict() -> dict:
         "in_reserve": False,
         "deployment": "stationary",
         "lost_models_this_turn": 0,
+        "movement_choice": None,
+        "melee_with": [],
         "turn_flags": {
             "advanced": False,
             "retreated": False,
@@ -420,7 +422,7 @@ def _phase_session(phase_idx: int, active: str, round_num: int = 1, cp: dict | N
         round=round_num,
         cp=cp if cp is not None else {"Necrons": 4, "Orks": 4},
         selected_unit=None,
-        selected_target=None,
+        selected_targets=[],
         necron_units={"u1": _unit_state_dict()},
         ork_units={"u2": _unit_state_dict()},
     )
@@ -460,17 +462,17 @@ def test_next_phase_does_not_award_cp_on_player_switch() -> None:
     assert session["cp"]["Orks"] == 4
 
 
-def test_next_phase_resets_selected_unit_and_target() -> None:
+def test_next_phase_resets_selected_unit_and_targets() -> None:
     session = _make_session(
         phase_idx=1,
         active="Necrons",
         round=1,
         cp={"Necrons": 4, "Orks": 4},
         selected_unit=("Necrons", "wh40k_9e.necrons.unit.overlord"),
-        selected_target=("Orks", "wh40k_9e.orks.unit.big_mek"),
+        selected_targets=[("Orks", "wh40k_9e.orks.unit.big_mek")],
         necron_units={"u1": _unit_state_dict()},
         ork_units={"u2": _unit_state_dict()},
     )
     next_phase()
     assert session["selected_unit"] is None
-    assert session["selected_target"] is None
+    assert session["selected_targets"] == []

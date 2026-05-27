@@ -70,6 +70,8 @@ PHASE_RULES: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
+    "NORMAL": ("#4a7a4a", "#101810"),
+    "STATIONARY": ("#6b5f44", "#1c1a14"),
     "ADVANCED": ("#c9a84c", "#2e2618"),
     "RETREATED": ("#8b1a1a", "#1e1010"),
     "IN MELEE": ("#cc6644", "#2a1810"),
@@ -80,7 +82,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
 
 
 def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
-    """Generate HTML state badges from turn_flags and persistent state."""
+    """Generate HTML state badges from movement_choice, turn_flags and persistent state."""
 
     def _badge(text: str) -> str:
         fg, bg = _BADGE_COLORS.get(text, ("#c9a84c", "#2e2618"))
@@ -91,11 +93,20 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
         )
 
     parts: list[str] = []
+
+    # Movement badge — single-choice per turn, None means not yet moved.
+    _MOVEMENT_BADGE: dict[str, str] = {
+        "normal": "NORMAL",
+        "stationary": "STATIONARY",
+        "advanced": "ADVANCED",
+        "retreated": "RETREATED",
+    }
+    mc = unit_state.get("movement_choice")
+    if mc in _MOVEMENT_BADGE:
+        parts.append(_badge(_MOVEMENT_BADGE[mc]))
+
+    # Combat badges from turn_flags / persistent state.
     flags = unit_state.get("turn_flags", {})
-    if flags.get("advanced"):
-        parts.append(_badge("ADVANCED"))
-    if flags.get("retreated"):
-        parts.append(_badge("RETREATED"))
     if flags.get("charged"):
         parts.append(_badge("CHARGED"))
     elif unit_state.get("in_melee"):
@@ -191,18 +202,20 @@ def render_player_column(
             st.caption("← Select a unit from your army list.")
 
     else:
-        tgt = st.session_state.selected_target
-        if tgt and tgt[0] == faction:
-            _, uid = tgt
-            unit, unit_state = lookup(faction, uid)
-            badges = state_badges_html(unit_state)
-            st.markdown(f"*{unit.name_en}* ← Target")
-            if badges:
-                st.markdown(badges, unsafe_allow_html=True)
-            if inactive_content is not None:
-                inactive_content(faction, uid, unit, unit_state)
-            st.divider()
-            wound_adjustment_buttons(faction, uid, unit)
+        targets: list[tuple[str, str]] = st.session_state.selected_targets
+        matching = [t for t in targets if t[0] == faction]
+        if matching:
+            for tgt in matching:
+                _, uid = tgt
+                unit, unit_state = lookup(faction, uid)
+                badges = state_badges_html(unit_state)
+                st.markdown(f"*{unit.name_en}* ← Target")
+                if badges:
+                    st.markdown(badges, unsafe_allow_html=True)
+                if inactive_content is not None:
+                    inactive_content(faction, uid, unit, unit_state)
+                st.divider()
+                wound_adjustment_buttons(faction, uid, unit)
         elif st.session_state.get("selected_unit"):
             st.caption(no_target_caption)
         else:

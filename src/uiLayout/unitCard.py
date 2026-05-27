@@ -38,13 +38,24 @@ def _badge(text: str) -> str:
     )
 
 
+_MOVEMENT_BADGE: dict[str, str] = {
+    "normal": "NORMAL",
+    "stationary": "STATIONARY",
+    "advanced": "ADVANCED",
+    "retreated": "RETREATED",
+}
+
+
 def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     parts: list[str] = []
+
+    # Movement badge — single-choice per turn, None means not yet moved.
+    mc = state.get("movement_choice")
+    if mc in _MOVEMENT_BADGE:
+        parts.append(_badge(_MOVEMENT_BADGE[mc]))
+
+    # Combat badges.
     flags = state.get("turn_flags", {})
-    if flags.get("advanced"):
-        parts.append(_badge("ADVANCED"))
-    if flags.get("retreated"):
-        parts.append(_badge("RETREATED"))
     if flags.get("charged"):
         parts.append(_badge("CHARGED"))
     elif state.get("in_melee"):
@@ -93,14 +104,14 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
             disabled=in_reserve,
         ):
             st.session_state.selected_unit = None if is_sel else (faction, uid)
-            st.session_state.selected_target = None
+            st.session_state.selected_targets = []  # clear targets on unit switch
             st.rerun()
 
     else:
         # Inactive player — target selector for relevant phases
         if phase_key in _TARGET_PHASES:
-            tgt = st.session_state.selected_target
-            is_tgt = tgt == (faction, uid)
+            tgts: list[tuple[str, str]] = st.session_state.selected_targets
+            is_tgt = (faction, uid) in tgts
             label = f"◀ {unit.name_en}" if is_tgt else f"▷ {unit.name_en}"
             if st.button(
                 label,
@@ -109,7 +120,12 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                 use_container_width=True,
                 disabled=in_reserve,
             ):
-                st.session_state.selected_target = None if is_tgt else (faction, uid)
+                new_tgts = list(tgts)
+                if is_tgt:
+                    new_tgts.remove((faction, uid))
+                else:
+                    new_tgts.append((faction, uid))
+                st.session_state.selected_targets = new_tgts
                 st.rerun()
         else:
             st.markdown(f"**{unit.name_en}**")

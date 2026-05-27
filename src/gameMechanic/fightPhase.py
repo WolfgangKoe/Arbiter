@@ -71,12 +71,12 @@ def _active_fight(
         st.warning("Not in melee — no action possible.")
         return
 
-    tgt = st.session_state.selected_target
-    if tgt is None:
+    tgts: list[tuple[str, str]] = st.session_state.selected_targets
+    if not tgts:
         st.info("Select a **target** in melee from the enemy army list (▷).")
         return
 
-    tgt_faction, tgt_uid = tgt
+    tgt_faction, tgt_uid = tgts[0]
     tgt_unit, _ = lookup(tgt_faction, tgt_uid)
     melee = [w for w in unit.weapons if w.is_melee]
     if not melee:
@@ -107,11 +107,12 @@ def _inactive_target_stats(
 
 
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Display area — attack reference when attacker and target are selected."""
+    """Display area — attack reference when attacker and a target are selected."""
     sel = st.session_state.selected_unit
-    tgt = st.session_state.selected_target
-    if sel and tgt:
-        _display_attack_summary(sel, tgt, phase_key="fight")
+    tgts: list[tuple[str, str]] = st.session_state.selected_targets
+    if sel and tgts:
+        # Show reference for the first selected melee target.
+        _display_attack_summary(sel, tgts[0], phase_key="fight")
         return
     st.info(PHASE_RULES["fight"])
 

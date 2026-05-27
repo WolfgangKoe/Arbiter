@@ -306,5 +306,187 @@
     "unit": "Overlord",
     "action": "Resurrection Orb used",
     "timestamp": "2026-05-26T23:17:15.584208"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Necrons",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-27T23:25:34.900793"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Overlord",
+    "action": "My Will Be Done activated",
+    "timestamp": "2026-05-27T23:25:36.685398"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:13.564738"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:16.996145"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:17.758441"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:18.505849"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:26.956896"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors ×10",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-27T23:26:34.811886"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors ×10",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:37.311599"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors ×10",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-27T23:26:38.239219"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors ×10",
+    "action": "movement: stationary",
+    "timestamp": "2026-05-27T23:26:39.112437"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors ×10",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-27T23:26:40.140613"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:43.766544"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Triarch Stalker",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:26:52.685198"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Triarch Stalker",
+    "action": "movement: stationary",
+    "timestamp": "2026-05-27T23:26:53.673960"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Triarch Stalker",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-27T23:26:54.263918"
+  },
+  {
+    "round": 1,
+    "phase": "shooting",
+    "unit": "Overlord (Warlord)",
+    "action": "shot at Warboss in Mega Armour (Warlord)",
+    "timestamp": "2026-05-27T23:33:49.889706"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Warboss in Mega Armour (Warlord) — success",
+    "timestamp": "2026-05-27T23:37:30.108681"
+  },
+  {
+    "round": 1,
+    "phase": "fight",
+    "unit": "Triarch Stalker",
+    "action": "fought Boyz ×10",
+    "timestamp": "2026-05-27T23:40:22.528113"
+  },
+  {
+    "round": 1,
+    "phase": "fight",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "fought Boyz ×10",
+    "timestamp": "2026-05-27T23:40:28.138581"
+  },
+  {
+    "round": 1,
+    "phase": "fight",
+    "unit": "Overlord (Warlord)",
+    "action": "fought Warboss in Mega Armour (Warlord)",
+    "timestamp": "2026-05-27T23:40:33.145000"
+  },
+  {
+    "round": 1,
+    "phase": "fight",
+    "unit": "Overlord (Warlord)",
+    "action": "fought Big Mek in Mega Armour",
+    "timestamp": "2026-05-27T23:40:43.562462"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Orks",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-27T23:44:17.194623"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Big Mek in Mega Armour",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-27T23:44:36.695650"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "movement: retreated",
+    "timestamp": "2026-05-27T23:44:41.874339"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Boyz ×10",
+    "action": "movement: normal",
+    "timestamp": "2026-05-27T23:44:47.989523"
   }
 ]

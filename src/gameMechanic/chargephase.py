@@ -57,22 +57,27 @@ class ChargePhaseHandler:
 def _active_charge(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Render charge action for the active player's selected unit."""
+    """Render charge action for the active player's selected unit.
+
+    Supports multi-target charges (9E: one or more enemy units within 12").
+    Each target is toggled in selected_targets from the enemy army list (▷).
+    """
     flags = unit_state.get("turn_flags", {})
     if flags.get("advanced") or flags.get("retreated"):
         moved = "Advanced" if flags.get("advanced") else "Retreated"
         st.warning(f"{moved} this turn — cannot charge.")
         return
 
-    tgt = st.session_state.selected_target
-    if tgt is None:
-        st.info("Select a **target** to charge from the enemy army list (▷).")
+    tgts: list[tuple[str, str]] = st.session_state.selected_targets
+    if not tgts:
+        st.info("Select one or more **targets** to charge from the enemy army list (▷).")
         return
 
-    tgt_faction, tgt_uid = tgt
-    tgt_unit, _ = lookup(tgt_faction, tgt_uid)
-    st.markdown(f"**Target:** {tgt_unit.name_en}")
-    st.caption("Roll **2D6** — must equal or beat the distance to the target.")
+    for tgt_faction, tgt_uid in tgts:
+        tgt_unit, _ = lookup(tgt_faction, tgt_uid)
+        st.markdown(f"**Target:** {tgt_unit.name_en}")
+
+    st.caption("Roll **2D6** — must equal or beat the distance to the closest target model.")
 
     c1, c2 = st.columns(2)
     with c1:
@@ -82,23 +87,27 @@ def _active_charge(
             type="primary",
             use_container_width=True,
         ):
-            set_charged(uid, faction, tgt_uid, tgt_faction)
-            log_action(
-                st.session_state.round,
-                "charge",
-                unit.name_en,
-                f"charged {tgt_unit.name_en} — success",
-            )
-            st.session_state.selected_target = None
+            for tgt_faction, tgt_uid in tgts:
+                tgt_unit, _ = lookup(tgt_faction, tgt_uid)
+                set_charged(uid, faction, tgt_uid, tgt_faction)
+                log_action(
+                    st.session_state.round,
+                    "charge",
+                    unit.name_en,
+                    f"charged {tgt_unit.name_en} — success",
+                )
+            st.session_state.selected_targets = []
             st.rerun()
     with c2:
         if st.button("Charge Failed", key=f"charge_fail_{faction}_{uid}", use_container_width=True):
-            log_action(
-                st.session_state.round,
-                "charge",
-                unit.name_en,
-                f"charged {tgt_unit.name_en} — failed",
-            )
+            for tgt_faction, tgt_uid in tgts:
+                tgt_unit, _ = lookup(tgt_faction, tgt_uid)
+                log_action(
+                    st.session_state.round,
+                    "charge",
+                    unit.name_en,
+                    f"charged {tgt_unit.name_en} — failed",
+                )
             st.info("Charge failed — no movement.")
 
 

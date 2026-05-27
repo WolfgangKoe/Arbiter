@@ -169,6 +169,11 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         "in_reserve": False,
         "deployment": "stationary",
         "lost_models_this_turn": 0,
+        # Single-choice movement for current turn — drives display badges only.
+        # None | "normal" | "advanced" | "stationary" | "retreated"
+        "movement_choice": None,
+        # Bidirectional melee tracking: list of enemy unit-ID strings.
+        "melee_with": [],
         "turn_flags": {
             "advanced": False,
             "retreated": False,
@@ -195,7 +200,7 @@ def init_state() -> None:
     st.session_state.cp = {"Necrons": 3, "Orks": 3}
     st.session_state.vp = {"Necrons": 0, "Orks": 0}
     st.session_state.selected_unit = None
-    st.session_state.selected_target = None
+    st.session_state.selected_targets = []  # list[tuple[str, str]] — faction + uid pairs
     st.session_state.resurrection_orb_used = False
     # Phase stage: "start" | "active" | "end"
     st.session_state.phase_stage = "active"
@@ -226,14 +231,15 @@ def set_deployment(uid: str, faction: str, deployment: str) -> None:
 
 
 def set_movement_status(uid: str, faction: str, status: str) -> None:
-    """Update turn_flags based on the chosen movement type."""
+    """Update turn_flags and movement_choice based on the chosen movement type."""
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
     flags = state["turn_flags"]
     flags["advanced"] = status == "advanced"
     flags["retreated"] = status == "retreated"
+    state["movement_choice"] = status
     if status == "retreated":
-        state["in_melee"] = False
+        leave_melee(uid, faction)
 
 
 def set_in_melee(uid: str, faction: str, value: bool) -> None:
@@ -241,13 +247,45 @@ def set_in_melee(uid: str, faction: str, value: bool) -> None:
     st.session_state[key][uid]["in_melee"] = value
 
 
+def enter_melee(
+    attacker_uid: str,
+    attacker_faction: str,
+    target_uid: str,
+    target_faction: str,
+) -> None:
+    """Register both units as engaged with each other (bidirectional)."""
+    atk_key = "necron_units" if attacker_faction == "Necrons" else "ork_units"
+    tgt_key = "necron_units" if target_faction == "Necrons" else "ork_units"
+    atk_state = st.session_state[atk_key][attacker_uid]
+    tgt_state = st.session_state[tgt_key][target_uid]
+    if target_uid not in atk_state["melee_with"]:
+        atk_state["melee_with"].append(target_uid)
+    if attacker_uid not in tgt_state["melee_with"]:
+        tgt_state["melee_with"].append(attacker_uid)
+    atk_state["in_melee"] = True
+    tgt_state["in_melee"] = True
+
+
+def leave_melee(uid: str, faction: str) -> None:
+    """Remove unit from melee — cleans up both sides of every engagement."""
+    own_key = "necron_units" if faction == "Necrons" else "ork_units"
+    enemy_key = "ork_units" if faction == "Necrons" else "necron_units"
+    state = st.session_state[own_key][uid]
+    for enemy_uid in list(state["melee_with"]):
+        enemy_state = st.session_state[enemy_key].get(enemy_uid)
+        if enemy_state is not None:
+            if uid in enemy_state["melee_with"]:
+                enemy_state["melee_with"].remove(uid)
+            if not enemy_state["melee_with"]:
+                enemy_state["in_melee"] = False
+    state["melee_with"] = []
+    state["in_melee"] = False
+
+
 def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
-    state = st.session_state[key][uid]
-    state["turn_flags"]["charged"] = True
-    state["in_melee"] = True
-    tgt_key = "necron_units" if target_faction == "Necrons" else "ork_units"
-    st.session_state[tgt_key][target_uid]["in_melee"] = True
+    st.session_state[key][uid]["turn_flags"]["charged"] = True
+    enter_melee(uid, faction, target_uid, target_faction)
 
 
 def reset_turn_flags(uid: str, faction: str) -> None:
@@ -291,6 +329,7 @@ def _reset_turn_state() -> None:
             for flag in flags:
                 flags[flag] = False
             state["lost_models_this_turn"] = 0
+            state["movement_choice"] = None
 
 
 def next_phase() -> None:
@@ -313,4 +352,4 @@ def next_phase() -> None:
         _reset_phase_state()
 
     st.session_state.selected_unit = None
-    st.session_state.selected_target = None
+    st.session_state.selected_targets = []

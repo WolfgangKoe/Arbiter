@@ -65,16 +65,10 @@ def _active_movement(
                 st.rerun()
         return
 
-    flags = unit_state.get("turn_flags", {})
     in_melee = unit_state.get("in_melee", False)
 
-    # Determine current display state from turn_flags
-    if flags.get("advanced"):
-        current = "advanced"
-    elif flags.get("retreated"):
-        current = "retreated"
-    else:
-        current = "none"
+    # Determine current display state from movement_choice (None = not yet moved).
+    current = unit_state.get("movement_choice") or "none"
 
     st.markdown("Set movement status:")
     cols = st.columns(4)
