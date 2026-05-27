@@ -46,6 +46,10 @@ def wound_threshold(strength: int, toughness: int) -> int:
     return 5
 
 
+# ---------------------------------------------------------------------------
+# DEPRECATED: resolve_attack() — replaced by gameMechanic/combat.py (Ziel 3b).
+# Do not extend this function. It will be removed in Ziel 3c.
+# ---------------------------------------------------------------------------
 def resolve_attack(
     attacker: Unit,
     atk_state: dict,  # type: ignore[type-arg]
@@ -161,13 +165,17 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         "current_wounds": u.wounds * u.models_max,
         "models": u.models_max,
         "destroyed": False,
-        "movement_status": "stationary",
         "in_melee": False,
         "in_reserve": False,
         "deployment": "stationary",
-        "acted_this_phase": False,
         "lost_models_this_turn": 0,
-        "charged_this_turn": False,
+        "turn_flags": {
+            "advanced": False,
+            "retreated": False,
+            "charged": False,
+            "shot": False,
+            "fought": False,
+        },
         # Ability system
         "my_will_be_done_active": False,
         "active_buffs": [],
@@ -218,10 +226,12 @@ def set_deployment(uid: str, faction: str, deployment: str) -> None:
 
 
 def set_movement_status(uid: str, faction: str, status: str) -> None:
+    """Update turn_flags based on the chosen movement type."""
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
-    state["movement_status"] = status
-    state["acted_this_phase"] = True
+    flags = state["turn_flags"]
+    flags["advanced"] = status == "advanced"
+    flags["retreated"] = status == "retreated"
     if status == "retreated":
         state["in_melee"] = False
 
@@ -234,11 +244,18 @@ def set_in_melee(uid: str, faction: str, value: bool) -> None:
 def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
-    state["charged_this_turn"] = True
+    state["turn_flags"]["charged"] = True
     state["in_melee"] = True
-    state["acted_this_phase"] = True
     tgt_key = "necron_units" if target_faction == "Necrons" else "ork_units"
     st.session_state[tgt_key][target_uid]["in_melee"] = True
+
+
+def reset_turn_flags(uid: str, faction: str) -> None:
+    """Reset all turn_flags for a single unit — called at turn start."""
+    key = "necron_units" if faction == "Necrons" else "ork_units"
+    flags = st.session_state[key][uid]["turn_flags"]
+    for flag in flags:
+        flags[flag] = False
 
 
 def log_action(round_num: int, phase: str, unit_name: str, action: str) -> None:
@@ -264,18 +281,16 @@ def log_action(round_num: int, phase: str, unit_name: str, action: str) -> None:
 
 
 def _reset_phase_state() -> None:
-    for key in ("necron_units", "ork_units"):
-        for state in st.session_state[key].values():
-            state["acted_this_phase"] = False
+    pass  # Phase-level flags moved to turn_flags — reset at turn start only.
 
 
 def _reset_turn_state() -> None:
     for key in ("necron_units", "ork_units"):
         for state in st.session_state[key].values():
-            state["movement_status"] = "stationary"
-            state["acted_this_phase"] = False
+            flags = state["turn_flags"]
+            for flag in flags:
+                flags[flag] = False
             state["lost_models_this_turn"] = 0
-            state["charged_this_turn"] = False
 
 
 def next_phase() -> None:

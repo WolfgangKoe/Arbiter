@@ -40,21 +40,17 @@ def _badge(text: str) -> str:
 
 def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     parts: list[str] = []
-    ms = state.get("movement_status", "stationary")
-    if ms == "advanced":
+    flags = state.get("turn_flags", {})
+    if flags.get("advanced"):
         parts.append(_badge("ADVANCED"))
-    elif ms == "stationary":
-        parts.append(_badge("STATIONARY"))
-    elif ms == "retreated":
+    if flags.get("retreated"):
         parts.append(_badge("RETREATED"))
-    if state.get("charged_this_turn"):
+    if flags.get("charged"):
         parts.append(_badge("CHARGED"))
     elif state.get("in_melee"):
         parts.append(_badge("IN MELEE"))
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
-    if state.get("acted_this_phase"):
-        parts.append(_badge("ACTED"))
     return "".join(parts)
 
 

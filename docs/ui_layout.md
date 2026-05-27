@@ -128,21 +128,21 @@ One card per unit. Displayed inside a detachmentCard, grouped by battlefield rol
 
 ```
 ┌───────────────────────────────────────────────────────┐
-│  [unitName]  ← clickable → toggles selected state    │
-│  ─────────────────────────────────────────────────── │
+│  [unitName]  ← clickable → toggles selected state     │
+│  ──────────────────────────────────────────────────── │
 │  [keyword1] [keyword2] [keyword3] ...                 │
-│  ─────────────────────────────────────────────────── │
-│  LP  ████████████░░░░  8 / 10                         │
-│  ⬡   ████████████░░░░  8 / 10                         │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
+│  ❤  ████████████░░░░  8 / 10                          │
+│  ⬡  ████████████░░░░  8 / 10                         │
+│  ──────────────────────────────────────────────────── │
 │  [state1] [state2] ...                                │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
 │  ▼ phase area  [collapsible]                          │
-│  ┌───────────────────────────────────────────────┐   │
+│  ┌────────────────────────────────────────────────┐   │
 │  │ commandPhase:   informations, active abilities │   │
 │  │ movementPhase:  move value, allowed actions    │   │
 │  │ ...                                            │   │
-│  └───────────────────────────────────────────────┘   │
+│  └────────────────────────────────────────────────┘   │
 └───────────────────────────────────────────────────────┘
 ```
 
@@ -194,17 +194,17 @@ Groups the units of one detachment by battlefield role.
 ┌───────────────────────────────────────────────────────┐
 │  [detachmentType]  detachmentName                     │
 │  (e.g.,  "Patrol"  ·  "My Custom Name")               │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
 │  HQ                                                   │
 │    [unitCard]                                         │
 │    [unitCard]                                         │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
 │  Troops                                               │
 │    [unitCard]                                         │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
 │  Elites                                               │
 │    [unitCard]                                         │
-│  ─────────────────────────────────────────────────── │
+│  ──────────────────────────────────────────────────── │
 │  ...                                                  │
 └───────────────────────────────────────────────────────┘
 ```
@@ -280,14 +280,14 @@ The `gameProtocoll` panel (Section 8) is rendered **below** this area as a separ
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│  firstPlayerArea (50%)        │  secondPlayerArea (50%)                 │
-│  ─────────────────────────────────────────────────────────────────────│
-│  Main interaction surface     │  Main interaction surface               │
-│  for the first player:        │  for the second player:                 │
-│  active actions + reactions   │  active actions + reactions             │
-│  + wound adjustment buttons.  │  + wound adjustment buttons.            │
+│  firstPlayerArea (50%)        │  secondPlayerArea (50%)                │
+│  ──────────────────────────────────────────────────────────────────────│
+│  Main interaction surface     │  Main interaction surface              │
+│  for the first player:        │  for the second player:                │
+│  active actions + reactions   │  active actions + reactions            │
+│  + wound adjustment buttons.  │  + wound adjustment buttons.           │
 ├────────────────────────────────────────────────────────────────────────┤
-│  gameActionDisplayArea (full width)                                     │
+│  gameActionDisplayArea (full width)                                    │
 │  Combined view of all effects (including passive auras).               │
 │  Modifier chain → final result. Phase rules text + attack summary.     │
 │  Setup: unit datasheet when a unit is selected.                        │
@@ -351,7 +351,7 @@ One view is never needed while using the other, so tabs are the right pattern.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
+│  [📋 Command Protocol]  [⚔️ Stratagems]                  │
 │  ──────────────────────────────────────────────────────  │
 │  (active tab content below)                              │
 └──────────────────────────────────────────────────────────┘
@@ -365,17 +365,17 @@ Shows the event log filtered by round and phase.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
+│  [📋 Command Protocol]  [⚔️ Stratagems]                  │
 │  ──────────────────────────────────────────────────────  │
 │  Round 2  ·  Phase: Shooting                             │
 │  Active player: Necrons                                  │
 │  ──────────────────────────────────────────────────────  │
-│  [Setup] │ [R1 ▼] │ [R2 ▼] │ ...                        │
+│  [Setup] │ [R1 ▼] │ [R2 ▼] │ ...                         │
 │          [com] [mov] [psy] [sho] [cha] [fig] [mor]       │
 │  ──────────────────────────────────────────────────────  │
 │  · log entry ...                                         │
 │  · log entry ...                                         │
-│  · ...                                        [⬇ log]   │
+│  · ...                                        [⬇ log]    │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -400,7 +400,7 @@ No scrolling between both players' GOs is needed — the tab shows both.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  [📋 Command Protocol]  [⚔️ Stratagems]                   │
+│  [📋 Command Protocol]  [⚔️ Stratagems]                  │
 │  ──────────────────────────────────────────────────────  │
 │  Necrons · CP: 4                                         │
 │  ──────────────────────────────────────────────────────  │

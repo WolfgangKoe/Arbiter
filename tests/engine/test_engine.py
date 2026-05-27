@@ -42,13 +42,17 @@ def _unit_state_dict() -> dict:
         "current_wounds": 5,
         "models": 1,
         "destroyed": False,
-        "movement_status": "stationary",
         "in_melee": False,
         "in_reserve": False,
         "deployment": "stationary",
-        "acted_this_phase": False,
         "lost_models_this_turn": 0,
-        "charged_this_turn": False,
+        "turn_flags": {
+            "advanced": False,
+            "retreated": False,
+            "charged": False,
+            "shot": False,
+            "fought": False,
+        },
     }
 
 

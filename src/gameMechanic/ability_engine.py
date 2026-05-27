@@ -4,6 +4,15 @@ from gameObjects.ability import Ability
 from gameObjects.loader import load_army, load_faction_abilities, load_unit_abilities
 from gameObjects.unit import Unit
 
+# ---------------------------------------------------------------------------
+# Timing constants — used by ability triggers and phase_runner hooks
+# ---------------------------------------------------------------------------
+
+TIMING_PHASE_START = "phase_start"
+TIMING_PHASE_END = "phase_end"
+TIMING_BEFORE_UNIT_ACTS = "before_unit_acts"
+TIMING_AFTER_UNIT_ATTACKED = "after_unit_attacked"
+
 
 def check_trigger(ability: Ability, phase: str, timing: str, active_player: str) -> bool:
     t = ability.trigger

@@ -5,9 +5,11 @@ from collections.abc import Callable
 import streamlit as st
 
 from gameMechanic.ability_engine import get_triggered_abilities
+from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameObjects.ability import Ability
 from gameObjects.loader import load_army
 from gameObjects.unit import Unit
+from uiLayout._common import PHASE_RULES, lookup, state_badges_html, wound_adjustment_buttons
 
 # Resolved lazily to avoid circular imports at module load time.
 _adjust_cp: Callable | None = None
@@ -121,3 +123,57 @@ def render_actions_command(state: dict) -> None:  # type: ignore[type-arg]
             log_action(state["round"], "command", "Overlord", "Resurrection Orb used")
             st.success("Resurrection Orb used — enact Reanimation Protocols for target unit.")
             st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# PhaseHandler implementation
+# ---------------------------------------------------------------------------
+
+
+class CommandPhaseHandler:
+    """PhaseHandler for the Command Phase."""
+
+    phase_name: str = "command"
+
+    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
+        pass
+
+    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+        first: str = state["first_player"]
+        second: str = state["second_player"]
+
+        col1, col2 = st.columns(2)
+        with col1:
+            _render_command_column(first, state)
+        with col2:
+            _render_command_column(second, state)
+
+        st.divider()
+        st.info(PHASE_RULES["command"])
+
+    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
+        pass
+
+
+def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+    """Render the command phase column for one player."""
+    is_active = faction == state["active"]
+    indicator = "▶" if is_active else "◀"
+    st.markdown(f"**{indicator} {faction}**")
+
+    if is_active:
+        # Show selected unit context (badges) if any, then army-wide actions.
+        sel = st.session_state.selected_unit
+        if sel and sel[0] == faction:
+            _, uid = sel
+            unit, unit_state = lookup(faction, uid)
+            badges = state_badges_html(unit_state)
+            st.markdown(f"*{unit.name_en}*")
+            if badges:
+                st.markdown(badges, unsafe_allow_html=True)
+            st.divider()
+            wound_adjustment_buttons(faction, uid, unit)
+            st.divider()
+        render_actions_command(state)
+    else:
+        st.caption("—")
