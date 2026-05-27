@@ -44,16 +44,19 @@ src/
     loader.py                      ← YAML loader: reads faction data, resolves weapon references
 
   gameMechanic/
-    state.py                       ← session_state schema, init_state, reset_game, next_phase
-    setup.py                       ← Pre-game setup logic (army composition, game params)
-    commandPhase.py                ← Command phase: logic + gameActionsArea fill
-    movementPhase.py               ← Movement phase: logic + gameActionsArea fill
-    psychicPhase.py                ← Psychic phase: logic + gameActionsArea fill
-    shootingPhase.py               ← Shooting phase: logic + gameActionsArea fill
-    chargePhase.py                 ← Charge phase: logic + gameActionsArea fill
-    fightPhase.py                  ← Fight phase: logic + gameActionsArea fill
-    moralePhase.py                 ← Morale phase: logic + gameActionsArea fill
-    combat.py                      ← Shared: parse_dice, hit_roll, wound_roll, save_roll, damage
+    phase_handler.py               ← PhaseHandler Protocol (ABC für alle Phasen)
+    phase_runner.py                ← Zentraler Dispatcher: PHASE_REGISTRY, start→active→end-Loop,
+                                      Ability-Hook-Aufrufe an Übergängen
+    combat.py                      ← AttackSequence: Modifier, AttackParams, AttackResult,
+                                      resolve_attack_sequence, build_attack_display, s_vs_t_table
+    commandPhase.py                ← CommandPhaseHandler (PhaseHandler)
+    movementPhase.py               ← MovementPhaseHandler (PhaseHandler) — Ziel 3 Stub → Ziel 4 voll
+    psychicPhase.py                ← PsychicPhaseHandler (PhaseHandler)  — Stub → Ziel 4
+    shootingPhase.py               ← ShootingPhaseHandler (PhaseHandler)
+    chargephase.py                 ← ChargePhaseHandler (PhaseHandler)   — Stub → Ziel 4
+    fightPhase.py                  ← FightPhaseHandler (PhaseHandler)
+    moralePhase.py                 ← MoralePhaseHandler (PhaseHandler)   — Stub → Ziel 4
+    ability_engine.py              ← check_trigger, check_conditions, get_triggered_abilities
     protocol.py                    ← Log writes (append-only within turn), immutability enforcement
 
 data/
@@ -110,19 +113,46 @@ All army data flows through the loader; no hardcoded unit lists remain in the co
 
 ### gameMechanic/
 
-Each phase file exports two functions:
+#### PhaseHandler Protocol
+
+Jede Phase implementiert das `PhaseHandler`-Protocol:
 
 ```python
-def resolve_<phase>(state: dict, ...) -> dict:
-    # Pure state transition. No Streamlit.
-
-def render_actions_<phase>(state: dict, selected_units: list[str]) -> None:
-    # Fills gameActionsArea. Calls st.* here.
+class PhaseHandler(Protocol):
+    phase_name: ClassVar[str]
+    def render_start(self, state: dict) -> None: ...   # phase_start Ability-Hooks + UI
+    def render_active(self, state: dict) -> None: ...  # Hauptinteraktion
+    def render_end(self, state: dict) -> None: ...     # phase_end Ability-Hooks + UI
 ```
 
-`state.py` owns the session_state schema. All reads and writes go through helper functions there — no direct `st.session_state["key"]` access scattered across modules.
+#### PhaseRunner
 
-`combat.py` contains shared attack resolution logic (used by shooting and fight phases).
+`phase_runner.py` hält die `PHASE_REGISTRY` und ist der einzige Aufrufer von `gameActionsArea.py`:
+
+```python
+def render_current_phase(state: dict) -> None:
+    handler = PHASE_REGISTRY[state["phase"]]
+    stage   = state.get("phase_stage", "active")
+    triggered = get_triggered_abilities(state, state["phase"], f"phase_{stage}")
+    getattr(handler, f"render_{stage}")(state)
+
+def advance_stage(state: dict) -> None:
+    # start → active → end → next_phase (mit turn_flags reset)
+```
+
+Der "→ Weiter"-Button ruft ausschließlich `advance_stage()` auf.
+
+#### combat.py — Kritische Datei
+
+`combat.py` enthält die vollständige `AttackSequence`. Jede Änderung braucht grüne Tests.
+
+Kernprinzipien (nicht verhandelbar):
+- AP modifiziert den **Würfelwurf** (`effective_roll = raw + ap`), nicht den Threshold
+- Roll-Modifier für Treffer/Verwundung: `clamp(Σ, -1, +1)` — AP hat keinen Cap
+- Unmodifizierter Wurf von 1 = immer Fehler; unmodifizierter 6 = immer Treffer/Verwundung
+- Quellparameter (Stärke, Zähigkeit) werden **vor** Threshold-Ableitung aufgelöst
+
+Details: siehe `docs/processes.md P-08`.
 
 `protocol.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
 
@@ -291,20 +321,23 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
     # Unit runtime state (keyed by unit.id)
     "unit_state": {
         "<unit_id>": {
-            "current_wounds":             int,
-            "models":                     int,
-            "destroyed":                  bool,
-            "movement_status":            Literal["stationary", "normal", "advanced", "retreated"],
-            "in_melee":                   bool,
-            "in_reserve":                 bool,
-            "deployment":                 Literal["normal", "stationary", "reserve"],
-            "acted_this_phase":           bool,
-            "lost_models_this_turn":      int,
-            "charged_this_turn":          bool,
+            "current_wounds":         int,
+            "models":                 int,
+            "destroyed":              bool,
+            "in_melee":               bool,
+            "in_reserve":             bool,
+            # Turn flags — reset am Start jedes Spielerzugs (reset_turn_flags())
+            # Bestimmen Eligibility für spätere Phasen (z.B. advanced → kein Schießen)
+            "turn_flags": {
+                "advanced":   bool,   # Bewegt mit Vorrücken → kein Schießen, kein Angriff
+                "retreated":  bool,   # Rückzug → kein Schießen, kein Angriff, kein Psi
+                "charged":    bool,   # Angriff deklariert → kämpft zuerst in Nahkampfphase
+                "shot":       bool,   # Hat in dieser Phase geschossen
+                "fought":     bool,   # Hat in dieser Phase gekämpft
+            },
             # Ability system
-            "my_will_be_done_active":     bool,
-            "active_buffs":               list[str],
-            "models_lost_since_last_rp":  int,
+            "active_buffs":           list[str],  # z.B. ["my_will_be_done"]
+            "models_lost_this_turn":  int,         # für Moralphase + Ability-Trigger
         }
     },
 

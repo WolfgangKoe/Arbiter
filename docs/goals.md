@@ -68,32 +68,66 @@ Danach ist das Zusammenspiel gameMechanic ↔ gameActionsArea für alle Folgepha
 
 ---
 
-## Ziel 3 — Combat Loop: Shooting & Fight Phase ⬜
+## Ziel 3 — Combat Foundation: Phase-Infrastruktur + Attack Sequence ⬜
 
-Ziel: Vollständige Treffersequenz (Treffer → Verwundung → Rettung → Schaden) im Zentralbereich.
-Zwei Phasen auf einmal, da sie dieselbe `combat.py`-Grundlage teilen.
+Ziel: Das Fundament der Spielmechanik legen. Jede weitere Phase, jede Armee und jede Ability dockt an diese Infrastruktur an — ohne neue Code-Strukturen einzuführen.
+
+**Kern-Einsicht:** Action ≠ Phase. Die `AttackSequence` ist eine wiederverwendbare Aktion, die von der Fernkampf- *und* der Nahkampfphase (und später Overwatch in der Angriffsphase) mit unterschiedlichen Bedingungen aufgerufen wird. Abilities sind Parameter-Modifier für diese Sequenz.
 
 **Voraussetzung:** Ziel 2 abgeschlossen.
 
-- [ ] `gameMechanic/combat.py` — `hit_roll`, `wound_roll`, `save_roll`, `apply_damage` als pure functions
-- [ ] `gameMechanic/shootingPhase.py` — Logik + gameActionsArea-Layout (Angreifer | Ziel)
-- [ ] `gameMechanic/fightPhase.py` — Logik + gameActionsArea-Layout, Fights-first-Reihenfolge
-- [ ] Weapon-Profile-Anzeige aus gameObjects (kein Hardcode mehr)
-- [ ] Modifier-Buttons (+1/−1, capped ±1), Result-Anzeige
-- [ ] Log-Einträge für beide Phasen
-- [ ] Tests für combat.py + beide Phasen
+---
+
+### 3a — Phase-Infrastruktur
+
+- [ ] `gameMechanic/phase_handler.py` — `PhaseHandler` Protocol (Abstract Base für alle Phasen)
+- [ ] `gameMechanic/phase_runner.py` — zentraler Dispatcher; treibt `start → active → end` für alle Phasen; feuert Ability-Hooks an Übergängen; hält `PHASE_REGISTRY`
+- [ ] `engine.py` — `turn_flags` dict in `_unit_state()` einführen (`advanced`, `retreated`, `charged`, `shot`, `fought`); ad-hoc-Felder ersetzen; `reset_turn_flags()` für Zuganfang
+- [ ] `gameMechanic/ability_engine.py` — neue Timing-Konstanten: `before_unit_acts`, `after_unit_attacked`
+- [ ] `gameMechanic/commandPhase.py` — auf `PhaseHandler`-Protocol migrieren (`CommandPhaseHandler`)
+- [ ] `uiLayout/gameActionsArea.py` — Routing-Logik ersetzen durch `phase_runner.render_current_phase(state)`
+- [ ] 4 Stub-Handler: `movementPhase.py`, `chargephase.py`, `psychicPhase.py`, `moralePhase.py` — zeigen Phasennamen, setzen/lesen `turn_flags`, erlauben Weiterklicken
 
 ---
 
-## Ziel 4 — Restliche Phasen + Army Builder ⬜
+### 3b — Combat-Kernel (`combat.py`) — KRITISCH
 
-**Voraussetzung:** Ziel 3 abgeschlossen.
+Zentrale, army-agnostische Datei. Jede Änderung an dieser Datei **muss** von einem vollständig grünen Test-Suite abgesichert sein.
 
-### Phasen
-- [ ] `gameMechanic/movementPhase.py` — Move-Typ-Selector, Advance-Roll, Reserve-Deploy
-- [ ] `gameMechanic/chargephase.py` — Charge-Roll, Overwatch, Heroic Intervention
-- [ ] `gameMechanic/moralePhase.py` — D6 + Verluste vs. Leadership
-- [ ] `gameMechanic/psychicPhase.py` — Manifest/Deny/Perils (Scope: TBD)
+- [ ] `gameMechanic/combat.py` — Dataclasses `Modifier`, `AttackParams`, `AttackResult`; Funktionen `s_vs_t_table`, `resolve_attack_sequence`, `build_attack_display`
+- [ ] `tests/gameMechanic/test_combat.py` — **≥ 40 Tests** — vollständige Spezifikation in `next_session.md`
+
+Grundsätze:
+- `resolve_attack_sequence` nimmt **vom Spieler eingegebene Zählwerte** (physisch gewürfelt), keine Auto-Würfel
+- AP modifiziert den **Würfelwurf**, nicht den Threshold — `effective_roll = raw_roll + ap_modifier`
+- Roll-Modifier für Treffer/Verwundung **gecappt bei ±1** (9E-Regel); AP hat keinen Cap
+- Unmodifizierter 1 = immer Fehler, unmodifizierter 6 = immer Treffer/Verwundung (Sonderregel)
+- `"User"`-Stärke wird **vor** Übergabe an die Funktion aufgelöst — Funktion sieht nur `int`
+
+---
+
+### 3c — Shooting Phase + Fight Phase
+
+**Voraussetzung:** 3a und 3b vollständig und alle Tests grün.
+
+- [ ] `gameMechanic/shootingPhase.py` — `ShootingPhaseHandler`; `can_shoot(unit_state)` als pure function; Parameter aus Waffenprofil; UI: Angreifer-Waffe | Ziel-Stats | AttackDisplay | Spieler-Input
+- [ ] `gameMechanic/fightPhase.py` — `FightPhaseHandler`; Parameter aus Einheits- + Waffenprofil (A-Stat, WS, `"User"`-Auflösung); Fights-First-Reihenfolge; UI analog Shooting
+- [ ] `data/wh40k_9e/necrons/unit_abilities.yaml` — RP-Timing aktualisieren auf `after_unit_attacked` (Phase: `[shooting, fight]`, Player: `inactive`) — als **Testfall** für das Ability-Hook-System, kein Hardcode in den Phasendateien
+- [ ] `tests/gameMechanic/test_shooting_phase.py` — `can_shoot`-Fälle, Parameter-Auflösung, MWBD-Modifier
+- [ ] `tests/gameMechanic/test_fight_phase.py` — `can_fight`-Fälle, `"User"`-Stärkeauflösung, Fights-First-Reihenfolge
+- [ ] `engine.py` — alten `resolve_attack()` deprecaten/entfernen
+
+---
+
+## Ziel 4 — Phasen ausbauen + Army Builder ⬜
+
+**Voraussetzung:** Ziel 3 abgeschlossen (Infrastruktur steht, Stubs existieren).
+
+### Phasen (Stubs → vollständige Implementierung)
+- [ ] `movementPhase.py` — Move-Typ-Selector, Advance-Roll, Reserve-Deploy; `turn_flags` korrekt setzen
+- [ ] `chargephase.py` — Charge-Roll (2D6), Overwatch via `ShootingAction` mit `hit_modifier="only_6s"`
+- [ ] `moralePhase.py` — D6 + Verluste vs. Leadership
+- [ ] `psychicPhase.py` — Manifest (2D6 ≥ WC), Deny, Perils (Scope: TBD)
 
 ### Army Builder
 - [ ] Entscheidung: Datei-Import vs. In-App-Builder vs. hardcodierte Presets (TBD)
