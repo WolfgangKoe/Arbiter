@@ -345,14 +345,52 @@ RP-Trigger gehört in Schuss-, Angriffs- und Nahkampfphase (nach Feindangriff). 
 
 **Voraussetzung:** 4e abgeschlossen ✅
 
-Stub existiert bereits (`psychicPhase.py`). Necrons haben keine Psyker — die Phase wird mit
-korrekter "no PSYKER units"-Anzeige für Necrons und vollem Flow für Psyker-Armeen gebaut.
+Stub existiert bereits (`psychicPhase.py`). Necrons haben keine Psyker — die Phase zeigt
+für Necrons die korrekte "no PSYKER units"-Meldung; der volle Flow läuft für Psyker-Armeen.
 
-- [ ] PSYKER-Keyword-Check — Einheit hat kein PSYKER-Keyword → Caption "No Psyker units"
-- [ ] Manifest: Psikraft wählen → Warp-Charge-Wert anzeigen → 2D6 eingeben → Effekt beschreiben
-- [ ] Deny: gegnerischer Psyker → zweiten 2D6-Wurf eingeben → bei Übertreffen: Kraft gebannt
-- [ ] Perils of the Warp: Doppel-1/Doppel-6 → W3 Schaden an Psyker
-- [ ] Scope: Nur Schmetterschlag (Smite) als erste Psikraft implementieren
+**Test-Einheiten (in YAML einzupflegen vor Implementierung):**
+- Orks `army.yaml`: Weirdboy (PSYKER, Weirdboy Staff) + Wurrboy (PSYKER, Eyez of Mork)
+- Necrons `army.yaml`: Canoptek Spyder mit Gloom Prism (`rules: [gloom_prism]`)
+
+#### Generalisierter Psi-Flow
+
+```
+selectPsyker → selectTarget (friendly ODER enemy) → resolve_psi_power → handle_effects
+```
+
+Die Zielrichtung ist **Teil der Kraft**, nicht des Bannvorgangs:
+- **Witchfire/Smite:** feindliches Ziel → tödliche Verwundungen
+- **Blessing:** befreundetes Ziel → Buff (z.B. Bewegung, Attacken) — Scope: spätere Session
+
+#### Bannversuch — unabhängig vom Ziel
+
+Der Bannversuch reagiert auf die **Kraftanmeldung selbst**, nicht auf das Ziel.
+Eine Einheit kann bannen, wenn: PSYKER-Keyword ODER `"gloom_prism"` in `unit.rules`.
+Necron-Canoptek-Spinne mit Gloom Prism kann bannen als wäre sie ein PSYKER.
+
+```python
+def can_deny(units: list[Unit]) -> bool:
+    return any(
+        "PSYKER" in {kw.upper() for kw in u.keywords} or "gloom_prism" in u.rules
+        for u in units
+    )
+```
+
+#### Implementierungsschritte
+
+- [ ] YAML: Weirdboy + Wurrboy in `orks/army.yaml` (BSData p.85/92, PSYKER-Keyword)
+- [ ] YAML: Canoptek Spyder in `necrons/army.yaml` (`rules: [gloom_prism]`, Particle Beamer)
+- [ ] Pure functions: `has_psyker()`, `can_deny()`, `is_perils()`, `smite_damage_die()`
+- [ ] Aktive Spalte: Kein PSYKER → Caption | PSYKER + Nicht-PSYKER gewählt → Info | PSYKER → Smite-Flow
+- [ ] Smite-Manifest: 2D6 eingeben → Ergebnis prüfen (< 5 fail, ≥ 5 ok, 2/12 Perils)
+- [ ] Perils: W3-Schadenseingabe + `apply_damage(mortal=True)` am Psyker selbst
+- [ ] Inaktive Spalte: Bannversuch wenn `can_deny()` + laufendes Manifest → 2D6 > Manifestwurf
+- [ ] Smite-Bereich (unten): Zielauswahl via `selected_targets` + W3 (W6 bei Roll ≥ 11) + Apply
+- [ ] Tests: alle reinen Hilfsfunktionen in `tests/gameMechanic/test_psychic_phase.py`
+
+**Scope:** Nur Smite (WC 5) — keine weiteren Psikräfte in dieser Session.
+**Ability Engine:** Gloom Prism nicht über den Effect-Dispatcher — direkt via `unit.rules`-Check.
+  Ein neuer Effect-Typ `"deny_psychic"` wäre die saubere Lösung — Thema für Ziel 4i / Refactoring.
 
 ---
 
@@ -377,6 +415,15 @@ korrekter "no PSYKER units"-Anzeige für Necrons und vollem Flow für Psyker-Arm
 - [ ] Entscheidung: Datei-Import vs. In-App-Builder vs. hardcodierte Presets (TBD)
 - [ ] Setup-Screen: Spielgröße, Spieltyp, Armeeauswahl, Erster Spieler
 - [ ] Detachment-Slot-Constraints als Referenz im Setup anzeigen
+
+**Architektur-Entscheidung (aus Session 2026-05-28):**
+Aktuell koexistieren zwei parallele Datenschichten ohne Verbindung:
+- **Katalog** (`units.yaml`, `weapons.yaml`, `wargear.yaml`) — vollständig, nie vom App-Code gelesen
+- **Armee** (`army.yaml`) — selbstenthalten, vom Loader direkt gelesen (Daten dupliziert)
+
+Ziel für Army Builder: `army.yaml` wird zum **Roster** (welche Einheiten + Ausrüstungswahl),
+der Loader löst Einheitenwerte aus `units.yaml`/`weapons.yaml` per ID auf.
+Bis dahin: neue Einheiten weiterhin direkt in `army.yaml` pflegen.
 
 ---
 

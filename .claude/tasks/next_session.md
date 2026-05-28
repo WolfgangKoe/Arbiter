@@ -12,15 +12,15 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session gemacht wurde
 
-- Ziel 4e vollständig implementiert und committed (`291e698`):
-  - Bug-Fix: Early-Return in `_active_movement` wenn `already_retreated=True`
-  - Button-Labels: "Normal" → "Move", "Stationary" → "Stay Stationary"
-  - Buttons vertikal (kein `st.columns(4)` mehr)
-  - `_render_reinforcements_step` als eigener, immer sichtbarer Abschnitt
-  - Phasennamen im Header auf Englisch: Command, Movement, Psychic, Shooting, Charge, Fight, Morale
-  - `docs/spec/unit_states.md` komplett überarbeitet (4 Sektionen inkl. passive Spieler)
-  - 15 Integrationstests (`test_movement_transitions.py`), alle grün
-- `goals.md` + `next_session.md` aktualisiert: Psiphase vorgezogen (vor Fernkampfphase)
+- Psiphase vollständig geplant (kein Code geschrieben — nur Analyse + Dokumentation)
+- BSData (`Orks.cat`, `Necrons.cat`) ausgewertet:
+  - Weirdboy (p.85) und Wurrboy (p.92) als Ork-PSYKERs identifiziert
+  - Canoptek Spyder + Gloom Prism als Necron-Deny-Einheit identifiziert
+- Architektur-Problem erkannt: `army.yaml` dupliziert Daten aus `units.yaml`/`weapons.yaml`
+  → Notiz in `goals.md` Ziel 4i; für jetzt: neue Einheiten weiterhin in `army.yaml` direkt
+- Generalisierter Psi-Flow dokumentiert: `selectPsyker → selectTarget → resolve → handle_effects`
+- Bannversuch-Konzept geklärt: unabhängig vom Ziel der Kraft; Canoptek Spinne kann bannen
+- `docs/goals.md` Ziel 4f vollständig überarbeitet (Ziel 4i Architektur-Notiz ergänzt)
 
 ---
 
@@ -41,77 +41,152 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## NÄCHSTE AUFGABE: Ziel 4f — Psychic Phase
+## NÄCHSTE AUFGABE: Ziel 4f — Psychic Phase implementieren
 
 ### Kontext
 
-Die Psiphase kommt in der Spielreihenfolge direkt nach der Bewegungsphase.
-Stub existiert bereits: `src/gameMechanic/psychicPhase.py`
+Alles ist geplant und dokumentiert. Die nächste Session beginnt direkt mit Implementierung —
+kein weiteres Planen nötig. Freigabe liegt vor.
 
-**Necrons haben keine Psyker** — die Phase zeigt für Necrons nur eine Info-Caption.
-Der volle Flow wird trotzdem generisch gebaut, damit er für Psyker-Armeen (z.B. Orks → Weird Boyz) einsetzbar ist.
+### Schritt 1: YAML-Einträge (vor dem Code)
 
-### Regelgrundlage (aus `docs/work/schlachtrunde.md`)
+**`data/wh40k_9e/orks/army.yaml`** — zwei Einheiten hinzufügen:
 
-- **Manifest:** 2W6 ≥ Warp-Energie-Wert → Psikraft wirkt
-- **Bannen:** Gegnerischer Psyker innerhalb 24" → 2W6, bei Ergebnis **höher** als der Manifestwurf: Kraft gebannt
-- **Gefahren des Warp:** Doppel-1 oder Doppel-6 beim Manifestversuch → W3 Schaden am Psyker
-- **Schmetterschlag (Smite):** Warp-Energie 5 (+1 pro Manifestversuch in der Phase), trifft nächste sichtbare feindliche Einheit innerhalb 18" für W3 tödliche Verwundungen (W6 bei Ergebnis 11+)
-- **Kein Auto-Würfeln:** Spieler gibt alle Würfelwürfe manuell ein
+**Weirdboy** (BSData Orks.cat p.85):
+- M5"/WS3+/BS5+/S5/T5/W5/A3/Ld6/Sv6+, kein Invuln, kein FNP
+- Keywords: Orks, Bad Moons, Infantry, Character, **PSYKER**, Weirdboy
+- Psyker: Cast 1, Deny 1, Powers: Smite + 2 PotW
+- Waffe: Weirdboy Staff — Melee, S+3 (= 8 bei S5), AP-1, D3
 
-### Geplanter UI-Flow
+**Wurrboy** (BSData Orks.cat p.92):
+- M5"/WS3+/BS5+/S5/T5/W5/A3/Ld6/Sv6+, kein Invuln, kein FNP
+- Keywords: Orks, Bad Moons, Infantry, Character, **PSYKER**, Beast Snagga, Wurrboy
+- Psyker: Cast 1, Deny 1, Powers: Smite + 2 Beasthead
+- Waffe: Eyez of Mork — 12", Assault 2, S6, AP-3, D3 (einzigartige Fernkampf-Psikraft)
 
-#### Aktiver Spieler — Einheit mit PSYKER-Keyword ausgewählt:
+**`data/wh40k_9e/necrons/army.yaml`** — eine Einheit hinzufügen:
 
+**Canoptek Spyder (Gloom Prism)** (BSData Necrons.cat p.101):
+- M6"/WS4+/BS4+/S6/T6/W6/A5/Ld10/Sv3+, kein Invuln, kein FNP
+- Keywords: Necrons, Nephrekh, Vehicle, Fly, Canoptek, Canoptek Spyder
+- `rules: [gloom_prism]` ← Schlüsselfeld für can_deny()-Check
+- Waffe: 2× Particle Beamer — 18", Assault 6, S5, AP0, D1
+- Abilities: "Gloom Prism: In der Psi-Phase des Gegners kann diese Einheit eine Psikraft bannen als wäre sie ein PSIONIKER | Fabricator Claw Array: Repariert DYNASTY VEHICLE um W3 LP/Zug"
+
+### Schritt 2: Hilfsfunktionen in `psychicPhase.py`
+
+```python
+def has_psyker(units: list[Unit]) -> bool:
+    return any("PSYKER" in {kw.upper() for kw in u.keywords} for u in units)
+
+def can_deny(units: list[Unit]) -> bool:
+    return any(
+        "PSYKER" in {kw.upper() for kw in u.keywords} or "gloom_prism" in u.rules
+        for u in units
+    )
+
+def is_perils(roll: int) -> bool:
+    return roll in (2, 12)
+
+def smite_damage_die(roll: int) -> str:
+    return "W6" if roll >= 11 else "W3"
+
+def deny_succeeds(manifest_roll: int, deny_roll: int) -> bool:
+    return deny_roll > manifest_roll
 ```
-Schritt 1: Psikraft auswählen
-  [Schmetterschlag (Smite) — WC 5]   ← einzige Kraft in Scope
 
-Schritt 2: Manifestation
-  Warp-Energie: 5
-  [Eingabe: 2D6 Ergebnis]
-  → bei ≥ 5: "Kraft manifestiert" → Schritt 3
-  → bei Doppel-1/6: "Gefahren des Warp! W3 Schaden." → Eingabe + apply_damage()
-  → bei < 5: "Kraft gescheitert."
+### Schritt 3: UI-Flow
 
-Schritt 3: Ziel und Schaden
-  Nächste sichtbare feindliche Einheit (Spieler wählt)
-  → bei Ergebnis 11+: W6 tödliche Verwundungen, sonst W3
-  [Eingabe: Anzahl tödlicher Verwundungen] + "Apply"
+**Generalisierter Psi-Flow:**
+```
+selectPsyker → selectTarget (friendly ODER enemy) → resolve_psi_power → handle_effects
+```
+Zielrichtung ist Teil der Kraft, nicht des Bannvorgangs. Für Smite: feindliches Ziel.
+
+**Session-State:**
+```python
+psi_result: dict | None = {
+    "faction": str, "uid": str,
+    "roll": int,
+    "manifested": bool,      # roll >= 5
+    "perils": bool,          # roll in (2, 12)
+    "perils_applied": bool,  # W3-Schaden am Psyker angewendet
+    "denied": bool,
+    "deny_roll": int | None,
+}
 ```
 
-#### Passiver Spieler — Einheit mit PSYKER-Keyword innerhalb 24":
-
+**Aktive Spalte:**
 ```
-[Bannversuch]
-  [Eingabe: 2D6 Ergebnis]
-  → wenn Ergebnis > Manifestwurf: "Kraft gebannt."
-  → sonst: "Bannversuch gescheitert."
+Keine PSYKER in Armee     → Caption "No PSYKER units — skip this phase."
+Keine Einheit gewählt     → Caption "← Select a PSYKER from your army list."
+Nicht-PSYKER gewählt      → Caption "Not a PSYKER — select a PSYKER unit."
+PSYKER gewählt (Weirdboy) →
+  "Smite — Warp Charge 5"
+  [2D6 input]  [Attempt Manifest]
+  → Roll < 5 (kein Perils):  "Failed." + [Reset]
+  → Roll == 2 (Perils+fail): "Perils! Power failed." → W3 input → [Apply to Weirdboy]
+  → Roll == 12 (Perils+ok):  "Perils! Manifested." → W3 input → [Apply] + Smite bereit
+  → Roll 5–11:               "Manifested! Roll: N." → Smite bereit
 ```
 
-#### Kein Psyker in der Armee:
-
+**Inaktive Spalte:**
 ```
-Caption: "No PSYKER units — nothing to do in the Psychic Phase."
+can_deny(enemy_units) == True + Manifest läuft + nicht gebannt:
+  "Deny: 2D6 > {manifest_roll}"
+  [2D6 input]  [Attempt Deny]
+  → > manifest_roll: "Denied!"
+  → ≤ manifest_roll: "Deny failed."
+
+can_deny == False:
+  Caption "No PSYKER or Gloom Prism — cannot deny."
+
+(Zielstats wenn via ▷ markiert: T / Sv / ++)
 ```
 
-### Empfohlene Reihenfolge
+**Unterer Bereich:**
+```
+Manifested + nicht gebannt + (kein Perils ODER Perils bereits angewendet):
+  "Smite → {Zieleinheit}" | W3 (W6 bei Roll ≥ 11)
+  [Schadenseingabe]  [Apply mortal wounds]
 
-1. `psychicPhase.py` lesen (aktueller Stub)
-2. Plan beschreiben + Freigabe einholen
-3. Implementieren:
-   a. PSYKER-Check + No-Psyker-Caption
-   b. Smite-Manifestationsflow (2D6-Eingabe, WC-Vergleich, Perils)
-   c. Zielauswahl + Schaden (tödliche Verwundungen via `apply_damage(mortal=True)`)
-   d. Bannversuch für passiven Spieler
-4. Tests schreiben (`tests/gameMechanic/test_psychic_phase.py`)
-5. Commit
+Sonst: PHASE_RULES["psychic"] Info-Text
+```
 
-### Scope-Grenzen
+### Schritt 4: Tests (`tests/gameMechanic/test_psychic_phase.py`)
 
-- **Nur Schmetterschlag** — keine weiteren Psikräfte
-- **Kein PSYKER-Flag** im unit_state nötig — PSYKER ist ein Keyword, wird aus `unit.keywords` geprüft
-- Die Phase nutzt `apply_damage(mortal=True)` für tödliche Verwundungen (kein Schutzwurf)
+```python
+test_has_psyker_true()            # Unit mit PSYKER-Keyword
+test_has_psyker_false()           # Units ohne PSYKER
+test_can_deny_via_psyker_keyword()
+test_can_deny_via_gloom_prism()   # rules: [gloom_prism], kein PSYKER
+test_can_deny_neither()
+test_is_perils_true()             # 2 und 12
+test_is_perils_false()            # 5, 10, 11
+test_smite_damage_die_w3()        # 5–10 → "W3"
+test_smite_damage_die_w6()        # 11, 12 → "W6"
+test_deny_succeeds_greater()
+test_deny_fails_equal()           # strikt größer nötig
+test_deny_fails_lower()
+```
+
+### Implementierungsreihenfolge
+
+1. YAML-Einträge (Weirdboy, Wurrboy, Canoptek Spyder)
+2. Tests schreiben (rot)
+3. Hilfsfunktionen implementieren (grün)
+4. UI-Flow implementieren
+5. Manuell im Browser testen (Testszenario: Orks aktiv, Weirdboy manifestiert → Necrons denyen via Spinne)
+6. Commit
+
+---
+
+## Scope-Grenzen
+
+- **Nur Smite** — keine weiteren Psikräfte
+- **Kein Blessing-Flow** — Zielauswahl nur feindlich (friendly target: spätere Session)
+- **Gloom Prism** — direkt via `unit.rules`, kein Ability-Engine-Dispatch
+- Ability Engine braucht neuen Effect-Typ `"deny_psychic"` für vollständige Abstraktion — nicht jetzt
 
 ---
 
@@ -122,7 +197,6 @@ Caption: "No PSYKER units — nothing to do in the Psychic Phase."
 - Aktionen nur kontextuell zur ausgewählten Einheit
 - **Kein Design ohne Schema** — Nutzer definiert Farbpalette selbst
 - `dev`-Branch — kein direktes Committen auf `main`
-- Necron-Spezifika sind **Beispiele** — Hauptlogik und Doku bleiben generisch
 - Kein Auto-Würfeln — alle Würfelwürfe gibt der Spieler ein
 
 ---
@@ -134,7 +208,7 @@ src/
   app.py
   gameMechanic/
     combat.py | commandPhase.py
-    psychicPhase.py   ← nächste Hauptdatei (Stub vorhanden)
+    psychicPhase.py   ← NÄCHSTE Hauptdatei (Stub vorhanden)
     shootingPhase.py | fightPhase.py
     movementPhase.py   ← Ziel 4e fertig
     chargephase.py | game_state.py
@@ -149,11 +223,11 @@ src/
     unitCard.py | armyCard.py
     armyList.py | gameActionsArea.py
     gameProtocoll.py
-data/wh40k_9e/necrons/
-  command_protocols.yaml
+data/wh40k_9e/
+  necrons/army.yaml   ← Canoptek Spyder hinzufügen
+  orks/army.yaml      ← Weirdboy + Wurrboy hinzufügen
 tests/
   gameMechanic/ | uiLayout/ | gameObjects/
 docs/
   goals.md | spec/unit_states.md
-  work/schlachtrunde.md   ← Regelreferenz für Psiphase (Abschnitt 3)
 ```
