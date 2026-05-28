@@ -7,7 +7,7 @@ from gameMechanic.game_log import log_action
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army
+from gameObjects.loader import load_army, load_command_protocols
 from uiLayout._common import PHASE_RULES, lookup, state_badges_html, wound_adjustment_buttons
 
 _OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"
@@ -116,6 +116,61 @@ def _render_overlord_actions(
             st.rerun()
 
 
+def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+    if faction != "Necrons":
+        return
+
+    protocols = load_command_protocols("necrons")
+    if not protocols:
+        return
+
+    st.divider()
+    st.markdown("**Kommandoprotokolle**")
+
+    active_id = st.session_state.get("active_protocol_id")
+    used_ids = st.session_state.get("used_protocol_ids", [])
+    current_round = state.get("round", 1)
+
+    if current_round == 1:
+        p = next((p for p in protocols if p.id == "eternal_guardian"), None)
+        if p:
+            st.caption(f"{p.name_de} — automatisch aktiv (Runde 1)")
+            st.caption(f"Direktive 1: {p.primary}")
+            st.caption(f"Direktive 2: {p.secondary}")
+        return
+
+    if active_id:
+        p = next((p for p in protocols if p.id == active_id), None)
+        if p:
+            st.caption(f"{p.name_de} — aktiv diese Runde")
+            st.caption(f"Direktive 1: {p.primary}")
+            st.caption(f"Direktive 2: {p.secondary}")
+        return
+
+    available = [p for p in protocols if p.id not in used_ids]
+    if not available:
+        st.caption("Alle Protokolle wurden bereits eingesetzt.")
+        return
+
+    choice = st.radio(
+        "Protokoll wählen:",
+        options=range(len(available)),
+        format_func=lambda i: available[i].name_de,
+        key="cmd_protocol_choice",
+    )
+    if st.button(
+        "Protokoll aktivieren",
+        key="cmd_protocol_activate",
+        type="primary",
+        use_container_width=True,
+    ):
+        chosen = available[choice]
+        st.session_state.active_protocol_id = chosen.id
+        st.session_state.used_protocol_ids = used_ids + [chosen.id]
+        log_action(state["round"], "command", faction, f"Protocol: {chosen.name_de}")
+        st.rerun()
+
+
 # ---------------------------------------------------------------------------
 # PhaseHandler implementation
 # ---------------------------------------------------------------------------
@@ -173,6 +228,7 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
+    _render_command_protocols(faction, state)
 
     if faction == "Necrons":
         overlord_alive = _OVERLORD_ID in units_state and not units_state[_OVERLORD_ID].get(

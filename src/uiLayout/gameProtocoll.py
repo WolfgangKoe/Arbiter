@@ -17,6 +17,7 @@ from pathlib import Path
 import streamlit as st
 
 from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS, PHASES
+from gameObjects.loader import load_command_protocols
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -39,9 +40,33 @@ def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
     return st.session_state[key]
 
 
+def _render_necron_protocols() -> None:
+    protocols = load_command_protocols("necrons")
+    if not protocols:
+        return
+
+    active_id = st.session_state.get("active_protocol_id")
+    used_ids = st.session_state.get("used_protocol_ids", [])
+
+    st.caption("**Necron Command Protocols**")
+    for p in protocols:
+        if p.id == active_id:
+            st.markdown(f"**{p.name_de}** — active")
+            st.caption(f"  Directive 1: {p.primary}")
+            st.caption(f"  Directive 2: {p.secondary}")
+        elif p.id in used_ids:
+            st.markdown(f"~~{p.name_de}~~ — used")
+        else:
+            st.caption(f"{p.name_de} — available")
+    st.divider()
+
+
 def _render_command_protocol() -> None:
     first = st.session_state.get("first_player", "Necrons")
     second = st.session_state.get("second_player", "Orks")
+
+    if "Necrons" in (first, second):
+        _render_necron_protocols()
 
     st.caption(
         f"**Round** {st.session_state.get('round', 1)}  ·  "

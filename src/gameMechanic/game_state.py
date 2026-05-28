@@ -67,6 +67,8 @@ def init_state() -> None:
     st.session_state.res_orb_target_uid = None
     st.session_state.necron_units = {u.id: _unit_state(u) for u in _NECRON_UNITS}
     st.session_state.ork_units = {u.id: _unit_state(u) for u in _ORK_UNITS}
+    st.session_state.active_protocol_id = "eternal_guardian"
+    st.session_state.used_protocol_ids = ["eternal_guardian"]
 
 
 def reset_game() -> None:
@@ -90,6 +92,7 @@ def _reset_turn_state() -> None:
             state["lost_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
             state["my_will_be_done_active"] = False
+    st.session_state.active_protocol_id = None
 
 
 def next_phase() -> None:

@@ -275,50 +275,83 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4c — Ability Engine Refactoring ⬜
+### 4c — Ability Engine Refactoring ✅
 
-**Ziel:** Fraktionsspezifische Logik aus `armyCard.py` herauslösen. Die Karte soll vollständig
-datengetrieben sein — kein hardcodiertes `"livingMetal"`, kein Branch auf `effect.type == "heal"`.
+**Abgeschlossen** (commit `a884733`).
 
-**Kern-Änderungen:**
-
-- [ ] `Condition.needs_healing: bool = False` — prüft ob Unit verwundete (aber lebende) Modelle hat; Cap: `current_models × wounds` (kein Wiederbeleben)
-- [ ] `Effect.revive: bool = True` — `False` bei Living Metal: Heal capped auf lebende Modelle, keine Wiederbelebung zerstörter Modelle
-- [ ] `check_conditions()` wertet `needs_healing` aus
-- [ ] `heal_unit()` bekommt `revive: bool = True`-Parameter; Cap-Logik korrekt je nach Flag
-- [ ] `execute_effect(ability, uid, faction, unit)` Dispatcher in `ability_engine.py` — einzige Stelle, die `effect.type` kennt
-- [ ] `apply_living_metal()` löschen — ersetzt durch `heal_unit(revive=False)` via Dispatcher
-- [ ] Living Metal YAML: `unit_not_destroyed: true`, `needs_healing: true`, `revive: false`
-- [ ] `armyCard.py`: `_living_metal_eligible()` + Effect-Branch ersetzen; Import `apply_living_metal` entfernen
-- [ ] Tests anpassen/erweitern
+- [x] `Condition.needs_healing: bool`, `Effect.revive: bool` ins Datenmodell
+- [x] `check_conditions()` + `execute_effect()` Dispatcher in `ability_engine.py`
+- [x] `heal_unit(revive=)` — Cap-Logik korrekt
+- [x] `apply_living_metal()` gelöscht — ersetzt durch generischen Dispatcher
+- [x] Living Metal YAML: `unit_not_destroyed`, `needs_healing`, `revive: false`
+- [x] `armyCard.py` vollständig datengetrieben
+- [x] 215 Tests grün
 
 ---
 
-### 4d — Bewegungsphase vollständig ⬜
+### 4d — Befehlsphase vollständig ⬜
 
-- [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True` ✅
-- [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True` ✅
+**Voraussetzung:** 4c abgeschlossen ✅
+
+**Kontext:** Analyse in Session 2026-05-28 ergab drei Lücken in der Befehlsphase.
+
+#### 4d.1 — Living Metal immer sichtbar
+
+- [ ] `armyCard.py._render_triggered_abilities()`: Ability immer in Befehlsphase anzeigen
+  — wenn keine Einheit verwundet: Caption "Alle Einheiten unverwundet" statt stilles Überspringen
+  — Button bleibt nur aktiv wenn eligible units vorhanden
+
+#### 4d.2 — Kommandoprotokolle (Necrons)
+
+Necron-Armeeregel: In der eigenen Befehlsphase wählt der Nekron-Spieler eines von 5 Protokollen (jedes max. 1× pro Spiel). Runde 1: **Ewiger Wächter** automatisch aktiv (beide Direktiven). Mechanische Effekte werden noch nicht automatisch appliziert — nur Anzeige + Auswahl.
+
+| Protokoll | Primär | Sekundär |
+|---|---|---|
+| Ewiger Wächter | +1 auf alle Rettungswürfe | WW1 wiederholen |
+| Der hungrige Leere | +1 zum Treffen (Schuss) | +1 Stärke (Schuss) |
+| Des tyrannischen Herrschers | +1 Führung | WW1 bei Treffen/Wunden (NK) |
+| Des plötzlichen Sturms | +1 Bewegung | Vormarsch + Charge erlaubt |
+| Unaufhörlicher Legionen | RP neu würfeln | +1 Modell pro RP |
+
+- [ ] `data/wh40k_9e/necrons/command_protocols.yaml` — 5 Protokolle (id, name, primär, sekundär, `auto_round_1`)
+- [ ] `src/gameObjects/command_protocol.py` — `CommandProtocol` Dataclass
+- [ ] `src/gameObjects/loader.py` — `load_command_protocols(faction_dir)`
+- [ ] `src/gameMechanic/game_state.py` — `active_protocol_id`, `used_protocol_ids` in `init_state` + `_reset_turn_state`
+- [ ] `src/gameMechanic/commandPhase.py` — `_render_command_protocols()` für Necrons
+- [ ] `src/uiLayout/gameProtocoll.py` — "Command Protocol" Tab zeigt Protokoll-Status
+
+#### 4d.3 — RP-Trigger (Reanimationsprotokolle) — VERSCHOBEN
+
+RP-Trigger gehört in Schuss-, Angriffs- und Nahkampfphase (nach Feindangriff). Wird dort implementiert.
+
+---
+
+### 4e — Bewegungsphase vollständig ⬜
+
+- [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True`
+- [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True`
 - [ ] Advance-Roll: W6 würfeln, Ergebnis zur Bewegungsreichweite addieren, `advanced` setzen
 - [ ] Reserve-Deploy (Zug 2+): `in_reserve=False`, Bewegungseinschränkungen greifen
 
 ---
 
-### 4e — Angriffsphase (Charge Phase) ⬜
+### 4f — Angriffsphase (Charge Phase) ⬜
 
 - [ ] Charge-Würfel: 2W6 — bei Erfolg `set_charged()`, bei Misserfolg bleibt `MOVED`
 - [ ] `advanced`-Flag sperrt Charge-Button (Regelkonformität)
+- [ ] RP-Trigger nach Feindangriff (Charge) — inaktiver Spieler kann RP auslösen
 - [ ] Overwatch: gegnerische Schussreaktion mit `hit_modifier="only_6s"` (Scope: TBD)
 
 ---
 
-### 4f — Moralphase ⬜
+### 4g — Moralphase ⬜
 
 - [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
 - [ ] `moralePhase.py` — Render-Logik
 
 ---
 
-### 4g — Psychic Phase ⬜
+### 4h — Psychic Phase ⬜
 
 - [ ] Manifest: 2D6 ≥ Warp Charge → Effekt ausführen
 - [ ] Deny: gegnerischer Psyker darf versuchen zu unterdrücken
@@ -327,7 +360,7 @@ datengetrieben sein — kein hardcodiertes `"livingMetal"`, kein Branch auf `eff
 
 ---
 
-### 4h — Army Builder ⬜
+### 4i — Army Builder ⬜
 
 - [ ] Entscheidung: Datei-Import vs. In-App-Builder vs. hardcodierte Presets (TBD)
 - [ ] Setup-Screen: Spielgröße, Spieltyp, Armeeauswahl, Erster Spieler

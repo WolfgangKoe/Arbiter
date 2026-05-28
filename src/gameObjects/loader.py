@@ -8,6 +8,7 @@ from typing import Any
 import yaml
 
 from gameObjects.ability import Ability, Condition, Effect, Trigger
+from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.faction_property import FactionProperty
 from gameObjects.unit import Unit
@@ -151,6 +152,26 @@ def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
 def load_faction_properties(faction_dir: str) -> list[FactionProperty]:
     """Load faction abilities (compat shim — returns Ability objects under FactionProperty alias)."""
     return load_faction_abilities(faction_dir)
+
+
+def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
+    """Load command protocols from data/wh40k_9e/<faction_dir>/command_protocols.yaml."""
+    path = _DATA_ROOT / faction_dir / "command_protocols.yaml"
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return [
+        CommandProtocol(
+            id=p["id"],
+            name_en=p["name_en"],
+            name_de=p["name_de"],
+            primary=p["primary"],
+            secondary=p["secondary"],
+            auto_round_1=p.get("auto_round_1", False),
+        )
+        for p in data.get("protocols", [])
+    ]
 
 
 def load_detachment_types() -> list[DetachmentType]:

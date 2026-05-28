@@ -68,6 +68,7 @@ def _render_triggered_abilities(
             if (unit := unit_by_id.get(uid)) is not None and check_conditions(ability, unit, ustate)
         ]
         if not eligible:
+            st.caption(f"{ability.name_en} — no units eligible")
             continue
 
         n = len(eligible)
