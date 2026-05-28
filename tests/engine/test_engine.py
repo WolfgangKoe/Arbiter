@@ -9,8 +9,10 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import engine  # noqa: E402
-from engine import apply_damage, heal_unit, next_phase, parse_dice, wound_threshold  # noqa: E402
+import gameMechanic.unit_mutations as _mut  # noqa: E402
+from gameMechanic.combat import parse_dice, wound_threshold  # noqa: E402
+from gameMechanic.game_state import next_phase  # noqa: E402
+from gameMechanic.unit_mutations import apply_damage, heal_unit  # noqa: E402
 from gameObjects.unit import Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -33,7 +35,7 @@ class _S(dict):
 
 def _make_session(**kwargs: object) -> _S:
     s = _S(**kwargs)
-    engine.st.session_state = s
+    _mut.st.session_state = s
     return s
 
 

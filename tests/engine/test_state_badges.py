@@ -99,14 +99,22 @@ def test_in_reserve_shows_reserve_badge() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_advanced_and_charged_coexist() -> None:
-    """A unit can theoretically show ADVANCED + CHARGED if flags diverge — both appear."""
-    html = state_badges_html(_state(movement_choice="advanced", charged=True))
-    assert "ADVANCED" in html
+def test_charged_suppresses_movement_badge() -> None:
+    """When charged=True, the movement badge is hidden — CHARGED is the relevant state."""
+    html = state_badges_html(_state(movement_choice="normal", charged=True))
+    assert "NORMAL" not in html
     assert "CHARGED" in html
 
 
-def test_advanced_and_in_reserve_both_shown() -> None:
+def test_charged_suppresses_advanced_badge() -> None:
+    """ADVANCED is also suppressed when charged — charge overrides the movement choice."""
+    html = state_badges_html(_state(movement_choice="advanced", charged=True))
+    assert "ADVANCED" not in html
+    assert "CHARGED" in html
+
+
+def test_in_reserve_suppresses_movement_badge() -> None:
+    """RESERVE units don't show a movement badge — RESERVE alone communicates their state."""
     html = state_badges_html(_state(movement_choice="advanced", in_reserve=True))
-    assert "ADVANCED" in html
+    assert "ADVANCED" not in html
     assert "RESERVE" in html

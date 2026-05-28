@@ -6,7 +6,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-from engine import init_state  # noqa: E402
+from gameMechanic.game_state import init_state  # noqa: E402
 from uiLayout.armyList import render_army_list  # noqa: E402
 from uiLayout.gameActionsArea import render_game_actions_area  # noqa: E402
 from uiLayout.gameHeader import render_game_header  # noqa: E402

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from engine import PHASES
+from gameMechanic.game_state import PHASES, next_phase
 from uiLayout._common import lookup
 
 # ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ def _render_setup() -> None:
         "   - **Stationary** — deployed but will not move in turn 1\n"
         "   - **Reserve** — arrives from turn 2 onwards\n\n"
         "Click a unit name (▶) to view its full data profile here.\n\n"
-        "When ready, click **→** to begin Battle Round 1."
+        "When ready, click **⚔ Start Game** below."
     )
     st.markdown("---")
     st.markdown("**First Player**")
@@ -136,6 +136,11 @@ def _render_setup() -> None:
             st.session_state.second_player = "Necrons"
             st.rerun()
     st.caption(f"Currently selected: **{active}** go first.")
+
+    st.divider()
+    if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):
+        next_phase()
+        st.rerun()
 
 
 # ---------------------------------------------------------------------------

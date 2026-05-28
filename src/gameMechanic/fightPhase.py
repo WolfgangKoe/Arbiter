@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from engine import log_action, wound_threshold
+from gameMechanic.combat import wound_threshold
+from gameMechanic.game_log import log_action
+from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
 from uiLayout._common import PHASE_RULES, lookup, render_player_column
 
 
@@ -106,15 +108,32 @@ def _inactive_target_stats(
     cols[2].metric("++", inv_display)
 
 
+def _render_melee_pairs() -> None:
+    """Show all active melee engagements, or the phase rule hint if none."""
+    necron_names = {u.id: u.name_en for u in _NECRON_UNITS}
+    ork_names = {u.id: u.name_en for u in _ORK_UNITS}
+    pairs: list[str] = []
+    for uid, s in st.session_state.necron_units.items():
+        for enemy_uid in s.get("melee_with", []):
+            pairs.append(
+                f"**{necron_names.get(uid, uid)}** ↔ **{ork_names.get(enemy_uid, enemy_uid)}**"
+            )
+    if pairs:
+        st.markdown("**Active Melee Engagements:**")
+        for p in pairs:
+            st.markdown(f"- {p}")
+    else:
+        st.info(PHASE_RULES["fight"])
+
+
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Display area — attack reference when attacker and a target are selected."""
+    """Display area — attack reference when attacker and target are selected."""
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if sel and tgts:
-        # Show reference for the first selected melee target.
         _display_attack_summary(sel, tgts[0], phase_key="fight")
         return
-    st.info(PHASE_RULES["fight"])
+    _render_melee_pairs()
 
 
 def _display_attack_summary(

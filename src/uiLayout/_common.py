@@ -12,6 +12,8 @@ from collections.abc import Callable
 
 import streamlit as st
 
+from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 
 # ---------------------------------------------------------------------------
@@ -70,14 +72,15 @@ PHASE_RULES: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "NORMAL": ("#4a7a4a", "#101810"),
+    "NORMAL": ("#4a9a5a", "#0a1a0a"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
-    "ADVANCED": ("#c9a84c", "#2e2618"),
-    "RETREATED": ("#8b1a1a", "#1e1010"),
-    "IN MELEE": ("#cc6644", "#2a1810"),
-    "CHARGED": ("#9b59b6", "#1a0a2a"),
-    "RESERVE": ("#2a6a8b", "#101820"),
-    "DESTROYED": ("#8b1a1a", "#1e1010"),
+    "ADVANCED": ("#d4a017", "#2e2618"),
+    "RETREATED": ("#c04040", "#1e1010"),
+    "IN MELEE": ("#e07050", "#2a1810"),
+    "CHARGED": ("#b070d8", "#1a0a2a"),
+    "RESERVE": ("#4090b0", "#101820"),
+    "DESTROYED": ("#c04040", "#1e1010"),
+    "MWBD": ("#60a5fa", "#0a1020"),
 }
 
 
@@ -94,25 +97,27 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
 
     parts: list[str] = []
 
-    # Movement badge — single-choice per turn, None means not yet moved.
     _MOVEMENT_BADGE: dict[str, str] = {
         "normal": "NORMAL",
         "stationary": "STATIONARY",
         "advanced": "ADVANCED",
         "retreated": "RETREATED",
     }
+    flags = unit_state.get("turn_flags", {})
+    # Movement badge suppressed when charged or in reserve.
     mc = unit_state.get("movement_choice")
-    if mc in _MOVEMENT_BADGE:
+    if mc in _MOVEMENT_BADGE and not flags.get("charged") and not unit_state.get("in_reserve"):
         parts.append(_badge(_MOVEMENT_BADGE[mc]))
 
     # Combat badges from turn_flags / persistent state.
-    flags = unit_state.get("turn_flags", {})
     if flags.get("charged"):
         parts.append(_badge("CHARGED"))
     elif unit_state.get("in_melee"):
         parts.append(_badge("IN MELEE"))
     if unit_state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
+    if unit_state.get("my_will_be_done_active"):
+        parts.append(_badge("MWBD"))
     return "".join(parts)
 
 
@@ -123,9 +128,6 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
 
 def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
     """Return (Unit, unit_state_dict) for the given faction + uid."""
-    # Lazy import to avoid circular dependency at module load time.
-    from engine import _NECRON_UNITS, _ORK_UNITS  # noqa: PLC0415
-
     units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
     unit = next(u for u in units if u.id == uid)
     key = "necron_units" if faction == "Necrons" else "ork_units"
@@ -139,8 +141,6 @@ def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-ar
 
 def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
     """Render ±1/2/3 wound-adjustment buttons for a unit."""
-    from engine import apply_damage, heal_unit  # noqa: PLC0415
-
     bc = st.columns(6)
     for col, delta, label in zip(bc, [-3, -2, -1, 1, 2, 3], ["−3", "−2", "−1", "+1", "+2", "+3"]):
         with col:
@@ -196,8 +196,6 @@ def render_player_column(
             if badges:
                 st.markdown(badges, unsafe_allow_html=True)
             active_content(faction, uid, unit, unit_state, state)
-            st.divider()
-            wound_adjustment_buttons(faction, uid, unit)
         else:
             st.caption("← Select a unit from your army list.")
 

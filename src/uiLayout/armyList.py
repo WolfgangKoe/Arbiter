@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from engine import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
 from gameObjects.unit import Unit
 from uiLayout.armyCard import render_army_card
 from uiLayout.detachmentCard import render_detachment_card

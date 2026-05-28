@@ -10,9 +10,22 @@ GO visibility states (see docs/processes.md P-06 and gameObjects/stratagem.py):
   hidden     — conditions not met → not rendered at all
 """
 
+import json
+from itertools import groupby
+from pathlib import Path
+
 import streamlit as st
 
-from engine import _NECRON_UNITS, _ORK_UNITS, PHASES
+from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS, PHASES
+
+_LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
+
+
+def _load_game_log() -> list[dict]:  # type: ignore[type-arg]
+    if not _LOG_PATH.exists():
+        return []
+    with _LOG_PATH.open() as f:
+        return json.load(f)
 
 
 def _unit_name_map(faction: str) -> dict[str, str]:
@@ -37,6 +50,17 @@ def _render_command_protocol() -> None:
     st.caption(f"**Active player:** {st.session_state.get('active', first)}")
     st.divider()
 
+    entries = _load_game_log()
+    if entries:
+        st.caption("**Battle Log**")
+        key_fn = lambda e: (e["round"], e["phase"])  # noqa: E731
+        for (round_num, phase), items in groupby(sorted(entries, key=key_fn), key=key_fn):
+            with st.expander(f"R{round_num} · {phase.capitalize()}", expanded=False):
+                for item in items:
+                    st.caption(f"**{item['unit']}**: {item['action']}")
+        st.divider()
+
+    st.caption("**Deployment Snapshot**")
     for faction in (first, second):
         st.caption(f"**{faction}**")
         names = _unit_name_map(faction)

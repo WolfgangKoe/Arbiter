@@ -5,14 +5,15 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
-sys.modules["streamlit"] = MagicMock()
+_st_mock = MagicMock()
+sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import engine  # noqa: E402
-from engine import (  # noqa: E402
+import gameMechanic.unit_mutations as _mut  # noqa: E402
+from gameMechanic.game_state import next_phase  # noqa: E402
+from gameMechanic.unit_mutations import (  # noqa: E402
     enter_melee,
     leave_melee,
-    next_phase,
     set_charged,
     set_movement_status,
 )
@@ -61,7 +62,7 @@ def _unit() -> dict:
 
 def _make_session(**kwargs) -> _S:  # type: ignore[no-untyped-def]
     s = _S(**kwargs)
-    engine.st.session_state = s
+    _mut.st.session_state = s
     return s
 
 
@@ -241,10 +242,10 @@ def test_set_movement_status_retreated_calls_leave_melee() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_reset_turn_state_clears_movement_choice() -> None:
+def test_reset_turn_state_resets_movement_choice_to_stationary() -> None:
     session = _make_session(
         necron_units={OVERLORD: {**_unit(), "movement_choice": "advanced"}},
-        ork_units={BOYZ: {**_unit(), "movement_choice": "stationary"}},
+        ork_units={BOYZ: {**_unit(), "movement_choice": "advanced"}},
         selected_targets=[],
         phase_idx=7,  # morale phase — triggers turn reset
         active="Necrons",
@@ -253,5 +254,5 @@ def test_reset_turn_state_clears_movement_choice() -> None:
         selected_unit=None,
     )
     next_phase()
-    assert session["necron_units"][OVERLORD]["movement_choice"] is None
-    assert session["ork_units"][BOYZ]["movement_choice"] is None
+    assert session["necron_units"][OVERLORD]["movement_choice"] == "stationary"
+    assert session["ork_units"][BOYZ]["movement_choice"] == "stationary"

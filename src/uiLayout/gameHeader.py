@@ -2,7 +2,8 @@
 
 import streamlit as st
 
-from engine import PHASES, adjust_cp, adjust_vp, next_phase, reset_game
+from gameMechanic.game_state import PHASES, next_phase, reset_game
+from gameMechanic.unit_mutations import adjust_cp, adjust_vp
 
 CSS_THEME = """
 <style>
@@ -11,16 +12,16 @@ CSS_THEME = """
     --arb-bg:        #0f0e0c;
     --arb-surface:   #1c1a14;
     --arb-border:    #2e2618;
-    --arb-accent:    #c9a84c;
-    --arb-accent-lt: #e8d5a3;
+    --arb-accent:    #d4a017;
+    --arb-accent-lt: #fbbf24;
     --arb-muted:     #6b5f44;
-    --arb-text:      #e0cca0;
-    --arb-unit:      #b0a080;
+    --arb-text:      #e7e5e4;
+    --arb-unit:      #a8a29e;
     --arb-hover:     #2a2316;
-    --arb-red:       #8b1a1a;
-    --arb-btn:       #5a4820;
-    --arb-green:     #4a7c3f;
-    --arb-blue:      #2a4a6a;
+    --arb-red:       #991b1b;
+    --arb-btn:       #7a5810;
+    --arb-green:     #166534;
+    --arb-blue:      #1e3a8a;
 }
 
 /* Background */
@@ -64,7 +65,7 @@ h2 { color: var(--arb-accent) !important; font-size: 1rem; }
 
 /* Buttons */
 .stButton > button {
-    background: transparent !important;
+    background: var(--arb-surface) !important;
     border: 1px solid var(--arb-btn) !important;
     color: var(--arb-accent-lt) !important;
     border-radius: 2px !important;
@@ -80,10 +81,12 @@ h2 { color: var(--arb-accent) !important; font-size: 1rem; }
     background: var(--arb-accent) !important;
     border-color: var(--arb-accent) !important;
     color: var(--arb-bg) !important;
-    font-weight: 600;
+    font-weight: 700;
 }
-.stButton > button[data-testid="baseButton-primary"]:hover {
+.stButton > button[data-testid="baseButton-primary"]:hover,
+.stButton > button[kind="primary"]:hover {
     background: var(--arb-accent-lt) !important;
+    border-color: var(--arb-accent-lt) !important;
 }
 
 /* Dividers */
@@ -167,11 +170,11 @@ header[data-testid="stHeader"] { display: none !important; }
 
 _SCORE_LABEL_STYLE = (
     "display:block;width:100%;text-align:center;font-size:1.6rem;font-weight:600;"
-    "letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;"
+    "letter-spacing:0.15em;color:#d4a017;text-transform:uppercase;"
 )
 _SCORE_VALUE_STYLE = (
     "display:block;width:100%;text-align:center;"
-    "font-size:2rem;font-weight:600;color:#e8d5a3;padding:0.2rem 0;"
+    "font-size:2rem;font-weight:600;color:#fbbf24;padding:0.2rem 0;"
 )
 
 _VP_STEP = 5
@@ -220,49 +223,53 @@ def render_game_header() -> None:
         _score_group(first, "left")
 
     with center_hdr:
-        _, rst_c, _ = st.columns([2, 1, 2])
-        with rst_c:
-            if st.button("↺", key="reset_game", use_container_width=True):
-                reset_game()
-                st.rerun()
-
         round_label = "Setup" if phase_key == "setup" else f"Round {st.session_state.round}"
         st.markdown(
             f'<div style="text-align:center;font-size:1.6rem;font-weight:600;'
-            f'letter-spacing:0.15em;color:#c9a84c;text-transform:uppercase;">'
+            f'letter-spacing:0.15em;color:#d4a017;text-transform:uppercase;">'
             f"{round_label}</div>",
             unsafe_allow_html=True,
         )
 
-        prev_c, phase_c, next_c = st.columns([1, 5, 1])
-        with prev_c:
-            prev_disabled = phase_idx == 0
-            if st.button(
-                "←",
-                key="prev_phase",
-                type="primary",
-                use_container_width=True,
-                disabled=prev_disabled,
-            ):
-                if phase_idx > 1:
-                    st.session_state.phase_idx = phase_idx - 1
-                else:
-                    st.session_state.phase_idx = 0
-                st.session_state.selected_unit = None
-                st.session_state.selected_target = None
-                st.rerun()
-        with phase_c:
-            active_label = "" if phase_key == "setup" else f" · {active} active"
+        if phase_key == "setup":
+            # During setup: only show phase label, no navigation or reset.
             st.markdown(
                 f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
-                f'letter-spacing:0.1em;color:#e8d5a3;text-transform:uppercase;padding:0.25rem 0;">'
-                f"{phase_name}{active_label}</div>",
+                f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;padding:0.25rem 0;">'
+                f"{phase_name}</div>",
                 unsafe_allow_html=True,
             )
-        with next_c:
-            if st.button("→", key="next_phase", type="primary", use_container_width=True):
-                next_phase()
-                st.rerun()
+        else:
+            _, rst_c, _ = st.columns([2, 1, 2])
+            with rst_c:
+                if st.button("↺", key="reset_game", use_container_width=True):
+                    reset_game()
+                    st.rerun()
+
+            prev_c, phase_c, next_c = st.columns([1, 5, 1])
+            with prev_c:
+                if st.button(
+                    "←",
+                    key="prev_phase",
+                    type="primary",
+                    use_container_width=True,
+                    disabled=phase_idx <= 1,
+                ):
+                    st.session_state.phase_idx = phase_idx - 1
+                    st.session_state.selected_unit = None
+                    st.session_state.selected_targets = []
+                    st.rerun()
+            with phase_c:
+                st.markdown(
+                    f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
+                    f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;padding:0.25rem 0;">'
+                    f"{phase_name} · {active} active</div>",
+                    unsafe_allow_html=True,
+                )
+            with next_c:
+                if st.button("→", key="next_phase", type="primary", use_container_width=True):
+                    next_phase()
+                    st.rerun()
 
     with right_hdr:
         _score_group(second, "right")
@@ -275,13 +282,13 @@ def render_game_header() -> None:
             real_idx = i + 1
             if real_idx == phase_idx:
                 steps_html += (
-                    f'<span style="background:#2e2618;border:1px solid #c9a84c;border-radius:2px;'
-                    f'padding:2px 8px;font-size:11px;color:#e8d5a3;letter-spacing:0.05em;">{pn}</span>'
+                    f'<span style="background:#2e2618;border:1px solid #d4a017;border-radius:2px;'
+                    f'padding:2px 8px;font-size:11px;color:#fbbf24;letter-spacing:0.05em;">{pn}</span>'
                 )
             else:
                 steps_html += (
-                    f'<span style="border:1px solid #2e2618;border-radius:2px;'
-                    f'padding:2px 8px;font-size:11px;color:#4a3f2a;">{pn}</span>'
+                    f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
+                    f'padding:2px 8px;font-size:11px;color:#6b5f44;">{pn}</span>'
                 )
         steps_html += "</div>"
         _, ctr, _ = st.columns([1, 2, 1])

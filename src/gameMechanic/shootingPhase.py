@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from engine import log_action, wound_threshold
+from gameMechanic.combat import wound_threshold
+from gameMechanic.game_log import log_action
 from uiLayout._common import PHASE_RULES, lookup, render_player_column
 
 

@@ -27,7 +27,7 @@ PHASE_REGISTRY: dict[str, PhaseHandler] = {}
 
 def render_current_phase(state: dict) -> None:  # type: ignore[type-arg]
     """Look up the handler for the current phase and render its active stage."""
-    from engine import PHASES  # noqa: PLC0415
+    from gameMechanic.game_state import PHASES  # noqa: PLC0415
 
     phase_key: str = PHASES[state["phase_idx"]][1]
     handler = PHASE_REGISTRY.get(phase_key)
@@ -50,7 +50,7 @@ def advance_stage(state: dict) -> None:  # type: ignore[type-arg]
     Called by the phase-navigation button in gameProtocoll.
     At end → next_phase transition, turn_flags are reset by engine.next_phase().
     """
-    from engine import next_phase  # noqa: PLC0415
+    from gameMechanic.game_state import next_phase  # noqa: PLC0415
 
     stage: str = state.get("phase_stage", "active")
     if stage == "start":

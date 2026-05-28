@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from engine import log_action, set_deployment, set_movement_status
+from gameMechanic.game_log import log_action
+from gameMechanic.unit_mutations import set_deployment, set_movement_status
 from uiLayout._common import PHASE_RULES, render_player_column
 
 

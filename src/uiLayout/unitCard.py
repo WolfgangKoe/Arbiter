@@ -12,18 +12,21 @@ Design principles (see docs/ui_layout.md §4):
 
 import streamlit as st
 
-from engine import PHASES, set_deployment
+from gameMechanic.game_state import PHASES
+from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "ADVANCED": ("#c9a84c", "#2e2618"),
+    "NORMAL": ("#4a9a5a", "#0a1a0a"),
+    "ADVANCED": ("#d4a017", "#2e2618"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
-    "RETREATED": ("#8b1a1a", "#1e1010"),
-    "IN MELEE": ("#cc6644", "#2a1810"),
-    "CHARGED": ("#9b59b6", "#1a0a2a"),
-    "RESERVE": ("#2a6a8b", "#101820"),
-    "DESTROYED": ("#8b1a1a", "#1e1010"),
-    "ACTED": ("#3a5a3a", "#101810"),
+    "RETREATED": ("#c04040", "#1e1010"),
+    "IN MELEE": ("#e07050", "#2a1810"),
+    "CHARGED": ("#b070d8", "#1a0a2a"),
+    "RESERVE": ("#4090b0", "#101820"),
+    "DESTROYED": ("#c04040", "#1e1010"),
+    "ACTED": ("#4a9a5a", "#0a1a0a"),
+    "MWBD": ("#60a5fa", "#0a1020"),
 }
 
 _TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight"})
@@ -49,19 +52,21 @@ _MOVEMENT_BADGE: dict[str, str] = {
 def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     parts: list[str] = []
 
-    # Movement badge — single-choice per turn, None means not yet moved.
+    flags = state.get("turn_flags", {})
+    # Movement badge suppressed when charged or in reserve.
     mc = state.get("movement_choice")
-    if mc in _MOVEMENT_BADGE:
+    if mc in _MOVEMENT_BADGE and not flags.get("charged") and not state.get("in_reserve"):
         parts.append(_badge(_MOVEMENT_BADGE[mc]))
 
     # Combat badges.
-    flags = state.get("turn_flags", {})
     if flags.get("charged"):
         parts.append(_badge("CHARGED"))
     elif state.get("in_melee"):
         parts.append(_badge("IN MELEE"))
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
+    if state.get("my_will_be_done_active"):
+        parts.append(_badge("MWBD"))
     return "".join(parts)
 
 
