@@ -12,6 +12,7 @@ Design principles (see docs/ui_layout.md §4):
 
 import streamlit as st
 
+from gameMechanic.game_log import log_action
 from gameMechanic.game_state import PHASES
 from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
@@ -98,19 +99,64 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
             st.rerun()
 
     elif is_active:
-        sel = st.session_state.selected_unit
-        is_sel = sel == (faction, uid)
-        label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
-        if st.button(
-            label,
-            key=f"sel_{faction}_{uid}",
-            type="primary" if is_sel else "secondary",
-            use_container_width=True,
-            disabled=in_reserve,
-        ):
-            st.session_state.selected_unit = None if is_sel else (faction, uid)
-            st.session_state.selected_targets = []  # clear targets on unit switch
-            st.rerun()
+        mwbd_awaiting = phase_key == "command" and st.session_state.get(
+            "mwbd_awaiting_target", False
+        )
+        res_orb_awaiting = phase_key == "command" and st.session_state.get(
+            "res_orb_awaiting_target", False
+        )
+
+        if mwbd_awaiting:
+            if "Core" in unit.keywords:
+                if st.button(
+                    f"▶ {unit.name_en}",
+                    key=f"mwbd_tgt_{faction}_{uid}",
+                    type="secondary",
+                    use_container_width=True,
+                ):
+                    st.session_state.necron_units[uid]["my_will_be_done_active"] = True
+                    st.session_state.mwbd_target_uid = uid
+                    st.session_state.mwbd_active_since_round = st.session_state.round
+                    st.session_state.mwbd_awaiting_target = False
+                    log_action(
+                        st.session_state.round,
+                        "command",
+                        "Overlord",
+                        f"My Will Be Done → {unit.name_en}",
+                    )
+                    st.rerun()
+            else:
+                st.markdown(f"**{unit.name_en}**")
+
+        elif res_orb_awaiting:
+            _overlord_id = "wh40k_9e.necrons.unit.overlord"
+            if uid == _overlord_id:
+                st.markdown(f"**{unit.name_en}**")
+            else:
+                if st.button(
+                    f"▷ {unit.name_en}",
+                    key=f"res_orb_tgt_{faction}_{uid}",
+                    type="secondary",
+                    use_container_width=True,
+                ):
+                    st.session_state.res_orb_target_uid = uid
+                    st.session_state.res_orb_awaiting_target = False
+                    st.rerun()
+
+        else:
+            sel = st.session_state.selected_unit
+            is_sel = sel == (faction, uid)
+            label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
+            if st.button(
+                label,
+                key=f"sel_{faction}_{uid}",
+                type="primary" if is_sel else "secondary",
+                use_container_width=True,
+                disabled=in_reserve,
+            ):
+                st.session_state.selected_unit = None if is_sel else (faction, uid)
+                st.session_state.selected_targets = []
+                st.rerun()
 
     else:
         # Inactive player — target selector for relevant phases

@@ -93,45 +93,20 @@ def _render_overlord_actions(
             f"Active — **{target_unit.name_en if target_unit else mwbd_target}** "
             "gets +1 to hit until your next Command Phase."
         )
+    elif st.session_state.get("mwbd_awaiting_target", False):
+        st.info("Select a CORE unit from your army list.")
+        if st.button("Cancel", key="mwbd_cancel", use_container_width=True):
+            st.session_state.mwbd_awaiting_target = False
+            st.rerun()
     else:
-        core_units = [
-            u
-            for u in unit_by_id.values()
-            if "Core" in u.keywords and not units_state.get(u.id, {}).get("destroyed")
-        ]
-        if not core_units:
-            st.caption("No CORE units available.")
-        else:
-            pending = st.session_state.get("mwbd_pending_uid")
-            for u in core_units:
-                is_sel = pending == u.id
-                label = f"◀ {u.name_en}" if is_sel else f"▶ {u.name_en}"
-                if st.button(
-                    label,
-                    key=f"mwbd_pick_{u.id}",
-                    type="primary" if is_sel else "secondary",
-                    use_container_width=True,
-                ):
-                    st.session_state.mwbd_pending_uid = None if is_sel else u.id
-                    st.rerun()
-            if pending and pending in unit_by_id:
-                if st.button(
-                    "Activate My Will Be Done",
-                    key="cmd_mwbd",
-                    type="primary",
-                    use_container_width=True,
-                ):
-                    units_state[pending]["my_will_be_done_active"] = True
-                    st.session_state.mwbd_target_uid = pending
-                    st.session_state.mwbd_pending_uid = None
-                    st.session_state.mwbd_active_since_round = state["round"]
-                    log_action(
-                        state["round"],
-                        "command",
-                        "Overlord",
-                        f"My Will Be Done → {unit_by_id[pending].name_en}",
-                    )
-                    st.rerun()
+        if st.button(
+            "Activate My Will Be Done",
+            key="cmd_mwbd",
+            type="primary",
+            use_container_width=True,
+        ):
+            st.session_state.mwbd_awaiting_target = True
+            st.rerun()
 
     # ── Resurrection Orb ──────────────────────────────────────────────────────
     st.divider()
@@ -157,36 +132,20 @@ def _render_overlord_actions(
             log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
             st.session_state.res_orb_target_uid = None
             st.rerun()
+    elif st.session_state.get("res_orb_awaiting_target", False):
+        st.info("Select a target unit from your army list.")
+        if st.button("Cancel", key="res_orb_cancel", use_container_width=True):
+            st.session_state.res_orb_awaiting_target = False
+            st.rerun()
     else:
-        alive_units = [
-            u
-            for u in unit_by_id.values()
-            if not units_state.get(u.id, {}).get("destroyed") and u.id != _OVERLORD_ID
-        ]
-        if alive_units:
-            st.caption('Select target unit (verify within 6" on table):')
-            pending_orb = st.session_state.get("res_orb_pending_uid")
-            for u in alive_units:
-                is_sel = pending_orb == u.id
-                label = f"◀ {u.name_en}" if is_sel else f"▷ {u.name_en}"
-                if st.button(
-                    label,
-                    key=f"res_orb_pick_{u.id}",
-                    type="primary" if is_sel else "secondary",
-                    use_container_width=True,
-                ):
-                    st.session_state.res_orb_pending_uid = None if is_sel else u.id
-                    st.rerun()
-            if pending_orb:
-                if st.button(
-                    "Use Resurrection Orb",
-                    key="cmd_res_orb",
-                    type="primary",
-                    use_container_width=True,
-                ):
-                    st.session_state.res_orb_target_uid = pending_orb
-                    st.session_state.res_orb_pending_uid = None
-                    st.rerun()
+        if st.button(
+            "Use Resurrection Orb",
+            key="cmd_res_orb",
+            type="primary",
+            use_container_width=True,
+        ):
+            st.session_state.res_orb_awaiting_target = True
+            st.rerun()
 
 
 # ---------------------------------------------------------------------------
@@ -237,8 +196,6 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
         st.markdown(f"*{unit.name_en}*")
         if badges:
             st.markdown(badges, unsafe_allow_html=True)
-        st.divider()
-        wound_adjustment_buttons(faction, uid, unit)
         st.divider()
 
     faction_dir = "necrons" if faction == "Necrons" else "orks"
