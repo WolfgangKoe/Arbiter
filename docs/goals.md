@@ -297,7 +297,7 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 #### 4d.1 — Living Metal immer sichtbar
 
-- [ ] `armyCard.py._render_triggered_abilities()`: Ability immer in Befehlsphase anzeigen
+- [x] `armyCard.py._render_triggered_abilities()`: Ability immer in Befehlsphase anzeigen
   — wenn keine Einheit verwundet: Caption "Alle Einheiten unverwundet" statt stilles Überspringen
   — Button bleibt nur aktiv wenn eligible units vorhanden
 
@@ -313,12 +313,12 @@ Necron-Armeeregel: In der eigenen Befehlsphase wählt der Nekron-Spieler eines v
 | Des plötzlichen Sturms | +1 Bewegung | Vormarsch + Charge erlaubt |
 | Unaufhörlicher Legionen | RP neu würfeln | +1 Modell pro RP |
 
-- [ ] `data/wh40k_9e/necrons/command_protocols.yaml` — 5 Protokolle (id, name, primär, sekundär, `auto_round_1`)
-- [ ] `src/gameObjects/command_protocol.py` — `CommandProtocol` Dataclass
-- [ ] `src/gameObjects/loader.py` — `load_command_protocols(faction_dir)`
-- [ ] `src/gameMechanic/game_state.py` — `active_protocol_id`, `used_protocol_ids` in `init_state` + `_reset_turn_state`
-- [ ] `src/gameMechanic/commandPhase.py` — `_render_command_protocols()` für Necrons
-- [ ] `src/uiLayout/gameProtocoll.py` — "Command Protocol" Tab zeigt Protokoll-Status
+- [x] `data/wh40k_9e/necrons/command_protocols.yaml` — 5 Protokolle (id, name, primär, sekundär, `auto_round_1`)
+- [x] `src/gameObjects/command_protocol.py` — `CommandProtocol` Dataclass
+- [x] `src/gameObjects/loader.py` — `load_command_protocols(faction_dir)`
+- [x] `src/gameMechanic/game_state.py` — `active_protocol_id`, `used_protocol_ids` in `init_state` + `_reset_turn_state`
+- [x] `src/gameMechanic/commandPhase.py` — `_render_command_protocols()` für Necrons
+- [x] `src/uiLayout/gameProtocoll.py` — "Command Protocol" Tab zeigt Protokoll-Status
 
 #### 4d.3 — RP-Trigger (Reanimationsprotokolle) — VERSCHOBEN
 
