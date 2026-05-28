@@ -13,29 +13,31 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — alle Ziele, aktueller Status
-3. `docs/review/architecture_review_2026-05.md` — vollständiger Review aus letzter Session
-4. `src/gameMechanic/combat.py` — für Blocker 1 fix
-5. `src/gameMechanic/shootingPhase.py` — für Blocker 2 fix
-6. `src/gameMechanic/fightPhase.py` — für Blocker 3 fix
+2. `docs/goals.md` — vollständiger Plan, insbesondere Ziel 4a
+3. `src/uiLayout/_common.py` — `state_badges_html()` für Badge-Logik
+4. `src/gameMechanic/unit_mutations.py` — `set_movement_status`, `apply_damage`
+5. `src/gameMechanic/shootingPhase.py` — `_render_display()` für SHOT-Flag
+6. `src/gameMechanic/fightPhase.py` — `_render_display()` für FOUGHT-Flag
+7. `src/gameMechanic/game_state.py` — `_reset_turn_state()`
+8. `tests/uiLayout/test_common.py` — bestehende Badge-Tests
 
 ---
 
 ## Was in dieser Session gemacht wurde
 
-### Ziel A — Architektur-Review (fertig)
+### Blocker-Fixes (alle committed)
 
-**A3 — Test-Refactoring:**
-- `tests/engine/` komplett gelöscht (war verwaist, `engine.py` existiert nicht mehr)
-- `test_unit_mutations.py` — 29 Tests (apply_damage, heal_unit, enter/leave_melee, set_charged, set_movement_status)
-- `test_game_state.py` — 6 Tests (next_phase Transitionen)
-- `tests/uiLayout/test_common.py` — 13 Tests (state_badges_html)
-- 11 Duplikate (parse_dice + wound_threshold) korrekt entfernt
-- Ergebnis: **166 Tests, alle grün**
+- **Blocker 1** — `parse_dice()` crasht auf W-Notation: Fix + `+N`-Modifier-Support
+- **Blocker 2** — `in_melee`-Check in `can_shoot()`: war bereits implementiert, keine Änderung nötig
+- **Blocker 3** — Nahkampfphase startet mit falschem Spieler: `⚔ Fight Priority`-Badge für Nicht-Aktiv-Spieler
+- **Neu** — `resolve_weapon_strength()` für Träger/+1/x2-Notation
+- **182 Tests, alle grün**
 
-**A1 + A2 — Review-Dokument:**
-- `docs/review/architecture_review_2026-05.md` geschrieben
-- Alle Phasen klassifiziert, 3 Blocker identifiziert, YAML-Template erstellt
+### Konzeptarbeit (nicht committed, nur Doku)
+
+- Vollständiges Badge/State-Modell erarbeitet (siehe `docs/goals.md` → Ziel 4a)
+- 13 Szenarien für Zustandsübergänge definiert
+- `docs/goals.md` um Ziel 4a–4f erweitert
 
 ---
 
@@ -49,55 +51,70 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 3a — Phase-Infrastruktur | ✅ fertig |
 | Ziel 3b — combat.py Kernel | ✅ fertig |
 | Ziel 3c — Shooting + Fight Phase | ✅ fertig |
-| **Ziel A — Architektur-Review** | ✅ **fertig** |
-| **Ziel 4 — Phasen ausbauen** | ⏳ **nächste Session** |
+| Ziel A — Architektur-Review | ✅ fertig |
+| **Ziel 4a — Badge/State-System** | ⏳ **nächste Session** |
+| Ziel 4b–4f | ⬜ geplant |
 
 ---
 
-## Nächste Session: Blocker beheben, dann Ziel 4
-
-Der Review hat 3 Blocker vor Ziel 4 identifiziert. Diese sind schnell fixbar (P1: 1 Zeile, P2: 1 Check, P3: Turn-Order-Logik). Danach kann Ziel 4 beginnen.
+## Nächste Session: Ziel 4a
 
 ### Reihenfolge
 
 ```
-1. Blocker 1 — parse_dice() W-Notation fix  (src/gameMechanic/combat.py)
-2. Blocker 2 — in_melee-Check in can_shoot()  (src/gameMechanic/shootingPhase.py)
-3. Blocker 3 — Nahkampfphase Turn-Order  (src/gameMechanic/fightPhase.py)
-4. Tests für alle 3 Fixes
-5. Ziel 4 starten: Bewegungsphase ausbauen (Advance-Roll, Reserve)
+1. Entscheidung: Doku-Ort für unit_states.md (docs/rules/ vs. docs/)
+2. docs/rules/unit_states.md schreiben (Flussdiagramme + Badge-Vokabular)
+3. "normal" → "moved" umbenennen (unit_mutations, movementPhase, _common, Tests)
+4. turn_flags["shot"] = True nach Schussauflösung (shootingPhase._render_display)
+5. turn_flags["fought"] = True nach Kampfauflösung (fightPhase._render_display)
+6. state_badges_html() — neue Prioritätslogik: FOUGHT > CHARGED; SHOT additiv
+7. _reset_turn_state() — my_will_be_done_active ebenfalls zurücksetzen
+8. apply_damage() — destroyed=True → melee-Partner auto-clearen
+9. Tests für alle Badge-Transitionen
 ```
+
+### Designentscheidungen aus dieser Session (fest)
+
+- Badges sind digitale Spielmarker — immer den Regelzustand abbilden, nicht technische Felder
+- `STATIONARY` als Default am Zugstart ist RICHTIG — Spieler muss immer Zustand sehen
+- `FOUGHT` ersetzt `CHARGED` in der Anzeige (nicht additiv)
+- `SHOT` ist immer additiv neben dem Bewegungsbadge
+- `IN MELEE` wird unterdrückt wenn `CHARGED` aktiv (ist impliziert)
+- `FOUGHT + IN MELEE` zeigen zusammen (kämpfte, noch gebunden)
+- Spaltenreihenfolge NIEMALS an `active` binden — `first_player`/`second_player` sind unveränderlich
 
 ---
 
-## Blocker-Details
+## Badge-Vokabular (Kurzreferenz für nächste Session)
 
-### Blocker 1 — parse_dice() crasht auf W-Notation (P1)
-
-**Problem:** Necron-YAML nutzt `W3`, `W6`, `W3+3`, `3W3`. `parse_dice()` kennt nur D-Notation.
-**Fix:** In `src/gameMechanic/combat.py`, Funktion `parse_dice()`, vor dem bestehenden Code:
-```python
-s = str(s).upper().replace("W", "D")
 ```
-**Tests:** Neue Tests für `parse_dice("W3")`, `parse_dice("W6")`, `parse_dice("3W3")`, `parse_dice("W3+3")`
+PERSISTENT:   IN MELEE | IN RESERVE
+BEWEGUNG:     STATIONARY | MOVED | ADVANCED | RETREATED | CHARGED
+AKTION:       SHOT (additiv) | FOUGHT (ersetzt CHARGED)
+SPEZIAL:      MWBD
 
-Zusätzlich fehlt `resolve_weapon_strength()` für relative Stärkewerte (`Träger`, `+1`, `x2`).
-Das ist ein separater Fix — auch in `combat.py` als neue Funktion.
-
-### Blocker 2 — in_melee-Check fehlt in can_shoot() (P2)
-
-**Problem:** Gebundene Einheiten dürfen laut Regelwerk nicht schießen. `can_shoot()` prüft das nicht.
-**Fix:** In `src/gameMechanic/shootingPhase.py`, Funktion `can_shoot()`:
-```python
-if unit_state.get("in_melee"):
-    return False
+PRIORITÄT: FOUGHT > CHARGED > MOVED/ADVANCED/RETREATED/STATIONARY
+           SHOT immer additiv
+           IN MELEE zeigt immer außer bei CHARGED
 ```
-Analog: Schießen auf Freunde die im Nahkampf gebunden sind — noch out-of-scope, nur eigene Einheit prüfen.
 
-### Blocker 3 — Nahkampfphase startet mit falschem Spieler (P3)
+## 13 Szenarien (Kurzreferenz)
 
-**Problem:** Regelwerk: Nahkampfrunde beginnt beim Nicht-aktiven Spieler. App startet beim aktiven Spieler.
-**Fix:** In `src/gameMechanic/fightPhase.py` Turn-Order-Logik: Nicht-aktiver Spieler wird als erster zum Kämpfen aufgefordert.
+| # | Start | Bewegung | FKampf | Angriff | Nahkampf | Zugwechsel |
+|---|---|---|---|---|---|---|
+| 1 | STAT | stationary | SHOT | — | — | STATIONARY |
+| 2 | STAT | MOVED | SHOT | — | — | STATIONARY |
+| 3 | STAT | ADVANCED | — | — | — | STATIONARY |
+| 4 | STAT | MOVED | SHOT | Charge✓ | FOUGHT | IN MELEE |
+| 5 | STAT | MOVED | — | Charge✓ | FOUGHT | IN MELEE |
+| 6 | STAT | MOVED | — | Charge✗ | — | STATIONARY |
+| 7 | STAT | MOVED | — | Charge✓ | (noch nicht) | — |
+| 8 | IN MELEE | stationary | — | — | FOUGHT | IN MELEE |
+| 9 | IN MELEE | stationary | — | — | Feind destroyed | STATIONARY |
+| 10 | IN MELEE | RETREATED | — | — | — | STATIONARY |
+| 11 | IN RESERVE | (Runde 1) | — | — | — | IN RESERVE |
+| 12 | IN RESERVE | DEPLOY(R≥2) | — | — | — | STATIONARY |
+| 13 | STAT | MWBD aktiv | … | … | … | STATIONARY |
 
 ---
 
@@ -105,46 +122,40 @@ Analog: Schießen auf Freunde die im Nahkampf gebunden sind — noch out-of-scop
 
 ```
 src/
-  app.py                    ← Streamlit-Einstieg
+  app.py
   gameMechanic/
-    combat.py               ← AttackParams, DefendParams, resolve_attack(), parse_dice()
-    commandPhase.py         ← Command Phase Handler
-    shootingPhase.py        ← can_shoot(), ShootingPhaseHandler
-    fightPhase.py           ← can_fight(), FightPhaseHandler
-    movementPhase.py        ← MovementPhaseHandler
-    chargephase.py          ← Stub
-    game_state.py           ← init_state, next_phase, PHASES
-    unit_mutations.py       ← apply_damage, heal_unit, enter/leave_melee, set_charged
-    game_log.py             ← log_action
-    ability_engine.py       ← Timing-Konstanten, Trigger-System
-    phase_runner.py         ← PHASE_REGISTRY, render_current_phase()
+    combat.py               ← parse_dice (W+D, +N), resolve_weapon_strength, resolve_attack
+    commandPhase.py
+    shootingPhase.py        ← can_shoot(), _render_display() → SHOT-Flag hier setzen
+    fightPhase.py           ← can_fight(), _render_display() → FOUGHT-Flag hier setzen
+    movementPhase.py        ← "normal" → "moved" umbenennen
+    chargephase.py          ← Stub (4c)
+    game_state.py           ← _reset_turn_state() — MWBD-Bug hier
+    unit_mutations.py       ← set_movement_status, apply_damage — melee-auto-clear hier
+    game_log.py
+    ability_engine.py
+    phase_runner.py
   gameObjects/
-    unit.py                 ← Unit-Dataclass
-    weapon.py               ← Weapon-Dataclass
-    loader.py               ← YAML → Objekte
+    unit.py | weapon.py | loader.py
   uiLayout/
-    _common.py              ← lookup(), render_player_column(), render_attack_form()
-    unitCard.py             ← Einheitenkarte inkl. MWBD/ResOrb-Awaiting-Flow
-    gameActionsArea.py      ← delegiert an phase_runner
-data/
-  wh40k_9e/
-    necrons/                ← units.yaml (W-Notation!), weapons.yaml, army.yaml
-    orks/                   ← army.yaml (6 Einheiten, keine units.yaml)
+    _common.py              ← state_badges_html() — Hauptziel 4a
+    unitCard.py
+    gameActionsArea.py
+data/wh40k_9e/necrons/ | orks/
 tests/
-  gameMechanic/             ← test_combat.py, test_unit_mutations.py, test_game_state.py,
-                               test_command_phase.py, test_shooting.py, test_fight.py,
-                               test_ability_engine.py
-  uiLayout/                 ← test_common.py (NEU)
-  gameObjects/              ← (vorhanden)
+  gameMechanic/             ← test_combat.py (182 Tests total)
+  uiLayout/                 ← test_common.py — Badge-Tests hier erweitern
+  gameObjects/
+docs/
+  goals.md                  ← Ziel 4a vollständig spezifiziert
+  rules/schlachtrunde.md
+  rules/unit_states.md      ← NOCH ZU ERSTELLEN (Ziel 4a Schritt 1-2)
 ```
 
-## Designentscheidungen (unveränderlich)
+## Wichtige Designregeln (aus CLAUDE.md + Memory)
 
-- `turn_flags` = Spielmechanik-Checks only
-- `selected_targets: list[tuple[str, str]]` — nie single-target
-- `can_fight()` prüft `in_melee` ODER `charged`
-- `render_attack_form()` in `_common.py` — shared, kein Duplikat
-- Attack-Form immer im unteren `_render_display`-Bereich, nicht in der Spalte
-- Aktionen erscheinen NUR kontextabhängig zur ausgewählten Einheit
-- Alle Engine-Importe direkt aus `gameMechanic.*` — kein Shim mehr
-- Kein direktes Committen auf `main`
+- Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
+- Seitenleisten IMMER fest: `first_player` links, `second_player` rechts — niemals an `active` binden
+- Aktionen nur kontextuell zur ausgewählten Einheit
+- Kein Design ohne Schema — Nutzer definiert Farbpalette selbst
+- `dev`-Branch — kein direktes Committen auf `main`

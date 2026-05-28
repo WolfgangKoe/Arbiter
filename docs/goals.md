@@ -170,18 +170,131 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 **Voraussetzung:** Ziel 3 abgeschlossen. Ziel A liefert die Grundlage für korrekte Implementierung.
 
-### Bekannte Bugs (Bewegungsphase)
+---
+
+### 4a — Einheitenzustand & Badge-System ⬜
+
+**Konzept:** Badges sind digitale Spielmarker — wie physische Tokens auf dem Tisch.
+Jedes Badge drückt genau einen Regelzustand aus, der taktisch relevant ist.
+Zustände lösen sich im Phasenverlauf ab oder ergänzen sich; ephemere Badges werden am Zugwechsel zurückgesetzt.
+
+#### Badge-Vokabular (SOLL)
+
+**Persistente Badges** (rundenübergreifend, nicht im Zugreset):
+
+| Badge | Zustand |
+|---|---|
+| `IN MELEE` | Einheit ist im Nahkampf gebunden |
+| `IN RESERVE` | Einheit in Reserve gehalten |
+
+**Ephemere Bewegungs-Badges** (mutex, Zugstart → reset zu `STATIONARY`):
+
+| Badge | Bedeutung | Einschränkungen |
+|---|---|---|
+| `STATIONARY` | Hat sich nicht bewegt (Zugstart-Default) | keine |
+| `MOVED` | Normal bewegt (war: `"normal"`) | keine |
+| `ADVANCED` | Vorgestoßen | ✗ Schuss (außer Assault), ✗ Charge |
+| `RETREATED` | Aus Nahkampf zurückgezogen — löscht `IN MELEE` | ✗ Schuss, ✗ Charge |
+| `CHARGED` | Angestürmt — ersetzt MOVED/STATIONARY, impliziert `IN MELEE` | kämpft zuerst |
+
+**Aktion-Badges** (additiv, Zugstart → reset):
+
+| Badge | Gesetzt wann | Ersetzt |
+|---|---|---|
+| `SHOT` | nach Schussauflösung (render_attack_form Shooting) | nichts (additiv) |
+| `FOUGHT` | nach Kampfauflösung (render_attack_form Fight) | ersetzt `CHARGED` in Anzeige |
+
+**Spezial-Badges**:
+
+| Badge | Reset-Zeitpunkt |
+|---|---|
+| `MWBD` | Zugwechsel (`_reset_turn_state`) — aktuell Bug: wird nicht zurückgesetzt |
+
+#### Badge-Priorität (Anzeigelogik)
+
+```
+Bewegungsgruppe (mutex):  FOUGHT > CHARGED > MOVED | ADVANCED | RETREATED | STATIONARY
+Aktion (additiv):         SHOT zeigt immer neben dem aktuellen Bewegungsbadge
+Persistent:               IN MELEE zeigt immer — außer CHARGED aktiv (impliziert IN MELEE)
+Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebunden)
+                          SHOT + CHARGED zeigen zusammen (schoss und chargte)
+                          SHOT + FOUGHT + IN MELEE möglich (voll aktiviert, noch gebunden)
+```
+
+#### Zustandsübergänge — vollständige Szenarien
+
+| # | Startzustand | Bewegung | Fernkampf | Angriff | Nahkampf | Badge-Verlauf | Zugwechsel |
+|---|---|---|---|---|---|---|---|
+| 1 | STATIONARY | stationary | schießt | — | — | `STATIONARY` → `STATIONARY+SHOT` | `STATIONARY` |
+| 2 | STATIONARY | normal | schießt | — | — | `STATIONARY` → `MOVED` → `MOVED+SHOT` | `STATIONARY` |
+| 3 | STATIONARY | advance | — | — | — | `STATIONARY` → `ADVANCED` | `STATIONARY` |
+| 4 | STATIONARY | normal | schießt | Charge ✓ | kämpft | `MOVED` → `MOVED+SHOT` → `SHOT+CHARGED` → `SHOT+FOUGHT+IN MELEE` | `IN MELEE` |
+| 5 | STATIONARY | normal | — | Charge ✓ | kämpft | `MOVED` → `CHARGED` → `CHARGED+FOUGHT` → `[IN MELEE]` | `IN MELEE` |
+| 6 | STATIONARY | normal | — | Charge ✗ | — | `MOVED` → `MOVED` (kein CHARGED) | `STATIONARY` |
+| 7 | STATIONARY | normal | — | Charge ✓ | noch nicht | `MOVED` → `CHARGED` (zwischen Angriffs- und Nahkampfphase) | — |
+| 8 | IN MELEE | stationary | — | — | kämpft | `IN MELEE` → `IN MELEE+FOUGHT` | `IN MELEE` |
+| 9 | IN MELEE | stationary | — | — | Feind vernichtet | `IN MELEE` → `IN MELEE+FOUGHT` → auto-clear → `STATIONARY` | `STATIONARY` |
+| 10 | IN MELEE | retreat | — | — | — | `IN MELEE` → `RETREATED` (IN MELEE erlischt) | `STATIONARY` |
+| 11 | IN RESERVE | (Runde 1) | — | — | — | `IN RESERVE` bleibt | `IN RESERVE` |
+| 12 | IN RESERVE | deploy (Runde ≥ 2) | ✗* | ✗* | — | `IN RESERVE` → `MOVED` (IN RESERVE erlischt) | `STATIONARY` |
+| 13 | STATIONARY | (MWBD aktiv) | … | … | … | `STATIONARY+MWBD` → … | `STATIONARY` (MWBD cleared) |
+
+*Reserve-Einschränkung in Ankunftsrunde: kein Charge, kein Shoot (vereinfachte Regel)
+
+#### Dokumentation
+
+- [ ] Flussdiagramme + Badge-Vokabular in `docs/rules/unit_states.md` schreiben
+  - Vorschlag: neue Datei neben `schlachtrunde.md` — Domänenmodell, das Regelwelt und Code-Zustand verbindet
+  - Alternative: Abschnitt in `docs/architecture.md` (wenn eher Implementierungsreferenz)
+  - **Entscheidung offen** — im Zuge der Implementierung klären
+
+#### Implementierungsschritte
+
+- [ ] `"normal"` → `"moved"` umbenennen: `unit_mutations`, `movementPhase`, `_common`, Tests
+- [ ] `turn_flags["shot"] = True` nach Schussauflösung setzen (`shootingPhase._render_display`)
+- [ ] `turn_flags["fought"] = True` nach Kampfauflösung setzen (`fightPhase._render_display`)
+- [ ] `state_badges_html()` — FOUGHT > CHARGED Priorität; SHOT additiv; IN MELEE bei CHARGED unterdrücken
+- [ ] `_reset_turn_state()` — `my_will_be_done_active` ebenfalls zurücksetzen (Bug)
+- [ ] `apply_damage()` — bei `destroyed=True` prüfen ob melee-Partner `in_melee` auto-clearen
+- [ ] Tests für neue Badge-Transitionen (TestStateBadges erweitern)
+
+---
+
+### 4b — Bewegungsphase vollständig ⬜
 
 - [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True` ✅
 - [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True` ✅
+- [ ] Advance-Roll: W6 würfeln, Ergebnis zur Bewegungsreichweite addieren, `advanced` setzen
+- [ ] Reserve-Deploy (Zug 2+): `in_reserve=False`, Bewegungseinschränkungen greifen
 
-### Phasen (Stubs → vollständige Implementierung)
-- [ ] `movementPhase.py` — Advance-Roll, Reserve-Deploy (Zug 2+); Bugs (siehe oben) als Voraussetzung
-- [ ] `chargephase.py` — Overwatch via `ShootingAction` mit `hit_modifier="only_6s"`
-- [ ] `moralePhase.py` — D6 + Verluste vs. Leadership
-- [ ] `psychicPhase.py` — Manifest (2D6 ≥ WC), Deny, Perils (Scope: TBD)
+---
 
-### Army Builder
+### 4c — Angriffsphase (Charge Phase) ⬜
+
+- [ ] Charge-Würfel: 2W6 — bei Erfolg `set_charged()`, bei Misserfolg bleibt `MOVED`
+- [ ] `advanced`-Flag sperrt Charge-Button (Regelkonformität)
+- [ ] Overwatch: gegnerische Schussreaktion mit `hit_modifier="only_6s"` (Scope: TBD)
+
+---
+
+### 4d — Moralphase ⬜
+
+- [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
+- [ ] `moralePhase.py` — Render-Logik
+
+---
+
+### 4e — Psychic Phase ⬜
+
+- [ ] Manifest: 2D6 ≥ Warp Charge → Effekt ausführen
+- [ ] Deny: gegnerischer Psyker darf versuchen zu unterdrücken
+- [ ] Perils of the Warp: Doppel-1/Doppel-6 → Schaden am Psyker
+- [ ] Scope: TBD (Necrons haben keine Psyker — für Ork-Phase relevant)
+
+---
+
+### 4f — Army Builder ⬜
+
 - [ ] Entscheidung: Datei-Import vs. In-App-Builder vs. hardcodierte Presets (TBD)
 - [ ] Setup-Screen: Spielgröße, Spieltyp, Armeeauswahl, Erster Spieler
 - [ ] Detachment-Slot-Constraints als Referenz im Setup anzeigen
