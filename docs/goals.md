@@ -341,56 +341,52 @@ RP-Trigger gehört in Schuss-, Angriffs- und Nahkampfphase (nach Feindangriff). 
 
 ---
 
-### 4f — Psychic Phase ⬜
+### 4f — Psychic Phase ✅
 
-**Voraussetzung:** 4e abgeschlossen ✅
+**Abgeschlossen** (commit `625a0ff`).
 
-Stub existiert bereits (`psychicPhase.py`). Necrons haben keine Psyker — die Phase zeigt
-für Necrons die korrekte "no PSYKER units"-Meldung; der volle Flow läuft für Psyker-Armeen.
+- [x] YAML: Weirdboy + Wurrboy in `orks/army.yaml` (BSData p.85/92, PSYKER-Keyword)
+- [x] YAML: Canoptek Spyder in `necrons/army.yaml` (`rules: [gloom_prism]`, Particle Beamer)
+- [x] Pure functions: `has_psyker()`, `can_deny()`, `is_perils()`, `smite_damage_die()`, `deny_succeeds()`
+- [x] Aktive Spalte: Kein PSYKER → Caption | Nicht-PSYKER → Warning | PSYKER → Smite-Flow
+- [x] Smite-Manifest: 2D6 eingeben → Ergebnis prüfen (< 5 fail, ≥ 5 ok, 2/12 Perils)
+- [x] Perils: W3-Schadenseingabe + `apply_damage(mortal=True)` am Psyker selbst (Button)
+- [x] Inaktive Spalte: Bannversuch wenn `can_deny()` + laufendes Manifest → 2D6 > Manifestwurf
+- [x] Gloom Prism: einmal-pro-Phase (`psychic_denies_used` in session_state)
+- [x] Smite-Schaden: Zielauswahl via `selected_targets` + W3 (W6 bei Roll ≥ 11) + Apply-Button
+- [x] 22 Tests grün (`tests/gameMechanic/test_psychic_phase.py`)
+- [x] `docs/spec/processes.md`: P-10 Bewegungsphase, P-11 Kommandoprotokolle, P-12 Psychic Phase
 
-**Test-Einheiten (in YAML einzupflegen vor Implementierung):**
-- Orks `army.yaml`: Weirdboy (PSYKER, Weirdboy Staff) + Wurrboy (PSYKER, Eyez of Mork)
-- Necrons `army.yaml`: Canoptek Spyder mit Gloom Prism (`rules: [gloom_prism]`)
+**Hinweis Smite-Zielauswahl:** Gleicher Mechanismus wie Schussphase — Spieler klickt auf eine
+feindliche Einheit in der gegnerischen Armeeliste; danach erscheint Schadenseingabe + Apply-Button.
 
-#### Generalisierter Psi-Flow
+---
 
-```
-selectPsyker → selectTarget (friendly ODER enemy) → resolve_psi_power → handle_effects
-```
+### 4f.1 — Psychic Phase Nachbesserungen ⬜
 
-Die Zielrichtung ist **Teil der Kraft**, nicht des Bannvorgangs:
-- **Witchfire/Smite:** feindliches Ziel → tödliche Verwundungen
-- **Blessing:** befreundetes Ziel → Buff (z.B. Bewegung, Attacken) — Scope: spätere Session
+Offene Punkte aus Review-Session nach 4f-Implementierung:
 
-#### Bannversuch — unabhängig vom Ziel
+#### 4f.1.a — Smite-Zielauswahl-Hinweis verbessern
 
-Der Bannversuch reagiert auf die **Kraftanmeldung selbst**, nicht auf das Ziel.
-Eine Einheit kann bannen, wenn: PSYKER-Keyword ODER `"gloom_prism"` in `unit.rules`.
-Necron-Canoptek-Spinne mit Gloom Prism kann bannen als wäre sie ein PSYKER.
+- [ ] `_render_psi_result()`: Caption bei fehlendem Ziel ausführlicher — Schritt-für-Schritt-Hinweis
+  → "① Click an enemy unit in their army list to mark it as Smite target, then the damage button appears."
 
-```python
-def can_deny(units: list[Unit]) -> bool:
-    return any(
-        "PSYKER" in {kw.upper() for kw in u.keywords} or "gloom_prism" in u.rules
-        for u in units
-    )
-```
+#### 4f.1.b — CAST-Badge (ephemer)
 
-#### Implementierungsschritte
+Wenn ein Psyker erfolgreich manifestiert hat, erhält er ein `CAST`-Badge (analog zu `SHOT`).
 
-- [ ] YAML: Weirdboy + Wurrboy in `orks/army.yaml` (BSData p.85/92, PSYKER-Keyword)
-- [ ] YAML: Canoptek Spyder in `necrons/army.yaml` (`rules: [gloom_prism]`, Particle Beamer)
-- [ ] Pure functions: `has_psyker()`, `can_deny()`, `is_perils()`, `smite_damage_die()`
-- [ ] Aktive Spalte: Kein PSYKER → Caption | PSYKER + Nicht-PSYKER gewählt → Info | PSYKER → Smite-Flow
-- [ ] Smite-Manifest: 2D6 eingeben → Ergebnis prüfen (< 5 fail, ≥ 5 ok, 2/12 Perils)
-- [ ] Perils: W3-Schadenseingabe + `apply_damage(mortal=True)` am Psyker selbst
-- [ ] Inaktive Spalte: Bannversuch wenn `can_deny()` + laufendes Manifest → 2D6 > Manifestwurf
-- [ ] Smite-Bereich (unten): Zielauswahl via `selected_targets` + W3 (W6 bei Roll ≥ 11) + Apply
-- [ ] Tests: alle reinen Hilfsfunktionen in `tests/gameMechanic/test_psychic_phase.py`
+- [ ] `src/uiLayout/_common.py: _BADGE_COLORS`: `"CAST": ("#9060d0", "#180a28")` (Violett)
+- [ ] `src/uiLayout/_common.py: state_badges_html()`: `CAST` additiv anzeigen (wie SHOT)
+- [ ] `src/gameMechanic/psychicPhase.py`: `turn_flags["cast"] = True` nach `manifested=True`
+- [ ] `src/gameMechanic/game_state.py: reset_turn_flags()`: `"cast": False` ergänzen
+- [ ] Tests: `tests/uiLayout/test_common.py`
 
-**Scope:** Nur Smite (WC 5) — keine weiteren Psikräfte in dieser Session.
-**Ability Engine:** Gloom Prism nicht über den Effect-Dispatcher — direkt via `unit.rules`-Check.
-  Ein neuer Effect-Typ `"deny_psychic"` wäre die saubere Lösung — Thema für Ziel 4i / Refactoring.
+#### 4f.1.c — Blessing-Flow (befreundetes Ziel) ⬜
+
+Scope für spätere Session:
+- Psikräfte vom Typ Blessing benötigen eine **befreundete** Einheit als Ziel
+- Buff-Effekt anwenden (z.B. +1 Bewegung, +1 Attacke) + neues Badge
+- Braucht neuen Effect-Typ `"blessing"` in der Ability Engine (Thema Ziel 4i)
 
 ---
 

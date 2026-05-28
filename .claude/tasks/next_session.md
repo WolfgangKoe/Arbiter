@@ -12,15 +12,13 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session gemacht wurde
 
-- Psiphase vollständig geplant (kein Code geschrieben — nur Analyse + Dokumentation)
-- BSData (`Orks.cat`, `Necrons.cat`) ausgewertet:
-  - Weirdboy (p.85) und Wurrboy (p.92) als Ork-PSYKERs identifiziert
-  - Canoptek Spyder + Gloom Prism als Necron-Deny-Einheit identifiziert
-- Architektur-Problem erkannt: `army.yaml` dupliziert Daten aus `units.yaml`/`weapons.yaml`
-  → Notiz in `goals.md` Ziel 4i; für jetzt: neue Einheiten weiterhin in `army.yaml` direkt
-- Generalisierter Psi-Flow dokumentiert: `selectPsyker → selectTarget → resolve → handle_effects`
-- Bannversuch-Konzept geklärt: unabhängig vom Ziel der Kraft; Canoptek Spinne kann bannen
-- `docs/goals.md` Ziel 4f vollständig überarbeitet (Ziel 4i Architektur-Notiz ergänzt)
+- `docs/spec/processes.md` ergänzt: P-10 (Bewegungsphase), P-11 (Kommandoprotokolle), P-12 (Psychic Phase)
+- Ziel 4f vollständig implementiert (commit `625a0ff`):
+  - `orks/army.yaml`: Weirdboy + Wurrboy (PSYKER, korrekte BSData-Werte)
+  - `necrons/army.yaml`: Canoptek Spyder mit `rules: [gloom_prism]`
+  - `psychicPhase.py`: vollständiger Smite-Flow inkl. Perils, Bannversuch, Schadensanwendung
+  - `test_psychic_phase.py`: 22 Tests, alle grün (252 gesamt)
+  - Gloom Prism: einmal-pro-Phase-Tracking via `psychic_denies_used` in session_state
 
 ---
 
@@ -37,156 +35,92 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 4c — Ability Engine Refactoring | ✅ fertig |
 | Ziel 4d — Befehlsphase vollständig | ✅ fertig (commit `b734f97`) |
 | Ziel 4e — Bewegungsphase vollständig | ✅ fertig (commit `291e698`) |
-| **Ziel 4f — Psychic Phase** | ⏳ **nächster Schritt** |
+| Ziel 4f — Psychic Phase | ✅ fertig (commit `625a0ff`) |
+| **Ziel 4f-Nachbesserungen** | ⏳ **nächster Schritt** |
 
 ---
 
-## NÄCHSTE AUFGABE: Ziel 4f — Psychic Phase implementieren
+## NÄCHSTE AUFGABE: Ziel 4f — Nachbesserungen
 
-### Kontext
-
-Alles ist geplant und dokumentiert. Die nächste Session beginnt direkt mit Implementierung —
-kein weiteres Planen nötig. Freigabe liegt vor.
-
-### Schritt 1: YAML-Einträge (vor dem Code)
-
-**`data/wh40k_9e/orks/army.yaml`** — zwei Einheiten hinzufügen:
-
-**Weirdboy** (BSData Orks.cat p.85):
-- M5"/WS3+/BS5+/S5/T5/W5/A3/Ld6/Sv6+, kein Invuln, kein FNP
-- Keywords: Orks, Bad Moons, Infantry, Character, **PSYKER**, Weirdboy
-- Psyker: Cast 1, Deny 1, Powers: Smite + 2 PotW
-- Waffe: Weirdboy Staff — Melee, S+3 (= 8 bei S5), AP-1, D3
-
-**Wurrboy** (BSData Orks.cat p.92):
-- M5"/WS3+/BS5+/S5/T5/W5/A3/Ld6/Sv6+, kein Invuln, kein FNP
-- Keywords: Orks, Bad Moons, Infantry, Character, **PSYKER**, Beast Snagga, Wurrboy
-- Psyker: Cast 1, Deny 1, Powers: Smite + 2 Beasthead
-- Waffe: Eyez of Mork — 12", Assault 2, S6, AP-3, D3 (einzigartige Fernkampf-Psikraft)
-
-**`data/wh40k_9e/necrons/army.yaml`** — eine Einheit hinzufügen:
-
-**Canoptek Spyder (Gloom Prism)** (BSData Necrons.cat p.101):
-- M6"/WS4+/BS4+/S6/T6/W6/A5/Ld10/Sv3+, kein Invuln, kein FNP
-- Keywords: Necrons, Nephrekh, Vehicle, Fly, Canoptek, Canoptek Spyder
-- `rules: [gloom_prism]` ← Schlüsselfeld für can_deny()-Check
-- Waffe: 2× Particle Beamer — 18", Assault 6, S5, AP0, D1
-- Abilities: "Gloom Prism: In der Psi-Phase des Gegners kann diese Einheit eine Psikraft bannen als wäre sie ein PSIONIKER | Fabricator Claw Array: Repariert DYNASTY VEHICLE um W3 LP/Zug"
-
-### Schritt 2: Hilfsfunktionen in `psychicPhase.py`
-
-```python
-def has_psyker(units: list[Unit]) -> bool:
-    return any("PSYKER" in {kw.upper() for kw in u.keywords} for u in units)
-
-def can_deny(units: list[Unit]) -> bool:
-    return any(
-        "PSYKER" in {kw.upper() for kw in u.keywords} or "gloom_prism" in u.rules
-        for u in units
-    )
-
-def is_perils(roll: int) -> bool:
-    return roll in (2, 12)
-
-def smite_damage_die(roll: int) -> str:
-    return "W6" if roll >= 11 else "W3"
-
-def deny_succeeds(manifest_roll: int, deny_roll: int) -> bool:
-    return deny_roll > manifest_roll
-```
-
-### Schritt 3: UI-Flow
-
-**Generalisierter Psi-Flow:**
-```
-selectPsyker → selectTarget (friendly ODER enemy) → resolve_psi_power → handle_effects
-```
-Zielrichtung ist Teil der Kraft, nicht des Bannvorgangs. Für Smite: feindliches Ziel.
-
-**Session-State:**
-```python
-psi_result: dict | None = {
-    "faction": str, "uid": str,
-    "roll": int,
-    "manifested": bool,      # roll >= 5
-    "perils": bool,          # roll in (2, 12)
-    "perils_applied": bool,  # W3-Schaden am Psyker angewendet
-    "denied": bool,
-    "deny_roll": int | None,
-}
-```
-
-**Aktive Spalte:**
-```
-Keine PSYKER in Armee     → Caption "No PSYKER units — skip this phase."
-Keine Einheit gewählt     → Caption "← Select a PSYKER from your army list."
-Nicht-PSYKER gewählt      → Caption "Not a PSYKER — select a PSYKER unit."
-PSYKER gewählt (Weirdboy) →
-  "Smite — Warp Charge 5"
-  [2D6 input]  [Attempt Manifest]
-  → Roll < 5 (kein Perils):  "Failed." + [Reset]
-  → Roll == 2 (Perils+fail): "Perils! Power failed." → W3 input → [Apply to Weirdboy]
-  → Roll == 12 (Perils+ok):  "Perils! Manifested." → W3 input → [Apply] + Smite bereit
-  → Roll 5–11:               "Manifested! Roll: N." → Smite bereit
-```
-
-**Inaktive Spalte:**
-```
-can_deny(enemy_units) == True + Manifest läuft + nicht gebannt:
-  "Deny: 2D6 > {manifest_roll}"
-  [2D6 input]  [Attempt Deny]
-  → > manifest_roll: "Denied!"
-  → ≤ manifest_roll: "Deny failed."
-
-can_deny == False:
-  Caption "No PSYKER or Gloom Prism — cannot deny."
-
-(Zielstats wenn via ▷ markiert: T / Sv / ++)
-```
-
-**Unterer Bereich:**
-```
-Manifested + nicht gebannt + (kein Perils ODER Perils bereits angewendet):
-  "Smite → {Zieleinheit}" | W3 (W6 bei Roll ≥ 11)
-  [Schadenseingabe]  [Apply mortal wounds]
-
-Sonst: PHASE_RULES["psychic"] Info-Text
-```
-
-### Schritt 4: Tests (`tests/gameMechanic/test_psychic_phase.py`)
-
-```python
-test_has_psyker_true()            # Unit mit PSYKER-Keyword
-test_has_psyker_false()           # Units ohne PSYKER
-test_can_deny_via_psyker_keyword()
-test_can_deny_via_gloom_prism()   # rules: [gloom_prism], kein PSYKER
-test_can_deny_neither()
-test_is_perils_true()             # 2 und 12
-test_is_perils_false()            # 5, 10, 11
-test_smite_damage_die_w3()        # 5–10 → "W3"
-test_smite_damage_die_w6()        # 11, 12 → "W6"
-test_deny_succeeds_greater()
-test_deny_fails_equal()           # strikt größer nötig
-test_deny_fails_lower()
-```
-
-### Implementierungsreihenfolge
-
-1. YAML-Einträge (Weirdboy, Wurrboy, Canoptek Spyder)
-2. Tests schreiben (rot)
-3. Hilfsfunktionen implementieren (grün)
-4. UI-Flow implementieren
-5. Manuell im Browser testen (Testszenario: Orks aktiv, Weirdboy manifestiert → Necrons denyen via Spinne)
-6. Commit
+Drei offene Punkte aus der Review-Session:
 
 ---
 
-## Scope-Grenzen
+### 4f.1 — Smite-Schadensbutton klar machen
 
-- **Nur Smite** — keine weiteren Psikräfte
-- **Kein Blessing-Flow** — Zielauswahl nur feindlich (friendly target: spätere Session)
-- **Gloom Prism** — direkt via `unit.rules`, kein Ability-Engine-Dispatch
-- Ability Engine braucht neuen Effect-Typ `"deny_psychic"` für vollständige Abstraktion — nicht jetzt
+**Status:** Der Code ist korrekt — der Schadensbutton erscheint sobald eine feindliche Einheit via
+`selected_targets` ausgewählt ist (gleicher Mechanismus wie in der Schussphase: Spieler klickt auf
+gegnerische Einheit in deren Armeeliste).
+
+**Problem:** In der UI ist nicht klar genug, wie der Spieler das Ziel auswählt.
+Die Caption `"▷ Select an enemy unit from their army list as Smite target."` reicht offenbar nicht.
+
+**Fix:** Im Smite-Bereich explizit erklären, dass das Ziel via Klick auf die gegnerische Armeeliste
+gewählt wird (wie in Schuss-/Kampfphase). Optional: Die Zielauswahl-Logik testen.
+
+**Zu bearbeiten in:** `src/gameMechanic/psychicPhase.py: _render_psi_result()`
+
+---
+
+### 4f.2 — PSYKER-Badge
+
+**Beschreibung:** Es fehlt ein Badge für den PSYKER-Zustand (analog zu MWBD, IN MELEE etc.).
+
+Konkret: Wenn ein Psyker in dieser Phase bereits eine Kraft manifestiert hat, sollte er ein
+`CAST` (oder ähnlich) Badge erhalten, damit Spieler wissen, welche Einheit schon gecastet hat.
+(Optional: für Ziel 4f ausreichend — ist kein harter Bug.)
+
+**Design:** Badge setzt sich nach Phasenwechsel zurück (ephemer, analog zu SHOT).
+Name: `CAST` — Farbe: passend zu Psi-Thema (lila/violett, ähnlich `CHARGED`).
+
+**Zu bearbeiten in:**
+- `src/uiLayout/_common.py: _BADGE_COLORS` + `state_badges_html()`
+- `src/gameMechanic/psychicPhase.py`: `turn_flags["cast"] = True` nach erfolgreichem Manifest
+- `src/gameMechanic/game_state.py: reset_turn_flags()`: `"cast": False` ergänzen
+- Tests: `tests/uiLayout/test_common.py`
+
+---
+
+### 4f.3 — Buff-Flow (Blessing) für spätere Session (Ziel 4g oder 4f.3)
+
+**Beschreibung:** Psikräfte vom Typ Blessing betreffen eine befreundete Einheit (kein feindliches Ziel).
+Wenn der Psyker einen Buff manifestiert, muss:
+1. Eine **befreundete** Einheit als Ziel gewählt werden (aus der eigenen Armeeliste)
+2. Der Buff-Effekt angewendet werden (z.B. +1 Bewegung, +1 Attacke)
+3. Ein neues Badge erscheinen (z.B. `BLESSED` oder der Buff-Name als Micro-Badge)
+
+**Scope-Grenze jetzt:** Ziel 4f deckt nur Smite (Witchfire). Blessings kommen in 4f.3 oder 4g.
+
+**Wichtig für die Planung:** Zum Zeitpunkt der Blessing-Implementierung braucht die Ability Engine
+einen neuen Effect-Typ `"blessing"` mit Zieltyp `"friendly"` — bis dahin reicht direkter Code.
+
+---
+
+## Weitere offene Punkte aus Ziel 4
+
+### 4g — Angriffsphase (Charge Phase)
+
+- [ ] Charge-Würfel: 2W6 — bei Erfolg `set_charged()`, bei Misserfolg bleibt `MOVED`
+- [ ] `advanced`-Flag sperrt Charge-Button
+- [ ] RP-Trigger nach Feindangriff
+- [ ] Overwatch (Scope: TBD)
+
+### 4h — Moralphase
+
+- [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen
+
+### 4i — Army Builder + Architektur
+
+- [ ] `army.yaml` als Roster; Loader löst Werte aus `units.yaml`/`weapons.yaml` auf
+- [ ] Ability Engine: Effect-Typ `"deny_psychic"` für Gloom Prism (aktuell: direkter rules-Check)
+
+---
+
+## Implementierungsreihenfolge (nächste Session)
+
+1. **4f.1** — Smite-Zielauswahl-Hinweis verbessern + ggf. manuell testen
+2. **4f.2** — CAST-Badge (ephemer, nach Manifest gesetzt, Reset bei Phasenwechsel)
+3. Dann: Entscheidung ob 4g (Charge) oder 4f.3 (Blessing) als nächstes
 
 ---
 
@@ -208,7 +142,7 @@ src/
   app.py
   gameMechanic/
     combat.py | commandPhase.py
-    psychicPhase.py   ← NÄCHSTE Hauptdatei (Stub vorhanden)
+    psychicPhase.py   ← Ziel 4f fertig (commit 625a0ff)
     shootingPhase.py | fightPhase.py
     movementPhase.py   ← Ziel 4e fertig
     chargephase.py | game_state.py
@@ -224,10 +158,34 @@ src/
     armyList.py | gameActionsArea.py
     gameProtocoll.py
 data/wh40k_9e/
-  necrons/army.yaml   ← Canoptek Spyder hinzufügen
-  orks/army.yaml      ← Weirdboy + Wurrboy hinzufügen
+  necrons/army.yaml   ← Canoptek Spyder (gloom_prism) ✅
+  orks/army.yaml      ← Weirdboy + Wurrboy (PSYKER) ✅
 tests/
   gameMechanic/ | uiLayout/ | gameObjects/
 docs/
-  goals.md | spec/unit_states.md
+  goals.md | spec/unit_states.md | spec/processes.md
 ```
+
+---
+
+## Psychic Phase — Implementierungsdetails (für nächste Session)
+
+### Wie Smite-Schaden funktioniert (wichtig für Testing)
+
+Der Schadensbutton erscheint **nur wenn eine feindliche Einheit ausgewählt ist**:
+1. Psyker-Spieler wählt seinen PSYKER (aktive Spalte)
+2. Psyker-Spieler klickt auf eine gegnerische Einheit in der **gegnerischen Armeeliste** → `selected_targets`
+3. Danach erscheint in der aktiven Spalte: Zielname + Schadenseingabe + Apply-Button
+
+Gleicher Mechanismus wie in Schuss-/Kampfphase. Kein separater Zielauswahl-Dialog.
+
+### Perils-Schaden — Kein Auto-Apply
+
+Perils verursacht W3 tödliche Verwundungen am Psyker selbst.
+Der Spieler gibt das W3-Ergebnis (1–3) ein und klickt **[Apply to {unit}]**.
+Kein automatisches Apply — konsistent mit "kein Auto-Würfeln".
+
+### Deny — Gloom Prism (einmal pro Phase)
+
+`psychic_denies_used` in `session_state` ist ein Dict `{faction: bool}`.
+Reset erfolgt in `render_end` (wenn Spieler → klickt) und beim nächsten Phasen-Init.
