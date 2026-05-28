@@ -31,9 +31,14 @@ class FightPhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
+        # 9E: non-active player has fight priority and selects a unit to fight first.
+        active_player: str = st.session_state.active
+        priority_player = second if active_player == first else first
 
         col1, col2 = st.columns(2)
         with col1:
+            if first == priority_player:
+                st.info("⚔ Fight Priority — selects first this phase")
             render_player_column(
                 first,
                 state,
@@ -42,6 +47,8 @@ class FightPhaseHandler:
                 no_target_caption="← Designate a target (▷) from your army list.",
             )
         with col2:
+            if second == priority_player:
+                st.info("⚔ Fight Priority — selects first this phase")
             render_player_column(
                 second,
                 state,

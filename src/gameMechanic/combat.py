@@ -12,12 +12,30 @@ from dataclasses import dataclass
 
 
 def parse_dice(s: str) -> int:
-    s = str(s).upper().strip()
+    s = str(s).upper().strip().replace("W", "D")
+    modifier = 0
+    if "+" in s:
+        dice_part, mod_part = s.rsplit("+", 1)
+        if mod_part.isdigit():
+            modifier = int(mod_part)
+            s = dice_part
     if "D" in s:
         parts = s.split("D")
         mult = int(parts[0]) if parts[0] else 1
         sides = int(parts[1])
-        return sum(random.randint(1, sides) for _ in range(mult))
+        return sum(random.randint(1, sides) for _ in range(mult)) + modifier
+    return int(s) + modifier
+
+
+def resolve_weapon_strength(strength_value: str | int, bearer_strength: int) -> int:
+    """Resolve weapon strength including relative notation (Träger/Bearer/+N/xN)."""
+    s = str(strength_value).strip()
+    if s.lower() in ("träger", "bearer", "user"):
+        return bearer_strength
+    if s.startswith("+"):
+        return bearer_strength + int(s[1:])
+    if s.lower().startswith("x"):
+        return bearer_strength * int(s[1:])
     return int(s)
 
 

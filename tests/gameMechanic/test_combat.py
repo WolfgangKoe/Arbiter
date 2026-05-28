@@ -16,6 +16,7 @@ from gameMechanic.combat import (
     DefendParams,
     parse_dice,
     resolve_attack,
+    resolve_weapon_strength,
     wound_threshold,
 )
 
@@ -46,6 +47,63 @@ class TestParseDice:
 
     def test_zero_prefix(self):
         assert parse_dice("1") == 1
+
+
+class TestParseDiceWNotation:
+    def test_w3_notation(self):
+        assert 1 <= parse_dice("W3") <= 3
+
+    def test_w6_notation(self):
+        assert 1 <= parse_dice("W6") <= 6
+
+    def test_3w3_notation(self):
+        assert 3 <= parse_dice("3W3") <= 9
+
+    def test_w3_plus_3(self):
+        assert 4 <= parse_dice("W3+3") <= 6
+
+    def test_d3_plus_3(self):
+        assert 4 <= parse_dice("D3+3") <= 6
+
+    def test_2d6_plus_2(self):
+        assert 4 <= parse_dice("2D6+2") <= 14
+
+    def test_lowercase_w(self):
+        assert 1 <= parse_dice("w6") <= 6
+
+
+# ---------------------------------------------------------------------------
+# resolve_weapon_strength
+# ---------------------------------------------------------------------------
+
+
+class TestResolveWeaponStrength:
+    def test_fixed_integer(self):
+        assert resolve_weapon_strength(5, 4) == 5
+
+    def test_fixed_string_integer(self):
+        assert resolve_weapon_strength("6", 4) == 6
+
+    def test_traeger_keyword(self):
+        assert resolve_weapon_strength("Träger", 4) == 4
+
+    def test_bearer_keyword(self):
+        assert resolve_weapon_strength("Bearer", 3) == 3
+
+    def test_user_keyword(self):
+        assert resolve_weapon_strength("user", 5) == 5
+
+    def test_plus_one(self):
+        assert resolve_weapon_strength("+1", 4) == 5
+
+    def test_plus_two(self):
+        assert resolve_weapon_strength("+2", 3) == 5
+
+    def test_times_two(self):
+        assert resolve_weapon_strength("x2", 4) == 8
+
+    def test_times_three(self):
+        assert resolve_weapon_strength("x3", 3) == 9
 
 
 # ---------------------------------------------------------------------------
