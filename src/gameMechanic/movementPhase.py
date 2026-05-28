@@ -79,9 +79,14 @@ def _active_movement(
         ("Stationary", "stationary", "Do not move"),
         ("Retreat", "retreated", "Exit melee, no shoot/charge"),
     ]
+    flags = unit_state.get("turn_flags", {})
+    already_retreated = flags.get("retreated", False)
+
     for col, (label, value, tip) in zip(cols, options):
         with col:
-            disabled = value == "retreated" and not in_melee
+            disabled = (value in ("normal", "advanced") and (in_melee or already_retreated)) or (
+                value == "retreated" and not in_melee
+            )
             btn_type = "primary" if current == value else "secondary"
             if st.button(
                 label,

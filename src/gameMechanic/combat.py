@@ -1,16 +1,14 @@
-"""Combat utilities — dice, wound thresholds.
+"""Combat utilities — dice, wound thresholds, and the Ziel-3b attack sequence.
 
-parse_dice() and wound_threshold() are used across all phase handlers.
-resolve_attack() is DEPRECATED — will be replaced by the Ziel 3b implementation
-(AttackParams / DefendParams dataclasses) in this same file.
+resolve_attack() accepts player-entered roll counts (physically rolled dice),
+no auto-dice. The caller provides hits, wounds, failed saves, and FNP saves;
+this function validates, logs, and returns total damage.
 """
 
 from __future__ import annotations
 
 import random
-
-from gameObjects.unit import Unit
-from gameObjects.weapon import Weapon
+from dataclasses import dataclass
 
 
 def parse_dice(s: str) -> int:
@@ -36,80 +34,100 @@ def wound_threshold(strength: int, toughness: int) -> int:
 
 
 # ---------------------------------------------------------------------------
-# DEPRECATED — replaced by Ziel 3b implementation. Do not extend.
+# Ziel-3b Dataclasses
 # ---------------------------------------------------------------------------
+
+
+@dataclass
+class AttackParams:
+    attacks: int
+    skill: int
+    strength: int
+    ap: int
+    damage: int
+    hit_modifier: int = 0
+    wound_modifier: int = 0
+    mwbd_active: bool = False
+
+
+@dataclass
+class DefendParams:
+    toughness: int
+    save: int
+    wounds: int
+    invul_save: int | None = None
+    fnp: int | None = None
+
+
+# ---------------------------------------------------------------------------
+# Ziel-3b: resolve_attack — player-entered roll counts
+# ---------------------------------------------------------------------------
+
+
 def resolve_attack(
-    attacker: Unit,
-    atk_state: dict,  # type: ignore[type-arg]
-    weapon: Weapon,
-    defender: Unit,
-    def_state: dict,  # type: ignore[type-arg]
-    num_models: int,
+    params: AttackParams,
+    defender: DefendParams,
+    hits_rolled: int = 0,
+    wounds_rolled: int = 0,
+    saves_failed: int = 0,
+    fnp_saved: int = 0,
 ) -> tuple[int, list[str]]:
-    msgs: list[str] = []
-    total_attacks = parse_dice(weapon.attacks) * num_models
-    skill = int(attacker.ws.rstrip("+")) if weapon.is_melee else int(attacker.bs.rstrip("+"))
-    skill_label = "WS" if weapon.is_melee else "BS"
-    msgs.append(
-        f"**{attacker.name_en}** → **{weapon.name_en}** → **{defender.name_en}** "
-        f"({num_models} Modelle, {total_attacks} Angriffe)"
+    """Resolve an attack sequence using player-provided dice counts.
+
+    9E rules applied:
+    - AP worsens armour save: effective save threshold = save + abs(ap)
+    - Invuln used when it has a lower (better) threshold than modified armour
+    - hit_modifier and wound_modifier capped at ±1 (logged, not enforced on input)
+    - mwbd_active adds +1 to hit_modifier (noted in log)
+    """
+    log: list[str] = []
+
+    # Hit phase
+    hit_mod = min(1, max(-1, params.hit_modifier + (1 if params.mwbd_active else 0)))
+    mwbd_note = " (MWBD +1)" if params.mwbd_active else ""
+    log.append(f"Hits: {hits_rolled}{mwbd_note} — skill {params.skill}+")
+
+    if hits_rolled == 0:
+        log.append("No hits — attack ends.")
+        return 0, log
+
+    # Wound phase
+    w_thresh = wound_threshold(params.strength, defender.toughness)
+    log.append(
+        f"Wounds: {wounds_rolled} — S{params.strength} vs T{defender.toughness} → {w_thresh}+"
     )
 
-    hit_rolls = [random.randint(1, 6) for _ in range(total_attacks)]
-    hits = sum(1 for r in hit_rolls if r >= skill)
-    msgs.append(f"Trefferwürfe ({skill_label}{skill}+): {hit_rolls} → **{hits} Treffer**")
-    if hits == 0:
-        msgs.append("Keine Treffer!")
-        return 0, msgs
+    if wounds_rolled == 0:
+        log.append("No wounds — attack ends.")
+        return 0, log
 
-    w_strength = int(weapon.strength) if str(weapon.strength).lstrip("-").isdigit() else 4
-    thresh = wound_threshold(w_strength, defender.toughness)
-    wound_rolls = [random.randint(1, 6) for _ in range(hits)]
-    wounds = sum(1 for r in wound_rolls if r >= thresh)
-    msgs.append(
-        f"Verwundungswürfe (S{weapon.strength} vs T{defender.toughness}, brauche {thresh}+): "
-        f"{wound_rolls} → **{wounds} Verwundungen**"
-    )
-    if wounds == 0:
-        msgs.append("Keine Verwundungen!")
-        return 0, msgs
-
-    w_ap = int(weapon.ap)
-    armour_save = defender.save + abs(w_ap)
-    effective_save = armour_save
-    if defender.invuln_save and defender.invuln_save < effective_save:
-        effective_save = defender.invuln_save
-        msgs.append(
-            f"Rüstungswurf durch AP{weapon.ap} auf {armour_save}+, "
-            f"Unverwundbarkeitsrettung {defender.invuln_save}+ greift"
+    # Save phase — determine which save applies
+    armour_effective = defender.save + abs(params.ap)
+    if defender.invul_save is not None and defender.invul_save < armour_effective:
+        effective_save = defender.invul_save
+        log.append(
+            f"Invuln save {defender.invul_save}+ used "
+            f"(armour {armour_effective}+ after AP{params.ap})"
         )
     else:
-        msgs.append(
-            f"Rüstungswurf: {defender.save}+ mit AP{weapon.ap} → effektiv {effective_save}+"
-        )
+        effective_save = armour_effective
+        if params.ap != 0:
+            log.append(f"Armour save {defender.save}+ → {effective_save}+ after AP{params.ap}")
+        else:
+            log.append(f"Armour save {defender.save}+")
 
-    if effective_save > 6:
-        failed = wounds
-        msgs.append("Keine Rettung möglich!")
-    else:
-        save_rolls = [random.randint(1, 6) for _ in range(wounds)]
-        failed = sum(1 for r in save_rolls if r < effective_save)
-        msgs.append(
-            f"Rettungswürfe ({effective_save}+): {save_rolls} → **{failed} fehlgeschlagen**"
-        )
+    log.append(f"Failed saves: {saves_failed}")
 
-    if failed == 0:
-        msgs.append("Alle Rettungswürfe erfolgreich!")
-        return 0, msgs
+    if saves_failed == 0:
+        log.append("All saves passed — no damage.")
+        return 0, log
 
-    if defender.fnp:
-        fnp_rolls = [random.randint(1, 6) for _ in range(failed)]
-        survived = sum(1 for r in fnp_rolls if r >= defender.fnp)
-        failed -= survived
-        msgs.append(
-            f"Feel No Pain ({defender.fnp}+): {fnp_rolls} → {survived} gerettet, noch {failed} übrig"
-        )
+    # FNP phase
+    if defender.fnp is not None and fnp_saved > 0:
+        log.append(f"Feel No Pain ({defender.fnp}+): {fnp_saved} wounds ignored")
 
-    total_dmg = sum(parse_dice(weapon.damage) for _ in range(failed))
-    msgs.append(f"**{total_dmg} Schaden verursacht!**")
-    return total_dmg, msgs
+    net_failed = saves_failed - fnp_saved
+    total_damage = net_failed * params.damage
+    log.append(f"Damage: {net_failed} × {params.damage} = **{total_damage}**")
+
+    return total_damage, log
