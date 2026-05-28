@@ -9,6 +9,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import next_phase  # noqa: E402
 from gameMechanic.unit_mutations import (  # noqa: E402
@@ -45,6 +46,7 @@ class _S(dict):
 def _make_session(**kwargs) -> _S:  # type: ignore[no-untyped-def]
     s = _S(**kwargs)
     _mut.st.session_state = s
+    _gs.st.session_state = s
     return s
 
 
@@ -362,6 +364,53 @@ def test_heal_unit_updates_model_count_for_multimodel() -> None:
     state = session["necron_units"][WARRIORS]
     assert state["current_wounds"] == 10
     assert state["models"] == 10
+
+
+def test_heal_unit_returns_true_when_healed() -> None:
+    _make_session(necron_units={OVERLORD: {"current_wounds": 3, "models": 1, "destroyed": False}})
+    assert heal_unit(OVERLORD, "Necrons", 1, _overlord()) is True
+
+
+def test_heal_unit_returns_false_when_already_full() -> None:
+    _make_session(necron_units={OVERLORD: {"current_wounds": 5, "models": 1, "destroyed": False}})
+    assert heal_unit(OVERLORD, "Necrons", 1, _overlord()) is False
+
+
+def test_heal_unit_no_revive_caps_at_current_models() -> None:
+    """revive=False: cannot heal beyond current living models × wounds."""
+    session = _make_session(
+        necron_units={
+            "wh40k_9e.necrons.unit.skorpekh_destroyers": {
+                "current_wounds": 5,
+                "models": 2,
+                "destroyed": False,
+            }
+        }
+    )
+    heal_unit("wh40k_9e.necrons.unit.skorpekh_destroyers", "Necrons", 1, _skorpekh(), revive=False)
+    state = session["necron_units"]["wh40k_9e.necrons.unit.skorpekh_destroyers"]
+    assert state["current_wounds"] == 6  # 2 models × 3 wounds = 6 max, was 5
+    assert state["models"] == 2  # dead model NOT restored
+
+
+def test_heal_unit_no_revive_does_not_exceed_living_model_cap() -> None:
+    """revive=False: full living-model HP → no healing, dead model stays dead."""
+    session = _make_session(
+        necron_units={
+            "wh40k_9e.necrons.unit.skorpekh_destroyers": {
+                "current_wounds": 6,
+                "models": 2,
+                "destroyed": False,
+            }
+        }
+    )
+    result = heal_unit(
+        "wh40k_9e.necrons.unit.skorpekh_destroyers", "Necrons", 1, _skorpekh(), revive=False
+    )
+    state = session["necron_units"]["wh40k_9e.necrons.unit.skorpekh_destroyers"]
+    assert result is False
+    assert state["current_wounds"] == 6
+    assert state["models"] == 2
 
 
 # ---------------------------------------------------------------------------

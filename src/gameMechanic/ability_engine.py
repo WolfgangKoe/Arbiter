@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import load_army, load_faction_abilities, load_unit_abilities
 from gameObjects.unit import Unit
@@ -36,9 +37,21 @@ def check_conditions(ability: Ability, unit: Unit, unit_state: dict) -> bool:  #
             unit_kw_upper = {kw.upper() for kw in unit.keywords}
             if not any(kw.upper() in unit_kw_upper for kw in cond.has_keywords):
                 return False
+        if cond.needs_healing:
+            max_hp = unit.wounds * unit_state.get("models", 0)
+            if unit_state.get("current_wounds", 0) >= max_hp:
+                return False
         # within_inches: spatial tracking not implemented — always passes
         # max_uses: handled by callers against session state
     return True
+
+
+def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool:
+    """Apply ability effect to a unit. Returns True if state actually changed."""
+    if ability.effect.type == "heal":
+        hp = int(ability.effect.amount or 1)
+        return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
+    return False
 
 
 def get_triggered_abilities(

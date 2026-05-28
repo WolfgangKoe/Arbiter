@@ -257,7 +257,44 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4b — Bewegungsphase vollständig ⬜
+### 4b — armyCard + unitCard Redesign ✅
+
+**Abgeschlossen.**
+
+- [x] `unitCard.py` — neue Layout-Reihenfolge: LP/Modell-Bars → Name-Button → State-Badges → Keywords
+- [x] `unitCard.py` — `st.container(border=True)`; Hauptfraktions-Keyword aus Keywords-Anzeige gefiltert
+- [x] `unitCard.py` — Keyword-Highlighting via `session_state.highlight_keywords`
+- [x] `armyCard.py` — Border, Faction-Badge + Subfaction-Badge
+- [x] `armyCard.py` — TriggeredAbility-Buttons (phasenabhängig sichtbar, z.B. Living Metal in Befehlsphase)
+- [x] `Ability.ability_type: str` — `"triggered"` | `"activated"` ins Datenmodell
+- [x] YAMLs aktualisiert, Loader erweitert
+- [x] `apply_living_metal()` von `commandPhase.py` → `unit_mutations.py` verschoben
+- [x] Living Metal Button aus `commandPhase.py` entfernt (jetzt in armyCard)
+- [x] `armyList.py` lädt und reicht `faction_abilities` weiter
+- [x] 9 neue Tests — gesamt 209 grün
+
+---
+
+### 4c — Ability Engine Refactoring ⬜
+
+**Ziel:** Fraktionsspezifische Logik aus `armyCard.py` herauslösen. Die Karte soll vollständig
+datengetrieben sein — kein hardcodiertes `"livingMetal"`, kein Branch auf `effect.type == "heal"`.
+
+**Kern-Änderungen:**
+
+- [ ] `Condition.needs_healing: bool = False` — prüft ob Unit verwundete (aber lebende) Modelle hat; Cap: `current_models × wounds` (kein Wiederbeleben)
+- [ ] `Effect.revive: bool = True` — `False` bei Living Metal: Heal capped auf lebende Modelle, keine Wiederbelebung zerstörter Modelle
+- [ ] `check_conditions()` wertet `needs_healing` aus
+- [ ] `heal_unit()` bekommt `revive: bool = True`-Parameter; Cap-Logik korrekt je nach Flag
+- [ ] `execute_effect(ability, uid, faction, unit)` Dispatcher in `ability_engine.py` — einzige Stelle, die `effect.type` kennt
+- [ ] `apply_living_metal()` löschen — ersetzt durch `heal_unit(revive=False)` via Dispatcher
+- [ ] Living Metal YAML: `unit_not_destroyed: true`, `needs_healing: true`, `revive: false`
+- [ ] `armyCard.py`: `_living_metal_eligible()` + Effect-Branch ersetzen; Import `apply_living_metal` entfernen
+- [ ] Tests anpassen/erweitern
+
+---
+
+### 4d — Bewegungsphase vollständig ⬜
 
 - [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True` ✅
 - [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True` ✅
@@ -266,7 +303,7 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4c — Angriffsphase (Charge Phase) ⬜
+### 4e — Angriffsphase (Charge Phase) ⬜
 
 - [ ] Charge-Würfel: 2W6 — bei Erfolg `set_charged()`, bei Misserfolg bleibt `MOVED`
 - [ ] `advanced`-Flag sperrt Charge-Button (Regelkonformität)
@@ -274,14 +311,14 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4d — Moralphase ⬜
+### 4f — Moralphase ⬜
 
 - [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
 - [ ] `moralePhase.py` — Render-Logik
 
 ---
 
-### 4e — Psychic Phase ⬜
+### 4g — Psychic Phase ⬜
 
 - [ ] Manifest: 2D6 ≥ Warp Charge → Effekt ausführen
 - [ ] Deny: gegnerischer Psyker darf versuchen zu unterdrücken
@@ -290,7 +327,7 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4f — Army Builder ⬜
+### 4h — Army Builder ⬜
 
 - [ ] Entscheidung: Datei-Import vs. In-App-Builder vs. hardcodierte Presets (TBD)
 - [ ] Setup-Screen: Spielgröße, Spieltyp, Armeeauswahl, Erster Spieler

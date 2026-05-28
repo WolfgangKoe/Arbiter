@@ -8,6 +8,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import next_phase  # noqa: E402
 
@@ -26,6 +27,7 @@ class _S(dict):
 def _make_session(**kwargs) -> _S:
     s = _S(**kwargs)
     _mut.st.session_state = s
+    _gs.st.session_state = s
     return s
 
 

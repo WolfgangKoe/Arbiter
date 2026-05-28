@@ -7,15 +7,6 @@ import streamlit as st
 from gameObjects.unit import Unit
 
 
-def apply_living_metal(unit_state: dict, unit: Unit) -> bool:  # type: ignore[type-arg]
-    """Heal 1 wound if the unit is below maximum HP. Returns True if healed."""
-    max_alive = unit_state["models"] * unit.wounds
-    if unit_state["current_wounds"] < max_alive:
-        unit_state["current_wounds"] += 1
-        return True
-    return False
-
-
 def adjust_vp(faction: str, delta: int) -> None:
     st.session_state.vp[faction] = max(0, st.session_state.vp[faction] + delta)
 
@@ -47,16 +38,18 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = Fa
         state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + lost
 
 
-def heal_unit(uid: str, faction: str, hp: int, unit: Unit) -> None:
+def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) -> bool:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
-    max_hp = unit.wounds * unit.models_max
+    max_hp = unit.wounds * (unit.models_max if revive else state["models"])
+    old_wounds = state["current_wounds"]
     state["current_wounds"] = min(max_hp, state["current_wounds"] + hp)
     state["destroyed"] = state["current_wounds"] <= 0
     if unit.wounds > 0:
         full = state["current_wounds"] // unit.wounds
         partial = 1 if state["current_wounds"] % unit.wounds > 0 else 0
         state["models"] = min(unit.models_max, full + partial)
+    return state["current_wounds"] > old_wounds
 
 
 def set_deployment(uid: str, faction: str, deployment: str) -> None:

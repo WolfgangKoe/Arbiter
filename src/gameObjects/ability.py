@@ -20,6 +20,7 @@ class Condition:
     max_uses: int | None = None
     min_round: int | None = None
     unit_not_destroyed: bool = False
+    needs_healing: bool = False
 
 
 @dataclass
@@ -30,6 +31,7 @@ class Effect:
     stat: str | None = None
     modifier: int | None = None
     handler: str | None = None
+    revive: bool = True  # False = cap heal to current living models, no resurrection
 
 
 @dataclass

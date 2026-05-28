@@ -67,6 +67,7 @@ def _condition_from_dict(d: dict[str, Any]) -> Condition:
         max_uses=d.get("max_uses"),
         min_round=d.get("min_round"),
         unit_not_destroyed=d.get("unit_not_destroyed", False),
+        needs_healing=d.get("needs_healing", False),
     )
 
 
@@ -94,6 +95,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             stat=d["effect"].get("stat"),
             modifier=d["effect"].get("modifier"),
             handler=d["effect"].get("handler"),
+            revive=d["effect"].get("revive", True),
         ),
         unit_id=d.get("unit_id"),
         ability_type=d.get("ability_type", "triggered"),

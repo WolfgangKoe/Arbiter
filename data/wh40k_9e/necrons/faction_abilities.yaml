@@ -12,10 +12,13 @@ abilities:
       player: active
     conditions:
       - has_rules: [livingMetal]
+        unit_not_destroyed: true
+        needs_healing: true
     effect:
       type: heal
       target: self
       amount: "1"
+      revive: false
 
   - id: necrons.faction.reanimation_protocols
     name_en: Reanimation Protocols
