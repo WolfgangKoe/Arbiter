@@ -4,7 +4,7 @@ Two tabs in the center column below the gameActionDisplayArea:
   - CommandProtocol: round/phase log navigator (setup summary for now)
   - Stratagems:      GO list with visibility logic (data structure ready; Ziel 4)
 
-GO visibility states (see docs/processes.md P-06 and gameObjects/stratagem.py):
+GO visibility states (see docs/spec/processes.md P-06 and gameObjects/stratagem.py):
   clickable  — conditions met, CP available, not yet used this phase
   greyed     — conditions met, but CP insufficient OR already used this phase
   hidden     — conditions not met → not rendered at all

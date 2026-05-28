@@ -72,20 +72,33 @@ PHASE_RULES: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "NORMAL": ("#4a9a5a", "#0a1a0a"),
+    "MOVED": ("#4a9a5a", "#0a1a0a"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
     "ADVANCED": ("#d4a017", "#2e2618"),
     "RETREATED": ("#c04040", "#1e1010"),
     "IN MELEE": ("#e07050", "#2a1810"),
     "CHARGED": ("#b070d8", "#1a0a2a"),
+    "FOUGHT": ("#c080e8", "#200a30"),
+    "SHOT": ("#40a0b8", "#081418"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
     "MWBD": ("#60a5fa", "#0a1020"),
 }
 
+_MOVEMENT_BADGE: dict[str, str] = {
+    "moved": "MOVED",
+    "stationary": "STATIONARY",
+    "advanced": "ADVANCED",
+    "retreated": "RETREATED",
+}
+
 
 def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
-    """Generate HTML state badges from movement_choice, turn_flags and persistent state."""
+    """Generate HTML state badges from movement_choice, turn_flags and persistent state.
+
+    Priority: FOUGHT > CHARGED > movement_choice (mutex movement slot).
+    SHOT is always additive. IN MELEE shows always except when CHARGED is active.
+    """
 
     def _badge(text: str) -> str:
         fg, bg = _BADGE_COLORS.get(text, ("#c9a84c", "#2e2618"))
@@ -96,24 +109,30 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
         )
 
     parts: list[str] = []
-
-    _MOVEMENT_BADGE: dict[str, str] = {
-        "normal": "NORMAL",
-        "stationary": "STATIONARY",
-        "advanced": "ADVANCED",
-        "retreated": "RETREATED",
-    }
     flags = unit_state.get("turn_flags", {})
-    # Movement badge suppressed when charged or in reserve.
     mc = unit_state.get("movement_choice")
-    if mc in _MOVEMENT_BADGE and not flags.get("charged") and not unit_state.get("in_reserve"):
-        parts.append(_badge(_MOVEMENT_BADGE[mc]))
 
-    # Combat badges from turn_flags / persistent state.
-    if flags.get("charged"):
-        parts.append(_badge("CHARGED"))
-    elif unit_state.get("in_melee"):
+    # Movement slot: FOUGHT > CHARGED > movement_choice (suppressed when in_reserve)
+    if flags.get("fought"):
+        movement_slot = "FOUGHT"
+    elif flags.get("charged"):
+        movement_slot = "CHARGED"
+    elif mc in _MOVEMENT_BADGE and not unit_state.get("in_reserve"):
+        movement_slot = _MOVEMENT_BADGE[mc]
+    else:
+        movement_slot = None
+
+    if movement_slot:
+        parts.append(_badge(movement_slot))
+
+    # SHOT is always additive alongside the movement slot
+    if flags.get("shot"):
+        parts.append(_badge("SHOT"))
+
+    # IN MELEE: always visible except when CHARGED is the active movement slot
+    if unit_state.get("in_melee") and movement_slot != "CHARGED":
         parts.append(_badge("IN MELEE"))
+
     if unit_state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
     if unit_state.get("my_will_be_done_active"):
@@ -374,6 +393,12 @@ def render_attack_form(
                 use_container_width=True,
             ):
                 apply_damage(def_uid, def_faction, damage, def_unit)
+                atk_key = "necron_units" if atk_faction == "Necrons" else "ork_units"
+                atk_flags = st.session_state[atk_key][atk_uid]["turn_flags"]
+                if phase_key == "shooting":
+                    atk_flags["shot"] = True
+                elif phase_key == "fight":
+                    atk_flags["fought"] = True
                 log_action(
                     st.session_state.round,
                     phase_key,

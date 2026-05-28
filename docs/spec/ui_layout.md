@@ -413,7 +413,7 @@ No scrolling between both players' GOs is needed — the tab shows both.
 └──────────────────────────────────────────────────────────┘
 ```
 
-#### GO visibility rules (see also `docs/processes.md P-06`)
+#### GO visibility rules (see also `docs/spec/processes.md P-06`)
 
 | Display state | Condition |
 |---------------|-----------|

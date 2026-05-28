@@ -1,6 +1,6 @@
 """unitCard — Passive display card with single selector button.
 
-Design principles (see docs/ui_layout.md §4):
+Design principles (see docs/spec/ui_layout.md §4):
 - ONE button per card: the unit name. Clicking it toggles selection.
   - Own unit  → toggles selected_unit
   - Enemy unit → toggles selected_target (shooting / charge / fight phases only)
@@ -18,15 +18,16 @@ from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
 
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "NORMAL": ("#4a9a5a", "#0a1a0a"),
+    "MOVED": ("#4a9a5a", "#0a1a0a"),
     "ADVANCED": ("#d4a017", "#2e2618"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
     "RETREATED": ("#c04040", "#1e1010"),
     "IN MELEE": ("#e07050", "#2a1810"),
     "CHARGED": ("#b070d8", "#1a0a2a"),
+    "FOUGHT": ("#c080e8", "#200a30"),
+    "SHOT": ("#40a0b8", "#081418"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
-    "ACTED": ("#4a9a5a", "#0a1a0a"),
     "MWBD": ("#60a5fa", "#0a1020"),
 }
 
@@ -43,7 +44,7 @@ def _badge(text: str) -> str:
 
 
 _MOVEMENT_BADGE: dict[str, str] = {
-    "normal": "NORMAL",
+    "moved": "MOVED",
     "stationary": "STATIONARY",
     "advanced": "ADVANCED",
     "retreated": "RETREATED",
@@ -52,18 +53,28 @@ _MOVEMENT_BADGE: dict[str, str] = {
 
 def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     parts: list[str] = []
-
     flags = state.get("turn_flags", {})
-    # Movement badge suppressed when charged or in reserve.
     mc = state.get("movement_choice")
-    if mc in _MOVEMENT_BADGE and not flags.get("charged") and not state.get("in_reserve"):
-        parts.append(_badge(_MOVEMENT_BADGE[mc]))
 
-    # Combat badges.
-    if flags.get("charged"):
-        parts.append(_badge("CHARGED"))
-    elif state.get("in_melee"):
+    # Movement slot: FOUGHT > CHARGED > movement_choice (suppressed when in_reserve)
+    if flags.get("fought"):
+        movement_slot = "FOUGHT"
+    elif flags.get("charged"):
+        movement_slot = "CHARGED"
+    elif mc in _MOVEMENT_BADGE and not state.get("in_reserve"):
+        movement_slot = _MOVEMENT_BADGE[mc]
+    else:
+        movement_slot = None
+
+    if movement_slot:
+        parts.append(_badge(movement_slot))
+
+    if flags.get("shot"):
+        parts.append(_badge("SHOT"))
+
+    if state.get("in_melee") and movement_slot != "CHARGED":
         parts.append(_badge("IN MELEE"))
+
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
     if state.get("my_will_be_done_active"):

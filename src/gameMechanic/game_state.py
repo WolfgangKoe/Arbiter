@@ -89,6 +89,7 @@ def _reset_turn_state() -> None:
                 flags[flag] = False
             state["lost_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
+            state["my_will_be_done_active"] = False
 
 
 def next_phase() -> None:

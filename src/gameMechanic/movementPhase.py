@@ -59,7 +59,7 @@ def _active_movement(
                 use_container_width=True,
             ):
                 set_deployment(uid, faction, "normal")
-                set_movement_status(uid, faction, "normal")
+                set_movement_status(uid, faction, "moved")
                 log_action(
                     st.session_state.round, "movement", unit.name_en, "deployed from reserve"
                 )
@@ -74,7 +74,7 @@ def _active_movement(
     st.markdown("Set movement status:")
     cols = st.columns(4)
     options = [
-        ("Normal", "normal", 'Move up to M"'),
+        ("Normal", "moved", 'Move up to M"'),
         ("Advance", "advanced", 'M"+D6", no shoot/charge'),
         ("Stationary", "stationary", "Do not move"),
         ("Retreat", "retreated", "Exit melee, no shoot/charge"),
@@ -84,7 +84,7 @@ def _active_movement(
 
     for col, (label, value, tip) in zip(cols, options):
         with col:
-            disabled = (value in ("normal", "advanced") and (in_melee or already_retreated)) or (
+            disabled = (value in ("moved", "advanced") and (in_melee or already_retreated)) or (
                 value == "retreated" and not in_melee
             )
             btn_type = "primary" if current == value else "secondary"

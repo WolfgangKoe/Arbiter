@@ -1,6 +1,6 @@
 """gameActionsArea — Center column layout.
 
-Internal layout (see docs/ui_layout.md §7):
+Internal layout (see docs/spec/ui_layout.md §7):
 
   ┌────────────────────────────────────────────────────────┐
   │  firstPlayerArea (50%)  │  secondPlayerArea (50%)       │

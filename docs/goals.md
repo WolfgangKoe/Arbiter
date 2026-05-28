@@ -6,14 +6,14 @@ Arbiter ist ein digitaler Spielbegleiter für WH40k 9. Edition (Streamlit).
 Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwalten, Würfe berechnen.
 
 Zielarchitektur: `app.py` + `uiLayout/` + `gameObjects/` + `gameMechanic/`
-Details: `docs/architecture.md` · UI-Spec: `docs/ui_layout.md`
+Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 
 ---
 
 ## Ziel 1A — `uiLayout/` Struktursplit ✅
 
 Ziel: `src/ui.py` wird ohne Verhaltensänderung in `src/uiLayout/` aufgeteilt.
-Alle Sidebar-Komponenten erhalten dabei das neue Layout gemäß `docs/ui_layout.md`.
+Alle Sidebar-Komponenten erhalten dabei das neue Layout gemäß `docs/spec/ui_layout.md`.
 
 **Abgeschlossen.** `ui.py` gelöscht. Alle Komponenten in `uiLayout/` aktiv.
 
@@ -122,7 +122,7 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ## Ziel A — Architektur-Review & Erweiterungsfähigkeit ✅
 
-**Zweck:** Sicherstellen, dass die Kernlogik korrekt und das Gesamtkonzept tragfähig ist, bevor Ziel 4 beginnt. Ziel ist nicht, alle Regeln zu implementieren, sondern zu prüfen ob bestehende Abstraktionen ausreichen oder substanzielle Lücken vorhanden sind. Ergebnis: `docs/review/architecture_review_2026-05.md` + bereinigtes Test-Gerüst.
+**Zweck:** Sicherstellen, dass die Kernlogik korrekt und das Gesamtkonzept tragfähig ist, bevor Ziel 4 beginnt. Ziel ist nicht, alle Regeln zu implementieren, sondern zu prüfen ob bestehende Abstraktionen ausreichen oder substanzielle Lücken vorhanden sind. Ergebnis: `docs/work/architecture_review_2026-05.md` + bereinigtes Test-Gerüst.
 
 **Leitfrage:** Kann eine neue Armee "angedockt" werden, ohne die Kernlogik anzufassen?
 **Antwort:** Noch nicht — 3 Blocker müssen vor Ziel 4 behoben werden (siehe Review-Dokument).
@@ -131,7 +131,7 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ### A1 — Regelwerk-Review gegen Architektur ✅
 
-**Ergebnis:** `docs/review/architecture_review_2026-05.md`
+**Ergebnis:** `docs/work/architecture_review_2026-05.md`
 
 - [x] Jede Regelgruppe klassifiziert
 - [x] Edge Cases in `resolve_attack()` geprüft (AP-Mechanik korrekt, Spillover fehlt)
@@ -141,7 +141,7 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ### A2 — YAML-Struktur-Review & Datenqualität ✅
 
-**Ergebnis:** `docs/review/architecture_review_2026-05.md`
+**Ergebnis:** `docs/work/architecture_review_2026-05.md`
 
 - [x] Necron-YAML-Felder klassifiziert: ~200 Zeilen Curation-Metadaten löschen
 - [x] `<Dynasty>` kanonisch; `dynasty_selectable` löschen
@@ -172,7 +172,7 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ---
 
-### 4a — Einheitenzustand & Badge-System ⬜
+### 4a — Einheitenzustand & Badge-System ✅
 
 **Konzept:** Badges sind digitale Spielmarker — wie physische Tokens auf dem Tisch.
 Jedes Badge drückt genau einen Regelzustand aus, der taktisch relevant ist.
@@ -243,20 +243,17 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 #### Dokumentation
 
-- [ ] Flussdiagramme + Badge-Vokabular in `docs/rules/unit_states.md` schreiben
-  - Vorschlag: neue Datei neben `schlachtrunde.md` — Domänenmodell, das Regelwelt und Code-Zustand verbindet
-  - Alternative: Abschnitt in `docs/architecture.md` (wenn eher Implementierungsreferenz)
-  - **Entscheidung offen** — im Zuge der Implementierung klären
+- [x] Flussdiagramme + Badge-Vokabular in `docs/spec/unit_states.md` schreiben
 
 #### Implementierungsschritte
 
-- [ ] `"normal"` → `"moved"` umbenennen: `unit_mutations`, `movementPhase`, `_common`, Tests
-- [ ] `turn_flags["shot"] = True` nach Schussauflösung setzen (`shootingPhase._render_display`)
-- [ ] `turn_flags["fought"] = True` nach Kampfauflösung setzen (`fightPhase._render_display`)
-- [ ] `state_badges_html()` — FOUGHT > CHARGED Priorität; SHOT additiv; IN MELEE bei CHARGED unterdrücken
-- [ ] `_reset_turn_state()` — `my_will_be_done_active` ebenfalls zurücksetzen (Bug)
-- [ ] `apply_damage()` — bei `destroyed=True` prüfen ob melee-Partner `in_melee` auto-clearen
-- [ ] Tests für neue Badge-Transitionen (TestStateBadges erweitern)
+- [x] `"normal"` → `"moved"` umbenennen: `unit_mutations`, `movementPhase`, `_common`, Tests
+- [x] `turn_flags["shot"] = True` nach Schussauflösung setzen (`render_attack_form`, phase_key="shooting")
+- [x] `turn_flags["fought"] = True` nach Kampfauflösung setzen (`render_attack_form`, phase_key="fight")
+- [x] `state_badges_html()` — FOUGHT > CHARGED Priorität; SHOT additiv; IN MELEE bei CHARGED unterdrücken
+- [x] `_reset_turn_state()` — `my_will_be_done_active` ebenfalls zurücksetzen (Bug)
+- [x] `apply_damage()` — bei `destroyed=True` melee-Partner `in_melee` auto-clearen
+- [x] Tests für neue Badge-Transitionen (TestStateBadges erweitern)
 
 ---
 
@@ -311,4 +308,4 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ## Offene Designfragen
 
-Dokumentiert in `docs/architecture.md` — Abschnitt "Open Design Questions".
+Dokumentiert in `docs/spec/architecture.md` — Abschnitt "Open Design Questions".

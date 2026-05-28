@@ -2,7 +2,7 @@
 
 > Redesigned: 2026-05-26
 > Replaces previous plan (domain/ / session/ / ui/).
-> UI wireframes and component specs: see `docs/ui_layout.md`.
+> UI wireframes and component specs: see `docs/spec/ui_layout.md`.
 
 ---
 
@@ -95,7 +95,7 @@ Each file exports one render function: `render_<component>(props) -> None`.
 Components receive all data as arguments — no direct `st.session_state` reads inside components.
 No game logic in this layer.
 
-**gameActionsArea.py** is structured in three internal sections (see `docs/ui_layout.md §7`):
+**gameActionsArea.py** is structured in three internal sections (see `docs/spec/ui_layout.md §7`):
 1. `firstPlayerArea` | `secondPlayerArea` — 50/50 split; main interaction surface per player.
 2. `gameActionDisplayArea` — full-width combined effect view (passive, no buttons).
 3. `gameProtocoll` tabs — CommandProtocol log | Stratagems GO list.
@@ -152,7 +152,7 @@ Kernprinzipien (nicht verhandelbar):
 - Unmodifizierter Wurf von 1 = immer Fehler; unmodifizierter 6 = immer Treffer/Verwundung
 - Quellparameter (Stärke, Zähigkeit) werden **vor** Threshold-Ableitung aufgelöst
 
-Details: siehe `docs/processes.md P-08`.
+Details: siehe `docs/spec/processes.md P-08`.
 
 `protocol.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
 
@@ -232,7 +232,7 @@ class Stratagem:
     once_per_phase: bool = True
 ```
 
-GO visibility (see `docs/processes.md P-06` and `gameObjects/stratagem.py`):
+GO visibility (see `docs/spec/processes.md P-06` and `gameObjects/stratagem.py`):
 
 | State | Condition |
 |-------|-----------|
@@ -512,8 +512,8 @@ Defined in `src/constants/colors.py`. Injected once as custom CSS in `app.py`.
 ## Refactoring Plan
 
 ### Phase 0 — Documentation ✅ (this session)
-- `docs/ui_layout.md` — wireframes + component specs
-- `docs/architecture.md` — this file
+- `docs/spec/ui_layout.md` — wireframes + component specs
+- `docs/spec/architecture.md` — this file
 
 ### Phase 1 — Structural split of ui.py (no behavior change)
 Split `src/ui.py` into `src/uiLayout/`:

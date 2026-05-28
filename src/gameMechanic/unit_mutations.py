@@ -31,6 +31,8 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = Fa
         state["destroyed"] = True
         state["current_wounds"] = 0
         state["models"] = 0
+        if state.get("melee_with"):
+            leave_melee(uid, faction)
     lost = old_models - state["models"]
     if lost > 0:
         state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + lost

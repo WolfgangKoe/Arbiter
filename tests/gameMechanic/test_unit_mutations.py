@@ -492,9 +492,9 @@ def test_set_movement_status_advanced_sets_turn_flag() -> None:
     assert session["necron_units"][OVERLORD]["turn_flags"]["advanced"] is True
 
 
-def test_set_movement_status_normal_does_not_set_advanced_flag() -> None:
+def test_set_movement_status_moved_does_not_set_advanced_flag() -> None:
     session = _two_unit_session()
-    set_movement_status(OVERLORD, "Necrons", "normal")
+    set_movement_status(OVERLORD, "Necrons", "moved")
     assert session["necron_units"][OVERLORD]["turn_flags"]["advanced"] is False
     assert session["necron_units"][OVERLORD]["turn_flags"]["retreated"] is False
 

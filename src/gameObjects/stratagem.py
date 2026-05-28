@@ -3,7 +3,7 @@
 A Stratagem is a one-time or once-per-phase ability that costs CP.
 The GO visibility logic is implemented in gameMechanic/stratagems.py.
 
-Visibility rules (see docs/processes.md P-06):
+Visibility rules (see docs/spec/processes.md P-06):
   - conditions met + CP available + not yet used this phase  →  shown, clickable
   - conditions met + CP insufficient                         →  shown, greyed out
   - conditions met + already used this phase                 →  shown, greyed out
