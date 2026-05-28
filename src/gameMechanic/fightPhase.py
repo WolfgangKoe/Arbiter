@@ -1,26 +1,27 @@
 """FightPhaseHandler — Fight Phase for WH40k 9E.
 
-Ziel 3a: Stub — migrates existing fight-display UI from gameActionsArea.
-          No combat resolution yet (uses old manual log).
-Ziel 3c: Full AttackSequence via combat.py, can_fight(), params_from_melee_attack(),
-          Fights-First ordering.
+Ziel 3c: can_fight(), Fights-First indicator, full AttackSequence via combat.py.
 """
 
 from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.combat import wound_threshold
-from gameMechanic.game_log import log_action
 from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
-from uiLayout._common import PHASE_RULES, lookup, render_player_column
+from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
+
+
+def can_fight(unit_state: dict) -> bool:  # type: ignore[type-arg]
+    """Return True if the unit may fight this turn.
+
+    9E: a unit is eligible to fight if it is in melee or if it charged this turn.
+    """
+    flags = unit_state.get("turn_flags", {})
+    return bool(unit_state.get("in_melee") or flags.get("charged"))
 
 
 class FightPhaseHandler:
-    """PhaseHandler for the Fight Phase.
-
-    NOTE: This is a Ziel-3a stub. Full combat resolution comes in Ziel 3c.
-    """
+    """PhaseHandler for the Fight Phase."""
 
     phase_name: str = "fight"
 
@@ -64,43 +65,41 @@ class FightPhaseHandler:
 def _active_fight(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Render fight actions for the active player's selected unit."""
+    """Show fight eligibility, fights-first indicator, and melee weapons."""
+    if not can_fight(unit_state):
+        st.warning("Not in melee — no fight action possible.")
+        return
+
+    fights_first = any(k.lower() == "fights_first" for k in unit.keywords)
+    if fights_first:
+        st.info("Fights First — this unit activates before others.")
+
     flags = unit_state.get("turn_flags", {})
     if flags.get("charged"):
         st.markdown("**Fights first** (charged this turn).")
 
-    if not unit_state.get("in_melee"):
-        st.warning("Not in melee — no action possible.")
-        return
+    melee = [w for w in unit.weapons if w.is_melee]
+    if melee:
+        skill = int(unit.ws.rstrip("+"))
+        for w in melee:
+            ap_int = int(w.ap)
+            ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
+            st.caption(
+                f"**{w.name_en}** · A{w.attacks} · WS{skill}+ "
+                f"· S{w.strength} · {ap_str} · D{w.damage}"
+            )
+    else:
+        st.caption("No melee weapons.")
 
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if not tgts:
-        st.info("Select a **target** in melee from the enemy army list (▷).")
-        return
-
-    tgt_faction, tgt_uid = tgts[0]
-    tgt_unit, _ = lookup(tgt_faction, tgt_uid)
-    melee = [w for w in unit.weapons if w.is_melee]
-    if not melee:
-        st.caption("No melee weapons.")
-        return
-
-    skill = int(unit.ws.rstrip("+"))
-    for w in melee:
-        ap_int = int(w.ap)
-        ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
-        st.caption(
-            f"**{w.name_en}** · A{w.attacks} · WS{skill}+ · S{w.strength} · {ap_str} · D{w.damage}"
-        )
-    if st.button("Log Fight Action", key=f"log_fight_{faction}_{uid}", use_container_width=True):
-        log_action(st.session_state.round, "fight", unit.name_en, f"fought {tgt_unit.name_en}")
-        st.success("Action logged.")
+        st.caption("Designate a target (▷) to resolve attacks.")
 
 
 def _inactive_target_stats(
     faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Show target stats (T/Sv/++) in the inactive player area."""
+    """Show target defensive stats (T / Sv / ++) in the inactive column."""
     inv_display = f"{unit.invuln_save}+" if unit.invuln_save else "—"
     cols = st.columns(3)
     cols[0].metric("T", unit.toughness)
@@ -127,57 +126,24 @@ def _render_melee_pairs() -> None:
 
 
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Display area — attack reference when attacker and target are selected."""
+    """Bottom area: attack form when both attacker and target are selected."""
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if sel and tgts:
-        _display_attack_summary(sel, tgts[0], phase_key="fight")
-        return
+        atk_faction, atk_uid = sel
+        def_faction, def_uid = tgts[0]
+        atk_unit, atk_state = lookup(atk_faction, atk_uid)
+        def_unit, _ = lookup(def_faction, def_uid)
+        if can_fight(atk_state):
+            render_attack_form(
+                atk_faction,
+                atk_uid,
+                atk_unit,
+                def_faction,
+                def_uid,
+                def_unit,
+                use_melee=True,
+                phase_key="fight",
+            )
+            return
     _render_melee_pairs()
-
-
-def _display_attack_summary(
-    sel: tuple[str, str],
-    tgt: tuple[str, str],
-    phase_key: str,
-) -> None:
-    """Attack reference table shown when attacker and target are both selected."""
-    atk_faction, atk_uid = sel
-    def_faction, def_uid = tgt
-    atk_unit, _ = lookup(atk_faction, atk_uid)
-    def_unit, _ = lookup(def_faction, def_uid)
-
-    weapons = [w for w in atk_unit.weapons if w.is_melee]
-    if not weapons:
-        st.info(PHASE_RULES[phase_key])
-        return
-
-    st.markdown(f"**{atk_unit.name_en}** → **{def_unit.name_en}**")
-    st.markdown("*Attack reference (roll dice on the table):*")
-
-    skill = int(atk_unit.ws.rstrip("+"))
-    inv_display = f"{def_unit.invuln_save}+" if def_unit.invuln_save else "none"
-
-    for w in weapons:
-        thresh = wound_threshold(int(w.strength), def_unit.toughness)
-        eff_save = def_unit.save + abs(int(w.ap))
-        if def_unit.invuln_save and def_unit.invuln_save < eff_save:
-            eff_save = def_unit.invuln_save
-        save_str = f"{eff_save}+" if eff_save <= 6 else "none"
-        st.caption(
-            f"**{w.name_en}**: {w.attacks} att · WS{skill}+ · "
-            f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{w.damage}"
-        )
-
-    if st.button(
-        "Log Fight Action",
-        key=f"log_fight_display_{atk_faction}_{atk_uid}",
-        use_container_width=True,
-    ):
-        log_action(
-            st.session_state.round,
-            "fight",
-            atk_unit.name_en,
-            f"fought {def_unit.name_en}",
-        )
-        st.success("Action logged.")

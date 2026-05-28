@@ -1,7 +1,7 @@
 """Shared UI utilities for phase handlers.
 
 Provides: lookup, state_badges_html, wound_adjustment_buttons,
-          render_player_column, PHASE_RULES.
+          render_player_column, render_attack_form, PHASE_RULES.
 
 Handlers import from here — never from gameActionsArea — to avoid circular imports.
 """
@@ -218,3 +218,172 @@ def render_player_column(
             st.caption(no_target_caption)
         else:
             st.caption("—")
+
+
+# ---------------------------------------------------------------------------
+# Attack resolution form (shared by Shooting and Fight Phase)
+# ---------------------------------------------------------------------------
+
+
+def _try_parse_damage(damage_str: str) -> int | None:
+    """Return int if damage is fixed, None if variable (D/W notation)."""
+    try:
+        return int(str(damage_str).strip())
+    except ValueError:
+        return None
+
+
+def render_attack_form(
+    atk_faction: str,
+    atk_uid: str,
+    atk_unit: Unit,
+    def_faction: str,
+    def_uid: str,
+    def_unit: Unit,
+    use_melee: bool,
+    phase_key: str,
+) -> None:
+    """Render weapon selector, dice inputs, resolve, and apply-damage flow."""
+    from gameMechanic.combat import AttackParams, DefendParams, resolve_attack, wound_threshold
+    from gameMechanic.game_log import log_action
+
+    weapons = [w for w in atk_unit.weapons if w.is_melee == use_melee]
+    if not weapons:
+        st.info("No melee weapons." if use_melee else "No ranged weapons.")
+        return
+
+    st.markdown(f"**{atk_unit.name_en}** → **{def_unit.name_en}**")
+
+    if len(weapons) > 1:
+        weapon = st.radio(
+            "Weapon",
+            weapons,
+            format_func=lambda w: w.name_en,
+            key=f"atk_weapon_{phase_key}_{atk_faction}_{atk_uid}",
+            horizontal=True,
+        )
+    else:
+        weapon = weapons[0]
+
+    # Resolve "User" strength to unit strength.
+    raw_str = str(weapon.strength)
+    strength = atk_unit.strength if raw_str.upper() == "USER" else int(raw_str)
+
+    skill = int(atk_unit.ws.rstrip("+")) if use_melee else int(atk_unit.bs.rstrip("+"))
+    skill_label = "WS" if use_melee else "BS"
+    thresh = wound_threshold(strength, def_unit.toughness)
+    eff_save = def_unit.save + abs(int(weapon.ap))
+    if def_unit.invuln_save and def_unit.invuln_save < eff_save:
+        eff_save = def_unit.invuln_save
+    save_str = f"{eff_save}+" if eff_save <= 6 else "none"
+    inv_display = f"{def_unit.invuln_save}+" if def_unit.invuln_save else "none"
+
+    st.caption(
+        f"**{weapon.name_en}**: {weapon.attacks} att · {skill_label}{skill}+ · "
+        f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{weapon.damage}"
+    )
+
+    unit_key = "necron_units" if atk_faction == "Necrons" else "ork_units"
+    atk_state = st.session_state[unit_key][atk_uid]
+    mwbd_active = atk_state.get("my_will_be_done_active", False)
+    if mwbd_active:
+        st.info("MWBD active — +1 to hit modifier.")
+
+    c1, c2, c3, c4 = st.columns(4)
+    hits = c1.number_input(
+        "Hits", min_value=0, step=1, key=f"atk_hits_{phase_key}_{atk_faction}_{atk_uid}"
+    )
+    wounds = c2.number_input(
+        "Wounds", min_value=0, step=1, key=f"atk_wnds_{phase_key}_{atk_faction}_{atk_uid}"
+    )
+    saves_failed = c3.number_input(
+        "Failed Saves", min_value=0, step=1, key=f"atk_sfail_{phase_key}_{atk_faction}_{atk_uid}"
+    )
+    fnp_saved = c4.number_input(
+        "FNP Saved", min_value=0, step=1, key=f"atk_fnp_{phase_key}_{atk_faction}_{atk_uid}"
+    )
+
+    fixed_dmg = _try_parse_damage(str(weapon.damage))
+    total_dmg_input = None
+    if fixed_dmg is None:
+        total_dmg_input = st.number_input(
+            f"Total damage rolled ({weapon.damage} per failed save)",
+            min_value=0,
+            step=1,
+            key=f"atk_dmgtotal_{phase_key}_{atk_faction}_{atk_uid}",
+        )
+
+    result_key = f"atk_result_{phase_key}_{atk_faction}_{atk_uid}"
+
+    if st.button(
+        "Resolve Attack",
+        key=f"atk_resolve_{phase_key}_{atk_faction}_{atk_uid}",
+        type="primary",
+        use_container_width=True,
+    ):
+        if fixed_dmg is not None:
+            params = AttackParams(
+                attacks=1,
+                skill=skill,
+                strength=strength,
+                ap=int(weapon.ap),
+                damage=fixed_dmg,
+                mwbd_active=mwbd_active,
+            )
+            def_params = DefendParams(
+                toughness=def_unit.toughness,
+                save=def_unit.save,
+                wounds=def_unit.wounds,
+                invul_save=def_unit.invuln_save,
+                fnp=def_unit.fnp,
+            )
+            damage, log = resolve_attack(
+                params,
+                def_params,
+                int(hits),
+                int(wounds),
+                int(saves_failed),
+                int(fnp_saved),
+            )
+        else:
+            raw = int(total_dmg_input or 0)
+            fnp_n = int(fnp_saved)
+            net = max(0, raw - fnp_n)
+            log = [
+                f"Hits: {hits}",
+                f"Wounds: {wounds}",
+                f"Failed saves: {saves_failed}",
+                f"Variable damage {weapon.damage}: {raw} total",
+                f"FNP saved: {fnp_n}",
+                f"Damage: **{net}**",
+            ]
+            damage = net
+        st.session_state[result_key] = (damage, log)
+        st.rerun()
+
+    result = st.session_state.get(result_key)
+    if result:
+        damage, log = result
+        for line in log:
+            st.markdown(f"- {line}")
+        if damage > 0:
+            if st.button(
+                f"Apply {damage} damage to {def_unit.name_en}",
+                key=f"atk_apply_{phase_key}_{atk_faction}_{atk_uid}",
+                type="primary",
+                use_container_width=True,
+            ):
+                apply_damage(def_uid, def_faction, damage, def_unit)
+                log_action(
+                    st.session_state.round,
+                    phase_key,
+                    atk_unit.name_en,
+                    f"dealt {damage} damage to {def_unit.name_en}",
+                )
+                del st.session_state[result_key]
+                st.rerun()
+        else:
+            st.info("No damage dealt.")
+            if st.button("Clear", key=f"atk_clear_{phase_key}_{atk_faction}_{atk_uid}"):
+                del st.session_state[result_key]
+                st.rerun()

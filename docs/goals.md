@@ -93,29 +93,90 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ---
 
-### 3c — Shooting Phase + Fight Phase ⏳
+### 3c — Shooting Phase + Fight Phase ✅
 
 **Voraussetzung:** 3b vollständig ✅
 
 #### Shooting Phase (`shootingPhase.py`)
 
-- [ ] `can_shoot(unit_state) → bool` — pure function; False wenn: `advanced`, `retreated`, `in_melee`, `in_reserve`
-- [ ] UI-Flow: Angreifer wählt Waffe → gibt `hits_rolled` / `wounds_rolled` / `saves_failed` / `fnp_saved` ein → `resolve_attack()` → Schadensanzeige + Log
-- [ ] Schadensanwendung: `apply_damage(uid, faction, amount)` aus `unit_mutations.py` (prüfen ob vorhanden, sonst anlegen)
-- [ ] Tests für `can_shoot` + Integrations-Smoke-Test
+- [x] `can_shoot(unit_state) → bool` — pure function; False wenn: `advanced`, `retreated`, `in_melee`, `in_reserve`
+- [x] UI-Flow: Angreifer wählt Waffe → gibt `hits_rolled` / `wounds_rolled` / `saves_failed` / `fnp_saved` ein → `resolve_attack()` → Schadensanzeige + Log
+- [x] Schadensanwendung via `apply_damage()` aus `unit_mutations.py`
+- [x] Variable Schadenswerte (D6, W3 etc.) → Extra-Eingabefeld
+- [x] Tests: 18 Tests grün
 
 #### Fight Phase (`fightPhase.py`)
 
-- [ ] `can_fight(unit_state) → bool` — True wenn `in_melee=True` ODER `charged=True`
-- [ ] Fights-First-Reihenfolge: Einheiten mit `fights_first`-Keyword zuerst (Keyword aus YAML)
-- [ ] UI analog Shooting: Waffe → Roll-Eingabe → Schadensanzeige
-- [ ] Tests für `can_fight` + Fights-First-Logik
+- [x] `can_fight(unit_state) → bool` — True wenn `in_melee=True` ODER `charged=True`
+- [x] Fights-First-Indikator: `fights_first`-Keyword in `unit.keywords` → Badge/Info
+- [x] UI analog Shooting: Waffe → Roll-Eingabe → Schadensanzeige + Apply Damage
+- [x] Tests: 15 Tests grün
+
+#### Shared
+
+- [x] `render_attack_form()` in `uiLayout/_common.py` — von beiden Phasen genutzt
+- [x] `_try_parse_damage()` — erkennt variable Schadenswerte
+- [x] `"User"`-Stärke wird zu Einheitenstärke aufgelöst
+
+---
+
+## Ziel A — Architektur-Review & Erweiterungsfähigkeit ⏳
+
+**Zweck:** Sicherstellen, dass die Kernlogik korrekt und das Gesamtkonzept tragfähig ist, bevor Ziel 4 beginnt. Ziel ist nicht, alle Regeln zu implementieren, sondern zu prüfen ob bestehende Abstraktionen ausreichen oder substanzielle Lücken vorhanden sind. Ergebnis: `docs/review/architecture_review_2026-05.md` + bereinigtes Test-Gerüst.
+
+**Leitfrage:** Kann eine neue Armee "angedockt" werden, ohne die Kernlogik anzufassen?
+
+---
+
+### A1 — Regelwerk-Review gegen Architektur ⏳
+
+**Quelle:** `docs/rules/schlachtrunde.md`
+
+Für jede Regel in der Schlachtrunde bewerten ob:
+- ✅ **YAML-only** — als `ability`/Keyword ausdrückbar, keine Code-Änderung nötig
+- 🔧 **Parameter-Ergänzung** — neues Feld in Dataclass oder `turn_flags`, kein neues Konzept
+- 🏗️ **Neues Konzept** — eigene Funktion, Handler oder neue Abstraktion nötig
+- ⚠️ **Architektur-Konflikt** — widerspricht bestehender Designentscheidung
+- ❌ **Out of Scope** — bewusst nicht geplant (Sichtlinien-Physik etc.)
+
+Regelbereiche: Befehlsphase · Bewegungsphase (FLIEGEN, Reserve) · Psiphase · Fernkampfphase (Zielbeschränkungen, Schnelles Würfeln) · Attackensequenz (1/6-Regel, AP-Mechanik, tödliche Verwundungen / Spillover) · Angriffsphase (Abwehrfeuer, Heroische Intervention) · Nahkampfphase (Alternierend, Angreifer zuerst) · Moralphase
+
+- [ ] Jede Regelgruppe klassifiziert
+- [ ] Edge Cases in bestehender `resolve_attack()`-Logik geprüft (AP-Schwelle vs. Würfelmodifikator, Spillover)
+- [ ] Ergebnis in Review-Dokument
+
+---
+
+### A2 — YAML-Struktur-Review & Datenqualität ⏳
+
+**Ziel:** Kanonische, armeeunabhängige YAML-Struktur. `necrons.md` und `orks.md` werden als Primärquelle abgelöst.
+
+- [ ] Bestehende Necron-YAML-Felder klassifizieren: entfernen (Curation-Metadaten) · korrigieren (Strukturfehler) · ergänzen (fehlende Felder) · normieren (Notation W3 vs. D3, `"User"`)
+- [ ] `faction`-Keyword-Modell klären: `<Dynasty>` in Liste vs. `dynasty_selectable` — welches Konzept ist kanonisch?
+- [ ] Degradierende Profile (Triarch Stalker): Dataclass-Erweiterung oder Ability-basiert? Entscheidungsvorlage
+- [ ] Delta `necrons.md` ↔ `units.yaml` dokumentieren (fehlende Regeln, falsche Werte)
+- [ ] Ork-Einheitendaten beschaffen: Versuch Wahapedia-Zugriff, Fallback BattleScribe-Repo
+- [ ] Proposal für `units.yaml`-Template (gilt für alle Armeen)
+- [ ] Ergebnis in Review-Dokument
+
+---
+
+### A3 — Test-Struktur-Refactoring ⏳
+
+**Problem:** `tests/engine/` testet Logik die in `unit_mutations.py`, `combat.py`, `game_state.py` und `uiLayout/_common.py` lebt — `engine.py` existiert nicht mehr.
+
+- [ ] `test_engine.py` aufteilen: `apply_damage`/`heal_unit` → `tests/gameMechanic/test_unit_mutations.py`; `next_phase` → `tests/gameMechanic/test_game_state.py`; Duplikate mit bestehendem `test_combat.py` entfernen
+- [ ] `test_multi_target.py` → `tests/gameMechanic/test_unit_mutations.py` (zusammenführen)
+- [ ] `test_state_badges.py` → `tests/uiLayout/test_common.py` (neuer Ordner)
+- [ ] `tests/engine/` löschen nach Migration
+- [ ] Coverage ≥ 80% vor und nach Refactoring bestätigt
+- [ ] Alle 177+ Tests grün
 
 ---
 
 ## Ziel 4 — Phasen ausbauen + Army Builder ⬜
 
-**Voraussetzung:** Ziel 3 abgeschlossen.
+**Voraussetzung:** Ziel 3 abgeschlossen. Ziel A liefert die Grundlage für korrekte Implementierung.
 
 ### Bekannte Bugs (Bewegungsphase)
 
