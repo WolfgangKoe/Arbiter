@@ -250,7 +250,9 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
         if phase_key != "setup":
             badges = _state_badges_html(state)
             kws = _keywords_html(unit)
-            if badges or kws:
+            if badges and kws:
+                st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)
+            elif badges or kws:
                 st.markdown(badges + kws, unsafe_allow_html=True)
         else:
             kws = _keywords_html(unit)
