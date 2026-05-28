@@ -84,7 +84,6 @@ def test_in_melee_without_charged_shows_in_melee_badge() -> None:
 
 
 def test_charged_suppresses_in_melee_badge() -> None:
-    # When charged=True, CHARGED takes precedence over IN MELEE.
     html = state_badges_html(_state(charged=True, in_melee=True))
     assert "CHARGED" in html
     assert "IN MELEE" not in html

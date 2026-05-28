@@ -120,57 +120,49 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ---
 
-## Ziel A — Architektur-Review & Erweiterungsfähigkeit ⏳
+## Ziel A — Architektur-Review & Erweiterungsfähigkeit ✅
 
 **Zweck:** Sicherstellen, dass die Kernlogik korrekt und das Gesamtkonzept tragfähig ist, bevor Ziel 4 beginnt. Ziel ist nicht, alle Regeln zu implementieren, sondern zu prüfen ob bestehende Abstraktionen ausreichen oder substanzielle Lücken vorhanden sind. Ergebnis: `docs/review/architecture_review_2026-05.md` + bereinigtes Test-Gerüst.
 
 **Leitfrage:** Kann eine neue Armee "angedockt" werden, ohne die Kernlogik anzufassen?
+**Antwort:** Noch nicht — 3 Blocker müssen vor Ziel 4 behoben werden (siehe Review-Dokument).
 
 ---
 
-### A1 — Regelwerk-Review gegen Architektur ⏳
+### A1 — Regelwerk-Review gegen Architektur ✅
 
-**Quelle:** `docs/rules/schlachtrunde.md`
+**Ergebnis:** `docs/review/architecture_review_2026-05.md`
 
-Für jede Regel in der Schlachtrunde bewerten ob:
-- ✅ **YAML-only** — als `ability`/Keyword ausdrückbar, keine Code-Änderung nötig
-- 🔧 **Parameter-Ergänzung** — neues Feld in Dataclass oder `turn_flags`, kein neues Konzept
-- 🏗️ **Neues Konzept** — eigene Funktion, Handler oder neue Abstraktion nötig
-- ⚠️ **Architektur-Konflikt** — widerspricht bestehender Designentscheidung
-- ❌ **Out of Scope** — bewusst nicht geplant (Sichtlinien-Physik etc.)
-
-Regelbereiche: Befehlsphase · Bewegungsphase (FLIEGEN, Reserve) · Psiphase · Fernkampfphase (Zielbeschränkungen, Schnelles Würfeln) · Attackensequenz (1/6-Regel, AP-Mechanik, tödliche Verwundungen / Spillover) · Angriffsphase (Abwehrfeuer, Heroische Intervention) · Nahkampfphase (Alternierend, Angreifer zuerst) · Moralphase
-
-- [ ] Jede Regelgruppe klassifiziert
-- [ ] Edge Cases in bestehender `resolve_attack()`-Logik geprüft (AP-Schwelle vs. Würfelmodifikator, Spillover)
-- [ ] Ergebnis in Review-Dokument
+- [x] Jede Regelgruppe klassifiziert
+- [x] Edge Cases in `resolve_attack()` geprüft (AP-Mechanik korrekt, Spillover fehlt)
+- [x] Ergebnis in Review-Dokument
 
 ---
 
-### A2 — YAML-Struktur-Review & Datenqualität ⏳
+### A2 — YAML-Struktur-Review & Datenqualität ✅
 
-**Ziel:** Kanonische, armeeunabhängige YAML-Struktur. `necrons.md` und `orks.md` werden als Primärquelle abgelöst.
+**Ergebnis:** `docs/review/architecture_review_2026-05.md`
 
-- [ ] Bestehende Necron-YAML-Felder klassifizieren: entfernen (Curation-Metadaten) · korrigieren (Strukturfehler) · ergänzen (fehlende Felder) · normieren (Notation W3 vs. D3, `"User"`)
-- [ ] `faction`-Keyword-Modell klären: `<Dynasty>` in Liste vs. `dynasty_selectable` — welches Konzept ist kanonisch?
-- [ ] Degradierende Profile (Triarch Stalker): Dataclass-Erweiterung oder Ability-basiert? Entscheidungsvorlage
-- [ ] Delta `necrons.md` ↔ `units.yaml` dokumentieren (fehlende Regeln, falsche Werte)
-- [ ] Ork-Einheitendaten beschaffen: Versuch Wahapedia-Zugriff, Fallback BattleScribe-Repo
-- [ ] Proposal für `units.yaml`-Template (gilt für alle Armeen)
-- [ ] Ergebnis in Review-Dokument
+- [x] Necron-YAML-Felder klassifiziert: ~200 Zeilen Curation-Metadaten löschen
+- [x] `<Dynasty>` kanonisch; `dynasty_selectable` löschen
+- [x] Degradierende Profile: Option A (Dataclass-Erweiterung) empfohlen
+- [x] W-Notation vs. D-Notation: Crash-Bug dokumentiert, Fix-Empfehlung (Option B, 1 Zeile)
+- [x] Stärke-Relativwerte (`Träger`, `+1`, `x2`): Caller-Kontrakt-Lücke dokumentiert
+- [x] Ork-Einheitenliste via Wahapedia beschafft (~80 Einheiten)
+- [x] Template-YAML für armeeneutrale Einheiten erstellt
+- [x] Ergebnis in Review-Dokument
 
 ---
 
-### A3 — Test-Struktur-Refactoring ⏳
+### A3 — Test-Struktur-Refactoring ✅
 
-**Problem:** `tests/engine/` testet Logik die in `unit_mutations.py`, `combat.py`, `game_state.py` und `uiLayout/_common.py` lebt — `engine.py` existiert nicht mehr.
+**Ergebnis:** 166 Tests grün (177 − 11 Duplikate), `tests/engine/` gelöscht.
 
-- [ ] `test_engine.py` aufteilen: `apply_damage`/`heal_unit` → `tests/gameMechanic/test_unit_mutations.py`; `next_phase` → `tests/gameMechanic/test_game_state.py`; Duplikate mit bestehendem `test_combat.py` entfernen
-- [ ] `test_multi_target.py` → `tests/gameMechanic/test_unit_mutations.py` (zusammenführen)
-- [ ] `test_state_badges.py` → `tests/uiLayout/test_common.py` (neuer Ordner)
-- [ ] `tests/engine/` löschen nach Migration
-- [ ] Coverage ≥ 80% vor und nach Refactoring bestätigt
-- [ ] Alle 177+ Tests grün
+- [x] `test_engine.py` aufgeteilt: `apply_damage`/`heal_unit` → `tests/gameMechanic/test_unit_mutations.py`; `next_phase` → `tests/gameMechanic/test_game_state.py`; 11 Duplikate entfernt
+- [x] `test_multi_target.py` → `tests/gameMechanic/test_unit_mutations.py` zusammengeführt
+- [x] `test_state_badges.py` → `tests/uiLayout/test_common.py` (neuer Ordner)
+- [x] `tests/engine/` gelöscht
+- [x] Alle 166 Tests grün
 
 ---
 

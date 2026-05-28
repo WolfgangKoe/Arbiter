@@ -13,26 +13,29 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — alle Ziele, aktueller Status, **Ziel A** ist das neue Schwerpunktziel
-3. `docs/rules/schlachtrunde.md` — vollständige WH40k 9E Regelreferenz (Deutsch)
-4. `src/gameMechanic/combat.py` — Kernlogik Attackensequenz
-5. `src/gameObjects/unit.py` — Unit-Dataclass
-6. `data/wh40k_9e/necrons/units.yaml` — Necron-Einheitendaten (Beispielstruktur)
-7. `data/wh40k_9e/orks/army.yaml` — Ork-Daten (unvollständig, units.yaml fehlt)
-8. `tests/engine/` — veraltete Teststruktur, die refactored werden soll
+2. `docs/goals.md` — alle Ziele, aktueller Status
+3. `docs/review/architecture_review_2026-05.md` — vollständiger Review aus letzter Session
+4. `src/gameMechanic/combat.py` — für Blocker 1 fix
+5. `src/gameMechanic/shootingPhase.py` — für Blocker 2 fix
+6. `src/gameMechanic/fightPhase.py` — für Blocker 3 fix
 
 ---
 
 ## Was in dieser Session gemacht wurde
 
-### Ziel 3c — Shooting Phase + Fight Phase (fertig)
+### Ziel A — Architektur-Review (fertig)
 
-- `can_shoot()` und `can_fight()` als pure functions
-- `render_attack_form()` in `_common.py` — shared UI-Helper für beide Phasen
-- Waffe wählen → 4 Dice-Inputs (Hits/Wounds/Failed Saves/FNP) → Resolve → Apply Damage
-- Variable Schadenswerte (D6, W3) mit Extra-Eingabe
-- `"User"`-Stärke korrekt aufgelöst
-- 177 Tests, alle grün
+**A3 — Test-Refactoring:**
+- `tests/engine/` komplett gelöscht (war verwaist, `engine.py` existiert nicht mehr)
+- `test_unit_mutations.py` — 29 Tests (apply_damage, heal_unit, enter/leave_melee, set_charged, set_movement_status)
+- `test_game_state.py` — 6 Tests (next_phase Transitionen)
+- `tests/uiLayout/test_common.py` — 13 Tests (state_badges_html)
+- 11 Duplikate (parse_dice + wound_threshold) korrekt entfernt
+- Ergebnis: **166 Tests, alle grün**
+
+**A1 + A2 — Review-Dokument:**
+- `docs/review/architecture_review_2026-05.md` geschrieben
+- Alle Phasen klassifiziert, 3 Blocker identifiziert, YAML-Template erstellt
 
 ---
 
@@ -44,120 +47,57 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 1B — gameObjects/ Foundation | ✅ fertig |
 | Ziel 2 — Command Phase | ✅ fertig |
 | Ziel 3a — Phase-Infrastruktur | ✅ fertig |
-| Ziel 3b — combat.py Kernel (41 Tests) | ✅ fertig |
-| Ziel 3c — Shooting + Fight Phase (177 Tests) | ✅ fertig |
-| **Ziel A — Architektur-Review** | ⏳ **nächste Session** |
-| Ziel 4 — Phasen ausbauen + Army Builder | ⬜ wartet auf Ziel A |
+| Ziel 3b — combat.py Kernel | ✅ fertig |
+| Ziel 3c — Shooting + Fight Phase | ✅ fertig |
+| **Ziel A — Architektur-Review** | ✅ **fertig** |
+| **Ziel 4 — Phasen ausbauen** | ⏳ **nächste Session** |
 
 ---
 
-## Nächste Session: Ziel A
+## Nächste Session: Blocker beheben, dann Ziel 4
 
-**Leitfrage:** Kann eine neue Armee "angedockt" werden, ohne die Kernlogik anzufassen?
+Der Review hat 3 Blocker vor Ziel 4 identifiziert. Diese sind schnell fixbar (P1: 1 Zeile, P2: 1 Check, P3: Turn-Order-Logik). Danach kann Ziel 4 beginnen.
 
-Das Ziel ist nicht, alle Regeln zu implementieren, sondern zu prüfen, ob bestehende Abstraktionen ausreichen oder substanzielle Lücken vorhanden sind.
-
-**Output:** `docs/review/architecture_review_2026-05.md` — Analyse + Entscheidungsvorlagen (keine Implementierung, erst nach User-Review)
-
-### Arbeitsreihenfolge
+### Reihenfolge
 
 ```
-1. A3 — Test-Refactoring tests/engine/ (operativ, parallel-sicher)
-2. A2 — YAML-Daten sichten + externe Quellen abfragen
-3. A1 — Schlachtrunden-Review
-4. Review-Dokument schreiben
-5. next_session.md + goals.md aktualisieren
+1. Blocker 1 — parse_dice() W-Notation fix  (src/gameMechanic/combat.py)
+2. Blocker 2 — in_melee-Check in can_shoot()  (src/gameMechanic/shootingPhase.py)
+3. Blocker 3 — Nahkampfphase Turn-Order  (src/gameMechanic/fightPhase.py)
+4. Tests für alle 3 Fixes
+5. Ziel 4 starten: Bewegungsphase ausbauen (Advance-Roll, Reserve)
 ```
 
 ---
 
-### A1 — Regelwerk-Review gegen Architektur
+## Blocker-Details
 
-**Quelle:** `docs/rules/schlachtrunde.md`
+### Blocker 1 — parse_dice() crasht auf W-Notation (P1)
 
-Für jede Regelgruppe klassifizieren:
-
-| Kürzel | Bedeutung |
-|--------|-----------|
-| ✅ YAML-only | Als Ability/Keyword ausdrückbar, kein Code nötig |
-| 🔧 Parameter | Neues Feld in Dataclass oder turn_flags |
-| 🏗️ Konzept | Eigene Funktion oder Handler nötig |
-| ⚠️ Konflikt | Widerspricht bestehender Designentscheidung |
-| ❌ Out of Scope | Bewusst nicht geplant |
-
-Zu prüfende Bereiche:
-- Befehlsphase (CP-Bonus, Ability-Timing)
-- Bewegungsphase (FLIEGEN als Keyword, Advance-Roll, Reserve, Formation)
-- Psiphase (2W6 vs. WC, Deny, Perils — passt in `ability_engine`?)
-- Fernkampfphase (Zielbeschränkungen, "Im Nahkampf gebunden"-Schussverbot auf Freunde, Schnelles Würfeln)
-- Attackensequenz: **AP-Mechanik prüfen** — Regelwerk sagt "W6 − DS ≥ RW", Implementierung setzt "RW + |AP|". Mathematisch äquivalent, aber unmodifizierte 1 (immer misslingt) hat Edge Case wenn kein AP. Spillover bei tödlichen Verwundungen fehlt aktuell.
-- Angriffsphase (Abwehrfeuer `hit_modifier="only_6s"`, Heroische Intervention: eigene Funktion oder Ability?)
-- Nahkampfphase (Alternierend beginnend mit Nicht-Aktiv-Spieler, Nachrücken, Neu ordnen)
-- Moralphase (W6 + `lost_models_this_turn` vs. Leadership — `lost_models_this_turn` ist vorhanden in `unit_state`)
-
----
-
-### A2 — YAML-Struktur-Review
-
-#### Necron-YAML bereinigen
-
-Felder die wahrscheinlich weg können (kein Spielwert, nur Build-Metadaten):
-```yaml
-curation:
-  rules_reviewed: true
-  wave_completed: 2c
-  ...
-weapon_source_strategy: catalog_entry
+**Problem:** Necron-YAML nutzt `W3`, `W6`, `W3+3`, `3W3`. `parse_dice()` kennt nur D-Notation.
+**Fix:** In `src/gameMechanic/combat.py`, Funktion `parse_dice()`, vor dem bestehenden Code:
+```python
+s = str(s).upper().replace("W", "D")
 ```
+**Tests:** Neue Tests für `parse_dice("W3")`, `parse_dice("W6")`, `parse_dice("3W3")`, `parse_dice("W3+3")`
 
-Strukturfragen zu klären:
-- `faction: [<Dynasty>, Necrons, Canoptek]` — `<Dynasty>` bedeutet "Einheit nimmt Dynastiewert an". Aber `dynasty_selectable: []` scheint dasselbe auszudrücken. Welches Konzept ist kanonisch?
-- Canoptek-Einheiten haben `<Dynasty>` in der Faction-Liste — stimmt das mit dem Regelwerk überein?
-- Schadenswerte: Necrons nutzen `W3`, `W6`, `W3+3`. Orks nutzen `D6`. `parse_dice()` versteht nur D-Notation — W-Notation crasht. Brauchen wir eine kanonische Notation?
-- `"User"`-Stärke: bereits in `render_attack_form` aufgelöst. Sollte das ins YAML-Schema?
+Zusätzlich fehlt `resolve_weapon_strength()` für relative Stärkewerte (`Träger`, `+1`, `x2`).
+Das ist ein separater Fix — auch in `combat.py` als neue Funktion.
 
-Degradierende Profile (Triarch Stalker hat 3 Statzeilen je nach LP-Stand):
-- Aktuell nicht abbildbar in `Unit`-Dataclass
-- Optionen: (a) `wound_profiles: list[WoundProfile]` in Dataclass, (b) als Ability mit Trigger auf LP-Schwelle
-- Entscheidungsvorlage mit Abwägung
+### Blocker 2 — in_melee-Check fehlt in can_shoot() (P2)
 
-#### Ork-Daten beschaffen
-
-`data/wh40k_9e/orks/` hat keine `units.yaml`. Einheiten aus `army.yaml` vorhanden aber unvollständig.
-
-Quellen versuchen (in dieser Reihenfolge):
-1. Wahapedia: `https://wahapedia.ru/wh40k9ed/factions/orks/` (WebFetch)
-2. BattleScribe-Datenrepo auf GitHub (WebSearch nach "battlescribe data orks 9th edition")
-
-**Achtung:** BattleScribe-Datenstruktur (XML, army builder-spezifisch) nicht 1:1 übernehmen — nur Zahlenwerte und Regeltext extrahieren.
-
-Delta `orks.md` (aktuell vorhanden) vs. tatsächliche Einheiten-Datasheets prüfen.
-
-#### Template
-
-Am Ende ein Muster-YAML für eine Einheit, das auf jede Armee anwendbar ist:
-- Alle semantisch sinnvollen Felder
-- Keine Build-Metadaten
-- Klarer Umgang mit Sonderfällen (W-Notation, User-Stärke, Varianten-Profile)
-
----
-
-### A3 — Test-Struktur-Refactoring
-
-**Problem:** `engine.py` existiert nicht mehr. `tests/engine/` ist verwaist.
-
+**Problem:** Gebundene Einheiten dürfen laut Regelwerk nicht schießen. `can_shoot()` prüft das nicht.
+**Fix:** In `src/gameMechanic/shootingPhase.py`, Funktion `can_shoot()`:
+```python
+if unit_state.get("in_melee"):
+    return False
 ```
-tests/engine/test_engine.py        → aufteilen (siehe unten)
-tests/engine/test_multi_target.py  → tests/gameMechanic/test_unit_mutations.py
-tests/engine/test_state_badges.py  → tests/uiLayout/test_common.py
-```
+Analog: Schießen auf Freunde die im Nahkampf gebunden sind — noch out-of-scope, nur eigene Einheit prüfen.
 
-`test_engine.py` enthält Logik aus mehreren Modulen:
-- `parse_dice`, `wound_threshold` → bereits in `tests/gameMechanic/test_combat.py` — Duplikate prüfen, fehlende Tests ergänzen
-- `apply_damage`, `heal_unit` → `tests/gameMechanic/test_unit_mutations.py` (neu)
-- `next_phase`, Phase-Navigation → `tests/gameMechanic/test_game_state.py` (neu)
+### Blocker 3 — Nahkampfphase startet mit falschem Spieler (P3)
 
-Nach Migration: `tests/engine/` löschen. Coverage-Report: ≥ 80%.
+**Problem:** Regelwerk: Nahkampfrunde beginnt beim Nicht-aktiven Spieler. App startet beim aktiven Spieler.
+**Fix:** In `src/gameMechanic/fightPhase.py` Turn-Order-Logik: Nicht-aktiver Spieler wird als erster zum Kämpfen aufgefordert.
 
 ---
 
@@ -167,7 +107,7 @@ Nach Migration: `tests/engine/` löschen. Coverage-Report: ≥ 80%.
 src/
   app.py                    ← Streamlit-Einstieg
   gameMechanic/
-    combat.py               ← AttackParams, DefendParams, resolve_attack()
+    combat.py               ← AttackParams, DefendParams, resolve_attack(), parse_dice()
     commandPhase.py         ← Command Phase Handler
     shootingPhase.py        ← can_shoot(), ShootingPhaseHandler
     fightPhase.py           ← can_fight(), FightPhaseHandler
@@ -188,8 +128,14 @@ src/
     gameActionsArea.py      ← delegiert an phase_runner
 data/
   wh40k_9e/
-    necrons/                ← units.yaml, weapons.yaml, army.yaml, ...
-    orks/                   ← army.yaml (units.yaml fehlt!)
+    necrons/                ← units.yaml (W-Notation!), weapons.yaml, army.yaml
+    orks/                   ← army.yaml (6 Einheiten, keine units.yaml)
+tests/
+  gameMechanic/             ← test_combat.py, test_unit_mutations.py, test_game_state.py,
+                               test_command_phase.py, test_shooting.py, test_fight.py,
+                               test_ability_engine.py
+  uiLayout/                 ← test_common.py (NEU)
+  gameObjects/              ← (vorhanden)
 ```
 
 ## Designentscheidungen (unveränderlich)
