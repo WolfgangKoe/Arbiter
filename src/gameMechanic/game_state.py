@@ -9,13 +9,13 @@ from gameObjects.unit import Unit
 
 PHASES: list[tuple[str, str]] = [
     ("Setup", "setup"),
-    ("Befehlsphase", "command"),
-    ("Bewegungsphase", "movement"),
-    ("Psiphase", "psychic"),
-    ("Fernkampfphase", "shooting"),
-    ("Angriffsphase", "charge"),
-    ("Nahkampfphase", "fight"),
-    ("Moralphase", "morale"),
+    ("Command", "command"),
+    ("Movement", "movement"),
+    ("Psychic", "psychic"),
+    ("Shooting", "shooting"),
+    ("Charge", "charge"),
+    ("Fight", "fight"),
+    ("Morale", "morale"),
 ]
 
 _NECRON_UNITS = load_army("necrons")

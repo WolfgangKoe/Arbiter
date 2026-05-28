@@ -3,6 +3,8 @@
 > Dieses Dokument beschreibt das Badge-Vokabular, die Zustandsübergänge und die
 > Anzeigelogik für Einheiten-Badges in Arbiter.
 > Badges sind digitale Spielmarker — sie bilden immer den Regelzustand ab, nie interne Felder.
+> Dieses Dokument dient als Test-Spezifikation: Was hier steht, ist erlaubt.
+> Was nicht hier steht, darf die App nicht ermöglichen.
 
 ---
 
@@ -22,7 +24,7 @@
 | `STATIONARY` | Hat sich nicht bewegt | keine |
 | `MOVED` | Normal bewegt | keine |
 | `ADVANCED` | Vorgestoßen | ✗ Schuss (außer Assault), ✗ Charge |
-| `RETREATED` | Aus Nahkampf zurückgezogen — löscht `IN MELEE` | ✗ Schuss, ✗ Charge |
+| `RETREATED` | Aus Nahkampf zurückgezogen — löscht `IN MELEE` | ✗ Schuss, ✗ Charge, ✗ Kämpfen |
 | `CHARGED` | Angestürmt — impliziert `IN MELEE`, kämpft zuerst | — |
 
 ### Aktions-Badges (additiv zum Bewegungs-Badge)
@@ -79,25 +81,47 @@ Kombinationen:
 
 ---
 
-## Zustandsübergänge — 13 Szenarien
+## Sektion 1: Transition-Constraints
 
-| # | Startzustand | Bewegung | Fernkampf | Angriff | Nahkampf | Zugwechsel |
+Welche Folge-Aktionen ein Bewegungszustand erlaubt oder sperrt:
+
+| Bewegungszustand | Schießen | Charge ansagen | Kämpfen (wenn in Melee) | Advance | Retreat |
+|---|---|---|---|---|---|
+| STATIONARY | ✓ | ✓ | ✓ | — | nur wenn IN MELEE |
+| MOVED | ✓ | ✓ | ✓ | — | — |
+| ADVANCED | nur Assault-Waffen | ✗ | ✓ | — | — |
+| RETREATED | ✗ | ✗ | ✗ | — | — |
+| IN MELEE (stationary) | ✗ | ✗ | ✓ | ✗ | ✓ |
+
+**Constraint-Regeln:**
+- IN MELEE → Nur STATIONARY oder RETREAT im Bewegungsschritt erlaubt.
+- RETREATED → Keine weiteren Bewegungsoptionen mehr in diesem Zug.
+- Deployed from Reserve → gilt als MOVED (kann schießen, angreifen, kämpfen; kein Advance).
+
+---
+
+## Sektion 2: Aktiver Spieler — vollständige Szenarien
+
+Alle kanonischen Pfade für einen kompletten Zug des aktiven Spielers:
+
+| # | Start | Bewegung | Schuss | Charge | Kampf | Rundenende |
 |---|---|---|---|---|---|---|
-| 1 | STATIONARY | stationary | schießt | — | — | STATIONARY |
-| 2 | STATIONARY | MOVED | schießt | — | — | STATIONARY |
-| 3 | STATIONARY | ADVANCED | — | — | — | STATIONARY |
-| 4 | STATIONARY | MOVED | schießt | Charge ✓ | kämpft | IN MELEE |
-| 5 | STATIONARY | MOVED | — | Charge ✓ | kämpft | IN MELEE |
-| 6 | STATIONARY | MOVED | — | Charge ✗ | — | STATIONARY |
-| 7 | STATIONARY | MOVED | — | Charge ✓ | noch nicht | — |
-| 8 | IN MELEE | stationary | — | — | kämpft | IN MELEE |
-| 9 | IN MELEE | stationary | — | — | Feind vernichtet | STATIONARY |
-| 10 | IN MELEE | RETREATED | — | — | — | STATIONARY |
-| 11 | IN RESERVE | (Runde 1) | — | — | — | IN RESERVE |
-| 12 | IN RESERVE | deploy (Runde ≥ 2) | — | — | — | STATIONARY |
-| 13 | STATIONARY | MWBD aktiv | … | … | … | STATIONARY (MWBD cleared) |
+| 1 | STATIONARY | stationary | — | — | — | STATIONARY |
+| 2 | STATIONARY | stationary | schießt | — | — | STATIONARY |
+| 3 | STATIONARY | MOVED | — | — | — | STATIONARY |
+| 4 | STATIONARY | MOVED | schießt | — | — | STATIONARY |
+| 5 | STATIONARY | MOVED | — | Charge ✗ | — | STATIONARY |
+| 6 | STATIONARY | MOVED | — | Charge ✓ | kämpft | IN MELEE |
+| 7 | STATIONARY | MOVED | schießt | Charge ✓ | kämpft | IN MELEE |
+| 8 | STATIONARY | ADVANCED | — | — | — | STATIONARY |
+| 9 | IN MELEE | stationary | — | — | kämpft (Feind überlebt) | IN MELEE |
+| 10 | IN MELEE | stationary | — | — | kämpft (Feind vernichtet) | STATIONARY |
+| 11 | IN MELEE | RETREATED | — | — | — | STATIONARY |
+| 12 | IN RESERVE (R1) | — | — | — | — | IN RESERVE |
+| 13 | IN RESERVE (R≥2) | MOVED (deploy) | schießt | — | — | STATIONARY |
+| 14 | IN RESERVE (R≥2) | MOVED (deploy) | — | Charge ✓ | kämpft | IN MELEE |
 
-### Szenario 4 — Badge-Verlauf im Detail
+### Szenario 7 — Badge-Verlauf im Detail (MOVED + SHOT + CHARGE + FOUGHT)
 
 ```
 Zugstart           → STATIONARY
@@ -108,7 +132,7 @@ nach Kampf         → FOUGHT + SHOT + IN MELEE  (CHARGED suppressed by FOUGHT)
 Zugwechsel         → IN MELEE              (ephemere Badges reset, persistent bleibt)
 ```
 
-### Szenario 9 — Feind vernichtet (melee auto-clear)
+### Szenario 10 — Feind vernichtet (melee auto-clear)
 
 ```
 Zugstart           → IN MELEE
@@ -117,6 +141,89 @@ Feind destroyed    → leave_melee() auto-called (apply_damage, melee_with not e
                    → FOUGHT                 (IN MELEE erlischt)
 Zugwechsel         → STATIONARY
 ```
+
+### Szenario 13/14 — Deployment aus Reserve
+
+```
+Bewegung           → set_deployment("normal") + set_movement_status("moved")
+                   → MOVED (nicht ADVANCED — darf schießen und angreifen)
+Regelbasis         → "gilt als Bewegungswert in Zoll bewegt" (Schritt 2: Verstärkungen)
+```
+
+---
+
+## Sektion 3: Passiver Spieler — Zustände und Trigger
+
+Der passive Spieler hat keine normale Zugabfolge, reagiert aber auf Aktionen des aktiven Spielers.
+
+### Passive Szenarien
+
+| # | Passive-Start | Ursache | Zustand danach | Trigger/Effekt |
+|---|---|---|---|---|
+| P1 | STATIONARY | Beschossen (Schaden erhalten) | STATIONARY (Wunden reduziert) | Living Metal (nächste BP), Reanimation Protocols (nach Angriff) |
+| P2 | STATIONARY | Feindl. Charge erfolgreich | IN MELEE | Overwatch vor Angriffswurf möglich |
+| P3 | STATIONARY | Heroische Intervention | IN MELEE | Nur CHARACTERMODELL-Einheiten |
+| P4 | IN MELEE | Kämpft in Nahkampfphase | IN MELEE + FOUGHT oder FOUGHT | RP wenn Modelle verloren |
+
+### P1 — Beschossen werden
+
+- Einheit erhält Schaden → `current_wounds` sinkt, `lost_models_this_turn` steigt.
+- Badge: bleibt STATIONARY/MOVED etc. — Beschuss ändert keine Bewegungs-Badges.
+- **Living Metal**: Wird am Beginn der nächsten eigenen Befehlsphase ausgelöst (+1 LP pro Modell).
+- **Reanimation Protocols**: Können nach feindlichem Angriff (Nahkampfphase oder Fernkampfphase) ausgelöst werden, wenn Modelle verloren gingen.
+
+### P2 — Angegriffen werden (Charge)
+
+- Aktiver Spieler sagt Charge an → passive Einheit wird Ziel.
+- **Overwatch (Abwehrfeuer)**: Die passive Einheit darf schießen, **bevor** der Angriffswurf gewürfelt wird.
+  - Nur unmodifizierte 6er treffen (unabhängig von BF und Modifikatoren).
+  - Setzt **kein SHOT-Flag** — Abwehrfeuer ist kein regulärer Schuss.
+  - Nicht möglich wenn passive Einheit selbst IN MELEE ist.
+- Bei erfolgreichem Charge: `enter_melee()` → passive Einheit geht IN MELEE über.
+
+### P3 — Heroische Intervention
+
+- Ausgelöst nach allen Charges des aktiven Spielers (Schritt 2: Heroische Interventionen).
+- **Bedingung:** CHARACTERMODELL-Einheit, nicht bereits IN MELEE, ≤ 3" horizontal / ≤ 5" vertikal von einer feindlichen Einheit entfernt.
+- **Bewegung:** Bis zu 3" — jedes Modell muss näher an nächstem feindlichen Modell enden.
+- **Ergebnis:** `enter_melee()` → IN MELEE.
+- Maximal eine Heroische Intervention pro feindlicher Angriffsphase. Nie in eigener Angriffsphase.
+
+### P4 — Kämpfen in der Nahkampfphase
+
+- Die Nahkampfphase beginnt mit dem **inaktiven** Spieler.
+- Passive Einheiten IN MELEE (aber nicht charged) kämpfen in regulärer Reihenfolge.
+- **Ablauf:** Nachrücken (Pile In, bis 3") → Nahkampfattacken → Neu ordnen (Consolidation, bis 3").
+- **Badge-Ergebnis:**
+  - Feind überlebt → FOUGHT + IN MELEE
+  - Feind vernichtet → `leave_melee()` → FOUGHT (IN MELEE erlischt)
+- **RP-Trigger:** Wenn Modelle verloren gingen, Reanimation Protocols nach dem Angriff.
+
+---
+
+## Sektion 4: Verbotene Transitionen
+
+Explizite Negativliste — diese Übergänge darf die App **nie** ermöglichen:
+
+| Von | Nach | Grund |
+|---|---|---|
+| RETREATED | Bewegung (MOVED/ADVANCED/STATIONARY) | Rückzug ist final für diesen Zug |
+| RETREATED | Schuss | Kein Schuss nach Rückzug |
+| RETREATED | Charge | Kein Angriff nach Rückzug |
+| RETREATED | Kämpfen | Kein Kampf nach Rückzug |
+| ADVANCED | Charge | Kein Angriff nach Vorrücken |
+| ADVANCED | Schuss (außer Assault) | Kein regulärer Schuss nach Vorrücken |
+| IN MELEE + STATIONARY | MOVED | Einheit im Nahkampf kann sich nicht normal bewegen |
+| IN MELEE + STATIONARY | ADVANCED | Einheit im Nahkampf kann nicht vorrücken |
+| Deploy (MOVED) | ADVANCED | Deployments zählen als MOVED, nicht ADVANCED |
+
+### Regressionstest-Pflicht
+
+Der folgende Bug muss als dauerhafter Regressionstest abgedeckt sein:
+
+> **Bug:** Retreated → dann Stationary → dann MOVED/ADVANCED möglich  
+> **Ursache:** `set_movement_status("stationary")` setzt `flags["retreated"] = False`  
+> **Fix:** Early-Return in `_active_movement` wenn `already_retreated = True`
 
 ---
 
@@ -146,6 +253,8 @@ Nicht zurückgesetzt (persistent):
 | Badge-HTML-Rendering | `src/uiLayout/_common.py: state_badges_html()` |
 | Badge-HTML (unitCard) | `src/uiLayout/unitCard.py: _state_badges_html()` |
 | SHOT/FOUGHT setzen | `src/uiLayout/_common.py: render_attack_form()` |
-| MWBD-Reset-Bug | `src/gameMechanic/game_state.py: _reset_turn_state()` |
 | Melee auto-clear | `src/gameMechanic/unit_mutations.py: apply_damage()` |
-| Tests | `tests/uiLayout/test_common.py` |
+| Bewegungs-Buttons + Rückzug-Fix | `src/gameMechanic/movementPhase.py: _active_movement()` |
+| Deployment aus Reserve | `src/gameMechanic/movementPhase.py: _render_reinforcements_step()` |
+| Tests (Badges) | `tests/uiLayout/test_common.py` |
+| Tests (Bewegungs-Transitionen) | `tests/gameMechanic/test_movement_transitions.py` |
