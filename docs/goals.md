@@ -84,34 +84,32 @@ Ziel: Erste vollständige Phase als Blaupause für alle weiteren.
 
 ---
 
-### 3b — Combat-Kernel (`combat.py`) ⏳
+### 3b — Combat-Kernel (`combat.py`) ✅
 
-**Foundation vorhanden** (`parse_dice`, `wound_threshold`, deprecated `resolve_attack`).
-**Noch offen:** Vollständige Attack Sequence mit Spieler-Inputs.
-
-Zentrale, army-agnostische Datei. Jede Änderung **muss** von vollständig grünem Test-Suite abgesichert sein.
-
-- [x] `gameMechanic/combat.py` — Datei angelegt, `parse_dice`, `wound_threshold`, deprecated `resolve_attack`
-- [ ] `combat.py` — Dataclasses `AttackParams`, `DefendParams`; `resolve_attack(params, defender) → (damage, log)`
-- [ ] **Regeln für `resolve_attack`:**
-  - Nimmt vom Spieler eingegebene Zählwerte (physisch gewürfelt), keine Auto-Würfel
-  - AP modifiziert den Würfelwurf, nicht den Threshold — `effective_roll = raw_roll + ap_modifier`
-  - Roll-Modifier für Treffer/Verwundung gecappt bei ±1 (9E-Regel); AP hat keinen Cap
-  - Unmodifizierter 1 = immer Fehler, unmodifizierter 6 = immer Treffer/Verwundung
-  - `"User"`-Stärke wird **vor** Übergabe an die Funktion aufgelöst — Funktion sieht nur `int`
-  - `mwbd_active`-Flag auf Angreifer → hit_modifier +1
-- [ ] `tests/gameMechanic/test_combat.py` — **≥ 40 Tests** — vollständige Spezifikation
+- [x] `gameMechanic/combat.py` — `AttackParams`, `DefendParams` Dataclasses; neue `resolve_attack(params, defender, hits_rolled, wounds_rolled, saves_failed, fnp_saved) → (damage, log)`
+- [x] Player-entered roll counts (kein Auto-Würfeln); AP/Invuln/FNP/MWBD korrekt
+- [x] Deprecated `resolve_attack(Unit, Weapon, ...)` entfernt
+- [x] `tests/gameMechanic/test_combat.py` — **41 Tests**, alle grün
 
 ---
 
 ### 3c — Shooting Phase + Fight Phase ⏳
 
-**Voraussetzung:** 3b vollständig und alle Tests grün.
+**Voraussetzung:** 3b vollständig ✅
 
-- [ ] `gameMechanic/shootingPhase.py` — `can_shoot(unit_state)` als pure function; UI: Angreifer-Waffe | Ziel-Stats | AttackDisplay
-- [ ] `gameMechanic/fightPhase.py` — `can_fight(unit_state)` als pure function; Fights-First-Reihenfolge; UI analog Shooting
-- [ ] Deprecated `resolve_attack()` aus `combat.py` entfernen
-- [ ] Tests für shooting/fight phase
+#### Shooting Phase (`shootingPhase.py`)
+
+- [ ] `can_shoot(unit_state) → bool` — pure function; False wenn: `advanced`, `retreated`, `in_melee`, `in_reserve`
+- [ ] UI-Flow: Angreifer wählt Waffe → gibt `hits_rolled` / `wounds_rolled` / `saves_failed` / `fnp_saved` ein → `resolve_attack()` → Schadensanzeige + Log
+- [ ] Schadensanwendung: `apply_damage(uid, faction, amount)` aus `unit_mutations.py` (prüfen ob vorhanden, sonst anlegen)
+- [ ] Tests für `can_shoot` + Integrations-Smoke-Test
+
+#### Fight Phase (`fightPhase.py`)
+
+- [ ] `can_fight(unit_state) → bool` — True wenn `in_melee=True` ODER `charged=True`
+- [ ] Fights-First-Reihenfolge: Einheiten mit `fights_first`-Keyword zuerst (Keyword aus YAML)
+- [ ] UI analog Shooting: Waffe → Roll-Eingabe → Schadensanzeige
+- [ ] Tests für `can_fight` + Fights-First-Logik
 
 ---
 
@@ -119,8 +117,13 @@ Zentrale, army-agnostische Datei. Jede Änderung **muss** von vollständig grün
 
 **Voraussetzung:** Ziel 3 abgeschlossen.
 
+### Bekannte Bugs (Bewegungsphase)
+
+- [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True` ✅
+- [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True` ✅
+
 ### Phasen (Stubs → vollständige Implementierung)
-- [ ] `movementPhase.py` — Advance-Roll, Reserve-Deploy (Zug 2+)
+- [ ] `movementPhase.py` — Advance-Roll, Reserve-Deploy (Zug 2+); Bugs (siehe oben) als Voraussetzung
 - [ ] `chargephase.py` — Overwatch via `ShootingAction` mit `hit_modifier="only_6s"`
 - [ ] `moralePhase.py` — D6 + Verluste vs. Leadership
 - [ ] `psychicPhase.py` — Manifest (2D6 ≥ WC), Deny, Perils (Scope: TBD)

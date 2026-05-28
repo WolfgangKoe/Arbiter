@@ -3,12 +3,10 @@
 ## Dateien lesen (in dieser Reihenfolge)
 
 1. `.claude/tasks/next_session.md` — diese Datei
-2. `src/engine.py` — _unit_state, enter_melee, leave_melee, selected_targets
-3. `src/uiLayout/_common.py` — state_badges_html, render_player_column
-4. `src/uiLayout/unitCard.py` — _state_badges_html, target-toggle
-5. `src/gameMechanic/fightPhase.py` — Stub + _render_display
-6. `src/uiLayout/gameProtocoll.py` — aktueller Stand
-7. `data/log/game_log.json` — Format der Log-Einträge
+2. `docs/goals.md` — aktueller Gesamtstatus aller Ziele
+3. `src/gameMechanic/movementPhase.py` — Movement Phase (Bugs dokumentiert)
+4. `src/gameMechanic/commandPhase.py` — fertig umgebaut, als Referenz für Flows
+5. `src/uiLayout/unitCard.py` — MWBD/ResOrb-Awaiting-Logik als Referenz
 
 ---
 
@@ -20,186 +18,112 @@ Aktueller Branch: `dev`
 
 ---
 
+## Was in dieser Session gemacht wurde
+
+### Command Phase UX-Refactor (erledigt)
+- MWBD + ResOrb erscheinen nur wenn Overlord als Einheit ausgewählt ist
+- LP-Buttons (Wound Adjustment) aus dem selected-unit-Block der Command Phase entfernt
+- MWBD-Zielauswahl via unitCard: `mwbd_awaiting_target = True` → CORE-Einheiten in der Armeeliste werden zu klickbaren Zielen; Nicht-CORE als Plaintext
+- ResOrb-Zielauswahl analog: `res_orb_awaiting_target = True` → alle Einheiten (außer Overlord) werden zu Zielen
+- Cancel-Buttons für beide Flows
+- MWBD-Dauer-Fix: `mwbd_active_since_round` gespeichert; Reset am Anfang der nächsten Necron-Command-Phase
+
+### MWBD-Badge (erledigt)
+- Badge "MWBD" (`#60a5fa` auf `#0a1020`) in `_common.py` und `unitCard.py` ergänzt
+- Erscheint sobald `my_will_be_done_active = True` auf der Einheit
+
+---
+
 ## Aktueller Stand
 
 | Ziel | Status |
 |------|--------|
-| Ziel 1A/1B — Struktur + gameObjects | ✅ fertig |
-| Ziel 2 — commandPhase + Ability-System | ✅ fertig |
+| Ziel 1A — uiLayout/ Struktursplit | ✅ fertig |
+| Ziel 1B — gameObjects/ Foundation | ✅ fertig |
+| Ziel 2 — Command Phase | ✅ fertig inkl. UX-Refactor |
 | Ziel 3a — Phase-Infrastruktur | ✅ fertig |
-| Bug 1 — NORMAL/STATIONARY Badge | ✅ behoben |
-| Multi-Target-Block | ✅ fertig (102 Tests grün) |
-| **4 neue Bugs (Session 2026-05-28)** | ⏳ nächste Session |
-| Design-Block — Farben | ⏳ eigene Session |
-| Ziel 3b — combat.py | ⏳ nach den Bugs |
-| Ziel 3c — Shooting + Fight Phase | ⏳ |
+| Ziel 3b — combat.py Kernel | ⏳ Foundation vorhanden, AttackSequence fehlt |
+| Ziel 3c — Shooting + Fight Phase | ⏳ Stubs vorhanden, wartet auf 3b |
+| Bewegungsphase Bugs | 🐛 zwei bekannte Fehler (siehe unten) |
 
 ---
 
-## SOFORT zu fixen: 4 Bugs (vor Ziel 3b)
+## Nächste Schritte (Prioritätsreihenfolge)
 
-### Bug A — Badge-Konflikt: movement_choice + CHARGED
+### A — Bewegungsphase Bugs (höchste Priorität, kleine Fixes)
 
-**Problem:** Eine Einheit, die "Normal" bewegt und danach chargert, zeigt NORMAL + CHARGED gleichzeitig. Das ist inhaltlich falsch (Charge ist der relevante Zustand, Normal ist obsolet).
+**Datei:** `src/gameMechanic/movementPhase.py`
 
-**Fix:** In `state_badges_html()` und `_state_badges_html()` — Bewegungs-Badge überspringen wenn `charged=True`:
+**Bug 1 — In-Melee-Lock:**
+- Wenn `in_melee = True`: Normal und Advance müssen disabled sein
+- Nur Stationary und Retreat erlaubt
+- Aktuell: nur Retreat wird disabled wenn NICHT in melee (Zeile 84); umgekehrt fehlt der Lock
 
+**Bug 2 — Post-Retreat-Lock:**
+- Wenn `turn_flags["retreated"] = True`: Normal und Advance müssen disabled sein
+- Einheit kann sich nach einem Retreat in dieser Phase nicht anders bewegen
+- Aktuell: kein Lock nach Retreat gesetzt
+
+**Fix-Logik** (beide Bugs, ~5 Zeilen in `_active_movement`):
 ```python
-# In _common.py state_badges_html():
-mc = unit_state.get("movement_choice")
 flags = unit_state.get("turn_flags", {})
-# Bewegungs-Badge nur zeigen wenn Einheit NICHT gechargt hat
-if mc in _MOVEMENT_BADGE and not flags.get("charged"):
-    parts.append(_badge(_MOVEMENT_BADGE[mc]))
+already_retreated = flags.get("retreated", False)
+disabled_normal   = (in_melee or already_retreated)
+disabled_advance  = (in_melee or already_retreated)
+disabled_retreat  = not in_melee
+# disabled_stationary = False (immer erlaubt)
 ```
 
-**Dateien:** `src/uiLayout/_common.py`, `src/uiLayout/unitCard.py`
-**Tests:** `tests/engine/test_state_badges.py` — Test ergänzen: `test_charged_suppresses_movement_badge`
+**Erforderliche Änderungen:**
+- `src/gameMechanic/movementPhase.py` — `disabled`-Logik pro Button erweitern
+- Die Caption "Unit is in melee — only Stationary or Retreat allowed." bleibt
 
 ---
 
-### Bug B — Melee-Paare nicht in gameActionDisplayArea
+### B — Ziel 3b: combat.py Kernel
 
-**Problem:** Nach einem Charge ist nicht sichtbar, welche Einheiten miteinander im Nahkampf sind. Die Fight-Phase-Anzeige zeigt keine Engagement-Übersicht.
+**Datei:** `src/gameMechanic/combat.py`
+**Tests:** `tests/gameMechanic/test_combat.py` (neu anlegen, ≥ 40 Tests)
 
-**Fix:** In `fightPhase.py` `_render_display()` — wenn kein Angreifer+Ziel selektiert: alle aktiven Melee-Paare durch Scan der unit states anzeigen.
+Zentrale army-agnostische Datei. Keine Streamlit-Abhängigkeiten.
 
-```python
-def _render_melee_pairs(state: dict) -> None:
-    """Show all active melee engagements from unit states."""
-    from engine import _NECRON_UNITS, _ORK_UNITS  # noqa
-    pairs: list[str] = []
-    necron_states = st.session_state.necron_units
-    ork_names = {u.id: u.name_en for u in _ORK_UNITS}
-    necron_names = {u.id: u.name_en for u in _NECRON_UNITS}
-    for uid, s in necron_states.items():
-        for enemy_uid in s.get("melee_with", []):
-            pairs.append(f"**{necron_names.get(uid, uid)}** ↔ **{ork_names.get(enemy_uid, enemy_uid)}**")
-    if pairs:
-        st.markdown("**Active Melee Engagements:**")
-        for p in pairs:
-            st.markdown(f"- {p}")
-    else:
-        st.info(PHASE_RULES["fight"])
-```
+**Was fehlt:**
+- `AttackParams` Dataclass: `attacks`, `skill`, `strength`, `ap`, `damage`, `hit_modifier`, `wound_modifier`, `mwbd_active`
+- `DefendParams` Dataclass: `toughness`, `save`, `invul_save`, `wounds`
+- `resolve_attack(params: AttackParams, defender: DefendParams) → tuple[int, list[str]]`
+  - Gibt `(total_damage, log_lines)` zurück
+  - Nimmt physisch gewürfelte Zählwerte vom Spieler entgegen (kein Auto-Würfeln)
 
-**Datei:** `src/gameMechanic/fightPhase.py`
+**Regeldetails (unveränderlich festgelegt):**
+- AP modifiziert den Würfelwurf: `effective_roll = raw_roll + ap_modifier` (kein Save-Threshold-Abzug)
+- Roll-Modifier für Hit/Wound gecappt bei ±1 (9E-Regel); AP hat keinen Cap
+- Unmodifizierter 1 = immer Fehler; unmodifizierter 6 = immer Treffer/Verwundung
+- `"User"`-Stärke wird vor Übergabe aufgelöst — Funktion sieht nur `int`
+- `mwbd_active` auf Angreifer → `hit_modifier +1`
 
 ---
 
-### Bug C — Protocol zeigt kein Game-Log
+## Offene Punkte / bekannte Schwächen
 
-**Problem:** Tab "📋 Command Protocol" zeigt nur statischen Deployment-Snapshot, nicht die tatsächlich geloggten Aktionen aus `data/log/game_log.json`.
+### Bewegungsphase (nächste Session fixen)
+- In-Melee-Einheiten können Normal/Advance wählen — falsch
+- Nach Retreat sind Normal/Advance noch wählbar — falsch
 
-**Format game_log.json** (pro Eintrag):
-```json
-{ "round": 1, "phase": "movement", "unit": "Big Mek in Mega Armour",
-  "action": "movement: advanced", "timestamp": "2026-05-25T..." }
-```
-
-**Fix:** `gameProtocoll.py` — `_render_command_protocol()` liest `game_log.json`, gruppiert nach Round+Phase, zeigt als expandable Sections:
-
-```python
-# Pseudocode:
-entries = load_game_log()  # list[dict] aus JSON
-grouped = group_by(entries, key=lambda e: (e["round"], e["phase"]))
-for (round_num, phase), items in sorted(grouped.items()):
-    with st.expander(f"R{round_num} · {phase.capitalize()}", expanded=False):
-        for item in items:
-            st.caption(f"**{item['unit']}**: {item['action']}")
-```
-
-**Datei:** `src/uiLayout/gameProtocoll.py`
-**Kein neuer Log-Mechanismus** — `engine.log_action()` bleibt unverändert.
+### Deprecated resolve_attack() in combat.py
+- Erst löschen wenn Ziel 3b vollständig
 
 ---
 
-### Bug D — LP-Buttons immer sichtbar (Zwischenfix vor Bug 3)
-
-**Problem:** Wound-Adjustment-Buttons erscheinen für jede selektierte Einheit, unabhängig von Phase. Das ist unübersichtlich.
-
-**Analyse der Abhängigkeit:**
-- Bug 3 (aus Plan) ist der saubere Weg: LP-Buttons nur bei `active_effect` (braucht Ziel 3c)
-- **Jetzt möglich ohne 3c:** LP-Buttons nur auf der **inaktiven** (Ziel-)Seite zeigen, nicht für die aktive Einheit
-  - Semantisch korrekt: Du trägst Schaden beim Gegner ein, nicht bei dir selbst
-  - Living Metal / Heilung: läuft über Command Phase Abilities (eigene Buttons)
-
-**Fix:** In `render_player_column()` — `wound_adjustment_buttons` nur im `else`-Zweig (inaktive Seite):
-
-```python
-# AKTIVE Seite (is_active == True):
-# ... active_content(...) anzeigen
-# wound_adjustment_buttons ENTFERNEN
-
-# INAKTIVE Seite (Ziele):
-# ... wound_adjustment_buttons BEHALTEN (pro Ziel)
-```
-
-**Datei:** `src/uiLayout/_common.py`
-**Hinweis:** Wenn später `active_effect` kommt (Bug 3 / nach 3c), wird auch die inaktive Seite konditioniert.
-
----
-
-## Reihenfolge für nächste Session
-
-```
-1. Bug A — Badge-Konflikt (5 min)
-2. Bug B — Melee-Paare anzeigen (20 min)
-3. Bug C — Protocol-Log aus game_log.json (30 min)
-4. Bug D — LP-Buttons Zwischenfix (10 min)
-5. Tests aktualisieren (15 min)
-   └── test_state_badges.py: test_charged_suppresses_movement_badge
-6. Commit: "Fix UX bugs: badge conflict, melee display, protocol log, LP buttons"
-7. Ziel 3b — combat.py (≥40 Tests)
-```
-
----
-
-## Designentscheidungen die NICHT rückgängig gemacht werden
+## Designentscheidungen (unveränderlich)
 
 - `turn_flags` = Spielmechanik-Checks only
-- `movement_choice` = Display only; wird NICHT angezeigt wenn `charged=True`
+- `movement_choice` = Display only; nicht angezeigt wenn `charged=True` oder `in_reserve=True`
 - `melee_with` bidirektional (enter_melee / leave_melee)
 - `selected_targets: list[tuple[str, str]]` — nie wieder single-target
 - `can_fight()` prüft `melee_with` ODER `charged` flag
-- LP-Buttons: aktive Seite KEIN Button; inaktive Seite (Ziele) ja — bis 3c active_effect kommt
+- LP-Buttons: aktive Seite kein Button in Command Phase; inaktive Seite (Ziele) ja
 - `render_player_column()` bleibt in `_common.py`
-
----
-
-## Ziel 3b — combat.py (nach den Bugs)
-
-`src/gameMechanic/combat.py` mit:
-```python
-@dataclass
-class AttackParams:
-    attacks: str       # "D6", "3", etc.
-    skill: int         # BS/WS als int
-    strength: int
-    ap: int            # negativ z.B. -1
-    damage: str        # "D3", "2", etc.
-    hit_modifier: int = 0
-    num_models: int = 1
-
-@dataclass
-class DefendParams:
-    toughness: int
-    save: int
-    invuln_save: int | None
-    fnp: int | None
-
-def resolve_attack(params: AttackParams, defender: DefendParams) -> tuple[int, list[str]]:
-    """Returns (total_damage, log_messages)."""
-```
-
-Hilfsfunktionen (in `engine.py` oder `combat.py`):
-```python
-def can_shoot(unit_state: dict) -> bool:
-    flags = unit_state["turn_flags"]
-    return not flags["advanced"] and not flags["retreated"] and not unit_state["in_melee"]
-
-def can_fight(unit_state: dict) -> bool:
-    return bool(unit_state["melee_with"]) or unit_state["turn_flags"]["charged"]
-```
-
-Ziel: ≥ 40 Tests in `tests/gameMechanic/test_combat.py`
+- Alle engine-Importe direkt aus `gameMechanic.*` — kein `engine.py` Shim mehr
+- Aktionen erscheinen NUR kontextabhängig zur ausgewählten Einheit
+- Buff-Zustände (MWBD etc.) müssen als Badge sichtbar sein
+- MWBD/ResOrb Zielauswahl via unitCard (awaiting-target-Flow), nicht via Inline-Buttons
