@@ -262,6 +262,81 @@ units:
         abilities: "S+2, Boss Nob"
         is_melee: true
 
+  - id: wh40k_9e.orks.unit.weirdboy
+    name_en: "Weirdboy"
+    name_de: "Weirdboy"
+    battlefield_role: [HQ]
+    keywords:
+      - Orks
+      - Bad Moons
+      - Infantry
+      - Character
+      - PSYKER
+      - Weirdboy
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    move: "5\""
+    bs: "5+"
+    ws: "3+"
+    strength: 5
+    toughness: 5
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    abilities: "PSYKER: Cast 1, Deny 1, Powers: Smite + 2 Powers of the Waaagh! | 'Eadbang: bei Perils → Einheit in 6\" erhält D3 MV statt Psyker"
+    weapons:
+      - id: orks.weapon.weirdboy_staff
+        name_en: "Weirdboy Staff"
+        weapon_type: Melee
+        range_inches: "Melee"
+        attacks: "3"
+        strength: "8"
+        ap: "-1"
+        damage: "D3"
+        abilities: "S+3 (Träger S5 → 8)"
+        is_melee: true
+
+  - id: wh40k_9e.orks.unit.wurrboy
+    name_en: "Wurrboy"
+    name_de: "Wurrboy"
+    battlefield_role: [HQ]
+    keywords:
+      - Orks
+      - Bad Moons
+      - Infantry
+      - Character
+      - PSYKER
+      - Beast Snagga
+      - Wurrboy
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    move: "5\""
+    bs: "5+"
+    ws: "3+"
+    strength: 5
+    toughness: 5
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    abilities: "PSYKER: Cast 1, Deny 1, Powers: Smite + 2 Beasthead Powers | Beast Snagga: zählt als Tier-Einheit für Synapsen-Fähigkeiten"
+    weapons:
+      - id: orks.weapon.eyez_of_mork
+        name_en: "Eyez of Mork"
+        weapon_type: Assault
+        range_inches: "12"
+        attacks: "2"
+        strength: "6"
+        ap: "-3"
+        damage: "D3"
+        abilities: "Assault 2, 12\"; psionische Fernkampfwaffe"
+        is_melee: false
+
   - id: wh40k_9e.orks.unit.mek_gun
     name_en: "Mek Gun (Kustom Mega Kannon)"
     name_de: "Mek-Kanone (Kustom Mega Kannon)"

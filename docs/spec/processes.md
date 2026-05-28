@@ -318,3 +318,157 @@ def reset_turn_flags(faction: str, state: dict) -> None:
 - `render_end`: leer
 
 Turn-Flags werden von den Stub-Phasen noch **nicht** gesetzt (folgt in Ziel 4).
+
+---
+
+## P-10 — Bewegungsphase — vollständiger Ablauf
+
+```mermaid
+flowchart TD
+    A[Bewegungsphase beginnt] --> B[Spieler wählt Einheit ▶]
+    B --> C{in_reserve?}
+    C -- ja --> RESERVE[Caption: In reserve —\nmanage in Step 2 below]
+    C -- nein --> D{already_retreated?}
+    D -- ja --> LOCKED[Caption: Already retreated\n— no further movement]
+    D -- nein --> E{in_melee?}
+
+    E -- ja --> F[Nur STATIONARY oder RETREAT\n— MOVE + ADVANCE deaktiviert]
+    E -- nein --> G[MOVE / ADVANCE /\nSTATIONARY / RETREAT]
+
+    F --> H{Spieler klickt RETREAT}
+    H --> I[set_movement_status 'retreated'\nleave_melee\nlog_action]
+    F --> J{Spieler klickt STATIONARY}
+    J --> K[set_movement_status 'stationary']
+
+    G --> L{Spieler klickt MOVE}
+    L --> M[set_movement_status 'moved']
+    G --> N{Spieler klickt ADVANCE}
+    N --> O[set_movement_status 'advanced'\n✗ Charge / ✗ Shoot except Assault]
+    G --> P{Spieler klickt STATIONARY}
+    P --> Q[set_movement_status 'stationary']
+
+    A --> REINF[Step 2: Reinforcements\nimmer sichtbar für aktiven Spieler]
+    REINF --> R{reserve_units vorhanden?}
+    R -- nein --> SKIP[Caption: No reinforcements]
+    R -- ja, Round 1 --> WAIT[Caption: Cannot deploy until Round 2]
+    R -- ja, Round ≥ 2 --> DEPLOY[Button: Deploy {unit} from Reserve]
+    DEPLOY --> S[set_deployment 'normal'\nset_movement_status 'moved'\ngilt als MOVED — darf schießen/angreifen]
+```
+
+**Einschränkungen (aus `unit_states.md` Sektion 4):**
+- `RETREATED` → kein weiterer Bewegungsschritt möglich in diesem Zug
+- `IN MELEE + STATIONARY` → kein MOVED/ADVANCED
+- `Deployed (MOVED)` → kein ADVANCED (Deployment ≠ ADVANCED)
+
+**Code-Referenzen:**
+- `src/gameMechanic/movementPhase.py: _active_movement()` — Constraint-Logik
+- `src/gameMechanic/movementPhase.py: _render_reinforcements_step()` — Reserve-Deploy
+- `src/gameMechanic/unit_mutations.py: set_movement_status()` — State-Mutation
+- Tests: `tests/gameMechanic/test_movement_transitions.py`
+
+---
+
+## P-11 — Befehlsphase — Kommandoprotokolle (Necrons)
+
+Die Necron-Armeeregel „Kommandoprotokolle" wird einmal pro Befehlsphase aktiviert.
+Jedes Protokoll kann max. 1× pro Spiel gewählt werden.
+
+```mermaid
+flowchart TD
+    A[Befehlsphase beginnt\nNecrons aktiver Spieler] --> B{Round == 1?}
+    B -- ja --> C[Ewiger Wächter automatisch aktiv\nPrimär + Sekundär-Direktive gelten\nautomatisch ohne Spielerauswahl]
+    B -- nein --> D{Noch ungenutzte\nProtokolle vorhanden?}
+    D -- nein --> E[Alle Protokolle verwendet\nkein Protokoll in dieser Runde]
+    D -- ja --> F[Zeige Liste der verfügbaren\nnicht-genutzten Protokolle]
+    F --> G[Spieler klickt Protokoll]
+    G --> H[active_protocol_id = p.id\nused_protocol_ids.append p.id]
+    H --> I[Protokoll + beide Direktiven\nwerden in gameProtocoll angezeigt]
+    C --> I
+```
+
+**State in `game_state`:**
+| Feld | Typ | Bedeutung |
+|---|---|---|
+| `active_protocol_id` | `str \| None` | aktuell gewähltes Protokoll |
+| `used_protocol_ids` | `list[str]` | alle bereits genutzten Protokoll-IDs |
+
+**Mechanische Effekte:** Noch nicht automatisch appliziert — nur Anzeige + Auswahl.
+Vollautomatischer Effekt-Dispatch: Ziel 4i / Ability Engine Erweiterung.
+
+**Code-Referenzen:**
+- `src/gameMechanic/commandPhase.py: _render_command_protocols()` — UI
+- `src/gameObjects/command_protocol.py` — Dataclass
+- `data/wh40k_9e/necrons/command_protocols.yaml` — 5 Protokolle
+
+---
+
+## P-12 — Psychic Phase — vollständiger Ablauf
+
+Generalisierter Psi-Flow: `selectPsyker → rollManifest → (Deny) → resolve Smite`
+
+```mermaid
+flowchart TD
+    A[Psychic Phase beginnt] --> B{Aktive Armee\nhat PSYKER?}
+    B -- nein --> SKIP[Caption: No PSYKER units\n— skip this phase]
+    B -- ja --> C{Einheit ausgewählt?}
+    C -- nein --> SEL[Caption: Select a PSYKER\nfrom your army list]
+    C -- Nicht-PSYKER --> WARN[Warning: Not a PSYKER]
+    C -- PSYKER --> D[Zeige Smite — WC 5\n2D6-Eingabe + Attempt Manifest]
+
+    D --> E{Roll eingegeben\nund Button geklickt}
+    E --> F{roll == 2 oder 12?}
+    F -- ja --> G[Perils of the Warp!\nW3-Schadenseingabe\nam Psyker selbst]
+    G --> H{Perils applied?}
+    H -- ja --> I{roll ≥ 5?}
+    F -- nein --> I
+
+    I -- nein\nroll < 5 --> FAIL[Failed. + Reset-Button\npsi_result = None]
+    I -- ja --> MANI[Manifested!\nSmite bereit\nZielauswahl via gegnerische Armeeliste]
+
+    MANI --> DENY{Gegner hat\ncan_deny?}
+    DENY -- nein --> DMGAREA[Schadensbereich\nW3 oder W6 bei roll ≥ 11\nApply mortal wounds → Zieleinheit]
+    DENY -- ja, denied = None --> WAIT_DENY[Inaktive Spalte:\n2D6 > manifest_roll\nAttempt Deny / Skip]
+    WAIT_DENY --> DENIED_RES{deny_roll > manifest_roll?}
+    DENIED_RES -- ja --> BLOCKED[Denied! Smite gesperrt]
+    DENIED_RES -- nein --> DMGAREA
+    DENY -- ja, denied = False --> DMGAREA
+
+    DMGAREA --> APPLY[apply_damage mortal=True\nan Zieleinheit\npsi_result = None\nLog-Eintrag]
+```
+
+**`psi_result` — Session-State-Struktur:**
+```python
+psi_result: dict | None = {
+    "faction": str,   # Fraktion des Psykers
+    "uid":     str,   # Unit-ID des Psykers
+    "roll":    int,   # 2D6-Ergebnis
+    "manifested":     bool,       # roll >= 5
+    "perils":         bool,       # roll in (2, 12)
+    "perils_applied": bool,       # W3-Schaden am Psyker angewendet
+    "denied":         bool | None, # None = noch nicht versucht
+    "deny_roll":      int | None,
+}
+```
+
+**Hilfsfunktionen (`psychicPhase.py`):**
+
+| Funktion | Signatur | Zweck |
+|---|---|---|
+| `has_psyker` | `(units) → bool` | Prüft PSYKER-Keyword |
+| `can_deny` | `(units) → bool` | PSYKER-Keyword ODER `"gloom_prism"` in `unit.rules` |
+| `is_perils` | `(roll) → bool` | `roll in (2, 12)` |
+| `smite_damage_die` | `(roll) → str` | `"W6"` bei ≥ 11, sonst `"W3"` |
+| `deny_succeeds` | `(manifest, deny) → bool` | `deny > manifest` (strikt größer) |
+
+**Bannversuch — Canoptek Spyder (Gloom Prism):**
+- Kein PSYKER-Keyword — Bannfähigkeit via `"gloom_prism"` in `unit.rules`
+- Direkt über `can_deny()`-Check, nicht über Ability Engine (kein Effect-Typ `"deny_psychic"`)
+- Vollständige Ability-Engine-Abstraktion: Ziel 4i
+
+**Scope (Ziel 4f):** Nur Smite (WC 5). Blessing-Flow (befreundetes Ziel) folgt später.
+
+**Code-Referenzen:**
+- `src/gameMechanic/psychicPhase.py` — Handler + alle Hilfsfunktionen
+- `data/wh40k_9e/orks/army.yaml` — Weirdboy + Wurrboy (PSYKER-Einheiten)
+- `data/wh40k_9e/necrons/army.yaml` — Canoptek Spyder (`rules: [gloom_prism]`)
+- Tests: `tests/gameMechanic/test_psychic_phase.py`

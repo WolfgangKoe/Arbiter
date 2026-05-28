@@ -239,3 +239,41 @@ units:
         damage: "1"
         abilities: "Unmodif. 6 zum Treffen = automatisch verwundet"
         is_melee: true
+
+  - id: wh40k_9e.necrons.unit.canoptek_spyder
+    name_en: "Canoptek Spyder (Gloom Prism)"
+    name_de: "Canoptek-Spinne (Düsterprism)"
+    rules: [gloom_prism]
+    battlefield_role: [Heavy Support]
+    keywords:
+      - Necrons
+      - Nephrekh
+      - Vehicle
+      - Fly
+      - Canoptek
+      - Canoptek Spyder
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    move: "6\""
+    bs: "4+"
+    ws: "4+"
+    strength: 6
+    toughness: 6
+    save: 3
+    invuln_save: null
+    leadership: 10
+    oc: 3
+    fnp: null
+    abilities: "Gloom Prism: Kann in der Psiphase des Gegners eine Psikraft bannen als wäre sie ein PSIONIKER | Fabricator Claw Array: Repariert eine befreundete DYNASTY VEHICLE-Einheit in 3\" um W3 LP/Zug"
+    weapons:
+      - id: necrons.weapon.particle_beamer_spyder
+        name_en: "Particle Beamer"
+        weapon_type: Assault
+        range_inches: "18"
+        attacks: "6"
+        strength: "5"
+        ap: "0"
+        damage: "1"
+        abilities: "Assault 6, 18\"; 2× Particle Beamer = 12 Angriffe gesamt"
+        is_melee: false

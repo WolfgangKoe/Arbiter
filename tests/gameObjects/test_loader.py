@@ -14,9 +14,9 @@ from gameObjects.loader import (
 )
 
 
-def test_load_necron_army_returns_five_units() -> None:
+def test_load_necron_army_returns_six_units() -> None:
     units = load_army("necrons")
-    assert len(units) == 5
+    assert len(units) == 6
 
 
 def test_overlord_name_and_stats() -> None:
@@ -42,9 +42,9 @@ def test_warriors_models_and_save() -> None:
     assert warriors.save == 4
 
 
-def test_load_ork_army_returns_six_units() -> None:
+def test_load_ork_army_returns_eight_units() -> None:
     units = load_army("orks")
-    assert len(units) == 6
+    assert len(units) == 8
 
 
 def test_load_necron_faction_abilities_returns_at_least_one() -> None:
