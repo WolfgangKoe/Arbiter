@@ -10,39 +10,17 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Dateien lesen (in dieser Reihenfolge)
-
-1. `.claude/tasks/next_session.md` — diese Datei
-2. `docs/goals.md` — vollständiger Plan
-3. `src/uiLayout/armyCard.py` — aktuelle Implementierung (wichtig für Designdiskussion unten)
-4. `src/gameObjects/ability.py` — aktuelles Ability-Datenmodell
-
----
-
 ## Was in dieser Session gemacht wurde
 
-### Ziel 4b — armyCard + unitCard Redesign (committed)
-
-**unitCard (`src/uiLayout/unitCard.py`):**
-- Neue Layout-Reihenfolge: LP/Modell-Bars → Name-Button → State-Badges → Keywords
-- `st.container(border=True)` — sichtbarer Rahmen, Badges eindeutig zugeordnet
-- Hauptfraktionsschlüsselwort (`unit.faction`) aus Keywords-Anzeige gefiltert
-- Keyword-Highlighting: `session_state.highlight_keywords: list[str]` — all-or-nothing Logik
-
-**armyCard (`src/uiLayout/armyCard.py`):**
-- Komplett neu: Border, Faction-Badge + Subfaction-Badge
-- TriggeredAbility-Buttons (phasenabhängig sichtbar, z.B. Living Metal in Befehlsphase)
-
-**Datenmodell:**
-- `Ability.ability_type: str = "triggered" | "activated"` — neu
-- YAMLs aktualisiert, Loader erweitert
-
-**Refactoring:**
-- `apply_living_metal()` von `commandPhase.py` → `unit_mutations.py` verschoben
-- Living Metal Button aus commandPhase entfernt (jetzt in armyCard)
-- `armyList.py` lädt und reicht `faction_abilities` weiter
-
-**Tests:** 209 grün (vorher 200)
+- Ziel 4e vollständig implementiert und committed (`291e698`):
+  - Bug-Fix: Early-Return in `_active_movement` wenn `already_retreated=True`
+  - Button-Labels: "Normal" → "Move", "Stationary" → "Stay Stationary"
+  - Buttons vertikal (kein `st.columns(4)` mehr)
+  - `_render_reinforcements_step` als eigener, immer sichtbarer Abschnitt
+  - Phasennamen im Header auf Englisch: Command, Movement, Psychic, Shooting, Charge, Fight, Morale
+  - `docs/spec/unit_states.md` komplett überarbeitet (4 Sektionen inkl. passive Spieler)
+  - 15 Integrationstests (`test_movement_transitions.py`), alle grün
+- `goals.md` + `next_session.md` aktualisiert: Psiphase vorgezogen (vor Fernkampfphase)
 
 ---
 
@@ -51,86 +29,101 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel | Status |
 |------|--------|
 | Ziel 1A–1B — Struktur | ✅ fertig |
-| Ziel 2 — Command Phase | ✅ fertig |
+| Ziel 2 — Command Phase | ✅ fertig (Basis) |
 | Ziel 3 — Combat Foundation | ✅ fertig |
 | Ziel A — Architektur-Review | ✅ fertig |
 | Ziel 4a — Badge/State-System | ✅ fertig |
-| **Ziel 4b — armyCard + unitCard Redesign** | ✅ **fertig** |
-| Ziel 4c — Bewegungsphase vollständig | ⬜ geplant |
-| Ziel 4d — Angriffsphase (Charge) | ⬜ geplant |
+| Ziel 4b — armyCard + unitCard Redesign | ✅ fertig |
+| Ziel 4c — Ability Engine Refactoring | ✅ fertig |
+| Ziel 4d — Befehlsphase vollständig | ✅ fertig (commit `b734f97`) |
+| Ziel 4e — Bewegungsphase vollständig | ✅ fertig (commit `291e698`) |
+| **Ziel 4f — Psychic Phase** | ⏳ **nächster Schritt** |
 
 ---
 
-## ERSTE AUFGABE: Designdiskussion — generisches Ability-Modell
+## NÄCHSTE AUFGABE: Ziel 4f — Psychic Phase
 
-### Das Problem
+### Kontext
 
-`armyCard.py` enthält `_living_metal_eligible()` — eine Eligibility-Prüfung, die
-`"livingMetal" in u.rules` direkt prüft. Das ist eine Necron-spezifische Implementierung,
-die als generische Logik in das Ability-Datenmodell gehört.
+Die Psiphase kommt in der Spielreihenfolge direkt nach der Bewegungsphase.
+Stub existiert bereits: `src/gameMechanic/psychicPhase.py`
 
-**Kern-Frage:** Wie kann eine `Ability` ihre eigene Eligibility-Prüfung kapseln,
-sodass `armyCard.py` nur noch `ability.get_eligible_units(units, states)` ruft?
+**Necrons haben keine Psyker** — die Phase zeigt für Necrons nur eine Info-Caption.
+Der volle Flow wird trotzdem generisch gebaut, damit er für Psyker-Armeen (z.B. Orks → Weird Boyz) einsetzbar ist.
 
-### Nutzerwunsch (wörtlich aus Session)
+### Regelgrundlage (aus `docs/work/schlachtrunde.md`)
 
-> "Ich hätte hier lieber so etwas wie `armyAbility(...)` stehen auf ganz abstrakte Weise.
-> Und Living Metal, RP usw. sind dann eben eine `armyAbility()`. `armyAbility()` wäre dann
-> vielleicht eine Unterklasse von `ability()`."
+- **Manifest:** 2W6 ≥ Warp-Energie-Wert → Psikraft wirkt
+- **Bannen:** Gegnerischer Psyker innerhalb 24" → 2W6, bei Ergebnis **höher** als der Manifestwurf: Kraft gebannt
+- **Gefahren des Warp:** Doppel-1 oder Doppel-6 beim Manifestversuch → W3 Schaden am Psyker
+- **Schmetterschlag (Smite):** Warp-Energie 5 (+1 pro Manifestversuch in der Phase), trifft nächste sichtbare feindliche Einheit innerhalb 18" für W3 tödliche Verwundungen (W6 bei Ergebnis 11+)
+- **Kein Auto-Würfeln:** Spieler gibt alle Würfelwürfe manuell ein
 
-### Aktuelles Ability-Modell (Kurzreferenz)
+### Geplanter UI-Flow
 
-```python
-# src/gameObjects/ability.py
-@dataclass
-class Ability:
-    id: str
-    name_en: str
-    source: str          # "faction_rule" | "unit_ability" | "wargear"
-    rule_text: str
-    trigger: Trigger     # timing, phase, player, event
-    conditions: list[Condition]  # has_rules, has_keywords, max_uses, ...
-    effect: Effect       # type, target, amount, modifier, handler
-    unit_id: str | None
-    ability_type: str    # "triggered" | "activated"
+#### Aktiver Spieler — Einheit mit PSYKER-Keyword ausgewählt:
+
+```
+Schritt 1: Psikraft auswählen
+  [Schmetterschlag (Smite) — WC 5]   ← einzige Kraft in Scope
+
+Schritt 2: Manifestation
+  Warp-Energie: 5
+  [Eingabe: 2D6 Ergebnis]
+  → bei ≥ 5: "Kraft manifestiert" → Schritt 3
+  → bei Doppel-1/6: "Gefahren des Warp! W3 Schaden." → Eingabe + apply_damage()
+  → bei < 5: "Kraft gescheitert."
+
+Schritt 3: Ziel und Schaden
+  Nächste sichtbare feindliche Einheit (Spieler wählt)
+  → bei Ergebnis 11+: W6 tödliche Verwundungen, sonst W3
+  [Eingabe: Anzahl tödlicher Verwundungen] + "Apply"
 ```
 
-### Diskussionspunkte für die Session
+#### Passiver Spieler — Einheit mit PSYKER-Keyword innerhalb 24":
 
-1. **Eligibility als Methode auf `Ability`?**
-   ```python
-   ability.get_eligible_units(units, states) -> list[str]
-   ```
-   Würde erfordern, dass `Ability` die Bedingungen gegen Unit-States auswerten kann —
-   das ist eigentlich Aufgabe der `ability_engine.py`.
+```
+[Bannversuch]
+  [Eingabe: 2D6 Ergebnis]
+  → wenn Ergebnis > Manifestwurf: "Kraft gebannt."
+  → sonst: "Bannversuch gescheitert."
+```
 
-2. **`ArmyAbility` als Unterklasse?**
-   Pro: klare Trennung army-wide vs. unit-specific.
-   Con: `Ability` ist schon generisch genug — vielleicht reicht ein Feld `scope: "army" | "unit"`.
+#### Kein Psyker in der Armee:
 
-3. **Handler-Pattern (bereits in `Effect.handler`)?**
-   `effect.handler = "livingMetal"` existiert schon für komplexe Effekte.
-   Könnte man zu `eligibility_handler = "livingMetal"` erweitern.
+```
+Caption: "No PSYKER units — nothing to do in the Psychic Phase."
+```
 
-4. **Conditions reichen aus?**
-   `Condition.has_rules = ["livingMetal"]` ist bereits im YAML.
-   Vielleicht muss `armyCard` nur `ability_engine.check_conditions()` aufrufen
-   statt eine eigene `_living_metal_eligible()`-Funktion zu haben.
+### Empfohlene Reihenfolge
 
-**Empfehlung zum Diskutieren:** Option 4 ist am elegantesten — die Conditions-Logik
-existiert bereits in `ability_engine.py`. `armyCard` ruft sie einfach pro Unit auf.
-Kein neuer Code, keine Unterklasse — nur den vorhandenen Mechanismus nutzen.
+1. `psychicPhase.py` lesen (aktueller Stub)
+2. Plan beschreiben + Freigabe einholen
+3. Implementieren:
+   a. PSYKER-Check + No-Psyker-Caption
+   b. Smite-Manifestationsflow (2D6-Eingabe, WC-Vergleich, Perils)
+   c. Zielauswahl + Schaden (tödliche Verwundungen via `apply_damage(mortal=True)`)
+   d. Bannversuch für passiven Spieler
+4. Tests schreiben (`tests/gameMechanic/test_psychic_phase.py`)
+5. Commit
+
+### Scope-Grenzen
+
+- **Nur Schmetterschlag** — keine weiteren Psikräfte
+- **Kein PSYKER-Flag** im unit_state nötig — PSYKER ist ein Keyword, wird aus `unit.keywords` geprüft
+- Die Phase nutzt `apply_damage(mortal=True)` für tödliche Verwundungen (kein Schutzwurf)
 
 ---
 
 ## Designregeln (fest)
 
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
-- Seitenleisten IMMER fest: `first_player` links, `second_player` rechts — niemals an `active` binden
+- Seitenleisten IMMER fest: `first_player` links, `second_player` rechts
 - Aktionen nur kontextuell zur ausgewählten Einheit
-- **Kein Design ohne Schema** — Nutzer definiert Farbpalette selbst; keine eigenständigen Farbentscheidungen
+- **Kein Design ohne Schema** — Nutzer definiert Farbpalette selbst
 - `dev`-Branch — kein direktes Committen auf `main`
 - Necron-Spezifika sind **Beispiele** — Hauptlogik und Doku bleiben generisch
+- Kein Auto-Würfeln — alle Würfelwürfe gibt der Spieler ein
 
 ---
 
@@ -140,23 +133,27 @@ Kein neuer Code, keine Unterklasse — nur den vorhandenen Mechanismus nutzen.
 src/
   app.py
   gameMechanic/
-    combat.py | commandPhase.py | shootingPhase.py | fightPhase.py
-    movementPhase.py | chargephase.py | game_state.py
-    unit_mutations.py   ← apply_living_metal() jetzt hier
-    game_log.py | ability_engine.py | phase_runner.py
+    combat.py | commandPhase.py
+    psychicPhase.py   ← nächste Hauptdatei (Stub vorhanden)
+    shootingPhase.py | fightPhase.py
+    movementPhase.py   ← Ziel 4e fertig
+    chargephase.py | game_state.py
+    unit_mutations.py
+    game_log.py | ability_engine.py
+    phase_runner.py
   gameObjects/
-    ability.py          ← Ability mit ability_type-Feld
+    ability.py | command_protocol.py
     unit.py | weapon.py | loader.py
   uiLayout/
     _common.py
-    unitCard.py         ← border, neue Reihenfolge, keyword highlighting
-    armyCard.py         ← border, badges, triggered ability buttons
-    armyList.py         ← lädt faction_abilities
-    gameActionsArea.py
-data/wh40k_9e/necrons/ | orks/
+    unitCard.py | armyCard.py
+    armyList.py | gameActionsArea.py
+    gameProtocoll.py
+data/wh40k_9e/necrons/
+  command_protocols.yaml
 tests/
   gameMechanic/ | uiLayout/ | gameObjects/
-  uiLayout/test_unit_card.py  ← neu
 docs/
-  goals.md | spec/ | work/
+  goals.md | spec/unit_states.md
+  work/schlachtrunde.md   ← Regelreferenz für Psiphase (Abschnitt 3)
 ```

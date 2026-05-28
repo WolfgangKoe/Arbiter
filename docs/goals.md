@@ -289,9 +289,9 @@ Kombination:              FOUGHT + IN MELEE zeigen zusammen (kämpfte, noch gebu
 
 ---
 
-### 4d — Befehlsphase vollständig ⬜
+### 4d — Befehlsphase vollständig ✅
 
-**Voraussetzung:** 4c abgeschlossen ✅
+**Abgeschlossen** (commit `b734f97`).
 
 **Kontext:** Analyse in Session 2026-05-28 ergab drei Lücken in der Befehlsphase.
 
@@ -326,16 +326,37 @@ RP-Trigger gehört in Schuss-, Angriffs- und Nahkampfphase (nach Feindangriff). 
 
 ---
 
-### 4e — Bewegungsphase vollständig ⬜
+### 4e — Bewegungsphase vollständig ✅
 
-- [x] **In-Melee-Lock** — Normal/Advance disabled wenn `in_melee=True`
-- [x] **Post-Retreat-Lock** — Normal/Advance disabled nach `retreated=True`
-- [ ] Advance-Roll: W6 würfeln, Ergebnis zur Bewegungsreichweite addieren, `advanced` setzen
-- [ ] Reserve-Deploy (Zug 2+): `in_reserve=False`, Bewegungseinschränkungen greifen
+**Abgeschlossen** (commit `291e698`).
+
+- [x] **In-Melee-Lock** — Move/Advance disabled wenn `in_melee=True`
+- [x] **Post-Retreat-Lock** — alle Bewegungsoptionen disabled nach `retreated=True`
+- [x] Bug-Fix: Retreat-Override durch nachfolgendes "Stay Stationary" verhindert
+- [x] Buttons vertikal, Labels: "Move" / "Advance" / "Stay Stationary" / "Retreat"
+- [x] `_render_reinforcements_step` — immer sichtbarer Abschnitt für Reserve-Deploy
+- [x] Phasennamen im Header auf Englisch (Command, Movement, Psychic, …)
+- [x] `docs/spec/unit_states.md` — 4 Sektionen inkl. passive Spieler-Zustände
+- [x] 15 Integrationstests grün (`test_movement_transitions.py`)
 
 ---
 
-### 4f — Angriffsphase (Charge Phase) ⬜
+### 4f — Psychic Phase ⬜
+
+**Voraussetzung:** 4e abgeschlossen ✅
+
+Stub existiert bereits (`psychicPhase.py`). Necrons haben keine Psyker — die Phase wird mit
+korrekter "no PSYKER units"-Anzeige für Necrons und vollem Flow für Psyker-Armeen gebaut.
+
+- [ ] PSYKER-Keyword-Check — Einheit hat kein PSYKER-Keyword → Caption "No Psyker units"
+- [ ] Manifest: Psikraft wählen → Warp-Charge-Wert anzeigen → 2D6 eingeben → Effekt beschreiben
+- [ ] Deny: gegnerischer Psyker → zweiten 2D6-Wurf eingeben → bei Übertreffen: Kraft gebannt
+- [ ] Perils of the Warp: Doppel-1/Doppel-6 → W3 Schaden an Psyker
+- [ ] Scope: Nur Schmetterschlag (Smite) als erste Psikraft implementieren
+
+---
+
+### 4g — Angriffsphase (Charge Phase) ⬜
 
 - [ ] Charge-Würfel: 2W6 — bei Erfolg `set_charged()`, bei Misserfolg bleibt `MOVED`
 - [ ] `advanced`-Flag sperrt Charge-Button (Regelkonformität)
@@ -344,19 +365,10 @@ RP-Trigger gehört in Schuss-, Angriffs- und Nahkampfphase (nach Feindangriff). 
 
 ---
 
-### 4g — Moralphase ⬜
+### 4h — Moralphase ⬜
 
 - [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
 - [ ] `moralePhase.py` — Render-Logik
-
----
-
-### 4h — Psychic Phase ⬜
-
-- [ ] Manifest: 2D6 ≥ Warp Charge → Effekt ausführen
-- [ ] Deny: gegnerischer Psyker darf versuchen zu unterdrücken
-- [ ] Perils of the Warp: Doppel-1/Doppel-6 → Schaden am Psyker
-- [ ] Scope: TBD (Necrons haben keine Psyker — für Ork-Phase relevant)
 
 ---
 
