@@ -6,7 +6,13 @@ Design principles (see docs/spec/ui_layout.md §4):
   - Enemy unit → toggles selected_target (shooting / charge / fight phases only)
 - No expander, no stats table, no wound buttons.
   Wound adjustments live in the PlayerArea of gameActionsArea.
-- Shows: name button · keywords · LP bar (❤) · model bar (⬡) · status badges
+- Layout (top to bottom, inside a border):
+    LP/model bars → name button → state badges → keywords
+- Main faction keyword (unit.faction) is omitted from keyword display;
+  it is shown once in the armyCard.
+- Keyword highlighting: when session_state.highlight_keywords is set,
+  keywords are highlighted all-or-nothing: only if the unit has ALL required
+  keywords do the matching chips light up.
 - Setup phase exception: deployment selectbox shown inline below name.
 """
 
@@ -82,6 +88,37 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     return "".join(parts)
 
 
+def _keyword_chip(kw: str, highlighted: bool) -> str:
+    if highlighted:
+        fg, bg, border = "#f5d080", "#3a2e10", "#f5d080"
+    else:
+        fg, bg, border = "#6b5f44", "#1c1a14", "#2e2618"
+    return (
+        f'<span style="background:{bg};border:1px solid {border};border-radius:2px;'
+        f"padding:1px 5px;font-size:9px;color:{fg};letter-spacing:0.05em;"
+        f'margin-right:2px;">{kw}</span>'
+    )
+
+
+def _keywords_html(unit: Unit) -> str:
+    """Render keyword chips, excluding the main faction keyword.
+
+    Highlighting is all-or-nothing: if the unit has all highlight_keywords,
+    each matching chip is highlighted; otherwise no chip is highlighted.
+    """
+    required: list[str] = st.session_state.get("highlight_keywords", [])
+    visible_kws = [kw for kw in unit.keywords if kw != unit.faction]
+
+    if required:
+        unit_kws = set(unit.keywords)
+        qualifies = all(r in unit_kws for r in required)
+        required_set = set(required) if qualifies else set()
+    else:
+        required_set = set()
+
+    return "".join(_keyword_chip(kw, kw in required_set) for kw in visible_kws)
+
+
 def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
     phase_key = PHASES[st.session_state.phase_idx][1]
     active = st.session_state.active
@@ -89,72 +126,31 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
     uid = unit.id
     in_reserve = state.get("in_reserve", False)
 
-    # ── Destroyed ─────────────────────────────────────────────
-    if state["destroyed"]:
-        st.markdown(f"~~{unit.name_en}~~  *DESTROYED*")
-        return
+    with st.container(border=True):
+        # ── Destroyed ─────────────────────────────────────────────
+        if state["destroyed"]:
+            st.markdown(f"~~{unit.name_en}~~  *DESTROYED*")
+            return
 
-    # ── Name / Selector Button ─────────────────────────────────
-    if phase_key == "setup":
-        # In setup: selector triggers datasheet display in gameActionDisplayArea
-        sel = st.session_state.selected_unit
-        is_sel = sel == (faction, uid)
-        label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
-        if st.button(
-            label,
-            key=f"sel_{faction}_{uid}",
-            type="primary" if is_sel else "secondary",
-            use_container_width=True,
-        ):
-            st.session_state.selected_unit = None if is_sel else (faction, uid)
-            st.rerun()
+        # ── LP bar (❤) and model bar (⬡) — top of card ───────────
+        cur = state["current_wounds"]
+        models_alive = state["models"]
 
-    elif is_active:
-        mwbd_awaiting = phase_key == "command" and st.session_state.get(
-            "mwbd_awaiting_target", False
-        )
-        res_orb_awaiting = phase_key == "command" and st.session_state.get(
-            "res_orb_awaiting_target", False
-        )
-
-        if mwbd_awaiting:
-            if "Core" in unit.keywords:
-                if st.button(
-                    f"▶ {unit.name_en}",
-                    key=f"mwbd_tgt_{faction}_{uid}",
-                    type="secondary",
-                    use_container_width=True,
-                ):
-                    st.session_state.necron_units[uid]["my_will_be_done_active"] = True
-                    st.session_state.mwbd_target_uid = uid
-                    st.session_state.mwbd_active_since_round = st.session_state.round
-                    st.session_state.mwbd_awaiting_target = False
-                    log_action(
-                        st.session_state.round,
-                        "command",
-                        "Overlord",
-                        f"My Will Be Done → {unit.name_en}",
-                    )
-                    st.rerun()
-            else:
-                st.markdown(f"**{unit.name_en}**")
-
-        elif res_orb_awaiting:
-            _overlord_id = "wh40k_9e.necrons.unit.overlord"
-            if uid == _overlord_id:
-                st.markdown(f"**{unit.name_en}**")
-            else:
-                if st.button(
-                    f"▷ {unit.name_en}",
-                    key=f"res_orb_tgt_{faction}_{uid}",
-                    type="secondary",
-                    use_container_width=True,
-                ):
-                    st.session_state.res_orb_target_uid = uid
-                    st.session_state.res_orb_awaiting_target = False
-                    st.rerun()
-
+        if unit.models_max == 1:
+            st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
+            st.caption(f"❤ {cur}/{unit.wounds}")
+        elif unit.wounds == 1:
+            st.progress(models_alive / unit.models_max if unit.models_max > 0 else 0)
+            st.caption(f"⬡ {models_alive}/{unit.models_max}")
         else:
+            front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
+            st.progress(models_alive / unit.models_max)
+            st.caption(f"⬡ {models_alive}/{unit.models_max}")
+            st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
+            st.caption(f"❤ {front_wounds}/{unit.wounds}")
+
+        # ── Name / Selector Button ─────────────────────────────────
+        if phase_key == "setup":
             sel = st.session_state.selected_unit
             is_sel = sel == (faction, uid)
             label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
@@ -163,84 +159,117 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                 key=f"sel_{faction}_{uid}",
                 type="primary" if is_sel else "secondary",
                 use_container_width=True,
-                disabled=in_reserve,
             ):
                 st.session_state.selected_unit = None if is_sel else (faction, uid)
-                st.session_state.selected_targets = []
                 st.rerun()
 
-    else:
-        # Inactive player — target selector for relevant phases
-        if phase_key in _TARGET_PHASES:
-            tgts: list[tuple[str, str]] = st.session_state.selected_targets
-            is_tgt = (faction, uid) in tgts
-            label = f"◀ {unit.name_en}" if is_tgt else f"▷ {unit.name_en}"
-            if st.button(
-                label,
-                key=f"tgt_{faction}_{uid}",
-                type="primary" if is_tgt else "secondary",
-                use_container_width=True,
-                disabled=in_reserve,
-            ):
-                new_tgts = list(tgts)
-                if is_tgt:
-                    new_tgts.remove((faction, uid))
+        elif is_active:
+            mwbd_awaiting = phase_key == "command" and st.session_state.get(
+                "mwbd_awaiting_target", False
+            )
+            res_orb_awaiting = phase_key == "command" and st.session_state.get(
+                "res_orb_awaiting_target", False
+            )
+
+            if mwbd_awaiting:
+                if "Core" in unit.keywords:
+                    if st.button(
+                        f"▶ {unit.name_en}",
+                        key=f"mwbd_tgt_{faction}_{uid}",
+                        type="secondary",
+                        use_container_width=True,
+                    ):
+                        st.session_state.necron_units[uid]["my_will_be_done_active"] = True
+                        st.session_state.mwbd_target_uid = uid
+                        st.session_state.mwbd_active_since_round = st.session_state.round
+                        st.session_state.mwbd_awaiting_target = False
+                        log_action(
+                            st.session_state.round,
+                            "command",
+                            "Overlord",
+                            f"My Will Be Done → {unit.name_en}",
+                        )
+                        st.rerun()
                 else:
-                    new_tgts.append((faction, uid))
-                st.session_state.selected_targets = new_tgts
-                st.rerun()
+                    st.markdown(f"**{unit.name_en}**")
+
+            elif res_orb_awaiting:
+                _overlord_id = "wh40k_9e.necrons.unit.overlord"
+                if uid == _overlord_id:
+                    st.markdown(f"**{unit.name_en}**")
+                else:
+                    if st.button(
+                        f"▷ {unit.name_en}",
+                        key=f"res_orb_tgt_{faction}_{uid}",
+                        type="secondary",
+                        use_container_width=True,
+                    ):
+                        st.session_state.res_orb_target_uid = uid
+                        st.session_state.res_orb_awaiting_target = False
+                        st.rerun()
+
+            else:
+                sel = st.session_state.selected_unit
+                is_sel = sel == (faction, uid)
+                label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
+                if st.button(
+                    label,
+                    key=f"sel_{faction}_{uid}",
+                    type="primary" if is_sel else "secondary",
+                    use_container_width=True,
+                    disabled=in_reserve,
+                ):
+                    st.session_state.selected_unit = None if is_sel else (faction, uid)
+                    st.session_state.selected_targets = []
+                    st.rerun()
+
         else:
-            st.markdown(f"**{unit.name_en}**")
+            # Inactive player — target selector for relevant phases
+            if phase_key in _TARGET_PHASES:
+                tgts: list[tuple[str, str]] = st.session_state.selected_targets
+                is_tgt = (faction, uid) in tgts
+                label = f"◀ {unit.name_en}" if is_tgt else f"▷ {unit.name_en}"
+                if st.button(
+                    label,
+                    key=f"tgt_{faction}_{uid}",
+                    type="primary" if is_tgt else "secondary",
+                    use_container_width=True,
+                    disabled=in_reserve,
+                ):
+                    new_tgts = list(tgts)
+                    if is_tgt:
+                        new_tgts.remove((faction, uid))
+                    else:
+                        new_tgts.append((faction, uid))
+                    st.session_state.selected_targets = new_tgts
+                    st.rerun()
+            else:
+                st.markdown(f"**{unit.name_en}**")
 
-    # ── Keywords ──────────────────────────────────────────────
-    if unit.keywords:
-        kw_html = "".join(
-            f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
-            f"padding:1px 5px;font-size:9px;color:#6b5f44;letter-spacing:0.05em;"
-            f'margin-right:2px;">{kw}</span>'
-            for kw in unit.keywords
-        )
-        st.markdown(kw_html, unsafe_allow_html=True)
+        # ── State badges + Keywords ────────────────────────────────
+        if phase_key != "setup":
+            badges = _state_badges_html(state)
+            kws = _keywords_html(unit)
+            if badges or kws:
+                st.markdown(badges + kws, unsafe_allow_html=True)
+        else:
+            kws = _keywords_html(unit)
+            if kws:
+                st.markdown(kws, unsafe_allow_html=True)
 
-    # ── LP bar (❤) and model bar (⬡) ──────────────────────────
-    cur = state["current_wounds"]
-    models_alive = state["models"]
-
-    if unit.models_max == 1:
-        # Single-model unit: only LP bar
-        st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
-        st.caption(f"❤ {cur}/{unit.wounds}")
-    elif unit.wounds == 1:
-        # Multi-model, 1 wound each: only model bar
-        st.progress(models_alive / unit.models_max if unit.models_max > 0 else 0)
-        st.caption(f"⬡ {models_alive}/{unit.models_max}")
-    else:
-        # Multi-model, multi-wound: model bar + front-model LP bar
-        front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
-        st.progress(models_alive / unit.models_max)
-        st.caption(f"⬡ {models_alive}/{unit.models_max}")
-        st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
-        st.caption(f"❤ {front_wounds}/{unit.wounds}")
-
-    # ── Status badges ─────────────────────────────────────────
-    if phase_key != "setup":
-        badges = _state_badges_html(state)
-        if badges:
-            st.markdown(badges, unsafe_allow_html=True)
-
-    # ── Setup: deployment selector (inline, no expander) ──────
-    if phase_key == "setup":
-        opts = ["Normal", "Stationary", "Reserve"]
-        current = state.get("deployment", "normal").capitalize()
-        idx = opts.index(current) if current in opts else 0
-        chosen = st.selectbox(
-            "Deployment",
-            opts,
-            index=idx,
-            key=f"deploy_{faction}_{uid}",
-            label_visibility="collapsed",
-        )
-        mapping = {"Normal": "normal", "Stationary": "stationary", "Reserve": "reserve"}
-        if mapping[chosen] != state.get("deployment", "normal"):
-            set_deployment(uid, faction, mapping[chosen])
-            st.rerun()
+        # ── Setup: deployment selector (inline, no expander) ──────
+        if phase_key == "setup":
+            opts = ["Normal", "Stationary", "Reserve"]
+            current = state.get("deployment", "normal").capitalize()
+            idx = opts.index(current) if current in opts else 0
+            chosen = st.selectbox(
+                "Deployment",
+                opts,
+                index=idx,
+                key=f"deploy_{faction}_{uid}",
+                label_visibility="collapsed",
+            )
+            mapping = {"Normal": "normal", "Stationary": "stationary", "Reserve": "reserve"}
+            if mapping[chosen] != state.get("deployment", "normal"):
+                set_deployment(uid, faction, mapping[chosen])
+                st.rerun()

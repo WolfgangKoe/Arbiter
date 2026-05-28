@@ -96,6 +96,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             handler=d["effect"].get("handler"),
         ),
         unit_id=d.get("unit_id"),
+        ability_type=d.get("ability_type", "triggered"),
     )
 
 

@@ -8,18 +8,9 @@ from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for t
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
 from gameObjects.loader import load_army
-from gameObjects.unit import Unit
 from uiLayout._common import PHASE_RULES, lookup, state_badges_html, wound_adjustment_buttons
 
 _OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"
-
-
-def apply_living_metal(unit_state: dict, unit: Unit) -> bool:  # type: ignore[type-arg]
-    max_alive = unit_state["models"] * unit.wounds
-    if unit_state["current_wounds"] < max_alive:
-        unit_state["current_wounds"] += 1
-        return True
-    return False
 
 
 def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
@@ -29,10 +20,8 @@ def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # ty
 def _render_faction_actions(
     faction: str,
     state: dict,  # type: ignore[type-arg]
-    units_state: dict,  # type: ignore[type-arg]
-    unit_by_id: dict,  # type: ignore[type-arg]
 ) -> None:
-    """CP-Grant + Living Metal — always visible for the active faction."""
+    """CP-Grant — Living Metal has moved to armyCard."""
     st.divider()
     st.markdown(f"**+1 CP for {faction}**")
     already_granted = st.session_state.get("cp_granted_this_phase", False)
@@ -43,27 +32,6 @@ def _render_faction_actions(
             adjust_cp(faction, 1)
             log_action(state["round"], "command", faction, "+1 CP received")
             st.session_state.cp_granted_this_phase = True
-            st.rerun()
-
-    living_metal_units = [
-        uid
-        for uid, ustate in units_state.items()
-        if not ustate.get("destroyed", False)
-        and uid in unit_by_id
-        and "livingMetal" in unit_by_id[uid].rules
-        and ustate["current_wounds"] < unit_by_id[uid].wounds * ustate["models"]
-    ]
-    if living_metal_units:
-        st.divider()
-        n = len(living_metal_units)
-        st.markdown(f"**Living Metal** — {n} unit{'s' if n > 1 else ''} eligible")
-        if st.button("Apply Living Metal", key="cmd_living_metal", use_container_width=True):
-            healed = sum(
-                1
-                for uid in living_metal_units
-                if apply_living_metal(units_state[uid], unit_by_id[uid])
-            )
-            log_action(state["round"], "command", faction, f"Living Metal: {healed} unit(s) healed")
             st.rerun()
 
 
@@ -204,7 +172,7 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_key = "necron_units" if faction == "Necrons" else "ork_units"
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
-    _render_faction_actions(faction, state, units_state, unit_by_id)
+    _render_faction_actions(faction, state)
 
     if faction == "Necrons":
         overlord_alive = _OVERLORD_ID in units_state and not units_state[_OVERLORD_ID].get(

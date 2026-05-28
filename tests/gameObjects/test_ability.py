@@ -25,6 +25,21 @@ def test_ability_dataclass_fields() -> None:
     assert ability.trigger.phase == "command"
     assert ability.trigger.player == "active"
     assert ability.unit_id is None
+    assert ability.ability_type == "triggered"
+
+
+def test_ability_type_activated() -> None:
+    ability = Ability(
+        id="test.activated",
+        name_en="Activated Ability",
+        source="unit_ability",
+        rule_text="Must be chosen.",
+        trigger=Trigger(timing="activated", phase="command"),
+        conditions=[],
+        effect=Effect(type="buff_roll", target="friendly", modifier=1),
+        ability_type="activated",
+    )
+    assert ability.ability_type == "activated"
 
 
 def test_condition_defaults() -> None:
@@ -116,3 +131,24 @@ def test_skorpekh_destroyers_has_living_metal_and_rp() -> None:
     skorp = next(u for u in units if "skorpekh" in u.id)
     assert "livingMetal" in skorp.rules
     assert "reanimationProtocols" in skorp.rules
+
+
+def test_faction_abilities_have_ability_type() -> None:
+    abilities = load_faction_abilities("necrons")
+    for ability in abilities:
+        assert ability.ability_type in (
+            "triggered",
+            "activated",
+        ), f"{ability.id} has invalid ability_type: {ability.ability_type!r}"
+
+
+def test_living_metal_is_triggered() -> None:
+    abilities = load_faction_abilities("necrons")
+    lm = next(a for a in abilities if a.id == "necrons.faction.living_metal")
+    assert lm.ability_type == "triggered"
+
+
+def test_reanimation_protocols_is_triggered() -> None:
+    abilities = load_faction_abilities("necrons")
+    rp = next(a for a in abilities if a.id == "necrons.faction.reanimation_protocols")
+    assert rp.ability_type == "triggered"

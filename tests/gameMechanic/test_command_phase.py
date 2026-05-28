@@ -9,7 +9,8 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.commandPhase import apply_living_metal, resolve_command_start  # noqa: E402
+from gameMechanic.commandPhase import resolve_command_start  # noqa: E402
+from gameMechanic.unit_mutations import apply_living_metal  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
 from gameObjects.unit import Unit  # noqa: E402
 

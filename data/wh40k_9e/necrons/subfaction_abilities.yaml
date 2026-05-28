@@ -5,6 +5,7 @@ subfactions:
     abilities:
       - id: necrons.dynasty.nephrekh.translocation_beams
         name_en: Translocation Beams
+        ability_type: triggered
         source: dynastic_code
         rule_text: "Models in this unit have a 6+ invulnerable save."
         trigger:

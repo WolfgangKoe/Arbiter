@@ -42,3 +42,4 @@ class Ability:
     conditions: list[Condition]
     effect: Effect
     unit_id: str | None = None
+    ability_type: str = "triggered"  # "triggered" | "activated"

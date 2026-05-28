@@ -86,65 +86,89 @@ Fixed bar across the full width at the top.
 
 ## 3. armyCard
 
-Displayed once at the top of each player's armyList. Read-only display, no interaction.
+Displayed once at the top of each player's armyList. Shows faction identity and army-wide ability buttons.
 
 ```
 ┌──────────────────────────────────────────────┐
 │  armyName                                    │
 │  (default: "{faction} — {subfaction}")       │
 │  ──────────────────────────────────────────  │
-│  [Faction]  [Subfaction]  [Battle-Forged]    │
+│  [{faction}]  [{subfaction}]                 │
 │  ──────────────────────────────────────────  │
-│  factionProperty ▸  <rule name / text>       │
-│  subfactionProperty ▸  <rule name / text>    │
+│  [Ability Button]   (phase-dependent)        │
+│  [Ability Button]   (phase-dependent)        │
 └──────────────────────────────────────────────┘
 ```
+
+The card has a visible thin border.
 
 ### Properties
 
 | Property | Type | Notes |
 |----------|------|-------|
 | `army_name` | str | Custom name; default = "{faction} — {subfaction}" |
-| `faction` | str | e.g., "Necrons" |
-| `subfaction` | str \| None | e.g., "Nephrekh" |
-| `battle_forged` | bool | Badge shown only if True |
-| `faction_properties` | list[FactionProperty] | From gameObjects data |
-| `subfaction_properties` | list[FactionProperty] | From gameObjects data |
+| `faction` | str | Main faction keyword, e.g. "Necrons" |
+| `subfaction` | str \| None | Subfaction keyword chosen at army build, e.g. "Nephrekh" |
+| `faction_abilities` | list[Ability] | Loaded from faction_abilities.yaml |
 
-### FactionProperty display
+### Faction keyword badges
 
-Each property is shown as: name and short rule text. Not clickable.
-The phase/parameter data is stored in gameObjects but not surfaced as interactive UI here.
+Two badges are shown:
+- **faction badge** — the main faction keyword (e.g. "Necrons", "Orks")
+- **subfaction badge** — the chosen subfaction keyword (e.g. "Nephrekh", "Bad Moons")
 
-**Examples (Necrons):**
-- factionProperty — *Living Metal:* "At the start of your Command phase, each NECRONS unit recovers 1 lost wound."
-- subfactionProperty (Nephrekh) — *Translocation Beams:* "Models have a 6+ invulnerable save." *(triggers in: shooting, fight)*
+These are the only two faction-level keywords shown here. Further subfaction keywords (e.g. sub-cult or dynasty variants) are intentionally omitted as no army-wide abilities target them.
+
+### Ability buttons (TriggeredAbility vs. ActivatedAbility)
+
+Army abilities fall into two categories:
+
+| Type | Behaviour | Shown when |
+|------|-----------|------------|
+| `triggered` | Auto-fires when trigger conditions are met; button appears to confirm/apply | Current phase matches `trigger.phase` AND all conditions met |
+| `activated` | Must be deliberately chosen by the player | Per-unit selection (not in armyCard) |
+
+`triggered` ability buttons appear in the armyCard only for the active player, only in the matching phase.
+
+**Examples:**
+- *Triggered (command phase):* faction heal ability — button visible at start of command phase when any eligible unit has lost wounds.
+- *Triggered (shooting + fight phase):* faction reanimate ability — button visible after enemy attacks when conditions are met.
+- *Activated:* unit-specific abilities (e.g. character commands, one-use items) — shown in gameActionsArea when the relevant unit is selected, not in armyCard.
+
+### actionArea context when no unit is selected
+
+When no unit is selected, the playerArea in gameActionsArea shows which faction and unit abilities are available in the current phase — so the area is never empty.
 
 ---
 
 ## 4. unitCard
 
 One card per unit. Displayed inside a detachmentCard, grouped by battlefield role.
+The card has a visible thin border so state badges are unambiguously grouped with their unit.
 
 ```
 ┌───────────────────────────────────────────────────────┐
-│  [unitName]  ← clickable → toggles selected state     │
-│  ──────────────────────────────────────────────────── │
-│  [keyword1] [keyword2] [keyword3] ...                 │
-│  ──────────────────────────────────────────────────── │
 │  ❤  ████████████░░░░  8 / 10                          │
 │  ⬡  ████████████░░░░  8 / 10                         │
 │  ──────────────────────────────────────────────────── │
-│  [state1] [state2] ...                                │
+│  [unitName]  ← clickable → toggles selected state     │
 │  ──────────────────────────────────────────────────── │
-│  ▼ phase area  [collapsible]                          │
-│  ┌────────────────────────────────────────────────┐   │
-│  │ commandPhase:   informations, active abilities │   │
-│  │ movementPhase:  move value, allowed actions    │   │
-│  │ ...                                            │   │
-│  └────────────────────────────────────────────────┘   │
+│  [state1] [state2] ...                                │
+│  [keyword1] [keyword2] [keyword3] ...                 │
 └───────────────────────────────────────────────────────┘
 ```
+
+**Layout rationale:** bars at the top give an immediate health read before the name.
+State badges sit directly below the name — visually bound to this unit, not the one below.
+
+### Keyword display rules
+
+- The **main faction keyword** (`unit.faction`, e.g. the army's top-level faction) is **not shown** on the unitCard — it is shown once in the armyCard.
+- The **subfaction keyword** and all other keywords are shown.
+- When an ability requires specific keywords as a condition (e.g. during target selection), keyword highlighting activates:
+  - If the unit satisfies **all** required keywords → all matching keyword chips are highlighted.
+  - If even one required keyword is missing → no highlighting at all (all-or-nothing).
+  - Highlighting is driven by `session_state.highlight_keywords: list[str]`.
 
 ### Interaction
 
