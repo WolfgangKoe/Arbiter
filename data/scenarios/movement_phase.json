@@ -1,0 +1,10 @@
+{
+  "description": "Movement Phase: Round 1, Necrons active",
+  "round": 1,
+  "phase_idx": 2,
+  "active": "Necrons",
+  "phase_stage": "active",
+  "cp": {"Necrons": 3, "Orks": 3},
+  "vp": {"Necrons": 0, "Orks": 0},
+  "unit_patches": {}
+}

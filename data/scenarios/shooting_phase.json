@@ -1,0 +1,23 @@
+{
+  "description": "Shooting Phase: Round 1, Necrons active, no units in melee",
+  "round": 1,
+  "phase_idx": 4,
+  "active": "Necrons",
+  "phase_stage": "active",
+  "cp": {"Necrons": 3, "Orks": 3},
+  "vp": {"Necrons": 0, "Orks": 0},
+  "unit_patches": {
+    "necron_units": {
+      "wh40k_9e.necrons.unit.warriors": {
+        "in_melee": false,
+        "melee_with": []
+      }
+    },
+    "ork_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": false,
+        "melee_with": []
+      }
+    }
+  }
+}
