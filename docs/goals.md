@@ -362,24 +362,21 @@ feindliche Einheit in der gegnerischen Armeeliste; danach erscheint Schadenseing
 
 ---
 
-### 4f.1 — Psychic Phase Nachbesserungen ⬜
-
-Offene Punkte aus Review-Session nach 4f-Implementierung:
+### 4f.1 — Psychic Phase Nachbesserungen ✅
 
 #### 4f.1.a — Smite-Zielauswahl-Hinweis verbessern
 
-- [ ] `_render_psi_result()`: Caption bei fehlendem Ziel ausführlicher — Schritt-für-Schritt-Hinweis
-  → "① Click an enemy unit in their army list to mark it as Smite target, then the damage button appears."
+- [x] `_render_psi_result()`: Caption bei fehlendem Ziel ausführlicher — Schritt-für-Schritt-Hinweis
 
 #### 4f.1.b — CAST-Badge (ephemer)
 
-Wenn ein Psyker erfolgreich manifestiert hat, erhält er ein `CAST`-Badge (analog zu `SHOT`).
-
-- [ ] `src/uiLayout/_common.py: _BADGE_COLORS`: `"CAST": ("#9060d0", "#180a28")` (Violett)
-- [ ] `src/uiLayout/_common.py: state_badges_html()`: `CAST` additiv anzeigen (wie SHOT)
-- [ ] `src/gameMechanic/psychicPhase.py`: `turn_flags["cast"] = True` nach `manifested=True`
-- [ ] `src/gameMechanic/game_state.py: reset_turn_flags()`: `"cast": False` ergänzen
-- [ ] Tests: `tests/uiLayout/test_common.py`
+- [x] `src/uiLayout/_common.py: _BADGE_COLORS`: `"CAST": ("#9060d0", "#180a28")` (Violett)
+- [x] `src/uiLayout/_common.py: state_badges_html()`: `CAST` additiv anzeigen (wie SHOT)
+- [x] `src/gameMechanic/psychicPhase.py`: `turn_flags["cast"] = True` nach Smite-Apply
+- [x] `src/gameMechanic/game_state.py`: `"cast": False` in `turn_flags` + Reset in `next_phase()`
+- [x] `cast_eligibility(unit_state)` — Retreated-Sperre + Already-cast-Sperre
+- [x] WC-Eskalation: `psi_attempts_this_phase` — Smite WC steigt pro Manifestationsversuch um 1
+- [x] Tests: `tests/uiLayout/test_common.py` + `tests/gameMechanic/test_psychic_phase.py`
 
 #### 4f.1.c — Blessing-Flow (befreundetes Ziel) ⬜
 

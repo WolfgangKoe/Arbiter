@@ -80,6 +80,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "CHARGED": ("#b070d8", "#1a0a2a"),
     "FOUGHT": ("#c080e8", "#200a30"),
     "SHOT": ("#40a0b8", "#081418"),
+    "CAST": ("#9060d0", "#180a28"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
     "MWBD": ("#60a5fa", "#0a1020"),
@@ -125,9 +126,11 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
     if movement_slot:
         parts.append(_badge(movement_slot))
 
-    # SHOT is always additive alongside the movement slot
+    # SHOT and CAST are always additive alongside the movement slot
     if flags.get("shot"):
         parts.append(_badge("SHOT"))
+    if flags.get("cast"):
+        parts.append(_badge("CAST"))
 
     # IN MELEE: always visible except when CHARGED is the active movement slot
     if unit_state.get("in_melee") and movement_slot != "CHARGED":

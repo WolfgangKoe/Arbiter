@@ -72,6 +72,16 @@ def deny_succeeds(manifest_roll: int, deny_roll: int) -> bool:
     return deny_roll > manifest_roll
 
 
+def cast_eligibility(unit_state: dict) -> tuple[bool, str | None]:  # type: ignore[type-arg]
+    """Return (eligible, reason) — None reason means eligible to manifest."""
+    flags = unit_state.get("turn_flags", {})
+    if flags.get("retreated"):
+        return False, "Retreated this turn — cannot manifest psychic powers."
+    if flags.get("cast"):
+        return False, "Already manifested this phase — each PSYKER may only be chosen once."
+    return True, None
+
+
 # ---------------------------------------------------------------------------
 # Column rendering
 # ---------------------------------------------------------------------------
@@ -101,11 +111,16 @@ def _render_active_psychic(faction: str, state: dict) -> None:  # type: ignore[t
         return
 
     _, uid = sel
-    unit, _ = lookup(faction, uid)
+    unit, unit_state = lookup(faction, uid)
     st.markdown(f"*{unit.name_en}*")
 
     if not any(kw.upper() == "PSYKER" for kw in unit.keywords):
         st.warning("Not a PSYKER — select a PSYKER unit.")
+        return
+
+    eligible, reason = cast_eligibility(unit_state)
+    if not eligible:
+        st.warning(reason)
         return
 
     _render_smite_flow(faction, uid, unit, state)
@@ -121,7 +136,8 @@ def _render_smite_flow(
         return
 
     # No active result — show manifest input.
-    st.markdown("**Smite** — Warp Charge 5")
+    wc = 5 + st.session_state.get("psi_attempts_this_phase", 0)
+    st.markdown(f"**Smite** — Warp Charge {wc}")
     roll = st.number_input(
         "2D6 roll",
         min_value=2,
@@ -135,8 +151,11 @@ def _render_smite_flow(
         type="primary",
         use_container_width=True,
     ):
-        manifested = roll >= 5
+        manifested = roll >= wc
         perils = is_perils(int(roll))
+        st.session_state.psi_attempts_this_phase = (
+            st.session_state.get("psi_attempts_this_phase", 0) + 1
+        )
         st.session_state.psi_result = {
             "faction": faction,
             "uid": uid,
@@ -228,7 +247,10 @@ def _render_psi_result(
 
     targets = [t for t in st.session_state.selected_targets if t[0] != faction]
     if not targets:
-        st.caption("▷ Select an enemy unit from their army list as Smite target.")
+        st.caption(
+            "① Click an enemy unit in their army list to mark it as Smite target,"
+            " then the damage button appears."
+        )
     else:
         for tgt_faction, tgt_uid in targets:
             tgt_unit, _ = lookup(tgt_faction, tgt_uid)
@@ -248,6 +270,8 @@ def _render_psi_result(
                 use_container_width=True,
             ):
                 apply_damage(tgt_uid, tgt_faction, int(smite_dmg), tgt_unit, mortal=True)
+                unit_key = "necron_units" if faction == "Necrons" else "ork_units"
+                st.session_state[unit_key][uid]["turn_flags"]["cast"] = True
                 log_action(
                     state["round"],
                     "psychic",

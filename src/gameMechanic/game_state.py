@@ -39,6 +39,7 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
             "charged": False,
             "shot": False,
             "fought": False,
+            "cast": False,
         },
         "my_will_be_done_active": False,
         "active_buffs": [],
@@ -69,6 +70,7 @@ def init_state() -> None:
     st.session_state.ork_units = {u.id: _unit_state(u) for u in _ORK_UNITS}
     st.session_state.active_protocol_id = "eternal_guardian"
     st.session_state.used_protocol_ids = ["eternal_guardian"]
+    st.session_state.psi_attempts_this_phase = 0
 
 
 def reset_game() -> None:
@@ -119,3 +121,4 @@ def next_phase() -> None:
     st.session_state.selected_targets = []
     st.session_state.psi_result = None
     st.session_state.psychic_denies_used = {}
+    st.session_state.psi_attempts_this_phase = 0

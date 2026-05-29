@@ -19,6 +19,7 @@ def _state(
     charged: bool = False,
     shot: bool = False,
     fought: bool = False,
+    cast: bool = False,
     in_melee: bool = False,
     in_reserve: bool = False,
     mwbd: bool = False,
@@ -31,6 +32,7 @@ def _state(
             "charged": charged,
             "shot": shot,
             "fought": fought,
+            "cast": cast,
         },
         "in_melee": in_melee,
         "in_reserve": in_reserve,
@@ -211,3 +213,29 @@ def test_mwbd_is_additive() -> None:
     assert "STATIONARY" in html
     assert "SHOT" in html
     assert "MWBD" in html
+
+
+# ---------------------------------------------------------------------------
+# CAST badge tests
+# ---------------------------------------------------------------------------
+
+
+def test_cast_flag_shows_cast_badge() -> None:
+    assert "CAST" in state_badges_html(_state(movement_choice="stationary", cast=True))
+
+
+def test_cast_is_additive_with_stationary() -> None:
+    html = state_badges_html(_state(movement_choice="stationary", cast=True))
+    assert "STATIONARY" in html
+    assert "CAST" in html
+
+
+def test_cast_is_additive_with_shot() -> None:
+    html = state_badges_html(_state(movement_choice="stationary", shot=True, cast=True))
+    assert "STATIONARY" in html
+    assert "SHOT" in html
+    assert "CAST" in html
+
+
+def test_cast_not_shown_when_false() -> None:
+    assert "CAST" not in state_badges_html(_state(movement_choice="stationary"))

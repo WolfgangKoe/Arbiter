@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.psychicPhase import (
     can_deny,
+    cast_eligibility,
     deny_succeeds,
     has_psyker,
     is_perils,
@@ -140,3 +141,43 @@ class TestDenySucceeds:
 
     def test_deny_barely_succeeds(self):
         assert deny_succeeds(7, 8) is True
+
+
+# ---------------------------------------------------------------------------
+# cast_eligibility
+# ---------------------------------------------------------------------------
+
+
+def _flags(**kwargs) -> dict:  # type: ignore[type-arg]
+    base = {"retreated": False, "cast": False, "advanced": False, "shot": False, "fought": False}
+    base.update(kwargs)
+    return {"turn_flags": base}
+
+
+class TestCastEligibility:
+    def test_eligible_by_default(self):
+        eligible, reason = cast_eligibility(_flags())
+        assert eligible is True
+        assert reason is None
+
+    def test_retreated_blocks_cast(self):
+        eligible, reason = cast_eligibility(_flags(retreated=True))
+        assert eligible is False
+        assert reason is not None
+        assert "Retreated" in reason
+
+    def test_already_cast_blocks_cast(self):
+        eligible, reason = cast_eligibility(_flags(cast=True))
+        assert eligible is False
+        assert reason is not None
+        assert "Already manifested" in reason
+
+    def test_advanced_does_not_block(self):
+        eligible, _ = cast_eligibility(_flags(advanced=True))
+        assert eligible is True
+
+    def test_retreated_takes_priority_over_cast(self):
+        # Both flags set — retreated is checked first
+        eligible, reason = cast_eligibility(_flags(retreated=True, cast=True))
+        assert eligible is False
+        assert "Retreated" in reason
