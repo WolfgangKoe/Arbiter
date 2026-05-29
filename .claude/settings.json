@@ -30,7 +30,8 @@
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter add .claude/tasks/next_session.md .claude/settings.json docs/goals.md \"Fotos/IMG_3990.jpeg\" \"Fotos/IMG_3991.jpeg\" \"Fotos/IMG_3992.jpeg\" \"Fotos/IMG_3993.jpeg\")",
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/gameMechanic/chargephase.py src/gameMechanic/fightPhase.py src/gameMechanic/game_state.py src/gameMechanic/shootingPhase.py src/gameMechanic/unit_mutations.py src/uiLayout/_common.py tests/gameMechanic/test_movement_transitions.py tests/gameMechanic/test_unit_mutations.py tests/gameMechanic/test_charge_phase.py .claude/tasks/next_session.md)",
       "Bash(streamlit run src/app.py --server.port 8501 &>/tmp/streamlit.log & *)",
-      "Bash(curl -s \"http://localhost:8501/?scenario=charge_phase\" -o /dev/null -w \"%{http_code}\")"
+      "Bash(curl -s \"http://localhost:8501/?scenario=charge_phase\" -o /dev/null -w \"%{http_code}\")",
+      "Bash(git rm *)"
     ],
     "additionalDirectories": [
       "/home/wolfgang/Dokumente/Arbiter/.claude/tasks",
