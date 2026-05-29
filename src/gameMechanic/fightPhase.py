@@ -11,6 +11,11 @@ from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
+def _is_target_engaged(atk_state: dict, def_faction: str, def_uid: str) -> bool:  # type: ignore[type-arg]
+    """Return True if def_faction/def_uid is in the attacker's melee_with list."""
+    return [def_faction, def_uid] in atk_state.get("melee_with", [])
+
+
 def can_fight(unit_state: dict) -> bool:  # type: ignore[type-arg]
     """Return True if the unit may fight this turn.
 
@@ -148,7 +153,7 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
         def_faction, def_uid = tgts[0]
         atk_unit, atk_state = lookup(atk_faction, atk_uid)
         def_unit, _ = lookup(def_faction, def_uid)
-        if can_fight(atk_state):
+        if can_fight(atk_state) and _is_target_engaged(atk_state, def_faction, def_uid):
             render_attack_form(
                 atk_faction,
                 atk_uid,
@@ -160,4 +165,6 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
                 phase_key="fight",
             )
             return
+        if can_fight(atk_state) and not _is_target_engaged(atk_state, def_faction, def_uid):
+            st.warning("Target is not engaged with this unit — select an engaged enemy.")
     _render_melee_pairs()

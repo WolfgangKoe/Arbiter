@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
-from gameMechanic.fightPhase import can_fight
+from gameMechanic.fightPhase import _is_target_engaged, can_fight
 
 # ---------------------------------------------------------------------------
 # can_fight — pure-function tests
@@ -49,6 +49,52 @@ class TestCanFight:
     def test_charged_takes_priority_over_advanced(self):
         # Charged units are always eligible regardless of other flags.
         assert can_fight(self._state(charged=True, advanced=True)) is True
+
+
+# ---------------------------------------------------------------------------
+# _is_target_engaged — pure-function tests
+# ---------------------------------------------------------------------------
+
+
+class TestIsTargetEngaged:
+    def _state(self, melee_with: list) -> dict:
+        return {"melee_with": melee_with}
+
+    def test_engaged_enemy_returns_true(self):
+        state = self._state([["Orks", "wh40k_9e.orks.unit.boyz"]])
+        assert _is_target_engaged(state, "Orks", "wh40k_9e.orks.unit.boyz") is True
+
+    def test_non_engaged_enemy_returns_false(self):
+        state = self._state([["Orks", "wh40k_9e.orks.unit.boyz"]])
+        assert _is_target_engaged(state, "Orks", "wh40k_9e.orks.unit.gretchin") is False
+
+    def test_wrong_faction_returns_false(self):
+        state = self._state([["Orks", "wh40k_9e.orks.unit.boyz"]])
+        assert _is_target_engaged(state, "Necrons", "wh40k_9e.orks.unit.boyz") is False
+
+    def test_empty_melee_with_returns_false(self):
+        assert _is_target_engaged({"melee_with": []}, "Orks", "wh40k_9e.orks.unit.boyz") is False
+
+    def test_missing_melee_with_returns_false(self):
+        assert _is_target_engaged({}, "Orks", "wh40k_9e.orks.unit.boyz") is False
+
+    def test_multiple_engaged_enemies_correct_one_found(self):
+        state = self._state(
+            [
+                ["Orks", "wh40k_9e.orks.unit.boyz"],
+                ["Orks", "wh40k_9e.orks.unit.gretchin"],
+            ]
+        )
+        assert _is_target_engaged(state, "Orks", "wh40k_9e.orks.unit.gretchin") is True
+
+    def test_multiple_engaged_enemies_non_member_not_found(self):
+        state = self._state(
+            [
+                ["Orks", "wh40k_9e.orks.unit.boyz"],
+                ["Orks", "wh40k_9e.orks.unit.gretchin"],
+            ]
+        )
+        assert _is_target_engaged(state, "Orks", "wh40k_9e.orks.unit.warboss") is False
 
 
 # ---------------------------------------------------------------------------
