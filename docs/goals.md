@@ -463,10 +463,16 @@ Listenformat (kein Tuple) weil Streamlit Session State kein Tuple preserviert.
 
 ---
 
-### 4h — Moralphase ⬜
+### 4h — Moralphase ✅
 
-- [ ] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
-- [ ] `moralePhase.py` — Render-Logik
+- [x] D6 + Verluste vs. Leadership → bei Fehlschlag: Modelle fliehen (models reduzieren)
+- [x] `moralePhase.py` — Render-Logik
+- [x] `flee_models()` in `unit_mutations.py` — semantisch getrennt von Kampfverlusten
+- [x] `fled_models_this_turn` im Unit-State — separat zu `lost_models_this_turn`
+- [x] Schwellenwertanzeige mit Rechenweg (D6 ≥ X → schlägt fehl)
+- [x] Bestanden/Fehlgeschlagen-Buttons + Modellzahl-Eingabe bei Fehlschlag
+- [x] Protokolleintrag: „X Modelle geflohen" (eigener Log-Typ)
+- [x] 13 Tests (`test_morale_phase.py`): `_fail_threshold` + `flee_models`
 
 ---
 

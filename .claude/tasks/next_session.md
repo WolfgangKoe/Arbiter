@@ -7,26 +7,36 @@ Er führt zwei Spieler durch eine Partie: Phasen anzeigen, Einheitenstatus verwa
 
 Starten: `streamlit run src/app.py` (Port fest: 8501)
 Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
+Remote: GitHub (`origin`) — kein CodeBerg mehr.
 
 ---
 
 ## Was in dieser Session gemacht wurde
 
-**Ziel 4g — Angriffsphase (Charge Phase)** vollständig implementiert.
+### GitHub-Integration abgeschlossen
+- GitHub als einziges Remote (`origin`), CodeBerg entfernt
+- GitHub Actions Workflow (`.github/workflows/deploy.yml`) läuft: Test → Deploy auf HF Space `arbiter-test`
 
-### Änderungen:
+### Bugfix: Fight Phase — Melee-Engagement-Prüfung
+- `fightPhase.py`: Angriff nur möglich wenn Ziel in `melee_with` des Angreifers steht
+- Neue Hilfsfunktion `_is_target_engaged()` (testbar, pure function)
+- 7 neue Tests in `test_fight.py`
 
-| Datei | Was |
-|-------|-----|
-| `unit_mutations.py` | `melee_with` auf `[[faction, uid]]`-Format umgestellt; `_unit_key()` Helper; `leave_melee_pair()` neu |
-| `game_state.py` | `heroic_intervened: False` in `turn_flags` |
-| `chargephase.py` | `in_melee`-Sperre, HI-Renderer, `render_melee_engagements`-Aufruf |
-| `shootingPhase.py` | `can_shoot()` mit `unit`-Param für Big Guns Never Tire; `target_in_friendly_melee()` |
-| `fightPhase.py` | `_render_melee_pairs()` auf neues Format aktualisiert |
-| `uiLayout/_common.py` | `render_melee_engagements()` mit Break-Buttons |
-| Tests | `test_unit_mutations.py`, `test_movement_transitions.py` angepasst; `test_charge_phase.py` neu (25 Tests) |
+### Scenario-Fixtures für alle Phasen
+- `data/scenarios/`: command, movement, shooting, morale neu hinzugefügt
+- `docs/scenarios.md`: Übersicht mit vollständigen URLs
+- `morale_phase.json`: Warriors (3 Verluste) + Boyz (5 Verluste) für echten Moraltest
 
-**Teststatus:** 280 Tests grün.
+### Ziel 4h — Moralphase ✅
+- `moralePhase.py`: vollständige UI — alle Einheiten mit Verlusten werden angezeigt
+- Schwellenwertanzeige mit Rechenweg (z.B. „schlägt fehl ab W6 ≥ 5")
+- Bestanden/Fehlgeschlagen-Buttons; bei Fehlschlag: Modellzahl-Eingabe
+- `flee_models()` in `unit_mutations.py` — semantisch getrennt von `apply_damage()`
+- `fled_models_this_turn` + `morale_tested` im Unit-State
+- Protokolleintrag: „X Modelle geflohen" (eigener Log-Eintrag)
+- 13 neue Tests (`test_morale_phase.py`)
+
+**Teststatus: 300 Tests grün.**
 
 ---
 
@@ -41,78 +51,44 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 4f — Psychic Phase (Smite + Deny + Perils) | ✅ fertig |
 | Ziel 4f.1 — Psychic Phase Nachbesserungen | ✅ fertig |
 | Ziel 4g — Angriffsphase (Charge Phase) | ✅ fertig |
-| **Ziel 4h — Moralphase** | ⏳ nächste logische Implementierungsaufgabe |
+| Ziel 4h — Moralphase | ✅ fertig |
+| **Ziel 4i — Army Builder** | ⏳ nächste Aufgabe (Diskussion offen) |
 
 ---
 
-## NÄCHSTE SESSION — Diskussionsthemen
-
-Diese Session ist eine **Planungs- und Konzeptsession**, kein Implementierungsblock.
-Der Nutzer bringt eigene Prompts/Recherchen mit (insb. für Punkt 2).
-
----
-
-### Thema 1: Spec-Dokumentation aktualisieren
-
-Zwei Aufgaben:
-
-**a) Bedeutung des Namens „Arbiter" ergänzen**
-In `docs/goals.md` (oder einem neuen `docs/concept.md`) die Bedeutung des Namens dokumentieren.
-Der Nutzer möchte den Begriff selbst definieren — Vorschlag einholen und dann aufschreiben.
-
-**b) Aktuellen Stand der App dokumentieren**
-`docs/goals.md` → alle abgeschlossenen Ziele sauber als fertig markieren.
-Ggf. offene Designfragen (Overwatch-Scope, 4f.1.c Blessing-Flow) aktualisieren.
-
----
-
-### Thema 2: Deployment auf Hugging Face + CodeBerg-Integration
-
-Der Nutzer hat bereits einen Prompt für dieses Thema.
-
-**Zu klärende Fragen:**
-- Wie wird die Streamlit-App als Hugging Face Space deployt?
-- Wie wird ein CI/CD-Workflow über CodeBerg (Gitea-basiert) gebaut, der pushes auf `dev` → Test-Space und pushes auf `main` → Prod-Space auslöst?
-- Secrets/Config für HF-Token in CodeBerg-Actions einrichten
-- Benötigt die App eine `requirements.txt` mit fixierten Versionen? (aktuell: `pyproject.toml`)
-
-**Architekturentscheidung vorab:**
-Hugging Face Spaces unterstützen Streamlit nativ — kein Docker erforderlich.
-Zwei Spaces: `arbiter-test` (branch: `dev`) und `arbiter-prod` (branch: `main`).
-
----
-
-### Thema 3: Phase-Testfixtures (Dev-Shortcuts / Test-Stubs)
-
-Ziel: Die App in einem vordefinierten Zustand starten, ohne alle Phasen durchklicken zu müssen.
-
-**Mögliche Ansätze zur Diskussion:**
-
-**Option A — URL-Parameter / Query-String**
-`?scenario=charge_phase` → App startet direkt in der Charge Phase mit zwei engaged units.
-Streamlit unterstützt `st.query_params` seit v1.30.
-
-**Option B — Dev-Panel (sichtbar nur im Dev-Modus)**
-Seitliches Expander-Panel mit Schaltflächen: „Load Charge Scenario", „Load Psychic Scenario" etc.
-Aktiviert über Env-Variable `ARBITER_DEV=true`.
-
-**Option C — Fixture-Dateien (`data/scenarios/`)**
-JSON-Snapshots des `st.session_state` — App kann diese laden und sich in diesen Zustand versetzen.
-Wiederverwendbar für Tests (pytest kann denselben Snapshot laden).
-
-**Empfehlung vorab:** Option C ist am mächtigsten (deckt UI-Tests + manuelle Navigation ab),
-Option B ist am schnellsten implementiert.
-
----
-
-## Offene Implementierungsaufgaben (nach den Diskussionen)
+## Offene Implementierungsaufgaben
 
 | Aufgabe | Priorität |
 |---------|-----------|
-| Ziel 4h — Moralphase | hoch |
+| Ziel 4i — Army Builder + YAML-Loader | mittel |
 | 4g.x — Overwatch (Scope noch offen) | mittel |
 | 4f.1.c — Blessing-Flow (befreundetes Ziel) | niedrig |
-| 4i — Army Builder + YAML-Loader | mittel |
+
+---
+
+## Nächste Session — Themen
+
+### Thema 1: Ziel 4i — Army Builder
+
+Architektur-Entscheidung aus `docs/goals.md`:
+- Aktuell: `army.yaml` selbstenthalten (Daten dupliziert zum Katalog)
+- Ziel: `army.yaml` wird Roster; Loader löst Werte aus `units.yaml`/`weapons.yaml` auf
+- Bis dahin: neue Einheiten weiterhin direkt in `army.yaml` pflegen
+
+Offene Frage: Datei-Import vs. In-App-Builder vs. hardcodierte Presets?
+
+### Thema 2: PR auf main
+
+Alle Ziele 4a–4h sind fertig. Wäre ein guter Zeitpunkt für einen PR `dev` → `main`.
+Voraussetzung: GitHub Actions läuft grün auf `dev`.
+
+### Thema 3: UI-Theme (Design-Block)
+
+Laut `docs/goals.md` noch offen:
+- Farbpalette überarbeiten (Goldtöne, Primärfarbe, Kontraste)
+- Badge-Optik und Spacing prüfen
+- Einheitenkarten-Layout verfeinern
+Nutzer definiert Farbschema selbst (kein Design ohne Schema).
 
 ---
 
@@ -131,27 +107,32 @@ Option B ist am schnellsten implementiert.
 
 ```
 src/
-  app.py
+  app.py                          ← ?scenario= Query-Param
   gameMechanic/
-    chargephase.py    ← Ziel 4g fertig
-    psychicPhase.py   ← Ziel 4f + 4f.1 fertig
-    game_state.py
+    moralePhase.py                ← Ziel 4h fertig
+    chargephase.py                ← Ziel 4g fertig
+    psychicPhase.py               ← Ziel 4f + 4f.1 fertig
+    fightPhase.py                 ← _is_target_engaged() neu
+    game_state.py                 ← fled_models_this_turn, morale_tested
+    unit_mutations.py             ← flee_models() neu
+    scenarios.py                  ← load/apply/save Fixtures
     commandPhase.py | movementPhase.py | shootingPhase.py
-    fightPhase.py | moralePhase.py
-    unit_mutations.py ← melee_with: [[faction, uid]] (neu!)
     game_log.py | ability_engine.py | phase_runner.py
   gameObjects/
     unit.py | weapon.py | loader.py | ability.py | command_protocol.py
   uiLayout/
-    _common.py        ← render_melee_engagements() neu
-    unitCard.py | armyCard.py | armyList.py
+    _common.py | unitCard.py | armyCard.py | armyList.py
     gameActionsArea.py | gameProtocoll.py
-data/wh40k_9e/
-  necrons/army.yaml
-  orks/army.yaml
+data/
+  scenarios/                      ← alle 7 Phasen als Fixtures (docs/scenarios.md)
+  wh40k_9e/necrons/army.yaml
+  wh40k_9e/orks/army.yaml
 tests/
-  gameMechanic/test_charge_phase.py  ← NEU (25 Tests)
+  gameMechanic/test_morale_phase.py  ← NEU (13 Tests)
+  gameMechanic/test_fight.py         ← _is_target_engaged (7 neue Tests)
   gameMechanic/ | uiLayout/ | gameObjects/
 docs/
-  goals.md | work/schlachtrunde.md
+  scenarios.md                    ← NEU: Übersicht aller Scenario-URLs
+  goals.md | concept.md | work/schlachtrunde.md
+.github/workflows/deploy.yml      ← GitHub Actions: Test + HF Deploy
 ```

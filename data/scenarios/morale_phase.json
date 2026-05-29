@@ -1,10 +1,25 @@
 {
-  "description": "Morale Phase: Round 1, Necrons active",
+  "description": "Morale Phase: Warriors took 3 losses (Ld 7), Boyz took 5 losses (Ld 6)",
   "round": 1,
   "phase_idx": 7,
   "active": "Necrons",
   "phase_stage": "active",
   "cp": {"Necrons": 3, "Orks": 3},
   "vp": {"Necrons": 0, "Orks": 0},
-  "unit_patches": {}
+  "unit_patches": {
+    "necron_units": {
+      "wh40k_9e.necrons.unit.warriors": {
+        "lost_models_this_turn": 3,
+        "current_wounds": 7,
+        "models": 7
+      }
+    },
+    "ork_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "lost_models_this_turn": 5,
+        "current_wounds": 25,
+        "models": 25
+      }
+    }
+  }
 }
