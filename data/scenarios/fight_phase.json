@@ -1,0 +1,34 @@
+{
+  "description": "Fight Phase: Skorpekh Destroyers and Warriors both in melee with Boyz",
+  "round": 2,
+  "phase_idx": 6,
+  "active": "Necrons",
+  "phase_stage": "active",
+  "cp": {"Necrons": 4, "Orks": 3},
+  "vp": {"Necrons": 2, "Orks": 1},
+  "unit_patches": {
+    "necron_units": {
+      "wh40k_9e.necrons.unit.warriors": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "turn_flags": {"charged": false}
+      },
+      "wh40k_9e.necrons.unit.skorpekh_destroyers": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "turn_flags": {"charged": true}
+      }
+    },
+    "ork_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": true,
+        "melee_with": [
+          ["Necrons", "wh40k_9e.necrons.unit.warriors"],
+          ["Necrons", "wh40k_9e.necrons.unit.skorpekh_destroyers"]
+        ],
+        "current_wounds": 60,
+        "models": 10
+      }
+    }
+  }
+}

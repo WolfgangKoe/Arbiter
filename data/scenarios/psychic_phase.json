@@ -1,0 +1,13 @@
+{
+  "description": "Psychic Phase: Weirdboy ready to manifest, Canoptek Spyder ready to deny",
+  "round": 1,
+  "phase_idx": 3,
+  "active": "Orks",
+  "phase_stage": "active",
+  "cp": {"Necrons": 3, "Orks": 3},
+  "vp": {"Necrons": 0, "Orks": 0},
+  "unit_patches": {
+    "necron_units": {},
+    "ork_units": {}
+  }
+}

@@ -1,51 +1,149 @@
 [
   {
     "round": 1,
-    "phase": "psychic",
-    "unit": "Weirdboy",
-    "action": "Smite manifest roll 7 — manifested",
-    "timestamp": "2026-05-29T08:43:42.227415"
-  },
-  {
-    "round": 1,
-    "phase": "psychic",
-    "unit": "Necrons",
-    "action": "Deny succeeded (roll 8 vs 7)",
-    "timestamp": "2026-05-29T08:43:48.201015"
-  },
-  {
-    "round": 1,
-    "phase": "psychic",
-    "unit": "Wurrboy",
-    "action": "Smite manifest roll 7 — manifested",
-    "timestamp": "2026-05-29T08:44:07.121966"
-  },
-  {
-    "round": 2,
     "phase": "command",
-    "unit": "Necrons",
-    "action": "Protocol: Protokoll der hungrigen Leere",
-    "timestamp": "2026-05-29T08:44:29.369966"
+    "unit": "Orks",
+    "action": "+1 CP received",
+    "timestamp": "2026-05-29T08:55:49.818467"
   },
   {
-    "round": 2,
+    "round": 1,
+    "phase": "movement",
+    "unit": "Big Mek in Mega Armour",
+    "action": "movement: moved",
+    "timestamp": "2026-05-29T08:56:11.226783"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Wurrboy",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-29T08:56:23.718046"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Weirdboy",
+    "action": "movement: moved",
+    "timestamp": "2026-05-29T08:56:32.802793"
+  },
+  {
+    "round": 1,
     "phase": "psychic",
     "unit": "Weirdboy",
     "action": "Smite manifest roll 7 — manifested",
-    "timestamp": "2026-05-29T08:44:49.918748"
+    "timestamp": "2026-05-29T08:56:48.289978"
   },
   {
-    "round": 2,
-    "phase": "psychic",
-    "unit": "Wurrboy",
-    "action": "Smite manifest roll 7 — manifested",
-    "timestamp": "2026-05-29T08:45:01.955269"
-  },
-  {
-    "round": 2,
+    "round": 1,
     "phase": "psychic",
     "unit": "Necrons",
     "action": "Deny failed (roll 7 vs 7)",
-    "timestamp": "2026-05-29T08:45:03.897589"
+    "timestamp": "2026-05-29T08:56:53.563982"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Wurrboy",
+    "action": "charged Necron Warriors ×10 — success",
+    "timestamp": "2026-05-29T09:10:12.288270"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Wurrboy",
+    "action": "charged Skorpekh Destroyers ×3 — success",
+    "timestamp": "2026-05-29T09:10:12.293080"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Wurrboy",
+    "action": "charged Triarch Stalker — success",
+    "timestamp": "2026-05-29T09:10:12.297948"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Wurrboy",
+    "action": "charged Necron Warriors ×10 — success",
+    "timestamp": "2026-05-29T09:11:09.757320"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Wurrboy",
+    "action": "charged Overlord (Warlord) — success",
+    "timestamp": "2026-05-29T09:11:09.767126"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Overlord (Warlord) — success",
+    "timestamp": "2026-05-29T12:25:58.682258"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Necron Warriors ×10 — success",
+    "timestamp": "2026-05-29T12:25:58.683755"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Skorpekh Destroyers ×3 — success",
+    "timestamp": "2026-05-29T12:25:58.685158"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Overlord (Warlord) — success",
+    "timestamp": "2026-05-29T12:29:20.336327"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Necron Warriors ×10 — success",
+    "timestamp": "2026-05-29T12:29:20.338219"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Big Mek in Mega Armour",
+    "action": "charged Skorpekh Destroyers ×3 — success",
+    "timestamp": "2026-05-29T12:29:20.339684"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Overlord (Warlord)",
+    "action": "performed Heroic Intervention",
+    "timestamp": "2026-05-29T12:29:30.140485"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "charged Skorpekh Destroyers ×3 — success",
+    "timestamp": "2026-05-29T12:29:42.104537"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "charged Necron Warriors ×10 — success",
+    "timestamp": "2026-05-29T12:29:42.106169"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Warboss in Mega Armour (Warlord)",
+    "action": "charged Triarch Stalker — success",
+    "timestamp": "2026-05-29T12:29:42.107378"
   }
 ]

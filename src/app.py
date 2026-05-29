@@ -12,7 +12,14 @@ from uiLayout.gameActionsArea import render_game_actions_area  # noqa: E402
 from uiLayout.gameHeader import render_game_header  # noqa: E402
 from uiLayout.gameProtocoll import render_game_protocoll  # noqa: E402
 
+_first_run = "initialized" not in st.session_state
 init_state()
+if _first_run:
+    _scenario = st.query_params.get("scenario")
+    if _scenario:
+        from gameMechanic.scenarios import load_scenario  # noqa: PLC0415
+
+        load_scenario(_scenario)
 render_game_header()
 st.divider()
 

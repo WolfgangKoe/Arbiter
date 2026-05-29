@@ -387,9 +387,9 @@ Scope für spätere Session:
 
 ---
 
-### 4g — Angriffsphase (Charge Phase) ⬜
+### 4g — Angriffsphase (Charge Phase) ✅
 
-**Voraussetzung:** 4f.1 abgeschlossen ✅
+**Abgeschlossen** (commit `fa224f3`).
 
 **Umfang:** Melee-Beziehungsgraph korrekt aufbauen, Charge-Flow implementieren, Heroic Intervention,
 alle Downstream-Auswirkungen von `in_melee` reparieren.
@@ -398,125 +398,68 @@ alle Downstream-Auswirkungen von `in_melee` reparieren.
 
 #### 4g.1 — Melee-Beziehungsgraph reparieren
 
-Das bestehende `melee_with: list[str]` speichert nur UIDs ohne Fraktionskontext.
-Alle abhängigen Funktionen haben dadurch Bugs oder Hardcodes.
+Das bestehende `melee_with: list[str]` speicherte nur UIDs ohne Fraktionskontext.
 
-**Datenformat-Änderung** (in `game_state.py` + `unit_mutations.py`):
+**Datenformat** (in `game_state.py` + `unit_mutations.py`):
 ```python
-# Alt: list[str]
-"melee_with": ["boyz_mob"]
-
 # Neu: list[list[str, str]] — [faction, uid]
 "melee_with": [["Orks", "boyz_mob"], ["Orks", "gretchin"]]
 ```
 
 Listenformat (kein Tuple) weil Streamlit Session State kein Tuple preserviert.
-Nur **Feindeinheiten** stehen in dieser Liste — befreundete Einheiten niemals.
-Many-to-many ist damit korrekt abgebildet.
 
-- [ ] `enter_melee(attacker_uid, attacker_faction, target_uid, target_faction)` — speichert `[faction, uid]`-Paare
-- [ ] `leave_melee(uid, faction)` — iteriert `[fac, euid]` aus Paarliste, kein Hardcode mehr
-- [ ] `leave_melee_pair(uid, faction, enemy_uid, enemy_faction)` — **neu** — löst genau ein Paar (für Break-Button)
-- [ ] `in_melee`-Flag immer aus `len(melee_with) > 0` ableiten (Synchronisierung in `enter_melee` / `leave_melee`)
-- [ ] `_render_melee_pairs()` in `fightPhase.py` — Faction aus Paarliste lesen, kein Hardcode mehr
+- [x] `enter_melee(attacker_uid, attacker_faction, target_uid, target_faction)` — speichert `[faction, uid]`-Paare
+- [x] `leave_melee(uid, faction)` — iteriert `[fac, euid]` aus Paarliste, kein Hardcode mehr
+- [x] `leave_melee_pair(uid, faction, enemy_uid, enemy_faction)` — löst genau ein Paar (für Break-Button)
+- [x] `in_melee`-Flag immer aus `len(melee_with) > 0` ableiten
+- [x] `_render_melee_pairs()` in `fightPhase.py` — Faction aus Paarliste lesen
 
 ---
 
-#### 4g.2 — Charge-Eligibility-Bug beheben
+#### 4g.2 — Charge-Eligibility-Bug behoben
 
-9E-Regel: Einheiten, die die Angriffsphase **bereits in Nahkampfreichweite** beginnen, können nicht angreifen.
-Aktuell fehlt der `in_melee`-Check in `_active_charge()`.
-
-- [ ] `chargephase.py: _active_charge()` — Sperrung wenn `advanced OR retreated OR in_melee`
-- [ ] Warnung: `"Already in melee — cannot declare a charge."`
+- [x] `chargephase.py: _active_charge()` — Sperrung wenn `advanced OR retreated OR in_melee`
+- [x] Warnung: `"Already in melee — cannot declare a charge."`
 
 ---
 
 #### 4g.3 — Charge-Flow + Melee-Engagement-Anzeige
 
-- [ ] Charge-UI: Einheit wählen → Target(s) via `▷` → "Charge Successful" / "Charge Failed"
-- [ ] Bei Erfolg: `set_charged()` → `enter_melee()` für alle Targets
-- [ ] Melee-Engagement-Block in der aktiven Spalte (wenn Einheit selected + `in_melee=True`):
-  ```
-  ⚔ Engaged with:
-    • Boyz Mob A  [Break ✕]
-    • Gretchin    [Break ✕]
-  ```
-  `[Break ✕]` ruft `leave_melee_pair()` auf — manueller Override für Modellverlust-Fälle (kein Board-State vorhanden)
+- [x] Charge-UI: Einheit wählen → Target(s) via `▷` → "Charge Successful" / "Charge Failed"
+- [x] Bei Erfolg: `set_charged()` → `enter_melee()` für alle Targets
+- [x] Melee-Engagement-Block mit Break-Buttons in `render_melee_engagements()` (`uiLayout/_common.py`)
 
 ---
 
 #### 4g.4 — Heroische Intervention
 
-9E-Regel (Schritt 2 der Angriffsphase): Nach allen Charges kann der **inaktive** Spieler
-infrage kommende CHARACTER-Einheiten für eine Heroische Intervention wählen.
-
-- Infrage kommend: CHARACTER, nicht bereits in Melee, innerhalb 3" einer Feindeinheit (Board-Check → Spieler-Verantwortung)
-- Bewegung bis zu 3" → muss näher an Feindmodell enden → landet in Melee
-- Max. 1× pro Einheit pro Angriffsphase des Gegners
-- Kein HI in der eigenen Angriffsphase
-
-**Umsetzung (ohne Board-State):**
-
-- [ ] HI-Sektion in der **inaktiven** Spielerspalte (nach Charge-Schritt 1)
-- [ ] Nur CHARACTER-Einheiten werden angeboten (Keyword-Check `"Character"` in `unit.keywords`)
-- [ ] Einheit wählen → Feind-Target via `▷` → "Heroic Intervention" Button
-- [ ] Ergebnis: `enter_melee(char_uid, char_faction, target_uid, target_faction)` + `log_action`
-- [ ] `turn_flags["heroic_intervened"] = True` — verhindert zweite HI derselben Einheit
-- [ ] `"heroic_intervened": False` in `_unit_state()` + Reset in `next_phase()`
+- [x] HI-Sektion in der **inaktiven** Spielerspalte (nach Charge-Schritt 1)
+- [x] Nur CHARACTER-Einheiten werden angeboten
+- [x] Einheit wählen → Feind-Target via `▷` → "Heroic Intervention" Button
+- [x] `turn_flags["heroic_intervened"] = True` — verhindert zweite HI
+- [x] `"heroic_intervened": False` in `_unit_state()` + Reset in `next_phase()`
 
 ---
 
-#### 4g.5 — `can_shoot()` für VEHICLE/MONSTER reparieren (Big Guns Never Tire)
+#### 4g.5 — `can_shoot()` für VEHICLE/MONSTER (Big Guns Never Tire)
 
-9E-Regel: VEHICLE- und MONSTER-Einheiten dürfen auch im Melee schießen.
-Aktuell sperrt `can_shoot()` alle Einheiten im Melee — falsch für Triarch Stalker, Canoptek Spyder, Mek Gun.
-
-- [ ] `can_shoot(unit_state, unit=None) -> bool` — optionaler `unit`-Parameter (rückwärtskompatibel)
-- [ ] Wenn `in_melee` und `unit` bekannt: VEHICLE/MONSTER-Keywords → Sperre aufheben
-- [ ] Aufruf in `shootingPhase.py: _active_shooting()` mit `unit` mitgeben
-- [ ] Aufruf in `shootingPhase.py: _render_display()` mit `unit` mitgeben
-- [ ] Warnung statt Sperre: `"VEHICLE in melee — Big Guns Never Tire applies. Check -1 to hit manually."`
+- [x] `can_shoot(unit_state, unit=None) -> bool` — optionaler `unit`-Parameter
+- [x] VEHICLE/MONSTER im Melee: Sperre aufgehoben, Warnung statt Block
+- [x] Aufruf in `shootingPhase.py` mit `unit` mitgegeben
 
 ---
 
-#### 4g.6 — "Nicht in befreundeten Nahkampf schießen" (Shooting Phase)
+#### 4g.6 — "Nicht in befreundeten Nahkampf schießen"
 
-9E-Regel: Einheiten dürfen nicht auf Ziele schießen, die sich in Nahkampfreichweite
-**befreundeter** Einheiten befinden.
-
-- [ ] Hilfsfunktion `is_engaged_with_friendly(target_uid, target_faction, attacker_faction) -> bool`
-  — prüft `melee_with` des Ziels auf Einträge mit `attacker_faction`
-- [ ] In `_active_shooting()` bei Zielauswahl: wenn `is_engaged_with_friendly()` → Warning + Schießen sperren
-- [ ] Ausnahme: Angreifer ist selbst VEHICLE/MONSTER (dann erlaubt, aber -1 to hit)
+- [x] `target_in_friendly_melee(target_uid, target_faction, attacker_faction) -> bool`
+- [x] In `_active_shooting()` bei Zielauswahl: Warning + Schießen sperren
+- [x] Ausnahme: Angreifer ist selbst VEHICLE/MONSTER
 
 ---
 
 #### 4g.7 — Tests
 
-- [ ] `tests/gameMechanic/test_charge_phase.py` — neu anlegen:
-  - Melee-Graph many-to-many
-  - `leave_melee_pair()` — ein Pair lösen, anderes bleibt
-  - Charge-Eligibility (advanced, retreated, in_melee)
-  - `enter_melee` / `leave_melee` mit Fraktionspaaren
-  - Heroic Intervention Eligibility (Character-Check, `heroic_intervened`-Flag)
-  - Big Guns Never Tire: VEHICLE in melee → `can_shoot()` True
-  - Nicht-VEHICLE in melee → `can_shoot()` False
-  - `is_engaged_with_friendly()`
-
----
-
-#### Betroffene Dateien
-
-| Datei | Änderung |
-|-------|---------|
-| `src/gameMechanic/unit_mutations.py` | `enter_melee`, `leave_melee` auf Pair-Format; neue `leave_melee_pair()` |
-| `src/gameMechanic/game_state.py` | `heroic_intervened` in `turn_flags`; kein Schema-Bruch bei `melee_with` |
-| `src/gameMechanic/chargephase.py` | Eligibility-Check; HI-Sektion; Break-Button; Engagement-Anzeige |
-| `src/gameMechanic/shootingPhase.py` | `can_shoot(unit)` + Friendly-Melee-Check |
-| `src/gameMechanic/fightPhase.py` | `_render_melee_pairs()` auf Pair-Format |
-| `src/uiLayout/_common.py` | Ggf. `render_melee_engagements()` Hilfsfunktion |
-| `tests/gameMechanic/test_charge_phase.py` | Neu |
+- [x] `tests/gameMechanic/test_charge_phase.py` — 25 neue Tests, alle grün (280 gesamt)
 
 ---
 
