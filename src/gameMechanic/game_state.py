@@ -117,3 +117,5 @@ def next_phase() -> None:
 
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []
+    st.session_state.psi_result = None
+    st.session_state.psychic_denies_used = {}

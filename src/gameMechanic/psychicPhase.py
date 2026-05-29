@@ -193,6 +193,7 @@ def _render_psi_result(
         ):
             apply_damage(uid, faction, int(perils_dmg), unit, mortal=True)
             psi["perils_applied"] = True
+            st.session_state.psi_result = psi
             log_action(
                 state["round"],
                 "psychic",
@@ -318,6 +319,7 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
             succeeded = deny_succeeds(manifest_roll, int(deny_roll))
             psi["denied"] = succeeded
             psi["deny_roll"] = int(deny_roll)
+            st.session_state.psi_result = psi
             # Mark deny as used for this faction — only one deny per phase.
             used = st.session_state.get("psychic_denies_used", {})
             used[faction] = True
@@ -334,4 +336,5 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
         if st.button("Skip Deny", key=f"deny_skip_{faction}", use_container_width=True):
             # Explicitly mark as not denied so Smite proceeds.
             psi["denied"] = False
+            st.session_state.psi_result = psi
             st.rerun()
