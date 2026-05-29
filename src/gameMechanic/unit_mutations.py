@@ -59,37 +59,60 @@ def set_deployment(uid: str, faction: str, deployment: str) -> None:
     state["in_reserve"] = deployment == "reserve"
 
 
+def _unit_key(faction: str) -> str:
+    return "necron_units" if faction == "Necrons" else "ork_units"
+
+
 def enter_melee(
     attacker_uid: str,
     attacker_faction: str,
     target_uid: str,
     target_faction: str,
 ) -> None:
-    atk_key = "necron_units" if attacker_faction == "Necrons" else "ork_units"
-    tgt_key = "necron_units" if target_faction == "Necrons" else "ork_units"
-    atk_state = st.session_state[atk_key][attacker_uid]
-    tgt_state = st.session_state[tgt_key][target_uid]
-    if target_uid not in atk_state["melee_with"]:
-        atk_state["melee_with"].append(target_uid)
-    if attacker_uid not in tgt_state["melee_with"]:
-        tgt_state["melee_with"].append(attacker_uid)
+    atk_state = st.session_state[_unit_key(attacker_faction)][attacker_uid]
+    tgt_state = st.session_state[_unit_key(target_faction)][target_uid]
+    if [target_faction, target_uid] not in atk_state["melee_with"]:
+        atk_state["melee_with"].append([target_faction, target_uid])
+    if [attacker_faction, attacker_uid] not in tgt_state["melee_with"]:
+        tgt_state["melee_with"].append([attacker_faction, attacker_uid])
     atk_state["in_melee"] = True
     tgt_state["in_melee"] = True
 
 
 def leave_melee(uid: str, faction: str) -> None:
-    own_key = "necron_units" if faction == "Necrons" else "ork_units"
-    enemy_key = "ork_units" if faction == "Necrons" else "necron_units"
-    state = st.session_state[own_key][uid]
-    for enemy_uid in list(state["melee_with"]):
-        enemy_state = st.session_state[enemy_key].get(enemy_uid)
+    state = st.session_state[_unit_key(faction)][uid]
+    for fac, enemy_uid in list(state["melee_with"]):
+        enemy_state = st.session_state[_unit_key(fac)].get(enemy_uid)
         if enemy_state is not None:
-            if uid in enemy_state["melee_with"]:
-                enemy_state["melee_with"].remove(uid)
+            pair = [faction, uid]
+            if pair in enemy_state["melee_with"]:
+                enemy_state["melee_with"].remove(pair)
             if not enemy_state["melee_with"]:
                 enemy_state["in_melee"] = False
     state["melee_with"] = []
     state["in_melee"] = False
+
+
+def leave_melee_pair(
+    uid: str,
+    faction: str,
+    enemy_uid: str,
+    enemy_faction: str,
+) -> None:
+    """Remove the engagement between exactly two units, leaving other engagements intact."""
+    state = st.session_state[_unit_key(faction)][uid]
+    enemy_state = st.session_state[_unit_key(enemy_faction)].get(enemy_uid)
+    pair_in_own = [enemy_faction, enemy_uid]
+    pair_in_enemy = [faction, uid]
+    if pair_in_own in state["melee_with"]:
+        state["melee_with"].remove(pair_in_own)
+    if not state["melee_with"]:
+        state["in_melee"] = False
+    if enemy_state is not None:
+        if pair_in_enemy in enemy_state["melee_with"]:
+            enemy_state["melee_with"].remove(pair_in_enemy)
+        if not enemy_state["melee_with"]:
+            enemy_state["in_melee"] = False
 
 
 def set_movement_status(uid: str, faction: str, status: str) -> None:

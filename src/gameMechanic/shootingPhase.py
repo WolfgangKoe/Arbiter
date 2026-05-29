@@ -10,18 +10,30 @@ import streamlit as st
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
-def can_shoot(unit_state: dict) -> bool:  # type: ignore[type-arg]
+def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
     """Return True if the unit may shoot this turn.
 
-    9E: units that advanced, retreated, are in melee, or in reserve cannot shoot.
+    9E: units that advanced, retreated, are in melee (unless VEHICLE/MONSTER), or in reserve
+    cannot shoot. VEHICLE and MONSTER units may shoot even while in melee (Big Guns Never Tire).
     """
     flags = unit_state.get("turn_flags", {})
-    return not (
-        flags.get("advanced")
-        or flags.get("retreated")
-        or unit_state.get("in_melee")
-        or unit_state.get("in_reserve")
-    )
+    if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_reserve"):
+        return False
+    if unit_state.get("in_melee"):
+        if unit is not None and ("Vehicle" in unit.keywords or "Monster" in unit.keywords):
+            return True
+        return False
+    return True
+
+
+def target_in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -> bool:
+    """Return True if the target is in melee with a unit friendly to the attacker.
+
+    9E: a unit may not shoot into a combat involving friendly units.
+    """
+    def_key = "necron_units" if def_faction == "Necrons" else "ork_units"
+    def_state = st.session_state[def_key].get(def_uid, {})
+    return any(fac == atk_faction for fac, _ in def_state.get("melee_with", []))
 
 
 class ShootingPhaseHandler:
@@ -70,7 +82,7 @@ def _active_shooting(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
     """Show shooting eligibility and ranged weapon list for the selected unit."""
-    if not can_shoot(unit_state):
+    if not can_shoot(unit_state, unit):
         flags = unit_state.get("turn_flags", {})
         if flags.get("advanced"):
             st.warning("Advanced this turn — cannot shoot.")
@@ -98,6 +110,13 @@ def _active_shooting(
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if not tgts:
         st.caption("Designate a target (▷) to resolve attacks.")
+    else:
+        for tgt_faction, tgt_uid in tgts:
+            if target_in_friendly_melee(faction, tgt_faction, tgt_uid):
+                tgt_unit, _ = lookup(tgt_faction, tgt_uid)
+                st.warning(
+                    f"Cannot shoot {tgt_unit.name_en} — friendly unit is engaged in that melee."
+                )
 
 
 def _inactive_target_stats(
@@ -120,7 +139,9 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
         def_faction, def_uid = tgts[0]
         atk_unit, atk_state = lookup(atk_faction, atk_uid)
         def_unit, _ = lookup(def_faction, def_uid)
-        if can_shoot(atk_state):
+        if can_shoot(atk_state, atk_unit) and not target_in_friendly_melee(
+            atk_faction, def_faction, def_uid
+        ):
             render_attack_form(
                 atk_faction,
                 atk_uid,

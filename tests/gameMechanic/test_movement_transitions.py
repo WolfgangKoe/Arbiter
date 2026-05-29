@@ -71,8 +71,8 @@ def _session_with_two_units(n_in_melee: bool = False, o_in_melee: bool = False) 
     necron = _unit(in_melee=n_in_melee)
     ork = _unit(in_melee=o_in_melee)
     if n_in_melee and o_in_melee:
-        necron["melee_with"] = ["ork_1"]
-        ork["melee_with"] = ["necron_1"]
+        necron["melee_with"] = [["Orks", "ork_1"]]
+        ork["melee_with"] = [["Necrons", "necron_1"]]
     return _make_session(
         necron_units={"necron_1": necron},
         ork_units={"ork_1": ork},

@@ -116,14 +116,21 @@ def _inactive_target_stats(
 
 def _render_melee_pairs() -> None:
     """Show all active melee engagements, or the phase rule hint if none."""
-    necron_names = {u.id: u.name_en for u in _NECRON_UNITS}
-    ork_names = {u.id: u.name_en for u in _ORK_UNITS}
+    name_map = {
+        "Necrons": {u.id: u.name_en for u in _NECRON_UNITS},
+        "Orks": {u.id: u.name_en for u in _ORK_UNITS},
+    }
+    seen: set[frozenset[str]] = set()
     pairs: list[str] = []
     for uid, s in st.session_state.necron_units.items():
-        for enemy_uid in s.get("melee_with", []):
-            pairs.append(
-                f"**{necron_names.get(uid, uid)}** ↔ **{ork_names.get(enemy_uid, enemy_uid)}**"
-            )
+        for fac, enemy_uid in s.get("melee_with", []):
+            key = frozenset({f"Necrons:{uid}", f"{fac}:{enemy_uid}"})
+            if key in seen:
+                continue
+            seen.add(key)
+            a = name_map["Necrons"].get(uid, uid)
+            b = name_map.get(fac, {}).get(enemy_uid, enemy_uid)
+            pairs.append(f"**{a}** ↔ **{b}**")
     if pairs:
         st.markdown("**Active Melee Engagements:**")
         for p in pairs:

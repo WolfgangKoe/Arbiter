@@ -421,8 +421,8 @@ def test_heal_unit_no_revive_does_not_exceed_living_model_cap() -> None:
 def test_enter_melee_registers_both_sides() -> None:
     session = _two_unit_session()
     enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
-    assert BOYZ in session["necron_units"][OVERLORD]["melee_with"]
-    assert OVERLORD in session["ork_units"][BOYZ]["melee_with"]
+    assert ["Orks", BOYZ] in session["necron_units"][OVERLORD]["melee_with"]
+    assert ["Necrons", OVERLORD] in session["ork_units"][BOYZ]["melee_with"]
 
 
 def test_enter_melee_sets_in_melee_true_for_both() -> None:
@@ -437,8 +437,10 @@ def test_enter_melee_idempotent() -> None:
     session = _two_unit_session()
     enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
     enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
-    assert session["necron_units"][OVERLORD]["melee_with"].count(BOYZ) == 1
-    assert session["ork_units"][BOYZ]["melee_with"].count(OVERLORD) == 1
+    mw_overlord = session["necron_units"][OVERLORD]["melee_with"]
+    mw_boyz = session["ork_units"][BOYZ]["melee_with"]
+    assert sum(1 for p in mw_overlord if p == ["Orks", BOYZ]) == 1
+    assert sum(1 for p in mw_boyz if p == ["Necrons", OVERLORD]) == 1
 
 
 def test_enter_melee_multiple_enemies() -> None:
@@ -447,8 +449,8 @@ def test_enter_melee_multiple_enemies() -> None:
     enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
     enter_melee(OVERLORD, "Necrons", WARBOSS, "Orks")
     mw = session["necron_units"][OVERLORD]["melee_with"]
-    assert BOYZ in mw
-    assert WARBOSS in mw
+    assert ["Orks", BOYZ] in mw
+    assert ["Orks", WARBOSS] in mw
 
 
 # ---------------------------------------------------------------------------
@@ -467,7 +469,7 @@ def test_leave_melee_removes_from_enemy_melee_with() -> None:
     session = _two_unit_session()
     enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
     leave_melee(OVERLORD, "Necrons")
-    assert OVERLORD not in session["ork_units"][BOYZ]["melee_with"]
+    assert ["Necrons", OVERLORD] not in session["ork_units"][BOYZ]["melee_with"]
 
 
 def test_leave_melee_sets_in_melee_false_for_attacker() -> None:
@@ -491,7 +493,7 @@ def test_leave_melee_enemy_stays_in_melee_if_still_engaged_elsewhere() -> None:
     enter_melee(WARRIORS, "Necrons", BOYZ, "Orks")
     leave_melee(OVERLORD, "Necrons")
     assert session["ork_units"][BOYZ]["in_melee"] is True
-    assert WARRIORS in session["ork_units"][BOYZ]["melee_with"]
+    assert ["Necrons", WARRIORS] in session["ork_units"][BOYZ]["melee_with"]
 
 
 # ---------------------------------------------------------------------------
@@ -510,8 +512,8 @@ def test_set_charged_enters_melee_for_both_units() -> None:
     set_charged(OVERLORD, "Necrons", BOYZ, "Orks")
     assert session["necron_units"][OVERLORD]["in_melee"] is True
     assert session["ork_units"][BOYZ]["in_melee"] is True
-    assert BOYZ in session["necron_units"][OVERLORD]["melee_with"]
-    assert OVERLORD in session["ork_units"][BOYZ]["melee_with"]
+    assert ["Orks", BOYZ] in session["necron_units"][OVERLORD]["melee_with"]
+    assert ["Necrons", OVERLORD] in session["ork_units"][BOYZ]["melee_with"]
 
 
 def test_set_charged_multiple_targets() -> None:
@@ -520,8 +522,8 @@ def test_set_charged_multiple_targets() -> None:
     set_charged(OVERLORD, "Necrons", BOYZ, "Orks")
     set_charged(OVERLORD, "Necrons", WARBOSS, "Orks")
     mw = session["necron_units"][OVERLORD]["melee_with"]
-    assert BOYZ in mw
-    assert WARBOSS in mw
+    assert ["Orks", BOYZ] in mw
+    assert ["Orks", WARBOSS] in mw
 
 
 # ---------------------------------------------------------------------------

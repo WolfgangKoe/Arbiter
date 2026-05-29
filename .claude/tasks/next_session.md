@@ -12,16 +12,21 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session gemacht wurde
 
-**Planungssession für Ziel 4g** — kein Code geschrieben.
+**Ziel 4g — Angriffsphase (Charge Phase)** vollständig implementiert.
 
-Analyse und vollständige Spezifikation der Angriffsphase erarbeitet:
-- Melee-Beziehungsgraph-Konzept: `melee_with` auf `[faction, uid]`-Paare umstellen
-- Alle Downstream-Auswirkungen von `in_melee` identifiziert und spezifiziert
-- Heroische Intervention vollständig spezifiziert
-- Big Guns Never Tire als Lücke in `can_shoot()` identifiziert
-- "Nicht in befreundeten Nahkampf schießen" als fehlende Regel identifiziert
+### Änderungen:
 
-Vollständige Spezifikation in `docs/goals.md`, Abschnitt 4g (4g.1–4g.7).
+| Datei | Was |
+|-------|-----|
+| `unit_mutations.py` | `melee_with` auf `[[faction, uid]]`-Format umgestellt; `_unit_key()` Helper; `leave_melee_pair()` neu |
+| `game_state.py` | `heroic_intervened: False` in `turn_flags` |
+| `chargephase.py` | `in_melee`-Sperre, HI-Renderer, `render_melee_engagements`-Aufruf |
+| `shootingPhase.py` | `can_shoot()` mit `unit`-Param für Big Guns Never Tire; `target_in_friendly_melee()` |
+| `fightPhase.py` | `_render_melee_pairs()` auf neues Format aktualisiert |
+| `uiLayout/_common.py` | `render_melee_engagements()` mit Break-Buttons |
+| Tests | `test_unit_mutations.py`, `test_movement_transitions.py` angepasst; `test_charge_phase.py` neu (25 Tests) |
+
+**Teststatus:** 280 Tests grün.
 
 ---
 
@@ -35,123 +40,79 @@ Vollständige Spezifikation in `docs/goals.md`, Abschnitt 4g (4g.1–4g.7).
 | Ziel 4a–4e — Badges, UI, Ability Engine, Command, Movement | ✅ fertig |
 | Ziel 4f — Psychic Phase (Smite + Deny + Perils) | ✅ fertig |
 | Ziel 4f.1 — Psychic Phase Nachbesserungen | ✅ fertig |
-| **Ziel 4g — Angriffsphase (Charge Phase)** | ⏳ **nächster Schritt** |
+| Ziel 4g — Angriffsphase (Charge Phase) | ✅ fertig |
+| **Ziel 4h — Moralphase** | ⏳ nächste logische Implementierungsaufgabe |
 
 ---
 
-## NÄCHSTE AUFGABE: Ziel 4g — Angriffsphase
+## NÄCHSTE SESSION — Diskussionsthemen
 
-Vollständige Spezifikation in `docs/goals.md` → Abschnitt 4g.1–4g.7.
-Regelreferenz: `docs/work/schlachtrunde.md`, Abschnitt "5. Angriffsphase"
-
-### Empfohlene Reihenfolge
-
-1. **4g.1** — Melee-Beziehungsgraph reparieren (`unit_mutations.py`)
-   — Basis für alles andere; keine UI-Änderung, reine Logik
-   — Tests zuerst schreiben (TDD)
-
-2. **4g.2** — Charge-Eligibility-Bug beheben (`chargephase.py`)
-   — Ein-Zeiler in `_active_charge()`
-
-3. **4g.3** — Charge-Flow + Melee-Engagement-Anzeige + Break-Button
-   — UI-Erweiterung in `chargephase.py`
-
-4. **4g.4** — Heroische Intervention
-   — Neuer Block in inaktiver Spalte der Charge Phase
-
-5. **4g.5** — `can_shoot()` für VEHICLE/MONSTER (`shootingPhase.py`)
-   — API-Erweiterung: `unit`-Parameter optional hinzufügen
-
-6. **4g.6** — Friendly-Melee-Schuss-Sperre (`shootingPhase.py`)
-   — Neue Hilfsfunktion + Prüfung bei Zielauswahl
-
-7. **4g.7** — Tests
-   — `tests/gameMechanic/test_charge_phase.py` neu anlegen
-
-### Kernpunkte aus der Analyse
-
-**Melee-Datenstruktur:**
-```python
-# Alt (buggy): list[str]
-"melee_with": ["boyz_mob"]
-
-# Neu: list[list[str, str]] — [faction, uid]
-"melee_with": [["Orks", "boyz_mob"], ["Orks", "gretchin"]]
-```
-Kein Tuple — Streamlit Session State serialisiert Tuples zu Lists.
-Nur Feind-Einheiten in der Liste. Many-to-many korrekt abgebildet.
-
-**leave_melee() — kein Hardcode mehr:**
-```python
-for fac, euid in list(state["melee_with"]):
-    enemy_key = "necron_units" if fac == "Necrons" else "ork_units"
-    enemy_state = st.session_state[enemy_key].get(euid)
-    # cleanup wie bisher
-```
-
-**Neue Funktion `leave_melee_pair()`** — löst nur ein spezifisches Pair (für Break-Button):
-```python
-def leave_melee_pair(uid, faction, enemy_uid, enemy_faction) -> None: ...
-```
-
-**Charge-Eligibility (3 Sperren):**
-```python
-if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_melee"):
-    st.warning("Cannot charge — [reason].")
-    return
-```
-
-**Big Guns Never Tire:**
-```python
-def can_shoot(unit_state, unit=None) -> bool:
-    if unit_state.get("in_melee"):
-        if unit is not None:
-            kws = {k.upper() for k in unit.keywords}
-            if "VEHICLE" in kws or "MONSTER" in kws:
-                pass  # Big Guns Never Tire — erlaubt
-            else:
-                return False
-        else:
-            return False
-    ...
-```
-Betroffene Einheiten: Triarch Stalker, Canoptek Spyder, Mek Gun (alle VEHICLE).
-
-**Heroische Intervention:**
-- `turn_flags["heroic_intervened"]: False` hinzufügen (in `_unit_state()` + `next_phase()` reset)
-- Erscheint in **inaktiver** Spielerspalte nach Abschluss von Schritt 1 (Charges)
-- Nur CHARACTER-Einheiten (Keyword-Check: `"Character"` in `unit.keywords`)
-- Nur Einheiten, die nicht bereits `in_melee` sind
-- Nur 1× pro Einheit (`heroic_intervened`-Flag)
-- Kann **nicht** in eigener Angriffsphase eingesetzt werden
-
-### Melee-Engagement-Anzeige (UI-Muster)
-
-```
-⚔ Engaged with:
-  • Boyz Mob A  [Break ✕]
-  • Gretchin    [Break ✕]
-```
-
-`[Break ✕]` = `leave_melee_pair()` — manueller Override.
-Erscheint wenn Einheit selected + `in_melee=True` (Charge Phase + Fight Phase).
+Diese Session ist eine **Planungs- und Konzeptsession**, kein Implementierungsblock.
+Der Nutzer bringt eigene Prompts/Recherchen mit (insb. für Punkt 2).
 
 ---
 
-## Weitere offene Ziele
+### Thema 1: Spec-Dokumentation aktualisieren
 
-### 4g.x — Overwatch (Scope TBD)
-Wenn eine feindliche Einheit einen Angriff ansagt: Abwehrfeuer-Regel (nur unmodifizierte 6er treffen).
-Wurde als `hit_modifier="only_6s"` skizziert. Scope noch nicht entschieden.
+Zwei Aufgaben:
 
-### 4h — Moralphase
-- D6 + Verluste vs. Leadership → Modelle fliehen
+**a) Bedeutung des Namens „Arbiter" ergänzen**
+In `docs/goals.md` (oder einem neuen `docs/concept.md`) die Bedeutung des Namens dokumentieren.
+Der Nutzer möchte den Begriff selbst definieren — Vorschlag einholen und dann aufschreiben.
 
-### 4f.1.c — Blessing-Flow (befreundetes Ziel)
-- Neuer Effect-Typ `"blessing"` in der Ability Engine
+**b) Aktuellen Stand der App dokumentieren**
+`docs/goals.md` → alle abgeschlossenen Ziele sauber als fertig markieren.
+Ggf. offene Designfragen (Overwatch-Scope, 4f.1.c Blessing-Flow) aktualisieren.
 
-### 4i — Army Builder + Architektur
-- `army.yaml` als Roster; Loader löst Werte aus `units.yaml`/`weapons.yaml` auf
+---
+
+### Thema 2: Deployment auf Hugging Face + CodeBerg-Integration
+
+Der Nutzer hat bereits einen Prompt für dieses Thema.
+
+**Zu klärende Fragen:**
+- Wie wird die Streamlit-App als Hugging Face Space deployt?
+- Wie wird ein CI/CD-Workflow über CodeBerg (Gitea-basiert) gebaut, der pushes auf `dev` → Test-Space und pushes auf `main` → Prod-Space auslöst?
+- Secrets/Config für HF-Token in CodeBerg-Actions einrichten
+- Benötigt die App eine `requirements.txt` mit fixierten Versionen? (aktuell: `pyproject.toml`)
+
+**Architekturentscheidung vorab:**
+Hugging Face Spaces unterstützen Streamlit nativ — kein Docker erforderlich.
+Zwei Spaces: `arbiter-test` (branch: `dev`) und `arbiter-prod` (branch: `main`).
+
+---
+
+### Thema 3: Phase-Testfixtures (Dev-Shortcuts / Test-Stubs)
+
+Ziel: Die App in einem vordefinierten Zustand starten, ohne alle Phasen durchklicken zu müssen.
+
+**Mögliche Ansätze zur Diskussion:**
+
+**Option A — URL-Parameter / Query-String**
+`?scenario=charge_phase` → App startet direkt in der Charge Phase mit zwei engaged units.
+Streamlit unterstützt `st.query_params` seit v1.30.
+
+**Option B — Dev-Panel (sichtbar nur im Dev-Modus)**
+Seitliches Expander-Panel mit Schaltflächen: „Load Charge Scenario", „Load Psychic Scenario" etc.
+Aktiviert über Env-Variable `ARBITER_DEV=true`.
+
+**Option C — Fixture-Dateien (`data/scenarios/`)**
+JSON-Snapshots des `st.session_state` — App kann diese laden und sich in diesen Zustand versetzen.
+Wiederverwendbar für Tests (pytest kann denselben Snapshot laden).
+
+**Empfehlung vorab:** Option C ist am mächtigsten (deckt UI-Tests + manuelle Navigation ab),
+Option B ist am schnellsten implementiert.
+
+---
+
+## Offene Implementierungsaufgaben (nach den Diskussionen)
+
+| Aufgabe | Priorität |
+|---------|-----------|
+| Ziel 4h — Moralphase | hoch |
+| 4g.x — Overwatch (Scope noch offen) | mittel |
+| 4f.1.c — Blessing-Flow (befreundetes Ziel) | niedrig |
+| 4i — Army Builder + YAML-Loader | mittel |
 
 ---
 
@@ -172,36 +133,25 @@ Wurde als `hit_modifier="only_6s"` skizziert. Scope noch nicht entschieden.
 src/
   app.py
   gameMechanic/
-    chargephase.py    ← Ziel 4g (Stub → vollständig)
+    chargephase.py    ← Ziel 4g fertig
     psychicPhase.py   ← Ziel 4f + 4f.1 fertig
-    game_state.py     ← heroic_intervened in turn_flags ergänzen
+    game_state.py
     commandPhase.py | movementPhase.py | shootingPhase.py
     fightPhase.py | moralePhase.py
-    unit_mutations.py ← enter_melee / leave_melee / leave_melee_pair
+    unit_mutations.py ← melee_with: [[faction, uid]] (neu!)
     game_log.py | ability_engine.py | phase_runner.py
   gameObjects/
     unit.py | weapon.py | loader.py | ability.py | command_protocol.py
   uiLayout/
-    _common.py        ← ggf. render_melee_engagements() Hilfsfunktion
+    _common.py        ← render_melee_engagements() neu
     unitCard.py | armyCard.py | armyList.py
     gameActionsArea.py | gameProtocoll.py
 data/wh40k_9e/
-  necrons/army.yaml   ← Triarch Stalker + Canoptek Spyder: VEHICLE ✓
-  orks/army.yaml      ← Mek Gun: VEHICLE ✓
+  necrons/army.yaml
+  orks/army.yaml
 tests/
-  gameMechanic/test_charge_phase.py  ← NEU
+  gameMechanic/test_charge_phase.py  ← NEU (25 Tests)
   gameMechanic/ | uiLayout/ | gameObjects/
 docs/
-  goals.md | tasks/next_session.md
-  work/schlachtrunde.md  ← Regelreferenz (Abschnitt 5. Angriffsphase)
+  goals.md | work/schlachtrunde.md
 ```
-
----
-
-## Units mit VEHICLE-Keyword (relevant für Big Guns Never Tire)
-
-| Einheit | Fraktion | Keywords |
-|---------|----------|---------|
-| Triarch Stalker | Necrons | Vehicle, Core, Dynastic Agent |
-| Canoptek Spyder | Necrons | Vehicle, Fly, Canoptek |
-| Mek Gun | Orks | Vehicle, Artillery |

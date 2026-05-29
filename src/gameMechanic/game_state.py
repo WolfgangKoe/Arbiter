@@ -40,6 +40,7 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
             "shot": False,
             "fought": False,
             "cast": False,
+            "heroic_intervened": False,
         },
         "my_will_be_done_active": False,
         "active_buffs": [],

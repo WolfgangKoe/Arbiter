@@ -180,6 +180,35 @@ def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Melee engagement display
+# ---------------------------------------------------------------------------
+
+
+def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None:  # type: ignore[type-arg]
+    """Show the list of enemy units this unit is engaged with, each with a Break button."""
+    from gameMechanic.unit_mutations import leave_melee_pair
+
+    melee_with: list[list[str]] = unit_state.get("melee_with", [])
+    if not unit_state.get("in_melee") or not melee_with:
+        return
+
+    units_by_faction = {
+        "Necrons": {u.id: u for u in _NECRON_UNITS},
+        "Orks": {u.id: u for u in _ORK_UNITS},
+    }
+
+    st.markdown("**⚔ Engaged with:**")
+    for i, (enemy_fac, enemy_uid) in enumerate(list(melee_with)):
+        enemy_unit = units_by_faction.get(enemy_fac, {}).get(enemy_uid)
+        name = enemy_unit.name_en if enemy_unit else enemy_uid
+        cols = st.columns([4, 1])
+        cols[0].markdown(f"- {name}")
+        if cols[1].button("Break ✕", key=f"break_{faction}_{uid}_{enemy_fac}_{enemy_uid}_{i}"):
+            leave_melee_pair(uid, faction, enemy_uid, enemy_fac)
+            st.rerun()
+
+
+# ---------------------------------------------------------------------------
 # Standard player-column renderer (shared by all handlers)
 # ---------------------------------------------------------------------------
 
