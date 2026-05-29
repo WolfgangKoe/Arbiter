@@ -13,7 +13,24 @@
       "Bash(echo \"Exit: $?\")",
       "Bash(DISPLAY=:0 google-chrome --headless=new --disable-gpu --no-sandbox --screenshot=/tmp/arbiter_screenshot.png --window-size=1400,900 http://localhost:8501)",
       "Bash(DISPLAY=:0 google-chrome --headless=new --disable-gpu --no-sandbox --screenshot=/tmp/arbiter_screenshot2.png --window-size=1400,900 --virtual-time-budget=8000 http://localhost:8501)",
-      "Bash(curl -s http://localhost:8501/healthz)"
+      "Bash(curl -s http://localhost:8501/healthz)",
+      "Bash(git stash *)",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/uiLayout/armyCard.py src/uiLayout/armyList.py tests/gameObjects/test_ability.py tests/uiLayout/test_unit_card.py)",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/uiLayout/unitCard.py)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501/healthz)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501/)",
+      "Bash(pip show *)",
+      "Bash(find /home/wolfgang -maxdepth 4 -name \". claude\" -type d 2>/dev/null)",
+      "Read(//home/wolfgang/**)",
+      "Bash(PYTHONPATH=src streamlit run src/app.py --server.port 8502 --server.headless true)",
+      "Bash(curl -s http://localhost:8502)",
+      "Bash(PYTHONPATH=src python -m pytest tests/gameMechanic/test_psychic_phase.py -v)",
+      "Bash(PYTHONPATH=src python3 -m pytest tests/gameMechanic/test_psychic_phase.py -v)",
+      "Bash(cp /home/wolfgang/Dokumente/Arbiter/docs/tasks/next_session.md /home/wolfgang/Dokumente/Arbiter/.claude/tasks/next_session.md && rm /home/wolfgang/Dokumente/Arbiter/docs/tasks/next_session.md && rmdir /home/wolfgang/Dokumente/Arbiter/docs/tasks 2>/dev/null; echo \"done\")",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter add .claude/tasks/next_session.md .claude/settings.json docs/goals.md \"Fotos/IMG_3990.jpeg\" \"Fotos/IMG_3991.jpeg\" \"Fotos/IMG_3992.jpeg\" \"Fotos/IMG_3993.jpeg\")"
+    ],
+    "additionalDirectories": [
+      "/home/wolfgang/Dokumente/Arbiter/.claude/tasks"
     ]
   }
 }

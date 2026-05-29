@@ -12,26 +12,16 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session gemacht wurde
 
-**Ziel 4f.1 — Psychic Phase Nachbesserungen** vollständig abgeschlossen:
+**Planungssession für Ziel 4g** — kein Code geschrieben.
 
-1. **CAST-Badge** (`_common.py`, `game_state.py`, `psychicPhase.py`):
-   - Violettes Badge `("#9060d0", "#180a28")`, additiv wie SHOT
-   - `turn_flags["cast"] = True` nach Smite-Apply gesetzt
-   - `"cast": False` in `_unit_state()` + Reset in `next_phase()`
+Analyse und vollständige Spezifikation der Angriffsphase erarbeitet:
+- Melee-Beziehungsgraph-Konzept: `melee_with` auf `[faction, uid]`-Paare umstellen
+- Alle Downstream-Auswirkungen von `in_melee` identifiziert und spezifiziert
+- Heroische Intervention vollständig spezifiziert
+- Big Guns Never Tire als Lücke in `can_shoot()` identifiziert
+- "Nicht in befreundeten Nahkampf schießen" als fehlende Regel identifiziert
 
-2. **cast_eligibility(unit_state)** — neue exportierte Pure Function:
-   - Retreated → gesperrt (Regel: Zurückgezogene können nicht manifestieren)
-   - Already cast → gesperrt (Regel: Einheit max. 1× pro Phase wählbar)
-   - Wird in `_render_active_psychic()` geprüft
-
-3. **WC-Eskalation für Smite:**
-   - `psi_attempts_this_phase` Counter in `game_state` (init + `next_phase()` Reset)
-   - Angezeigter und genutzter WC = `5 + psi_attempts_this_phase`
-   - Counter wird bei jedem "Attempt Manifest"-Klick inkrementiert
-
-4. **Smite-Zielhinweis** verbessert → Schritt-für-Schritt-Caption
-
-5. **Port 8501 festgelegt** in `.streamlit/config.toml`
+Vollständige Spezifikation in `docs/goals.md`, Abschnitt 4g (4g.1–4g.7).
 
 ---
 
@@ -49,74 +39,116 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## NÄCHSTE AUFGABE: Ziel 4g — Angriffsphase (Charge Phase)
+## NÄCHSTE AUFGABE: Ziel 4g — Angriffsphase
 
+Vollständige Spezifikation in `docs/goals.md` → Abschnitt 4g.1–4g.7.
 Regelreferenz: `docs/work/schlachtrunde.md`, Abschnitt "5. Angriffsphase"
 
-### Kernregeln
+### Empfohlene Reihenfolge
 
-**Infrage kommende Einheiten:**
-- Innerhalb von 12 Zoll um feindliche Einheit (Distanz nicht implementiert → UI-Hinweis genügt)
-- **Gesperrt wenn:** `advanced=True` ODER `retreated=True`
-- **Gesperrt wenn:** bereits `in_melee=True` zu Beginn der Phase (steht schon im Nahkampf)
+1. **4g.1** — Melee-Beziehungsgraph reparieren (`unit_mutations.py`)
+   — Basis für alles andere; keine UI-Änderung, reine Logik
+   — Tests zuerst schreiben (TDD)
 
-**Ablauf:**
-1. Angreifende Einheit wählen → 2W6 würfeln (Spieler gibt Ergebnis ein)
-2. Bei Erfolg: `set_charged()` → `turn_flags["charged"] = True`, `in_melee = True`
-3. Bei Misserfolg: kein Badge, Einheit bleibt im bisherigen Bewegungsstatus
+2. **4g.2** — Charge-Eligibility-Bug beheben (`chargephase.py`)
+   — Ein-Zeiler in `_active_charge()`
 
-**Abwehrfeuer (Overwatch):**
-Scope TBD — vorläufig weglassen oder als Info-Caption erwähnen
+3. **4g.3** — Charge-Flow + Melee-Engagement-Anzeige + Break-Button
+   — UI-Erweiterung in `chargephase.py`
 
-### Dateien
+4. **4g.4** — Heroische Intervention
+   — Neuer Block in inaktiver Spalte der Charge Phase
 
-```
-src/gameMechanic/chargephase.py    ← Haupt-Handler (aktuell Stub)
-src/gameMechanic/game_state.py     ← kein Änderungsbedarf erwartet
-src/gameMechanic/unit_mutations.py ← set_charged() prüfen/ergänzen
-tests/gameMechanic/test_charge_phase.py  ← neu anlegen
-```
+5. **4g.5** — `can_shoot()` für VEHICLE/MONSTER (`shootingPhase.py`)
+   — API-Erweiterung: `unit`-Parameter optional hinzufügen
 
-### Hilfsfunktionen (analog Shooting/Fight)
+6. **4g.6** — Friendly-Melee-Schuss-Sperre (`shootingPhase.py`)
+   — Neue Hilfsfunktion + Prüfung bei Zielauswahl
 
+7. **4g.7** — Tests
+   — `tests/gameMechanic/test_charge_phase.py` neu anlegen
+
+### Kernpunkte aus der Analyse
+
+**Melee-Datenstruktur:**
 ```python
-def can_charge(unit_state: dict) -> bool:
-    flags = unit_state.get("turn_flags", {})
-    return not (
-        flags.get("advanced")
-        or flags.get("retreated")
-        or unit_state.get("in_melee")
-    )
+# Alt (buggy): list[str]
+"melee_with": ["boyz_mob"]
+
+# Neu: list[list[str, str]] — [faction, uid]
+"melee_with": [["Orks", "boyz_mob"], ["Orks", "gretchin"]]
+```
+Kein Tuple — Streamlit Session State serialisiert Tuples zu Lists.
+Nur Feind-Einheiten in der Liste. Many-to-many korrekt abgebildet.
+
+**leave_melee() — kein Hardcode mehr:**
+```python
+for fac, euid in list(state["melee_with"]):
+    enemy_key = "necron_units" if fac == "Necrons" else "ork_units"
+    enemy_state = st.session_state[enemy_key].get(euid)
+    # cleanup wie bisher
 ```
 
-### UI-Fluss
-
-```
-Aktive Spalte:
-  Einheit selected → can_charge()? → Nein: Warning-Caption
-                                   → Ja: "Charge Roll (2W6)" Number-Input + Button
-  Erfolg (Roll ≥ custom threshold oder immer — kein Board): set_charged()
-  Misserfolg: Caption "Charge failed."
-
-Inaktive Spalte:
-  Zieleinheit (selected_targets) → ggf. Wundanpassung wie in anderen Phasen
+**Neue Funktion `leave_melee_pair()`** — löst nur ein spezifisches Pair (für Break-Button):
+```python
+def leave_melee_pair(uid, faction, enemy_uid, enemy_faction) -> None: ...
 ```
 
-**Hinweis zur Distanzprüfung:** Da kein physisches Board existiert, ist der 12"-Check
-nicht implementierbar. Der Spieler gibt nur den 2W6-Würfelwurf ein; ob der Charge
-geometrisch reicht, entscheiden die Spieler selbst. Das ist regelkonform für diesen
-App-Kontext.
+**Charge-Eligibility (3 Sperren):**
+```python
+if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_melee"):
+    st.warning("Cannot charge — [reason].")
+    return
+```
+
+**Big Guns Never Tire:**
+```python
+def can_shoot(unit_state, unit=None) -> bool:
+    if unit_state.get("in_melee"):
+        if unit is not None:
+            kws = {k.upper() for k in unit.keywords}
+            if "VEHICLE" in kws or "MONSTER" in kws:
+                pass  # Big Guns Never Tire — erlaubt
+            else:
+                return False
+        else:
+            return False
+    ...
+```
+Betroffene Einheiten: Triarch Stalker, Canoptek Spyder, Mek Gun (alle VEHICLE).
+
+**Heroische Intervention:**
+- `turn_flags["heroic_intervened"]: False` hinzufügen (in `_unit_state()` + `next_phase()` reset)
+- Erscheint in **inaktiver** Spielerspalte nach Abschluss von Schritt 1 (Charges)
+- Nur CHARACTER-Einheiten (Keyword-Check: `"Character"` in `unit.keywords`)
+- Nur Einheiten, die nicht bereits `in_melee` sind
+- Nur 1× pro Einheit (`heroic_intervened`-Flag)
+- Kann **nicht** in eigener Angriffsphase eingesetzt werden
+
+### Melee-Engagement-Anzeige (UI-Muster)
+
+```
+⚔ Engaged with:
+  • Boyz Mob A  [Break ✕]
+  • Gretchin    [Break ✕]
+```
+
+`[Break ✕]` = `leave_melee_pair()` — manueller Override.
+Erscheint wenn Einheit selected + `in_melee=True` (Charge Phase + Fight Phase).
 
 ---
 
 ## Weitere offene Ziele
 
+### 4g.x — Overwatch (Scope TBD)
+Wenn eine feindliche Einheit einen Angriff ansagt: Abwehrfeuer-Regel (nur unmodifizierte 6er treffen).
+Wurde als `hit_modifier="only_6s"` skizziert. Scope noch nicht entschieden.
+
 ### 4h — Moralphase
 - D6 + Verluste vs. Leadership → Modelle fliehen
 
 ### 4f.1.c — Blessing-Flow (befreundetes Ziel)
-- Braucht neuen Effect-Typ `"blessing"` in der Ability Engine
-- Scope: nach 4g/4h
+- Neuer Effect-Typ `"blessing"` in der Ability Engine
 
 ### 4i — Army Builder + Architektur
 - `army.yaml` als Roster; Loader löst Werte aus `units.yaml`/`weapons.yaml` auf
@@ -140,41 +172,36 @@ App-Kontext.
 src/
   app.py
   gameMechanic/
-    chargephase.py    ← Ziel 4g (aktuell Stub)
+    chargephase.py    ← Ziel 4g (Stub → vollständig)
     psychicPhase.py   ← Ziel 4f + 4f.1 fertig
-    game_state.py     ← psi_attempts_this_phase, cast in turn_flags
+    game_state.py     ← heroic_intervened in turn_flags ergänzen
     commandPhase.py | movementPhase.py | shootingPhase.py
     fightPhase.py | moralePhase.py
-    unit_mutations.py | game_log.py | ability_engine.py | phase_runner.py
+    unit_mutations.py ← enter_melee / leave_melee / leave_melee_pair
+    game_log.py | ability_engine.py | phase_runner.py
   gameObjects/
     unit.py | weapon.py | loader.py | ability.py | command_protocol.py
   uiLayout/
-    _common.py        ← CAST-Badge, cast_eligibility
+    _common.py        ← ggf. render_melee_engagements() Hilfsfunktion
     unitCard.py | armyCard.py | armyList.py
     gameActionsArea.py | gameProtocoll.py
 data/wh40k_9e/
-  necrons/army.yaml   ← Canoptek Spyder (gloom_prism) ✅
-  orks/army.yaml      ← Weirdboy + Wurrboy (PSYKER) ✅
+  necrons/army.yaml   ← Triarch Stalker + Canoptek Spyder: VEHICLE ✓
+  orks/army.yaml      ← Mek Gun: VEHICLE ✓
 tests/
+  gameMechanic/test_charge_phase.py  ← NEU
   gameMechanic/ | uiLayout/ | gameObjects/
 docs/
-  goals.md | spec/unit_states.md | spec/processes.md
-  work/schlachtrunde.md  ← Regelreferenz
+  goals.md | tasks/next_session.md
+  work/schlachtrunde.md  ← Regelreferenz (Abschnitt 5. Angriffsphase)
 ```
 
 ---
 
-## Psychic Phase — vollständiger Stand
+## Units mit VEHICLE-Keyword (relevant für Big Guns Never Tire)
 
-- Smite (Witchfire): WC 5 + Eskalation pro Versuch, W3/W6 bei Roll ≥ 11
-- Perils of the Warp: W3 tödliche Verwundungen am Psyker
-- Deny the Witch: 2W6 > Manifestwurf; 1× pro Phase pro Fraktion
-- Gloom Prism: Canoptek Spyder kann bannen ohne PSYKER-Keyword
-- CAST-Badge: nach erfolgreichem Smite-Apply
-- Retreated-Sperre + Already-cast-Sperre via `cast_eligibility()`
-- psi_attempts_this_phase: WC-Eskalation korrekt implementiert
-
-### Bekannte Einschränkungen
-- Nur Smite implementiert — keine Blessings/Maledictions (4f.1.c)
-- Perils-Explosion (W3 auf Nachbareinheiten bei Psyker-Tod) fehlt — braucht Board-Positionen
-- Psibann-Distanz (24 Zoll) nicht geprüft — braucht Board-Positionen
+| Einheit | Fraktion | Keywords |
+|---------|----------|---------|
+| Triarch Stalker | Necrons | Vehicle, Core, Dynastic Agent |
+| Canoptek Spyder | Necrons | Vehicle, Fly, Canoptek |
+| Mek Gun | Orks | Vehicle, Artillery |
