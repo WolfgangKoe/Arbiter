@@ -31,6 +31,7 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
         "in_reserve": False,
         "deployment": "stationary",
         "lost_models_this_turn": 0,
+        "fled_models_this_turn": 0,
         "movement_choice": "stationary",
         "melee_with": [],
         "turn_flags": {
@@ -41,6 +42,7 @@ def _unit_state(u: Unit) -> dict:  # type: ignore[type-arg]
             "fought": False,
             "cast": False,
             "heroic_intervened": False,
+            "morale_tested": False,
         },
         "my_will_be_done_active": False,
         "active_buffs": [],
@@ -93,6 +95,7 @@ def _reset_turn_state() -> None:
             for flag in flags:
                 flags[flag] = False
             state["lost_models_this_turn"] = 0
+            state["fled_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
             state["my_will_be_done_active"] = False
     st.session_state.active_protocol_id = None

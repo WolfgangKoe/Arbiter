@@ -115,6 +115,24 @@ def leave_melee_pair(
             enemy_state["in_melee"] = False
 
 
+def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
+    """Remove models that fled a morale test — semantically distinct from combat losses."""
+    key = _unit_key(faction)
+    state = st.session_state[key][uid]
+    wounds_to_remove = count * unit.wounds
+    state["current_wounds"] = max(0, state["current_wounds"] - wounds_to_remove)
+    if unit.wounds > 0:
+        full = state["current_wounds"] // unit.wounds
+        partial = 1 if state["current_wounds"] % unit.wounds > 0 else 0
+        state["models"] = min(unit.models_max, full + partial)
+    if state["current_wounds"] <= 0:
+        state["destroyed"] = True
+        state["current_wounds"] = 0
+        state["models"] = 0
+    state["fled_models_this_turn"] = state.get("fled_models_this_turn", 0) + count
+    state["turn_flags"]["morale_tested"] = True
+
+
 def set_movement_status(uid: str, faction: str, status: str) -> None:
     key = "necron_units" if faction == "Necrons" else "ork_units"
     state = st.session_state[key][uid]
