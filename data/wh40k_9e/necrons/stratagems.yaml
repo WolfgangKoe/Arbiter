@@ -1,0 +1,171 @@
+# Necron stratagems — WH40k 9E
+# Source: Codex Necrons (9E, 2020)
+# Format matches gameObjects/stratagem.py Stratagem dataclass.
+# Loader support: Ziel 5c (not yet loaded at runtime).
+#
+# conditions: list of keywords — unit must have ALL listed keywords to qualify.
+# phase: the phase in which the stratagem may be used.
+# stage: "start" | "active" | "end"
+# player: "active" | "inactive" | "both"
+
+stratagems:
+
+  # ── Dynastic Stratagems ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.stratagem.adaptive_subroutines
+    name_en: Adaptive Subroutines
+    cp_cost: 1
+    phase: movement
+    stage: active
+    player: active
+    conditions: [Infantry, Core, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem at the end of your Movement phase. Select one NECRONS INFANTRY CORE unit from your army that Advanced this phase. Until the end of the phase, that unit can still shoot Assault weapons without the -1 to hit penalty."
+
+  - id: wh40k_9e.necrons.stratagem.reclaim_the_galaxy
+    name_en: Reclaim the Galaxy
+    cp_cost: 1
+    phase: movement
+    stage: active
+    player: active
+    conditions: [Infantry, Core, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem at the end of your Movement phase. Select one NECRONS INFANTRY CORE unit from your army that is within range of an objective marker. Until the start of your next turn, treat the battle round as round 1 for the purposes of that unit holding that objective."
+
+  - id: wh40k_9e.necrons.stratagem.talent_for_annihilation
+    name_en: Talent for Annihilation
+    cp_cost: 1
+    phase: shooting
+    stage: active
+    player: active
+    conditions: [Character, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem at the start of your Shooting phase. Select one DYNASTIC CHARACTER model from your army. Until the end of the phase, add 1 to hit rolls for attacks made by friendly CORE units within 12\" of that CHARACTER."
+
+  - id: wh40k_9e.necrons.stratagem.counter_tactics
+    name_en: Counter-Tactics
+    cp_cost: 1
+    phase: shooting
+    stage: active
+    player: inactive
+    conditions: [Character, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when an enemy unit shoots. Select one DYNASTIC CHARACTER model from your army within 12\" of a friendly CORE unit being targeted. Until the end of the phase, subtract 1 from hit rolls for attacks made by that enemy unit."
+
+  - id: wh40k_9e.necrons.stratagem.disruption_fields
+    name_en: Disruption Fields
+    cp_cost: 1
+    phase: fight
+    stage: active
+    player: active
+    conditions: [Core, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a NECRONS CORE unit from your army is chosen to fight. Until the end of the phase, each time a model in that unit makes a melee attack, an unmodified hit roll of 6 scores 1 additional hit."
+
+  - id: wh40k_9e.necrons.stratagem.their_number_is_legion
+    name_en: Their Number is Legion
+    cp_cost: 1
+    phase: fight
+    stage: active
+    player: active
+    conditions: [Necron Warriors]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a NECRON WARRIORS unit from your army is chosen to fight or when its Reanimation Protocols are triggered. Until the end of the phase, when making Reanimation Protocol rolls for that unit, re-roll any unmodified rolls of 1."
+
+  - id: wh40k_9e.necrons.stratagem.we_are_undying
+    name_en: We Are Undying
+    cp_cost: 2
+    phase: shooting
+    stage: end
+    player: inactive
+    conditions: [Necrons]
+    once_per_phase: false
+    rule_text: "Use this Stratagem at the end of any phase in which any models in a DYNASTY unit from your army were destroyed. That unit's Reanimation Protocols are immediately enacted."
+
+  - id: wh40k_9e.necrons.stratagem.eternal_warrior
+    name_en: Eternal Warrior
+    cp_cost: 2
+    phase: fight
+    stage: active
+    player: active
+    conditions: [Character, Noble, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a DYNASTIC NOBLE CHARACTER model from your army would be destroyed. Roll one D6: on a 2+, that model is not destroyed and instead retains 1 wound."
+
+  # ── Destroyer Cult Stratagems ─────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.stratagem.acquire_and_destroy
+    name_en: Acquire and Destroy
+    cp_cost: 1
+    phase: shooting
+    stage: active
+    player: active
+    conditions: [Destroyer Cult, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a DESTROYER CULT unit from your army is chosen to shoot. Until the end of the phase, add 1 to wound rolls for attacks made by models in that unit."
+
+  - id: wh40k_9e.necrons.stratagem.eternal_madness
+    name_en: Eternal Madness
+    cp_cost: 1
+    phase: fight
+    stage: active
+    player: inactive
+    conditions: [Destroyer Cult, Character, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a DESTROYER CULT CHARACTER model from your army is destroyed by a melee attack. That model can immediately make its attacks as if it were the Shooting phase (using its melee weapons)."
+
+  # ── Canoptek Stratagems ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.stratagem.entropic_strike
+    name_en: Entropic Strike
+    cp_cost: 1
+    phase: fight
+    stage: active
+    player: active
+    conditions: [Swarm, Canoptek, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a CANOPTEK SCARAB SWARMS unit from your army is chosen to fight. Until the end of the phase, each time a model in that unit makes a melee attack, an unmodified wound roll of 6 inflicts D3 mortal wounds on the target and the attack sequence ends."
+
+  - id: wh40k_9e.necrons.stratagem.programmed_retreat
+    name_en: Programmed Retreat
+    cp_cost: 1
+    phase: movement
+    stage: active
+    player: active
+    conditions: [Canoptek, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem at the start of your Movement phase. Select one CANOPTEK unit from your army that is within Engagement Range of an enemy unit. That unit can Fall Back and still shoot and/or charge this turn."
+
+  # ── Triarch / Vehicle Stratagems ──────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.stratagem.quantum_deflection
+    name_en: Quantum Deflection
+    cp_cost: 1
+    phase: shooting
+    stage: active
+    player: inactive
+    conditions: [Quantum Shielding, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when a QUANTUM SHIELDING model from your army would lose wounds. Until the end of the phase, each time a saving throw is made for that model, improve its invulnerable save by 1 (max 3+)."
+
+  - id: wh40k_9e.necrons.stratagem.relentless_advance
+    name_en: Relentless Advance
+    cp_cost: 1
+    phase: movement
+    stage: active
+    player: active
+    conditions: [Vehicle, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem at the end of your Movement phase. Select one NECRONS VEHICLE unit from your army that Advanced this phase. Until the end of the phase, that unit can still shoot Heavy weapons without the -1 to hit penalty."
+
+  # ── Psychic / Special Stratagems ──────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.stratagem.warp_pulse
+    name_en: Warp Pulse
+    cp_cost: 1
+    phase: psychic
+    stage: active
+    player: inactive
+    conditions: [Character, Necrons]
+    once_per_phase: true
+    rule_text: "Use this Stratagem when an enemy Psychic power is manifested within 24\" of a DYNASTIC AGENT CHARACTER model from your army that is not a PSYKER. That model can attempt to deny that power as if it were a PSYKER (roll 2D6; if the result is greater than the result of the Psychic test, the power is denied)."

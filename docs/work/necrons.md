@@ -1,4 +1,6 @@
-Zarekhan‘Sol - Kampf 2 (Warhammer 40,000 9th Edition) [25 PL, 485pts, 3CP]
+> **VERALTET** — Roher BattleScribe-Export. Wird durch `data/wh40k_9e/necrons/` (Ziel 5b) ersetzt.
+
+Zarekhan’Sol - Kampf 2 (Warhammer 40,000 9th Edition) [25 PL, 485pts, 3CP]
 Patrol Detachment 0CP (Necrons) [25 PL, 485pts, 3CP]
 Rules: Dynastic Agents and Star Gods, The Royal Court
 Configuration [3CP]

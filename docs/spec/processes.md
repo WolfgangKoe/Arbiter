@@ -18,6 +18,12 @@
 | P-07 | Schussphase — vollständiger Ablauf               | shooting           |
 | P-08 | AttackSequence — Auflösungsreihenfolge           | shooting / fight   |
 | P-09 | PhaseRunner — start → active → end              | alle               |
+| P-10 | Bewegungsphase — vollständiger Ablauf            | movement           |
+| P-11 | Befehlsphase — Kommandoprotokolle (Necrons)      | command            |
+| P-12 | Psychic Phase — vollständiger Ablauf             | psychic            |
+| P-13 | Angriffsphase — vollständiger Ablauf             | charge             |
+| P-14 | Nahkampfphase — vollständiger Ablauf             | fight              |
+| P-15 | Moralphase — vollständiger Ablauf                | morale             |
 
 ---
 
@@ -312,12 +318,7 @@ def reset_turn_flags(faction: str, state: dict) -> None:
         }
 ```
 
-**Stub-Phasen** (Ziel 3 — Movement, Charge, Psychic, Morale) implementieren das `PhaseHandler`-Protocol minimal:
-- `render_start`: leer
-- `render_active`: Phasenname + Info-Text + Hinweis auf turn_flags
-- `render_end`: leer
-
-Turn-Flags werden von den Stub-Phasen noch **nicht** gesetzt (folgt in Ziel 4).
+Alle Phasen sind vollständig implementiert (Ziel 4).
 
 ---
 
@@ -472,3 +473,125 @@ psi_result: dict | None = {
 - `data/wh40k_9e/orks/army.yaml` — Weirdboy + Wurrboy (PSYKER-Einheiten)
 - `data/wh40k_9e/necrons/army.yaml` — Canoptek Spyder (`rules: [gloom_prism]`)
 - Tests: `tests/gameMechanic/test_psychic_phase.py`
+
+---
+
+## P-13 — Angriffsphase — vollständiger Ablauf
+
+```mermaid
+flowchart TD
+    A[Angriffsphase beginnt] --> B[Spieler wählt Einheit ▶]
+    B --> C{advanced?}
+    C -- ja --> NOCHARGE[Warnung: Advanced — kein Angriff möglich]
+    C -- nein --> D{retreated?}
+    D -- ja --> NOCHARGE
+    D -- nein --> E{in_melee?}
+    E -- ja --> NOCHARGE2[Warnung: Already in melee — kein Angriff]
+    E -- nein --> F[Spieler wählt Ziel-Einheit via gegnerischer Armeeliste ▷]
+    F --> G{Ziel ausgewählt?}
+    G -- nein --> INFO[Info: Select one or more targets to charge]
+    G -- ja --> H[Ziel-Einheitsnamen anzeigen\nHinweis: Roll 2D6, must reach target]
+    H --> I{Spieler klickt Charge Successful?}
+    I -- ja --> J[set_charged für Angreifer\nenter_melee für Angreifer + Ziel\nlog_action charge ... success]
+    I -- nein --> K{Spieler klickt Charge Failed?}
+    K -- ja --> L[log_action charge ... failed\nkeine Bewegung]
+    J --> M[selected_targets leeren\nst.rerun]
+    L --> M
+
+    A --> HI[Inaktiver Spieler: Heroic Intervention]
+    HI --> N{CHARACTER-Einheit\neligibel?}
+    N -- nein --> SKIP[kein Angebot]
+    N -- ja --> O[Button: Intervene pro Einheit]
+    O --> P[turn_flags.heroic_intervened = True\nenter_melee mit Angreifer\nlog_action]
+```
+
+**Eligibility Heroic Intervention:** Einheit ist CHARACTER, nicht destroyed, nicht bereits in_melee, `heroic_intervened` noch nicht gesetzt.
+
+**Overwatch:** Im inaktiven Bereich angezeigt: *„Overwatch: only unmodified 6s hit."* — kein eigener Ablauf implementiert (Scope Ziel 4d).
+
+**Code-Referenzen:**
+- `src/gameMechanic/chargephase.py` — Handler, `_active_charge`, `_render_heroic_intervention`
+- `src/gameMechanic/unit_mutations.py: set_charged`, `enter_melee`
+- Tests: `tests/gameMechanic/test_charge_phase.py`
+
+---
+
+## P-14 — Nahkampfphase — vollständiger Ablauf
+
+```mermaid
+flowchart TD
+    A[Nahkampfphase beginnt] --> PRIO[Nicht-aktiver Spieler hat Kampfpriorität\nwählt zuerst eine Einheit]
+    PRIO --> B[Spieler wählt Einheit ▶]
+    B --> C{can_fight?\nin_melee ODER charged this turn}
+    C -- nein --> WARN[Warnung: Not in melee — no fight action]
+    C -- ja --> D{fights_first Keyword?}
+    D -- ja --> INFO1[Info: Fights First — activates before others]
+    D -- nein --> E{charged this turn?}
+    E -- ja --> INFO2[Hinweis: Fights first charged this turn]
+    E -- nein --> F[Nahkampfwaffen anzeigen\nA/WS/S/AP/D pro Waffe]
+
+    F --> G[Spieler wählt Ziel ▷ aus gegnerischer Armeeliste]
+    G --> H{Ziel selected?}
+    H -- nein --> HINT[Caption: Designate a target to resolve attacks]
+    H -- ja --> I{is_target_engaged?\nZiel in melee_with des Angreifers}
+    I -- nein --> WARN2[Warnung: Target not engaged — select engaged enemy]
+    I -- ja --> FORM[render_attack_form\nuse_melee=True\nAttack-Sequenz via combat.py]
+
+    FORM --> J[Spieler gibt Hits/Wounds/Saves ein\nApply Damage]
+```
+
+**Kampfpriorität (9E):** Der nicht-aktive Spieler wählt als erster eine Einheit zum Kämpfen. Danach alternierend.
+
+**Engagierung-Check:** `_is_target_engaged` prüft ob das Ziel in `unit_state.melee_with` des Angreifers steht. Nicht engagierte Einheiten können nicht angreifen.
+
+**Code-Referenzen:**
+- `src/gameMechanic/fightPhase.py` — Handler, `can_fight`, `_is_target_engaged`, `_render_display`
+- `src/uiLayout/_common.py: render_attack_form` — Angriffsformular (use_melee=True)
+- Tests: `tests/gameMechanic/test_fight_phase.py`
+
+---
+
+## P-15 — Moralphase — vollständiger Ablauf
+
+```mermaid
+flowchart TD
+    A[Moralphase beginnt] --> B{Einheit hat lost_models_this_turn > 0?}
+    B -- nein --> SKIP[Success: Keine Verluste — kein Moraltest]
+    B -- ja --> C{models_max == 1?}
+    C -- ja --> SKIP
+    C -- nein --> D{unit destroyed?}
+    D -- ja --> SKIP
+    D -- nein --> E{morale_tested bereits gesetzt?}
+    E -- ja --> RESULT[Ergebnis anzeigen:\ngeflohen oder bestanden]
+    E -- nein --> F[Berechne threshold = Ld − lost + 1]
+
+    F --> G{threshold > 6?}
+    G -- ja --> AUTOPASS[Success: Kann nicht fehlschlagen\nButton: Bestätigen auto-bestanden]
+    AUTOPASS --> SET[turn_flags.morale_tested = True\nlog_action]
+
+    G -- nein --> H{threshold ≤ 1?}
+    H -- ja --> ALWAYS[Error: Schlägt immer fehl]
+    H -- nein --> NORM[Anzeige: Schlägt fehl ab W6-Ergebnis X]
+
+    ALWAYS --> BUTTONS[Buttons: ✓ Bestanden / ✗ Fehlgeschlagen]
+    NORM --> BUTTONS
+
+    BUTTONS --> PASS{Bestanden geklickt?}
+    PASS -- ja --> SET
+    PASS -- nein --> FAIL{Fehlgeschlagen geklickt?}
+    FAIL -- ja --> INPUT[Eingabe: Wie viele Modelle geflohen?\nmin=1 max=models]
+    INPUT --> CONFIRM[Button: Bestätigen]
+    CONFIRM --> FLEE[flee_models: models − fled\nlost_models_this_turn + fled\nmorale_tested = True\nlog_action]
+```
+
+**Befreiungscheck:** Einheiten mit `models_max == 1` sind grundsätzlich befreit (kein Moraltest).
+
+**Threshold-Formel:** `threshold = leadership − lost_models_this_turn + 1`
+- Schlägt fehl wenn W6 ≥ threshold
+- `threshold > 6` → kann nie fehlschlagen (auto-bestanden)
+- `threshold ≤ 1` → schlägt immer fehl
+
+**Code-Referenzen:**
+- `src/gameMechanic/moralePhase.py` — Handler, `_fail_threshold`, `_render_unit_morale`
+- `src/gameMechanic/unit_mutations.py: flee_models`
+- Tests: `tests/gameMechanic/test_morale_phase.py`

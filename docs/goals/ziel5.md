@@ -1,4 +1,4 @@
-# Ziel 5 — Setup & Datenlage ⬜
+# Ziel 5 — Setup & Datenlage 🔄
 
 **Architektur-Entscheidung (2026-05-30):**
 
@@ -19,21 +19,24 @@ Jede Einheit besitzt mindestens eine Nahkampfwaffe. Falls nicht explizit definie
 
 ---
 
-## 5a — Neue Datenstruktur & Spec
+## 5a — Neue Datenstruktur & Spec ✅
 
-- [ ] `docs/spec/army_builder.md` — Roster-Format, Katalog-Schema, Loader-Vertrag, Unmatched-Handling
-- [ ] `docs/spec/setup.md` — Spielmodi-Regeln (Matched/Open/Crusade) aus Wahapedia
-- [ ] Roster-Format definieren: `data/rosters/<name>.yaml` (ID-basiert, kein Stat-Duplizierung)
-- [ ] Katalog-Schema bereinigen: unnötige Felder entfernen, FNP standardisieren, Stratagems-Struktur definieren
+- [x] `docs/spec/army_builder.md` — Roster-Format, Katalog-Schema, Loader-Vertrag, Unmatched-Handling
+- [x] `docs/spec/setup.md` — Spielmodi-Regeln (Matched/Open/Crusade)
+- [x] Roster-Format definiert: `data/rosters/<name>.yaml` (ID-basiert, keine Stat-Duplizierung)
+- [x] Katalog-Schema definiert: neues Format in army_builder.md v1
 
 ---
 
-## 5b — Katalog neu aufbauen (Necrons + Orks)
+## 5b — Katalog neu aufbauen (Necrons) 🔄
 
-- [ ] Wahapedia-Fetcher (curl) für Necrons: `units.yaml`, `weapons.yaml`, `stratagems.yaml`, `abilities.yaml`
-- [ ] Wahapedia-Fetcher für Orks (nach Necrons, Effizienz prüfen)
-- [ ] Default-Nahkampfwaffe automatisch ergänzen wo fehlend
-- [ ] Alte `data/wh40k_9e/necrons/army.yaml` und `orks/army.yaml` durch Katalog + Roster ablösen
+- [x] `data/wh40k_9e/necrons/units.yaml` — 11 Einheiten, neues Format (army_builder.md v1), Weapon-Refs
+- [x] `data/wh40k_9e/necrons/weapons.yaml` — 20 Waffenprofile, neues Format
+- [x] `data/wh40k_9e/necrons/stratagems.yaml` — 15 Stratagems (Dynastic, Destroyer Cult, Canoptek, Vehicle)
+- [ ] Wahapedia-Verifikation aller Statlines und Stratagem-Texte (Daten aus Trainingswissen, noch nicht curl-verifiziert)
+- [ ] Fehlende Einheiten ergänzen (Triarch Praetorians, Ophydian Destroyers, Lokhust Destroyers, etc.)
+- [ ] Orks: `units.yaml`, `weapons.yaml`, `stratagems.yaml` (nach Necron-Verifikation)
+- [ ] Alte `army.yaml`-Dateien durch Katalog + Roster ablösen (nach Ziel 5c)
 
 ---
 
@@ -88,7 +91,7 @@ Implementierung:
 
 ## 5f — Stratagems Proof of Concept
 
-- [ ] `data/wh40k_9e/necrons/stratagems.yaml` via Wahapedia
-- [ ] `data/wh40k_9e/orks/stratagems.yaml` via Wahapedia
+- [x] `data/wh40k_9e/necrons/stratagems.yaml` — angelegt (15 Stratagems, Wahapedia-Verifikation ausstehend)
+- [ ] `data/wh40k_9e/orks/stratagems.yaml`
 - [ ] Loader + `game_state` für Stratagems erweitern
 - [ ] Stratagem-Anzeige: zunächst nur lesend (kein automatischer Effekt)

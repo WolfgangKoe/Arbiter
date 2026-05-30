@@ -1,3 +1,5 @@
+> **VERALTET** — Roher BattleScribe-Export. Wird durch `data/wh40k_9e/orks/` (Ziel 5b) ersetzt.
+
 ++ Patrol Detachment 0CP (Orks) [25 PL, 1CP, 470pts] ++
 
 + Configuration +

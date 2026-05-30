@@ -40,7 +40,6 @@ src/
     weapon.py                      ← Weapon dataclass
     detachment.py                  ← Detachment dataclass (type, name, slot constraints, units by role)
     faction_property.py            ← FactionProperty dataclass
-    keyword.py                     ← Keyword constants / registry (TBD)
     loader.py                      ← YAML loader: reads faction data, resolves weapon references
 
   gameMechanic/
@@ -50,14 +49,14 @@ src/
     combat.py                      ← AttackSequence: Modifier, AttackParams, AttackResult,
                                       resolve_attack_sequence, build_attack_display, s_vs_t_table
     commandPhase.py                ← CommandPhaseHandler (PhaseHandler)
-    movementPhase.py               ← MovementPhaseHandler (PhaseHandler) — Ziel 3 Stub → Ziel 4 voll
-    psychicPhase.py                ← PsychicPhaseHandler (PhaseHandler)  — Stub → Ziel 4
+    movementPhase.py               ← MovementPhaseHandler (PhaseHandler)
+    psychicPhase.py                ← PsychicPhaseHandler (PhaseHandler)
     shootingPhase.py               ← ShootingPhaseHandler (PhaseHandler)
-    chargephase.py                 ← ChargePhaseHandler (PhaseHandler)   — Stub → Ziel 4
+    chargephase.py                 ← ChargePhaseHandler (PhaseHandler)
     fightPhase.py                  ← FightPhaseHandler (PhaseHandler)
-    moralePhase.py                 ← MoralePhaseHandler (PhaseHandler)   — Stub → Ziel 4
+    moralePhase.py                 ← MoralePhaseHandler (PhaseHandler)
     ability_engine.py              ← check_trigger, check_conditions, get_triggered_abilities
-    protocol.py                    ← Log writes (append-only within turn), immutability enforcement
+    game_log.py                    ← Log writes (append-only within turn), immutability enforcement
 
 data/
   wh40k_9e/
@@ -85,7 +84,7 @@ data/
 ### app.py
 
 - `st.set_page_config()`
-- Call `gameMechanic/state.py: init_state()` on first load
+- Call `gameMechanic/game_state.py: init_state()` on first load
 - Assemble the three-column layout: `gameHeader` | `col_first` | `col_center` | `col_second`
 - No game logic. No direct YAML access. Pure wiring.
 
@@ -154,7 +153,7 @@ Kernprinzipien (nicht verhandelbar):
 
 Details: siehe `docs/spec/processes.md P-08`.
 
-`protocol.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
+`game_log.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
 
 ---
 
@@ -288,7 +287,7 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
     "game_size":       Literal["patrol", "incursion", "strike_force", "onslaught"],
     "game_type":       Literal["matched", "open", "crusade"],
     "current_round":   int,          # 0 = setup not complete
-    "current_phase":   str,          # "command" | "movement" | "psychic" | "shooting" | "charge" | "fight" | "morale"
+    "phase":           str,          # "command" | "movement" | "psychic" | "shooting" | "charge" | "fight" | "morale"
     "first_player":    Literal["p1", "p2"],
     "active_player":   Literal["p1", "p2"],
     "setup_complete":  bool,
@@ -346,7 +345,7 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
     "selected_target": tuple[str, str] | None,  # (faction, unit_id)
 
     # Protocol
-    "game_log":       list[dict],    # append-only log entries; see protocol.py
+    "game_log":       list[dict],    # append-only log entries; see game_log.py
     "turns_frozen":   list[int],     # round numbers whose logs are immutable
 }
 ```
@@ -379,9 +378,9 @@ app.py  →  gameActionsArea.py  →  dispatch on current_phase
 
 ---
 
-## Phase Stubs
+## Phase Reference
 
-Each phase must be individually designed before implementation. Below: known rules + open TBDs.
+All phases fully implemented (Ziel 4). Below: rules summary + open design TBDs per phase.
 
 ### commandPhase
 
