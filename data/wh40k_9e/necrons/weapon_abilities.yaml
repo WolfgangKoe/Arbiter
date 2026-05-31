@@ -1,0 +1,776 @@
+# Necron weapon abilities — WH40k 9E
+# Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
+# Schema: identical to wargear_abilities.yaml.
+# source: weapon_ability; weapon_id references weapons.yaml.
+# One entry per weapon with a non-empty abilities field.
+
+faction: Necrons
+abilities:
+
+  # ── Tesla (unmod. hit roll of 6 → 2 extra hits) ──────────────────────────────
+
+  - id: necrons.weapon.tesla_carbine.ability
+    name_en: Tesla Carbine
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.tesla_carbine
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  - id: necrons.weapon.tesla_cannon.ability
+    name_en: Tesla Cannon
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.tesla_cannon
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  - id: necrons.weapon.twin_tesla_destructor.ability
+    name_en: Twin Tesla Destructor
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.twin_tesla_destructor
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  - id: necrons.weapon.twin_tesla_carbine.ability
+    name_en: Twin Tesla Carbine
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.twin_tesla_carbine
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  - id: necrons.weapon.tesla_sphere.ability
+    name_en: Tesla Sphere
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.tesla_sphere
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  # ── Voltaic Staff tesla ability (relic weapon) ────────────────────────────────
+
+  - id: necrons.weapon.voltaic_staff_shooting.ability
+    name_en: Voltaic Staff (Shooting)
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.voltaic_staff_shooting
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: extra_hits
+      target: enemy
+      amount: 2
+
+  # ── Extra attacks (bearer fights → N additional attacks) ─────────────────────
+
+  - id: necrons.weapon.voidblade.ability
+    name_en: Voidblade
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.voidblade
+    rule_text: "Each time the bearer fights, it makes 1 additional attack with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 1
+
+  - id: necrons.weapon.hyperphase_threshers.ability
+    name_en: Hyperphase Threshers
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.hyperphase_threshers
+    rule_text: "Remaining models. Each time this model fights, it makes 1 additional attack with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions:
+      - model_restriction: remaining_models_only
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 1
+
+  - id: necrons.weapon.impaling_legs.ability
+    name_en: Impaling Legs
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.impaling_legs
+    rule_text: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 2
+
+  - id: necrons.weapon.ophydian_claws.ability
+    name_en: Ophydian Claws
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.ophydian_claws
+    rule_text: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 2
+
+  - id: necrons.weapon.chronotendrils.ability
+    name_en: Chronotendrils
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.chronotendrils
+    rule_text: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 3
+
+  - id: necrons.weapon.staff_of_stars_melee.ability
+    name_en: Staff of Stars (Melee)
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.staff_of_stars_melee
+    rule_text: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 3
+
+  - id: necrons.weapon.scythe_of_dust.ability
+    name_en: Scythe of Dust
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.scythe_of_dust
+    rule_text: "Each time the bearer fights, it makes 4 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 4
+
+  - id: necrons.weapon.canoptek_tail_blades.ability
+    name_en: Canoptek Tail Blades
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.canoptek_tail_blades
+    rule_text: "Each time the bearer fights, it makes D6 additional attacks with this weapon."
+    trigger:
+      timing: fight_step
+      phase: fight
+      stage: fight
+      player: active
+    conditions: []
+    effect:
+      type: extra_attacks
+      target: self
+      amount: "D6"
+
+  # ── Blast ─────────────────────────────────────────────────────────────────────
+
+  - id: necrons.weapon.enmitic_exterminator.ability
+    name_en: Enmitic Exterminator
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.enmitic_exterminator
+    rule_text: "Blast."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.enmitic_annihilator.ability
+    name_en: Enmitic Annihilator
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.enmitic_annihilator
+    rule_text: "Blast."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.aeonstave_shooting.ability
+    name_en: Aeonstave (Shooting)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.aeonstave_shooting
+    rule_text: "Blast. Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: complex
+      target: enemy
+      handler: aeonstaveShoot
+
+  - id: necrons.weapon.doomsday_blaster_low.ability
+    name_en: Doomsday Blaster (Low Power)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.doomsday_blaster_low
+    rule_text: "Blast."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.doomsday_blaster_high.ability
+    name_en: Doomsday Blaster (High Power)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.doomsday_blaster_high
+    rule_text: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - bearer_remained_stationary: true
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.doomsday_cannon_low.ability
+    name_en: Doomsday Cannon (Low Power)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.doomsday_cannon_low
+    rule_text: "Blast."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.doomsday_cannon_high.ability
+    name_en: Doomsday Cannon (High Power)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.doomsday_cannon_high
+    rule_text: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - bearer_remained_stationary: true
+    effect:
+      type: blast
+      target: enemy
+
+  - id: necrons.weapon.particle_whip.ability
+    name_en: Particle Whip
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.particle_whip
+    rule_text: "Blast."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: blast
+      target: enemy
+
+  # ── Invulnerable save bypass ──────────────────────────────────────────────────
+
+  - id: necrons.weapon.aeonstave_melee.ability
+    name_en: Aeonstave (Melee)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.aeonstave_melee
+    rule_text: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: ignore_invuln
+      target: enemy
+
+  - id: necrons.weapon.staff_of_tomorrow.ability
+    name_en: Staff of Tomorrow
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.staff_of_tomorrow
+    rule_text: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: ignore_invuln
+      target: enemy
+
+  - id: necrons.weapon.entropic_blow.ability
+    name_en: Entropic Blow
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.entropic_blow
+    rule_text: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: ignore_invuln
+      target: enemy
+
+  # ── Auto-hit ──────────────────────────────────────────────────────────────────
+
+  - id: necrons.weapon.heat_ray_dispersed.ability
+    name_en: Heat Ray (Dispersed)
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.heat_ray_dispersed
+    rule_text: "Auto-hits."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: auto_hit
+      target: enemy
+
+  - id: necrons.weapon.gauntlet_of_conflagrator.ability
+    name_en: Gauntlet of the Conflagrator
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.gauntlet_of_conflagrator
+    rule_text: "Each time an attack is made with this weapon, that attack automatically hits its target. Instead of making a wound roll, roll one D6 for each model in the target unit; that unit suffers 1 mortal wound for each result of 6, and the attack sequence ends."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_and_wound
+      player: active
+    conditions: []
+    effect:
+      type: complex
+      target: enemy
+      handler: gauntletOfConflagrator
+
+  - id: necrons.weapon.gauntlet_of_fire.ability
+    name_en: Gauntlet of Fire
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.gauntlet_of_fire
+    rule_text: "Auto-hits."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: auto_hit
+      target: enemy
+
+  # ── Half-range bonus ──────────────────────────────────────────────────────────
+
+  - id: necrons.weapon.heat_ray_focused.ability
+    name_en: Heat Ray (Focused)
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.heat_ray_focused
+    rule_text: "If target is within half range, damage becomes D6+2."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: damage
+      player: active
+    conditions:
+      - within_half_range: true
+    effect:
+      type: modify_damage
+      target: enemy
+      damage: "D6+2"
+
+  # ── Unique ────────────────────────────────────────────────────────────────────
+
+  - id: necrons.weapon.tachyon_arrow.ability
+    name_en: Tachyon Arrow
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.tachyon_arrow
+    rule_text: "1×/game only."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - max_uses: 1
+    effect:
+      type: use_limit
+      target: self
+      max_uses: 1
+
+  - id: necrons.weapon.synaptic_disintegrator.ability
+    name_en: Synaptic Disintegrator
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.synaptic_disintegrator
+    rule_text: "Each time you select a target for this weapon, you can ignore the Look Out, Sir rule. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: wound_roll
+      player: active
+    conditions:
+      - wound_roll_unmodified: 6
+    effect:
+      type: complex
+      target: enemy
+      handler: synapticDisintegrator
+
+  - id: necrons.weapon.feeder_mandibles.ability
+    name_en: Feeder Mandibles
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.feeder_mandibles
+    rule_text: "Each time an attack is made with this weapon, an unmodified hit roll of 6 automatically wounds the target."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_roll_unmodified: 6
+    effect:
+      type: auto_wound
+      target: enemy
+
+  - id: necrons.weapon.whip_coils.ability
+    name_en: Whip Coils
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.whip_coils
+    rule_text: "Each time an attack is made with this weapon, make 2 hit rolls instead of 1."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions: []
+    effect:
+      type: double_hit_rolls
+      target: enemy
+
+  - id: necrons.weapon.hyperphase_reap_blade.ability
+    name_en: Hyperphase Reap-Blade
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.hyperphase_reap_blade
+    rule_text: "1 model in unit only."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - model_restriction: one_per_unit
+    effect:
+      type: use_limit
+      target: self
+      max_models: 1
+
+  - id: necrons.weapon.voidscythe.ability
+    name_en: Voidscythe
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.voidscythe
+    rule_text: "-1 to hit roll."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: penalty_roll
+      target: self
+      stat: hit_roll
+      modifier: -1
+
+  - id: necrons.weapon.hyperphase_harvester.ability
+    name_en: Hyperphase Harvester
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.hyperphase_harvester
+    rule_text: "-1 to hit roll."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: penalty_roll
+      target: self
+      stat: hit_roll
+      modifier: -1
+
+  - id: necrons.weapon.flensing_claw.ability
+    name_en: Flensing Claw
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.flensing_claw
+    rule_text: "Each time an attack is made with this weapon, make 2 hit rolls instead of 1."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions: []
+    effect:
+      type: double_hit_rolls
+      target: enemy
+
+  - id: necrons.weapon.empathic_obliterator.ability
+    name_en: Empathic Obliterator
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.empathic_obliterator
+    rule_text: "Each time an attack is made with this weapon, if a CHARACTER model is slain, make 1 additional attack with this weapon against the target unit."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: damage
+      player: active
+    conditions:
+      - target_model_type: CHARACTER
+      - target_slain: true
+    effect:
+      type: extra_attacks
+      target: enemy_unit
+      amount: 1
+
+  - id: necrons.weapon.reaping_sweep.ability
+    name_en: Reaping Sweep
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.reaping_sweep
+    rule_text: "Each time an attack is made with this weapon, make one additional hit roll."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions: []
+    effect:
+      type: extra_hit_roll
+      target: enemy
+      amount: 1
+
+  - id: necrons.weapon.spear_of_void_dragon_shooting.ability
+    name_en: Spear of the Void Dragon (Shooting)
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.spear_of_void_dragon_shooting
+    rule_text: "If a hit is scored, invulnerable saving throws cannot be taken against this weapon's attacks until the end of the phase."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - hit_scored: true
+    effect:
+      type: ignore_invuln
+      target: enemy
+      duration: phase_end
+
+  - id: necrons.weapon.spear_of_void_dragon_melee.ability
+    name_en: Spear of the Void Dragon (Melee)
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.spear_of_void_dragon_melee
+    rule_text: "Each time an attack allocated to a VEHICLE model, that model does not receive the benefit of cover."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: damage
+      player: active
+    conditions:
+      - target_keyword: VEHICLE
+    effect:
+      type: ignore_cover
+      target: enemy
+
+  - id: necrons.weapon.portal_of_exile.ability
+    name_en: Portal of Exile
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.portal_of_exile
+    rule_text: "Each time an attack is allocated to a model, that model can only take a saving throw if it is an invulnerable save."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: save
+      player: active
+    conditions: []
+    effect:
+      type: only_invuln_saves
+      target: enemy
+
+  - id: necrons.weapon.voidreaper.ability
+    name_en: Voidreaper
+    ability_type: passive
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.voidreaper
+    rule_text: "Each time an attack is made with this weapon, rules that ignore wounds cannot be used."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: damage
+      player: active
+    conditions: []
+    effect:
+      type: ignore_wound_ignoring_rules
+      target: enemy
+
+  - id: necrons.weapon.resurrection_orb_weapon.ability
+    name_en: Resurrection Orb (weapon profile)
+    ability_type: activated
+    source: weapon_ability
+    weapon_id: wh40k_9e.necrons.weapon.resurrection_orb
+    rule_text: "1×/game: in your Command phase, enact Reanimation Protocols for a friendly DYNASTY unit within 6\"."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 6
+        max_uses: 1
+    effect:
+      type: complex
+      target: selected_unit
+      handler: resurrectionOrb

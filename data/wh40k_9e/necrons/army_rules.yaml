@@ -1,0 +1,56 @@
+schema: tabletop.army_rules.v1
+game_system: wh40k_9e
+faction: Necrons
+# Source: Codex Necrons (9E, 2020), S. 88-90
+# Used by loader (Ziel 5c) for roster validation.
+
+# Kriegsherr-Anforderung
+warlord:
+  required_keywords: [NOBLE]
+  exceptions:
+    - unit_id: wh40k_9e.necrons.unit.the_silent_king
+      rule: auto_warlord        # Silent King ist automatisch Kriegsherr
+
+# Dynastic Advisors (Codex S. 90 — Technomancer-Regel)
+dynastic_advisors:
+  max_crypteks_per_dynasty_detachment: 1
+  exceptions:
+    - stratagem_id: wh40k_9e.necrons.stratagem.exalted_cryptek
+      max_crypteks: 2           # Exalted Cryptek Stratagem erlaubt 2. CRYPTEK
+    - detachment_keyword: CULT_OF_THE_CRYPTEK
+      max_crypteks: unlimited   # Cult of the Cryptek: unbegrenzt
+
+# The Silent King — Sonderregeln
+silent_king:
+  unit_id: wh40k_9e.necrons.unit.the_silent_king
+  dynasty_keyword: szarekhan    # kein <DYNASTY>-Platzhalter, immer SZAREKHAN
+  must_be_warlord: true
+  unique: true                  # max. 1× pro Armee
+
+# Command Protocols — Zuweisung vor der Schlacht
+command_protocols:
+  assign_count: 5               # 5 von 6 Protokollen wählen, je 1× pro Runde
+  szarekhan_warlord_trait_override:
+    assign_count: 4             # Triarch's Will: 4 wählen, eines 2× einsetzbar
+    double_use_count: 1
+
+# Dynastien-Keyword-Regel
+dynasty_keyword:
+  rule: all_units_in_detachment_share_dynasty
+  named_character_exceptions:
+    - unit_id: wh40k_9e.necrons.unit.the_silent_king
+      fixed_dynasty: szarekhan
+    # weitere Named Characters (Imotekh, Nemesor Zahndrekh etc.) nach Wahapedia-Verifikation ergänzen
+
+# Matched Play — Punkte-Limits (Standard)
+matched_play:
+  cp_budget: 12
+  point_limits:
+    - label: Combat Patrol
+      points: 500
+    - label: Incursion
+      points: 1000
+    - label: Strike Force
+      points: 2000
+    - label: Onslaught
+      points: 3000

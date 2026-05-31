@@ -225,8 +225,8 @@ relics:
         ap: "-4"
         damage: "3"
         abilities_en: >
-          Abilities that ignore the loss of wounds cannot be used against
-          attacks made with this weapon.
+          Each time an attack is made with this weapon, rules that ignore
+          wounds cannot be used.
         abilities_de: >
           Gegen Attacken mit dieser Waffe können keine Regeln eingesetzt werden,
           die den Verlust von Lebenspunkten ignorieren.

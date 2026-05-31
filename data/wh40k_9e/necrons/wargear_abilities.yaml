@@ -121,6 +121,64 @@ abilities:
       target: selected_unit
       handler: resurrectionOrb
 
+  # ── Relic Wargear ────────────────────────────────────────────────────────────
+
+  - id: necrons.wargear.orb_of_eternity.ability
+    name_en: Orb of Eternity
+    ability_type: activated
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.orb_of_eternity
+    rule_text: "Once per battle, in your Command phase, the bearer can use this Orb of Eternity. Select one friendly DYNASTY unit within 6\" that is not at Starting Strength and has not had its Reanimation Protocols enacted this phase. That unit's Reanimation Protocols are enacted, and add 1 to each Reanimation Protocol roll."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 6
+        max_uses: 1
+    effect:
+      type: complex
+      target: selected_unit
+      handler: orbOfEternity
+
+  - id: necrons.wargear.nanoscarab_casket.ability
+    name_en: Nanoscarab Casket
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.nanoscarab_casket
+    rule_text: "Each time the bearer uses its Living Metal ability, it regains 1 additional lost wound."
+    trigger:
+      timing: phase_start
+      phase: command
+      stage: start
+      player: active
+    conditions:
+      - needs_healing: true
+    effect:
+      type: heal
+      target: self
+      amount: "1"
+      revive: false
+
+  - id: necrons.wargear.veil_of_darkness.ability
+    name_en: Veil of Darkness
+    ability_type: activated
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.veil_of_darkness
+    rule_text: "Once per battle, in your Movement phase, remove the bearer's unit and up to one friendly DYNASTY CORE unit within 3\" and set them up anywhere more than 9\" from any enemy models."
+    trigger:
+      timing: phase_any
+      phase: movement
+      stage: active
+      player: active
+    conditions:
+      - max_uses: 1
+    effect:
+      type: complex
+      target: self_and_optional_unit
+      handler: veilOfDarkness
+
   # ── Tomb Blade Wargear ───────────────────────────────────────────────────────
 
   - id: necrons.wargear.nebuloscope.ability

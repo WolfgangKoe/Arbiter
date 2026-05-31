@@ -86,14 +86,15 @@ weapons:
 
   - id: wh40k_9e.necrons.weapon.gauntlet_of_conflagrator
     name_en: Gauntlet of the Conflagrator
-    weapon_type: Assault
+    weapon_type: Pistol 1
     range_inches: 12
-    attacks: "D6"
-    strength: "5"
-    ap: "0"
-    damage: "1"
-    abilities: "Auto-hits. Roll D6 per target model; each 6 = 1 mortal wound (ignores saves)."
+    attacks: "1"
+    strength: "*"
+    ap: "*"
+    damage: "*"
+    abilities: "Each time an attack is made with this weapon, that attack automatically hits its target. Instead of making a wound roll, roll one D6 for each model in the target unit; that unit suffers 1 mortal wound for each result of 6, and the attack sequence ends."
     is_melee: false
+    is_relic: true
 
   - id: wh40k_9e.necrons.weapon.tachyon_arrow
     name_en: Tachyon Arrow
@@ -127,6 +128,42 @@ weapons:
     damage: "2"
     abilities: ""
     is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.voltaic_staff_shooting
+    name_en: Voltaic Staff (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "4"
+    strength: "6"
+    ap: "-2"
+    damage: "2"
+    abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+    is_relic: true
+
+  - id: wh40k_9e.necrons.weapon.voltaic_staff_melee
+    name_en: Voltaic Staff (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+1"
+    ap: "-2"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+    is_relic: true
+
+  - id: wh40k_9e.necrons.weapon.voidreaper
+    name_en: Voidreaper
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-4"
+    damage: "3"
+    abilities: "Each time an attack is made with this weapon, rules that ignore wounds cannot be used."
+    is_melee: true
+    is_relic: true
 
   - id: wh40k_9e.necrons.weapon.plasmic_lance_shooting
     name_en: Plasmic Lance (Shooting)
@@ -228,7 +265,7 @@ weapons:
     strength: "5"
     ap: "-2"
     damage: "1"
-    abilities: "Unmodified wound roll of 6 inflicts +1 mortal wound. Ignores Look Out, Sir."
+    abilities: "Each time you select a target for this weapon, you can ignore the Look Out, Sir rule. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage."
     is_melee: false
 
   # ── Fast Attack ───────────────────────────────────────────────────────────

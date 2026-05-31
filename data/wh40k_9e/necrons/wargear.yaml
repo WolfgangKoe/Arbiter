@@ -174,6 +174,73 @@ entries:
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
 
+# #11 Relic: replaces Resurrection Orb (Codex S. 66)
+- id: wh40k_9e.necrons.wargear.orb_of_eternity
+  name_en: Orb of Eternity
+  name_de: Sphäre der Ewigkeit
+  is_relic: true
+  replaces: wh40k_9e.necrons.wargear.resurrection_orb
+  ability_en: >-
+    Once per battle, in your Command phase, the bearer can use this
+    Orb of Eternity. Select one friendly <DYNASTY> unit within 6" of
+    the bearer that is not at its Starting Strength and has not had
+    its Reanimation Protocols enacted this phase. That unit's
+    Reanimation Protocols are enacted, and add 1 to each Reanimation
+    Protocol roll made for that unit.
+  ability_de: >-
+    Einmal pro Schlacht kann der Träger in deiner Befehlsphase diese
+    Sphäre der Ewigkeit einsetzen. Wähle eine befreundete
+    <DYNASTIE>-Einheit innerhalb von 6 Zoll um den Träger, die sich
+    nicht auf Sollstärke befindet und deren Reanimationsprotokolle in
+    dieser Phase noch nicht ausgeführt wurden. Die
+    Reanimationsprotokolle der gewählten Einheit werden ausgeführt und
+    addiere 1 auf jeden Reanimationsprotokoll-Wurf.
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e, page: "66" }
+  verification_status: draft_from_user_image
+
+# #12 Relic: standalone, TECHNOMANCER only (Codex S. 66)
+- id: wh40k_9e.necrons.wargear.nanoscarab_casket
+  name_en: Nanoscarab Casket
+  name_de: Nanoskarabäenphiole
+  is_relic: true
+  replaces: ~
+  ability_en: >-
+    Each time the bearer uses its Living Metal ability, it regains 1
+    additional lost wound.
+  ability_de: >-
+    Jedes Mal, wenn der Träger seine Fähigkeit Lebendes Metall
+    einsetzt, erhält er 1 zusätzlichen verlorenen Lebenspunkt zurück.
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e, page: "66" }
+  verification_status: draft_from_user_image
+
+# #13 Relic: standalone, NOBLE only (Codex S. 66)
+- id: wh40k_9e.necrons.wargear.veil_of_darkness
+  name_en: Veil of Darkness
+  name_de: Schleier der Finsternis
+  is_relic: true
+  replaces: ~
+  ability_en: >-
+    Once per battle, in your Movement phase, the bearer can use this
+    Relic. Remove the bearer's unit and up to one friendly <DYNASTY>
+    CORE unit within 3" of the bearer from the battlefield and set
+    them up anywhere on the battlefield more than 9" from any enemy
+    models. If two units are set up using this relic, both units must
+    be set up wholly within 6" of each other.
+  ability_de: >-
+    Einmal pro Schlacht kann der Träger diese Reliquie in deiner
+    Bewegungsphase einsetzen. Entferne die Einheit des Trägers und
+    bis zu eine befreundete <DYNASTIE>-KERN-Einheit innerhalb von
+    3 Zoll vom Schlachtfeld und stelle sie irgendwo auf dem
+    Schlachtfeld auf, aber weiter als 9 Zoll von allen feindlichen
+    Modellen entfernt. Falls zwei Einheiten mittels dieser Reliquie
+    aufgestellt werden, müssen beide vollständig innerhalb von
+    6 Zoll voneinander aufgestellt werden.
+  grants_keywords: []
+  source: { publication: Codex Necrons 9e, page: "66" }
+  verification_status: draft_from_user_image
+
 # #10 Tomb Blade (Codex S. 102)
 - id: wh40k_9e.necrons.wargear.shieldvanes
   name_en: Shieldvanes
