@@ -10,7 +10,6 @@ import yaml
 from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
-from gameObjects.faction_property import FactionProperty
 from gameObjects.unit import Unit
 from gameObjects.weapon import Weapon
 
@@ -147,11 +146,6 @@ def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
     for subfaction in data.get("subfactions", []):
         abilities.extend(_ability_from_dict(a) for a in subfaction.get("abilities", []))
     return abilities
-
-
-def load_faction_properties(faction_dir: str) -> list[FactionProperty]:
-    """Load faction abilities (compat shim — returns Ability objects under FactionProperty alias)."""
-    return load_faction_abilities(faction_dir)
 
 
 def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:

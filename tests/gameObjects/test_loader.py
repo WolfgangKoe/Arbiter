@@ -10,7 +10,6 @@ from gameObjects.loader import (
     load_army,
     load_detachment_types,
     load_faction_abilities,
-    load_faction_properties,
 )
 
 
@@ -50,12 +49,6 @@ def test_load_ork_army_returns_eight_units() -> None:
 def test_load_necron_faction_abilities_returns_at_least_one() -> None:
     abilities = load_faction_abilities("necrons")
     assert len(abilities) >= 1
-
-
-def test_load_faction_properties_compat_shim_returns_abilities() -> None:
-    # load_faction_properties is a compat shim that delegates to load_faction_abilities
-    props = load_faction_properties("necrons")
-    assert len(props) >= 1
 
 
 def test_living_metal_ability_id_and_trigger() -> None:
