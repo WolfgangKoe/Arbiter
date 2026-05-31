@@ -44,6 +44,7 @@ data/wh40k_9e/<fraktion>/
   bs: "3+"
   strength: 4
   toughness: 4
+  attacks: 1
   save: "4+"
   invuln_save: null
   leadership: 10

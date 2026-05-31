@@ -1,5 +1,5 @@
 # Necron unit catalog — WH40k 9E
-# Source: Codex Necrons (9E, 2020) + Wahapedia verification pending
+# Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
 # Format: army_builder.md v1 (see docs/spec/army_builder.md)
 #
 # Stats: base codex values (no dynasty bonuses).
@@ -7,6 +7,7 @@
 #   Dynasty 6+ invulns (e.g. Nephrekh) are applied by subfaction_abilities.yaml.
 # weapons: refs to weapons.yaml — resolved by loader (Ziel 5c).
 # models_min/max: codex unit composition limits.
+# attacks: A-characteristic (base value, before modifiers).
 
 units:
 
@@ -16,7 +17,7 @@ units:
     name_en: Overlord
     name_de: Overlord
     battlefield_role: [HQ]
-    keywords: [Infantry, Character, Noble, Overlord, Necrons, Living Metal]
+    keywords: [INFANTRY, CHARACTER, NOBLE, OVERLORD]
     wounds: 5
     models_min: 1
     models_max: 1
@@ -25,34 +26,38 @@ units:
     bs: "2+"
     strength: 5
     toughness: 5
+    attacks: 4
     save: 3
-    invuln_save: null
+    invuln_save: 4
     leadership: 10
     oc: 1
     fnp: null
-    rules: [livingMetal, myWillBeDone]
-    abilities: "My Will Be Done: choose a friendly CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, re-roll a hit roll of 1."
+    rules: [livingMetal, myWillBeDone, phaseShifter]
+    abilities: "My Will Be Done: choose a friendly CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll. Phase Shifter: 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light_shooting
       - ref: wh40k_9e.necrons.weapon.staff_of_light_melee
     wargear_options:
       - replace_with: wh40k_9e.necrons.weapon.voidscythe
       - replace_with: wh40k_9e.necrons.weapon.warscythe
+      - replace_with: wh40k_9e.necrons.weapon.hyperphase_glaive
+      - replace_with: wh40k_9e.necrons.weapon.voidblade
       - add: wh40k_9e.necrons.weapon.resurrection_orb
 
   - id: wh40k_9e.necrons.unit.royal_warden
     name_en: Royal Warden
     name_de: Königlicher Wächter
     battlefield_role: [HQ]
-    keywords: [Infantry, Character, Noble, Royal Warden, Necrons, Living Metal, Core]
+    keywords: [INFANTRY, CHARACTER, ROYAL WARDEN]
     wounds: 4
     models_min: 1
     models_max: 1
     move: "6\""
     ws: "3+"
     bs: "2+"
-    strength: 4
+    strength: 5
     toughness: 5
+    attacks: 3
     save: 3
     invuln_save: null
     leadership: 10
@@ -68,7 +73,7 @@ units:
     name_en: Plasmancer
     name_de: Plasmancer
     battlefield_role: [HQ]
-    keywords: [Infantry, Character, Cryptek, Plasmancer, Necrons, Living Metal]
+    keywords: [INFANTRY, CHARACTER, FLY, CRYPTEK, PLASMANCER]
     wounds: 4
     models_min: 1
     models_max: 1
@@ -77,16 +82,42 @@ units:
     bs: "3+"
     strength: 4
     toughness: 4
+    attacks: 1
     save: 4
     invuln_save: null
     leadership: 10
     oc: 1
     fnp: null
     rules: [livingMetal]
-    abilities: "Harbinger of Destruction: each time this model makes a ranged attack, on unmodified hit roll of 6, the target suffers 1 mortal wound in addition to normal damage."
+    abilities: "Living Lightning: At the start of the Fight phase, roll one D6 for each enemy unit within 6\". On a 4+, that unit suffers 1 mortal wound. Harbinger of Destruction: At the end of your Movement phase (if this model did not Fall Back), roll three D6. For each result of 4+, the closest visible enemy unit within 24\" suffers 1 mortal wound."
     weapons:
-      - ref: wh40k_9e.necrons.weapon.plasmic_lance
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+      - ref: wh40k_9e.necrons.weapon.plasmic_lance_shooting
+      - ref: wh40k_9e.necrons.weapon.plasmic_lance_melee
+
+  - id: wh40k_9e.necrons.unit.technomancer
+    name_en: Technomancer
+    name_de: Technomant
+    battlefield_role: [HQ]
+    keywords: [INFANTRY, CHARACTER, CRYPTEK, TECHNOMANCER]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    move: "5\""
+    ws: "3+"
+    bs: "3+"
+    strength: 4
+    toughness: 4
+    attacks: 1
+    save: 4
+    invuln_save: null
+    leadership: 10
+    oc: 1
+    fnp: null
+    rules: [livingMetal, dynasticAdvisors, ritesOfReanimation]
+    abilities: "Dynastic Advisors: only one CRYPTEK per detachment (unless special rule allows more). Rites of Reanimation: once per phase, at the end of the phase, pick one friendly DYNASTY INFANTRY unit within 3\" — that unit immediately makes Reanimation Protocol rolls."
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.staff_of_light_shooting
+      - ref: wh40k_9e.necrons.weapon.staff_of_light_melee
 
   # ── Troops ────────────────────────────────────────────────────────────────
 
@@ -94,7 +125,7 @@ units:
     name_en: Necron Warriors
     name_de: Nekron-Krieger
     battlefield_role: [Troops]
-    keywords: [Infantry, Core, Necrons, Necron Warriors, Reanimation Protocols, Their Number is Legion]
+    keywords: [INFANTRY, CORE, NECRON WARRIORS]
     wounds: 1
     models_min: 10
     models_max: 20
@@ -103,6 +134,7 @@ units:
     bs: "3+"
     strength: 4
     toughness: 4
+    attacks: 1
     save: 4
     invuln_save: null
     leadership: 10
@@ -120,7 +152,7 @@ units:
     name_en: Immortals
     name_de: Unsterbliche
     battlefield_role: [Troops]
-    keywords: [Infantry, Core, Necrons, Immortals, Reanimation Protocols]
+    keywords: [INFANTRY, CORE, IMMORTALS]
     wounds: 1
     models_min: 5
     models_max: 10
@@ -129,6 +161,7 @@ units:
     bs: "3+"
     strength: 4
     toughness: 5
+    attacks: 2
     save: 3
     invuln_save: null
     leadership: 10
@@ -148,7 +181,7 @@ units:
     name_en: Skorpekh Destroyers
     name_de: Skorpekh-Vernichter
     battlefield_role: [Elites]
-    keywords: [Infantry, Core, Destroyer Cult, Necrons, Skorpekh Destroyers, Reanimation Protocols, Living Metal]
+    keywords: [INFANTRY, CORE, DESTROYER CULT, SKORPEKH DESTROYERS]
     wounds: 3
     models_min: 3
     models_max: 6
@@ -157,6 +190,7 @@ units:
     bs: "3+"
     strength: 5
     toughness: 5
+    attacks: 3
     save: 3
     invuln_save: null
     leadership: 10
@@ -172,22 +206,23 @@ units:
     name_en: Lychguard
     name_de: Gruftgardisten
     battlefield_role: [Elites]
-    keywords: [Infantry, Core, Necrons, Lychguard, Reanimation Protocols]
+    keywords: [INFANTRY, CORE, LYCHGUARD]
     wounds: 2
     models_min: 5
     models_max: 10
     move: "5\""
-    ws: "2+"
+    ws: "3+"
     bs: "3+"
     strength: 5
     toughness: 5
+    attacks: 3
     save: 3
-    invuln_save: 4
+    invuln_save: null
     leadership: 10
     oc: 2
     fnp: null
     rules: [reanimationProtocols]
-    abilities: "Dispersion Shield: 4+ invulnerable save."
+    abilities: "Dispersion Shield (wargear): 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.warscythe
     wargear_options:
@@ -197,7 +232,7 @@ units:
     name_en: Deathmarks
     name_de: Todesmarkierer
     battlefield_role: [Elites]
-    keywords: [Infantry, Core, Necrons, Deathmarks, Reanimation Protocols]
+    keywords: [INFANTRY, CORE, HYPERSPACE HUNTER, DEATHMARKS]
     wounds: 1
     models_min: 5
     models_max: 10
@@ -205,14 +240,15 @@ units:
     ws: "3+"
     bs: "2+"
     strength: 4
-    toughness: 4
+    toughness: 5
+    attacks: 1
     save: 3
     invuln_save: null
     leadership: 10
     oc: 1
     fnp: null
-    rules: [reanimationProtocols]
-    abilities: "Hunters from Hyperspace: designate a unit at start of Shooting Phase — this unit re-rolls wound rolls of 1 against it."
+    rules: [reanimationProtocols, hyperspaceHunter]
+    abilities: "Hunters from Hyperspace: designate a unit at start of Shooting Phase — this unit re-rolls wound rolls of 1 against it. Hyperspace Hunter: can be set up in Hyperspace and arrive as Reinforcements."
     weapons:
       - ref: wh40k_9e.necrons.weapon.synaptic_disintegrator
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
@@ -223,15 +259,16 @@ units:
     name_en: Canoptek Scarab Swarms
     name_de: Canoptek-Skarabäus-Schwärme
     battlefield_role: [Fast Attack]
-    keywords: [Swarm, Fly, Canoptek, Necrons]
+    keywords: [SWARM, FLY, CANOPTEK, CANOPTEK SCARAB SWARMS]
     wounds: 4
     models_min: 3
     models_max: 9
     move: "10\""
     ws: "4+"
-    bs: "4+"
+    bs: "-"
     strength: 3
     toughness: 3
+    attacks: 4
     save: 6
     invuln_save: null
     leadership: 10
@@ -246,24 +283,58 @@ units:
     name_en: Canoptek Wraiths
     name_de: Canoptek-Geister
     battlefield_role: [Fast Attack]
-    keywords: [Infantry, Fly, Canoptek, Necrons]
+    keywords: [BEAST, CORE, FLY, CANOPTEK, CANOPTEK WRAITHS]
     wounds: 3
     models_min: 3
     models_max: 6
     move: "12\""
-    ws: "3+"
+    ws: "4+"
     bs: "4+"
-    strength: 6
+    strength: 4
     toughness: 5
+    attacks: 4
     save: 4
-    invuln_save: 3
+    invuln_save: 4
     leadership: 10
     oc: 1
     fnp: null
-    rules: [livingMetal, phaseShifter]
-    abilities: "Phase Shifter: 3+ invulnerable save."
+    rules: [livingMetal, wraith_form]
+    abilities: "Wraith Form: 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.vicious_claws
+    wargear_options:
+      - replace_with: wh40k_9e.necrons.weapon.whip_coils
+      - add: wh40k_9e.necrons.weapon.particle_caster
+      - add: wh40k_9e.necrons.weapon.transdimensional_beamer
+
+  # ── Elites (continued) ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.unit.canoptek_spyder
+    name_en: Canoptek Spyder
+    name_de: Canoptek-Spinne
+    battlefield_role: [Elites]
+    keywords: [MONSTER, CORE, FLY, CANOPTEK, CANOPTEK SPYDERS]
+    wounds: 6
+    models_min: 1
+    models_max: 3
+    move: "6\""
+    ws: "4+"
+    bs: "4+"
+    strength: 6
+    toughness: 6
+    attacks: 5
+    save: 3
+    invuln_save: null
+    leadership: 10
+    oc: 3
+    fnp: null
+    rules: [livingMetal, fabricatorClawArray]
+    abilities: "Fabricator Claw Array: at end of Movement phase, repair one friendly DYNASTY VEHICLE within 3\" — that model regains D3 lost wounds. Gloom Prism (wargear): attempt to deny one psychic power per Psychic phase."
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.particle_beamer
+      - ref: wh40k_9e.necrons.weapon.automaton_claws
+    wargear_options:
+      - add: wh40k_9e.necrons.weapon.gloom_prism_upgrade
 
   # ── Heavy Support ─────────────────────────────────────────────────────────
 
@@ -271,7 +342,7 @@ units:
     name_en: Triarch Stalker
     name_de: Triarch-Stalker
     battlefield_role: [Heavy Support]
-    keywords: [Vehicle, Core, Triarch, Dynastic Agent, Quantum Shielding, Necrons, Living Metal]
+    keywords: [VEHICLE, CORE, DYNASTIC AGENT, QUANTUM SHIELDING, TRIARCH, TRIARCH STALKER]
     wounds: 12
     models_min: 1
     models_max: 1
@@ -280,6 +351,7 @@ units:
     bs: "3+"
     strength: 7
     toughness: 6
+    attacks: 3
     save: 3
     invuln_save: 5
     leadership: 10
@@ -299,15 +371,16 @@ units:
     name_en: Annihilation Barge
     name_de: Vernichtungsbarke
     battlefield_role: [Heavy Support]
-    keywords: [Vehicle, Fly, Quantum Shielding, Necrons, Living Metal]
-    wounds: 12
+    keywords: [VEHICLE, CORE, QUANTUM SHIELDING, FLY, ANNIHILATION BARGE]
+    wounds: 8
     models_min: 1
     models_max: 1
     move: "12\""
-    ws: "3+"
+    ws: "6+"
     bs: "3+"
-    strength: 6
+    strength: 5
     toughness: 6
+    attacks: 3
     save: 3
     invuln_save: 5
     leadership: 10
@@ -319,28 +392,29 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_cannon
       - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
 
-  - id: wh40k_9e.necrons.unit.canoptek_spyder
-    name_en: Canoptek Spyder
-    name_de: Canoptek-Spinne
+  - id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
+    name_en: Lokhust Heavy Destroyers
+    name_de: Lokhust-Schwere-Vernichter
     battlefield_role: [Heavy Support]
-    keywords: [Vehicle, Fly, Canoptek, Necrons, Living Metal]
-    wounds: 6
+    keywords: [INFANTRY, CORE, FLY, DESTROYER CULT, LOKHUST HEAVY DESTROYERS]
+    wounds: 4
     models_min: 1
     models_max: 3
-    move: "6\""
-    ws: "4+"
-    bs: "4+"
-    strength: 6
-    toughness: 6
+    move: "8\""
+    ws: "3+"
+    bs: "3+"
+    strength: 4
+    toughness: 5
+    attacks: 2
     save: 3
     invuln_save: null
     leadership: 10
-    oc: 3
+    oc: 1
     fnp: null
-    rules: [livingMetal, fabricatorClawArray]
-    abilities: "Fabricator Claw Array: at end of Movement phase, repair one friendly DYNASTY VEHICLE within 3\" — that model regains D3 lost wounds. Gloom Prism (wargear): attempt to deny one psychic power per Psychic phase."
+    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
+    abilities: "Hardwired for Destruction: re-roll hit rolls of 1."
     weapons:
-      - ref: wh40k_9e.necrons.weapon.particle_beamer
+      - ref: wh40k_9e.necrons.weapon.gauss_destructor
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
     wargear_options:
-      - add: wh40k_9e.necrons.weapon.gloom_prism_upgrade
+      - replace_with: wh40k_9e.necrons.weapon.enmitic_exterminator

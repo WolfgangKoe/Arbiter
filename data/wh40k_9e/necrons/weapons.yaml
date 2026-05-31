@@ -1,7 +1,7 @@
 # Necron weapon catalog — WH40k 9E
-# Source: Codex Necrons (9E, 2020) + Wahapedia verification pending
+# Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
 # Format: army_builder.md v1 (see docs/spec/army_builder.md)
-# Note: strength "User" = attacker's Strength stat; resolve before combat.py
+# Strength notation: "User" = attacker's S stat; "User+1" = S+1; "User×2" = S×2
 
 weapons:
 
@@ -22,7 +22,7 @@ weapons:
     name_en: Staff of Light (Melee)
     weapon_type: Melee
     range_inches: 0
-    attacks: "1"
+    attacks: "*"
     strength: "User"
     ap: "-2"
     damage: "1"
@@ -33,22 +33,55 @@ weapons:
     name_en: Resurrection Orb
     weapon_type: Melee
     range_inches: 0
-    attacks: "1"
+    attacks: "*"
     strength: "User"
     ap: "0"
     damage: "1"
-    abilities: "1×/Spiel: Reanimationsprotokoll für befreundete DYNASTY-Einheit in 6\" wirken."
+    abilities: "1×/game: enact Reanimation Protocols for a friendly DYNASTY unit within 6\"."
     is_melee: true
 
   - id: wh40k_9e.necrons.weapon.voidscythe
     name_en: Voidscythe
     weapon_type: Melee
     range_inches: 0
-    attacks: "4"
-    strength: "10"
+    attacks: "*"
+    strength: "User×2"
     ap: "-4"
     damage: "3"
     abilities: "-1 to hit roll."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.warscythe
+    name_en: Warscythe
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-4"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.hyperphase_glaive
+    name_en: Hyperphase Glaive
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-3"
+    damage: "D3"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.voidblade
+    name_en: Voidblade
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
     is_melee: true
 
   - id: wh40k_9e.necrons.weapon.gauntlet_of_conflagrator
@@ -59,26 +92,15 @@ weapons:
     strength: "5"
     ap: "0"
     damage: "1"
-    abilities: "Auto-hits. Instead of hit/wound rolls: roll D6 per target model; each 6 = 1 mortal wound (ignores saves)."
+    abilities: "Auto-hits. Roll D6 per target model; each 6 = 1 mortal wound (ignores saves)."
     is_melee: false
-
-  - id: wh40k_9e.necrons.weapon.warscythe
-    name_en: Warscythe
-    weapon_type: Melee
-    range_inches: 0
-    attacks: "4"
-    strength: "8"
-    ap: "-4"
-    damage: "2"
-    abilities: ""
-    is_melee: true
 
   - id: wh40k_9e.necrons.weapon.tachyon_arrow
     name_en: Tachyon Arrow
     weapon_type: Assault
     range_inches: 120
     attacks: "1"
-    strength: "10"
+    strength: "12"
     ap: "-5"
     damage: "D6"
     abilities: "1×/game only."
@@ -88,10 +110,43 @@ weapons:
     name_en: Hyperphase Sword
     weapon_type: Melee
     range_inches: 0
-    attacks: "4"
-    strength: "5"
+    attacks: "*"
+    strength: "User+1"
     ap: "-3"
     damage: "1"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.relic_gauss_blaster
+    name_en: Relic Gauss Blaster
+    weapon_type: Rapid Fire
+    range_inches: 30
+    attacks: "2"
+    strength: "5"
+    ap: "-2"
+    damage: "2"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.plasmic_lance_shooting
+    name_en: Plasmic Lance (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "D3"
+    strength: "7"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.plasmic_lance_melee
+    name_en: Plasmic Lance (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "2"
     abilities: ""
     is_melee: true
 
@@ -103,7 +158,7 @@ weapons:
     range_inches: 24
     attacks: "1"
     strength: "4"
-    ap: "0"
+    ap: "-1"
     damage: "1"
     abilities: ""
     is_melee: false
@@ -119,14 +174,36 @@ weapons:
     abilities: ""
     is_melee: false
 
+  - id: wh40k_9e.necrons.weapon.gauss_blaster
+    name_en: Gauss Blaster
+    weapon_type: Rapid Fire
+    range_inches: 30
+    attacks: "1"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.tesla_carbine
+    name_en: Tesla Carbine
+    weapon_type: Assault
+    range_inches: 24
+    attacks: "2"
+    strength: "5"
+    ap: "0"
+    damage: "1"
+    abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+
   # ── Elites ────────────────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.weapon.hyperphase_reap_blade
     name_en: Hyperphase Reap-Blade
     weapon_type: Melee
     range_inches: 0
-    attacks: "3"
-    strength: "7"
+    attacks: "*"
+    strength: "User+2"
     ap: "-4"
     damage: "3"
     abilities: "1 model in unit only."
@@ -136,12 +213,23 @@ weapons:
     name_en: Hyperphase Threshers
     weapon_type: Melee
     range_inches: 0
-    attacks: "4"
-    strength: "5"
+    attacks: "*"
+    strength: "User"
     ap: "-3"
     damage: "2"
     abilities: "Remaining models. Each time this model fights, it makes 1 additional attack."
     is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.synaptic_disintegrator
+    name_en: Synaptic Disintegrator
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "1"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: "Unmodified wound roll of 6 inflicts +1 mortal wound. Ignores Look Out, Sir."
+    is_melee: false
 
   # ── Fast Attack ───────────────────────────────────────────────────────────
 
@@ -149,12 +237,56 @@ weapons:
     name_en: Feeder Mandibles
     weapon_type: Melee
     range_inches: 0
-    attacks: "4"
-    strength: "3"
+    attacks: "*"
+    strength: "User"
     ap: "0"
     damage: "1"
     abilities: "Unmodified hit roll of 6 = auto-wounds."
     is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.vicious_claws
+    name_en: Vicious Claws
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-2"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.whip_coils
+    name_en: Whip Coils
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: "Makes 2 hit rolls per attack instead of 1."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.particle_caster
+    name_en: Particle Caster
+    weapon_type: Pistol
+    range_inches: 12
+    attacks: "2"
+    strength: "6"
+    ap: "0"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.transdimensional_beamer
+    name_en: Transdimensional Beamer
+    weapon_type: Assault
+    range_inches: 12
+    attacks: "1"
+    strength: "4"
+    ap: "-3"
+    damage: "3"
+    abilities: ""
+    is_melee: false
 
   # ── Heavy Support / Vehicles ──────────────────────────────────────────────
 
@@ -177,19 +309,41 @@ weapons:
     strength: "8"
     ap: "-4"
     damage: "D6"
-    abilities: "If target is within half range, damage becomes D6+3."
+    abilities: "If target is within half range, damage becomes D6+2."
     is_melee: false
 
   - id: wh40k_9e.necrons.weapon.stalkers_forelimbs
     name_en: Stalker's Forelimbs
     weapon_type: Melee
     range_inches: 0
-    attacks: "3"
-    strength: "7"
+    attacks: "*"
+    strength: "User"
     ap: "-2"
     damage: "3"
     abilities: ""
     is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
+    name_en: Twin Heavy Gauss Cannon
+    weapon_type: Heavy
+    range_inches: 30
+    attacks: "6"
+    strength: "7"
+    ap: "-3"
+    damage: "D3"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.particle_shredder
+    name_en: Particle Shredder
+    weapon_type: Heavy
+    range_inches: 24
+    attacks: "8"
+    strength: "6"
+    ap: "-1"
+    damage: "2"
+    abilities: ""
+    is_melee: false
 
   - id: wh40k_9e.necrons.weapon.particle_beamer
     name_en: Particle Beamer
@@ -208,9 +362,64 @@ weapons:
     range_inches: 24
     attacks: "3"
     strength: "6"
-    ap: "-2"
+    ap: "-3"
+    damage: "D3"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.tesla_cannon
+    name_en: Tesla Cannon
+    weapon_type: Heavy
+    range_inches: 30
+    attacks: "3"
+    strength: "6"
+    ap: "0"
+    damage: "1"
+    abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.twin_tesla_destructor
+    name_en: Twin Tesla Destructor
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "10"
+    strength: "7"
+    ap: "0"
+    damage: "1"
+    abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.automaton_claws
+    name_en: Automaton Claws
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-3"
     damage: "2"
     abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.gauss_destructor
+    name_en: Gauss Destructor
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "1"
+    strength: "10"
+    ap: "-4"
+    damage: "3D3"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.enmitic_exterminator
+    name_en: Enmitic Exterminator
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "D3"
+    strength: "7"
+    ap: "-1"
+    damage: "1"
+    abilities: "Blast."
     is_melee: false
 
   # ── Shared / Default ──────────────────────────────────────────────────────
@@ -219,7 +428,7 @@ weapons:
     name_en: Close Combat Weapon
     weapon_type: Melee
     range_inches: 0
-    attacks: "1"
+    attacks: "*"
     strength: "User"
     ap: "0"
     damage: "1"
