@@ -11,22 +11,21 @@ Remote: GitHub (`origin`)
 
 ---
 
-## Was in dieser Session gemacht wurde
+## Was zuletzt gemacht wurde
 
-### Schritt 1: Wahapedia-Verifikation — Necrons Katalog (Ziel 5b) ✅
+### Ziel 5b — Necrons Katalog Fixes ✅
+Alle Statline-Fehler, Keyword-Korrekturen, 18 fehlende Waffen, 2 neue Einheiten (Technomancer, Lokhust Heavy Destroyers), stratagems.yaml komplett neu aufgebaut.
 
-Vollständige Prüfung aller Necron-Datensheets gegen Wahapedia 9E.
+### Ability-Architektur vereinheitlicht ✅
+- `units.yaml` hat nur noch `rules: [...]` — kein `abilities:` Textfeld mehr
+- `faction_abilities.yaml` — 7 Abilities, `unit_abilities.yaml` — 8 Abilities, `wargear_abilities.yaml` — 9 Abilities
+- `get_abilities_for_unit()` + `load_wargear_abilities()` in loader.py
 
-Gebaut: `tools/wahapedia_scraper.py`
-- Scrapt Wahapedia-Einheitenseiten (BeautifulSoup)
-- Extrahiert Stats, Keywords, Invuln, Waffen, Abilities
-- Läuft mit: `python3 tools/wahapedia_scraper.py necrons --all`
-- Stratagems: `python3 tools/wahapedia_scraper.py necrons --stratagems`
-- Wiederverwendbar für andere Fraktionen (Orks etc.)
-
-Befund abgelegt: `docs/work/necrons_catalog_verification.md`
-- Alle offenen Fragen beantwortet (scraper-gesichert)
-- Alle Fehler mit Ist/Soll dokumentiert
+### Ziel 5b.5 — Necrons Regeln vervollständigen ✅
+- **stratagems.yaml**: 59 Stratagems (37 Core + 6 Dynastic + 8 Cult of Cryptek + 8 Annihilation Legion), vollständig gegen Wahapedia verifiziert. Boarding Actions ausgeschlossen. player-Felder für 4 Stratagems korrigiert (both statt active).
+- **units.yaml**: 46 Einheiten — alle Necrons 9E Datasheets außer ForgeWorld. 31 neue Einheiten hinzugefügt (14 HQs inkl. Named Characters + Silent King, 4 Elites, 2 Fast Attack, 4 Heavy Support, 2 Flyer, 5 Lord of War/Titanic).
+- **weapons.yaml**: 90 Waffen — 52 neue Waffen für alle neuen Einheiten hinzugefügt (Wahapedia-verifiziert).
+- **tools/wahapedia_scraper.py**: Slugs für alle neuen Einheiten ergänzt (inkl. Fix: `Lord` statt `Necron-Lord`, `C-tan-Shard-...` mit Bindestrichen).
 
 ---
 
@@ -40,51 +39,45 @@ Befund abgelegt: `docs/work/necrons_catalog_verification.md`
 | Ziel A — Architektur-Review | ✅ fertig |
 | Ziel 4a–4h — Alle Phasen | ✅ fertig |
 | Ziel 5a — Spec-Dateien | ✅ fertig |
-| **Ziel 5b — Katalog Necrons** | 🔄 Verifikation ✅, Fixes ausstehend |
-| Ziel 5c — Loader-Refactoring | ⬜ nächste Aufgabe (nach 5b Fixes) |
+| Ziel 5b — Katalog Necrons | ✅ fertig |
+| Ziel 5b.5 — Necrons Regeln vervollständigen | ✅ fertig |
+| **Ziel 5b.6 — Army Building Rules** | 🔄 Konzept-Entscheidung nötig |
+| **Ziel 5c — Loader-Refactoring** | ⬜ nächste große Aufgabe |
 | Ziel 5d — BattleScribe Importer | ⬜ geplant |
 | Ziel 5e — Setup-Screen Redesign | ⬜ geplant |
 | Ziel 5f — Stratagems PoC | ⬜ geplant |
 | Ziel 6 — Crusade-Erweiterung | ⬜ geplant |
-| Ziel 7 — Wahapedia Faction Fetcher | ⬜ geplant |
 
 ---
 
-## Nächste Session — Einstieg
+## Offene Entscheidung: Army Building Rules (Ziel 5b.6)
 
-### Schritt 1: Ziel 5b abschließen — Alle Fixes umsetzen (Freigabe nötig!)
+**Frage an Nutzer:** Wie tief soll die Armeebau-Validierung werden?
+- **a)** Nur Daten-Vollständigkeit: alle Einheiten + Regeln als Text-Beschreibung in YAML (kein Code)
+- **b)** Einfache Validierung: Pflicht-Slots, Warlord-Pflicht (NOBLE), Dynastic Advisors (1× CRYPTEK pro Detachment)
+- **c)** Vollständige Validierung inkl. CP-Budget, Punkte-Limits, The Silent King Sonderregel
 
-Vollständiger Befund in: `docs/work/necrons_catalog_verification.md`
-Der Nutzer muss Freigabe erteilen, dann alles in dieser Reihenfolge:
+Die Entscheidung bestimmt, ob Ziel 5b.6 vor oder nach Ziel 5c angegangen wird.
 
-**1. Schema erweitern:**
-- `docs/spec/army_builder.md` → `attacks`-Feld in units.yaml-Schema ergänzen
+**Bekannte Regeln die implementiert werden müssten:**
+- Dynastic Advisors: 1× CRYPTEK pro DYNASTY-Detachment (Ausnahme: Exalted Cryptek Stratagem = 2; Cult of the Cryptek = unbegrenzt)
+- Noble als Warlord: Warlord muss NOBLE-Keyword haben (Ausnahme: Silent King = automatisch Warlord)
+- The Silent King: kein `<DYNASTY>`-Keyword, hat SZAREKHAN fest, muss Warlord sein
+- Command Protocols: bereits in `command_protocols.yaml` und `commandPhase.py` — prüfen ob korrekt
 
-**2. units.yaml korrigieren:**
-- 13 Statline-Fehler (invuln, ws, s, t, wounds, bs, battlefield_role)
-- Keywords aller 13 Einheiten bereinigen (Rules raus, fehlende Keywords rein)
-- `attacks`-Werte für alle 13 Einheiten eintragen
-- Abilities-Texte: Overlord "My Will Be Done", Plasmancer "Living Lightning"
-- 2 fehlende Einheiten ergänzen: Technomancer, Lokhust Heavy Destroyers
+---
 
-**3. weapons.yaml korrigieren:**
-- 13 falsche Feldwerte (ap, damage, strength — mit neuer User+X-Notation)
-- 18 fehlende Waffendefinitionen eintragen (alle Werte scraper-gesichert)
-- Canoptek Spyder: `close_combat_weapon` → `automaton_claws`
+## Nächste Hauptaufgabe: Ziel 5c — Loader-Refactoring
 
-**4. stratagems.yaml neu aufbauen:**
-- Alle 15 aktuellen Einträge löschen
-- 34 Kern-Stratagems + 6 Dynastic-Stratagems aus Verifikationsdokument eintragen
-- Supplement-Stratagems (Annihilation Legion, Boarding Actions) weglassen
+Ziel: `load_army()` auf `units.yaml` + `weapons.yaml` umstellen (statt `army.yaml`), Roster-System einführen.
 
-### Schritt 2: Ziel 5c — Loader-Refactoring
+**Was das bedeutet:**
+- `loader.py` neu schreiben: lädt alle 46 units aus units.yaml, resolved weapon-refs aus weapons.yaml
+- Roster-System: Spieler wählt Einheiten + Wargear, Wargear-Abilities werden per Roster angewendet
+- `army.yaml` archivieren (aktuell noch aktiv, bleibt bis Ziel 5c als Fallback)
+- Neue Datei: `data/rosters/` — persistente Armeelisten
 
-Nach den Data-Fixes: Loader auf neue YAML-Struktur umstellen.
-- `load_army(faction_dir)` → liest units.yaml + weapons.yaml (statt army.yaml)
-- `attacks`-Feld im Unit-Objekt ergänzen
-- Default Close Combat Weapon ergänzen wo fehlend
-- Alle Tests auf Kompatibilität prüfen
-- `army.yaml` danach archivieren
+**Achtung:** Ziel 5c ist ein größeres Refactoring. units.yaml hat jetzt 46 Einheiten und 90 Waffen — alle valide und weapon-refs vollständig geprüft. Bereit für Loader.
 
 ---
 
@@ -92,18 +85,16 @@ Nach den Data-Fixes: Loader auf neue YAML-Struktur umstellen.
 
 | Datei | Inhalt |
 |-------|--------|
-| `docs/work/necrons_catalog_verification.md` | Vollständiger Verifikationsbefund mit Ist/Soll |
-| `tools/wahapedia_scraper.py` | Wahapedia-Scraper (wiederverwendbar) |
-| `data/wh40k_9e/necrons/units.yaml` | Zu korrigierende Katalogdatei |
-| `data/wh40k_9e/necrons/weapons.yaml` | Zu korrigierende Waffendatei |
-| `data/wh40k_9e/necrons/stratagems.yaml` | Komplett neu aufzubauende Stratagem-Datei |
+| `data/wh40k_9e/necrons/units.yaml` | **46 Einheiten** — Wahapedia-verifiziert |
+| `data/wh40k_9e/necrons/weapons.yaml` | **90 Waffen** — Wahapedia-verifiziert |
+| `data/wh40k_9e/necrons/stratagems.yaml` | **59 Stratagems** — vollständig Wahapedia-verifiziert |
+| `data/wh40k_9e/necrons/faction_abilities.yaml` | 7 Abilities (faction scope) |
+| `data/wh40k_9e/necrons/unit_abilities.yaml` | 8 Abilities (unit scope) |
+| `data/wh40k_9e/necrons/wargear_abilities.yaml` | 9 Abilities (wargear scope) |
+| `data/wh40k_9e/necrons/wargear.yaml` | 10 Wargear-Items (Display-Daten) |
+| `tools/wahapedia_scraper.py` | Scraper mit allen 46 Unit-Slugs — `python3 tools/wahapedia_scraper.py necrons --unit overlord` |
 
-Scraper-Befehl zum Nachprüfen:
-```
-python3 tools/wahapedia_scraper.py necrons --unit overlord
-python3 tools/wahapedia_scraper.py necrons --all
-python3 tools/wahapedia_scraper.py necrons --stratagems
-```
+Wahapedia Live-Referenz: https://wahapedia.ru/wh40k9ed/factions/necrons/
 
 ---
 
@@ -112,9 +103,9 @@ python3 tools/wahapedia_scraper.py necrons --stratagems
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
 - Seitenleisten IMMER fest: `first_player` links, `second_player` rechts
 - Aktionen nur kontextuell zur ausgewählten Einheit
-- **Kein Design ohne Schema** — Nutzer definiert Farbpalette selbst
 - `dev`-Branch — kein direktes Committen auf `main`
 - Kein Auto-Würfeln — alle Würfelwürfe gibt der Spieler ein
+- Keine eigenständigen Design-/Farbentscheidungen (Nutzer definiert Schema)
 
 ---
 
@@ -140,21 +131,19 @@ data/
     _shared/detachment_types.yaml
     necrons/
       army.yaml         ← aktiv bis Ziel 5c
-      units.yaml        ← wird in dieser Session korrigiert
-      weapons.yaml      ← wird in dieser Session korrigiert
-      stratagems.yaml   ← wird in dieser Session neu aufgebaut
-      faction_abilities.yaml | subfaction_abilities.yaml | unit_abilities.yaml
-      command_protocols.yaml | faction_properties.yaml
+      units.yaml        ← verifiziert, bereit für Ziel 5c
+      weapons.yaml      ← verifiziert
+      stratagems.yaml   ← Review nötig!
+      faction_abilities.yaml | unit_abilities.yaml | wargear_abilities.yaml
+      subfaction_abilities.yaml | command_protocols.yaml
+      faction_properties.yaml | wargear.yaml | relics.yaml | arkana.yaml
     orks/army.yaml
-  rosters/              ← NEU in Ziel 5c
+  rosters/            ← NEU in Ziel 5c
   scenarios/
 docs/
-  goals/
-  spec/ army_builder.md | architecture.md | setup.md | ...
-  work/ necrons_catalog_verification.md ← Verifikationsbefund
+  goals/ | spec/ | work/
 tools/
-  wahapedia_scraper.py  ← NEU: Wahapedia-Scraper
-  import_rosz.py        ← NEU in Ziel 5d
+  wahapedia_scraper.py
 tests/
   gameMechanic/ | uiLayout/ | gameObjects/
 ```

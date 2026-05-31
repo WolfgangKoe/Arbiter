@@ -27,6 +27,7 @@ class Stratagem:
     conditions: list[str] = field(default_factory=list)  # keyword conditions
     rule_text: str = ""
     once_per_phase: bool = True
+    detachment: str | None = None  # detachment type required, e.g. "cult_of_the_cryptek"
 
 
 # ── GO visibility helper ──────────────────────────────────────────────────────

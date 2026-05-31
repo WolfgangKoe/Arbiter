@@ -24,22 +24,63 @@ BASE = "https://wahapedia.ru/wh40k9ed/factions"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ArbiterDataVerifier/1.0)"}
 
 UNIT_SLUGS: dict[str, str] = {
+    # HQ — already verified
     "overlord": "Overlord",
     "royal_warden": "Royal-Warden",
     "plasmancer": "Plasmancer",
+    "technomancer": "Technomancer",
+    # HQ — new
+    "necron_lord": "Lord",
+    "lokhust_lord": "Lokhust-Lord",
+    "skorpekh_lord": "Skorpekh-Lord",
+    "catacomb_command_barge": "Catacomb-Command-Barge",
+    "psychomancer": "Psychomancer",
+    "chronomancer": "Chronomancer",
+    "illuminor_szeras": "Illuminor-Szeras",
+    "orikan_the_diviner": "Orikan-the-Diviner",
+    "trazyn_the_infinite": "Trazyn-the-Infinite",
+    "nemesor_zahndrekh": "Nemesor-Zahndrekh",
+    "vargard_obyron": "Vargard-Obyron",
+    "anrakyr_the_traveller": "Anrakyr-the-Traveller",
+    "imotekh_the_stormlord": "Imotekh-the-Stormlord",
+    "the_silent_king": "The-Silent-King",
+    # Troops — already verified
     "warriors": "Necron-Warriors",
     "immortals": "Immortals",
+    # Elites — already verified
     "skorpekh_destroyers": "Skorpekh-Destroyers",
     "lychguard": "Lychguard",
     "deathmarks": "Deathmarks",
+    "canoptek_spyder": "Canoptek-Spyders",
+    # Elites — new
+    "triarch_praetorians": "Triarch-Praetorians",
+    "flayed_ones": "Flayed-Ones",
+    "canoptek_reanimator": "Canoptek-Reanimator",
+    "cryptothralls": "Cryptothralls",
+    # Fast Attack — already verified
     "canoptek_scarabs": "Canoptek-Scarab-Swarms",
     "canoptek_wraiths": "Canoptek-Wraiths",
+    # Fast Attack — new
+    "tomb_blades": "Tomb-Blades",
+    "ophydian_destroyers": "Ophydian-Destroyers",
+    # Heavy Support — already verified
     "triarch_stalker": "Triarch-Stalker",
     "annihilation_barge": "Annihilation-Barge",
-    "canoptek_spyder": "Canoptek-Spyders",
-    "technomancer": "Technomancer",
     "lokhust_heavy_destroyers": "Lokhust-Heavy-Destroyers",
-    "necron_lord": "Necron-Lord",
+    # Heavy Support — new
+    "lokhust_destroyers": "Lokhust-Destroyers",
+    "canoptek_doomstalker": "Canoptek-Doomstalker",
+    "doomsday_ark": "Doomsday-Ark",
+    "ghost_ark": "Ghost-Ark",
+    # Flyer — new
+    "night_scythe": "Night-Scythe",
+    "doom_scythe": "Doom-Scythe",
+    # Lord of War / Titanic — new
+    "monolith": "Monolith",
+    "c_tan_nightbringer": "C-tan-Shard-of-the-Nightbringer",
+    "c_tan_deceiver": "C-tan-Shard-of-the-Deceiver",
+    "c_tan_void_dragon": "C-tan-Shard-of-the-Void-Dragon",
+    "tesseract_vault": "Tesseract-Vault",
 }
 
 STAT_COLS = ["M", "WS", "BS", "S", "T", "W", "A", "Ld", "Sv"]
@@ -220,10 +261,16 @@ def extract_stratagems(soup: BeautifulSoup) -> list[dict]:
         s: dict = {}
         name_el = wrapper.find(class_="stratName_9k")
         if name_el:
-            s["name"] = re.sub(r"\s+", " ", name_el.get_text()).strip()
-        price_el = wrapper.find(class_="PowerPrice")
-        if price_el:
-            s["cp"] = re.sub(r"\s+", " ", price_el.get_text()).strip()
+            raw = re.sub(r"\s+", " ", name_el.get_text()).strip()
+            # CP cost is embedded in the name text, e.g. "ENSLAVED PROTECTORS1CP" or "CURSE3CP/1CP"
+            # Variable-cost format: "3CP/1CP" means max/min; capture full block.
+            cp_match = re.search(r"\s*(?:(\d+)CP/)?(\d+)CP\s*$", raw)
+            if cp_match:
+                max_cp, min_cp = cp_match.group(1), cp_match.group(2)
+                s["cp"] = f"{max_cp}/{min_cp}" if max_cp else min_cp
+                s["name"] = raw[: cp_match.start()].strip()
+            else:
+                s["name"] = raw
         text_el = wrapper.find(class_="stratText_CS")
         if text_el:
             s["rule_text"] = re.sub(r"\s+", " ", text_el.get_text(" ")).strip()

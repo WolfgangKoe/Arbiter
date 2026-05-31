@@ -422,6 +422,622 @@ weapons:
     abilities: "Blast."
     is_melee: false
 
+  # ── Psychomancer ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.abyssal_lance_shooting
+    name_en: Abyssal Lance (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "3"
+    strength: "4"
+    ap: "-3"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.abyssal_lance_melee
+    name_en: Abyssal Lance (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "1"
+    abilities: ""
+    is_melee: true
+
+  # ── Chronomancer ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.aeonstave_shooting
+    name_en: Aeonstave (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "D3"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: "Blast. Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.aeonstave_melee
+    name_en: Aeonstave (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-2"
+    damage: "1"
+    abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.entropic_lance_shooting
+    name_en: Entropic Lance (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "1"
+    strength: "8"
+    ap: "-3"
+    damage: "D3+3"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.entropic_lance_melee
+    name_en: Entropic Lance (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "3"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.chronotendrils
+    name_en: Chronotendrils
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "0"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
+    is_melee: true
+
+  # ── Illuminor Szeras ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.eldritch_lance_shooting
+    name_en: Eldritch Lance (Shooting)
+    weapon_type: Assault
+    range_inches: 36
+    attacks: "D3"
+    strength: "8"
+    ap: "-4"
+    damage: "D6"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.eldritch_lance_melee
+    name_en: Eldritch Lance (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-4"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.impaling_legs
+    name_en: Impaling Legs
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-2"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
+    is_melee: true
+
+  # ── Orikan the Diviner ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.staff_of_tomorrow
+    name_en: Staff of Tomorrow
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "D3"
+    abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    is_melee: true
+
+  # ── Trazyn the Infinite ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.empathic_obliterator
+    name_en: Empathic Obliterator
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-1"
+    damage: "D3"
+    abilities: "Each time an attack is made with this weapon, if a CHARACTER model is slain, make 1 additional attack with this weapon against the target unit."
+    is_melee: true
+
+  # ── Imotekh the Stormlord ─────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.gauntlet_of_fire
+    name_en: Gauntlet of Fire
+    weapon_type: Assault
+    range_inches: 12
+    attacks: "D6"
+    strength: "5"
+    ap: "-1"
+    damage: "1"
+    abilities: "Auto-hits."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.staff_of_the_destroyer_shooting
+    name_en: Staff of the Destroyer (Shooting)
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "3"
+    strength: "6"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.staff_of_the_destroyer_melee
+    name_en: Staff of the Destroyer (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+1"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  # ── Skorpekh Lord ─────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.enmitic_annihilator
+    name_en: Enmitic Annihilator
+    weapon_type: Assault
+    range_inches: 18
+    attacks: "2D3"
+    strength: "6"
+    ap: "-1"
+    damage: "1"
+    abilities: "Blast."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.flensing_claw
+    name_en: Flensing Claw
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: "Each time an attack is made with this weapon, make 2 hit rolls instead of 1."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.hyperphase_harvester
+    name_en: Hyperphase Harvester
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+2"
+    ap: "-4"
+    damage: "3"
+    abilities: "-1 to hit roll."
+    is_melee: true
+
+  # ── The Silent King ───────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.annihilator_beam
+    name_en: Annihilator Beam
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "1"
+    strength: "12"
+    ap: "-4"
+    damage: "6"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory_shooting
+    name_en: Sceptre of Eternal Glory (Shooting)
+    weapon_type: Assault
+    range_inches: 24
+    attacks: "3"
+    strength: "8"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory_melee
+    name_en: Sceptre of Eternal Glory (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+4"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.staff_of_stars_shooting
+    name_en: Staff of Stars (Shooting)
+    weapon_type: Assault
+    range_inches: 24
+    attacks: "9"
+    strength: "6"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.staff_of_stars_melee
+    name_en: Staff of Stars (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-2"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.scythe_of_dust
+    name_en: Scythe of Dust
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+3"
+    ap: "-4"
+    damage: "3"
+    abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon."
+    is_melee: true
+
+  # ── Triarch Praetorians ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.rod_of_covenant_shooting
+    name_en: Rod of Covenant (Shooting)
+    weapon_type: Assault
+    range_inches: 12
+    attacks: "1"
+    strength: "5"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.rod_of_covenant_melee
+    name_en: Rod of Covenant (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "2"
+    abilities: ""
+    is_melee: true
+
+  # ── Flayed Ones ───────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.flayer_claws
+    name_en: Flayer Claws
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: true
+
+  # ── Canoptek Reanimator ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.atomiser_beam
+    name_en: Atomiser Beam
+    weapon_type: Assault
+    range_inches: 12
+    attacks: "3"
+    strength: "6"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.reanimators_claws
+    name_en: Reanimator's Claws
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: true
+
+  # ── Cryptothralls ─────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.scouring_eye
+    name_en: Scouring Eye
+    weapon_type: Pistol
+    range_inches: 12
+    attacks: "2"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.scythed_limbs
+    name_en: Scythed Limbs
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: true
+
+  # ── Tomb Blades ───────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.twin_gauss_blaster
+    name_en: Twin Gauss Blaster
+    weapon_type: Rapid Fire
+    range_inches: 30
+    attacks: "2"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.twin_tesla_carbine
+    name_en: Twin Tesla Carbine
+    weapon_type: Assault
+    range_inches: 24
+    attacks: "4"
+    strength: "5"
+    ap: "0"
+    damage: "1"
+    abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+
+  # ── Ophydian Destroyers ───────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.ophydian_claws
+    name_en: Ophydian Claws
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
+    is_melee: true
+
+  # ── Canoptek Doomstalker ──────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.doomsday_blaster_low
+    name_en: Doomsday Blaster (Low Power)
+    weapon_type: Heavy
+    range_inches: 24
+    attacks: "D6"
+    strength: "8"
+    ap: "-2"
+    damage: "D3"
+    abilities: "Blast."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.doomsday_blaster_high
+    name_en: Doomsday Blaster (High Power)
+    weapon_type: Heavy
+    range_inches: 48
+    attacks: "D6"
+    strength: "10"
+    ap: "-5"
+    damage: "D6"
+    abilities: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.twin_gauss_flayer
+    name_en: Twin Gauss Flayer
+    weapon_type: Rapid Fire
+    range_inches: 24
+    attacks: "2"
+    strength: "4"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  # ── Doomsday Ark ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.doomsday_cannon_low
+    name_en: Doomsday Cannon (Low Power)
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "D6"
+    strength: "8"
+    ap: "-2"
+    damage: "D3"
+    abilities: "Blast."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.doomsday_cannon_high
+    name_en: Doomsday Cannon (High Power)
+    weapon_type: Heavy
+    range_inches: 72
+    attacks: "D6"
+    strength: "10"
+    ap: "-5"
+    damage: "D6"
+    abilities: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.gauss_flayer_array
+    name_en: Gauss Flayer Array
+    weapon_type: Rapid Fire
+    range_inches: 24
+    attacks: "5"
+    strength: "4"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  # ── Doom Scythe ───────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.heavy_death_ray
+    name_en: Heavy Death Ray
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "3"
+    strength: "12"
+    ap: "-4"
+    damage: "D3+3"
+    abilities: ""
+    is_melee: false
+
+  # ── C'tan Shard of the Nightbringer ──────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.reaping_sweep
+    name_en: Reaping Sweep
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "1"
+    abilities: "Each time an attack is made with this weapon, make one additional hit roll."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.entropic_blow
+    name_en: Entropic Blow
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User×2"
+    ap: "-4"
+    damage: "D6"
+    abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
+    is_melee: true
+
+  # ── C'tan Shard of the Deceiver ───────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.golden_fists
+    name_en: Golden Fists
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "3"
+    abilities: ""
+    is_melee: true
+
+  # ── C'tan Shard of the Void Dragon ───────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.spear_of_void_dragon_shooting
+    name_en: Spear of the Void Dragon (Shooting)
+    weapon_type: Heavy
+    range_inches: 12
+    attacks: "1"
+    strength: "9"
+    ap: "-4"
+    damage: "D6"
+    abilities: "If a hit is scored, invulnerable saving throws cannot be taken against this weapon's attacks until the end of the phase."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.spear_of_void_dragon_melee
+    name_en: Spear of the Void Dragon (Melee)
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User+3"
+    ap: "-4"
+    damage: "D6"
+    abilities: "Each time an attack allocated to a VEHICLE model, that model does not receive the benefit of cover."
+    is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.canoptek_tail_blades
+    name_en: Canoptek Tail Blades
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-2"
+    damage: "1"
+    abilities: "Each time the bearer fights, it makes D6 additional attacks with this weapon."
+    is_melee: true
+
+  # ── Tesseract Vault ───────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.tesla_sphere
+    name_en: Tesla Sphere
+    weapon_type: Assault
+    range_inches: 24
+    attacks: "4"
+    strength: "7"
+    ap: "0"
+    damage: "1"
+    abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+    is_melee: false
+
+  # ── Monolith ──────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.death_ray
+    name_en: Death Ray
+    weapon_type: Heavy
+    range_inches: 24
+    attacks: "1"
+    strength: "9"
+    ap: "-3"
+    damage: "D3+3"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.gauss_flux_arc
+    name_en: Gauss Flux Arc
+    weapon_type: Rapid Fire
+    range_inches: 30
+    attacks: "3"
+    strength: "5"
+    ap: "-2"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.particle_whip
+    name_en: Particle Whip
+    weapon_type: Heavy
+    range_inches: 36
+    attacks: "D6"
+    strength: "12"
+    ap: "-3"
+    damage: "3"
+    abilities: "Blast."
+    is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.portal_of_exile
+    name_en: Portal of Exile
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-3"
+    damage: "3"
+    abilities: "Each time an attack is allocated to a model, that model can only take a saving throw if it is an invulnerable save."
+    is_melee: true
+
   # ── Shared / Default ──────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.weapon.close_combat_weapon

@@ -145,5 +145,96 @@
     "unit": "Warboss in Mega Armour (Warlord)",
     "action": "charged Triarch Stalker — success",
     "timestamp": "2026-05-29T12:29:42.107378"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Overlord (Warlord)",
+    "action": "charged Big Mek in Mega Armour — success",
+    "timestamp": "2026-05-29T21:25:29.921498"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Overlord (Warlord)",
+    "action": "charged Warboss in Mega Armour (Warlord) — success",
+    "timestamp": "2026-05-29T21:25:29.925310"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Boyz ×10 — success",
+    "timestamp": "2026-05-29T21:25:46.863017"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Gretchin ×10 — success",
+    "timestamp": "2026-05-29T21:25:46.865562"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Warboss in Mega Armour (Warlord) — success",
+    "timestamp": "2026-05-29T21:25:46.866951"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Warbikers ×3 — success",
+    "timestamp": "2026-05-29T21:25:46.868120"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Overlord (Warlord)",
+    "action": "charged Big Mek in Mega Armour — success",
+    "timestamp": "2026-05-29T21:32:36.964984"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Overlord (Warlord)",
+    "action": "charged Warboss in Mega Armour (Warlord) — success",
+    "timestamp": "2026-05-29T21:32:36.966448"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Boyz ×10 — success",
+    "timestamp": "2026-05-29T21:32:49.257846"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Gretchin ×10 — success",
+    "timestamp": "2026-05-29T21:32:49.258905"
+  },
+  {
+    "round": 1,
+    "phase": "charge",
+    "unit": "Skorpekh Destroyers ×3",
+    "action": "charged Big Mek in Mega Armour — success",
+    "timestamp": "2026-05-29T21:32:49.261626"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord (Warlord)",
+    "action": "movement: advanced",
+    "timestamp": "2026-05-29T21:45:01.671071"
+  },
+  {
+    "round": 1,
+    "phase": "morale",
+    "unit": "Boyz ×10",
+    "action": "Moraltest fehlgeschlagen — 3 Modelle geflohen.",
+    "timestamp": "2026-05-29T22:04:23.546586"
   }
 ]

@@ -31,7 +31,19 @@
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter add src/gameMechanic/chargephase.py src/gameMechanic/fightPhase.py src/gameMechanic/game_state.py src/gameMechanic/shootingPhase.py src/gameMechanic/unit_mutations.py src/uiLayout/_common.py tests/gameMechanic/test_movement_transitions.py tests/gameMechanic/test_unit_mutations.py tests/gameMechanic/test_charge_phase.py .claude/tasks/next_session.md)",
       "Bash(streamlit run src/app.py --server.port 8501 &>/tmp/streamlit.log & *)",
       "Bash(curl -s \"http://localhost:8501/?scenario=charge_phase\" -o /dev/null -w \"%{http_code}\")",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(ssh-keyscan github.com)",
+      "Bash(ssh-add -l)",
+      "Bash(git fetch *)",
+      "Bash(ps -p 11414 -o pid,stat,cmd)",
+      "Bash(google-chrome --headless=new --no-sandbox --disable-gpu --screenshot=/tmp/scenario_test.png --window-size=1400,900 --virtual-time-budget=5000 http://localhost:8501?scenario=charge_phase)",
+      "Bash(google-chrome --headless=new --no-sandbox --disable-gpu --screenshot=/tmp/scenario_test2.png --window-size=1400,900 --virtual-time-budget=8000 http://localhost:8501?scenario=charge_phase)",
+      "Bash(git branch *)",
+      "Bash(curl -s \"https://wahapedia.ru/wh40k9ed/the-rules/open-play/\")",
+      "Bash(curl -s \"https://wahapedia.ru/wh40k9ed/the-rules/creating-a-crusade-force/\")",
+      "Bash(curl -s \"https://wahapedia.ru/wh40k9ed/the-rules/crusade/\")",
+      "Bash(git -C /home/wolfgang/Dokumente/Arbiter add .claude/tasks/next_session.md data/wh40k_9e/necrons/units.yaml data/wh40k_9e/necrons/weapons.yaml data/wh40k_9e/necrons/stratagems.yaml docs/goals/doku.md docs/goals/ziel5.md docs/spec/architecture.md docs/spec/processes.md docs/spec/army_builder.md docs/spec/setup.md docs/work/necrons.md docs/work/orks.md)",
+      "WebFetch(domain:wahapedia.ru)"
     ],
     "additionalDirectories": [
       "/home/wolfgang/Dokumente/Arbiter/.claude/tasks",
