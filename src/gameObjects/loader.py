@@ -55,7 +55,6 @@ def _unit_from_dict(d: dict[str, Any]) -> Unit:
         oc=int(d["oc"]),
         fnp=d.get("fnp"),
         weapons=[_weapon_from_dict(w) for w in d.get("weapons", [])],
-        abilities=d.get("abilities", ""),
         rules=d.get("rules", []),
     )
 
@@ -99,6 +98,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             revive=d["effect"].get("revive", True),
         ),
         unit_id=d.get("unit_id"),
+        wargear_id=d.get("wargear_id"),
         ability_type=d.get("ability_type", "triggered"),
     )
 
@@ -172,6 +172,36 @@ def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
         )
         for p in data.get("protocols", [])
     ]
+
+
+def load_wargear_abilities(faction_dir: str) -> list[Ability]:
+    """Load wargear abilities from data/wh40k_9e/<faction_dir>/wargear_abilities.yaml."""
+    path = _DATA_ROOT / faction_dir / "wargear_abilities.yaml"
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+
+
+def get_abilities_for_unit(unit: Unit, faction_dir: str) -> list[Ability]:
+    """Return all abilities applicable to a unit (faction + unit scope, not wargear).
+
+    Used by the UI to display ability texts per unit.
+    """
+    result: list[Ability] = []
+    for ab in load_faction_abilities(faction_dir):
+        for cond in ab.conditions:
+            if cond.has_rules and any(r in unit.rules for r in cond.has_rules):
+                result.append(ab)
+                break
+        else:
+            if not ab.conditions:
+                result.append(ab)
+    for ab in load_unit_abilities(faction_dir):
+        if ab.unit_id == unit.id:
+            result.append(ab)
+    return result
 
 
 def load_detachment_types() -> list[DetachmentType]:

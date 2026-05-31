@@ -1,12 +1,14 @@
 faction: Necrons
 abilities:
+
+  # ── HQ ────────────────────────────────────────────────────────────────────
+
   - id: necrons.unit.overlord.my_will_be_done
     name_en: My Will Be Done
+    ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.overlord
-    rule_text: "In your Command phase, select one friendly DYNASTY CORE unit within 9\".
-      Until the start of your next Command phase, each time a model in that unit makes
-      an attack, add 1 to that attack's hit roll."
+    rule_text: "In your Command phase, select one friendly DYNASTY CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
     trigger:
       timing: phase_any
       phase: command
@@ -21,21 +23,145 @@ abilities:
       stat: hit_roll
       modifier: 1
 
-  - id: necrons.unit.overlord.resurrection_orb
-    name_en: Resurrection Orb
-    source: wargear
-    unit_id: wh40k_9e.necrons.unit.overlord
-    rule_text: "Once per battle, in your Command phase, select one friendly DYNASTY unit
-      within 6\" not at Starting Strength. That unit's reanimation protocols are enacted."
+  - id: necrons.unit.royal_warden.relentless_march
+    name_en: Relentless March
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.royal_warden
+    rule_text: "Aura: while a friendly DYNASTY CORE unit is within 6\" of this model, add 1\" to the Move characteristic of models in that unit."
     trigger:
-      timing: phase_any
-      phase: command
+      timing: persistent
+      phase: movement
       stage: active
       player: active
     conditions:
-      - within_inches: 6
-        max_uses: 1
+      - has_rules: [relentlessMarch]
     effect:
-      type: complex
+      type: buff_stat
+      target: friendly_core_aura
+      stat: move
+      modifier: 1
+
+  - id: necrons.unit.technomancer.dynastic_advisors
+    name_en: Dynastic Advisors
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.technomancer
+    rule_text: "Each DYNASTY Detachment can only be joined by one CRYPTEK (unless a special rule allows otherwise)."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [dynasticAdvisors]
+    effect:
+      type: restriction
+      target: detachment
+      handler: dynasticAdvisors
+
+  - id: necrons.unit.technomancer.rites_of_reanimation
+    name_en: Rites of Reanimation
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.technomancer
+    rule_text: "Once per phase, at the end of the phase, select one friendly DYNASTY INFANTRY unit within 3\" of this model. That unit immediately makes Reanimation Protocol rolls."
+    trigger:
+      timing: phase_end
+      phase:
+        - command
+        - movement
+        - shooting
+        - fight
+      stage: end
+      player: active
+    conditions:
+      - has_rules: [ritesOfReanimation]
+        within_inches: 3
+    effect:
+      type: reanimate
       target: selected_unit
-      handler: resurrectionOrb
+      amount: D6_per_wound
+
+  # ── Troops ────────────────────────────────────────────────────────────────
+
+  - id: necrons.unit.warriors.their_number_is_legion
+    name_en: Their Number is Legion
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.warriors
+    rule_text: "Each time a Reanimation Protocols roll is made for this unit, re-roll unmodified results of 1."
+    trigger:
+      timing: phase_reactive
+      phase:
+        - shooting
+        - fight
+      stage: end
+      player: inactive
+      event: reanimation_roll
+    conditions:
+      - has_rules: [theirNumberIsLegion]
+    effect:
+      type: reroll_rp
+      target: self
+      modifier: 1
+
+  # ── Elites ────────────────────────────────────────────────────────────────
+
+  - id: necrons.unit.deathmarks.hyperspace_hunter
+    name_en: Hyperspace Hunter
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.deathmarks
+    rule_text: "During deployment, this unit can be set up in hyperspace instead of being set up on the battlefield. At the end of any of your Movement phases, this unit can arrive — set it up anywhere on the battlefield more than 9\" from any enemy models."
+    trigger:
+      timing: persistent
+      phase: deployment
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [hyperspaceHunter]
+    effect:
+      type: deep_strike
+      target: self
+
+  # ── Heavy Support ──────────────────────────────────────────────────────────
+
+  - id: necrons.unit.canoptek_spyder.fabricator_claw_array
+    name_en: Fabricator Claw Array
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_spyder
+    rule_text: "At the end of your Movement phase, select one friendly DYNASTY VEHICLE model within 3\" of this model. That model regains up to D3 lost wounds."
+    trigger:
+      timing: phase_end
+      phase: movement
+      stage: end
+      player: active
+    conditions:
+      - has_rules: [fabricatorClawArray]
+        within_inches: 3
+    effect:
+      type: heal
+      target: friendly_vehicle
+      amount: "D3"
+      revive: false
+
+  - id: necrons.unit.triarch_stalker.targeting_relay
+    name_en: Targeting Relay
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.triarch_stalker
+    rule_text: "Each time this model shoots, after all attacks have been resolved, select one enemy unit that was hit. Until the end of the phase, each time a friendly NECRONS model makes an attack against that unit, re-roll a hit roll of 1."
+    trigger:
+      timing: phase_reactive
+      phase: shooting
+      stage: active
+      player: active
+      event: after_unit_shoots
+    conditions:
+      - has_rules: [targetingRelay]
+    effect:
+      type: mark_target
+      target: enemy_hit
+      handler: targetingRelay

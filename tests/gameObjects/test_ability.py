@@ -6,7 +6,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameObjects.ability import Ability, Condition, Effect, Trigger
-from gameObjects.loader import load_army, load_faction_abilities, load_unit_abilities
+from gameObjects.loader import (
+    load_army,
+    load_faction_abilities,
+    load_unit_abilities,
+    load_wargear_abilities,
+)
 
 
 def test_ability_dataclass_fields() -> None:
@@ -51,9 +56,9 @@ def test_condition_defaults() -> None:
     assert cond.unit_not_destroyed is False
 
 
-def test_load_faction_abilities_necrons_returns_two() -> None:
+def test_load_faction_abilities_necrons_returns_at_least_seven() -> None:
     abilities = load_faction_abilities("necrons")
-    assert len(abilities) == 2
+    assert len(abilities) >= 7
 
 
 def test_living_metal_ability_parsed_correctly() -> None:
@@ -86,9 +91,9 @@ def test_load_faction_abilities_orks_returns_empty() -> None:
     assert abilities == []
 
 
-def test_load_unit_abilities_necrons_returns_two() -> None:
+def test_load_unit_abilities_necrons_returns_at_least_eight() -> None:
     abilities = load_unit_abilities("necrons")
-    assert len(abilities) == 2
+    assert len(abilities) >= 8
 
 
 def test_my_will_be_done_parsed() -> None:
@@ -104,9 +109,10 @@ def test_my_will_be_done_parsed() -> None:
 
 
 def test_resurrection_orb_wargear_source() -> None:
-    abilities = load_unit_abilities("necrons")
-    orb = next(a for a in abilities if a.id == "necrons.unit.overlord.resurrection_orb")
+    abilities = load_wargear_abilities("necrons")
+    orb = next(a for a in abilities if a.id == "necrons.wargear.resurrection_orb.ability")
     assert orb.source == "wargear"
+    assert orb.wargear_id == "wh40k_9e.necrons.wargear.resurrection_orb"
     assert orb.conditions[0].max_uses == 1
     assert orb.effect.type == "complex"
     assert orb.effect.handler == "resurrectionOrb"

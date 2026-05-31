@@ -19,6 +19,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import PHASES, next_phase
+from gameObjects.loader import get_abilities_for_unit
 from uiLayout._common import lookup
 
 # ---------------------------------------------------------------------------
@@ -73,10 +74,13 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
                 f"S{w.strength} · {ap_str} · D{w.damage}{abilities_str}"
             )
 
-    if unit.abilities:
+    faction_dir = "necrons" if "necrons" in unit.id else "orks"
+    unit_abilities = get_abilities_for_unit(unit, faction_dir)
+    if unit_abilities:
         st.divider()
         st.caption("**Abilities**")
-        st.caption(unit.abilities)
+        for ab in unit_abilities:
+            st.caption(f"**{ab.name_en}:** {ab.rule_text}")
 
 
 def _render_setup() -> None:

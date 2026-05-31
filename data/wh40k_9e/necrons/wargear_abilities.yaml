@@ -1,0 +1,175 @@
+# Necron wargear abilities — WH40k 9E
+# Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
+# Format: same Ability schema as faction/unit abilities.
+# wargear_id: the wargear item that grants this ability.
+# Applied by loader only when the unit has this wargear in its roster selection.
+
+faction: Necrons
+abilities:
+
+  # ── Technomancer Wargear ────────────────────────────────────────────────────
+
+  - id: necrons.wargear.canoptek_cloak.ability
+    name_en: Canoptek Cloak
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.canoptek_cloak
+    rule_text: "The bearer has a Move characteristic of 10\" and the FLY keyword. In addition, at the end of your Movement phase, you can repair one friendly DYNASTY model within 3\" of this model. That model regains up to D3 lost wounds."
+    trigger:
+      timing: phase_end
+      phase: movement
+      stage: end
+      player: active
+    conditions: []
+    effect:
+      type: complex
+      target: friendly_dynasty
+      handler: canoptekCloak
+
+  - id: necrons.wargear.canoptek_control_node.ability
+    name_en: Canoptek Control Node
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.canoptek_control_node
+    rule_text: "Aura: while a friendly DYNASTY CANOPTEK unit is within 6\" of this model, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: buff_roll
+      target: friendly_canoptek_aura
+      stat: hit_roll
+      modifier: 1
+
+  # ── Lychguard Wargear ────────────────────────────────────────────────────────
+
+  - id: necrons.wargear.dispersion_shield.ability
+    name_en: Dispersion Shield
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.dispersion_shield
+    rule_text: "The bearer has a 4+ invulnerable save. In addition, add 1 to armour saving throws made for the bearer."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions: []
+    effect:
+      type: invuln_save
+      target: self
+      modifier: 4
+
+  # ── Canoptek Spyder Wargear ───────────────────────────────────────────────────
+
+  - id: necrons.wargear.gloom_prism.ability
+    name_en: Gloom Prism
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.gloom_prism
+    rule_text: "In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power as if it were a PSYKER."
+    trigger:
+      timing: phase_reactive
+      phase: psychic
+      stage: active
+      player: inactive
+    conditions: []
+    effect:
+      type: deny_psychic
+      target: self
+
+  # ── HQ Wargear ───────────────────────────────────────────────────────────────
+
+  - id: necrons.wargear.phylactery.ability
+    name_en: Phylactery
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.phylactery
+    rule_text: "Each time this model uses its Living Metal ability, it regains up to D3 lost wounds instead of 1."
+    trigger:
+      timing: phase_start
+      phase: command
+      stage: start
+      player: active
+    conditions:
+      - needs_healing: true
+    effect:
+      type: heal
+      target: self
+      amount: "D3"
+      revive: false
+
+  - id: necrons.wargear.resurrection_orb.ability
+    name_en: Resurrection Orb
+    ability_type: activated
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.resurrection_orb
+    rule_text: "Once per battle, in your Command phase, the bearer can use its resurrection orb. Select one friendly DYNASTY unit within 6\" of the bearer that is not at its Starting Strength. That unit's reanimation protocols are enacted."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 6
+        max_uses: 1
+    effect:
+      type: complex
+      target: selected_unit
+      handler: resurrectionOrb
+
+  # ── Tomb Blade Wargear ───────────────────────────────────────────────────────
+
+  - id: necrons.wargear.nebuloscope.ability
+    name_en: Nebuloscope
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.nebuloscope
+    rule_text: "Each time the bearer makes a ranged attack, the target does not receive the benefits of cover against that attack."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: ignore_cover
+      target: self
+
+  - id: necrons.wargear.shadowloom.ability
+    name_en: Shadowloom
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.shadowloom
+    rule_text: "The bearer has a 5+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions: []
+    effect:
+      type: invuln_save
+      target: self
+      modifier: 5
+
+  - id: necrons.wargear.shieldvanes.ability
+    name_en: Shieldvanes
+    ability_type: triggered
+    source: wargear
+    wargear_id: wh40k_9e.necrons.wargear.shieldvanes
+    rule_text: "The bearer has a Save characteristic of 3+."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions: []
+    effect:
+      type: passive_stat
+      target: self
+      stat: save
+      modifier: 3

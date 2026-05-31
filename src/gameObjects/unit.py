@@ -26,5 +26,4 @@ class Unit:
     oc: int  # Objective Control
     fnp: int | None  # Feel No Pain or None
     weapons: list[Weapon] = field(default_factory=list)
-    abilities: str = ""
     rules: list[str] = field(default_factory=list)

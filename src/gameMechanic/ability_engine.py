@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army, load_faction_abilities, load_unit_abilities
+from gameObjects.loader import (
+    load_army,
+    load_faction_abilities,
+    load_subfaction_abilities,
+    load_unit_abilities,
+)
 from gameObjects.unit import Unit
 
 # ---------------------------------------------------------------------------
@@ -65,6 +70,7 @@ def get_triggered_abilities(
     all_abilities: list[Ability] = []
     all_abilities.extend(load_faction_abilities(faction_dir))
     all_abilities.extend(load_unit_abilities(faction_dir))
+    all_abilities.extend(load_subfaction_abilities(faction_dir))
 
     units_key = "necron_units" if active == "Necrons" else "ork_units"
     units_state: dict = state.get(units_key, {})  # type: ignore[type-arg]

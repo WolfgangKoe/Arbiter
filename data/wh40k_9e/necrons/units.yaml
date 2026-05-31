@@ -33,7 +33,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal, myWillBeDone, phaseShifter]
-    abilities: "My Will Be Done: choose a friendly CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll. Phase Shifter: 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light_shooting
       - ref: wh40k_9e.necrons.weapon.staff_of_light_melee
@@ -64,7 +63,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal, relentlessMarch]
-    abilities: "Relentless March (Aura): friendly CORE units within 6\" add 1\" to their Move characteristic."
     weapons:
       - ref: wh40k_9e.necrons.weapon.relic_gauss_blaster
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
@@ -89,7 +87,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal]
-    abilities: "Living Lightning: At the start of the Fight phase, roll one D6 for each enemy unit within 6\". On a 4+, that unit suffers 1 mortal wound. Harbinger of Destruction: At the end of your Movement phase (if this model did not Fall Back), roll three D6. For each result of 4+, the closest visible enemy unit within 24\" suffers 1 mortal wound."
     weapons:
       - ref: wh40k_9e.necrons.weapon.plasmic_lance_shooting
       - ref: wh40k_9e.necrons.weapon.plasmic_lance_melee
@@ -114,7 +111,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal, dynasticAdvisors, ritesOfReanimation]
-    abilities: "Dynastic Advisors: only one CRYPTEK per detachment (unless special rule allows more). Rites of Reanimation: once per phase, at the end of the phase, pick one friendly DYNASTY INFANTRY unit within 3\" — that unit immediately makes Reanimation Protocol rolls."
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light_shooting
       - ref: wh40k_9e.necrons.weapon.staff_of_light_melee
@@ -141,7 +137,6 @@ units:
     oc: 2
     fnp: null
     rules: [reanimationProtocols, theirNumberIsLegion, objectiveSecured]
-    abilities: "Objective Secured. Reanimation Protocols. Their Number is Legion: re-roll RP rolls of 1."
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_flayer
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
@@ -168,7 +163,6 @@ units:
     oc: 2
     fnp: null
     rules: [reanimationProtocols, objectiveSecured]
-    abilities: "Objective Secured. Reanimation Protocols."
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_blaster
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
@@ -197,7 +191,6 @@ units:
     oc: 2
     fnp: null
     rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    abilities: "Hardwired for Destruction: re-roll hit rolls of 1."
     weapons:
       - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
       - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
@@ -222,7 +215,6 @@ units:
     oc: 2
     fnp: null
     rules: [reanimationProtocols]
-    abilities: "Dispersion Shield (wargear): 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.warscythe
     wargear_options:
@@ -248,7 +240,6 @@ units:
     oc: 1
     fnp: null
     rules: [reanimationProtocols, hyperspaceHunter]
-    abilities: "Hunters from Hyperspace: designate a unit at start of Shooting Phase — this unit re-rolls wound rolls of 1 against it. Hyperspace Hunter: can be set up in Hyperspace and arrive as Reinforcements."
     weapons:
       - ref: wh40k_9e.necrons.weapon.synaptic_disintegrator
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
@@ -275,7 +266,6 @@ units:
     oc: 0
     fnp: null
     rules: [livingMetal]
-    abilities: "Living Metal."
     weapons:
       - ref: wh40k_9e.necrons.weapon.feeder_mandibles
 
@@ -299,7 +289,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal, wraith_form]
-    abilities: "Wraith Form: 4+ invulnerable save."
     weapons:
       - ref: wh40k_9e.necrons.weapon.vicious_claws
     wargear_options:
@@ -329,7 +318,6 @@ units:
     oc: 3
     fnp: null
     rules: [livingMetal, fabricatorClawArray]
-    abilities: "Fabricator Claw Array: at end of Movement phase, repair one friendly DYNASTY VEHICLE within 3\" — that model regains D3 lost wounds. Gloom Prism (wargear): attempt to deny one psychic power per Psychic phase."
     weapons:
       - ref: wh40k_9e.necrons.weapon.particle_beamer
       - ref: wh40k_9e.necrons.weapon.automaton_claws
@@ -358,7 +346,6 @@ units:
     oc: 3
     fnp: null
     rules: [livingMetal, targetingRelay, quantumShielding]
-    abilities: "Quantum Shielding: 5+ invuln; unmodified wound rolls of 1/2/3 always fail. Targeting Relay: after this model shoots, choose one enemy unit it hit — friendly NECRONS units re-roll hit rolls of 1 against that unit until end of phase. Degrades at 7W and 4W."
     weapons:
       - ref: wh40k_9e.necrons.weapon.heat_ray_dispersed
       - ref: wh40k_9e.necrons.weapon.heat_ray_focused
@@ -387,7 +374,6 @@ units:
     oc: 3
     fnp: null
     rules: [livingMetal, quantumShielding]
-    abilities: "Quantum Shielding: 5+ invuln; unmodified wound rolls of 1/2/3 always fail."
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_cannon
       - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
@@ -412,7 +398,6 @@ units:
     oc: 1
     fnp: null
     rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    abilities: "Hardwired for Destruction: re-roll hit rolls of 1."
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_destructor
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
