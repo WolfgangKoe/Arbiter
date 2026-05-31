@@ -18,3 +18,99 @@ subfactions:
           type: invuln_save
           target: self
           modifier: 6
+
+  - id: mephrit
+    name_en: Mephrit
+    abilities:
+      - id: necrons.dynasty.mephrit.talent_for_annihilation
+        name_en: Talent for Annihilation
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "Each time a model in this unit makes a ranged attack that targets an enemy unit within half of the attacking weapon's maximum range, improve the AP characteristic of that attack by 1."
+        trigger:
+          timing: persistent
+          phase: shooting
+          stage: active
+          player: active
+        conditions: []
+        effect:
+          type: buff_ap
+          target: self
+          modifier: 1
+
+  - id: nihilakh
+    name_en: Nihilakh
+    abilities:
+      - id: necrons.dynasty.nihilakh.acquisitive_grasp
+        name_en: Acquisitive Grasp
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "While this unit is within range of an objective marker that you control, models in this unit cannot Fall Back."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions:
+          - has_rules: [nihilakhAcquisitiveGrasp]
+        effect:
+          type: restriction
+          target: self
+          handler: nihilakhFallBack
+
+  - id: novokh
+    name_en: Novokh
+    abilities:
+      - id: necrons.dynasty.novokh.savage_hunters
+        name_en: Savage Hunters
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "Add 1 to charge rolls made for this unit. In addition, each time a model in this unit makes a melee attack, if the attacking unit made a charge move, was charged, or performed a Heroic Intervention this turn, add 1 to that attack's hit roll."
+        trigger:
+          timing: persistent
+          phase: fight
+          stage: active
+          player: active
+        conditions: []
+        effect:
+          type: complex
+          target: self
+          handler: novokhSavageHunters
+
+  - id: sautekh
+    name_en: Sautekh
+    abilities:
+      - id: necrons.dynasty.sautekh.relentless_expansionists
+        name_en: Relentless Expansionists
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "Add 3\" to Advance rolls made for this unit. In addition, each time a model in this unit makes a ranged attack, if this unit Advanced this turn, treat Assault weapons as stationary for the purposes of hit roll penalties."
+        trigger:
+          timing: persistent
+          phase: movement
+          stage: active
+          player: active
+        conditions: []
+        effect:
+          type: complex
+          target: self
+          handler: sautekh_advance
+
+  - id: szarekhan
+    name_en: Szarekhan
+    abilities:
+      - id: necrons.dynasty.szarekhan.loyal_to_the_triarch
+        name_en: Loyal to the Triarch
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "Each time a SZAREKHAN unit uses a Command Protocol, the unit can use both the primary and secondary effects of that protocol."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: active
+        conditions: []
+        effect:
+          type: complex
+          target: self
+          handler: szarekhanProtocol

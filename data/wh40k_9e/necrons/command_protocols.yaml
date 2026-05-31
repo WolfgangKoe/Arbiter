@@ -29,3 +29,9 @@ protocols:
     primary: "Reanimationsprotokolle neu würfeln"
     secondary: "+1 Modell pro Reanimationsprotokoll zurückgebracht"
     auto_round_1: false
+  - id: vengeful_stars
+    name_en: Protocol of the Vengeful Stars
+    name_de: Protokoll der rachsüchtigen Sterne
+    primary: "+1 auf Verwundungswürfe (Fernkampf)"
+    secondary: "AP von Fernkampfwaffen um 1 verbessern"
+    auto_round_1: false
