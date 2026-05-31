@@ -11,248 +11,140 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Aktueller Status Necrons-Datensatz
 
-Der Datensatz ist **NICHT vollständig** — folgende Lücken wurden identifiziert:
-
 | Datei | Status |
 |-------|--------|
-| `units.yaml` | ⚠️ 46 Einheiten, aber 5 fehlen; Triarch Stalker falsche Role; kein PL; keine Brackets |
+| `units.yaml` | ✅ 51 Einheiten, PL bei allen, Brackets bei 10, 5 neue Einheiten |
+| `weapons.yaml` | ⚠️ 97 Waffen — aber Dual-Profile-Waffen als 2 Objekte statt `profiles`-Liste |
 | `stratagems.yaml` | ✅ 59 Stratagems |
-| `faction_abilities.yaml` | ✅ 7 abilities |
-| `unit_abilities.yaml` | ⚠️ 8 abilities — ~10 neue für fehlende Einheiten nötig |
-| `wargear_abilities.yaml` | ✅ 12 abilities |
-| `wargear.yaml` | ✅ 13 Items |
+| `faction_abilities.yaml` | ✅ |
+| `unit_abilities.yaml` | ✅ 8 + 13 neue Abilities |
+| `wargear_abilities.yaml` | ✅ |
+| `wargear.yaml` | ⚠️ Struktur unklar für Loader |
 | `subfaction_abilities.yaml` | ✅ 6 Dynastien |
-| `command_protocols.yaml` | ✅ 6 Protokolle |
-| `warlord_traits.yaml` | ✅ 13 Traits |
-| `arkana.yaml` | ✅ 12 Cryptek-Arkana |
-| `relics.yaml` | ✅ 6 Relikte |
-| `weapons.yaml` | ⚠️ 93 Waffen — 4 neue nötig für fehlende Einheiten |
-| `weapon_abilities.yaml` | ✅ 44 abilities |
-| `army_rules.yaml` | ✅ Armeebau-Regeln |
-| `points.yaml` | ❌ Fehlt komplett (neue Datei) |
+| `command_protocols.yaml` | ⚠️ Struktur unklar für Loader |
+| `warlord_traits.yaml` | ⚠️ Struktur unklar für Loader |
+| `arkana.yaml` | ⚠️ Struktur unklar für Loader |
+| `relics.yaml` | ⚠️ Struktur unklar für Loader |
+| `weapon_abilities.yaml` | ✅ |
+| `army_rules.yaml` | ✅ |
+| `points.yaml` | ⚠️ Existiert — aber Wargear-Optionen mit Kosten fehlen noch |
+
+**Forge World / Legends Einheiten:** noch nicht importiert (bewusst zurückgestellt)
 
 ---
 
-## Plan: Was zu tun ist
+## Ziel dieser Session: Ziel-5-Architektur
 
-### Schritt 1 — Datenbeschaffung (Subagent, parallel)
-Alle fehlenden Werte von Wahapedia holen:
-- PL für alle 46 bestehenden Einheiten
-- Punktwerte für alle 46 bestehenden Einheiten
-- Fehlende Brackets: Canoptek Doomstalker, Ghost Ark, Night Scythe, Doom Scythe, Tesseract Vault
-- Fehlende Daten für neue Einheiten: Canoptek Plasmacyte (PL + Punkte), Hexmark Destroyer (PL)
+**Kurzfassung:** Der Datensatz ist inhaltlich weit, aber die YAML-Strukturen sind organisch gewachsen — nie vom Loader her gedacht. Bevor 5c (Loader) implementiert wird, muss die Architektur klar sein.
 
-URL-Pattern: `https://wahapedia.ru/wh40k9ed/factions/necrons/{Unit-Slug}`
+Vollständige Analyse und Schulden-Diagnose: `docs/work/ziel5_architektur_review.md`
 
 ---
 
-### Schritt 2 — `weapons.yaml`: 4 neue Waffen
+### Schritt 1 — Loader-Vertrag definieren (Hauptaufgabe)
 
-| Waffe | Einheit | Stats |
-|-------|---------|-------|
-| `transdimensional_abductor` | Convergence of Dominion | Assault D3, 12", S4, AP-3, D3 |
-| `monomolecular_proboscis` | Canoptek Plasmacyte | Melee, User, AP-1, D1 |
-| `enmitic_disintegrator_pistol` | Hexmark Destroyer | Pistol 1, 18", S6, AP-1, D1 |
-| `crackling_tendrils` | Transcendent C'tan | Melee, User, AP-4, D D6 |
+**Vor allem anderen:** Diese Fragen beantworten und in `docs/spec/army_builder.md` festhalten.
 
-`tesla_sphere` existiert bereits (Tesseract Vault) → für Obelisk wiederverwenden.
+**A. Was liest der Loader zur Laufzeit?**
+
+Unklar bei: `wargear.yaml`, `arkana.yaml`, `relics.yaml`, `warlord_traits.yaml`, `command_protocols.yaml`
+
+Fragen:
+- Wargear-Optionen stehen in `units.yaml` — was ist in `wargear.yaml` *zusätzlich*?
+- Arkana: sind das Crusade-only-Daten oder auch Matched Play relevant?
+- Relics / Warlord Traits: wann werden sie geladen — immer, oder nur bei Crusade?
+- Command Protocols: wann getriggert — sind das Faction Abilities oder eigene Mechanik?
+
+**B. Welche Daten sind spielmechanisch aktiv vs. nur Anzeige?**
+
+Spielmechanisch aktiv (Loader braucht sie zur Laufzeit):
+- Units, Weapons, Points, Damage Brackets, Stratagems (CP-Kosten)
+
+Nur Anzeige (Loader kann lazy laden):
+- Warlord Traits, Relics, Arkana, Wargear-Beschreibungen
+
+**C. Vollständige Feldliste pro Katalog-Datei**
+Keine "könnte nützlich sein"-Felder — nur was der Loader braucht.
 
 ---
 
-### Schritt 3 — `unit_abilities.yaml`: neue Abilities
+### Schritt 2 — Schema-Bereinigung
 
-Neue Ability-IDs für neue Einheiten:
-- **Convergence of Dominion:** `dominionProtocols`, `dynasticCommandNode`, `translocationProtocols`
-- **Canoptek Plasmacyte:** `viralConstruct`, `evasionProtocol`, `infusedMadness`
-- **Hexmark Destroyer:** `inescapableDeath`, `multiThreatEliminator`
-- **Transcendent C'tan:** `enslavedStarGod`, `realityUnravels`, `fracturedPersonality`
-- **Obelisk:** `hoveringSentinel`, `gravityPulse`
+Nach Freigabe des Loader-Vertrags:
 
----
+**weapons.yaml:** Dual-Profile-Waffen zusammenführen
 
-### Schritt 4 — `units.yaml`: vier Änderungsblöcke
-
-#### 4a. `power_level` zu allen 46 Einheiten inline ergänzen
+Aktuell (falsch):
 ```yaml
-power_level: 11   # bei models_min; Loader skaliert proportional
+- id: wh40k_9e.necrons.weapon.staff_of_light_shooting
+- id: wh40k_9e.necrons.weapon.staff_of_light_melee
 ```
 
-#### 4b. Battlefield Role Triarch Stalker korrigieren
+Ziel (korrekt):
 ```yaml
-# ALT:
-battlefield_role: [Heavy Support]
-# NEU:
-battlefield_role: [Elites]
-```
-Bestätigt durch Wahapedia-Datenblatt und Screenshot.
-
-#### 4c. `damage_bracket` zu 10 Einheiten ergänzen (wounds > 9)
-
-| Einheit | W | Brackets | Degradiert |
-|---------|---|----------|------------|
-| Triarch Stalker | 12 | 7-12 / 4-6 / 1-3 | M, WS, BS |
-| Canoptek Doomstalker | 12 | noch fetchen | — |
-| Ghost Ark | 14 | noch fetchen | — |
-| Doomsday Ark | 14 | 8-14 / 4-7 / 1-3 | M, BS, A |
-| Night Scythe | 12 | noch fetchen | — |
-| Doom Scythe | 12 | noch fetchen | — |
-| Obelisk | 28 | 15-28 / 8-14 / 1-7 | M, BS, A |
-| The Silent King | 16 | 9-16 / 5-8 / 1-4 | M, A |
-| Monolith | 24 | 13-24 / 7-12 / 1-6 | M, BS, A |
-| Tesseract Vault | 30 | noch fetchen | — |
-
-Format:
-```yaml
-damage_bracket:
-  - wounds_min: 7
-    wounds_max: 12
-    move: "10\""
-    ws: "3+"
-    bs: "3+"
-    attacks: 3
-  - wounds_min: 4
-    wounds_max: 6
-    move: "8\""
-    ws: "4+"
-    bs: "4+"
-    attacks: 3
-  - wounds_min: 1
-    wounds_max: 3
-    move: "6\""
-    ws: "5+"
-    bs: "5+"
-    attacks: 3
+- id: wh40k_9e.necrons.weapon.staff_of_light
+  name_en: Staff of Light
+  profiles:
+    - name: Shooting
+      weapon_type: Assault
+      range_inches: 18
+      attacks: "3"
+      strength: "5"
+      ap: "-2"
+      damage: "1"
+      is_melee: false
+    - name: Melee
+      weapon_type: Melee
+      range_inches: 0
+      attacks: "*"
+      strength: "User"
+      ap: "-2"
+      damage: "1"
+      is_melee: true
 ```
 
-#### 4d. 5 neue Einheiten ergänzen
+Waffen mit nur einem Profil: ebenfalls `profiles`-Liste mit einem Eintrag. Einheitlich.
+Scope: ~50 Waffen betroffen. Referenzen in `units.yaml` müssen angepasst werden (kein `_shooting`/`_melee` mehr).
 
-**Canoptek Plasmacyte** (Elites)
-```
-M 8" / WS 4+ / BS 4+ / S 4 / T 5 / W 1 / A 1 / Ld 10 / Sv 4+
-Keywords: BEAST, FLY, CANOPTEK, CANOPTEK PLASMACYTE
-models_min: 1, models_max: 1
-rules: [livingMetal, viralConstruct, evasionProtocol, infusedMadness, dimensionalTranslocation]
-weapons: monomolecular_proboscis
-PL: fetchen | Punkte: fetchen
-```
+**Alle anderen Katalog-Dateien:** Struktur auf Loader-Vertrag ausrichten.
 
-**Hexmark Destroyer** (Elites)
-```
-M 8" / WS 3+ / BS 2+ / S 5 / T 5 / W 5 / A 4 / Ld 10 / Sv 3+
-Keywords: INFANTRY, CHARACTER, DESTROYER CULT, HYPERSPACE HUNTER, HEXMARK DESTROYER
-models_min: 1, models_max: 1
-rules: [livingMetal, dimensionalTranslocation, inescapableDeath, multiThreatEliminator, hardwiredForDestruction]
-weapons: enmitic_disintegrator_pistol (×6)
-PL: fetchen | Punkte: 65
-```
-
-**Transcendent C'tan** (Elites)
-```
-M 8" / WS 2+ / BS 2+ / S 6 / T 7 / W 9 / A 5 / Ld 10 / Sv 4+ / Invuln 4+
-Keywords: MONSTER, CHARACTER, FLY, C'TAN SHARD, TRANSCENDENT C'TAN
-models_min: 1, models_max: 1
-rules: [livingMetal, necrodermis, enslavedStarGod, realityUnravels, fracturedPersonality, ctanPowers]
-weapons: crackling_tendrils
-PL: 14 | Punkte: 230
-```
-
-**Obelisk** (Lords of War)
-```
-M 8" / WS 6+ / BS 3+ / S 8 / T 8 / W 28 / A 6 / Ld 10 / Sv 2+
-Keywords: VEHICLE, CORE, TITANIC, FLY, OBELISK
-models_min: 1, models_max: 1
-rules: [livingMetal, deathDescending, hoveringSentinel, gravityPulse]
-weapons: tesla_sphere (×4)
-PL: 17 | Punkte: 270
-Bracket: 15-28 / 8-14 / 1-7 → M, BS, A degradieren
-```
-
-**Convergence of Dominion** (Fortification)
-```
-M – / WS – / BS 3+ / S 6 / T 8 / W 6 / A – / Ld – / Sv 3+
-Keywords: BUILDING, CORE, VEHICLE, STARSTELE, CONVERGENCE OF DOMINION
-models_min: 3, models_max: 3  (Codex: 3 Starstele; Wahapedia zeigt 1-10 → verifizieren)
-rules: [livingMetal, dominionProtocols, dynasticCommandNode, translocationProtocols]
-weapons: transdimensional_abductor
-PL: 4 | Punkte: 80/Modell
-```
+**points.yaml:** Wargear-Optionen mit Kosten > 0 ergänzen.
 
 ---
 
-### Schritt 5 — `points.yaml`: neue Datei
+### Schritt 3 — Forge World Einheiten ergänzen
 
-```yaml
-# Punktkosten für Matched Play (9E, Codex Necrons)
-# Quelle: Wahapedia / Chapter Approved
+Nach Schema-Bereinigung: FW-Einheiten als eigene Sektion in `units.yaml`.
 
-units:
-  wh40k_9e.necrons.unit.warriors:             { per_model: 13 }
-  wh40k_9e.necrons.unit.overlord:             { per_unit: 90 }
-  wh40k_9e.necrons.unit.triarch_stalker:      { per_unit: 110 }
-  wh40k_9e.necrons.unit.doomsday_ark:         { per_unit: 145 }
-  wh40k_9e.necrons.unit.the_silent_king:      { per_unit: 400 }
-  wh40k_9e.necrons.unit.obelisk:              { per_unit: 270 }
-  wh40k_9e.necrons.unit.hexmark_destroyer:    { per_unit: 65 }
-  wh40k_9e.necrons.unit.transcendent_ctan:    { per_unit: 230 }
-  wh40k_9e.necrons.unit.convergence_of_dominion: { per_model: 80 }
-  # ... restliche 42 Einheiten aus Schritt 1 ...
-
-wargear:
-  wh40k_9e.necrons.wargear.resurrection_orb: { points: 25 }
-  # Alle anderen Wargear-Optionen = 0 (Default)
-```
-
----
-
-### Schritt 6 — `army_builder.md`: neue Felder dokumentieren
-
-- `power_level: int` (bei models_min; Loader skaliert)
-- `damage_bracket: list` (nur bei wounds > 9)
-- Schema für `points.yaml` (per_model vs per_unit, wargear)
-
----
-
-## Forge World / Legends (aktuell außer Scope)
-
-Im Wahapedia Army List mit Symbol markiert — nicht im Standardkodex:
+Kandidaten (Wahapedia, mit FW-Symbol):
 Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites,
 Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon,
 Seraptek Heavy Construct, Sentry Pylon.
 
-→ Separater Scope falls gewünscht.
+Daten von Wahapedia fetchen (Subagent).
 
 ---
 
-## Verifikation nach Abschluss
+### Schritt 4 — Loader implementieren (Ziel 5c)
 
-```bash
-grep "power_level" data/wh40k_9e/necrons/units.yaml | wc -l    # → 51
-grep "damage_bracket" data/wh40k_9e/necrons/units.yaml | wc -l  # → 10
-grep -c "^  - id:" data/wh40k_9e/necrons/units.yaml              # → 51
-grep "convergence_of_dominion" data/wh40k_9e/necrons/units.yaml  # → Treffer
-grep "Elites" data/wh40k_9e/necrons/units.yaml | grep stalker    # → Triarch korrekt
-```
+Erst wenn Schema stabil und freigegeben:
+- `src/gameObjects/loader.py` vollständig lesen
+- Plan zeigen, Freigabe abwarten
+- Dann implementieren
 
 ---
 
-## Nach diesem Plan: Ziel 5c — Loader Refactoring
+## Betroffene Dateien (Schritt 2)
 
-**Betroffene Datei:** `src/gameObjects/loader.py`
-
-Der aktuelle Loader lädt `army.yaml`. Nach dem Datensatz-Abschluss wird er refactored,
-um den vollständigen Datensatz (units, weapons, wargear, abilities, points etc.) zu nutzen.
-
-Vor dem Start: `loader.py` vollständig lesen und aktuellen Zustand verstehen, dann Plan zeigen.
+| Datei | Aktion |
+|-------|--------|
+| `docs/spec/army_builder.md` | Loader-Vertrag vollständig ausformulieren |
+| `data/wh40k_9e/necrons/weapons.yaml` | Dual-Profile-Waffen → `profiles`-Liste |
+| `data/wh40k_9e/necrons/units.yaml` | Waffen-Referenzen anpassen (kein `_shooting`/`_melee`) |
+| `data/wh40k_9e/necrons/points.yaml` | Wargear-Kosten ergänzen |
+| Alle anderen YAML-Dateien | Schema-Bereinigung nach Loader-Vertrag |
 
 ---
-
-## Architektur-Kurzreferenz
-
-```
-src/gameObjects/loader.py     ← aktiv, lädt army.yaml (bis Ziel 5c)
-data/wh40k_9e/necrons/        ← alle Necron-Daten (noch unvollständig)
-data/wh40k_9e/_shared/        ← detachment_types.yaml
-```
 
 ## Wichtige Constraints
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
