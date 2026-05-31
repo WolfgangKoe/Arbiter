@@ -1075,6 +1075,58 @@ weapons:
     abilities: "Each time an attack is allocated to a model, that model can only take a saving throw if it is an invulnerable save."
     is_melee: true
 
+  # ── Convergence of Dominion ───────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.transdimensional_abductor
+    name_en: Transdimensional Abductor
+    weapon_type: Assault
+    range_inches: 12
+    attacks: "D3"
+    strength: "4"
+    ap: "-3"
+    damage: "3"
+    abilities: ""
+    is_melee: false
+
+  # ── Canoptek Plasmacyte ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.monomolecular_proboscis
+    name_en: Monomolecular Proboscis
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: true
+
+  # ── Hexmark Destroyer ─────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
+    name_en: Enmitic Disintegrator Pistol
+    weapon_type: Pistol
+    range_inches: 18
+    attacks: "1"
+    strength: "6"
+    ap: "-1"
+    damage: "1"
+    abilities: ""
+    is_melee: false
+
+  # ── Transcendent C'tan ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.crackling_tendrils
+    name_en: Crackling Tendrils
+    weapon_type: Melee
+    range_inches: 0
+    attacks: "*"
+    strength: "User"
+    ap: "-4"
+    damage: "D6"
+    abilities: ""
+    is_melee: true
+
   # ── Shared / Default ──────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.weapon.close_combat_weapon

@@ -1,0 +1,87 @@
+# Necrons points — Matched Play (9E, Codex Necrons + Chapter Approved)
+# Source: Wahapedia verification 2026-05-31
+# Format:
+#   per_unit: flat cost regardless of model count
+#   per_model: cost × current model count (loader multiplies)
+# Wargear: only entries with cost > 0 are listed (default is 0)
+
+units:
+
+  # ── HQ ────────────────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.overlord:                 { per_unit: 90 }
+  wh40k_9e.necrons.unit.royal_warden:             { per_unit: 70 }
+  wh40k_9e.necrons.unit.plasmancer:               { per_unit: 65 }
+  wh40k_9e.necrons.unit.technomancer:             { per_unit: 70 }
+  wh40k_9e.necrons.unit.psychomancer:             { per_unit: 65 }
+  wh40k_9e.necrons.unit.chronomancer:             { per_unit: 75 }
+  wh40k_9e.necrons.unit.necron_lord:              { per_unit: 65 }
+  wh40k_9e.necrons.unit.lokhust_lord:             { per_unit: 100 }
+  wh40k_9e.necrons.unit.skorpekh_lord:            { per_unit: 130 }
+  wh40k_9e.necrons.unit.catacomb_command_barge:   { per_unit: 145 }
+  wh40k_9e.necrons.unit.illuminor_szeras:         { per_unit: 145 }
+  wh40k_9e.necrons.unit.orikan_the_diviner:       { per_unit: 100 }
+  wh40k_9e.necrons.unit.trazyn_the_infinite:      { per_unit: 90 }
+  wh40k_9e.necrons.unit.nemesor_zahndrekh:        { per_unit: 125 }
+  wh40k_9e.necrons.unit.vargard_obyron:           { per_unit: 90 }
+  wh40k_9e.necrons.unit.anrakyr_the_traveller:    { per_unit: 130 }
+  wh40k_9e.necrons.unit.imotekh_the_stormlord:    { per_unit: 130 }
+
+  # ── Troops ────────────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.warriors:                 { per_model: 11 }
+  wh40k_9e.necrons.unit.immortals:                { per_model: 16 }
+
+  # ── Elites ────────────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.skorpekh_destroyers:      { per_model: 30 }
+  wh40k_9e.necrons.unit.lychguard:                { per_model: 25 }
+  wh40k_9e.necrons.unit.deathmarks:               { per_model: 13 }
+  wh40k_9e.necrons.unit.canoptek_spyder:          { per_model: 60 }
+  wh40k_9e.necrons.unit.triarch_praetorians:      { per_model: 20 }
+  wh40k_9e.necrons.unit.flayed_ones:              { per_model: 10 }
+  wh40k_9e.necrons.unit.canoptek_reanimator:      { per_unit: 80 }
+  wh40k_9e.necrons.unit.cryptothralls:            { per_unit: 40 }
+  wh40k_9e.necrons.unit.canoptek_plasmacyte:      { per_unit: 15 }
+  wh40k_9e.necrons.unit.hexmark_destroyer:        { per_unit: 65 }
+  wh40k_9e.necrons.unit.transcendent_ctan:        { per_unit: 230 }
+
+  # ── Fast Attack ───────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.canoptek_scarabs:         { per_model: 15 }
+  wh40k_9e.necrons.unit.canoptek_wraiths:         { per_model: 35 }
+  wh40k_9e.necrons.unit.tomb_blades:              { per_model: 18 }
+  wh40k_9e.necrons.unit.ophydian_destroyers:      { per_model: 30 }
+
+  # ── Heavy Support ─────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.triarch_stalker:          { per_unit: 110 }
+  wh40k_9e.necrons.unit.annihilation_barge:       { per_unit: 120 }
+  wh40k_9e.necrons.unit.lokhust_heavy_destroyers: { per_model: 50 }
+  wh40k_9e.necrons.unit.lokhust_destroyers:       { per_model: 40 }
+  wh40k_9e.necrons.unit.canoptek_doomstalker:     { per_unit: 130 }
+  wh40k_9e.necrons.unit.doomsday_ark:             { per_unit: 145 }
+  wh40k_9e.necrons.unit.ghost_ark:                { per_unit: 115 }
+
+  # ── Flyer ─────────────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.night_scythe:             { per_unit: 120 }
+  wh40k_9e.necrons.unit.doom_scythe:              { per_unit: 165 }
+
+  # ── Lord of War ───────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.the_silent_king:          { per_unit: 400 }
+  wh40k_9e.necrons.unit.monolith:                 { per_unit: 270 }
+  wh40k_9e.necrons.unit.c_tan_nightbringer:       { per_unit: 320 }
+  wh40k_9e.necrons.unit.c_tan_deceiver:           { per_unit: 300 }
+  wh40k_9e.necrons.unit.c_tan_void_dragon:        { per_unit: 300 }
+  wh40k_9e.necrons.unit.tesseract_vault:          { per_unit: 360 }
+  wh40k_9e.necrons.unit.obelisk:                  { per_unit: 270 }
+
+  # ── Fortification ─────────────────────────────────────────────────────────
+
+  wh40k_9e.necrons.unit.convergence_of_dominion:  { per_model: 80 }
+
+wargear:
+  # Only wargear with points cost > 0
+  wh40k_9e.necrons.wargear.resurrection_orb:      { points: 25 }

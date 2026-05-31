@@ -125,6 +125,265 @@ abilities:
       type: deep_strike
       target: self
 
+  # ── Canoptek Plasmacyte ────────────────────────────────────────────────────
+
+  - id: necrons.unit.canoptek_plasmacyte.viral_construct
+    name_en: Viral Construct
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+    rule_text: "Once per battle, at the start of any Fight phase, if this model is within 1\" of a friendly SKORPEKH DESTROYERS or OPHYDIAN DESTROYERS unit, you can select that unit. Until the end of the phase, each time a model in that unit makes an attack, add 1 to the Strength and Attacks characteristics of that attack."
+    trigger:
+      timing: phase_start
+      phase: fight
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [viralConstruct]
+        within_inches: 1
+    effect:
+      type: buff_stat
+      target: selected_unit
+      stat: [strength, attacks]
+      modifier: 1
+
+  - id: necrons.unit.canoptek_plasmacyte.evasion_protocol
+    name_en: Evasion Protocol
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+    rule_text: "This model has a 5+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [evasionProtocol]
+    effect:
+      type: invuln_save
+      target: self
+      value: 5
+
+  - id: necrons.unit.canoptek_plasmacyte.infused_madness
+    name_en: Infused Madness
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+    rule_text: "Each time this model is destroyed, roll one D6: on a 4+, the closest enemy unit within 6\" suffers 1 mortal wound."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions:
+      - has_rules: [infusedMadness]
+    effect:
+      type: mortal_wounds
+      target: closest_enemy_within_6
+      amount: 1
+      roll_threshold: 4
+
+  # ── Hexmark Destroyer ─────────────────────────────────────────────────────
+
+  - id: necrons.unit.hexmark_destroyer.inescapable_death
+    name_en: Inescapable Death
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.hexmark_destroyer
+    rule_text: "Each time an enemy unit Falls Back within 9\" of this model, this model can make a ranged attack against that unit."
+    trigger:
+      timing: phase_reactive
+      phase: movement
+      stage: active
+      player: inactive
+      event: enemy_falls_back
+    conditions:
+      - has_rules: [inescapableDeath]
+        within_inches: 9
+    effect:
+      type: free_attack
+      target: falling_back_unit
+      handler: inescapableDeath
+
+  - id: necrons.unit.hexmark_destroyer.multi_threat_eliminator
+    name_en: Multi-threat Eliminator
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.hexmark_destroyer
+    rule_text: "Each time this model makes a ranged attack, re-roll a hit roll of 1. If the target is a CHARACTER, re-roll all failed hit rolls instead."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [multiThreatEliminator]
+    effect:
+      type: reroll_hits
+      target: self
+      reroll: 1
+      bonus_vs_character: reroll_all_failed
+
+  # ── Transcendent C'tan ────────────────────────────────────────────────────
+
+  - id: necrons.unit.transcendent_ctan.enslaved_star_god
+    name_en: Enslaved Star God
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.transcendent_ctan
+    rule_text: "Friendly NECRONS units (other than C'TAN SHARDS) automatically pass Morale tests while they are within 12\" of any friendly C'TAN SHARD models."
+    trigger:
+      timing: persistent
+      phase: morale
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [enslavedStarGod]
+        within_inches: 12
+    effect:
+      type: auto_pass_morale
+      target: friendly_non_ctan
+
+  - id: necrons.unit.transcendent_ctan.reality_unravels
+    name_en: Reality Unravels
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.transcendent_ctan
+    rule_text: "At the start of each battle round, you can roll one D6; on a 4+, pick one enemy unit. That unit suffers D3 mortal wounds."
+    trigger:
+      timing: round_start
+      phase: any
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [realityUnravels]
+    effect:
+      type: mortal_wounds
+      target: selected_enemy
+      amount: "D3"
+      roll_threshold: 4
+
+  - id: necrons.unit.transcendent_ctan.fractured_personality
+    name_en: Fractured Personality
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.transcendent_ctan
+    rule_text: "At the start of the battle, before deployment, randomly select one of the C'tan Powers this model knows. It can use that power twice per battle instead of once."
+    trigger:
+      timing: pre_battle
+      phase: any
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [fracturedPersonality]
+    effect:
+      type: double_use_power
+      target: self
+      handler: fracturedPersonality
+
+  # ── Obelisk ───────────────────────────────────────────────────────────────
+
+  - id: necrons.unit.obelisk.hovering_sentinel
+    name_en: Hovering Sentinel
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.obelisk
+    rule_text: "At the end of your Movement phase, if this model did not move this turn, until the start of your next Movement phase, this model is considered to not have FLY for the purposes of charging and being charged."
+    trigger:
+      timing: phase_end
+      phase: movement
+      stage: end
+      player: active
+    conditions:
+      - has_rules: [hoveringSentinel]
+        did_not_move: true
+    effect:
+      type: toggle_keyword
+      target: self
+      keyword: FLY
+      remove: true
+
+  - id: necrons.unit.obelisk.gravity_pulse
+    name_en: Gravity Pulse
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.obelisk
+    rule_text: "Once per battle, at the start of your Shooting phase, select one enemy unit within 24\" of this model. Until the start of your next turn, subtract 2 from any Advance and Charge rolls made for that unit."
+    trigger:
+      timing: phase_start
+      phase: shooting
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [gravityPulse]
+        within_inches: 24
+    effect:
+      type: debuff_roll
+      target: selected_enemy
+      stat: [advance_roll, charge_roll]
+      modifier: -2
+
+  # ── Convergence of Dominion ────────────────────────────────────────────────
+
+  - id: necrons.unit.convergence_of_dominion.dominion_protocols
+    name_en: Dominion Protocols
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.convergence_of_dominion
+    rule_text: "Each time a model in a friendly DYNASTY unit within 6\" of any STARSTELE models from your army would lose a wound, roll one D6: on a 6, that wound is not lost."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [dominionProtocols]
+        within_inches: 6
+    effect:
+      type: fnp
+      target: friendly_dynasty_units
+      value: 6
+
+  - id: necrons.unit.convergence_of_dominion.dynastic_command_node
+    name_en: Dynastic Command Node
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.convergence_of_dominion
+    rule_text: "While a friendly DYNASTY INFANTRY unit is within 6\" of any STARSTELE models from your army, models in that unit can use the Command phase ability of their unit even if that ability has already been used this turn."
+    trigger:
+      timing: persistent
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [dynasticCommandNode]
+        within_inches: 6
+    effect:
+      type: allow_repeat_ability
+      target: friendly_infantry_within_6
+      handler: dynasticCommandNode
+
+  - id: necrons.unit.convergence_of_dominion.translocation_protocols
+    name_en: Translocation Protocols
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.convergence_of_dominion
+    rule_text: "At the end of your Movement phase, you can select one STARSTELE model from your army that did not move this turn. Remove that model from the battlefield, then set it up anywhere on the battlefield that is more than 3\" from any enemy models."
+    trigger:
+      timing: phase_end
+      phase: movement
+      stage: end
+      player: active
+    conditions:
+      - has_rules: [translocationProtocols]
+        did_not_move: true
+    effect:
+      type: teleport
+      target: self_model
+      restriction: more_than_3_from_enemy
+
   # ── Heavy Support ──────────────────────────────────────────────────────────
 
   - id: necrons.unit.canoptek_spyder.fabricator_claw_array

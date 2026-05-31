@@ -21,6 +21,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
+    power_level: 6
     move: "6\""
     ws: "2+"
     bs: "2+"
@@ -51,6 +52,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 4
     move: "6\""
     ws: "3+"
     bs: "2+"
@@ -75,6 +77,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -99,6 +102,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -125,6 +129,7 @@ units:
     wounds: 1
     models_min: 10
     models_max: 20
+    power_level: 6
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -151,6 +156,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 10
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -179,6 +185,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 6
+    power_level: 4
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -203,6 +210,7 @@ units:
     wounds: 2
     models_min: 5
     models_max: 10
+    power_level: 7
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -228,6 +236,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 10
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "2+"
@@ -254,6 +263,7 @@ units:
     wounds: 4
     models_min: 3
     models_max: 9
+    power_level: 2
     move: "10\""
     ws: "4+"
     bs: "-"
@@ -277,6 +287,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 6
+    power_level: 6
     move: "12\""
     ws: "4+"
     bs: "4+"
@@ -306,6 +317,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 3
+    power_level: 4
     move: "6\""
     ws: "4+"
     bs: "4+"
@@ -329,11 +341,12 @@ units:
   - id: wh40k_9e.necrons.unit.triarch_stalker
     name_en: Triarch Stalker
     name_de: Triarch-Stalker
-    battlefield_role: [Heavy Support]
+    battlefield_role: [Elites]
     keywords: [VEHICLE, CORE, DYNASTIC AGENT, QUANTUM SHIELDING, TRIARCH, TRIARCH STALKER]
     wounds: 12
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "10\""
     ws: "3+"
     bs: "3+"
@@ -345,6 +358,22 @@ units:
     leadership: 10
     oc: 3
     fnp: null
+    damage_bracket:
+      - wounds_min: 7
+        wounds_max: 12
+        move: "10\""
+        ws: "3+"
+        bs: "3+"
+      - wounds_min: 4
+        wounds_max: 6
+        move: "8\""
+        ws: "4+"
+        bs: "4+"
+      - wounds_min: 1
+        wounds_max: 3
+        move: "6\""
+        ws: "5+"
+        bs: "5+"
     rules: [livingMetal, targetingRelay, quantumShielding]
     weapons:
       - ref: wh40k_9e.necrons.weapon.heat_ray_dispersed
@@ -362,6 +391,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "12\""
     ws: "6+"
     bs: "3+"
@@ -386,6 +416,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 3
+    power_level: 3
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -414,6 +445,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 5
     move: "6\""
     ws: "3+"
     bs: "3+"
@@ -442,6 +474,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 6
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -470,6 +503,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "8\""
     ws: "2+"
     bs: "2+"
@@ -495,6 +529,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 1
+    power_level: 9
     move: "12\""
     ws: "2+"
     bs: "2+"
@@ -525,6 +560,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -549,6 +585,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
+    power_level: 5
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -577,6 +614,7 @@ units:
     wounds: 7
     models_min: 1
     models_max: 1
+    power_level: 8
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -602,6 +640,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
+    power_level: 6
     move: "5\""
     ws: "3+"
     bs: "3+"
@@ -625,6 +664,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 5
     move: "6\""
     ws: "2+"
     bs: "2+"
@@ -648,6 +688,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "6\""
     ws: "2+"
     bs: "2+"
@@ -672,6 +713,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 5
     move: "6\""
     ws: "2+"
     bs: "3+"
@@ -695,6 +737,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "6\""
     ws: "2+"
     bs: "2+"
@@ -719,6 +762,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 8
     move: "6\""
     ws: "2+"
     bs: "2+"
@@ -744,6 +788,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
+    power_level: 21
     move: "8\""
     ws: "2+"
     bs: "2+"
@@ -755,6 +800,19 @@ units:
     leadership: 10
     oc: 5
     fnp: null
+    damage_bracket:
+      - wounds_min: 9
+        wounds_max: 16
+        move: "8\""
+        attacks: 6
+      - wounds_min: 5
+        wounds_max: 8
+        move: "6\""
+        attacks: 4
+      - wounds_min: 1
+        wounds_max: 4
+        move: "4\""
+        attacks: 2
     rules: [livingMetal, noctilithBeacons, triarchsWill]
     weapons:
       - ref: wh40k_9e.necrons.weapon.annihilator_beam
@@ -774,6 +832,7 @@ units:
     wounds: 2
     models_min: 5
     models_max: 10
+    power_level: 6
     move: "10\""
     ws: "3+"
     bs: "3+"
@@ -800,6 +859,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 20
+    power_level: 2
     move: "5\""
     ws: "3+"
     bs: "6+"
@@ -823,6 +883,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
+    power_level: 4
     move: "8\""
     ws: "4+"
     bs: "4+"
@@ -847,6 +908,7 @@ units:
     wounds: 2
     models_min: 2
     models_max: 2
+    power_level: 2
     move: "5\""
     ws: "4+"
     bs: "4+"
@@ -873,6 +935,7 @@ units:
     wounds: 2
     models_min: 3
     models_max: 9
+    power_level: 4
     move: "14\""
     ws: "3+"
     bs: "3+"
@@ -899,6 +962,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 6
+    power_level: 4
     move: "10\""
     ws: "3+"
     bs: "3+"
@@ -926,6 +990,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 9
+    power_level: 6
     move: "8\""
     ws: "3+"
     bs: "3+"
@@ -952,6 +1017,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 3
+    power_level: 7
     move: "10\""
     ws: "4+"
     bs: "4+"
@@ -963,6 +1029,22 @@ units:
     leadership: 10
     oc: 3
     fnp: null
+    damage_bracket:
+      - wounds_min: 7
+        wounds_max: 12
+        move: "10\""
+        ws: "4+"
+        attacks: 3
+      - wounds_min: 4
+        wounds_max: 6
+        move: "8\""
+        ws: "5+"
+        attacks: 2
+      - wounds_min: 1
+        wounds_max: 3
+        move: "6\""
+        ws: "6+"
+        attacks: 1
     rules: [livingMetal, containmentField]
     weapons:
       - ref: wh40k_9e.necrons.weapon.doomsday_blaster_low
@@ -977,6 +1059,7 @@ units:
     wounds: 14
     models_min: 1
     models_max: 1
+    power_level: 8
     move: "12\""
     ws: "6+"
     bs: "3+"
@@ -988,6 +1071,22 @@ units:
     leadership: 10
     oc: 3
     fnp: null
+    damage_bracket:
+      - wounds_min: 8
+        wounds_max: 14
+        move: "12\""
+        bs: "3+"
+        attacks: 3
+      - wounds_min: 4
+        wounds_max: 7
+        move: "8\""
+        bs: "4+"
+        attacks: "D3"
+      - wounds_min: 1
+        wounds_max: 3
+        move: "4\""
+        bs: "5+"
+        attacks: 1
     rules: [livingMetal, quantumShielding]
     weapons:
       - ref: wh40k_9e.necrons.weapon.doomsday_cannon_low
@@ -1002,6 +1101,7 @@ units:
     wounds: 14
     models_min: 1
     models_max: 1
+    power_level: 8
     move: "12\""
     ws: "6+"
     bs: "3+"
@@ -1014,6 +1114,22 @@ units:
     oc: 3
     fnp: null
     transport_capacity: 10
+    damage_bracket:
+      - wounds_min: 8
+        wounds_max: 14
+        move: "12\""
+        bs: "3+"
+        attacks: 3
+      - wounds_min: 4
+        wounds_max: 7
+        move: "8\""
+        bs: "4+"
+        attacks: "D3"
+      - wounds_min: 1
+        wounds_max: 3
+        move: "4\""
+        bs: "5+"
+        attacks: 1
     rules: [livingMetal, quantumShielding, repairBarge]
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_flayer_array
@@ -1028,6 +1144,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
+    power_level: 7
     move: "20\""
     ws: "6+"
     bs: "3+"
@@ -1040,6 +1157,22 @@ units:
     oc: 3
     fnp: null
     transport_capacity: 20
+    damage_bracket:
+      - wounds_min: 7
+        wounds_max: 12
+        move: "20-50\""
+        bs: "3+"
+        attacks: 3
+      - wounds_min: 4
+        wounds_max: 6
+        move: "20-40\""
+        bs: "4+"
+        attacks: "D3"
+      - wounds_min: 1
+        wounds_max: 3
+        move: "20-30\""
+        bs: "5+"
+        attacks: 1
     rules: [livingMetal, supersonic]
     weapons:
       - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
@@ -1052,6 +1185,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
+    power_level: 9
     move: "20\""
     ws: "6+"
     bs: "3+"
@@ -1063,6 +1197,22 @@ units:
     leadership: 10
     oc: 3
     fnp: null
+    damage_bracket:
+      - wounds_min: 7
+        wounds_max: 12
+        move: "20-50\""
+        bs: "3+"
+        attacks: 3
+      - wounds_min: 4
+        wounds_max: 6
+        move: "20-40\""
+        bs: "4+"
+        attacks: "D3"
+      - wounds_min: 1
+        wounds_max: 3
+        move: "20-30\""
+        bs: "5+"
+        attacks: 1
     rules: [livingMetal, supersonic]
     weapons:
       - ref: wh40k_9e.necrons.weapon.heavy_death_ray
@@ -1078,6 +1228,7 @@ units:
     wounds: 24
     models_min: 1
     models_max: 1
+    power_level: 17
     move: "8\""
     ws: "6+"
     bs: "3+"
@@ -1089,6 +1240,22 @@ units:
     leadership: 10
     oc: 5
     fnp: null
+    damage_bracket:
+      - wounds_min: 13
+        wounds_max: 24
+        move: "8\""
+        bs: "3+"
+        attacks: 6
+      - wounds_min: 7
+        wounds_max: 12
+        move: "6\""
+        bs: "4+"
+        attacks: "D6"
+      - wounds_min: 1
+        wounds_max: 6
+        move: "4\""
+        bs: "5+"
+        attacks: "D3"
     rules: [livingMetal, deathDescending]
     weapons:
       - ref: wh40k_9e.necrons.weapon.gauss_flux_arc
@@ -1105,6 +1272,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 1
+    power_level: 19
     move: "8\""
     ws: "2+"
     bs: "2+"
@@ -1129,6 +1297,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 1
+    power_level: 18
     move: "8\""
     ws: "2+"
     bs: "2+"
@@ -1152,6 +1321,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 1
+    power_level: 18
     move: "8\""
     ws: "2+"
     bs: "2+"
@@ -1177,6 +1347,7 @@ units:
     wounds: 30
     models_min: 1
     models_max: 1
+    power_level: 23
     move: "8\""
     ws: "6+"
     bs: "3+"
@@ -1188,6 +1359,165 @@ units:
     leadership: 10
     oc: 5
     fnp: null
+    damage_bracket:
+      - wounds_min: 16
+        wounds_max: 30
+        move: "8\""
+        bs: "3+"
+        attacks: 6
+      - wounds_min: 9
+        wounds_max: 15
+        move: "6\""
+        bs: "4+"
+        attacks: "D6"
+      - wounds_min: 1
+        wounds_max: 8
+        move: "4\""
+        bs: "5+"
+        attacks: "D3"
     rules: [livingMetal, vengeanceOfTheEnchained, ctanPowers]
     weapons:
       - ref: wh40k_9e.necrons.weapon.tesla_sphere
+
+  # ── New Units (5b.1) ─────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+    name_en: Canoptek Plasmacyte
+    name_de: Canoptek-Plasmacyt
+    battlefield_role: [Elites]
+    keywords: [NECRONS, BEAST, FLY, CANOPTEK, CANOPTEK PLASMACYTE]
+    wounds: 1
+    models_min: 1
+    models_max: 1
+    power_level: 1
+    move: "8\""
+    ws: "4+"
+    bs: "4+"
+    strength: 4
+    toughness: 5
+    attacks: 1
+    save: 4
+    invuln_save: 5
+    leadership: 10
+    oc: 0
+    fnp: null
+    rules: [livingMetal, viralConstruct, evasionProtocol, infusedMadness, dimensionalTranslocation]
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.monomolecular_proboscis
+
+  - id: wh40k_9e.necrons.unit.hexmark_destroyer
+    name_en: Hexmark Destroyer
+    name_de: Hexmark-Vernichter
+    battlefield_role: [Elites]
+    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CHARACTER, DESTROYER CULT, HYPERSPACE HUNTER, HEXMARK DESTROYER]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 4
+    move: "8\""
+    ws: "3+"
+    bs: "2+"
+    strength: 5
+    toughness: 5
+    attacks: 4
+    save: 3
+    invuln_save: null
+    leadership: 10
+    oc: 1
+    fnp: null
+    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction, dimensionalTranslocation, inescapableDeath, multiThreatEliminator]
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
+      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+    weapon_count:
+      wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol: 6
+
+  - id: wh40k_9e.necrons.unit.transcendent_ctan
+    name_en: "Transcendent C'tan"
+    name_de: "Transzendenter C'tan"
+    battlefield_role: [Elites]
+    keywords: [NECRONS, MONSTER, CHARACTER, FLY, "C'TAN SHARD", TRANSCENDENT CTAN]
+    wounds: 9
+    models_min: 1
+    models_max: 1
+    power_level: 14
+    move: "8\""
+    ws: "2+"
+    bs: "2+"
+    strength: 6
+    toughness: 7
+    attacks: 5
+    save: 4
+    invuln_save: 4
+    leadership: 10
+    oc: 1
+    fnp: null
+    rules: [livingMetal, necrodermis, enslavedStarGod, realityUnravels, fracturedPersonality, ctanPowers]
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.crackling_tendrils
+
+  - id: wh40k_9e.necrons.unit.obelisk
+    name_en: Obelisk
+    name_de: Obelisk
+    battlefield_role: [Lord of War]
+    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, TITANIC, FLY, OBELISK]
+    wounds: 28
+    models_min: 1
+    models_max: 1
+    power_level: 17
+    move: "8\""
+    ws: "6+"
+    bs: "3+"
+    strength: 8
+    toughness: 8
+    attacks: 6
+    save: 2
+    invuln_save: null
+    leadership: 10
+    oc: 5
+    fnp: null
+    damage_bracket:
+      - wounds_min: 15
+        wounds_max: 28
+        move: "8\""
+        bs: "3+"
+        attacks: 6
+      - wounds_min: 8
+        wounds_max: 14
+        move: "6\""
+        bs: "4+"
+        attacks: "D6"
+      - wounds_min: 1
+        wounds_max: 7
+        move: "4\""
+        bs: "5+"
+        attacks: "D3"
+    rules: [livingMetal, deathDescending, hoveringSentinel, gravityPulse]
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.tesla_sphere
+    weapon_count:
+      wh40k_9e.necrons.weapon.tesla_sphere: 4
+
+  - id: wh40k_9e.necrons.unit.convergence_of_dominion
+    name_en: Convergence of Dominion
+    name_de: Konvergenz der Dominion
+    battlefield_role: [Fortification]
+    keywords: [NECRONS, "<DYNASTY>", BUILDING, CORE, VEHICLE, STARSTELE, CONVERGENCE OF DOMINION]
+    wounds: 6
+    models_min: 3
+    models_max: 3
+    power_level: 6
+    move: null
+    ws: null
+    bs: "3+"
+    strength: 6
+    toughness: 8
+    attacks: null
+    save: 3
+    invuln_save: null
+    leadership: null
+    oc: 0
+    fnp: null
+    rules: [livingMetal, dominionProtocols, dynasticCommandNode, translocationProtocols]
+    weapons:
+      - ref: wh40k_9e.necrons.weapon.transdimensional_abductor

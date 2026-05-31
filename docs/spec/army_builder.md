@@ -56,6 +56,50 @@ data/wh40k_9e/<fraktion>/
 Alle Stat-Werte als `str` für Werte wie `"3+"`, `"*"`, `"N/A"`.
 `weapons` enthält nur Referenzen (IDs) — der Loader löst sie auf.
 
+**Zusätzliche Felder (seit 5b.1):**
+
+`power_level: int` — Power Level bei `models_min`. Der Loader skaliert proportional:
+`effective_pl = power_level × (current_models / models_min)`
+
+`damage_bracket: list` — nur bei Einheiten mit wounds > 9. Enthält nur Stats, die sich tatsächlich ändern. Der Loader wählt den passenden Bracket nach aktuellen Wounds:
+
+```yaml
+damage_bracket:
+  - wounds_min: 7
+    wounds_max: 12
+    move: "10\""
+    ws: "3+"
+    bs: "3+"
+  - wounds_min: 4
+    wounds_max: 6
+    move: "8\""
+    ws: "4+"
+    bs: "4+"
+  - wounds_min: 1
+    wounds_max: 3
+    move: "6\""
+    ws: "5+"
+    bs: "5+"
+```
+
+Felder, die nicht im Bracket stehen, bleiben konstant (z.B. `attacks` wenn es sich nicht ändert).
+
+### `points.yaml` — Punktekosten Matched Play
+
+```yaml
+units:
+  wh40k_9e.necrons.unit.warriors:  { per_model: 11 }
+  wh40k_9e.necrons.unit.overlord:  { per_unit: 90 }
+
+wargear:
+  wh40k_9e.necrons.wargear.resurrection_orb: { points: 25 }
+  # Nur Einträge mit cost > 0 — Default ist 0
+```
+
+`per_unit`: Gesamtkosten unabhängig von Modellzahl.
+`per_model`: Kosten × aktuelle Modellzahl (Loader multipliziert).
+Wargear mit `points: 0` wird nicht aufgelistet.
+
 ### `weapons.yaml` — Waffenprofil-Format
 
 ```yaml
