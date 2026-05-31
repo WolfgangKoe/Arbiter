@@ -28,21 +28,75 @@ Jede Einheit besitzt mindestens eine Nahkampfwaffe. Falls nicht explizit definie
 
 ---
 
-## 5b — Katalog neu aufbauen (Necrons) 🔄
+## 5b — Katalog Necrons (Grunddaten) 🔄
 
-- [x] `data/wh40k_9e/necrons/units.yaml` — 11 Einheiten, neues Format (army_builder.md v1), Weapon-Refs
-- [x] `data/wh40k_9e/necrons/weapons.yaml` — 20 Waffenprofile, neues Format
-- [x] `data/wh40k_9e/necrons/stratagems.yaml` — 15 Stratagems (Dynastic, Destroyer Cult, Canoptek, Vehicle)
-- [ ] Wahapedia-Verifikation aller Statlines und Stratagem-Texte (Daten aus Trainingswissen, noch nicht curl-verifiziert)
-- [ ] Fehlende Einheiten ergänzen (Triarch Praetorians, Ophydian Destroyers, Lokhust Destroyers, etc.)
-- [ ] Orks: `units.yaml`, `weapons.yaml`, `stratagems.yaml` (nach Necron-Verifikation)
-- [ ] Alte `army.yaml`-Dateien durch Katalog + Roster ablösen (nach Ziel 5c)
+Stand 2026-05-30 — verifiziert gegen Wahapedia:
+
+| Datei | Status | Inhalt |
+|-------|--------|--------|
+| `units.yaml` | ⚠️ | 46 Einheiten — 5 fehlen, kein PL, keine Brackets |
+| `weapons.yaml` | ⚠️ | 93 Waffen — 4 neue nötig für fehlende Einheiten |
+| `stratagems.yaml` | ✅ | 59 Stratagems |
+| `faction_abilities.yaml` | ✅ | 7 Abilities |
+| `unit_abilities.yaml` | ⚠️ | 8 Abilities — ~10 neue nötig |
+| `wargear_abilities.yaml` | ✅ | 12 Abilities |
+| `wargear.yaml` | ✅ | 13 Items |
+| `subfaction_abilities.yaml` | ✅ | 6 Dynastien |
+| `command_protocols.yaml` | ✅ | 6 Protokolle |
+| `warlord_traits.yaml` | ✅ | 13 Traits |
+| `arkana.yaml` | ✅ | 12 Cryptek-Arkana |
+| `relics.yaml` | ✅ | 6 Relikte |
+| `weapon_abilities.yaml` | ✅ | 44 Abilities |
+| `army_rules.yaml` | ✅ | Armeebau-Regeln |
+| `points.yaml` | ❌ | Fehlt komplett |
+
+Wahapedia-Verifikation aller Statlines und Stratagem-Texte: ✅ abgeschlossen (2026-05-30)
+
+---
+
+## 5b.1 — Necrons Datensatz vervollständigen 🔄
+
+**Fehlende Einheiten (5 Stück → 51 gesamt):**
+
+| Einheit | Role | PL | Punkte |
+|---------|------|----|--------|
+| Canoptek Plasmacyte | Elites | fetchen | fetchen |
+| Hexmark Destroyer | Elites | fetchen | 65 |
+| Transcendent C'tan | Elites | 14 | 230 |
+| Obelisk | Lords of War | 17 | 270 |
+| Convergence of Dominion | Fortification | 4 | 80/Modell |
+
+**Battlefield Role Korrektur:** Triarch Stalker `[Heavy Support]` → `[Elites]`
+
+**Damage Brackets (10 Einheiten mit wounds > 9):**
+Triarch Stalker, Canoptek Doomstalker, Ghost Ark, Doomsday Ark, Night Scythe, Doom Scythe, Obelisk, The Silent King, Monolith, Tesseract Vault
+
+**Neue Datenfelder:**
+- `power_level` inline in allen 51 Einheiten
+- `damage_bracket` für Einheiten > 9W
+- `points.yaml` — neue Datei, 51 Einheiten + Non-Zero-Wargear
+
+**Umsetzungsreihenfolge:**
+
+- [ ] Datenbeschaffung: fehlende PL/Punkte/Brackets von Wahapedia fetchen
+- [ ] `weapons.yaml` — 4 neue Waffen (transdimensional_abductor, monomolecular_proboscis, enmitic_disintegrator_pistol, crackling_tendrils)
+- [ ] `unit_abilities.yaml` — ~10 neue Abilities für neue Einheiten
+- [ ] `units.yaml` — power_level zu 46 Einheiten, Role fix, brackets zu 10 Einheiten, 5 neue Einheiten
+- [ ] `points.yaml` — neue Datei erstellen
+- [ ] `army_builder.md` — power_level, damage_bracket, points.yaml-Schema dokumentieren
+
+**Forge World / Legends (außer Scope):** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
 
 ---
 
 ## 5c — Loader-Refactoring
 
+Erst nach Abschluss von 5b.1. Vollständige Lektüre von `src/gameObjects/loader.py` vor Planung.
+
 - [ ] `gameObjects/loader.py` — liest Roster, löst IDs gegen Katalog auf
+- [ ] `power_level`-Skalierung: PL × (aktuelle_modelle / models_min)
+- [ ] `points.yaml` einbinden
+- [ ] `damage_bracket` zur Laufzeit auflösen (nach Wounds-Stand der Einheit)
 - [ ] Default-Nahkampfwaffe-Logik im Loader (immer ergänzen wenn fehlend)
 - [ ] Unmatched-Einheiten: Warning im Setup, nicht spielbar
 - [ ] Alle bestehenden Tests anpassen (neue Datenstruktur)
@@ -91,7 +145,7 @@ Implementierung:
 
 ## 5f — Stratagems Proof of Concept
 
-- [x] `data/wh40k_9e/necrons/stratagems.yaml` — angelegt (15 Stratagems, Wahapedia-Verifikation ausstehend)
+- [x] `data/wh40k_9e/necrons/stratagems.yaml` — 59 Stratagems, verifiziert (2026-05-30)
 - [ ] `data/wh40k_9e/orks/stratagems.yaml`
 - [ ] Loader + `game_state` für Stratagems erweitern
 - [ ] Stratagem-Anzeige: zunächst nur lesend (kein automatischer Effekt)

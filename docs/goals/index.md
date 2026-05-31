@@ -28,7 +28,10 @@ Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 | Ziel 4f.1 — Psychic Phase Nachbesserungen | ✅ fertig (4f.1.c offen) |
 | Ziel 4g — Angriffsphase (Charge Phase) | ✅ fertig |
 | Ziel 4h — Moralphase | ✅ fertig |
-| **Ziel 5 — Setup & Datenlage** | ⬜ in Arbeit |
+| **Ziel 5 — Setup & Datenlage** | 🔄 in Arbeit |
+| Ziel 5a — Datenstruktur & Spec | ✅ fertig |
+| Ziel 5b — Necrons Katalog (Grunddaten) | 🔄 46/51 Einheiten, kein PL/Punkte |
+| Ziel 5b.1 — Necrons vervollständigen | ⬜ nächster Schritt |
 | Ziel 6 — Crusade-Erweiterung | ⬜ geplant |
 | Ziel 7 — Wahapedia Faction Fetcher | ⬜ geplant |
 | Design-Block — UI-Theme | ⏳ eigene Session |
