@@ -42,6 +42,8 @@ def _weapon_from_dict(d: dict[str, Any]) -> Weapon:
 def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
     """Load weapons.yaml and return a weapon_id → Weapon index."""
     path = _DATA_ROOT / faction_dir / "weapons.yaml"
+    if not path.exists():
+        return {}
     with open(path) as f:
         data = yaml.safe_load(f)
     return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
@@ -76,7 +78,7 @@ def _unit_from_dict(
         toughness=int(d["toughness"]),
         save=int(d["save"]),
         invuln_save=d.get("invuln_save"),
-        leadership=int(d["leadership"]),
+        leadership=int(d["leadership"]) if d.get("leadership") not in (None, "-") else None,
         oc=int(d["oc"]),
         fnp=d.get("fnp"),
         weapons=weapons,
@@ -129,21 +131,35 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
 
 
 def load_army(faction_dir: str) -> tuple[list[Unit], list[str]]:
-    """Load all units from data/wh40k_9e/<faction_dir>/army.yaml.
+    """Load all units for a faction.
 
-    Returns (units, unmatched) where unmatched contains unit_ids that were
-    present in the roster but could not be resolved against the unit catalog.
-    Callers should surface unmatched as warnings rather than hard errors.
+    Prefers units.yaml (catalog format with weapon refs). Falls back to the
+    legacy army.yaml if units.yaml does not exist. Returns (units, unmatched)
+    where unmatched is always empty until the roster-first loader is implemented
+    in Ziel 5c (Schritt C).
     """
-    path = _DATA_ROOT / faction_dir / "army.yaml"
-    with open(path) as f:
-        data = yaml.safe_load(f)
-    faction = data.get("faction", "")
-    subfaction = data.get("subfaction")
+    units_path = _DATA_ROOT / faction_dir / "units.yaml"
+    army_path = _DATA_ROOT / faction_dir / "army.yaml"
+
+    if units_path.exists():
+        with open(units_path) as f:
+            data = yaml.safe_load(f)
+        faction = faction_dir.capitalize()
+        subfaction = None
+        entries = data.get("units", [])
+    elif army_path.exists():
+        with open(army_path) as f:
+            data = yaml.safe_load(f)
+        faction = data.get("faction", "")
+        subfaction = data.get("subfaction")
+        entries = data.get("units", [])
+    else:
+        return [], []
+
     weapon_catalog = load_weapon_catalog(faction_dir)
     units: list[Unit] = []
     unmatched: list[str] = []
-    for ud in data.get("units", []):
+    for ud in entries:
         ud.setdefault("faction", faction)
         ud.setdefault("subfaction", subfaction)
         units.append(_unit_from_dict(ud, weapon_catalog))

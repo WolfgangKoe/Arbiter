@@ -22,7 +22,7 @@ class Unit:
     toughness: int
     save: int  # armour save target number (e.g. 3 = 3+)
     invuln_save: int | None  # invulnerable save or None
-    leadership: int
+    leadership: int | None  # None for buildings/fortifications
     oc: int  # Objective Control
     fnp: int | None  # Feel No Pain or None
     weapons: list[Weapon] = field(default_factory=list)

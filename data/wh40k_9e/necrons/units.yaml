@@ -1488,15 +1488,15 @@ units:
     models_min: 3
     models_max: 3
     power_level: 6
-    move: null
-    ws: null
+    move: "-"
+    ws: "-"
     bs: "3+"
     strength: 6
     toughness: 8
     attacks: null
     save: 3
     invuln_save: null
-    leadership: null
+    leadership: "-"
     oc: 0
     fnp: null
     rules: [livingMetal, dominionProtocols, dynasticCommandNode, translocationProtocols]

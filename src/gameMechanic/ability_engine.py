@@ -75,7 +75,7 @@ def get_triggered_abilities(
     units_key = "necron_units" if active == "Necrons" else "ork_units"
     units_state: dict = state.get(units_key, {})  # type: ignore[type-arg]
 
-    units = load_army(faction_dir)
+    units, _ = load_army(faction_dir)
     unit_by_id = {u.id: u for u in units}
 
     result: list[tuple[Ability, list[str]]] = []
