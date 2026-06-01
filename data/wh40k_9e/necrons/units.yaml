@@ -37,11 +37,16 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.voidscythe
-      - replace_with: wh40k_9e.necrons.weapon.warscythe
-      - replace_with: wh40k_9e.necrons.weapon.hyperphase_glaive
-      - replace_with: wh40k_9e.necrons.weapon.voidblade
-      - add: wh40k_9e.necrons.wargear.resurrection_orb
+      - type: replace
+        with: wh40k_9e.necrons.weapon.voidscythe
+      - type: replace
+        with: wh40k_9e.necrons.weapon.warscythe
+      - type: replace
+        with: wh40k_9e.necrons.weapon.hyperphase_glaive
+      - type: replace
+        with: wh40k_9e.necrons.weapon.voidblade
+      - type: add
+        item: wh40k_9e.necrons.wargear.resurrection_orb
 
   - id: wh40k_9e.necrons.unit.royal_warden
     name_en: Royal Warden
@@ -143,7 +148,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_flayer
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.gauss_reaper
+      - type: replace
+        with: wh40k_9e.necrons.weapon.gauss_reaper
 
   - id: wh40k_9e.necrons.unit.immortals
     name_en: Immortals
@@ -170,7 +176,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_blaster
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.tesla_carbine
+      - type: replace
+        with: wh40k_9e.necrons.weapon.tesla_carbine
 
   # ── Elites ────────────────────────────────────────────────────────────────
 
@@ -223,7 +230,10 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.warscythe
     wargear_options:
-      - replace_with_pair: [wh40k_9e.necrons.weapon.hyperphase_sword, wh40k_9e.necrons.weapon.dispersion_shield]
+      - type: replace_pair
+        with:
+          - wh40k_9e.necrons.weapon.hyperphase_sword
+          - wh40k_9e.necrons.weapon.dispersion_shield
 
   - id: wh40k_9e.necrons.unit.deathmarks
     name_en: Deathmarks
@@ -300,9 +310,12 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.vicious_claws
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.whip_coils
-      - add: wh40k_9e.necrons.weapon.particle_caster
-      - add: wh40k_9e.necrons.weapon.transdimensional_beamer
+      - type: replace
+        with: wh40k_9e.necrons.weapon.whip_coils
+      - type: add
+        item: wh40k_9e.necrons.weapon.particle_caster
+      - type: add
+        item: wh40k_9e.necrons.weapon.transdimensional_beamer
 
   # ── Elites (continued) ────────────────────────────────────────────────────
 
@@ -331,7 +344,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.particle_beamer
       - ref: wh40k_9e.necrons.weapon.automaton_claws
     wargear_options:
-      - add: wh40k_9e.necrons.weapon.gloom_prism_upgrade
+      - type: add
+        item: wh40k_9e.necrons.weapon.gloom_prism_upgrade
 
   # ── Heavy Support ─────────────────────────────────────────────────────────
 
@@ -376,8 +390,12 @@ units:
       - ref: wh40k_9e.necrons.weapon.heat_ray
       - ref: wh40k_9e.necrons.weapon.stalkers_forelimbs
     wargear_options:
-      - replace_heat_ray_with: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
-      - replace_heat_ray_with: wh40k_9e.necrons.weapon.particle_shredder
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.heat_ray
+        with: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.heat_ray
+        with: wh40k_9e.necrons.weapon.particle_shredder
 
   - id: wh40k_9e.necrons.unit.annihilation_barge
     name_en: Annihilation Barge
@@ -429,7 +447,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_destructor
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.enmitic_exterminator
+      - type: replace
+        with: wh40k_9e.necrons.weapon.enmitic_exterminator
 
   # ── HQ (new) ──────────────────────────────────────────────────────────────
 
@@ -457,9 +476,12 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - replace_with: wh40k_9e.necrons.weapon.voidblade
-      - replace_with: wh40k_9e.necrons.weapon.warscythe
+      - type: replace
+        with: wh40k_9e.necrons.weapon.hyperphase_sword
+      - type: replace
+        with: wh40k_9e.necrons.weapon.voidblade
+      - type: replace
+        with: wh40k_9e.necrons.weapon.warscythe
 
   - id: wh40k_9e.necrons.unit.lokhust_lord
     name_en: Lokhust Lord
@@ -485,9 +507,12 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.staff_of_light
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - replace_with: wh40k_9e.necrons.weapon.voidblade
-      - replace_with: wh40k_9e.necrons.weapon.warscythe
+      - type: replace
+        with: wh40k_9e.necrons.weapon.hyperphase_sword
+      - type: replace
+        with: wh40k_9e.necrons.weapon.voidblade
+      - type: replace
+        with: wh40k_9e.necrons.weapon.warscythe
 
   - id: wh40k_9e.necrons.unit.skorpekh_lord
     name_en: Skorpekh Lord
@@ -540,10 +565,17 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_cannon
       - ref: wh40k_9e.necrons.weapon.staff_of_light
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.tesla_cannon
-      - replace_melee_with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - replace_melee_with: wh40k_9e.necrons.weapon.voidblade
-      - replace_melee_with: wh40k_9e.necrons.weapon.warscythe
+      - type: replace
+        with: wh40k_9e.necrons.weapon.tesla_cannon
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.staff_of_light
+        with: wh40k_9e.necrons.weapon.hyperphase_sword
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.staff_of_light
+        with: wh40k_9e.necrons.weapon.voidblade
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.staff_of_light
+        with: wh40k_9e.necrons.weapon.warscythe
 
   - id: wh40k_9e.necrons.unit.psychomancer
     name_en: Psychomancer
@@ -594,7 +626,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.aeonstave
       - ref: wh40k_9e.necrons.weapon.chronotendrils
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.entropic_lance
+      - type: replace
+        with: wh40k_9e.necrons.weapon.entropic_lance
 
   - id: wh40k_9e.necrons.unit.illuminor_szeras
     name_en: Illuminor Szeras
@@ -833,7 +866,10 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.rod_of_covenant
     wargear_options:
-      - replace_with_pair: [wh40k_9e.necrons.weapon.particle_caster, wh40k_9e.necrons.weapon.voidblade]
+      - type: replace_pair
+        with:
+          - wh40k_9e.necrons.weapon.particle_caster
+          - wh40k_9e.necrons.weapon.voidblade
 
   - id: wh40k_9e.necrons.unit.flayed_ones
     name_en: Flayed Ones
@@ -935,8 +971,10 @@ units:
     weapons:
       - ref: wh40k_9e.necrons.weapon.twin_gauss_blaster
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.particle_beamer
-      - replace_with: wh40k_9e.necrons.weapon.twin_tesla_carbine
+      - type: replace
+        with: wh40k_9e.necrons.weapon.particle_beamer
+      - type: replace
+        with: wh40k_9e.necrons.weapon.twin_tesla_carbine
 
   - id: wh40k_9e.necrons.unit.ophydian_destroyers
     name_en: Ophydian Destroyers
@@ -991,7 +1029,8 @@ units:
       - ref: wh40k_9e.necrons.weapon.gauss_cannon
       - ref: wh40k_9e.necrons.weapon.close_combat_weapon
     wargear_options:
-      - replace_with: wh40k_9e.necrons.weapon.enmitic_exterminator
+      - type: replace
+        with: wh40k_9e.necrons.weapon.enmitic_exterminator
 
   - id: wh40k_9e.necrons.unit.canoptek_doomstalker
     name_en: Canoptek Doomstalker
@@ -1244,7 +1283,9 @@ units:
       - ref: wh40k_9e.necrons.weapon.particle_whip
       - ref: wh40k_9e.necrons.weapon.portal_of_exile
     wargear_options:
-      - replace_all_with: wh40k_9e.necrons.weapon.death_ray
+      - type: replace
+        replaces: wh40k_9e.necrons.weapon.gauss_flux_arc
+        with: wh40k_9e.necrons.weapon.death_ray
 
   - id: wh40k_9e.necrons.unit.c_tan_nightbringer
     name_en: "C'tan Shard of the Nightbringer"
