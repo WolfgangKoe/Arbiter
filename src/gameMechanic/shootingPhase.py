@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from gameMechanic.game_state import units_key_for
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
@@ -31,7 +32,7 @@ def target_in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -
 
     9E: a unit may not shoot into a combat involving friendly units.
     """
-    def_key = "necron_units" if def_faction == "Necrons" else "ork_units"
+    def_key = units_key_for(def_faction)
     def_state = st.session_state[def_key].get(def_uid, {})
     return any(fac == atk_faction for fac, _ in def_state.get("melee_with", []))
 
@@ -94,15 +95,16 @@ def _active_shooting(
             st.warning("In reserve — cannot shoot.")
         return
 
-    ranged = [w for w in unit.weapons if not w.is_melee]
+    ranged = [w for w in unit.weapons if any(not p.is_melee for p in w.profiles)]
     if ranged:
         skill = int(unit.bs.rstrip("+"))
         for w in ranged:
-            ap_int = int(w.ap)
-            ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
+            p = w.for_phase(use_melee=False)
+            ap_int = int(p.ap)
+            ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
             st.caption(
-                f"**{w.name_en}** · A{w.attacks} · BS{skill}+ "
-                f"· S{w.strength} · {ap_str} · D{w.damage}"
+                f"**{w.name_en}** · A{p.attacks} · BS{skill}+ "
+                f"· S{p.strength} · {ap_str} · D{p.damage}"
             )
     else:
         st.caption("No ranged weapons.")

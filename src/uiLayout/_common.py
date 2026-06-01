@@ -12,7 +12,7 @@ from collections.abc import Callable
 
 import streamlit as st
 
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS, units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 
@@ -150,10 +150,9 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
 
 def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
     """Return (Unit, unit_state_dict) for the given faction + uid."""
-    units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
+    units = units_list_for(faction)
     unit = next(u for u in units if u.id == uid)
-    key = "necron_units" if faction == "Necrons" else "ork_units"
-    return unit, st.session_state[key][uid]
+    return unit, st.session_state[units_key_for(faction)][uid]
 
 
 # ---------------------------------------------------------------------------
@@ -192,9 +191,11 @@ def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None: 
     if not unit_state.get("in_melee") or not melee_with:
         return
 
+    p1 = st.session_state.get("first_player", "")
+    p2 = st.session_state.get("second_player", "")
     units_by_faction = {
-        "Necrons": {u.id: u for u in _NECRON_UNITS},
-        "Orks": {u.id: u for u in _ORK_UNITS},
+        p1: {u.id: u for u in _NECRON_UNITS},
+        p2: {u.id: u for u in _ORK_UNITS},
     }
 
     st.markdown("**⚔ Engaged with:**")
@@ -298,7 +299,7 @@ def render_attack_form(
     from gameMechanic.combat import AttackParams, DefendParams, resolve_attack, wound_threshold
     from gameMechanic.game_log import log_action
 
-    weapons = [w for w in atk_unit.weapons if w.is_melee == use_melee]
+    weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
     if not weapons:
         st.info("No melee weapons." if use_melee else "No ranged weapons.")
         return
@@ -316,26 +317,27 @@ def render_attack_form(
     else:
         weapon = weapons[0]
 
+    profile = weapon.for_phase(use_melee)
+
     # Resolve "User" strength to unit strength.
-    raw_str = str(weapon.strength)
+    raw_str = str(profile.strength)
     strength = atk_unit.strength if raw_str.upper() == "USER" else int(raw_str)
 
     skill = int(atk_unit.ws.rstrip("+")) if use_melee else int(atk_unit.bs.rstrip("+"))
     skill_label = "WS" if use_melee else "BS"
     thresh = wound_threshold(strength, def_unit.toughness)
-    eff_save = def_unit.save + abs(int(weapon.ap))
+    eff_save = def_unit.save + abs(int(profile.ap))
     if def_unit.invuln_save and def_unit.invuln_save < eff_save:
         eff_save = def_unit.invuln_save
     save_str = f"{eff_save}+" if eff_save <= 6 else "none"
     inv_display = f"{def_unit.invuln_save}+" if def_unit.invuln_save else "none"
 
     st.caption(
-        f"**{weapon.name_en}**: {weapon.attacks} att · {skill_label}{skill}+ · "
-        f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{weapon.damage}"
+        f"**{weapon.name_en}**: {profile.attacks} att · {skill_label}{skill}+ · "
+        f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{profile.damage}"
     )
 
-    unit_key = "necron_units" if atk_faction == "Necrons" else "ork_units"
-    atk_state = st.session_state[unit_key][atk_uid]
+    atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
     mwbd_active = atk_state.get("my_will_be_done_active", False)
     if mwbd_active:
         st.info("MWBD active — +1 to hit modifier.")
@@ -354,11 +356,11 @@ def render_attack_form(
         "FNP Saved", min_value=0, step=1, key=f"atk_fnp_{phase_key}_{atk_faction}_{atk_uid}"
     )
 
-    fixed_dmg = _try_parse_damage(str(weapon.damage))
+    fixed_dmg = _try_parse_damage(str(profile.damage))
     total_dmg_input = None
     if fixed_dmg is None:
         total_dmg_input = st.number_input(
-            f"Total damage rolled ({weapon.damage} per failed save)",
+            f"Total damage rolled ({profile.damage} per failed save)",
             min_value=0,
             step=1,
             key=f"atk_dmgtotal_{phase_key}_{atk_faction}_{atk_uid}",
@@ -377,7 +379,7 @@ def render_attack_form(
                 attacks=1,
                 skill=skill,
                 strength=strength,
-                ap=int(weapon.ap),
+                ap=int(profile.ap),
                 damage=fixed_dmg,
                 mwbd_active=mwbd_active,
             )
@@ -404,7 +406,7 @@ def render_attack_form(
                 f"Hits: {hits}",
                 f"Wounds: {wounds}",
                 f"Failed saves: {saves_failed}",
-                f"Variable damage {weapon.damage}: {raw} total",
+                f"Variable damage {profile.damage}: {raw} total",
                 f"FNP saved: {fnp_n}",
                 f"Damage: **{net}**",
             ]
@@ -425,8 +427,7 @@ def render_attack_form(
                 use_container_width=True,
             ):
                 apply_damage(def_uid, def_faction, damage, def_unit)
-                atk_key = "necron_units" if atk_faction == "Necrons" else "ork_units"
-                atk_flags = st.session_state[atk_key][atk_uid]["turn_flags"]
+                atk_flags = st.session_state[units_key_for(atk_faction)][atk_uid]["turn_flags"]
                 if phase_key == "shooting":
                     atk_flags["shot"] = True
                 elif phase_key == "fight":

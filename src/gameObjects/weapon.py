@@ -58,3 +58,10 @@ class Weapon:
     @property
     def abilities(self) -> str:
         return self.profiles[0].abilities if self.profiles else ""
+
+    def for_phase(self, use_melee: bool) -> WeaponProfile:
+        """Return the profile matching the phase (melee/ranged). Falls back to profiles[0]."""
+        for p in self.profiles:
+            if p.is_melee == use_melee:
+                return p
+        return self.profiles[0]

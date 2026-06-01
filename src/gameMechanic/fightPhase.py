@@ -90,15 +90,16 @@ def _active_fight(
     if flags.get("charged"):
         st.markdown("**Fights first** (charged this turn).")
 
-    melee = [w for w in unit.weapons if w.is_melee]
+    melee = [w for w in unit.weapons if any(p.is_melee for p in w.profiles)]
     if melee:
         skill = int(unit.ws.rstrip("+"))
         for w in melee:
-            ap_int = int(w.ap)
-            ap_str = f"AP{w.ap}" if ap_int != 0 else "AP0"
+            p = w.for_phase(use_melee=True)
+            ap_int = int(p.ap)
+            ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
             st.caption(
-                f"**{w.name_en}** · A{w.attacks} · WS{skill}+ "
-                f"· S{w.strength} · {ap_str} · D{w.damage}"
+                f"**{w.name_en}** · A{p.attacks} · WS{skill}+ "
+                f"· S{p.strength} · {ap_str} · D{p.damage}"
             )
     else:
         st.caption("No melee weapons.")
@@ -121,19 +122,21 @@ def _inactive_target_stats(
 
 def _render_melee_pairs() -> None:
     """Show all active melee engagements, or the phase rule hint if none."""
+    p1 = st.session_state.get("first_player", "")
+    p2 = st.session_state.get("second_player", "")
     name_map = {
-        "Necrons": {u.id: u.name_en for u in _NECRON_UNITS},
-        "Orks": {u.id: u.name_en for u in _ORK_UNITS},
+        p1: {u.id: u.name_en for u in _NECRON_UNITS},
+        p2: {u.id: u.name_en for u in _ORK_UNITS},
     }
     seen: set[frozenset[str]] = set()
     pairs: list[str] = []
     for uid, s in st.session_state.necron_units.items():
         for fac, enemy_uid in s.get("melee_with", []):
-            key = frozenset({f"Necrons:{uid}", f"{fac}:{enemy_uid}"})
+            key = frozenset({f"{p1}:{uid}", f"{fac}:{enemy_uid}"})
             if key in seen:
                 continue
             seen.add(key)
-            a = name_map["Necrons"].get(uid, uid)
+            a = name_map[p1].get(uid, uid)
             b = name_map.get(fac, {}).get(enemy_uid, enemy_uid)
             pairs.append(f"**{a}** ↔ **{b}**")
     if pairs:
