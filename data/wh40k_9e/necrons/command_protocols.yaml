@@ -1,35 +1,35 @@
 protocols:
-  - id: eternal_guardian
+  - id: wh40k_9e.necrons.protocol.eternal_guardian
     name_en: Protocol of the Eternal Guardian
     name_de: Protokoll des Ewigen Wächters
     primary: "+1 auf alle Rettungswürfe bis zur nächsten Befehlsphase"
     secondary: "Rettungswürfe von 1 wiederholen"
     auto_round_1: true
-  - id: hungry_void
+  - id: wh40k_9e.necrons.protocol.hungry_void
     name_en: Protocol of the Hungry Void
     name_de: Protokoll der hungrigen Leere
     primary: "+1 zum Treffen (Fernkampf)"
     secondary: "+1 Stärke (Fernkampfwaffen)"
     auto_round_1: false
-  - id: conquering_tyrant
+  - id: wh40k_9e.necrons.protocol.conquering_tyrant
     name_en: Protocol of the Conquering Tyrant
     name_de: Protokoll des tyrannischen Herrschers
     primary: "+1 Führung"
     secondary: "Trefferwürfe und Wundwürfe von 1 wiederholen (Nahkampf)"
     auto_round_1: false
-  - id: sudden_storm
+  - id: wh40k_9e.necrons.protocol.sudden_storm
     name_en: Protocol of the Sudden Storm
     name_de: Protokoll des plötzlichen Sturms
     primary: "+1\" Bewegung"
     secondary: "Vormarsch und Charge im selben Zug erlaubt"
     auto_round_1: false
-  - id: undying_legions
+  - id: wh40k_9e.necrons.protocol.undying_legions
     name_en: Protocol of the Undying Legions
     name_de: Protokoll der unaufhörlichen Legionen
     primary: "Reanimationsprotokolle neu würfeln"
     secondary: "+1 Modell pro Reanimationsprotokoll zurückgebracht"
     auto_round_1: false
-  - id: vengeful_stars
+  - id: wh40k_9e.necrons.protocol.vengeful_stars
     name_en: Protocol of the Vengeful Stars
     name_de: Protokoll der rachsüchtigen Sterne
     primary: "+1 auf Verwundungswürfe (Fernkampf)"

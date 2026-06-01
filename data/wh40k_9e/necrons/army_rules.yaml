@@ -29,9 +29,10 @@ silent_king:
 
 # Command Protocols — Zuweisung vor der Schlacht
 command_protocols:
-  assign_count: 5               # 5 von 6 Protokollen wählen, je 1× pro Runde
+  assign_to_rounds: 5          # 1 Protokoll pro Schlachtrunde, vor der Partie gewählt
+  permanent_count: 1           # 1 übrig bleibendes Protokoll permanent für die gesamte Partie wählen
   szarekhan_warlord_trait_override:
-    assign_count: 4             # Triarch's Will: 4 wählen, eines 2× einsetzbar
+    assign_to_rounds: 4        # Triarch's Will: 4 wählen, eines 2× einsetzbar
     double_use_count: 1
 
 # Dynastien-Keyword-Regel

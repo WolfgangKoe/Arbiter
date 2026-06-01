@@ -85,3 +85,17 @@ units:
 wargear:
   # Only wargear with points cost > 0
   wh40k_9e.necrons.wargear.resurrection_orb:      { points: 25 }
+
+arkana:
+  wh40k_9e.necrons.arkana.failsafe_overcharger:           { points: 30 }
+  wh40k_9e.necrons.arkana.countertemporal_nanomines:      { points: 30 }
+  wh40k_9e.necrons.arkana.atavindicator:                  { points: 25 }
+  wh40k_9e.necrons.arkana.dimensional_sanctum:            { points: 15 }
+  wh40k_9e.necrons.arkana.hypermaterial_ablator:          { points: 25 }
+  wh40k_9e.necrons.arkana.cortical_subjugator_scarabs:    { points: 15 }
+  wh40k_9e.necrons.arkana.cryptogeometric_adjuster:       { points: 15 }
+  wh40k_9e.necrons.arkana.metalodermal_tesla_weave:       { points: 20 }
+  wh40k_9e.necrons.arkana.photonic_transubjector:         { points: 20 }
+  wh40k_9e.necrons.arkana.phylacterine_hive:              { points: 20 }
+  wh40k_9e.necrons.arkana.prismatic_obfuscatron:          { points: 20 }
+  wh40k_9e.necrons.arkana.quantum_orb:                    { points: 20 }

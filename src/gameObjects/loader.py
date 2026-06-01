@@ -11,17 +11,16 @@ from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.unit import Unit
-from gameObjects.weapon import Weapon
+from gameObjects.weapon import Weapon, WeaponProfile
 
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
 
 
-def _weapon_from_dict(d: dict[str, Any]) -> Weapon:
-    return Weapon(
-        id=d["id"],
-        name_en=d["name_en"],
+def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
+    return WeaponProfile(
+        name_en=d.get("name_en", ""),
         weapon_type=d["weapon_type"],
-        range_inches=str(d["range_inches"]),
+        range_inches=int(d["range_inches"]),
         attacks=str(d["attacks"]),
         strength=str(d["strength"]),
         ap=str(d["ap"]),
@@ -31,7 +30,34 @@ def _weapon_from_dict(d: dict[str, Any]) -> Weapon:
     )
 
 
-def _unit_from_dict(d: dict[str, Any]) -> Unit:
+def _weapon_from_dict(d: dict[str, Any]) -> Weapon:
+    return Weapon(
+        id=d["id"],
+        name_en=d["name_en"],
+        profiles=[_weapon_profile_from_dict(p) for p in d.get("profiles", [])],
+        is_relic=d.get("is_relic", False),
+    )
+
+
+def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
+    """Load weapons.yaml and return a weapon_id → Weapon index."""
+    path = _DATA_ROOT / faction_dir / "weapons.yaml"
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
+
+
+def _unit_from_dict(
+    d: dict[str, Any],
+    weapon_catalog: dict[str, Weapon] | None = None,
+) -> Unit:
+    weapons: list[Weapon] = []
+    for entry in d.get("weapons", []):
+        ref = entry.get("ref")
+        if ref and weapon_catalog:
+            weapon = weapon_catalog.get(ref)
+            if weapon:
+                weapons.append(weapon)
     return Unit(
         id=d["id"],
         name_en=d["name_en"],
@@ -53,7 +79,7 @@ def _unit_from_dict(d: dict[str, Any]) -> Unit:
         leadership=int(d["leadership"]),
         oc=int(d["oc"]),
         fnp=d.get("fnp"),
-        weapons=[_weapon_from_dict(w) for w in d.get("weapons", [])],
+        weapons=weapons,
         rules=d.get("rules", []),
     )
 
@@ -102,19 +128,26 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
     )
 
 
-def load_army(faction_dir: str) -> list[Unit]:
-    """Load all units from data/wh40k_9e/<faction_dir>/army.yaml."""
+def load_army(faction_dir: str) -> tuple[list[Unit], list[str]]:
+    """Load all units from data/wh40k_9e/<faction_dir>/army.yaml.
+
+    Returns (units, unmatched) where unmatched contains unit_ids that were
+    present in the roster but could not be resolved against the unit catalog.
+    Callers should surface unmatched as warnings rather than hard errors.
+    """
     path = _DATA_ROOT / faction_dir / "army.yaml"
     with open(path) as f:
         data = yaml.safe_load(f)
     faction = data.get("faction", "")
     subfaction = data.get("subfaction")
-    units = []
+    weapon_catalog = load_weapon_catalog(faction_dir)
+    units: list[Unit] = []
+    unmatched: list[str] = []
     for ud in data.get("units", []):
         ud.setdefault("faction", faction)
         ud.setdefault("subfaction", subfaction)
-        units.append(_unit_from_dict(ud))
-    return units
+        units.append(_unit_from_dict(ud, weapon_catalog))
+    return units, unmatched
 
 
 def load_faction_abilities(faction_dir: str) -> list[Ability]:

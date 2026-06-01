@@ -6,7 +6,6 @@ entries:
     name_en: Failsafe Overcharger
     name_de: Sicherungsüberlader
     power_delta: 2
-    points_cost: 30
     source:
       publication: Codex Necrons
       page: "61"
@@ -34,7 +33,6 @@ entries:
     name_en: Countertemporal Nanomines
     name_de: Antitemporale Nanominen
     power_delta: 2
-    points_cost: 30
     source:
       publication: Codex Necrons
       page: "61"
@@ -59,7 +57,6 @@ entries:
     name_en: Atavindicator
     name_de: Atavindicator
     power_delta: 1
-    points_cost: 25
     source:
       publication: Codex Necrons
       page: "61"
@@ -87,7 +84,6 @@ entries:
     name_en: Dimensional Sanctum
     name_de: Dimensionszuflucht
     power_delta: 1
-    points_cost: 15
     source:
       publication: Codex Necrons
       page: "61"
@@ -106,7 +102,6 @@ entries:
     name_en: Hypermaterial Ablator
     name_de: Hypermaterial-Abtrager
     power_delta: 1
-    points_cost: 25
     source:
       publication: Codex Necrons
       page: "61"
@@ -132,7 +127,6 @@ entries:
     name_en: Cortical Subjugator Scarabs
     name_de: Kortikale Unterwerfungsskarabäen
     power_delta: 1
-    points_cost: 15
     source:
       publication: Codex Necrons
       page: "61"
@@ -161,7 +155,6 @@ entries:
     name_en: Cryptogeometric Adjuster
     name_de: Kryptogeometrischer Regler
     power_delta: 1
-    points_cost: 15
     source:
       publication: Codex Necrons
       page: "61"
@@ -186,7 +179,6 @@ entries:
     name_en: Metalodermal Tesla Weave
     name_de: Metallodermales Tesla-Gewebe
     power_delta: 1
-    points_cost: 20
     source:
       publication: Codex Necrons
       page: "61"
@@ -210,7 +202,6 @@ entries:
     name_en: Photonic Transubjector
     name_de: Photonischer Transpersonalisator
     power_delta: 1
-    points_cost: 20
     source:
       publication: Codex Necrons
       page: "61"
@@ -230,7 +221,6 @@ entries:
     name_en: Phylacterine Hive
     name_de: Phylakterienschwarm
     power_delta: 1
-    points_cost: 20
     source:
       publication: Codex Necrons
       page: "61"
@@ -258,7 +248,6 @@ entries:
     name_en: Prismatic Obfuscatron
     name_de: Prismatischer Obfuskierer
     power_delta: 1
-    points_cost: 20
     source:
       publication: Codex Necrons
       page: "61"
@@ -283,7 +272,6 @@ entries:
     name_en: Quantum Orb
     name_de: Quantensphäre
     power_delta: 1
-    points_cost: 20
     source:
       publication: Codex Necrons
       page: "61"
