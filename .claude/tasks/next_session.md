@@ -11,89 +11,103 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session passiert ist
 
-**Ziel 5b.2 vollständig abgeschlossen — Schritte A, B, C ✅ — 306 Tests grün**
+**Ziel 5c war abgeschlossen — in dieser Session: Bugfixes aus erstem Testlauf**
 
-### Schritt A ✅ (bereits letzte Session, jetzt fertig)
-- `army.yaml` gelöscht
-- Alle Ability-IDs auf `wh40k_9e.`-Namespace normiert
-- `loader.py` liest `units.yaml`; `ability_engine.py` Tuple-Unpacking korrigiert
-- `Convergence of Dominion` (Fortification): `move/ws/leadership: null` → `"-"`
-- `Unit.leadership: int | None` (None = Gebäude)
+### Bugfixes (2026-06-01)
 
-### Schritt B ✅
-- Alle 16 `wargear_options`-Blöcke in `units.yaml` auf `type/with/replaces/item`-Schema
-- `replace_all_with` (Monolith) → `type: replace, replaces: gauss_flux_arc`
+1. **`Weapon`-Properties fehlten** — `Weapon`-Dataclass hatte keine `is_melee`, `attacks`, `ap`, `strength`, `damage`, `abilities`, `range_inches`. Code griff überall direkt auf `Weapon`-Objekte zu → `AttributeError` im Column-Kontext → Shooting-/Fight-Phase-Columns verschwanden still.
+   - Fix: Convenience-Properties auf `Weapon` ergänzt, delegieren auf `profiles[0]`.
 
-### Schritt C ✅
-- `WargearOption`, `DamageBracket` Dataclasses in `src/gameObjects/unit.py`
-- `Unit` um `power_level: int`, `attacks: int | None`, `wargear_options`, `damage_bracket` erweitert
-- `loader.py`: `_wargear_option_from_dict`, `_damage_bracket_from_dict`, `load_unit_catalog()`
-- Orks-legacy `army.yaml` via Defaults kompatibel gehalten (`power_level=0`)
-- 8 Test-Fixtures aktualisiert, 7 neue Tests in `tests/gameObjects/test_loader.py`
+2. **Dual-Profil-Waffen** (Staff of Light: Shooting + Melee-Profil) — `Weapon.is_melee` gab immer `profiles[0].is_melee` (= Shooting) zurück → Overlord in Nahkampfphase: "No melee weapons".
+   - Fix: `Weapon.for_phase(use_melee: bool) → WeaponProfile` ergänzt. Filter in Fight-/Shooting-Phase und `render_attack_form` nutzen jetzt Profil-Ebene.
+   - **Achtung für zukünftige Arbeit:** Weapon-Zugriffe nie per `w.is_melee` filtern, wenn Dual-Profile möglich sind — immer `any(p.is_melee for p in w.profiles)` und dann `w.for_phase(use_melee)` nutzen.
 
-### UI-Status der neuen Felder
-Die neuen Felder sind reine Datenschicht-Erweiterungen — kein UI-Code wurde geändert:
-- `power_level`, `wargear_options` → relevant für Army Builder (Ziel 5e)
-- `attacks` → relevant für Detailansichten / Kampfphase
-- `damage_bracket` → **spielmechanisch dringend**: Vehicles zeigen aktuell immer Basis-Stats, auch bei niedrigem Woundstand
+3. **`models_initial` fehlte** — `unitCard.py` nutzte `unit.models_max` als Nenner → Immortals mit Roster-Anzahl 5 zeigten `5/10` statt `5/5`.
+   - Fix: `models_initial` in `_unit_state()` gespeichert.
 
----
+4. **MWBD Keyword-Case** — Check war `"Core" in unit.keywords`, Keywords in units.yaml sind `UPPERCASE`.
+   - Fix: `"Core"` → `"CORE"`.
+   - **Achtung:** Alle zukünftigen Keyword-Checks müssen `UPPERCASE` nutzen.
 
-## Aktueller Status Necrons-Datensatz
+5. **MWBD/ResOrb gegenseitiger Ausschluss** — Beide Awaiting-States konnten gleichzeitig aktiv sein → `elif res_orb_awaiting:` im unitCard wurde von `if mwbd_awaiting:` blockiert, ResOrb-Zielauswahl war nie erreichbar.
+   - Fix: Aktivieren des einen States löscht den anderen in `commandPhase.py`.
 
-Alle Dateien vollständig und normiert. ✅ 306 Tests grün.
+### Stand nach Session
+- 323 Tests grün
+- App läuft mit zwei Necron-Armeen (α + β)
+- Shooting-Phase, Fight-Phase, Command-Phase (inkl. MWBD + ResOrb) funktionieren grundsätzlich
 
 ---
 
-## Nächster konkreter Schritt: 5c Loader-Refactoring
+## Aktueller Status
 
-**Voraussetzung: explizite Freigabe durch Nutzer vor Dateiänderungen.**
-**Alle Punkte gehören zu 5c — am besten zusammen angehen.**
+| Ziel | Status |
+|------|--------|
+| 5a — Spec | ✅ |
+| 5b — Necron-Katalog | ✅ |
+| 5b.2 — Datensäuberung | ✅ |
+| 5c — Loader-Refactoring | ✅ |
+| 5c — Bugfixes (Weapon, MWBD, ResOrb) | ✅ |
+| 5d — BattleScribe Importer | ⬜ |
+| 5e — Setup-Screen Redesign | ⬜ |
+| 5f — Stratagems PoC | ⬜ |
 
-### 1 — `damage_bracket` live auflösen (spielmechanisch dringend)
+---
 
-Vehicles (Triarch Stalker, Monolith, etc.) zeigen aktuell immer Basis-Stats.
-Fix: Hilfsfunktion, die aus `damage_bracket` + aktuellem Woundstand die laufenden Stats zurückgibt.
+## Nächste Schritte
 
-```python
-def resolve_bracket_stats(unit: Unit, current_wounds: int) -> dict[str, str]:
-    """Gibt {move, ws, bs, attacks} für den aktuellen Woundstand zurück."""
+### Priorät 1 — Ziel 5e: Setup-Screen Redesign
+
+Das ist der sinnvollste nächste Schritt, weil er:
+- Die hartcodierten Roster-Dateien in `game_state.py` auflöst (blockiert alles andere)
+- Einen Roster-Dropdown einführt — Basis für echtes Spielen mit verschiedenen Armeen
+- Die Unmatched-Warnungen sichtbar macht
+
+**Kritische Architektur-Änderung (muss zuerst gelöst werden):**
+`game_state.py` lädt Roster auf Modul-Ebene (beim Import) — `_P1_MATCHED`, `_P2_MATCHED` etc. sind globale Variablen. Das muss in `init_state()` verschoben werden, damit Roster-Pfade dynamisch übergeben werden können.
+
+Plan:
+1. Roster-Globals aus Modul-Ebene entfernen
+2. `init_state(roster_p1, roster_p2, game_mode, game_size)` — Roster-Pfade als Parameter
+3. Setup-Screen-UI: Dropdown für P1 + P2 aus `data/rosters/`, Spielmodus, Spielgröße, CP-Initialisierung
+4. Start-Button erst aktiv wenn P1 ≠ P2 und beide Rosters gewählt
+
+### Priorität 2 — Ziel 5d: BattleScribe Importer
+
+Erst nach 5e sinnvoll, weil 5e die Roster-Auswahl erst ermöglicht.
+
+Erweiterung Roster-Format um Wargear (Entwurf):
+```yaml
+- id: wh40k_9e.necrons.unit.overlord
+  models: 1
+  wargear:
+    - wh40k_9e.necrons.weapon.voidscythe
+    - wh40k_9e.necrons.wargear.resurrection_orb
 ```
 
-Betroffene Dateien: `src/gameObjects/loader.py` + ggf. UI-Stellen, die `unit.move/ws/bs` rendern.
+### Priorität 3 — Orks-Fraktion
 
-### 2 — Default-Nahkampfwaffe ergänzen
+Orks haben nur eine Legacy `army.yaml` — kein `units.yaml`. Für echtes Zwei-Fraktionen-Spiel wird eine zweite vollständige Fraktion gebraucht. Kann parallel zu 5d/5e laufen.
 
-Jede Einheit braucht mindestens eine Nahkampfwaffe. Falls keine in `weapons` definiert, automatisch:
-`Close Combat Weapon: Range=Melee, S=User, AP=0, D=1`
-In `_unit_from_dict` nach dem Waffen-Laden prüfen und ergänzen.
+---
 
-### 3 — `points.yaml` einbinden
+## Bekannte offene Lücken (nicht vergessen)
 
-`src/gameObjects/loader.py` um `load_points(faction_dir)` erweitern.
-Gibt `dict[str, int]` zurück (unit_id → Punkte).
-`points.yaml` hat Sektionen (HQ, Troops, …) + `wargear:` + `arkana:` — flatten zu einem dict.
-
-### 4 — `power_level`-Skalierung
-
-Hilfsfunktion: `scaled_pl(unit: Unit, current_models: int) -> float`
-Formel: `unit.power_level × (current_models / unit.models_min)`
-Keine Änderung an der Dataclass — reine Berechnung im Loader oder game_state.
-
-### 5 — Roster-Flow: `load_army` auf ID-Lookup umschreiben
-
-Roster `data/rosters/<name>.yaml` laden, IDs gegen Katalog auflösen, `unmatched` befüllen.
-Vorbedingung: ein Roster für Necrons anlegen.
-`unmatched`-Einheiten: Warnung im Setup, nicht spielbar.
-
-### 6 — Orks auf `units.yaml`-Format migrieren
-
-Orks noch im Altformat (`army.yaml`). Migration → Orks können dann alle neuen Felder nutzen.
-Bis dahin: `power_level=0` als Compat-Default im Loader.
+| Lücke | Beschreibung |
+|-------|-------------|
+| `resolve_bracket_stats` unverdrahtet | Implementiert, aber kein UI-Aufruf — Vehicles zeigen immer Basis-Stats unabhängig vom aktuellen Wundstand |
+| Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml` — Ziel 5c.6 war geplant, nicht umgesetzt |
+| Wargear im Roster-Format | Aktuell nur `id` + `models` — keine Wargear-Auswahl speicherbar |
+| Punkte-Validierung | `load_points()` implementiert, aber Roster-Gesamtpunkte werden nicht geprüft |
+| Unmatched-UI | `roster_warnings` in session_state, aber kein UI-Feedback |
+| Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` einer Waffe im Datasheet-View |
 
 ---
 
 ## Wichtige Constraints
+
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
-- Seitenleisten IMMER fest: first_player links, second_player rechts
+- Seitenleisten IMMER fest: first_player links, second_player rechts (unveränderlich während Spiel)
 - dev-Branch — kein direktes Committen auf main
+- Keywords immer `UPPERCASE` in units.yaml — Checks entsprechend schreiben
+- Weapon-Zugriff: Nie `w.is_melee` für Filter nutzen wenn Dual-Profile möglich — `w.for_phase(use_melee)` verwenden

@@ -81,18 +81,35 @@ Wahapedia-Verifikation aller Statlines und Stratagem-Texte: ✅ abgeschlossen (2
 
 ---
 
-## 5c — Loader-Refactoring 🔄
+## 5c — Loader-Refactoring ✅
 
-Schritt C hat die Dataclass-Seite abgeschlossen. Noch offen:
+Stand 2026-06-01 — alle 323 Tests grün.
 
-- [ ] `damage_bracket` zur Laufzeit auflösen: aktive Stats eines Vehicles abhängig von Woundstand (z.B. Triarch Stalker zeigt aktuell immer Basis-Stats, nicht bracketed Stats)
-- [ ] `gameObjects/loader.py` — Roster-Flow: liest `data/rosters/<name>.yaml`, löst IDs gegen Katalog auf
-- [ ] `power_level`-Skalierung: PL × (aktuelle_modelle / models_min)
-- [ ] `points.yaml` einbinden
-- [ ] Default-Nahkampfwaffe-Logik im Loader (immer ergänzen wenn fehlend)
-- [ ] Unmatched-Einheiten: Warning im Setup, nicht spielbar
+- [x] `damage_bracket` zur Laufzeit auflösen: `resolve_bracket_stats(unit, current_wounds) → dict`
+- [x] `load_roster(path, catalog)` → `(matched: list[tuple[Unit, int]], unmatched: list[str])`
+- [x] `load_roster_metadata(path)` → `dict[str, str]` (display_name, faction_dir)
+- [x] `power_level`-Skalierung: `scaled_pl(unit, current_models) → float`
+- [x] `points.yaml` einbinden: `load_points(faction_dir) → dict[str, int]`
+- [x] Default-Nahkampfwaffe: Close Combat Weapon wird automatisch ergänzt wenn fehlend
+- [x] Roster-Flow: `game_state.py` lädt aus `data/rosters/` statt vollständigem Katalog
+- [x] Zwei Necron-Roster: `necrons_alpha.yaml` (Errant Legion) + `necrons_beta.yaml` (Silent Kings)
+- [x] Zwei Necron-Armeen können gegeneinander spielen — alle Phase-Handler und UI-Dateien player-agnostisch
 
-**Hinweis UI:** Die neuen Felder (`power_level`, `attacks`, `wargear_options`, `damage_bracket`) sind reine Datenschicht-Erweiterungen — die bestehende UI nutzt sie noch nicht. `damage_bracket` ist die spielmechanisch dringendste Lücke.
+**Unmatched-Einheiten:** `roster_warnings` in session_state gesetzt, UI-Einbindung (Setup-Screen) noch ausstehend (Ziel 5e).
+
+### 5c — Nachgelagerte Bugfixes (2026-06-01) ✅
+
+Beim ersten manuellen Testlauf der App mit zwei Necron-Armeen entdeckt und behoben:
+
+- [x] **`Weapon`-Properties fehlten**: `Weapon`-Dataclass hatte keine `is_melee`, `attacks`, `ap`, `strength`, `damage`, `abilities`, `range_inches`-Attribute — nur `WeaponProfile` hatte diese. Alle UI-Zugriffe crashten mit `AttributeError`. Fix: Convenience-Properties auf `Weapon` ergänzt, die auf `profiles[0]` delegieren.
+- [x] **Dual-Profil-Waffen** (z.B. Staff of Light: Shooting + Melee): `Weapon.is_melee` gab immer `profiles[0].is_melee` zurück → Overlord hatte in der Nahkampfphase "No melee weapons". Fix: `Weapon.for_phase(use_melee)` ergänzt; Filter in Fight-/Shooting-Phase und `render_attack_form` auf Profil-Ebene umgestellt.
+- [x] **`models_initial` fehlte im Unit-State**: `unitCard.py` nutzte `unit.models_max` als Nenner des Progress-Bars (immer Datenblatt-Maximum). Fix: `models_initial` in `_unit_state()` gespeichert, Unit-Card zeigt Roster-Anzahl als Nenner.
+- [x] **MWBD Keyword-Case**: Check war `"Core" in unit.keywords`, Keywords in units.yaml sind durchgehend `UPPERCASE`. Fix: `"Core"` → `"CORE"`.
+- [x] **MWBD/ResOrb gegenseitiger Ausschluss**: Beide Awaiting-States konnten gleichzeitig aktiv sein → `elif res_orb_awaiting:` im unitCard wurde von `if mwbd_awaiting:` blockiert. Fix: Aktivieren des einen States löscht den anderen.
+
+**Erkenntnisse für zukünftige Arbeit:**
+- Das `for_phase(use_melee)`-Muster muss bei **jedem neuen Weapon-Zugriff** beachtet werden (nicht `w.is_melee` direkt verwenden, wenn Dual-Profil-Waffen möglich sind).
+- Keyword-Checks immer mit `UPPERCASE` schreiben — units.yaml ist durchgehend uppercase.
 
 ---
 
@@ -112,6 +129,18 @@ Implementierung:
 - [ ] Sicherheit: Dateiformat-Validierung (`.rosz`/`.ros`), Max-Größe, XML-Namespace-Check
 - [ ] Unmatched-Kategorie: Einheiten ohne Katalog-Treffer werden explizit geflaggt
 - [ ] `invuln_save` + FNP via Regex aus Ability-Text extrahieren
+
+**Absehbare Lücke — Wargear-Selektion im Roster-Format:**
+Das aktuelle Roster-Format kennt nur `id` + `models`. Wargear-Auswahl (z.B. Overlord mit Voidscythe statt Staff of Light) ist nicht speicherbar. Der BattleScribe-Importer muss entscheiden: Wargear aus dem XML extrahieren und im Roster ablegen → Loader muss dann Wargear-Overrides beim Unit-Aufbau anwenden. Das erfordert eine Erweiterung des Loader-Vertrags.
+
+Roster-Format-Erweiterung (Entwurf):
+```yaml
+- id: wh40k_9e.necrons.unit.overlord
+  models: 1
+  wargear:
+    - wh40k_9e.necrons.weapon.voidscythe
+    - wh40k_9e.necrons.wargear.resurrection_orb
+```
 
 ---
 
@@ -134,6 +163,11 @@ Implementierung:
 - [ ] Start-Button erst aktiv wenn alle Bedingungen erfüllt
 - [ ] `game_state.init_state()` mit Spielmodus + Spielgröße + Roster-Pfaden erweitern
 
+**Absehbare Lücken:**
+- `game_state.py` hat aktuell **hartcodierte** Roster-Dateipfade (`necrons_alpha.yaml`, `necrons_beta.yaml`) auf Modul-Ebene — muss für dynamische Roster-Auswahl grundlegend umgebaut werden. Das Laden muss in `init_state()` verschoben werden und die Roster-Pfade als Parameter erhalten.
+- `unmatched`-Warnungen sind in `session_state.roster_warnings` gesetzt, aber es gibt noch keine UI-Anzeige im Setup-Screen.
+- Punkte-Validierung: `load_points()` ist implementiert, aber nichts summiert die Punkte eines Rosters gegen die Spielgröße.
+
 ---
 
 ## 5f — Stratagems Proof of Concept
@@ -142,3 +176,16 @@ Implementierung:
 - [ ] `data/wh40k_9e/orks/stratagems.yaml`
 - [ ] Loader + `game_state` für Stratagems erweitern
 - [ ] Stratagem-Anzeige: zunächst nur lesend (kein automatischer Effekt)
+
+---
+
+## Offene Querschnittslücken
+
+Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie nicht untergehen:
+
+| Lücke | Beschreibung | Relevant für |
+|-------|-------------|--------------|
+| `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein Phase-Handler ruft es auf. Vehicle-Stats (Annihilation Barge, Triarch Stalker etc.) ändern sich nicht live beim Schaden. | 5e oder eigenes Ziel |
+| Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml`. Ziel 5c.6 war geplant aber nicht umgesetzt. Orks können nicht als vollständige zweite Fraktion genutzt werden. | 5e (Roster-Auswahl braucht reale zweite Fraktion) |
+| Datasheet-Anzeige Dual-Profile | `gameActionsArea.py` zeigt im Setup-Phase nur `profiles[0]` einer Waffe — Staff of Light zeigt nur Shooting-Profil. Kein Bug, aber UX-Lücke. | 5e Setup-Screen |
+| Keyword-Checks | Alle zukünftigen Keyword-Checks müssen `UPPERCASE` nutzen (units.yaml-Konvention). Bisher nur MWBD-Bug gefunden — weitere könnten bei neuen Features auftreten. | alle |
