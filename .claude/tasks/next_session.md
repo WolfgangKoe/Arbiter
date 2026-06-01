@@ -9,140 +9,119 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
+## Was in dieser Session passiert ist
+
+**Ziel: Schritt 1 — Loader-Vertrag definieren**
+
+Der Loader-Vertrag ist vollständig ausgearbeitet und in `docs/spec/loader_contract.md` festgehalten.
+
+Analyse-Grundlage: Alle 15 Necrons-YAML-Dateien gelesen, `docs/spec/architecture.md`,
+`docs/spec/processes.md`, `docs/work/schlachtrunde.md`, `src/gameObjects/loader.py`,
+`data/wh40k_9e/necrons/army_rules.yaml` und `docs/spec/setup.md`.
+
+**Design-Entscheidungen dieser Session:**
+- `Weapon`-Dataclass bekommt `profiles: list[WeaponProfile]` (auch Single-Profile-Waffen)
+- Roster-Format definiert (inkl. `weapon_loadout` mit `model_count` für gemischte Einheiten)
+- Loader läuft Roster-first: erst Roster parsen + validieren, dann nur benötigte Catalog-Einträge laden
+- Arkana haben Punktekosten in Matched Play → `arkana:`-Abschnitt in `points.yaml`
+- Relics, Warlord Traits, Arkana → werden als `Ability`-Objekte an Einheit gehängt
+- `points.yaml` und Power Level nur im Setup-Screen, nicht im laufenden Spiel
+
+---
+
 ## Aktueller Status Necrons-Datensatz
 
 | Datei | Status |
 |-------|--------|
-| `units.yaml` | ✅ 51 Einheiten, PL bei allen, Brackets bei 10, 5 neue Einheiten |
-| `weapons.yaml` | ⚠️ 97 Waffen — aber Dual-Profile-Waffen als 2 Objekte statt `profiles`-Liste |
+| `units.yaml` | ✅ 51 Einheiten — Refs auf `_shooting`/`_melee` + `resurrection_orb` (weapon) noch alt |
+| `weapons.yaml` | ⚠️ Dual-Profile-Waffen als 2 Objekte; `resurrection_orb` fälschlich drin |
 | `stratagems.yaml` | ✅ 59 Stratagems |
 | `faction_abilities.yaml` | ✅ |
-| `unit_abilities.yaml` | ✅ 8 + 13 neue Abilities |
-| `wargear_abilities.yaml` | ✅ |
-| `wargear.yaml` | ⚠️ Struktur unklar für Loader |
+| `unit_abilities.yaml` | ✅ |
+| `wargear_abilities.yaml` | ⚠️ 3 Relic-Ability-Einträge drin (Duplikation) |
+| `wargear.yaml` | ⚠️ 3 Einträge mit `is_relic: true` (Duplikation zu relics.yaml) |
 | `subfaction_abilities.yaml` | ✅ 6 Dynastien |
-| `command_protocols.yaml` | ⚠️ Struktur unklar für Loader |
-| `warlord_traits.yaml` | ⚠️ Struktur unklar für Loader |
-| `arkana.yaml` | ⚠️ Struktur unklar für Loader |
-| `relics.yaml` | ⚠️ Struktur unklar für Loader |
+| `command_protocols.yaml` | ⚠️ IDs ohne Namespace-Präfix (`eternal_guardian` statt `wh40k_9e.necrons.protocol.eternal_guardian`) |
+| `warlord_traits.yaml` | ✅ Struktur klar — nur Anzeige + Ability-Objekt bei Freigabe |
+| `arkana.yaml` | ⚠️ `points_cost` direkt in Datei statt in `points.yaml` |
+| `relics.yaml` | ✅ Struktur klar |
 | `weapon_abilities.yaml` | ✅ |
 | `army_rules.yaml` | ✅ |
-| `points.yaml` | ⚠️ Existiert — aber Wargear-Optionen mit Kosten fehlen noch |
-
-**Forge World / Legends Einheiten:** noch nicht importiert (bewusst zurückgestellt)
+| `points.yaml` | ⚠️ `arkana:`-Abschnitt fehlt noch |
 
 ---
 
-## Ziel dieser Session: Ziel-5-Architektur
+## Nächster konkreter Schritt: Schritt 2 — Schema-Bereinigung
 
-**Kurzfassung:** Der Datensatz ist inhaltlich weit, aber die YAML-Strukturen sind organisch gewachsen — nie vom Loader her gedacht. Bevor 5c (Loader) implementiert wird, muss die Architektur klar sein.
+**Voraussetzung: explizite Freigabe durch Nutzer vor jeder Dateiänderung.**
 
-Vollständige Analyse und Schulden-Diagnose: `docs/work/ziel5_architektur_review.md`
+Die vollständige Spezifikation steht in `docs/spec/loader_contract.md`.
 
----
+### Reihenfolge (Abhängigkeiten beachten)
 
-### Schritt 1 — Loader-Vertrag definieren (Hauptaufgabe)
+**Gruppe A — YAML-Bereinigung (keine Python-Änderungen nötig):**
 
-**Vor allem anderen:** Diese Fragen beantworten und in `docs/spec/army_builder.md` festhalten.
+1. `command_protocols.yaml` — IDs auf Namespace-Präfix `wh40k_9e.necrons.protocol.<slug>` updaten
+2. `wargear.yaml` — 3 `is_relic: true`-Einträge entfernen (orb_of_eternity, nanoscarab_casket, veil_of_darkness)
+3. `wargear_abilities.yaml` — 3 Relic-Ability-Einträge entfernen (orb_of_eternity, nanoscarab_casket, veil_of_darkness)
+4. `points.yaml` — `arkana:`-Abschnitt mit 12 Einträgen ergänzen (Kosten aus arkana.yaml)
+5. `arkana.yaml` — `points_cost`-Felder entfernen (jetzt in points.yaml)
 
-**A. Was liest der Loader zur Laufzeit?**
+**Gruppe B — weapons.yaml Migration (größte Änderung):**
 
-Unklar bei: `wargear.yaml`, `arkana.yaml`, `relics.yaml`, `warlord_traits.yaml`, `command_protocols.yaml`
+6. `weapons.yaml` — Alle Waffen auf `profiles:`-Liste umstellen:
+   - Dual-Profile-Waffen (z.B. `staff_of_light_shooting` + `staff_of_light_melee`) → ein Objekt `staff_of_light` mit zwei Profilen
+   - Single-Profile-Waffen → ein Profil in der Liste (nur einpacken)
+   - `resurrection_orb` entfernen (kein Weapon)
+   - Scope: alle Waffen in der Datei (~97 Einträge, davon ~20–25 Dual-Profile)
 
-Fragen:
-- Wargear-Optionen stehen in `units.yaml` — was ist in `wargear.yaml` *zusätzlich*?
-- Arkana: sind das Crusade-only-Daten oder auch Matched Play relevant?
-- Relics / Warlord Traits: wann werden sie geladen — immer, oder nur bei Crusade?
-- Command Protocols: wann getriggert — sind das Faction Abilities oder eigene Mechanik?
+7. `units.yaml` — Referenzen anpassen:
+   - `staff_of_light_shooting` / `staff_of_light_melee` → `staff_of_light`
+   - Alle weiteren `_shooting`/`_melee`-Split-Refs finden und zusammenführen
+   - `wargear_options.add: wh40k_9e.necrons.weapon.resurrection_orb` → `wh40k_9e.necrons.wargear.resurrection_orb`
 
-**B. Welche Daten sind spielmechanisch aktiv vs. nur Anzeige?**
+**Gruppe C — Python (nach YAML-Bereinigung):**
 
-Spielmechanisch aktiv (Loader braucht sie zur Laufzeit):
-- Units, Weapons, Points, Damage Brackets, Stratagems (CP-Kosten)
+8. `src/gameObjects/weapon.py` — Dataclass auf `profiles: list[WeaponProfile]` umstellen
+9. `src/gameObjects/loader.py` — `_weapon_from_dict` auf Profile-Parsing umschreiben
 
-Nur Anzeige (Loader kann lazy laden):
-- Warlord Traits, Relics, Arkana, Wargear-Beschreibungen
-
-**C. Vollständige Feldliste pro Katalog-Datei**
-Keine "könnte nützlich sein"-Felder — nur was der Loader braucht.
-
----
-
-### Schritt 2 — Schema-Bereinigung
-
-Nach Freigabe des Loader-Vertrags:
-
-**weapons.yaml:** Dual-Profile-Waffen zusammenführen
-
-Aktuell (falsch):
-```yaml
-- id: wh40k_9e.necrons.weapon.staff_of_light_shooting
-- id: wh40k_9e.necrons.weapon.staff_of_light_melee
-```
-
-Ziel (korrekt):
-```yaml
-- id: wh40k_9e.necrons.weapon.staff_of_light
-  name_en: Staff of Light
-  profiles:
-    - name: Shooting
-      weapon_type: Assault
-      range_inches: 18
-      attacks: "3"
-      strength: "5"
-      ap: "-2"
-      damage: "1"
-      is_melee: false
-    - name: Melee
-      weapon_type: Melee
-      range_inches: 0
-      attacks: "*"
-      strength: "User"
-      ap: "-2"
-      damage: "1"
-      is_melee: true
-```
-
-Waffen mit nur einem Profil: ebenfalls `profiles`-Liste mit einem Eintrag. Einheitlich.
-Scope: ~50 Waffen betroffen. Referenzen in `units.yaml` müssen angepasst werden (kein `_shooting`/`_melee` mehr).
-
-**Alle anderen Katalog-Dateien:** Struktur auf Loader-Vertrag ausrichten.
-
-**points.yaml:** Wargear-Optionen mit Kosten > 0 ergänzen.
-
----
-
-### Schritt 3 — Forge World Einheiten ergänzen
-
-Nach Schema-Bereinigung: FW-Einheiten als eigene Sektion in `units.yaml`.
-
-Kandidaten (Wahapedia, mit FW-Symbol):
-Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites,
-Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon,
-Seraptek Heavy Construct, Sentry Pylon.
-
-Daten von Wahapedia fetchen (Subagent).
-
----
-
-### Schritt 4 — Loader implementieren (Ziel 5c)
-
-Erst wenn Schema stabil und freigegeben:
-- `src/gameObjects/loader.py` vollständig lesen
-- Plan zeigen, Freigabe abwarten
-- Dann implementieren
-
----
-
-## Betroffene Dateien (Schritt 2)
+### Betroffene Dateien (vollständige Liste)
 
 | Datei | Aktion |
 |-------|--------|
-| `docs/spec/army_builder.md` | Loader-Vertrag vollständig ausformulieren |
-| `data/wh40k_9e/necrons/weapons.yaml` | Dual-Profile-Waffen → `profiles`-Liste |
-| `data/wh40k_9e/necrons/units.yaml` | Waffen-Referenzen anpassen (kein `_shooting`/`_melee`) |
-| `data/wh40k_9e/necrons/points.yaml` | Wargear-Kosten ergänzen |
-| Alle anderen YAML-Dateien | Schema-Bereinigung nach Loader-Vertrag |
+| `docs/spec/loader_contract.md` | ✅ Fertig (diese Session) |
+| `docs/spec/army_builder.md` | Weapon-Schema + Roster-Format aktualisieren |
+| `data/wh40k_9e/necrons/command_protocols.yaml` | IDs → Namespace-Präfix |
+| `data/wh40k_9e/necrons/wargear.yaml` | 3 Relic-Einträge entfernen |
+| `data/wh40k_9e/necrons/wargear_abilities.yaml` | 3 Relic-Ability-Einträge entfernen |
+| `data/wh40k_9e/necrons/points.yaml` | `arkana:`-Abschnitt ergänzen |
+| `data/wh40k_9e/necrons/arkana.yaml` | `points_cost`-Felder entfernen |
+| `data/wh40k_9e/necrons/weapons.yaml` | Alle Waffen → `profiles:`-Liste; `resurrection_orb` entfernen |
+| `data/wh40k_9e/necrons/units.yaml` | `_shooting`/`_melee`-Refs + `resurrection_orb`-Ref anpassen |
+| `src/gameObjects/weapon.py` | Dataclass + `WeaponProfile` |
+| `src/gameObjects/loader.py` | `_weapon_from_dict` auf Profile-Parsing |
+
+---
+
+## Offene Design-Fragen (aus loader_contract.md §6)
+
+| # | Frage | Impact |
+|---|-------|--------|
+| 1 | `Unit`-Dataclass: Braucht es `weapon_groups: list[WeaponGroup]` für gemischte Einheiten (z.B. 7 Lychguard Schwert+Schild, 3 Kriegssense), oder reicht die flache `weapons: list[Weapon]`-Liste mit Combat-System-seitiger Auswahl? | `unit.py`, `fightPhase.py`, `shootingPhase.py` |
+| 2 | Roster ohne passendem Catalog-Eintrag (unit_id nicht in units.yaml): `Army.unmatched` + Warnung oder `LoaderError`? | `load_army()` API |
+
+---
+
+## Danach: Schritt 3 + 4
+
+**Schritt 3 — Forge World Einheiten** (nach Schema-Bereinigung):
+Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark,
+Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
+Daten von Wahapedia fetchen (Subagent), als eigene Sektion in `units.yaml`.
+
+**Schritt 4 — Loader implementieren (Ziel 5c)**:
+`src/gameObjects/loader.py` vollständig auf neues Schema umschreiben.
+Erst nach Freigabe des bereinigten Schemas.
 
 ---
 
