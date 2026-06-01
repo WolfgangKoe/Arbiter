@@ -77,8 +77,6 @@ Wahapedia-Verifikation aller Statlines und Stratagem-Texte: ✅ abgeschlossen (2
 - [x] Orks-legacy `army.yaml` via Defaults kompatibel gehalten
 - [x] 306 Tests grün
 
-**Forge World / Legends entsprechend des Datenschemas importieren:** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
-
 ---
 
 ## 5c — Loader-Refactoring ✅
@@ -142,6 +140,8 @@ Roster-Format-Erweiterung (Entwurf):
     - wh40k_9e.necrons.wargear.resurrection_orb
 ```
 
+**Forge World / Legends entsprechend des Datenschemas importieren:** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
+
 ---
 
 ## 5e — Setup-Screen Redesign
@@ -155,17 +155,38 @@ Matched Play Spielgrößen (aus Wahapedia):
 | Strike Force | 2000 | 12 |
 | Onslaught | 3000 | 18 |
 
-Implementierung:
+### UI-Änderungen (beschlossen 2026-06-01)
+
+**gameHeader** — bereinigt, nur noch Anzeige (keine Buttons):
+- VP und CP werden **nur angezeigt**, keine +/− Buttons mehr im Header
+- VP-Anpassung (+5/−5) erfolgt in der gameActionDisplayArea am Ende der konfigurierten Siegpunkt-Phase
+- CP-Anpassung läuft ausschließlich über die Befehlsphase (Grant +1 CP) und Abilities
+
+**gameActionDisplayArea** — Reihenfolge geändert:
+- Wird **oberhalb** der firstPlayerArea/secondPlayerArea gerendert (nicht mehr darunter)
+- Begründung: Kontext (Phasenregeln, Angriffszusammenfassung, Ergebnis) steht vor den Aktionsbuttons
+
+**Siegpunkt-Zählphase** — neues Setup-Feld:
+- Spieler wählt im Setup, zu welchem Phasenende VPs gezählt werden
+- Optionen: Befehlsphase / Bewegungsphase / Schussphase / Nahkampfphase / Moralphase (etc.)
+- Am Ende dieser Phase erscheinen VP-Buttons (+5/−5) für beide Spieler in der displayArea
+
+### Implementierung
+
+- [ ] **Architektur-Umbau `game_state.py`**: Roster-Globals von Modul-Ebene in `init_state(roster_p1, roster_p2, game_mode, game_size, vp_phase)` verschieben — kritischer erster Schritt
 - [ ] Spielmodus-Auswahl: Matched / Open / Crusade
-- [ ] Spielgröße: Combat Patrol (500 Pkt) / Incursion (1000) / Strike Force (2000) / Onslaught (3000)
+- [ ] Spielgröße-Auswahl: Combat Patrol / Incursion / Strike Force / Onslaught + CP-Initialisierung
 - [ ] Roster-Dropdown aus `data/rosters/` — P1-Wahl sperrt für P2 (keine doppelte Armeewahl)
+- [ ] Siegpunkt-Zählphase wählen (Dropdown: alle 7 Phasen)
 - [ ] Erster Spieler festlegen
-- [ ] Start-Button erst aktiv wenn alle Bedingungen erfüllt
-- [ ] `game_state.init_state()` mit Spielmodus + Spielgröße + Roster-Pfaden erweitern
+- [ ] Start-Button erst aktiv wenn alle Bedingungen erfüllt (Modus, Größe, beide Roster, VP-Phase)
+- [ ] `unmatched`-Warnungen im Setup-Screen anzeigen (Einheiten die nicht im Katalog gefunden wurden)
+- [ ] gameHeader: VP/CP-Buttons entfernen, nur Anzeige behalten
+- [ ] gameActionsArea: DisplayArea nach oben verschieben (vor PlayerAreas rendern)
+- [ ] VP-Buttons (+5/−5) in displayArea am Ende der konfigurierten Phase einblenden
 
 **Absehbare Lücken:**
-- `game_state.py` hat aktuell **hartcodierte** Roster-Dateipfade (`necrons_alpha.yaml`, `necrons_beta.yaml`) auf Modul-Ebene — muss für dynamische Roster-Auswahl grundlegend umgebaut werden. Das Laden muss in `init_state()` verschoben werden und die Roster-Pfade als Parameter erhalten.
-- `unmatched`-Warnungen sind in `session_state.roster_warnings` gesetzt, aber es gibt noch keine UI-Anzeige im Setup-Screen.
+- `game_state.py` hat aktuell **hartcodierte** Roster-Dateipfade (`necrons_alpha.yaml`, `necrons_beta.yaml`) auf Modul-Ebene — muss für dynamische Roster-Auswahl grundlegend umgebaut werden.
 - Punkte-Validierung: `load_points()` ist implementiert, aber nichts summiert die Punkte eines Rosters gegen die Spielgröße.
 
 ---

@@ -42,12 +42,13 @@ Three-column layout with a fixed top header. Each column scrolls independently.
 
 ## 2. gameHeader
 
-Fixed bar across the full width at the top.
+Fixed bar across the full width at the top. **Read-only display** — no adjustment buttons.
+VP and CP are modified exclusively inside the game phases, not from the header.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  VP [+5][-5]  X=0    │  Arbiter · gameTitel  │  gameSize  │  gameType  │  VP [+5][-5]  X=0   │
-│  CP [+1][-1]  Y=…    │                       │            │            │  CP [+1][-1]  Y=…   │
+│  VP  X=0    │  Arbiter · gameTitel  │  gameSize  │  gameType  │  VP  X=0   │
+│  CP  Y=…    │                       │            │            │  CP  Y=…   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -55,32 +56,38 @@ Fixed bar across the full width at the top.
 
 | Property | Type | Default | Notes |
 |----------|------|---------|-------|
-| `vp_p1` | int | 0 | Victory Points, firstPlayer |
-| `vp_p2` | int | 0 | Victory Points, secondPlayer |
-| `cp_p1` | int | gameSize-dependent | Command Points, firstPlayer |
-| `cp_p2` | int | gameSize-dependent | Command Points, secondPlayer |
+| `vp_p1` | int | 0 | Victory Points, firstPlayer — display only |
+| `vp_p2` | int | 0 | Victory Points, secondPlayer — display only |
+| `cp_p1` | int | gameSize-dependent | Command Points, firstPlayer — display only |
+| `cp_p2` | int | gameSize-dependent | Command Points, secondPlayer — display only |
 | `game_title` | str | "" | Optional custom game name |
 | `game_size` | enum | — | Patrol / Incursion / Strike Force / Onslaught |
 | `game_type` | enum | matched | matched / open / crusade |
 | `current_round` | int | 0 | 0 = Setup not yet complete |
 | `current_phase` | str | — | see phase list |
 
-### Controls
+### Where VP and CP are modified
 
-- **VP stepper:** `[+5]` / `[−5]` per player. Step size = 5 (typical scoring is 5 / 10 / 15 VP).
-- **CP stepper:** `[+1]` / `[−1]` per player. Step size = 1.
-- **X** (VP value) starts at 0.
-- **Y** (CP value) starts at a value determined by `game_size` during setup — TBD, see note below.
-- `game_size` and `game_type` are set in the setup screen and not changeable mid-game.
+| Stat | Where modified | Notes |
+|------|---------------|-------|
+| VP | gameActionsArea — dedicated VP phase (Command or other, see Setup) | +5/−5 steppers appear at end of the configured scoring phase |
+| CP | gameActionsArea — Command Phase (Grant +1 CP button) | Additional CP via abilities or Setup screen (initial value) |
 
-### CP Starting Values by gameSize (TBD — verify against Wahapedia)
+### VP Scoring Phase (configured in Setup)
+
+The player selects at which phase end VPs are counted:
+`Command Phase` / `Movement Phase` / `Psychic Phase` / `Shooting Phase` / `Charge Phase` / `Fight Phase` / `Morale Phase`
+
+At the end of the chosen phase, VP adjustment buttons (+5 / −5) appear in the gameActionsArea for both players.
+
+### CP Starting Values by gameSize
 
 | gameSize | CP start |
 |----------|----------|
 | Patrol | 3 |
-| Incursion | 4 |
-| Strike Force | 5 |
-| Onslaught | 6 |
+| Incursion | 6 |
+| Strike Force | 12 |
+| Onslaught | 18 |
 
 ---
 
@@ -299,50 +306,61 @@ Typical army: 1 detachment. Large games (Onslaught): up to 3+ detachments.
 
 ## 7. gameActionsArea
 
-Center column, upper section. Two sections stacked vertically. Highest dynamic of all components.
+Center column. Three sections stacked vertically. Highest dynamic of all components.
 The `gameProtocoll` panel (Section 8) is rendered **below** this area as a separate component.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
+│  gameActionDisplayArea (full width)                                    │
+│  Combined view of all effects (including passive auras).               │
+│  Modifier chain → final result. Phase rules text + attack summary.     │
+│  Setup: unit datasheet when a unit is selected.                        │
+│  VP scoring phase: +5 / −5 buttons for both players.                  │
+├────────────────────────────────────────────────────────────────────────┤
 │  firstPlayerArea (50%)        │  secondPlayerArea (50%)                │
 │  ──────────────────────────────────────────────────────────────────────│
 │  Main interaction surface     │  Main interaction surface              │
 │  for the first player:        │  for the second player:                │
 │  active actions + reactions   │  active actions + reactions            │
 │  + wound adjustment buttons.  │  + wound adjustment buttons.           │
-├────────────────────────────────────────────────────────────────────────┤
-│  gameActionDisplayArea (full width)                                    │
-│  Combined view of all effects (including passive auras).               │
-│  Modifier chain → final result. Phase rules text + attack summary.     │
-│  Setup: unit datasheet when a unit is selected.                        │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
+**Render order:** `gameActionDisplayArea` first (top), then the two-column `PlayerArea` split below.
+This puts context (result summary, phase rules, attack form) above the action buttons,
+so the player reads the situation before acting.
+
 ### Design principles
 
+- **gameActionDisplayArea** is rendered first — it provides context for the player actions below.
+  - Passive result view (phase rules, attack summary, modifier chain) in most phases.
+  - Active surface only for VP scoring: `[+5]` / `[−5]` buttons for both players appear here
+    at the end of the configured scoring phase (see Section 2, VP Scoring Phase).
+  - Setup: shows unit datasheet when a unit is selected.
 - **PlayerAreas** are the main interaction surface for each player.
   - Active player: action buttons for selected unit (movement, charge, fight, abilities).
   - Inactive player: target info + reaction buttons (overwatch, stratagems, etc.).
   - Wound adjustment buttons appear in the relevant PlayerArea when an effect targets a unit.
   - Both players may have active buttons simultaneously (e.g. active shoots, inactive reacts).
-- **gameActionDisplayArea** is a passive combined result view — not an interaction surface.
-  Shows how all effects (including auras) interact and what the final outcome is.
 - `uiLayout/gameActionsArea.py` owns the layout. Phase logic is delegated to
   `gameMechanic/<phase>.py` render functions.
 - Wound-change buttons are **not** on the unitCard — they live in the PlayerArea.
 
 ### Per-phase content
 
-| Phase | firstPlayerArea | secondPlayerArea | displayArea |
-|-------|-----------------|------------------|-------------|
-| setup | — | — | unit datasheet (when unit selected) or setup instructions |
-| command | selected unit + ability buttons + heal | reactions / — | Living Metal results, CP |
-| movement | move type buttons + M" value | — | phase rules |
-| psychic | PSYKER + power + roll | target + deny | phase rules |
-| shooting | attacker + weapon profiles + wound buttons | target T/Sv/++ + wound buttons | attack summary |
-| charge | charge declaration + 2D6 | overwatch reaction | phase rules |
-| fight | melee attacker + weapons + wound buttons | defender + wound buttons | fight summary |
-| morale | morale test + result | — | phase rules |
+| Phase | displayArea (top) | firstPlayerArea | secondPlayerArea |
+|-------|-------------------|-----------------|------------------|
+| setup | unit datasheet (when selected) or setup instructions | — | — |
+| command | Living Metal results, CP grant | selected unit + ability buttons + heal | reactions / — |
+| movement | phase rules | move type buttons + M" value | — |
+| psychic | phase rules | PSYKER + power + roll | target + deny |
+| shooting | attack summary + attack form | attacker + weapon profiles + wound buttons | target T/Sv/++ + wound buttons |
+| charge | phase rules | charge declaration + 2D6 | overwatch reaction |
+| fight | fight summary + attack form | melee attacker + weapons + wound buttons | defender + wound buttons |
+| morale | phase rules | morale test + result | — |
+| (VP phase) | **VP: [+5][−5] for both players** | — | — |
+
+The VP scoring row appears at the end of whichever phase was configured in Setup (e.g. end of Command Phase). It is shown in the displayArea so both players can confirm the score simultaneously.
 
 ### Setup — unit datasheet in displayArea
 
