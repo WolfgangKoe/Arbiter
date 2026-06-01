@@ -140,8 +140,6 @@ Roster-Format-Erweiterung (Entwurf):
     - wh40k_9e.necrons.wargear.resurrection_orb
 ```
 
-**Forge World / Legends entsprechend des Datenschemas importieren:** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
-
 ---
 
 ## 5e — Setup-Screen Redesign
@@ -208,5 +206,6 @@ Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie n
 |-------|-------------|--------------|
 | `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein Phase-Handler ruft es auf. Vehicle-Stats (Annihilation Barge, Triarch Stalker etc.) ändern sich nicht live beim Schaden. | 5e oder eigenes Ziel |
 | Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml`. Ziel 5c.6 war geplant aber nicht umgesetzt. Orks können nicht als vollständige zweite Fraktion genutzt werden. | 5e (Roster-Auswahl braucht reale zweite Fraktion) |
+| Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. Müssen nach Datenschema in `units.yaml` + `weapons.yaml` eingetragen werden. | nach 5d/5e, eigenes Ziel |
 | Datasheet-Anzeige Dual-Profile | `gameActionsArea.py` zeigt im Setup-Phase nur `profiles[0]` einer Waffe — Staff of Light zeigt nur Shooting-Profil. Kein Bug, aber UX-Lücke. | 5e Setup-Screen |
 | Keyword-Checks | Alle zukünftigen Keyword-Checks müssen `UPPERCASE` nutzen (units.yaml-Konvention). Bisher nur MWBD-Bug gefunden — weitere könnten bei neuen Features auftreten. | alle |
