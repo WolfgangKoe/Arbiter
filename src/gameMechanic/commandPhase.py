@@ -4,6 +4,7 @@ import streamlit as st
 
 from gameMechanic.ability_engine import get_triggered_abilities
 from gameMechanic.game_log import log_action
+from gameMechanic.game_state import faction_dir_for, is_necron_faction, units_key_for
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
@@ -74,6 +75,7 @@ def _render_overlord_actions(
             use_container_width=True,
         ):
             st.session_state.mwbd_awaiting_target = True
+            st.session_state.res_orb_awaiting_target = False
             st.rerun()
 
     # ── Resurrection Orb ──────────────────────────────────────────────────────
@@ -89,7 +91,9 @@ def _render_overlord_actions(
         target_unit = unit_by_id.get(res_orb_target)
         if target_unit:
             st.caption(f'Target: **{target_unit.name_en}** — verify within 6" on table')
-            wound_adjustment_buttons("Necrons", res_orb_target, target_unit)
+            wound_adjustment_buttons(
+                st.session_state.get("active", ""), res_orb_target, target_unit
+            )
         if st.button(
             "Confirm & Close Resurrection Orb",
             key="cmd_res_orb_confirm",
@@ -113,14 +117,15 @@ def _render_overlord_actions(
             use_container_width=True,
         ):
             st.session_state.res_orb_awaiting_target = True
+            st.session_state.mwbd_awaiting_target = False
             st.rerun()
 
 
 def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    if faction != "Necrons":
+    if not is_necron_faction(faction):
         return
 
-    protocols = load_command_protocols("necrons")
+    protocols = load_command_protocols(faction_dir_for(faction))
     if not protocols:
         return
 
@@ -221,16 +226,15 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
             st.markdown(badges, unsafe_allow_html=True)
         st.divider()
 
-    faction_dir = "necrons" if faction == "Necrons" else "orks"
-    units = load_army(faction_dir)
+    units, _ = load_army(faction_dir_for(faction))
     unit_by_id = {u.id: u for u in units}
-    units_key = "necron_units" if faction == "Necrons" else "ork_units"
+    units_key = units_key_for(faction)
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
     _render_command_protocols(faction, state)
 
-    if faction == "Necrons":
+    if is_necron_faction(faction):
         overlord_alive = _OVERLORD_ID in units_state and not units_state[_OVERLORD_ID].get(
             "destroyed"
         )

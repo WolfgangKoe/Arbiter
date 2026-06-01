@@ -173,7 +173,7 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
             )
 
             if mwbd_awaiting:
-                if "Core" in unit.keywords:
+                if "CORE" in unit.keywords:
                     if st.button(
                         f"▶ {unit.name_en}",
                         key=f"mwbd_tgt_{faction}_{uid}",
