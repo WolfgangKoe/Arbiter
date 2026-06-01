@@ -28,3 +28,33 @@ class Weapon:
     name_en: str
     profiles: list[WeaponProfile] = field(default_factory=list)
     is_relic: bool = False
+
+    # Convenience properties — delegate to profiles[0] for single-profile weapons.
+    # Multi-profile weapons (dual-mode) should be handled by iterating .profiles.
+    @property
+    def is_melee(self) -> bool:
+        return self.profiles[0].is_melee if self.profiles else False
+
+    @property
+    def range_inches(self) -> int:
+        return self.profiles[0].range_inches if self.profiles else 0
+
+    @property
+    def attacks(self) -> str:
+        return self.profiles[0].attacks if self.profiles else "0"
+
+    @property
+    def strength(self) -> str:
+        return self.profiles[0].strength if self.profiles else "0"
+
+    @property
+    def ap(self) -> str:
+        return self.profiles[0].ap if self.profiles else "0"
+
+    @property
+    def damage(self) -> str:
+        return self.profiles[0].damage if self.profiles else "0"
+
+    @property
+    def abilities(self) -> str:
+        return self.profiles[0].abilities if self.profiles else ""

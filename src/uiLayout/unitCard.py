@@ -19,7 +19,7 @@ Design principles (see docs/spec/ui_layout.md §4):
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES
+from gameMechanic.game_state import PHASES, units_key_for
 from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
 
@@ -136,16 +136,17 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
         cur = state["current_wounds"]
         models_alive = state["models"]
 
+        models_initial = state.get("models_initial", unit.models_max)
         if unit.models_max == 1:
             st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
             st.caption(f"❤ {cur}/{unit.wounds}")
         elif unit.wounds == 1:
-            st.progress(models_alive / unit.models_max if unit.models_max > 0 else 0)
-            st.caption(f"⬡ {models_alive}/{unit.models_max}")
+            st.progress(models_alive / models_initial if models_initial > 0 else 0)
+            st.caption(f"⬡ {models_alive}/{models_initial}")
         else:
             front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
-            st.progress(models_alive / unit.models_max)
-            st.caption(f"⬡ {models_alive}/{unit.models_max}")
+            st.progress(models_alive / models_initial if models_initial > 0 else 0)
+            st.caption(f"⬡ {models_alive}/{models_initial}")
             st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
             st.caption(f"❤ {front_wounds}/{unit.wounds}")
 
@@ -179,7 +180,9 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
                         type="secondary",
                         use_container_width=True,
                     ):
-                        st.session_state.necron_units[uid]["my_will_be_done_active"] = True
+                        st.session_state[units_key_for(faction)][uid][
+                            "my_will_be_done_active"
+                        ] = True
                         st.session_state.mwbd_target_uid = uid
                         st.session_state.mwbd_active_since_round = st.session_state.round
                         st.session_state.mwbd_awaiting_target = False
