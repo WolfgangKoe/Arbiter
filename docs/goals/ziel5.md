@@ -28,78 +28,71 @@ Jede Einheit besitzt mindestens eine Nahkampfwaffe. Falls nicht explizit definie
 
 ---
 
-## 5b — Katalog Necrons (Grunddaten) 🔄
+## 5b — Katalog Necrons (Grunddaten) ✅
 
-Stand 2026-05-30 — verifiziert gegen Wahapedia:
+Stand 2026-06-01 — verifiziert gegen Wahapedia:
 
 | Datei | Status | Inhalt |
 |-------|--------|--------|
-| `units.yaml` | ⚠️ | 46 Einheiten — 5 fehlen, kein PL, keine Brackets |
-| `weapons.yaml` | ⚠️ | 93 Waffen — 4 neue nötig für fehlende Einheiten |
+| `units.yaml` | ✅ | 51 Einheiten, power_level, damage_bracket (Vehicles), wargear_options (normiert) |
+| `weapons.yaml` | ✅ | Profile-Schema, alle Dual-Profile zusammengeführt |
 | `stratagems.yaml` | ✅ | 59 Stratagems |
-| `faction_abilities.yaml` | ✅ | 7 Abilities |
-| `unit_abilities.yaml` | ⚠️ | 8 Abilities — ~10 neue nötig |
-| `wargear_abilities.yaml` | ✅ | 12 Abilities |
-| `wargear.yaml` | ✅ | 13 Items |
-| `subfaction_abilities.yaml` | ✅ | 6 Dynastien |
-| `command_protocols.yaml` | ✅ | 6 Protokolle |
+| `faction_abilities.yaml` | ✅ | 7 Abilities, IDs normiert auf `wh40k_9e.necrons.faction.*` |
+| `unit_abilities.yaml` | ✅ | 8 Abilities, IDs normiert auf `wh40k_9e.necrons.unit.*` |
+| `wargear_abilities.yaml` | ✅ | 12 Abilities, IDs normiert auf `wh40k_9e.necrons.wargear.*` |
+| `wargear.yaml` | ✅ | 10 Items |
+| `subfaction_abilities.yaml` | ✅ | 6 Dynastien, IDs normiert auf `wh40k_9e.necrons.dynasty.*` |
+| `command_protocols.yaml` | ✅ | 6 Protokolle, Namespace-Prefix gesetzt |
 | `warlord_traits.yaml` | ✅ | 13 Traits |
 | `arkana.yaml` | ✅ | 12 Cryptek-Arkana |
 | `relics.yaml` | ✅ | 6 Relikte |
 | `weapon_abilities.yaml` | ✅ | 44 Abilities |
 | `army_rules.yaml` | ✅ | Armeebau-Regeln |
-| `points.yaml` | ❌ | Fehlt komplett |
+| `points.yaml` | ✅ | 51 Einheiten + Wargear + Arkana |
+| `army.yaml` | ✅ | **gelöscht** |
 
 Wahapedia-Verifikation aller Statlines und Stratagem-Texte: ✅ abgeschlossen (2026-05-30)
 
 ---
 
-## 5b.1 — Necrons Datensatz vervollständigen 🔄
+## 5b.2 — Datensäuberung vor Loader ✅
 
-**Fehlende Einheiten (5 Stück → 51 gesamt):**
+### Schritt A — `army.yaml` entfernen + Namespace-Normierung ✅
 
-| Einheit | Role | PL | Punkte |
-|---------|------|----|--------|
-| Canoptek Plasmacyte | Elites | fetchen | fetchen |
-| Hexmark Destroyer | Elites | fetchen | 65 |
-| Transcendent C'tan | Elites | 14 | 230 |
-| Obelisk | Lords of War | 17 | 270 |
-| Convergence of Dominion | Fortification | 4 | 80/Modell |
+- [x] `army.yaml` gelöscht
+- [x] Alle Ability-IDs auf `wh40k_9e.`-Namespace normiert (faction/unit/wargear/dynasty)
+- [x] `loader.py` liest `units.yaml` (Catalog), fällt auf `army.yaml` zurück (Orks-Compat)
+- [x] `points.yaml`: Triarch Stalker in Elites-Sektion
 
-**Battlefield Role Korrektur:** Triarch Stalker `[Heavy Support]` → `[Elites]`
+### Schritt B — `wargear_options`-Schema vereinheitlichen ✅
 
-**Damage Brackets (10 Einheiten mit wounds > 9):**
-Triarch Stalker, Canoptek Doomstalker, Ghost Ark, Doomsday Ark, Night Scythe, Doom Scythe, Obelisk, The Silent King, Monolith, Tesseract Vault
+- [x] Alle 16 `wargear_options`-Blöcke auf einheitliches `type/with/replaces/item`-Schema
+- [x] `replace_all_with` (Monolith) → `type: replace, replaces: gauss_flux_arc`
 
-**Neue Datenfelder:**
-- `power_level` inline in allen 51 Einheiten
-- `damage_bracket` für Einheiten > 9W
-- `points.yaml` — neue Datei, 51 Einheiten + Non-Zero-Wargear
+### Schritt C — `Unit`-Dataclass + Loader vervollständigen ✅
 
-**Umsetzungsreihenfolge:**
+- [x] `WargearOption`, `DamageBracket` Dataclasses in `unit.py`
+- [x] `Unit` um `power_level`, `attacks`, `wargear_options`, `damage_bracket` erweitert
+- [x] `loader.py`: `_wargear_option_from_dict`, `_damage_bracket_from_dict`, `load_unit_catalog()`
+- [x] Orks-legacy `army.yaml` via Defaults kompatibel gehalten
+- [x] 306 Tests grün
 
-- [ ] Datenbeschaffung: fehlende PL/Punkte/Brackets von Wahapedia fetchen
-- [ ] `weapons.yaml` — 4 neue Waffen (transdimensional_abductor, monomolecular_proboscis, enmitic_disintegrator_pistol, crackling_tendrils)
-- [ ] `unit_abilities.yaml` — ~10 neue Abilities für neue Einheiten
-- [ ] `units.yaml` — power_level zu 46 Einheiten, Role fix, brackets zu 10 Einheiten, 5 neue Einheiten
-- [ ] `points.yaml` — neue Datei erstellen
-- [ ] `army_builder.md` — power_level, damage_bracket, points.yaml-Schema dokumentieren
-
-**Forge World / Legends (außer Scope):** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
+**Forge World / Legends entsprechend des Datenschemas importieren:** Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon.
 
 ---
 
-## 5c — Loader-Refactoring
+## 5c — Loader-Refactoring 🔄
 
-Erst nach Abschluss von 5b.1. Vollständige Lektüre von `src/gameObjects/loader.py` vor Planung.
+Schritt C hat die Dataclass-Seite abgeschlossen. Noch offen:
 
-- [ ] `gameObjects/loader.py` — liest Roster, löst IDs gegen Katalog auf
+- [ ] `damage_bracket` zur Laufzeit auflösen: aktive Stats eines Vehicles abhängig von Woundstand (z.B. Triarch Stalker zeigt aktuell immer Basis-Stats, nicht bracketed Stats)
+- [ ] `gameObjects/loader.py` — Roster-Flow: liest `data/rosters/<name>.yaml`, löst IDs gegen Katalog auf
 - [ ] `power_level`-Skalierung: PL × (aktuelle_modelle / models_min)
 - [ ] `points.yaml` einbinden
-- [ ] `damage_bracket` zur Laufzeit auflösen (nach Wounds-Stand der Einheit)
 - [ ] Default-Nahkampfwaffe-Logik im Loader (immer ergänzen wenn fehlend)
 - [ ] Unmatched-Einheiten: Warning im Setup, nicht spielbar
-- [ ] Alle bestehenden Tests anpassen (neue Datenstruktur)
+
+**Hinweis UI:** Die neuen Felder (`power_level`, `attacks`, `wargear_options`, `damage_bracket`) sind reine Datenschicht-Erweiterungen — die bestehende UI nutzt sie noch nicht. `damage_bracket` ist die spielmechanisch dringendste Lücke.
 
 ---
 

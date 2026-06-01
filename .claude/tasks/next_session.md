@@ -11,95 +11,67 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Was in dieser Session passiert ist
 
-**Ziel: Schritt 2 — Schema-Bereinigung (vollständig abgeschlossen)**
+**Ziel 5b.2 vollständig abgeschlossen — Schritte A, B, C ✅ — 306 Tests grün**
 
-### Erledigte Design-Entscheidungen
-- `WeaponGroup` (Option B): Einheiten mit gemischten Loadouts nutzen `weapon_groups: list[WeaponGroup]` statt flacher `weapons`-Liste
-- `Army.unmatched` (Option A): Unbekannte `unit_id` im Roster landet in `unmatched`-Liste + Warnung, kein harter Fehler
+### Schritt A ✅ (bereits letzte Session, jetzt fertig)
+- `army.yaml` gelöscht
+- Alle Ability-IDs auf `wh40k_9e.`-Namespace normiert
+- `loader.py` liest `units.yaml`; `ability_engine.py` Tuple-Unpacking korrigiert
+- `Convergence of Dominion` (Fortification): `move/ws/leadership: null` → `"-"`
+- `Unit.leadership: int | None` (None = Gebäude)
 
-### Erledigte Korrekturen
-- `army_rules.yaml` — Command Protocols: `assign_count: 5` → `assign_to_rounds: 5` + `permanent_count: 1` (permanentes Protokoll muss ebenfalls gewählt werden)
+### Schritt B ✅
+- Alle 16 `wargear_options`-Blöcke in `units.yaml` auf `type/with/replaces/item`-Schema
+- `replace_all_with` (Monolith) → `type: replace, replaces: gauss_flux_arc`
 
-### Erledigte Bereinigungen
+### Schritt C ✅
+- `WargearOption`, `DamageBracket` Dataclasses in `src/gameObjects/unit.py`
+- `Unit` um `power_level: int`, `attacks: int | None`, `wargear_options`, `damage_bracket` erweitert
+- `loader.py`: `_wargear_option_from_dict`, `_damage_bracket_from_dict`, `load_unit_catalog()`
+- Orks-legacy `army.yaml` via Defaults kompatibel gehalten (`power_level=0`)
+- 8 Test-Fixtures aktualisiert, 7 neue Tests in `tests/gameObjects/test_loader.py`
 
-**Gruppe A — YAML:**
-| Datei | Änderung |
-|-------|----------|
-| `command_protocols.yaml` | Alle 6 IDs auf Namespace-Präfix `wh40k_9e.necrons.protocol.*` |
-| `wargear.yaml` | 3 Relic-Einträge entfernt (`orb_of_eternity`, `nanoscarab_casket`, `veil_of_darkness`) |
-| `wargear_abilities.yaml` | 3 Relic-Ability-Einträge entfernt (gleiche 3) |
-| `points.yaml` | `arkana:`-Abschnitt mit 12 Einträgen ergänzt |
-| `arkana.yaml` | Alle `points_cost`-Felder entfernt (jetzt in `points.yaml`) |
-
-**Gruppe B — Waffen-Migration:**
-| Datei | Änderung |
-|-------|----------|
-| `weapons.yaml` | Komplett auf `profiles: list[WeaponProfile]` umgestellt; 15 Dual-Profile-Paare zusammengeführt (`staff_of_light`, `heat_ray`, `doomsday_cannon`, etc.); `resurrection_orb` als Weapon entfernt |
-| `units.yaml` | Alle `_shooting`/`_melee`-Refs zusammengeführt; `wh40k_9e.necrons.weapon.resurrection_orb` → `wh40k_9e.necrons.wargear.resurrection_orb` |
-
-**Gruppe C — Python:**
-| Datei | Änderung |
-|-------|----------|
-| `weapon.py` | `WeaponProfile`, `WeaponGroup`, `Weapon` neu strukturiert |
-| `loader.py` | `_weapon_profile_from_dict`, `_weapon_from_dict` (Profile-Parsing), `load_weapon_catalog`, `_unit_from_dict` (Ref-Auflösung mit weapon_catalog), `load_army` gibt jetzt `(list[Unit], list[str])` zurück |
+### UI-Status der neuen Felder
+Die neuen Felder sind reine Datenschicht-Erweiterungen — kein UI-Code wurde geändert:
+- `power_level`, `wargear_options` → relevant für Army Builder (Ziel 5e)
+- `attacks` → relevant für Detailansichten / Kampfphase
+- `damage_bracket` → **spielmechanisch dringend**: Vehicles zeigen aktuell immer Basis-Stats, auch bei niedrigem Woundstand
 
 ---
 
 ## Aktueller Status Necrons-Datensatz
 
-| Datei | Status |
-|-------|--------|
-| `units.yaml` | ✅ 51 Einheiten — Refs auf einzelne Weapon-IDs (keine Splits mehr) |
-| `weapons.yaml` | ✅ Profile-Schema; alle Dual-Profile zusammengeführt |
-| `stratagems.yaml` | ✅ 59 Stratagems |
-| `faction_abilities.yaml` | ✅ |
-| `unit_abilities.yaml` | ✅ |
-| `wargear_abilities.yaml` | ✅ Relic-Duplikate entfernt |
-| `wargear.yaml` | ✅ Relic-Duplikate entfernt |
-| `subfaction_abilities.yaml` | ✅ 6 Dynastien |
-| `command_protocols.yaml` | ✅ Namespace-Präfix gesetzt |
-| `warlord_traits.yaml` | ✅ |
-| `arkana.yaml` | ✅ `points_cost` entfernt |
-| `relics.yaml` | ✅ |
-| `weapon_abilities.yaml` | ✅ |
-| `army_rules.yaml` | ✅ Command Protocols korrigiert |
-| `points.yaml` | ✅ `arkana:`-Abschnitt vorhanden |
+Alle Dateien vollständig und normiert. ✅ 306 Tests grün.
 
 ---
 
-## Nächster konkreter Schritt: Schritt 3 — Forge World Einheiten
+## Nächster konkreter Schritt: 5c Loader-Refactoring
 
-**Voraussetzung: explizite Freigabe durch Nutzer vor jeder Dateiänderung.**
+**Voraussetzung: explizite Freigabe durch Nutzer vor Dateiänderungen.**
 
-Forge World Einheiten für Necrons, die noch fehlen:
-- Night Shroud
-- Canoptek Tombstalker
-- Canoptek Acanthrites
-- Tesseract Ark
-- Canoptek Tomb Sentinel
-- Gauss Pylon
-- Seraptek Heavy Construct
-- Sentry Pylon
+### Option 1 — `damage_bracket` live auflösen (spielmechanisch relevant)
 
-**Vorgehen:**
-1. Subagent: Daten für alle 8 Einheiten von Wahapedia fetchen (Stats, Waffen, Keywords, Regeln)
-2. Neue Sektion `# ── Forge World ──` in `units.yaml` ergänzen
-3. Neue Waffen-Einträge in `weapons.yaml` (Profile-Format)
-4. Punkte-Einträge in `points.yaml`
+Vehicles (Triarch Stalker, Monolith, etc.) haben `damage_bracket`-Einträge. Aktuell werden
+immer die Basis-Stats angezeigt. Fix: eine Hilfsfunktion, die aus `damage_bracket` + aktuellem
+Woundstand die aktuellen Stats zurückgibt.
 
----
+```python
+def resolve_stats(unit: Unit, current_wounds: int) -> tuple[str, str, str]:
+    """Gibt (move, ws, bs) für den aktuellen Woundstand zurück."""
+```
 
-## Danach: Schritt 4 — Loader implementieren (Ziel 5c)
+Betroffene Dateien:
+- `src/gameObjects/loader.py` (neue Hilfsfunktion)
+- UI-Stellen, die `unit.move/ws/bs` anzeigen (derzeit: keine — damage bracket wird noch nicht genutzt)
 
-`src/gameObjects/loader.py` vollständig auf neues Schema umschreiben:
-- Roster-first: erst Roster parsen + validieren, dann Catalog-Einträge laden
-- `Unit.weapon_groups: list[WeaponGroup]` für gemischte Einheiten
-- `load_army` gibt `(list[Unit], list[str])` zurück — unmatched bereits vorbereitet
+### Option 2 — Roster-Flow (`load_army` auf ID-Lookup umschreiben)
 
-Offene Design-Fragen (aus loader_contract.md §6, noch zu entscheiden vor Schritt 4):
-| # | Frage | Impact |
-|---|-------|--------|
-| 1 | `Unit`-Dataclass: `weapon_groups: list[WeaponGroup]` für gemischte Einheiten, oder erst im Combat-System auflösen? | `unit.py`, `fightPhase.py`, `shootingPhase.py` |
+Roster `data/rosters/<name>.yaml` laden, IDs gegen Katalog auflösen, `unmatched` befüllen.
+Vorbedingung: ein Roster für Necrons anlegen.
+
+### Option 3 — Orks auf `units.yaml`-Format migrieren
+
+Orks noch im Altformat (`army.yaml`). Migration → Orks können dann `power_level`, `attacks` etc. nutzen.
 
 ---
 
