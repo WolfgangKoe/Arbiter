@@ -32,11 +32,13 @@ def _make_unit(rules: list[str], keywords: list[str] | None = None) -> Unit:
         wounds=3,
         models_min=1,
         models_max=3,
+        power_level=4,
         move='6"',
         bs="3+",
         ws="3+",
         strength=4,
         toughness=4,
+        attacks=3,
         save=3,
         invuln_save=None,
         leadership=10,
@@ -244,11 +246,13 @@ def test_execute_effect_heal_heals_unit() -> None:
         wounds=3,
         models_min=1,
         models_max=3,
+        power_level=4,
         move='6"',
         bs="3+",
         ws="3+",
         strength=4,
         toughness=4,
+        attacks=3,
         save=3,
         invuln_save=None,
         leadership=10,
@@ -280,11 +284,13 @@ def test_execute_effect_heal_no_revive_caps_at_living_models() -> None:
         wounds=3,
         models_min=1,
         models_max=3,
+        power_level=4,
         move='6"',
         bs="3+",
         ws="3+",
         strength=4,
         toughness=4,
+        attacks=3,
         save=3,
         invuln_save=None,
         leadership=10,
@@ -319,7 +325,7 @@ def test_execute_effect_unknown_type_returns_false() -> None:
 
 
 def _make_necron_state() -> dict:
-    units = load_army("necrons")
+    units, _ = load_army("necrons")
     return {
         "active": "Necrons",
         "necron_units": {
@@ -339,13 +345,15 @@ def test_get_triggered_abilities_command_phase_start_includes_living_metal() -> 
     state = _make_necron_state()
     triggered = get_triggered_abilities(state, "command", "phase_start")
     ability_ids = [a.id for a, _ in triggered]
-    assert "necrons.faction.living_metal" in ability_ids
+    assert "wh40k_9e.necrons.faction.living_metal" in ability_ids
 
 
 def test_get_triggered_abilities_living_metal_excludes_warriors() -> None:
     state = _make_necron_state()
     triggered = get_triggered_abilities(state, "command", "phase_start")
-    lm_entry = next((a, uids) for a, uids in triggered if a.id == "necrons.faction.living_metal")
+    lm_entry = next(
+        (a, uids) for a, uids in triggered if a.id == "wh40k_9e.necrons.faction.living_metal"
+    )
     _, eligible_ids = lm_entry
     # Warriors have reanimationProtocols but NOT livingMetal
     warriors_id = "wh40k_9e.necrons.unit.warriors"
@@ -355,7 +363,7 @@ def test_get_triggered_abilities_living_metal_excludes_warriors() -> None:
 def test_get_triggered_abilities_living_metal_includes_overlord_and_skorpekh() -> None:
     state = _make_necron_state()
     triggered = get_triggered_abilities(state, "command", "phase_start")
-    _, lm_units = next(t for t in triggered if t[0].id == "necrons.faction.living_metal")
+    _, lm_units = next(t for t in triggered if t[0].id == "wh40k_9e.necrons.faction.living_metal")
     assert "wh40k_9e.necrons.unit.overlord" in lm_units
     assert "wh40k_9e.necrons.unit.skorpekh_destroyers" in lm_units
     assert "wh40k_9e.necrons.unit.triarch_stalker" in lm_units
@@ -364,7 +372,7 @@ def test_get_triggered_abilities_living_metal_includes_overlord_and_skorpekh() -
 
 def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> None:
     """Units at full health are not eligible even if they have the livingMetal rule."""
-    units = load_army("necrons")
+    units, _ = load_army("necrons")
     state = {
         "active": "Necrons",
         "necron_units": {
@@ -378,11 +386,11 @@ def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> No
     }
     triggered = get_triggered_abilities(state, "command", "phase_start")
     ability_ids = [a.id for a, _ in triggered]
-    assert "necrons.faction.living_metal" not in ability_ids
+    assert "wh40k_9e.necrons.faction.living_metal" not in ability_ids
 
 
 def test_get_triggered_abilities_ork_command_returns_empty() -> None:
-    units = load_army("orks")
+    units, _ = load_army("orks")
     state = {
         "active": "Orks",
         "ork_units": {

@@ -10,7 +10,7 @@ import yaml
 from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
-from gameObjects.unit import Unit
+from gameObjects.unit import DamageBracket, Unit, WargearOption
 from gameObjects.weapon import Weapon, WeaponProfile
 
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
@@ -49,6 +49,33 @@ def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
     return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
 
 
+def _wargear_option_from_dict(d: dict[str, Any]) -> WargearOption:
+    with_raw = d.get("with")
+    if isinstance(with_raw, list):
+        with_refs = with_raw
+    elif with_raw is not None:
+        with_refs = [with_raw]
+    else:
+        with_refs = []
+    return WargearOption(
+        type=d["type"],
+        with_refs=with_refs,
+        replaces=d.get("replaces"),
+        item=d.get("item"),
+    )
+
+
+def _damage_bracket_from_dict(d: dict[str, Any]) -> DamageBracket:
+    return DamageBracket(
+        wounds_min=int(d["wounds_min"]),
+        wounds_max=int(d["wounds_max"]),
+        move=str(d["move"]) if d.get("move") is not None else None,
+        ws=str(d["ws"]) if d.get("ws") is not None else None,
+        bs=str(d["bs"]) if d.get("bs") is not None else None,
+        attacks=str(d["attacks"]) if d.get("attacks") is not None else None,
+    )
+
+
 def _unit_from_dict(
     d: dict[str, Any],
     weapon_catalog: dict[str, Weapon] | None = None,
@@ -60,6 +87,7 @@ def _unit_from_dict(
             weapon = weapon_catalog.get(ref)
             if weapon:
                 weapons.append(weapon)
+    brackets_raw = d.get("damage_bracket", [])
     return Unit(
         id=d["id"],
         name_en=d["name_en"],
@@ -71,17 +99,21 @@ def _unit_from_dict(
         wounds=int(d["wounds"]),
         models_min=int(d["models_min"]),
         models_max=int(d["models_max"]),
+        power_level=int(d["power_level"]) if d.get("power_level") is not None else 0,
         move=str(d["move"]),
         bs=str(d["bs"]),
         ws=str(d["ws"]),
         strength=int(d["strength"]),
         toughness=int(d["toughness"]),
+        attacks=int(d["attacks"]) if d.get("attacks") not in (None, "-") else None,
         save=int(d["save"]),
         invuln_save=d.get("invuln_save"),
         leadership=int(d["leadership"]) if d.get("leadership") not in (None, "-") else None,
         oc=int(d["oc"]),
         fnp=d.get("fnp"),
         weapons=weapons,
+        wargear_options=[_wargear_option_from_dict(o) for o in d.get("wargear_options", [])],
+        damage_bracket=[_damage_bracket_from_dict(b) for b in brackets_raw] or None,
         rules=d.get("rules", []),
     )
 
@@ -164,6 +196,12 @@ def load_army(faction_dir: str) -> tuple[list[Unit], list[str]]:
         ud.setdefault("subfaction", subfaction)
         units.append(_unit_from_dict(ud, weapon_catalog))
     return units, unmatched
+
+
+def load_unit_catalog(faction_dir: str) -> dict[str, Unit]:
+    """Load all units for a faction indexed by unit ID."""
+    units, _ = load_army(faction_dir)
+    return {u.id: u for u in units}
 
 
 def load_faction_abilities(faction_dir: str) -> list[Ability]:
