@@ -21,7 +21,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import PHASES, next_phase
-from gameMechanic.unit_mutations import adjust_vp
+from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
 from gameObjects.loader import get_abilities_for_unit
 from uiLayout._common import lookup
 
@@ -146,6 +146,31 @@ def _render_setup() -> None:
 # ---------------------------------------------------------------------------
 
 
+def _render_secondary_vp_section(faction: str, player_key: str) -> None:
+    """Render per-objective secondary VP trackers for one player."""
+    secondaries: dict = st.session_state.get("secondaries") or {}
+    secondary_vp: dict = st.session_state.get("secondary_vp") or {}
+    obj_names: list[str] = secondaries.get(player_key, [])
+    vp_vals: list[int] = secondary_vp.get(player_key, [0, 0, 0])
+
+    sec_total = sum(vp_vals)
+    st.caption(f"Secondary — {sec_total} VP")
+
+    for idx, (name, val) in enumerate(zip(obj_names, vp_vals)):
+        col_name, col_minus, col_val, col_plus = st.columns([5, 1, 1, 1])
+        col_name.caption(name)
+        col_val.markdown(
+            f'<div style="text-align:center;font-size:0.9rem;color:#fbbf24;">{val}</div>',
+            unsafe_allow_html=True,
+        )
+        if col_minus.button("−", key=f"sec_m_{faction}_{idx}", use_container_width=True):
+            adjust_secondary_vp(player_key, idx, -1)
+            st.rerun()
+        if col_plus.button("+", key=f"sec_p_{faction}_{idx}", use_container_width=True):
+            adjust_secondary_vp(player_key, idx, 1)
+            st.rerun()
+
+
 def _render_vp_scoring() -> None:
     """Contextual VP scoring block — shown only at the configured phase and round."""
     phase_name, phase_key = PHASES[st.session_state.phase_idx]
@@ -156,16 +181,22 @@ def _render_vp_scoring() -> None:
     if phase_name != vp_phase or current_round < vp_from_round:
         return
 
+    use_secondaries: bool = st.session_state.get("use_secondaries", False)
+
     st.divider()
     st.markdown("### Victory Points")
 
     first = st.session_state.first_player
     second = st.session_state.second_player
+    # Map display name → p1/p2 key for secondary_vp lookup
+    player_keys = {first: "p1", second: "p2"}
 
     col1, col2 = st.columns(2)
     for col, faction in ((col1, first), (col2, second)):
         with col:
-            st.markdown(f"**{faction}** — {st.session_state.vp[faction]} VP")
+            primary_vp = st.session_state.vp[faction]
+            label = "Primary" if use_secondaries else ""
+            st.markdown(f"**{faction}** — {primary_vp} VP {label}".strip())
             b1, b2, b3, b4 = st.columns(4)
             if b1.button("+5", key=f"vp_p5_{faction}"):
                 adjust_vp(faction, 5)
@@ -179,6 +210,9 @@ def _render_vp_scoring() -> None:
             if b4.button("-5", key=f"vp_m5_{faction}"):
                 adjust_vp(faction, -5)
                 st.rerun()
+
+            if use_secondaries:
+                _render_secondary_vp_section(faction, player_keys[faction])
 
 
 def render_game_actions_area() -> None:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from gameMechanic.game_state import units_key_for
 from gameObjects.unit import Unit
 
 
@@ -11,12 +12,18 @@ def adjust_vp(faction: str, delta: int) -> None:
     st.session_state.vp[faction] = max(0, st.session_state.vp[faction] + delta)
 
 
+def adjust_secondary_vp(player_key: str, obj_idx: int, delta: int) -> None:
+    """Adjust VP for one secondary objective slot (cap 0–15)."""
+    sec_vp: list[int] = st.session_state.secondary_vp[player_key]
+    sec_vp[obj_idx] = max(0, min(15, sec_vp[obj_idx] + delta))
+
+
 def adjust_cp(faction: str, delta: int) -> None:
     st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
 
 
 def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     state = st.session_state[key][uid]
     old_models = state["models"]
     if not mortal and unit.models_max > 1 and state["models"] > 0 and state["current_wounds"] > 0:
@@ -39,7 +46,7 @@ def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = Fa
 
 
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) -> bool:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     state = st.session_state[key][uid]
     max_hp = unit.wounds * (unit.models_max if revive else state["models"])
     old_wounds = state["current_wounds"]
@@ -53,14 +60,14 @@ def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) 
 
 
 def set_deployment(uid: str, faction: str, deployment: str) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     state = st.session_state[key][uid]
     state["deployment"] = deployment
     state["in_reserve"] = deployment == "reserve"
 
 
 def _unit_key(faction: str) -> str:
-    return "necron_units" if faction == "Necrons" else "ork_units"
+    return units_key_for(faction)
 
 
 def enter_melee(
@@ -134,7 +141,7 @@ def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
 
 
 def set_movement_status(uid: str, faction: str, status: str) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     state = st.session_state[key][uid]
     flags = state["turn_flags"]
     flags["advanced"] = status == "advanced"
@@ -145,18 +152,18 @@ def set_movement_status(uid: str, faction: str, status: str) -> None:
 
 
 def set_in_melee(uid: str, faction: str, value: bool) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     st.session_state[key][uid]["in_melee"] = value
 
 
 def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     st.session_state[key][uid]["turn_flags"]["charged"] = True
     enter_melee(uid, faction, target_uid, target_faction)
 
 
 def reset_turn_flags(uid: str, faction: str) -> None:
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     flags = st.session_state[key][uid]["turn_flags"]
     for flag in flags:
         flags[flag] = False

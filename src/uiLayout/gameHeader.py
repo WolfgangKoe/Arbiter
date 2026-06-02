@@ -123,6 +123,11 @@ hr { border-color: var(--arb-border) !important; opacity: 1 !important; }
     font-family: monospace;
     font-size: 11px !important;
 }
+[data-testid="stNumberInput"] [data-baseweb="input"] {
+    background: var(--arb-surface) !important;
+    border: 1px solid var(--arb-border) !important;
+    border-radius: 2px !important;
+}
 [data-testid="stNumberInput"] button {
     background: var(--arb-surface) !important;
     border-color: var(--arb-border) !important;
