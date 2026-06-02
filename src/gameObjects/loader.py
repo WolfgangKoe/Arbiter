@@ -14,6 +14,25 @@ from gameObjects.unit import DamageBracket, Unit, WargearOption
 from gameObjects.weapon import Weapon, WeaponProfile
 
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
+_ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
+
+_CCW_PROFILE = WeaponProfile(
+    name_en="Close Combat Weapon",
+    weapon_type="Melee",
+    range_inches=0,
+    attacks="1",
+    strength="User",
+    ap="0",
+    damage="1",
+    abilities="",
+    is_melee=True,
+)
+_CCW = Weapon(
+    id="close_combat_weapon",
+    name_en="Close Combat Weapon",
+    profiles=[_CCW_PROFILE],
+    is_relic=False,
+)
 
 
 def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
@@ -87,6 +106,9 @@ def _unit_from_dict(
             weapon = weapon_catalog.get(ref)
             if weapon:
                 weapons.append(weapon)
+    if not any(p.is_melee for w in weapons for p in w.profiles):
+        weapons.append(_CCW)
+
     brackets_raw = d.get("damage_bracket", [])
     return Unit(
         id=d["id"],
@@ -298,3 +320,96 @@ def load_detachment_types() -> list[DetachmentType]:
         ]
         types.append(DetachmentType(id=dt["id"], name_en=dt["name_en"], slot_constraints=slots))
     return types
+
+
+def resolve_bracket_stats(unit: Unit, current_wounds: int) -> dict[str, str | None]:
+    """Return live {move, ws, bs, attacks} for unit at given wound count.
+
+    Vehicles degrade across brackets; units without damage_bracket return base stats.
+    """
+    base = {
+        "move": unit.move,
+        "ws": unit.ws,
+        "bs": unit.bs,
+        "attacks": str(unit.attacks) if unit.attacks is not None else None,
+    }
+    if not unit.damage_bracket:
+        return base
+    for bracket in unit.damage_bracket:
+        if bracket.wounds_min <= current_wounds <= bracket.wounds_max:
+            return {
+                "move": bracket.move if bracket.move is not None else unit.move,
+                "ws": bracket.ws if bracket.ws is not None else unit.ws,
+                "bs": bracket.bs if bracket.bs is not None else unit.bs,
+                "attacks": bracket.attacks if bracket.attacks is not None else base["attacks"],
+            }
+    return base
+
+
+def load_points(faction_dir: str) -> dict[str, int]:
+    """Load points.yaml and return a flat id → point-cost dict.
+
+    Per-unit entries store the flat cost; per-model entries store the per-model cost.
+    Wargear and arkana sections are also included.
+    """
+    path = _DATA_ROOT / faction_dir / "points.yaml"
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    result: dict[str, int] = {}
+    for uid, entry in (data.get("units") or {}).items():
+        cost = entry.get("per_unit") or entry.get("per_model") or 0
+        result[uid] = int(cost)
+    for uid, entry in (data.get("wargear") or {}).items():
+        result[uid] = int(entry.get("points", 0))
+    for uid, entry in (data.get("arkana") or {}).items():
+        result[uid] = int(entry.get("points", 0))
+    return result
+
+
+def scaled_pl(unit: Unit, current_models: int) -> float:
+    """Return power level scaled linearly to current model count."""
+    if unit.models_min == 0:
+        return float(unit.power_level)
+    return unit.power_level * (current_models / unit.models_min)
+
+
+def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
+    """Read display_name and faction_dir from a roster file without loading units."""
+    path = Path(roster_path)
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return {
+        "display_name": data.get("display_name", ""),
+        "faction_dir": data.get("faction_dir", "necrons"),
+    }
+
+
+def load_roster(
+    roster_path: str | Path,
+    catalog: dict[str, Unit],
+) -> tuple[list[tuple[Unit, int]], list[str]]:
+    """Load a roster YAML and resolve unit IDs against a catalog.
+
+    Returns (matched, unmatched) where matched is a list of (Unit, model_count)
+    pairs and unmatched is a list of IDs not found in the catalog.
+    """
+    path = Path(roster_path)
+    if not path.exists():
+        return [], [f"roster-not-found:{path}"]
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    matched: list[tuple[Unit, int]] = []
+    unmatched: list[str] = []
+    for entry in data.get("units", []):
+        uid = entry["id"]
+        unit = catalog.get(uid)
+        if unit is None:
+            unmatched.append(uid)
+        else:
+            models = int(entry.get("models", unit.models_max))
+            matched.append((unit, models))
+    return matched, unmatched

@@ -3,7 +3,7 @@ abilities:
 
   # ── HQ ────────────────────────────────────────────────────────────────────
 
-  - id: necrons.unit.overlord.my_will_be_done
+  - id: wh40k_9e.necrons.unit.overlord.my_will_be_done
     name_en: My Will Be Done
     ability_type: activated
     source: unit_ability
@@ -23,7 +23,7 @@ abilities:
       stat: hit_roll
       modifier: 1
 
-  - id: necrons.unit.royal_warden.relentless_march
+  - id: wh40k_9e.necrons.unit.royal_warden.relentless_march
     name_en: Relentless March
     ability_type: triggered
     source: unit_ability
@@ -42,7 +42,7 @@ abilities:
       stat: move
       modifier: 1
 
-  - id: necrons.unit.technomancer.dynastic_advisors
+  - id: wh40k_9e.necrons.unit.technomancer.dynastic_advisors
     name_en: Dynastic Advisors
     ability_type: triggered
     source: unit_ability
@@ -60,7 +60,7 @@ abilities:
       target: detachment
       handler: dynasticAdvisors
 
-  - id: necrons.unit.technomancer.rites_of_reanimation
+  - id: wh40k_9e.necrons.unit.technomancer.rites_of_reanimation
     name_en: Rites of Reanimation
     ability_type: activated
     source: unit_ability
@@ -85,7 +85,7 @@ abilities:
 
   # ── Troops ────────────────────────────────────────────────────────────────
 
-  - id: necrons.unit.warriors.their_number_is_legion
+  - id: wh40k_9e.necrons.unit.warriors.their_number_is_legion
     name_en: Their Number is Legion
     ability_type: triggered
     source: unit_ability
@@ -108,7 +108,7 @@ abilities:
 
   # ── Elites ────────────────────────────────────────────────────────────────
 
-  - id: necrons.unit.deathmarks.hyperspace_hunter
+  - id: wh40k_9e.necrons.unit.deathmarks.hyperspace_hunter
     name_en: Hyperspace Hunter
     ability_type: triggered
     source: unit_ability
@@ -127,7 +127,7 @@ abilities:
 
   # ── Canoptek Plasmacyte ────────────────────────────────────────────────────
 
-  - id: necrons.unit.canoptek_plasmacyte.viral_construct
+  - id: wh40k_9e.necrons.unit.canoptek_plasmacyte.viral_construct
     name_en: Viral Construct
     ability_type: triggered
     source: unit_ability
@@ -147,7 +147,7 @@ abilities:
       stat: [strength, attacks]
       modifier: 1
 
-  - id: necrons.unit.canoptek_plasmacyte.evasion_protocol
+  - id: wh40k_9e.necrons.unit.canoptek_plasmacyte.evasion_protocol
     name_en: Evasion Protocol
     ability_type: triggered
     source: unit_ability
@@ -165,7 +165,7 @@ abilities:
       target: self
       value: 5
 
-  - id: necrons.unit.canoptek_plasmacyte.infused_madness
+  - id: wh40k_9e.necrons.unit.canoptek_plasmacyte.infused_madness
     name_en: Infused Madness
     ability_type: triggered
     source: unit_ability
@@ -187,7 +187,7 @@ abilities:
 
   # ── Hexmark Destroyer ─────────────────────────────────────────────────────
 
-  - id: necrons.unit.hexmark_destroyer.inescapable_death
+  - id: wh40k_9e.necrons.unit.hexmark_destroyer.inescapable_death
     name_en: Inescapable Death
     ability_type: triggered
     source: unit_ability
@@ -207,7 +207,7 @@ abilities:
       target: falling_back_unit
       handler: inescapableDeath
 
-  - id: necrons.unit.hexmark_destroyer.multi_threat_eliminator
+  - id: wh40k_9e.necrons.unit.hexmark_destroyer.multi_threat_eliminator
     name_en: Multi-threat Eliminator
     ability_type: triggered
     source: unit_ability
@@ -228,7 +228,7 @@ abilities:
 
   # ── Transcendent C'tan ────────────────────────────────────────────────────
 
-  - id: necrons.unit.transcendent_ctan.enslaved_star_god
+  - id: wh40k_9e.necrons.unit.transcendent_ctan.enslaved_star_god
     name_en: Enslaved Star God
     ability_type: triggered
     source: unit_ability
@@ -246,7 +246,7 @@ abilities:
       type: auto_pass_morale
       target: friendly_non_ctan
 
-  - id: necrons.unit.transcendent_ctan.reality_unravels
+  - id: wh40k_9e.necrons.unit.transcendent_ctan.reality_unravels
     name_en: Reality Unravels
     ability_type: triggered
     source: unit_ability
@@ -265,7 +265,7 @@ abilities:
       amount: "D3"
       roll_threshold: 4
 
-  - id: necrons.unit.transcendent_ctan.fractured_personality
+  - id: wh40k_9e.necrons.unit.transcendent_ctan.fractured_personality
     name_en: Fractured Personality
     ability_type: triggered
     source: unit_ability
@@ -285,7 +285,7 @@ abilities:
 
   # ── Obelisk ───────────────────────────────────────────────────────────────
 
-  - id: necrons.unit.obelisk.hovering_sentinel
+  - id: wh40k_9e.necrons.unit.obelisk.hovering_sentinel
     name_en: Hovering Sentinel
     ability_type: triggered
     source: unit_ability
@@ -305,7 +305,7 @@ abilities:
       keyword: FLY
       remove: true
 
-  - id: necrons.unit.obelisk.gravity_pulse
+  - id: wh40k_9e.necrons.unit.obelisk.gravity_pulse
     name_en: Gravity Pulse
     ability_type: activated
     source: unit_ability
@@ -327,7 +327,7 @@ abilities:
 
   # ── Convergence of Dominion ────────────────────────────────────────────────
 
-  - id: necrons.unit.convergence_of_dominion.dominion_protocols
+  - id: wh40k_9e.necrons.unit.convergence_of_dominion.dominion_protocols
     name_en: Dominion Protocols
     ability_type: triggered
     source: unit_ability
@@ -346,7 +346,7 @@ abilities:
       target: friendly_dynasty_units
       value: 6
 
-  - id: necrons.unit.convergence_of_dominion.dynastic_command_node
+  - id: wh40k_9e.necrons.unit.convergence_of_dominion.dynastic_command_node
     name_en: Dynastic Command Node
     ability_type: triggered
     source: unit_ability
@@ -365,7 +365,7 @@ abilities:
       target: friendly_infantry_within_6
       handler: dynasticCommandNode
 
-  - id: necrons.unit.convergence_of_dominion.translocation_protocols
+  - id: wh40k_9e.necrons.unit.convergence_of_dominion.translocation_protocols
     name_en: Translocation Protocols
     ability_type: triggered
     source: unit_ability
@@ -386,7 +386,7 @@ abilities:
 
   # ── Heavy Support ──────────────────────────────────────────────────────────
 
-  - id: necrons.unit.canoptek_spyder.fabricator_claw_array
+  - id: wh40k_9e.necrons.unit.canoptek_spyder.fabricator_claw_array
     name_en: Fabricator Claw Array
     ability_type: triggered
     source: unit_ability
@@ -406,7 +406,7 @@ abilities:
       amount: "D3"
       revive: false
 
-  - id: necrons.unit.triarch_stalker.targeting_relay
+  - id: wh40k_9e.necrons.unit.triarch_stalker.targeting_relay
     name_en: Targeting Relay
     ability_type: triggered
     source: unit_ability

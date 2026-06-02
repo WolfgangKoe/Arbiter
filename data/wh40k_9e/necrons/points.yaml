@@ -45,6 +45,7 @@ units:
   wh40k_9e.necrons.unit.canoptek_plasmacyte:      { per_unit: 15 }
   wh40k_9e.necrons.unit.hexmark_destroyer:        { per_unit: 65 }
   wh40k_9e.necrons.unit.transcendent_ctan:        { per_unit: 230 }
+  wh40k_9e.necrons.unit.triarch_stalker:          { per_unit: 110 }
 
   # ── Fast Attack ───────────────────────────────────────────────────────────
 
@@ -55,7 +56,6 @@ units:
 
   # ── Heavy Support ─────────────────────────────────────────────────────────
 
-  wh40k_9e.necrons.unit.triarch_stalker:          { per_unit: 110 }
   wh40k_9e.necrons.unit.annihilation_barge:       { per_unit: 120 }
   wh40k_9e.necrons.unit.lokhust_heavy_destroyers: { per_model: 50 }
   wh40k_9e.necrons.unit.lokhust_destroyers:       { per_model: 40 }

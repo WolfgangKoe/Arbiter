@@ -63,7 +63,7 @@ def test_load_faction_abilities_necrons_returns_at_least_seven() -> None:
 
 def test_living_metal_ability_parsed_correctly() -> None:
     abilities = load_faction_abilities("necrons")
-    lm = next(a for a in abilities if a.id == "necrons.faction.living_metal")
+    lm = next(a for a in abilities if a.id == "wh40k_9e.necrons.faction.living_metal")
     assert lm.name_en == "Living Metal"
     assert lm.source == "faction_rule"
     assert lm.trigger.timing == "phase_start"
@@ -77,7 +77,7 @@ def test_living_metal_ability_parsed_correctly() -> None:
 
 def test_reanimation_protocols_reactive_trigger() -> None:
     abilities = load_faction_abilities("necrons")
-    rp = next(a for a in abilities if a.id == "necrons.faction.reanimation_protocols")
+    rp = next(a for a in abilities if a.id == "wh40k_9e.necrons.faction.reanimation_protocols")
     assert rp.trigger.timing == "phase_reactive"
     assert isinstance(rp.trigger.phase, list)
     assert "shooting" in rp.trigger.phase
@@ -98,7 +98,7 @@ def test_load_unit_abilities_necrons_returns_at_least_eight() -> None:
 
 def test_my_will_be_done_parsed() -> None:
     abilities = load_unit_abilities("necrons")
-    mwbd = next(a for a in abilities if a.id == "necrons.unit.overlord.my_will_be_done")
+    mwbd = next(a for a in abilities if a.id == "wh40k_9e.necrons.unit.overlord.my_will_be_done")
     assert mwbd.name_en == "My Will Be Done"
     assert mwbd.source == "unit_ability"
     assert mwbd.unit_id == "wh40k_9e.necrons.unit.overlord"
@@ -110,7 +110,7 @@ def test_my_will_be_done_parsed() -> None:
 
 def test_resurrection_orb_wargear_source() -> None:
     abilities = load_wargear_abilities("necrons")
-    orb = next(a for a in abilities if a.id == "necrons.wargear.resurrection_orb.ability")
+    orb = next(a for a in abilities if a.id == "wh40k_9e.necrons.wargear.resurrection_orb.ability")
     assert orb.source == "wargear"
     assert orb.wargear_id == "wh40k_9e.necrons.wargear.resurrection_orb"
     assert orb.conditions[0].max_uses == 1
@@ -119,22 +119,22 @@ def test_resurrection_orb_wargear_source() -> None:
 
 
 def test_overlord_has_rules_field_loaded() -> None:
-    units = load_army("necrons")
-    overlord = next(u for u in units if "overlord" in u.id)
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
     assert "livingMetal" in overlord.rules
-    assert "resurrectionOrb" in overlord.rules
+    assert "myWillBeDone" in overlord.rules
 
 
 def test_warriors_rules_no_living_metal() -> None:
-    units = load_army("necrons")
-    warriors = next(u for u in units if "warriors" in u.id)
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
     assert "livingMetal" not in warriors.rules
     assert "reanimationProtocols" in warriors.rules
 
 
 def test_skorpekh_destroyers_has_living_metal_and_rp() -> None:
-    units = load_army("necrons")
-    skorp = next(u for u in units if "skorpekh" in u.id)
+    units, _ = load_army("necrons")
+    skorp = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
     assert "livingMetal" in skorp.rules
     assert "reanimationProtocols" in skorp.rules
 
@@ -150,11 +150,11 @@ def test_faction_abilities_have_ability_type() -> None:
 
 def test_living_metal_is_triggered() -> None:
     abilities = load_faction_abilities("necrons")
-    lm = next(a for a in abilities if a.id == "necrons.faction.living_metal")
+    lm = next(a for a in abilities if a.id == "wh40k_9e.necrons.faction.living_metal")
     assert lm.ability_type == "triggered"
 
 
 def test_reanimation_protocols_is_triggered() -> None:
     abilities = load_faction_abilities("necrons")
-    rp = next(a for a in abilities if a.id == "necrons.faction.reanimation_protocols")
+    rp = next(a for a in abilities if a.id == "wh40k_9e.necrons.faction.reanimation_protocols")
     assert rp.ability_type == "triggered"

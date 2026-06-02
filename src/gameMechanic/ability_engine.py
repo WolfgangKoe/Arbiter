@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from gameMechanic.game_state import faction_dir_for, units_key_for
 from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import (
@@ -64,15 +65,15 @@ def get_triggered_abilities(
     phase: str,
     timing: str,
 ) -> list[tuple[Ability, list[str]]]:
-    active: str = state.get("active", "Necrons")
-    faction_dir = "necrons" if active == "Necrons" else "orks"
+    active: str = state.get("active", state.get("first_player", ""))
+    faction_dir = faction_dir_for(active)
 
     all_abilities: list[Ability] = []
     all_abilities.extend(load_faction_abilities(faction_dir))
     all_abilities.extend(load_unit_abilities(faction_dir))
     all_abilities.extend(load_subfaction_abilities(faction_dir))
 
-    units_key = "necron_units" if active == "Necrons" else "ork_units"
+    units_key = units_key_for(active)
     units_state: dict = state.get(units_key, {})  # type: ignore[type-arg]
 
     units, _ = load_army(faction_dir)

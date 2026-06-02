@@ -45,7 +45,9 @@
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter add .claude/tasks/next_session.md data/wh40k_9e/necrons/units.yaml data/wh40k_9e/necrons/weapons.yaml data/wh40k_9e/necrons/stratagems.yaml docs/goals/doku.md docs/goals/ziel5.md docs/spec/architecture.md docs/spec/processes.md docs/spec/army_builder.md docs/spec/setup.md docs/work/necrons.md docs/work/orks.md)",
       "WebFetch(domain:wahapedia.ru)",
       "Bash(grep -A 6 \"gauntlet_of_conflagrator$\" /home/wolfgang/Dokumente/Arbiter/data/wh40k_9e/necrons/weapons.yaml)",
-      "Bash(grep -A 3 \"voltaic_staff_shooting$\\\\|voidreaper$\" /home/wolfgang/Dokumente/Arbiter/data/wh40k_9e/necrons/weapons.yaml)"
+      "Bash(grep -A 3 \"voltaic_staff_shooting$\\\\|voidreaper$\" /home/wolfgang/Dokumente/Arbiter/data/wh40k_9e/necrons/weapons.yaml)",
+      "Bash(sed -n '120,145p' /home/wolfgang/Dokumente/Arbiter/src/gameMechanic/fightPhase.py)",
+      "Bash(sed -n '190,205p' /home/wolfgang/Dokumente/Arbiter/src/uiLayout/_common.py)"
     ],
     "additionalDirectories": [
       "/home/wolfgang/Dokumente/Arbiter/.claude/tasks",

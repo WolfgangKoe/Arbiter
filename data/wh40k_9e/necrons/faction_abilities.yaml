@@ -3,7 +3,7 @@ abilities:
 
   # ── Universal Necron Rules ─────────────────────────────────────────────────
 
-  - id: necrons.faction.living_metal
+  - id: wh40k_9e.necrons.faction.living_metal
     name_en: Living Metal
     ability_type: triggered
     source: faction_rule
@@ -23,7 +23,7 @@ abilities:
       amount: "1"
       revive: false
 
-  - id: necrons.faction.reanimation_protocols
+  - id: wh40k_9e.necrons.faction.reanimation_protocols
     name_en: Reanimation Protocols
     ability_type: triggered
     source: faction_rule
@@ -46,7 +46,7 @@ abilities:
 
   # ── Passive Keyword Rules ──────────────────────────────────────────────────
 
-  - id: necrons.faction.objective_secured
+  - id: wh40k_9e.necrons.faction.objective_secured
     name_en: Objective Secured
     ability_type: triggered
     source: faction_rule
@@ -62,7 +62,7 @@ abilities:
       type: objective_control
       target: self
 
-  - id: necrons.faction.hardwired_for_destruction
+  - id: wh40k_9e.necrons.faction.hardwired_for_destruction
     name_en: Hardwired for Destruction
     ability_type: triggered
     source: faction_rule
@@ -79,7 +79,7 @@ abilities:
       target: self
       modifier: 1
 
-  - id: necrons.faction.quantum_shielding
+  - id: wh40k_9e.necrons.faction.quantum_shielding
     name_en: Quantum Shielding
     ability_type: triggered
     source: faction_rule
@@ -96,7 +96,7 @@ abilities:
       target: self
       modifier: 5
 
-  - id: necrons.faction.phase_shifter
+  - id: wh40k_9e.necrons.faction.phase_shifter
     name_en: Phase Shifter
     ability_type: triggered
     source: faction_rule
@@ -113,7 +113,7 @@ abilities:
       target: self
       modifier: 4
 
-  - id: necrons.faction.wraith_form
+  - id: wh40k_9e.necrons.faction.wraith_form
     name_en: Wraith Form
     ability_type: triggered
     source: faction_rule

@@ -6,11 +6,18 @@ from pathlib import Path
 # Ensure src/ is on the path so gameObjects can be imported
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from pathlib import Path
+
 from gameObjects.loader import (
     load_army,
     load_detachment_types,
     load_faction_abilities,
+    load_points,
+    load_roster,
+    load_roster_metadata,
     load_unit_catalog,
+    resolve_bracket_stats,
+    scaled_pl,
 )
 
 
@@ -110,6 +117,167 @@ def test_building_has_none_attacks_and_leadership() -> None:
     cov = next(u for u in units if u.id == "wh40k_9e.necrons.unit.convergence_of_dominion")
     assert cov.attacks is None
     assert cov.leadership is None
+
+
+# ---------------------------------------------------------------------------
+# 5c: CCW default
+# ---------------------------------------------------------------------------
+
+
+def test_unit_with_no_melee_weapon_gets_ccw() -> None:
+    units, _ = load_army("necrons")
+    # Annihilation Barge has only shooting weapons — no explicit melee ref in units.yaml
+    barge = next(u for u in units if u.id == "wh40k_9e.necrons.unit.annihilation_barge")
+    melee_profiles = [p for w in barge.weapons for p in w.profiles if p.is_melee]
+    assert len(melee_profiles) >= 1
+    ccw = next((p for p in melee_profiles if p.name_en == "Close Combat Weapon"), None)
+    assert ccw is not None
+
+
+def test_all_units_have_at_least_one_melee_profile() -> None:
+    units, _ = load_army("necrons")
+    missing = [u.id for u in units if not any(p.is_melee for w in u.weapons for p in w.profiles)]
+    assert missing == [], f"Units without melee profile: {missing}"
+
+
+def test_unit_with_existing_melee_does_not_get_ccw() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    # Staff of Light has a melee profile — CCW should NOT be added as default
+    ccw_count = sum(
+        1 for w in overlord.weapons for p in w.profiles if p.name_en == "Close Combat Weapon"
+    )
+    assert ccw_count == 0
+
+
+# ---------------------------------------------------------------------------
+# 5c: resolve_bracket_stats
+# ---------------------------------------------------------------------------
+
+
+def test_resolve_bracket_stats_top_bracket() -> None:
+    units, _ = load_army("necrons")
+    stalker = next(u for u in units if u.id == "wh40k_9e.necrons.unit.triarch_stalker")
+    stats = resolve_bracket_stats(stalker, 12)
+    assert stats["move"] == '10"'
+
+
+def test_resolve_bracket_stats_bottom_bracket() -> None:
+    units, _ = load_army("necrons")
+    stalker = next(u for u in units if u.id == "wh40k_9e.necrons.unit.triarch_stalker")
+    stats = resolve_bracket_stats(stalker, 1)
+    assert stats["move"] == '6"'
+
+
+def test_resolve_bracket_stats_no_bracket_returns_base() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert warriors.damage_bracket is None
+    stats = resolve_bracket_stats(warriors, 10)
+    assert stats["move"] == warriors.move
+    assert stats["ws"] == warriors.ws
+
+
+# ---------------------------------------------------------------------------
+# 5c: load_points
+# ---------------------------------------------------------------------------
+
+
+def test_load_points_returns_overlord_cost() -> None:
+    pts = load_points("necrons")
+    assert pts["wh40k_9e.necrons.unit.overlord"] == 90
+
+
+def test_load_points_per_model_warriors() -> None:
+    pts = load_points("necrons")
+    assert pts["wh40k_9e.necrons.unit.warriors"] == 11
+
+
+def test_load_points_includes_wargear() -> None:
+    pts = load_points("necrons")
+    assert pts["wh40k_9e.necrons.wargear.resurrection_orb"] == 25
+
+
+def test_load_points_missing_faction_returns_empty() -> None:
+    pts = load_points("eldar")
+    assert pts == {}
+
+
+# ---------------------------------------------------------------------------
+# 5c: scaled_pl
+# ---------------------------------------------------------------------------
+
+
+def test_scaled_pl_full_squad() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    # warriors models_min = 10, models_max = 20, power_level from units.yaml
+    result = scaled_pl(warriors, warriors.models_min)
+    assert result == float(warriors.power_level)
+
+
+def test_scaled_pl_doubled_models() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    full = scaled_pl(warriors, warriors.models_max)
+    half = scaled_pl(warriors, warriors.models_min)
+    assert full == 2 * half
+
+
+# ---------------------------------------------------------------------------
+# 5c: load_roster / load_roster_metadata
+# ---------------------------------------------------------------------------
+
+_ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
+
+
+def test_load_roster_metadata_alpha() -> None:
+    meta = load_roster_metadata(_ROSTER_DIR / "necrons_alpha.yaml")
+    assert meta["display_name"] == "Necrons α"
+    assert meta["faction_dir"] == "necrons"
+
+
+def test_load_roster_alpha_resolves_overlord() -> None:
+    catalog = load_unit_catalog("necrons")
+    matched, unmatched = load_roster(_ROSTER_DIR / "necrons_alpha.yaml", catalog)
+    assert unmatched == []
+    ids = [u.id for u, _ in matched]
+    assert "wh40k_9e.necrons.unit.overlord" in ids
+
+
+def test_load_roster_alpha_model_counts() -> None:
+    catalog = load_unit_catalog("necrons")
+    matched, _ = load_roster(_ROSTER_DIR / "necrons_alpha.yaml", catalog)
+    warriors_entry = next((u, m) for u, m in matched if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert warriors_entry[1] == 10
+
+
+def test_load_roster_beta_resolves_all_units() -> None:
+    catalog = load_unit_catalog("necrons")
+    matched, unmatched = load_roster(_ROSTER_DIR / "necrons_beta.yaml", catalog)
+    assert unmatched == []
+    assert len(matched) == 5
+
+
+def test_load_roster_unmatched_id_reported() -> None:
+    catalog = load_unit_catalog("necrons")
+    import tempfile  # noqa: E401
+
+    import yaml
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
+        yaml.dump(
+            {
+                "display_name": "Test",
+                "faction_dir": "necrons",
+                "units": [{"id": "nonexistent.unit", "models": 1}],
+            },
+            f,
+        )
+        tmp = f.name
+    matched, unmatched = load_roster(tmp, catalog)
+    assert matched == []
+    assert "nonexistent.unit" in unmatched
 
 
 def test_warriors_no_damage_bracket() -> None:

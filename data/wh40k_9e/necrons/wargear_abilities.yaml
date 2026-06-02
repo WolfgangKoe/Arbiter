@@ -9,7 +9,7 @@ abilities:
 
   # ── Technomancer Wargear ────────────────────────────────────────────────────
 
-  - id: necrons.wargear.canoptek_cloak.ability
+  - id: wh40k_9e.necrons.wargear.canoptek_cloak.ability
     name_en: Canoptek Cloak
     ability_type: triggered
     source: wargear
@@ -26,7 +26,7 @@ abilities:
       target: friendly_dynasty
       handler: canoptekCloak
 
-  - id: necrons.wargear.canoptek_control_node.ability
+  - id: wh40k_9e.necrons.wargear.canoptek_control_node.ability
     name_en: Canoptek Control Node
     ability_type: triggered
     source: wargear
@@ -46,7 +46,7 @@ abilities:
 
   # ── Lychguard Wargear ────────────────────────────────────────────────────────
 
-  - id: necrons.wargear.dispersion_shield.ability
+  - id: wh40k_9e.necrons.wargear.dispersion_shield.ability
     name_en: Dispersion Shield
     ability_type: triggered
     source: wargear
@@ -65,7 +65,7 @@ abilities:
 
   # ── Canoptek Spyder Wargear ───────────────────────────────────────────────────
 
-  - id: necrons.wargear.gloom_prism.ability
+  - id: wh40k_9e.necrons.wargear.gloom_prism.ability
     name_en: Gloom Prism
     ability_type: triggered
     source: wargear
@@ -83,7 +83,7 @@ abilities:
 
   # ── HQ Wargear ───────────────────────────────────────────────────────────────
 
-  - id: necrons.wargear.phylactery.ability
+  - id: wh40k_9e.necrons.wargear.phylactery.ability
     name_en: Phylactery
     ability_type: triggered
     source: wargear
@@ -102,7 +102,7 @@ abilities:
       amount: "D3"
       revive: false
 
-  - id: necrons.wargear.resurrection_orb.ability
+  - id: wh40k_9e.necrons.wargear.resurrection_orb.ability
     name_en: Resurrection Orb
     ability_type: activated
     source: wargear
@@ -123,7 +123,7 @@ abilities:
 
   # ── Tomb Blade Wargear ───────────────────────────────────────────────────────
 
-  - id: necrons.wargear.nebuloscope.ability
+  - id: wh40k_9e.necrons.wargear.nebuloscope.ability
     name_en: Nebuloscope
     ability_type: triggered
     source: wargear
@@ -139,7 +139,7 @@ abilities:
       type: ignore_cover
       target: self
 
-  - id: necrons.wargear.shadowloom.ability
+  - id: wh40k_9e.necrons.wargear.shadowloom.ability
     name_en: Shadowloom
     ability_type: triggered
     source: wargear
@@ -156,7 +156,7 @@ abilities:
       target: self
       modifier: 5
 
-  - id: necrons.wargear.shieldvanes.ability
+  - id: wh40k_9e.necrons.wargear.shieldvanes.ability
     name_en: Shieldvanes
     ability_type: triggered
     source: wargear
