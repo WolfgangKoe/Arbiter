@@ -19,6 +19,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import PHASES, next_phase
+from gameMechanic.unit_mutations import adjust_vp
 from gameObjects.loader import get_abilities_for_unit
 from uiLayout._common import lookup
 
@@ -120,26 +121,24 @@ def _render_setup() -> None:
     )
     st.markdown("---")
     st.markdown("**First Player**")
+    p1 = st.session_state.first_player
+    p2 = st.session_state.second_player
     c1, c2 = st.columns(2)
     with c1:
-        nc_type = "primary" if active == "Necrons" else "secondary"
+        p1_type = "primary" if active == p1 else "secondary"
         if st.button(
-            "Necrons go first", key="setup_first_necrons", type=nc_type, use_container_width=True
+            f"{p1} geht zuerst", key="setup_first_p1", type=p1_type, use_container_width=True
         ):
-            st.session_state.active = "Necrons"
-            st.session_state.first_player = "Necrons"
-            st.session_state.second_player = "Orks"
+            st.session_state.active = p1
             st.rerun()
     with c2:
-        ok_type = "primary" if active == "Orks" else "secondary"
+        p2_type = "primary" if active == p2 else "secondary"
         if st.button(
-            "Orks go first", key="setup_first_orks", type=ok_type, use_container_width=True
+            f"{p2} geht zuerst", key="setup_first_p2", type=p2_type, use_container_width=True
         ):
-            st.session_state.active = "Orks"
-            st.session_state.first_player = "Orks"
-            st.session_state.second_player = "Necrons"
+            st.session_state.active = p2
             st.rerun()
-    st.caption(f"Currently selected: **{active}** go first.")
+    st.caption(f"Currently selected: **{active}** geht zuerst.")
 
     st.divider()
     if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):
@@ -150,6 +149,41 @@ def _render_setup() -> None:
 # ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
+
+
+def _render_vp_scoring() -> None:
+    """Contextual VP scoring block — shown only at the configured phase and round."""
+    phase_name, phase_key = PHASES[st.session_state.phase_idx]
+    current_round: int = st.session_state.get("round", 1)
+    vp_phase: str = st.session_state.get("vp_phase", "Morale")
+    vp_from_round: int = st.session_state.get("vp_from_round", 1)
+
+    if phase_name != vp_phase or current_round < vp_from_round:
+        return
+
+    st.divider()
+    st.markdown("### Victory Points")
+
+    first = st.session_state.first_player
+    second = st.session_state.second_player
+
+    col1, col2 = st.columns(2)
+    for col, faction in ((col1, first), (col2, second)):
+        with col:
+            st.markdown(f"**{faction}** — {st.session_state.vp[faction]} VP")
+            b1, b2, b3, b4 = st.columns(4)
+            if b1.button("+5", key=f"vp_p5_{faction}"):
+                adjust_vp(faction, 5)
+                st.rerun()
+            if b2.button("+1", key=f"vp_p1_{faction}"):
+                adjust_vp(faction, 1)
+                st.rerun()
+            if b3.button("-1", key=f"vp_m1_{faction}"):
+                adjust_vp(faction, -1)
+                st.rerun()
+            if b4.button("-5", key=f"vp_m5_{faction}"):
+                adjust_vp(faction, -5)
+                st.rerun()
 
 
 def render_game_actions_area() -> None:
@@ -163,3 +197,4 @@ def render_game_actions_area() -> None:
     from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
 
     render_current_phase(st.session_state)
+    _render_vp_scoring()

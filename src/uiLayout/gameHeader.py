@@ -3,7 +3,6 @@
 import streamlit as st
 
 from gameMechanic.game_state import PHASES, next_phase, reset_game
-from gameMechanic.unit_mutations import adjust_cp, adjust_vp
 
 CSS_THEME = """
 <style>
@@ -168,44 +167,33 @@ header[data-testid="stHeader"] { display: none !important; }
 </style>
 """
 
-_SCORE_LABEL_STYLE = (
-    "display:block;width:100%;text-align:center;font-size:1.6rem;font-weight:600;"
-    "letter-spacing:0.15em;color:#d4a017;text-transform:uppercase;"
+_LABEL_STYLE = (
+    "display:block;width:100%;text-align:center;font-size:0.65rem;font-weight:600;"
+    "letter-spacing:0.15em;color:#6b5f44;text-transform:uppercase;margin-bottom:2px;"
 )
-_SCORE_VALUE_STYLE = (
+_VALUE_STYLE = (
     "display:block;width:100%;text-align:center;"
-    "font-size:2rem;font-weight:600;color:#fbbf24;padding:0.2rem 0;"
+    "font-size:2rem;font-weight:600;color:#fbbf24;line-height:1.1;"
 )
 
-_VP_STEP = 5
-_CP_STEP = 1
 
-
-def _score_group(faction: str, prefix: str) -> None:
+def _score_group(faction: str) -> None:
     vp = st.session_state.vp[faction]
     cp = st.session_state.cp[faction]
 
     vp_col, cp_col = st.columns(2)
 
     with vp_col:
-        st.markdown(f'<div style="{_SCORE_LABEL_STYLE}">VP</div>', unsafe_allow_html=True)
-        if st.button("▲", key=f"{prefix}_vp_up", use_container_width=True):
-            adjust_vp(faction, _VP_STEP)
-            st.rerun()
-        st.markdown(f'<div style="{_SCORE_VALUE_STYLE}">{vp}</div>', unsafe_allow_html=True)
-        if st.button("▼", key=f"{prefix}_vp_dn", use_container_width=True):
-            adjust_vp(faction, -_VP_STEP)
-            st.rerun()
+        st.markdown(
+            f'<div style="{_LABEL_STYLE}">VP</div>' f'<div style="{_VALUE_STYLE}">{vp}</div>',
+            unsafe_allow_html=True,
+        )
 
     with cp_col:
-        st.markdown(f'<div style="{_SCORE_LABEL_STYLE}">CP</div>', unsafe_allow_html=True)
-        if st.button("▲", key=f"{prefix}_cp_up", use_container_width=True):
-            adjust_cp(faction, _CP_STEP)
-            st.rerun()
-        st.markdown(f'<div style="{_SCORE_VALUE_STYLE}">{cp}</div>', unsafe_allow_html=True)
-        if st.button("▼", key=f"{prefix}_cp_dn", use_container_width=True):
-            adjust_cp(faction, -_CP_STEP)
-            st.rerun()
+        st.markdown(
+            f'<div style="{_LABEL_STYLE}">CP</div>' f'<div style="{_VALUE_STYLE}">{cp}</div>',
+            unsafe_allow_html=True,
+        )
 
 
 def render_game_header() -> None:
@@ -220,7 +208,7 @@ def render_game_header() -> None:
     left_hdr, center_hdr, right_hdr = st.columns([2.5, 5, 2.5], gap="medium")
 
     with left_hdr:
-        _score_group(first, "left")
+        _score_group(first)
 
     with center_hdr:
         round_label = "Setup" if phase_key == "setup" else f"Round {st.session_state.round}"
@@ -272,7 +260,7 @@ def render_game_header() -> None:
                     st.rerun()
 
     with right_hdr:
-        _score_group(second, "right")
+        _score_group(second)
 
     # Phase stepper chips (only during battle)
     if phase_key != "setup":

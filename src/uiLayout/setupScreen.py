@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import CP_BY_GAME_SIZE, init_state, list_available_rosters
+from gameMechanic.game_state import CP_BY_GAME_SIZE, PHASES, init_state, list_available_rosters
 
 _GAME_SIZES = list(CP_BY_GAME_SIZE.keys())
+# Battle phases only (skip "Setup"), used for VP scoring config
+_BATTLE_PHASE_NAMES = [name for name, _ in PHASES[1:]]
 
 
 def render_setup_screen() -> None:
@@ -55,6 +57,29 @@ def render_setup_screen() -> None:
 
     st.caption(f"Starting CP per player: **{CP_BY_GAME_SIZE.get(game_size, 3)}**")
 
+    st.divider()
+    st.markdown("**Victory Point Scoring**")
+
+    col_vp_phase, col_vp_round, col_vp_spacer = st.columns([3, 2, 5])
+    with col_vp_phase:
+        # Default: Morale (last battle phase)
+        default_phase_idx = len(_BATTLE_PHASE_NAMES) - 1
+        vp_phase = st.selectbox(
+            "Score VP at end of",
+            _BATTLE_PHASE_NAMES,
+            index=default_phase_idx,
+            key="setup_vp_phase",
+        )
+    with col_vp_round:
+        vp_from_round = st.number_input(
+            "From round",
+            min_value=1,
+            max_value=5,
+            value=1,
+            step=1,
+            key="setup_vp_from_round",
+        )
+
     same_roster = p1_roster == p2_roster
     if same_roster:
         st.warning("Player 1 and Player 2 cannot use the same roster.")
@@ -70,5 +95,7 @@ def render_setup_screen() -> None:
             roster_p1=p1_roster,
             roster_p2=p2_roster,
             game_size=game_size,
+            vp_phase=vp_phase,
+            vp_from_round=int(vp_from_round),
         )
         st.rerun()

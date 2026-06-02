@@ -134,6 +134,8 @@ def init_state(
     roster_p1: str = "necrons_alpha.yaml",
     roster_p2: str = "necrons_beta.yaml",
     game_size: str = "Incursion",
+    vp_phase: str = "Morale",
+    vp_from_round: int = 1,
 ) -> None:
     if "initialized" in st.session_state:
         return
@@ -168,6 +170,9 @@ def init_state(
 
     st.session_state.p1_units = {u.id: _unit_state(u, m) for u, m in p1_matched}
     st.session_state.p2_units = {u.id: _unit_state(u, m) for u, m in p2_matched}
+
+    st.session_state.vp_phase = vp_phase
+    st.session_state.vp_from_round = vp_from_round
 
     st.session_state.active_protocol_id = "eternal_guardian"
     st.session_state.used_protocol_ids = ["eternal_guardian"]
