@@ -1,0 +1,14 @@
+# Necrons Beta — Silent Kings (ranged defensive force, ~465 pts)
+display_name: "Necrons β"
+faction_dir: "necrons"
+units:
+  - id: wh40k_9e.necrons.unit.necron_lord
+    models: 1
+  - id: wh40k_9e.necrons.unit.warriors
+    models: 10
+  - id: wh40k_9e.necrons.unit.deathmarks
+    models: 5
+  - id: wh40k_9e.necrons.unit.canoptek_wraiths
+    models: 3
+  - id: wh40k_9e.necrons.unit.lokhust_destroyers
+    models: 3

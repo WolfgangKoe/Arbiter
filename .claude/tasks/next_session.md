@@ -9,45 +9,42 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Was in dieser Session passiert ist
+## Was in dieser Session passiert ist (2026-06-02)
 
-### Ziel 5g — Wahapedia-Recherche Spielaufbau-Regeln (2026-06-02)
+### Ziel 5g — Setup-Screen vollständig implementiert ✅
 
-Regeln für alle drei Spieltypen (Matched / Open / Crusade) von Wahapedia abgerufen und lokal gespeichert:
-- `docs/work/wahapedia_matched_play.md` — 16-Schritt-Sequenz, Spielgrößen, Secondaries, VP-System
-- `docs/work/wahapedia_open_play.md` — 12 Schritte, 3 Missionen (Annihilation / Hold at All Costs / Death or Glory)
-- `docs/work/wahapedia_crusade.md` — Crusade-Überblick (Wahapedia-Seite war 404; aus Core-Rule-Wissen)
+**game_state.py:**
+- `CP_BY_GAME_SIZE` korrigiert: 3 / 6 / 12 / 18 (vorher falsch: 3/3/6/9 — Quelle: Wahapedia)
+- `init_state()` um 6 neue Parameter erweitert (alle optional mit Defaults, bestehende Tests unberührt):
+  `game_mode`, `mission`, `attacker`, `use_secondaries`, `secondaries`, `secondary_vp`
+- Open Play: CP immer fest 3, unabhängig von `game_size`
 
-`docs/spec/setup.md` korrigiert und erweitert:
-- Secondary Objectives neu in Spec (5 Kategorien, 3 pro Spieler, 15 VP cap, **optional via Toggle**)
-- Attacker/Defender-Mechanik ergänzt (Matched: Roll-off; Open: höherer PL)
-- Mission-Dropdown je Spielgröße ergänzt
-- session_state um `mission`, `attacker`, `use_secondaries`, `secondaries`, `secondary_vp` erweitert
-- `docs/goals/ziel5.md`: Abschnitt 5g mit allen offenen Implementierungsaufgaben
+**setupScreen.py** — Kompletter Umbau:
+- Spielmodus-Selektor oben (Matched / Open / Crusade — Crusade zeigt Info-Banner)
+- Game Size + CP-Anzeige (Matched) bzw. fixed 3 CP (Open)
+- Mission-Dropdown je Spielgröße (3–6 Missionen, GT-Missionpack)
+- Attacker/Defender Roll-off-Button + persistiertes Ergebnis in `setup_attacker_result`
+- Secondary Objectives Toggle (default: off) + 3 Kategorie/Objective-Picker pro Spieler
+  — Live-Filterung: keine Kategorie doppelt je Spieler
 
-### UI-Bugfixes (2026-06-02)
+**unit_mutations.py:**
+- `adjust_secondary_vp(player_key, obj_idx, delta)` — Cap 0–15 per Objective
 
-1. **CSS-Injection in `app.py` ganz nach oben verschoben** — vorher nur in `render_game_header()`, was
-   den Setup-Screen ohne Dark-Theme ließ. Jetzt gilt das Theme für alle Screens.
+**gameActionsArea.py:**
+- `_render_secondary_vp_section()` — Objective-Name + aktueller Wert + +/− Buttons
+- Erscheint nur wenn `use_secondaries=True` und konfigurierte VP-Phase erreicht
 
-2. **Borders auf armyCard / unitCard** — `[data-testid="stVerticalBlockBorderWrapper"]` existiert in
-   Streamlit 1.57 nicht. Korrekte Lösung: `.e1rw0b1u3` (Emotion-Zielklasse für flex container).
-   `border-color` override wirkt nur wo `border-style: solid` bereits gesetzt ist (border=True) —
-   nicht-bordered Container bleiben unverändert.
+### CSS-Fixes (gameHeader.py)
 
-3. **Button-Farben in der Movement-Phase** — data-testid änderte sich in Streamlit 1.57:
-   `baseButton-primary` → `stBaseButton-primary`. CSS-Selektoren angepasst.
-
-4. **gameActionDisplayArea jetzt oben** — alle Phase-Handler umgebaut:
-   - Movement, Command, Charge: `PHASE_RULES`-Text vor die Columns verschoben
-   - Shooting, Fight: `_render_display()` (Angriffs-Form oder Regeltext) vor die Columns
-   - In `gameActionsArea.py`: `_render_vp_scoring()` läuft vor `render_current_phase()`
-   - In `_render_setup()`: Datasheet/Instructions zuerst, First-Player-Auswahl darunter
+Gelernte Lektion: Streamlit 1.57 rendert NumberInput mit anderen testids als erwartet.
+Korrekte Selektoren (nach JS-Source-Analyse):
+- Container: `[data-testid="stNumberInputContainer"]`
+- Buttons: `[data-testid="stNumberInputStepUp"]`, `[data-testid="stNumberInputStepDown"]`
+- (Falsch war: `[data-testid="stNumberInput"] button` und `[data-baseweb="input"]`)
 
 ### Stand nach Session
 - 323 Tests grün
-- CSS-Theme gilt für Setup-Screen und Spiel-Screen
-- Layout laut Spec: displayArea oben, PlayerAreas unten
+- Ziel 5g vollständig abgeschlossen
 
 ---
 
@@ -61,7 +58,7 @@ Regeln für alle drei Spieltypen (Matched / Open / Crusade) von Wahapedia abgeru
 | 5c — Loader-Refactoring | ✅ |
 | 5c — Bugfixes (Weapon, MWBD, ResOrb) | ✅ |
 | 5e — Setup-Screen Redesign + VP-Config + Header | ✅ |
-| 5g — Spec-Erweiterung (Wahapedia-Review) | ✅ Spec fertig, Implementierung offen |
+| 5g — Regelkonformer Setup-Flow | ✅ **vollständig** |
 | 5d — BattleScribe Importer | ⬜ |
 | 5f — Stratagems PoC | ⬜ |
 
@@ -69,40 +66,49 @@ Regeln für alle drei Spieltypen (Matched / Open / Crusade) von Wahapedia abgeru
 
 ## Nächste Schritte (priorisiert)
 
-### Priorität 1 — Ziel 5g: Setup-Screen erweitern (Spec ist fertig, jetzt implementieren)
+### Priorität 1 — Ziel 5d: BattleScribe Importer
 
-Alle nötigen Felder sind in `docs/spec/setup.md` und `docs/goals/ziel5.md § 5g` beschrieben.
-Reihenfolge:
+BattleScribe exportiert `.rosz`-Dateien (ZIP mit einer `.ros`-Datei, UTF-8 XML).
+XML-Namespace: `http://www.battlescribe.net/schema/rosterSchema`
+Python stdlib reicht (zipfile + xml.etree).
 
-1. **Spielmodus-Auswahl** (Matched / Open / Crusade) — aktuell fehlt die Modus-Dropdown komplett im Setup-Screen
-2. **Mission-Dropdown** je Spielgröße (Matched Play: 3–6 Missionen, in `wahapedia_matched_play.md`)
-3. **Attacker/Defender Roll-off-Button** im Setup-Screen
-4. **Secondary Objectives Toggle** + Picker (3 Slots pro Spieler, 1 pro Kategorie erzwungen)
-5. **VP-Tracking für Secondaries** (je Objective 0–15 VP, Cap-Enforcement)
-6. **Architektur-Voraussetzung**: `game_state.py` muss `game_mode` (matched/open/crusade) als Parameter in `init_state()` aufnehmen
+**Ziel:** `.rosz` → `data/rosters/<name>.yaml` (ID-basiertes Roster-Format)
 
-**Kritischer erster Schritt**: `init_state()` um `game_mode`-Parameter erweitern, danach der Rest.
+Zu implementieren (in `tools/import_rosz.py`):
+1. `.rosz` entpacken + XML parsen (Namespace-Check als Sicherheitsvalidierung)
+2. Einheiten aus XML extrahieren → gegen Necron-Katalog matchen (via `load_unit_catalog()`)
+3. Unmatched-Einheiten explizit flaggen (nicht crashen)
+4. Roster-YAML schreiben: `id` + `models` (Wargear-Auswahl ist noch nicht im Format)
+5. Streamlit File-Upload im Setup-Screen integrieren (`.rosz` Upload → sofort im Roster-Dropdown)
 
-### Priorität 2 — Ziel 5d: BattleScribe Importer
+**Sicherheit:** Dateiformat-Validierung (`.rosz`/`.ros`), Max-Größe (z.B. 5 MB), XML-Namespace-Check
 
-Jetzt sinnvoll, da 5e die Roster-Auswahl abgeschlossen hat. BattleScribe exportiert `.rosz`-Dateien (ZIP mit XML). Ein Importer konvertiert diese in das `data/rosters/*.yaml`-Format.
+**Absehbare Lücke — Wargear:**
+Das Roster-Format kennt aktuell nur `id` + `models`. BattleScribe enthält Wargear-Auswahl im XML.
+Entscheidung nötig: Wargear jetzt mit einbauen (erfordert Loader-Erweiterung) oder erstmal nur matchen.
+Empfehlung: zunächst ohne Wargear — sauberer Zwischenschritt.
 
-Erweiterung Roster-Format um Wargear (Entwurf):
+**Roster-Format (aktuell):**
 ```yaml
-- id: wh40k_9e.necrons.unit.overlord
-  models: 1
-  wargear:
-    - wh40k_9e.necrons.weapon.voidscythe
-    - wh40k_9e.necrons.wargear.resurrection_orb
+faction_dir: necrons
+display_name: Meine Armee
+units:
+  - id: wh40k_9e.necrons.unit.overlord
+    models: 1
+  - id: wh40k_9e.necrons.unit.warriors
+    models: 10
 ```
 
-### Priorität 3 — Orks-Fraktion
+### Priorität 2 — Orks-Fraktion
 
-Orks haben nur eine Legacy `army.yaml` — kein `units.yaml`. Für echtes Zwei-Fraktionen-Spiel wird eine zweite vollständige Fraktion gebraucht (Wahapedia-Scraper in `tools/wahapedia_scraper.py`).
+Orks haben nur eine Legacy `army.yaml` — kein `units.yaml`, `weapons.yaml` etc.
+Wahapedia-Scraper liegt in `tools/wahapedia_scraper.py`.
+Für echtes Zwei-Fraktionen-Spiel (Necrons vs. Orks) wird der vollständige Ork-Katalog gebraucht.
 
-### Priorität 4 — Ziel 5f: Stratagems PoC
+### Priorität 3 — Ziel 5f: Stratagems PoC
 
-Infrastruktur (GO-Liste, Sichtbarkeitslogik) bereits vorbereitet in `gameProtocoll.py`. Daten fehlen noch.
+Infrastruktur (GO-Liste, Sichtbarkeitslogik) bereits vorbereitet in `gameProtocoll.py`.
+Daten (stratagem_conditions, triggers) fehlen noch.
 
 ---
 
@@ -110,16 +116,15 @@ Infrastruktur (GO-Liste, Sichtbarkeitslogik) bereits vorbereitet in `gameProtoco
 
 | Lücke | Beschreibung |
 |-------|-------------|
-| `game_mode` fehlt in `init_state()` | Setup-Screen hat noch keine Modus-Auswahl — `init_state()` kennt kein matched/open/crusade |
-| `resolve_bracket_stats` unverdrahtet | Implementiert, aber kein UI-Aufruf — Vehicles zeigen immer Basis-Stats |
+| `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein UI-Aufruf — Vehicles zeigen immer Basis-Stats |
 | Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml` |
 | Forge World / Legends importieren | Noch nicht umgesetzt |
 | Wargear im Roster-Format | Aktuell nur `id` + `models` — keine Wargear-Auswahl speicherbar |
-| Punkte-Validierung | `load_points()` implementiert, aber Roster-Gesamtpunkte werden nicht geprüft |
-| Unmatched-UI | `roster_warnings` in session_state, aber kein UI-Feedback im Setup-Screen |
+| Punkte-Validierung | `load_points()` implementiert, aber Roster-Gesamtpunkte werden nicht gegen Spielgröße geprüft |
+| Unmatched-UI | `roster_warnings` in session_state gesetzt, aber kein UI-Feedback im Setup-Screen |
 | Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` einer Waffe im Datasheet-View |
 | Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` nutzt `"necrons" if "necrons" in unit.id else "orks"` — muss auf `faction_dir_for()` umgestellt werden |
-| CP +1/Runde verifizieren | Wahapedia Core Rules Command Phase noch nicht abgerufen — in `_common.py` steht "+1 CP (Battle-forged)" aber Quelle nicht bestätigt |
+| CP +1/Runde verifizieren | `_common.py` zeigt "+1 CP (Battle-forged)" — Wahapedia Core Rules Command Phase noch nicht abgerufen zur Bestätigung |
 
 ---
 
@@ -132,5 +137,16 @@ Infrastruktur (GO-Liste, Sichtbarkeitslogik) bereits vorbereitet in `gameProtoco
 - Weapon-Zugriff: Nie `w.is_melee` für Filter nutzen wenn Dual-Profile möglich — `w.for_phase(use_melee)` verwenden
 - Session-State Unit-Keys: `p1_units` / `p2_units` (nie wieder `necron_units`/`ork_units`)
 - CP wird nur durch Game Mechanics verändert (Befehlsphase, Stratagems) — kein manueller Header-Stepper mehr
-- Streamlit 1.57: Button-testid ist `stBaseButton-{kind}` (nicht `baseButton-{kind}`)
-- Streamlit 1.57: Borders auf `st.container(border=True)` via `.e1rw0b1u3` CSS-Zielklasse stylen
+
+### Streamlit 1.57 — CSS-Selektoren (gelernte Lektionen)
+
+Falsche Selektoren kosten Zeit. Vor dem Schreiben von CSS immer JS-Source prüfen:
+`find .venv -name "*.js" | xargs grep -l "<Komponentenname>"` → dann testids aus dem Minified-JS extrahieren.
+
+| Komponente | Korrekte Selektoren |
+|---|---|
+| NumberInput Container | `[data-testid="stNumberInputContainer"]` |
+| NumberInput Step-Buttons | `[data-testid="stNumberInputStepUp"]`, `[data-testid="stNumberInputStepDown"]` |
+| Buttons allgemein | `button[data-testid="stBaseButton-{kind}"]` (nicht `baseButton-{kind}`) |
+| Container border=True | `.e1rw0b1u3` (Emotion-Klasse — kann sich bei Streamlit-Update ändern!) |
+| Selectbox | `.stSelectbox [data-baseweb="select"] > div` |

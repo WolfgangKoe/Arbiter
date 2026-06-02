@@ -65,6 +65,7 @@
 - Bevor eine Session geclearet wird: **immer** `.claude/tasks/next_session.md` schreiben
 - Inhalt: aktueller Stand, was zuletzt gemacht wurde, nächster konkreter Schritt, offene Designfragen
 - Die Datei ist der Startprompt für die nächste Session — vollständig und selbsterklärend
+- **Kritisch:** Datei ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions (CSS-Selektoren, Constraints, Lücken) dürfen nicht verloren gehen.
 - Nach dem Schreiben den Pfad nennen, damit der Nutzer ihn kopieren kann
 
 ### Commit-Erinnerungen
@@ -127,6 +128,24 @@
 2. Test rot laufen lassen
 3. Minimale Implementierung, die den Test grün macht
 4. Refactoren — Test bleibt grün
+
+---
+
+## Streamlit CSS — Bekannte Selektoren (Streamlit 1.57)
+
+Vor dem Schreiben von CSS-Overrides immer JS-Source prüfen — Emotion-Klassen und testids ändern sich zwischen Streamlit-Versionen:
+```bash
+find .venv -name "*.js" | xargs grep -l "<Komponentenname>" | head -3
+# dann im Minified-JS nach data-testid suchen
+```
+
+| Komponente | Korrekte Selektoren |
+|---|---|
+| NumberInput Container | `[data-testid="stNumberInputContainer"]` |
+| NumberInput Step-Buttons | `[data-testid="stNumberInputStepUp"]`, `[data-testid="stNumberInputStepDown"]` |
+| Buttons allgemein | `button[data-testid="stBaseButton-{kind}"]` (nicht `baseButton-{kind}`) |
+| Container `border=True` | `.e1rw0b1u3` (Emotion-Klasse — prüfen bei Streamlit-Update!) |
+| Selectbox | `.stSelectbox [data-baseweb="select"] > div` |
 
 ---
 
