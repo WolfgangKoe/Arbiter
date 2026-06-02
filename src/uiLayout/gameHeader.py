@@ -123,19 +123,21 @@ hr { border-color: var(--arb-border) !important; opacity: 1 !important; }
     font-family: monospace;
     font-size: 11px !important;
 }
-[data-testid="stNumberInput"] [data-baseweb="input"] {
+[data-testid="stNumberInputContainer"] {
     background: var(--arb-surface) !important;
     border: 1px solid var(--arb-border) !important;
     border-radius: 2px !important;
 }
-[data-testid="stNumberInput"] button {
+[data-testid="stNumberInputStepUp"],
+[data-testid="stNumberInputStepDown"] {
     background: var(--arb-surface) !important;
-    border-color: var(--arb-border) !important;
+    background-color: var(--arb-surface) !important;
     color: var(--arb-muted) !important;
 }
-[data-testid="stNumberInput"] button:hover {
+[data-testid="stNumberInputStepUp"]:hover:enabled,
+[data-testid="stNumberInputStepDown"]:hover:enabled {
     background: var(--arb-hover) !important;
-    border-color: var(--arb-accent) !important;
+    background-color: var(--arb-hover) !important;
     color: var(--arb-accent-lt) !important;
 }
 
