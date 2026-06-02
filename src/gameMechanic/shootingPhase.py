@@ -21,7 +21,7 @@ def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
     if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_reserve"):
         return False
     if unit_state.get("in_melee"):
-        if unit is not None and ("Vehicle" in unit.keywords or "Monster" in unit.keywords):
+        if unit is not None and (unit.has_keyword("VEHICLE") or unit.has_keyword("MONSTER")):
             return True
         return False
     return True

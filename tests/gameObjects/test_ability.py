@@ -103,7 +103,7 @@ def test_my_will_be_done_parsed() -> None:
     assert mwbd.source == "unit_ability"
     assert mwbd.unit_id == "wh40k_9e.necrons.unit.overlord"
     assert mwbd.trigger.phase == "command"
-    assert mwbd.conditions[0].has_keywords == ["Core"]
+    assert mwbd.conditions[0].has_keywords == ["CORE"]
     assert mwbd.effect.type == "buff_roll"
     assert mwbd.effect.modifier == 1
 

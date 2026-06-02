@@ -51,13 +51,11 @@ class PsychicPhaseHandler:
 
 
 def has_psyker(units: list[Unit]) -> bool:
-    return any("PSYKER" in {kw.upper() for kw in u.keywords} for u in units)
+    return any(u.has_keyword("PSYKER") for u in units)
 
 
 def can_deny(units: list[Unit]) -> bool:
-    return any(
-        "PSYKER" in {kw.upper() for kw in u.keywords} or "gloom_prism" in u.rules for u in units
-    )
+    return any(u.has_keyword("PSYKER") or "gloom_prism" in u.rules for u in units)
 
 
 def is_perils(roll: int) -> bool:
@@ -114,7 +112,7 @@ def _render_active_psychic(faction: str, state: dict) -> None:  # type: ignore[t
     unit, unit_state = lookup(faction, uid)
     st.markdown(f"*{unit.name_en}*")
 
-    if not any(kw.upper() == "PSYKER" for kw in unit.keywords):
+    if not unit.has_keyword("PSYKER"):
         st.warning("Not a PSYKER — select a PSYKER unit.")
         return
 

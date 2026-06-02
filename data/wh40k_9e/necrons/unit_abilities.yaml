@@ -15,7 +15,7 @@ abilities:
       stage: active
       player: active
     conditions:
-      - has_keywords: [Core]
+      - has_keywords: [CORE]
         within_inches: 9
     effect:
       type: buff_roll

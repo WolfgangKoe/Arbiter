@@ -147,7 +147,7 @@ def _render_heroic_intervention(faction: str, state: dict) -> None:  # type: ign
         if not units_data.get(u.id, {}).get("destroyed")
         and not units_data.get(u.id, {}).get("in_melee")
         and not units_data.get(u.id, {}).get("turn_flags", {}).get("heroic_intervened")
-        and "Character" in u.keywords
+        and u.has_keyword("CHARACTER")
     ]
     if not eligible:
         return

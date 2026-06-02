@@ -8,7 +8,7 @@ from gameMechanic.game_state import faction_dir_for, is_necron_faction, units_ke
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army, load_command_protocols
+from gameObjects.loader import load_army, load_command_protocols, load_unit_abilities
 from uiLayout._common import PHASE_RULES, lookup, state_badges_html, wound_adjustment_buttons
 
 _OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"
@@ -36,7 +36,19 @@ def _render_faction_actions(
             st.rerun()
 
 
+def _mwbd_required_keywords(faction: str) -> list[str]:
+    """Return the has_keywords condition list from the MWBD ability definition."""
+    abilities = load_unit_abilities(faction_dir_for(faction))
+    mwbd = next((a for a in abilities if a.id.endswith(".my_will_be_done")), None)
+    if mwbd:
+        for cond in mwbd.conditions:
+            if cond.has_keywords:
+                return list(cond.has_keywords)
+    return []
+
+
 def _render_overlord_actions(
+    faction: str,
     state: dict,  # type: ignore[type-arg]
     units_state: dict,  # type: ignore[type-arg]
     unit_by_id: dict,  # type: ignore[type-arg]
@@ -75,6 +87,7 @@ def _render_overlord_actions(
             use_container_width=True,
         ):
             st.session_state.mwbd_awaiting_target = True
+            st.session_state.mwbd_required_keywords = _mwbd_required_keywords(faction)
             st.session_state.res_orb_awaiting_target = False
             st.rerun()
 
@@ -239,4 +252,4 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
             "destroyed"
         )
         if overlord_alive and sel == (faction, _OVERLORD_ID):
-            _render_overlord_actions(state, units_state, unit_by_id)
+            _render_overlord_actions(faction, state, units_state, unit_by_id)

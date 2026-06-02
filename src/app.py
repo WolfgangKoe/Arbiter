@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="WH40k 9th Ed. – Battle Tracker",
+    page_title="Arbiter",
     layout="wide",
     initial_sidebar_state="collapsed",
 )

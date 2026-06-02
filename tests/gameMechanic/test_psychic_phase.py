@@ -31,6 +31,10 @@ class _Unit:
     keywords: list[str] = field(default_factory=list)
     rules: list[str] = field(default_factory=list)
 
+    def has_keyword(self, keyword: str) -> bool:
+        needle = keyword.upper()
+        return any(kw.upper() == needle for kw in self.keywords)
+
 
 # ---------------------------------------------------------------------------
 # has_psyker

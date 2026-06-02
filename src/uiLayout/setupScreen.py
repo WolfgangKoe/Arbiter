@@ -123,7 +123,7 @@ def _render_secondary_picker(player_label: str, key_prefix: str) -> tuple[list[s
 
 def render_setup_screen() -> None:
     """Render the pre-game setup UI. Calls init_state() on confirmation."""
-    st.title("WH40k 9th Edition — Battle Tracker")
+    st.title("Arbiter")
     st.markdown("### Setup")
     st.divider()
 

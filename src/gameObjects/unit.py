@@ -49,3 +49,7 @@ class Unit:
     wargear_options: list[WargearOption] = field(default_factory=list)
     damage_bracket: list[DamageBracket] | None = None
     rules: list[str] = field(default_factory=list)
+
+    def has_keyword(self, keyword: str) -> bool:
+        needle = keyword.upper()
+        return any(kw.upper() == needle for kw in self.keywords)

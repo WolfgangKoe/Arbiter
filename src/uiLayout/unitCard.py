@@ -178,7 +178,8 @@ def render_unit_card(
             )
 
             if mwbd_awaiting:
-                if "CORE" in unit.keywords:
+                required_kws: list[str] = st.session_state.get("mwbd_required_keywords", [])
+                if required_kws and any(unit.has_keyword(kw) for kw in required_kws):
                     if st.button(
                         f"▶ {unit.name_en}",
                         key=f"mwbd_tgt_{faction}_{uid}",
