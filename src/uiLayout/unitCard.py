@@ -119,11 +119,16 @@ def _keywords_html(unit: Unit) -> str:
     return "".join(_keyword_chip(kw, kw in required_set) for kw in visible_kws)
 
 
-def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ignore[type-arg]
+def render_unit_card(
+    unit: Unit,
+    state: dict,  # type: ignore[type-arg]
+    faction: str,
+    state_key: str | None = None,
+) -> None:
     phase_key = PHASES[st.session_state.phase_idx][1]
     active = st.session_state.active
     is_active = faction == active
-    uid = unit.id
+    uid = state_key if state_key is not None else unit.id
     in_reserve = state.get("in_reserve", False)
 
     with st.container(border=True):
@@ -138,14 +143,14 @@ def render_unit_card(unit: Unit, state: dict, faction: str) -> None:  # type: ig
 
         models_initial = state.get("models_initial", unit.models_max)
         if unit.models_max == 1:
-            st.progress(cur / unit.wounds if unit.wounds > 0 else 0)
+            st.progress(min(1.0, cur / unit.wounds) if unit.wounds > 0 else 0)
             st.caption(f"❤ {cur}/{unit.wounds}")
         elif unit.wounds == 1:
-            st.progress(models_alive / models_initial if models_initial > 0 else 0)
+            st.progress(min(1.0, models_alive / models_initial) if models_initial > 0 else 0)
             st.caption(f"⬡ {models_alive}/{models_initial}")
         else:
             front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
-            st.progress(models_alive / models_initial if models_initial > 0 else 0)
+            st.progress(min(1.0, models_alive / models_initial) if models_initial > 0 else 0)
             st.caption(f"⬡ {models_alive}/{models_initial}")
             st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
             st.caption(f"❤ {front_wounds}/{unit.wounds}")

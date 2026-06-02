@@ -7,6 +7,7 @@ import random
 import streamlit as st
 
 from gameMechanic.game_state import CP_BY_GAME_SIZE, PHASES, init_state, list_available_rosters
+from gameObjects.rosz_importer import import_roster, parse_ros_bytes, parse_rosz_bytes
 
 _GAME_SIZES = list(CP_BY_GAME_SIZE.keys())
 _BATTLE_PHASE_NAMES = [name for name, _ in PHASES[1:]]
@@ -155,6 +156,9 @@ def render_setup_screen() -> None:
         st.caption("Open Play — Starting CP per player: **3** (fixed)")
 
     st.divider()
+
+    # --- BattleScribe Import ---
+    _render_rosz_import()
 
     # --- Rosters ---
     rosters = list_available_rosters()
@@ -312,4 +316,54 @@ def render_setup_screen() -> None:
             secondaries=secondaries,
             secondary_vp=secondary_vp,
         )
+        st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# BattleScribe import helper
+# ---------------------------------------------------------------------------
+
+
+def _render_rosz_import() -> None:
+    """Render a collapsible section for importing BattleScribe .rosz rosters."""
+    with st.expander("Import BattleScribe Roster (.rosz / .ros)", expanded=False):
+        uploaded = st.file_uploader(
+            "Upload roster file",
+            type=["rosz", "ros"],
+            key="setup_rosz_upload",
+            label_visibility="collapsed",
+        )
+        if uploaded is None:
+            st.caption("Supports BattleScribe .rosz exports for Necrons. Wargear is not imported.")
+            return
+
+        # Deduplicate: only process each unique file once per session
+        file_key = (uploaded.name, uploaded.size)
+        if st.session_state.get("_last_imported_rosz") == file_key:
+            st.info(
+                f"Already imported **{uploaded.name}**. Select it in the roster dropdowns below."
+            )
+            return
+
+        data = uploaded.read()
+        try:
+            if uploaded.name.lower().endswith(".rosz"):
+                roster_name, root = parse_rosz_bytes(data)
+            else:
+                roster_name, root = parse_ros_bytes(data)
+            out_path, unmatched = import_roster(roster_name, root)
+        except ValueError as exc:
+            st.error(f"Import failed: {exc}")
+            return
+
+        st.session_state["_last_imported_rosz"] = file_key
+
+        if unmatched:
+            st.warning(
+                f"Imported **{out_path.name}** with {len(unmatched)} unmatched unit(s): "
+                + ", ".join(f"`{n}`" for n in unmatched)
+            )
+        else:
+            st.success(f"Imported **{out_path.name}** — all units matched.")
+
         st.rerun()

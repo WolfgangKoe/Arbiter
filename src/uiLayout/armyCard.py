@@ -15,7 +15,7 @@ import streamlit as st
 
 from gameMechanic.ability_engine import check_conditions, execute_effect
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES
+from gameMechanic.game_state import PHASES, unit_id_from_state_key
 from gameObjects.ability import Ability
 from gameObjects.unit import Unit
 
@@ -63,9 +63,10 @@ def _render_triggered_abilities(
             continue
 
         eligible = [
-            uid
-            for uid, ustate in units_state.items()
-            if (unit := unit_by_id.get(uid)) is not None and check_conditions(ability, unit, ustate)
+            state_key
+            for state_key, ustate in units_state.items()
+            if (unit := unit_by_id.get(unit_id_from_state_key(state_key))) is not None
+            and check_conditions(ability, unit, ustate)
         ]
         if not eligible:
             st.caption(f"{ability.name_en} — no units eligible")
@@ -79,7 +80,9 @@ def _render_triggered_abilities(
             use_container_width=True,
         ):
             applied = sum(
-                1 for uid in eligible if execute_effect(ability, uid, faction, unit_by_id[uid])
+                1
+                for sk in eligible
+                if execute_effect(ability, sk, faction, unit_by_id[unit_id_from_state_key(sk)])
             )
             log_action(
                 st.session_state.round,

@@ -95,13 +95,52 @@ def units_list_for(player: str) -> list[Unit]:
     return st.session_state.get("p2_units_list", [])
 
 
+def unit_keys_for(player: str) -> list[str]:
+    """Return the ordered list of state-dict keys for a player's units.
+
+    Matches the order of units_list_for(). For duplicate unit IDs a '#N' suffix
+    is appended (e.g. 'wh40k_9e.necrons.unit.warriors#1' for the second squad).
+    """
+    if player == st.session_state.get("first_player"):
+        return st.session_state.get("p1_unit_keys", [])
+    return st.session_state.get("p2_unit_keys", [])
+
+
+def unit_id_from_state_key(state_key: str) -> str:
+    """Strip the deduplication suffix from a state key to get the canonical unit ID.
+
+    'wh40k_9e.necrons.unit.warriors#1' → 'wh40k_9e.necrons.unit.warriors'
+    """
+    return state_key.split("#")[0]
+
+
 # ---------------------------------------------------------------------------
 # Session state helpers
 # ---------------------------------------------------------------------------
 
 
+def _make_unit_state_dict(
+    matched: list[tuple[Unit, int]],
+) -> tuple[dict, list[str]]:  # type: ignore[type-arg]
+    """Build the state dict and ordered key list for a matched unit list.
+
+    Duplicate unit IDs are disambiguated with a '#N' suffix so each unit
+    instance has its own independent state.
+    """
+    counts: dict[str, int] = {}
+    state_dict: dict[str, dict] = {}  # type: ignore[type-arg]
+    keys: list[str] = []
+    for u, m in matched:
+        n = counts.get(u.id, 0)
+        counts[u.id] = n + 1
+        key = u.id if n == 0 else f"{u.id}#{n}"
+        state_dict[key] = _unit_state(u, m)
+        keys.append(key)
+    return state_dict, keys
+
+
 def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[type-arg]
-    count = models if models is not None else u.models_max
+    count = min(models, u.models_max) if models is not None else u.models_max
     return {
         "current_wounds": u.wounds * count,
         "models": count,
@@ -174,8 +213,12 @@ def init_state(
     st.session_state.p1_faction_dir = p1_faction_dir
     st.session_state.p2_faction_dir = p2_faction_dir
 
-    st.session_state.p1_units = {u.id: _unit_state(u, m) for u, m in p1_matched}
-    st.session_state.p2_units = {u.id: _unit_state(u, m) for u, m in p2_matched}
+    p1_states, p1_keys = _make_unit_state_dict(p1_matched)
+    p2_states, p2_keys = _make_unit_state_dict(p2_matched)
+    st.session_state.p1_units = p1_states
+    st.session_state.p2_units = p2_states
+    st.session_state.p1_unit_keys = p1_keys
+    st.session_state.p2_unit_keys = p2_keys
 
     st.session_state.vp_phase = vp_phase
     st.session_state.vp_from_round = vp_from_round

@@ -9,8 +9,12 @@ _DETACHMENT_NAME = "Patrol Detachment"
 
 
 def render_detachment_card(
-    faction: str, units: list[Unit], states: dict  # type: ignore[type-arg]
+    faction: str,
+    units: list[Unit],
+    states: dict,  # type: ignore[type-arg]
+    unit_keys: list[str] | None = None,
 ) -> None:
     st.caption(_DETACHMENT_NAME)
-    for unit in units:
-        render_unit_card(unit, states[unit.id], faction)
+    keys = unit_keys if unit_keys is not None else [u.id for u in units]
+    for unit, state_key in zip(units, keys):
+        render_unit_card(unit, states[state_key], faction, state_key=state_key)

@@ -149,9 +149,15 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
 
 
 def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-arg]
-    """Return (Unit, unit_state_dict) for the given faction + uid."""
+    """Return (Unit, unit_state_dict) for the given faction + state_key (uid).
+
+    uid may be a bare unit ID or a deduplicated state key ('unit.id#N').
+    """
+    from gameMechanic.game_state import unit_id_from_state_key
+
+    unit_id = unit_id_from_state_key(uid)
     units = units_list_for(faction)
-    unit = next(u for u in units if u.id == uid)
+    unit = next(u for u in units if u.id == unit_id)
     return unit, st.session_state[units_key_for(faction)][uid]
 
 
