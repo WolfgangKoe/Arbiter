@@ -62,12 +62,11 @@ def render_setup_screen() -> None:
 
     col_vp_phase, col_vp_round, col_vp_spacer = st.columns([3, 2, 5])
     with col_vp_phase:
-        # Default: Morale (last battle phase)
-        default_phase_idx = len(_BATTLE_PHASE_NAMES) - 1
+        # Default: Command (index 0) — avoids Streamlit virtual-dropdown clipping the first item
         vp_phase = st.selectbox(
             "Score VP at end of",
             _BATTLE_PHASE_NAMES,
-            index=default_phase_idx,
+            index=0,
             key="setup_vp_phase",
         )
     with col_vp_round:
