@@ -9,6 +9,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
+from gameMechanic.game_state import units_key_for
 from gameMechanic.unit_mutations import set_deployment, set_movement_status
 from uiLayout._common import PHASE_RULES, lookup, render_player_column
 
@@ -25,6 +26,9 @@ class MovementPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
+        st.info(PHASE_RULES["movement"])
+        st.divider()
+
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(first, state, active_content=_active_movement)
@@ -34,9 +38,6 @@ class MovementPhaseHandler:
             render_player_column(second, state, active_content=_active_movement)
             if second == state["active"]:
                 _render_reinforcements_step(second)
-
-        st.divider()
-        st.info(PHASE_RULES["movement"])
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass
@@ -95,7 +96,7 @@ def _active_movement(
 
 def _render_reinforcements_step(faction: str) -> None:
     """Always-visible reinforcements section for the active player."""
-    key = "necron_units" if faction == "Necrons" else "ork_units"
+    key = units_key_for(faction)
     units_state = st.session_state[key]
     reserve_units = [(uid, us) for uid, us in units_state.items() if us.get("in_reserve")]
 

@@ -48,7 +48,7 @@ h2 { color: var(--arb-accent) !important; font-size: 1rem; }
 [data-testid="stMetricValue"] { color: var(--arb-accent-lt) !important; }
 [data-testid="stMetricLabel"] { color: var(--arb-muted) !important; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
-/* Expanders (unit cards) */
+/* Expanders */
 [data-testid="stExpander"] {
     background: var(--arb-surface) !important;
     border: 1px solid var(--arb-border) !important;
@@ -62,7 +62,16 @@ h2 { color: var(--arb-accent) !important; font-size: 1rem; }
 [data-testid="stExpander"] summary:hover { background: #332d1e !important; }
 [data-testid="stExpanderDetails"] { background: var(--arb-surface) !important; }
 
-/* Buttons */
+/* Bordered containers (st.container(border=True)) — armyCard, unitCard
+   Streamlit 1.57 uses Emotion class e1rw0b1u3 for all flex containers.
+   border-color only affects elements that already have border-style:solid
+   set by Emotion (border=True); non-bordered containers stay unaffected. */
+.e1rw0b1u3 {
+    border-color: var(--arb-border) !important;
+    border-left-color: var(--arb-accent) !important;
+}
+
+/* Buttons — Streamlit 1.57 uses data-testid="stBaseButton-{kind}" */
 .stButton > button {
     background: var(--arb-surface) !important;
     border: 1px solid var(--arb-btn) !important;
@@ -75,17 +84,24 @@ h2 { color: var(--arb-accent) !important; font-size: 1rem; }
     background: var(--arb-hover) !important;
     border-color: var(--arb-accent) !important;
 }
-.stButton > button[data-testid="baseButton-primary"],
-.stButton > button[kind="primary"] {
+button[data-testid="stBaseButton-primary"] {
     background: var(--arb-accent) !important;
     border-color: var(--arb-accent) !important;
     color: var(--arb-bg) !important;
     font-weight: 700;
 }
-.stButton > button[data-testid="baseButton-primary"]:hover,
-.stButton > button[kind="primary"]:hover {
+button[data-testid="stBaseButton-primary"]:hover {
     background: var(--arb-accent-lt) !important;
     border-color: var(--arb-accent-lt) !important;
+}
+button[data-testid="stBaseButton-secondary"] {
+    background: var(--arb-surface) !important;
+    border-color: var(--arb-btn) !important;
+    color: var(--arb-accent-lt) !important;
+}
+button[data-testid="stBaseButton-secondary"]:hover {
+    background: var(--arb-hover) !important;
+    border-color: var(--arb-accent) !important;
 }
 
 /* Dividers */
@@ -197,8 +213,6 @@ def _score_group(faction: str) -> None:
 
 
 def render_game_header() -> None:
-    st.markdown(CSS_THEME, unsafe_allow_html=True)
-
     first = st.session_state.get("first_player", "Necrons")
     second = st.session_state.get("second_player", "Orks")
     phase_idx = st.session_state.phase_idx

@@ -3,9 +3,11 @@
 Internal layout (see docs/spec/ui_layout.md §7):
 
   ┌────────────────────────────────────────────────────────┐
-  │  firstPlayerArea (50%)  │  secondPlayerArea (50%)       │
-  ├────────────────────────────────────────────────────────┤
   │              gameActionDisplayArea (full width)         │
+  │  context first: phase rules, attack summary, VP score  │
+  ├────────────────────────────────────────────────────────┤
+  │  firstPlayerArea (50%)  │  secondPlayerArea (50%)       │
+  │  actions + reactions    │  actions + reactions          │
   ├────────────────────────────────────────────────────────┤
   │   gameProtocoll tabs  [CommandProtocol | Stratagems]    │
   └────────────────────────────────────────────────────────┘
@@ -85,60 +87,53 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
 
 
 def _render_setup() -> None:
-    """Render the setup phase — two empty player columns + setup display area."""
-    first = st.session_state.first_player
-    second = st.session_state.second_player
+    """Render the setup phase — displayArea first, then player actions below."""
     active = st.session_state.active
+    p1 = st.session_state.first_player
+    p2 = st.session_state.second_player
 
-    col_p1, col_p2 = st.columns(2)
-    with col_p1:
-        indicator = "▶" if first == active else "◀"
-        st.markdown(f"**{indicator} {first}**")
-    with col_p2:
-        indicator = "▶" if second == active else "◀"
-        st.markdown(f"**{indicator} {second}**")
-
-    st.divider()
-
-    # Unit selected → show its datasheet
+    # ── displayArea: datasheet (unit selected) or instructions ────────
     sel = st.session_state.selected_unit
     if sel is not None:
         faction, uid = sel
         _display_unit_datasheet(faction, uid)
-        return
+    else:
+        st.markdown("### Setup")
+        st.info(
+            "Configure your armies before the battle begins.\n\n"
+            "1. **Select first player** — the active player takes their turn first.\n"
+            "2. **Set deployment** for each unit using the dropdowns in the unit cards.\n"
+            "   - **Normal** — deployed on the battlefield\n"
+            "   - **Stationary** — deployed but will not move in turn 1\n"
+            "   - **Reserve** — arrives from turn 2 onwards\n\n"
+            "Click a unit name (▶) to view its full data profile here.\n\n"
+            "When ready, click **⚔ Start Game** below."
+        )
 
-    # Default: setup instructions + first-player selection
-    st.markdown("### Setup")
-    st.info(
-        "Configure your armies before the battle begins.\n\n"
-        "1. **Select first player** — the active player takes their turn first.\n"
-        "2. **Set deployment** for each unit using the dropdowns in the unit cards.\n"
-        "   - **Normal** — deployed on the battlefield\n"
-        "   - **Stationary** — deployed but will not move in turn 1\n"
-        "   - **Reserve** — arrives from turn 2 onwards\n\n"
-        "Click a unit name (▶) to view its full data profile here.\n\n"
-        "When ready, click **⚔ Start Game** below."
-    )
-    st.markdown("---")
+    st.divider()
+
+    # ── PlayerArea: first-player selection + Start Game ───────────────
     st.markdown("**First Player**")
-    p1 = st.session_state.first_player
-    p2 = st.session_state.second_player
     c1, c2 = st.columns(2)
     with c1:
-        p1_type = "primary" if active == p1 else "secondary"
         if st.button(
-            f"{p1} geht zuerst", key="setup_first_p1", type=p1_type, use_container_width=True
+            f"{p1} goes first",
+            key="setup_first_p1",
+            type="primary" if active == p1 else "secondary",
+            use_container_width=True,
         ):
             st.session_state.active = p1
             st.rerun()
     with c2:
-        p2_type = "primary" if active == p2 else "secondary"
         if st.button(
-            f"{p2} geht zuerst", key="setup_first_p2", type=p2_type, use_container_width=True
+            f"{p2} goes first",
+            key="setup_first_p2",
+            type="primary" if active == p2 else "secondary",
+            use_container_width=True,
         ):
             st.session_state.active = p2
             st.rerun()
-    st.caption(f"Currently selected: **{active}** geht zuerst.")
+    st.caption(f"Currently selected: **{active}** goes first.")
 
     st.divider()
     if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):
@@ -193,8 +188,10 @@ def render_game_actions_area() -> None:
         _render_setup()
         return
 
-    # All game phases delegated to phase_runner.
+    # displayArea first: VP scoring buttons appear at top when active
+    _render_vp_scoring()
+
+    # PlayerAreas below: phase-specific actions delegated to phase_runner
     from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
 
     render_current_phase(st.session_state)
-    _render_vp_scoring()

@@ -6,6 +6,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+from uiLayout.gameHeader import CSS_THEME  # noqa: E402
+
+st.markdown(CSS_THEME, unsafe_allow_html=True)
+
 from uiLayout.setupScreen import render_setup_screen  # noqa: E402
 
 if "initialized" not in st.session_state:

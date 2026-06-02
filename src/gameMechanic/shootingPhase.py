@@ -49,6 +49,9 @@ class ShootingPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
+        _render_display(state)
+        st.divider()
+
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(
@@ -66,9 +69,6 @@ class ShootingPhaseHandler:
                 inactive_content=_inactive_target_stats,
                 no_target_caption="← Designate a target (▷) from your army list.",
             )
-
-        st.divider()
-        _render_display(state)
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass

@@ -27,6 +27,9 @@ class ChargePhaseHandler:
         second: str = state["second_player"]
         inactive: str = second if state["active"] == first else first
 
+        st.info(PHASE_RULES["charge"])
+        st.divider()
+
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(
@@ -48,9 +51,6 @@ class ChargePhaseHandler:
             )
             if second == inactive:
                 _render_heroic_intervention(second, state)
-
-        st.divider()
-        st.info(PHASE_RULES["charge"])
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass

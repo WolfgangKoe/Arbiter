@@ -189,6 +189,36 @@ Matched Play Spielgrößen (aus Wahapedia):
 
 ---
 
+## 5g — Regelkonformer Setup-Flow
+
+Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_play.md`, `wahapedia_open_play.md`, `wahapedia_crusade.md`.
+
+### Spec-Korrekturen (aus Wahapedia-Review)
+
+- [x] `docs/spec/setup.md`: Spielgrößen-Tabelle um Missions-Spalte erweitert
+- [x] `docs/spec/setup.md`: CP-Regel präzisiert — Starting CP (Matched Play-Kapitel) vs. +1 CP/Runde (Core Rules Command Phase) klar getrennt
+- [x] `docs/spec/setup.md`: Attacker/Defender-Abschnitt ergänzt (Matched: Roll-off; Open: höherer PL)
+- [x] `docs/spec/setup.md`: Secondary Objectives Abschnitt neu (5 Kategorien, 3 pro Spieler, 15 VP cap, **optional**)
+- [x] `docs/spec/setup.md`: Open Play-Sektion um Missions und Attacker/Defender ergänzt
+- [x] `docs/spec/setup.md`: Setup-Flow um Mission + Secondary Objectives Toggle erweitert
+- [x] `docs/spec/setup.md`: session_state um `mission`, `attacker`, `use_secondaries`, `secondaries`, `secondary_vp` erweitert
+
+**Hinweis Detachment-Count-Limits:** Incursion/Strike Force/Onslaught-Limits (2/3/4 Detachments) stehen **nicht** auf der Wahapedia Matched Play-Seite — nur Combat Patrol = 1 Patrol Detachment ist explizit bestätigt. Limits stammen aus den Core Battle-Forged Rules; Verifikation empfohlen bevor Enforcement implementiert wird.
+
+**Hinweis Crusade Wahapedia:** Die Crusade-Seite auf Wahapedia war 404. Datei basiert auf Core-Rule-Wissen + bestehendem Spec.
+
+### Implementierung (noch ausstehend)
+
+- [ ] **Mission-Auswahl im Setup-Screen:** Dropdown je Spielgröße (Matched Play); wird in `session_state["mission"]` gespeichert
+- [ ] **Attacker/Defender-Button:** Roll-off UI im Setup-Screen (Matched: immer; Open: nur bei PL-Gleichstand)
+- [ ] **Secondary Objectives Toggle:** "Use Secondary Objectives" on/off im Setup-Screen (default: off)
+  - [ ] Wenn on: 3 Dropdown-Slots pro Spieler, je 1 Kategorie erzwungen (keine doppelten Kategorien)
+  - [ ] VP-Tracking: je Objective 0–15 VP mit Cap-Enforcement
+  - [ ] Anzeige in gameActionsArea: Primary VP und Secondary VP aufgeteilt
+- [ ] **+1 CP/Runde verifizieren:** Wahapedia Core Rules Command Phase lesen — bestätigen dass +1 CP/Runde für Battle-Forged gilt, dann in Command Phase automatisieren (falls noch nicht geschehen)
+
+---
+
 ## 5f — Stratagems Proof of Concept
 
 - [x] `data/wh40k_9e/necrons/stratagems.yaml` — 59 Stratagems, verifiziert (2026-05-30)

@@ -193,14 +193,14 @@ class CommandPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
+        st.info(PHASE_RULES["command"])
+        st.divider()
+
         col1, col2 = st.columns(2)
         with col1:
             _render_command_column(first, state)
         with col2:
             _render_command_column(second, state)
-
-        st.divider()
-        st.info(PHASE_RULES["command"])
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass
