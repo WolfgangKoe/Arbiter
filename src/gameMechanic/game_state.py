@@ -28,9 +28,9 @@ _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
 CP_BY_GAME_SIZE: dict[str, int] = {
     "Combat Patrol": 3,
-    "Incursion": 3,
-    "Strike Force": 6,
-    "Onslaught": 9,
+    "Incursion": 6,
+    "Strike Force": 12,
+    "Onslaught": 18,
 }
 
 
@@ -136,6 +136,12 @@ def init_state(
     game_size: str = "Incursion",
     vp_phase: str = "Morale",
     vp_from_round: int = 1,
+    game_mode: str = "matched",
+    mission: str | None = None,
+    attacker: str | None = None,
+    use_secondaries: bool = False,
+    secondaries: dict | None = None,  # type: ignore[type-arg]
+    secondary_vp: dict | None = None,  # type: ignore[type-arg]
 ) -> None:
     if "initialized" in st.session_state:
         return
@@ -143,7 +149,7 @@ def init_state(
     p1_matched, p1_unmatched, p1_name, p1_faction_dir = _load_roster_for(roster_p1, "necrons")
     p2_matched, p2_unmatched, p2_name, p2_faction_dir = _load_roster_for(roster_p2, "necrons")
 
-    starting_cp = CP_BY_GAME_SIZE.get(game_size, 3)
+    starting_cp = CP_BY_GAME_SIZE.get(game_size, 3) if game_mode == "matched" else 3
 
     st.session_state.initialized = True
     st.session_state.round = 1
@@ -173,6 +179,15 @@ def init_state(
 
     st.session_state.vp_phase = vp_phase
     st.session_state.vp_from_round = vp_from_round
+
+    # Game configuration
+    st.session_state.game_mode = game_mode
+    st.session_state.game_size = game_size
+    st.session_state.mission = mission
+    st.session_state.attacker = attacker
+    st.session_state.use_secondaries = use_secondaries
+    st.session_state.secondaries = secondaries
+    st.session_state.secondary_vp = secondary_vp
 
     st.session_state.active_protocol_id = "eternal_guardian"
     st.session_state.used_protocol_ids = ["eternal_guardian"]

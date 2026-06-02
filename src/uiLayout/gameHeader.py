@@ -123,6 +123,16 @@ hr { border-color: var(--arb-border) !important; opacity: 1 !important; }
     font-family: monospace;
     font-size: 11px !important;
 }
+[data-testid="stNumberInput"] button {
+    background: var(--arb-surface) !important;
+    border-color: var(--arb-border) !important;
+    color: var(--arb-muted) !important;
+}
+[data-testid="stNumberInput"] button:hover {
+    background: var(--arb-hover) !important;
+    border-color: var(--arb-accent) !important;
+    color: var(--arb-accent-lt) !important;
+}
 
 /* Selectbox */
 .stSelectbox [data-baseweb="select"] > div {
