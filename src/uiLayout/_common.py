@@ -12,7 +12,7 @@ from collections.abc import Callable
 
 import streamlit as st
 
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS, units_key_for, units_list_for
+from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 
@@ -194,8 +194,8 @@ def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None: 
     p1 = st.session_state.get("first_player", "")
     p2 = st.session_state.get("second_player", "")
     units_by_faction = {
-        p1: {u.id: u for u in _NECRON_UNITS},
-        p2: {u.id: u for u in _ORK_UNITS},
+        p1: {u.id: u for u in units_list_for(p1)},
+        p2: {u.id: u for u in units_list_for(p2)},
     }
 
     st.markdown("**⚔ Engaged with:**")

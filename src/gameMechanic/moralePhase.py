@@ -5,7 +5,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import flee_models
 from gameObjects.unit import Unit
 
@@ -29,14 +29,13 @@ class MoralePhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
-
         unit_map = {
-            "Necrons": {u.id: u for u in _NECRON_UNITS},
-            "Orks": {u.id: u for u in _ORK_UNITS},
+            first: {u.id: u for u in units_list_for(first)},
+            second: {u.id: u for u in units_list_for(second)},
         }
         state_map = {
-            "Necrons": st.session_state.necron_units,
-            "Orks": st.session_state.ork_units,
+            first: st.session_state[units_key_for(first)],
+            second: st.session_state[units_key_for(second)],
         }
 
         col1, col2 = st.columns(2)

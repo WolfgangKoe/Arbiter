@@ -229,11 +229,15 @@ class _S(dict):
 
 
 def test_execute_effect_heal_heals_unit() -> None:
-    session = _S(necron_units={"test.unit": {"current_wounds": 4, "models": 2, "destroyed": False}})
+    session = _S(
+        first_player="Necrons",
+        p1_units={"test.unit": {"current_wounds": 4, "models": 2, "destroyed": False}},
+    )
     _eng.heal_unit.__module__  # ensure imported
     import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
 
     _mut.st.session_state = session
+    _st_mock.session_state = session
     unit = _make_unit(rules=["livingMetal"])
     unit = Unit(
         id="test.unit",
@@ -263,7 +267,7 @@ def test_execute_effect_heal_heals_unit() -> None:
     ability = _living_metal_ability()
     result = execute_effect(ability, "test.unit", "Necrons", unit)
     assert result is True
-    assert session["necron_units"]["test.unit"]["current_wounds"] == 5
+    assert session["p1_units"]["test.unit"]["current_wounds"] == 5
 
 
 def test_execute_effect_heal_no_revive_caps_at_living_models() -> None:
@@ -271,8 +275,12 @@ def test_execute_effect_heal_no_revive_caps_at_living_models() -> None:
     import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
 
     # 1 model dead, 2 remaining at full HP: cannot be healed further
-    session = _S(necron_units={"test.unit": {"current_wounds": 6, "models": 2, "destroyed": False}})
+    session = _S(
+        first_player="Necrons",
+        p1_units={"test.unit": {"current_wounds": 6, "models": 2, "destroyed": False}},
+    )
     _mut.st.session_state = session
+    _st_mock.session_state = session
     unit = Unit(
         id="test.unit",
         name_en="T",
@@ -301,7 +309,7 @@ def test_execute_effect_heal_no_revive_caps_at_living_models() -> None:
     ability = _living_metal_ability()
     result = execute_effect(ability, "test.unit", "Necrons", unit)
     assert result is False
-    assert session["necron_units"]["test.unit"]["current_wounds"] == 6
+    assert session["p1_units"]["test.unit"]["current_wounds"] == 6
 
 
 def test_execute_effect_unknown_type_returns_false() -> None:
@@ -326,9 +334,12 @@ def test_execute_effect_unknown_type_returns_false() -> None:
 
 def _make_necron_state() -> dict:
     units, _ = load_army("necrons")
+    session = _S(first_player="Necrons")
+    _st_mock.session_state = session
     return {
         "active": "Necrons",
-        "necron_units": {
+        "first_player": "Necrons",
+        "p1_units": {
             u.id: {
                 "current_wounds": max(
                     1, u.wounds * u.models_max - 1
@@ -373,9 +384,12 @@ def test_get_triggered_abilities_living_metal_includes_overlord_and_skorpekh() -
 def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> None:
     """Units at full health are not eligible even if they have the livingMetal rule."""
     units, _ = load_army("necrons")
+    session = _S(first_player="Necrons")
+    _st_mock.session_state = session
     state = {
         "active": "Necrons",
-        "necron_units": {
+        "first_player": "Necrons",
+        "p1_units": {
             u.id: {
                 "current_wounds": u.wounds * u.models_max,  # full health
                 "models": u.models_max,
@@ -391,9 +405,12 @@ def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> No
 
 def test_get_triggered_abilities_ork_command_returns_empty() -> None:
     units, _ = load_army("orks")
+    session = _S(first_player="Necrons")
+    _st_mock.session_state = session
     state = {
         "active": "Orks",
-        "ork_units": {
+        "first_player": "Necrons",
+        "p2_units": {
             u.id: {
                 "current_wounds": u.wounds * u.models_max,
                 "models": u.models_max,

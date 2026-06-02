@@ -59,19 +59,19 @@ def load_scenario(name: str) -> bool:
 
 def save_scenario(name: str) -> None:
     """Snapshot the current game state to data/scenarios/<name>.json."""
-    necron_units = {uid: dict(s) for uid, s in st.session_state.get("necron_units", {}).items()}
-    ork_units = {uid: dict(s) for uid, s in st.session_state.get("ork_units", {}).items()}
+    p1_units = {uid: dict(s) for uid, s in st.session_state.get("p1_units", {}).items()}
+    p2_units = {uid: dict(s) for uid, s in st.session_state.get("p2_units", {}).items()}
     data: dict[str, Any] = {
         "description": f"Snapshot — round {st.session_state.get('round', 1)}, phase {st.session_state.get('phase_idx', 0)}",
         "round": st.session_state.get("round", 1),
         "phase_idx": st.session_state.get("phase_idx", 0),
-        "active": st.session_state.get("active", "Necrons"),
+        "active": st.session_state.get("active", ""),
         "phase_stage": st.session_state.get("phase_stage", "active"),
         "cp": dict(st.session_state.get("cp", {})),
         "vp": dict(st.session_state.get("vp", {})),
         "unit_patches": {
-            "necron_units": necron_units,
-            "ork_units": ork_units,
+            "p1_units": p1_units,
+            "p2_units": p2_units,
         },
     }
     _SCENARIOS_DIR.mkdir(parents=True, exist_ok=True)

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import units_key_for, units_list_for
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
@@ -125,12 +125,12 @@ def _render_melee_pairs() -> None:
     p1 = st.session_state.get("first_player", "")
     p2 = st.session_state.get("second_player", "")
     name_map = {
-        p1: {u.id: u.name_en for u in _NECRON_UNITS},
-        p2: {u.id: u.name_en for u in _ORK_UNITS},
+        p1: {u.id: u.name_en for u in units_list_for(p1)},
+        p2: {u.id: u.name_en for u in units_list_for(p2)},
     }
     seen: set[frozenset[str]] = set()
     pairs: list[str] = []
-    for uid, s in st.session_state.necron_units.items():
+    for uid, s in st.session_state[units_key_for(p1)].items():
         for fac, enemy_uid in s.get("melee_with", []):
             key = frozenset({f"{p1}:{uid}", f"{fac}:{enemy_uid}"})
             if key in seen:

@@ -16,7 +16,12 @@ from pathlib import Path
 
 import streamlit as st
 
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS, PHASES
+from gameMechanic.game_state import (
+    PHASES,
+    is_necron_faction,
+    units_key_for,
+    units_list_for,
+)
 from gameObjects.loader import load_command_protocols
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
@@ -31,13 +36,11 @@ def _load_game_log() -> list[dict]:  # type: ignore[type-arg]
 
 def _unit_name_map(faction: str) -> dict[str, str]:
     """Return uid → name_en mapping for a faction."""
-    units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
-    return {u.id: u.name_en for u in units}
+    return {u.id: u.name_en for u in units_list_for(faction)}
 
 
 def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
-    key = "necron_units" if faction == "Necrons" else "ork_units"
-    return st.session_state[key]
+    return st.session_state[units_key_for(faction)]
 
 
 def _render_necron_protocols() -> None:
@@ -65,7 +68,7 @@ def _render_command_protocol() -> None:
     first = st.session_state.get("first_player", "Necrons")
     second = st.session_state.get("second_player", "Orks")
 
-    if "Necrons" in (first, second):
+    if is_necron_faction(first) or is_necron_faction(second):
         _render_necron_protocols()
 
     st.caption(

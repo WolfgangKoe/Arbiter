@@ -40,6 +40,7 @@ class _S(dict):
 
 
 def _make_session(**kwargs) -> _S:
+    kwargs.setdefault("first_player", "Necrons")
     s = _S(**kwargs)
     _mut.st.session_state = s
     return s
@@ -74,8 +75,8 @@ def _session_with_two_units(n_in_melee: bool = False, o_in_melee: bool = False) 
         necron["melee_with"] = [["Orks", "ork_1"]]
         ork["melee_with"] = [["Necrons", "necron_1"]]
     return _make_session(
-        necron_units={"necron_1": necron},
-        ork_units={"ork_1": ork},
+        p1_units={"necron_1": necron},
+        p2_units={"ork_1": ork},
     )
 
 
@@ -107,9 +108,9 @@ def _movement_blocked(value: str, unit_state: dict) -> bool:
 
 def test_scenario_1_stationary_no_action():
     """Szenario 1: STATIONARY → stationary → no further actions → STATIONARY."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
     set_movement_status("u1", "Necrons", "stationary")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     assert state["movement_choice"] == "stationary"
     assert not state["turn_flags"]["advanced"]
     assert not state["turn_flags"]["retreated"]
@@ -117,9 +118,9 @@ def test_scenario_1_stationary_no_action():
 
 def test_scenario_2_stationary_then_shoot():
     """Szenario 2: STATIONARY → stationary → schießt. Shoot not blocked."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
     set_movement_status("u1", "Necrons", "stationary")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     # STATIONARY unit may shoot (no flag blocks it)
     assert not state["turn_flags"]["retreated"]
     assert not state["turn_flags"]["advanced"]
@@ -127,9 +128,9 @@ def test_scenario_2_stationary_then_shoot():
 
 def test_scenario_3_normal_move():
     """Szenario 3: STATIONARY → MOVED."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
     set_movement_status("u1", "Necrons", "moved")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     assert state["movement_choice"] == "moved"
     assert not state["turn_flags"]["advanced"]
     assert not state["turn_flags"]["retreated"]
@@ -137,9 +138,9 @@ def test_scenario_3_normal_move():
 
 def test_scenario_8_advanced_sets_flag():
     """Szenario 8: STATIONARY → ADVANCED sets advanced flag."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
     set_movement_status("u1", "Necrons", "advanced")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     assert state["movement_choice"] == "advanced"
     assert state["turn_flags"]["advanced"]
     assert not state["turn_flags"]["retreated"]
@@ -148,7 +149,7 @@ def test_scenario_8_advanced_sets_flag():
 def test_scenario_9_in_melee_stationary_stationary_allowed():
     """Szenario 9: IN MELEE → stationary is the only valid non-retreat option."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
-    state = s["necron_units"]["necron_1"]
+    state = s["p1_units"]["necron_1"]
     assert not _movement_blocked("stationary", state)
     assert _movement_blocked("moved", state)
     assert _movement_blocked("advanced", state)
@@ -159,7 +160,7 @@ def test_scenario_11_retreat_from_melee_clears_in_melee():
     """Szenario 11: IN MELEE → RETREATED clears in_melee and sets retreated flag."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
     set_movement_status("necron_1", "Necrons", "retreated")
-    necron = s["necron_units"]["necron_1"]
+    necron = s["p1_units"]["necron_1"]
     assert necron["movement_choice"] == "retreated"
     assert necron["turn_flags"]["retreated"]
     assert not necron["in_melee"]
@@ -170,7 +171,7 @@ def test_scenario_11_retreat_also_clears_enemy_melee_link():
     """Szenario 11: When Necron retreats, Ork's melee_with is also cleared."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
     set_movement_status("necron_1", "Necrons", "retreated")
-    ork = s["ork_units"]["ork_1"]
+    ork = s["p2_units"]["ork_1"]
     assert not ork["in_melee"]
     assert ork["melee_with"] == []
 
@@ -179,10 +180,10 @@ def test_scenario_12_reserve_round1_not_blocked_by_movement_constraints():
     """Szenario 12: IN RESERVE (R1) — unit stays in reserve (UI shows caption, no buttons)."""
     unit = _unit()
     unit["in_reserve"] = True
-    s = _make_session(necron_units={"u1": unit}, ork_units={})
+    s = _make_session(p1_units={"u1": unit}, p2_units={})
     # Reserve units are handled by _render_reinforcements_step, not _active_movement.
     # _active_movement returns early when in_reserve=True (no constraint check needed).
-    assert s["necron_units"]["u1"]["in_reserve"]
+    assert s["p1_units"]["u1"]["in_reserve"]
 
 
 def test_scenario_13_deploy_from_reserve_sets_moved():
@@ -191,10 +192,10 @@ def test_scenario_13_deploy_from_reserve_sets_moved():
 
     unit = _unit()
     unit["in_reserve"] = True
-    s = _make_session(necron_units={"u1": unit}, ork_units={})
+    s = _make_session(p1_units={"u1": unit}, p2_units={})
     set_deployment("u1", "Necrons", "normal")
     set_movement_status("u1", "Necrons", "moved")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     assert not state["in_reserve"]
     assert state["movement_choice"] == "moved"
     assert not state["turn_flags"]["advanced"]  # Deploy is MOVED, never ADVANCED
@@ -209,37 +210,37 @@ def test_forbidden_retreated_then_no_further_movement():
     """RETREATED → all further movement options are blocked (early-return gate)."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
     set_movement_status("necron_1", "Necrons", "retreated")
-    state = s["necron_units"]["necron_1"]
+    state = s["p1_units"]["necron_1"]
     for value in ("moved", "advanced", "stationary", "retreated"):
         assert _movement_blocked(value, state), f"{value} should be blocked after retreat"
 
 
 def test_forbidden_advanced_then_retreat_is_blocked():
     """ADVANCED → Retreat is blocked (not in_melee after advance)."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
     set_movement_status("u1", "Necrons", "advanced")
-    state = s["necron_units"]["u1"]
+    state = s["p1_units"]["u1"]
     assert _movement_blocked("retreated", state)  # not in melee, can't retreat
 
 
 def test_forbidden_in_melee_stationary_moved_blocked():
     """IN MELEE + stationary → MOVED is blocked."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
-    state = s["necron_units"]["necron_1"]
+    state = s["p1_units"]["necron_1"]
     assert _movement_blocked("moved", state)
 
 
 def test_forbidden_in_melee_stationary_advanced_blocked():
     """IN MELEE + stationary → ADVANCED is blocked."""
     s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
-    state = s["necron_units"]["necron_1"]
+    state = s["p1_units"]["necron_1"]
     assert _movement_blocked("advanced", state)
 
 
 def test_forbidden_not_in_melee_retreat_blocked():
     """Unit not in melee → RETREAT is blocked."""
-    s = _make_session(necron_units={"u1": _unit()}, ork_units={})
-    state = s["necron_units"]["u1"]
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
+    state = s["p1_units"]["u1"]
     assert _movement_blocked("retreated", state)
 
 
@@ -261,7 +262,7 @@ def test_regression_retreated_then_stationary_call_still_blocks_move():
 
     # Step 1: Retreat — correct path
     set_movement_status("necron_1", "Necrons", "retreated")
-    state = s["necron_units"]["necron_1"]
+    state = s["p1_units"]["necron_1"]
     assert state["turn_flags"]["retreated"], "retreated flag must be True after retreat"
     assert not state["in_melee"], "leave_melee must have been called"
 
@@ -272,7 +273,7 @@ def test_regression_retreated_then_stationary_call_still_blocks_move():
     # Step 3: Demonstrate the underlying mutation vulnerability
     # (the bug path — simulating a bypass of the UI gate)
     set_movement_status("necron_1", "Necrons", "stationary")
-    state_after_bypass = s["necron_units"]["necron_1"]
+    state_after_bypass = s["p1_units"]["necron_1"]
     # The mutation itself resets the flag — this is why the UI gate is critical
     assert not state_after_bypass["turn_flags"][
         "retreated"

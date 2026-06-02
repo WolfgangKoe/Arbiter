@@ -26,8 +26,16 @@ PHASES: list[tuple[str, str]] = [
 
 _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
+CP_BY_GAME_SIZE: dict[str, int] = {
+    "Combat Patrol": 3,
+    "Incursion": 3,
+    "Strike Force": 6,
+    "Onslaught": 9,
+}
+
+
 # ---------------------------------------------------------------------------
-# Module-level roster loading (runs once per worker process)
+# Roster loading helper
 # ---------------------------------------------------------------------------
 
 
@@ -53,22 +61,9 @@ def _load_roster_for(
     return matched, unmatched, display_name, faction_dir
 
 
-_P1_MATCHED, _P1_UNMATCHED, _P1_NAME, _P1_FACTION_DIR = _load_roster_for(
-    "necrons_alpha.yaml", "necrons"
-)
-_P2_MATCHED, _P2_UNMATCHED, _P2_NAME, _P2_FACTION_DIR = _load_roster_for(
-    "necrons_beta.yaml", "necrons"
-)
-
-# Unit lists used by UI/stats lookups (order matches player slot)
-_NECRON_UNITS: list[Unit] = [u for u, _ in _P1_MATCHED]
-_ORK_UNITS: list[Unit] = [u for u, _ in _P2_MATCHED]
-
-# Player-name → faction directory  (populated at init, used by helpers below)
-PLAYER_FACTION_DIR: dict[str, str] = {
-    _P1_NAME: _P1_FACTION_DIR,
-    _P2_NAME: _P2_FACTION_DIR,
-}
+def list_available_rosters() -> list[str]:
+    """Return all .yaml filenames in the rosters directory."""
+    return sorted(p.name for p in _ROSTER_DIR.glob("*.yaml"))
 
 
 # ---------------------------------------------------------------------------
@@ -78,12 +73,14 @@ PLAYER_FACTION_DIR: dict[str, str] = {
 
 def units_key_for(player: str) -> str:
     """Return the session_state key that holds a player's unit states."""
-    return "necron_units" if player == st.session_state.get("first_player") else "ork_units"
+    return "p1_units" if player == st.session_state.get("first_player") else "p2_units"
 
 
 def faction_dir_for(player: str) -> str:
     """Return the data-directory name for a player's faction."""
-    return PLAYER_FACTION_DIR.get(player, "necrons")
+    if player == st.session_state.get("first_player"):
+        return st.session_state.get("p1_faction_dir", "necrons")
+    return st.session_state.get("p2_faction_dir", "necrons")
 
 
 def is_necron_faction(player: str) -> bool:
@@ -93,7 +90,9 @@ def is_necron_faction(player: str) -> bool:
 
 def units_list_for(player: str) -> list[Unit]:
     """Return the Unit-definition list for a player (for stats / name lookups)."""
-    return _NECRON_UNITS if player == st.session_state.get("first_player") else _ORK_UNITS
+    if player == st.session_state.get("first_player"):
+        return st.session_state.get("p1_units_list", [])
+    return st.session_state.get("p2_units_list", [])
 
 
 # ---------------------------------------------------------------------------
@@ -131,17 +130,27 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
     }
 
 
-def init_state() -> None:
+def init_state(
+    roster_p1: str = "necrons_alpha.yaml",
+    roster_p2: str = "necrons_beta.yaml",
+    game_size: str = "Incursion",
+) -> None:
     if "initialized" in st.session_state:
         return
+
+    p1_matched, p1_unmatched, p1_name, p1_faction_dir = _load_roster_for(roster_p1, "necrons")
+    p2_matched, p2_unmatched, p2_name, p2_faction_dir = _load_roster_for(roster_p2, "necrons")
+
+    starting_cp = CP_BY_GAME_SIZE.get(game_size, 3)
+
     st.session_state.initialized = True
     st.session_state.round = 1
     st.session_state.phase_idx = 0
-    st.session_state.first_player = _P1_NAME
-    st.session_state.second_player = _P2_NAME
-    st.session_state.active = _P1_NAME
-    st.session_state.cp = {_P1_NAME: 3, _P2_NAME: 3}
-    st.session_state.vp = {_P1_NAME: 0, _P2_NAME: 0}
+    st.session_state.first_player = p1_name
+    st.session_state.second_player = p2_name
+    st.session_state.active = p1_name
+    st.session_state.cp = {p1_name: starting_cp, p2_name: starting_cp}
+    st.session_state.vp = {p1_name: 0, p2_name: 0}
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []
     st.session_state.resurrection_orb_used = False
@@ -150,15 +159,23 @@ def init_state() -> None:
     st.session_state.cp_granted_this_phase = False
     st.session_state.mwbd_target_uid = None
     st.session_state.res_orb_target_uid = None
-    st.session_state.necron_units = {u.id: _unit_state(u, m) for u, m in _P1_MATCHED}
-    st.session_state.ork_units = {u.id: _unit_state(u, m) for u, m in _P2_MATCHED}
+
+    # Unit lists for stat/name lookups (indexed by player slot, not faction)
+    st.session_state.p1_units_list = [u for u, _ in p1_matched]
+    st.session_state.p2_units_list = [u for u, _ in p2_matched]
+    st.session_state.p1_faction_dir = p1_faction_dir
+    st.session_state.p2_faction_dir = p2_faction_dir
+
+    st.session_state.p1_units = {u.id: _unit_state(u, m) for u, m in p1_matched}
+    st.session_state.p2_units = {u.id: _unit_state(u, m) for u, m in p2_matched}
+
     st.session_state.active_protocol_id = "eternal_guardian"
     st.session_state.used_protocol_ids = ["eternal_guardian"]
     st.session_state.psi_attempts_this_phase = 0
-    if _P1_UNMATCHED or _P2_UNMATCHED:
+    if p1_unmatched or p2_unmatched:
         st.session_state.roster_warnings = {
-            _P1_NAME: _P1_UNMATCHED,
-            _P2_NAME: _P2_UNMATCHED,
+            p1_name: p1_unmatched,
+            p2_name: p2_unmatched,
         }
     else:
         st.session_state.roster_warnings = {}
@@ -177,7 +194,7 @@ def _reset_phase_state() -> None:
 
 
 def _reset_turn_state() -> None:
-    for key in ("necron_units", "ork_units"):
+    for key in ("p1_units", "p2_units"):
         for state in st.session_state[key].values():
             flags = state["turn_flags"]
             for flag in flags:

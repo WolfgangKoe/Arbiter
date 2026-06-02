@@ -6,20 +6,24 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-from gameMechanic.game_state import init_state  # noqa: E402
+from uiLayout.setupScreen import render_setup_screen  # noqa: E402
+
+if "initialized" not in st.session_state:
+    render_setup_screen()
+    st.stop()
+
 from uiLayout.armyList import render_army_list  # noqa: E402
 from uiLayout.gameActionsArea import render_game_actions_area  # noqa: E402
 from uiLayout.gameHeader import render_game_header  # noqa: E402
 from uiLayout.gameProtocoll import render_game_protocoll  # noqa: E402
 
-_first_run = "initialized" not in st.session_state
-init_state()
-if _first_run:
-    _scenario = st.query_params.get("scenario")
-    if _scenario:
-        from gameMechanic.scenarios import load_scenario  # noqa: PLC0415
+_scenario = st.query_params.get("scenario")
+if _scenario and "scenario_loaded" not in st.session_state:
+    from gameMechanic.scenarios import load_scenario  # noqa: PLC0415
 
-        load_scenario(_scenario)
+    load_scenario(_scenario)
+    st.session_state.scenario_loaded = True
+
 render_game_header()
 st.divider()
 

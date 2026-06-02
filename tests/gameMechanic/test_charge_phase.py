@@ -16,6 +16,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.shootingPhase as _sp  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.shootingPhase import can_shoot, target_in_friendly_melee  # noqa: E402
@@ -45,8 +46,10 @@ class _S(dict):
 
 
 def _make_session(**kwargs) -> _S:  # type: ignore[no-untyped-def]
+    kwargs.setdefault("first_player", "Necrons")
     s = _S(**kwargs)
     _mut.st.session_state = s
+    _gs.st.session_state = s
     # Ensure shootingPhase.st uses the same mock (test_shooting.py may have imported it first)
     _sp.st = _st_mock
     _st_mock.session_state = s
@@ -73,15 +76,15 @@ def _unit(in_melee: bool = False) -> dict:
 
 def _two_unit_session() -> _S:
     return _make_session(
-        necron_units={OVERLORD: _unit()},
-        ork_units={BOYZ: _unit()},
+        p1_units={OVERLORD: _unit()},
+        p2_units={BOYZ: _unit()},
     )
 
 
 def _four_unit_session() -> _S:
     return _make_session(
-        necron_units={OVERLORD: _unit(), WARRIORS: _unit()},
-        ork_units={BOYZ: _unit(), WARBOSS: _unit()},
+        p1_units={OVERLORD: _unit(), WARRIORS: _unit()},
+        p2_units={BOYZ: _unit(), WARBOSS: _unit()},
     )
 
 
@@ -127,7 +130,7 @@ class TestLeaveMeleePair:
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         enter_melee(OVERLORD, "Necrons", WARBOSS, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        mw = session["necron_units"][OVERLORD]["melee_with"]
+        mw = session["p1_units"][OVERLORD]["melee_with"]
         assert ["Orks", BOYZ] not in mw
         assert ["Orks", WARBOSS] in mw
 
@@ -135,41 +138,41 @@ class TestLeaveMeleePair:
         session = _two_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert ["Necrons", OVERLORD] not in session["ork_units"][BOYZ]["melee_with"]
+        assert ["Necrons", OVERLORD] not in session["p2_units"][BOYZ]["melee_with"]
 
     def test_own_unit_still_in_melee_if_other_pairs_remain(self) -> None:
         session = _four_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         enter_melee(OVERLORD, "Necrons", WARBOSS, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert session["necron_units"][OVERLORD]["in_melee"] is True
+        assert session["p1_units"][OVERLORD]["in_melee"] is True
 
     def test_own_unit_leaves_melee_when_last_pair_broken(self) -> None:
         session = _two_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert session["necron_units"][OVERLORD]["in_melee"] is False
+        assert session["p1_units"][OVERLORD]["in_melee"] is False
 
     def test_enemy_stays_in_melee_if_still_engaged_elsewhere(self) -> None:
         session = _four_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         enter_melee(WARRIORS, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert session["ork_units"][BOYZ]["in_melee"] is True
-        assert ["Necrons", WARRIORS] in session["ork_units"][BOYZ]["melee_with"]
+        assert session["p2_units"][BOYZ]["in_melee"] is True
+        assert ["Necrons", WARRIORS] in session["p2_units"][BOYZ]["melee_with"]
 
     def test_enemy_leaves_melee_when_last_pair_broken(self) -> None:
         session = _two_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert session["ork_units"][BOYZ]["in_melee"] is False
+        assert session["p2_units"][BOYZ]["in_melee"] is False
 
     def test_idempotent_when_pair_already_gone(self) -> None:
         session = _two_unit_session()
         enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
         leave_melee_pair(OVERLORD, "Necrons", BOYZ, "Orks")
-        assert session["necron_units"][OVERLORD]["melee_with"] == []
+        assert session["p1_units"][OVERLORD]["melee_with"] == []
 
 
 # ---------------------------------------------------------------------------
@@ -218,8 +221,8 @@ class TestCanShootBigGunsNeverTire:
 class TestTargetInFriendlyMelee:
     def test_returns_false_when_target_not_in_melee(self) -> None:
         _make_session(
-            necron_units={OVERLORD: _unit()},
-            ork_units={BOYZ: _unit()},
+            p1_units={OVERLORD: _unit()},
+            p2_units={BOYZ: _unit()},
         )
         assert target_in_friendly_melee("Necrons", "Orks", BOYZ) is False
 

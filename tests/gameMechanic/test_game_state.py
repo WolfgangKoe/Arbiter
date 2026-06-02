@@ -25,6 +25,8 @@ class _S(dict):
 
 
 def _make_session(**kwargs) -> _S:
+    kwargs.setdefault("first_player", "Necrons")
+    kwargs.setdefault("second_player", "Orks")
     s = _S(**kwargs)
     _mut.st.session_state = s
     _gs.st.session_state = s
@@ -60,8 +62,8 @@ def _phase_session(phase_idx: int, active: str, round_num: int = 1, cp: dict | N
         cp=cp if cp is not None else {"Necrons": 4, "Orks": 4},
         selected_unit=None,
         selected_targets=[],
-        necron_units={"u1": _unit_state_dict()},
-        ork_units={"u2": _unit_state_dict()},
+        p1_units={"u1": _unit_state_dict()},
+        p2_units={"u2": _unit_state_dict()},
     )
 
 
@@ -112,8 +114,8 @@ def test_next_phase_resets_selected_unit_and_targets() -> None:
         cp={"Necrons": 4, "Orks": 4},
         selected_unit=("Necrons", "wh40k_9e.necrons.unit.overlord"),
         selected_targets=[("Orks", "wh40k_9e.orks.unit.big_mek")],
-        necron_units={"u1": _unit_state_dict()},
-        ork_units={"u2": _unit_state_dict()},
+        p1_units={"u1": _unit_state_dict()},
+        p2_units={"u2": _unit_state_dict()},
     )
     next_phase()
     assert session["selected_unit"] is None

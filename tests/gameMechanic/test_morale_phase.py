@@ -68,12 +68,19 @@ def _make_state(models: int = 10, wounds_per_model: int = 1) -> dict:
     }
 
 
+def _necron_session(unit_state: dict) -> dict:
+    return {"first_player": "Necrons", "p1_units": {"u1": unit_state}}
+
+
 class TestFleeModels:
     def test_flee_reduces_models(self):
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 3, unit)
         assert unit_state["models"] == 7
         assert unit_state["current_wounds"] == 7
@@ -81,24 +88,33 @@ class TestFleeModels:
     def test_flee_sets_fled_counter(self):
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)
         assert unit_state["fled_models_this_turn"] == 2
 
     def test_flee_marks_morale_tested(self):
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 1, unit)
         assert unit_state["turn_flags"]["morale_tested"] is True
 
     def test_flee_all_models_marks_destroyed(self):
         unit_state = _make_state(models=3)
         unit = _make_unit(wounds=1, models_max=3)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 3, unit)
         assert unit_state["destroyed"] is True
         assert unit_state["models"] == 0
@@ -106,8 +122,11 @@ class TestFleeModels:
     def test_flee_accumulates_across_calls(self):
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)
             flee_models("u1", "Necrons", 1, unit)
         assert unit_state["fled_models_this_turn"] == 3
@@ -115,8 +134,11 @@ class TestFleeModels:
     def test_flee_multi_wound_model(self):
         unit_state = _make_state(models=5, wounds_per_model=3)
         unit = _make_unit(wounds=3, models_max=5)
-        with patch("gameMechanic.unit_mutations.st") as mock_st:
-            mock_st.session_state = {"necron_units": {"u1": unit_state}}
+        with (
+            patch("gameMechanic.unit_mutations.st") as mock_st,
+            patch("gameMechanic.game_state.st", mock_st),
+        ):
+            mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)
         assert unit_state["models"] == 3
         assert unit_state["current_wounds"] == 9

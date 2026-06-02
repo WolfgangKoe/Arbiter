@@ -9,7 +9,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage
 from gameObjects.unit import Unit
 from uiLayout._common import PHASE_RULES, lookup
@@ -99,7 +99,7 @@ def _render_psychic_column(faction: str, state: dict) -> None:  # type: ignore[t
 
 
 def _render_active_psychic(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
+    units = units_list_for(faction)
 
     if not has_psyker(units):
         st.caption("No PSYKER units — skip this phase.")
@@ -270,7 +270,7 @@ def _render_psi_result(
                 use_container_width=True,
             ):
                 apply_damage(tgt_uid, tgt_faction, int(smite_dmg), tgt_unit, mortal=True)
-                unit_key = "necron_units" if faction == "Necrons" else "ork_units"
+                unit_key = units_key_for(faction)
                 st.session_state[unit_key][uid]["turn_flags"]["cast"] = True
                 log_action(
                     state["round"],
@@ -293,7 +293,7 @@ def _render_psi_result(
 
 
 def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
+    units = units_list_for(faction)
 
     if not can_deny(units):
         st.caption("No PSYKER or Gloom Prism — cannot deny.")

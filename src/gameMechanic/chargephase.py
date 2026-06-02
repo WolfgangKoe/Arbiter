@@ -9,7 +9,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import _NECRON_UNITS, _ORK_UNITS
+from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import enter_melee, set_charged
 from uiLayout._common import PHASE_RULES, lookup, render_melee_engagements, render_player_column
 
@@ -137,8 +137,8 @@ def _render_heroic_intervention(faction: str, state: dict) -> None:  # type: ign
     Eligible: not destroyed, not in_melee, CHARACTER keyword, not yet heroic_intervened this turn.
     Ties the intervention to the currently selected active unit (the charger).
     """
-    key = "necron_units" if faction == "Necrons" else "ork_units"
-    all_units = _NECRON_UNITS if faction == "Necrons" else _ORK_UNITS
+    key = units_key_for(faction)
+    all_units = units_list_for(faction)
     units_data = st.session_state[key]
 
     eligible = [
