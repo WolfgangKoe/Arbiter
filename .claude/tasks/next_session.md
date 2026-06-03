@@ -40,7 +40,22 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Was wurde zuletzt gemacht (2026-06-03, diese Session)
+## Was wurde zuletzt gemacht (2026-06-03, Session 2 — Bugfixes)
+
+### Battle Log TypeError gefixt
+- `gameProtocoll._load_game_log()`: Log-Format-Mismatch nach Ziel-6g-Migration
+  — gab rohen `dict` zurück statt flacher `list[dict]`; Adapter eingefügt der
+  `rounds → phases → events` auf `{round, phase, unit, action}` flacht
+
+### Inaktiver Spieler konnte Protokoll aktivieren — gefixt
+- `armyCard._render_protocol_ui()`: `is_active`-Check fehlte; alle interaktiven
+  Elemente (Direktiven-Buttons, Radio, Aktivierungs-Button) nun nur noch für
+  den aktiven Spieler sichtbar. Inaktiver Spieler: read-only Status.
+- Regel bestätigt durch Wahapedia-Daten: "in your Command phase" = nur aktiver Spieler
+
+---
+
+## Was wurde zuletzt gemacht (2026-06-03, Session 1)
 
 ### WAAAGH! Datenfehler korrigiert
 - `orks/faction_abilities.yaml` + `unit_abilities.yaml`: `phase: charge` → `phase: command`
