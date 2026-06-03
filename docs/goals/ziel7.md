@@ -1,11 +1,13 @@
-# Ziel 7 — Wahapedia Faction Fetcher ⬜
+# Ziel 7 — Crusade-Erweiterung ⬜
 
-**Voraussetzung:** Ziel 5 Katalog-Struktur stabil.
+**Voraussetzung:** Ziel 6 abgeschlossen.
 
-Halbautomatisches Werkzeug, um neue Fraktionen ohne manuelle Datenpflege anzulegen — analog zur Erstellung von `schlachtrunde.md`, aber als strukturierter YAML-Output.
+Crusade erfordert persistente Aufzeichnungen während und nach dem Spiel. Das `gameProtocoll` wird vom reinen Log zum strukturierten Tracking-System erweitert.
 
 ---
 
-- [ ] `tools/fetch_faction.py <fraktion>` — fetcht Wahapedia-Seiten via curl, generiert Katalog-YAMLs
-- [ ] Workflow dokumentieren: neue Fraktion in < 1 Stunde anlegen
-- [ ] Erste Testfraktion: Space Marines oder eine weitere Xenos-Armee
+- [ ] `gameProtocoll.py` Refactoring: Tabs für Battle Log / Agendas / Order of Battle
+- [ ] Agenda-Auswahl vor Spielbeginn (3 Agendas pro Spieler, aus `agendas.yaml`)
+- [ ] Agenda-Tracking während des Spiels (Fortschritt + Punkte)
+- [ ] XP-Spalte pro Einheit im Protokoll (earned this battle)
+- [ ] Battle Honours / Battle Scars (Post-Game-Eingabe)

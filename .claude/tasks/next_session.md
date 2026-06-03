@@ -9,46 +9,125 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Was in dieser Session passiert ist (2026-06-03)
+## Was in dieser Session passiert ist (2026-06-03 — vierte Session)
 
-### Data-driven Keyword-Matching ✅
+### Fix: Melee-Waffen zeigen Unit-A-Stat statt "AMelee" ✅
+
+`attacks: Melee` in `weapons.yaml` ist semantisch korrekt (= "nutze Unit-A-Wert").
+Fix in `fightPhase.py`, `_common.py`, `gameActionsArea.py`: wenn `p.attacks in ("Melee", None)` → `str(unit.attacks)` anzeigen.
+
+### Ziel 5f — Stratagems PoC ✅
+
+- `data/wh40k_9e/universal/stratagems.yaml` — 7 Core-Stratagems von Wahapedia core-rules-Seite
+- `loader.py`: `load_stratagems(faction_dir)` — lädt universal + Fraktion
+- `stratagem.py`: `phase: any` Support in `stratagem_visibility()`
+- `game_state.py`: `used_stratagem_ids` in Init + `_reset_phase_state()`
+- `gameProtocoll.py`: `_render_stratagems()` — Phase-Filter, Conditions-Check, CP-Buttons, "*(used)*"-Markierung
+
+**Verifikation (Playwright):**
+- Command Phase: nur Command Re-Roll (phase:any) sichtbar ✅
+- Charge Phase: Command Re-Roll + Fire Overwatch sichtbar ✅
+- Conditions-Filter: Ork-Stratagems mit [FLASH GITZ] etc. korrekt versteckt (nicht im Testspiel-Roster) ✅
+- Use-Klick: CP 6→5, Stratagem als *(used)* markiert ✅
+
+**Bekannte offene Punkte (→ Ziel 6a):**
+- Bug: `player: inactive`-Stratagems ziehen CP vom falschen Pool (aktiver statt inaktiver Spieler)
+- Condition-Check nur auf Armee-Ebene, nicht auf selected-Unit-Ebene
+- Stratagems fehlen noch in der gameActionArea als Inline-Hinweis
+
+### Neue Zieldatei ziel6.md — Refactoring & Konsolidierung ✅
+
+`docs/goals/ziel6.md` angelegt. Bisherige ziel6→ziel7, ziel7→ziel8 verschoben.
+
+---
+
+## Was in dieser Session passiert ist (2026-06-03 — dritte Session)
+
+### Ork-Roster für Testspiel ✅
+
+`data/rosters/orks_test.yaml` angelegt (297 Punkte):
+- Warboss in Mega Armour (115 pts)
+- Boyz × 10 (70 pts)
+- Gretchin × 10 (40 pts)
+- Warbikers × 3 (72 pts)
+
+### E2E-Testspiel — Playwright-Verifikation aller Phasen ✅
+
+Alle 7 Phasen (Command → Movement → Psychic → Shooting → Charge → Fight → Morale) durchgespielt, kein einziger Crash.
+
+**Ergebnisse je Phase:**
+- **Command:** +1 CP korrekt, Necron Command Protocols (5 Stück) als "available" gelistet
+- **Movement:** Normal / Advance / Stationary / Retreat — alle 4 Optionen mit Regeltext korrekt
+- **Psychic:** App erkennt "No PSYKER units — skip this phase." automatisch; Gegner: "No PSYKER or Gloom Prism — cannot deny."
+- **Shooting:** Unit-Auswahl → Waffenstatistiken korrekt (`Gauss Flayer · A1 · BS3+ · S4 · AP-1 · D1`); "Designate a target (▷)" Prompt erscheint; Attack-Sequenz sichtbar
+- **Charge:** Regeltext korrekt (2D6 ≥ Distanz); **Heroic Intervention-Buttons** erscheinen für alle gegnerischen Einheiten
+- **Fight:** "Not in melee — no fight action possible." bei Einheiten ohne Charge — regelkonforme Blockierung; kein Crash (der frühere `User×2`-Bug tritt nicht mehr auf)
+- **Morale:** Phase erreichbar
+
+**Offene Beobachtungen aus dem Test:**
+- Command Protocol-Namen sind auf Deutsch (`"Protokoll des Ewigen Wächters"`) obwohl App-UI auf Englisch ist — Datenproblem oder gewollt?
+- Melee-Attack-Form (Warboss vs. Necrons) nicht automatisch testbar, da Units vorher chargen müssen — manuell im nächsten Testspiel verifizieren
+
+---
+
+## Was in früheren Sessions passiert ist (2026-06-03 — zweite Session)
+
+### Bug 2 — Kampfphase: Gegner-Armeeliste verschwindet ✅
+
+**Root Cause:** `render_attack_form` in `_common.py` rief `int("User×2")` auf (für killsaw/power_klaw des Big Mek in Mega Armour) → `ValueError`. Dieser Crash im Center-Column-Render verhinderte das Rendern der rechten Spalte (Necrons-Armeeliste). Warboss funktionierte weil `int("+3") = 3` in Python gültig ist.
+
+**Fix:** Neue `_parse_strength(raw, unit_strength)` Hilfsfunktion in `_common.py`:
+- `"User"` → `unit_strength`
+- `"User×2"` → `unit_strength * 2`
+- `"User+2"` → `unit_strength + 2`
+- `"+3"` → `unit_strength + 3`
+- Plain integers → `int(raw)`
+- Fallback → `unit_strength`
+
+**Wichtig:** Nie direkt `int(profile.strength)` aufrufen — immer `_parse_strength()` verwenden.
+
+**Hinweis Datenproblem:** `attacks: Melee` für killsaw/power_klaw/uge_choppa in `orks/weapons.yaml` ist ein Scraper-Artefakt (kein Crash, zeigt `AMelee`). Korrekte Werte aus Kodex nachtragen.
+
+### Bug 3 — Setup-Buttons tauschen Position ✅
+
+**Root Cause:** `_render_setup()` las Button-Labels aus `first_player`/`second_player`, die nach `swap_players()` getauscht wurden → Buttons wechselten ihre Labels und Positionen.
+
+**Fix:** `player_slots = (p1_name, p2_name)` wird einmalig in `init_state` gesetzt und NIE getauscht. Setup-Buttons lesen aus `player_slots` statt aus `first_player`/`second_player`.
+
+**Constraint:** Setup-Buttons immer über `player_slots` — nicht über `first_player`/`second_player`.
+
+**Betroffene Dateien:** `src/gameMechanic/game_state.py`, `src/uiLayout/gameActionsArea.py`
+
+### BattleScribe Importer — Orks-Support ✅ (vor Session gefixt, in dieser Session committed)
+
+- `_FACTION_CATALOGUE_MAP` um `"orks"` und `"ork"` erweitert
+- Prefix-Stripping generisch (nicht mehr Necron-hardcoded): nutzt `faction_dir` + Singular-Form
+- Fallback `"necrons"` → `ValueError` mit klarer Fehlermeldung wenn Fraktion unbekannt
+- Tests in `test_rosz_importer.py` erweitert
+
+### Bug 1 — Setup-Phase swap_players() ✅ (vor Session gefixt)
+
+Setup-Buttons rufen `swap_players()` auf, das alle p1/p2-State-Keys korrekt tauscht (units, unit_keys, faction_dir, units_list).
+
+### Weitere Fixes (committed)
+
+- `Effect.target` optional (`None` default) — erlaubt Abilities ohne `target`-Feld
+- `armyList.py`: `try/except` um `load_faction_abilities` — verhindert Crash bei fehlerhafter YAML
+- `data/rosters/zarekhan_sol_kampf_2.yaml`: neues Necron-Roster
+
+---
+
+## Was in früheren Sessions passiert ist
+
+### Data-driven Keyword-Matching ✅ (2026-06-03, erste Session)
 
 - `Unit.has_keyword(kw: str) -> bool` — case-insensitive Vergleich direkt am Unit-Objekt
-- Alle Frontend-Checks (`chargephase.py`, `shootingPhase.py`, `psychicPhase.py`, `unitCard.py`) nutzen jetzt `unit.has_keyword()` statt literaler String-Vergleiche
-- MWBD-Zielauswahl: `_mwbd_required_keywords(faction)` liest `has_keywords` aus Ability-Definition — kein `"CORE"` im Frontend mehr
-- `unit_abilities.yaml`: `Core` → `CORE` vereinheitlicht
-- **Constraint:** Keywords IMMER `UPPERCASE` in allen YAML-Dateien; Checks via `unit.has_keyword()`
+- Alle Frontend-Checks nutzen jetzt `unit.has_keyword()` statt literaler String-Vergleiche
+- **Constraint:** Keywords IMMER `UPPERCASE` in allen YAML-Dateien
 
-### App-Umbenennung ✅
+### Orks-Katalog vollständig ✅ (Ziel 5h)
 
-- `page_title` und `st.title()` → `"Arbiter"` (war "Battle Tracker")
-
-### Orks-Fraktion — Units + Weapons gescraped ✅
-
-- `tools/wahapedia_scraper.py`: `UNIT_SLUGS` → `FACTION_UNIT_SLUGS` (Multi-Faction); `<CLAN>`-Keyword-Fix (CLCL-Span analog zu DYDY)
-- `tools/convert_ork_scrape.py`: neues Konverter-Script (Parser + YAML-Generator)
-- `data/wh40k_9e/orks/units.yaml`: **51 Einheiten** mit Stats, Keywords, Waffen-Refs
-- `data/wh40k_9e/orks/weapons.yaml`: **82 Waffen** mit Profilen
-- Loader-Test aktualisiert: `load_unit_catalog("orks")` → ≥50 Units
-
-### Ziel 5h — Orks-Katalog vervollständigt ✅
-
-Quelle: Wahapedia (WebFetch) — alle fehlenden Datenkategorien ergänzt:
-
-| Datei | Inhalt |
-|-------|--------|
-| `faction_abilities.yaml` | WAAAGH!, Speedwaaagh!, 'Ere We Go, Mob Rule, Ramshackle, Beast Snagga, Ob.Sec, 7 Psychic Powers |
-| `army_rules.yaml` | Warlord (WARBOSS), Detachments, 4 Specialist Detachments |
-| `subfaction_abilities.yaml` | 7 Klans (Bad Moons, Blood Axes, Deathskulls, Evil Sunz, Freebooterz, Goffs, Snakebites) |
-| `stratagems.yaml` | 29 Stratagems (Core + Klan + Specialist Detachment + Requisitions) |
-| `warlord_traits.yaml` | 14 Traits (3 Generic + 7 Klan + 4 Specialist) |
-| `relics.yaml` | 11 Relikte (1 pro Klan + 4 Specialist Detachment) |
-| `unit_abilities.yaml` | 20 Abilities (WARBOSS, Big Mek, Weirdboy, Painboy, Ghazghkull, Kommandos, etc.) |
-| `wargear.yaml` + `wargear_abilities.yaml` | 10 Wargear-Items (Cybork Body, Ammo Runt, Bomb Squig, Grot Oiler, Kustom Jobs…) |
-| `weapon_abilities.yaml` | Dakka!, Skorcha, Power Klaw, Killsaw, Choppa, Shokk Attack Gun, etc. |
-| `points.yaml` | Alle 51 Einheiten (MFM 2023 Mk I — bei Spielbetrieb verifizieren) |
-
-**Constraint:** `power_level: 0` in units.yaml noch nicht befüllt — nur Punktekosten vorhanden.
+51 Einheiten, 82 Waffen, faction/army/subfaction/stratagem/warlord/relics/unit_abilities/wargear/points — alle Dateien vorhanden. Punktekosten aus MFM 2023 — bei Spielbetrieb verifizieren.
 
 ---
 
@@ -59,110 +138,42 @@ Quelle: Wahapedia (WebFetch) — alle fehlenden Datenkategorien ergänzt:
 | 5a — Spec | ✅ |
 | 5b — Necron-Katalog | ✅ |
 | 5c — Loader-Refactoring | ✅ |
+| 5d — BattleScribe Importer (fraktionsunabhängig) | ✅ 2026-06-03 |
 | 5e — Setup-Screen Redesign + VP-Config + Header | ✅ |
 | 5g — Regelkonformer Setup-Flow | ✅ |
-| 5d — BattleScribe Importer | ✅ |
 | Keyword-Matching data-driven | ✅ |
-| Orks units.yaml + weapons.yaml | ✅ |
-| Orks-Katalog vervollständigen (5h) | ✅ 2026-06-03 |
-| BattleScribe Importer fraktionsunabhängig | 🔴 **nächster Schritt** |
-| 5f — Stratagems PoC | ⬜ |
+| Orks-Katalog (5h) | ✅ |
+| Bug: Kampfphase Armeeliste verschwindet | ✅ 2026-06-03 |
+| Bug: Setup-Buttons tauschen Position | ✅ 2026-06-03 |
+| Ork-Roster für Testspiel | ✅ 2026-06-03 |
+| E2E-Verifikation alle Phasen | ✅ 2026-06-03 |
+| 5f — Stratagems PoC | ✅ 2026-06-03 |
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-### Priorität 1 — BattleScribe Importer fraktionsunabhängig machen 🔴
+### Priorität 1 — Ziel 6: Refactoring & Konsolidierung
 
-**Problem:** Beim Import einer Orks-Roster-Datei enthält das exportierte `data/rosters/orks.yaml`:
-```yaml
-display_name: Orks
-faction_dir: necrons   ← FALSCH, sollte "orks" sein
-units: []              ← leer, weil Necron-Katalog keine Ork-Namen kennt
-```
+Startpunkt: `docs/goals/ziel6.md`
 
-**Ursachen (in `src/gameObjects/rosz_importer.py`):**
+**6a — Stratagems Verbesserungen (Bugs zuerst):**
+1. Bug: `player: inactive`-Stratagems (Fire Overwatch, Counter-Offensive) ziehen CP vom aktiven statt inaktiven Spieler ab → `gameProtocoll.py` `_render_stratagems()`
+2. Condition-Check auf selected-Unit-Ebene (aktuell: Armee-Ebene) → `_conditions_met()`
+3. Stratagems als Inline-Hinweis in gameActionArea pro Aktion
 
-1. **`_FACTION_CATALOGUE_MAP` fehlt Orks:**
-   ```python
-   _FACTION_CATALOGUE_MAP = {
-       "necrons": "necrons",
-       "adeptus custodes": "adeptus_custodes",
-       # "orks" fehlt!
-   }
-   ```
-   → Ork-Rosters fallen auf Fallback `"necrons"` zurück.
+**6b — Code-Qualität:**
+- Faction-Dir Hardcode `"necrons" if "necrons" in unit.id else "orks"` → `faction_dir_for()`
+- `resolve_bracket_stats` in Fight-/Shooting-Phase verdrahten
 
-2. **Prefix-Stripping hardcoded für Necrons:**
-   ```python
-   for prefix in ("necron_", "necrons_"):   # hardcoded!
-       if norm.startswith(prefix):
-           stripped = norm[len(prefix):]
-           if stripped in name_map:
-               return name_map[stripped]
-   ```
-   BattleScribe schreibt z.B. "Ork Boyz" → slug `"ork_boyz"` → kein Match.
+**6c — Datenqualität:**
+- Command Protocols deutsche Namen → `name_en` auf Englisch
+- Datasheet Dual-Profile vollständig anzeigen
+- Wargear im Roster-Format
 
-3. **Fallback `"necrons"` ist falsch** — sollte Fehler werfen wenn Fraktion unbekannt.
-
-**Fix-Plan (benötigt Freigabe):**
-
-**Datei: `src/gameObjects/rosz_importer.py`**
-
-a) `_FACTION_CATALOGUE_MAP` erweitern:
-```python
-_FACTION_CATALOGUE_MAP: dict[str, str] = {
-    "necrons": "necrons",
-    "adeptus custodes": "adeptus_custodes",
-    "custodes": "adeptus_custodes",
-    "orks": "orks",
-    "ork": "orks",
-}
-```
-
-b) Prefix-Stripping generisch machen — strippt `"{faction_dir}_"` und alle einbuchstabigen Faction-Wörter:
-```python
-def _match_unit_name(bs_name: str, name_map: dict[str, str], faction_dir: str) -> str | None:
-    norm = _normalize(bs_name)
-    if norm in name_map:
-        return name_map[norm]
-    # Strip faction prefix (e.g. "ork_boyz" → "boyz", "necron_warriors" → "warriors")
-    for prefix in (f"{faction_dir}_", f"{faction_dir.rstrip('s')}_"):
-        if norm.startswith(prefix):
-            stripped = norm[len(prefix):]
-            if stripped in name_map:
-                return name_map[stripped]
-    return None
-```
-
-c) Fallback von `"necrons"` auf `None` ändern → klare Fehlermeldung wenn Fraktion unbekannt:
-```python
-faction_dir = _detect_faction(root)
-if faction_dir is None:
-    raise ValueError("Unknown faction in BattleScribe roster. Add faction to _FACTION_CATALOGUE_MAP.")
-```
-
-**Betroffene Dateien:** `src/gameObjects/rosz_importer.py`, `tests/gameObjects/test_rosz_importer.py`
-
-**Danach testen:** Ork-Roster importieren → `faction_dir: orks`, `units: [{id: ..., models: ...}]`
-
----
-
-### Priorität 2 — Ork-Roster für Testspiel erstellen
-
-Sobald Importer funktioniert: Roster-Datei `data/rosters/orks_bad_moons.yaml` anlegen.
-Kann entweder manuell erstellt oder via BattleScribe importiert werden.
-
-Minimal-Roster für Testspiel (analog zu `necrons_1000pts.yaml`):
-- Warboss / Weirdboy (HQ)
-- Boyz ×10 (Troops)
-- Gretchin ×10 (Troops)
-- Warbikers ×3 (Fast Attack)
-
-### Priorität 3 — Ziel 5f: Stratagems PoC
-
-Infrastruktur bereits in `gameProtocoll.py` vorbereitet.
-Daten fehlen: `stratagem_conditions`, `triggers` in `data/wh40k_9e/necrons/stratagems.yaml`.
+**6d — Ziel-5-Restpunkte:**
+- Mission-Auswahl, Attacker/Defender, Secondary Objectives (aus 5e/5g)
+- `invuln_save` + FNP via BattleScribe-Regex (aus 5d)
 
 ---
 
@@ -170,44 +181,39 @@ Daten fehlen: `stratagem_conditions`, `triggers` in `data/wh40k_9e/necrons/strat
 
 | Lücke | Beschreibung |
 |-------|-------------|
-| Orks-Katalog (Ziel 5h) | ✅ vollständig 2026-06-03 — alle 14 Dateien vorhanden; Punktekosten aus MFM 2023, bei Spielbetrieb verifizieren |
-| Importer nicht fraktionsunabhängig | Orks-Import liefert `faction_dir: necrons`, `units: []` — fix in Priorität 1 |
+| Ork-Waffen `attacks: Melee` | Scraper-Artefakt — zeigt `AMelee`, korrekte Werte nachtragen |
+| Ork `power_level: 0` | Codex-Werte noch nicht eingetragen |
 | `resolve_bracket_stats` unverdrahtet | In `loader.py` implementiert, kein UI-Aufruf — Vehicles zeigen immer Basis-Stats |
-| Adeptus Custodes Katalog fehlt | `data/wh40k_9e/adeptus_custodes/` hat nur Placeholder-Dateien |
-| Ork-Roster für Testspiel fehlt | Braucht Importer-Fix zuerst |
-| Ork `power_level: 0` | Codex-Werte noch nicht eingetragen (nur TODO-Marker) |
-| Waffen-Duplikate im Ork-Katalog | Kombi-Waffen (Slugga, Rokkit etc.) teilen einen Eintrag — Warboss-Variante hat Sub-Profile, Boyz-Variante nicht |
-| Wargear im Roster-Format | Aktuell nur `id` + `models` — keine Wargear-Auswahl speicherbar |
-| Punkte-Validierung | `load_points()` implementiert, aber Gesamtpunkte werden nicht geprüft |
+| Adeptus Custodes Katalog fehlt | Nur Placeholder-Dateien |
+| Melee-Attack-Form Orks unverifiziert | Warboss-Angriff nur manuell testbar (Units müssen chargen) |
+| Command Protocol-Namen auf Deutsch | `necrons/stratagems.yaml` hat deutsche Namen — UI-Sprache ist Englisch |
+| Waffen-Duplikate im Ork-Katalog | Kombi-Waffen teilen einen Eintrag — nicht konsistent |
+| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar |
+| Punkte-Validierung | `load_points()` vorhanden, Gesamtpunkte werden nicht geprüft |
 | Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` |
 | Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` nutzt `"necrons" if "necrons" in unit.id else "orks"` — auf `faction_dir_for()` umstellen |
-| Unbekannte Fraktion im Importer | War `"necrons"` Fallback — wird in Priorität 1 behoben |
 
 ---
 
 ## Wichtige Constraints
 
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
-- Seitenleisten IMMER fest: first_player links, second_player rechts (unveränderlich während Spiel)
+- Seitenleisten IMMER fest: first_player links, second_player rechts
+- Setup-Buttons: `player_slots` verwenden, NICHT `first_player`/`second_player`
 - dev-Branch — kein direktes Committen auf main
-- **Keywords immer `UPPERCASE` in allen YAML-Dateien** — Checks via `unit.has_keyword()`
-- Weapon-Zugriff: Nie `w.is_melee` wenn Dual-Profile möglich — `w.for_phase(use_melee)` verwenden
+- **Keywords immer `UPPERCASE` in YAML** — Checks via `unit.has_keyword()`
+- Weapon-Zugriff mit Dual-Profile: `w.for_phase(use_melee)` — nicht `w.is_melee`
 - Session-State Unit-Keys: `p1_units` / `p2_units` mit `#N`-Suffix für Duplikate
-- CP wird nur durch Game Mechanics verändert (Befehlsphase, Stratagems)
+- Weapon strength: `_parse_strength()` in `_common.py` — nie direkt `int(profile.strength)`
 
-### State-Key System (seit 2026-06-02)
+### State-Key System
 
-Mehrfach-Units gleichen Typs im Roster werden mit `#N`-Suffix disambiguiert:
-- Erstes Vorkommen: `wh40k_9e.necrons.unit.warriors` (kein Suffix)
+Mehrfach-Units gleichen Typs werden mit `#N`-Suffix disambiguiert:
+- Erstes Vorkommen: `wh40k_9e.necrons.unit.warriors`
 - Zweites Vorkommen: `wh40k_9e.necrons.unit.warriors#1`
 
 `unit_id_from_state_key(key)` → echte `unit.id`.
 `lookup(faction, uid)` in `_common.py` versteht State-Keys.
-
-### Keyword-Matching (seit 2026-06-03)
-
-`Unit.has_keyword(kw: str) -> bool` ist die einzige erlaubte Methode für Keyword-Checks.
-Direkter String-Vergleich verboten. MWBD data-driven via `_mwbd_required_keywords(faction)`.
 
 ### Streamlit 1.57 — CSS-Selektoren
 
