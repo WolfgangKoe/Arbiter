@@ -31,7 +31,7 @@ class _S(dict):
 
 def _make_necron_state() -> dict:
     units, _ = load_army("necrons")
-    session = _S(first_player="Necrons")
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
     _st_mock.session_state = session
     _gs.st.session_state = session
     return {
@@ -57,7 +57,7 @@ def test_resolve_command_start_returns_living_metal() -> None:
 
 def test_resolve_command_start_ork_returns_empty() -> None:
     units, _ = load_army("orks")
-    session = _S(first_player="Necrons")
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="orks")
     _st_mock.session_state = session
     _gs.st.session_state = session
     state = {

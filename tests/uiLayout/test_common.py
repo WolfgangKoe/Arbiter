@@ -36,7 +36,11 @@ def _state(
         },
         "in_melee": in_melee,
         "in_reserve": in_reserve,
-        "my_will_be_done_active": mwbd,
+        "active_buffs": (
+            [{"ability_id": "mwbd", "badge_label": "MWBD", "effect_type": "buff_roll"}]
+            if mwbd
+            else []
+        ),
     }
 
 

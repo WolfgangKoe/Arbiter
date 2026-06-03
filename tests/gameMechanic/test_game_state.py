@@ -106,6 +106,80 @@ def test_next_phase_does_not_award_cp_on_player_switch() -> None:
     assert session["cp"]["Orks"] == 4
 
 
+# ---------------------------------------------------------------------------
+# active_buffs and command_ability_state
+# ---------------------------------------------------------------------------
+
+
+def test_reset_turn_state_clears_active_buffs() -> None:
+    unit_with_buff = _unit_state_dict()
+    unit_with_buff["active_buffs"] = [
+        {"ability_id": "mwbd", "badge_label": "MWBD", "effect_type": "buff_roll"}
+    ]
+    session = _make_session(
+        phase_idx=7,
+        active="Orks",
+        round=1,
+        cp={"Necrons": 4, "Orks": 4},
+        selected_unit=None,
+        selected_targets=[],
+        p1_units={"u1": unit_with_buff},
+        p2_units={"u2": _unit_state_dict()},
+    )
+    next_phase()
+    assert session["p1_units"]["u1"]["active_buffs"] == []
+    assert session["p2_units"]["u2"]["active_buffs"] == []
+
+
+def test_reset_turn_state_does_not_clear_command_ability_state() -> None:
+    existing = {"mwbd": {"target_uid": "u2", "active_since_round": 1}}
+    session = _make_session(
+        phase_idx=7,
+        active="Orks",
+        round=1,
+        cp={"Necrons": 4, "Orks": 4},
+        selected_unit=None,
+        selected_targets=[],
+        p1_units={"u1": _unit_state_dict()},
+        p2_units={"u2": _unit_state_dict()},
+        command_ability_state=existing,
+    )
+    next_phase()
+    assert session["command_ability_state"] == existing
+
+
+def test_unit_state_active_buffs_starts_empty() -> None:
+    from gameObjects.unit import Unit  # noqa: PLC0415
+
+    unit = Unit(
+        id="test.u",
+        name_en="T",
+        name_de="T",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=[],
+        keywords=[],
+        wounds=3,
+        models_min=1,
+        models_max=1,
+        power_level=4,
+        move='6"',
+        bs="3+",
+        ws="3+",
+        strength=4,
+        toughness=4,
+        attacks=3,
+        save=3,
+        invuln_save=None,
+        leadership=10,
+        oc=2,
+        fnp=None,
+        rules=[],
+    )
+    state = _gs._unit_state(unit)
+    assert state["active_buffs"] == []
+
+
 def test_next_phase_resets_selected_unit_and_targets() -> None:
     session = _make_session(
         phase_idx=1,

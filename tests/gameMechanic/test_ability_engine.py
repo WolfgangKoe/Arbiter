@@ -13,6 +13,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     check_conditions,
     check_trigger,
     execute_effect,
+    get_activated_command_abilities,
     get_triggered_abilities,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -334,7 +335,7 @@ def test_execute_effect_unknown_type_returns_false() -> None:
 
 def _make_necron_state() -> dict:
     units, _ = load_army("necrons")
-    session = _S(first_player="Necrons")
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
     _st_mock.session_state = session
     return {
         "active": "Necrons",
@@ -384,7 +385,7 @@ def test_get_triggered_abilities_living_metal_includes_overlord_and_skorpekh() -
 def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> None:
     """Units at full health are not eligible even if they have the livingMetal rule."""
     units, _ = load_army("necrons")
-    session = _S(first_player="Necrons")
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
     _st_mock.session_state = session
     state = {
         "active": "Necrons",
@@ -403,9 +404,46 @@ def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> No
     assert "wh40k_9e.necrons.faction.living_metal" not in ability_ids
 
 
+# ---------------------------------------------------------------------------
+# get_activated_command_abilities — unit-scoped activated abilities
+# ---------------------------------------------------------------------------
+
+
+def test_get_activated_command_abilities_overlord_returns_mwbd() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.overlord", "necrons")
+    assert any(a.id == "wh40k_9e.necrons.unit.overlord.my_will_be_done" for a in abilities)
+
+
+def test_get_activated_command_abilities_mwbd_has_badge_label() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.overlord", "necrons")
+    mwbd = next(a for a in abilities if a.id == "wh40k_9e.necrons.unit.overlord.my_will_be_done")
+    assert mwbd.badge_label == "MWBD"
+
+
+def test_get_activated_command_abilities_mwbd_effect_type_buff_roll() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.overlord", "necrons")
+    mwbd = next(a for a in abilities if a.id == "wh40k_9e.necrons.unit.overlord.my_will_be_done")
+    assert mwbd.effect.type == "buff_roll"
+
+
+def test_get_activated_command_abilities_necron_lord_returns_lords_will() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.necron_lord", "necrons")
+    assert any(a.id == "wh40k_9e.necrons.unit.necron_lord.the_lords_will" for a in abilities)
+
+
+def test_get_activated_command_abilities_warriors_returns_empty() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.warriors", "necrons")
+    assert abilities == []
+
+
+def test_get_activated_command_abilities_ork_faction_returns_empty() -> None:
+    abilities = get_activated_command_abilities("wh40k_9e.necrons.unit.overlord", "orks")
+    assert abilities == []
+
+
 def test_get_triggered_abilities_ork_command_returns_empty() -> None:
     units, _ = load_army("orks")
-    session = _S(first_player="Necrons")
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="orks")
     _st_mock.session_state = session
     state = {
         "active": "Orks",
