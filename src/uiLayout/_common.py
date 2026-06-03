@@ -390,6 +390,7 @@ def render_attack_form(
 
     from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+    from gameObjects.loader import load_command_protocols  # noqa: PLC0415
 
     atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
     mwbd_active = any(
@@ -410,19 +411,41 @@ def render_attack_form(
         atk_faction_dir = faction_dir_for(atk_faction)
         atk_protocol_mod = get_active_protocol_modifier(atk_faction_dir, phase_key, use_melee)
     except KeyError:
+        atk_faction_dir = ""
         atk_protocol_mod = {}
     try:
         def_faction_dir = faction_dir_for(def_faction)
         def_protocol_mod = get_active_protocol_modifier(def_faction_dir, phase_key, use_melee)
     except KeyError:
+        def_faction_dir = ""
         def_protocol_mod = {}
 
+    def _protocol_source_label(faction_dir: str) -> str:
+        protocol_id = st.session_state.get("active_protocol_id")
+        directive = st.session_state.get("active_directive")
+        if not protocol_id or not directive or not faction_dir:
+            return "Protocol"
+        protocols = load_command_protocols(faction_dir)
+        p = next((p for p in protocols if p.id == protocol_id), None)
+        return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
+
     if atk_protocol_mod.get("hit"):
-        st.info(f"Protocol: +{atk_protocol_mod['hit']} to hit modifier.")
+        src = _protocol_source_label(atk_faction_dir)
+        st.info(f"{src}: +{atk_protocol_mod['hit']} to hit")
     if atk_protocol_mod.get("wound"):
-        st.info(f"Protocol: +{atk_protocol_mod['wound']} to wound modifier.")
+        src = _protocol_source_label(atk_faction_dir)
+        st.info(f"{src}: +{atk_protocol_mod['wound']} to wound")
     if def_protocol_mod.get("save"):
-        st.info(f"Defender Protocol: +{def_protocol_mod['save']} to saves (Eternal Guardian).")
+        src = _protocol_source_label(def_faction_dir)
+        st.info(f"{src} (defender): +{def_protocol_mod['save']} to saves")
+
+    # WAAAGH! active effects display (fight phase only, non-numeric — not wired to combat)
+    waaagh_state = st.session_state.get("waaagh_state", {})
+    atk_waaagh = waaagh_state.get(atk_faction)
+    if atk_waaagh and use_melee:
+        stage = atk_waaagh.get("stage", 1)
+        invuln = "5+" if stage == 1 else "6+"
+        st.info(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {invuln} invuln (display only)")
 
     c1, c2, c3, c4 = st.columns(4)
     hits = c1.number_input(

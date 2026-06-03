@@ -31,6 +31,21 @@ def _faction_badge(text: str) -> str:
     )
 
 
+def _active_ability_badge(text: str, *, color: str = "protocol") -> str:
+    """HTML badge for an active faction ability (protocol, waaagh, etc.)."""
+    if color == "waaagh_1":
+        fg, bg = "#4ade80", "#052e16"
+    elif color == "waaagh_2":
+        fg, bg = "#86efac", "#071a0e"
+    else:  # protocol
+        fg, bg = "#fbbf24", "#1c1007"
+    return (
+        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
+        f"padding:2px 8px;font-size:10px;color:{fg};letter-spacing:0.07em;"
+        f'font-weight:700;margin-right:4px;">{text}</span>'
+    )
+
+
 def _current_phase_key() -> str:
     return PHASES[st.session_state.phase_idx][1]
 
@@ -148,23 +163,27 @@ def _render_protocol_ui(faction: str) -> None:
             if not active_id:
                 st.session_state.active_protocol_id = _ETERNAL_GUARDIAN_ID
                 active_id = _ETERNAL_GUARDIAN_ID
-            st.caption(f"{p.name_en} — auto (Round 1)")
             if not active_directive:
+                st.caption(f"{p.name_en} — auto (Round 1)")
                 _render_directive_buttons(p, faction, current_round)
             else:
+                badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
+                st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
-                st.caption(f"↳ **{active_directive.capitalize()}:** {chosen_text}")
+                st.caption(f"↳ {chosen_text}")
         return
 
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)
         if p:
-            st.caption(f"**{p.name_en}** — active this round")
             if not active_directive:
+                st.caption(f"**{p.name_en}** — active this round")
                 _render_directive_buttons(p, faction, current_round)
             else:
+                badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
+                st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
-                st.caption(f"↳ **{active_directive.capitalize()}:** {chosen_text}")
+                st.caption(f"↳ {chosen_text}")
         return
 
     if phase_key != "command":
@@ -197,6 +216,80 @@ def _render_protocol_ui(faction: str) -> None:
         st.rerun()
 
 
+def _render_waaagh_ui(
+    faction: str,
+    faction_abilities: list[Ability],
+    units: list[Unit],
+) -> None:
+    """Command-phase faction ability UI for factions with once-per-battle activations (WAAAGH! etc.).
+
+    Generic: reads command-phase activated abilities from the passed faction_abilities list.
+    No-ops silently for factions without such abilities (Necrons, Space Marines, etc.).
+    """
+    command_activated = [
+        a
+        for a in faction_abilities
+        if a.ability_type == "activated" and _ability_matches_phase(a, "command")
+    ]
+    if not command_activated:
+        return
+
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+
+    # Necrons use command protocols instead — don't double-render
+    if load_command_protocols(faction_dir):
+        return
+
+    phase_key = _current_phase_key()
+    current_round = st.session_state.get("round", 1)
+    is_active = faction == st.session_state.get("active")
+    waaagh_state: dict = st.session_state.get("waaagh_state", {})
+    player_ws = waaagh_state.get(faction)
+
+    st.divider()
+
+    if player_ws:
+        stage = player_ws.get("stage", 1)
+        color = "waaagh_1" if stage == 1 else "waaagh_2"
+        badge_text = f"WAAAGH! — STAGE {stage}"
+        st.markdown(_active_ability_badge(badge_text, color=color), unsafe_allow_html=True)
+        if stage == 1:
+            st.caption("↳ +1 Strength · +1 Attacks · 5+ invuln · Advance & Charge")
+        else:
+            st.caption("↳ +1 Strength · +1 Attacks · 6+ invuln")
+        return
+
+    # WAAAGH! not called yet
+    if not is_active or phase_key != "command":
+        st.caption("— WAAAGH! not called —")
+        return
+
+    # Require WARBOSS (or SPEEDBOSS / GHAZGHKULL THRAKA) on the battlefield
+    waaagh_ability = next(
+        (a for a in command_activated if "waaagh" in a.id.lower() and "speed" not in a.id.lower()),
+        None,
+    )
+    has_warboss = any(u.has_keyword("WARBOSS") for u in units)
+
+    if waaagh_ability and has_warboss:
+        st.caption("**WAAAGH!** — call once per battle (requires WARBOSS)")
+        if st.button(
+            "Call Da WAAAGH!",
+            key=f"waaagh_call_{faction}",
+            type="primary",
+            use_container_width=True,
+        ):
+            waaagh_state[faction] = {"stage": 1, "round_activated": current_round}
+            st.session_state.waaagh_state = waaagh_state
+            log_action(current_round, "command", faction, "WAAAGH! called — Stage 1 active")
+            st.rerun()
+    else:
+        st.caption("— WAAAGH! not available (no WARBOSS) —")
+
+
 def render_army_card(
     faction: str,
     subfaction: str | None,
@@ -216,8 +309,11 @@ def render_army_card(
             badges_html += _faction_badge(subfaction)
         st.markdown(badges_html, unsafe_allow_html=True)
 
-        # Command Protocol UI (Necrons only — other factions: no-op)
+        # Command Protocol UI (Necrons — no-op for other factions)
         _render_protocol_ui(faction)
+
+        # Once-per-battle command-phase faction abilities (WAAAGH! etc. — no-op for Necrons)
+        _render_waaagh_ui(faction, faction_abilities, units)
 
         # Triggered ability buttons (phase-dependent)
         _render_triggered_abilities(faction, faction_abilities, units, units_state, phase_key)

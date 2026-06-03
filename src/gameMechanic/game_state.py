@@ -287,6 +287,9 @@ def init_state(
 
     st.session_state.active_protocol_id = "eternal_guardian"
     st.session_state.used_protocol_ids = ["eternal_guardian"]
+    st.session_state.waaagh_state: dict = (
+        {}
+    )  # {player_name: {"stage": 1|2, "round_activated": int}}
     st.session_state.psi_attempts_this_phase = 0
     if p1_unmatched or p2_unmatched:
         st.session_state.roster_warnings = {
@@ -335,6 +338,7 @@ def _reset_phase_state() -> None:
 
 
 def _reset_turn_state() -> None:
+    current_round = st.session_state.get("round", 1)
     for key in ("p1_units", "p2_units"):
         for state in st.session_state[key].values():
             flags = state["turn_flags"]
@@ -346,6 +350,12 @@ def _reset_turn_state() -> None:
             state["active_buffs"] = []
     st.session_state.active_protocol_id = None
     st.session_state.active_directive = None
+    # WAAAGH! Stage 1 → Stage 2 transition: auto-upgrade when a new round begins
+    waaagh = st.session_state.get("waaagh_state", {})
+    for player, ws in waaagh.items():
+        if ws.get("stage") == 1 and ws.get("round_activated", current_round) < current_round:
+            waaagh[player] = {**ws, "stage": 2}
+    st.session_state.waaagh_state = waaagh
 
 
 def next_phase() -> None:

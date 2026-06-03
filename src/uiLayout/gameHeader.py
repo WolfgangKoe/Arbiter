@@ -208,7 +208,7 @@ def _score_group(faction: str, justify: str = "center") -> None:
     vp = st.session_state.vp[faction]
     cp = st.session_state.cp[faction]
     st.markdown(
-        f'<div style="display:flex;gap:14px;align-items:baseline;justify-content:{justify};">'
+        f'<div style="display:flex;gap:40px;align-items:baseline;justify-content:{justify};">'
         f'<span><span style="{_SCORE_NUM}">{vp}</span><span style="{_SCORE_LBL}">VP</span></span>'
         f'<span><span style="{_SCORE_NUM}">{cp}</span><span style="{_SCORE_LBL}">CP</span></span>'
         f"</div>",

@@ -47,7 +47,8 @@
       "Bash(grep -A 6 \"gauntlet_of_conflagrator$\" /home/wolfgang/Dokumente/Arbiter/data/wh40k_9e/necrons/weapons.yaml)",
       "Bash(grep -A 3 \"voltaic_staff_shooting$\\\\|voidreaper$\" /home/wolfgang/Dokumente/Arbiter/data/wh40k_9e/necrons/weapons.yaml)",
       "Bash(sed -n '120,145p' /home/wolfgang/Dokumente/Arbiter/src/gameMechanic/fightPhase.py)",
-      "Bash(sed -n '190,205p' /home/wolfgang/Dokumente/Arbiter/src/uiLayout/_common.py)"
+      "Bash(sed -n '190,205p' /home/wolfgang/Dokumente/Arbiter/src/uiLayout/_common.py)",
+      "Bash(grep -v \"^$\")"
     ],
     "additionalDirectories": [
       "/home/wolfgang/Dokumente/Arbiter/.claude/tasks",

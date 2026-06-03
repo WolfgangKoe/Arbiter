@@ -240,11 +240,83 @@ VERWUNDUNG
 
 ---
 
+## 6h — Generisches Fraktion-Fähigkeits-System (alle Fraktionen)
+
+**Ziel:** Die App funktioniert korrekt für ALLE Fraktionen, nicht nur für Necrons und Orks. Das Fähigkeitssystem ist vollständig generisch — neue Fraktionen erfordern nur YAML-Daten, keinen Code-Änderungen.
+
+**Hintergrund:** Wahapedia-Recherche (2026-06-03) ergab 6 Fähigkeitskategorien über alle 10 Hauptfraktionen.
+Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh40k_9e/_schema/`.
+
+### Kategorie 1 — Runden-Wahl (identisch zu Command Protocols)
+
+| Fraktion | Mechanik | Status |
+|----------|----------|--------|
+| Necrons | Command Protocols (6 Optionen, Primary/Secondary) | ✅ implementiert |
+| **Adeptus Custodes** | **Martial Ka'tah (6 Ka'tahs, Aggressive/Stoic Stance)** | ⬜ YAML fehlt |
+| **Adeptus Mechanicus** | **Canticles of the Omnissiah (6, kein Secondary)** | ⬜ YAML fehlt |
+| **Tyranids** | **Synaptic Imperatives (bis 10, dynamischer Pool)** | ⬜ YAML + Pool-Logik fehlt |
+
+**Code-Änderungen nötig:**
+- [ ] `gameObjects/loader.py`: `CommandProtocol.secondary` + `secondary_effect` optional machen
+- [ ] `armyCard._render_protocol_ui()`: Falls kein secondary: Directive-Wahl überspringen, direkt auto-apply
+- [ ] Tyranids: Pool-Check ob Synapse-Unit noch lebt (Unit-Keyword-Check in UI)
+
+**YAML nötig:**
+- [ ] `data/wh40k_9e/adeptus_custodes/command_protocols.yaml` — alle 6 Ka'tahs
+- [ ] `data/wh40k_9e/adeptus_mechanicus/command_protocols.yaml` — alle 6 Canticles
+- [ ] `data/wh40k_9e/tyranids/command_protocols.yaml` — alle Synaptic Imperatives
+
+**Tests nötig:**
+- [ ] `tests/test_faction_abilities_custodes.py` — load, badge_label, modifier, used_ids
+- [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply
+- [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die
+
+### Kategorie 2 — Einmalig-Deklariert (wie WAAAGH!)
+
+| Fraktion | Mechanik | Status |
+|----------|----------|--------|
+| Orks | WAAAGH! (2 Stages) | ✅ implementiert |
+| **T'au Empire** | **Mont'ka / Kauyon (Runden-Fenster)** | ⬜ fehlt |
+
+**Code-Änderungen nötig:**
+- [ ] `armyCard._render_waaagh_ui()`: `active_rounds`-Feld aus YAML auslesen; Badge nur zeigen wenn aktuelle Runde im Fenster liegt
+- [ ] `game_state._reset_turn_state()`: Runden-Fenster-Prüfung für T'au ergänzen
+
+**YAML nötig:**
+- [ ] T'au `faction_abilities.yaml`: `montka` + `kauyon` mit `active_rounds` Feld
+
+**Tests nötig:**
+- [ ] `tests/test_faction_abilities_tau.py` — montka_active_rounds, kauyon_active_rounds
+
+### Kategorie 3 — Auto-Progression (kein Player-Input)
+
+| Fraktion | Mechanik | Status |
+|----------|----------|--------|
+| Space Marines | Combat Doctrines (R1 Heavy / R2 Assault / R3+ Melee) | ⬜ fehlt |
+| Death Guard | Contagions of Nurgle (Reichweite skaliert) | ⬜ fehlt |
+| Chaos SM | Let the Galaxy Burn (R1+R2 auto, R3 Wahl) | ⬜ fehlt |
+
+**Code-Änderungen nötig:**
+- [ ] `ability_engine.py`: `get_auto_progression_modifier(faction_dir, phase, round)` → `dict[str, int]`
+- [ ] `armyCard.py`: `_render_auto_progression_badge(faction)` — Info-Badge ohne Button
+- [ ] `_common.py`: Auto-Progression-Modifier in `render_attack_form()` einbinden
+
+**YAML nötig:**
+- [ ] `ability_type: auto_progression` + `progression: [{round, effects}]` Schema (Beispiel: `_schema/auto_progression.example.yaml`)
+- [ ] YAML für Space Marines, Death Guard, Chaos SM
+
+**Tests nötig:**
+- [ ] `tests/test_auto_progression.py` — round→modifier Mapping, round_max, kein Player-Input
+
+---
+
 ## Akzeptanzkriterien (Ziel 6 komplett)
 
 - [ ] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß
 - [ ] armyCard: Korrekte Fähigkeiten für jede Fraktion, kein Necron-Fallback-Bug
 - [ ] WAAAGH aktivierbar, Command Protocol wechselbar — beide über armyCard
+- [ ] **Ka'tah (Custodes) + Canticles (AdMech) funktionieren ohne Code-Änderung** (nur YAML)
+- [ ] **Auto-Progression-Badge zeigt korrekte Doctrine für Space Marines**
 - [ ] Stratagems sind Default-Tab in gameProtocoll
 - [ ] Attackensequenz: simultan, Modifier transparent, kein Zwischenwert-Klicken
 - [ ] CP-Doppelvergabe unmöglich

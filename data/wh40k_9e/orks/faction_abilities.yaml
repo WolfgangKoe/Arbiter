@@ -90,10 +90,10 @@ abilities:
     name_en: "Waaagh! — Call Da Waaagh!"
     ability_type: activated
     source: faction_rule
-    rule_text: "Once per battle, in your Charge phase, a WARBOSS can call a Waaagh! Stage 1: Until the end of the turn, ORKS CORE and ORKS CHARACTER units from your army can charge even if they Advanced this turn. Until the start of your next turn, add 1 to the Strength and Attacks characteristics of ORKS models from your army. ORKS models from your army also have a 5+ invulnerable save until the start of your next turn."
+    rule_text: "Once per battle, in your Command phase, a WARBOSS can call a Waaagh! Stage 1: Until the end of the turn, ORKS CORE and ORKS CHARACTER units from your army can charge even if they Advanced this turn. Until the start of your next turn, add 1 to the Strength and Attacks characteristics of ORKS models from your army. ORKS models from your army also have a 5+ invulnerable save until the start of your next turn."
     trigger:
       timing: phase_any
-      phase: charge
+      phase: command
       stage: active
       player: active
     conditions:
@@ -147,10 +147,10 @@ abilities:
     name_en: "Speedwaaagh! — Da Big Race"
     ability_type: activated
     source: faction_rule
-    rule_text: "Once per battle, a SPEEDBOSS can call a Speedwaaagh! Stage 1: SPEED FREEKS units do not suffer the penalty for firing Assault weapons after Advancing. Add 1 additional hit to Dakka weapon attacks. Until the start of the next turn, improve AP by 1 on ranged attacks of ORKS units."
+    rule_text: "Once per battle, in your Command phase, a SPEEDBOSS can call a Speedwaaagh! Stage 1: SPEED FREEKS units do not suffer the penalty for firing Assault weapons after Advancing. Add 1 additional hit to Dakka weapon attacks. Until the start of the next turn, improve AP by 1 on ranged attacks of ORKS units."
     trigger:
       timing: phase_any
-      phase: charge
+      phase: command
       stage: active
       player: active
     conditions:

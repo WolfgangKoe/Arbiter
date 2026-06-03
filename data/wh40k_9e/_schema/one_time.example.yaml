@@ -1,0 +1,128 @@
+# Schema-Beispiel: one_time — Einmalig-Deklarierte Fähigkeit (once per battle)
+# Verwendung: Orks (WAAAGH!), T'au (Mont'ka / Kauyon)
+#
+# Dateiname pro Fraktion: data/wh40k_9e/<faction_dir>/faction_abilities.yaml
+# Die Fähigkeit liegt unter abilities: als normaler Eintrag
+# Erkennungskriterium: ability_type: activated + trigger.phase: command + once_per_battle: true
+#
+# UI: uiLayout/armyCard._render_waaagh_ui() — automatisch aktiv wenn solche Abilities vorhanden
+# Session-State: waaagh_state: {player_name: {stage, round_activated}}
+#
+# Regeln:
+# - Stages sind als separate Ability-Einträge modelliert (stage1 + stage2)
+# - Stage-Übergang ist automatisch: in _reset_turn_state() wenn round_activated < current_round
+# - Bei T'au: kein Stage-Übergang, aber Runden-Fenster (active_rounds)
+
+faction: ExampleFaction
+
+abilities:
+
+  # VARIANTE A — Mehrstufig mit automatischem Stage-Übergang (Orks WAAAGH!)
+  - id: example.faction.one_time.stage1
+    name_en: "Example Ability — Stage 1"
+    ability_type: activated
+    source: faction_rule
+    rule_text: "Once per battle, in your Command phase, declare this ability. Stage 1 is active this round. Stage 2 is active from the next round onwards."
+    trigger:
+      timing: phase_any
+      phase: command        # Muss command sein für _render_waaagh_ui()
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [REQUIRED_KEYWORD]  # z.B. WARBOSS für WAAAGH!
+        once_per_battle: true
+    effect:
+      type: activate_faction_ability
+      ability_id: example.faction.one_time.stage1    # Selbstreferenz für Tracking
+      next_stage_id: example.faction.one_time.stage2  # Optional: für Stage-Übergang
+
+    # Effekte Stage 1 (für Display in armyCard + gameActionsArea)
+    stage_effects:
+      stage: 1
+      badge_label: "EXAMPLE — STAGE 1"
+      effects:
+        - description: "+1 Strength"
+          type: strength_modifier
+          value: 1
+          phase: fight
+        - description: "+1 Attacks"
+          type: attacks_modifier
+          value: 1
+          phase: fight
+        - description: "5+ invulnerable save"
+          type: invuln_save
+          value: 5
+
+  - id: example.faction.one_time.stage2
+    name_en: "Example Ability — Stage 2"
+    ability_type: passive       # Stage 2 ist passiv (kein Aktivierungsbutton)
+    source: faction_rule
+    rule_text: "Stage 2: Effects persist from Stage 1, but weakened."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+
+    stage_effects:
+      stage: 2
+      badge_label: "EXAMPLE — STAGE 2"
+      effects:
+        - description: "+1 Strength"
+          type: strength_modifier
+          value: 1
+          phase: fight
+        - description: "+1 Attacks"
+          type: attacks_modifier
+          value: 1
+          phase: fight
+        - description: "6+ invulnerable save"
+          type: invuln_save
+          value: 6
+
+  # VARIANTE B — Einfache Wahl ohne Stage-Übergang, mit Runden-Fenster (T'au)
+  - id: example.faction.one_time.variant_a
+    name_en: "Aggressive Strategy (active Rounds 1–3)"
+    ability_type: activated
+    source: faction_rule
+    rule_text: "Once per battle, before the game begins, choose this or the defensive strategy."
+    trigger:
+      timing: pre_game
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - once_per_battle: true
+        choose_one_of: [example.faction.one_time.variant_a, example.faction.one_time.variant_b]
+    active_rounds: [1, 2, 3]   # Effekte nur in diesen Runden aktiv
+    stage_effects:
+      stage: 1
+      badge_label: "STRATEGY — AGGRESSIVE"
+      effects:
+        - description: "Units count as stationary"
+          type: stationary_bonus
+        - description: "Re-roll wound rolls of 1"
+          type: reroll_wound_1
+
+  - id: example.faction.one_time.variant_b
+    name_en: "Defensive Strategy (active Rounds 3–5)"
+    ability_type: activated
+    source: faction_rule
+    rule_text: "Once per battle, before the game begins, choose this or the aggressive strategy."
+    trigger:
+      timing: pre_game
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - once_per_battle: true
+        choose_one_of: [example.faction.one_time.variant_a, example.faction.one_time.variant_b]
+    active_rounds: [3, 4, 5]
+    stage_effects:
+      stage: 1
+      badge_label: "STRATEGY — DEFENSIVE"
+      effects:
+        - description: "Shoot after Fall Back"
+          type: shoot_after_fallback
+        - description: "Bonus hits on 6+ to hit"
+          type: extra_hit_on_6

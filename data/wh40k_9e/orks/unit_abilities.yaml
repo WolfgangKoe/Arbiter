@@ -11,10 +11,10 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.orks.unit.warboss
-    rule_text: "Once per battle, in your Charge phase, this WARBOSS can call a Waaagh! See the Waaagh! faction ability for full effects."
+    rule_text: "Once per battle, in your Command phase, this WARBOSS can call a Waaagh! See the Waaagh! faction ability for full effects."
     trigger:
       timing: phase_any
-      phase: charge
+      phase: command
       stage: active
       player: active
     conditions:
@@ -29,10 +29,10 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.orks.unit.warboss_warbike
-    rule_text: "Once per battle, in your Charge phase, this SPEEDBOSS can call a Speedwaaagh! instead of a standard Waaagh!. See the Speedwaaagh! faction ability for full effects."
+    rule_text: "Once per battle, in your Command phase, this SPEEDBOSS can call a Speedwaaagh! instead of a standard Waaagh!. See the Speedwaaagh! faction ability for full effects."
     trigger:
       timing: phase_any
-      phase: charge
+      phase: command
       stage: active
       player: active
     conditions:
@@ -184,10 +184,10 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.orks.unit.ghazghkull
-    rule_text: "Once per battle, in your Charge phase, Ghazghkull can call a Great Waaagh! combining both the standard Waaagh! and Speedwaaagh! effects simultaneously."
+    rule_text: "Once per battle, in your Command phase, Ghazghkull can call a Great Waaagh! combining both the standard Waaagh! and Speedwaaagh! effects simultaneously."
     trigger:
       timing: phase_any
-      phase: charge
+      phase: command
       stage: active
       player: active
     conditions:

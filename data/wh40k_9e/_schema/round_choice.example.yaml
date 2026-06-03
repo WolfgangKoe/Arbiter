@@ -1,0 +1,62 @@
+# Schema-Beispiel: round_choice — Runden-Wahl aus begrenztem Pool
+# Verwendung: Necrons (Command Protocols), Adeptus Custodes (Martial Ka'tah),
+#             Adeptus Mechanicus (Canticles), Tyranids (Synaptic Imperatives)
+#
+# Dateiname pro Fraktion: data/wh40k_9e/<faction_dir>/command_protocols.yaml
+# Geladen von: gameObjects/loader.py → load_command_protocols(faction_dir)
+# UI: uiLayout/armyCard._render_protocol_ui() — automatisch aktiv wenn Datei vorhanden
+#
+# Regeln:
+# - Jede Option max. 1× pro Partie verwendbar (tracked via used_protocol_ids)
+# - Reihenfolge: entweder frei oder geordnet (ordered: true)
+# - secondary + secondary_effect sind OPTIONAL (z.B. Canticles haben nur einen Effekt)
+
+faction: ExampleFaction
+
+# VARIANTE A — Mit zwei Stances/Direktiven (Necrons, Custodes)
+protocols:
+  - id: example.faction.protocol.option_with_stances
+    name_en: "Option With Two Stances"
+    # Stance A = Primary = Aggressive
+    primary: "Aggressive Stance: +1 to hit rolls in the Shooting Phase."
+    primary_effect:
+      type: hit_modifier
+      value: 1
+      phase: shooting   # "shooting" | "melee" | "any"
+
+    # Stance B = Secondary = Stoic (optional — weglassen für single-effect Fähigkeiten)
+    secondary: "Stoic Stance: +1 to all saving throws."
+    secondary_effect:
+      type: save_modifier
+      value: 1
+      phase: any
+
+# VARIANTE B — Ohne Stances / Single-Effect (Adeptus Mechanicus Canticles)
+  - id: example.faction.protocol.canticle_style
+    name_en: "Single-Effect Option (Canticle Style)"
+    primary: "Chant: Add 1 to the Strength of models in this unit."
+    primary_effect:
+      type: strength_modifier
+      value: 1
+      phase: fight
+    # secondary: (kein secondary = keine Stance-Wahl; UI zeigt nur Auto-Apply)
+    # secondary_effect: (ebenfalls leer)
+
+# VARIANTE C — Auto-aktivierte erste Option (Necrons: Eternal Guardian in Runde 1)
+# Wird über eine Sonderlogik im UI gehandhabt:
+# In armyCard._render_protocol_ui(): if current_round == 1: auto-set zu dieser ID
+# Keine YAML-Eigenschaft nötig — Logik im Code via _ETERNAL_GUARDIAN_ID-Konstante.
+# Für andere Fraktionen mit ähnlicher Auto-Aktivierung: Konstante in armyCard extrahieren.
+
+# VARIANTE D — Geordnete Reihenfolge (Adeptus Custodes: Ka'tah-Reihenfolge)
+# Alle Optionen haben einen "order"-Wert; UI erzwingt sequenziellen Fortschritt.
+# Noch nicht implementiert — für Phase 2 geplant.
+# Wenn ordered: true, darf nur die nächste Option in der Reihenfolge gewählt werden.
+
+# Wired effect types (in ability_engine.get_active_protocol_modifier()):
+#   hit_modifier, wound_modifier, save_modifier
+#
+# Noch nicht wired (Display only):
+#   strength_modifier, attacks_modifier, ap_bonus, move_bonus,
+#   advance_and_charge, reroll_hit_wound_1, reroll_save_1,
+#   leadership_bonus, rp_reroll, rp_bonus

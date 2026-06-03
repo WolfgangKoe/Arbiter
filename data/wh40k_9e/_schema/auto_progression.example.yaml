@@ -1,0 +1,154 @@
+# Schema-Beispiel: auto_progression — Automatische Runden-Progression (kein Player-Input)
+# Verwendung: Space Marines (Combat Doctrines), Death Guard (Contagions of Nurgle),
+#             Chaos Space Marines (Let the Galaxy Burn, teilweise)
+#
+# Dateiname pro Fraktion: data/wh40k_9e/<faction_dir>/faction_abilities.yaml
+# Erkennungskriterium: ability_type: auto_progression
+#
+# UI: armyCard zeigt Info-Badge mit aktuellem Effekt — KEIN Aktivierungsbutton
+# Session-State: Kein separater State nötig — Effekt direkt aus current_round berechnet
+# Engine: get_auto_progression_modifier(faction_dir, phase, round) in ability_engine.py
+#
+# Regeln:
+# - Kein Spieler-Input erforderlich
+# - Effekt wird bei jedem Render aus round-Mapping berechnet
+# - Optional: ab Runde N gilt letzter Effekt dauerhaft (round_max: N)
+
+faction: ExampleFaction
+
+abilities:
+
+  # VARIANTE A — Stufenweise Progression (Space Marines Combat Doctrines)
+  - id: example.faction.auto.combat_doctrines
+    name_en: "Combat Doctrines"
+    ability_type: auto_progression
+    source: faction_rule
+    rule_text: "The army's tactics shift automatically each round: Devastator Doctrine (Round 1), Tactical Doctrine (Round 2), Assault Doctrine (Round 3+)."
+    trigger:
+      timing: start_of_round
+      phase: any
+      player: either
+
+    progression:
+      - round: 1
+        label: "Devastator Doctrine"
+        badge_label: "DEVASTATOR DOCTRINE"
+        effects:
+          - type: ap_modifier
+            value: -1             # Verbesserung um 1 (AP wird besser, also -1)
+            weapon_types: [Heavy]
+            phase: shooting
+
+      - round: 2
+        label: "Tactical Doctrine"
+        badge_label: "TACTICAL DOCTRINE"
+        effects:
+          - type: ap_modifier
+            value: -1
+            weapon_types: [Assault, Rapid Fire]
+            phase: shooting
+
+      - round: 3
+        label: "Assault Doctrine"
+        badge_label: "ASSAULT DOCTRINE"
+        round_max: null           # null = gilt ab Runde 3 dauerhaft
+        effects:
+          - type: ap_modifier
+            value: -1
+            weapon_types: [Pistol, Melee]
+            phase: [shooting, fight]
+          - type: shoot_after_fallback
+            condition: has_keywords_CHAPTER
+            phase: shooting
+
+  # VARIANTE B — Skalierender Effekt (Death Guard Contagions of Nurgle)
+  - id: example.faction.auto.contagions
+    name_en: "Contagions of Nurgle"
+    ability_type: auto_progression
+    source: faction_rule
+    rule_text: "Enemy units within range suffer -1 Toughness. The range increases each round."
+    trigger:
+      timing: persistent
+      phase: any
+      player: either
+
+    progression:
+      - round: 1
+        label: "Contagions (1\")"
+        badge_label: "CONTAGIONS 1\""
+        aura_range: 1
+        effects:
+          - type: toughness_debuff
+            value: -1
+            target: enemy_within_aura
+
+      - round: 2
+        label: "Contagions (3\")"
+        badge_label: "CONTAGIONS 3\""
+        aura_range: 3
+        effects:
+          - type: toughness_debuff
+            value: -1
+            target: enemy_within_aura
+
+      - round: 3
+        label: "Contagions (6\")"
+        badge_label: "CONTAGIONS 6\""
+        aura_range: 6
+        effects:
+          - type: toughness_debuff
+            value: -1
+            target: enemy_within_aura
+
+      - round: 4
+        label: "Contagions (9\")"
+        badge_label: "CONTAGIONS 9\""
+        aura_range: 9
+        round_max: null           # Dauerhaft ab Runde 4
+        effects:
+          - type: toughness_debuff
+            value: -1
+            target: enemy_within_aura
+
+  # VARIANTE C — Hybrid: Auto + Wahl in bestimmter Runde (Chaos SM)
+  # Runden 1 + 2 sind automatisch; ab Runde 3 wählt der Spieler zwischen zwei Optionen.
+  # Diese Variante kombiniert auto_progression (R1+R2) mit round_choice (R3).
+  # Implementierung: In Runde 3 schaltet das System auf round_choice-Modus um.
+  - id: example.faction.auto.hybrid
+    name_en: "Let the Galaxy Burn"
+    ability_type: auto_progression
+    source: faction_rule
+
+    progression:
+      - round: 1
+        label: "Wanton Destruction"
+        badge_label: "WANTON DESTRUCTION"
+        effects:
+          - type: extra_hit_on_unmodified_6
+            phase: shooting
+
+      - round: 2
+        label: "Wanton Massacre"
+        badge_label: "WANTON MASSACRE"
+        effects:
+          - type: extra_hit_on_unmodified_6
+            phase: fight
+
+      - round: 3
+        label: "Player Choice"
+        round_max: null
+        player_choice: true       # Ab hier: round_choice-Modus
+        choice_options:
+          - id: massacre
+            label: "Wanton Massacre"
+            badge_label: "WANTON MASSACRE"
+            effects:
+              - type: extra_hit_on_unmodified_6
+                phase: fight
+          - id: slaughter
+            label: "Wanton Slaughter"
+            badge_label: "WANTON SLAUGHTER"
+            effects:
+              - type: extra_hits_on_unmodified_6
+                count: 2
+                phase: fight
