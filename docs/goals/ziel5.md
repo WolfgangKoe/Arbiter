@@ -179,11 +179,11 @@ Matched Play Spielgrößen (aus Wahapedia):
 - [x] Siegpunkt-Zählphase wählen (Dropdown)
 - [x] Erster Spieler festlegen
 - [x] Start-Button
-- [ ] `unmatched`-Warnungen im Setup-Screen anzeigen — offen (→ 5i)
+- [x] `unmatched`-Warnungen im Setup-Screen anzeigen ✅
 - [x] gameHeader: VP/CP nur Anzeige, keine Buttons
 - [x] gameActionsArea: DisplayArea oberhalb der Armeen
 - [x] VP-Buttons (+5/+1/−1/−5) in displayArea
-- [ ] Punkte-Validierung: Roster-Summe gegen Spielgröße prüfen — offen (→ 5i)
+- [x] Punkte-Validierung: Roster-Summe gegen Spielgröße prüfen ✅
 
 ---
 
@@ -208,9 +208,9 @@ Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_
 ### Implementierung
 
 - [x] **+1 CP/Runde:** „Grant +1 CP"-Button in Command Phase funktioniert
-- [ ] **Mission-Auswahl im Setup-Screen:** Dropdown je Spielgröße (Matched Play) — offen (→ 5i)
-- [ ] **Attacker/Defender-Button:** Roll-off UI im Setup-Screen — offen (→ 5i)
-- [ ] **Secondary Objectives Toggle:** on/off + 3 Slots + VP-Tracking — offen (→ 5i)
+- [x] **Mission-Auswahl im Setup-Screen:** Dropdown je Spielgröße (Matched Play) ✅
+- [x] **Attacker/Defender-Button:** Roll-off UI im Setup-Screen ✅
+- [x] **Secondary Objectives Toggle:** on/off + 3 Slots + VP-Tracking ✅
 
 ---
 
@@ -293,23 +293,23 @@ Analog zur Necrons-Datenlage — direkt in YAML einpflegen.
 
 ---
 
-## 5i — Abschluss: Offene Punkte & Qualitätssicherung ⬜
+## 5i — Abschluss: Offene Punkte & Qualitätssicherung 🔄
 
 Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Ziel 5 erledigt sein.
 
 ### Stratagems (aus 5f)
 
-- [ ] **Bug: CP vom falschen Pool** — `player: inactive`-Stratagems (Fire Overwatch, Counter-Offensive) ziehen CP vom aktiven statt inaktiven Spieler
-- [ ] **Condition-Check auf Unit-Ebene** — aktuell: Armee-Ebene; Ziel: `selected_unit`-Check wenn Unit gewählt
-- [ ] **Stratagems in gameActionArea** — Inline-Hinweis pro Aktion, welche Stratagems nutzbar sind (aktiv + reaktiv getrennt)
+- [x] **Bug: CP vom falschen Pool** — `player: inactive`-Stratagems ziehen CP vom richtigen Pool ✅
+- [x] **Condition-Check auf Unit-Ebene** — `selected_unit` bevorzugt, Fallback auf Armee ✅
+- [x] **Stratagems in gameActionArea** — Inline-Hinweis (Expander) pro Phase ✅
 
 ### Setup-Screen (aus 5e/5g)
 
-- [ ] **Mission-Auswahl** — Dropdown je Spielgröße im Setup-Screen
-- [ ] **Attacker/Defender-Button** — Roll-off UI
-- [ ] **Secondary Objectives Toggle** — on/off + 3 Slots pro Spieler + VP-Tracking mit Cap
-- [ ] **`unmatched`-Warnungen** — nicht im Katalog gefundene Einheiten im Setup anzeigen
-- [ ] **Punkte-Validierung** — Roster-Gesamtpunkte gegen Spielgröße prüfen
+- [x] **Mission-Auswahl** — Dropdown je Spielgröße im Setup-Screen ✅
+- [x] **Attacker/Defender-Button** — Roll-off UI ✅
+- [x] **Secondary Objectives Toggle** — on/off + 3 Slots pro Spieler + VP-Tracking mit Cap ✅
+- [x] **`unmatched`-Warnungen** — nicht im Katalog gefundene Einheiten im Setup anzeigen ✅
+- [x] **Punkte-Validierung** — Roster-Gesamtpunkte gegen Spielgröße prüfen ✅
 
 ### Code-Qualität
 

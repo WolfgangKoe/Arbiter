@@ -20,6 +20,7 @@ from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
     is_necron_faction,
+    unit_id_from_state_key,
     units_key_for,
     units_list_for,
 )
@@ -103,27 +104,38 @@ def _render_command_protocol() -> None:
             st.caption(f"  {name}: {status}")
 
 
-def _conditions_met(conditions: list[str], faction: str) -> bool:
-    """Return True if at least one unit in the army has ALL required keywords."""
+def _conditions_met(conditions: list[str], faction: str, unit=None) -> bool:
+    """Return True if conditions are satisfied.
+
+    If unit is provided (selected unit), check only that unit.
+    Otherwise check all units in the faction (army-wide fallback).
+    """
     if not conditions:
         return True
-    units = units_list_for(faction)
-    for unit in units:
-        if all(unit.has_keyword(kw) for kw in conditions):
+    if unit is not None:
+        return all(unit.has_keyword(kw) for kw in conditions)
+    for u in units_list_for(faction):
+        if all(u.has_keyword(kw) for kw in conditions):
             return True
     return False
 
 
 def _render_stratagems() -> None:
     active_faction = st.session_state.get("active", "—")
+    first = st.session_state.get("first_player", "")
+    second = st.session_state.get("second_player", "")
+    inactive_faction = second if active_faction == first else first
+
     cp = st.session_state.get("cp", {})
     cp_active = cp.get(active_faction, 0)
+    cp_inactive = cp.get(inactive_faction, 0)
     phase_idx = st.session_state.get("phase_idx", 0)
     current_phase = PHASES[phase_idx][1]
     current_stage = st.session_state.get("phase_stage", "active")
     used_ids: set[str] = st.session_state.get("used_stratagem_ids", set())
 
-    st.caption(f"**{active_faction}** · CP available: **{cp_active}**")
+    st.caption(f"**{active_faction}** (active) · CP: **{cp_active}**")
+    st.caption(f"**{inactive_faction}** (inactive) · CP: **{cp_inactive}**")
     st.divider()
 
     faction_dir = faction_dir_for(active_faction)
@@ -133,20 +145,40 @@ def _render_stratagems() -> None:
         st.warning("Could not load stratagems.")
         return
 
+    # Resolve selected unit for unit-level condition check
+    sel = st.session_state.get("selected_unit")
+    sel_faction_unit: tuple[str, object] | None = None
+    if sel is not None:
+        sel_faction, sel_state_key = sel
+        real_uid = unit_id_from_state_key(sel_state_key)
+        for u in units_list_for(sel_faction):
+            if u.id == real_uid:
+                sel_faction_unit = (sel_faction, u)
+                break
+
     visible = []
     for s in stratagems:
-        met = _conditions_met(s.conditions, active_faction)
-        vis = stratagem_visibility(s, cp_active, current_phase, current_stage, used_ids, met)
+        spending_faction = inactive_faction if s.player == "inactive" else active_faction
+        cp_for_strat = cp_inactive if s.player == "inactive" else cp_active
+
+        unit_for_check = None
+        if sel_faction_unit is not None and sel_faction_unit[0] == spending_faction:
+            unit_for_check = sel_faction_unit[1]
+        met = _conditions_met(s.conditions, spending_faction, unit_for_check)
+
+        vis = stratagem_visibility(s, cp_for_strat, current_phase, current_stage, used_ids, met)
         if vis != "hidden":
-            visible.append((s, vis))
+            visible.append((s, vis, spending_faction))
 
     if not visible:
         st.caption(f"No stratagems available in the **{current_phase.capitalize()}** phase.")
         return
 
-    for strat, vis in visible:
+    for strat, vis, spending_faction in visible:
         disabled = vis == "greyed"
         label = f"**{strat.name_en}** · {strat.cp_cost} CP"
+        if strat.player == "inactive":
+            label += f" *({inactive_faction})*"
         if vis == "greyed":
             if strat.id in used_ids:
                 label += " *(used)*"
@@ -160,7 +192,7 @@ def _render_stratagems() -> None:
                     f"Use — spend {strat.cp_cost} CP",
                     key=f"strat_{strat.id}_{phase_idx}",
                 ):
-                    adjust_cp(active_faction, -strat.cp_cost)
+                    adjust_cp(spending_faction, -strat.cp_cost)
                     used_ids.add(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
                     st.rerun()

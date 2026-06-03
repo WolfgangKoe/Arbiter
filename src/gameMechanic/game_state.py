@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import streamlit as st
+import yaml
 
 from gameObjects.loader import (
     load_roster,
@@ -32,6 +33,15 @@ CP_BY_GAME_SIZE: dict[str, int] = {
     "Strike Force": 12,
     "Onslaught": 18,
 }
+
+PTS_LIMIT_BY_GAME_SIZE: dict[str, int] = {
+    "Combat Patrol": 500,
+    "Incursion": 1000,
+    "Strike Force": 2000,
+    "Onslaught": 3000,
+}
+
+_DATA_ROOT = Path(__file__).parent.parent.parent / "data"
 
 
 # ---------------------------------------------------------------------------
@@ -64,6 +74,38 @@ def _load_roster_for(
 def list_available_rosters() -> list[str]:
     """Return all .yaml filenames in the rosters directory."""
     return sorted(p.name for p in _ROSTER_DIR.glob("*.yaml"))
+
+
+def compute_roster_total_pts(roster_file: str) -> int:
+    """Return the total points cost for a roster file. Returns 0 on error.
+
+    Handles per_unit (flat cost) and per_model (cost × model_count) entries.
+    """
+    roster_path = _ROSTER_DIR / roster_file
+    meta = load_roster_metadata(roster_path)
+    faction_dir = meta.get("faction_dir", "")
+    if not faction_dir:
+        return 0
+    pts_path = _DATA_ROOT / "wh40k_9e" / faction_dir / "points.yaml"
+    if not pts_path.exists():
+        return 0
+    with open(pts_path) as f:
+        pts_data = yaml.safe_load(f) or {}
+    units_pts: dict[str, dict] = pts_data.get("units") or {}
+    with open(roster_path) as f:
+        roster_data = yaml.safe_load(f) or {}
+    total = 0
+    for entry in roster_data.get("units", []):
+        uid = entry["id"]
+        models = int(entry.get("models", 1))
+        cost_entry = units_pts.get(uid)
+        if not cost_entry:
+            continue
+        if "per_model" in cost_entry:
+            total += int(cost_entry["per_model"]) * models
+        else:
+            total += int(cost_entry.get("per_unit", 0))
+    return total
 
 
 # ---------------------------------------------------------------------------

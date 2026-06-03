@@ -6,7 +6,14 @@ import random
 
 import streamlit as st
 
-from gameMechanic.game_state import CP_BY_GAME_SIZE, PHASES, init_state, list_available_rosters
+from gameMechanic.game_state import (
+    CP_BY_GAME_SIZE,
+    PHASES,
+    PTS_LIMIT_BY_GAME_SIZE,
+    compute_roster_total_pts,
+    init_state,
+    list_available_rosters,
+)
 from gameObjects.rosz_importer import import_roster, parse_ros_bytes, parse_rosz_bytes
 
 _GAME_SIZES = list(CP_BY_GAME_SIZE.keys())
@@ -195,6 +202,20 @@ def render_setup_screen() -> None:
     same_roster = p1_roster == p2_roster
     if same_roster:
         st.warning("Player 1 and Player 2 cannot use the same roster.")
+
+    if game_mode == "matched":
+        pts_limit = PTS_LIMIT_BY_GAME_SIZE.get(game_size, 0)
+        p1_pts = compute_roster_total_pts(p1_roster)
+        p2_pts = compute_roster_total_pts(p2_roster)
+        over = []
+        if p1_pts > pts_limit:
+            over.append(f"P1: **{p1_pts}** pts")
+        if p2_pts > pts_limit:
+            over.append(f"P2: **{p2_pts}** pts")
+        if over:
+            st.warning(f"Points limit exceeded ({pts_limit} pts) — {' · '.join(over)}")
+        else:
+            st.caption(f"Roster points — P1: {p1_pts} · P2: {p2_pts} · Limit: {pts_limit} pts")
 
     st.divider()
 
