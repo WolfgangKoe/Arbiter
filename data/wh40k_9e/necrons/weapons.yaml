@@ -1194,3 +1194,197 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: true
+
+  # ── Forge World / Legends ─────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.night_shroud_bomb_bay
+    name_en: Night Shroud Bomb Bay
+    profiles:
+      - weapon_type: Assault
+        range_inches: 0
+        attacks: "2D6"
+        strength: "8"
+        ap: "-2"
+        damage: "2"
+        abilities: "One use only. Make this attack when performing a Bombing Run."
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.massive_forelimbs
+    name_en: Massive Forelimbs
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: "*"
+        strength: "User×2"
+        ap: "-3"
+        damage: "D3"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.thermic_cutting_beam
+    name_en: Thermic Cutting Beam
+    profiles:
+      - weapon_type: Assault
+        range_inches: 9
+        attacks: "D3"
+        strength: "8"
+        ap: "-4"
+        damage: "2"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.acanthritic_claws
+    name_en: Acanthritic Claws
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: "*"
+        strength: "User"
+        ap: "-2"
+        damage: "1"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.twin_particle_beamer
+    name_en: Twin Particle Beamer
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "D6"
+        strength: "9"
+        ap: "-4"
+        damage: "D6+1"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.exile_beam
+    name_en: Exile Beam
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "1"
+        strength: "8"
+        ap: "-4"
+        damage: "D6"
+        abilities: "If the target has fewer than 10 wounds remaining and is destroyed by this weapon, remove it from play (no death save, cannot be reanimated)."
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.scything_talons
+    name_en: Scything Talons
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: "*"
+        strength: "User"
+        ap: "-2"
+        damage: "2"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.gauss_annihilator
+    name_en: Gauss Annihilator
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 96
+        attacks: "1"
+        strength: "16"
+        ap: "-5"
+        damage: "D6+4"
+        abilities: "Blast (to the extent that this weapon's single shot counts as macro-weapon)."
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.gauss_extrapolator
+    name_en: Gauss Extrapolator
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 72
+        attacks: "3"
+        strength: "8"
+        ap: "-3"
+        damage: "3"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.sentry_gauss_cannon
+    name_en: Sentry Gauss Cannon
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 48
+        attacks: "3"
+        strength: "9"
+        ap: "-4"
+        damage: "3"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.massive_reaper_talons
+    name_en: Massive Reaper Talons
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: "*"
+        strength: "User×2"
+        ap: "-4"
+        damage: "D6+4"
+        abilities: ""
+        is_melee: true
+
+  - id: wh40k_9e.necrons.weapon.singularity_projector
+    name_en: Singularity Projector
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "D6"
+        strength: "8"
+        ap: "-3"
+        damage: "D6"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.loom_of_change
+    name_en: Loom of Change
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "D6+2"
+        strength: "6"
+        ap: "-2"
+        damage: "1"
+        abilities: "Tesla: Each unmodified To Hit roll of 6 generates 2 additional hits."
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.focused_death_ray
+    name_en: Focused Death Ray
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 24
+        attacks: "D3"
+        strength: "9"
+        ap: "-4"
+        damage: "D6+1"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.heavy_gauss_cannon_fw
+    name_en: Heavy Gauss Cannon
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "1"
+        strength: "10"
+        ap: "-4"
+        damage: "D6+3"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.twin_gauss_extrapolator
+    name_en: Twin Gauss Extrapolator
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 60
+        attacks: "4"
+        strength: "8"
+        ap: "-3"
+        damage: "2"
+        abilities: ""
+        is_melee: false

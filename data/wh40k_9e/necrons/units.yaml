@@ -1,5 +1,6 @@
 # Necron unit catalog — WH40k 9E
 # Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
+# FW units: Imperial Armour Compendium 9E, verified via Wahapedia 2026-06-03
 # Format: army_builder.md v1 (see docs/spec/army_builder.md)
 #
 # Stats: base codex values (no dynasty bonuses).
@@ -10,1536 +11,2357 @@
 # attacks: A-characteristic (base value, before modifiers).
 
 units:
-
-  # ── HQ ────────────────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.overlord
-    name_en: Overlord
-    name_de: Overlord
-    battlefield_role: [HQ]
-    keywords: [INFANTRY, CHARACTER, NOBLE, OVERLORD]
-    wounds: 5
-    models_min: 1
-    models_max: 1
-    power_level: 6
-    move: "6\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
+- id: wh40k_9e.necrons.unit.overlord
+  name_en: Overlord
+  name_de: Overlord
+  battlefield_role:
+  - HQ
+  keywords:
+  - INFANTRY
+  - CHARACTER
+  - NOBLE
+  - OVERLORD
+  wounds: 5
+  models_min: 1
+  models_max: 1
+  power_level: 6
+  move: 6"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - myWillBeDone
+  - phaseShifter
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.voidscythe
+  - type: replace
+    with: wh40k_9e.necrons.weapon.warscythe
+  - type: replace
+    with: wh40k_9e.necrons.weapon.hyperphase_glaive
+  - type: replace
+    with: wh40k_9e.necrons.weapon.voidblade
+  - type: add
+    item: wh40k_9e.necrons.wargear.resurrection_orb
+- id: wh40k_9e.necrons.unit.royal_warden
+  name_en: Royal Warden
+  name_de: Königlicher Wächter
+  battlefield_role:
+  - HQ
+  keywords:
+  - INFANTRY
+  - CHARACTER
+  - ROYAL WARDEN
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 4
+  move: 6"
+  ws: 3+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - relentlessMarch
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.relic_gauss_blaster
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+- id: wh40k_9e.necrons.unit.plasmancer
+  name_en: Plasmancer
+  name_de: Plasmancer
+  battlefield_role:
+  - HQ
+  keywords:
+  - INFANTRY
+  - CHARACTER
+  - FLY
+  - CRYPTEK
+  - PLASMANCER
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 4
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 1
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.plasmic_lance
+- id: wh40k_9e.necrons.unit.technomancer
+  name_en: Technomancer
+  name_de: Technomant
+  battlefield_role:
+  - HQ
+  keywords:
+  - INFANTRY
+  - CHARACTER
+  - CRYPTEK
+  - TECHNOMANCER
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 5
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 1
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - dynasticAdvisors
+  - ritesOfReanimation
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+- id: wh40k_9e.necrons.unit.warriors
+  name_en: Necron Warriors
+  name_de: Nekron-Krieger
+  battlefield_role:
+  - Troops
+  keywords:
+  - INFANTRY
+  - CORE
+  - NECRON WARRIORS
+  wounds: 1
+  models_min: 10
+  models_max: 20
+  power_level: 6
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 1
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - reanimationProtocols
+  - theirNumberIsLegion
+  - objectiveSecured
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_flayer
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.gauss_reaper
+- id: wh40k_9e.necrons.unit.immortals
+  name_en: Immortals
+  name_de: Unsterbliche
+  battlefield_role:
+  - Troops
+  keywords:
+  - INFANTRY
+  - CORE
+  - IMMORTALS
+  wounds: 1
+  models_min: 5
+  models_max: 10
+  power_level: 4
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 5
+  attacks: 2
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - reanimationProtocols
+  - objectiveSecured
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_blaster
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.tesla_carbine
+- id: wh40k_9e.necrons.unit.skorpekh_destroyers
+  name_en: Skorpekh Destroyers
+  name_de: Skorpekh-Vernichter
+  battlefield_role:
+  - Elites
+  keywords:
+  - INFANTRY
+  - CORE
+  - DESTROYER CULT
+  - SKORPEKH DESTROYERS
+  wounds: 3
+  models_min: 3
+  models_max: 6
+  power_level: 4
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - hardwiredForDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
+  - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
+- id: wh40k_9e.necrons.unit.lychguard
+  name_en: Lychguard
+  name_de: Gruftgardisten
+  battlefield_role:
+  - Elites
+  keywords:
+  - INFANTRY
+  - CORE
+  - LYCHGUARD
+  wounds: 2
+  models_min: 5
+  models_max: 10
+  power_level: 7
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - reanimationProtocols
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.warscythe
+  wargear_options:
+  - type: replace_pair
+    with:
+    - wh40k_9e.necrons.weapon.hyperphase_sword
+    - wh40k_9e.necrons.weapon.dispersion_shield
+- id: wh40k_9e.necrons.unit.deathmarks
+  name_en: Deathmarks
+  name_de: Todesmarkierer
+  battlefield_role:
+  - Elites
+  keywords:
+  - INFANTRY
+  - CORE
+  - HYPERSPACE HUNTER
+  - DEATHMARKS
+  wounds: 1
+  models_min: 5
+  models_max: 10
+  power_level: 4
+  move: 5"
+  ws: 3+
+  bs: 2+
+  strength: 4
+  toughness: 5
+  attacks: 1
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - reanimationProtocols
+  - hyperspaceHunter
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.synaptic_disintegrator
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+- id: wh40k_9e.necrons.unit.canoptek_scarabs
+  name_en: Canoptek Scarab Swarms
+  name_de: Canoptek-Skarabäus-Schwärme
+  battlefield_role:
+  - Fast Attack
+  keywords:
+  - SWARM
+  - FLY
+  - CANOPTEK
+  - CANOPTEK SCARAB SWARMS
+  wounds: 4
+  models_min: 3
+  models_max: 9
+  power_level: 2
+  move: 10"
+  ws: 4+
+  bs: '-'
+  strength: 3
+  toughness: 3
+  attacks: 4
+  save: 6
+  invuln_save: null
+  leadership: 10
+  oc: 0
+  fnp: null
+  rules:
+  - livingMetal
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.feeder_mandibles
+- id: wh40k_9e.necrons.unit.canoptek_wraiths
+  name_en: Canoptek Wraiths
+  name_de: Canoptek-Geister
+  battlefield_role:
+  - Fast Attack
+  keywords:
+  - BEAST
+  - CORE
+  - FLY
+  - CANOPTEK
+  - CANOPTEK WRAITHS
+  wounds: 3
+  models_min: 3
+  models_max: 6
+  power_level: 6
+  move: 12"
+  ws: 4+
+  bs: 4+
+  strength: 4
+  toughness: 5
+  attacks: 4
+  save: 4
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - wraith_form
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.vicious_claws
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.whip_coils
+  - type: add
+    item: wh40k_9e.necrons.weapon.particle_caster
+  - type: add
+    item: wh40k_9e.necrons.weapon.transdimensional_beamer
+- id: wh40k_9e.necrons.unit.canoptek_spyder
+  name_en: Canoptek Spyder
+  name_de: Canoptek-Spinne
+  battlefield_role:
+  - Elites
+  keywords:
+  - MONSTER
+  - CORE
+  - FLY
+  - CANOPTEK
+  - CANOPTEK SPYDERS
+  wounds: 6
+  models_min: 1
+  models_max: 3
+  power_level: 4
+  move: 6"
+  ws: 4+
+  bs: 4+
+  strength: 6
+  toughness: 6
+  attacks: 5
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 3
+  fnp: null
+  rules:
+  - livingMetal
+  - fabricatorClawArray
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.particle_beamer
+  - ref: wh40k_9e.necrons.weapon.automaton_claws
+  wargear_options:
+  - type: add
+    item: wh40k_9e.necrons.weapon.gloom_prism_upgrade
+- id: wh40k_9e.necrons.unit.triarch_stalker
+  name_en: Triarch Stalker
+  name_de: Triarch-Stalker
+  battlefield_role:
+  - Elites
+  keywords:
+  - VEHICLE
+  - CORE
+  - DYNASTIC AGENT
+  - QUANTUM SHIELDING
+  - TRIARCH
+  - TRIARCH STALKER
+  wounds: 12
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 10"
+  ws: 3+
+  bs: 3+
+  strength: 7
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 3
+  fnp: null
+  damage_bracket:
+  - wounds_min: 7
+    wounds_max: 12
+    move: 10"
+    ws: 3+
+    bs: 3+
+  - wounds_min: 4
+    wounds_max: 6
+    move: 8"
+    ws: 4+
+    bs: 4+
+  - wounds_min: 1
+    wounds_max: 3
+    move: 6"
+    ws: 5+
+    bs: 5+
+  rules:
+  - livingMetal
+  - targetingRelay
+  - quantumShielding
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.heat_ray
+  - ref: wh40k_9e.necrons.weapon.stalkers_forelimbs
+  wargear_options:
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.heat_ray
+    with: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.heat_ray
+    with: wh40k_9e.necrons.weapon.particle_shredder
+- id: wh40k_9e.necrons.unit.annihilation_barge
+  name_en: Annihilation Barge
+  name_de: Vernichtungsbarke
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - VEHICLE
+  - CORE
+  - QUANTUM SHIELDING
+  - FLY
+  - ANNIHILATION BARGE
+  wounds: 8
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 12"
+  ws: 6+
+  bs: 3+
+  strength: 5
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 3
+  fnp: null
+  rules:
+  - livingMetal
+  - quantumShielding
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_cannon
+  - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
+- id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
+  name_en: Lokhust Heavy Destroyers
+  name_de: Lokhust-Schwere-Vernichter
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - INFANTRY
+  - CORE
+  - FLY
+  - DESTROYER CULT
+  - LOKHUST HEAVY DESTROYERS
+  wounds: 4
+  models_min: 1
+  models_max: 3
+  power_level: 3
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 5
+  attacks: 2
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - hardwiredForDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_destructor
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.enmitic_exterminator
+- id: wh40k_9e.necrons.unit.necron_lord
+  name_en: Necron Lord
+  name_de: Nekron-Lord
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - NOBLE
+  - LORD
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 5
+  move: 6"
+  ws: 3+
+  bs: 3+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - theLordsWill
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.hyperphase_sword
+  - type: replace
+    with: wh40k_9e.necrons.weapon.voidblade
+  - type: replace
+    with: wh40k_9e.necrons.weapon.warscythe
+- id: wh40k_9e.necrons.unit.lokhust_lord
+  name_en: Lokhust Lord
+  name_de: Lokhust-Lord
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - DESTROYER CULT
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - FLY
+  - LOKHUST LORD
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 6
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 5
+  toughness: 6
+  attacks: 4
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - hardwiredForDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.hyperphase_sword
+  - type: replace
+    with: wh40k_9e.necrons.weapon.voidblade
+  - type: replace
+    with: wh40k_9e.necrons.weapon.warscythe
+- id: wh40k_9e.necrons.unit.skorpekh_lord
+  name_en: Skorpekh Lord
+  name_de: Skorpekh-Lord
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - DESTROYER CULT
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - SKORPEKH LORD
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 6
+  toughness: 6
+  attacks: 4
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - unitedInDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.enmitic_annihilator
+  - ref: wh40k_9e.necrons.weapon.flensing_claw
+  - ref: wh40k_9e.necrons.weapon.hyperphase_harvester
+- id: wh40k_9e.necrons.unit.catacomb_command_barge
+  name_en: Catacomb Command Barge
+  name_de: Katakomb-Befehlsbarke
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CHARACTER
+  - QUANTUM SHIELDING
+  - NOBLE
+  - OVERLORD
+  - FLY
+  - CATACOMB COMMAND BARGE
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 9
+  move: 12"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 6
+  attacks: 4
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - myWillBeDone
+  - quantumShielding
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_cannon
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.tesla_cannon
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.staff_of_light
+    with: wh40k_9e.necrons.weapon.hyperphase_sword
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.staff_of_light
+    with: wh40k_9e.necrons.weapon.voidblade
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.staff_of_light
+    with: wh40k_9e.necrons.weapon.warscythe
+- id: wh40k_9e.necrons.unit.psychomancer
+  name_en: Psychomancer
+  name_de: Psychomant
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - FLY
+  - CRYPTEK
+  - PSYCHOMANCER
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 4
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 1
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - dynasticAdvisors
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.abyssal_lance
+- id: wh40k_9e.necrons.unit.chronomancer
+  name_en: Chronomancer
+  name_de: Chronomant
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - FLY
+  - CRYPTEK
+  - CHRONOMANCER
+  wounds: 4
+  models_min: 1
+  models_max: 1
+  power_level: 5
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 1
+  save: 4
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - dynasticAdvisors
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.aeonstave
+  - ref: wh40k_9e.necrons.weapon.chronotendrils
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.entropic_lance
+- id: wh40k_9e.necrons.unit.illuminor_szeras
+  name_en: Illuminor Szeras
+  name_de: Illuminor Szeras
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - INFANTRY
+  - CHARACTER
+  - DYNASTIC AGENT
+  - CRYPTEK
+  - TECHNOMANCER
+  - ILLUMINOR SZERAS
+  wounds: 7
+  models_min: 1
+  models_max: 1
+  power_level: 8
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 6
+  toughness: 6
+  attacks: 4
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - ritesOfReanimation
+  - enduringWill
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.eldritch_lance
+  - ref: wh40k_9e.necrons.weapon.impaling_legs
+- id: wh40k_9e.necrons.unit.orikan_the_diviner
+  name_en: Orikan the Diviner
+  name_de: Orikan der Wahrsager
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - INFANTRY
+  - CHARACTER
+  - CHRONOMANCER
+  - DYNASTIC AGENT
+  - CRYPTEK
+  - ORIKAN DIVINER
+  wounds: 5
+  models_min: 1
+  models_max: 1
+  power_level: 6
+  move: 5"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 2
+  save: 4
+  invuln_save: 5
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - masterChronomancer
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_tomorrow
+- id: wh40k_9e.necrons.unit.trazyn_the_infinite
+  name_en: Trazyn the Infinite
+  name_de: Trazyn der Unendliche
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - INFANTRY
+  - CHARACTER
+  - OVERLORD
+  - NOBLE
+  - DYNASTIC AGENT
+  - TRAZYN INFINITE
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 5
+  move: 6"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - phaseShifter
+  - myWillBeDone
+  - enduringWill
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.empathic_obliterator
+- id: wh40k_9e.necrons.unit.nemesor_zahndrekh
+  name_en: Nemesor Zahndrekh
+  name_de: Nemesor Zahndrekh
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - SAUTEKH
+  - INFANTRY
+  - CHARACTER
+  - OVERLORD
+  - NOBLE
+  - NEMESOR ZAHNDREKH
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 6"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 2
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - myWillBeDone
+  - eternalMadness
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.staff_of_light
+- id: wh40k_9e.necrons.unit.vargard_obyron
+  name_en: Vargard Obyron
+  name_de: Vargard Obyron
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - SAUTEKH
+  - INFANTRY
+  - CHARACTER
+  - LORD
+  - NOBLE
+  - VARGARD OBYRON
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 5
+  move: 6"
+  ws: 2+
+  bs: 3+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 2
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - dimensionalTranslocation
+  - cleavingCounterblow
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.warscythe
+- id: wh40k_9e.necrons.unit.anrakyr_the_traveller
+  name_en: Anrakyr the Traveller
+  name_de: Anrakyr der Reisende
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - INFANTRY
+  - CHARACTER
+  - NOBLE
+  - DYNASTIC AGENT
+  - OVERLORD
+  - ANRAKYR TRAVELLER
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 6"
+  ws: 2+
+  bs: 2+
+  strength: 6
+  toughness: 5
+  attacks: 4
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - myWillBeDone
+  - phaseShifter
+  - implacableConqueror
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.tachyon_arrow
+  - ref: wh40k_9e.necrons.weapon.warscythe
+- id: wh40k_9e.necrons.unit.imotekh_the_stormlord
+  name_en: Imotekh the Stormlord
+  name_de: Imotekh der Sturmherr
+  battlefield_role:
+  - HQ
+  keywords:
+  - NECRONS
+  - SAUTEKH
+  - INFANTRY
+  - CHARACTER
+  - PHAERON
+  - OVERLORD
+  - NOBLE
+  - IMOTEKH STORMLORD
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 8
+  move: 6"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 2
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - myWillBeDone
+  - hyperlogicalStrategist
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauntlet_of_fire
+  - ref: wh40k_9e.necrons.weapon.staff_of_the_destroyer
+- id: wh40k_9e.necrons.unit.the_silent_king
+  name_en: The Silent King
+  name_de: Der Stille König
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - SZAREKHAN
+  - VEHICLE
+  - CHARACTER
+  - TITANIC
+  - FLY
+  - SUPREME COMMANDER
+  - PHAERON
+  - NOBLE
+  - DYNASTIC AGENT
+  - THE SILENT KING
+  - TRIARCHAL MENHIRS
+  wounds: 16
+  models_min: 1
+  models_max: 1
+  power_level: 21
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 5
+  toughness: 7
+  attacks: 6
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 9
+    wounds_max: 16
+    move: 8"
+    attacks: 6
+  - wounds_min: 5
+    wounds_max: 8
+    move: 6"
     attacks: 4
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, myWillBeDone, phaseShifter]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.voidscythe
-      - type: replace
-        with: wh40k_9e.necrons.weapon.warscythe
-      - type: replace
-        with: wh40k_9e.necrons.weapon.hyperphase_glaive
-      - type: replace
-        with: wh40k_9e.necrons.weapon.voidblade
-      - type: add
-        item: wh40k_9e.necrons.wargear.resurrection_orb
-
-  - id: wh40k_9e.necrons.unit.royal_warden
-    name_en: Royal Warden
-    name_de: Königlicher Wächter
-    battlefield_role: [HQ]
-    keywords: [INFANTRY, CHARACTER, ROYAL WARDEN]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 4
-    move: "6\""
-    ws: "3+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, relentlessMarch]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.relic_gauss_blaster
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-
-  - id: wh40k_9e.necrons.unit.plasmancer
-    name_en: Plasmancer
-    name_de: Plasmancer
-    battlefield_role: [HQ]
-    keywords: [INFANTRY, CHARACTER, FLY, CRYPTEK, PLASMANCER]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 4
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
-    attacks: 1
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.plasmic_lance
-
-  - id: wh40k_9e.necrons.unit.technomancer
-    name_en: Technomancer
-    name_de: Technomant
-    battlefield_role: [HQ]
-    keywords: [INFANTRY, CHARACTER, CRYPTEK, TECHNOMANCER]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 5
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
-    attacks: 1
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, dynasticAdvisors, ritesOfReanimation]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-
-  # ── Troops ────────────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.warriors
-    name_en: Necron Warriors
-    name_de: Nekron-Krieger
-    battlefield_role: [Troops]
-    keywords: [INFANTRY, CORE, NECRON WARRIORS]
-    wounds: 1
-    models_min: 10
-    models_max: 20
-    power_level: 6
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
-    attacks: 1
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [reanimationProtocols, theirNumberIsLegion, objectiveSecured]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_flayer
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.gauss_reaper
-
-  - id: wh40k_9e.necrons.unit.immortals
-    name_en: Immortals
-    name_de: Unsterbliche
-    battlefield_role: [Troops]
-    keywords: [INFANTRY, CORE, IMMORTALS]
-    wounds: 1
-    models_min: 5
-    models_max: 10
-    power_level: 4
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 5
+  - wounds_min: 1
+    wounds_max: 4
+    move: 4"
     attacks: 2
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [reanimationProtocols, objectiveSecured]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_blaster
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.tesla_carbine
-
-  # ── Elites ────────────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.skorpekh_destroyers
-    name_en: Skorpekh Destroyers
-    name_de: Skorpekh-Vernichter
-    battlefield_role: [Elites]
-    keywords: [INFANTRY, CORE, DESTROYER CULT, SKORPEKH DESTROYERS]
-    wounds: 3
-    models_min: 3
-    models_max: 6
-    power_level: 4
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 5
-    toughness: 5
+  rules:
+  - livingMetal
+  - noctilithBeacons
+  - triarchsWill
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.annihilator_beam
+  - ref: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
+  - ref: wh40k_9e.necrons.weapon.staff_of_stars
+  - ref: wh40k_9e.necrons.weapon.scythe_of_dust
+- id: wh40k_9e.necrons.unit.triarch_praetorians
+  name_en: Triarch Praetorians
+  name_de: Triarch-Prätorianer
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - INFANTRY
+  - CORE
+  - FLY
+  - DYNASTIC AGENT
+  - TRIARCH
+  - TRIARCH PRAETORIANS
+  wounds: 2
+  models_min: 5
+  models_max: 10
+  power_level: 6
+  move: 10"
+  ws: 3+
+  bs: 3+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.rod_of_covenant
+  wargear_options:
+  - type: replace_pair
+    with:
+    - wh40k_9e.necrons.weapon.particle_caster
+    - wh40k_9e.necrons.weapon.voidblade
+- id: wh40k_9e.necrons.unit.flayed_ones
+  name_en: Flayed Ones
+  name_de: Gehäutete
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CORE
+  - FLAYED ONES
+  wounds: 1
+  models_min: 5
+  models_max: 20
+  power_level: 2
+  move: 5"
+  ws: 3+
+  bs: 6+
+  strength: 4
+  toughness: 4
+  attacks: 3
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - reanimationProtocols
+  - dimensionalTranslocation
+  - fleshHunger
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.flayer_claws
+- id: wh40k_9e.necrons.unit.canoptek_reanimator
+  name_en: Canoptek Reanimator
+  name_de: Canoptek-Reanimator
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - CANOPTEK
+  - <DYNASTY>
+  - MONSTER
+  - CORE
+  - CANOPTEK REANIMATOR
+  wounds: 6
+  models_min: 1
+  models_max: 1
+  power_level: 4
+  move: 8"
+  ws: 4+
+  bs: 4+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 3
+  fnp: null
+  rules:
+  - livingMetal
+  - nanoscarabReanimationBeam
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.atomiser_beam
+  - ref: wh40k_9e.necrons.weapon.reanimators_claws
+- id: wh40k_9e.necrons.unit.cryptothralls
+  name_en: Cryptothralls
+  name_de: Kryptosklaven
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - CANOPTEK
+  - <DYNASTY>
+  - INFANTRY
+  - CRYPTOTHRALLS
+  wounds: 2
+  models_min: 2
+  models_max: 2
+  power_level: 2
+  move: 5"
+  ws: 4+
+  bs: 4+
+  strength: 5
+  toughness: 5
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - boundCreation
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.scouring_eye
+  - ref: wh40k_9e.necrons.weapon.scythed_limbs
+- id: wh40k_9e.necrons.unit.tomb_blades
+  name_en: Tomb Blades
+  name_de: Gruft-Klingen
+  battlefield_role:
+  - Fast Attack
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - BIKER
+  - FLY
+  - CORE
+  - TOMB BLADES
+  wounds: 2
+  models_min: 3
+  models_max: 9
+  power_level: 4
+  move: 14"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 5
+  attacks: 1
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - evasionEngrams
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.twin_gauss_blaster
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.particle_beamer
+  - type: replace
+    with: wh40k_9e.necrons.weapon.twin_tesla_carbine
+- id: wh40k_9e.necrons.unit.ophydian_destroyers
+  name_en: Ophydian Destroyers
+  name_de: Ophydian-Vernichter
+  battlefield_role:
+  - Fast Attack
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CORE
+  - DESTROYER CULT
+  - OPHYDIAN DESTROYERS
+  wounds: 3
+  models_min: 3
+  models_max: 6
+  power_level: 4
+  move: 10"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 4
+  attacks: 3
+  save: 4
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - hardwiredForDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
+  - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
+  - ref: wh40k_9e.necrons.weapon.ophydian_claws
+- id: wh40k_9e.necrons.unit.lokhust_destroyers
+  name_en: Lokhust Destroyers
+  name_de: Lokhust-Vernichter
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CORE
+  - FLY
+  - DESTROYER CULT
+  - LOKHUST DESTROYERS
+  wounds: 3
+  models_min: 3
+  models_max: 9
+  power_level: 6
+  move: 8"
+  ws: 3+
+  bs: 3+
+  strength: 4
+  toughness: 5
+  attacks: 2
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 2
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - hardwiredForDestruction
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_cannon
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.enmitic_exterminator
+- id: wh40k_9e.necrons.unit.canoptek_doomstalker
+  name_en: Canoptek Doomstalker
+  name_de: Canoptek-Düsterjäger
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - MONSTER
+  - CANOPTEK
+  - CANOPTEK DOOMSTALKER
+  wounds: 12
+  models_min: 1
+  models_max: 3
+  power_level: 7
+  move: 10"
+  ws: 4+
+  bs: 4+
+  strength: 6
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 3
+  fnp: null
+  damage_bracket:
+  - wounds_min: 7
+    wounds_max: 12
+    move: 10"
+    ws: 4+
     attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
-      - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
-
-  - id: wh40k_9e.necrons.unit.lychguard
-    name_en: Lychguard
-    name_de: Gruftgardisten
-    battlefield_role: [Elites]
-    keywords: [INFANTRY, CORE, LYCHGUARD]
-    wounds: 2
-    models_min: 5
-    models_max: 10
-    power_level: 7
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 5
-    toughness: 5
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [reanimationProtocols]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.warscythe
-    wargear_options:
-      - type: replace_pair
-        with:
-          - wh40k_9e.necrons.weapon.hyperphase_sword
-          - wh40k_9e.necrons.weapon.dispersion_shield
-
-  - id: wh40k_9e.necrons.unit.deathmarks
-    name_en: Deathmarks
-    name_de: Todesmarkierer
-    battlefield_role: [Elites]
-    keywords: [INFANTRY, CORE, HYPERSPACE HUNTER, DEATHMARKS]
-    wounds: 1
-    models_min: 5
-    models_max: 10
-    power_level: 4
-    move: "5\""
-    ws: "3+"
-    bs: "2+"
-    strength: 4
-    toughness: 5
-    attacks: 1
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [reanimationProtocols, hyperspaceHunter]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.synaptic_disintegrator
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-
-  # ── Fast Attack ───────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.canoptek_scarabs
-    name_en: Canoptek Scarab Swarms
-    name_de: Canoptek-Skarabäus-Schwärme
-    battlefield_role: [Fast Attack]
-    keywords: [SWARM, FLY, CANOPTEK, CANOPTEK SCARAB SWARMS]
-    wounds: 4
-    models_min: 3
-    models_max: 9
-    power_level: 2
-    move: "10\""
-    ws: "4+"
-    bs: "-"
-    strength: 3
-    toughness: 3
-    attacks: 4
-    save: 6
-    invuln_save: null
-    leadership: 10
-    oc: 0
-    fnp: null
-    rules: [livingMetal]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.feeder_mandibles
-
-  - id: wh40k_9e.necrons.unit.canoptek_wraiths
-    name_en: Canoptek Wraiths
-    name_de: Canoptek-Geister
-    battlefield_role: [Fast Attack]
-    keywords: [BEAST, CORE, FLY, CANOPTEK, CANOPTEK WRAITHS]
-    wounds: 3
-    models_min: 3
-    models_max: 6
-    power_level: 6
-    move: "12\""
-    ws: "4+"
-    bs: "4+"
-    strength: 4
-    toughness: 5
-    attacks: 4
-    save: 4
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, wraith_form]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.vicious_claws
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.whip_coils
-      - type: add
-        item: wh40k_9e.necrons.weapon.particle_caster
-      - type: add
-        item: wh40k_9e.necrons.weapon.transdimensional_beamer
-
-  # ── Elites (continued) ────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.canoptek_spyder
-    name_en: Canoptek Spyder
-    name_de: Canoptek-Spinne
-    battlefield_role: [Elites]
-    keywords: [MONSTER, CORE, FLY, CANOPTEK, CANOPTEK SPYDERS]
-    wounds: 6
-    models_min: 1
-    models_max: 3
-    power_level: 4
-    move: "6\""
-    ws: "4+"
-    bs: "4+"
-    strength: 6
-    toughness: 6
-    attacks: 5
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 3
-    fnp: null
-    rules: [livingMetal, fabricatorClawArray]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.particle_beamer
-      - ref: wh40k_9e.necrons.weapon.automaton_claws
-    wargear_options:
-      - type: add
-        item: wh40k_9e.necrons.weapon.gloom_prism_upgrade
-
-  # ── Heavy Support ─────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.triarch_stalker
-    name_en: Triarch Stalker
-    name_de: Triarch-Stalker
-    battlefield_role: [Elites]
-    keywords: [VEHICLE, CORE, DYNASTIC AGENT, QUANTUM SHIELDING, TRIARCH, TRIARCH STALKER]
-    wounds: 12
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "10\""
-    ws: "3+"
-    bs: "3+"
-    strength: 7
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: 5
-    leadership: 10
-    oc: 3
-    fnp: null
-    damage_bracket:
-      - wounds_min: 7
-        wounds_max: 12
-        move: "10\""
-        ws: "3+"
-        bs: "3+"
-      - wounds_min: 4
-        wounds_max: 6
-        move: "8\""
-        ws: "4+"
-        bs: "4+"
-      - wounds_min: 1
-        wounds_max: 3
-        move: "6\""
-        ws: "5+"
-        bs: "5+"
-    rules: [livingMetal, targetingRelay, quantumShielding]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.heat_ray
-      - ref: wh40k_9e.necrons.weapon.stalkers_forelimbs
-    wargear_options:
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.heat_ray
-        with: wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.heat_ray
-        with: wh40k_9e.necrons.weapon.particle_shredder
-
-  - id: wh40k_9e.necrons.unit.annihilation_barge
-    name_en: Annihilation Barge
-    name_de: Vernichtungsbarke
-    battlefield_role: [Heavy Support]
-    keywords: [VEHICLE, CORE, QUANTUM SHIELDING, FLY, ANNIHILATION BARGE]
-    wounds: 8
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "12\""
-    ws: "6+"
-    bs: "3+"
-    strength: 5
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: 5
-    leadership: 10
-    oc: 3
-    fnp: null
-    rules: [livingMetal, quantumShielding]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_cannon
-      - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
-
-  - id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
-    name_en: Lokhust Heavy Destroyers
-    name_de: Lokhust-Schwere-Vernichter
-    battlefield_role: [Heavy Support]
-    keywords: [INFANTRY, CORE, FLY, DESTROYER CULT, LOKHUST HEAVY DESTROYERS]
-    wounds: 4
-    models_min: 1
-    models_max: 3
-    power_level: 3
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 5
+  - wounds_min: 4
+    wounds_max: 6
+    move: 8"
+    ws: 5+
     attacks: 2
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_destructor
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.enmitic_exterminator
-
-  # ── HQ (new) ──────────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.necron_lord
-    name_en: Necron Lord
-    name_de: Nekron-Lord
-    battlefield_role: [HQ]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CHARACTER, NOBLE, LORD]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 5
-    move: "6\""
-    ws: "3+"
-    bs: "3+"
-    strength: 5
-    toughness: 5
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, theLordsWill]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - type: replace
-        with: wh40k_9e.necrons.weapon.voidblade
-      - type: replace
-        with: wh40k_9e.necrons.weapon.warscythe
-
-  - id: wh40k_9e.necrons.unit.lokhust_lord
-    name_en: Lokhust Lord
-    name_de: Lokhust-Lord
-    battlefield_role: [HQ]
-    keywords: [NECRONS, DESTROYER CULT, "<DYNASTY>", INFANTRY, CHARACTER, FLY, LOKHUST LORD]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 6
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 5
-    toughness: 6
-    attacks: 4
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, hardwiredForDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - type: replace
-        with: wh40k_9e.necrons.weapon.voidblade
-      - type: replace
-        with: wh40k_9e.necrons.weapon.warscythe
-
-  - id: wh40k_9e.necrons.unit.skorpekh_lord
-    name_en: Skorpekh Lord
-    name_de: Skorpekh-Lord
-    battlefield_role: [HQ]
-    keywords: [NECRONS, DESTROYER CULT, "<DYNASTY>", INFANTRY, CHARACTER, SKORPEKH LORD]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 6
-    toughness: 6
-    attacks: 4
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, unitedInDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.enmitic_annihilator
-      - ref: wh40k_9e.necrons.weapon.flensing_claw
-      - ref: wh40k_9e.necrons.weapon.hyperphase_harvester
-
-  - id: wh40k_9e.necrons.unit.catacomb_command_barge
-    name_en: Catacomb Command Barge
-    name_de: Katakomb-Befehlsbarke
-    battlefield_role: [HQ]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CHARACTER, QUANTUM SHIELDING, NOBLE, OVERLORD, FLY, CATACOMB COMMAND BARGE]
-    wounds: 9
-    models_min: 1
-    models_max: 1
-    power_level: 9
-    move: "12\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 6
-    attacks: 4
-    save: 3
-    invuln_save: 5
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, myWillBeDone, quantumShielding]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_cannon
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.tesla_cannon
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.staff_of_light
-        with: wh40k_9e.necrons.weapon.hyperphase_sword
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.staff_of_light
-        with: wh40k_9e.necrons.weapon.voidblade
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.staff_of_light
-        with: wh40k_9e.necrons.weapon.warscythe
-
-  - id: wh40k_9e.necrons.unit.psychomancer
-    name_en: Psychomancer
-    name_de: Psychomant
-    battlefield_role: [HQ]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CHARACTER, FLY, CRYPTEK, PSYCHOMANCER]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 4
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
+  - wounds_min: 1
+    wounds_max: 3
+    move: 6"
+    ws: 6+
     attacks: 1
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, dynasticAdvisors]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.abyssal_lance
-
-  - id: wh40k_9e.necrons.unit.chronomancer
-    name_en: Chronomancer
-    name_de: Chronomant
-    battlefield_role: [HQ]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CHARACTER, FLY, CRYPTEK, CHRONOMANCER]
-    wounds: 4
-    models_min: 1
-    models_max: 1
-    power_level: 5
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
+  rules:
+  - livingMetal
+  - containmentField
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.doomsday_blaster
+  - ref: wh40k_9e.necrons.weapon.twin_gauss_flayer
+- id: wh40k_9e.necrons.unit.doomsday_ark
+  name_en: Doomsday Ark
+  name_de: Jüngste-Gericht-Arche
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - QUANTUM SHIELDING
+  - FLY
+  - DOOMSDAY ARK
+  wounds: 14
+  models_min: 1
+  models_max: 1
+  power_level: 8
+  move: 12"
+  ws: 6+
+  bs: 3+
+  strength: 6
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 3
+  fnp: null
+  damage_bracket:
+  - wounds_min: 8
+    wounds_max: 14
+    move: 12"
+    bs: 3+
+    attacks: 3
+  - wounds_min: 4
+    wounds_max: 7
+    move: 8"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 3
+    move: 4"
+    bs: 5+
     attacks: 1
-    save: 4
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, dynasticAdvisors]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.aeonstave
-      - ref: wh40k_9e.necrons.weapon.chronotendrils
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.entropic_lance
-
-  - id: wh40k_9e.necrons.unit.illuminor_szeras
-    name_en: Illuminor Szeras
-    name_de: Illuminor Szeras
-    battlefield_role: [HQ]
-    keywords: [NECRONS, INFANTRY, CHARACTER, DYNASTIC AGENT, CRYPTEK, TECHNOMANCER, ILLUMINOR SZERAS]
-    wounds: 7
-    models_min: 1
-    models_max: 1
-    power_level: 8
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 6
-    toughness: 6
-    attacks: 4
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, ritesOfReanimation, enduringWill]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.eldritch_lance
-      - ref: wh40k_9e.necrons.weapon.impaling_legs
-
-  - id: wh40k_9e.necrons.unit.orikan_the_diviner
-    name_en: Orikan the Diviner
-    name_de: Orikan der Wahrsager
-    battlefield_role: [HQ]
-    keywords: [NECRONS, INFANTRY, CHARACTER, CHRONOMANCER, DYNASTIC AGENT, CRYPTEK, ORIKAN DIVINER]
-    wounds: 5
-    models_min: 1
-    models_max: 1
-    power_level: 6
-    move: "5\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
-    attacks: 2
-    save: 4
-    invuln_save: 5
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, masterChronomancer]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_tomorrow
-
-  - id: wh40k_9e.necrons.unit.trazyn_the_infinite
-    name_en: Trazyn the Infinite
-    name_de: Trazyn der Unendliche
-    battlefield_role: [HQ]
-    keywords: [NECRONS, INFANTRY, CHARACTER, OVERLORD, NOBLE, DYNASTIC AGENT, TRAZYN INFINITE]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 5
-    move: "6\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, phaseShifter, myWillBeDone, enduringWill]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.empathic_obliterator
-
-  - id: wh40k_9e.necrons.unit.nemesor_zahndrekh
-    name_en: Nemesor Zahndrekh
-    name_de: Nemesor Zahndrekh
-    battlefield_role: [HQ]
-    keywords: [NECRONS, SAUTEKH, INFANTRY, CHARACTER, OVERLORD, NOBLE, NEMESOR ZAHNDREKH]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "6\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 2
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, myWillBeDone, eternalMadness]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.staff_of_light
-
-  - id: wh40k_9e.necrons.unit.vargard_obyron
-    name_en: Vargard Obyron
-    name_de: Vargard Obyron
-    battlefield_role: [HQ]
-    keywords: [NECRONS, SAUTEKH, INFANTRY, CHARACTER, LORD, NOBLE, VARGARD OBYRON]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 5
-    move: "6\""
-    ws: "2+"
-    bs: "3+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 2
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, dimensionalTranslocation, cleavingCounterblow]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.warscythe
-
-  - id: wh40k_9e.necrons.unit.anrakyr_the_traveller
-    name_en: Anrakyr the Traveller
-    name_de: Anrakyr der Reisende
-    battlefield_role: [HQ]
-    keywords: [NECRONS, INFANTRY, CHARACTER, NOBLE, DYNASTIC AGENT, OVERLORD, ANRAKYR TRAVELLER]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "6\""
-    ws: "2+"
-    bs: "2+"
-    strength: 6
-    toughness: 5
-    attacks: 4
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, myWillBeDone, phaseShifter, implacableConqueror]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.tachyon_arrow
-      - ref: wh40k_9e.necrons.weapon.warscythe
-
-  - id: wh40k_9e.necrons.unit.imotekh_the_stormlord
-    name_en: Imotekh the Stormlord
-    name_de: Imotekh der Sturmherr
-    battlefield_role: [HQ]
-    keywords: [NECRONS, SAUTEKH, INFANTRY, CHARACTER, PHAERON, OVERLORD, NOBLE, IMOTEKH STORMLORD]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 8
-    move: "6\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 2
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, myWillBeDone, hyperlogicalStrategist]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauntlet_of_fire
-      - ref: wh40k_9e.necrons.weapon.staff_of_the_destroyer
-
-  - id: wh40k_9e.necrons.unit.the_silent_king
-    name_en: The Silent King
-    name_de: Der Stille König
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, SZAREKHAN, VEHICLE, CHARACTER, TITANIC, FLY, SUPREME COMMANDER, PHAERON, NOBLE, DYNASTIC AGENT, THE SILENT KING, TRIARCHAL MENHIRS]
-    wounds: 16
-    models_min: 1
-    models_max: 1
-    power_level: 21
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 5
-    toughness: 7
-    attacks: 6
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 5
-    fnp: null
-    damage_bracket:
-      - wounds_min: 9
-        wounds_max: 16
-        move: "8\""
-        attacks: 6
-      - wounds_min: 5
-        wounds_max: 8
-        move: "6\""
-        attacks: 4
-      - wounds_min: 1
-        wounds_max: 4
-        move: "4\""
-        attacks: 2
-    rules: [livingMetal, noctilithBeacons, triarchsWill]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.annihilator_beam
-      - ref: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
-      - ref: wh40k_9e.necrons.weapon.staff_of_stars
-      - ref: wh40k_9e.necrons.weapon.scythe_of_dust
-
-  # ── Elites (new) ──────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.triarch_praetorians
-    name_en: Triarch Praetorians
-    name_de: Triarch-Prätorianer
-    battlefield_role: [Elites]
-    keywords: [NECRONS, INFANTRY, CORE, FLY, DYNASTIC AGENT, TRIARCH, TRIARCH PRAETORIANS]
-    wounds: 2
-    models_min: 5
-    models_max: 10
-    power_level: 6
-    move: "10\""
-    ws: "3+"
-    bs: "3+"
-    strength: 5
-    toughness: 5
+  rules:
+  - livingMetal
+  - quantumShielding
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.doomsday_cannon
+  - ref: wh40k_9e.necrons.weapon.gauss_flayer_array
+- id: wh40k_9e.necrons.unit.ghost_ark
+  name_en: Ghost Ark
+  name_de: Geisterarche
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - QUANTUM SHIELDING
+  - TRANSPORT
+  - FLY
+  - GHOST ARK
+  wounds: 14
+  models_min: 1
+  models_max: 1
+  power_level: 8
+  move: 12"
+  ws: 6+
+  bs: 3+
+  strength: 6
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 3
+  fnp: null
+  transport_capacity: 10
+  damage_bracket:
+  - wounds_min: 8
+    wounds_max: 14
+    move: 12"
+    bs: 3+
     attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [livingMetal, reanimationProtocols]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.rod_of_covenant
-    wargear_options:
-      - type: replace_pair
-        with:
-          - wh40k_9e.necrons.weapon.particle_caster
-          - wh40k_9e.necrons.weapon.voidblade
-
-  - id: wh40k_9e.necrons.unit.flayed_ones
-    name_en: Flayed Ones
-    name_de: Gehäutete
-    battlefield_role: [Elites]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CORE, FLAYED ONES]
-    wounds: 1
-    models_min: 5
-    models_max: 20
-    power_level: 2
-    move: "5\""
-    ws: "3+"
-    bs: "6+"
-    strength: 4
-    toughness: 4
-    attacks: 3
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [reanimationProtocols, dimensionalTranslocation, fleshHunger]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.flayer_claws
-
-  - id: wh40k_9e.necrons.unit.canoptek_reanimator
-    name_en: Canoptek Reanimator
-    name_de: Canoptek-Reanimator
-    battlefield_role: [Elites]
-    keywords: [NECRONS, CANOPTEK, "<DYNASTY>", MONSTER, CORE, CANOPTEK REANIMATOR]
-    wounds: 6
-    models_min: 1
-    models_max: 1
-    power_level: 4
-    move: "8\""
-    ws: "4+"
-    bs: "4+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 3
-    fnp: null
-    rules: [livingMetal, nanoscarabReanimationBeam]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.atomiser_beam
-      - ref: wh40k_9e.necrons.weapon.reanimators_claws
-
-  - id: wh40k_9e.necrons.unit.cryptothralls
-    name_en: Cryptothralls
-    name_de: Kryptosklaven
-    battlefield_role: [Elites]
-    keywords: [NECRONS, CANOPTEK, "<DYNASTY>", INFANTRY, CRYPTOTHRALLS]
-    wounds: 2
-    models_min: 2
-    models_max: 2
-    power_level: 2
-    move: "5\""
-    ws: "4+"
-    bs: "4+"
-    strength: 5
-    toughness: 5
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, boundCreation]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.scouring_eye
-      - ref: wh40k_9e.necrons.weapon.scythed_limbs
-
-  # ── Fast Attack (new) ─────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.tomb_blades
-    name_en: Tomb Blades
-    name_de: Gruft-Klingen
-    battlefield_role: [Fast Attack]
-    keywords: [NECRONS, "<DYNASTY>", BIKER, FLY, CORE, TOMB BLADES]
-    wounds: 2
-    models_min: 3
-    models_max: 9
-    power_level: 4
-    move: "14\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 5
+  - wounds_min: 4
+    wounds_max: 7
+    move: 8"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 3
+    move: 4"
+    bs: 5+
     attacks: 1
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, evasionEngrams]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.twin_gauss_blaster
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.particle_beamer
-      - type: replace
-        with: wh40k_9e.necrons.weapon.twin_tesla_carbine
-
-  - id: wh40k_9e.necrons.unit.ophydian_destroyers
-    name_en: Ophydian Destroyers
-    name_de: Ophydian-Vernichter
-    battlefield_role: [Fast Attack]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CORE, DESTROYER CULT, OPHYDIAN DESTROYERS]
-    wounds: 3
-    models_min: 3
-    models_max: 6
-    power_level: 4
-    move: "10\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 4
+  rules:
+  - livingMetal
+  - quantumShielding
+  - repairBarge
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_flayer_array
+- id: wh40k_9e.necrons.unit.night_scythe
+  name_en: Night Scythe
+  name_de: Nachtsense
+  battlefield_role:
+  - Flyer
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - AIRCRAFT
+  - FLY
+  - TRANSPORT
+  - NIGHT SCYTHE
+  wounds: 12
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 20"
+  ws: 6+
+  bs: 3+
+  strength: 6
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 3
+  fnp: null
+  transport_capacity: 20
+  damage_bracket:
+  - wounds_min: 7
+    wounds_max: 12
+    move: 20-50"
+    bs: 3+
     attacks: 3
-    save: 4
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
-      - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
-      - ref: wh40k_9e.necrons.weapon.ophydian_claws
-
-  # ── Heavy Support (new) ───────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.lokhust_destroyers
-    name_en: Lokhust Destroyers
-    name_de: Lokhust-Vernichter
-    battlefield_role: [Heavy Support]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CORE, FLY, DESTROYER CULT, LOKHUST DESTROYERS]
-    wounds: 3
-    models_min: 3
-    models_max: 9
-    power_level: 6
-    move: "8\""
-    ws: "3+"
-    bs: "3+"
-    strength: 4
-    toughness: 5
-    attacks: 2
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 2
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_cannon
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-    wargear_options:
-      - type: replace
-        with: wh40k_9e.necrons.weapon.enmitic_exterminator
-
-  - id: wh40k_9e.necrons.unit.canoptek_doomstalker
-    name_en: Canoptek Doomstalker
-    name_de: Canoptek-Düsterjäger
-    battlefield_role: [Heavy Support]
-    keywords: [NECRONS, "<DYNASTY>", MONSTER, CANOPTEK, CANOPTEK DOOMSTALKER]
-    wounds: 12
-    models_min: 1
-    models_max: 3
-    power_level: 7
-    move: "10\""
-    ws: "4+"
-    bs: "4+"
-    strength: 6
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 3
-    fnp: null
-    damage_bracket:
-      - wounds_min: 7
-        wounds_max: 12
-        move: "10\""
-        ws: "4+"
-        attacks: 3
-      - wounds_min: 4
-        wounds_max: 6
-        move: "8\""
-        ws: "5+"
-        attacks: 2
-      - wounds_min: 1
-        wounds_max: 3
-        move: "6\""
-        ws: "6+"
-        attacks: 1
-    rules: [livingMetal, containmentField]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.doomsday_blaster
-      - ref: wh40k_9e.necrons.weapon.twin_gauss_flayer
-
-  - id: wh40k_9e.necrons.unit.doomsday_ark
-    name_en: Doomsday Ark
-    name_de: Jüngste-Gericht-Arche
-    battlefield_role: [Heavy Support]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, QUANTUM SHIELDING, FLY, DOOMSDAY ARK]
-    wounds: 14
-    models_min: 1
-    models_max: 1
-    power_level: 8
-    move: "12\""
-    ws: "6+"
-    bs: "3+"
-    strength: 6
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: 5
-    leadership: 10
-    oc: 3
-    fnp: null
-    damage_bracket:
-      - wounds_min: 8
-        wounds_max: 14
-        move: "12\""
-        bs: "3+"
-        attacks: 3
-      - wounds_min: 4
-        wounds_max: 7
-        move: "8\""
-        bs: "4+"
-        attacks: "D3"
-      - wounds_min: 1
-        wounds_max: 3
-        move: "4\""
-        bs: "5+"
-        attacks: 1
-    rules: [livingMetal, quantumShielding]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.doomsday_cannon
-      - ref: wh40k_9e.necrons.weapon.gauss_flayer_array
-
-  - id: wh40k_9e.necrons.unit.ghost_ark
-    name_en: Ghost Ark
-    name_de: Geisterarche
-    battlefield_role: [Heavy Support]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, QUANTUM SHIELDING, TRANSPORT, FLY, GHOST ARK]
-    wounds: 14
-    models_min: 1
-    models_max: 1
-    power_level: 8
-    move: "12\""
-    ws: "6+"
-    bs: "3+"
-    strength: 6
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: 5
-    leadership: 10
-    oc: 3
-    fnp: null
-    transport_capacity: 10
-    damage_bracket:
-      - wounds_min: 8
-        wounds_max: 14
-        move: "12\""
-        bs: "3+"
-        attacks: 3
-      - wounds_min: 4
-        wounds_max: 7
-        move: "8\""
-        bs: "4+"
-        attacks: "D3"
-      - wounds_min: 1
-        wounds_max: 3
-        move: "4\""
-        bs: "5+"
-        attacks: 1
-    rules: [livingMetal, quantumShielding, repairBarge]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_flayer_array
-
-  # ── Flyer (new) ───────────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.night_scythe
-    name_en: Night Scythe
-    name_de: Nachtsense
-    battlefield_role: [Flyer]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, AIRCRAFT, FLY, TRANSPORT, NIGHT SCYTHE]
-    wounds: 12
-    models_min: 1
-    models_max: 1
-    power_level: 7
-    move: "20\""
-    ws: "6+"
-    bs: "3+"
-    strength: 6
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 3
-    fnp: null
-    transport_capacity: 20
-    damage_bracket:
-      - wounds_min: 7
-        wounds_max: 12
-        move: "20-50\""
-        bs: "3+"
-        attacks: 3
-      - wounds_min: 4
-        wounds_max: 6
-        move: "20-40\""
-        bs: "4+"
-        attacks: "D3"
-      - wounds_min: 1
-        wounds_max: 3
-        move: "20-30\""
-        bs: "5+"
-        attacks: 1
-    rules: [livingMetal, supersonic]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
-
-  - id: wh40k_9e.necrons.unit.doom_scythe
-    name_en: Doom Scythe
-    name_de: Schicksalssense
-    battlefield_role: [Flyer]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, AIRCRAFT, FLY, DOOM SCYTHE]
-    wounds: 12
-    models_min: 1
-    models_max: 1
-    power_level: 9
-    move: "20\""
-    ws: "6+"
-    bs: "3+"
-    strength: 6
-    toughness: 6
-    attacks: 3
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 3
-    fnp: null
-    damage_bracket:
-      - wounds_min: 7
-        wounds_max: 12
-        move: "20-50\""
-        bs: "3+"
-        attacks: 3
-      - wounds_min: 4
-        wounds_max: 6
-        move: "20-40\""
-        bs: "4+"
-        attacks: "D3"
-      - wounds_min: 1
-        wounds_max: 3
-        move: "20-30\""
-        bs: "5+"
-        attacks: 1
-    rules: [livingMetal, supersonic]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.heavy_death_ray
-      - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
-
-  # ── Lord of War / Titanic (new) ────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.monolith
-    name_en: Monolith
-    name_de: Monolith
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, TITANIC, MONOLITH]
-    wounds: 24
-    models_min: 1
-    models_max: 1
-    power_level: 17
-    move: "8\""
-    ws: "6+"
-    bs: "3+"
-    strength: 8
-    toughness: 8
-    attacks: 6
-    save: 2
-    invuln_save: null
-    leadership: 10
-    oc: 5
-    fnp: null
-    damage_bracket:
-      - wounds_min: 13
-        wounds_max: 24
-        move: "8\""
-        bs: "3+"
-        attacks: 6
-      - wounds_min: 7
-        wounds_max: 12
-        move: "6\""
-        bs: "4+"
-        attacks: "D6"
-      - wounds_min: 1
-        wounds_max: 6
-        move: "4\""
-        bs: "5+"
-        attacks: "D3"
-    rules: [livingMetal, deathDescending]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.gauss_flux_arc
-      - ref: wh40k_9e.necrons.weapon.particle_whip
-      - ref: wh40k_9e.necrons.weapon.portal_of_exile
-    wargear_options:
-      - type: replace
-        replaces: wh40k_9e.necrons.weapon.gauss_flux_arc
-        with: wh40k_9e.necrons.weapon.death_ray
-
-  - id: wh40k_9e.necrons.unit.c_tan_nightbringer
-    name_en: "C'tan Shard of the Nightbringer"
-    name_de: "C'tan-Splitter des Nachtbringers"
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, MONSTER, CHARACTER, FLY, "C'TAN SHARD", "C'TAN SHARD NIGHTBRINGER"]
-    wounds: 9
-    models_min: 1
-    models_max: 1
-    power_level: 19
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 7
-    toughness: 7
-    attacks: 6
-    save: 4
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, necrodermis, ctanPowers]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.reaping_sweep
-      - ref: wh40k_9e.necrons.weapon.entropic_blow
-
-  - id: wh40k_9e.necrons.unit.c_tan_deceiver
-    name_en: "C'tan Shard of the Deceiver"
-    name_de: "C'tan-Splitter des Betrügers"
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, MONSTER, CHARACTER, FLY, "C'TAN SHARD", "C'TAN SHARD DECEIVER"]
-    wounds: 9
-    models_min: 1
-    models_max: 1
-    power_level: 18
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 6
-    toughness: 7
-    attacks: 5
-    save: 4
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, dimensionalTranslocation, grandIllusion, necrodermis, ctanPowers]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.golden_fists
-
-  - id: wh40k_9e.necrons.unit.c_tan_void_dragon
-    name_en: "C'tan Shard of the Void Dragon"
-    name_de: "C'tan-Splitter des Leerendrachens"
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, MONSTER, CHARACTER, FLY, "C'TAN SHARD", "C'TAN SHARD VOID DRAGON"]
-    wounds: 9
-    models_min: 1
-    models_max: 1
-    power_level: 18
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 6
-    toughness: 7
-    attacks: 5
-    save: 3
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, necrodermis, ctanPowers]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.spear_of_void_dragon
-      - ref: wh40k_9e.necrons.weapon.canoptek_tail_blades
-
-  - id: wh40k_9e.necrons.unit.tesseract_vault
-    name_en: Tesseract Vault
-    name_de: Tessarakt-Gewölbe
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, TITANIC, FLY, "C'TAN SHARD", TESSERACT VAULT]
-    wounds: 30
-    models_min: 1
-    models_max: 1
-    power_level: 23
-    move: "8\""
-    ws: "6+"
-    bs: "3+"
-    strength: 8
-    toughness: 7
-    attacks: 6
-    save: 2
-    invuln_save: 4
-    leadership: 10
-    oc: 5
-    fnp: null
-    damage_bracket:
-      - wounds_min: 16
-        wounds_max: 30
-        move: "8\""
-        bs: "3+"
-        attacks: 6
-      - wounds_min: 9
-        wounds_max: 15
-        move: "6\""
-        bs: "4+"
-        attacks: "D6"
-      - wounds_min: 1
-        wounds_max: 8
-        move: "4\""
-        bs: "5+"
-        attacks: "D3"
-    rules: [livingMetal, vengeanceOfTheEnchained, ctanPowers]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.tesla_sphere
-
-  # ── New Units (5b.1) ─────────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.unit.canoptek_plasmacyte
-    name_en: Canoptek Plasmacyte
-    name_de: Canoptek-Plasmacyt
-    battlefield_role: [Elites]
-    keywords: [NECRONS, BEAST, FLY, CANOPTEK, CANOPTEK PLASMACYTE]
-    wounds: 1
-    models_min: 1
-    models_max: 1
-    power_level: 1
-    move: "8\""
-    ws: "4+"
-    bs: "4+"
-    strength: 4
-    toughness: 5
+  - wounds_min: 4
+    wounds_max: 6
+    move: 20-40"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 3
+    move: 20-30"
+    bs: 5+
     attacks: 1
-    save: 4
-    invuln_save: 5
-    leadership: 10
-    oc: 0
-    fnp: null
-    rules: [livingMetal, viralConstruct, evasionProtocol, infusedMadness, dimensionalTranslocation]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.monomolecular_proboscis
-
-  - id: wh40k_9e.necrons.unit.hexmark_destroyer
-    name_en: Hexmark Destroyer
-    name_de: Hexmark-Vernichter
-    battlefield_role: [Elites]
-    keywords: [NECRONS, "<DYNASTY>", INFANTRY, CHARACTER, DESTROYER CULT, HYPERSPACE HUNTER, HEXMARK DESTROYER]
-    wounds: 5
-    models_min: 1
-    models_max: 1
-    power_level: 4
-    move: "8\""
-    ws: "3+"
-    bs: "2+"
-    strength: 5
-    toughness: 5
-    attacks: 4
-    save: 3
-    invuln_save: null
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, reanimationProtocols, hardwiredForDestruction, dimensionalTranslocation, inescapableDeath, multiThreatEliminator]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
-      - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-    weapon_count:
-      wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol: 6
-
-  - id: wh40k_9e.necrons.unit.transcendent_ctan
-    name_en: "Transcendent C'tan"
-    name_de: "Transzendenter C'tan"
-    battlefield_role: [Elites]
-    keywords: [NECRONS, MONSTER, CHARACTER, FLY, "C'TAN SHARD", TRANSCENDENT CTAN]
-    wounds: 9
-    models_min: 1
-    models_max: 1
-    power_level: 14
-    move: "8\""
-    ws: "2+"
-    bs: "2+"
-    strength: 6
-    toughness: 7
-    attacks: 5
-    save: 4
-    invuln_save: 4
-    leadership: 10
-    oc: 1
-    fnp: null
-    rules: [livingMetal, necrodermis, enslavedStarGod, realityUnravels, fracturedPersonality, ctanPowers]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.crackling_tendrils
-
-  - id: wh40k_9e.necrons.unit.obelisk
-    name_en: Obelisk
-    name_de: Obelisk
-    battlefield_role: [Lord of War]
-    keywords: [NECRONS, "<DYNASTY>", VEHICLE, CORE, TITANIC, FLY, OBELISK]
-    wounds: 28
-    models_min: 1
-    models_max: 1
-    power_level: 17
-    move: "8\""
-    ws: "6+"
-    bs: "3+"
-    strength: 8
-    toughness: 8
+  rules:
+  - livingMetal
+  - supersonic
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
+- id: wh40k_9e.necrons.unit.doom_scythe
+  name_en: Doom Scythe
+  name_de: Schicksalssense
+  battlefield_role:
+  - Flyer
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - AIRCRAFT
+  - FLY
+  - DOOM SCYTHE
+  wounds: 12
+  models_min: 1
+  models_max: 1
+  power_level: 9
+  move: 20"
+  ws: 6+
+  bs: 3+
+  strength: 6
+  toughness: 6
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 3
+  fnp: null
+  damage_bracket:
+  - wounds_min: 7
+    wounds_max: 12
+    move: 20-50"
+    bs: 3+
+    attacks: 3
+  - wounds_min: 4
+    wounds_max: 6
+    move: 20-40"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 3
+    move: 20-30"
+    bs: 5+
+    attacks: 1
+  rules:
+  - livingMetal
+  - supersonic
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.heavy_death_ray
+  - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
+- id: wh40k_9e.necrons.unit.monolith
+  name_en: Monolith
+  name_de: Monolith
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - TITANIC
+  - MONOLITH
+  wounds: 24
+  models_min: 1
+  models_max: 1
+  power_level: 17
+  move: 8"
+  ws: 6+
+  bs: 3+
+  strength: 8
+  toughness: 8
+  attacks: 6
+  save: 2
+  invuln_save: null
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 13
+    wounds_max: 24
+    move: 8"
+    bs: 3+
     attacks: 6
-    save: 2
-    invuln_save: null
-    leadership: 10
-    oc: 5
-    fnp: null
-    damage_bracket:
-      - wounds_min: 15
-        wounds_max: 28
-        move: "8\""
-        bs: "3+"
-        attacks: 6
-      - wounds_min: 8
-        wounds_max: 14
-        move: "6\""
-        bs: "4+"
-        attacks: "D6"
-      - wounds_min: 1
-        wounds_max: 7
-        move: "4\""
-        bs: "5+"
-        attacks: "D3"
-    rules: [livingMetal, deathDescending, hoveringSentinel, gravityPulse]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.tesla_sphere
-    weapon_count:
-      wh40k_9e.necrons.weapon.tesla_sphere: 4
-
-  - id: wh40k_9e.necrons.unit.convergence_of_dominion
-    name_en: Convergence of Dominion
-    name_de: Konvergenz der Dominion
-    battlefield_role: [Fortification]
-    keywords: [NECRONS, "<DYNASTY>", BUILDING, CORE, VEHICLE, STARSTELE, CONVERGENCE OF DOMINION]
-    wounds: 6
-    models_min: 3
-    models_max: 3
-    power_level: 6
-    move: "-"
-    ws: "-"
-    bs: "3+"
-    strength: 6
-    toughness: 8
+  - wounds_min: 7
+    wounds_max: 12
+    move: 6"
+    bs: 4+
+    attacks: D6
+  - wounds_min: 1
+    wounds_max: 6
+    move: 4"
+    bs: 5+
+    attacks: D3
+  rules:
+  - livingMetal
+  - deathDescending
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_flux_arc
+  - ref: wh40k_9e.necrons.weapon.particle_whip
+  - ref: wh40k_9e.necrons.weapon.portal_of_exile
+  wargear_options:
+  - type: replace
+    replaces: wh40k_9e.necrons.weapon.gauss_flux_arc
+    with: wh40k_9e.necrons.weapon.death_ray
+- id: wh40k_9e.necrons.unit.c_tan_nightbringer
+  name_en: C'tan Shard of the Nightbringer
+  name_de: C'tan-Splitter des Nachtbringers
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - MONSTER
+  - CHARACTER
+  - FLY
+  - C'TAN SHARD
+  - C'TAN SHARD NIGHTBRINGER
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 19
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 7
+  toughness: 7
+  attacks: 6
+  save: 4
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - necrodermis
+  - ctanPowers
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.reaping_sweep
+  - ref: wh40k_9e.necrons.weapon.entropic_blow
+- id: wh40k_9e.necrons.unit.c_tan_deceiver
+  name_en: C'tan Shard of the Deceiver
+  name_de: C'tan-Splitter des Betrügers
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - MONSTER
+  - CHARACTER
+  - FLY
+  - C'TAN SHARD
+  - C'TAN SHARD DECEIVER
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 18
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 6
+  toughness: 7
+  attacks: 5
+  save: 4
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - dimensionalTranslocation
+  - grandIllusion
+  - necrodermis
+  - ctanPowers
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.golden_fists
+- id: wh40k_9e.necrons.unit.c_tan_void_dragon
+  name_en: C'tan Shard of the Void Dragon
+  name_de: C'tan-Splitter des Leerendrachens
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - MONSTER
+  - CHARACTER
+  - FLY
+  - C'TAN SHARD
+  - C'TAN SHARD VOID DRAGON
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 18
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 6
+  toughness: 7
+  attacks: 5
+  save: 3
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - necrodermis
+  - ctanPowers
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.spear_of_void_dragon
+  - ref: wh40k_9e.necrons.weapon.canoptek_tail_blades
+- id: wh40k_9e.necrons.unit.tesseract_vault
+  name_en: Tesseract Vault
+  name_de: Tessarakt-Gewölbe
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - TITANIC
+  - FLY
+  - C'TAN SHARD
+  - TESSERACT VAULT
+  wounds: 30
+  models_min: 1
+  models_max: 1
+  power_level: 23
+  move: 8"
+  ws: 6+
+  bs: 3+
+  strength: 8
+  toughness: 7
+  attacks: 6
+  save: 2
+  invuln_save: 4
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 16
+    wounds_max: 30
+    move: 8"
+    bs: 3+
+    attacks: 6
+  - wounds_min: 9
+    wounds_max: 15
+    move: 6"
+    bs: 4+
+    attacks: D6
+  - wounds_min: 1
+    wounds_max: 8
+    move: 4"
+    bs: 5+
+    attacks: D3
+  rules:
+  - livingMetal
+  - vengeanceOfTheEnchained
+  - ctanPowers
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.tesla_sphere
+- id: wh40k_9e.necrons.unit.canoptek_plasmacyte
+  name_en: Canoptek Plasmacyte
+  name_de: Canoptek-Plasmacyt
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - BEAST
+  - FLY
+  - CANOPTEK
+  - CANOPTEK PLASMACYTE
+  wounds: 1
+  models_min: 1
+  models_max: 1
+  power_level: 1
+  move: 8"
+  ws: 4+
+  bs: 4+
+  strength: 4
+  toughness: 5
+  attacks: 1
+  save: 4
+  invuln_save: 5
+  leadership: 10
+  oc: 0
+  fnp: null
+  rules:
+  - livingMetal
+  - viralConstruct
+  - evasionProtocol
+  - infusedMadness
+  - dimensionalTranslocation
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.monomolecular_proboscis
+- id: wh40k_9e.necrons.unit.hexmark_destroyer
+  name_en: Hexmark Destroyer
+  name_de: Hexmark-Vernichter
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - CHARACTER
+  - DESTROYER CULT
+  - HYPERSPACE HUNTER
+  - HEXMARK DESTROYER
+  wounds: 5
+  models_min: 1
+  models_max: 1
+  power_level: 4
+  move: 8"
+  ws: 3+
+  bs: 2+
+  strength: 5
+  toughness: 5
+  attacks: 4
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - reanimationProtocols
+  - hardwiredForDestruction
+  - dimensionalTranslocation
+  - inescapableDeath
+  - multiThreatEliminator
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol
+  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+  weapon_count:
+    wh40k_9e.necrons.weapon.enmitic_disintegrator_pistol: 6
+- id: wh40k_9e.necrons.unit.transcendent_ctan
+  name_en: Transcendent C'tan
+  name_de: Transzendenter C'tan
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - MONSTER
+  - CHARACTER
+  - FLY
+  - C'TAN SHARD
+  - TRANSCENDENT CTAN
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 14
+  move: 8"
+  ws: 2+
+  bs: 2+
+  strength: 6
+  toughness: 7
+  attacks: 5
+  save: 4
+  invuln_save: 4
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  - necrodermis
+  - enslavedStarGod
+  - realityUnravels
+  - fracturedPersonality
+  - ctanPowers
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.crackling_tendrils
+- id: wh40k_9e.necrons.unit.obelisk
+  name_en: Obelisk
+  name_de: Obelisk
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - TITANIC
+  - FLY
+  - OBELISK
+  wounds: 28
+  models_min: 1
+  models_max: 1
+  power_level: 17
+  move: 8"
+  ws: 6+
+  bs: 3+
+  strength: 8
+  toughness: 8
+  attacks: 6
+  save: 2
+  invuln_save: null
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 15
+    wounds_max: 28
+    move: 8"
+    bs: 3+
+    attacks: 6
+  - wounds_min: 8
+    wounds_max: 14
+    move: 6"
+    bs: 4+
+    attacks: D6
+  - wounds_min: 1
+    wounds_max: 7
+    move: 4"
+    bs: 5+
+    attacks: D3
+  rules:
+  - livingMetal
+  - deathDescending
+  - hoveringSentinel
+  - gravityPulse
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.tesla_sphere
+  weapon_count:
+    wh40k_9e.necrons.weapon.tesla_sphere: 4
+- id: wh40k_9e.necrons.unit.convergence_of_dominion
+  name_en: Convergence of Dominion
+  name_de: Konvergenz der Dominion
+  battlefield_role:
+  - Fortification
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - BUILDING
+  - CORE
+  - VEHICLE
+  - STARSTELE
+  - CONVERGENCE OF DOMINION
+  wounds: 6
+  models_min: 3
+  models_max: 3
+  power_level: 6
+  move: '-'
+  ws: '-'
+  bs: 3+
+  strength: 6
+  toughness: 8
+  attacks: null
+  save: 3
+  invuln_save: null
+  leadership: '-'
+  oc: 0
+  fnp: null
+  rules:
+  - livingMetal
+  - dominionProtocols
+  - dynasticCommandNode
+  - translocationProtocols
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.transdimensional_abductor
+- id: wh40k_9e.necrons.unit.night_shroud
+  name_en: Night Shroud
+  name_de: Night Shroud
+  battlefield_role:
+  - Flyer
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - AIRCRAFT
+  - FLY
+  - NIGHT SHROUD
+  wounds: 14
+  models_min: 1
+  models_max: 1
+  power_level: 12
+  move: 20"
+  ws: 6+
+  bs: 3+
+  strength: 6
+  toughness: 7
+  attacks: 3
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 0
+  fnp: null
+  damage_bracket:
+  - wounds_min: 8
+    wounds_max: 14
+    move: 20-60"
+    bs: 3+
+    attacks: 3
+  - wounds_min: 4
+    wounds_max: 7
+    move: 20-45"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 3
+    move: 20-30"
+    bs: 5+
+    attacks: 1
+  rules:
+  - livingMetal
+  - supersonic
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.twin_tesla_destructor
+  - ref: wh40k_9e.necrons.weapon.night_shroud_bomb_bay
+  weapon_count:
+    wh40k_9e.necrons.weapon.twin_tesla_destructor: 2
+- id: wh40k_9e.necrons.unit.canoptek_tombstalker
+  name_en: Canoptek Tombstalker
+  name_de: Canoptek Tombstalker
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - CANOPTEK
+  - TOMBSTALKER
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 10
+  move: 10"
+  ws: 4+
+  bs: 4+
+  strength: 6
+  toughness: 7
+  attacks: 6
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 3
+  fnp: null
+  damage_bracket:
+  - wounds_min: 5
+    wounds_max: 9
+    move: 10"
+    bs: 4+
+    attacks: 6
+  - wounds_min: 3
+    wounds_max: 4
+    move: 8"
+    bs: 4+
+    attacks: D3+2
+  - wounds_min: 1
+    wounds_max: 2
+    move: 6"
+    bs: 5+
+    attacks: D3
+  rules:
+  - livingMetal
+  - multiLimbedCombat
+  - tombComplexAmbush
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.particle_caster
+  - ref: wh40k_9e.necrons.weapon.massive_forelimbs
+  weapon_count:
+    wh40k_9e.necrons.weapon.particle_caster: 2
+- id: wh40k_9e.necrons.unit.canoptek_acanthrites
+  name_en: Canoptek Acanthrites
+  name_de: Canoptek Acanthrites
+  battlefield_role:
+  - Elites
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - INFANTRY
+  - FLY
+  - CANOPTEK
+  - ACANTHRITES
+  wounds: 3
+  models_min: 3
+  models_max: 9
+  power_level: 5
+  move: 12"
+  ws: 4+
+  bs: 4+
+  strength: 5
+  toughness: 5
+  attacks: 2
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  rules:
+  - livingMetal
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.thermic_cutting_beam
+  - ref: wh40k_9e.necrons.weapon.acanthritic_claws
+- id: wh40k_9e.necrons.unit.tesseract_ark
+  name_en: Tesseract Ark
+  name_de: Tesseract Ark
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - QUANTUM SHIELDING
+  - TESSERACT ARK
+  wounds: 10
+  models_min: 1
+  models_max: 1
+  power_level: 10
+  move: 12"
+  ws: 6+
+  bs: 3+
+  strength: 5
+  toughness: 7
+  attacks: 3
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 6
+    wounds_max: 10
+    move: 12"
+    bs: 3+
+    attacks: 3
+  - wounds_min: 3
+    wounds_max: 5
+    move: 9"
+    bs: 4+
+    attacks: D3
+  - wounds_min: 1
+    wounds_max: 2
+    move: 6"
+    bs: 5+
+    attacks: 1
+  rules:
+  - livingMetal
+  - quantumShielding
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.twin_particle_beamer
+  - ref: wh40k_9e.necrons.weapon.gauss_flux_arc
+- id: wh40k_9e.necrons.unit.canoptek_tomb_sentinel
+  name_en: Canoptek Tomb Sentinel
+  name_de: Canoptek Tomb Sentinel
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - CANOPTEK
+  - TOMB SENTINEL
+  wounds: 9
+  models_min: 1
+  models_max: 1
+  power_level: 7
+  move: 10"
+  ws: 4+
+  bs: 4+
+  strength: 6
+  toughness: 7
+  attacks: 4
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 1
+  fnp: null
+  damage_bracket:
+  - wounds_min: 5
+    wounds_max: 9
+    move: 10"
+    bs: 4+
+    attacks: 4
+  - wounds_min: 3
+    wounds_max: 4
+    move: 8"
+    bs: 4+
+    attacks: D3+1
+  - wounds_min: 1
+    wounds_max: 2
+    move: 6"
+    bs: 5+
+    attacks: D3
+  rules:
+  - livingMetal
+  - outOfPhase
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.exile_beam
+  - ref: wh40k_9e.necrons.weapon.scything_talons
+- id: wh40k_9e.necrons.unit.gauss_pylon
+  name_en: Gauss Pylon
+  name_de: Gauss-Pylon
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - BUILDING
+  - GAUSS PYLON
+  wounds: 30
+  models_min: 1
+  models_max: 1
+  power_level: 14
+  move: '-'
+  ws: '-'
+  bs: 3+
+  strength: 6
+  toughness: 8
+  attacks: null
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 0
+  fnp: null
+  damage_bracket:
+  - wounds_min: 16
+    wounds_max: 30
+    move: '-'
+    bs: 3+
     attacks: null
-    save: 3
-    invuln_save: null
-    leadership: "-"
-    oc: 0
-    fnp: null
-    rules: [livingMetal, dominionProtocols, dynasticCommandNode, translocationProtocols]
-    weapons:
-      - ref: wh40k_9e.necrons.weapon.transdimensional_abductor
+  - wounds_min: 8
+    wounds_max: 15
+    move: '-'
+    bs: 4+
+    attacks: null
+  - wounds_min: 1
+    wounds_max: 7
+    move: '-'
+    bs: 5+
+    attacks: null
+  rules:
+  - livingMetal
+  - arcFields
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.gauss_annihilator
+  - ref: wh40k_9e.necrons.weapon.sentry_gauss_cannon
+  - ref: wh40k_9e.necrons.weapon.gauss_extrapolator
+  weapon_count:
+    wh40k_9e.necrons.weapon.sentry_gauss_cannon: 2
+    wh40k_9e.necrons.weapon.gauss_extrapolator: 2
+- id: wh40k_9e.necrons.unit.seraptek_heavy_construct
+  name_en: Seraptek Heavy Construct
+  name_de: Seraptek Heavy Construct
+  battlefield_role:
+  - Lord of War
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - CORE
+  - TITANIC
+  - FLY
+  - QUANTUM SHIELDING
+  - SERAPTEK HEAVY CONSTRUCT
+  wounds: 28
+  models_min: 1
+  models_max: 1
+  power_level: 22
+  move: 12"
+  ws: 3+
+  bs: 3+
+  strength: 8
+  toughness: 8
+  attacks: 6
+  save: 3
+  invuln_save: 5
+  leadership: 10
+  oc: 5
+  fnp: null
+  damage_bracket:
+  - wounds_min: 15
+    wounds_max: 28
+    move: 12"
+    bs: 3+
+    attacks: 6
+  - wounds_min: 8
+    wounds_max: 14
+    move: 10"
+    bs: 3+
+    attacks: D6+3
+  - wounds_min: 1
+    wounds_max: 7
+    move: 8"
+    bs: 4+
+    attacks: D6
+  rules:
+  - livingMetal
+  - quantumShielding
+  - wrathOfTheSeraptek
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.massive_reaper_talons
+  - ref: wh40k_9e.necrons.weapon.singularity_projector
+  weapon_count:
+    wh40k_9e.necrons.weapon.massive_reaper_talons: 2
+    wh40k_9e.necrons.weapon.singularity_projector: 2
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.loom_of_change
+  - type: replace
+    with: wh40k_9e.necrons.weapon.enmitic_annihilator
+- id: wh40k_9e.necrons.unit.sentry_pylon
+  name_en: Sentry Pylon
+  name_de: Wächter-Pylon
+  battlefield_role:
+  - Heavy Support
+  keywords:
+  - NECRONS
+  - <DYNASTY>
+  - VEHICLE
+  - BUILDING
+  - SENTRY PYLON
+  wounds: 8
+  models_min: 1
+  models_max: 1
+  power_level: 6
+  move: '-'
+  ws: '-'
+  bs: 3+
+  strength: 4
+  toughness: 7
+  attacks: null
+  save: 3
+  invuln_save: null
+  leadership: 10
+  oc: 0
+  fnp: null
+  damage_bracket:
+  - wounds_min: 5
+    wounds_max: 8
+    move: '-'
+    bs: 3+
+    attacks: null
+  - wounds_min: 3
+    wounds_max: 4
+    move: '-'
+    bs: 4+
+    attacks: null
+  - wounds_min: 1
+    wounds_max: 2
+    move: '-'
+    bs: 5+
+    attacks: null
+  rules:
+  - livingMetal
+  weapons:
+  - ref: wh40k_9e.necrons.weapon.focused_death_ray
+  wargear_options:
+  - type: replace
+    with: wh40k_9e.necrons.weapon.heavy_gauss_cannon_fw
+  - type: replace
+    with: wh40k_9e.necrons.weapon.twin_gauss_extrapolator

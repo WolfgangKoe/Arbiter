@@ -6,59 +6,13 @@ weapons:
   - id: wh40k_9e.orks.weapon.slugga
     name_en: Slugga
     profiles:
-      - name_en: Slugga
-        weapon_type: Pistol 1
+      - weapon_type: Pistol 1
         range_inches: 12
         attacks: 1
         strength: 4
         ap: 0
         damage: 1
-        abilities: 
-        is_melee: false
-      - name_en: Rokkit
-        weapon_type: Heavy D3
-        range_inches: 24
-        attacks: D3
-        strength: 8
-        ap: -2
-        damage: 3
-        abilities: Blast
-        is_melee: false
-      - name_en: Shoota
-        weapon_type: Dakka
-        range_inches: 18
-        attacks: 3/2
-        strength: 4
-        ap: 0
-        damage: 1
-        abilities: 
-        is_melee: false
-      - name_en: Skorcha
-        weapon_type: Assault D6
-        range_inches: 12
-        attacks: D6
-        strength: 5
-        ap: -1
-        damage: 1
-        abilities: "Each time an attack is made with this weapon profile, t"
-        is_melee: false
-      - name_en: Standard
-        weapon_type: Heavy 3
-        range_inches: 24
-        attacks: 3
-        strength: 7
-        ap: -3
-        damage: 2
-        abilities: 
-        is_melee: false
-      - name_en: Supercharge
-        weapon_type: Heavy 3
-        range_inches: 24
-        attacks: 3
-        strength: 8
-        ap: -3
-        damage: 3
-        abilities: "Each time the bearer shoots, if any unmodified hit roll"
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.kustom_shoota
@@ -102,7 +56,7 @@ weapons:
     profiles:
       - weapon_type: Melee
         range_inches: 0
-        attacks: Melee
+        attacks: 2
         strength: User×2
         ap: -3
         damage: 2
@@ -112,8 +66,7 @@ weapons:
   - id: wh40k_9e.orks.weapon.stikkbombz
     name_en: Stikkbombz
     profiles:
-      - name_en: Stikkbombz
-        weapon_type: Grenade D6
+      - weapon_type: Grenade D6
         range_inches: 8
         attacks: D6
         strength: 3
@@ -121,90 +74,17 @@ weapons:
         damage: 1
         abilities: Blast
         is_melee: false
-      - name_en: Rokkit
-        weapon_type: Heavy D3
-        range_inches: 24
-        attacks: D3
-        strength: 8
-        ap: -2
-        damage: 3
-        abilities: Blast
-        is_melee: false
-      - name_en: Shoota
-        weapon_type: Dakka
-        range_inches: 18
-        attacks: 3/2
-        strength: 4
-        ap: 0
-        damage: 1
-        abilities: 
-        is_melee: false
-      - name_en: Skorcha
-        weapon_type: Assault D6
-        range_inches: 12
-        attacks: D6
-        strength: 5
-        ap: -1
-        damage: 1
-        abilities: "Each time an attack is made with this weapon profile, t"
-        is_melee: false
 
   - id: wh40k_9e.orks.weapon.big_shoota
     name_en: Big shoota
     profiles:
-      - name_en: Big shoota
-        weapon_type: Dakka
+      - weapon_type: Dakka
         range_inches: 36
         attacks: 5/3
         strength: 5
         ap: 0
         damage: 1
-        abilities: 
-        is_melee: false
-      - name_en: Rokkit
-        weapon_type: Heavy D3
-        range_inches: 24
-        attacks: D3
-        strength: 8
-        ap: -2
-        damage: 3
-        abilities: Blast
-        is_melee: false
-      - name_en: Shoota
-        weapon_type: Dakka
-        range_inches: 18
-        attacks: 3/2
-        strength: 4
-        ap: 0
-        damage: 1
-        abilities: 
-        is_melee: false
-      - name_en: Skorcha
-        weapon_type: Assault D6
-        range_inches: 12
-        attacks: D6
-        strength: 5
-        ap: -1
-        damage: 1
-        abilities: "Each time an attack is made with this weapon profile, t"
-        is_melee: false
-      - name_en: Frag
-        weapon_type: Heavy D6
-        range_inches: 36
-        attacks: D6
-        strength: 5
-        ap: 0
-        damage: 1
-        abilities: Blast
-        is_melee: false
-      - name_en: Shell
-        weapon_type: Heavy 1
-        range_inches: 36
-        attacks: 1
-        strength: 8
-        ap: -2
-        damage: D6
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.uge_choppa
@@ -236,7 +116,7 @@ weapons:
     profiles:
       - weapon_type: Melee
         range_inches: 0
-        attacks: Melee
+        attacks: 2
         strength: User×2
         ap: -4
         damage: D3
@@ -572,7 +452,7 @@ weapons:
     profiles:
       - weapon_type: Melee
         range_inches: 0
-        attacks: Melee
+        attacks: 1
         strength: User
         ap: "-"
         damage: "-"

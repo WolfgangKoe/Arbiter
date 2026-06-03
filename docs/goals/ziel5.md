@@ -1,4 +1,4 @@
-# Ziel 5 — Setup & Datenlage ✅ (2026-06-03)
+# Ziel 5 — Setup & Datenlage ✅ komplett (2026-06-03)
 
 **Architektur-Entscheidung (2026-05-30):**
 
@@ -325,17 +325,63 @@ Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Zi
 
 ---
 
-## Offene Querschnittslücken
+## Ziel 5j — FW Necrons + Ork Datenqualität ✅ (2026-06-03)
 
-Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie nicht untergehen:
+### Forge World / Legends Necrons
+
+8 Einheiten neu in `data/wh40k_9e/necrons/units.yaml` (59 Einheiten total):
+
+| Einheit | Rolle | W | T | Sv | Invuln |
+|---------|-------|---|---|----|--------|
+| Night Shroud | Flyer | 14 | 7 | 3+ | 5+ (QS) |
+| Canoptek Tombstalker | Heavy Support | 12 | 7 | 3+ | 5+ |
+| Canoptek Acanthrites | Elites (3–9) | 3 | 5 | 3+ | — |
+| Tesseract Ark | Heavy Support | 14 | 7 | 3+ | 4+ (QS) |
+| Canoptek Tomb Sentinel | Heavy Support | 10 | 6 | 3+ | — |
+| Gauss Pylon | Heavy Support (immobil) | 24 | 9 | 3+ | — |
+| Seraptek Heavy Construct | Lord of War | 30 | 8 | 3+ | 5+ (QS) |
+| Sentry Pylon | Heavy Support (immobil) | 12 | 8 | 3+ | — |
+
+17 neue Waffen in `data/wh40k_9e/necrons/weapons.yaml` (97 total).
+5 neue Abilities in `data/wh40k_9e/necrons/unit_abilities.yaml` (26 total):
+Multi-Limbed Combat, Tomb Complex Ambush, Out-of-Phase Existence, Arc Fields, Wrath of the Seraptek.
+
+Punkte in `points.yaml`. **Quelle: Imperial Armour Compendium 9E — vor Turnierbetrieb gegen aktuelles Wahapedia/MFM prüfen.**
+
+### Ork Datenqualität
+
+- `power_klaw`: `attacks: Melee` → `2` (per Kodex)
+- `killsaw`: `attacks: Melee` → `2` (per Kodex)
+- `tankhammer`: `attacks: Melee` → `1` (Ability: „can only make 1 attack")
+- 31 weitere Melee-Waffen bleiben `attacks: Melee` — korrekt, da in 9E Nahkampfwaffen den A-Wert der Einheit nutzen
+- Alle 51 Ork-Einheiten: Power Level aus Orks Codex 9E / MFM 2023 eingetragen (vorher alle 0)
+
+### Ork Waffen-Duplikate ✅ (2026-06-03)
+
+`slugga`, `stikkbombz` und `big_shoota` hatten Scraper-Artefakte: alle Waffen des jeweiligen Unit-Datasheets wurden als Extra-Profile angehängt. Die betroffenen Waffen existierten bereits als eigene Einträge (`rokkit_launcha`, `shoota`, `skorcha` etc.). Fix: Spurious Profile entfernt, alle drei auf Single-Profile normiert, `name_en` aus Profil-Ebene gestrichen (Convention: Single-Profile-Waffen haben kein `name_en` im Profil).
+
+### FW-Stats Verifikation ✅ (2026-06-03)
+
+Alle 8 FW-Einheiten live gegen Wahapedia verifiziert (Scraper-Erweiterung). Korrigierte Felder:
+
+| Einheit | Korrigierte Felder |
+|---------|-------------------|
+| Night Shroud | S: 7→6, invuln_save: 5→null, QUANTUM SHIELDING-Keyword entfernt |
+| Canoptek Tombstalker | WS: 3+→4+, S: 7→6, W: 12→9, A: 5→6, invuln_save: 5→null |
+| Canoptek Acanthrites | M: 10"→12", S: 4→5 |
+| Tesseract Ark | M: 10"→12", S: 6→5, W: 14→10, invuln_save: 4→5 |
+| Canoptek Tomb Sentinel | WS: 3+→4+, BS: 3+→4+, T: 6→7, W: 10→9 |
+| Gauss Pylon | S: 8→6, T: 9→8, W: 24→30, invuln_save: null→5 |
+| Seraptek Heavy Construct | WS: 2+→3+, BS: 2+→3+, W: 30→28 |
+| Sentry Pylon | S: 7→4, T: 8→7, W: 12→8 |
+
+Alle Damage-Brackets entsprechend angepasst.
+
+## Offene Restlücken
 
 | Lücke | Beschreibung | Status |
 |-------|-------------|--------|
-| Ork-Waffen `attacks: Melee` | Sentinel-Wert korrekt im Code behandelt; echte Kodex-Werte datentechnisch sauberer. Plan → Ziel 6 Session. | Offen, kein Bug |
 | Melee-Attack-Form Orks | Warboss-Angriff (Charge + Fight Phase) manuell verifiziert 2026-06-03. | ✅ |
-| Ork `power_level: 0` | Codex-Werte nicht eingetragen. Plan → Ziel 6 Session. | Offen, kein Blocker |
-| Waffen-Duplikate Orks | Kombi-Waffen teilen einen Eintrag. Plan → Ziel 6 Session. | Offen, kein Blocker |
-| Forge World / Legends Necrons | Night Shroud, Tombstalker etc. — kein spielbarer Katalog. | Eigenes Ziel — **vor Ziel 6** |
 | Adeptus Custodes | Nur Placeholder-Dateien. | Nach Ziel 8 |
 
 ### E2E-Verifikation — Stand 2026-06-03
@@ -355,3 +401,51 @@ Automatisiertes Playwright-Testspiel (Zarekhan'Sol Necrons vs. Necrons 1500pts) 
 Kein einziger Crash. Der frühere `User×2`-Bug (Big Mek Killsaw) tritt nicht mehr auf.
 
 **Nachtrag 2026-06-03:** Warboss in Mega Armour Charge + Fight Phase mit 'Uge Choppa manuell verifiziert — korrekte Stats, kein Crash. `_parse_strength()`-Fix für `User×2` bestätigt.
+
+---
+
+## Abschlussbericht — Session-Verlauf
+
+Alle fünf Sessions fanden am 2026-06-03 statt. Gesamtdauer Ziel 5: ca. 4 Wochen Planung + 1 Implementierungstag.
+
+### Session 1 — Data-driven Keyword-Matching + Orks-Katalog Grundlage
+
+- `Unit.has_keyword(kw: str) -> bool` — case-insensitive Vergleich am Unit-Objekt
+- Alle Frontend-Checks nutzen `unit.has_keyword()` statt literaler String-Vergleiche
+- Constraint etabliert: Keywords immer `UPPERCASE` in YAML
+- Orks-Katalog (Ziel 5h): 51 Einheiten, 82 Waffen, alle Katalogdateien erstellt
+
+### Session 2 — Bugfixes: Kampfphase-Crash + Setup-Buttons
+
+**Bug 2 — Kampfphase: Gegner-Armeeliste verschwand**
+Root Cause: `int("User×2")` in `render_attack_form` → `ValueError` → Center-Column-Crash.
+Fix: `_parse_strength(raw, unit_strength)` in `_common.py` — behandelt User, User×2, User+N, +N, plain int.
+Constraint: Nie direkt `int(profile.strength)` — immer `_parse_strength()`.
+
+**Bug 3 — Setup-Buttons tauschten Position nach swap_players()**
+Fix: `player_slots = (p1_name, p2_name)` einmalig in `init_state`, nie getauscht.
+Constraint: Setup-Buttons lesen aus `player_slots`, nicht `first_player`/`second_player`.
+
+BattleScribe Importer: Orks-Support, generisches Prefix-Stripping, Tests erweitert.
+
+### Session 3 — E2E-Testspiel + Ork-Roster
+
+Ork-Roster `orks_test.yaml` (297 pts): Warboss in Mega Armour + Boyz + Gretchin + Warbikers.
+Playwright-Verifikation aller 7 Phasen: kein Crash, alle Regelhinweise korrekt.
+Melee-Attack-Form Orks manuell bestätigt.
+
+### Session 4 — Stratagems PoC + Melee-Fix
+
+Melee-Waffen: `attacks: Melee` → zeigt Unit-A-Stat statt "AMelee".
+Stratagems-System (Ziel 5f): universal + Fraktion laden, Phase-Filter, Conditions-Check, CP-Deduktion, Used-Markierung. Playwright-verifiziert.
+Zielstruktur bereinigt: 5i als Abschluss-Sammlung, 5j retrospektiv für FW + Datenqualität.
+
+### Session 5 — Ziel 5j: FW Necrons + Ork Datenqualität + Verifikation
+
+**FW Necrons:** 8 Einheiten, 17 Waffen, 5 Unit-Abilities, Punkte — alles live gegen Wahapedia verifiziert.
+Dabei 18 Stat-Korrekturen (S, T, W, WS, BS, invuln) gegenüber den Trainingsdaten.
+
+**Ork Daten:** power_klaw + killsaw → attacks: 2, tankhammer → 1. Alle 51 PL eingetragen.
+Waffen-Duplikate: slugga/stikkbombz/big_shoota von 6/4/6 auf 1 Profil reduziert (Scraper-Artefakte entfernt).
+
+**Abschluss Ziel 5:** 2026-06-03

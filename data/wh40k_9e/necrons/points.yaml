@@ -82,6 +82,18 @@ units:
 
   wh40k_9e.necrons.unit.convergence_of_dominion:  { per_model: 80 }
 
+  # ── Forge World / Legends ─────────────────────────────────────────────────
+  # Source: Imperial Armour Compendium 9E — verify before competitive play
+
+  wh40k_9e.necrons.unit.night_shroud:              { per_unit: 235 }
+  wh40k_9e.necrons.unit.canoptek_tombstalker:      { per_unit: 165 }
+  wh40k_9e.necrons.unit.canoptek_acanthrites:      { per_model: 25 }
+  wh40k_9e.necrons.unit.tesseract_ark:             { per_unit: 185 }
+  wh40k_9e.necrons.unit.canoptek_tomb_sentinel:    { per_unit: 135 }
+  wh40k_9e.necrons.unit.gauss_pylon:               { per_unit: 395 }
+  wh40k_9e.necrons.unit.seraptek_heavy_construct:  { per_unit: 420 }
+  wh40k_9e.necrons.unit.sentry_pylon:              { per_unit: 125 }
+
 wargear:
   # Only wargear with points cost > 0
   wh40k_9e.necrons.wargear.resurrection_orb:      { points: 25 }

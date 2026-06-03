@@ -384,6 +384,103 @@ abilities:
       target: self_model
       restriction: more_than_3_from_enemy
 
+  # ── Forge World / Legends ─────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.unit.canoptek_tombstalker.multi_limbed_combat
+    name_en: Multi-limbed Combat
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_tombstalker
+    rule_text: "Each time this model is chosen to fight, it can make 3 additional attacks using its Massive Forelimbs. These attacks are in addition to those determined by the model's Attacks characteristic."
+    trigger:
+      timing: phase_start
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [multiLimbedCombat]
+    effect:
+      type: bonus_attacks
+      target: self
+      weapon: wh40k_9e.necrons.weapon.massive_forelimbs
+      amount: 3
+
+  - id: wh40k_9e.necrons.unit.canoptek_tombstalker.tomb_complex_ambush
+    name_en: Tomb Complex Ambush
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_tombstalker
+    rule_text: "During deployment, you can set up this model in a Tomb Complex instead of on the battlefield. At the end of any of your Movement phases, this model can emerge — set it up anywhere on the battlefield more than 9\" from any enemy models."
+    trigger:
+      timing: persistent
+      phase: deployment
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [tombComplexAmbush]
+    effect:
+      type: deep_strike
+      target: self
+      min_distance_from_enemy: 9
+
+  - id: wh40k_9e.necrons.unit.canoptek_tomb_sentinel.out_of_phase
+    name_en: Out-of-Phase Existence
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_tomb_sentinel
+    rule_text: "When this model moves, it can move through other models and terrain features (it cannot end its move on top of other models or within 1\" of enemy models). In addition, if a model with fewer than 10 wounds remaining is destroyed by this model's Exile Beam, it is removed from the battlefield entirely and cannot be returned to play by any means (e.g. Reanimation Protocols do not apply)."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [outOfPhase]
+    effect:
+      type: move_through_terrain
+      target: self
+
+  - id: wh40k_9e.necrons.unit.gauss_pylon.arc_fields
+    name_en: Arc Fields
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.gauss_pylon
+    rule_text: "Each time an enemy model makes a melee attack against this model, on an unmodified hit roll of 1, the attacking unit suffers 1 mortal wound after all of its attacks have been resolved."
+    trigger:
+      timing: phase_reactive
+      phase: fight
+      stage: active
+      player: inactive
+      event: enemy_melee_attack
+    conditions:
+      - has_rules: [arcFields]
+    effect:
+      type: mortal_wounds
+      target: attacker
+      amount: 1
+      roll_threshold: 1
+      roll_type: unmodified_hit_1
+
+  - id: wh40k_9e.necrons.unit.seraptek_heavy_construct.wrath_of_the_seraptek
+    name_en: Wrath of the Seraptek
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.seraptek_heavy_construct
+    rule_text: "Each time this model fights, after all of its attacks have been resolved, roll one D6 for each enemy unit within 1\" of this model: on a 4+, that unit suffers D3 mortal wounds."
+    trigger:
+      timing: phase_reactive
+      phase: fight
+      stage: active
+      player: active
+      event: after_unit_fights
+    conditions:
+      - has_rules: [wrathOfTheSeraptek]
+    effect:
+      type: mortal_wounds
+      target: enemy_units_within_1
+      amount: "D3"
+      roll_threshold: 4
+
   # ── Heavy Support ──────────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.unit.canoptek_spyder.fabricator_claw_array

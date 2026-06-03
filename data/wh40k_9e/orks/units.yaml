@@ -14,7 +14,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "2+"
     bs: "5+"
@@ -44,7 +44,7 @@ units:
     wounds: 7
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "5\""
     ws: "2+"
     bs: "5+"
@@ -70,7 +70,7 @@ units:
     wounds: 7
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 6
     move: "14\""
     ws: "2+"
     bs: "5+"
@@ -98,7 +98,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -131,7 +131,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 6
     move: "4\""
     ws: "3+"
     bs: "4+"
@@ -160,7 +160,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "4+"
@@ -187,7 +187,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "4+"
@@ -213,7 +213,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "14\""
     ws: "3+"
     bs: "5+"
@@ -248,7 +248,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -273,7 +273,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -298,7 +298,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -324,7 +324,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "2+"
     bs: "5+"
@@ -351,7 +351,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 9
     move: "10\""
     ws: "2+"
     bs: "5+"
@@ -379,7 +379,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 12
     move: "7\""
     ws: "2+"
     bs: "5+"
@@ -407,7 +407,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "2+"
     bs: "4+"
@@ -434,7 +434,7 @@ units:
     wounds: 6
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "12\""
     ws: "2+"
     bs: "5+"
@@ -462,7 +462,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "14\""
     ws: "2+"
     bs: "5+"
@@ -490,7 +490,7 @@ units:
     wounds: 1
     models_min: 10
     models_max: 30
-    power_level: 0  # TODO: fill from codex
+    power_level: 6
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -524,7 +524,7 @@ units:
     wounds: 1
     models_min: 10
     models_max: 40
-    power_level: 0  # TODO: fill from codex
+    power_level: 3
     move: "5\""
     ws: "5+"
     bs: "4+"
@@ -549,7 +549,7 @@ units:
     wounds: 1
     models_min: 10
     models_max: 20
-    power_level: 0  # TODO: fill from codex
+    power_level: 6
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -579,7 +579,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 6
-    power_level: 0  # TODO: fill from codex
+    power_level: 6
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -607,7 +607,7 @@ units:
     wounds: 2
     models_min: 5
     models_max: 10
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -638,7 +638,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 10
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -666,7 +666,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 10
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "6\""
     ws: "3+"
     bs: "5+"
@@ -701,7 +701,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 10
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -728,7 +728,7 @@ units:
     wounds: 2
     models_min: 5
     models_max: 10
-    power_level: 0  # TODO: fill from codex
+    power_level: 8
     move: "5\""
     ws: "3+"
     bs: "4+"
@@ -756,7 +756,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "5\""
     ws: "2+"
     bs: "5+"
@@ -783,7 +783,7 @@ units:
     wounds: 3
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 2
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -810,7 +810,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 2
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -837,7 +837,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "14\""
     ws: "3+"
     bs: "5+"
@@ -865,7 +865,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 3
     move: "5\""
     ws: "3+"
     bs: "5+"
@@ -894,7 +894,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 9
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "14\""
     ws: "3+"
     bs: "5+"
@@ -923,7 +923,7 @@ units:
     wounds: 1
     models_min: 5
     models_max: 30
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "12\""
     ws: "3+"
     bs: "5+"
@@ -951,7 +951,7 @@ units:
     wounds: 4
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "14\""
     ws: "3+"
     bs: "5+"
@@ -980,7 +980,7 @@ units:
     wounds: 3
     models_min: 3
     models_max: 6
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "10\""
     ws: "3+"
     bs: "5+"
@@ -1009,7 +1009,7 @@ units:
     wounds: 5
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "10\""
     ws: "3+"
     bs: "5+"
@@ -1036,7 +1036,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "12\""
     ws: "4+"
     bs: "5+"
@@ -1064,7 +1064,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 4
     move: "12\""
     ws: "4+"
     bs: "5+"
@@ -1092,7 +1092,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "10\""
     ws: "4+"
     bs: "5+"
@@ -1120,7 +1120,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "14\""
     ws: "4+"
     bs: "5+"
@@ -1147,7 +1147,7 @@ units:
     wounds: 9
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "10\""
     ws: "4+"
     bs: "5+"
@@ -1178,7 +1178,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 8
     move: "12\""
     ws: "5+"
     bs: "5+"
@@ -1210,7 +1210,7 @@ units:
     wounds: 8
     models_min: 1
     models_max: 3
-    power_level: 0  # TODO: fill from codex
+    power_level: 5
     move: "6\""
     ws: "3+"
     bs: "5+"
@@ -1239,7 +1239,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 8
     move: "12\""
     ws: "5+"
     bs: "5+"
@@ -1271,7 +1271,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 8
     move: "12\""
     ws: "5+"
     bs: "5+"
@@ -1303,7 +1303,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 12
     move: "12\""
     ws: "3+"
     bs: "5+"
@@ -1334,7 +1334,7 @@ units:
     wounds: 16
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 12
     move: "12\""
     ws: "3+"
     bs: "5+"
@@ -1366,7 +1366,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "20-60\""
     ws: "5+"
     bs: "5+"
@@ -1392,7 +1392,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 8
     move: "20-60\""
     ws: "5+"
     bs: "5+"
@@ -1420,7 +1420,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "20-60\""
     ws: "5+"
     bs: "5+"
@@ -1447,7 +1447,7 @@ units:
     wounds: 12
     models_min: 1
     models_max: 1
-    power_level: 0  # TODO: fill from codex
+    power_level: 7
     move: "20-60\""
     ws: "5+"
     bs: "4+"
