@@ -133,9 +133,10 @@ def _render_directive_buttons(protocol, faction: str, round_num: int) -> None:
 
 
 def _render_protocol_ui(faction: str) -> None:
-    """Command Protocol UI — only for factions with command_protocols.yaml (i.e. Necrons).
+    """Command Protocol UI — only for factions with command_protocols.yaml.
 
-    During command phase: interactive selection. All other phases: read-only current protocol.
+    Only the active player may select/change protocols. The inactive player
+    sees read-only status only.
     """
     try:
         faction_dir = faction_dir_for(faction)
@@ -147,6 +148,7 @@ def _render_protocol_ui(faction: str) -> None:
         return
 
     phase_key = _current_phase_key()
+    is_active = faction == st.session_state.get("active")
     active_id = st.session_state.get("active_protocol_id")
     used_ids = st.session_state.get("used_protocol_ids", [])
     current_round = st.session_state.get("round", 1)
@@ -159,13 +161,15 @@ def _render_protocol_ui(faction: str) -> None:
     if current_round == 1:
         p = next((p for p in protocols if p.id == _ETERNAL_GUARDIAN_ID), None)
         if p:
-            # Auto-activate Eternal Guardian for round 1
             if not active_id:
                 st.session_state.active_protocol_id = _ETERNAL_GUARDIAN_ID
                 active_id = _ETERNAL_GUARDIAN_ID
             if not active_directive:
                 st.caption(f"{p.name_en} — auto (Round 1)")
-                _render_directive_buttons(p, faction, current_round)
+                if is_active:
+                    _render_directive_buttons(p, faction, current_round)
+                else:
+                    st.caption("↳ *Awaiting directive selection*")
             else:
                 badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
@@ -178,7 +182,10 @@ def _render_protocol_ui(faction: str) -> None:
         if p:
             if not active_directive:
                 st.caption(f"**{p.name_en}** — active this round")
-                _render_directive_buttons(p, faction, current_round)
+                if is_active:
+                    _render_directive_buttons(p, faction, current_round)
+                else:
+                    st.caption("↳ *Awaiting directive selection*")
             else:
                 badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
@@ -186,11 +193,11 @@ def _render_protocol_ui(faction: str) -> None:
                 st.caption(f"↳ {chosen_text}")
         return
 
-    if phase_key != "command":
+    if phase_key != "command" or not is_active:
         st.caption("— no protocol selected —")
         return
 
-    # Interactive selection — only available in command phase when no protocol is active yet
+    # Interactive selection — active player, command phase, no protocol yet
     available = [p for p in protocols if p.id not in used_ids]
     if not available:
         st.caption("All protocols have been used.")
