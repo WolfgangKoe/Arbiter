@@ -1,0 +1,1470 @@
+# Orks unit catalog — WH40k 9E
+# Source: Wahapedia scrape 2026-06-03
+# Keywords: UPPERCASE throughout.
+
+units:
+
+  # ── HQ ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.warboss
+    name_en: Warboss
+    name_de: Warboss
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, WARBOSS]
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 5
+    save: 4
+    invuln_save: 5
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.kustom_shoota
+      - ref: wh40k_9e.orks.weapon.attack_squig
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.warboss_mega_armour
+    name_en: Warboss in Mega Armour
+    name_de: Warboss in Mega Armour
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, MEGA ARMOUR, WARBOSS]
+    wounds: 7
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 5
+    save: 2
+    invuln_save: 5
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.uge_choppa
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.warboss_warbike
+    name_en: Warboss on Warbike
+    name_de: Warboss on Warbike
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, SPEEDBOSS]
+    wounds: 7
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 7
+    attacks: 5
+    save: 4
+    invuln_save: 5
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.dakkagun
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.big_mek
+    name_en: Big Mek
+    name_de: Big Mek
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK, GRETCHIN, GROT OILER]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 4
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.kustom_mega_slugga
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.big_mek_mega_armour
+    name_en: Big Mek in Mega Armour
+    name_de: Big Mek in Mega Armour
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, MEGA ARMOUR, BIG MEK]
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "4\""
+    ws: "3+"
+    bs: "4+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 2
+    invuln_save: null
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.kustom_shoota
+      - ref: wh40k_9e.orks.weapon.tellyport_blasta
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.big_mek_kff
+    name_en: Big Mek with Kustom Force Field
+    name_de: Big Mek with Kustom Force Field
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "4+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.big_mek_sag
+    name_en: Big Mek with Shokk Attack Gun
+    name_de: Big Mek with Shokk Attack Gun
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK, SHOKK ATTACK GUN]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "4+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.shokk_attack_gun
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.big_mek_warbike
+    name_en: Big Mek on Warbike
+    name_de: Big Mek on Warbike
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, BIG MEK]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: 5
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.dakkagun
+      - ref: wh40k_9e.orks.weapon.shokk_attack_gun
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.kustom_mega_slugga
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.weirdboy
+    name_en: Weirdboy
+    name_de: Weirdboy
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, PSYKER, WEIRDBOY]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.weirdboy_staff
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.wurrboy
+    name_en: Wurrboy
+    name_de: Wurrboy
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, PSYKER, BEAST SNAGGA, WEIRDBOY, WURRBOY]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.eyez_of_mork
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.painboy
+    name_en: Painboy
+    name_de: Painboy
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, PAINBOY]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 4
+    save: 6
+    invuln_save: null
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.urty_syringe
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.beastboss
+    name_en: Beastboss
+    name_de: Beastboss
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, BEAST SNAGGA, WARBOSS, BEASTBOSS]
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 5
+    save: 4
+    invuln_save: 5
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.shoota
+      - ref: wh40k_9e.orks.weapon.beast_snagga_klaw
+      - ref: wh40k_9e.orks.weapon.beastchoppa
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.beastboss_squigosaur
+    name_en: Beastboss on Squigosaur
+    name_de: Beastboss on Squigosaur
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, CAVALRY, SQUIG, BEAST SNAGGA, WARBOSS, BEASTBOSS]
+    wounds: 9
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "10\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 7
+    attacks: 5
+    save: 4
+    invuln_save: 5
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.thump_gun
+      - ref: wh40k_9e.orks.weapon.beastchoppa
+      - ref: wh40k_9e.orks.weapon.squigosaurs_jaws
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.ghazghkull
+    name_en: Ghazghkull Thraka
+    name_de: Ghazghkull Thraka
+    battlefield_role: [HQ]
+    keywords: [ORK, GOFFS, CHARACTER, MONSTER, SUPREME COMMANDER, WARBOSS, GHAZGHKULL THRAKA]
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "7\""
+    ws: "2+"
+    bs: "5+"
+    strength: 7
+    toughness: 7
+    attacks: 5
+    save: 2
+    invuln_save: 4
+    leadership: 8
+    oc: 1
+    fnp: null
+    # damage_bracket: true  # wounds range: 7-12
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.morks_roar
+      - ref: wh40k_9e.orks.weapon.gorks_klaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.kaptin_badrukk
+    name_en: Kaptin Badrukk
+    name_de: Kaptin Badrukk
+    battlefield_role: [HQ]
+    keywords: [ORK, FREEBOOTERZ, CHARACTER, INFANTRY, WARBOSS, FLASH GITZ, KAPTIN BADRUKK]
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "2+"
+    bs: "4+"
+    strength: 5
+    toughness: 6
+    attacks: 5
+    save: 3
+    invuln_save: 4
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.boss_zagstruk
+    name_en: Boss Zagstruk
+    name_de: Boss Zagstruk
+    battlefield_role: [HQ]
+    keywords: [ORK, GOFFS, CHARACTER, INFANTRY, STORMBOY, JUMP PACK, FLY, BOSS ZAGSTRUK]
+    wounds: 6
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "2+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 6
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.blitz_missiles
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.da_vulchas_klaws
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.deffkilla_wartrike
+    name_en: Deffkilla Wartrike
+    name_de: Deffkilla Wartrike
+    battlefield_role: [HQ]
+    keywords: [ORK, <CLAN>, CHARACTER, VEHICLE, SPEED FREEKS, SPEEDBOSS, DEFFKILLA WARTRIKE]
+    wounds: 8
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "2+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 5
+    save: 4
+    invuln_save: 5
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.twin_boomstikk
+      - ref: wh40k_9e.orks.weapon.snagga_klaw
+    wargear_options: []
+
+  # ── Troops ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.boyz
+    name_en: Boyz
+    name_de: Boyz
+    battlefield_role: [Troops]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, BOYZ]
+    wounds: 1
+    models_min: 10
+    models_max: 30
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.shoota
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.power_stabba
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.gretchin
+    name_en: Gretchin
+    name_de: Gretchin
+    battlefield_role: [Troops]
+    keywords: [ORK, <CLAN>, INFANTRY, CORE, GRETCHIN]
+    wounds: 1
+    models_min: 10
+    models_max: 40
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "5+"
+    bs: "4+"
+    strength: 2
+    toughness: 3
+    attacks: 1
+    save: 7
+    invuln_save: null
+    leadership: 4
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.grot_blasta
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.beast_snagga_boyz
+    name_en: Beast Snagga Boyz
+    name_de: Beast Snagga Boyz
+    battlefield_role: [Troops]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, BEAST SNAGGA, BEAST SNAGGA BOYZ]
+    wounds: 1
+    models_min: 10
+    models_max: 20
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.thump_gun
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.power_snappa
+    wargear_options: []
+
+  # ── Elites ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.meganobz
+    name_en: Meganobz
+    name_de: Meganobz
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MEGA ARMOUR, NOBZ, MOB, CORE, MEGANOBZ]
+    wounds: 3
+    models_min: 3
+    models_max: 6
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 2
+    invuln_save: null
+    leadership: 7
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.kustom_shoota
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.nobz
+    name_en: Nobz
+    name_de: Nobz
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, NOBZ]
+    wounds: 2
+    models_min: 5
+    models_max: 10
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.power_stabba
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.burna_boyz
+    name_en: Burna Boyz
+    name_de: Burna Boyz
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, BURNA BOYZ]
+    wounds: 1
+    models_min: 5
+    models_max: 10
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.burna
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.kommandos
+    name_en: Kommandos
+    name_de: Kommandos
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, KOMMANDOS]
+    wounds: 1
+    models_min: 5
+    models_max: 10
+    power_level: 0  # TODO: fill from codex
+    move: "6\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.shokka_pistol
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.burna
+      - ref: wh40k_9e.orks.weapon.kustom_shoota
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.breacha_ram
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.tankbustas
+    name_en: Tankbustas
+    name_de: Tankbustas
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, TANKBUSTAS]
+    wounds: 1
+    models_min: 5
+    models_max: 10
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.pair_of_rokkit_pistols
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.tankhammer
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.flash_gitz
+    name_en: Flash Gitz
+    name_de: Flash Gitz
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, INFANTRY, MOB, FLASH GITZ]
+    wounds: 2
+    models_min: 5
+    models_max: 10
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "4+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.snazzgun
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.mad_dok_grotsnik
+    name_en: Mad Dok Grotsnik
+    name_de: Mad Dok Grotsnik
+    battlefield_role: [Elites]
+    keywords: [ORK, DEATHSKULLS, CHARACTER, INFANTRY, PAINBOY, MAD DOK GROTSNIK]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "2+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 8
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.urty_syringe
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.mek
+    name_en: Mek
+    name_de: Mek
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, MEK]
+    wounds: 3
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.kustom_mega_slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.killsaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.runtherd
+    name_en: Runtherd
+    name_de: Runtherd
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, RUNTHERD]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 3
+    save: 6
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.grabba_stikk
+      - ref: wh40k_9e.orks.weapon.grot_prod
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.painboy_warbike
+    name_en: Painboy on Warbike
+    name_de: Painboy on Warbike
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, PAINBOY]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.dakkagun
+      - ref: wh40k_9e.orks.weapon.killsaw
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.urty_syringe
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.nob_waaagh_banner
+    name_en: Nob with Waaagh Banner
+    name_de: Nob with Waaagh Banner
+    battlefield_role: [Elites]
+    keywords: [ORK, <CLAN>, CHARACTER, INFANTRY, NOB]
+    wounds: 4
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "5\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 5
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.kustom_shoota
+      - ref: wh40k_9e.orks.weapon.waaagh_banner
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  # ── Fast Attack ─────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.warbikers
+    name_en: Warbikers
+    name_de: Warbikers
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, BIKER, SPEED FREEKS, CORE, WARBIKERS]
+    wounds: 3
+    models_min: 3
+    models_max: 9
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.dakkagun
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.stormboyz
+    name_en: Stormboyz
+    name_de: Stormboyz
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, INFANTRY, JUMP PACK, FLY, MOB, CORE, STORMBOYZ]
+    wounds: 1
+    models_min: 5
+    models_max: 30
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 6
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.power_klaw
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.deffkoptas
+    name_en: Deffkoptas
+    name_de: Deffkoptas
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, FLY, SPEED FREEKS, DEFFKOPTAS]
+    wounds: 4
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "3+"
+    bs: "5+"
+    strength: 4
+    toughness: 5
+    attacks: 2
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.kopta_rokkits
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.spinnin_blades
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.squighog_boyz
+    name_en: Squighog Boyz
+    name_de: Squighog Boyz
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, CAVALRY, BEAST SNAGGA, SQUIG, CORE, SQUIGHOG BOYZ]
+    wounds: 3
+    models_min: 3
+    models_max: 6
+    power_level: 0  # TODO: fill from codex
+    move: "10\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 2
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.saddlegit_weapons_shooting
+      - ref: wh40k_9e.orks.weapon.stikka_shooting
+      - ref: wh40k_9e.orks.weapon.saddlegit_weapons_melee
+      - ref: wh40k_9e.orks.weapon.squighog_jaws
+      - ref: wh40k_9e.orks.weapon.stikka_melee
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.nob_smasha_squig
+    name_en: Nob on Smasha Squig
+    name_de: Nob on Smasha Squig
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, CAVALRY, CHARACTER, BEAST SNAGGA, SQUIG, NOB, NOB SMASHA SQUIG]
+    wounds: 5
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "10\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.big_choppa
+      - ref: wh40k_9e.orks.weapon.smasha_squig_jaws
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.boomdakka_snazzwagons
+    name_en: Boomdakka Snazzwagons
+    name_de: Boomdakka Snazzwagons
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, SPEED FREEKS, BOOMDAKKA SNAZZWAGONS]
+    wounds: 8
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "4+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.grot_blasta
+      - ref: wh40k_9e.orks.weapon.mek_speshul
+      - ref: wh40k_9e.orks.weapon.burna_bottles
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.kustom_boosta_blastas
+    name_en: Kustom Boosta blastas
+    name_de: Kustom Boosta blastas
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, SPEED FREEKS, KUSTOM BOOSTA-BLASTAS]
+    wounds: 8
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "4+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.grot_blasta
+      - ref: wh40k_9e.orks.weapon.burna_exhaust
+      - ref: wh40k_9e.orks.weapon.rivet_kannon
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.megatrakk_scrapjets
+    name_en: Megatrakk Scrapjets
+    name_de: Megatrakk Scrapjets
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, SPEED FREEKS, MEGATRAKK SCRAPJETS]
+    wounds: 9
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "10\""
+    ws: "4+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.rokkit_kannon
+      - ref: wh40k_9e.orks.weapon.twin_big_shoota
+      - ref: wh40k_9e.orks.weapon.wing_missiles
+      - ref: wh40k_9e.orks.weapon.nose_drill
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.shokkjump_dragstas
+    name_en: Shokkjump Dragstas
+    name_de: Shokkjump Dragstas
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, SPEED FREEKS, SHOKKJUMP DRAGSTAS]
+    wounds: 8
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "14\""
+    ws: "4+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.kustom_shokk_rifle
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.saw_blades
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.rukkatrukk_squigbuggies
+    name_en: Rukkatrukk Squigbuggies
+    name_de: Rukkatrukk Squigbuggies
+    battlefield_role: [Fast Attack]
+    keywords: [ORK, <CLAN>, VEHICLE, SPEED FREEKS, RUKKATRUKK SQUIGBUGGIES]
+    wounds: 9
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "10\""
+    ws: "4+"
+    bs: "5+"
+    strength: 5
+    toughness: 6
+    attacks: 4
+    save: 4
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.heavy_squig_launcha
+      - ref: wh40k_9e.orks.weapon.sawn_off_shotgun
+      - ref: wh40k_9e.orks.weapon.squig_launcha
+      - ref: wh40k_9e.orks.weapon.saw_blades
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    wargear_options: []
+
+  # ── Heavy Support ───────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.battlewagon
+    name_en: Battlewagon
+    name_de: Battlewagon
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, BATTLEWAGON]
+    wounds: 16
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "5+"
+    bs: "5+"
+    strength: 8
+    toughness: 7
+    attacks: 6
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 9-16
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.killkannon
+      - ref: wh40k_9e.orks.weapon.lobba
+      - ref: wh40k_9e.orks.weapon.zzap_gun
+      - ref: wh40k_9e.orks.weapon.deff_rolla
+      - ref: wh40k_9e.orks.weapon.grabbin_klaw
+      - ref: wh40k_9e.orks.weapon.wreckin_ball
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.deff_dreads
+    name_en: Deff Dreads
+    name_de: Deff Dreads
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, WALKERZ, DEFF DREADS]
+    wounds: 8
+    models_min: 1
+    models_max: 3
+    power_level: 0  # TODO: fill from codex
+    move: "6\""
+    ws: "3+"
+    bs: "5+"
+    strength: 5
+    toughness: 7
+    attacks: 3
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - ref: wh40k_9e.orks.weapon.rokkit_launcha
+      - ref: wh40k_9e.orks.weapon.skorcha
+      - ref: wh40k_9e.orks.weapon.dread_klaw
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.bonebreaka
+    name_en: Bonebreaka
+    name_de: Bonebreaka
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, BONEBREAKA]
+    wounds: 16
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "5+"
+    bs: "5+"
+    strength: 8
+    toughness: 8
+    attacks: 6
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 9-16
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.killkannon
+      - ref: wh40k_9e.orks.weapon.lobba
+      - ref: wh40k_9e.orks.weapon.zzap_gun
+      - ref: wh40k_9e.orks.weapon.deff_rolla
+      - ref: wh40k_9e.orks.weapon.grabbin_klaw
+      - ref: wh40k_9e.orks.weapon.wreckin_ball
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.gunwagon
+    name_en: Gunwagon
+    name_de: Gunwagon
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, GUNWAGON]
+    wounds: 16
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "5+"
+    bs: "5+"
+    strength: 8
+    toughness: 8
+    attacks: 6
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 9-16
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.killkannon
+      - ref: wh40k_9e.orks.weapon.lobba
+      - ref: wh40k_9e.orks.weapon.zzap_gun
+      - ref: wh40k_9e.orks.weapon.deff_rolla
+      - ref: wh40k_9e.orks.weapon.grabbin_klaw
+      - ref: wh40k_9e.orks.weapon.wreckin_ball
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.kill_rig
+    name_en: Kill Rig
+    name_de: Kill Rig
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, TRANSPORT, CHARACTER, PSYKER, BEAST SNAGGA, WEIRDBOY, KILL RIG]
+    wounds: 16
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "3+"
+    bs: "5+"
+    strength: 6
+    toughness: 8
+    attacks: 6
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 1
+    fnp: null
+    # damage_bracket: true  # wounds range: 9-16
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.eavy_lobba
+      - ref: wh40k_9e.orks.weapon.stikka_kannon
+      - ref: wh40k_9e.orks.weapon.wurrtower
+      - ref: wh40k_9e.orks.weapon.butcha_boyz
+      - ref: wh40k_9e.orks.weapon.savage_horns_and_hooves
+      - ref: wh40k_9e.orks.weapon.saw_blades
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.hunta_rig
+    name_en: Hunta Rig
+    name_de: Hunta Rig
+    battlefield_role: [Heavy Support]
+    keywords: [ORK, <CLAN>, VEHICLE, TRANSPORT, BEAST SNAGGA, HUNTA RIG]
+    wounds: 16
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "12\""
+    ws: "3+"
+    bs: "5+"
+    strength: 6
+    toughness: 8
+    attacks: 6
+    save: 3
+    invuln_save: null
+    leadership: 7
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 9-16
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.eavy_lobba
+      - ref: wh40k_9e.orks.weapon.stikka_kannon
+      - ref: wh40k_9e.orks.weapon.butcha_boyz
+      - ref: wh40k_9e.orks.weapon.savage_horns_and_hooves
+      - ref: wh40k_9e.orks.weapon.saw_blades
+    wargear_options: []
+
+  # ── Flyers ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.dakkajet
+    name_en: Dakkajet
+    name_de: Dakkajet
+    battlefield_role: [Flyers]
+    keywords: [ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, DAKKAJET]
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "20-60\""
+    ws: "5+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 7-12
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.supa_shoota
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.burna_bommer
+    name_en: Burna bommer
+    name_de: Burna bommer
+    battlefield_role: [Flyers]
+    keywords: [ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, BURNA-BOMMER]
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "20-60\""
+    ws: "5+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 7-12
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.skorcha_missile_racks
+      - ref: wh40k_9e.orks.weapon.supa_shoota
+      - ref: wh40k_9e.orks.weapon.twin_big_shoota
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.blitza_bommer
+    name_en: Blitza bommer
+    name_de: Blitza bommer
+    battlefield_role: [Flyers]
+    keywords: [ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, BLITZA-BOMMER]
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "20-60\""
+    ws: "5+"
+    bs: "5+"
+    strength: 6
+    toughness: 6
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 7-12
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.big_shoota
+      - ref: wh40k_9e.orks.weapon.supa_shoota
+    wargear_options: []
+
+  - id: wh40k_9e.orks.unit.wazbom_blastajet
+    name_en: Wazbom Blastajet
+    name_de: Wazbom Blastajet
+    battlefield_role: [Flyers]
+    keywords: [ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, MEK, WAZBOM BLASTAJET]
+    wounds: 12
+    models_min: 1
+    models_max: 1
+    power_level: 0  # TODO: fill from codex
+    move: "20-60\""
+    ws: "5+"
+    bs: "4+"
+    strength: 6
+    toughness: 6
+    attacks: 3
+    save: 4
+    invuln_save: null
+    leadership: 6
+    oc: 3
+    fnp: null
+    # damage_bracket: true  # wounds range: 7-12
+    rules: []
+    weapons:
+      - ref: wh40k_9e.orks.weapon.smasha_gun
+      - ref: wh40k_9e.orks.weapon.stikkbomb_flinga
+      - ref: wh40k_9e.orks.weapon.supa_shoota
+      - ref: wh40k_9e.orks.weapon.tellyport_mega_blasta
+      - ref: wh40k_9e.orks.weapon.wazbom_mega_kannon
+    wargear_options: []

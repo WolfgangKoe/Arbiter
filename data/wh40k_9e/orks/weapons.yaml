@@ -1,0 +1,1108 @@
+# Orks weapon catalog — WH40k 9E
+# Source: Wahapedia scrape 2026-06-03
+
+weapons:
+
+  - id: wh40k_9e.orks.weapon.slugga
+    name_en: Slugga
+    profiles:
+      - name_en: Slugga
+        weapon_type: Pistol 1
+        range_inches: 12
+        attacks: 1
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+      - name_en: Rokkit
+        weapon_type: Heavy D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+      - name_en: Shoota
+        weapon_type: Dakka
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+      - name_en: Skorcha
+        weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon profile, t"
+        is_melee: false
+      - name_en: Standard
+        weapon_type: Heavy 3
+        range_inches: 24
+        attacks: 3
+        strength: 7
+        ap: -3
+        damage: 2
+        abilities: 
+        is_melee: false
+      - name_en: Supercharge
+        weapon_type: Heavy 3
+        range_inches: 24
+        attacks: 3
+        strength: 8
+        ap: -3
+        damage: 3
+        abilities: "Each time the bearer shoots, if any unmodified hit roll"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.kustom_shoota
+    name_en: Kustom shoota
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 18
+        attacks: 6/4
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.attack_squig
+    name_en: Attack squig
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 4
+        ap: -1
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.big_choppa
+    name_en: Big choppa
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -1
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.power_klaw
+    name_en: Power klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User×2
+        ap: -3
+        damage: 2
+        abilities: "Each time an attack is made with this weapon, subtract"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.stikkbombz
+    name_en: Stikkbombz
+    profiles:
+      - name_en: Stikkbombz
+        weapon_type: Grenade D6
+        range_inches: 8
+        attacks: D6
+        strength: 3
+        ap: 0
+        damage: 1
+        abilities: Blast
+        is_melee: false
+      - name_en: Rokkit
+        weapon_type: Heavy D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+      - name_en: Shoota
+        weapon_type: Dakka
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+      - name_en: Skorcha
+        weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon profile, t"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.big_shoota
+    name_en: Big shoota
+    profiles:
+      - name_en: Big shoota
+        weapon_type: Dakka
+        range_inches: 36
+        attacks: 5/3
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+      - name_en: Rokkit
+        weapon_type: Heavy D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+      - name_en: Shoota
+        weapon_type: Dakka
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+      - name_en: Skorcha
+        weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon profile, t"
+        is_melee: false
+      - name_en: Frag
+        weapon_type: Heavy D6
+        range_inches: 36
+        attacks: D6
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: Blast
+        is_melee: false
+      - name_en: Shell
+        weapon_type: Heavy 1
+        range_inches: 36
+        attacks: 1
+        strength: 8
+        ap: -2
+        damage: D6
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.uge_choppa
+    name_en: ’Uge choppa
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +3
+        ap: -3
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.dakkagun
+    name_en: Dakkagun
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 18
+        attacks: 5/3
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.killsaw
+    name_en: Killsaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User×2
+        ap: -4
+        damage: D3
+        abilities: "Each time an attack is made with this weapon, subtract"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.choppa
+    name_en: Choppa
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User
+        ap: -1
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.kustom_mega_blasta
+    name_en: Kustom mega-blasta
+    profiles:
+      - weapon_type: Assault D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -3
+        damage: D6
+        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.kustom_mega_slugga
+    name_en: Kustom mega-slugga
+    profiles:
+      - weapon_type: Pistol D3
+        range_inches: 12
+        attacks: D3
+        strength: 8
+        ap: -3
+        damage: D6
+        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.rokkit_launcha
+    name_en: Rokkit launcha
+    profiles:
+      - weapon_type: Heavy D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.tellyport_blasta
+    name_en: Tellyport blasta
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.shokk_attack_gun
+    name_en: Shokk attack gun
+    profiles:
+      - weapon_type: Heavy D6
+        range_inches: 60
+        attacks: D6
+        strength: "*"
+        ap: -5
+        damage: D6
+        abilities: Blast . Each time this weapon is selected to shoot with
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.weirdboy_staff
+    name_en: Weirdboy staff
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +3
+        ap: -1
+        damage: D3
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.eyez_of_mork
+    name_en: Eyez of Mork
+    profiles:
+      - weapon_type: Assault 2
+        range_inches: 12
+        attacks: 2
+        strength: 6
+        ap: -3
+        damage: D3
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.urty_syringe
+    name_en: ’Urty syringe
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 2
+        ap: 0
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.shoota
+    name_en: Shoota
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.beast_snagga_klaw
+    name_en: Beast Snagga klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +4
+        ap: -3
+        damage: 2
+        abilities: "Each time an attack is made with this weapon, subtract"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.beastchoppa
+    name_en: Beastchoppa
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User
+        ap: -2
+        damage: 2
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.thump_gun
+    name_en: Thump gun
+    profiles:
+      - weapon_type: Assault D3
+        range_inches: 18
+        attacks: D3
+        strength: 6
+        ap: -1
+        damage: D3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.squigosaurs_jaws
+    name_en: Squigosaur’s jaws
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 7
+        ap: -3
+        damage: 3
+        abilities: "Each time the bearer fights, it makes 3 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.morks_roar
+    name_en: Mork’s Roar
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 36
+        attacks: 16/12
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.gorks_klaw
+    name_en: Gork’s Klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User×2
+        ap: -4
+        damage: 4
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.blitz_missiles
+    name_en: Blitz missiles
+    profiles:
+      - weapon_type: Assault D3
+        range_inches: 18
+        attacks: D3
+        strength: 6
+        ap: -1
+        damage: D3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.da_vulchas_klaws
+    name_en: Da Vulcha’s Klaws
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -3
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.twin_boomstikk
+    name_en: Twin boomstikk
+    profiles:
+      - weapon_type: Assault 2
+        range_inches: 12
+        attacks: 2
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.snagga_klaw
+    name_en: Snagga klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -2
+        damage: 2
+        abilities: "Each time an attack is made with this weapon, you can r"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.power_stabba
+    name_en: Power stabba
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User
+        ap: -2
+        damage: 1
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.grot_blasta
+    name_en: Grot blasta
+    profiles:
+      - weapon_type: Pistol 1
+        range_inches: 12
+        attacks: 1
+        strength: 3
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.power_snappa
+    name_en: Power snappa
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.burna
+    name_en: Burna
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: "Each time an attack is made with this weapon, that atta"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.shokka_pistol
+    name_en: Shokka pistol
+    profiles:
+      - weapon_type: Pistol D3
+        range_inches: 6
+        attacks: D3
+        strength: 6
+        ap: -1
+        damage: 1
+        abilities: Blast . Each time an attack made with this weapon is al
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.breacha_ram
+    name_en: Breacha ram
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -2
+        damage: 2
+        abilities: "Each time an attack is made with this weapon, the targe"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.pair_of_rokkit_pistols
+    name_en: Pair of rokkit pistols
+    profiles:
+      - weapon_type: Pistol 2
+        range_inches: 12
+        attacks: 2
+        strength: 7
+        ap: -2
+        damage: D3
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.tankhammer
+    name_en: Tankhammer
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User
+        ap: "-"
+        damage: "-"
+        abilities: "Each time the bearer fights, it can only make 1 attack"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.snazzgun
+    name_en: Snazzgun
+    profiles:
+      - weapon_type: Heavy 3
+        range_inches: 24
+        attacks: 3
+        strength: 6
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.grabba_stikk
+    name_en: Grabba stikk
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +1
+        ap: 0
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.grot_prod
+    name_en: Grot-prod
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -1
+        damage: 1
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.waaagh_banner
+    name_en: Waaagh! banner
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: 0
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.kopta_rokkits
+    name_en: Kopta rokkits
+    profiles:
+      - weapon_type: Heavy 2D3
+        range_inches: 24
+        attacks: 2D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.spinnin_blades
+    name_en: Spinnin’ blades
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +1
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon, make 3 hi"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.saddlegit_weapons_shooting
+    name_en: Saddlegit weapons (shooting)
+    profiles:
+      - weapon_type: Assault 1
+        range_inches: 8
+        attacks: 1
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.stikka_shooting
+    name_en: Stikka (shooting)
+    profiles:
+      - weapon_type: Assault 1
+        range_inches: 12
+        attacks: 1
+        strength: User
+        ap: -2
+        damage: 2
+        abilities: Each time an attack made with this weapon targets a uni
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.saddlegit_weapons_melee
+    name_en: Saddlegit weapons (melee)
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 3
+        ap: -1
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.squighog_jaws
+    name_en: Squighog jaws
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 6
+        ap: -1
+        damage: 2
+        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.stikka_melee
+    name_en: Stikka (melee)
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +1
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.smasha_squig_jaws
+    name_en: Smasha squig jaws
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 6
+        ap: -1
+        damage: 2
+        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.mek_speshul
+    name_en: Mek speshul
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 30
+        attacks: 14/10
+        strength: 5
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.burna_bottles
+    name_en: Burna bottles
+    profiles:
+      - weapon_type: Grenade 2D3
+        range_inches: 6
+        attacks: 2D3
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: "Blast . Each time an attack is made with this weapon, t"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.burna_exhaust
+    name_en: Burna exhaust
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 8
+        attacks: D6
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: "Each time an attack is made with this weapon, that atta"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.rivet_kannon
+    name_en: Rivet kannon
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 36
+        attacks: 9/6
+        strength: 7
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.rokkit_kannon
+    name_en: Rokkit kannon
+    profiles:
+      - weapon_type: Heavy 3D3
+        range_inches: 24
+        attacks: 3D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.twin_big_shoota
+    name_en: Twin big shoota
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 36
+        attacks: 10/6
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.wing_missiles
+    name_en: Wing missiles
+    profiles:
+      - weapon_type: Assault 1
+        range_inches: 24
+        attacks: 1
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: Each time an attack is made with this weapon that targe
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.nose_drill
+    name_en: Nose drill
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -2
+        damage: D3
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.kustom_shokk_rifle
+    name_en: Kustom shokk rifle
+    profiles:
+      - weapon_type: Assault 2
+        range_inches: 24
+        attacks: 2
+        strength: 8
+        ap: -3
+        damage: D6
+        abilities: If any unmodified hit rolls of 1 are made for attacks w
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.saw_blades
+    name_en: Saw blades
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -2
+        damage: 2
+        abilities: 
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.heavy_squig_launcha
+    name_en: Heavy squig launcha
+    profiles:
+      - weapon_type: Assault 2D6
+        range_inches: 36
+        attacks: 2D6
+        strength: 5
+        ap: -2
+        damage: 2
+        abilities: Indirect Fire . Blast . This weapon can target units th
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.sawn_off_shotgun
+    name_en: Sawn-off shotgun
+    profiles:
+      - weapon_type: Assault 2
+        range_inches: 12
+        attacks: 2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.squig_launcha
+    name_en: Squig launcha
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 18
+        attacks: D6
+        strength: 5
+        ap: -2
+        damage: 2
+        abilities: Indirect Fire . Blast . This weapon can target units th
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.killkannon
+    name_en: Killkannon
+    profiles:
+      - weapon_type: Heavy D6
+        range_inches: 24
+        attacks: D6
+        strength: 8
+        ap: -2
+        damage: 2
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.lobba
+    name_en: Lobba
+    profiles:
+      - weapon_type: Heavy D6
+        range_inches: 48
+        attacks: D6
+        strength: 5
+        ap: 0
+        damage: 1
+        abilities: Indirect Fire . Blast . This weapon can target units th
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.zzap_gun
+    name_en: Zzap gun
+    profiles:
+      - weapon_type: Heavy 1
+        range_inches: 36
+        attacks: 1
+        strength: "*"
+        ap: -3
+        damage: 3
+        abilities: "Each time this weapon is selected to shoot with, roll 2"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.deff_rolla
+    name_en: Deff rolla
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +1
+        ap: -2
+        damage: 2
+        abilities: "Each time an attack is made with this weapon, treat the"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.grabbin_klaw
+    name_en: Grabbin’ klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User
+        ap: -3
+        damage: 2
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.wreckin_ball
+    name_en: Wreckin’ ball
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +2
+        ap: -1
+        damage: 2
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.skorcha
+    name_en: Skorcha
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon, that atta"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.dread_klaw
+    name_en: Dread klaw
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: User×2
+        ap: -3
+        damage: 3
+        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.eavy_lobba
+    name_en: ’Eavy lobba
+    profiles:
+      - weapon_type: Heavy D6
+        range_inches: 48
+        attacks: D6
+        strength: 6
+        ap: -1
+        damage: 2
+        abilities: Indirect Fire . Blast . This weapon can target units th
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.stikka_kannon
+    name_en: Stikka kannon
+    profiles:
+      - weapon_type: Heavy 1
+        range_inches: 12
+        attacks: 1
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: "Each time the bearer makes an attack with this weapon,"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.wurrtower
+    name_en: Wurrtower
+    profiles:
+      - weapon_type: Assault 1
+        range_inches: 24
+        attacks: 1
+        strength: 9
+        ap: -3
+        damage: D6
+        abilities: "Each time this weapon is selected to shoot with, if the"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.butcha_boyz
+    name_en: Butcha boyz
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time the bearer fights, it makes 4 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.savage_horns_and_hooves
+    name_en: Savage horns and hooves
+    profiles:
+      - weapon_type: Melee
+        range_inches: 0
+        attacks: Melee
+        strength: +1
+        ap: -2
+        damage: 3
+        abilities: "Each time the bearer fights, it makes 4 additional atta"
+        is_melee: true
+
+  - id: wh40k_9e.orks.weapon.supa_shoota
+    name_en: Supa-shoota
+    profiles:
+      - weapon_type: Dakka
+        range_inches: 36
+        attacks: 6/4
+        strength: 6
+        ap: -1
+        damage: 1
+        abilities: 
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.skorcha_missile_racks
+    name_en: Skorcha missile racks
+    profiles:
+      - weapon_type: Assault 2D6
+        range_inches: 36
+        attacks: 2D6
+        strength: 6
+        ap: -2
+        damage: 1
+        abilities: "Blast . Each time an attack is made with this weapon, t"
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.smasha_gun
+    name_en: Smasha gun
+    profiles:
+      - weapon_type: Heavy D3
+        range_inches: 48
+        attacks: D3
+        strength: 8
+        ap: -4
+        damage: D6
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.stikkbomb_flinga
+    name_en: Stikkbomb flinga
+    profiles:
+      - weapon_type: Assault 2D6
+        range_inches: 12
+        attacks: 2D6
+        strength: 3
+        ap: 0
+        damage: 1
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.tellyport_mega_blasta
+    name_en: Tellyport mega-blasta
+    profiles:
+      - weapon_type: Assault D6
+        range_inches: 24
+        attacks: D6
+        strength: 9
+        ap: -2
+        damage: D3+3
+        abilities: Blast
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.wazbom_mega_kannon
+    name_en: Wazbom mega-kannon
+    profiles:
+      - weapon_type: Heavy D3
+        range_inches: 36
+        attacks: D3
+        strength: 10
+        ap: -3
+        damage: D6
+        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        is_melee: false

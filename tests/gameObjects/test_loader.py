@@ -55,7 +55,7 @@ def test_warriors_models_and_save() -> None:
 
 def test_load_ork_army_returns_units() -> None:
     units, _ = load_army("orks")
-    assert len(units) == 8
+    assert len(units) >= 50  # Full Ork catalog scraped from Wahapedia
 
 
 def test_load_necron_faction_abilities_returns_at_least_one() -> None:

@@ -23,64 +23,121 @@ except ImportError:
 BASE = "https://wahapedia.ru/wh40k9ed/factions"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ArbiterDataVerifier/1.0)"}
 
-UNIT_SLUGS: dict[str, str] = {
-    # HQ — already verified
-    "overlord": "Overlord",
-    "royal_warden": "Royal-Warden",
-    "plasmancer": "Plasmancer",
-    "technomancer": "Technomancer",
-    # HQ — new
-    "necron_lord": "Lord",
-    "lokhust_lord": "Lokhust-Lord",
-    "skorpekh_lord": "Skorpekh-Lord",
-    "catacomb_command_barge": "Catacomb-Command-Barge",
-    "psychomancer": "Psychomancer",
-    "chronomancer": "Chronomancer",
-    "illuminor_szeras": "Illuminor-Szeras",
-    "orikan_the_diviner": "Orikan-the-Diviner",
-    "trazyn_the_infinite": "Trazyn-the-Infinite",
-    "nemesor_zahndrekh": "Nemesor-Zahndrekh",
-    "vargard_obyron": "Vargard-Obyron",
-    "anrakyr_the_traveller": "Anrakyr-the-Traveller",
-    "imotekh_the_stormlord": "Imotekh-the-Stormlord",
-    "the_silent_king": "The-Silent-King",
-    # Troops — already verified
-    "warriors": "Necron-Warriors",
-    "immortals": "Immortals",
-    # Elites — already verified
-    "skorpekh_destroyers": "Skorpekh-Destroyers",
-    "lychguard": "Lychguard",
-    "deathmarks": "Deathmarks",
-    "canoptek_spyder": "Canoptek-Spyders",
-    # Elites — new
-    "triarch_praetorians": "Triarch-Praetorians",
-    "flayed_ones": "Flayed-Ones",
-    "canoptek_reanimator": "Canoptek-Reanimator",
-    "cryptothralls": "Cryptothralls",
-    # Fast Attack — already verified
-    "canoptek_scarabs": "Canoptek-Scarab-Swarms",
-    "canoptek_wraiths": "Canoptek-Wraiths",
-    # Fast Attack — new
-    "tomb_blades": "Tomb-Blades",
-    "ophydian_destroyers": "Ophydian-Destroyers",
-    # Heavy Support — already verified
-    "triarch_stalker": "Triarch-Stalker",
-    "annihilation_barge": "Annihilation-Barge",
-    "lokhust_heavy_destroyers": "Lokhust-Heavy-Destroyers",
-    # Heavy Support — new
-    "lokhust_destroyers": "Lokhust-Destroyers",
-    "canoptek_doomstalker": "Canoptek-Doomstalker",
-    "doomsday_ark": "Doomsday-Ark",
-    "ghost_ark": "Ghost-Ark",
-    # Flyer — new
-    "night_scythe": "Night-Scythe",
-    "doom_scythe": "Doom-Scythe",
-    # Lord of War / Titanic — new
-    "monolith": "Monolith",
-    "c_tan_nightbringer": "C-tan-Shard-of-the-Nightbringer",
-    "c_tan_deceiver": "C-tan-Shard-of-the-Deceiver",
-    "c_tan_void_dragon": "C-tan-Shard-of-the-Void-Dragon",
-    "tesseract_vault": "Tesseract-Vault",
+FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
+    "necrons": {
+        # HQ
+        "overlord": "Overlord",
+        "royal_warden": "Royal-Warden",
+        "plasmancer": "Plasmancer",
+        "technomancer": "Technomancer",
+        "necron_lord": "Lord",
+        "lokhust_lord": "Lokhust-Lord",
+        "skorpekh_lord": "Skorpekh-Lord",
+        "catacomb_command_barge": "Catacomb-Command-Barge",
+        "psychomancer": "Psychomancer",
+        "chronomancer": "Chronomancer",
+        "illuminor_szeras": "Illuminor-Szeras",
+        "orikan_the_diviner": "Orikan-the-Diviner",
+        "trazyn_the_infinite": "Trazyn-the-Infinite",
+        "nemesor_zahndrekh": "Nemesor-Zahndrekh",
+        "vargard_obyron": "Vargard-Obyron",
+        "anrakyr_the_traveller": "Anrakyr-the-Traveller",
+        "imotekh_the_stormlord": "Imotekh-the-Stormlord",
+        "the_silent_king": "The-Silent-King",
+        # Troops
+        "warriors": "Necron-Warriors",
+        "immortals": "Immortals",
+        # Elites
+        "skorpekh_destroyers": "Skorpekh-Destroyers",
+        "lychguard": "Lychguard",
+        "deathmarks": "Deathmarks",
+        "canoptek_spyder": "Canoptek-Spyders",
+        "triarch_praetorians": "Triarch-Praetorians",
+        "flayed_ones": "Flayed-Ones",
+        "canoptek_reanimator": "Canoptek-Reanimator",
+        "cryptothralls": "Cryptothralls",
+        # Fast Attack
+        "canoptek_scarabs": "Canoptek-Scarab-Swarms",
+        "canoptek_wraiths": "Canoptek-Wraiths",
+        "tomb_blades": "Tomb-Blades",
+        "ophydian_destroyers": "Ophydian-Destroyers",
+        # Heavy Support
+        "triarch_stalker": "Triarch-Stalker",
+        "annihilation_barge": "Annihilation-Barge",
+        "lokhust_heavy_destroyers": "Lokhust-Heavy-Destroyers",
+        "lokhust_destroyers": "Lokhust-Destroyers",
+        "canoptek_doomstalker": "Canoptek-Doomstalker",
+        "doomsday_ark": "Doomsday-Ark",
+        "ghost_ark": "Ghost-Ark",
+        # Flyers
+        "night_scythe": "Night-Scythe",
+        "doom_scythe": "Doom-Scythe",
+        # Lord of War
+        "monolith": "Monolith",
+        "c_tan_nightbringer": "C-tan-Shard-of-the-Nightbringer",
+        "c_tan_deceiver": "C-tan-Shard-of-the-Deceiver",
+        "c_tan_void_dragon": "C-tan-Shard-of-the-Void-Dragon",
+        "tesseract_vault": "Tesseract-Vault",
+    },
+    "orks": {
+        # HQ
+        "warboss": "Warboss",
+        "warboss_mega_armour": "Warboss-in-Mega-Armour",
+        "warboss_warbike": "Warboss-on-Warbike",
+        "big_mek": "Big-Mek",
+        "big_mek_mega_armour": "Big-Mek-in-Mega-Armour",
+        "big_mek_kff": "Big-Mek-with-Kustom-Force-Field",
+        "big_mek_sag": "Big-Mek-with-Shokk-Attack-Gun",
+        "big_mek_warbike": "Big-Mek-on-Warbike",
+        "weirdboy": "Weirdboy",
+        "wurrboy": "Wurrboy",
+        "painboy": "Painboy",
+        "beastboss": "Beastboss",
+        "beastboss_squigosaur": "Beastboss-on-Squigosaur",
+        "ghazghkull": "Ghazghkull-Thraka",
+        "kaptin_badrukk": "Kaptin-Badrukk",
+        "boss_zagstruk": "Boss-Zagstruk",
+        "deffkilla_wartrike": "Deffkilla-Wartrike",
+        # Troops
+        "boyz": "Boyz",
+        "gretchin": "Gretchin",
+        "beast_snagga_boyz": "Beast-Snagga-Boyz",
+        # Elites
+        "meganobz": "Meganobz",
+        "nobz": "Nobz",
+        "burna_boyz": "Burna-Boyz",
+        "kommandos": "Kommandos",
+        "tankbustas": "Tankbustas",
+        "flash_gitz": "Flash-Gitz",
+        "mad_dok_grotsnik": "Mad-Dok-Grotsnik",
+        "mek": "Mek",
+        "runtherd": "Runtherd",
+        "painboy_warbike": "Painboy-on-Warbike",
+        "nob_waaagh_banner": "Nob-with-Waaagh-Banner",
+        # Fast Attack
+        "warbikers": "Warbikers",
+        "stormboyz": "Stormboyz",
+        "deffkoptas": "Deffkoptas",
+        "squighog_boyz": "Squighog-Boyz",
+        "nob_smasha_squig": "Nob-on-Smasha-Squig",
+        "boomdakka_snazzwagons": "Boomdakka-Snazzwagons",
+        "kustom_boosta_blastas": "Kustom-Boosta-blastas",
+        "megatrakk_scrapjets": "Megatrakk-Scrapjets",
+        "shokkjump_dragstas": "Shokkjump-Dragstas",
+        "rukkatrukk_squigbuggies": "Rukkatrukk-Squigbuggies",
+        # Heavy Support
+        "battlewagon": "Battlewagon",
+        "deff_dreads": "Deff-Dreads",
+        "bonebreaka": "Bonebreaka",
+        "gunwagon": "Gunwagon",
+        "kill_rig": "Kill-Rig",
+        "hunta_rig": "Hunta-Rig",
+        # Flyers
+        "dakkajet": "Dakkajet",
+        "burna_bommer": "Burna-bommer",
+        "blitza_bommer": "Blitza-bommer",
+        "wazbom_blastajet": "Wazbom-Blastajet",
+    },
 }
 
 STAT_COLS = ["M", "WS", "BS", "S", "T", "W", "A", "Ld", "Sv"]
@@ -127,9 +184,13 @@ def extract_keywords(soup: BeautifulSoup) -> list[str]:
                 if any(c.startswith("tooltip") for c in classes):
                     flush(buf)
                     if "tooltipDynasty" in classes:
-                        # Get only the <DYNASTY> inner span, skip dynasty sub-names
+                        # <DYNASTY>: take only DYDY inner span, skip dynasty-specific sub-names
                         dydy = child.find(class_="DYDY")
                         kw = dydy.get_text(strip=True) if dydy else "<DYNASTY>"
+                    elif "tooltipClan" in classes:
+                        # <CLAN>: take only CLCL inner span, skip clan-specific sub-names
+                        clcl = child.find(class_="CLCL")
+                        kw = clcl.get_text(strip=True) if clcl else "<CLAN>"
                     else:
                         # separator=' ' joins multi-word kwb inner spans correctly
                         kw = child.get_text(separator=" ", strip=True)
@@ -342,6 +403,7 @@ def main() -> None:
     args = parser.parse_args()
 
     faction = args.faction
+    unit_slugs = FACTION_UNIT_SLUGS.get(faction, {})
 
     if args.stratagems:
         url = f"{BASE}/{faction}/"
@@ -354,12 +416,18 @@ def main() -> None:
     units: list[tuple[str, str]]
     if args.unit:
         uid = args.unit.lower()
-        if uid not in UNIT_SLUGS:
-            print(f"Unknown unit '{uid}'. Known: {', '.join(UNIT_SLUGS)}", file=sys.stderr)
+        if uid not in unit_slugs:
+            known = (
+                ", ".join(unit_slugs) if unit_slugs else "(no slugs registered for this faction)"
+            )
+            print(f"Unknown unit '{uid}'. Known: {known}", file=sys.stderr)
             sys.exit(1)
-        units = [(uid, UNIT_SLUGS[uid])]
+        units = [(uid, unit_slugs[uid])]
     elif args.all_units:
-        units = list(UNIT_SLUGS.items())
+        if not unit_slugs:
+            print(f"No unit slugs registered for faction '{faction}'.", file=sys.stderr)
+            sys.exit(1)
+        units = list(unit_slugs.items())
     else:
         parser.print_help()
         sys.exit(0)

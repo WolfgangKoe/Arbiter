@@ -49,9 +49,22 @@ Ursache: `p1_units = {u.id: state}` überschrieb Duplikate, alle Widget-Keys kol
 
 **Wichtig:** Mehrfache Einheiten gleichen Typs sind nun vollständig unterstützt — sowohl im Roster-YAML als auch im Game-State (eigene Wunden, eigene Buttons).
 
-### Stand nach Session
-- **342 Tests grün** (vorher 323)
-- Ziel 5d vollständig abgeschlossen
+### Data-driven Keyword-Matching ✅ (neu)
+
+**Problem:** Keyword-Vergleiche im Frontend waren hart-kodiert (`"CORE" in unit.keywords`, `"Character" in unit.keywords` etc.) — Groß-/Kleinschreibung konnte Fähigkeiten brechen.
+
+**Lösung:**
+- `Unit.has_keyword(kw: str) -> bool` — case-insensitive Vergleich direkt am Objekt
+- Alle Frontend-Checks in `chargephase.py`, `shootingPhase.py`, `psychicPhase.py`, `unitCard.py` nutzen jetzt `unit.has_keyword()`
+- MWBD-Zielauswahl: neue Funktion `_mwbd_required_keywords(faction)` liest `has_keywords`-Condition direkt aus der Ability-Definition; kein String im Frontend mehr
+- `unit_abilities.yaml`: `Core` → `CORE` vereinheitlicht
+
+**Constraint verschärft:** Keywords IMMER `UPPERCASE` in allen YAML-Dateien (units.yaml, unit_abilities.yaml, stratagems.yaml etc.). Checks in Python immer via `unit.has_keyword()`.
+
+### App-Umbenennung ✅ (neu)
+
+- `src/app.py`: `page_title` → `"Arbiter"`
+- `src/uiLayout/setupScreen.py`: `st.title()` → `"Arbiter"`
 
 ---
 
@@ -66,25 +79,32 @@ Ursache: `p1_units = {u.id: state}` überschrieb Duplikate, alle Widget-Keys kol
 | 5c — Bugfixes (Weapon, MWBD, ResOrb) | ✅ |
 | 5e — Setup-Screen Redesign + VP-Config + Header | ✅ |
 | 5g — Regelkonformer Setup-Flow | ✅ |
-| 5d — BattleScribe Importer | ✅ **neu** |
+| 5d — BattleScribe Importer | ✅ |
+| Keyword-Matching data-driven | ✅ **neu** |
+| Orks-Fraktion (vollständig) | 🔄 in Arbeit |
 | 5f — Stratagems PoC | ⬜ |
-| Orks-Fraktion (vollständig) | ⬜ |
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-### Priorität 1 — Orks-Fraktion
+### Priorität 1 — Orks-Fraktion vollständig scrapen
 
-Orks haben nur eine Legacy `army.yaml` — kein `units.yaml`, `weapons.yaml` etc.
-Für echtes Zwei-Fraktionen-Spiel (Necrons vs. Orks) wird der vollständige Katalog gebraucht.
-Wahapedia-Scraper liegt in `tools/wahapedia_scraper.py`.
+Der Scraper (`tools/wahapedia_scraper.py`) wurde auf Multi-Faction-Support umgestellt:
+- `FACTION_UNIT_SLUGS = {"necrons": {...}, "orks": {...}}` statt monolithischem `UNIT_SLUGS`
+- Aufruf: `python tools/wahapedia_scraper.py orks --all`
 
-Vorgehen:
-1. `tools/wahapedia_scraper.py necrons --all` als Referenz ansehen (hat funktioniert)
-2. `python tools/wahapedia_scraper.py orks --all` ausführen → `data/wh40k_9e/orks/units.yaml` erzeugen
-3. Weapons, Stratagems analog scrapen
-4. Loader testen: `load_unit_catalog("orks")` muss > 0 Units zurückgeben
+**Orks-Slugs bereits in Scraper eingetragen** (aus Wahapedia-Faction-Page abgeleitet):
+HQ, Troops, Elites, Fast Attack, Heavy Support, Flyers — vollständige Liste.
+
+**Nächste konkrete Schritte:**
+1. Scraper-Output für Orks prüfen (läuft gerade oder schon gelaufen)
+2. Rohdaten in `data/wh40k_9e/orks/units.yaml` konvertieren (analog zu Necrons)
+3. Weapons in `data/wh40k_9e/orks/weapons.yaml`
+4. Loader-Test: `load_unit_catalog("orks")` muss > 0 Units zurückgeben
+5. Roster-Datei `data/rosters/orks_*.yaml` anlegen für Testspiel
+
+**Wichtig:** Legacy `army.yaml` enthält nur 8 Units (Bad Moons Subfraktion) — der vollständige Katalog soll alle Ork-Einheiten umfassen, nicht nur diese Auswahl.
 
 ### Priorität 2 — Ziel 5f: Stratagems PoC
 
@@ -110,7 +130,7 @@ Bekannte Lücken aus Live-Tests:
 | Lücke | Beschreibung |
 |-------|-------------|
 | `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein UI-Aufruf — Vehicles zeigen immer Basis-Stats |
-| Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml` |
+| Orks-Fraktion fehlt | Scraping läuft — `units.yaml` / `weapons.yaml` noch zu erstellen |
 | Adeptus Custodes Katalog fehlt | `data/wh40k_9e/adeptus_custodes/` hat nur Placeholder-Dateien |
 | Forge World / Legends importieren | Noch nicht umgesetzt |
 | Wargear im Roster-Format | Aktuell nur `id` + `models` — keine Wargear-Auswahl speicherbar |
@@ -127,9 +147,9 @@ Bekannte Lücken aus Live-Tests:
 - Freigabe vor Umsetzung — Plan zeigen, auf „ja" warten
 - Seitenleisten IMMER fest: first_player links, second_player rechts (unveränderlich während Spiel)
 - dev-Branch — kein direktes Committen auf main
-- Keywords immer `UPPERCASE` in units.yaml — Checks entsprechend schreiben
+- **Keywords immer `UPPERCASE` in allen YAML-Dateien** — Checks in Python via `unit.has_keyword()` (niemals direkter String-Vergleich)
 - Weapon-Zugriff: Nie `w.is_melee` für Filter nutzen wenn Dual-Profile möglich — `w.for_phase(use_melee)` verwenden
-- Session-State Unit-Keys: `p1_units` / `p2_units` mit `#N`-Suffix für Duplikate (seit heute)
+- Session-State Unit-Keys: `p1_units` / `p2_units` mit `#N`-Suffix für Duplikate (seit 2026-06-02)
 - CP wird nur durch Game Mechanics verändert (Befehlsphase, Stratagems) — kein manueller Header-Stepper mehr
 
 ### State-Key System (seit 2026-06-02)
@@ -142,6 +162,12 @@ Mehrfach-Units gleichen Typs im Roster werden mit `#N`-Suffix disambiguiert:
 `unit_id_from_state_key(key)` strippt den Suffix wieder → gibt echte `unit.id` zurück.
 Neue Hilfsfunktionen in `game_state.py`: `unit_keys_for()`, `unit_id_from_state_key()`.
 `lookup(faction, uid)` in `_common.py` versteht State-Keys.
+
+### Keyword-Matching (seit 2026-06-02)
+
+`Unit.has_keyword(kw: str) -> bool` ist die einzige erlaubte Methode für Keyword-Checks.
+Direkter String-Vergleich (`"CORE" in unit.keywords`) ist verboten — immer `unit.has_keyword("CORE")`.
+MWBD-Zielfilter liest `has_keywords` aus Ability-Definition (data-driven, kein Hard-Code).
 
 ### Streamlit 1.57 — CSS-Selektoren (gelernte Lektionen)
 
