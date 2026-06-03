@@ -1,0 +1,11 @@
+display_name: Orks — Testspiel
+faction_dir: orks
+units:
+- id: wh40k_9e.orks.unit.warboss_mega_armour
+  models: 1
+- id: wh40k_9e.orks.unit.boyz
+  models: 10
+- id: wh40k_9e.orks.unit.gretchin
+  models: 10
+- id: wh40k_9e.orks.unit.warbikers
+  models: 3
