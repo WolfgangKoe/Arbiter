@@ -1,5 +1,244 @@
-# Ziel 6 — [Titel folgt] ⬜
+# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration ⬜
 
-**Voraussetzung:** Ziel 5 (inkl. 5i) abgeschlossen.
+**Voraussetzung:** Ziel 5 (inkl. 5i) abgeschlossen. ✅
 
-Wird nach Abschluss von Ziel 5 definiert.
+---
+
+## Übersicht
+
+Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert werden können:
+
+| Teilziel | Thema | Abhängigkeiten |
+|----------|-------|----------------|
+| **6a** | gameHeader Redesign | – |
+| **6b** | armyCard — generisches Fähigkeitssystem | – |
+| **6c** | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
+| **6d** | Attackensequenz — neue simultane Darstellung | 6b, 6c |
+| **6e** | Fähigkeiten-Integration in alle Phasen | 6b |
+| **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
+| **6g** | Game Log — Archiv, strukturiertes Format, Setup-UI | – |
+
+---
+
+## 6a — gameHeader Redesign
+
+**Ziel:** Der Header sieht professionell aus. Steuerelemente sind konsistent angeordnet.
+
+### Layout-Spec
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  [Fraktion A]              Runde 2              [Fraktion B]      │
+│                                                                  │
+│   3 VP  4 CP     [MOVEMENT] [SHOOTING] [CHARGE] [FIGHT] [MORALE] │
+│                         ←   ↺   →                               │
+│                   ← auf derselben Zeile wie ↺ und →             │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+- VP und CP auf **einer Zeile**, z.B. `3 VP  4 CP` — Zahl + Label inline, kein Label über der Zahl
+- Linke und rechte Score-Gruppe auf **exakt derselben Höhe**
+- `←`, `↺`, `→` auf **derselben untersten Zeile** im Center-Bereich
+- Phase-Badges **doppelt so groß** wie aktuell (padding erhöhen, font-size hochsetzen)
+- Aktive Phase-Badge: deutlich hervorgehoben (Farbe + Border)
+
+### Tasks
+
+- [ ] `gameHeader.py`: `_score_group()` umschreiben — VP und CP inline in einer Zeile
+- [ ] `gameHeader.py`: `←`, `↺`, `→` in eine gemeinsame Columns-Row packen (kein separater `rst_c`-Block)
+- [ ] `gameHeader.py`: Phase-Badge-Größe verdoppeln (`padding`, `font-size`)
+- [ ] Visuell prüfen: Scores links/rechts auf gleicher Höhe
+
+---
+
+## 6b — armyCard — generisches Fähigkeitssystem
+
+**Ziel:** Die armyCard zeigt korrekte Fraktionsdaten und ermöglicht die Aktivierung aller armeeweit relevanten Fähigkeiten — fraktionsunabhängig.
+
+### Bugs
+
+- `faction_dir_for()` fällt auf `"necrons"` zurück wenn `p1_faction_dir`/`p2_faction_dir` nicht gesetzt → Living Metal erscheint bei Adeptus Custodes, WAAAGH fehlt bei Orks
+- Command Protocol-Wechsel ist in `gameProtocoll.py` hart auf Necrons verdrahtet
+
+### Spec
+
+- Fraktions-Keywords als Badges aus den Daten (`army.yaml` oder `units.yaml` keywords), nicht nur Fraktionsname
+- Armeefähigkeiten werden **generisch** aktiviert: Die armyCard liest `faction_abilities.yaml` der korrekten Fraktion und rendert phase-abhängige Buttons
+- Command Protocol-Wechsel zieht von `gameProtocoll.py` in die armyCard (nur sichtbar wenn Fraktion Protokolle hat)
+- WAAAGH-Aktivierung erscheint für Orks in der Befehlsphase
+- Aktivierte Fähigkeiten werden im Session-State vermerkt (für Modifier-System in 6d/6e)
+
+### Tasks
+
+- [ ] `game_state.py` / `setupScreen.py`: `p1_faction_dir` und `p2_faction_dir` beim Setup **immer** setzen, kein Default auf `"necrons"` in `faction_dir_for()`
+- [ ] `armyCard.py`: Fraktions-Keywords aus Daten lesen und als Badges rendern
+- [ ] `armyCard.py`: Triggered-Abilities generisch rendern (unabhängig von Fraktionsname)
+- [ ] `gameProtocoll.py`: `_render_necron_protocols()` + hardcoded Necron-Check entfernen; Protokoll-Logik in armyCard verlagern
+- [ ] `armyCard.py`: Command Protocol-Wechsel-UI (nur wenn `command_protocols.yaml` vorhanden)
+- [ ] `data/wh40k_9e/orks/faction_abilities.yaml`: WAAAGH-Fähigkeit prüfen / ergänzen
+- [ ] Verifizieren: Adeptus Custodes zeigt keine Necron-Fähigkeiten; Orks zeigt WAAAGH
+
+---
+
+## 6c — gameProtocoll — Stratagems als Default, Modifier-Export
+
+**Ziel:** Stratagems sind der Default-Tab. Verwendete Stratagems propagieren ihre Effekte als Modifier ins Spiel.
+
+### Tasks
+
+- [ ] `gameProtocoll.py`: Tab-Reihenfolge tauschen — Stratagems zuerst, Command Protocol zweiter Tab
+- [ ] `gameObjects/stratagem.py`: Stratagems bekommen optionales `modifier`-Feld (phase, roll_type, value, source_label)
+- [ ] `data/wh40k_9e/*/stratagems.yaml`: Relevante Stratagems mit `modifier`-Feldern ergänzen (Necrons, Orks als Piloten)
+- [ ] `gameMechanic/game_state.py`: `active_modifiers` im Session-State — Liste aktiver Modifier mit Quelle und Ablaufzeitpunkt
+- [ ] Wenn Stratagem aktiviert: Modifier in `active_modifiers` einschreiben
+- [ ] Phasenende / Rundenende: abgelaufene Modifier aus `active_modifiers` entfernen
+
+---
+
+## 6d — Attackensequenz — simultane Darstellung
+
+**Ziel:** Treffer-, Verwundungs-, Rettungswurf, FNP und Schaden werden **gleichzeitig** angezeigt. Kein schrittweises Klicken. Modifikatoren aus Fähigkeiten, Ausrüstung und Stratagems werden transparent aufgelistet.
+
+### Layout-Spec
+
+```
+gameDisplayArea (oben, full width)
+──────────────────────────────────────────────────────────────
+  [Angreifer] SPACE MARINES INTERCESSOR → [Ziel] ORK BOY
+  Bolter [Rapid Fire]  |  A2 · S4 · AP-1 · D1
+
+AngreiferPlayerArea (links)         VerteidigenPlayerArea (rechts)
+─────────────────────────────────   ──────────────────────────────
+TREFFER                             RETTUNGSWURF
+  [ 3+ ]  BS 3+                       [ 5+ ]  Sv 4+ / AP-1
+  −1  Heavy (nicht bewegt)            → 5+
+  → 4+
+  [Reroll 1s — Protokoll] 0 CP ▶     FEEL NO PAIN  (falls vorhanden)
+                                        [ 5+ ]  FNP 5+
+VERWUNDUNG                              ~~FNP~~  Nightbringer: ignored
+  [ 5+ ]  S4 vs T5
+  +1  [Lethal Hits — Stratagem] 1 CP ▶ SCHADEN
+  → 4+                                  D1  pro Treffer
+                                        [ Schaden: 0 ] [+] [−]
+                                        [ Mortal: 0  ] [+] [−]
+```
+
+### Regeln
+
+- **Gleichzeitig:** Alle Blöcke werden auf einmal gerendert, keine Weiter-Buttons
+- **Angreifer-Seite:** Trefferwurf + Verwundungswurf (mit Modifier-Stack + Quellen)
+- **Verteidiger-Seite:** Rettungswurf (normal + Invulnerable, bester wird genommen) + FNP (nur wenn vorhanden) + Schadenseingabe
+- **FNP-Negation:** Generisch über Waffenfähigkeits-Flag `ignores_fnp: true` in `weapons.yaml` — nicht hardcoded auf Nightbringer
+- **Stratagem-Buttons:** Erscheinen direkt beim betreffenden Würfels-Block; zeigen CP-Kosten; sind nur clickbar wenn CP verfügbar und nicht bereits verwendet
+- **Nahkampf / Overwatch:** Inaktiver Spieler kann Angreifer sein — Seiten-Zuweisung basiert auf `attacker_faction`, nicht `active`
+- **Schaden:** User gibt nur finalen zugewiesenen Schaden ein; Zwischenwerte (Anzahl Treffer etc.) werden nicht eingegeben
+
+### Tasks
+
+- [ ] `gameMechanic/combat.py`: Funktion `resolve_attack_modifiers(attacker_unit, weapon_profile, target_unit, active_modifiers)` → gibt strukturierten Modifier-Stack pro Roll-Typ zurück
+- [ ] `gameMechanic/combat.py`: Funktion `resolve_save(target_unit, ap, active_modifiers)` → gibt besten Save-Wert zurück (normal vs. invuln)
+- [ ] `gameMechanic/combat.py`: Funktion `resolve_fnp(target_unit, weapon_profile)` → gibt FNP-Wert zurück oder `None` wenn ignoriert
+- [ ] `uiLayout/gameActionsArea.py` / Phase-Handler: Attack-Sequenz-Block extrahieren in eigene Render-Funktion
+- [ ] Angreifer-PlayerArea: Treffer-Block + Verwundungs-Block rendern (Modifier-Stack, Quelle, optionale Stratagem-Buttons)
+- [ ] Verteidiger-PlayerArea: Save-Block + FNP-Block (konditional) + Schadenseingabe rendern
+- [ ] `gameObjects/weapon.py`: `ignores_fnp: bool` Feld ergänzen
+- [ ] Prüfen: Shootingphase, Fightphase, Overwatch in Chargephase — alle drei Kontexte korrekt
+
+---
+
+## 6e — Fähigkeiten-Integration in alle Phasen
+
+**Ziel:** Fähigkeiten aus Armee, Einheit, Ausrüstung und Stratagems greifen in den richtigen Phasen. CP-Doppelvergabe-Bug gefixt.
+
+### Tasks
+
+- [ ] `gameMechanic/commandPhase.py`: CP-Vergabe als einmaligen Phase-Grant implementieren (Flag `cp_granted_this_phase` im Session-State, Reset beim Phasenwechsel)
+- [ ] `gameMechanic/commandPhase.py`: Einheiten mit Befehlsphase-Fähigkeiten anzeigen (ähnlich Psiphase-Hinweise)
+- [ ] `gameMechanic/ability_engine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen
+- [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c)
+- [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks)
+- [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer
+
+---
+
+## 6f — Ability-Badges und Keyword-Highlighting auf unitCard
+
+**Ziel:** Aktive Buffs auf einer Einheit sind auf der unitCard sofort sichtbar.
+
+### Spec
+
+- Badge pro aktivem Buff (Stratagem, Fähigkeit, Protokoll) auf der unitCard
+- Badge zeigt: Name der Quelle + Ablauf (z.B. "bis Phasenende")
+- Ablauf-Logik kommt aus `active_modifiers` (6c) — Badge verschwindet wenn Modifier abläuft
+- Betroffene Keywords visuell hervorgehoben wenn eine Fähigkeit auf sie zutrifft
+
+### Tasks
+
+- [ ] `uiLayout/unitCard.py`: `active_modifiers` aus Session-State lesen, Badges für betroffene Einheit rendern
+- [ ] `uiLayout/unitCard.py`: Keyword-Highlighting wenn `active_modifiers` ein Keyword-Condition-Modifier betrifft
+- [ ] `gameMechanic/game_state.py`: `active_modifiers` Datenstruktur definieren: `{unit_key, source, effect, expires_at_phase, expires_at_round}`
+
+---
+
+## 6g — Game Log — Archiv, strukturiertes Format, Setup-UI
+
+**Ziel:** Reset archiviert das Log. Das Format ist für Crusade-Vorbereitung (Ziel 7) geeignet. Setup-Screen hat eine Log-Verwaltungs-UI.
+
+### Log-Format (JSON)
+
+```json
+{
+  "game_id": "2026-06-03T14:22:00",
+  "players": {"first": "Necrons", "second": "Orks"},
+  "rounds": [
+    {
+      "round": 1,
+      "phases": [
+        {
+          "phase": "shooting",
+          "active": "Necrons",
+          "events": [
+            {
+              "type": "attack",
+              "attacker_unit": "wh40k_9e.necrons.unit.warriors",
+              "attacker_unit_name": "Warriors",
+              "target_unit": "wh40k_9e.orks.unit.boyz",
+              "target_unit_name": "Boyz",
+              "weapon": "gauss_flayer",
+              "damage_dealt": 2,
+              "mortal_wounds": 0,
+              "target_destroyed": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "result": {"winner": "Necrons", "vp": {"Necrons": 75, "Orks": 42}}
+}
+```
+
+### Tasks
+
+- [ ] `gameMechanic/game_log.py`: Log-Format auf obige Struktur umstellen
+- [ ] `gameMechanic/game_log.py`: `archive_and_reset_log()` — verschiebt aktuelles Log nach `data/log/archive/<game_id>.json`
+- [ ] `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
+- [ ] `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (nur im Setup-Screen sichtbar)
+  - Liste der archivierten Logs (Datum, Spieler, Ergebnis)
+  - Download-Button pro Log (als JSON)
+  - Löschen-Button pro Log (mit Bestätigung)
+- [ ] Prüfen: Nach Reset keine alten Einträge im Battle Log sichtbar
+
+---
+
+## Akzeptanzkriterien (Ziel 6 komplett)
+
+- [ ] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß
+- [ ] armyCard: Korrekte Fähigkeiten für jede Fraktion, kein Necron-Fallback-Bug
+- [ ] WAAAGH aktivierbar, Command Protocol wechselbar — beide über armyCard
+- [ ] Stratagems sind Default-Tab in gameProtocoll
+- [ ] Attackensequenz: simultan, Modifier transparent, kein Zwischenwert-Klicken
+- [ ] CP-Doppelvergabe unmöglich
+- [ ] Ability-Badges auf unitCard sichtbar und korrekt ablaufend
+- [ ] Reset archiviert Log; neues Spiel startet sauber
+- [ ] Archiv-UI im Setup-Screen: Liste, Download, Löschen
