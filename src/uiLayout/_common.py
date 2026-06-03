@@ -375,8 +375,9 @@ def render_attack_form(
     save_str = f"{eff_save}+" if eff_save <= 6 else "none"
     inv_display = f"{def_unit.invuln_save}+" if def_unit.invuln_save else "none"
 
+    atk_display = str(atk_unit.attacks) if profile.attacks in ("Melee", None) else profile.attacks
     st.caption(
-        f"**{weapon.name_en}**: {profile.attacks} att · {skill_label}{skill}+ · "
+        f"**{weapon.name_en}**: {atk_display} att · {skill_label}{skill}+ · "
         f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{profile.damage}"
     )
 

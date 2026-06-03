@@ -97,8 +97,9 @@ def _active_fight(
             p = w.for_phase(use_melee=True)
             ap_int = int(p.ap)
             ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
+            atk_display = str(unit.attacks) if p.attacks in ("Melee", None) else p.attacks
             st.caption(
-                f"**{w.name_en}** · A{p.attacks} · WS{skill}+ "
+                f"**{w.name_en}** · A{atk_display} · WS{skill}+ "
                 f"· S{p.strength} · {ap_str} · D{p.damage}"
             )
     else:

@@ -72,8 +72,9 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             w_range = "Melee" if w.is_melee else f'{w.range_inches}"'
             ap_str = f"AP{w.ap}" if int(w.ap) != 0 else "AP0"
             abilities_str = f" · *{w.abilities}*" if w.abilities else ""
+            atk_display = str(unit.attacks) if w.attacks in ("Melee", None) else w.attacks
             st.caption(
-                f"**{w.name_en}** · {w_range} · A{w.attacks} · "
+                f"**{w.name_en}** · {w_range} · A{atk_display} · "
                 f"S{w.strength} · {ap_str} · D{w.damage}{abilities_str}"
             )
 
