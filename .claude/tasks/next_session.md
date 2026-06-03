@@ -140,42 +140,49 @@ Setup-Buttons rufen `swap_players()` auf, das alle p1/p2-State-Keys korrekt taus
 | 5a — Spec | ✅ |
 | 5b — Necron-Katalog | ✅ |
 | 5c — Loader-Refactoring | ✅ |
-| 5d — BattleScribe Importer (fraktionsunabhängig) | ✅ 2026-06-03 |
-| 5e — Setup-Screen Redesign + VP-Config + Header | ✅ |
-| 5g — Regelkonformer Setup-Flow | ✅ |
-| Keyword-Matching data-driven | ✅ |
-| Orks-Katalog (5h) | ✅ |
-| Bug: Kampfphase Armeeliste verschwindet | ✅ 2026-06-03 |
-| Bug: Setup-Buttons tauschen Position | ✅ 2026-06-03 |
-| Ork-Roster für Testspiel | ✅ 2026-06-03 |
-| E2E-Verifikation alle Phasen | ✅ 2026-06-03 |
+| 5d — BattleScribe Importer | ✅ 2026-06-03 |
+| 5e — Setup-Screen Redesign | ✅ |
 | 5f — Stratagems PoC | ✅ 2026-06-03 |
+| 5g — Regelkonformer Setup-Flow | ✅ Spec; Implementierung → 5i |
+| 5h — Orks-Katalog | ✅ |
+| **5i — Abschluss & Qualitätssicherung** | ⬜ nächster Schritt |
+| 6 — [wird nach Ziel 5 definiert] | ⬜ |
+| 7 — Crusade-Erweiterung | ⬜ |
+| 8 — Wahapedia Faction Fetcher | ⬜ |
 
 ---
 
-## Nächste Schritte (priorisiert)
+## Nächste Schritte — Ziel 5i (Abschluss Ziel 5)
 
-### Priorität 1 — Ziel 6: Refactoring & Konsolidierung
+Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
 
-Startpunkt: `docs/goals/ziel6.md`
+### Stratagems-Verbesserungen (Bugs zuerst)
 
-**6a — Stratagems Verbesserungen (Bugs zuerst):**
-1. Bug: `player: inactive`-Stratagems (Fire Overwatch, Counter-Offensive) ziehen CP vom aktiven statt inaktiven Spieler ab → `gameProtocoll.py` `_render_stratagems()`
-2. Condition-Check auf selected-Unit-Ebene (aktuell: Armee-Ebene) → `_conditions_met()`
-3. Stratagems als Inline-Hinweis in gameActionArea pro Aktion
+1. **Bug: CP vom falschen Pool** — `player: inactive`-Stratagems (Fire Overwatch, Counter-Offensive, Cut Them Down) ziehen CP vom aktiven statt inaktiven Spieler
+   - Fix: in `_render_stratagems()` spendierenden Spieler anhand `strat.player` bestimmen
+2. **Condition-Check auf Unit-Ebene** — aktuell Armee-Ebene; wenn `selected_unit` gesetzt → nur diese Unit prüfen
+   - Fix: `_conditions_met()` in `gameProtocoll.py` erweitern
+3. **Stratagems in gameActionArea** — Inline-Hinweis pro Aktion welche Stratagems nutzbar sind (aktiv + reaktiv getrennt)
 
-**6b — Code-Qualität:**
-- Faction-Dir Hardcode `"necrons" if "necrons" in unit.id else "orks"` → `faction_dir_for()`
-- `resolve_bracket_stats` in Fight-/Shooting-Phase verdrahten
+### Setup-Screen
 
-**6c — Datenqualität:**
-- Command Protocols deutsche Namen → `name_en` auf Englisch
-- Datasheet Dual-Profile vollständig anzeigen
-- Wargear im Roster-Format
+- Mission-Auswahl im Setup-Screen (Dropdown je Spielgröße)
+- Attacker/Defender-Button (Roll-off UI)
+- Secondary Objectives Toggle (on/off + 3 Slots + VP-Tracking)
+- `unmatched`-Warnungen im Setup-Screen anzeigen
+- Punkte-Validierung: Roster-Summe gegen Spielgröße prüfen
 
-**6d — Ziel-5-Restpunkte:**
-- Mission-Auswahl, Attacker/Defender, Secondary Objectives (aus 5e/5g)
-- `invuln_save` + FNP via BattleScribe-Regex (aus 5d)
+### Code-Qualität
+
+- **Faction-Dir Hardcode** — `"necrons" if "necrons" in unit.id else "orks"` in `gameActionsArea.py` → `faction_dir_for()`
+- **`resolve_bracket_stats` verdrahten** — Vehicle-Stats live beim Schaden anpassen (bereits in `loader.py`, nie aufgerufen)
+- **`invuln_save` + FNP** — BattleScribe-Importer extrahiert diese noch nicht via Regex
+
+### Datenqualität
+
+- **Command Protocols Englisch** — `necrons/command_protocols.yaml` hat deutsche Namen → `name_en` auf Englisch
+- **Datasheet Dual-Profile** — `gameActionsArea.py` zeigt nur `profiles[0]`; alle Profile iterieren
+- **Wargear im Roster-Format** — optionales `wargear`-Feld + Loader-Override + Importer-Extraktion
 
 ---
 
@@ -183,17 +190,18 @@ Startpunkt: `docs/goals/ziel6.md`
 
 | Lücke | Beschreibung |
 |-------|-------------|
-| Ork-Waffen `attacks: Melee` | Scraper-Artefakt — zeigt `AMelee`, korrekte Werte nachtragen |
-| Ork `power_level: 0` | Codex-Werte noch nicht eingetragen |
-| `resolve_bracket_stats` unverdrahtet | In `loader.py` implementiert, kein UI-Aufruf — Vehicles zeigen immer Basis-Stats |
-| Adeptus Custodes Katalog fehlt | Nur Placeholder-Dateien |
-| Melee-Attack-Form Orks unverifiziert | Warboss-Angriff nur manuell testbar (Units müssen chargen) |
-| Command Protocol-Namen auf Deutsch | `necrons/stratagems.yaml` hat deutsche Namen — UI-Sprache ist Englisch |
-| Waffen-Duplikate im Ork-Katalog | Kombi-Waffen teilen einen Eintrag — nicht konsistent |
-| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar |
-| Punkte-Validierung | `load_points()` vorhanden, Gesamtpunkte werden nicht geprüft |
-| Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` |
-| Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` nutzt `"necrons" if "necrons" in unit.id else "orks"` — auf `faction_dir_for()` umstellen |
+| Stratagems: CP falscher Pool | `player: inactive`-Stratagems buchen beim aktiven Spieler (→ 5i) |
+| Stratagems: Condition-Granularität | Check auf Armee-Ebene statt selected-Unit-Ebene (→ 5i) |
+| Stratagems: gameActionArea | Kein Inline-Hinweis bei Aktionen (→ 5i) |
+| Mission-Auswahl fehlt | Setup-Screen hat kein Mission-Dropdown (→ 5i) |
+| `resolve_bracket_stats` unverdrahtet | In `loader.py` implementiert, kein Aufrufer — Vehicles zeigen immer Basis-Stats (→ 5i) |
+| Command Protocols deutsch | `necrons/command_protocols.yaml`: `name_de` statt `name_en` im UI (→ 5i) |
+| Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` (→ 5i) |
+| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar (→ 5i) |
+| Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` → `faction_dir_for()` umstellen (→ 5i) |
+| Ork `power_level: 0` | Codex-Werte nicht eingetragen (kein Blocker) |
+| Waffen-Duplikate Orks | Kombi-Waffen teilen einen Eintrag (kein Blocker) |
+| Adeptus Custodes | Nur Placeholder-Dateien — kein spielbarer Katalog |
 
 ---
 
