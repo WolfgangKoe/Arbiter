@@ -46,3 +46,4 @@ class Ability:
     unit_id: str | None = None
     wargear_id: str | None = None
     ability_type: str = "triggered"  # "triggered" | "activated"
+    badge_label: str | None = None

@@ -183,6 +183,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
         unit_id=d.get("unit_id"),
         wargear_id=d.get("wargear_id"),
         ability_type=d.get("ability_type", "triggered"),
+        badge_label=d.get("badge_label"),
     )
 
 

@@ -83,8 +83,10 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "CAST": ("#9060d0", "#180a28"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
-    "MWBD": ("#60a5fa", "#0a1020"),
 }
+
+_BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
+_DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
 
 _MOVEMENT_BADGE: dict[str, str] = {
     "moved": "MOVED",
@@ -94,21 +96,24 @@ _MOVEMENT_BADGE: dict[str, str] = {
 }
 
 
+def _badge(text: str, variant: str = "") -> str:
+    if text in _BADGE_COLORS:
+        fg, bg = _BADGE_COLORS[text]
+    elif variant == "buff":
+        fg, bg = _BUFF_COLOR
+    elif variant == "debuff":
+        fg, bg = _DEBUFF_COLOR
+    else:
+        fg, bg = ("#c9a84c", "#2e2618")
+    return (
+        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
+        f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
+        f'font-weight:600;margin-right:3px;">{text}</span>'
+    )
+
+
 def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
-    """Generate HTML state badges from movement_choice, turn_flags and persistent state.
-
-    Priority: FOUGHT > CHARGED > movement_choice (mutex movement slot).
-    SHOT is always additive. IN MELEE shows always except when CHARGED is active.
-    """
-
-    def _badge(text: str) -> str:
-        fg, bg = _BADGE_COLORS.get(text, ("#c9a84c", "#2e2618"))
-        return (
-            f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
-            f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
-            f'font-weight:600;margin-right:3px;">{text}</span>'
-        )
-
+    """Generate HTML state badges from movement_choice, turn_flags and active_buffs."""
     parts: list[str] = []
     flags = unit_state.get("turn_flags", {})
     mc = unit_state.get("movement_choice")
@@ -138,8 +143,10 @@ def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
 
     if unit_state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
-    if unit_state.get("my_will_be_done_active"):
-        parts.append(_badge("MWBD"))
+
+    for buf in unit_state.get("active_buffs", []):
+        parts.append(_badge(buf.get("badge_label", "BUFF"), variant="buff"))
+
     return "".join(parts)
 
 
@@ -382,9 +389,19 @@ def render_attack_form(
     )
 
     atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
-    mwbd_active = atk_state.get("my_will_be_done_active", False)
+    mwbd_active = any(
+        b.get("effect_type") == "buff_roll" for b in atk_state.get("active_buffs", [])
+    )
     if mwbd_active:
-        st.info("MWBD active — +1 to hit modifier.")
+        label = next(
+            (
+                b["badge_label"]
+                for b in atk_state.get("active_buffs", [])
+                if b.get("effect_type") == "buff_roll"
+            ),
+            "BUFF",
+        )
+        st.info(f"{label} active — +1 to hit modifier.")
 
     c1, c2, c3, c4 = st.columns(4)
     hits = c1.number_input(

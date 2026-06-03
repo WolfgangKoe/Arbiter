@@ -205,7 +205,6 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
             "heroic_intervened": False,
             "morale_tested": False,
         },
-        "my_will_be_done_active": False,
         "active_buffs": [],
         "models_lost_since_last_rp": 0,
     }
@@ -255,7 +254,9 @@ def init_state(
     st.session_state.cp_granted_this_phase = False
     st.session_state.used_stratagem_ids: set[str] = set()
     st.session_state.active_modifiers: list[dict] = []
-    st.session_state.mwbd_target_uid = None
+    st.session_state.command_ability_state: dict = {}
+    st.session_state.cmd_awaiting_ability_id: str | None = None
+    st.session_state.cmd_awaiting_required_kw: list = []
     st.session_state.res_orb_target_uid = None
 
     # Unit lists for stat/name lookups (indexed by player slot, not faction)
@@ -341,7 +342,7 @@ def _reset_turn_state() -> None:
             state["lost_models_this_turn"] = 0
             state["fled_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
-            state["my_will_be_done_active"] = False
+            state["active_buffs"] = []
     st.session_state.active_protocol_id = None
 
 

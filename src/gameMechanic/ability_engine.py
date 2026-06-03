@@ -60,6 +60,21 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
     return False
 
 
+def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:
+    """Return all activated command-phase abilities for a specific unit."""
+    all_abilities = load_unit_abilities(faction_dir)
+    result = []
+    for a in all_abilities:
+        if a.ability_type != "activated":
+            continue
+        if a.unit_id != unit_id:
+            continue
+        phases = a.trigger.phase if isinstance(a.trigger.phase, list) else [a.trigger.phase]
+        if "command" in phases:
+            result.append(a)
+    return result
+
+
 def get_triggered_abilities(
     state: dict,  # type: ignore[type-arg]
     phase: str,

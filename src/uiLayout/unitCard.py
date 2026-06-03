@@ -34,14 +34,23 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "SHOT": ("#40a0b8", "#081418"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
-    "MWBD": ("#60a5fa", "#0a1020"),
 }
+
+_BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
+_DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
 
 _TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight"})
 
 
-def _badge(text: str) -> str:
-    fg, bg = _BADGE_COLORS.get(text, ("#c9a84c", "#2e2618"))
+def _badge(text: str, variant: str = "") -> str:
+    if text in _BADGE_COLORS:
+        fg, bg = _BADGE_COLORS[text]
+    elif variant == "buff":
+        fg, bg = _BUFF_COLOR
+    elif variant == "debuff":
+        fg, bg = _DEBUFF_COLOR
+    else:
+        fg, bg = ("#c9a84c", "#2e2618")
     return (
         f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
         f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
@@ -83,8 +92,10 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
 
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
-    if state.get("my_will_be_done_active"):
-        parts.append(_badge("MWBD"))
+
+    for buf in state.get("active_buffs", []):
+        parts.append(_badge(buf.get("badge_label", "BUFF"), variant="buff"))
+
     return "".join(parts)
 
 
@@ -170,33 +181,49 @@ def render_unit_card(
                 st.rerun()
 
         elif is_active:
-            mwbd_awaiting = phase_key == "command" and st.session_state.get(
-                "mwbd_awaiting_target", False
+            cmd_awaiting_id: str | None = (
+                st.session_state.get("cmd_awaiting_ability_id") if phase_key == "command" else None
             )
             res_orb_awaiting = phase_key == "command" and st.session_state.get(
                 "res_orb_awaiting_target", False
             )
 
-            if mwbd_awaiting:
-                required_kws: list[str] = st.session_state.get("mwbd_required_keywords", [])
-                if required_kws and any(unit.has_keyword(kw) for kw in required_kws):
+            if cmd_awaiting_id:
+                required_kws: list[str] = st.session_state.get("cmd_awaiting_required_kw", [])
+                eligible = not required_kws or any(unit.has_keyword(kw) for kw in required_kws)
+                if eligible:
                     if st.button(
                         f"▶ {unit.name_en}",
-                        key=f"mwbd_tgt_{faction}_{uid}",
+                        key=f"cmd_tgt_{cmd_awaiting_id}_{faction}_{uid}",
                         type="secondary",
                         use_container_width=True,
                     ):
-                        st.session_state[units_key_for(faction)][uid][
-                            "my_will_be_done_active"
-                        ] = True
-                        st.session_state.mwbd_target_uid = uid
-                        st.session_state.mwbd_active_since_round = st.session_state.round
-                        st.session_state.mwbd_awaiting_target = False
+                        badge = (
+                            st.session_state.get("cmd_awaiting_badge_label")
+                            or cmd_awaiting_id.split(".")[-1]
+                        )
+                        effect_type = st.session_state.get("cmd_awaiting_effect_type", "")
+                        unit_state = st.session_state[units_key_for(faction)][uid]
+                        unit_state.setdefault("active_buffs", [])
+                        unit_state["active_buffs"].append(
+                            {
+                                "ability_id": cmd_awaiting_id,
+                                "badge_label": badge,
+                                "effect_type": effect_type,
+                            }
+                        )
+                        cmd_state: dict = st.session_state.get("command_ability_state", {})
+                        cmd_state[cmd_awaiting_id] = {
+                            "target_uid": uid,
+                            "active_since_round": st.session_state.round,
+                        }
+                        st.session_state.command_ability_state = cmd_state
+                        st.session_state.cmd_awaiting_ability_id = None
                         log_action(
                             st.session_state.round,
                             "command",
-                            "Overlord",
-                            f"My Will Be Done → {unit.name_en}",
+                            faction,
+                            f"{badge} → {unit.name_en}",
                         )
                         st.rerun()
                 else:

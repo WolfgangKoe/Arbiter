@@ -5,6 +5,7 @@ abilities:
 
   - id: wh40k_9e.necrons.unit.overlord.my_will_be_done
     name_en: My Will Be Done
+    badge_label: MWBD
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.overlord
@@ -22,6 +23,25 @@ abilities:
       target: selected_unit
       stat: hit_roll
       modifier: 1
+
+  - id: wh40k_9e.necrons.unit.necron_lord.the_lords_will
+    name_en: "The Lord's Will"
+    badge_label: "LORD'S WILL"
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.necron_lord
+    rule_text: "In your Command phase, select one friendly <DYNASTY> CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, re-roll a hit roll of 1."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 9
+    effect:
+      type: reroll_hit_1
+      target: selected_unit
 
   - id: wh40k_9e.necrons.unit.royal_warden.relentless_march
     name_en: Relentless March
