@@ -171,7 +171,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
         conditions=[_condition_from_dict(c) for c in d.get("conditions", [])],
         effect=Effect(
             type=d["effect"]["type"],
-            target=d["effect"]["target"],
+            target=d["effect"].get("target"),
             amount=d["effect"].get("amount"),
             stat=d["effect"].get("stat"),
             modifier=d["effect"].get("modifier"),

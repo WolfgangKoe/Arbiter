@@ -86,9 +86,11 @@ def test_reanimation_protocols_reactive_trigger() -> None:
     assert rp.trigger.event == "after_enemy_attack"
 
 
-def test_load_faction_abilities_orks_returns_empty() -> None:
+def test_load_faction_abilities_orks_returns_abilities() -> None:
     abilities = load_faction_abilities("orks")
-    assert abilities == []
+    ids = [a.id for a in abilities]
+    assert "wh40k_9e.orks.faction.ere_we_go" in ids
+    assert "wh40k_9e.orks.faction.mob_rule" in ids
 
 
 def test_load_unit_abilities_necrons_returns_at_least_eight() -> None:

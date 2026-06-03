@@ -27,7 +27,9 @@ _BS_NS = "http://www.battlescribe.net/schema/rosterSchema"
 
 
 def _make_ros_xml(
-    roster_name: str = "Test Army", units: list[tuple[str, int]] | None = None
+    roster_name: str = "Test Army",
+    units: list[tuple[str, int]] | None = None,
+    catalogue_name: str = "Necrons",
 ) -> bytes:
     """Build a minimal BattleScribe XML roster as bytes."""
     if units is None:
@@ -46,7 +48,7 @@ def _make_ros_xml(
     return (
         f'<?xml version="1.0" encoding="utf-8"?>'
         f'<roster xmlns="{_BS_NS}" name="{roster_name}">'
-        f'<forces><force catalogueName="Necrons">'
+        f'<forces><force catalogueName="{catalogue_name}">'
         f"<selections>{unit_els}</selections>"
         f"</force></forces>"
         f"</roster>"
@@ -92,7 +94,7 @@ def test_build_name_map_contains_display_name() -> None:
 def test_match_exact_name() -> None:
     catalog = load_unit_catalog("necrons")
     name_map = _build_name_map(catalog)
-    uid = _match_unit_name("Overlord", name_map)
+    uid = _match_unit_name("Overlord", name_map, "necrons")
     assert uid == "wh40k_9e.necrons.unit.overlord"
 
 
@@ -100,29 +102,44 @@ def test_match_necron_prefix_stripped() -> None:
     """BattleScribe exports 'Necron Warriors'; catalog has slug 'warriors'."""
     catalog = load_unit_catalog("necrons")
     name_map = _build_name_map(catalog)
-    uid = _match_unit_name("Necron Warriors", name_map)
+    uid = _match_unit_name("Necron Warriors", name_map, "necrons")
     assert uid == "wh40k_9e.necrons.unit.warriors"
 
 
 def test_match_necron_immortals_prefix_stripped() -> None:
     catalog = load_unit_catalog("necrons")
     name_map = _build_name_map(catalog)
-    uid = _match_unit_name("Necron Immortals", name_map)
+    uid = _match_unit_name("Necron Immortals", name_map, "necrons")
     assert uid == "wh40k_9e.necrons.unit.immortals"
 
 
 def test_match_unknown_returns_none() -> None:
     catalog = load_unit_catalog("necrons")
     name_map = _build_name_map(catalog)
-    uid = _match_unit_name("Space Marine Captain", name_map)
+    uid = _match_unit_name("Space Marine Captain", name_map, "necrons")
     assert uid is None
 
 
 def test_match_canoptek_scarabs() -> None:
     catalog = load_unit_catalog("necrons")
     name_map = _build_name_map(catalog)
-    uid = _match_unit_name("Canoptek Scarabs", name_map)
+    uid = _match_unit_name("Canoptek Scarabs", name_map, "necrons")
     assert uid == "wh40k_9e.necrons.unit.canoptek_scarabs"
+
+
+def test_match_ork_prefix_stripped() -> None:
+    """BattleScribe exports 'Ork Boyz'; catalog has slug 'boyz'."""
+    catalog = load_unit_catalog("orks")
+    name_map = _build_name_map(catalog)
+    uid = _match_unit_name("Ork Boyz", name_map, "orks")
+    assert uid == "wh40k_9e.orks.unit.boyz"
+
+
+def test_match_ork_exact_name() -> None:
+    catalog = load_unit_catalog("orks")
+    name_map = _build_name_map(catalog)
+    uid = _match_unit_name("Warboss", name_map, "orks")
+    assert uid == "wh40k_9e.orks.unit.warboss"
 
 
 # ---------------------------------------------------------------------------
@@ -250,3 +267,30 @@ def test_import_roster_safe_filename(tmp_path: Path) -> None:
     assert out_path.suffix == ".yaml"
     assert "/" not in out_path.name
     assert "!" not in out_path.name
+
+
+def test_import_roster_unknown_faction_raises(tmp_path: Path) -> None:
+    """Unknown catalogueName without explicit faction_dir must raise ValueError."""
+    xml_bytes = _make_ros_xml("Alpha Legion", [("Chaos Lord", 1)], catalogue_name="Space Marines")
+    roster_name, root = parse_ros_bytes(xml_bytes)
+    with pytest.raises(ValueError, match="_FACTION_CATALOGUE_MAP"):
+        import_roster(roster_name, root, output_dir=tmp_path)
+
+
+def test_import_roster_orks_roundtrip(tmp_path: Path) -> None:
+    import yaml
+
+    xml_bytes = _make_ros_xml(
+        "Bad Moons Waaagh",
+        [("Warboss", 1), ("Boyz", 10), ("Ork Boyz", 10)],
+        catalogue_name="Orks",
+    )
+    roster_name, root = parse_ros_bytes(xml_bytes)
+    out_path, unmatched = import_roster(roster_name, root, output_dir=tmp_path)
+
+    assert out_path.exists()
+    data = yaml.safe_load(out_path.read_text())
+    assert data["faction_dir"] == "orks"
+    assert any(u["id"] == "wh40k_9e.orks.unit.warboss" for u in data["units"])
+    assert any(u["id"] == "wh40k_9e.orks.unit.boyz" for u in data["units"])
+    assert unmatched == []

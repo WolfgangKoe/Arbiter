@@ -14,7 +14,10 @@ _ABILITIES_CACHE: dict[str, list] = {}
 def _faction_abilities_for(faction: str) -> list:
     faction_dir = faction_dir_for(faction)
     if faction_dir not in _ABILITIES_CACHE:
-        _ABILITIES_CACHE[faction_dir] = load_faction_abilities(faction_dir)
+        try:
+            _ABILITIES_CACHE[faction_dir] = load_faction_abilities(faction_dir)
+        except Exception:
+            _ABILITIES_CACHE[faction_dir] = []
     return _ABILITIES_CACHE[faction_dir]
 
 

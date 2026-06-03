@@ -291,6 +291,45 @@ def _try_parse_damage(damage_str: str) -> int | None:
         return None
 
 
+def _parse_strength(raw: str, unit_strength: int) -> int:
+    """Resolve weapon strength notation to a numeric value.
+
+    Handles: "User" → unit_strength, "User×2" → unit_strength*2,
+    "User+2" → unit_strength+2, "+3" → unit_strength+3, plain ints.
+    Falls back to unit_strength on unrecognised input.
+    """
+    s = raw.strip()
+    upper = s.upper()
+    if upper == "USER":
+        return unit_strength
+    if upper.startswith("USER"):
+        tail = s[4:].strip()
+        if tail.startswith("×") or tail.startswith("*"):
+            try:
+                return unit_strength * int(tail[1:])
+            except ValueError:
+                pass
+        if tail.startswith("+"):
+            try:
+                return unit_strength + int(tail[1:])
+            except ValueError:
+                pass
+        if tail.startswith("-"):
+            try:
+                return unit_strength - int(tail[1:])
+            except ValueError:
+                pass
+    if s.startswith("+"):
+        try:
+            return unit_strength + int(s[1:])
+        except ValueError:
+            pass
+    try:
+        return int(s)
+    except ValueError:
+        return unit_strength
+
+
 def render_attack_form(
     atk_faction: str,
     atk_uid: str,
@@ -325,9 +364,7 @@ def render_attack_form(
 
     profile = weapon.for_phase(use_melee)
 
-    # Resolve "User" strength to unit strength.
-    raw_str = str(profile.strength)
-    strength = atk_unit.strength if raw_str.upper() == "USER" else int(raw_str)
+    strength = _parse_strength(str(profile.strength), atk_unit.strength)
 
     skill = int(atk_unit.ws.rstrip("+")) if use_melee else int(atk_unit.bs.rstrip("+"))
     skill_label = "WS" if use_melee else "BS"

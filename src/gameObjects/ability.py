@@ -26,7 +26,7 @@ class Condition:
 @dataclass
 class Effect:
     type: str
-    target: str
+    target: str | None = None
     amount: str | None = None
     stat: str | None = None
     modifier: int | None = None

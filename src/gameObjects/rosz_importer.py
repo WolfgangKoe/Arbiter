@@ -25,6 +25,8 @@ _FACTION_CATALOGUE_MAP: dict[str, str] = {
     "necrons": "necrons",
     "adeptus custodes": "adeptus_custodes",
     "custodes": "adeptus_custodes",
+    "orks": "orks",
+    "ork": "orks",
 }
 
 
@@ -42,16 +44,17 @@ def _build_name_map(catalog: dict) -> dict[str, str]:
     return mapping
 
 
-def _match_unit_name(bs_name: str, name_map: dict[str, str]) -> str | None:
+def _match_unit_name(bs_name: str, name_map: dict[str, str], faction_dir: str) -> str | None:
     """Return unit ID for a BattleScribe selection name, or None if unmatched.
 
-    BattleScribe sometimes prepends the faction name (e.g. "Necron Warriors").
-    Strip common prefixes when direct lookup fails.
+    BattleScribe sometimes prepends the faction name (e.g. "Necron Warriors", "Ork Boyz").
+    Strips "{faction_dir}_" and singular form "{faction_dir.rstrip('s')}_" as prefixes.
     """
     norm = _normalize(bs_name)
     if norm in name_map:
         return name_map[norm]
-    for prefix in ("necron_", "necrons_"):
+    singular = faction_dir.rstrip("s")
+    for prefix in (f"{faction_dir}_", f"{singular}_"):
         if norm.startswith(prefix):
             stripped = norm[len(prefix) :]
             if stripped in name_map:
@@ -154,7 +157,12 @@ def import_roster(
     Unmatched names are units that could not be resolved against the catalog.
     """
     if faction_dir is None:
-        faction_dir = _detect_faction(root) or "necrons"
+        faction_dir = _detect_faction(root)
+        if faction_dir is None:
+            raise ValueError(
+                "Unknown faction in BattleScribe roster. "
+                "Add the catalogue name to _FACTION_CATALOGUE_MAP in rosz_importer.py."
+            )
 
     catalog = load_unit_catalog(faction_dir)
     if not catalog:
@@ -168,7 +176,7 @@ def import_roster(
     matched: list[dict] = []
     unmatched: list[str] = []
     for name, count in bs_units:
-        uid = _match_unit_name(name, name_map)
+        uid = _match_unit_name(name, name_map, faction_dir)
         if uid is None:
             unmatched.append(name)
         else:

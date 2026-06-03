@@ -1,0 +1,15 @@
+display_name: Zarekhan‘Sol - Kampf 2
+faction_dir: necrons
+units:
+- id: wh40k_9e.necrons.unit.overlord
+  models: 1
+- id: wh40k_9e.necrons.unit.warriors
+  models: 10
+- id: wh40k_9e.necrons.unit.skorpekh_destroyers
+  models: 3
+- id: wh40k_9e.necrons.unit.triarch_stalker
+  models: 1
+- id: wh40k_9e.necrons.unit.canoptek_scarabs
+  models: 3
+- id: wh40k_9e.necrons.unit.night_scythe
+  models: 1

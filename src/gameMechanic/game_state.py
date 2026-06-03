@@ -188,6 +188,12 @@ def init_state(
     p1_matched, p1_unmatched, p1_name, p1_faction_dir = _load_roster_for(roster_p1, "necrons")
     p2_matched, p2_unmatched, p2_name, p2_faction_dir = _load_roster_for(roster_p2, "necrons")
 
+    if attacker == "p2":
+        p1_matched, p2_matched = p2_matched, p1_matched
+        p1_name, p2_name = p2_name, p1_name
+        p1_faction_dir, p2_faction_dir = p2_faction_dir, p1_faction_dir
+        p1_unmatched, p2_unmatched = p2_unmatched, p1_unmatched
+
     starting_cp = CP_BY_GAME_SIZE.get(game_size, 3) if game_mode == "matched" else 3
 
     st.session_state.initialized = True
@@ -195,6 +201,7 @@ def init_state(
     st.session_state.phase_idx = 0
     st.session_state.first_player = p1_name
     st.session_state.second_player = p2_name
+    st.session_state.player_slots = (p1_name, p2_name)
     st.session_state.active = p1_name
     st.session_state.cp = {p1_name: starting_cp, p2_name: starting_cp}
     st.session_state.vp = {p1_name: 0, p2_name: 0}
@@ -242,6 +249,20 @@ def init_state(
         }
     else:
         st.session_state.roster_warnings = {}
+
+
+def swap_players() -> None:
+    """Swap first_player / second_player and all associated p1/p2 session state.
+
+    Called from the in-game setup phase when the user chooses who goes first.
+    Keeps CP, VP, and game config consistent because those are keyed by display name.
+    """
+    ss = st.session_state
+    ss.first_player, ss.second_player = ss.second_player, ss.first_player
+    ss.p1_units, ss.p2_units = ss.p2_units, ss.p1_units
+    ss.p1_units_list, ss.p2_units_list = ss.p2_units_list, ss.p1_units_list
+    ss.p1_unit_keys, ss.p2_unit_keys = ss.p2_unit_keys, ss.p1_unit_keys
+    ss.p1_faction_dir, ss.p2_faction_dir = ss.p2_faction_dir, ss.p1_faction_dir
 
 
 def reset_game() -> None:

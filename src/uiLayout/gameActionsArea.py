@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import PHASES, next_phase
+from gameMechanic.game_state import PHASES, next_phase, swap_players
 from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
 from gameObjects.loader import get_abilities_for_unit
 from uiLayout._common import lookup
@@ -88,9 +88,11 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
 
 def _render_setup() -> None:
     """Render the setup phase — displayArea first, then player actions below."""
-    active = st.session_state.active
-    p1 = st.session_state.first_player
-    p2 = st.session_state.second_player
+    # Use the original slot order (never swapped) so buttons stay fixed.
+    slot_a, slot_b = st.session_state.get("player_slots") or (
+        st.session_state.first_player,
+        st.session_state.second_player,
+    )
 
     # ── displayArea: datasheet (unit selected) or instructions ────────
     sel = st.session_state.selected_unit
@@ -117,23 +119,27 @@ def _render_setup() -> None:
     c1, c2 = st.columns(2)
     with c1:
         if st.button(
-            f"{p1} goes first",
+            f"{slot_a} goes first",
             key="setup_first_p1",
-            type="primary" if active == p1 else "secondary",
+            type="primary" if st.session_state.first_player == slot_a else "secondary",
             use_container_width=True,
         ):
-            st.session_state.active = p1
+            if st.session_state.first_player != slot_a:
+                swap_players()
+            st.session_state.active = st.session_state.first_player
             st.rerun()
     with c2:
         if st.button(
-            f"{p2} goes first",
+            f"{slot_b} goes first",
             key="setup_first_p2",
-            type="primary" if active == p2 else "secondary",
+            type="primary" if st.session_state.first_player == slot_b else "secondary",
             use_container_width=True,
         ):
-            st.session_state.active = p2
+            if st.session_state.first_player != slot_b:
+                swap_players()
+            st.session_state.active = st.session_state.first_player
             st.rerun()
-    st.caption(f"Currently selected: **{active}** goes first.")
+    st.caption(f"Currently selected: **{st.session_state.first_player}** goes first.")
 
     st.divider()
     if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):
