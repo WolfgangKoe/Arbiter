@@ -111,7 +111,7 @@ Beim ersten manuellen Testlauf der App mit zwei Necron-Armeen entdeckt und behob
 
 ---
 
-## 5d — BattleScribe Importer
+## 5d — BattleScribe Importer ✅ (2026-06-03)
 
 BattleScribe-Format (recherchiert 2026-05-30):
 - `.rosz` = ZIP mit einer `.ros`-Datei (UTF-8 XML), Python stdlib reicht
@@ -122,11 +122,12 @@ BattleScribe-Format (recherchiert 2026-05-30):
 - Weapon-Attacks stecken im `Type`-String (`"Rapid Fire 2"` → 2 Attacks)
 
 Implementierung:
-- [ ] `tools/import_rosz.py` — parst `.rosz` XML → matched gegen Katalog → `data/rosters/<name>.yaml`
-- [ ] Streamlit-Upload-UI im Setup-Screen integriert
-- [ ] Sicherheit: Dateiformat-Validierung (`.rosz`/`.ros`), Max-Größe, XML-Namespace-Check
-- [ ] Unmatched-Kategorie: Einheiten ohne Katalog-Treffer werden explizit geflaggt
-- [ ] `invuln_save` + FNP via Regex aus Ability-Text extrahieren
+- [x] `tools/import_rosz.py` — parst `.rosz` XML → matched gegen Katalog → `data/rosters/<name>.yaml`
+- [x] Streamlit-Upload-UI im Setup-Screen integriert
+- [x] Sicherheit: Dateiformat-Validierung (`.rosz`/`.ros`), Max-Größe, XML-Namespace-Check
+- [x] Unmatched-Kategorie: Einheiten ohne Katalog-Treffer werden explizit geflaggt
+- [x] Orks-Support: `_FACTION_CATALOGUE_MAP` um `"orks"` / `"ork"` erweitert; Prefix-Stripping generisch (nicht mehr Necron-hardcoded)
+- [ ] `invuln_save` + FNP via Regex aus Ability-Text extrahieren (noch ausstehend)
 
 **Absehbare Lücke — Wargear-Selektion im Roster-Format:**
 Das aktuelle Roster-Format kennt nur `id` + `models`. Wargear-Auswahl (z.B. Overlord mit Voidscythe statt Staff of Light) ist nicht speicherbar. Der BattleScribe-Importer muss entscheiden: Wargear aus dem XML extrahieren und im Roster ablegen → Loader muss dann Wargear-Overrides beim Unit-Aufbau anwenden. Das erfordert eine Erweiterung des Loader-Vertrags.
@@ -142,7 +143,7 @@ Roster-Format-Erweiterung (Entwurf):
 
 ---
 
-## 5e — Setup-Screen Redesign
+## 5e — Setup-Screen Redesign ✅ (2026-06-02)
 
 Matched Play Spielgrößen (aus Wahapedia):
 
@@ -171,25 +172,22 @@ Matched Play Spielgrößen (aus Wahapedia):
 
 ### Implementierung
 
-- [ ] **Architektur-Umbau `game_state.py`**: Roster-Globals von Modul-Ebene in `init_state(roster_p1, roster_p2, game_mode, game_size, vp_phase)` verschieben — kritischer erster Schritt
-- [ ] Spielmodus-Auswahl: Matched / Open / Crusade
-- [ ] Spielgröße-Auswahl: Combat Patrol / Incursion / Strike Force / Onslaught + CP-Initialisierung
-- [ ] Roster-Dropdown aus `data/rosters/` — P1-Wahl sperrt für P2 (keine doppelte Armeewahl)
-- [ ] Siegpunkt-Zählphase wählen (Dropdown: alle 7 Phasen)
-- [ ] Erster Spieler festlegen
-- [ ] Start-Button erst aktiv wenn alle Bedingungen erfüllt (Modus, Größe, beide Roster, VP-Phase)
-- [ ] `unmatched`-Warnungen im Setup-Screen anzeigen (Einheiten die nicht im Katalog gefunden wurden)
-- [ ] gameHeader: VP/CP-Buttons entfernen, nur Anzeige behalten
-- [ ] gameActionsArea: DisplayArea nach oben verschieben (vor PlayerAreas rendern)
-- [ ] VP-Buttons (+5/−5) in displayArea am Ende der konfigurierten Phase einblenden
-
-**Absehbare Lücken:**
-- `game_state.py` hat aktuell **hartcodierte** Roster-Dateipfade (`necrons_alpha.yaml`, `necrons_beta.yaml`) auf Modul-Ebene — muss für dynamische Roster-Auswahl grundlegend umgebaut werden.
-- Punkte-Validierung: `load_points()` ist implementiert, aber nichts summiert die Punkte eines Rosters gegen die Spielgröße.
+- [x] **Architektur-Umbau `game_state.py`**: `init_state(roster_p1, roster_p2, game_mode, game_size, vp_phase)` — dynamische Roster-Auswahl, keine hardcodierten Pfade mehr
+- [x] Spielmodus-Auswahl: Matched / Open / Crusade
+- [x] Spielgröße-Auswahl: Combat Patrol / Incursion / Strike Force / Onslaught + CP-Initialisierung
+- [x] Roster-Dropdown aus `data/rosters/` — P1-Wahl sperrt für P2
+- [x] Siegpunkt-Zählphase wählen (Dropdown)
+- [x] Erster Spieler festlegen
+- [x] Start-Button
+- [ ] `unmatched`-Warnungen im Setup-Screen anzeigen — offen (→ 5i)
+- [x] gameHeader: VP/CP nur Anzeige, keine Buttons
+- [x] gameActionsArea: DisplayArea oberhalb der Armeen
+- [x] VP-Buttons (+5/+1/−1/−5) in displayArea
+- [ ] Punkte-Validierung: Roster-Summe gegen Spielgröße prüfen — offen (→ 5i)
 
 ---
 
-## 5g — Regelkonformer Setup-Flow
+## 5g — Regelkonformer Setup-Flow ✅ (2026-06-02)
 
 Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_play.md`, `wahapedia_open_play.md`, `wahapedia_crusade.md`.
 
@@ -207,31 +205,43 @@ Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_
 
 **Hinweis Crusade Wahapedia:** Die Crusade-Seite auf Wahapedia war 404. Datei basiert auf Core-Rule-Wissen + bestehendem Spec.
 
-### Implementierung (noch ausstehend)
+### Implementierung
 
-- [ ] **Mission-Auswahl im Setup-Screen:** Dropdown je Spielgröße (Matched Play); wird in `session_state["mission"]` gespeichert
-- [ ] **Attacker/Defender-Button:** Roll-off UI im Setup-Screen (Matched: immer; Open: nur bei PL-Gleichstand)
-- [ ] **Secondary Objectives Toggle:** "Use Secondary Objectives" on/off im Setup-Screen (default: off)
-  - [ ] Wenn on: 3 Dropdown-Slots pro Spieler, je 1 Kategorie erzwungen (keine doppelten Kategorien)
-  - [ ] VP-Tracking: je Objective 0–15 VP mit Cap-Enforcement
-  - [ ] Anzeige in gameActionsArea: Primary VP und Secondary VP aufgeteilt
-- [ ] **+1 CP/Runde verifizieren:** Wahapedia Core Rules Command Phase lesen — bestätigen dass +1 CP/Runde für Battle-Forged gilt, dann in Command Phase automatisieren (falls noch nicht geschehen)
+- [x] **+1 CP/Runde:** „Grant +1 CP"-Button in Command Phase funktioniert
+- [ ] **Mission-Auswahl im Setup-Screen:** Dropdown je Spielgröße (Matched Play) — offen (→ 5i)
+- [ ] **Attacker/Defender-Button:** Roll-off UI im Setup-Screen — offen (→ 5i)
+- [ ] **Secondary Objectives Toggle:** on/off + 3 Slots + VP-Tracking — offen (→ 5i)
 
 ---
 
-## 5f — Stratagems Proof of Concept
+## 5f — Stratagems Proof of Concept ✅ (2026-06-03)
 
 - [x] `data/wh40k_9e/necrons/stratagems.yaml` — 59 Stratagems, verifiziert (2026-05-30)
-- [ ] `data/wh40k_9e/orks/stratagems.yaml` — blockiert durch 5h
-- [ ] Loader + `game_state` für Stratagems erweitern
-- [ ] Stratagem-Anzeige: zunächst nur lesend (kein automatischer Effekt)
+- [x] `data/wh40k_9e/orks/stratagems.yaml` — 29 Stratagems (2026-06-03)
+- [x] `data/wh40k_9e/universal/stratagems.yaml` — 7 Core-Stratagems von Wahapedia
+- [x] `load_stratagems()` in `loader.py` — universal + Fraktion kombiniert
+- [x] `used_stratagem_ids` in `game_state.py` — Init + Phase-Reset
+- [x] `stratagem_visibility()` — `phase: any` Support
+- [x] Stratagem-Tab: Phase-Filter, Conditions-Check, CP-Button, "*(used)*"-Markierung
+
+**Verifikation 2026-06-03:** Command Re-Roll (any), Fire Overwatch (charge), Conditions-Filter — alle korrekt.
+
+**Noch offen (→ 5i):**
+- Bug: `player: inactive`-Stratagems ziehen CP vom falschen Pool
+- Condition-Check nur Armee-Ebene, nicht selected-Unit-Ebene
+- Stratagems fehlen als Inline-Hinweis in gameActionArea
 
 ---
 
-## 5h — Orks-Katalog vervollständigen 🔴
+## 5h — Orks-Katalog vervollständigen ✅ (2026-06-03)
 
-**Status 2026-06-03:** Nur `units.yaml` (51 Einheiten) und `weapons.yaml` (82 Waffen) vorhanden.
-Alle übrigen Datenkategorien fehlen — der Orks-Katalog ist **nicht spielfähig**.
+**Abschluss 2026-06-03** — Alle Katalogdateien vorhanden. Punktekosten aus MFM 2023 Mk I.
+E2E-Testspiel durchgeführt: Ork-Roster (`orks_test.yaml`, 297 pts) gegen Necrons — alle 7 Phasen ohne Crash.
+
+**Bekannte Datenlücken (kein Blocker):**
+- `attacks: Melee` bei einigen Waffen (killsaw, power_klaw, uge_choppa) — Scraper-Artefakt, zeigt `AMelee` in UI
+- `power_level: 0` überall — Codex-Werte nicht eingetragen
+- Punktekosten unverified gegen aktuelle MFM-Errata
 
 Zum Vergleich: Necrons haben 15 Dateien, Orks aktuell 3 (davon `faction_abilities.yaml` leer).
 
@@ -283,14 +293,65 @@ Analog zur Necrons-Datenlage — direkt in YAML einpflegen.
 
 ---
 
+## 5i — Abschluss: Offene Punkte & Qualitätssicherung ⬜
+
+Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Ziel 5 erledigt sein.
+
+### Stratagems (aus 5f)
+
+- [ ] **Bug: CP vom falschen Pool** — `player: inactive`-Stratagems (Fire Overwatch, Counter-Offensive) ziehen CP vom aktiven statt inaktiven Spieler
+- [ ] **Condition-Check auf Unit-Ebene** — aktuell: Armee-Ebene; Ziel: `selected_unit`-Check wenn Unit gewählt
+- [ ] **Stratagems in gameActionArea** — Inline-Hinweis pro Aktion, welche Stratagems nutzbar sind (aktiv + reaktiv getrennt)
+
+### Setup-Screen (aus 5e/5g)
+
+- [ ] **Mission-Auswahl** — Dropdown je Spielgröße im Setup-Screen
+- [ ] **Attacker/Defender-Button** — Roll-off UI
+- [ ] **Secondary Objectives Toggle** — on/off + 3 Slots pro Spieler + VP-Tracking mit Cap
+- [ ] **`unmatched`-Warnungen** — nicht im Katalog gefundene Einheiten im Setup anzeigen
+- [ ] **Punkte-Validierung** — Roster-Gesamtpunkte gegen Spielgröße prüfen
+
+### Code-Qualität
+
+- [ ] **Faction-Dir Hardcode** — `"necrons" if "necrons" in unit.id else "orks"` in `gameActionsArea.py` → `faction_dir_for()`
+- [ ] **`resolve_bracket_stats` verdrahten** — Vehicle-Stats ändern sich live beim Schaden (bereits implementiert, nicht aufgerufen)
+- [ ] **`invuln_save` + FNP via Regex** — BattleScribe-Importer extrahiert diese noch nicht
+
+### Datenqualität
+
+- [ ] **Command Protocols Englisch** — `necrons/command_protocols.yaml` hat deutsche Namen; auf `name_en` (Englisch) umstellen
+- [ ] **Datasheet Dual-Profile** — Setup-Anzeige zeigt nur `profiles[0]`; alle Profile iterieren
+- [ ] **Wargear im Roster-Format** — `id` + `models` + optionales `wargear`-Feld; Loader-Override + Importer-Extraktion
+
+---
+
 ## Offene Querschnittslücken
 
 Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie nicht untergehen:
 
 | Lücke | Beschreibung | Relevant für |
 |-------|-------------|--------------|
-| `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein Phase-Handler ruft es auf. Vehicle-Stats (Annihilation Barge, Triarch Stalker etc.) ändern sich nicht live beim Schaden. | 5e oder eigenes Ziel |
-| Orks-Fraktion fehlt | Nur Legacy `army.yaml`, kein `units.yaml`. Ziel 5c.6 war geplant aber nicht umgesetzt. Orks können nicht als vollständige zweite Fraktion genutzt werden. | 5e (Roster-Auswahl braucht reale zweite Fraktion) |
-| Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. Müssen nach Datenschema in `units.yaml` + `weapons.yaml` eingetragen werden. | nach 5d/5e, eigenes Ziel |
-| Datasheet-Anzeige Dual-Profile | `gameActionsArea.py` zeigt im Setup-Phase nur `profiles[0]` einer Waffe — Staff of Light zeigt nur Shooting-Profil. Kein Bug, aber UX-Lücke. | 5e Setup-Screen |
-| Keyword-Checks | Alle zukünftigen Keyword-Checks müssen `UPPERCASE` nutzen (units.yaml-Konvention). Bisher nur MWBD-Bug gefunden — weitere könnten bei neuen Features auftreten. | alle |
+| `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein Phase-Handler ruft es auf. Vehicle-Stats (Annihilation Barge, Triarch Stalker etc.) ändern sich nicht live beim Schaden. | eigenes Ziel |
+| Ork-Waffen `attacks: Melee` | Scraper-Artefakt für killsaw/power_klaw/uge_choppa — zeigt `AMelee` in UI. Korrekte Werte aus Wahapedia/Kodex nachtragen. | Priorität 1 nächste Session |
+| Melee-Attack-Form Orks unverifiziert | E2E-Test konnte Fight-Phase nur ohne Charge testen ("Not in melee — no fight action possible"). Warboss-Angriff (inkl. `User×2`-Fix) manuell im echten Testspiel bestätigen. | manuelles Testspiel |
+| Command Protocols deutsche Namen | `data/wh40k_9e/necrons/command_protocols.yaml` enthält deutsche Namen ("Protokoll des Ewigen Wächters") — App-UI ist Englisch. Entweder alle auf Englisch oder Sprachschlüssel einführen. | Datenqualität |
+| Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` nutzt `"necrons" if "necrons" in unit.id else "orks"` — auf `faction_dir_for()` umstellen. | Erweiterbarkeit |
+| Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. | eigenes Ziel |
+| Datasheet-Anzeige Dual-Profile | `gameActionsArea.py` zeigt in der Setup-Phase nur `profiles[0]` — Staff of Light zeigt nur Shooting-Profil. Kein Bug, aber UX-Lücke. | UX |
+| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar. BattleScribe-Import extrahiert Wargear nicht. | 5d Nacharbeit |
+
+### E2E-Verifikation — Stand 2026-06-03
+
+Automatisiertes Playwright-Testspiel (Zarekhan'Sol Necrons vs. Necrons 1500pts) durchgeführt:
+
+| Phase | Ergebnis | Anmerkung |
+|-------|----------|-----------|
+| Command | ✅ | +1 CP korrekt; 5 Command Protocols gelistet |
+| Movement | ✅ | Normal/Advance/Stationary/Retreat mit Regeltext |
+| Psychic | ✅ | Kein Psyker erkannt → Skip-Hinweis korrekt |
+| Shooting | ✅ | Waffenstatistiken korrekt; Attack-Sequenz sichtbar; Ziel-Prompt |
+| Charge | ✅ | 2D6-Regel; Heroic Intervention-Buttons je Gegnereinheit |
+| Fight | ✅ | "Not in melee — no fight action possible." regelkonform blockiert |
+| Morale | ✅ | Phase erreichbar |
+
+Kein einziger Crash. Der frühere `User×2`-Bug (Big Mek Killsaw) tritt nicht mehr auf.

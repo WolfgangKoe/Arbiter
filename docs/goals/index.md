@@ -33,15 +33,12 @@ Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 | Ziel 5b — Necrons Katalog | ✅ fertig |
 | Ziel 5c — Loader-Refactoring | ✅ fertig |
 | Ziel 5d — BattleScribe Importer | ✅ fertig |
-| Ziel 5e — Setup-Screen Redesign | ✅ fertig (Restpunkte → Ziel 6d) |
+| Ziel 5e — Setup-Screen Redesign | ✅ fertig |
 | Ziel 5f — Stratagems PoC | ✅ fertig (2026-06-03) |
-| Ziel 5g — Regelkonformer Setup-Flow | ✅ fertig (Restpunkte → Ziel 6d) |
+| Ziel 5g — Regelkonformer Setup-Flow | ✅ Spec fertig |
 | Ziel 5h — Orks-Katalog | ✅ fertig |
-| **Ziel 6 — Refactoring & Konsolidierung** | ⬜ geplant |
-| Ziel 6a — Stratagems Verbesserungen | ⬜ |
-| Ziel 6b — Code-Qualität | ⬜ |
-| Ziel 6c — Datenqualität | ⬜ |
-| Ziel 6d — Ziel-5-Restpunkte (Setup, Importer) | ⬜ |
+| Ziel 5i — Abschluss: Offene Punkte | ⬜ nächster Schritt |
+| **Ziel 6 — [folgt nach Ziel 5]** | ⬜ wird definiert |
 | Ziel 7 — Crusade-Erweiterung | ⬜ geplant |
 | Ziel 8 — Wahapedia Faction Fetcher | ⬜ geplant |
 | Design-Block — UI-Theme | ⏳ eigene Session |

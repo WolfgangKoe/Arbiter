@@ -35,9 +35,11 @@ Fix in `fightPhase.py`, `_common.py`, `gameActionsArea.py`: wenn `p.attacks in (
 - Condition-Check nur auf Armee-Ebene, nicht auf selected-Unit-Ebene
 - Stratagems fehlen noch in der gameActionArea als Inline-Hinweis
 
-### Neue Zieldatei ziel6.md — Refactoring & Konsolidierung ✅
+### Zielstruktur bereinigt ✅
 
-`docs/goals/ziel6.md` angelegt. Bisherige ziel6→ziel7, ziel7→ziel8 verschoben.
+- `ziel5.md`: 5e/5f Checkboxen nachgetragen; neuer Abschlussabschnitt **5i** mit allen offenen Punkten aus 5d/5e/5f/5g
+- `ziel6.md`: Platzhalter — wird nach Abschluss von Ziel 5 definiert
+- `ziel7.md` (ex-6): Crusade · `ziel8.md` (ex-7): Faction Fetcher
 
 ---
 
