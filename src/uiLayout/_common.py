@@ -388,6 +388,9 @@ def render_attack_form(
         f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{profile.damage}"
     )
 
+    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+
     atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
     mwbd_active = any(
         b.get("effect_type") == "buff_roll" for b in atk_state.get("active_buffs", [])
@@ -402,6 +405,24 @@ def render_attack_form(
             "BUFF",
         )
         st.info(f"{label} active — +1 to hit modifier.")
+
+    try:
+        atk_faction_dir = faction_dir_for(atk_faction)
+        atk_protocol_mod = get_active_protocol_modifier(atk_faction_dir, phase_key, use_melee)
+    except KeyError:
+        atk_protocol_mod = {}
+    try:
+        def_faction_dir = faction_dir_for(def_faction)
+        def_protocol_mod = get_active_protocol_modifier(def_faction_dir, phase_key, use_melee)
+    except KeyError:
+        def_protocol_mod = {}
+
+    if atk_protocol_mod.get("hit"):
+        st.info(f"Protocol: +{atk_protocol_mod['hit']} to hit modifier.")
+    if atk_protocol_mod.get("wound"):
+        st.info(f"Protocol: +{atk_protocol_mod['wound']} to wound modifier.")
+    if def_protocol_mod.get("save"):
+        st.info(f"Defender Protocol: +{def_protocol_mod['save']} to saves (Eternal Guardian).")
 
     c1, c2, c3, c4 = st.columns(4)
     hits = c1.number_input(
@@ -442,6 +463,8 @@ def render_attack_form(
                 strength=strength,
                 ap=int(profile.ap),
                 damage=fixed_dmg,
+                hit_modifier=atk_protocol_mod.get("hit", 0),
+                wound_modifier=atk_protocol_mod.get("wound", 0),
                 mwbd_active=mwbd_active,
             )
             def_params = DefendParams(
@@ -450,6 +473,7 @@ def render_attack_form(
                 wounds=def_unit.wounds,
                 invul_save=def_unit.invuln_save,
                 fnp=def_unit.fnp,
+                save_modifier=def_protocol_mod.get("save", 0),
             )
             damage, log = resolve_attack(
                 params,

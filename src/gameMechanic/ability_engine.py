@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import streamlit as st
+
 from gameMechanic.game_state import faction_dir_for, units_key_for
 from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import (
     load_army,
+    load_command_protocols,
     load_faction_abilities,
     load_subfaction_abilities,
     load_unit_abilities,
@@ -58,6 +61,53 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
         hp = int(ability.effect.amount or 1)
         return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
     return False
+
+
+_WIRED_EFFECT_TYPES = {"hit_modifier", "wound_modifier", "save_modifier"}
+
+
+def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) -> dict[str, int]:
+    """Return numeric modifiers from the active protocol's chosen directive.
+
+    Only effects with wired types (hit_modifier, wound_modifier, save_modifier) are returned.
+    Effects for other types (reroll_save_1, move_bonus, etc.) are registered in YAML but
+    not yet wired into combat — they are silently skipped here.
+
+    Returns a dict with any of: {"hit": int, "wound": int, "save": int}.
+    """
+    protocol_id: str | None = st.session_state.get("active_protocol_id")
+    directive: str | None = st.session_state.get("active_directive")
+    if not protocol_id or not directive:
+        return {}
+
+    protocols = load_command_protocols(faction_dir)
+    protocol = next((p for p in protocols if p.id == protocol_id), None)
+    if not protocol:
+        return {}
+
+    effect = protocol.primary_effect if directive == "primary" else protocol.secondary_effect
+    if not effect:
+        return {}
+
+    effect_type = effect.get("type", "")
+    if effect_type not in _WIRED_EFFECT_TYPES:
+        return {}
+
+    # Phase applicability check
+    effect_phase = effect.get("phase", "any")
+    if effect_phase == "shooting" and use_melee:
+        return {}
+    if effect_phase == "melee" and not use_melee:
+        return {}
+
+    value = effect.get("value", 0)
+    if effect_type == "hit_modifier":
+        return {"hit": value}
+    if effect_type == "wound_modifier":
+        return {"wound": value}
+    if effect_type == "save_modifier":
+        return {"save": value}
+    return {}
 
 
 def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:

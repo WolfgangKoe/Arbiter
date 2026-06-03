@@ -255,6 +255,7 @@ def init_state(
     st.session_state.used_stratagem_ids: set[str] = set()
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
+    st.session_state.active_directive: str | None = None
     st.session_state.cmd_awaiting_ability_id: str | None = None
     st.session_state.cmd_awaiting_required_kw: list = []
     st.session_state.res_orb_target_uid = None
@@ -311,9 +312,9 @@ def swap_players() -> None:
 
 
 def reset_game() -> None:
-    from gameMechanic.game_log import clear_game_log  # noqa: PLC0415
+    from gameMechanic.game_log import archive_and_reset_log  # noqa: PLC0415
 
-    clear_game_log()
+    archive_and_reset_log()
     for k in list(st.session_state.keys()):
         del st.session_state[k]
 
@@ -344,6 +345,7 @@ def _reset_turn_state() -> None:
             state["movement_choice"] = "stationary"
             state["active_buffs"] = []
     st.session_state.active_protocol_id = None
+    st.session_state.active_directive = None
 
 
 def next_phase() -> None:

@@ -75,6 +75,7 @@ class DefendParams:
     wounds: int
     invul_save: int | None = None
     fnp: int | None = None
+    save_modifier: int = 0
 
 
 # ---------------------------------------------------------------------------
@@ -120,7 +121,7 @@ def resolve_attack(
         return 0, log
 
     # Save phase — determine which save applies
-    armour_effective = defender.save + abs(params.ap)
+    armour_effective = defender.save + abs(params.ap) - defender.save_modifier
     if defender.invul_save is not None and defender.invul_save < armour_effective:
         effective_save = defender.invul_save
         log.append(
@@ -129,8 +130,11 @@ def resolve_attack(
         )
     else:
         effective_save = armour_effective
-        if params.ap != 0:
-            log.append(f"Armour save {defender.save}+ → {effective_save}+ after AP{params.ap}")
+        if params.ap != 0 or defender.save_modifier != 0:
+            mod_note = f" / Protocol +{defender.save_modifier}" if defender.save_modifier else ""
+            log.append(
+                f"Armour save {defender.save}+ → {effective_save}+ after AP{params.ap}{mod_note}"
+            )
         else:
             log.append(f"Armour save {defender.save}+")
 

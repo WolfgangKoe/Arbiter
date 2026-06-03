@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import os
 import random
 
 import streamlit as st
 
+from gameMechanic.game_log import list_archived_logs
 from gameMechanic.game_state import (
     CP_BY_GAME_SIZE,
     PHASES,
@@ -338,6 +340,68 @@ def render_setup_screen() -> None:
             secondary_vp=secondary_vp,
         )
         st.rerun()
+
+    st.divider()
+    _render_archive_section()
+
+
+# ---------------------------------------------------------------------------
+# Archive management
+# ---------------------------------------------------------------------------
+
+
+def _render_archive_section() -> None:
+    """Show archived game logs with download and delete options."""
+    with st.expander("Battle Log Archive", expanded=False):
+        logs = list_archived_logs()
+        if not logs:
+            st.caption("No archived games yet. Previous games are saved here after reset.")
+            return
+
+        for entry in logs:
+            col_info, col_dl, col_del = st.columns([6, 2, 1])
+            game_id = entry["game_id"][:19].replace("T", " ")
+            label = (
+                f"**{game_id}** — {entry['first']} vs {entry['second']} ({entry['rounds']} rounds)"
+            )
+            col_info.markdown(label)
+
+            try:
+                with open(entry["path"]) as f:
+                    raw = f.read()
+                col_dl.download_button(
+                    "⬇",
+                    data=raw,
+                    file_name=entry["filename"],
+                    mime="application/json",
+                    key=f"archive_dl_{entry['filename']}",
+                    use_container_width=True,
+                )
+            except OSError:
+                col_dl.caption("—")
+
+            if col_del.button(
+                "✕",
+                key=f"archive_del_{entry['filename']}",
+                use_container_width=True,
+            ):
+                confirm_key = f"archive_del_confirm_{entry['filename']}"
+                st.session_state[confirm_key] = True
+
+            confirm_key = f"archive_del_confirm_{entry['filename']}"
+            if st.session_state.get(confirm_key):
+                st.warning(f"Delete **{entry['filename']}**?")
+                col_yes, col_no = st.columns(2)
+                if col_yes.button("Yes, delete", key=f"archive_del_yes_{entry['filename']}"):
+                    try:
+                        os.remove(entry["path"])
+                    except OSError:
+                        pass
+                    st.session_state.pop(confirm_key, None)
+                    st.rerun()
+                if col_no.button("Cancel", key=f"archive_del_no_{entry['filename']}"):
+                    st.session_state.pop(confirm_key, None)
+                    st.rerun()
 
 
 # ---------------------------------------------------------------------------

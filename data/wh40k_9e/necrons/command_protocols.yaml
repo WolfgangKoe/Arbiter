@@ -5,33 +5,100 @@ protocols:
     primary: "+1 to all saving throws until next Command phase"
     secondary: "Re-roll saving throws of 1"
     auto_round_1: true
+    directives:
+      primary:
+        effect:
+          type: save_modifier
+          value: 1
+          phase: any
+      secondary:
+        effect:
+          type: reroll_save_1
+          phase: any
+
   - id: wh40k_9e.necrons.protocol.hungry_void
     name_en: Protocol of the Hungry Void
     name_de: Protokoll der hungrigen Leere
     primary: "+1 to hit (Shooting)"
     secondary: "+1 Strength (Shooting weapons)"
     auto_round_1: false
+    directives:
+      primary:
+        effect:
+          type: hit_modifier
+          value: 1
+          phase: shooting
+      secondary:
+        effect:
+          type: strength_modifier
+          value: 1
+          phase: shooting
+
   - id: wh40k_9e.necrons.protocol.conquering_tyrant
     name_en: Protocol of the Conquering Tyrant
     name_de: Protokoll des tyrannischen Herrschers
     primary: "+1 Leadership"
     secondary: "Re-roll hit and wound rolls of 1 (Melee)"
     auto_round_1: false
+    directives:
+      primary:
+        effect:
+          type: leadership_bonus
+          value: 1
+          phase: any
+      secondary:
+        effect:
+          type: reroll_hit_wound_1
+          phase: melee
+
   - id: wh40k_9e.necrons.protocol.sudden_storm
     name_en: Protocol of the Sudden Storm
     name_de: Protokoll des plötzlichen Sturms
     primary: "+1\" Move"
     secondary: "Can Advance and Charge in the same turn"
     auto_round_1: false
+    directives:
+      primary:
+        effect:
+          type: move_bonus
+          value: 1
+          phase: movement
+      secondary:
+        effect:
+          type: advance_and_charge
+          phase: charge
+
   - id: wh40k_9e.necrons.protocol.undying_legions
     name_en: Protocol of the Undying Legions
     name_de: Protokoll der unaufhörlichen Legionen
     primary: "Re-roll Reanimation Protocols"
     secondary: "+1 model returned per Reanimation Protocol"
     auto_round_1: false
+    directives:
+      primary:
+        effect:
+          type: rp_reroll
+          phase: any
+      secondary:
+        effect:
+          type: rp_bonus
+          value: 1
+          phase: any
+
   - id: wh40k_9e.necrons.protocol.vengeful_stars
     name_en: Protocol of the Vengeful Stars
     name_de: Protokoll der rachsüchtigen Sterne
     primary: "+1 to wound rolls (Shooting)"
     secondary: "Improve AP of Shooting weapons by 1"
     auto_round_1: false
+    directives:
+      primary:
+        effect:
+          type: wound_modifier
+          value: 1
+          phase: shooting
+      secondary:
+        effect:
+          type: ap_bonus
+          value: -1
+          phase: shooting

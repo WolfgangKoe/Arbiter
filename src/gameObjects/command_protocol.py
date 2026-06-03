@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -11,3 +11,5 @@ class CommandProtocol:
     primary: str
     secondary: str
     auto_round_1: bool = False
+    primary_effect: dict = field(default_factory=dict)
+    secondary_effect: dict = field(default_factory=dict)

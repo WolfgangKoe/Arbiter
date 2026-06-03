@@ -20,7 +20,7 @@ from gameObjects.ability import Ability
 from gameObjects.loader import load_command_protocols
 from gameObjects.unit import Unit
 
-_ETERNAL_GUARDIAN_ID = "eternal_guardian"
+_ETERNAL_GUARDIAN_ID = "wh40k_9e.necrons.protocol.eternal_guardian"
 
 
 def _faction_badge(text: str) -> str:
@@ -96,6 +96,27 @@ def _render_triggered_abilities(
             st.rerun()
 
 
+def _render_directive_buttons(protocol, faction: str, round_num: int) -> None:
+    """Show Primary / Secondary directive selection buttons for the active protocol."""
+    st.caption(f"↳ **Primary:** {protocol.primary}")
+    st.caption(f"↳ **Secondary:** {protocol.secondary}")
+    col_p, col_s = st.columns(2)
+    if col_p.button(
+        "Use Primary",
+        key=f"cmd_directive_primary_{faction}_{round_num}",
+        use_container_width=True,
+    ):
+        st.session_state.active_directive = "primary"
+        st.rerun()
+    if col_s.button(
+        "Use Secondary",
+        key=f"cmd_directive_secondary_{faction}_{round_num}",
+        use_container_width=True,
+    ):
+        st.session_state.active_directive = "secondary"
+        st.rerun()
+
+
 def _render_protocol_ui(faction: str) -> None:
     """Command Protocol UI — only for factions with command_protocols.yaml (i.e. Necrons).
 
@@ -118,22 +139,32 @@ def _render_protocol_ui(faction: str) -> None:
     st.divider()
     st.caption("**Command Protocols**")
 
+    active_directive: str | None = st.session_state.get("active_directive")
+
     if current_round == 1:
         p = next((p for p in protocols if p.id == _ETERNAL_GUARDIAN_ID), None)
         if p:
+            # Auto-activate Eternal Guardian for round 1
+            if not active_id:
+                st.session_state.active_protocol_id = _ETERNAL_GUARDIAN_ID
+                active_id = _ETERNAL_GUARDIAN_ID
             st.caption(f"{p.name_en} — auto (Round 1)")
-            st.caption(f"↳ {p.primary}")
-            if p.secondary:
-                st.caption(f"↳ {p.secondary}")
+            if not active_directive:
+                _render_directive_buttons(p, faction, current_round)
+            else:
+                chosen_text = p.primary if active_directive == "primary" else p.secondary
+                st.caption(f"↳ **{active_directive.capitalize()}:** {chosen_text}")
         return
 
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)
         if p:
             st.caption(f"**{p.name_en}** — active this round")
-            st.caption(f"↳ {p.primary}")
-            if p.secondary:
-                st.caption(f"↳ {p.secondary}")
+            if not active_directive:
+                _render_directive_buttons(p, faction, current_round)
+            else:
+                chosen_text = p.primary if active_directive == "primary" else p.secondary
+                st.caption(f"↳ **{active_directive.capitalize()}:** {chosen_text}")
         return
 
     if phase_key != "command":
@@ -161,6 +192,7 @@ def _render_protocol_ui(faction: str) -> None:
         chosen = available[choice]
         st.session_state.active_protocol_id = chosen.id
         st.session_state.used_protocol_ids = used_ids + [chosen.id]
+        st.session_state.active_directive = None
         log_action(current_round, "command", faction, f"Protocol: {chosen.name_en}")
         st.rerun()
 

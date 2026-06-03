@@ -267,17 +267,22 @@ def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
         return []
     with open(path) as f:
         data = yaml.safe_load(f)
-    return [
-        CommandProtocol(
-            id=p["id"],
-            name_en=p["name_en"],
-            name_de=p["name_de"],
-            primary=p["primary"],
-            secondary=p["secondary"],
-            auto_round_1=p.get("auto_round_1", False),
+    result = []
+    for p in data.get("protocols", []):
+        dirs = p.get("directives", {})
+        result.append(
+            CommandProtocol(
+                id=p["id"],
+                name_en=p["name_en"],
+                name_de=p["name_de"],
+                primary=p["primary"],
+                secondary=p["secondary"],
+                auto_round_1=p.get("auto_round_1", False),
+                primary_effect=dirs.get("primary", {}).get("effect", {}),
+                secondary_effect=dirs.get("secondary", {}).get("effect", {}),
+            )
         )
-        for p in data.get("protocols", [])
-    ]
+    return result
 
 
 def load_stratagems(faction_dir: str) -> list[Stratagem]:
