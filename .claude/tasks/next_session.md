@@ -5,10 +5,10 @@
 
 **Zu Beginn jeder Session lesen:**
 - `CLAUDE.md` — Workflow, Freigabe-Pflicht, **Unklarheiten IMMER zuerst fragen**, Branch-Strategie
-- `docs/goals/ziel6.md` — aktueller Ziel-6-Stand: Spec, Checkliste, offene Punkte
+- `docs/goals/ziel6.md` — aktueller Ziel-6-Stand
 
 **Am Ende jeder Session:**
-- `docs/goals/ziel6.md` aktualisieren: Checkboxen abhaken, neue Erkenntnisse ergänzen, nächste Schritte fortschreiben
+- `docs/goals/ziel6.md` aktualisieren: Checkboxen abhaken, neue Erkenntnisse ergänzen
 
 ---
 
@@ -25,156 +25,208 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel | Status |
 |------|--------|
 | Ziel 1–5 — Grundgerüst, Phasen, Setup, Daten | ✅ fertig |
-| **Ziel 6a — gameHeader Redesign** | ✅ fertig (2026-06-03) |
-| **Ziel 6b — armyCard generisches Fähigkeitssystem** | ✅ fertig (2026-06-03) |
-| **Ziel 6c — Stratagems Default-Tab, Modifier-Export** | ✅ fertig (2026-06-03) |
-| **Ziel 6g — Game Log Archiv** | ⬜ nächster Schritt |
-| **Ziel 6d — Attackensequenz simultan** | ⬜ (nach 6g) |
-| **Ziel 6e — Fähigkeiten-Integration alle Phasen** | ⬜ |
-| **Ziel 6f — Ability-Badges unitCard** | ⬜ |
-| Ziel 7 — Crusade-Erweiterung | ⬜ |
-| Ziel 8 — Wahapedia Faction Fetcher | ⬜ |
-
-Details: `docs/goals/index.md`
-
----
-
-## Was wurde in dieser Session gemacht (2026-06-03)
-
-### 6a — gameHeader Redesign ✅
-- 4-Zeilen-Layout: Runde / Phase·Spieler / Scores+Badges / Navigation
-- VP und CP Label gleich groß wie Zahl (`4.5rem bold`)
-- `← ↺ →` in einer Zeile, zentriert
-- Phase-Badges in Zeile 3 Mitte integriert (nicht mehr unterhalb)
-
-### 6b — armyCard generisches Fähigkeitssystem ✅
-- `faction_dir_for()`: kein `"necrons"`-Default mehr — KeyError wenn nicht initialisiert
-- Command Protocol UI aus `commandPhase.py` herausgelöst → **einziger Einstiegspunkt ist jetzt armyCard**
-- Nur Necrons haben Protokolle (generisch via `load_command_protocols()` — leere Liste = kein UI)
-- Interaktive Auswahl (Befehlsphase) vs. Read-only-Status (alle anderen Phasen) in armyCard
-- `_render_necron_protocols()` aus gameProtocoll.py entfernt
-
-### 6c — Stratagems Default-Tab, Modifier-Export ✅
-- Stratagems sind jetzt erster Tab in gameProtocoll (war Command Protocol)
-- `StratagemModifier` Dataclass in `stratagem.py`; optionales `modifier`-Feld auf `Stratagem`
-- Loader parst `modifier`-Block aus YAML
-- `active_modifiers: list[dict]` im Session-State (init + reset + cleanup bei Phasenwechsel)
-- Bei Stratagem-Nutzung: Modifier wird in `active_modifiers` geschrieben
-- Modifier-Daten in YAML:
-  - Necrons: `disruption_fields` (+1 wound, attacker), `whirling_onslaught` (-1 wound, defender), `methodical_destruction` (+1 hit, attacker)
-  - Orks: `hit_em_harder` (+1 damage, attacker), `tough_as_squig_hide` (-1 wound, defender), `wreckaz` (+1 wound, attacker)
-
-### VP-Bug-Fix ✅
-- Siegpunkte-Vergabe nur für den **aktiven** Spieler (Buttons)
-- Inaktiver Spieler: nur read-only Anzeige mit `(inactive — no scoring)`
-- Datei: `src/uiLayout/gameActionsArea.py`
-
-### Workflow-Verbesserung ✅
-- CLAUDE.md: neuer Abschnitt „Bei Unklarheiten IMMER zuerst fragen (PFLICHT)"
-- Memory gespeichert: `feedback_ask_before_assuming_scope.md`
+| Ziel 6a — gameHeader Redesign | ✅ fertig |
+| Ziel 6b — armyCard generisches Fähigkeitssystem | ✅ fertig |
+| Ziel 6c — Stratagems Default-Tab, Modifier-Export | ✅ fertig |
+| Ziel 6e (teilw.) — Command Phase generic abilities | ✅ committed (2026-06-03) |
+| Ziel 6e (teilw.) — Command Protocols verdrahtet | ✅ committed (2026-06-03) |
+| Ziel 6g (teilw.) — Game Log Archiv + Setup-UI | ✅ committed (2026-06-03) |
+| **Ziel 6e — Protocol-Badge + sourced Modifier-Display** | ⬅ NÄCHSTER SCHRITT |
+| Ziel 6g — set_log_players() in init_state() | ⬜ klein, schnell |
+| Ziel 6d — Attackensequenz simultan | ⬜ |
+| Ziel 6f — Ability-Badges unitCard | ⬜ |
 
 ---
 
-## Nächste Schritte
+## Was wurde zuletzt gemacht (2026-06-03, commits caec44c + 350b387)
 
-### 6g — Game Log (empfohlen als nächstes, unabhängig)
-1. `gameMechanic/game_log.py`: Log-Format auf strukturierte JSON umstellen (game_id, players, rounds, phases, events)
-2. `gameMechanic/game_log.py`: `archive_and_reset_log()` — verschiebt Log nach `data/log/archive/<game_id>.json`
-3. `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
-4. `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (Liste, Download, Löschen)
+### Session 1: Tests + Bugfixes
 
-### 6d — Attackensequenz simultan (nach 6c/6g)
-5. `gameMechanic/combat.py`: `resolve_attack_modifiers()` — Modifier-Stack aus `active_modifiers`
-6. `gameMechanic/combat.py`: `resolve_save()` und `resolve_fnp()`
-7. Attack-Sequenz-Renderer: Treffer/Verwundung links, Save/FNP/Schaden rechts, alles gleichzeitig
+- **9 neue Tests** für `get_activated_command_abilities()`: Overlord→MWBD, Necron Lord→Lord's Will,
+  Warriors→leer, Ork-Fraktion→leer, badge_label, effect.type
+- **3 neue Tests** für `active_buffs` Reset + `command_ability_state` Persistenz in game_state
+- **5 pre-existing Failures gefixt**: `p1_faction_dir`-KeyError in 3 Dateien (nach `faction_dir_for()`-Refactoring),
+  `my_will_be_done_active` → `active_buffs` in 2 UI-Test-Helpern
 
-### 6e → 6f (danach)
-8. CP-Doppelvergabe-Bug fixen
-9. Ability-Engine alle Quellen einbinden
-10. Ability-Badges auf unitCard
+### Session 2: Command Protocol Effects + Game Log Archiv
 
-Vollständige Task-Listen in `docs/goals/ziel6.md`.
+**Command Protocols (Schritt 2):**
+- `command_protocols.yaml`: strukturierte `directives`-Blöcke mit `effect`-Feldern für alle 6 Protokolle
+- `CommandProtocol` Dataclass: `primary_effect: dict` + `secondary_effect: dict`
+- `loader.py`: parst `directives.primary/secondary.effect` aus YAML
+- `ability_engine.py`: `get_active_protocol_modifier(faction_dir, phase, use_melee)`
+  — gibt `{hit, wound, save}` zurück; unwired Types (reroll, move, RP) still skipped
+- `armyCard.py`: `_render_directive_buttons()` — Primary/Secondary Buttons nach Protokoll-Aktivierung;
+  Bug gefixt: `_ETERNAL_GUARDIAN_ID` stimmte nicht mit YAML-ID überein
+- `combat.py`: `DefendParams.save_modifier` — Eternal Guardian +1 Save wired
+- `_common.py` `render_attack_form()`: liest Protokoll-Modifier für Angreifer (hit/wound)
+  und Verteidiger (save), zeigt als `st.info()` + fließt in `AttackParams`/`DefendParams`
+- `game_state.py`: `active_directive` in `init_state()` + `_reset_turn_state()`
+- **9 neue Tests** für `get_active_protocol_modifier()`
+
+**Game Log Archiv (Schritt 3):**
+- `game_log.py`: neues JSON-Format (game_id/players/rounds/phases/events),
+  `archive_and_reset_log()`, `list_archived_logs()`
+- `game_state.py`: `reset_game()` → `archive_and_reset_log()`
+- `setupScreen.py`: "Battle Log Archive" Expander (Liste, Download, Löschen mit Bestätigung)
 
 ---
 
-## Bekannte offene Lücken
+## Bekannte offene Probleme / Nächste Schritte (priorisiert)
 
-| Lücke | Beschreibung | Priorität |
-|-------|-------------|-----------|
-| Adeptus Custodes | Nur Placeholder-Dateien — kein spielbarer Katalog | Nach Ziel 8 |
-| CP Doppelvergabe | Befehlsphase kann mehrfach CP vergeben | Ziel 6e |
+### 1. Protocol-Badge in armyCard + sourced Modifier in gameActionsArea (⬅ NÄCHSTE SESSION)
+
+**Was fehlt:**
+- **armyCard:** Nach Direktiven-Wahl: Badge mit Protokollname + Direktive
+  (z.B. `HUNGRY VOID — PRIMARY` als buff-blauer Badge) + Effect-Text als Caption.
+  Aktuell wird nur plain Text gezeigt.
+- **gameActionsArea (`render_attack_form()`):** Protokoll-Modifier ist aktuell ein generisches
+  `st.info("Protocol: +1 to hit modifier.")`. Soll durch sourced Einträge ersetzt werden —
+  Protokollname als Quelle klar nennen, z.B. `Hungry Void (Primary): +1 to hit` —
+  inline bei den Waffen-Stats oder als Badge-HTML.
+
+**Betroffene Dateien:**
+- `src/uiLayout/armyCard.py` — Badge nach Direktiven-Wahl
+- `src/uiLayout/_common.py` — sourced Modifier-Zeile in `render_attack_form()`
+
+**Nicht wired (bewusst ausgelassen für diese Session, da kein numerischer Modifier):**
+- Reroll-Effekte (Conquering Tyrant secondary, Eternal Guardian secondary)
+- Move-Bonus (Sudden Storm primary) → movementPhase nötig
+- Advance and Charge (Sudden Storm secondary) → chargephase nötig
+- Strength-Bonus (Hungry Void secondary) → AttackParams.strength_modifier bräuchte neues Feld
+- AP-Bonus (Vengeful Stars secondary) → profile.ap wäre zu modifizieren
+- RP-Effekte (Undying Legions) → reanimation system nötig
+- Leadership-Bonus (Conquering Tyrant primary)
+
+### 2. `set_log_players()` in `init_state()` (klein, 5 Minuten)
+
+`set_log_players(first, second)` ist implementiert aber wird nicht aufgerufen.
+In `game_state.py` `init_state()` nach den `st.session_state`-Zuweisungen ergänzen:
+```python
+from gameMechanic.game_log import set_log_players
+set_log_players(p1_name, p2_name)
+```
+Betroffene Datei: `src/gameMechanic/game_state.py`
+
+### 3. Ziel 6d — Attackensequenz simultan (größer, braucht eigene Session)
+
+Alle Würfelblöcke (Treffer, Verwundung, Save, FNP, Schaden) gleichzeitig rendern.
+Modifier-Stack mit Quellen transparent anzeigen. Benötigt `collect_modifiers_for_phase()`.
+Spec: `docs/goals/ziel6.md` → 6d.
+
+---
+
+## Architektur-Entscheidungen (nicht vergessen)
+
+### Command Protocol System
+
+```
+YAML (command_protocols.yaml)
+  └─ CommandProtocol: id, name_en, primary, secondary,
+                      primary_effect: {type, value, phase}
+                      secondary_effect: {type, value, phase}
+        │
+ability_engine.py
+  └─ get_active_protocol_modifier(faction_dir, phase, use_melee)
+        → liest active_protocol_id + active_directive aus session_state
+        → gibt {hit, wound, save} zurück (nur wired types)
+        │
+_common.py render_attack_form()
+  └─ atk_protocol_mod → AttackParams.hit_modifier + wound_modifier
+  └─ def_protocol_mod → DefendParams.save_modifier
+```
+
+**Wired effect types:** `hit_modifier`, `wound_modifier`, `save_modifier`
+**Not wired (in YAML, nicht in Combat):** `reroll_save_1`, `reroll_hit_wound_1`,
+`strength_modifier`, `ap_bonus`, `leadership_bonus`, `move_bonus`, `advance_and_charge`,
+`rp_reroll`, `rp_bonus`
+
+### Session-State Schlüssel (Command Phase + Protocols)
+
+| Key | Typ | Bedeutung |
+|-----|-----|-----------|
+| `active_protocol_id` | `str \| None` | Aktives Protokoll dieser Runde |
+| `active_directive` | `"primary" \| "secondary" \| None` | Gewählte Direktive |
+| `used_protocol_ids` | `list[str]` | Bereits verwendete Protokoll-IDs (keine Wiederholung) |
+| `command_ability_state` | `dict[ability_id, {target_uid, active_since_round}]` | Aktive Unit-Abilities |
+| `cmd_awaiting_ability_id` | `str \| None` | Welche Ability wartet auf Zielauswahl |
+| `cmd_awaiting_required_kw` | `list[str]` | Keywords die das Ziel haben muss |
+
+### Unit-State Felder (relevant für Abilities)
+
+| Feld | Typ | Bedeutung |
+|------|-----|-----------|
+| `active_buffs` | `list[dict]` | `[{ability_id, badge_label, effect_type}]` — aktive Buffs |
+
+`active_buffs` wird bei `_reset_turn_state()` geleert.
+`active_protocol_id` + `active_directive` werden bei `_reset_turn_state()` auf `None` gesetzt.
+
+### Game Log Format
+
+```json
+{
+  "game_id": "2026-06-03T14:22:00",
+  "players": {"first": "Necrons", "second": "Orks"},
+  "rounds": [
+    {
+      "round": 1,
+      "phases": [
+        {
+          "phase": "shooting",
+          "active": "Necrons",
+          "events": [{"type": "action", "unit": "...", "action": "..."}]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Archiv: `data/log/archive/<game_id>.json` — entsteht bei `reset_game()`
+
+### Wie das Ability-System funktioniert
+
+```
+YAML (unit_abilities.yaml)
+  └─ Ability: id, unit_id, ability_type, trigger.phase, effect.type, badge_label
+        │
+ability_engine.py
+  └─ get_activated_command_abilities(unit_id, faction_dir)
+        │
+commandPhase.py
+  └─ _render_unit_command_abilities(selected_uid, faction, ...)
+        └─ für effect.type in (buff_roll, reroll_hit_1): _render_buff_roll_ability()
+                │
+                └─ Button → cmd_awaiting_ability_id gesetzt
+                        │
+                unitCard.py: wenn cmd_awaiting_ability_id gesetzt
+                        └─ Zeige Select-Button für jede Einheit die has_keywords erfüllt
+                                │
+                                └─ Bei Klick: active_buffs[{ability_id, badge_label, effect_type}]
+                                             command_ability_state[ability_id] = {target_uid, round}
+```
 
 ---
 
 ## Wichtige Constraints
 
 - **Freigabe vor Umsetzung** — Plan + Dateiliste zeigen, auf „ja" warten
-- **Bei Unklarheiten ZUERST FRAGEN** — besonders bei Scope und „verlagern"-Aufgaben (siehe CLAUDE.md)
+- **Bei Unklarheiten ZUERST FRAGEN** — Regelwerk immer nachschlagen, nicht raten
 - Seitenleisten IMMER fest: first_player links, second_player rechts
-- Setup-Buttons: `player_slots` verwenden, NICHT `first_player`/`second_player`
 - dev-Branch — kein direktes Committen auf main
 - **Keywords immer `UPPERCASE` in YAML** — Checks via `unit.has_keyword()`
 - Weapon-Zugriff mit Dual-Profile: `w.for_phase(use_melee)` — nicht `w.is_melee`
 - Session-State Unit-Keys: `p1_units` / `p2_units` mit `#N`-Suffix für Duplikate
 - Weapon strength: `_parse_strength()` in `_common.py` — nie direkt `int(profile.strength)`
-- Fähigkeiten: **nie** auf Fraktionsnamen hardcoden — immer generisch über Keywords/YAML
-- **Command Protocols: NUR NECRONS** — armyCard ist einziger Einstiegspunkt, commandPhase hat keinen Aufruf mehr
-
-### State-Key System
-
-Mehrfach-Units gleichen Typs werden mit `#N`-Suffix disambiguiert:
-- Erstes Vorkommen: `wh40k_9e.necrons.unit.warriors`
-- Zweites Vorkommen: `wh40k_9e.necrons.unit.warriors#1`
-
-`unit_id_from_state_key(key)` → echte `unit.id`.
-`lookup(faction, uid)` in `_common.py` versteht State-Keys.
-
-### Ziel-6-Datenstrukturen (implementiert in 6c)
-
-**`active_modifiers`** (Session-State, init in `game_state.py`):
-```python
-{
-  "unit_key": str | None,    # betroffene Einheit (State-Key); None = armeeweit
-  "source": str,             # z.B. "Methodical Destruction"
-  "effect": {
-    "roll_type": str,        # "hit" | "wound" | "save" | "fnp" | "damage"
-    "value": int,            # +1 oder -1
-    "target": str,           # "attacker" | "defender"
-    "phase": str,            # Phase in der der Modifier gilt
-  },
-  "expires_at_phase": str | None,
-  "expires_at_round": int | None,
-}
-```
-
-**`StratagemModifier`** (Dataclass in `gameObjects/stratagem.py`):
-```python
-roll_type: str        # hit | wound | save | fnp | charge | damage
-value: int            # positiv = Bonus, negativ = Malus
-target: str           # attacker | defender
-expires_at: str       # phase_end | turn_end
-source_label: str     # Anzeige-Label im Modifier-Stack
-phase: str | None     # Override für angewandte Phase
-```
-
-**Game-Log-Format** (strukturierte JSON, definiert für 6g):
-```json
-{
-  "game_id": "<ISO-Timestamp>",
-  "players": {"first": "...", "second": "..."},
-  "rounds": [{"round": 1, "phases": [{"phase": "...", "events": [...]}]}],
-  "result": {"winner": "...", "vp": {...}}
-}
-```
+- **Abilities: NIE auf Fraktionsnamen hardcoden** — immer generisch über Keywords/YAML/unit_id
+- **Command Protocols: NUR NECRONS** — armyCard ist einziger Einstiegspunkt
+- **Protocol-Direktiven:** `active_protocol_id` + `active_directive` sind global (nicht per Spieler).
+  Bei Necrons vs. Necrons theoretisch buggy — für jetzt akzeptiert, da Protokoll-Fraktionen exklusiv.
 
 ### Streamlit 1.57 — CSS-Selektoren
-
-Vor dem Schreiben von CSS-Overrides immer JS-Source prüfen — Emotion-Klassen ändern sich zwischen Versionen.
 
 | Komponente | Korrekte Selektoren |
 |---|---|
 | NumberInput Container | `[data-testid="stNumberInputContainer"]` |
-| NumberInput Step-Buttons | `[data-testid="stNumberInputStepUp"]`, `[data-testid="stNumberInputStepDown"]` |
 | Buttons allgemein | `button[data-testid="stBaseButton-{kind}"]` |
 | Container border=True | `.e1rw0b1u3` (Emotion-Klasse — prüfen bei Streamlit-Update!) |
-| Selectbox | `.stSelectbox [data-baseweb="select"] > div` |

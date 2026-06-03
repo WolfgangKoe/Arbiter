@@ -14,9 +14,9 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6b** ✅ | armyCard — generisches Fähigkeitssystem | – |
 | **6c** ✅ | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
 | **6d** | Attackensequenz — neue simultane Darstellung | 6b, 6c |
-| **6e** | Fähigkeiten-Integration in alle Phasen | 6b |
+| **6e** ✅ (teilw.) | Fähigkeiten-Integration — Command Protocols verdrahtet | 6b |
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
-| **6g** | Game Log — Archiv, strukturiertes Format, Setup-UI | – |
+| **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
 
 ---
 
@@ -107,20 +107,31 @@ gameDisplayArea (oben, full width)
   [Angreifer] SPACE MARINES INTERCESSOR → [Ziel] ORK BOY
   Bolter [Rapid Fire]  |  A2 · S4 · AP-1 · D1
 
-AngreiferPlayerArea (links)         VerteidigenPlayerArea (rechts)
-─────────────────────────────────   ──────────────────────────────
-TREFFER                             RETTUNGSWURF
-  [ 3+ ]  BS 3+                       [ 5+ ]  Sv 4+ / AP-1
-  −1  Heavy (nicht bewegt)            → 5+
+AngreiferPlayerArea (links)        
+─────────────────────────────────   
+TREFFER                             
+  [ 3+ ]  BS 3+                       
+  −1  Heavy (nicht bewegt)           
   → 4+
-  [Reroll 1s — Protokoll] 0 CP ▶     FEEL NO PAIN  (falls vorhanden)
-                                        [ 5+ ]  FNP 5+
-VERWUNDUNG                              ~~FNP~~  Nightbringer: ignored
+  [Reroll 1s — Protokoll] 0 CP ▶     
+                                     
+VERWUNDUNG                              
   [ 5+ ]  S4 vs T5
-  +1  [Lethal Hits — Stratagem] 1 CP ▶ SCHADEN
-  → 4+                                  D1  pro Treffer
+  +1  [Lethal Hits — Stratagem] 1 CP 
+
+
+                                    VerteidigenPlayerArea (rechts nach unten versetzt)
+                                    ──────────────────────────────
+                                    RÜSTUNGSWURF/RETTUNGSWURF
+                                    [ 5+ ]  Sv 4+ / AP-1
+                                     → 5+
+                                    FEEL NO PAIN  (falls vorhanden)
+                                    [ 5+ ]  FNP 5+
+                                    ~~FNP~~  Nightbringer: ignored
+                                     ▶ SCHADEN  → 4+ D1  pro Treffer
                                         [ Schaden: 0 ] [+] [−]
                                         [ Mortal: 0  ] [+] [−]
+                                   
 ```
 
 ### Regeln
@@ -220,13 +231,11 @@ VERWUNDUNG                              ~~FNP~~  Nightbringer: ignored
 
 ### Tasks
 
-- [ ] `gameMechanic/game_log.py`: Log-Format auf obige Struktur umstellen
-- [ ] `gameMechanic/game_log.py`: `archive_and_reset_log()` — verschiebt aktuelles Log nach `data/log/archive/<game_id>.json`
-- [ ] `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
-- [ ] `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (nur im Setup-Screen sichtbar)
-  - Liste der archivierten Logs (Datum, Spieler, Ergebnis)
-  - Download-Button pro Log (als JSON)
-  - Löschen-Button pro Log (mit Bestätigung)
+- [x] `gameMechanic/game_log.py`: Log-Format auf strukturiertes JSON (game_id/players/rounds/phases/events)
+- [x] `gameMechanic/game_log.py`: `archive_and_reset_log()` — verschiebt aktuelles Log nach `data/log/archive/<game_id>.json`
+- [x] `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
+- [x] `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (Liste, Download, Löschen mit Bestätigung)
+- [ ] `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf (Spielernamen im Log-Header)
 - [ ] Prüfen: Nach Reset keine alten Einträge im Battle Log sichtbar
 
 ---
