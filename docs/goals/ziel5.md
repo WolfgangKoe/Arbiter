@@ -329,11 +329,14 @@ Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Zi
 
 Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie nicht untergehen:
 
-| Lücke | Beschreibung | Relevant für |
-|-------|-------------|--------------|
-| Ork-Waffen `attacks: Melee` | Scraper-Artefakt für killsaw/power_klaw/uge_choppa — zeigt `AMelee` in UI. Korrekte Werte aus Wahapedia/Kodex nachtragen. | Priorität 1 nächste Session |
-| Melee-Attack-Form Orks unverifiziert | E2E-Test konnte Fight-Phase nur ohne Charge testen ("Not in melee — no fight action possible"). Warboss-Angriff (inkl. `User×2`-Fix) manuell im echten Testspiel bestätigen. | manuelles Testspiel |
-| Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. | eigenes Ziel |
+| Lücke | Beschreibung | Status |
+|-------|-------------|--------|
+| Ork-Waffen `attacks: Melee` | Sentinel-Wert korrekt im Code behandelt; echte Kodex-Werte datentechnisch sauberer. Plan → Ziel 6 Session. | Offen, kein Bug |
+| Melee-Attack-Form Orks | Warboss-Angriff (Charge + Fight Phase) manuell verifiziert 2026-06-03. | ✅ |
+| Ork `power_level: 0` | Codex-Werte nicht eingetragen. Plan → Ziel 6 Session. | Offen, kein Blocker |
+| Waffen-Duplikate Orks | Kombi-Waffen teilen einen Eintrag. Plan → Ziel 6 Session. | Offen, kein Blocker |
+| Forge World / Legends Necrons | Night Shroud, Tombstalker etc. — kein spielbarer Katalog. | Eigenes Ziel — **vor Ziel 6** |
+| Adeptus Custodes | Nur Placeholder-Dateien. | Nach Ziel 8 |
 
 ### E2E-Verifikation — Stand 2026-06-03
 
@@ -350,3 +353,5 @@ Automatisiertes Playwright-Testspiel (Zarekhan'Sol Necrons vs. Necrons 1500pts) 
 | Morale | ✅ | Phase erreichbar |
 
 Kein einziger Crash. Der frühere `User×2`-Bug (Big Mek Killsaw) tritt nicht mehr auf.
+
+**Nachtrag 2026-06-03:** Warboss in Mega Armour Charge + Fight Phase mit 'Uge Choppa manuell verifiziert — korrekte Stats, kein Crash. `_parse_strength()`-Fix für `User×2` bestätigt.

@@ -152,44 +152,37 @@ Setup-Buttons rufen `swap_players()` auf, das alle p1/p2-State-Keys korrekt taus
 
 ---
 
-## Nächste Schritte — Ziel 5i (restliche Punkte) → dann Ziel 6
+## Nächste Schritte
 
-Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
+### 1. Pläne erstellen (Anfang der nächsten Session — noch nicht implementieren)
 
-### Stratagems ✅ erledigt (2026-06-03)
+**Forge World / Legends Necrons** (vor Ziel 6):
+- Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon
+- Plan: Umfang klären (welche Einheiten?), Datenquelle (Wahapedia FW), Katalog-Schema identisch zu Necrons-Hauptkatalog
 
-- CP-Bug (player: inactive) — `gameProtocoll.py` ✅
-- Condition-Check auf Unit-Ebene — `_conditions_met()` ✅
-- Stratagems-Hinweis in gameActionArea (Expander) ✅
+**Ork-Datenqualität** (kann parallel zu Ziel 6 oder danach):
+- **`attacks: Melee`** — echte Kodex-Werte (Power Klaw = 2, Killsaw = 2, etc.)
+- **`power_level: 0`** — alle 51 Einheiten aus MFM nachtragen
+- **Waffen-Duplikate** — Kombi-Waffen in separate Einträge oder Mehrfach-Profile
 
-### Setup-Screen ✅ erledigt
+### 2. Ziel 6 definieren und beginnen
 
-- Mission-Auswahl, Attacker/Defender, Secondary Objectives, unmatched-Warnungen, Punkte-Validierung ✅
-
-### Code-Qualität ✅ (2026-06-03)
-
-- ✅ **Faction-Dir Hardcode** — `unit.id.split(".")[1]` in `gameActionsArea.py`
-- ✅ **`resolve_bracket_stats` verdrahten** — `fightPhase.py` + `shootingPhase.py` nutzen live WS/BS/attacks
-- ✅ **`invuln_save` Orks** — Mega Armour-Einheiten (Warboss, Big Mek, Meganobz) auf 4++ korrigiert
-
-### Datenqualität ✅ (2026-06-03)
-
-- ✅ **Command Protocols Englisch** — `primary`/`secondary` + UI (`name_en`) auf Englisch
-- ✅ **Datasheet Dual-Profile** — Setup-Anzeige iteriert alle `w.profiles`
-- ✅ **Wargear im Roster-Format** — `wargear`-Feld in Roster; `_apply_wargear()` im Loader; BattleScribe-Importer extrahiert Upgrade-Selections
+Ziel 6 ist noch nicht inhaltlich definiert (`docs/goals/ziel6.md` ist Platzhalter). Zu Beginn der nächsten Session:
+- Ziel 6 gemeinsam spezifizieren (wahrscheinlich: Kampfmechanik vertiefen — Mortal Wounds, Command Re-Roll, volle Attack-Sequenz)
+- Dann implementieren
 
 ---
 
 ## Bekannte offene Lücken
 
-| Lücke | Beschreibung |
-|-------|-------------|
-| Ork-Waffen `attacks: Melee` | Scraper-Artefakt: killsaw/power_klaw/uge_choppa zeigen `AMelee` — Kodex-Werte nachtragen |
-| Melee-Attack-Form Orks unverifiziert | Warboss-Angriff (inkl. `User×2`-Fix) noch nicht im echten Testspiel mit Charge bestätigt |
-| Forge World / Legends Necrons | Night Shroud, Canoptek Tombstalker, Acanthrites etc. — kein spielbarer Katalog |
-| Ork `power_level: 0` | Codex-Werte nicht eingetragen (kein Blocker) |
-| Waffen-Duplikate Orks | Kombi-Waffen teilen einen Eintrag (kein Blocker) |
-| Adeptus Custodes | Nur Placeholder-Dateien — kein spielbarer Katalog |
+| Lücke | Beschreibung | Priorität |
+|-------|-------------|-----------|
+| Ork-Waffen `attacks: Melee` | Sentinel-Wert funktioniert korrekt im Code; echte Kodex-Werte (z.B. `attacks: 2` für Power Klaw) sind datentechnisch sauberer — **Plan erstellen in Ziel 6 Session** | Datenqualität |
+| Ork `power_level: 0` | Codex-Werte nicht eingetragen — **Plan erstellen in Ziel 6 Session** | Datenqualität |
+| Waffen-Duplikate Orks | Kombi-Waffen teilen einen Eintrag — **Plan erstellen in Ziel 6 Session** | Datenqualität |
+| Forge World / Legends Necrons | Night Shroud, Canoptek Tombstalker, Acanthrites etc. — kein spielbarer Katalog | **Vor Ziel 6** — Plan in nächster Session |
+| Adeptus Custodes | Nur Placeholder-Dateien — kein spielbarer Katalog | Nach Ziel 8 |
+| Melee-Attack-Form Orks | Warboss-Angriff mit Charge manuell getestet ✅ 2026-06-03 | — |
 
 ---
 
