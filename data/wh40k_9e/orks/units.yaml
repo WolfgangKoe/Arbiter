@@ -52,7 +52,7 @@ units:
     toughness: 6
     attacks: 5
     save: 2
-    invuln_save: 5
+    invuln_save: 4
     leadership: 8
     oc: 1
     fnp: null
@@ -139,7 +139,7 @@ units:
     toughness: 5
     attacks: 3
     save: 2
-    invuln_save: null
+    invuln_save: 4
     leadership: 8
     oc: 1
     fnp: null
@@ -587,7 +587,7 @@ units:
     toughness: 5
     attacks: 3
     save: 2
-    invuln_save: null
+    invuln_save: 4
     leadership: 7
     oc: 2
     fnp: null

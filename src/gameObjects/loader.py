@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 from pathlib import Path
 from typing import Any
 
@@ -416,6 +417,52 @@ def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
     }
 
 
+def _apply_wargear(
+    unit: Unit,
+    wargear_ids: list[str],
+    weapon_catalog: dict[str, Weapon],
+) -> Unit:
+    """Return a copy of unit with roster wargear overrides applied.
+
+    Each ID is looked up in the weapon catalog. A matching wargear_option
+    drives whether it replaces an existing weapon or is added. Unknown IDs
+    (non-weapon wargear items not yet supported) are silently skipped.
+    """
+    weapons = list(unit.weapons)
+
+    for wid in wargear_ids:
+        new_weapon = weapon_catalog.get(wid)
+        if new_weapon is None:
+            continue
+
+        opt = next(
+            (o for o in unit.wargear_options if wid in o.with_refs),
+            None,
+        )
+
+        if opt is None or opt.type == "add":
+            weapons.append(new_weapon)
+        else:  # replace / replace_pair
+            if opt.replaces:
+                weapons = [w for w in weapons if w.id != opt.replaces]
+            else:
+                # Remove the first non-CCW weapon (the implied slot)
+                removed = False
+                kept: list[Weapon] = []
+                for w in weapons:
+                    if not removed and w.id != "close_combat_weapon":
+                        removed = True
+                    else:
+                        kept.append(w)
+                weapons = kept
+            weapons.append(new_weapon)
+
+    if not any(p.is_melee for w in weapons for p in w.profiles):
+        weapons.append(_CCW)
+
+    return dataclasses.replace(unit, weapons=weapons)
+
+
 def load_roster(
     roster_path: str | Path,
     catalog: dict[str, Unit],
@@ -424,12 +471,18 @@ def load_roster(
 
     Returns (matched, unmatched) where matched is a list of (Unit, model_count)
     pairs and unmatched is a list of IDs not found in the catalog.
+    Roster entries with a 'wargear' list get weapon overrides applied via
+    _apply_wargear before they are added to the matched list.
     """
     path = Path(roster_path)
     if not path.exists():
         return [], [f"roster-not-found:{path}"]
     with open(path) as f:
         data = yaml.safe_load(f)
+
+    faction_dir = data.get("faction_dir", "necrons")
+    weapon_catalog = load_weapon_catalog(faction_dir)
+
     matched: list[tuple[Unit, int]] = []
     unmatched: list[str] = []
     for entry in data.get("units", []):
@@ -439,5 +492,8 @@ def load_roster(
             unmatched.append(uid)
         else:
             models = int(entry.get("models", unit.models_max))
+            wargear_ids: list[str] = entry.get("wargear") or []
+            if wargear_ids:
+                unit = _apply_wargear(unit, wargear_ids, weapon_catalog)
             matched.append((unit, models))
     return matched, unmatched

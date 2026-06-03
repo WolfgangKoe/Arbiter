@@ -145,7 +145,7 @@ Setup-Buttons rufen `swap_players()` auf, das alle p1/p2-State-Keys korrekt taus
 | 5f — Stratagems PoC | ✅ 2026-06-03 |
 | 5g — Regelkonformer Setup-Flow | ✅ |
 | 5h — Orks-Katalog | ✅ |
-| **5i — Abschluss & Qualitätssicherung** | 🔄 Code-Qualität + Datenqualität offen |
+| **5i — Abschluss & Qualitätssicherung** | ✅ 2026-06-03 |
 | 6 — [wird nach Ziel 5 definiert] | ⬜ |
 | 7 — Crusade-Erweiterung | ⬜ |
 | 8 — Wahapedia Faction Fetcher | ⬜ |
@@ -170,13 +170,13 @@ Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
 
 - ✅ **Faction-Dir Hardcode** — `unit.id.split(".")[1]` in `gameActionsArea.py`
 - ✅ **`resolve_bracket_stats` verdrahten** — `fightPhase.py` + `shootingPhase.py` nutzen live WS/BS/attacks
-- **`invuln_save` + FNP** — BattleScribe-Importer extrahiert diese noch nicht (defer)
+- ✅ **`invuln_save` Orks** — Mega Armour-Einheiten (Warboss, Big Mek, Meganobz) auf 4++ korrigiert
 
 ### Datenqualität ✅ (2026-06-03)
 
 - ✅ **Command Protocols Englisch** — `primary`/`secondary` + UI (`name_en`) auf Englisch
 - ✅ **Datasheet Dual-Profile** — Setup-Anzeige iteriert alle `w.profiles`
-- **Wargear im Roster-Format** — optionales `wargear`-Feld + Loader-Override + Importer-Extraktion (defer → eigenes Ziel)
+- ✅ **Wargear im Roster-Format** — `wargear`-Feld in Roster; `_apply_wargear()` im Loader; BattleScribe-Importer extrahiert Upgrade-Selections
 
 ---
 
@@ -184,8 +184,6 @@ Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
 
 | Lücke | Beschreibung |
 |-------|-------------|
-| `invuln_save` + FNP | BattleScribe-Importer extrahiert diese nicht; Katalog-Werte Orks manuell prüfen |
-| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar (defer, eigenes Ziel) |
 | Ork-Waffen `attacks: Melee` | Scraper-Artefakt: killsaw/power_klaw/uge_choppa zeigen `AMelee` — Kodex-Werte nachtragen |
 | Melee-Attack-Form Orks unverifiziert | Warboss-Angriff (inkl. `User×2`-Fix) noch nicht im echten Testspiel mit Charge bestätigt |
 | Forge World / Legends Necrons | Night Shroud, Canoptek Tombstalker, Acanthrites etc. — kein spielbarer Katalog |

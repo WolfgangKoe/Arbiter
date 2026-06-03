@@ -154,7 +154,7 @@ def test_extract_units_basic() -> None:
     root = ET.fromstring(xml_bytes)
     units = _extract_units(root)
     assert len(units) == 2
-    names = {name for name, _ in units}
+    names = {name for name, _count, _wg in units}
     assert "Overlord" in names
     assert "Warriors" in names
 
@@ -165,7 +165,39 @@ def test_extract_units_model_count() -> None:
     xml_bytes = _make_ros_xml("Test", [("Lychguard", 5)])
     root = ET.fromstring(xml_bytes)
     units = _extract_units(root)
-    assert units[0] == ("Lychguard", 5)
+    name, count, wargear = units[0]
+    assert name == "Lychguard"
+    assert count == 5
+    assert wargear == []
+
+
+def test_extract_units_wargear_upgrades() -> None:
+    """Upgrade selections nested under a unit are collected as wargear_names."""
+    import xml.etree.ElementTree as ET
+
+    ns = "http://www.battlescribe.net/schema/rosterSchema"
+    xml = (
+        f'<?xml version="1.0"?>'
+        f'<roster xmlns="{ns}" name="T">'
+        f'<forces><force catalogueName="Necrons"><selections>'
+        f'<selection xmlns="{ns}" type="unit" name="Overlord" quantity="1">'
+        f"<selections>"
+        f'<selection xmlns="{ns}" type="model" name="Overlord" quantity="1">'
+        f"<selections>"
+        f'<selection xmlns="{ns}" type="upgrade" name="Voidscythe" quantity="1"/>'
+        f'<selection xmlns="{ns}" type="upgrade" name="Resurrection Orb" quantity="1"/>'
+        f"</selections>"
+        f"</selection>"
+        f"</selections>"
+        f"</selection>"
+        f"</selections></force></forces></roster>"
+    ).encode()
+    root = ET.fromstring(xml)
+    units = _extract_units(root)
+    assert len(units) == 1
+    _name, _count, wargear = units[0]
+    assert "Voidscythe" in wargear
+    assert "Resurrection Orb" in wargear
 
 
 # ---------------------------------------------------------------------------

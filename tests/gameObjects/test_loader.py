@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from pathlib import Path
 
 from gameObjects.loader import (
+    _apply_wargear,
     load_army,
     load_detachment_types,
     load_faction_abilities,
@@ -16,6 +17,7 @@ from gameObjects.loader import (
     load_roster,
     load_roster_metadata,
     load_unit_catalog,
+    load_weapon_catalog,
     resolve_bracket_stats,
     scaled_pl,
 )
@@ -303,3 +305,94 @@ def test_triarch_stalker_replace_heat_ray_wargear_options() -> None:
     targets = {o.with_refs[0] for o in heat_ray_opts}
     assert "wh40k_9e.necrons.weapon.twin_heavy_gauss_cannon" in targets
     assert "wh40k_9e.necrons.weapon.particle_shredder" in targets
+
+
+# ---------------------------------------------------------------------------
+# Wargear overrides: _apply_wargear + load_roster with wargear field
+# ---------------------------------------------------------------------------
+
+
+def test_apply_wargear_replace_staff_of_light_with_voidscythe() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+
+    assert overlord.weapons[0].name_en == "Staff of Light"
+
+    modified = _apply_wargear(
+        overlord,
+        ["wh40k_9e.necrons.weapon.voidscythe"],
+        weapon_catalog,
+    )
+    weapon_names = [w.name_en for w in modified.weapons]
+    assert "Voidscythe" in weapon_names
+    assert "Staff of Light" not in weapon_names
+
+
+def test_apply_wargear_add_resurrection_orb() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+
+    modified = _apply_wargear(
+        overlord,
+        ["wh40k_9e.necrons.weapon.voidscythe"],
+        weapon_catalog,
+    )
+    assert len(modified.weapons) == 1
+    assert modified.weapons[0].name_en == "Voidscythe"
+
+
+def test_apply_wargear_unknown_id_skipped() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+
+    before_count = len(overlord.weapons)
+    modified = _apply_wargear(
+        overlord, ["wh40k_9e.necrons.wargear.resurrection_orb"], weapon_catalog
+    )
+    assert len(modified.weapons) == before_count
+
+
+def test_load_roster_with_wargear_override(tmp_path: Path) -> None:
+    import yaml
+
+    catalog = load_unit_catalog("necrons")
+    roster = {
+        "display_name": "Wargear Test",
+        "faction_dir": "necrons",
+        "units": [
+            {
+                "id": "wh40k_9e.necrons.unit.overlord",
+                "models": 1,
+                "wargear": ["wh40k_9e.necrons.weapon.voidscythe"],
+            }
+        ],
+    }
+    roster_path = tmp_path / "test.yaml"
+    roster_path.write_text(yaml.dump(roster))
+
+    matched, unmatched = load_roster(roster_path, catalog)
+    assert unmatched == []
+    unit, _models = matched[0]
+    weapon_names = [w.name_en for w in unit.weapons]
+    assert "Voidscythe" in weapon_names
+    assert "Staff of Light" not in weapon_names
+
+
+def test_load_roster_without_wargear_uses_catalog_defaults(tmp_path: Path) -> None:
+    import yaml
+
+    catalog = load_unit_catalog("necrons")
+    roster = {
+        "display_name": "Default Test",
+        "faction_dir": "necrons",
+        "units": [{"id": "wh40k_9e.necrons.unit.overlord", "models": 1}],
+    }
+    roster_path = tmp_path / "test.yaml"
+    roster_path.write_text(yaml.dump(roster))
+
+    matched, _ = load_roster(roster_path, catalog)
+    unit, _ = matched[0]
+    assert unit.weapons[0].name_en == "Staff of Light"

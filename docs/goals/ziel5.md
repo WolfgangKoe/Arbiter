@@ -315,13 +315,13 @@ Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Zi
 
 - [x] **Faction-Dir Hardcode** — `unit.id.split(".")[1]` in `gameActionsArea.py` ✅ 2026-06-03
 - [x] **`resolve_bracket_stats` verdrahten** — `fightPhase.py` + `shootingPhase.py` nutzen live WS/BS/attacks ✅ 2026-06-03
-- [ ] **`invuln_save` + FNP via Regex** — BattleScribe-Importer extrahiert diese noch nicht (→ defer, Katalog-Daten für Orks prüfen)
+- [x] **`invuln_save` Orks Katalog** — Mega Armour (Warboss, Big Mek, Meganobz) auf 4++ korrigiert ✅ 2026-06-03
 
 ### Datenqualität
 
 - [x] **Command Protocols Englisch** — `primary`/`secondary` auf Englisch; UI zeigt `name_en` ✅ 2026-06-03
 - [x] **Datasheet Dual-Profile** — Setup-Anzeige iteriert alle `w.profiles`; Staff of Light zeigt beide Profile ✅ 2026-06-03
-- [ ] **Wargear im Roster-Format** — `id` + `models` + optionales `wargear`-Feld; Loader-Override + Importer-Extraktion (→ defer, eigenes Ziel)
+- [x] **Wargear im Roster-Format** — `wargear`-Feld in Roster; `_apply_wargear()` im Loader; BattleScribe-Importer extrahiert Upgrade-Selections ✅ 2026-06-03
 
 ---
 
@@ -333,9 +333,7 @@ Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie n
 |-------|-------------|--------------|
 | Ork-Waffen `attacks: Melee` | Scraper-Artefakt für killsaw/power_klaw/uge_choppa — zeigt `AMelee` in UI. Korrekte Werte aus Wahapedia/Kodex nachtragen. | Priorität 1 nächste Session |
 | Melee-Attack-Form Orks unverifiziert | E2E-Test konnte Fight-Phase nur ohne Charge testen ("Not in melee — no fight action possible"). Warboss-Angriff (inkl. `User×2`-Fix) manuell im echten Testspiel bestätigen. | manuelles Testspiel |
-| `invuln_save` + FNP via Regex | BattleScribe-Importer extrahiert invuln_save und FNP noch nicht. Katalog-Werte für Necrons und Orks manuell prüfen. | 5d Nacharbeit |
 | Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. | eigenes Ziel |
-| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar. BattleScribe-Import extrahiert Wargear nicht. | 5d Nacharbeit |
 
 ### E2E-Verifikation — Stand 2026-06-03
 

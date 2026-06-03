@@ -44,6 +44,16 @@ def _build_name_map(catalog: dict) -> dict[str, str]:
     return mapping
 
 
+def _build_weapon_name_map(weapon_catalog: dict) -> dict[str, str]:
+    """Build normalized-display-name and slug → weapon-id lookup."""
+    mapping: dict[str, str] = {}
+    for wid, weapon in weapon_catalog.items():
+        slug = wid.rsplit(".", 1)[-1]
+        mapping[_normalize(weapon.name_en)] = wid
+        mapping[slug] = wid
+    return mapping
+
+
 def _match_unit_name(bs_name: str, name_map: dict[str, str], faction_dir: str) -> str | None:
     """Return unit ID for a BattleScribe selection name, or None if unmatched.
 
@@ -62,16 +72,35 @@ def _match_unit_name(bs_name: str, name_map: dict[str, str], faction_dir: str) -
     return None
 
 
-def _extract_units(root: ET.Element) -> list[tuple[str, int]]:
-    """Extract (unit_name, model_count) pairs from a BattleScribe XML roster.
+def _collect_upgrade_names(element: ET.Element, ns: dict) -> list[str]:
+    """Recursively collect all 'upgrade' selection names inside element."""
+    names: list[str] = []
+    sub_sels = element.find("bs:selections", ns)
+    if sub_sels is None:
+        return names
+    for sel in sub_sels.findall("bs:selection", ns):
+        if sel.attrib.get("type") == "upgrade":
+            name = sel.attrib.get("name", "")
+            if name:
+                names.append(name)
+            names.extend(_collect_upgrade_names(sel, ns))
+        else:
+            # Recurse into model sub-selections to catch nested upgrades
+            names.extend(_collect_upgrade_names(sel, ns))
+    return names
+
+
+def _extract_units(root: ET.Element) -> list[tuple[str, int, list[str]]]:
+    """Extract (unit_name, model_count, wargear_names) triples from a BattleScribe XML.
 
     BattleScribe structure:
       <roster> → <forces> → <force> → <selections> → <selection type="unit">
         → <selections> → <selection type="model" quantity="N">
     Single-model units may be exported as top-level type="model" selections.
+    wargear_names contains all nested 'upgrade' selection names (weapons/wargear).
     """
     ns = {"bs": _BS_NS}
-    units: list[tuple[str, int]] = []
+    units: list[tuple[str, int, list[str]]] = []
 
     for selections_el in root.findall(".//bs:force/bs:selections", ns):
         for sel in selections_el.findall("bs:selection", ns):
@@ -81,14 +110,15 @@ def _extract_units(root: ET.Element) -> list[tuple[str, int]]:
 
             name = sel.attrib.get("name", "")
             quantity = int(sel.attrib.get("quantity", sel.attrib.get("number", "1")))
+            wargear_names = _collect_upgrade_names(sel, ns)
 
             if sel_type == "unit":
                 model_count = _count_models(sel, ns)
                 if model_count == 0:
                     model_count = quantity
-                units.append((name, model_count))
+                units.append((name, model_count, wargear_names))
             else:
-                units.append((name, quantity))
+                units.append((name, quantity, wargear_names))
 
     return units
 
@@ -164,23 +194,35 @@ def import_roster(
                 "Add the catalogue name to _FACTION_CATALOGUE_MAP in rosz_importer.py."
             )
 
+    from gameObjects.loader import load_weapon_catalog  # noqa: PLC0415
+
     catalog = load_unit_catalog(faction_dir)
     if not catalog:
         raise ValueError(
             f"No unit catalog found for faction '{faction_dir}'. "
             "Add a units.yaml to data/wh40k_9e/{faction_dir}/ before importing."
         )
+    weapon_catalog = load_weapon_catalog(faction_dir)
     name_map = _build_name_map(catalog)
+    weapon_name_map = _build_weapon_name_map(weapon_catalog)
     bs_units = _extract_units(root)
 
     matched: list[dict] = []
     unmatched: list[str] = []
-    for name, count in bs_units:
+    for name, count, wargear_names in bs_units:
         uid = _match_unit_name(name, name_map, faction_dir)
         if uid is None:
             unmatched.append(name)
         else:
-            matched.append({"id": uid, "models": count})
+            entry: dict = {"id": uid, "models": count}
+            matched_wargear = [
+                weapon_name_map[_normalize(wn)]
+                for wn in wargear_names
+                if _normalize(wn) in weapon_name_map
+            ]
+            if matched_wargear:
+                entry["wargear"] = matched_wargear
+            matched.append(entry)
 
     safe_name = re.sub(r"[^a-z0-9_]+", "_", roster_name.lower()).strip("_") or "roster"
     output_path = output_dir / f"{safe_name}.yaml"
