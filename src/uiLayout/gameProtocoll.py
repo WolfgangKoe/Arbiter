@@ -31,10 +31,35 @@ _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.jso
 
 
 def _load_game_log() -> list[dict]:  # type: ignore[type-arg]
+    """Load log entries as a flat list compatible with the battle-log renderer.
+
+    Converts the nested {rounds → phases → events} format from game_log.py
+    into flat dicts: {round, phase, unit, action}.
+    """
     if not _LOG_PATH.exists():
         return []
     with _LOG_PATH.open() as f:
-        return json.load(f)
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            return []
+    if not isinstance(data, dict):
+        return []
+    entries = []
+    for r in data.get("rounds", []):
+        round_num = r.get("round", 0)
+        for phase_entry in r.get("phases", []):
+            phase = phase_entry.get("phase", "")
+            for event in phase_entry.get("events", []):
+                entries.append(
+                    {
+                        "round": round_num,
+                        "phase": phase,
+                        "unit": event.get("unit", ""),
+                        "action": event.get("action", ""),
+                    }
+                )
+    return entries
 
 
 def _unit_name_map(faction: str) -> dict[str, str]:
