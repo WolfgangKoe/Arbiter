@@ -1,0 +1,27 @@
+display_name: Necrons 1500pts - Silent King
+faction_dir: necrons
+units:
+- id: wh40k_9e.necrons.unit.the_silent_king
+  models: 3
+- id: wh40k_9e.necrons.unit.royal_warden
+  models: 1
+- id: wh40k_9e.necrons.unit.plasmancer
+  models: 1
+- id: wh40k_9e.necrons.unit.warriors
+  models: 10
+- id: wh40k_9e.necrons.unit.warriors
+  models: 10
+- id: wh40k_9e.necrons.unit.warriors
+  models: 10
+- id: wh40k_9e.necrons.unit.technomancer
+  models: 1
+- id: wh40k_9e.necrons.unit.lychguard
+  models: 5
+- id: wh40k_9e.necrons.unit.lychguard
+  models: 5
+- id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
+  models: 3
+- id: wh40k_9e.necrons.unit.canoptek_scarabs
+  models: 3
+- id: wh40k_9e.necrons.unit.canoptek_scarabs
+  models: 3

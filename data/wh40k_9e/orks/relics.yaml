@@ -1,0 +1,167 @@
+schema: tabletop.relics.v1
+game_system: wh40k_9e
+faction: Orks
+# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
+# Format mirrors data/wh40k_9e/necrons/relics.yaml
+# Klan relics: one per Klan + specialist detachment relics
+rule_context:
+  edition: "9"
+  ruleset_mode: current
+
+relics:
+
+  # ── Bad Moons ──────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_gobshot_thunderbuss
+    name_en: Da Gobshot Thunderbuss
+    is_relic: true
+    klan: bad_moons
+    replaces:
+      any_of: [wh40k_9e.orks.weapon.kustom_shoota]
+    profiles:
+      - mode: Shooting
+        range_inches: 18
+        weapon_type: Heavy 2D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon, that attack automatically hits the target."
+
+  # ── Blood Axes ─────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.morgogs_finkin_cap
+    name_en: "Morgog's Finkin' Cap"
+    is_relic: true
+    klan: blood_axes
+    replaces:
+      any_of: []
+    ability_en: >
+      At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
+      on a 4+, you gain 1 Command point.
+
+  # ── Deathskulls ────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_fixer_upperz
+    name_en: "Da Fixer Upperz"
+    is_relic: true
+    klan: deathskulls
+    applies_to:
+      keywords: [MEK]
+    replaces:
+      any_of: []
+    ability_en: >
+      MEK or BIG MEK only. Each time the bearer uses their Mekaniak ability, roll one D6:
+      on a 2+, the repaired model regains 1 additional lost wound. On a 6, also deal D3
+      mortal wounds to the nearest enemy VEHICLE within 6\" of the repaired model.
+
+  # ── Evil Sunz ──────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.rezmekkas_redder_paint
+    name_en: "Rezmekka's Redder Paint"
+    is_relic: true
+    klan: evil_sunz
+    replaces:
+      any_of: []
+    ability_en: >
+      Add 2\" to the Move characteristic of the bearer's model. In addition, at the
+      start of the Fight phase, if the bearer is within Engagement Range of any enemy
+      units, those enemy units cannot be selected to fight until all other eligible
+      units have been selected to fight.
+
+  # ── Freebooterz ────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_badskull_banna
+    name_en: Da Badskull Banna
+    is_relic: true
+    klan: freebooterz
+    replaces:
+      any_of: []
+    ability_en: >
+      While an enemy unit is within 6\" of the bearer, that enemy unit loses the
+      Objective Secured ability (if it has it).
+
+  # ── Goffs ──────────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_irongob
+    name_en: Da Irongob
+    is_relic: true
+    klan: goffs
+    replaces:
+      any_of: []
+    ability_en: >
+      After the bearer has made all of its close combat attacks, before it makes its
+      consolidation move, select one enemy unit within 1\" of the bearer and roll one D6:
+      on a 2+, that enemy unit suffers D3 mortal wounds.
+
+  # ── Snakebites ─────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.broggs_buzzbomb
+    name_en: "Brogg's Buzzbomb"
+    is_relic: true
+    klan: snakebites
+    replaces:
+      any_of: []
+    profiles:
+      - mode: Shooting
+        range_inches: 6
+        weapon_type: Grenade 3D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Scores a hit on a 2+. After shooting with this weapon, each unit within 6\" of the target suffers 1 mortal wound."
+
+  # ── Blitz Brigade ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_blitz_shouta
+    name_en: Da Blitz Shouta
+    is_relic: true
+    detachment: blitz_brigade
+    replaces:
+      any_of: []
+    ability_en: >
+      At the start of your Shooting phase, if the bearer is embarked within a BATTLEWAGON,
+      select one enemy unit visible to the bearer. Until the end of the phase, each time a
+      friendly unit makes an attack that targets that enemy unit and the attacking model is
+      within 6\" of that BATTLEWAGON, re-roll hit rolls of 1.
+
+  # ── Dread Waaagh! ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.da_souped_up_shokka
+    name_en: "Da Souped-Up Shokka"
+    is_relic: true
+    detachment: dread_waaagh
+    replaces:
+      any_of: [wh40k_9e.orks.weapon.shokk_attack_gun]
+    profiles:
+      - mode: Shooting
+        range_inches: 60
+        weapon_type: Heavy 2D6
+        strength: "2D6"
+        ap: -5
+        damage: "D6"
+        abilities: "On an unmodified wound roll of 11+, successful hits inflict D3 mortal wounds on the target in addition to any other damage."
+
+  # ── Kult of Speed ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.skargrims_snazztrike
+    name_en: "Skargrim's Snazztrike"
+    is_relic: true
+    detachment: kult_of_speed
+    applies_to:
+      unit_id: [wh40k_9e.orks.unit.deffkilla_wartrike]
+    replaces:
+      any_of: []
+    ability_en: >
+      DEFFKILLA WARTRIKE only. Add 1 to the Toughness characteristic of this model.
+      In addition, this model has a 5+ invulnerable save.
+
+  # ── Stompa Mob ─────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.relic.tezdrek_stompa_power_field
+    name_en: "Tezdrek's Stompa Power Field"
+    is_relic: true
+    detachment: stompa_mob
+    replaces:
+      any_of: []
+    ability_en: >
+      The bearer gains a 5+ invulnerable save.

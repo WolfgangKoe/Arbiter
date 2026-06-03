@@ -1,0 +1,206 @@
+# Orks subfaction (Klan) abilities — WH40k 9E
+# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
+# 7 Klans: Bad Moons, Blood Axes, Deathskulls, Evil Sunz, Freebooterz, Goffs, Snakebites
+# Format mirrors data/wh40k_9e/necrons/subfaction_abilities.yaml
+faction: Orks
+subfactions:
+
+  # ── Bad Moons ──────────────────────────────────────────────────────────────
+  - id: bad_moons
+    name_en: Bad Moons
+    klan_keyword: BAD MOONS
+    abilities:
+      - id: wh40k_9e.orks.klan.bad_moons.armed_to_da_teef
+        name_en: "Kultur — Armed to da Teef"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Add 6\" to the Range characteristic of Dakka weapons and Heavy weapons models in this unit are equipped with. Each time a model in this unit makes an attack with a ranged weapon, on an unmodified wound roll of 6, improve the AP characteristic of that attack by 1."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: buff_stat
+              target: self
+              stat: range
+              modifier: 6
+              weapon_types: [Dakka, Heavy]
+            - type: buff_ap
+              target: self
+              modifier: 1
+              condition: unmodified_wound_roll_6
+
+  # ── Blood Axes ─────────────────────────────────────────────────────────────
+  - id: blood_axes
+    name_en: Blood Axes
+    klan_keyword: BLOOD AXES
+    abilities:
+      - id: wh40k_9e.orks.klan.blood_axes.taktiks
+        name_en: "Kultur — Taktiks"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time a ranged attack is made against this unit, if the attacking model is more than 18\" away, this unit is treated as being in Light Cover. Additionally, each time this unit Falls Back, it can either shoot or charge (not both) in the same turn."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: cover_save
+              target: self
+              cover_type: light
+              condition: attacker_more_than_18_inches
+            - type: fallback_shoot_or_charge
+              target: self
+
+  # ── Deathskulls ────────────────────────────────────────────────────────────
+  - id: deathskulls
+    name_en: Deathskulls
+    klan_keyword: DEATHSKULLS
+    abilities:
+      - id: wh40k_9e.orks.klan.deathskulls.lucky_blue_gitz
+        name_en: "Kultur — Lucky Blue Gitz"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time a model in this unit makes an attack, you can re-roll one hit roll or one wound roll. Each time this unit suffers a mortal wound, roll one D6: on a 5+, that mortal wound is negated. INFANTRY models in this unit have the Objective Secured ability."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: reroll_one
+              target: self
+              stat: [hit_roll, wound_roll]
+            - type: mortal_wound_negate
+              target: self
+              threshold: 5
+            - type: objective_secured
+              target: self
+              condition: has_keywords_INFANTRY
+
+  # ── Evil Sunz ──────────────────────────────────────────────────────────────
+  - id: evil_sunz
+    name_en: Evil Sunz
+    klan_keyword: EVIL SUNZ
+    abilities:
+      - id: wh40k_9e.orks.klan.evil_sunz.red_ones_go_fasta
+        name_en: "Kultur — Red Ones Go Fasta"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Add 1\" to the Move characteristic of models in this unit (add 2\" instead if they have the SPEED FREEKS keyword). Add 1 to Advance rolls for this unit. Models in this unit do not suffer the penalty for firing Assault weapons after Advancing."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: buff_stat
+              target: self
+              stat: move
+              modifier: 1
+            - type: buff_stat
+              target: self
+              stat: move
+              modifier: 2
+              condition: has_keywords_SPEED_FREEKS
+            - type: buff_roll
+              target: self
+              stat: advance_roll
+              modifier: 1
+            - type: assault_after_advance
+              target: self
+
+  # ── Freebooterz ────────────────────────────────────────────────────────────
+  - id: freebooterz
+    name_en: Freebooterz
+    klan_keyword: FREEBOOTERZ
+    abilities:
+      - id: wh40k_9e.orks.klan.freebooterz.competitive_streak
+        name_en: "Kultur — Competitive Streak"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time a FREEBOOTERZ unit from your army destroys an enemy unit, after that unit's attacks have been resolved, until the end of the phase, each time an attack is made by another FREEBOOTERZ unit from your army, add 1 to that attack's hit roll."
+        trigger:
+          timing: phase_reactive
+          phase: any
+          stage: active
+          player: active
+          event: friendly_unit_destroys_enemy
+        conditions:
+          - has_keywords: [FREEBOOTERZ]
+        effect:
+          type: buff_roll
+          target: friendly_freebooterz
+          stat: hit_roll
+          modifier: 1
+          duration: until_end_of_phase
+
+  # ── Goffs ──────────────────────────────────────────────────────────────────
+  - id: goffs
+    name_en: Goffs
+    klan_keyword: GOFFS
+    abilities:
+      - id: wh40k_9e.orks.klan.goffs.no_mukkin_about
+        name_en: "Kultur — No Mukkin' About"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time a model in this unit makes a melee attack, an unmodified hit roll of 6 scores 1 additional hit. In addition, each time this unit makes a pile-in or consolidation move, if it charged this turn or performed a Heroic Intervention this turn, add 1 to the Strength characteristic of models in this unit until the end of that phase."
+        trigger:
+          timing: persistent
+          phase: fight
+          stage: active
+          player: active
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: extra_hit_on_6
+              target: self
+              phase: fight
+            - type: buff_stat
+              target: self
+              stat: strength
+              modifier: 1
+              condition: charged_or_heroic_intervention
+
+  # ── Snakebites ─────────────────────────────────────────────────────────────
+  - id: snakebites
+    name_en: Snakebites
+    klan_keyword: SNAKEBITES
+    abilities:
+      - id: wh40k_9e.orks.klan.snakebites.da_old_ways
+        name_en: "Kultur — Da Old Ways"
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time an attack is made against a model in this unit, an unmodified wound roll of 1, 2 or 3 always fails, regardless of any abilities. SQUIG models in this unit add 1 to their wound rolls if this unit charged or performed a Heroic Intervention this turn."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: multi
+          effects:
+            - type: wound_roll_fail_threshold
+              target: self
+              threshold: 3
+            - type: buff_roll
+              target: self
+              stat: wound_roll
+              modifier: 1
+              condition: squig_models_after_charge

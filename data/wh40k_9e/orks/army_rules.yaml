@@ -1,0 +1,70 @@
+schema: tabletop.army_rules.v1
+game_system: wh40k_9e
+faction: Orks
+# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
+
+# Warlord-Anforderung
+warlord:
+  required_keywords: [WARBOSS]
+  exceptions:
+    - unit_id: wh40k_9e.orks.unit.ghazghkull_thraka
+      rule: auto_warlord  # Ghazghkull ist automatisch Kriegsherr
+
+# "I'm Da Boss!" — max. 1 WARBOSS oder SPEEDBOSS pro Detachment
+detachment_limits:
+  max_warboss_per_detachment: 1
+  keywords: [WARBOSS, SPEEDBOSS]
+  note: "Only one WARBOSS or SPEEDBOSS model allowed per Detachment."
+
+# Clan Kulturs — alle <CLAN>-Einheiten in einem Klan-Detachment
+# erhalten die Klan-Kultur (ausgenommen GRETCHIN)
+clan_kulture:
+  applies_to_keyword: "<CLAN>"
+  excludes_keywords: [GRETCHIN]
+  requires: clan_detachment  # alle Einheiten müssen denselben Klan haben
+
+# Objective Secured — TROOPS (außer GRETCHIN) haben Ob.Sec
+objective_secured:
+  applies_to_battlefield_role: [Troops]
+  excludes_keywords: [GRETCHIN]
+
+# Matched Play — Punkte-Limits (Standard)
+matched_play:
+  cp_budget: 12
+  point_limits:
+    - label: Combat Patrol
+      points: 500
+    - label: Incursion
+      points: 1000
+    - label: Strike Force
+      points: 2000
+    - label: Onslaught
+      points: 3000
+
+# Spezialisten-Detachments (Specialist Detachments)
+# Jedes Detachment kann durch Stratagem in ein Spezialistendetachment
+# umgewandelt werden und erhält entsprechende Stratagems + Relics.
+specialist_detachments:
+  - keyword: BLITZ_BRIGADE
+    stratagem_id: wh40k_9e.orks.stratagem.blitz_brigade
+    eligible_units: [WARBOSS, BATTLEWAGON, GUNWAGON, BONEBREAKA]
+  - keyword: DREAD_WAAAGH
+    stratagem_id: wh40k_9e.orks.stratagem.dread_waaagh
+    eligible_units: [BIG MEK, GORKANAUT, MORKANAUT, DEFF DREAD, KILLA KANS]
+  - keyword: KULT_OF_SPEED
+    stratagem_id: wh40k_9e.orks.stratagem.kult_of_speed
+    eligible_units: [SPEED FREEKS]
+  - keyword: STOMPA_MOB
+    stratagem_id: wh40k_9e.orks.stratagem.stompa_mob
+    eligible_units: [STOMPA]
+
+# Requisitions (Vor der Partie)
+requisitions:
+  - id: big_boss
+    name_en: Big Boss
+    rule_text: "Use this Stratagem when choosing your army. Select one ORKS CHARACTER model in your army and determine one Warlord Trait for it; it is only regarded as your WARLORD for that trait. Each Warlord Trait in your army must be unique."
+    cp_cost: 1
+  - id: extra_gubbinz
+    name_en: Extra Gubbinz
+    rule_text: "Use this Stratagem when choosing your army. Select one ORKS CHARACTER model and give it one Relic. Each Relic in your army must be unique. You cannot use this Stratagem to give a model two Relics."
+    cp_cost: 1

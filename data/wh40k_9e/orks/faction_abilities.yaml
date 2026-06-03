@@ -1,2 +1,325 @@
+# Orks faction abilities — WH40k 9E
+# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
+# Format mirrors data/wh40k_9e/necrons/faction_abilities.yaml
 faction: Orks
-abilities: []
+
+abilities:
+
+  # ── Universal Ork Rules ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.faction.ere_we_go
+    name_en: "'Ere We Go"
+    ability_type: triggered
+    source: faction_rule
+    rule_text: "You can re-roll charge rolls made for units with this ability."
+    trigger:
+      timing: phase_any
+      phase: charge
+      stage: active
+      player: active
+    conditions:
+      - has_rules: [ereWeGo]
+    effect:
+      type: reroll_charge
+      target: self
+
+  - id: wh40k_9e.orks.faction.mob_rule
+    name_en: Mob Rule
+    ability_type: triggered
+    source: faction_rule
+    rule_text: "While this unit is within 6\" of a friendly <CLAN> MOB unit that is not under half strength, this unit is never considered to be under half strength."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [mobRule]
+        nearby_friendly_above_half: true
+    effect:
+      type: morale_immunity
+      target: self
+      condition: near_friendly_mob
+
+  - id: wh40k_9e.orks.faction.ramshackle
+    name_en: Ramshackle
+    ability_type: triggered
+    source: faction_rule
+    rule_text: "Each time an attack is allocated to this model, unless that attack has a Strength characteristic of 8 or more, subtract 1 from the Damage characteristic of that attack (to a minimum of 1)."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [ramshackle]
+    effect:
+      type: damage_reduction
+      target: self
+      modifier: -1
+      minimum: 1
+      except_strength_ge: 8
+
+  - id: wh40k_9e.orks.faction.beast_snagga
+    name_en: Beast Snagga
+    ability_type: triggered
+    source: faction_rule
+    rule_text: "Models with this ability gain +1 to hit rolls against VEHICLE and MONSTER targets. All models with this ability have a 6+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [beastSnagga]
+    effect:
+      type: multi
+      effects:
+        - type: buff_hit
+          target: self
+          modifier: 1
+          condition: target_has_keyword
+          target_keyword: [VEHICLE, MONSTER]
+        - type: invuln_save
+          target: self
+          modifier: 6
+
+  # ── WAAAGH! ────────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.faction.waaagh_stage1
+    name_en: "Waaagh! — Call Da Waaagh!"
+    ability_type: activated
+    source: faction_rule
+    rule_text: "Once per battle, in your Charge phase, a WARBOSS can call a Waaagh! Stage 1: Until the end of the turn, ORKS CORE and ORKS CHARACTER units from your army can charge even if they Advanced this turn. Until the start of your next turn, add 1 to the Strength and Attacks characteristics of ORKS models from your army. ORKS models from your army also have a 5+ invulnerable save until the start of your next turn."
+    trigger:
+      timing: phase_any
+      phase: charge
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [WARBOSS]
+        once_per_battle: true
+    effect:
+      type: multi
+      effects:
+        - type: charge_after_advance
+          target: friendly_orks_core_or_character
+        - type: buff_stat
+          target: friendly_orks
+          stat: strength
+          modifier: 1
+        - type: buff_stat
+          target: friendly_orks
+          stat: attacks
+          modifier: 1
+        - type: invuln_save
+          target: friendly_orks
+          modifier: 5
+
+  - id: wh40k_9e.orks.faction.waaagh_stage2
+    name_en: "Waaagh! — Get Stuck In!"
+    ability_type: passive
+    source: faction_rule
+    rule_text: "Stage 2 of Waaagh! (active in the turn following Stage 1): +1 Strength and Attacks for ORKS models. ORKS models have a 6+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [waaagh_stage2]
+    effect:
+      type: multi
+      effects:
+        - type: buff_stat
+          target: friendly_orks
+          stat: strength
+          modifier: 1
+        - type: buff_stat
+          target: friendly_orks
+          stat: attacks
+          modifier: 1
+        - type: invuln_save
+          target: friendly_orks
+          modifier: 6
+
+  - id: wh40k_9e.orks.faction.speedwaaagh_stage1
+    name_en: "Speedwaaagh! — Da Big Race"
+    ability_type: activated
+    source: faction_rule
+    rule_text: "Once per battle, a SPEEDBOSS can call a Speedwaaagh! Stage 1: SPEED FREEKS units do not suffer the penalty for firing Assault weapons after Advancing. Add 1 additional hit to Dakka weapon attacks. Until the start of the next turn, improve AP by 1 on ranged attacks of ORKS units."
+    trigger:
+      timing: phase_any
+      phase: charge
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [SPEEDBOSS]
+        once_per_battle: true
+    effect:
+      type: multi
+      effects:
+        - type: assault_after_advance
+          target: speed_freeks
+        - type: buff_stat
+          target: speed_freeks
+          stat: dakka_hits
+          modifier: 1
+        - type: buff_ap
+          target: friendly_orks
+          modifier: 1
+
+  # ── Objective Secured ─────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.faction.objective_secured
+    name_en: Objective Secured
+    ability_type: triggered
+    source: faction_rule
+    rule_text: "While this unit is within range of an objective marker, it controls that objective marker even if there are more enemy models within range of that objective marker. GRETCHIN units do not have this ability."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [objectiveSecured]
+      - not_has_keywords: [GRETCHIN]
+    effect:
+      type: objective_control
+      target: self
+
+  # ── Psychic Powers (Waaagh! Energy) ───────────────────────────────────────
+
+  - id: wh40k_9e.orks.faction.psychic.smite
+    name_en: Smite
+    ability_type: psychic
+    source: core_rule
+    rule_text: "Warp Charge 5. The closest enemy unit within 18\" of and visible to the psyker suffers D3 mortal wounds. If the result of the Psychic test was 11 or more, that unit suffers D6 mortal wounds instead."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER]
+    effect:
+      type: mortal_wounds
+      target: enemy_closest
+      amount: D3
+      amount_on_11: D6
+      warp_charge: 5
+
+  - id: wh40k_9e.orks.faction.psychic.eadbanger
+    name_en: "'Eadbanger"
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 5. Select one enemy unit within 18\" of the psyker and roll a D6. If the result exceeds the target's Toughness, that unit suffers D6 mortal wounds. Maximum one model can be destroyed from this power."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: mortal_wounds_conditional
+      target: enemy_selected
+      amount: D6
+      condition: roll_vs_toughness
+      max_destroyed: 1
+      warp_charge: 5
+
+  - id: wh40k_9e.orks.faction.psychic.warpath
+    name_en: Warpath
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 6. Select one friendly ORKS CORE or ORKS CHARACTER unit within 18\". Until the start of your next Psychic phase, add 1 to the Attacks characteristic of models in that unit."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: buff_stat
+      target: friendly_orks_core_or_character
+      stat: attacks
+      modifier: 1
+      warp_charge: 6
+
+  - id: wh40k_9e.orks.faction.psychic.da_jump
+    name_en: Da Jump
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 7. Select one friendly ORKS CORE unit within 12\". Remove it from the battlefield and set it up anywhere more than 9\" from enemy models."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: deep_strike
+      target: friendly_orks_core
+      min_range_from_enemy: 9
+      warp_charge: 7
+
+  - id: wh40k_9e.orks.faction.psychic.fists_of_gork
+    name_en: Fists of Gork
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 6. Select one friendly ORKS CHARACTER within 12\". Add 2 to Strength and Attacks until your next Psychic phase (add 3 instead if test result was 11+)."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: buff_stat
+      target: friendly_orks_character
+      stat: [strength, attacks]
+      modifier: 2
+      modifier_on_11: 3
+      warp_charge: 6
+
+  - id: wh40k_9e.orks.faction.psychic.da_krunch
+    name_en: Da Krunch
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 6. Select one enemy unit within 18\". Roll one D6 per model in the unit; each roll of 6 causes 1 mortal wound. On test result 9+, add 1 to all rolls."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: mortal_wounds_per_model
+      target: enemy_selected
+      roll_threshold: 6
+      threshold_on_9: 5
+      warp_charge: 6
+
+  - id: wh40k_9e.orks.faction.psychic.jabbinfinger
+    name_en: "Jabbin' Fingerz"
+    ability_type: psychic
+    source: faction_rule
+    rule_text: "Warp Charge 6. Select one visible enemy unit within 18\". Until the start of your next Psychic phase, each time a model in that unit makes an attack, subtract 1 from that attack's hit roll."
+    trigger:
+      timing: phase_any
+      phase: psychic
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: debuff_roll
+      target: enemy_selected
+      stat: hit_roll
+      modifier: -1
+      warp_charge: 6

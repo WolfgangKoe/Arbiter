@@ -1,0 +1,82 @@
+# Orks points — Matched Play (9E, Codex Orks + Chapter Approved 2023)
+# Source: Munitorum Field Manual 2023 Mk I — verify against current errata
+# Format identical to data/wh40k_9e/necrons/points.yaml:
+#   per_unit: flat cost regardless of model count
+#   per_model: cost × current model count (loader multiplies)
+# NOTE: These values are based on MFM 2023 Mk I.
+#       Verify against https://wahapedia.ru/wh40k9ed/factions/orks/
+#       if discrepancies are found.
+
+units:
+
+  # ── HQ ────────────────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.warboss:                    { per_unit: 65 }
+  wh40k_9e.orks.unit.warboss_mega_armour:        { per_unit: 115 }
+  wh40k_9e.orks.unit.warboss_warbike:            { per_unit: 115 }
+  wh40k_9e.orks.unit.big_mek:                    { per_unit: 55 }
+  wh40k_9e.orks.unit.big_mek_mega_armour:        { per_unit: 100 }
+  wh40k_9e.orks.unit.big_mek_kff:                { per_unit: 80 }
+  wh40k_9e.orks.unit.big_mek_sag:                { per_unit: 85 }
+  wh40k_9e.orks.unit.big_mek_warbike:            { per_unit: 80 }
+  wh40k_9e.orks.unit.weirdboy:                   { per_unit: 65 }
+  wh40k_9e.orks.unit.wurrboy:                    { per_unit: 75 }
+  wh40k_9e.orks.unit.painboy:                    { per_unit: 65 }
+  wh40k_9e.orks.unit.beastboss:                  { per_unit: 95 }
+  wh40k_9e.orks.unit.beastboss_squigosaur:       { per_unit: 155 }
+  wh40k_9e.orks.unit.ghazghkull:                 { per_unit: 270 }
+  wh40k_9e.orks.unit.kaptin_badrukk:             { per_unit: 85 }
+  wh40k_9e.orks.unit.boss_zagstruk:              { per_unit: 80 }
+  wh40k_9e.orks.unit.deffkilla_wartrike:         { per_unit: 115 }
+
+  # ── Troops ────────────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.boyz:                       { per_model: 7 }
+  wh40k_9e.orks.unit.gretchin:                   { per_model: 4 }
+  wh40k_9e.orks.unit.beast_snagga_boyz:          { per_model: 12 }
+
+  # ── Elites ────────────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.meganobz:                   { per_model: 40 }
+  wh40k_9e.orks.unit.nobz:                       { per_model: 15 }
+  wh40k_9e.orks.unit.burna_boyz:                 { per_model: 15 }
+  wh40k_9e.orks.unit.kommandos:                  { per_model: 14 }
+  wh40k_9e.orks.unit.tankbustas:                 { per_model: 15 }
+  wh40k_9e.orks.unit.flash_gitz:                 { per_model: 26 }
+  wh40k_9e.orks.unit.mad_dok_grotsnik:           { per_unit: 90 }
+  wh40k_9e.orks.unit.mek:                        { per_unit: 25 }
+  wh40k_9e.orks.unit.runtherd:                   { per_unit: 25 }
+  wh40k_9e.orks.unit.painboy_warbike:            { per_unit: 80 }
+  wh40k_9e.orks.unit.nob_waaagh_banner:          { per_unit: 55 }
+
+  # ── Fast Attack ───────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.warbikers:                  { per_model: 24 }
+  wh40k_9e.orks.unit.stormboyz:                  { per_model: 12 }
+  wh40k_9e.orks.unit.deffkoptas:                 { per_model: 40 }
+  wh40k_9e.orks.unit.squighog_boyz:              { per_model: 28 }
+  wh40k_9e.orks.unit.nob_smasha_squig:           { per_unit: 70 }
+  wh40k_9e.orks.unit.boomdakka_snazzwagons:      { per_unit: 105 }
+  wh40k_9e.orks.unit.kustom_boosta_blastas:      { per_unit: 85 }
+  wh40k_9e.orks.unit.megatrakk_scrapjets:        { per_unit: 130 }
+  wh40k_9e.orks.unit.shokkjump_dragstas:         { per_unit: 100 }
+  wh40k_9e.orks.unit.rukkatrukk_squigbuggies:    { per_unit: 100 }
+
+  # ── Heavy Support ─────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.battlewagon:                { per_unit: 130 }
+  wh40k_9e.orks.unit.deff_dreads:                { per_unit: 100 }
+  wh40k_9e.orks.unit.bonebreaka:                 { per_unit: 155 }
+  wh40k_9e.orks.unit.gunwagon:                   { per_unit: 155 }
+
+  # ── Lords of War ──────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.kill_rig:                   { per_unit: 265 }
+  wh40k_9e.orks.unit.hunta_rig:                  { per_unit: 215 }
+
+  # ── Flyers ────────────────────────────────────────────────────────────────
+
+  wh40k_9e.orks.unit.dakkajet:                   { per_unit: 125 }
+  wh40k_9e.orks.unit.burna_bommer:               { per_unit: 125 }
+  wh40k_9e.orks.unit.blitza_bommer:              { per_unit: 125 }
+  wh40k_9e.orks.unit.wazbom_blastajet:           { per_unit: 165 }

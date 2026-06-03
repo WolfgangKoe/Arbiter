@@ -1,0 +1,269 @@
+# Orks weapon abilities — WH40k 9E
+# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
+# Format mirrors data/wh40k_9e/necrons/weapon_abilities.yaml
+# One entry per weapon special rule. Corrects truncated ability texts from scraper.
+faction: Orks
+abilities:
+
+  # ── Dakka Weapons ─────────────────────────────────────────────────────────
+  # Weapons with weapon_type: Dakka use two attack values (X/Y).
+  # Use X if target is within half range, Y if beyond half range.
+
+  - id: wh40k_9e.orks.weapon_ability.dakka
+    name_en: "Dakka! Dakka! Dakka!"
+    ability_type: triggered
+    source: weapon_ability
+    weapon_type: Dakka
+    rule_text: "Weapons with the Dakka type have two Attacks values. Use the first value if the target is within half the weapon's maximum range. Use the second value if the target is beyond half range. In addition, each time a model shoots a Dakka weapon, for each unmodified hit roll of 6, that weapon scores 1 additional hit."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_type: Dakka
+    effect:
+      type: multi
+      effects:
+        - type: variable_attacks
+          condition: range_half
+        - type: extra_hits
+          condition: unmodified_hit_roll_6
+          amount: 1
+
+  # ── Torrent / Auto-Hit ────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.skorcha.ability
+    name_en: Skorcha
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.skorcha
+    rule_text: "Each time an attack is made with this weapon profile, that attack automatically hits the target. Models ignore the Look Out, Sir rule when targeting enemy units with this weapon."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_name_contains: Skorcha
+    effect:
+      type: auto_hit
+      target: enemy
+
+  # ── Power Klaw / Killsaw ──────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.power_klaw.ability
+    name_en: Power Klaw
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.power_klaw
+    rule_text: "Each time an attack is made with this weapon, subtract 1 from that attack's hit roll."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.power_klaw
+    effect:
+      type: debuff_roll
+      target: self
+      stat: hit_roll
+      modifier: -1
+
+  - id: wh40k_9e.orks.weapon.killsaw.ability
+    name_en: Killsaw
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.killsaw
+    rule_text: "Each time an attack is made with this weapon, subtract 1 from that attack's hit roll."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.killsaw
+    effect:
+      type: debuff_roll
+      target: self
+      stat: hit_roll
+      modifier: -1
+
+  # ── Extra Attacks ─────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.choppa.ability
+    name_en: Choppa
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.choppa
+    rule_text: "Each time the bearer fights, it makes 1 additional attack with this weapon."
+    trigger:
+      timing: per_unit_fight
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.choppa
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 1
+
+  - id: wh40k_9e.orks.weapon.attack_squig.ability
+    name_en: Attack Squig
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.attack_squig
+    rule_text: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
+    trigger:
+      timing: per_unit_fight
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.attack_squig
+    effect:
+      type: extra_attacks
+      target: self
+      amount: 2
+
+  # ── Hazardous Weapons ─────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.kustom_mega_blasta.ability
+    name_en: Kustom Mega-Blasta
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.kustom_mega_blasta
+    rule_text: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer's unit suffers D3 mortal wounds after shooting with this weapon."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.kustom_mega_blasta
+      - hit_roll_unmodified: 1
+    effect:
+      type: multi
+      effects:
+        - type: blast
+        - type: mortal_wounds_self
+          amount: D3
+          condition: any_unmodified_1_to_hit
+
+  - id: wh40k_9e.orks.weapon.kustom_mega_slugga.ability
+    name_en: Kustom Mega-Slugga
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.kustom_mega_slugga
+    rule_text: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer's unit suffers D3 mortal wounds after shooting with this weapon."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.kustom_mega_slugga
+      - hit_roll_unmodified: 1
+    effect:
+      type: multi
+      effects:
+        - type: blast
+        - type: mortal_wounds_self
+          amount: D3
+          condition: any_unmodified_1_to_hit
+
+  # ── Shokk Attack Gun ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.shokk_attack_gun.ability
+    name_en: Shokk Attack Gun
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.shokk_attack_gun
+    rule_text: "Blast. Each time this weapon is selected to shoot with, before making any hit rolls, roll 2D6 for the Strength characteristic of that attack. On an unmodified result of 2, the bearer immediately suffers D6 mortal wounds and the weapon cannot be used again this phase."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: before_hit
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.shokk_attack_gun
+    effect:
+      type: multi
+      effects:
+        - type: blast
+        - type: random_strength
+          roll: 2D6
+        - type: hazardous_2
+          on_result: 2
+          mortal_wounds: D6
+          target: self
+
+  # ── Tellyport Blasta ──────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.tellyport_blasta.ability
+    name_en: Tellyport Blasta
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.tellyport_blasta
+    rule_text: "Blast. Each time a hit is scored with this weapon, the target unit cannot Advance in its next Movement phase."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.tellyport_blasta
+    effect:
+      type: multi
+      effects:
+        - type: blast
+        - type: debuff
+          target: enemy
+          stat: can_advance
+          duration: next_movement_phase
+
+  # ── Tankhammer ────────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.tankhammer.ability
+    name_en: Tankhammer
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.tankhammer
+    rule_text: "Each time an attack is made with this weapon, if the target is a VEHICLE, add 1 to the Damage characteristic of that attack."
+    trigger:
+      timing: per_attack
+      phase: fight
+      stage: damage
+      player: active
+    conditions:
+      - weapon_id: wh40k_9e.orks.weapon.tankhammer
+      - target_has_keyword: VEHICLE
+    effect:
+      type: buff_stat
+      target: attack
+      stat: damage
+      modifier: 1
+      condition: target_is_vehicle
+
+  # ── Supercharge (Kustom Shoota) ────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.weapon.kustom_shoota.supercharge
+    name_en: Kustom Shoota — Supercharge
+    ability_type: triggered
+    source: weapon_ability
+    weapon_id: wh40k_9e.orks.weapon.kustom_shoota
+    rule_text: "Supercharge profile: Each time the bearer shoots, if any unmodified hit rolls of 1 are made, after resolving the attacks the bearer's unit suffers 1 mortal wound."
+    trigger:
+      timing: per_attack
+      phase: shooting
+      stage: hit_roll
+      player: active
+    conditions:
+      - weapon_profile: Supercharge
+      - hit_roll_unmodified: 1
+    effect:
+      type: mortal_wounds_self
+      amount: 1
+      condition: any_unmodified_1_to_hit

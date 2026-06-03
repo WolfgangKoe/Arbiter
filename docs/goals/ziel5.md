@@ -222,9 +222,64 @@ Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_
 ## 5f — Stratagems Proof of Concept
 
 - [x] `data/wh40k_9e/necrons/stratagems.yaml` — 59 Stratagems, verifiziert (2026-05-30)
-- [ ] `data/wh40k_9e/orks/stratagems.yaml`
+- [ ] `data/wh40k_9e/orks/stratagems.yaml` — blockiert durch 5h
 - [ ] Loader + `game_state` für Stratagems erweitern
 - [ ] Stratagem-Anzeige: zunächst nur lesend (kein automatischer Effekt)
+
+---
+
+## 5h — Orks-Katalog vervollständigen 🔴
+
+**Status 2026-06-03:** Nur `units.yaml` (51 Einheiten) und `weapons.yaml` (82 Waffen) vorhanden.
+Alle übrigen Datenkategorien fehlen — der Orks-Katalog ist **nicht spielfähig**.
+
+Zum Vergleich: Necrons haben 15 Dateien, Orks aktuell 3 (davon `faction_abilities.yaml` leer).
+
+### Fehlende Dateien
+
+| Datei | Inhalt | Scraper-Support |
+|-------|--------|-----------------|
+| `faction_abilities.yaml` | WAAAGH!, Ere We Go, Da Jump etc. | ❌ manuell |
+| `army_rules.yaml` | Armeebau-Regeln (Detachment, Warlord etc.) | ❌ manuell |
+| `stratagems.yaml` | Codex-Stratagems + Klan-Stratagems | ✅ `--stratagems` |
+| `subfaction_abilities.yaml` | Klan-Regeln (Bad Moons, Evil Sunz, Goffs, Deathskulls, Blood Axes, Snakebites) | ❌ fehlt im Scraper |
+| `unit_abilities.yaml` | Einheitenspezifische Fähigkeiten (Mob Rule, Dakka! Dakka! Dakka! etc.) | ❌ fehlt im Scraper |
+| `relics.yaml` | Ork-Relikte | ❌ fehlt im Scraper |
+| `warlord_traits.yaml` | Kriegsherr-Eigenschaften (allgemein + Klan-spezifisch) | ❌ fehlt im Scraper |
+| `wargear.yaml` | Wargear-Items | ❌ fehlt im Scraper |
+| `wargear_abilities.yaml` | Wargear-Sonderfähigkeiten | ❌ fehlt im Scraper |
+| `weapon_abilities.yaml` | Waffen-Sonderfähigkeiten | ❌ fehlt im Scraper |
+| `points.yaml` | Punktekosten (aktuell `power_level: 0` überall) | ❌ fehlt im Scraper |
+
+### Umsetzungsstrategie
+
+**Option A — Scraper erweitern:**
+`tools/wahapedia_scraper.py` um fehlende Datentypen erweitern:
+- `--subfactions` → `subfaction_abilities.yaml`
+- `--faction-abilities` → `faction_abilities.yaml`
+- `--relics` → `relics.yaml`
+- `--warlord-traits` → `warlord_traits.yaml`
+- Stratagems (`--stratagems`) bereits vorhanden
+
+**Option B — Manuell aus Codex/Wahapedia:**
+Analog zur Necrons-Datenlage — direkt in YAML einpflegen.
+
+**Empfehlung:** Stratagems via Scraper (`--stratagems`), Rest manuell nach Necrons-Schema.
+
+### Checkliste
+
+- [x] `stratagems.yaml` — 29 Stratagems (8 Core + 7 Klan + 4 Specialist Setup + 4 Specialist Rules + 2 Requisitions)
+- [x] `subfaction_abilities.yaml` — 7 Klans (Bad Moons, Blood Axes, Deathskulls, Evil Sunz, Freebooterz, Goffs, Snakebites)
+- [x] `faction_abilities.yaml` — WAAAGH!, Speedwaaagh!, 'Ere We Go, Mob Rule, Ramshackle, Beast Snagga, Ob.Sec, 7 Psychic Powers
+- [x] `unit_abilities.yaml` — HQ, Troop, Elites, Fast Attack, Heavy Support Abilities
+- [x] `army_rules.yaml` — Warlord-Anforderung (WARBOSS), Detachment-Regeln, Specialist Detachments
+- [x] `relics.yaml` — 11 Relikte (1 pro Klan + 4 Specialist Detachment)
+- [x] `warlord_traits.yaml` — 3 Generic + 7 Klan + 4 Specialist Detachment Traits
+- [x] `wargear.yaml` + `wargear_abilities.yaml` — 10 Wargear-Items + Abilities
+- [x] `weapon_abilities.yaml` — Dakka!, Skorcha, Power Klaw, Killsaw, Choppa, Bomb-Squig, Shokk Attack Gun etc.
+- [x] `points.yaml` — alle 51 Einheiten (MFM 2023 Mk I — Verifikation empfohlen)
+
+**Abschluss: 2026-06-03** — Katalog strukturell vollständig. Punktekosten aus Trainingsdaten, nicht direkt von Wahapedia — bei Spielbetrieb gegen MFM verifizieren.
 
 ---
 
