@@ -15,9 +15,12 @@ import streamlit as st
 
 from gameMechanic.ability_engine import check_conditions, execute_effect
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES, unit_id_from_state_key
+from gameMechanic.game_state import PHASES, faction_dir_for, unit_id_from_state_key
 from gameObjects.ability import Ability
+from gameObjects.loader import load_command_protocols
 from gameObjects.unit import Unit
+
+_ETERNAL_GUARDIAN_ID = "eternal_guardian"
 
 
 def _faction_badge(text: str) -> str:
@@ -93,6 +96,75 @@ def _render_triggered_abilities(
             st.rerun()
 
 
+def _render_protocol_ui(faction: str) -> None:
+    """Command Protocol UI — only for factions with command_protocols.yaml (i.e. Necrons).
+
+    During command phase: interactive selection. All other phases: read-only current protocol.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+
+    protocols = load_command_protocols(faction_dir)
+    if not protocols:
+        return
+
+    phase_key = _current_phase_key()
+    active_id = st.session_state.get("active_protocol_id")
+    used_ids = st.session_state.get("used_protocol_ids", [])
+    current_round = st.session_state.get("round", 1)
+
+    st.divider()
+    st.caption("**Command Protocols**")
+
+    if current_round == 1:
+        p = next((p for p in protocols if p.id == _ETERNAL_GUARDIAN_ID), None)
+        if p:
+            st.caption(f"{p.name_en} — auto (Round 1)")
+            st.caption(f"↳ {p.primary}")
+            if p.secondary:
+                st.caption(f"↳ {p.secondary}")
+        return
+
+    if active_id:
+        p = next((p for p in protocols if p.id == active_id), None)
+        if p:
+            st.caption(f"**{p.name_en}** — active this round")
+            st.caption(f"↳ {p.primary}")
+            if p.secondary:
+                st.caption(f"↳ {p.secondary}")
+        return
+
+    if phase_key != "command":
+        st.caption("— no protocol selected —")
+        return
+
+    # Interactive selection — only available in command phase when no protocol is active yet
+    available = [p for p in protocols if p.id not in used_ids]
+    if not available:
+        st.caption("All protocols have been used.")
+        return
+
+    choice = st.radio(
+        "Choose protocol:",
+        options=range(len(available)),
+        format_func=lambda i: available[i].name_en,
+        key=f"cmd_protocol_choice_{faction}",
+    )
+    if st.button(
+        "Activate Protocol",
+        key=f"cmd_protocol_activate_{faction}",
+        type="primary",
+        use_container_width=True,
+    ):
+        chosen = available[choice]
+        st.session_state.active_protocol_id = chosen.id
+        st.session_state.used_protocol_ids = used_ids + [chosen.id]
+        log_action(current_round, "command", faction, f"Protocol: {chosen.name_en}")
+        st.rerun()
+
+
 def render_army_card(
     faction: str,
     subfaction: str | None,
@@ -111,6 +183,9 @@ def render_army_card(
         if subfaction:
             badges_html += _faction_badge(subfaction)
         st.markdown(badges_html, unsafe_allow_html=True)
+
+        # Command Protocol UI (Necrons only — other factions: no-op)
+        _render_protocol_ui(faction)
 
         # Triggered ability buttons (phase-dependent)
         _render_triggered_abilities(faction, faction_abilities, units, units_state, phase_key)

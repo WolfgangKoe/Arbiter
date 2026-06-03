@@ -135,9 +135,6 @@ def _render_overlord_actions(
 
 
 def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    if not is_necron_faction(faction):
-        return
-
     protocols = load_command_protocols(faction_dir_for(faction))
     if not protocols:
         return
@@ -245,7 +242,6 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
-    _render_command_protocols(faction, state)
 
     if is_necron_faction(faction):
         overlord_alive = _OVERLORD_ID in units_state and not units_state[_OVERLORD_ID].get(

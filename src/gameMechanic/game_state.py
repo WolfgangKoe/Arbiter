@@ -121,8 +121,8 @@ def units_key_for(player: str) -> str:
 def faction_dir_for(player: str) -> str:
     """Return the data-directory name for a player's faction."""
     if player == st.session_state.get("first_player"):
-        return st.session_state.get("p1_faction_dir", "necrons")
-    return st.session_state.get("p2_faction_dir", "necrons")
+        return st.session_state["p1_faction_dir"]
+    return st.session_state["p2_faction_dir"]
 
 
 def is_necron_faction(player: str) -> bool:
@@ -254,6 +254,7 @@ def init_state(
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
     st.session_state.used_stratagem_ids: set[str] = set()
+    st.session_state.active_modifiers: list[dict] = []
     st.session_state.mwbd_target_uid = None
     st.session_state.res_orb_target_uid = None
 
@@ -319,6 +320,16 @@ def reset_game() -> None:
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
     st.session_state.used_stratagem_ids = set()
+    current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+    current_round = st.session_state.get("round", 1)
+    st.session_state.active_modifiers = [
+        m
+        for m in st.session_state.get("active_modifiers", [])
+        if not (
+            m.get("expires_at_phase") == current_phase
+            or (m.get("expires_at_round") is not None and m["expires_at_round"] <= current_round)
+        )
+    ]
 
 
 def _reset_turn_state() -> None:

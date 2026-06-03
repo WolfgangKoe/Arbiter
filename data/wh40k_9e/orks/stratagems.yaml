@@ -139,6 +139,12 @@ stratagems:
     conditions: [MEGANOBZ]
     once_per_phase: true
     rule_text: "Use this Stratagem in the Fight phase, when a MEGANOBZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack with a power klaw or killsaw, add 1 to that attack's Damage characteristic."
+    modifier:
+      roll_type: damage
+      value: 1
+      target: attacker
+      expires_at: phase_end
+      source_label: "Hit 'Em Harder"
 
   # ── Core — Shooting Phase ──────────────────────────────────────────────────
 
@@ -175,6 +181,12 @@ stratagems:
     conditions: [BEAST SNAGGA]
     once_per_phase: true
     rule_text: "Use this Stratagem in any phase, when a BEAST SNAGGA INFANTRY, BEAST SNAGGA CAVALRY or BEAST SNAGGA MONSTER unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1, 2 or 3 for that attack fails, irrespective of any abilities."
+    modifier:
+      roll_type: wound
+      value: -1
+      target: defender
+      expires_at: phase_end
+      source_label: "Tough as Squig-Hide"
 
   # ── Klan Stratagems ────────────────────────────────────────────────────────
 
@@ -207,6 +219,12 @@ stratagems:
     conditions: [DEATHSKULLS]
     once_per_phase: true
     rule_text: "Use this Stratagem at the start of your Shooting phase or Fight phase. Select one DEATHSKULLS CORE or DEATHSKULLS CHARACTER unit from your army. Until the end of the phase, each time a model in that unit makes an attack that targets a VEHICLE, add 1 to that attack's wound roll."
+    modifier:
+      roll_type: wound
+      value: 1
+      target: attacker
+      expires_at: phase_end
+      source_label: "Wreckaz"
 
   - id: wh40k_9e.orks.stratagem.drive_by_dakka
     name_en: "Drive By Dakka"

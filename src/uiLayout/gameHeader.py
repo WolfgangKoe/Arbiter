@@ -200,33 +200,39 @@ header[data-testid="stHeader"] { display: none !important; }
 </style>
 """
 
-_LABEL_STYLE = (
-    "display:block;width:100%;text-align:center;font-size:0.65rem;font-weight:600;"
-    "letter-spacing:0.15em;color:#6b5f44;text-transform:uppercase;margin-bottom:2px;"
-)
-_VALUE_STYLE = (
-    "display:block;width:100%;text-align:center;"
-    "font-size:2rem;font-weight:600;color:#fbbf24;line-height:1.1;"
-)
+_SCORE_NUM = "font-size:4.5rem;font-weight:700;color:#fbbf24;line-height:1.0;"
+_SCORE_LBL = "font-size:4.5rem;font-weight:700;color:#6b5f44;margin-left:6px;letter-spacing:0.1em;line-height:1.0;"
 
 
-def _score_group(faction: str) -> None:
+def _score_group(faction: str, justify: str = "center") -> None:
     vp = st.session_state.vp[faction]
     cp = st.session_state.cp[faction]
+    st.markdown(
+        f'<div style="display:flex;gap:14px;align-items:baseline;justify-content:{justify};">'
+        f'<span><span style="{_SCORE_NUM}">{vp}</span><span style="{_SCORE_LBL}">VP</span></span>'
+        f'<span><span style="{_SCORE_NUM}">{cp}</span><span style="{_SCORE_LBL}">CP</span></span>'
+        f"</div>",
+        unsafe_allow_html=True,
+    )
 
-    vp_col, cp_col = st.columns(2)
 
-    with vp_col:
-        st.markdown(
-            f'<div style="{_LABEL_STYLE}">VP</div>' f'<div style="{_VALUE_STYLE}">{vp}</div>',
-            unsafe_allow_html=True,
-        )
-
-    with cp_col:
-        st.markdown(
-            f'<div style="{_LABEL_STYLE}">CP</div>' f'<div style="{_VALUE_STYLE}">{cp}</div>',
-            unsafe_allow_html=True,
-        )
+def _phase_badges_html(phase_idx: int) -> str:
+    battle_phases = PHASES[1:]  # skip setup
+    html = '<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;">'
+    for i, (pn, _) in enumerate(battle_phases):
+        real_idx = i + 1
+        if real_idx == phase_idx:
+            html += (
+                f'<span style="background:#2e2618;border:2px solid #d4a017;border-radius:2px;'
+                f'padding:5px 16px;font-size:13px;color:#fbbf24;letter-spacing:0.07em;font-weight:700;">{pn}</span>'
+            )
+        else:
+            html += (
+                f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
+                f'padding:5px 16px;font-size:13px;color:#6b5f44;">{pn}</span>'
+            )
+    html += "</div>"
+    return html
 
 
 def render_game_header() -> None:
@@ -236,80 +242,53 @@ def render_game_header() -> None:
     phase_name, phase_key = PHASES[phase_idx]
     active = st.session_state.active
 
-    left_hdr, center_hdr, right_hdr = st.columns([2.5, 5, 2.5], gap="medium")
+    # ── Zeile 1: Rundenanzeige ────────────────────────────────────────────────
+    round_label = "Setup" if phase_key == "setup" else f"Round {st.session_state.round}"
+    st.markdown(
+        f'<div style="text-align:center;font-size:1.6rem;font-weight:600;'
+        f'letter-spacing:0.15em;color:#d4a017;text-transform:uppercase;margin-bottom:2px;">'
+        f"{round_label}</div>",
+        unsafe_allow_html=True,
+    )
 
-    with left_hdr:
-        _score_group(first)
+    # ── Zeile 2: Phase · Armeename des aktiven Spielers ───────────────────────
+    st.markdown(
+        f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
+        f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;margin-bottom:6px;">'
+        f"{phase_name} · {active}</div>",
+        unsafe_allow_html=True,
+    )
 
-    with center_hdr:
-        round_label = "Setup" if phase_key == "setup" else f"Round {st.session_state.round}"
-        st.markdown(
-            f'<div style="text-align:center;font-size:1.6rem;font-weight:600;'
-            f'letter-spacing:0.15em;color:#d4a017;text-transform:uppercase;">'
-            f"{round_label}</div>",
-            unsafe_allow_html=True,
-        )
+    # ── Zeile 3: Scores | Phase-Badges | Scores ───────────────────────────────
+    left_col, center_col, right_col = st.columns([2.5, 5, 2.5], gap="medium")
+    with left_col:
+        _score_group(first, justify="flex-start")
+    with center_col:
+        if phase_key != "setup":
+            st.markdown(_phase_badges_html(phase_idx), unsafe_allow_html=True)
+    with right_col:
+        _score_group(second, justify="flex-end")
 
-        if phase_key == "setup":
-            # During setup: only show phase label, no navigation or reset.
-            st.markdown(
-                f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
-                f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;padding:0.25rem 0;">'
-                f"{phase_name}</div>",
-                unsafe_allow_html=True,
-            )
-        else:
-            _, rst_c, _ = st.columns([2, 1, 2])
-            with rst_c:
-                if st.button("↺", key="reset_game", use_container_width=True):
-                    reset_game()
-                    st.rerun()
-
-            prev_c, phase_c, next_c = st.columns([1, 5, 1])
-            with prev_c:
-                if st.button(
-                    "←",
-                    key="prev_phase",
-                    type="primary",
-                    use_container_width=True,
-                    disabled=phase_idx <= 1,
-                ):
-                    st.session_state.phase_idx = phase_idx - 1
-                    st.session_state.selected_unit = None
-                    st.session_state.selected_targets = []
-                    st.rerun()
-            with phase_c:
-                st.markdown(
-                    f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
-                    f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;padding:0.25rem 0;">'
-                    f"{phase_name} · {active} active</div>",
-                    unsafe_allow_html=True,
-                )
-            with next_c:
-                if st.button("→", key="next_phase", type="primary", use_container_width=True):
-                    next_phase()
-                    st.rerun()
-
-    with right_hdr:
-        _score_group(second)
-
-    # Phase stepper chips (only during battle)
+    # ── Zeile 4: Navigationsbuttons (nur im Kampf) ────────────────────────────
     if phase_key != "setup":
-        battle_phases = PHASES[1:]  # skip setup
-        steps_html = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">'
-        for i, (pn, _) in enumerate(battle_phases):
-            real_idx = i + 1
-            if real_idx == phase_idx:
-                steps_html += (
-                    f'<span style="background:#2e2618;border:1px solid #d4a017;border-radius:2px;'
-                    f'padding:2px 8px;font-size:11px;color:#fbbf24;letter-spacing:0.05em;">{pn}</span>'
-                )
-            else:
-                steps_html += (
-                    f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
-                    f'padding:2px 8px;font-size:11px;color:#6b5f44;">{pn}</span>'
-                )
-        steps_html += "</div>"
-        _, ctr, _ = st.columns([1, 2, 1])
-        with ctr:
-            st.markdown(steps_html, unsafe_allow_html=True)
+        _, prev_c, rst_c, next_c, _ = st.columns([2, 1, 1, 1, 2])
+        with prev_c:
+            if st.button(
+                "←",
+                key="prev_phase",
+                type="primary",
+                use_container_width=True,
+                disabled=phase_idx <= 1,
+            ):
+                st.session_state.phase_idx = phase_idx - 1
+                st.session_state.selected_unit = None
+                st.session_state.selected_targets = []
+                st.rerun()
+        with rst_c:
+            if st.button("↺", key="reset_game", use_container_width=True):
+                reset_game()
+                st.rerun()
+        with next_c:
+            if st.button("→", key="next_phase", type="primary", use_container_width=True):
+                next_phase()
+                st.rerun()

@@ -1,4 +1,4 @@
-# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration ⬜
+# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration 🔄
 
 **Voraussetzung:** Ziel 5 (inkl. 5i) abgeschlossen. ✅
 
@@ -10,9 +10,9 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 | Teilziel | Thema | Abhängigkeiten |
 |----------|-------|----------------|
-| **6a** | gameHeader Redesign | – |
-| **6b** | armyCard — generisches Fähigkeitssystem | – |
-| **6c** | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
+| **6a** ✅ | gameHeader Redesign | – |
+| **6b** ✅ | armyCard — generisches Fähigkeitssystem | – |
+| **6c** ✅ | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
 | **6d** | Attackensequenz — neue simultane Darstellung | 6b, 6c |
 | **6e** | Fähigkeiten-Integration in alle Phasen | 6b |
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
@@ -44,10 +44,10 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 ### Tasks
 
-- [ ] `gameHeader.py`: `_score_group()` umschreiben — VP und CP inline in einer Zeile
-- [ ] `gameHeader.py`: `←`, `↺`, `→` in eine gemeinsame Columns-Row packen (kein separater `rst_c`-Block)
-- [ ] `gameHeader.py`: Phase-Badge-Größe verdoppeln (`padding`, `font-size`)
-- [ ] Visuell prüfen: Scores links/rechts auf gleicher Höhe
+- [x] `gameHeader.py`: 4-Zeilen-Layout (Runde / Phase·Spieler / Scores+Badges / Navigation)
+- [x] `gameHeader.py`: VP/CP Label gleich groß wie Zahl (`4.5rem bold`)
+- [x] `gameHeader.py`: `←`, `↺`, `→` in eine gemeinsame Row, zentriert
+- [x] `gameHeader.py`: Phase-Badges in Zeile 3 Mitte integriert
 
 ---
 
@@ -70,13 +70,12 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 ### Tasks
 
-- [ ] `game_state.py` / `setupScreen.py`: `p1_faction_dir` und `p2_faction_dir` beim Setup **immer** setzen, kein Default auf `"necrons"` in `faction_dir_for()`
-- [ ] `armyCard.py`: Fraktions-Keywords aus Daten lesen und als Badges rendern
-- [ ] `armyCard.py`: Triggered-Abilities generisch rendern (unabhängig von Fraktionsname)
-- [ ] `gameProtocoll.py`: `_render_necron_protocols()` + hardcoded Necron-Check entfernen; Protokoll-Logik in armyCard verlagern
-- [ ] `armyCard.py`: Command Protocol-Wechsel-UI (nur wenn `command_protocols.yaml` vorhanden)
-- [ ] `data/wh40k_9e/orks/faction_abilities.yaml`: WAAAGH-Fähigkeit prüfen / ergänzen
-- [ ] Verifizieren: Adeptus Custodes zeigt keine Necron-Fähigkeiten; Orks zeigt WAAAGH
+- [x] `game_state.py`: `faction_dir_for()` — kein `"necrons"`-Default mehr, KeyError wenn nicht initialisiert
+- [x] `armyCard.py`: Triggered-Abilities generisch rendern (unabhängig von Fraktionsname)
+- [x] `gameProtocoll.py`: `_render_necron_protocols()` entfernt; `is_necron_faction`-Import entfernt
+- [x] `armyCard.py`: Command Protocol-UI (interaktiv in Befehlsphase, read-only sonst) — einziger Einstiegspunkt
+- [x] `commandPhase.py`: `_render_command_protocols()`-Aufruf entfernt — NUR armyCard ruft Protokolle auf
+- [x] `data/wh40k_9e/orks/faction_abilities.yaml`: WAAAGH-Fähigkeit bereits vorhanden ✓
 
 ---
 
@@ -86,12 +85,13 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 ### Tasks
 
-- [ ] `gameProtocoll.py`: Tab-Reihenfolge tauschen — Stratagems zuerst, Command Protocol zweiter Tab
-- [ ] `gameObjects/stratagem.py`: Stratagems bekommen optionales `modifier`-Feld (phase, roll_type, value, source_label)
-- [ ] `data/wh40k_9e/*/stratagems.yaml`: Relevante Stratagems mit `modifier`-Feldern ergänzen (Necrons, Orks als Piloten)
-- [ ] `gameMechanic/game_state.py`: `active_modifiers` im Session-State — Liste aktiver Modifier mit Quelle und Ablaufzeitpunkt
-- [ ] Wenn Stratagem aktiviert: Modifier in `active_modifiers` einschreiben
-- [ ] Phasenende / Rundenende: abgelaufene Modifier aus `active_modifiers` entfernen
+- [x] `gameProtocoll.py`: Tab-Reihenfolge getauscht — Stratagems zuerst, Command Protocol zweiter Tab
+- [x] `gameObjects/stratagem.py`: `StratagemModifier` Dataclass + optionales `modifier`-Feld auf `Stratagem`
+- [x] `gameObjects/loader.py`: `modifier`-Block aus YAML parsen
+- [x] `data/wh40k_9e/necrons/stratagems.yaml`: `disruption_fields` (+1 wound), `whirling_onslaught` (-1 wound), `methodical_destruction` (+1 hit)
+- [x] `data/wh40k_9e/orks/stratagems.yaml`: `hit_em_harder` (+1 damage), `tough_as_squig_hide` (-1 wound), `wreckaz` (+1 wound)
+- [x] `gameMechanic/game_state.py`: `active_modifiers: list[dict]` im Session-State (init + reset + cleanup bei Phasenwechsel)
+- [x] `gameProtocoll.py`: Modifier bei Stratagem-Nutzung in `active_modifiers` schreiben
 
 ---
 

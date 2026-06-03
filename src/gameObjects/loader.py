@@ -11,7 +11,7 @@ import yaml
 from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
-from gameObjects.stratagem import Stratagem
+from gameObjects.stratagem import Stratagem, StratagemModifier
 from gameObjects.unit import DamageBracket, Unit, WargearOption
 from gameObjects.weapon import Weapon, WeaponProfile
 
@@ -289,6 +289,19 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
         with open(path) as f:
             data = yaml.safe_load(f)
         for s in data.get("stratagems", []):
+            mod_data = s.get("modifier")
+            modifier = (
+                StratagemModifier(
+                    roll_type=mod_data["roll_type"],
+                    value=int(mod_data["value"]),
+                    target=mod_data.get("target", "attacker"),
+                    expires_at=mod_data.get("expires_at", "phase_end"),
+                    source_label=mod_data.get("source_label", s["name_en"]),
+                    phase=mod_data.get("phase"),
+                )
+                if mod_data
+                else None
+            )
             results.append(
                 Stratagem(
                     id=s["id"],
@@ -301,6 +314,7 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                     rule_text=s.get("rule_text", ""),
                     once_per_phase=s.get("once_per_phase", True),
                     detachment=s.get("detachment"),
+                    modifier=modifier,
                 )
             )
     return results

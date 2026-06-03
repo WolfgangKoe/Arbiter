@@ -200,28 +200,36 @@ def _render_vp_scoring() -> None:
     # Map display name → p1/p2 key for secondary_vp lookup
     player_keys = {first: "p1", second: "p2"}
 
-    col1, col2 = st.columns(2)
-    for col, faction in ((col1, first), (col2, second)):
-        with col:
-            primary_vp = st.session_state.vp[faction]
-            label = "Primary" if use_secondaries else ""
-            st.markdown(f"**{faction}** — {primary_vp} VP {label}".strip())
-            b1, b2, b3, b4 = st.columns(4)
-            if b1.button("+5", key=f"vp_p5_{faction}"):
-                adjust_vp(faction, 5)
-                st.rerun()
-            if b2.button("+1", key=f"vp_p1_{faction}"):
-                adjust_vp(faction, 1)
-                st.rerun()
-            if b3.button("-1", key=f"vp_m1_{faction}"):
-                adjust_vp(faction, -1)
-                st.rerun()
-            if b4.button("-5", key=f"vp_m5_{faction}"):
-                adjust_vp(faction, -5)
-                st.rerun()
+    active = st.session_state.get("active", first)
+    inactive = second if active == first else first
 
-            if use_secondaries:
-                _render_secondary_vp_section(faction, player_keys[faction])
+    col_active, col_inactive = st.columns(2)
+
+    with col_active:
+        primary_vp = st.session_state.vp[active]
+        label = "Primary" if use_secondaries else ""
+        st.markdown(f"**{active}** — {primary_vp} VP {label}".strip())
+        b1, b2, b3, b4 = st.columns(4)
+        if b1.button("+5", key=f"vp_p5_{active}"):
+            adjust_vp(active, 5)
+            st.rerun()
+        if b2.button("+1", key=f"vp_p1_{active}"):
+            adjust_vp(active, 1)
+            st.rerun()
+        if b3.button("-1", key=f"vp_m1_{active}"):
+            adjust_vp(active, -1)
+            st.rerun()
+        if b4.button("-5", key=f"vp_m5_{active}"):
+            adjust_vp(active, -5)
+            st.rerun()
+        if use_secondaries:
+            _render_secondary_vp_section(active, player_keys[active])
+
+    with col_inactive:
+        primary_vp = st.session_state.vp[inactive]
+        label = "Primary" if use_secondaries else ""
+        st.markdown(f"**{inactive}** — {primary_vp} VP {label}".strip())
+        st.caption("(inactive — no scoring)")
 
 
 def _render_stratagem_hints() -> None:

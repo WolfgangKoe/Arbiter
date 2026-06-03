@@ -17,6 +17,32 @@ from typing import Literal
 
 
 @dataclass(frozen=True)
+class StratagemModifier:
+    """Describes how an active stratagem modifies attack rolls.
+
+    Used by the attack sequence renderer (6d) to show transparent modifier stacks.
+    """
+
+    roll_type: str
+    """hit | wound | save | fnp | charge | damage"""
+
+    value: int
+    """Positive = bonus, negative = penalty."""
+
+    target: str
+    """attacker | defender — which side of the combat this applies to."""
+
+    expires_at: str
+    """phase_end | turn_end"""
+
+    source_label: str
+    """Short display label shown in the modifier stack."""
+
+    phase: str | None = None
+    """Override for which phase the modifier applies in; None = same as stratagem phase."""
+
+
+@dataclass(frozen=True)
 class Stratagem:
     id: str
     name_en: str
@@ -28,6 +54,7 @@ class Stratagem:
     rule_text: str = ""
     once_per_phase: bool = True
     detachment: str | None = None  # detachment type required, e.g. "cult_of_the_cryptek"
+    modifier: StratagemModifier | None = None  # optional roll modifier for attack sequence
 
 
 # ── GO visibility helper ──────────────────────────────────────────────────────

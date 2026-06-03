@@ -19,13 +19,12 @@ import streamlit as st
 from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
-    is_necron_faction,
     unit_id_from_state_key,
     units_key_for,
     units_list_for,
 )
 from gameMechanic.unit_mutations import adjust_cp
-from gameObjects.loader import load_command_protocols, load_stratagems
+from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import stratagem_visibility
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
@@ -47,33 +46,9 @@ def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
     return st.session_state[units_key_for(faction)]
 
 
-def _render_necron_protocols() -> None:
-    protocols = load_command_protocols("necrons")
-    if not protocols:
-        return
-
-    active_id = st.session_state.get("active_protocol_id")
-    used_ids = st.session_state.get("used_protocol_ids", [])
-
-    st.caption("**Necron Command Protocols**")
-    for p in protocols:
-        if p.id == active_id:
-            st.markdown(f"**{p.name_en}** — active")
-            st.caption(f"  Directive 1: {p.primary}")
-            st.caption(f"  Directive 2: {p.secondary}")
-        elif p.id in used_ids:
-            st.markdown(f"~~{p.name_en}~~ — used")
-        else:
-            st.caption(f"{p.name_en} — available")
-    st.divider()
-
-
 def _render_command_protocol() -> None:
     first = st.session_state.get("first_player", "Necrons")
     second = st.session_state.get("second_player", "Orks")
-
-    if is_necron_faction(first) or is_necron_faction(second):
-        _render_necron_protocols()
 
     st.caption(
         f"**Round** {st.session_state.get('round', 1)}  ·  "
@@ -195,12 +170,36 @@ def _render_stratagems() -> None:
                     adjust_cp(spending_faction, -strat.cp_cost)
                     used_ids.add(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
+                    if strat.modifier is not None:
+                        m = strat.modifier
+                        active_mods = st.session_state.get("active_modifiers", [])
+                        active_mods.append(
+                            {
+                                "unit_key": None,
+                                "source": strat.name_en,
+                                "effect": {
+                                    "roll_type": m.roll_type,
+                                    "value": m.value,
+                                    "target": m.target,
+                                    "phase": m.phase or current_phase,
+                                },
+                                "expires_at_phase": (
+                                    current_phase if m.expires_at == "phase_end" else None
+                                ),
+                                "expires_at_round": (
+                                    None
+                                    if m.expires_at != "turn_end"
+                                    else st.session_state.get("round", 1)
+                                ),
+                            }
+                        )
+                        st.session_state.active_modifiers = active_mods
                     st.rerun()
 
 
 def render_game_protocoll() -> None:
-    tab_protocol, tab_stratagems = st.tabs(["📋 Command Protocol", "⚔️ Stratagems"])
-    with tab_protocol:
-        _render_command_protocol()
+    tab_stratagems, tab_protocol = st.tabs(["⚔️ Stratagems", "📋 Command Protocol"])
     with tab_stratagems:
         _render_stratagems()
+    with tab_protocol:
+        _render_command_protocol()

@@ -15,6 +15,13 @@
 - Ausnahme: Der Nutzer gibt explizit „freien Lauf" für mehrere Schritte — dann darf ohne Einzelfreigabe implementiert werden
 - Auch bei kleinen, offensichtlichen Änderungen gilt diese Regel
 
+### Bei Unklarheiten IMMER zuerst fragen (PFLICHT)
+- Wenn eine Anforderung mehrdeutig ist — **STOP, Frage stellen, auf Antwort warten**
+- Besonders kritisch bei: „X entfernen und nach Y verlagern" — ist X danach noch irgendwo? Welche Variante bleibt?
+- Besonders kritisch bei: Scope-Fragen — gilt eine Regel für alle Fraktionen oder nur für eine bestimmte?
+- **Konkrete Beispiel-Falle:** Spec sagt „Necron-Check entfernen" → das heißt NICHT „für alle Fraktionen öffnen", sondern: Necron-Logik bleibt Necron-only, nur der *Ort* des Aufrufs ändert sich
+- Lieber einmal zu viel gefragt als eine falsche Annahme implementiert
+
 ### Subagent Strategy
 - Use subagents liberally to keep main context window clean
 - Offload research, exploration, and parallel analysis to subagents
