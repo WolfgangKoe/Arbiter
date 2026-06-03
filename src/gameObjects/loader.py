@@ -10,6 +10,7 @@ import yaml
 from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
+from gameObjects.stratagem import Stratagem
 from gameObjects.unit import DamageBracket, Unit, WargearOption
 from gameObjects.weapon import Weapon, WeaponProfile
 
@@ -275,6 +276,33 @@ def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
         )
         for p in data.get("protocols", [])
     ]
+
+
+def load_stratagems(faction_dir: str) -> list[Stratagem]:
+    """Load universal + faction stratagems. Universal ones come first."""
+    results: list[Stratagem] = []
+    for source in ("universal", faction_dir):
+        path = _DATA_ROOT / source / "stratagems.yaml"
+        if not path.exists():
+            continue
+        with open(path) as f:
+            data = yaml.safe_load(f)
+        for s in data.get("stratagems", []):
+            results.append(
+                Stratagem(
+                    id=s["id"],
+                    name_en=s["name_en"],
+                    cp_cost=int(s["cp_cost"]),
+                    phase=s["phase"],
+                    stage=s.get("stage", "active"),
+                    player=s.get("player", "active"),
+                    conditions=s.get("conditions") or [],
+                    rule_text=s.get("rule_text", ""),
+                    once_per_phase=s.get("once_per_phase", True),
+                    detachment=s.get("detachment"),
+                )
+            )
+    return results
 
 
 def load_wargear_abilities(faction_dir: str) -> list[Ability]:

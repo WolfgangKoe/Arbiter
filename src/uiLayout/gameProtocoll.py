@@ -18,11 +18,14 @@ import streamlit as st
 
 from gameMechanic.game_state import (
     PHASES,
+    faction_dir_for,
     is_necron_faction,
     units_key_for,
     units_list_for,
 )
-from gameObjects.loader import load_command_protocols
+from gameMechanic.unit_mutations import adjust_cp
+from gameObjects.loader import load_command_protocols, load_stratagems
+from gameObjects.stratagem import stratagem_visibility
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -100,27 +103,67 @@ def _render_command_protocol() -> None:
             st.caption(f"  {name}: {status}")
 
 
+def _conditions_met(conditions: list[str], faction: str) -> bool:
+    """Return True if at least one unit in the army has ALL required keywords."""
+    if not conditions:
+        return True
+    units = units_list_for(faction)
+    for unit in units:
+        if all(unit.has_keyword(kw) for kw in conditions):
+            return True
+    return False
+
+
 def _render_stratagems() -> None:
-    """Stratagem (GO) panel — architecture ready, content loaded in Ziel 4."""
     active_faction = st.session_state.get("active", "—")
     cp = st.session_state.get("cp", {})
     cp_active = cp.get(active_faction, 0)
+    phase_idx = st.session_state.get("phase_idx", 0)
+    current_phase = PHASES[phase_idx][1]
+    current_stage = st.session_state.get("phase_stage", "active")
+    used_ids: set[str] = st.session_state.get("used_stratagem_ids", set())
 
     st.caption(f"**{active_faction}** · CP available: **{cp_active}**")
     st.divider()
 
-    # Placeholder: no stratagems loaded yet
-    # In Ziel 4, this loop will iterate over loaded Stratagem objects and call
-    # stratagem_visibility() from gameObjects/stratagem.py to determine display state.
-    st.info(
-        "No Stratagems loaded for this army.\n\n"
-        "Stratagem data (YAML) and GO visibility logic will be added in Ziel 4.\n\n"
-        "**Visibility rules:**\n"
-        "- ✅ Conditions met + CP ≥ cost + not used this phase → shown, clickable\n"
-        "- 🔘 Conditions met, but CP insufficient → shown, greyed out\n"
-        "- 🔘 Conditions met, but already used this phase → shown, greyed out\n"
-        "- *(not shown)* Conditions not met"
-    )
+    faction_dir = faction_dir_for(active_faction)
+    try:
+        stratagems = load_stratagems(faction_dir)
+    except Exception:
+        st.warning("Could not load stratagems.")
+        return
+
+    visible = []
+    for s in stratagems:
+        met = _conditions_met(s.conditions, active_faction)
+        vis = stratagem_visibility(s, cp_active, current_phase, current_stage, used_ids, met)
+        if vis != "hidden":
+            visible.append((s, vis))
+
+    if not visible:
+        st.caption(f"No stratagems available in the **{current_phase.capitalize()}** phase.")
+        return
+
+    for strat, vis in visible:
+        disabled = vis == "greyed"
+        label = f"**{strat.name_en}** · {strat.cp_cost} CP"
+        if vis == "greyed":
+            if strat.id in used_ids:
+                label += " *(used)*"
+            else:
+                label += " *(CP insufficient)*"
+
+        with st.expander(label, expanded=False):
+            st.caption(strat.rule_text)
+            if not disabled:
+                if st.button(
+                    f"Use — spend {strat.cp_cost} CP",
+                    key=f"strat_{strat.id}_{phase_idx}",
+                ):
+                    adjust_cp(active_faction, -strat.cp_cost)
+                    used_ids.add(strat.id)
+                    st.session_state.used_stratagem_ids = used_ids
+                    st.rerun()
 
 
 def render_game_protocoll() -> None:

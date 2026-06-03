@@ -54,7 +54,7 @@ def stratagem_visibility(
     """
     if not conditions_met:
         return "hidden"
-    if stratagem.phase != current_phase:
+    if stratagem.phase != "any" and stratagem.phase != current_phase:
         return "hidden"
     if stratagem.stage != current_stage:
         return "hidden"

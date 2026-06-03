@@ -1,0 +1,78 @@
+# Universal (Core) stratagems — WH40k 9E
+# Source: Wahapedia https://wahapedia.ru/wh40k9ed/the-rules/core-rules/ (scraped 2026-06-03)
+# Available to every army regardless of faction.
+#
+# phase: "any" = show in every phase
+# once_per_battle: true overrides once_per_phase
+
+stratagems:
+
+  - id: wh40k_9e.universal.stratagem.command_re_roll
+    name_en: Command Re-Roll
+    cp_cost: 1
+    phase: any
+    stage: active
+    player: both
+    conditions: []
+    once_per_phase: false
+    rule_text: "Use this Stratagem after you have made a hit roll, a wound roll, a damage roll, a saving throw, an Advance roll, a charge roll, a Psychic test, a Deny the Witch test or you have rolled the dice to determine the number of attacks made by a weapon. Re-roll that roll, test or saving throw."
+
+  - id: wh40k_9e.universal.stratagem.cut_them_down
+    name_en: Cut Them Down
+    cp_cost: 1
+    phase: movement
+    stage: active
+    player: inactive
+    conditions: []
+    once_per_phase: true
+    rule_text: "Use this Stratagem when an enemy unit Falls Back, before any models in that unit are moved. Roll one D6 for each model from your army that is within Engagement Range of that enemy unit; for each result of 6, that enemy unit suffers 1 mortal wound."
+
+  - id: wh40k_9e.universal.stratagem.desperate_breakout
+    name_en: Desperate Breakout
+    cp_cost: 2
+    phase: movement
+    stage: active
+    player: active
+    conditions: []
+    once_per_phase: true
+    rule_text: "Use this Stratagem in your Movement phase. Select one unit from your army that has not been selected to move this phase and which is in Engagement Range with at least one enemy unit. Roll one D6 for each model in that unit; for each result of 1, one model in that unit of your choice is destroyed. Assuming that unit was not destroyed, it can now attempt to Fall Back, and when doing so its models can be moved across enemy models as if they were not there. Any model in that unit that ends its Fall Back move within Engagement Range of any enemy model is destroyed. Assuming the unit is not destroyed, it cannot do anything else this turn."
+
+  - id: wh40k_9e.universal.stratagem.emergency_disembarkation
+    name_en: Emergency Disembarkation
+    cp_cost: 1
+    phase: any
+    stage: active
+    player: active
+    conditions: [TRANSPORT]
+    once_per_phase: false
+    rule_text: "Use this Stratagem when a TRANSPORT model from your army is destroyed. All units that are embarked within that model can be set up wholly within 6\" of the destroyed model when they disembark instead of the normal 3\" before the model itself is removed from the battlefield. These units are not affected by the destroyed model's Explodes ability — instead roll one D6 for each model set up: one model (your choice) is destroyed for each roll of 1 or 2. Units cannot declare a charge or perform a Heroic Intervention in the same turn that they disembarked from a destroyed TRANSPORT model."
+
+  - id: wh40k_9e.universal.stratagem.fire_overwatch
+    name_en: Fire Overwatch
+    cp_cost: 1
+    phase: charge
+    stage: active
+    player: inactive
+    conditions: []
+    once_per_phase: true
+    rule_text: "Use this Stratagem after an enemy unit has declared a charge against one or more units from your army. One of the units that was chosen as the target of that charge can fire Overwatch before the charge roll is made."
+
+  - id: wh40k_9e.universal.stratagem.counter_offensive
+    name_en: Counter-Offensive
+    cp_cost: 2
+    phase: fight
+    stage: active
+    player: inactive
+    conditions: []
+    once_per_phase: true
+    rule_text: "Use this Stratagem after an enemy unit has fought in this turn. Select one of your own eligible units and fight with it next."
+
+  - id: wh40k_9e.universal.stratagem.insane_bravery
+    name_en: Insane Bravery
+    cp_cost: 2
+    phase: morale
+    stage: active
+    player: active
+    conditions: []
+    once_per_phase: true
+    rule_text: "Use this Stratagem before you take a Morale test for a unit in your army. That test is automatically passed (do not roll any dice). You can only use this Stratagem once per battle."

@@ -211,6 +211,7 @@ def init_state(
     st.session_state.phase_stage = "active"
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
+    st.session_state.used_stratagem_ids: set[str] = set()
     st.session_state.mwbd_target_uid = None
     st.session_state.res_orb_target_uid = None
 
@@ -275,6 +276,7 @@ def reset_game() -> None:
 
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
+    st.session_state.used_stratagem_ids = set()
 
 
 def _reset_turn_state() -> None:
