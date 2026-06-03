@@ -58,13 +58,13 @@ def _render_necron_protocols() -> None:
     st.caption("**Necron Command Protocols**")
     for p in protocols:
         if p.id == active_id:
-            st.markdown(f"**{p.name_de}** — active")
+            st.markdown(f"**{p.name_en}** — active")
             st.caption(f"  Directive 1: {p.primary}")
             st.caption(f"  Directive 2: {p.secondary}")
         elif p.id in used_ids:
-            st.markdown(f"~~{p.name_de}~~ — used")
+            st.markdown(f"~~{p.name_en}~~ — used")
         else:
-            st.caption(f"{p.name_de} — available")
+            st.caption(f"{p.name_en} — available")
     st.divider()
 
 

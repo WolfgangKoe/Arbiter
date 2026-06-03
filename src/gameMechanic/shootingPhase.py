@@ -8,6 +8,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import units_key_for
+from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
@@ -97,7 +98,10 @@ def _active_shooting(
 
     ranged = [w for w in unit.weapons if any(not p.is_melee for p in w.profiles)]
     if ranged:
-        skill = int(unit.bs.rstrip("+"))
+        models_alive = unit_state.get("models", unit.models_max)
+        per_model_wounds = unit_state["current_wounds"] // max(1, models_alive)
+        live_bs = resolve_bracket_stats(unit, per_model_wounds)["bs"]
+        skill = int(live_bs.rstrip("+"))
         for w in ranged:
             p = w.for_phase(use_melee=False)
             ap_int = int(p.ap)

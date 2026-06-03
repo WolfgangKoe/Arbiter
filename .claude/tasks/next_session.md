@@ -166,17 +166,17 @@ Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
 
 - Mission-Auswahl, Attacker/Defender, Secondary Objectives, unmatched-Warnungen, Punkte-Validierung ✅
 
-### Code-Qualität (noch offen)
+### Code-Qualität ✅ (2026-06-03)
 
-- **Faction-Dir Hardcode** — `"necrons" if "necrons" in unit.id else "orks"` in `gameActionsArea.py:81` → `faction_dir_for()`
-- **`resolve_bracket_stats` verdrahten** — Vehicle-Stats live beim Schaden anpassen (in `loader.py`, nie aufgerufen)
-- **`invuln_save` + FNP** — BattleScribe-Importer extrahiert diese nicht via Regex
+- ✅ **Faction-Dir Hardcode** — `unit.id.split(".")[1]` in `gameActionsArea.py`
+- ✅ **`resolve_bracket_stats` verdrahten** — `fightPhase.py` + `shootingPhase.py` nutzen live WS/BS/attacks
+- **`invuln_save` + FNP** — BattleScribe-Importer extrahiert diese noch nicht (defer)
 
-### Datenqualität (noch offen)
+### Datenqualität ✅ (2026-06-03)
 
-- **Command Protocols Englisch** — `necrons/command_protocols.yaml` zeigt `name_de` im UI statt `name_en`
-- **Datasheet Dual-Profile** — Weapon-Properties delegieren auf `profiles[0]`; Setup zeigt nur erstes Profil
-- **Wargear im Roster-Format** — optionales `wargear`-Feld + Loader-Override + Importer-Extraktion
+- ✅ **Command Protocols Englisch** — `primary`/`secondary` + UI (`name_en`) auf Englisch
+- ✅ **Datasheet Dual-Profile** — Setup-Anzeige iteriert alle `w.profiles`
+- **Wargear im Roster-Format** — optionales `wargear`-Feld + Loader-Override + Importer-Extraktion (defer → eigenes Ziel)
 
 ---
 
@@ -184,12 +184,8 @@ Vollständige Checkliste: `docs/goals/ziel5.md` → Abschnitt 5i
 
 | Lücke | Beschreibung |
 |-------|-------------|
-| `invuln_save` + FNP fehlen | BattleScribe-Importer extrahiert invuln_save und FNP noch nicht via Regex (→ 5i) |
-| `resolve_bracket_stats` unverdrahtet | In `loader.py` implementiert, kein Aufrufer — Vehicles zeigen immer Basis-Stats (→ 5i) |
-| Command Protocols deutsch | `necrons/command_protocols.yaml`: `name_de` statt `name_en` im UI (→ 5i) |
-| Dual-Profil Datasheet | Setup-Phase zeigt nur `profiles[0]` (→ 5i) |
-| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar (→ 5i) |
-| Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` → `faction_dir_for()` umstellen (→ 5i) |
+| `invuln_save` + FNP | BattleScribe-Importer extrahiert diese nicht; Katalog-Werte Orks manuell prüfen |
+| Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar (defer, eigenes Ziel) |
 | Ork-Waffen `attacks: Melee` | Scraper-Artefakt: killsaw/power_klaw/uge_choppa zeigen `AMelee` — Kodex-Werte nachtragen |
 | Melee-Attack-Form Orks unverifiziert | Warboss-Angriff (inkl. `User×2`-Fix) noch nicht im echten Testspiel mit Charge bestätigt |
 | Forge World / Legends Necrons | Night Shroud, Canoptek Tombstalker, Acanthrites etc. — kein spielbarer Katalog |

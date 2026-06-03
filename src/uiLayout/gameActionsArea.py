@@ -69,16 +69,18 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
     if unit.weapons:
         st.caption("**Weapons**")
         for w in unit.weapons:
-            w_range = "Melee" if w.is_melee else f'{w.range_inches}"'
-            ap_str = f"AP{w.ap}" if int(w.ap) != 0 else "AP0"
-            abilities_str = f" · *{w.abilities}*" if w.abilities else ""
-            atk_display = str(unit.attacks) if w.attacks in ("Melee", None) else w.attacks
-            st.caption(
-                f"**{w.name_en}** · {w_range} · A{atk_display} · "
-                f"S{w.strength} · {ap_str} · D{w.damage}{abilities_str}"
-            )
+            for p in w.profiles:
+                profile_label = f"{w.name_en} [{p.name_en}]" if p.name_en else w.name_en
+                w_range = "Melee" if p.is_melee else f'{p.range_inches}"'
+                ap_str = f"AP{p.ap}" if int(p.ap) != 0 else "AP0"
+                abilities_str = f" · *{p.abilities}*" if p.abilities else ""
+                atk_display = str(unit.attacks) if p.attacks in ("Melee", None) else p.attacks
+                st.caption(
+                    f"**{profile_label}** · {w_range} · A{atk_display} · "
+                    f"S{p.strength} · {ap_str} · D{p.damage}{abilities_str}"
+                )
 
-    faction_dir = "necrons" if "necrons" in unit.id else "orks"
+    faction_dir = unit.id.split(".")[1]
     unit_abilities = get_abilities_for_unit(unit, faction_dir)
     if unit_abilities:
         st.divider()

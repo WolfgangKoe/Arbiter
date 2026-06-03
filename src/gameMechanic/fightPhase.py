@@ -8,6 +8,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import units_key_for, units_list_for
+from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
 
 
@@ -92,12 +93,18 @@ def _active_fight(
 
     melee = [w for w in unit.weapons if any(p.is_melee for p in w.profiles)]
     if melee:
-        skill = int(unit.ws.rstrip("+"))
+        models_alive = unit_state.get("models", unit.models_max)
+        per_model_wounds = unit_state["current_wounds"] // max(1, models_alive)
+        live = resolve_bracket_stats(unit, per_model_wounds)
+        skill = int(live["ws"].rstrip("+"))
+        live_attacks = live.get("attacks")
         for w in melee:
             p = w.for_phase(use_melee=True)
             ap_int = int(p.ap)
             ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
-            atk_display = str(unit.attacks) if p.attacks in ("Melee", None) else p.attacks
+            atk_display = live_attacks if p.attacks in ("Melee", None) else p.attacks
+            if atk_display is None:
+                atk_display = str(unit.attacks)
             st.caption(
                 f"**{w.name_en}** · A{atk_display} · WS{skill}+ "
                 f"· S{p.strength} · {ap_str} · D{p.damage}"

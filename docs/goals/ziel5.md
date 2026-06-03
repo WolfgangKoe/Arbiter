@@ -1,4 +1,4 @@
-# Ziel 5 — Setup & Datenlage 🔄
+# Ziel 5 — Setup & Datenlage ✅ (2026-06-03)
 
 **Architektur-Entscheidung (2026-05-30):**
 
@@ -226,10 +226,10 @@ Recherche abgeschlossen 2026-06-02. Quellen lokal: `docs/work/wahapedia_matched_
 
 **Verifikation 2026-06-03:** Command Re-Roll (any), Fire Overwatch (charge), Conditions-Filter — alle korrekt.
 
-**Noch offen (→ 5i):**
-- Bug: `player: inactive`-Stratagems ziehen CP vom falschen Pool
-- Condition-Check nur Armee-Ebene, nicht selected-Unit-Ebene
-- Stratagems fehlen als Inline-Hinweis in gameActionArea
+**Abgeschlossen in 5i (2026-06-03):**
+- Bug `player: inactive` CP-Pool ✅
+- Condition-Check auf Unit-Ebene ✅
+- Stratagems als Inline-Hinweis in gameActionArea ✅
 
 ---
 
@@ -293,7 +293,7 @@ Analog zur Necrons-Datenlage — direkt in YAML einpflegen.
 
 ---
 
-## 5i — Abschluss: Offene Punkte & Qualitätssicherung 🔄
+## 5i — Abschluss: Offene Punkte & Qualitätssicherung ✅ (2026-06-03)
 
 Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Ziel 5 erledigt sein.
 
@@ -313,15 +313,15 @@ Sammlung aller noch offenen Punkte aus 5d/5e/5f/5g — muss vor Abschluss von Zi
 
 ### Code-Qualität
 
-- [ ] **Faction-Dir Hardcode** — `"necrons" if "necrons" in unit.id else "orks"` in `gameActionsArea.py` → `faction_dir_for()`
-- [ ] **`resolve_bracket_stats` verdrahten** — Vehicle-Stats ändern sich live beim Schaden (bereits implementiert, nicht aufgerufen)
-- [ ] **`invuln_save` + FNP via Regex** — BattleScribe-Importer extrahiert diese noch nicht
+- [x] **Faction-Dir Hardcode** — `unit.id.split(".")[1]` in `gameActionsArea.py` ✅ 2026-06-03
+- [x] **`resolve_bracket_stats` verdrahten** — `fightPhase.py` + `shootingPhase.py` nutzen live WS/BS/attacks ✅ 2026-06-03
+- [ ] **`invuln_save` + FNP via Regex** — BattleScribe-Importer extrahiert diese noch nicht (→ defer, Katalog-Daten für Orks prüfen)
 
 ### Datenqualität
 
-- [ ] **Command Protocols Englisch** — `necrons/command_protocols.yaml` hat deutsche Namen; auf `name_en` (Englisch) umstellen
-- [ ] **Datasheet Dual-Profile** — Setup-Anzeige zeigt nur `profiles[0]`; alle Profile iterieren
-- [ ] **Wargear im Roster-Format** — `id` + `models` + optionales `wargear`-Feld; Loader-Override + Importer-Extraktion
+- [x] **Command Protocols Englisch** — `primary`/`secondary` auf Englisch; UI zeigt `name_en` ✅ 2026-06-03
+- [x] **Datasheet Dual-Profile** — Setup-Anzeige iteriert alle `w.profiles`; Staff of Light zeigt beide Profile ✅ 2026-06-03
+- [ ] **Wargear im Roster-Format** — `id` + `models` + optionales `wargear`-Feld; Loader-Override + Importer-Extraktion (→ defer, eigenes Ziel)
 
 ---
 
@@ -331,13 +331,10 @@ Diese Punkte fallen quer durch mehrere Ziele — explizit festhalten damit sie n
 
 | Lücke | Beschreibung | Relevant für |
 |-------|-------------|--------------|
-| `resolve_bracket_stats` unverdrahtet | Implementiert in `loader.py`, aber kein Phase-Handler ruft es auf. Vehicle-Stats (Annihilation Barge, Triarch Stalker etc.) ändern sich nicht live beim Schaden. | eigenes Ziel |
 | Ork-Waffen `attacks: Melee` | Scraper-Artefakt für killsaw/power_klaw/uge_choppa — zeigt `AMelee` in UI. Korrekte Werte aus Wahapedia/Kodex nachtragen. | Priorität 1 nächste Session |
 | Melee-Attack-Form Orks unverifiziert | E2E-Test konnte Fight-Phase nur ohne Charge testen ("Not in melee — no fight action possible"). Warboss-Angriff (inkl. `User×2`-Fix) manuell im echten Testspiel bestätigen. | manuelles Testspiel |
-| Command Protocols deutsche Namen | `data/wh40k_9e/necrons/command_protocols.yaml` enthält deutsche Namen ("Protokoll des Ewigen Wächters") — App-UI ist Englisch. Entweder alle auf Englisch oder Sprachschlüssel einführen. | Datenqualität |
-| Faction-Dir Hardcode | `gameActionsArea._display_unit_datasheet` nutzt `"necrons" if "necrons" in unit.id else "orks"` — auf `faction_dir_for()` umstellen. | Erweiterbarkeit |
+| `invuln_save` + FNP via Regex | BattleScribe-Importer extrahiert invuln_save und FNP noch nicht. Katalog-Werte für Necrons und Orks manuell prüfen. | 5d Nacharbeit |
 | Forge World / Legends Necrons | Nicht im Katalog: Night Shroud, Canoptek Tombstalker, Canoptek Acanthrites, Tesseract Ark, Canoptek Tomb Sentinel, Gauss Pylon, Seraptek Heavy Construct, Sentry Pylon. | eigenes Ziel |
-| Datasheet-Anzeige Dual-Profile | `gameActionsArea.py` zeigt in der Setup-Phase nur `profiles[0]` — Staff of Light zeigt nur Shooting-Profil. Kein Bug, aber UX-Lücke. | UX |
 | Wargear im Roster-Format | Nur `id` + `models` — keine Wargear-Auswahl speicherbar. BattleScribe-Import extrahiert Wargear nicht. | 5d Nacharbeit |
 
 ### E2E-Verifikation — Stand 2026-06-03

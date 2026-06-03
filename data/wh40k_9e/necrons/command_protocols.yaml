@@ -2,36 +2,36 @@ protocols:
   - id: wh40k_9e.necrons.protocol.eternal_guardian
     name_en: Protocol of the Eternal Guardian
     name_de: Protokoll des Ewigen Wächters
-    primary: "+1 auf alle Rettungswürfe bis zur nächsten Befehlsphase"
-    secondary: "Rettungswürfe von 1 wiederholen"
+    primary: "+1 to all saving throws until next Command phase"
+    secondary: "Re-roll saving throws of 1"
     auto_round_1: true
   - id: wh40k_9e.necrons.protocol.hungry_void
     name_en: Protocol of the Hungry Void
     name_de: Protokoll der hungrigen Leere
-    primary: "+1 zum Treffen (Fernkampf)"
-    secondary: "+1 Stärke (Fernkampfwaffen)"
+    primary: "+1 to hit (Shooting)"
+    secondary: "+1 Strength (Shooting weapons)"
     auto_round_1: false
   - id: wh40k_9e.necrons.protocol.conquering_tyrant
     name_en: Protocol of the Conquering Tyrant
     name_de: Protokoll des tyrannischen Herrschers
-    primary: "+1 Führung"
-    secondary: "Trefferwürfe und Wundwürfe von 1 wiederholen (Nahkampf)"
+    primary: "+1 Leadership"
+    secondary: "Re-roll hit and wound rolls of 1 (Melee)"
     auto_round_1: false
   - id: wh40k_9e.necrons.protocol.sudden_storm
     name_en: Protocol of the Sudden Storm
     name_de: Protokoll des plötzlichen Sturms
-    primary: "+1\" Bewegung"
-    secondary: "Vormarsch und Charge im selben Zug erlaubt"
+    primary: "+1\" Move"
+    secondary: "Can Advance and Charge in the same turn"
     auto_round_1: false
   - id: wh40k_9e.necrons.protocol.undying_legions
     name_en: Protocol of the Undying Legions
     name_de: Protokoll der unaufhörlichen Legionen
-    primary: "Reanimationsprotokolle neu würfeln"
-    secondary: "+1 Modell pro Reanimationsprotokoll zurückgebracht"
+    primary: "Re-roll Reanimation Protocols"
+    secondary: "+1 model returned per Reanimation Protocol"
     auto_round_1: false
   - id: wh40k_9e.necrons.protocol.vengeful_stars
     name_en: Protocol of the Vengeful Stars
     name_de: Protokoll der rachsüchtigen Sterne
-    primary: "+1 auf Verwundungswürfe (Fernkampf)"
-    secondary: "AP von Fernkampfwaffen um 1 verbessern"
+    primary: "+1 to wound rolls (Shooting)"
+    secondary: "Improve AP of Shooting weapons by 1"
     auto_round_1: false
