@@ -15,6 +15,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
+from gameObjects.ability import Effect
+
 
 @dataclass(frozen=True)
 class StratagemModifier:
@@ -47,14 +49,20 @@ class Stratagem:
     id: str
     name_en: str
     cp_cost: int  # 0 = free
-    phase: str  # "command" | "movement" | "shooting" | ...
+    phase: str | list[str]  # "command" | "movement" | ... | "any" | ["shooting", "fight"]
     stage: Literal["start", "active", "end"]  # when in the phase it may be used
     player: Literal["active", "inactive", "both"]  # who may use it
     conditions: list[str] = field(default_factory=list)  # keyword conditions
     rule_text: str = ""
     once_per_phase: bool = True
+    once_per_battle: bool = (
+        False  # overrides once_per_phase; enforcement pending session-state tracking
+    )
+    timing: str | None = None  # None = proactive | "phase_reactive" | "phase_start" | "phase_end"
+    event: str | None = None  # "after_roll" | "on_destroy" | "on_target" | "on_declaration"
+    effect: Effect | None = None  # machine-readable effect (mirrors Ability.effect vocabulary)
     detachment: str | None = None  # detachment type required, e.g. "cult_of_the_cryptek"
-    modifier: StratagemModifier | None = None  # optional roll modifier for attack sequence
+    modifier: StratagemModifier | None = None  # attack-sequence modifier stack (6d)
 
 
 # ── GO visibility helper ──────────────────────────────────────────────────────
@@ -81,8 +89,11 @@ def stratagem_visibility(
     """
     if not conditions_met:
         return "hidden"
-    if stratagem.phase != "any" and stratagem.phase != current_phase:
-        return "hidden"
+    phase = stratagem.phase
+    if phase != "any":
+        phases = phase if isinstance(phase, list) else [phase]
+        if current_phase not in phases:
+            return "hidden"
     if stratagem.stage != current_stage:
         return "hidden"
 

@@ -337,6 +337,19 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                 if mod_data
                 else None
             )
+            eff_data = s.get("effect")
+            effect = (
+                Effect(
+                    type=eff_data["type"],
+                    target=eff_data.get("target"),
+                    amount=eff_data.get("amount"),
+                    stat=eff_data.get("stat"),
+                    modifier=eff_data.get("modifier"),
+                    handler=eff_data.get("handler"),
+                )
+                if eff_data
+                else None
+            )
             results.append(
                 Stratagem(
                     id=s["id"],
@@ -348,6 +361,10 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                     conditions=s.get("conditions") or [],
                     rule_text=s.get("rule_text", ""),
                     once_per_phase=s.get("once_per_phase", True),
+                    once_per_battle=s.get("once_per_battle", False),
+                    timing=s.get("timing"),
+                    event=s.get("event"),
+                    effect=effect,
                     detachment=s.get("detachment"),
                     modifier=modifier,
                 )

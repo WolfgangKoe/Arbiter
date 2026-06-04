@@ -82,7 +82,7 @@ stratagems:
 
   - id: wh40k_9e.necrons.stratagem.stellar_alignment_protocol
     name_en: Stellar Alignment Protocol
-    cp_cost: 1
+    cp_cost: 1  # variable: 1CP normally, 2CP for TITANIC models
     phase: command
     stage: active
     player: active
@@ -281,11 +281,15 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.judgement_of_the_triarch
     name_en: Judgement of the Triarch
     cp_cost: 1
-    phase: any
+    phase: [shooting, fight]  # rule text: "Shooting phase ... or ... Fight phase"
     stage: active
     player: active
     conditions: [TRIARCH]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: hit
+      modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, when a TRIARCH unit is selected to shoot, or in the Fight phase, when a TRIARCH unit is selected to fight. Until the end of the phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
 
   - id: wh40k_9e.necrons.stratagem.eternal_protectors
@@ -317,12 +321,18 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.whirling_onslaught
     name_en: Whirling Onslaught
     cp_cost: 1
-    phase: any
+    phase: [shooting, fight]  # rule: "selected as the target of an attack" — only in attack phases
     stage: active
     player: inactive
     conditions: [DESTROYER CULT]
     once_per_phase: true
-    rule_text: "Use this Stratagem in any phase, when a SKORPEKH DESTROYERS or SKORPEKH LORD unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's wound roll."
+    timing: phase_reactive
+    event: on_target  # triggers when unit is selected as attack target
+    effect:
+      type: debuff_roll
+      stat: wound
+      modifier: -1
+      target: defender
     modifier:
       roll_type: wound
       value: -1
@@ -355,11 +365,16 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.resurrection_protocols
     name_en: Resurrection Protocols
     cp_cost: 1
-    phase: any
-    stage: end
-    player: both
+    phase: any  # triggers on destroy — can happen in any phase
+    stage: end   # roll at end of phase
+    player: both  # your model can be destroyed in either player's turn
     conditions: [INFANTRY]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: reanimate
+      amount: "D3"
     rule_text: "Use this Stratagem in any phase, when a NECRONS INFANTRY NOBLE or NECRONS INFANTRY CRYPTEK model from your army is destroyed. You can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when that model is destroyed. If you do, then on a 4+, set that model back up on the battlefield as close as possible to where they were destroyed and more than 1\" away from any enemy models, with D3 wounds remaining. This Stratagem cannot be used to set the same model back up more than once per battle."
 
   - id: wh40k_9e.necrons.stratagem.quantum_deflection
@@ -374,12 +389,16 @@ stratagems:
 
   - id: wh40k_9e.necrons.stratagem.curse_of_the_phaeron
     name_en: Curse of the Phaeron
-    cp_cost: 1
-    phase: any
+    cp_cost: 1  # variable: 1CP normally, 3CP for TITANIC models
+    phase: any  # triggers on destroy — can happen in any phase
     stage: active
-    player: both
+    player: both  # your vehicle can be destroyed in either player's turn
     conditions: [VEHICLE]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: auto_explode
     rule_text: "Use this Stratagem in any phase, when a NECRONS VEHICLE model from your army is destroyed. Do not roll to see if that model explodes: it does so automatically. If that model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it costs 1CP."
 
   - id: wh40k_9e.necrons.stratagem.shadows_of_drazak
@@ -404,12 +423,18 @@ stratagems:
 
   - id: wh40k_9e.necrons.stratagem.rapid_reanimation
     name_en: Rapid Reanimation
-    cp_cost: 1
-    phase: any
+    cp_cost: 1  # variable: 1CP with CRYPTEK/Resurrection Orb on field, 2CP otherwise
+    phase: any  # triggered when RP is enacted — can happen in any phase
     stage: active
     player: active
     conditions: []
     once_per_phase: false
+    timing: phase_reactive
+    event: after_roll  # after reanimation protocols roll
+    effect:
+      type: buff_roll
+      stat: rp
+      modifier: 1
     rule_text: "Use this Stratagem when a unit from your army has its reanimation protocols enacted. Until the end of the phase, add 1 to all reanimation protocols rolls made for that unit. If you have a CRYPTEK model or a CHARACTER model equipped with a Resurrection Orb on the battlefield, this Stratagem costs 1CP; otherwise, it costs 2CP."
 
   # ── Dynastic Stratagems ────────────────────────────────────────────────────
@@ -621,12 +646,16 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.efficient_disintegration
     name_en: Efficient Disintegration
     cp_cost: 2
-    phase: any
+    phase: shooting  # rule text: "selected to shoot"
     stage: active
-    player: both
+    player: active   # "from your army is selected to shoot" — always your active turn
     detachment: annihilation_legion
     conditions: [LOKHUST DESTROYERS]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: damage
+      modifier: 1
     rule_text: "Use this Stratagem in any phase, when a LOKHUST DESTROYERS or LOKHUST HEAVY DESTROYERS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a gauss cannon or gauss destructor, add 1 to the damage roll for that attack."
 
   - id: wh40k_9e.necrons.stratagem.hyperphase_impalement

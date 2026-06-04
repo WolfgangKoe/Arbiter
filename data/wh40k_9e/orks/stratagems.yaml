@@ -90,12 +90,17 @@ stratagems:
 
   - id: wh40k_9e.orks.stratagem.careen
     name_en: "Careen!"
-    cp_cost: 1
-    phase: any
+    cp_cost: 1  # variable: 1CP normally, 2CP for WAGON or TITANIC
+    phase: any  # triggers on destroy — can happen in any phase
     stage: active
-    player: active
+    player: both  # your vehicle can be destroyed in either player's turn
     conditions: [VEHICLE]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: move
+      amount: "6"
     rule_text: "Use this Stratagem in any phase, when an ORKS VEHICLE model from your army that is not within Engagement Range of any enemy models is destroyed, before rolling to see if it explodes. That model can make a Normal Move of up to 6\" before resolving the explosion. If that VEHICLE has the WAGON or TITANIC keyword, this Stratagem costs 2CP; otherwise it costs 1CP."
 
   - id: wh40k_9e.orks.stratagem.breakin_heads
@@ -213,18 +218,23 @@ stratagems:
   - id: wh40k_9e.orks.stratagem.wreckaz
     name_en: Wreckaz
     cp_cost: 2
-    phase: any
+    phase: [shooting, fight]  # rule text: "Shooting phase or Fight phase"
     stage: start
     player: active
     conditions: [DEATHSKULLS]
     once_per_phase: true
-    rule_text: "Use this Stratagem at the start of your Shooting phase or Fight phase. Select one DEATHSKULLS CORE or DEATHSKULLS CHARACTER unit from your army. Until the end of the phase, each time a model in that unit makes an attack that targets a VEHICLE, add 1 to that attack's wound roll."
+    effect:
+      type: buff_roll
+      stat: wound
+      modifier: 1
+      target: attacker
     modifier:
       roll_type: wound
       value: 1
       target: attacker
       expires_at: phase_end
       source_label: "Wreckaz"
+    rule_text: "Use this Stratagem at the start of your Shooting phase or Fight phase. Select one DEATHSKULLS CORE or DEATHSKULLS CHARACTER unit from your army. Until the end of the phase, each time a model in that unit makes an attack that targets a VEHICLE, add 1 to that attack's wound roll."
 
   - id: wh40k_9e.orks.stratagem.drive_by_dakka
     name_en: "Drive By Dakka"

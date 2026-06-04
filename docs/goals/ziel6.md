@@ -17,6 +17,8 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6e** ✅ (teilw.) | Fähigkeiten-Integration — Command Protocols verdrahtet | 6b |
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
 | **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
+| **6h** ✅ (teilw.) | Generisches Fraktion-Fähigkeits-System | 6b |
+| **Daten-Review** ⬅ | Fachliche Qualitätsprüfung aller Stratagems/Abilities | – |
 
 ---
 
@@ -262,12 +264,12 @@ Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh
 - [ ] Tyranids: Pool-Check ob Synapse-Unit noch lebt (Unit-Keyword-Check in UI)
 
 **YAML nötig:**
-- [ ] `data/wh40k_9e/adeptus_custodes/command_protocols.yaml` — alle 6 Ka'tahs
-- [ ] `data/wh40k_9e/adeptus_mechanicus/command_protocols.yaml` — alle 6 Canticles
-- [ ] `data/wh40k_9e/tyranids/command_protocols.yaml` — alle Synaptic Imperatives
+- [x] `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml` — alle 6 Ka'tahs ✅ (Batch 1+)
+- [ ] `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` — alle 6 Canticles
+- [ ] `data/wh40k_9e/tyranids/faction_abilities.yaml` — alle Synaptic Imperatives
 
 **Tests nötig:**
-- [ ] `tests/test_faction_abilities_custodes.py` — load, badge_label, modifier, used_ids
+- [x] `tests/test_faction_abilities_custodes.py` — ✅ (Batch 6)
 - [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply
 - [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die
 

@@ -10,11 +10,15 @@ stratagems:
   - id: wh40k_9e.shared.stratagem.command_re_roll
     name_en: Command Re-Roll
     cp_cost: 1
-    phase: any
+    phase: [movement, psychic, shooting, charge, fight]  # not command: no rolls happen there
     stage: active
     player: both
     conditions: []
     once_per_phase: false
+    timing: phase_reactive
+    event: after_roll
+    effect:
+      type: reroll
     rule_text: "Use this Stratagem after you have made a hit roll, a wound roll, a damage roll, a saving throw, an Advance roll, a charge roll, a Psychic test, a Deny the Witch test or you have rolled the dice to determine the number of attacks made by a weapon. Re-roll that roll, test or saving throw."
 
   - id: wh40k_9e.shared.stratagem.cut_them_down
@@ -40,11 +44,16 @@ stratagems:
   - id: wh40k_9e.shared.stratagem.emergency_disembarkation
     name_en: Emergency Disembarkation
     cp_cost: 1
-    phase: any
+    phase: any  # triggers when TRANSPORT is destroyed — can happen in any phase
     stage: active
-    player: active
+    player: both  # can occur in either player's turn
     conditions: [TRANSPORT]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: disembark
+      amount: "6"
     rule_text: "Use this Stratagem when a TRANSPORT model from your army is destroyed. All units that are embarked within that model can be set up wholly within 6\" of the destroyed model when they disembark instead of the normal 3\" before the model itself is removed from the battlefield. These units are not affected by the destroyed model's Explodes ability — instead roll one D6 for each model set up: one model (your choice) is destroyed for each roll of 1 or 2. Units cannot declare a charge or perform a Heroic Intervention in the same turn that they disembarked from a destroyed TRANSPORT model."
 
   - id: wh40k_9e.shared.stratagem.fire_overwatch
@@ -55,6 +64,10 @@ stratagems:
     player: inactive
     conditions: []
     once_per_phase: true
+    timing: phase_reactive
+    event: on_declaration  # after charge is declared, before charge roll
+    effect:
+      type: shoot_reaction
     rule_text: "Use this Stratagem after an enemy unit has declared a charge against one or more units from your army. One of the units that was chosen as the target of that charge can fire Overwatch before the charge roll is made."
 
   - id: wh40k_9e.shared.stratagem.counter_offensive
@@ -74,5 +87,8 @@ stratagems:
     stage: active
     player: active
     conditions: []
-    once_per_phase: true
+    once_per_phase: false
+    once_per_battle: true  # rule text: "once per battle"
+    effect:
+      type: auto_pass_morale
     rule_text: "Use this Stratagem before you take a Morale test for a unit in your army. That test is automatically passed (do not roll any dice). You can only use this Stratagem once per battle."
