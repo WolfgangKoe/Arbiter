@@ -44,6 +44,8 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "anrakyr_the_traveller": "Anrakyr-the-Traveller",
         "imotekh_the_stormlord": "Imotekh-the-Stormlord",
         "the_silent_king": "The-Silent-King",
+        "kutlakh": "Kutlakh-the-World-Killer",
+        "toholk": "Toholk-the-Blinded",
         # Troops
         "warriors": "Necron-Warriors",
         "immortals": "Immortals",
@@ -56,28 +58,44 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "flayed_ones": "Flayed-Ones",
         "canoptek_reanimator": "Canoptek-Reanimator",
         "cryptothralls": "Cryptothralls",
+        "hexmark_destroyer": "Hexmark-Destroyer",
+        "canoptek_plasmacyte": "Canoptek-Plasmacyte",
+        "transcendent_c_tan": "Transcendent-C-tan",
+        "triarch_stalker": "Triarch-Stalker",
+        "canoptek_tombstalker": "Canoptek-Tombstalker",
         # Fast Attack
         "canoptek_scarabs": "Canoptek-Scarab-Swarms",
         "canoptek_wraiths": "Canoptek-Wraiths",
         "tomb_blades": "Tomb-Blades",
         "ophydian_destroyers": "Ophydian-Destroyers",
+        "canoptek_acanthrites": "Canoptek-Acanthrites",
+        "canoptek_tomb_sentinel": "Canoptek-Tomb-Sentinel",
         # Heavy Support
-        "triarch_stalker": "Triarch-Stalker",
         "annihilation_barge": "Annihilation-Barge",
         "lokhust_heavy_destroyers": "Lokhust-Heavy-Destroyers",
         "lokhust_destroyers": "Lokhust-Destroyers",
         "canoptek_doomstalker": "Canoptek-Doomstalker",
         "doomsday_ark": "Doomsday-Ark",
+        "tesseract_ark": "Tesseract-Ark",
+        # Dedicated Transport
         "ghost_ark": "Ghost-Ark",
         # Flyers
         "night_scythe": "Night-Scythe",
         "doom_scythe": "Doom-Scythe",
-        # Lord of War
+        "night_shroud": "Night-Shroud",
+        # Lords of War
         "monolith": "Monolith",
+        "obelisk": "Obelisk",
         "c_tan_nightbringer": "C-tan-Shard-of-the-Nightbringer",
         "c_tan_deceiver": "C-tan-Shard-of-the-Deceiver",
         "c_tan_void_dragon": "C-tan-Shard-of-the-Void-Dragon",
         "tesseract_vault": "Tesseract-Vault",
+        "gauss_pylon": "Gauss-Pylon",
+        "seraptek_heavy_construct": "Seraptek-Heavy-Construct",
+        # Fortifications
+        "convergence_of_dominion": "Convergence-of-Dominion",
+        "sentry_pylon": "Sentry-Pylon",
+        "tomb_citadel_walls": "Tomb-Citadel-Walls",
     },
     "orks": {
         # HQ
@@ -92,16 +110,29 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "weirdboy": "Weirdboy",
         "wurrboy": "Wurrboy",
         "painboy": "Painboy",
+        "painboss": "Painboss",
         "beastboss": "Beastboss",
         "beastboss_squigosaur": "Beastboss-on-Squigosaur",
         "ghazghkull": "Ghazghkull-Thraka",
+        "makari": "Makari",
+        "mozrog_skragbad": "Mozrog-Skragbad",
         "kaptin_badrukk": "Kaptin-Badrukk",
         "boss_zagstruk": "Boss-Zagstruk",
+        "boss_snikrot": "Boss-Snikrot",
         "deffkilla_wartrike": "Deffkilla-Wartrike",
+        "zodgrod_wortsnagga": "Zodgrod-Wortsnagga",
+        "da_red_gobbo_on_bounca": "Da-Red-Gobbo-on-Bounca",
+        "goff_rokker": "Goff-Rokker",
+        "grukk_face_rippa": "Grukk-Face-rippa",
+        "mek_boss_buzzgob": "Mek-Boss-Buzzgob",
+        "zhadsnark_da_ripper": "Zhadsnark-da-Ripper",
         # Troops
         "boyz": "Boyz",
         "gretchin": "Gretchin",
         "beast_snagga_boyz": "Beast-Snagga-Boyz",
+        # Dedicated Transport
+        "trukk": "Trukk",
+        "looted_wagon": "Looted-Wagon",
         # Elites
         "meganobz": "Meganobz",
         "nobz": "Nobz",
@@ -114,6 +145,8 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "runtherd": "Runtherd",
         "painboy_warbike": "Painboy-on-Warbike",
         "nob_waaagh_banner": "Nob-with-Waaagh-Banner",
+        "da_red_gobbo": "Da-Red-Gobbo",
+        "skrak_skull_nobz": "Skrak-s-Skull-Nobz",
         # Fast Attack
         "warbikers": "Warbikers",
         "stormboyz": "Stormboyz",
@@ -125,6 +158,13 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "megatrakk_scrapjets": "Megatrakk-Scrapjets",
         "shokkjump_dragstas": "Shokkjump-Dragstas",
         "rukkatrukk_squigbuggies": "Rukkatrukk-Squigbuggies",
+        "nobz_on_warbikes": "Nobz-on-Warbikes",
+        "grot_mega_tank": "Grot-Mega-tank",
+        "grot_tanks": "Grot-Tanks",
+        "skorchas": "Skorchas",
+        "warbuggies": "Warbuggies",
+        "wartrakks": "Wartrakks",
+        "grot_bomm_launcha": "Grot-Bomm-Launcha",
         # Heavy Support
         "battlewagon": "Battlewagon",
         "deff_dreads": "Deff-Dreads",
@@ -132,11 +172,78 @@ FACTION_UNIT_SLUGS: dict[str, dict[str, str]] = {
         "gunwagon": "Gunwagon",
         "kill_rig": "Kill-Rig",
         "hunta_rig": "Hunta-Rig",
+        "killa_kans": "Killa-Kans",
+        "lootas": "Lootas",
+        "mek_gunz": "Mek-Gunz",
+        "big_trakk": "Big-Trakk",
+        "kannonwagon": "Kannonwagon",
+        "mega_dread": "Mega-Dread",
+        "meka_dread": "Meka-Dread",
+        "squiggoth": "Squiggoth",
+        "big_gunz": "Big-Gunz",
+        "lifta_wagon": "Lifta-Wagon",
         # Flyers
         "dakkajet": "Dakkajet",
         "burna_bommer": "Burna-bommer",
         "blitza_bommer": "Blitza-bommer",
         "wazbom_blastajet": "Wazbom-Blastajet",
+        "attack_fighta": "Attack-Fighta",
+        "chinork_warkopta": "Chinork-Warkopta",
+        "fighta_bommer": "Fighta-bommer",
+        # Lords of War
+        "gorkanaut": "Gorkanaut",
+        "morkanaut": "Morkanaut",
+        "stompa": "Stompa",
+        "battle_fortress": "Battle-Fortress",
+        "gargantuan_squiggoth": "Gargantuan-Squiggoth",
+        "kill_tank": "Kill-Tank",
+        "kustom_stompa": "Kustom-Stompa",
+        "kill_krusha": "Kill-Krusha",
+        # Fortifications
+        "big_ed_bossbunka": "Big-ed-Bossbunka",
+        "mekboy_workshop": "Mekboy-Workshop",
+    },
+    "adeptus-custodes": {
+        # HQ
+        "aleya": "Aleya",
+        "blade_champion": "Blade-Champion",
+        "knight_centura": "Knight-Centura",
+        "shield_captain": "Shield-Captain",
+        "shield_captain_allarus": "Shield-Captain-in-Allarus-Terminator-Armour",
+        "shield_captain_jetbike": "Shield-Captain-on-Dawneagle-Jetbike",
+        "trajann_valoris": "Trajann-Valoris",
+        "valerian": "Valerian",
+        # Troops
+        "custodian_guard": "Custodian-Guard",
+        "prosecutors": "Prosecutors",
+        "custodian_guard_spears": "Custodian-Guard-with-Adrasite-and-Pyrithite-Spears",
+        "sagittarum_custodians": "Sagittarum-Custodians",
+        # Dedicated Transport
+        "anathema_psykana_rhino": "Anathema-Psykana-Rhino",
+        "coronus_grav_carrier": "Coronus-Grav-carrier",
+        # Elites
+        "allarus_custodians": "Allarus-Custodians",
+        "custodian_wardens": "Custodian-Wardens",
+        "venerable_contemptor": "Venerable-Contemptor-Dreadnought",
+        "vexilus_praetor": "Vexilus-Praetor",
+        "vexilus_praetor_allarus": "Vexilus-Praetor-in-Allarus-Terminator-Armour",
+        "vigilators": "Vigilators",
+        "aquilon_custodians": "Aquilon-Custodians",
+        "contemptor_achillus": "Contemptor-Achillus-Dreadnought",
+        "contemptor_galatus": "Contemptor-Galatus-Dreadnought",
+        # Fast Attack
+        "vertus_praetors": "Vertus-Praetors",
+        "witchseekers": "Witchseekers",
+        "agamatus_custodians": "Agamatus-Custodians",
+        "pallas_grav_attack": "Pallas-Grav-attack",
+        "venatari_custodians": "Venatari-Custodians",
+        # Flyers
+        "ares_gunship": "Ares-Gunship",
+        "orion_assault_dropship": "Orion-Assault-Dropship",
+        # Heavy Support
+        "venerable_land_raider": "Venerable-Land-Raider",
+        "caladius_grav_tank": "Caladius-Grav-tank",
+        "telemon_heavy_dreadnought": "Telemon-Heavy-Dreadnought",
     },
 }
 
@@ -368,13 +475,12 @@ def print_unit(uid: str, data: dict) -> None:
         print(f"  {'WEAPON':<30} {'RNG':<7} {'TYPE':<14} {'S':<5} {'AP':<5} {'D':<5} ABILITIES")
         for w in data["weapons"]:
             ab = w.get("abilities", "")
-            ab_short = (ab[:55] + "…") if len(ab) > 55 else ab
             print(
                 f"  {w['name']:<30} {w.get('range',''):<7} {w.get('type',''):<14} "
-                f"{w.get('S',''):<5} {w.get('AP',''):<5} {w.get('D',''):<5} {ab_short}"
+                f"{w.get('S',''):<5} {w.get('AP',''):<5} {w.get('D',''):<5} {ab}"
             )
-    for ab in data.get("abilities", [])[:5]:
-        print(f"  ABIL   {ab[:110]}")
+    for ab in data.get("abilities", []):
+        print(f"  ABIL   {ab}")
 
 
 def print_stratagems(stratagems: list[dict]) -> None:
@@ -385,7 +491,7 @@ def print_stratagems(stratagems: list[dict]) -> None:
         name = s.get("name", "?")
         cp = s.get("cp", "?")
         typ = s.get("type", "")
-        text = s.get("rule_text", "")[:100]
+        text = s.get("rule_text", "")
         print(f"\n  [{cp} CP]  {name}  [{typ}]")
         print(f"    {text}")
 

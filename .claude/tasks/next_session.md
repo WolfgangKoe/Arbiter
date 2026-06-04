@@ -42,14 +42,14 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 **Plan liegt vor, Freigabe noch ausstehend.** Permissions in `settings.json` sind bereits eingetragen.
 
-Schritte (alle bereits beschrieben, warten auf „ja"):
-1. `mkdir -p data/wahapedia_reference/necrons data/wahapedia_reference/orks`
-2. `.venv/bin/python tools/wahapedia_scraper.py necrons --all > data/wahapedia_reference/necrons/units_all.txt`
-3. `.venv/bin/python tools/wahapedia_scraper.py necrons --stratagems > data/wahapedia_reference/necrons/stratagems.txt`
-4. Gleiches für Orks
-5. Vergleichsreport `data/wahapedia_reference/VERIFICATION_REPORT.md` schreiben
+**ABGESCHLOSSEN** (Session 13, 2026-06-04):
+- `docs/work/wahapedia_necrons/units_all.txt` — 46 Einheiten, vollständige Texte
+- `docs/work/wahapedia_necrons/stratagems.txt` — 126 Stratagems
+- `docs/work/wahapedia_orks/units_all.txt` — 51 Einheiten, vollständige Texte
+- `docs/work/wahapedia_orks/stratagems.txt` — Orks-Stratagems
+- Scraper-Truncation entfernt (`tools/wahapedia_scraper.py`)
 
-**Ziel:** Daten lokal haben, um YAML-Fehler bei Einheiten (Silent King etc.) zu finden.
+**Nächster Schritt:** Vergleichsreport schreiben (YAML vs. Wahapedia-Daten)
 
 ---
 
