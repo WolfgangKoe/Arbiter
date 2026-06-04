@@ -65,16 +65,24 @@ data/
       weapons.yaml
       wargear.yaml
       relics.yaml
-      arkana.yaml
       warlord_traits.yaml
-      faction_properties.yaml      ← TBD: Living Metal, Reanimation Protocols, etc.
-      subfaction_properties.yaml   ← TBD: Dynasty rules (Nephrekh, Sautekh, etc.)
+      faction_abilities.yaml       ← triggered, round_choice, activated abilities
+      unit_abilities.yaml          ← keyword/unit-bound abilities
+      subfaction_abilities.yaml    ← Dynasty-specific rules
+      wargear_abilities.yaml       ← arkana + wargear abilities
     orks/
       units.yaml
       weapons.yaml
-      ...
+      faction_abilities.yaml
+      unit_abilities.yaml
+      powers.yaml                  ← psychic powers (Weirdboy — Batch 3 migration)
+    adeptus_custodes/
+      faction_abilities.yaml       ← Ka'tahs of the Broadsword (round_choice)
     _shared/
-      detachment_types.yaml        ← TBD: Patrol/Brigade/etc. with slot constraints
+      detachment_types.yaml        ← Patrol/Brigade/etc. mit CP-Feldern
+      shared_abilities.yaml        ← ObjSec, Deep Strike, FNP, Fly + 3 further (stub)
+      shared_powers.yaml           ← Smite, Deny the Witch, Perils (stub)
+      stratagems.yaml              ← 7 Core Stratagems (was universal/)
 ```
 
 ---

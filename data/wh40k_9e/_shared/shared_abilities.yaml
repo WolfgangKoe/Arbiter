@@ -72,3 +72,57 @@ abilities:
       type: feel_no_pain
       target: self
       threshold: 6
+
+  - id: wh40k_9e.shared.big_guns_never_tire
+    name_en: Big Guns Never Tire
+    ability_type: triggered
+    source: core_rule
+    rule_text: "VEHICLE and MONSTER models can shoot even if there are enemy models within Engagement Range, but suffer -1 to their hit rolls when doing so. They may not shoot at units within Engagement Range if those units contain only VEHICLE or MONSTER models."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [VEHICLE, MONSTER]
+    effect:
+      type: shoot_in_engagement_range
+      target: self
+      hit_modifier: -1
+
+  - id: wh40k_9e.shared.look_out_sir
+    name_en: Look Out, Sir
+    ability_type: triggered
+    source: core_rule
+    rule_text: "Unless this model is the closest visible enemy model to the firing model, this model cannot be selected as the target of a ranged attack if it has a Wounds characteristic of 9 or less and there is at least one other friendly non-CHARACTER model within 3\" of it."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: either
+    conditions:
+      - has_keywords: [CHARACTER]
+        max_wounds: 9
+    effect:
+      type: untargetable_ranged
+      target: self
+      condition: friendly_non_character_within_3
+
+  - id: wh40k_9e.shared.heroic_intervention
+    name_en: Heroic Intervention
+    ability_type: triggered
+    source: core_rule
+    rule_text: "After the enemy Charge phase, any CHARACTER models from your army that are within 3\" of an enemy unit may move up to 3\" — they must end this move closer to the nearest enemy model."
+    trigger:
+      timing: phase_end
+      phase: charge
+      stage: end
+      player: inactive
+    conditions:
+      - has_keywords: [CHARACTER]
+        within_3_of_enemy: true
+    effect:
+      type: move
+      target: self
+      max_distance: 3
+      must_end_closer_to_enemy: true

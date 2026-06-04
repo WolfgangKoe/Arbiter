@@ -170,8 +170,9 @@ Roster referenzierten Catalog-Einträge geladen — kein Full-Table-Scan.
    ├── unit_abilities.yaml
    ├── subfaction_abilities.yaml   (nur wenn subfaction gesetzt)
    ├── wargear_abilities.yaml      (nur für wargear_ids aus Roster)
-   ├── command_protocols.yaml      (nur wenn Fraktion Protokolle hat)
-   └── stratagems.yaml
+   ├── powers.yaml                 (nur wenn Fraktion Psioniker hat; noch nicht verdrahtet)
+   ├── _shared/stratagems.yaml     (immer; 7 Core Stratagems)
+   └── <faction>/stratagems.yaml   (falls vorhanden)
 
 5. Roster auf Units anwenden
    a. Modellanzahl aus Roster setzen

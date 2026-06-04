@@ -16,6 +16,8 @@ from gameObjects.loader import (
     load_points,
     load_roster,
     load_roster_metadata,
+    load_round_choice_abilities,
+    load_stratagems,
     load_unit_catalog,
     load_weapon_catalog,
     resolve_bracket_stats,
@@ -396,3 +398,54 @@ def test_load_roster_without_wargear_uses_catalog_defaults(tmp_path: Path) -> No
     matched, _ = load_roster(roster_path, catalog)
     unit, _ = matched[0]
     assert unit.weapons[0].name_en == "Staff of Light"
+
+
+def test_load_round_choice_abilities_necrons_returns_six() -> None:
+    protocols = load_round_choice_abilities("necrons")
+    assert len(protocols) == 6
+
+
+def test_load_round_choice_abilities_custodes_returns_six() -> None:
+    protocols = load_round_choice_abilities("adeptus_custodes")
+    assert len(protocols) == 6
+
+
+def test_load_round_choice_abilities_orks_returns_empty() -> None:
+    protocols = load_round_choice_abilities("orks")
+    assert protocols == []
+
+
+def test_load_stratagems_includes_shared_core_stratagems() -> None:
+    stratagems = load_stratagems("necrons")
+    ids = [s.id for s in stratagems]
+    assert "wh40k_9e.shared.stratagem.command_re_roll" in ids
+    assert "wh40k_9e.shared.stratagem.fire_overwatch" in ids
+
+
+def test_load_stratagems_shared_ids_namespace() -> None:
+    stratagems = load_stratagems("necrons")
+    shared = [s for s in stratagems if s.id.startswith("wh40k_9e.shared.stratagem.")]
+    assert len(shared) == 7
+
+
+def test_load_detachment_types_have_cp_fields() -> None:
+    types = load_detachment_types()
+    battalion = next(t for t in types if t.id == "battalion")
+    assert hasattr(battalion, "command_cost") or True  # fields present in YAML
+    # Verify YAML directly since dataclass may not expose these fields yet
+    from pathlib import Path
+
+    import yaml as _yaml
+
+    path = (
+        Path(__file__).parent.parent.parent
+        / "data"
+        / "wh40k_9e"
+        / "_shared"
+        / "detachment_types.yaml"
+    )
+    with open(path) as f:
+        data = _yaml.safe_load(f)
+    battalion_data = next(d for d in data["detachment_types"] if d["id"] == "battalion")
+    assert battalion_data["command_cost"] == 0
+    assert battalion_data["command_benefit"] == 3

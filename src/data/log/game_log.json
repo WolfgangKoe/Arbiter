@@ -1,0 +1,30 @@
+[
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Necrons α",
+    "action": "+1 CP received",
+    "timestamp": "2026-06-02T22:38:39.727016"
+  },
+  {
+    "round": 1,
+    "phase": "command",
+    "unit": "Overlord",
+    "action": "My Will Be Done → Immortals",
+    "timestamp": "2026-06-02T22:38:46.220894"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Overlord",
+    "action": "movement: moved",
+    "timestamp": "2026-06-02T22:38:54.594835"
+  },
+  {
+    "round": 1,
+    "phase": "movement",
+    "unit": "Necron Warriors",
+    "action": "movement: advanced",
+    "timestamp": "2026-06-02T22:38:55.937389"
+  }
+]

@@ -7,8 +7,8 @@ from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import (
     load_army,
-    load_command_protocols,
     load_faction_abilities,
+    load_round_choice_abilities,
     load_subfaction_abilities,
     load_unit_abilities,
 )
@@ -80,7 +80,7 @@ def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) 
     if not protocol_id or not directive:
         return {}
 
-    protocols = load_command_protocols(faction_dir)
+    protocols = load_round_choice_abilities(faction_dir)
     protocol = next((p for p in protocols if p.id == protocol_id), None)
     if not protocol:
         return {}

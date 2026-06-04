@@ -1,0 +1,52 @@
+# Shared psychic powers — WH40k 9E
+# Source: Wahapedia https://wahapedia.ru/wh40k9ed/the-rules/core-rules/
+#
+# power_type: psychic | deny | ctan
+# denyable: whether the power can be denied by an opponent's PSYKER
+# accumulating_charge: +1 warp charge for each additional use by the same army per battle round
+
+powers:
+
+  - id: wh40k_9e.shared.power.smite
+    name_en: Smite
+    power_type: psychic
+    warp_charge: 5
+    denyable: true
+    range_inches: 18
+    targeting: closest_visible_enemy
+    effect:
+      type: mortal_wounds
+      amount: D3
+      boosted_amount: D6
+      boost_threshold: 11
+    restriction: once_per_psyker_per_battle_round
+    accumulating_charge: true
+    rule_text: "The closest enemy unit within 18\" of and visible to the psyker suffers D3 mortal wounds (D6 instead if the Psychic test result was 11+). Each time you manifest Smite, the warp charge value increases by 1 for each other time a friendly model has attempted to manifest Smite this battle round."
+
+  - id: wh40k_9e.shared.power.deny_the_witch
+    name_en: Deny the Witch
+    power_type: deny
+    warp_charge: null
+    denyable: false
+    range_inches: 24
+    targeting: manifesting_enemy_psyker
+    effect:
+      type: deny_psychic
+      condition: roll_2d6_exceeds_manifest_roll
+    rule_text: "When an enemy PSYKER unit attempts to manifest a psychic power within 24\" of this PSYKER unit, roll 2D6. If the result is greater than the result of the enemy's Psychic test, the power is denied and its effects are cancelled."
+
+  - id: wh40k_9e.shared.power.perils_of_the_warp
+    name_en: Perils of the Warp
+    power_type: psychic
+    warp_charge: null
+    denyable: false
+    range_inches: 6
+    targeting: self_and_nearby
+    trigger: auto_on_double_1_or_double_6
+    effect:
+      type: mortal_wounds
+      amount: D3
+      targets:
+        - self
+        - all_units_within_6
+    rule_text: "When a PSYKER unit rolls a double 1 or double 6 on a Psychic test, it suffers Perils of the Warp: it suffers D3 mortal wounds. In addition, every unit within 6\" (friend or foe) also suffers D3 mortal wounds."

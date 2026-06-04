@@ -291,11 +291,6 @@ def load_round_choice_label(faction_dir: str) -> str:
     return data.get("round_choice_label", "Round Abilities")
 
 
-def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
-    """Backward-compatible alias for load_round_choice_abilities()."""
-    return load_round_choice_abilities(faction_dir)
-
-
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
     """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
     path = _DATA_ROOT / faction_dir / "unit_abilities.yaml"

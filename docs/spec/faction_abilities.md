@@ -14,7 +14,10 @@
 | `unit_abilities.yaml` | Gebunden an unit- oder keyword-spezifische Regeln (WRAITH, VEHICLE, CRYPTEK) | Wenn Einheit/Keyword in Armee |
 | `subfaction_abilities.yaml` | Gebunden an Subfaction-Keyword (Dynasty, Clan, Shield Host, Supplement) | Wenn Subfaction aktiv |
 | `wargear_abilities.yaml` | Gebunden an Ausrüstungsgegenstand; enthält auch `arkana:`-Block für Cryptek-Arkana | Wenn Ausrüstung ausgewählt |
-| `_shared/shared_abilities.yaml` | Fraktionsübergreifende Universalregeln (ObjSec, Deep Strike, FNP, Fly) | Stub; noch nicht verdrahtet |
+| `powers.yaml` | Psionische Kräfte (je Fraktion); `power_type: psychic \| deny \| ctan` | Stub; noch nicht verdrahtet |
+| `_shared/shared_abilities.yaml` | ObjSec, Deep Strike, FNP, Fly + BigGuns, LookOut, HeroicIntervention | Stub; noch nicht verdrahtet |
+| `_shared/shared_powers.yaml` | Smite, Deny the Witch, Perils of the Warp | Stub; noch nicht verdrahtet |
+| `_shared/stratagems.yaml` | 7 Core Stratagems (war `universal/stratagems.yaml`) | verdrahtet: `load_stratagems()` |
 
 **Regel:** Neue Fraktion = nur YAML in `faction_abilities.yaml`. Kein Code-Change nötig, solange der `ability_type` bereits unterstützt ist.
 
@@ -42,8 +45,7 @@ Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigen
 | Tyranids | Synaptic Imperatives | bis 10 | Keine | — | Pool dynamisch: schrumpft wenn Synapse-Einheiten sterben |
 
 **YAML-Ort:** `data/wh40k_9e/<faction>/faction_abilities.yaml` als `ability_type: round_choice`  
-**Loader:** `load_round_choice_abilities(faction_dir)` in `loader.py` — liest aus `faction_abilities.yaml`, filtert auf `ability_type == "round_choice"`, gibt `list[CommandProtocol]` zurück.  
-`load_command_protocols()` bleibt als Backward-Compat-Alias.
+**Loader:** `load_round_choice_abilities(faction_dir)` in `loader.py` — liest aus `faction_abilities.yaml`, filtert auf `ability_type == "round_choice"`, gibt `list[CommandProtocol]` zurück.
 
 **YAML-Schema:**
 ```yaml
@@ -189,9 +191,9 @@ Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelli
 - Protokoll-Badge: HTML-Badge nach Direktiven-Wahl
 - Sourced Modifier-Labels in `_common.py`
 
-### Phase 2 ✅ (2026-06-04 — Architektur-Aufräum-Sprint)
+### Phase 2 ✅ (2026-06-04 — Architektur-Aufräum-Sprint + 6-Batch-Plan)
 - `command_protocols.yaml` → in `faction_abilities.yaml` als `ability_type: round_choice` (Necrons)
-- `load_round_choice_abilities()` ersetzt `load_command_protocols()` (Alias bleibt)
+- `load_round_choice_abilities()` ersetzt `load_command_protocols()` (Alias entfernt — Batch 4)
 - `_ETERNAL_GUARDIAN_ID` Hardcoding → generische `auto_round_1`-Suche
 - `commandPhase.py`: `"eternal_guardian"` Hardcoding → `auto_round_1`-Suche
 - `round_choice_label` im YAML → dynamische Überschrift statt "Command Protocols" Hardcoding
@@ -202,7 +204,13 @@ Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelli
 - Necron `subfaction_abilities.yaml`: Destroyer Cult + hardwired_for_destruction
 - Necron `wargear_abilities.yaml`: 13 Arkana migriert; `arkana.yaml` gelöscht
 - Ork `faction_abilities.yaml`: mob_rule, ramshackle, beast_snagga → unit_abilities.yaml
-- `_shared/shared_abilities.yaml`: ObjSec, Deep Strike, Fly, FNP als Stub
+- Ork `faction_abilities.yaml`: objective_secured → `unit_abilities.yaml` (Batch 1)
+- Ork `faction_abilities.yaml`: psychic powers → `powers.yaml` (Batch 3)
+- `_shared/shared_abilities.yaml`: ObjSec, Deep Strike, Fly, FNP + 3 weitere (Batch 2)
+- `_shared/shared_powers.yaml`: Smite, Deny, Perils (Batch 2, NEU)
+- `_shared/stratagems.yaml`: migriert aus `universal/` (Batch 0); IDs auf `shared`-Namespace
+- `_shared/detachment_types.yaml`: CP-Felder `command_cost` + `command_benefit` ergänzt (Batch 2)
+- Subfaction-Affinitäten korrigiert: Necrons 4 Werte, Custodes 2 Werte + rendax-ID (Batch 1)
 
 ### Phase 3 (nächste Priorität)
 1. **subfaction_affinity UI**: Wenn aktive Subfaction == `subfaction_affinity`, beide Direktiven aktiv

@@ -15,7 +15,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: emissaries_imperatus
+    subfaction_affinity: solar_watch
     primary: "+D6\" to Advance rolls"
     secondary: "Counts as having remained stationary even if it moved this turn"
     directives:
@@ -36,7 +36,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: solar_watch
+    subfaction_affinity: emissaries_imperatus
     primary: "Can perform actions while Advancing or Falling Back"
     secondary: "Can make ranged attacks while performing actions"
     directives:
@@ -98,7 +98,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: wardens
+    subfaction_affinity: emperors_chosen
     primary: "Unmodified hit roll of 6 automatically wounds VEHICLE and MONSTER units"
     secondary: "+1 Strength after making a Charge move"
     directives:

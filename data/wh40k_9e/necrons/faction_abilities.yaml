@@ -54,7 +54,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: true
-    subfaction_affinity: szarekhan
+    subfaction_affinity: nihilakh
     primary: "+1 to all saving throws until next Command phase"
     secondary: "Re-roll saving throws of 1"
     directives:
@@ -74,7 +74,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: mephrit
+    subfaction_affinity: novokh
     primary: "+1 to hit (Shooting)"
     secondary: "+1 Strength (Shooting weapons)"
     directives:
@@ -135,7 +135,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: novokh
+    subfaction_affinity: szarekhan
     primary: "Re-roll Reanimation Protocols"
     secondary: "+1 model returned per Reanimation Protocol"
     directives:
@@ -155,7 +155,7 @@ abilities:
     ability_type: round_choice
     source: faction_rule
     auto_round_1: false
-    subfaction_affinity: nihilakh
+    subfaction_affinity: mephrit
     primary: "+1 to wound rolls (Shooting)"
     secondary: "Improve AP of Shooting weapons by 1"
     directives:

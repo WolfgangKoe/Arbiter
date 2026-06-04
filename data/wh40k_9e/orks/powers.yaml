@@ -1,0 +1,108 @@
+# Orks psychic powers — Waaagh! Energy discipline — WH40k 9E
+# Source: Wahapedia https://wahapedia.ru/wh40k9ed/factions/orks/
+# Loader: nicht verdrahtet — reine Datenmigration aus faction_abilities.yaml (Batch 3)
+#
+# power_type: psychic | deny
+# All powers except smite require PSYKER + WEIRDBOY keywords.
+
+powers:
+
+  - id: wh40k_9e.orks.power.smite
+    name_en: Smite
+    power_type: psychic
+    shared_ref: wh40k_9e.shared.power.smite
+    warp_charge: 5
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER]
+    rule_text: "Warp Charge 5. The closest enemy unit within 18\" of and visible to the psyker suffers D3 mortal wounds. If the result of the Psychic test was 11 or more, that unit suffers D6 mortal wounds instead."
+
+  - id: wh40k_9e.orks.power.eadbanger
+    name_en: "'Eadbanger"
+    power_type: psychic
+    warp_charge: 5
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: mortal_wounds_conditional
+      target: enemy_selected
+      amount: D6
+      condition: roll_vs_toughness
+      max_destroyed: 1
+    rule_text: "Warp Charge 5. Select one enemy unit within 18\" of the psyker and roll a D6. If the result exceeds the target's Toughness, that unit suffers D6 mortal wounds. Maximum one model can be destroyed from this power."
+
+  - id: wh40k_9e.orks.power.warpath
+    name_en: Warpath
+    power_type: psychic
+    warp_charge: 6
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: buff_stat
+      target: friendly_orks_core_or_character
+      stat: attacks
+      modifier: 1
+      duration: until_next_psychic_phase
+    rule_text: "Warp Charge 6. Select one friendly ORKS CORE or ORKS CHARACTER unit within 18\". Until the start of your next Psychic phase, add 1 to the Attacks characteristic of models in that unit."
+
+  - id: wh40k_9e.orks.power.da_jump
+    name_en: Da Jump
+    power_type: psychic
+    warp_charge: 7
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: deep_strike
+      target: friendly_orks_core
+      source_range_inches: 12
+      min_range_from_enemy: 9
+    rule_text: "Warp Charge 7. Select one friendly ORKS CORE unit within 12\". Remove it from the battlefield and set it up anywhere more than 9\" from enemy models."
+
+  - id: wh40k_9e.orks.power.fists_of_gork
+    name_en: Fists of Gork
+    power_type: psychic
+    warp_charge: 6
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: buff_stat
+      target: friendly_orks_character
+      stat: [strength, attacks]
+      modifier: 2
+      modifier_on_11: 3
+      source_range_inches: 12
+      duration: until_next_psychic_phase
+    rule_text: "Warp Charge 6. Select one friendly ORKS CHARACTER within 12\". Add 2 to Strength and Attacks until your next Psychic phase (add 3 instead if test result was 11+)."
+
+  - id: wh40k_9e.orks.power.da_krunch
+    name_en: Da Krunch
+    power_type: psychic
+    warp_charge: 6
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: mortal_wounds_per_model
+      target: enemy_selected
+      roll_threshold: 6
+      threshold_on_9: 5
+    rule_text: "Warp Charge 6. Select one enemy unit within 18\". Roll one D6 per model in the unit; each roll of 6 causes 1 mortal wound. On test result 9+, add 1 to all rolls."
+
+  - id: wh40k_9e.orks.power.jabbinfinger
+    name_en: "Jabbin' Fingerz"
+    power_type: psychic
+    warp_charge: 6
+    denyable: true
+    conditions:
+      - has_keywords: [PSYKER, WEIRDBOY]
+    effect:
+      type: debuff_roll
+      target: enemy_selected
+      stat: hit_roll
+      modifier: -1
+      duration: until_next_psychic_phase
+    rule_text: "Warp Charge 6. Select one visible enemy unit within 18\". Until the start of your next Psychic phase, each time a model in that unit makes an attack, subtract 1 from that attack's hit roll."

@@ -17,7 +17,7 @@ from gameMechanic.ability_engine import check_conditions, execute_effect
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import PHASES, faction_dir_for, unit_id_from_state_key
 from gameObjects.ability import Ability
-from gameObjects.loader import load_command_protocols, load_round_choice_label
+from gameObjects.loader import load_round_choice_abilities, load_round_choice_label
 from gameObjects.unit import Unit
 
 
@@ -141,7 +141,7 @@ def _render_protocol_ui(faction: str) -> None:
     except KeyError:
         return
 
-    protocols = load_command_protocols(faction_dir)
+    protocols = load_round_choice_abilities(faction_dir)
     if not protocols:
         return
 
@@ -250,7 +250,7 @@ def _render_waaagh_ui(
         return
 
     # Necrons use command protocols instead — don't double-render
-    if load_command_protocols(faction_dir):
+    if load_round_choice_abilities(faction_dir):
         return
 
     phase_key = _current_phase_key()

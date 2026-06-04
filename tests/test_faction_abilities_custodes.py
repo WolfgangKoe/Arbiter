@@ -1,7 +1,6 @@
 """Tests for Custodes Ka'tah loading via the generic round_choice pipeline."""
 
 from gameObjects.loader import (
-    load_command_protocols,
     load_round_choice_abilities,
     load_round_choice_label,
 )
@@ -80,28 +79,38 @@ class TestCustodesRoundChoiceLabel:
         assert label == "Round Abilities"
 
 
-class TestBackwardCompatibility:
-    def test_load_command_protocols_alias_works_for_necrons(self) -> None:
-        protocols = load_command_protocols("necrons")
-        assert len(protocols) == 6
+class TestCustodesSubfactionAffinityCorrectness:
+    def test_rendax_affinity_is_emperors_chosen(self) -> None:
+        protocols = load_round_choice_abilities("adeptus_custodes")
+        rendax = next(p for p in protocols if "rendax" in p.id)
+        assert rendax.subfaction_affinity == "emperors_chosen"
 
-    def test_load_command_protocols_alias_works_for_custodes(self) -> None:
-        protocols = load_command_protocols("adeptus_custodes")
-        assert len(protocols) == 6
+    def test_calistus_affinity_is_solar_watch(self) -> None:
+        protocols = load_round_choice_abilities("adeptus_custodes")
+        calistus = next(p for p in protocols if "calistus" in p.id)
+        assert calistus.subfaction_affinity == "solar_watch"
 
-    def test_load_command_protocols_orks_returns_empty(self) -> None:
-        protocols = load_command_protocols("orks")
-        assert protocols == []
+    def test_conservai_affinity_is_emissaries_imperatus(self) -> None:
+        protocols = load_round_choice_abilities("adeptus_custodes")
+        conservai = next(p for p in protocols if "conservai" in p.id)
+        assert conservai.subfaction_affinity == "emissaries_imperatus"
 
+    def test_all_affinities_unique(self) -> None:
+        protocols = load_round_choice_abilities("adeptus_custodes")
+        affinities = [p.subfaction_affinity for p in protocols]
+        assert len(affinities) == len(set(affinities))
+
+
+class TestNecronSubfactionAffinity:
     def test_necrons_protocols_have_subfaction_affinity(self) -> None:
         protocols = load_round_choice_abilities("necrons")
         for p in protocols:
             assert p.subfaction_affinity is not None, f"{p.name_en} missing subfaction_affinity"
 
-    def test_necrons_eternal_guardian_affinity_is_szarekhan(self) -> None:
+    def test_necrons_eternal_guardian_affinity_is_nihilakh(self) -> None:
         protocols = load_round_choice_abilities("necrons")
         eg = next(p for p in protocols if "eternal_guardian" in p.id)
-        assert eg.subfaction_affinity == "szarekhan"
+        assert eg.subfaction_affinity == "nihilakh"
 
     def test_necrons_eternal_guardian_auto_round_1(self) -> None:
         protocols = load_round_choice_abilities("necrons")

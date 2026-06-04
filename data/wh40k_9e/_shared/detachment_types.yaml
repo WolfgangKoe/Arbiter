@@ -1,6 +1,8 @@
 detachment_types:
   - id: patrol
     name_en: Patrol
+    command_cost: 2
+    command_benefit: 0
     slots:
       - role: HQ
         min: 1
@@ -25,6 +27,8 @@ detachment_types:
         max: 2
   - id: battalion
     name_en: Battalion
+    command_cost: 0
+    command_benefit: 3
     slots:
       - role: HQ
         min: 2
@@ -49,6 +53,8 @@ detachment_types:
         max: 3
   - id: brigade
     name_en: Brigade
+    command_cost: 0
+    command_benefit: 12
     slots:
       - role: HQ
         min: 2
@@ -73,6 +79,8 @@ detachment_types:
         max: 3
   - id: spearhead
     name_en: Spearhead
+    command_cost: 1
+    command_benefit: 0
     slots:
       - role: HQ
         min: 1
@@ -97,6 +105,8 @@ detachment_types:
         max: 2
   - id: outrider
     name_en: Outrider
+    command_cost: 1
+    command_benefit: 0
     slots:
       - role: HQ
         min: 1
@@ -121,6 +131,8 @@ detachment_types:
         max: 2
   - id: vanguard
     name_en: Vanguard
+    command_cost: 1
+    command_benefit: 0
     slots:
       - role: HQ
         min: 1
@@ -145,6 +157,8 @@ detachment_types:
         max: 2
   - id: air_wing
     name_en: Air Wing
+    command_cost: 1
+    command_benefit: 0
     slots:
       - role: Flyer
         min: 3

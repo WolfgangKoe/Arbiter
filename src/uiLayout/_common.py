@@ -390,7 +390,7 @@ def render_attack_form(
 
     from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
-    from gameObjects.loader import load_command_protocols  # noqa: PLC0415
+    from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
 
     atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
     mwbd_active = any(
@@ -425,7 +425,7 @@ def render_attack_form(
         directive = st.session_state.get("active_directive")
         if not protocol_id or not directive or not faction_dir:
             return "Protocol"
-        protocols = load_command_protocols(faction_dir)
+        protocols = load_round_choice_abilities(faction_dir)
         p = next((p for p in protocols if p.id == protocol_id), None)
         return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
 

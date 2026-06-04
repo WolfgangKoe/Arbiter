@@ -8,7 +8,7 @@ from gameMechanic.game_state import faction_dir_for, unit_id_from_state_key, uni
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army, load_command_protocols
+from gameObjects.loader import load_army, load_round_choice_abilities
 from uiLayout._common import (
     PHASE_RULES,
     lookup,
@@ -197,7 +197,7 @@ def _render_unit_command_abilities(
 
 
 def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    protocols = load_command_protocols(faction_dir_for(faction))
+    protocols = load_round_choice_abilities(faction_dir_for(faction))
     if not protocols:
         return
 
