@@ -26,55 +26,95 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 |------|--------|
 | Ziel 1–5 — Grundgerüst, Phasen, Setup, Daten | ✅ fertig |
 | Ziel 6a–6c, 6e, 6g, 6h | ✅ committed |
-| Ziel 6h — Custodes Ka'tah YAML + Tests | ✅ committed |
-| **Datenqualitäts-Review** | ✅ Stratagems vollständig (Necrons + Orks); faction_abilities offen |
+| **Ziel 6d — Simultane Attackensequenz (alt)** | ✅ committed (wird durch 6d-v2 ersetzt) |
+| **Ziel 6d-v2 — Attackensequenz Overhaul** | 🔵 Design fertig, Implementierung ausstehend |
+| **Datenqualitäts-Review** | ✅ vollständig (Stratagems + faction_abilities) |
 
-Teststand: **426 Tests grün**
-
----
-
-## Was wurde zuletzt gemacht (2026-06-04, Session 6)
-
-- `necrons/stratagems.yaml` — alle 59 GOs vollständig:
-  - `effect:` Block zu 53 GOs ergänzt (6 waren bereits gesetzt)
-  - `once_per_battle: true` bei 5 GOs: Hand of the Phaeron, Dynastic Heirlooms, Rarefied Nobility, Exalted Cryptek, Canoptek Reinforcement
-  - `timing: phase_reactive` + `event:` bei 8 weiteren reaktiven GOs: aetheric_interception (`on_set_up`), reanimation_prioritisation (`on_target`), quantum_deflection (`on_target`), shadows_of_drazak (`on_target`), revenge_of_the_doomstalker (`on_destroy`), canoptek_overdrive (`on_destroy`), murderous_demise (`on_destroy`)
-  - `player: both` korrigiert bei quantum_deflection + shadows_of_drazak (Angriffe in beiden Spielerzügen möglich)
-  - `rule_text:` bei whirling_onslaught nachgetragen (war leer)
-- `orks/stratagems.yaml` — alle 28 GOs vollständig:
-  - `effect:` Block zu 26 GOs ergänzt (careen + wreckaz bereits gesetzt)
-  - `once_per_battle: true` bei Big Boss + Extra Gubbinz
-  - `timing/event` + `player: inactive` bei orks_is_never_beaten + tough_as_squig_hide korrigiert
-  - `cp_cost`-Kommentar bei get_stuck_in_ladz ergänzt
+Teststand: **454 Tests grün**
 
 ---
 
-## ⬅ NÄCHSTE SESSION: Daten-Review Abschluss + Ziel 6g + 6d-Vorbereitung
+## Was wurde zuletzt gemacht (2026-06-04, Session 9)
 
-### 1. Daten-Review Abschluss (klein, ca. 30–45 Min.)
+**P0 — Pistol-in-Melee Bug Fix:**
+- `shootingPhase.py`: `can_shoot()` erlaubt Schuss wenn Einheit im Nahkampf UND Pistol-Waffe hat; `_active_shooting()` filtert Waffenliste auf Pistolen + zeigt Info-Badge; `_render_display()` übergibt `in_melee` an `render_attack_form()`
+- `_common.py`: `render_attack_form()` — neuer `in_melee: bool = False` Parameter; Waffenfilter auf `weapon_type.startswith("Pistol")` wenn `in_melee=True`
 
-**`necrons/faction_abilities.yaml` — Trigger/Conditions spot-check:**
-- Für jede Fähigkeit: `ability_type` korrekt? `trigger.phase/timing/event` vollständig? `conditions` richtig?
-- Besonders: Living Metal (Command Phase, Auto), Reanimation Protocols (phase_reactive / on_destroy)
-- Quelle: `data/wh40k_9e/necrons/faction_abilities.yaml`
+**P1 — Scenario-Mockups:**
+- 4 neue JSON-Dateien: `necrons_shoot_orks.json`, `orks_fight_necrons.json`, `orks_shoot_necrons.json`, `necrons_fight_orks.json`
+- Alle mit `p1_units`/`p2_units` Keys; Roster `necrons_alpha.yaml` (p1) + `orks.yaml` (p2); active-Keys `"Necrons α"` / `"Orks"`
+- `orks_shoot_necrons.json`: Boyz in Melee mit Warriors → demonstriert Pistol-only-Verhalten nach Fix
+- `necrons_fight_orks.json`: Skorpekhs CHARGED, Warriors ebenfalls im Nahkampf → RP nach Verlusten relevant
 
-**`orks/faction_abilities.yaml` — Trigger/Conditions spot-check:**
-- WAAAGH!-Fähigkeit: `trigger`, `stages`, `once_per_battle` prüfen
-- Quelle: `data/wh40k_9e/orks/faction_abilities.yaml`
+Teststand: **454 Tests grün**
 
-### 2. Ziel 6g Restpunkt (5 Min.)
+---
 
-- `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf
-- Dann: Checkbox in `ziel6.md` abhaken
+## ⬅ NÄCHSTE SESSION: Ziel 6d-v2 — Attackensequenz Overhaul (P2)
 
-### 3. Ziel 6d — Attackensequenz (Hauptaufgabe, mehrstufig)
+Design vollständig abgestimmt (Session 8). P0+P1 abgehakt. Nächster Schritt: Implementierung beginnen.
 
-Vorher Plan zeigen + Freigabe holen. Die Arbeit ist umfangreich:
-- `gameMechanic/combat.py`: `resolve_attack_modifiers()`, `resolve_save()`, `resolve_fnp()`
-- Angreifer/Verteidiger-Area: simultane Darstellung mit Modifier-Stack
-- Stratagem-Buttons direkt beim betreffenden Würfelblock
+**Empfohlener Einstieg:** Plan zeigen + Freigabe holen für den ersten 6d-v2 Task:
+> `uiLayout/_common.py`: `render_attack_form()` aufteilen in `render_attack_declaration()` + `render_attack_resolution_tab()`
 
-**Wichtiger Constraint:** Nahkampf/Overwatch — Seiten-Zuweisung nach `attacker_faction`, nicht `active`.
+---
+
+## Was wurde zuletzt gemacht (2026-06-04, Session 8 — Design)
+- `necrons/faction_abilities.yaml` + `orks/faction_abilities.yaml` — Spot-Check: alle Trigger/Conditions korrekt, keine Korrekturen nötig
+
+**Ziel 6g Restpunkt:**
+- `game_state.py`: `init_state()` ruft jetzt `set_log_players(p1_name, p2_name)` auf
+
+**Ziel 6d — Simultane Attackensequenz:**
+- `combat.py`: 3 neue Pure-Functions — `resolve_attack_modifiers()` (Hit/Wound-Schwellwerte + Modifier-Stack, Heavy-Penalty, ±1-Cap), `resolve_save()` (Rüstung vs. Invuln, Stack), `resolve_fnp()` (None wenn ignoriert/abwesend)
+- `weapon.py` + `loader.py`: `ignores_fnp: bool = False` auf `WeaponProfile`, aus YAML parsbar
+- `_common.py`: `render_attack_form()` komplett neu — 2-Spalten-Layout: Angreifer (Treffer/Verwundung-Block mit Modifier-Stack und Quellen) | Verteidiger (Rettungswurf, FNP konditional, Schaden-Input + Mortal-Wounds-Input, ein Apply-Button); altes Resolve→Apply-Zweischritt-System entfernt
+- `tests/test_combat_6d.py`: 28 neue Tests (454 gesamt, alle grün)
+
+---
+
+## ⬅ NÄCHSTE SESSION: Ziel 6d-v2 — Attackensequenz Overhaul
+
+Design ist vollständig abgestimmt (Session 8, 2026-06-04). Vor Implementierung: Plan zeigen + Freigabe holen.
+
+### P0 — Bug-Fix (unabhängig, klein)
+- **Pistol in Melee** — `can_shoot()` in `shootingPhase.py`: Einheit im Nahkampf darf Pistolen abfeuern. Korrekte Logik: wenn `in_melee` → nur Waffen mit `weapon_type` starting "Pistol" anzeigen + Schuss erlauben; alle anderen Waffen blockiert.
+
+### P1 — Scenario-Mockups für Testhilfe (klein, eigenständig)
+Infrastruktur ist fertig (`data/scenarios/`, `?scenario=` URL-Parameter, `scenarios.py`). Neue Szenarien:
+- `necrons_shoot_orks.json` — Shooting Phase, Necrons aktiv: Immortals (Tesla Carbines, 5 Modelle, 10 LP) → Ork Boyz (20 Modelle, 20 LP). Tesla-Badge sichtbar.
+- `orks_fight_necrons.json` — Fight Phase, Orks aktiv: Boyz (20 Modelle) im Nahkampf mit Warriors (10 Modelle) + Skorpekh Destroyers (3 Modelle, 9 LP). Whirling Onslaught aktivierbar (Necrons reaktiv). RP nach Apply relevant.
+- `orks_shoot_necrons.json` — Shooting Phase, Orks aktiv: Boyz mit Sluggas (Pistol 1!) → Warriors (einige in Melee → Pistol-Bug sichtbar).
+- `necrons_fight_orks.json` — Fight Phase, Necrons aktiv: Skorpekh Destroyers (3 Modelle, geladen → CHARGED-Badge) → Boyz. Whirling Onslaught ist defensive Necron-GO, hier irrelevant für Angreifer.
+- **Achtung:** Bestehende Szenarien nutzen falsche Keys (`necron_units` statt `p1_units`). Alle 4 neuen Szenarien mit `p1_units`/`p2_units` schreiben. Roster-Kombi: `necrons_alpha.yaml` (p1) + `orks.yaml` (p2).
+
+### P2 — Ziel 6d-v2 Kern-Redesign (groß, mehrere Sessions)
+Vollständige Spec in `docs/goals/ziel6.md` Abschnitt "6d-v2". Kurzüberblick:
+
+**Phase 1 — Deklaration (gameActionArea übernehmen):**
+1. Angreifer ist bereits gewählt (via unitCard-Klick, wie bisher)
+2. Ziele wählen (mehrere möglich) + Modelle-Counter pro Ziel
+3. Waffe wählen (bei mehreren Waffen; triviale Fälle auto-selektiert)
+4. Waffenprofil wählen (bei mehreren Profilen; gesperrte Optionen ausgegraut mit Grund)
+5. Bestätigen → Tabs öffnen
+
+**Phase 2 — Auflösung (Tabs):**
+Ein Tab pro (Waffe × Zieleinheit). Inhalt: Hit-Block → Wound-Tabelle → Save-Block → Damage-Block.
+
+**Damage-Block:**
+- Modelle verloren `[0][−][+]`
+- Wunden auf Frontmodell `[0][−][+]` (nur wenn Ziel nLP-Modelle hat)
+- Tödliche Verwundungen `[0][−][+]` (immer)
+- Apply → Tab lockt; Reset-Button bis Phase-End
+
+**Necron RP-Block** (erscheint nach Apply wenn Necron-Einheit Verluste hatte):
+- Würfelanzahl = Summe LP der gefallenen Modelle
+- Erfolg 5+ pro Würfel; Modelle zurück `[0][−][+]`
+
+### Verbleibende Optionen aus Session 7 (nachrangig)
+- **6e — CP-Doppelvergabe-Fix**: `cp_granted_this_phase`-Flag in `commandPhase.py`
+- **Subfaction Affinity UI**: `_render_protocol_ui()` — aktive Subfaction == Affinität → beide Direktiven aktiv
+- **AdMech Canticles YAML**: `faction_abilities.yaml` + `secondary` optional
 
 ---
 
@@ -84,7 +124,9 @@ Vorher Plan zeigen + Freigabe holen. Die Arbeit ist umfangreich:
 |---|---|
 | **`once_per_battle` enforcement** | Braucht `used_this_battle: set[str]` in Session-State + neuen Parameter in `stratagem_visibility()`. Wann implementieren? |
 | **Variable CP-Kosten** | Derzeit nur Kommentar im YAML. Optionen: (a) so lassen, (b) `cp_cost_max: int` Feld, (c) `cp_cost_condition: str` Feld + Logik |
-| **Reaktive GO UI** | `timing: phase_reactive` GOs sind korrekt markiert — aber UI zeigt sie gleich wie proaktive. Eigener UI-Bereich? Anderes Styling? |
+| **Reaktive GO UI** | `timing: phase_reactive` GOs sind korrekt markiert — aber UI zeigt sie gleich wie proaktive. In 6d-v2 erscheinen reaktive GOs des Verteidigers inline im Deklarations-Bereich. |
+| **Stratagem Reset-Button** | Aktivierte GOs brauchen einen Reset-Button. Vor Phase-End reversibel; danach fest im Log. Implementierung als Teil von 6d-v2. |
+| **Cover-Toggle** | Default "kein Cover". Light Cover (+1 save, Shooting), Dense Cover (−1 hit, Shooting), Heavy Cover (+1 save vs Melee, außer nach Charge). Alle drei als Dropdown im Save-Block. Display-only — App trackt nicht ob Terrain physisch vorliegt. |
 
 ---
 
@@ -137,27 +179,47 @@ Etablierte `effect.type`-Werte (aus Necrons + Orks Review):
 - Abilities: NIE auf Fraktionsnamen hardcoden — immer generisch via YAML/Keywords
 - `round_choice` für alle Fraktionen: `load_round_choice_abilities()` + `_render_protocol_ui()`
 
+### Attackensequenz-Design-Constraints (6d-v2, Stand 2026-06-04)
+- **Kein Input für Zwischenergebnisse** — keine Treffer-/Verwundungs-Eingabe. App zeigt Info, Spieler würfelt am Tisch.
+- **Granularität Fernkampf**: pro Modell-Waffe, nicht pro Waffentyp. 10 Warriors = 10 unabhängige Waffen.
+- **Überschuss-Schaden bei normalen Attacken verfällt** — bei nLP-Modellen deshalb getrennte Eingabe: Modelle + Wunden Frontmodell.
+- **Tödliche Verwundungen** tragen zwischen Modellen über — separater Counter immer sichtbar.
+- **RP-Würfel** = Summe LP-Charakteristik aller gefallenen Modelle (1LP-Warrior = 1 Würfel; 3LP-Skorpekh = 3 Würfel). Erfolg 5+.
+- **Pistol in Melee**: Einheiten im Nahkampf dürfen nur Pistolen abfeuern — alle anderen Waffen ausgeblendet.
+- **Zielansage vor Auflösung** (Regelkonform, 9E Core): alle Targets + Waffen deklarieren, dann erst Tabs starten.
+- **Waffe → Profil**: triviale Fälle (1 Waffe, 1 Profil) auto-selektiert; gesperrte Profile (z.B. Heavy Stationary) ausgegraut mit Grund.
+- **Scenario-JSON-Keys**: immer `p1_units` / `p2_units`, nicht fraktionsspezifische Namen.
+
 ---
 
-## Mittelfristige Roadmap (nach der Review)
+## Mittelfristige Roadmap
 
 | Schritt | Was | Status |
 |---------|-----|--------|
-| faction_abilities spot-check | Necrons + Orks faction_abilities.yaml | ⬜ |
-| 6g Restpunkt | set_log_players() in init_state() | ⬜ |
-| 6d — Attackensequenz simultan | combat.py + UI | ⬜ |
+| faction_abilities spot-check | Necrons + Orks faction_abilities.yaml | ✅ |
+| 6g Restpunkt | set_log_players() in init_state() | ✅ |
+| 6d — Attackensequenz simultan (alt) | combat.py + UI | ✅ |
+| **Pistol-Bug-Fix** | `can_shoot()` in Melee nur Pistolen erlauben | ✅ |
+| **Scenario-Mockups** | 4 neue JSON-Szenarien (Necrons↔Orks, Shooting+Fight) | ✅ |
+| **6d-v2 — Attackensequenz Overhaul** | Deklaration + Tabs + neue Blöcke (Wound-Tabelle, RP, Cover) | ⬜ P2 |
+| 6e — CP-Doppelvergabe-Fix | `cp_granted_this_phase`-Flag | ⬜ |
 | subfaction_affinity UI | Wenn aktive Subfaction == Affinität → beide Direktiven aktiv | ⬜ |
 | AdMech Canticles YAML | `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` | ⬜ |
 | T'au Mont'ka/Kauyon YAML | Runden-Fenster-Mechanik | ⬜ |
 | Auto-Progression Space Marines | Doctrines, neuer ability_type | ⬜ |
-| 6f — Ability-Badges unitCard | hängt von 6d ab | ⬜ |
-| 6e — CP-Doppelvergabe-Fix | `cp_granted_this_phase`-Flag | ⬜ |
+| 6f — Ability-Badges unitCard | hängt von 6d-v2 ab | ⬜ |
 | load_powers() verdrahten | Psychic Phase, Orks Weirdboy | ⬜ |
 | load_shared_abilities() verdrahten | Universalregeln im Engine | ⬜ |
 
 ---
 
 ## Historische Session-Notizen
+
+### 2026-06-04, Session 8 — Design-Session: Attackensequenz Overhaul
+Vollständiges Zielbild für 6d-v2 erarbeitet. Wichtigste Entscheidungen: kein Input für Zwischenergebnisse (nur Modellverluste + Tödliche Verwundungen); Deklarations-Phase (alle Targets + Waffen) vor Tab-Auflösung; Granularität Fernkampf = pro Modell-Waffe; Überschuss-Schaden verfällt bei normalen Attacken; RP-Würfel = Summe LP der gefallenen Modelle; Pistol-Bug identifiziert; Cover-Regeln verifiziert (Light/Dense/Heavy); Whirling Onslaught als Verteidigungs-GO inline im Deklarationsbereich. Bestehende Scenario-JSON-Infrastruktur gefunden und nutzbar.
+
+### 2026-06-04, Session 7 — Ziel 6d + 6g + faction_abilities Review
+faction_abilities Necrons + Orks geprüft — OK, keine Korrekturen. set_log_players in init_state. render_attack_form komplett neu: 2-Spalten simultanes Layout, 3 Pure-Functions (resolve_attack_modifiers/save/fnp), ignores_fnp-Feld, 28 neue Tests. 454 Tests grün.
 
 ### 2026-06-04, Session 6 — Datenqualitäts-Review (Teil 2, Abschluss Stratagems)
 Alle 59 Necron-GOs + 28 Ork-GOs vollständig: effect, once_per_battle, timing/event für reaktive GOs, player-Korrekturen. whirling_onslaught rule_text nachgetragen. 426 Tests grün.

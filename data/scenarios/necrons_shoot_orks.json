@@ -1,0 +1,27 @@
+{
+  "description": "Shooting Phase: Necrons active, Immortals (Tesla Carbines, 5 models) shoot at Ork Boyz (20 models). Tesla-badge visible on selection.",
+  "round": 1,
+  "phase_idx": 4,
+  "active": "Necrons α",
+  "phase_stage": "active",
+  "cp": {"Necrons α": 6, "Orks": 6},
+  "vp": {"Necrons α": 0, "Orks": 0},
+  "unit_patches": {
+    "p1_units": {
+      "wh40k_9e.necrons.unit.immortals": {
+        "in_melee": false,
+        "melee_with": [],
+        "models": 5,
+        "current_wounds": 5
+      }
+    },
+    "p2_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": false,
+        "melee_with": [],
+        "models": 20,
+        "current_wounds": 20
+      }
+    }
+  }
+}

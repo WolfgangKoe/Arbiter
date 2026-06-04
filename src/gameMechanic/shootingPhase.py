@@ -24,6 +24,10 @@ def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
     if unit_state.get("in_melee"):
         if unit is not None and (unit.has_keyword("VEHICLE") or unit.has_keyword("MONSTER")):
             return True
+        if unit is not None and any(
+            p.weapon_type.startswith("Pistol") for w in unit.weapons for p in w.profiles
+        ):
+            return True
         return False
     return True
 
@@ -91,12 +95,21 @@ def _active_shooting(
         elif flags.get("retreated"):
             st.warning("Retreated this turn — cannot shoot.")
         elif unit_state.get("in_melee"):
-            st.warning("Bound in melee — cannot shoot.")
+            st.warning("Bound in melee — no Pistol weapons to fire.")
         else:
             st.warning("In reserve — cannot shoot.")
         return
 
-    ranged = [w for w in unit.weapons if any(not p.is_melee for p in w.profiles)]
+    in_melee = unit_state.get("in_melee", False)
+    if in_melee:
+        ranged = [
+            w
+            for w in unit.weapons
+            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
+        ]
+        st.info("Engaged in melee — Pistol weapons only.")
+    else:
+        ranged = [w for w in unit.weapons if any(not p.is_melee for p in w.profiles)]
     if ranged:
         models_alive = unit_state.get("models", unit.models_max)
         per_model_wounds = unit_state["current_wounds"] // max(1, models_alive)
@@ -157,6 +170,7 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
                 def_unit,
                 use_melee=False,
                 phase_key="shooting",
+                in_melee=atk_state.get("in_melee", False),
             )
             return
     st.info(PHASE_RULES["shooting"])

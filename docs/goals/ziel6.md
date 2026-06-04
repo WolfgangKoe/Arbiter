@@ -13,7 +13,8 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6a** ✅ | gameHeader Redesign | – |
 | **6b** ✅ | armyCard — generisches Fähigkeitssystem | – |
 | **6c** ✅ | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
-| **6d** | Attackensequenz — neue simultane Darstellung | 6b, 6c |
+| **6d** ✅ | Attackensequenz — simultane Darstellung (Basis-Implementation) | 6b, 6c |
+| **6d-v2** 🔵 | Attackensequenz — vollständiges UI-Redesign (Design abgestimmt) | 6d |
 | **6e** ✅ (teilw.) | Fähigkeiten-Integration — Command Protocols verdrahtet | 6b |
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
 | **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
@@ -101,39 +102,20 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 **Ziel:** Treffer-, Verwundungs-, Rettungswurf, FNP und Schaden werden **gleichzeitig** angezeigt. Kein schrittweises Klicken. Modifikatoren aus Fähigkeiten, Ausrüstung und Stratagems werden transparent aufgelistet.
 
-### Layout-Spec
+### Implementierter Zustand (superseded by 6d-v2)
+
+> Das folgende Diagramm beschreibt den ursprünglichen Plan, der in `render_attack_form()` umgesetzt wurde. Es ist nicht mehr das Zielbild — das vollständige Redesign ist in **6d-v2** specifiziert.
 
 ```
-gameDisplayArea (oben, full width)
-──────────────────────────────────────────────────────────────
-  [Angreifer] SPACE MARINES INTERCESSOR → [Ziel] ORK BOY
-  Bolter [Rapid Fire]  |  A2 · S4 · AP-1 · D1
-
-AngreiferPlayerArea (links)        
-─────────────────────────────────   
-TREFFER                             
-  [ 3+ ]  BS 3+                       
-  −1  Heavy (nicht bewegt)           
-  → 4+
-  [Reroll 1s — Protokoll] 0 CP ▶     
-                                     
-VERWUNDUNG                              
-  [ 5+ ]  S4 vs T5
-  +1  [Lethal Hits — Stratagem] 1 CP 
-
-
-                                    VerteidigenPlayerArea (rechts nach unten versetzt)
-                                    ──────────────────────────────
-                                    RÜSTUNGSWURF/RETTUNGSWURF
-                                    [ 5+ ]  Sv 4+ / AP-1
-                                     → 5+
-                                    FEEL NO PAIN  (falls vorhanden)
-                                    [ 5+ ]  FNP 5+
-                                    ~~FNP~~  Nightbringer: ignored
-                                     ▶ SCHADEN  → 4+ D1  pro Treffer
-                                        [ Schaden: 0 ] [+] [−]
-                                        [ Mortal: 0  ] [+] [−]
-                                   
+Angreifer (links):          Verteidiger (rechts):
+──────────────────          ───────────────────────
+TREFFER  BS 3+              RÜSTUNGSWURF/RETTUNGSWURF
+  Modifier-Stack              Sv + AP → effektiv
+  → modifizierter Wert      FEEL NO PAIN (falls vorhanden)
+                            SCHADEN-Input + Mortal-Input
+VERWUNDUNG  S vs T          [Apply-Button]
+  Modifier-Stack
+  → modifizierter Wert
 ```
 
 ### Regeln
@@ -156,6 +138,158 @@ VERWUNDUNG
 - [x] `gameObjects/loader.py`: `ignores_fnp` aus YAML parsen
 - [x] `tests/test_combat_6d.py`: 28 Tests für die 3 neuen Funktionen
 - [ ] Prüfen: Shootingphase, Fightphase, Overwatch in Chargephase — alle drei Kontexte korrekt (Overwatch: kein chargePhase.py vorhanden — separater Task)
+
+---
+
+---
+
+## 6d-v2 — Attackensequenz — vollständiges UI-Redesign
+
+**Ziel:** Die `gameActionArea` wird während einer Attackenabhandlung vollständig übernommen. Alle relevanten Würfelwurf-Informationen werden kontextuell angezeigt — ohne dass Zwischenergebnisse (Treffer, Verwundungen) eingegeben werden müssen. Nur Modellverluste und tödliche Verwundungen werden am Ende eingegeben.
+
+**Voraussetzung:** Ziel 6d (Basis-Implementation) abgeschlossen ✅
+
+### Bekannte Bugs (mit 6d-v2 zu beheben)
+
+- [ ] **Pistol in Melee**: `can_shoot()` in `shootingPhase.py` — Einheiten im Nahkampf dürfen nur Pistolen abfeuern; alle anderen Waffen müssen ausgeblendet werden. Aktuell werden alle geblockt.
+
+### Scenario-Mockups (Testhilfe, unabhängig implementierbar)
+
+Infrastruktur bereits vorhanden: `data/scenarios/`, `?scenario=<name>` URL-Parameter, `scenarios.py`.
+
+- [x] `data/scenarios/necrons_shoot_orks.json` — Shooting Phase, Necrons aktiv: Immortals (Tesla Carbines, 5 Modelle) → Ork Boyz (20 Modelle). Selected Unit + Target vorgesetzt. Tesla-Badge sichtbar.
+- [x] `data/scenarios/orks_fight_necrons.json` — Fight Phase, Orks aktiv: Boyz (20M) im Nahkampf mit Warriors (10M) + Skorpekh Destroyers (3M, 9LP). Whirling Onslaught aktivierbar (Necron reaktive GO). RP nach Apply relevant.
+- [x] `data/scenarios/orks_shoot_necrons.json` — Shooting Phase, Orks aktiv: Boyz mit Sluggas (Pistol 1) → Warriors (einige im Nahkampf → Pistol-Bug sichtbar). CP: Orks 6, Necrons 6.
+- [x] `data/scenarios/necrons_fight_orks.json` — Fight Phase, Necrons aktiv: Skorpekh Destroyers (CHARGED) → Boyz. Warriors daneben im Nahkampf (RP relevant nach Verlustanzeige).
+
+**Wichtig:** Keys immer `p1_units` / `p2_units`. Roster: `necrons_alpha.yaml` (p1) + `orks.yaml` (p2). Bestehende Szenarien (`necron_units`-Key) sind fehlerhaft — nicht als Vorlage nutzen.
+
+### Layout-Spec
+
+Die `gameActionArea` wechselt in zwei Phasen:
+
+**Phase 1 — Deklaration**
+```
+[Angreifer: Intercessors]  →  [+ Ziel hinzufügen ▾]
+
+  ┌─ Ork Boyz ─────────────────────────────────────┐
+  │  Waffe: [◉ Bolt Rifle]  [○ Bolt Pistol]        │
+  │  Profil: [◉ Standard]  (kein zweites Profil)   │
+  │  Modelle auf dieses Ziel: [8] [−][+]  → 8 att  │
+  │  [Verteidiger-Aktionen: GO aktivieren ▾]        │
+  └─────────────────────────────────────────────────┘
+  ┌─ Gretchin ──────────────────────────────────────┐
+  │  Waffe: [◉ Bolt Rifle]                         │
+  │  Modelle auf dieses Ziel: [2] [−][+]  → 2 att  │
+  └─────────────────────────────────────────────────┘
+  Verbleibend: 0 / 10 zugeteilt ✓
+
+  [Auflösung starten →]
+```
+
+Regeln:
+- Triviale Fälle (1 Waffe, 1 Profil) auto-selektiert
+- Gesperrte Profile ausgegraut mit Grund (`unit moved`, `stationary required`)
+- Pistolen hervorgehoben wenn Einheit `IN MELEE`; alle anderen Waffen ausgegraut
+- Reaktive GOs des Verteidigers erscheinen beim jeweiligen Ziel sobald es hinzugefügt wird
+- Rapid Fire: Info-Badge `[RAPID FIRE · ½ = 12"]` — kein Toggle, nur Display
+
+**Phase 2 — Auflösung (Tabs)**
+
+Ein Tab pro (Waffe × Zieleinheit). Reihenfolge frei wählbar, Tab lockt nach Apply.
+
+```
+╔══ Bolt Rifle → Ork Boyz (8 Attacken) ══════════╗
+║                                                  ║
+║  TREFFER  8 Würfel · BS 3+                       ║
+║  [HEAVY −1 · moved]  [Reroll 1s — 1CP aktivieren]║
+║  [Whirling Onslaught −1] (Gegner aktiviert)      ║
+║  → effektiv 3+  (max ±1)                        ║
+║                                                  ║
+║  VERWUNDUNG  S4  [S↑Proto +1]  vs  T5  [T↓—]   ║
+║  ╔═══════════════════════════════╗               ║
+║  ║  S ≥ 2T  →  2+               ║               ║
+║  ║  S > T   →  3+               ║               ║
+║  ║  S = T   →  4+               ║               ║
+║  ║▶ S < T   →  5+  ◀ [aktiv]   ║               ║
+║  ║  S ≤ ½T →  6+               ║               ║
+║  ╚═══════════════════════════════╝               ║
+║  Modifier: [Proto Wunde +1] → 4+                ║
+║                                                  ║
+║  SAVE  Sv 6+ / AP-1 → 7+ (immer misslingt)      ║
+║  INV 5+ [Nephrekh]  → 5+ ← optimal (highlight)  ║
+║  FNP —                                           ║
+║  Deckung: [Kein Cover ▾]                         ║
+║                                                  ║
+║  SCHADEN  D1 fix · Ziel: 1LP/Modell              ║
+║  Modelle verloren:        [ 0 ] [−][+]           ║
+║  Tödliche Verwundungen:   [ 0 ] [−][+]           ║
+║                                                  ║
+║  [⚔ Schaden anwenden]    [↺ Zurücksetzen]       ║
+╚══════════════════════════════════════════════════╝
+```
+
+Nach Apply → Tab zeigt Zusammenfassung + Reset-Button (bis Phase-End).
+
+**Necron RP-Block** (erscheint nach Apply wenn Necron-Einheit Verluste erlitten hat):
+```
+REANIMATION PROTOCOLS
+3 Warriors gefallen → 3 Würfel, Erfolg: 5+
+[Proto: Undying Legions — Reroll]  [Reanimator +1]
+Modelle zurück: [ 0 ] [−][+]
+[RP anwenden]  [↺]
+```
+
+### Damage-Block — Fallunterscheidung
+
+| Szenario | Eingabe |
+|---|---|
+| 1LP-Modelle, fester Schaden | `Modelle verloren [0][−][+]` |
+| 1LP-Modelle, var. Schaden (D3) | `Modelle verloren [0][−][+]` (Schaden ≥1 = immer tot) |
+| nLP-Modelle, fester Schaden | `Modelle verloren [0][−][+]` + `Wunden Frontmodell [0][−][+]` |
+| nLP-Modelle, var. Schaden | wie oben + Hinweistext "Würfle D3 pro missgl. Wurf" |
+| Tödliche Verwundungen | immer eigener Counter (Übertrag auf nächstes Modell ✓) |
+
+### Cover-Dropdown (im Save-Block)
+
+| Auswahl | Effekt | Phase |
+|---|---|---|
+| Kein Cover (default) | — | beide |
+| Light Cover | +1 auf Rettungswurf | Shooting |
+| Dense Cover | −1 auf Trefferwurf | Shooting |
+| Heavy Cover | +1 auf Rettungswurf vs. Nahkampf (außer nach Charge) | Fight |
+
+Invulnerable Saves sind von Cover nicht betroffen.
+
+### Tasks
+
+- [x] **Bug P0**: `can_shoot()` — Pistol in Melee erlauben, andere Waffen ausblenden
+- [x] Scenario-Mockups (4 JSON-Dateien, s.o.)
+- [ ] `uiLayout/_common.py`: `render_attack_form()` in `render_attack_declaration()` + `render_attack_resolution_tab()` aufteilen
+- [ ] `uiLayout/_common.py`: Deklarations-Phase — Ziel-Karten mit Modell-Counter + Waffenwahl + Profilwahl + Verteidiger-GO-Bereich
+- [ ] `uiLayout/_common.py`: Auflösungs-Tabs — Hit-Block (Badges, Modifier, max-±1-Hinweis)
+- [ ] `uiLayout/_common.py`: Wound-Tabelle (5 Zeilen, aktive Zeile highlight, Spalten für S-/T-/Wurf-Modifier)
+- [ ] `uiLayout/_common.py`: Save-Block (Rüstung / Invuln / FNP je eigene Zeile; Cover-Dropdown; optimal highlighted)
+- [ ] `uiLayout/_common.py`: Damage-Block (Fallunterscheidung 1LP/nLP/var; Modelle+Wunden-Counter)
+- [ ] `uiLayout/_common.py`: RP-Block nach Apply (nur Necron-Fraktion + Verluste > 0)
+- [ ] `uiLayout/_common.py`: Tab-Lock nach Apply + Reset-Button (bis Phase-End)
+- [ ] `gameMechanic/combat.py`: `apply_damage_attacks(n, dmg_each, uid, faction, unit)` — sequentielle Zuweisung mit Überschuss-Verlust für normale Attacken
+- [ ] Weapon-Abilities als Badges im Hit-Block: Tesla (`extra_hits` bei unmod. 6), Dakka, Power Klaw (−1 hit), Auto-Hit
+- [ ] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite
+- [ ] Shooting/Fight Phase Handler: `render_attack_form()` durch neue Funktion ersetzen
+- [ ] Tests für neuen Damage-Block + RP-Würfellogik
+
+### Akzeptanzkriterien 6d-v2
+
+- [ ] Kein Input für Treffer oder Verwundungen — nur Modellverluste + Tödliche Verwundungen
+- [ ] Wound-Tabelle zeigt aktive Zeile highlighted; Modifier als Badges sichtbar
+- [ ] Save-Block: Rüstung / Invuln / FNP getrennt; bester Save optisch hervorgehoben
+- [ ] Cover-Dropdown vorhanden (default: kein Cover)
+- [x] Pistolen in Melee: nur Pistolen anzeigbar, Rest ausgegraut
+- [ ] RP-Block erscheint nach Apply bei Necron-Einheiten mit Verlusten
+- [ ] Tabs locken nach Apply; Reset bis Phase-End möglich
+- [ ] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw) im Hit-Block
+- [x] Scenario-Mockups aufrufbar via `?scenario=necrons_shoot_orks` etc.
 
 ---
 
@@ -348,8 +482,8 @@ Effect-Typen (Vocabulary aus `ability.py`): `buff_roll`, `debuff_roll`, `mortal_
 - [x] `orks/stratagems.yaml`: wreckaz + careen behoben
 - [x] `necrons/stratagems.yaml`: alle 59 GOs vollständig — `effect`, `once_per_battle`, `timing/event` für reaktive GOs; `player` korrigiert bei quantum_deflection + shadows_of_drazak; `rule_text` bei whirling_onslaught nachgetragen
 - [x] `orks/stratagems.yaml`: alle 28 GOs vollständig — `effect`, `once_per_battle`, `timing/event`, `player` bei tough_as_squig_hide + orks_is_never_beaten korrigiert
-- [ ] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check
-- [ ] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check
+- [x] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
+- [x] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()`
 - [ ] Optional: Tests für korrekte Phase/Stage-Werte
 

@@ -379,6 +379,7 @@ def render_attack_form(
     def_unit: Unit,
     use_melee: bool,
     phase_key: str,
+    in_melee: bool = False,
 ) -> None:
     """Simultaneous attack breakdown: hit/wound (attacker) + save/FNP/damage (defender)."""
     from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
@@ -390,7 +391,14 @@ def render_attack_form(
     from gameMechanic.game_log import log_action  # noqa: PLC0415
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
-    weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
+    if in_melee and not use_melee:
+        weapons = [
+            w
+            for w in atk_unit.weapons
+            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
+        ]
+    else:
+        weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
     if not weapons:
         st.info("No melee weapons." if use_melee else "No ranged weapons.")
         return

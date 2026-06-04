@@ -1,0 +1,27 @@
+{
+  "description": "Shooting Phase: Orks active, Boyz in melee with Warriors — Pistol bug scenario. Boyz have Sluggas (Pistol 1) and should be allowed to fire only those. After fix: Pistol weapons only shown.",
+  "round": 2,
+  "phase_idx": 4,
+  "active": "Orks",
+  "phase_stage": "active",
+  "cp": {"Necrons α": 6, "Orks": 6},
+  "vp": {"Necrons α": 0, "Orks": 0},
+  "unit_patches": {
+    "p1_units": {
+      "wh40k_9e.necrons.unit.warriors": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "models": 10,
+        "current_wounds": 10
+      }
+    },
+    "p2_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": true,
+        "melee_with": [["Necrons α", "wh40k_9e.necrons.unit.warriors"]],
+        "models": 20,
+        "current_wounds": 20
+      }
+    }
+  }
+}

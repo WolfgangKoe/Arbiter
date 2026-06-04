@@ -1,0 +1,38 @@
+{
+  "description": "Fight Phase: Orks active, Boyz (20 models) in melee with Warriors (10 models) + Skorpekh Destroyers (3 models). Whirling Onslaught activatable (Necron reactive GO). RP relevant after Apply.",
+  "round": 2,
+  "phase_idx": 6,
+  "active": "Orks",
+  "phase_stage": "active",
+  "cp": {"Necrons α": 5, "Orks": 5},
+  "vp": {"Necrons α": 1, "Orks": 2},
+  "unit_patches": {
+    "p1_units": {
+      "wh40k_9e.necrons.unit.warriors": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "models": 10,
+        "current_wounds": 10,
+        "turn_flags": {"charged": false}
+      },
+      "wh40k_9e.necrons.unit.skorpekh_destroyers": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "models": 3,
+        "current_wounds": 9,
+        "turn_flags": {"charged": false}
+      }
+    },
+    "p2_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": true,
+        "melee_with": [
+          ["Necrons α", "wh40k_9e.necrons.unit.warriors"],
+          ["Necrons α", "wh40k_9e.necrons.unit.skorpekh_destroyers"]
+        ],
+        "models": 20,
+        "current_wounds": 20
+      }
+    }
+  }
+}

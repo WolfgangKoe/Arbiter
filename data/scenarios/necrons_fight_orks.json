@@ -1,0 +1,38 @@
+{
+  "description": "Fight Phase: Necrons active, Skorpekh Destroyers (CHARGED, 3 models) attack Ork Boyz. Warriors also in melee (RP relevant after losses).",
+  "round": 1,
+  "phase_idx": 6,
+  "active": "Necrons α",
+  "phase_stage": "active",
+  "cp": {"Necrons α": 6, "Orks": 6},
+  "vp": {"Necrons α": 0, "Orks": 0},
+  "unit_patches": {
+    "p1_units": {
+      "wh40k_9e.necrons.unit.skorpekh_destroyers": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "models": 3,
+        "current_wounds": 9,
+        "turn_flags": {"charged": true}
+      },
+      "wh40k_9e.necrons.unit.warriors": {
+        "in_melee": true,
+        "melee_with": [["Orks", "wh40k_9e.orks.unit.boyz"]],
+        "models": 10,
+        "current_wounds": 10,
+        "turn_flags": {"charged": false}
+      }
+    },
+    "p2_units": {
+      "wh40k_9e.orks.unit.boyz": {
+        "in_melee": true,
+        "melee_with": [
+          ["Necrons α", "wh40k_9e.necrons.unit.skorpekh_destroyers"],
+          ["Necrons α", "wh40k_9e.necrons.unit.warriors"]
+        ],
+        "models": 20,
+        "current_wounds": 20
+      }
+    }
+  }
+}
