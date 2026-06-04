@@ -20,9 +20,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import PHASES, next_phase, swap_players
+from gameMechanic.game_state import PHASES, faction_dir_for, next_phase, swap_players
 from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
-from gameObjects.loader import get_abilities_for_unit
+from gameObjects.loader import get_abilities_for_unit, load_round_choice_abilities
 from uiLayout._common import lookup
 
 # ---------------------------------------------------------------------------
@@ -89,6 +89,43 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             st.caption(f"**{ab.name_en}:** {ab.rule_text}")
 
 
+def _render_protocol_assignment(faction: str) -> None:
+    """Assign Command Protocols to rounds 2-5 before the battle. Round 1 is always Eternal Guardian."""
+    protocols = load_round_choice_abilities(faction_dir_for(faction))
+    if not protocols:
+        return
+
+    assignable = [p for p in protocols if not p.auto_round_1]
+    auto = next((p for p in protocols if p.auto_round_1), None)
+
+    st.divider()
+    st.markdown(f"**{faction} — Command Protocol Order**")
+    if auto:
+        st.caption(f"Round 1: **{auto.name_de}** *(fixed by rule)*")
+
+    assignments: dict = st.session_state.get("protocol_assignments", {})
+    faction_assignments: dict = dict(assignments.get(faction, {}))
+
+    for round_num in range(2, 6):
+        already_taken = {v for k, v in faction_assignments.items() if k != round_num}
+        available = [p for p in assignable if p.id not in already_taken]
+        if not available:
+            continue
+        current_id = faction_assignments.get(round_num, available[0].id)
+        current_idx = next((i for i, p in enumerate(available) if p.id == current_id), 0)
+        chosen_idx = st.selectbox(
+            f"Round {round_num}",
+            options=range(len(available)),
+            format_func=lambda i, av=available: av[i].name_de,
+            index=current_idx,
+            key=f"proto_assign_{faction}_{round_num}",
+        )
+        faction_assignments[round_num] = available[chosen_idx].id
+
+    assignments[faction] = faction_assignments
+    st.session_state.protocol_assignments = assignments
+
+
 def _render_setup() -> None:
     """Render the setup phase — displayArea first, then player actions below."""
     # Use the original slot order (never swapped) so buttons stay fixed.
@@ -143,6 +180,9 @@ def _render_setup() -> None:
             st.session_state.active = st.session_state.first_player
             st.rerun()
     st.caption(f"Currently selected: **{st.session_state.first_player}** goes first.")
+
+    for faction in (slot_a, slot_b):
+        _render_protocol_assignment(faction)
 
     st.divider()
     if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):

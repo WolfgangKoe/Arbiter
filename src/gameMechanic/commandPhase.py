@@ -202,50 +202,36 @@ def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignor
         return
 
     st.divider()
-    st.markdown("**Kommandoprotokolle**")
+    st.markdown("**Command Protocols**")
 
-    active_id = st.session_state.get("active_protocol_id")
-    used_ids = st.session_state.get("used_protocol_ids", [])
     current_round = state.get("round", 1)
 
+    # Determine active protocol: Round 1 = Eternal Guardian (fixed by rule),
+    # Rounds 2-5 = player assignment from Setup.
     if current_round == 1:
-        auto_protocol = next((p for p in protocols if p.auto_round_1), None)
-        if auto_protocol:
-            st.caption(f"{auto_protocol.name_de} — automatisch aktiv (Runde 1)")
-            st.caption(f"Direktive 1: {auto_protocol.primary}")
-            st.caption(f"Direktive 2: {auto_protocol.secondary}")
-            return
+        protocol = next((p for p in protocols if p.auto_round_1), None)
+    else:
+        assignments: dict = st.session_state.get("protocol_assignments", {}).get(faction, {})
+        assigned_id = assignments.get(current_round)
+        protocol = next((p for p in protocols if p.id == assigned_id), None)
 
-    if active_id:
-        p = next((p for p in protocols if p.id == active_id), None)
-        if p:
-            st.caption(f"{p.name_de} — aktiv diese Runde")
-            st.caption(f"Direktive 1: {p.primary}")
-            st.caption(f"Direktive 2: {p.secondary}")
+    if not protocol:
+        st.caption("No protocol assigned — set order in Setup before the battle.")
         return
 
-    available = [p for p in protocols if p.id not in used_ids]
-    if not available:
-        st.caption("Alle Protokolle wurden bereits eingesetzt.")
-        return
+    st.session_state.active_protocol_id = protocol.id
+    st.caption(f"**{protocol.name_de}**")
+    st.caption(f"Primary: {protocol.primary}")
+    st.caption(f"Secondary: {protocol.secondary}")
 
-    choice = st.radio(
-        "Protokoll wählen:",
-        options=range(len(available)),
-        format_func=lambda i: available[i].name_de,
-        key="cmd_protocol_choice",
+    directive = st.radio(
+        "Active directive:",
+        options=["primary", "secondary"],
+        format_func=lambda d: "Primary" if d == "primary" else "Secondary",
+        key=f"protocol_directive_r{current_round}",
+        horizontal=True,
     )
-    if st.button(
-        "Protokoll aktivieren",
-        key="cmd_protocol_activate",
-        type="primary",
-        use_container_width=True,
-    ):
-        chosen = available[choice]
-        st.session_state.active_protocol_id = chosen.id
-        st.session_state.used_protocol_ids = used_ids + [chosen.id]
-        log_action(state["round"], "command", faction, f"Protocol: {chosen.name_de}")
-        st.rerun()
+    st.session_state.active_directive = directive
 
 
 # ---------------------------------------------------------------------------
@@ -304,6 +290,7 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
+    _render_command_protocols(faction, state)
 
     # Render activated command-phase abilities for the selected unit (any faction)
     if sel and sel[0] == faction:
