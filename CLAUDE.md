@@ -1,146 +1,67 @@
-# CLAUDE.md — Workflow & Core Principles
+# CLAUDE.md — Arbiter Workflow
 
-## Workflow Orchestration
+## Projekt-Kontext
 
-### Plan Mode Default
-- Enter plan mode for **ANY** non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, **STOP** and re-plan immediately
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
+**Arbiter** ist ein Streamlit-basierter Spielbegleiter für Warhammer 40.000 9. Edition.
 
-### Freigabe vor Umsetzung (PFLICHT)
-- **Niemals Code schreiben oder Dateien bearbeiten ohne vorherige explizite Freigabe durch den Nutzer**
+- Start: `streamlit run src/app.py` (Port 8501)
+- Datenebene: YAML unter `data/wh40k_9e/<fraktion>/` — Loader ist `gameObjects/loader.py`
+- Rosters: `data/rosters/` (YAML, werden beim Start geladen)
+- Branch: `dev` (aktiv), `main` (nur per PR, alle Tests grün)
+
+---
+
+## Workflow-Regeln (PFLICHT)
+
+### Freigabe vor Umsetzung
+- **Niemals Code schreiben oder Dateien bearbeiten ohne vorherige explizite Freigabe**
 - Vor jeder Umsetzung: Plan beschreiben + **alle betroffenen Dateien auflisten**
 - Warten bis der Nutzer explizit zustimmt (z.B. „ja", „mach es", „ok")
-- Ausnahme: Der Nutzer gibt explizit „freien Lauf" für mehrere Schritte — dann darf ohne Einzelfreigabe implementiert werden
-- Auch bei kleinen, offensichtlichen Änderungen gilt diese Regel
+- Ausnahme: expliziter „freier Lauf" für mehrere Schritte
 
-### Bei Unklarheiten IMMER zuerst fragen (PFLICHT)
+### Bei Unklarheiten IMMER zuerst fragen
 - Wenn eine Anforderung mehrdeutig ist — **STOP, Frage stellen, auf Antwort warten**
-- Besonders kritisch bei: „X entfernen und nach Y verlagern" — ist X danach noch irgendwo? Welche Variante bleibt?
-- Besonders kritisch bei: Scope-Fragen — gilt eine Regel für alle Fraktionen oder nur für eine bestimmte?
-- **Konkrete Beispiel-Falle:** Spec sagt „Necron-Check entfernen" → das heißt NICHT „für alle Fraktionen öffnen", sondern: Necron-Logik bleibt Necron-only, nur der *Ort* des Aufrufs ändert sich
-- Lieber einmal zu viel gefragt als eine falsche Annahme implementiert
+- Kritisch bei: Scope-Fragen, „X entfernen und nach Y verlagern", Fraktion vs. global
+- **Falle:** „Necron-Check entfernen" ≠ „für alle Fraktionen öffnen" — nur der *Ort* des Aufrufs ändert sich, nicht die Logik
 
-### Subagent Strategy
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- For complex problems, throw more compute at it via subagents
-- One task per agent for focused execution
+### Session-Workflow
+1. **Session-Start:** `next_session.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
+2. **Plan zeigen** → Freigabe einholen → Implementieren
+3. **Session-Ende:** `next_session.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
+4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken
 
-### Self-Improvement Loop
-- Use the established MCP memory to internalize user corrections and patterns
-- Prevent the same mistake by referencing past session data
-- Ruthlessly iterate on execution until mistake rate drops
+**Kritisch beim `next_session.md`-Update:** Datei ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen.
 
-### Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: *"Would a staff engineer approve this?"*
-- Run tests, check logs, demonstrate correctness
-
-### Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask *"is there a more elegant way?"*
-- If a fix feels hacky: *"Knowing everything I know now, implement the elegant solution"*
-- Skip this for simple, obvious fixes — don't over-engineer
-- Challenge your own work before presenting it
-
-### Autonomous Bug Fixing
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests — then resolve them
-- Zero context switching required from the user
-- Go fix failing CI tests without being told how
-
-### Task Management
-
-| Step | Action |
-|------|--------|
-| **Plan First** | Write plan to `.claude/tasks/todo.md` with checkable items |
-| **Verify Plan** | Check in before starting implementation |
-| **Track Progress** | Mark items complete as you go |
-| **Explain Changes** | High-level summary at each step |
-| **Document Results** | Add review section to `.claude/tasks/todo.md` |
-
-### Branch-Strategie
-- **`main`** — stabiler Stand, nur per Pull Request von `dev`
-- **`dev`** — aktiver Entwicklungszweig, hier wird gearbeitet
-- Neue Features immer auf `dev` entwickeln
-- Kein direktes Committen auf `main`
-- Merge nach `main` nur wenn alle Tests grün sind
-
-### Session-Wechsel
-- Bevor eine Session geclearet wird: **immer** `.claude/tasks/next_session.md` schreiben
-- Inhalt: aktueller Stand, was zuletzt gemacht wurde, nächster konkreter Schritt, offene Designfragen
-- Die Datei ist der Startprompt für die nächste Session — vollständig und selbsterklärend
-- **Kritisch:** Datei ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions (CSS-Selektoren, Constraints, Lücken) dürfen nicht verloren gehen.
-- Nach dem Schreiben den Pfad nennen, damit der Nutzer ihn kopieren kann
-
-### Commit-Erinnerungen
-- Nach jeder abgeschlossenen, in sich sinnvollen Änderung aktiv auf einen Commit-Punkt hinweisen
-- Gute Commit-Punkte: neue Feature fertiggestellt, Bug behoben, Refactoring abgeschlossen, Konfiguration geändert
-- Commit-Nachricht: kurz, imperativ, auf Englisch (`Add shooting phase UI`, `Fix slider crash for single-model units`)
+### Commit-Punkte
+- Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen
+- Nachricht: kurz, imperativ, Englisch (`Add shooting phase UI`, `Fix slider crash`)
 - Kein Commit mitten in einer halbfertigen Änderung
 
 ---
 
 ## Clean Code
 
-### Lesbarkeit
-- Bedeutungsvolle Namen für Variablen, Funktionen und Klassen — der Name erklärt das *Was*, ein Kommentar höchstens das *Warum*
-- Funktionen tun **genau eine Sache** (Single Responsibility Principle)
-- Keine magischen Zahlen oder Strings — stattdessen benannte Konstanten (`MAX_CHARGE_DISTANCE = 12`)
+- Bedeutungsvolle Namen — Name erklärt *Was*, Kommentar höchstens das *Warum*
+- Funktionen tun **genau eine Sache**; keine magischen Zahlen/Strings
 - Kein tiefes Verschachteln — Early Returns bevorzugen
-- DRY: Wiederholungen → Abstraktion; aber erst ab der **dritten** Wiederholung
-- Boy Scout Rule: Code sauberer hinterlassen als vorgefunden
-
-### Typsicherheit & Stil
-- **Type Hints** überall (`def roll(n: int) -> list[int]`)
-- `mypy` für statische Typprüfung
-- Formatter: `black` + `isort` (nicht diskutieren, automatisch durchsetzen)
-- Linter: `ruff` (ersetzt flake8/pylint)
-
-### Automatisierung
-- **Pre-commit Hooks**: Formatter, Linter und Typprüfung laufen vor jedem Commit
-- **CI/CD**: alle Tests und Qualitätschecks bei jedem Push automatisch
-- Kein Merge ohne grüne Pipeline
+- DRY: erst ab der **dritten** Wiederholung abstrahieren
+- **Type Hints** überall; Formatter: `black` + `isort`; Linter: `ruff`
 
 ---
 
 ## Testing
 
-### Teststrategie
-
-| Testart | Zweck | Anteil |
-|---------|-------|--------|
-| **Unit-Tests** | Einzelne Funktionen/Klassen isoliert | ~70 % |
-| **Integrations-Tests** | Zusammenspiel mehrerer Komponenten | ~20 % |
-| **E2E-Tests** | Vollständiger Benutzerfluss | ~10 % |
-
-### Regeln
-- **Coverage-Schwelle: 80 %** — darunter wird der Build rot
-- **Keine geteilten Zustände** zwischen Tests — jeder Test ist vollständig isoliert
-- **Testnamen beschreiben Verhalten**, nicht Implementierung:
-  `test_overlord_resurrection_orb_heals_destroyed_warrior` ✓ — `test_orb` ✗
-- **Regression-Tests**: Jeder Bugfix bekommt einen Test, der genau diesen Bug abdeckt
-- **Mocking-Strategie**: Externe Abhängigkeiten (DB, API, Dateisystem) werden gemockt — interne Logik nicht
-- **Performance-Tests**: dort wo Skalierung relevant ist (z.B. Massenberechnungen)
-
-### Pflicht bei Flask-Erweiterungen
-- **Jede** neue Route, jedes neue Domain-Modell und jede neue Service-Funktion bekommt sofort Tests
-- Eine Erweiterung der Flask-App gilt erst als fertig, wenn die zugehörigen Tests grün sind
-- Struktur: `tests/domain/` für Modelle & Services, `tests/adapters/web/` für Routen
-
-### Ablauf
-1. Test schreiben (TDD bevorzugt, aber nicht erzwungen)
-2. Test rot laufen lassen
-3. Minimale Implementierung, die den Test grün macht
-4. Refactoren — Test bleibt grün
+- Coverage-Schwelle: **80 %** — darunter wird der Build rot
+- Keine geteilten Zustände zwischen Tests — jeder Test vollständig isoliert
+- Testnamen beschreiben Verhalten: `test_overlord_resurrection_orb_heals_destroyed_warrior` ✓
+- Jeder Bugfix bekommt einen Regressionstest
+- **Streamlit-UI kann nicht automatisch getestet werden** — wenn UI geändert wird, explizit nennen was manuell verifiziert werden muss; nie behaupten ein UI-Feature sei fertig ohne manuelle Prüfung
 
 ---
 
 ## Streamlit CSS — Bekannte Selektoren (Streamlit 1.57)
 
-Vor dem Schreiben von CSS-Overrides immer JS-Source prüfen — Emotion-Klassen und testids ändern sich zwischen Streamlit-Versionen:
+Vor CSS-Overrides immer JS-Source prüfen:
 ```bash
 find .venv -name "*.js" | xargs grep -l "<Komponentenname>" | head -3
 # dann im Minified-JS nach data-testid suchen
@@ -160,7 +81,7 @@ find .venv -name "*.js" | xargs grep -l "<Komponentenname>" | head -3
 
 | Principle | Description |
 |-----------|-------------|
-| **Simplicity First** | Make every change as simple as possible. Impact minimal code. |
+| **Simplicity First** | Make every change as simple as possible. Minimal code impact. |
 | **No Laziness** | Find root causes. No temporary fixes. Senior developer standards. |
 | **Minimal Impact** | Only touch what's necessary. No side effects with new bugs. |
-| **No Placeholders — Ever** | Never write `...`, `TODO`, `<value>`, or any placeholder in config files, snippets, or any file the user will deploy or paste directly. Always write the complete, real value. A placeholder in a config file is a production incident waiting to happen. |
+| **No Placeholders — Ever** | Never write `...`, `TODO`, `<value>`, or any placeholder in deployed files. |

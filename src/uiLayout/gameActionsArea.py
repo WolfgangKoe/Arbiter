@@ -232,42 +232,6 @@ def _render_vp_scoring() -> None:
         st.caption("(inactive — no scoring)")
 
 
-def _render_stratagem_hints() -> None:
-    """Show available active-player stratagems for the current phase as compact hints."""
-    active_faction = st.session_state.get("active", "")
-    if not active_faction:
-        return
-    phase_idx = st.session_state.get("phase_idx", 0)
-    current_phase = PHASES[phase_idx][1]
-    current_stage = st.session_state.get("phase_stage", "active")
-    used_ids: set[str] = st.session_state.get("used_stratagem_ids", set())
-    cp_active = (st.session_state.get("cp") or {}).get(active_faction, 0)
-
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
-    from gameObjects.loader import load_stratagems  # noqa: PLC0415
-    from gameObjects.stratagem import stratagem_visibility  # noqa: PLC0415
-
-    try:
-        stratagems = load_stratagems(faction_dir_for(active_faction))
-    except Exception:
-        return
-
-    hints = [
-        s
-        for s in stratagems
-        if s.player != "inactive"
-        and stratagem_visibility(s, cp_active, current_phase, current_stage, used_ids, True)
-        != "hidden"
-    ]
-    if not hints:
-        return
-
-    with st.expander(f"⚔️ Stratagems this phase ({len(hints)})", expanded=False):
-        for s in hints:
-            used_mark = " *(used)*" if s.id in used_ids else ""
-            st.caption(f"**{s.name_en}** · {s.cp_cost} CP{used_mark}")
-
-
 def render_game_actions_area() -> None:
     phase_key = PHASES[st.session_state.phase_idx][1]
 
@@ -277,9 +241,6 @@ def render_game_actions_area() -> None:
 
     # displayArea first: VP scoring buttons appear at top when active
     _render_vp_scoring()
-
-    # Stratagem hints for current phase (active player, compact, no buttons)
-    _render_stratagem_hints()
 
     # PlayerAreas below: phase-specific actions delegated to phase_runner
     from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
