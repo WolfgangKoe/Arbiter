@@ -103,6 +103,163 @@ abilities:
       target: selected_unit
       amount: D6_per_wound
 
+  # ── The Silent King ────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.my_will_be_done
+    name_en: My Will Be Done
+    badge_label: MWBD
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "In your Command phase, you can select one friendly NECRONS CORE or TRIARCH PRAETORIANS unit within 9\" of Szarekh. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll. Each unit can only be selected for this ability once per phase. Phaeron: this model can use this ability one additional time per turn."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 9
+    effect:
+      type: buff_roll
+      target: selected_unit
+      stat: hit_roll
+      modifier: 1
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.voice_of_the_triarch
+    name_en: Voice of the Triarch
+    badge_label: VOICE
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "Once per battle, at the start of any battle round, if Szarekh is on the battlefield he can alter your command protocols. One command protocol that was not assigned to any battle round becomes active for that battle round instead of the one assigned to it."
+    trigger:
+      timing: round_start
+      phase: command
+      stage: start
+      player: active
+    conditions: []
+    effect:
+      type: alter_command_protocol
+      target: self
+      handler: voiceOfTheTriarch
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.phaeron_of_the_stars
+    name_en: Phaeron of the Stars
+    badge_label: "PHR★"
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "Aura: while a friendly NECRONS CORE unit or TRIARCH PRAETORIANS unit is within 6\" of Szarekh, each time a ranged attack is made by a model in that unit, you can re-roll the hit roll. Lost when Szarekh has 8 or fewer wounds remaining."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 6
+    effect:
+      type: reroll_hit
+      target: friendly_core_aura_6
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.phaeron_of_the_blades
+    name_en: Phaeron of the Blades
+    badge_label: "PHR⚔"
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "Aura: while a friendly NECRONS CORE unit or TRIARCH PRAETORIANS unit is within 6\" of Szarekh, each time a melee attack is made by a model in that unit, you can re-roll the wound roll. Lost when Szarekh has 4 or fewer wounds remaining."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 6
+    effect:
+      type: reroll_wound
+      target: friendly_core_aura_6
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.relentless_march
+    name_en: Relentless March
+    badge_label: MARCH
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "Aura: while a friendly NECRONS CORE or TRIARCH PRAETORIANS unit is within 6\" of Szarekh, each time that unit is selected to make a Normal Move or Advance, add 1\" to the Move characteristic of models in that unit until the end of the phase."
+    trigger:
+      timing: persistent
+      phase: movement
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 6
+    effect:
+      type: buff_stat
+      target: friendly_core_aura
+      stat: move
+      modifier: 1
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.noctilith_beacons
+    name_en: Noctilith Beacons
+    badge_label: NOCTI
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "In your opponent's Psychic phase, Szarekh can attempt to deny one psychic power as if he were a PSYKER."
+    trigger:
+      timing: phase_reactive
+      phase: psychic
+      stage: active
+      player: inactive
+      event: opponent_psychic_phase
+    conditions: []
+    effect:
+      type: deny_psychic
+      target: self
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.obeisance_generators
+    name_en: Obeisance Generators
+    badge_label: OBEIS
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "At the start of the Fight phase, if there are any enemy units within Engagement Range of Szarekh, those units cannot fight until after all other eligible units from your army have done so."
+    trigger:
+      timing: phase_start
+      phase: fight
+      stage: start
+      player: active
+    conditions:
+      - enemy_in_engagement_range: true
+    effect:
+      type: fight_last
+      target: enemy_in_engagement_range
+
+  - id: wh40k_9e.necrons.unit.the_silent_king.vengeance_of_the_enchained
+    name_en: Vengeance of the Enchained
+    badge_label: VENG
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.the_silent_king
+    rule_text: "When Szarekh is destroyed, roll one D6 before removing it from play. On a 4+, each unit within 2D6\" suffers D6 mortal wounds."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions:
+      - has_rules: [vengeanceOfTheEnchained]
+    effect:
+      type: mortal_wounds
+      target: units_within_2d6
+      amount: "D6"
+      roll_threshold: 4
+
   # ── Troops ────────────────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.unit.warriors.their_number_is_legion
