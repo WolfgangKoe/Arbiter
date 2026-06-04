@@ -17,10 +17,8 @@ from gameMechanic.ability_engine import check_conditions, execute_effect
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import PHASES, faction_dir_for, unit_id_from_state_key
 from gameObjects.ability import Ability
-from gameObjects.loader import load_command_protocols
+from gameObjects.loader import load_command_protocols, load_round_choice_label
 from gameObjects.unit import Unit
-
-_ETERNAL_GUARDIAN_ID = "wh40k_9e.necrons.protocol.eternal_guardian"
 
 
 def _faction_badge(text: str) -> str:
@@ -154,28 +152,33 @@ def _render_protocol_ui(faction: str) -> None:
     current_round = st.session_state.get("round", 1)
 
     st.divider()
-    st.caption("**Command Protocols**")
+    label = load_round_choice_label(faction_dir)
+    st.caption(f"**{label}**")
 
     active_directive: str | None = st.session_state.get("active_directive")
 
     if current_round == 1:
-        p = next((p for p in protocols if p.id == _ETERNAL_GUARDIAN_ID), None)
-        if p:
+        auto_protocol = next((p for p in protocols if p.auto_round_1), None)
+        if auto_protocol:
             if not active_id:
-                st.session_state.active_protocol_id = _ETERNAL_GUARDIAN_ID
-                active_id = _ETERNAL_GUARDIAN_ID
+                st.session_state.active_protocol_id = auto_protocol.id
+                active_id = auto_protocol.id
             if not active_directive:
-                st.caption(f"{p.name_en} — auto (Round 1)")
+                st.caption(f"{auto_protocol.name_en} — auto (Round 1)")
                 if is_active:
-                    _render_directive_buttons(p, faction, current_round)
+                    _render_directive_buttons(auto_protocol, faction, current_round)
                 else:
                     st.caption("↳ *Awaiting directive selection*")
             else:
-                badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
+                badge_text = f"{auto_protocol.name_en.upper()} — {active_directive.upper()}"
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-                chosen_text = p.primary if active_directive == "primary" else p.secondary
+                chosen_text = (
+                    auto_protocol.primary
+                    if active_directive == "primary"
+                    else auto_protocol.secondary
+                )
                 st.caption(f"↳ {chosen_text}")
-        return
+            return
 
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)

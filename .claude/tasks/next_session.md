@@ -31,181 +31,208 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 6e (teilw.) — Command Phase generic abilities | ✅ committed |
 | Ziel 6e (teilw.) — Command Protocols verdrahtet | ✅ committed |
 | Ziel 6g (teilw.) — Game Log Archiv + Setup-UI | ✅ committed |
-| **Ziel 6h — Custodes Ka'tah YAML + Loader-Fix** | ⬅ NÄCHSTER SCHRITT |
-| Ziel 6h — AdMech Canticles YAML | ⬜ |
-| Ziel 6h — Auto-Progression (Space Marines Doctrines) | ⬜ |
-| Ziel 6g — set_log_players() in init_state() | ⬜ klein |
-| Ziel 6d — Attackensequenz simultan | ⬜ |
-| Ziel 6f — Ability-Badges unitCard | ⬜ |
+| Ziel 6h — Architektur-Aufräum-Sprint | ✅ committed (2026-06-04) |
+| **6-Batch-Plan (diese Session geplant)** | ⬅ NÄCHSTER SCHRITT |
 
 ---
 
-## Was wurde zuletzt gemacht (2026-06-03, Session 2 — Bugfixes)
+## Was wurde zuletzt gemacht (2026-06-04 — Session 3: Planung)
 
-### Battle Log TypeError gefixt
-- `gameProtocoll._load_game_log()`: Log-Format-Mismatch nach Ziel-6g-Migration
-  — gab rohen `dict` zurück statt flacher `list[dict]`; Adapter eingefügt der
-  `rounds → phases → events` auf `{round, phase, unit, action}` flacht
+Diese Session war reine Forschung und Planung — **kein Code wurde geändert**.
 
-### Inaktiver Spieler konnte Protokoll aktivieren — gefixt
-- `armyCard._render_protocol_ui()`: `is_active`-Check fehlte; alle interaktiven
-  Elemente (Direktiven-Buttons, Radio, Aktivierungs-Button) nun nur noch für
-  den aktiven Spieler sichtbar. Inaktiver Spieler: read-only Status.
-- Regel bestätigt durch Wahapedia-Daten: "in your Command phase" = nur aktiver Spieler
+### Forschungsergebnisse
+
+#### Subfaction-Affinitäten — korrigiert durch Wahapedia-Verifikation
+
+**Necrons (4 von 6 waren falsch):**
+| Protocol ID | Alt (YAML) | Korrekt (Wahapedia) | Status |
+|---|---|---|---|
+| eternal_guardian | szarekhan | **nihilakh** | FALSCH |
+| hungry_void | mephrit | **novokh** | FALSCH |
+| conquering_tyrant | sautekh | sautekh | ✓ |
+| sudden_storm | nephrekh | nephrekh | ✓ |
+| undying_legions | novokh | **szarekhan** | FALSCH |
+| vengeful_stars | nihilakh | **mephrit** | FALSCH |
+
+**Adeptus Custodes (2 vertauscht + 1 ID-Rename):**
+| Ka'tah ID | Alt (YAML) | Korrekt (Wahapedia) | Status |
+|---|---|---|---|
+| calistus | emissaries_imperatus | **solar_watch** | FALSCH (swap) |
+| conservai | solar_watch | **emissaries_imperatus** | FALSCH (swap) |
+| dacatarai | dread_host | dread_host | ✓ |
+| salvus | aquilan_shield | aquilan_shield | ✓ |
+| rendax | wardens | **emperors_chosen** | ID-Rename |
+| kaptaris | shadowkeepers | shadowkeepers | ✓ |
+
+**Hinweis rendax:** Nur `adeptus_custodes/faction_abilities.yaml:101` enthält `subfaction_affinity: wardens` — das ist die einzige Stelle, die geändert werden muss.
+
+#### Core Rules Inventory (universal/shared)
+
+Bereits vorhanden in `data/wh40k_9e/universal/stratagems.yaml` (7 Core-Stratagems — vollständig):
+- command_re_roll, cut_them_down, desperate_breakout, emergency_disembarkation,
+  fire_overwatch, counter_offensive, insane_bravery
+
+In `data/wh40k_9e/_shared/shared_abilities.yaml` (4 Stubs — unvollständig):
+- objective_secured, deep_strike, fly, feel_no_pain
+
+**Noch fehlende Shared Abilities:**
+- big_guns_never_tire (VEHICLE/MONSTER keyword — kann in Engagement Range schießen; -1 to hit bei ER)
+- look_out_sir (CHARACTER ≤9W — kann nicht targetiert werden wenn ≥1 nicht-CHARACTER-Einheit in 3")
+- heroic_intervention (CHARACTER — kann in gegnerischer Charge Phase bis 3" auf Gegner zu bewegen)
+
+**Noch fehlende Shared Powers (neue Datei `_shared/shared_powers.yaml`):**
+- smite (warp charge 5, 18", D3 MW; 11+ → D6 MW; max 1 pro PSYKER + je +1 Warp Charge pro weiterer Smite derselben Armee)
+- deny_the_witch (Reaktion; PSYKER in 24"; 2D6 > Manifestierungs-Wert → Macht gescheitert)
+- perils_of_the_warp (Auto-Trigger; Doppel-1 oder Doppel-6; D3 MW auf Caster; alle Einheiten in 6" ebenfalls D3 MW)
+
+**Nicht 9E — nicht hinzufügen:** Lethal Hits, Sustained Hits, Devastating Wounds, Anti-[X], Lone Operative, Leader, Deadly Demise (alle 10E)
+
+**Detachment CP-Daten für `_shared/detachment_types.yaml`:**
+| Detachment | command_cost | command_benefit |
+|---|---|---|
+| patrol | 2 | 0 |
+| battalion | 0 | 3 |
+| brigade | 0 | 12 |
+| vanguard | 1 | 0 |
+| spearhead | 1 | 0 |
+| outrider | 1 | 0 |
+| air_wing | 1 | 0 |
+
+### Entscheidungen dieser Session
+
+| Thema | Entscheidung |
+|-------|-------------|
+| Powers-Datei | `powers.yaml` je Fraktion, `power_type: psychic \| deny \| ctan`, shared in `_shared/shared_powers.yaml` |
+| Folder-Merge | `universal/` und `_shared/` → vereinheitlicht in `_shared/` |
+| rendax Shield Host | ID `wardens` → `emperors_chosen` |
+| Alias | `load_command_protocols()` löschen, alle 4 Aufrufer auf `load_round_choice_abilities()` |
+| Ork ObjSec | → `unit_abilities.yaml` mit `not_has_keywords: [GRETCHIN]` |
+| Dokumentation | Neue Struktur: `docs/spec/data/` mit `schema.md`, `import_guide.md`, `_shared.md`, `factions/` |
 
 ---
 
-## Was wurde zuletzt gemacht (2026-06-03, Session 1)
+## ⬅ VOLLSTÄNDIGER IMPLEMENTIERUNGSPLAN (freigegeben)
 
-### WAAAGH! Datenfehler korrigiert
-- `orks/faction_abilities.yaml` + `unit_abilities.yaml`: `phase: charge` → `phase: command`
-  (WAAAGH! wird in der Befehlsphase ausgerufen, nicht in der Charge Phase — Wahapedia Screenshot bestätigt)
-- Betroffen: `waaagh_stage1`, `speedwaaagh_stage1`, `call_da_waaagh`, `call_da_speedwaaagh`, `great_waaagh`
+### Batch 0 — Folder-Merge `universal/` → `_shared/`
+**Dateien:**
+- `data/wh40k_9e/universal/stratagems.yaml` → `data/wh40k_9e/_shared/stratagems.yaml` (verschieben)
+- IDs in der Datei: `wh40k_9e.universal.stratagem.*` → `wh40k_9e.shared.stratagem.*`
+- `src/gameObjects/loader.py:327`: `"universal"` → `"_shared"` (in `load_stratagems()`)
+- `data/wh40k_9e/universal/` Verzeichnis löschen
+- Tests prüfen ob Stratagem-IDs referenziert sind
 
-### Generisches Fähigkeitssystem implementiert
+### Batch 1 — Datenkorrekturen YAML
+**Dateien:**
+- `data/wh40k_9e/necrons/faction_abilities.yaml` — 4 subfaction_affinity-Werte
+- `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml` — calistus↔conservai swap + rendax `wardens`→`emperors_chosen`
+- `data/wh40k_9e/orks/faction_abilities.yaml` — objective_secured entfernen
+- `data/wh40k_9e/orks/unit_abilities.yaml` — objective_secured hinzufügen (`not_has_keywords: [GRETCHIN]`, `shared_ref: wh40k_9e.shared.objective_secured`)
+- Bei Gelegenheit: FNP/Deep-Strike-Einträge in necrons/unit_abilities.yaml + orks/unit_abilities.yaml um `shared_ref`-Feld ergänzen
 
-**game_state.py:**
-- `waaagh_state: dict = {}` in `init_state()` (Format: `{player_name: {stage, round_activated}}`)
-- `_reset_turn_state()`: automatische Stage-1→2-Transition wenn `round_activated < current_round`
+### Batch 2 — Shared-Dateien ausbauen
+**Dateien:**
+- `data/wh40k_9e/_shared/shared_abilities.yaml` — big_guns_never_tire, look_out_sir, heroic_intervention ergänzen
+- `data/wh40k_9e/_shared/shared_powers.yaml` (NEU) — smite, deny_the_witch, perils_of_the_warp mit `power_type`-Enum
+- `data/wh40k_9e/_shared/detachment_types.yaml` — `command_cost` + `command_benefit` ergänzen (7 Einträge)
 
-**armyCard.py:**
-- `_active_ability_badge(text, color)`: HTML-Badge (amber für Protocols, grün für WAAAGH!)
-- `_render_protocol_ui()`: zeigt nach Direktiven-Wahl jetzt **HTML-Badge** statt st.caption
-- `_render_waaagh_ui(faction, faction_abilities, units)`: **generisch** — liest `ability_type: activated` + `trigger.phase: command` aus `faction_abilities`; zeigt Button wenn WARBOSS im Roster; Stage-Badge wenn aktiv
-- `render_army_card()`: ruft beide UIs auf — für Necrons: Protocols; für Orks: WAAAGH!; für andere: no-op (bis YAML-Daten angelegt)
-
-**_common.py `render_attack_form()`:**
-- Sourced Modifier-Labels: statt `"Protocol: +1 to hit"` → `"Hungry Void (Primary): +1 to hit"`
-- WAAAGH!-Effekte im Fight-Phase als Info-Text (display only, nicht in combat.py verdrahtet)
-
-**369 Tests — alle grün.**
-
-### Architektur-Dokumentation
-- `docs/spec/faction_abilities.md` — vollständige Spec aller 6 Fähigkeitskategorien
-- `data/wh40k_9e/_schema/round_choice.example.yaml` — Schema-Vorlage
-- `data/wh40k_9e/_schema/one_time.example.yaml` — Schema-Vorlage
-- `data/wh40k_9e/_schema/auto_progression.example.yaml` — Schema-Vorlage
-- `docs/goals/ziel6.md`: neues Teilziel 6h mit allen fehlenden Fraktionen
-
----
-
-## WICHTIGE ARCHITEKTUR-ERKENNTNIS (Wahapedia-Recherche 2026-06-03)
-
-### 6 Kategorien von Fraktionsfähigkeiten
-
-Die App muss für ALLE Fraktionen funktionieren. Lokale YAML-Dateien ≠ vollständige Daten.
-**Niemals nur lokale Dateien für Architekturentscheidungen befragen — immer Wahapedia prüfen!**
-
-| Kategorie | Fraktionen | Code-Pattern | Status |
-|-----------|-----------|-------------|--------|
-| Runden-Wahl | Necrons, **Custodes**, **AdMech**, **Tyranids** | `command_protocols.yaml` + `_render_protocol_ui()` | Code fertig, YAML fehlt |
-| Einmalig | Orks, **T'au** | `faction_abilities.yaml` (activated/command) + `_render_waaagh_ui()` | Orks fertig, T'au fehlt |
-| Auto-Progression | **Space Marines**, **Death Guard**, **Chaos SM** | `auto_progression` YAML + Info-Badge | Noch nicht implementiert |
-| Ressourcen | Thousand Sons, Aeldari | Eigenes System | Noch nicht geplant |
-| Verteilung | Astra Militarum | Orders-System | Noch nicht geplant |
-| Passiv | Alle (Dynastien, Klan-Kulturen) | triggered-Abilities | Abgedeckt |
-
-**Custodes Ka'tah = identische Struktur wie Necron Command Protocols!**
-6 Optionen × 2 Stances (Aggressive/Stoic = Primary/Secondary) — kein Code-Änderung nötig, nur YAML.
-
----
-
-## Konkrete nächste Schritte (priorisiert)
-
-### 1. Custodes Ka'tah YAML anlegen (⬅ JETZT STARTEN)
-
-Datei: `data/wh40k_9e/adeptus_custodes/command_protocols.yaml`
-Schema: identisch zu `data/wh40k_9e/necrons/command_protocols.yaml`
-Quelle: https://wahapedia.ru/wh40k9ed/factions/adeptus-custodes/
-
-Die 6 Ka'tahs (je mit Aggressive Stance = Primary, Stoic Stance = Secondary):
-1. **Calistus Ka'tah** — Aggressive: +D6" Advance / Stoic: gilt als stationär nach Bewegung
-2. **Conservai Ka'tah** — Aggressive: Aktionen während Advance/Fall Back / Stoic: Schießen während Aktionen
-3. **Dacatarai Ka'tah** — Aggressive: Pile-in/Consol -2" für Feind / Stoic: +1 Attacks (Dmg-1-Waffen)
-4. **Salvus Ka'tah** — Aggressive: Reichweite +4" / Stoic: 2× schießen (Auric-Waffen, stationär)
-5. **Rendax Ka'tah** — Aggressive: unmod. 6 = auto-wound vs VEHICLE/MONSTER / Stoic: +1 Str nach Charge
-6. **Kaptaris Ka'tah** — Aggressive: Feind kann Hits nicht re-rollen / Stoic: verhindert Fallback
-
-**Nach YAML-Anlage:** Test schreiben + sicherstellen dass `_render_protocol_ui()` Custodes korrekt anzeigt.
-
-### 2. Loader fix: `secondary` optional machen
-
-Datei: `src/gameObjects/loader.py` (CommandProtocol-Parser)
-Problem: `CommandProtocol.secondary` und `secondary_effect` sind aktuell required
-Fix: Optional machen (None wenn nicht in YAML → UI überspringt Direktiven-Wahl)
-Für: AdMech Canticles (kein Secondary)
-
-### 3. AdMech Canticles YAML anlegen
-
-Datei: `data/wh40k_9e/adeptus_mechanicus/command_protocols.yaml`
-Quelle: https://wahapedia.ru/wh40k9ed/factions/adeptus-mechanicus/
-Alle 6 Canticles — nur Primary (kein Secondary)
-
-### 4. Auto-Progression implementieren (Space Marines Doctrines)
-
-Neue Funktion in `ability_engine.py`:
-```python
-def get_auto_progression_modifier(faction_dir: str, phase: str, current_round: int, use_melee: bool) -> dict[str, int]:
-```
-Neue Funktion in `armyCard.py`:
-```python
-def _render_auto_progression_badge(faction: str, faction_abilities: list[Ability]) -> None:
-```
-YAML: `data/wh40k_9e/space_marines/faction_abilities.yaml` mit `ability_type: auto_progression`
-
-### 5. Tests für alle neuen Fraktions-Fähigkeiten
-
-Neue Testdateien:
-- `tests/test_faction_abilities_custodes.py`
-- `tests/test_faction_abilities_admech.py`
-- `tests/test_auto_progression.py`
-
-Testmuster pro Fraktion:
-```python
-def test_load_<faction>_command_protocols():
-    protocols = load_command_protocols("<faction_dir>")
-    assert len(protocols) == N
-
-def test_<faction>_protocol_badge_label():
-    p = protocols[0]
-    assert p.name_en != ""
-
-def test_<faction>_protocol_modifier_<phase>():
-    mod = get_active_protocol_modifier("<faction_dir>", "<phase>", use_melee=False)
-    assert mod.get("hit") == expected_value
+Schema für `shared_powers.yaml`:
+```yaml
+- id: wh40k_9e.shared.power.smite
+  name_en: Smite
+  power_type: psychic          # psychic | deny | ctan
+  warp_charge: 5
+  denyable: true
+  range_inches: 18
+  targeting: closest_visible_enemy
+  effect:
+    type: mortal_wounds
+    amount: D3
+    boosted_amount: D6
+    boost_threshold: 11
+  restriction: once_per_psyker_per_battle_round
+  accumulating_charge: true    # +1 WC für jede weitere Smite der Armee
 ```
 
-### 6. set_log_players() in init_state() (klein, 5 Minuten)
+### Batch 3 — Orks Powers-YAML
+**Dateien:**
+- `data/wh40k_9e/orks/powers.yaml` (NEU) — Weirdboy-Kräfte mit `power_type: psychic`
+- `data/wh40k_9e/orks/faction_abilities.yaml` — Weirdboy-Kräfte entfernen
 
-`game_state.py` `init_state()` nach Session-State-Zuweisungen ergänzen:
-```python
-from gameMechanic.game_log import set_log_players
-set_log_players(p1_name, p2_name)
-```
+Loader noch nicht verdrahten — reine Datenmigration.
+
+### Batch 4 — Code-Refactor (Alias entfernen)
+**Dateien (alle callers auf `load_round_choice_abilities()` umstellen):**
+- `src/gameObjects/loader.py` — `load_command_protocols()` löschen (Zeile 294–296)
+- `src/gameMechanic/commandPhase.py` — Import + Aufruf Zeile 11, 200
+- `src/gameMechanic/ability_engine.py` — Import + Aufruf Zeile 10, 83
+- `src/uiLayout/_common.py` — Import + Aufruf Zeile 393, 428
+- `src/uiLayout/armyCard.py` — Import + 3 Aufrufe Zeile 20, 144, 249
+- `tests/test_faction_abilities_custodes.py` — 3 Alias-Tests bereinigen (Zeile 82–91)
+
+### Batch 5 — Spec-Update (3 Unter-Batches)
+
+#### Batch 5a — Outdated refs bereinigen
+**Dateien:**
+- `docs/spec/architecture.md` — `arkana.yaml` (gelöscht), `command_protocols.yaml` (gemergt), `universal/` → `_shared/`
+- `docs/spec/loader_contract.md` — Loader-Ablauf Schritt 4 korrigieren, Arkana-Schema anpassen
+- `docs/spec/faction_abilities.md` — Alias-Entfernung eintragen, `powers.yaml`-Sektion ergänzen, `_shared/`-Übersicht
+
+#### Batch 5b — Neue Datendokumentation
+**Neue Dateien:**
+- `docs/spec/data/schema.md` — vollständige Felddefinitionen für alle YAML-Dateitypen:
+  units.yaml, weapons.yaml, faction_abilities.yaml, unit_abilities.yaml,
+  subfaction_abilities.yaml, wargear_abilities.yaml, powers.yaml, _shared/*.yaml
+- `docs/spec/data/import_guide.md` — Checkliste neue Fraktion: Dateien anlegen → Wahapedia → Tests → Doku; Umgang mit Sonderfällen
+- `docs/spec/data/_shared.md` — alle shared abilities, stratagems, powers vollständig dokumentiert
+
+#### Batch 5c — Fraktionsdokumentationen
+**Neue Dateien:**
+- `docs/spec/data/factions/necrons.md` — alle Protocols + Affinitäten (mit korrigierten Werten!), Abilities nach Datei, Sonderregeln
+- `docs/spec/data/factions/orks.md` — WAAAGH!-Varianten, ObjSec-Sonderfall, Weirdboy-Powers
+- `docs/spec/data/factions/adeptus_custodes.md` — Ka'tahs + Affinitäten (mit korrigierten Werten!), Shield Hosts
+
+### Batch 6 — Test-Gerüst härten
+**Neue Dateien:**
+- `tests/test_faction_abilities_necrons.py` — Necron-Protokolle fokussiert: alle 6 Affinitäten korrekt, round_choice loading, subfaction_affinity-Daten-Korrektheit
+- `tests/test_faction_abilities_orks.py` — WAAAGH!-Aktivierung, objective_secured-Migration, Weirdboy-Powers
+
+**Updates bestehender Dateien:**
+- `tests/test_faction_abilities_custodes.py` — Alias-Tests entfernen; subfaction_affinity-Korrektheit testen (emperors_chosen!)
+- `tests/gameObjects/test_loader.py` — `load_round_choice_abilities()` direkt testen; `_shared/stratagems`-Pfad testen
+- `tests/gameMechanic/test_command_phase.py` — Lücken füllen (76 Zeilen, wahrscheinlich dünn)
 
 ---
 
-## Bekannte Constraints & Architektur-Entscheidungen
+## Wichtige Constraints & Architektur (Stand 2026-06-04)
 
 ### Generische Fähigkeits-Architektur
 
 ```
-YAML (command_protocols.yaml)          YAML (faction_abilities.yaml)
-  └─ CommandProtocol: id, name,          └─ Ability: id, ability_type=activated,
-     primary/secondary (optional),           trigger.phase=command, once_per_battle
-     primary_effect/secondary_effect         stage_effects: {badge_label, effects[]}
-          │                                       │
-ability_engine.py                         armyCard._render_waaagh_ui()
-  └─ get_active_protocol_modifier()         └─ filtert command_activated
-     → {hit, wound, save}                      → Button oder Badge
-          │                                       │
-armyCard._render_protocol_ui()            game_state.waaagh_state{}
-  └─ lädt command_protocols.yaml              └─ {player: {stage, round_activated}}
-     → Radio + Button oder Badge
-          │
-_common.py render_attack_form()
-  └─ sourced label: "Hungry Void (Primary): +1 to hit"
+YAML (faction_abilities.yaml)
+  ├─ ability_type: round_choice   → load_round_choice_abilities() → list[CommandProtocol]
+  │    subfaction_affinity: id         → UI: armyCard._render_protocol_ui()
+  │                                        Modifier: ability_engine.get_active_protocol_modifier()
+  ├─ ability_type: activated      → load_faction_abilities() filtert, armyCard._render_waaagh_ui()
+  ├─ ability_type: triggered      → load_faction_abilities(), ability_engine.get_triggered_abilities()
+  └─ ability_type: auto_progression → (noch nicht implementiert)
+
+YAML (powers.yaml — NEU)          → load_powers() [noch nicht verdrahtet]
+  ├─ power_type: psychic           → Psionik-Phase
+  ├─ power_type: deny              → Reaktion in Psionik-Phase
+  └─ power_type: ctan              → Ende der Bewegungsphase
+
+YAML (_shared/shared_powers.yaml) → smite, deny_the_witch, perils — shared_ref in faction powers
+YAML (_shared/shared_abilities.yaml) → load_shared_abilities() [noch nicht verdrahtet]
+YAML (_shared/stratagems.yaml)    → load_stratagems() [war universal/, jetzt _shared/]
 ```
+
+### _shared/-Verzeichnis (nach Batch 0+2)
+| Datei | Inhalt | Loader-Status |
+|-------|--------|--------------|
+| `_shared/stratagems.yaml` | 7 Core Stratagems | verdrahtet (`load_stratagems()`) |
+| `_shared/shared_abilities.yaml` | ObjSec, DS, FNP, Fly + 3 neue | Stub, nicht verdrahtet |
+| `_shared/shared_powers.yaml` | Smite, Deny, Perils | Stub, nicht verdrahtet |
+| `_shared/detachment_types.yaml` | Patrol–Air Wing + CP-Felder | verdrahtet (`load_detachment_types()`) |
 
 ### Wired effect types (in combat.py)
 `hit_modifier`, `wound_modifier`, `save_modifier`
@@ -214,7 +241,10 @@ _common.py render_attack_form()
 `strength_modifier`, `attacks_modifier`, `ap_bonus`, `move_bonus`,
 `advance_and_charge`, `reroll_hit_wound_1`, `reroll_save_1`,
 `leadership_bonus`, `rp_reroll`, `rp_bonus`, `toughness_debuff`,
-`invuln_save`, `extra_hit_on_6`, `shoot_after_fallback`
+`invuln_save`, `extra_hit_on_6`, `shoot_after_fallback`,
+`action_during_advance`, `shoot_during_action`, `enemy_pilein_debuff`,
+`range_bonus`, `shoot_twice_stationary`, `extra_wound_on_6`,
+`prevent_reroll_hits`, `prevent_fallback`, `stationary_after_move`, `deep_strike`
 
 ### Session-State Schlüssel (Command Phase + Protocols + WAAAGH!)
 
@@ -229,13 +259,15 @@ _common.py render_attack_form()
 ### Wichtige Constraints
 - **Freigabe vor Umsetzung** — Plan + Dateiliste zeigen, auf „ja" warten
 - **Niemals nur lokale YAML-Daten für Architektur-Entscheidungen** — immer Wahapedia prüfen
+- **subfaction_affinity-Daten NICHT implementieren ohne Wahapedia-Verifikation** (jetzt verifiziert!)
 - Seitenleisten IMMER fest: first_player links, second_player rechts
 - dev-Branch — kein direktes Committen auf main
 - Keywords immer `UPPERCASE` in YAML — Checks via `unit.has_keyword()`
 - Weapon strength: `_parse_strength()` in `_common.py`
 - Abilities: NIE auf Fraktionsnamen hardcoden — immer generisch via YAML/Keywords
-- Command Protocols: kein Necrons-only mehr — Ka'tah + Canticles nutzen selbe Pipeline
+- `round_choice` für alle Fraktionen: `load_round_choice_abilities()` + `_render_protocol_ui()`
 - WAAAGH! + T'au: nutzen `_render_waaagh_ui()` — generisch via `faction_abilities`
+- `auto_round_1: true` im YAML ersetzt jedes Faction-Hardcoding für automatische Runde-1-Auswahl
 
 ### Streamlit 1.57 — CSS-Selektoren
 
@@ -244,3 +276,44 @@ _common.py render_attack_form()
 | NumberInput Container | `[data-testid="stNumberInputContainer"]` |
 | Buttons allgemein | `button[data-testid="stBaseButton-{kind}"]` |
 | Container border=True | `.e1rw0b1u3` (Emotion-Klasse — prüfen bei Streamlit-Update!) |
+
+---
+
+## Mittelfristige Roadmap (nach dem 6-Batch-Plan)
+
+| Schritt | Was | Status |
+|---------|-----|--------|
+| subfaction_affinity UI | Wenn aktive Subfaction == Affinität → beide Direktiven aktiv | ⬜ |
+| AdMech Canticles YAML | `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` | ⬜ |
+| Auto-Progression Space Marines | Doctrines, neuer ability_type | ⬜ |
+| set_log_players() in init_state() | `game_log.py` — klein, 5 Min | ⬜ |
+| Ziel 6d — Attackensequenz simultan | | ⬜ |
+| Ziel 6f — Ability-Badges unitCard | | ⬜ |
+
+---
+
+## Historische Session-Notizen
+
+### 2026-06-04, Session 3 — Planung & Forschung (kein Code)
+
+- Subfaction-Affinitäten für Necrons (4 falsch) und Custodes (2 falsch + 1 ID) verifiziert
+- Core Rules Inventory via Wahapedia: 7 Core Stratagems (vollständig), fehlende Shared Abilities + neues `powers.yaml`-Konzept
+- Entscheidungen getroffen: powers.yaml-Schema, Folder-Merge universal→_shared, emperors_chosen-ID, Alias-Entfernung
+- Vollständiger 6-Batch-Plan formuliert und freigegeben
+- Neue Dokumentationsstruktur `docs/spec/data/` geplant (schema.md, import_guide.md, _shared.md, factions/)
+
+### 2026-06-03, Session 2 — Bugfixes
+
+**Battle Log TypeError gefixt**
+- `gameProtocoll._load_game_log()`: Log-Format-Mismatch nach Ziel-6g-Migration
+
+**Inaktiver Spieler konnte Protokoll aktivieren — gefixt**
+- `armyCard._render_protocol_ui()`: `is_active`-Check fehlte
+
+### 2026-06-03, Session 1
+
+**WAAAGH! Datenfehler korrigiert**
+- `phase: charge` → `phase: command` (WAAAGH! wird in Befehlsphase ausgerufen)
+
+**Generisches Fähigkeitssystem implementiert**
+- `waaagh_state`, `_render_waaagh_ui()`, `_render_protocol_ui()` generisch

@@ -114,3 +114,25 @@ subfactions:
           type: complex
           target: self
           handler: szarekhanProtocol
+
+  # ── Supplement Subfactions (Keyword-gated, not Dynasty) ───────────────────
+
+  - id: destroyer_cult
+    name_en: Destroyer Cult
+    abilities:
+      - id: wh40k_9e.necrons.subfaction.destroyer_cult.hardwired_for_destruction
+        name_en: Hardwired for Destruction
+        ability_type: triggered
+        source: subfaction_rule
+        rule_text: "Each time a model in this unit makes an attack, re-roll a hit roll of 1."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: active
+        conditions:
+          - has_rules: [hardwiredForDestruction]
+        effect:
+          type: reroll_hit
+          target: self
+          modifier: 1

@@ -541,3 +541,72 @@ abilities:
       type: mark_target
       target: enemy_hit
       handler: targetingRelay
+
+  # ── Keyword-based abilities (moved from faction_abilities.yaml) ────────────
+
+  - id: wh40k_9e.necrons.unit.quantum_shielding
+    name_en: Quantum Shielding
+    ability_type: triggered
+    source: unit_ability
+    rule_text: "This model has a 5+ invulnerable save. In addition, each time an attack is allocated to this model, if the unmodified wound roll for that attack was 1, 2, or 3, the attack fails and the attack sequence ends."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [quantumShielding]
+    effect:
+      type: invuln_save
+      target: self
+      modifier: 5
+
+  - id: wh40k_9e.necrons.unit.phase_shifter
+    name_en: Phase Shifter
+    ability_type: triggered
+    source: unit_ability
+    rule_text: "This model has a 4+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [phaseShifter]
+    effect:
+      type: invuln_save
+      target: self
+      modifier: 4
+
+  - id: wh40k_9e.necrons.unit.wraith_form
+    name_en: Wraith Form
+    ability_type: triggered
+    source: unit_ability
+    rule_text: "Models in this unit have a 4+ invulnerable save."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [wraith_form]
+    effect:
+      type: invuln_save
+      target: self
+      modifier: 4
+
+  - id: wh40k_9e.necrons.unit.dimensional_translocation
+    name_en: Dimensional Translocation
+    ability_type: triggered
+    source: unit_ability
+    rule_text: "During deployment, you can set up this unit in dimensional translocation instead of setting it up on the battlefield. If you do, at the start of your Movement phase, you can set up this unit anywhere on the battlefield that is more than 9\" from any enemy models."
+    trigger:
+      timing: phase_start
+      phase: movement
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [dimensionalTranslocation]
+    effect:
+      type: deep_strike
+      target: self

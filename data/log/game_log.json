@@ -1,44 +1,134 @@
-[
-  {
-    "round": 1,
-    "phase": "command",
-    "unit": "Necrons α",
-    "action": "+1 CP received",
-    "timestamp": "2026-06-03T14:39:11.070867"
-  },
-  {
-    "round": 1,
-    "phase": "movement",
-    "unit": "Overlord",
-    "action": "movement: moved",
-    "timestamp": "2026-06-03T14:39:23.915485"
-  },
-  {
-    "round": 1,
-    "phase": "movement",
-    "unit": "Necron Warriors",
-    "action": "movement: moved",
-    "timestamp": "2026-06-03T14:39:25.761431"
-  },
-  {
-    "round": 1,
-    "phase": "movement",
-    "unit": "Immortals",
-    "action": "movement: moved",
-    "timestamp": "2026-06-03T14:39:27.810863"
-  },
-  {
-    "round": 1,
-    "phase": "movement",
-    "unit": "Skorpekh Destroyers",
-    "action": "movement: advanced",
-    "timestamp": "2026-06-03T14:39:30.351712"
-  },
-  {
-    "round": 1,
-    "phase": "movement",
-    "unit": "Canoptek Scarab Swarms",
-    "action": "movement: advanced",
-    "timestamp": "2026-06-03T14:39:34.632599"
-  }
-]
+{
+  "game_id": "2026-06-03T23:20:53.461583",
+  "players": {},
+  "rounds": [
+    {
+      "round": 1,
+      "phases": [
+        {
+          "phase": "command",
+          "active": "Orks",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "WAAAGH! called — Stage 1 active"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "+1 CP received"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "WAAAGH! called — Stage 1 active"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "movement: moved"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Warboss in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Boyz",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Gretchin",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "movement: moved"
+            },
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Warbikers",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "charged Overlord — success"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "charged Necron Warriors — success"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "charged Immortals — success"
+            }
+          ]
+        },
+        {
+          "phase": "fight",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "dealt 4 damage to Overlord"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

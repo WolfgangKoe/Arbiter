@@ -1,4 +1,5 @@
 faction: Necrons
+round_choice_label: "Command Protocols"
 abilities:
 
   # ── Universal Necron Rules ─────────────────────────────────────────────────
@@ -44,88 +45,127 @@ abilities:
       target: self
       amount: D6_per_wound
 
-  # ── Passive Keyword Rules ──────────────────────────────────────────────────
+  # ── Round-Choice Abilities (Command Protocols) ────────────────────────────
+  # ability_type: round_choice — geladen via load_round_choice_abilities(), NICHT via _ability_from_dict()
 
-  - id: wh40k_9e.necrons.faction.objective_secured
-    name_en: Objective Secured
-    ability_type: triggered
+  - id: wh40k_9e.necrons.faction.protocol_eternal_guardian
+    name_en: Protocol of the Eternal Guardian
+    name_de: Protokoll des Ewigen Wächters
+    ability_type: round_choice
     source: faction_rule
-    rule_text: "While this unit is within range of an objective marker, it controls that objective marker even if there are more enemy models within range of that objective marker."
-    trigger:
-      timing: persistent
-      phase: any
-      stage: active
-      player: either
-    conditions:
-      - has_rules: [objectiveSecured]
-    effect:
-      type: objective_control
-      target: self
+    auto_round_1: true
+    subfaction_affinity: szarekhan
+    primary: "+1 to all saving throws until next Command phase"
+    secondary: "Re-roll saving throws of 1"
+    directives:
+      primary:
+        effect:
+          type: save_modifier
+          value: 1
+          phase: any
+      secondary:
+        effect:
+          type: reroll_save_1
+          phase: any
 
-  - id: wh40k_9e.necrons.faction.hardwired_for_destruction
-    name_en: Hardwired for Destruction
-    ability_type: triggered
+  - id: wh40k_9e.necrons.faction.protocol_hungry_void
+    name_en: Protocol of the Hungry Void
+    name_de: Protokoll der hungrigen Leere
+    ability_type: round_choice
     source: faction_rule
-    rule_text: "Each time a model in this unit makes an attack, re-roll a hit roll of 1."
-    trigger:
-      timing: persistent
-      phase: any
-      stage: active
-      player: active
-    conditions:
-      - has_rules: [hardwiredForDestruction]
-    effect:
-      type: reroll_hit
-      target: self
-      modifier: 1
+    auto_round_1: false
+    subfaction_affinity: mephrit
+    primary: "+1 to hit (Shooting)"
+    secondary: "+1 Strength (Shooting weapons)"
+    directives:
+      primary:
+        effect:
+          type: hit_modifier
+          value: 1
+          phase: shooting
+      secondary:
+        effect:
+          type: strength_modifier
+          value: 1
+          phase: shooting
 
-  - id: wh40k_9e.necrons.faction.quantum_shielding
-    name_en: Quantum Shielding
-    ability_type: triggered
+  - id: wh40k_9e.necrons.faction.protocol_conquering_tyrant
+    name_en: Protocol of the Conquering Tyrant
+    name_de: Protokoll des tyrannischen Herrschers
+    ability_type: round_choice
     source: faction_rule
-    rule_text: "This model has a 5+ invulnerable save. In addition, each time an attack is allocated to this model, if the unmodified wound roll for that attack was 1, 2, or 3, the attack fails and the attack sequence ends."
-    trigger:
-      timing: persistent
-      phase: any
-      stage: active
-      player: either
-    conditions:
-      - has_rules: [quantumShielding]
-    effect:
-      type: invuln_save
-      target: self
-      modifier: 5
+    auto_round_1: false
+    subfaction_affinity: sautekh
+    primary: "+1 Leadership"
+    secondary: "Re-roll hit and wound rolls of 1 (Melee)"
+    directives:
+      primary:
+        effect:
+          type: leadership_bonus
+          value: 1
+          phase: any
+      secondary:
+        effect:
+          type: reroll_hit_wound_1
+          phase: melee
 
-  - id: wh40k_9e.necrons.faction.phase_shifter
-    name_en: Phase Shifter
-    ability_type: triggered
+  - id: wh40k_9e.necrons.faction.protocol_sudden_storm
+    name_en: Protocol of the Sudden Storm
+    name_de: Protokoll des plötzlichen Sturms
+    ability_type: round_choice
     source: faction_rule
-    rule_text: "This model has a 4+ invulnerable save."
-    trigger:
-      timing: persistent
-      phase: any
-      stage: active
-      player: either
-    conditions:
-      - has_rules: [phaseShifter]
-    effect:
-      type: invuln_save
-      target: self
-      modifier: 4
+    auto_round_1: false
+    subfaction_affinity: nephrekh
+    primary: "+1\" Move"
+    secondary: "Can Advance and Charge in the same turn"
+    directives:
+      primary:
+        effect:
+          type: move_bonus
+          value: 1
+          phase: movement
+      secondary:
+        effect:
+          type: advance_and_charge
+          phase: charge
 
-  - id: wh40k_9e.necrons.faction.wraith_form
-    name_en: Wraith Form
-    ability_type: triggered
+  - id: wh40k_9e.necrons.faction.protocol_undying_legions
+    name_en: Protocol of the Undying Legions
+    name_de: Protokoll der unaufhörlichen Legionen
+    ability_type: round_choice
     source: faction_rule
-    rule_text: "Models in this unit have a 4+ invulnerable save."
-    trigger:
-      timing: persistent
-      phase: any
-      stage: active
-      player: either
-    conditions:
-      - has_rules: [wraith_form]
-    effect:
-      type: invuln_save
-      target: self
-      modifier: 4
+    auto_round_1: false
+    subfaction_affinity: novokh
+    primary: "Re-roll Reanimation Protocols"
+    secondary: "+1 model returned per Reanimation Protocol"
+    directives:
+      primary:
+        effect:
+          type: rp_reroll
+          phase: any
+      secondary:
+        effect:
+          type: rp_bonus
+          value: 1
+          phase: any
+
+  - id: wh40k_9e.necrons.faction.protocol_vengeful_stars
+    name_en: Protocol of the Vengeful Stars
+    name_de: Protokoll der rachsüchtigen Sterne
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: nihilakh
+    primary: "+1 to wound rolls (Shooting)"
+    secondary: "Improve AP of Shooting weapons by 1"
+    directives:
+      primary:
+        effect:
+          type: wound_modifier
+          value: 1
+          phase: shooting
+      secondary:
+        effect:
+          type: ap_bonus
+          value: -1
+          phase: shooting

@@ -230,11 +230,70 @@ def load_unit_catalog(faction_dir: str) -> dict[str, Unit]:
 
 
 def load_faction_abilities(faction_dir: str) -> list[Ability]:
-    """Load faction abilities from data/wh40k_9e/<faction_dir>/faction_abilities.yaml."""
+    """Load faction abilities from data/wh40k_9e/<faction_dir>/faction_abilities.yaml.
+
+    Skips round_choice entries — those are loaded via load_round_choice_abilities().
+    """
     path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
+    if not path.exists():
+        return []
     with open(path) as f:
         data = yaml.safe_load(f)
-    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+    return [
+        _ability_from_dict(a)
+        for a in data.get("abilities", [])
+        if a.get("ability_type") != "round_choice"
+    ]
+
+
+def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
+    """Load round-choice abilities (Protocols, Ka'tahs, Canticles) from faction_abilities.yaml.
+
+    Replaces the old command_protocols.yaml lookup. Any faction with ability_type: round_choice
+    entries in its faction_abilities.yaml is automatically supported — no code change needed.
+    """
+    path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
+    if not path.exists():
+        return []
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    result = []
+    for a in data.get("abilities", []):
+        if a.get("ability_type") != "round_choice":
+            continue
+        dirs = a.get("directives", {})
+        result.append(
+            CommandProtocol(
+                id=a["id"],
+                name_en=a["name_en"],
+                name_de=a.get("name_de", a["name_en"]),
+                primary=a.get("primary", ""),
+                secondary=a.get("secondary", ""),
+                auto_round_1=a.get("auto_round_1", False),
+                primary_effect=dirs.get("primary", {}).get("effect", {}),
+                secondary_effect=dirs.get("secondary", {}).get("effect", {}),
+                subfaction_affinity=a.get("subfaction_affinity"),
+            )
+        )
+    return result
+
+
+def load_round_choice_label(faction_dir: str) -> str:
+    """Return the UI label for this faction's round-choice abilities (e.g. 'Command Protocols', 'Ka'tahs').
+
+    Reads round_choice_label from faction_abilities.yaml. Falls back to 'Round Abilities'.
+    """
+    path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
+    if not path.exists():
+        return "Round Abilities"
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    return data.get("round_choice_label", "Round Abilities")
+
+
+def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
+    """Backward-compatible alias for load_round_choice_abilities()."""
+    return load_round_choice_abilities(faction_dir)
 
 
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
@@ -258,31 +317,6 @@ def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
     for subfaction in data.get("subfactions", []):
         abilities.extend(_ability_from_dict(a) for a in subfaction.get("abilities", []))
     return abilities
-
-
-def load_command_protocols(faction_dir: str) -> list[CommandProtocol]:
-    """Load command protocols from data/wh40k_9e/<faction_dir>/command_protocols.yaml."""
-    path = _DATA_ROOT / faction_dir / "command_protocols.yaml"
-    if not path.exists():
-        return []
-    with open(path) as f:
-        data = yaml.safe_load(f)
-    result = []
-    for p in data.get("protocols", []):
-        dirs = p.get("directives", {})
-        result.append(
-            CommandProtocol(
-                id=p["id"],
-                name_en=p["name_en"],
-                name_de=p["name_de"],
-                primary=p["primary"],
-                secondary=p["secondary"],
-                auto_round_1=p.get("auto_round_1", False),
-                primary_effect=dirs.get("primary", {}).get("effect", {}),
-                secondary_effect=dirs.get("secondary", {}).get("effect", {}),
-            )
-        )
-    return result
 
 
 def load_stratagems(faction_dir: str) -> list[Stratagem]:

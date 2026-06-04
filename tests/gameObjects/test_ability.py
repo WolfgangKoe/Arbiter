@@ -56,9 +56,12 @@ def test_condition_defaults() -> None:
     assert cond.unit_not_destroyed is False
 
 
-def test_load_faction_abilities_necrons_returns_at_least_seven() -> None:
+def test_load_faction_abilities_necrons_returns_triggered_abilities_only() -> None:
+    # round_choice entries (6 Protocols) are excluded — loaded via load_round_choice_abilities()
+    # Only triggered faction-wide rules remain: Living Metal + Reanimation Protocols
     abilities = load_faction_abilities("necrons")
-    assert len(abilities) >= 7
+    assert len(abilities) >= 2
+    assert all(a.ability_type != "round_choice" for a in abilities)
 
 
 def test_living_metal_ability_parsed_correctly() -> None:
@@ -89,8 +92,21 @@ def test_reanimation_protocols_reactive_trigger() -> None:
 def test_load_faction_abilities_orks_returns_abilities() -> None:
     abilities = load_faction_abilities("orks")
     ids = [a.id for a in abilities]
+    # 'Ere We Go and WAAAGH! are true faction-wide abilities
     assert "wh40k_9e.orks.faction.ere_we_go" in ids
-    assert "wh40k_9e.orks.faction.mob_rule" in ids
+    assert "wh40k_9e.orks.faction.waaagh_stage1" in ids
+    # mob_rule/ramshackle/beast_snagga moved to unit_abilities.yaml (keyword-gated)
+    assert "wh40k_9e.orks.faction.mob_rule" not in ids
+
+
+def test_load_unit_abilities_orks_has_mob_rule_and_ramshackle() -> None:
+    from gameObjects.loader import load_unit_abilities
+
+    abilities = load_unit_abilities("orks")
+    ids = [a.id for a in abilities]
+    assert "wh40k_9e.orks.unit.mob_rule" in ids
+    assert "wh40k_9e.orks.unit.ramshackle" in ids
+    assert "wh40k_9e.orks.unit.beast_snagga" in ids
 
 
 def test_load_unit_abilities_necrons_returns_at_least_eight() -> None:

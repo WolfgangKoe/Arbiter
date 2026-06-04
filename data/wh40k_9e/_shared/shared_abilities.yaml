@@ -1,0 +1,74 @@
+# Shared abilities — fraktionsübergreifende Universalregeln (WH40k 9E)
+# Diese Fähigkeiten gelten für jede Fraktion, die das entsprechende Keyword/Rule hat.
+# Fraktionen mit fraktionsspezifischen Varianten (z.B. Orks: ObjSec ohne GRETCHIN)
+# behalten ihre eigene Einheit in faction_abilities.yaml bis ein Alias-Mechanismus
+# implementiert ist.
+#
+# Loader: noch nicht verdrahtet — Stub für zukünftige load_shared_abilities()-Funktion.
+
+abilities:
+
+  - id: wh40k_9e.shared.objective_secured
+    name_en: Objective Secured
+    ability_type: triggered
+    source: core_rule
+    rule_text: "While this unit is within range of an objective marker, it controls that objective marker even if there are more enemy models within range of that objective marker."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [objectiveSecured]
+    effect:
+      type: objective_control
+      target: self
+
+  - id: wh40k_9e.shared.deep_strike
+    name_en: Deep Strike
+    ability_type: triggered
+    source: core_rule
+    rule_text: "During deployment, you can set up this unit in Reserve instead of setting it up on the battlefield. If you do, at the start of your Movement phase you can set up this unit anywhere on the battlefield that is more than 9\" from any enemy models."
+    trigger:
+      timing: phase_start
+      phase: movement
+      stage: start
+      player: active
+    conditions:
+      - has_rules: [deepStrike]
+    effect:
+      type: deep_strike
+      target: self
+
+  - id: wh40k_9e.shared.fly
+    name_en: Fly
+    ability_type: triggered
+    source: core_rule
+    rule_text: "When this unit Falls Back, it can move over enemy models and terrain features as if they were not there."
+    trigger:
+      timing: persistent
+      phase: movement
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [FLY]
+    effect:
+      type: fly
+      target: self
+
+  - id: wh40k_9e.shared.feel_no_pain
+    name_en: Feel No Pain
+    ability_type: triggered
+    source: core_rule
+    rule_text: "Each time this model would lose a wound, roll one D6: on a 6+ that wound is not lost."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [feelNoPain]
+    effect:
+      type: feel_no_pain
+      target: self
+      threshold: 6

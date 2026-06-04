@@ -1,13 +1,28 @@
 # Faction Abilities — Generisches Abstraktionsmodell
 
 > Erstellt: 2026-06-03  
+> Aktualisiert: 2026-06-04 — Architektur-Aufräum-Sprint (Ziel 6h)
 > Basis: Wahapedia-Recherche aller 10 Hauptfraktionen (WH40k 9E)
+
+---
+
+## Datei-Scope-Regeln (verbindlich)
+
+| Datei | Scope | Wann geladen |
+|-------|-------|-------------|
+| `faction_abilities.yaml` | Gilt ohne Bedingung für JEDE Armee dieser Fraktion; `ability_type` unterscheidet die Kategorien | Sobald Fraktion geladen |
+| `unit_abilities.yaml` | Gebunden an unit- oder keyword-spezifische Regeln (WRAITH, VEHICLE, CRYPTEK) | Wenn Einheit/Keyword in Armee |
+| `subfaction_abilities.yaml` | Gebunden an Subfaction-Keyword (Dynasty, Clan, Shield Host, Supplement) | Wenn Subfaction aktiv |
+| `wargear_abilities.yaml` | Gebunden an Ausrüstungsgegenstand; enthält auch `arkana:`-Block für Cryptek-Arkana | Wenn Ausrüstung ausgewählt |
+| `_shared/shared_abilities.yaml` | Fraktionsübergreifende Universalregeln (ObjSec, Deep Strike, FNP, Fly) | Stub; noch nicht verdrahtet |
+
+**Regel:** Neue Fraktion = nur YAML in `faction_abilities.yaml`. Kein Code-Change nötig, solange der `ability_type` bereits unterstützt ist.
 
 ---
 
 ## Übersicht
 
-Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigenes YAML-Schema und ein eigenes UI-/State-Pattern. Die App muss alle 6 Kategorien unterstützen — nicht nur die zwei ursprünglich implementierten.
+Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigenes `ability_type`-Feld und ein eigenes UI-/State-Pattern.
 
 ---
 
@@ -15,20 +30,48 @@ Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigen
 
 **Mechanik:** In der Befehlsphase wählt der Spieler eine Fähigkeit aus einer begrenzten Liste. Jede Option ist nur einmal pro Partie verwendbar. Die Wahl kann eine oder zwei Stances/Direktiven haben.
 
+**Subfaction-Affinität:** Jede `round_choice`-Option kann ein `subfaction_affinity`-Feld haben. Wenn die aktive Subfaction des Spielers mit dieser Affinität übereinstimmt, aktivieren sich **beide** Direktiven gleichzeitig (statt einer). UI-Implementierung noch ausstehend.
+
 **Fraktionen:**
 
-| Fraktion | Mechanik-Name | Optionen | Stances | Anmerkungen |
-|----------|---------------|----------|---------|-------------|
-| Necrons | Command Protocols | 6 | Primary + Secondary | Runde 1: Eternal Guardian auto-aktiv |
-| Adeptus Custodes | Martial Ka'tah | 6 | Aggressive + Stoic Stance | Reihenfolge im Spiel geordnet |
-| Adeptus Mechanicus | Canticles of the Omnissiah | 6 | Keine (nur 1 Effekt) | Freie Reihenfolge |
-| Tyranids | Synaptic Imperatives | bis 10 | Keine | Pool dynamisch: schrumpft wenn Synapse-Einheiten sterben |
+| Fraktion | Mechanik-Name | Optionen | Stances | Affinität-Feld | Anmerkungen |
+|----------|---------------|----------|---------|----------------|-------------|
+| Necrons | Command Protocols | 6 | Primary + Secondary | Dynasty (szarekhan, mephrit, …) | Runde 1: Eternal Guardian auto-aktiv (`auto_round_1: true`) |
+| Adeptus Custodes | Ka'tahs of the Broadsword | 6 | Aggressive + Stoic Stance | Shield Host (solar_watch, …) | Kein auto_round_1 |
+| Adeptus Mechanicus | Canticles of the Omnissiah | 6 | Keine (nur 1 Effekt) | — | `secondary` optional |
+| Tyranids | Synaptic Imperatives | bis 10 | Keine | — | Pool dynamisch: schrumpft wenn Synapse-Einheiten sterben |
 
-**YAML-Schema:** `data/wh40k_9e/<faction>/command_protocols.yaml`  
-Alle vier Fraktionen benutzen **dasselbe Schema** — `secondary` und `secondary_effect` sind optional.
+**YAML-Ort:** `data/wh40k_9e/<faction>/faction_abilities.yaml` als `ability_type: round_choice`  
+**Loader:** `load_round_choice_abilities(faction_dir)` in `loader.py` — liest aus `faction_abilities.yaml`, filtert auf `ability_type == "round_choice"`, gibt `list[CommandProtocol]` zurück.  
+`load_command_protocols()` bleibt als Backward-Compat-Alias.
+
+**YAML-Schema:**
+```yaml
+- id: wh40k_9e.<faction>.faction.<ability_id>
+  name_en: "Protocol / Ka'tah / Canticle Name"
+  name_de: "Deutsch"
+  ability_type: round_choice
+  source: faction_rule
+  auto_round_1: false        # true nur wenn Runde-1-Pflicht
+  subfaction_affinity: <id>  # optional; ID des Subfaction-Eintrags
+  round_choice_label: "..."  # top-level im YAML (nicht per Eintrag)
+  primary: "Effektbeschreibung Primary/Aggressive"
+  secondary: "Effektbeschreibung Secondary/Stoic"  # optional
+  directives:
+    primary:
+      effect:
+        type: hit_modifier   # oder anderer wired/display-only Typ
+        value: 1
+        phase: shooting
+    secondary:               # optional
+      effect:
+        type: strength_modifier
+        value: 1
+        phase: shooting
+```
 
 **Session-State:** `active_protocol_id`, `active_directive`, `used_protocol_ids`  
-**UI:** `armyCard._render_protocol_ui()` — bereits generisch (no-op wenn keine Protokoll-YAML vorhanden)
+**UI:** `armyCard._render_protocol_ui()` — generisch; `round_choice_label` aus YAML für Überschrift; kein Faction-Hardcoding
 
 **Tests erforderlich:**
 - `test_load_protocols_<faction>()` — YAML korrekt geladen
@@ -140,33 +183,44 @@ Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelli
 
 ## Implementierungsplan
 
-### Phase 1 (aktuell implementiert) ✅
+### Phase 1 ✅ (2026-06-03)
 - Necrons Command Protocols: vollständig (`armyCard._render_protocol_ui()`)
 - Orks WAAAGH!: Badge + Aktivierung + Stage-2-Transition (`armyCard._render_waaagh_ui()`)
 - Protokoll-Badge: HTML-Badge nach Direktiven-Wahl
 - Sourced Modifier-Labels in `_common.py`
 
-### Phase 2 (nächste Priorität)
-1. **Custodes Ka'tah YAML anlegen** (`data/wh40k_9e/adeptus_custodes/command_protocols.yaml`)
-   - Format identisch zu Necrons; `secondary` = Stoic Stance; alle 6 Ka'tahs
-   - Kein Code-Änderung nötig — `_render_protocol_ui()` funktioniert bereits
-2. **Loader: `secondary` optional machen** für AdMech Canticles (kein secondary_effect)
-3. **AdMech Canticles YAML anlegen** (`data/wh40k_9e/adeptus_mechanicus/command_protocols.yaml`)
-4. **Tests für Custodes und AdMech** schreiben
+### Phase 2 ✅ (2026-06-04 — Architektur-Aufräum-Sprint)
+- `command_protocols.yaml` → in `faction_abilities.yaml` als `ability_type: round_choice` (Necrons)
+- `load_round_choice_abilities()` ersetzt `load_command_protocols()` (Alias bleibt)
+- `_ETERNAL_GUARDIAN_ID` Hardcoding → generische `auto_round_1`-Suche
+- `commandPhase.py`: `"eternal_guardian"` Hardcoding → `auto_round_1`-Suche
+- `round_choice_label` im YAML → dynamische Überschrift statt "Command Protocols" Hardcoding
+- `subfaction_affinity` Feld in `CommandProtocol` + Loader (UI noch ausstehend)
+- Custodes Ka'tahs: `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml` ✅
+- Necron `faction_abilities.yaml` aufgeräumt: 5 Fehlplatzierte entfernt
+- Necron `unit_abilities.yaml`: quantum_shielding, phase_shifter, wraith_form, dimensional_translocation
+- Necron `subfaction_abilities.yaml`: Destroyer Cult + hardwired_for_destruction
+- Necron `wargear_abilities.yaml`: 13 Arkana migriert; `arkana.yaml` gelöscht
+- Ork `faction_abilities.yaml`: mob_rule, ramshackle, beast_snagga → unit_abilities.yaml
+- `_shared/shared_abilities.yaml`: ObjSec, Deep Strike, Fly, FNP als Stub
 
-### Phase 3 (mittelfristig)
-5. **Auto-Progression: Space Marines Doctrines**
-   - `ability_type: auto_progression` YAML-Schema einführen
-   - `get_auto_progression_modifier()` in `ability_engine.py`
-   - Info-Badge in armyCard (kein Button)
-6. **T'au Mont'ka/Kauyon** — in `_render_waaagh_ui()` integrieren (gleiche Logik)
-7. **Tyranid Synaptic Imperatives** — dynamischer Pool-Check (welche Synapse-Units noch leben)
+### Phase 3 (nächste Priorität)
+1. **subfaction_affinity UI**: Wenn aktive Subfaction == `subfaction_affinity`, beide Direktiven aktiv
+2. **AdMech Canticles YAML** (`data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml`)
+   - `secondary` bereits optional (Loader gibt leeres dict zurück)
+3. **Tests für Custodes und AdMech** schreiben
+4. **Auto-Progression: Space Marines Doctrines**
 
-### Phase 4 (langfristig)
-8. Chaos SM Let the Galaxy Burn (Hybrid: Auto + 1 Wahl in R3)
-9. Thousand Sons Cabal Points (eigenes Ressourcen-UI, Psionik-Phase)
-10. Astra Militarum Orders (unit-level Distribution)
-11. Aeldari Strands of Fate (Würfelpool-Management)
+### Phase 4 (mittelfristig)
+5. **T'au Mont'ka/Kauyon** — in `_render_waaagh_ui()` integrieren
+6. **Tyranid Synaptic Imperatives** — dynamischer Pool-Check
+7. **load_shared_abilities()** verdrahten
+
+### Phase 5 (langfristig)
+8. Chaos SM Let the Galaxy Burn (Hybrid)
+9. Thousand Sons Cabal Points
+10. Astra Militarum Orders
+11. Aeldari Strands of Fate
 
 ---
 

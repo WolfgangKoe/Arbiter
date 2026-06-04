@@ -1,0 +1,135 @@
+faction: Adeptus Custodes
+round_choice_label: "Ka'tahs of the Broadsword"
+abilities:
+
+  # ── Ka'tahs of the Broadsword ─────────────────────────────────────────────
+  # ability_type: round_choice — geladen via load_round_choice_abilities()
+  # subfaction_affinity: When the active Shield Host matches, both Aggressive
+  # and Stoic stances activate simultaneously (same mechanic as Necron Protocols).
+  # Directives: Aggressive Stance = primary, Stoic Stance = secondary.
+  # Source: Wahapedia https://wahapedia.ru/wh40k9ed/factions/adeptus-custodes/
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_calistus
+    name_en: "Calistus Ka'tah"
+    name_de: "Calistus Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: emissaries_imperatus
+    primary: "+D6\" to Advance rolls"
+    secondary: "Counts as having remained stationary even if it moved this turn"
+    directives:
+      primary:
+        effect:
+          type: move_bonus
+          value: D6
+          phase: movement
+          applies_to: advance
+      secondary:
+        effect:
+          type: stationary_after_move
+          phase: shooting
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_conservai
+    name_en: "Conservai Ka'tah"
+    name_de: "Conservai Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: solar_watch
+    primary: "Can perform actions while Advancing or Falling Back"
+    secondary: "Can make ranged attacks while performing actions"
+    directives:
+      primary:
+        effect:
+          type: action_during_advance
+          phase: movement
+      secondary:
+        effect:
+          type: shoot_during_action
+          phase: shooting
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_dacatarai
+    name_en: "Dacatarai Ka'tah"
+    name_de: "Dacatarai Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: dread_host
+    primary: "Enemy units within Engagement Range can only Pile In and Consolidate 1\" instead of 3\""
+    secondary: "+1 Attack with weapons that have Damage 1"
+    directives:
+      primary:
+        effect:
+          type: enemy_pilein_debuff
+          value: -2
+          phase: fight
+      secondary:
+        effect:
+          type: attacks_modifier
+          value: 1
+          phase: fight
+          condition: weapon_damage_1
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_salvus
+    name_en: "Salvus Ka'tah"
+    name_de: "Salvus Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: aquilan_shield
+    primary: "+4\" to the Range of ranged weapons"
+    secondary: "Auric weapons can shoot twice if the unit remained stationary"
+    directives:
+      primary:
+        effect:
+          type: range_bonus
+          value: 4
+          phase: shooting
+      secondary:
+        effect:
+          type: shoot_twice_stationary
+          phase: shooting
+          condition: auric_weapon
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_rendax
+    name_en: "Rendax Ka'tah"
+    name_de: "Rendax Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: wardens
+    primary: "Unmodified hit roll of 6 automatically wounds VEHICLE and MONSTER units"
+    secondary: "+1 Strength after making a Charge move"
+    directives:
+      primary:
+        effect:
+          type: extra_wound_on_6
+          phase: fight
+          condition: target_has_keyword
+          target_keyword: [VEHICLE, MONSTER]
+      secondary:
+        effect:
+          type: strength_modifier
+          value: 1
+          phase: fight
+          condition: charged_this_turn
+
+  - id: wh40k_9e.adeptus_custodes.faction.katah_kaptaris
+    name_en: "Kaptaris Ka'tah"
+    name_de: "Kaptaris Ka'tah"
+    ability_type: round_choice
+    source: faction_rule
+    auto_round_1: false
+    subfaction_affinity: shadowkeepers
+    primary: "Enemy units cannot re-roll hit rolls against units with this ability"
+    secondary: "Enemy units cannot Fall Back from units with this ability"
+    directives:
+      primary:
+        effect:
+          type: prevent_reroll_hits
+          phase: any
+      secondary:
+        effect:
+          type: prevent_fallback
+          phase: fight

@@ -428,30 +428,30 @@ def test_protocol_modifier_no_active_protocol_returns_empty() -> None:
 
 
 def test_protocol_modifier_no_directive_returns_empty() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.hungry_void", None)
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", None)
     assert get_active_protocol_modifier("necrons", "shooting", False) == {}
 
 
 def test_protocol_modifier_hungry_void_primary_hit_in_shooting() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.hungry_void", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     result = get_active_protocol_modifier("necrons", "shooting", False)
     assert result == {"hit": 1}
 
 
 def test_protocol_modifier_hungry_void_primary_no_effect_in_melee() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.hungry_void", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     result = get_active_protocol_modifier("necrons", "fight", True)
     assert result == {}
 
 
 def test_protocol_modifier_vengeful_stars_primary_wound_in_shooting() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.vengeful_stars", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "primary")
     result = get_active_protocol_modifier("necrons", "shooting", False)
     assert result == {"wound": 1}
 
 
 def test_protocol_modifier_eternal_guardian_primary_save_any_phase() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.eternal_guardian", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "primary")
     result = get_active_protocol_modifier("necrons", "shooting", False)
     assert result == {"save": 1}
     result_melee = get_active_protocol_modifier("necrons", "fight", True)
@@ -459,13 +459,13 @@ def test_protocol_modifier_eternal_guardian_primary_save_any_phase() -> None:
 
 
 def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.conquering_tyrant", "secondary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
     result = get_active_protocol_modifier("necrons", "fight", True)
     assert result == {}
 
 
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:
-    _protocol_session("wh40k_9e.necrons.protocol.hungry_void", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     result = get_active_protocol_modifier("orks", "shooting", False)
     assert result == {}
 

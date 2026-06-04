@@ -209,12 +209,12 @@ def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignor
     current_round = state.get("round", 1)
 
     if current_round == 1:
-        p = next((p for p in protocols if p.id == "eternal_guardian"), None)
-        if p:
-            st.caption(f"{p.name_de} — automatisch aktiv (Runde 1)")
-            st.caption(f"Direktive 1: {p.primary}")
-            st.caption(f"Direktive 2: {p.secondary}")
-        return
+        auto_protocol = next((p for p in protocols if p.auto_round_1), None)
+        if auto_protocol:
+            st.caption(f"{auto_protocol.name_de} — automatisch aktiv (Runde 1)")
+            st.caption(f"Direktive 1: {auto_protocol.primary}")
+            st.caption(f"Direktive 2: {auto_protocol.secondary}")
+            return
 
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)
