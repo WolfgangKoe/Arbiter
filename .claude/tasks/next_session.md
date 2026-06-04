@@ -27,53 +27,64 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel 1–5 — Grundgerüst, Phasen, Setup, Daten | ✅ fertig |
 | Ziel 6a–6c, 6e, 6g, 6h | ✅ committed |
 | Ziel 6h — Custodes Ka'tah YAML + Tests | ✅ committed |
-| **Datenqualitäts-Review** | 🔄 Schema + _shared + bekannte Fehler done; volle Review offen |
+| **Datenqualitäts-Review** | ✅ Stratagems vollständig (Necrons + Orks); faction_abilities offen |
 
 Teststand: **426 Tests grün**
 
 ---
 
-## Was wurde zuletzt gemacht (2026-06-04)
+## Was wurde zuletzt gemacht (2026-06-04, Session 6)
 
-- `Stratagem`-Dataclass erweitert: `phase: str | list[str]`, `timing`, `event`, `once_per_battle`, `effect: Effect` (reuse aus `ability.py`); `stratagem_visibility()` list-phase-fähig
-- `loader.py`: neue Felder werden geparst
-- `_shared/stratagems.yaml`: alle 7 GOs vollständig (phase, timing, event, effect, once_per_battle)
-- `necrons/stratagems.yaml`: 7 bekannte Fehler behoben (phase-Listen, player, timing/event, effect, variable CP-Kommentare)
-- `orks/stratagems.yaml`: wreckaz + careen korrigiert
-- `adeptus_custodes/faction_abilities.yaml`: Datenfehler in Calistus-Eintrag gefixt
-
----
-
-## ⬅ NÄCHSTE SESSION: Fachliche Datenqualitäts-Review (Fortsetzung)
-
-Für jede GO prüfen und ergänzen:
-- `phase` — korrekt als Liste wenn mehrere Phasen möglich
-- `stage` — `start` / `active` / `end`
-- `player` — `active` / `inactive` / `both`
-- `timing` + `event` — wenn reaktiv
-- `effect` — maschinenlesbares Feld nachtragen (Typen: `buff_roll`, `debuff_roll`, `mortal_wounds`, `heal`, `reanimate`, `free_attack`, `auto_pass_morale`, `reroll`, `move`, `teleport`, `invuln_save`, `restriction`, `mark_target`, ...)
-- `once_per_battle` — wenn rule_text "once per battle" sagt
-- variable `cp_cost` — als Kommentar dokumentieren
-
-**Priorität:**
-1. ⬅ `necrons/stratagems.yaml` — ~52 GOs noch offen
-2. ⬅ `orks/stratagems.yaml` — ~21 GOs noch offen
-3. ⬅ `necrons/faction_abilities.yaml` + `orks/faction_abilities.yaml` — Trigger/Conditions spot-check
-4. ⬅ Optional: Tests für korrekte Phase/Stage-Werte
-
-**Wahapedia-Quellen:**
-- `https://wahapedia.ru/wh40k9ed/factions/necrons/Stratagems`
-- `https://wahapedia.ru/wh40k9ed/factions/orks/Stratagems`
+- `necrons/stratagems.yaml` — alle 59 GOs vollständig:
+  - `effect:` Block zu 53 GOs ergänzt (6 waren bereits gesetzt)
+  - `once_per_battle: true` bei 5 GOs: Hand of the Phaeron, Dynastic Heirlooms, Rarefied Nobility, Exalted Cryptek, Canoptek Reinforcement
+  - `timing: phase_reactive` + `event:` bei 8 weiteren reaktiven GOs: aetheric_interception (`on_set_up`), reanimation_prioritisation (`on_target`), quantum_deflection (`on_target`), shadows_of_drazak (`on_target`), revenge_of_the_doomstalker (`on_destroy`), canoptek_overdrive (`on_destroy`), murderous_demise (`on_destroy`)
+  - `player: both` korrigiert bei quantum_deflection + shadows_of_drazak (Angriffe in beiden Spielerzügen möglich)
+  - `rule_text:` bei whirling_onslaught nachgetragen (war leer)
+- `orks/stratagems.yaml` — alle 28 GOs vollständig:
+  - `effect:` Block zu 26 GOs ergänzt (careen + wreckaz bereits gesetzt)
+  - `once_per_battle: true` bei Big Boss + Extra Gubbinz
+  - `timing/event` + `player: inactive` bei orks_is_never_beaten + tough_as_squig_hide korrigiert
+  - `cp_cost`-Kommentar bei get_stuck_in_ladz ergänzt
 
 ---
 
-## Offene Entscheidungen (für Folgeschritte)
+## ⬅ NÄCHSTE SESSION: Daten-Review Abschluss + Ziel 6g + 6d-Vorbereitung
+
+### 1. Daten-Review Abschluss (klein, ca. 30–45 Min.)
+
+**`necrons/faction_abilities.yaml` — Trigger/Conditions spot-check:**
+- Für jede Fähigkeit: `ability_type` korrekt? `trigger.phase/timing/event` vollständig? `conditions` richtig?
+- Besonders: Living Metal (Command Phase, Auto), Reanimation Protocols (phase_reactive / on_destroy)
+- Quelle: `data/wh40k_9e/necrons/faction_abilities.yaml`
+
+**`orks/faction_abilities.yaml` — Trigger/Conditions spot-check:**
+- WAAAGH!-Fähigkeit: `trigger`, `stages`, `once_per_battle` prüfen
+- Quelle: `data/wh40k_9e/orks/faction_abilities.yaml`
+
+### 2. Ziel 6g Restpunkt (5 Min.)
+
+- `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf
+- Dann: Checkbox in `ziel6.md` abhaken
+
+### 3. Ziel 6d — Attackensequenz (Hauptaufgabe, mehrstufig)
+
+Vorher Plan zeigen + Freigabe holen. Die Arbeit ist umfangreich:
+- `gameMechanic/combat.py`: `resolve_attack_modifiers()`, `resolve_save()`, `resolve_fnp()`
+- Angreifer/Verteidiger-Area: simultane Darstellung mit Modifier-Stack
+- Stratagem-Buttons direkt beim betreffenden Würfelblock
+
+**Wichtiger Constraint:** Nahkampf/Overwatch — Seiten-Zuweisung nach `attacker_faction`, nicht `active`.
+
+---
+
+## Offene Entscheidungen
 
 | Entscheidung | Optionen |
 |---|---|
 | **`once_per_battle` enforcement** | Braucht `used_this_battle: set[str]` in Session-State + neuen Parameter in `stratagem_visibility()`. Wann implementieren? |
 | **Variable CP-Kosten** | Derzeit nur Kommentar im YAML. Optionen: (a) so lassen, (b) `cp_cost_max: int` Feld, (c) `cp_cost_condition: str` Feld + Logik |
-| **Reaktive GO UI** | `timing: phase_reactive` GOs sind jetzt korrekt in der Dataclass markiert — aber die UI zeigt sie gleich wie proaktive. Eigener UI-Bereich? Anderes Styling? Spätere Entscheidung. |
+| **Reaktive GO UI** | `timing: phase_reactive` GOs sind korrekt markiert — aber UI zeigt sie gleich wie proaktive. Eigener UI-Bereich? Anderes Styling? |
 
 ---
 
@@ -103,13 +114,9 @@ YAML (_shared/stratagems.yaml)   → load_stratagems() [verdrahtet]
 | `_shared/shared_powers.yaml` | Smite, Deny, Perils | Stub, nicht verdrahtet |
 | `_shared/detachment_types.yaml` | Patrol–Air Wing + CP-Felder | verdrahtet |
 
-### Nicht wired (nur Display)
-`strength_modifier`, `attacks_modifier`, `ap_bonus`, `move_bonus`, `advance_and_charge`,
-`reroll_hit_wound_1`, `reroll_save_1`, `leadership_bonus`, `rp_reroll`, `rp_bonus`,
-`toughness_debuff`, `invuln_save`, `extra_hit_on_6`, `shoot_after_fallback`,
-`action_during_advance`, `shoot_during_action`, `enemy_pilein_debuff`, `range_bonus`,
-`shoot_twice_stationary`, `extra_wound_on_6`, `prevent_reroll_hits`, `prevent_fallback`,
-`stationary_after_move`, `deep_strike`
+### Stratagem-Effect-Vocabulary (Stand 2026-06-04)
+Etablierte `effect.type`-Werte (aus Necrons + Orks Review):
+`buff_roll`, `debuff_roll`, `buff_stat`, `buff_count`, `mortal_wounds`, `heal`, `reanimate`, `respawn`, `free_attack`, `auto_pass_morale`, `reroll`, `move`, `teleport`, `deep_strike`, `invuln_save`, `restriction`, `grant_ability`, `grant_keyword`, `grant_relic`, `grant_warlord_trait`, `grant_equipment`, `auto_wound`, `auto_explode`, `swap_ability`, `extra_ability_use`, `wound_track_override`, `deny_psychic`, `buff_weapon_type`
 
 ### Session-State Schlüssel
 | Key | Typ | Bedeutung |
@@ -136,18 +143,24 @@ YAML (_shared/stratagems.yaml)   → load_stratagems() [verdrahtet]
 
 | Schritt | Was | Status |
 |---------|-----|--------|
+| faction_abilities spot-check | Necrons + Orks faction_abilities.yaml | ⬜ |
+| 6g Restpunkt | set_log_players() in init_state() | ⬜ |
+| 6d — Attackensequenz simultan | combat.py + UI | ⬜ |
 | subfaction_affinity UI | Wenn aktive Subfaction == Affinität → beide Direktiven aktiv | ⬜ |
 | AdMech Canticles YAML | `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` | ⬜ |
+| T'au Mont'ka/Kauyon YAML | Runden-Fenster-Mechanik | ⬜ |
 | Auto-Progression Space Marines | Doctrines, neuer ability_type | ⬜ |
-| set_log_players() in init_state() | `game_log.py` — klein, 5 Min | ⬜ |
-| Ziel 6d — Attackensequenz simultan | | ⬜ |
-| Ziel 6f — Ability-Badges unitCard | | ⬜ |
+| 6f — Ability-Badges unitCard | hängt von 6d ab | ⬜ |
+| 6e — CP-Doppelvergabe-Fix | `cp_granted_this_phase`-Flag | ⬜ |
 | load_powers() verdrahten | Psychic Phase, Orks Weirdboy | ⬜ |
 | load_shared_abilities() verdrahten | Universalregeln im Engine | ⬜ |
 
 ---
 
 ## Historische Session-Notizen
+
+### 2026-06-04, Session 6 — Datenqualitäts-Review (Teil 2, Abschluss Stratagems)
+Alle 59 Necron-GOs + 28 Ork-GOs vollständig: effect, once_per_battle, timing/event für reaktive GOs, player-Korrekturen. whirling_onslaught rule_text nachgetragen. 426 Tests grün.
 
 ### 2026-06-04, Session 5 — Datenqualitäts-Review (Teil 1)
 Schema-Erweiterung Stratagem-Dataclass. Alle _shared GOs vollständig. 7 bekannte Necron-Fehler + Orks wreckaz/careen behoben. Custodes faction_abilities.yaml Datenfehler gefixt.

@@ -26,6 +26,10 @@ stratagems:
     player: active
     conditions: [OVERLORD]
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_keyword
+      stat: phaeron
     rule_text: "Use this Stratagem before the battle, when you are mustering your army. If your army does not contain a model with the PHAERON keyword, select one NECRONS OVERLORD model from your army (excluding named characters). That model gains the PHAERON keyword, and in your Command phase it can use its My Will Be Done ability one additional time. You can only use this Stratagem once."
 
   - id: wh40k_9e.necrons.stratagem.dynastic_heirlooms
@@ -36,6 +40,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_relic
     rule_text: "Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the NECRONS keyword. Select one NECRONS CHARACTER model (excluding C'TAN SHARD models) in your army and give them one Relic (this must be a Relic they can have). Each Relic in your army must be unique, and you cannot use this Stratagem to give a model two Relics. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case you can use this Stratagem twice), or an Onslaught battle (in which case you can use this Stratagem three times)."
 
   - id: wh40k_9e.necrons.stratagem.rarefied_nobility
@@ -46,6 +53,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_warlord_trait
     rule_text: "Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the NECRONS keyword. Select one NECRONS CHARACTER model (excluding C'TAN SHARD models) in your army and determine one Warlord Trait for that model (this must be a Warlord Trait they can have); that model is only regarded as your WARLORD for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique (if randomly generated, re-roll duplicate results), and you cannot use this Stratagem to give a model two Warlord Traits. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case you can use this Stratagem twice), or an Onslaught battle (in which case you can use this Stratagem three times)."
 
   # ── Core — Command Phase ───────────────────────────────────────────────────
@@ -58,6 +68,8 @@ stratagems:
     player: active
     conditions: [C'TAN SHARD]
     once_per_phase: true
+    effect:
+      type: swap_ability
     rule_text: "Use this Stratagem in your Command phase. Select one C'TAN SHARD model from your army. Select one of the powers from the Powers of the C'tan that the model does not know. The selected power replaces one of the Powers of the C'tan that the model does know."
 
   - id: wh40k_9e.necrons.stratagem.the_deathless_arise
@@ -68,6 +80,10 @@ stratagems:
     player: active
     conditions: [TECHNOMANCER]
     once_per_phase: true
+    effect:
+      type: buff_count
+      stat: ability_uses
+      modifier: 1
     rule_text: "Use this Stratagem in your Command phase. Select one TECHNOMANCER model from your army. Until the end of the phase, that model can use its Rites of Reanimation ability one additional time."
 
   - id: wh40k_9e.necrons.stratagem.reconstitution_protocols
@@ -78,6 +94,9 @@ stratagems:
     player: active
     conditions: [GHOST ARK]
     once_per_phase: true
+    effect:
+      type: buff_count
+      stat: reanimate_amount
     rule_text: "Use this Stratagem in your Command phase. Select one GHOST ARK unit from your army. Until the end of the phase, each time that unit uses its Repair Barge ability, you can set up to D6 destroyed models back up on the battlefield, instead of D3."
 
   - id: wh40k_9e.necrons.stratagem.stellar_alignment_protocol
@@ -88,6 +107,8 @@ stratagems:
     player: active
     conditions: [VEHICLE]
     once_per_phase: true
+    effect:
+      type: wound_track_override
     rule_text: "Use this Stratagem in the Command phase. Select one NECRONS VEHICLE model from your army that has a Wounds characteristic of 10 or more. Until the start of your next Command phase, that model is considered to have its full wounds remaining for the purposes of determining what characteristics on its profile to use. If that model has the TITANIC keyword, this Stratagem costs 2CP; otherwise it costs 1CP."
 
   # ── Core — Movement Phase ──────────────────────────────────────────────────
@@ -100,6 +121,8 @@ stratagems:
     player: active
     conditions: [CORE, INFANTRY]
     once_per_phase: true
+    effect:
+      type: teleport
     rule_text: "Use this Stratagem at the start of your Movement phase. Select one <DYNASTY> CORE INFANTRY unit from your army that is on the battlefield. Remove that unit from the battlefield. In the Reinforcements step of this phase, set that unit back up on the battlefield anywhere that is wholly within 3\" of a friendly <DYNASTY> MONOLITH model and more than 9\" away from any enemy models."
 
   - id: wh40k_9e.necrons.stratagem.burrowing_nightmares
@@ -110,6 +133,8 @@ stratagems:
     player: active
     conditions: [OPHYDIAN DESTROYERS]
     once_per_phase: true
+    effect:
+      type: teleport
     rule_text: "Use this Stratagem at the start of your Movement phase. Select one OPHYDIAN DESTROYERS unit from your army that is on the battlefield. Remove that unit from the battlefield. In the Reinforcements step of your next Movement phase, you can set that unit back up on the battlefield anywhere that is more than 9\" away from any enemy models. If the battle ends and that unit is not on the battlefield, it is destroyed."
 
   - id: wh40k_9e.necrons.stratagem.prismatic_dimensional_breach
@@ -120,16 +145,20 @@ stratagems:
     player: active
     conditions: [CORE]
     once_per_phase: true
+    effect:
+      type: teleport
     rule_text: "Use this Stratagem in the Reinforcements step of your Movement phase. Select one <DYNASTY> CORE unit from your army that is in Strategic Reserves, and then select one friendly <DYNASTY> NIGHT SCYTHE or <DYNASTY> MONOLITH model that is on the battlefield. Set that CORE unit up anywhere on the battlefield that is wholly within 3\" of that NIGHT SCYTHE or MONOLITH model and not within Engagement Range of any enemy units. This Stratagem cannot be used in the first battle round."
 
   - id: wh40k_9e.necrons.stratagem.dimensional_destabilisation
     name_en: Dimensional Destabilisation
-    cp_cost: 1
+    cp_cost: 1  # variable: 1CP normally, 2CP for TITANIC models
     phase: movement
     stage: end
     player: active
     conditions: [C'TAN SHARD]
     once_per_phase: true
+    effect:
+      type: extra_ability_use
     rule_text: "Use this Stratagem at the end of your Movement phase, when a C'TAN SHARD model from your army has used a Power of the C'tan. Roll one D6; that model can immediately use the corresponding power from the Powers of the C'tan, even if it has already been used this turn. If that model has the TITANIC keyword, this Stratagem costs 2CP; otherwise it costs 1CP."
 
   - id: wh40k_9e.necrons.stratagem.aetheric_interception
@@ -140,6 +169,11 @@ stratagems:
     player: inactive
     conditions: [HYPERSPACE HUNTER]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_set_up
+    effect:
+      type: free_attack
+      stat: shooting
     rule_text: "Use this Stratagem in the Reinforcements step of your opponent's Movement phase, after an enemy unit has been set up on the battlefield. Select one HYPERSPACE HUNTER unit from your army that is either on the battlefield, in a hyperspace dimension or in Strategic Reserves. If that HYPERSPACE HUNTER unit is in a hyperspace dimension or in Strategic Reserves, set it up anywhere on the battlefield that is within 18\" of that enemy unit and more than 9\" away from any enemy models. That HYPERSPACE HUNTER unit can, at the end of the phase, shoot as if it were your Shooting phase, but until the end of the phase it can only target the enemy unit that was just set up on the battlefield (and only if that enemy unit is an eligible target for that attack)."
 
   # ── Core — Charge Phase ────────────────────────────────────────────────────
@@ -152,6 +186,9 @@ stratagems:
     player: inactive
     conditions: [CANOPTEK]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: heroic_intervention
     rule_text: "Use this Stratagem in your opponent's Charge phase. Select one CANOPTEK unit from your army. Until the end of the phase, that unit is eligible to perform Heroic Interventions as if it was a CHARACTER."
 
   # ── Core — Shooting Phase ──────────────────────────────────────────────────
@@ -164,6 +201,8 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: auto_wound
     rule_text: "Use this Stratagem in your Shooting phase, before making the wound roll for an attack made by a NECRONS model from your army. Do not make a wound roll for that attack: it automatically wounds the target."
 
   - id: wh40k_9e.necrons.stratagem.extermination_protocols
@@ -174,6 +213,9 @@ stratagems:
     player: active
     conditions: [LOKHUST DESTROYERS]
     once_per_phase: true
+    effect:
+      type: reroll
+      stat: wound
     rule_text: "Use this Stratagem in your Shooting phase, when a LOKHUST DESTROYERS or LOKHUST HEAVY DESTROYERS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack, you can re-roll the wound roll."
 
   - id: wh40k_9e.necrons.stratagem.fractal_targeting
@@ -184,6 +226,8 @@ stratagems:
     player: active
     conditions: [TOMB BLADES]
     once_per_phase: true
+    effect:
+      type: buff_weapon_type
     rule_text: "Use this Stratagem in your Shooting phase. Select one TOMB BLADES unit from your army. Until the end of the phase: All Rapid Fire weapons that models in that unit are equipped with are treated as being Assault 2 weapons. Models in that unit do not suffer the penalty to hit rolls incurred for firing Assault weapons in the same turn that their unit has Advanced."
 
   - id: wh40k_9e.necrons.stratagem.disintegration_capacitors
@@ -194,6 +238,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: auto_wound
+      modifier: 6
     rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a gauss weapon, an unmodified hit roll of 6 automatically wounds the target."
 
   - id: wh40k_9e.necrons.stratagem.malevolent_arcing
@@ -204,6 +251,8 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS model from your army targets an enemy unit with a tesla weapon. After making that weapon's attacks, roll one D6 for each other unit within 6\" of that enemy unit: on a 4+, the unit being rolled for suffers 1 mortal wound."
 
   - id: wh40k_9e.necrons.stratagem.relentless_onslaught
@@ -214,6 +263,10 @@ stratagems:
     player: active
     conditions: [CORE, INFANTRY]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: hit
+      modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, when a CORE INFANTRY unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Rapid Fire weapon, an unmodified hit roll of 6 scores one additional hit."
 
   - id: wh40k_9e.necrons.stratagem.reanimation_prioritisation
@@ -224,6 +277,10 @@ stratagems:
     player: inactive
     conditions: []
     once_per_phase: true
+    timing: phase_reactive
+    event: on_target
+    effect:
+      type: reanimate
     rule_text: "Use this Stratagem in your opponent's Shooting phase, when a NECRONS unit from your army is selected as the target of an attack. Select one CANOPTEK REANIMATOR model in your army that is within 6\" of and visible to the targeted unit. That model can use its Nanoscarab Reanimation Beam ability as if it was your Command phase, selecting the targeted unit to be healed by its reanimation beam (any unit that was already being healed by that model's reanimation beam is no longer considered to be healed by it)."
 
   - id: wh40k_9e.necrons.stratagem.solar_pulse
@@ -234,6 +291,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: restriction
+      stat: cover
     rule_text: "Use this Stratagem in your Shooting phase. Select one enemy unit. Until the end of the phase, each time a model in a NECRONS unit from your army makes a ranged attack against that enemy unit, the target does not receive the benefits of cover against that attack."
 
   - id: wh40k_9e.necrons.stratagem.atavistic_instigation
@@ -244,6 +304,8 @@ stratagems:
     player: active
     conditions: [DOOM SCYTHE]
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in your Shooting phase, when a DOOM SCYTHE model from your army is selected to shoot. After you select the target unit for that model's heavy death ray, select one enemy unit within 3\" of that target (you can select the target itself if you wish); that enemy unit can either brace or duck for cover. If that unit braces, and it is not a VEHICLE or a MONSTER unit, it suffers D3 mortal wounds. If that unit ducks for cover, then until the end of the turn, subtract 1 from the Attacks characteristic of models in that unit, and that unit cannot fire Overwatch or Set to Defend."
 
   - id: wh40k_9e.necrons.stratagem.shield_piercer_projectors
@@ -254,6 +316,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: restriction
+      stat: invuln_save
     rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS model from your army shoots with a ranged weapon. Until the end of the phase, each time that model makes an attack with that weapon, invulnerable saving throws cannot be taken against that attack."
 
   - id: wh40k_9e.necrons.stratagem.flensing_capacitors
@@ -264,6 +329,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: auto_wound
+      modifier: 5
     rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a gauss weapon, an unmodified successful hit roll of 5+ automatically wounds the target."
 
   # ── Core — Fight Phase ─────────────────────────────────────────────────────
@@ -276,6 +344,8 @@ stratagems:
     player: active
     conditions: [FLAYED ONES]
     once_per_phase: true
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem at the end of the Fight phase. Select one FLAYED ONES unit from your army within Engagement Range of any enemy units; that unit can fight again."
 
   - id: wh40k_9e.necrons.stratagem.judgement_of_the_triarch
@@ -300,6 +370,10 @@ stratagems:
     player: active
     conditions: [LYCHGUARD]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: attacks
+      modifier: 1
     rule_text: "Use this Stratagem in the Fight phase. Select a <DYNASTY> LYCHGUARD unit from your army. Until the end of the phase, while that unit is within 3\" of a friendly <DYNASTY> NOBLE model, add 1 to the Attacks characteristic of each model in that unit."
 
   - id: wh40k_9e.necrons.stratagem.disruption_fields
@@ -310,6 +384,10 @@ stratagems:
     player: active
     conditions: [CORE]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: strength
+      modifier: 1
     rule_text: "Use this Stratagem in the Fight phase, when a NECRONS CORE unit from your army is selected to fight. Until the end of the phase, add 1 to the Strength characteristic of models in that unit."
     modifier:
       roll_type: wound
@@ -339,6 +417,7 @@ stratagems:
       target: defender
       expires_at: phase_end
       source_label: "Whirling Onslaught"
+    rule_text: "Use this Stratagem in your Shooting phase or the Fight phase, when a DESTROYER CULT unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's wound roll."
 
   - id: wh40k_9e.necrons.stratagem.entropic_strike
     name_en: Entropic Strike
@@ -348,6 +427,9 @@ stratagems:
     player: active
     conditions: [C'TAN SHARD]
     once_per_phase: true
+    effect:
+      type: restriction
+      stat: invuln_save
     rule_text: "Use this Stratagem in the Fight phase, when a C'TAN SHARD model from your army is selected to fight. Until the end of the phase, each time a melee attack is made by that model, invulnerable saving throws cannot be taken against that attack."
 
   - id: wh40k_9e.necrons.stratagem.self_destruction
@@ -358,6 +440,8 @@ stratagems:
     player: active
     conditions: [CANOPTEK SCARAB SWARMS]
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in the Fight phase, when a CANOPTEK SCARAB SWARMS unit from your army is selected to fight. Select one model in that unit. After that unit has finished piling in, you can select one enemy unit within Engagement Range of that model and roll one D6: on a 2-5, that enemy unit suffers D3 mortal wounds; on a 6, that enemy unit suffers 3 mortal wounds. The CANOPTEK SCARAB SWARM model is then destroyed."
 
   # ── Core — Any Phase ──────────────────────────────────────────────────────
@@ -382,9 +466,14 @@ stratagems:
     cp_cost: 1
     phase: any
     stage: active
-    player: inactive
+    player: both  # can be targeted in any phase in either player's turn
     conditions: [QUANTUM SHIELDING]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_target
+    effect:
+      type: invuln_save
+      modifier: 4
     rule_text: "Use this Stratagem in any phase, when a NECRONS QUANTUM SHIELDING unit from your army is selected as the target of an attack. Until the end of the phase, models in that unit have a 4+ invulnerable save."
 
   - id: wh40k_9e.necrons.stratagem.curse_of_the_phaeron
@@ -406,9 +495,15 @@ stratagems:
     cp_cost: 1
     phase: any
     stage: active
-    player: inactive
+    player: both  # can be targeted in any phase in either player's turn
     conditions: [FLAYED ONES]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_target
+    effect:
+      type: debuff_roll
+      stat: hit
+      modifier: -1
     rule_text: "Use this Stratagem in any phase, when a FLAYED ONES unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's hit roll."
 
   - id: wh40k_9e.necrons.stratagem.revenge_of_the_doomstalker
@@ -419,6 +514,11 @@ stratagems:
     player: both
     conditions: [CANOPTEK DOOMSTALKER]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: free_attack
+      stat: shooting
     rule_text: "Use this Stratagem in any phase, when a <DYNASTY> CHARACTER unit from your army is destroyed by an enemy unit. Select one friendly <DYNASTY> CANOPTEK DOOMSTALKER model from your army. At the end of the phase, that CANOPTEK DOOMSTALKER model can shoot as if it were your Shooting phase, but it can only target that enemy unit (and only if that enemy unit is an eligible target for that attack). Until the end of the battle, each time that CANOPTEK DOOMSTALKER model makes an attack that targets that enemy unit, add 1 to that attack's hit roll."
 
   - id: wh40k_9e.necrons.stratagem.rapid_reanimation
@@ -447,6 +547,8 @@ stratagems:
     player: active
     conditions: [MEPHRIT]
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in your Shooting phase, when a MEPHRIT unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage (a maximum of 3 mortal wounds can be inflicted per phase via this Stratagem)."
 
   - id: wh40k_9e.necrons.stratagem.translocation_crypt
@@ -457,6 +559,9 @@ stratagems:
     player: active
     conditions: [NEPHREKH]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: dimensional_translocation
     rule_text: "Use this Stratagem before the battle when declaring reserves and transports (if you are playing a mission without this step, use this Stratagem during deployment instead). Select one NEPHREKH unit (excluding VEHICLE or MONSTER units) from your army. That unit gains the Dimensional Translocation ability."
 
   - id: wh40k_9e.necrons.stratagem.reclaim_a_lost_empire
@@ -467,6 +572,9 @@ stratagems:
     player: active
     conditions: [NIHILAKH, INFANTRY]
     once_per_phase: true
+    effect:
+      type: restriction
+      stat: action_shoot_penalty
     rule_text: "Use this Stratagem in your Shooting phase. Select one NIHILAKH INFANTRY unit from your army that is currently performing an action. That unit can still shoot this phase without that action failing."
 
   - id: wh40k_9e.necrons.stratagem.blood_rites
@@ -477,6 +585,10 @@ stratagems:
     player: active
     conditions: [NOVOKH]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: attacks
+      modifier: 1
     rule_text: "Use this Stratagem in the Fight phase, when a NOVOKH unit from your army is selected to fight. Until the end of the phase, add 1 to the Attacks characteristic of models in that unit."
 
   - id: wh40k_9e.necrons.stratagem.methodical_destruction
@@ -487,6 +599,10 @@ stratagems:
     player: active
     conditions: [SAUTEKH]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: hit
+      modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, after a SAUTEKH unit from your army has finished making its attacks. Select one enemy unit that was targeted by an attack made by a model in that unit this phase. Until the end of the phase, each time an attack is made by a model in another friendly SAUTEKH unit against that enemy unit, add 1 to that attack's hit roll."
     modifier:
       roll_type: hit
@@ -503,6 +619,8 @@ stratagems:
     player: inactive
     conditions: [SZAREKHAN]
     once_per_phase: true
+    effect:
+      type: deny_psychic
     rule_text: "Use this Stratagem in your opponent's Psychic phase, when an enemy PSYKER attempts to manifest a psychic power within 18\" of a SZAREKHAN unit from your army. Roll one D6: on a 4+, that psychic power is denied."
 
   # ── Cult of the Cryptek Stratagems ────────────────────────────────────────
@@ -517,6 +635,9 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CRYPTEK]
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_equipment
     rule_text: "Use this Stratagem before the battle, when you are mustering your army. Select one CRYPTEK model from your army. That model can be equipped with two items of Cryptek Arkana instead of one. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case you can use this Stratagem twice), or an Onslaught battle (in which case you can use this Stratagem three times)."
 
   - id: wh40k_9e.necrons.stratagem.the_swarm_descends
@@ -528,6 +649,9 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK SCARAB SWARMS]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: dimensional_translocation
     rule_text: "Use this Stratagem before the battle. Select one CANOPTEK SCARAB SWARM unit from your army. That unit gains the Dimensional Translocation ability."
 
   - id: wh40k_9e.necrons.stratagem.overkill_protocols
@@ -539,6 +663,10 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK WRAITHS]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: ap
+      modifier: -1
     rule_text: "Use this Stratagem in your Command phase. Select one CANOPTEK WRAITHS unit from your army. Until the start of your next Command phase: Each time a model in that unit makes an attack with vicious claws, improve the Armour Penetration characteristic of that attack by 1. Each time a model in that unit makes an attack with whip coils, make one additional hit roll."
 
   - id: wh40k_9e.necrons.stratagem.aggression_overrides
@@ -550,6 +678,10 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK SPYDERS]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: move
+      modifier: 2
     rule_text: "Use this Stratagem in your Command phase. Select one CANOPTEK SPYDERS unit from your army. Until the start of your next Command phase: Add 2\" to the Move characteristic of models in that unit. Change the Weapon Skill characteristic of models in that unit to 2+."
 
   - id: wh40k_9e.necrons.stratagem.stalking_annihilator
@@ -561,6 +693,9 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK DOOMSTALKER]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: shoot_after_move
     rule_text: "Use this Stratagem in your Shooting phase. Select one CANOPTEK DOOMSTALKER model from your army that made a Normal Move or Fell Back this turn. That model is eligible to shoot this turn. When it does so, you can select the high power profile of that model's doomsday blaster even though that model did not Remain Stationary this turn."
 
   - id: wh40k_9e.necrons.stratagem.hyperdense_particle_beams
@@ -572,6 +707,10 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CULT OF THE CRYPTEK]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: ap
+      modifier: -2
     rule_text: "Use this Stratagem in your Shooting phase, when a CULT OF THE CRYPTEK unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a particle beamer or particle caster, improve the Armour Penetration characteristic of that attack by 2."
 
   - id: wh40k_9e.necrons.stratagem.enhanced_gloom_prism
@@ -583,6 +722,10 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK SPYDERS]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: deny
+      modifier: 2
     rule_text: "Use this Stratagem in your opponent's Psychic phase, before you take a Deny the Witch test for a CANOPTEK SPYDERS unit from your army. Add 2 to the result of that test."
 
   - id: wh40k_9e.necrons.stratagem.canoptek_overdrive
@@ -594,6 +737,10 @@ stratagems:
     detachment: cult_of_the_cryptek
     conditions: [CANOPTEK WRAITHS]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem in the Fight phase, when a CANOPTEK WRAITHS model from your army is destroyed. Until the end of the phase, each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, do not remove it from play. The destroyed model can fight after the attacking model's unit has finished making attacks, and is then removed from play."
 
   # ── Annihilation Legion Stratagems ────────────────────────────────────────
@@ -608,6 +755,9 @@ stratagems:
     detachment: annihilation_legion
     conditions: [ANNIHILATION LEGION]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: objective_secured
     rule_text: "Use this Stratagem in your Command phase. Select one ANNIHILATION LEGION unit from your army. Until the start of your next Command phase, that unit has the Objective Secured ability."
 
   - id: wh40k_9e.necrons.stratagem.canoptek_reinforcement
@@ -619,6 +769,9 @@ stratagems:
     detachment: annihilation_legion
     conditions: [CANOPTEK PLASMACYTE]
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: respawn
     rule_text: "Use this Stratagem in the Reinforcement step of your Movement phase. Select one CANOPTEK PLASMACYTE unit from your army that has been destroyed. Set that unit up again anywhere on the battlefield within 3\" of a friendly DESTROYER CULT unit and not within Engagement Range of any enemy models. You can only use this Stratagem once."
 
   - id: wh40k_9e.necrons.stratagem.swift_dismemberment
@@ -630,6 +783,9 @@ stratagems:
     detachment: annihilation_legion
     conditions: [DESTROYER CULT]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: charge_after_advance
     rule_text: "Use this Stratagem in your Charge phase. Select one DESTROYER CULT unit from your army. Until the end of the turn, that unit is eligible to charge in a turn in which it Advanced."
 
   - id: wh40k_9e.necrons.stratagem.weaponised_bodies
@@ -641,6 +797,8 @@ stratagems:
     detachment: annihilation_legion
     conditions: [DESTROYER CULT]
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in your Charge phase, when a DESTROYER CULT unit from your army finishes a charge move. Select one enemy unit within Engagement Range of that DESTROYER CULT unit. For each model in that DESTROYER CULT unit that is within Engagement Range of that enemy unit, roll a number of D6 equal to that model's Wounds characteristic. For each result of 5+, that enemy unit suffers 1 mortal wound (to a maximum of 6 mortal wounds)."
 
   - id: wh40k_9e.necrons.stratagem.efficient_disintegration
@@ -667,17 +825,23 @@ stratagems:
     detachment: annihilation_legion
     conditions: [OPHYDIAN DESTROYERS]
     once_per_phase: true
+    effect:
+      type: restriction
+      stat: ignore_wounds
     rule_text: "Use this Stratagem in the Fight phase, when an OPHYDIAN DESTROYERS unit from your army is selected to fight. Until that fight is resolved, each time a model in that unit makes a melee attack, rules that ignore wounds cannot be used."
 
   - id: wh40k_9e.necrons.stratagem.lurking_murderers
     name_en: Lurking Murderers
-    cp_cost: 1
+    cp_cost: 1  # variable: 1CP for ≤10 models, 2CP for 11+ models
     phase: fight
     stage: start
     player: active
     detachment: annihilation_legion
     conditions: [FLAYED ONES]
     once_per_phase: true
+    effect:
+      type: reroll
+      stat: wound
     rule_text: "Use this Stratagem at the start of the Fight phase. Select one FLAYED ONES unit from your army that is wholly within an Area Terrain feature. Until the end of the phase, each time a model in that unit makes an attack, you can re-roll the wound roll. If that unit contains 11 or more models this Stratagem costs 2CP; otherwise, it costs 1CP."
 
   - id: wh40k_9e.necrons.stratagem.murderous_demise
@@ -689,4 +853,8 @@ stratagems:
     detachment: annihilation_legion
     conditions: [CHARACTER]
     once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem in the Fight phase, when a CHARACTER model from your army that has not already been selected to fight this phase is destroyed, instead of using any other abilities that trigger when that model is destroyed. Do not remove that model from play - after the attacking model's unit has finished making attacks, that destroyed model can either shoot as if it were your Shooting phase, or be selected to fight. After resolving the destroyed model's attacks, it is then removed."

@@ -28,6 +28,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_warlord_trait
     rule_text: "Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER model from your army (excluding your WARLORD) and determine one Warlord Trait for that model; that model is only regarded as your WARLORD for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique. You can only use this Stratagem once, unless you are playing a Strike Force battle (twice) or an Onslaught battle (three times)."
 
   - id: wh40k_9e.orks.stratagem.extra_gubbinz
@@ -38,6 +41,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    once_per_battle: true
+    effect:
+      type: grant_relic
     rule_text: "Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER model from your army and give them one Relic (this must be a Relic they can have). Each Relic in your army must be unique, and you cannot use this Stratagem to give a model two Relics. You can only use this Stratagem once, unless you are playing a Strike Force battle (twice) or an Onslaught battle (three times)."
 
   # ── Specialist Detachment Setup — Before Battle ───────────────────────────
@@ -51,6 +57,8 @@ stratagems:
     conditions: []
     once_per_phase: true
     detachment: blitz_brigade
+    effect:
+      type: grant_keyword
     rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Blitz Brigade Specialist Detachment. WARBOSSES, BATTLEWAGONS, GUNWAGONS and BONEBREAKA units in that Detachment gain the BLITZ BRIGADE keyword."
 
   - id: wh40k_9e.orks.stratagem.dread_waaagh
@@ -62,6 +70,8 @@ stratagems:
     conditions: []
     once_per_phase: true
     detachment: dread_waaagh
+    effect:
+      type: grant_keyword
     rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Dread Waaagh! Specialist Detachment. BIG MEKS, GORKANAUTS, MORKANAUTS, DEFF DREADS and KILLA KANS in that Detachment gain the DREAD WAAAGH! keyword."
 
   - id: wh40k_9e.orks.stratagem.kult_of_speed
@@ -73,6 +83,8 @@ stratagems:
     conditions: []
     once_per_phase: true
     detachment: kult_of_speed
+    effect:
+      type: grant_keyword
     rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Kult of Speed Specialist Detachment. SPEED FREEKS in that Detachment gain the KULT OF SPEED keyword."
 
   - id: wh40k_9e.orks.stratagem.stompa_mob
@@ -84,6 +96,8 @@ stratagems:
     conditions: []
     once_per_phase: true
     detachment: stompa_mob
+    effect:
+      type: grant_keyword
     rule_text: "Use this Stratagem before the battle. Pick an ORK Super-heavy Detachment from your army to be a Stompa Mob Specialist Detachment. STOMPA units in that Detachment gain the STOMPA MOB keyword."
 
   # ── Core — Any Phase ──────────────────────────────────────────────────────
@@ -111,6 +125,8 @@ stratagems:
     player: active
     conditions: [WARBOSS]
     once_per_phase: true
+    effect:
+      type: auto_pass_morale
     rule_text: "Use this Stratagem in the Morale phase, when a Morale test is failed for a <CLAN> unit (excluding GRETCHIN units) from your army that is within 3\" of any friendly <CLAN> WARBOSS or <CLAN> NOBZ units. That <CLAN> unit suffers D3 mortal wounds, and the Morale test is treated as having been passed."
 
   - id: wh40k_9e.orks.stratagem.orks_is_never_beaten
@@ -121,18 +137,24 @@ stratagems:
     player: active
     conditions: [CHARACTER]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem in the Fight phase, when an ORKS CHARACTER model from your army that has not already been selected to fight this phase is destroyed. Do not remove the model from the battlefield — instead, it can fight before being removed. If this model's unit is still locked in combat with any enemy units, it can fight even though it is destroyed."
 
   # ── Core — Fight Phase ────────────────────────────────────────────────────
 
   - id: wh40k_9e.orks.stratagem.get_stuck_in_ladz
     name_en: "Get Stuck In, Ladz!"
-    cp_cost: 1
+    cp_cost: 1  # variable: 1CP for ≤10 models, 2CP for 11+ models
     phase: fight
     stage: active
     player: active
     conditions: [BOYZ]
     once_per_phase: true
+    effect:
+      type: move
     rule_text: "Use this Stratagem in the Fight phase, when a BOYZ or BEAST SNAGGA BOYZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes a pile in or consolidation move, it can move up to an additional 3\". If the selected unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise it costs 2CP."
 
   - id: wh40k_9e.orks.stratagem.hit_em_harder
@@ -143,6 +165,10 @@ stratagems:
     player: active
     conditions: [MEGANOBZ]
     once_per_phase: true
+    effect:
+      type: buff_stat
+      stat: damage
+      modifier: 1
     rule_text: "Use this Stratagem in the Fight phase, when a MEGANOBZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack with a power klaw or killsaw, add 1 to that attack's Damage characteristic."
     modifier:
       roll_type: damage
@@ -161,6 +187,8 @@ stratagems:
     player: active
     conditions: [FLASH GITZ]
     once_per_phase: true
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem at the end of your Shooting phase. Select one FLASH GITZ unit from your army; that unit can shoot again, but it must target the closest eligible enemy unit."
 
   # ── Core — Charge Phase ────────────────────────────────────────────────────
@@ -173,6 +201,8 @@ stratagems:
     player: active
     conditions: [VEHICLE]
     once_per_phase: true
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem in your Charge phase, when an ORKS VEHICLE unit from your army is selected to charge. Until the end of the phase, when making a charge roll for that unit, roll 3D6 instead of 2D6. Until the end of the phase, when that unit finishes a charge move, select one enemy unit that is within Engagement Range of it and roll one D6: on a 2+, that enemy unit suffers D3 mortal wounds."
 
   # ── Core — Any Phase (defensive) ──────────────────────────────────────────
@@ -182,9 +212,14 @@ stratagems:
     cp_cost: 2
     phase: any
     stage: active
-    player: active
+    player: inactive
     conditions: [BEAST SNAGGA]
     once_per_phase: true
+    timing: phase_reactive
+    event: on_target
+    effect:
+      type: restriction
+      stat: wound_threshold
     rule_text: "Use this Stratagem in any phase, when a BEAST SNAGGA INFANTRY, BEAST SNAGGA CAVALRY or BEAST SNAGGA MONSTER unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1, 2 or 3 for that attack fails, irrespective of any abilities."
     modifier:
       roll_type: wound
@@ -203,6 +238,10 @@ stratagems:
     player: active
     conditions: [BAD MOONS]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: hit
+      modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, when a BAD MOONS CORE or BAD MOONS CHARACTER unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon, an unmodified hit roll of 6 scores 1 additional hit."
 
   - id: wh40k_9e.orks.stratagem.ded_sneaky
@@ -213,6 +252,9 @@ stratagems:
     player: active
     conditions: [BLOOD AXES, INFANTRY]
     once_per_phase: true
+    effect:
+      type: teleport
+      stat: strategic_reserve
     rule_text: "Use this Stratagem at the end of your Movement phase, if the mission you are playing is using the Strategic Reserves rule. Select one BLOOD AXES INFANTRY unit from your army (excluding MEGA ARMOUR units) that is within 3\" of any battlefield edge. Place that unit in Strategic Reserve."
 
   - id: wh40k_9e.orks.stratagem.wreckaz
@@ -244,6 +286,8 @@ stratagems:
     player: active
     conditions: [EVIL SUNZ, SPEED FREEKS]
     once_per_phase: true
+    effect:
+      type: move
     rule_text: "Use this Stratagem at the end of your Shooting phase. Select one EVIL SUNZ SPEED FREEKS unit from your army. That unit can immediately make a Normal Move as if it was your Movement phase. That unit is not eligible to charge this turn."
 
   - id: wh40k_9e.orks.stratagem.get_da_loot
@@ -254,6 +298,9 @@ stratagems:
     player: active
     conditions: [FREEBOOTERZ, INFANTRY]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: objective_secured
     rule_text: "Use this Stratagem at the start of your Command phase. Select one FREEBOOTERZ INFANTRY unit from your army that is on the battlefield. Until the start of your next Command phase, that unit gains the Objective Secured ability (if it already has this ability, each model in that unit counts as 2 models for the purpose of controlling objective markers instead)."
 
   - id: wh40k_9e.orks.stratagem.unbridled_carnage
@@ -264,6 +311,10 @@ stratagems:
     player: active
     conditions: [GOFFS]
     once_per_phase: true
+    effect:
+      type: buff_roll
+      stat: hit
+      modifier: 1
     rule_text: "Use this Stratagem at the start of the Fight phase. Select one GOFF CORE or GOFF CHARACTER unit from your army that has the No Mukkin' About Clan Kultur. Until the end of the phase, each time a model in that unit makes an attack, it scores an additional hit on an unmodified hit roll of 5+ instead of 6."
 
   - id: wh40k_9e.orks.stratagem.mystic_chanting
@@ -274,6 +325,9 @@ stratagems:
     player: inactive
     conditions: [SNAKEBITES]
     once_per_phase: true
+    effect:
+      type: grant_ability
+      stat: deny_psychic
     rule_text: "Use this Stratagem during your opponent's Psychic phase. Select one SNAKEBITES unit from your army. Until the end of the phase, that unit can attempt to deny one psychic power as if it were a PSYKER (if that unit already has the PSYKER keyword, it can attempt to deny one additional psychic power instead)."
 
   # ── Specialist Detachment Rules ────────────────────────────────────────────
@@ -287,6 +341,9 @@ stratagems:
     conditions: [BLITZ BRIGADE, GUNWAGON]
     once_per_phase: true
     detachment: blitz_brigade
+    effect:
+      type: buff_stat
+      stat: range
     rule_text: "Use this Stratagem in your Shooting phase of the first battle round, when a BLITZ BRIGADE GUNWAGON from your army is selected to shoot. Until the end of that phase, double the Range characteristic of that model's weapons."
 
   - id: wh40k_9e.orks.stratagem.krush_em
@@ -298,6 +355,9 @@ stratagems:
     conditions: [BLITZ BRIGADE, BONEBREAKA]
     once_per_phase: true
     detachment: blitz_brigade
+    effect:
+      type: buff_roll
+      stat: ability
     rule_text: "Use this Stratagem in the Fight phase, when a BLITZ BRIGADE BONEBREAKA from your army is chosen to fight. Roll three D6 for the Bonebreaka Ram ability and choose the highest result."
 
   - id: wh40k_9e.orks.stratagem.hold_on_boyz
@@ -309,6 +369,9 @@ stratagems:
     conditions: [BLITZ BRIGADE, BATTLEWAGON]
     once_per_phase: true
     detachment: blitz_brigade
+    effect:
+      type: move
+      target: embarked_unit
     rule_text: "Use this Stratagem during your Movement phase, before you move a <CLAN> BLITZ BRIGADE BATTLEWAGON from your army. Pick a friendly <CLAN> INFANTRY unit wholly within 3\" of that model and remove it from the battlefield. After that BATTLEWAGON has moved, set the <CLAN> INFANTRY unit up on the battlefield wholly within 3\" of that BATTLEWAGON, and more than 3\" from any enemy models."
 
   - id: wh40k_9e.orks.stratagem.kustom_ammo
@@ -320,6 +383,8 @@ stratagems:
     conditions: [DREAD WAAAGH!]
     once_per_phase: true
     detachment: dread_waaagh
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem in your Shooting phase. Pick a DREAD WAAAGH! unit from your army. That unit can shoot twice this Shooting phase with all of its ranged weapons (but must target the same unit both times)."
 
   - id: wh40k_9e.orks.stratagem.turbo_boostas
@@ -331,6 +396,9 @@ stratagems:
     conditions: [KULT OF SPEED]
     once_per_phase: true
     detachment: kult_of_speed
+    effect:
+      type: move
+      stat: advance_double
     rule_text: "Use this Stratagem at the start of your Movement phase. Pick a KULT OF SPEED unit from your army. If that unit Advances this phase, double that unit's Move characteristic instead of rolling a dice."
 
   - id: wh40k_9e.orks.stratagem.stomp_stomp_stomp
@@ -342,6 +410,8 @@ stratagems:
     conditions: [STOMPA MOB]
     once_per_phase: true
     detachment: stompa_mob
+    effect:
+      type: mortal_wounds
     rule_text: "Use this Stratagem at the start of the Fight phase. Pick a STOMPA MOB unit from your army that is within 1\" of any enemy units. Roll a D6 for each enemy model within 3\" of that unit; on a 6+ that model's unit suffers 1 mortal wound."
 
   - id: wh40k_9e.orks.stratagem.stompa_porta
@@ -353,4 +423,6 @@ stratagems:
     conditions: [STOMPA MOB]
     once_per_phase: true
     detachment: stompa_mob
+    effect:
+      type: deep_strike
     rule_text: "Use this Stratagem during deployment. Set up a STOMPA MOB unit on a tellyporta pad instead of placing it on the battlefield. Units on a tellyporta pad can teleport into battle at the end of any of your Movement phases — set them up anywhere on the battlefield that is more than 9\" from any enemy models."

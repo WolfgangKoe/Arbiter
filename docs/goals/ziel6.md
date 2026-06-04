@@ -346,8 +346,8 @@ Effect-Typen (Vocabulary aus `ability.py`): `buff_roll`, `debuff_roll`, `mortal_
 - [x] `_shared/stratagems.yaml`: alle 7 GOs vollständig
 - [x] `necrons/stratagems.yaml`: 7 bekannte Fehler behoben
 - [x] `orks/stratagems.yaml`: wreckaz + careen behoben
-- [ ] `necrons/stratagems.yaml`: verbleibende ~52 GOs vollständig reviewen + `effect` nachtragen
-- [ ] `orks/stratagems.yaml`: verbleibende ~21 GOs vollständig reviewen + `effect` nachtragen
+- [x] `necrons/stratagems.yaml`: alle 59 GOs vollständig — `effect`, `once_per_battle`, `timing/event` für reaktive GOs; `player` korrigiert bei quantum_deflection + shadows_of_drazak; `rule_text` bei whirling_onslaught nachgetragen
+- [x] `orks/stratagems.yaml`: alle 28 GOs vollständig — `effect`, `once_per_battle`, `timing/event`, `player` bei tough_as_squig_hide + orks_is_never_beaten korrigiert
 - [ ] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check
 - [ ] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check
 - [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()`
