@@ -322,7 +322,7 @@ def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
 def load_stratagems(faction_dir: str) -> list[Stratagem]:
     """Load universal + faction stratagems. Universal ones come first."""
     results: list[Stratagem] = []
-    for source in ("universal", faction_dir):
+    for source in ("_shared", faction_dir):
         path = _DATA_ROOT / source / "stratagems.yaml"
         if not path.exists():
             continue

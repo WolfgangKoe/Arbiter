@@ -107,6 +107,33 @@ def list_archived_logs() -> list[dict]:
         try:
             with open(path) as f:
                 data = json.load(f)
+            if isinstance(data, list):
+                round_count = len({e.get("round") for e in data if isinstance(e, dict)})
+                results.append(
+                    {
+                        "filename": fname,
+                        "path": path,
+                        "game_id": fname.replace(".json", ""),
+                        "first": "?",
+                        "second": "?",
+                        "rounds": round_count,
+                        "warning": "Legacy format (list) — player data unavailable",
+                    }
+                )
+                continue
+            if not isinstance(data, dict):
+                results.append(
+                    {
+                        "filename": fname,
+                        "path": path,
+                        "game_id": fname.replace(".json", ""),
+                        "first": "?",
+                        "second": "?",
+                        "rounds": 0,
+                        "warning": f"Unexpected format ({type(data).__name__})",
+                    }
+                )
+                continue
             players = data.get("players", {})
             rounds = data.get("rounds", [])
             results.append(
@@ -117,6 +144,7 @@ def list_archived_logs() -> list[dict]:
                     "first": players.get("first", "?"),
                     "second": players.get("second", "?"),
                     "rounds": len(rounds),
+                    "warning": None,
                 }
             )
         except (json.JSONDecodeError, OSError):

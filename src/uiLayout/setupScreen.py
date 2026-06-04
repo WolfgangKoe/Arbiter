@@ -365,6 +365,8 @@ def _render_archive_section() -> None:
                 f"**{game_id}** — {entry['first']} vs {entry['second']} ({entry['rounds']} rounds)"
             )
             col_info.markdown(label)
+            if entry.get("warning"):
+                col_info.warning(f"Unbekanntes Log-Format: {entry['warning']}")
 
             try:
                 with open(entry["path"]) as f:
