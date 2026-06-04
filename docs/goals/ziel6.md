@@ -18,7 +18,7 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
 | **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
 | **6h** ✅ (teilw.) | Generisches Fraktion-Fähigkeits-System | 6b |
-| **Daten-Review** ⬅ | Fachliche Qualitätsprüfung aller Stratagems/Abilities | – |
+| **Daten-Review** 🔄 | Fachliche Qualitätsprüfung aller Stratagems/Abilities | – |
 
 ---
 
@@ -309,6 +309,49 @@ Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh
 
 **Tests nötig:**
 - [ ] `tests/test_auto_progression.py` — round→modifier Mapping, round_max, kein Player-Input
+
+---
+
+## Daten-Review — Stratagem-Schema + fachliche Korrekturen
+
+**Ziel:** Alle YAML-Datendateien fachlich gegen Wahapedia verifizieren. Jede GO erhält korrekte `phase`, `stage`, `player`, `timing`, `event` und ein maschinenlesbares `effect`-Feld.
+
+### Schema-Erweiterung `Stratagem`-Dataclass (2026-06-04)
+
+Neue Felder (konsistent mit `Ability.Trigger` / `Ability.Effect`):
+
+| Feld | Typ | Bedeutung |
+|------|-----|-----------|
+| `phase` | `str \| list[str]` | Einzelphase oder Liste; `"any"` nur wenn wirklich jede Phase gilt |
+| `timing` | `str \| None` | `None` = proaktiv; `"phase_reactive"` = reaktiv auf Ereignis |
+| `event` | `str \| None` | `"after_roll"` / `"on_destroy"` / `"on_target"` / `"on_declaration"` |
+| `once_per_battle` | `bool` | `True` wenn rule_text "once per battle" sagt |
+| `effect` | `Effect \| None` | Maschinenlesbarer Effekt — reuse aus `ability.py` |
+
+Effect-Typen (Vocabulary aus `ability.py`): `buff_roll`, `debuff_roll`, `mortal_wounds`, `heal`, `reanimate`, `free_attack`, `auto_pass_morale`, `reroll`, `move`, `disembark`, `shoot_reaction`, `auto_explode`, `teleport`, `invuln_save`, `restriction`, `mark_target`
+
+### Offene Entscheidungen
+
+| Entscheidung | Status |
+|---|---|
+| `once_per_battle` enforcement | Datenfeld gesetzt; Enforcement braucht `used_this_battle` in Session-State + neuen Parameter in `stratagem_visibility()` — noch nicht implementiert |
+| Variable CP-Kosten | Derzeit Kommentar im YAML (`# variable: 1CP / 2CP`). Ggf. `cp_cost_max`-Feld ergänzen. |
+| Reaktive GO UI | `timing: phase_reactive` korrekt in Dataclass; UI behandelt diese GOs noch wie proaktive |
+
+### Tasks
+
+- [x] `gameObjects/stratagem.py`: `phase: str | list[str]`, `timing`, `event`, `once_per_battle`, `effect: Effect`
+- [x] `gameObjects/loader.py`: neue Felder parsen
+- [x] `gameObjects/stratagem.py`: `stratagem_visibility()` list-phase-fähig
+- [x] `_shared/stratagems.yaml`: alle 7 GOs vollständig
+- [x] `necrons/stratagems.yaml`: 7 bekannte Fehler behoben
+- [x] `orks/stratagems.yaml`: wreckaz + careen behoben
+- [ ] `necrons/stratagems.yaml`: verbleibende ~52 GOs vollständig reviewen + `effect` nachtragen
+- [ ] `orks/stratagems.yaml`: verbleibende ~21 GOs vollständig reviewen + `effect` nachtragen
+- [ ] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check
+- [ ] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check
+- [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()`
+- [ ] Optional: Tests für korrekte Phase/Stage-Werte
 
 ---
 

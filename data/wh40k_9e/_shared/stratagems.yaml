@@ -29,6 +29,12 @@ stratagems:
     player: inactive
     conditions: []
     once_per_phase: true
+    timing: phase_reactive
+    event: on_declaration  # triggers when enemy declares Fall Back
+    effect:
+      type: mortal_wounds
+      amount: "1"
+      target: enemy
     rule_text: "Use this Stratagem when an enemy unit Falls Back, before any models in that unit are moved. Roll one D6 for each model from your army that is within Engagement Range of that enemy unit; for each result of 6, that enemy unit suffers 1 mortal wound."
 
   - id: wh40k_9e.shared.stratagem.desperate_breakout
@@ -39,6 +45,9 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    effect:
+      type: move
+      handler: fall_back_through_models
     rule_text: "Use this Stratagem in your Movement phase. Select one unit from your army that has not been selected to move this phase and which is in Engagement Range with at least one enemy unit. Roll one D6 for each model in that unit; for each result of 1, one model in that unit of your choice is destroyed. Assuming that unit was not destroyed, it can now attempt to Fall Back, and when doing so its models can be moved across enemy models as if they were not there. Any model in that unit that ends its Fall Back move within Engagement Range of any enemy model is destroyed. Assuming the unit is not destroyed, it cannot do anything else this turn."
 
   - id: wh40k_9e.shared.stratagem.emergency_disembarkation
@@ -78,6 +87,10 @@ stratagems:
     player: inactive
     conditions: []
     once_per_phase: true
+    timing: phase_reactive
+    event: on_declaration  # after enemy unit has fought
+    effect:
+      type: free_attack
     rule_text: "Use this Stratagem after an enemy unit has fought in this turn. Select one of your own eligible units and fight with it next."
 
   - id: wh40k_9e.shared.stratagem.insane_bravery

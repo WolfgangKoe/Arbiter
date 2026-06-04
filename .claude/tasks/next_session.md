@@ -25,147 +25,55 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 | Ziel | Status |
 |------|--------|
 | Ziel 1–5 — Grundgerüst, Phasen, Setup, Daten | ✅ fertig |
-| Ziel 6a — gameHeader Redesign | ✅ fertig |
-| Ziel 6b — armyCard generisches Fähigkeitssystem | ✅ fertig |
-| Ziel 6c — Stratagems Default-Tab, Modifier-Export | ✅ fertig |
-| Ziel 6e — Command Phase generic abilities + Protocols verdrahtet | ✅ committed |
-| Ziel 6g — Game Log Archiv + Setup-UI | ✅ committed |
-| Ziel 6h — Architektur-Aufräum-Sprint | ✅ committed |
-| **6-Batch-Plan (Batches 0–6)** | ✅ **VOLLSTÄNDIG COMMITTED (2026-06-04)** |
-| **Datenqualitäts-Review (läuft)** | 🔄 Schema done, bekannte Fehler gefixt, volle Review ausstehend |
-
----
-
-## Was wurde zuletzt gemacht (2026-06-04 — Session 4: 6-Batch-Plan)
-
-Alle Batches 0–6 implementiert und committed:
-
-- **Batch 0:** `universal/stratagems.yaml` → `_shared/stratagems.yaml`, IDs auf `wh40k_9e.shared.stratagem.*`
-- **Batch 1:** Subfaction-Affinitäten korrigiert (4× Necron, 3× Custodes), Ork ObjSec → `unit_abilities.yaml`
-- **Batch 2:** `shared_abilities.yaml` +3, `shared_powers.yaml` (NEU), `detachment_types.yaml` +CP-Felder
-- **Batch 3:** `orks/powers.yaml` (NEU) — 7 Weirdboy-Kräfte migriert
-- **Batch 4:** `load_command_protocols()` Alias entfernt, 5 Caller auf `load_round_choice_abilities()` umgestellt
-- **Batch 5:** Spec-Doku aktualisiert, 3 neue Fraktions-Docs in `docs/spec/data/factions/`
-- **Batch 6:** 27 neue Tests, Custodes + Loader-Tests erweitert
-- **Bonus:** Archive-Log-Crash gefixt (`AttributeError: list has no .get`)
+| Ziel 6a–6c, 6e, 6g, 6h | ✅ committed |
+| Ziel 6h — Custodes Ka'tah YAML + Tests | ✅ committed |
+| **Datenqualitäts-Review** | 🔄 Schema + _shared + bekannte Fehler done; volle Review offen |
 
 Teststand: **426 Tests grün**
 
 ---
 
-## ⬅ NÄCHSTE SESSION: Fachliche Datenqualitäts-Review
+## Was wurde zuletzt gemacht (2026-06-04)
 
-### Ziel
-
-Alle YAML-Datendateien fachlich gegen Wahapedia verifizieren und intern auf Konsistenz prüfen. Bekannte Fehlerklassen:
-
-1. **Timing-Modell zu grob** — `phase: "any"` verschleiert wann eine GO wirklich verwendbar ist
-2. **`stage` stimmt nicht** mit dem tatsächlichen Aktivierungszeitpunkt überein
-3. **`player` falsch** — aktiver vs. inaktiver Spieler nicht korrekt modelliert
-4. **Fehlende `trigger`-Semantik** — reaktive Stratagems (z.B. nach einem Würfelwurf) haben keinen eigenen `trigger_type`
-5. **Effekte nicht strukturiert** — `rule_text` beschreibt den Effekt, aber kein maschinenlesbares `effect`-Feld
-6. **`conditions` unvollständig** — Keyword-Anforderungen fehlen oder sind falsch
+- `Stratagem`-Dataclass erweitert: `phase: str | list[str]`, `timing`, `event`, `once_per_battle`, `effect: Effect` (reuse aus `ability.py`); `stratagem_visibility()` list-phase-fähig
+- `loader.py`: neue Felder werden geparst
+- `_shared/stratagems.yaml`: alle 7 GOs vollständig (phase, timing, event, effect, once_per_battle)
+- `necrons/stratagems.yaml`: 7 bekannte Fehler behoben (phase-Listen, player, timing/event, effect, variable CP-Kommentare)
+- `orks/stratagems.yaml`: wreckaz + careen korrigiert
+- `adeptus_custodes/faction_abilities.yaml`: Datenfehler in Calistus-Eintrag gefixt
 
 ---
 
-### Bekannte Einzelfehler (Beispiele, kein vollständiger Katalog)
+## ⬅ NÄCHSTE SESSION: Fachliche Datenqualitäts-Review (Fortsetzung)
 
-#### `_shared/stratagems.yaml`
+Für jede GO prüfen und ergänzen:
+- `phase` — korrekt als Liste wenn mehrere Phasen möglich
+- `stage` — `start` / `active` / `end`
+- `player` — `active` / `inactive` / `both`
+- `timing` + `event` — wenn reaktiv
+- `effect` — maschinenlesbares Feld nachtragen (Typen: `buff_roll`, `debuff_roll`, `mortal_wounds`, `heal`, `reanimate`, `free_attack`, `auto_pass_morale`, `reroll`, `move`, `teleport`, `invuln_save`, `restriction`, `mark_target`, ...)
+- `once_per_battle` — wenn rule_text "once per battle" sagt
+- variable `cp_cost` — als Kommentar dokumentieren
 
-| Stratagem | Problem |
-|-----------|---------|
-| `command_re_roll` | `phase: any` falsch — GO ist **reaktiv nach einem Würfelwurf**, nicht "in beliebiger Phase" aktiv nutzbar. In der Befehlsphase gibt es keine Hit/Wound/Save-Rolls. Braucht `trigger_type: after_roll` + `applicable_phases: [movement, psychic, shooting, charge, fight]` |
-| `emergency_disembarkation` | `phase: any` — tatsächlich nur wenn ein TRANSPORT **zerstört wird** (reaktiv). Braucht `trigger_type: on_destroy`, `conditions: [TRANSPORT]` korrekt? |
-| `fire_overwatch` | `stage: active` — tatsächlich **nach** Charge-Deklaration, vor dem Charge-Wurf. Braucht genaueres Timing-Modell. |
-| `insane_bravery` | `once_per_phase: true` falsch — Regeltext sagt **once per battle** |
+**Priorität:**
+1. ⬅ `necrons/stratagems.yaml` — ~52 GOs noch offen
+2. ⬅ `orks/stratagems.yaml` — ~21 GOs noch offen
+3. ⬅ `necrons/faction_abilities.yaml` + `orks/faction_abilities.yaml` — Trigger/Conditions spot-check
+4. ⬅ Optional: Tests für korrekte Phase/Stage-Werte
 
-#### Necrons `stratagems.yaml`
-
-| Stratagem | Problem |
-|-----------|---------|
-| `judgement_of_the_triarch` | `phase: any` falsch — GO gilt für Shooting **oder** Fight, nicht beliebig. Korrekt: `phase: [shooting, fight]` |
-| `whirling_onslaught` | `phase: any` + `stage: active` falsch — tatsächlich reaktiv wenn Einheit als Ziel ausgewählt wird; `player: inactive` korrekt |
-| `resurrection_protocols` | `stage: end` korrekt, aber `player: both`? Nur eigene Modelle. |
-| `rapid_reanimation` | variable CP-Kosten (1 oder 2 CP) — YAML hat nur einen Wert |
-| `stellar_alignment_protocol` | variable CP-Kosten (1 CP normal, 2 CP für TITANIC) |
-| `efficient_disintegration` | `phase: any` falsch — GO ist Shooting-Phase |
-| `curse_of_the_phaeron` | `player: both` falsch — nur aktiver Spieler löst aus |
-
-#### Orks `stratagems.yaml`
-
-| Stratagem | Problem |
-|-----------|---------|
-| `wreckaz` | `phase: any, stage: start` falsch — tatsächlich `phase: [shooting, fight], stage: start` |
-| `careen` | `phase: any` + reaktiv auf Destroy-Event — braucht `trigger_type: on_destroy` |
+**Wahapedia-Quellen:**
+- `https://wahapedia.ru/wh40k9ed/factions/necrons/Stratagems`
+- `https://wahapedia.ru/wh40k9ed/factions/orks/Stratagems`
 
 ---
 
-### Scope der Review
+## Offene Entscheidungen (für Folgeschritte)
 
-**Zu prüfende Dateien (Priorität 1 — haben direkte Spielauswirkung):**
-1. `data/wh40k_9e/_shared/stratagems.yaml` — 7 Core GOs
-2. `data/wh40k_9e/necrons/stratagems.yaml` — 59 GOs
-3. `data/wh40k_9e/orks/stratagems.yaml` — 23 GOs
-4. `data/wh40k_9e/necrons/faction_abilities.yaml` — Trigger/Conditions
-5. `data/wh40k_9e/orks/faction_abilities.yaml` — Trigger/Conditions
-
-**Zu prüfende Dateien (Priorität 2 — Datenkonsistenz):**
-6. `data/wh40k_9e/necrons/unit_abilities.yaml`
-7. `data/wh40k_9e/orks/unit_abilities.yaml`
-8. `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml`
-9. `data/wh40k_9e/_shared/shared_abilities.yaml`
-
----
-
-### Methodik
-
-**Für jede Gefechtsoption:**
-1. `rule_text` lesen
-2. Wahapedia-Originaltext prüfen (Quelle: `https://wahapedia.ru/wh40k9ed/factions/<faction>/Stratagems`)
-3. Folgende Felder verifizieren:
-   - `phase` — in welcher Phase **genau** verwendbar? Liste wenn mehrere.
-   - `stage` — `start` / `active` / `end` — stimmt der Zeitpunkt?
-   - `player` — active / inactive / both?
-   - `once_per_phase` vs. `once_per_battle` — explizit im Regeltext prüfen
-   - `conditions` — welche Keywords zwingend erforderlich?
-   - variable `cp_cost` — im YAML dokumentieren (entweder Mindestwert + Kommentar, oder neues Feld)
-4. Interne Konsistenz: passt das zur Spiellogik? Kann die GO im aktuellen Phasenmodell überhaupt getriggert werden?
-
-**Für reaktive Stratagems** (Reaktion auf Ereignis):
-- Klären: brauchen wir ein `trigger_type`-Feld? Optionen: `proactive` | `after_roll` | `on_destroy` | `on_target` | `on_declaration`
-- Diese Entscheidung **vor** der Implementierung treffen — betrifft das Datenmodell
-
----
-
-### Offene Architekturentscheidung (VOR der Implementierung klären)
-
-**Frage:** Wie modellieren wir reaktive Stratagems im `Stratagem`-Dataclass?
-
-**Option A:** Neues Feld `trigger_type: proactive | reactive` + optionales `trigger_event`
-```yaml
-trigger_type: reactive
-trigger_event: after_roll   # after_roll | on_destroy | on_target | on_declaration
-applicable_phases: [shooting, fight, charge, psychic, movement]
-```
-
-**Option B:** `phase`-Feld bleibt, aber als Liste. `stage: reactive` als neuer Stage-Wert.
-
-**Option C:** Kein Schema-Change — nur `phase: [shooting, fight]` statt `any` korrigieren, reaktive Semantik im `rule_text` belassen (pragmatisch, kein Engine-Aufwand)
-
-→ **Empfehlung für die Review-Session:** Zunächst Option C (Datenkorrekturen ohne Schema-Erweiterung), und parallel dokumentieren welche GOs reaktiv sind. Dann separat entscheiden ob ein neues Feld sinnvoll ist.
-
----
-
-### Ablauf der Review-Session (Stand 2026-06-04)
-
-1. ✅ **Schema-Entscheidung** → Option A gewählt: `timing`, `event`, `once_per_battle`, `effect: Effect` zu `Stratagem`-Dataclass ergänzt; `phase: str | list[str]`; `stratagem_visibility()` angepasst
-2. ✅ **`_shared/stratagems.yaml`** — alle 7 GOs korrigiert (timing/event/phase/once_per_battle/effect)
-3. ✅ **Bekannte Fehler `necrons/stratagems.yaml`** — 7 GOs korrigiert (phase, player, timing, event, effect, variable CP-Kommentare)
-4. ✅ **Bekannte Fehler `orks/stratagems.yaml`** — wreckaz + careen korrigiert
-5. ⬅ **Vollständige Review `necrons/stratagems.yaml`** — 52 verbleibende GOs noch nicht geprüft
-6. ⬅ **Vollständige Review `orks/stratagems.yaml`** — 21 verbleibende GOs noch nicht geprüft
-7. ⬅ **`faction_abilities.yaml`** (necrons + orks) — Trigger/Conditions spot-check
-8. ⬅ Optional: neue Tests für korrekte Phase/Stage-Werte
+| Entscheidung | Optionen |
+|---|---|
+| **`once_per_battle` enforcement** | Braucht `used_this_battle: set[str]` in Session-State + neuen Parameter in `stratagem_visibility()`. Wann implementieren? |
+| **Variable CP-Kosten** | Derzeit nur Kommentar im YAML. Optionen: (a) so lassen, (b) `cp_cost_max: int` Feld, (c) `cp_cost_condition: str` Feld + Logik |
+| **Reaktive GO UI** | `timing: phase_reactive` GOs sind jetzt korrekt in der Dataclass markiert — aber die UI zeigt sie gleich wie proaktive. Eigener UI-Bereich? Anderes Styling? Spätere Entscheidung. |
 
 ---
 
@@ -181,19 +89,19 @@ YAML (faction_abilities.yaml)
   ├─ ability_type: triggered      → load_faction_abilities(), ability_engine.get_triggered_abilities()
   └─ ability_type: auto_progression → (noch nicht implementiert)
 
-YAML (powers.yaml — NEU)          → load_powers() [noch nicht verdrahtet]
+YAML (powers.yaml)               → load_powers() [noch nicht verdrahtet]
 YAML (_shared/shared_powers.yaml) → smite, deny_the_witch, perils — stub
 YAML (_shared/shared_abilities.yaml) → load_shared_abilities() [noch nicht verdrahtet]
-YAML (_shared/stratagems.yaml)    → load_stratagems() [war universal/, jetzt _shared/]
+YAML (_shared/stratagems.yaml)   → load_stratagems() [verdrahtet]
 ```
 
-### _shared/-Verzeichnis (aktueller Stand)
+### _shared/-Verzeichnis
 | Datei | Inhalt | Loader-Status |
 |-------|--------|--------------|
-| `_shared/stratagems.yaml` | 7 Core Stratagems | verdrahtet (`load_stratagems()`) |
+| `_shared/stratagems.yaml` | 7 Core Stratagems (vollständig) | verdrahtet |
 | `_shared/shared_abilities.yaml` | ObjSec, DS, FNP, Fly + 3 weitere | Stub, nicht verdrahtet |
 | `_shared/shared_powers.yaml` | Smite, Deny, Perils | Stub, nicht verdrahtet |
-| `_shared/detachment_types.yaml` | Patrol–Air Wing + CP-Felder | verdrahtet (`load_detachment_types()`) |
+| `_shared/detachment_types.yaml` | Patrol–Air Wing + CP-Felder | verdrahtet |
 
 ### Nicht wired (nur Display)
 `strength_modifier`, `attacks_modifier`, `ap_bonus`, `move_bonus`, `advance_and_charge`,
@@ -224,7 +132,7 @@ YAML (_shared/stratagems.yaml)    → load_stratagems() [war universal/, jetzt _
 
 ---
 
-## Mittelfristige Roadmap (nach der Review-Session)
+## Mittelfristige Roadmap (nach der Review)
 
 | Schritt | Was | Status |
 |---------|-----|--------|
@@ -241,21 +149,17 @@ YAML (_shared/stratagems.yaml)    → load_stratagems() [war universal/, jetzt _
 
 ## Historische Session-Notizen
 
+### 2026-06-04, Session 5 — Datenqualitäts-Review (Teil 1)
+Schema-Erweiterung Stratagem-Dataclass. Alle _shared GOs vollständig. 7 bekannte Necron-Fehler + Orks wreckaz/careen behoben. Custodes faction_abilities.yaml Datenfehler gefixt.
+
 ### 2026-06-04, Session 4 — 6-Batch-Plan vollständig
+Batches 0–6: Folder-Merge, YAML-Datenkorrekturen, Shared-Dateien, Orks powers.yaml, Alias-Entfernung, Spec-Doku, 27 Tests. 426 Tests grün. Bugfix: Archive-Log-Crash.
 
-Alle Batches 0–6 implementiert: Folder-Merge, YAML-Datenkorrekturen, Shared-Dateien,
-Orks powers.yaml, Alias-Entfernung, Spec-Doku, 27 neue Tests.
-426 Tests grün. Bugfix: Archive-Log-Crash (list vs. dict).
-
-### 2026-06-04, Session 3 — Planung & Forschung (kein Code)
-
-Subfaction-Affinitäten für Necrons (4 falsch) und Custodes (2 falsch + 1 ID) verifiziert.
-Core Rules Inventory via Wahapedia. Vollständiger 6-Batch-Plan formuliert.
+### 2026-06-04, Session 3 — Planung & Forschung
+Subfaction-Affinitäten verifiziert. Core Rules Inventory. 6-Batch-Plan formuliert.
 
 ### 2026-06-03, Session 2 — Bugfixes
-
-Battle Log TypeError gefixt. Inaktiver Spieler konnte Protokoll aktivieren — gefixt.
+Battle Log TypeError + Protokoll-Aktivierung durch inaktiven Spieler gefixt.
 
 ### 2026-06-03, Session 1
-
 WAAAGH! Datenfehler korrigiert. Generisches Fähigkeitssystem implementiert.
