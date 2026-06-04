@@ -19,6 +19,18 @@
 - Warten bis der Nutzer explizit zustimmt (z.B. „ja", „mach es", „ok")
 - Ausnahme: expliziter „freier Lauf" für mehrere Schritte
 
+### Was NIEMALS ohne explizite Freigabe passiert
+Dieselbe Pflicht wie für Code gilt auch für:
+- Memory-Einträge schreiben oder ändern
+- Subagents starten
+- Skills aufrufen, die Dateien oder Einstellungen ändern (z.B. `update-config`)
+
+### Was „Freigabe" bedeutet
+- ✓ Explizit: „ja", „mach es", „ok", „Freigabe", „mach weiter"
+- ✗ Rückfrage des Nutzers zum Plan = **keine** Freigabe
+- ✗ Ergänzung des Nutzers zum Plan = **keine** Freigabe → Plan aktualisieren, neu zeigen, warten
+- ✓ „meinetwegen" / direkter Befehl = Freigabe **nur** für das explizit Genannte
+
 ### Bei Unklarheiten IMMER zuerst fragen
 - Wenn eine Anforderung mehrdeutig ist — **STOP, Frage stellen, auf Antwort warten**
 - Kritisch bei: Scope-Fragen, „X entfernen und nach Y verlagern", Fraktion vs. global
