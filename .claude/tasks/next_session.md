@@ -20,79 +20,51 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 12, 2026-06-04)
+## Aktueller Stand (nach Session 13, 2026-06-04)
 
 ### Was funktioniert ✅
 - Ziel 1–5 (Grundgerüst, Phasen, Setup, Daten) — vollständig
-- Ziel 6a–6c, 6e, 6g, 6h — committed
+- Ziel 6a–6e, 6g, 6h — committed
 - 6d-v2 Attackensequenz: Deklaration + Resolution-Tabs, Wound-Tabelle, RP-Block, Cover-Dropdown
 - 461 Tests grün
 
 ### Was diese Session erledigt wurde ✅
-- CLAUDE.md verschlankt: Flask entfernt, Arbiter-Projektkontext ergänzt, Freigabe-Regeln präzisiert
-- Dead Code `_render_stratagem_hints()` aus `gameActionsArea.py` gelöscht
-- Memory bereinigt: veraltete Flask/Ziel-3-Einträge entfernt
-- `.claude/settings.json` verschlankt: von 55 spezifischen Einträgen auf 18 allgemeine Patterns
+- Wahapedia-Scraper: Truncation entfernt, alle Unit-Slugs (Necrons 67, Orks 80+, Custodes 33)
+- Neues Tool `wahapedia_page_scraper.py`: faction_overview + Core Rules lokal gespeichert
+- Stratagem-Visibility: 3 Bugs gefixt (phase_reactive, dual-faction load, condition fallback)
+- Silent King: 8 fehlende Abilities in `unit_abilities.yaml` eingetragen
+- Command Protocols: regelkonform (Setup-Zuweisung, Auto-Aktivierung, active_directive gesetzt)
 
 ---
 
 ## Offene Aufgaben (priorisiert)
 
-### AUFGABE 1 — Wahapedia-Daten lokal speichern (Voraussetzung für Aufgabe 2)
+### AUFGABE 1 — Wahapedia-Daten lokal (erledigt)
 
-**Plan liegt vor, Freigabe noch ausstehend.** Permissions in `settings.json` sind bereits eingetragen.
+Gespeichert in `docs/work/`:
+- `wahapedia_necrons/`: units_all.txt (67 Einheiten), stratagems.txt, faction_overview.txt (344K)
+- `wahapedia_orks/`: units_all.txt (80+ Einheiten), stratagems.txt, faction_overview.txt (343K)
+- `wahapedia_adeptus_custodes/`: units_all.txt (33 Einheiten), faction_overview.txt (262K)
+- `wahapedia_core_rules/`: 6 Dateien (741K gesamt)
 
-**ABGESCHLOSSEN** (Session 13, 2026-06-04):
-- `docs/work/wahapedia_necrons/units_all.txt` — 46 Einheiten, vollständige Texte
-- `docs/work/wahapedia_necrons/stratagems.txt` — 126 Stratagems
-- `docs/work/wahapedia_orks/units_all.txt` — 51 Einheiten, vollständige Texte
-- `docs/work/wahapedia_orks/stratagems.txt` — Orks-Stratagems
-- Scraper-Truncation entfernt (`tools/wahapedia_scraper.py`)
-
-**Nächster Schritt:** Vergleichsreport schreiben (YAML vs. Wahapedia-Daten)
+Noch offen: Vergleichsreport YAML vs. Wahapedia (weitere Einheiten nach Silent King)
 
 ---
 
-### AUFGABE 2 — Stratagems-Visibility Redesign (kritisch)
-
-**Code-Review ist fertig** (aus Session 12). Ursachen sind vollständig verstanden:
-
-**Bug A — `timing: phase_reactive` wird ignoriert:**
-`stratagem_visibility()` liest das `timing`-Feld nie → reaktive GOs erscheinen immer wenn Phase + Stage passen.
-Fix: `if stratagem.timing == "phase_reactive": return "hidden"` in `stratagem_visibility()`.
-
-**Bug B — Nur aktive Fraktion geladen:**
-`load_stratagems(faction_dir_for(active_faction))` lädt nur Necron-Stratagems, aber zeigt manche als "für Orks" an.
-Fix: Beide Fraktionen laden, sauber filtern nach `player`.
-
-**Bug C — Condition-Fallback zu permissiv:**
-`_conditions_met()` ohne selected_unit → prüft alle Einheiten → fast immer True.
-Fix: Kein Fallback. Ohne selected_unit + mit Conditions → hidden.
-
-**Dateien die sich ändern:**
-- `src/gameObjects/stratagem.py` — `stratagem_visibility()` um timing-Check erweitern
-- `src/uiLayout/gameProtocoll.py` — `_conditions_met()` Fallback entfernen + beide Fraktionen laden
-
-**Alle Änderungen gegen Wahapedia-Daten verifizieren** (erst Aufgabe 1 abschließen).
+### AUFGABE 2 — Stratagems-Visibility ✅ ERLEDIGT (fb5d39c)
 
 ---
 
-### AUFGABE 3 — Silent King + weitere Einheiten-Fähigkeiten (Datenproblem)
+### AUFGABE 3 — Einheiten-Abilities (laufend)
 
-**Symptom:** Command-Phase-Fähigkeiten des Silent King (Will of the Triarch etc.) erscheinen nicht.
-**Vermutung:** Einträge fehlen oder sind falsch in `data/wh40k_9e/necrons/unit_abilities.yaml`.
-**Vorgehensweise:** Nach Aufgabe 1 gegen Wahapedia-Daten vergleichen → gezielte YAML-Korrekturen.
-**Wahrscheinlich betrifft es weitere Einheiten** — nicht nur Silent King.
+Silent King ✅ — 8 Abilities eingetragen (149029d)
+
+Noch offen: Imotekh, Chronomancer, Plasmancer, Psychomancer, Lychguard, Flayed Ones,
+Canoptek Wraiths u.v.m. — gegen `docs/work/wahapedia_necrons/units_all.txt` prüfen.
 
 ---
 
-### AUFGABE 4 — Command Protocols regelkonform machen
-
-**Problem:** Reihenfolge der Protokolle sollte vor Spielbeginn festgelegt werden (in Setup), nicht frei in jeder Befehlsphase wählbar. Außerdem: `active_directive` (primary/secondary) wird in `ability_engine.py` abgefragt, aber nirgends gesetzt.
-
-**Dateien:**
-- `src/gameMechanic/commandPhase.py` — `_render_command_protocols()` überarbeiten
-- `src/uiLayout/gameActionsArea.py` — Setup-Phase um Protokoll-Reihenfolge erweitern
+### AUFGABE 4 — Command Protocols ✅ ERLEDIGT (58ebc0b)
 
 ---
 

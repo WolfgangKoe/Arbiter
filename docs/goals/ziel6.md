@@ -15,11 +15,11 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6c** ✅ | gameProtocoll — Stratagems als Default, Modifier-Export | 6b |
 | **6d** ✅ | Attackensequenz — simultane Darstellung (Basis-Implementation) | 6b, 6c |
 | **6d-v2** 🔵 | Attackensequenz — vollständiges UI-Redesign (Design abgestimmt) | 6d |
-| **6e** ✅ (teilw.) | Fähigkeiten-Integration — Command Protocols verdrahtet | 6b |
+| **6e** ✅ | Fähigkeiten-Integration — Command Protocols regelkonform + Stratagem-Visibility-Fix | 6b |
 | **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
 | **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
 | **6h** ✅ (teilw.) | Generisches Fraktion-Fähigkeits-System | 6b |
-| **Daten-Review** 🔄 | Fachliche Qualitätsprüfung aller Stratagems/Abilities | – |
+| **Daten-Review** 🔄 | YAML-Vollständigkeit (Silent King ✅, weitere Einheiten offen) | – |
 
 ---
 
