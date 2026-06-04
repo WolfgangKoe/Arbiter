@@ -153,3 +153,108 @@ def resolve_attack(
     log.append(f"Damage: {net_failed} × {params.damage} = **{total_damage}**")
 
     return total_damage, log
+
+
+# ---------------------------------------------------------------------------
+# Ziel-6d: modifier-stack helpers — pure functions, no session state access
+# ---------------------------------------------------------------------------
+
+
+def resolve_attack_modifiers(
+    skill: int,
+    strength: int,
+    toughness: int,
+    weapon_type: str,
+    advanced: bool,
+    modifiers: list[dict],  # type: ignore[type-arg]
+    use_melee: bool,
+) -> dict:  # type: ignore[type-arg]
+    """Compute hit/wound thresholds with full modifier stack.
+
+    Each entry in *modifiers*: {"label": str, "value": int, "roll_type": "hit"|"wound", "source": str}
+    Returns:
+        {
+            "hit":   {"base": int, "stack": list[dict], "modified": int},
+            "wound": {"base": int, "stack": list[dict], "modified": int},
+        }
+    Net modifier is capped at ±1 per 9E rules. Threshold minimum is 2+.
+    """
+    hit_stack: list[dict] = []  # type: ignore[type-arg]
+    wound_stack: list[dict] = []  # type: ignore[type-arg]
+
+    if not use_melee and weapon_type == "Heavy" and advanced:
+        hit_stack.append({"label": "Heavy (advanced)", "value": -1, "source": "weapon_rule"})
+
+    for m in modifiers:
+        roll_type = m.get("roll_type", "")
+        entry = {"label": m["label"], "value": m["value"], "source": m.get("source", "modifier")}
+        if roll_type == "hit":
+            hit_stack.append(entry)
+        elif roll_type == "wound":
+            wound_stack.append(entry)
+
+    hit_net = min(1, max(-1, sum(e["value"] for e in hit_stack)))
+    wound_net = min(1, max(-1, sum(e["value"] for e in wound_stack)))
+
+    hit_base = skill
+    wound_base = wound_threshold(strength, toughness)
+
+    return {
+        "hit": {
+            "base": hit_base,
+            "stack": hit_stack,
+            "modified": max(2, hit_base - hit_net),
+        },
+        "wound": {
+            "base": wound_base,
+            "stack": wound_stack,
+            "modified": max(2, wound_base - wound_net),
+        },
+    }
+
+
+def resolve_save(
+    base_save: int,
+    invuln_save: int | None,
+    ap: int,
+    save_modifiers: list[dict],  # type: ignore[type-arg]
+) -> dict:  # type: ignore[type-arg]
+    """Compute best effective save value.
+
+    Each entry in *save_modifiers*: {"label": str, "value": int}
+    Positive value = save improves (e.g. +1 lowers threshold from 5+ to 4+).
+    Invuln save cannot be improved by armour modifiers.
+    Returns:
+        {
+            "armour": int, "armour_eff": int, "invuln": int | None,
+            "effective": int, "using_invuln": bool,
+            "save_bonus": int, "stack": list[dict],
+        }
+    """
+    save_bonus = sum(m["value"] for m in save_modifiers)
+    armour_eff = base_save + abs(ap)
+    armour_modified = armour_eff - save_bonus
+
+    if invuln_save is not None and invuln_save < armour_modified:
+        effective = invuln_save
+        using_invuln = True
+    else:
+        effective = armour_modified
+        using_invuln = False
+
+    return {
+        "armour": base_save,
+        "armour_eff": armour_eff,
+        "invuln": invuln_save,
+        "effective": min(effective, 7),
+        "using_invuln": using_invuln,
+        "save_bonus": save_bonus,
+        "stack": save_modifiers,
+    }
+
+
+def resolve_fnp(fnp: int | None, ignores_fnp: bool) -> int | None:
+    """Return FNP threshold, or None if the unit has no FNP or the weapon ignores it."""
+    if fnp is None or ignores_fnp:
+        return None
+    return fnp

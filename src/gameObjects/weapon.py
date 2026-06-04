@@ -11,6 +11,7 @@ class WeaponProfile:
     damage: str  # "1", "D3", "D3+3"
     is_melee: bool
     abilities: str = ""
+    ignores_fnp: bool = False
     name_en: str = ""  # only set for dual-profile weapons (e.g. "Shooting", "Melee")
 
 

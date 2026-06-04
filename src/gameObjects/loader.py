@@ -47,6 +47,7 @@ def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
         ap=str(d["ap"]),
         damage=str(d["damage"]),
         abilities=d.get("abilities", ""),
+        ignores_fnp=d.get("ignores_fnp", False),
         is_melee=d.get("is_melee", False),
     )
 

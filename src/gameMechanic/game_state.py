@@ -299,6 +299,10 @@ def init_state(
     else:
         st.session_state.roster_warnings = {}
 
+    from gameMechanic.game_log import set_log_players  # noqa: PLC0415
+
+    set_log_players(p1_name, p2_name)
+
 
 def swap_players() -> None:
     """Swap first_player / second_player and all associated p1/p2 session state.

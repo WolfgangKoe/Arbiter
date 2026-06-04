@@ -148,14 +148,14 @@ VERWUNDUNG
 
 ### Tasks
 
-- [ ] `gameMechanic/combat.py`: Funktion `resolve_attack_modifiers(attacker_unit, weapon_profile, target_unit, active_modifiers)` → gibt strukturierten Modifier-Stack pro Roll-Typ zurück
-- [ ] `gameMechanic/combat.py`: Funktion `resolve_save(target_unit, ap, active_modifiers)` → gibt besten Save-Wert zurück (normal vs. invuln)
-- [ ] `gameMechanic/combat.py`: Funktion `resolve_fnp(target_unit, weapon_profile)` → gibt FNP-Wert zurück oder `None` wenn ignoriert
-- [ ] `uiLayout/gameActionsArea.py` / Phase-Handler: Attack-Sequenz-Block extrahieren in eigene Render-Funktion
-- [ ] Angreifer-PlayerArea: Treffer-Block + Verwundungs-Block rendern (Modifier-Stack, Quelle, optionale Stratagem-Buttons)
-- [ ] Verteidiger-PlayerArea: Save-Block + FNP-Block (konditional) + Schadenseingabe rendern
-- [ ] `gameObjects/weapon.py`: `ignores_fnp: bool` Feld ergänzen
-- [ ] Prüfen: Shootingphase, Fightphase, Overwatch in Chargephase — alle drei Kontexte korrekt
+- [x] `gameMechanic/combat.py`: Funktion `resolve_attack_modifiers(skill, strength, toughness, weapon_type, advanced, modifiers, use_melee)` → strukturierter Modifier-Stack (±1-Cap, Heavy-Penalty)
+- [x] `gameMechanic/combat.py`: Funktion `resolve_save(base_save, invuln_save, ap, save_modifiers)` → besten Save (Rüstung vs. Invuln), mit Stack
+- [x] `gameMechanic/combat.py`: Funktion `resolve_fnp(fnp, ignores_fnp)` → FNP-Wert oder `None` wenn ignoriert/abwesend
+- [x] `uiLayout/_common.py`: `render_attack_form()` komplett neu — 2-Spalten-Layout (Angreifer: Treffer/Verwundung · Verteidiger: Save/FNP/Schaden-Input)
+- [x] `gameObjects/weapon.py`: `ignores_fnp: bool` Feld ergänzt
+- [x] `gameObjects/loader.py`: `ignores_fnp` aus YAML parsen
+- [x] `tests/test_combat_6d.py`: 28 Tests für die 3 neuen Funktionen
+- [ ] Prüfen: Shootingphase, Fightphase, Overwatch in Chargephase — alle drei Kontexte korrekt (Overwatch: kein chargePhase.py vorhanden — separater Task)
 
 ---
 
@@ -237,7 +237,7 @@ VERWUNDUNG
 - [x] `gameMechanic/game_log.py`: `archive_and_reset_log()` — verschiebt aktuelles Log nach `data/log/archive/<game_id>.json`
 - [x] `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
 - [x] `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (Liste, Download, Löschen mit Bestätigung)
-- [ ] `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf (Spielernamen im Log-Header)
+- [x] `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf (Spielernamen im Log-Header)
 - [ ] Prüfen: Nach Reset keine alten Einträge im Battle Log sichtbar
 
 ---

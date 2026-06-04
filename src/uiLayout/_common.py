@@ -290,14 +290,6 @@ def render_player_column(
 # ---------------------------------------------------------------------------
 
 
-def _try_parse_damage(damage_str: str) -> int | None:
-    """Return int if damage is fixed, None if variable (D/W notation)."""
-    try:
-        return int(str(damage_str).strip())
-    except ValueError:
-        return None
-
-
 def _parse_strength(raw: str, unit_strength: int) -> int:
     """Resolve weapon strength notation to a numeric value.
 
@@ -337,6 +329,47 @@ def _parse_strength(raw: str, unit_strength: int) -> int:
         return unit_strength
 
 
+def _protocol_source_label(faction_dir: str) -> str:
+    from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
+
+    protocol_id = st.session_state.get("active_protocol_id")
+    directive = st.session_state.get("active_directive")
+    if not protocol_id or not directive or not faction_dir:
+        return "Protocol"
+    protocols = load_round_choice_abilities(faction_dir)
+    p = next((proto for proto in protocols if proto.id == protocol_id), None)
+    return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
+
+
+def _render_roll_block(title: str, base_label: str, block: dict) -> None:  # type: ignore[type-arg]
+    """Render a hit or wound block with modifier stack."""
+    st.markdown(f"**{title}**")
+    line = f"[ {base_label} {block['base']}+ ]"
+    for entry in block["stack"]:
+        sign = "+" if entry["value"] > 0 else ""
+        line += f" &nbsp;·&nbsp; {sign}{entry['value']} _{entry['label']}_"
+    st.markdown(line, unsafe_allow_html=True)
+    if block["stack"]:
+        st.markdown(f"→ &nbsp;**{block['modified']}+**", unsafe_allow_html=True)
+
+
+def _render_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
+    """Render the save block with armour/invuln comparison."""
+    st.markdown("**RETTUNGSWURF**")
+    ap_str = f"AP{ap}" if ap != 0 else "AP0"
+    line = f"[ Sv {save['armour']}+ / {ap_str} → {save['armour_eff']}+ ]"
+    if save["invuln"] is not None:
+        line += f" &nbsp;·&nbsp; Invuln {save['invuln']}+"
+    st.markdown(line, unsafe_allow_html=True)
+    for m in save["stack"]:
+        sign = "+" if m["value"] > 0 else ""
+        st.markdown(f"&nbsp;&nbsp;{sign}{m['value']} _{m['label']}_", unsafe_allow_html=True)
+    if save["using_invuln"]:
+        st.markdown(f"→ &nbsp;**{save['effective']}+** _(invuln)_", unsafe_allow_html=True)
+    elif save["save_bonus"] or save["armour_eff"] != save["armour"]:
+        st.markdown(f"→ &nbsp;**{save['effective']}+**", unsafe_allow_html=True)
+
+
 def render_attack_form(
     atk_faction: str,
     atk_uid: str,
@@ -347,16 +380,20 @@ def render_attack_form(
     use_melee: bool,
     phase_key: str,
 ) -> None:
-    """Render weapon selector, dice inputs, resolve, and apply-damage flow."""
-    from gameMechanic.combat import AttackParams, DefendParams, resolve_attack, wound_threshold
-    from gameMechanic.game_log import log_action
+    """Simultaneous attack breakdown: hit/wound (attacker) + save/FNP/damage (defender)."""
+    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    from gameMechanic.combat import (  # noqa: PLC0415
+        resolve_attack_modifiers,
+        resolve_fnp,
+        resolve_save,
+    )
+    from gameMechanic.game_log import log_action  # noqa: PLC0415
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
     if not weapons:
         st.info("No melee weapons." if use_melee else "No ranged weapons.")
         return
-
-    st.markdown(f"**{atk_unit.name_en}** → **{def_unit.name_en}**")
 
     if len(weapons) > 1:
         weapon = st.radio(
@@ -370,186 +407,177 @@ def render_attack_form(
         weapon = weapons[0]
 
     profile = weapon.for_phase(use_melee)
-
     strength = _parse_strength(str(profile.strength), atk_unit.strength)
-
+    ap = int(profile.ap)
     skill = int(atk_unit.ws.rstrip("+")) if use_melee else int(atk_unit.bs.rstrip("+"))
     skill_label = "WS" if use_melee else "BS"
-    thresh = wound_threshold(strength, def_unit.toughness)
-    eff_save = def_unit.save + abs(int(profile.ap))
-    if def_unit.invuln_save and def_unit.invuln_save < eff_save:
-        eff_save = def_unit.invuln_save
-    save_str = f"{eff_save}+" if eff_save <= 6 else "none"
-    inv_display = f"{def_unit.invuln_save}+" if def_unit.invuln_save else "none"
-
-    atk_display = str(atk_unit.attacks) if profile.attacks in ("Melee", None) else profile.attacks
-    st.caption(
-        f"**{weapon.name_en}**: {atk_display} att · {skill_label}{skill}+ · "
-        f"wound {thresh}+ · save {save_str} (++ {inv_display}) · D{profile.damage}"
-    )
-
-    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
-    from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
 
     atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
-    mwbd_active = any(
-        b.get("effect_type") == "buff_roll" for b in atk_state.get("active_buffs", [])
-    )
-    if mwbd_active:
-        label = next(
-            (
-                b["badge_label"]
-                for b in atk_state.get("active_buffs", [])
-                if b.get("effect_type") == "buff_roll"
-            ),
-            "BUFF",
+    advanced = atk_state.get("turn_flags", {}).get("advanced", False)
+
+    # Protocol modifiers
+    try:
+        atk_fdir = faction_dir_for(atk_faction)
+        atk_proto = get_active_protocol_modifier(atk_fdir, phase_key, use_melee)
+        atk_proto_label = _protocol_source_label(atk_fdir)
+    except KeyError:
+        atk_fdir, atk_proto, atk_proto_label = "", {}, "Protocol"
+    try:
+        def_fdir = faction_dir_for(def_faction)
+        def_proto = get_active_protocol_modifier(def_fdir, phase_key, use_melee)
+        def_proto_label = _protocol_source_label(def_fdir)
+    except KeyError:
+        def_fdir, def_proto, def_proto_label = "", {}, "Protocol"
+
+    # Assemble attacker modifier list (hit + wound)
+    atk_mods: list[dict] = []  # type: ignore[type-arg]
+    if atk_proto.get("hit"):
+        atk_mods.append(
+            {
+                "label": atk_proto_label,
+                "value": atk_proto["hit"],
+                "roll_type": "hit",
+                "source": "protocol",
+            }
         )
-        st.info(f"{label} active — +1 to hit modifier.")
+    if atk_proto.get("wound"):
+        atk_mods.append(
+            {
+                "label": atk_proto_label,
+                "value": atk_proto["wound"],
+                "roll_type": "wound",
+                "source": "protocol",
+            }
+        )
+    for b in atk_state.get("active_buffs", []):
+        if b.get("effect_type") == "buff_roll":
+            atk_mods.append(
+                {
+                    "label": b.get("badge_label", "Buff"),
+                    "value": 1,
+                    "roll_type": "hit",
+                    "source": "buff",
+                }
+            )
+    for m in st.session_state.get("active_modifiers", []):
+        eff = m.get("effect", {})
+        rt = eff.get("roll_type")
+        tgt = eff.get("target", "attacker")
+        if rt in ("hit", "wound") and tgt in ("attacker", "any"):
+            atk_mods.append(
+                {
+                    "label": m.get("source", "Modifier"),
+                    "value": eff.get("value", 0),
+                    "roll_type": rt,
+                    "source": "stratagem",
+                }
+            )
 
-    try:
-        atk_faction_dir = faction_dir_for(atk_faction)
-        atk_protocol_mod = get_active_protocol_modifier(atk_faction_dir, phase_key, use_melee)
-    except KeyError:
-        atk_faction_dir = ""
-        atk_protocol_mod = {}
-    try:
-        def_faction_dir = faction_dir_for(def_faction)
-        def_protocol_mod = get_active_protocol_modifier(def_faction_dir, phase_key, use_melee)
-    except KeyError:
-        def_faction_dir = ""
-        def_protocol_mod = {}
+    # Assemble defender save modifier list
+    def_save_mods: list[dict] = []  # type: ignore[type-arg]
+    if def_proto.get("save"):
+        def_save_mods.append({"label": f"{def_proto_label} (defender)", "value": def_proto["save"]})
+    for m in st.session_state.get("active_modifiers", []):
+        eff = m.get("effect", {})
+        if eff.get("roll_type") == "save" and eff.get("target") in ("defender", "any"):
+            def_save_mods.append(
+                {"label": m.get("source", "Modifier"), "value": eff.get("value", 0)}
+            )
 
-    def _protocol_source_label(faction_dir: str) -> str:
-        protocol_id = st.session_state.get("active_protocol_id")
-        directive = st.session_state.get("active_directive")
-        if not protocol_id or not directive or not faction_dir:
-            return "Protocol"
-        protocols = load_round_choice_abilities(faction_dir)
-        p = next((p for p in protocols if p.id == protocol_id), None)
-        return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
-
-    if atk_protocol_mod.get("hit"):
-        src = _protocol_source_label(atk_faction_dir)
-        st.info(f"{src}: +{atk_protocol_mod['hit']} to hit")
-    if atk_protocol_mod.get("wound"):
-        src = _protocol_source_label(atk_faction_dir)
-        st.info(f"{src}: +{atk_protocol_mod['wound']} to wound")
-    if def_protocol_mod.get("save"):
-        src = _protocol_source_label(def_faction_dir)
-        st.info(f"{src} (defender): +{def_protocol_mod['save']} to saves")
-
-    # WAAAGH! active effects display (fight phase only, non-numeric — not wired to combat)
-    waaagh_state = st.session_state.get("waaagh_state", {})
-    atk_waaagh = waaagh_state.get(atk_faction)
-    if atk_waaagh and use_melee:
-        stage = atk_waaagh.get("stage", 1)
-        invuln = "5+" if stage == 1 else "6+"
-        st.info(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {invuln} invuln (display only)")
-
-    c1, c2, c3, c4 = st.columns(4)
-    hits = c1.number_input(
-        "Hits", min_value=0, step=1, key=f"atk_hits_{phase_key}_{atk_faction}_{atk_uid}"
+    # Compute via pure functions
+    atk_result = resolve_attack_modifiers(
+        skill=skill,
+        strength=strength,
+        toughness=def_unit.toughness,
+        weapon_type=profile.weapon_type,
+        advanced=advanced,
+        modifiers=atk_mods,
+        use_melee=use_melee,
     )
-    wounds = c2.number_input(
-        "Wounds", min_value=0, step=1, key=f"atk_wnds_{phase_key}_{atk_faction}_{atk_uid}"
+    save_result = resolve_save(
+        base_save=def_unit.save,
+        invuln_save=def_unit.invuln_save,
+        ap=ap,
+        save_modifiers=def_save_mods,
     )
-    saves_failed = c3.number_input(
-        "Failed Saves", min_value=0, step=1, key=f"atk_sfail_{phase_key}_{atk_faction}_{atk_uid}"
-    )
-    fnp_saved = c4.number_input(
-        "FNP Saved", min_value=0, step=1, key=f"atk_fnp_{phase_key}_{atk_faction}_{atk_uid}"
+    fnp_value = resolve_fnp(def_unit.fnp, profile.ignores_fnp)
+
+    # ── Header ─────────────────────────────────────────────────────────────
+    atk_display = str(atk_unit.attacks) if profile.attacks in ("Melee", None) else profile.attacks
+    ap_str = f"AP{ap}" if ap != 0 else "AP0"
+    st.markdown(
+        f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
+        f"_{weapon.name_en}_ — {atk_display} att · S{strength} · {ap_str} · D{profile.damage}"
     )
 
-    fixed_dmg = _try_parse_damage(str(profile.damage))
-    total_dmg_input = None
-    if fixed_dmg is None:
-        total_dmg_input = st.number_input(
-            f"Total damage rolled ({profile.damage} per failed save)",
+    # WAAAGH! info note (fight phase only)
+    waaagh_atk = st.session_state.get("waaagh_state", {}).get(atk_faction)
+    if waaagh_atk and use_melee:
+        stage = waaagh_atk.get("stage", 1)
+        inv_txt = "5+" if stage == 1 else "6+"
+        st.caption(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {inv_txt} invuln")
+
+    # ── Two-column layout ───────────────────────────────────────────────────
+    col_atk, col_def = st.columns(2)
+
+    with col_atk:
+        _render_roll_block("TREFFER", skill_label, atk_result["hit"])
+        st.markdown("")
+        _render_roll_block(
+            "VERWUNDUNG",
+            f"S{strength} vs T{def_unit.toughness}",
+            atk_result["wound"],
+        )
+
+    with col_def:
+        _render_save_block(save_result, ap)
+
+        if def_unit.fnp is not None:
+            st.markdown("")
+            if fnp_value is None:
+                st.markdown(f"~~**FEEL NO PAIN**~~ ~~{def_unit.fnp}+~~ _(ignoriert)_")
+            else:
+                st.markdown(f"**FEEL NO PAIN** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
+
+        st.markdown("---")
+        st.markdown("**SCHADEN**")
+        dc1, dc2 = st.columns(2)
+        damage_input = dc1.number_input(
+            f"Normal (D{profile.damage})" if not profile.damage.lstrip("-").isdigit() else "Normal",
             min_value=0,
             step=1,
-            key=f"atk_dmgtotal_{phase_key}_{atk_faction}_{atk_uid}",
+            key=f"atk_dmg_{phase_key}_{atk_faction}_{atk_uid}",
         )
+        mortal_input = dc2.number_input(
+            "Mortal Wounds",
+            min_value=0,
+            step=1,
+            key=f"atk_mw_{phase_key}_{atk_faction}_{atk_uid}",
+        )
+        total = int(damage_input) + int(mortal_input)
 
-    result_key = f"atk_result_{phase_key}_{atk_faction}_{atk_uid}"
-
-    if st.button(
-        "Resolve Attack",
-        key=f"atk_resolve_{phase_key}_{atk_faction}_{atk_uid}",
-        type="primary",
-        use_container_width=True,
-    ):
-        if fixed_dmg is not None:
-            params = AttackParams(
-                attacks=1,
-                skill=skill,
-                strength=strength,
-                ap=int(profile.ap),
-                damage=fixed_dmg,
-                hit_modifier=atk_protocol_mod.get("hit", 0),
-                wound_modifier=atk_protocol_mod.get("wound", 0),
-                mwbd_active=mwbd_active,
+        btn_label = (
+            f"{'⚔' if use_melee else '🎯'} {total} Schaden → {def_unit.name_en}"
+            if total > 0
+            else "Schaden zuweisen"
+        )
+        if st.button(
+            btn_label,
+            key=f"atk_apply_{phase_key}_{atk_faction}_{atk_uid}",
+            type="primary",
+            use_container_width=True,
+        ):
+            if total > 0:
+                apply_damage(def_uid, def_faction, total, def_unit)
+            atk_flags = st.session_state[units_key_for(atk_faction)][atk_uid]["turn_flags"]
+            if phase_key == "shooting":
+                atk_flags["shot"] = True
+            elif phase_key == "fight":
+                atk_flags["fought"] = True
+            log_action(
+                st.session_state.round,
+                phase_key,
+                atk_unit.name_en,
+                f"dealt {total} damage to {def_unit.name_en}",
             )
-            def_params = DefendParams(
-                toughness=def_unit.toughness,
-                save=def_unit.save,
-                wounds=def_unit.wounds,
-                invul_save=def_unit.invuln_save,
-                fnp=def_unit.fnp,
-                save_modifier=def_protocol_mod.get("save", 0),
-            )
-            damage, log = resolve_attack(
-                params,
-                def_params,
-                int(hits),
-                int(wounds),
-                int(saves_failed),
-                int(fnp_saved),
-            )
-        else:
-            raw = int(total_dmg_input or 0)
-            fnp_n = int(fnp_saved)
-            net = max(0, raw - fnp_n)
-            log = [
-                f"Hits: {hits}",
-                f"Wounds: {wounds}",
-                f"Failed saves: {saves_failed}",
-                f"Variable damage {profile.damage}: {raw} total",
-                f"FNP saved: {fnp_n}",
-                f"Damage: **{net}**",
-            ]
-            damage = net
-        st.session_state[result_key] = (damage, log)
-        st.rerun()
-
-    result = st.session_state.get(result_key)
-    if result:
-        damage, log = result
-        for line in log:
-            st.markdown(f"- {line}")
-        if damage > 0:
-            if st.button(
-                f"Apply {damage} damage to {def_unit.name_en}",
-                key=f"atk_apply_{phase_key}_{atk_faction}_{atk_uid}",
-                type="primary",
-                use_container_width=True,
-            ):
-                apply_damage(def_uid, def_faction, damage, def_unit)
-                atk_flags = st.session_state[units_key_for(atk_faction)][atk_uid]["turn_flags"]
-                if phase_key == "shooting":
-                    atk_flags["shot"] = True
-                elif phase_key == "fight":
-                    atk_flags["fought"] = True
-                log_action(
-                    st.session_state.round,
-                    phase_key,
-                    atk_unit.name_en,
-                    f"dealt {damage} damage to {def_unit.name_en}",
-                )
-                del st.session_state[result_key]
-                st.rerun()
-        else:
-            st.info("No damage dealt.")
-            if st.button("Clear", key=f"atk_clear_{phase_key}_{atk_faction}_{atk_uid}"):
-                del st.session_state[result_key]
-                st.rerun()
+            st.rerun()
