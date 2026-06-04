@@ -89,6 +89,8 @@ def stratagem_visibility(
     """
     if not conditions_met:
         return "hidden"
+    if stratagem.timing == "phase_reactive":
+        return "hidden"
     phase = stratagem.phase
     if phase != "any":
         phases = phase if isinstance(phase, list) else [phase]

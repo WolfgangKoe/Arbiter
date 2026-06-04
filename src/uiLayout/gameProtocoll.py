@@ -104,20 +104,17 @@ def _render_command_protocol() -> None:
             st.caption(f"  {name}: {status}")
 
 
-def _conditions_met(conditions: list[str], faction: str, unit=None) -> bool:
+def _conditions_met(conditions: list[str], unit=None) -> bool:
     """Return True if conditions are satisfied.
 
-    If unit is provided (selected unit), check only that unit.
-    Otherwise check all units in the faction (army-wide fallback).
+    Requires an explicit unit — no army-wide fallback, as that would show
+    unit-specific stratagems even when nothing relevant is selected.
     """
     if not conditions:
         return True
-    if unit is not None:
-        return all(unit.has_keyword(kw) for kw in conditions)
-    for u in units_list_for(faction):
-        if all(u.has_keyword(kw) for kw in conditions):
-            return True
-    return False
+    if unit is None:
+        return False
+    return all(unit.has_keyword(kw) for kw in conditions)
 
 
 def _render_stratagems() -> None:
@@ -138,12 +135,15 @@ def _render_stratagems() -> None:
     st.caption(f"**{inactive_faction}** (inactive) · CP: **{cp_inactive}**")
     st.divider()
 
-    faction_dir = faction_dir_for(active_faction)
     try:
-        stratagems = load_stratagems(faction_dir)
+        stratagems_active = load_stratagems(faction_dir_for(active_faction))
+        stratagems_inactive = (
+            load_stratagems(faction_dir_for(inactive_faction)) if inactive_faction else []
+        )
     except Exception:
         st.warning("Could not load stratagems.")
         return
+    stratagems = stratagems_active + stratagems_inactive
 
     # Resolve selected unit for unit-level condition check
     sel = st.session_state.get("selected_unit")
@@ -164,7 +164,7 @@ def _render_stratagems() -> None:
         unit_for_check = None
         if sel_faction_unit is not None and sel_faction_unit[0] == spending_faction:
             unit_for_check = sel_faction_unit[1]
-        met = _conditions_met(s.conditions, spending_faction, unit_for_check)
+        met = _conditions_met(s.conditions, unit_for_check)
 
         vis = stratagem_visibility(s, cp_for_strat, current_phase, current_stage, used_ids, met)
         if vis != "hidden":
