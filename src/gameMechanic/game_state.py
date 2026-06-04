@@ -291,6 +291,7 @@ def init_state(
         {}
     )  # {player_name: {"stage": 1|2, "round_activated": int}}
     st.session_state.psi_attempts_this_phase = 0
+    st.session_state.attack_declaration: dict = {"active": False, "entries": []}
     if p1_unmatched or p2_unmatched:
         st.session_state.roster_warnings = {
             p1_name: p1_unmatched,
@@ -329,6 +330,7 @@ def reset_game() -> None:
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
     st.session_state.used_stratagem_ids = set()
+    st.session_state.attack_declaration = {"active": False, "entries": []}
     current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
     current_round = st.session_state.get("round", 1)
     st.session_state.active_modifiers = [

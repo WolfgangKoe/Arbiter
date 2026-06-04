@@ -9,7 +9,13 @@ import streamlit as st
 
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameObjects.loader import resolve_bracket_stats
-from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
+from uiLayout._common import (
+    PHASE_RULES,
+    lookup,
+    render_attack_declaration,
+    render_attack_resolution,
+    render_player_column,
+)
 
 
 def _is_target_engaged(atk_state: dict, def_faction: str, def_uid: str) -> bool:  # type: ignore[type-arg]
@@ -156,22 +162,24 @@ def _render_melee_pairs() -> None:
 
 
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Bottom area: attack form when both attacker and target are selected."""
+    """Bottom area: attack declaration or resolution when attacker + target are selected."""
+    decl = st.session_state.get("attack_declaration", {})
+    if decl.get("active") and decl.get("phase_key") == "fight":
+        render_attack_resolution("fight")
+        return
+
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if sel and tgts:
         atk_faction, atk_uid = sel
         def_faction, def_uid = tgts[0]
         atk_unit, atk_state = lookup(atk_faction, atk_uid)
-        def_unit, _ = lookup(def_faction, def_uid)
         if can_fight(atk_state) and _is_target_engaged(atk_state, def_faction, def_uid):
-            render_attack_form(
+            render_attack_declaration(
                 atk_faction,
                 atk_uid,
                 atk_unit,
-                def_faction,
-                def_uid,
-                def_unit,
+                atk_state,
                 use_melee=True,
                 phase_key="fight",
             )

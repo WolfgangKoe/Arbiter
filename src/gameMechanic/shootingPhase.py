@@ -9,7 +9,13 @@ import streamlit as st
 
 from gameMechanic.game_state import units_key_for
 from gameObjects.loader import resolve_bracket_stats
-from uiLayout._common import PHASE_RULES, lookup, render_attack_form, render_player_column
+from uiLayout._common import (
+    PHASE_RULES,
+    lookup,
+    render_attack_declaration,
+    render_attack_resolution,
+    render_player_column,
+)
 
 
 def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
@@ -150,24 +156,26 @@ def _inactive_target_stats(
 
 
 def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Bottom area: attack form when both attacker and target are selected."""
+    """Bottom area: attack declaration or resolution when attacker + target are selected."""
+    decl = st.session_state.get("attack_declaration", {})
+    if decl.get("active") and decl.get("phase_key") == "shooting":
+        render_attack_resolution("shooting")
+        return
+
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if sel and tgts:
         atk_faction, atk_uid = sel
         def_faction, def_uid = tgts[0]
         atk_unit, atk_state = lookup(atk_faction, atk_uid)
-        def_unit, _ = lookup(def_faction, def_uid)
         if can_shoot(atk_state, atk_unit) and not target_in_friendly_melee(
             atk_faction, def_faction, def_uid
         ):
-            render_attack_form(
+            render_attack_declaration(
                 atk_faction,
                 atk_uid,
                 atk_unit,
-                def_faction,
-                def_uid,
-                def_unit,
+                atk_state,
                 use_melee=False,
                 phase_key="shooting",
                 in_melee=atk_state.get("in_melee", False),

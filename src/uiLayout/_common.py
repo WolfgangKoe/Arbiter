@@ -1,7 +1,8 @@
 """Shared UI utilities for phase handlers.
 
 Provides: lookup, state_badges_html, wound_adjustment_buttons,
-          render_player_column, render_attack_form, PHASE_RULES.
+          render_player_column, render_attack_declaration,
+          render_attack_resolution, PHASE_RULES.
 
 Handlers import from here — never from gameActionsArea — to avoid circular imports.
 """
@@ -286,8 +287,20 @@ def render_player_column(
 
 
 # ---------------------------------------------------------------------------
-# Attack resolution form (shared by Shooting and Fight Phase)
+# 6d-v2 Attack sequence — shared utilities
 # ---------------------------------------------------------------------------
+
+
+def _empty_attack_declaration() -> dict:  # type: ignore[type-arg]
+    return {
+        "active": False,
+        "atk_faction": "",
+        "atk_uid": "",
+        "phase_key": "",
+        "use_melee": False,
+        "in_melee": False,
+        "entries": [],
+    }
 
 
 def _parse_strength(raw: str, unit_strength: int) -> int:
@@ -341,6 +354,103 @@ def _protocol_source_label(faction_dir: str) -> str:
     return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
 
 
+def _compute_attacks(attacks_str: str, models_count: int, unit_attacks: int) -> str:
+    """Return display string for total attack count."""
+    s = str(attacks_str).strip()
+    if s in ("Melee", "None", ""):
+        return str(models_count * unit_attacks)
+    try:
+        return str(models_count * int(s))
+    except ValueError:
+        return f"{models_count}×{s}"
+
+
+def _collect_atk_modifiers(
+    atk_faction: str,
+    atk_state: dict,  # type: ignore[type-arg]
+    phase_key: str,
+    use_melee: bool,
+) -> list[dict]:  # type: ignore[type-arg]
+    """Collect hit/wound modifiers for the attacker from protocols, buffs, and active_modifiers."""
+    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+
+    mods: list[dict] = []  # type: ignore[type-arg]
+    try:
+        fdir = faction_dir_for(atk_faction)
+        proto = get_active_protocol_modifier(fdir, phase_key, use_melee)
+        label = _protocol_source_label(fdir)
+        if proto.get("hit"):
+            mods.append(
+                {"label": label, "value": proto["hit"], "roll_type": "hit", "source": "protocol"}
+            )
+        if proto.get("wound"):
+            mods.append(
+                {
+                    "label": label,
+                    "value": proto["wound"],
+                    "roll_type": "wound",
+                    "source": "protocol",
+                }
+            )
+    except KeyError:
+        pass
+    for b in atk_state.get("active_buffs", []):
+        if b.get("effect_type") == "buff_roll":
+            mods.append(
+                {
+                    "label": b.get("badge_label", "Buff"),
+                    "value": 1,
+                    "roll_type": "hit",
+                    "source": "buff",
+                }
+            )
+    for m in st.session_state.get("active_modifiers", []):
+        eff = m.get("effect", {})
+        rt = eff.get("roll_type")
+        tgt = eff.get("target", "attacker")
+        if rt in ("hit", "wound") and tgt in ("attacker", "any"):
+            mods.append(
+                {
+                    "label": m.get("source", "Modifier"),
+                    "value": eff.get("value", 0),
+                    "roll_type": rt,
+                    "source": "stratagem",
+                }
+            )
+    return mods
+
+
+def _collect_def_save_modifiers(
+    def_faction: str,
+    phase_key: str,
+    use_melee: bool,
+) -> list[dict]:  # type: ignore[type-arg]
+    """Collect save modifiers for the defender from protocols and active_modifiers."""
+    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+
+    mods: list[dict] = []  # type: ignore[type-arg]
+    try:
+        fdir = faction_dir_for(def_faction)
+        proto = get_active_protocol_modifier(fdir, phase_key, use_melee)
+        if proto.get("save"):
+            label = _protocol_source_label(fdir)
+            mods.append({"label": f"{label} (defender)", "value": proto["save"]})
+    except KeyError:
+        pass
+    for m in st.session_state.get("active_modifiers", []):
+        eff = m.get("effect", {})
+        if eff.get("roll_type") == "save" and eff.get("target") in ("defender", "any"):
+            mods.append({"label": m.get("source", "Modifier"), "value": eff.get("value", 0)})
+    return mods
+
+
+# ---------------------------------------------------------------------------
+# 6d-v2 Display helpers
+# ---------------------------------------------------------------------------
+
+
 def _render_roll_block(title: str, base_label: str, block: dict) -> None:  # type: ignore[type-arg]
     """Render a hit or wound block with modifier stack."""
     st.markdown(f"**{title}**")
@@ -370,26 +480,379 @@ def _render_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
         st.markdown(f"→ &nbsp;**{save['effective']}+**", unsafe_allow_html=True)
 
 
-def render_attack_form(
-    atk_faction: str,
-    atk_uid: str,
-    atk_unit: Unit,
+def _render_wound_table(
+    strength: int,
+    toughness: int,
+    wound_stack: list[dict],  # type: ignore[type-arg]
+) -> None:
+    """Render the 5-row wound threshold table with the active row highlighted."""
+    from gameMechanic.combat import wound_threshold  # noqa: PLC0415
+
+    base = wound_threshold(strength, toughness)
+    net = min(1, max(-1, sum(e["value"] for e in wound_stack)))
+    modified = max(2, base - net)
+
+    thresholds = [
+        (f"S ≥ 2T &nbsp;(S≥{toughness * 2})", 2),
+        (f"S > T &nbsp;&nbsp;(S>{toughness})", 3),
+        (f"S = T &nbsp;&nbsp;(S={toughness})", 4),
+        (f"S < T &nbsp;&nbsp;(S<{toughness})", 5),
+        (f"S ≤ ½T (S≤{toughness // 2})", 6),
+    ]
+    rows = []
+    for label, thresh in thresholds:
+        active = thresh == base
+        col = "#c9a84c" if active else "#666"
+        bg = "#1a1a2e" if active else "transparent"
+        arrow = "▶" if active else "&nbsp;&nbsp;"
+        thresh_cell = f"<b>{thresh}+</b>" if active else f"{thresh}+"
+        rows.append(
+            f'<tr style="background:{bg};color:{col};">'
+            f'<td style="padding:1px 4px;font-size:12px;width:16px;">{arrow}</td>'
+            f'<td style="padding:1px 8px;font-size:12px;">{label}</td>'
+            f'<td style="padding:1px 6px;font-size:12px;">→ {thresh_cell}</td>'
+            f"</tr>"
+        )
+    html = (
+        '<table style="border-collapse:collapse;width:100%;margin:2px 0;">'
+        + "".join(rows)
+        + "</table>"
+    )
+    st.markdown(html, unsafe_allow_html=True)
+    if wound_stack:
+        for e in wound_stack:
+            sign = "+" if e["value"] > 0 else ""
+            st.markdown(f"&nbsp;&nbsp;{sign}{e['value']} _{e['label']}_", unsafe_allow_html=True)
+        st.markdown(f"→ &nbsp;**{modified}+**", unsafe_allow_html=True)
+
+
+# ---------------------------------------------------------------------------
+# 6d-v2 Damage + RP blocks
+# ---------------------------------------------------------------------------
+
+
+def _render_rp_block(
+    def_unit: Unit,
     def_faction: str,
     def_uid: str,
+    models_lost: int,
+    tab_key: str,
+) -> None:
+    """Render Reanimation Protocols block after damage if target is a Necron unit."""
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+    from gameMechanic.unit_mutations import heal_unit  # noqa: PLC0415
+
+    if models_lost <= 0:
+        return
+    try:
+        fdir = faction_dir_for(def_faction)
+    except KeyError:
+        return
+    if not fdir.startswith("necron"):
+        return
+
+    rp_key = f"rp_{tab_key}"
+    rp_state = st.session_state.get(rp_key, {})
+    if rp_state.get("applied"):
+        mb = rp_state.get("models_back", 0)
+        if mb > 0:
+            st.caption(f"RP: {mb} Modelle zurückgekehrt ✓")
+        return
+
+    rp_dice = models_lost * def_unit.wounds
+    st.markdown(
+        f"**REANIMATION PROTOCOLS** &nbsp; "
+        f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel** · Erfolg: 5+"
+    )
+    models_back = st.number_input(
+        "Modelle zurück",
+        min_value=0,
+        max_value=models_lost,
+        step=1,
+        key=f"rp_mb_{tab_key}",
+    )
+    c1, c2 = st.columns(2)
+    with c1:
+        if c1.button("RP anwenden", key=f"rp_apply_{tab_key}", type="primary"):
+            if int(models_back) > 0:
+                heal_unit(def_uid, def_faction, int(models_back) * def_unit.wounds, def_unit)
+            st.session_state[rp_key] = {"applied": True, "models_back": int(models_back)}
+            st.rerun()
+    with c2:
+        if c2.button("Überspringen", key=f"rp_skip_{tab_key}"):
+            st.session_state[rp_key] = {"applied": True, "models_back": 0}
+            st.rerun()
+
+
+def _render_damage_block(
     def_unit: Unit,
+    def_faction: str,
+    def_uid: str,
+    profile,
+    atk_unit_name: str,
+    phase_key: str,
+    tab_key: str,
+) -> None:
+    """Render damage input, apply button, post-apply summary, and RP block."""
+    from gameMechanic.combat import apply_damage_attacks  # noqa: PLC0415
+    from gameMechanic.game_log import log_action  # noqa: PLC0415
+    from gameMechanic.game_state import units_key_for  # noqa: PLC0415
+    from gameMechanic.unit_mutations import apply_damage  # noqa: PLC0415
+
+    res_key = f"res_{tab_key}"
+    tab_state = st.session_state.get(res_key, {})
+
+    if tab_state.get("applied"):
+        m_lost = tab_state.get("models_lost", 0)
+        mw = tab_state.get("mortal_wounds", 0)
+        total = tab_state.get("total_damage", 0)
+        st.success(f"✓ {m_lost} Modelle · {mw} MW · {total} Schaden angewandt")
+        _render_rp_block(def_unit, def_faction, def_uid, m_lost, tab_key)
+        if st.button("↺ Zurücksetzen", key=f"res_reset_{tab_key}"):
+            for k in (res_key, f"rp_{tab_key}"):
+                st.session_state.pop(k, None)
+            st.rerun()
+        return
+
+    st.markdown("**SCHADEN**")
+    is_multi_lp = def_unit.wounds > 1
+    dmg_str = str(profile.damage)
+    dmg_label = f"D{dmg_str}" if not dmg_str.lstrip("+-").isdigit() else f"{dmg_str} fix"
+    st.caption(f"Schaden: {dmg_label} pro missgl. Rettungswurf · Ziel: {def_unit.wounds} LP/Modell")
+
+    c1, c2 = st.columns(2)
+    with c1:
+        models_lost = st.number_input(
+            "Modelle verloren",
+            min_value=0,
+            step=1,
+            key=f"ml_{tab_key}",
+        )
+    with c2:
+        mortal_wounds = st.number_input(
+            "Tödliche Verwundungen",
+            min_value=0,
+            step=1,
+            key=f"mw_{tab_key}",
+        )
+
+    wounds_on_front = 0
+    if is_multi_lp:
+        wounds_on_front = st.number_input(
+            f"Wunden Frontmodell (0–{def_unit.wounds - 1})",
+            min_value=0,
+            max_value=def_unit.wounds - 1,
+            step=1,
+            key=f"wf_{tab_key}",
+        )
+
+    total = apply_damage_attacks(
+        int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
+    )
+    btn_label = f"⚔ {total} Schaden → {def_unit.name_en}" if total > 0 else "Schaden anwenden"
+    if st.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
+        if total > 0:
+            apply_damage(def_uid, def_faction, total, def_unit)
+        decl = st.session_state.get("attack_declaration", {})
+        atk_uid = decl.get("atk_uid", "")
+        atk_f = decl.get("atk_faction", "")
+        if atk_uid and atk_f:
+            atk_flags = (
+                st.session_state[units_key_for(atk_f)].get(atk_uid, {}).get("turn_flags", {})
+            )
+            if phase_key == "shooting":
+                atk_flags["shot"] = True
+            elif phase_key == "fight":
+                atk_flags["fought"] = True
+        log_action(
+            st.session_state.round,
+            phase_key,
+            atk_unit_name,
+            f"dealt {total} damage to {def_unit.name_en}",
+        )
+        st.session_state[res_key] = {
+            "applied": True,
+            "models_lost": int(models_lost),
+            "wounds_on_front": int(wounds_on_front),
+            "mortal_wounds": int(mortal_wounds),
+            "total_damage": total,
+        }
+        st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# 6d-v2 Resolution tab
+# ---------------------------------------------------------------------------
+
+_COVER_OPTIONS: list[str] = [
+    "Kein Cover",
+    "Light Cover (+1 Save)",
+    "Dense Cover (−1 Hit)",
+    "Heavy Cover (+1 Save vs Melee)",
+]
+
+
+def _render_resolution_tab(
+    entry: dict,  # type: ignore[type-arg]
+    atk_faction: str,
+    atk_unit: Unit,
+    atk_state: dict,  # type: ignore[type-arg]
     use_melee: bool,
     phase_key: str,
-    in_melee: bool = False,
+    tab_key: str,
 ) -> None:
-    """Simultaneous attack breakdown: hit/wound (attacker) + save/FNP/damage (defender)."""
-    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    """Render one resolution tab: Hit + Wound table + Save + Cover + Damage."""
     from gameMechanic.combat import (  # noqa: PLC0415
         resolve_attack_modifiers,
         resolve_fnp,
         resolve_save,
     )
-    from gameMechanic.game_log import log_action  # noqa: PLC0415
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+    from gameObjects.loader import resolve_bracket_stats  # noqa: PLC0415
+
+    def_faction = entry["def_faction"]
+    def_uid = entry["def_uid"]
+    weapon_name = entry["weapon_name"]
+    profile_idx = entry["profile_idx"]
+    models_count = entry["models_count"]
+
+    def_unit, _ = lookup(def_faction, def_uid)
+
+    # Resolve weapon + profile
+    in_melee_flag = st.session_state.get("attack_declaration", {}).get("in_melee", False)
+    if use_melee:
+        weapons = [w for w in atk_unit.weapons if any(p.is_melee for p in w.profiles)]
+    elif in_melee_flag:
+        weapons = [
+            w
+            for w in atk_unit.weapons
+            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
+        ]
+    else:
+        weapons = [w for w in atk_unit.weapons if any(not p.is_melee for p in w.profiles)]
+
+    weapon = next((w for w in weapons if w.name_en == weapon_name), weapons[0] if weapons else None)
+    if weapon is None:
+        st.error("Weapon not found.")
+        return
+    profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
+    if not profiles:
+        profiles = weapon.profiles
+    profile = profiles[min(profile_idx, len(profiles) - 1)]
+
+    strength = _parse_strength(str(profile.strength), atk_unit.strength)
+    ap = int(profile.ap)
+    skill_label = "WS" if use_melee else "BS"
+    advanced = atk_state.get("turn_flags", {}).get("advanced", False)
+
+    per_model_hp = atk_state.get("current_wounds", atk_unit.wounds) // max(
+        1, atk_state.get("models", atk_unit.models_max)
+    )
+    live = resolve_bracket_stats(atk_unit, per_model_hp)
+    skill = int(live["ws"].rstrip("+")) if use_melee else int(live["bs"].rstrip("+"))
+
+    # Read cover from session_state (set by selectbox from previous render, default Kein Cover)
+    cover = st.session_state.get(f"cover_{tab_key}", _COVER_OPTIONS[0])
+
+    # Build modifier lists including cover effects
+    base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee)
+    base_save_mods = _collect_def_save_modifiers(def_faction, phase_key, use_melee)
+
+    final_atk_mods = list(base_atk_mods)
+    final_save_mods = list(base_save_mods)
+    if cover.startswith("Dense"):
+        final_atk_mods.append(
+            {"label": "Dense Cover", "value": -1, "roll_type": "hit", "source": "terrain"}
+        )
+    if cover.startswith("Light"):
+        final_save_mods.append({"label": "Light Cover", "value": 1})
+    elif cover.startswith("Heavy") and not atk_state.get("turn_flags", {}).get("charged"):
+        final_save_mods.append({"label": "Heavy Cover", "value": 1})
+
+    atk_result = resolve_attack_modifiers(
+        skill=skill,
+        strength=strength,
+        toughness=def_unit.toughness,
+        weapon_type=profile.weapon_type,
+        advanced=advanced,
+        modifiers=final_atk_mods,
+        use_melee=use_melee,
+    )
+    save_result = resolve_save(
+        base_save=def_unit.save,
+        invuln_save=def_unit.invuln_save,
+        ap=ap,
+        save_modifiers=final_save_mods,
+    )
+    fnp_value = resolve_fnp(def_unit.fnp, profile.ignores_fnp)
+
+    # Header
+    atk_count = _compute_attacks(profile.attacks, models_count, atk_unit.attacks)
+    ap_str = f"AP{ap}" if ap != 0 else "AP0"
+    st.markdown(
+        f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
+        f"_{weapon.name_en}_ — {atk_count} att · S{strength} · {ap_str} · D{profile.damage}"
+    )
+    waaagh_atk = st.session_state.get("waaagh_state", {}).get(atk_faction)
+    if waaagh_atk and use_melee:
+        stage = waaagh_atk.get("stage", 1)
+        inv_txt = "5+" if stage == 1 else "6+"
+        st.caption(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {inv_txt} invuln")
+
+    # HIT BLOCK
+    _render_roll_block("TREFFER", skill_label, atk_result["hit"])
+    st.markdown("")
+
+    # WOUND TABLE
+    st.markdown("**VERWUNDUNG**")
+    _render_wound_table(strength, def_unit.toughness, atk_result["wound"]["stack"])
+
+    st.markdown("---")
+
+    # SAVE BLOCK + FNP + COVER
+    _render_save_block(save_result, ap)
+    if def_unit.fnp is not None:
+        st.markdown("")
+        if fnp_value is None:
+            st.markdown(f"~~**FNP**~~ ~~{def_unit.fnp}+~~ _(ignoriert)_")
+        else:
+            st.markdown(f"**FNP** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
+    st.selectbox("Deckung", _COVER_OPTIONS, key=f"cover_{tab_key}")
+
+    st.markdown("---")
+
+    # DAMAGE BLOCK
+    _render_damage_block(
+        def_unit,
+        def_faction,
+        def_uid,
+        profile,
+        atk_unit.name_en,
+        phase_key,
+        tab_key,
+    )
+
+
+# ---------------------------------------------------------------------------
+# 6d-v2 Declaration phase
+# ---------------------------------------------------------------------------
+
+
+def render_attack_declaration(
+    atk_faction: str,
+    atk_uid: str,
+    atk_unit: Unit,
+    atk_state: dict,  # type: ignore[type-arg]
+    use_melee: bool,
+    phase_key: str,
+    in_melee: bool = False,
+) -> None:
+    """Phase 1 — Declare targets, weapons, model counts. Writes to attack_declaration on confirm."""
+    tgts: list[tuple[str, str]] = st.session_state.selected_targets
+    if not tgts:
+        st.caption("Designate a target (▷) to begin attack declaration.")
+        return
+
+    models_alive = atk_state.get("models", atk_unit.models_max)
 
     if in_melee and not use_melee:
         weapons = [
@@ -399,193 +862,174 @@ def render_attack_form(
         ]
     else:
         weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
+
     if not weapons:
         st.info("No melee weapons." if use_melee else "No ranged weapons.")
         return
 
-    if len(weapons) > 1:
-        weapon = st.radio(
-            "Weapon",
-            weapons,
-            format_func=lambda w: w.name_en,
-            key=f"atk_weapon_{phase_key}_{atk_faction}_{atk_uid}",
-            horizontal=True,
-        )
-    else:
-        weapon = weapons[0]
+    st.markdown(f"**{atk_unit.name_en}** — Angriff deklarieren")
+    if in_melee:
+        st.info("Engaged in melee — Pistol weapons only.")
 
-    profile = weapon.for_phase(use_melee)
-    strength = _parse_strength(str(profile.strength), atk_unit.strength)
-    ap = int(profile.ap)
-    skill = int(atk_unit.ws.rstrip("+")) if use_melee else int(atk_unit.bs.rstrip("+"))
-    skill_label = "WS" if use_melee else "BS"
+    entries: list[dict] = []  # type: ignore[type-arg]
+    models_assigned = 0
 
-    atk_state = st.session_state[units_key_for(atk_faction)][atk_uid]
-    advanced = atk_state.get("turn_flags", {}).get("advanced", False)
+    for i, (def_faction, def_uid) in enumerate(tgts):
+        def_unit, _ = lookup(def_faction, def_uid)
 
-    # Protocol modifiers
-    try:
-        atk_fdir = faction_dir_for(atk_faction)
-        atk_proto = get_active_protocol_modifier(atk_fdir, phase_key, use_melee)
-        atk_proto_label = _protocol_source_label(atk_fdir)
-    except KeyError:
-        atk_fdir, atk_proto, atk_proto_label = "", {}, "Protocol"
-    try:
-        def_fdir = faction_dir_for(def_faction)
-        def_proto = get_active_protocol_modifier(def_fdir, phase_key, use_melee)
-        def_proto_label = _protocol_source_label(def_fdir)
-    except KeyError:
-        def_fdir, def_proto, def_proto_label = "", {}, "Protocol"
+        with st.container(border=True):
+            st.markdown(f"**→ {def_unit.name_en}**")
+            c_t, c_sv, c_inv = st.columns(3)
+            c_t.metric("T", def_unit.toughness)
+            c_sv.metric("Sv", f"{def_unit.save}+")
+            c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
 
-    # Assemble attacker modifier list (hit + wound)
-    atk_mods: list[dict] = []  # type: ignore[type-arg]
-    if atk_proto.get("hit"):
-        atk_mods.append(
-            {
-                "label": atk_proto_label,
-                "value": atk_proto["hit"],
-                "roll_type": "hit",
-                "source": "protocol",
-            }
-        )
-    if atk_proto.get("wound"):
-        atk_mods.append(
-            {
-                "label": atk_proto_label,
-                "value": atk_proto["wound"],
-                "roll_type": "wound",
-                "source": "protocol",
-            }
-        )
-    for b in atk_state.get("active_buffs", []):
-        if b.get("effect_type") == "buff_roll":
-            atk_mods.append(
-                {
-                    "label": b.get("badge_label", "Buff"),
-                    "value": 1,
-                    "roll_type": "hit",
-                    "source": "buff",
-                }
-            )
-    for m in st.session_state.get("active_modifiers", []):
-        eff = m.get("effect", {})
-        rt = eff.get("roll_type")
-        tgt = eff.get("target", "attacker")
-        if rt in ("hit", "wound") and tgt in ("attacker", "any"):
-            atk_mods.append(
-                {
-                    "label": m.get("source", "Modifier"),
-                    "value": eff.get("value", 0),
-                    "roll_type": rt,
-                    "source": "stratagem",
-                }
-            )
-
-    # Assemble defender save modifier list
-    def_save_mods: list[dict] = []  # type: ignore[type-arg]
-    if def_proto.get("save"):
-        def_save_mods.append({"label": f"{def_proto_label} (defender)", "value": def_proto["save"]})
-    for m in st.session_state.get("active_modifiers", []):
-        eff = m.get("effect", {})
-        if eff.get("roll_type") == "save" and eff.get("target") in ("defender", "any"):
-            def_save_mods.append(
-                {"label": m.get("source", "Modifier"), "value": eff.get("value", 0)}
-            )
-
-    # Compute via pure functions
-    atk_result = resolve_attack_modifiers(
-        skill=skill,
-        strength=strength,
-        toughness=def_unit.toughness,
-        weapon_type=profile.weapon_type,
-        advanced=advanced,
-        modifiers=atk_mods,
-        use_melee=use_melee,
-    )
-    save_result = resolve_save(
-        base_save=def_unit.save,
-        invuln_save=def_unit.invuln_save,
-        ap=ap,
-        save_modifiers=def_save_mods,
-    )
-    fnp_value = resolve_fnp(def_unit.fnp, profile.ignores_fnp)
-
-    # ── Header ─────────────────────────────────────────────────────────────
-    atk_display = str(atk_unit.attacks) if profile.attacks in ("Melee", None) else profile.attacks
-    ap_str = f"AP{ap}" if ap != 0 else "AP0"
-    st.markdown(
-        f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
-        f"_{weapon.name_en}_ — {atk_display} att · S{strength} · {ap_str} · D{profile.damage}"
-    )
-
-    # WAAAGH! info note (fight phase only)
-    waaagh_atk = st.session_state.get("waaagh_state", {}).get(atk_faction)
-    if waaagh_atk and use_melee:
-        stage = waaagh_atk.get("stage", 1)
-        inv_txt = "5+" if stage == 1 else "6+"
-        st.caption(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {inv_txt} invuln")
-
-    # ── Two-column layout ───────────────────────────────────────────────────
-    col_atk, col_def = st.columns(2)
-
-    with col_atk:
-        _render_roll_block("TREFFER", skill_label, atk_result["hit"])
-        st.markdown("")
-        _render_roll_block(
-            "VERWUNDUNG",
-            f"S{strength} vs T{def_unit.toughness}",
-            atk_result["wound"],
-        )
-
-    with col_def:
-        _render_save_block(save_result, ap)
-
-        if def_unit.fnp is not None:
-            st.markdown("")
-            if fnp_value is None:
-                st.markdown(f"~~**FEEL NO PAIN**~~ ~~{def_unit.fnp}+~~ _(ignoriert)_")
+            # Weapon selection
+            if len(weapons) > 1:
+                weapon = st.radio(
+                    "Waffe",
+                    weapons,
+                    format_func=lambda w: w.name_en,
+                    key=f"decl_w_{atk_uid}_{def_uid}",
+                    horizontal=True,
+                )
             else:
-                st.markdown(f"**FEEL NO PAIN** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
+                weapon = weapons[0]
+                st.caption(f"Waffe: **{weapon.name_en}**")
 
-        st.markdown("---")
-        st.markdown("**SCHADEN**")
-        dc1, dc2 = st.columns(2)
-        damage_input = dc1.number_input(
-            f"Normal (D{profile.damage})" if not profile.damage.lstrip("-").isdigit() else "Normal",
-            min_value=0,
-            step=1,
-            key=f"atk_dmg_{phase_key}_{atk_faction}_{atk_uid}",
-        )
-        mortal_input = dc2.number_input(
-            "Mortal Wounds",
-            min_value=0,
-            step=1,
-            key=f"atk_mw_{phase_key}_{atk_faction}_{atk_uid}",
-        )
-        total = int(damage_input) + int(mortal_input)
+            # Profile selection
+            profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
+            if not profiles:
+                profiles = weapon.profiles
+            if len(profiles) > 1:
+                p_names = [p.name or f"Profil {j + 1}" for j, p in enumerate(profiles)]
+                p_key = f"decl_p_{atk_uid}_{def_uid}"
+                sel_p = st.radio("Profil", p_names, key=p_key, horizontal=True)
+                profile_idx = p_names.index(sel_p)
+            else:
+                profile_idx = 0
 
-        btn_label = (
-            f"{'⚔' if use_melee else '🎯'} {total} Schaden → {def_unit.name_en}"
-            if total > 0
-            else "Schaden zuweisen"
-        )
-        if st.button(
-            btn_label,
-            key=f"atk_apply_{phase_key}_{atk_faction}_{atk_uid}",
-            type="primary",
-            use_container_width=True,
-        ):
-            if total > 0:
-                apply_damage(def_uid, def_faction, total, def_unit)
-            atk_flags = st.session_state[units_key_for(atk_faction)][atk_uid]["turn_flags"]
-            if phase_key == "shooting":
-                atk_flags["shot"] = True
-            elif phase_key == "fight":
-                atk_flags["fought"] = True
-            log_action(
-                st.session_state.round,
-                phase_key,
-                atk_unit.name_en,
-                f"dealt {total} damage to {def_unit.name_en}",
+            profile = profiles[profile_idx]
+
+            # Model counter — initialise session_state default once
+            models_key = f"decl_m_{atk_uid}_{def_uid}"
+            if models_key not in st.session_state:
+                st.session_state[models_key] = models_alive if i == 0 else 0
+
+            models_val = st.number_input(
+                "Modelle auf dieses Ziel",
+                min_value=0,
+                max_value=models_alive,
+                step=1,
+                key=models_key,
             )
+            atk_count = _compute_attacks(profile.attacks, int(models_val), atk_unit.attacks)
+            st.caption(f"→ {atk_count} Attacken")
+
+            models_assigned += int(models_val)
+            entries.append(
+                {
+                    "def_faction": def_faction,
+                    "def_uid": def_uid,
+                    "weapon_name": weapon.name_en,
+                    "profile_idx": profile_idx,
+                    "models_count": int(models_val),
+                }
+            )
+
+    remaining = models_alive - models_assigned
+    if remaining < 0:
+        st.error(f"Zu viele Modelle zugeteilt ({models_assigned}/{models_alive})")
+    elif remaining > 0:
+        st.caption(f"Verbleibend: {remaining} / {models_alive} nicht zugeteilt")
+    else:
+        st.caption(f"✓ {models_alive} / {models_alive} Modelle zugeteilt")
+
+    can_start = 0 < models_assigned <= models_alive
+    if st.button(
+        "Auflösung starten →",
+        type="primary",
+        disabled=not can_start,
+        key=f"start_res_{atk_uid}",
+    ):
+        st.session_state.attack_declaration = {
+            "active": True,
+            "atk_faction": atk_faction,
+            "atk_uid": atk_uid,
+            "phase_key": phase_key,
+            "use_melee": use_melee,
+            "in_melee": in_melee,
+            "entries": [e for e in entries if e["models_count"] > 0],
+        }
+        st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# 6d-v2 Resolution phase
+# ---------------------------------------------------------------------------
+
+
+def render_attack_resolution(phase_key: str) -> None:
+    """Phase 2 — One tab per (weapon × target). Reads state from attack_declaration."""
+    decl = st.session_state.get("attack_declaration", {})
+    if not decl.get("active"):
+        return
+
+    atk_faction = decl["atk_faction"]
+    atk_uid = decl["atk_uid"]
+    use_melee = decl["use_melee"]
+    entries = decl.get("entries", [])
+
+    atk_unit, atk_state = lookup(atk_faction, atk_uid)
+    badges = state_badges_html(atk_state)
+
+    st.markdown(f"**{atk_unit.name_en}** — Auflösung")
+    if badges:
+        st.markdown(badges, unsafe_allow_html=True)
+
+    if st.button("↺ Deklaration zurücksetzen", key="reset_decl"):
+        st.session_state.attack_declaration = _empty_attack_declaration()
+        st.rerun()
+
+    if not entries:
+        return
+
+    tab_labels = []
+    for entry in entries:
+        def_unit, _ = lookup(entry["def_faction"], entry["def_uid"])
+        tab_labels.append(f"{entry['weapon_name']} → {def_unit.name_en}")
+
+    tabs = st.tabs(tab_labels)
+    for i, (tab, entry) in enumerate(zip(tabs, entries)):
+        with tab:
+            tab_key = f"{atk_uid}_{entry['def_uid']}_{i}"
+            res_key = f"res_{tab_key}"
+            tab_state = st.session_state.get(res_key, {})
+
+            if tab_state.get("applied"):
+                def_unit_t, _ = lookup(entry["def_faction"], entry["def_uid"])
+                m_lost = tab_state.get("models_lost", 0)
+                mw = tab_state.get("mortal_wounds", 0)
+                total = tab_state.get("total_damage", 0)
+                st.success(f"✓ {m_lost} Modelle · {mw} MW · {total} Schaden")
+                _render_rp_block(
+                    def_unit_t, entry["def_faction"], entry["def_uid"], m_lost, tab_key
+                )
+                if st.button("↺ Zurücksetzen", key=f"res_reset_{tab_key}"):
+                    for k in (res_key, f"rp_{tab_key}"):
+                        st.session_state.pop(k, None)
+                    st.rerun()
+            else:
+                _render_resolution_tab(
+                    entry, atk_faction, atk_unit, atk_state, use_melee, phase_key, tab_key
+                )
+
+    all_applied = all(
+        st.session_state.get(f"res_{atk_uid}_{e['def_uid']}_{j}", {}).get("applied", False)
+        for j, e in enumerate(entries)
+    )
+    if all_applied and entries:
+        st.markdown("---")
+        if st.button("✓ Alle Tabs abgeschlossen — Weiter", type="primary", key="all_done"):
+            st.session_state.attack_declaration = _empty_attack_declaration()
             st.rerun()

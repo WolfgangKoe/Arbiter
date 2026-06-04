@@ -1,6 +1,12 @@
-"""Tests for Ziel-6d combat helpers: resolve_attack_modifiers, resolve_save, resolve_fnp."""
+"""Tests for Ziel-6d combat helpers: resolve_attack_modifiers, resolve_save, resolve_fnp,
+apply_damage_attacks."""
 
-from gameMechanic.combat import resolve_attack_modifiers, resolve_fnp, resolve_save
+from gameMechanic.combat import (
+    apply_damage_attacks,
+    resolve_attack_modifiers,
+    resolve_fnp,
+    resolve_save,
+)
 
 # ---------------------------------------------------------------------------
 # resolve_attack_modifiers
@@ -193,3 +199,37 @@ def test_fnp_ignored_by_weapon():
 
 def test_fnp_no_fnp_and_ignores():
     assert resolve_fnp(None, True) is None
+
+
+# ---------------------------------------------------------------------------
+# apply_damage_attacks (6d-v2)
+# ---------------------------------------------------------------------------
+
+
+def test_apply_damage_attacks_1lp_only_models():
+    assert apply_damage_attacks(3, 0, 0, 1) == 3
+
+
+def test_apply_damage_attacks_3lp_models():
+    assert apply_damage_attacks(2, 0, 0, 3) == 6
+
+
+def test_apply_damage_attacks_wounds_on_front():
+    assert apply_damage_attacks(1, 2, 0, 3) == 5
+
+
+def test_apply_damage_attacks_mortal_wounds_only():
+    assert apply_damage_attacks(0, 0, 4, 1) == 4
+
+
+def test_apply_damage_attacks_combined():
+    assert apply_damage_attacks(2, 1, 3, 3) == 10
+
+
+def test_apply_damage_attacks_zero():
+    assert apply_damage_attacks(0, 0, 0, 1) == 0
+
+
+def test_apply_damage_attacks_mortal_added_to_normal():
+    # 1 model dead (1LP) + 2 mortal wounds = 3 total damage
+    assert apply_damage_attacks(1, 0, 2, 1) == 3

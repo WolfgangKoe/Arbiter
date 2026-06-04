@@ -265,15 +265,15 @@ Invulnerable Saves sind von Cover nicht betroffen.
 
 - [x] **Bug P0**: `can_shoot()` — Pistol in Melee erlauben, andere Waffen ausblenden
 - [x] Scenario-Mockups (4 JSON-Dateien, s.o.)
-- [ ] `uiLayout/_common.py`: `render_attack_form()` in `render_attack_declaration()` + `render_attack_resolution_tab()` aufteilen
-- [ ] `uiLayout/_common.py`: Deklarations-Phase — Ziel-Karten mit Modell-Counter + Waffenwahl + Profilwahl + Verteidiger-GO-Bereich
-- [ ] `uiLayout/_common.py`: Auflösungs-Tabs — Hit-Block (Badges, Modifier, max-±1-Hinweis)
-- [ ] `uiLayout/_common.py`: Wound-Tabelle (5 Zeilen, aktive Zeile highlight, Spalten für S-/T-/Wurf-Modifier)
-- [ ] `uiLayout/_common.py`: Save-Block (Rüstung / Invuln / FNP je eigene Zeile; Cover-Dropdown; optimal highlighted)
-- [ ] `uiLayout/_common.py`: Damage-Block (Fallunterscheidung 1LP/nLP/var; Modelle+Wunden-Counter)
-- [ ] `uiLayout/_common.py`: RP-Block nach Apply (nur Necron-Fraktion + Verluste > 0)
-- [ ] `uiLayout/_common.py`: Tab-Lock nach Apply + Reset-Button (bis Phase-End)
-- [ ] `gameMechanic/combat.py`: `apply_damage_attacks(n, dmg_each, uid, faction, unit)` — sequentielle Zuweisung mit Überschuss-Verlust für normale Attacken
+- [x] `uiLayout/_common.py`: `render_attack_form()` in `render_attack_declaration()` + `render_attack_resolution()` aufteilen
+- [x] `uiLayout/_common.py`: Deklarations-Phase — Ziel-Karten mit Modell-Counter + Waffenwahl + Profilwahl
+- [x] `uiLayout/_common.py`: Auflösungs-Tabs — Hit-Block mit Modifier-Stack
+- [x] `uiLayout/_common.py`: Wound-Tabelle (5 Zeilen, aktive Zeile highlight, Modifier-Stack-Badges)
+- [x] `uiLayout/_common.py`: Save-Block (Rüstung / Invuln / FNP; Cover-Dropdown)
+- [x] `uiLayout/_common.py`: Damage-Block (1LP/nLP Fallunterscheidung; Modelle+Wunden-Counter + Mortal Wounds)
+- [x] `uiLayout/_common.py`: RP-Block nach Apply (nur Necron-Fraktion + Verluste > 0)
+- [x] `uiLayout/_common.py`: Tab-Lock nach Apply + Reset-Button
+- [x] `gameMechanic/combat.py`: `apply_damage_attacks(models_lost, wounds_on_front, mortal_wounds, wounds_per_model)` — reine HP-Berechnung
 - [ ] Weapon-Abilities als Badges im Hit-Block: Tesla (`extra_hits` bei unmod. 6), Dakka, Power Klaw (−1 hit), Auto-Hit
 - [ ] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite
 - [ ] Shooting/Fight Phase Handler: `render_attack_form()` durch neue Funktion ersetzen
@@ -281,14 +281,13 @@ Invulnerable Saves sind von Cover nicht betroffen.
 
 ### Akzeptanzkriterien 6d-v2
 
-- [ ] Kein Input für Treffer oder Verwundungen — nur Modellverluste + Tödliche Verwundungen
-- [ ] Wound-Tabelle zeigt aktive Zeile highlighted; Modifier als Badges sichtbar
-- [ ] Save-Block: Rüstung / Invuln / FNP getrennt; bester Save optisch hervorgehoben
-- [ ] Cover-Dropdown vorhanden (default: kein Cover)
+- [x] Kein Input für Treffer oder Verwundungen — nur Modellverluste + Tödliche Verwundungen
+- [x] Wound-Tabelle zeigt aktive Zeile highlighted; Modifier als Badges sichtbar
+- [x] Save-Block: Rüstung / Invuln / FNP getrennt; Cover-Dropdown vorhanden (default: kein Cover)
 - [x] Pistolen in Melee: nur Pistolen anzeigbar, Rest ausgegraut
-- [ ] RP-Block erscheint nach Apply bei Necron-Einheiten mit Verlusten
-- [ ] Tabs locken nach Apply; Reset bis Phase-End möglich
-- [ ] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw) im Hit-Block
+- [x] RP-Block erscheint nach Apply bei Necron-Einheiten mit Verlusten
+- [x] Tabs locken nach Apply; Reset bis Phase-End möglich
+- [ ] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw) im Hit-Block (nachrangig)
 - [x] Scenario-Mockups aufrufbar via `?scenario=necrons_shoot_orks` etc.
 
 ---

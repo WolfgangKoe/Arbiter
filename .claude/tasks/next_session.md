@@ -26,36 +26,68 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 |------|--------|
 | Ziel 1–5 — Grundgerüst, Phasen, Setup, Daten | ✅ fertig |
 | Ziel 6a–6c, 6e, 6g, 6h | ✅ committed |
-| **Ziel 6d — Simultane Attackensequenz (alt)** | ✅ committed (wird durch 6d-v2 ersetzt) |
-| **Ziel 6d-v2 — Attackensequenz Overhaul** | 🔵 Design fertig, Implementierung ausstehend |
+| **Ziel 6d — Simultane Attackensequenz (alt)** | ✅ committed (durch 6d-v2 ersetzt) |
+| **Ziel 6d-v2 — Attackensequenz Overhaul** | ✅ Kern implementiert (Session 10) — noch nicht committed |
 | **Datenqualitäts-Review** | ✅ vollständig (Stratagems + faction_abilities) |
 
-Teststand: **454 Tests grün**
+Teststand: **461 Tests grün**
 
 ---
 
-## Was wurde zuletzt gemacht (2026-06-04, Session 9)
+## Was wurde zuletzt gemacht (2026-06-04, Session 10)
 
-**P0 — Pistol-in-Melee Bug Fix:**
-- `shootingPhase.py`: `can_shoot()` erlaubt Schuss wenn Einheit im Nahkampf UND Pistol-Waffe hat; `_active_shooting()` filtert Waffenliste auf Pistolen + zeigt Info-Badge; `_render_display()` übergibt `in_melee` an `render_attack_form()`
-- `_common.py`: `render_attack_form()` — neuer `in_melee: bool = False` Parameter; Waffenfilter auf `weapon_type.startswith("Pistol")` wenn `in_melee=True`
+**Ziel 6d-v2 — Kern-Implementierung:**
 
-**P1 — Scenario-Mockups:**
-- 4 neue JSON-Dateien: `necrons_shoot_orks.json`, `orks_fight_necrons.json`, `orks_shoot_necrons.json`, `necrons_fight_orks.json`
-- Alle mit `p1_units`/`p2_units` Keys; Roster `necrons_alpha.yaml` (p1) + `orks.yaml` (p2); active-Keys `"Necrons α"` / `"Orks"`
-- `orks_shoot_necrons.json`: Boyz in Melee mit Warriors → demonstriert Pistol-only-Verhalten nach Fix
-- `necrons_fight_orks.json`: Skorpekhs CHARGED, Warriors ebenfalls im Nahkampf → RP nach Verlusten relevant
+- `gameMechanic/game_state.py`: `attack_declaration`-State in `init_state()` + `_reset_phase_state()` hinzugefügt
+- `gameMechanic/combat.py`: `apply_damage_attacks(models_lost, wounds_on_front, mortal_wounds, wounds_per_model) -> int` hinzugefügt
+- `uiLayout/_common.py`: `render_attack_form()` entfernt; ersetzt durch:
+  - `render_attack_declaration()` — Phase 1: Zielkarten mit Modell-Counter, Waffenwahl, Profilwahl; "Auflösung starten"-Button schreibt in `attack_declaration`
+  - `render_attack_resolution()` — Phase 2: Tabs pro (Waffe × Ziel), Hit-Block, Wound-Tabelle (5 Zeilen, aktive highlighted), Save-Block + FNP + Cover-Dropdown, Damage-Block (1LP/nLP), Tab-Lock nach Apply, RP-Block für Necrons
+  - Helfer: `_collect_atk_modifiers()`, `_collect_def_save_modifiers()`, `_render_wound_table()`, `_render_damage_block()`, `_render_rp_block()`, `_render_resolution_tab()`, `_empty_attack_declaration()`, `_compute_attacks()`
+- `gameMechanic/shootingPhase.py`: `_render_display()` → nutzt `render_attack_declaration` / `render_attack_resolution`
+- `gameMechanic/fightPhase.py`: `_render_display()` → nutzt `render_attack_declaration` / `render_attack_resolution`
+- `tests/test_combat_6d.py`: 7 neue Tests für `apply_damage_attacks`
 
-Teststand: **454 Tests grün**
+Teststand: **461 Tests grün** (+7 neue)
 
 ---
 
-## ⬅ NÄCHSTE SESSION: Ziel 6d-v2 — Attackensequenz Overhaul (P2)
+## ⬅ NÄCHSTE SESSION: Bug-Fixes + UI-Bereinigung (Session 11)
 
-Design vollständig abgestimmt (Session 8). P0+P1 abgehakt. Nächster Schritt: Implementierung beginnen.
+Feedback aus erstem Smoke-Test (2026-06-04). Grundstruktur 6d-v2 erkennbar, aber folgende Probleme blockieren den produktiven Einsatz.
 
-**Empfohlener Einstieg:** Plan zeigen + Freigabe holen für den ersten 6d-v2 Task:
-> `uiLayout/_common.py`: `render_attack_form()` aufteilen in `render_attack_declaration()` + `render_attack_resolution_tab()`
+### P0 — Scenario-Bug (App-Crash)
+**Symptom:** `KeyError: 'Necrons 1500pts - Silent King'` in `gameHeader.py` Zeile `vp = st.session_state.vp[faction]`
+**Ursache:** Wenn die App mit einem alten Session-State (anderer Roster) läuft und dann `?scenario=...` geladen wird, stimmen die `vp`/`cp`-Schlüssel nicht mit dem `first_player`/`second_player` des Scenarios überein.
+**Fix:** In `scenarios.py` `apply_scenario()` sicherstellen dass `vp` + `cp` auf die tatsächlichen Spielernamen des Session-States umgeschlüsselt werden, NICHT blindlings aus der Scenario-JSON übernommen. Alternativ: vor Scenario-Load `reset_game()` + `init_state()` mit den Scenario-Rostern aufrufen.
+**Dateien:** `gameMechanic/scenarios.py`, evtl. `app.py`
+
+### P1 — Altlasten-Cleanup (UI-Übersichtlichkeit)
+
+**a) Stratagems-Akkordeon über Attack-Form**
+Das Akkordeon "Stratagems this phase (N)" erscheint direkt über dem Attack-Deklarations-Bereich und stört die Übersicht.
+- In der Shooting/Fight Phase: Stratagems-Block in gameProtocoll belassen, aber aus dem `render_active()`-Bereich der Phase-Handler entfernen oder nach unten verschieben
+- **Dateien:** `gameMechanic/shootingPhase.py`, `gameMechanic/fightPhase.py`, `uiLayout/gameProtocoll.py`
+
+**b) Player-Columns (Wound-Buttons) im Attack-Modus ausblenden**
+Während `attack_declaration.active == True` werden die Spieler-Spalten (mit Wound-Buttons −3…+3) weiter gerendert — das erzeugt leere Boxen und redundante Steuerelemente unter dem Attack-Form.
+- Wenn Declaration oder Resolution aktiv: `render_player_column()` überspringen, stattdessen nur `render_attack_resolution()` zeigen
+- **Dateien:** `gameMechanic/shootingPhase.py`, `gameMechanic/fightPhase.py`
+
+### P2 — Mehrere Waffen pro Ziel (Silent King / MONSTER / VEHICLE)
+**Problem:** Pro Zielkarte nur eine Waffe wählbar (Radio-Button). Ein MONSTER/VEHICLE kann in 9E alle seine Waffen abfeuern.
+**Fix:** Waffenauswahl von Radio → Checkboxen ändern. Jede angehakte Waffe erzeugt einen eigenen Deklarations-Eintrag (= eigenen Tab in der Auflösung). Trivialfall (1 Waffe) bleibt auto-selektiert.
+**Dateien:** `uiLayout/_common.py` → `render_attack_declaration()`
+
+### P3 — Deklarations-UX Kleinigkeiten
+- Modell-Counter: Label zu abstrakt. Umbenennen in `"Anzahl schießende Modelle"` + die Attacken-Zahl fett und größer darstellen (aktuell zu klein)
+- Damage-Block: Erklärtext `"Modelle verloren = vollständig vernichtete Modelle"` hinzufügen um Unterschied zu Wunden auf Frontmodell klarzumachen
+- **Dateien:** `uiLayout/_common.py`
+
+### Nachrangig (eigene Sessions)
+- Weapon-Ability-Badges im Hit-Block (Tesla, Dakka, Power Klaw)
+- Stratagem-Modifier-Integration prüfen: sind `active_modifiers` bei Declaration/Resolution korrekt sichtbar?
+- Verteidiger-GO-Bereich in Deklarationsschritt (reaktive Stratagems pro Zielkarte)
 
 ---
 

@@ -258,3 +258,18 @@ def resolve_fnp(fnp: int | None, ignores_fnp: bool) -> int | None:
     if fnp is None or ignores_fnp:
         return None
     return fnp
+
+
+def apply_damage_attacks(
+    models_lost: int,
+    wounds_on_front: int,
+    mortal_wounds: int,
+    wounds_per_model: int,
+) -> int:
+    """Compute total HP damage from 6d-v2 damage inputs.
+
+    models_lost × wounds_per_model = HP from fully destroyed models.
+    wounds_on_front = partial damage on the current front model (9E: excess is lost).
+    mortal_wounds = carry over between models (same HP pool as normal wounds).
+    """
+    return models_lost * wounds_per_model + wounds_on_front + mortal_wounds
