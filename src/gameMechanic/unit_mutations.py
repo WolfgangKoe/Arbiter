@@ -157,6 +157,7 @@ def set_movement_status(uid: str, faction: str, status: str) -> None:
     flags["advanced"] = status == "advanced"
     flags["retreated"] = status == "retreated"
     state["movement_choice"] = status
+    state["movement_chosen"] = True
     if status == "retreated":
         leave_melee(uid, faction)
 

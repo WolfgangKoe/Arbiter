@@ -20,26 +20,23 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 15, 2026-06-05)
+## Aktueller Stand (nach Session 16, 2026-06-05)
 
 ### Was funktioniert ✅
 - Ziel 1–5 (Grundgerüst, Phasen, Setup, Daten) — vollständig
-- Ziel 6a–6e, 6g, 6h — committed
+- Ziel 6a–6i — committed
 - 6d-v2 Attackensequenz: Deklaration + Resolution-Tabs, Wound-Tabelle, RP-Block, Cover-Dropdown
-- AUFGABE 2 ✅: alle hardcodierten Fraktionsreferenzen entfernt
-- AUFGABE 3 ✅: 6. Protokoll + Dynastiebonus implementiert
+- Weapon-Ability-Badges (Tesla, Dakka, Auto-Hit, Power Klaw) im Hit-Block
+- Stratagem Undo-Button (CP-Erstattung + Modifier-Rollback)
+- Auto-Advance: abgehandelte Einheiten rutschen ans Ende der Armeeliste
 - 456 Tests grün
 
-### Was diese Session erledigt wurde ✅
-- Pending-Commit von Session 14: shot/fought-Flags, resolved damage, scenario mapping, weapon multiselect
-- AUFGABE 2 komplett: `_OVERLORD_ID` → Keyword-Check, `is_necron_faction()` gelöscht,
-  `resurrection_orb_used` aus init, `auto_round_1` aus Code (YAML war bereits sauber),
-  Protocol-Assignment Range 1–5, `_render_command_protocols` aus commandPhase.py entfernt
-- AUFGABE 3 Bug 2: `_get_extra_protocol_id` + `_render_extra_protocol` + auto-activate aus Assignments
-- AUFGABE 3 Bug 3: `dynasty`-Feld in Roster-YAML + `p1/p2_dynasty` in session state
-- AUFGABE 1 Necrons: Tesseract Ark Waffen korrigiert (C'tan-Powers particle_hurricane/seismic_lash/solar_fire)
-- AUFGABE 1 Necrons: Waffen-Profile verifiziert (Chronomancer ✅, Doomstalker ✅, Wound-Tracks ✅)
-- AUFGABE 1 Orks: Aktive Roster-Einheiten ergänzt (Warboss Mega Armour, Big Mek, Warbikers)
+### Was Session 16 erledigt hat ✅
+- Weapon-Ability-Badges im Hit-Block (Tesla, Dakka, Auto-Hit, Power Klaw)
+- Stratagem Reset-Button (Undo mit CP-Erstattung)
+- Auto-Advance in Armeeliste: `movement_chosen`-Flag + stabile Sortierung in `detachmentCard.py`
+- Bugfix: `movement_choice == "stationary"` war Initialwert → `movement_chosen: bool` als separates Flag
+- Skizzen für Attackensequenz-Redesign analysiert (Fotos/IMG_4038–4042)
 
 ---
 
@@ -71,12 +68,43 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
+## Nächste Session — AUFGABE 5: Attackensequenz-Redesign (Würfel-UI)
+
+Design-Skizzen in `Fotos/IMG_4038–4042`. Ziel: visuelle Würfelfaces statt Text.
+
+**Schritt 1 — Würfel-Komponente:**
+- SVG-Würfelface für Werte 1–6, inline via `st.markdown(unsafe_allow_html=True)`
+- Farbcodierung: grün (3+), gelb (4+), orange (5+), rot (6+), dunkelrot (immer miss)
+- Highlight-Rahmen für aktive Schwelle
+- Hilfsfunktion `dice_face_svg(value, color, highlighted) -> str`
+- Hilfsfunktion `dice_row_html(threshold, stack) -> str` — rendert 2+…6+ als Reihe
+
+**Schritt 2 — Treffer-Block neu:**
+- Würfelreihe 2+…6+, aktive Schwelle highlighted + farbig
+- Modifier verschieben den Highlight (nicht den Text)
+- Badges darunter: MWBD, Tesla, Dakka, faction ability etc.
+
+**Schritt 3 — Verwundungs-Block neu:**
+- Dieselbe Würfelkomponente
+- Nur aktive S-vs-T-Zeile anzeigen (nicht Tabelle)
+
+**Schritt 4 — Rettungswurf-Block neu:**
+- Rüstung + Invuln je als Würfelreihe
+- AP und Cover als Modifier-Würfel die den Effektivwert zeigen
+
+**Schritt 5 — Schaden-Block:**
+- Würfel-Icon für Schadenswert (D3, D6 als Text im Würfel)
+- FNP als Würfel-Icon
+- `[−1][+1]` Buttons bleiben
+
+Betroffene Dateien: `uiLayout/_common.py` (neue Hilfsfunktionen + Render-Blöcke ersetzen)
+
+---
+
 ## Weitere offene Punkte (nachrangig)
 
 | Punkt | Priorität |
 |---|---|
-| Weapon-Ability-Badges (Tesla, Dakka) im Hit-Block | mittel |
-| Stratagem Reset-Button (reaktive GOs rückgängig) | mittel |
 | `once_per_battle` enforcement | niedrig |
 | subfaction_affinity UI | niedrig |
 | load_powers() verdrahten (Psychic Phase) | niedrig |

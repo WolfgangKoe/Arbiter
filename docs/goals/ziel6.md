@@ -288,12 +288,35 @@ Invulnerable Saves sind von Cover nicht betroffen.
 - [x] Pistolen in Melee: nur Pistolen anzeigbar, Rest ausgegraut
 - [x] RP-Block erscheint nach Apply bei Necron-Einheiten mit Verlusten
 - [x] Tabs locken nach Apply; Reset bis Phase-End möglich
-- [ ] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw) im Hit-Block (nachrangig)
+- [x] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw, Auto-Hit) im Hit-Block ✅ (2026-06-05)
 - [x] Scenario-Mockups aufrufbar via `?scenario=necrons_shoot_orks` etc.
 
-### 🔵 Refinement-Session ausstehend (Session 2026-06-05)
+### 🔵 6d-v3 — Würfel-UI Redesign (geplant, nächste Session)
 
-6d-v2 ist funktional und brauchbar, aber noch nicht auf dem gewünschten Detaillevel. Details und Feinheiten müssen in einer **separaten Refinement-Session** ausgearbeitet werden — kein Scope für laufende Bugfix-Sessions. Konkrete Kritikpunkte beim nächsten Session-Start sammeln.
+Design-Grundlage: Handskizzen `Fotos/IMG_4038–4042` (analysiert 2026-06-05).
+
+**Kernidee:** Alle Wurf-Blöcke (Treffer, Verwundung, Rettungswurf) zeigen eine Reihe von SVG-Würfelfaces (2+…6+). Die aktive Schwelle ist farbig hervorgehoben. Modifier verschieben den Highlight — kein langer Modifier-Stack-Text.
+
+**Farbschema:**
+- 3+ → grün
+- 4+ → gelb
+- 5+ → orange
+- 6+ → rot / dunkelrot (immer miss)
+
+**Komponenten:**
+- `dice_face_svg(value, color, highlighted)` — einzelner SVG-Würfel
+- `dice_row_html(threshold, stack)` — Reihe 2+…6+, Highlight + Farbe aus Schwelle
+- Treffer-Block: Würfelreihe + Ability-Badges darunter (MWBD, Tesla, Dakka…)
+- Verwundungs-Block: nur aktive S-vs-T-Zeile als Würfelreihe (keine Tabelle mehr)
+- Rettungswurf: Rüstung + Invuln je als Würfelreihe, AP/Cover als Modifier-Würfel
+- Schaden: Würfel-Icon für Schadenswert, FNP-Würfel, `[−1][+1]` Buttons bleiben
+
+**Tasks:**
+- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` Hilfsfunktionen
+- [ ] `uiLayout/_common.py`: `_render_roll_block()` ersetzt durch Würfelreihe
+- [ ] `uiLayout/_common.py`: `_render_wound_table()` ersetzt durch einzeilige Würfelreihe
+- [ ] `uiLayout/_common.py`: `_render_save_block()` mit Würfelreihen + Modifier-Würfeln
+- [ ] `uiLayout/_common.py`: Schaden-Block mit Würfel-Icon für D-Werte
 
 ---
 
@@ -544,6 +567,27 @@ Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantie
 - [x] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()`
 - [ ] Optional: Tests für korrekte Phase/Stage-Werte
+
+---
+
+## 6i — Auto-Advance: Abgehandelte Einheiten ans Listenende
+
+**Ziel:** Nach dem Abhandeln einer Einheit in einer Phase wandert ihre unitCard ans Ende der Armeeliste. So ist die nächste unbehandelte Einheit immer oben — kein Zurückscrollen nötig. Phase-Reset stellt Standardreihenfolge wieder her.
+
+### Handled-Kriterien pro Phase
+
+| Phase | Kriterium |
+|---|---|
+| movement | `state["movement_choice"] is not None` |
+| shooting | `turn_flags["shot"] == True` |
+| psychic | `turn_flags["cast"] == True` |
+| charge | `turn_flags["charged"] == True` |
+| fight | `turn_flags["fought"] == True` |
+| command / morale / setup | keine Sortierung |
+
+### Tasks
+
+- [x] `uiLayout/detachmentCard.py`: `(unit, state_key)`-Paare vor dem Rendern sortieren — unbehandelte zuerst, behandelte zuletzt (stabile Sortierung)
 
 ---
 

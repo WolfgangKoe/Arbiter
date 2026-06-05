@@ -190,6 +190,7 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
         "lost_models_this_turn": 0,
         "fled_models_this_turn": 0,
         "movement_choice": "stationary",
+        "movement_chosen": False,
         "melee_with": [],
         "turn_flags": {
             "advanced": False,
@@ -357,6 +358,7 @@ def _reset_turn_state() -> None:
             state["lost_models_this_turn"] = 0
             state["fled_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
+            state["movement_chosen"] = False
             state["active_buffs"] = []
     st.session_state.active_protocol_id = None
     st.session_state.active_directive = None
