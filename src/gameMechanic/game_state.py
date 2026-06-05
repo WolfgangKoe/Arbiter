@@ -125,11 +125,6 @@ def faction_dir_for(player: str) -> str:
     return st.session_state["p2_faction_dir"]
 
 
-def is_necron_faction(player: str) -> bool:
-    """True when the player's faction uses Necron rules (command protocols etc.)."""
-    return faction_dir_for(player) == "necrons"
-
-
 def units_list_for(player: str) -> list[Unit]:
     """Return the Unit-definition list for a player (for stats / name lookups)."""
     if player == st.session_state.get("first_player"):
@@ -248,7 +243,6 @@ def init_state(
     st.session_state.vp = {p1_name: 0, p2_name: 0}
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []
-    st.session_state.resurrection_orb_used = False
     st.session_state.phase_stage = "active"
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
@@ -285,8 +279,8 @@ def init_state(
     st.session_state.secondaries = secondaries
     st.session_state.secondary_vp = secondary_vp
 
-    st.session_state.active_protocol_id = "eternal_guardian"
-    st.session_state.used_protocol_ids = ["eternal_guardian"]
+    st.session_state.active_protocol_id = None
+    st.session_state.used_protocol_ids = []
     st.session_state.waaagh_state: dict = (
         {}
     )  # {player_name: {"stage": 1|2, "round_activated": int}}

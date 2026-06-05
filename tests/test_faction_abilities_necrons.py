@@ -30,19 +30,6 @@ class TestNecronProtocolLoading:
             assert p.id.startswith("wh40k_9e.necrons.faction.protocol_")
 
 
-class TestNecronAutoRound1:
-    def test_eternal_guardian_has_auto_round_1(self) -> None:
-        protocols = load_round_choice_abilities("necrons")
-        eg = next(p for p in protocols if "eternal_guardian" in p.id)
-        assert eg.auto_round_1 is True
-
-    def test_other_protocols_do_not_have_auto_round_1(self) -> None:
-        protocols = load_round_choice_abilities("necrons")
-        for p in protocols:
-            if "eternal_guardian" not in p.id:
-                assert not p.auto_round_1, f"{p.name_en} should not have auto_round_1"
-
-
 class TestNecronSubfactionAffinities:
     def test_all_protocols_have_subfaction_affinity(self) -> None:
         protocols = load_round_choice_abilities("necrons")

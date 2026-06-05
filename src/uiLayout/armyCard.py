@@ -157,29 +157,6 @@ def _render_protocol_ui(faction: str) -> None:
 
     active_directive: str | None = st.session_state.get("active_directive")
 
-    if current_round == 1:
-        auto_protocol = next((p for p in protocols if p.auto_round_1), None)
-        if auto_protocol:
-            if not active_id:
-                st.session_state.active_protocol_id = auto_protocol.id
-                active_id = auto_protocol.id
-            if not active_directive:
-                st.caption(f"{auto_protocol.name_en} — auto (Round 1)")
-                if is_active:
-                    _render_directive_buttons(auto_protocol, faction, current_round)
-                else:
-                    st.caption("↳ *Awaiting directive selection*")
-            else:
-                badge_text = f"{auto_protocol.name_en.upper()} — {active_directive.upper()}"
-                st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-                chosen_text = (
-                    auto_protocol.primary
-                    if active_directive == "primary"
-                    else auto_protocol.secondary
-                )
-                st.caption(f"↳ {chosen_text}")
-            return
-
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)
         if p:

@@ -8,15 +8,13 @@ from gameMechanic.game_state import faction_dir_for, unit_id_from_state_key, uni
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army, load_round_choice_abilities
+from gameObjects.loader import load_army
 from uiLayout._common import (
     PHASE_RULES,
     lookup,
     state_badges_html,
     wound_adjustment_buttons,
 )
-
-_OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"
 
 
 def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
@@ -186,52 +184,10 @@ def _render_unit_command_abilities(
         if ability.effect.type in ("buff_roll", "reroll_hit_1"):
             _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
 
-    # Resurrection Orb is wargear (not in unit_abilities) — Overlord only
-    if unit_id == _OVERLORD_ID:
+    # Resurrection Orb is wargear (not in unit_abilities) — any OVERLORD unit
+    unit = unit_by_id.get(unit_id)
+    if unit and unit.has_keyword("OVERLORD"):
         _render_resurrection_orb(faction, state, units_state, unit_by_id)
-
-
-# ---------------------------------------------------------------------------
-# Command Protocols (Necron faction ability — armyCard is primary entry point)
-# ---------------------------------------------------------------------------
-
-
-def _render_command_protocols(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    protocols = load_round_choice_abilities(faction_dir_for(faction))
-    if not protocols:
-        return
-
-    st.divider()
-    st.markdown("**Command Protocols**")
-
-    current_round = state.get("round", 1)
-
-    # Determine active protocol: Round 1 = Eternal Guardian (fixed by rule),
-    # Rounds 2-5 = player assignment from Setup.
-    if current_round == 1:
-        protocol = next((p for p in protocols if p.auto_round_1), None)
-    else:
-        assignments: dict = st.session_state.get("protocol_assignments", {}).get(faction, {})
-        assigned_id = assignments.get(current_round)
-        protocol = next((p for p in protocols if p.id == assigned_id), None)
-
-    if not protocol:
-        st.caption("No protocol assigned — set order in Setup before the battle.")
-        return
-
-    st.session_state.active_protocol_id = protocol.id
-    st.caption(f"**{protocol.name_de}**")
-    st.caption(f"Primary: {protocol.primary}")
-    st.caption(f"Secondary: {protocol.secondary}")
-
-    directive = st.radio(
-        "Active directive:",
-        options=["primary", "secondary"],
-        format_func=lambda d: "Primary" if d == "primary" else "Secondary",
-        key=f"protocol_directive_r{current_round}",
-        horizontal=True,
-    )
-    st.session_state.active_directive = directive
 
 
 # ---------------------------------------------------------------------------
@@ -290,7 +246,6 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
-    _render_command_protocols(faction, state)
 
     # Render activated command-phase abilities for the selected unit (any faction)
     if sel and sel[0] == faction:

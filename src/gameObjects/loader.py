@@ -270,7 +270,6 @@ def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
                 name_de=a.get("name_de", a["name_en"]),
                 primary=a.get("primary", ""),
                 secondary=a.get("secondary", ""),
-                auto_round_1=a.get("auto_round_1", False),
                 primary_effect=dirs.get("primary", {}).get("effect", {}),
                 secondary_effect=dirs.get("secondary", {}).get("effect", {}),
                 subfaction_affinity=a.get("subfaction_affinity"),

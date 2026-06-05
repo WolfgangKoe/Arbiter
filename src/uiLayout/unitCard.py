@@ -230,8 +230,7 @@ def render_unit_card(
                     st.markdown(f"**{unit.name_en}**")
 
             elif res_orb_awaiting:
-                _overlord_id = "wh40k_9e.necrons.unit.overlord"
-                if uid == _overlord_id:
+                if unit.has_keyword("OVERLORD"):
                     st.markdown(f"**{unit.name_en}**")
                 else:
                     if st.button(

@@ -90,25 +90,20 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
 
 
 def _render_protocol_assignment(faction: str) -> None:
-    """Assign Command Protocols to rounds 2-5 before the battle. Round 1 is always Eternal Guardian."""
+    """Pre-assign round-choice abilities (Command Protocols, Ka'tahs) to rounds 1–5."""
     protocols = load_round_choice_abilities(faction_dir_for(faction))
     if not protocols:
         return
 
-    assignable = [p for p in protocols if not p.auto_round_1]
-    auto = next((p for p in protocols if p.auto_round_1), None)
-
     st.divider()
-    st.markdown(f"**{faction} — Command Protocol Order**")
-    if auto:
-        st.caption(f"Round 1: **{auto.name_de}** *(fixed by rule)*")
+    st.markdown(f"**{faction} — Protocol Order**")
 
     assignments: dict = st.session_state.get("protocol_assignments", {})
     faction_assignments: dict = dict(assignments.get(faction, {}))
 
-    for round_num in range(2, 6):
+    for round_num in range(1, 6):
         already_taken = {v for k, v in faction_assignments.items() if k != round_num}
-        available = [p for p in assignable if p.id not in already_taken]
+        available = [p for p in protocols if p.id not in already_taken]
         if not available:
             continue
         current_id = faction_assignments.get(round_num, available[0].id)

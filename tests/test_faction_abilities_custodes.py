@@ -11,10 +11,6 @@ class TestCustodesKatahLoading:
         protocols = load_round_choice_abilities("adeptus_custodes")
         assert len(protocols) == 6
 
-    def test_custodes_katah_no_auto_round_1(self) -> None:
-        protocols = load_round_choice_abilities("adeptus_custodes")
-        assert not any(p.auto_round_1 for p in protocols)
-
     def test_custodes_katah_first_is_calistus(self) -> None:
         protocols = load_round_choice_abilities("adeptus_custodes")
         assert protocols[0].name_en == "Calistus Ka'tah"
@@ -111,14 +107,3 @@ class TestNecronSubfactionAffinity:
         protocols = load_round_choice_abilities("necrons")
         eg = next(p for p in protocols if "eternal_guardian" in p.id)
         assert eg.subfaction_affinity == "nihilakh"
-
-    def test_necrons_eternal_guardian_auto_round_1(self) -> None:
-        protocols = load_round_choice_abilities("necrons")
-        eg = next(p for p in protocols if "eternal_guardian" in p.id)
-        assert eg.auto_round_1 is True
-
-    def test_necrons_all_other_protocols_not_auto_round_1(self) -> None:
-        protocols = load_round_choice_abilities("necrons")
-        for p in protocols:
-            if "eternal_guardian" not in p.id:
-                assert not p.auto_round_1, f"{p.name_en} should not have auto_round_1"
