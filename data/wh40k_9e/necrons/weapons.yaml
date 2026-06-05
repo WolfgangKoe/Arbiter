@@ -1061,6 +1061,44 @@ weapons:
         abilities: "Each time the bearer fights, it makes D6 additional attacks with this weapon."
         is_melee: true
 
+  # ── Tesseract Ark — C'tan Shard Powers ───────────────────────────────────
+
+  - id: wh40k_9e.necrons.weapon.particle_hurricane
+    name_en: Particle Hurricane
+    profiles:
+      - weapon_type: Assault
+        range_inches: 12
+        attacks: "D6"
+        strength: "4"
+        ap: "-3"
+        damage: "1"
+        abilities: "Each time an attack is made with this weapon, that attack automatically hits the target, and a wound roll of 2+ is always successful (wound roll of 6+ vs VEHICLE)."
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.seismic_lash
+    name_en: Seismic Lash
+    profiles:
+      - weapon_type: Assault
+        range_inches: 24
+        attacks: "D6"
+        strength: "5"
+        ap: "-3"
+        damage: "3"
+        abilities: ""
+        is_melee: false
+
+  - id: wh40k_9e.necrons.weapon.solar_fire
+    name_en: Solar Fire
+    profiles:
+      - weapon_type: Heavy
+        range_inches: 36
+        attacks: "D6"
+        strength: "8"
+        ap: "-3"
+        damage: "D6"
+        abilities: ""
+        is_melee: false
+
   # ── Tesseract Vault / Obelisk ─────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.weapon.tesla_sphere

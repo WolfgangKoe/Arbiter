@@ -2151,8 +2151,10 @@ units:
   - livingMetal
   - quantumShielding
   weapons:
-  - ref: wh40k_9e.necrons.weapon.twin_particle_beamer
-  - ref: wh40k_9e.necrons.weapon.gauss_flux_arc
+  - ref: wh40k_9e.necrons.weapon.tesla_cannon
+  - ref: wh40k_9e.necrons.weapon.particle_hurricane
+  - ref: wh40k_9e.necrons.weapon.seismic_lash
+  - ref: wh40k_9e.necrons.weapon.solar_fire
 - id: wh40k_9e.necrons.unit.canoptek_tomb_sentinel
   name_en: Canoptek Tomb Sentinel
   name_de: Canoptek Tomb Sentinel
