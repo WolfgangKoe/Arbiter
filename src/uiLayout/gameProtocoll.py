@@ -187,7 +187,21 @@ def _render_stratagems() -> None:
 
         with st.expander(label, expanded=False):
             st.caption(strat.rule_text)
-            if not disabled:
+            if strat.id in used_ids:
+                if st.button(
+                    f"↺ Rückgängig (+{strat.cp_cost} CP)",
+                    key=f"strat_undo_{strat.id}_{phase_idx}_{i}",
+                ):
+                    adjust_cp(spending_faction, strat.cp_cost)
+                    used_ids.discard(strat.id)
+                    st.session_state.used_stratagem_ids = used_ids
+                    st.session_state.active_modifiers = [
+                        m
+                        for m in st.session_state.get("active_modifiers", [])
+                        if m.get("source") != strat.name_en
+                    ]
+                    st.rerun()
+            elif not disabled:
                 if st.button(
                     f"Use — spend {strat.cp_cost} CP",
                     key=f"strat_{strat.id}_{phase_idx}_{i}",
