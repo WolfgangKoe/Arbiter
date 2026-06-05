@@ -332,9 +332,9 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 - [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c)
 - [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks)
 - [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer
-- [ ] Command Protocol Bug 1 — `auto_round_1` komplett entfernen (YAML + Dataclass + UI + commandPhase)
-- [ ] Command Protocol Bug 2 — 6. Protokoll (immer aktiv) implementieren + eigene Direktiven-Wahl
-- [ ] Command Protocol Bug 3 — Dynastiebonus (beide Direktiven wenn Dynastieprotokoll) — Voraussetzung: Dynastieinfo im Roster
+- [x] Command Protocol Bug 1 — `auto_round_1` komplett entfernen ✅ (2026-06-05)
+- [x] Command Protocol Bug 2 — 6. Protokoll (immer aktiv) + eigene Direktiven-Wahl ✅ (2026-06-05)
+- [x] Command Protocol Bug 3 — Dynastiebonus; `dynasty`-Feld in Roster-YAML ✅ (2026-06-05)
 
 ---
 

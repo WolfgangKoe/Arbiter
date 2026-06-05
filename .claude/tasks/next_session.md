@@ -20,22 +20,26 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 14, 2026-06-05)
+## Aktueller Stand (nach Session 15, 2026-06-05)
 
 ### Was funktioniert ✅
 - Ziel 1–5 (Grundgerüst, Phasen, Setup, Daten) — vollständig
 - Ziel 6a–6e, 6g, 6h — committed
 - 6d-v2 Attackensequenz: Deklaration + Resolution-Tabs, Wound-Tabelle, RP-Block, Cover-Dropdown
-- 461 Tests grün
+- AUFGABE 2 ✅: alle hardcodierten Fraktionsreferenzen entfernt
+- AUFGABE 3 ✅: 6. Protokoll + Dynastiebonus implementiert
+- 456 Tests grün
 
 ### Was diese Session erledigt wurde ✅
-- Architekturanalyse: alle hardcodierten Fraktionsreferenzen inventarisiert (→ ziel6.md 6h)
-- Command Protocol Bugs 1–3 analysiert und dokumentiert (→ ziel6.md 6e)
-- `auto_round_1` aus `faction_abilities.yaml` entfernt (alle 6 Protokolle)
-- 10 fehlende Command-/Fight-Phase-Abilities für Necrons ergänzt (unit_abilities.yaml):
-  Royal Warden (Adaptive Strategy), Catacomb Command Barge (MWBD), Chronomancer (Chronometron),
-  Orikan (Master Chronomancer + Stars Are Right), Lokhust Lord + Skorpekh Lord (United in Destruction),
-  Canoptek Reanimator (Nanoscarab Beam), Canoptek Spyder (Scarab Hive), Ghost Ark (Repair Barge)
+- Pending-Commit von Session 14: shot/fought-Flags, resolved damage, scenario mapping, weapon multiselect
+- AUFGABE 2 komplett: `_OVERLORD_ID` → Keyword-Check, `is_necron_faction()` gelöscht,
+  `resurrection_orb_used` aus init, `auto_round_1` aus Code (YAML war bereits sauber),
+  Protocol-Assignment Range 1–5, `_render_command_protocols` aus commandPhase.py entfernt
+- AUFGABE 3 Bug 2: `_get_extra_protocol_id` + `_render_extra_protocol` + auto-activate aus Assignments
+- AUFGABE 3 Bug 3: `dynasty`-Feld in Roster-YAML + `p1/p2_dynasty` in session state
+- AUFGABE 1 Necrons: Tesseract Ark Waffen korrigiert (C'tan-Powers particle_hurricane/seismic_lash/solar_fire)
+- AUFGABE 1 Necrons: Waffen-Profile verifiziert (Chronomancer ✅, Doomstalker ✅, Wound-Tracks ✅)
+- AUFGABE 1 Orks: Aktive Roster-Einheiten ergänzt (Warboss Mega Armour, Big Mek, Warbikers)
 
 ---
 
@@ -43,39 +47,23 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ### AUFGABE 1 — Datengrundlage vollständig fixen (laufend)
 
-**Schritt 1 (Necrons) — teilweise erledigt:**
-- 10 Abilities ergänzt ✅
-- Noch offen: Waffen-Profile prüfen (Chronomancer Aeonstave/Entropic Lance/Chronotendrils,
-  Canoptek Doomstalker Doomsday Blaster, Tesseract Ark C'tan-Waffen usw.)
-- Noch offen: Einheiten-Stats für beschädigte Wound-Tracks (Silent King, Triarch Stalker,
-  Canoptek Doomstalker etc.) auf Korrektheit prüfen
+**Necrons ✅ weitgehend erledigt:**
+- Waffen verifiziert, Wound-Tracks korrekt
+- Noch offen: weitere Einheiten nach Bedarf
 
-**Schritt 2 (Orks) — noch nicht angefangen:**
-- unit_abilities.yaml gegen `docs/work/wahapedia_orks/units_all.txt` prüfen
+**Orks — aktive Roster-Einheiten ergänzt ✅:**
+- Noch offen: 71 weitere Einheiten haben fehlende Abilities (niedrig-prio, nach Bedarf ergänzen)
 
-**Schritt 3 (Custodes) — noch nicht angefangen:**
-- unit_abilities.yaml gegen `docs/work/wahapedia_adeptus_custodes/units_all.txt` prüfen
+**Custodes — kein aktiver Roster:**
+- Noch kein `unit_abilities.yaml` — erst anlegen wenn Custodes-Roster erstellt wird
 
 ---
 
-### AUFGABE 2 — Hardcoding aus gameMechanics entfernen (nächster großer Schritt)
-
-Vollständiges Inventar in `docs/goals/ziel6.md` (Abschnitt 6h). Kernpunkte:
-- `_OVERLORD_ID` aus commandPhase.py + unitCard.py → Resurrection Orb über wargear.yaml treiben
-- `is_necron_faction()` aus game_state.py entfernen
-- `resurrection_orb_used` aus init_state raus
-- `waaagh_state` aus _common.py Attacken-Resolver raus
-- `auto_round_1`-Feld aus command_protocol.py Dataclass + gameActionsArea.py + commandPhase.py entfernen
-  (YAML ist bereits sauber — Code hängt noch dran)
-
-**Voraussetzung für diesen Schritt:** Daten (AUFGABE 1) müssen für alle aktiven Fraktionen stabil sein.
+### AUFGABE 2 ✅ ERLEDIGT (2026-06-05, Commit 564deb8)
 
 ---
 
-### AUFGABE 3 — Command Protocol Bugs 2+3 (wartet auf AUFGABE 2)
-
-- Bug 2: 6. Protokoll (immer aktiv) implementieren + eigene Direktiven-Wahl
-- Bug 3: Dynastiebonus (beide Direktiven wenn Dynastieprotokoll) — braucht Dynastieinfo im Roster
+### AUFGABE 3 ✅ ERLEDIGT (2026-06-05, Commits 42b49ce + 2cd8357)
 
 ---
 
