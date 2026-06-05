@@ -16,6 +16,7 @@ import streamlit as st
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
+from gameObjects.weapon import WeaponProfile
 
 # ---------------------------------------------------------------------------
 # Phase description texts
@@ -451,6 +452,17 @@ def _collect_def_save_modifiers(
 # ---------------------------------------------------------------------------
 
 
+def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type-arg]
+    """Detect special weapon abilities from profile fields."""
+    abilities = profile.abilities or ""
+    return {
+        "auto_hit": "Auto-hits" in abilities,
+        "tesla": "additional hits" in abilities,
+        "dakka": profile.weapon_type == "Dakka",
+        "klaw_penalty": profile.is_melee and "subtract" in abilities,
+    }
+
+
 def _render_roll_block(title: str, base_label: str, block: dict) -> None:  # type: ignore[type-arg]
     """Render a hit or wound block with modifier stack."""
     st.markdown(f"**{title}**")
@@ -758,8 +770,14 @@ def _render_resolution_tab(
     base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee)
     base_save_mods = _collect_def_save_modifiers(def_faction, phase_key, use_melee)
 
+    weapon_special = _detect_weapon_special(profile)
+
     final_atk_mods = list(base_atk_mods)
     final_save_mods = list(base_save_mods)
+    if weapon_special["klaw_penalty"]:
+        final_atk_mods.append(
+            {"label": "Power Klaw", "value": -1, "roll_type": "hit", "source": "weapon"}
+        )
     if cover.startswith("Dense"):
         final_atk_mods.append(
             {"label": "Dense Cover", "value": -1, "roll_type": "hit", "source": "terrain"}
@@ -800,7 +818,17 @@ def _render_resolution_tab(
         st.caption(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {inv_txt} invuln")
 
     # HIT BLOCK
-    _render_roll_block("TREFFER", skill_label, atk_result["hit"])
+    if weapon_special["auto_hit"]:
+        st.markdown("**TREFFER** &nbsp; AUTO-TRIFFT", unsafe_allow_html=True)
+    else:
+        _render_roll_block("TREFFER", skill_label, atk_result["hit"])
+        ability_badges = []
+        if weapon_special["tesla"]:
+            ability_badges.append("Tesla: unmod. 6 = +2 Hits")
+        if weapon_special["dakka"]:
+            ability_badges.append(f"Dakka {profile.attacks}")
+        if ability_badges:
+            st.caption(" · ".join(f"[{b}]" for b in ability_badges))
     st.markdown("")
 
     # WOUND TABLE
