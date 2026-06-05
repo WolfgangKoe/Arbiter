@@ -62,6 +62,25 @@ abilities:
       stat: move
       modifier: 1
 
+  - id: wh40k_9e.necrons.unit.royal_warden.adaptive_strategy
+    name_en: Adaptive Strategy
+    badge_label: ADAPT
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.royal_warden
+    rule_text: "In your Command phase, you can select one friendly <DYNASTY> CORE unit within 9\". Until the end of the turn, that unit is eligible to shoot and declare a charge in a turn in which it Fell Back."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 9
+    effect:
+      type: allow_fell_back_shoot_charge
+      target: selected_unit
+
   - id: wh40k_9e.necrons.unit.technomancer.dynastic_advisors
     name_en: Dynastic Advisors
     ability_type: triggered
@@ -102,6 +121,121 @@ abilities:
       type: reanimate
       target: selected_unit
       amount: D6_per_wound
+
+  - id: wh40k_9e.necrons.unit.catacomb_command_barge.my_will_be_done
+    name_en: My Will Be Done
+    badge_label: MWBD
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.catacomb_command_barge
+    rule_text: "In your Command phase, select one friendly <DYNASTY> CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 9
+    effect:
+      type: buff_roll
+      target: selected_unit
+      stat: hit_roll
+      modifier: 1
+
+  - id: wh40k_9e.necrons.unit.chronomancer.chronometron
+    name_en: Chronometron
+    badge_label: CHRON
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.chronomancer
+    rule_text: "In your Command phase, you can select one friendly <DYNASTY> unit within 9\". Until the start of your next Command phase, you can re-roll charge rolls made for that unit and models in that unit have a 5+ invulnerable save."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 9
+    effect:
+      type: buff_charge_and_invuln
+      target: selected_unit
+      invuln_save: 5
+
+  - id: wh40k_9e.necrons.unit.orikan_the_diviner.master_chronomancer
+    name_en: Master Chronomancer
+    badge_label: CHRON
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.orikan_the_diviner
+    rule_text: "In your Command phase, you can select one friendly NECRONS unit within 9\". Until the start of your next Command phase, you can reroll charge rolls made for that unit and models in that unit have a 5+ invulnerable save."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 9
+    effect:
+      type: buff_charge_and_invuln
+      target: selected_unit
+      invuln_save: 5
+
+  - id: wh40k_9e.necrons.unit.orikan_the_diviner.the_stars_are_right
+    name_en: The Stars Are Right
+    badge_label: STARS
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.orikan_the_diviner
+    rule_text: "In your Command phase, if this model is on the battlefield, roll one D6: if the result is less than the current battle round number, until the end of the battle use the Orikan Empowered profile (WS:2+, S:5, W:7, A:4)."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions: []
+    effect:
+      type: profile_switch
+      target: self
+      handler: orikanEmpowered
+
+  - id: wh40k_9e.necrons.unit.lokhust_lord.united_in_destruction
+    name_en: United in Destruction
+    badge_label: UNITED
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.lokhust_lord
+    rule_text: "Aura: While a friendly <DYNASTY> DESTROYER CULT unit is within 6\" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [DESTROYER CULT]
+        within_inches: 6
+    effect:
+      type: reroll_wound_1
+      target: friendly_destroyer_cult_aura
+
+  - id: wh40k_9e.necrons.unit.skorpekh_lord.united_in_destruction
+    name_en: United in Destruction
+    badge_label: UNITED
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.skorpekh_lord
+    rule_text: "Aura: While a friendly <DYNASTY> DESTROYER CULT unit is within 6\" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [DESTROYER CULT]
+        within_inches: 6
+    effect:
+      type: reroll_wound_1
+      target: friendly_destroyer_cult_aura
 
   # ── The Silent King ────────────────────────────────────────────────────────
 
@@ -658,7 +792,65 @@ abilities:
       amount: "D3"
       roll_threshold: 4
 
+  - id: wh40k_9e.necrons.unit.canoptek_reanimator.nanoscarab_reanimation_beam
+    name_en: Nanoscarab Reanimation Beam
+    badge_label: NANO
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_reanimator
+    rule_text: "In your Command phase, you can select one friendly <DYNASTY> unit within 6\" of and visible to this model. Until the start of your next Command phase, while that unit is within 6\" of this model, add 1 to Reanimation Protocol rolls made for that unit."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - within_inches: 6
+    effect:
+      type: buff_rp
+      target: selected_unit
+      modifier: 1
+
   # ── Heavy Support ──────────────────────────────────────────────────────────
+
+  - id: wh40k_9e.necrons.unit.canoptek_spyder.scarab_hive
+    name_en: Scarab Hive
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_spyder
+    rule_text: "In your Command phase, one destroyed model from each friendly <DYNASTY> CANOPTEK SCARAB SWARM unit within 6\" of this unit is Reanimated."
+    trigger:
+      timing: phase_start
+      phase: command
+      stage: start
+      player: active
+    conditions:
+      - has_keywords: [CANOPTEK]
+        within_inches: 6
+    effect:
+      type: reanimate
+      target: friendly_scarabs_within_6
+      amount: 1
+
+  - id: wh40k_9e.necrons.unit.ghost_ark.repair_barge
+    name_en: Repair Barge
+    badge_label: REPAIR
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.ghost_ark
+    rule_text: "In your Command phase, you can select one friendly <DYNASTY> NECRON WARRIORS unit within 6\". If you do, up to D3 destroyed models from that unit Reanimate."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [NECRON WARRIORS]
+        within_inches: 6
+    effect:
+      type: reanimate
+      target: selected_unit
+      amount: D3
 
   - id: wh40k_9e.necrons.unit.canoptek_spyder.fabricator_claw_array
     name_en: Fabricator Claw Array

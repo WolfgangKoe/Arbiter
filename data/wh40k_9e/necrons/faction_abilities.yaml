@@ -53,7 +53,6 @@ abilities:
     name_de: Protokoll des Ewigen Wächters
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: true
     subfaction_affinity: nihilakh
     primary: "+1 to all saving throws until next Command phase"
     secondary: "Re-roll saving throws of 1"
@@ -73,7 +72,6 @@ abilities:
     name_de: Protokoll der hungrigen Leere
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: false
     subfaction_affinity: novokh
     primary: "+1 to hit (Shooting)"
     secondary: "+1 Strength (Shooting weapons)"
@@ -94,7 +92,6 @@ abilities:
     name_de: Protokoll des tyrannischen Herrschers
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: false
     subfaction_affinity: sautekh
     primary: "+1 Leadership"
     secondary: "Re-roll hit and wound rolls of 1 (Melee)"
@@ -114,7 +111,6 @@ abilities:
     name_de: Protokoll des plötzlichen Sturms
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: false
     subfaction_affinity: nephrekh
     primary: "+1\" Move"
     secondary: "Can Advance and Charge in the same turn"
@@ -134,7 +130,6 @@ abilities:
     name_de: Protokoll der unaufhörlichen Legionen
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: false
     subfaction_affinity: szarekhan
     primary: "Re-roll Reanimation Protocols"
     secondary: "+1 model returned per Reanimation Protocol"
@@ -154,7 +149,6 @@ abilities:
     name_de: Protokoll der rachsüchtigen Sterne
     ability_type: round_choice
     source: faction_rule
-    auto_round_1: false
     subfaction_affinity: mephrit
     primary: "+1 to wound rolls (Shooting)"
     secondary: "Improve AP of Shooting weapons by 1"

@@ -62,6 +62,7 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 
 - `faction_dir_for()` fällt auf `"necrons"` zurück wenn `p1_faction_dir`/`p2_faction_dir` nicht gesetzt → Living Metal erscheint bei Adeptus Custodes, WAAAGH fehlt bei Orks
 - Command Protocol-Wechsel ist in `gameProtocoll.py` hart auf Necrons verdrahtet
+- ⚠️ **armyCard entspricht Stand 2026-06-05 noch nicht vollständig der Spec** — triggered abilities, Wargear-Aktionen und Protokoll-UI nicht korrekt generisch; detaillierter Abgleich mit Spec nötig vor nächster Feature-Session
 
 ### Spec
 
@@ -290,11 +291,38 @@ Invulnerable Saves sind von Cover nicht betroffen.
 - [ ] Weapon-Ability-Badges (Tesla, Dakka, Power Klaw) im Hit-Block (nachrangig)
 - [x] Scenario-Mockups aufrufbar via `?scenario=necrons_shoot_orks` etc.
 
+### 🔵 Refinement-Session ausstehend (Session 2026-06-05)
+
+6d-v2 ist funktional und brauchbar, aber noch nicht auf dem gewünschten Detaillevel. Details und Feinheiten müssen in einer **separaten Refinement-Session** ausgearbeitet werden — kein Scope für laufende Bugfix-Sessions. Konkrete Kritikpunkte beim nächsten Session-Start sammeln.
+
 ---
 
 ## 6e — Fähigkeiten-Integration in alle Phasen
 
 **Ziel:** Fähigkeiten aus Armee, Einheit, Ausrüstung und Stratagems greifen in den richtigen Phasen. CP-Doppelvergabe-Bug gefixt.
+
+### ⚠️ Command Protocol Bugs (Session 2026-06-04)
+
+Die aktuelle Implementierung weicht in drei Punkten von der Regelregel ab:
+
+**Bug 1 — `auto_round_1` existiert nicht in den Regeln:**
+Die Regeln erlauben, alle 5 Protokolle frei auf Runden 1–5 zu verteilen. `auto_round_1: true` für Eternal Guardian ist eine erfundene Einschränkung. Das Setup zeigt nur Runden 2–5 (`range(2,6)`) — muss `range(1,6)` sein. Das Flag muss aus YAML, Dataclass, Setup-UI und commandPhase.py entfernt werden.
+
+**Bug 2 — 6. Protokoll fehlt komplett:**
+Es gibt 6 Protokolle; 5 werden Runden zugewiesen, das 6. (übrige) ist **jede Runde zusätzlich aktiv**. Die Spielerin wählt dessen Direktive am Rundenanfang. Die App kennt dieses Konzept nicht.
+
+**Bug 3 — Dynastiebonus fehlt:**
+Falls das 6. Protokoll das Dynastieprotokoll ist (z.B. Eternal Guardian für Nihilakh), gelten **beide Direktiven** gleichzeitig. Erfordert Dynast-Info im Roster/Unit-Daten — noch nicht vorhanden.
+
+Betroffene Dateien: `faction_abilities.yaml` (Flag weg), `command_protocol.py` (Feld weg), `gameActionsArea.py` (Setup-UI), `commandPhase.py` (Render-Logik), `game_state.py` (`active_protocol_id = "eternal_guardian"` weg).
+
+### ⚠️ Stratagems und Phasenbedingungen (Session 2026-06-04)
+
+Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per_battle` gesetzt), aber die **Anbindung in den Phase-Handlern ist unvollständig**:
+- `timing: phase_reactive` GOs werden wie proaktive behandelt (UI-Unterschied fehlt)
+- Keine Phase-Handler rufen `stratagem_visibility()` mit korrektem `stage` auf
+- Effekte aktiver GOs (`modifier`-Feld) werden in der Attackensequenz nicht ausgewertet
+- `once_per_battle` wird nicht enforced
 
 ### Tasks
 
@@ -304,6 +332,9 @@ Invulnerable Saves sind von Cover nicht betroffen.
 - [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c)
 - [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks)
 - [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer
+- [ ] Command Protocol Bug 1 — `auto_round_1` komplett entfernen (YAML + Dataclass + UI + commandPhase)
+- [ ] Command Protocol Bug 2 — 6. Protokoll (immer aktiv) implementieren + eigene Direktiven-Wahl
+- [ ] Command Protocol Bug 3 — Dynastiebonus (beide Direktiven wenn Dynastieprotokoll) — Voraussetzung: Dynastieinfo im Roster
 
 ---
 
@@ -406,6 +437,25 @@ Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh
 - [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply
 - [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die
 
+### ⚠️ Hardcoded Fraktionslogik — vollständiges Inventar (Session 2026-06-04)
+
+Das folgende muss herausgelöst werden — keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein:
+
+| Datei | Zeile | Problem | Lösung |
+|---|---|---|---|
+| `commandPhase.py` | 19 | `_OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"` | Resurrection Orb über `wargear.yaml` + generisches Wargear-Aktionssystem |
+| `commandPhase.py` | 190 | `if unit_id == _OVERLORD_ID` | entfällt mit generischem Wargear |
+| `unitCard.py` | 233 | `_overlord_id = "wh40k_9e.necrons.unit.overlord"` (doppelt) | entfällt |
+| `game_state.py` | 128 | `is_necron_faction()` vergleicht direkt mit `"necrons"` | Funktion löschen, generisch ersetzen |
+| `game_state.py` | 251 | `resurrection_orb_used = False` in `init_state` | Necron-Wargear-State gehört nicht in globalen Init |
+| `game_state.py` | 288 | `active_protocol_id = "eternal_guardian"` | entfällt mit Bug-1-Fix |
+| `_common.py` | 796 | `waaagh_state` im Attacken-Resolver hardcoded | Ork-Modifier soll über `active_modifiers` fließen |
+| `armyCard.py` | 229 | `_render_waaagh_ui()` — Ork-spezifischer Block | generisch über Ability-Typ |
+| `armyCard.py` | 253 | `if load_round_choice_abilities(faction_dir): return` blockiert Waaagh | generische Prüfung |
+| `faction_abilities.yaml` | — | `auto_round_1: true/false` | Flag komplett entfernen |
+
+**Kernproblem:** Resurrection Orb ist Wargear, aber nicht im Wargear-System. Waaagh ist eine Faction-Ability, aber Render-Logik steckt direkt in `armyCard.py` + `_common.py` statt über `ability_engine` zu laufen.
+
 ### Kategorie 2 — Einmalig-Deklariert (wie WAAAGH!)
 
 | Fraktion | Mechanik | Status |
@@ -470,6 +520,15 @@ Effect-Typen (Vocabulary aus `ability.py`): `buff_roll`, `debuff_roll`, `mortal_
 | `once_per_battle` enforcement | Datenfeld gesetzt; Enforcement braucht `used_this_battle` in Session-State + neuen Parameter in `stratagem_visibility()` — noch nicht implementiert |
 | Variable CP-Kosten | Derzeit Kommentar im YAML (`# variable: 1CP / 2CP`). Ggf. `cp_cost_max`-Feld ergänzen. |
 | Reaktive GO UI | `timing: phase_reactive` korrekt in Dataclass; UI behandelt diese GOs noch wie proaktive |
+
+### ⚠️ Daten-Lücken — Truncated Scraper (Session 2026-06-04)
+
+Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantiell unvollständige Daten** geliefert. Betroffen sind insbesondere:
+- Einheiten-Profile (fehlende Stats, fehlende Keywords, unvollständige Waffenprofile)
+- Fähigkeiten (Abilities/Rules nicht vollständig — z.B. Dynastiebonus-Mechanik bei Command Protocols komplett fehlend)
+- Stratagems bereits manuell nachgearbeitet ✅ — Units/Weapons noch offen
+
+**Vorgehen:** Vor jedem weiteren Feature-Build für eine Fraktion zuerst Daten gegen Wahapedia verifizieren.
 
 ### Tasks
 

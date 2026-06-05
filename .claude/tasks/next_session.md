@@ -20,7 +20,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 13, 2026-06-04)
+## Aktueller Stand (nach Session 14, 2026-06-05)
 
 ### Was funktioniert ✅
 - Ziel 1–5 (Grundgerüst, Phasen, Setup, Daten) — vollständig
@@ -29,38 +29,53 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - 461 Tests grün
 
 ### Was diese Session erledigt wurde ✅
-- Wahapedia-Scraper: Truncation entfernt, alle Unit-Slugs (Necrons 67, Orks 80+, Custodes 33)
-- Neues Tool `wahapedia_page_scraper.py`: faction_overview + Core Rules lokal gespeichert
-- Stratagem-Visibility: 3 Bugs gefixt (phase_reactive, dual-faction load, condition fallback)
-- Silent King: 8 fehlende Abilities in `unit_abilities.yaml` eingetragen
-- Command Protocols: regelkonform (Setup-Zuweisung, Auto-Aktivierung, active_directive gesetzt)
+- Architekturanalyse: alle hardcodierten Fraktionsreferenzen inventarisiert (→ ziel6.md 6h)
+- Command Protocol Bugs 1–3 analysiert und dokumentiert (→ ziel6.md 6e)
+- `auto_round_1` aus `faction_abilities.yaml` entfernt (alle 6 Protokolle)
+- 10 fehlende Command-/Fight-Phase-Abilities für Necrons ergänzt (unit_abilities.yaml):
+  Royal Warden (Adaptive Strategy), Catacomb Command Barge (MWBD), Chronomancer (Chronometron),
+  Orikan (Master Chronomancer + Stars Are Right), Lokhust Lord + Skorpekh Lord (United in Destruction),
+  Canoptek Reanimator (Nanoscarab Beam), Canoptek Spyder (Scarab Hive), Ghost Ark (Repair Barge)
 
 ---
 
 ## Offene Aufgaben (priorisiert)
 
-### AUFGABE 1 — Wahapedia-Daten lokal (erledigt)
+### AUFGABE 1 — Datengrundlage vollständig fixen (laufend)
 
-Gespeichert in `docs/work/`:
-- `wahapedia_necrons/`: units_all.txt (67 Einheiten), stratagems.txt, faction_overview.txt (344K)
-- `wahapedia_orks/`: units_all.txt (80+ Einheiten), stratagems.txt, faction_overview.txt (343K)
-- `wahapedia_adeptus_custodes/`: units_all.txt (33 Einheiten), faction_overview.txt (262K)
-- `wahapedia_core_rules/`: 6 Dateien (741K gesamt)
+**Schritt 1 (Necrons) — teilweise erledigt:**
+- 10 Abilities ergänzt ✅
+- Noch offen: Waffen-Profile prüfen (Chronomancer Aeonstave/Entropic Lance/Chronotendrils,
+  Canoptek Doomstalker Doomsday Blaster, Tesseract Ark C'tan-Waffen usw.)
+- Noch offen: Einheiten-Stats für beschädigte Wound-Tracks (Silent King, Triarch Stalker,
+  Canoptek Doomstalker etc.) auf Korrektheit prüfen
 
-Noch offen: Vergleichsreport YAML vs. Wahapedia (weitere Einheiten nach Silent King)
+**Schritt 2 (Orks) — noch nicht angefangen:**
+- unit_abilities.yaml gegen `docs/work/wahapedia_orks/units_all.txt` prüfen
+
+**Schritt 3 (Custodes) — noch nicht angefangen:**
+- unit_abilities.yaml gegen `docs/work/wahapedia_adeptus_custodes/units_all.txt` prüfen
 
 ---
 
-### AUFGABE 2 — Stratagems-Visibility ✅ ERLEDIGT (fb5d39c)
+### AUFGABE 2 — Hardcoding aus gameMechanics entfernen (nächster großer Schritt)
+
+Vollständiges Inventar in `docs/goals/ziel6.md` (Abschnitt 6h). Kernpunkte:
+- `_OVERLORD_ID` aus commandPhase.py + unitCard.py → Resurrection Orb über wargear.yaml treiben
+- `is_necron_faction()` aus game_state.py entfernen
+- `resurrection_orb_used` aus init_state raus
+- `waaagh_state` aus _common.py Attacken-Resolver raus
+- `auto_round_1`-Feld aus command_protocol.py Dataclass + gameActionsArea.py + commandPhase.py entfernen
+  (YAML ist bereits sauber — Code hängt noch dran)
+
+**Voraussetzung für diesen Schritt:** Daten (AUFGABE 1) müssen für alle aktiven Fraktionen stabil sein.
 
 ---
 
-### AUFGABE 3 — Einheiten-Abilities (laufend)
+### AUFGABE 3 — Command Protocol Bugs 2+3 (wartet auf AUFGABE 2)
 
-Silent King ✅ — 8 Abilities eingetragen (149029d)
-
-Noch offen: Imotekh, Chronomancer, Plasmancer, Psychomancer, Lychguard, Flayed Ones,
-Canoptek Wraiths u.v.m. — gegen `docs/work/wahapedia_necrons/units_all.txt` prüfen.
+- Bug 2: 6. Protokoll (immer aktiv) implementieren + eigene Direktiven-Wahl
+- Bug 3: Dynastiebonus (beide Direktiven wenn Dynastieprotokoll) — braucht Dynastieinfo im Roster
 
 ---
 
