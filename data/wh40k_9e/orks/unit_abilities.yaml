@@ -491,6 +491,89 @@ abilities:
       minimum: 1
       except_strength_ge: 8
 
+  # ── HQ — Warboss in Mega Armour ──────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.warboss_mega_armour.call_da_waaagh
+    name_en: Call Da Waaagh!
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.warboss_mega_armour
+    rule_text: "Once per battle, in your Command phase, this WARBOSS can call a Waaagh! See the Waaagh! faction ability for full effects."
+    trigger:
+      timing: phase_any
+      phase: command
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [WARBOSS]
+        once_per_battle: true
+    effect:
+      type: activate_faction_ability
+      ability_id: wh40k_9e.orks.faction.waaagh_stage1
+
+  - id: wh40k_9e.orks.unit.warboss_mega_armour.warboss_aura
+    name_en: Warboss (Aura)
+    badge_label: BOSS
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.warboss_mega_armour
+    rule_text: "While a friendly <CLAN> CORE or <CLAN> CHARACTER unit is within 6\" of this model, each time a model in that unit makes a melee attack, add 1 to that attack's hit roll."
+    trigger:
+      timing: persistent
+      phase: fight
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [CORE]
+        within_inches: 6
+    effect:
+      type: buff_hit
+      target: friendly_clan_core_within_6
+      modifier: 1
+
+  # ── HQ — Big Mek in Mega Armour ──────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.big_mek_mega_armour.big_mekaniak
+    name_en: Big Mekaniak
+    badge_label: REPAIR
+    ability_type: activated
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.big_mek_mega_armour
+    rule_text: "At the end of your Movement phase, this model can repair one friendly <CLAN> VEHICLE model within 3\" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn."
+    trigger:
+      timing: phase_any
+      phase: movement
+      stage: active
+      player: active
+    conditions:
+      - has_keywords: [VEHICLE]
+        within_inches: 3
+    effect:
+      type: heal
+      target: selected_unit
+      amount: D3
+
+  # ── Fast Attack — Warbikers ───────────────────────────────────────────────
+
+  - id: wh40k_9e.orks.unit.warbikers.cloud_of_smoke
+    name_en: Cloud of Smoke
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.warbikers
+    rule_text: "Each time a ranged attack is made against this unit, subtract 1 from that attack's hit roll."
+    trigger:
+      timing: persistent
+      phase: shooting
+      stage: active
+      player: either
+    conditions: []
+    effect:
+      type: debuff_hit
+      target: self
+      modifier: -1
+
+  # ── Generic ───────────────────────────────────────────────────────────────
+
   - id: wh40k_9e.orks.unit.beast_snagga
     name_en: Beast Snagga
     ability_type: triggered
