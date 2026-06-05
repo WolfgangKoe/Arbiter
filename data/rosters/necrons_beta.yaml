@@ -1,6 +1,7 @@
 # Necrons Beta — Silent Kings (ranged defensive force, ~465 pts)
 display_name: "Necrons β"
 faction_dir: "necrons"
+dynasty: nihilakh
 units:
   - id: wh40k_9e.necrons.unit.necron_lord
     models: 1

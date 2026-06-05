@@ -144,9 +144,25 @@ def _get_extra_protocol_id(protocols: list, faction: str) -> str | None:
 
 
 def _render_extra_protocol(protocol, faction: str, is_active: bool, current_round: int) -> None:
-    """Render the always-active 6th protocol with its own directive selection."""
+    """Render the always-active 6th protocol with its own directive selection.
+
+    Dynasty bonus: if the faction's dynasty matches the protocol's subfaction_affinity,
+    both directives are active simultaneously (no player choice required).
+    """
+    first = st.session_state.get("first_player")
+    dynasty: str | None = st.session_state.get("p1_dynasty" if faction == first else "p2_dynasty")
+    dynasty_bonus = bool(dynasty and dynasty == protocol.subfaction_affinity)
+
     extra_directive: str | None = st.session_state.get("extra_directive")
     st.caption("*Always active (extra protocol):*")
+
+    if dynasty_bonus:
+        badge_text = f"{protocol.name_en.upper()} — DYNASTY BONUS (BOTH)"
+        st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
+        st.caption(f"↳ Primary: {protocol.primary}")
+        st.caption(f"↳ Secondary: {protocol.secondary}")
+        return
+
     if extra_directive:
         badge_text = f"{protocol.name_en.upper()} — {extra_directive.upper()}"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)

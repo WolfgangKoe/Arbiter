@@ -1,6 +1,7 @@
 # Necrons Alpha — Errant Legion (offensive assault force, ~415 pts)
 display_name: "Necrons α"
 faction_dir: "necrons"
+dynasty: nihilakh
 units:
   - id: wh40k_9e.necrons.unit.overlord
     models: 1
