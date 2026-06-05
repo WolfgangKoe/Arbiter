@@ -174,7 +174,7 @@ def _render_stratagems() -> None:
         st.caption(f"No stratagems available in the **{current_phase.capitalize()}** phase.")
         return
 
-    for strat, vis, spending_faction in visible:
+    for i, (strat, vis, spending_faction) in enumerate(visible):
         disabled = vis == "greyed"
         label = f"**{strat.name_en}** · {strat.cp_cost} CP"
         if strat.player == "inactive":
@@ -190,7 +190,7 @@ def _render_stratagems() -> None:
             if not disabled:
                 if st.button(
                     f"Use — spend {strat.cp_cost} CP",
-                    key=f"strat_{strat.id}_{phase_idx}",
+                    key=f"strat_{strat.id}_{phase_idx}_{i}",
                 ):
                     adjust_cp(spending_faction, -strat.cp_cost)
                     used_ids.add(strat.id)
