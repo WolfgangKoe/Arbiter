@@ -250,6 +250,7 @@ def init_state(
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
     st.session_state.active_directive: str | None = None
+    st.session_state.extra_directive: str | None = None
     st.session_state.cmd_awaiting_ability_id: str | None = None
     st.session_state.cmd_awaiting_required_kw: list = []
     st.session_state.res_orb_target_uid = None
@@ -350,6 +351,7 @@ def _reset_turn_state() -> None:
             state["active_buffs"] = []
     st.session_state.active_protocol_id = None
     st.session_state.active_directive = None
+    st.session_state.extra_directive = None
     # WAAAGH! Stage 1 → Stage 2 transition: auto-upgrade when a new round begins
     waaagh = st.session_state.get("waaagh_state", {})
     for player, ws in waaagh.items():

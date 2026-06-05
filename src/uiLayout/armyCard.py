@@ -130,6 +130,61 @@ def _render_directive_buttons(protocol, faction: str, round_num: int) -> None:
         st.rerun()
 
 
+def _get_extra_protocol_id(protocols: list, faction: str) -> str | None:
+    """Return the ID of the 6th (always-active) protocol — the one not assigned to any round.
+
+    Returns None when not all 5 round slots are filled (extra can't be determined yet).
+    """
+    assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+    assigned_ids = set(assignments.values())
+    if len(assigned_ids) < 5:
+        return None
+    extras = [p.id for p in protocols if p.id not in assigned_ids]
+    return extras[0] if len(extras) == 1 else None
+
+
+def _render_extra_protocol(protocol, faction: str, is_active: bool, current_round: int) -> None:
+    """Render the always-active 6th protocol with its own directive selection."""
+    extra_directive: str | None = st.session_state.get("extra_directive")
+    st.caption("*Always active (extra protocol):*")
+    if extra_directive:
+        badge_text = f"{protocol.name_en.upper()} — {extra_directive.upper()}"
+        st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
+        chosen_text = protocol.primary if extra_directive == "primary" else protocol.secondary
+        st.caption(f"↳ {chosen_text}")
+        if is_active and st.button(
+            "Change extra directive",
+            key=f"extra_dir_change_{faction}_{current_round}",
+            use_container_width=True,
+        ):
+            st.session_state.extra_directive = None
+            st.rerun()
+    else:
+        st.caption(f"**{protocol.name_en}**")
+        st.caption(f"↳ Primary: {protocol.primary}")
+        st.caption(f"↳ Secondary: {protocol.secondary}")
+        if is_active:
+            col_p, col_s = st.columns(2)
+            if col_p.button(
+                "Primary", key=f"extra_dir_p_{faction}_{current_round}", use_container_width=True
+            ):
+                st.session_state.extra_directive = "primary"
+                log_action(
+                    current_round, "command", faction, f"Extra: {protocol.name_en} — primary"
+                )
+                st.rerun()
+            if col_s.button(
+                "Secondary",
+                key=f"extra_dir_s_{faction}_{current_round}",
+                use_container_width=True,
+            ):
+                st.session_state.extra_directive = "secondary"
+                log_action(
+                    current_round, "command", faction, f"Extra: {protocol.name_en} — secondary"
+                )
+                st.rerun()
+
+
 def _render_protocol_ui(faction: str) -> None:
     """Command Protocol UI — only for factions with command_protocols.yaml.
 
@@ -157,6 +212,14 @@ def _render_protocol_ui(faction: str) -> None:
 
     active_directive: str | None = st.session_state.get("active_directive")
 
+    # Auto-activate the assigned protocol for this round
+    if not active_id:
+        faction_assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+        assigned_id = faction_assignments.get(current_round)
+        if assigned_id:
+            active_id = assigned_id
+            st.session_state.active_protocol_id = assigned_id
+
     if active_id:
         p = next((p for p in protocols if p.id == active_id), None)
         if p:
@@ -171,36 +234,39 @@ def _render_protocol_ui(faction: str) -> None:
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
                 st.caption(f"↳ {chosen_text}")
-        return
-
-    if phase_key != "command" or not is_active:
+    elif phase_key != "command" or not is_active:
         st.caption("— no protocol selected —")
-        return
+    else:
+        # Fallback free selection — active player, command phase, no assignment set
+        available = [p for p in protocols if p.id not in used_ids]
+        if not available:
+            st.caption("All protocols have been used.")
+        else:
+            choice = st.radio(
+                "Choose protocol:",
+                options=range(len(available)),
+                format_func=lambda i: available[i].name_en,
+                key=f"cmd_protocol_choice_{faction}",
+            )
+            if st.button(
+                "Activate Protocol",
+                key=f"cmd_protocol_activate_{faction}",
+                type="primary",
+                use_container_width=True,
+            ):
+                chosen = available[choice]
+                st.session_state.active_protocol_id = chosen.id
+                st.session_state.used_protocol_ids = used_ids + [chosen.id]
+                st.session_state.active_directive = None
+                log_action(current_round, "command", faction, f"Protocol: {chosen.name_en}")
+                st.rerun()
 
-    # Interactive selection — active player, command phase, no protocol yet
-    available = [p for p in protocols if p.id not in used_ids]
-    if not available:
-        st.caption("All protocols have been used.")
-        return
-
-    choice = st.radio(
-        "Choose protocol:",
-        options=range(len(available)),
-        format_func=lambda i: available[i].name_en,
-        key=f"cmd_protocol_choice_{faction}",
-    )
-    if st.button(
-        "Activate Protocol",
-        key=f"cmd_protocol_activate_{faction}",
-        type="primary",
-        use_container_width=True,
-    ):
-        chosen = available[choice]
-        st.session_state.active_protocol_id = chosen.id
-        st.session_state.used_protocol_ids = used_ids + [chosen.id]
-        st.session_state.active_directive = None
-        log_action(current_round, "command", faction, f"Protocol: {chosen.name_en}")
-        st.rerun()
+    # Render the 6th (always-active) protocol when all 5 rounds are assigned
+    extra_id = _get_extra_protocol_id(protocols, faction)
+    if extra_id:
+        extra_p = next((p for p in protocols if p.id == extra_id), None)
+        if extra_p:
+            _render_extra_protocol(extra_p, faction, is_active, current_round)
 
 
 def _render_waaagh_ui(
