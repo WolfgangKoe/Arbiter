@@ -72,32 +72,16 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 Design-Skizzen in `Fotos/IMG_4038–4042`. Ziel: visuelle Würfelfaces statt Text.
 
-**Schritt 1 — Würfel-Komponente:**
-- SVG-Würfelface für Werte 1–6, inline via `st.markdown(unsafe_allow_html=True)`
-- Farbcodierung: grün (3+), gelb (4+), orange (5+), rot (6+), dunkelrot (immer miss)
-- Highlight-Rahmen für aktive Schwelle
-- Hilfsfunktion `dice_face_svg(value, color, highlighted) -> str`
-- Hilfsfunktion `dice_row_html(threshold, stack) -> str` — rendert 2+…6+ als Reihe
+Vollständige Skizzen + Komponenten-API: `docs/goals/ziel6.md` → Abschnitt **6d-v3**.
 
-**Schritt 2 — Treffer-Block neu:**
-- Würfelreihe 2+…6+, aktive Schwelle highlighted + farbig
-- Modifier verschieben den Highlight (nicht den Text)
-- Badges darunter: MWBD, Tesla, Dakka, faction ability etc.
+Kurzfassung:
+1. `dice_face_svg()` + `dice_row_html()` + `modifier_die_html()` als SVG-Hilfsfunktionen
+2. Treffer-Block: Würfelreihe 2+…6+, aktive Schwelle farbig highlighted, Modifier-Würfel inline
+3. Verwundungs-Block: nur aktive S-vs-T-Zeile als einzelner Würfel (keine Tabelle mehr)
+4. Rettungswurf: Rüstung + Invuln je als Würfelreihe, AP/Cover als Modifier-Würfel
+5. Schaden: Würfel-Icon für D-Werte + FNP, `[−1][+1]` Buttons bleiben
 
-**Schritt 3 — Verwundungs-Block neu:**
-- Dieselbe Würfelkomponente
-- Nur aktive S-vs-T-Zeile anzeigen (nicht Tabelle)
-
-**Schritt 4 — Rettungswurf-Block neu:**
-- Rüstung + Invuln je als Würfelreihe
-- AP und Cover als Modifier-Würfel die den Effektivwert zeigen
-
-**Schritt 5 — Schaden-Block:**
-- Würfel-Icon für Schadenswert (D3, D6 als Text im Würfel)
-- FNP als Würfel-Icon
-- `[−1][+1]` Buttons bleiben
-
-Betroffene Dateien: `uiLayout/_common.py` (neue Hilfsfunktionen + Render-Blöcke ersetzen)
+Betroffene Datei: nur `uiLayout/_common.py`
 
 ---
 

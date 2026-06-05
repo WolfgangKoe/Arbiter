@@ -167,9 +167,11 @@ Infrastruktur bereits vorhanden: `data/scenarios/`, `?scenario=<name>` URL-Param
 
 ### Layout-Spec
 
+> ⚠️ **Veraltet — wird durch 6d-v3 ersetzt.** Die Auflösungs-Blöcke (Treffer, Verwundung, Save, Schaden) werden auf Würfel-UI umgestellt. Die Deklarations-Phase bleibt weitgehend unverändert.
+
 Die `gameActionArea` wechselt in zwei Phasen:
 
-**Phase 1 — Deklaration**
+**Phase 1 — Deklaration** _(unverändert gültig)_
 ```
 [Angreifer: Intercessors]  →  [+ Ziel hinzufügen ▾]
 
@@ -195,44 +197,18 @@ Regeln:
 - Reaktive GOs des Verteidigers erscheinen beim jeweiligen Ziel sobald es hinzugefügt wird
 - Rapid Fire: Info-Badge `[RAPID FIRE · ½ = 12"]` — kein Toggle, nur Display
 
-**Phase 2 — Auflösung (Tabs)**
-
-Ein Tab pro (Waffe × Zieleinheit). Reihenfolge frei wählbar, Tab lockt nach Apply.
+**Phase 2 — Auflösung (Tabs)** _(Würfel-UI in 6d-v3 — alte Textdarstellung veraltet)_
 
 ```
-╔══ Bolt Rifle → Ork Boyz (8 Attacken) ══════════╗
-║                                                  ║
-║  TREFFER  8 Würfel · BS 3+                       ║
-║  [HEAVY −1 · moved]  [Reroll 1s — 1CP aktivieren]║
-║  [Whirling Onslaught −1] (Gegner aktiviert)      ║
-║  → effektiv 3+  (max ±1)                        ║
-║                                                  ║
-║  VERWUNDUNG  S4  [S↑Proto +1]  vs  T5  [T↓—]   ║
-║  ╔═══════════════════════════════╗               ║
-║  ║  S ≥ 2T  →  2+               ║               ║
-║  ║  S > T   →  3+               ║               ║
-║  ║  S = T   →  4+               ║               ║
-║  ║▶ S < T   →  5+  ◀ [aktiv]   ║               ║
-║  ║  S ≤ ½T →  6+               ║               ║
-║  ╚═══════════════════════════════╝               ║
-║  Modifier: [Proto Wunde +1] → 4+                ║
-║                                                  ║
-║  SAVE  Sv 6+ / AP-1 → 7+ (immer misslingt)      ║
-║  INV 5+ [Nephrekh]  → 5+ ← optimal (highlight)  ║
-║  FNP —                                           ║
-║  Deckung: [Kein Cover ▾]                         ║
-║                                                  ║
-║  SCHADEN  D1 fix · Ziel: 1LP/Modell              ║
-║  Modelle verloren:        [ 0 ] [−][+]           ║
-║  Tödliche Verwundungen:   [ 0 ] [−][+]           ║
-║                                                  ║
-║  [⚔ Schaden anwenden]    [↺ Zurücksetzen]       ║
-╚══════════════════════════════════════════════════╝
+╔══ Bolt Rifle → Ork Boyz (8 Attacken) ══════════╗   ← veraltet, s. 6d-v3
+║  TREFFER  BS 3+  [HEAVY −1]  → effektiv 3+     ║
+║  VERWUNDUNG S4 < T5  → 5+  [+1 Wunde] → 4+    ║
+║  SAVE Sv6+ / AP-1  INV 5+  FNP —               ║
+║  [⚔ Schaden anwenden]    [↺ Zurücksetzen]      ║
+╚═════════════════════════════════════════════════╝
 ```
 
-Nach Apply → Tab zeigt Zusammenfassung + Reset-Button (bis Phase-End).
-
-**Necron RP-Block** (erscheint nach Apply wenn Necron-Einheit Verluste erlitten hat):
+**Necron RP-Block** _(bleibt unverändert)_:
 ```
 REANIMATION PROTOCOLS
 3 Warriors gefallen → 3 Würfel, Erfolg: 5+
@@ -295,28 +271,143 @@ Invulnerable Saves sind von Cover nicht betroffen.
 
 Design-Grundlage: Handskizzen `Fotos/IMG_4038–4042` (analysiert 2026-06-05).
 
-**Kernidee:** Alle Wurf-Blöcke (Treffer, Verwundung, Rettungswurf) zeigen eine Reihe von SVG-Würfelfaces (2+…6+). Die aktive Schwelle ist farbig hervorgehoben. Modifier verschieben den Highlight — kein langer Modifier-Stack-Text.
+**Kernidee:** Alle Wurf-Blöcke zeigen SVG-Würfelfaces (2+…6+) als Reihe. Die aktive Schwelle ist farbig hervorgehoben. Modifier-Würfel zeigen den Effekt inline — kein langer Stack-Text.
 
-**Farbschema:**
+**Farbschema der aktiven Schwelle:**
+- 2+ → grau (sehr einfach)
 - 3+ → grün
 - 4+ → gelb
 - 5+ → orange
-- 6+ → rot / dunkelrot (immer miss)
+- 6+ → rot (knapp)
+- immer miss (7+) → dunkelrot, durchgestrichen
 
-**Komponenten:**
-- `dice_face_svg(value, color, highlighted)` — einzelner SVG-Würfel
-- `dice_row_html(threshold, stack)` — Reihe 2+…6+, Highlight + Farbe aus Schwelle
-- Treffer-Block: Würfelreihe + Ability-Badges darunter (MWBD, Tesla, Dakka…)
-- Verwundungs-Block: nur aktive S-vs-T-Zeile als Würfelreihe (keine Tabelle mehr)
-- Rettungswurf: Rüstung + Invuln je als Würfelreihe, AP/Cover als Modifier-Würfel
-- Schaden: Würfel-Icon für Schadenswert, FNP-Würfel, `[−1][+1]` Buttons bleiben
+---
+
+#### Treffer-Block (`IMG_4039`)
+
+```
+TREFFER  8 Würfel · BS
+┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
+│ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │    ← Würfelfaces, Dots oder Zahl
+└───┘ └───┘ └▶3◀┘ └───┘ └───┘    ← aktive Schwelle mit Rahmen + grün
+ 2+    3+   [3+]   5+    6+
+
+[HEAVY −1]                         ← Modifier-Badge: verschiebt Highlight → 4+
+┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
+│ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
+└───┘ └───┘ └───┘ └▶4◀┘ └───┘    ← effektiv 4+ (gelb)
+                  [4+]
+
+[Tesla: unmod. 6 = +2 Hits]  [MWBD]  [Faction Ability]  ← Info-Badges darunter
+```
+
+Regeln:
+- Modifier verschieben den Highlight-Würfel; max ±1 gilt (Cap bleibt)
+- Ability-Badges erscheinen nur wenn Waffe/Einheit die Fähigkeit hat
+- Buttons für reaktive GOs (Stratagem) erscheinen rechts neben dem Block wenn CP vorhanden
+
+---
+
+#### Verwundungs-Block (`IMG_4040`)
+
+```
+VERWUNDUNG  S 5  vs  T 4
+
+┌───┐
+│ 4 │    ← S > T → 4+ (gelb), nur diese eine Zeile
+└▶4◀┘
+[4+]
+
+[+1 Proto]  →  ┌───┐
+               │ 3 │  (effektiv 3+, grün)
+               └▶3◀┘
+```
+
+Regeln:
+- Nur die aktive S-vs-T-Zeile wird gezeigt (keine 5-Zeilen-Tabelle mehr)
+- Modifier verschieben den Würfel (gleiche Logik wie Treffer)
+- Farbe folgt der effektiven Schwelle
+
+---
+
+#### Rettungswurf-Block (`IMG_4041`)
+
+```
+RETTUNGSWURF
+
+normal   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
+         │ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
+         └───┘ └───┘ └▶3◀┘ └───┘ └───┘   ← Basis-Save 3+ (grün)
+          2+    3+   [3+]   5+    6+
+
+AP-2     ┌───┐  →  verschiebt normal um +2  →  effektiv 5+ (orange)
+         │ · │ (Modifier-Würfel, zeigt AP-Wert als Dots)
+         └───┘
+
+Cover    ┌───┐  →  −1 auf effektiv  →  4+ (gelb)
+         │ · │
+         └───┘
+
+effektiv ┌───┐
+         │ 4 │  [4+]  ← highlight, gelb
+         └▶4◀┘
+
+invuln   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
+         │ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
+         └───┘ └───┘ └───┘ └▶4◀┘ └───┘   ← Invuln 4+ (gelb)
+          2+    3+    4+   [4+]   6+
+
+         ──── kein AP/Cover-Effekt auf Invuln ────
+```
+
+Sonderfälle:
+- Quantum Shielding: setzt Invuln auf 4+ fix (kein Modifier-Würfel, direkter Override)
+- Wenn effektiv schlechter als Invuln: Invuln-Zeile wird als optimal hervorgehoben
+
+---
+
+#### Schaden-Block (`IMG_4042`)
+
+```
+SCHADEN
+
+normal  ┌───┐  per Attacke          (Waffenschaden: feste Zahl oder D-Würfel)
+        │ D3│                        D-Werte als Text im Würfel-Icon
+        └───┘
+
+mortal  ┌───┐  per Attacke          (tödliche Verwundungen, falls vorhanden)
+        │ 1 │
+        └───┘
+
+FNP     ┌───┐                        (nur wenn Einheit FNP hat)
+        │6+ │
+        └───┘
+
+────────────────────────────────────
+Modelle verloren:    [−1]  [ 0 ]  [+1]    (Einheiten mit mehreren Modellen)
+Wunden (Front):      [−1]  [ 0 ]  [+1]    (Frontmodell / Einzelmodell)
+────────────────────────────────────
+[⚔ Schaden anwenden]   [↺ Zurücksetzen]
+```
+
+---
+
+#### Komponenten-API (geplant)
+
+| Funktion | Signatur | Zweck |
+|---|---|---|
+| `dice_face_svg` | `(value: int, highlighted: bool, color: str) -> str` | Einzelner SVG-Würfel |
+| `dice_row_html` | `(base: int, modified: int, stack: list[dict]) -> str` | Würfelreihe 2+…6+ mit Highlight |
+| `modifier_die_html` | `(value: int, label: str) -> str` | Kleiner Modifier-Würfel mit Label |
+
+---
 
 **Tasks:**
-- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` Hilfsfunktionen
-- [ ] `uiLayout/_common.py`: `_render_roll_block()` ersetzt durch Würfelreihe
-- [ ] `uiLayout/_common.py`: `_render_wound_table()` ersetzt durch einzeilige Würfelreihe
-- [ ] `uiLayout/_common.py`: `_render_save_block()` mit Würfelreihen + Modifier-Würfeln
-- [ ] `uiLayout/_common.py`: Schaden-Block mit Würfel-Icon für D-Werte
+- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` + `modifier_die_html()`
+- [ ] `uiLayout/_common.py`: `_render_roll_block()` → Würfelreihe (Treffer)
+- [ ] `uiLayout/_common.py`: `_render_wound_table()` → einzeilige Würfeldarstellung
+- [ ] `uiLayout/_common.py`: `_render_save_block()` → Würfelreihen + Modifier-Würfel
+- [ ] `uiLayout/_common.py`: Schaden-Block → Würfel-Icons für D-Werte + FNP
 
 ---
 
