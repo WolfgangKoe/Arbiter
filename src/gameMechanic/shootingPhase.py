@@ -25,6 +25,8 @@ def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
     cannot shoot. VEHICLE and MONSTER units may shoot even while in melee (Big Guns Never Tire).
     """
     flags = unit_state.get("turn_flags", {})
+    if flags.get("shot"):
+        return False
     if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_reserve"):
         return False
     if unit_state.get("in_melee"):
@@ -60,7 +62,10 @@ class ShootingPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
-        _render_display(state)
+        attack_form_shown = _render_display(state)
+        if attack_form_shown:
+            return
+
         st.divider()
 
         col1, col2 = st.columns(2)
@@ -94,8 +99,11 @@ def _active_shooting(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
     """Show shooting eligibility and ranged weapon list for the selected unit."""
+    flags = unit_state.get("turn_flags", {})
+    if flags.get("shot"):
+        st.info("Already shot this phase.")
+        return
     if not can_shoot(unit_state, unit):
-        flags = unit_state.get("turn_flags", {})
         if flags.get("advanced"):
             st.warning("Advanced this turn — cannot shoot.")
         elif flags.get("retreated"):
@@ -155,12 +163,12 @@ def _inactive_target_stats(
     cols[2].metric("++", inv_display)
 
 
-def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Bottom area: attack declaration or resolution when attacker + target are selected."""
+def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
+    """Render attack form if applicable. Returns True when the form is shown."""
     decl = st.session_state.get("attack_declaration", {})
     if decl.get("active") and decl.get("phase_key") == "shooting":
         render_attack_resolution("shooting")
-        return
+        return True
 
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
@@ -180,5 +188,6 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
                 phase_key="shooting",
                 in_melee=atk_state.get("in_melee", False),
             )
-            return
+            return True
     st.info(PHASE_RULES["shooting"])
+    return False

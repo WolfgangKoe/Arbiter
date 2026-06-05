@@ -21,9 +21,36 @@ def get_scenario_data(name: str) -> dict[str, Any] | None:
 
 def apply_scenario(data: dict[str, Any], state: dict[str, Any]) -> None:
     """Patch a state dict with scenario data. Pure function — safe for tests."""
-    for key in ("round", "phase_idx", "active", "phase_stage", "cp", "vp"):
+    for key in ("round", "phase_idx", "phase_stage"):
         if key in data:
             state[key] = data[key]
+
+    # Re-map faction-keyed dicts positionally so loading a scenario saved with
+    # different player names never causes a KeyError in gameHeader.
+    first = state.get("first_player", "")
+    second = state.get("second_player", "")
+    for dict_key in ("cp", "vp"):
+        if dict_key not in data:
+            continue
+        src: dict[str, Any] = data[dict_key]
+        src_keys = list(src.keys())
+        mapped: dict[str, Any] = dict(state.get(dict_key) or {})
+        if first and len(src_keys) >= 1:
+            mapped[first] = src[src_keys[0]]
+        if second and len(src_keys) >= 2:
+            mapped[second] = src[src_keys[1]]
+        state[dict_key] = mapped
+
+    # Map "active" player positionally using the cp key order from the scenario.
+    if "active" in data:
+        src_cp_keys = list((data.get("cp") or {}).keys())
+        src_active = data["active"]
+        if first and src_cp_keys and src_active == src_cp_keys[0]:
+            state["active"] = first
+        elif second and len(src_cp_keys) >= 2 and src_active == src_cp_keys[1]:
+            state["active"] = second
+        else:
+            state["active"] = src_active
 
     unit_patches: dict[str, dict[str, Any]] = data.get("unit_patches", {})
     for faction_key, patches in unit_patches.items():

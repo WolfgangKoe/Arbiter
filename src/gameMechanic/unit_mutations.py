@@ -22,11 +22,21 @@ def adjust_cp(faction: str, delta: int) -> None:
     st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
 
 
-def apply_damage(uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False) -> None:
+def apply_damage(
+    uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False, resolved: bool = False
+) -> None:
     key = units_key_for(faction)
     state = st.session_state[key][uid]
     old_models = state["models"]
-    if not mortal and unit.models_max > 1 and state["models"] > 0 and state["current_wounds"] > 0:
+    # Front-model cap applies only to single-hit damage (wound buttons, old attack form).
+    # 6d-v2 passes resolved=True: damage is already the correct total HP reduction.
+    if (
+        not mortal
+        and not resolved
+        and unit.models_max > 1
+        and state["models"] > 0
+        and state["current_wounds"] > 0
+    ):
         front_hp = state["current_wounds"] - (state["models"] - 1) * unit.wounds
         dmg = min(dmg, front_hp)
     state["current_wounds"] = max(0, state["current_wounds"] - dmg)

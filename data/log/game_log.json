@@ -1,130 +1,181 @@
 {
-  "game_id": "2026-06-03T23:20:53.461583",
-  "players": {},
+  "game_id": "2026-06-04T19:29:37.555079",
+  "players": {
+    "first": "Necrons 1500pts - Silent King",
+    "second": "Necrons α"
+  },
   "rounds": [
     {
       "round": 1,
       "phases": [
         {
-          "phase": "command",
-          "active": "Orks",
+          "phase": "movement",
+          "active": "The Silent King",
           "events": [
             {
               "type": "action",
-              "unit": "Orks",
-              "action": "WAAAGH! called — Stage 1 active"
+              "unit": "The Silent King",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Royal Warden",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Royal Warden",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Plasmancer",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Plasmancer",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Necron Warriors",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Necron Warriors",
+              "action": "movement: moved"
             },
             {
               "type": "action",
-              "unit": "Orks",
+              "unit": "Necron Warriors",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Necron Warriors",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Technomancer",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Technomancer",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Lychguard",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Lychguard",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Canoptek Scarab Swarms",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Canoptek Scarab Swarms",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Canoptek Scarab Swarms",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "command",
+          "active": "Necrons 1500pts - Silent King",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Necrons 1500pts - Silent King",
               "action": "+1 CP received"
             },
             {
               "type": "action",
-              "unit": "Orks",
-              "action": "WAAAGH! called — Stage 1 active"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Big Mek in Mega Armour",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Big Mek in Mega Armour",
-              "action": "movement: moved"
-            },
-            {
-              "type": "action",
-              "unit": "Big Mek in Mega Armour",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Warboss in Mega Armour",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Warboss in Mega Armour",
-              "action": "movement: advanced"
-            },
-            {
-              "type": "action",
-              "unit": "Warboss in Mega Armour",
-              "action": "movement: advanced"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Boyz",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Boyz",
-              "action": "movement: advanced"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Gretchin",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Gretchin",
-              "action": "movement: moved"
-            },
-            {
-              "type": "action",
-              "unit": "Gretchin",
-              "action": "movement: advanced"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Warbikers",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Warbikers",
-              "action": "movement: advanced"
+              "unit": "Necrons 1500pts - Silent King",
+              "action": "MWBD → Lychguard"
             }
           ]
         },
         {
           "phase": "charge",
-          "active": "Big Mek in Mega Armour",
+          "active": "The Silent King",
           "events": [
             {
               "type": "action",
-              "unit": "Big Mek in Mega Armour",
+              "unit": "The Silent King",
               "action": "charged Overlord — success"
-            },
-            {
-              "type": "action",
-              "unit": "Big Mek in Mega Armour",
-              "action": "charged Necron Warriors — success"
-            },
-            {
-              "type": "action",
-              "unit": "Big Mek in Mega Armour",
-              "action": "charged Immortals — success"
             }
           ]
         },
         {
           "phase": "fight",
-          "active": "Big Mek in Mega Armour",
+          "active": "The Silent King",
           "events": [
             {
               "type": "action",
-              "unit": "Big Mek in Mega Armour",
-              "action": "dealt 4 damage to Overlord"
+              "unit": "The Silent King",
+              "action": "dealt 3 damage to Overlord"
+            },
+            {
+              "type": "action",
+              "unit": "The Silent King",
+              "action": "dealt 0 damage to Overlord"
+            },
+            {
+              "type": "action",
+              "unit": "The Silent King",
+              "action": "dealt 0 damage to Overlord"
+            }
+          ]
+        },
+        {
+          "phase": "command",
+          "active": "Necrons α",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "Living Metal: 1 unit(s) healed"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "Living Metal: 1 unit(s) healed"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "Living Metal: 1 unit(s) healed"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "+1 CP received"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "MWBD → Necron Warriors"
             }
           ]
         }

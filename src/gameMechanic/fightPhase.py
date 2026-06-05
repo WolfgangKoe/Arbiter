@@ -27,8 +27,11 @@ def can_fight(unit_state: dict) -> bool:  # type: ignore[type-arg]
     """Return True if the unit may fight this turn.
 
     9E: a unit is eligible to fight if it is in melee or if it charged this turn.
+    Units that have already fought this phase may not fight again.
     """
     flags = unit_state.get("turn_flags", {})
+    if flags.get("fought"):
+        return False
     return bool(unit_state.get("in_melee") or flags.get("charged"))
 
 
@@ -47,7 +50,10 @@ class FightPhaseHandler:
         active_player: str = st.session_state.active
         priority_player = second if active_player == first else first
 
-        _render_display(state)
+        attack_form_shown = _render_display(state)
+        if attack_form_shown:
+            return
+
         st.divider()
 
         col1, col2 = st.columns(2)
@@ -85,6 +91,10 @@ def _active_fight(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
     """Show fight eligibility, fights-first indicator, and melee weapons."""
+    flags = unit_state.get("turn_flags", {})
+    if flags.get("fought"):
+        st.info("Already fought this phase.")
+        return
     if not can_fight(unit_state):
         st.warning("Not in melee — no fight action possible.")
         return
@@ -161,12 +171,12 @@ def _render_melee_pairs() -> None:
         st.info(PHASE_RULES["fight"])
 
 
-def _render_display(state: dict) -> None:  # type: ignore[type-arg]
-    """Bottom area: attack declaration or resolution when attacker + target are selected."""
+def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
+    """Render attack form if applicable. Returns True when the form is shown."""
     decl = st.session_state.get("attack_declaration", {})
     if decl.get("active") and decl.get("phase_key") == "fight":
         render_attack_resolution("fight")
-        return
+        return True
 
     sel = st.session_state.selected_unit
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
@@ -183,7 +193,8 @@ def _render_display(state: dict) -> None:  # type: ignore[type-arg]
                 use_melee=True,
                 phase_key="fight",
             )
-            return
+            return True
         if can_fight(atk_state) and not _is_target_engaged(atk_state, def_faction, def_uid):
             st.warning("Target is not engaged with this unit — select an engaged enemy.")
     _render_melee_pairs()
+    return False
