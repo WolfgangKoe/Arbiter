@@ -269,124 +269,185 @@ Invulnerable Saves sind von Cover nicht betroffen.
 
 ### 🔵 6d-v3 — Würfel-UI Redesign (geplant, nächste Session)
 
-Design-Grundlage: Handskizzen `Fotos/IMG_4038–4042` (analysiert 2026-06-05).
+Design-Grundlage: Handskizzen `Fotos/IMG_4038–4042` (analysiert 2026-06-06).
 
-**Kernidee:** Alle Wurf-Blöcke zeigen SVG-Würfelfaces (2+…6+) als Reihe. Die aktive Schwelle ist farbig hervorgehoben. Modifier-Würfel zeigen den Effekt inline — kein langer Stack-Text.
+**Kernkonzept:** Jeder Würfelblock zeigt eine Reihe von SVG-Würfelfaces (1–6). Ein farbiger **Rahmen** umschließt die Würfel, die einen Treffer/Erfolg bedeuten — Würfel außerhalb des Rahmens sind Misses. Modifier-Fähigkeiten verschieben den Rahmen durch Würfelpaare mit Pfeilen. Eine **vertikale LINE** dient als Ausrichtungshilfe; die **DASHED LINE** zeigt das effektive Ergebnis nach Cap.
 
-**Farbschema der aktiven Schwelle:**
-- 2+ → grau (sehr einfach)
-- 3+ → grün
-- 4+ → gelb
-- 5+ → orange
-- 6+ → rot (knapp)
-- immer miss (7+) → dunkelrot, durchgestrichen
+**Farbschema des Rahmens (Treffer & Verwundung, max ±1 Cap):**
+- 2+/3+ → grüner Rahmen
+- 4+ → gelber Rahmen
+- 5+/6+ → oranger Rahmen
+- [x]-Würfel = immer miss (1 immer; alle außerhalb Rahmen)
+
+**Farbschema Verwundung (Schwelle aus S vs T):**
+- 2+ → grün (S ≥ 2×T)
+- 3+ → grün (S > T)
+- 4+ → gelb (S = T)
+- 5+ → orange (S < T)
+- 6+ → orange (2×S ≤ T)
+
+**S/T-Modifier (blau):** Fähigkeiten, die S oder T verändern, werden in Blau hervorgehoben. Der Rahmen passt sich an die neue Schwelle an.
+
+**Beim Rettungswurf gilt kein ±1-Cap.**
+
+---
+
+#### Deklarations-Block (`IMG_4038`) — vor dem Trefferblock
+
+```
+DEKLARATION  (Shooting / Fight Phase)
+
+YOU have eligible units to shoot / fight
+  ▲ [ Einheit auswählen ] ▼
+
+Check conditions (Shooting):
+  ✓ moved              → kann schießen
+  ✗ advanced           → kann nicht schießen
+  ✗ retreated          → kann nicht schießen
+  ✓/✗ HEAVY            → −1 auf Trefferwurf wenn moved AND HEAVY-Waffe
+  ✓ has_ranged_weapons
+  ✓ triggered abilities (außer adaptive abilities)
+  ✗ shot this phase    → bereits geschossen
+  … weitere Bedingungen
+
+Atk — eligible unit auswählen
+  Shooting:              Fight:
+  1. select target       1. select targets
+  2. select weapon
+  3. resolve attacks
+
+─────────────────────────────────────────────────────
+Weapon-Auswahl (Shooting) — zeigt #attacks
+┌──────────────────────────────────────────────────────────┐
+│  #attacks   Rapid Fire   display Range ↓                 │
+│                                                          │
+│  ☑ Weapon 1  ──────────────────────────────→  target-1  │
+│  ☑ Weapon 2  ──────────────────────────────→  target-2  │
+│  ☐ Weapon n   (gesperrt / inkompatibel)                  │
+│  ☐ Weapon n+1 (durchgestrichen)                          │
+│  …                                            next-n    │
+└──────────────────────────────────────────────────────────┘
+"close display only / same attack display for fights"
+```
 
 ---
 
 #### Treffer-Block (`IMG_4039`)
 
 ```
-TREFFER  8 Würfel · BS
-┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
-│ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │    ← Würfelfaces, Dots oder Zahl
-└───┘ └───┘ └▶3◀┘ └───┘ └───┘    ← aktive Schwelle mit Rahmen + grün
- 2+    3+   [3+]   5+    6+
+TREFFER  8 Würfel
 
-[HEAVY −1]                         ← Modifier-Badge: verschiebt Highlight → 4+
-┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
-│ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
-└───┘ └───┘ └───┘ └▶4◀┘ └───┘    ← effektiv 4+ (gelb)
-                  [4+]
+BS/WS    1      2     [3+]    4+     5+     6+
+         ┌───┐ ┌───┐  ┌────────────────────────────────┐
+         │[x]│ │ · │  │ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ │  ← grüner Rahmen (BS 3+)
+         └───┘ └───┘  │ │ · │ │ · │ │ · │ │ · │ │ · │ │
+         misses        │ └───┘ └───┘ └───┘ └───┘ └───┘ │
+                       └────────────────────────────────┘
+         │ (vertikale LINE)
+[HEAVY]  ┌───┐ ←-1← ┌───┐       ← Schwelle schlechter; Rahmen → gelb (4+)
+         └───┘        └───┘
+[MWBD]   ┌───┐ →+1→ ┌───┐       ← Schwelle besser
+         └───┘        └───┘
+[Lords Will] ┌───┐               ← Reroll-Icon im Würfelsymbol
+             └───┘
+[Tesla]                ┌───────┐ ← Sondereffekt, kein Threshold-Modifier
+                       │ +2Hit │
+                       └───────┘
+- - - - - - - - - DASHED LINE - - - - - - - - -
+Effektiv BS: [3+]  (max ±1 Cap)
 
-[Tesla: unmod. 6 = +2 Hits]  [MWBD]  [Faction Ability]  ← Info-Badges darunter
+Buttons (konditionell — Stratagem, CP-Kosten, Reset):  [Aktivieren]  [↺]
+
+Rahmen-Farbe nach effektivem BS: 2+/3+ grün · 4+ gelb · 5+/6+ orange
+[x]-Würfel: 1 = immer miss; alle Würfel links des Rahmens = miss (·)
 ```
-
-Regeln:
-- Modifier verschieben den Highlight-Würfel; max ±1 gilt (Cap bleibt)
-- Ability-Badges erscheinen nur wenn Waffe/Einheit die Fähigkeit hat
-- Buttons für reaktive GOs (Stratagem) erscheinen rechts neben dem Block wenn CP vorhanden
 
 ---
 
-#### Verwundungs-Block (`IMG_4040`)
+#### Verwundungs-Block (`IMG_4040`) — gleiche Komponente wie Treffer
 
 ```
-VERWUNDUNG  S 5  vs  T 4
+VERWUNDUNG
 
-┌───┐
-│ 4 │    ← S > T → 4+ (gelb), nur diese eine Zeile
-└▶4◀┘
-[4+]
+S = [5]   >   T = [4]   →   Schwelle: 3+
 
-[+1 Proto]  →  ┌───┐
-               │ 3 │  (effektiv 3+, grün)
-               └▶3◀┘
+(Modifier auf S oder T erscheinen in Blau:)
+S = [5] + [+1] (blau) = [6]  →  T = [4]  →  neue Schwelle: 3+ (S≥2T möglich)
+S = [5]  →  T = [4] + [+1] (blau) = [5]  →  neue Schwelle: 4+ (S=T)
+Rahmenfarbe passt sich automatisch an neue Schwelle an.
+
+        1      2     [3+]    4+     5+     6+
+        ┌───┐ ┌───┐  ┌────────────────────────────────┐
+        │[x]│ │ · │  │ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ │  ← grüner Rahmen (3+, S > T)
+        └───┘ └───┘  │ │ · │ │ · │ │ · │ │ · │ │ · │ │
+        misses        │ └───┘ └───┘ └───┘ └───┘ └───┘ │
+                      └────────────────────────────────┘
+        │ (vertikale LINE)
+[Badge1]  ┌───┐ →+1→ ┌───┐   ← Wound-Modifier (Schwelle verbessert)
+          └───┘        └───┘
+[Badge2]  ┌───┐ ←-1← ┌───┐   ← Wound-Modifier (Schwelle schlechter)
+          └───┘        └───┘
+[Reroll]  ┌───┐                ← rot
+          └───┘
+[Miss]    ┌───┐                ← rot
+          └───┘
+- - - - - - - - - DASHED LINE - - - - - - - - -
+Effektiv: [3+]  (max ±1 Cap)
+
+Farbschema: 2+/3+ grün · 4+ gelb · 5+/6+ orange
 ```
-
-Regeln:
-- Nur die aktive S-vs-T-Zeile wird gezeigt (keine 5-Zeilen-Tabelle mehr)
-- Modifier verschieben den Würfel (gleiche Logik wie Treffer)
-- Farbe folgt der effektiven Schwelle
 
 ---
 
 #### Rettungswurf-Block (`IMG_4041`)
 
 ```
-RETTUNGSWURF
+[Standard]
+normal   2+  [3+]  4+  5+  6+    ← Basis-Save 3+ (highlighted, grün)
+invuln   2+   3+  [4+] 5+  6+    ← Invuln 4+ (highlighted, gelb)
 
-normal   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
-         │ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
-         └───┘ └───┘ └▶3◀┘ └───┘ └───┘   ← Basis-Save 3+ (grün)
-          2+    3+   [3+]   5+    6+
+[mit AP & Cover]
+normal  2+  [3+]  4+  5+  6+
+                   │  (vertikale LINE — markiert Basis-Schwelle)
+AP-2    ┌─┐ →-2→ ┌─┐  rot        ← Threshold 2 Schritte schlechter → 5+
+        └─┘       └─┘
+cover   ┌─┐ →+1→ ┌─┐             ← Cover verbessert um 1 → 4+
+        └─┘       └─┘
+eff.    ┌─┐ →-1→ ┌─┐             ← Netto: 4+ (gelb)
+        └─┘       └─┘
 
-AP-2     ┌───┐  →  verschiebt normal um +2  →  effektiv 5+ (orange)
-         │ · │ (Modifier-Würfel, zeigt AP-Wert als Dots)
-         └───┘
+invuln  2+   3+  [4+]  5+  6+
+────── AP/Cover wirken nicht auf Invuln: LINE ──────
 
-Cover    ┌───┐  →  −1 auf effektiv  →  4+ (gelb)
-         │ · │
-         └───┘
+[Quantum Shielding]: Invuln direkt auf 4+ gesetzt (kein Modifier-Würfelpaar, direkter Override)
 
-effektiv ┌───┐
-         │ 4 │  [4+]  ← highlight, gelb
-         └▶4◀┘
-
-invuln   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
-         │ 2 │ │ 3 │ │ 4 │ │ 5 │ │ 6 │
-         └───┘ └───┘ └───┘ └▶4◀┘ └───┘   ← Invuln 4+ (gelb)
-          2+    3+    4+   [4+]   6+
-
-         ──── kein AP/Cover-Effekt auf Invuln ────
+(kein ±1-Cap beim Rettungswurf)
 ```
-
-Sonderfälle:
-- Quantum Shielding: setzt Invuln auf 4+ fix (kein Modifier-Würfel, direkter Override)
-- Wenn effektiv schlechter als Invuln: Invuln-Zeile wird als optimal hervorgehoben
 
 ---
 
 #### Schaden-Block (`IMG_4042`)
 
 ```
-SCHADEN
+SCHADEN   (2, 3, D6, D3+2, …)
 
-normal  ┌───┐  per Attacke          (Waffenschaden: feste Zahl oder D-Würfel)
-        │ D3│                        D-Werte als Text im Würfel-Icon
-        └───┘
+normal   [1]   per Attacke
+mortal   [1]   per (additional) per Attacke
+               "string: default text oder weapon ability"
+FNP      [6+]  (nur wenn Einheit FNP hat)
 
-mortal  ┌───┐  per Attacke          (tödliche Verwundungen, falls vorhanden)
-        │ 1 │
-        └───┘
+              ← Buttons →
+Lost Models   [−1]  [+1]   (Einheiten mit mehreren Modellen)
+Lost Wounds   [−1]  [+1]   (Frontmodell oder Einzelmodell)
 
-FNP     ┌───┐                        (nur wenn Einheit FNP hat)
-        │6+ │
-        └───┘
+────────────────────────────────────────────────────────
+REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
-────────────────────────────────────
-Modelle verloren:    [−1]  [ 0 ]  [+1]    (Einheiten mit mehreren Modellen)
-Wunden (Front):      [−1]  [ 0 ]  [+1]    (Frontmodell / Einzelmodell)
-────────────────────────────────────
+  N Warriors gefallen → N Würfel, Erfolg: 5+
+  [Proto: Undying Legions — Reroll]   [Reanimator +1]
+  Modelle zurück:  [−1]  [ 0 ]  [+1]
+  [RP anwenden]   [↺ Zurücksetzen]
+────────────────────────────────────────────────────────
 [⚔ Schaden anwenden]   [↺ Zurücksetzen]
 ```
 
@@ -396,18 +457,19 @@ Wunden (Front):      [−1]  [ 0 ]  [+1]    (Frontmodell / Einzelmodell)
 
 | Funktion | Signatur | Zweck |
 |---|---|---|
-| `dice_face_svg` | `(value: int, highlighted: bool, color: str) -> str` | Einzelner SVG-Würfel |
-| `dice_row_html` | `(base: int, modified: int, stack: list[dict]) -> str` | Würfelreihe 2+…6+ mit Highlight |
-| `modifier_die_html` | `(value: int, label: str) -> str` | Kleiner Modifier-Würfel mit Label |
+| `dice_face_svg` | `(value: int, color: str, miss: bool) -> str` | Einzelner SVG-Würfel mit Dots |
+| `dice_row_html` | `(threshold: int, modifier: int, cap: bool) -> str` | Würfelreihe 1–6 mit Rahmen + Miss-Würfeln |
+| `modifier_die_pair_html` | `(label: str, value: int, color: str) -> str` | Würfelpaar mit Pfeil + Label |
+| `special_die_html` | `(label: str, content: str) -> str` | Sondereffekt-Würfel (Tesla, Reroll, FNP) |
 
 ---
 
 **Tasks:**
-- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` + `modifier_die_html()`
-- [ ] `uiLayout/_common.py`: `_render_roll_block()` → Würfelreihe (Treffer)
-- [ ] `uiLayout/_common.py`: `_render_wound_table()` → einzeilige Würfeldarstellung
-- [ ] `uiLayout/_common.py`: `_render_save_block()` → Würfelreihen + Modifier-Würfel
-- [ ] `uiLayout/_common.py`: Schaden-Block → Würfel-Icons für D-Werte + FNP
+- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` + `modifier_die_pair_html()` + `special_die_html()`
+- [ ] `uiLayout/_common.py`: `_render_roll_block()` → Treffer-Block mit Rahmen + Modifier-Paaren
+- [ ] `uiLayout/_common.py`: `_render_wound_block()` → S/T-Würfel + gleiche Rahmen-Komponente + Blau-Highlighting
+- [ ] `uiLayout/_common.py`: `_render_save_block()` → Standard + AP/Cover-Modifier-Paare + Invuln
+- [ ] `uiLayout/_common.py`: Schaden-Block → Würfel-Icons + RP-Block vollständig
 
 ---
 
