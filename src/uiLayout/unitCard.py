@@ -138,7 +138,11 @@ def render_unit_card(
 ) -> None:
     phase_key = PHASES[st.session_state.phase_idx][1]
     active = st.session_state.active
-    is_active = faction == active
+    if phase_key == "fight":
+        fight_player = st.session_state.get("fight_current_player", active)
+        is_active = faction == fight_player
+    else:
+        is_active = faction == active
     uid = state_key if state_key is not None else unit.id
     in_reserve = state.get("in_reserve", False)
 

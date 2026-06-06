@@ -534,6 +534,9 @@ def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: 
 def dice_row_html(threshold: int) -> str:
     """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame.
 
+    Visual separators:
+    - Dashed right-border on die:1 (always-miss divider) when threshold >= 2.
+    - Thin solid separator before the success frame when threshold > 2 (second miss boundary).
     For threshold > 6 (impossible roll): 6 grey miss dice + red × marker.
     """
     if threshold > 6:
@@ -544,8 +547,31 @@ def dice_row_html(threshold: int) -> str:
         )
         return f'<div style="margin:4px 0;">{miss_dice}{impossible}</div>'
     frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
-    miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, threshold))
     success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
+    if threshold <= 1:
+        # All dice succeed — no miss dice, no separators
+        framed = (
+            f'<span style="border:2px solid {frame_color};border-radius:5px;'
+            f'padding:2px 3px;display:inline-block;vertical-align:middle;">'
+            f"{success_dice}</span>"
+        )
+        return f'<div style="margin:4px 0;">{framed}</div>'
+    # Die 1 always misses → dashed right-border marks permanent always-miss boundary
+    die1 = (
+        '<span style="display:inline-block;border-right:1px dashed #4b5563;'
+        'padding-right:2px;margin-right:2px;vertical-align:middle;">'
+        + dice_face_svg(1, miss=True)
+        + "</span>"
+    )
+    other_miss = "".join(dice_face_svg(v, miss=True) for v in range(2, threshold))
+    miss_section = die1 + other_miss
+    # Solid threshold line only when miss dice exist beyond die:1 (threshold > 2)
+    threshold_line = (
+        '<span style="display:inline-block;width:2px;height:34px;'
+        'background:#6b7280;vertical-align:middle;margin:0 2px;border-radius:1px;"></span>'
+        if threshold > 2 and success_dice
+        else ""
+    )
     framed = (
         f'<span style="border:2px solid {frame_color};border-radius:5px;'
         f'padding:2px 3px;display:inline-block;vertical-align:middle;">'
@@ -553,7 +579,7 @@ def dice_row_html(threshold: int) -> str:
         if success_dice
         else ""
     )
-    return f'<div style="margin:4px 0;">{miss_dice}{framed}</div>'
+    return f'<div style="margin:4px 0;">{miss_section}{threshold_line}{framed}</div>'
 
 
 def modifier_die_pair_html(
@@ -561,24 +587,32 @@ def modifier_die_pair_html(
 ) -> str:
     """Modifier pair: label badge + from-die (neutral) + arrow + to-die (colored).
 
-    Left die = starting threshold (neutral grey reference).
-    Right die = new threshold after modifier (colored by effect).
+    Convention: lower die value always on left, higher on right (aligns with dice row).
+    Arrow: → for improvements (value > 0), ← for penalties (value < 0).
+    For improvements the threshold decreases, so to_thresh < from_thresh — swap so
+    the lower value (to_thresh) appears on the left and higher (from_thresh) on the right.
     """
-    sign = "+" if value > 0 else ""
+    sign = "+" if value > 0 else ("-" if value < 0 else "")
     arrow = "→" if value > 0 else "←"
     from_clamped = max(1, min(6, from_thresh))
     to_clamped = max(1, min(6, to_thresh))
-    from_die = dice_face_svg(from_clamped, color="#6b7280")
-    to_die = dice_face_svg(to_clamped, color=color)
+    # Improvements lower the threshold: put the smaller value (new threshold) on the left.
+    # Penalties raise the threshold: from_thresh (smaller) stays left, to_thresh (larger) right.
+    if value > 0:
+        left_die = dice_face_svg(to_clamped, color="#6b7280")
+        right_die = dice_face_svg(from_clamped, color=color)
+    else:
+        left_die = dice_face_svg(from_clamped, color="#6b7280")
+        right_die = dice_face_svg(to_clamped, color=color)
     return (
         f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
         f'<span style="font-size:11px;color:{color};background:#111827;'
         f'border:1px solid {color};border-radius:3px;padding:1px 5px;white-space:nowrap;">'
         f"{label}</span>"
-        f"{from_die}"
+        f"{left_die}"
         f'<span style="color:{color};font-size:12px;font-weight:bold;">'
         f"{arrow}{sign}{abs(value)}{arrow}</span>"
-        f"{to_die}</div>"
+        f"{right_die}</div>"
     )
 
 
@@ -677,8 +711,15 @@ def _render_dice_wound_block(
         st.markdown("".join(parts), unsafe_allow_html=True)
 
 
+_LABEL_COL = (
+    'style="min-width:68px;flex-shrink:0;font-size:12px;color:#9ca3af;'
+    'padding-right:6px;display:flex;align-items:center;"'
+)
+_ROW_WRAP = 'style="display:flex;align-items:flex-start;margin:2px 0;"'
+
+
 def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
-    """SAVE block: threshold header + dice row for armour/invuln + modifier pairs + 7+ handling."""
+    """SAVE block: table-aligned rows (label | content) for armour, modifiers, eff, invuln."""
     armour = save["armour"]
     armour_eff = save["armour_eff"]
     invuln = save["invuln"]
@@ -688,61 +729,66 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
 
     st.markdown("**SAVE**")
 
-    # Armour save row
-    base_color = _THRESHOLD_COLOR.get(min(6, armour), "#f97316")
+    rows: list[str] = []
+
+    def _row(label: str, content: str) -> str:
+        return (
+            f"<div {_ROW_WRAP}>"
+            f"<div {_LABEL_COL}>{label}</div>"
+            f'<div style="flex:1;">{content}</div>'
+            f"</div>"
+        )
+
+    # Armour base row
     sv_label = f"Sv {armour}+" if armour <= 6 else "Sv —"
-    st.markdown(
-        f'<span style="font-size:12px;color:#9ca3af;">{sv_label}</span>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)),
-        unsafe_allow_html=True,
+    rows.append(
+        _row(sv_label, threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)))
     )
 
-    # Modifier pairs (AP + cover stack)
-    parts: list[str] = []
+    # Modifier rows (AP + cover stack)
+    has_modifiers = ap != 0 or bool(stack)
     if ap != 0:
-        parts.append(modifier_die_pair_html(armour, armour_eff, f"AP{ap}", -ap, "#ef4444"))
+        # ap is negative (e.g. -2 for AP-2); pass directly so arrow shows ← (penalty)
+        rows.append(_row("", modifier_die_pair_html(armour, armour_eff, f"AP{ap}", ap, "#ef4444")))
     current = armour_eff
     for m in stack:
         next_thresh = current - m["value"]
         color = "#22c55e" if m["value"] > 0 else "#ef4444"
-        parts.append(modifier_die_pair_html(current, next_thresh, m["label"], m["value"], color))
+        rows.append(
+            _row("", modifier_die_pair_html(current, next_thresh, m["label"], m["value"], color))
+        )
         current = next_thresh
 
-    # Effective save result row
-    if parts:
+    # Effective save row (only when modifiers exist)
+    if has_modifiers:
         eff_clamped = min(effective, 7)
-        eff_row = threshold_header_html(eff_clamped) + dice_row_html(eff_clamped)
-        eff_label = f"{effective}+" if effective <= 6 else "7+ (impossible)"
-        parts.append(
-            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
-            f'<div style="font-size:12px;color:#9ca3af;">Effective Save: '
-            f'<b style="color:#f8fafc;">{eff_label}</b></div>' + eff_row
+        eff_label_text = f"{effective}+" if effective <= 6 else "impossible"
+        rows.append('<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">')
+        rows.append(
+            _row(
+                f'<span style="color:#f8fafc;font-weight:600;">Eff. {eff_label_text}</span>',
+                threshold_header_html(eff_clamped) + dice_row_html(eff_clamped),
+            )
         )
-        st.markdown("".join(parts), unsafe_allow_html=True)
 
-    # Invuln save row
+    st.markdown("".join(rows), unsafe_allow_html=True)
+
+    # Invuln save block (separate section)
     if invuln is not None:
         inv_color = _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
-        inv_label = f"Invuln {invuln}+"
-        active_note = (
-            f' <span style="font-size:10px;color:{inv_color};border:1px solid {inv_color};'
-            f'border-radius:3px;padding:0 3px;">active</span>'
+        active_badge = (
+            f'<span style="font-size:10px;color:{inv_color};border:1px solid {inv_color};'
+            f'border-radius:3px;padding:0 3px;margin-left:4px;">active</span>'
             if using_invuln
             else ""
         )
-        st.markdown(
-            f'<span style="font-size:12px;color:#9ca3af;">{inv_label}</span>'
-            f' <span style="font-size:10px;color:#6b7280;">AP/Cover not applicable</span>'
-            f"{active_note}",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
+        note = '<span style="font-size:10px;color:#4b5563;margin-left:4px;">AP/Cover N/A</span>'
+        inv_label = f"Inv {invuln}+{active_badge}{note}"
+        inv_row = _row(
+            inv_label,
             threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),
-            unsafe_allow_html=True,
         )
+        st.markdown(inv_row, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------

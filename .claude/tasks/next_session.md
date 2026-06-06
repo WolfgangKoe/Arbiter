@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 19, 2026-06-06)
+## Aktueller Stand (nach Session 20, 2026-06-06)
 
 ### Was funktioniert ✅
 - Ziel 1–5 vollständig abgeschlossen
@@ -43,6 +43,10 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - `can_fight_now()` + `_any_charged_remain()`: CHARGED-Priorität nach Regeltext
 - `_advance_fight_turn_if_needed()`: automatischer Spielerwechsel + Auto-Skip
 - `_render_fight_column()`: beide Spalten können aktiv sein (ersetzt `render_player_column`)
+
+### Session 20 (2026-06-06) ✅
+- 6d-v3 Würfel-UI Restfixes: Ausrichtungslinien (dashed/solid), Modifier-Richtung korrigiert, SAVE-Alignment
+- Fight Phase Root Cause: `unitCard.py` `is_active` nutzte `st.session_state.active` statt `fight_current_player` → inaktiver Spieler konnte nie Einheiten für Angriff auswählen
 
 ---
 
@@ -92,13 +96,21 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
 
-### 🔴 HOCH — 6d-v3 Würfel-UI Restfixes (`uiLayout/_common.py`)
+### ✅ 6d-v3 Würfel-UI Restfixes — erledigt Session 20
 
-Erledigt in Session 18: Schwellenwert-Zeile, Modifier-Reihenfolge, SAVE-Würfelreihen, 7+.
-**Noch offen:**
-- [ ] Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
-- [ ] Die Modifier korrigieren. z.B. bei MWBD wird ein Wurf von 2 auf 3 verbessert. Ist aktuell falsch herum angezeigt. Bei AP ist es auch falsch herum. Die visuelle Ausrichtung des Effekts auf die Würfel muss sich logisch an den AUsrichtungslinien orientieren.
-- [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig ausgerichtet
+- [x] Ausrichtungslinien: gestrichelte Linie nach Würfel 1, solide Linie vor Erfolgs-Frame
+- [x] Modifier-Richtung: positive Modifier zeigen `[neuer Würfel] →+1→ [alter Würfel]` (MWBD: 2→3 ✓)
+- [x] AP: negativer Wert → `←` Pfeil statt `→`
+- [x] SAVE: Flex-Tabellen-Layout (Label-Spalte 68px, Würfelinhalt immer bündig)
+
+### 🔴 HOCH — Nahkampf: Attacken auf Ziele verteilen, nicht Modelle (`uiLayout/_common.py` Declaration-Block)
+
+**Bug:** Im Declaration-Block der Nahkampfphase kann der Spieler seine Attacken aktuell NUR auf Modelle eines Ziels verteilen. Regelkonform müssen Attacken auf **Zieleinheiten** verteilt werden — beliebig aufgeteilt. Ein Overlord mit 4 Attacken darf 2+2 auf zwei verschiedene Einheiten aufteilen.
+
+- Hinweis: Der Declaration-Block wird ohnehin noch überarbeitet (6d-v3 Layout). Diesen Fix **im Zuge der Überarbeitung** umsetzen, nicht vorher als Einzelfix.
+- Betrifft: `uiLayout/_common.py` → `render_attack_declaration()`, Fight-Phase-Integration
+
+### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
 
 ### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
 

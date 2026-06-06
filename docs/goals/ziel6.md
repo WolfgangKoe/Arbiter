@@ -484,11 +484,11 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 ### 6d-v3 Würfel-UI Fixes
 
 - [x] HIT/WOUND: Schwellenwert-Zeile über Würfeln (`2+  3+  4+  5+  6+`), aktive Schwelle mit Rahmen ✅ (2026-06-06)
-- [ ] HIT/WOUND: Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
+- [x] HIT/WOUND: Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2 ✅ (2026-06-06)
 - [x] Modifier-Paare: linker Würfel = Ausgangsschwelle (neutral), rechter = neue Schwelle (farbig) ✅ (2026-06-06)
 - [x] Modifier-Paare: Positive Modifier-Farbe blau (wie unitCard-Badges), nicht grün ✅ (2026-06-06)
 - [x] SAVE: Schwellenwert-Reihe + Würfelreihe für Rüstungs- und Invuln-Save ✅ (2026-06-06)
-- [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig
+- [x] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig ✅ (2026-06-06)
 - [x] SAVE: Effective Save als Würfelreihe mit farbigem Rahmen ✅ (2026-06-06)
 - [x] SAVE: Invuln-Zeile — Schwellenwert-Reihe + Würfelreihe ✅ (2026-06-06)
 - [x] 7+ / unmöglicher Save: roter `×`-Marker rechts neben 6er-Würfeln ✅ (2026-06-06)
@@ -510,7 +510,7 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 > Regelgrundlage: `core_rules.txt` Z. 1941–1973
 
-- [x] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen ✅ (2026-06-06)
+- [x] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen ✅ (2026-06-06, Root-Cause-Fix Session 20: `unitCard.py` `is_active` nutzt `fight_current_player`)
 - [x] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten ✅ (2026-06-06)
 - [x] Ablauf 9E: erst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv) ✅ (2026-06-06)
 - [ ] Counterattack GO einsetzbar (reaktive Unterbrechung) — Teil von 6e (GO-System)
