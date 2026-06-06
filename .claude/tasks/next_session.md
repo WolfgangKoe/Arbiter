@@ -42,11 +42,43 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Session-Start — Empfohlene Reihenfolge
 
 1. Diese Datei + `docs/goals/ziel6.md` lesen
-2. Offene Regelrecherche erledigen (s. Abschnitt "Noch nachzuschlagen")
-3. Block aus den offenen Tasks auswählen → Plan zeigen → Freigabe einholen
+2. Regelrecherche (s.u.) erledigen — entsperrt mehrere Tasks
+3. Schritt aus "Nächste Schritte" auswählen → Plan zeigen → Freigabe einholen
 
-**Kritischster Block:** Fight Phase — struktureller Regelfehler, Regeln bekannt, braucht Plan
-**Schnellster Gewinn:** 6d-v3 Würfel-UI Fixes — alle in `_common.py`, gut isoliert
+---
+
+## Nächste Schritte (priorisiert)
+
+### Schritt 1 — Regelrecherche (~15 min, vor allem anderen)
+
+Lokale Wahapedia-Dateien lesen, Ergebnisse in diese Datei eintragen:
+
+- `docs/work/wahapedia_necrons/` → Resurrection Orb (KERN-Einschränkung?), Command Protocols (6. Protokoll Setup-Zeitpunkt, Dynastiebonus, Effekte auf Living Metal/RP), Skarabäen (6=auto-wound)
+- `docs/work/wahapedia_orks/` → WAAAGH! (welche Einheiten ausgenommen?)
+
+### Schritt 2 — 6d-v3 Würfel-UI Fixes (nur `uiLayout/_common.py`)
+
+Alle gut isoliert, kein Architektureingriff:
+
+1. Schwellenwert-Zeile über Würfeln + Ausrichtungslinien (HIT, WOUND, SAVE, Invuln)
+2. Modifier-Paar Reihenfolge fix + MWBD-Farbe blau
+3. 7+ / unmöglicher Save: roter `[×]`-Würfel
+
+### Schritt 3 — Cover-Überarbeitung (noch `uiLayout/_common.py`)
+
+1. Dropdown → Checkboxen/Buttons
+2. Dense Cover in HIT-Block verschieben
+3. Phasenbindung: Dense/Light nur Shooting, Heavy nur Fight
+
+### Schritt 4 — Damage-Block Fixes (noch `uiLayout/_common.py`)
+
+1. Mortal Wounds nur wenn Waffenfähigkeit vorhanden
+2. Einzelmodell: kein Modellverlust-Counter
+
+### Schritt 5 — Fight Phase (eigene Session, komplex)
+
+Struktureller Regelfehler — inaktiver Spieler kämpft mit, CHARGED-Reihenfolge.
+Betrifft `gameMechanic/fightPhase.py` + `game_state.py`. Braucht detaillierten Plan.
 
 ---
 
