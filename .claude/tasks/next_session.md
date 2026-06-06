@@ -97,6 +97,7 @@ Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
 Erledigt in Session 18: Schwellenwert-Zeile, Modifier-Reihenfolge, SAVE-Würfelreihen, 7+.
 **Noch offen:**
 - [ ] Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
+- [ ] Die Modifier korrigieren. z.B. bei MWBD wird ein Wurf von 2 auf 3 verbessert. Ist aktuell falsch herum angezeigt. Bei AP ist es auch falsch herum. Die visuelle Ausrichtung des Effekts auf die Würfel muss sich logisch an den AUsrichtungslinien orientieren.
 - [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig ausgerichtet
 
 ### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
