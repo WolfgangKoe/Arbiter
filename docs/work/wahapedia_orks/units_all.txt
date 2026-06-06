@@ -1,0 +1,1443 @@
+
+================================================================
+  warboss  (Warboss)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:6  T:6  W:6  A:5  Ld:8  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, WARBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Kustom shoota                  18"     Dakka 6/4      4     0     1     -
+  Attack squig                   Melee   Melee          4     -1    1     Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon.
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • This model’s kombi-rokkit can be replaced with one of the following: 1 kombi-skorcha; 1 kustom shoota. • This model’s big choppa can be replaced with 1 power klaw. • This model can be equipped with 1 attack squig.
+  ABIL   ’Ere We Go , Waaagh! Dead Tough : This model has a 5+ invulnerable save . Warboss (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES CORE or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES CHARACTER unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+
+================================================================
+  warboss_mega_armour  (Warboss in Mega Armour)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:6  T:6  W:7  A:5  Ld:8  Sv:2+
+  INVULN 5+
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, MEGA ARMOUR, WARBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  ’Uge choppa                    Melee   Melee          +3    -3    2     -
+  ABIL   ’Ere We Go , Waaagh! Dead Tough : This model has a 5+ invulnerable save . Grot Gunner : Each time this model makes an attack with a big shoota, or a Relic that replaces this model’s big shoota, add 1 to that attack’s hit roll . Warboss (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES CORE or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES CHARACTER unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+
+================================================================
+  warboss_warbike  (Warboss on Warbike)
+================================================================
+  STATS  M:14"  WS:2+  BS:5+  S:6  T:7  W:7  A:5  Ld:8  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, SPEEDBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Dakkagun                       18"     Dakka 5/3      5     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ABIL   • This model’s killsaw can be replaced with one of the following: 1 big choppa; 1 power klaw.
+  ABIL   ’Ere We Go , Waaagh! Big Red Button : Each time this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of this model. Dead Tough : This model has a 5+ invulnerable save .
+
+================================================================
+  big_mek  (Big Mek)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:4  W:4  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK, GRETCHIN, GROT OILER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Kustom mega-slugga             12"     Pistol D3      8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ABIL   • This model can be equipped with one of the following instead of 1 slugga: one weapon from the Choppy Weapons list; one weapon from the Souped-up Weapons list. • This model can be equipped with one of the following instead of 1 choppa: 1 killsaw; 1 weapon from the Choppy Weapons list; 1 weapon from the Souped-up Weapons list.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Big Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn.
+  ABIL   Big Mek can receive the following Kustom Jobs upgrade: Bionik Oiler +10 ( Power Rating: +1 ).
+
+================================================================
+  big_mek_mega_armour  (Big Mek in Mega Armour)
+================================================================
+  STATS  M:4"  WS:3+  BS:4+  S:5  T:5  W:6  A:3  Ld:8  Sv:2+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, MEGA ARMOUR, BIG MEK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Kustom shoota                  18"     Dakka 6/4      4     0     1     -
+  Tellyport blasta               12"     Assault D6     8     -2    3     Blast
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ABIL   • This model’s kustom mega-blasta can be replaced with one of the following: 1 killsaw; 1 kombi-rokkit; 1 kombi-skorcha; 1 kustom shoota. • This model can be equipped with one of the following: 1 tellyport blasta; 1 kustom force field. • This model can be equipped with 1 grot oiler.
+  ABIL   ’Ere We Go , Waaagh! Big Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn.
+  ABIL   Big Mek in Mega Armour can receive the following Kustom Jobs upgrades: • Bionik Oiler +10 Power Rating: +1 • Extra-Kustom Weapon +10 Power Rating: +1
+
+================================================================
+  big_mek_kff  (Big Mek with Kustom Force Field)
+================================================================
+  STATS  M:5"  WS:3+  BS:4+  S:5  T:5  W:5  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • This model can be equipped with 1 grot oiler.
+  ABIL   ’Ere We Go , Waaagh! Big Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn.
+  ABIL   Big Mek with Kustom Force Field can receive the following Kustom Jobs upgrade: Bionik Oiler +10 ( Power Rating: +1 ).
+
+================================================================
+  big_mek_sag  (Big Mek with Shokk Attack Gun)
+================================================================
+  STATS  M:5"  WS:3+  BS:4+  S:5  T:5  W:5  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, BIG MEK, SHOKK ATTACK GUN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Shokk attack gun               60"     Heavy D6       *     -5    D6    Blast . Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • This model can be equipped with 1 grot oiler.
+  ABIL   ’Ere We Go , Waaagh! Big Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn.
+  ABIL   Big Mek with Shokk Attack Gun can receive the following Kustom Jobs upgrades: • Bionik Oiler +10 Power Rating: +1 • Enhanced Runt-Sucker +15 Power Rating: +1
+
+================================================================
+  big_mek_warbike  (Big Mek on Warbike)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:5  T:5  W:5  A:3  Ld:7  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, BIG MEK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Dakkagun                       18"     Dakka 5/3      5     0     1     -
+  Shokk attack gun               60"     Heavy D6       *     -5    D6    Blast . Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage.
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Kustom mega-slugga             12"     Pistol D3      8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ABIL   • This model can be equipped with one of the following instead of 1 slugga: 1 shokk attack gun; 1 kustom force field; 1 weapon from the Souped-up Weapons list; 1 weapon from the Choppy Weapons list. • This model can be equipped with one of the following instead of 1 choppa: 1 killsaw; 1 weapon from the Souped-up Weapons list; 1 weapon from the Choppy Weapons list.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Big Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains up to D3 lost wounds. Each model can only be repaired once per turn. Kustom Force Field : +20 If this model is equipped with a kustom force field, models in friendly ORK units have a 5+ invulnerable save against attacks made with ranged weapons whilst their unit is wholly within 9" of this model. In addition, if this model is equipped with a kustom force field and is embarked within a TRANSPORT model, that TRANSPORT model has a 5+ invulnerable save against attacks made with ranged weapons.
+  ABIL   Big Mek on Warbike can receive the following Kustom Jobs upgrades: • Enhanced Runt-Sucker +15 Power Rating: +1 • Extra-Kustom Weapon +10 Power Rating: +1
+
+================================================================
+  weirdboy  (Weirdboy)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:5  A:3  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, PSYKER, WEIRDBOY
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Weirdboy staff                 Melee   Melee          +3    -1    D3    -
+  ABIL   ’Ere We Go , Waaagh! Waaagh! Energy : While there are 20 or more ORKS models (excluding GRETCHIN ) within 12" of this model, this model can attempt to manifest one additional psychic power in your Psychic phase .
+  ABIL   This model can attempt to manifest one psychic power in your Psychic phase and attempt to deny one psychic power in your opponent’s Psychic phase. It knows Smite and two psychic powers from the Power of the Waaagh! discipline .
+
+================================================================
+  wurrboy  (Wurrboy)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:5  A:3  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, PSYKER, BEAST SNAGGA, WEIRDBOY, WURRBOY
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Eyez of Mork                   12"     Assault 2      6     -3    D3    -
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Waaagh! Energy : While there are 20 or more ORKS models (excluding GRETCHIN ) within 12" of this model, this model can attempt to manifest one additional psychic power in your Psychic phase .
+  ABIL   This model can attempt to manifest one psychic power in your Psychic phase and attempt to deny one psychic power in your opponent’s Psychic phase. It knows Smite and two psychic powers from the Beasthead discipline .
+
+================================================================
+  painboy  (Painboy)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:4  A:4  Ld:8  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, PAINBOY
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ’Urty syringe                  Melee   Melee          2     0     1     Each time the bearer fights, it makes 1 additional attack with this weapon. Each time an attack is made with this weapon, unless the target is a VEHICLE or TITANIC unit, that attack always wounds on an unmodified wound roll of 2+.
+  ABIL   • This model can be equipped with 1 grot orderly.
+  ABIL   ’Ere We Go , Waaagh! Sawbonez : At the end of your Movement phase , this model can heal one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER model whose unit is within 3" of it. If you do so, roll one D6: on a 1, that model suffers 1 mortal wound . On a 2+, that model regains up to 2 lost wounds. Each model can only be healed once per turn. Dok’s Toolz (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER unit is within 3" of this model, each time a model in that unit would lose a wound, roll one D6: on a 6, that wound is not lost.
+
+================================================================
+  painboss  (Painboss)
+================================================================
+  STATS  M:7"  WS:3+  BS:5+  S:5  T:5  W:5  A:4  Ld:8  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, BEAST SNAGGA, PAINBOY, PAINBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Beast Snagga klaw              Melee   Melee          +4    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Power snappa                   Melee   Melee          +2    -2    2     -
+  ABIL   • This model’s power snappa can be replaced with 1 Beast Snagga klaw. • This model can be equipped with 1 grot orderly.
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Dok’s Tools (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY , < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES CAVALRY unit is within 3" of this model, each time a model in that unit would lose a wound, roll one D6: on a 6, that wound is not lost. Sawbonez : At the end of your Movement phase , this model can heal one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA INFANTRY , < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA CAVALRY model whose unit is within 3" of it. If you do so, roll one D6: on a 1, that model suffers 1 mortal wound . On a 2+, that model regains up to 2 lost wounds. Each model can only be healed once per turn.
+
+================================================================
+  beastboss  (Beastboss)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:6  T:6  W:6  A:5  Ld:8  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, BEAST SNAGGA, WARBOSS, BEASTBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Shoota                         18"     Dakka 3/2      4     0     1     -
+  Beast Snagga klaw              Melee   Melee          +4    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Beastchoppa                    Melee   Melee          User  -2    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Dead Tough : This model has a 5+ invulnerable save . Targetin’ Squig : Each time this model makes an attack with a shoota, or a Relic that replaces this model’s shoota, add 1 to that attack’s hit roll . Beastboss (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA CORE or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA CHARACTER unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+
+================================================================
+  beastboss_squigosaur  (Beastboss on Squigosaur)
+================================================================
+  STATS  M:10"  WS:2+  BS:5+  S:6  T:7  W:9  A:5  Ld:8  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, CHARACTER, CAVALRY, SQUIG, BEAST SNAGGA, WARBOSS, BEASTBOSS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Thump gun                      18"     Assault D3     6     -1    D3    Blast
+  Beastchoppa                    Melee   Melee          User  -2    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Squigosaur’s jaws              Melee   Melee          7     -3    3     Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 3 mortal wounds on the target and the attack sequence ends.
+  ABIL   • This model can be equipped with 1 thump gun.
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Dead Tough : This model has a 5+ invulnerable save . Thick Hide : Each time an attack is allocated this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Beastboss (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA CORE or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA CHARACTER unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+
+================================================================
+  ghazghkull  (Ghazghkull Thraka)
+================================================================
+  STATS  M:7"  WS:2+  BS:5+  S:7  T:7  W:7-12  A:5  Ld:8  Sv:2+
+  INVULN 4+
+  KW     ORK, GOFFS, CHARACTER, MONSTER, SUPREME COMMANDER, WARBOSS, GHAZGHKULL THRAKA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Mork’s Roar                    36"     Dakka 16/12    5     -1    1     -
+  Gork’s Klaw                    Melee   Melee          x2    -4    4     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Waaagh! Goffs is da Best (Aura) : While a friendly GOFF CORE or GOFF CHARACTER , unit is within 6" of this model, each time a model in that unit makes a melee attack, you can re-roll the hit roll . Grand Warlord : If this model is included in your army, it must be your WARLORD . Da Boss is Watchin’ (Aura) : While a friendly ORKS unit is within 6" of this model, each time a Combat Attrition test is taken for that unit, ignore any or all modifiers. Prophet of Gork and Mork : This model has a 4+ invulnerable save . In addition, this model can only lose a maximum of 4 wounds in each phase.
+  ABIL   Proper Killy : Add 1 to this WARLORD ’s Attacks characteristic. Each time this WARLORD makes a melee attack, improve the Armour Penetration characteristic of that attack by 1.
+
+================================================================
+  makari  (Makari)
+================================================================
+  STATS  M:5"  WS:4+  BS:4+  S:3  T:3  W:4  A:2  Ld:6  Sv:6+
+  INVULN 2+
+  KW     ORK, GOFFS, CHARACTER, INFANTRY, GRETCHIN, MAKARI
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Makari’s stabba                Melee   Melee          User  0     1     Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts D3 mortal wounds on the target and the attack sequence ends.
+  ABIL   Waaagh! Ghazghkull’s Waaagh! Banner (Aura) : While a friendly GOFF ORKS unit is within 3" of this model, and this model is within 3" of a friendly GHAZGHKULL THRAKA unit, each time a model in that friendly GOFF ORKS unit would lose a wound, roll one D6: on a 6, that wound is not lost. Keep up! : While this model is within 3" of a friendly GHAZGHKULL THRAKA unit, add 2" to this model’s Move characteristic. Suspiciously Lucky : This model has a 2+ invulnerable save . If an invulnerable save made for this model is failed, this ability has no effect for the rest of the battle. Accidental Figurehead (Aura) : While a friendly GOFF GRETCHIN unit is within 12" of this model, models in that unit can use this model’s Leadership characteristic instead of their own. Da Boss’ Best Grot : If your army is Battle-forged , then if GHAZGHKULL THRAKA is included in a Detachment, MAKARI can be included in that Detachment without taking up an additional Battlefield Role slot.
+  ABIL   Follow Me Ladz (Aura) : If this WARLORD has made a charge move this turn, until the end of the turn, each time a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES ORKS unit declares a charge against an enemy unit that is within Engagement Range of this WARLORD , add 1 to the charge roll for that unit.
+
+================================================================
+  mozrog_skragbad  (Mozrog Skragbad)
+================================================================
+  STATS  M:10"  WS:2+  BS:5+  S:6  T:7  W:9  A:6  Ld:8  Sv:3+
+  INVULN 4+
+  KW     ORK, SNAKEBITES, CHARACTER, CAVALRY, SQUIG, WARBOSS, BEAST SNAGGA, BEASTBOSS, MOZROG SKRAGBAD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Thump gun                      18"     Assault D3     6     -1    D3    Blast
+  Big Chompa’s jaws              Melee   Melee          7     -3    3     Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 4 mortal wounds on the target and the attack sequence ends.
+  Gutrippa                       Melee   Melee          +1    -2    3     -
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Tougher than a Rok Squig : This model has a 4+ invulnerable save . Thick Hide : Each time an attack is allocated this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Beastboss (Aura) : While a friendly SNAKEBITE BEAST SNAGGA CORE or SNAKEBITE BEAST SNAGGA CHARACTER unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+  ABIL   Surly as a Squiggoth : The first time this WARLORD is destroyed, you can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when a model is destroyed (e.g. the Orks is Never Beaten Stratagem). If you do so, then on a 4+, set this WARLORD back up on the battlefield as close as possible to where they were destroyed and not within Engagement Range of any enemy models, with D3 wounds remaining.
+
+================================================================
+  kaptin_badrukk  (Kaptin Badrukk)
+================================================================
+  STATS  M:5"  WS:2+  BS:4+  S:5  T:6  W:6  A:5  Ld:8  Sv:3+
+  INVULN 4+
+  KW     ORK, FREEBOOTERZ, CHARACTER, INFANTRY, WARBOSS, FLASH GITZ, KAPTIN BADRUKK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  - Standard                     24"     Heavy 3        7     -3    2     -
+  - Supercharge                  24"     Heavy 3        8     -3    3     Each time the bearer shoots, if any unmodified hit rolls of 1 are made for an attack with this weapon profile, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • This model can be equipped with 1 ammo runt.
+  ABIL   ’Ere We Go , Waaagh! Goldtoof Armour : This model has a 4+ invulnerable save . Flashiest Gitz (Aura) : While a friendly FLASH GITZ unit within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll of 1.
+  ABIL   Killa Reputation (Aura) : While an enemy unit is within 3" of this model, subtract 1 from the Leadership characteristic of models in that unit, and each time a Combat Attrition test is taken for that unit, subtract 1 from that Combat Attrition test. While a friendly FREEBOOTERZ unit is within 6" of this model, add 1 to the Leadership characteristic of models in that unit.
+
+================================================================
+  boss_zagstruk  (Boss Zagstruk)
+================================================================
+  STATS  M:12"  WS:2+  BS:5+  S:6  T:6  W:6  A:6  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, GOFFS, CHARACTER, INFANTRY, STORMBOY, JUMP PACK, FLY, BOSS ZAGSTRUK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Blitz missiles                 18"     Assault D3     6     -1    D3    Blast
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Da Vulcha’s Klaws              Melee   Melee          +2    -3    2     -
+  ABIL   ’Ere We Go , Waaagh! Full Throttle : Each time this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of this model and roll one D6: on a 1, this model suffers 1 mortal wound . Cybork Body : Each time this model would lose a wound, roll one D6: on a 5+, that wound is not lost. Drill Boss (Aura) : While a friendly GOFF STORMBOYZ unit is within 6" of this model, each time a Morale test is failed for that unit, until the end of the phase, halve the number of models that flee that unit due to failed Combat Attrition tests (rounding fractions down). Stormboyz Strike : During deployment, you can set up this model high in the skies instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+  ABIL   Big Gob : Add 3" to the range of this WARLORD ’s aura abilities (to a maximum of 9").
+
+================================================================
+  boss_snikrot  (Boss Snikrot)
+================================================================
+  STATS  M:6"  WS:2+  BS:5+  S:6  T:6  W:6  A:6  Ld:7  Sv:6+
+  INVULN 5+
+  KW     ORK, BLOOD AXES, CHARACTER, INFANTRY, KOMMANDO, BOSS SNIKROT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Mork’s Teeth                   Melee   Melee          User  -2    2     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Waaagh! Kunnin’ Infiltrator : During deployment, when you set up this model, it can be set up anywhere on the battlefield that is more than 9" away from the enemy deployment zone and any enemy models. Terrifying Killer (Aura) : While an enemy unit is within 6" of this model, subtract 2 from the Leadership characteristic of models in that unit. Dead Tough : This model has a 5+ invulnerable save . Throat Slitta : Each time this model makes an attack, if it is within 1" of a terrain feature , add 1 to that attack’s wound roll . Red Skull Kommandos (Aura) : While a friendly BLOOD AXES KOMMANDOS unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll . Sneakiest Git : Each time an attack is allocated to this model while it is receiving the benefits of cover , add an additional 2 to any armour saving throw made against that attack.
+  ABIL   Brutal but Kunnin’ : Each time this WARLORD fights, if all of its attacks target one enemy unit, after resolving all of those attacks, it can make a number of additional attacks against that enemy unit equal to the number of attacks that did not reach the Inflict Damage step of the attack sequence during that fight.
+
+================================================================
+  deffkilla_wartrike  (Deffkilla Wartrike)
+================================================================
+  STATS  M:14"  WS:2+  BS:5+  S:5  T:6  W:8  A:5  Ld:7  Sv:4+
+  INVULN 5+
+  KW     ORK, <CLAN>, CHARACTER, VEHICLE, SPEED FREEKS, SPEEDBOSS, DEFFKILLA WARTRIKE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Burna                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  - Cutta                        12"     Assault 2      8     -4    D6    Each time an attack made with this weapon profile targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  Twin boomstikk                 12"     Assault 2      5     0     1     -
+  Snagga klaw                    Melee   Melee          +2    -2    2     Each time an attack is made with this weapon, you can re-roll the wound roll .
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Big Red Button : Each time this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of this model. Dead Tough : This model has a 5+ invulnerable save . Fuel-mixa Grot : Once per battle, when this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 9" to the Move characteristic of this model. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound .
+  ABIL   Deffkilla Wartrike can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  zodgrod_wortsnagga  (Zodgrod Wortsnagga)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:5  T:5  W:6  A:4  Ld:7  Sv:6+
+  INVULN none
+  KW     ORK, SNAKEBITES, CHARACTER, INFANTRY, BEAST SNAGGA, RUNTHERD, ZODGROD WORTSNAGGA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Da Grabzappa                   Melee   Melee          +2    -3    2     -
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Squigstoppa : At the start of the Fight phase you can select one enemy MONSTER unit that is within 6" of this model and roll one D6: on a 2+, that unit is not eligible to fight this phase until after all eligible units from your army have done so. Super Runts : At the start of the first battle round select one GRETCHIN CORE unit from your army to be Zodgrod’s super runts. Each time a model in that unit makes an attack, add 1 to that attack’s hit roll . That unit can shoot while performing an action without that action failing.
+  ABIL   Beastgob (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES SQUIG unit is within 6" of this WARLORD , each time a model in that unit makes a melee attack with squighog jaws, smasha squig jaws or a squigosaur’s jaws, add 1 to that attack’s Damage characteristic.
+
+================================================================
+  da_red_gobbo_on_bounca  (Da Red Gobbo on Bounca)
+================================================================
+  STATS  M:10"  WS:4+  BS:3+  S:3  T:5  W:5  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, CHARACTER, CAVALRY, GRETCHIN, SQUIG, DA RED GOBBO
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom grot blasta             12"     Dakka 3/2      5     -1    2     -
+  Bounca’s jaws                  Melee   Melee          6     -2    2     Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 3 mortal wounds on the target and the attack sequence ends.
+  Stikkbombs                     6"      Grenade D6     3     0     1     Blast
+  ABIL   Waaagh! Da Revolushun! (Aura) : While a friendly GRETCHIN unit is within 6" of this model, each time you make a Combat Attrition test for that unit, add 1 to the result. Red Gobbo : This model can be included in an ORK Detachment without preventing other units in that Detachment from gaining a Clan Kultur . Note, however, that this model does not itself benefit from any Clan Kultur. If this model is your WARLORD , it has the Inspiring Leader Warlord Trait. Pointy Decorashunz! : After this unit makes a charge move , you can select one enemy unit within 1" of it and roll one D6: on a 4+, that enemy unit suffers D3 mortal wounds .
+  ABIL   Inspiring Leader (Aura) : Add 1 to the Leadership characteristic of friendly units while they are within 6" of this WARLORD .
+
+================================================================
+  goff_rokker  (Goff Rokker)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:4  W:4  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, GOFFS, CHARACTER, INFANTRY, NOB, GOFF ROKKER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Rokker shoota                  24"     Assault 4      4     -1    1     -
+  Rokker choppa                  Melee   Melee          +1    0     1     Each time the bearer fights, it can make 1 additional attack with this weapon.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Musik : At the start of each battle round, select one type of musik below for this model to perform until the end of that battle round. Goffik Rokk: While a friendly GOFF INFANTRY unit is within 6" of this model, add 1 to the Strength characteristic of models in that unit. ’Eavy Metal: While a friendly GOFF INFANTRY unit with the No Mukkin’ About kultur is within 6” of this model, the additional hit as a result of that ability is generated on an unmodified roll of 5+ instead of a 6.
+
+================================================================
+  grukk_face_rippa  (Grukk Face rippa)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:6  T:5  W:7  A:5  Ld:8  Sv:4+
+  INVULN 5+
+  KW     ORK, GOFFS, CHARACTER, INFANTRY, WARBOSS, GRUKK FACE-RIPPA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Attack squig                   Melee   Melee          4     -1    1     Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon.
+  Git-rippa                      Melee   Melee          x2    -4    2     When resolving an attack made with this weapon, you can re-roll the wound roll .
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Waaagh! : Friendly GOFF INFANTRY units within 6" of this model at the start of the Charge phase can charge even if they Advanced this turn. Breakin’ Heads : If a GOFF unit fails a Morale test while it is within 3" of a friendly model with this ability, this model can restore order with a brutal display of violence. If they do so, the unit suffers D3 mortal wounds but the Morale test is then considered to have been passed. Too Tuff for Deff : This model has a 5+ invulnerable save . Each time this model would lose a wound, roll one D6: on a 5+, that wound is not lost.
+  ABIL   Foul Temper : While this Warlord has fewer wounds remaining than its Wounds characteristic, add 3 to its Attacks characteristic.
+
+================================================================
+  mek_boss_buzzgob  (Mek Boss Buzzgob)
+================================================================
+  STATS  M:5"  WS:3+  BS:4+  S:5  T:5  W:6  A:4  Ld:8  Sv:4+
+  INVULN none
+  KW     ORK, GOFFS, INFANTRY, CHARACTER, BIG MEK, MEK BOSS BUZZGOB
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Mek arms                       Melee   Melee          x2    0     2     Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Waaagh! Nitnuckle and Lunk : Once per turn, when Mek Boss Buzzgob uses the Mekaniak Boss ability to repair a GOFF VEHICLE model, you can choose for his grot underlings to help. If you do so, that GOFF VEHICLE model can regain 1 additional lost wound. You can only use this ability twice per battle. We recommend placing two Grot Oiler models next to this Mek Boss Buzzgob model as a reminder, removing one each time this ability has been used (a Grot Oiler model does not count as a model for any rules purposes). Mekaniak Boss : At the end of your Movement phase , Mek Boss Buzzgob can repair one friendly GOFF VEHICLE model within 3" of it. That VEHICLE model regains up to 3 lost wounds. Each model can only be repaired once per turn. Buzzgob’s Dredheadz : In your Command phase , you can select one friendly GOFF DEFF DREADS , GOFF MEGA DREAD , GOFF MEKA-DREAD , GOFF KILLA KANS , GOFF GORKANAUT or GOFF MORKANAUT unit that is within 6" of Mek Boss Buzzgob. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll .
+  ABIL   Inspiring Leader (Aura) : Add 1 to the Leadership characteristic of friendly units while they are within 6" of this WARLORD .
+
+================================================================
+  zhadsnark_da_ripper  (Zhadsnark da Ripper)
+================================================================
+  STATS  M:14"  WS:2+  BS:5+  S:6  T:6  W:7  A:5  Ld:8  Sv:4+
+  INVULN none
+  KW     ORK, EVIL SUNZ, BIKER, CHARACTER, WARBOSS, SPEED FREEKS, ZHADSNARK DA RIPPER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Da Pain Klaw                   Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon against an INFANTRY or MONSTER unit, an unmodified hit roll of 6 inflicts 1 mortal wound on the target in addition to the normal damage.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Breakin’ Heads : If a <CLAN> unit fails a Morale test while it is within 3" of a friendly < C LAN> EVIL SUNZ WARBOSS , the Warboss can restore order with a brutal display of violence. If they do so, the unit suffers D3 mortal wounds but the Morale test is then considered to have been passed. Speedwaaagh! : Friendly < C LAN> EVIL SUNZ BIKER and VEHICLE units within 6" of this model at the start of the Charge phase can charge even if they Advanced this turn. Da Beast : When this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of this model.
+  ABIL   Inspiring Leader (Aura) : Add 1 to the Leadership characteristic of friendly units while they are within 6" of this WARLORD .
+
+================================================================
+  boyz  (Boyz)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, BOYZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Shoota                         18"     Dakka 3/2      4     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Power stabba                   Melee   Melee          User  -2    1     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • Any Ork Boy’s slugga and choppa can be replaced with 1 shoota. • For every 10 models this unit contains, 1 Ork Boy’s choppa and slugga can be replaced with one of the following: 1 big shoota; 1 rokkit launcha. • The Boss Nob’s slugga and choppa can be replaced with two of the following: 1 big choppa; 1 choppa; 1 killsaw; 1 power klaw; 1 power stabba; 1 slugga. • The Boss Nob’s slugga and choppa can be replaced with one of the following: 1 kombi-rokkit; 1 kombi-skorcha.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  gretchin  (Gretchin)
+================================================================
+  STATS  M:5"  WS:5+  BS:4+  S:2  T:3  W:1  A:1  Ld:4  Sv:7+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, CORE, GRETCHIN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Grot blasta                    12"     Pistol 1       3     0     1     -
+  ABIL   Waaagh! Cowardly : Unless a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES RUNTHERD model is within 6" of this unit, each time a model in this unit makes a Combat Attrition test , subtract 1 from the result. Diminutive : Each time a ranged attack is allocated to a model in this unit while it is receiving the benefits of cover , add an additional 1 to any armour saving throw made against that attack.
+
+================================================================
+  beast_snagga_boyz  (Beast Snagga Boyz)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, BEAST SNAGGA, BEAST SNAGGA BOYZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Thump gun                      18"     Assault D3     6     -1    D3    Blast
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Power snappa                   Melee   Melee          +2    -2    2     -
+  ABIL   • For every 10 models this unit contains, 1 Beast Snagga Boy’s choppa and slugga can be replaced with 1 thump gun.
+  ABIL   Beast Snagga , ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  trukk  (Trukk)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:6  T:6  W:6-10  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, TRUKK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Grabbin’ klaw                  Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  Wreckin’ ball                  Melee   Melee          +2    -1    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  ABIL   • This model can be equipped with one of the following: 1 grabbin’ klaw; 1 wreckin’ ball.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ , SPECIALIST MOB INFANTRY or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Trukk can receive the following Kustom Jobs upgrades: • Fortress on Wheels +20 Power Rating: +1 • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  looted_wagon  (Looted Wagon)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:6  T:7  W:6-10  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, LOOTED, LOOTED WAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Shoota                         18"     Dakka 3/2      4     0     1     -
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   • This model can be equipped with up to two of the following (+1 Scrap point ): 1 big shoota; 1 skorcha. • This model can be equipped with up to 6 shootas (+1 Scrap point ).
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Kustom Red Button : Once per battle, at the start of your Command phase , you can select for the driver to hit the inviting and mysterious red button mounted on his dashboard. When you do, roll one D6 and consult the table below to determine the effect. D6 Result 1 Snack Dispensa: A hidden compartment delivers the driver a tasty grilled squig. No effect. 2-3 Boosta: Until your next Command phase , add 4" to this model’s Move characteristic. 4-5 More Dakka: Until your next Command phase , each time this model makes a ranged attack, an unmodified hit roll of 6 scores 1 additional hit. 6 Hidden Rokkits: Until your next Command phase this model is equipped with 1 rokkit launcha.
+  ABIL   This model has a transport capacity of 10 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Looted Wagon can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  meganobz  (Meganobz)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:3  A:3  Ld:7  Sv:2+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MEGA ARMOUR, NOBZ, MOB, CORE, MEGANOBZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Kustom shoota                  18"     Dakka 6/4      4     0     1     -
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • Any model’s power klaw can be replaced with 1 killsaw. • Any model’s kustom shoota can be replaced with 1 killsaw. • Any model’s kustom shoota can be replaced with one of the following: 1 kombi-skorcha; 1 kombi-rokkit.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  nobz  (Nobz)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:2  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, NOBZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Power stabba                   Melee   Melee          User  -2    1     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • Any number of models can each have their slugga and choppa replaced with two of the following: 1 big choppa; 1 choppa; 1 killsaw; 1 power klaw; 1 power stabba; 1 slugga. • Any number of models can each have their slugga and choppa replaced with one of the following: 1 kombi-rokkit; 1 kombi-skorcha. • For every 5 models this unit contains, this unit can be equipped with 1 ammo runt.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  burna_boyz  (Burna Boyz)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, BURNA BOYZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Burna                          12"     Assault D6     4     0     1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  ABIL   • Any number of Spanners can each have their big shoota replaced with one of the following: 1 kustom mega-blasta; 1 rokkit launcha.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Pyromaniaks : If an enemy unit is destroyed by an attack made with a burna by this unit, until your next turn, each time a Morale test is taken for this unit, it is automatically passed. Mekaniak : At the end of your Movement phase , each Spanner model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains 1 lost wound. Each model can only be repaired once per turn.
+  ABIL   Burna Boyz can receive the following Kustom Jobs upgrades: • Extra-Kustom Weapon +10 Power Rating: +1 • Smoky Gubbinz +1/model Power Rating: +1 per 5 models • Zzapkrumpaz +2/model Power Rating: +1 per 5 models
+
+================================================================
+  kommandos  (Kommandos)
+================================================================
+  STATS  M:6"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, KOMMANDOS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Shokka pistol                  6"      Pistol D3      6     -1    1     Blast . Each time an attack made with this weapon is allocated to a VEHICLE model, that attack has a Damage characteristic of D3.
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Burna                          12"     Assault D6     4     0     1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Kustom shoota                  18"     Dakka 6/4      4     0     1     -
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Breacha ram                    Melee   Melee          +2    -2    2     Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack.
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • The Boss Nob’s choppa can be replaced with one of the following: 1 big choppa; 1 power klaw. • For every 10 models this unit contains, 1 Kommando s slugga and choppa can be replaced with 1 big shoota. • For every 10 models this unit contains, 1 Kommando’s slugga and choppa can be replaced with 1 breacha ram. • For every 10 models this unit contains, 1 Kommando’s slugga can be replaced with 1 shokka pistol. • For every 10 models this unit contains, 1 Kommando’s slugga and choppa can be replaced with 1 burna. • For every 10 models this unit contains, 1 Kommando’s slugga and choppa can be replaced with 1 kustom shoota. • For every 10 models this unit contains, 1 Kommando’s slugga and choppa can be replaced with 1 rokkit launcha. • For every 10 models this unit contains, this unit can be equipped with 1 bomb squig. • For every 10 models this unit contains, this unit can be equipped with 1 distraction grot.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Kunnin’ Infiltrators : During deployment, when you set up this unit it can be set up anywhere on the battlefield that is more than 9" away from the enemy deployment zone and any enemy models. Sneaky Gitz : Each time an attack is allocated to a model in this unit while it is receiving the benefits of cover , add an additional 2 to any armour saving throw made against that attack. Throat Slittas : Each time a model in this unit makes a melee attack, if it is within 1" of a terrain feature , add 1 to that attack’s wound roll .
+
+================================================================
+  tankbustas  (Tankbustas)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, TANKBUSTA BOMBS, TANKBUSTAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Pair of rokkit pistols         12"     Pistol 2       7     -2    D3    -
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Tankhammer                     Melee   Melee          -     -     -     Each time the bearer fights, it can only make 1 attack with this weapon. If that attack hits, the target unit suffers D6 mortal wounds and the bearer is destroyed.
+  ABIL   • For every 5 models this unit contains, 1 Tankbusta’s rokkit launcha can be replaced with 1 tankhammer. • For every 5 models this unit contains, 1 Tankbusta’s rokkit launcha can be replaced with 1 pair of rokkit pistols. • For every 5 models this unit contains, this unit can be equipped with up to 2 bomb squigs.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Tank Hunters : Each time a model with this ability makes an attack that targets a VEHICLE unit, add 1 to that attack’s hit roll .
+
+================================================================
+  flash_gitz  (Flash Gitz)
+================================================================
+  STATS  M:5"  WS:3+  BS:4+  S:5  T:5  W:2  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, FLASH GITZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Snazzgun                       24"     Heavy 3        6     -2    2     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • The Kaptin can be equipped with one of the following: 1 choppa; 1 slugga. • The Kaptin can be equipped with 1 gitfinda squig. • For every 5 models this unit contains, this unit can be equipped with 1 ammo runt.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  mad_dok_grotsnik  (Mad Dok Grotsnik)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:5  T:5  W:4  A:4  Ld:8  Sv:4+
+  INVULN none
+  KW     ORK, DEATHSKULLS, CHARACTER, INFANTRY, PAINBOY, MAD DOK GROTSNIK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ’Urty syringe                  Melee   Melee          2     0     1     Each time the bearer fights, it makes 1 additional attack with this weapon. Each time an attack is made with this weapon, unless the target is a VEHICLE or TITANIC unit, that attack always wounds on an unmodified wound roll of 2+.
+  ABIL   ’Ere We Go , Waaagh! Cybork Body : Each time this model would lose a wound, roll one D6: on a 5+, that wound is not lost. One Scalpel Short of a Medpack : This model is eligible to charge even if it Advanced or Fell Back in the same turn. At the start of the Charge phase , if this model is eligible to charge you must declare a charge and you must select the closest enemy unit as one of the targets of that charge. Dok’s Toolz (Aura) : While a friendly ORKS INFANTRY or ORKS BIKER unit is within 3" of this model, each time a model in that unit would lose a wound, roll one D6: on a 6, that wound is not lost. Sawbonez : At the end of your Movement phase , this model can heal one friendly ORKS INFANTRY or ORKS BIKER model whose unit is within 3" of it. If you do so, roll one D6: on a 1, that model suffers 1 mortal wound . On a 2+, that model regains up to 2 lost wounds. Each model can only be healed once per turn.
+  ABIL   ’Ard as Nails : Each time an attack is made that targets this WARLORD , subtract 1 from that attack’s wound roll.
+
+================================================================
+  mek  (Mek)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:3  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, MEK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom mega-slugga             12"     Pistol D3      8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  ABIL   • This model can replace its choppa with: 1 killsaw. • This model can be equipped with 1 grot oiler.
+  ABIL   ’Ere We Go , Waaagh! Mekaniak : At the end of your Movement phase , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains 1 lost wound. Each model can only be repaired once per turn.
+  ABIL   Mek can receive the following Kustom Jobs upgrades: • Bionik Oiler +10 Power Rating: +1 • Extra-Kustom Weapon +10 Power Rating: +1
+
+================================================================
+  runtherd  (Runtherd)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:4  A:3  Ld:7  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, RUNTHERD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Grabba stikk                   Melee   Melee          +1    0     1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Grot-prod                      Melee   Melee          +2    -1    1     -
+  ABIL   • This model’s grabba stikk can be replaced with 1 grot-prod. • This model can be equipped with one of the following: 1 squig hound; 1 grot-lash.
+  ABIL   ’Ere We Go , Waaagh! Runtherd : If your army is Battle-forged , you must include at least one GRETCHIN INFANTRY unit in a Detachment for each RUNTHERD unit in that Detachment. RUNTHERD units do not take up slots in a Detachment .
+
+================================================================
+  painboy_warbike  (Painboy on Warbike)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:5  T:5  W:5  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, BIKER, CHARACTER, SPEED FREEKS, PAINBOY
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Dakkagun                       18"     Dakka 5/3      5     0     1     -
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ’Urty syringe                  Melee   Melee          2     0     1     Each time the bearer fights, it makes 1 additional attack with this weapon. Each time an attack is made with this weapon, unless the target is a VEHICLE or TITANIC unit, that attack always wounds on an unmodified wound roll of 2+.
+  ABIL   • This model can be equipped with 1 killsaw instead of 1 power klaw.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Dok’s Tools : When a < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER model would lose a wound within 3" of any friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES PAINBOYS , roll one D6; on a 6, that wound is not lost. Sawbonez : At the end of your Movement phase , this model can attempt surgery on one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BIKER model within 3". If it does, roll one D6; on a 1 that friendly model loses 1 wound, otherwise it regains D3 lost wounds. Each model can only have surgery attempted on it once per turn.
+
+================================================================
+  nob_waaagh_banner  (Nob with Waaagh Banner)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:5  T:5  W:4  A:3  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CHARACTER, INFANTRY, NOB
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom shoota                  18"     Dakka 6/4      4     0     1     -
+  Waaagh! banner                 Melee   Melee          +2    0     2     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Waaagh! Waaagh! Banner : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES ORKS unit is within 6" of this model, each time a model in that unit makes a melee attack, add 1 to that attack’s hit roll .
+
+================================================================
+  da_red_gobbo  (Da Red Gobbo)
+================================================================
+  STATS  M:5"  WS:4+  BS:3+  S:3  T:3  W:3  A:3  Ld:6  Sv:5+
+  INVULN none
+  KW     ORK, INFANTRY, CHARACTER, GRETCHIN, DA RED GOBBO
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom grot blasta             12"     Pistol D3      5     -1    2     -
+  Icon of da Revolushun          Melee   Melee          User  -1    1     When resolving an attack made with this weapon, a wound roll of 6+ inflicts 1 mortal wound on the target in addition to any other damage.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   Dakka Weapons Da Revolushun! : Friendly GRETCHIN units can use this model’s Leadership instead of their own whilst they are within 6" of this model. Red Gobbo : This model can be included in an ORK Detachment without preventing other units in that Detachment from gaining a Clan Kultur . Note, however, that this model does not itself benefit from any Clan Kultur. Has Yoo Been a Good Little Grot This Year? : At the end of your Movement phase , you can select one other GRETCHIN unit within 3" of this model. If you do, roll one D6; on a 1, that unit suffers 1 mortal wound . On a 2+, models in that unit count as being equipped with stikkbombs until the end of the battle.
+
+================================================================
+  skrak_skull_nobz  (Skrak s Skull Nobz)
+================================================================
+  STATS  M:5"  WS:2+  BS:5+  S:5  T:4  W:2  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, GOFFS, INFANTRY, NOBZ, SKRAK’S SKULL-NOBZ, GRETCHIN, AMMO RUNTS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Skrak’s horned helmet          Melee   Melee          *     *     *     Each time the bearer fights, it can make 1 additional attack with this weapon and only 1 attack can be made with this weapon. When resolving an attack made with this weapon, if a hit is scored, the target suffers 1 mortal wound and the attack sequence ends.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  - Rokkit                       24"     Heavy D3       8     -2    3     Blast
+  - Shoota                       18"     Dakka 3/2      4     0     1     -
+  - Skorcha                      12"     Assault D6     5     -1    1     Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Power stabba                   Melee   Melee          User  -2    1     -
+  ABIL   • Any model can be equipped with 1 weapon from the Nob Weapons list instead of 1 slugga. • Any model can be equipped with 1 weapon from the Nob Weapons list instead of 1 choppa.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Ammo Runt : Each time this unit shoots, you can reroll one hit roll for each Ammo Runt accompanying it. When rolling to wound this unit, use the Skull-Nobz’ or Skrak Head-smasha’s Toughness while they are on the battlefield. The death of an Ammo Runt is ignored for the purposes of Morale tests . Keepin’ Order : Roll a D6 for each model that flees from a GOFF unit that is within 3" of any friendly GOFF units with this ability when the Morale test is taken. On a 6, that model does not flee. Grukk’s Meanest Ladz : While this unit is within 6" of a friendly GRUKK FACE-RIPPA model, add 1 to the Attacks characteristic of each NOBZ model in this unit.
+
+================================================================
+  warbikers  (Warbikers)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:4  T:5  W:3  A:2  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, BIKER, SPEED FREEKS, CORE, WARBIKERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Dakkagun                       18"     Dakka 5/3      5     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  ABIL   • Any Warbiker can be equipped with one of the following: 1 slugga; 1 choppa. • The Boss Nob on Warbike can be equipped with one of the following: 1 slugga; 1 big choppa; 1 choppa; 1 power klaw.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Cloud of Smoke : Each time a ranged attack is made against this unit, subtract 1 from that attack’s hit roll . Big Red Button : Each time this unit Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of model’s in this unit.
+
+================================================================
+  stormboyz  (Stormboyz)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, JUMP PACK, FLY, MOB, CORE, STORMBOYZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • The Boss Nob’s choppa can be replaced with 1 power klaw.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Full Throttle : Each time this unit Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of model’s in this unit and roll one D6: on a 4+, this unit suffers 1 mortal wound . Stormboyz Strike : During deployment, you can set up this unit high in the skies instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+
+================================================================
+  deffkoptas  (Deffkoptas)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:4  T:5  W:4  A:2  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, FLY, SPEED FREEKS, DEFFKOPTAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Kopta rokkits                  24"     Heavy 2D3      8     -2    3     Blast
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Spinnin’ blades                Melee   Melee          +1    -1    1     Each time an attack is made with this weapon, make 3 hit rolls instead of 1.
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   • For every 3 models this unit contains, 1 model’s kopta rokkits can be replaced with 1 kustom mega-blasta and 1 big bomb.
+  ABIL   ’Ere We Go , Mob Rule , Ramshackle , Waaagh! Big Red Button : Each time this unit Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of model’s in this unit. Swoopin’ Down : During deployment, you can set up this unit high in the skies instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+  ABIL   Deffkoptas can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  squighog_boyz  (Squighog Boyz)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:5  T:6  W:3  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CAVALRY, BEAST SNAGGA, SQUIG, CORE, SQUIGHOG BOYZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Saddlegit weapons (shooting)   8"      Assault 1      4     0     1     -
+  Stikka (shooting)              12"     Assault 1      User  -2    2     Each time an attack made with this weapon targets a unit within half range, that attack has a Strength characteristic of +1.
+  Saddlegit weapons (melee)      Melee   Melee          3     -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Squighog jaws                  Melee   Melee          6     -1    2     Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon.
+  Stikka (melee)                 Melee   Melee          +1    -2    2     -
+  ABIL   • For every 3 models this unit contains, this unit can be equipped with 1 bomb squig.
+  ABIL   Beast Snagga , ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  nob_smasha_squig  (Nob on Smasha Squig)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:5  T:6  W:5  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, CAVALRY, CHARACTER, BEAST SNAGGA, SQUIG, NOB, NOB SMASHA SQUIG
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Smasha squig jaws              Melee   Melee          6     -1    2     Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon.
+  ABIL   Beast Snagga , ’Ere We Go , Waaagh! Smasha ’Ead : Each time this model finishes a charge move or Heroic Intervention move, select one enemy unit that is within Engagement Range of this model and roll five D6; for each result of 4+, that enemy unit suffers 1 mortal wound . Squigboss : For each < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES SQUIGHOG BOYZ unit included in a Detachment, up to two < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES NOB ON SMASHA SQUIG units can be included in that Detachment without taking up any Battlefield Role slots .
+
+================================================================
+  boomdakka_snazzwagons  (Boomdakka Snazzwagons)
+================================================================
+  STATS  M:12"  WS:4+  BS:5+  S:5  T:6  W:8  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, BOOMDAKKA SNAZZWAGONS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Grot blasta                    12"     Pistol 1       3     0     1     -
+  Mek speshul                    30"     Dakka 14/10    5     -2    2     -
+  Burna bottles                  6"      Grenade 2D3    4     0     1     Blast . Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Grot Gunner : Each time a model in this unit makes an attack with a grot blasta or big shoota, add 1 to that attack’s hit roll . Billowing Fumes : Each time a ranged attack is made against this unit, subtract 1 from that attack’s hit roll . Riding Shotgun : Each time a model in this unit shoots, it can shoot with Grenade and Pistol weapons in addition to any other weapon types . Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   Boomdakka Snazzwagons can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Souped-up Speshul +10 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  kustom_boosta_blastas  (Kustom Boosta blastas)
+================================================================
+  STATS  M:12"  WS:4+  BS:5+  S:5  T:6  W:8  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, KUSTOM BOOSTA-BLASTAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Grot blasta                    12"     Pistol 1       3     0     1     -
+  Burna exhaust                  8"      Assault D6     4     0     1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Rivet kannon                   36"     Dakka 9/6      7     -2    2     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Grot Gunner : Each time a model in this unit makes an attack with a grot blasta, add 1 to that attack’s hit roll . Riding Shotgun : Each time a model in this unit shoots, it can shoot with Grenade and Pistol weapons in addition to any other weapon types . Spiked Ram : After this unit makes a charge move , you can select one enemy unit within 1" of it and roll one D6 for each model this unit contains; for each roll of 4+, that enemy unit suffers D3 mortal wounds . Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   Kustom Boosta-blastas can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  megatrakk_scrapjets  (Megatrakk Scrapjets)
+================================================================
+  STATS  M:10"  WS:4+  BS:5+  S:6  T:6  W:9  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, MEGATRAKK SCRAPJETS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Rokkit kannon                  24"     Heavy 3D3      8     -2    3     Blast
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Wing missiles                  24"     Assault 1      8     -2    3     Each time an attack is made with this weapon that targets a VEHICLE unit, add 1 to that attack’s hit roll .
+  Nose drill                     Melee   Melee          +2    -2    D3    -
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Spiked Ram : After this unit makes a charge move , you can select one enemy unit within 1" of it and roll one D6 for each model this unit contains; for each roll of 4+, that enemy unit suffers D3 mortal wounds . Grot Gunner : Each time a model in this unit shoots, you can select one twin big shoota it is equipped with. Each time that model makes an attack with that twin big shoota, add 1 to that attack’s hit roll . Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   Megatrakk Scrapjets can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  shokkjump_dragstas  (Shokkjump Dragstas)
+================================================================
+  STATS  M:14"  WS:4+  BS:5+  S:5  T:6  W:8  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, SHOKKJUMP DRAGSTAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom shokk rifle             24"     Assault 2      8     -3    D6    If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer’s unit suffers 1 mortal wound after shooting with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Saw blades                     Melee   Melee          +2    -2    2     -
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Shokk Tunnel : If an Advance roll made for this unit is 4+, you can remove this unit from the battlefield and set it up again anywhere on the battlefield that is more than 9" away from any enemy models and roll one D6: on a 4+ this unit suffers D3 mortal wounds . Grot Gunner and Targetin’ Squig : Each time a model from this unit makes an attack with a kustom shokk rifle, treat that model as having a Ballistic Skill characteristic of 3+. Explodes : Each time a model in this unit is destroyed roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   Shokkjump Dragstas can receive the following Kustom Jobs upgrades: • Gyroscopic Whirlygig +10 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  rukkatrukk_squigbuggies  (Rukkatrukk Squigbuggies)
+================================================================
+  STATS  M:10"  WS:4+  BS:5+  S:5  T:6  W:9  A:4  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, RUKKATRUKK SQUIGBUGGIES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Heavy squig launcha            36"     Assault 2D6    5     -2    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Sawn-off shotgun               12"     Assault 2      4     0     1     -
+  Squig launcha                  18"     Assault D6     5     -2    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Saw blades                     Melee   Melee          +2    -2    2     -
+  Stikkbombz                     8"      Grenade D6     3     0     1     Blast
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Grot Gunner : Each time a model in this unit makes an attack with a heavy squig launcha, add 1 to that attack’s hit roll . Riding Shotgun : Each time a model in this unit shoots, it can shoot with Grenade and Pistol weapons in addition to any other weapon types . Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   Rukkatrukk Squigbuggies can receive the following Kustom Jobs upgrades: • Nitro Squigs +25 Power Rating: +2 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  nobz_on_warbikes  (Nobz on Warbikes)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:5  T:5  W:3  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, BIKER, SPEED FREEKS, NOBZ WARBIKES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Slugga                         12"     Pistol 1       4     0     1     -
+  Dakkagun                       18"     Dakka 5/3      5     0     1     -
+  Big choppa                     Melee   Melee          +2    -1    2     -
+  Choppa                         Melee   Melee          User  -1    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Killsaw                        Melee   Melee          x2    -4    D3    Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll . Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon.
+  Power klaw                     Melee   Melee          x2    -3    2     Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll .
+  Power stabba                   Melee   Melee          User  -2    1     -
+  ABIL   • Any model can be equipped with 1 slugga. • Any number of model’s can each have their choppa replaced with one of the following: 1 big choppa; 1 choppa; 1 killsaw; 1 power klaw; 1 power stabba; 1 slugga.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh!
+
+================================================================
+  grot_mega_tank  (Grot Mega tank)
+================================================================
+  STATS  M:6+D6"  WS:5+  BS:4+  S:6  T:6  W:6-11  A:4  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, GRETCHIN, GROT MEGA-TANK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Shoota                         18"     Dakka 3/2      4     0     1     -
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Grotzooka                      18"     Heavy 2D3      6     0     1     Blast
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  ABIL   • Any number of this model's big shootas can be replaced with one of the following: skorcha; grotzooka; rokkit launcha; kustom mega-blasta. • Any number of this model’s twin big shootas can be replaced with one of the following: 2 skorchas; 2 grotzookas; 2 rokkit launchas; 2 kustom mega-blastas.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Grot Mega-tank can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  grot_tanks  (Grot Tanks)
+================================================================
+  STATS  M:6+D6"  WS:6+  BS:4+  S:4  T:5  W:4  A:2  Ld:6  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, GRETCHIN, GROT TANKS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Grotzooka                      18"     Heavy 2D3      6     0     1     Blast
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   • Any number of models can each have their big shoota replaced with one of the following: skorcha; grotzooka; rokkit launcha; kustom mega-blasta. • The Kommanda can be equipped with one of the following: big shoota, skorcha; grotzooka; rokkit launcha; kustom mega-blasta.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh!
+  ABIL   Grot Tanks can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  skorchas  (Skorchas)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:4  T:5  W:6  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, SKORCHAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Outriders : During deployment, you can set up this unit on the army’s flank instead of setting it up on the battlefield. If you do, at the end of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models and wholly within 6" of any battlefield edge.
+  ABIL   Skorchas can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  warbuggies  (Warbuggies)
+================================================================
+  STATS  M:14"  WS:3+  BS:5+  S:4  T:5  W:5  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, WARBUGGIES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Rack of rokkits                24"     Assault 2      8     -2    3     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  ABIL   • Any model can be equipped with 1 rack of rokkits instead of 1 twin big shoota.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Outriders : During deployment, you can set up this unit on the army’s flank instead of setting it up on the battlefield. If you do, at the end of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models and wholly within 6" of any battlefield edge.
+  ABIL   Warbuggies can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  wartrakks  (Wartrakks)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:4  T:5  W:6  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, SPEED FREEKS, WARTRAKKS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Rack of rokkits                24"     Assault 2      8     -2    3     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  ABIL   • Any model can be equipped with 1 rack of rokkits instead of 1 twin big shoota.
+  ABIL   ’Ere We Go , Mob Rule , Dakka Weapons Outriders : During deployment, you can set up this unit on the army’s flank instead of setting it up on the battlefield. If you do, at the end of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models and wholly within 6" of any battlefield edge.
+  ABIL   Wartrakks can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  grot_bomm_launcha  (Grot Bomm Launcha)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:4  T:5  W:6  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, GROT BOMM LAUNCHA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Grot-guided bomm               72"     Heavy 2D6      8     -3    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer. The bearer can only shoot with this weapon once per battle. Each time an attack is made with this weapon, the bearer has a Ballistic Skill characteristic of 2+ for that attack.
+  ABIL   Dakka Weapons
+  ABIL   Grot Bomm Launcha can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  battlewagon  (Battlewagon)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:7  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, BATTLEWAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  Lobba                          48"     Heavy D6       5     0     1     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Zzap gun                       36"     Heavy 1        *     -3    3     Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound.
+  Deff rolla                     Melee   Melee          +1    -2    2     Each time an attack is made with this weapon, treat the bearer as having a Weapon Skill characteristic of 2+.
+  Grabbin’ klaw                  Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  Wreckin’ ball                  Melee   Melee          +2    -1    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  ABIL   • This model can be equipped with one of the following: 1 kannon; 1 kiIIkannon; 1 zzap gun. • This model can be equipped with 1 lobba. • This model can be equipped with up to 4 big shootas. • This model can be equipped with any of the following: 1 ’ard case; 1 deff rolla; 1 grabbin’ klaw; 1 wreckin’ ball.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6, it explodes, and each unit within 6" suffers D6 mortal wounds . Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols .
+  ABIL   This model has a transport capacity of 20 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. If this model is equipped with a killkannon, it has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models instead. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models. If this model has the GOFF keyword and is not equipped with an ’ard case or a kannon, killkannon or zzap gun, it can transport 1 GHAZGHKULL THRAKA . GHAZGHKULL THRAKA takes up the space of 18 models.
+  ABIL   Battlewagon can receive the following Kustom Jobs upgrades: • Da Booma +15 Power Rating: +1 • Fortress on Wheels +20 Power Rating: +1 • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  deff_dreads  (Deff Dreads)
+================================================================
+  STATS  M:6"  WS:3+  BS:5+  S:5  T:7  W:8  A:3  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, WALKERZ, DEFF DREADS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Dread klaw                     Melee   Melee          x2    -3    3     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any number of models can each have each of their big shootas replaced with one of the following: 1 dread klaw; 1 kustom mega-blasta; 1 rokkit launcha; 1 skorcha. • Any number of models can each have each of their dread klaws replaced with one of the following: 1 big shoota; 1 kustom mega-blasta; 1 rokkit launcha; 1 skorcha.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Explodes : When this model is destroyed, roll one D6. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds . Dread Mob : After this unit is set up on the battlefield for the first time, if this unit has more than 1 model, all models in this unit must be set up within 6" of another model from this unit. After they are set up for the first time, each model is treated as a separate unit.
+  ABIL   Deff Dreads can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Stompamatic Pistons +15 Power Rating: +1
+
+================================================================
+  bonebreaka  (Bonebreaka)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:8  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, BONEBREAKA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  Lobba                          48"     Heavy D6       5     0     1     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Zzap gun                       36"     Heavy 1        *     -3    3     Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound.
+  Deff rolla                     Melee   Melee          +1    -2    2     Each time an attack is made with this weapon, treat the bearer as having a Weapon Skill characteristic of 2+.
+  Grabbin’ klaw                  Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  Wreckin’ ball                  Melee   Melee          +2    -1    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  ABIL   • This model can be equipped with one of the following: 1 kannon; 1 killkannon; 1 zzap gun. • This model can take up to 4 big shootas. • This model can be equipped with 1 lobba. • This model can be equipped with any of the following: 1 grabbin’ klaw; 1 wreckin’ ball.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Bonebreaka Ram : Each time this model fights, if it made a charge move this turn, then until that fight is resolved, add D6 to the Attacks characteristic of this model. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Bonebreaka can receive the following Kustom Jobs upgrades: • Da Booma +15 Power Rating: +1 • Fortress on Wheels +20 Power Rating: +1 • More Dakka +30 Power Rating: +2 • Red Rolla +20 Power Rating: +1 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  gunwagon  (Gunwagon)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:8  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, WAGON, GUNWAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  Lobba                          48"     Heavy D6       5     0     1     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Zzap gun                       36"     Heavy 1        *     -3    3     Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound.
+  Deff rolla                     Melee   Melee          +1    -2    2     Each time an attack is made with this weapon, treat the bearer as having a Weapon Skill characteristic of 2+.
+  Grabbin’ klaw                  Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  Wreckin’ ball                  Melee   Melee          +2    -1    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  ABIL   • This model can replace its kannon with one of the following: 1 killkannon; 1 zzap gun. • This model can take up to 4 big shootas. • This model can be equipped with 1 lobba. • This model can be equipped with any of the following: 1 deff rolla; 1 grabbin’ klaw; 1 wreckin’ ball.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Periscope : Each time this model makes an attack with its kannon, killkannon, zzap gun or da booma, add 1 to that attack’s hit roll . Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Gunwagon can receive the following Kustom Jobs upgrades: • Da Booma +15 Power Rating: +1 • Fortress on Wheels +20 Power Rating: +1 • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  kill_rig  (Kill Rig)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:6  T:8  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, CHARACTER, PSYKER, BEAST SNAGGA, WEIRDBOY, KILL RIG
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  ’Eavy lobba                    48"     Heavy D6       6     -1    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Stikka kannon                  12"     Heavy 1        8     -2    3     Each time the bearer makes an attack with this weapon, if that attack targets a MONSTER or VEHICLE unit, you can re-roll the hit roll .
+  Wurrtower                      24"     Assault 1      9     -3    D6    Each time this weapon is selected to shoot with, if the bearer successfully manifested any psychic powers this turn, change this weapon’s Type to Assault D3 . Each time an attack is made with this weapon, that attack automatically hits the target.
+  Butcha boyz                    Melee   Melee          5     -1    1     Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon.
+  Savage horns and hooves        Melee   Melee          +1    -2    3     Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon.
+  Saw blades                     Melee   Melee          +2    -2    2     -
+  ABIL   Beast Snagga , ’Ere We Go , Ramshackle , Waaagh! Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Snagged : Each time this model makes an attack with its stikka kannon, if an enemy VEHICLE or MONSTER model (excluding TITANIC or AIRCRAFT models) loses any wounds as a result of that attack, roll one D6: on a 4+, that enemy model cannot finish any type of move more than 12" from this model until the start of your next turn. If this model moves for any reason, or is destroyed, this effect ends. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   This model can attempt to manifest two psychic powers in your Psychic phase and attempt to deny one psychic power in your opponent’s Psychic phase. It knows Smite and two psychic powers from the Beasthead discipline .
+  ABIL   This model has a transport capacity of 10 < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA INFANTRY models.
+  ABIL   Beastgob (Aura) : While a friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES SQUIG unit is within 6" of this WARLORD , each time a model in that unit makes a melee attack with squighog jaws, smasha squig jaws or a squigosaur’s jaws, add 1 to that attack’s Damage characteristic.
+  ABIL   Kill Rig can receive the following Kustom Jobs upgrades: • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  hunta_rig  (Hunta Rig)
+================================================================
+  STATS  M:12"  WS:3+  BS:5+  S:6  T:8  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, BEAST SNAGGA, HUNTA RIG
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  ’Eavy lobba                    48"     Heavy D6       6     -1    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Stikka kannon                  12"     Heavy 1        8     -2    3     Each time the bearer makes an attack with this weapon, if that attack targets a MONSTER or VEHICLE unit, you can re-roll the hit roll .
+  Butcha boyz                    Melee   Melee          5     -1    1     Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon.
+  Savage horns and hooves        Melee   Melee          +1    -2    3     Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon.
+  Saw blades                     Melee   Melee          +2    -2    2     -
+  ABIL   Beast Snagga , ’Ere We Go , Ramshackle , Waaagh! Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Snagged : Each time this model makes an attack with its stikka kannon, if an enemy VEHICLE or MONSTER model (excluding TITANIC or AIRCRAFT models) loses any wounds as a result of that attack, roll one D6: on a 4+, that enemy model cannot finish any type of move more than 12" from this model until the start of your next turn. If this model moves for any reason, or is destroyed, this effect ends. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 3" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 15 < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES BEAST SNAGGA INFANTRY models.
+  ABIL   Hunta Rig can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  killa_kans  (Killa Kans)
+================================================================
+  STATS  M:6"  WS:4+  BS:4+  S:5  T:5  W:5  A:3  Ld:6  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, GRETCHIN, WALKERZ, KILLA KANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Grotzooka                      18"     Heavy 2D3      6     0     1     Blast
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Kan klaw                       Melee   Melee          +3    -3    3     -
+  ABIL   • Any number of models can each have their big shoota replaced with one of the following: 1 grotzooka; 1 rokkit launcha; 1 skorcha.
+  ABIL   Ramshackle , Waaagh! Scrag ’Em : While this unit contains 3 or more models, add 1 to the Attacks characteristic of models in this unit. Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound .
+  ABIL   Killa Kans can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  lootas  (Lootas)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:5  W:1  A:2  Ld:6  Sv:6+
+  INVULN none
+  KW     ORK, <CLAN>, INFANTRY, MOB, CORE, LOOTAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Deffgun                        48"     Dakka 3/2      7     -1    2     -
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  ABIL   • Any number of Spanners can each have their big shoota replaced with one of the following: 1 kustom mega-blasta; 1 rokkit launcha.
+  ABIL   ’Ere We Go , Mob Rule , Waaagh! Mekaniak : At the end of your Movement phase , each Spanner model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 3" of it. That VEHICLE model regains 1 lost wound. Each model can only be repaired once per turn.
+  ABIL   Lootas can receive the following Kustom Jobs upgrades: • Extra-Kustom Weapon +10 Power Rating: +1 • Smoky Gubbinz +1/model Power Rating: +1 per 5 models • Zzapkrumpaz +2/model Power Rating: +1 per 5 models
+
+================================================================
+  mek_gunz  (Mek Gunz)
+================================================================
+  STATS  M:3"  WS:5+  BS:4+  S:2  T:5  W:6  A:6  Ld:4  Sv:5+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, ARTILLERY, GRETCHIN, MEK GUNZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - 1: Big bubble                48"     Heavy 3D3      6     -2    1     Blast
+  - 2: Wobbly bubble             48"     Heavy D6       8     -3    3     Blast
+  - 3: Dense bubble              48"     Heavy 1        10    -4    D3+3  -
+  Kustom mega-kannon             36"     Heavy D6       8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Smasha gun                     48"     Heavy D3       8     -4    D6    Blast
+  Traktor kannon                 48"     Heavy 1        8     -2    D3+3  Each time an attack is made with this weapon: Against a VEHICLE unit that can FLY , that attack has a Damage characteristic of D6+3. Against an AIRCRAFT unit, add 2 to that attack’s hit roll . Against a non- AIRCRAFT unit, add 1 to that attack’s hit roll.
+  ABIL   • This model’s smasha gun can be replaced with one of the following: 1 bubblechukka; 1 kustom mega-kannon; 1 traktor kannon.
+  ABIL   Ramshackle , Waaagh! Artillery and Crew : Each Mek Gun and its crew are treated as a single model for all rules purposes (crew models must remain within 1" of their Mek Gun model). This means that the crew models cannot be targeted or attacked separately and that visibility and all ranges are measured to and from the Mek Gun’s model, not the crew models. This unit cannot Advance , is never eligible to charge or Heroically Intervene , and cannot make pile-in or consolidation moves .
+  ABIL   Mek Gunz can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  big_trakk  (Big Trakk)
+================================================================
+  STATS  M:14"  WS:5+  BS:5+  S:6  T:6  W:7-12  A:4  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, BIG TRAKK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Supa-kannon                    60"     Heavy 2D6      8     -2    3     Blast
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  ABIL   • This model can be equipped with 1 kannon. If it is, it has a transport capacity of 6 models instead of 12. • If this model is not equipped with 1 kannon, it can be equipped with 1 supa-kannon. If it is, it does not have a transport capacity and loses the TRANSPORT keyword.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Spiked Ram : Each time this model finishes a charge move , select one enemy unit within Engagement Range of it and roll one D6: on a 4+, that unit suffers D3 mortal wounds . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes the space of 2 models.
+  ABIL   Big Trakk can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  kannonwagon  (Kannonwagon)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:7  W:9-16  A:6  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, KANNONWAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Supa-kannon                    60"     Heavy 2D6      8     -2    3     Blast
+  ABIL   • This model can be equipped with up to 3 big shootas.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Kannonwagon Grot Gunners : Each time this model makes an attack with a supa-kannon, add 1 to that attack’s hit roll . Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 6 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Kannonwagon can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  mega_dread  (Mega Dread)
+================================================================
+  STATS  M:8"  WS:3+  BS:5+  S:7  T:7  W:9-16  A:5  Ld:9  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, WALKERZ, MEGA DREAD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Boombits                       12"     Assault D6     5     0     1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Dread killsaw                  Melee   Melee          +1    -4    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Dread rippa klaw               Melee   Melee          x2    -3    D3+3  -
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  ABIL   • This model’s killkannon can be replaced with one of the following: 1 dread killsaw; 1 dread rippa klaw. • This model’s dread rippa klaw can be replaced with one of the following: 1 dread killsaw; 1 killkannon.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Mega Charge : Each time a charge roll is made for this unit, roll one additional D6 and discard one. Rippa Klaws : If the bearer is equipped with 2 dread rippa klaws, each time it fights, it can make 1 additional attack with 1 dread rippa klaw.
+  ABIL   Mega Dread can receive the following Kustom Jobs upgrade: Shokka Hull +15 ( Power Rating: +1 ).
+
+================================================================
+  meka_dread  (Meka Dread)
+================================================================
+  STATS  M:8"  WS:3+  BS:4+  S:7  T:7  W:9-16  A:4  Ld:9  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, WALKERZ, MEKA-DREAD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Dread killsaw                  Melee   Melee          +1    -4    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Dread rippa klaw               Melee   Melee          x2    -3    D3+3  -
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  ABIL   • This model’s killkannon can be replaced with one of the following: 1 dread killsaw; 1 dread rippa klaw. • This model’s dread rippa klaw can be replaced with one of the following: 1 dread killsaw; 1 killkannon.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Fixin’ Jobs : At the end of each of your Movement phases , this model can repair one friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES VEHICLE model within 1" (it cannot repair itself). If it does, that model regains up to D3 lost wounds. A model can only be repaired once each turn. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Rippa Klaws : If the bearer is equipped with 2 dread rippa klaws, each time it fights, it can make 1 additional attack with 1 dread rippa klaw.
+  ABIL   Meka-Dread can receive the following Kustom Jobs upgrade: Shokka Hull +15 ( Power Rating: +1 ).
+
+================================================================
+  squiggoth  (Squiggoth)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:8  T:8  W:10-18  A:4  Ld:9  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, MONSTER, TRANSPORT, SQUIGGOTH
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Gorin’ horns                   Melee   Melee          User  -3    D6    -
+  ABIL   • This model can be equipped with 1 kannon. If it is, it has a transport capacity of 6 models.
+  ABIL   ’Ere We Go , Ramshackle , Waaagh! Stampede : Each time this model finishes a charge move , select one enemy unit within Engagement Range of it and roll one D6: on a 2+, that unit suffers D3 mortal wounds . Enraged Demise : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it becomes enraged, and each unit within 6" suffers D3 mortal wounds . Howdah : In your Shooting phase , units embarked on this model can be selected to shoot. Measure the range and draw line of sight from any point on this model. When shooting with units embarked on this model, they do not count as being within Engagement Range of enemy units, and if this model made a Normal Move or Fell Back , they count as having Remained Stationary . Any other restrictions or modifiers that apply to this model also apply to models embarked upon it; for example, if this model Advanced , models embarked upon it also count as having Advanced.
+  ABIL   This model has a transport capacity of 10 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. It cannot transport MEGA ARMOUR or JUMP PACK models.
+
+================================================================
+  big_gunz  (Big Gunz)
+================================================================
+  STATS  M:3"  WS:5+  BS:4+  S:2  T:5  W:3  A:2  Ld:4  Sv:5+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, ARTILLERY, GRETCHIN, BIG GUNZ
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Lobba                          48"     Heavy D6       5     0     1     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Zzap gun                       36"     Heavy 1        *     -3    3     Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound.
+  ABIL   • Any Big Gun can be equipped with one of the following instead of 1 kannon: 1 lobba; 1 zzap gun.
+  ABIL   Dakka Weapons Grot Krew : Each Big Gun and its grot krew are treated as a single model for all rules purposes. The krew must remain within 1" of their Big Gun and cannot be targeted or attacked separately. The range and visibility of all attacks made by a Big Gun are measured from the Big Gun, not the krew. Big Gunz : The first time this unit is set up on the battlefield, all of its Big Gunz must be placed within 6" of at least one other Big Gun, and with each grot krew within 1" of their Big Gun. From that point onwards, each Big Gun operates independently and is treated as a separate unit for all rules purposes.
+  ABIL   Big Gunz can receive the following Kustom Jobs upgrades: • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  lifta_wagon  (Lifta Wagon)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:7  W:9-16  A:6  Ld:7  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, BATTLEWAGON, LIFTA WAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Lifta-droppa                   48"     Heavy D6       -     -     -     Blast . Each time an attack is made with this weapon, that attack automatically hits the target. Each time this weapon hits, roll 2D6 instead of rolling to wound : if the result is equal to or greater than the target’s highest Strength characteristic, the target suffers 1 mortal wound .
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Deff rolla                     Melee   Melee          +1    -2    2     Each time an attack is made with this weapon, treat the bearer as having a Weapon Skill characteristic of 2+.
+  Grabbin’ klaw                  Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  Wreckin’ ball                  Melee   Melee          +2    -1    2     Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon.
+  ABIL   • This model can be equipped with one each of any of the following: 1 deff rolla; 1 grabbin’ klaw; 1 wreckin’ ball. • This model can be equipped with one of the following: 1 big shoota; 2 big shootas; 1 big shoota and 1 rokkit launcher; 1 rokkit launcha; 2 rokkit launchas.
+  ABIL   ’Ere We Go , Dakka Weapons Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds .
+  ABIL   Lifta Wagon can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  dakkajet  (Dakkajet)
+================================================================
+  STATS  M:20-60"  WS:5+  BS:5+  S:6  T:6  W:7-12  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, DAKKAJET
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Supa-shoota                    36"     Dakka 6/4      6     -1    1     -
+  ABIL   • This model can be equipped with 2 additional supa-shootas.
+  ABIL   Ramshackle , Waaagh! Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll .
+  ABIL   Dakkajet can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  burna_bommer  (Burna bommer)
+================================================================
+  STATS  M:20-60"  WS:5+  BS:5+  S:6  T:6  W:7-12  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, BURNA-BOMMER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Skorcha missile racks          36"     Assault 2D6    6     -2    1     Blast . Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack.
+  Supa-shoota                    36"     Dakka 6/4      6     -1    1     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  ABIL   • This model can be equipped with 1 skorcha missile racks.
+  ABIL   Ramshackle , Waaagh! Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll . Grot Gunner : Each time this model makes an attack with a twin big shoota, add 1 to that attack’s hit roll . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Burna-bommer can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  blitza_bommer  (Blitza bommer)
+================================================================
+  STATS  M:20-60"  WS:5+  BS:5+  S:6  T:6  W:7-12  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, BLITZA-BOMMER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Supa-shoota                    36"     Dakka 6/4      6     -1    1     -
+  ABIL   Ramshackle , Waaagh! Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Grot Gunner : Each time this model makes an attack with a big shoota, add 1 to that attack’s hit roll . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Blitza-bommer can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  wazbom_blastajet  (Wazbom Blastajet)
+================================================================
+  STATS  M:20-60"  WS:5+  BS:4+  S:6  T:6  W:7-12  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, MEK, WAZBOM BLASTAJET
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Smasha gun                     48"     Heavy D3       8     -4    D6    Blast
+  Stikkbomb flinga               12"     Assault 2D6    3     0     1     Blast
+  Supa-shoota                    36"     Dakka 6/4      6     -1    1     -
+  Tellyport mega-blasta          24"     Assault D6     9     -2    D3+3  Blast
+  Wazbom mega-kannon             36"     Heavy D3       10    -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  ABIL   • This model’s 2 wazbom mega-kannons can be replaced with 2 tellyport mega-blastas. • This model can be equipped with 2 supa-shootas. • This model’s stikkbomb flinga can be replaced with 1 blastajet force field.
+  ABIL   Ramshackle , Waaagh! Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Wazbom Blastajet can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2
+
+================================================================
+  attack_fighta  (Attack Fighta)
+================================================================
+  STATS  M:20-50"  WS:5+  BS:5+  S:6  T:6  W:7-12  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, AIRCRAFT, VEHICLE, FLY, ATTACK FIGHTA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Wing missiles                  24"     Assault 1      8     -2    3     Each time an attack is made with this weapon that targets a VEHICLE unit, add 1 to that attack’s hit roll .
+  ABIL   • This model can be equipped with 1 wing missiles.
+  ABIL   Dakka Weapons Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Small Bomms : Twice per battle, in your Movement phase , after this model makes a Normal Move or Advances , you can select one enemy unit this model moved across as part of that move. If you do, roll one D6 for each model in that unit (to a maximum of 10 dice): for each 5+, that unit suffers 1 mortal wound . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Attack Fighta can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  chinork_warkopta  (Chinork Warkopta)
+================================================================
+  STATS  M:16"  WS:3+  BS:5+  S:6  T:6  W:6-10  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, TRANSPORT, CHINORK WARKOPTA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Deffgun                        48"     Dakka 3/2      7     -1    2     -
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rattler kannon                 24"     Heavy D6       6     -2    1     -
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   • This model’s big shoota can be replaced with one of the following: 1 kustom mega-blasta; 1 rokkit launcha; 1 skorcha. • This model’s 2 deffguns can be replaced with 2 rattler kannons. • This model can be equipped with up to 2 bigbomms.
+  ABIL   Dakka Weapons , ’Ere We Go , Ramshackle Turbo-boost : When this unit Advances , add 6" to its Move characteristic for that Movement phase instead of rolling a dice. Scoutin’ Ahead : During deployment, you can set up this unit behind enemy lines instead of placing it on the battlefield. At the end of any of your Movement phases , they can swoop around to ambush the foe – set them up anywhere on the battlefield that is more than 9" away from any enemy models and within 14" of a battlefield edge. Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. If this transport made a Normal Move , Advanced or Fell Back this turn, embarked units are considered to have done the same. While this transport is within Engagement Range of any enemy units, embarked units cannot shoot, except with Pistols . Bigbomm : +10 Once per battle for each bigbomm that this model is equipped with it can drop a bomm. If it does, in your Movement phase , after this model has made a Normal Move or Advanced , you can select one enemy unit this model moved across as part of that move. If you do, roll one D6 for each model in that enemy unit (up to a maximum of five D6). That enemy unit suffers 1 mortal wound for each result of 5+. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 10 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. It cannot transport MEGA ARMOUR or JUMP PACK models.
+  ABIL   Chinork Warkopta can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  fighta_bommer  (Fighta bommer)
+================================================================
+  STATS  M:20-50"  WS:5+  BS:5+  S:6  T:6  W:8-14  A:3  Ld:6  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, AIRCRAFT, FLY, FIGHTA-BOMMER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Grot-guided bomm               72"     Heavy 2D6      8     -3    2     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer. The bearer can only shoot with this weapon once per battle. Each time an attack is made with this weapon, the bearer has a Ballistic Skill characteristic of 2+ for that attack.
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Wing missiles                  24"     Assault 1      8     -2    3     Each time an attack is made with this weapon that targets a VEHICLE unit, add 1 to that attack’s hit roll .
+  ABIL   • This model can be equipped with one of the following: 2 Grot-guided bomms; 2 wing missiles. If it is, it loses the Small Bomms ability.
+  ABIL   Dakka Weapons Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack’s hit roll . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Small Bomms : Twice per battle, in your Movement phase , after this model makes a Normal Move or Advances , you can select one enemy unit this model moved across as part of that move. If you do, roll one D6 for each model in that unit (to a maximum of 10 dice): for each 5+, that unit suffers 1 mortal wound . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   Fighta-bommer can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1
+
+================================================================
+  gorkanaut  (Gorkanaut)
+================================================================
+  STATS  M:8"  WS:3+  BS:5+  S:8  T:8  W:13-24  A:5  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TITANIC, TRANSPORT, WALKERZ, GORKANAUT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Deffstorm mega-shoota          36"     Dakka 30/20    6     -1    1     -
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  - Crush                        Melee   Melee          x2    -4    6     -
+  - Smash                        Melee   Melee          User  -2    2     Each time an attack is made with this weapon profile, make 3 hit rolls instead of 1.
+  ABIL   ’Ere We Go , Waaagh! Big ’n’ Stompy : This model is eligible to declare a charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back, it can be moved across other models (excluding MONSTER and VEHICLE models) as if they were not there, and when it does so it can be moved within Engagement Range of such models, but cannot finish its move within Engagement Range of any of them. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 2D6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 6 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Gorkanaut can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Stompamatic Pistons +30 Power Rating: +2
+
+================================================================
+  morkanaut  (Morkanaut)
+================================================================
+  STATS  M:8"  WS:3+  BS:5+  S:8  T:8  W:13-24  A:4  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TITANIC, TRANSPORT, WALKERZ, MORKANAUT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kustom mega-blasta             24"     Assault D3     8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Kustom mega-zappa              36"     Heavy 3D3      8     -3    D6    Blast . If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  - Crush                        Melee   Melee          x2    -4    6     -
+  - Smash                        Melee   Melee          User  -2    2     Each time an attack is made with this weapon profile, make 3 hit rolls instead of 1.
+  ABIL   • This model can be equipped with 1 kustom force field.
+  ABIL   ’Ere We Go , Waaagh! Big ’n’ Stompy : This model is eligible to declare a charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back, it can be moved across other models (excluding MONSTER and VEHICLE models) as if they were not there, and when it does so it can be moved within Engagement Range of such models, but cannot finish its move within Engagement Range of any of them. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 2D6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 6 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Morkanaut can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Stompamatic Pistons +30 Power Rating: +2
+
+================================================================
+  stompa  (Stompa)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:10  T:8  W:31-40  A:6  Ld:8  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, TITANIC, WALKERZ, STOMPA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Deffkannon                     72"     Heavy 3D6      10    -4    D6    Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Supa-gatler                    48"     Dakka 24/16    7     -2    1     -
+  Supa-rokkits                   100"    Heavy D6       8     -3    D6    Blast
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  - Smash                        Melee   Melee          x2    -5    9     -
+  - Slash                        Melee   Melee          User  -2    3     Each time an attack is made with this weapon profile, make 3 hit rolls instead of 1.
+  ABIL   ’Ere We Go , Waaagh! Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 3D6" suffers D6 mortal wounds . Waaagh! Effigy (Aura) : While a friendly ORKS unit is within 6" of this model, each time a Morale test is taken for that unit, you can re-roll the result. Big ’n’ Stompy : This model is eligible to declare a charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back, it can be moved across other models (excluding MONSTER and VEHICLE models) as if they were not there, and when it does so it can be moved within Engagement Range of such models, but cannot finish its move within Engagement Range of any of them. Rigger Crew : At the end of your Movement phase , this model’s grot riggers can attempt to repair it. If they do so, roll one D6; one a 2+, this model regains D3 lost wounds. This model can only be repaired once per turn.
+  ABIL   This model has a transport capacity of 20 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Stompa can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2
+
+================================================================
+  battle_fortress  (Battle Fortress)
+================================================================
+  STATS  M:10"  WS:5+  BS:5+  S:9  T:8  W:14-26  A:9  Ld:8  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TITANIC, LOOTED, BATTLE FORTRESS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Deffkannon                     72"     Heavy 3D6      10    -4    D6    Blast
+  Killkannon                     24"     Heavy D6       8     -2    2     Blast
+  Lobba                          48"     Heavy D6       5     0     1     Indirect Fire . Blast . This weapon can target units that are not visible to the bearer.
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Supa-gatler                    48"     Dakka 24/16    7     -2    1     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Twin skorcha                   12"     Heavy 2D6      5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Zzap gun                       36"     Heavy 1        *     -3    3     Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound.
+  Krushin’ tracks                Melee   Melee          User  -2    2     -
+  ABIL   • This model’s deffkannon can be replaced with 1 supa-gatler. • This model’s killkannon can be replaced with 1 of the following: 1 lobba; 1 twin big shoota; 1 zzap gun. • This model can be equipped with up to two of the following (+1 Scrap point ): 1 big shoota; 1 rokkit launcha; 1 skorcha. • This model can be equipped with up to four zzap guns (+1 Scrap point each). ○ For each zzap gun selected using this option, this model must be equipped with one of the following: 1 twin big shoota; 1 twin skorcha.
+  ABIL   ’Ere We Go , Waaagh! Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 2D6" suffers D6 mortal wounds . Unstoppable : This model is eligible to declare a charge in a turn in which it Fell Back . Kustom Red Button : Once per battle, at the start of your Command phase , you can select for the driver to hit the inviting and mysterious red button mounted on his dashboard. When you do, roll one D6 and consult the table below to determine the effect. D6 Result 1 Skreenwipers: Flexible scrapers deploy to clean the accumulated dirt and gore from the vision ports. No effect. 2-3 Boosta: Until your next Command phase , add 3" to this model’s Move characteristic. 4-5 Extra Spikes: Until your next Command phase , after this model makes a charge move , roll one D6 for each enemy unit within Engagement Range : on a 4+, that unit suffers D3 mortal wounds . 6 More Dakka: Until your next Command phase , each time this model makes a ranged attack, an unmodified hit roll of 6 it scores 1 additional hit.
+  ABIL   If this model is equipped with a supa-gatler, it gains the TRANSPORT keyword, and has a transport capacity of 20 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Battle Fortress can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  gargantuan_squiggoth  (Gargantuan Squiggoth)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:12  T:8  W:19-36  A:8  Ld:9  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, MONSTER, TITANIC, TRANSPORT, GARGANTUAN SQUIGGOTH
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Frag                         36"     Heavy D6       5     0     1     Blast
+  - Shell                        36"     Heavy 1        8     -2    D6    -
+  Squiggoth supa-kannon          60"     Heavy 2D6      8     -2    3     Blast
+  Huge tusks                     Melee   Melee          User  -4    D3+3  -
+  ABIL   • This model can be equipped with 1 kannon. • If this model is not equipped with 1 kannon, it can be equipped with 1 Squiggoth supa-kannon. If it is, it has a transport capacity of 15 models.
+  ABIL   ’Ere We Go , Waaagh! Howdah : In your Shooting phase , units embarked on this model can be selected to shoot. Measure the range and draw line of sight from any point on this model. When shooting with units embarked on this model, they do not count as being within Engagement Range of enemy units, and if this model made a Normal Move or Fell Back , they count as having Remained Stationary . Any other restrictions or modifiers that apply to this model also apply to models embarked upon it; for example, if this model Advanced , models embarked upon it also count as having Advanced. Stampede : Each time this model finishes a charge move , select one enemy unit within Engagement Range of it and roll one D6: on a 2+, that unit suffers D6 mortal wounds . Gargantuan : This model is eligible to charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back , it can move across models (excluding VEHICLE or MONSTER models) as if they were not there. Enraged Demise : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it becomes enraged, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 20 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. It cannot transport MEGA ARMOUR or JUMP PACK models.
+
+================================================================
+  kill_tank  (Kill Tank)
+================================================================
+  STATS  M:12"  WS:4+  BS:5+  S:8  T:8  W:13-24  A:8  Ld:8  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, TITANIC, KILL TANK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Bursta kannon                  36"     Heavy 3D6      10    -3    3     Blast . Each time an attack is made with this weapon against a target within half range, add 1 to that attack’s hit roll .
+  Giga shoota                    48"     Heavy 30       6     -2    1     Each time an attack is made with this weapon against a target within half range, add 1 to that attack’s hit roll .
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  Reinforced ram                 Melee   Melee          +1    -1    3     -
+  ABIL   • This model’s bursta kannon can be replaced with 1 giga shoota.
+  ABIL   ’Ere We Go , Waaagh! Kill Tank Grot Riggers : At the end of each of your Movement phases , this model regains up to D3 lost wounds. This model can only be repaired once per turn. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. Ona 6 it explodes, and each unit within 6" suffers D6 mortal wounds . Ram : Each time this model finishes a charge move , select one enemy unit within Engagement Range of it and roll one D6: on a 2+, that unit suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes the space of 2 models.
+  ABIL   Kill Tank can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  kustom_stompa  (Kustom Stompa)
+================================================================
+  STATS  M:10"  WS:3+  BS:5+  S:10  T:8  W:31-40  A:6  Ld:8  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, TITANIC, WALKERZ, KUSTOM STOMPA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Belly gun                      36"     Heavy 3D6      8     -2    2     Blast
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  Deffkannon                     72"     Heavy 3D6      10    -4    D6    Blast
+  Gaze of Mork                   18"     Heavy 3        12    -4    6     -
+  Kustom supa-rokkits            100"    Heavy D6       8     -3    D6    Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Stompa lifta-droppa            48"     Heavy 4D3      *     -4    D3+3  Each time an attack made with this weapon successfully hits, roll 3D6. If the result is greater than the target’s Toughness characteristic, that attack successfully wounds.
+  Supa-gatler                    48"     Dakka 24/16    7     -2    1     -
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  - Smash                        Melee   Melee          x2    -5    9     -
+  - Slash                        Melee   Melee          User  -2    3     Each time an attack is made with this weapon profile, make 3 hit rolls instead of 1.
+  Stompa klaw                    Melee   Melee          x2    -5    9     Each time an attack made with this weapon, an unmodified wound roll of 4+ inflicts D3 mortal wounds on the target in addition to any normal damage.
+  ABIL   • This model can be equipped with 1 belly gun. If it is, it does not have a transport capacity and loses the TRANSPORT keyword. • This model’s mega-choppa and twin big shoota can be replaced with one of the following: 1 stompa klaw; 1 stompa lifta-droppa. • This model’s deffkannon, supa-gatler and supa-rokkits can be replaced with one of the following: 1 stompa klaw; 1 stompa lifta-droppa.
+  ABIL   ’Ere We Go , Waaagh! Big ’n’ Stompy : This model is eligible to declare a charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back, it can be moved across other models (excluding MONSTER and VEHICLE models) as if they were not there, and when it does so it can be moved within Engagement Range of such models, but cannot finish its move within Engagement Range of any of them. Rigger Crew : At the end of your Movement phase , this model’s grot riggers can attempt to repair it. If they do so, roll one D6; one a 2+, this model regains D3 lost wounds. This model can only be repaired once per turn. Waaagh! Effigy (Aura) : While a friendly ORKS unit is within 6" of this model, each time a Morale test is taken for that unit, you can re-roll the result. Chop and Krush : If this model is equipped with two melee weapons, add 1 to its Attacks characteristic. Explodes : When this model is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 3D6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 20 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Kustom Stompa can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2
+
+================================================================
+  kill_krusha  (Kill Krusha)
+================================================================
+  STATS  M:12"  WS:5+  BS:5+  S:8  T:8  W:13-24  A:8  Ld:8  Sv:4+
+  INVULN none
+  KW     ORK, <CLAN>, VEHICLE, TRANSPORT, TITANIC, KILL KRUSHA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Blast burna                  48"     Heavy 3D6      5     -1    1     Blast
+  - Boom shell                   60"     Heavy 2D6      8     -2    2     Blast
+  - Scrap kanister               18"     Heavy 3D6      5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  - Tankhamma shell              60"     Heavy 1        10    -3    6     Each time an attack is made with this weapon against a VEHICLE unit, you can re-roll the hit roll .
+  Rokkit launcha                 24"     Heavy D3       8     -2    3     Blast
+  Skorcha                        12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Twin big shoota                36"     Dakka 10/6     5     0     1     -
+  ABIL   • This model can be equipped with one of the following: 1 twin big shoota; 2 rokkit launchas; 1 skorcha.
+  ABIL   Dakka Weapons Grot Riggers : In your Command phase , this model regains up to 1 lost wound. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds . Ram : Each time this model finishes a charge move , select one enemy unit within Engagement Range of it and roll one D6: on a 4+, that unit suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 12 FLASH GITZ or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes the space of 2 models.
+  ABIL   Kill Krusha can receive the following Kustom Jobs upgrades: • More Dakka +30 Power Rating: +2 • Shokka Hull +30 Power Rating: +2 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  big_ed_bossbunka  (Big ed Bossbunka)
+================================================================
+  STATS  M:-  WS:-  BS:5+  S:6  T:8  W:7-12  A:-  Ld:7  Sv:3+
+  INVULN none
+  KW     ORK, <CLAN>, BUILDING, VEHICLE, TRANSPORT, BIG’ED BOSSBUNKA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Big shoota                     36"     Dakka 5/3      5     0     1     -
+  - Squint                       18"     Heavy 1        9     -4    3     Each time an attack is made with this weapon profile, select one eligible target unit, draw a straight line between the closest point of the bearer’s base (or hull) and that of the closest model in the target unit. Make one wound roll against the target unit, and each other unit this line passes over. Each time an attack is made with this weapon profile, that attack automatically hits the target.
+  - Glare                        24"     Heavy D6       5     -1    1     Blast . Each time this weapon profile is selected, select a point on the battlefield within this weapon’s maximum range and resolve attacks against every eligible enemy unit within 3" of that point, determining visibility from that point. Determine the number of attacks separately for each eligible enemy unit.
+  ABIL   • This model can be equipped with up to 3 additional big shootas. • This model can be equipped with a shoutin’ pole.
+  ABIL   Ramshackle , Waaagh! Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Open-topped : In your Shooting phase , units embarked within this transport can be selected to shoot with; measure distances and draw line of sight from any point on this transport when doing so. Embarked models are considered to have Remained Stationary , unless they embarked this turn.
+  ABIL   This model has a transport capacity of 10 FLASH GITZ or ORKS INFANTRY models. Each MEGA ARMOUR or JUMP PACK model takes up the space of 2 models.
+  ABIL   Big’ed Bossbunka can receive the following Kustom Jobs upgrades: • More Dakka +15 Power Rating: +1 • Shokka Hull +15 Power Rating: +1 • Squig-hide Tyres +15 Power Rating: +1
+
+================================================================
+  mekboy_workshop  (Mekboy Workshop)
+================================================================
+  STATS  (not parsed)
+  INVULN none
+  KW     ORK, <CLAN>, MEKBOY WORKSHOP
+  ABIL   Workshop : When this fortification is set up on the battlefield, all of the Scrap Piles and Scrap Barricades must be set up within 6" of the Mekboy Workbench. Once it has been set up, each piece of this Fortification is treated as a terrain feature . Terrain Traits : Each piece of this terrain feature is treated as an Obstacle with the following terrain traits : Defence Line , Light Cover , Heavy Cover , Defensible , Unstable Position , Difficult Ground . Fixin’ Toolz : While a MEK or BIG MEK model is within 1" of the Mekboy Workbench terrain feature , each time that model uses their Mekaniak or Big Mekaniak ability, add 1 to the number of wounds the VEHICLE unit being repaired regains. I’ll Av Wot E’s Avin! : If this model is included in your army, each Kustom Job can be selected twice for your army, instead of once. Each model can still only have one Kustom Job. I’ve Got Just da Fing : MEK and BIG MEK units in your army can attempt the following action : Kustomise (Action): Once per battle round, at the end of your Movement phase , select one Mek or Big Mek unit from your army that is within 1" of the Mekboy Workbench, then select one ORKS VEHICLE unit (excluding TITANIC units) that is within 3" of this Mekboy Workbench. That VEHICLE unit must remain within 3" of that Mekboy Workbench until the action is completed. The action is completed at the end of your turn. Once completed, select one Kustom Job that VEHICLE unit is eligible for, including the normal restrictions on how many of each Kustom Job can be included in your army (see I’ll Av Wot E’s Avin! , above). That VEHICLE unit gains the selected Kustom Job (Do not increase the model’s Power Rating or points value ). At the end of each battle round, roll one D6 for each Kustom Job gained from this ability: on a 1, that Kustom Job falls off again and cannot be used by or selected for that model for the rest of the battle.

@@ -1,0 +1,752 @@
+
+================================================================
+  overlord  (Overlord)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:5  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, NOBLE, OVERLORD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Tachyon arrow                  120"    Assault 1      12    -5    D6    The bearer can only shoot with this weapon once per battle.
+  Hyperphase glaive              Melee   Melee          +2    -3    D3    -
+  Hyperphase sword               Melee   Melee          +1    -3    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Voidscythe                     Melee   Melee          x2    -4    3     Each time an attack is made with this weapon, subtract 1 from that attack's hit roll .
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   • This model's tachyon arrow and hyperphase glaive can be replaced with one of the following: 1 hyperphase sword; 1 staff of light; 1 voidblade; 1 voidscythe; 1 warscythe. • If this model is not equipped with a tachyon arrow, it can be equipped with 1 resurrection orb.
+  ABIL   Living Metal , Command Protocols Relentless March (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Phase Shifter : This model has a 4+ invulnerable save . My Will Be Done : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase.
+
+================================================================
+  royal_warden  (Royal Warden)
+================================================================
+  STATS  M:6"  WS:3+  BS:3+  S:5  T:5  W:4  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, ROYAL WARDEN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Relic gauss blaster            30"     Rapid Fire 2   5     -2    2     -
+  ABIL   Living Metal , Command Protocols Adaptive Strategy : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit within 9" of this model. Until the end of the turn, that unit is eligible to shoot and declare a charge with in a turn in which they Fell Back . Relentless March (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit.
+
+================================================================
+  plasmancer  (Plasmancer)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:4  W:4  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, FLY, CRYPTEK, PLASMANCER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Plasmic lance (shooting)       18"     Assault D3     7     -3    2     -
+  Plasmic lance (melee)          Melee   Melee          User  -3    2     -
+  ABIL   Living Metal , Command Protocols Living Lightning : At the start of the Fight phase , roll one D6 for each enemy unit within 6" of this model: on a 4+, that unit suffers 1 mortal wound . Harbinger of Destruction : At the end of your Movement phase , if this model did not Fall Back that phase, roll three D6s: for each 4+, the closest enemy unit within 24" of and visible to this model suffers 1 mortal wound . Dynastic Advisors : If your army is Battle-forged , then for each CRYPTEK unit (excluding DYNASTIC AGENTS units) included in a Detachment that also contains at least one NOBLE unit, a second CRYPTEK unit (excluding DYNASTIC AGENTS units) can be included in that Detachment without taking up an additional Battlefield Role slot.
+  ABIL   Plasmancer can receive the following Cryptek Arkana upgrades: • Cryptogeometric Adjuster +10 Power Rating: +1 • Photonic Transubjector +15 Power Rating: +1 • Dimensional Sanctum +10 Power Rating: +1 • Cortical Subjugator Scarabs +10 Power Rating: +1 • Hypermaterial Ablator +20 Power Rating: +1 • Quantum Orb +15 Power Rating: +1 • Metalodermal Tesla Weave +15 Power Rating: +1 • Prismatic Obfuscatron +15 Power Rating: +1
+
+================================================================
+  technomancer  (Technomancer)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:4  W:4  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, CRYPTEK, TECHNOMANCER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  ABIL   • This model can be equipped with one of the following: 1 Canoptek cloak; 1 Canoptek control node.
+  ABIL   Living Metal , Command Protocols Dynastic Advisors : If your army is Battle-forged , then for each CRYPTEK unit (excluding DYNASTIC AGENTS units) included in a Detachment that also contains at least one NOBLE unit, a second CRYPTEK unit (excluding DYNASTIC AGENTS units) can be included in that Detachment without taking up an additional Battlefield Role slot. Rites of Reanimation : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit within 6" of this model. One destroyed model from that unit is Reanimated . If the selected unit is a NECRON WARRIORS unit, D3 destroyed models from that unit are Reanimated instead. Each unit can only be selected for this ability once per phase.
+  ABIL   Technomancer can receive the following Cryptek Arkana upgrades: • Cryptogeometric Adjuster +10 Power Rating: +1 • Photonic Transubjector +15 Power Rating: +1 • Dimensional Sanctum +10 Power Rating: +1 • Cortical Subjugator Scarabs +10 Power Rating: +1 • Fail-safe Overcharger +25 Power Rating: +2 • Hypermaterial Ablator +20 Power Rating: +1 • Metalodermal Tesla Weave +15 Power Rating: +1 • Phylacterine Hive +15 Power Rating: +1 • Prismatic Obfuscatron +15 Power Rating: +1
+
+================================================================
+  necron_lord  (Lord)
+================================================================
+  STATS  M:6"  WS:3+  BS:3+  S:5  T:5  W:4  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, NOBLE, LORD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  Hyperphase sword               Melee   Melee          +1    -3    1     -
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   • This model's staff of light can be replaced with one of the following: 1 hyperphase sword; 1 void blade; 1 warscythe. • This model can be equipped with 1 resurrection orb.
+  ABIL   Living Metal , Command Protocols The Lord’s Will : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, re-roll a hit roll of 1. Relentless March (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit.
+
+================================================================
+  lokhust_lord  (Lokhust Lord)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:5  T:6  W:6  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, DESTROYER CULT, <DYNASTY>, INFANTRY, CHARACTER, FLY, LOKHUST LORD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  Hyperphase sword               Melee   Melee          +1    -3    1     -
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   • This model's staff of light can be replaced with one of the following: 1 hyperphase sword; 1 voidblade; 1 warscythe. • This model can be equipped with one of the following: 1 phylactery; 1 resurrection orb.
+  ABIL   Living Metal , Command Protocols Hardwired for Destruction : Each time this model makes an attack, re-roll a hit roll of 1. United in Destruction (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1. Phase Shifter : This model has a 4+ invulnerable save .
+
+================================================================
+  skorpekh_lord  (Skorpekh Lord)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:6  T:6  W:6  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, DESTROYER CULT, <DYNASTY>, INFANTRY, CHARACTER, SKORPEKH LORD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Enmitic annihilator            18"     Assault 2D3    6     -1    1     Blast
+  Flensing claw                  Melee   Melee          User  -1    1     Each time an attack is made with this weapon, make 2 hit rolls instead of 1.
+  Hyperphase harvester           Melee   Melee          +2    -4    3     Each time an attack is made with this weapon, subtract 1 from that attack's hit roll .
+  ABIL   Living Metal , Command Protocols United in Destruction (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1. Phase Shifter : This model has a 4+ invulnerable save . Hardwired for Destruction : Each time this model makes an attack, re-roll a hit roll of 1.
+
+================================================================
+  catacomb_command_barge  (Catacomb Command Barge)
+================================================================
+  STATS  M:12"  WS:2+  BS:2+  S:5  T:6  W:9  A:4  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CHARACTER, QUANTUM SHIELDING, NOBLE, OVERLORD, FLY, CATACOMB COMMAND BARGE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss cannon                   24"     Heavy 3        6     -3    D3    -
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Tesla cannon                   30"     Heavy 3        6     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  Hyperphase sword               Melee   Melee          +1    -3    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   • This model's gauss cannon can be replaced with 1 tesla cannon. • This model's staff of light can be replaced with one of the following: 1 hyperphase sword; 1 voidblade; 1 warscythe. • This model can be equipped with 1 resurrection orb.
+  ABIL   Living Metal , Command Protocols My Will Be Done : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Relentless March (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound . Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest.
+
+================================================================
+  psychomancer  (Psychomancer)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:4  W:4  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, FLY, CRYPTEK, PSYCHOMANCER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Abyssal lance (shooting)       18"     Assault 3      4     -3    1     -
+  Abyssal lance (melee)          Melee   Melee          User  -3    1     -
+  ABIL   Living Metal , Command Protocols Dynastic Advisors : If your army is Battle-forged , then for each CRYPTEK unit (excluding DYNASTIC AGENTS units) included in a Detachment that also contains at least one NOBLE unit, a second CRYPTEK unit (excluding DYNASTIC AGENTS units) can be included in that Detachment without taking up an additional Battlefield Role slot. Harbinger of Despair : In your Morale phase , you can select one enemy unit within 12" of this model and roll 3D6: if the result is greater than the enemy unit's Leadership characteristic, select one of the results below to take effect until the start of your next Morale phase. Each unit can only be selected for this ability once per phase. The selected unit cannot perform actions (if that unit is currently performing an action, it immediately fails). The selected unit loses the Objective Secured ability. Halve Advance rolls and charge rolls made for the selected unit. The selected unit cannot fire Overwatch or Set to Defend , and is not eligible to fight in the Fight phase until after all eligible units from your army have done so. Nightmare Shroud (Aura) : While an enemy unit is within 6" of this model, subtract 1 from the Leadership characteristic of models in that unit and subtract 1 from Combat Attrition tests taken for that unit.
+  ABIL   Psychomancer can receive the following Cryptek Arkana upgrades: • Atavindicator +20 Power Rating: +1 • Cryptogeometric Adjuster +10 Power Rating: +1 • Photonic Transubjector +15 Power Rating: +1 • Dimensional Sanctum +10 Power Rating: +1 • Cortical Subjugator Scarabs +10 Power Rating: +1 • Hypermaterial Ablator +20 Power Rating: +1 • Metalodermal Tesla Weave +15 Power Rating: +1 • Prismatic Obfuscatron +15 Power Rating: +1
+
+================================================================
+  chronomancer  (Chronomancer)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:4  T:4  W:4  A:1  Ld:10  Sv:4+
+  INVULN 4+
+  KW     NECRONS, <DYNASTY>, INFANTRY, CHARACTER, FLY, CRYPTEK, CHRONOMANCER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Aeonstave (shooting)           18"     Assault D3     5     -2    1     Blast . Each time an attack is made with this weapon, invulnerable saving throws cannot be taken against that attack.
+  Entropic lance (shooting)      18"     Assault 1      8     -3    D3+3  -
+  Aeonstave (melee)              Melee   Melee          User  -2    1     Each time an attack is made with this weapon, invulnerable saving throws cannot be taken against that attack.
+  Chronotendrils                 Melee   Melee          User  0     1     Each time the bearer fights, it makes 3 additional attacks with this weapon.
+  Entropic lance (melee)         Melee   Melee          User  -3    3     -
+  ABIL   • This model's aeon stave can be replaced with 1 entropic lance.
+  ABIL   Living Metal , Command Protocols Dynastic Advisors : If your army is Battle-forged , then for each CRYPTEK unit (excluding DYNASTIC AGENTS units) included in a Detachment that also contains at least one NOBLE unit, a second CRYPTEK unit (excluding DYNASTIC AGENTS units) can be included in that Detachment without taking up an additional Battlefield Role slot. Timesplinter Mantle : This model has a 4+ invulnerable save . Chronometron : In your Command phase , you can select one friendly < D YNASTY> unit within 9" of this model. Until the start of your next Command phase, you can re-roll charge rolls made for that unit and models in that unit have a 5+ invulnerable save .
+  ABIL   Chronomancer can receive the following Cryptek Arkana upgrades: • Cryptogeometric Adjuster +10 Power Rating: +1 • Photonic Transubjector +15 Power Rating: +1 • Dimensional Sanctum +10 Power Rating: +1 • Cortical Subjugator Scarabs +10 Power Rating: +1 • Countertemporal Nanomines +25 Power Rating: +2 • Hypermaterial Ablator +20 Power Rating: +1 • Metalodermal Tesla Weave +15 Power Rating: +1 • Prismatic Obfuscatron +15 Power Rating: +1
+
+================================================================
+  illuminor_szeras  (Illuminor Szeras)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:6  T:6  W:7  A:4  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, INFANTRY, CHARACTER, DYNASTIC AGENT, CRYPTEK, TECHNOMANCER, ILLUMINOR SZERAS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Eldritch Lance (shooting)      36"     Assault D3     8     -4    D6    -
+  Eldritch Lance (melee)         Melee   Melee          User  -4    2     -
+  Impaling legs                  Melee   Melee          User  -2    1     Each time the bearer fights, it makes 2 additional attacks with this weapon.
+  ABIL   Living Metal , Command Protocols Rites of Reanimation : In your Command phase , you can select one friendly NECRONS CORE unit within 6" of this model. One destroyed model from that unit is Reanimated . If the selected unit is a NECRON WARRIORS unit, D3 destroyed models from that unit are Reanimated instead. Each unit can only be selected for this ability once per phase. Empyric Overcharger (Aura) : While an enemy PSYKER unit is within 12" of this model, each time a Psychic test is taken for that unit, it suffers Perils of the Warp on any dice roll that includes a double, instead of only a double 1 or double 6. Atomic Energy Manipulator : In the Fight phase , if this model destroys one or more enemy models, then at the end of that phase it can use its Mechanical Augmentation ability as if it were the end of your Movement phase . Mechanical Augmentation : At the end of your Movement phase , you can select one friendly NECRONS CORE unit within 6" of this model. If you do, roll one D3 and consult the table below: D3 Result 1 Until the end of the battle, add 1 to the Strength characteristic of models in that unit. 2 Until the end of the battle, add 1 to the Toughness characteristic of models in that unit. 3 Until the end of the battle, improve the Ballistic Skill characteristic of models in that unit by 1. Each unit can only be selected for this ability once per battle. Illuminor : This model can use its Rites of Reanimation ability one additional time per turn.
+  ABIL   Enduring Will : Each time an attack is allocated to this WARLORD , subtract 1 from the Damage characteristic of that attack (to a minimum of 1).
+
+================================================================
+  orikan_the_diviner  (Orikan the Diviner)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:4  W:5  A:2  Ld:10  Sv:4+
+  INVULN 5+
+  KW     NECRONS, INFANTRY, CHARACTER, CHRONOMANCER, DYNASTIC AGENT, CRYPTEK, ORIKAN DIVINER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of Tomorrow              Melee   Melee          User  -3    D3    Each time an attack is made with this weapon, invulnerable saving throws cannot be taken against that attack.
+  ABIL   Living Metal , Command Protocols Master Chronomancer : In your Command phase , you can select one friendly NECRONS unit within 9" of this model. Until the start of your next Command phase, you can reroll charge rolls made for that unit and models in that unit have a 5+ invulnerable save . Prescient Strike : At the start of the Fight phase , if this model is within Engagement Range of any enemy units, it can fight first that phase. Timesplinter Mantle : This model has a 4+ invulnerable save . The Stars Are Right : In your Command phase , if this model is on the battlefield, roll one D6: if the result is less than the current battle round number, then until the end of the battle, use the Orikan Empowered profile for this model (note that any wounds it has already lost remain lost).
+  ABIL   Immortal Pride : Each time this WARLORD would lose a wound as the result of a mortal wound , roll one D6: on a 5+, that wound is not lost. This WARLORD has the following ability: ‘ Immortal Pride (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, each time a Combat Attrition test is taken for that unit, ignore any or all modifiers’.
+
+================================================================
+  trazyn_the_infinite  (Trazyn the Infinite)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:6  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, INFANTRY, CHARACTER, OVERLORD, NOBLE, DYNASTIC AGENT, TRAZYN INFINITE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Empathic Obliterator           Melee   Melee          +2    -1    D3    Each time an attack is made with this weapon, if a CHARACTER model is destroyed by that attack, each enemy unit within 6" of the bearer suffers D3 mortal wounds .
+  ABIL   Living Metal , Command Protocols Phase Shifter : This model has a 4+ invulnerable save . My Will Be Done : In your Command phase , you can select one friendly NECRONS CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Ancient Collector : If this model is included in your army, the Dynastic Heirlooms Stratagem costs 1 fewer Command points to use the first time you use it. If this model is included in your Crusade force , the Relic Requisition costs 0 Requisition points to use. Surrogate Hosts : When this model is destroyed, instead of using any other rule that is triggered when a model is destroyed, after removing it from play you can roll one D6: on a 2+, you can select another friendly NECRONS INFANTRY CHARACTER model on the battlefield [excluding named characters). Remove that model as if it were destroyed (you cannot use any rules that are triggered when a model is destroyed) and return this model to play, placing it in the removed model's place with 3 wounds remaining. Relentless March (Aura) : While a friendly NECRONS CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit.
+  ABIL   Enduring Will : Each time an attack is allocated to this WARLORD , subtract 1 from the Damage characteristic of that attack (to a minimum of 1).
+
+================================================================
+  nemesor_zahndrekh  (Nemesor Zahndrekh)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:6  A:4  Ld:10  Sv:2+
+  INVULN 4+
+  KW     NECRONS, SAUTEKH, INFANTRY, CHARACTER, OVERLORD, NOBLE, NEMESOR ZAHNDREKH
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  ABIL   Living Metal , Command Protocols My Will Be Done : In your Command phase , you can select one friendly SAUTEKH CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Relentless March (Aura) : While a friendly SAUTEKH CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Counter Tactics : Once per battle, when your opponent declares they will use a Stratagem during a battle round but before any Command points are spent, this model can engage its counter tactics. If it does, your opponent cannot use that Stratagem this battle round. Phase Shifter : This model has a 4+ invulnerable save . Transient Madness : In your Command phase , you can select one friendly SAUTEKH CORE unit within 9" of this model and roll 3D6. If the total is less than this model's Leadership characteristic, you can select one of the results below to apply to that unit; otherwise, roll one D3 to determine which of the results below apply to that unit. D3 Result 1 Avenge the Fallen: Until the start of your next Command phase , add 1 to the Attacks characteristic of models in that unit. 2 Quell the Rebellion: Until the start of your next Command phase , improve the Ballistic Skill of models in that unit by 1. 3 Solarmills? Charge! Until the start of your next Command phase , you can re-roll charge rolls made for that unit.
+  ABIL   Eternal Madness : Each time this WARLORD makes a melee attack, you can re-roll the wound roll .
+
+================================================================
+  vargard_obyron  (Vargard Obyron)
+================================================================
+  STATS  M:6"  WS:2+  BS:3+  S:5  T:5  W:6  A:4  Ld:10  Sv:2+
+  INVULN none
+  KW     NECRONS, SAUTEKH, INFANTRY, CHARACTER, LORD, NOBLE, VARGARD OBYRON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   Living Metal , Command Protocols , Dimensional Translocation Cleaving Counterblow : When this model is destroyed by a melee attack, do not remove this model from play; after the attacking model's unit has finished making its attacks, this model fights as if it were the Fight phase . This model is then removed from play. The Lord’s Will : In your Command phase , you can select one friendly SAUTEKH CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, re-roll a hit roll of 1. The Vargard’s Duty (Aura) : While a friendly NEMESOR ZAHNDREKH unit is within 3" of this model, that unit can use the Look Out, Sir rule even if this unit contains fewer than 3 models. Relentless March (Aura) : While a friendly SAUTEKH CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Ghostwalk Mantle : At the start of your Movement phase , you can remove this model from the battlefield. If you do, then in the Reinforcements step of that phase, set this model back up on the battlefield, anywhere within 3" of a friendly NEMESOR ZAHNDREKH model. Ever-present Protector : If a Detachment includes NEMESOR ZAHNDREKH , then VARGARD OBYRON can be included in that Detachment without taking up a Battlefield Role slot.
+  ABIL   Honourable Combatant : In the Fight phase , each time this WARLORD is selected to fight, it can engage in honourable combat. If it does, select one enemy CHARACTER unit; until the end of the phase, add 2 to the Attacks characteristic of this WARLORD , but it can only make attacks that target that enemy CHARACTER unit.
+
+================================================================
+  anrakyr_the_traveller  (Anrakyr the Traveller)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:6  T:5  W:6  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, INFANTRY, CHARACTER, NOBLE, DYNASTIC AGENT, OVERLORD, ANRAKYR TRAVELLER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Tachyon arrow                  120"    Assault 1      12    -5    D6    The bearer can only shoot with this weapon once per battle.
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   Living Metal , Command Protocols My Will Be Done : In your Command phase , you can select one friendly NECRONS CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Relentless March (Aura) : While a friendly NECRONS CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Phase Shifter : This model has a 4+ invulnerable save . Lord of the Pyrrhian Legions (Aura) : While a friendly NECRONS CORE unit is within 6" of this model, add 1 to the Attacks characteristic of models in that unit. Mind in the Machine : At the start of your Shooting phase , you can select one enemy VEHICLE model that is visible to and within 12" of this model and roll 3D6 (if the model you selected is TITANIC , roll 2D6 instead). If the result is greater than or equal to the Leadership characteristic of the selected model, you can shoot one of that model’s ranged weapons as if that model was a unit from your army, using this model’s Ballistic Skill characteristic instead of the target model’s.
+  ABIL   Implacable Conqueror (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this WARLORD , you can re-roll charge rolls made for that unit.
+
+================================================================
+  imotekh_the_stormlord  (Imotekh the Stormlord)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:6  A:4  Ld:10  Sv:2+
+  INVULN 4+
+  KW     NECRONS, SAUTEKH, INFANTRY, CHARACTER, PHAERON, OVERLORD, NOBLE, IMOTEKH STORMLORD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauntlet of fire               12"     Assault D6     5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Staff of the Destroyer (shooting) 18"     Assault 3      6     -3    2     -
+  Staff of the Destroyer (melee) Melee   Melee          +1    -3    2     -
+  ABIL   Living Metal , Command Protocols My Will Be Done : In your Command phase , you can select one friendly SAUTEKH CORE unit within 9" of this unit. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Relentless March (Aura) : While a friendly SAUTEKH CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Phase Shifter : This model has a 4+ invulnerable save . Lord of the Storm : Once per battle, in your Shooting phase , this model can call the storm. If it does, select one enemy model within 48" of and visible to it (you can only select a CHARACTER model with a Wounds characteristic of 9 or less if it is the closest enemy model to Imotekh). Roll one D6 for each other enemy unit within 6" of that model: on a 4+, that unit suffers D3 mortal wounds . Then roll one D6: on a 4+, that model suffers 3 mortal wounds. Grand Strategist : If your army is Battle-forged , you receive 2 additional Command Points if you select this model as your WARLORD . Phaeron : This model can use its My Will Be Done ability one additional time per turn.
+  ABIL   Hyperlogical Strategist : While this WARLORD is on the battlefield, each time you spend a Command point to use a Stratagem you can roll one D6: on a 5+, that Command point is refunded.
+
+================================================================
+  the_silent_king  (The Silent King)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:5  T:7  W:9-16  A:6  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, SZAREKHAN, VEHICLE, CHARACTER, FLY, SUPREME COMMANDER, PHAERON, NOBLE, DYNASTIC AGENT, THE SILENT KING, TRIARCHAL MENHIRS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Annihilator beam               36"     Heavy 1        12    -4    6     -
+  Sceptre of Eternal Glory (shooting) 24"     Assault 3      8     -3    2     -
+  Staff of Stars (shooting)      24"     Assault 9      6     -2    1     -
+  Sceptre of Eternal Glory (melee) Melee   Melee          +4    -3    2     -
+  Scythe of Dust                 Melee   Melee          +3    -4    3     Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon.
+  Staff of Stars (melee)         Melee   Melee          User  -2    1     Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon.
+  ABIL   Living Metal , Command Protocols Noctilith Beacons : In your opponent's Psychic phase , Szarekh can attempt to deny one psychic power as if he were a PSYKER . Obeisance Generators : At the start of the Fight phase , if there any enemy units within Engagement Range of Szarekh, then until the end of the phase, those units cannot fight until after all other eligible units from your army have done so. Phaeron of the Stars (Aura) : While a friendly NECRONS CORE unit or TRIARCH PRAETORIANS unit is within 6" of Szarekh, each time a ranged attack is made by a model in that unit, you can re-roll the hit roll . Phaeron of the Blades (Aura) : While a friendly NECRONS CORE unit or TRIARCH PRAETORIANS unit is within 6" of Szarekh, each time a melee attack is made by a model in that unit, you can re-roll the wound roll . Relentless March (Aura) : While a friendly NECRONS CORE or TRIARCH PRAETORIANS unit is within 6" of Szarekh, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. My Will Be Done : In your Command phase , you can select one friendly NECRONS CORE or TRIARCH PRAETORIANS unit within 9" of Szarekh. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Phaeron : This model can use its My Will Be Done ability one additional time per turn. Voice of the Triarch : Once per battle, at the start of any battle round, if Szarekh is on the battlefield he can alter your command protocols . If he does, one command protocol that you did not assign to any battle rounds before the battle becomes active for your army for that battle round, instead of the one that you assigned to it. Triarchal Menhir : While this unit contains any Triarchal Menhirs models, it does not count as a CHARACTER for the purposes of the Look Out, Sir rule and each time an attack successfully wounds this unit, that attack must be allocated to one of those models. The destruction of Triarchal Menhirs is ignored for the purposes of Morale tests . If Szarekh is ever destroyed, any remaining Triarchal Menhirs in this unit are also destroyed. The Silent King : If your army is Battle-forged , Szarekh must be your army's WARLORD . You receive 3 additional Command points if Szarekh is your WARLORD . Transtemporal Force Field : Models in this unit have a 4+ invulnerable save . Preservative Auto-torpor : If Szarekh has 8 or fewer wounds remaining, it cannot make attacks with its Staff of Stars and loses the Phaeron of the Stars ability. If Szarekh has 4 or fewer wounds remaining, it cannot make attacks with its Scythe of Dust and loses the Phaeron of the Blades ability. Vengeance of the Enchained : When Szarekh is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 2D6" suffers D6 mortal wounds .
+  ABIL   The Triarch’s Will : If your WARLORD has this Warlord Trait, then when assigning command protocols for the battle, you can select four command protocols instead of five, and then one of those command protocols can be assigned to two battle rounds instead of one.
+
+================================================================
+  kutlakh  (Kutlakh the World Killer)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:6  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, MAYNARKH, INFANTRY, CHARACTER, NOBLE, OVERLORD, KUTLAKH WORLD KILLER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Staff of light (shooting)      18"     Assault 3      5     -2    1     -
+  Obsidax                        Melee   Melee          +1    -3    3     -
+  Staff of light (melee)         Melee   Melee          User  -2    1     -
+  ABIL   Living Metal , Command Protocols My Will Be Done : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH CORE unit within 9" of this model. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll . Each unit can only be selected for this ability once per phase. Phase Shifter : This model has a 4+ invulnerable save . Relentless March (Aura) : While a friendly < D YNASTY> MAYNARKH CORE unit is within 6" of this model, each time that unit is selected to make a Normal Move or Advance , until the end of the phase, add 1" to the Move characteristic of models in that unit. Spirit of Madness : Each time this model makes a melee attack against a unit, if this model’s Leadership characteristic is higher than the Leadership characteristic of that unit, you can re-roll the hit roll .
+  ABIL   Inspiring Leader (Aura) : Add 1 to the Leadership characteristic of friendly units while they are within 6" of this WARLORD .
+
+================================================================
+  toholk  (Toholk the Blinded)
+================================================================
+  STATS  M:5"  WS:3+  BS:5+  S:4  T:4  W:4  A:1  Ld:10  Sv:4+
+  INVULN 5+
+  KW     NECRONS, MAYNARKH, INFANTRY, CHARACTER, CRYPTEK, TECHNOMANCER, TOHOLK BLINDED
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Transdimensional beamer        12"     Assault 1      4     -3    3     -
+  Aeonstave (shooting)           18"     Assault D3     5     -2    1     Blast . Each time an attack is made with this weapon, invulnerable saving throws cannot be taken against that attack.
+  Aeonstave (melee)              Melee   Melee          User  -2    1     Each time an attack is made with this weapon, invulnerable saving throws cannot be taken against that attack.
+  ABIL   Living Metal , Command Protocols Dynastic Advisors : If your army is Battle-forged , then for each CRYPTEK unit (excluding DYNASTIC AGENTS units) included in a Detachment that also contains at least one NOBLE unit, a second CRYPTEK unit (excluding DYNASTIC AGENTS units) can be included in that Detachment without taking up an additional Battlefield Role slot. Chronometron : In your Command phase , you can select one friendly < D YNASTY> unit within 9" of this model. Until the start of your next Command phase, you can re-roll charge rolls made for that unit and models in that unit have a 5+ invulnerable save . Eternal Engines : In your Command phase , you can select one friendly MAYNARKH VEHICLE unit within 6" of this model. When that unit uses its Living Metal ability this phase, it regains up to D3 lost wounds instead of 1. Predictive Strategist : If your army is Battle-forged and this model is on the battlefield, once per battle, when you use a Stratagem, this model can use its Predictive Strategy. If it does, reduce the CP cost of that Stratagem by 1CP (to a minimum of 0CP). Note that the CP cost is only reduced by 1CP for that use of the Stratagem, any future usages of it cost the normal amount of CPs . Timesplinter Mantle : This model has a 4+ invulnerable save .
+  ABIL   Inspiring Leader (Aura) : Add 1 to the Leadership characteristic of friendly units while they are within 6" of this WARLORD .
+
+================================================================
+  warriors  (Necron Warriors)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:4  W:1  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, NECRON WARRIORS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss flayer                   24"     Rapid Fire 1   4     -1    1     -
+  Gauss reaper                   12"     Assault 2      5     -2    1     -
+  ABIL   • Any number of models can each have their gauss flayer replaced with 1 gauss reaper.
+  ABIL   Reanimation Protocols , Command Protocols Their Number is Legion : Re-roll Reanimation Protocol rolls of 1 made for this unit.
+
+================================================================
+  immortals  (Immortals)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:4  T:5  W:1  A:2  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, IMMORTALS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss blaster                  30"     Rapid Fire 1   5     -2    1     -
+  Tesla carbine                  24"     Assault 2      5     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   • All of the models in the unit can have their gauss blaster replaced with 1 tesla carbine each.
+  ABIL   Reanimation Protocols , Command Protocols
+
+================================================================
+  skorpekh_destroyers  (Skorpekh Destroyers)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:5  T:5  W:3  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, DESTROYER CULT, <DYNASTY>, INFANTRY, CORE, SKORPEKH DESTROYERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hyperphase reap-blade          Melee   Melee          +2    -4    3     -
+  Hyperphase threshers           Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Hardwired for Destruction : Each time a model in this unit makes an attack, re-roll a hit roll of 1.
+
+================================================================
+  lychguard  (Lychguard)
+================================================================
+  STATS  M:5"  WS:3+  BS:3+  S:5  T:5  W:2  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, LYCHGUARD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hyperphase sword               Melee   Melee          +1    -3    1     -
+  Warscythe                      Melee   Melee          +2    -4    2     -
+  ABIL   • All of the models in the unit can have their warscythe replaced with 1 hyperphase sword and 1 dispersion shield each.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Guardian Protocols (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN INFANTRY NOBLE or DYNASTIC AGENT INFANTRY NOBLE unit is within 3" of this unit, that unit can use the Look Out, Sir rule even if this unit contains fewer than 3 models.
+
+================================================================
+  canoptek_spyder  (Canoptek Spyders)
+================================================================
+  STATS  M:6"  WS:4+  BS:4+  S:6  T:6  W:6  A:5  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, MONSTER, CORE, FLY, CANOPTEK, CANOPTEK SPYDERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Particle beamer                18"     Assault 6      5     0     1     -
+  Automaton claws                Melee   Melee          +2    -3    2     -
+  ABIL   • Any number of models can each be equipped with 2 particle beamers. • Any number of models can each be equipped with 1 fabricator claw array. • Any number of models can each be equipped with 1 gloom prism.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Explodes : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound . Scarab Hive : In your Command phase , one destroyed model from each friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CANOPTEK SCARAB SWARM unit within 6" of this unit is Reanimated . Each unit can only be affected by this ability once per phase.
+
+================================================================
+  triarch_praetorians  (Triarch Praetorians)
+================================================================
+  STATS  M:10"  WS:3+  BS:3+  S:5  T:5  W:2  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, INFANTRY, CORE, FLY, DYNASTIC AGENT, TRIARCH, TRIARCH PRAETORIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Particle caster                12"     Pistol 2       6     0     1     -
+  Rod of covenant (shooting)     12"     Assault 1      5     -3    2     -
+  Rod of covenant (melee)        Melee   Melee          User  -3    2     -
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • All of the models in the unit can have their rod of covenant replaced with 1 particle caster and 1 voidblade each.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols
+
+================================================================
+  flayed_ones  (Flayed Ones)
+================================================================
+  STATS  M:5"  WS:3+  BS:6+  S:4  T:4  W:1  A:3  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, FLAYED ONES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Flayer claws                   Melee   Melee          User  -1    1     -
+  ABIL   Reanimation Protocols , Command Protocols , Dimensional Translocation Flesh Hunger : Each time a model in this unit makes a melee attack against an enemy non- VEHICLE unit, an unmodified hit roll of 6 scores 1 additional hit. Terrifying Foes (Aura) : While an enemy unit is within 3" of this unit, subtract 2 from the Leadership characteristic of models in that unit.
+
+================================================================
+  canoptek_reanimator  (Canoptek Reanimator)
+================================================================
+  STATS  M:8"  WS:4+  BS:4+  S:5  T:5  W:6  A:4  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, CANOPTEK, <DYNASTY>, MONSTER, CORE, CANOPTEK REANIMATOR
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Atomiser beam                  12"     Assault 3      6     -2    1     -
+  Reanimator’s claws             Melee   Melee          User  -2    1     -
+  ABIL   Living Metal , Command Protocols Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound . Nanoscarab Reanimation Beam (Aura) : In your Command phase , you can select one friendly < D YNASTY> unit within 6" of and visible to this model. Until the start of your next Command phase, while that unit is within 6" of and visible to this model, that unit is being healed by this model's reanimation beam. While a unit is being healed by a reanimation beam, add 1 to Reanimation Protocol rolls made for that unit. Each unit can only ever be healed by one reanimation beam at a time.
+
+================================================================
+  cryptothralls  (Cryptothralls)
+================================================================
+  STATS  M:5"  WS:4+  BS:4+  S:5  T:5  W:2  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, CANOPTEK, <DYNASTY>, INFANTRY, CRYPTOTHRALLS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Scouring eye                   12"     Pistol 2       5     -2    1     -
+  Scythed limbs                  Melee   Melee          User  -1    1     -
+  ABIL   Living Metal , Reanimation Protocols , Command Protocols Bound Creation : If your army is Battle-forged , then for each CRYPTEK unit included in a Detachment, one CRYPTOTHRALLS unit can be included in that Detachment without taking up a Battlefield Role slot. Protectors (Aura) : While a friendly CRYPTEK unit is within 3" of this unit, that CRYPTEK unit can use the Look Out, Sir rule even if this unit contains fewer than 3 models. Systematic Vigour : While this unit is within 6" of any friendly CRYPTEK units, models in this unit have a Weapon Skill and Ballistic Skill characteristic of 3+ and an Attacks characteristic of 6.
+
+================================================================
+  hexmark_destroyer  (Hexmark Destroyer)
+================================================================
+  STATS  M:8"  WS:3+  BS:2+  S:5  T:5  W:5  A:4  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, DESTROYER CULT, <DYNASTY>, INFANTRY, CHARACTER, HYPERSPACE HUNTER, HEXMARK DESTROYER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Enmitic disintegrator pistol   18"     Pistol 1       6     -1    1     -
+  ABIL   Living Metal , Command Protocols , Dimensional Translocation Inescapable Death : Each time this model makes a ranged attack, you can ignore any or all hit roll and Ballistic Skill modifiers, and the target does not receive the benefits of cover against that attack. In addition, each time this model fires Overwatch , it scores hits on unmodified hit rolls of 2+, instead of 6. Multi-threat Eliminator : Each time an enemy model is destroyed by a ranged attack made by this model's enmitic disintegrator pistols, after this model makes the rest of its attacks, it can shoot with one of its enmitic disintegrator pistols one additional time. These attacks cannot generate additional attacks. Hardwired for Destruction : Each time this model makes an attack, re-roll a hit roll of 1.
+
+================================================================
+  canoptek_plasmacyte  (Canoptek Plasmacyte)
+================================================================
+  STATS  M:8"  WS:4+  BS:4+  S:4  T:5  W:1  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, CANOPTEK, <DYNASTY>, BEAST, FLY, CANOPTEK PLASMACYTE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Monomolecular proboscis        Melee   Melee          User  -1    1     -
+  ABIL   Dimensional Translocation , Command Protocols Viral Construct : If your army is Battle-forged , then for each < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT unit included in a Detachment, one < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CANOPTEK PLASMACYTE unit can be included in that Detachment without taking up a Battlefield Role slot. You cannot include more < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CANOPTEK PLASMACYTE units in a Detachment than there are < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT units in that Detachment. Evasion Protocol : While this model is within 3" of a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT unit, enemy models cannot target this model with ranged weapons unless it is the closest eligible target. In addition, this unit cannot perform actions . Recall Protocol : In the Unit Coherency Checks step of the Morale phase, if this model is not within 6" of any friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT units, this model is destroyed. Infused Madness : Once per turn, at the start of either your Charge phase or the Fight phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN DESTROYER CULT unit within 3" of this model. If you do, roll one D6: on a 1, one model in that unit is destroyed. Regardless of the result, until the end of the turn, add 1 to the Strength and Attacks characteristics of models in that unit. Each unit can only be selected for this ability once per turn.
+
+================================================================
+  transcendent_c_tan  (Transcendent C tan)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:6  T:7  W:9  A:5  Ld:10  Sv:4+
+  INVULN 4+
+  KW     NECRONS, MONSTER, CHARACTER, FLY, C’TAN SHARD, TRANSCENDENT C’TAN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Crackling tendrils             Melee   Melee          User  -4    D6    -
+  ABIL   Living Metal Necrodermis : This model has a 4+ invulnerable save . In addition, this model cannot lose more than 3 wounds in the same phase. Any wounds that would be lost after that point are not lost. Enslaved Star God : This model can never have a Relic or a Warlord Trait. In addition, enemy models can ignore the Look Out, Sir rule when selecting this model as the target of a ranged attack. Reality Unravels : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 6" suffers D3 mortal wounds . Fractured Personality : Before the battle, select one of the abilities in the table below for this model to have for the duration of the battle. Alternatively, you can randomly determine two abilities from the table for this model to have by rolling two D6 and looking up the result (if a double is rolled, roll both dice again until two different results are rolled). D6 Ability 1 Cosmic Tyrant: At the end of your Movement phase , if this model has not Advanced or Fallen Back that phase, it can use one additional C’tan Power that it knows. It cannot use the same C’tan Power more than once per turn. 2 Immune to Natural Law: Each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. 3 Sentient Necrodermis: This model has a Save characteristic of 3+. 4 Transdimensional Displacement: This model gains the Dimensional Translocation ability. 5 Untamed Power: This model has an Attacks characteristic of 6 and a Strength characteristic of 7. 6 Writhing Worldscape: At the start of your Movement phase , roll one D6 for each enemy unit within Engagement range of this model: on a 4+, that unit suffers 1 mortal wound . In addition, each time a unit declares a charge against this model, until the end of the phase, subtract 2 from charge rolls made for that unit.
+  ABIL   This model knows two C’tan Powers from the Powers of the C’tan . At the end of your Movement phase , if this model did not Advance or Fall Back that phase, it can use one of the C’tan Powers it knows.
+
+================================================================
+  triarch_stalker  (Triarch Stalker)
+================================================================
+  STATS  M:10"  WS:3+  BS:3+  S:7  T:6  W:7-12  A:3  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, VEHICLE, CORE, DYNASTIC AGENT, QUANTUM SHIELDING, TRIARCH, TRIARCH STALKER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Dispersed                    12"     Heavy 2D6      5     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  - Focused                      24"     Heavy 2        8     -4    D6    Each time an attack made with this weapon targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  Particle shredder              24"     Heavy 8        6     -1    2     -
+  Twin heavy gauss cannon        30"     Heavy 6        7     -3    D3    -
+  Stalker’s forelimbs            Melee   Melee          User  -2    3     -
+  ABIL   • This model's heat ray can be replaced with one of the following: 1 particle shredder; 1 twin heavy gauss cannon.
+  ABIL   Living Metal , Command Protocols Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. Targeting Relay : Each time this model makes a ranged attack against an enemy unit, if a hit is scored, until the end of the phase, each time another friendly NECRONS model makes a ranged attack against that enemy unit, re-roll a hit roll of 1. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+
+================================================================
+  canoptek_tombstalker  (Canoptek Tombstalker)
+================================================================
+  STATS  M:10"  WS:4+  BS:4+  S:6  T:7  W:9  A:6  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, MONSTER, CANOPTEK, CANOPTEK TOMBSTALKER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss slicers                  24"     Rapid Fire 2   5     -1    1     -
+  Tomb stalker claws             Melee   Melee          +1    -2    2     -
+  ABIL   Living Metal , Command Protocols , Dimensional Translocation
+
+================================================================
+  canoptek_scarabs  (Canoptek Scarab Swarms)
+================================================================
+  STATS  M:10"  WS:4+  BS:-  S:3  T:3  W:4  A:4  Ld:10  Sv:6+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, SWARM, FLY, CANOPTEK, CANOPTEK SCARAB SWARMS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Feeder mandibles               Melee   Melee          User  0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 automatically wounds the target.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols
+
+================================================================
+  canoptek_wraiths  (Canoptek Wraiths)
+================================================================
+  STATS  M:12"  WS:4+  BS:4+  S:4  T:5  W:3  A:4  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, <DYNASTY>, BEAST, CORE, CANOPTEK, CANOPTEK WRAITHS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Particle caster                12"     Pistol 2       6     0     1     -
+  Transdimensional beamer        12"     Assault 1      4     -3    3     -
+  Vicious claws                  Melee   Melee          +2    -2    2     -
+  Whip coils                     Melee   Melee          User  -1    1     Each time an attack is made with this weapon, make 2 hit rolls instead of 1.
+  ABIL   • Any number of models can each be equipped with one of the following: 1 particle caster; 1 transdimensional beamer. • Any number of models can each have their vicious claws replaced with whip coils.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Slinking Strike : This unit is eligible to shoot and declare a charge with in a turn in which it Fell Back . Wraith Form : Models in this unit have a 4+ invulnerable save . In addition, each time this unit makes a Normal Move , Advances , Falls Back or it makes a charge move , until that move is finished, models in this unit can move horizontally through models and terrain features (they cannot finish a move on top of another model, or its base).
+
+================================================================
+  tomb_blades  (Tomb Blades)
+================================================================
+  STATS  M:14"  WS:3+  BS:3+  S:4  T:5  W:2  A:1  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, BIKER, FLY, CORE, TOMB BLADES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Particle beamer                18"     Assault 6      5     0     1     -
+  Twin gauss blaster             30"     Rapid Fire 2   5     -2    1     -
+  Twin tesla carbine             24"     Assault 4      5     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   • Any number of models can each have their twin gauss blasters replaced with one of the following: 1 particle beamer; 1 twin tesla carbine. • Any number of models can each be equipped with shieldvanes. • Any number of models can each be equipped with one of the following: 1 nebuloscope; 1 shadowloom.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Evasion Engrams : Each time a ranged attack is made against this unit, subtract 1 from that attack's hit roll .
+
+================================================================
+  ophydian_destroyers  (Ophydian Destroyers)
+================================================================
+  STATS  M:10"  WS:3+  BS:3+  S:4  T:4  W:3  A:3  Ld:10  Sv:4+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, DESTROYER CULT, OPHYDIAN DESTROYERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hyperphase reap-blade          Melee   Melee          +2    -4    3     -
+  Hyperphase threshers           Melee   Melee          User  -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Ophydian claws                 Melee   Melee          User  -1    1     Each time the bearer fights, it makes 2 additional attacks with this weapon.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Hardwired for Destruction : Each time a model in this unit makes an attack, re-roll a hit roll of 1. Hyperphase Reap-blades : Each time a model in this unit makes an attack with a hyperphase reap-blade, an unmodified hit roll of 6 scores 1 additional hit. Whipcoil Bodies : Each time a melee attack is made against this unit, subtract 1 from that attack's hit roll . Tunnelling Horrors : During deployment, you can set up this unit underground instead of setting it up on the battlefield. If you do, then during the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+
+================================================================
+  canoptek_acanthrites  (Canoptek Acanthrites)
+================================================================
+  STATS  M:12"  WS:4+  BS:4+  S:5  T:5  W:3  A:2  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, BEAST, CORE, FLY, CANOPTEK, CANOPTEK ACANTHRITES
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Cutting beam                   12"     Assault 1      8     -4    D6    Each time an attack made with this weapon targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  Voidblade                      Melee   Melee          User  -3    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Shadowed Wings : Each time a ranged attack is made against this unit, subtract 1 from that attack’s hit roll .
+
+================================================================
+  canoptek_tomb_sentinel  (Canoptek Tomb Sentinel)
+================================================================
+  STATS  M:10"  WS:4+  BS:4+  S:6  T:7  W:9  A:4  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, MONSTER, CANOPTEK, CANOPTEK TOMB SENTINEL
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Exile cannon                   18"     Heavy D6       10    -4    3     Blast
+  Tomb sentinel claws            Melee   Melee          +1    -2    2     -
+  ABIL   Living Metal , Command Protocols , Dimensional Translocation
+
+================================================================
+  annihilation_barge  (Annihilation Barge)
+================================================================
+  STATS  M:12"  WS:6+  BS:3+  S:5  T:6  W:8  A:3  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, QUANTUM SHIELDING, FLY, ANNIHILATION BARGE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss cannon                   24"     Heavy 3        6     -3    D3    -
+  Tesla cannon                   30"     Heavy 3        6     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  Twin tesla destructor          36"     Heavy 10       7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   • This model's gauss cannon can be replaced with 1 tesla cannon.
+  ABIL   Living Metal , Command Protocols Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound . Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest.
+
+================================================================
+  lokhust_heavy_destroyers  (Lokhust Heavy Destroyers)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:4  T:5  W:4  A:2  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, FLY, DESTROYER CULT, LOKHUST HEAVY DESTROYERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Enmitic exterminator           36"     Heavy 3D3      7     -1    1     Blast
+  Gauss destructor               36"     Heavy 1        10    -4    3D3   -
+  ABIL   • Any number of models can each have their gauss destructor replaced with 1 enmitic exterminator.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Hardwired for Destruction : Each time a model in this unit makes an attack, re-roll a hit roll of 1. Repulsor Platform : Models in this unit do not suffer the penalty to hit rolls incurred for firing Heavy weapons in the same turn that their unit has moved.
+
+================================================================
+  lokhust_destroyers  (Lokhust Destroyers)
+================================================================
+  STATS  M:8"  WS:3+  BS:3+  S:4  T:5  W:3  A:2  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, INFANTRY, CORE, FLY, DESTROYER CULT, LOKHUST DESTROYERS, LOKHUST HEAVY DESTROYERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Enmitic exterminator           36"     Heavy 3D3      7     -1    1     Blast
+  Gauss cannon                   24"     Heavy 3        6     -3    D3    -
+  Gauss destructor               36"     Heavy 1        10    -4    3D3   -
+  ABIL   • The Lokhust Heavy Destroyer's gauss destructor can be replaced with 1 enmitic exterminator.
+  ABIL   Living Metal , Command Protocols , Reanimation Protocols Hardwired for Destruction : Each time a model in this unit makes an attack, re-roll a hit roll of 1. Repulsor Platform : Models in this unit do not suffer the penalty to hit rolls incurred for firing Heavy weapons in the same turn that their unit has moved.
+
+================================================================
+  canoptek_doomstalker  (Canoptek Doomstalker)
+================================================================
+  STATS  M:10"  WS:4+  BS:4+  S:6  T:6  W:7-12  A:3  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, <DYNASTY>, MONSTER, CANOPTEK, CANOPTEK DOOMSTALKER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Low power                    24"     Heavy D6       8     -2    D3    Blast
+  - High power                   48"     Heavy D6       10    -5    D6    Blast . The bearer can only make attacks with this profile if it Remained Stationary during its previous Movement phase .
+  Twin gauss flayer              24"     Rapid Fire 2   4     -1    1     -
+  ABIL   Living Metal , Command Protocols Containment Field : This model has a 4+ invulnerable save . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 5+ it explodes, and each unit within 6" suffers D3 mortal wounds . Sentinel Construct : Each time an enemy unit declares a charge against a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN or DYNASTIC AGENT unit within 6" of this model, unless this model is within Engagement Range of any enemy models, this model can fire Overwatch at the charging unit as if it were also a target of that charge (this is in addition to any other units that are firing Overwatch). Each time this model fires Overwatch, it makes attacks with its doomsday blaster using the high power profile.
+
+================================================================
+  doomsday_ark  (Doomsday Ark)
+================================================================
+  STATS  M:12"  WS:6+  BS:3+  S:6  T:6  W:8-14  A:3  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, QUANTUM SHIELDING, FLY, DOOMSDAY ARK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Low power                    36"     Heavy D6       8     -2    D3    Blast
+  - High power                   72"     Heavy D6       10    -5    D6    Blast . The bearer can only make attacks with this profile if it Remained Stationary during its previous Movement phase .
+  Gauss flayer array             24"     Rapid Fire 5   4     -1    1     -
+  ABIL   Living Metal , Command Protocols Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest. Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have.
+
+================================================================
+  tesseract_ark  (Tesseract Ark)
+================================================================
+  STATS  M:12"  WS:6+  BS:3+  S:5  T:7  W:6-10  A:3  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, FLY, QUANTUM SHIELDING, TESSERACT ARK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss cannon                   24"     Heavy 3        6     -3    D3    -
+  Particle beamer                18"     Assault 6      5     0     1     -
+  Tesla cannon                   30"     Heavy 3        6     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  - Particle hurricane           12"     Assault D6     4     -3    1     Each time an attack is made with this weapon, that attack automatically hits the target, and a wound roll of 2+ is always successful, unless the target is a VEHICLE , then a wound roll of 6 is always successful.
+  - Seismic lash                 24"     Assault D6     5     -3    3     -
+  - Solar fire                   36"     Heavy D6       8     -3    D6    -
+  ABIL   • This model’s 2 tesla cannons can be replaced with one of the following: 2 gauss cannons; 2 particle beamers.
+  ABIL   Living Metal , Command Protocols Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 6" suffers D3 mortal wounds . Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest. Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. Containment Field : This model has a 4+ invulnerable save .
+
+================================================================
+  ghost_ark  (Ghost Ark)
+================================================================
+  STATS  M:12"  WS:6+  BS:3+  S:6  T:6  W:8-14  A:3  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, QUANTUM SHIELDING, TRANSPORT, FLY, GHOST ARK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss flayer array             24"     Rapid Fire 5   4     -1    1     -
+  ABIL   Living Metal , Command Protocols Quantum Shielding : This model has a 5+ invulnerable save . In addition, each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have. Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest. Repair Barge : In your Command phase , you can select one friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN NECRON WARRIORS unit within 6" of this model. If you do, up to D3 destroyed models from that unit Reanimate . Each unit can only be selected for this ability once per phase. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 10 < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN NECRON WARRIORS or < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN INFANTRY CHARACTER models.
+
+================================================================
+  night_scythe  (Night Scythe)
+================================================================
+  STATS  M:20-50"  WS:6+  BS:3+  S:6  T:6  W:7-12  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, AIRCRAFT, FLY, TRANSPORT, NIGHT SCYTHE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Twin tesla destructor          36"     Heavy 10       7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal , Command Protocols Supersonic : Each time this model makes a Normal move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this unit, subtract 1 from that attack's hit roll .
+  ABIL   This model has a transport capacity of 20 < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE INFANTRY , < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN INFANTRY CHARACTER or DYNASTIC AGENT INFANTRY models.
+
+================================================================
+  doom_scythe  (Doom Scythe)
+================================================================
+  STATS  M:20-50"  WS:6+  BS:3+  S:6  T:6  W:7-12  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, AIRCRAFT, FLY, DOOM SCYTHE
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Heavy death ray                36"     Heavy 3        12    -4    D3+3  -
+  Twin tesla destructor          36"     Heavy 10       7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal , Command Protocols Supersonic : Each time this model makes a Normal move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Hard to Hit : Each time a ranged attack is made against this unit, subtract 1 from that attack's hit roll . Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY .
+
+================================================================
+  night_shroud  (Night Shroud)
+================================================================
+  STATS  M:20-50"  WS:6+  BS:3+  S:6  T:7  W:8-14  A:3  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, AIRCRAFT, FLY, NIGHT SHROUD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Twin tesla destructor          36"     Heavy 10       7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal , Command Protocols Supersonic : Each time this model makes a Normal move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Hard to Hit : Each time a ranged attack is made against this unit, subtract 1 from that attack's hit roll . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Death Sphere Bombardment : Once per battle, in your Movement phase , after this model makes a Normal Move or Advances , you can select one enemy unit this model moved across as part of that move. If you do, roll 3D6 for each VEHICLE or MONSTER model in that unit, and roll one D6 for each other model in that unit (to a maximum of twelve D6): for each roll of a 3+, that unit suffers 1 mortal wound .
+
+================================================================
+  monolith  (Monolith)
+================================================================
+  STATS  M:8"  WS:6+  BS:3+  S:8  T:8  W:13-24  A:6  Ld:10  Sv:2+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, TITANIC, MONOLITH
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Death ray                      24"     Heavy 1        9     -3    D3+3  -
+  Gauss flux arc                 30"     Rapid Fire 3   5     -2    1     -
+  Particle whip                  36"     Heavy D6       12    -3    3     Blast
+  Portal of exile                Melee   Melee          User  -3    3     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   • This model's 4 gauss flux arcs can be replaced with 4 death rays.
+  ABIL   Living Metal , Command Protocols Death Descending : During deployment, you can set up this model in the upper atmosphere instead of placing it on the battlefield. If you do, then during the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds . Eternity Gate : In your Movement phase , if this model Remains Stationary, then in the Reinforcement step of that phase it can summon a unit. If it does, select one < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE INFANTRY unit from your army that is in Strategic Reserves : set up that unit anywhere on the battlefield that it is wholly within 3" of this model and not within Engagement Range of any enemy models. Models in units that are set up using this ability count as having moved a distance in inches equal to their Move characteristic in the Movement phase.
+
+================================================================
+  obelisk  (Obelisk)
+================================================================
+  STATS  M:8"  WS:6+  BS:3+  S:8  T:8  W:15-28  A:6  Ld:10  Sv:2+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, TITANIC, FLY, OBELISK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Tesla sphere                   24"     Assault 4      7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal , Command Protocols Death Descending : During deployment, you can set up this model in the upper atmosphere instead of placing it on the battlefield. If you do, then during the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. Hovering Sentinel : In your Movement phase , if this model Remains Stationary , then until the start of your next Movement phase, its tesla spheres have a Type of Assault 6 , a Strength characteristic of 8 and a Damage characteristic of 2. Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds . Gravity Pulse : In your Shooting phase , you can select one enemy unit that can FLY and is within 24" of this model. Until the start of your next Shooting phase, halve the Move characteristic of models in that unit. If the selected unit is an AIRCRAFT , roll 2D6: for each point by which the total exceeds that unit's Toughness characteristic, that unit suffers 1 mortal wound . Each unit can only be selected for this ability once per phase.
+
+================================================================
+  c_tan_nightbringer  (C tan Shard of the Nightbringer)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:7  T:7  W:9  A:6  Ld:10  Sv:4+
+  INVULN 4+
+  KW     NECRONS, MONSTER, CHARACTER, FLY, C’TAN SHARD, C’TAN SHARD NIGHTBRINGER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Reaping sweep                Melee   Melee          User  -3    1     Each time an attack is made with this weapon profile, make 2 hit rolls instead of 1.
+  - Entropic blow                Melee   Melee          x2    -4    D6    Each time an attack is made with this weapon profile, invulnerable saving throws cannot be made against that attack.
+  ABIL   Living Metal Necrodermis : This model has a 4+ invulnerable save . In addition, this model cannot lose more than 3 wounds in the same phase. Any wounds that would be lost after that point are not lost. Enslaved Star God : This model can never have a Relic or a Warlord Trait. In addition, enemy models can ignore the Look Out, Sir rule when selecting this model as the target of a ranged attack. Reality Unravels : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 6" suffers D3 mortal wounds . Drain Life : Each time this model makes a melee attack that is allocated to an enemy model, that enemy model cannot use any rules to ignore the wounds it loses.
+  ABIL   This model knows the Gaze of Death C’tan Power and one other C’tan Power from the Powers of the C’tan . At the end of your Movement phase , if this model did not Advance or Fall Back that phase, it can use two of the C’tan Powers it knows. It cannot use the same C’tan Power more than once per turn.
+
+================================================================
+  c_tan_deceiver  (C tan Shard of the Deceiver)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:6  T:7  W:9  A:5  Ld:10  Sv:4+
+  INVULN 4+
+  KW     NECRONS, MONSTER, CHARACTER, FLY, C’TAN SHARD, C’TAN SHARD DECEIVER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Golden fists                   Melee   Melee          User  -3    3     -
+  ABIL   Living Metal , Dimensional Translocation Grand Illusion : At the start of the first battle round, you can select up to three friendly NECRONS units. Remove those units from the battlefield, then set them up anywhere on the battlefield that is wholly within your deployment zone. If the mission uses the Strategic Reserves rules, any of those units can be placed into Strategic Reserves without having to spend any additional CPs , regardless of how many units are already in Strategic Reserves. If both players have abilities that redeploy units, roll off; the winner chooses who redeploys their units first. Enslaved Star God : This model can never have a Relic or a Warlord Trait. In addition, enemy models can ignore the Look Out, Sir rule when selecting this model as the target of a ranged attack. Misdirection : Each time an attack is made against this model, subtract 1 from the hit roll . Necrodermis : This model has a 4+ invulnerable save . In addition, this model cannot lose more than 3 wounds in the same phase. Any wounds that would be lost after that point are not lost. Reality Unravels : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model knows the Cosmic Insanity C’tan Power and one other C’tan Power selected from the Powers of the C’tan . At the end of your Movement phase , if this model did not Advance or Fall Back that phase, it can use two of the C’tan Powers it knows. It cannot use the same C’tan Power more than once per turn.
+
+================================================================
+  c_tan_void_dragon  (C tan Shard of the Void Dragon)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:6  T:7  W:9  A:5  Ld:10  Sv:3+
+  INVULN 4+
+  KW     NECRONS, MONSTER, CHARACTER, FLY, C’TAN SHARD, C’TAN SHARD VOID DRAGON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Spear of the Void Dragon (shooting) 12"     Heavy 1        9     -4    D6    Each time an attack is made with this weapon, if a hit is scored, draw a straight line between the closest point of this model's base (or hull) and that of the closest model in the target unit. Make one wound roll against the target unit, and each other unit this line passes over. Each time an attack made with this weapon is allocated to a VEHICLE model, that attack hs a Damage characteristic of D3+3.
+  Canoptek tail blades           Melee   Melee          User  -2    1     Each time the bearer fights, it makes D6 additional attacks with this weapon.
+  Spear of the Void Dragon (melee) Melee   Melee          +3    -4    D6    Each time an attack made with this weapon is allocated to a VEHICLE model, that attack has a Damage characteristic of D3+3.
+  ABIL   Living Metal Necrodermis : This model has a 4+ invulnerable save . In addition, this model cannot lose more than 3 wounds in the same phase. Any wounds that would be lost after that point are not lost. Enslaved Star God : This model can never have a Relic or a Warlord Trait. In addition, enemy models can ignore the Look Out, Sir rule when selecting this model as the target of a ranged attack. Reality Unravels : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 6" suffers D3 mortal wounds . Matter Absorption : At the end of each phase, roll one D6 for each enemy VEHICLE model destroyed as a result of an attack made by this model or a C’tan Power used by this model that phase: for each 2+, this model regains 1 lost wound (to a maximum of 3 regained wounds per phase).
+  ABIL   This model knows the Voltaic Storm C’tan Power and one other C’tan Power from the Powers of the C’tan . At the end of your Movement phase , if this model did not Advance or Fall Back that phase, it can use two of the C’tan Powers it knows. It cannot use the same C’tan Power more than once per turn.
+
+================================================================
+  tesseract_vault  (Tesseract Vault)
+================================================================
+  STATS  M:8"  WS:6+  BS:3+  S:8  T:7  W:16-30  A:6  Ld:10  Sv:2+
+  INVULN 4+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, TITANIC, FLY, C’TAN SHARD, TESSERACT VAULT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Tesla sphere                   24"     Assault 4      7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal Vengeance of the Enchained : When this model is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 2D6" suffers D6 mortal wounds . Transtemporal Force Field : This model has a 4+ invulnerable save . Hovering : Distances are measured to and from either this model's hull or its base, whichever is the closest.
+  ABIL   This model knows four C’tan Powers from the Powers of the C’tan . At the end of your Movement phase , if this model did not Advance or Fall Back that phase, it can use a number of C’tan Powers it knows equal to the number in the table below. It cannot use the same C’tan Power more than once per turn. Remaining Wounds Powers of the C'tan 16+ 3 9-15 2 1-8 1
+
+================================================================
+  gauss_pylon  (Gauss Pylon)
+================================================================
+  STATS  M:-  WS:-  BS:3+  S:6  T:8  W:16-30  A:-  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, ARTILLERY, TITANIC, GAUSS PYLON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Focused beam                 120"    Heavy 2D3      16    -4    D3+6  Blast . Each time an attack is made with this weapon against an AIRCRAFT unit, add 2 to that attack’s hit roll .
+  - Flux arc                     30"     Rapid Fire 6   6     -2    2     -
+  Tesla arc                      3"      Assault 3D6    4     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   Living Metal , Command Protocols Phase Shift Generator : Friendly NECRONS models receive a 5+ invulnerable save against ranged attacks while they are within 6" of this model. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 5+ it explodes, and each unit within 6" suffers D6 mortal wounds .
+
+================================================================
+  seraptek_heavy_construct  (Seraptek Heavy Construct)
+================================================================
+  STATS  M:12"  WS:3+  BS:3+  S:8  T:8  W:15-28  A:6  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, TITANIC, SERAPTEK HEAVY CONSTRUCT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Singularity generator          36"     Heavy 3D3      8     -3    D6    Blast
+  Synaptic obliterator           72"     Heavy D3       16    -4    6     -
+  Transdimensional projector     24"     Heavy D6       6     -2    1     Blast
+  - Impaling strike              Melee   Melee          x2    -3    5     -
+  - Reaping sweep                Melee   Melee          User  -1    2     Make 2 hit rolls for each attack made with this weapon.
+  ABIL   • This model's 2 singularity generators can be replaced with 2 synaptic obliterators and 2 transdimensional projectors.
+  ABIL   Living Metal , Command Protocols Containment Field : This model has a 5+ invulnerable save . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 5+ it explodes, and each unit within 2D6" suffers D6 mortal wounds . Titanic : This model is eligible to declare a charge in a turn in which it Fell Back . Each time this model makes a Normal Move , Advances or Falls Back , it can be moved across other models (excluding MONSTER and VEHICLE models) as if they were not there, and when it does it can be moved within Engagement Range of such models, but cannot finish its move within Engagement Range of any of them. Designers Note: If this model does not have a base, before deploying this model, both players must agree the footprint of this models ‘base’ in the same way they would for an Area Terrain feature. We suggest that an imaginary straight line should be drawn from each point on this model which would touch the battlefield when it is placed on a flat surface. The area within these lines should be considered to be this model’s ‘base’. If the model has been posed with one or more of its legs raised, agree with your opponent the point where that leg would touch the battlefield, and use this to advise the shape of the models ‘base’.
+
+================================================================
+  convergence_of_dominion  (Convergence of Dominion)
+================================================================
+  STATS  M:-  WS:-  BS:3+  S:6  T:8  W:6-10  A:-  Ld:-  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, BUILDING, CORE, VEHICLE, STARSTELE, CONVERGENCE DOMINION
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Transdimensional abductor      12"     Assault D3     4     -3    3     -
+  ABIL   Living Metal , Command Protocols Convergence of Dominion : When this unit is first set up on the battlefield, its models do not have to be set up in unit coherency . Instead, each model must be set up wholly within 12" of one other model from its unit. From that point on, each model in this unit is treated as a separate unit. Dominion Protocols (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this model, add 2 to the Leadership characteristic of models in that unit. Dynastic Command Node : While a command protocol is active for your army, friendly units with the Command Protocols ability that are within 6" of this model benefit from the selected directive(s) of the active command protocol. Translocation Protocols : While there are any STARSTELE units from your army on the battlefield, CRYPTEK units in your army can attempt the following action : ‘ Activate Trans location Protocols (Action) : At the end of your Movement phase , one friendly CRYPTEK unit from your army that is within 3" of any friendly STARSTELE units can start to perform this action . The action is completed at the end of your turn. Once completed, select one of those STARSTELE units and remove it from the battlefield; in the Reinforcements step of your next Movement phase, set that STARSTELE unit back up on the battlefield, anywhere that is more than 9" away from any enemy models. If the battle ends and that STARSTELE unit is not on the battlefield, it is destroyed.’
+
+================================================================
+  sentry_pylon  (Sentry Pylon)
+================================================================
+  STATS  M:-  WS:-  BS:3+  S:4  T:7  W:8  A:-  Ld:10  Sv:3+
+  INVULN none
+  KW     NECRONS, <DYNASTY>, VEHICLE, CORE, ARTILLERY, SENTRY PYLON
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Focused death ray              36"     Heavy 1        12    -4    D3+3  -
+  Gauss exterminator             48"     Heavy 2        8     -3    D6    Each time an attack is made with this weapon against an AIRCRAFT unit, add 2 to that attack's hit roll .
+  Heat cannon                    36"     Heavy D6       8     -4    D6    Each time an attack made with this weapon targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  ABIL   • Any model’s gauss exterminator can be replaced with one of the following: focused death ray; heat cannon.
+  ABIL   Living Metal , Command Protocols Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Artillery Battery : When this unit is first set up on the battlefield, its models do not have to be set up in unit coherency . Instead, each model must be set up within 6" of one other model from its unit. From that point on, each model in this unit is treated as a separate unit.
+
+================================================================
+  tomb_citadel_walls  (Tomb Citadel Walls)
+================================================================
+  STATS  M:-  WS:-  BS:3+  S:9  T:9  W:20  A:-  Ld:10  Sv:3+
+  INVULN 5+
+  KW     NECRONS, <DYNASTY>, TERRAIN, OBSTACLES, BUILDING, TOMB CITADEL, TOMB ZIGGURAT, POWER CRUCIBLE, GUN EMPLACEMENT MOUNT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gauss exterminator             48"     Heavy 2        9     -3    2D3   -
+  Tesla destructor               36"     Heavy 5        7     0     1     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits.
+  ABIL   • This model’s Gun Emplacement Mounts can each be equipped with one of the following: 1 gauss exterminator; 1 tesla destructor.
+  ABIL   Living Metal Eternity Gate : In your Movement phase , if this model Remains Stationary, then in the Reinforcement step of that phase it can summon a unit. If it does, select one < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE INFANTRY unit from your army that is in Strategic Reserves : set up that unit anywhere on the battlefield that it is wholly within 3" of this model and not within Engagement Range of any enemy models. Models in units that are set up using this ability count as having moved a distance in inches equal to their Move characteristic in the Movement phase. Tomb Citadel : After this unit is set up: The Tomb Ziggurat is treated as a terrain feature with the following Terrain Traits : Scaleable Defensible Light Cover Obscuring The Power Crucible is treated as a terrain feature with the following Terrain Traits: Unstable Position Dense Cover Obscuring The Gun Emplacement Mounts are treated as terrain features with the following Terrain Traits: Unstable Position Dense Cover Obscuring Ziggurat Dock : During deployment, you can set up one < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN MONOLITH or < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN SENTRY PYLON model from your army on top of this unit’s Tomb Ziggurat model. If you do, until that Monolith or Sentry Pylon unit moves, add 1 to the Strength characteristic of weapons that model is equipped with. Defence Field (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN unit is within 6" of this unit’s Power Crucible model, models in that unit have a 5+ invulnerable save . Resurrection Amplifier (Aura) : While a friendly < D YNASTY> MAYNARKH MEPHRIT NEPHREKH NIHILAKH NOVOKH SAUTEKH SZAREKHAN CORE unit is within 6" of this unit’s Power Crucible model, add 1 to Reanimation Protocol rolls made for that unit. Wrecked : Each time a model in this unit is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 9" suffers D6 mortal wounds . On any other result that model is wrecked; though the model counts as destroyed for all rules purposes do not remove it from the battlefield. Instead, for the remainder of the battle it is treated as an Obstacle terrain feature with the following terrain traits : Difficult Ground Exposed Position Unstable Position

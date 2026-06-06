@@ -42,19 +42,13 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Session-Start — Empfohlene Reihenfolge
 
 1. Diese Datei + `docs/goals/ziel6.md` lesen
-2. Regelrecherche (s.u.) erledigen — entsperrt mehrere Tasks
-3. Schritt aus "Nächste Schritte" auswählen → Plan zeigen → Freigabe einholen
+2. Schritt aus "Nächste Schritte" auswählen → Plan zeigen → Freigabe einholen
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-### Schritt 1 — Regelrecherche (~15 min, vor allem anderen)
-
-Lokale Wahapedia-Dateien lesen, Ergebnisse in diese Datei eintragen:
-
-- `docs/work/wahapedia_necrons/` → Resurrection Orb (KERN-Einschränkung?), Command Protocols (6. Protokoll Setup-Zeitpunkt, Dynastiebonus, Effekte auf Living Metal/RP), Skarabäen (6=auto-wound)
-- `docs/work/wahapedia_orks/` → WAAAGH! (welche Einheiten ausgenommen?)
+### ✅ Schritt 1 — Regelrecherche (2026-06-06, erledigt)
 
 ### ✅ Schritt 2 — 6d-v3 Würfel-UI Fixes (2026-06-06)
 

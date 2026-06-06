@@ -1,0 +1,428 @@
+﻿
+
+Open Play
+
+
+
+
+
+
+
+Author
+Community
+Data Export
+
+
+
+Settings
+
+Show fluff text
+
+Show Legends and not recommended rules/datasheets
+
+Show Forge World datasheets
+
+Show Specialist Detachments
+
+Show Crusade Rules
+
+Show Armies of Renown
+
+Show Boarding Actions rules
+
+Show non-Boarding Action stratagems
+
+Show base size
+
+Color theme:
+
+
+OS default
+
+Bright
+
+Dark
+
+The Rules
+
+Playing This Game
+Core Rules
+Open Play
+Matched Play
+Narrative Play
+Rules Appendix
+Matched Mission Packs
+Grand Tournament 2021
+Tactical Deployment
+Tempest of War
+War Zone Nachmund: Grand Tournament
+War Zone Nephilim: Grand Tournament
+Arks of Omen: Grand Tournament
+War Zones
+Charadon
+Nachmund
+Octarius
+Crusade Mission Packs
+Amidst the Ashes
+Beyond the Veil
+Catastrophe
+Containment
+Plague Purge
+Wars of Faith
+Boarding Actions
+Boarding Action Rules
+Gallowdark
+The Rock Besieged
+Dark Depths
+Herald of Misery
+Multiplayer Missions
+Others
+Open War
+Eldritch Omens
+Hexfire
+Piety and Pain
+Shadow Throne
+Psychic Awakening
+
+Factions
+
+Imperium
+Adepta Sororitas
+Adeptus Custodes
+Adeptus Mechanicus
+Agents of the Imperium
+Astra Militarum
+Grey Knights
+Imperial Knights
+Rogue Traders
+Space Marines
+Titan Legions
+Chaos
+Chaos Daemons
+Chaos Knights
+Chaos Space Marines
+Death Guard
+Heretic Titan Legions
+Renegades and Heretics
+Thousand Sons
+World Eaters
+Xenos
+Aeldari
+Drukhari
+Genestealer Cults
+Leagues of Votann
+Necrons
+Orks
+T’au Empire
+Tyranids
+Unaligned
+Unaligned
+
+Open Play
+
+Below you will find different examples of how to create missions for open play. If you want to start waging war right away, pick one of the three missions from the
+Open Hostility mission pack
+, detailed below. Alternatively, if you want the freedom and flexibility to create your own open play missions, we have provided a few ideas to spark your imagination (see
+Suggestions for Open Play Missions
+).
+
+Contents
+OPEN HOSTILITY MISSION PACK
+
+1-2
+
+Annihilation
+
+3-4
+
+Hold at all Costs
+
+5-6
+
+Death or Glory
+Suggestions for Open Play Missions
+The open play rules provide a style of play that is as free-form and permissive as Warhammer 40,000 gets. In open play anything goes, whether it be deploying your armies without worrying about points of power, inventing your own missions, playing highly themed and entirely unbalanced games, or anything else that you think will prove enjoyable.
+Perhaps you are looking to play your first few games of Warhammer 40,000 with whatever models you have to hand. Maybe you simply want to play with every tank you have in your collection, while your opponent has a swarm of huge monsters to send into battle against them. You and your opponent might have much larger or smaller collections than one another, and elect to play a battle where the smaller force must simply hold out for as long as it can from behind heavily fortified positions before it is finally overrun. Alternatively, maybe both of you have a handful of powerful heroes each and want to pit them against one another, or to send such a band of champions in against a horde of lesser foes and see how many they can slay. The limits of open play are few, and dictated only by your own imagination.
+Open play mission packs provide a guide on how to dive into this sort of free-form wargaming. For example, Open War cards provide randomised cues for how to set up and fight different missions, giving near endless possibilities for different battle. But the quickest way to start playing is to use the Open Hostility mission pack on the following pages. It provides guidelines for approximate game sizes, several fun and straightforward missions that you can play, and explains how big of a battlefield you're going to want in order to enjoy a satisfying game depending on how big your armies are. Within the content of these few pages, there are dozens of potential games to be played and long hours of wargaming enjoyment to be had.
+Once you have gotten a feel for open play gaming, you may well find that you want to start devising your own missions that fit the armies you want to use and the stories you want to tell. On the last page of this section you will find a raft of exciting suggestions to help you on your way and inspire exciting games that you and your opponents will remember for years to come. Whether it be stopping your enemy’s evil ritual (or completing your evil ritual before your foes can interfere), ambushing a convoy as it races through hostile territory, hunting down the enemy’s spies or any of a host of other exciting ideas, you will be sure to find inspiration for your own fun and engaging open play missions.
+
+
+
+OPEN HOSTILITY MISSION PACK
+An Open Hostility battle is waged by following the sequence below:
+1. MUSTER ARMIES
+You and your opponent must first each muster an army from the miniatures in your collection. Your armies can be as big as you like, and you can use as many models from your collection as you wish.
+It is up to the players to agree how big their armies will be — there is no reason why the two armies need to be the same size, though if that is what the players want they should agree to this now. The table below gives a rough guide of how long the battle should take based on the size of the armies used (note that this is the combined
+Power
+
+Level
+ of both your and your opponent's army).
+BATTLES
+BATTLE SIZE
+SIZE OF ARMIES
+(Combined Power Levels)
+BATTLE DURATION
+Combat Patrol
+50
+Up to 1 hour
+Incursion
+100
+Up to 2 hour
+Strike Force
+200
+Up to 3 hour
+Onslaught
+300
+Up to 4 hour
+The missions in this mission pack have been designed to be used for armies that have certain relative Power Levels. As a result, you may wish to read on further before deciding what size armies to muster.
+Once you have mustered your army, select one of your models to be your Warlord. This model gains the
+WARLORD
+ keyword. If your Warlord has the
+CHARACTER
+ keyword, they will have a Warlord Trait, which you choose now. Any
+WARLORD
+ can have the Inspiring Leader Warlord Trait:
+Inspiring Leader (Warlord Trait, Aura)
+Add 1 to the Leadership characteristic of friendly units while they are within 6" of this
+WARLORD
+.
+Alternative Warlord Traits can be found in other publications.
+2. DETERMINE MISSION
+The players determine which of the three Open Hostility missions will be used for the battle. This will determine the deployment map that the players use, as well as the specific mission briefing.
+You can simply agree with your opponent which mission you will use. Alternatively, you can roll to randomly select a mission using the appropriate table below. Note, however, that the missions have been designed to be used with battles of certain relative Power Levels, as described in the table below:
+MISSION
+D6
+OPEN HOSTILITY MISSIONS
+1-2
+Annihilation
+This mission is designed for battles with two armies of roughly similar Power Level.
+3-4
+Hold at All Costs
+This mission is designed for battles where the Power Level of one player's army is at least one third more than, but less than twice that of, the other.
+5-6
+Death or Glory
+This mission is designed for battles where the Power Level of one player's army is at least twice that of the other.
+3. READ MISSION BRIEFING
+Each mission has a mission briefing that will detail the mission objectives that award victory points to the players. Some mission briefings also list one or more mission rules that will apply for the duration of the battle. The players should read and familiarise themselves with these before proceeding.
+4. CREATE THE BATTLEFIELD
+The players now create the battlefield and set up
+terrain features
+. Missions are played on rectangular battlefields. The size of your battlefield depends on the battle size you have selected, as shown in the table below:
+BATTLEFIELDS
+BATTLE SIZE
+BATTLEFIELD SIZE (Minimum)
+Combat Patrol/Incursion
+44" x 30"
+Strike Force
+44" x 60"
+Onslaught
+44" x 90"
+5. DETERMINE ATTACKER AND DEFENDER
+If the
+Power
+
+Rating
+ of one player's army is greater than that of their opponent’, then that player is the Attacker and their opponent is the Defender. Otherwise, the players
+roll
+
+off
+ and the winner decides who will be the Attacker and who will be the Defender.
+6. DECLARE RESERVES AND TRANSPORTS
+Both players now secretly note down which of their units will start the battle in a location other than the battlefield, and which of their units will start the battle embarked within
+TRANSPORT
+ models (they must declare what units are embarked on what models). When both players have done so, they declare their selections to their opponent.
+7. DEPLOY ARMIES
+The deployment maps for each mission will tell you which deployment zone is the Attacker’s and which is the Defender’s.
+The players alternate setting up their remaining units, one at a time, starting with the Attacker. These models must be set up wholly within their player’s deployment zone. If one player has finished deploying all their units, their opponent then deploys the remainder of their units.
+If both players have units that have abilities that allow them to be set up ‘after both armies have deployed’, the players must
+roll-off
+ after all other units have been set-up and alternate setting up these units, starting with the winner.
+8. DETERMINE FIRST TURN
+Unless the mission briefing says otherwise, the players roll-off and the winner declares whether they will take the first or second turn.
+9. RESOLVE PRE-BATTLE ABILITIES
+Players alternate resolving any pre-battle abilities units in their army may have, starting with the player who will take the first turn.
+10. BEGIN THE BATTLE
+The first battle round begins. Players continue to resolve
+battle rounds
+ until the battle ends.
+11. ENDING THE BATTLE
+The battle ends when all of the models in one player's army have been destroyed, or once the fifth battle round has ended (whichever comes first).
+12. DETERMINE VICTOR
+At the end of the battle, both players check their mission objectives to determine who is the victor.
+
+
+
+Open Hostility
+Annihilation
+ 1-2
+MISSION BRIEFING
+Two warlords face each other, intent on destroying all who stand before them. Each must attempt to annihilate their opponent while minimising their own losses.
+MISSION OBJECTIVES
+No Mercy
+: If, at the end of the battle, one army has been destroyed, the player commanding the opposing army is the victor. Otherwise, the player with the most victory points is the victor (in the case of a tie, the battle is a draw). Victory points are awarded as follows:
+Slay the Warlord
+: A player scores 1 victory point if the enemy
+WARLORD
+ is destroyed at the end of the battle.
+Purge the Enemy
+: At the end of the battle, each player adds up the
+Power
+
+Rating
+ of all enemy units that were destroyed during the battle and divides the total by 10 (rounding up) - this is the number of victory points that player scores. If a unit splits to form two or more individual units during the battle, then divide that unit’s Power Rating equally between the individual ‘split’ units (rounding up) when calculating this. Any units that are not on the battlefield at the end of the battle (other than units that are currently embarked within
+TRANSPORT
+ models that are on the battlefield) count as destroyed for this mission objective.
+
+
+
+Open Hostility
+Hold at all Costs
+ 3-4
+MISSION BRIEFING
+The battlefield lies at a crossing of key strategic importance. A defending army that has dug in stands ready to hold it at all costs in the face of a superior foe that surrounds them.
+Mission Rules
+Dug-in Positions
+: In the first battle round, the Defender adds 1 to all
+saving
+
+throws
+ taken for their models that are wholly within their own deployment zone (
+invulnerable
+
+saves
+ are unaffected).
+MISSION OBJECTIVES
+No Matter the Cost
+: If, at the end of the battle, one army has been destroyed, the player commanding the opposing army is the victor. Otherwise, the player who has the closest model to the centre of the battlefield is the victor (if both players have models that are the closest to the centre of the battlefield, the battle is a draw).
+
+
+
+Open Hostility
+Death or Glory
+ 5-6
+MISSION BRIEFING
+An outnumbered army faces inevitable defeat, but if they sell their lives dearly to allow even a single warrior to survive them, they will have earned a heroic death.
+Mission Rules
+No Retreat
+: In this mission, the Defender automatically passes all
+Morale
+
+tests
+ taken for their units (no dice are rolled).
+FIRST TURN
+The Defender decides which player has the first turn.
+MISSION OBJECTIVES
+Death or Glory
+: If, at the end of the battle, the Defender’s army has been destroyed, the Attacker is the victor. Otherwise, the Defender is the victor.
+
+
+
+Suggestions for Open Play Missions
+No form of war is unknown in the galaxy. Below you will find a few ideas below to spark your imagination for other open play missions; you should feel free to use these hooks as the basis of your battles, or simply create ones of your own.
+An elite force strikes behind enemy lines to assassinate the foe’s commanders.
+An evil ritual is nearing completion - fight to prevent its culmination, or bring about its fruition.
+A group of sappers attempts to sabotage a mighty war machine or fortress before it, and its fearsome weapons, become fully operational.
+A convoy is ambushed - how many of its vital supplies can it escape with?
+You and your opponent(s) are trying to reach a powerful relic; use your fastest units to race across the long battlefield and claim the prize!
+The battlefield houses a holy shrine that must not fall into enemy hands. Protect it at any cost.
+As you signal the attack, your own allies suddenly reveal their traitorous intent and open fire upon your fines. Can you rally to wage a war on two fronts and prevail?
+An escape pod has crash landed nearby. Locate and recover the survivors before the enemy can capture them.
+Your enemy believes their position unassailable. Lead the forlorn attempt to create a breach and bring victory!
+The underground tunnels beneath the battlefield are infested with mutants, aliens or cultists. They boil to the surface, threatening to overwhelm the defenders.
+A band of operatives must silence enemy sentries to enable their army’s approach to go undetected.
+A priceless piece of archeotech is lost within these war-torn ruins; your forces must be the ones to discover its location and take it back to your headquarters.
+A beleaguered army must hold out long enough for reinforcements to relieve them.
+You have been entrusted with the life of a dignitary - you must escort them safely across the war zone.
+Snipers and close-quarters fighters come into their own in a claustrophobic battle through the ruins of a fallen hive city.
+A spy is sheltering within ruins deep inside hostile territory. Their allies must attempt to extract them before they are discovered by patrols.
+After months of fighting, the enemy army is on the verge of routing. Break their morale and victory will be assured.
+
+Power Level
+
+An army's Power Level is a guide to how large and powerful an army is, so an army with a high Power Level is more powerful than one with a low Power Level. You can calculate the Power Level of an army by adding up the individual Power Ratings of every unit contained within it.
+Power Level:
+ Sum of all Power Ratings in army.
+
+Power Ratings
+
+Every unit has a Power Rating listed on its
+datasheet
+, and it is a measure of its efficacy on the battlefield. They are designed to give players, at a glance, an idea of how mighty a unit is on the battlefield, irrespective of the weapons its models can be equipped with. They can therefore be used as a quick guide to establish the comparative strength of each army.
+The Power Rating on a datasheet is for a minimum-sized unit. A unit’s Power Rating can be increased if additional models are added to the unit, and occasionally if other options are taken for the unit (such as equipping a unit with jump packs) - in either case the unit's datasheet will make it clear if the Power Rating listed at the top of the datasheet is increased as a result.
+Power Ratings:
+ Quick measure of a unit's efficacy.
+
+Roll-offs
+
+Some rules instruct players to roll off. To do so, both players roll one D6, and whoever scores highest wins the roll-off. If there is a tie for the highest roll, make the roll-off again. Neither player is allowed to re-roll or modify any of the D6 when making a roll-off.
+Roll-off:
+ Both players roll a D6 – highest wins.
+Roll again if a tie.
+
+Saving Throw
+
+The player commanding the target unit then makes one saving throw by rolling one D6 and modifying the roll by the Armour Penetration (AP) characteristic of the weapon that the attack was made with. For example, if the weapon has an AP of -1, then 1 is subtracted from the saving throw roll. If the result is equal to, or greater than, the Save (Sv) characteristic of the model the attack was allocated to, then the saving throw is successful and the attack sequence ends. If the result is less than the model’s Save characteristic, then the saving throw fails and the model suffers damage. An unmodified roll of 1 always fails.
+
+Invulnerable Saves
+
+Some models have an invulnerable save. Each time an attack is allocated to a model with an invulnerable save, you can choose to use either its normal Save (Sv) characteristic or its invulnerable save, but not both. If a model has more than one invulnerable save, it can only use one of them – choose which it will use. If you use a model’s invulnerable save, it is never modified by a weapon’s Armour Penetration value.
+Invulnerable save
+:
+Saving
+
+throw
+ that is never modified by attacking weapon’s AP.
+A model with an invulnerable save can use it instead of its normal Sv.
+
+Morale Tests
+
+To take a Morale test, roll one D6 and add the number of models from the unit that have been destroyed this turn. If the result is equal to or less than the highest Leadership (Ld) characteristic in the unit, the Morale test is passed and nothing else happens. An unmodified roll of 1 also always results in a passed Morale test, irrespective of the total result. In any other case, the Morale test is failed, one model flees that unit, and you must then take
+Combat Attrition tests
+ for the remaining models in the unit. You decide which model from your unit flees – that model is removed from play and counts as having been destroyed, but it never triggers any rules that are used when a model is destroyed.
+Morale test
+ = D6 + number of models destroyed this turn.
+Unmodified roll of 1 always a success (no models flee).
+If Morale test exceeds unit’s Ld, one model flees and other models must take Combat Attrition tests.
+
+Contents
+OPEN HOSTILITY MISSION PACK
+
+1-2
+
+Annihilation
+
+3-4
+
+Hold at all Costs
+
+5-6
+
+Death or Glory
+Suggestions for Open Play Missions
+
+Disable Ads
+
+E-mail:
+
+
+Pin code:
+
+
+Get pin code
+
+Disable Ads
+
+Boosty
+ subscribers may disable ads:
+
+1. Enter e-mail you have used to login on Boosty.
+
+2. Press
+Get pin code
+ button (if you don’t have it already)
+
+3. Enter pin code.
+
+Note that login database updated once a day. So, if you are a new booster - try tomorrow. And thank you!
+
+© Vyacheslav Maltsev 2013-2023

@@ -1,0 +1,316 @@
+
+================================================================
+  STRATAGEMS  (104 found)
+================================================================
+
+  [1 CP]  SHOWIN’ OFF  []
+    Use this Stratagem when a BAD MOONS CORE or BAD MOONS CHARACTER unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [1 CP]  DED SNEAKY  []
+    Use this Stratagem at the end of your Movement phase if the mission you are playing is using the Strategic Reserves rule. Select one BLOOD AXES INFANTRY unit from your army (excluding MEGA ARMOUR units) that is within 3" of any battlefield edge. Place that unit in Strategic Reserve.
+
+  [2 CP]  WRECKAZ  []
+    Use this Stratagem at the start of your Shooting or Fight phase . Select one DEATHSKULLS CORE or DEATHSKULLS CHARACTER unit from your army. Until the end of the phase, each time a model in that unit makes an attack that targets a VEHICLE , add 1 to that attack’s wound roll .
+
+  [1 CP]  DRIVE BY DAKKA  []
+    Use this Stratagem at the end of your Shooting phase . Select one EVIL SUNZ SPEED FREEKS unit from your army. That unit can immediately make a Normal Move as if it was your Movement phase . That unit is not eligible to charge this turn.
+
+  [1 CP]  GET DA LOOT  []
+    Use this Stratagem at the start of your Command phase . Select one FREEBOOTERZ INFANTRY unit from your army that is on the battlefield. Until the start of your next Command phase, that unit gains the Objective Secured ability.
+
+  [2 CP]  UNBRIDLED CARNAGE  []
+    Use this Stratagem at the start of the Fight phase . Select one GOFF CORE or GOFF CHARACTER unit from your army that has the No Mukkin’ About Clan Kultur. Until the end of the phase, each time a model in that unit makes an attack, it scores an additional hit on an unmodified hit roll of 5+ instead of 6.
+
+  [1 CP]  MYSTIC CHANTING  []
+    Use this Stratagem during your opponent’s Psychic phase . Select one SNAKEBITES unit from your army. Until the end of the phase, that unit can attempt to deny one psychic power as if it were a PSYKER .
+
+  [1/2 CP]  CAREEN!  []
+    Use this Stratagem in any phase, when an ORKS VEHICLE model in your army that is not within Engagement Range of any enemy models is destroyed and explodes. That model can make a Normal Move of up to 6" before resolving the explosion. If that VEHICLE is a WAGON or TITANIC model, this Stratagem costs 2CP; otherwise, it costs 1CP.
+
+  [1/2 CP]  GET STUCK IN LADZ!  []
+    Use this Stratagem in the Fight phase , when a BOYZ or BEAST SNAGGA BOYZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes a pile in or consolidation move , it can move up to an additional 3". This is not cumulative with any other rule that increases the distance models can pile in or consolidate. If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [2 CP]  RAMMING SPEED  []
+    Use this Stratagem in your Charge phase , when an ORKS VEHICLE unit from your army is selected to charge. Until the end of the phase, when making a charge roll for that unit, roll 3D6 instead. Until the end of the phase, when that unit finishes a charge move, select one enemy unit that is within Engagement Range of it and roll one D6: on a 2+, that enemy unit suffers D3 mortal wounds .
+
+  [2 CP]  GUN CRAZY SHOW OFFS  []
+    Use this Stratagem at the end of your Shooting phase . Select one FLASH GITZ unit from your army; that unit can shoot again , but must target the closest eligible enemy unit.
+
+  [2 CP]  HIT ’EM HARDER  []
+    Use this Stratagem in the Fight phase , when a MEGANOBZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack with a power klaw or killsaw, add 1 to that attack’s Damage characteristic.
+
+  [2 CP]  TOUGH AS SQUIG-HIDE  []
+    Use this Stratagem in any phase, when a BEAST SNAGGA INFANTRY , BEAST SNAGGA CAVALRY or BEAST SNAGGA MONSTER unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1-3 for that attack fails, irrespective of any abilities that the weapon or the model making the attack may have.
+
+  [2 CP]  BREAKIN’ HEADS  []
+    Use this Stratagem in the Morale phase , when a Morale test is failed for a < C LAN> unit (excluding GRETCHIN units) from your army that is within 3" of any friendly < C LAN> WARBOSS or < C LAN> NOBZ units. That < C LAN> unit suffers D3 mortal wounds , and the Morale test is treated as having been passed.
+
+  [2 CP]  ORKS IS NEVER BEATEN  []
+    Use this Stratagem in the Fight phase , when an ORKS CHARACTER model in your army that has not already been selected to fight this phase is destroyed. Do not remove that model from play - it can fight after the attacking model’s unit has finished making attacks. If the selected model’s characteristics change as it takes damage, use the bottom row of that model’s profile when resolving those attacks. After resolving the destroyed model’s attacks, it is then removed.
+
+  [2 CP]  DA BIGGER DEY IZ...  []
+    Use this Stratagem in the Fight phase , when a BEAST SNAGGA WARBOSS unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack that targets a TITANIC unit, add 2 to the Damage characteristic of that attack.
+
+  [1 CP]  EXTRA GUBBINZ  []
+    Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER model in your army and give them one Shiny Gubbinz (this must be a Relic they could have). Each Relic in your army must be unique, and you cannot use this Stratagem to give a model two Relics. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+
+  [1 CP]  BIG BOSS  []
+    Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER from your army and determine one Warlord Trait for that model (this must be a Warlord Trait they could have); that model it is only regarded as your WARLORD for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique (if randomly generated, re-roll duplicate results), and you cannot use this Stratagem to give a model two Warlord Traits . You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+
+  [1 CP]  TIDE OF MUSCLE  []
+    Use this Stratagem in your Charge phase , when you select an ORKS CORE unit (excluding GRETCHIN units) from your army to charge. That unit can ignore any or all modifiers to the charge roll .
+
+  [1 CP]  UNSTOPPABLE MOMENTUM  []
+    Use this Stratagem in your Charge phase , after a NOB ON SMASHA SQUIG unit from your army finishes a charge move . If there are no enemy models within Engagement Range of that model, it can immediately be selected to declare a charge again.
+
+  [2 CP]  GROT SHIELDS  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one ORKS INFANTRY unit from your army, then select one GRETCHIN INFANTRY unit (excluding CHARACTER units) from your army that is within 6" of that unit. Until the end of the phase, enemy models cannot select the selected ORKS INFANTRY unit as a target if the selected GRETCHIN INFANTRY unit is a closer visible target.
+
+  [2 CP]  TELLYPORTA  []
+    Use this Stratagem during deployment. Select one non- MONSTER ORKS unit from your army that has Power Rating 20 or less. You can set up this unit on a tellyporta pad instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases, you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. If you select a TRANSPORT unit, any embarked units remain embarked when this unit is set up on the battlefield.
+
+  [1 CP]  LUMBERING STRIDES  []
+    Use this Stratagem in your Charge phase , when you use the ’Ere We Go ability to re-roll a charge roll for a MORKANAUT , GORKANAUT or STOMPA unit from your army. You can re-roll one of the dice for that charge roll instead of both.
+
+  [1 CP]  BURN ’EM ALL!  []
+    Use this Stratagem in your Shooting phase , when a BURNA-BOMMER unit from your army makes attacks with skorcha missile racks. After resolving these attacks, each other unit within 3" of the target suffers 1 mortal wound .
+
+  [2 CP]  MONSTER HUNTERZ  []
+    Use this Stratagem at the start of any phase. Select one enemy MONSTER or VEHICLE unit and up to 3 BEAST SNAGGA units from your army. Until the end of the phase, each time an attack is made by a model in one of the selected BEAST SNAGGA units that targets the selected MONSTER or VEHICLE unit, add 1 to that attack’s wound roll .
+
+  [1 CP]  CUTTIN’ FLAMES  []
+    Use this Stratagem in the Fight phase . Select one BURNA BOYZ unit from your army. Until the end of the phase, each time a Burna Boy model in that unit makes a melee attack, that attack has an Armour Penetration characteristic of -2. This cannot be improved by any abilities or rules that improve Armour Penetration characteristics.
+
+  [2 CP]  MORE DAKKA!  []
+    Use this Stratagem in your Shooting phase , when an ORKS unit from your army is selected to shoot. Until the end of the phase, Dakka weapons that unit is equipped with are considered to be within half range when determining how many attacks are made with that weapon.
+
+  [2 CP]  CLOUD OF SMOKE  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one SPEED FREEKS VEHICLE unit from your army. Until the end of the phase, while a friendly SPEED FREEKS VEHICLE unit is within 6" of the selected unit, each time a ranged attack targets that unit, subtract 1 from that attack’s hit roll .
+
+  [1 CP]  TANKBUSTA BOMB  []
+    Use this Stratagem in the Fight phase , when an ORKS TANKBUSTA BOMBS unit from your army is selected to fight. Select one model in that unit; that model can only make one attack this phase and must target an enemy VEHICLE unit with that attack, but if a hit is scored, that unit suffers 2D3 mortal wounds and the attack sequence ends.
+
+  [2 CP]  SNAGGA GRAPPLE  []
+    Use this Stratagem at the start of your opponent’s Movement phase . Select one BEAST SNAGGA BOYZ unit from your army. Each time an enemy unit (excluding TITANIC units) that is within Engagement Range of that unit is selected to move, roll one D6: on a 4+, that enemy unit cannot Fall Back this turn.
+
+  [1 CP]  GROUNDSHAKER SHELLS  []
+    Use this Stratagem in your Shooting phase , when selecting a target for an ’eavy lobba. Until the end of the phase, each time that model makes a ranged attack with an ‘eavy lobba, if a hit is scored against a target that is not TITANIC and cannot FLY , then until the start of your next Movement phase , halve the Move characteristic of models in the target unit and subtract 2 from the result of Advance rolls and charge rolls made for that unit.
+
+  [2 CP]  FORCE FIELD BOOSTA  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one model in your army that is equipped with a kustom force field. Until the end of the turn, replace that kustom force field’s ability with the following: ‘(Aura) While a friendly ORKS unit is within 9" of the bearer, models in that unit have a 5+ invulnerable save .’ At the end of this turn, the kustom force field overloads and cannot be used for the rest of the battle. You can only use this Stratagem once per battle.
+
+  [1/2 CP]  YOUNGBLOODZ  []
+    Use this Stratagem in the Fight phase , when a BLOOD AXES STORMBOYZ unit is selected to fight. Until the end of the phase, add 1 to the Strength characteristic of models in that unit. If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [2 CP]  GOT’EM TRAPPED  []
+    Use this Stratagem at the start of the Fight phase . Select one enemy unit within Engagement Range of two or more BLOOD AXES units (excluding CHARACTER units) from your army. Until the end of the phase, each time a BLOOD AXES model makes an attack against that unit, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [1/2 CP]  TRIGGA DISCIPLINE  []
+    Use this Stratagem in your Shooting phase , when a BLOOD AXES LOOTAS unit from your army is selected to shoot. Select one enemy VEHICLE unit. Until the end of the phase, each time a model in that LOOTAS unit makes an attack against that VEHICLE unit, you can re-roll the hit roll . If that LOOTAS unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [1 CP]  SURPRIZE!  []
+    Use this Stratagem at the start of the Fight phase . Select one BLOOD AXES KOMMANDOS unit that is wholly within an Area Terrain feature. Until the end of the phase: While an enemy unit is within Engagement Range of this unit, that enemy unit cannot make use of any rules that allow it to fight first and never counts as having made a charge move this turn, irrespective of any abilities that unit may have. Each time an attack is made against that unit, subtract 1 from that attacks hit roll .
+
+  [1 CP]  GLORYBOYZ  []
+    Use this Stratagem in your Charge phase , when a BLOOD AXES unit from your army makes a charge move. Select one enemy unit that was a target of that charge. Until the end of the phase, each time a BLOOD AXES STORMBOYZ unit declares that enemy unit as a target of a charge, add 2 to that charge roll .
+
+  [1 CP]  SPOTTED ‘EM!  []
+    Use this Stratagem at the start of your Shooting phase . Select one enemy unit within 12" of and visible to a BLOOD AXES KOMMANDOS unit from your army. Until the end of the phase, each time a BLOOD AXES model in your army makes an attack against that enemy unit, the target unit does not receive the benefits of cover against that attack.
+
+  [2 CP]  TAKTICAL AWARENESS  []
+    Use this Stratagem at the start of any phase. Select one BLOOD AXES unit from your army. Until the end of the turn: That unit can start to perform an action even if it Advanced this turn. That unit can make ranged attacks without any action it is performing failing. If that unit has the CHARACTER keyword, it can still use any aura abilities it has while performing an action.
+
+  [1/2 CP]  SPESHUL AMMO  []
+    Use this Stratagem in your Shooting phase , when a BLOOD AXES unit from your army is selected to shoot. Until the end of the phase, shootas models in that unit are equipped with have a Type characteristic of Dakka 4/2 and an Armour Penetration characteristic of -1 (this includes the Shoota profile of kombi-weapons ). If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [1 CP]  BLITZA DAKKA  []
+    Use this Stratagem in your Shooting phase, when a SPEED MOB unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack that targets an enemy unit within 12", re-roll a hit roll of 1. If that SPEED MOB unit has the KUSTOM BOOSTA-BLASTAS keyword, re-roll a hit roll of 1-2 instead.
+
+  [2 CP]  CHAAAAARGE!  []
+    Use this Stratagem in your Charge phase , when a Warbikers unit from your army makes a charge move . Until the end of the turn: Add 1 to the Strength characteristic of models in that unit. Each time a model in that unit makes a melee attack, improve the Armour Penetration characteristic of that attack by 1.
+
+  [1 CP]  CRASHIN’ THROUGH  []
+    Use this Stratagem in your Charge phase , when a SPEED FREEKS unit from your army finishes a charge move . If that unit has the Spiked Ram ability, it cannot use that ability this turn. Select one enemy unit within 1" of that SPEED FREEKS unit and roll one D6 for each model that SPEED FREEKS unit contains (to a maximum of six D6): If that SPEED FREEKS unit has the BIKER keyword, for each dice result of 4+, that enemy unit suffers 1 mortal wound . If that SPEED FREEKS unit has the VEHICLE keyword (excluding MEGATRAKK SCRAPJETS and KUSTOM BOOSTA-BLASTAS units), for each dice result of 4+, that enemy unit suffers D3 mortal wounds . If that SPEED FREEKS unit has the MEGATRAKK SCRAPJETS or KUSTOM BOOSTA-BLASTAS keywords, for each dice result of 2-5, that enemy unit suffers D3 mortal wounds; for each dice result of 6, that enemy unit suffers 2D3 mortal wounds.
+
+  [1 CP]  MORE GITZ OVER ’ERE!  []
+    Use this Stratagem in your Movement phase , when a SPEED MOB unit from your army Falls Back : That unit is still eligible to shoot this turn even though it Fell Back. If that unit has the BOOMDAKKA SNAZZWAGONS keyword, until the end of the turn, each time a model in that unit makes a ranged attack, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [2 CP]  ATTACK OUT O’ DA SUN’  []
+    Use this Stratagem at the end of your turn. Select one DEFFKOPTAS unit from your army. Remove that unit from the battlefield. In the Reinforcements step of your next Movement phase , you can set that unit back up on the battlefield anywhere that is more than 9" away from any enemy models. If the battle ends and that unit is not on the battlefield, it is destroyed.
+
+  [1 CP]  LOTSA SQUIGS!  []
+    Use this Stratagem in your Shooting phase . Select one RUKKATRUKK SQUIGBUGGIES unit from your army. Add 1 to the number of squig mines that unit has remaining.
+
+  [1 CP]  STICK IT TO ’EM, LADZ!  []
+    Use this Stratagem in the Fight phase , when an ORKS unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes a pile-in or consolidation move , it can move up to an additional 3". This is not cumulative with any other rule that increases the distance models can pile in or consolidate.
+
+  [1 CP]  DAKKA STORM  []
+    Use this Stratagem in your Shooting phase , when an ORKS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon , if a hit is scored, that attack scores 1 additional hit.
+
+  [1 CP]  LEATHERHIDE  []
+    Use this Stratagem in any phase, when an ORKS unit from your army (excluding GRETCHIN units) is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1-3 for that attack fails, irrespective of any abilities that the weapon or the model making the attack may have.
+
+  [1 CP]  TOO ’ARD TO DIE  []
+    Use this Stratagem in the Fight phase , when an ORKS unit from your army that has not already been selected to fight this phase is selected as the target of an attack. Until the end of the phase, each time a model in that unit is destroyed, do not remove it from play. The destroyed model can fight after the attacking models unit has finished making attacks , and is then removed from play.
+
+  [1 CP]  TELLYPORTA  []
+    Use this Stratagem during deployment. Select one ORKS unit from your army. You can set up this unit on a tellyporta pad instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. You can only use this Stratagem once.
+
+  [1 CP]  PILE THROUGH  []
+    Use this Stratagem in your Movement phase when a Hatchway is opened , or in your opponent’s Movement phase when a Hatchway is opened. Until the end of the turn, any ORKS units from your army that are now within Engagement Range of one or more enemy units as a result of that Hatchway being opened count as having made a charge move this turn.
+
+  [1 CP]  BIG BOSS  []
+    Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER from your army and determine one Warlord Trait for that model (this must be a Warlord Trait they could have); that model it is only regarded as your WARLORD for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique (if randomly generated, re-roll duplicate results), and you cannot use this Stratagem to give a model two Warlord Traits . You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+
+  [2 CP]  ORKS IS NEVER BEATEN  []
+    Use this Stratagem in the Fight phase , when an ORKS CHARACTER model in your army that has not already been selected to fight this phase is destroyed. Do not remove that model from play - it can fight after the attacking model’s unit has finished making attacks. If the selected model’s characteristics change as it takes damage, use the bottom row of that model’s profile when resolving those attacks. After resolving the destroyed model’s attacks, it is then removed.
+
+  [1 CP]  EXTRA GUBBINZ  []
+    Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER model in your army and give them one Shiny Gubbinz (this must be a Relic they could have). Each Relic in your army must be unique, and you cannot use this Stratagem to give a model two Relics. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+
+  [2 CP]  TELLYPORTA  []
+    Use this Stratagem during deployment. Select one non- MONSTER ORKS unit from your army that has Power Rating 20 or less. You can set up this unit on a tellyporta pad instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases, you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. If you select a TRANSPORT unit, any embarked units remain embarked when this unit is set up on the battlefield.
+
+  [1 CP]  TELLYPORTA  []
+    Use this Stratagem during deployment. Select one ORKS unit from your army. You can set up this unit on a tellyporta pad instead of setting it up on the battlefield. If you do so, then in the Reinforcements step of one of your Movement phases , you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models. You can only use this Stratagem once.
+
+  [2 CP]  MONSTER HUNTERZ  []
+    Use this Stratagem at the start of any phase. Select one enemy MONSTER or VEHICLE unit and up to 3 BEAST SNAGGA units from your army. Until the end of the phase, each time an attack is made by a model in one of the selected BEAST SNAGGA units that targets the selected MONSTER or VEHICLE unit, add 1 to that attack’s wound roll .
+
+  [2 CP]  TAKTICAL AWARENESS  []
+    Use this Stratagem at the start of any phase. Select one BLOOD AXES unit from your army. Until the end of the turn: That unit can start to perform an action even if it Advanced this turn. That unit can make ranged attacks without any action it is performing failing. If that unit has the CHARACTER keyword, it can still use any aura abilities it has while performing an action.
+
+  [1 CP]  GET DA LOOT  []
+    Use this Stratagem at the start of your Command phase . Select one FREEBOOTERZ INFANTRY unit from your army that is on the battlefield. Until the start of your next Command phase, that unit gains the Objective Secured ability.
+
+  [1 CP]  PILE THROUGH  []
+    Use this Stratagem in your Movement phase when a Hatchway is opened , or in your opponent’s Movement phase when a Hatchway is opened. Until the end of the turn, any ORKS units from your army that are now within Engagement Range of one or more enemy units as a result of that Hatchway being opened count as having made a charge move this turn.
+
+  [1 CP]  MORE GITZ OVER ’ERE!  []
+    Use this Stratagem in your Movement phase , when a SPEED MOB unit from your army Falls Back : That unit is still eligible to shoot this turn even though it Fell Back. If that unit has the BOOMDAKKA SNAZZWAGONS keyword, until the end of the turn, each time a model in that unit makes a ranged attack, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [1 CP]  DED SNEAKY  []
+    Use this Stratagem at the end of your Movement phase if the mission you are playing is using the Strategic Reserves rule. Select one BLOOD AXES INFANTRY unit from your army (excluding MEGA ARMOUR units) that is within 3" of any battlefield edge. Place that unit in Strategic Reserve.
+
+  [2 CP]  SNAGGA GRAPPLE  []
+    Use this Stratagem at the start of your opponent’s Movement phase . Select one BEAST SNAGGA BOYZ unit from your army. Each time an enemy unit (excluding TITANIC units) that is within Engagement Range of that unit is selected to move, roll one D6: on a 4+, that enemy unit cannot Fall Back this turn.
+
+  [1 CP]  MYSTIC CHANTING  []
+    Use this Stratagem during your opponent’s Psychic phase . Select one SNAKEBITES unit from your army. Until the end of the phase, that unit can attempt to deny one psychic power as if it were a PSYKER .
+
+  [1 CP]  BURN ’EM ALL!  []
+    Use this Stratagem in your Shooting phase , when a BURNA-BOMMER unit from your army makes attacks with skorcha missile racks. After resolving these attacks, each other unit within 3" of the target suffers 1 mortal wound .
+
+  [1 CP]  GROUNDSHAKER SHELLS  []
+    Use this Stratagem in your Shooting phase , when selecting a target for an ’eavy lobba. Until the end of the phase, each time that model makes a ranged attack with an ‘eavy lobba, if a hit is scored against a target that is not TITANIC and cannot FLY , then until the start of your next Movement phase , halve the Move characteristic of models in the target unit and subtract 2 from the result of Advance rolls and charge rolls made for that unit.
+
+  [2 CP]  MORE DAKKA!  []
+    Use this Stratagem in your Shooting phase , when an ORKS unit from your army is selected to shoot. Until the end of the phase, Dakka weapons that unit is equipped with are considered to be within half range when determining how many attacks are made with that weapon.
+
+  [1 CP]  DAKKA STORM  []
+    Use this Stratagem in your Shooting phase , when an ORKS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon , if a hit is scored, that attack scores 1 additional hit.
+
+  [2 CP]  GUN CRAZY SHOW OFFS  []
+    Use this Stratagem at the end of your Shooting phase . Select one FLASH GITZ unit from your army; that unit can shoot again , but must target the closest eligible enemy unit.
+
+  [2 CP]  WRECKAZ  []
+    Use this Stratagem at the start of your Shooting or Fight phase . Select one DEATHSKULLS CORE or DEATHSKULLS CHARACTER unit from your army. Until the end of the phase, each time a model in that unit makes an attack that targets a VEHICLE , add 1 to that attack’s wound roll .
+
+  [1 CP]  SPOTTED ‘EM!  []
+    Use this Stratagem at the start of your Shooting phase . Select one enemy unit within 12" of and visible to a BLOOD AXES KOMMANDOS unit from your army. Until the end of the phase, each time a BLOOD AXES model in your army makes an attack against that enemy unit, the target unit does not receive the benefits of cover against that attack.
+
+  [1 CP]  BLITZA DAKKA  []
+    Use this Stratagem in your Shooting phase, when a SPEED MOB unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack that targets an enemy unit within 12", re-roll a hit roll of 1. If that SPEED MOB unit has the KUSTOM BOOSTA-BLASTAS keyword, re-roll a hit roll of 1-2 instead.
+
+  [1 CP]  LOTSA SQUIGS!  []
+    Use this Stratagem in your Shooting phase . Select one RUKKATRUKK SQUIGBUGGIES unit from your army. Add 1 to the number of squig mines that unit has remaining.
+
+  [1/2 CP]  SPESHUL AMMO  []
+    Use this Stratagem in your Shooting phase , when a BLOOD AXES unit from your army is selected to shoot. Until the end of the phase, shootas models in that unit are equipped with have a Type characteristic of Dakka 4/2 and an Armour Penetration characteristic of -1 (this includes the Shoota profile of kombi-weapons ). If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [1/2 CP]  TRIGGA DISCIPLINE  []
+    Use this Stratagem in your Shooting phase , when a BLOOD AXES LOOTAS unit from your army is selected to shoot. Select one enemy VEHICLE unit. Until the end of the phase, each time a model in that LOOTAS unit makes an attack against that VEHICLE unit, you can re-roll the hit roll . If that LOOTAS unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [1 CP]  SHOWIN’ OFF  []
+    Use this Stratagem when a BAD MOONS CORE or BAD MOONS CHARACTER unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [1 CP]  DRIVE BY DAKKA  []
+    Use this Stratagem at the end of your Shooting phase . Select one EVIL SUNZ SPEED FREEKS unit from your army. That unit can immediately make a Normal Move as if it was your Movement phase . That unit is not eligible to charge this turn.
+
+  [2 CP]  CLOUD OF SMOKE  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one SPEED FREEKS VEHICLE unit from your army. Until the end of the phase, while a friendly SPEED FREEKS VEHICLE unit is within 6" of the selected unit, each time a ranged attack targets that unit, subtract 1 from that attack’s hit roll .
+
+  [2 CP]  FORCE FIELD BOOSTA  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one model in your army that is equipped with a kustom force field. Until the end of the turn, replace that kustom force field’s ability with the following: ‘(Aura) While a friendly ORKS unit is within 9" of the bearer, models in that unit have a 5+ invulnerable save .’ At the end of this turn, the kustom force field overloads and cannot be used for the rest of the battle. You can only use this Stratagem once per battle.
+
+  [2 CP]  GROT SHIELDS  []
+    Use this Stratagem at the start of your opponent’s Shooting phase . Select one ORKS INFANTRY unit from your army, then select one GRETCHIN INFANTRY unit (excluding CHARACTER units) from your army that is within 6" of that unit. Until the end of the phase, enemy models cannot select the selected ORKS INFANTRY unit as a target if the selected GRETCHIN INFANTRY unit is a closer visible target.
+
+  [2 CP]  TOUGH AS SQUIG-HIDE  []
+    Use this Stratagem in any phase, when a BEAST SNAGGA INFANTRY , BEAST SNAGGA CAVALRY or BEAST SNAGGA MONSTER unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1-3 for that attack fails, irrespective of any abilities that the weapon or the model making the attack may have.
+
+  [1 CP]  LEATHERHIDE  []
+    Use this Stratagem in any phase, when an ORKS unit from your army (excluding GRETCHIN units) is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, an unmodified wound roll of 1-3 for that attack fails, irrespective of any abilities that the weapon or the model making the attack may have.
+
+  [1 CP]  TOO ’ARD TO DIE  []
+    Use this Stratagem in the Fight phase , when an ORKS unit from your army that has not already been selected to fight this phase is selected as the target of an attack. Until the end of the phase, each time a model in that unit is destroyed, do not remove it from play. The destroyed model can fight after the attacking models unit has finished making attacks , and is then removed from play.
+
+  [1 CP]  LUMBERING STRIDES  []
+    Use this Stratagem in your Charge phase , when you use the ’Ere We Go ability to re-roll a charge roll for a MORKANAUT , GORKANAUT or STOMPA unit from your army. You can re-roll one of the dice for that charge roll instead of both.
+
+  [2 CP]  RAMMING SPEED  []
+    Use this Stratagem in your Charge phase , when an ORKS VEHICLE unit from your army is selected to charge. Until the end of the phase, when making a charge roll for that unit, roll 3D6 instead. Until the end of the phase, when that unit finishes a charge move, select one enemy unit that is within Engagement Range of it and roll one D6: on a 2+, that enemy unit suffers D3 mortal wounds .
+
+  [1 CP]  TIDE OF MUSCLE  []
+    Use this Stratagem in your Charge phase , when you select an ORKS CORE unit (excluding GRETCHIN units) from your army to charge. That unit can ignore any or all modifiers to the charge roll .
+
+  [1 CP]  UNSTOPPABLE MOMENTUM  []
+    Use this Stratagem in your Charge phase , after a NOB ON SMASHA SQUIG unit from your army finishes a charge move . If there are no enemy models within Engagement Range of that model, it can immediately be selected to declare a charge again.
+
+  [2 CP]  CHAAAAARGE!  []
+    Use this Stratagem in your Charge phase , when a Warbikers unit from your army makes a charge move . Until the end of the turn: Add 1 to the Strength characteristic of models in that unit. Each time a model in that unit makes a melee attack, improve the Armour Penetration characteristic of that attack by 1.
+
+  [1 CP]  GLORYBOYZ  []
+    Use this Stratagem in your Charge phase , when a BLOOD AXES unit from your army makes a charge move. Select one enemy unit that was a target of that charge. Until the end of the phase, each time a BLOOD AXES STORMBOYZ unit declares that enemy unit as a target of a charge, add 2 to that charge roll .
+
+  [1 CP]  CRASHIN’ THROUGH  []
+    Use this Stratagem in your Charge phase , when a SPEED FREEKS unit from your army finishes a charge move . If that unit has the Spiked Ram ability, it cannot use that ability this turn. Select one enemy unit within 1" of that SPEED FREEKS unit and roll one D6 for each model that SPEED FREEKS unit contains (to a maximum of six D6): If that SPEED FREEKS unit has the BIKER keyword, for each dice result of 4+, that enemy unit suffers 1 mortal wound . If that SPEED FREEKS unit has the VEHICLE keyword (excluding MEGATRAKK SCRAPJETS and KUSTOM BOOSTA-BLASTAS units), for each dice result of 4+, that enemy unit suffers D3 mortal wounds . If that SPEED FREEKS unit has the MEGATRAKK SCRAPJETS or KUSTOM BOOSTA-BLASTAS keywords, for each dice result of 2-5, that enemy unit suffers D3 mortal wounds; for each dice result of 6, that enemy unit suffers 2D3 mortal wounds.
+
+  [1 CP]  CUTTIN’ FLAMES  []
+    Use this Stratagem in the Fight phase . Select one BURNA BOYZ unit from your army. Until the end of the phase, each time a Burna Boy model in that unit makes a melee attack, that attack has an Armour Penetration characteristic of -2. This cannot be improved by any abilities or rules that improve Armour Penetration characteristics.
+
+  [2 CP]  DA BIGGER DEY IZ...  []
+    Use this Stratagem in the Fight phase , when a BEAST SNAGGA WARBOSS unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack that targets a TITANIC unit, add 2 to the Damage characteristic of that attack.
+
+  [1/2 CP]  GET STUCK IN LADZ!  []
+    Use this Stratagem in the Fight phase , when a BOYZ or BEAST SNAGGA BOYZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes a pile in or consolidation move , it can move up to an additional 3". This is not cumulative with any other rule that increases the distance models can pile in or consolidate. If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [2 CP]  HIT ’EM HARDER  []
+    Use this Stratagem in the Fight phase , when a MEGANOBZ unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes an attack with a power klaw or killsaw, add 1 to that attack’s Damage characteristic.
+
+  [1 CP]  TANKBUSTA BOMB  []
+    Use this Stratagem in the Fight phase , when an ORKS TANKBUSTA BOMBS unit from your army is selected to fight. Select one model in that unit; that model can only make one attack this phase and must target an enemy VEHICLE unit with that attack, but if a hit is scored, that unit suffers 2D3 mortal wounds and the attack sequence ends.
+
+  [1 CP]  STICK IT TO ’EM, LADZ!  []
+    Use this Stratagem in the Fight phase , when an ORKS unit from your army is selected to fight. Until the end of the phase, each time a model in that unit makes a pile-in or consolidation move , it can move up to an additional 3". This is not cumulative with any other rule that increases the distance models can pile in or consolidate.
+
+  [2 CP]  UNBRIDLED CARNAGE  []
+    Use this Stratagem at the start of the Fight phase . Select one GOFF CORE or GOFF CHARACTER unit from your army that has the No Mukkin’ About Clan Kultur. Until the end of the phase, each time a model in that unit makes an attack, it scores an additional hit on an unmodified hit roll of 5+ instead of 6.
+
+  [2 CP]  GOT’EM TRAPPED  []
+    Use this Stratagem at the start of the Fight phase . Select one enemy unit within Engagement Range of two or more BLOOD AXES units (excluding CHARACTER units) from your army. Until the end of the phase, each time a BLOOD AXES model makes an attack against that unit, an unmodified hit roll of 6 scores 1 additional hit.
+
+  [1 CP]  SURPRIZE!  []
+    Use this Stratagem at the start of the Fight phase . Select one BLOOD AXES KOMMANDOS unit that is wholly within an Area Terrain feature. Until the end of the phase: While an enemy unit is within Engagement Range of this unit, that enemy unit cannot make use of any rules that allow it to fight first and never counts as having made a charge move this turn, irrespective of any abilities that unit may have. Each time an attack is made against that unit, subtract 1 from that attacks hit roll .
+
+  [1/2 CP]  YOUNGBLOODZ  []
+    Use this Stratagem in the Fight phase , when a BLOOD AXES STORMBOYZ unit is selected to fight. Until the end of the phase, add 1 to the Strength characteristic of models in that unit. If that unit contains 10 or fewer models, this Stratagem costs 1CP; otherwise, it costs 2CP.
+
+  [2 CP]  BREAKIN’ HEADS  []
+    Use this Stratagem in the Morale phase , when a Morale test is failed for a < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES unit (excluding GRETCHIN units) from your army that is within 3" of any friendly < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES WARBOSS or < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES NOBZ units. That < C LAN> BAD MOONS BLOOD AXES DEATHSKULLS EVIL SUNZ FREEBOOTERZ GOFFS SNAKEBITES unit suffers D3 mortal wounds , and the Morale test is treated as having been passed.
+
+  [1/2 CP]  CAREEN!  []
+    Use this Stratagem in any phase, when an ORKS VEHICLE model in your army that is not within Engagement Range of any enemy models is destroyed and explodes. That model can make a Normal Move of up to 6" before resolving the explosion. If that VEHICLE is a WAGON or TITANIC model, this Stratagem costs 2CP; otherwise, it costs 1CP.
+
+  [2 CP]  ATTACK OUT O’ DA SUN’  []
+    Use this Stratagem at the end of your turn. Select one DEFFKOPTAS unit from your army. Remove that unit from the battlefield. In the Reinforcements step of your next Movement phase , you can set that unit back up on the battlefield anywhere that is more than 9" away from any enemy models. If the battle ends and that unit is not on the battlefield, it is destroyed.

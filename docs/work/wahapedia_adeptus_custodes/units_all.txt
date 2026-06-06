@@ -1,0 +1,451 @@
+
+================================================================
+  aleya  (Aleya)
+================================================================
+  STATS  M:7"  WS:2+  BS:2+  S:3  T:3  W:5  A:5  Ld:9  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ANATHEMA PSYKANA, INFANTRY, CHARACTER, KNIGHT-CENTURA, ALEYA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Somnus                         Melee   Melee          +3    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Daughters of the Abyss Cadre Tactics (Aura) : While a friendly ANATHEMA PSYKANA CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1. Voidsheen Cloak : This model has a 5+ invulnerable save . Tenacious Spirit : At the start of the Fight phase , if this model is within Engagement Range of any enemy units, it fights first that phase. In addition, if this model is destroyed in the Fight phase before it has been selected to fight in that phase, do not remove it from play - it can fight after the attacking model’s unit has finished making attacks . After resolving this model’s attacks, it is then removed.
+  ABIL   Oblivion Knight : This WARLORD has the following ability: ‘ Oblivion Knight (Aura) : Add 1 to Advance and charge rolls made for ANATHEMA PSYKANA INFANTRY units while they are within 6" of this model.’ Each time this WARLORD makes an attack, re-roll a wound roll of 1.
+
+================================================================
+  blade_champion  (Blade Champion)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:7  A:6  Ld:11  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, BLADE CHAMPION
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Behemor                      Melee   Melee          +2    -4    2     Each time an attack is made with this weapon profile against a MONSTER or VEHICLE unit, an unmodified hit roll of 4+ automatically wounds the target.
+  - Hurricanis                   Melee   Melee          User  -1    1     Each time an attack is made with this weapon profile, make 2 hit rolls instead of 1.
+  - Victus                       Melee   Melee          +1    -4    3     Each time an attack is made with this weapon profile against a CHARACTER unit, you can re-roll the wound roll .
+  ABIL   Aegis of the Emperor , Martial Ka’tah Consummate Swordsman : Each time a melee attack is made against this model, an unmodified hit roll of 1-3 always fails. Each time a melee attack is allocated to this model, add 1 to the armour saving throw . Martial Inspiration : Each time a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH unit declares a charge against enemy unit that is within Engagement Range of this unit, add 1 to the charge roll made for that unit. Legacy of Combat : At the start of the Fight phase , if this model is within Engagement Range of any enemy units, it can fight first that phase. This model is eligible to perform a Heroic Intervention if it is within 6" horizontally and 5" vertically of any enemy unit. Each time this model makes a Heroic Intervention move, so long as it ends that move either closer to the closest enemy model or within Engagement Range of an enemy CHARACTER unit, it can move up to 6". All other rules for Heroic Interventions still apply.
+
+================================================================
+  knight_centura  (Knight Centura)
+================================================================
+  STATS  M:7"  WS:2+  BS:2+  S:3  T:3  W:5  A:4  Ld:9  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ANATHEMA PSYKANA, INFANTRY, CHARACTER, KNIGHT-CENTURA
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Master-crafted boltgun         24"     Rapid Fire 1   4     -1    2     -
+  Witchseeker flamer             12"     Assault D6     4     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Executioner greatblade         Melee   Melee          +2    -3    2     -
+  ABIL   • This model’s executioner greatblade can be replaced with one of the following: 1 master-crafted boltgun; 1 witchseeker flamer.
+  ABIL   Daughters of the Abyss Voidsheen Cloak : This model has a 5+ invulnerable save . Cadre Tactics (Aura) : While a friendly ANATHEMA PSYKANA CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1.
+
+================================================================
+  shield_captain  (Shield Captain)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:7  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, GUARDIAN, SHIELD-CAPTAIN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Castellan axe (shooting)       24"     Rapid Fire 1   4     -1    2     -
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Sentinel blade (shooting)      12"     Pistol 2       4     -1    2     -
+  Castellan axe (melee)          Melee   Melee          +3    -2    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Sentinel blade (melee)         Melee   Melee          +1    -3    2     -
+  ABIL   • This model’s guardian spear can be replaced with one of the following: 1 castellan axe; 1 sentinel blade and 1 praesidium shield. • If this model is not equipped with a praesidium shield, it can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Inspirational Fighter (Aura) : While a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll of 1.
+  ABIL   Shield-Captain can receive the following Captain-Commander upgrades: • Master of the Stances +25 Power Rating: +1 • Swift as the Eagle +15 Power Rating: +1 • Inspirational Exemplar +15 Power Rating: +1
+
+================================================================
+  shield_captain_allarus  (Shield Captain in Allarus Terminator Armour)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:8  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, TELEPORT HOMER, TERMINATOR, ALLARUS, SHIELD-CAPTAIN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Balistus grenade launcher      18"     Assault D3     5     -3    1     Blast
+  Castellan axe (shooting)       24"     Rapid Fire 1   4     -1    2     -
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Castellan axe (melee)          Melee   Melee          +3    -2    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • This model’s guardian spear can be replaced with 1 castellan axe. • This model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , From Golden Light , Martial Ka’tah Inspirational Fighter (Aura) : While a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll of 1.
+  ABIL   Shield-Captain in Allarus Terminator Armour can receive the following Captain-Commander upgrades: • Unstoppable Destroyer +10 Power Rating: +1 • Bane of Abominations +15 Power Rating: +1 • Defiant to the Last +20 Power Rating: +1
+
+================================================================
+  shield_captain_jetbike  (Shield Captain on Dawneagle Jetbike)
+================================================================
+  STATS  M:14"  WS:2+  BS:2+  S:5  T:6  W:9  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, BIKER, CHARACTER, FLY, VERTUS, SHIELD-CAPTAIN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hurricane bolter               24"     Rapid Fire 6   4     0     1     -
+  Salvo launcher                 24"     Heavy 1        8     -4    D3+3  -
+  Interceptor lance              Melee   Melee          +2    -3    2     Each time the bearer makes a melee attack with this weapon, if it made a charge move or performed a Heroic Intervention this turn, add 1 to that attack’s wound roll .
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • This model’s hurricane bolter can be replaced with 1 salvo launcher. • This model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Inspirational Fighter (Aura) : While a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll of 1. Implacable Vanguard : Each time this model Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of this model.
+  ABIL   Shield-Captain on Dawneagle Jetbike can receive the following Captain-Commander upgrades: • Fierce Conqueror +15 Power Rating: +1 • Ceaseless Hunter +20 Power Rating: +1 • Tip of the Spear +15 Power Rating: +1
+
+================================================================
+  trajann_valoris  (Trajann Valoris)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:8  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, CAPTAIN-GENERAL, TRAJANN VALORIS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Watcher’s Axe (shooting)       24"     Rapid Fire 1   5     -1    2     -
+  Watcher’s Axe (melee)          Melee   Melee          x2    -3    3     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Adamantine Mantle : Each time this model would lose a wound, roll one D6: on a 5+, that wound is not lost. Captain-General : If your army is Battle-forged , this model must be your army’s WARLORD . If more than one model from your army has a rule to this effect, then one of those models must be your army’s WARLORD . If this model is your WARLORD and every unit from your army is ADEPTUS CUSTODES (excluding ANATHEMA PSYKANA , AGENT OF THE IMPERIUM and UNALIGNED units), you receive 1 additional Command point and this model gains 2 Warlord Traits instead of 1. Legendary Commander (Aura) : While a friendly ADEPTUS CUSTODES CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll and wound roll of 1. Moment Shackle : Once per battle, you can do one of the following: At the end of the Fight phase , if this model is within Engagement Range of any enemy units, it can fight again . When a saving throw is failed for this model, the Damage characteristic of that attack is changed to 0. After an enemy unit has fought, if this model is eligible to fight, you can fight with it next.
+  ABIL   Champion of the Imperium : This WARLORD is eligible to perform a Heroic Intervention if it is within 6" horizontally and 5" vertically of any enemy unit. Each time this WARLORD makes a Heroic Intervention move, it can move up to 6" instead of 3". All other rules for Heroic Interventions still apply. Each time this WARLORD makes an attack, you can re-roll the hit roll . Master of Martial Strategy : While this WARLORD is on the battlefield, each time you spend a Command point to use a Stratagem, you can roll one D6: on a 5+, that Command point is refunded. Once per battle, in your Command phase , if units from your army are using the Martial Ka’tah ability, before selecting a ka’tah stance for your army, you can change the order of your martial ka’tahs, i.e. primary, secondary or tertiary. Note that this does not allow you to select ka’tah stances more than once.
+
+================================================================
+  valerian  (Valerian)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:7  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, GUARDIAN, SHIELD-CAPTAIN, VALERIAN
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Gnosis (shooting)              24"     Rapid Fire 1   4     -1    2     -
+  Gnosis (melee)                 Melee   Melee          +2    -4    2     Each time an attack made with this weapon is allocated to an enemy model, that enemy model cannot use any rules to ignore the wounds it loses.
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Inspirational Fighter (Aura) : While a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH CORE unit is within 6" of this model, each time a model in that unit makes an attack, re-roll a hit roll of 1. Hero of the Lion’s Gate : Each time an attack is made against this model, an unmodified wound roll of 1-3 always fails. Golden Laurels : Once per battle round, you can re-roll a single hit roll , wound roll , charge roll or saving throw made for this model.
+  ABIL   Peerless Warrior : Each time this WARLORD makes a melee attack, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage. Each time an attack made by this WARLORD is allocated to an enemy model, the saving throw cannot be re-rolled .
+
+================================================================
+  custodian_guard  (Custodian Guard)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:3  A:3  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, CUSTODIAN GUARD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Sentinel blade (shooting)      12"     Pistol 2       4     -1    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Sentinel blade (melee)         Melee   Melee          +1    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any number of models can each have their guardian spear replaced with 1 sentinel blade and 1 praesidium shield. • Any number of models that are not equipped with a praesidium shield can each be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah
+
+================================================================
+  prosecutors  (Prosecutors)
+================================================================
+  STATS  M:7"  WS:3+  BS:3+  S:3  T:3  W:1  A:2  Ld:8  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ANATHEMA PSYKANA, INFANTRY, CORE, PROSECUTORS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Boltgun                        24"     Rapid Fire 1   4     0     1     -
+  ABIL   Daughters of the Abyss
+
+================================================================
+  custodian_guard_spears  (Custodian Guard with Adrasite and Pyrithite Spears)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:3  A:3  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, CUSTODIAN GUARD
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Adrasite spear (shooting)      18"     Assault 1      5     -3    3     -
+  Pyrithite spear (shooting)     12"     Assault 1      8     -4    D6    Each time an attack made with this weapon targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  Adrasite spear (melee)         Melee   Melee          +1    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Pyrithite spear (melee)        Melee   Melee          +1    -3    2     -
+  ABIL   • Any model’s adrasite spear can be replaced with 1 pyrithite spear. • Any model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah
+
+================================================================
+  sagittarum_custodians  (Sagittarum Custodians)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:3  A:3  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, SAGITTARUM CUSTODIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Bolt volley                  36"     Assault 3      5     -1    2     -
+  - Disintegration beam          15"     Assault 1      5     -3    3     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah
+
+================================================================
+  anathema_psykana_rhino  (Anathema Psykana Rhino)
+================================================================
+  STATS  M:12"  WS:6+  BS:3+  S:6  T:7  W:6-10  A:3  Ld:8  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ANATHEMA PSYKANA, VEHICLE, TRANSPORT, SMOKESCREEN, RHINO
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hunter-killer missile          48"     Heavy 1        10    -2    D6    The bearer can only shoot with each hunter-killer missile it is equipped with once per battle.
+  Storm bolter                   24"     Rapid Fire 2   4     0     1     -
+  ABIL   • This model can be equipped with 1 hunter-killer missile.
+  ABIL   Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Anathema Psykana Dedicated Transport : Do not follow a Detachment ’s normal rules for Battlefield Role slots for this Dedicated Transport. Instead, you can include one of this unit for each ANATHEMA PSYKANA INFANTRY unit in that Detachment.
+  ABIL   This model has a transport capacity of 10 ANATHEMA PSYKANA INFANTRY models.
+
+================================================================
+  coronus_grav_carrier  (Coronus Grav carrier)
+================================================================
+  STATS  M:14"  WS:6+  BS:2+  S:7  T:8  W:9-18  A:3  Ld:11  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, TRANSPORT, FLY, MACHINE SPIRIT, CORONUS GRAV-CARRIER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         36"     Heavy 2        7     -4    3     Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        24"     Heavy 6        5     -2    1     -
+  Twin lastrum bolt cannon       36"     Heavy 6        6     -2    1     -
+  ABIL   Flare Shielding : This model has a 5+ invulnerable save . Hover Tank : Distances are always measured to and from this model’s hull. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+  ABIL   This model has a transport capacity of 6 ADEPTUS CUSTODES INFANTRY models.
+
+================================================================
+  allarus_custodians  (Allarus Custodians)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:4  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, TELEPORT HOMER, TERMINATOR, ALLARUS, CUSTODIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Balistus grenade launcher      18"     Assault D3     5     -3    1     Blast
+  Castellan axe (shooting)       24"     Rapid Fire 1   4     -1    2     -
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Castellan axe (melee)          Melee   Melee          +3    -2    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any number of models can each have their guardian spear replaced with 1 castellan axe. • Any number of models can each be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , From Golden Light , Martial Ka’tah Slayers of Tyrants : Each time this unit piles in or consolidates , each model in the unit can move towards an enemy CHARACTER model instead of the closest enemy model, so long as one or more models in this unit finish that move within Engagement Range of that enemy CHARACTER model.
+
+================================================================
+  custodian_wardens  (Custodian Wardens)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:3  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, CUSTODIAN WARDENS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Castellan axe (shooting)       24"     Rapid Fire 1   4     -1    2     -
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Castellan axe (melee)          Melee   Melee          +3    -2    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any number of models can each have their guardian spear replaced with 1 castellan axe. • Any number of models can each be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Binding Oaths : Each time a model in this unit would lose a wound, roll one D6: on a 6, that wound is not lost. Watchmen : While a friendly < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH CHARACTER unit is within 3" of this unit, that CHARACTER unit can use the Look Out, Sir rule even if this unit contains fewer than 3 models.
+
+================================================================
+  venerable_contemptor  (Venerable Contemptor Dreadnought)
+================================================================
+  STATS  M:9"  WS:2+  BS:2+  S:7  T:7  W:9  A:5  Ld:11  Sv:2+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, CORE, DREADNOUGHT, VENERABLE CONTEMPTOR DREADNOUGHT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Combi-bolter                   24"     Rapid Fire 2   4     0     1     -
+  Kheres-pattern assault cannon  24"     Heavy 6        7     -1    1     -
+  Multi-melta                    24"     Heavy 2        8     -4    D6    Each time an attack made with this weapon targets a unit within half range, that attack has a Damage characteristic of D6+2.
+  Dreadnought combat weapon      Melee   Melee          x2    -3    3     -
+  ABIL   • This model’s multi-melta can be replaced with 1 kheres-pattern assault cannon.
+  ABIL   Guardian Eternal : Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Unyielding Ancient : Each time this model would lose a wound, roll one D6: on a 6, that wound is not lost. Atomantic Shielding : This model has a 5+ invulnerable save . Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+
+================================================================
+  vexilus_praetor  (Vexilus Praetor)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:6  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, GUARDIAN, VEXILUS PRAETOR
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Castellan axe (shooting)       24"     Rapid Fire 1   4     -1    2     -
+  Guardian spear (shooting)      24"     Rapid Fire 1   4     -1    2     -
+  Castellan axe (melee)          Melee   Melee          +3    -2    2     -
+  Guardian spear (melee)         Melee   Melee          +2    -3    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • This model’s guardian spear can be replaced with one of the following: 1 castellan axe; 1 praesidium shield. • This model’s vexilla defensor can be replaced with one of the following: 1 vexilla imperius; 1 vexilla magnifica. • This model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Aquilane Relic : Your army can only include each type of vexilla (e.g. vexilla magnifica) once.
+
+================================================================
+  vexilus_praetor_allarus  (Vexilus Praetor in Allarus Terminator Armour)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:7  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CHARACTER, TELEPORT HOMER, TERMINATOR, ALLARUS, VEXILUS PRAETOR
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Balistus grenade launcher      18"     Assault D3     5     -3    1     Blast
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • This model can be equipped with 1 misericordia. • This model’s vexilla defensor can be replaced with one of the following: 1 vexilla imperius; 1 vexilla magnifica.
+  ABIL   Aegis of the Emperor , From Golden Light , Martial Ka’tah Aquilane Relic : Your army can only include each type of vexilla (e.g. vexilla magnifica) once.
+
+================================================================
+  vigilators  (Vigilators)
+================================================================
+  STATS  M:7"  WS:3+  BS:3+  S:3  T:3  W:1  A:2  Ld:8  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ANATHEMA PSYKANA, INFANTRY, CORE, VIGILATORS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Executioner greatblade         Melee   Melee          +2    -3    2     -
+  ABIL   Daughters of the Abyss
+
+================================================================
+  aquilon_custodians  (Aquilon Custodians)
+================================================================
+  STATS  M:6"  WS:2+  BS:2+  S:5  T:5  W:4  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, CORE, TERMINATOR, TELEPORT HOMER, AQUILON CUSTODIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Infernus firepike              15"     Heavy D6       6     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Lastrum storm bolter           24"     Rapid Fire 2   5     -1    1     -
+  Twin adrathic destructor       18"     Assault 2      5     -3    3     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Solerite power gauntlet        Melee   Melee          x2    -4    2     -
+  Solerite power talon           Melee   Melee          +1    -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon. Each time an attack is made with this weapon, you can re-roll the wound roll .
+  ABIL   • Any model’s lastrum storm bolter can be replaced with one of the following: 1 infernus firepike; 1 twin adrathic destructor. • Any model’s solerite power gauntlet can be replaced with 1 solerite power talon. • Any model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah From Golden Light : During deployment, you can set up this unit in a Godstrike-pattern teleportarium array instead of setting it up on the battlefield. If you do, at the end of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+
+================================================================
+  contemptor_achillus  (Contemptor Achillus Dreadnought)
+================================================================
+  STATS  M:9"  WS:2+  BS:2+  S:7  T:7  W:9  A:5  Ld:11  Sv:2+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, CORE, DREADNOUGHT, CONTEMPTOR-ACHILLUS DREADNOUGHT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Achillus dreadspear (shooting) 24"     Heavy 2        8     -2    3     -
+  Infernus incinerator           12"     Heavy D6       6     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Lastrum storm bolter           24"     Rapid Fire 2   5     -1    1     -
+  Twin adrathic destructor       18"     Assault 2      5     -3    3     -
+  Achillus dreadspear (melee)    Melee   Melee          x2    -3    D3+3  -
+  ABIL   • This model's lastrum storm bolters can each be replaced with one of the following: 1 infernus incinerator; 1 twin adrathic destructor.
+  ABIL   Atomantic Shielding : This model has a 5+ invulnerable save . Unyielding Ancient : Each time this model would lose a wound, roll one D6: on a 6, that wound is not lost. Guardian Eternal : Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+
+================================================================
+  contemptor_galatus  (Contemptor Galatus Dreadnought)
+================================================================
+  STATS  M:9"  WS:2+  BS:2+  S:7  T:7  W:9  A:5  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, CORE, DREADNOUGHT, CONTEMPTOR-GALATUS DREADNOUGHT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Galatus warblade (shooting)    12"     Heavy 2D6      6     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Galatus warblade (melee)       Melee   Melee          User  -3    3     Each time the bearer fights, it makes D3 additional attacks with this weapon.
+  ABIL   Unyielding Ancient : Each time this model would lose a wound, roll one D6: on a 6, that wound is not lost. Guardian Eternal : Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+
+================================================================
+  vertus_praetors  (Vertus Praetors)
+================================================================
+  STATS  M:14"  WS:2+  BS:2+  S:5  T:6  W:5  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, BIKER, CORE, FLY, VERTUS, PRAETORS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hurricane bolter               24"     Rapid Fire 6   4     0     1     -
+  Salvo launcher                 24"     Heavy 1        8     -4    D3+3  -
+  Interceptor lance              Melee   Melee          +2    -3    2     Each time the bearer makes a melee attack with this weapon, if it made a charge move or performed a Heroic Intervention this turn, add 1 to that attack’s wound roll .
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any number of models can each have their hurricane bolter replaced with 1 salvo launcher. • Any number of models can each be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Implacable Vanguard : Each time this unit Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit.
+
+================================================================
+  witchseekers  (Witchseekers)
+================================================================
+  STATS  M:7"  WS:3+  BS:3+  S:3  T:3  W:1  A:2  Ld:8  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ANATHEMA PSYKANA, INFANTRY, CORE, WITCHSEEKERS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Witchseeker flamer             12"     Assault D6     4     -1    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  ABIL   Daughters of the Abyss Seeker Cadre : At the start of the first battle round, before the first turn begins, this unit, or the ANATHEMA PSYKANA TRANSPORT it is embarked within, can make a Normal Move of up to 6" as if it were your Movement phase . This unit must end that move more than 9" away from any enemy models. If both players have units that can do this, the player who is taking the first turn moves their units first.
+
+================================================================
+  agamatus_custodians  (Agamatus Custodians)
+================================================================
+  STATS  M:14"  WS:2+  BS:2+  S:5  T:6  W:4  A:4  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, BIKER, CORE, FLY, AGAMATUS CUSTODIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Adrathic devastator            18"     Heavy 2        6     -3    3     -
+  Lastrum bolt cannon            36"     Heavy 3        6     -2    1     -
+  Twin las-pulser                24"     Heavy 4        8     -2    D3    -
+  Interceptor lance              Melee   Melee          +2    -3    2     Each time the bearer makes a melee attack with this weapon, if it made a charge move or performed a Heroic Intervention this turn, add 1 to that attack’s wound roll .
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any model's lastrum bolt cannon can be replaced with one of the following: 1 adrathic devastator; 1 twin las-pulser. • Any model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Implacable Vanguard : Each time this unit Advances, do not make an Advance roll . Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit.
+
+================================================================
+  pallas_grav_attack  (Pallas Grav attack)
+================================================================
+  STATS  M:16"  WS:6+  BS:2+  S:5  T:6  W:8  A:2  Ld:11  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, FLY, PALLAS GRAV-ATTACK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         36"     Heavy 2        7     -4    3     Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        24"     Heavy 6        5     -2    1     -
+  ABIL   Flare Shielding : This model has a 5+ invulnerable save . Hover Tank : Distances are always measured to and from this model’s hull. Explodes : When this model is destroyed, roll one D6 before amoving it from play. On a 6 it explodes, and each unit within 3" suffers 1 mortal wound .
+
+================================================================
+  venatari_custodians  (Venatari Custodians)
+================================================================
+  STATS  M:12"  WS:2+  BS:2+  S:5  T:5  W:3  A:3  Ld:11  Sv:3+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, INFANTRY, FLY, CORE, JUMP PACK, VENATARI CUSTODIANS
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Kinetic destroyer              18"     Pistol 2       6     -2    2     Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 1 additional hit.
+  Venatari lance (shooting)      12"     Assault 2      6     -2    2     -
+  Misericordia                   Melee   Melee          User  -2    1     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  Tarsus buckler                 Melee   Melee          +1    -2    1     -
+  Venatari lance (melee)         Melee   Melee          +1    -3    2     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Any model’s kinetic destroyer and tarsus buckler can be replaced with 1 Venatari lance. • Any model can be equipped with 1 misericordia.
+  ABIL   Aegis of the Emperor , Martial Ka’tah Airborne Hunters : During deployment, you can set up this unit high in the skies instead of setting it up on the battlefield. If you do, then in the Reinforcements step of one of your Movement phases you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models.
+
+================================================================
+  ares_gunship  (Ares Gunship)
+================================================================
+  STATS  M:20"-50"  WS:6+  BS:2+  S:8  T:8  W:12-22  A:6  Ld:11  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, AIRCRAFT, FLY, MACHINE SPIRIT, ARES GUNSHIP
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         48"     Heavy 1        9     -4    D3+3  Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        36"     Heavy 4        7     -2    1     -
+  ABIL   Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Eclipse Shield : This model has a 5+ invulnerable save . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack's hit roll . Hover Jet : In your Command phase , this model can hover. If it does, then until the start of your next Command phase, its Move characteristic becomes 20" and it loses the Airborne , Hard to Hit and Supersonic abilities.
+
+================================================================
+  orion_assault_dropship  (Orion Assault Dropship)
+================================================================
+  STATS  M:20"-50"  WS:6+  BS:2+  S:8  T:8  W:12-22  A:6  Ld:11  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, AIRCRAFT, FLY, TRANSPORT, MACHINE SPIRIT, ORION ASSAULT DROPSHIP
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         48"     Heavy 1        9     -4    D3+3  Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        36"     Heavy 4        7     -2    1     -
+  Spiculus heavy bolt launcher   48"     Heavy 3        7     -1    2     -
+  Twin lastrum bolt cannon       36"     Heavy 6        6     -2    1     -
+  ABIL   Airborne : You cannot declare a charge with this model, and it can only be chosen as a target of a charge if the unit making the charge can FLY . You can only fight with this model if it is within Engagement Range of any enemy units that can FLY , and this model can only make melee attacks against units that can FLY . Enemy units can only make melee attacks against this model if they can FLY . Supersonic : Each time this model makes a Normal Move , Advances or Falls Back , first pivot it on the spot up to 90° (this does not contribute to how far the model moves), then move the model straight forwards. It cannot pivot again after the initial pivot. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Eclipse Shield : This model has a 5+ invulnerable save . Hard to Hit : Each time a ranged attack is made against this model, subtract 1 from that attack's hit roll . Hover Jet : In your Command phase , this model can hover. If it does, then until the start of your next Command phase, its Move characteristic becomes 20" and it loses the Airborne , Hard to Hit and Supersonic abilities.
+  ABIL   This model has a transport capacity of 12 ADEPTUS CUSTODES INFANTRY models or 7 ADEPTUS CUSTODES INFANTRY models and 1 CONTEMPTOR-ACHILLUS DREADNOUGHT , 1 CONTEMPTOR-GALATUS DREADNOUGHT or 1 VENERABLE CONTEMPTOR DREADNOUGHT model.
+
+================================================================
+  venerable_land_raider  (Venerable Land Raider)
+================================================================
+  STATS  M:10"  WS:6+  BS:2+  S:8  T:8  W:9-16  A:6  Ld:11  Sv:2+
+  INVULN none
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, TRANSPORT, MACHINE SPIRIT, SMOKESCREEN, VENERABLE LAND RAIDER
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  Hunter-killer missile          48"     Heavy 1        10    -2    D6    The bearer can only shoot with each hunter-killer missile it is equipped with once per battle.
+  Storm bolter                   24"     Rapid Fire 2   4     0     1     -
+  Twin heavy bolter              36"     Heavy 6        5     -1    2     -
+  Twin lascannon                 48"     Heavy 2        9     -3    D6    -
+  ABIL   • This model can be equipped with 1 hunter-killer missile. • This model can be equipped with 1 storm bolter.
+  ABIL   Unyielding Ancient : Each time this model would lose a wound, roll one D6: on a 6, that wound is not lost. Explodes : When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6" suffers D6 mortal wounds .
+  ABIL   This model has a transport capacity of 5 < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH INFANTRY models.
+
+================================================================
+  caladius_grav_tank  (Caladius Grav tank)
+================================================================
+  STATS  M:14"  WS:6+  BS:2+  S:6  T:7  W:8-14  A:3  Ld:11  Sv:3+
+  INVULN 5+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, FLY, MACHINE SPIRIT, CALADIUS GRAV-TANK
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         48"     Heavy 2        9     -4    D3+3  Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        36"     Heavy 8        7     -2    1     -
+  Twin Iliastus accelerator cannon 60"     Heavy 8        7     -3    2     -
+  Twin lastrum bolt cannon       36"     Heavy 6        6     -2    1     -
+  ABIL   • This model’s twin iliastus accelerator cannon can be replaced with 1 twin arachnus heavy blaze cannon.
+  ABIL   Flare Shielding : This model has a 5+ invulnerable save . Hover Tank : Distances are always measured to and from this model’s hull. Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds .
+
+================================================================
+  telemon_heavy_dreadnought  (Telemon Heavy Dreadnought)
+================================================================
+  STATS  M:8"  WS:2+  BS:2+  S:8  T:8  W:8-14  A:4  Ld:11  Sv:2+
+  INVULN 4+
+  KW     IMPERIUM, ADEPTUS CUSTODES, < S HIELD HOST> AQUILAN SHIELD DREAD HOST EMISSARIES IMPERATUS EMPEROR’S CHOSEN SHADOWKEEPERS SOLAR WATCH, VEHICLE, DREADNOUGHT, TELEMON HEAVY DREADNOUGHT
+  WEAPON                         RNG     TYPE           S     AP    D     ABILITIES
+  - Beam                         36"     Heavy 2        8     -4    3     Each time an attack is made with this profile, if that target is a VEHICLE unit, you can re-roll the wound roll .
+  - Burst                        24"     Heavy 6        7     -2    1     -
+  Iliastus accelerator culverin  48"     Heavy 4        7     -3    2     -
+  Spiculus bolt launcher         24"     Heavy 5        5     -1    1     Each time this weapon is selected to shoot with, if this model has not moved this turn, change this weapon's Type to Heavy 10 .
+  Twin plasma projector          12"     Heavy 2D3      6     -2    1     Each time an attack is made with this weapon, that attack automatically hits the target.
+  Telemon caestus                Melee   Melee          x2    -3    4     Each time the bearer fights, it makes 1 additional attack with this weapon.
+  ABIL   • Each of this model’s iliastus accelerator culverins can be replaced with one of the following: 1 Arachnus storm cannon; 1 Telemon caestus and 1 twin plasma projector.
+  ABIL   Unyielding Ancient : Each time this model would lose a wound, roll one D6: on a 6, that wound is not lost. Guardian Eternal : Each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack (to a minimum of 1). Explodes : When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6" suffers D3 mortal wounds . Reinforced Atomantic Shielding : This model has a 4+ invulnerable save .
