@@ -460,6 +460,7 @@ def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type
         "tesla": "additional hits" in abilities,
         "dakka": profile.weapon_type == "Dakka",
         "klaw_penalty": profile.is_melee and "subtract" in abilities,
+        "has_mortal_wounds": "mortal wound" in abilities.lower(),
     }
 
 
@@ -485,6 +486,29 @@ _PIP_POSITIONS: dict[int, list[tuple[int, int]]] = {
 }
 
 
+def threshold_header_html(threshold: int) -> str:
+    """Compact header row: 1  2  [3+]  4+  5+  6+ with active threshold boxed."""
+    color = _THRESHOLD_COLOR.get(min(6, threshold), "#f97316")
+    parts = []
+    for v in range(1, 7):
+        label = f"{v}+"
+        if v < threshold:
+            style = (
+                "width:34px;text-align:center;display:inline-block;" "font-size:10px;color:#4b5563;"
+            )
+        elif v == threshold:
+            style = (
+                f"width:34px;text-align:center;display:inline-block;font-size:10px;"
+                f"color:{color};border:1px solid {color};border-radius:3px;"
+            )
+        else:
+            style = (
+                "width:34px;text-align:center;display:inline-block;" "font-size:10px;color:#6b7280;"
+            )
+        parts.append(f'<span style="{style}">{label}</span>')
+    return f'<div style="display:flex;margin:0 0 1px 0;">{"".join(parts)}</div>'
+
+
 def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: int = 32) -> str:
     """SVG for a single d6 face with pip pattern. Value 1 always shows × (always-miss marker)."""
     pips = _PIP_POSITIONS.get(max(1, min(6, value)), [])
@@ -508,7 +532,17 @@ def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: 
 
 
 def dice_row_html(threshold: int) -> str:
-    """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame."""
+    """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame.
+
+    For threshold > 6 (impossible roll): 6 grey miss dice + red × marker.
+    """
+    if threshold > 6:
+        miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, 7))
+        impossible = (
+            '<span style="font-size:16px;color:#ef4444;vertical-align:middle;'
+            'margin:0 4px;font-weight:bold;">×</span>'
+        )
+        return f'<div style="margin:4px 0;">{miss_dice}{impossible}</div>'
     frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
     miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, threshold))
     success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
@@ -525,12 +559,16 @@ def dice_row_html(threshold: int) -> str:
 def modifier_die_pair_html(
     from_thresh: int, to_thresh: int, label: str, value: int, color: str
 ) -> str:
-    """Modifier pair: label badge + from-die + arrow + to-die showing the threshold shift."""
+    """Modifier pair: label badge + from-die (neutral) + arrow + to-die (colored).
+
+    Left die = starting threshold (neutral grey reference).
+    Right die = new threshold after modifier (colored by effect).
+    """
     sign = "+" if value > 0 else ""
     arrow = "→" if value > 0 else "←"
     from_clamped = max(1, min(6, from_thresh))
     to_clamped = max(1, min(6, to_thresh))
-    from_die = dice_face_svg(from_clamped, color="#6b7280", miss=(to_thresh > from_thresh))
+    from_die = dice_face_svg(from_clamped, color="#6b7280")
     to_die = dice_face_svg(to_clamped, color=color)
     return (
         f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
@@ -560,18 +598,21 @@ def _render_dice_roll_block(
     block: dict,  # type: ignore[type-arg]
     weapon_special: dict | None = None,  # type: ignore[type-arg]
 ) -> None:
-    """HIT or WOUND roll block: dice row with colored frame + modifier pairs."""
+    """HIT or WOUND roll block: threshold header + dice row + modifier pairs."""
     base = block["base"]
     stack = block.get("stack", [])
     modified = block.get("modified", base)
     st.markdown(f"**{title}** &nbsp; {skill_label} {base}+", unsafe_allow_html=True)
-    st.markdown(dice_row_html(base), unsafe_allow_html=True)
+    st.markdown(
+        threshold_header_html(base) + dice_row_html(base),
+        unsafe_allow_html=True,
+    )
     if stack:
         current = base
         parts = []
         for entry in stack:
             next_thresh = max(2, current - entry["value"])
-            color = "#22c55e" if entry["value"] > 0 else "#ef4444"
+            color = "#3b82f6" if entry["value"] > 0 else "#ef4444"
             parts.append(
                 modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
             )
@@ -613,7 +654,10 @@ def _render_dice_wound_block(
         f"**WOUND** &nbsp; S {strength} {rel} T {toughness} &nbsp;→&nbsp; {base}+",
         unsafe_allow_html=True,
     )
-    st.markdown(dice_row_html(base), unsafe_allow_html=True)
+    st.markdown(
+        threshold_header_html(base) + dice_row_html(base),
+        unsafe_allow_html=True,
+    )
     if wound_stack:
         current = base
         parts = []
@@ -634,7 +678,7 @@ def _render_dice_wound_block(
 
 
 def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
-    """SAVE block: normal save + AP/cover modifier pairs + separate invuln row."""
+    """SAVE block: threshold header + dice row for armour/invuln + modifier pairs + 7+ handling."""
     armour = save["armour"]
     armour_eff = save["armour_eff"]
     invuln = save["invuln"]
@@ -644,44 +688,61 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
 
     st.markdown("**SAVE**")
 
-    base_color = _THRESHOLD_COLOR.get(armour, "#f97316")
+    # Armour save row
+    base_color = _THRESHOLD_COLOR.get(min(6, armour), "#f97316")
+    sv_label = f"Sv {armour}+" if armour <= 6 else "Sv —"
     st.markdown(
-        f"Sv {armour}+ &nbsp; {dice_face_svg(min(6, armour), color=base_color)}",
+        f'<span style="font-size:12px;color:#9ca3af;">{sv_label}</span>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)),
         unsafe_allow_html=True,
     )
 
+    # Modifier pairs (AP + cover stack)
     parts: list[str] = []
     if ap != 0:
         parts.append(modifier_die_pair_html(armour, armour_eff, f"AP{ap}", -ap, "#ef4444"))
     current = armour_eff
     for m in stack:
-        next_thresh = max(2, current - m["value"])
+        next_thresh = current - m["value"]
         color = "#22c55e" if m["value"] > 0 else "#ef4444"
         parts.append(modifier_die_pair_html(current, next_thresh, m["label"], m["value"], color))
         current = next_thresh
-    if parts and not using_invuln:
+
+    # Effective save result row
+    if parts:
+        eff_clamped = min(effective, 7)
+        eff_row = threshold_header_html(eff_clamped) + dice_row_html(eff_clamped)
+        eff_label = f"{effective}+" if effective <= 6 else "7+ (impossible)"
         parts.append(
             '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
             f'<div style="font-size:12px;color:#9ca3af;">Effective Save: '
-            f'<b style="color:#f8fafc;">{effective}+</b></div>'
+            f'<b style="color:#f8fafc;">{eff_label}</b></div>' + eff_row
         )
-    if parts:
         st.markdown("".join(parts), unsafe_allow_html=True)
 
+    # Invuln save row
     if invuln is not None:
-        inv_color = _THRESHOLD_COLOR.get(invuln, "#f97316")
-        inv_note = " _(active)_" if using_invuln else ""
+        inv_color = _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
+        inv_label = f"Invuln {invuln}+"
+        active_note = (
+            f' <span style="font-size:10px;color:{inv_color};border:1px solid {inv_color};'
+            f'border-radius:3px;padding:0 3px;">active</span>'
+            if using_invuln
+            else ""
+        )
         st.markdown(
-            f"Invuln {invuln}+{inv_note} &nbsp; {dice_face_svg(min(6, invuln), color=inv_color)}"
-            f' &nbsp; <span style="font-size:11px;color:#6b7280;">AP/Cover not applicable</span>',
+            f'<span style="font-size:12px;color:#9ca3af;">{inv_label}</span>'
+            f' <span style="font-size:10px;color:#6b7280;">AP/Cover not applicable</span>'
+            f"{active_note}",
             unsafe_allow_html=True,
         )
-        if using_invuln:
-            st.markdown(
-                f'<div style="font-size:12px;color:#9ca3af;">Effective Save: '
-                f'<b style="color:#f8fafc;">{effective}+</b> _(invuln)_</div>',
-                unsafe_allow_html=True,
-            )
+        st.markdown(
+            threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),
+            unsafe_allow_html=True,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -774,34 +835,43 @@ def _render_damage_block(
 
     st.markdown("**DAMAGE**")
     is_multi_lp = def_unit.wounds > 1
+    is_single_model = def_unit.models_max <= 1
     dmg_str = str(profile.damage)
     dmg_label = f"D{dmg_str}" if not dmg_str.lstrip("+-").isdigit() else f"{dmg_str} fixed"
     st.caption(f"Damage: {dmg_label} per failed save · Target: {def_unit.wounds} HP/model")
 
-    c1, c2 = st.columns(2)
-    with c1:
+    models_lost = 0
+    if not is_single_model:
         models_lost = st.number_input(
             "Models lost",
             min_value=0,
             step=1,
             key=f"ml_{tab_key}",
         )
-    with c2:
+
+    wounds_on_front = 0
+    if is_multi_lp:
+        wf_label = (
+            f"Wounds taken (0–{def_unit.wounds - 1})"
+            if is_single_model
+            else f"Wounds on front model (0–{def_unit.wounds - 1})"
+        )
+        wounds_on_front = st.number_input(
+            wf_label,
+            min_value=0,
+            max_value=def_unit.wounds - 1,
+            step=1,
+            key=f"wf_{tab_key}",
+        )
+
+    weapon_special = _detect_weapon_special(profile)
+    mortal_wounds = 0
+    if weapon_special.get("has_mortal_wounds"):
         mortal_wounds = st.number_input(
             "Mortal Wounds",
             min_value=0,
             step=1,
             key=f"mw_{tab_key}",
-        )
-
-    wounds_on_front = 0
-    if is_multi_lp:
-        wounds_on_front = st.number_input(
-            f"Wounds on front model (0–{def_unit.wounds - 1})",
-            min_value=0,
-            max_value=def_unit.wounds - 1,
-            step=1,
-            key=f"wf_{tab_key}",
         )
 
     total = apply_damage_attacks(
@@ -841,13 +911,6 @@ def _render_damage_block(
 # ---------------------------------------------------------------------------
 # 6d-v2 Resolution tab
 # ---------------------------------------------------------------------------
-
-_COVER_OPTIONS: list[str] = [
-    "No Cover",
-    "Light Cover (+1 Save)",
-    "Dense Cover (−1 Hit)",
-    "Heavy Cover (+1 Save vs Melee)",
-]
 
 
 def _render_resolution_tab(
@@ -908,8 +971,17 @@ def _render_resolution_tab(
     live = resolve_bracket_stats(atk_unit, per_model_hp)
     skill = int(live["ws"].rstrip("+")) if use_melee else int(live["bs"].rstrip("+"))
 
-    # Read cover from session_state (set by selectbox from previous render, default No Cover)
-    cover = st.session_state.get(f"cover_{tab_key}", _COVER_OPTIONS[0])
+    is_shooting = phase_key == "shooting"
+    is_fight = phase_key == "fight"
+
+    # Read cover checkbox states (checkboxes are rendered later, state read now)
+    dense_cover = is_shooting and st.session_state.get(f"dense_cover_{tab_key}", False)
+    light_cover = is_shooting and st.session_state.get(f"light_cover_{tab_key}", False)
+    heavy_cover = (
+        is_fight
+        and st.session_state.get(f"heavy_cover_{tab_key}", False)
+        and not atk_state.get("turn_flags", {}).get("charged")
+    )
 
     # Build modifier lists including cover effects
     base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee)
@@ -923,13 +995,13 @@ def _render_resolution_tab(
         final_atk_mods.append(
             {"label": "Power Klaw", "value": -1, "roll_type": "hit", "source": "weapon"}
         )
-    if cover.startswith("Dense"):
+    if dense_cover:
         final_atk_mods.append(
             {"label": "Dense Cover", "value": -1, "roll_type": "hit", "source": "terrain"}
         )
-    if cover.startswith("Light"):
+    if light_cover:
         final_save_mods.append({"label": "Light Cover", "value": 1})
-    elif cover.startswith("Heavy") and not atk_state.get("turn_flags", {}).get("charged"):
+    if heavy_cover:
         final_save_mods.append({"label": "Heavy Cover", "value": 1})
 
     atk_result = resolve_attack_modifiers(
@@ -967,6 +1039,11 @@ def _render_resolution_tab(
         st.markdown("**HIT** &nbsp; AUTO-HIT", unsafe_allow_html=True)
     else:
         _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
+
+    # Dense Cover checkbox: Shooting phase only, affects hit roll → placed near HIT block
+    if is_shooting:
+        st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{tab_key}")
+
     st.markdown("")
 
     # WOUND BLOCK
@@ -974,15 +1051,23 @@ def _render_resolution_tab(
 
     st.markdown("---")
 
-    # SAVE BLOCK + FNP + COVER
+    # SAVE BLOCK
     _render_dice_save_block(save_result, ap)
+
+    # Cover checkboxes for save modifiers (phase-bound)
+    if is_shooting:
+        st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{tab_key}")
+    if is_fight:
+        charged = atk_state.get("turn_flags", {}).get("charged", False)
+        if not charged:
+            st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{tab_key}")
+
     if def_unit.fnp is not None:
         st.markdown("")
         if fnp_value is None:
             st.markdown(f"~~**FNP**~~ ~~{def_unit.fnp}+~~ _(ignored)_")
         else:
             st.markdown(f"**FNP** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
-    st.selectbox("Cover", _COVER_OPTIONS, key=f"cover_{tab_key}")
 
     st.markdown("---")
 

@@ -21,21 +21,21 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 17, 2026-06-06)
+## Aktueller Stand (nach Session 18, 2026-06-06)
 
 ### Was funktioniert ✅
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6i (Basis) committed
-- 6d-v3 Würfel-UI: SVG-Würfelfaces, `dice_face_svg` / `dice_row_html` / `modifier_die_pair_html` / `special_die_html`
-- Englische Begriffe in gameActionArea, Rapid Fire Badge in Declaration
-- Stratagem Undo-Button (CP-Erstattung + Modifier-Rollback)
-- Auto-Advance: abgehandelte Einheiten ans Listenende
+- 6d-v3 Würfel-UI vollständig: Schwellenwert-Kopfzeile, Modifier-Paare (korrekte Reihenfolge), 7+-Handling
+- Cover: 3 phasengebundene Checkboxen (Dense nach HIT, Light/Heavy nach SAVE)
+- Damage-Block: MW-Bedingung + Einzelmodell-Fix
 - 456 Tests grün
 
-### Session 17 (2026-06-06) ✅
-- 6d-v3 SVG-Würfel-UI implementiert (dice-Komponenten + neue Render-Blöcke in `_common.py`)
-- Testsession: 21 Abweichungen aufgenommen und dokumentiert
-- Regelrecherche: Fight Phase, Heroic Intervention, Cover, FNP, Gretchin nachgelesen
+### Session 18 (2026-06-06) ✅
+- Regelrecherche: Resurrection Orb, WAAAGH!, Skarabäen → Ergebnisse in next_session.md
+- 6d-v3 Würfel-UI Fixes: `threshold_header_html`, Modifier-Dimming-Fix, Blau für positive Mods, SAVE-Überarbeitung, 7+
+- Cover: Dropdown → 3 Checkboxen + Phasenbindung + Dense nach HIT-Block
+- Damage-Block: `has_mortal_wounds`-Flag + `is_single_model`-Fix
 
 ---
 
@@ -56,24 +56,25 @@ Lokale Wahapedia-Dateien lesen, Ergebnisse in diese Datei eintragen:
 - `docs/work/wahapedia_necrons/` → Resurrection Orb (KERN-Einschränkung?), Command Protocols (6. Protokoll Setup-Zeitpunkt, Dynastiebonus, Effekte auf Living Metal/RP), Skarabäen (6=auto-wound)
 - `docs/work/wahapedia_orks/` → WAAAGH! (welche Einheiten ausgenommen?)
 
-### Schritt 2 — 6d-v3 Würfel-UI Fixes (nur `uiLayout/_common.py`)
+### ✅ Schritt 2 — 6d-v3 Würfel-UI Fixes (2026-06-06)
 
-Alle gut isoliert, kein Architektureingriff:
+- Schwellenwert-Zeile (`threshold_header_html`) über allen Würfelreihen
+- Modifier-Paar: linker Würfel neutral, rechter farbig (kein miss-Dimming mehr)
+- Positive Modifier-Farbe: blau (#3b82f6) statt grün
+- SAVE: Würfelreihe für Rüstung + Invuln + Effective Save
+- 7+/unmöglicher Save: grauer Würfelblock + rotes `×`-Marker
 
-1. Schwellenwert-Zeile über Würfeln + Ausrichtungslinien (HIT, WOUND, SAVE, Invuln)
-2. Modifier-Paar Reihenfolge fix + MWBD-Farbe blau
-3. 7+ / unmöglicher Save: roter `[×]`-Würfel
+### ✅ Schritt 3 — Cover-Überarbeitung (2026-06-06)
 
-### Schritt 3 — Cover-Überarbeitung (noch `uiLayout/_common.py`)
+- Dropdown → 3 separate Checkboxen (Dense/Light/Heavy)
+- Phasenbindung: Dense+Light nur Shooting, Heavy nur Fight
+- Dense Cover Checkbox direkt nach HIT-Block
+- `_COVER_OPTIONS` Liste entfernt
 
-1. Dropdown → Checkboxen/Buttons
-2. Dense Cover in HIT-Block verschieben
-3. Phasenbindung: Dense/Light nur Shooting, Heavy nur Fight
+### ✅ Schritt 4 — Damage-Block Fixes (2026-06-06)
 
-### Schritt 4 — Damage-Block Fixes (noch `uiLayout/_common.py`)
-
-1. Mortal Wounds nur wenn Waffenfähigkeit vorhanden
-2. Einzelmodell: kein Modellverlust-Counter
+- `has_mortal_wounds` in `_detect_weapon_special`: MW-Input nur wenn `"mortal wound"` in abilities
+- `is_single_model = models_max ≤ 1`: kein Model-Counter, nur Wunden-Input
 
 ### Schritt 5 — Fight Phase (eigene Session, komplex)
 
@@ -196,12 +197,18 @@ Hier stehen die Tasks mit Beobachtungsdetail als Kontext.
 
 ---
 
+## Regelerkenntnisse (2026-06-06, Session 18)
+
+- **Resurrection Orb**: Keine KERN-Einschränkung — gilt für alle `<DYNASTY>`-Einheiten. Bedingung: nicht bei Starting Strength + RP noch nicht ausgelöst diese Phase. Einmalig pro Kampf. Aktuelle Implementierung ist korrekt (keine falsche KERN-Prüfung).
+- **WAAAGH!**: Keine Einheiten-Ausnahmen — alle ORKS-Modelle profitieren (Stage 1: ORKS CORE+CHARACTER dürfen nach Advance chargen; alle ORKS: +1 Str/A, 5+/6+ Invuln). GRETCHIN-Ausnahme gilt nur für "Waaagh! Energy"-Zählung, nicht für WAAAGH! selbst.
+- **Skarabäen**: Feeder Mandibles "Unmodified hit roll of 6 = auto-wounds." BEREITS in `data/wh40k_9e/necrons/weapons.yaml` als `abilities` Text. Kein Code-Feature nötig; nur als Abilities-Text angezeigt (gleich wie Tesla/Dakka).
+- **Command Protocols 6. Protokoll**: Bereits in Session 17 gefixt ✅.
+
+---
+
 ## Noch nachzuschlagen (vor Umsetzung der betroffenen Tasks)
 
-- **Resurrection Orb** — nur KERN-Einheiten? → `docs/work/wahapedia_necrons/`
-- **WAAAGH!** — welche Ork-Einheiten ausgenommen? → `docs/work/wahapedia_orks/`
-- **Command Protocols** — 6. Protokoll Setup-Zeitpunkt, Dynastiebonus-Regel, Effekte auf Living Metal/RP → `docs/work/wahapedia_necrons/`
-- **Skarabäen** — 6=auto-wound: erst `docs/work/wahapedia_necrons/` prüfen, dann YAML vs. Code klären
+_(leer — alle offenen Recherchepunkte abgearbeitet)_
 
 ---
 

@@ -483,28 +483,28 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 ### 6d-v3 Würfel-UI Fixes
 
-- [ ] HIT/WOUND: Schwellenwert-Zeile über Würfeln (`2+  3+  4+  5+  6+`), aktive Schwelle mit Rahmen
+- [x] HIT/WOUND: Schwellenwert-Zeile über Würfeln (`2+  3+  4+  5+  6+`), aktive Schwelle mit Rahmen ✅ (2026-06-06)
 - [ ] HIT/WOUND: Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
-- [ ] Modifier-Paare: linker Würfel = Ausgangsschwelle, rechter = neue Schwelle (aktuell vertauscht)
-- [ ] Modifier-Paare: MWBD-Farbe blau (wie unitCard-Badges), nicht grün
-- [ ] SAVE: Waagerechte Schwellenwert-Reihe + senkrechte Ausrichtungslinie (wie HIT/WOUND)
+- [x] Modifier-Paare: linker Würfel = Ausgangsschwelle (neutral), rechter = neue Schwelle (farbig) ✅ (2026-06-06)
+- [x] Modifier-Paare: Positive Modifier-Farbe blau (wie unitCard-Badges), nicht grün ✅ (2026-06-06)
+- [x] SAVE: Schwellenwert-Reihe + Würfelreihe für Rüstungs- und Invuln-Save ✅ (2026-06-06)
 - [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig
-- [ ] SAVE: Effective Save als Würfelreihe mit farbigem Rahmen (kein statischer Wert)
-- [ ] SAVE: Invuln-Zeile — ebenfalls Schwellenwert-Reihe + senkrechte Linie
-- [ ] 7+ / unmöglicher Save: roter `[×]`-Würfel rechts neben 6er-Würfel
-- [ ] Effective Save 7+: 6 rote `[×]`-Würfel statt Zahlenwert
+- [x] SAVE: Effective Save als Würfelreihe mit farbigem Rahmen ✅ (2026-06-06)
+- [x] SAVE: Invuln-Zeile — Schwellenwert-Reihe + Würfelreihe ✅ (2026-06-06)
+- [x] 7+ / unmöglicher Save: roter `×`-Marker rechts neben 6er-Würfeln ✅ (2026-06-06)
+- [x] Threshold > 6: alle 6 Würfel grau + `×`-Marker statt Zahlenwert ✅ (2026-06-06)
 
 ### Cover-Überarbeitung
 
-- [ ] Dropdown → Checkboxen/Buttons (mehrere Cover-Typen gleichzeitig aktiv möglich)
-- [ ] Phasenbindung: Dense + Light Cover → nur Shooting Phase; Heavy Cover → nur Fight Phase
-- [ ] Dense Cover in HIT-Block verschieben (−1 Trefferwurf), nicht im Save-Block
-- [ ] Heavy Cover: Effekt korrekt anzeigen; gegnerische-Phase-Bug beheben
+- [x] Dropdown → separate Checkboxen (Dense/Light/Heavy unabhängig) ✅ (2026-06-06)
+- [x] Phasenbindung: Dense + Light → nur Shooting; Heavy → nur Fight Phase ✅ (2026-06-06)
+- [x] Dense Cover Checkbox direkt nach HIT-Block (−1 Trefferwurf) ✅ (2026-06-06)
+- [x] Heavy Cover: Charged-Check korrekt; phase-gebundene Anzeige ✅ (2026-06-06)
 
 ### Damage-Block
 
-- [ ] Mortal Wounds: Eingabe nur anzeigen wenn Waffe MW-Fähigkeit hat (aktuell immer sichtbar)
-- [ ] Einzelmodell-Einheit: nur Wunden-Eingabe, kein Modellverlust-Counter
+- [x] Mortal Wounds: Eingabe nur wenn Waffe `mortal wound` in abilities hat ✅ (2026-06-06)
+- [x] Einzelmodell-Einheit (`models_max ≤ 1`): nur Wunden-Eingabe, kein Modellverlust-Counter ✅ (2026-06-06)
 
 ### Fight Phase — Struktureller Fehler (kritisch)
 
