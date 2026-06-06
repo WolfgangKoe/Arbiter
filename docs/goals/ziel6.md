@@ -252,7 +252,7 @@ Invulnerable Saves sind von Cover nicht betroffen.
 - [x] `uiLayout/_common.py`: Tab-Lock nach Apply + Reset-Button
 - [x] `gameMechanic/combat.py`: `apply_damage_attacks(models_lost, wounds_on_front, mortal_wounds, wounds_per_model)` — reine HP-Berechnung
 - [ ] Weapon-Abilities als Badges im Hit-Block: Tesla (`extra_hits` bei unmod. 6), Dakka, Power Klaw (−1 hit), Auto-Hit
-- [ ] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite
+- [ ] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite → in 6d-v3 integriert
 - [ ] Shooting/Fight Phase Handler: `render_attack_form()` durch neue Funktion ersetzen
 - [ ] Tests für neuen Damage-Block + RP-Würfellogik
 
@@ -302,30 +302,32 @@ YOU have eligible units to shoot / fight
 
 Check conditions (Shooting):
   ✓ moved              → kann schießen
-  ✗ advanced           → kann nicht schießen
-  ✗ retreated          → kann nicht schießen
-  ✓/✗ HEAVY            → −1 auf Trefferwurf wenn moved AND HEAVY-Waffe
+  ✗ advanced           → kann nicht schießen, außer ASSAULT
+  ✗ retreated          → kann nicht schießen, außer ability wie "adaptive strategy"
+  ✓/✗ HEAVY            → −1 auf Trefferwurf wenn moved AND INFANTRY-unit
   ✓ has_ranged_weapons
-  ✓ triggered abilities (außer adaptive abilities)
+  ✓ triggered abilities
   ✗ shot this phase    → bereits geschossen
   … weitere Bedingungen
 
 Atk — eligible unit auswählen
   Shooting:              Fight:
   1. select target       1. select targets
-  2. select weapon
+  2. select weapon       2. ...
   3. resolve attacks
 
 ─────────────────────────────────────────────────────
 Weapon-Auswahl (Shooting) — zeigt #attacks
 ┌──────────────────────────────────────────────────────────┐
-│  #attacks   Rapid Fire   display Range ↓                 │
+│  #attacks      display Range (especially rapid fire)     │
 │                                                          │
-│  ☑ Weapon 1  ──────────────────────────────→  target-1  │
-│  ☑ Weapon 2  ──────────────────────────────→  target-2  │
-│  ☐ Weapon n   (gesperrt / inkompatibel)                  │
-│  ☐ Weapon n+1 (durchgestrichen)                          │
-│  …                                            next-n    │
+│  ☑ Weapon 1  ──────────────────────────────→  target-1   │
+│   ...                                                    │
+│  ☑ Weapon n                                              │
+│  ☐ Weapon n+1   ─────────────────────────────target-2    │
+│   ...                                         ...        │
+│  ☐ Weapon m                                   target-x   │
+│                                                          │
 └──────────────────────────────────────────────────────────┘
 "close display only / same attack display for fights"
 ```
@@ -338,21 +340,21 @@ Weapon-Auswahl (Shooting) — zeigt #attacks
 TREFFER  8 Würfel
 
 BS/WS    1      2     [3+]    4+     5+     6+
-         ┌───┐ ┌───┐  ┌────────────────────────────────┐
+         ┌───┐ ┌───┐  ┌───────────────────────────────┐
          │[x]│ │ · │  │ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ │  ← grüner Rahmen (BS 3+)
          └───┘ └───┘  │ │ · │ │ · │ │ · │ │ · │ │ · │ │
-         misses        │ └───┘ └───┘ └───┘ └───┘ └───┘ │
-                       └────────────────────────────────┘
-         │ (vertikale LINE)
-[HEAVY]  ┌───┐ ←-1← ┌───┐       ← Schwelle schlechter; Rahmen → gelb (4+)
-         └───┘        └───┘
-[MWBD]   ┌───┐ →+1→ ┌───┐       ← Schwelle besser
-         └───┘        └───┘
-[Lords Will] ┌───┐               ← Reroll-Icon im Würfelsymbol
-             └───┘
-[Tesla]                ┌───────┐ ← Sondereffekt, kein Threshold-Modifier
-                       │ +2Hit │
-                       └───────┘
+         misses       │ └───┘ └───┘ └───┘ └───┘ └───┘ │
+                      └───────────────────────────────┘
+                      │ (vertikale LINE)
+[HEAVY]       ┌───┐ ←-1← ┌───┐                             ← Schwelle schlechter
+              └───┘   │  └───┘
+[MWBD]        ┌───┐ →+1→ ┌───┐                             ← Schwelle besser
+              └───┘   │  └───┘
+[Lords Will] ┌───┐    │                                    ← Reroll-Icon im Würfelsymbol (Einheitenfähigkeit)
+             └───┘    │
+                                                ┌────┐
+[Tesla]                                         │+2Hit│    ← Waffenfähigkeit
+                                                └────┘
 - - - - - - - - - DASHED LINE - - - - - - - - -
 Effektiv BS: [3+]  (max ±1 Cap)
 
@@ -409,11 +411,11 @@ invuln   2+   3+  [4+] 5+  6+    ← Invuln 4+ (highlighted, gelb)
 [mit AP & Cover]
 normal  2+  [3+]  4+  5+  6+
                    │  (vertikale LINE — markiert Basis-Schwelle)
-AP-2    ┌─┐ →-2→ ┌─┐  rot        ← Threshold 2 Schritte schlechter → 5+
+AP-2    ┌─┐ →-2→  ┌─┐  rot        ← Threshold 2 Schritte schlechter → 5+
         └─┘       └─┘
-cover   ┌─┐ →+1→ ┌─┐             ← Cover verbessert um 1 → 4+
+cover   ┌─┐ →+1→  ┌─┐             ← Cover verbessert um 1 → 4+
         └─┘       └─┘
-eff.    ┌─┐ →-1→ ┌─┐             ← Netto: 4+ (gelb)
+eff.    ┌─┐ →-1→  ┌─┐             ← Netto: 4+ (gelb)
         └─┘       └─┘
 
 invuln  2+   3+  [4+]  5+  6+
@@ -464,12 +466,14 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 ---
 
-**Tasks:**
-- [ ] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` + `modifier_die_pair_html()` + `special_die_html()`
-- [ ] `uiLayout/_common.py`: `_render_roll_block()` → Treffer-Block mit Rahmen + Modifier-Paaren
-- [ ] `uiLayout/_common.py`: `_render_wound_block()` → S/T-Würfel + gleiche Rahmen-Komponente + Blau-Highlighting
-- [ ] `uiLayout/_common.py`: `_render_save_block()` → Standard + AP/Cover-Modifier-Paare + Invuln
-- [ ] `uiLayout/_common.py`: Schaden-Block → Würfel-Icons + RP-Block vollständig
+**Tasks (Freigabe 2026-06-06):**
+- [x] `uiLayout/_common.py`: Englische Begriffe in allen Attack-Blocks (Declaration + Resolution + Damage + RP)
+- [x] `uiLayout/_common.py`: Rapid Fire Info-Badge in Declaration (`[RAPID FIRE · 24" · ½ = 12"]` via `profile.range_inches`)
+- [x] `uiLayout/_common.py`: `dice_face_svg()` + `dice_row_html()` + `modifier_die_pair_html()` + `special_die_html()` — SVG-Komponenten
+- [x] `uiLayout/_common.py`: `_render_dice_roll_block()` → HIT-Block mit Würfelreihe + Rahmen + Modifier-Paaren + Tesla/Dakka/Power-Klaw-Badges
+- [x] `uiLayout/_common.py`: `_render_dice_wound_block()` → S/T-Anzeige + Würfelreihe + Blau-Highlighting für S/T-Modifier
+- [x] `uiLayout/_common.py`: `_render_dice_save_block()` → Normal-Save + AP/Cover-Modifier-Paare (rot) + Invuln-Zeile separat
+- Damage-Block + RP-Block bleiben unverändert (Eingabe-basiert)
 
 ---
 

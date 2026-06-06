@@ -9,6 +9,21 @@
 - Rosters: `data/rosters/` (YAML, werden beim Start geladen)
 - Branch: `dev` (aktiv), `main` (nur per PR, alle Tests grün)
 
+### Regelrecherche — IMMER zuerst selbst nachschlagen
+
+Regelfragen **niemals dem Nutzer stellen** — alle Regeln liegen lokal vor:
+
+| Quelle | Inhalt |
+|---|---|
+| `docs/work/wahapedia_core_rules/core_rules.txt` | Vollständige 9E-Grundregeln |
+| `docs/work/wahapedia_core_rules/rules_appendix.txt` | Regelanhang (Sonderfälle, Glossar) |
+| `docs/work/wahapedia_necrons/` | Necron-Regeln und Einheiten |
+| `docs/work/wahapedia_orks/` | Ork-Regeln und Einheiten |
+| `docs/work/wahapedia_adeptus_custodes/` | Custodes-Regeln |
+| `docs/work/schlachtrunde.md` | Übersicht Spielrunden-Ablauf |
+
+Vorgehen: Erst lesen, bevor du den Plan für die Implementierung erstellst. Nur wenn nach Lesen der Regeln mehrere UI-Varianten möglich sind, den Nutzer nach dem bevorzugten Layout fragen. 
+
 ---
 
 ## Workflow-Regeln (PFLICHT)

@@ -463,79 +463,225 @@ def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type
     }
 
 
-def _render_roll_block(title: str, base_label: str, block: dict) -> None:  # type: ignore[type-arg]
-    """Render a hit or wound block with modifier stack."""
-    st.markdown(f"**{title}**")
-    line = f"[ {base_label} {block['base']}+ ]"
-    for entry in block["stack"]:
-        sign = "+" if entry["value"] > 0 else ""
-        line += f" &nbsp;·&nbsp; {sign}{entry['value']} _{entry['label']}_"
-    st.markdown(line, unsafe_allow_html=True)
-    if block["stack"]:
-        st.markdown(f"→ &nbsp;**{block['modified']}+**", unsafe_allow_html=True)
+# ---------------------------------------------------------------------------
+# 6d-v3 SVG dice components
+# ---------------------------------------------------------------------------
+
+_THRESHOLD_COLOR: dict[int, str] = {
+    2: "#22c55e",
+    3: "#22c55e",
+    4: "#f59e0b",
+    5: "#f97316",
+    6: "#f97316",
+}
+
+_PIP_POSITIONS: dict[int, list[tuple[int, int]]] = {
+    1: [(16, 16)],
+    2: [(9, 9), (23, 23)],
+    3: [(9, 9), (16, 16), (23, 23)],
+    4: [(9, 9), (9, 23), (23, 9), (23, 23)],
+    5: [(9, 9), (9, 23), (23, 9), (23, 23), (16, 16)],
+    6: [(9, 9), (9, 16), (9, 23), (23, 9), (23, 16), (23, 23)],
+}
 
 
-def _render_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
-    """Render the save block with armour/invuln comparison."""
-    st.markdown("**RETTUNGSWURF**")
-    ap_str = f"AP{ap}" if ap != 0 else "AP0"
-    line = f"[ Sv {save['armour']}+ / {ap_str} → {save['armour_eff']}+ ]"
-    if save["invuln"] is not None:
-        line += f" &nbsp;·&nbsp; Invuln {save['invuln']}+"
-    st.markdown(line, unsafe_allow_html=True)
-    for m in save["stack"]:
-        sign = "+" if m["value"] > 0 else ""
-        st.markdown(f"&nbsp;&nbsp;{sign}{m['value']} _{m['label']}_", unsafe_allow_html=True)
-    if save["using_invuln"]:
-        st.markdown(f"→ &nbsp;**{save['effective']}+** _(invuln)_", unsafe_allow_html=True)
-    elif save["save_bonus"] or save["armour_eff"] != save["armour"]:
-        st.markdown(f"→ &nbsp;**{save['effective']}+**", unsafe_allow_html=True)
+def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: int = 32) -> str:
+    """SVG for a single d6 face with pip pattern. Value 1 always shows × (always-miss marker)."""
+    pips = _PIP_POSITIONS.get(max(1, min(6, value)), [])
+    bg = "#111827" if miss else "#1e293b"
+    border = "#374151" if miss else color
+    if miss and value == 1:
+        pip_html = (
+            '<line x1="9" y1="9" x2="23" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
+            '<line x1="23" y1="9" x2="9" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
+        )
+    else:
+        pip_color = "#374151" if miss else color
+        pip_html = "".join(f'<circle cx="{x}" cy="{y}" r="2" fill="{pip_color}"/>' for x, y in pips)
+    return (
+        f'<svg width="{size}" height="{size}" viewBox="0 0 32 32" '
+        f'style="display:inline-block;vertical-align:middle;margin:1px;">'
+        f'<rect x="1" y="1" width="30" height="30" rx="4" ry="4" '
+        f'fill="{bg}" stroke="{border}" stroke-width="1.5"/>'
+        f"{pip_html}</svg>"
+    )
 
 
-def _render_wound_table(
+def dice_row_html(threshold: int) -> str:
+    """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame."""
+    frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
+    miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, threshold))
+    success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
+    framed = (
+        f'<span style="border:2px solid {frame_color};border-radius:5px;'
+        f'padding:2px 3px;display:inline-block;vertical-align:middle;">'
+        f"{success_dice}</span>"
+        if success_dice
+        else ""
+    )
+    return f'<div style="margin:4px 0;">{miss_dice}{framed}</div>'
+
+
+def modifier_die_pair_html(
+    from_thresh: int, to_thresh: int, label: str, value: int, color: str
+) -> str:
+    """Modifier pair: label badge + from-die + arrow + to-die showing the threshold shift."""
+    sign = "+" if value > 0 else ""
+    arrow = "→" if value > 0 else "←"
+    from_clamped = max(1, min(6, from_thresh))
+    to_clamped = max(1, min(6, to_thresh))
+    from_die = dice_face_svg(from_clamped, color="#6b7280", miss=(to_thresh > from_thresh))
+    to_die = dice_face_svg(to_clamped, color=color)
+    return (
+        f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
+        f'<span style="font-size:11px;color:{color};background:#111827;'
+        f'border:1px solid {color};border-radius:3px;padding:1px 5px;white-space:nowrap;">'
+        f"{label}</span>"
+        f"{from_die}"
+        f'<span style="color:{color};font-size:12px;font-weight:bold;">'
+        f"{arrow}{sign}{abs(value)}{arrow}</span>"
+        f"{to_die}</div>"
+    )
+
+
+def special_die_html(label: str, content: str = "") -> str:
+    """Badge for special weapon abilities (Tesla, Dakka, Power Klaw, Reroll, etc.)."""
+    text = f"{label}: {content}" if content else label
+    return (
+        f'<span style="background:#111827;border:1px solid #f59e0b;border-radius:4px;'
+        f'padding:2px 6px;font-size:11px;color:#f59e0b;margin:2px;">'
+        f"{text}</span>"
+    )
+
+
+def _render_dice_roll_block(
+    title: str,
+    skill_label: str,
+    block: dict,  # type: ignore[type-arg]
+    weapon_special: dict | None = None,  # type: ignore[type-arg]
+) -> None:
+    """HIT or WOUND roll block: dice row with colored frame + modifier pairs."""
+    base = block["base"]
+    stack = block.get("stack", [])
+    modified = block.get("modified", base)
+    st.markdown(f"**{title}** &nbsp; {skill_label} {base}+", unsafe_allow_html=True)
+    st.markdown(dice_row_html(base), unsafe_allow_html=True)
+    if stack:
+        current = base
+        parts = []
+        for entry in stack:
+            next_thresh = max(2, current - entry["value"])
+            color = "#22c55e" if entry["value"] > 0 else "#ef4444"
+            parts.append(
+                modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
+            )
+            current = next_thresh
+        parts.append(
+            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
+            f'<div style="font-size:12px;color:#9ca3af;">Effective {skill_label}: '
+            f'<b style="color:#f8fafc;">{modified}+</b> (max ±1 cap)</div>'
+        )
+        st.markdown("".join(parts), unsafe_allow_html=True)
+    if weapon_special:
+        badges = []
+        if weapon_special.get("tesla"):
+            badges.append(special_die_html("Tesla", "unmod. 6 = +2 Hits"))
+        if weapon_special.get("dakka"):
+            badges.append(special_die_html("Dakka"))
+        if weapon_special.get("klaw_penalty"):
+            badges.append(special_die_html("Power Klaw", "−1 to Hit"))
+        if badges:
+            st.markdown(
+                f'<div style="margin-top:4px;">{"".join(badges)}</div>',
+                unsafe_allow_html=True,
+            )
+
+
+def _render_dice_wound_block(
     strength: int,
     toughness: int,
     wound_stack: list[dict],  # type: ignore[type-arg]
 ) -> None:
-    """Render the 5-row wound threshold table with the active row highlighted."""
+    """WOUND block: S vs T header, dice row, modifier pairs in blue."""
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
     base = wound_threshold(strength, toughness)
     net = min(1, max(-1, sum(e["value"] for e in wound_stack)))
     modified = max(2, base - net)
-
-    thresholds = [
-        (f"S ≥ 2T &nbsp;(S≥{toughness * 2})", 2),
-        (f"S > T &nbsp;&nbsp;(S>{toughness})", 3),
-        (f"S = T &nbsp;&nbsp;(S={toughness})", 4),
-        (f"S < T &nbsp;&nbsp;(S<{toughness})", 5),
-        (f"S ≤ ½T (S≤{toughness // 2})", 6),
-    ]
-    rows = []
-    for label, thresh in thresholds:
-        active = thresh == base
-        col = "#c9a84c" if active else "#666"
-        bg = "#1a1a2e" if active else "transparent"
-        arrow = "▶" if active else "&nbsp;&nbsp;"
-        thresh_cell = f"<b>{thresh}+</b>" if active else f"{thresh}+"
-        rows.append(
-            f'<tr style="background:{bg};color:{col};">'
-            f'<td style="padding:1px 4px;font-size:12px;width:16px;">{arrow}</td>'
-            f'<td style="padding:1px 8px;font-size:12px;">{label}</td>'
-            f'<td style="padding:1px 6px;font-size:12px;">→ {thresh_cell}</td>'
-            f"</tr>"
-        )
-    html = (
-        '<table style="border-collapse:collapse;width:100%;margin:2px 0;">'
-        + "".join(rows)
-        + "</table>"
+    rel = ">" if strength > toughness else ("=" if strength == toughness else "<")
+    st.markdown(
+        f"**WOUND** &nbsp; S {strength} {rel} T {toughness} &nbsp;→&nbsp; {base}+",
+        unsafe_allow_html=True,
     )
-    st.markdown(html, unsafe_allow_html=True)
+    st.markdown(dice_row_html(base), unsafe_allow_html=True)
     if wound_stack:
-        for e in wound_stack:
-            sign = "+" if e["value"] > 0 else ""
-            st.markdown(f"&nbsp;&nbsp;{sign}{e['value']} _{e['label']}_", unsafe_allow_html=True)
-        st.markdown(f"→ &nbsp;**{modified}+**", unsafe_allow_html=True)
+        current = base
+        parts = []
+        for entry in wound_stack:
+            next_thresh = max(2, current - entry["value"])
+            parts.append(
+                modifier_die_pair_html(
+                    current, next_thresh, entry["label"], entry["value"], "#3b82f6"
+                )
+            )
+            current = next_thresh
+        parts.append(
+            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
+            f'<div style="font-size:12px;color:#9ca3af;">Effective: '
+            f'<b style="color:#f8fafc;">{modified}+</b></div>'
+        )
+        st.markdown("".join(parts), unsafe_allow_html=True)
+
+
+def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
+    """SAVE block: normal save + AP/cover modifier pairs + separate invuln row."""
+    armour = save["armour"]
+    armour_eff = save["armour_eff"]
+    invuln = save["invuln"]
+    effective = save["effective"]
+    using_invuln = save["using_invuln"]
+    stack = save.get("stack", [])
+
+    st.markdown("**SAVE**")
+
+    base_color = _THRESHOLD_COLOR.get(armour, "#f97316")
+    st.markdown(
+        f"Sv {armour}+ &nbsp; {dice_face_svg(min(6, armour), color=base_color)}",
+        unsafe_allow_html=True,
+    )
+
+    parts: list[str] = []
+    if ap != 0:
+        parts.append(modifier_die_pair_html(armour, armour_eff, f"AP{ap}", -ap, "#ef4444"))
+    current = armour_eff
+    for m in stack:
+        next_thresh = max(2, current - m["value"])
+        color = "#22c55e" if m["value"] > 0 else "#ef4444"
+        parts.append(modifier_die_pair_html(current, next_thresh, m["label"], m["value"], color))
+        current = next_thresh
+    if parts and not using_invuln:
+        parts.append(
+            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
+            f'<div style="font-size:12px;color:#9ca3af;">Effective Save: '
+            f'<b style="color:#f8fafc;">{effective}+</b></div>'
+        )
+    if parts:
+        st.markdown("".join(parts), unsafe_allow_html=True)
+
+    if invuln is not None:
+        inv_color = _THRESHOLD_COLOR.get(invuln, "#f97316")
+        inv_note = " _(active)_" if using_invuln else ""
+        st.markdown(
+            f"Invuln {invuln}+{inv_note} &nbsp; {dice_face_svg(min(6, invuln), color=inv_color)}"
+            f' &nbsp; <span style="font-size:11px;color:#6b7280;">AP/Cover not applicable</span>',
+            unsafe_allow_html=True,
+        )
+        if using_invuln:
+            st.markdown(
+                f'<div style="font-size:12px;color:#9ca3af;">Effective Save: '
+                f'<b style="color:#f8fafc;">{effective}+</b> _(invuln)_</div>',
+                unsafe_allow_html=True,
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -568,7 +714,7 @@ def _render_rp_block(
     if rp_state.get("applied"):
         mb = rp_state.get("models_back", 0)
         if mb > 0:
-            st.caption(f"RP: {mb} Modelle zurückgekehrt ✓")
+            st.caption(f"RP: {mb} models returned ✓")
         return
 
     rp_dice = models_lost * def_unit.wounds
@@ -618,32 +764,31 @@ def _render_damage_block(
         m_lost = tab_state.get("models_lost", 0)
         mw = tab_state.get("mortal_wounds", 0)
         total = tab_state.get("total_damage", 0)
-        st.success(f"✓ {m_lost} Modelle · {mw} MW · {total} Schaden angewandt")
+        st.success(f"✓ {m_lost} models · {mw} MW · {total} damage applied")
         _render_rp_block(def_unit, def_faction, def_uid, m_lost, tab_key)
-        if st.button("↺ Zurücksetzen", key=f"res_reset_{tab_key}"):
+        if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
             for k in (res_key, f"rp_{tab_key}"):
                 st.session_state.pop(k, None)
             st.rerun()
         return
 
-    st.markdown("**SCHADEN**")
-    st.caption("Modelle verloren = vollständig vernichtete Modelle")
+    st.markdown("**DAMAGE**")
     is_multi_lp = def_unit.wounds > 1
     dmg_str = str(profile.damage)
-    dmg_label = f"D{dmg_str}" if not dmg_str.lstrip("+-").isdigit() else f"{dmg_str} fix"
-    st.caption(f"Schaden: {dmg_label} pro missgl. Rettungswurf · Ziel: {def_unit.wounds} LP/Modell")
+    dmg_label = f"D{dmg_str}" if not dmg_str.lstrip("+-").isdigit() else f"{dmg_str} fixed"
+    st.caption(f"Damage: {dmg_label} per failed save · Target: {def_unit.wounds} HP/model")
 
     c1, c2 = st.columns(2)
     with c1:
         models_lost = st.number_input(
-            "Modelle verloren",
+            "Models lost",
             min_value=0,
             step=1,
             key=f"ml_{tab_key}",
         )
     with c2:
         mortal_wounds = st.number_input(
-            "Tödliche Verwundungen",
+            "Mortal Wounds",
             min_value=0,
             step=1,
             key=f"mw_{tab_key}",
@@ -652,7 +797,7 @@ def _render_damage_block(
     wounds_on_front = 0
     if is_multi_lp:
         wounds_on_front = st.number_input(
-            f"Wunden Frontmodell (0–{def_unit.wounds - 1})",
+            f"Wounds on front model (0–{def_unit.wounds - 1})",
             min_value=0,
             max_value=def_unit.wounds - 1,
             step=1,
@@ -662,7 +807,7 @@ def _render_damage_block(
     total = apply_damage_attacks(
         int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
     )
-    btn_label = f"⚔ {total} Schaden → {def_unit.name_en}" if total > 0 else "Schaden anwenden"
+    btn_label = f"⚔ Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
     if st.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
         if total > 0:
             apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
@@ -698,7 +843,7 @@ def _render_damage_block(
 # ---------------------------------------------------------------------------
 
 _COVER_OPTIONS: list[str] = [
-    "Kein Cover",
+    "No Cover",
     "Light Cover (+1 Save)",
     "Dense Cover (−1 Hit)",
     "Heavy Cover (+1 Save vs Melee)",
@@ -763,7 +908,7 @@ def _render_resolution_tab(
     live = resolve_bracket_stats(atk_unit, per_model_hp)
     skill = int(live["ws"].rstrip("+")) if use_melee else int(live["bs"].rstrip("+"))
 
-    # Read cover from session_state (set by selectbox from previous render, default Kein Cover)
+    # Read cover from session_state (set by selectbox from previous render, default No Cover)
     cover = st.session_state.get(f"cover_{tab_key}", _COVER_OPTIONS[0])
 
     # Build modifier lists including cover effects
@@ -819,33 +964,25 @@ def _render_resolution_tab(
 
     # HIT BLOCK
     if weapon_special["auto_hit"]:
-        st.markdown("**TREFFER** &nbsp; AUTO-TRIFFT", unsafe_allow_html=True)
+        st.markdown("**HIT** &nbsp; AUTO-HIT", unsafe_allow_html=True)
     else:
-        _render_roll_block("TREFFER", skill_label, atk_result["hit"])
-        ability_badges = []
-        if weapon_special["tesla"]:
-            ability_badges.append("Tesla: unmod. 6 = +2 Hits")
-        if weapon_special["dakka"]:
-            ability_badges.append(f"Dakka {profile.attacks}")
-        if ability_badges:
-            st.caption(" · ".join(f"[{b}]" for b in ability_badges))
+        _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
     st.markdown("")
 
-    # WOUND TABLE
-    st.markdown("**VERWUNDUNG**")
-    _render_wound_table(strength, def_unit.toughness, atk_result["wound"]["stack"])
+    # WOUND BLOCK
+    _render_dice_wound_block(strength, def_unit.toughness, atk_result["wound"]["stack"])
 
     st.markdown("---")
 
     # SAVE BLOCK + FNP + COVER
-    _render_save_block(save_result, ap)
+    _render_dice_save_block(save_result, ap)
     if def_unit.fnp is not None:
         st.markdown("")
         if fnp_value is None:
-            st.markdown(f"~~**FNP**~~ ~~{def_unit.fnp}+~~ _(ignoriert)_")
+            st.markdown(f"~~**FNP**~~ ~~{def_unit.fnp}+~~ _(ignored)_")
         else:
             st.markdown(f"**FNP** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
-    st.selectbox("Deckung", _COVER_OPTIONS, key=f"cover_{tab_key}")
+    st.selectbox("Cover", _COVER_OPTIONS, key=f"cover_{tab_key}")
 
     st.markdown("---")
 
@@ -896,13 +1033,13 @@ def render_attack_declaration(
         st.info("No melee weapons." if use_melee else "No ranged weapons.")
         return
 
-    st.markdown(f"**{atk_unit.name_en}** — Angriff deklarieren")
+    st.markdown(f"**{atk_unit.name_en}** — Declare Attack")
     if in_melee:
         st.info("Engaged in melee — Pistol weapons only.")
 
     entries: list[dict] = []  # type: ignore[type-arg]
     models_assigned = 0
-    models_lbl = "Anzahl kämpfende Modelle" if use_melee else "Anzahl schießende Modelle"
+    models_lbl = "Models fighting" if use_melee else "Models shooting"
 
     for i, (def_faction, def_uid) in enumerate(tgts):
         def_unit, _ = lookup(def_faction, def_uid)
@@ -917,7 +1054,7 @@ def render_attack_declaration(
             # Weapon selection — multiselect allows MONSTER/VEHICLE to fire all weapons
             if len(weapons) > 1:
                 sel_w_names: list[str] = st.multiselect(
-                    "Waffen",
+                    "Weapons",
                     [w.name_en for w in weapons],
                     default=[weapons[0].name_en],
                     key=f"decl_ws_{atk_uid}_{def_uid}",
@@ -925,7 +1062,7 @@ def render_attack_declaration(
                 sel_weapons = [w for w in weapons if w.name_en in sel_w_names]
             else:
                 sel_weapons = [weapons[0]]
-                st.caption(f"Waffe: **{weapons[0].name_en}**")
+                st.caption(f"Weapon: **{weapons[0].name_en}**")
 
             # Model counter (shared — same models fire all selected weapons)
             models_key = f"decl_m_{atk_uid}_{def_uid}"
@@ -941,7 +1078,7 @@ def render_attack_declaration(
             )
 
             if not sel_weapons:
-                st.warning("Mindestens eine Waffe auswählen.")
+                st.warning("Select at least one weapon.")
             else:
                 # Profile selection + attack count per selected weapon
                 for weapon in sel_weapons:
@@ -949,10 +1086,10 @@ def render_attack_declaration(
                     if not profiles:
                         profiles = weapon.profiles
                     if len(profiles) > 1:
-                        p_names = [p.name or f"Profil {j + 1}" for j, p in enumerate(profiles)]
+                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
                         p_key = f"decl_p_{atk_uid}_{def_uid}_{weapon.name_en}"
                         sel_p = st.radio(
-                            f"Profil — {weapon.name_en}", p_names, key=p_key, horizontal=True
+                            f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
                         )
                         profile_idx = p_names.index(sel_p)
                     else:
@@ -962,9 +1099,16 @@ def render_attack_declaration(
                     st.markdown(
                         f"**{weapon.name_en}** → "
                         f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                        f"{atk_count}</span> Attacken",
+                        f"{atk_count}</span> Attacks",
                         unsafe_allow_html=True,
                     )
+                    if (
+                        not use_melee
+                        and profile.weapon_type.startswith("Rapid Fire")
+                        and profile.range_inches > 0
+                    ):
+                        half = profile.range_inches // 2
+                        st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
                     entries.append(
                         {
                             "def_faction": def_faction,
@@ -979,15 +1123,15 @@ def render_attack_declaration(
 
     remaining = models_alive - models_assigned
     if remaining < 0:
-        st.error(f"Zu viele Modelle zugeteilt ({models_assigned}/{models_alive})")
+        st.error(f"Too many models assigned ({models_assigned}/{models_alive})")
     elif remaining > 0:
-        st.caption(f"Verbleibend: {remaining} / {models_alive} nicht zugeteilt")
+        st.caption(f"Remaining: {remaining} / {models_alive} unassigned")
     else:
-        st.caption(f"✓ {models_alive} / {models_alive} Modelle zugeteilt")
+        st.caption(f"✓ {models_alive} / {models_alive} assigned")
 
     can_start = 0 < models_assigned <= models_alive
     if st.button(
-        "Auflösung starten →",
+        "Start Resolution →",
         type="primary",
         disabled=not can_start,
         key=f"start_res_{atk_uid}",
@@ -1023,11 +1167,11 @@ def render_attack_resolution(phase_key: str) -> None:
     atk_unit, atk_state = lookup(atk_faction, atk_uid)
     badges = state_badges_html(atk_state)
 
-    st.markdown(f"**{atk_unit.name_en}** — Auflösung")
+    st.markdown(f"**{atk_unit.name_en}** — Resolution")
     if badges:
         st.markdown(badges, unsafe_allow_html=True)
 
-    if st.button("↺ Deklaration zurücksetzen", key="reset_decl"):
+    if st.button("↺ Reset Declaration", key="reset_decl"):
         st.session_state.attack_declaration = _empty_attack_declaration()
         st.rerun()
 
@@ -1051,11 +1195,11 @@ def render_attack_resolution(phase_key: str) -> None:
                 m_lost = tab_state.get("models_lost", 0)
                 mw = tab_state.get("mortal_wounds", 0)
                 total = tab_state.get("total_damage", 0)
-                st.success(f"✓ {m_lost} Modelle · {mw} MW · {total} Schaden")
+                st.success(f"✓ {m_lost} models · {mw} MW · {total} damage")
                 _render_rp_block(
                     def_unit_t, entry["def_faction"], entry["def_uid"], m_lost, tab_key
                 )
-                if st.button("↺ Zurücksetzen", key=f"res_reset_{tab_key}"):
+                if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
                     for k in (res_key, f"rp_{tab_key}"):
                         st.session_state.pop(k, None)
                     st.rerun()
@@ -1070,6 +1214,6 @@ def render_attack_resolution(phase_key: str) -> None:
     )
     if all_applied and entries:
         st.markdown("---")
-        if st.button("✓ Alle Tabs abgeschlossen — Weiter", type="primary", key="all_done"):
+        if st.button("✓ All done — Continue", type="primary", key="all_done"):
             st.session_state.attack_declaration = _empty_attack_declaration()
             st.rerun()
