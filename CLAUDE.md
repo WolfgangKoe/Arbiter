@@ -52,12 +52,12 @@ Dieselbe Pflicht wie für Code gilt auch für:
 - **Falle:** „Necron-Check entfernen" ≠ „für alle Fraktionen öffnen" — nur der *Ort* des Aufrufs ändert sich, nicht die Logik
 
 ### Session-Workflow
-1. **Session-Start:** `next_session.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
+1. **Session-Start:** `.claude/tasks/next_session.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
 2. **Plan zeigen** → Freigabe einholen → Implementieren
-3. **Session-Ende:** `next_session.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
+3. **Session-Ende:** `.claude/tasks/next_session.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
 4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken
 
-**Kritisch beim `next_session.md`-Update:** Datei ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen.
+**Kritisch beim Update:** `.claude/tasks/next_session.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
 
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen

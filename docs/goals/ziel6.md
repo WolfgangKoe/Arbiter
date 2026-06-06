@@ -477,6 +477,76 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 ---
 
+## Testsession-Fixes (2026-06-06)
+
+> Beobachtungsdetail + Regelerkenntnisse: `.claude/tasks/next_session.md`
+
+### 6d-v3 Würfel-UI Fixes
+
+- [ ] HIT/WOUND: Schwellenwert-Zeile über Würfeln (`2+  3+  4+  5+  6+`), aktive Schwelle mit Rahmen
+- [ ] HIT/WOUND: Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
+- [ ] Modifier-Paare: linker Würfel = Ausgangsschwelle, rechter = neue Schwelle (aktuell vertauscht)
+- [ ] Modifier-Paare: MWBD-Farbe blau (wie unitCard-Badges), nicht grün
+- [ ] SAVE: Waagerechte Schwellenwert-Reihe + senkrechte Ausrichtungslinie (wie HIT/WOUND)
+- [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig
+- [ ] SAVE: Effective Save als Würfelreihe mit farbigem Rahmen (kein statischer Wert)
+- [ ] SAVE: Invuln-Zeile — ebenfalls Schwellenwert-Reihe + senkrechte Linie
+- [ ] 7+ / unmöglicher Save: roter `[×]`-Würfel rechts neben 6er-Würfel
+- [ ] Effective Save 7+: 6 rote `[×]`-Würfel statt Zahlenwert
+
+### Cover-Überarbeitung
+
+- [ ] Dropdown → Checkboxen/Buttons (mehrere Cover-Typen gleichzeitig aktiv möglich)
+- [ ] Phasenbindung: Dense + Light Cover → nur Shooting Phase; Heavy Cover → nur Fight Phase
+- [ ] Dense Cover in HIT-Block verschieben (−1 Trefferwurf), nicht im Save-Block
+- [ ] Heavy Cover: Effekt korrekt anzeigen; gegnerische-Phase-Bug beheben
+
+### Damage-Block
+
+- [ ] Mortal Wounds: Eingabe nur anzeigen wenn Waffe MW-Fähigkeit hat (aktuell immer sichtbar)
+- [ ] Einzelmodell-Einheit: nur Wunden-Eingabe, kein Modellverlust-Counter
+
+### Fight Phase — Struktureller Fehler (kritisch)
+
+> Regelgrundlage: `core_rules.txt` Z. 1941–1973
+
+- [ ] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen
+- [ ] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten
+- [ ] Ablauf 9E: erst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv)
+- [ ] Counterattack GO einsetzbar (reaktive Unterbrechung)
+
+### Heroic Intervention
+
+> Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
+
+- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (nicht bei Zielauswahl)
+- [ ] Nur CHARACTER-Einheiten dürfen intervenieren
+- [ ] INTERVENED-Badge auf unitCard; `in_melee`-Ergänzung korrekt
+- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range landen
+
+### GOs in gameActionArea
+
+- [ ] GO-Buttons kontextuell direkt in gameActionArea (aktiver + inaktiver Spieler), nicht als Liste
+- [ ] Overwatch als reaktive GO in Charge Phase
+
+### Necron — Command Phase Fixes
+
+- [ ] Living Metal: einmalig pro Phase
+- [ ] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu)
+- [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden
+- [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
+- [ ] Anzeigereihenfolge: Regelkasten immer ganz oben (alle Phasen prüfen)
+
+### WAAAGH! + Sonstiges
+
+- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten
+- [ ] Ork-Regeln prüfen: welche Einheiten ausgenommen? → unitCard-Logik
+- [ ] Resurrection Orb: Regel lesen → nur KERN-Einheiten? → Implementierung anpassen
+- [ ] Skarabäen: 6=auto-wound → YAML prüfen, ggf. Code ergänzen
+- [ ] Gretchin Moralphase: Cowardly (−1 Attrition wenn kein RUNTHERD in 6") implementieren
+
+---
+
 ## 6e — Fähigkeiten-Integration in alle Phasen
 
 **Ziel:** Fähigkeiten aus Armee, Einheit, Ausrüstung und Stratagems greifen in den richtigen Phasen. CP-Doppelvergabe-Bug gefixt.

@@ -1,113 +1,192 @@
 # Startprompt — Nächste Session
-<!-- Kanonische Planung. Nicht durch separate Plan-Dateien ersetzen — immer hier ergänzen. -->
+<!-- Kanonisch: .claude/tasks/next_session.md — nie ins Root-Verzeichnis anlegen. -->
 
 ## ⚠️ Session-Regeln (immer beachten)
 
 **Zu Beginn jeder Session lesen:**
-- `CLAUDE.md` — Workflow, Freigabe-Pflicht, **Unklarheiten IMMER zuerst fragen**, Branch-Strategie
-- `docs/goals/ziel6.md` — aktueller Ziel-6-Stand
+- `CLAUDE.md` — Workflow, Freigabe-Pflicht, **Unklarheiten IMMER zuerst fragen**
+- `docs/goals/ziel6.md` — vollständige Aufgabenliste mit allen Checkboxen
 
 **Am Ende jeder Session:**
-- `docs/goals/ziel6.md` aktualisieren: Checkboxen abhaken, neue Erkenntnisse ergänzen
+- Checkboxen in `docs/goals/ziel6.md` abhaken
+- Diese Datei aktualisieren: Stand + nächster Schritt + neue Erkenntnisse (ZUERST lesen, dann ergänzen)
 
 ---
 
 ## Was ist Arbiter?
 
 **Arbiter** ist ein digitaler Spielbegleiter für Warhammer 40.000 9. Edition, gebaut in Streamlit (Python).
-Starten: `streamlit run src/app.py` (Port fest: 8501)
+Start: `streamlit run src/app.py` (Port 8501)
 Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 16, 2026-06-05)
+## Aktueller Stand (nach Session 17, 2026-06-06)
 
 ### Was funktioniert ✅
-- Ziel 1–5 (Grundgerüst, Phasen, Setup, Daten) — vollständig
-- Ziel 6a–6i — committed
-- 6d-v2 Attackensequenz: Deklaration + Resolution-Tabs, Wound-Tabelle, RP-Block, Cover-Dropdown
-- Weapon-Ability-Badges (Tesla, Dakka, Auto-Hit, Power Klaw) im Hit-Block
+- Ziel 1–5 vollständig abgeschlossen
+- Ziel 6a–6i (Basis) committed
+- 6d-v3 Würfel-UI: SVG-Würfelfaces, `dice_face_svg` / `dice_row_html` / `modifier_die_pair_html` / `special_die_html`
+- Englische Begriffe in gameActionArea, Rapid Fire Badge in Declaration
 - Stratagem Undo-Button (CP-Erstattung + Modifier-Rollback)
-- Auto-Advance: abgehandelte Einheiten rutschen ans Ende der Armeeliste
+- Auto-Advance: abgehandelte Einheiten ans Listenende
 - 456 Tests grün
 
-### Was Session 16 erledigt hat ✅
-- Weapon-Ability-Badges im Hit-Block (Tesla, Dakka, Auto-Hit, Power Klaw)
-- Stratagem Reset-Button (Undo mit CP-Erstattung)
-- Auto-Advance in Armeeliste: `movement_chosen`-Flag + stabile Sortierung in `detachmentCard.py`
-- Bugfix: `movement_choice == "stationary"` war Initialwert → `movement_chosen: bool` als separates Flag
-- Skizzen für Attackensequenz-Redesign analysiert (Fotos/IMG_4038–4042)
+### Session 17 (2026-06-06) ✅
+- 6d-v3 SVG-Würfel-UI implementiert (dice-Komponenten + neue Render-Blöcke in `_common.py`)
+- Testsession: 21 Abweichungen aufgenommen und dokumentiert
+- Regelrecherche: Fight Phase, Heroic Intervention, Cover, FNP, Gretchin nachgelesen
 
 ---
 
-## Offene Aufgaben (priorisiert)
+## Session-Start — Empfohlene Reihenfolge
 
-### AUFGABE 1 — Datengrundlage vollständig fixen (laufend)
+1. Diese Datei + `docs/goals/ziel6.md` lesen
+2. Offene Regelrecherche erledigen (s. Abschnitt "Noch nachzuschlagen")
+3. Block aus den offenen Tasks auswählen → Plan zeigen → Freigabe einholen
 
-**Necrons ✅ weitgehend erledigt:**
-- Waffen verifiziert, Wound-Tracks korrekt
-- Noch offen: weitere Einheiten nach Bedarf
-
-**Orks — aktive Roster-Einheiten ergänzt ✅:**
-- Noch offen: 71 weitere Einheiten haben fehlende Abilities (niedrig-prio, nach Bedarf ergänzen)
-
-**Custodes — kein aktiver Roster:**
-- Noch kein `unit_abilities.yaml` — erst anlegen wenn Custodes-Roster erstellt wird
+**Kritischster Block:** Fight Phase — struktureller Regelfehler, Regeln bekannt, braucht Plan
+**Schnellster Gewinn:** 6d-v3 Würfel-UI Fixes — alle in `_common.py`, gut isoliert
 
 ---
 
-### AUFGABE 2 ✅ ERLEDIGT (2026-06-05, Commit 564deb8)
+## Offene Tasks — Ziel 6 (Fokus nächste Session)
+
+Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
+Hier stehen die Tasks mit Beobachtungsdetail als Kontext.
+
+### 🔴 KRITISCH — Fight Phase (`gameMechanic/fightPhase.py`, `game_state.py`)
+
+- [ ] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen (aktuell geblockt)
+- [ ] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten
+- [ ] Ablauf 9E: zuerst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv)
+- [ ] Counterattack GO einsetzbar (reaktive Unterbrechung)
+
+### 🔴 HOCH — 6d-v3 Würfel-UI Fixes (`uiLayout/_common.py`)
+
+**HIT + WOUND:**
+- [ ] Schwellenwert-Zeile über Würfeln: `2+  3+  4+  5+  6+`, aktive Schwelle mit Rahmen hervorgehoben
+- [ ] Senkrechte Ausrichtungslinie bei aktiver Schwelle (durchgezogen); gestrichelte Linie zwischen Würfel 1 (immer miss) und Würfel 2
+- [ ] Modifier-Reihenfolge: linker Würfel = Ausgangsschwelle, rechter = neue Schwelle (aktuell vertauscht)
+- [ ] MWBD-Farbe: **blau** (wie unitCard-Badges), nicht grün
+
+**SAVE:**
+- [ ] Waagerechte Schwellenwert-Reihe + senkrechte Ausrichtungslinie (wie HIT/WOUND)
+- [ ] Vertikales Alignment: Würfelreihen und Modifier-Effekte tabellenartig ausgerichtet
+- [ ] Effective Save als Würfelreihe mit farbigem Rahmen (kein statischer Zahlenwert)
+- [ ] Invuln-Zeile: ebenfalls Schwellenwert-Reihe + senkrechte Linie nötig
+
+**7+ / unmöglicher Save:**
+- [ ] Roter `[×]`-Würfel rechts neben 6er-Würfel wenn Schwelle 7+ (z.B. Gretchin, Warboss)
+- [ ] Effective Save 7+: 6 rote `[×]`-Würfel statt Zahlenwert
+
+### 🟡 HOCH — Damage-Block (`uiLayout/_common.py`)
+
+- [ ] Mortal Wounds: Eingabe nur anzeigen wenn Waffe MW-Fähigkeit hat (aktuell immer sichtbar)
+- [ ] Einzelmodell-Einheit (z.B. Warboss): nur Wunden-Eingabe, kein Modellverlust-Counter
+
+### 🟡 HOCH — Heroic Intervention (`gameMechanic/chargePhase.py`, `game_state.py`)
+
+- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (Step 2 Charge Phase, nicht bei Zielauswahl)
+- [ ] Nur CHARACTER-Einheiten dürfen intervenieren — Prüfung fehlt
+- [ ] INTERVENED-Badge auf unitCard; `in_melee`-Ergänzung korrekt
+- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range landen
+
+### 🟡 MITTEL — Cover-Überarbeitung (`uiLayout/_common.py`)
+
+- [ ] Dropdown → Checkboxen/Buttons (mehrere Cover-Typen gleichzeitig möglich — Entweder-Oder ist regelfalsch)
+- [ ] Phasenbindung: Dense + Light Cover → nur Shooting Phase; Heavy Cover → nur Fight Phase
+- [ ] Dense Cover in HIT-Block verschieben (−1 Trefferwurf), nicht im Save-Block
+- [ ] Heavy Cover: Effekt korrekt anzeigen; erscheint fälschlicherweise in gegnerischer Phase
+
+### 🟡 MITTEL — GOs in gameActionArea
+
+- [ ] GO-Buttons kontextuell direkt in gameActionArea (aktiver + inaktiver Spieler), nicht als Liste unten
+- [ ] Overwatch als reaktive GO in Charge Phase
+
+### 🟡 MITTEL — Necron Command Phase (`gameMechanic/commandPhase.py`, `uiLayout/armyCard.py`)
+
+- [ ] Living Metal: einmalig pro Phase (aktuell mehrfach anwendbar)
+- [ ] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu wählbar)
+- [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden (Interaktion fehlt)
+- [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
+- [ ] Anzeigereihenfolge: Regelkasten immer ganz oben in allen Phasen
+
+### 🟡 MITTEL — WAAAGH! + Sonstiges
+
+- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten
+- [ ] Ork-Regeln prüfen: welche Einheiten ausgenommen? → unitCard-Logik anpassen
+- [ ] Resurrection Orb: Regel lesen (nur KERN-Einheiten?) → Implementierung prüfen
+- [ ] Skarabäen: 6=auto-wound — YAML-Lücke oder Code fehlt?
+
+### 🟢 NIEDRIG — Moralphase
+
+- [ ] Gretchin Cowardly: −1 auf Combat Attrition Tests wenn kein RUNTHERD in 6" (Ld 4 — kritisch!)
+
+### Weitere offene Tasks (nachrangig — Details in ziel6.md §6e–6h)
+
+- [ ] Fight Phase Declaration-Block: noch nicht 6d-v3-Layout
+- [ ] CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (6e)
+- [ ] Ability-Badges auf unitCard (6f)
+- [ ] Nach Reset keine alten Einträge im Battle Log (6g)
+- [ ] Hardcoded Fraktionslogik herauslösen (6h)
 
 ---
 
-### AUFGABE 3 ✅ ERLEDIGT (2026-06-05, Commits 42b49ce + 2cd8357)
+## Regelerkenntnisse (2026-06-06)
+
+### Fight Phase — exakter Ablauf (core_rules.txt Z. 1941–1973)
+- **Startet mit dem inaktiven Spieler** — beide Spieler wechseln sich ab beim Auswählen eligibler Einheiten
+- **Charged Units Fight First:** Nicht-gechargede Einheiten erst wenn ALLE gechargeden Einheiten aller Spieler gekämpft haben
+- Eligible = innerhalb Engagement Range ODER hat diese Runde einen Charge Move gemacht
+- Wenn ein Spieler keine eligible Einheiten mehr hat, kämpft der andere alleine weiter
+- Nach Consolidation können neue Einheiten eligible werden
+
+### Heroic Intervention — Timing (core_rules.txt Z. 1824–1848)
+- **Schritt 2 der Charge Phase** — erst NACHDEM alle Charges abgeschlossen sind
+- Nur **CHARACTER**-Einheiten
+- Bedingung: nicht in Engagement Range, aber ≤3" horizontal + ≤5" vertikal von einer feindlichen Einheit
+- Bewegung: bis zu 3", muss näher zum nächsten feindlichen Modell enden
+
+### Cover (core_rules.txt Z. 3791–3858)
+- **Dense Cover:** −1 Trefferwurf bei Fernkampfwaffen (Terrain ≥3" hoch zwischen Schütze und Ziel) → gehört in HIT-Block
+- **Light Cover:** +1 Rüstungswurf gegen Fernkampfwaffen — nur Shooting Phase
+- **Heavy Cover:** +1 Rüstungswurf gegen Nahkampfwaffen, außer wenn Angreifer diese Runde charged — nur Fight Phase
+- Alle drei können gleichzeitig aktiv sein → Dropdown falsch, Checkboxen nötig
+
+### FNP (rules_appendix.txt Z. 2214–2219)
+- Gilt für alle Wunden — normale UND tödliche Verwundungen
+- Pro Wunde nur eine Ignore-Regel verwendbar
+
+### Gretchin (units_all.txt Z. 417)
+- **Cowardly:** −1 auf alle Combat Attrition Tests solange kein RUNTHERD in 6"
+- Ld 4 — sehr niedrig, Tests schon bei kleinen Verlusten kritisch
 
 ---
 
-### AUFGABE 4 — Command Protocols ✅ ERLEDIGT (58ebc0b)
+## Noch nachzuschlagen (vor Umsetzung der betroffenen Tasks)
+
+- **Resurrection Orb** — nur KERN-Einheiten? → `docs/work/wahapedia_necrons/`
+- **WAAAGH!** — welche Ork-Einheiten ausgenommen? → `docs/work/wahapedia_orks/`
+- **Command Protocols** — 6. Protokoll Setup-Zeitpunkt, Dynastiebonus-Regel, Effekte auf Living Metal/RP → `docs/work/wahapedia_necrons/`
+- **Skarabäen** — 6=auto-wound: erst `docs/work/wahapedia_necrons/` prüfen, dann YAML vs. Code klären
 
 ---
 
-## Nächste Session — AUFGABE 5: Attackensequenz-Redesign (Würfel-UI)
-
-Design-Skizzen in `Fotos/IMG_4038–4042`. Ziel: visuelle Würfelfaces statt Text.
-
-Vollständige Skizzen + Komponenten-API: `docs/goals/ziel6.md` → Abschnitt **6d-v3**.
-
-Kurzfassung:
-1. `dice_face_svg()` + `dice_row_html()` + `modifier_die_html()` als SVG-Hilfsfunktionen
-2. Treffer-Block: Würfelreihe 2+…6+, aktive Schwelle farbig highlighted, Modifier-Würfel inline
-3. Verwundungs-Block: nur aktive S-vs-T-Zeile als einzelner Würfel (keine Tabelle mehr)
-4. Rettungswurf: Rüstung + Invuln je als Würfelreihe, AP/Cover als Modifier-Würfel
-5. Schaden: Würfel-Icon für D-Werte + FNP, `[−1][+1]` Buttons bleiben
-
-Betroffene Datei: nur `uiLayout/_common.py`
-
----
-
-## Weitere offene Punkte (nachrangig)
-
-| Punkt | Priorität |
-|---|---|
-| `once_per_battle` enforcement | niedrig |
-| subfaction_affinity UI | niedrig |
-| load_powers() verdrahten (Psychic Phase) | niedrig |
-
----
-
-## Wichtige Constraints (unverändert)
+## Wichtige Constraints (unveränderlich)
 
 - **Freigabe vor Umsetzung** — Plan + Dateiliste zeigen, auf „ja" warten
 - **Planergänzung ≠ Freigabe** — Plan neu zeigen, nochmal warten
 - **Kein Memory/Subagent/Skill ohne Freigabe**
 - dev-Branch, kein direktes Committen auf main
-- Seitenleisten: first_player links, second_player rechts (unveränderlich)
+- Seitenleisten: `first_player` links, `second_player` rechts (unveränderlich)
 - Keywords immer `UPPERCASE` in YAML
 - `_parse_strength()` für Waffenstärke, nie `int(strength)` direkt
+- Regelreferenz: Immer erst lokal nachschlagen (`docs/work/wahapedia_*/`), nie Nutzer fragen
 
 ---
 
-## Historische Sessions (Kurzfassung)
+## Historische Sessions
 
 | Session | Datum | Inhalt |
 |---|---|---|
@@ -115,5 +194,8 @@ Betroffene Datei: nur `uiLayout/_common.py`
 | 6–7 | 2026-06-04 | GO-Daten vollständig, render_attack_form neu (2-Spalten) |
 | 8 | 2026-06-04 | Design 6d-v2 abgestimmt |
 | 9–10 | 2026-06-04 | 6d-v2 Kern implementiert (Deklaration + Resolution + RP) |
-| 11 | 2026-06-04 | Bug-Fixes: Scenario-KeyError, shot/fought-Flags, apply_damage(resolved), Stratagems-Hint entfernt |
-| 12 | 2026-06-04 | CLAUDE.md + Memory + settings.json bereinigt; Stratagem-Bugs analysiert; Wahapedia-Plan vorbereitet |
+| 11 | 2026-06-04 | Bug-Fixes: Scenario-KeyError, shot/fought-Flags, apply_damage(resolved), Stratagems-Hint |
+| 12 | 2026-06-04 | CLAUDE.md + Memory bereinigt; Stratagem-Bugs; Wahapedia-Plan |
+| 13–14 | 2026-06-04/05 | Wahapedia-Scraper, Daten-Review (Necrons/Orks), Custodes Ka'tah |
+| 15–16 | 2026-06-05 | Weapon-Ability-Badges, Stratagem Undo, Auto-Advance, 6d-v3 Skizzen |
+| 17 | 2026-06-06 | 6d-v3 SVG-Würfel-UI; Testsession: 21 Abweichungen + Regelrecherche |
