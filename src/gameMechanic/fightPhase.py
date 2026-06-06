@@ -1,6 +1,9 @@
 """FightPhaseHandler — Fight Phase for WH40k 9E.
 
-Ziel 3c: can_fight(), Fights-First indicator, full AttackSequence via combat.py.
+9E rules (core_rules.txt Z. 1941-1973):
+- Inactive player selects first; both players alternate.
+- Charged units fight before non-charged units (Fights First rule).
+- If one player has no eligible units, the other continues alone.
 """
 
 from __future__ import annotations
@@ -14,7 +17,8 @@ from uiLayout._common import (
     lookup,
     render_attack_declaration,
     render_attack_resolution,
-    render_player_column,
+    state_badges_html,
+    wound_adjustment_buttons,
 )
 
 
@@ -24,15 +28,71 @@ def _is_target_engaged(atk_state: dict, def_faction: str, def_uid: str) -> bool:
 
 
 def can_fight(unit_state: dict) -> bool:  # type: ignore[type-arg]
-    """Return True if the unit may fight this turn.
+    """Return True if the unit is generally eligible to fight this turn.
 
-    9E: a unit is eligible to fight if it is in melee or if it charged this turn.
-    Units that have already fought this phase may not fight again.
+    9E: a unit is eligible if it is in melee or if it charged this turn.
+    Units that have already fought may not fight again.
     """
     flags = unit_state.get("turn_flags", {})
     if flags.get("fought"):
         return False
     return bool(unit_state.get("in_melee") or flags.get("charged"))
+
+
+def _any_charged_remain(first: str, second: str) -> bool:
+    """Return True if any charged (but not yet fought) unit exists on either side."""
+    for player in (first, second):
+        for s in st.session_state[units_key_for(player)].values():
+            flags = s.get("turn_flags", {})
+            if flags.get("charged") and not flags.get("fought"):
+                return True
+    return False
+
+
+def can_fight_now(unit_state: dict, first: str, second: str) -> bool:  # type: ignore[type-arg]
+    """Return True if this unit may fight right now (considering CHARGED priority).
+
+    Non-charged units must wait until all charged units from both sides have fought.
+    """
+    if not can_fight(unit_state):
+        return False
+    flags = unit_state.get("turn_flags", {})
+    if _any_charged_remain(first, second) and not flags.get("charged"):
+        return False
+    return True
+
+
+def _has_eligible_units(player: str, first: str, second: str) -> bool:
+    """Return True if the player has at least one unit eligible to fight right now."""
+    for s in st.session_state[units_key_for(player)].values():
+        if can_fight_now(s, first, second):
+            return True
+    return False
+
+
+def _advance_fight_turn_if_needed(first: str, second: str) -> None:
+    """Switch fight_current_player after a unit fights or when a player has no eligible units."""
+    current = st.session_state.get("fight_current_player")
+    if current is None:
+        return
+
+    # Detect if the current player's selected unit just fought
+    sel = st.session_state.get("selected_unit")
+    if sel and sel[0] == current:
+        _, unit_state = lookup(current, sel[1])
+        if unit_state.get("turn_flags", {}).get("fought"):
+            other = second if current == first else first
+            st.session_state.fight_current_player = other
+            st.session_state.selected_unit = None
+            st.session_state.selected_targets = []
+            current = other
+
+    # Auto-skip if current player has no eligible units but the other does
+    other = second if current == first else first
+    if not _has_eligible_units(current, first, second) and _has_eligible_units(
+        other, first, second
+    ):
+        st.session_state.fight_current_player = other
 
 
 class FightPhaseHandler:
@@ -46,37 +106,29 @@ class FightPhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
-        # 9E: non-active player has fight priority and selects a unit to fight first.
         active_player: str = st.session_state.active
-        priority_player = second if active_player == first else first
 
-        attack_form_shown = _render_display(state)
+        # Priority goes to the inactive (non-active) player
+        if st.session_state.get("fight_current_player") is None:
+            priority = second if active_player == first else first
+            st.session_state.fight_current_player = priority
+
+        _advance_fight_turn_if_needed(first, second)
+        fight_player = st.session_state.fight_current_player
+
+        attack_form_shown = _render_display(state, fight_player, first, second)
         if attack_form_shown:
             return
 
         st.divider()
+        _render_melee_pairs()
+        st.divider()
 
         col1, col2 = st.columns(2)
         with col1:
-            if first == priority_player:
-                st.info("⚔ Fight Priority — selects first this phase")
-            render_player_column(
-                first,
-                state,
-                active_content=_active_fight,
-                inactive_content=_inactive_target_stats,
-                no_target_caption="← Designate a target (▷) from your army list.",
-            )
+            _render_fight_column(first, state, fight_player, first, second)
         with col2:
-            if second == priority_player:
-                st.info("⚔ Fight Priority — selects first this phase")
-            render_player_column(
-                second,
-                state,
-                active_content=_active_fight,
-                inactive_content=_inactive_target_stats,
-                no_target_caption="← Designate a target (▷) from your army list.",
-            )
+            _render_fight_column(second, state, fight_player, first, second)
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass
@@ -87,8 +139,58 @@ class FightPhaseHandler:
 # ---------------------------------------------------------------------------
 
 
+def _render_fight_column(
+    faction: str,
+    state: dict,  # type: ignore[type-arg]
+    fight_player: str,
+    first: str,
+    second: str,
+) -> None:
+    """Render one fight column — attacker side or target/waiting side."""
+    is_my_turn = faction == fight_player
+    indicator = "⚔" if is_my_turn else "◀"
+    st.markdown(f"**{indicator} {faction}**")
+
+    if is_my_turn:
+        sel = st.session_state.selected_unit
+        if sel and sel[0] == faction:
+            _, uid = sel
+            unit, unit_state = lookup(faction, uid)
+            badges = state_badges_html(unit_state)
+            st.markdown(f"*{unit.name_en}*")
+            if badges:
+                st.markdown(badges, unsafe_allow_html=True)
+            _active_fight(faction, uid, unit, unit_state, state, first, second)
+        else:
+            st.caption("← Select a unit from your army list to fight.")
+    else:
+        targets: list[tuple[str, str]] = st.session_state.selected_targets
+        matching = [t for t in targets if t[0] == faction]
+        if matching:
+            for tgt in matching:
+                _, uid = tgt
+                unit, unit_state = lookup(faction, uid)
+                badges = state_badges_html(unit_state)
+                st.markdown(f"*{unit.name_en}* ← Target")
+                if badges:
+                    st.markdown(badges, unsafe_allow_html=True)
+                _inactive_target_stats(faction, uid, unit, unit_state)
+                st.divider()
+                wound_adjustment_buttons(faction, uid, unit)
+        elif st.session_state.get("selected_unit"):
+            st.caption("← Designate a target (▷) from your army list.")
+        else:
+            st.caption("Waiting — opponent selects a unit to fight.")
+
+
 def _active_fight(
-    faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
+    faction: str,
+    uid: str,
+    unit,  # type: ignore[type-arg]
+    unit_state: dict,  # type: ignore[type-arg]
+    state: dict,  # type: ignore[type-arg]
+    first: str,
+    second: str,
 ) -> None:
     """Show fight eligibility, fights-first indicator, and melee weapons."""
     flags = unit_state.get("turn_flags", {})
@@ -96,14 +198,14 @@ def _active_fight(
         st.info("Already fought this phase.")
         return
     if not can_fight(unit_state):
-        st.warning("Not in melee — no fight action possible.")
+        st.warning("Not eligible — not in melee and did not charge this turn.")
+        return
+    if not can_fight_now(unit_state, first, second):
+        st.info("Charged units from both sides must fight first.")
         return
 
-    fights_first = any(k.lower() == "fights_first" for k in unit.keywords)
-    if fights_first:
+    if any(k.lower() == "fights_first" for k in unit.keywords):
         st.info("Fights First — this unit activates before others.")
-
-    flags = unit_state.get("turn_flags", {})
     if flags.get("charged"):
         st.markdown("**Fights first** (charged this turn).")
 
@@ -136,7 +238,7 @@ def _active_fight(
 def _inactive_target_stats(
     faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Show target defensive stats (T / Sv / ++) in the inactive column."""
+    """Show target defensive stats (T / Sv / ++) in the fight column."""
     inv_display = f"{unit.invuln_save}+" if unit.invuln_save else "—"
     cols = st.columns(3)
     cols[0].metric("T", unit.toughness)
@@ -171,7 +273,12 @@ def _render_melee_pairs() -> None:
         st.info(PHASE_RULES["fight"])
 
 
-def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
+def _render_display(
+    state: dict,  # type: ignore[type-arg]
+    fight_player: str,
+    first: str,
+    second: str,
+) -> bool:
     """Render attack form if applicable. Returns True when the form is shown."""
     decl = st.session_state.get("attack_declaration", {})
     if decl.get("active") and decl.get("phase_key") == "fight":
@@ -183,8 +290,15 @@ def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
     if sel and tgts:
         atk_faction, atk_uid = sel
         def_faction, def_uid = tgts[0]
+
+        # Only the current fight player may initiate attacks
+        if atk_faction != fight_player:
+            return False
+
         atk_unit, atk_state = lookup(atk_faction, atk_uid)
-        if can_fight(atk_state) and _is_target_engaged(atk_state, def_faction, def_uid):
+        if can_fight_now(atk_state, first, second) and _is_target_engaged(
+            atk_state, def_faction, def_uid
+        ):
             render_attack_declaration(
                 atk_faction,
                 atk_uid,
@@ -194,7 +308,8 @@ def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
                 phase_key="fight",
             )
             return True
-        if can_fight(atk_state) and not _is_target_engaged(atk_state, def_faction, def_uid):
+        if can_fight(atk_state) and not can_fight_now(atk_state, first, second):
+            st.info("Charged units must fight first — wait for all charged units to activate.")
+        elif can_fight(atk_state) and not _is_target_engaged(atk_state, def_faction, def_uid):
             st.warning("Target is not engaged with this unit — select an engaged enemy.")
-    _render_melee_pairs()
     return False

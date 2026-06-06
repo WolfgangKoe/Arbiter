@@ -510,10 +510,10 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 > Regelgrundlage: `core_rules.txt` Z. 1941–1973
 
-- [ ] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen
-- [ ] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten
-- [ ] Ablauf 9E: erst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv)
-- [ ] Counterattack GO einsetzbar (reaktive Unterbrechung)
+- [x] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen ✅ (2026-06-06)
+- [x] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten ✅ (2026-06-06)
+- [x] Ablauf 9E: erst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv) ✅ (2026-06-06)
+- [ ] Counterattack GO einsetzbar (reaktive Unterbrechung) — Teil von 6e (GO-System)
 
 ### Heroic Intervention
 

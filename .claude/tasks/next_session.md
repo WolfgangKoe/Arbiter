@@ -21,14 +21,15 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 18, 2026-06-06)
+## Aktueller Stand (nach Session 19, 2026-06-06)
 
 ### Was funktioniert ✅
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6i (Basis) committed
-- 6d-v3 Würfel-UI vollständig: Schwellenwert-Kopfzeile, Modifier-Paare (korrekte Reihenfolge), 7+-Handling
-- Cover: 3 phasengebundene Checkboxen (Dense nach HIT, Light/Heavy nach SAVE)
+- 6d-v3 Würfel-UI: Schwellenwert-Kopfzeile, Modifier-Paare, SAVE-Würfelreihen, 7+-Handling
+- Cover: 3 phasengebundene Checkboxen (Dense → HIT, Light/Heavy → SAVE)
 - Damage-Block: MW-Bedingung + Einzelmodell-Fix
+- Fight Phase: beide Spieler alternieren korrekt; CHARGED-Priorität; inaktiver Spieler startet
 - 456 Tests grün
 
 ### Session 18 (2026-06-06) ✅
@@ -36,6 +37,12 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - 6d-v3 Würfel-UI Fixes: `threshold_header_html`, Modifier-Dimming-Fix, Blau für positive Mods, SAVE-Überarbeitung, 7+
 - Cover: Dropdown → 3 Checkboxen + Phasenbindung + Dense nach HIT-Block
 - Damage-Block: `has_mortal_wounds`-Flag + `is_single_model`-Fix
+
+### Session 19 (2026-06-06) ✅
+- Fight Phase Strukturfehler behoben: `fight_current_player` in `game_state.py`
+- `can_fight_now()` + `_any_charged_remain()`: CHARGED-Priorität nach Regeltext
+- `_advance_fight_turn_if_needed()`: automatischer Spielerwechsel + Auto-Skip
+- `_render_fight_column()`: beide Spalten können aktiv sein (ersetzt `render_player_column`)
 
 ---
 
@@ -70,87 +77,59 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - `has_mortal_wounds` in `_detect_weapon_special`: MW-Input nur wenn `"mortal wound"` in abilities
 - `is_single_model = models_max ≤ 1`: kein Model-Counter, nur Wunden-Input
 
-### Schritt 5 — Fight Phase (eigene Session, komplex)
+### ✅ Schritt 5 — Fight Phase (2026-06-06)
 
-Struktureller Regelfehler — inaktiver Spieler kämpft mit, CHARGED-Reihenfolge.
-Betrifft `gameMechanic/fightPhase.py` + `game_state.py`. Braucht detaillierten Plan.
+- `fight_current_player` State in `game_state.py` (init + reset)
+- Inaktiver Spieler startet: `priority = second if active == first else first`
+- Beide Spieler alternieren: `_advance_fight_turn_if_needed()` wechselt nach jedem Fight
+- CHARGED-Priorität: `can_fight_now()` + `_any_charged_remain()` blockieren nicht-gechargede Einheiten
+- Auto-Skip wenn ein Spieler keine eligible Units hat
+- Counterattack GO (reaktive Unterbrechung) → Teil von 6e, noch offen
 
 ---
 
 ## Offene Tasks — Ziel 6 (Fokus nächste Session)
 
 Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
-Hier stehen die Tasks mit Beobachtungsdetail als Kontext.
 
-### 🔴 KRITISCH — Fight Phase (`gameMechanic/fightPhase.py`, `game_state.py`)
+### 🔴 HOCH — 6d-v3 Würfel-UI Restfixes (`uiLayout/_common.py`)
 
-- [ ] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen (aktuell geblockt)
-- [ ] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten
-- [ ] Ablauf 9E: zuerst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv)
-- [ ] Counterattack GO einsetzbar (reaktive Unterbrechung)
+Erledigt in Session 18: Schwellenwert-Zeile, Modifier-Reihenfolge, SAVE-Würfelreihen, 7+.
+**Noch offen:**
+- [ ] Senkrechte Ausrichtungslinie bei aktiver Schwelle; gestrichelte Linie zwischen Würfel 1 und 2
+- [ ] SAVE: Vertikales Alignment — Würfelreihen und Modifier-Effekte tabellenartig ausgerichtet
 
-### 🔴 HOCH — 6d-v3 Würfel-UI Fixes (`uiLayout/_common.py`)
+### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
 
-**HIT + WOUND:**
-- [ ] Schwellenwert-Zeile über Würfeln: `2+  3+  4+  5+  6+`, aktive Schwelle mit Rahmen hervorgehoben
-- [ ] Senkrechte Ausrichtungslinie bei aktiver Schwelle (durchgezogen); gestrichelte Linie zwischen Würfel 1 (immer miss) und Würfel 2
-- [ ] Modifier-Reihenfolge: linker Würfel = Ausgangsschwelle, rechter = neue Schwelle (aktuell vertauscht)
-- [ ] MWBD-Farbe: **blau** (wie unitCard-Badges), nicht grün
-
-**SAVE:**
-- [ ] Waagerechte Schwellenwert-Reihe + senkrechte Ausrichtungslinie (wie HIT/WOUND)
-- [ ] Vertikales Alignment: Würfelreihen und Modifier-Effekte tabellenartig ausgerichtet
-- [ ] Effective Save als Würfelreihe mit farbigem Rahmen (kein statischer Zahlenwert)
-- [ ] Invuln-Zeile: ebenfalls Schwellenwert-Reihe + senkrechte Linie nötig
-
-**7+ / unmöglicher Save:**
-- [ ] Roter `[×]`-Würfel rechts neben 6er-Würfel wenn Schwelle 7+ (z.B. Gretchin, Warboss)
-- [ ] Effective Save 7+: 6 rote `[×]`-Würfel statt Zahlenwert
-
-### 🟡 HOCH — Damage-Block (`uiLayout/_common.py`)
-
-- [ ] Mortal Wounds: Eingabe nur anzeigen wenn Waffe MW-Fähigkeit hat (aktuell immer sichtbar)
-- [ ] Einzelmodell-Einheit (z.B. Warboss): nur Wunden-Eingabe, kein Modellverlust-Counter
-
-### 🟡 HOCH — Heroic Intervention (`gameMechanic/chargePhase.py`, `game_state.py`)
-
-- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (Step 2 Charge Phase, nicht bei Zielauswahl)
+Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
+- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (Step 2, nicht bei Zielauswahl)
 - [ ] Nur CHARACTER-Einheiten dürfen intervenieren — Prüfung fehlt
 - [ ] INTERVENED-Badge auf unitCard; `in_melee`-Ergänzung korrekt
-- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range landen
-
-### 🟡 MITTEL — Cover-Überarbeitung (`uiLayout/_common.py`)
-
-- [ ] Dropdown → Checkboxen/Buttons (mehrere Cover-Typen gleichzeitig möglich — Entweder-Oder ist regelfalsch)
-- [ ] Phasenbindung: Dense + Light Cover → nur Shooting Phase; Heavy Cover → nur Fight Phase
-- [ ] Dense Cover in HIT-Block verschieben (−1 Trefferwurf), nicht im Save-Block
-- [ ] Heavy Cover: Effekt korrekt anzeigen; erscheint fälschlicherweise in gegnerischer Phase
+- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range
 
 ### 🟡 MITTEL — GOs in gameActionArea
 
-- [ ] GO-Buttons kontextuell direkt in gameActionArea (aktiver + inaktiver Spieler), nicht als Liste unten
+- [ ] GO-Buttons kontextuell direkt in gameActionArea (aktiver + inaktiver Spieler), nicht als Liste
 - [ ] Overwatch als reaktive GO in Charge Phase
+- [ ] Counterattack GO in Fight Phase (reaktive Unterbrechung) — Teil von 6e
 
 ### 🟡 MITTEL — Necron Command Phase (`gameMechanic/commandPhase.py`, `uiLayout/armyCard.py`)
 
 - [ ] Living Metal: einmalig pro Phase (aktuell mehrfach anwendbar)
-- [ ] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu wählbar)
+- [ ] MWBD: nach erstmaligem Setzen in Command Phase zurücksetzbar
 - [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden (Interaktion fehlt)
 - [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
 - [ ] Anzeigereihenfolge: Regelkasten immer ganz oben in allen Phasen
 
-### 🟡 MITTEL — WAAAGH! + Sonstiges
+### 🟡 MITTEL — WAAAGH!
 
-- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten
-- [ ] Ork-Regeln prüfen: welche Einheiten ausgenommen? → unitCard-Logik anpassen
-- [ ] Resurrection Orb: Regel lesen (nur KERN-Einheiten?) → Implementierung prüfen
-- [ ] Skarabäen: 6=auto-wound — YAML-Lücke oder Code fehlt?
+- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten (alle ORKS — keine Ausnahmen laut Regeltext)
 
 ### 🟢 NIEDRIG — Moralphase
 
-- [ ] Gretchin Cowardly: −1 auf Combat Attrition Tests wenn kein RUNTHERD in 6" (Ld 4 — kritisch!)
+- [ ] Gretchin Cowardly: −1 auf Combat Attrition Tests wenn kein RUNTHERD in 6" (Ld 4)
 
-### Weitere offene Tasks (nachrangig — Details in ziel6.md §6e–6h)
+### Nachrangig (Details in ziel6.md §6e–6h)
 
 - [ ] Fight Phase Declaration-Block: noch nicht 6d-v3-Layout
 - [ ] CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (6e)
@@ -232,3 +211,5 @@ _(leer — alle offenen Recherchepunkte abgearbeitet)_
 | 13–14 | 2026-06-04/05 | Wahapedia-Scraper, Daten-Review (Necrons/Orks), Custodes Ka'tah |
 | 15–16 | 2026-06-05 | Weapon-Ability-Badges, Stratagem Undo, Auto-Advance, 6d-v3 Skizzen |
 | 17 | 2026-06-06 | 6d-v3 SVG-Würfel-UI; Testsession: 21 Abweichungen + Regelrecherche |
+| 18 | 2026-06-06 | 6d-v3 Fixes (Schwellenwert, Modifier, SAVE, 7+), Cover-Checkboxen, Damage-Block |
+| 19 | 2026-06-06 | Fight Phase: beide Spieler alternieren, CHARGED-Priorität, fight_current_player |
