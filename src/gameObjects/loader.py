@@ -372,6 +372,53 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
     return results
 
 
+def load_wargear_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[type-arg]
+    """Return a wargear_id → raw-dict index for a faction's wargear.yaml."""
+    path = _DATA_ROOT / faction_dir / "wargear.yaml"
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        data = yaml.safe_load(f) or []
+    entries = data if isinstance(data, list) else []
+    return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
+
+
+def _parse_move_inches(move_str: str) -> int:
+    """Parse a move string such as '6"' or '10"' to an integer."""
+    return int(move_str.rstrip('"').strip())
+
+
+def _apply_persistent_effect(unit: Unit, effect: dict) -> Unit:  # type: ignore[type-arg]
+    """Return a copy of unit with one persistent wargear effect applied."""
+    etype = effect.get("type", "")
+    if etype == "set_stat":
+        stat = effect.get("stat", "")
+        value = effect.get("value")
+        if stat == "move" and value is not None:
+            return dataclasses.replace(unit, move=str(value))
+        if stat == "save" and value is not None:
+            return dataclasses.replace(unit, save=int(value))
+    elif etype == "buff_stat":
+        stat = effect.get("stat", "")
+        modifier = int(effect.get("modifier", 0))
+        if stat == "move":
+            current = _parse_move_inches(unit.move)
+            return dataclasses.replace(unit, move=f'{current + modifier}"')
+    elif etype == "grant_keyword":
+        kw = str(effect.get("keyword", "")).upper()
+        if kw and kw not in unit.keywords:
+            return dataclasses.replace(unit, keywords=list(unit.keywords) + [kw])
+    elif etype == "set_invuln":
+        return dataclasses.replace(unit, invuln_save=int(effect["value"]))
+    elif etype == "buff_save":
+        modifier = int(effect.get("modifier", 0))
+        new_save = max(1, unit.save - modifier)
+        return dataclasses.replace(unit, save=new_save)
+    elif etype == "set_fnp":
+        return dataclasses.replace(unit, fnp=int(effect["value"]))
+    return unit
+
+
 def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
     """Return short names of wargear items with deny_psychic effect for a faction.
 
@@ -526,12 +573,13 @@ def _apply_wargear(
     unit: Unit,
     wargear_ids: list[str],
     weapon_catalog: dict[str, Weapon],
+    wargear_catalog: dict[str, dict] | None = None,  # type: ignore[type-arg]
 ) -> Unit:
     """Return a copy of unit with roster wargear overrides applied.
 
-    Each ID is looked up in the weapon catalog. A matching wargear_option
-    drives whether it replaces an existing weapon or is added. Unknown IDs
-    (non-weapon wargear items not yet supported) are silently skipped.
+    Weapon IDs found in weapon_catalog are added/replaced per wargear_options.
+    All IDs are tracked in unit.wargear_ids. Entries in wargear_catalog with
+    persistent_effects have those effects applied to the unit's stats.
     """
     weapons = list(unit.weapons)
 
@@ -565,7 +613,28 @@ def _apply_wargear(
     if not any(p.is_melee for w in weapons for p in w.profiles):
         weapons.append(_CCW)
 
-    return dataclasses.replace(unit, weapons=weapons)
+    unit = dataclasses.replace(
+        unit,
+        weapons=weapons,
+        wargear_ids=list(unit.wargear_ids) + wargear_ids,
+    )
+
+    if wargear_catalog:
+        granted: list[str] = []
+        for wid in wargear_ids:
+            entry = wargear_catalog.get(wid)
+            if not entry:
+                continue
+            for eff in entry.get("persistent_effects", []):
+                kws_before = set(unit.keywords)
+                unit = _apply_persistent_effect(unit, eff)
+                for kw in unit.keywords:
+                    if kw not in kws_before:
+                        granted.append(kw)
+        if granted:
+            unit = dataclasses.replace(unit, wargear_keywords=list(unit.wargear_keywords) + granted)
+
+    return unit
 
 
 def load_roster(
@@ -587,6 +656,7 @@ def load_roster(
 
     faction_dir = data.get("faction_dir", "necrons")
     weapon_catalog = load_weapon_catalog(faction_dir)
+    wargear_catalog = load_wargear_catalog(faction_dir)
 
     matched: list[tuple[Unit, int]] = []
     unmatched: list[str] = []
@@ -599,6 +669,6 @@ def load_roster(
             models = int(entry.get("models", unit.models_max))
             wargear_ids: list[str] = entry.get("wargear") or []
             if wargear_ids:
-                unit = _apply_wargear(unit, wargear_ids, weapon_catalog)
+                unit = _apply_wargear(unit, wargear_ids, weapon_catalog, wargear_catalog)
             matched.append((unit, models))
     return matched, unmatched

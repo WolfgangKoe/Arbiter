@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from pathlib import Path
 
 from gameObjects.loader import (
+    _apply_persistent_effect,
     _apply_wargear,
     load_army,
     load_detachment_types,
@@ -19,6 +20,7 @@ from gameObjects.loader import (
     load_round_choice_abilities,
     load_stratagems,
     load_unit_catalog,
+    load_wargear_catalog,
     load_weapon_catalog,
     resolve_bracket_stats,
     scaled_pl,
@@ -426,6 +428,147 @@ def test_load_stratagems_shared_ids_namespace() -> None:
     stratagems = load_stratagems("necrons")
     shared = [s for s in stratagems if s.id.startswith("wh40k_9e.shared.stratagem.")]
     assert len(shared) == 7
+
+
+# ---------------------------------------------------------------------------
+# 6k: load_wargear_catalog, _apply_persistent_effect, _apply_wargear + wargear_ids
+# ---------------------------------------------------------------------------
+
+
+def test_load_wargear_catalog_necrons_contains_known_items() -> None:
+    catalog = load_wargear_catalog("necrons")
+    assert "wh40k_9e.necrons.wargear.gloom_prism" in catalog
+    assert "wh40k_9e.necrons.wargear.resurrection_orb" in catalog
+    assert "wh40k_9e.necrons.wargear.canoptek_cloak" in catalog
+
+
+def test_load_wargear_catalog_missing_faction_returns_empty() -> None:
+    assert load_wargear_catalog("eldar") == {}
+
+
+def test_apply_persistent_effect_set_invuln() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert warriors.invuln_save is None
+    modified = _apply_persistent_effect(warriors, {"type": "set_invuln", "value": 5})
+    assert modified.invuln_save == 5
+
+
+def test_apply_persistent_effect_grant_keyword_adds_to_keywords() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    assert not overlord.has_keyword("FLY")
+    modified = _apply_persistent_effect(overlord, {"type": "grant_keyword", "keyword": "FLY"})
+    assert modified.has_keyword("FLY")
+
+
+def test_apply_persistent_effect_grant_keyword_idempotent() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    modified = _apply_persistent_effect(overlord, {"type": "grant_keyword", "keyword": "NECRONS"})
+    count = sum(1 for kw in modified.keywords if kw == "NECRONS")
+    assert count == 1
+
+
+def test_apply_persistent_effect_buff_save_decreases_value() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    original = warriors.save
+    modified = _apply_persistent_effect(warriors, {"type": "buff_save", "modifier": 1})
+    assert modified.save == original - 1
+
+
+def test_apply_persistent_effect_set_fnp() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    modified = _apply_persistent_effect(overlord, {"type": "set_fnp", "value": 6})
+    assert modified.fnp == 6
+
+
+def test_apply_persistent_effect_buff_stat_move() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    original_inches = int(warriors.move.rstrip('"'))
+    modified = _apply_persistent_effect(
+        warriors, {"type": "buff_stat", "stat": "move", "modifier": 2}
+    )
+    assert modified.move == f'{original_inches + 2}"'
+
+
+def test_apply_persistent_effect_set_stat_save() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    modified = _apply_persistent_effect(warriors, {"type": "set_stat", "stat": "save", "value": 3})
+    assert modified.save == 3
+
+
+def test_apply_wargear_tracks_wargear_ids() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+    wargear_catalog = load_wargear_catalog("necrons")
+
+    modified = _apply_wargear(
+        overlord,
+        ["wh40k_9e.necrons.wargear.resurrection_orb"],
+        weapon_catalog,
+        wargear_catalog,
+    )
+    assert "wh40k_9e.necrons.wargear.resurrection_orb" in modified.wargear_ids
+
+
+def test_apply_wargear_canoptek_cloak_sets_move_and_keyword() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert not warriors.has_keyword("FLY")
+    weapon_catalog = load_weapon_catalog("necrons")
+    wargear_catalog = load_wargear_catalog("necrons")
+
+    modified = _apply_wargear(
+        warriors,
+        ["wh40k_9e.necrons.wargear.canoptek_cloak"],
+        weapon_catalog,
+        wargear_catalog,
+    )
+    assert modified.move == '10"'
+    assert modified.has_keyword("FLY")
+    assert "FLY" in modified.wargear_keywords
+
+
+def test_apply_wargear_shadowloom_sets_invuln() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+    wargear_catalog = load_wargear_catalog("necrons")
+
+    modified = _apply_wargear(
+        overlord,
+        ["wh40k_9e.necrons.wargear.shadowloom"],
+        weapon_catalog,
+        wargear_catalog,
+    )
+    assert modified.invuln_save == 5
+
+
+def test_apply_wargear_no_wargear_catalog_still_tracks_ids() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    weapon_catalog = load_weapon_catalog("necrons")
+
+    modified = _apply_wargear(
+        overlord,
+        ["wh40k_9e.necrons.wargear.resurrection_orb"],
+        weapon_catalog,
+    )
+    assert "wh40k_9e.necrons.wargear.resurrection_orb" in modified.wargear_ids
+
+
+def test_load_roster_alpha_overlord_has_resurrection_orb_in_wargear_ids() -> None:
+    catalog = load_unit_catalog("necrons")
+    matched, unmatched = load_roster(_ROSTER_DIR / "necrons_alpha.yaml", catalog)
+    assert unmatched == []
+    overlord, _ = next((u, m) for u, m in matched if u.id == "wh40k_9e.necrons.unit.overlord")
+    assert "wh40k_9e.necrons.wargear.resurrection_orb" in overlord.wargear_ids
 
 
 def test_load_detachment_types_have_cp_fields() -> None:

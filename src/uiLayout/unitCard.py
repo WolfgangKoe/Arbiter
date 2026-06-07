@@ -103,9 +103,11 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     return "".join(parts)
 
 
-def _keyword_chip(kw: str, highlighted: bool) -> str:
+def _keyword_chip(kw: str, highlighted: bool, wargear: bool = False) -> str:
     if highlighted:
         fg, bg, border = "#f5d080", "#3a2e10", "#f5d080"
+    elif wargear:
+        fg, bg, border = "#60a5fa", "#0c1a2e", "#2563eb"
     else:
         fg, bg, border = "#6b5f44", "#1c1a14", "#2e2618"
     return (
@@ -120,9 +122,11 @@ def _keywords_html(unit: Unit) -> str:
 
     Highlighting is all-or-nothing: if the unit has all highlight_keywords,
     each matching chip is highlighted; otherwise no chip is highlighted.
+    Wargear-granted keywords are rendered in blue.
     """
     required: list[str] = st.session_state.get("highlight_keywords", [])
     visible_kws = [kw for kw in unit.keywords if kw != unit.faction]
+    wargear_kws = set(unit.wargear_keywords)
 
     if required:
         unit_kws = set(unit.keywords)
@@ -131,7 +135,9 @@ def _keywords_html(unit: Unit) -> str:
     else:
         required_set = set()
 
-    return "".join(_keyword_chip(kw, kw in required_set) for kw in visible_kws)
+    return "".join(
+        _keyword_chip(kw, kw in required_set, wargear=kw in wargear_kws) for kw in visible_kws
+    )
 
 
 def render_unit_card(
@@ -238,7 +244,7 @@ def render_unit_card(
                     st.markdown(f"**{unit.name_en}**")
 
             elif res_orb_awaiting:
-                if unit.has_keyword("OVERLORD"):
+                if "wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids:
                     st.markdown(f"**{unit.name_en}**")
                 else:
                     if st.button(

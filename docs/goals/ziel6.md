@@ -973,12 +973,12 @@ Die Resurrection-Orb-UI existiert und ist nutzbar (`commandPhase.py` Z. 118–16
 
 ### Tasks
 
-- [ ] Schema + YAML-Felder für persistente Effekte (Necrons + Orks)
-- [ ] `_apply_persistent_effect()` Interpreter in loader.py
-- [ ] `_apply_wargear()` erweiterung
-- [ ] unitCard: granted Keywords anzeigen
-- [ ] resurrection_orb: Wargear-ID-Check statt OVERLORD-Keyword
-- [ ] Tests
+- [x] Schema + YAML-Felder für persistente Effekte (Necrons + Orks) ✅ (2026-06-07)
+- [x] `_apply_persistent_effect()` Interpreter in loader.py ✅ (2026-06-07)
+- [x] `_apply_wargear()` erweiterung ✅ (2026-06-07)
+- [x] unitCard: granted Keywords anzeigen (blau markiert) ✅ (2026-06-07)
+- [x] resurrection_orb: Wargear-ID-Check statt OVERLORD-Keyword ✅ (2026-06-07)
+- [x] Tests (14 neue Tests) ✅ (2026-06-07)
 
 ---
 

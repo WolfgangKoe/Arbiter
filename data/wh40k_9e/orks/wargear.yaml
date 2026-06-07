@@ -8,6 +8,9 @@
     This model has a 6+ feel no pain.
   grants_keywords: []
   source: { publication: Codex Orks 9e }
+  persistent_effects:
+    - type: set_fnp
+      value: 6
   ability_type: triggered
   rule_text: "This model has a 6+ feel no pain."
   trigger:
@@ -110,6 +113,10 @@
     Vehicle only. Add 2" to the Move characteristic of this model.
   grants_keywords: []
   source: { publication: Codex Orks 9e }
+  persistent_effects:
+    - type: buff_stat
+      stat: move
+      modifier: 2
   ability_type: triggered
   rule_text: "Add 2\" to the Move characteristic of this model."
   trigger:
@@ -140,6 +147,9 @@
     Vehicle only. Add 1 to armour saving throws made for this model.
   grants_keywords: []
   source: { publication: Codex Orks 9e }
+  persistent_effects:
+    - type: buff_save
+      modifier: 1
   ability_type: triggered
   rule_text: "Add 1 to armour saving throws made for this model."
   trigger:

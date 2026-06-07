@@ -23,6 +23,12 @@
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  persistent_effects:
+    - type: set_stat
+      stat: move
+      value: "10\""
+    - type: grant_keyword
+      keyword: FLY
   ability_type: triggered
   rule_text: "The bearer has a Move characteristic of 10\" and the FLY keyword. In addition, at the end of your Movement phase, you can repair one friendly DYNASTY model within 3\" of this model. That model regains up to D3 lost wounds."
   trigger:
@@ -78,6 +84,11 @@
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  persistent_effects:
+    - type: set_invuln
+      value: 4
+    - type: buff_save
+      modifier: 1
   ability_type: triggered
   rule_text: "The bearer has a 4+ invulnerable save. In addition, add 1 to armour saving throws made for the bearer."
   trigger:
@@ -231,6 +242,9 @@
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  persistent_effects:
+    - type: set_invuln
+      value: 5
   ability_type: triggered
   rule_text: "The bearer has a 5+ invulnerable save."
   trigger:
@@ -254,6 +268,10 @@
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  persistent_effects:
+    - type: set_stat
+      stat: save
+      value: 3
   ability_type: triggered
   rule_text: "The bearer has a Save characteristic of 3+."
   trigger:

@@ -4,11 +4,15 @@ import streamlit as st
 
 from gameMechanic.ability_engine import get_activated_command_abilities, get_triggered_abilities
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import faction_dir_for, unit_id_from_state_key, units_key_for
+from gameMechanic.game_state import (
+    faction_dir_for,
+    unit_id_from_state_key,
+    units_key_for,
+    units_list_for,
+)
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import load_army
 from uiLayout._common import (
     PHASE_RULES,
     lookup,
@@ -184,9 +188,8 @@ def _render_unit_command_abilities(
         if ability.effect.type in ("buff_roll", "reroll_hit_1"):
             _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
 
-    # Resurrection Orb is wargear (not in unit_abilities) — any OVERLORD unit
     unit = unit_by_id.get(unit_id)
-    if unit and unit.has_keyword("OVERLORD"):
+    if unit and "wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids:
         _render_resurrection_orb(faction, state, units_state, unit_by_id)
 
 
@@ -240,8 +243,7 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
             st.markdown(badges, unsafe_allow_html=True)
         st.divider()
 
-    units, _ = load_army(faction_dir_for(faction))
-    unit_by_id = {u.id: u for u in units}
+    unit_by_id = {u.id: u for u in units_list_for(faction)}
     units_key = units_key_for(faction)
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
