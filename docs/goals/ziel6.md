@@ -861,7 +861,7 @@ Neue Struktur: Ability als optionales `effect`-Feld im Waffen-Eintrag:
 - [ ] `src/gameObjects/loader.py` — `load_weapon_abilities()` liest aus `weapons.yaml`
 - [ ] Tests anpassen
 
-### Schritt 2 — `wargear_abilities.yaml` in `wargear.yaml` integrieren
+### Schritt 2 — `wargear_abilities.yaml` in `wargear.yaml` integrieren ✅ (2026-06-07)
 
 Betrifft: Necrons, Orks
 
@@ -883,13 +883,12 @@ Neue Struktur: direkte Liste (kein `schema/faction/entries:` Header), Ability in
 `deny: true` Flag entfällt — `can_deny()` prüft `effect.type == "deny_psychic"` direkt.
 
 **Dateien:**
-- [ ] `data/wh40k_9e/necrons/wargear.yaml` — Header entfernen, direkte Liste, Ability-Felder aus `wargear_abilities.yaml` einpflegen
-- [ ] `data/wh40k_9e/orks/wargear.yaml` — dto.
-- [ ] `data/wh40k_9e/necrons/wargear_abilities.yaml` — **löschen** (Arkana → `arkana.yaml`)
-- [ ] `data/wh40k_9e/orks/wargear_abilities.yaml` — **löschen**
-- [ ] `data/wh40k_9e/necrons/arkana.yaml` — **neu** (Arkana-Block aus `wargear_abilities.yaml`)
-- [ ] `src/gameObjects/loader.py` — `load_wargear_abilities()` und `load_deny_wargear_names()` auf neue Struktur umstellen
-- [ ] `src/gameMechanic/psychicPhase.py` — `can_deny()`: prüft `effect.type == "deny_psychic"` statt Namens-String
+- [x] `data/wh40k_9e/necrons/wargear.yaml` — Header entfernen, direkte Liste, Ability-Felder einpflegen ✅
+- [x] `data/wh40k_9e/orks/wargear.yaml` — dto. ✅
+- [x] `data/wh40k_9e/necrons/wargear_abilities.yaml` — **gelöscht** ✅
+- [x] `data/wh40k_9e/orks/wargear_abilities.yaml` — **gelöscht** ✅
+- [x] `data/wh40k_9e/necrons/arkana.yaml` — **neu** (Arkana-Block ausgelagert) ✅
+- [x] `src/gameObjects/loader.py` — `load_wargear_abilities()` und `load_deny_wargear_names()` auf neue Struktur umgestellt ✅
 
 ### Schritt 3 — Header vereinheitlichen (restliche Dateien)
 
@@ -906,7 +905,80 @@ Aktuell mit `schema:` + `entries:`-Header → direkte Liste wie `weapons.yaml` u
 
 ### Reihenfolge
 
-Schritt 2 zuerst (hat aktuell blockierenden Bug: `can_deny()` auf wargear-Daten angewiesen), dann Schritt 1, dann Schritt 3.
+~~Schritt 2 zuerst~~ ✅ → dann Schritt 1, dann Schritt 3.
+
+---
+
+## 6k — Wargear-Effekt-Interpreter
+
+**Ziel:** Persistente Wargear-Effekte (Stat-Änderungen, Keyword-Grants, Saves, FNP) werden beim Roster-Laden auf die Unit-Instanz angewendet und in der App überall dort sichtbar, wo der Originalwert stünde. Kein `type: complex`-Platzhalter mehr für einfache Effekte.
+
+**Voraussetzung:** 6j Schritt 2 abgeschlossen ✅
+
+### Schema-Erweiterung (`wargear.yaml`)
+
+Neues optionales Feld `persistent_effects:` neben dem bestehenden `effect:`-Feld:
+
+```yaml
+- id: wh40k_9e.necrons.wargear.canoptek_cloak
+  ...
+  persistent_effects:
+    - type: set_stat
+      stat: move
+      value: "10\""
+    - type: grant_keyword
+      keyword: FLY
+  # triggered heal bleibt als effect: {type: heal, ...} (Ziel-Auswahl → complex)
+```
+
+**Persistente Effekt-Typen (80%):**
+
+| Typ | Felder | Beispiel |
+|---|---|---|
+| `set_stat` | `stat`, `value` | Move = 10" (absolut) |
+| `buff_stat` | `stat`, `modifier` | Move +2 (relativ) |
+| `grant_keyword` | `keyword` | FLY, INFANTRY |
+| `set_invuln` | `value` | Invuln = 4+ |
+| `buff_save` | `modifier` | Save +1 |
+| `set_fnp` | `value` | FNP = 6+ |
+
+**Komplex-Liste (20% — nicht implementiert, hardcoded oder display-only):**
+
+| Wargear | Warum komplex | Status |
+|---|---|---|
+| `canoptek_cloak` heal D3 | Triggered, Ziel-Auswahl innerhalb 3", ein Modell | display-only |
+| `canoptek_control_node` Aura | Echtzeit-Reichweiten-Check auf Nachbareinheiten | display-only |
+| `resurrection_orb` | Functionally implemented, aber hardcoded auf OVERLORD keyword statt Wargear-ID | 6h-Migration |
+| `phylactery` | Modifiziert Living-Metal-Effekt dynamisch (konditionell) | display-only |
+| `fabricator_claw_array` | Triggered, Ziel-Auswahl VEHICLE innerhalb 3" | display-only |
+| Ork: `grot_oiler` | Modifiziert Mekaniak-Ergebnis konditionell | display-only |
+| Ork: `ammo_runt` | Triggered, once-per-battle | display-only |
+| Ork: `bomb_squig`, `ramming_spur`, `squig_bomb` | Komplexe Bedingungen + Ziel-Auswahl | display-only |
+
+### Betroffene Dateien
+
+- [ ] `gameObjects/unit.py` — `wargear_ids: list[str]` Feld hinzufügen
+- [ ] `gameObjects/loader.py`:
+  - `load_wargear_catalog(faction_dir)` — neue Hilfsfunktion (wargear.yaml → dict by ID)
+  - `_apply_persistent_effect(unit, effect_dict)` — wendet einen persistenten Effekt auf Unit an
+  - `_apply_wargear()` — erweitern: `wargear_ids` tracken + `persistent_effects` anwenden
+- [ ] `data/wh40k_9e/necrons/wargear.yaml` — `persistent_effects:` für canoptek_cloak, dispersion_shield, shieldvanes, shadowloom
+- [ ] `data/wh40k_9e/orks/wargear.yaml` — `persistent_effects:` für cybork_body, kustom_job_souped_up_driveshaft, kustom_job_extra_armour_platez
+- [ ] `uiLayout/unitCard.py` — wargear-granted Keywords in Keyword-Zeile anzeigen
+- [ ] Tests — neue Tests für persistent_effects loading + stat changes
+
+### Hinweis: `resurrection_orb` bereits funktional
+
+Die Resurrection-Orb-UI existiert und ist nutzbar (`commandPhase.py` Z. 118–163). Sie ist jedoch auf `unit.has_keyword("OVERLORD")` hardcoded, nicht auf den Wargear-Eintrag im Roster. Migration nach 6k: Prüfung auf `"resurrection_orb" in unit.wargear_ids` statt OVERLORD-Keyword-Check.
+
+### Tasks
+
+- [ ] Schema + YAML-Felder für persistente Effekte (Necrons + Orks)
+- [ ] `_apply_persistent_effect()` Interpreter in loader.py
+- [ ] `_apply_wargear()` erweiterung
+- [ ] unitCard: granted Keywords anzeigen
+- [ ] resurrection_orb: Wargear-ID-Check statt OVERLORD-Keyword
+- [ ] Tests
 
 ---
 

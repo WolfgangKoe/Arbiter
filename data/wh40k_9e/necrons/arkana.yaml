@@ -1,0 +1,152 @@
+# Cryptek Arkana — WH40k 9E Necrons
+# Arkana sind spezielle Ausrüstung exklusiv für CRYPTEK-Modelle.
+# Source: Codex Necrons 9E, S. 61.
+# Geladen via load_arkana() (noch nicht implementiert), nicht via load_wargear_abilities().
+
+arkana:
+  - id: wh40k_9e.necrons.arkana.failsafe_overcharger
+    name_en: Failsafe Overcharger
+    name_de: Sicherungsüberlader
+    power_delta: 2
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Nur für ein TECHNOMANT-Modell. In deiner Befehlsphase kannst du eine
+      befreundete KANOPTECH-Einheit innerhalb von 9 Zoll um den Träger
+      auswählen. Addiere bis zum Beginn deiner nächsten Befehlsphase 1 zum
+      Attackenwert der Modelle der gewählten Einheit. Wenn die Einheit eine
+      MONSTER- oder FAHRZEUG-Einheit ist, addiere W3 zum Attackenwert der
+      Modelle statt 1.
+
+  - id: wh40k_9e.necrons.arkana.countertemporal_nanomines
+    name_en: Countertemporal Nanomines
+    name_de: Antitemporale Nanominen
+    power_delta: 2
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Nur für ein CHRONOMANT-Modell. In deiner Fernkampfphase kannst du eine
+      feindliche Einheit innerhalb von 18 Zoll um den Träger auswählen.
+      Halbiere bis zum Beginn deines nächsten Zuges jeden Vorrücken- und
+      Angriffswurf für die gewählte Einheit.
+
+  - id: wh40k_9e.necrons.arkana.atavindicator
+    name_en: Atavindicator
+    name_de: Atavindicator
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Nur für ein PSYCHOMANT-Modell. Wähle am Ende deiner Bewegungsphase eine
+      feindliche Einheit (ausgenommen FAHRZEUG-Einheiten) innerhalb von
+      18 Zoll um den Träger und wirf 3W6; wenn die Summe dem Moralwert der
+      gewählten Einheit entspricht oder höher ist, erleidet die feindliche
+      Einheit W3 tödliche Verwundungen.
+
+  - id: wh40k_9e.necrons.arkana.dimensional_sanctum
+    name_en: Dimensional Sanctum
+    name_de: Dimensionszuflucht
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    grants_ability: wh40k_9e.necrons.unit.dimensional_translocation
+    text_de: >
+      Der Träger erhält die Fähigkeit Dimensionale Translokation (Seite 80).
+
+  - id: wh40k_9e.necrons.arkana.hypermaterial_ablator
+    name_en: Hypermaterial Ablator
+    name_de: Hypermaterial-Abtrager
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      In deiner Befehlsphase kannst du eine befreundete
+      <DYNASTIE>-KERN- oder <DYNASTIE>-KANOPTECH-Einheit innerhalb von
+      9 Zoll um den Träger auswählen. Bis zum Beginn deiner nächsten
+      Befehlsphase wird die gewählte Einheit bei jeder Fernkampfattacke gegen
+      sich behandelt, als profitiere sie von leichter Deckung.
+
+  - id: wh40k_9e.necrons.arkana.cortical_subjugator_scarabs
+    name_en: Cortical Subjugator Scarabs
+    name_de: Kortikale Unterwerfungsskarabäen
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Einmal pro Schlacht kannst du zu Beginn des Schritts Heroische
+      Interventionen in der Angriffsphase deines Gegners eine befreundete
+      <DYNASTIE>-Einheit innerhalb von 6 Zoll um den Träger auswählen. Sofern
+      sich die Einheit nicht in Nahkampfreichweite einer feindlichen Einheit
+      befindet, kann sie wie ein CHARAKTERMODELL eine Heroische Intervention
+      durchführen.
+
+  - id: wh40k_9e.necrons.arkana.cryptogeometric_adjuster
+    name_en: Cryptogeometric Adjuster
+    name_de: Kryptogeometrischer Regler
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Zu Beginn der Fernkampfphase deines Gegners kannst du eine feindliche
+      Einheit auswählen, die sich innerhalb von 12 Zoll befindet und für den
+      Träger sichtbar ist. Ziehe bis zum Ende der Phase bei jeder Attacke
+      eines Modells der gewählten Einheit 1 vom Trefferwurf ab.
+
+  - id: wh40k_9e.necrons.arkana.metalodermal_tesla_weave
+    name_en: Metalodermal Tesla Weave
+    name_de: Metallodermales Tesla-Gewebe
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Am Ende des Schritts Angriffe in der Angriffsphase deines Gegners kannst
+      du eine feindliche Einheit auswählen, die in dieser Phase eine
+      Angriffsbewegung innerhalb von 6 Zoll um den Träger beendet hat. Wirf
+      einen W6; bei 2+ erleidet die feindliche Einheit W3 tödliche
+      Verwundungen.
+
+  - id: wh40k_9e.necrons.arkana.photonic_transubjector
+    name_en: Photonic Transubjector
+    name_de: Photonischer Transpersonalisator
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Einmal pro Zug, wenn das erste Mal ein Schutzwurf für den Träger
+      misslingt, wird der Schadenswert der Attacke zu 0 geändert.
+
+  - id: wh40k_9e.necrons.arkana.phylacterine_hive
+    name_en: Phylacterine Hive
+    name_de: Phylakterienschwarm
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Nur für ein TECHNOMANT-Modell. Einmal pro Schlacht kannst du, wenn der
+      Träger seine Fähigkeit Riten der Reanimation einsetzt, eine
+      befreundete <DYNASTIE>-KANOPTECH-, <DYNASTIE>-DESTRUKTORKULT- oder
+      TRIARCHAT-PRÄTORIANER-Einheit auswählen, die statt einer befreundeten
+      <DYNASTIE>-KERN-Einheit von der Fähigkeit betroffen wird.
+
+  - id: wh40k_9e.necrons.arkana.prismatic_obfuscatron
+    name_en: Prismatic Obfuscatron
+    name_de: Prismatischer Obfuskierer
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Solange der Träger nicht das nächste infrage kommende Ziel ist, können
+      feindliche Modelle ihn nicht als Ziel für Fernkampfattacken auswählen.
+
+  - id: wh40k_9e.necrons.arkana.quantum_orb
+    name_en: Quantum Orb
+    name_de: Quantensphäre
+    power_delta: 1
+    applies_to:
+      keywords: [CRYPTEK]
+    text_de: >
+      Nur für ein PLASMANT-Modell. Einmal pro Schlacht kann der Träger in
+      deiner Befehlsphase diesen Gegenstand der Kryptomanten-Arkana
+      aktivieren. Wähle einen beliebigen Punkt auf dem Schlachtfeld innerhalb
+      von 24 Zoll um den Träger. Wirf zu Beginn deiner nächsten Befehlsphase
+      einen W6 für jede Einheit innerhalb von 6 Zoll um diesen Punkt.

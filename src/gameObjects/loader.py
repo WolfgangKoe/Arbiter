@@ -373,7 +373,7 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
 
 
 def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
-    """Return short names of wargear items with deny: true for a faction.
+    """Return short names of wargear items with deny_psychic effect for a faction.
 
     Short name = last segment of the wargear ID (e.g. 'gloom_prism').
     """
@@ -381,23 +381,43 @@ def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
     if not path.exists():
         return frozenset()
     with open(path) as f:
-        data = yaml.safe_load(f) or {}
-    entries = data.get("entries", data) if isinstance(data, dict) else data
+        data = yaml.safe_load(f) or []
+    entries = data if isinstance(data, list) else []
     return frozenset(
         e["id"].rsplit(".", 1)[-1]
-        for e in (entries if isinstance(entries, list) else [])
-        if isinstance(e, dict) and e.get("deny")
+        for e in entries
+        if isinstance(e, dict) and e.get("effect", {}).get("type") == "deny_psychic"
     )
 
 
 def load_wargear_abilities(faction_dir: str) -> list[Ability]:
-    """Load wargear abilities from data/wh40k_9e/<faction_dir>/wargear_abilities.yaml."""
-    path = _DATA_ROOT / faction_dir / "wargear_abilities.yaml"
+    """Load wargear abilities from data/wh40k_9e/<faction_dir>/wargear.yaml.
+
+    Only wargear items with an 'effect' field are returned as Ability objects.
+    """
+    path = _DATA_ROOT / faction_dir / "wargear.yaml"
     if not path.exists():
         return []
     with open(path) as f:
-        data = yaml.safe_load(f)
-    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+        data = yaml.safe_load(f) or []
+    entries = data if isinstance(data, list) else []
+    abilities: list[Ability] = []
+    for e in entries:
+        if not isinstance(e, dict) or "effect" not in e:
+            continue
+        ability_dict = {
+            "id": e["id"] + ".ability",
+            "name_en": e["name_en"],
+            "source": "wargear",
+            "rule_text": e.get("rule_text", e.get("ability_en", "")),
+            "trigger": e["trigger"],
+            "conditions": e.get("conditions", []),
+            "effect": e["effect"],
+            "wargear_id": e["id"],
+            "ability_type": e.get("ability_type", "triggered"),
+        }
+        abilities.append(_ability_from_dict(ability_dict))
+    return abilities
 
 
 def get_abilities_for_unit(unit: Unit, faction_dir: str) -> list[Ability]:

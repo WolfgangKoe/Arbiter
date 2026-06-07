@@ -57,6 +57,11 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Gloom Prism generisch: `load_deny_wargear_names(faction_dir)` in `loader.py`; `can_deny()` lädt YAML-gesteuert über Faction-ID statt Hardcode; `deny: true` in `wargear.yaml`
 - YAML-Audit: Vollständiger Audit aller 36 YAML-Dateien über alle Fraktionen → Redundanz-Plan in `docs/goals/ziel6.md §6j`
 
+### Session 23 (2026-06-07) ✅
+- 6j Schritt 2: `wargear_abilities.yaml` → `wargear.yaml` (direkte Liste, Ability-Felder inline); `arkana.yaml` neu; `load_wargear_abilities()` + `load_deny_wargear_names()` auf direkte Liste umgestellt; `effect.type == "deny_psychic"` statt `deny: true`
+- 6k Planung: Wargear-Effekt-Interpreter — Plan in `docs/goals/ziel6.md §6k` angelegt
+- Erkenntnis: `resurrection_orb` ist functional implementiert, aber hardcoded auf `unit.has_keyword("OVERLORD")` statt Wargear-ID — Migration in 6k
+
 ---
 
 ## Session-Start — Empfohlene Reihenfolge
@@ -68,16 +73,24 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Nächste Schritte (priorisiert)
 
-### 🔴 HOCH — 6j YAML-Konsolidierung (nächste Session)
+### 🔴 HOCH — 6k Wargear-Effekt-Interpreter (nächste Session)
 
-Vollständiger Plan: `docs/goals/ziel6.md §6j`
+Vollständiger Plan: `docs/goals/ziel6.md §6k`
 
 **Reihenfolge:**
-1. **Schritt 2 zuerst**: `wargear.yaml` + `wargear_abilities.yaml` → unified `wargear.yaml` (direkte Liste), `wargear_abilities.yaml` löschen, Arkana → `arkana.yaml`. Dann `can_deny()` auf `effect.type == "deny_psychic"` umstellen (aktuell noch über `deny: true` Flag + Name-String).
-2. **Schritt 1**: `weapon_abilities.yaml` in `weapons.yaml` integrieren.
-3. **Schritt 3**: `warlord_traits.yaml` und `relics.yaml` Header bereinigen.
+1. Schema + YAML-Felder für persistente Effekte (`persistent_effects:` Liste in wargear.yaml — Necrons + Orks)
+2. `load_wargear_catalog()` + `_apply_persistent_effect()` + `_apply_wargear()` Erweiterung in `loader.py`
+3. `unit.wargear_ids` Feld + unitCard: granted Keywords anzeigen
+4. `resurrection_orb`: Wargear-ID-Check statt OVERLORD-Keyword
+   - Roster `necrons_alpha.yaml` + Szenarien: `wargear: [wh40k_9e.necrons.wargear.resurrection_orb]` beim Overlord ergänzen
+   - Dann: `unit.has_keyword("OVERLORD")` → `"wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids`
+   - Die bestehende UI (`_render_resurrection_orb`) bleibt unverändert
 
-**Zustand Gloom Prism:** Aktuell halbfertig — `deny: true` Flag in `wargear.yaml` + `load_deny_wargear_names()` in loader.py. Nach 6j Schritt 2 wird das durch den sauberen `effect.type`-Check ersetzt.
+**Zustand 6j:**
+- Schritt 2 ✅ (wargear_abilities.yaml integriert, arkana.yaml neu, deny via effect.type)
+- Schritt 1 offen: `weapon_abilities.yaml` → `weapons.yaml`
+- Schritt 3 offen: `warlord_traits.yaml` / `relics.yaml` Header bereinigen
+- → Schritt 1+3 können nach 6k oder parallel gemacht werden (kein Blocker)
 
 ### ✅ Schritt 1 — Regelrecherche (2026-06-06, erledigt)
 

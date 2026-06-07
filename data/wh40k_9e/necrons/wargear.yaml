@@ -1,26 +1,9 @@
-schema: tabletop.wargear_catalog.v1
-game_system: wh40k_9e
-faction: necrons
+# Necron Wargear — WH40k 9E
+# Source: Codex Necrons 9e. EN-Texte: BSData inline-Descriptions.
+# Ability fields (ability_type, rule_text, trigger, conditions, effect) are
+# machine-readable; ability_en/ability_de are for display. Items without
+# an effect field are display-only wargear.
 
-# Schicht 1 (Stammdaten) fuer Necron-Wargear, Codex 9e. Angelegt mit
-# NX-2b-Abschluss am 2026-05-23. 10 Items (Inventarbericht
-# docs/quellen/inventar-necron-wargear-2026-05-23.md, Revision 2).
-# EN-Texte: 1:1 aus BSData inline-Descriptions
-# (data/catalog/wh40k_9e/imported/necrons.*.yaml,
-# profiles[type: Abilities].characteristics.Description).
-# DE-Texte: 1:1 aus
-# data/localization/wh40k_9e/de_weapon_terms.yaml Abschnitt
-# rule_text_by_name_de — KEINE eigene Uebersetzung (Memory
-# feedback-einheit-label-konvention, feedback-rettungswurf-codex-9e).
-# DE-Name Phylactery -> Phylakterium (OP-2, ueberschreibt die
-# necrons.translations.de.yaml-Drift „Phylakterie"; Sammelkorrektur
-# in NX-2c/e). Cryptek-Arkana, Relikte und intrinsische Abilities
-# liegen in eigenen Schichten und gehoeren nicht in diese Datei
-# (Memory feedback-inventar-vorab-check-schichten).
-
-entries:
-
-# #1 Technomancer (Codex S. 90)
 - id: wh40k_9e.necrons.wargear.canoptek_cloak
   name_en: Canoptek Cloak
   name_de: Kanoptechmantel
@@ -40,8 +23,19 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "The bearer has a Move characteristic of 10\" and the FLY keyword. In addition, at the end of your Movement phase, you can repair one friendly DYNASTY model within 3\" of this model. That model regains up to D3 lost wounds."
+  trigger:
+    timing: phase_end
+    phase: movement
+    stage: end
+    player: active
+  conditions: []
+  effect:
+    type: complex
+    target: friendly_dynasty
+    handler: canoptekCloak
 
-# #2 Technomancer (Codex S. 90)
 - id: wh40k_9e.necrons.wargear.canoptek_control_node
   name_en: Canoptek Control Node
   name_de: Kanoptech-Kontrollknoten
@@ -58,8 +52,20 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "Aura: while a friendly DYNASTY CANOPTEK unit is within 6\" of this model, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
+  trigger:
+    timing: persistent
+    phase: any
+    stage: active
+    player: active
+  conditions: []
+  effect:
+    type: buff_roll
+    target: friendly_canoptek_aura
+    stat: hit_roll
+    modifier: 1
 
-# #3 Lychguard (Codex S. 94)
 - id: wh40k_9e.necrons.wargear.dispersion_shield
   name_en: Dispersion Shield
   name_de: Dispersionsschild
@@ -72,8 +78,19 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "The bearer has a 4+ invulnerable save. In addition, add 1 to armour saving throws made for the bearer."
+  trigger:
+    timing: persistent
+    phase: any
+    stage: active
+    player: either
+  conditions: []
+  effect:
+    type: invuln_save
+    target: self
+    modifier: 4
 
-# #4 Canoptek Spyder (Codex S. 101)
 - id: wh40k_9e.necrons.wargear.fabricator_claw_array
   name_en: Fabricator Claw Array
   name_de: Fabrikatorklauenarray
@@ -91,12 +108,9 @@ entries:
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
 
-# #5 Canoptek Spyder, Canoptek Tomb Sentinel, Canoptek Tombstalker
-# (Codex S. 101)
 - id: wh40k_9e.necrons.wargear.gloom_prism
   name_en: Gloom Prism
   name_de: Düsterprisma
-  deny: true
   ability_en: >-
     In your opponent's Psychic phase, the bearer's unit can attempt
     to deny one psychic power as if it were a PSYKER.
@@ -106,8 +120,18 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power as if it were a PSYKER."
+  trigger:
+    timing: phase_reactive
+    phase: psychic
+    stage: active
+    player: inactive
+  conditions: []
+  effect:
+    type: deny_psychic
+    target: self
 
-# #6 Tomb Blade (Codex S. 102)
 - id: wh40k_9e.necrons.wargear.nebuloscope
   name_en: Nebuloscope
   name_de: Nebuloskop
@@ -120,10 +144,18 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "Each time the bearer makes a ranged attack, the target does not receive the benefits of cover against that attack."
+  trigger:
+    timing: persistent
+    phase: shooting
+    stage: active
+    player: active
+  conditions: []
+  effect:
+    type: ignore_cover
+    target: self
 
-# #7 Lokhust Lord, Vargard Obyron (Codex S. 87). OP-2: DE-Name
-# „Phylakterium" ueberschreibt translations.de.yaml-Drift
-# „Phylakterie"; Sammelkorrektur dort in NX-2c/e.
 - id: wh40k_9e.necrons.wargear.phylactery
   name_en: Phylactery
   name_de: Phylakterium
@@ -137,9 +169,21 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "Each time this model uses its Living Metal ability, it regains up to D3 lost wounds instead of 1."
+  trigger:
+    timing: phase_start
+    phase: command
+    stage: start
+    player: active
+  conditions:
+    - needs_healing: true
+  effect:
+    type: heal
+    target: self
+    amount: "D3"
+    revive: false
 
-# #8 Catacomb Command Barge, Lokhust Lord, Lord, Overlord
-# (Codex S. 87)
 - id: wh40k_9e.necrons.wargear.resurrection_orb
   name_en: Resurrection Orb
   name_de: Regeneratorsphäre
@@ -162,8 +206,21 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: activated
+  rule_text: "Once per battle, in your Command phase, the bearer can use its resurrection orb. Select one friendly DYNASTY unit within 6\" of the bearer that is not at its Starting Strength. That unit's reanimation protocols are enacted."
+  trigger:
+    timing: phase_any
+    phase: command
+    stage: active
+    player: active
+  conditions:
+    - within_inches: 6
+      max_uses: 1
+  effect:
+    type: complex
+    target: selected_unit
+    handler: resurrectionOrb
 
-# #9 Tomb Blade (Codex S. 102)
 - id: wh40k_9e.necrons.wargear.shadowloom
   name_en: Shadowloom
   name_de: Schattenschleier
@@ -174,8 +231,19 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "The bearer has a 5+ invulnerable save."
+  trigger:
+    timing: persistent
+    phase: any
+    stage: active
+    player: either
+  conditions: []
+  effect:
+    type: invuln_save
+    target: self
+    modifier: 5
 
-# #10 Tomb Blade (Codex S. 102)
 - id: wh40k_9e.necrons.wargear.shieldvanes
   name_en: Shieldvanes
   name_de: Schildvanen
@@ -186,3 +254,16 @@ entries:
   grants_keywords: []
   source: { publication: Codex Necrons 9e }
   verification_status: verified_nx2b_2026-05-23
+  ability_type: triggered
+  rule_text: "The bearer has a Save characteristic of 3+."
+  trigger:
+    timing: persistent
+    phase: any
+    stage: active
+    player: either
+  conditions: []
+  effect:
+    type: passive_stat
+    target: self
+    stat: save
+    modifier: 3
