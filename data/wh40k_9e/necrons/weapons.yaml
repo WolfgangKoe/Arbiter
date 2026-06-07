@@ -41,6 +41,10 @@ weapons:
         damage: "3"
         abilities: "-1 to hit roll."
         is_melee: true
+        effect:
+          type: penalty_roll
+          stat: hit_roll
+          modifier: -1
 
   - id: wh40k_9e.necrons.weapon.warscythe
     name_en: Warscythe
@@ -77,6 +81,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.necrons.weapon.gauntlet_of_conflagrator
     name_en: Gauntlet of the Conflagrator
@@ -90,6 +97,9 @@ weapons:
         damage: "*"
         abilities: "Each time an attack is made with this weapon, that attack automatically hits its target. Instead of making a wound roll, roll one D6 for each model in the target unit; that unit suffers 1 mortal wound for each result of 6, and the attack sequence ends."
         is_melee: false
+        effect:
+          type: complex
+          handler: gauntletOfConflagrator
 
   - id: wh40k_9e.necrons.weapon.tachyon_arrow
     name_en: Tachyon Arrow
@@ -102,6 +112,9 @@ weapons:
         damage: "D6"
         abilities: "1×/game only."
         is_melee: false
+        effect:
+          type: use_limit
+          max_uses: 1
 
   - id: wh40k_9e.necrons.weapon.hyperphase_sword
     name_en: Hyperphase Sword
@@ -140,6 +153,11 @@ weapons:
         damage: "2"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
       - name_en: Melee
         weapon_type: Melee
         range_inches: 0
@@ -162,6 +180,8 @@ weapons:
         damage: "3"
         abilities: "Each time an attack is made with this weapon, rules that ignore wounds cannot be used."
         is_melee: true
+        effect:
+          type: ignore_wound_ignoring_rules
 
   - id: wh40k_9e.necrons.weapon.plasmic_lance
     name_en: Plasmic Lance
@@ -234,6 +254,11 @@ weapons:
         damage: "1"
         abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
 
   # ── Elites ────────────────────────────────────────────────────────────────
 
@@ -248,6 +273,9 @@ weapons:
         damage: "3"
         abilities: "1 model in unit only."
         is_melee: true
+        effect:
+          type: use_limit
+          max_models: 1
 
   - id: wh40k_9e.necrons.weapon.hyperphase_threshers
     name_en: Hyperphase Threshers
@@ -260,6 +288,10 @@ weapons:
         damage: "2"
         abilities: "Remaining models. Each time this model fights, it makes 1 additional attack."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
+          condition: remaining_models_only
 
   - id: wh40k_9e.necrons.weapon.synaptic_disintegrator
     name_en: Synaptic Disintegrator
@@ -272,6 +304,9 @@ weapons:
         damage: "1"
         abilities: "Each time you select a target for this weapon, you can ignore the Look Out, Sir rule. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage."
         is_melee: false
+        effect:
+          type: complex
+          handler: synapticDisintegrator
 
   # ── Fast Attack ───────────────────────────────────────────────────────────
 
@@ -286,6 +321,10 @@ weapons:
         damage: "1"
         abilities: "Unmodified hit roll of 6 = auto-wounds."
         is_melee: true
+        effect:
+          type: auto_wound
+          trigger_value: 6
+          unmodified: true
 
   - id: wh40k_9e.necrons.weapon.vicious_claws
     name_en: Vicious Claws
@@ -310,6 +349,8 @@ weapons:
         damage: "1"
         abilities: "Makes 2 hit rolls per attack instead of 1."
         is_melee: true
+        effect:
+          type: double_hit_rolls
 
   - id: wh40k_9e.necrons.weapon.particle_caster
     name_en: Particle Caster
@@ -349,6 +390,8 @@ weapons:
         damage: "1"
         abilities: "Auto-hits."
         is_melee: false
+        effect:
+          type: auto_hit
       - name_en: Focused
         weapon_type: Heavy
         range_inches: 24
@@ -358,6 +401,10 @@ weapons:
         damage: "D6"
         abilities: "If target is within half range, damage becomes D6+2."
         is_melee: false
+        effect:
+          type: modify_damage
+          condition: within_half_range
+          damage: "D6+2"
 
   - id: wh40k_9e.necrons.weapon.stalkers_forelimbs
     name_en: Stalker's Forelimbs
@@ -430,6 +477,11 @@ weapons:
         damage: "1"
         abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
 
   - id: wh40k_9e.necrons.weapon.twin_tesla_destructor
     name_en: Twin Tesla Destructor
@@ -442,6 +494,11 @@ weapons:
         damage: "1"
         abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
 
   - id: wh40k_9e.necrons.weapon.automaton_claws
     name_en: Automaton Claws
@@ -478,6 +535,8 @@ weapons:
         damage: "1"
         abilities: "Blast."
         is_melee: false
+        effect:
+          type: blast
 
   # ── Psychomancer ──────────────────────────────────────────────────────────
 
@@ -517,6 +576,9 @@ weapons:
         damage: "1"
         abilities: "Blast. Invulnerable saving throws cannot be taken against attacks made with this weapon."
         is_melee: false
+        effect:
+          type: complex
+          handler: aeonstaveShoot
       - name_en: Melee
         weapon_type: Melee
         range_inches: 0
@@ -526,6 +588,8 @@ weapons:
         damage: "1"
         abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
         is_melee: true
+        effect:
+          type: ignore_invuln
 
   - id: wh40k_9e.necrons.weapon.entropic_lance
     name_en: Entropic Lance
@@ -560,6 +624,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 3
 
   # ── Illuminor Szeras ──────────────────────────────────────────────────────
 
@@ -596,6 +663,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 2
 
   # ── Orikan the Diviner ────────────────────────────────────────────────────
 
@@ -610,6 +680,8 @@ weapons:
         damage: "D3"
         abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
         is_melee: true
+        effect:
+          type: ignore_invuln
 
   # ── Trazyn the Infinite ───────────────────────────────────────────────────
 
@@ -624,6 +696,10 @@ weapons:
         damage: "D3"
         abilities: "Each time an attack is made with this weapon, if a CHARACTER model is slain, make 1 additional attack with this weapon against the target unit."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
+          condition: character_slain
 
   # ── Imotekh the Stormlord ─────────────────────────────────────────────────
 
@@ -638,6 +714,8 @@ weapons:
         damage: "1"
         abilities: "Auto-hits."
         is_melee: false
+        effect:
+          type: auto_hit
 
   - id: wh40k_9e.necrons.weapon.staff_of_the_destroyer
     name_en: Staff of the Destroyer
@@ -674,6 +752,8 @@ weapons:
         damage: "1"
         abilities: "Blast."
         is_melee: false
+        effect:
+          type: blast
 
   - id: wh40k_9e.necrons.weapon.flensing_claw
     name_en: Flensing Claw
@@ -686,6 +766,8 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, make 2 hit rolls instead of 1."
         is_melee: true
+        effect:
+          type: double_hit_rolls
 
   - id: wh40k_9e.necrons.weapon.hyperphase_harvester
     name_en: Hyperphase Harvester
@@ -698,6 +780,10 @@ weapons:
         damage: "3"
         abilities: "-1 to hit roll."
         is_melee: true
+        effect:
+          type: penalty_roll
+          stat: hit_roll
+          modifier: -1
 
   # ── The Silent King ───────────────────────────────────────────────────────
 
@@ -756,6 +842,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 3
 
   - id: wh40k_9e.necrons.weapon.scythe_of_dust
     name_en: Scythe of Dust
@@ -768,6 +857,9 @@ weapons:
         damage: "3"
         abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 4
 
   # ── Triarch Praetorians ───────────────────────────────────────────────────
 
@@ -884,6 +976,11 @@ weapons:
         damage: "1"
         abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
 
   # ── Ophydian Destroyers ───────────────────────────────────────────────────
 
@@ -898,6 +995,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 2
 
   # ── Canoptek Doomstalker ──────────────────────────────────────────────────
 
@@ -913,6 +1013,8 @@ weapons:
         damage: "D3"
         abilities: "Blast."
         is_melee: false
+        effect:
+          type: blast
       - name_en: High Power
         weapon_type: Heavy
         range_inches: 48
@@ -922,6 +1024,8 @@ weapons:
         damage: "D6"
         abilities: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
         is_melee: false
+        effect:
+          type: blast
 
   - id: wh40k_9e.necrons.weapon.twin_gauss_flayer
     name_en: Twin Gauss Flayer
@@ -949,6 +1053,8 @@ weapons:
         damage: "D3"
         abilities: "Blast."
         is_melee: false
+        effect:
+          type: blast
       - name_en: High Power
         weapon_type: Heavy
         range_inches: 72
@@ -958,6 +1064,8 @@ weapons:
         damage: "D6"
         abilities: "Blast. The bearer can only make attacks with this profile if it Remained Stationary this turn."
         is_melee: false
+        effect:
+          type: blast
 
   - id: wh40k_9e.necrons.weapon.gauss_flayer_array
     name_en: Gauss Flayer Array
@@ -998,6 +1106,9 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, make one additional hit roll."
         is_melee: true
+        effect:
+          type: extra_hit_roll
+          amount: 1
 
   - id: wh40k_9e.necrons.weapon.entropic_blow
     name_en: Entropic Blow
@@ -1010,6 +1121,8 @@ weapons:
         damage: "D6"
         abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
         is_melee: true
+        effect:
+          type: ignore_invuln
 
   # ── C'tan Shard of the Deceiver ───────────────────────────────────────────
 
@@ -1039,6 +1152,10 @@ weapons:
         damage: "D6"
         abilities: "If a hit is scored, invulnerable saving throws cannot be taken against this weapon's attacks until the end of the phase."
         is_melee: false
+        effect:
+          type: ignore_invuln
+          condition: hit_scored
+          duration: phase_end
       - name_en: Melee
         weapon_type: Melee
         range_inches: 0
@@ -1048,6 +1165,9 @@ weapons:
         damage: "D6"
         abilities: "Each time an attack allocated to a VEHICLE model, that model does not receive the benefit of cover."
         is_melee: true
+        effect:
+          type: ignore_cover
+          condition: target_is_vehicle
 
   - id: wh40k_9e.necrons.weapon.canoptek_tail_blades
     name_en: Canoptek Tail Blades
@@ -1060,6 +1180,9 @@ weapons:
         damage: "1"
         abilities: "Each time the bearer fights, it makes D6 additional attacks with this weapon."
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: "D6"
 
   # ── Tesseract Ark — C'tan Shard Powers ───────────────────────────────────
 
@@ -1112,6 +1235,11 @@ weapons:
         damage: "1"
         abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        effect:
+          type: extra_hits
+          trigger_value: 6
+          unmodified: true
+          hits: 2
 
   # ── Monolith ──────────────────────────────────────────────────────────────
 
@@ -1150,6 +1278,8 @@ weapons:
         damage: "3"
         abilities: "Blast."
         is_melee: false
+        effect:
+          type: blast
 
   - id: wh40k_9e.necrons.weapon.portal_of_exile
     name_en: Portal of Exile
@@ -1162,6 +1292,8 @@ weapons:
         damage: "3"
         abilities: "Each time an attack is allocated to a model, that model can only take a saving throw if it is an invulnerable save."
         is_melee: true
+        effect:
+          type: only_invuln_saves
 
   # ── Convergence of Dominion ───────────────────────────────────────────────
 

@@ -1,232 +1,212 @@
-schema: tabletop.relics.v1
-game_system: wh40k_9e
-faction: Necrons
-rule_context:
-  edition: "9"
-  ruleset_mode: current
+# game_system: wh40k_9e, faction: Necrons
+# Schema: id, name_de, name_en, is_relic, replaces.any_of, source
+# Weapon relics: profiles (like weapons.yaml); Wargear relics: ability_en/ability_de
 
-# Schicht-2 (Overlay) fuer Necron-Relikte, Codex 9e.
-# Schema-Alignment 2026-05-31: weapon profiles verwenden jetzt dieselben
-# Feldnamen wie weapons.yaml (range_inches, weapon_type, strength).
-# type_de / strength_de bleiben als Display-Hilfe erhalten.
-# Wargear-Relikte haben jetzt ability_en + ability_de.
-#
-# Schema pro Relikt:
-#   - id, name_de, name_en
-#   - is_relic: true
-#   - replaces.any_of: [<schicht1-id>...]  leer = eigenstaendig
-#   - source: { publication, page, capture_status }
-#   - description_de: Codex-Flavortext (optional)
-#   - genau eines von:
-#       profiles: [...]    Waffen-Relikt; Felder wie weapons.yaml
-#       ability_en / ability_de   Wargear-Relikt
+- id: wh40k_9e.necrons.relic.faust_des_pyromanen
+  name_de: Faust des Pyromanen
+  name_en: Gauntlet of the Conflagrator
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: cross_checked_with_bsdata
+    image_files:
+      - IMG_3896.png
+    bsdata_reference:
+      file: sources_private/bsdata/wh40k-9e/Necrons.cat
+      selection_entry_id: 2c1d-fa98-12bd-bc42
+  replaces:
+    any_of: []
+  description_de: >
+    Dieser vom Kryptomanten Harriapt dem Pyromanen gefertigte Panzerhandschuh
+    öffnet mittels interdimensionaler Energieaustauscher eine mikroskopisch
+    kleine Verbindung zum lodernden Herzen eines Sterns.
+  profiles:
+    - mode: Shooting
+      range_inches: 12
+      weapon_type: Pistol 1
+      type_de: Pistole 1
+      strength: "-"
+      strength_de: "-"
+      ap: "-"
+      damage: "-"
+      abilities_en: >
+        Each attack made with this weapon automatically hits its target.
+        Instead of making a wound roll, roll one D6 for each model in the
+        target unit: for each 6, the target unit suffers 1 mortal wound,
+        then the attack sequence ends.
+      abilities_de: >
+        Jede Attacke mit dieser Waffe trifft das Ziel automatisch. Wirf
+        anstatt einen Verwundungswurf durchzuführen für jedes Modell in der
+        Zieleinheit einen W6: Für jede 6 erleidet die Zieleinheit 1 tödliche
+        Verwundung, dann endet die Attackenabfolge.
 
-relics:
-  - id: wh40k_9e.necrons.relic.faust_des_pyromanen
-    name_de: Faust des Pyromanen
-    name_en: Gauntlet of the Conflagrator
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: cross_checked_with_bsdata
-      image_files:
-        - IMG_3896.png
-      bsdata_reference:
-        file: sources_private/bsdata/wh40k-9e/Necrons.cat
-        selection_entry_id: 2c1d-fa98-12bd-bc42
-    replaces:
-      any_of: []
-    description_de: >
-      Dieser vom Kryptomanten Harriapt dem Pyromanen gefertigte Panzerhandschuh
-      öffnet mittels interdimensionaler Energieaustauscher eine mikroskopisch
-      kleine Verbindung zum lodernden Herzen eines Sterns.
-    profiles:
-      - mode: Shooting
-        range_inches: 12
-        weapon_type: Pistol 1
-        type_de: Pistole 1
-        strength: "-"
-        strength_de: "-"
-        ap: "-"
-        damage: "-"
-        abilities_en: >
-          Each attack made with this weapon automatically hits its target.
-          Instead of making a wound roll, roll one D6 for each model in the
-          target unit: for each 6, the target unit suffers 1 mortal wound,
-          then the attack sequence ends.
-        abilities_de: >
-          Jede Attacke mit dieser Waffe trifft das Ziel automatisch. Wirf
-          anstatt einen Verwundungswurf durchzuführen für jedes Modell in der
-          Zieleinheit einen W6: Für jede 6 erleidet die Zieleinheit 1 tödliche
-          Verwundung, dann endet die Attackenabfolge.
+- id: wh40k_9e.necrons.relic.sphaere_der_ewigkeit
+  name_de: Sphäre der Ewigkeit
+  name_en: Orb of Eternity
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: draft_from_user_image
+    image_files:
+      - IMG_3896.png
+      - IMG_3897.png
+  replaces:
+    any_of:
+      - wh40k_9e.necrons.wargear.resurrection_orb
+  description_de: >
+    Die erste jemals geschaffene Regeneratorsphäre, deren Kern selbst nach
+    Jahrtausenden noch mit Energie pulsiert.
+  ability_en: >-
+    Once per battle, in your Command phase, the bearer can use this relic.
+    Select one friendly DYNASTY unit within 6" of the bearer that is not at
+    its Starting Strength and has not had its Reanimation Protocols enacted
+    this phase. That unit's Reanimation Protocols are enacted, and add 1 to
+    each Reanimation Protocol roll made for that unit.
+  ability_de: >-
+    Einmal pro Schlacht kann der Träger diese Reliquie in deiner
+    Befehlsphase einsetzen. Wenn er das tut, wähle eine befreundete
+    <DYNASTIE>-Einheit innerhalb von 6 Zoll um den Träger, die sich nicht
+    auf Sollstärke befindet und deren Reanimationsprotokolle in dieser
+    Phase noch nicht ausgeführt wurden. Die Reanimationsprotokolle der
+    gewählten Einheit werden ausgeführt und jedes zerstörte Modell beginnt
+    sich wieder zusammenzusetzen. Addiere bei diesen Reanimationsprotokollen
+    1 auf jeden Reanimationsprotokoll-Wurf.
 
-  - id: wh40k_9e.necrons.relic.sphaere_der_ewigkeit
-    name_de: Sphäre der Ewigkeit
-    name_en: Orb of Eternity
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: draft_from_user_image
-      image_files:
-        - IMG_3896.png
-        - IMG_3897.png
-    replaces:
-      any_of:
-        - wh40k_9e.necrons.wargear.resurrection_orb
-    description_de: >
-      Die erste jemals geschaffene Regeneratorsphäre, deren Kern selbst nach
-      Jahrtausenden noch mit Energie pulsiert.
-    ability_en: >-
-      Once per battle, in your Command phase, the bearer can use this relic.
-      Select one friendly DYNASTY unit within 6" of the bearer that is not at
-      its Starting Strength and has not had its Reanimation Protocols enacted
-      this phase. That unit's Reanimation Protocols are enacted, and add 1 to
-      each Reanimation Protocol roll made for that unit.
-    ability_de: >-
-      Einmal pro Schlacht kann der Träger diese Reliquie in deiner
-      Befehlsphase einsetzen. Wenn er das tut, wähle eine befreundete
-      <DYNASTIE>-Einheit innerhalb von 6 Zoll um den Träger, die sich nicht
-      auf Sollstärke befindet und deren Reanimationsprotokolle in dieser
-      Phase noch nicht ausgeführt wurden. Die Reanimationsprotokolle der
-      gewählten Einheit werden ausgeführt und jedes zerstörte Modell beginnt
-      sich wieder zusammenzusetzen. Addiere bei diesen Reanimationsprotokollen
-      1 auf jeden Reanimationsprotokoll-Wurf.
+- id: wh40k_9e.necrons.relic.voltaikstab
+  name_de: Voltaikstab
+  name_en: Voltaic Staff
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: draft_from_user_image
+    image_files:
+      - IMG_3896.png
+      - IMG_3897.png
+  replaces:
+    any_of:
+      - wh40k_9e.necrons.weapon.staff_of_light
+  description_de: >
+    Elektrostatische Entladungen zucken unablässig den Schaft dieses
+    Onyxstabs entlang und versengen den Feind.
+  profiles:
+    - mode: Shooting
+      range_inches: 18
+      weapon_type: Assault 4
+      type_de: Sturm 4
+      strength: "6"
+      strength_de: "6"
+      ap: "-2"
+      damage: "2"
+      abilities_en: >
+        Each time an attack is made with this weapon, an unmodified hit
+        roll of 6 scores 2 additional hits.
+      abilities_de: >
+        Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter
+        Trefferwurf von 6 zwei zusätzliche Treffer.
+    - mode: Melee
+      range_inches: 0
+      weapon_type: Melee
+      type_de: Nahkampf
+      strength: "User+1"
+      strength_de: "+1"
+      ap: "-2"
+      damage: "2"
+      abilities_en: "-"
+      abilities_de: "-"
 
-  - id: wh40k_9e.necrons.relic.voltaikstab
-    name_de: Voltaikstab
-    name_en: Voltaic Staff
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: draft_from_user_image
-      image_files:
-        - IMG_3896.png
-        - IMG_3897.png
-    replaces:
-      any_of:
-        - wh40k_9e.necrons.weapon.staff_of_light
-    description_de: >
-      Elektrostatische Entladungen zucken unablässig den Schaft dieses
-      Onyxstabs entlang und versengen den Feind.
-    profiles:
-      - mode: Shooting
-        range_inches: 18
-        weapon_type: Assault 4
-        type_de: Sturm 4
-        strength: "6"
-        strength_de: "6"
-        ap: "-2"
-        damage: "2"
-        abilities_en: >
-          Each time an attack is made with this weapon, an unmodified hit
-          roll of 6 scores 2 additional hits.
-        abilities_de: >
-          Bei jeder Attacke mit dieser Waffe erzielt ein unmodifizierter
-          Trefferwurf von 6 zwei zusätzliche Treffer.
-      - mode: Melee
-        range_inches: 0
-        weapon_type: Melee
-        type_de: Nahkampf
-        strength: "User+1"
-        strength_de: "+1"
-        ap: "-2"
-        damage: "2"
-        abilities_en: "-"
-        abilities_de: "-"
+- id: wh40k_9e.necrons.relic.nanoskarabaeenphiole
+  name_de: Nanoskarabäenphiole
+  name_en: Nanoscarab Casket
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: draft_from_user_image
+    image_files:
+      - IMG_3897.png
+  replaces:
+    any_of: []
+  description_de: >
+    Diese Phiole enthält einen Schwarm winziger Kanoptechkonstrukte, die die
+    Nekrodermis des Trägers reparieren.
+  ability_en: >-
+    Each time the bearer uses its Living Metal ability, it regains 1
+    additional lost wound.
+  ability_de: >-
+    Jedes Mal, wenn der Träger seine Fähigkeit Lebendes Metall einsetzt,
+    erhält er 1 zusätzlichen verlorenen Lebenspunkt zurück.
 
-  - id: wh40k_9e.necrons.relic.nanoskarabaeenphiole
-    name_de: Nanoskarabäenphiole
-    name_en: Nanoscarab Casket
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: draft_from_user_image
-      image_files:
-        - IMG_3897.png
-    replaces:
-      any_of: []
-    description_de: >
-      Diese Phiole enthält einen Schwarm winziger Kanoptechkonstrukte, die die
-      Nekrodermis des Trägers reparieren.
-    ability_en: >-
-      Each time the bearer uses its Living Metal ability, it regains 1
-      additional lost wound.
-    ability_de: >-
-      Jedes Mal, wenn der Träger seine Fähigkeit Lebendes Metall einsetzt,
-      erhält er 1 zusätzlichen verlorenen Lebenspunkt zurück.
+- id: wh40k_9e.necrons.relic.schleier_der_finsternis
+  name_de: Schleier der Finsternis
+  name_en: Veil of Darkness
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: draft_from_user_image
+    image_files:
+      - IMG_3897.png
+  replaces:
+    any_of: []
+  description_de: >
+    Ein Transpositionsartefakt, das den Träger und seine Begleiter durch eine
+    wirbelnde Finsternis an einen anderen Ort versetzt.
+  ability_en: >-
+    Once per battle, in your Movement phase, the bearer can use this relic.
+    Remove the bearer's unit and up to one friendly DYNASTY CORE unit within
+    3" of the bearer from the battlefield and set them up anywhere on the
+    battlefield more than 9" from any enemy models. If two units are set up
+    using this relic, both units must be set up wholly within 6" of each
+    other.
+  ability_de: >-
+    Einmal pro Schlacht kann der Träger diese Reliquie in deiner
+    Bewegungsphase einsetzen. Wenn er das tut, können die Einheit des
+    Trägers und bis zu eine befreundete <DYNASTIE>-KERN-Einheit innerhalb
+    von 3 Zoll um den Träger vom Schlachtfeld entfernt und irgendwo auf dem
+    Schlachtfeld, aber weiter als 9 Zoll von allen feindlichen Modellen
+    entfernt, wieder aufgestellt werden. Falls mittels dieser Reliquie zwei
+    Einheiten wieder auf dem Schlachtfeld aufgestellt werden, müssen beide
+    Einheiten vollständig innerhalb von 6 Zoll voneinander aufgestellt
+    werden.
 
-  - id: wh40k_9e.necrons.relic.schleier_der_finsternis
-    name_de: Schleier der Finsternis
-    name_en: Veil of Darkness
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: draft_from_user_image
-      image_files:
-        - IMG_3897.png
-    replaces:
-      any_of: []
-    description_de: >
-      Ein Transpositionsartefakt, das den Träger und seine Begleiter durch eine
-      wirbelnde Finsternis an einen anderen Ort versetzt.
-    ability_en: >-
-      Once per battle, in your Movement phase, the bearer can use this relic.
-      Remove the bearer's unit and up to one friendly DYNASTY CORE unit within
-      3" of the bearer from the battlefield and set them up anywhere on the
-      battlefield more than 9" from any enemy models. If two units are set up
-      using this relic, both units must be set up wholly within 6" of each
-      other.
-    ability_de: >-
-      Einmal pro Schlacht kann der Träger diese Reliquie in deiner
-      Bewegungsphase einsetzen. Wenn er das tut, können die Einheit des
-      Trägers und bis zu eine befreundete <DYNASTIE>-KERN-Einheit innerhalb
-      von 3 Zoll um den Träger vom Schlachtfeld entfernt und irgendwo auf dem
-      Schlachtfeld, aber weiter als 9 Zoll von allen feindlichen Modellen
-      entfernt, wieder aufgestellt werden. Falls mittels dieser Reliquie zwei
-      Einheiten wieder auf dem Schlachtfeld aufgestellt werden, müssen beide
-      Einheiten vollständig innerhalb von 6 Zoll voneinander aufgestellt
-      werden.
-
-  - id: wh40k_9e.necrons.relic.leerenschnitter
-    name_de: Leerenschnitter
-    name_en: Voidreaper
-    is_relic: true
-    grants_keywords: []
-    source:
-      publication: Codex Necrons
-      page: "66"
-      capture_status: draft_from_user_image
-      image_files:
-        - IMG_3897.png
-    replaces:
-      any_of:
-        - wh40k_9e.necrons.weapon.warscythe
-        - wh40k_9e.necrons.weapon.voidscythe
-    description_de: >
-      Eine uralte Kriegssense, deren Klinge ein Splitter der Leere ist und
-      deren Schläge selbst den Seelenkern der Opfer aufreißen.
-    profiles:
-      - mode: Melee
-        range_inches: 0
-        weapon_type: Melee
-        type_de: Nahkampf
-        strength: "User+2"
-        strength_de: "+2"
-        ap: "-4"
-        damage: "3"
-        abilities_en: >
-          Each time an attack is made with this weapon, rules that ignore
-          wounds cannot be used.
-        abilities_de: >
-          Gegen Attacken mit dieser Waffe können keine Regeln eingesetzt werden,
-          die den Verlust von Lebenspunkten ignorieren.
+- id: wh40k_9e.necrons.relic.leerenschnitter
+  name_de: Leerenschnitter
+  name_en: Voidreaper
+  is_relic: true
+  grants_keywords: []
+  source:
+    publication: Codex Necrons
+    page: "66"
+    capture_status: draft_from_user_image
+    image_files:
+      - IMG_3897.png
+  replaces:
+    any_of:
+      - wh40k_9e.necrons.weapon.warscythe
+      - wh40k_9e.necrons.weapon.voidscythe
+  description_de: >
+    Eine uralte Kriegssense, deren Klinge ein Splitter der Leere ist und
+    deren Schläge selbst den Seelenkern der Opfer aufreißen.
+  profiles:
+    - mode: Melee
+      range_inches: 0
+      weapon_type: Melee
+      type_de: Nahkampf
+      strength: "User+2"
+      strength_de: "+2"
+      ap: "-4"
+      damage: "3"
+      abilities_en: >
+        Each time an attack is made with this weapon, rules that ignore
+        wounds cannot be used.
+      abilities_de: >
+        Gegen Attacken mit dieser Waffe können keine Regeln eingesetzt werden,
+        die den Verlust von Lebenspunkten ignorieren.

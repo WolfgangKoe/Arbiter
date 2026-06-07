@@ -1,155 +1,151 @@
-schema: tabletop.warlord_traits.v1
-game_system: wh40k_9e
-faction: Orks
-# Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
-# Format mirrors data/wh40k_9e/necrons/warlord_traits.yaml
-entries:
+# game_system: wh40k_9e, faction: Orks
+# Source: Wahapedia 2026-06-03
 
-  # ── Generic Orks Traits ───────────────────────────────────────────────────
+# ── Generic Orks Traits ───────────────────────────────────────────────────
 
-  - id: wh40k_9e.orks.warlord_trait.brutal_but_kunnin
-    name_en: "Brutal but Kunnin'"
-    category: generic
-    applies_to:
-      keywords: [CHARACTER]
-    text_en: >
-      Each time this WARLORD makes a melee attack, an unmodified hit roll of 6 scores
-      1 additional hit. Additional hits from other abilities do not generate further hits.
+- id: wh40k_9e.orks.warlord_trait.brutal_but_kunnin
+  name_en: "Brutal but Kunnin'"
+  category: generic
+  applies_to:
+    keywords: [CHARACTER]
+  text_en: >
+    Each time this WARLORD makes a melee attack, an unmodified hit roll of 6 scores
+    1 additional hit. Additional hits from other abilities do not generate further hits.
 
-  - id: wh40k_9e.orks.warlord_trait.kunnin_but_brutal
-    name_en: "Kunnin' but Brutal"
-    category: generic
-    applies_to:
-      keywords: [CHARACTER]
-    text_en: >
-      Once per battle, at the start of the Fight phase, this WARLORD can use this trait.
-      Until the end of that phase, add 2 to the Attacks characteristic of this WARLORD.
+- id: wh40k_9e.orks.warlord_trait.kunnin_but_brutal
+  name_en: "Kunnin' but Brutal"
+  category: generic
+  applies_to:
+    keywords: [CHARACTER]
+  text_en: >
+    Once per battle, at the start of the Fight phase, this WARLORD can use this trait.
+    Until the end of that phase, add 2 to the Attacks characteristic of this WARLORD.
 
-  - id: wh40k_9e.orks.warlord_trait.big_n_stompy
-    name_en: "Big 'N' Stompy"
-    category: generic
-    applies_to:
-      keywords: [CHARACTER, MONSTER]
-    text_en: >
-      Add 1 to the Toughness characteristic of this WARLORD. In addition, each time this
-      WARLORD makes an attack in the Fight phase, add 1 to that attack's Damage characteristic.
+- id: wh40k_9e.orks.warlord_trait.big_n_stompy
+  name_en: "Big 'N' Stompy"
+  category: generic
+  applies_to:
+    keywords: [CHARACTER, MONSTER]
+  text_en: >
+    Add 1 to the Toughness characteristic of this WARLORD. In addition, each time this
+    WARLORD makes an attack in the Fight phase, add 1 to that attack's Damage characteristic.
 
-  # ── Klan Warlord Traits ───────────────────────────────────────────────────
+# ── Klan Warlord Traits ───────────────────────────────────────────────────
 
-  - id: wh40k_9e.orks.warlord_trait.bad_moons.da_best_armour
-    name_en: "Da Best Armour Teef Can Buy"
-    category: bad_moons
-    applies_to:
-      keywords: [CHARACTER, BAD MOONS]
-    text_en: >
-      This WARLORD has a 4+ invulnerable save. In addition, add 1 to armour saving
-      throws made for this WARLORD.
+- id: wh40k_9e.orks.warlord_trait.bad_moons.da_best_armour
+  name_en: "Da Best Armour Teef Can Buy"
+  category: bad_moons
+  applies_to:
+    keywords: [CHARACTER, BAD MOONS]
+  text_en: >
+    This WARLORD has a 4+ invulnerable save. In addition, add 1 to armour saving
+    throws made for this WARLORD.
 
-  - id: wh40k_9e.orks.warlord_trait.blood_axes.ive_got_a_plan
-    name_en: "I've Got a Plan, Ladz!"
-    category: blood_axes
-    applies_to:
-      keywords: [CHARACTER, BLOOD AXES]
-    text_en: >
-      At the end of the Deploy Armies step, you can redeploy up to three BLOOD AXES
-      units from your army. In addition, BLOOD AXES units from your army can be placed
-      in Strategic Reserves without spending any additional Command points.
+- id: wh40k_9e.orks.warlord_trait.blood_axes.ive_got_a_plan
+  name_en: "I've Got a Plan, Ladz!"
+  category: blood_axes
+  applies_to:
+    keywords: [CHARACTER, BLOOD AXES]
+  text_en: >
+    At the end of the Deploy Armies step, you can redeploy up to three BLOOD AXES
+    units from your army. In addition, BLOOD AXES units from your army can be placed
+    in Strategic Reserves without spending any additional Command points.
 
-  - id: wh40k_9e.orks.warlord_trait.deathskulls.opportunist
-    name_en: Opportunist
-    category: deathskulls
-    applies_to:
-      keywords: [CHARACTER, DEATHSKULLS]
-    text_en: >
-      This WARLORD is not affected by the Look Out, Sir rule when targeting
-      enemy CHARACTER models that are within 12\" of this WARLORD. In addition,
-      each time an enemy VEHICLE model is destroyed within 6\" of this WARLORD,
-      gain 1 Command point.
+- id: wh40k_9e.orks.warlord_trait.deathskulls.opportunist
+  name_en: Opportunist
+  category: deathskulls
+  applies_to:
+    keywords: [CHARACTER, DEATHSKULLS]
+  text_en: >
+    This WARLORD is not affected by the Look Out, Sir rule when targeting
+    enemy CHARACTER models that are within 12\" of this WARLORD. In addition,
+    each time an enemy VEHICLE model is destroyed within 6\" of this WARLORD,
+    gain 1 Command point.
 
-  - id: wh40k_9e.orks.warlord_trait.evil_sunz.fasta_than_yooz
-    name_en: "Fasta Than Yooz"
-    category: evil_sunz
-    applies_to:
-      keywords: [CHARACTER, EVIL SUNZ]
-    text_en: >
-      In your Command phase, select one friendly EVIL SUNZ CORE unit within 6\" of
-      this WARLORD. Until the end of the turn, that unit is eligible to charge even
-      if it Advanced or Fell Back this turn.
+- id: wh40k_9e.orks.warlord_trait.evil_sunz.fasta_than_yooz
+  name_en: "Fasta Than Yooz"
+  category: evil_sunz
+  applies_to:
+    keywords: [CHARACTER, EVIL SUNZ]
+  text_en: >
+    In your Command phase, select one friendly EVIL SUNZ CORE unit within 6\" of
+    this WARLORD. Until the end of the turn, that unit is eligible to charge even
+    if it Advanced or Fell Back this turn.
 
-  - id: wh40k_9e.orks.warlord_trait.freebooterz.killa_reputation
-    name_en: Killa Reputation
-    category: freebooterz
-    applies_to:
-      keywords: [CHARACTER, FREEBOOTERZ]
-    text_en: >
-      Aura: While an enemy unit is within 3\" of this WARLORD, subtract 1 from that
-      unit's Leadership characteristic and subtract 1 from Combat Attrition tests made
-      for that unit. While a friendly FREEBOOTERZ unit (excluding this WARLORD) is
-      within 6\" of this WARLORD, add 1 to that unit's Leadership characteristic.
+- id: wh40k_9e.orks.warlord_trait.freebooterz.killa_reputation
+  name_en: Killa Reputation
+  category: freebooterz
+  applies_to:
+    keywords: [CHARACTER, FREEBOOTERZ]
+  text_en: >
+    Aura: While an enemy unit is within 3\" of this WARLORD, subtract 1 from that
+    unit's Leadership characteristic and subtract 1 from Combat Attrition tests made
+    for that unit. While a friendly FREEBOOTERZ unit (excluding this WARLORD) is
+    within 6\" of this WARLORD, add 1 to that unit's Leadership characteristic.
 
-  - id: wh40k_9e.orks.warlord_trait.goffs.proper_killy
-    name_en: Proper Killy
-    category: goffs
-    applies_to:
-      keywords: [CHARACTER, GOFFS]
-    text_en: >
-      Add 1 to the Attacks characteristic of this WARLORD. In addition, improve the
-      AP characteristic of melee attacks made by this WARLORD by 1.
+- id: wh40k_9e.orks.warlord_trait.goffs.proper_killy
+  name_en: Proper Killy
+  category: goffs
+  applies_to:
+    keywords: [CHARACTER, GOFFS]
+  text_en: >
+    Add 1 to the Attacks characteristic of this WARLORD. In addition, improve the
+    AP characteristic of melee attacks made by this WARLORD by 1.
 
-  - id: wh40k_9e.orks.warlord_trait.snakebites.surly_as_a_squiggoth
-    name_en: "Surly as a Squiggoth"
-    category: snakebites
-    applies_to:
-      keywords: [CHARACTER, SNAKEBITES]
-    text_en: >
-      The first time this WARLORD is destroyed, roll one D6 at the end of the phase.
-      On a 4+, set this WARLORD back up on the battlefield as close as possible to
-      where it was destroyed, and not within Engagement Range of any enemy models,
-      with D3 wounds remaining.
+- id: wh40k_9e.orks.warlord_trait.snakebites.surly_as_a_squiggoth
+  name_en: "Surly as a Squiggoth"
+  category: snakebites
+  applies_to:
+    keywords: [CHARACTER, SNAKEBITES]
+  text_en: >
+    The first time this WARLORD is destroyed, roll one D6 at the end of the phase.
+    On a 4+, set this WARLORD back up on the battlefield as close as possible to
+    where it was destroyed, and not within Engagement Range of any enemy models,
+    with D3 wounds remaining.
 
-  # ── Specialist Detachment Warlord Traits ──────────────────────────────────
+# ── Specialist Detachment Warlord Traits ──────────────────────────────────
 
-  - id: wh40k_9e.orks.warlord_trait.blitz_brigade.back_seat_driver
-    name_en: Back-Seat Driver
-    category: blitz_brigade
-    applies_to:
-      keywords: [CHARACTER, BLITZ BRIGADE]
-    text_en: >
-      While this WARLORD is embarked within a BLITZ BRIGADE TRANSPORT, add 1\" to
-      that model's Move characteristic. In addition, that TRANSPORT gains the 'Ere
-      We Go ability while this WARLORD is embarked within it.
+- id: wh40k_9e.orks.warlord_trait.blitz_brigade.back_seat_driver
+  name_en: Back-Seat Driver
+  category: blitz_brigade
+  applies_to:
+    keywords: [CHARACTER, BLITZ BRIGADE]
+  text_en: >
+    While this WARLORD is embarked within a BLITZ BRIGADE TRANSPORT, add 1\" to
+    that model's Move characteristic. In addition, that TRANSPORT gains the 'Ere
+    We Go ability while this WARLORD is embarked within it.
 
-  - id: wh40k_9e.orks.warlord_trait.dread_waaagh.dread_mek
-    name_en: Dread Mek
-    category: dread_waaagh
-    applies_to:
-      keywords: [BIG MEK, DREAD WAAAGH!]
-    text_en: >
-      Each time this WARLORD uses their Mekaniak ability to repair a DREAD WAAAGH!
-      unit, add 1 to the number of wounds regained.
+- id: wh40k_9e.orks.warlord_trait.dread_waaagh.dread_mek
+  name_en: Dread Mek
+  category: dread_waaagh
+  applies_to:
+    keywords: [BIG MEK, DREAD WAAAGH!]
+  text_en: >
+    Each time this WARLORD uses their Mekaniak ability to repair a DREAD WAAAGH!
+    unit, add 1 to the number of wounds regained.
 
-  - id: wh40k_9e.orks.warlord_trait.kult_of_speed.quick_ladz
-    name_en: "Quick, Ladz!"
-    category: kult_of_speed
-    applies_to:
-      keywords: [CHARACTER, KULT OF SPEED]
-    text_en: >
-      Friendly KULT OF SPEED units within 12\" of this WARLORD automatically pass
-      Morale tests if they Advanced this turn.
+- id: wh40k_9e.orks.warlord_trait.kult_of_speed.quick_ladz
+  name_en: "Quick, Ladz!"
+  category: kult_of_speed
+  applies_to:
+    keywords: [CHARACTER, KULT OF SPEED]
+  text_en: >
+    Friendly KULT OF SPEED units within 12\" of this WARLORD automatically pass
+    Morale tests if they Advanced this turn.
 
-  - id: wh40k_9e.orks.warlord_trait.stompa_mob.gorks_one
-    name_en: "Gork's One"
-    category: stompa_mob
-    applies_to:
-      keywords: [STOMPA MOB]
-    text_en: >
-      Add 1 to hit rolls and wound rolls for attacks made by this WARLORD in the
-      Fight phase.
+- id: wh40k_9e.orks.warlord_trait.stompa_mob.gorks_one
+  name_en: "Gork's One"
+  category: stompa_mob
+  applies_to:
+    keywords: [STOMPA MOB]
+  text_en: >
+    Add 1 to hit rolls and wound rolls for attacks made by this WARLORD in the
+    Fight phase.
 
-  - id: wh40k_9e.orks.warlord_trait.stompa_mob.morks_one
-    name_en: "Mork's One"
-    category: stompa_mob
-    applies_to:
-      keywords: [STOMPA MOB]
-    text_en: >
-      Add 1 to wound rolls for attacks made by this WARLORD in the Shooting phase.
+- id: wh40k_9e.orks.warlord_trait.stompa_mob.morks_one
+  name_en: "Mork's One"
+  category: stompa_mob
+  applies_to:
+    keywords: [STOMPA MOB]
+  text_en: >
+    Add 1 to wound rolls for attacks made by this WARLORD in the Shooting phase.

@@ -13,6 +13,7 @@ class WeaponProfile:
     abilities: str = ""
     ignores_fnp: bool = False
     name_en: str = ""  # only set for dual-profile weapons (e.g. "Shooting", "Melee")
+    effect: dict | None = None
 
 
 @dataclass

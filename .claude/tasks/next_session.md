@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 24, 2026-06-07)
+## Aktueller Stand (nach Session 25, 2026-06-07)
 
 ### Was funktioniert ✅
 - Ziel 1–5 vollständig abgeschlossen
@@ -73,6 +73,17 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - `necrons_alpha.yaml`: Overlord hat `resurrection_orb` in Roster
   - 14 neue Tests → 470 total, alle grün
 
+### Session 25 (2026-06-07) ✅
+- 6j Schritt 1: `weapon_abilities.yaml` → `weapons.yaml` migriert
+  - 43 `effect:`-Felder in `necrons/weapons.yaml` eingetragen (tesla, aeonstave, voidscythe, heat_ray, spear_of_void_dragon, doomsday_blaster/cannon u.v.m.)
+  - 10 `effect:`-Felder in `orks/weapons.yaml` eingetragen (power_klaw, killsaw, kustom_mega_blasta, slugga, tankhammer u.a.)
+  - `WeaponProfile.effect: dict | None` in `weapon.py`; `_weapon_profile_from_dict()` + `load_weapon_abilities()` in `loader.py` angepasst
+  - `necrons/weapon_abilities.yaml` + `orks/weapon_abilities.yaml` gelöscht (waren orphaned — nirgendwo geladen)
+- 6j Schritt 3: YAML-Header vereinheitlicht
+  - `necrons/warlord_traits.yaml`, `orks/warlord_traits.yaml`: `schema/entries:`-Wrapper entfernt, direkte Listen
+  - `necrons/relics.yaml`, `orks/relics.yaml`: `schema/relics:`-Wrapper entfernt, direkte Listen; `replaces:` + `profiles:` Struktur erhalten
+  - 470 Tests grün — keine Code-Änderungen nötig
+
 ---
 
 ## Session-Start — Empfohlene Reihenfolge
@@ -86,16 +97,15 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ### ✅ 6k Wargear-Effekt-Interpreter — erledigt Session 24
 
-**Zustand 6j (noch offen):**
-- Schritt 1 offen: `weapon_abilities.yaml` → `weapons.yaml` (Necrons + Orks)
-- Schritt 3 offen: `warlord_traits.yaml` / `relics.yaml` Header bereinigen (schema/entries: → direkte Liste)
-- → Kein Blocker für andere Features; niedriger Aufwand, guter Cleanup
+### ✅ 6j Schritt 1+3 — erledigt Session 25
+
+**6j vollständig abgeschlossen** (Schritt 2 Session 23, Schritt 1+3 Session 25)
 
 ### 🟡 Nächste Kandidaten (nach Priorität)
 
-1. **6j Schritt 1+3** — YAML-Cleanup (`weapon_abilities.yaml` → `weapons.yaml`, Header-Vereinheitlichung)
-2. **Necron Command Phase Fixes** — Living Metal einmalig, Dynastiebonus-Anzeige
-3. **WAAAGH!-Badge** auf unitCards (alle ORKS-Einheiten)
+1. **Necron Command Phase Fixes** — Living Metal einmalig, Dynastiebonus-Anzeige
+2. **WAAAGH!-Badge** auf unitCards (alle ORKS-Einheiten)
+3. **Fight Phase Declaration-Block** — 6d-v3-Layout, Attacken auf Zieleinheiten verteilen
 
 ### ✅ Schritt 1 — Regelrecherche (2026-06-06, erledigt)
 
@@ -273,3 +283,9 @@ _(leer — alle offenen Recherchepunkte abgearbeitet)_
 | 17 | 2026-06-06 | 6d-v3 SVG-Würfel-UI; Testsession: 21 Abweichungen + Regelrecherche |
 | 18 | 2026-06-06 | 6d-v3 Fixes (Schwellenwert, Modifier, SAVE, 7+), Cover-Checkboxen, Damage-Block |
 | 19 | 2026-06-06 | Fight Phase: beide Spieler alternieren, CHARGED-Priorität, fight_current_player |
+| 20 | 2026-06-06 | 6d-v3 Restfixes: Ausrichtungslinien, Modifier-Richtung, SAVE-Alignment; unitCard Fight-Phase Root-Cause |
+| 21 | 2026-06-07 | Heroic Intervention: Step-2-Timing, CHARACTER-Check, Badge, Feind-Zielauswahl |
+| 22 | 2026-06-07 | SAVE Würfel-UI Bugs; Gloom Prism generisch via YAML; YAML-Audit + 6j-Plan |
+| 23 | 2026-06-07 | 6j Schritt 2: wargear_abilities.yaml → wargear.yaml; arkana.yaml neu |
+| 24 | 2026-06-07 | 6k Wargear-Effekt-Interpreter vollständig (persistent_effects, wargear_ids, Orb via Wargear-ID) |
+| 25 | 2026-06-07 | 6j Schritt 1+3: weapon_abilities.yaml → weapons.yaml + Header-Cleanup (warlord_traits/relics) |

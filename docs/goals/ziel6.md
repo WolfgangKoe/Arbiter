@@ -854,12 +854,12 @@ Neue Struktur: Ability als optionales `effect`-Feld im Waffen-Eintrag:
 ```
 
 **Dateien:**
-- [ ] `data/wh40k_9e/necrons/weapons.yaml` — `effect`-Felder aus `weapon_abilities.yaml` einpflegen
-- [ ] `data/wh40k_9e/orks/weapons.yaml` — dto.
-- [ ] `data/wh40k_9e/necrons/weapon_abilities.yaml` — **löschen**
-- [ ] `data/wh40k_9e/orks/weapon_abilities.yaml` — **löschen**
-- [ ] `src/gameObjects/loader.py` — `load_weapon_abilities()` liest aus `weapons.yaml`
-- [ ] Tests anpassen
+- [x] `data/wh40k_9e/necrons/weapons.yaml` — `effect`-Felder aus `weapon_abilities.yaml` einpflegen ✅ (2026-06-07)
+- [x] `data/wh40k_9e/orks/weapons.yaml` — dto. ✅ (2026-06-07)
+- [x] `data/wh40k_9e/necrons/weapon_abilities.yaml` — **gelöscht** ✅ (2026-06-07)
+- [x] `data/wh40k_9e/orks/weapon_abilities.yaml` — **gelöscht** ✅ (2026-06-07)
+- [x] `src/gameObjects/loader.py` — `load_weapon_abilities()` liest aus `weapons.yaml` ✅ (2026-06-07)
+- [x] Tests anpassen — 470 Tests grün, keine Änderungen nötig ✅ (2026-06-07)
 
 ### Schritt 2 — `wargear_abilities.yaml` in `wargear.yaml` integrieren ✅ (2026-06-07)
 
@@ -897,11 +897,11 @@ Betrifft: `warlord_traits.yaml`, `relics.yaml` in Necrons + Orks
 Aktuell mit `schema:` + `entries:`-Header → direkte Liste wie `weapons.yaml` und `stratagems.yaml`.
 
 **Dateien:**
-- [ ] `data/wh40k_9e/necrons/warlord_traits.yaml` — `schema/entries:` entfernen → direkte Liste
-- [ ] `data/wh40k_9e/orks/warlord_traits.yaml` — dto.
-- [ ] `data/wh40k_9e/necrons/relics.yaml` — `schema/relics:` entfernen → direkte Liste
-- [ ] `data/wh40k_9e/orks/relics.yaml` — dto.
-- [ ] `src/gameObjects/loader.py` — Loader auf direkte Listen umstellen
+- [x] `data/wh40k_9e/necrons/warlord_traits.yaml` — `schema/entries:` entfernen → direkte Liste ✅ (2026-06-07)
+- [x] `data/wh40k_9e/orks/warlord_traits.yaml` — dto. ✅ (2026-06-07)
+- [x] `data/wh40k_9e/necrons/relics.yaml` — `schema/relics:` entfernen → direkte Liste ✅ (2026-06-07)
+- [x] `data/wh40k_9e/orks/relics.yaml` — dto. ✅ (2026-06-07)
+- [x] `src/gameObjects/loader.py` — kein Loader für diese Dateien vorhanden; Format jetzt konsistent ✅ (2026-06-07)
 
 ### Reihenfolge
 

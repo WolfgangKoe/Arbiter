@@ -49,6 +49,7 @@ def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
         abilities=d.get("abilities", ""),
         ignores_fnp=d.get("ignores_fnp", False),
         is_melee=d.get("is_melee", False),
+        effect=d.get("effect"),
     )
 
 
@@ -69,6 +70,17 @@ def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
     with open(path) as f:
         data = yaml.safe_load(f)
     return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
+
+
+def load_weapon_abilities(faction_dir: str) -> dict[str, list[dict]]:
+    """Return weapon_id → list[effect dicts] from inline effect fields in weapons.yaml."""
+    catalog = load_weapon_catalog(faction_dir)
+    result: dict[str, list[dict]] = {}
+    for weapon_id, weapon in catalog.items():
+        effects = [p.effect for p in weapon.profiles if p.effect is not None]
+        if effects:
+            result[weapon_id] = effects
+    return result
 
 
 def _wargear_option_from_dict(d: dict[str, Any]) -> WargearOption:
