@@ -493,6 +493,9 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 - [x] SAVE: Invuln-Zeile — Schwellenwert-Reihe + Würfelreihe ✅ (2026-06-06)
 - [x] 7+ / unmöglicher Save: roter `×`-Marker rechts neben 6er-Würfeln ✅ (2026-06-06)
 - [x] Threshold > 6: alle 6 Würfel grau + `×`-Marker statt Zahlenwert ✅ (2026-06-06)
+- [ ] SAVE: Grauer Miss-Würfel links vom Rahmen zeigt `threshold − 1` (aktuell immer 6)
+- [ ] SAVE Modifier-Paare: beide Würfel zeigen `threshold − 1`; Richtung: `Basis ←-N← Effektiv(rot)` für AP; Effektiv-Würfel rot wenn AP, blau wenn Cover
+- [ ] SAVE Modifier-Paare: Fähigkeit + AP kombiniert als eine Badge darstellen (z.B. `Enslaved AP-1`)
 
 ### Cover-Überarbeitung
 
@@ -519,10 +522,11 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 > Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
 
-- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (nicht bei Zielauswahl)
-- [ ] Nur CHARACTER-Einheiten dürfen intervenieren
-- [ ] INTERVENED-Badge auf unitCard; `in_melee`-Ergänzung korrekt
-- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range landen
+- [x] Intervene-Button erst sichtbar nach "All Charges Done →" (Step 2) ✅ (2026-06-07)
+- [x] Nur CHARACTER-Einheiten dürfen intervenieren ✅ (2026-06-07)
+- [x] HEROIC INT.-Badge auf unitCard ✅ (2026-06-07)
+- [x] Intervention: Spieler wählt welche feindlichen Einheiten in Engagement Range landen ✅ (2026-06-07)
+- [ ] GOs die Non-CHARACTER-Einheiten HI erlauben (z.B. `enslaved_protectors`) greifen in HI-Eligibility
 
 ### GOs in gameActionArea
 
@@ -703,6 +707,7 @@ Das folgende muss herausgelöst werden — keine Fraktion darf namentlich in gam
 | `armyCard.py` | 229 | `_render_waaagh_ui()` — Ork-spezifischer Block | generisch über Ability-Typ |
 | `armyCard.py` | 253 | `if load_round_choice_abilities(faction_dir): return` blockiert Waaagh | generische Prüfung |
 | `faction_abilities.yaml` | — | `auto_round_1: true/false` | Flag komplett entfernen |
+| `psychicPhase.py` | 58 | `"gloom_prism" in u.rules` in `can_deny()` | generisch über Wargear-Fähigkeit (`deny: true` in wargear.yaml) |
 
 **Kernproblem:** Resurrection Orb ist Wargear, aber nicht im Wargear-System. Waaagh ist eine Faction-Ability, aber Render-Logik steckt direkt in `armyCard.py` + `_common.py` statt über `ability_engine` zu laufen.
 

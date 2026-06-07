@@ -1,7 +1,9 @@
 """ChargePhaseHandler — Charge Phase for WH40k 9E.
 
-Ziel 3a: Migrates existing charge UI from gameActionsArea.
-Ziel 4:  Overwatch via ShootingAction with hit_modifier="only_6s".
+9E rules (core_rules.txt Z. 1824–1848):
+- Step 1: Active player charges with eligible units (one at a time).
+- Step 2: After all charges, inactive player's CHARACTER units within 3" may
+  perform Heroic Intervention — up to 3" move, must end closer to nearest enemy.
 """
 
 from __future__ import annotations
@@ -25,50 +27,58 @@ class ChargePhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
-        inactive: str = second if state["active"] == first else first
+        active: str = state["active"]
+        inactive: str = second if active == first else first
+        step: int = st.session_state.get("charge_phase_step", 1)
 
-        st.info(PHASE_RULES["charge"])
-        st.divider()
+        if step == 1:
+            st.info(PHASE_RULES["charge"])
+            st.divider()
 
-        col1, col2 = st.columns(2)
-        with col1:
-            render_player_column(
-                first,
-                state,
-                active_content=_active_charge,
-                inactive_content=_inactive_charge,
-                no_target_caption="← Designate a target (▷) from your army list.",
-            )
-            if first == inactive:
-                _render_heroic_intervention(first, state)
-        with col2:
-            render_player_column(
-                second,
-                state,
-                active_content=_active_charge,
-                inactive_content=_inactive_charge,
-                no_target_caption="← Designate a target (▷) from your army list.",
-            )
-            if second == inactive:
-                _render_heroic_intervention(second, state)
+            col1, col2 = st.columns(2)
+            with col1:
+                render_player_column(
+                    first,
+                    state,
+                    active_content=_active_charge,
+                    inactive_content=_inactive_charge,
+                    no_target_caption="← Designate a target (▷) from your army list.",
+                )
+            with col2:
+                render_player_column(
+                    second,
+                    state,
+                    active_content=_active_charge,
+                    inactive_content=_inactive_charge,
+                    no_target_caption="← Designate a target (▷) from your army list.",
+                )
+
+            st.divider()
+            if st.button(
+                "All Charges Done — Proceed to Heroic Interventions →",
+                type="primary",
+                use_container_width=True,
+            ):
+                st.session_state.charge_phase_step = 2
+                st.session_state.selected_unit = None
+                st.session_state.selected_targets = []
+                st.rerun()
+        else:
+            _render_hi_phase(inactive, active, state)
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         pass
 
 
 # ---------------------------------------------------------------------------
-# Phase-specific content helpers
+# Step 1 helpers — normal charge
 # ---------------------------------------------------------------------------
 
 
 def _active_charge(
     faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Render charge action for the active player's selected unit.
-
-    Supports multi-target charges (9E: one or more enemy units within 12").
-    Each target is toggled in selected_targets from the enemy army list (▷).
-    """
+    """Render charge action for the active player's selected unit."""
     flags = unit_state.get("turn_flags", {})
     if flags.get("advanced"):
         st.warning("Advanced this turn — cannot charge.")
@@ -131,14 +141,27 @@ def _inactive_charge(
     st.caption("Overwatch: only unmodified 6s hit.")
 
 
-def _render_heroic_intervention(faction: str, state: dict) -> None:  # type: ignore[type-arg]
-    """Render Heroic Intervention buttons for eligible CHARACTER units of the inactive player.
+# ---------------------------------------------------------------------------
+# Step 2 helpers — Heroic Intervention
+# ---------------------------------------------------------------------------
 
-    Eligible: not destroyed, not in_melee, CHARACTER keyword, not yet heroic_intervened this turn.
-    Ties the intervention to the currently selected active unit (the charger).
-    """
-    key = units_key_for(faction)
-    all_units = units_list_for(faction)
+
+def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: ignore[type-arg]
+    """Step 2: Heroic Intervention window for the inactive player."""
+    st.markdown("### ⚔ Heroic Intervention")
+    st.info(
+        "Inactive player's CHARACTER units not in melee, within 3\" of an enemy, "
+        'may move up to 3" — must end closer to the nearest enemy model.'
+    )
+    st.divider()
+
+    pending = st.session_state.get("pending_hi")
+    if pending:
+        _render_hi_target_selection(pending, active, state)
+        return
+
+    key = units_key_for(inactive)
+    all_units = units_list_for(inactive)
     units_data = st.session_state[key]
 
     eligible = [
@@ -149,25 +172,72 @@ def _render_heroic_intervention(faction: str, state: dict) -> None:  # type: ign
         and not units_data.get(u.id, {}).get("turn_flags", {}).get("heroic_intervened")
         and u.has_keyword("CHARACTER")
     ]
+
     if not eligible:
-        return
+        st.info("No eligible CHARACTER units — Heroic Intervention not possible.")
+    else:
+        for unit in eligible:
+            cols = st.columns([4, 2])
+            cols[0].markdown(f"*{unit.name_en}*")
+            if cols[1].button("Intervene", key=f"hi_{inactive}_{unit.id}"):
+                st.session_state.pending_hi = (inactive, unit.id)
+                st.session_state.hi_targets = []
+                st.rerun()
 
-    charger = st.session_state.get("selected_unit")
 
-    st.markdown("**⚔ Heroic Intervention**")
-    for unit in eligible:
-        unit_state = units_data[unit.id]
-        cols = st.columns([4, 2])
-        cols[0].markdown(f"*{unit.name_en}*")
-        if cols[1].button("Intervene", key=f"hi_{faction}_{unit.id}"):
-            unit_state["turn_flags"]["heroic_intervened"] = True
-            if charger:
-                charger_faction, charger_uid = charger
-                enter_melee(unit.id, faction, charger_uid, charger_faction)
+def _render_hi_target_selection(
+    pending: tuple,  # type: ignore[type-arg]
+    active: str,
+    state: dict,  # type: ignore[type-arg]
+) -> None:
+    """Show enemy unit selector for the intervening CHARACTER unit."""
+    hi_faction, hi_uid = pending
+    hi_unit, _ = lookup(hi_faction, hi_uid)
+    hi_targets: list[str] = st.session_state.get("hi_targets", [])
+
+    st.markdown(f"**{hi_unit.name_en}** — select enemy units to engage:")
+    st.caption("Tap a unit to toggle; confirm when ready.")
+
+    active_units = units_list_for(active)
+    active_data = st.session_state[units_key_for(active)]
+
+    for enemy in active_units:
+        if active_data.get(enemy.id, {}).get("destroyed"):
+            continue
+        is_sel = enemy.id in hi_targets
+        prefix = "✓ " if is_sel else ""
+        if st.button(f"{prefix}{enemy.name_en}", key=f"hi_tgt_{active}_{enemy.id}"):
+            if is_sel:
+                hi_targets.remove(enemy.id)
+            else:
+                hi_targets.append(enemy.id)
+            st.session_state.hi_targets = hi_targets
+            st.rerun()
+
+    st.divider()
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button(
+            "Confirm Intervention",
+            type="primary",
+            disabled=not hi_targets,
+            use_container_width=True,
+        ):
+            hi_state = st.session_state[units_key_for(hi_faction)][hi_uid]
+            hi_state["turn_flags"]["heroic_intervened"] = True
+            for tgt_uid in hi_targets:
+                enter_melee(hi_uid, hi_faction, tgt_uid, active)
             log_action(
                 state["round"],
                 "charge",
-                unit.name_en,
-                "performed Heroic Intervention",
+                hi_unit.name_en,
+                f"Heroic Intervention — engaged {len(hi_targets)} unit(s)",
             )
+            st.session_state.pending_hi = None
+            st.session_state.hi_targets = []
+            st.rerun()
+    with c2:
+        if st.button("Cancel", use_container_width=True):
+            st.session_state.pending_hi = None
+            st.session_state.hi_targets = []
             st.rerun()

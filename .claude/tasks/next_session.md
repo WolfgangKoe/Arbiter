@@ -48,6 +48,10 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - 6d-v3 Würfel-UI Restfixes: Ausrichtungslinien (dashed/solid), Modifier-Richtung korrigiert, SAVE-Alignment
 - Fight Phase Root Cause: `unitCard.py` `is_active` nutzte `st.session_state.active` statt `fight_current_player` → inaktiver Spieler konnte nie Einheiten für Angriff auswählen
 
+### Session 21 (2026-06-07) ✅
+- Heroic Intervention: Step-2-Timing (`charge_phase_step`), "All Charges Done →"-Button, CHARACTER-Check, HEROIC INT.-Badge, Feind-Zielauswahl via `pending_hi` + `hi_targets`
+- Beobachtungen gesammelt: SAVE Würfel-Bug, HI GO-Extension, Gloom-Prism-Hardcodierung → in ziel6.md eingetragen
+
 ---
 
 ## Session-Start — Empfohlene Reihenfolge
@@ -112,13 +116,12 @@ Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
 
 ### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
 
-### 🔴 HOCH — Heroic Intervention (`gameMechanic/chargephase.py`, `game_state.py`)
+### ✅ Heroic Intervention — erledigt Session 21
 
-Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
-- [ ] Intervene-Button erst sichtbar nach erfolgreichem Charge (Step 2, nicht bei Zielauswahl)
-- [ ] Nur CHARACTER-Einheiten dürfen intervenieren — Prüfung fehlt
-- [ ] INTERVENED-Badge auf unitCard; `in_melee`-Ergänzung korrekt
-- [ ] Intervention = Charge-Bewegung: Spieler wählt welche feindlichen Einheiten in Engagement Range
+- [x] Step-2-Timing: `charge_phase_step` in `game_state.py`; "All Charges Done →"-Button
+- [x] CHARACTER-Check korrekt; HEROIC INT.-Badge auf unitCard
+- [x] Feind-Zielauswahl via `pending_hi` + `hi_targets` → `enter_melee()`
+- [ ] **Offen:** GOs die Non-CHARACTER HI erlauben (z.B. `enslaved_protectors`) → HI-Eligibility erweiterbar machen
 
 ### 🟡 MITTEL — GOs in gameActionArea
 
@@ -141,6 +144,21 @@ Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
 ### 🟢 NIEDRIG — Moralphase
 
 - [ ] Gretchin Cowardly: −1 auf Combat Attrition Tests wenn kein RUNTHERD in 6" (Ld 4)
+
+### 🔴 HOCH — SAVE Würfel-UI Bugs (`uiLayout/_common.py`)
+
+Befunde Session 21 (noch nicht implementiert):
+
+- [ ] Grauer Miss-Würfel links vom Rahmen: muss `threshold − 1` zeigen (bei 6+ Save: Würfel-5, nicht Würfel-6)
+- [ ] Modifier-Paare im SAVE-Block: beide Würfel zeigen `threshold − 1` des jeweiligen Zustands
+  - Richtung: `Basis(neutral) ←-N← Effektiv(rot)` für AP; `Basis(neutral) →+N→ Effektiv(blau)` für Cover
+  - Beispiel AP-2 auf 4+: `Würfel-3 ←-2← Würfel-5(rot)`
+- [ ] Fähigkeit + AP kombiniert als eine Badge: z.B. `Enslaved AP-1` statt zwei separater Paare
+
+### 🔴 HOCH — Psiphase: Gloom Prism hardcoded (`gameMechanic/psychicPhase.py:58`)
+
+- [ ] `can_deny()` prüft `"gloom_prism" in u.rules` direkt — gehört in generisches Wargear-System
+- [ ] Lösung: `deny: true`-Flag in `wargear.yaml`; `can_deny()` liest Wargear-Fähigkeiten generisch
 
 ### Nachrangig (Details in ziel6.md §6e–6h)
 

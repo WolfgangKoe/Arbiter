@@ -34,6 +34,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "SHOT": ("#40a0b8", "#081418"),
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
+    "HEROIC INT.": ("#ff9060", "#2a1208"),
 }
 
 _BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
@@ -89,6 +90,9 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
 
     if state.get("in_melee") and movement_slot != "CHARGED":
         parts.append(_badge("IN MELEE"))
+
+    if flags.get("heroic_intervened"):
+        parts.append(_badge("HEROIC INT."))
 
     if state.get("in_reserve"):
         parts.append(_badge("RESERVE"))
