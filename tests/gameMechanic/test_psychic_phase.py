@@ -28,6 +28,7 @@ from gameMechanic.psychicPhase import (
 
 @dataclass
 class _Unit:
+    id: str = ""
     keywords: list[str] = field(default_factory=list)
     rules: list[str] = field(default_factory=list)
 
@@ -70,8 +71,14 @@ class TestCanDeny:
         assert can_deny(units) is True
 
     def test_can_deny_via_gloom_prism(self):
-        # Canoptek Spyder has no PSYKER keyword — only gloom_prism rule
-        units = [_Unit(keywords=["Vehicle", "Canoptek Spyder"], rules=["gloom_prism"])]
+        # Canoptek Spyder has no PSYKER keyword — deny comes from gloom_prism wargear rule
+        units = [
+            _Unit(
+                id="wh40k_9e.necrons.unit.canoptek_spyder",
+                keywords=["VEHICLE", "CANOPTEK"],
+                rules=["gloom_prism"],
+            )
+        ]
         assert can_deny(units) is True
 
     def test_can_deny_neither(self):

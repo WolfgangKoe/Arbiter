@@ -493,9 +493,9 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 - [x] SAVE: Invuln-Zeile — Schwellenwert-Reihe + Würfelreihe ✅ (2026-06-06)
 - [x] 7+ / unmöglicher Save: roter `×`-Marker rechts neben 6er-Würfeln ✅ (2026-06-06)
 - [x] Threshold > 6: alle 6 Würfel grau + `×`-Marker statt Zahlenwert ✅ (2026-06-06)
-- [ ] SAVE: Grauer Miss-Würfel links vom Rahmen zeigt `threshold − 1` (aktuell immer 6)
-- [ ] SAVE Modifier-Paare: beide Würfel zeigen `threshold − 1`; Richtung: `Basis ←-N← Effektiv(rot)` für AP; Effektiv-Würfel rot wenn AP, blau wenn Cover
-- [ ] SAVE Modifier-Paare: Fähigkeit + AP kombiniert als eine Badge darstellen (z.B. `Enslaved AP-1`)
+- [x] SAVE: Modifier-Würfelpaare zeigen `threshold − 1` (letzter fehlschlagender Würfel) ✅ (2026-06-07)
+- [x] SAVE: Richtung immer Basis(grau/links) → Effektiv(farbig/rechts); Cover blau, AP rot ✅ (2026-06-07)
+- [ ] SAVE Modifier-Paare: Fähigkeit + AP kombiniert als eine Badge darstellen (z.B. `Enslaved AP-1`) — erfordert Datenarchitektur (6j)
 
 ### Cover-Überarbeitung
 
@@ -820,6 +820,93 @@ Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantie
 ### Tasks
 
 - [x] `uiLayout/detachmentCard.py`: `(unit, state_key)`-Paare vor dem Rendern sortieren — unbehandelte zuerst, behandelte zuletzt (stabile Sortierung)
+
+---
+
+## 6j — YAML-Konsolidierung: Doppel-Dateien zusammenführen
+
+**Ziel:** Jede Fraktion hat pro Datentyp genau eine YAML-Datei. Die aktuell parallelen `*_abilities.yaml`-Dateien (redundante Maschinen-Repräsentation) werden in die jeweilige Stammdatei integriert. Alle Listen-Dateien bekommen eine einheitliche Top-Level-Struktur (direkte Liste).
+
+### Hintergrund (Session 22, 2026-06-07)
+
+Vollständiger Audit über alle Fraktionen ergab drei Redundanz-Muster:
+
+1. **Doppel-Datei-Paare**: `weapons.yaml + weapon_abilities.yaml` und `wargear.yaml + wargear_abilities.yaml` — je zwei Dateien für dasselbe Objekt (Stammdaten + Maschinen-Repräsentation)
+2. **Header-Inkonsistenz**: Fünf verschiedene Top-Level-Formate für dieselbe Grundstruktur „Liste von Objekten"
+3. **Lokalisierung inkonsistent**: Mal `name_en/de`, mal nur `text_de`, mal `rule_text` ohne Übersetzung
+
+`faction_abilities.yaml` vs. `unit_abilities.yaml` sind **kein** Redundanzproblem — verschiedene Konzepte, kein Merge.
+
+### Schritt 1 — `weapon_abilities.yaml` in `weapons.yaml` integrieren
+
+Betrifft: Necrons, Orks (je eine Datei entfällt)
+
+Neue Struktur: Ability als optionales `effect`-Feld im Waffen-Eintrag:
+```yaml
+- id: wh40k_9e.necrons.weapon.tesla_carbine
+  name_en: Tesla Carbine
+  profiles: [...]
+  effect:          # optional — nur wenn Waffe Sonderregel hat
+    type: extra_hits
+    trigger_value: 6
+    unmodified: true
+    hits: 2
+```
+
+**Dateien:**
+- [ ] `data/wh40k_9e/necrons/weapons.yaml` — `effect`-Felder aus `weapon_abilities.yaml` einpflegen
+- [ ] `data/wh40k_9e/orks/weapons.yaml` — dto.
+- [ ] `data/wh40k_9e/necrons/weapon_abilities.yaml` — **löschen**
+- [ ] `data/wh40k_9e/orks/weapon_abilities.yaml` — **löschen**
+- [ ] `src/gameObjects/loader.py` — `load_weapon_abilities()` liest aus `weapons.yaml`
+- [ ] Tests anpassen
+
+### Schritt 2 — `wargear_abilities.yaml` in `wargear.yaml` integrieren
+
+Betrifft: Necrons, Orks
+
+Neue Struktur: direkte Liste (kein `schema/faction/entries:` Header), Ability inline:
+```yaml
+- id: wh40k_9e.necrons.wargear.gloom_prism
+  name_en: Gloom Prism
+  rule_text: "In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power as if it were a PSYKER."
+  effect:
+    type: deny_psychic
+    target: self
+  trigger:
+    timing: phase_reactive
+    phase: psychic
+    player: inactive
+  source: { publication: Codex Necrons 9e }
+```
+
+`deny: true` Flag entfällt — `can_deny()` prüft `effect.type == "deny_psychic"` direkt.
+
+**Dateien:**
+- [ ] `data/wh40k_9e/necrons/wargear.yaml` — Header entfernen, direkte Liste, Ability-Felder aus `wargear_abilities.yaml` einpflegen
+- [ ] `data/wh40k_9e/orks/wargear.yaml` — dto.
+- [ ] `data/wh40k_9e/necrons/wargear_abilities.yaml` — **löschen** (Arkana → `arkana.yaml`)
+- [ ] `data/wh40k_9e/orks/wargear_abilities.yaml` — **löschen**
+- [ ] `data/wh40k_9e/necrons/arkana.yaml` — **neu** (Arkana-Block aus `wargear_abilities.yaml`)
+- [ ] `src/gameObjects/loader.py` — `load_wargear_abilities()` und `load_deny_wargear_names()` auf neue Struktur umstellen
+- [ ] `src/gameMechanic/psychicPhase.py` — `can_deny()`: prüft `effect.type == "deny_psychic"` statt Namens-String
+
+### Schritt 3 — Header vereinheitlichen (restliche Dateien)
+
+Betrifft: `warlord_traits.yaml`, `relics.yaml` in Necrons + Orks
+
+Aktuell mit `schema:` + `entries:`-Header → direkte Liste wie `weapons.yaml` und `stratagems.yaml`.
+
+**Dateien:**
+- [ ] `data/wh40k_9e/necrons/warlord_traits.yaml` — `schema/entries:` entfernen → direkte Liste
+- [ ] `data/wh40k_9e/orks/warlord_traits.yaml` — dto.
+- [ ] `data/wh40k_9e/necrons/relics.yaml` — `schema/relics:` entfernen → direkte Liste
+- [ ] `data/wh40k_9e/orks/relics.yaml` — dto.
+- [ ] `src/gameObjects/loader.py` — Loader auf direkte Listen umstellen
+
+### Reihenfolge
+
+Schritt 2 zuerst (hat aktuell blockierenden Bug: `can_deny()` auf wargear-Daten angewiesen), dann Schritt 1, dann Schritt 3.
 
 ---
 

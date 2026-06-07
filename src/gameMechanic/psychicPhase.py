@@ -55,7 +55,17 @@ def has_psyker(units: list[Unit]) -> bool:
 
 
 def can_deny(units: list[Unit]) -> bool:
-    return any(u.has_keyword("PSYKER") or "gloom_prism" in u.rules for u in units)
+    from gameObjects.loader import load_deny_wargear_names  # noqa: PLC0415
+
+    deny_names: set[str] = set()
+    for u in units:
+        parts = u.id.split(".")
+        if len(parts) >= 2:
+            try:
+                deny_names.update(load_deny_wargear_names(parts[1]))
+            except Exception:
+                pass
+    return any(u.has_keyword("PSYKER") or any(r in deny_names for r in u.rules) for u in units)
 
 
 def is_perils(roll: int) -> bool:
@@ -294,7 +304,7 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
     units = units_list_for(faction)
 
     if not can_deny(units):
-        st.caption("No PSYKER or Gloom Prism — cannot deny.")
+        st.caption("No PSYKER or deny wargear — cannot deny.")
         return
 
     # Each faction may deny at most once per Psychic Phase (Deny 1 / Gloom Prism).

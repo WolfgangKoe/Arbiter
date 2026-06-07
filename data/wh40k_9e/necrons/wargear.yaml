@@ -96,6 +96,7 @@ entries:
 - id: wh40k_9e.necrons.wargear.gloom_prism
   name_en: Gloom Prism
   name_de: Düsterprisma
+  deny: true
   ability_en: >-
     In your opponent's Psychic phase, the bearer's unit can attempt
     to deny one psychic power as if it were a PSYKER.

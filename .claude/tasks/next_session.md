@@ -52,6 +52,11 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Heroic Intervention: Step-2-Timing (`charge_phase_step`), "All Charges Done →"-Button, CHARACTER-Check, HEROIC INT.-Badge, Feind-Zielauswahl via `pending_hi` + `hi_targets`
 - Beobachtungen gesammelt: SAVE Würfel-Bug, HI GO-Extension, Gloom-Prism-Hardcodierung → in ziel6.md eingetragen
 
+### Session 22 (2026-06-07) ✅
+- SAVE Würfel-UI Bugs 1+2: `save_modifier_die_pair_html()` — Würfelfaces zeigen `threshold−1` (letzter fehlschlagender Würfel statt niedrigster bestehender); Richtung immer links=Basis/grau, rechts=Effektiv/farbig; Cover-Farbe blau
+- Gloom Prism generisch: `load_deny_wargear_names(faction_dir)` in `loader.py`; `can_deny()` lädt YAML-gesteuert über Faction-ID statt Hardcode; `deny: true` in `wargear.yaml`
+- YAML-Audit: Vollständiger Audit aller 36 YAML-Dateien über alle Fraktionen → Redundanz-Plan in `docs/goals/ziel6.md §6j`
+
 ---
 
 ## Session-Start — Empfohlene Reihenfolge
@@ -62,6 +67,17 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ---
 
 ## Nächste Schritte (priorisiert)
+
+### 🔴 HOCH — 6j YAML-Konsolidierung (nächste Session)
+
+Vollständiger Plan: `docs/goals/ziel6.md §6j`
+
+**Reihenfolge:**
+1. **Schritt 2 zuerst**: `wargear.yaml` + `wargear_abilities.yaml` → unified `wargear.yaml` (direkte Liste), `wargear_abilities.yaml` löschen, Arkana → `arkana.yaml`. Dann `can_deny()` auf `effect.type == "deny_psychic"` umstellen (aktuell noch über `deny: true` Flag + Name-String).
+2. **Schritt 1**: `weapon_abilities.yaml` in `weapons.yaml` integrieren.
+3. **Schritt 3**: `warlord_traits.yaml` und `relics.yaml` Header bereinigen.
+
+**Zustand Gloom Prism:** Aktuell halbfertig — `deny: true` Flag in `wargear.yaml` + `load_deny_wargear_names()` in loader.py. Nach 6j Schritt 2 wird das durch den sauberen `effect.type`-Check ersetzt.
 
 ### ✅ Schritt 1 — Regelrecherche (2026-06-06, erledigt)
 
@@ -145,20 +161,15 @@ Kanonische Checkboxen: `docs/goals/ziel6.md § Testsession-Fixes`
 
 - [ ] Gretchin Cowardly: −1 auf Combat Attrition Tests wenn kein RUNTHERD in 6" (Ld 4)
 
-### 🔴 HOCH — SAVE Würfel-UI Bugs (`uiLayout/_common.py`)
+### ✅ SAVE Würfel-UI Bugs — erledigt Session 22
 
-Befunde Session 21 (noch nicht implementiert):
+- [x] Modifier-Würfelpaare zeigen `threshold − 1`; Richtung Basis(grau/links) → Effektiv(farbig/rechts) ✅
+- [ ] Fähigkeit + AP kombiniert als eine Badge (z.B. `Enslaved AP-1`) — erfordert 6j YAML-Konsolidierung
 
-- [ ] Grauer Miss-Würfel links vom Rahmen: muss `threshold − 1` zeigen (bei 6+ Save: Würfel-5, nicht Würfel-6)
-- [ ] Modifier-Paare im SAVE-Block: beide Würfel zeigen `threshold − 1` des jeweiligen Zustands
-  - Richtung: `Basis(neutral) ←-N← Effektiv(rot)` für AP; `Basis(neutral) →+N→ Effektiv(blau)` für Cover
-  - Beispiel AP-2 auf 4+: `Würfel-3 ←-2← Würfel-5(rot)`
-- [ ] Fähigkeit + AP kombiniert als eine Badge: z.B. `Enslaved AP-1` statt zwei separater Paare
+### ✅ Psiphase: Gloom Prism generisch — erledigt Session 22
 
-### 🔴 HOCH — Psiphase: Gloom Prism hardcoded (`gameMechanic/psychicPhase.py:58`)
-
-- [ ] `can_deny()` prüft `"gloom_prism" in u.rules` direkt — gehört in generisches Wargear-System
-- [ ] Lösung: `deny: true`-Flag in `wargear.yaml`; `can_deny()` liest Wargear-Fähigkeiten generisch
+- [x] `deny: true` in `wargear.yaml`; `can_deny()` lädt YAML-gesteuert via Faction-ID; kein Hardcode mehr
+- Hinweis: `deny: true` Flag entfällt nach 6j Schritt 2 → dann `effect.type == "deny_psychic"` direkt
 
 ### Nachrangig (Details in ziel6.md §6e–6h)
 

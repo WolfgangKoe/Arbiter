@@ -372,6 +372,24 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
     return results
 
 
+def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
+    """Return short names of wargear items with deny: true for a faction.
+
+    Short name = last segment of the wargear ID (e.g. 'gloom_prism').
+    """
+    path = _DATA_ROOT / faction_dir / "wargear.yaml"
+    if not path.exists():
+        return frozenset()
+    with open(path) as f:
+        data = yaml.safe_load(f) or {}
+    entries = data.get("entries", data) if isinstance(data, dict) else data
+    return frozenset(
+        e["id"].rsplit(".", 1)[-1]
+        for e in (entries if isinstance(entries, list) else [])
+        if isinstance(e, dict) and e.get("deny")
+    )
+
+
 def load_wargear_abilities(faction_dir: str) -> list[Ability]:
     """Load wargear abilities from data/wh40k_9e/<faction_dir>/wargear_abilities.yaml."""
     path = _DATA_ROOT / faction_dir / "wargear_abilities.yaml"
