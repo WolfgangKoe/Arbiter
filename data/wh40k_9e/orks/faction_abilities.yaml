@@ -27,6 +27,7 @@ abilities:
 
   - id: wh40k_9e.orks.faction.waaagh_stage1
     name_en: "Waaagh! — Call Da Waaagh!"
+    active_text: "+1 Strength · +1 Attacks · 5+ invuln · Advance & Charge"
     ability_type: activated
     source: faction_rule
     rule_text: "Once per battle, in your Command phase, a WARBOSS can call a Waaagh! Stage 1: Until the end of the turn, ORKS CORE and ORKS CHARACTER units from your army can charge even if they Advanced this turn. Until the start of your next turn, add 1 to the Strength and Attacks characteristics of ORKS models from your army. ORKS models from your army also have a 5+ invulnerable save until the start of your next turn."
@@ -57,6 +58,7 @@ abilities:
 
   - id: wh40k_9e.orks.faction.waaagh_stage2
     name_en: "Waaagh! — Get Stuck In!"
+    active_text: "+1 Strength · +1 Attacks · 6+ invuln"
     ability_type: passive
     source: faction_rule
     rule_text: "Stage 2 of Waaagh! (active in the turn following Stage 1): +1 Strength and Attacks for ORKS models. ORKS models have a 6+ invulnerable save."

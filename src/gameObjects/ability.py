@@ -21,6 +21,7 @@ class Condition:
     min_round: int | None = None
     unit_not_destroyed: bool = False
     needs_healing: bool = False
+    once_per_battle: bool = False
 
 
 @dataclass
@@ -47,3 +48,4 @@ class Ability:
     wargear_id: str | None = None
     ability_type: str = "triggered"  # "triggered" | "activated"
     badge_label: str | None = None
+    active_text: str | None = None

@@ -164,6 +164,7 @@ def _condition_from_dict(d: dict[str, Any]) -> Condition:
         min_round=d.get("min_round"),
         unit_not_destroyed=d.get("unit_not_destroyed", False),
         needs_healing=d.get("needs_healing", False),
+        once_per_battle=d.get("once_per_battle", False),
     )
 
 
@@ -197,6 +198,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
         wargear_id=d.get("wargear_id"),
         ability_type=d.get("ability_type", "triggered"),
         badge_label=d.get("badge_label"),
+        active_text=d.get("active_text"),
     )
 
 
