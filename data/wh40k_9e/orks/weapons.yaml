@@ -59,7 +59,7 @@ weapons:
     profiles:
       - weapon_type: Melee
         range_inches: 0
-        attacks: 2
+        attacks: "Melee"
         strength: User×2
         ap: -3
         damage: 2
@@ -123,7 +123,7 @@ weapons:
     profiles:
       - weapon_type: Melee
         range_inches: 0
-        attacks: 2
+        attacks: "Melee"
         strength: User×2
         ap: -4
         damage: D3
