@@ -559,11 +559,11 @@ Fehler wenn Summe > Gesamtattacken (zu viele)
 - `gameMechanic/fightPhase.py` — kein Eingriff nötig wenn Eintrags-Struktur kompatibel bleibt
 
 **Tasks:**
-- [ ] Plan + Freigabe einholen vor Implementierung
-- [ ] `render_attack_declaration()`: melee-Pfad auf `(weapon, target, atk_count)` Einträge umstellen
-- [ ] Multiselect für Waffen entfernen; stattdessen pro Waffe separate Zeilen im Deklarationsblock
-- [ ] Validierungslogik: Summe aller `atk_count` Einträge gegen Gesamtattacken prüfen
-- [ ] Tests für neue Eintrags-Struktur
+- [x] Plan + Freigabe einholen vor Implementierung ✅ (2026-06-08)
+- [x] `render_attack_declaration()`: melee-Pfad auf `(weapon, target, atk_count)` Einträge umstellen ✅ (2026-06-08)
+- [x] Multiselect für Waffen entfernen; stattdessen pro Waffe separate Zeilen im Deklarationsblock ✅ (2026-06-08)
+- [x] Validierungslogik: Summe aller `atk_count` Einträge gegen Gesamtattacken prüfen ✅ (2026-06-08)
+- [x] Tests für neue Eintrags-Struktur ✅ (2026-06-08)
 
 ### Heroic Intervention
 
@@ -594,8 +594,8 @@ Fehler wenn Summe > Gesamtattacken (zu viele)
 - [x] Ork-Regeln prüfen: welche Einheiten ausgenommen? → +1S/+1A gilt für alle ORKS; Advance+Charge nur ORKS CORE/CHARACTER ✅ (2026-06-08)
 - [x] Resurrection Orb: Regel lesen → keine KERN-Einschränkung; Implementierung war korrekt; jetzt via `wargear_ids` ✅ (2026-06-06/07)
 - [x] Skarabäen: 6=auto-wound → bereits als `abilities`-Text in `weapons.yaml`; kein Code-Feature nötig ✅ (2026-06-06)
-- [ ] **Advance & Charge:** WAAAGH! Stage 1 — ORKS CORE / ORKS CHARACTER dürfen trotz Advance chargen. `chargephase.py`: `if flags.get("advanced")` Guard überspringen wenn Bedingungen erfüllt. Dateien: `gameMechanic/chargephase.py`
-- [ ] **+1 Attacks in Deklaration:** WAAAGH! Stage 1 + 2 geben +1 Attacks für alle ORKS-Modelle. In `render_attack_declaration()`: `unit.attacks + 1` für Gesamtattacken verwenden wenn WAAAGH! aktiv. Dateien: `uiLayout/_common.py`
+- [x] **Advance & Charge:** WAAAGH! Stage 1 — ORKS CORE / ORKS CHARACTER dürfen trotz Advance chargen ✅ (2026-06-08)
+- [x] **+1 Attacks in Deklaration:** WAAAGH! Stage 1 + 2 geben +1 Attacks für alle ORKS-Modelle ✅ (2026-06-08)
 - [ ] Gretchin Moralphase: Cowardly (−1 Attrition wenn kein RUNTHERD in 6") implementieren
 
 ---
