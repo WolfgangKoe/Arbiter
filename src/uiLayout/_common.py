@@ -358,12 +358,23 @@ def _protocol_source_label(faction_dir: str) -> str:
 def _compute_attacks(attacks_str: str, models_count: int, unit_attacks: int) -> str:
     """Return display string for total attack count."""
     s = str(attacks_str).strip()
-    if s in ("Melee", "None", ""):
+    if s in ("Melee", "None", "", "*"):
         return str(models_count * unit_attacks)
     try:
         return str(models_count * int(s))
     except ValueError:
         return f"{models_count}×{s}"
+
+
+def _total_attacks_int(attacks_str: str, models_alive: int, unit_attacks: int) -> int | None:
+    """Return total attack count as int, or None if dice-based (cannot pre-split)."""
+    s = str(attacks_str).strip()
+    if s in ("Melee", "None", "", "*"):
+        return models_alive * unit_attacks
+    try:
+        return models_alive * int(s)
+    except ValueError:
+        return None
 
 
 def _collect_atk_modifiers(
@@ -1099,7 +1110,12 @@ def _render_resolution_tab(
     fnp_value = resolve_fnp(def_unit.fnp, profile.ignores_fnp)
 
     # Header
-    atk_count = _compute_attacks(profile.attacks, models_count, atk_unit.attacks)
+    atk_override = entry.get("atk_override")
+    atk_count = (
+        str(atk_override)
+        if atk_override is not None
+        else _compute_attacks(profile.attacks, models_count, atk_unit.attacks)
+    )
     ap_str = f"AP{ap}" if ap != 0 else "AP0"
     st.markdown(
         f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
@@ -1199,8 +1215,23 @@ def render_attack_declaration(
     if in_melee:
         st.info("Engaged in melee — Pistol weapons only.")
 
+    # For single-model units in fight phase, distribute by attacks (not models).
+    # A model with 4 attacks can split 2+2 between two targets — impossible with model counter (max=1).
+    use_atk_counter = False
+    total_attacks: int = 0
+    if use_melee and models_alive == 1:
+        first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
+        if first_melee_profiles:
+            total_attacks_maybe = _total_attacks_int(
+                first_melee_profiles[0].attacks, 1, atk_unit.attacks
+            )
+            if total_attacks_maybe is not None:
+                use_atk_counter = True
+                total_attacks = total_attacks_maybe
+
     entries: list[dict] = []  # type: ignore[type-arg]
     models_assigned = 0
+    attacks_assigned = 0
     models_lbl = "Models fighting" if use_melee else "Models shooting"
 
     for i, (def_faction, def_uid) in enumerate(tgts):
@@ -1226,18 +1257,31 @@ def render_attack_declaration(
                 sel_weapons = [weapons[0]]
                 st.caption(f"Weapon: **{weapons[0].name_en}**")
 
-            # Model counter (shared — same models fire all selected weapons)
-            models_key = f"decl_m_{atk_uid}_{def_uid}"
-            if models_key not in st.session_state:
-                st.session_state[models_key] = models_alive if i == 0 else 0
-
-            models_val = st.number_input(
-                models_lbl,
-                min_value=0,
-                max_value=models_alive,
-                step=1,
-                key=models_key,
-            )
+            if use_atk_counter:
+                # Attack counter — lets single-model units split their attacks between targets
+                atk_key = f"decl_a_{atk_uid}_{def_uid}"
+                if atk_key not in st.session_state:
+                    st.session_state[atk_key] = total_attacks if i == 0 else 0
+                atk_val = st.number_input(
+                    "Attacks on this target",
+                    min_value=0,
+                    max_value=total_attacks,
+                    step=1,
+                    key=atk_key,
+                )
+            else:
+                # Model counter — standard for multi-model units and shooting phase
+                models_key = f"decl_m_{atk_uid}_{def_uid}"
+                if models_key not in st.session_state:
+                    st.session_state[models_key] = models_alive if i == 0 else 0
+                atk_val = 0  # unused in non-atk-counter path
+                models_val = st.number_input(
+                    models_lbl,
+                    min_value=0,
+                    max_value=models_alive,
+                    step=1,
+                    key=models_key,
+                )
 
             if not sel_weapons:
                 st.warning("Select at least one weapon.")
@@ -1257,11 +1301,16 @@ def render_attack_declaration(
                     else:
                         profile_idx = 0
                     profile = profiles[profile_idx]
-                    atk_count = _compute_attacks(profile.attacks, int(models_val), atk_unit.attacks)
+                    if use_atk_counter:
+                        displayed_count = str(int(atk_val))
+                    else:
+                        displayed_count = _compute_attacks(
+                            profile.attacks, int(models_val), atk_unit.attacks
+                        )
                     st.markdown(
                         f"**{weapon.name_en}** → "
                         f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                        f"{atk_count}</span> Attacks",
+                        f"{displayed_count}</span> Attacks",
                         unsafe_allow_html=True,
                     )
                     if (
@@ -1271,27 +1320,40 @@ def render_attack_declaration(
                     ):
                         half = profile.range_inches // 2
                         st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
-                    entries.append(
-                        {
-                            "def_faction": def_faction,
-                            "def_uid": def_uid,
-                            "weapon_name": weapon.name_en,
-                            "profile_idx": profile_idx,
-                            "models_count": int(models_val),
-                        }
-                    )
+                    entry: dict = {  # type: ignore[type-arg]
+                        "def_faction": def_faction,
+                        "def_uid": def_uid,
+                        "weapon_name": weapon.name_en,
+                        "profile_idx": profile_idx,
+                        "models_count": 1 if use_atk_counter else int(models_val),
+                    }
+                    if use_atk_counter:
+                        entry["atk_override"] = int(atk_val)
+                    entries.append(entry)
 
-                models_assigned += int(models_val)
+                if use_atk_counter:
+                    attacks_assigned += int(atk_val)
+                else:
+                    models_assigned += int(models_val)
 
-    remaining = models_alive - models_assigned
-    if remaining < 0:
-        st.error(f"Too many models assigned ({models_assigned}/{models_alive})")
-    elif remaining > 0:
-        st.caption(f"Remaining: {remaining} / {models_alive} unassigned")
+    if use_atk_counter:
+        remaining = total_attacks - attacks_assigned
+        if remaining < 0:
+            st.error(f"Too many attacks assigned ({attacks_assigned}/{total_attacks})")
+        elif remaining > 0:
+            st.caption(f"Remaining: {remaining} / {total_attacks} attacks unassigned")
+        else:
+            st.caption(f"✓ {total_attacks} / {total_attacks} attacks assigned")
+        can_start = 0 < attacks_assigned <= total_attacks
     else:
-        st.caption(f"✓ {models_alive} / {models_alive} assigned")
-
-    can_start = 0 < models_assigned <= models_alive
+        remaining = models_alive - models_assigned
+        if remaining < 0:
+            st.error(f"Too many models assigned ({models_assigned}/{models_alive})")
+        elif remaining > 0:
+            st.caption(f"Remaining: {remaining} / {models_alive} unassigned")
+        else:
+            st.caption(f"✓ {models_alive} / {models_alive} assigned")
+        can_start = 0 < models_assigned <= models_alive
     if st.button(
         "Start Resolution →",
         type="primary",
@@ -1305,7 +1367,7 @@ def render_attack_declaration(
             "phase_key": phase_key,
             "use_melee": use_melee,
             "in_melee": in_melee,
-            "entries": [e for e in entries if e["models_count"] > 0],
+            "entries": [e for e in entries if e.get("atk_override", e["models_count"]) > 0],
         }
         st.rerun()
 
