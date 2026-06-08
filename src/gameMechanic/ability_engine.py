@@ -75,8 +75,8 @@ def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) 
 
     Returns a dict with any of: {"hit": int, "wound": int, "save": int}.
     """
-    protocol_id: str | None = st.session_state.get("active_protocol_id")
-    directive: str | None = st.session_state.get("active_directive")
+    protocol_id: str | None = st.session_state.get(f"protocol_active_{faction_dir}")
+    directive: str | None = st.session_state.get(f"protocol_directive_{faction_dir}")
     if not protocol_id or not directive:
         return {}
 

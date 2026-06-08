@@ -415,9 +415,9 @@ def _protocol_session(protocol_id: str | None, directive: str | None) -> _S:
         first_player="Necrons",
         p1_faction_dir="necrons",
         p2_faction_dir="necrons",
-        active_protocol_id=protocol_id,
-        active_directive=directive,
     )
+    session["protocol_active_necrons"] = protocol_id
+    session["protocol_directive_necrons"] = directive
     _st_mock.session_state = session
     return session
 

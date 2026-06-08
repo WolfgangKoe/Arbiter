@@ -346,8 +346,8 @@ def _parse_strength(raw: str, unit_strength: int) -> int:
 def _protocol_source_label(faction_dir: str) -> str:
     from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
 
-    protocol_id = st.session_state.get("active_protocol_id")
-    directive = st.session_state.get("active_directive")
+    protocol_id = st.session_state.get(f"protocol_active_{faction_dir}")
+    directive = st.session_state.get(f"protocol_directive_{faction_dir}")
     if not protocol_id or not directive or not faction_dir:
         return "Protocol"
     protocols = load_round_choice_abilities(faction_dir)
