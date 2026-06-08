@@ -112,3 +112,4 @@ find .venv -name "*.js" | xargs grep -l "<Komponentenname>" | head -3
 | **No Laziness** | Find root causes. No temporary fixes. Senior developer standards. |
 | **Minimal Impact** | Only touch what's necessary. No side effects with new bugs. |
 | **No Placeholders — Ever** | Never write `...`, `TODO`, `<value>`, or any placeholder in deployed files. |
+| **Generic src/** | Keine Fraktions-spezifische Logik in `src/` — alle Entscheidungen über Necrons, Orks etc. kommen aus den YAML-Daten. Hardcoded Fraktion-Checks in `src/` sind ein Bug. `src/`-Dateien werden regelmäßig auf versehentlich eingeschlichene Fraktions-Logik geprüft. |

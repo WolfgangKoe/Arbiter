@@ -1222,8 +1222,10 @@ def render_attack_declaration(
     if use_melee:
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
+            waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
+            waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORKS")) else 0
             total_attacks_maybe = _total_attacks_int(
-                first_melee_profiles[0].attacks, models_alive, atk_unit.attacks
+                first_melee_profiles[0].attacks, models_alive, atk_unit.attacks + waaagh_bonus
             )
             if total_attacks_maybe is not None:
                 use_atk_counter = True
@@ -1232,7 +1234,6 @@ def render_attack_declaration(
     entries: list[dict] = []  # type: ignore[type-arg]
     models_assigned = 0
     attacks_assigned = 0
-    models_lbl = "Models fighting" if use_melee else "Models shooting"
 
     for i, (def_faction, def_uid) in enumerate(tgts):
         def_unit, _ = lookup(def_faction, def_uid)
@@ -1244,51 +1245,10 @@ def render_attack_declaration(
             c_sv.metric("Sv", f"{def_unit.save}+")
             c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
 
-            # Weapon selection — multiselect allows MONSTER/VEHICLE to fire all weapons
-            if len(weapons) > 1:
-                sel_w_names: list[str] = st.multiselect(
-                    "Weapons",
-                    [w.name_en for w in weapons],
-                    default=[weapons[0].name_en],
-                    key=f"decl_ws_{atk_uid}_{def_uid}",
-                )
-                sel_weapons = [w for w in weapons if w.name_en in sel_w_names]
-            else:
-                sel_weapons = [weapons[0]]
-                st.caption(f"Weapon: **{weapons[0].name_en}**")
-
             if use_atk_counter:
-                # Attack counter — lets single-model units split their attacks between targets
-                atk_key = f"decl_a_{atk_uid}_{def_uid}"
-                if atk_key not in st.session_state:
-                    st.session_state[atk_key] = total_attacks if i == 0 else 0
-                atk_val = st.number_input(
-                    "Attacks on this target",
-                    min_value=0,
-                    max_value=total_attacks,
-                    step=1,
-                    key=atk_key,
-                )
-            else:
-                # Model counter — standard for multi-model units and shooting phase
-                models_key = f"decl_m_{atk_uid}_{def_uid}"
-                if models_key not in st.session_state:
-                    st.session_state[models_key] = models_alive if i == 0 else 0
-                atk_val = 0  # unused in non-atk-counter path
-                models_val = st.number_input(
-                    models_lbl,
-                    min_value=0,
-                    max_value=models_alive,
-                    step=1,
-                    key=models_key,
-                )
-
-            if not sel_weapons:
-                st.warning("Select at least one weapon.")
-            else:
-                # Profile selection + attack count per selected weapon
-                for weapon in sel_weapons:
-                    profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
+                # Melee: each weapon gets its own attack counter — no shared count, no multiselect
+                for weapon in weapons:
+                    profiles = [p for p in weapon.profiles if p.is_melee]
                     if not profiles:
                         profiles = weapon.profiles
                     if len(profiles) > 1:
@@ -1300,40 +1260,100 @@ def render_attack_declaration(
                         profile_idx = p_names.index(sel_p)
                     else:
                         profile_idx = 0
-                    profile = profiles[profile_idx]
-                    if use_atk_counter:
-                        displayed_count = str(int(atk_val))
-                    else:
-                        displayed_count = _compute_attacks(
-                            profile.attacks, int(models_val), atk_unit.attacks
-                        )
+                    atk_key = f"decl_a_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    if atk_key not in st.session_state:
+                        is_first = i == 0 and weapon == weapons[0]
+                        st.session_state[atk_key] = total_attacks if is_first else 0
+                    atk_count = st.number_input(
+                        f"{weapon.name_en} — Attacks",
+                        min_value=0,
+                        max_value=total_attacks,
+                        step=1,
+                        key=atk_key,
+                    )
                     st.markdown(
                         f"**{weapon.name_en}** → "
                         f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                        f"{displayed_count}</span> Attacks",
+                        f"{int(atk_count)}</span> Attacks",
                         unsafe_allow_html=True,
                     )
-                    if (
-                        not use_melee
-                        and profile.weapon_type.startswith("Rapid Fire")
-                        and profile.range_inches > 0
-                    ):
-                        half = profile.range_inches // 2
-                        st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
-                    entry: dict = {  # type: ignore[type-arg]
-                        "def_faction": def_faction,
-                        "def_uid": def_uid,
-                        "weapon_name": weapon.name_en,
-                        "profile_idx": profile_idx,
-                        "models_count": models_alive if use_atk_counter else int(models_val),
-                    }
-                    if use_atk_counter:
-                        entry["atk_override"] = int(atk_val)
-                    entries.append(entry)
-
-                if use_atk_counter:
-                    attacks_assigned += int(atk_val)
+                    entries.append(
+                        {
+                            "def_faction": def_faction,
+                            "def_uid": def_uid,
+                            "weapon_name": weapon.name_en,
+                            "profile_idx": profile_idx,
+                            "models_count": models_alive,
+                            "atk_override": int(atk_count),
+                        }
+                    )
+                    attacks_assigned += int(atk_count)
+            else:
+                # Shooting: multiselect weapons + model counter (unchanged)
+                if len(weapons) > 1:
+                    sel_w_names: list[str] = st.multiselect(
+                        "Weapons",
+                        [w.name_en for w in weapons],
+                        default=[weapons[0].name_en],
+                        key=f"decl_ws_{atk_uid}_{def_uid}",
+                    )
+                    sel_weapons = [w for w in weapons if w.name_en in sel_w_names]
                 else:
+                    sel_weapons = [weapons[0]]
+                    st.caption(f"Weapon: **{weapons[0].name_en}**")
+
+                models_key = f"decl_m_{atk_uid}_{def_uid}"
+                if models_key not in st.session_state:
+                    st.session_state[models_key] = models_alive if i == 0 else 0
+                models_val = st.number_input(
+                    "Models shooting",
+                    min_value=0,
+                    max_value=models_alive,
+                    step=1,
+                    key=models_key,
+                )
+
+                if not sel_weapons:
+                    st.warning("Select at least one weapon.")
+                else:
+                    for weapon in sel_weapons:
+                        profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
+                        if not profiles:
+                            profiles = weapon.profiles
+                        if len(profiles) > 1:
+                            p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+                            p_key = f"decl_p_{atk_uid}_{def_uid}_{weapon.name_en}"
+                            sel_p = st.radio(
+                                f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
+                            )
+                            profile_idx = p_names.index(sel_p)
+                        else:
+                            profile_idx = 0
+                        profile = profiles[profile_idx]
+                        displayed_count = _compute_attacks(
+                            profile.attacks, int(models_val), atk_unit.attacks
+                        )
+                        st.markdown(
+                            f"**{weapon.name_en}** → "
+                            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
+                            f"{displayed_count}</span> Attacks",
+                            unsafe_allow_html=True,
+                        )
+                        if (
+                            profile.weapon_type.startswith("Rapid Fire")
+                            and profile.range_inches > 0
+                        ):
+                            half = profile.range_inches // 2
+                            st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
+                        entries.append(
+                            {
+                                "def_faction": def_faction,
+                                "def_uid": def_uid,
+                                "weapon_name": weapon.name_en,
+                                "profile_idx": profile_idx,
+                                "models_count": int(models_val),
+                            }
+                        )
                     models_assigned += int(models_val)
 
     if use_atk_counter:

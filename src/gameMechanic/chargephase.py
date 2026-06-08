@@ -81,8 +81,17 @@ def _active_charge(
     """Render charge action for the active player's selected unit."""
     flags = unit_state.get("turn_flags", {})
     if flags.get("advanced"):
-        st.warning("Advanced this turn — cannot charge.")
-        return
+        waaagh = st.session_state.get("waaagh_state", {}).get(faction)
+        waaagh_advance_charge = (
+            waaagh
+            and waaagh.get("stage") == 1
+            and unit.has_keyword("ORKS")
+            and (unit.has_keyword("CORE") or unit.has_keyword("CHARACTER"))
+        )
+        if not waaagh_advance_charge:
+            st.warning("Advanced this turn — cannot charge.")
+            return
+        st.caption("WAAAGH! Stage 1 — Advance & Charge (ORKS CORE/CHARACTER).")
     if flags.get("retreated"):
         st.warning("Retreated this turn — cannot charge.")
         return
