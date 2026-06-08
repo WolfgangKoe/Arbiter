@@ -256,11 +256,12 @@ def init_state(
     st.session_state.used_stratagem_ids: set[str] = set()
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
-    st.session_state.active_directive: str | None = None
-    st.session_state.extra_directive: str | None = None
+    # Protocol state is keyed per faction_dir (set on demand in armyCard)
     st.session_state.cmd_awaiting_ability_id: str | None = None
     st.session_state.cmd_awaiting_required_kw: list = []
     st.session_state.res_orb_target_uid = None
+    st.session_state.wargear_used: dict[str, bool] = {}
+    st.session_state.wargear_awaiting_bearer_uid: str | None = None
 
     # Unit lists for stat/name lookups (indexed by player slot, not faction)
     st.session_state.p1_units_list = [u for u, _ in p1_matched]
@@ -289,8 +290,7 @@ def init_state(
     st.session_state.secondaries = secondaries
     st.session_state.secondary_vp = secondary_vp
 
-    st.session_state.active_protocol_id = None
-    st.session_state.used_protocol_ids = []
+    # Protocol per-faction keys are not pre-initialized; armyCard sets them on demand
     st.session_state.waaagh_state: dict = (
         {}
     )  # {player_name: {"stage": 1|2, "round_activated": int}}
@@ -371,9 +371,12 @@ def _reset_turn_state() -> None:
             state["movement_choice"] = "stationary"
             state["movement_chosen"] = False
             state["active_buffs"] = []
-    st.session_state.active_protocol_id = None
-    st.session_state.active_directive = None
-    st.session_state.extra_directive = None
+    for slot in ("p1_faction_dir", "p2_faction_dir"):
+        fdir = st.session_state.get(slot)
+        if fdir:
+            st.session_state[f"protocol_active_{fdir}"] = None
+            st.session_state[f"protocol_directive_{fdir}"] = None
+            st.session_state[f"protocol_extra_directive_{fdir}"] = None
     # WAAAGH! Stage 1 → Stage 2 transition: auto-upgrade when a new round begins
     waaagh = st.session_state.get("waaagh_state", {})
     for player, ws in waaagh.items():

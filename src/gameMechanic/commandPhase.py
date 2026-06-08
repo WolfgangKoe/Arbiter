@@ -20,6 +20,8 @@ from uiLayout._common import (
     wound_adjustment_buttons,
 )
 
+_RES_ORB_ID = "wh40k_9e.necrons.wargear.resurrection_orb"
+
 
 def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
     return get_triggered_abilities(state, "command", "phase_start")
@@ -124,11 +126,12 @@ def _render_resurrection_orb(
     state: dict,  # type: ignore[type-arg]
     units_state: dict,  # type: ignore[type-arg]
     unit_by_id: dict,  # type: ignore[type-arg]
+    bearer_uid: str = "",
 ) -> None:
     st.divider()
     st.markdown("**Resurrection Orb**")
 
-    if state.get("resurrection_orb_used", False):
+    if st.session_state.wargear_used.get(_RES_ORB_ID, False):
         st.caption("Already used this battle.")
         return
 
@@ -146,7 +149,7 @@ def _render_resurrection_orb(
             use_container_width=True,
         ):
             name = target_unit.name_en if target_unit else res_orb_target
-            state["resurrection_orb_used"] = True
+            st.session_state.wargear_used[_RES_ORB_ID] = True
             log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
             st.session_state.res_orb_target_uid = None
             st.rerun()
@@ -154,6 +157,7 @@ def _render_resurrection_orb(
         st.info("Select a target unit from your army list.")
         if st.button("Cancel", key="res_orb_cancel", use_container_width=True):
             st.session_state.res_orb_awaiting_target = False
+            st.session_state.wargear_awaiting_bearer_uid = None
             st.rerun()
     else:
         if st.button(
@@ -163,6 +167,7 @@ def _render_resurrection_orb(
             use_container_width=True,
         ):
             st.session_state.res_orb_awaiting_target = True
+            st.session_state.wargear_awaiting_bearer_uid = bearer_uid
             st.session_state.cmd_awaiting_ability_id = None
             st.rerun()
 
@@ -189,8 +194,8 @@ def _render_unit_command_abilities(
             _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
 
     unit = unit_by_id.get(unit_id)
-    if unit and "wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids:
-        _render_resurrection_orb(faction, state, units_state, unit_by_id)
+    if unit and _RES_ORB_ID in unit.wargear_ids:
+        _render_resurrection_orb(faction, state, units_state, unit_by_id, selected_state_key)
 
 
 # ---------------------------------------------------------------------------

@@ -245,7 +245,7 @@ def render_unit_card(
                     st.markdown(f"**{unit.name_en}**")
 
             elif res_orb_awaiting:
-                if "wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids:
+                if uid == st.session_state.get("wargear_awaiting_bearer_uid"):
                     st.markdown(f"**{unit.name_en}**")
                 else:
                     if st.button(
@@ -256,6 +256,7 @@ def render_unit_card(
                     ):
                         st.session_state.res_orb_target_uid = uid
                         st.session_state.res_orb_awaiting_target = False
+                        st.session_state.wargear_awaiting_bearer_uid = None
                         st.rerun()
 
             else:
