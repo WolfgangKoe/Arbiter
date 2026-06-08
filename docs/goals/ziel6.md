@@ -152,7 +152,7 @@ VERWUNDUNG  S vs T          [Apply-Button]
 
 ### Bekannte Bugs (mit 6d-v2 zu beheben)
 
-- [ ] **Pistol in Melee**: `can_shoot()` in `shootingPhase.py` — Einheiten im Nahkampf dürfen nur Pistolen abfeuern; alle anderen Waffen müssen ausgeblendet werden. Aktuell werden alle geblockt.
+- [x] **Pistol in Melee**: `can_shoot()` in `shootingPhase.py` — Einheiten im Nahkampf dürfen nur Pistolen abfeuern; alle anderen Waffen müssen ausgeblendet werden. ✅ (2026-06-05)
 
 ### Scenario-Mockups (Testhilfe, unabhängig implementierbar)
 
@@ -251,8 +251,8 @@ Invulnerable Saves sind von Cover nicht betroffen.
 - [x] `uiLayout/_common.py`: RP-Block nach Apply (nur Necron-Fraktion + Verluste > 0)
 - [x] `uiLayout/_common.py`: Tab-Lock nach Apply + Reset-Button
 - [x] `gameMechanic/combat.py`: `apply_damage_attacks(models_lost, wounds_on_front, mortal_wounds, wounds_per_model)` — reine HP-Berechnung
-- [ ] Weapon-Abilities als Badges im Hit-Block: Tesla (`extra_hits` bei unmod. 6), Dakka, Power Klaw (−1 hit), Auto-Hit
-- [ ] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite → in 6d-v3 integriert
+- [x] Weapon-Abilities als Badges im Hit-Block: Tesla, Dakka, Power Klaw, Auto-Hit ✅ (2026-06-05, in 6d-v2; Würfel-UI in 6d-v3)
+- [x] Rapid Fire Info-Badge mit Reichweite + berechneter Halbreichweite ✅ (2026-06-05, in 6d-v3)
 - [ ] Shooting/Fight Phase Handler: `render_attack_form()` durch neue Funktion ersetzen
 - [ ] Tests für neuen Damage-Block + RP-Würfellogik
 
@@ -536,7 +536,7 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 ### Necron — Command Phase Fixes
 
 - [ ] Living Metal: einmalig pro Phase
-- [ ] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu)
+- [x] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu) ✅ (2026-06-05, 6e Bug 2)
 - [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden
 - [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
 - [ ] Anzeigereihenfolge: Regelkasten immer ganz oben (alle Phasen prüfen)
@@ -544,9 +544,9 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 ### WAAAGH! + Sonstiges
 
 - [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten
-- [ ] Ork-Regeln prüfen: welche Einheiten ausgenommen? → unitCard-Logik
-- [ ] Resurrection Orb: Regel lesen → nur KERN-Einheiten? → Implementierung anpassen
-- [ ] Skarabäen: 6=auto-wound → YAML prüfen, ggf. Code ergänzen
+- [x] Ork-Regeln prüfen: welche Einheiten ausgenommen? → keine Ausnahmen (GRETCHIN-Ausnahme gilt nur für Waaagh! Energy-Zählung) ✅ (2026-06-06)
+- [x] Resurrection Orb: Regel lesen → keine KERN-Einschränkung; Implementierung war korrekt; jetzt via `wargear_ids` ✅ (2026-06-06/07)
+- [x] Skarabäen: 6=auto-wound → bereits als `abilities`-Text in `weapons.yaml`; kein Code-Feature nötig ✅ (2026-06-06)
 - [ ] Gretchin Moralphase: Cowardly (−1 Attrition wenn kein RUNTHERD in 6") implementieren
 
 ---
@@ -957,19 +957,16 @@ Neues optionales Feld `persistent_effects:` neben dem bestehenden `effect:`-Feld
 
 ### Betroffene Dateien
 
-- [ ] `gameObjects/unit.py` — `wargear_ids: list[str]` Feld hinzufügen
-- [ ] `gameObjects/loader.py`:
-  - `load_wargear_catalog(faction_dir)` — neue Hilfsfunktion (wargear.yaml → dict by ID)
-  - `_apply_persistent_effect(unit, effect_dict)` — wendet einen persistenten Effekt auf Unit an
-  - `_apply_wargear()` — erweitern: `wargear_ids` tracken + `persistent_effects` anwenden
-- [ ] `data/wh40k_9e/necrons/wargear.yaml` — `persistent_effects:` für canoptek_cloak, dispersion_shield, shieldvanes, shadowloom
-- [ ] `data/wh40k_9e/orks/wargear.yaml` — `persistent_effects:` für cybork_body, kustom_job_souped_up_driveshaft, kustom_job_extra_armour_platez
-- [ ] `uiLayout/unitCard.py` — wargear-granted Keywords in Keyword-Zeile anzeigen
-- [ ] Tests — neue Tests für persistent_effects loading + stat changes
+- [x] `gameObjects/unit.py` — `wargear_ids: list[str]` Feld hinzufügen ✅ (2026-06-07)
+- [x] `gameObjects/loader.py`: `load_wargear_catalog()`, `_apply_persistent_effect()`, `_apply_wargear()` erweitert ✅ (2026-06-07)
+- [x] `data/wh40k_9e/necrons/wargear.yaml` — `persistent_effects:` für canoptek_cloak, dispersion_shield, shieldvanes, shadowloom ✅ (2026-06-07)
+- [x] `data/wh40k_9e/orks/wargear.yaml` — `persistent_effects:` für cybork_body, kustom_job_souped_up_driveshaft, kustom_job_extra_armour_platez ✅ (2026-06-07)
+- [x] `uiLayout/unitCard.py` — wargear-granted Keywords in Keyword-Zeile anzeigen ✅ (2026-06-07)
+- [x] Tests — 14 neue Tests ✅ (2026-06-07)
 
 ### Hinweis: `resurrection_orb` bereits funktional
 
-Die Resurrection-Orb-UI existiert und ist nutzbar (`commandPhase.py` Z. 118–163). Sie ist jedoch auf `unit.has_keyword("OVERLORD")` hardcoded, nicht auf den Wargear-Eintrag im Roster. Migration nach 6k: Prüfung auf `"resurrection_orb" in unit.wargear_ids` statt OVERLORD-Keyword-Check.
+Die Resurrection-Orb-UI ist funktional und nutzt seit 6k `"resurrection_orb" in unit.wargear_ids` statt OVERLORD-Keyword-Check. ✅ (2026-06-07)
 
 ### Tasks
 
@@ -979,6 +976,49 @@ Die Resurrection-Orb-UI existiert und ist nutzbar (`commandPhase.py` Z. 118–16
 - [x] unitCard: granted Keywords anzeigen (blau markiert) ✅ (2026-06-07)
 - [x] resurrection_orb: Wargear-ID-Check statt OVERLORD-Keyword ✅ (2026-06-07)
 - [x] Tests (14 neue Tests) ✅ (2026-06-07)
+
+---
+
+## 6l — Relic-Effekt-Interpreter (geplant)
+
+**Ziel:** Relics mit Conditions und Effekten werden maschinenlesbar — analog zu 6k (Wargear). Aktuell werden `ability_en`-Texte nur angezeigt, aber nie ausgewertet. Trigger (z.B. „At the start of your Command phase") und Effekte (z.B. „roll D6 on 4+: gain 1 CP") existieren nur als Freitext.
+
+**Betrifft alle Fraktionen** — Necrons und Orks je ~10 Relics, künftige Fraktionen ebenso.
+
+**Beispiel (Orks):**
+
+```yaml
+# Aktuell — nur Freitext:
+- id: wh40k_9e.orks.relic.morgogs_finkin_cap
+  ability_en: >
+    At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
+    on a 4+, you gain 1 Command point.
+
+# Ziel — maschinenlesbar:
+- id: wh40k_9e.orks.relic.morgogs_finkin_cap
+  ability_en: >
+    At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
+    on a 4+, you gain 1 Command point.
+  trigger:
+    timing: phase_start
+    phase: command
+    player: active
+  effect:
+    type: gain_cp
+    roll: D6
+    threshold: 4
+    amount: 1
+    condition: bearer_on_battlefield
+```
+
+**Analog zu 6k:** Relic-Effekte können in drei Klassen eingeteilt werden:
+1. **Persistent** — Stat-Änderungen, Keyword-Grants, Invuln-Saves (analog `persistent_effects` in Wargear)
+2. **Triggered** — CP-Gain, Heilung, FNP-Modifikation bei bestimmten Events
+3. **Weapon-Relic** — hat `profiles:` → bereits über Waffen-Renderer abgedeckt (display-only)
+
+**Vorbedingung:** 6k vollständig ✅ — Schema und Interpreter bereits bekannt.
+
+**Noch nicht spezifiziert** — vor Umsetzung: YAML-Schema für alle Relic-Effekt-Typen definieren, dann Necrons + Orks nachziehen.
 
 ---
 
