@@ -1215,15 +1215,15 @@ def render_attack_declaration(
     if in_melee:
         st.info("Engaged in melee — Pistol weapons only.")
 
-    # For single-model units in fight phase, distribute by attacks (not models).
-    # A model with 4 attacks can split 2+2 between two targets — impossible with model counter (max=1).
+    # In fight phase, always distribute by attacks (not models).
+    # Attacks can be freely split between targets regardless of model count.
     use_atk_counter = False
     total_attacks: int = 0
-    if use_melee and models_alive == 1:
+    if use_melee:
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
             total_attacks_maybe = _total_attacks_int(
-                first_melee_profiles[0].attacks, 1, atk_unit.attacks
+                first_melee_profiles[0].attacks, models_alive, atk_unit.attacks
             )
             if total_attacks_maybe is not None:
                 use_atk_counter = True
@@ -1325,7 +1325,7 @@ def render_attack_declaration(
                         "def_uid": def_uid,
                         "weapon_name": weapon.name_en,
                         "profile_idx": profile_idx,
-                        "models_count": 1 if use_atk_counter else int(models_val),
+                        "models_count": models_alive if use_atk_counter else int(models_val),
                     }
                     if use_atk_counter:
                         entry["atk_override"] = int(atk_val)
