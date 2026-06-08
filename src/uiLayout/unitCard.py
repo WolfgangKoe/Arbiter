@@ -35,6 +35,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "RESERVE": ("#4090b0", "#101820"),
     "DESTROYED": ("#c04040", "#1e1010"),
     "HEROIC INT.": ("#ff9060", "#2a1208"),
+    "WAAAGH!": ("#b8e040", "#1a2a00"),
 }
 
 _BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
@@ -298,6 +299,9 @@ def render_unit_card(
         # ── State badges + Keywords ────────────────────────────────
         if phase_key != "setup":
             badges = _state_badges_html(state)
+            waaagh = st.session_state.get("waaagh_state", {}).get(faction, {})
+            if waaagh.get("stage", 0) >= 1:
+                badges += _badge("WAAAGH!")
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)
