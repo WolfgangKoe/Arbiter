@@ -88,9 +88,12 @@ def _render_triggered_abilities(
             st.caption(f"{ability.name_en} — no units eligible")
             continue
 
+        already_applied = st.session_state.get(f"applied_triggered_{ability.id}", False)
         n = len(eligible)
         st.caption(f"{ability.name_en} — {n} unit{'s' if n > 1 else ''} eligible")
-        if is_active and st.button(
+        if already_applied:
+            st.caption("Already applied this phase.")
+        elif is_active and st.button(
             f"Apply {ability.name_en}",
             key=f"army_triggered_{ability.id}",
             use_container_width=True,
@@ -106,6 +109,7 @@ def _render_triggered_abilities(
                 faction,
                 f"{ability.name_en}: {applied} unit(s) healed",
             )
+            st.session_state[f"applied_triggered_{ability.id}"] = True
             st.rerun()
 
 

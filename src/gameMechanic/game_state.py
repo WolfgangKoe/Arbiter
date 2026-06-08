@@ -338,6 +338,9 @@ def reset_game() -> None:
 
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
+    for k in list(st.session_state.keys()):
+        if k.startswith("applied_triggered_"):
+            del st.session_state[k]
     st.session_state.used_stratagem_ids = set()
     st.session_state.fight_current_player = None
     st.session_state.attack_declaration = {"active": False, "entries": []}
