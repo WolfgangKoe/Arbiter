@@ -693,25 +693,102 @@ Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh
 - [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply
 - [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die
 
-### ⚠️ Hardcoded Fraktionslogik — vollständiges Inventar (Session 2026-06-04)
+### ⚠️ Hardcoded Fraktionslogik — Inventar (Stand 2026-06-08)
 
-Das folgende muss herausgelöst werden — keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein:
+Keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein.
 
-| Datei | Zeile | Problem | Lösung |
+| Datei | Problem | Status |
+|---|---|---|
+| `commandPhase.py` | `_OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"` | ✅ entfernt (6k) |
+| `unitCard.py` | `_overlord_id` (doppelt) | ✅ entfernt (6k) |
+| `game_state.py` | `is_necron_faction()` | ✅ entfernt (6e) |
+| `game_state.py` | `active_protocol_id = "eternal_guardian"` | ✅ entfernt (6e Bug 1) |
+| `faction_abilities.yaml` | `auto_round_1: true/false` | ✅ entfernt (6e Bug 1) |
+| `psychicPhase.py` | `"gloom_prism" in u.rules` in `can_deny()` | ✅ generisch via `load_deny_wargear_names` (6j) |
+| `unitCard.py:248` | `"wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids` | 🔴 offen → **Fix A** |
+| `game_state.py` | `resurrection_orb_used = False` in globalem `init_state` | 🟡 offen → **Fix D** |
+| `armyCard.py:_render_waaagh_ui` | `"WARBOSS"` Keyword + `"waaagh" in a.id` + Effekttexte hardcoded | 🟡 offen → **Fix B** |
+| `armyCard.py:_render_protocol_ui` | `active_protocol_id` / `active_directive` nicht per-Fraktion | 🟡 offen → **Fix C** |
+| `_common.py` | `waaagh_state` im Attacken-Resolver (Stärke/Attacken-Modifier) | 🟡 offen → Teil 6e |
+
+---
+
+### 6h — Generifizierungs-Plan (Audit 2026-06-08)
+
+#### Fix A — unitCard: Resurrection Orb Bearer-Ausschluss ohne Wargear-ID (🔴 einfach)
+
+**Problem:** `unitCard.py:248` prüft eine konkrete Necron-Wargear-ID.
+
+**Lösung:**
+- `commandPhase.py`: beim Setzen von `res_orb_awaiting_target = True` zusätzlich `wargear_awaiting_bearer_uid = uid` setzen; beim Abbruch/Bestätigung wieder löschen
+- `unitCard.py:248`: `if uid == st.session_state.get("wargear_awaiting_bearer_uid")` statt Wargear-ID-String
+- Kein Datenmodell-Änderung nötig — der Bearer ist ohnehin bekannt wenn die Aktion ausgelöst wird
+
+**Dateien:** `commandPhase.py`, `unitCard.py`
+
+---
+
+#### Fix B — armyCard: WAAAGH!-UI vollständig generisch (🟡 mittel)
+
+**Problem:** `_render_waaagh_ui` hat drei hardcoded Stellen:
+
+1. **Ability-Suche per ID-String:** `"waaagh" in a.id.lower()` → Ersetzen durch generische Bedingung: alle `activated` Command-Phase-Abilities, deren `conditions[0].once_per_battle == True`. Das YAML hat das bereits als `once_per_battle: true` in den Conditions.
+
+2. **WARBOSS-Keyword:** `has_warboss = any(u.has_keyword("WARBOSS") ...)` → Ersetzen durch `any(check_conditions(ability, u, {}) for u in units)` — die Ability-Conditions enthalten bereits `has_keywords: [WARBOSS]`.
+
+3. **Effekttexte:** Stage-1- und Stage-2-Texte hardcoded → YAML-Feld `active_text` in `faction_abilities.yaml` ergänzen; `Ability`-Dataclass um optionales `active_text: str | None` erweitern.
+
+```yaml
+# faction_abilities.yaml (Orks) — Ergänzung:
+- id: wh40k_9e.orks.faction.waaagh_stage1
+  active_text: "+1 Strength · +1 Attacks · 5+ invuln · Advance & Charge"
+  ...
+- id: wh40k_9e.orks.faction.waaagh_stage2
+  active_text: "+1 Strength · +1 Attacks · 6+ invuln"
+  ...
+```
+
+**Dateien:** `gameObjects/ability.py`, `gameObjects/loader.py`, `data/wh40k_9e/orks/faction_abilities.yaml`, `armyCard.py`
+
+---
+
+#### Fix C — armyCard/ability_engine: Protokoll-Session-Keys per Fraktion (🟡 aufwändig)
+
+**Problem:** `active_protocol_id`, `active_directive`, `extra_directive` sind globale Session-State-Keys. Sobald zwei Fraktionen mit Protokollen spielen (Necrons vs. Custodes Ka'tahs), überschreiben sie sich gegenseitig.
+
+**Lösung:** Keys auf `faction_dir` scopen:
+- `active_protocol_id` → `protocol_active_{faction_dir}`
+- `active_directive` → `protocol_directive_{faction_dir}`
+- `extra_directive` → `protocol_extra_directive_{faction_dir}`
+
+`get_active_protocol_modifier(faction_dir, ...)` liest bereits `faction_dir` — nur die Key-Namen ändern.
+
+**Dateien:** `armyCard.py` (_render_protocol_ui, _render_extra_protocol, _render_directive_buttons), `gameMechanic/ability_engine.py`, `gameMechanic/game_state.py` (init + reset), ggf. `commandPhase.py`
+
+**Voraussetzung für:** Custodes Ka'tahs, AdMech Canticles (6h Kategorie 1)
+
+---
+
+#### Fix D — game_state: `resurrection_orb_used` aus globalem Init herauslösen (🟡 einfach)
+
+**Problem:** `game_state.py init_state()` initialisiert `resurrection_orb_used = False` — Necron-Wargear-State im globalen Init.
+
+**Lösung:** Ersetzen durch generischen `wargear_used: dict[str, bool] = {}`. `commandPhase.py` schreibt `state["wargear_used"]["wh40k_9e.necrons.wargear.resurrection_orb"] = True` — der Key-Name ist dann in commandPhase, nicht in game_state.
+
+**Dateien:** `gameMechanic/game_state.py`, `gameMechanic/commandPhase.py`
+
+---
+
+#### Reihenfolge
+
+| Priorität | Fix | Aufwand | Abhängigkeit |
 |---|---|---|---|
-| `commandPhase.py` | 19 | `_OVERLORD_ID = "wh40k_9e.necrons.unit.overlord"` | Resurrection Orb über `wargear.yaml` + generisches Wargear-Aktionssystem |
-| `commandPhase.py` | 190 | `if unit_id == _OVERLORD_ID` | entfällt mit generischem Wargear |
-| `unitCard.py` | 233 | `_overlord_id = "wh40k_9e.necrons.unit.overlord"` (doppelt) | entfällt |
-| `game_state.py` | 128 | `is_necron_faction()` vergleicht direkt mit `"necrons"` | Funktion löschen, generisch ersetzen |
-| `game_state.py` | 251 | `resurrection_orb_used = False` in `init_state` | Necron-Wargear-State gehört nicht in globalen Init |
-| `game_state.py` | 288 | `active_protocol_id = "eternal_guardian"` | entfällt mit Bug-1-Fix |
-| `_common.py` | 796 | `waaagh_state` im Attacken-Resolver hardcoded | Ork-Modifier soll über `active_modifiers` fließen |
-| `armyCard.py` | 229 | `_render_waaagh_ui()` — Ork-spezifischer Block | generisch über Ability-Typ |
-| `armyCard.py` | 253 | `if load_round_choice_abilities(faction_dir): return` blockiert Waaagh | generische Prüfung |
-| `faction_abilities.yaml` | — | `auto_round_1: true/false` | Flag komplett entfernen |
-| `psychicPhase.py` | 58 | `"gloom_prism" in u.rules` in `can_deny()` | generisch über Wargear-Fähigkeit (`deny: true` in wargear.yaml) |
+| 1 | **A** — unitCard Orb-Bearer | klein | — |
+| 2 | **D** — wargear_used generic | klein | — |
+| 3 | **B** — WAAAGH! generisch | mittel | — |
+| 4 | **C** — Protokoll-Keys per Fraktion | groß | — |
 
-**Kernproblem:** Resurrection Orb ist Wargear, aber nicht im Wargear-System. Waaagh ist eine Faction-Ability, aber Render-Logik steckt direkt in `armyCard.py` + `_common.py` statt über `ability_engine` zu laufen.
+A+D können in einem Commit, B+C jeweils einzeln.
 
 ### Kategorie 2 — Einmalig-Deklariert (wie WAAAGH!)
 

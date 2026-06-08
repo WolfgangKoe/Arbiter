@@ -38,9 +38,10 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Nächste Schritte (priorisiert)
 
-1. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics durchgehen, dann Schema vorschlagen, Freigabe einholen, YAML + Interpreter umsetzen
-2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler (Details: §Offene Tasks)
-3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus-Anzeige; Regelkasten-Reihenfolge
+1. **Generifizierung armyCard/unitCard** — Hardcoded Ork/Necron-Logik herauslösen (Reihenfolge A→D→B→C, Details: `docs/goals/ziel6.md §6h Generifizierungs-Plan`)
+2. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics durchgehen, dann Schema vorschlagen, Freigabe einholen, YAML + Interpreter umsetzen
+3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler (Details: §Offene Tasks)
+4. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus-Anzeige; Regelkasten-Reihenfolge
 
 ---
 
