@@ -85,7 +85,7 @@ def _active_charge(
         waaagh_advance_charge = (
             waaagh
             and waaagh.get("stage") == 1
-            and unit.has_keyword("ORKS")
+            and unit.has_keyword("ORK")
             and (unit.has_keyword("CORE") or unit.has_keyword("CHARACTER"))
         )
         if not waaagh_advance_charge:

@@ -1223,7 +1223,7 @@ def render_attack_declaration(
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
             waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
-            waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORKS")) else 0
+            waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
             total_attacks_maybe = _total_attacks_int(
                 first_melee_profiles[0].attacks, models_alive, atk_unit.attacks + waaagh_bonus
             )
