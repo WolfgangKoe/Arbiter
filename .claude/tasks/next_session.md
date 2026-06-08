@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 28, 2026-06-08)
+## Aktueller Stand (nach Session 29, 2026-06-08)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -32,22 +32,46 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - 6k: `persistent_effects` Interpreter; `wargear_ids`/`wargear_keywords` auf Unit; Resurrection Orb via Wargear-ID
 - 6j: `weapon_abilities.yaml` + `wargear_abilities.yaml` gelöscht; alle YAML-Header vereinheitlicht
 - Session 27: Fix A+D (wargear_used generisch, Bearer via session key); Fix B (WAAAGH!-UI generisch); Fix C (Protokoll-Keys auf faction_dir-Scope)
-- **Session 28 neu:** CLAUDE.md Generic-src/-Regel ✅; WAAAGH! Advance+Charge (ORKS CORE/CHARACTER, Stage 1) ✅; WAAAGH! +1 Attacks in Melee-Deklaration (Stage 1+2) ✅; Nahkampf-Deklaration: per-weapon atk_counter, kein Multiselect im Melee-Pfad ✅
+- Session 28: CLAUDE.md Generic-src/-Regel ✅; WAAAGH! Advance+Charge (ORKS CORE/CHARACTER, Stage 1) ✅; WAAAGH! +1 Attacks in Melee-Deklaration (Stage 1+2) ✅; Nahkampf-Deklaration: per-weapon atk_counter, kein Multiselect im Melee-Pfad ✅
+- **Session 29 (diese Session): Ork Waffen-Audit** — vollständiger Abgleich aller Einheiten gegen Wahapedia; drei Kategorien von Befunden dokumentiert in `docs/goals/ziel6.md`; kein Code geändert
 - 485 Tests grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics in `docs/work/` lesen, dann Schema vorschlagen, Freigabe einholen
-2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
-3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
-4. **6h Fix B** — WAAAGH!-UI vollständig generisch (armyCard.py); **Fix C** — Protokoll-Keys per Fraktion (bereits committed, ggf. Nacharbeit)
-5. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
+1. **extra_attacks Klasse 3b** — Waffen mit `max_attacks`-Cap (attack_squig, squighog jaws, grabbin' klaw etc.) berechnen immer N Attacken statt `models × unit.attacks`. Kleiner Fix in `_compute_attacks` + `_total_attacks_int`, YAML-Ergänzung `max_attacks`. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 3.
+2. **extra_attacks Klasse 3a** — Choppa und ähnliche (+1 additional attack, kein Cap) berechnen `models × (unit.attacks + 1)` statt `models × unit.attacks`. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 3.
+3. **model_restriction** — Boss-Nob-Waffen und 1-per-N-Waffen in `units.yaml` kennzeichnen; Deklarations-UI filtert/kennzeichnet sie. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 2.
+4. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics in `docs/work/` lesen, dann Schema vorschlagen, Freigabe einholen
+5. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
+6. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
+7. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
 ---
 
 ## Offene Tasks
+
+### 🔴 HOCH — extra_attacks-Effekt implementieren (Audit Session 29)
+
+Waffen mit `effect.type: extra_attacks` werden von `_compute_attacks()` und `_total_attacks_int()` ignoriert. Zwei Klassen:
+
+**Klasse 3b — fester Cap** (`max_attacks: N`, unabhängig von `unit.attacks`):
+- [ ] `data/wh40k_9e/orks/weapons.yaml`: `max_attacks`-Feld für attack_squig (2), squighog_jaws (2), squigosaur's_jaws (3), smasha_squig_jaws (2), grabbin_klaw (1), wreckin_ball (1), butcha_boyz (4), savage_horns_and_hooves (4) ergänzen
+- [ ] `gameObjects/weapon.py`: `WeaponProfile.max_attacks: int | None = None`
+- [ ] `gameObjects/loader.py`: `max_attacks` parsen
+- [ ] `uiLayout/_common.py`: `_compute_attacks()` + `_total_attacks_int()` — wenn `max_attacks` gesetzt: `models × max_attacks`; sonst wenn `extra_attacks.amount`: `models × (unit.attacks + amount)`
+
+**Klasse 3a — additiv** (`unit.attacks + N`):
+- Waffen: choppa, beastchoppa, 'urty syringe, grabba stikk, dread klaw, grot_prod
+- Wird durch obige Änderung automatisch mit abgedeckt (kein `max_attacks` → `+amount`)
+
+### 🔴 HOCH — model_restriction in YAML + UI-Filter (Audit Session 29)
+
+- [ ] `data/wh40k_9e/orks/units.yaml`: `model_restriction: boss_nob_only` für betroffene Waffen in boyz, warbikers, stormboyz, kommandos; `model_restriction: "1_per_10"` / `"1_per_5"` für Spezialwaffen
+- [ ] `gameObjects/unit.py`: `WeaponRef`-Dataclass um `model_restriction: str | None = None` erweitern
+- [ ] `gameObjects/loader.py`: `model_restriction` aus `weapons[]`-Einträgen parsen
+- [ ] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Waffen kennzeichnen (Badge) oder aus Standard-Auswahl herausfiltern
 
 ### 🟡 MITTEL — GOs in gameActionArea
 
@@ -107,3 +131,6 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 - **FNP**: Gilt für alle Wunden — normale UND tödliche. Pro Wunde nur eine Ignore-Regel verwendbar.
 - **Fight Phase**: Startet mit dem **inaktiven** Spieler. CHARGED-Einheiten aller Spieler kämpfen zuerst, dann abwechselnd.
 - **Heroic Intervention**: Schritt 2 der Charge Phase (nach allen Charges). Nur CHARACTER. ≤3" Bewegung, muss näher zum nächsten Feind enden.
+- **extra_attacks — zwei Klassen:** Waffen mit „+N additional attacks" geben `unit.attacks + N` Attacken. Waffen mit „+N additional attacks AND no more than N attacks" geben immer genau N Attacken (cap), unabhängig von `unit.attacks`. Zweite Klasse: attack_squig (2), squighog_jaws (2), squigosaur's_jaws (3), grabbin_klaw (1), wreckin_ball (1), butcha_boyz (4), savage_horns_and_hooves (4).
+- **Boss-Nob-Waffen:** In Ork-Einheiten mit mehreren Modellen trägt nur der Boss Nob Spezialwaffen (power klaw, big choppa, killsaw). Bestätigt für: boyz, warbikers, stormboyz, kommandos. Nicht betroffen (alle Modelle): nobz, meganobz, squighog boyz.
+- **Stärke-Parsing:** `_parse_strength()` in `_common.py` ist korrekt — `User` → unit_strength, `+2` → unit_strength+2, `User×2` → unit_strength*2. Kein Bug hier.

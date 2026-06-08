@@ -1148,6 +1148,128 @@ Die Resurrection-Orb-UI ist funktional und nutzt seit 6k `"resurrection_orb" in 
 
 ---
 
+## Ork Waffen-Audit — Befunde (Session 29, 2026-06-08)
+
+> Vollständiger manueller Abgleich aller Ork-Einheiten gegen Wahapedia-Quelldaten.
+
+### Befund 1: Stärke-Werte — korrekt ✅
+
+`_parse_strength()` in `_common.py` verarbeitet alle Notationen korrekt: `User` → `unit_strength`, `+2` → `unit_strength + 2`, `User×2` → `unit_strength * 2`. Kein Handlungsbedarf.
+
+### Befund 2: Boss-Nob-Waffen fälschlicherweise für alle Modelle sichtbar ❌
+
+In multi-Modell-Einheiten sind Waffen, die nur der Boss Nob tragen darf, flach in `weapons[]` gelistet — ohne Einschränkung. Die App erlaubt damit jedem Modell, diese Waffen im Nahkampf zu wählen.
+
+| Einheit | Waffe | Tatsächliche Einschränkung |
+|---|---|---|
+| `boyz` | big_choppa, killsaw, power_klaw, power_stabba | Boss Nob only |
+| `boyz` | big_shoota, rokkit_launcha | 1 pro 10 Modelle |
+| `beast_snagga_boyz` | thump_gun | 1 pro 10 Modelle |
+| `kommandos` | big_choppa, power_klaw | Boss Nob only |
+| `kommandos` | big_shoota, breacha_ram, burna, kustom_shoota, rokkit_launcha, shokka_pistol | 1 pro 10 Modelle |
+| `tankbustas` | tankhammer (**Nahkampfwaffe!**), pair_of_rokkit_pistols | 1 pro 5 Modelle |
+| `warbikers` | big_choppa, power_klaw | Boss Nob only |
+| `stormboyz` | power_klaw | Boss Nob only |
+| `nobz`, `meganobz`, `flash_gitz`, `squighog_boyz` | alle | jedes Modell ✅ |
+
+**Geplante Lösung (Option A):** Optionales `model_restriction`-Feld in `weapons[]`-Einträgen der Units:
+
+```yaml
+# units.yaml — Beispiel Boyz
+weapons:
+  - ref: wh40k_9e.orks.weapon.choppa          # alle Modelle (kein Feld = keine Einschränkung)
+  - ref: wh40k_9e.orks.weapon.power_klaw
+    model_restriction: boss_nob_only
+  - ref: wh40k_9e.orks.weapon.big_shoota
+    model_restriction: "1_per_10"
+```
+
+**Betroffene Dateien:** `data/wh40k_9e/orks/units.yaml`, `gameObjects/unit.py` (WeaponRef-Dataclass), `gameObjects/loader.py` (Parsing), `uiLayout/_common.py` (Deklarations-Filter)
+
+### Befund 3: `extra_attacks`-Waffeneffekt nie ausgewertet ❌ (kritisch)
+
+`_compute_attacks()` (`_common.py:358`) ignoriert den `effect`-Block aus `weapons.yaml` vollständig. Bei `weapon_type: Melee` wird immer `models × unit.attacks` berechnet — ohne Bonus für Waffen mit `extra_attacks`-Effekt.
+
+Zwei Unterklassen:
+
+**3a — „+N additional attacks" ohne Cap** (bearer kämpft mit `unit.attacks + N`):
+
+| Waffe | Effekt | Ist | Soll (Beispiel S:4, 3 attacks) |
+|---|---|---|---|
+| choppa | +1 additional attack | 3 | 4 |
+| beastchoppa | +1 additional attack | 3 | 4 |
+| 'urty syringe | +1 additional attack | 3 | 4 |
+| grabba stikk | +1 additional attack | 3 | 4 |
+| dread klaw | +1 additional attack | 3 | 4 |
+
+**3b — „+N additional attacks, no more than N" (fester Cap)** (immer genau N Attacken, unabhängig von `unit.attacks`):
+
+| Waffe | Cap | Ist (Warboss A:5) | Soll |
+|---|---|---|---|
+| attack squig | max 2 | 5 | 2 |
+| squighog jaws | max 2 | 3 | 2 |
+| squigosaur's jaws | max 3 | 5 | 3 |
+| smasha squig jaws | max 2 | 4 | 2 |
+| grabbin' klaw | max 1 | 6 | 1 |
+| wreckin' ball | max 1 | 6 | 1 |
+| butcha boyz | max 4 | 6 | 4 |
+| savage horns and hooves | max 4 | 6 | 4 |
+
+**Geplante Lösung:** `effect`-Block in `weapons.yaml` um `max_attacks`-Feld erweitern; `_compute_attacks()` und `_total_attacks_int()` auslesen:
+
+```yaml
+# weapons.yaml — attack_squig (Klasse 3b)
+effect:
+  type: extra_attacks
+  amount: 2
+  max_attacks: 2   # neu — "no more than N" Cap
+
+# choppa (Klasse 3a)
+effect:
+  type: extra_attacks
+  amount: 1
+  # kein max_attacks → unit.attacks + 1
+```
+
+**Betroffene Dateien:** `data/wh40k_9e/orks/weapons.yaml` (max_attacks-Felder ergänzen), `gameObjects/weapon.py` (WeaponProfile-Dataclass), `gameObjects/loader.py`, `uiLayout/_common.py` (`_compute_attacks`, `_total_attacks_int`)
+
+### Befund 4: Optional-Wargear-Attachments nicht in YAML ⚠️ (display-only)
+
+Folgende Attachment-Wargear-Einträge fehlen vollständig in `wargear_options` aller Ork-Einheiten. Sie sind als `display-only` in der 6k-Komplex-Liste bereits dokumentiert (kein neuer Handlungsbedarf):
+
+| Wargear | Trägereinheit(en) | Effekt |
+|---|---|---|
+| grot oiler | Big Mek-Varianten | +D3 bei Mekaniak-Reparatur |
+| ammo runt | Nobz (1/5), Flash Gitz, Kaptin Badrukk | Re-roll 1 Treffer/Runde |
+| grot orderly | Painboy, Painboss | Verbessert Sawbonez |
+| gitfinda squig | Flash Gitz Kaptin | +1 Hit mit Snazzgun |
+| squig hound / grot-lash | Runtherd | Gretchin-Moral-Modifikator |
+| bomb squig | Kommandos (1/10), Squighog Boyz (1/3), Tankbustas (2/5) | Mortal Wounds bei Charge |
+| distraction grot | Kommandos (1/10) | −1 Hit auf Feind |
+
+### Priorisierung der Fixes
+
+| Priorität | Fix | Aufwand | Kritikalität |
+|---|---|---|---|
+| **1** | extra_attacks Klasse 3b (Cap-Waffen: feste Attackenzahl) | klein | hoch — falsche Attackanzahl |
+| **2** | extra_attacks Klasse 3a (Choppa etc.: +N) | mittel | hoch — betrifft fast alle Ork-Nahkämpfer |
+| **3** | model_restriction in YAML + Filter in UI | groß | mittel — regelwidrig, aber Spieler bemerkt es |
+| **4** | Optional-Wargear-Attachments | sehr groß | niedrig — display-only akzeptiert |
+
+### Tasks
+
+- [ ] `data/wh40k_9e/orks/weapons.yaml`: `max_attacks`-Feld für alle Klasse-3b-Waffen ergänzen
+- [ ] `gameObjects/weapon.py`: `WeaponProfile.max_attacks: int | None = None`
+- [ ] `gameObjects/loader.py`: `max_attacks` aus YAML parsen
+- [ ] `uiLayout/_common.py`: `_compute_attacks()` + `_total_attacks_int()` — Klasse 3b (max_attacks) + Klasse 3a (+N) auswerten
+- [ ] `data/wh40k_9e/orks/units.yaml`: `model_restriction`-Felder für alle Boss-Nob-Waffen und 1-per-N-Waffen
+- [ ] `gameObjects/unit.py`: `WeaponRef`-Dataclass um `model_restriction: str | None` erweitern
+- [ ] `gameObjects/loader.py`: `model_restriction` aus YAML parsen
+- [ ] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Waffen und 1-per-N-Waffen aus Standard-Auswahl filtern (oder kennzeichnen)
+- [ ] Tests für neue extra_attacks-Logik
+
+---
+
 ## Akzeptanzkriterien (Ziel 6 komplett)
 
 - [ ] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß
