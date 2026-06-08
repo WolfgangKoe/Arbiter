@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 26, 2026-06-08)
+## Aktueller Stand (nach Session 27, 2026-06-08)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -31,17 +31,19 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Heroic Intervention: Step-2-Timing, CHARACTER-Check, Badge, Feind-Zielauswahl
 - 6k: `persistent_effects` Interpreter; `wargear_ids`/`wargear_keywords` auf Unit; Resurrection Orb via Wargear-ID
 - 6j: `weapon_abilities.yaml` + `wargear_abilities.yaml` gelöscht; alle YAML-Header vereinheitlicht
-- **Session 26 neu:** Living Metal einmalig pro Phase ✅; WAAAGH!-Badge auf unitCards ✅; Attack-Splitting für Single-Modell-Einheiten in Fight Phase ✅; `"*"`-Attacken-Bug in `_compute_attacks` gefixt ✅
+- Session 26: Living Metal einmalig pro Phase; WAAAGH!-Badge auf unitCards; Attack-Splitting Single-Modell; `"*"`-Bug gefixt
+- **Session 27 neu:** Fix A+D (wargear_used generisch, Bearer via session key) ✅; Fix B (WAAAGH!-UI: once_per_battle, check_conditions, active_text) ✅; Fix C (Protokoll-Keys auf faction_dir-Scope) ✅
 - 470 Tests grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **Generifizierung armyCard/unitCard** — Hardcoded Ork/Necron-Logik herauslösen (Reihenfolge A→D→B→C, Details: `docs/goals/ziel6.md §6h Generifizierungs-Plan`)
-2. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics durchgehen, dann Schema vorschlagen, Freigabe einholen, YAML + Interpreter umsetzen
-3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler (Details: §Offene Tasks)
-4. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus-Anzeige; Regelkasten-Reihenfolge
+1. **WAAAGH! Advance+Charge** — `chargephase.py`: advanced-Block überspringen wenn WAAAGH! Stage 1 + ORKS CORE/CHARACTER (Details: §Offene Tasks)
+2. **WAAAGH! +1 Attacks** — `_common.py`: WAAAGH! +1 auf `unit.attacks` in Deklarations-Attackenberechnung addieren
+3. **Nahkampf-Deklaration regelkonform** — Jede Attacke deklariert (Waffe × Ziel); Plan zeigen + Freigabe einholen vor Implementierung (Details: `docs/goals/ziel6.md §Nahkampf-Deklaration`)
+4. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics durchgehen, dann Schema vorschlagen, Freigabe einholen
+5. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
 
 ---
 
@@ -64,6 +66,28 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ### 🟡 MITTEL — WAAAGH!
 
 - [x] WAAAGH!-Badge auf unitCards ✅ (2026-06-08)
+- [ ] **Advance & Charge:** `chargephase.py` — wenn WAAAGH! Stage 1 aktiv + Einheit hat ORKS CORE oder ORKS CHARACTER → advanced-Block überspringen; Einheit darf trotzdem chargen
+- [ ] **+1 Attacks:** In `render_attack_declaration` → `_total_attacks_int()`: WAAAGH-Modifier (+1) auf `unit.attacks` addieren bevor Gesamtattacken berechnet werden; gilt für Stage 1 und Stage 2
+
+### 🔴 HOCH — Nahkampf-Deklaration regelkonform
+
+**Problem:** Aktuelle Deklaration wählt Waffe pro Ziel (Multiselect). Bei 2 Waffen auf dasselbe Ziel zeigt die App für jede Waffe die volle Attackenzahl → Doppelzählung. Regel verlangt, dass jede Attacke (Waffe × Ziel) einzeln deklariert wird und die Summe gleich den Gesamtattacken ist.
+
+**Regel (core_rules.txt Z. 1995–2040):**
+- Vor Auflösung: Ziel(e) + Waffe(n) für ALLE Attacken deklarieren
+- Jede Attacke wählt genau eine Waffe und genau ein Ziel
+- Attacken können frei zwischen Zielen UND Waffen aufgeteilt werden
+- Auflösungsreihenfolge: erst alle Attacken gegen Ziel A, dann Ziel B; innerhalb eines Ziels erst alle Attacken mit Profil X, dann Profil Y
+
+**Lösung:** Deklarationsstruktur auf `(weapon, profile, target, attacks)` umstellen:
+- Gesamtattacken = `models_alive × unit.attacks` (+ WAAAGH! falls aktiv)
+- UI: Für jede Waffe + jeden Ziel-Kombination: Eingabe wie viele Attacken
+- Validierung: Summe aller Einträge ≤ Gesamtattacken; Warnung bei Unter-/Überzählung
+- Gilt einheitlich für Single- und Multi-Modell-Einheiten (model-counter entfällt für melee)
+
+**Betroffene Dateien:** `uiLayout/_common.py` (render_attack_declaration + Eintrags-Struktur), `gameMechanic/fightPhase.py`
+
+- [ ] Plan zeigen + Freigabe einholen bevor Implementierung beginnt
 
 ### 🟡 MITTEL — Fähigkeit + AP kombiniert (SAVE-Block)
 
@@ -93,7 +117,8 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Regelerkenntnisse (nicht-offensichtlich)
 
-- **WAAAGH!**: Keine Einheiten-Ausnahmen — alle ORKS-Modelle profitieren. GRETCHIN-Ausnahme gilt nur für "Waaagh! Energy"-Zählung, nicht für WAAAGH! selbst.
+- **WAAAGH! Stage 1:** Nur ORKS CORE und ORKS CHARACTER dürfen nach Advance chargen (nicht alle ORKS). +1 Strength und +1 Attacks gilt für ALLE ORKS-Modelle. GRETCHIN-Ausnahme gilt nur für Waaagh! Energy-Zählung.
+- **WAAAGH! Aktivierung:** Erfordert, dass der WARLORD ein WARBOSS ist (nicht nur irgendein WARBOSS auf dem Feld). Aktuell prüft die App nur ob irgendeine Einheit das WARBOSS-Keyword hat — streng genommen müsste der WARLORD-Status geprüft werden (noch nicht implementiert, pragmatische Näherung akzeptiert).
 - **Resurrection Orb**: Keine KERN-Einschränkung — gilt für alle `<DYNASTY>`-Einheiten.
 - **FNP**: Gilt für alle Wunden — normale UND tödliche. Pro Wunde nur eine Ignore-Regel verwendbar.
 - **Fight Phase**: Startet mit dem **inaktiven** Spieler. CHARGED-Einheiten aller Spieler kämpfen zuerst, dann abwechselnd.

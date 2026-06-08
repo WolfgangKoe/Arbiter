@@ -520,6 +520,51 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 - [x] `_compute_attacks`: `"*"`-Angriffswert behandelt wie `"Melee"` → korrekte Necron-Nahkampfangriffe ✅ (2026-06-08)
 - [ ] Counterattack GO einsetzbar (reaktive Unterbrechung) — Teil von 6e (GO-System)
 
+### Nahkampf-Deklaration — Waffe × Ziel × Attacken (regelkonform)
+
+> Regelgrundlage: `core_rules.txt` Z. 1995–2040
+
+**Problem (Stand 2026-06-08):** Die aktuelle Deklaration (`render_attack_declaration`) wählt eine Waffe (Multiselect) pro Ziel. Bei mehreren gewählten Waffen zeigt die App für jede Waffe die volle Attackenzahl — das ist eine Doppelzählung. Die Regel verlangt:
+
+- Vor der Auflösung: Ziel(e) + Waffe für ALLE Attacken deklarieren
+- Jede Attacke wählt genau ein Ziel UND genau eine Waffe
+- Attacken können frei aufgeteilt werden: 2× Power Klaw → Ziel A, 1× Slugga → Ziel A ist erlaubt
+- Auflösungsreihenfolge: erst alle Attacken gegen Ziel A, dann Ziel B; innerhalb eines Ziels erst alle Attacken mit Profil X, dann Profil Y
+
+**Aktuell existiert ein single-model `use_atk_counter` Pfad (Attacken-Counter) und ein multi-model `model-counter` Pfad. Beide sind für Nahkampf regelwidrig wenn mehrere Waffen gewählt werden.**
+
+**Lösung:**
+
+Deklarationseinträge umstrukturieren auf `(weapon, profile_idx, target, atk_count)`:
+
+```
+Gesamtattacken = models_alive × (unit.attacks + waaagh_bonus)
+
+UI:
+  Für jede Waffe:
+    → Für jeden Ziel-Target:
+      Anzahl Attacken: [0][−][+]   ← Summe aller Einträge muss = Gesamtattacken
+
+Validierung: Summe aller atk_count Einträge ≤ Gesamtattacken
+Warnung wenn Summe < Gesamtattacken (nicht alle Attacken zugeteilt)
+Fehler wenn Summe > Gesamtattacken (zu viele)
+```
+
+- Melee **immer** mit Attacken-Counter (kein model-counter mehr für Nahkampf)
+- Multi-Modell-Einheiten: Gesamtattacken = `models_alive × unit.attacks`; User teilt ALLE Attacken auf, nicht Modelle
+- Für Schussphase bleibt das model-counter Modell (Schusswaffen nicht betroffen)
+
+**Betroffene Dateien:**
+- `uiLayout/_common.py` — `render_attack_declaration()`: Eintrags-Logik neu
+- `gameMechanic/fightPhase.py` — kein Eingriff nötig wenn Eintrags-Struktur kompatibel bleibt
+
+**Tasks:**
+- [ ] Plan + Freigabe einholen vor Implementierung
+- [ ] `render_attack_declaration()`: melee-Pfad auf `(weapon, target, atk_count)` Einträge umstellen
+- [ ] Multiselect für Waffen entfernen; stattdessen pro Waffe separate Zeilen im Deklarationsblock
+- [ ] Validierungslogik: Summe aller `atk_count` Einträge gegen Gesamtattacken prüfen
+- [ ] Tests für neue Eintrags-Struktur
+
 ### Heroic Intervention
 
 > Regelgrundlage: `core_rules.txt` Z. 1824–1848 (Schritt 2 der Charge Phase)
@@ -546,9 +591,11 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 ### WAAAGH! + Sonstiges
 
 - [x] WAAAGH!-Badge auf unitCards der betroffenen Einheiten ✅ (2026-06-08)
-- [x] Ork-Regeln prüfen: welche Einheiten ausgenommen? → keine Ausnahmen (GRETCHIN-Ausnahme gilt nur für Waaagh! Energy-Zählung) ✅ (2026-06-06)
+- [x] Ork-Regeln prüfen: welche Einheiten ausgenommen? → +1S/+1A gilt für alle ORKS; Advance+Charge nur ORKS CORE/CHARACTER ✅ (2026-06-08)
 - [x] Resurrection Orb: Regel lesen → keine KERN-Einschränkung; Implementierung war korrekt; jetzt via `wargear_ids` ✅ (2026-06-06/07)
 - [x] Skarabäen: 6=auto-wound → bereits als `abilities`-Text in `weapons.yaml`; kein Code-Feature nötig ✅ (2026-06-06)
+- [ ] **Advance & Charge:** WAAAGH! Stage 1 — ORKS CORE / ORKS CHARACTER dürfen trotz Advance chargen. `chargephase.py`: `if flags.get("advanced")` Guard überspringen wenn Bedingungen erfüllt. Dateien: `gameMechanic/chargephase.py`
+- [ ] **+1 Attacks in Deklaration:** WAAAGH! Stage 1 + 2 geben +1 Attacks für alle ORKS-Modelle. In `render_attack_declaration()`: `unit.attacks + 1` für Gesamtattacken verwenden wenn WAAAGH! aktiv. Dateien: `uiLayout/_common.py`
 - [ ] Gretchin Moralphase: Cowardly (−1 Attrition wenn kein RUNTHERD in 6") implementieren
 
 ---
