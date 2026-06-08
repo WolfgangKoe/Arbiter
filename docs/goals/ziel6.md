@@ -516,6 +516,8 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 - [x] Inaktiver Spieler kann in Fight Phase Einheiten auswählen und kämpfen ✅ (2026-06-06, Root-Cause-Fix Session 20: `unitCard.py` `is_active` nutzt `fight_current_player`)
 - [x] `charged` / `in_melee` / `fought` als separate Flags korrekt setzen und auswerten ✅ (2026-06-06)
 - [x] Ablauf 9E: erst alle CHARGED-Einheiten aller Spieler → dann abwechselnd (Startspieler: inaktiv) ✅ (2026-06-06)
+- [x] Attacken-Splitting für Single-Modell-Einheiten: Angriffs-Counter statt Modell-Counter in Fight-Phase-Deklaration (z.B. Overlord 2+2 auf zwei Ziele) ✅ (2026-06-08)
+- [x] `_compute_attacks`: `"*"`-Angriffswert behandelt wie `"Melee"` → korrekte Necron-Nahkampfangriffe ✅ (2026-06-08)
 - [ ] Counterattack GO einsetzbar (reaktive Unterbrechung) — Teil von 6e (GO-System)
 
 ### Heroic Intervention
@@ -535,7 +537,7 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 ### Necron — Command Phase Fixes
 
-- [ ] Living Metal: einmalig pro Phase
+- [x] Living Metal: einmalig pro Phase ✅ (2026-06-08)
 - [x] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu) ✅ (2026-06-05, 6e Bug 2)
 - [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden
 - [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
@@ -543,7 +545,7 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 
 ### WAAAGH! + Sonstiges
 
-- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten
+- [x] WAAAGH!-Badge auf unitCards der betroffenen Einheiten ✅ (2026-06-08)
 - [x] Ork-Regeln prüfen: welche Einheiten ausgenommen? → keine Ausnahmen (GRETCHIN-Ausnahme gilt nur für Waaagh! Energy-Zählung) ✅ (2026-06-06)
 - [x] Resurrection Orb: Regel lesen → keine KERN-Einschränkung; Implementierung war korrekt; jetzt via `wargear_ids` ✅ (2026-06-06/07)
 - [x] Skarabäen: 6=auto-wound → bereits als `abilities`-Text in `weapons.yaml`; kein Code-Feature nötig ✅ (2026-06-06)

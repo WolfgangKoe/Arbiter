@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 25, 2026-06-07)
+## Aktueller Stand (nach Session 26, 2026-06-08)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -31,24 +31,20 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Heroic Intervention: Step-2-Timing, CHARACTER-Check, Badge, Feind-Zielauswahl
 - 6k: `persistent_effects` Interpreter; `wargear_ids`/`wargear_keywords` auf Unit; Resurrection Orb via Wargear-ID
 - 6j: `weapon_abilities.yaml` + `wargear_abilities.yaml` gelöscht; alle YAML-Header vereinheitlicht
+- **Session 26 neu:** Living Metal einmalig pro Phase ✅; WAAAGH!-Badge auf unitCards ✅; Attack-Splitting für Single-Modell-Einheiten in Fight Phase ✅; `"*"`-Attacken-Bug in `_compute_attacks` gefixt ✅
 - 470 Tests grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **Necron Command Phase Fixes** — Living Metal einmalig, Dynastiebonus-Anzeige (Details: `docs/goals/ziel6.md §Testsession-Fixes`)
-2. **WAAAGH!-Badge** auf unitCards (alle ORKS-Einheiten, keine Ausnahmen)
-3. **Fight Phase Declaration-Block** — 6d-v3-Layout + Attacken regelkonform auf Zieleinheiten verteilen
-4. **6l Relic-Effekt-Interpreter** — `ability_en` in maschinenlesbare `trigger:` + `effect:` überführen (Spec: `docs/goals/ziel6.md §6l`)
+1. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics durchgehen, dann Schema vorschlagen, Freigabe einholen, YAML + Interpreter umsetzen
+2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler (Details: §Offene Tasks)
+3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus-Anzeige; Regelkasten-Reihenfolge
 
 ---
 
 ## Offene Tasks
-
-### 🔴 HOCH — Nahkampf: Attacken auf Zieleinheiten verteilen
-
-**Bug:** Regelkonform müssen Attacken auf **Einheiten** verteilt werden, nicht auf Modelle. Ein Overlord mit 4 Attacken darf 2+2 auf zwei Einheiten aufteilen. Fix im Zuge der 6d-v3-Überarbeitung des Declaration-Blocks umsetzen.
 
 ### 🟡 MITTEL — GOs in gameActionArea
 
@@ -59,14 +55,14 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ### 🟡 MITTEL — Necron Command Phase
 
-- [ ] Living Metal: einmalig pro Phase (aktuell mehrfach anwendbar)
+- [x] Living Metal: einmalig pro Phase ✅ (2026-06-08)
 - [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden
 - [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
 - [ ] Anzeigereihenfolge: Regelkasten immer ganz oben in allen Phasen
 
 ### 🟡 MITTEL — WAAAGH!
 
-- [ ] WAAAGH!-Badge auf unitCards der betroffenen Einheiten (alle ORKS — keine Ausnahmen laut Regeltext)
+- [x] WAAAGH!-Badge auf unitCards ✅ (2026-06-08)
 
 ### 🟡 MITTEL — Fähigkeit + AP kombiniert (SAVE-Block)
 
