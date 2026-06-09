@@ -2,7 +2,7 @@
 # Source: Codex Necrons (9E, 2020) + Wahapedia verification 2026-05-30
 # Format: loader_contract.md v2 — each weapon has profiles: list[WeaponProfile]
 # Dual-profile weapons carry name_en per profile; single-profile weapons omit it.
-# Strength notation: "User" = attacker's S stat; "User+1" = S+1; "User×2" = S×2
+# Strength notation: "User" = attacker's S stat; "+N" = S+N; "×N" = S×N
 
 weapons:
 
@@ -36,7 +36,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User×2"
+        strength: "×2"
         ap: "-4"
         damage: "3"
         abilities: "-1 to hit roll."
@@ -52,7 +52,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-4"
         damage: "2"
         abilities: ""
@@ -64,7 +64,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-3"
         damage: "D3"
         abilities: ""
@@ -122,7 +122,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+1"
+        strength: "+1"
         ap: "-3"
         damage: "1"
         abilities: ""
@@ -162,7 +162,7 @@ weapons:
         weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+1"
+        strength: "+1"
         ap: "-2"
         damage: "2"
         abilities: ""
@@ -175,7 +175,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-4"
         damage: "3"
         abilities: "Each time an attack is made with this weapon, rules that ignore wounds cannot be used."
@@ -268,7 +268,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-4"
         damage: "3"
         abilities: "1 model in unit only."
@@ -332,7 +332,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-2"
         damage: "2"
         abilities: ""
@@ -506,7 +506,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-3"
         damage: "2"
         abilities: ""
@@ -691,7 +691,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-1"
         damage: "D3"
         abilities: "Each time an attack is made with this weapon, if a CHARACTER model is slain, make 1 additional attack with this weapon against the target unit."
@@ -733,7 +733,7 @@ weapons:
         weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+1"
+        strength: "+1"
         ap: "-3"
         damage: "2"
         abilities: ""
@@ -775,7 +775,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+2"
+        strength: "+2"
         ap: "-4"
         damage: "3"
         abilities: "-1 to hit roll."
@@ -815,7 +815,7 @@ weapons:
         weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+4"
+        strength: "+4"
         ap: "-3"
         damage: "2"
         abilities: ""
@@ -852,7 +852,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+3"
+        strength: "+3"
         ap: "-4"
         damage: "3"
         abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon."
@@ -1116,7 +1116,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User×2"
+        strength: "×2"
         ap: "-4"
         damage: "D6"
         abilities: "Invulnerable saving throws cannot be taken against attacks made with this weapon."
@@ -1160,7 +1160,7 @@ weapons:
         weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User+3"
+        strength: "+3"
         ap: "-4"
         damage: "D6"
         abilities: "Each time an attack allocated to a VEHICLE model, that model does not receive the benefit of cover."
@@ -1385,7 +1385,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User×2"
+        strength: "×2"
         ap: "-3"
         damage: "D3"
         abilities: ""
@@ -1493,7 +1493,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: "*"
-        strength: "User×2"
+        strength: "×2"
         ap: "-4"
         damage: "D6+4"
         abilities: ""

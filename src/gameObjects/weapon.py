@@ -6,8 +6,8 @@ class WeaponProfile:
     weapon_type: str  # "Rapid Fire", "Heavy", "Assault", "Pistol", "Melee"
     range_inches: int
     attacks: str  # "1", "D6", "2D3", "*"
-    strength: str  # "4", "User", "User+2", "User×2"
-    ap: str  # "0", "-1", "-3"
+    strength: int | str  # 4, "User", "+2", "×2"
+    ap: int  # 0, -1, -3
     damage: str  # "1", "D3", "D3+3"
     is_melee: bool
     abilities: str = ""
@@ -47,12 +47,12 @@ class Weapon:
         return self.profiles[0].attacks if self.profiles else "0"
 
     @property
-    def strength(self) -> str:
-        return self.profiles[0].strength if self.profiles else "0"
+    def strength(self) -> int | str:
+        return self.profiles[0].strength if self.profiles else 0
 
     @property
-    def ap(self) -> str:
-        return self.profiles[0].ap if self.profiles else "0"
+    def ap(self) -> int:
+        return self.profiles[0].ap if self.profiles else 0
 
     @property
     def damage(self) -> str:

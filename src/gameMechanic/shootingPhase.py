@@ -131,8 +131,7 @@ def _active_shooting(
         skill = int(live_bs.rstrip("+"))
         for w in ranged:
             p = w.for_phase(use_melee=False)
-            ap_int = int(p.ap)
-            ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
+            ap_str = f"AP{p.ap}" if p.ap != 0 else "AP0"
             st.caption(
                 f"**{w.name_en}** · A{p.attacks} · BS{skill}+ "
                 f"· S{p.strength} · {ap_str} · D{p.damage}"

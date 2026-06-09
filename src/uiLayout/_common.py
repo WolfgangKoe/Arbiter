@@ -304,43 +304,29 @@ def _empty_attack_declaration() -> dict:  # type: ignore[type-arg]
     }
 
 
-def _parse_strength(raw: str, unit_strength: int) -> int:
-    """Resolve weapon strength notation to a numeric value.
+def _parse_strength(raw: int | str, unit_strength: int) -> int:
+    """Resolve weapon strength to a numeric value.
 
-    Handles: "User" → unit_strength, "User×2" → unit_strength*2,
-    "User+2" → unit_strength+2, "+3" → unit_strength+3, plain ints.
-    Falls back to unit_strength on unrecognised input.
+    int  → fixed strength
+    "+N" → unit_strength + N
+    "×N" → unit_strength × N
+    "-N" → unit_strength - N  (rare)
+    "User" → unit_strength
     """
+    if isinstance(raw, int):
+        return raw
     s = raw.strip()
-    upper = s.upper()
-    if upper == "USER":
+    if s == "*":
+        return 0  # special-mechanic weapon; handled by effect handler
+    if s.upper() == "USER":
         return unit_strength
-    if upper.startswith("USER"):
-        tail = s[4:].strip()
-        if tail.startswith("×") or tail.startswith("*"):
-            try:
-                return unit_strength * int(tail[1:])
-            except ValueError:
-                pass
-        if tail.startswith("+"):
-            try:
-                return unit_strength + int(tail[1:])
-            except ValueError:
-                pass
-        if tail.startswith("-"):
-            try:
-                return unit_strength - int(tail[1:])
-            except ValueError:
-                pass
     if s.startswith("+"):
-        try:
-            return unit_strength + int(s[1:])
-        except ValueError:
-            pass
-    try:
-        return int(s)
-    except ValueError:
-        return unit_strength
+        return unit_strength + int(s[1:])
+    if s.startswith("×"):
+        return unit_strength * int(s[1:])
+    if s.startswith("-"):
+        return unit_strength - int(s[1:])
+    return int(s)
 
 
 def _protocol_source_label(faction_dir: str) -> str:
@@ -1079,8 +1065,8 @@ def _render_resolution_tab(
         profiles = weapon.profiles
     profile = profiles[min(profile_idx, len(profiles) - 1)]
 
-    strength = _parse_strength(str(profile.strength), atk_unit.strength)
-    ap = int(profile.ap)
+    strength = _parse_strength(profile.strength, atk_unit.strength)
+    ap = profile.ap
     skill_label = "WS" if use_melee else "BS"
     advanced = atk_state.get("turn_flags", {}).get("advanced", False)
 

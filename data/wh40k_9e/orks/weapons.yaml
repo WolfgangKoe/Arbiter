@@ -49,7 +49,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -1
         damage: 2
         abilities: 
@@ -101,7 +101,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +3
+        strength: "+3"
         ap: -3
         damage: 2
         abilities: 
@@ -241,7 +241,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +3
+        strength: "+3"
         ap: -1
         damage: D3
         abilities: 
@@ -292,7 +292,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +4
+        strength: "+4"
         ap: -3
         damage: 2
         abilities: "Each time an attack is made with this weapon, subtract"
@@ -383,7 +383,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -3
         damage: 2
         abilities: 
@@ -407,7 +407,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -2
         damage: 2
         abilities: "Each time an attack is made with this weapon, you can r"
@@ -443,7 +443,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -2
         damage: 2
         abilities: 
@@ -479,7 +479,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -2
         damage: 2
         abilities: "Each time an attack is made with this weapon, the targe"
@@ -532,7 +532,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +1
+        strength: "+1"
         ap: 0
         damage: 1
         abilities: "Each time the bearer fights, it makes 1 additional atta"
@@ -547,7 +547,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -1
         damage: 1
         abilities: 
@@ -559,7 +559,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: 0
         damage: 2
         abilities: 
@@ -583,7 +583,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +1
+        strength: "+1"
         ap: -1
         damage: 1
         abilities: "Each time an attack is made with this weapon, make 3 hi"
@@ -647,7 +647,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +1
+        strength: "+1"
         ap: -2
         damage: 2
         abilities: 
@@ -759,7 +759,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -2
         damage: D3
         abilities: 
@@ -783,7 +783,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -2
         damage: 2
         abilities: 
@@ -867,7 +867,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +1
+        strength: "+1"
         ap: -2
         damage: 2
         abilities: "Each time an attack is made with this weapon, treat the"
@@ -895,7 +895,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +2
+        strength: "+2"
         ap: -1
         damage: 2
         abilities: "Each time the bearer fights, it makes 1 additional atta"
@@ -992,7 +992,7 @@ weapons:
       - weapon_type: Melee
         range_inches: 0
         attacks: Melee
-        strength: +1
+        strength: "+1"
         ap: -2
         damage: 3
         abilities: "Each time the bearer fights, it makes 4 additional atta"

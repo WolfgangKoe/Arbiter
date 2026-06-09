@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 30, 2026-06-08)
+## Aktueller Stand (nach Session 31, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -32,8 +32,8 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - 6k: `persistent_effects` Interpreter; `wargear_ids`/`wargear_keywords` auf Unit; Resurrection Orb via Wargear-ID
 - Session 28: WAAAGH! Advance+Charge, +1 Attacks in Melee, per-weapon atk_counter ✅
 - Session 29: Ork Waffen-Audit — Befunde 1/2/3 dokumentiert in `docs/goals/ziel6.md`
-- **Session 30: extra_attacks + model_restriction implementiert** — `WeaponProfile.max_attacks`, Klasse 3a/3b korrekt berechnet, Boss-Nob-Badges in Deklarations-UI, 25 neue Tests
-- 510 Tests grün
+- Session 30: extra_attacks + model_restriction implementiert — `WeaponProfile.max_attacks`, Klasse 3a/3b korrekt berechnet, Boss-Nob-Badges in Deklarations-UI, 25 neue Tests
+- **Session 31: Weapon-Strength-Bugfix + Architektur-Bereinigung** — `_parse_strength` akzeptiert `int | str` nativ; `WeaponProfile.ap: int`; kein `str()`/`int()`-Umweg mehr; Ork `+N`-Stärken gequotet; Necron `User+N` → `"+N"` normalisiert; 510 Tests grün
 
 ---
 
@@ -114,7 +114,8 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 - dev-Branch, kein direktes Committen auf main
 - Seitenleisten: `first_player` links, `second_player` rechts (unveränderlich)
 - Keywords immer `UPPERCASE` in YAML
-- `_parse_strength()` für Waffenstärke, nie `int(strength)` direkt
+- `_parse_strength(raw: int | str, unit_strength)` für Waffenstärke — akzeptiert native YAML-Typen; nie `int(strength)` oder `str(strength)` direkt
+- Weapon strength in YAML: plain int = feste Stärke, `"+N"` = User+N, `"×N"` = User×N, `"User"` = User; Necrons und Orks beide normalisiert
 - Regelreferenz: Immer erst lokal nachschlagen (`docs/work/wahapedia_*/`), nie Nutzer fragen
 
 ---
@@ -129,4 +130,4 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 - **Heroic Intervention**: Schritt 2 der Charge Phase (nach allen Charges). Nur CHARACTER. ≤3" Bewegung, muss näher zum nächsten Feind enden.
 - **extra_attacks — zwei Klassen:** Waffen mit „+N additional attacks" geben `unit.attacks + N` Attacken. Waffen mit „+N additional attacks AND no more than N attacks" geben immer genau N Attacken (cap), unabhängig von `unit.attacks`. Zweite Klasse: attack_squig (2), squighog_jaws (2), squigosaur's_jaws (3), grabbin_klaw (1), wreckin_ball (1), butcha_boyz (4), savage_horns_and_hooves (4).
 - **Boss-Nob-Waffen:** In Ork-Einheiten mit mehreren Modellen trägt nur der Boss Nob Spezialwaffen (power klaw, big choppa, killsaw). Bestätigt für: boyz, warbikers, stormboyz, kommandos. Nicht betroffen (alle Modelle): nobz, meganobz, squighog boyz.
-- **Stärke-Parsing:** `_parse_strength()` in `_common.py` ist korrekt — `User` → unit_strength, `+2` → unit_strength+2, `User×2` → unit_strength*2. Kein Bug hier.
+- **Stärke-Parsing:** `_parse_strength(raw: int|str, unit_strength)` in `_common.py` — int → feste Stärke, `"+2"` → unit_strength+2, `"×2"` → unit_strength×2, `"User"` → unit_strength, `"*"` → 0 (Spezialwaffe). YAML-Bug war: `+2` wurde von PyYAML als int 2 geparst (Plus verloren) — gefixt durch Quoting `"+2"` in Ork-YAML und Normalisierung `"User+2"` → `"+2"` in Necron-YAML.

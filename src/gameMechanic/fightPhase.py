@@ -218,8 +218,7 @@ def _active_fight(
         live_attacks = live.get("attacks")
         for w in melee:
             p = w.for_phase(use_melee=True)
-            ap_int = int(p.ap)
-            ap_str = f"AP{p.ap}" if ap_int != 0 else "AP0"
+            ap_str = f"AP{p.ap}" if p.ap != 0 else "AP0"
             atk_display = live_attacks if p.attacks in ("Melee", None) else p.attacks
             if atk_display is None:
                 atk_display = str(unit.attacks)

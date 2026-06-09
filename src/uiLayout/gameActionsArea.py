@@ -72,7 +72,7 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             for p in w.profiles:
                 profile_label = f"{w.name_en} [{p.name_en}]" if p.name_en else w.name_en
                 w_range = "Melee" if p.is_melee else f'{p.range_inches}"'
-                ap_str = f"AP{p.ap}" if int(p.ap) != 0 else "AP0"
+                ap_str = f"AP{p.ap}" if p.ap != 0 else "AP0"
                 abilities_str = f" · *{p.abilities}*" if p.abilities else ""
                 atk_display = str(unit.attacks) if p.attacks in ("Melee", None) else p.attacks
                 st.caption(
