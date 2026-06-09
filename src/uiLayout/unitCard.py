@@ -40,6 +40,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
 
 _BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
 _DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
+_RELIC_COLOR: tuple[str, str] = ("#e8c460", "#201a08")
 
 _TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight"})
 
@@ -51,6 +52,8 @@ def _badge(text: str, variant: str = "") -> str:
         fg, bg = _BUFF_COLOR
     elif variant == "debuff":
         fg, bg = _DEBUFF_COLOR
+    elif variant == "relic":
+        fg, bg = _RELIC_COLOR
     else:
         fg, bg = ("#c9a84c", "#2e2618")
     return (
@@ -303,6 +306,9 @@ def render_unit_card(
             waaagh = st.session_state.get("waaagh_state", {}).get(faction, {})
             if waaagh.get("stage", 0) >= 1:
                 badges += _badge("WAAAGH!")
+            if unit.relic_id:
+                relic_short = unit.relic_id.rsplit(".", 1)[-1].replace("_", " ").upper()
+                badges += _badge(relic_short, variant="relic")
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)

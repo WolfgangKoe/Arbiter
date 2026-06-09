@@ -59,6 +59,19 @@ Dieselbe Pflicht wie für Code gilt auch für:
 
 **Kritisch beim Update:** `.claude/tasks/next_session.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
 
+### Standard-Prompts (Kurzschrift)
+
+**Session starten** (Plan aus `next_session.md` ist bereits freigegeben):
+> Beginne mit der nächsten Session. Der Plan ist freigegeben.
+
+→ `next_session.md` + Zieldatei lesen, direkt mit der ersten Aufgabe starten — kein erneuter Plan nötig.  
+Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, hat dieses Vorrang.
+
+**Session beenden + committen:**
+> Bereite die nächste Session vor. Committen.
+
+→ `next_session.md` aktualisieren (Stand, nächster Schritt, neue Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
+
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen
 - Nachricht: kurz, imperativ, Englisch (`Add shooting phase UI`, `Fix slider crash`)

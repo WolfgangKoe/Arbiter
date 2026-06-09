@@ -52,6 +52,7 @@ class Unit:
     wargear_ids: list[str] = field(default_factory=list)
     wargear_keywords: list[str] = field(default_factory=list)
     weapon_restrictions: dict[str, str] = field(default_factory=dict)
+    relic_id: str | None = None
 
     def has_keyword(self, keyword: str) -> bool:
         needle = keyword.upper()

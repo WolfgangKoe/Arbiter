@@ -10,11 +10,13 @@ from pathlib import Path
 
 from gameObjects.loader import (
     _apply_persistent_effect,
+    _apply_relic,
     _apply_wargear,
     load_army,
     load_detachment_types,
     load_faction_abilities,
     load_points,
+    load_relic_catalog,
     load_roster,
     load_roster_metadata,
     load_round_choice_abilities,
@@ -704,3 +706,80 @@ def test_unit_without_restrictions_has_empty_dict() -> None:
     units, _ = load_army("necrons")
     overlord = next(u for u in units if "overlord" in u.id)
     assert overlord.weapon_restrictions == {}
+
+
+# ── Relic loader tests ───────────────────────────────────────────────────────
+
+
+def test_load_relic_catalog_orks_returns_entries() -> None:
+    catalog = load_relic_catalog("orks")
+    assert "wh40k_9e.orks.relic.da_gobshot_thunderbuss" in catalog
+    assert "wh40k_9e.orks.relic.rezmekkas_redder_paint" in catalog
+
+
+def test_load_relic_catalog_necrons_returns_entries() -> None:
+    catalog = load_relic_catalog("necrons")
+    assert "wh40k_9e.necrons.relic.leerenschnitter" in catalog
+
+
+def test_apply_relic_sets_relic_id() -> None:
+    units, _ = load_army("orks")
+    warboss = next(u for u in units if u.id == "wh40k_9e.orks.unit.warboss")
+    relic_catalog = load_relic_catalog("orks")
+    result = _apply_relic(warboss, "wh40k_9e.orks.relic.da_irongob", relic_catalog)
+    assert result.relic_id == "wh40k_9e.orks.relic.da_irongob"
+
+
+def test_apply_relic_buff_stat_move() -> None:
+    units, _ = load_army("orks")
+    warboss = next(u for u in units if u.id == "wh40k_9e.orks.unit.warboss")
+    base_move = int(warboss.move.rstrip('"'))
+    relic_catalog = load_relic_catalog("orks")
+    result = _apply_relic(warboss, "wh40k_9e.orks.relic.rezmekkas_redder_paint", relic_catalog)
+    assert int(result.move.rstrip('"')) == base_move + 2
+
+
+def test_apply_relic_set_invuln() -> None:
+    units, _ = load_army("orks")
+    warboss = next(u for u in units if u.id == "wh40k_9e.orks.unit.warboss")
+    relic_catalog = load_relic_catalog("orks")
+    result = _apply_relic(warboss, "wh40k_9e.orks.relic.tezdrek_stompa_power_field", relic_catalog)
+    assert result.invuln_save == 5
+
+
+def test_apply_relic_weapon_replacement_adds_relic_weapon() -> None:
+    units, _ = load_army("necrons")
+    # leerenschnitter (Voidreaper) replaces warscythe / voidscythe
+    lychguard = next(u for u in units if u.id == "wh40k_9e.necrons.unit.lychguard")
+    relic_catalog = load_relic_catalog("necrons")
+    result = _apply_relic(lychguard, "wh40k_9e.necrons.relic.leerenschnitter", relic_catalog)
+    relic_weapon_ids = [w.id for w in result.weapons]
+    assert "wh40k_9e.necrons.relic.leerenschnitter" in relic_weapon_ids
+
+
+def test_apply_relic_weapon_replacement_removes_replaced_weapon() -> None:
+    units, _ = load_army("necrons")
+    lychguard = next(u for u in units if u.id == "wh40k_9e.necrons.unit.lychguard")
+    relic_catalog = load_relic_catalog("necrons")
+    result = _apply_relic(lychguard, "wh40k_9e.necrons.relic.leerenschnitter", relic_catalog)
+    weapon_ids = [w.id for w in result.weapons]
+    assert "wh40k_9e.necrons.weapon.warscythe" not in weapon_ids
+
+
+def test_apply_relic_unknown_id_returns_unit_unchanged() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    relic_catalog = load_relic_catalog("necrons")
+    result = _apply_relic(overlord, "wh40k_9e.necrons.relic.does_not_exist", relic_catalog)
+    assert result.relic_id is None
+    assert result.weapons == overlord.weapons
+
+
+def test_buff_stat_toughness_in_persistent_effect() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    base_t = overlord.toughness
+    result = _apply_persistent_effect(
+        overlord, {"type": "buff_stat", "stat": "toughness", "modifier": 1}
+    )
+    assert result.toughness == base_t + 1

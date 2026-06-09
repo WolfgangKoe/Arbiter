@@ -502,7 +502,7 @@ REANIMATION PROTOCOLS  (erscheint nach Apply, wenn Necron-Einheit Verluste hat)
 - [x] Dropdown → separate Checkboxen (Dense/Light/Heavy unabhängig) ✅ (2026-06-06)
 - [x] Phasenbindung: Dense + Light → nur Shooting; Heavy → nur Fight Phase ✅ (2026-06-06)
 - [x] Dense Cover Checkbox direkt nach HIT-Block (−1 Trefferwurf) ✅ (2026-06-06)
-- [x] Heavy Cover: Charged-Check korrekt; phase-gebundene Anzeige ✅ (2026-06-06)
+- [x] Heavy Cover: Charged-Check korrekt; phase-gebundene Anzeige ✅ (2026-06-06) → Bug-Fix 2026-06-09: `charged` prüfte `atk_state` statt `def_state` — Regel: Defender verliert Cover wenn **er selbst** charged hat, nicht der Angreifer
 
 ### Damage-Block
 
@@ -1105,46 +1105,43 @@ Die Resurrection-Orb-UI ist funktional und nutzt seit 6k `"resurrection_orb" in 
 
 ---
 
-## 6l — Relic-Effekt-Interpreter (geplant)
+## 6l — Relic-Effekt-Interpreter 🔄
 
-**Ziel:** Relics mit Conditions und Effekten werden maschinenlesbar — analog zu 6k (Wargear). Aktuell werden `ability_en`-Texte nur angezeigt, aber nie ausgewertet. Trigger (z.B. „At the start of your Command phase") und Effekte (z.B. „roll D6 on 4+: gain 1 CP") existieren nur als Freitext.
+**Ziel:** Relics mit Conditions und Effekten werden maschinenlesbar — analog zu 6k (Wargear).
 
-**Betrifft alle Fraktionen** — Necrons und Orks je ~10 Relics, künftige Fraktionen ebenso.
+**Phase 1 ✅ (2026-06-09):** Passive Relic-Effekte + Waffenersatz
+- [x] `gameObjects/unit.py`: `Unit.relic_id: str | None = None`
+- [x] `gameObjects/loader.py`: `load_relic_catalog(faction_dir)` — lädt `relics.yaml` als ID-Index
+- [x] `gameObjects/loader.py`: `_attacks_from_weapon_type()` — extrahiert Attacks-Zahl aus Weapon-Type-String
+- [x] `gameObjects/loader.py`: `_relic_weapon_from_entry()` — konvertiert Relic-Profiles in Weapon-Objekt
+- [x] `gameObjects/loader.py`: `_apply_relic()` — Waffenersatz (replaces.any_of) + persistent_effects + relic_id
+- [x] `gameObjects/loader.py`: `_apply_persistent_effect()` — `buff_stat: toughness/strength` ergänzt
+- [x] `gameObjects/loader.py`: `load_roster()` — `relic: <id>` Schlüssel in Roster-Einträgen unterstützt
+- [x] `data/wh40k_9e/orks/relics.yaml`: `persistent_effects` für Rezmekka's Redder Paint (+2 Move), Skargrim's Snazztrike (+1T + 5+ Invuln), Tezdrek's Power Field (5+ Invuln)
+- [x] `uiLayout/unitCard.py`: Relic-Badge (gold) wenn `unit.relic_id` gesetzt — kurzer Name aus ID-Suffix
+- [x] 9 neue Tests → 519 grün
 
-**Beispiel (Orks):**
+**Phase 2 — Triggered Relic-Effekte (offen):**
+- [ ] `data/wh40k_9e/orks/relics.yaml`: Morgog's Finkin' Cap — `trigger/effect: gain_cp_roll` (Command Phase, D6 ≥ 4)
+- [ ] `data/wh40k_9e/orks/relics.yaml`: Da Irongob — `trigger/effect: mortal_after_melee` (Fight Phase, nach Attacken, D6 ≥ 2 → D3 Mortals)
+- [ ] `data/wh40k_9e/necrons/relics.yaml`: Veil of Darkness — `trigger/effect: teleport` (Movement Phase, 1×/Battle)
+- [ ] UI: Button pro triggered Relic in der richtigen Phase (analog Resurrection Orb)
+
+**Schema (Phase 2):**
 
 ```yaml
-# Aktuell — nur Freitext:
 - id: wh40k_9e.orks.relic.morgogs_finkin_cap
-  ability_en: >
-    At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
-    on a 4+, you gain 1 Command point.
-
-# Ziel — maschinenlesbar:
-- id: wh40k_9e.orks.relic.morgogs_finkin_cap
-  ability_en: >
-    At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
-    on a 4+, you gain 1 Command point.
+  ability_type: triggered
   trigger:
     timing: phase_start
     phase: command
     player: active
   effect:
-    type: gain_cp
-    roll: D6
+    type: gain_cp_roll
+    dice: D6
     threshold: 4
     amount: 1
-    condition: bearer_on_battlefield
 ```
-
-**Analog zu 6k:** Relic-Effekte können in drei Klassen eingeteilt werden:
-1. **Persistent** — Stat-Änderungen, Keyword-Grants, Invuln-Saves (analog `persistent_effects` in Wargear)
-2. **Triggered** — CP-Gain, Heilung, FNP-Modifikation bei bestimmten Events
-3. **Weapon-Relic** — hat `profiles:` → bereits über Waffen-Renderer abgedeckt (display-only)
-
-**Vorbedingung:** 6k vollständig ✅ — Schema und Interpreter bereits bekannt.
-
-**Noch nicht spezifiziert** — vor Umsetzung: YAML-Schema für alle Relic-Effekt-Typen definieren, dann Necrons + Orks nachziehen.
 
 ---
 

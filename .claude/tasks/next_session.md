@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 31, 2026-06-09)
+## Aktueller Stand (nach Session 32, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -33,13 +33,16 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Session 28: WAAAGH! Advance+Charge, +1 Attacks in Melee, per-weapon atk_counter ✅
 - Session 29: Ork Waffen-Audit — Befunde 1/2/3 dokumentiert in `docs/goals/ziel6.md`
 - Session 30: extra_attacks + model_restriction implementiert — `WeaponProfile.max_attacks`, Klasse 3a/3b korrekt berechnet, Boss-Nob-Badges in Deklarations-UI, 25 neue Tests
-- **Session 31: Weapon-Strength-Bugfix + Architektur-Bereinigung** — `_parse_strength` akzeptiert `int | str` nativ; `WeaponProfile.ap: int`; kein `str()`/`int()`-Umweg mehr; Ork `+N`-Stärken gequotet; Necron `User+N` → `"+N"` normalisiert; 510 Tests grün
+- Session 31: Weapon-Strength-Bugfix + Architektur-Bereinigung — `_parse_strength` akzeptiert `int | str` nativ; `WeaponProfile.ap: int`; 510 Tests grün
+- **Session 32: 6l Relic-Effekt-Interpreter + Bug Heavy Cover**
+  - Bug: Heavy Cover `charged`-Check war `atk_state` → jetzt `def_state` (Regel: Defender verliert Cover wenn er selbst charged hat, nicht der Angreifer)
+  - 6l Phase 1: `Unit.relic_id`; `load_relic_catalog()`; `_apply_relic()` (Waffenersatz + `persistent_effects`); `buff_stat: toughness/strength`; Roster-Key `relic: <id>`; Relic-Badge (gold) auf unitCard; 9 neue Tests → 519 grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics in `docs/work/` lesen, dann Schema vorschlagen, Freigabe einholen
+1. **6l Phase 2: Triggered Relic-Effekte** — CP-Roll (Morgog's Finkin' Cap: Command Phase, D6 → 4+ = +1 CP), Fight-Phase-Mortal (Da Irongob: nach Melee → D6 → 2+ = D3 mortals), Teleport (Veil of Darkness: Movement Phase, 1×/Battle, teleport)
 2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
 3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
 4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"

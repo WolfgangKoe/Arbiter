@@ -403,6 +403,84 @@ def load_wargear_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[t
     return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
 
 
+def load_relic_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[type-arg]
+    """Return a relic_id → raw-dict index for a faction's relics.yaml."""
+    path = _DATA_ROOT / faction_dir / "relics.yaml"
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        data = yaml.safe_load(f) or []
+    entries = data if isinstance(data, list) else []
+    return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
+
+
+def _attacks_from_weapon_type(weapon_type: str) -> str:
+    """Extract attack count from weapon_type like 'Heavy 2D6' or 'Assault 4'."""
+    parts = weapon_type.split()
+    return parts[-1] if len(parts) >= 2 else "1"
+
+
+def _relic_weapon_from_entry(entry: dict[str, Any]) -> Weapon:
+    """Convert a relic YAML entry with profiles into a Weapon object."""
+    profiles = []
+    for pd in entry.get("profiles", []):
+        mode = pd.get("mode", "Shooting")
+        is_melee = mode == "Melee"
+        weapon_type = pd["weapon_type"]
+        attacks = str(pd.get("attacks", _attacks_from_weapon_type(weapon_type)))
+        strength = pd["strength"]
+        profiles.append(
+            WeaponProfile(
+                weapon_type=weapon_type,
+                range_inches=int(pd["range_inches"]),
+                attacks=attacks,
+                strength=strength,
+                ap=0 if str(pd.get("ap", "0")) in ("*", "-") else int(pd["ap"]),
+                damage=str(pd["damage"]),
+                is_melee=is_melee,
+                abilities=pd.get("abilities", pd.get("abilities_en", "")),
+            )
+        )
+    return Weapon(
+        id=entry["id"],
+        name_en=entry["name_en"],
+        profiles=profiles,
+        is_relic=True,
+    )
+
+
+def _apply_relic(
+    unit: Unit,
+    relic_id: str,
+    relic_catalog: dict[str, dict],  # type: ignore[type-arg]
+) -> Unit:
+    """Return a copy of unit with the named relic applied.
+
+    Weapon relics replace the specified base weapon and add the relic weapon.
+    Relics with persistent_effects have those effects applied to unit stats.
+    """
+    entry = relic_catalog.get(relic_id)
+    if not entry:
+        return unit
+
+    unit = dataclasses.replace(unit, relic_id=relic_id)
+
+    if entry.get("profiles"):
+        relic_weapon = _relic_weapon_from_entry(entry)
+        weapons = list(unit.weapons)
+        for replaced_id in entry.get("replaces", {}).get("any_of", []):
+            weapons = [w for w in weapons if w.id != replaced_id]
+        weapons.append(relic_weapon)
+        if not any(p.is_melee for w in weapons for p in w.profiles):
+            weapons.append(_CCW)
+        unit = dataclasses.replace(unit, weapons=weapons)
+
+    for eff in entry.get("persistent_effects", []):
+        unit = _apply_persistent_effect(unit, eff)
+
+    return unit
+
+
 def _parse_move_inches(move_str: str) -> int:
     """Parse a move string such as '6"' or '10"' to an integer."""
     return int(move_str.rstrip('"').strip())
@@ -424,6 +502,10 @@ def _apply_persistent_effect(unit: Unit, effect: dict) -> Unit:  # type: ignore[
         if stat == "move":
             current = _parse_move_inches(unit.move)
             return dataclasses.replace(unit, move=f'{current + modifier}"')
+        if stat == "toughness":
+            return dataclasses.replace(unit, toughness=unit.toughness + modifier)
+        if stat == "strength":
+            return dataclasses.replace(unit, strength=unit.strength + modifier)
     elif etype == "grant_keyword":
         kw = str(effect.get("keyword", "")).upper()
         if kw and kw not in unit.keywords:
@@ -677,6 +759,7 @@ def load_roster(
     faction_dir = data.get("faction_dir", "necrons")
     weapon_catalog = load_weapon_catalog(faction_dir)
     wargear_catalog = load_wargear_catalog(faction_dir)
+    relic_catalog = load_relic_catalog(faction_dir)
 
     matched: list[tuple[Unit, int]] = []
     unmatched: list[str] = []
@@ -690,5 +773,8 @@ def load_roster(
             wargear_ids: list[str] = entry.get("wargear") or []
             if wargear_ids:
                 unit = _apply_wargear(unit, wargear_ids, weapon_catalog, wargear_catalog)
+            relic_id: str | None = entry.get("relic")
+            if relic_id:
+                unit = _apply_relic(unit, relic_id, relic_catalog)
             matched.append((unit, models))
     return matched, unmatched

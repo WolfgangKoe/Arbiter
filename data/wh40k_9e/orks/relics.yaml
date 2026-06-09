@@ -53,6 +53,10 @@
   klan: evil_sunz
   replaces:
     any_of: []
+  persistent_effects:
+    - type: buff_stat
+      stat: move
+      modifier: 2
   ability_en: >
     Add 2\" to the Move characteristic of the bearer's model. In addition, at the
     start of the Fight phase, if the bearer is within Engagement Range of any enemy
@@ -142,6 +146,12 @@
     unit_id: [wh40k_9e.orks.unit.deffkilla_wartrike]
   replaces:
     any_of: []
+  persistent_effects:
+    - type: buff_stat
+      stat: toughness
+      modifier: 1
+    - type: set_invuln
+      value: 5
   ability_en: >
     DEFFKILLA WARTRIKE only. Add 1 to the Toughness characteristic of this model.
     In addition, this model has a 5+ invulnerable save.
@@ -154,5 +164,8 @@
   detachment: stompa_mob
   replaces:
     any_of: []
+  persistent_effects:
+    - type: set_invuln
+      value: 5
   ability_en: >
     The bearer gains a 5+ invulnerable save.

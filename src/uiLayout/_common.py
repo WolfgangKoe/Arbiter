@@ -1041,7 +1041,7 @@ def _render_resolution_tab(
     profile_idx = entry["profile_idx"]
     models_count = entry["models_count"]
 
-    def_unit, _ = lookup(def_faction, def_uid)
+    def_unit, def_state = lookup(def_faction, def_uid)
 
     # Resolve weapon + profile
     in_melee_flag = st.session_state.get("attack_declaration", {}).get("in_melee", False)
@@ -1085,7 +1085,7 @@ def _render_resolution_tab(
     heavy_cover = (
         is_fight
         and st.session_state.get(f"heavy_cover_{tab_key}", False)
-        and not atk_state.get("turn_flags", {}).get("charged")
+        and not def_state.get("turn_flags", {}).get("charged")
     )
 
     # Build modifier lists including cover effects
@@ -1170,8 +1170,8 @@ def _render_resolution_tab(
     if is_shooting:
         st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{tab_key}")
     if is_fight:
-        charged = atk_state.get("turn_flags", {}).get("charged", False)
-        if not charged:
+        def_charged = def_state.get("turn_flags", {}).get("charged", False)
+        if not def_charged:
             st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{tab_key}")
 
     if def_unit.fnp is not None:
