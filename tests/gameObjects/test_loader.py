@@ -702,6 +702,27 @@ def test_kommandos_power_klaw_has_boss_nob_restriction() -> None:
     assert kommandos.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
 
 
+def test_boyz_big_shoota_has_1_per_10_restriction() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.big_shoota") == "1_per_10"
+    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.rokkit_launcha") == "1_per_10"
+
+
+def test_kommandos_special_weapons_have_1_per_10_restriction() -> None:
+    units, _ = load_army("orks")
+    kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
+    for weapon_id in [
+        "wh40k_9e.orks.weapon.shokka_pistol",
+        "wh40k_9e.orks.weapon.big_shoota",
+        "wh40k_9e.orks.weapon.burna",
+        "wh40k_9e.orks.weapon.kustom_shoota",
+        "wh40k_9e.orks.weapon.rokkit_launcha",
+        "wh40k_9e.orks.weapon.breacha_ram",
+    ]:
+        assert kommandos.weapon_restrictions.get(weapon_id) == "1_per_10", weapon_id
+
+
 def test_unit_without_restrictions_has_empty_dict() -> None:
     units, _ = load_army("necrons")
     overlord = next(u for u in units if "overlord" in u.id)

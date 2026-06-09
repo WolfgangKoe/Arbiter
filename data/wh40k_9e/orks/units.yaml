@@ -506,7 +506,9 @@ units:
     weapons:
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.big_shoota
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.rokkit_launcha
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.shoota
       - ref: wh40k_9e.orks.weapon.big_choppa
         model_restriction: boss_nob_only
@@ -684,14 +686,20 @@ units:
     rules: []
     weapons:
       - ref: wh40k_9e.orks.weapon.shokka_pistol
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.big_shoota
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.burna
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.kustom_shoota
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.rokkit_launcha
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.big_choppa
         model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.breacha_ram
+        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.power_klaw
         model_restriction: boss_nob_only
