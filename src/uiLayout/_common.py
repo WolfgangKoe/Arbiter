@@ -1388,14 +1388,22 @@ def render_attack_declaration(
                         else:
                             profile_idx = 0
                         profile = profiles[profile_idx]
+                        restr = atk_unit.weapon_restrictions.get(weapon.id)
+                        if restr == "boss_nob_only":
+                            eff_models = 1
+                        elif restr == "1_per_10":
+                            eff_models = models_alive // 10
+                        elif restr == "1_per_5":
+                            eff_models = models_alive // 5
+                        else:
+                            eff_models = int(models_val)
                         displayed_count = _compute_attacks(
                             profile.attacks,
-                            int(models_val),
+                            eff_models,
                             atk_unit.attacks,
                             profile.effect,
                             profile.max_attacks,
                         )
-                        restr = atk_unit.weapon_restrictions.get(weapon.id)
                         restr_suffix = (
                             f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restr)}]</span>'
                             if restr
@@ -1419,7 +1427,7 @@ def render_attack_declaration(
                                 "def_uid": def_uid,
                                 "weapon_name": weapon.name_en,
                                 "profile_idx": profile_idx,
-                                "models_count": int(models_val),
+                                "models_count": eff_models,
                             }
                         )
                     models_assigned += int(models_val)
