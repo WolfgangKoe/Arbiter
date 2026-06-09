@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 32, 2026-06-09)
+## Aktueller Stand (nach Session 33, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -37,6 +37,10 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - **Session 32: 6l Relic-Effekt-Interpreter + Bug Heavy Cover**
   - Bug: Heavy Cover `charged`-Check war `atk_state` → jetzt `def_state` (Regel: Defender verliert Cover wenn er selbst charged hat, nicht der Angreifer)
   - 6l Phase 1: `Unit.relic_id`; `load_relic_catalog()`; `_apply_relic()` (Waffenersatz + `persistent_effects`); `buff_stat: toughness/strength`; Roster-Key `relic: <id>`; Relic-Badge (gold) auf unitCard; 9 neue Tests → 519 grün
+- **Session 33: Bugfix `_parse_strength` — User×N Notation**
+  - Bug: `power_klaw`, `killsaw`, `gorks_klaw`, `dread_klaw` (alle `strength: User×2`) crashten die Resolution mit `ValueError` — `_parse_strength` kannte nur `"×N"` isoliert, nicht `"User×N"`
+  - Fix: `_parse_strength` strippt jetzt optional das `"User"`-Präfix vor dem Operator → `"User×2"`, `"User+3"`, `"User-1"` alle korrekt
+  - 14 neue Regressionstests in `tests/uiLayout/test_common.py` → 533 grün
 
 ---
 
@@ -118,7 +122,7 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 - Seitenleisten: `first_player` links, `second_player` rechts (unveränderlich)
 - Keywords immer `UPPERCASE` in YAML
 - `_parse_strength(raw: int | str, unit_strength)` für Waffenstärke — akzeptiert native YAML-Typen; nie `int(strength)` oder `str(strength)` direkt
-- Weapon strength in YAML: plain int = feste Stärke, `"+N"` = User+N, `"×N"` = User×N, `"User"` = User; Necrons und Orks beide normalisiert
+- Weapon strength in YAML: plain int = feste Stärke, `"+N"` = User+N, `"×N"` = User×N, `"User"` = User; **auch `"User×N"`, `"User+N"`, `"User-N"` werden von `_parse_strength` akzeptiert** — Ork-YAML nutzt diese Form (power_klaw, killsaw etc. = `User×2`)
 - Regelreferenz: Immer erst lokal nachschlagen (`docs/work/wahapedia_*/`), nie Nutzer fragen
 
 ---

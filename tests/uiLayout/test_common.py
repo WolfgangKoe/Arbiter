@@ -1,4 +1,4 @@
-"""Tests for state_badges_html() — movement_choice and combat badges."""
+"""Tests for state_badges_html() and _parse_strength()."""
 
 import sys
 from pathlib import Path
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout._common import state_badges_html  # noqa: E402
+from uiLayout._common import _parse_strength, state_badges_html  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -206,6 +206,70 @@ def test_in_reserve_suppresses_movement_badge() -> None:
     html = state_badges_html(_state(movement_choice="advanced", in_reserve=True))
     assert "ADVANCED" not in html
     assert "RESERVE" in html
+
+
+# ---------------------------------------------------------------------------
+# _parse_strength — all notation variants
+# ---------------------------------------------------------------------------
+
+
+def test_parse_strength_fixed_int() -> None:
+    assert _parse_strength(5, 4) == 5
+
+
+def test_parse_strength_fixed_string() -> None:
+    assert _parse_strength("7", 4) == 7
+
+
+def test_parse_strength_user() -> None:
+    assert _parse_strength("User", 4) == 4
+
+
+def test_parse_strength_user_lowercase() -> None:
+    assert _parse_strength("user", 6) == 6
+
+
+def test_parse_strength_plus_n() -> None:
+    assert _parse_strength("+2", 4) == 6
+
+
+def test_parse_strength_times_n() -> None:
+    assert _parse_strength("×2", 4) == 8
+
+
+def test_parse_strength_minus_n() -> None:
+    assert _parse_strength("-1", 5) == 4
+
+
+def test_parse_strength_star() -> None:
+    assert _parse_strength("*", 99) == 0
+
+
+def test_parse_strength_user_times_n() -> None:
+    """Regression: power_klaw / killsaw strength 'User×2' must not crash."""
+    assert _parse_strength("User×2", 4) == 8
+
+
+def test_parse_strength_user_times_n_high_strength() -> None:
+    assert _parse_strength("User×2", 6) == 12
+
+
+def test_parse_strength_user_plus_n() -> None:
+    assert _parse_strength("User+3", 5) == 8
+
+
+def test_parse_strength_user_minus_n() -> None:
+    assert _parse_strength("User-1", 5) == 4
+
+
+def test_parse_strength_power_klaw_ork_boyz() -> None:
+    """Regression: Ork Boyz (S4) with power_klaw (User×2) → S8."""
+    assert _parse_strength("User×2", 4) == 8
+
+
+def test_parse_strength_power_klaw_warboss() -> None:
+    """Regression: Warboss in Mega Armour (S6) with dread_klaw (User×2) → S12."""
+    assert _parse_strength("User×2", 6) == 12
 
 
 def test_mwbd_shows_when_active() -> None:

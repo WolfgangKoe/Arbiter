@@ -307,25 +307,28 @@ def _empty_attack_declaration() -> dict:  # type: ignore[type-arg]
 def _parse_strength(raw: int | str, unit_strength: int) -> int:
     """Resolve weapon strength to a numeric value.
 
-    int  → fixed strength
-    "+N" → unit_strength + N
-    "×N" → unit_strength × N
-    "-N" → unit_strength - N  (rare)
-    "User" → unit_strength
+    int      → fixed strength
+    "User"   → unit_strength
+    "+N"     → unit_strength + N  (also "User+N")
+    "×N"     → unit_strength × N  (also "User×N")
+    "-N"     → unit_strength - N  (also "User-N", rare)
+    "*"      → 0 (special-mechanic weapon)
     """
     if isinstance(raw, int):
         return raw
     s = raw.strip()
     if s == "*":
         return 0  # special-mechanic weapon; handled by effect handler
-    if s.upper() == "USER":
+    # Strip optional "User" prefix before the operator
+    body = s[4:] if s[:4].upper() == "USER" else s
+    if not body or body.upper() == "USER":
         return unit_strength
-    if s.startswith("+"):
-        return unit_strength + int(s[1:])
-    if s.startswith("×"):
-        return unit_strength * int(s[1:])
-    if s.startswith("-"):
-        return unit_strength - int(s[1:])
+    if body.startswith("+"):
+        return unit_strength + int(body[1:])
+    if body.startswith("×"):
+        return unit_strength * int(body[1:])
+    if body.startswith("-"):
+        return unit_strength - int(body[1:])
     return int(s)
 
 
