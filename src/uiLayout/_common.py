@@ -652,21 +652,28 @@ def modifier_die_pair_html(
     )
 
 
-def save_modifier_die_pair_html(
-    from_thresh: int, to_thresh: int, label: str, value: int, color: str
-) -> str:
-    """SAVE-specific modifier pair using 'last failing die' convention (threshold − 1).
+def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str) -> str:
+    """SAVE modifier pair always anchored to the base armour value (never cumulative).
 
-    Layout: LEFT=base(grey) / arrow / RIGHT=effective(colored).
-    Arrow: ← for AP/penalties (save gets worse), → for cover/improvements (save gets better).
+    Buff  (value > 0, e.g. Cover+1, armour=3): blue(armour-value) → grey(armour)
+      "A 2 that used to fail at 3+ now passes."
+    Debuff (value < 0, e.g. AP-2,   armour=3): grey(armour-1) → red(armour+|value|-1)
+      "A 4 that used to pass at 3+ now fails (4-2=2 < 3)."
     """
     sign = "+" if value > 0 else ("-" if value < 0 else "")
-    arrow = "→" if value > 0 else "←"
-    # Show save-threshold values directly: grey = from_thresh (old save), colored = to_thresh (new save).
-    from_die = max(1, min(6, from_thresh))
-    to_die = max(1, min(6, to_thresh))
-    left_die = dice_face_svg(from_die, color="#6b7280")
-    right_die = dice_face_svg(to_die, color=color)
+    n = abs(value)
+    if value > 0:
+        left_val = max(1, min(6, armour - n))
+        right_val = max(1, min(6, armour))
+        arrow = "→"
+        left_die = dice_face_svg(left_val, color=color)
+        right_die = dice_face_svg(right_val, color="#6b7280")
+    else:
+        left_val = max(1, min(6, armour - 1))
+        right_val = max(1, min(6, armour + n - 1))
+        arrow = "←"
+        left_die = dice_face_svg(left_val, color="#6b7280")
+        right_die = dice_face_svg(right_val, color=color)
     return (
         f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
         f'<span style="font-size:11px;color:{color};background:#111827;'
@@ -674,7 +681,7 @@ def save_modifier_die_pair_html(
         f"{label}</span>"
         f"{left_die}"
         f'<span style="color:{color};font-size:12px;font-weight:bold;">'
-        f"{arrow}{sign}{abs(value)}{arrow}</span>"
+        f"{arrow}{sign}{n}{arrow}</span>"
         f"{right_die}</div>"
     )
 
@@ -808,23 +815,13 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
         _row(sv_label, threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)))
     )
 
-    # Modifier rows (AP + cover stack)
+    # Modifier rows (AP + cover stack) — each anchored to base armour, never cumulative
     has_modifiers = ap != 0 or bool(stack)
     if ap != 0:
-        # ap is negative (e.g. -2 for AP-2); pass directly so arrow shows ← (penalty)
-        rows.append(
-            _row("", save_modifier_die_pair_html(armour, armour_eff, f"AP{ap}", ap, "#ef4444"))
-        )
-    current = armour_eff
+        rows.append(_row("", save_modifier_die_pair_html(armour, ap, f"AP{ap}", "#ef4444")))
     for m in stack:
-        next_thresh = current - m["value"]
         color = "#3b82f6" if m["value"] > 0 else "#ef4444"
-        rows.append(
-            _row(
-                "", save_modifier_die_pair_html(current, next_thresh, m["label"], m["value"], color)
-            )
-        )
-        current = next_thresh
+        rows.append(_row("", save_modifier_die_pair_html(armour, m["value"], m["label"], color)))
 
     # Effective save row: always shows the armour-path result (after AP + cover).
     # Invuln is shown separately below with its own row — not mixed into this value.
