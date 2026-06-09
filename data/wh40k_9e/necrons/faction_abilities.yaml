@@ -1,165 +1,149 @@
 faction: Necrons
-round_choice_label: "Command Protocols"
+round_choice_label: Command Protocols
 abilities:
-
-  # ── Universal Necron Rules ─────────────────────────────────────────────────
-
-  - id: wh40k_9e.necrons.faction.living_metal
-    name_en: Living Metal
-    ability_type: triggered
-    source: faction_rule
-    rule_text: "At the start of your Command phase, each model in this unit regains 1 lost wound."
-    trigger:
-      timing: phase_start
-      phase: command
-      stage: start
-      player: active
-    conditions:
-      - has_rules: [livingMetal]
-        unit_not_destroyed: true
-        needs_healing: true
-    effect:
-      type: heal
-      target: self
-      amount: "1"
-      revive: false
-
-  - id: wh40k_9e.necrons.faction.reanimation_protocols
-    name_en: Reanimation Protocols
-    ability_type: triggered
-    source: faction_rule
-    rule_text: "Each time an enemy unit shoots or fights, after it makes its attacks, if any models in this unit were destroyed but this unit was not destroyed, this unit's reanimation protocols are enacted."
-    trigger:
-      timing: phase_reactive
-      phase:
-        - shooting
-        - fight
-      stage: end
-      player: inactive
-      event: after_enemy_attack
-    conditions:
-      - has_rules: [reanimationProtocols]
-        unit_not_destroyed: true
-    effect:
-      type: reanimate
-      target: self
-      amount: D6_per_wound
-
-  # ── Round-Choice Abilities (Command Protocols) ────────────────────────────
-  # ability_type: round_choice — geladen via load_round_choice_abilities(), NICHT via _ability_from_dict()
-
-  - id: wh40k_9e.necrons.faction.protocol_eternal_guardian
-    name_en: Protocol of the Eternal Guardian
-    name_de: Protokoll des Ewigen Wächters
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: nihilakh
-    primary: "+1 to all saving throws until next Command phase"
-    secondary: "Re-roll saving throws of 1"
-    directives:
-      primary:
-        effect:
-          type: save_modifier
-          value: 1
-          phase: any
-      secondary:
-        effect:
-          type: reroll_save_1
-          phase: any
-
-  - id: wh40k_9e.necrons.faction.protocol_hungry_void
-    name_en: Protocol of the Hungry Void
-    name_de: Protokoll der hungrigen Leere
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: novokh
-    primary: "+1 to hit (Shooting)"
-    secondary: "+1 Strength (Shooting weapons)"
-    directives:
-      primary:
-        effect:
-          type: hit_modifier
-          value: 1
-          phase: shooting
-      secondary:
-        effect:
-          type: strength_modifier
-          value: 1
-          phase: shooting
-
-  - id: wh40k_9e.necrons.faction.protocol_conquering_tyrant
-    name_en: Protocol of the Conquering Tyrant
-    name_de: Protokoll des tyrannischen Herrschers
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: sautekh
-    primary: "+1 Leadership"
-    secondary: "Re-roll hit and wound rolls of 1 (Melee)"
-    directives:
-      primary:
-        effect:
-          type: leadership_bonus
-          value: 1
-          phase: any
-      secondary:
-        effect:
-          type: reroll_hit_wound_1
-          phase: melee
-
-  - id: wh40k_9e.necrons.faction.protocol_sudden_storm
-    name_en: Protocol of the Sudden Storm
-    name_de: Protokoll des plötzlichen Sturms
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: nephrekh
-    primary: "+1\" Move"
-    secondary: "Can Advance and Charge in the same turn"
-    directives:
-      primary:
-        effect:
-          type: move_bonus
-          value: 1
-          phase: movement
-      secondary:
-        effect:
-          type: advance_and_charge
-          phase: charge
-
-  - id: wh40k_9e.necrons.faction.protocol_undying_legions
-    name_en: Protocol of the Undying Legions
-    name_de: Protokoll der unaufhörlichen Legionen
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: szarekhan
-    primary: "Re-roll Reanimation Protocols"
-    secondary: "+1 model returned per Reanimation Protocol"
-    directives:
-      primary:
-        effect:
-          type: rp_reroll
-          phase: any
-      secondary:
-        effect:
-          type: rp_bonus
-          value: 1
-          phase: any
-
-  - id: wh40k_9e.necrons.faction.protocol_vengeful_stars
-    name_en: Protocol of the Vengeful Stars
-    name_de: Protokoll der rachsüchtigen Sterne
-    ability_type: round_choice
-    source: faction_rule
-    subfaction_affinity: mephrit
-    primary: "+1 to wound rolls (Shooting)"
-    secondary: "Improve AP of Shooting weapons by 1"
-    directives:
-      primary:
-        effect:
-          type: wound_modifier
-          value: 1
-          phase: shooting
-      secondary:
-        effect:
-          type: ap_bonus
-          value: -1
-          phase: shooting
+- id: wh40k_9e.necrons.faction.living_metal
+  name_en: Living Metal
+  ability_type: triggered
+  source: faction_rule
+  rule_text: At the start of your Command phase, each model in this unit regains 1 lost wound.
+  trigger:
+    timing: phase_start
+    phase: command
+    stage: start
+    player: active
+  conditions:
+  - has_rules:
+    - livingMetal
+    unit_not_destroyed: true
+    needs_healing: true
+  effect:
+    type: heal
+    target: self
+    amount: '1'
+    revive: false
+- id: wh40k_9e.necrons.faction.reanimation_protocols
+  name_en: Reanimation Protocols
+  ability_type: triggered
+  source: faction_rule
+  rule_text: Each time an enemy unit shoots or fights, after it makes its attacks, if any models in this
+    unit were destroyed but this unit was not destroyed, this unit's reanimation protocols are enacted.
+  trigger:
+    timing: phase_reactive
+    phase:
+    - shooting
+    - fight
+    stage: end
+    player: inactive
+    event: after_enemy_attack
+  conditions:
+  - has_rules:
+    - reanimationProtocols
+    unit_not_destroyed: true
+  effect:
+    type: reanimate
+    target: self
+    amount: D6_per_wound
+- id: wh40k_9e.necrons.faction.protocol_eternal_guardian
+  name_en: Protocol of the Eternal Guardian
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: nihilakh
+  primary: +1 to all saving throws until next Command phase
+  secondary: Re-roll saving throws of 1
+  directives:
+    primary:
+      effect:
+        type: save_modifier
+        value: 1
+        phase: any
+    secondary:
+      effect:
+        type: reroll_save_1
+        phase: any
+- id: wh40k_9e.necrons.faction.protocol_hungry_void
+  name_en: Protocol of the Hungry Void
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: novokh
+  primary: +1 to hit (Shooting)
+  secondary: +1 Strength (Shooting weapons)
+  directives:
+    primary:
+      effect:
+        type: hit_modifier
+        value: 1
+        phase: shooting
+    secondary:
+      effect:
+        type: strength_modifier
+        value: 1
+        phase: shooting
+- id: wh40k_9e.necrons.faction.protocol_conquering_tyrant
+  name_en: Protocol of the Conquering Tyrant
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: sautekh
+  primary: +1 Leadership
+  secondary: Re-roll hit and wound rolls of 1 (Melee)
+  directives:
+    primary:
+      effect:
+        type: leadership_bonus
+        value: 1
+        phase: any
+    secondary:
+      effect:
+        type: reroll_hit_wound_1
+        phase: melee
+- id: wh40k_9e.necrons.faction.protocol_sudden_storm
+  name_en: Protocol of the Sudden Storm
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: nephrekh
+  primary: +1" Move
+  secondary: Can Advance and Charge in the same turn
+  directives:
+    primary:
+      effect:
+        type: move_bonus
+        value: 1
+        phase: movement
+    secondary:
+      effect:
+        type: advance_and_charge
+        phase: charge
+- id: wh40k_9e.necrons.faction.protocol_undying_legions
+  name_en: Protocol of the Undying Legions
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: szarekhan
+  primary: Re-roll Reanimation Protocols
+  secondary: +1 model returned per Reanimation Protocol
+  directives:
+    primary:
+      effect:
+        type: rp_reroll
+        phase: any
+    secondary:
+      effect:
+        type: rp_bonus
+        value: 1
+        phase: any
+- id: wh40k_9e.necrons.faction.protocol_vengeful_stars
+  name_en: Protocol of the Vengeful Stars
+  ability_type: round_choice
+  source: faction_rule
+  subfaction_affinity: mephrit
+  primary: +1 to wound rolls (Shooting)
+  secondary: Improve AP of Shooting weapons by 1
+  directives:
+    primary:
+      effect:
+        type: wound_modifier
+        value: 1
+        phase: shooting
+    secondary:
+      effect:
+        type: ap_bonus
+        value: -1
+        phase: shooting

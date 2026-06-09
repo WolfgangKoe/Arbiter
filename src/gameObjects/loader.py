@@ -12,7 +12,7 @@ from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.stratagem import Stratagem, StratagemModifier
-from gameObjects.unit import DamageBracket, Unit, WargearOption
+from gameObjects.unit import DamageBracket, TriggeredEffect, Unit, WargearOption
 from gameObjects.weapon import Weapon, WeaponProfile
 
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
@@ -463,7 +463,25 @@ def _apply_relic(
     if not entry:
         return unit
 
-    unit = dataclasses.replace(unit, relic_id=relic_id)
+    te_list: list[TriggeredEffect] = [
+        TriggeredEffect(
+            timing=te["timing"],
+            phase=te["phase"],
+            effect=te["effect"],
+            once_per_battle=te.get("once_per_battle", False),
+            dice=te.get("dice"),
+            threshold=te.get("threshold"),
+            amount=te.get("amount"),
+            mortal_dice=te.get("mortal_dice"),
+        )
+        for te in entry.get("triggered_effects", [])
+    ]
+    unit = dataclasses.replace(
+        unit,
+        relic_id=relic_id,
+        relic_name=entry.get("name_en"),
+        triggered_effects=te_list,
+    )
 
     if entry.get("profiles"):
         relic_weapon = _relic_weapon_from_entry(entry)

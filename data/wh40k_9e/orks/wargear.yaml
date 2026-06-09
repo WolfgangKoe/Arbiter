@@ -4,179 +4,144 @@
 
 - id: wh40k_9e.orks.wargear.cybork_body
   name_en: Cybork Body
-  ability_en: >-
-    This model has a 6+ feel no pain.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  ability_en: This model has a 6+ feel no pain.
   persistent_effects:
-    - type: set_fnp
-      value: 6
+  - type: set_fnp
+    value: 6
   ability_type: triggered
-  rule_text: "This model has a 6+ feel no pain."
+  rule_text: This model has a 6+ feel no pain.
   trigger:
     timing: persistent
     phase: any
     stage: active
     player: either
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.cybork_body]
+  - has_wargear:
+    - wh40k_9e.orks.wargear.cybork_body
   effect:
     type: fnp
     target: self
     modifier: 6
-
 - id: wh40k_9e.orks.wargear.ammo_runt
   name_en: Ammo Runt
-  ability_en: >-
-    Once per Shooting phase, the bearer can re-roll one hit roll when making
-    ranged attacks. After re-rolling, remove the Ammo Runt from play for the
-    rest of the battle (one use only).
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  ability_en: Once per Shooting phase, the bearer can re-roll one hit roll when making ranged attacks.
+    After re-rolling, remove the Ammo Runt from play for the rest of the battle (one use only).
   ability_type: activated
-  rule_text: "Once per Shooting phase, re-roll one hit roll when making ranged attacks. After using, the Ammo Runt is removed for the rest of the battle."
+  rule_text: Once per Shooting phase, re-roll one hit roll when making ranged attacks. After using, the
+    Ammo Runt is removed for the rest of the battle.
   trigger:
     timing: phase_any
     phase: shooting
     stage: active
     player: active
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.ammo_runt]
-      once_per_battle: true
+  - has_wargear:
+    - wh40k_9e.orks.wargear.ammo_runt
+    once_per_battle: true
   effect:
     type: reroll_one_hit
     target: self
     uses: 1
-
 - id: wh40k_9e.orks.wargear.bomb_squig
   name_en: Bomb Squig
-  ability_en: >-
-    Once per game, in your Shooting phase, you can use a Bomb Squig.
-    Select one enemy VEHICLE unit within 6" of the bearer and roll 2D6:
-    if the total equals or exceeds the unit's Toughness characteristic,
-    it suffers D3 mortal wounds.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  ability_en: 'Once per game, in your Shooting phase, you can use a Bomb Squig. Select one enemy VEHICLE
+    unit within 6" of the bearer and roll 2D6: if the total equals or exceeds the unit''s Toughness characteristic,
+    it suffers D3 mortal wounds.'
   ability_type: activated
-  rule_text: "Once per game in your Shooting phase, select one enemy VEHICLE within 6\" and roll 2D6. If the total equals or exceeds the target's Toughness, it suffers D3 mortal wounds."
+  rule_text: Once per game in your Shooting phase, select one enemy VEHICLE within 6" and roll 2D6. If
+    the total equals or exceeds the target's Toughness, it suffers D3 mortal wounds.
   trigger:
     timing: phase_any
     phase: shooting
     stage: active
     player: active
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.bomb_squig]
-      once_per_battle: true
-    - target_within_inches: 6
-    - target_has_keyword: VEHICLE
+  - has_wargear:
+    - wh40k_9e.orks.wargear.bomb_squig
+    once_per_battle: true
+  - target_within_inches: 6
+  - target_has_keyword: VEHICLE
   effect:
     type: mortal_wounds_conditional
     target: enemy_vehicle_selected
     amount: D3
     condition: 2d6_vs_toughness
-
 - id: wh40k_9e.orks.wargear.grot_oiler
   name_en: Grot Oiler
-  ability_en: >-
-    If the bearer has the Mekaniak ability and uses it in a turn, the bearer
-    can repair one additional wound (i.e., regains up to D3+1 lost wounds).
-    The Grot Oiler is removed from play after use (one use only per battle).
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  ability_en: If the bearer has the Mekaniak ability and uses it in a turn, the bearer can repair one
+    additional wound (i.e., regains up to D3+1 lost wounds). The Grot Oiler is removed from play after
+    use (one use only per battle).
   ability_type: triggered
-  rule_text: "When the bearer uses the Mekaniak ability, the target regains D3+1 wounds instead of D3. One use only — the Grot Oiler is removed after use."
+  rule_text: When the bearer uses the Mekaniak ability, the target regains D3+1 wounds instead of D3.
+    One use only — the Grot Oiler is removed after use.
   trigger:
     timing: phase_end
     phase: movement
     stage: end
     player: active
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.grot_oiler]
-      once_per_battle: true
+  - has_wargear:
+    - wh40k_9e.orks.wargear.grot_oiler
+    once_per_battle: true
   effect:
     type: heal_bonus
     target: mekaniak_target
     bonus_amount: 1
-
 - id: wh40k_9e.orks.wargear.gitfindaz
   name_en: Gitfindaz
-  ability_en: >-
-    FLASH GITZ only. The bearer can target enemy units that are not the
-    closest eligible target when making ranged attacks, ignoring the
-    requirement to shoot the closest eligible unit.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
-
+  ability_en: FLASH GITZ only. The bearer can target enemy units that are not the closest eligible target
+    when making ranged attacks, ignoring the requirement to shoot the closest eligible unit.
 - id: wh40k_9e.orks.wargear.kustom_job_souped_up_driveshaft
-  name_en: "Kustom Job: Souped-Up Driveshaft"
-  ability_en: >-
-    Vehicle only. Add 2" to the Move characteristic of this model.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  name_en: 'Kustom Job: Souped-Up Driveshaft'
+  ability_en: Vehicle only. Add 2" to the Move characteristic of this model.
   persistent_effects:
-    - type: buff_stat
-      stat: move
-      modifier: 2
+  - type: buff_stat
+    stat: move
+    modifier: 2
   ability_type: triggered
-  rule_text: "Add 2\" to the Move characteristic of this model."
+  rule_text: Add 2" to the Move characteristic of this model.
   trigger:
     timing: persistent
     phase: any
     stage: active
     player: either
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.kustom_job_souped_up_driveshaft]
+  - has_wargear:
+    - wh40k_9e.orks.wargear.kustom_job_souped_up_driveshaft
   effect:
     type: buff_stat
     target: self
     stat: move
     modifier: 2
-
 - id: wh40k_9e.orks.wargear.kustom_job_ramming_spur
-  name_en: "Kustom Job: Ramming Spur"
-  ability_en: >-
-    Vehicle only. At the end of a charge move made by this model, you can
-    select one enemy unit within Engagement Range and roll one D6:
-    on a 4+, that unit suffers D3 mortal wounds.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
-
+  name_en: 'Kustom Job: Ramming Spur'
+  ability_en: 'Vehicle only. At the end of a charge move made by this model, you can select one enemy
+    unit within Engagement Range and roll one D6: on a 4+, that unit suffers D3 mortal wounds.'
 - id: wh40k_9e.orks.wargear.kustom_job_extra_armour_platez
-  name_en: "Kustom Job: Extra Armour Platez"
-  ability_en: >-
-    Vehicle only. Add 1 to armour saving throws made for this model.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  name_en: 'Kustom Job: Extra Armour Platez'
+  ability_en: Vehicle only. Add 1 to armour saving throws made for this model.
   persistent_effects:
-    - type: buff_save
-      modifier: 1
+  - type: buff_save
+    modifier: 1
   ability_type: triggered
-  rule_text: "Add 1 to armour saving throws made for this model."
+  rule_text: Add 1 to armour saving throws made for this model.
   trigger:
     timing: persistent
     phase: any
     stage: active
     player: either
   conditions:
-    - has_wargear: [wh40k_9e.orks.wargear.kustom_job_extra_armour_platez]
+  - has_wargear:
+    - wh40k_9e.orks.wargear.kustom_job_extra_armour_platez
   effect:
     type: buff_save
     target: self
     modifier: 1
-
 - id: wh40k_9e.orks.wargear.big_choppa_nob
   name_en: Big Choppa (Nob)
-  ability_en: >-
-    Replaces a Choppa. The bearer gains +2 Strength on melee attacks made
-    with this weapon (reflected in weapon profile).
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
-
+  ability_en: Replaces a Choppa. The bearer gains +2 Strength on melee attacks made with this weapon (reflected
+    in weapon profile).
 - id: wh40k_9e.orks.wargear.squig_bomb
   name_en: Squig Bomb
-  ability_en: >-
-    Kommandos only. Once per game, when this unit is set up from hiding,
-    you can select one enemy unit within 3" of the bearer and roll one D6:
-    on a 2+, that unit suffers D3+1 mortal wounds.
-  grants_keywords: []
-  source: { publication: Codex Orks 9e }
+  ability_en: 'Kommandos only. Once per game, when this unit is set up from hiding, you can select one
+    enemy unit within 3" of the bearer and roll one D6: on a 2+, that unit suffers D3+1 mortal wounds.'

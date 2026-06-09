@@ -117,6 +117,51 @@ def _render_buff_roll_ability(
 
 
 # ---------------------------------------------------------------------------
+# gain_cp_roll — relic triggered effect: roll a die, gain CP on threshold+
+# ---------------------------------------------------------------------------
+
+
+def _render_gain_cp_roll(unit, faction: str, state: dict) -> None:  # type: ignore[type-arg]
+    from gameObjects.unit import TriggeredEffect  # local import avoids circular dep
+
+    te: TriggeredEffect | None = unit.get_triggered_effect("phase_start", "command", "gain_cp_roll")
+    if not te:
+        return
+
+    display_name = unit.relic_name or unit.relic_id
+    threshold = te.threshold or 4
+    amount = te.amount or 1
+    fail_label = f"1–{threshold - 1} (Failed)"
+    success_label = f"{threshold}+ (Success)"
+
+    st.divider()
+    st.markdown(f"**{display_name}**")
+    if st.session_state.get("morgog_cap_rolled_this_phase"):
+        st.caption("Already rolled this Command Phase.")
+        return
+    st.caption(f"Roll {te.dice or 'D6'}: on a {threshold}+, gain {amount} CP.")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button(
+            success_label,
+            key=f"cp_roll_success_{unit.relic_id}",
+            type="primary",
+            use_container_width=True,
+        ):
+            adjust_cp(faction, amount)
+            log_action(
+                state["round"], "command", faction, f"{display_name}: {threshold}+ — +{amount} CP"
+            )
+            st.session_state.morgog_cap_rolled_this_phase = True
+            st.rerun()
+    with col2:
+        if st.button(fail_label, key=f"cp_roll_fail_{unit.relic_id}", use_container_width=True):
+            log_action(state["round"], "command", faction, f"{display_name}: failed — no CP")
+            st.session_state.morgog_cap_rolled_this_phase = True
+            st.rerun()
+
+
+# ---------------------------------------------------------------------------
 # Resurrection Orb — wargear, separate from unit_abilities system
 # ---------------------------------------------------------------------------
 
@@ -196,6 +241,8 @@ def _render_unit_command_abilities(
     unit = unit_by_id.get(unit_id)
     if unit and _RES_ORB_ID in unit.wargear_ids:
         _render_resurrection_orb(faction, state, units_state, unit_by_id, selected_state_key)
+    if unit and unit.get_triggered_effect("phase_start", "command", "gain_cp_roll"):
+        _render_gain_cp_roll(unit, faction, state)
 
 
 # ---------------------------------------------------------------------------

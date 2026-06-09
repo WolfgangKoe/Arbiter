@@ -6,6 +6,7 @@ units:
   - id: wh40k_9e.necrons.unit.overlord
     models: 1
     wargear: [wh40k_9e.necrons.wargear.resurrection_orb]
+    relic: wh40k_9e.necrons.relic.schleier_der_finsternis
   - id: wh40k_9e.necrons.unit.warriors
     models: 10
   - id: wh40k_9e.necrons.unit.immortals

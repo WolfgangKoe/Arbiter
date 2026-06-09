@@ -9,8 +9,9 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import units_key_for
+from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import set_deployment, set_movement_status
+from gameObjects.unit import TriggeredEffect
 from uiLayout._common import PHASE_RULES, lookup, render_player_column
 
 
@@ -59,6 +60,17 @@ def _active_movement(
     in_melee = unit_state.get("in_melee", False)
     current = unit_state.get("movement_choice") or "none"
     flags = unit_state.get("turn_flags", {})
+
+    # Movement was locked by an ability (e.g. teleport) — block normal movement buttons
+    if flags.get("movement_locked"):
+        st.divider()
+        te = unit.get_triggered_effect("phase_start", "movement", "teleport")
+        if te:
+            _render_teleport_effect(uid, unit, faction, state, unit_state, te)
+        else:
+            st.info("Movement locked by an ability — cannot change movement status this turn.")
+        return
+
     already_retreated = flags.get("retreated", False)
 
     if already_retreated:
@@ -92,6 +104,173 @@ def _active_movement(
 
     if in_melee:
         st.caption("Unit is in melee — only Stay Stationary or Retreat allowed.")
+
+    te = unit.get_triggered_effect("phase_start", "movement", "teleport")
+    if te:
+        _render_teleport_effect(uid, unit, faction, state, unit_state, te)
+
+
+def _render_teleport_effect(
+    uid: str,
+    unit,  # type: ignore[type-arg]
+    faction: str,
+    state: dict,  # type: ignore[type-arg]
+    unit_state: dict,  # type: ignore[type-arg]
+    te: TriggeredEffect,
+) -> None:
+    """Render a once-per-battle teleport relic UI.
+
+    Step 1: "Prepare" button (disabled if already moved or already used).
+    Step 2: Optional CORE unit selector + Confirm/Cancel.
+    On confirm: mark bearer + optional CORE unit as moved; lock movement; mark relic used.
+    """
+    relic_id = unit.relic_id
+    display_name = unit.relic_name or relic_id
+
+    st.divider()
+    st.markdown(f"**{display_name}**")
+
+    relic_used = st.session_state.get("relic_triggered_used", {})
+    if relic_used.get(relic_id):
+        if unit_state["turn_flags"].get("movement_locked"):
+            st.info(
+                f"{display_name} activated this turn — unit and selected CORE unit count as moved."
+            )
+            if st.button(
+                f"Undo {display_name}", key=f"teleport_undo_{uid}", use_container_width=True
+            ):
+                _undo_teleport(relic_id, faction, state)
+        else:
+            st.caption("Already used this battle.")
+        return
+
+    # Teleport replaces normal move — block if already moved/advanced/retreated
+    movement_choice = st.session_state[units_key_for(faction)].get(uid, {}).get("movement_choice")
+    if movement_choice in ("moved", "advanced", "retreated"):
+        st.caption(f"{display_name} not available — unit has already moved this turn.")
+        return
+
+    awaiting = st.session_state.get("veil_awaiting_confirm", False)
+
+    if not awaiting:
+        st.caption(
+            "Once per battle: remove this unit (and optionally one DYNASTY CORE unit "
+            'within 3") from the battlefield and set up both more than 9" from any '
+            "enemy models. Both units count as having moved this turn."
+        )
+        if st.button(
+            f"Prepare {display_name}",
+            key=f"teleport_prepare_{uid}",
+            type="primary",
+            use_container_width=True,
+        ):
+            st.session_state.veil_awaiting_confirm = True
+            st.session_state.veil_core_target_uid = None
+            st.rerun()
+        return
+
+    # ---------------------------------------------------------------------------
+    # Step 2 — CORE unit selector
+    # ---------------------------------------------------------------------------
+    st.info(
+        'Verify bearer is within 3" of the target unit on the table. '
+        'Both will be set up more than 9" from any enemy models.'
+    )
+
+    units_state = st.session_state[units_key_for(faction)]
+    all_units = units_list_for(faction)
+    all_keys = unit_keys_for(faction)
+
+    # Build (state_key, unit) pairs for CORE candidates — exclude bearer, destroyed, reserve
+    core_candidates: list[tuple[str, object]] = []  # type: ignore[type-arg]
+    for state_key, cu in zip(all_keys, all_units):
+        if cu.id == unit.id:
+            continue
+        if "CORE" not in cu.keywords:
+            continue
+        cu_state = units_state.get(state_key, {})
+        if cu_state.get("destroyed") or cu_state.get("in_reserve"):
+            continue
+        core_candidates.append((state_key, cu))
+
+    core_options: list[tuple[str | None, str]] = [(None, "— Bearer only (no second unit) —")]
+    for sk, cu in core_candidates:
+        core_options.append((sk, cu.name_en))
+
+    labels = [label for _, label in core_options]
+    current_target = st.session_state.get("veil_core_target_uid")
+    current_idx = next(
+        (i for i, (uid_opt, _) in enumerate(core_options) if uid_opt == current_target),
+        0,
+    )
+
+    chosen_idx = st.selectbox(
+        'Optional: select a DYNASTY CORE unit within 3"',
+        options=range(len(labels)),
+        format_func=lambda i: labels[i],
+        index=current_idx,
+        key="veil_core_select",
+    )
+    st.session_state.veil_core_target_uid = core_options[chosen_idx][0]
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button(
+            "Confirm Teleport", key="veil_confirm", type="primary", use_container_width=True
+        ):
+            # Mark relic as used (once per battle)
+            used = dict(st.session_state.get("relic_triggered_used", {}))
+            used[relic_id] = True
+            st.session_state.relic_triggered_used = used
+
+            # Mark bearer as moved (locked by teleport ability)
+            set_movement_status(uid, faction, "moved")
+            st.session_state[units_key_for(faction)][uid]["turn_flags"]["movement_locked"] = True
+
+            # Mark optional CORE unit as moved — core_uid IS already the state key
+            core_uid = st.session_state.get("veil_core_target_uid")
+            core_name = ""
+            if core_uid:
+                set_movement_status(core_uid, faction, "moved")
+                st.session_state[units_key_for(faction)][core_uid]["turn_flags"][
+                    "movement_locked"
+                ] = True
+                core_unit_pair = next(
+                    ((sk, cu) for sk, cu in core_candidates if sk == core_uid), None
+                )
+                core_name = f" + {core_unit_pair[1].name_en}" if core_unit_pair else ""
+
+            log_action(
+                state["round"],
+                "movement",
+                unit.name_en,
+                f"{display_name}: teleport{core_name}",
+            )
+            st.session_state.veil_awaiting_confirm = False
+            st.session_state.veil_core_target_uid = None
+            st.rerun()
+    with col2:
+        if st.button("Cancel", key="veil_cancel", use_container_width=True):
+            st.session_state.veil_awaiting_confirm = False
+            st.session_state.veil_core_target_uid = None
+            st.rerun()
+
+
+def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: ignore[type-arg]
+    """Undo a confirmed teleport ability (only available within the same turn)."""
+    used = dict(st.session_state.get("relic_triggered_used", {}))
+    used.pop(relic_id, None)
+    st.session_state.relic_triggered_used = used
+
+    # Reset every unit in the faction whose movement was locked by the teleport
+    for u_state in st.session_state[units_key_for(faction)].values():
+        if u_state.get("turn_flags", {}).get("movement_locked"):
+            u_state["turn_flags"]["movement_locked"] = False
+            u_state["movement_choice"] = "stationary"
+            u_state["movement_chosen"] = False
+
+    log_action(state["round"], "movement", "teleport", "undone")
+    st.rerun()
 
 
 def _render_reinforcements_step(faction: str) -> None:

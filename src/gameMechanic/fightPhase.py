@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import units_key_for, units_list_for
+from gameMechanic.game_log import log_action
+from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
+from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
 from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import (
     PHASE_RULES,
@@ -95,6 +97,214 @@ def _advance_fight_turn_if_needed(first: str, second: str) -> None:
         st.session_state.fight_current_player = other
 
 
+def _dice_max(dice_str: str) -> int:
+    """Parse 'D3' or 'D6' to its maximum value."""
+    try:
+        return int(str(dice_str).lstrip("Dd"))
+    except (ValueError, AttributeError):
+        return 3
+
+
+def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
+    """Render the post-fight mortal wound trigger UI (data-driven via triggered_effects).
+
+    Step 'initial': target selection + Failed / Continue buttons.
+    Step 'assign':  +/- wound counter + Back / Apply buttons.
+    """
+    pending = st.session_state.get("pending_irongob") or {}
+    uid = pending.get("uid", "")
+    faction = pending.get("faction", "")
+    step = pending.get("step", "initial")
+    if not uid or not faction:
+        return
+
+    unit, _ = lookup(faction, uid)
+    te = unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee")
+    if not te:
+        st.session_state.pending_irongob = None
+        return
+
+    display_name = unit.relic_name or unit.relic_id
+    threshold = te.threshold or 2
+    mortal_dice_str = te.mortal_dice or "D3"
+    mortal_max = _dice_max(mortal_dice_str)
+    fail_label = f"1–{threshold - 1} (Failed)" if threshold > 2 else "1 (Failed)"
+
+    first = state["first_player"]
+    enemy_faction = state["second_player"] if faction == first else first
+
+    st.info(f"**{display_name}** — {unit.name_en} has finished attacking.")
+
+    # ------------------------------------------------------------------
+    # Step 1 — target selection + D6 result
+    # ------------------------------------------------------------------
+    if step == "initial":
+        st.caption(
+            f"Roll {te.dice or 'D6'}: on a {threshold}+, select one enemy unit within 1\" "
+            f"and roll {mortal_dice_str} mortal wounds."
+        )
+
+        enemy_units_state = st.session_state[units_key_for(enemy_faction)]
+        all_keys = unit_keys_for(enemy_faction)
+        all_units = units_list_for(enemy_faction)
+        candidates = [
+            (sk, eu)
+            for sk, eu in zip(all_keys, all_units)
+            if not enemy_units_state.get(sk, {}).get("destroyed")
+            and not enemy_units_state.get(sk, {}).get("in_reserve")
+        ]
+        target_options: list[tuple[str | None, str]] = [(None, "— Select target unit —")] + [
+            (sk, eu.name_en) for sk, eu in candidates
+        ]
+        target_labels = [label for _, label in target_options]
+        current_target = pending.get("target_uid")
+        current_idx = next((i for i, (k, _) in enumerate(target_options) if k == current_target), 0)
+        chosen_idx = st.selectbox(
+            'Target enemy unit (verify within 1" on table):',
+            options=range(len(target_labels)),
+            format_func=lambda i: target_labels[i],
+            index=current_idx,
+            key="mortal_target_select",
+        )
+        selected_target = target_options[chosen_idx][0]
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button(fail_label, key="mortal_fail", use_container_width=True):
+                log_action(
+                    state["round"], "fight", unit.name_en, f"{display_name}: failed — no effect"
+                )
+                st.session_state.pending_irongob = None
+                st.rerun()
+        with col2:
+            if st.button(
+                f"2+ — Assign {mortal_dice_str} →",
+                key="mortal_continue",
+                type="primary",
+                disabled=selected_target is None,
+                use_container_width=True,
+            ):
+                updated = dict(pending)
+                updated["step"] = "assign"
+                updated["target_uid"] = selected_target
+                updated["target_faction"] = enemy_faction
+                st.session_state.pending_irongob = updated
+                st.rerun()
+
+    # ------------------------------------------------------------------
+    # Step 2 — +/- mortal wound counter
+    # ------------------------------------------------------------------
+    elif step == "assign":
+        target_uid = pending.get("target_uid", "")
+        target_faction = pending.get("target_faction", enemy_faction)
+        target_unit, _ = lookup(target_faction, target_uid)
+        mortals = pending.get("mortals", 0)
+
+        st.caption(
+            f"Roll {mortal_dice_str} on the table — assign mortal wounds to **{target_unit.name_en}**."
+        )
+
+        col_minus, col_count, col_plus = st.columns([1, 2, 1])
+        with col_minus:
+            if st.button("−", key="mortal_minus", disabled=mortals <= 0, use_container_width=True):
+                updated = dict(pending)
+                updated["mortals"] = mortals - 1
+                st.session_state.pending_irongob = updated
+                st.rerun()
+        with col_count:
+            st.markdown(
+                f"<div style='text-align:center;font-size:1.5rem;padding:0.3rem'><b>{mortals}</b></div>",
+                unsafe_allow_html=True,
+            )
+        with col_plus:
+            if st.button(
+                "+", key="mortal_plus", disabled=mortals >= mortal_max, use_container_width=True
+            ):
+                updated = dict(pending)
+                updated["mortals"] = mortals + 1
+                st.session_state.pending_irongob = updated
+                st.rerun()
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("← Back", key="mortal_back", use_container_width=True):
+                updated = dict(pending)
+                updated["step"] = "initial"
+                updated["mortals"] = 0
+                st.session_state.pending_irongob = updated
+                st.rerun()
+        with col2:
+            plural = "s" if mortals != 1 else ""
+            if st.button(
+                f"Apply {mortals} mortal wound{plural}",
+                key="mortal_apply",
+                type="primary",
+                disabled=mortals <= 0,
+                use_container_width=True,
+            ):
+                apply_mortal_wounds(target_uid, target_faction, mortals, target_unit)
+                st.session_state[units_key_for(faction)][uid]["turn_flags"][
+                    "mortal_effect_applied"
+                ] = True
+                st.session_state.pending_mortal_undo = {
+                    "attacker_uid": uid,
+                    "attacker_faction": faction,
+                    "target_uid": target_uid,
+                    "target_faction": target_faction,
+                    "count": mortals,
+                    "display_name": display_name,
+                }
+                log_action(
+                    state["round"],
+                    "fight",
+                    unit.name_en,
+                    f"{display_name}: {mortals} mortal wound{plural} → {target_unit.name_en}",
+                )
+                st.session_state.pending_irongob = None
+                st.rerun()
+
+
+def _maybe_render_mortal_undo(state: dict) -> None:  # type: ignore[type-arg]
+    """Show undo section after mortal wounds were applied (until turn end)."""
+    undo = st.session_state.get("pending_mortal_undo")
+    if not undo:
+        return
+    atk_uid = undo["attacker_uid"]
+    atk_faction = undo["attacker_faction"]
+    atk_flags = st.session_state[units_key_for(atk_faction)].get(atk_uid, {}).get("turn_flags", {})
+    if not atk_flags.get("mortal_effect_applied"):
+        return
+
+    count = undo["count"]
+    display_name = undo["display_name"]
+    target_uid = undo["target_uid"]
+    target_faction = undo["target_faction"]
+    target_unit, _ = lookup(target_faction, target_uid)
+    plural = "s" if count != 1 else ""
+
+    st.warning(
+        f"**{display_name}**: {count} mortal wound{plural} applied to **{target_unit.name_en}** this turn."
+    )
+    if st.button(
+        f"Undo — restore {count} wound{plural} to {target_unit.name_en}",
+        key="mortal_undo_btn",
+        use_container_width=True,
+    ):
+        heal_unit(target_uid, target_faction, count, target_unit, revive=True)
+        st.session_state[units_key_for(atk_faction)][atk_uid]["turn_flags"][
+            "mortal_effect_applied"
+        ] = False
+        st.session_state.pending_mortal_undo = None
+        log_action(
+            state["round"],
+            "fight",
+            display_name,
+            f"mortal wounds undone — {count} wound{plural} restored to {target_unit.name_en}",
+        )
+        st.rerun()
+    st.divider()
+
+
 class FightPhaseHandler:
     """PhaseHandler for the Fight Phase."""
 
@@ -107,6 +317,12 @@ class FightPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
         active_player: str = st.session_state.active
+
+        if st.session_state.get("pending_irongob"):
+            _render_mortal_after_melee(state)
+            return
+
+        _maybe_render_mortal_undo(state)
 
         # Priority goes to the inactive (non-active) player
         if st.session_state.get("fight_current_player") is None:

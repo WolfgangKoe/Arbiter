@@ -307,8 +307,10 @@ def render_unit_card(
             if waaagh.get("stage", 0) >= 1:
                 badges += _badge("WAAAGH!")
             if unit.relic_id:
-                relic_short = unit.relic_id.rsplit(".", 1)[-1].replace("_", " ").upper()
-                badges += _badge(relic_short, variant="relic")
+                relic_label = (
+                    unit.relic_name or unit.relic_id.rsplit(".", 1)[-1].replace("_", " ")
+                ).upper()
+                badges += _badge(relic_label, variant="relic")
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)

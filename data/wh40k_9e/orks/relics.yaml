@@ -26,6 +26,13 @@
   klan: blood_axes
   replaces:
     any_of: []
+  triggered_effects:
+    - timing: phase_start
+      phase: command
+      effect: gain_cp_roll
+      dice: D6
+      threshold: 4
+      amount: 1
   ability_en: >
     At the start of your Command phase, if the bearer is on the battlefield, roll one D6:
     on a 4+, you gain 1 Command point.
@@ -83,6 +90,13 @@
   klan: goffs
   replaces:
     any_of: []
+  triggered_effects:
+    - timing: after_fight
+      phase: fight
+      effect: mortal_after_melee
+      dice: D6
+      threshold: 2
+      mortal_dice: D3
   ability_en: >
     After the bearer has made all of its close combat attacks, before it makes its
     consolidation move, select one enemy unit within 1\" of the bearer and roll one D6:

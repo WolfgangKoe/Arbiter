@@ -173,6 +173,11 @@ def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) ->
     enter_melee(uid, faction, target_uid, target_faction)
 
 
+def apply_mortal_wounds(uid: str, faction: str, count: int, unit: Unit) -> None:
+    """Apply mortal wounds — no armour save, no front-model cap."""
+    apply_damage(uid, faction, count, unit, mortal=True)
+
+
 def reset_turn_flags(uid: str, faction: str) -> None:
     key = units_key_for(faction)
     flags = st.session_state[key][uid]["turn_flags"]

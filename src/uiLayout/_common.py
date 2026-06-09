@@ -1005,6 +1005,19 @@ def _render_damage_block(
                 atk_flags["shot"] = True
             elif phase_key == "fight":
                 atk_flags["fought"] = True
+                try:
+                    atk_unit, _ = lookup(atk_f, atk_uid)
+                    if atk_unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee"):
+                        st.session_state.pending_irongob = {
+                            "uid": atk_uid,
+                            "faction": atk_f,
+                            "step": "initial",
+                            "target_uid": None,
+                            "target_faction": None,
+                            "mortals": 0,
+                        }
+                except (StopIteration, KeyError):
+                    pass
         log_action(
             st.session_state.round,
             phase_key,

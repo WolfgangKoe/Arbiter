@@ -1,201 +1,73 @@
 # game_system: wh40k_9e, faction: Necrons
+
 - id: wh40k_9e.necrons.warlord_trait.enduring_will
   name_en: Enduring Will
-  name_de: Fortdauernder Wille
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Ziehe 1 ab vom Schadenswert jeder Attacke, die diesem KRIEGSHERRN
-    zugewiesen wird (bis zu einem Minimum von 1).
+
 - id: wh40k_9e.necrons.warlord_trait.eternal_madness
   name_en: Eternal Madness
-  name_de: Ewiger Wahnsinn
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Bei jeder Nahkampfattacke dieses KRIEGSHERRN kannst du den
-    Verwundungswurf wiederholen.
+
 - id: wh40k_9e.necrons.warlord_trait.immortal_pride
   name_en: Immortal Pride
-  name_de: Unsterblicher Stolz
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Wirf jedes Mal einen W6, wenn dieser KRIEGSHERR durch eine tödliche
-    Verwundung einen Lebenspunkt verlieren würde; bei 5+ verliert er den
-    Lebenspunkt nicht.
-    Dieser KRIEGSHERR hat außerdem die folgende Fähigkeit:
-    "Unsterblicher Stolz (Aura): Solange sich eine befreundete
-    <DYNASTIE>-KERN-Einheit innerhalb von 6 Zoll um dieses Modell befindet,
-    ignoriere jegliche Modifikatoren auf ihre Zermürbungstests."
+
 - id: wh40k_9e.necrons.warlord_trait.thrall_of_the_silent_king
   name_en: Thrall of the Silent King
-  name_de: Diener des Silent Kings
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Addiere 3 Zoll zur Reichweite der Aurafähigkeiten dieses KRIEGSHERRN
-    (bis zu einem Maximum von 9 Zoll). Außerdem kannst du, wenn dieser
-    KRIEGSHERR seine Fähigkeiten Mein Wille geschehe, Der Wille des Lords
-    oder Anpassungsfähige Strategie einsetzt, eine befreundete
-    <DYNASTIE>-KERN-Einheit innerhalb von 12 Zoll statt innerhalb von 9 Zoll
-    um diesen KRIEGSHERRN wählen.
+
 - id: wh40k_9e.necrons.warlord_trait.implacable_conqueror
   name_en: Implacable Conqueror
-  name_de: Unerbittlicher Eroberer
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Solange sich eine befreundete <DYNASTIE>-KERN-Einheit innerhalb von
-    6 Zoll um diesen KRIEGSHERRN befindet, kannst du Angriffswürfe
-    für jene Einheit wiederholen.
+
 - id: wh40k_9e.necrons.warlord_trait.honourable_combatant
   name_en: Honourable Combatant
-  name_de: Ehrbarer Streiter
   category: generic
-  source:
-    publication: Codex Necrons
-    page: "63-64"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3884.png
   applies_to:
     keywords:
       - CHARACTER
-  text_de: >
-    Jedes Mal, wenn dieser KRIEGSHERR in der Nahkampfphase zum Kämpfen
-    ausgewählt wird, kann er einen ehrbaren Kampf beginnen. Wenn er das
-    tut, wähle eine feindliche CHARAKTERMODELL-Einheit; addiere bis zum Ende
-    der Phase 2 zum Attackenwert dieses KRIEGSHERRN, aber er kann nur
-    Attacken ausführen, die die gewählte feindliche CHARAKTERMODELL-Einheit
-    als Ziel haben.
+
 - id: wh40k_9e.necrons.warlord_trait.mephrit.merciless_tyrant
   name_en: Merciless Tyrant
-  name_de: Unbarmherziger Tyrann
   category: dynastic
   dynasty: Mephrit
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Addiere 1 zu den Stärke- und Attackenwerten dieses KRIEGSHERRN.
+
 - id: wh40k_9e.necrons.warlord_trait.nephrekh.skin_of_living_gold
   name_en: Skin of Living Gold
-  name_de: Haut aus lebendem Gold
   category: dynastic
   dynasty: Nephrekh
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Ziehe bei jeder Attacke gegen diesen KRIEGSHERRN 1 vom Trefferwurf ab.
+
 - id: wh40k_9e.necrons.warlord_trait.nihilakh.precognitive_strike
   name_en: Precognitive Strike
-  name_de: Voraussehender Schlag
   category: dynastic
   dynasty: Nihilakh
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Wenn sich dieser KRIEGSHERR zu Beginn der Nahkampfphase in
-    Nahkampfreichweite zu mindestens einer feindlichen Einheit befindet,
-    kann er in dieser Phase zuerst kämpfen.
+
 - id: wh40k_9e.necrons.warlord_trait.novokh.blood_fuelled_fury
   name_en: Blood-Fuelled Fury
-  name_de: Blutgetriebene Wut
   category: dynastic
   dynasty: Novokh
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Bei jeder Nahkampfattacke dieses KRIEGSHERRN verursacht ein
-    unmodifizierter Verwundungswurf von 6 beim Ziel zusätzlich zum normalen
-    Schaden 1 tödliche Verwundung.
+
 - id: wh40k_9e.necrons.warlord_trait.sautekh.hyperlogical_strategist
   name_en: Hyperlogical Strategist
-  name_de: Hyperlogischer Stratege
   category: dynastic
   dynasty: Sautekh
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Solange sich dieser KRIEGSHERR auf dem Schlachtfeld befindet, kannst du
-    jedes Mal, wenn du einen Befehlspunkt ausgibst, um eine Gefechtsoption
-    einzusetzen, einen W6 werfen; bei 5+ erhältst du den Befehlspunkt zurück.
+
 - id: wh40k_9e.necrons.warlord_trait.szarekhan.the_triarchs_will
   name_en: The Triarch's Will
-  name_de: Der Wille des Triarchats
   category: dynastic
   dynasty: Szarekhan
-  source:
-    publication: Codex Necrons
-    page: "65"
-    capture_status: draft_from_user_image
-    image_files:
-      - IMG_3885.png
-  text_de: >
-    Wenn dein KRIEGSHERR diese Begabung des Kriegsherrn hat, kannst du,
-    wenn du Kommandoprotokolle für die Schlacht zuweist, vier
-    Kommandoprotokolle wählen anstatt fünf, und eines dieser
-    Kommandoprotokolle kann zwei Schlachtrunden zugewiesen werden
-    anstatt einer.
-notes:
-- Erste strukturierte Erfassung aus Nutzerbildern.

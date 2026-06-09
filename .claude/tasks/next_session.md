@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 34, 2026-06-09)
+## Aktueller Stand (nach Session 35, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -44,13 +44,20 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - **Session 34: 1_per_10 Restrictions + Cover-Würfel-Bugfix**
   - `model_restriction: "1_per_10"` für Boyz (big_shoota, rokkit_launcha) und Kommandos (6 Waffen) in `units.yaml`; 2 neue Tests → 535 grün
   - Bugfix Cover-Würfelpaare in `_common.py`: Dense Cover grau=from_thresh−1/rot=from_thresh; Light/Heavy Cover beide Würfel zeigen from_thresh−1 (Übergang fail→save); Effective-Save-Zeile zeigt immer Rüstungsweg (nicht Invuln)
+- **Session 35: 6l Phase 2 data-driven + Da Irongob Workflow**
+  - `TriggeredEffect` Dataclass + `Unit.get_triggered_effect()` + `relic_name`; Loader parsed `triggered_effects` aus YAML
+  - Alle hardcodierten Fraktions-IDs aus `src/` entfernt (`_VEIL_ID`, `_MORGOG_CAP_ID`, `da_irongob`-Literal) — rein datengetrieben über `effect`-Typ
+  - Relic-Badge zeigt jetzt `relic_name` statt deutschen ID-Fragment
+  - Veil of Darkness: `movement_locked` flag → Bewegungsbuttons nach Teleport gesperrt; `_undo_teleport` via Undo-Button (bis Zugwechsel)
+  - Da Irongob: 2-stufiger Workflow — Zielauswahl + Failed/Continue, dann +/−-Counter für D3-Ergebnis + Apply; Undo-Banner bis Zugwechsel; 547 Tests grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **6l Phase 2: Triggered Relic-Effekte** — CP-Roll (Morgog's Finkin' Cap: Command Phase, D6 → 4+ = +1 CP), Fight-Phase-Mortal (Da Irongob: nach Melee → D6 → 2+ = D3 mortals), Teleport (Veil of Darkness: Movement Phase, 1×/Battle, teleport)
-2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
+1. 🔴 **Bugfix: Da Irongob Zielfilter** — Zielauswahl muss auf Einheiten beschränkt werden, die `in_melee` mit dem Träger sind (Regel: "within 1\"" = im Nahkampf). Aktuell werden alle nicht-zerstörten Feinde angezeigt. Fix: in `fightPhase.py → _render_mortal_after_melee` Step "initial" die `candidates`-Liste um `[atk_faction, uid] in enemy_units_state.get(sk, {}).get("melee_with", [])` filtern.
+2. 🔴 **Bugfix: Light/Heavy Cover Würfelfarben** — Screenshot zeigt falsches Ergebnis: grauer Würfel müsste `2` zeigen, blauer `3`, und die Farben sind vertauscht. Fix in `src/uiLayout/_common.py` Cover-Würfel-Rendering-Logik. Regelkontext: Light Cover = +1 Save (Schwelle save−1), Heavy Cover = +2 Save. Grau = Fail-Schwelle (save−1), Blau/Rot = Erfolg-Schwelle.
+3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
 3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
 4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
@@ -127,6 +134,18 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 - `_parse_strength(raw: int | str, unit_strength)` für Waffenstärke — akzeptiert native YAML-Typen; nie `int(strength)` oder `str(strength)` direkt
 - Weapon strength in YAML: plain int = feste Stärke, `"+N"` = User+N, `"×N"` = User×N, `"User"` = User; **auch `"User×N"`, `"User+N"`, `"User-N"` werden von `_parse_strength` akzeptiert** — Ork-YAML nutzt diese Form (power_klaw, killsaw etc. = `User×2`)
 - Regelreferenz: Immer erst lokal nachschlagen (`docs/work/wahapedia_*/`), nie Nutzer fragen
+
+---
+
+## Architekturmuster
+
+### Reset-Button-Pattern für Fähigkeits-gesetzte Zustände
+Wenn eine Fähigkeit/ein Relikt den Zustand einer Einheit setzt (z.B. `movement_choice`, `turn_flags`), MUSS es eine Undo-Möglichkeit geben, solange der Zug noch läuft. Implementierungsmuster:
+- `turn_flags["<ability>_locked"] = True` setzen beim Aktivieren → dient als Unterscheidungsmerkmal zu normalem Spielerzug
+- In der betroffenen Phase-UI: wenn `<ability>_locked`, Buttons deaktivieren + Undo-Button zeigen
+- Undo löscht das `_locked`-Flag und setzt betroffene Felder zurück
+- Nach Zugwechsel (`reset_turn_flags`): `_locked`-Flags automatisch weg → kein Undo mehr möglich (State ist "fest")
+- Beispielimplementierung: Veil of Darkness (`turn_flags["veil_moved"]`) in `movementPhase.py`
 
 ---
 

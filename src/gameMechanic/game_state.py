@@ -201,6 +201,8 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
             "cast": False,
             "heroic_intervened": False,
             "morale_tested": False,
+            "movement_locked": False,
+            "mortal_effect_applied": False,
         },
         "active_buffs": [],
         "models_lost_since_last_rp": 0,
@@ -262,6 +264,11 @@ def init_state(
     st.session_state.res_orb_target_uid = None
     st.session_state.wargear_used: dict[str, bool] = {}
     st.session_state.wargear_awaiting_bearer_uid: str | None = None
+    st.session_state.relic_triggered_used: dict[str, bool] = {}
+    st.session_state.morgog_cap_rolled_this_phase = False
+    st.session_state.pending_irongob: dict | None = None
+    st.session_state.veil_awaiting_confirm: bool = False
+    st.session_state.veil_core_target_uid: str | None = None
 
     # Unit lists for stat/name lookups (indexed by player slot, not faction)
     st.session_state.p1_units_list = [u for u, _ in p1_matched]
@@ -338,6 +345,10 @@ def reset_game() -> None:
 
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
+    st.session_state.morgog_cap_rolled_this_phase = False
+    st.session_state.pending_irongob = None
+    st.session_state.veil_awaiting_confirm = False
+    st.session_state.veil_core_target_uid = None
     for k in list(st.session_state.keys()):
         if k.startswith("applied_triggered_"):
             del st.session_state[k]
@@ -360,6 +371,7 @@ def _reset_phase_state() -> None:
 
 
 def _reset_turn_state() -> None:
+    st.session_state.pending_mortal_undo = None
     current_round = st.session_state.get("round", 1)
     for key in ("p1_units", "p2_units"):
         for state in st.session_state[key].values():
