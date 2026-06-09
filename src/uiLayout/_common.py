@@ -627,14 +627,15 @@ def modifier_die_pair_html(
     arrow = "→" if value > 0 else "←"
     from_clamped = max(1, min(6, from_thresh))
     to_clamped = max(1, min(6, to_thresh))
-    # Improvements lower the threshold: put the smaller value (new threshold) on the left.
-    # Penalties raise the threshold: from_thresh (smaller) stays left, to_thresh (larger) right.
+    # Improvements: grey = new threshold, colored = old threshold (newly passes).
+    # Penalties: grey = from_thresh−1 (never hit anyway), colored = from_thresh (newly fails).
+    boundary = max(1, min(6, from_thresh - 1))
     if value > 0:
         left_die = dice_face_svg(to_clamped, color="#6b7280")
         right_die = dice_face_svg(from_clamped, color=color)
     else:
-        left_die = dice_face_svg(from_clamped, color="#6b7280")
-        right_die = dice_face_svg(to_clamped, color=color)
+        left_die = dice_face_svg(boundary, color="#6b7280")
+        right_die = dice_face_svg(from_clamped, color=color)
     return (
         f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
         f'<span style="font-size:11px;color:{color};background:#111827;'
@@ -657,9 +658,11 @@ def save_modifier_die_pair_html(
     """
     sign = "+" if value > 0 else ("-" if value < 0 else "")
     arrow = "→" if value > 0 else "←"
-    # Show the highest die that *fails* — one below the passing threshold.
+    # from_die: highest die that fails before this modifier (threshold − 1).
+    # to_die: for improvements the same die now saves (transition shown by color change);
+    #         for penalties keep the "last failing die after" convention.
     from_die = max(1, min(6, from_thresh - 1))
-    to_die = max(1, min(6, to_thresh - 1))
+    to_die = max(1, min(6, from_thresh - 1)) if value > 0 else max(1, min(6, to_thresh - 1))
     left_die = dice_face_svg(from_die, color="#6b7280")
     right_die = dice_face_svg(to_die, color=color)
     return (
@@ -821,10 +824,12 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
         )
         current = next_thresh
 
-    # Effective save row (only when modifiers exist)
+    # Effective save row: always shows the armour-path result (after AP + cover).
+    # Invuln is shown separately below with its own row — not mixed into this value.
     if has_modifiers:
-        eff_clamped = min(effective, 7)
-        eff_label_text = f"{effective}+" if effective <= 6 else "impossible"
+        armour_modified = armour_eff - sum(m["value"] for m in stack)
+        eff_clamped = min(armour_modified, 7)
+        eff_label_text = f"{armour_modified}+" if armour_modified <= 6 else "impossible"
         rows.append('<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">')
         rows.append(
             _row(
