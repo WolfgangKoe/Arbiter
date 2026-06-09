@@ -1271,6 +1271,206 @@ Folgende Attachment-Wargear-Einträge fehlen vollständig in `wargear_options` a
 
 ---
 
+## 6m — Modellgruppen-Datenmodell + neue Deklarations-UI
+
+**Ziel:** Einheitenkonfiguration regelkonform in YAML abbilden. Deklarations-UI folgt dem regeltreuen Ablauf: Gruppe → Ziel → Attacken → Waffe.
+
+**Status:** 🔴 Planung abgeschlossen (2026-06-09) — Implementierung ausstehend
+
+---
+
+### Hintergrund
+
+Die bisherigen `model_restriction`-Flags sind ein Workaround. Einheiten wie Boyz (9 Boys + 1 Boss Nob) haben strukturell verschiedene Modellgruppen mit unterschiedlichen Waffenoptionen — das ist im YAML nicht sauber abgebildet. Folge: Die UI zeigt alle Waffen allen Modellen, was regelwidrig ist.
+
+**Drei Gruppen-Typen (decken alle 40k-Fälle ab):**
+
+| Typ | Beispiel | Schema |
+|---|---|---|
+| **Homogen** | Gretchin, Warriors (default) | kein `model_groups` nötig |
+| **Strukturell gemischt** | Boyz (9 Boys + 1 Boss Nob), Kommandos | `model_groups` mit `count: remainder` + `count: 1` |
+| **Individuell gewählt** | Nobz, Killa Kans, Lychguard gemischt | `model_groups` mit `optional_mode: per_model` |
+
+Character-Units (1 Modell vollständig individuell) brauchen kein `model_groups`.
+
+---
+
+### YAML Schema (units.yaml — neue Felder)
+
+#### Strukturell gemischt (z.B. Boyz):
+
+```yaml
+model_groups:
+  - id: ork_boy
+    name_en: Ork Boy
+    count: remainder        # = models_alive minus alle fixed-count Gruppen
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.choppa
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    optional_per_10:        # 1 Modell pro 10 wählt genau eine (im Roster aufgelöst)
+      - wh40k_9e.orks.weapon.big_shoota
+      - wh40k_9e.orks.weapon.rokkit_launcha
+    priority: 1             # stirbt zuerst (1 = erster Verlust)
+  - id: boss_nob
+    name_en: Boss Nob
+    count: 1                # immer genau 1
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    optional_one_of:        # die ganze Gruppe wählt genau eine (im Roster aufgelöst)
+      - wh40k_9e.orks.weapon.choppa
+      - wh40k_9e.orks.weapon.big_choppa
+      - wh40k_9e.orks.weapon.power_klaw
+      - wh40k_9e.orks.weapon.killsaw
+    priority: 2             # stirbt zuletzt
+```
+
+#### Per-Model (z.B. Nobz, Killa Kans):
+
+```yaml
+model_groups:
+  - id: nob
+    name_en: Nob
+    count: models_max       # alle Modelle in dieser Gruppe (zählt gegen models_alive)
+    weapons:
+      - ref: wh40k_9e.orks.weapon.slugga
+      - ref: wh40k_9e.orks.weapon.stikkbombz
+    optional_one_of:
+      - wh40k_9e.orks.weapon.choppa
+      - wh40k_9e.orks.weapon.big_choppa
+      - wh40k_9e.orks.weapon.power_klaw
+      - wh40k_9e.orks.weapon.killsaw
+    optional_mode: per_model  # jedes Modell wählt individuell → Loader splittet in Sub-Gruppen
+    priority: 1
+```
+
+**`count`-Werte:**
+- `1`, `2`, … : feste Anzahl
+- `remainder`: `models_alive` minus alle anderen `count`-Gruppen
+- `models_max`: alle Modelle (für per_model-Gruppen ohne feste Sondermodelle)
+
+---
+
+### Roster Schema (Erweiterung)
+
+```yaml
+# Strukturell gemischt (Boss Nob + 1_per_10):
+group_loadouts:
+  boss_nob:
+    optional_weapon: wh40k_9e.orks.weapon.power_klaw
+  ork_boy:
+    optional_per_10_weapon: wh40k_9e.orks.weapon.big_shoota  # null = kein Sonderträger
+
+# Per-Model (Nobz):
+group_loadouts:
+  nob:
+    per_model_weapon_counts:
+      wh40k_9e.orks.weapon.power_klaw: 2
+      wh40k_9e.orks.weapon.big_choppa: 2
+      wh40k_9e.orks.weapon.choppa: 1
+      # Summe muss models-Anzahl ergeben
+```
+
+Der Loader löst `per_model_weapon_counts` in effektive Sub-Gruppen auf:
+- `nob_power_klaw` (count=2, weapons=[slugga, power_klaw, stikkbombz])
+- `nob_big_choppa` (count=2, …)
+- `nob_choppa` (count=1, …)
+
+Dadurch arbeitet die gesamte Laufzeit-Logik immer mit **einfachen Gruppen mit fixen Waffen** — keine Sonderfälle in UI oder Combat.
+
+---
+
+### Betroffene Einheiten
+
+**Orks (model_groups nötig):**
+
+| Einheit | Typ | Gruppen |
+|---|---|---|
+| boyz | strukturell gemischt | ork_boy (remainder, optional_per_10) + boss_nob (1, optional_one_of) |
+| beast_snagga_boyz | strukturell gemischt | beast_snagga (remainder) + boss_nob (1) — Wahapedia prüfen |
+| kommandos | strukturell gemischt | kommando (remainder, optional_per_10) + boss_nob (1) |
+| stormboyz | strukturell gemischt | stormboy (remainder) + boss_nob (1) |
+| warbikers | strukturell gemischt | warbiker (remainder) + boss_nob (1) |
+| nobz | per_model | nob (alle, optional_one_of) |
+| tankbustas | strukturell gemischt | tankbusta (remainder) + nob_with_tankhammer (1_per_5) — Wahapedia prüfen |
+| meganobz | per_model | meganob (alle) — Wahapedia prüfen |
+| squighog_boyz | per_model | squighog_boy (alle) — Wahapedia prüfen |
+
+**Orks (homogen, kein model_groups):** flash_gitz, burna_boyz, gretchin, deffkoptas, alle Fahrzeuge/Monster-Einzelmodelle
+
+**Necrons:** Lychguard kann gemischt sein — durch bestehendes `weapon_loadout`-Schema im Roster bereits abbildbar; kein `model_groups` nötig bis UI-Redesign fertig. Warriors homogen by default.
+
+**Custodes:** kein Handlungsbedarf (alle relevanten Einheiten homogen oder Einzelmodelle).
+
+---
+
+### Datenmodell (gameObjects/unit.py)
+
+```python
+@dataclass
+class ModelGroup:
+    id: str
+    name_en: str
+    count: int          # aufgelöste Anzahl (nach Roster-Auflösung)
+    weapons: list[WeaponRef]   # finale Waffen inkl. gewählte Optionals
+    priority: int       # Todesreihenfolge (1 = stirbt zuerst)
+```
+
+- `Unit.model_groups: list[ModelGroup]` — leer wenn Einheit homogen
+- `Unit.weapons` bleibt als flattened Union aller Gruppen-Waffen (Rückwärtskompatibilität)
+- Rückwärts: Einheiten ohne `model_groups` in YAML → `unit.model_groups = []`, altes Verhalten aktiv
+
+---
+
+### State-Erweiterung (game_state.py)
+
+```python
+unit_state["group_models"]: dict[str, int]
+# Init: {group.id: group.count for group in unit.model_groups}
+# unit_state["models"] = sum(group_models.values())  — abgeleitet, bleibt kompatibel
+```
+
+`apply_damage()`: reduziert nach `priority` (niedrigste zuerst = Standardmodelle sterben vor Sondermodellen). Default-Sortierung spiegelt Spieler-Praxis wider; Spieler kann bei Bedarf manuell abweichen (spätere Erweiterung).
+
+---
+
+### UI-Flow (neue Deklaration)
+
+**Fernkampf:**
+- firstPlayerArea: subUnitCard pro Gruppe (Name + lebend-count + Waffensummary + Select-Button)
+- Gruppe wählen → zeigt Waffen + Ziel-Zuweisung; count=1 → max 1 Ziel
+- secondPlayerArea: Übersicht zugewiesener Attacken / verbleibende Modelle
+- Fertige Gruppe: kollabiert zur Zusammenfassung (nicht verschwinden)
+
+**Nahkampf:**
+1. Gruppe wählen (firstPlayerArea subUnitCard)
+2. Ziel(e) wählen; count=1 → max 1 Ziel
+3. Attacken auf Ziele aufteilen
+4. Waffe deklarieren pro Ziel
+5. Fertige Gruppe: kollabiert zur Zusammenfassung
+
+**Rückwärtskompatibilität:** Einheiten ohne `model_groups` behalten bisherigen Flow.
+
+---
+
+### Tasks (Implementierungsreihenfolge)
+
+- [ ] **A — YAML-Datenpflege:** `model_groups` in `orks/units.yaml` für alle betroffenen Einheiten; `model_restriction`-Flags entfernen (werden durch Gruppen ersetzt)
+- [ ] **B — Roster-Schema:** `group_loadouts` in bestehende `data/rosters/*.yaml` ergänzen; `loader_contract.md` aktualisieren
+- [ ] **C — `gameObjects/unit.py`:** `ModelGroup` dataclass; `Unit.model_groups: list[ModelGroup]`
+- [ ] **D — `gameObjects/loader.py`:** `model_groups` parsen, count auflösen, `optional_one_of`/`optional_per_10` gegen Roster auflösen, `per_model`→Sub-Gruppen splitten
+- [ ] **E — `game_state.py`:** `group_models` initialisieren; `apply_damage()` nach priority; `models` als Summe ableiten
+- [ ] **F — `src/uiLayout/unitCard.py`:** subUnitCard rendern (wenn `unit.model_groups` nicht leer)
+- [ ] **G — `src/uiLayout/_common.py`:** neue Deklaration Schussphase (Gruppe → Waffe → Ziel)
+- [ ] **H — `src/uiLayout/_common.py`:** neue Deklaration Nahkampf (Gruppe → Ziel → Attacken → Waffe)
+- [ ] **I — Tests:** ModelGroup-Laden, count-Auflösung, apply_damage nach priority, Rückwärtskompatibilität
+- [ ] **J — `docs/spec/loader_contract.md` + `unit_states.md`:** aktualisieren nach Umsetzung
+
+**Abhängigkeit:** A+B → C → D → E → F → G/H (parallel) → I → J
+
+---
+
 ## Akzeptanzkriterien (Ziel 6 komplett)
 
 - [ ] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß

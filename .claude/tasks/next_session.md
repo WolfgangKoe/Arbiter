@@ -55,65 +55,85 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Dakka-Format `"5/3"` in `_compute_attacks` + `_total_attacks_int`: `N` (Würfelanzahl) korrekt extrahiert ✅
   - Boss-Nob-Limit per Ziel: `max_value=weapon_max` statt `total_attacks` im atk_counter; `1_per_5` ebenfalls abgedeckt ✅
   - Save-Modifier-Würfelpaar: AP-Farben korrekt (grau=from_thresh, rot=to_thresh). Cover-Farben noch offen — siehe neue Aufgaben unten.
+- **Session 37: Save-Modifier-Fix + Shooting-Restriction-Fix + 6m-Planung**
+  - Save-Modifier: `save_modifier_die_pair_html` neue Signatur `(armour, value, label, color)`; alle Rows jetzt relativ zu `armour` (nicht kumulativ). Buff: blue(armour-N)→grey(armour); Debuff: grey(armour-1)→red(armour+N-1). ✅
+  - Shooting model_restriction: `1_per_10`/`boss_nob_only`/`1_per_5` jetzt auch im Schussangriffs-Pfad korrekt (eff_models aus models_alive, nicht slider). ✅
+  - 6m Modellgruppen vollständig geplant → dokumentiert in `docs/goals/ziel6.md##6m`
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. 🔴 **Konzept + Fix: Save-Modifier-Würfelpaare (Cover-Buff vs. AP-Debuff)**
-2. 🔴 **Konzept + Redesign: Melee-Attackendeklaration mit Modell-Restriktionen**
-3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
-4. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
-5. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
+1. 🔴 **6m — Modellgruppen-Datenmodell + neue Deklarations-UI** (Plan fertig, Implementierung beginnt mit Task A)
+   - Vollständiger Plan in `docs/goals/ziel6.md ## 6m`
+   - Reihenfolge: A (YAML orks) → B (Roster) → C (unit.py) → D (loader) → E (game_state) → F (unitCard) → G/H (_common.py) → I (Tests)
+2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
+3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
+4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
 ---
 
 ## Offene Tasks
 
-### 🔴 HOCH — Save-Modifier-Würfelpaare: Cover-Buff korrekt darstellen
+### 🔴 HOCH — 6m: Modellgruppen-Datenmodell + neue Deklarations-UI
 
-**Problem:** `save_modifier_die_pair_html` zeigt AP-Zeilen (Debuff) jetzt korrekt mit grau=from_thresh, rot=to_thresh. Cover-Zeilen (Buff) zeigen dieselbe Logik, aber der Nutzer sagt die Farben sind falsch für Verbesserungen.
+> Vollständige Spec in `docs/goals/ziel6.md ## 6m`. Hier nur die Task-Checkliste.
 
-**Aktuelle Logik** (in `src/uiLayout/_common.py`, Funktion `save_modifier_die_pair_html`):
-```python
-from_die = max(1, min(6, from_thresh))   # grau, links
-to_die = max(1, min(6, to_thresh))       # farbig, rechts
-arrow = "→" if value > 0 else "←"
-```
+**Task A — YAML-Datenpflege `orks/units.yaml`**
+Wahapedia-Prüfung für beast_snagga_boyz, tankbustas, meganobz, squighog_boyz vor Umsetzung.
+- [ ] `boyz`: `model_groups` (ork_boy remainder + boss_nob 1); alte `model_restriction`-Flags entfernen
+- [ ] `kommandos`: `model_groups` (kommando remainder + boss_nob 1)
+- [ ] `stormboyz`: `model_groups` (stormboy remainder + boss_nob 1)
+- [ ] `warbikers`: `model_groups` (warbiker remainder + boss_nob 1)
+- [ ] `beast_snagga_boyz`: `model_groups` nach Wahapedia
+- [ ] `tankbustas`: `model_groups` nach Wahapedia (nob mit tankhammer = 1_per_5?)
+- [ ] `nobz`: `model_groups` (nob all, optional_mode: per_model)
+- [ ] `meganobz`, `squighog_boyz`: nach Wahapedia prüfen
 
-**Regelkontext + User-Anforderung:**
-- Grau = Basis-Rüstungswert aus dem Einheitenprofil (z.B. 3 für 3+ Save)
-- Farbig = Effektiver Schwellwert nach diesem Modifier
-- "Die Grenze liegt zwischen 2 und 3 wegen dem Rüstungswurf von 3+" — Basis-Armorwert als Anker
-- Für Cover-Buff: der Nutzer sieht bisher eine irreführende Darstellung; die Anzeige soll die Verbesserung klar zeigen
+**Task B — Roster-Schema**
+- [ ] `docs/spec/loader_contract.md`: `group_loadouts`-Feld dokumentieren (strukturell gemischt + per_model)
+- [ ] `data/rosters/*.yaml`: `group_loadouts` für alle Einheiten mit `model_groups` ergänzen
 
-**Nächster Schritt:** Vor Implementierung klären: Soll für Cover-Zeilen der grey-Würfel immer `armour` (base save, nicht AP-adjustiert) zeigen? Aktuell bekommt die Cover-Zeile `from_thresh=armour_eff` (nach AP). Wenn grau immer `armour` (unveränderlich) sein soll, muss `armour` an den Cover-Aufruf übergeben werden. Erfordert Signaturänderung oder separaten Aufruf.
+**Task C — `gameObjects/unit.py`**
+- [ ] `ModelGroup` dataclass: `id`, `name_en`, `count: int`, `weapons: list[WeaponRef]`, `priority: int`
+- [ ] `Unit.model_groups: list[ModelGroup]` — leer wenn homogen (Rückwärtskompatibilität)
+- [ ] `Unit.weapons` bleibt als flattened Union aller Gruppen-Waffen
 
-**Betroffene Datei:** `src/uiLayout/_common.py` — `save_modifier_die_pair_html` + Aufrufstelle in `_render_dice_save_block`
+**Task D — `gameObjects/loader.py`**
+- [ ] `model_groups` aus YAML parsen
+- [ ] `count` auflösen: feste Zahl / `remainder` / `models_max`
+- [ ] `optional_one_of` + `optional_per_10` gegen Roster `group_loadouts` auflösen
+- [ ] `optional_mode: per_model` + `per_model_weapon_counts` → in effektive Sub-Gruppen splitten (z.B. nob_power_klaw count=2, nob_choppa count=1)
 
----
+**Task E — `game_state.py`**
+- [ ] `unit_state["group_models"]: dict[str, int]` bei Unit-Init befüllen
+- [ ] `unit_state["models"]` = `sum(group_models.values())` — abgeleitet, beide kompatibel halten
+- [ ] `apply_damage()`: bei Modellverlust `group_models` nach `priority` reduzieren (priority 1 = stirbt zuerst)
 
-### 🔴 HOCH — Melee-Attackendeklaration: Konzept für Modell-Restriktionen bei mehreren Zielen
+**Task F — `src/uiLayout/unitCard.py`**
+- [ ] subUnitCard rendern wenn `unit.model_groups` nicht leer: pro Gruppe Name + lebend-count + Waffen-Summary
+- [ ] Select-Button pro Gruppe → setzt `selected_model_group` im Session-State
+- [ ] Nur sichtbar wenn Unit selected ist
 
-**Problem:** Der aktuelle `atk_counter`-Ansatz erstellt unabhängige Zähler pro `(weapon × target)`-Paar. Das führt dazu, dass Boss-Nob-Waffen (1 Modell!) pro Ziel separat bis `atk_per_model` aufgeladen werden können — also bei 2 Zielen effektiv doppelt so viele Attacken.
+**Task G — `src/uiLayout/_common.py`: Schussphase**
+- [ ] Wenn `unit.model_groups`: Gruppenauswahl statt Gesamt-Modell-Slider
+- [ ] Pro Gruppe: Waffen aus `group.weapons` (keine `model_restriction`-Prüfung mehr nötig)
+- [ ] Ziel-Zuweisung: count=1 → max 1 Ziel; count>1 → mehrere Ziele erlaubt
+- [ ] Fertige Gruppe kollabiert zur Zusammenfassung (nicht verstecken)
+- [ ] Rückwärtskompatibilität: ohne `model_groups` → alter Flow
 
-**Regelkontext (9E):**
-- Jedes Modell in einer Einheit attackiert in der Kampfphase mit seinen verfügbaren Waffen
-- Der Boss Nob ist genau 1 Modell mit einem fixen Attacken-Pool (`unit.attacks [+WAAAGH]`)
-- Dieser Pool wird **gesamt** auf alle Ziele und Waffen aufgeteilt — nicht pro Ziel neu vergeben
-- `1_per_10`-Modelle: analog — z.B. 1 Model mit big_shoota in einem 10er-Trupp hat `unit.attacks` Attacken total, nicht pro Ziel
-- Nicht-restringierte Modelle (z.B. 9 Boyz mit choppa): deren Attacken-Pool = `(models_alive - restricted_models) × unit.attacks`
+**Task H — `src/uiLayout/_common.py`: Nahkampfphase**
+- [ ] Gruppe wählen → Ziele wählen → Attacken aufteilen → Waffe deklarieren
+- [ ] Budget pro Gruppe = `group.count × unit.attacks` (+ WAAAGH-Bonus)
+- [ ] Fertige Gruppe kollabiert
+- [ ] Rückwärtskompatibilität: ohne `model_groups` → alter Flow
 
-**Konzept für Redesign:**
-1. Vor der Ziel-Schleife: Attacken-Budget pro Modell-Gruppe berechnen
-   - Boss-Nob-Gruppe: `atk_per_model` total (1 Modell)
-   - `1_per_10`-Gruppe: `(models_alive // 10) × atk_per_model` total
-   - Standard-Gruppe: `(models_alive - sonder_modelle) × atk_per_model` total
-2. Zähler-Keys global (nicht pro Ziel): `decl_a_{atk_uid}_{weapon_name}` statt `decl_a_{atk_uid}_{def_uid}_{weapon_name}`
-3. Verbleibende Attacken pro Gruppe werden angezeigt; Summe über alle Ziele darf Budget nicht überschreiten
-4. UI-Darstellung: evtl. Waffen nach Modell-Gruppe gruppieren (Boss-Nob-Block, Standard-Block)
-
-**Betroffene Dateien:** `src/uiLayout/_common.py` — `render_attack_declaration()` (Melee-Pfad)
+**Task I — Tests**
+- [ ] ModelGroup laden + count auflösen (remainder, fixed, models_max)
+- [ ] per_model split: Nobz 5 Modelle → korrekte Sub-Gruppen
+- [ ] `apply_damage()` mit group_models: priority 1 stirbt vor priority 2
+- [ ] Einheit ohne model_groups: alter Pfad unberührt
+- [ ] Shooting + Melee Deklaration: weapon count korrekt pro Gruppe
 
 ---
 
@@ -130,13 +150,6 @@ Waffen mit `effect.type: extra_attacks` werden von `_compute_attacks()` und `_to
 **Klasse 3a — additiv** (`unit.attacks + N`):
 - Waffen: choppa, beastchoppa, 'urty syringe, grabba stikk, dread klaw, grot_prod
 - Wird durch obige Änderung automatisch mit abgedeckt (kein `max_attacks` → `+amount`)
-
-### 🔴 HOCH — model_restriction in YAML + UI-Filter (Audit Session 29)
-
-- [ ] `data/wh40k_9e/orks/units.yaml`: `model_restriction: boss_nob_only` für betroffene Waffen in boyz, warbikers, stormboyz, kommandos; `model_restriction: "1_per_10"` / `"1_per_5"` für Spezialwaffen
-- [ ] `gameObjects/unit.py`: `WeaponRef`-Dataclass um `model_restriction: str | None = None` erweitern
-- [ ] `gameObjects/loader.py`: `model_restriction` aus `weapons[]`-Einträgen parsen
-- [ ] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Waffen kennzeichnen (Badge) oder aus Standard-Auswahl herausfiltern
 
 ### 🟡 MITTEL — GOs in gameActionArea
 
@@ -190,6 +203,17 @@ Melee-Pfad auf per-weapon `atk_counter` umgestellt. Jede Waffe bekommt eigenen C
 ---
 
 ## Architekturmuster
+
+### ModelGroup-Pattern (6m)
+
+Einheiten mit strukturell verschiedenen Modellen (z.B. Boyz: 9 Boys + 1 Boss Nob) werden durch `model_groups` in `units.yaml` abgebildet. Drei Typen:
+- **Homogen** (alle gleich): kein `model_groups` → alter Pfad bleibt aktiv
+- **Strukturell gemischt** (feste Sondermodelle): `count: 1` / `count: remainder`; `optional_one_of` im Roster aufgelöst
+- **Per-Model** (jedes Modell wählt individuell): `optional_mode: per_model`; Loader splittet in Sub-Gruppen
+
+State: `unit_state["group_models"]: dict[str, int]` — Modelle pro Gruppe; `models` = Summe daraus.
+Tod: `apply_damage()` reduziert nach `priority` (1 = stirbt zuerst = Standardmodelle).
+UI: subUnitCard pro Gruppe; Deklaration läuft Gruppe-für-Gruppe, fertige Gruppe kollabiert.
 
 ### Reset-Button-Pattern für Fähigkeits-gesetzte Zustände
 Wenn eine Fähigkeit/ein Relikt den Zustand einer Einheit setzt (z.B. `movement_choice`, `turn_flags`), MUSS es eine Undo-Möglichkeit geben, solange der Zug noch läuft. Implementierungsmuster:
