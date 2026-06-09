@@ -1264,6 +1264,9 @@ Folgende Attachment-Wargear-Einträge fehlen vollständig in `wargear_options` a
 - [x] `gameObjects/loader.py`: `model_restriction` aus YAML parsen ✅ (2026-06-08)
 - [x] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Badge in Melee+Shooting ✅ (2026-06-08)
 - [x] Tests für neue extra_attacks-Logik (25 Tests) ✅ (2026-06-08)
+- [x] `data/wh40k_9e/orks/units.yaml`: `model_restriction: "1_per_10"` für Boyz (big_shoota, rokkit_launcha) + Kommandos (6 Waffen) ✅ (2026-06-09)
+- [x] Tests für 1_per_10-Restrictions (2 Tests → 535 grün) ✅ (2026-06-09)
+- [x] Bugfix Cover-Würfelpaare: Dense Cover grau=from_thresh−1/rot=from_thresh; Light/Heavy Cover beide Würfel=from_thresh−1; Effective Save zeigt Rüstungsweg ✅ (2026-06-09)
 - Note: grot_prod hat laut Wahapedia kein extra_attacks (Ability-Text: `-`) — war in Session-29-Notizen falsch
 
 ---

@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 33, 2026-06-09)
+## Aktueller Stand (nach Session 34, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -41,6 +41,9 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Bug: `power_klaw`, `killsaw`, `gorks_klaw`, `dread_klaw` (alle `strength: User×2`) crashten die Resolution mit `ValueError` — `_parse_strength` kannte nur `"×N"` isoliert, nicht `"User×N"`
   - Fix: `_parse_strength` strippt jetzt optional das `"User"`-Präfix vor dem Operator → `"User×2"`, `"User+3"`, `"User-1"` alle korrekt
   - 14 neue Regressionstests in `tests/uiLayout/test_common.py` → 533 grün
+- **Session 34: 1_per_10 Restrictions + Cover-Würfel-Bugfix**
+  - `model_restriction: "1_per_10"` für Boyz (big_shoota, rokkit_launcha) und Kommandos (6 Waffen) in `units.yaml`; 2 neue Tests → 535 grün
+  - Bugfix Cover-Würfelpaare in `_common.py`: Dense Cover grau=from_thresh−1/rot=from_thresh; Light/Heavy Cover beide Würfel zeigen from_thresh−1 (Übergang fail→save); Effective-Save-Zeile zeigt immer Rüstungsweg (nicht Invuln)
 
 ---
 
