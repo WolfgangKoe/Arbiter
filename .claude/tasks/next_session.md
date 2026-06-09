@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 35, 2026-06-09)
+## Aktueller Stand (nach Session 36, 2026-06-09)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -50,20 +50,72 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Relic-Badge zeigt jetzt `relic_name` statt deutschen ID-Fragment
   - Veil of Darkness: `movement_locked` flag → Bewegungsbuttons nach Teleport gesperrt; `_undo_teleport` via Undo-Button (bis Zugwechsel)
   - Da Irongob: 2-stufiger Workflow — Zielauswahl + Failed/Continue, dann +/−-Counter für D3-Ergebnis + Apply; Undo-Banner bis Zugwechsel; 547 Tests grün
+- **Session 36: Bugfixes + offene Cover/Attacken-Konzeptfragen**
+  - Da Irongob Zielfilter: `_render_mortal_after_melee` filtert `candidates` jetzt per `_is_target_engaged` ✅
+  - Dakka-Format `"5/3"` in `_compute_attacks` + `_total_attacks_int`: `N` (Würfelanzahl) korrekt extrahiert ✅
+  - Boss-Nob-Limit per Ziel: `max_value=weapon_max` statt `total_attacks` im atk_counter; `1_per_5` ebenfalls abgedeckt ✅
+  - Save-Modifier-Würfelpaar: AP-Farben korrekt (grau=from_thresh, rot=to_thresh). Cover-Farben noch offen — siehe neue Aufgaben unten.
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. 🔴 **Bugfix: Da Irongob Zielfilter** — Zielauswahl muss auf Einheiten beschränkt werden, die `in_melee` mit dem Träger sind (Regel: "within 1\"" = im Nahkampf). Aktuell werden alle nicht-zerstörten Feinde angezeigt. Fix: in `fightPhase.py → _render_mortal_after_melee` Step "initial" die `candidates`-Liste um `[atk_faction, uid] in enemy_units_state.get(sk, {}).get("melee_with", [])` filtern.
-2. 🔴 **Bugfix: Light/Heavy Cover Würfelfarben** — Screenshot zeigt falsches Ergebnis: grauer Würfel müsste `2` zeigen, blauer `3`, und die Farben sind vertauscht. Fix in `src/uiLayout/_common.py` Cover-Würfel-Rendering-Logik. Regelkontext: Light Cover = +1 Save (Schwelle save−1), Heavy Cover = +2 Save. Grau = Fail-Schwelle (save−1), Blau/Rot = Erfolg-Schwelle.
+1. 🔴 **Konzept + Fix: Save-Modifier-Würfelpaare (Cover-Buff vs. AP-Debuff)**
+2. 🔴 **Konzept + Redesign: Melee-Attackendeklaration mit Modell-Restriktionen**
 3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
-3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
-4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
+4. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
+5. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
 ---
 
 ## Offene Tasks
+
+### 🔴 HOCH — Save-Modifier-Würfelpaare: Cover-Buff korrekt darstellen
+
+**Problem:** `save_modifier_die_pair_html` zeigt AP-Zeilen (Debuff) jetzt korrekt mit grau=from_thresh, rot=to_thresh. Cover-Zeilen (Buff) zeigen dieselbe Logik, aber der Nutzer sagt die Farben sind falsch für Verbesserungen.
+
+**Aktuelle Logik** (in `src/uiLayout/_common.py`, Funktion `save_modifier_die_pair_html`):
+```python
+from_die = max(1, min(6, from_thresh))   # grau, links
+to_die = max(1, min(6, to_thresh))       # farbig, rechts
+arrow = "→" if value > 0 else "←"
+```
+
+**Regelkontext + User-Anforderung:**
+- Grau = Basis-Rüstungswert aus dem Einheitenprofil (z.B. 3 für 3+ Save)
+- Farbig = Effektiver Schwellwert nach diesem Modifier
+- "Die Grenze liegt zwischen 2 und 3 wegen dem Rüstungswurf von 3+" — Basis-Armorwert als Anker
+- Für Cover-Buff: der Nutzer sieht bisher eine irreführende Darstellung; die Anzeige soll die Verbesserung klar zeigen
+
+**Nächster Schritt:** Vor Implementierung klären: Soll für Cover-Zeilen der grey-Würfel immer `armour` (base save, nicht AP-adjustiert) zeigen? Aktuell bekommt die Cover-Zeile `from_thresh=armour_eff` (nach AP). Wenn grau immer `armour` (unveränderlich) sein soll, muss `armour` an den Cover-Aufruf übergeben werden. Erfordert Signaturänderung oder separaten Aufruf.
+
+**Betroffene Datei:** `src/uiLayout/_common.py` — `save_modifier_die_pair_html` + Aufrufstelle in `_render_dice_save_block`
+
+---
+
+### 🔴 HOCH — Melee-Attackendeklaration: Konzept für Modell-Restriktionen bei mehreren Zielen
+
+**Problem:** Der aktuelle `atk_counter`-Ansatz erstellt unabhängige Zähler pro `(weapon × target)`-Paar. Das führt dazu, dass Boss-Nob-Waffen (1 Modell!) pro Ziel separat bis `atk_per_model` aufgeladen werden können — also bei 2 Zielen effektiv doppelt so viele Attacken.
+
+**Regelkontext (9E):**
+- Jedes Modell in einer Einheit attackiert in der Kampfphase mit seinen verfügbaren Waffen
+- Der Boss Nob ist genau 1 Modell mit einem fixen Attacken-Pool (`unit.attacks [+WAAAGH]`)
+- Dieser Pool wird **gesamt** auf alle Ziele und Waffen aufgeteilt — nicht pro Ziel neu vergeben
+- `1_per_10`-Modelle: analog — z.B. 1 Model mit big_shoota in einem 10er-Trupp hat `unit.attacks` Attacken total, nicht pro Ziel
+- Nicht-restringierte Modelle (z.B. 9 Boyz mit choppa): deren Attacken-Pool = `(models_alive - restricted_models) × unit.attacks`
+
+**Konzept für Redesign:**
+1. Vor der Ziel-Schleife: Attacken-Budget pro Modell-Gruppe berechnen
+   - Boss-Nob-Gruppe: `atk_per_model` total (1 Modell)
+   - `1_per_10`-Gruppe: `(models_alive // 10) × atk_per_model` total
+   - Standard-Gruppe: `(models_alive - sonder_modelle) × atk_per_model` total
+2. Zähler-Keys global (nicht pro Ziel): `decl_a_{atk_uid}_{weapon_name}` statt `decl_a_{atk_uid}_{def_uid}_{weapon_name}`
+3. Verbleibende Attacken pro Gruppe werden angezeigt; Summe über alle Ziele darf Budget nicht überschreiten
+4. UI-Darstellung: evtl. Waffen nach Modell-Gruppe gruppieren (Boss-Nob-Block, Standard-Block)
+
+**Betroffene Dateien:** `src/uiLayout/_common.py` — `render_attack_declaration()` (Melee-Pfad)
+
+---
 
 ### 🔴 HOCH — extra_attacks-Effekt implementieren (Audit Session 29)
 

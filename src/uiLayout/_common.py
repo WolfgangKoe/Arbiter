@@ -369,6 +369,8 @@ def _compute_attacks(
     s = str(attacks_str).strip()
     if s in ("Melee", "None", "", "*"):
         return str(models_count * unit_attacks)
+    if "/" in s:
+        return str(models_count * int(s.split("/")[0]))
     try:
         return str(models_count * int(s))
     except ValueError:
@@ -391,6 +393,8 @@ def _total_attacks_int(
     s = str(attacks_str).strip()
     if s in ("Melee", "None", "", "*"):
         return models_alive * unit_attacks
+    if "/" in s:
+        return models_alive * int(s.split("/")[0])
     try:
         return models_alive * int(s)
     except ValueError:
@@ -658,11 +662,9 @@ def save_modifier_die_pair_html(
     """
     sign = "+" if value > 0 else ("-" if value < 0 else "")
     arrow = "→" if value > 0 else "←"
-    # from_die: highest die that fails before this modifier (threshold − 1).
-    # to_die: for improvements the same die now saves (transition shown by color change);
-    #         for penalties keep the "last failing die after" convention.
-    from_die = max(1, min(6, from_thresh - 1))
-    to_die = max(1, min(6, from_thresh - 1)) if value > 0 else max(1, min(6, to_thresh - 1))
+    # Show save-threshold values directly: grey = from_thresh (old save), colored = to_thresh (new save).
+    from_die = max(1, min(6, from_thresh))
+    to_die = max(1, min(6, to_thresh))
     left_die = dice_face_svg(from_die, color="#6b7280")
     right_die = dice_face_svg(to_die, color=color)
     return (
@@ -1305,17 +1307,26 @@ def render_attack_declaration(
                     else:
                         profile_idx = 0
                     atk_key = f"decl_a_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    restriction = atk_unit.weapon_restrictions.get(weapon.id)
+                    atk_per_model = atk_unit.attacks + waaagh_bonus
+                    if restriction == "boss_nob_only":
+                        weapon_max = atk_per_model
+                    elif restriction == "1_per_10":
+                        weapon_max = (models_alive // 10) * atk_per_model
+                    elif restriction == "1_per_5":
+                        weapon_max = (models_alive // 5) * atk_per_model
+                    else:
+                        weapon_max = total_attacks
                     if atk_key not in st.session_state:
                         is_first = i == 0 and weapon == weapons[0]
-                        st.session_state[atk_key] = total_attacks if is_first else 0
+                        st.session_state[atk_key] = weapon_max if is_first else 0
                     atk_count = st.number_input(
                         f"{weapon.name_en} — Attacks",
                         min_value=0,
-                        max_value=total_attacks,
+                        max_value=weapon_max,
                         step=1,
                         key=atk_key,
                     )
-                    restriction = atk_unit.weapon_restrictions.get(weapon.id)
                     restriction_suffix = (
                         f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restriction)}]</span>'
                         if restriction

@@ -145,6 +145,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
         )
 
         enemy_units_state = st.session_state[units_key_for(enemy_faction)]
+        atk_state = st.session_state[units_key_for(faction)].get(uid, {})
         all_keys = unit_keys_for(enemy_faction)
         all_units = units_list_for(enemy_faction)
         candidates = [
@@ -152,6 +153,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
             for sk, eu in zip(all_keys, all_units)
             if not enemy_units_state.get(sk, {}).get("destroyed")
             and not enemy_units_state.get(sk, {}).get("in_reserve")
+            and _is_target_engaged(atk_state, enemy_faction, sk)
         ]
         target_options: list[tuple[str | None, str]] = [(None, "— Select target unit —")] + [
             (sk, eu.name_en) for sk, eu in candidates
