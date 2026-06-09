@@ -1258,15 +1258,16 @@ Folgende Attachment-Wargear-Einträge fehlen vollständig in `wargear_options` a
 
 ### Tasks
 
-- [ ] `data/wh40k_9e/orks/weapons.yaml`: `max_attacks`-Feld für alle Klasse-3b-Waffen ergänzen
-- [ ] `gameObjects/weapon.py`: `WeaponProfile.max_attacks: int | None = None`
-- [ ] `gameObjects/loader.py`: `max_attacks` aus YAML parsen
-- [ ] `uiLayout/_common.py`: `_compute_attacks()` + `_total_attacks_int()` — Klasse 3b (max_attacks) + Klasse 3a (+N) auswerten
-- [ ] `data/wh40k_9e/orks/units.yaml`: `model_restriction`-Felder für alle Boss-Nob-Waffen und 1-per-N-Waffen
-- [ ] `gameObjects/unit.py`: `WeaponRef`-Dataclass um `model_restriction: str | None` erweitern
-- [ ] `gameObjects/loader.py`: `model_restriction` aus YAML parsen
-- [ ] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Waffen und 1-per-N-Waffen aus Standard-Auswahl filtern (oder kennzeichnen)
-- [ ] Tests für neue extra_attacks-Logik
+- [x] `data/wh40k_9e/orks/weapons.yaml`: `max_attacks`-Feld für alle Klasse-3b-Waffen ergänzen ✅ (2026-06-08)
+- [x] `gameObjects/weapon.py`: `WeaponProfile.max_attacks: int | None = None` ✅ (2026-06-08)
+- [x] `gameObjects/loader.py`: `max_attacks` aus YAML parsen ✅ (2026-06-08)
+- [x] `uiLayout/_common.py`: `_compute_attacks()` + `_total_attacks_int()` — Klasse 3b (max_attacks) + Klasse 3a (+N) auswerten ✅ (2026-06-08)
+- [x] `data/wh40k_9e/orks/units.yaml`: `model_restriction`-Felder für alle Boss-Nob-Waffen ✅ (2026-06-08)
+- [x] `gameObjects/unit.py`: `Unit.weapon_restrictions: dict[str, str]` — Badge-Lookup ✅ (2026-06-08)
+- [x] `gameObjects/loader.py`: `model_restriction` aus YAML parsen ✅ (2026-06-08)
+- [x] `uiLayout/_common.py`: `render_attack_declaration()` — Boss-Nob-Badge in Melee+Shooting ✅ (2026-06-08)
+- [x] Tests für neue extra_attacks-Logik (25 Tests) ✅ (2026-06-08)
+- Note: grot_prod hat laut Wahapedia kein extra_attacks (Ability-Text: `-`) — war in Session-29-Notizen falsch
 
 ---
 

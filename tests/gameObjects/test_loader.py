@@ -592,3 +592,115 @@ def test_load_detachment_types_have_cp_fields() -> None:
     battalion_data = next(d for d in data["detachment_types"] if d["id"] == "battalion")
     assert battalion_data["command_cost"] == 0
     assert battalion_data["command_benefit"] == 3
+
+
+# ---------------------------------------------------------------------------
+# extra_attacks: max_attacks loaded from YAML
+# ---------------------------------------------------------------------------
+
+
+def test_attack_squig_profile_has_max_attacks_2() -> None:
+    catalog = load_weapon_catalog("orks")
+    squig = catalog["wh40k_9e.orks.weapon.attack_squig"]
+    profile = squig.profiles[0]
+    assert profile.max_attacks == 2
+    assert profile.effect is not None
+    assert profile.effect["type"] == "extra_attacks"
+
+
+def test_squighog_jaws_max_attacks_2() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.squighog_jaws"]
+    assert weapon.profiles[0].max_attacks == 2
+
+
+def test_squigosaurs_jaws_max_attacks_3() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.squigosaurs_jaws"]
+    assert weapon.profiles[0].max_attacks == 3
+
+
+def test_butcha_boyz_max_attacks_4() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.butcha_boyz"]
+    assert weapon.profiles[0].max_attacks == 4
+
+
+def test_grabbin_klaw_max_attacks_1() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.grabbin_klaw"]
+    assert weapon.profiles[0].max_attacks == 1
+
+
+def test_choppa_extra_attacks_additive_no_max_attacks() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.choppa"]
+    profile = weapon.profiles[0]
+    assert profile.max_attacks is None
+    assert profile.effect is not None
+    assert profile.effect["amount"] == 1
+
+
+def test_beastchoppa_extra_attacks_additive() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.beastchoppa"]
+    profile = weapon.profiles[0]
+    assert profile.effect is not None
+    assert profile.effect["type"] == "extra_attacks"
+    assert profile.max_attacks is None
+
+
+def test_dread_klaw_extra_attacks_additive() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.dread_klaw"]
+    profile = weapon.profiles[0]
+    assert profile.effect is not None
+    assert profile.effect["type"] == "extra_attacks"
+    assert profile.max_attacks is None
+
+
+# ---------------------------------------------------------------------------
+# model_restriction: loaded from units.yaml into unit.weapon_restrictions
+# ---------------------------------------------------------------------------
+
+
+def test_boyz_power_klaw_has_boss_nob_restriction() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+
+
+def test_boyz_big_choppa_has_boss_nob_restriction() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.big_choppa") == "boss_nob_only"
+
+
+def test_boyz_choppa_has_no_restriction() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.choppa") is None
+
+
+def test_warbikers_power_klaw_has_boss_nob_restriction() -> None:
+    units, _ = load_army("orks")
+    warbikers = next(u for u in units if u.id == "wh40k_9e.orks.unit.warbikers")
+    assert warbikers.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+
+
+def test_stormboyz_power_klaw_has_boss_nob_restriction() -> None:
+    units, _ = load_army("orks")
+    stormboyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.stormboyz")
+    assert stormboyz.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+
+
+def test_kommandos_power_klaw_has_boss_nob_restriction() -> None:
+    units, _ = load_army("orks")
+    kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
+    assert kommandos.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+
+
+def test_unit_without_restrictions_has_empty_dict() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if "overlord" in u.id)
+    assert overlord.weapon_restrictions == {}

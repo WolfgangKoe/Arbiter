@@ -355,8 +355,28 @@ def _protocol_source_label(faction_dir: str) -> str:
     return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
 
 
-def _compute_attacks(attacks_str: str, models_count: int, unit_attacks: int) -> str:
+def _restriction_label(restriction: str) -> str:
+    labels = {
+        "boss_nob_only": "Boss Nob only",
+        "1_per_10": "1 per 10 models",
+        "1_per_5": "1 per 5 models",
+    }
+    return labels.get(restriction, restriction)
+
+
+def _compute_attacks(
+    attacks_str: str,
+    models_count: int,
+    unit_attacks: int,
+    effect: dict | None = None,
+    max_attacks: int | None = None,
+) -> str:
     """Return display string for total attack count."""
+    if effect and effect.get("type") == "extra_attacks":
+        if max_attacks is not None:
+            return str(models_count * max_attacks)
+        amount = int(effect.get("amount", 1))
+        return str(models_count * (unit_attacks + amount))
     s = str(attacks_str).strip()
     if s in ("Melee", "None", "", "*"):
         return str(models_count * unit_attacks)
@@ -366,8 +386,19 @@ def _compute_attacks(attacks_str: str, models_count: int, unit_attacks: int) -> 
         return f"{models_count}×{s}"
 
 
-def _total_attacks_int(attacks_str: str, models_alive: int, unit_attacks: int) -> int | None:
+def _total_attacks_int(
+    attacks_str: str,
+    models_alive: int,
+    unit_attacks: int,
+    effect: dict | None = None,
+    max_attacks: int | None = None,
+) -> int | None:
     """Return total attack count as int, or None if dice-based (cannot pre-split)."""
+    if effect and effect.get("type") == "extra_attacks":
+        if max_attacks is not None:
+            return models_alive * max_attacks
+        amount = int(effect.get("amount", 1))
+        return models_alive * (unit_attacks + amount)
     s = str(attacks_str).strip()
     if s in ("Melee", "None", "", "*"):
         return models_alive * unit_attacks
@@ -1114,7 +1145,9 @@ def _render_resolution_tab(
     atk_count = (
         str(atk_override)
         if atk_override is not None
-        else _compute_attacks(profile.attacks, models_count, atk_unit.attacks)
+        else _compute_attacks(
+            profile.attacks, models_count, atk_unit.attacks, profile.effect, profile.max_attacks
+        )
     )
     ap_str = f"AP{ap}" if ap != 0 else "AP0"
     st.markdown(
@@ -1225,7 +1258,11 @@ def render_attack_declaration(
             waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
             waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
             total_attacks_maybe = _total_attacks_int(
-                first_melee_profiles[0].attacks, models_alive, atk_unit.attacks + waaagh_bonus
+                first_melee_profiles[0].attacks,
+                models_alive,
+                atk_unit.attacks + waaagh_bonus,
+                first_melee_profiles[0].effect,
+                first_melee_profiles[0].max_attacks,
             )
             if total_attacks_maybe is not None:
                 use_atk_counter = True
@@ -1271,8 +1308,14 @@ def render_attack_declaration(
                         step=1,
                         key=atk_key,
                     )
+                    restriction = atk_unit.weapon_restrictions.get(weapon.id)
+                    restriction_suffix = (
+                        f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restriction)}]</span>'
+                        if restriction
+                        else ""
+                    )
                     st.markdown(
-                        f"**{weapon.name_en}** → "
+                        f"**{weapon.name_en}**{restriction_suffix} → "
                         f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
                         f"{int(atk_count)}</span> Attacks",
                         unsafe_allow_html=True,
@@ -1331,10 +1374,20 @@ def render_attack_declaration(
                             profile_idx = 0
                         profile = profiles[profile_idx]
                         displayed_count = _compute_attacks(
-                            profile.attacks, int(models_val), atk_unit.attacks
+                            profile.attacks,
+                            int(models_val),
+                            atk_unit.attacks,
+                            profile.effect,
+                            profile.max_attacks,
+                        )
+                        restr = atk_unit.weapon_restrictions.get(weapon.id)
+                        restr_suffix = (
+                            f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restr)}]</span>'
+                            if restr
+                            else ""
                         )
                         st.markdown(
-                            f"**{weapon.name_en}** → "
+                            f"**{weapon.name_en}**{restr_suffix} → "
                             f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
                             f"{displayed_count}</span> Attacks",
                             unsafe_allow_html=True,

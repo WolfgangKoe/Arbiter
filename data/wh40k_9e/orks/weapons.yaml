@@ -38,6 +38,7 @@ weapons:
         damage: 1
         abilities: "Each time the bearer fights, it makes 2 additional atta"
         is_melee: true
+        max_attacks: 2
         effect:
           type: extra_attacks
           amount: 2
@@ -259,7 +260,7 @@ weapons:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.urty_syringe
-    name_en: ’Urty syringe
+    name_en: ‘Urty syringe
     profiles:
       - weapon_type: Melee
         range_inches: 0
@@ -269,6 +270,9 @@ weapons:
         damage: 1
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.shoota
     name_en: Shoota
@@ -305,6 +309,9 @@ weapons:
         damage: 2
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.thump_gun
     name_en: Thump gun
@@ -329,6 +336,10 @@ weapons:
         damage: 3
         abilities: "Each time the bearer fights, it makes 3 additional atta"
         is_melee: true
+        max_attacks: 3
+        effect:
+          type: extra_attacks
+          amount: 3
 
   - id: wh40k_9e.orks.weapon.morks_roar
     name_en: Mork’s Roar
@@ -526,6 +537,9 @@ weapons:
         damage: 1
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.grot_prod
     name_en: Grot-prod
@@ -622,6 +636,10 @@ weapons:
         damage: 2
         abilities: "Each time the bearer fights, it makes 2 additional atta"
         is_melee: true
+        max_attacks: 2
+        effect:
+          type: extra_attacks
+          amount: 2
 
   - id: wh40k_9e.orks.weapon.stikka_melee
     name_en: Stikka (melee)
@@ -646,6 +664,10 @@ weapons:
         damage: 2
         abilities: "Each time the bearer fights, it makes 2 additional atta"
         is_melee: true
+        max_attacks: 2
+        effect:
+          type: extra_attacks
+          amount: 2
 
   - id: wh40k_9e.orks.weapon.mek_speshul
     name_en: Mek speshul
@@ -862,6 +884,10 @@ weapons:
         damage: 2
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        max_attacks: 1
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.wreckin_ball
     name_en: Wreckin’ ball
@@ -874,6 +900,10 @@ weapons:
         damage: 2
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        max_attacks: 1
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.skorcha
     name_en: Skorcha
@@ -900,6 +930,9 @@ weapons:
         damage: 3
         abilities: "Each time the bearer fights, it makes 1 additional atta"
         is_melee: true
+        effect:
+          type: extra_attacks
+          amount: 1
 
   - id: wh40k_9e.orks.weapon.eavy_lobba
     name_en: ’Eavy lobba
@@ -948,6 +981,10 @@ weapons:
         damage: 1
         abilities: "Each time the bearer fights, it makes 4 additional atta"
         is_melee: true
+        max_attacks: 4
+        effect:
+          type: extra_attacks
+          amount: 4
 
   - id: wh40k_9e.orks.weapon.savage_horns_and_hooves
     name_en: Savage horns and hooves
@@ -960,6 +997,10 @@ weapons:
         damage: 3
         abilities: "Each time the bearer fights, it makes 4 additional atta"
         is_melee: true
+        max_attacks: 4
+        effect:
+          type: extra_attacks
+          amount: 4
 
   - id: wh40k_9e.orks.weapon.supa_shoota
     name_en: Supa-shoota

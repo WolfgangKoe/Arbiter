@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 29, 2026-06-08)
+## Aktueller Stand (nach Session 30, 2026-06-08)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -30,23 +30,19 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 - Fight Phase: beide Spieler alternieren korrekt; CHARGED-Priorität; inaktiver Spieler startet
 - Heroic Intervention: Step-2-Timing, CHARACTER-Check, Badge, Feind-Zielauswahl
 - 6k: `persistent_effects` Interpreter; `wargear_ids`/`wargear_keywords` auf Unit; Resurrection Orb via Wargear-ID
-- 6j: `weapon_abilities.yaml` + `wargear_abilities.yaml` gelöscht; alle YAML-Header vereinheitlicht
-- Session 27: Fix A+D (wargear_used generisch, Bearer via session key); Fix B (WAAAGH!-UI generisch); Fix C (Protokoll-Keys auf faction_dir-Scope)
-- Session 28: CLAUDE.md Generic-src/-Regel ✅; WAAAGH! Advance+Charge (ORKS CORE/CHARACTER, Stage 1) ✅; WAAAGH! +1 Attacks in Melee-Deklaration (Stage 1+2) ✅; Nahkampf-Deklaration: per-weapon atk_counter, kein Multiselect im Melee-Pfad ✅
-- **Session 29 (diese Session): Ork Waffen-Audit** — vollständiger Abgleich aller Einheiten gegen Wahapedia; drei Kategorien von Befunden dokumentiert in `docs/goals/ziel6.md`; kein Code geändert
-- 485 Tests grün
+- Session 28: WAAAGH! Advance+Charge, +1 Attacks in Melee, per-weapon atk_counter ✅
+- Session 29: Ork Waffen-Audit — Befunde 1/2/3 dokumentiert in `docs/goals/ziel6.md`
+- **Session 30: extra_attacks + model_restriction implementiert** — `WeaponProfile.max_attacks`, Klasse 3a/3b korrekt berechnet, Boss-Nob-Badges in Deklarations-UI, 25 neue Tests
+- 510 Tests grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. **extra_attacks Klasse 3b** — Waffen mit `max_attacks`-Cap (attack_squig, squighog jaws, grabbin' klaw etc.) berechnen immer N Attacken statt `models × unit.attacks`. Kleiner Fix in `_compute_attacks` + `_total_attacks_int`, YAML-Ergänzung `max_attacks`. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 3.
-2. **extra_attacks Klasse 3a** — Choppa und ähnliche (+1 additional attack, kein Cap) berechnen `models × (unit.attacks + 1)` statt `models × unit.attacks`. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 3.
-3. **model_restriction** — Boss-Nob-Waffen und 1-per-N-Waffen in `units.yaml` kennzeichnen; Deklarations-UI filtert/kennzeichnet sie. Details: `docs/goals/ziel6.md` → Ork Waffen-Audit Befund 2.
-4. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics in `docs/work/` lesen, dann Schema vorschlagen, Freigabe einholen
-5. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
-6. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
-7. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
+1. **6l Relic-Effekt-Interpreter** — Schema noch nicht spezifiziert; zuerst alle Necron + Ork Relics in `docs/work/` lesen, dann Schema vorschlagen, Freigabe einholen
+2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
+3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
+4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
 ---
 

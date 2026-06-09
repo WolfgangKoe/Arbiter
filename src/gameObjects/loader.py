@@ -50,6 +50,7 @@ def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
         ignores_fnp=d.get("ignores_fnp", False),
         is_melee=d.get("is_melee", False),
         effect=d.get("effect"),
+        max_attacks=d.get("max_attacks"),
     )
 
 
@@ -115,17 +116,22 @@ def _unit_from_dict(
     weapon_catalog: dict[str, Weapon] | None = None,
 ) -> Unit:
     weapons: list[Weapon] = []
+    weapon_restrictions: dict[str, str] = {}
     for entry in d.get("weapons", []):
         ref = entry.get("ref")
         if ref and weapon_catalog:
             weapon = weapon_catalog.get(ref)
             if weapon:
                 weapons.append(weapon)
+                restriction = entry.get("model_restriction")
+                if restriction:
+                    weapon_restrictions[ref] = restriction
     if not any(p.is_melee for w in weapons for p in w.profiles):
         weapons.append(_CCW)
 
     brackets_raw = d.get("damage_bracket", [])
     return Unit(
+        weapon_restrictions=weapon_restrictions,
         id=d["id"],
         name_en=d["name_en"],
         name_de=d["name_de"],

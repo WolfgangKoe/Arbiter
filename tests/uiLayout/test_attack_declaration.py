@@ -102,3 +102,61 @@ def test_entry_filter_keeps_all_nonzero_entries() -> None:
     ]
     filtered = [e for e in entries if e.get("atk_override", e["models_count"]) > 0]
     assert len(filtered) == 2
+
+
+# ---------------------------------------------------------------------------
+# extra_attacks effect — Klasse 3b (max_attacks cap) and 3a (additive)
+# ---------------------------------------------------------------------------
+
+_EFFECT_EXTRA_2 = {"type": "extra_attacks", "amount": 2}
+_EFFECT_EXTRA_1 = {"type": "extra_attacks", "amount": 1}
+_EFFECT_EXTRA_4 = {"type": "extra_attacks", "amount": 4}
+
+
+def test_total_attacks_int_extra_attacks_capped_attack_squig() -> None:
+    # attack_squig: max_attacks=2 → always 2 per model, independent of unit.attacks
+    assert _total_attacks_int("Melee", 1, 3, _EFFECT_EXTRA_2, max_attacks=2) == 2
+
+
+def test_total_attacks_int_extra_attacks_capped_squighog_jaws_multi_model() -> None:
+    # squighog_jaws: max_attacks=2, 3 models → 6 total
+    assert _total_attacks_int("Melee", 3, 4, _EFFECT_EXTRA_2, max_attacks=2) == 6
+
+
+def test_total_attacks_int_extra_attacks_capped_butcha_boyz() -> None:
+    # butcha_boyz: max_attacks=4, 1 model → 4 total
+    assert _total_attacks_int("Melee", 1, 2, _EFFECT_EXTRA_4, max_attacks=4) == 4
+
+
+def test_total_attacks_int_extra_attacks_additive_choppa() -> None:
+    # choppa: no max_attacks, amount=1 → unit.attacks + 1 per model
+    assert _total_attacks_int("Melee", 10, 2, _EFFECT_EXTRA_1) == 30  # 10 * (2+1)
+
+
+def test_total_attacks_int_extra_attacks_additive_with_waaagh() -> None:
+    # choppa + WAAAGH! bonus: unit_attacks=3 (2+1 waaagh), amount=1 → 10 * (3+1)
+    assert _total_attacks_int("Melee", 10, 3, _EFFECT_EXTRA_1) == 40
+
+
+def test_total_attacks_int_extra_attacks_capped_ignores_unit_attacks() -> None:
+    # Capped weapons: max_attacks takes precedence over unit.attacks entirely
+    # Even with WAAAGH! bonus, a capped weapon stays at max_attacks
+    assert _total_attacks_int("Melee", 10, 3, _EFFECT_EXTRA_2, max_attacks=2) == 20
+
+
+def test_compute_attacks_extra_attacks_capped() -> None:
+    assert _compute_attacks("Melee", 3, 4, _EFFECT_EXTRA_2, max_attacks=2) == "6"
+
+
+def test_compute_attacks_extra_attacks_additive() -> None:
+    # 10 models, unit.attacks=2, +1 → 30
+    assert _compute_attacks("Melee", 10, 2, _EFFECT_EXTRA_1) == "30"
+
+
+def test_compute_attacks_no_extra_attacks_effect_unchanged() -> None:
+    # No effect → existing behaviour: models * unit.attacks
+    assert _compute_attacks("Melee", 10, 2) == "20"
+
+
+def test_total_attacks_int_no_extra_attacks_effect_unchanged() -> None:
+    assert _total_attacks_int("Melee", 10, 2) == 20
