@@ -12,6 +12,7 @@ from gameObjects.loader import (
     _apply_persistent_effect,
     _apply_relic,
     _apply_wargear,
+    _resolve_model_groups,
     load_army,
     load_detachment_types,
     load_faction_abilities,
@@ -662,56 +663,70 @@ def test_dread_klaw_extra_attacks_additive() -> None:
 
 
 # ---------------------------------------------------------------------------
-# model_restriction: loaded from units.yaml into unit.weapon_restrictions
+# model_groups: parsed from units.yaml into unit.model_group_specs
 # ---------------------------------------------------------------------------
 
 
-def test_boyz_power_klaw_has_boss_nob_restriction() -> None:
+def test_boyz_has_two_model_group_specs() -> None:
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
-    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+    assert len(boyz.model_group_specs) == 2
+    ids = {s.id for s in boyz.model_group_specs}
+    assert ids == {"ork_boy", "boss_nob"}
 
 
-def test_boyz_big_choppa_has_boss_nob_restriction() -> None:
+def test_boyz_ork_boy_spec_has_remainder_count() -> None:
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
-    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.big_choppa") == "boss_nob_only"
+    ork_boy = next(s for s in boyz.model_group_specs if s.id == "ork_boy")
+    assert ork_boy.count_raw == "remainder"
+    assert ork_boy.priority == 1
 
 
-def test_boyz_choppa_has_no_restriction() -> None:
+def test_boyz_boss_nob_spec_has_boss_weapons() -> None:
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
-    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.choppa") is None
+    boss = next(s for s in boyz.model_group_specs if s.id == "boss_nob")
+    assert boss.count_raw == 1
+    assert boss.priority == 2
+    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
+    assert "wh40k_9e.orks.weapon.big_choppa" in boss.optional_one_of
 
 
-def test_warbikers_power_klaw_has_boss_nob_restriction() -> None:
+def test_boyz_ork_boy_spec_has_per_10_options() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    ork_boy = next(s for s in boyz.model_group_specs if s.id == "ork_boy")
+    assert "wh40k_9e.orks.weapon.big_shoota" in ork_boy.optional_per_10
+    assert "wh40k_9e.orks.weapon.rokkit_launcha" in ork_boy.optional_per_10
+
+
+def test_warbikers_has_two_model_group_specs() -> None:
     units, _ = load_army("orks")
     warbikers = next(u for u in units if u.id == "wh40k_9e.orks.unit.warbikers")
-    assert warbikers.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+    assert len(warbikers.model_group_specs) == 2
+    ids = {s.id for s in warbikers.model_group_specs}
+    assert ids == {"warbiker", "boss_nob_warbike"}
 
 
-def test_stormboyz_power_klaw_has_boss_nob_restriction() -> None:
+def test_stormboyz_boss_nob_spec_has_power_klaw_option() -> None:
     units, _ = load_army("orks")
     stormboyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.stormboyz")
-    assert stormboyz.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+    boss = next(s for s in stormboyz.model_group_specs if s.id == "boss_nob")
+    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
 
 
-def test_kommandos_power_klaw_has_boss_nob_restriction() -> None:
+def test_kommandos_boss_nob_spec_has_power_klaw_option() -> None:
     units, _ = load_army("orks")
     kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
-    assert kommandos.weapon_restrictions.get("wh40k_9e.orks.weapon.power_klaw") == "boss_nob_only"
+    boss = next(s for s in kommandos.model_group_specs if s.id == "boss_nob")
+    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
 
 
-def test_boyz_big_shoota_has_1_per_10_restriction() -> None:
-    units, _ = load_army("orks")
-    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
-    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.big_shoota") == "1_per_10"
-    assert boyz.weapon_restrictions.get("wh40k_9e.orks.weapon.rokkit_launcha") == "1_per_10"
-
-
-def test_kommandos_special_weapons_have_1_per_10_restriction() -> None:
+def test_kommandos_kommando_spec_has_per_10_specials() -> None:
     units, _ = load_army("orks")
     kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
+    kommando = next(s for s in kommandos.model_group_specs if s.id == "kommando")
     for weapon_id in [
         "wh40k_9e.orks.weapon.shokka_pistol",
         "wh40k_9e.orks.weapon.big_shoota",
@@ -720,12 +735,13 @@ def test_kommandos_special_weapons_have_1_per_10_restriction() -> None:
         "wh40k_9e.orks.weapon.rokkit_launcha",
         "wh40k_9e.orks.weapon.breacha_ram",
     ]:
-        assert kommandos.weapon_restrictions.get(weapon_id) == "1_per_10", weapon_id
+        assert weapon_id in kommando.optional_per_10, weapon_id
 
 
-def test_unit_without_restrictions_has_empty_dict() -> None:
+def test_unit_without_model_groups_has_empty_specs() -> None:
     units, _ = load_army("necrons")
     overlord = next(u for u in units if "overlord" in u.id)
+    assert overlord.model_group_specs == []
     assert overlord.weapon_restrictions == {}
 
 
@@ -804,3 +820,107 @@ def test_buff_stat_toughness_in_persistent_effect() -> None:
         overlord, {"type": "buff_stat", "stat": "toughness", "modifier": 1}
     )
     assert result.toughness == base_t + 1
+
+
+# ---------------------------------------------------------------------------
+# model_groups: count resolution + roster resolution
+# ---------------------------------------------------------------------------
+
+
+def test_resolve_model_groups_remainder_count() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, {}, catalog)
+    ork_boy = next(g for g in groups if g.id == "ork_boy")
+    boss_nob = next(g for g in groups if g.id == "boss_nob")
+    assert boss_nob.count == 1
+    assert ork_boy.count == 9  # remainder = 10 - 1
+
+
+def test_resolve_model_groups_boss_nob_has_base_weapons() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, {}, catalog)
+    boss_nob = next(g for g in groups if g.id == "boss_nob")
+    weapon_names = {w.id for w in boss_nob.weapons}
+    assert "wh40k_9e.orks.weapon.slugga" in weapon_names
+    assert "wh40k_9e.orks.weapon.stikkbombz" in weapon_names
+
+
+def test_resolve_model_groups_roster_optional_weapon_added() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    loadouts = {"boss_nob": {"optional_weapon": "wh40k_9e.orks.weapon.power_klaw"}}
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, loadouts, catalog)
+    boss_nob = next(g for g in groups if g.id == "boss_nob")
+    weapon_ids = {w.id for w in boss_nob.weapons}
+    assert "wh40k_9e.orks.weapon.power_klaw" in weapon_ids
+
+
+def test_resolve_model_groups_models_max_count() -> None:
+    units, _ = load_army("orks")
+    tankbustas = next(u for u in units if u.id == "wh40k_9e.orks.unit.tankbustas")
+    catalog = load_weapon_catalog("orks")
+    groups = _resolve_model_groups(tankbustas.model_group_specs, 10, {}, catalog)
+    assert len(groups) == 1
+    assert groups[0].count == 10
+
+
+def test_resolve_model_groups_per_model_split() -> None:
+    units, _ = load_army("orks")
+    nobz = next(u for u in units if u.id == "wh40k_9e.orks.unit.nobz")
+    catalog = load_weapon_catalog("orks")
+    loadouts = {
+        "nob": {
+            "per_model_weapon_counts": {
+                "wh40k_9e.orks.weapon.power_klaw": 3,
+                "wh40k_9e.orks.weapon.choppa": 2,
+            }
+        }
+    }
+    groups = _resolve_model_groups(nobz.model_group_specs, 5, loadouts, catalog)
+    assert len(groups) == 2
+    counts = {g.count for g in groups}
+    assert counts == {3, 2}
+    for g in groups:
+        assert "wh40k_9e.orks.weapon.slugga" in {w.id for w in g.weapons}
+
+
+def test_resolve_model_groups_no_specs_returns_empty() -> None:
+    units, _ = load_army("necrons")
+    warrior = next(u for u in units if "warriors" in u.id)
+    catalog = load_weapon_catalog("necrons")
+    groups = _resolve_model_groups(warrior.model_group_specs, 10, {}, catalog)
+    assert groups == []
+
+
+def test_load_roster_boyz_has_resolved_model_groups() -> None:
+    """Roster load resolves model_groups for units that have group specs."""
+    from pathlib import Path
+
+    roster_path = Path(__file__).parent.parent.parent / "data" / "rosters" / "orks_test.yaml"
+    catalog = load_unit_catalog("orks")
+    matched, _ = load_roster(roster_path, catalog)
+    boyz = next((u for u, _ in matched if u.id == "wh40k_9e.orks.unit.boyz"), None)
+    assert boyz is not None
+    assert len(boyz.model_groups) == 2
+    boss = next(g for g in boyz.model_groups if g.id == "boss_nob")
+    ork_boy = next(g for g in boyz.model_groups if g.id == "ork_boy")
+    assert boss.count == 1
+    assert ork_boy.count == 9  # 10 models - 1 boss nob
+    boss_weapon_ids = {w.id for w in boss.weapons}
+    assert "wh40k_9e.orks.weapon.power_klaw" in boss_weapon_ids  # group_loadouts applied
+
+
+def test_load_roster_unit_without_groups_has_empty_model_groups() -> None:
+    from pathlib import Path
+
+    roster_path = Path(__file__).parent.parent.parent / "data" / "rosters" / "orks_test.yaml"
+    catalog = load_unit_catalog("orks")
+    matched, _ = load_roster(roster_path, catalog)
+    gretchin = next((u for u, _ in matched if u.id == "wh40k_9e.orks.unit.gretchin"), None)
+    assert gretchin is not None
+    assert gretchin.model_groups == []

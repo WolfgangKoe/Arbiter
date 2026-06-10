@@ -5,7 +5,22 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import units_key_for
-from gameObjects.unit import Unit
+from gameObjects.unit import ModelGroup, Unit
+
+
+def _apply_group_losses(
+    group_models: dict[str, int],
+    lost: int,
+    model_groups: list[ModelGroup],
+) -> None:
+    """Remove lost models from group_models in priority order (lowest priority = dies first)."""
+    for group in sorted(model_groups, key=lambda g: g.priority):
+        if lost <= 0:
+            break
+        available = group_models.get(group.id, 0)
+        removed = min(lost, available)
+        group_models[group.id] = available - removed
+        lost -= removed
 
 
 def adjust_vp(faction: str, delta: int) -> None:
@@ -53,6 +68,8 @@ def apply_damage(
     lost = old_models - state["models"]
     if lost > 0:
         state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + lost
+        if state.get("group_models") and unit.model_groups:
+            _apply_group_losses(state["group_models"], lost, unit.model_groups)
 
 
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) -> bool:

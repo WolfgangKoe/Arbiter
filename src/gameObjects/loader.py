@@ -12,7 +12,14 @@ from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.stratagem import Stratagem, StratagemModifier
-from gameObjects.unit import DamageBracket, TriggeredEffect, Unit, WargearOption
+from gameObjects.unit import (
+    DamageBracket,
+    ModelGroup,
+    ModelGroupSpec,
+    TriggeredEffect,
+    Unit,
+    WargearOption,
+)
 from gameObjects.weapon import Weapon, WeaponProfile
 
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
@@ -82,6 +89,118 @@ def load_weapon_abilities(faction_dir: str) -> dict[str, list[dict]]:
         if effects:
             result[weapon_id] = effects
     return result
+
+
+def _parse_model_group_specs(
+    groups_raw: list[dict[str, Any]],
+) -> list[ModelGroupSpec]:
+    """Parse raw model_groups YAML dicts into ModelGroupSpec objects."""
+    specs: list[ModelGroupSpec] = []
+    for g in groups_raw:
+        base_weapon_refs = [
+            e["ref"] if isinstance(e, dict) else str(e) for e in g.get("weapons", [])
+        ]
+        specs.append(
+            ModelGroupSpec(
+                id=g["id"],
+                name_en=g["name_en"],
+                count_raw=g.get("count", "models_max"),
+                base_weapon_refs=base_weapon_refs,
+                optional_one_of=g.get("optional_one_of", []),
+                optional_per_10=g.get("optional_per_10", []),
+                optional_per_5=g.get("optional_per_5", []),
+                optional_mode=g.get("optional_mode"),
+                priority=g.get("priority", 1),
+            )
+        )
+    return specs
+
+
+def _resolve_model_groups(
+    specs: list[ModelGroupSpec],
+    models: int,
+    group_loadouts: dict[str, Any] | None,
+    weapon_catalog: dict[str, Weapon],
+) -> list[ModelGroup]:
+    """Resolve ModelGroupSpec objects into ModelGroup objects using roster data.
+
+    - "remainder" count = models minus sum of all fixed counts
+    - "models_max" count = models (whole unit in this group)
+    - per_model mode: splits into sub-groups based on roster per_model_weapon_counts
+    """
+    if not specs:
+        return []
+
+    fixed_total = sum(
+        int(s.count_raw)
+        for s in specs
+        if isinstance(s.count_raw, int) or (isinstance(s.count_raw, str) and s.count_raw.isdigit())
+    )
+    remainder_count = max(0, models - fixed_total)
+
+    groups: list[ModelGroup] = []
+    for spec in specs:
+        raw = spec.count_raw
+        if raw == "remainder":
+            count = remainder_count
+        elif raw == "models_max":
+            count = models
+        else:
+            count = int(raw)
+
+        loadout = (group_loadouts or {}).get(spec.id, {})
+
+        if spec.optional_mode == "per_model":
+            per_model_counts: dict[str, int] = loadout.get("per_model_weapon_counts", {})
+            if per_model_counts:
+                for weapon_ref, sub_count in per_model_counts.items():
+                    weapons = [
+                        weapon_catalog[r] for r in spec.base_weapon_refs if r in weapon_catalog
+                    ]
+                    extra = weapon_catalog.get(weapon_ref)
+                    if extra:
+                        weapons.append(extra)
+                    groups.append(
+                        ModelGroup(
+                            id=f"{spec.id}_{weapon_ref.split('.')[-1]}",
+                            name_en=f"{spec.name_en} ({extra.name_en if extra else weapon_ref})",
+                            count=sub_count,
+                            weapons=weapons,
+                            priority=spec.priority,
+                            optional_mode="per_model",
+                        )
+                    )
+                continue
+            # No per_model_weapon_counts in roster: fall through to default group
+
+        weapons = [weapon_catalog[r] for r in spec.base_weapon_refs if r in weapon_catalog]
+        # Apply optional_one_of from roster
+        if spec.optional_one_of:
+            chosen = loadout.get("optional_weapon")
+            if chosen and chosen in weapon_catalog:
+                weapons.append(weapon_catalog[chosen])
+        # Apply optional_per_10 from roster (add to weapon list if chosen)
+        if spec.optional_per_10:
+            chosen = loadout.get("optional_per_10_weapon")
+            if chosen and chosen in weapon_catalog:
+                weapons.append(weapon_catalog[chosen])
+        # Apply optional_per_5 from roster
+        if spec.optional_per_5:
+            chosen = loadout.get("optional_per_5_weapon")
+            if chosen and chosen in weapon_catalog:
+                weapons.append(weapon_catalog[chosen])
+
+        groups.append(
+            ModelGroup(
+                id=spec.id,
+                name_en=spec.name_en,
+                count=count,
+                weapons=weapons,
+                priority=spec.priority,
+                optional_mode=spec.optional_mode,
+            )
+        )
+    return groups
 
 
 def _wargear_option_from_dict(d: dict[str, Any]) -> WargearOption:
@@ -158,6 +277,7 @@ def _unit_from_dict(
         wargear_options=[_wargear_option_from_dict(o) for o in d.get("wargear_options", [])],
         damage_bracket=[_damage_bracket_from_dict(b) for b in brackets_raw] or None,
         rules=d.get("rules", []),
+        model_group_specs=_parse_model_group_specs(d.get("model_groups", [])),
     )
 
 
@@ -794,5 +914,11 @@ def load_roster(
             relic_id: str | None = entry.get("relic")
             if relic_id:
                 unit = _apply_relic(unit, relic_id, relic_catalog)
+            if unit.model_group_specs:
+                group_loadouts = entry.get("group_loadouts") or {}
+                resolved = _resolve_model_groups(
+                    unit.model_group_specs, models, group_loadouts, weapon_catalog
+                )
+                unit = dataclasses.replace(unit, model_groups=resolved)
             matched.append((unit, models))
     return matched, unmatched

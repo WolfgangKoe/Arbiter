@@ -179,6 +179,8 @@ def _make_unit_state_dict(
 
 def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[type-arg]
     count = min(models, u.models_max) if models is not None else u.models_max
+    # model_groups counts are already resolved from the roster in load_roster
+    group_models: dict[str, int] = {g.id: g.count for g in u.model_groups} if u.model_groups else {}
     return {
         "current_wounds": u.wounds * count,
         "models": count,
@@ -206,6 +208,7 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
         },
         "active_buffs": [],
         "models_lost_since_last_rp": 0,
+        "group_models": group_models,
     }
 
 

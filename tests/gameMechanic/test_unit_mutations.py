@@ -20,7 +20,7 @@ from gameMechanic.unit_mutations import (  # noqa: E402
     set_charged,
     set_movement_status,
 )
-from gameObjects.unit import Unit  # noqa: E402
+from gameObjects.unit import ModelGroup, Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -588,3 +588,95 @@ def test_reset_turn_state_resets_movement_choice_to_stationary() -> None:
     next_phase()
     assert session["p1_units"][OVERLORD]["movement_choice"] == "stationary"
     assert session["p2_units"][BOYZ]["movement_choice"] == "stationary"
+
+
+# ---------------------------------------------------------------------------
+# apply_damage — group_models priority reduction
+# ---------------------------------------------------------------------------
+
+
+def _boyz_with_groups() -> Unit:
+    return Unit(
+        id=BOYZ,
+        name_en="Boyz",
+        name_de="Boyz",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Troops"],
+        keywords=["ORK"],
+        wounds=1,
+        models_min=10,
+        models_max=10,
+        power_level=6,
+        move='5"',
+        bs="5+",
+        ws="3+",
+        strength=4,
+        toughness=5,
+        attacks=2,
+        save=6,
+        invuln_save=None,
+        leadership=6,
+        oc=2,
+        fnp=None,
+        model_groups=[
+            ModelGroup(id="ork_boy", name_en="Ork Boy", count=9, weapons=[], priority=1),
+            ModelGroup(id="boss_nob", name_en="Boss Nob", count=1, weapons=[], priority=2),
+        ],
+    )
+
+
+def _boyz_state(models: int = 10) -> dict:  # type: ignore[type-arg]
+    return {
+        "current_wounds": models,
+        "models": models,
+        "destroyed": False,
+        "in_melee": False,
+        "in_reserve": False,
+        "deployment": "normal",
+        "lost_models_this_turn": 0,
+        "movement_choice": None,
+        "melee_with": [],
+        "turn_flags": {
+            "advanced": False,
+            "retreated": False,
+            "charged": False,
+            "shot": False,
+            "fought": False,
+        },
+        "group_models": {"ork_boy": 9, "boss_nob": 1},
+    }
+
+
+def test_apply_damage_group_models_reduces_priority_1_first() -> None:
+    session = _make_session(p1_units={BOYZ: _boyz_state()})
+    apply_damage(BOYZ, "Necrons", 3, _boyz_with_groups(), mortal=True)
+    gm = session["p1_units"][BOYZ]["group_models"]
+    assert gm["ork_boy"] == 6  # 3 ork boys lost
+    assert gm["boss_nob"] == 1  # boss nob untouched
+
+
+def test_apply_damage_group_models_boss_nob_survives_until_boys_gone() -> None:
+    session = _make_session(p1_units={BOYZ: _boyz_state()})
+    apply_damage(BOYZ, "Necrons", 9, _boyz_with_groups(), mortal=True)
+    gm = session["p1_units"][BOYZ]["group_models"]
+    assert gm["ork_boy"] == 0
+    assert gm["boss_nob"] == 1  # boss nob still alive
+
+
+def test_apply_damage_group_models_boss_nob_dies_last() -> None:
+    session = _make_session(p1_units={BOYZ: _boyz_state()})
+    apply_damage(BOYZ, "Necrons", 10, _boyz_with_groups(), mortal=True)
+    gm = session["p1_units"][BOYZ]["group_models"]
+    assert gm["ork_boy"] == 0
+    assert gm["boss_nob"] == 0
+
+
+def test_apply_damage_without_group_models_leaves_dict_unchanged() -> None:
+    state = _boyz_state()
+    state["group_models"] = {}
+    session = _make_session(p1_units={BOYZ: state})
+    unit = _boyz_with_groups()
+    unit = Unit(**{**unit.__dict__, "model_groups": []})
+    apply_damage(BOYZ, "Necrons", 3, unit, mortal=True)
+    assert session["p1_units"][BOYZ]["group_models"] == {}

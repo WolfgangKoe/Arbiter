@@ -4,6 +4,33 @@ from gameObjects.weapon import Weapon
 
 
 @dataclass
+class ModelGroupSpec:
+    """Raw model group definition from YAML — count not yet resolved from roster."""
+
+    id: str
+    name_en: str
+    count_raw: str | int  # "remainder" | "models_max" | int
+    base_weapon_refs: list[str]
+    optional_one_of: list[str]
+    optional_per_10: list[str]
+    optional_per_5: list[str]
+    optional_mode: str | None  # "per_model" | None
+    priority: int
+
+
+@dataclass
+class ModelGroup:
+    """Resolved model group — count and weapons finalized from roster entry."""
+
+    id: str
+    name_en: str
+    count: int
+    weapons: list[Weapon]
+    priority: int
+    optional_mode: str | None = None
+
+
+@dataclass
 class TriggeredEffect:
     """A relic or ability effect that triggers at a specific game moment."""
 
@@ -69,6 +96,8 @@ class Unit:
     relic_id: str | None = None
     relic_name: str | None = None
     triggered_effects: list[TriggeredEffect] = field(default_factory=list)
+    model_group_specs: list[ModelGroupSpec] = field(default_factory=list)
+    model_groups: list[ModelGroup] = field(default_factory=list)
 
     def has_keyword(self, keyword: str) -> bool:
         needle = keyword.upper()

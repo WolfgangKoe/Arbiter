@@ -506,19 +506,39 @@ units:
     weapons:
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.big_shoota
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.rokkit_launcha
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.shoota
       - ref: wh40k_9e.orks.weapon.big_choppa
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.killsaw
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.power_klaw
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.power_stabba
       - ref: wh40k_9e.orks.weapon.stikkbombz
+    model_groups:
+      - id: ork_boy
+        name_en: Ork Boy
+        count: remainder
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_per_10:
+          - wh40k_9e.orks.weapon.big_shoota
+          - wh40k_9e.orks.weapon.rokkit_launcha
+        priority: 1
+      - id: boss_nob
+        name_en: Boss Nob
+        count: 1
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_one_of:
+          - wh40k_9e.orks.weapon.choppa
+          - wh40k_9e.orks.weapon.big_choppa
+          - wh40k_9e.orks.weapon.power_klaw
+          - wh40k_9e.orks.weapon.killsaw
+          - wh40k_9e.orks.weapon.power_stabba
+        priority: 2
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.gretchin
@@ -572,6 +592,17 @@ units:
       - ref: wh40k_9e.orks.weapon.thump_gun
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.power_snappa
+    model_groups:
+      - id: beast_snagga_boy
+        name_en: Beast Snagga Boy
+        count: models_max
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
+          - ref: wh40k_9e.orks.weapon.power_snappa
+        optional_per_10:
+          - wh40k_9e.orks.weapon.thump_gun
+        priority: 1
     wargear_options: []
 
   # ── Elites ──────────────────────────────────────────────────────
@@ -602,6 +633,18 @@ units:
       - ref: wh40k_9e.orks.weapon.killsaw
       - ref: wh40k_9e.orks.weapon.power_klaw
       - ref: wh40k_9e.orks.weapon.stikkbombz
+    model_groups:
+      - id: meganob
+        name_en: Meganob
+        count: models_max
+        weapons:
+          - ref: wh40k_9e.orks.weapon.kustom_shoota
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_one_of:
+          - wh40k_9e.orks.weapon.power_klaw
+          - wh40k_9e.orks.weapon.killsaw
+        optional_mode: per_model
+        priority: 1
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.nobz
@@ -633,6 +676,21 @@ units:
       - ref: wh40k_9e.orks.weapon.power_klaw
       - ref: wh40k_9e.orks.weapon.power_stabba
       - ref: wh40k_9e.orks.weapon.stikkbombz
+    model_groups:
+      - id: nob
+        name_en: Nob
+        count: models_max
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_one_of:
+          - wh40k_9e.orks.weapon.choppa
+          - wh40k_9e.orks.weapon.big_choppa
+          - wh40k_9e.orks.weapon.power_klaw
+          - wh40k_9e.orks.weapon.killsaw
+          - wh40k_9e.orks.weapon.power_stabba
+        optional_mode: per_model
+        priority: 1
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.burna_boyz
@@ -686,24 +744,43 @@ units:
     rules: []
     weapons:
       - ref: wh40k_9e.orks.weapon.shokka_pistol
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.big_shoota
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.burna
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.kustom_shoota
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.rokkit_launcha
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.big_choppa
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.breacha_ram
-        model_restriction: "1_per_10"
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.power_klaw
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.stikkbombz
+    model_groups:
+      - id: kommando
+        name_en: Kommando
+        count: remainder
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_per_10:
+          - wh40k_9e.orks.weapon.big_shoota
+          - wh40k_9e.orks.weapon.burna
+          - wh40k_9e.orks.weapon.kustom_shoota
+          - wh40k_9e.orks.weapon.rokkit_launcha
+          - wh40k_9e.orks.weapon.breacha_ram
+          - wh40k_9e.orks.weapon.shokka_pistol
+        priority: 1
+      - id: boss_nob
+        name_en: Boss Nob
+        count: 1
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_one_of:
+          - wh40k_9e.orks.weapon.choppa
+          - wh40k_9e.orks.weapon.big_choppa
+          - wh40k_9e.orks.weapon.power_klaw
+        priority: 2
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.tankbustas
@@ -731,6 +808,16 @@ units:
       - ref: wh40k_9e.orks.weapon.pair_of_rokkit_pistols
       - ref: wh40k_9e.orks.weapon.rokkit_launcha
       - ref: wh40k_9e.orks.weapon.tankhammer
+    model_groups:
+      - id: tankbusta
+        name_en: Tankbusta
+        count: models_max
+        weapons:
+          - ref: wh40k_9e.orks.weapon.rokkit_launcha
+        optional_per_5:
+          - wh40k_9e.orks.weapon.tankhammer
+          - wh40k_9e.orks.weapon.pair_of_rokkit_pistols
+        priority: 1
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.flash_gitz
@@ -924,10 +1011,28 @@ units:
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.dakkagun
       - ref: wh40k_9e.orks.weapon.big_choppa
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.power_klaw
-        model_restriction: boss_nob_only
+    model_groups:
+      - id: warbiker
+        name_en: Warbiker
+        count: remainder
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.dakkagun
+          - ref: wh40k_9e.orks.weapon.choppa
+        priority: 1
+      - id: boss_nob_warbike
+        name_en: Boss Nob on Warbike
+        count: 1
+        weapons:
+          - ref: wh40k_9e.orks.weapon.dakkagun
+        optional_one_of:
+          - wh40k_9e.orks.weapon.slugga
+          - wh40k_9e.orks.weapon.big_choppa
+          - wh40k_9e.orks.weapon.choppa
+          - wh40k_9e.orks.weapon.power_klaw
+        priority: 2
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.stormboyz
@@ -955,8 +1060,26 @@ units:
       - ref: wh40k_9e.orks.weapon.slugga
       - ref: wh40k_9e.orks.weapon.choppa
       - ref: wh40k_9e.orks.weapon.power_klaw
-        model_restriction: boss_nob_only
       - ref: wh40k_9e.orks.weapon.stikkbombz
+    model_groups:
+      - id: stormboy
+        name_en: Stormboy
+        count: remainder
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        priority: 1
+      - id: boss_nob
+        name_en: Boss Nob
+        count: 1
+        weapons:
+          - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.stikkbombz
+        optional_one_of:
+          - wh40k_9e.orks.weapon.choppa
+          - wh40k_9e.orks.weapon.power_klaw
+        priority: 2
     wargear_options: []
 
   - id: wh40k_9e.orks.unit.deffkoptas
