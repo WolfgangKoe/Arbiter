@@ -1456,15 +1456,15 @@ unit_state["group_models"]: dict[str, int]
 
 ### Tasks (Implementierungsreihenfolge)
 
-- [ ] **A — YAML-Datenpflege:** `model_groups` in `orks/units.yaml` für alle betroffenen Einheiten; `model_restriction`-Flags entfernen (werden durch Gruppen ersetzt)
-- [ ] **B — Roster-Schema:** `group_loadouts` in bestehende `data/rosters/*.yaml` ergänzen; `loader_contract.md` aktualisieren
-- [ ] **C — `gameObjects/unit.py`:** `ModelGroup` dataclass; `Unit.model_groups: list[ModelGroup]`
-- [ ] **D — `gameObjects/loader.py`:** `model_groups` parsen, count auflösen, `optional_one_of`/`optional_per_10` gegen Roster auflösen, `per_model`→Sub-Gruppen splitten
-- [ ] **E — `game_state.py`:** `group_models` initialisieren; `apply_damage()` nach priority; `models` als Summe ableiten
+- [x] **A — YAML-Datenpflege:** `model_groups` in `orks/units.yaml` für alle betroffenen Einheiten; `model_restriction`-Flags entfernen (werden durch Gruppen ersetzt)
+- [x] **B — Roster-Schema:** `group_loadouts` in bestehende `data/rosters/*.yaml` ergänzen (loader_contract.md → Task J)
+- [x] **C — `gameObjects/unit.py`:** `ModelGroup` dataclass; `Unit.model_groups: list[ModelGroup]`
+- [x] **D — `gameObjects/loader.py`:** `model_groups` parsen, count auflösen, `optional_one_of`/`optional_per_10`/`optional_per_5` gegen Roster auflösen, `per_model`→Sub-Gruppen splitten
+- [x] **E — `game_state.py`:** `group_models` initialisieren; `apply_damage()` nach priority; `models` als Summe ableiten
 - [ ] **F — `src/uiLayout/unitCard.py`:** subUnitCard rendern (wenn `unit.model_groups` nicht leer)
-- [ ] **G — `src/uiLayout/_common.py`:** neue Deklaration Schussphase (Gruppe → Waffe → Ziel)
-- [ ] **H — `src/uiLayout/_common.py`:** neue Deklaration Nahkampf (Gruppe → Ziel → Attacken → Waffe)
-- [ ] **I — Tests:** ModelGroup-Laden, count-Auflösung, apply_damage nach priority, Rückwärtskompatibilität
+- [x] **G — `src/uiLayout/_common.py`:** neue Deklaration Schussphase (Gruppe → Waffe → Ziel)
+- [x] **H — `src/uiLayout/_common.py`:** neue Deklaration Nahkampf (Gruppe → Ziel → Attacken → Waffe)
+- [x] **I — Tests:** ModelGroup-Laden, count-Auflösung, apply_damage nach priority, Rückwärtskompatibilität
 - [ ] **J — `docs/spec/loader_contract.md` + `unit_states.md`:** aktualisieren nach Umsetzung
 
 **Abhängigkeit:** A+B → C → D → E → F → G/H (parallel) → I → J

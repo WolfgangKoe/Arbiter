@@ -59,15 +59,23 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Save-Modifier: `save_modifier_die_pair_html` neue Signatur `(armour, value, label, color)`; alle Rows jetzt relativ zu `armour` (nicht kumulativ). Buff: blue(armour-N)→grey(armour); Debuff: grey(armour-1)→red(armour+N-1). ✅
   - Shooting model_restriction: `1_per_10`/`boss_nob_only`/`1_per_5` jetzt auch im Schussangriffs-Pfad korrekt (eff_models aus models_alive, nicht slider). ✅
   - 6m Modellgruppen vollständig geplant → dokumentiert in `docs/goals/ziel6.md##6m`
+- **Session 38: 6m Modellgruppen vollständig implementiert (Tasks A–E, G/H, I)**
+  - YAML: `model_groups` für boyz, kommandos, stormboyz, warbikers, beast_snagga_boyz, meganobz, nobz, tankbustas; squighog_boyz homogen (kein `model_groups` nötig); `model_restriction` entfernt
+  - Rosters: `group_loadouts` für boyz + warbikers (boss_nob → power_klaw)
+  - `ModelGroup` + `ModelGroupSpec` dataclasses in `unit.py`; `Unit.model_groups: list[ModelGroup]`
+  - `loader.py`: `_parse_model_group_specs()` + `_resolve_model_groups()` (remainder/models_max/per_model + optional_one_of/per_10/per_5 aus Roster aufgelöst)
+  - `game_state.py`: `group_models` init aus aufgelösten `model_groups`
+  - `unit_mutations.py`: `_apply_group_losses()` → reduziert nach priority bei `apply_damage()`
+  - `_common.py`: `_render_group_declaration()` — Schuss- + Nahkampfdeklaration per Gruppe (Waffen aus `group.weapons`, Budget = `group.count × attacks`); `render_attack_declaration` dispatcht wenn `unit.model_groups` gesetzt
+  - 13 neue Tests → 559 grün
 
 ---
 
 ## Nächste Schritte (priorisiert)
 
-1. 🔴 **6m — Modellgruppen-Datenmodell + neue Deklarations-UI** (Plan fertig, Implementierung beginnt mit Task A)
-   - Vollständiger Plan in `docs/goals/ziel6.md ## 6m`
-   - Reihenfolge: A (YAML orks) → B (Roster) → C (unit.py) → D (loader) → E (game_state) → F (unitCard) → G/H (_common.py) → I (Tests)
-2. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
+1. **6m Task F — subUnitCard** in `unitCard.py`: pro Gruppe Name + lebend-count + Waffen-Summary (nur wenn Unit selected)
+2. **6m Task J — Docs**: `docs/spec/loader_contract.md` + `unit_states.md` aktualisieren
+3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
 3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
 4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
 
@@ -75,65 +83,18 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Offene Tasks
 
-### 🔴 HOCH — 6m: Modellgruppen-Datenmodell + neue Deklarations-UI
+### 🟡 MITTEL — 6m: Reste (Tasks F + J)
 
-> Vollständige Spec in `docs/goals/ziel6.md ## 6m`. Hier nur die Task-Checkliste.
+> Kernimplementierung (A–E, G/H, I) in Session 38 abgeschlossen. Nur noch optionale UX-Verbesserung + Docs ausstehend.
 
-**Task A — YAML-Datenpflege `orks/units.yaml`**
-Wahapedia-Prüfung für beast_snagga_boyz, tankbustas, meganobz, squighog_boyz vor Umsetzung.
-- [ ] `boyz`: `model_groups` (ork_boy remainder + boss_nob 1); alte `model_restriction`-Flags entfernen
-- [ ] `kommandos`: `model_groups` (kommando remainder + boss_nob 1)
-- [ ] `stormboyz`: `model_groups` (stormboy remainder + boss_nob 1)
-- [ ] `warbikers`: `model_groups` (warbiker remainder + boss_nob 1)
-- [ ] `beast_snagga_boyz`: `model_groups` nach Wahapedia
-- [ ] `tankbustas`: `model_groups` nach Wahapedia (nob mit tankhammer = 1_per_5?)
-- [ ] `nobz`: `model_groups` (nob all, optional_mode: per_model)
-- [ ] `meganobz`, `squighog_boyz`: nach Wahapedia prüfen
-
-**Task B — Roster-Schema**
-- [ ] `docs/spec/loader_contract.md`: `group_loadouts`-Feld dokumentieren (strukturell gemischt + per_model)
-- [ ] `data/rosters/*.yaml`: `group_loadouts` für alle Einheiten mit `model_groups` ergänzen
-
-**Task C — `gameObjects/unit.py`**
-- [ ] `ModelGroup` dataclass: `id`, `name_en`, `count: int`, `weapons: list[WeaponRef]`, `priority: int`
-- [ ] `Unit.model_groups: list[ModelGroup]` — leer wenn homogen (Rückwärtskompatibilität)
-- [ ] `Unit.weapons` bleibt als flattened Union aller Gruppen-Waffen
-
-**Task D — `gameObjects/loader.py`**
-- [ ] `model_groups` aus YAML parsen
-- [ ] `count` auflösen: feste Zahl / `remainder` / `models_max`
-- [ ] `optional_one_of` + `optional_per_10` gegen Roster `group_loadouts` auflösen
-- [ ] `optional_mode: per_model` + `per_model_weapon_counts` → in effektive Sub-Gruppen splitten (z.B. nob_power_klaw count=2, nob_choppa count=1)
-
-**Task E — `game_state.py`**
-- [ ] `unit_state["group_models"]: dict[str, int]` bei Unit-Init befüllen
-- [ ] `unit_state["models"]` = `sum(group_models.values())` — abgeleitet, beide kompatibel halten
-- [ ] `apply_damage()`: bei Modellverlust `group_models` nach `priority` reduzieren (priority 1 = stirbt zuerst)
-
-**Task F — `src/uiLayout/unitCard.py`**
+**Task F — `src/uiLayout/unitCard.py`** (optionale UX)
 - [ ] subUnitCard rendern wenn `unit.model_groups` nicht leer: pro Gruppe Name + lebend-count + Waffen-Summary
 - [ ] Select-Button pro Gruppe → setzt `selected_model_group` im Session-State
 - [ ] Nur sichtbar wenn Unit selected ist
 
-**Task G — `src/uiLayout/_common.py`: Schussphase**
-- [ ] Wenn `unit.model_groups`: Gruppenauswahl statt Gesamt-Modell-Slider
-- [ ] Pro Gruppe: Waffen aus `group.weapons` (keine `model_restriction`-Prüfung mehr nötig)
-- [ ] Ziel-Zuweisung: count=1 → max 1 Ziel; count>1 → mehrere Ziele erlaubt
-- [ ] Fertige Gruppe kollabiert zur Zusammenfassung (nicht verstecken)
-- [ ] Rückwärtskompatibilität: ohne `model_groups` → alter Flow
-
-**Task H — `src/uiLayout/_common.py`: Nahkampfphase**
-- [ ] Gruppe wählen → Ziele wählen → Attacken aufteilen → Waffe deklarieren
-- [ ] Budget pro Gruppe = `group.count × unit.attacks` (+ WAAAGH-Bonus)
-- [ ] Fertige Gruppe kollabiert
-- [ ] Rückwärtskompatibilität: ohne `model_groups` → alter Flow
-
-**Task I — Tests**
-- [ ] ModelGroup laden + count auflösen (remainder, fixed, models_max)
-- [ ] per_model split: Nobz 5 Modelle → korrekte Sub-Gruppen
-- [ ] `apply_damage()` mit group_models: priority 1 stirbt vor priority 2
-- [ ] Einheit ohne model_groups: alter Pfad unberührt
-- [ ] Shooting + Melee Deklaration: weapon count korrekt pro Gruppe
+**Task J — Docs**
+- [ ] `docs/spec/loader_contract.md`: `group_loadouts`-Feld dokumentieren (strukturell gemischt + per_model)
+- [ ] `docs/spec/unit_states.md`: `group_models` dokumentieren
 
 ---
 
