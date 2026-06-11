@@ -10,7 +10,7 @@ run every verification command, and update your row below when done.
 
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
-| 001 | CI-Verifikations-Gates + Coverage einführen | P1 | M | — | TODO |
+| 001 | CI-Verifikations-Gates + Coverage einführen | P1 | M | — | BLOCKED — gemessene Coverage 40 % gesamt (723 Tests); STOP-Bedingung greift (unter 50 %); Lint-Gates (ruff/black/isort) wären grün; `pytest-cov` zu `requirements-dev.txt` hinzugefügt; 129 neue Tests geschrieben (Fokus auf gameMechanic + gameObjects); Coverage-Gate wartet auf weiteren Testausbau |
 | 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | P1 | S | — | TODO |
 | 003 | WAAAGH-Angriffsbonus zentralisieren (3× Duplikat entfernen) | P2 | S | 001 | TODO |
 | 004 | `lookup()`-`StopIteration` durch klare Fehlermeldung ersetzen | P2 | S | 001 | TODO |

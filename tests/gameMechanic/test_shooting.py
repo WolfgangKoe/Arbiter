@@ -7,6 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from unittest.mock import MagicMock
+
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
 from gameMechanic.shootingPhase import can_shoot
 
@@ -49,6 +51,29 @@ class TestCanShoot:
     def test_in_reserve_takes_priority(self):
         # Even with no blocking flags, in_reserve blocks shooting.
         assert can_shoot({"turn_flags": {}, "in_reserve": True}) is False
+
+    def test_already_shot_cannot_shoot(self):
+        assert can_shoot(self._state(shot=True)) is False
+
+    def test_pistol_in_melee_can_shoot(self):
+        profile = MagicMock()
+        profile.weapon_type = "Pistol 1"
+        weapon = MagicMock()
+        weapon.profiles = [profile]
+        unit = MagicMock()
+        unit.has_keyword.return_value = False
+        unit.weapons = [weapon]
+        assert can_shoot(self._state(in_melee=True), unit) is True
+
+    def test_no_pistol_infantry_in_melee_cannot_shoot(self):
+        profile = MagicMock()
+        profile.weapon_type = "Rapid Fire"
+        weapon = MagicMock()
+        weapon.profiles = [profile]
+        unit = MagicMock()
+        unit.has_keyword.return_value = False
+        unit.weapons = [weapon]
+        assert can_shoot(self._state(in_melee=True), unit) is False
 
 
 # ---------------------------------------------------------------------------

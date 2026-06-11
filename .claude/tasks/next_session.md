@@ -21,6 +21,18 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
+## Aktueller Stand (nach Coverage-Session, 2026-06-11 — 760 Tests grün, 90 % Coverage)
+
+**Coverage-Gate ist jetzt aktiv** (`pyproject.toml` + CI `deploy.yml`):
+- Messbefehl: `pytest --tb=short` (liest omit-Liste aus pyproject.toml automatisch)
+- Gate: **80 %** auf testbarem Code (ohne uiLayout/, *Phase.py, app.py, constants/)
+- Aktuell: **90 %** — Reserve vorhanden
+- Sicherheitsnetz-Regel in CLAUDE.md + Memory: Rote Tests = STOP + Nutzer fragen
+- pytest + python -m pytest + python -m coverage zur Allowlist hinzugefügt
+
+**Fachlicher Plan ON HOLD bis Coverage-Gate stabil** (Nutzer-Entscheidung 2026-06-11)
+- Nächste fachliche Aufgaben (wenn Coverage OK): P17 + P18 aus §6n
+
 ## Aktueller Stand (nach Session 39, 2026-06-10 — 594 Tests grün)
 
 - Ziel 1–5 vollständig abgeschlossen

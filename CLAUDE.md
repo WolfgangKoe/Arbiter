@@ -91,11 +91,32 @@ Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, 
 
 ## Testing
 
-- Coverage-Schwelle: **80 %** — darunter wird der Build rot
+### Messbefehl (IMMER so messen)
+
+```bash
+pytest --tb=short
+```
+
+Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **80 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+
+### Sicherheitsnetz-Regel — PFLICHT
+
+**Wenn nach einer Änderung vorher grüne Tests rot werden: STOP.**  
+Nicht weitermachen, nicht den Test still anpassen. Dem Nutzer die failing Tests auflisten und explizit fragen, ob der Verhaltensbruch beabsichtigt war. Erst nach Bestätigung fortfahren.
+
+Diese Regel ist der Hauptzweck der Tests: Ein fehlschlagender Test ist eine Nachricht aus einer früheren Session — „diese Funktionalität war bewusst so entworfen."
+
+**Kein Commit mit roten Tests** — auch nicht als „temporärer Fix".
+
+### Weitere Regeln
+
 - Keine geteilten Zustände zwischen Tests — jeder Test vollständig isoliert
 - Testnamen beschreiben Verhalten: `test_overlord_resurrection_orb_heals_destroyed_warrior` ✓
 - Jeder Bugfix bekommt einen Regressionstest
-- **Streamlit-UI kann nicht automatisch getestet werden** — wenn UI geändert wird, explizit nennen was manuell verifiziert werden muss; nie behaupten ein UI-Feature sei fertig ohne manuelle Prüfung
+
+### Warum Render-Code aus der Messung ausgeschlossen ist
+
+Streamlit-Render-Funktionen (in `uiLayout/` und den `*Phase.py`-Dateien) sind technisch testbar. Sie werden aber aus der Coverage-Messung ausgeschlossen, weil Button-Order-Mocks bei jeder UI-Änderung brechen — hoher Aufwand, niedriger Informationsgewinn. Ihre Business-Logik (State-Mutationen, Berechnungen) ist in den direkt getesteten Modulen (`combat.py`, `unit_mutations.py`, `game_state.py` etc.) abgedeckt. Render-Code wird **manuell verifiziert** — wenn UI geändert wird, explizit nennen was zu prüfen ist; nie behaupten ein UI-Feature sei fertig ohne manuelle Prüfung.
 
 ---
 

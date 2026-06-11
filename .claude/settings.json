@@ -1,6 +1,9 @@
 {
   "permissions": {
     "allow": [
+      "Bash(pytest *)",
+      "Bash(python -m pytest *)",
+      "Bash(python -m coverage *)",
       "Bash(git -C /home/wolfgang/Dokumente/Arbiter *)",
       "Bash(git stash *)",
       "Bash(git fetch *)",

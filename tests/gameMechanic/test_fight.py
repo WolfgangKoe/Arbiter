@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
-from gameMechanic.fightPhase import _is_target_engaged, can_fight
+from gameMechanic.fightPhase import _dice_max, _is_target_engaged, can_fight
 
 # ---------------------------------------------------------------------------
 # can_fight — pure-function tests
@@ -144,3 +144,28 @@ class TestFightSmoke:
             params, defender, hits_rolled=4, wounds_rolled=3, saves_failed=3, fnp_saved=2
         )
         assert damage == 1
+
+
+# ---------------------------------------------------------------------------
+# _dice_max — pure parser
+# ---------------------------------------------------------------------------
+
+
+class TestDiceMax:
+    def test_d3_returns_3(self) -> None:
+        assert _dice_max("D3") == 3
+
+    def test_d6_returns_6(self) -> None:
+        assert _dice_max("D6") == 6
+
+    def test_lowercase_d6(self) -> None:
+        assert _dice_max("d6") == 6
+
+    def test_plain_integer_string(self) -> None:
+        assert _dice_max("6") == 6
+
+    def test_invalid_string_returns_3(self) -> None:
+        assert _dice_max("invalid") == 3
+
+    def test_empty_string_returns_3(self) -> None:
+        assert _dice_max("") == 3

@@ -19,3 +19,25 @@ select = ["E", "F", "I", "UP"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = [
+    "src/uiLayout/*",
+    "src/app.py",
+    "src/constants/*",
+    "src/gameMechanic/commandPhase.py",
+    "src/gameMechanic/chargephase.py",
+    "src/gameMechanic/fightPhase.py",
+    "src/gameMechanic/moralePhase.py",
+    "src/gameMechanic/movementPhase.py",
+    "src/gameMechanic/psychicPhase.py",
+    "src/gameMechanic/shootingPhase.py",
+]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
