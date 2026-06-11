@@ -34,10 +34,9 @@ Diese standen im Bericht, wurden aber (noch) nicht zur Umsetzung ausgewählt:
 
 - **#6** Ungeschützte `yaml.safe_load` (18 Stellen) — M, sinnvoll, aber niedrigere Priorität.
 - **#7** Scenario-Query-Param Pfad-Traversal — Defense-in-Depth, geringe reale Auswirkung.
-- **#8** Zwei parallele CI-Pipelines (Woodpecker + GH Actions) — interagiert mit Plan 001
-  (siehe dessen Maintenance-Notes); Konsolidierung separat entscheiden.
-- **#9** Stale `Makefile` (Flask/Tailwind-Geister) — S, reines Aufräumen.
-- **#10** `.env.example` mit `FLASK_*` — S, Doku-Fix.
+- **#8** ✅ Woodpecker-Pipeline gelöscht; GitHub Actions ist die einzige CI.
+- **#9** ✅ `Makefile` (Flask/Tailwind-Reste) gelöscht.
+- **#10** ✅ `.env.example` auf `DATA_DIR=data` reduziert (FLASK_*-Einträge entfernt).
 - **#11** `_common.py` Gott-Modul (2077 LOC) — L; Voraussetzung ist messbare Coverage aus 001.
 
 ## Findings considered and rejected (nicht erneut auditieren)
