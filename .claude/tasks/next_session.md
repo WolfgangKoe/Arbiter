@@ -93,15 +93,30 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Finding #8: `.woodpecker.yml` gelöscht — GitHub Actions ist einzige CI ✅
   - Finding #9: `Makefile` (Flask/Tailwind-Reste) gelöscht ✅
   - Finding #10: `.env.example` auf `DATA_DIR=data` bereinigt ✅
+- **Re-Audit-Session 2026-06-11 (abends) — Bericht + 7 neue Executor-Pläne (kein Code geändert):**
+  - Bericht: `docs/audit/2026-06-11-reaudit.md` — 8 Findings R1–R8 (3 bestätigte Alt-Findings #6/#7/#11, 5 neue)
+  - Neue Pläne `docs/audit/plans/006–012` (Format wie 001–005); `plans/README.md` fortgeschrieben
+  - Wichtigste neue Funde: Duplikat-Subgruppen-IDs kollidieren still in `group_models` (009);
+    unbekannte Weapon-Refs in Roster-Swaps werden still verworfen (009); 5 tote Variablen
+    inkl. `combat.py:105` `hit_mod` (Docstring verspricht Logging) hinter `F841`-Ignore (010);
+    ORK-Hardcode-Reste in `waaagh_attack_bonus`/`chargephase` (011); Stratagem-/Ability-Loader
+    parsen YAML pro Rerun (012)
+  - Coverage-Nuance dokumentiert: `src/uiLayout/*` ist in der omit-Liste → Plan 008 extrahiert
+    die reine Attack-Mathematik nach `src/gameMechanic/attack_math.py` (gemessen), Re-Exports
+    halten alle Call-Sites/Tests stabil
+  - Sicherheits-Callout (Token in Remote-URL) ERLEDIGT: widerrufen + entfernt, Abschnitt in
+    `plans/README.md` abgeschlossen
 
 ---
 
-## Audit-Queue (Executor-Sessions)
+## Audit-Queue (Executor-Sessions) — ⬅️ HIER STARTET DIE NÄCHSTE SESSION
 
-Technische Schulden aus dem Audit 2026-06-11 werden als Executor-Sessions abgearbeitet.  
-**Startprompt für die nächste Executor-Session (Plan 001-Rest — einfach kopieren):**
+Das Re-Audit vom 2026-06-11 (`docs/audit/2026-06-11-reaudit.md`) hat die Queue mit
+7 neuen Plänen gefüllt. **Nächster Plan = erster offener Eintrag der Tabelle = 009.**
 
-> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/001-ci-verification-gates.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
+**Startprompt für die nächste Executor-Session (Plan 009 — einfach kopieren):**
+
+> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/009-roster-group-validation.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
 >
 > Befolge den „Executor instructions"- und den „Drift check"-Block am Anfang der Datei.
 > Führe nach jedem Schritt den angegebenen Verify-Befehl aus und bestätige das erwartete Ergebnis, bevor du weitermachst.
@@ -110,17 +125,23 @@ Technische Schulden aus dem Audit 2026-06-11 werden als Executor-Sessions abgear
 > Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile dieses Plans in `docs/audit/plans/README.md`.
 > Nicht committen oder pushen — das übernehme ich nach dem Review.
 
-*(Plan 001 abgeschlossen. Nächster Plan: `002-defusedxml-rosz-parsing.md`.)*
+Für die Folge-Sessions denselben Prompt mit dem jeweils nächsten offenen Plan-Dateinamen verwenden.
 
 Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
-| Plan | Titel | Warum jetzt | Status |
-|------|-------|-------------|--------|
-| 001-Rest | Woodpecker CI + Lint-Gates | Infrastruktur komplett machen (GitHub Actions ist fertig, Codeberg fehlt noch) | **DONE** (2026-06-11) |
-| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | **DONE** (2026-06-11) |
-| 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | **DONE** (2026-06-11) |
-| 004 | lookup() StopIteration-Fallback | Voraussetzung für P17 (Gruppen-Lookup crasht sonst bei State-Divergenz) | **DONE** (2026-06-11) |
-| 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | **DONE** (2026-06-11) |
+| Plan | Datei | Titel | Status |
+|------|-------|-------|--------|
+| 001–005 | *(Erst-Audit)* | CI-Gates, defusedxml, WAAAGH-Bonus, lookup, Loader-Cache | **DONE** (2026-06-11) |
+| 009 | `009-roster-group-validation.md` | Duplikat-Subgruppen mergen + unbekannte Weapon-Refs laut melden | TODO |
+| 010 | `010-dead-vars-f841-gate.md` | 5 tote Variablen raus + F841-Lint scharf (VOR 008!) | TODO |
+| 006 | `006-safe-yaml-load.md` | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | TODO |
+| 007 | `007-scenario-name-validation.md` | Scenario-Namen-Allowlist (Pfad-Traversal) | TODO |
+| 008 | `008-split-common-god-module.md` | `_common.py`: Attack-Mathe → gemessenes Modul + Dice-HTML auslagern | TODO |
+| 011 | `011-data-driven-waaagh.md` | WAAAGH datengetrieben (P3 — spätestens vor 4. Fraktion) | TODO |
+| 012 | `012-loader-cache-consolidation.md` | Restliche Loader cachen (P3 — zwingend NACH 006) | TODO |
+
+**Konflikt-Regeln:** 006/009/012 ändern alle `loader.py` → nie parallel; 010 zwingend vor 008;
+008 und 011 nicht parallel. Details in `docs/audit/plans/README.md`.
 
 **Dazwischenschieben:** Dringende Bugs (P20-Klasse) oder Nutzer-Entscheidungen können jederzeit vorgezogen werden — danach einfach beim nächsten offenen Eintrag in der Tabelle weitermachen.
 
@@ -128,8 +149,9 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
 ## Nächste Schritte (Feature-Plan, priorisiert)
 
-> **Audit-Queue vollständig abgearbeitet (2026-06-11).** Alle 5 Pläne + Findings #8/#9/#10 erledigt.
-> Nächster Schritt: Feature-Plan, Priorität P17.
+> **Re-Audit 2026-06-11 hat die Audit-Queue neu gefüllt (Pläne 006–012, s. oben).**
+> Erst die Executor-Queue abarbeiten (Start: Plan 009), DANN Feature-Plan ab P17.
+> Erst-Audit-Queue (001–005 + #8/#9/#10) ist vollständig erledigt.
 >
 > Review-Runde 2 wurde FREIGEGEBEN und größtenteils umgesetzt (2026-06-10, Session 39, 594 Tests grün).
 > Erledigt: P14, P15 (inkl. per_3 + Necron-Gruppen), P16 (im D5-Renderer), P19, P20 (Logik gepinnt),
