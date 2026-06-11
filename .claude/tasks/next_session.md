@@ -21,18 +21,6 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Coverage-Session, 2026-06-11 — 760 Tests grün, 90 % Coverage)
-
-**Coverage-Gate ist jetzt aktiv** (`pyproject.toml` + CI `deploy.yml`):
-- Messbefehl: `pytest --tb=short` (liest omit-Liste aus pyproject.toml automatisch)
-- Gate: **80 %** auf testbarem Code (ohne uiLayout/, *Phase.py, app.py, constants/)
-- Aktuell: **90 %** — Reserve vorhanden
-- Sicherheitsnetz-Regel in CLAUDE.md + Memory: Rote Tests = STOP + Nutzer fragen
-- pytest + python -m pytest + python -m coverage zur Allowlist hinzugefügt
-
-**Fachlicher Plan ON HOLD bis Coverage-Gate stabil** (Nutzer-Entscheidung 2026-06-11)
-- Nächste fachliche Aufgaben (wenn Coverage OK): P17 + P18 aus §6n
-
 ## Aktueller Stand (nach Session 39, 2026-06-10 — 594 Tests grün)
 
 - Ziel 1–5 vollständig abgeschlossen
@@ -89,11 +77,43 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - `unit_mutations.py`: `_apply_group_losses()` → reduziert nach priority bei `apply_damage()`
   - `_common.py`: `_render_group_declaration()` — Schuss- + Nahkampfdeklaration per Gruppe (Waffen aus `group.weapons`, Budget = `group.count × attacks`); `render_attack_declaration` dispatcht wenn `unit.model_groups` gesetzt
   - 13 neue Tests → 559 grün
+- **Coverage-Session 2026-06-11: 80 %-Gate aktiv — 760 Tests grün (90 % Coverage)**
+  - `pyproject.toml`: `[tool.coverage.run]` omit-Liste (uiLayout, *Phase.py, app.py) + `fail_under=80`; `pytest --tb=short` mißt jetzt automatisch
+  - `deploy.yml` (GitHub Actions): installiert `requirements-dev.txt`; Gate wirkt in CI
+  - `CLAUDE.md`: Sicherheitsnetz-Regel „rote Tests → STOP, Nutzer fragen" + Meßbefehl dokumentiert
+  - 166 neue Tests: test_game_log, test_scenarios, test_phase_runner, test_stratagem, test_weapon, test_game_state (swap_players, _reset_phase_state, WAAAGH-Upgrade, reset_game), test_fight, test_shooting
+  - Audit-Bericht `docs/audit/2026-06-11-repo-audit.md` + 5 Executor-Pläne `docs/audit/plans/001–005`
+  - **Noch offen (Plan 001 Rest):** `.woodpecker.yml` (Codeberg CI) hat noch keine Lint- oder Coverage-Gates
 
 ---
 
-## Nächste Schritte (priorisiert)
+## Audit-Queue (Executor-Sessions)
 
+Technische Schulden aus dem Audit 2026-06-11 werden als Executor-Sessions abgearbeitet.  
+Startprompt-Vorlage:
+
+> *Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/NNN-xxx.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um. Befolge den „Executor instructions"- und den „Drift check"-Block. Führe nach jedem Schritt den angegebenen Verify-Befehl aus. Halte dich strikt an den Scope. Tritt eine STOP condition ein: anhalten und zurückmelden. Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile in `docs/audit/plans/README.md`. Nicht committen oder pushen.*
+
+Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
+
+| Plan | Titel | Warum jetzt | Status |
+|------|-------|-------------|--------|
+| 001-Rest | Woodpecker CI + Lint-Gates | Infrastruktur komplett machen (GitHub Actions ist fertig, Codeberg fehlt noch) | **NÄCHSTE** |
+| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | TODO |
+| 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | TODO |
+| 004 | lookup() StopIteration-Fallback | Voraussetzung für P17 (Gruppen-Lookup crasht sonst bei State-Divergenz) | TODO |
+| 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | TODO |
+
+**Dazwischenschieben:** Dringende Bugs (P20-Klasse) oder Nutzer-Entscheidungen können jederzeit vorgezogen werden — danach einfach beim nächsten offenen Eintrag in der Tabelle weitermachen.
+
+---
+
+## Nächste Schritte (Feature-Plan, priorisiert)
+
+> **Audit-Queue zuerst abarbeiten (s. oben): 001-Rest → 002 → 003 → 004 → 005.**
+> Plans 003 + 004 sind direkte Voraussetzungen für P17/P18 (beide ändern _common.py-Stellen, die 003 erst bereinigt).
+> Ausnahme: dringende Bugs können vorgezogen werden, danach Audit-Queue fortsetzen.
+>
 > Review-Runde 2 wurde FREIGEGEBEN und größtenteils umgesetzt (2026-06-10, Session 39, 594 Tests grün).
 > Erledigt: P14, P15 (inkl. per_3 + Necron-Gruppen), P16 (im D5-Renderer), P19, P20 (Logik gepinnt),
 > D5 komplett, Farbkonzept komplett (Buff=grün #4a9a5a, MOVED=blau #60a5fa, RESERVE=#ff9060,
