@@ -90,9 +90,18 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Audit-Queue (Executor-Sessions)
 
 Technische Schulden aus dem Audit 2026-06-11 werden als Executor-Sessions abgearbeitet.  
-Startprompt-Vorlage:
+**Startprompt für die nächste Executor-Session (Plan 001-Rest — einfach kopieren):**
 
-> *Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/NNN-xxx.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um. Befolge den „Executor instructions"- und den „Drift check"-Block. Führe nach jedem Schritt den angegebenen Verify-Befehl aus. Halte dich strikt an den Scope. Tritt eine STOP condition ein: anhalten und zurückmelden. Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile in `docs/audit/plans/README.md`. Nicht committen oder pushen.*
+> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/001-ci-verification-gates.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
+>
+> Befolge den „Executor instructions"- und den „Drift check"-Block am Anfang der Datei.
+> Führe nach jedem Schritt den angegebenen Verify-Befehl aus und bestätige das erwartete Ergebnis, bevor du weitermachst.
+> Halte dich strikt an den Scope: ändere nur die unter „In scope" gelisteten Dateien, fasse die „Out of scope"-Dateien nicht an.
+> Tritt eine STOP condition ein: anhalten und zurückmelden — nicht improvisieren.
+> Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile dieses Plans in `docs/audit/plans/README.md`.
+> Nicht committen oder pushen — das übernehme ich nach dem Review.
+
+*(Nach Abschluss von 001: Prompt auf `002-defusedxml-rosz-parsing.md` umstellen usw.)*
 
 Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
