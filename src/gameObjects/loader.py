@@ -26,6 +26,9 @@ from gameObjects.weapon import Weapon, WeaponProfile
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
 _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
+_ROUND_CHOICE_CACHE: dict[str, list] = {}
+_ROUND_CHOICE_LABEL_CACHE: dict[str, str] = {}
+
 _CCW_PROFILE = WeaponProfile(
     name_en="Close Combat Weapon",
     weapon_type="Melee",
@@ -429,9 +432,12 @@ def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
     Replaces the old command_protocols.yaml lookup. Any faction with ability_type: round_choice
     entries in its faction_abilities.yaml is automatically supported — no code change needed.
     """
+    if faction_dir in _ROUND_CHOICE_CACHE:
+        return _ROUND_CHOICE_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
     if not path.exists():
-        return []
+        _ROUND_CHOICE_CACHE[faction_dir] = []
+        return _ROUND_CHOICE_CACHE[faction_dir]
     with open(path) as f:
         data = yaml.safe_load(f)
     result = []
@@ -451,6 +457,7 @@ def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
                 subfaction_affinity=a.get("subfaction_affinity"),
             )
         )
+    _ROUND_CHOICE_CACHE[faction_dir] = result
     return result
 
 
@@ -459,12 +466,17 @@ def load_round_choice_label(faction_dir: str) -> str:
 
     Reads round_choice_label from faction_abilities.yaml. Falls back to 'Round Abilities'.
     """
+    if faction_dir in _ROUND_CHOICE_LABEL_CACHE:
+        return _ROUND_CHOICE_LABEL_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
     if not path.exists():
-        return "Round Abilities"
+        _ROUND_CHOICE_LABEL_CACHE[faction_dir] = "Round Abilities"
+        return _ROUND_CHOICE_LABEL_CACHE[faction_dir]
     with open(path) as f:
         data = yaml.safe_load(f)
-    return data.get("round_choice_label", "Round Abilities")
+    label = data.get("round_choice_label", "Round Abilities")
+    _ROUND_CHOICE_LABEL_CACHE[faction_dir] = label
+    return label
 
 
 def load_unit_abilities(faction_dir: str) -> list[Ability]:

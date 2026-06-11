@@ -14,7 +14,7 @@ run every verification command, and update your row below when done.
 | 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | P1 | S | — | DONE — `_safe_fromstring` ersetzt `ET.fromstring`; Regressionstest für Entity-Expansion; 761 Tests grün. |
 | 003 | WAAAGH-Angriffsbonus zentralisieren (3× Duplikat entfernen) | P2 | S | 001 | DONE — `waaagh_attack_bonus()` in `ability_engine.py`; 3 Duplikate in `_common.py` ersetzt; 3 neue Tests; 764 Tests grün. |
 | 004 | `lookup()`-`StopIteration` durch klare Fehlermeldung ersetzen | P2 | S | 001 | DONE — KeyError mit "out of sync"-Meldung; Regressionstest; 765 Tests grün. |
-| 005 | Loader-YAML pro Prozess cachen (Re-Parse pro Rerun beenden) | P3 | S | 001 | TODO |
+| 005 | Loader-YAML pro Prozess cachen (Re-Parse pro Rerun beenden) | P3 | S | 001 | DONE — `_ROUND_CHOICE_CACHE` + `_ROUND_CHOICE_LABEL_CACHE`; 2 neue Tests; 767 Tests grün. |
 
 Status-Werte: TODO | IN PROGRESS | DONE | BLOCKED (mit Einzeiler-Grund) | REJECTED (mit Begründung)
 

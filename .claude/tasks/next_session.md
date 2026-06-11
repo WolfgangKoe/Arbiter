@@ -111,7 +111,7 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 | 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | **DONE** (2026-06-11) |
 | 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | **DONE** (2026-06-11) |
 | 004 | lookup() StopIteration-Fallback | Voraussetzung für P17 (Gruppen-Lookup crasht sonst bei State-Divergenz) | **DONE** (2026-06-11) |
-| 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | **NÄCHSTE** |
+| 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | **DONE** (2026-06-11) |
 
 **Dazwischenschieben:** Dringende Bugs (P20-Klasse) oder Nutzer-Entscheidungen können jederzeit vorgezogen werden — danach einfach beim nächsten offenen Eintrag in der Tabelle weitermachen.
 

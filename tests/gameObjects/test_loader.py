@@ -21,6 +21,7 @@ from gameObjects.loader import (
     load_roster,
     load_roster_metadata,
     load_round_choice_abilities,
+    load_round_choice_label,
     load_stratagems,
     load_unit_catalog,
     load_wargear_catalog,
@@ -1045,3 +1046,13 @@ def test_load_roster_unit_without_groups_has_empty_model_groups() -> None:
     gretchin = next((u for u, _ in matched if u.id == "wh40k_9e.orks.unit.gretchin"), None)
     assert gretchin is not None
     assert gretchin.model_groups == []
+
+
+def test_round_choice_abilities_are_cached() -> None:
+    first = load_round_choice_abilities("necrons")
+    second = load_round_choice_abilities("necrons")
+    assert first is second
+
+
+def test_round_choice_label_is_cached() -> None:
+    assert load_round_choice_label("necrons") == load_round_choice_label("necrons")
