@@ -166,7 +166,12 @@ def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-ar
 
     unit_id = unit_id_from_state_key(uid)
     units = units_list_for(faction)
-    unit = next(u for u in units if u.id == unit_id)
+    unit = next((u for u in units if u.id == unit_id), None)
+    if unit is None:
+        raise KeyError(
+            f"No unit with id {unit_id!r} in catalog for faction {faction!r} "
+            f"(state key {uid!r}). Session state and unit catalog are out of sync."
+        )
     return unit, st.session_state[units_key_for(faction)][uid]
 
 

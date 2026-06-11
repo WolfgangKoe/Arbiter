@@ -2,11 +2,15 @@
 
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import MagicMock
+
+import pytest
 
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import uiLayout._common as common  # noqa: E402
 from uiLayout._common import _parse_strength, state_badges_html  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -307,3 +311,13 @@ def test_cast_is_additive_with_shot() -> None:
 
 def test_cast_not_shown_when_false() -> None:
     assert "CAST" not in state_badges_html(_state(movement_choice="stationary"))
+
+
+def test_lookup_raises_keyerror_for_unknown_unit(monkeypatch) -> None:
+    fake_units = [SimpleNamespace(id="known.unit")]
+    monkeypatch.setattr(common, "units_list_for", lambda faction: fake_units)
+    monkeypatch.setattr(
+        "gameMechanic.game_state.unit_id_from_state_key", lambda uid: "missing.unit"
+    )
+    with pytest.raises(KeyError, match="out of sync"):
+        common.lookup("Necrons", "missing.unit")
