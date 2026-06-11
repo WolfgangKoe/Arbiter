@@ -83,7 +83,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - `CLAUDE.md`: Sicherheitsnetz-Regel „rote Tests → STOP, Nutzer fragen" + Meßbefehl dokumentiert
   - 166 neue Tests: test_game_log, test_scenarios, test_phase_runner, test_stratagem, test_weapon, test_game_state (swap_players, _reset_phase_state, WAAAGH-Upgrade, reset_game), test_fight, test_shooting
   - Audit-Bericht `docs/audit/2026-06-11-repo-audit.md` + 5 Executor-Pläne `docs/audit/plans/001–005`
-  - **Noch offen (Plan 001 Rest):** `.woodpecker.yml` (Codeberg CI) hat noch keine Lint- oder Coverage-Gates
+  - Plan 001 vollständig abgeschlossen: Lint-Gates (ruff/black/isort) + mypy (informational) + 80%-Coverage in beiden CIs (`.woodpecker.yml` + `deploy.yml`)
 
 ---
 
@@ -101,14 +101,14 @@ Technische Schulden aus dem Audit 2026-06-11 werden als Executor-Sessions abgear
 > Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile dieses Plans in `docs/audit/plans/README.md`.
 > Nicht committen oder pushen — das übernehme ich nach dem Review.
 
-*(Nach Abschluss von 001: Prompt auf `002-defusedxml-rosz-parsing.md` umstellen usw.)*
+*(Plan 001 abgeschlossen. Nächster Plan: `002-defusedxml-rosz-parsing.md`.)*
 
 Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
 | Plan | Titel | Warum jetzt | Status |
 |------|-------|-------------|--------|
-| 001-Rest | Woodpecker CI + Lint-Gates | Infrastruktur komplett machen (GitHub Actions ist fertig, Codeberg fehlt noch) | **NÄCHSTE** |
-| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | TODO |
+| 001-Rest | Woodpecker CI + Lint-Gates | Infrastruktur komplett machen (GitHub Actions ist fertig, Codeberg fehlt noch) | **DONE** (2026-06-11) |
+| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | **NÄCHSTE** |
 | 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | TODO |
 | 004 | lookup() StopIteration-Fallback | Voraussetzung für P17 (Gruppen-Lookup crasht sonst bei State-Divergenz) | TODO |
 | 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | TODO |

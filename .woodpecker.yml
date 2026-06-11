@@ -2,8 +2,12 @@ steps:
   - name: test
     image: python:3.12-slim
     commands:
-      - pip install --quiet -r requirements.txt pytest
-      - pytest tests/ -v --tb=short
+      - pip install --quiet -r requirements.txt -r requirements-dev.txt
+      - ruff check src/
+      - black --check src/
+      - isort --check-only src/
+      - mypy src/ || true
+      - pytest --tb=short
 
   - name: deploy
     image: alpine
