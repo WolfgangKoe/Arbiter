@@ -4,6 +4,27 @@ from gameObjects.weapon import Weapon
 
 
 @dataclass
+class WeaponSwapSpec:
+    """One datasheet wargear option — replaces base weapons with picked options.
+
+    scope "group":     the whole group swaps together (e.g. Boss Nob).
+    scope "per_model": individual models swap; the loader splits them into
+                       sub-groups with fixed weapons.
+    limit caps how many models may take the swap: "any", "per_10", "per_5",
+    "per_3" (per full 10/5/3 models the unit contains — core-rules wording).
+    pick = number of weapons chosen per swap (Boss Nob: "two of the following").
+    replaces = [] makes the swap a pure addition (e.g. Warbikers' extra slugga).
+    """
+
+    id: str
+    scope: str  # "group" | "per_model"
+    replaces: list[str]
+    options: list[str]
+    pick: int = 1
+    limit: str = "any"  # "any" | "per_10" | "per_5" | "per_3"
+
+
+@dataclass
 class ModelGroupSpec:
     """Raw model group definition from YAML — count not yet resolved from roster."""
 
@@ -11,10 +32,7 @@ class ModelGroupSpec:
     name_en: str
     count_raw: str | int  # "remainder" | "models_max" | int
     base_weapon_refs: list[str]
-    optional_one_of: list[str]
-    optional_per_10: list[str]
-    optional_per_5: list[str]
-    optional_mode: str | None  # "per_model" | None
+    weapon_swaps: list[WeaponSwapSpec]
     priority: int
 
 
@@ -27,7 +45,6 @@ class ModelGroup:
     count: int
     weapons: list[Weapon]
     priority: int
-    optional_mode: str | None = None
 
 
 @dataclass

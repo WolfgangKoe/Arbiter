@@ -12,7 +12,7 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import set_deployment, set_movement_status
 from gameObjects.unit import TriggeredEffect
-from uiLayout._common import PHASE_RULES, lookup, render_player_column
+from uiLayout._common import lookup, render_player_column
 
 
 class MovementPhaseHandler:
@@ -26,9 +26,6 @@ class MovementPhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
-
-        st.info(PHASE_RULES["movement"])
-        st.divider()
 
         col1, col2 = st.columns(2)
         with col1:

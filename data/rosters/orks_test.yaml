@@ -1,19 +1,49 @@
 display_name: Orks — Testspiel
 faction_dir: orks
+# Test-Roster: deckt alle weapon_swaps-Varianten ab —
+# per_model any (Shoota-Mix), per_model per_10 (Big Shoota),
+# group pick 2 (Boss Nob), per_model pick 2 mit counts (Nobz)
 units:
 - id: wh40k_9e.orks.unit.warboss_mega_armour
   models: 1
 - id: wh40k_9e.orks.unit.boyz
   models: 10
   group_loadouts:
-    boss_nob:
-      optional_weapon: wh40k_9e.orks.weapon.power_klaw
     ork_boy:
-      optional_per_10_weapon: null
+      swaps:
+        shoota_swap:
+          - weapons: [wh40k_9e.orks.weapon.shoota]
+            count: 3
+        special_weapon:
+          - weapons: [wh40k_9e.orks.weapon.big_shoota]
+            count: 1
+    boss_nob:
+      swaps:
+        nob_weapons:
+          weapons:
+            - wh40k_9e.orks.weapon.power_klaw
+            - wh40k_9e.orks.weapon.big_choppa
+- id: wh40k_9e.orks.unit.nobz
+  models: 5
+  group_loadouts:
+    nob:
+      swaps:
+        nob_weapons:
+          - weapons:
+              - wh40k_9e.orks.weapon.power_klaw
+              - wh40k_9e.orks.weapon.big_choppa
+            count: 2
+          - weapons:
+              - wh40k_9e.orks.weapon.killsaw
+              - wh40k_9e.orks.weapon.killsaw
+            count: 2
 - id: wh40k_9e.orks.unit.gretchin
   models: 10
 - id: wh40k_9e.orks.unit.warbikers
   models: 3
   group_loadouts:
     boss_nob_warbike:
-      optional_weapon: wh40k_9e.orks.weapon.power_klaw
+      swaps:
+        nob_weapon:
+          weapons:
+            - wh40k_9e.orks.weapon.power_klaw

@@ -358,6 +358,9 @@ def _reset_phase_state() -> None:
     st.session_state.used_stratagem_ids = set()
     st.session_state.fight_current_player = None
     st.session_state.attack_declaration = {"active": False, "entries": []}
+    st.session_state.selected_model_group = None
+    st.session_state.group_targets = {}
+    st.session_state.group_decl = {}
     st.session_state.charge_phase_step = 1
     st.session_state.pending_hi = None
     st.session_state.hi_targets = []

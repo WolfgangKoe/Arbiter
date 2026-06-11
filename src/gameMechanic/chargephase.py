@@ -13,7 +13,7 @@ import streamlit as st
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import enter_melee, set_charged
-from uiLayout._common import PHASE_RULES, lookup, render_melee_engagements, render_player_column
+from uiLayout._common import lookup, render_melee_engagements, render_player_column
 
 
 class ChargePhaseHandler:
@@ -32,9 +32,6 @@ class ChargePhaseHandler:
         step: int = st.session_state.get("charge_phase_step", 1)
 
         if step == 1:
-            st.info(PHASE_RULES["charge"])
-            st.divider()
-
             col1, col2 = st.columns(2)
             with col1:
                 render_player_column(
@@ -43,6 +40,7 @@ class ChargePhaseHandler:
                     active_content=_active_charge,
                     inactive_content=_inactive_charge,
                     no_target_caption="← Designate a target (▷) from your army list.",
+                    show_wound_buttons=False,
                 )
             with col2:
                 render_player_column(
@@ -51,6 +49,7 @@ class ChargePhaseHandler:
                     active_content=_active_charge,
                     inactive_content=_inactive_charge,
                     no_target_caption="← Designate a target (▷) from your army list.",
+                    show_wound_buttons=False,
                 )
 
             st.divider()

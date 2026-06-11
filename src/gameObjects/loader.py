@@ -19,6 +19,7 @@ from gameObjects.unit import (
     TriggeredEffect,
     Unit,
     WargearOption,
+    WeaponSwapSpec,
 )
 from gameObjects.weapon import Weapon, WeaponProfile
 
@@ -100,20 +101,52 @@ def _parse_model_group_specs(
         base_weapon_refs = [
             e["ref"] if isinstance(e, dict) else str(e) for e in g.get("weapons", [])
         ]
+        swaps = [
+            WeaponSwapSpec(
+                id=s["id"],
+                scope=s.get("scope", "group"),
+                replaces=s.get("replaces", []),
+                options=s.get("options", []),
+                pick=int(s.get("pick", 1)),
+                limit=s.get("limit", "any"),
+            )
+            for s in g.get("weapon_swaps", [])
+        ]
         specs.append(
             ModelGroupSpec(
                 id=g["id"],
                 name_en=g["name_en"],
                 count_raw=g.get("count", "models_max"),
                 base_weapon_refs=base_weapon_refs,
-                optional_one_of=g.get("optional_one_of", []),
-                optional_per_10=g.get("optional_per_10", []),
-                optional_per_5=g.get("optional_per_5", []),
-                optional_mode=g.get("optional_mode"),
+                weapon_swaps=swaps,
                 priority=g.get("priority", 1),
             )
         )
     return specs
+
+
+def _group_weapon_ref_union(groups_raw: list[dict[str, Any]]) -> list[str]:
+    """Ordered union of every weapon ref a unit's model groups can carry.
+
+    Units with model_groups omit the unit-level weapons list — the flattened
+    union (datasheet display, resolution lookup) is derived here instead.
+    """
+    refs: list[str] = []
+    for g in groups_raw:
+        for e in g.get("weapons", []):
+            refs.append(e["ref"] if isinstance(e, dict) else str(e))
+        for s in g.get("weapon_swaps", []):
+            refs.extend(s.get("options", []))
+    return list(dict.fromkeys(refs))
+
+
+def _swap_weapons(base: list[str], replaces: list[str], picks: list[str]) -> list[str]:
+    """Apply one swap: base refs minus replaced refs plus picked refs."""
+    return [r for r in base if r not in replaces] + list(picks)
+
+
+def _short_ref(ref: str) -> str:
+    return ref.split(".")[-1]
 
 
 def _resolve_model_groups(
@@ -126,7 +159,10 @@ def _resolve_model_groups(
 
     - "remainder" count = models minus sum of all fixed counts
     - "models_max" count = models (whole unit in this group)
-    - per_model mode: splits into sub-groups based on roster per_model_weapon_counts
+    - group-scope swaps replace weapons of the whole group
+      (roster: ``swaps: {<swap_id>: {weapons: [refs]}}``)
+    - per_model-scope swaps split swapped models into sub-groups with fixed
+      weapons (roster: ``swaps: {<swap_id>: [{weapons: [refs], count: n}]}``)
     """
     if not specs:
         return []
@@ -149,57 +185,53 @@ def _resolve_model_groups(
             count = int(raw)
 
         loadout = (group_loadouts or {}).get(spec.id, {})
+        chosen_swaps: dict[str, Any] = loadout.get("swaps", {})
 
-        if spec.optional_mode == "per_model":
-            per_model_counts: dict[str, int] = loadout.get("per_model_weapon_counts", {})
-            if per_model_counts:
-                for weapon_ref, sub_count in per_model_counts.items():
-                    weapons = [
-                        weapon_catalog[r] for r in spec.base_weapon_refs if r in weapon_catalog
-                    ]
-                    extra = weapon_catalog.get(weapon_ref)
-                    if extra:
-                        weapons.append(extra)
-                    groups.append(
-                        ModelGroup(
-                            id=f"{spec.id}_{weapon_ref.split('.')[-1]}",
-                            name_en=f"{spec.name_en} ({extra.name_en if extra else weapon_ref})",
-                            count=sub_count,
-                            weapons=weapons,
-                            priority=spec.priority,
-                            optional_mode="per_model",
-                        )
-                    )
+        base_refs = list(spec.base_weapon_refs)
+        remaining = count
+
+        for swap in spec.weapon_swaps:
+            chosen = chosen_swaps.get(swap.id)
+            if not chosen:
                 continue
-            # No per_model_weapon_counts in roster: fall through to default group
 
-        weapons = [weapon_catalog[r] for r in spec.base_weapon_refs if r in weapon_catalog]
-        # Apply optional_one_of from roster
-        if spec.optional_one_of:
-            chosen = loadout.get("optional_weapon")
-            if chosen and chosen in weapon_catalog:
-                weapons.append(weapon_catalog[chosen])
-        # Apply optional_per_10 from roster (add to weapon list if chosen)
-        if spec.optional_per_10:
-            chosen = loadout.get("optional_per_10_weapon")
-            if chosen and chosen in weapon_catalog:
-                weapons.append(weapon_catalog[chosen])
-        # Apply optional_per_5 from roster
-        if spec.optional_per_5:
-            chosen = loadout.get("optional_per_5_weapon")
-            if chosen and chosen in weapon_catalog:
-                weapons.append(weapon_catalog[chosen])
+            if swap.scope == "group":
+                picks = list(chosen.get("weapons", []))[: swap.pick]
+                base_refs = _swap_weapons(base_refs, swap.replaces, picks)
+                continue
 
-        groups.append(
-            ModelGroup(
-                id=spec.id,
-                name_en=spec.name_en,
-                count=count,
-                weapons=weapons,
-                priority=spec.priority,
-                optional_mode=spec.optional_mode,
+            # per_model: each entry becomes a sub-group with fixed weapons
+            for entry in chosen:
+                picks = list(entry.get("weapons", []))[: swap.pick]
+                sub_count = min(int(entry.get("count", 0)), remaining)
+                if sub_count <= 0 or not picks:
+                    continue
+                sub_refs = _swap_weapons(spec.base_weapon_refs, swap.replaces, picks)
+                pick_names = [
+                    weapon_catalog[r].name_en if r in weapon_catalog else _short_ref(r)
+                    for r in picks
+                ]
+                groups.append(
+                    ModelGroup(
+                        id=f"{spec.id}_{'_'.join(_short_ref(r) for r in picks)}",
+                        name_en=f"{spec.name_en} ({' + '.join(pick_names)})",
+                        count=sub_count,
+                        weapons=[weapon_catalog[r] for r in sub_refs if r in weapon_catalog],
+                        priority=spec.priority,
+                    )
+                )
+                remaining -= sub_count
+
+        if remaining > 0:
+            groups.append(
+                ModelGroup(
+                    id=spec.id,
+                    name_en=spec.name_en,
+                    count=remaining,
+                    weapons=[weapon_catalog[r] for r in base_refs if r in weapon_catalog],
+                    priority=spec.priority,
+                )
             )
-        )
     return groups
 
 
@@ -236,7 +268,11 @@ def _unit_from_dict(
 ) -> Unit:
     weapons: list[Weapon] = []
     weapon_restrictions: dict[str, str] = {}
-    for entry in d.get("weapons", []):
+    weapon_entries: list[dict[str, Any]] = d.get("weapons") or []
+    if not weapon_entries and d.get("model_groups"):
+        # Units with model_groups omit the unit-level list — derive the union
+        weapon_entries = [{"ref": ref} for ref in _group_weapon_ref_union(d["model_groups"])]
+    for entry in weapon_entries:
         ref = entry.get("ref")
         if ref and weapon_catalog:
             weapon = weapon_catalog.get(ref)

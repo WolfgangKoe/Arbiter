@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 36, 2026-06-09)
+## Aktueller Stand (nach Session 39, 2026-06-10 — 594 Tests grün)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -59,6 +59,15 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Save-Modifier: `save_modifier_die_pair_html` neue Signatur `(armour, value, label, color)`; alle Rows jetzt relativ zu `armour` (nicht kumulativ). Buff: blue(armour-N)→grey(armour); Debuff: grey(armour-1)→red(armour+N-1). ✅
   - Shooting model_restriction: `1_per_10`/`boss_nob_only`/`1_per_5` jetzt auch im Schussangriffs-Pfad korrekt (eff_models aus models_alive, nicht slider). ✅
   - 6m Modellgruppen vollständig geplant → dokumentiert in `docs/goals/ziel6.md##6m`
+- **Session 39: 6m Tasks F+J + Doppelklick-Fix + Gruppe-für-Gruppe-Flow + Review (13 Punkte → 6n)**
+  - Task F final: subUnitCards in den PlayerAreas der gameActionsArea (`render_group_cards`/`render_group_assignment` in `_common.py`), NICHT in der Armeeliste (Nutzer-Entscheidung). Ziel-Button ▷ weist Ziele der selektierten Gruppe zu (`group_targets`); Einzelmodell-Gruppe → max 1 Ziel; fertige Gruppe kollabiert (`group_decl`), ✎ Edit möglich; „Start Resolution →" sammelt alle Entries.
+  - Task J: loader_contract.md (`group_loadouts`) + unit_states.md (`group_models` + Flow) dokumentiert
+  - Doppelklick-Bug Fight Phase GEFIXT: app.py rendert linke Armeeliste VOR dem Phase-Handler; `fight_current_player`-Wechsel ohne `st.rerun()` ließ veraltete Buttons stehen (1. Klick traf ▷ statt ▶). Fix: rerun bei jeder Änderung (Init + `_advance_fight_turn_if_needed`). 4 Regressionstests.
+  - State-Reset: `reset_group_declaration_state()` bei Unit-Wechsel, Phasenwechsel (`_reset_phase_state` + ←-Button), Resolution-Start
+  - 574 Tests grün (15 neue: test_group_flow.py, test_fight_turn_advance.py)
+  - **Nutzer-Review mit Screenshots: 13 Befunde → vollständig dokumentiert in `docs/goals/ziel6.md##6n`** (Blöcke A–E, freigegeben). Entscheidungen: Reihenfolge A→B→C→D→E; Boss-Nob-Zweifachwahl GENERISCH; für Würfel-Sequenz (D5) und Farben (E2) erst Schema/Mockup vorlegen.
+  - **6n A–D + E2 umgesetzt (gleiche Session):** A1 Engagement-Check (`group_target_selectable`, ▷ disabled); A2 kein fight-turn-Advance während aktiver Resolution (fought wird beim ersten Apply gesetzt!); A3 `seq`-Namespacing der res_*-Keys; A4 `show_wound_buttons=False` Charge; B1 Waffen-Zeilen + Grenade-Cap 1; B2 dynamische Counter-Caps + Budget oben; C1 weapons-Union im Loader; C2 generisches `weapon_swaps`-Schema (ersetzt optional_* komplett, alle 8 Ork-Einheiten + Roster migriert); D1 Regelkasten oben/alle Phasen + VP unten; D2/D3 Damage/RP halbe Breite; D4 Tab-CSS (`stTab`-Selektor verifiziert); E2 `docs/spec/design_colors.md`-Entwurf. 583 Tests grün.
+  - **Manuell zu verifizieren:** Fight Phase: nur engaged Ziele wählbar, Wechsel erst nach „All done"; Resolution-Tabs starten frisch; Charge ohne Wound-Buttons; Schuss-Zuweisung ohne Multiselect, Überbuchung unmöglich, Stikkbombz max 1; Boyz-Roster: 5 Slugga-Boys + 3 Shoota-Boys + 1 Big-Shoota + Boss Nob (PK+BC); Nobz-Untergruppen; Regelkasten in allen Phasen oben, VP unten.
 - **Session 38: 6m Modellgruppen vollständig implementiert (Tasks A–E, G/H, I)**
   - YAML: `model_groups` für boyz, kommandos, stormboyz, warbikers, beast_snagga_boyz, meganobz, nobz, tankbustas; squighog_boyz homogen (kein `model_groups` nötig); `model_restriction` entfernt
   - Rosters: `group_loadouts` für boyz + warbikers (boss_nob → power_klaw)
@@ -73,28 +82,39 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Nächste Schritte (priorisiert)
 
-1. **6m Task F — subUnitCard** in `unitCard.py`: pro Gruppe Name + lebend-count + Waffen-Summary (nur wenn Unit selected)
-2. **6m Task J — Docs**: `docs/spec/loader_contract.md` + `unit_states.md` aktualisieren
-3. **GOs in gameActionArea** — kontextuelle GO-Buttons für aktiven + inaktiven Spieler
-3. **Necron Command Phase** — Protokoll-Effekte auf Living Metal / RP-Verbesserungen; Dynastiebonus; Anzeigereihenfolge
-4. **WAAAGH! Gretchin Cowardly** — Moralphase: −1 Attrition wenn kein RUNTHERD in 6"
+> Review-Runde 2 wurde FREIGEGEBEN und größtenteils umgesetzt (2026-06-10, Session 39, 594 Tests grün).
+> Erledigt: P14, P15 (inkl. per_3 + Necron-Gruppen), P16 (im D5-Renderer), P19, P20 (Logik gepinnt),
+> D5 komplett, Farbkonzept komplett (Buff=grün #4a9a5a, MOVED=blau #60a5fa, RESERVE=#ff9060,
+> Relic-/Wargear-Badges entfernt, E1 Army-Ability datengetrieben in armyCard).
+> Dazu 3 Nutzer-Bugmeldungen gefixt: Boss-Nob-Budget (_group_melee_budget), Reanimation vs.
+> Moralverluste (heal_unit generisch + group_models-Restore), Cover-Checkbox pro Ziel.
+> **NOCH OFFEN: P17 (Verteidiger-Korrektur Schadenszuweisung) + P18 (Ziele neben Untergruppen,
+> einheitlicher Flow für Einheiten ohne Gruppen)** — Details in ziel6.md §6n.
+
+1. **P20 (Bug, HOCH):** Heroic Intervention hinterlässt ADVANCED+IN MELEE → Einheit kämpft nicht, Kämpfer-Wechsel blockiert. **Analyse-Stand:** `enter_melee` setzt in_melee beidseitig korrekt; `can_fight` prüft nur in_melee/charged/fought — advanced blockiert das Kämpfen NICHT (RAW: Advance verbietet Charge+Schuss, nicht Kampf). ADVANCED-Badge an den Scarabs (= Einheit des AKTIVEN Spielers, in die interveniert wurde) ist regelkonform möglich (Advance im eigenen Zug). Zu reproduzieren: WO genau blockiert der Wechsel — vermutlich nicht can_fight, sondern UI-Pfad (_active_fight-Warnung? auto-skip-Bedingung? selected_unit-Zustand). Repro: Necrons aktiv, Scarabs ADVANCED, Ork-Charakter interveniert in Scarabs, Fight Phase durchspielen.
+2. **P14:** Wound-Buttons in Schussphase-Zielspalte raus; Ziele in-melee mit Freunden ▷-sperren
+3. **6n D5 — Würfel-Sequenz:** Detail-Spez ist FESTGELEGT (ziel6.md) — Umsetzung in `_common.py` (Dice-HTML); Randfall P16 (Sv>6+) mit abdecken
+4. **Farbkonzept umsetzen:** Beschlüsse in `docs/spec/design_colors.md` §0 — Buff=grün `#4a9a5a` / MOVED=blau `#60a5fa` (FESTGELEGT), Cover=Buff-Grün, RESERVE=`#ff9060`, Relic-/Wargear-Badges entfallen, E1 Army-Ability=Buff-Grün datengetrieben
+5. **P15:** Necron-Modellgruppen komplett: Skorpekh (`limit: per_3` neu!), Ophydian, Lokhust (+Heavy, gemischte Einheit?), Plasmacyte (Begleitmodell), Cryptothralls (Bodyguard?), Lychguard; Scraper-Lücke (Wargear-Zeilen fehlen in wahapedia_necrons!)
+6. **P17 (Task, nachgeschärft):** Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten — ±-Counter pro Gruppe nach Apply Damage (Default: priority); danach klar zeigen, welche Waffen wegfallen (Nobz-Fall!)
+7. **P18:** Nahkampf-UX: Ziele neben Untergruppen anzeigen; Einheiten ohne Gruppen = eine Gruppe (einheitlicher Flow)
+8. **P19:** Heavy Cover fehlt beim Power-Klaw-Tab — klären
+9. Danach: GOs in gameActionArea / Necron Command Phase / Gretchin Cowardly (s. unten)
 
 ---
 
 ## Offene Tasks
 
-### 🟡 MITTEL — 6m: Reste (Tasks F + J)
+### 🔴 HOCH — 6n: Reste (D5 + E1, warten auf Nutzer-Entscheidung)
 
-> Kernimplementierung (A–E, G/H, I) in Session 38 abgeschlossen. Nur noch optionale UX-Verbesserung + Docs ausstehend.
+> Blöcke A, B, C, D1–D4, E2 sind FERTIG (2026-06-10, Session 39) — Details + Häkchen in
+> `docs/goals/ziel6.md##6n`. Offen: D5 (Mockup-Freigabe), E1 (Farb-Entscheidung §4a in
+> `docs/spec/design_colors.md`), Fraktionsfarben-Frage §4c.
 
-**Task F — `src/uiLayout/unitCard.py`** (optionale UX)
-- [ ] subUnitCard rendern wenn `unit.model_groups` nicht leer: pro Gruppe Name + lebend-count + Waffen-Summary
-- [ ] Select-Button pro Gruppe → setzt `selected_model_group` im Session-State
-- [ ] Nur sichtbar wenn Unit selected ist
-
-**Task J — Docs**
-- [ ] `docs/spec/loader_contract.md`: `group_loadouts`-Feld dokumentieren (strukturell gemischt + per_model)
-- [ ] `docs/spec/unit_states.md`: `group_models` dokumentieren
+**Wichtig (C2):** `weapon_swaps` hat `optional_one_of`/`optional_per_10`/`optional_per_5`/
+`per_model_weapon_counts` VOLLSTÄNDIG ersetzt — Schema in `loader_contract.md`.
+Roster-Format: group-scope `swaps: {id: {weapons: [...]}}`; per_model-scope
+`swaps: {id: [{weapons: [...], count: n}]}` → Sub-Gruppen-Split im Loader.
 
 ---
 

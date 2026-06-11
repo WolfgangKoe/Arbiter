@@ -11,13 +11,18 @@ units:
   models: 10
   group_loadouts:
     boss_nob:
-      optional_weapon: wh40k_9e.orks.weapon.power_klaw
-    ork_boy:
-      optional_per_10_weapon: null
+      swaps:
+        nob_weapons:
+          weapons:
+            - wh40k_9e.orks.weapon.power_klaw
+            - wh40k_9e.orks.weapon.choppa
 - id: wh40k_9e.orks.unit.gretchin
   models: 10
 - id: wh40k_9e.orks.unit.warbikers
   models: 3
   group_loadouts:
     boss_nob_warbike:
-      optional_weapon: wh40k_9e.orks.weapon.power_klaw
+      swaps:
+        nob_weapon:
+          weapons:
+            - wh40k_9e.orks.weapon.power_klaw

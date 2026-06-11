@@ -683,22 +683,33 @@ def test_boyz_ork_boy_spec_has_remainder_count() -> None:
     assert ork_boy.priority == 1
 
 
-def test_boyz_boss_nob_spec_has_boss_weapons() -> None:
+def test_boyz_boss_nob_spec_has_pick_two_swap() -> None:
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
     boss = next(s for s in boyz.model_group_specs if s.id == "boss_nob")
     assert boss.count_raw == 1
     assert boss.priority == 2
-    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
-    assert "wh40k_9e.orks.weapon.big_choppa" in boss.optional_one_of
+    swap = next(s for s in boss.weapon_swaps if s.id == "nob_weapons")
+    assert swap.scope == "group"
+    assert swap.pick == 2
+    assert "wh40k_9e.orks.weapon.power_klaw" in swap.options
+    assert "wh40k_9e.orks.weapon.big_choppa" in swap.options
+    assert "wh40k_9e.orks.weapon.slugga" in swap.replaces
+    assert "wh40k_9e.orks.weapon.choppa" in swap.replaces
 
 
-def test_boyz_ork_boy_spec_has_per_10_options() -> None:
+def test_boyz_ork_boy_spec_has_shoota_and_per_10_swaps() -> None:
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
     ork_boy = next(s for s in boyz.model_group_specs if s.id == "ork_boy")
-    assert "wh40k_9e.orks.weapon.big_shoota" in ork_boy.optional_per_10
-    assert "wh40k_9e.orks.weapon.rokkit_launcha" in ork_boy.optional_per_10
+    shoota = next(s for s in ork_boy.weapon_swaps if s.id == "shoota_swap")
+    assert shoota.scope == "per_model"
+    assert shoota.limit == "any"
+    assert shoota.options == ["wh40k_9e.orks.weapon.shoota"]
+    special = next(s for s in ork_boy.weapon_swaps if s.id == "special_weapon")
+    assert special.limit == "per_10"
+    assert "wh40k_9e.orks.weapon.big_shoota" in special.options
+    assert "wh40k_9e.orks.weapon.rokkit_launcha" in special.options
 
 
 def test_warbikers_has_two_model_group_specs() -> None:
@@ -709,24 +720,31 @@ def test_warbikers_has_two_model_group_specs() -> None:
     assert ids == {"warbiker", "boss_nob_warbike"}
 
 
-def test_stormboyz_boss_nob_spec_has_power_klaw_option() -> None:
+def test_stormboyz_boss_nob_spec_has_power_klaw_swap() -> None:
     units, _ = load_army("orks")
     stormboyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.stormboyz")
     boss = next(s for s in stormboyz.model_group_specs if s.id == "boss_nob")
-    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
+    swap = boss.weapon_swaps[0]
+    assert swap.replaces == ["wh40k_9e.orks.weapon.choppa"]
+    assert swap.options == ["wh40k_9e.orks.weapon.power_klaw"]
 
 
-def test_kommandos_boss_nob_spec_has_power_klaw_option() -> None:
+def test_kommandos_boss_nob_spec_has_power_klaw_swap() -> None:
     units, _ = load_army("orks")
     kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
     boss = next(s for s in kommandos.model_group_specs if s.id == "boss_nob")
-    assert "wh40k_9e.orks.weapon.power_klaw" in boss.optional_one_of
+    swap = next(s for s in boss.weapon_swaps if s.id == "nob_weapon")
+    assert "wh40k_9e.orks.weapon.power_klaw" in swap.options
 
 
-def test_kommandos_kommando_spec_has_per_10_specials() -> None:
+def test_kommandos_kommando_spec_has_per_10_swaps() -> None:
+    """Each datasheet 'for every 10 models' option is its own per_10 swap."""
     units, _ = load_army("orks")
     kommandos = next(u for u in units if u.id == "wh40k_9e.orks.unit.kommandos")
     kommando = next(s for s in kommandos.model_group_specs if s.id == "kommando")
+    per_10_options = {
+        opt for s in kommando.weapon_swaps if s.limit == "per_10" for opt in s.options
+    }
     for weapon_id in [
         "wh40k_9e.orks.weapon.shokka_pistol",
         "wh40k_9e.orks.weapon.big_shoota",
@@ -735,7 +753,39 @@ def test_kommandos_kommando_spec_has_per_10_specials() -> None:
         "wh40k_9e.orks.weapon.rokkit_launcha",
         "wh40k_9e.orks.weapon.breacha_ram",
     ]:
-        assert weapon_id in kommando.optional_per_10, weapon_id
+        assert weapon_id in per_10_options, weapon_id
+
+
+def test_skorpekh_has_per_3_reap_blade_swap() -> None:
+    """P15: 1 per 3 Skorpekh Destroyers swaps threshers for a reap-blade."""
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    spec = skorpekh.model_group_specs[0]
+    swap = next(s for s in spec.weapon_swaps if s.id == "reap_blade_swap")
+    assert swap.scope == "per_model"
+    assert swap.limit == "per_3"
+    assert swap.options == ["wh40k_9e.necrons.weapon.hyperphase_reap_blade"]
+    # C1: unit-level weapons derived as union from the groups
+    weapon_ids = {w.id for w in skorpekh.weapons}
+    assert "wh40k_9e.necrons.weapon.hyperphase_threshers" in weapon_ids
+    assert "wh40k_9e.necrons.weapon.hyperphase_reap_blade" in weapon_ids
+
+
+def test_lychguard_group_swap_is_all_or_nothing() -> None:
+    """P15: ALL Lychguard swap warscythe for sword+shield together (no mix)."""
+    units, _ = load_army("necrons")
+    lychguard = next(u for u in units if u.id == "wh40k_9e.necrons.unit.lychguard")
+    catalog = load_weapon_catalog("necrons")
+    loadouts = {
+        "lychguard": {
+            "swaps": {"sword_and_shield": {"weapons": ["wh40k_9e.necrons.weapon.hyperphase_sword"]}}
+        }
+    }
+    groups = _resolve_model_groups(lychguard.model_group_specs, 10, loadouts, catalog)
+    assert len(groups) == 1
+    weapon_ids = {w.id for w in groups[0].weapons}
+    assert "wh40k_9e.necrons.weapon.hyperphase_sword" in weapon_ids
+    assert "wh40k_9e.necrons.weapon.warscythe" not in weapon_ids
 
 
 def test_unit_without_model_groups_has_empty_specs() -> None:
@@ -849,15 +899,55 @@ def test_resolve_model_groups_boss_nob_has_base_weapons() -> None:
     assert "wh40k_9e.orks.weapon.stikkbombz" in weapon_names
 
 
-def test_resolve_model_groups_roster_optional_weapon_added() -> None:
+def test_resolve_group_swap_replaces_base_weapons() -> None:
+    """Boss Nob pick-2 swap: slugga+choppa out, the two picks in."""
     units, _ = load_army("orks")
     boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
     catalog = load_weapon_catalog("orks")
-    loadouts = {"boss_nob": {"optional_weapon": "wh40k_9e.orks.weapon.power_klaw"}}
+    loadouts = {
+        "boss_nob": {
+            "swaps": {
+                "nob_weapons": {
+                    "weapons": [
+                        "wh40k_9e.orks.weapon.power_klaw",
+                        "wh40k_9e.orks.weapon.big_choppa",
+                    ]
+                }
+            }
+        }
+    }
     groups = _resolve_model_groups(boyz.model_group_specs, 10, loadouts, catalog)
     boss_nob = next(g for g in groups if g.id == "boss_nob")
     weapon_ids = {w.id for w in boss_nob.weapons}
     assert "wh40k_9e.orks.weapon.power_klaw" in weapon_ids
+    assert "wh40k_9e.orks.weapon.big_choppa" in weapon_ids
+    assert "wh40k_9e.orks.weapon.slugga" not in weapon_ids
+    assert "wh40k_9e.orks.weapon.choppa" not in weapon_ids
+    assert "wh40k_9e.orks.weapon.stikkbombz" in weapon_ids  # not replaced
+
+
+def test_resolve_per_model_swap_splits_sub_groups() -> None:
+    """Shoota mix: 3 of 9 Ork Boys swap slugga+choppa for a shoota."""
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    loadouts = {
+        "ork_boy": {
+            "swaps": {"shoota_swap": [{"weapons": ["wh40k_9e.orks.weapon.shoota"], "count": 3}]}
+        }
+    }
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, loadouts, catalog)
+    shoota_boys = next(g for g in groups if g.id == "ork_boy_shoota")
+    base_boys = next(g for g in groups if g.id == "ork_boy")
+    assert shoota_boys.count == 3
+    assert base_boys.count == 6  # 9 remainder - 3 swapped
+    shoota_ids = {w.id for w in shoota_boys.weapons}
+    assert "wh40k_9e.orks.weapon.shoota" in shoota_ids
+    assert "wh40k_9e.orks.weapon.slugga" not in shoota_ids
+    assert "wh40k_9e.orks.weapon.stikkbombz" in shoota_ids
+    base_ids = {w.id for w in base_boys.weapons}
+    assert "wh40k_9e.orks.weapon.slugga" in base_ids
+    assert "wh40k_9e.orks.weapon.shoota" not in base_ids
 
 
 def test_resolve_model_groups_models_max_count() -> None:
@@ -869,24 +959,46 @@ def test_resolve_model_groups_models_max_count() -> None:
     assert groups[0].count == 10
 
 
-def test_resolve_model_groups_per_model_split() -> None:
+def test_resolve_per_model_pick_two_split() -> None:
+    """Nobz: any number of models swap slugga+choppa for TWO picks each."""
     units, _ = load_army("orks")
     nobz = next(u for u in units if u.id == "wh40k_9e.orks.unit.nobz")
     catalog = load_weapon_catalog("orks")
     loadouts = {
         "nob": {
-            "per_model_weapon_counts": {
-                "wh40k_9e.orks.weapon.power_klaw": 3,
-                "wh40k_9e.orks.weapon.choppa": 2,
+            "swaps": {
+                "nob_weapons": [
+                    {
+                        "weapons": [
+                            "wh40k_9e.orks.weapon.power_klaw",
+                            "wh40k_9e.orks.weapon.big_choppa",
+                        ],
+                        "count": 3,
+                    },
+                    {
+                        "weapons": [
+                            "wh40k_9e.orks.weapon.killsaw",
+                            "wh40k_9e.orks.weapon.killsaw",
+                        ],
+                        "count": 2,
+                    },
+                ]
             }
         }
     }
     groups = _resolve_model_groups(nobz.model_group_specs, 5, loadouts, catalog)
-    assert len(groups) == 2
-    counts = {g.count for g in groups}
-    assert counts == {3, 2}
-    for g in groups:
-        assert "wh40k_9e.orks.weapon.slugga" in {w.id for w in g.weapons}
+    assert len(groups) == 2  # both sub-groups; no remainder (3 + 2 = 5)
+    klaw_nobz = next(g for g in groups if "power_klaw" in g.id)
+    saw_nobz = next(g for g in groups if "killsaw" in g.id)
+    assert klaw_nobz.count == 3
+    assert saw_nobz.count == 2
+    klaw_ids = {w.id for w in klaw_nobz.weapons}
+    assert "wh40k_9e.orks.weapon.power_klaw" in klaw_ids
+    assert "wh40k_9e.orks.weapon.big_choppa" in klaw_ids
+    assert "wh40k_9e.orks.weapon.slugga" not in klaw_ids
+    # Two killsaws: the weapon list contains the ref twice
+    saw_refs = [w.id for w in saw_nobz.weapons if w.id == "wh40k_9e.orks.weapon.killsaw"]
+    assert len(saw_refs) == 2
 
 
 def test_resolve_model_groups_no_specs_returns_empty() -> None:
@@ -906,13 +1018,22 @@ def test_load_roster_boyz_has_resolved_model_groups() -> None:
     matched, _ = load_roster(roster_path, catalog)
     boyz = next((u for u, _ in matched if u.id == "wh40k_9e.orks.unit.boyz"), None)
     assert boyz is not None
-    assert len(boyz.model_groups) == 2
+    # Test roster: 3 shoota boys + 1 big shoota carrier + 5 base boys + boss nob
+    assert len(boyz.model_groups) == 4
     boss = next(g for g in boyz.model_groups if g.id == "boss_nob")
     ork_boy = next(g for g in boyz.model_groups if g.id == "ork_boy")
+    shoota_boys = next(g for g in boyz.model_groups if g.id == "ork_boy_shoota")
+    carrier = next(g for g in boyz.model_groups if g.id == "ork_boy_big_shoota")
     assert boss.count == 1
-    assert ork_boy.count == 9  # 10 models - 1 boss nob
+    assert shoota_boys.count == 3
+    assert carrier.count == 1
+    assert ork_boy.count == 5  # 10 - 1 boss - 3 shoota - 1 carrier
     boss_weapon_ids = {w.id for w in boss.weapons}
-    assert "wh40k_9e.orks.weapon.power_klaw" in boss_weapon_ids  # group_loadouts applied
+    assert "wh40k_9e.orks.weapon.power_klaw" in boss_weapon_ids
+    assert "wh40k_9e.orks.weapon.big_choppa" in boss_weapon_ids
+    carrier_ids = {w.id for w in carrier.weapons}
+    assert "wh40k_9e.orks.weapon.big_shoota" in carrier_ids
+    assert "wh40k_9e.orks.weapon.slugga" not in carrier_ids
 
 
 def test_load_roster_unit_without_groups_has_empty_model_groups() -> None:

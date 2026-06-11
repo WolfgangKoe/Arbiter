@@ -227,6 +227,39 @@ Der folgende Bug muss als dauerhafter Regressionstest abgedeckt sein:
 
 ---
 
+## Modellgruppen-State (`group_models`) — 6m
+
+Einheiten mit `model_groups` (z.B. Boyz: 9 Ork Boys + 1 Boss Nob) führen die Modellanzahl
+pro Gruppe im State:
+
+```python
+unit_state["group_models"]: dict[str, int]
+# Init: {group.id: group.count} aus den aufgelösten model_groups (game_state.py)
+# Homogene Einheiten (ohne model_groups): {} — alter Pfad bleibt aktiv
+```
+
+**Invarianten:**
+
+- `unit_state["models"]` = Summe aller `group_models`-Werte (abgeleitet, bleibt kompatibel)
+- Modellverluste: `apply_damage()` → `_apply_group_losses()` (`unit_mutations.py`) reduziert
+  Gruppen nach `priority` aufsteigend — `priority: 1` stirbt zuerst (Standardmodelle vor
+  Sondermodellen wie Boss Nob)
+- `group_models` ist **persistent** — kein Reset bei Zugwechsel (wie `models`/`current_wounds`)
+
+**UI (Gruppe-für-Gruppe-Flow in der gameActionsArea):** Bei selektierter Einheit rendert
+`render_group_cards()` (`_common.py`) die subUnitCards in der PlayerArea des **Besitzers**
+(Name + lebend-Count + Waffen-Summary + Select-Button → `selected_model_group`). Der
+Ziel-Button (▷) in der gegnerischen Armeeliste weist Ziele der selektierten Gruppe zu
+(`group_targets[group_id]`; Gruppe mit 1 Modell → max 1 Ziel). Die gegenüberliegende
+PlayerArea zeigt `render_group_assignment()`: Attacken-Counter/Modellzuteilung pro Ziel,
+budgetiert aus `group_models` × Gruppen-Waffenprofil. „✓ Group done" schreibt die Entries
+nach `group_decl[group_id]`; die Gruppe kollabiert zur Zusammenfassung (✎ Edit möglich).
+„Start Resolution →" sammelt alle `group_decl`-Entries in `attack_declaration` und setzt
+den Gruppen-State zurück (`reset_group_declaration_state()`, auch bei Unit-Wechsel und
+Phasenwechsel).
+
+---
+
 ## Zugwechsel-Reset (`_reset_turn_state`)
 
 Zurückgesetzt bei Zugwechsel (alle Einheiten beider Fraktionen):
@@ -243,6 +276,7 @@ Nicht zurückgesetzt (persistent):
 - `in_melee`, `melee_with`
 - `in_reserve`
 - `current_wounds`, `models`, `destroyed`
+- `group_models` (Modellgruppen, siehe oben)
 
 ---
 

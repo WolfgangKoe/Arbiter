@@ -12,7 +12,7 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage
 from gameObjects.unit import Unit
-from uiLayout._common import PHASE_RULES, lookup
+from uiLayout._common import lookup
 
 
 class PsychicPhaseHandler:
@@ -36,9 +36,6 @@ class PsychicPhaseHandler:
             _render_psychic_column(first, state)
         with col2:
             _render_psychic_column(second, state)
-
-        st.divider()
-        st.info(PHASE_RULES["psychic"])
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
         st.session_state.psi_result = None

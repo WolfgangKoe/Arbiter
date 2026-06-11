@@ -1275,7 +1275,7 @@ Folgende Attachment-Wargear-Einträge fehlen vollständig in `wargear_options` a
 
 **Ziel:** Einheitenkonfiguration regelkonform in YAML abbilden. Deklarations-UI folgt dem regeltreuen Ablauf: Gruppe → Ziel → Attacken → Waffe.
 
-**Status:** 🔴 Planung abgeschlossen (2026-06-09) — Implementierung ausstehend
+**Status:** 🟢 Implementiert (2026-06-10, Session 38+39) — Review-Befunde in §6n
 
 ---
 
@@ -1461,13 +1461,104 @@ unit_state["group_models"]: dict[str, int]
 - [x] **C — `gameObjects/unit.py`:** `ModelGroup` dataclass; `Unit.model_groups: list[ModelGroup]`
 - [x] **D — `gameObjects/loader.py`:** `model_groups` parsen, count auflösen, `optional_one_of`/`optional_per_10`/`optional_per_5` gegen Roster auflösen, `per_model`→Sub-Gruppen splitten
 - [x] **E — `game_state.py`:** `group_models` initialisieren; `apply_damage()` nach priority; `models` als Summe ableiten
-- [ ] **F — `src/uiLayout/unitCard.py`:** subUnitCard rendern (wenn `unit.model_groups` nicht leer)
+- [x] **F — subUnitCards:** in den PlayerAreas der gameActionsArea (`render_group_cards` in `_common.py`), NICHT in der Armeeliste (Nutzer-Entscheidung Session 39); Gruppe-für-Gruppe-Flow mit `selected_model_group`/`group_targets`/`group_decl`
 - [x] **G — `src/uiLayout/_common.py`:** neue Deklaration Schussphase (Gruppe → Waffe → Ziel)
 - [x] **H — `src/uiLayout/_common.py`:** neue Deklaration Nahkampf (Gruppe → Ziel → Attacken → Waffe)
 - [x] **I — Tests:** ModelGroup-Laden, count-Auflösung, apply_damage nach priority, Rückwärtskompatibilität
-- [ ] **J — `docs/spec/loader_contract.md` + `unit_states.md`:** aktualisieren nach Umsetzung
+- [x] **J — `docs/spec/loader_contract.md` + `unit_states.md`:** aktualisiert (group_loadouts + group_models + Gruppen-Flow)
 
 **Abhängigkeit:** A+B → C → D → E → F → G/H (parallel) → I → J
+
+---
+
+## 6n — Review-Befunde Session 39 (13 Punkte, freigegeben 2026-06-10)
+
+**Ziel:** Regelbugs aus dem 6m-Umbau beheben + UX der Deklaration/Resolution überarbeiten.
+**Reihenfolge: Block A → B → C → D → E** (Nutzer-Freigabe Session 39).
+
+### Regelgrundlage (core_rules.txt Z. 1941–1974)
+
+> "Starting with the player whose turn is not taking place, the players must alternate
+> selecting an eligible unit … An eligible unit is one that is **within Engagement Range**
+> of an enemy unit and/or made a charge move … Units that did not make a charge move this
+> turn **cannot be selected to fight until after all units that did make a charge move have
+> fought**. If all of one player's eligible units have fought, the opposing player can then
+> fight with their remaining eligible units, one at a time."
+
+### Block A — Regelbugs Fight Phase (HOCH)
+
+- [x] **A1 (P10):** ✅ (2026-06-10) Gruppen-Flow-Zielauswahl in der Fight Phase auf engaged Ziele (`melee_with`) beschränken — `toggle_group_target` umgeht aktuell den `_is_target_engaged`-Check der Legacy-Deklaration. ▷ für nicht-engaged Ziele wirkungslos. (`_common.py`, `unitCard.py`, Tests)
+- [x] **A2 (P9):** ✅ Root Cause: fought-Flag wird beim ERSTEN Apply gesetzt → Wechsel lief mitten in der Resolution; Fix: kein Advance solange attack_declaration aktiv. Kampfreihenfolge gegen RAW verifizieren/reparieren: charged zuerst (alternierend, Start inaktiver Spieler), danach Alternation; Session-39-Rerun-Änderung kritisch prüfen. Testmatrix für alle Übergänge. (`fightPhase.py`, Tests)
+- [x] **A3 (P11):** ✅ Root Cause bestätigt: res_*-Keys überlebten; Fix: seq-Namespacing pro Deklaration. Resolution-Tabs starten fälschlich „✓ 0 models · 0 MW · 0 damage" — vermutlich persistierende Widget-Keys aus früherer Deklaration; Keys pro Deklaration namespacen oder beim Start zurücksetzen. (`_common.py`)
+- [x] **A4 (P8):** ✅ render_player_column(show_wound_buttons=False) in der Charge Phase. Wound-Buttons (−3…+3) aus der Charge-Phase-Zielspalte entfernen — kommen aus `render_player_column` (hängt nach `inactive_content` immer `wound_adjustment_buttons` an). Nur zeigen, wenn datengetriebener Charge-Trigger existiert. (`chargephase.py` / `_common.py`)
+
+### Block B — UX Gruppen-Zuweisung (HOCH)
+
+- [x] **B1 (P1):** ✅ Waffen-Zeilen mit Modell-Counter pro Waffe; Grenade-Cap 1. Waffen-Multiselect ersetzen durch feste Waffen-Zeilen mit Modell-Counter pro Waffe (kein Dropdown → kein „No results"). Grenade-Regel: max. 1 Modell pro Einheit wirft Stikkbombz pro Phase. (`_common.py`)
+- [x] **B2 (P4):** ✅ dynamische max_value = Restbudget; Budget-Übersicht oben. Überbuchung unmöglich machen: Counter-`max_value` dynamisch = Restbudget; Budget/Rest prominent OBEN im Zuweisungspanel statt Fehlermeldung unten. (`_common.py`)
+
+### Block C — Daten/YAML (MITTEL)
+
+- [x] **C1 (P2):** ✅ _group_weapon_ref_union() im Loader; weapons: bei allen 8 Gruppen-Einheiten entfernt. `weapons:` bei Einheiten mit `model_groups` aus `units.yaml` entfernen; Loader bildet Union aus Gruppen-Waffen. (`loader.py`, `orks/units.yaml`, `loader_contract.md`, Tests)
+- [x] **C2 (P1b):** ✅ GENERISCHES weapon_swaps-Schema ersetzt optional_one_of/per_10/per_5 komplett (scope group|per_model, pick N, limit any|per_10|per_5, replaces als echte Ersetzung). Alle 8 Einheiten migriert; Test-Roster: Shoota-Mix 3, Big-Shoota-Träger 1, Boss Nob PK+BC, Nobz 2×(PK+BC)+2×(2 Killsaws). Spec: loader_contract.md. Schema sauber erweitern (Nutzer-Entscheidung: generisch, kein Pragmatismus):
+  - Shoota-Mix für Ork Boys: „Any Ork Boy's slugga and choppa can be replaced with 1 shoota" → per-model
+  - `optional_two_of` für Boss Nob: slugga+choppa → ZWEI aus [big choppa, choppa, killsaw, power klaw, power stabba, slugga]
+  - Orks-Test-Roster deckt ab: Slugga/Shoota-Mix, Big-Shoota-Träger, Boss Nob mit 2 Waffen
+
+### Block D — displayArea-Anzeige (MITTEL)
+
+- [x] **D1 (P13):** ✅ Regelkasten zentral oben in gameActionsArea (alle 7 Phasen); VP unten; Inline-Duplikate entfernt. Blauer Phasen-Regelkasten in JEDER Phase ganz oben (fehlt in Fight + Morale); VP-Scoring ans ENDE der displayArea. (`gameActionsArea.py`, `fightPhase.py`, `moralePhase.py`)
+- [x] **D2 (P6):** ✅ halbe Breite, Damage/HP-Werte hervorgehoben. Damage-Panel halbe Breite; „Damage/HP"-Info deutlich lesbar. (`_common.py`)
+- [x] **D3 (P12):** ✅ RP-Block halbe Breite. RP-Panel kompakter. (`commandPhase.py` o.ä.)
+- [x] **D4 (P7):** ✅ CSS: Trennlinien zwischen stTab-Buttons, schlankeres Padding. Resolution-Tabs trennen/verschlanken (CSS). (`_common.py` / CSS)
+- [x] **D5 (P5):** ✅ (2026-06-10) Spaltenraster (Schwellen bündig über Würfeln, 15px hell), Badge-Spalte 96px in allen Zeilen, Trennlücke+Linie an Erfolgsgrenze (würfelbreit), S/T hervorgehoben ohne „→N+", Sv neben SAVE, Eff.-Reihen als Würfelzeilen, Profilzeile verschlankt (nur Attackenzahl), P16-Randfall (×-Marker >6+). Ursprünglich: Würfel-Sequenz: Trennlinien + Luft zwischen HIT/WOUND/SAVE; Würfel spaltenbündig; Schwellenzahlen (2+, 3+ …) in Würfelgröße + voller Helligkeit; Sv-Wert neben SAVE konsistent zu WS/BS (Profilzeile oben entfällt); S-vs-T-Vergleich deutlich markiert. **ERST HTML-Mockup/Schema dem Nutzer vorlegen, dann implementieren.**
+
+### Bugfixes nach Review-Runde 2 (Nutzer-Meldungen 2026-06-10, gefixt)
+
+- [x] **Boss-Nob-Budget unter WAAAGH (4 statt 3):** Gruppen-Melee-Budget basierte nur auf der ERSTEN Waffe — `_group_melee_budget()` = models × eff_attacks + Σ extra_attacks-Boni der getragenen Waffen (Choppa +1; max_attacks-Waffen addieren ihren Cap). 3 Tests.
+- [x] **Reanimierte Modelle zählten weiter als Moral-Verluste:** `heal_unit()` reduziert jetzt generisch `lost_models_this_turn` um zurückgekehrte Modelle (JEDE Revive-Mechanik, kein Fraktions-Check) und füllt `group_models` in Priority-Reihenfolge wieder auf (`_restore_group_models`). 3 Tests.
+- [x] **„WAAAGH wirkt nicht auf die Modelle":** Wirkung in Zahlen war korrekt (28 Boyz-Attacken = 7×(2+1)+7); die per-Unit-Badge wurde per Farbkonzept-Beschluss bewusst entfernt (Army-Ability nur in armyCard). Der Boss-Nob-Budget-Bug (oben) war der reale Zahlenfehler.
+
+### Block E — Farbkonzept (P3)
+
+- [x] **E1:** ✅ WAAAGH!-Badge aus unitCard entfernt; armyCard zeigt EINE Buff-grüne Army-Ability-Badge (Label aus YAML name_en); waaagh_1/waaagh_2-Farbschlüssel (Fraktionslogik!) entfernt. Ursprünglich: `"WAAAGH!"` aus `_BADGE_COLORS` in `unitCard.py` entfernen (Fraktionslogik in src/ = Bug). Badge-Label aus Army-Ability-YAML; EINE generische Army-Ability-Farbe.
+- [x] **E2:** ✅ Entwurf liegt vor — `docs/spec/design_colors.md`; Entscheidungen siehe Review-Runde 2 unten.
+
+### Review-Runde 2 (Session 39, nach Block A–D — GESAMMELT, noch nicht freigegeben)
+
+- [x] **P14:** ✅ (2026-06-10) show_wound_buttons=False in Schussphase; ▷-Sperre via _in_friendly_melee in group_target_selectable (gilt auch für Legacy-Einheiten; nur Schussphase, nicht Fight). Schussphase: eigene Einheiten in-melee sind wählbar → Ziel-Spalte zeigt dann wieder Wound-Buttons; auch beim beschossenen Ziel nach Resolution. Wound-Buttons dort raus. Außerdem: feindliche Einheiten in-melee mit Freunden dürfen NICHT als Ziel wählbar sein (▷ sperren, nicht nur Warnung).
+- [x] **P15:** ✅ (2026-06-10) Skorpekh (per_3-Swap, NEU im Schema), Ophydian (per_3), Lokhust Heavy (Exterminator-Swap per_model), Lychguard (group-Swap Schwert, Schild=Wargear — all-or-nothing per RAW), Lokhust Destroyers (falsche Exterminator-Option entfernt). Plasmacyte/Cryptothralls: keine Waffenoptionen → nichts nötig; Plasmacyte-Begleitmodell + „bis zu 2 Heavy in Lokhust-Einheit" (andere Statline!) NICHT abbildbar — Limitation. Necron-Modellgruppen — ALLE Sonderfälle (Wahapedia/offizielle Datasheets prüfen, ⚠ Wargear-Zeilen fehlen teils in `docs/work/wahapedia_necrons/units_all.txt` — Scraper-Lücke!):
+  - **Skorpekh Destroyers:** 1 pro 3 Modelle: Threshers → Reap-Blade → neues `limit: per_3` im weapon_swaps-Schema
+  - **Ophydian Destroyers:** Besonderheiten der Zerstörer-Einheit prüfen (Waffenwahl)
+  - **Lokhust Destroyers / Lokhust Heavy Destroyers:** Besonderheiten prüfen; Heavy: gauss destructor → enmitic exterminator; gemischte Einheit (Lokhust + Heavy in einer Einheit)?
+  - **Plasmacyte:** Begleitmodell für Skorpekh/Ophydian — wie abbilden (eigene Gruppe? Sondermodell)?
+  - **Cryptothralls:** mögliche Sonderrolle (Bodyguard-Mechanik für Crypteks) prüfen
+  - **Lychguard:** Schwert+Schild vs. Warscythe → model_groups statt weapon_loadout?
+  - Sonst laut Nutzer keine Necron-Besonderheiten.
+- [ ] **P16:** Save-Anzeige Randfall: Sv 6+ mit AP-4 → effektiv unmöglich (10+). Anker „von 6 ausgehend" + Ausnahmeregel für Schwellen > 6+ definieren (vs. Normalfall AP-1 auf 3+).
+- [ ] **P17 (nachgeschärft 2026-06-10):** Zielauswahl bleibt auf Einheiten-Ebene (Untergruppen des Verteidigers für den Angreifer unsichtbar — regelkonform). ABER: **Verteidiger bekommt Korrekturmöglichkeit bei der Schadenszuweisung** — nach „Apply Damage" gegen eine Gruppen-Einheit: ±-Counter pro Gruppe (Summe = Verluste), Default bleibt `priority`-Reihenfolge. Kritischer Fall: Nobz mit gemischter Bewaffnung — welcher Nob fällt, ändert die verfügbaren Waffen der Folgerunden („bricht die Logik"). **Danach muss klar erkennbar sein, welche Waffen nicht mehr zur Verfügung stehen** (Gruppe auf 0 → Waffen weg; subUnitCard/Deklaration zeigen nur lebende Gruppen). Folgefrage bei Umsetzung: Tracking, in welcher Gruppe das verwundete Frontmodell steht (Mehrwunden-Einheiten).
+- [ ] **P18:** UX Nahkampf: neben den Untergruppen in der gegnerischen PlayerArea die infrage kommenden Ziele anzeigen (App kennt `melee_with`). Einheiten OHNE Untergruppen genauso behandeln (= eine einzige Gruppe) → EIN einheitlicher Deklarations-Flow für alle Einheiten.
+- [x] **P19:** ✅ Root Cause: Cover-Checkboxen waren pro TAB gekeyt statt pro ZIEL — im zweiten Waffen-Tab desselben Ziels war die Checkbox separat/nicht gesetzt. Fix: cover_key pro Ziel; Checkbox nur im ersten Tab des Ziels (DuplicateWidgetID). Regel bestätigt: Heavy Cover entfällt NUR wenn der Verteidiger selbst gecharged hat (in-melee allein blockt nicht). Ursprünglich: Warum erscheint Heavy Cover beim Power-Klaw-Tab nicht? (Prüfen: Heavy-Cover-Checkbox-Bedingung pro Tab — Defender-charged-Regel oder Bug?)
+- [x] **P20:** ✅ Logik-Ebene verifiziert KORREKT (Regressionstest test_advanced_unit_in_melee_is_eligible_and_receives_turn): ADVANCED+IN MELEE ist kampfberechtigt, Wechsel funktioniert. Der beobachtete Block muss im UI-Pfad liegen — Verdacht: pending_irongob-Dialog des Big Mek (rendert Fight Phase exklusiv) oder unfertige charged-Einheit. Falls erneut beobachtet: genaue Repro-Schritte notieren! Ursprung: Heroic Intervention: Scarabs intervenieren → IN MELEE korrekt, aber ADVANCED-Badge bleibt; Einheit darf danach wohl nicht kämpfen und **blockiert den Kämpfer-Wechsel** in der Fight Phase. HI muss den Bewegungszustand regelkonform behandeln + Regressionstest.
+
+**D5 — verbindliche Detail-Spezifikation (Nutzer, anhand Referenz-Screenshot, 2026-06-10):**
+1. Schwellenzahlen (2+, 3+ …) stehen **bündig über dem Würfel der jeweiligen Augenzahl**.
+2. KEIN „→ 3+" hinter dem S/T-Vergleich — das Ergebnis steht farblich hervorgehoben in der Schwellenreihe darunter.
+3. **Trennlinie an der Erfolgsgrenze** (zwischen letztem Fail- und erstem Erfolgs-Würfel); der Zwischenraum so breit wie ein Würfel-Icon („Luft").
+4. Sv-Wert neben SAVE (wie WS/BS bei HIT).
+5. **Erste Spalte = Badge-Spalte** (Platz vor jeder Würfelreihe): AP-X, Heavy Cover, MWBD, Eff. … Hinter der Badge die Modifier-Notation zwischen Würfeln: Buff `2→3`, Debuff `3←4`, Buff-Reroll = Reroll-Symbol, Debuff-Miss = „✗" (z.B. Quantenschilde).
+6. Randfall P16 (Schwellen > 6+) in der Darstellung abfangen.
+
+**Farbkonzept — Entscheidungen (Nutzer, 2026-06-10):**
+- **Buff = GRÜN `#4a9a5a`** (das bisherige MOVED-Grün); **MOVED = BLAU `#60a5fa`** (das bisherige MWBD-Blau) — FESTGELEGT.
+- **Cover ist ein Buff** → Cover-Würfel/-Badges im SAVE-Block in Buff-Grün (vormals blau).
+- SHOT (cyan) und CHARGED/FOUGHT (violett) bleiben unverändert (bestätigt).
+- **Army-Ability (4a) = Buff-Grün** — WAAAGH!, aktive Command Protocols etc. SIND Buffs; eine konsistente, schlanke Kategorie. Badge erscheint in der armyCard (z.B. „WAAAGH!" grün).
+- **RESERVE** = Farbe von **HEROIC INT.** (`#ff9060`, warmes Lachs-Orange) — beides temporäre Sonderzustände.
+- **Relic-Badge ENTFÄLLT** — nur wenn das Relic einen Effekt bringt, erscheint die Buff-/Debuff-Badge des Effekts.
+- **Wargear-Keyword-Blau entfällt analog** — Wargear/Weapon-Abilities zeigen sich als Buff/Debuff.
+- **4c Fraktionsfarben: NEIN** — einheitliches Theme.
+- 4b (Würfel-Farben) = durch D5-Spezifikation + Referenz-Screenshot definiert; offener Punkt: Buff-Würfel im SAVE-Block war blau → nach neuem Konzept grün? Bei Umsetzung vorlegen.
 
 ---
 

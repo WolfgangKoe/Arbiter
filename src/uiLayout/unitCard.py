@@ -14,6 +14,9 @@ Design principles (see docs/spec/ui_layout.md §4):
   keywords are highlighted all-or-nothing: only if the unit has ALL required
   keywords do the matching chips light up.
 - Setup phase exception: deployment selectbox shown inline below name.
+- Model-group units: their subUnitCards live in the gameActionsArea player
+  areas (render_group_cards in _common.py), not here. The target button (▷)
+  assigns targets to the selected model group when the group flow is active.
 """
 
 import streamlit as st
@@ -22,9 +25,18 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import PHASES, units_key_for
 from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
+from uiLayout._common import (
+    group_target_selectable,
+    is_group_target,
+    reset_group_declaration_state,
+    toggle_group_target,
+)
 
+# design_colors.md §0: MOVED = blau (vormals Buff-Blau), Buff = grün (vormals
+# MOVED-Grün), RESERVE = HEROIC-INT.-Farbe (temporäre Sonderzustände).
+# Keine Fraktions-Badges hier — Army-Abilities zeigt die armyCard (Buff-Grün).
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "MOVED": ("#4a9a5a", "#0a1a0a"),
+    "MOVED": ("#60a5fa", "#0a1020"),
     "ADVANCED": ("#d4a017", "#2e2618"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
     "RETREATED": ("#c04040", "#1e1010"),
@@ -32,15 +44,13 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "CHARGED": ("#b070d8", "#1a0a2a"),
     "FOUGHT": ("#c080e8", "#200a30"),
     "SHOT": ("#40a0b8", "#081418"),
-    "RESERVE": ("#4090b0", "#101820"),
+    "RESERVE": ("#ff9060", "#2a1208"),
     "DESTROYED": ("#c04040", "#1e1010"),
     "HEROIC INT.": ("#ff9060", "#2a1208"),
-    "WAAAGH!": ("#b8e040", "#1a2a00"),
 }
 
-_BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
+_BUFF_COLOR: tuple[str, str] = ("#4a9a5a", "#0a1a0a")
 _DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
-_RELIC_COLOR: tuple[str, str] = ("#e8c460", "#201a08")
 
 _TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight"})
 
@@ -52,8 +62,6 @@ def _badge(text: str, variant: str = "") -> str:
         fg, bg = _BUFF_COLOR
     elif variant == "debuff":
         fg, bg = _DEBUFF_COLOR
-    elif variant == "relic":
-        fg, bg = _RELIC_COLOR
     else:
         fg, bg = ("#c9a84c", "#2e2618")
     return (
@@ -107,11 +115,11 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
     return "".join(parts)
 
 
-def _keyword_chip(kw: str, highlighted: bool, wargear: bool = False) -> str:
+def _keyword_chip(kw: str, highlighted: bool) -> str:
+    # Wargear-granted keywords look like any other keyword (design_colors.md §0):
+    # wargear effects show up as buff/debuff badges, not as a colored chip class.
     if highlighted:
         fg, bg, border = "#f5d080", "#3a2e10", "#f5d080"
-    elif wargear:
-        fg, bg, border = "#60a5fa", "#0c1a2e", "#2563eb"
     else:
         fg, bg, border = "#6b5f44", "#1c1a14", "#2e2618"
     return (
@@ -126,11 +134,9 @@ def _keywords_html(unit: Unit) -> str:
 
     Highlighting is all-or-nothing: if the unit has all highlight_keywords,
     each matching chip is highlighted; otherwise no chip is highlighted.
-    Wargear-granted keywords are rendered in blue.
     """
     required: list[str] = st.session_state.get("highlight_keywords", [])
     visible_kws = [kw for kw in unit.keywords if kw != unit.faction]
-    wargear_kws = set(unit.wargear_keywords)
 
     if required:
         unit_kws = set(unit.keywords)
@@ -139,9 +145,7 @@ def _keywords_html(unit: Unit) -> str:
     else:
         required_set = set()
 
-    return "".join(
-        _keyword_chip(kw, kw in required_set, wargear=kw in wargear_kws) for kw in visible_kws
-    )
+    return "".join(_keyword_chip(kw, kw in required_set) for kw in visible_kws)
 
 
 def render_unit_card(
@@ -275,42 +279,39 @@ def render_unit_card(
                 ):
                     st.session_state.selected_unit = None if is_sel else (faction, uid)
                     st.session_state.selected_targets = []
+                    reset_group_declaration_state()
                     st.rerun()
 
         else:
             # Inactive player — target selector for relevant phases
             if phase_key in _TARGET_PHASES:
                 tgts: list[tuple[str, str]] = st.session_state.selected_targets
-                is_tgt = (faction, uid) in tgts
+                is_tgt = (faction, uid) in tgts or is_group_target(faction, uid)
                 label = f"◀ {unit.name_en}" if is_tgt else f"▷ {unit.name_en}"
                 if st.button(
                     label,
                     key=f"tgt_{faction}_{uid}",
                     type="primary" if is_tgt else "secondary",
                     use_container_width=True,
-                    disabled=in_reserve,
+                    disabled=in_reserve or not group_target_selectable(faction, uid),
                 ):
-                    new_tgts = list(tgts)
-                    if is_tgt:
-                        new_tgts.remove((faction, uid))
-                    else:
-                        new_tgts.append((faction, uid))
-                    st.session_state.selected_targets = new_tgts
+                    # Group flow active → target belongs to the selected model group
+                    if not toggle_group_target(faction, uid):
+                        new_tgts = list(tgts)
+                        if is_tgt:
+                            new_tgts.remove((faction, uid))
+                        else:
+                            new_tgts.append((faction, uid))
+                        st.session_state.selected_targets = new_tgts
                     st.rerun()
             else:
                 st.markdown(f"**{unit.name_en}**")
 
         # ── State badges + Keywords ────────────────────────────────
+        # Army abilities (Waaagh! etc.) show once in the armyCard, not per unit.
+        # Relics show no badge of their own — only their effects (buff/debuff).
         if phase_key != "setup":
             badges = _state_badges_html(state)
-            waaagh = st.session_state.get("waaagh_state", {}).get(faction, {})
-            if waaagh.get("stage", 0) >= 1:
-                badges += _badge("WAAAGH!")
-            if unit.relic_id:
-                relic_label = (
-                    unit.relic_name or unit.relic_id.rsplit(".", 1)[-1].replace("_", " ")
-                ).upper()
-                badges += _badge(relic_label, variant="relic")
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)

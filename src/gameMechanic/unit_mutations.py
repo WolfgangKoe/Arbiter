@@ -72,17 +72,43 @@ def apply_damage(
             _apply_group_losses(state["group_models"], lost, unit.model_groups)
 
 
+def _restore_group_models(
+    group_models: dict[str, int],
+    returned: int,
+    groups: list,  # type: ignore[type-arg]
+) -> None:
+    """Refill group_models after a revive — lowest priority first (died first)."""
+    for group in sorted(groups, key=lambda g: g.priority):
+        missing = group.count - group_models.get(group.id, 0)
+        if missing <= 0:
+            continue
+        back = min(missing, returned)
+        group_models[group.id] = group_models.get(group.id, 0) + back
+        returned -= back
+        if returned <= 0:
+            return
+
+
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) -> bool:
     key = units_key_for(faction)
     state = st.session_state[key][uid]
     max_hp = unit.wounds * (unit.models_max if revive else state["models"])
     old_wounds = state["current_wounds"]
+    old_models = state["models"]
     state["current_wounds"] = min(max_hp, state["current_wounds"] + hp)
     state["destroyed"] = state["current_wounds"] <= 0
     if unit.wounds > 0:
         full = state["current_wounds"] // unit.wounds
         partial = 1 if state["current_wounds"] % unit.wounds > 0 else 0
         state["models"] = min(unit.models_max, full + partial)
+    # Models returned by ANY revive mechanic (Reanimation Protocols,
+    # Resurrection Orb, …) no longer count as destroyed for Morale this turn —
+    # generic rule, no faction checks.
+    models_back = state["models"] - old_models
+    if models_back > 0:
+        state["lost_models_this_turn"] = max(0, state.get("lost_models_this_turn", 0) - models_back)
+        if state.get("group_models") and unit.model_groups:
+            _restore_group_models(state["group_models"], models_back, unit.model_groups)
     return state["current_wounds"] > old_wounds
 
 

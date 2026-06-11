@@ -240,9 +240,22 @@ units:
   - livingMetal
   - reanimationProtocols
   - hardwiredForDestruction
-  weapons:
-  - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
-  - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
+  model_groups:
+  - id: skorpekh
+    name_en: Skorpekh Destroyer
+    count: models_max
+    weapons:
+    - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
+    weapon_swaps:
+    # For every 3 models, 1 model's hyperphase threshers → hyperphase reap-blade
+    - id: reap_blade_swap
+      scope: per_model
+      limit: per_3
+      replaces:
+      - wh40k_9e.necrons.weapon.hyperphase_threshers
+      options:
+      - wh40k_9e.necrons.weapon.hyperphase_reap_blade
+    priority: 1
 - id: wh40k_9e.necrons.unit.lychguard
   name_en: Lychguard
   name_de: Gruftgardisten
@@ -269,13 +282,25 @@ units:
   fnp: null
   rules:
   - reanimationProtocols
-  weapons:
-  - ref: wh40k_9e.necrons.weapon.warscythe
-  wargear_options:
-  - type: replace_pair
-    with:
-    - wh40k_9e.necrons.weapon.hyperphase_sword
-    - wh40k_9e.necrons.weapon.dispersion_shield
+  model_groups:
+  - id: lychguard
+    name_en: Lychguard
+    count: models_max
+    weapons:
+    - ref: wh40k_9e.necrons.weapon.warscythe
+    weapon_swaps:
+    # ALL models swap together (datasheet: "All of the models in the unit can
+    # have their warscythe replaced with 1 hyperphase sword and 1 dispersion
+    # shield each") — all-or-nothing, no mixed loadout. The dispersion shield
+    # is wargear (wh40k_9e.necrons.wargear.dispersion_shield), added via the
+    # roster wargear list — the swap only changes the weapon.
+    - id: sword_and_shield
+      scope: group
+      replaces:
+      - wh40k_9e.necrons.weapon.warscythe
+      options:
+      - wh40k_9e.necrons.weapon.hyperphase_sword
+    priority: 1
 - id: wh40k_9e.necrons.unit.deathmarks
   name_en: Deathmarks
   name_de: Todesmarkierer
@@ -528,12 +553,23 @@ units:
   - livingMetal
   - reanimationProtocols
   - hardwiredForDestruction
-  weapons:
-  - ref: wh40k_9e.necrons.weapon.gauss_destructor
-  - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-  wargear_options:
-  - type: replace
-    with: wh40k_9e.necrons.weapon.enmitic_exterminator
+  model_groups:
+  - id: lokhust_heavy
+    name_en: Lokhust Heavy Destroyer
+    count: models_max
+    weapons:
+    - ref: wh40k_9e.necrons.weapon.gauss_destructor
+    - ref: wh40k_9e.necrons.weapon.close_combat_weapon
+    weapon_swaps:
+    # The Lokhust Heavy Destroyer's gauss destructor → 1 enmitic exterminator
+    - id: exterminator_swap
+      scope: per_model
+      limit: any
+      replaces:
+      - wh40k_9e.necrons.weapon.gauss_destructor
+      options:
+      - wh40k_9e.necrons.weapon.enmitic_exterminator
+    priority: 1
 - id: wh40k_9e.necrons.unit.necron_lord
   name_en: Necron Lord
   name_de: Nekron-Lord
@@ -1269,10 +1305,23 @@ units:
   - livingMetal
   - reanimationProtocols
   - hardwiredForDestruction
-  weapons:
-  - ref: wh40k_9e.necrons.weapon.hyperphase_reap_blade
-  - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
-  - ref: wh40k_9e.necrons.weapon.ophydian_claws
+  model_groups:
+  - id: ophydian
+    name_en: Ophydian Destroyer
+    count: models_max
+    weapons:
+    - ref: wh40k_9e.necrons.weapon.hyperphase_threshers
+    - ref: wh40k_9e.necrons.weapon.ophydian_claws
+    weapon_swaps:
+    # For every 3 models, 1 model's hyperphase threshers → hyperphase reap-blade
+    - id: reap_blade_swap
+      scope: per_model
+      limit: per_3
+      replaces:
+      - wh40k_9e.necrons.weapon.hyperphase_threshers
+      options:
+      - wh40k_9e.necrons.weapon.hyperphase_reap_blade
+    priority: 1
 - id: wh40k_9e.necrons.unit.lokhust_destroyers
   name_en: Lokhust Destroyers
   name_de: Lokhust-Vernichter
@@ -1308,9 +1357,9 @@ units:
   weapons:
   - ref: wh40k_9e.necrons.weapon.gauss_cannon
   - ref: wh40k_9e.necrons.weapon.close_combat_weapon
-  wargear_options:
-  - type: replace
-    with: wh40k_9e.necrons.weapon.enmitic_exterminator
+  # Enmitic exterminator gehört zum Lokhust HEAVY Destroyer, nicht hierher.
+  # "Bis zu 2 Lokhust Heavy Destroyers in dieser Einheit" ist nicht abbildbar
+  # (andere Statline W4) — Limitation dokumentiert in ziel6.md §6n P15.
 - id: wh40k_9e.necrons.unit.canoptek_doomstalker
   name_en: Canoptek Doomstalker
   name_de: Canoptek-Düsterjäger

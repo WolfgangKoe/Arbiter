@@ -366,6 +366,89 @@ def test_heal_unit_revives_destroyed_unit() -> None:
     assert state["models"] == 1
 
 
+def test_heal_unit_reduces_lost_models_this_turn() -> None:
+    """Revived models (RP, Resurrection Orb, …) no longer count for Morale."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 7,
+                "models": 7,
+                "destroyed": False,
+                "lost_models_this_turn": 3,
+            }
+        }
+    )
+    heal_unit(WARRIORS, "Necrons", 2, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["models"] == 9
+    assert state["lost_models_this_turn"] == 1
+
+
+def test_heal_unit_lost_models_never_negative() -> None:
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 7,
+                "models": 7,
+                "destroyed": False,
+                "lost_models_this_turn": 1,
+            }
+        }
+    )
+    heal_unit(WARRIORS, "Necrons", 3, _warriors())
+    assert session["p1_units"][WARRIORS]["lost_models_this_turn"] == 0
+
+
+def test_heal_unit_restores_group_models_in_priority_order() -> None:
+    """Revived models refill the group that died first (lowest priority)."""
+    groups = [
+        ModelGroup(id="ork_boy", name_en="Ork Boy", count=9, weapons=[], priority=1),
+        ModelGroup(id="boss_nob", name_en="Boss Nob", count=1, weapons=[], priority=2),
+    ]
+    boyz_unit = Unit(
+        id=BOYZ,
+        name_en="Boyz",
+        name_de="Boyz",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Troops"],
+        keywords=["ORK"],
+        wounds=1,
+        models_min=10,
+        models_max=10,
+        power_level=6,
+        move='5"',
+        bs="5+",
+        ws="3+",
+        strength=4,
+        toughness=5,
+        attacks=2,
+        save=6,
+        invuln_save=None,
+        leadership=6,
+        oc=2,
+        fnp=None,
+        weapons=[],
+        model_groups=groups,
+    )
+    session = _make_session(
+        p2_units={
+            BOYZ: {
+                "current_wounds": 5,
+                "models": 5,
+                "destroyed": False,
+                "lost_models_this_turn": 5,
+                "group_models": {"ork_boy": 4, "boss_nob": 1},
+            }
+        }
+    )
+    heal_unit(BOYZ, "Orks", 3, boyz_unit)
+    state = session["p2_units"][BOYZ]
+    assert state["models"] == 8
+    assert state["group_models"] == {"ork_boy": 7, "boss_nob": 1}
+    assert state["lost_models_this_turn"] == 2
+
+
 def test_heal_unit_updates_model_count_for_multimodel() -> None:
     session = _make_session(
         p1_units={WARRIORS: {"current_wounds": 7, "models": 7, "destroyed": False}}

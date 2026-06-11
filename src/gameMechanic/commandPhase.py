@@ -14,7 +14,6 @@ from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for t
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
 from uiLayout._common import (
-    PHASE_RULES,
     lookup,
     state_badges_html,
     wound_adjustment_buttons,
@@ -261,9 +260,6 @@ class CommandPhaseHandler:
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
-
-        st.info(PHASE_RULES["command"])
-        st.divider()
 
         col1, col2 = st.columns(2)
         with col1:

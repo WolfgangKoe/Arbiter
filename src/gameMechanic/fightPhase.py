@@ -15,10 +15,12 @@ from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
 from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import (
-    PHASE_RULES,
+    group_flow_attacker,
     lookup,
     render_attack_declaration,
     render_attack_resolution,
+    render_group_assignment,
+    render_group_cards,
     state_badges_html,
     wound_adjustment_buttons,
 )
@@ -73,10 +75,21 @@ def _has_eligible_units(player: str, first: str, second: str) -> bool:
 
 
 def _advance_fight_turn_if_needed(first: str, second: str) -> None:
-    """Switch fight_current_player after a unit fights or when a player has no eligible units."""
+    """Switch fight_current_player after a unit fights or when a player has no eligible units.
+
+    Reruns on change: the army columns render before this runs (app.py order),
+    so a silent switch would leave them showing stale select/target buttons.
+
+    Never advances while a resolution is in progress — the fought flag is set on
+    the first Apply Damage, but the turn passes only after "All done — Continue"
+    (rule: alternate AFTER a unit finished fighting; charged units fight first).
+    """
+    if st.session_state.get("attack_declaration", {}).get("active"):
+        return
     current = st.session_state.get("fight_current_player")
     if current is None:
         return
+    entered_with = current
 
     # Detect if the current player's selected unit just fought
     sel = st.session_state.get("selected_unit")
@@ -95,6 +108,9 @@ def _advance_fight_turn_if_needed(first: str, second: str) -> None:
         other, first, second
     ):
         st.session_state.fight_current_player = other
+
+    if st.session_state.fight_current_player != entered_with:
+        st.rerun()
 
 
 def _dice_max(dice_str: str) -> int:
@@ -326,10 +342,12 @@ class FightPhaseHandler:
 
         _maybe_render_mortal_undo(state)
 
-        # Priority goes to the inactive (non-active) player
+        # Priority goes to the inactive (non-active) player.
+        # Rerun: the left army column already rendered without a fight player.
         if st.session_state.get("fight_current_player") is None:
             priority = second if active_player == first else first
             st.session_state.fight_current_player = priority
+            st.rerun()
 
         _advance_fight_turn_if_needed(first, second)
         fight_player = st.session_state.fight_current_player
@@ -382,6 +400,20 @@ def _render_fight_column(
         else:
             st.caption("← Select a unit from your army list to fight.")
     else:
+        # Model-group flow: this side shows the attack assignment for the
+        # fighting player's selected group.
+        info = group_flow_attacker()
+        if info is not None and info[0] == fight_player:
+            atk_faction, atk_uid, atk_unit, atk_state = info
+            eligible = (
+                can_fight(atk_state)
+                and can_fight_now(atk_state, first, second)
+                and not atk_state.get("turn_flags", {}).get("fought")
+            )
+            if eligible:
+                render_group_assignment(atk_faction, atk_uid, atk_unit, atk_state, use_melee=True)
+                return
+
         targets: list[tuple[str, str]] = st.session_state.selected_targets
         matching = [t for t in targets if t[0] == faction]
         if matching:
@@ -426,6 +458,10 @@ def _active_fight(
         st.info("Fights First — this unit activates before others.")
     if flags.get("charged"):
         st.markdown("**Fights first** (charged this turn).")
+
+    if unit.model_groups:
+        render_group_cards(faction, uid, unit, unit_state, use_melee=True, phase_key="fight")
+        return
 
     melee = [w for w in unit.weapons if any(p.is_melee for p in w.profiles)]
     if melee:
@@ -487,7 +523,7 @@ def _render_melee_pairs() -> None:
         for p in pairs:
             st.markdown(f"- {p}")
     else:
-        st.info(PHASE_RULES["fight"])
+        st.caption("No active melee engagements.")
 
 
 def _render_display(

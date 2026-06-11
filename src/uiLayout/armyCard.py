@@ -29,14 +29,13 @@ def _faction_badge(text: str) -> str:
     )
 
 
-def _active_ability_badge(text: str, *, color: str = "protocol") -> str:
-    """HTML badge for an active faction ability (protocol, waaagh, etc.)."""
-    if color == "waaagh_1":
-        fg, bg = "#4ade80", "#052e16"
-    elif color == "waaagh_2":
-        fg, bg = "#86efac", "#071a0e"
-    else:  # protocol
-        fg, bg = "#fbbf24", "#1c1007"
+def _active_ability_badge(text: str) -> str:
+    """HTML badge for an active army ability (Waaagh!, Command Protocol, …).
+
+    Army abilities grant buffs → ONE generic buff-green badge for all factions
+    (design_colors.md §0/§4a). No faction-specific colors in src/.
+    """
+    fg, bg = "#4a9a5a", "#0a1a0a"
     return (
         f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
         f"padding:2px 8px;font-size:10px;color:{fg};letter-spacing:0.07em;"
@@ -342,9 +341,8 @@ def _render_waaagh_ui(
 
     if player_ws:
         stage = player_ws.get("stage", 1)
-        color = "waaagh_1" if stage == 1 else "waaagh_2"
         badge_text = f"{ability_name.upper()} — STAGE {stage}"
-        st.markdown(_active_ability_badge(badge_text, color=color), unsafe_allow_html=True)
+        st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         # Find the ability for the current stage to get its active_text
         stage_id = player_ws.get("ability_id", waaagh_ability.id)
         if stage == 2:

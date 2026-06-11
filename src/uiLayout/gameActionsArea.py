@@ -23,7 +23,7 @@ import streamlit as st
 from gameMechanic.game_state import PHASES, faction_dir_for, next_phase, swap_players
 from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
 from gameObjects.loader import get_abilities_for_unit, load_round_choice_abilities
-from uiLayout._common import lookup
+from uiLayout._common import PHASE_RULES, lookup
 
 # ---------------------------------------------------------------------------
 # Setup phase rendering
@@ -274,10 +274,15 @@ def render_game_actions_area() -> None:
         _render_setup()
         return
 
-    # displayArea first: VP scoring buttons appear at top when active
-    _render_vp_scoring()
+    # Phase rule box always at the very top — every phase, every state
+    rule = PHASE_RULES.get(phase_key)
+    if rule:
+        st.info(rule)
 
-    # PlayerAreas below: phase-specific actions delegated to phase_runner
+    # PlayerAreas: phase-specific actions delegated to phase_runner
     from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
 
     render_current_phase(st.session_state)
+
+    # VP scoring at the bottom — scoring happens at the end of a phase
+    _render_vp_scoring()

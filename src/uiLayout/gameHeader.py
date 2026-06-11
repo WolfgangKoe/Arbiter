@@ -3,6 +3,7 @@
 import streamlit as st
 
 from gameMechanic.game_state import PHASES, next_phase, reset_game
+from uiLayout._common import reset_group_declaration_state
 
 CSS_THEME = """
 <style>
@@ -36,6 +37,15 @@ h1, h2, h3, h4, h5, h6 { color: var(--arb-text) !important; }
 h1, h2 { letter-spacing: 0.12em; text-transform: uppercase; }
 h2 { color: var(--arb-accent) !important; font-size: 1rem; }
 .stCaption, .stCaption p { color: var(--arb-muted) !important; }
+
+/* Resolution tabs — visible separation, slimmer chrome (6n D4) */
+[data-testid="stTabs"] [data-testid="stTab"] {
+    border-right: 1px solid var(--arb-border);
+    padding: 2px 10px;
+}
+[data-testid="stTabs"] [data-testid="stTab"]:last-of-type {
+    border-right: none;
+}
 
 /* Metrics */
 [data-testid="metric-container"] {
@@ -283,6 +293,7 @@ def render_game_header() -> None:
                 st.session_state.phase_idx = phase_idx - 1
                 st.session_state.selected_unit = None
                 st.session_state.selected_targets = []
+                reset_group_declaration_state()
                 st.rerun()
         with rst_c:
             if st.button("↺", key="reset_game", use_container_width=True):

@@ -7,7 +7,40 @@ from unittest.mock import MagicMock
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout._common import _compute_attacks, _total_attacks_int  # noqa: E402
+from types import SimpleNamespace  # noqa: E402
+
+from uiLayout._common import (  # noqa: E402
+    _compute_attacks,
+    _group_melee_budget,
+    _total_attacks_int,
+)
+
+
+def _melee_weapon(effect=None, max_attacks=None):  # type: ignore[no-untyped-def]
+    profile = SimpleNamespace(is_melee=True, effect=effect, max_attacks=max_attacks)
+    return SimpleNamespace(profiles=[profile])
+
+
+# ---------------------------------------------------------------------------
+# _group_melee_budget — base + extra-attack weapon bonuses (6n Bug: Boss Nob 4)
+# ---------------------------------------------------------------------------
+
+
+def test_group_budget_plain_weapons() -> None:
+    assert _group_melee_budget([_melee_weapon()], 9, 3) == 27
+
+
+def test_group_budget_includes_extra_attacks_weapon() -> None:
+    """Boss Nob with power klaw + choppa under WAAAGH: 1×(2+1) base + 1 choppa = 4."""
+    power_klaw = _melee_weapon()
+    choppa = _melee_weapon(effect={"type": "extra_attacks", "amount": 1})
+    assert _group_melee_budget([power_klaw, choppa], 1, 3) == 4
+
+
+def test_group_budget_capped_weapon_adds_its_cap() -> None:
+    attack_squig = _melee_weapon(effect={"type": "extra_attacks"}, max_attacks=2)
+    assert _group_melee_budget([_melee_weapon(), attack_squig], 1, 4) == 6
+
 
 # ---------------------------------------------------------------------------
 # _total_attacks_int — melee ("Melee" / "*") and fixed counts

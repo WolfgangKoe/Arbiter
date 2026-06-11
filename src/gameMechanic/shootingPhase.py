@@ -10,10 +10,12 @@ import streamlit as st
 from gameMechanic.game_state import units_key_for
 from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import (
-    PHASE_RULES,
+    group_flow_attacker,
     lookup,
     render_attack_declaration,
     render_attack_resolution,
+    render_group_assignment,
+    render_group_cards,
     render_player_column,
 )
 
@@ -68,6 +70,25 @@ class ShootingPhaseHandler:
 
         st.divider()
 
+        # Model-group flow: the defender column shows the group attack assignment
+        group_override = None
+        atk_faction = ""
+        ginfo = group_flow_attacker()
+        if ginfo is not None:
+            atk_faction, atk_uid, atk_unit, atk_state = ginfo
+            if can_shoot(atk_state, atk_unit):
+                in_melee = atk_state.get("in_melee", False)
+
+                def group_override() -> None:
+                    render_group_assignment(
+                        atk_faction,
+                        atk_uid,
+                        atk_unit,
+                        atk_state,
+                        use_melee=False,
+                        in_melee=in_melee,
+                    )
+
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(
@@ -76,6 +97,8 @@ class ShootingPhaseHandler:
                 active_content=_active_shooting,
                 inactive_content=_inactive_target_stats,
                 no_target_caption="← Designate a target (▷) from your army list.",
+                inactive_override=group_override if first != atk_faction else None,
+                show_wound_buttons=False,
             )
         with col2:
             render_player_column(
@@ -84,6 +107,8 @@ class ShootingPhaseHandler:
                 active_content=_active_shooting,
                 inactive_content=_inactive_target_stats,
                 no_target_caption="← Designate a target (▷) from your army list.",
+                inactive_override=group_override if second != atk_faction else None,
+                show_wound_buttons=False,
             )
 
     def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
@@ -115,6 +140,21 @@ def _active_shooting(
         return
 
     in_melee = unit_state.get("in_melee", False)
+
+    if unit.model_groups:
+        if in_melee:
+            st.info("Engaged in melee — Pistol weapons only.")
+        render_group_cards(
+            faction,
+            uid,
+            unit,
+            unit_state,
+            use_melee=False,
+            phase_key="shooting",
+            in_melee=in_melee,
+        )
+        return
+
     if in_melee:
         ranged = [
             w
@@ -188,5 +228,4 @@ def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
                 in_melee=atk_state.get("in_melee", False),
             )
             return True
-    st.info(PHASE_RULES["shooting"])
     return False

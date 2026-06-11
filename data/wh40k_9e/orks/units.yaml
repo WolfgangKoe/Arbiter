@@ -503,17 +503,6 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.big_shoota
-      - ref: wh40k_9e.orks.weapon.rokkit_launcha
-      - ref: wh40k_9e.orks.weapon.shoota
-      - ref: wh40k_9e.orks.weapon.big_choppa
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.killsaw
-      - ref: wh40k_9e.orks.weapon.power_klaw
-      - ref: wh40k_9e.orks.weapon.power_stabba
-      - ref: wh40k_9e.orks.weapon.stikkbombz
     model_groups:
       - id: ork_boy
         name_en: Ork Boy
@@ -522,22 +511,49 @@ units:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_per_10:
-          - wh40k_9e.orks.weapon.big_shoota
-          - wh40k_9e.orks.weapon.rokkit_launcha
+        weapon_swaps:
+          # Any Ork Boy's slugga and choppa can be replaced with 1 shoota
+          - id: shoota_swap
+            scope: per_model
+            limit: any
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.shoota
+          # For every 10 models, 1 Ork Boy's choppa and slugga can be replaced
+          - id: special_weapon
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.big_shoota
+              - wh40k_9e.orks.weapon.rokkit_launcha
         priority: 1
       - id: boss_nob
         name_en: Boss Nob
         count: 1
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_one_of:
-          - wh40k_9e.orks.weapon.choppa
-          - wh40k_9e.orks.weapon.big_choppa
-          - wh40k_9e.orks.weapon.power_klaw
-          - wh40k_9e.orks.weapon.killsaw
-          - wh40k_9e.orks.weapon.power_stabba
+        weapon_swaps:
+          # The Boss Nob's slugga and choppa can be replaced with two of the following
+          - id: nob_weapons
+            scope: group
+            pick: 2
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.big_choppa
+              - wh40k_9e.orks.weapon.choppa
+              - wh40k_9e.orks.weapon.killsaw
+              - wh40k_9e.orks.weapon.power_klaw
+              - wh40k_9e.orks.weapon.power_stabba
+              - wh40k_9e.orks.weapon.slugga
         priority: 2
     wargear_options: []
 
@@ -587,11 +603,6 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.thump_gun
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.power_snappa
     model_groups:
       - id: beast_snagga_boy
         name_en: Beast Snagga Boy
@@ -600,8 +611,16 @@ units:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.power_snappa
-        optional_per_10:
-          - wh40k_9e.orks.weapon.thump_gun
+        weapon_swaps:
+          # For every 10 models, 1 Beast Snagga Boy's choppa and slugga → thump gun
+          - id: thump_gun_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.thump_gun
         priority: 1
     wargear_options: []
 
@@ -628,22 +647,23 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.kustom_shoota
-      - ref: wh40k_9e.orks.weapon.killsaw
-      - ref: wh40k_9e.orks.weapon.power_klaw
-      - ref: wh40k_9e.orks.weapon.stikkbombz
     model_groups:
       - id: meganob
         name_en: Meganob
         count: models_max
         weapons:
           - ref: wh40k_9e.orks.weapon.kustom_shoota
+          - ref: wh40k_9e.orks.weapon.power_klaw
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_one_of:
-          - wh40k_9e.orks.weapon.power_klaw
-          - wh40k_9e.orks.weapon.killsaw
-        optional_mode: per_model
+        weapon_swaps:
+          # This model can be equipped with 1 killsaw instead of 1 power klaw
+          - id: killsaw_swap
+            scope: per_model
+            limit: any
+            replaces:
+              - wh40k_9e.orks.weapon.power_klaw
+            options:
+              - wh40k_9e.orks.weapon.killsaw
         priority: 1
     wargear_options: []
 
@@ -668,28 +688,30 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.big_choppa
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.killsaw
-      - ref: wh40k_9e.orks.weapon.power_klaw
-      - ref: wh40k_9e.orks.weapon.power_stabba
-      - ref: wh40k_9e.orks.weapon.stikkbombz
     model_groups:
       - id: nob
         name_en: Nob
         count: models_max
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_one_of:
-          - wh40k_9e.orks.weapon.choppa
-          - wh40k_9e.orks.weapon.big_choppa
-          - wh40k_9e.orks.weapon.power_klaw
-          - wh40k_9e.orks.weapon.killsaw
-          - wh40k_9e.orks.weapon.power_stabba
-        optional_mode: per_model
+        weapon_swaps:
+          # Any number of models: slugga and choppa → two of the following
+          - id: nob_weapons
+            scope: per_model
+            limit: any
+            pick: 2
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.big_choppa
+              - wh40k_9e.orks.weapon.choppa
+              - wh40k_9e.orks.weapon.killsaw
+              - wh40k_9e.orks.weapon.power_klaw
+              - wh40k_9e.orks.weapon.power_stabba
+              - wh40k_9e.orks.weapon.slugga
         priority: 1
     wargear_options: []
 
@@ -742,18 +764,6 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.shokka_pistol
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.big_shoota
-      - ref: wh40k_9e.orks.weapon.burna
-      - ref: wh40k_9e.orks.weapon.kustom_shoota
-      - ref: wh40k_9e.orks.weapon.rokkit_launcha
-      - ref: wh40k_9e.orks.weapon.big_choppa
-      - ref: wh40k_9e.orks.weapon.breacha_ram
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.power_klaw
-      - ref: wh40k_9e.orks.weapon.stikkbombz
     model_groups:
       - id: kommando
         name_en: Kommando
@@ -762,24 +772,72 @@ units:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_per_10:
-          - wh40k_9e.orks.weapon.big_shoota
-          - wh40k_9e.orks.weapon.burna
-          - wh40k_9e.orks.weapon.kustom_shoota
-          - wh40k_9e.orks.weapon.rokkit_launcha
-          - wh40k_9e.orks.weapon.breacha_ram
-          - wh40k_9e.orks.weapon.shokka_pistol
+        weapon_swaps:
+          # Each "for every 10 models" option is its own swap (datasheet wording)
+          - id: big_shoota_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.big_shoota
+          - id: breacha_ram_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.breacha_ram
+          - id: shokka_pistol_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+            options:
+              - wh40k_9e.orks.weapon.shokka_pistol
+          - id: burna_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.burna
+          - id: kustom_shoota_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.kustom_shoota
+          - id: rokkit_swap
+            scope: per_model
+            limit: per_10
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.rokkit_launcha
         priority: 1
       - id: boss_nob
         name_en: Boss Nob
         count: 1
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_one_of:
-          - wh40k_9e.orks.weapon.choppa
-          - wh40k_9e.orks.weapon.big_choppa
-          - wh40k_9e.orks.weapon.power_klaw
+        weapon_swaps:
+          # The Boss Nob's choppa can be replaced with one of the following
+          - id: nob_weapon
+            scope: group
+            replaces:
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.big_choppa
+              - wh40k_9e.orks.weapon.power_klaw
         priority: 2
     wargear_options: []
 
@@ -804,19 +862,28 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.pair_of_rokkit_pistols
-      - ref: wh40k_9e.orks.weapon.rokkit_launcha
-      - ref: wh40k_9e.orks.weapon.tankhammer
     model_groups:
       - id: tankbusta
         name_en: Tankbusta
         count: models_max
         weapons:
           - ref: wh40k_9e.orks.weapon.rokkit_launcha
-        optional_per_5:
-          - wh40k_9e.orks.weapon.tankhammer
-          - wh40k_9e.orks.weapon.pair_of_rokkit_pistols
+        weapon_swaps:
+          # For every 5 models, 1 Tankbusta's rokkit launcha can be replaced
+          - id: tankhammer_swap
+            scope: per_model
+            limit: per_5
+            replaces:
+              - wh40k_9e.orks.weapon.rokkit_launcha
+            options:
+              - wh40k_9e.orks.weapon.tankhammer
+          - id: rokkit_pistols_swap
+            scope: per_model
+            limit: per_5
+            replaces:
+              - wh40k_9e.orks.weapon.rokkit_launcha
+            options:
+              - wh40k_9e.orks.weapon.pair_of_rokkit_pistols
         priority: 1
     wargear_options: []
 
@@ -1007,12 +1074,6 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.dakkagun
-      - ref: wh40k_9e.orks.weapon.big_choppa
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.power_klaw
     model_groups:
       - id: warbiker
         name_en: Warbiker
@@ -1027,11 +1088,16 @@ units:
         count: 1
         weapons:
           - ref: wh40k_9e.orks.weapon.dakkagun
-        optional_one_of:
-          - wh40k_9e.orks.weapon.slugga
-          - wh40k_9e.orks.weapon.big_choppa
-          - wh40k_9e.orks.weapon.choppa
-          - wh40k_9e.orks.weapon.power_klaw
+        weapon_swaps:
+          # The Boss Nob on Warbike can be equipped with one of the following
+          - id: nob_weapon
+            scope: group
+            replaces: []
+            options:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.big_choppa
+              - wh40k_9e.orks.weapon.choppa
+              - wh40k_9e.orks.weapon.power_klaw
         priority: 2
     wargear_options: []
 
@@ -1056,11 +1122,6 @@ units:
     oc: 2
     fnp: null
     rules: []
-    weapons:
-      - ref: wh40k_9e.orks.weapon.slugga
-      - ref: wh40k_9e.orks.weapon.choppa
-      - ref: wh40k_9e.orks.weapon.power_klaw
-      - ref: wh40k_9e.orks.weapon.stikkbombz
     model_groups:
       - id: stormboy
         name_en: Stormboy
@@ -1075,10 +1136,16 @@ units:
         count: 1
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
+          - ref: wh40k_9e.orks.weapon.choppa
           - ref: wh40k_9e.orks.weapon.stikkbombz
-        optional_one_of:
-          - wh40k_9e.orks.weapon.choppa
-          - wh40k_9e.orks.weapon.power_klaw
+        weapon_swaps:
+          # The Boss Nob's choppa can be replaced with 1 power klaw
+          - id: power_klaw_swap
+            scope: group
+            replaces:
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.power_klaw
         priority: 2
     wargear_options: []
 

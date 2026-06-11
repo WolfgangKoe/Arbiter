@@ -138,6 +138,69 @@ Ersetzt `weapon_choices` und modelliert die tatsächliche Bewaffnung pro Einheit
 Der Loader überprüft beim Auflösen, ob die gewählte Kombination in den `wargear_options`
 der Einheit zulässig ist. Ungültige Auswahlen → `Army.warnings`.
 
+### `weapon_swaps` + `group_loadouts` (6m/6n — Modellgruppen)
+
+Einheiten mit `model_groups` in `units.yaml` beschreiben ihre Datasheet-Wargear-Optionen
+als **`weapon_swaps`** (Ersetzungen, nicht Additionen — RAW-Wortlaut „can be replaced").
+Einheiten mit `model_groups` haben **kein** unit-level `weapons:`-Feld mehr — der Loader
+bildet die flache Union aus allen Gruppen-Waffen + Swap-Optionen (`_group_weapon_ref_union`).
+
+**Swap-Schema (`units.yaml`):**
+
+```yaml
+model_groups:
+  - id: ork_boy
+    count: remainder
+    weapons: [slugga, choppa, stikkbombz]          # Default-Bewaffnung
+    weapon_swaps:
+      - id: shoota_swap
+        scope: per_model      # einzelne Modelle tauschen (→ Sub-Gruppen-Split)
+        limit: any            # any | per_10 | per_5 | per_3 (pro volle 10/5/3 Modelle der EINHEIT)
+        replaces: [slugga, choppa]
+        options: [shoota]
+  - id: boss_nob
+    count: 1
+    weapons: [slugga, choppa, stikkbombz]
+    weapon_swaps:
+      - id: nob_weapons
+        scope: group          # die ganze Gruppe tauscht gemeinsam
+        pick: 2               # „two of the following" (Wiederholung erlaubt: 2× killsaw)
+        replaces: [slugga, choppa]
+        options: [big_choppa, choppa, killsaw, power_klaw, power_stabba, slugga]
+```
+
+`replaces: []` modelliert reine Additionen („can be equipped with", z.B. Warbikers-Slugga).
+
+**Roster-Auflösung (`group_loadouts` → `swaps`):**
+
+```yaml
+group_loadouts:
+  boss_nob:                       # scope group: EIN Mapping mit weapons-Liste (pick Stück)
+    swaps:
+      nob_weapons:
+        weapons: [power_klaw, big_choppa]
+  ork_boy:                        # scope per_model: LISTE von {weapons, count}-Einträgen
+    swaps:
+      shoota_swap:
+        - weapons: [shoota]
+          count: 3
+      special_weapon:
+        - weapons: [big_shoota]
+          count: 1
+```
+
+Auflösung durch `_resolve_model_groups()` (`gameObjects/loader.py`):
+
+- **group-Scope:** Gruppen-Waffen = Basis − `replaces` + gewählte `weapons`
+- **per_model-Scope:** pro Eintrag entsteht eine **Sub-Gruppe mit fixen Waffen**
+  (`ork_boy_shoota`, count=3); der Rest behält die Basis-Bewaffnung. Die gesamte
+  Laufzeit-Logik (UI, Combat, group_models) arbeitet nur mit einfachen Gruppen.
+- Fehlt `group_loadouts`/ein Swap-Eintrag → Default-Bewaffnung bleibt.
+- Sub-Gruppen-IDs: `<gruppe>_<pick-shortnames>`; Anzeigename: `Ork Boy (Shoota)`.
+
+Einheiten ohne `model_groups` ignorieren `group_loadouts`; `weapon_loadout` (oben) bleibt
+der Mechanismus für homogene Einheiten mit Non-Default-Bewaffnung.
+
 ---
 
 ## 3. Loader-Ablauf (Ziel 5c)

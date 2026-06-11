@@ -13,7 +13,7 @@ from collections.abc import Callable
 
 import streamlit as st
 
-from gameMechanic.game_state import units_key_for, units_list_for
+from gameMechanic.game_state import PHASES, units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 from gameObjects.weapon import WeaponProfile
@@ -236,6 +236,8 @@ def render_player_column(
     active_content: Callable[[str, str, Unit, dict, dict], None],
     inactive_content: Callable[[str, str, Unit, dict], None] | None = None,
     no_target_caption: str = "—",
+    inactive_override: Callable[[], None] | None = None,
+    show_wound_buttons: bool = True,
 ) -> None:
     """Render one player column (active or inactive).
 
@@ -248,6 +250,12 @@ def render_player_column(
 
     no_target_caption — shown to the inactive player when the active player has a
     unit selected but no target from this faction is designated.
+
+    inactive_override — replaces the whole inactive branch when set (used by the
+    model-group flow to render the group attack assignment panel).
+
+    show_wound_buttons — set False in phases where targets take no damage
+    (e.g. charge declaration) to hide the manual wound adjustment buttons.
     """
     is_active = faction == state["active"]
     indicator = "▶" if is_active else "◀"
@@ -266,6 +274,9 @@ def render_player_column(
         else:
             st.caption("← Select a unit from your army list.")
 
+    elif inactive_override is not None:
+        inactive_override()
+
     else:
         targets: list[tuple[str, str]] = st.session_state.selected_targets
         matching = [t for t in targets if t[0] == faction]
@@ -279,8 +290,9 @@ def render_player_column(
                     st.markdown(badges, unsafe_allow_html=True)
                 if inactive_content is not None:
                     inactive_content(faction, uid, unit, unit_state)
-                st.divider()
-                wound_adjustment_buttons(faction, uid, unit)
+                if show_wound_buttons:
+                    st.divider()
+                    wound_adjustment_buttons(faction, uid, unit)
         elif st.session_state.get("selected_unit"):
             st.caption(no_target_caption)
         else:
@@ -302,6 +314,17 @@ def _empty_attack_declaration() -> dict:  # type: ignore[type-arg]
         "in_melee": False,
         "entries": [],
     }
+
+
+def _next_declaration_seq() -> int:
+    """Monotonic counter namespacing per-resolution widget keys.
+
+    Without it, res_/rp_ keys from an earlier resolution of the same unit and
+    target survive in session_state and the new tabs start as already applied.
+    """
+    seq = st.session_state.get("attack_decl_seq", 0) + 1
+    st.session_state.attack_decl_seq = seq
+    return seq
 
 
 def _parse_strength(raw: int | str, unit_strength: int) -> int:
@@ -521,27 +544,50 @@ _PIP_POSITIONS: dict[int, list[tuple[int, int]]] = {
 }
 
 
+# Shared column grid (D5): every dice row = badge column + die-sized slots.
+# The boundary gap (one die wide) appears in header AND dice row → labels stay
+# flush above the die of their value.
+_DIE_SLOT = 34  # svg 32px + 2px margin
+_FRAME_INSET = 5  # success-frame border+padding shifts dice right by this much
+_BUFF_COLOR_HEX = "#4a9a5a"  # Buff = grün (design_colors.md §0)
+_DEBUFF_COLOR_HEX = "#ef4444"
+
+
+def _boundary_gap_html(with_line: bool) -> str:
+    """One die-wide gap slot at the success boundary ('Luft' + separator line)."""
+    line = (
+        '<span style="display:inline-block;width:2px;height:34px;'
+        'background:#6b7280;border-radius:1px;"></span>'
+        if with_line
+        else ""
+    )
+    return (
+        f'<span style="display:inline-block;width:{_DIE_SLOT}px;text-align:center;'
+        f'vertical-align:middle;">{line}</span>'
+    )
+
+
 def threshold_header_html(threshold: int) -> str:
-    """Compact header row: 1  2  [3+]  4+  5+  6+ with active threshold boxed."""
+    """Header labels 1..6, die-sized and full brightness, aligned with dice_row_html."""
     color = _THRESHOLD_COLOR.get(min(6, threshold), "#f97316")
     parts = []
     for v in range(1, 7):
+        if 2 <= threshold <= 6 and v == threshold:
+            parts.append(_boundary_gap_html(with_line=False))
         label = f"{v}+"
-        if v < threshold:
+        if v == threshold:
             style = (
-                "width:34px;text-align:center;display:inline-block;" "font-size:10px;color:#4b5563;"
-            )
-        elif v == threshold:
-            style = (
-                f"width:34px;text-align:center;display:inline-block;font-size:10px;"
-                f"color:{color};border:1px solid {color};border-radius:3px;"
+                f"width:{_DIE_SLOT}px;text-align:center;display:inline-block;"
+                f"font-size:15px;font-weight:700;color:{color};"
+                f"border:1px solid {color};border-radius:3px;"
             )
         else:
             style = (
-                "width:34px;text-align:center;display:inline-block;" "font-size:10px;color:#6b7280;"
+                f"width:{_DIE_SLOT}px;text-align:center;display:inline-block;"
+                f"font-size:15px;font-weight:600;color:#e7e5e4;"
             )
         parts.append(f'<span style="{style}">{label}</span>')
-    return f'<div style="display:flex;margin:0 0 1px 0;">{"".join(parts)}</div>'
+    return f'<div style="display:flex;align-items:center;margin:0 0 1px 0;">{"".join(parts)}</div>'
 
 
 def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: int = 32) -> str:
@@ -569,10 +615,9 @@ def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: 
 def dice_row_html(threshold: int) -> str:
     """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame.
 
-    Visual separators:
-    - Dashed right-border on die:1 (always-miss divider) when threshold >= 2.
-    - Thin solid separator before the success frame when threshold > 2 (second miss boundary).
-    For threshold > 6 (impossible roll): 6 grey miss dice + red × marker.
+    D5: one die-wide boundary gap with a separator line sits between the last
+    miss die and the success frame — same gap as in threshold_header_html, so
+    the columns stay aligned. Threshold > 6 (impossible): 6 miss dice + red ×.
     """
     if threshold > 6:
         miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, 7))
@@ -583,44 +628,54 @@ def dice_row_html(threshold: int) -> str:
         return f'<div style="margin:4px 0;">{miss_dice}{impossible}</div>'
     frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
     success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
-    if threshold <= 1:
-        # All dice succeed — no miss dice, no separators
-        framed = (
-            f'<span style="border:2px solid {frame_color};border-radius:5px;'
-            f'padding:2px 3px;display:inline-block;vertical-align:middle;">'
-            f"{success_dice}</span>"
-        )
-        return f'<div style="margin:4px 0;">{framed}</div>'
-    # Die 1 always misses → dashed right-border marks permanent always-miss boundary
-    die1 = (
-        '<span style="display:inline-block;border-right:1px dashed #4b5563;'
-        'padding-right:2px;margin-right:2px;vertical-align:middle;">'
-        + dice_face_svg(1, miss=True)
-        + "</span>"
-    )
-    other_miss = "".join(dice_face_svg(v, miss=True) for v in range(2, threshold))
-    miss_section = die1 + other_miss
-    # Solid threshold line only when miss dice exist beyond die:1 (threshold > 2)
-    threshold_line = (
-        '<span style="display:inline-block;width:2px;height:34px;'
-        'background:#6b7280;vertical-align:middle;margin:0 2px;border-radius:1px;"></span>'
-        if threshold > 2 and success_dice
-        else ""
-    )
     framed = (
         f'<span style="border:2px solid {frame_color};border-radius:5px;'
-        f'padding:2px 3px;display:inline-block;vertical-align:middle;">'
+        f"padding:2px 3px;display:inline-block;vertical-align:middle;"
+        f'margin-left:-{_FRAME_INSET}px;">'
         f"{success_dice}</span>"
-        if success_dice
-        else ""
     )
-    return f'<div style="margin:4px 0;">{miss_section}{threshold_line}{framed}</div>'
+    if threshold <= 1:
+        # All dice succeed — no miss dice, no gap
+        return f'<div style="margin:4px 0;">{framed}</div>'
+    miss_section = "".join(dice_face_svg(v, miss=True) for v in range(1, threshold))
+    gap = _boundary_gap_html(with_line=True)
+    return f'<div style="margin:4px 0;">{miss_section}{gap}{framed}</div>'
+
+
+_BADGE_COL_W = 96  # left badge column (D5): AP-X, Heavy Cover, MWBD, Eff., …
+
+
+def _badge_chip(label: str, color: str) -> str:
+    return (
+        f'<span style="font-size:11px;color:{color};background:#111827;'
+        f"border:1px solid {color};border-radius:3px;padding:1px 5px;"
+        f'white-space:nowrap;">{label}</span>'
+    )
+
+
+def grid_row_html(label_html: str, content: str) -> str:
+    """One row of the D5 grid: fixed badge column on the left, content right.
+
+    Every row of a dice block (header+dice, modifier pairs, Eff., Inv.) goes
+    through this so the dice columns align vertically.
+    """
+    return (
+        f'<div style="display:flex;align-items:center;margin:2px 0;">'
+        f'<div style="width:{_BADGE_COL_W}px;flex-shrink:0;display:flex;'
+        f'align-items:center;font-size:12px;color:#9ca3af;">{label_html}</div>'
+        f'<div style="flex:1;">{content}</div></div>'
+    )
+
+
+def block_divider_html() -> str:
+    """Horizontal separator between HIT / WOUND / SAVE blocks (D5: 'Luft')."""
+    return '<hr style="border:none;border-top:1px solid #2e2618;margin:10px 0;">'
 
 
 def modifier_die_pair_html(
     from_thresh: int, to_thresh: int, label: str, value: int, color: str
 ) -> str:
-    """Modifier pair: label badge + from-die (neutral) + arrow + to-die (colored).
+    """Modifier row: badge column + from-die (neutral) + arrow + to-die (colored).
 
     Convention: lower die value always on left, higher on right (aligns with dice row).
     Arrow: → for improvements (value > 0), ← for penalties (value < 0).
@@ -640,25 +695,25 @@ def modifier_die_pair_html(
     else:
         left_die = dice_face_svg(boundary, color="#6b7280")
         right_die = dice_face_svg(from_clamped, color=color)
-    return (
-        f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
-        f'<span style="font-size:11px;color:{color};background:#111827;'
-        f'border:1px solid {color};border-radius:3px;padding:1px 5px;white-space:nowrap;">'
-        f"{label}</span>"
+    pair = (
+        f'<div style="display:flex;align-items:center;gap:4px;">'
         f"{left_die}"
         f'<span style="color:{color};font-size:12px;font-weight:bold;">'
         f"{arrow}{sign}{abs(value)}{arrow}</span>"
         f"{right_die}</div>"
     )
+    return grid_row_html(_badge_chip(label, color), pair)
 
 
 def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str) -> str:
     """SAVE modifier pair always anchored to the base armour value (never cumulative).
 
-    Buff  (value > 0, e.g. Cover+1, armour=3): blue(armour-value) → grey(armour)
+    Buff  (value > 0, e.g. Cover+1, armour=3): grün(armour-value) → grau(armour)
       "A 2 that used to fail at 3+ now passes."
-    Debuff (value < 0, e.g. AP-2,   armour=3): grey(armour-1) → red(armour+|value|-1)
+    Debuff (value < 0, e.g. AP-2,   armour=3): grau(armour-1) → rot(armour+|value|-1)
       "A 4 that used to pass at 3+ now fails (4-2=2 < 3)."
+    P16 edge: if the newly-failing value exceeds 6 (e.g. Sv 6+ with AP-4), no die
+    can show it — a red × marks the impossible range instead of a clamped die.
     """
     sign = "+" if value > 0 else ("-" if value < 0 else "")
     n = abs(value)
@@ -670,20 +725,25 @@ def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str)
         right_die = dice_face_svg(right_val, color="#6b7280")
     else:
         left_val = max(1, min(6, armour - 1))
-        right_val = max(1, min(6, armour + n - 1))
+        right_raw = armour + n - 1
+        right_val = max(1, min(6, right_raw))
         arrow = "←"
         left_die = dice_face_svg(left_val, color="#6b7280")
-        right_die = dice_face_svg(right_val, color=color)
-    return (
-        f'<div style="display:flex;align-items:center;gap:4px;margin:2px 0;">'
-        f'<span style="font-size:11px;color:{color};background:#111827;'
-        f'border:1px solid {color};border-radius:3px;padding:1px 5px;white-space:nowrap;">'
-        f"{label}</span>"
+        if right_raw > 6:
+            right_die = (
+                f'<span style="font-size:16px;color:{color};vertical-align:middle;'
+                f'font-weight:bold;" title="exceeds 6 — save impossible">×</span>'
+            )
+        else:
+            right_die = dice_face_svg(right_val, color=color)
+    pair = (
+        f'<div style="display:flex;align-items:center;gap:4px;">'
         f"{left_die}"
         f'<span style="color:{color};font-size:12px;font-weight:bold;">'
         f"{arrow}{sign}{n}{arrow}</span>"
         f"{right_die}</div>"
     )
+    return grid_row_html(_badge_chip(label, color), pair)
 
 
 def special_die_html(label: str, content: str = "") -> str:
@@ -708,7 +768,7 @@ def _render_dice_roll_block(
     modified = block.get("modified", base)
     st.markdown(f"**{title}** &nbsp; {skill_label} {base}+", unsafe_allow_html=True)
     st.markdown(
-        threshold_header_html(base) + dice_row_html(base),
+        grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
     if stack:
@@ -716,15 +776,16 @@ def _render_dice_roll_block(
         parts = []
         for entry in stack:
             next_thresh = max(2, current - entry["value"])
-            color = "#3b82f6" if entry["value"] > 0 else "#ef4444"
+            color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
             parts.append(
                 modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
             )
             current = next_thresh
         parts.append(
-            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
-            f'<div style="font-size:12px;color:#9ca3af;">Effective {skill_label}: '
-            f'<b style="color:#f8fafc;">{modified}+</b> (max ±1 cap)</div>'
+            grid_row_html(
+                f'<span style="color:#f8fafc;font-weight:600;">Eff. {modified}+</span>',
+                threshold_header_html(min(modified, 7)) + dice_row_html(min(modified, 7)),
+            )
         )
         st.markdown("".join(parts), unsafe_allow_html=True)
     if weapon_special:
@@ -754,12 +815,18 @@ def _render_dice_wound_block(
     net = min(1, max(-1, sum(e["value"] for e in wound_stack)))
     modified = max(2, base - net)
     rel = ">" if strength > toughness else ("=" if strength == toughness else "<")
+    # D5: S/T comparison clearly highlighted; NO "→ N+" — the result is the
+    # boxed threshold in the header row below.
+    hl = 'style="font-size:1.05rem;font-weight:700;color:#fbbf24;"'
+    st.markdown(block_divider_html(), unsafe_allow_html=True)
     st.markdown(
-        f"**WOUND** &nbsp; S {strength} {rel} T {toughness} &nbsp;→&nbsp; {base}+",
+        f"**WOUND** &nbsp; <span {hl}>S {strength}</span> "
+        f'<span style="font-size:1.05rem;font-weight:700;color:#e7e5e4;">{rel}</span> '
+        f"<span {hl}>T {toughness}</span>",
         unsafe_allow_html=True,
     )
     st.markdown(
-        threshold_header_html(base) + dice_row_html(base),
+        grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
     if wound_stack:
@@ -767,25 +834,18 @@ def _render_dice_wound_block(
         parts = []
         for entry in wound_stack:
             next_thresh = max(2, current - entry["value"])
+            color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
             parts.append(
-                modifier_die_pair_html(
-                    current, next_thresh, entry["label"], entry["value"], "#3b82f6"
-                )
+                modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
             )
             current = next_thresh
         parts.append(
-            '<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">'
-            f'<div style="font-size:12px;color:#9ca3af;">Effective: '
-            f'<b style="color:#f8fafc;">{modified}+</b></div>'
+            grid_row_html(
+                f'<span style="color:#f8fafc;font-weight:600;">Eff. {modified}+</span>',
+                threshold_header_html(min(modified, 7)) + dice_row_html(min(modified, 7)),
+            )
         )
         st.markdown("".join(parts), unsafe_allow_html=True)
-
-
-_LABEL_COL = (
-    'style="min-width:68px;flex-shrink:0;font-size:12px;color:#9ca3af;'
-    'padding-right:6px;display:flex;align-items:center;"'
-)
-_ROW_WRAP = 'style="display:flex;align-items:flex-start;margin:2px 0;"'
 
 
 def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
@@ -797,41 +857,34 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
     using_invuln = save["using_invuln"]
     stack = save.get("stack", [])
 
-    st.markdown("**SAVE**")
+    # D5: Sv value next to the SAVE title — consistent with WS/BS in the HIT title
+    sv_text = f"Sv {armour}+" if armour <= 6 else "Sv —"
+    st.markdown(block_divider_html(), unsafe_allow_html=True)
+    st.markdown(f"**SAVE** &nbsp; {sv_text}", unsafe_allow_html=True)
 
     rows: list[str] = []
 
-    def _row(label: str, content: str) -> str:
-        return (
-            f"<div {_ROW_WRAP}>"
-            f"<div {_LABEL_COL}>{label}</div>"
-            f'<div style="flex:1;">{content}</div>'
-            f"</div>"
-        )
-
     # Armour base row
-    sv_label = f"Sv {armour}+" if armour <= 6 else "Sv —"
     rows.append(
-        _row(sv_label, threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)))
+        grid_row_html("", threshold_header_html(min(armour, 7)) + dice_row_html(min(armour, 7)))
     )
 
     # Modifier rows (AP + cover stack) — each anchored to base armour, never cumulative
     has_modifiers = ap != 0 or bool(stack)
     if ap != 0:
-        rows.append(_row("", save_modifier_die_pair_html(armour, ap, f"AP{ap}", "#ef4444")))
+        rows.append(save_modifier_die_pair_html(armour, ap, f"AP{ap}", _DEBUFF_COLOR_HEX))
     for m in stack:
-        color = "#3b82f6" if m["value"] > 0 else "#ef4444"
-        rows.append(_row("", save_modifier_die_pair_html(armour, m["value"], m["label"], color)))
+        color = _BUFF_COLOR_HEX if m["value"] > 0 else _DEBUFF_COLOR_HEX
+        rows.append(save_modifier_die_pair_html(armour, m["value"], m["label"], color))
 
     # Effective save row: always shows the armour-path result (after AP + cover).
     # Invuln is shown separately below with its own row — not mixed into this value.
     if has_modifiers:
         armour_modified = armour_eff - sum(m["value"] for m in stack)
         eff_clamped = min(armour_modified, 7)
-        eff_label_text = f"{armour_modified}+" if armour_modified <= 6 else "impossible"
-        rows.append('<hr style="border:none;border-top:1px dashed #374151;margin:4px 0;">')
+        eff_label_text = f"{armour_modified}+" if armour_modified <= 6 else "—"
         rows.append(
-            _row(
+            grid_row_html(
                 f'<span style="color:#f8fafc;font-weight:600;">Eff. {eff_label_text}</span>',
                 threshold_header_html(eff_clamped) + dice_row_html(eff_clamped),
             )
@@ -850,7 +903,7 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
         )
         note = '<span style="font-size:10px;color:#4b5563;margin-left:4px;">AP/Cover N/A</span>'
         inv_label = f"Inv {invuln}+{active_badge}{note}"
-        inv_row = _row(
+        inv_row = grid_row_html(
             inv_label,
             threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),
         )
@@ -895,24 +948,24 @@ def _render_rp_block(
         f"**REANIMATION PROTOCOLS** &nbsp; "
         f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel** · Erfolg: 5+"
     )
-    models_back = st.number_input(
+    # Half-width block — keep the RP entry compact
+    rp_col, _ = st.columns(2)
+    models_back = rp_col.number_input(
         "Modelle zurück",
         min_value=0,
         max_value=models_lost,
         step=1,
         key=f"rp_mb_{tab_key}",
     )
-    c1, c2 = st.columns(2)
-    with c1:
-        if c1.button("RP anwenden", key=f"rp_apply_{tab_key}", type="primary"):
-            if int(models_back) > 0:
-                heal_unit(def_uid, def_faction, int(models_back) * def_unit.wounds, def_unit)
-            st.session_state[rp_key] = {"applied": True, "models_back": int(models_back)}
-            st.rerun()
-    with c2:
-        if c2.button("Überspringen", key=f"rp_skip_{tab_key}"):
-            st.session_state[rp_key] = {"applied": True, "models_back": 0}
-            st.rerun()
+    c1, c2 = rp_col.columns(2)
+    if c1.button("RP anwenden", key=f"rp_apply_{tab_key}", type="primary"):
+        if int(models_back) > 0:
+            heal_unit(def_uid, def_faction, int(models_back) * def_unit.wounds, def_unit)
+        st.session_state[rp_key] = {"applied": True, "models_back": int(models_back)}
+        st.rerun()
+    if c2.button("Überspringen", key=f"rp_skip_{tab_key}"):
+        st.session_state[rp_key] = {"applied": True, "models_back": 0}
+        st.rerun()
 
 
 def _render_damage_block(
@@ -950,11 +1003,20 @@ def _render_damage_block(
     is_single_model = def_unit.models_max <= 1
     dmg_str = str(profile.damage)
     dmg_label = f"D{dmg_str}" if not dmg_str.lstrip("+-").isdigit() else f"{dmg_str} fixed"
-    st.caption(f"Damage: {dmg_label} per failed save · Target: {def_unit.wounds} HP/model")
+    st.markdown(
+        f'<span style="font-size:1.05rem;font-weight:700;color:#fbbf24;">{dmg_label}</span> '
+        f"per failed save · Target: "
+        f'<span style="font-size:1.05rem;font-weight:700;color:#fbbf24;">'
+        f"{def_unit.wounds} HP/model</span>",
+        unsafe_allow_html=True,
+    )
+
+    # Half-width block — the damage entry does not need the whole displayArea
+    dmg_col, _ = st.columns(2)
 
     models_lost = 0
     if not is_single_model:
-        models_lost = st.number_input(
+        models_lost = dmg_col.number_input(
             "Models lost",
             min_value=0,
             step=1,
@@ -968,7 +1030,7 @@ def _render_damage_block(
             if is_single_model
             else f"Wounds on front model (0–{def_unit.wounds - 1})"
         )
-        wounds_on_front = st.number_input(
+        wounds_on_front = dmg_col.number_input(
             wf_label,
             min_value=0,
             max_value=def_unit.wounds - 1,
@@ -979,7 +1041,7 @@ def _render_damage_block(
     weapon_special = _detect_weapon_special(profile)
     mortal_wounds = 0
     if weapon_special.get("has_mortal_wounds"):
-        mortal_wounds = st.number_input(
+        mortal_wounds = dmg_col.number_input(
             "Mortal Wounds",
             min_value=0,
             step=1,
@@ -990,7 +1052,7 @@ def _render_damage_block(
         int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
     )
     btn_label = f"⚔ Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
-    if st.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
+    if dmg_col.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
         if total > 0:
             apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
         decl = st.session_state.get("attack_declaration", {})
@@ -1046,6 +1108,7 @@ def _render_resolution_tab(
     use_melee: bool,
     phase_key: str,
     tab_key: str,
+    show_cover_controls: bool = True,
 ) -> None:
     """Render one resolution tab: Hit + Wound table + Save + Cover + Damage."""
     from gameMechanic.combat import (  # noqa: PLC0415
@@ -1099,12 +1162,17 @@ def _render_resolution_tab(
     is_shooting = phase_key == "shooting"
     is_fight = phase_key == "fight"
 
+    # Cover is a property of the TARGET, not of the weapon: key per target
+    # (tab_key minus the trailing weapon index) so every weapon tab against the
+    # same unit shares the cover state (P19).
+    cover_key = tab_key.rsplit("_", 1)[0]
+
     # Read cover checkbox states (checkboxes are rendered later, state read now)
-    dense_cover = is_shooting and st.session_state.get(f"dense_cover_{tab_key}", False)
-    light_cover = is_shooting and st.session_state.get(f"light_cover_{tab_key}", False)
+    dense_cover = is_shooting and st.session_state.get(f"dense_cover_{cover_key}", False)
+    light_cover = is_shooting and st.session_state.get(f"light_cover_{cover_key}", False)
     heavy_cover = (
         is_fight
-        and st.session_state.get(f"heavy_cover_{tab_key}", False)
+        and st.session_state.get(f"heavy_cover_{cover_key}", False)
         and not def_state.get("turn_flags", {}).get("charged")
     )
 
@@ -1155,10 +1223,14 @@ def _render_resolution_tab(
             profile.attacks, models_count, atk_unit.attacks, profile.effect, profile.max_attacks
         )
     )
-    ap_str = f"AP{ap}" if ap != 0 else "AP0"
+    # D5: no redundant weapon profile line — S/T, AP, Sv and damage all appear
+    # in their blocks below. Only the attack count is needed up front.
     st.markdown(
         f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
-        f"_{weapon.name_en}_ — {atk_count} att · S{strength} · {ap_str} · D{profile.damage}"
+        f"_{weapon.name_en}_ — "
+        f'<span style="font-size:1.05rem;font-weight:700;color:#fbbf24;">{atk_count}</span>'
+        " Attacks",
+        unsafe_allow_html=True,
     )
     waaagh_atk = st.session_state.get("waaagh_state", {}).get(atk_faction)
     if waaagh_atk and use_melee:
@@ -1173,8 +1245,8 @@ def _render_resolution_tab(
         _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
 
     # Dense Cover checkbox: Shooting phase only, affects hit roll → placed near HIT block
-    if is_shooting:
-        st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{tab_key}")
+    if is_shooting and show_cover_controls:
+        st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
 
     st.markdown("")
 
@@ -1187,12 +1259,12 @@ def _render_resolution_tab(
     _render_dice_save_block(save_result, ap)
 
     # Cover checkboxes for save modifiers (phase-bound)
-    if is_shooting:
-        st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{tab_key}")
-    if is_fight:
+    if is_shooting and show_cover_controls:
+        st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{cover_key}")
+    if is_fight and show_cover_controls:
         def_charged = def_state.get("turn_flags", {}).get("charged", False)
         if not def_charged:
-            st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{tab_key}")
+            st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{cover_key}")
 
     if def_unit.fnp is not None:
         st.markdown("")
@@ -1220,224 +1292,222 @@ def _render_resolution_tab(
 # ---------------------------------------------------------------------------
 
 
-def _render_group_declaration(
+def reset_group_declaration_state() -> None:
+    """Clear group-by-group declaration state (on unit switch, phase change, resolution)."""
+    st.session_state.selected_model_group = None
+    st.session_state.group_targets = {}
+    st.session_state.group_decl = {}
+
+
+def group_flow_attacker() -> tuple[str, str, Unit, dict] | None:  # type: ignore[type-arg]
+    """Return (faction, uid, unit, state) when the selected unit declares via model groups."""
+    sel = st.session_state.get("selected_unit")
+    if not sel:
+        return None
+    faction, uid = sel
+    unit, unit_state = lookup(faction, uid)
+    if not unit.model_groups:
+        return None
+    return faction, uid, unit, unit_state
+
+
+def is_group_target(def_faction: str, def_uid: str) -> bool:
+    """True if the target is assigned to the currently selected model group."""
+    gid = st.session_state.get("selected_model_group")
+    if not gid:
+        return False
+    targets: dict = st.session_state.get("group_targets", {})  # type: ignore[type-arg]
+    return (def_faction, def_uid) in targets.get(gid, [])
+
+
+def _is_engaged_with(atk_state: dict, def_faction: str, def_uid: str) -> bool:  # type: ignore[type-arg]
+    """True if the defender is in the attacker's melee_with list."""
+    melee_with = atk_state.get("melee_with", [])
+    return [def_faction, def_uid] in melee_with or (def_faction, def_uid) in melee_with
+
+
+def _in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -> bool:
+    """True if the target is locked in melee with a unit friendly to the attacker.
+
+    9E: a unit may not shoot into a combat involving friendly units.
+    """
+    def_state = st.session_state.get(units_key_for(def_faction), {}).get(def_uid, {})
+    return any(fac == atk_faction for fac, _ in def_state.get("melee_with", []))
+
+
+def group_target_selectable(def_faction: str, def_uid: str) -> bool:
+    """Whether ▷ may select this enemy as a target right now.
+
+    Shooting: targets in melee with the attacker's friends are blocked (9E).
+    Group flow: a group must be selected first; in the fight phase only
+    engaged enemies are legal targets (Engagement Range, core rules).
+    """
+    phase_key = PHASES[st.session_state.phase_idx][1]
+    if phase_key not in ("shooting", "fight"):
+        return True
+    sel = st.session_state.get("selected_unit")
+    if phase_key == "shooting" and sel and _in_friendly_melee(sel[0], def_faction, def_uid):
+        return False
+    info = group_flow_attacker()
+    if info is None:
+        return True
+    if not st.session_state.get("selected_model_group"):
+        return False
+    if phase_key != "fight":
+        return True
+    _, _, _, atk_state = info
+    return _is_engaged_with(atk_state, def_faction, def_uid)
+
+
+def toggle_group_target(def_faction: str, def_uid: str) -> bool:
+    """Assign/unassign a target to the selected model group. Returns True if handled."""
+    gid = st.session_state.get("selected_model_group")
+    info = group_flow_attacker()
+    if not gid or info is None:
+        return False
+    if not group_target_selectable(def_faction, def_uid):
+        return True  # consume the click — never fall back to selected_targets
+    _, _, unit, unit_state = info
+    group = next((g for g in unit.model_groups if g.id == gid), None)
+    if group is None:
+        return False
+
+    targets: dict = dict(st.session_state.get("group_targets", {}))  # type: ignore[type-arg]
+    current: list = list(targets.get(gid, []))  # type: ignore[type-arg]
+    key = (def_faction, def_uid)
+    if key in current:
+        current.remove(key)
+    else:
+        alive = unit_state.get("group_models", {}).get(gid, group.count)
+        # A single-model group attacks a single target
+        current = [key] if alive == 1 else current + [key]
+    targets[gid] = current
+    st.session_state.group_targets = targets
+    return True
+
+
+def _group_phase_weapons(group, use_melee: bool, in_melee: bool) -> list:  # type: ignore[no-untyped-def, type-arg]
+    """Weapons of a group usable in the current phase (Pistols only while engaged)."""
+    if in_melee and not use_melee:
+        return [
+            w
+            for w in group.weapons
+            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
+        ]
+    return [w for w in group.weapons if any(p.is_melee == use_melee for p in w.profiles)]
+
+
+def _target_display_name(def_faction: str, def_uid: str) -> str:
+    tgt_unit, _ = lookup(def_faction, def_uid)
+    return tgt_unit.name_en
+
+
+def _group_melee_budget(grp_weapons: list, alive: int, eff_attacks: int) -> int:  # type: ignore[type-arg]
+    """Total melee attacks of a group: base attacks + extra-attack weapon bonuses.
+
+    Base = models × attacks (incl. WAAAGH bonus, passed by the caller).
+    Each carried weapon with an extra_attacks effect adds its bonus on top
+    (e.g. Choppa: "1 additional attack with this weapon"); capped weapons
+    (max_attacks, e.g. attack squig) add exactly their cap.
+    """
+    budget = alive * eff_attacks
+    for w in grp_weapons:
+        p = next((p for p in w.profiles if p.is_melee), None)
+        if p is None or not isinstance(p.effect, dict):
+            continue
+        if p.effect.get("type") != "extra_attacks":
+            continue
+        if p.max_attacks:
+            budget += alive * int(p.max_attacks)
+        else:
+            budget += alive * int(p.effect.get("amount", 0))
+    return budget
+
+
+def render_group_cards(
     atk_faction: str,
     atk_uid: str,
     atk_unit: Unit,
     atk_state: dict,  # type: ignore[type-arg]
-    tgts: list,  # type: ignore[type-arg]
     use_melee: bool,
     phase_key: str,
-    in_melee: bool,
+    in_melee: bool = False,
 ) -> None:
-    """Attack declaration for units with model_groups — shows per-group weapons and budgets."""
+    """Owner-side subUnitCards: select a group, review declared groups, start resolution.
+
+    Rendered in the player area of the unit's owner. Declared groups collapse to a
+    summary with an Edit button; the resolution starts once at least one group has
+    declared attacks.
+    """
     waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
     waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
-
     group_models: dict[str, int] = atk_state.get("group_models", {})
-    entries: list[dict] = []  # type: ignore[type-arg]
-    models_assigned = 0
-    attacks_assigned = 0
+    group_decl: dict = st.session_state.get("group_decl", {})  # type: ignore[type-arg]
+    group_targets: dict = st.session_state.get("group_targets", {})  # type: ignore[type-arg]
+    sel_gid = st.session_state.get("selected_model_group")
 
     for group in atk_unit.model_groups:
-        group_count = group_models.get(group.id, group.count)
-        if group_count == 0:
+        alive = group_models.get(group.id, group.count)
+        if alive == 0:
             continue
-
-        if in_melee and not use_melee:
-            grp_weapons = [
-                w
-                for w in group.weapons
-                if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
-            ]
-        else:
-            grp_weapons = [
-                w for w in group.weapons if any(p.is_melee == use_melee for p in w.profiles)
-            ]
+        grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
         if not grp_weapons:
             continue
 
-        if use_melee:
-            first_p = next((p for w in grp_weapons for p in w.profiles if p.is_melee), None)
-            group_budget = (
-                _total_attacks_int(
-                    first_p.attacks,
-                    group_count,
-                    atk_unit.attacks + waaagh_bonus,
-                    first_p.effect,
-                    first_p.max_attacks,
+        with st.container(border=True):
+            entries = group_decl.get(group.id)
+            if entries is not None and sel_gid != group.id:
+                st.markdown(f"**✓ {group.name_en}** ({alive})")
+                for e in entries:
+                    count = e.get("atk_override", e["models_count"])
+                    if count > 0:
+                        st.caption(
+                            f"{e['weapon_name']} → {count} @ "
+                            f"{_target_display_name(e['def_faction'], e['def_uid'])}"
+                        )
+                if st.button(
+                    "✎ Edit",
+                    key=f"editgrp_{atk_uid}_{group.id}",
+                    use_container_width=True,
+                ):
+                    st.session_state.selected_model_group = group.id
+                    st.rerun()
+                continue
+
+            is_sel = sel_gid == group.id
+            label = f"◀ {group.name_en} ({alive})" if is_sel else f"▶ {group.name_en} ({alive})"
+            if st.button(
+                label,
+                key=f"selgrp_{atk_uid}_{group.id}",
+                type="primary" if is_sel else "secondary",
+                use_container_width=True,
+            ):
+                st.session_state.selected_model_group = None if is_sel else group.id
+                st.rerun()
+            if use_melee:
+                budget = _group_melee_budget(
+                    grp_weapons, alive, (atk_unit.attacks or 0) + waaagh_bonus
                 )
-                if first_p
-                else 0
-            ) or 0
-            st.markdown(f"**{group.name_en}** — {group_count} model(s) · {group_budget} attacks")
-        else:
-            group_budget = 0
-            st.markdown(f"**{group.name_en}** — {group_count} model(s)")
-
-        for i, (def_faction, def_uid) in enumerate(tgts):
-            def_unit, _ = lookup(def_faction, def_uid)
-            with st.container(border=True):
-                st.markdown(f"**→ {def_unit.name_en}**")
-                c_t, c_sv, c_inv = st.columns(3)
-                c_t.metric("T", def_unit.toughness)
-                c_sv.metric("Sv", f"{def_unit.save}+")
-                c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
-
-                if use_melee:
-                    for weapon in grp_weapons:
-                        profiles = [p for p in weapon.profiles if p.is_melee]
-                        if not profiles:
-                            profiles = weapon.profiles
-                        if len(profiles) > 1:
-                            p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
-                            p_key = f"decl_p_{group.id}_{atk_uid}_{def_uid}_{weapon.name_en}"
-                            sel_p = st.radio(
-                                f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
-                            )
-                            profile_idx = p_names.index(sel_p)
-                        else:
-                            profile_idx = 0
-                        profile = profiles[profile_idx]
-                        weapon_max = (
-                            _total_attacks_int(
-                                profile.attacks,
-                                group_count,
-                                atk_unit.attacks + waaagh_bonus,
-                                profile.effect,
-                                profile.max_attacks,
-                            )
-                            or group_budget
-                        )
-                        atk_key = f"decl_a_{group.id}_{atk_uid}_{def_uid}_{weapon.name_en}"
-                        if atk_key not in st.session_state:
-                            is_first = i == 0 and weapon is grp_weapons[0]
-                            st.session_state[atk_key] = weapon_max if is_first else 0
-                        atk_count = st.number_input(
-                            f"{weapon.name_en} — Attacks",
-                            min_value=0,
-                            max_value=weapon_max,
-                            step=1,
-                            key=atk_key,
-                        )
-                        st.markdown(
-                            f"**{weapon.name_en}** → "
-                            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                            f"{int(atk_count)}</span> Attacks",
-                            unsafe_allow_html=True,
-                        )
-                        entries.append(
-                            {
-                                "def_faction": def_faction,
-                                "def_uid": def_uid,
-                                "weapon_name": weapon.name_en,
-                                "profile_idx": profile_idx,
-                                "models_count": group_count,
-                                "atk_override": int(atk_count),
-                            }
-                        )
-                        attacks_assigned += int(atk_count)
+                st.caption(f"{budget} attacks")
+            st.caption(", ".join(w.name_en for w in grp_weapons))
+            if is_sel:
+                assigned = group_targets.get(group.id, [])
+                if assigned:
+                    for tgt_faction, tgt_uid in assigned:
+                        st.caption(f"→ {_target_display_name(tgt_faction, tgt_uid)}")
                 else:
-                    sel_weapons = []
-                    if len(grp_weapons) > 1:
-                        sel_w_names: list[str] = st.multiselect(
-                            "Weapons",
-                            [w.name_en for w in grp_weapons],
-                            default=[grp_weapons[0].name_en],
-                            key=f"decl_ws_{group.id}_{atk_uid}_{def_uid}",
-                        )
-                        sel_weapons = [w for w in grp_weapons if w.name_en in sel_w_names]
-                    else:
-                        sel_weapons = [grp_weapons[0]]
-                        st.caption(f"Weapon: **{grp_weapons[0].name_en}**")
+                    st.caption("Designate a target (▷) from the enemy army list.")
 
-                    models_key = f"decl_m_{group.id}_{atk_uid}_{def_uid}"
-                    if models_key not in st.session_state:
-                        st.session_state[models_key] = group_count if i == 0 else 0
-                    models_val = st.number_input(
-                        "Models shooting",
-                        min_value=0,
-                        max_value=group_count,
-                        step=1,
-                        key=models_key,
-                    )
-
-                    if not sel_weapons:
-                        st.warning("Select at least one weapon.")
-                    else:
-                        for weapon in sel_weapons:
-                            profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
-                            if not profiles:
-                                profiles = weapon.profiles
-                            if len(profiles) > 1:
-                                p_names = [
-                                    p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)
-                                ]
-                                p_key = f"decl_p_{group.id}_{atk_uid}_{def_uid}_{weapon.name_en}"
-                                sel_p = st.radio(
-                                    f"Profile — {weapon.name_en}",
-                                    p_names,
-                                    key=p_key,
-                                    horizontal=True,
-                                )
-                                profile_idx = p_names.index(sel_p)
-                            else:
-                                profile_idx = 0
-                            profile = profiles[profile_idx]
-                            eff_models = int(models_val)
-                            displayed_count = _compute_attacks(
-                                profile.attacks,
-                                eff_models,
-                                atk_unit.attacks,
-                                profile.effect,
-                                profile.max_attacks,
-                            )
-                            if (
-                                profile.weapon_type.startswith("Rapid Fire")
-                                and profile.range_inches > 0
-                            ):
-                                half = profile.range_inches // 2
-                                st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
-                            st.markdown(
-                                f"**{weapon.name_en}** → "
-                                f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                                f"{displayed_count}</span> Attacks",
-                                unsafe_allow_html=True,
-                            )
-                            entries.append(
-                                {
-                                    "def_faction": def_faction,
-                                    "def_uid": def_uid,
-                                    "weapon_name": weapon.name_en,
-                                    "profile_idx": profile_idx,
-                                    "models_count": eff_models,
-                                }
-                            )
-                        models_assigned += int(models_val)
-
-    if use_melee:
-        if attacks_assigned > 0:
-            st.caption(f"✓ {attacks_assigned} attacks declared")
-        can_start = attacks_assigned > 0
-    else:
-        total_group_models = sum(
-            group_models.get(g.id, g.count)
-            for g in atk_unit.model_groups
-            if group_models.get(g.id, g.count) > 0
-        )
-        remaining = total_group_models - models_assigned
-        if remaining < 0:
-            st.error(f"Too many models assigned ({models_assigned}/{total_group_models})")
-        elif remaining > 0:
-            st.caption(f"Remaining: {remaining} / {total_group_models} unassigned")
-        else:
-            st.caption(f"✓ {models_assigned} / {total_group_models} assigned")
-        can_start = 0 < models_assigned <= total_group_models
-
+    all_entries = [
+        e
+        for grp_entries in group_decl.values()
+        for e in grp_entries
+        if e.get("atk_override", e["models_count"]) > 0
+    ]
     if st.button(
         "Start Resolution →",
         type="primary",
-        disabled=not can_start,
+        disabled=not all_entries,
         key=f"start_res_{atk_uid}",
     ):
         st.session_state.attack_declaration = {
@@ -1447,8 +1517,225 @@ def _render_group_declaration(
             "phase_key": phase_key,
             "use_melee": use_melee,
             "in_melee": in_melee,
-            "entries": [e for e in entries if e.get("atk_override", e["models_count"]) > 0],
+            "entries": all_entries,
+            "seq": _next_declaration_seq(),
         }
+        reset_group_declaration_state()
+        st.rerun()
+
+
+def render_group_assignment(
+    atk_faction: str,
+    atk_uid: str,
+    atk_unit: Unit,
+    atk_state: dict,  # type: ignore[type-arg]
+    use_melee: bool,
+    in_melee: bool = False,
+) -> None:
+    """Defender-side panel: assign attacks/models of the selected group to its targets.
+
+    Rendered in the opposite player area. Writes the group's entries to
+    st.session_state.group_decl when the player confirms the group.
+    """
+    gid = st.session_state.get("selected_model_group")
+    if not gid:
+        st.caption("Waiting — opponent selects a model group.")
+        return
+    group = next((g for g in atk_unit.model_groups if g.id == gid), None)
+    if group is None:
+        return
+    alive = atk_state.get("group_models", {}).get(gid, group.count)
+    tgts: list[tuple[str, str]] = st.session_state.get("group_targets", {}).get(gid, [])
+    if not tgts:
+        st.caption("← Designate a target (▷) from your army list.")
+        return
+
+    waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
+    waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
+    grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
+
+    def _val(key: str) -> int:
+        try:
+            return int(st.session_state.get(key, 0) or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    def _ranged_profile(weapon) -> WeaponProfile:  # type: ignore[no-untyped-def]
+        return next((p for p in weapon.profiles if not p.is_melee), weapon.profiles[0])
+
+    # Budget overview on top; counters below are capped so overbooking is impossible.
+    group_budget = 0
+    weapon_caps: dict[str, int] = {}
+    if use_melee:
+        group_budget = _group_melee_budget(
+            grp_weapons, alive, (atk_unit.attacks or 0) + waaagh_bonus
+        )
+        total_assigned = sum(
+            _val(f"decl_a_{gid}_{atk_uid}_{d_uid}_{w.name_en}")
+            for _, d_uid in tgts
+            for w in grp_weapons
+        )
+        st.markdown(
+            f"**{group.name_en}** — {alive} model(s) · "
+            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
+            f"{total_assigned} / {group_budget}</span> attacks assigned",
+            unsafe_allow_html=True,
+        )
+    else:
+        # One model per unit may throw a grenade per phase (core rules: Grenade)
+        for w in grp_weapons:
+            grenade = _ranged_profile(w).weapon_type.startswith("Grenade")
+            weapon_caps[w.name_en] = 1 if grenade else alive
+        weapon_assigned = {
+            w.name_en: sum(_val(f"decl_m_{gid}_{atk_uid}_{d_uid}_{w.name_en}") for _, d_uid in tgts)
+            for w in grp_weapons
+        }
+        summary = " · ".join(
+            f"{name}: {weapon_assigned[name]}/{cap}" for name, cap in weapon_caps.items()
+        )
+        st.markdown(f"**{group.name_en}** — {alive} model(s)")
+        st.caption(summary)
+
+    entries: list[dict] = []  # type: ignore[type-arg]
+    models_assigned = 0
+    attacks_assigned = 0
+
+    for i, (def_faction, def_uid) in enumerate(tgts):
+        def_unit, _ = lookup(def_faction, def_uid)
+        with st.container(border=True):
+            st.markdown(f"**→ {def_unit.name_en}**")
+            c_t, c_sv, c_inv = st.columns(3)
+            c_t.metric("T", def_unit.toughness)
+            c_sv.metric("Sv", f"{def_unit.save}+")
+            c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
+
+            if use_melee:
+                for weapon in grp_weapons:
+                    profiles = [p for p in weapon.profiles if p.is_melee]
+                    if not profiles:
+                        profiles = weapon.profiles
+                    if len(profiles) > 1:
+                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+                        p_key = f"decl_p_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                        sel_p = st.radio(
+                            f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
+                        )
+                        profile_idx = p_names.index(sel_p)
+                    else:
+                        profile_idx = 0
+                    profile = profiles[profile_idx]
+                    rule_max = (
+                        _total_attacks_int(
+                            profile.attacks,
+                            alive,
+                            atk_unit.attacks + waaagh_bonus,
+                            profile.effect,
+                            profile.max_attacks,
+                        )
+                        or group_budget
+                    )
+                    atk_key = f"decl_a_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    if atk_key not in st.session_state:
+                        is_first = i == 0 and weapon is grp_weapons[0]
+                        st.session_state[atk_key] = rule_max if is_first else 0
+                    # Remaining budget caps this counter — overbooking impossible
+                    budget_left = group_budget - (total_assigned - _val(atk_key))
+                    weapon_max = max(0, min(rule_max, budget_left))
+                    if _val(atk_key) > weapon_max:
+                        st.session_state[atk_key] = weapon_max
+                    atk_count = st.number_input(
+                        f"{weapon.name_en} — Attacks",
+                        min_value=0,
+                        max_value=weapon_max,
+                        step=1,
+                        key=atk_key,
+                    )
+                    entries.append(
+                        {
+                            "def_faction": def_faction,
+                            "def_uid": def_uid,
+                            "weapon_name": weapon.name_en,
+                            "profile_idx": profile_idx,
+                            "models_count": alive,
+                            "atk_override": int(atk_count),
+                        }
+                    )
+                    attacks_assigned += int(atk_count)
+            else:
+                for weapon in grp_weapons:
+                    profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
+                    if not profiles:
+                        profiles = list(weapon.profiles)
+                    if len(profiles) > 1:
+                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+                        p_key = f"decl_p_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                        sel_p = st.radio(
+                            f"Profile — {weapon.name_en}",
+                            p_names,
+                            key=p_key,
+                            horizontal=True,
+                        )
+                        profile_idx = p_names.index(sel_p)
+                    else:
+                        profile_idx = 0
+                    profile = profiles[profile_idx]
+                    cap = weapon_caps.get(weapon.name_en, alive)
+                    models_key = f"decl_m_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    if models_key not in st.session_state:
+                        # Grenades start at 0 (optional); everything else fires fully
+                        st.session_state[models_key] = cap if (i == 0 and cap > 1) else 0
+                    # Remaining models for this weapon cap the counter
+                    others = weapon_assigned[weapon.name_en] - _val(models_key)
+                    weapon_max = max(0, cap - others)
+                    if _val(models_key) > weapon_max:
+                        st.session_state[models_key] = weapon_max
+                    models_val = st.number_input(
+                        f"{weapon.name_en} — models",
+                        min_value=0,
+                        max_value=weapon_max,
+                        step=1,
+                        key=models_key,
+                    )
+                    eff_models = int(models_val)
+                    displayed_count = _compute_attacks(
+                        profile.attacks,
+                        eff_models,
+                        atk_unit.attacks,
+                        profile.effect,
+                        profile.max_attacks,
+                    )
+                    if profile.weapon_type.startswith("Rapid Fire") and profile.range_inches > 0:
+                        half = profile.range_inches // 2
+                        st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
+                    st.markdown(
+                        f"**{weapon.name_en}** → "
+                        f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
+                        f"{displayed_count}</span> Attacks",
+                        unsafe_allow_html=True,
+                    )
+                    entries.append(
+                        {
+                            "def_faction": def_faction,
+                            "def_uid": def_uid,
+                            "weapon_name": weapon.name_en,
+                            "profile_idx": profile_idx,
+                            "models_count": eff_models,
+                        }
+                    )
+                    models_assigned += eff_models
+
+    valid = attacks_assigned > 0 if use_melee else models_assigned > 0
+
+    if st.button(
+        "✓ Group done",
+        type="primary",
+        disabled=not valid,
+        key=f"grp_done_{atk_uid}_{gid}",
+    ):
+        group_decl = dict(st.session_state.get("group_decl", {}))
+        group_decl[gid] = entries
+        st.session_state.group_decl = group_decl
+        st.session_state.selected_model_group = None
         st.rerun()
 
 
@@ -1487,9 +1774,8 @@ def render_attack_declaration(
         st.info("Engaged in melee — Pistol weapons only.")
 
     if atk_unit.model_groups:
-        _render_group_declaration(
-            atk_faction, atk_uid, atk_unit, atk_state, tgts, use_melee, phase_key, in_melee
-        )
+        # Model-group units declare group-by-group via render_group_cards /
+        # render_group_assignment in the player areas — never through this path.
         return
 
     # In fight phase, always distribute by attacks (not models).
@@ -1702,6 +1988,7 @@ def render_attack_declaration(
             "use_melee": use_melee,
             "in_melee": in_melee,
             "entries": [e for e in entries if e.get("atk_override", e["models_count"]) > 0],
+            "seq": _next_declaration_seq(),
         }
         st.rerun()
 
@@ -1741,10 +2028,14 @@ def render_attack_resolution(phase_key: str) -> None:
         def_unit, _ = lookup(entry["def_faction"], entry["def_uid"])
         tab_labels.append(f"{entry['weapon_name']} → {def_unit.name_en}")
 
+    seq = decl.get("seq", 0)
     tabs = st.tabs(tab_labels)
+    # Cover checkboxes are per TARGET (P19) — render them only in the first
+    # tab of each target, otherwise Streamlit raises DuplicateWidgetID.
+    cover_rendered: set[str] = set()
     for i, (tab, entry) in enumerate(zip(tabs, entries)):
         with tab:
-            tab_key = f"{atk_uid}_{entry['def_uid']}_{i}"
+            tab_key = f"{seq}_{atk_uid}_{entry['def_uid']}_{i}"
             res_key = f"res_{tab_key}"
             tab_state = st.session_state.get(res_key, {})
 
@@ -1762,12 +2053,21 @@ def render_attack_resolution(phase_key: str) -> None:
                         st.session_state.pop(k, None)
                     st.rerun()
             else:
+                show_cover = entry["def_uid"] not in cover_rendered
+                cover_rendered.add(entry["def_uid"])
                 _render_resolution_tab(
-                    entry, atk_faction, atk_unit, atk_state, use_melee, phase_key, tab_key
+                    entry,
+                    atk_faction,
+                    atk_unit,
+                    atk_state,
+                    use_melee,
+                    phase_key,
+                    tab_key,
+                    show_cover_controls=show_cover,
                 )
 
     all_applied = all(
-        st.session_state.get(f"res_{atk_uid}_{e['def_uid']}_{j}", {}).get("applied", False)
+        st.session_state.get(f"res_{seq}_{atk_uid}_{e['def_uid']}_{j}", {}).get("applied", False)
         for j, e in enumerate(entries)
     )
     if all_applied and entries:
