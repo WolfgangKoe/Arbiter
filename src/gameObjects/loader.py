@@ -29,6 +29,20 @@ _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 _ROUND_CHOICE_CACHE: dict[str, list] = {}
 _ROUND_CHOICE_LABEL_CACHE: dict[str, str] = {}
 
+
+class YamlDataError(ValueError):
+    """A game data YAML file exists but cannot be parsed."""
+
+
+def load_yaml(path: Path) -> Any:
+    """Parse a YAML file, raising YamlDataError with the file path on syntax errors."""
+    try:
+        with open(path) as f:
+            return yaml.safe_load(f)
+    except yaml.YAMLError as exc:
+        raise YamlDataError(f"Invalid YAML in {path}: {exc}") from exc
+
+
 _CCW_PROFILE = WeaponProfile(
     name_en="Close Combat Weapon",
     weapon_type="Melee",
@@ -79,8 +93,7 @@ def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
     path = _DATA_ROOT / faction_dir / "weapons.yaml"
     if not path.exists():
         return {}
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
 
 
@@ -170,6 +183,15 @@ def _resolve_model_groups(
     if not specs:
         return []
 
+    def _resolve_refs(refs: list[str], group_id: str) -> list[Weapon]:
+        missing = [r for r in refs if r not in weapon_catalog]
+        if missing:
+            raise ValueError(
+                f"Model group {group_id!r}: unknown weapon ref(s) {missing} "
+                f"— check the roster's group_loadouts/swaps against weapons.yaml."
+            )
+        return [weapon_catalog[r] for r in refs]
+
     fixed_total = sum(
         int(s.count_raw)
         for s in specs
@@ -210,16 +232,14 @@ def _resolve_model_groups(
                 if sub_count <= 0 or not picks:
                     continue
                 sub_refs = _swap_weapons(spec.base_weapon_refs, swap.replaces, picks)
-                pick_names = [
-                    weapon_catalog[r].name_en if r in weapon_catalog else _short_ref(r)
-                    for r in picks
-                ]
+                weapons_resolved = _resolve_refs(sub_refs, spec.id)
+                pick_names = [weapon_catalog[r].name_en for r in picks]
                 groups.append(
                     ModelGroup(
                         id=f"{spec.id}_{'_'.join(_short_ref(r) for r in picks)}",
                         name_en=f"{spec.name_en} ({' + '.join(pick_names)})",
                         count=sub_count,
-                        weapons=[weapon_catalog[r] for r in sub_refs if r in weapon_catalog],
+                        weapons=weapons_resolved,
                         priority=spec.priority,
                     )
                 )
@@ -231,11 +251,19 @@ def _resolve_model_groups(
                     id=spec.id,
                     name_en=spec.name_en,
                     count=remaining,
-                    weapons=[weapon_catalog[r] for r in base_refs if r in weapon_catalog],
+                    weapons=_resolve_refs(base_refs, spec.id),
                     priority=spec.priority,
                 )
             )
-    return groups
+
+    merged: dict[str, ModelGroup] = {}
+    for g in groups:
+        if g.id in merged:
+            existing = merged[g.id]
+            merged[g.id] = dataclasses.replace(existing, count=existing.count + g.count)
+        else:
+            merged[g.id] = g
+    return list(merged.values())
 
 
 def _wargear_option_from_dict(d: dict[str, Any]) -> WargearOption:
@@ -379,14 +407,12 @@ def load_army(faction_dir: str) -> tuple[list[Unit], list[str]]:
     army_path = _DATA_ROOT / faction_dir / "army.yaml"
 
     if units_path.exists():
-        with open(units_path) as f:
-            data = yaml.safe_load(f)
+        data = load_yaml(units_path)
         faction = faction_dir.capitalize()
         subfaction = None
         entries = data.get("units", [])
     elif army_path.exists():
-        with open(army_path) as f:
-            data = yaml.safe_load(f)
+        data = load_yaml(army_path)
         faction = data.get("faction", "")
         subfaction = data.get("subfaction")
         entries = data.get("units", [])
@@ -417,8 +443,7 @@ def load_faction_abilities(faction_dir: str) -> list[Ability]:
     path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
     if not path.exists():
         return []
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     return [
         _ability_from_dict(a)
         for a in data.get("abilities", [])
@@ -438,8 +463,7 @@ def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
     if not path.exists():
         _ROUND_CHOICE_CACHE[faction_dir] = []
         return _ROUND_CHOICE_CACHE[faction_dir]
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     result = []
     for a in data.get("abilities", []):
         if a.get("ability_type") != "round_choice":
@@ -472,8 +496,7 @@ def load_round_choice_label(faction_dir: str) -> str:
     if not path.exists():
         _ROUND_CHOICE_LABEL_CACHE[faction_dir] = "Round Abilities"
         return _ROUND_CHOICE_LABEL_CACHE[faction_dir]
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     label = data.get("round_choice_label", "Round Abilities")
     _ROUND_CHOICE_LABEL_CACHE[faction_dir] = label
     return label
@@ -484,8 +507,7 @@ def load_unit_abilities(faction_dir: str) -> list[Ability]:
     path = _DATA_ROOT / faction_dir / "unit_abilities.yaml"
     if not path.exists():
         return []
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     return [_ability_from_dict(a) for a in data.get("abilities", [])]
 
 
@@ -494,8 +516,7 @@ def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
     path = _DATA_ROOT / faction_dir / "subfaction_abilities.yaml"
     if not path.exists():
         return []
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     abilities: list[Ability] = []
     for subfaction in data.get("subfactions", []):
         abilities.extend(_ability_from_dict(a) for a in subfaction.get("abilities", []))
@@ -509,8 +530,7 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
         path = _DATA_ROOT / source / "stratagems.yaml"
         if not path.exists():
             continue
-        with open(path) as f:
-            data = yaml.safe_load(f)
+        data = load_yaml(path)
         for s in data.get("stratagems", []):
             mod_data = s.get("modifier")
             modifier = (
@@ -565,8 +585,7 @@ def load_wargear_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[t
     path = _DATA_ROOT / faction_dir / "wargear.yaml"
     if not path.exists():
         return {}
-    with open(path) as f:
-        data = yaml.safe_load(f) or []
+    data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
     return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
 
@@ -576,8 +595,7 @@ def load_relic_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[typ
     path = _DATA_ROOT / faction_dir / "relics.yaml"
     if not path.exists():
         return {}
-    with open(path) as f:
-        data = yaml.safe_load(f) or []
+    data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
     return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
 
@@ -715,8 +733,7 @@ def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
     path = _DATA_ROOT / faction_dir / "wargear.yaml"
     if not path.exists():
         return frozenset()
-    with open(path) as f:
-        data = yaml.safe_load(f) or []
+    data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
     return frozenset(
         e["id"].rsplit(".", 1)[-1]
@@ -733,8 +750,7 @@ def load_wargear_abilities(faction_dir: str) -> list[Ability]:
     path = _DATA_ROOT / faction_dir / "wargear.yaml"
     if not path.exists():
         return []
-    with open(path) as f:
-        data = yaml.safe_load(f) or []
+    data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
     abilities: list[Ability] = []
     for e in entries:
@@ -778,8 +794,7 @@ def get_abilities_for_unit(unit: Unit, faction_dir: str) -> list[Ability]:
 def load_detachment_types() -> list[DetachmentType]:
     """Load detachment type definitions from data/wh40k_9e/_shared/detachment_types.yaml."""
     path = _DATA_ROOT / "_shared" / "detachment_types.yaml"
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     types = []
     for dt in data.get("detachment_types", []):
         slots = [
@@ -823,8 +838,7 @@ def load_points(faction_dir: str) -> dict[str, int]:
     path = _DATA_ROOT / faction_dir / "points.yaml"
     if not path.exists():
         return {}
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     result: dict[str, int] = {}
     for uid, entry in (data.get("units") or {}).items():
         cost = entry.get("per_unit") or entry.get("per_model") or 0
@@ -848,8 +862,7 @@ def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
     path = Path(roster_path)
     if not path.exists():
         return {}
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
     return {
         "display_name": data.get("display_name", ""),
         "faction_dir": data.get("faction_dir", "necrons"),
@@ -939,8 +952,7 @@ def load_roster(
     path = Path(roster_path)
     if not path.exists():
         return [], [f"roster-not-found:{path}"]
-    with open(path) as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(path)
 
     faction_dir = data.get("faction_dir", "necrons")
     weapon_catalog = load_weapon_catalog(faction_dir)

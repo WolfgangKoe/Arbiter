@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Audit-Session 2026-06-11 — 767 Tests grün)
+## Aktueller Stand (nach Audit-Executor-Session 2026-06-11 — 776 Tests grün)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -93,6 +93,12 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - Finding #8: `.woodpecker.yml` gelöscht — GitHub Actions ist einzige CI ✅
   - Finding #9: `Makefile` (Flask/Tailwind-Reste) gelöscht ✅
   - Finding #10: `.env.example` auf `DATA_DIR=data` bereinigt ✅
+- **Audit-Executor-Session 2026-06-11 — Pläne 009/010/006/007 erledigt (776 Tests grün):**
+  - Plan 009: `_resolve_refs` helper + Merge-Block in `_resolve_model_groups`; stille Weapon-Ref-Filter entfernt; 2 neue Tests
+  - Plan 010: 5 tote Variablen entfernt (`waaagh` ×3, `effective`, `hit_mod`); `hit_mod` ins Log aufgenommen; F841 aus per-file-ignores; 2 neue Tests
+  - Plan 006: `YamlDataError` + `load_yaml` in `loader.py`; alle 17 `yaml.safe_load`-Stellen umgestellt; `game_state.py` 2 Stellen + `import yaml` entfernt; 2 neue Tests
+  - Plan 007: `_VALID_NAME` Regex in `scenarios.py`; Pfad-Traversal blockiert; `save_scenario` wirft ValueError; 3 neue Tests
+  - 9 neue Tests gesamt; 776 Tests grün, 90 % Coverage
 - **Re-Audit-Session 2026-06-11 (abends) — Bericht + 7 neue Executor-Pläne (kein Code geändert):**
   - Bericht: `docs/audit/2026-06-11-reaudit.md` — 8 Findings R1–R8 (3 bestätigte Alt-Findings #6/#7/#11, 5 neue)
   - Neue Pläne `docs/audit/plans/006–012` (Format wie 001–005); `plans/README.md` fortgeschrieben
@@ -114,9 +120,9 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 Das Re-Audit vom 2026-06-11 (`docs/audit/2026-06-11-reaudit.md`) hat die Queue mit
 7 neuen Plänen gefüllt. **Nächster Plan = erster offener Eintrag der Tabelle = 009.**
 
-**Startprompt für die nächste Executor-Session (Plan 009 — einfach kopieren):**
+**Startprompt für die nächste Executor-Session (Plan 008 — einfach kopieren):**
 
-> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/009-roster-group-validation.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
+> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/008-split-common-god-module.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
 >
 > Befolge den „Executor instructions"- und den „Drift check"-Block am Anfang der Datei.
 > Führe nach jedem Schritt den angegebenen Verify-Befehl aus und bestätige das erwartete Ergebnis, bevor du weitermachst.
@@ -132,10 +138,10 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 | Plan | Datei | Titel | Status |
 |------|-------|-------|--------|
 | 001–005 | *(Erst-Audit)* | CI-Gates, defusedxml, WAAAGH-Bonus, lookup, Loader-Cache | **DONE** (2026-06-11) |
-| 009 | `009-roster-group-validation.md` | Duplikat-Subgruppen mergen + unbekannte Weapon-Refs laut melden | TODO |
-| 010 | `010-dead-vars-f841-gate.md` | 5 tote Variablen raus + F841-Lint scharf (VOR 008!) | TODO |
-| 006 | `006-safe-yaml-load.md` | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | TODO |
-| 007 | `007-scenario-name-validation.md` | Scenario-Namen-Allowlist (Pfad-Traversal) | TODO |
+| 009 | `009-roster-group-validation.md` | Duplikat-Subgruppen mergen + unbekannte Weapon-Refs laut melden | **DONE** (2026-06-11) |
+| 010 | `010-dead-vars-f841-gate.md` | 5 tote Variablen raus + F841-Lint scharf | **DONE** (2026-06-11) |
+| 006 | `006-safe-yaml-load.md` | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | **DONE** (2026-06-11) |
+| 007 | `007-scenario-name-validation.md` | Scenario-Namen-Allowlist (Pfad-Traversal) | **DONE** (2026-06-11) |
 | 008 | `008-split-common-god-module.md` | `_common.py`: Attack-Mathe → gemessenes Modul + Dice-HTML auslagern | TODO |
 | 011 | `011-data-driven-waaagh.md` | WAAAGH datengetrieben (P3 — spätestens vor 4. Fraktion) | TODO |
 | 012 | `012-loader-cache-consolidation.md` | Restliche Loader cachen (P3 — zwingend NACH 006) | TODO |

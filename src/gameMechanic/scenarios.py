@@ -3,16 +3,20 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
 _SCENARIOS_DIR = Path(__file__).parent.parent.parent / "data" / "scenarios"
+_VALID_NAME = re.compile(r"^[A-Za-z0-9_-]+$")
 
 
 def get_scenario_data(name: str) -> dict[str, Any] | None:
     """Return parsed scenario JSON or None if not found."""
+    if not _VALID_NAME.fullmatch(name):
+        return None
     path = _SCENARIOS_DIR / f"{name}.json"
     if not path.exists():
         return None
@@ -86,6 +90,8 @@ def load_scenario(name: str) -> bool:
 
 def save_scenario(name: str) -> None:
     """Snapshot the current game state to data/scenarios/<name>.json."""
+    if not _VALID_NAME.fullmatch(name):
+        raise ValueError(f"Invalid scenario name {name!r}: only [A-Za-z0-9_-] allowed.")
     p1_units = {uid: dict(s) for uid, s in st.session_state.get("p1_units", {}).items()}
     p2_units = {uid: dict(s) for uid, s in st.session_state.get("p2_units", {}).items()}
     data: dict[str, Any] = {

@@ -5,12 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 
 import streamlit as st
-import yaml
 
 from gameObjects.loader import (
     load_roster,
     load_roster_metadata,
     load_unit_catalog,
+    load_yaml,
 )
 from gameObjects.unit import Unit
 
@@ -90,11 +90,9 @@ def compute_roster_total_pts(roster_file: str) -> int:
     pts_path = _DATA_ROOT / "wh40k_9e" / faction_dir / "points.yaml"
     if not pts_path.exists():
         return 0
-    with open(pts_path) as f:
-        pts_data = yaml.safe_load(f) or {}
+    pts_data = load_yaml(pts_path) or {}
     units_pts: dict[str, dict] = pts_data.get("units") or {}
-    with open(roster_path) as f:
-        roster_data = yaml.safe_load(f) or {}
+    roster_data = load_yaml(roster_path) or {}
     total = 0
     for entry in roster_data.get("units", []):
         uid = entry["id"]

@@ -12,6 +12,8 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
+
 _st_mock = MagicMock()
 sys.modules.setdefault("streamlit", _st_mock)
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -257,3 +259,20 @@ class TestGetScenarioData:
         result = _sc.get_scenario_data("fight_r2")
         assert result is not None
         assert result["round"] == 2
+
+
+def test_get_scenario_data_rejects_path_traversal() -> None:
+    assert _sc.get_scenario_data("../rosters/necrons_alpha") is None
+    assert _sc.get_scenario_data("..") is None
+    assert _sc.get_scenario_data("a/b") is None
+    assert _sc.get_scenario_data("") is None
+
+
+def test_get_scenario_data_accepts_valid_names() -> None:
+    assert _sc.get_scenario_data("shooting_phase") is not None
+    assert _sc.get_scenario_data("does-not-exist_123") is None
+
+
+def test_save_scenario_rejects_invalid_name() -> None:
+    with pytest.raises(ValueError, match="Invalid scenario name"):
+        _sc.save_scenario("../evil")

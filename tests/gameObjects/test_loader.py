@@ -1056,3 +1056,89 @@ def test_round_choice_abilities_are_cached() -> None:
 
 def test_round_choice_label_is_cached() -> None:
     assert load_round_choice_label("necrons") == load_round_choice_label("necrons")
+
+
+def test_duplicate_per_model_entries_merge_into_one_group() -> None:
+
+    from gameObjects.unit import ModelGroupSpec, WeaponSwapSpec
+
+    catalog = load_weapon_catalog("orks")
+    spec = ModelGroupSpec(
+        id="boy",
+        name_en="Boy",
+        count_raw="models_max",
+        base_weapon_refs=["wh40k_9e.orks.weapon.slugga", "wh40k_9e.orks.weapon.choppa"],
+        weapon_swaps=[
+            WeaponSwapSpec(
+                id="special",
+                scope="per_model",
+                replaces=["wh40k_9e.orks.weapon.slugga"],
+                options=["wh40k_9e.orks.weapon.big_shoota"],
+                pick=1,
+                limit="any",
+            )
+        ],
+        priority=1,
+    )
+    loadouts = {
+        "boy": {
+            "swaps": {
+                "special": [
+                    {"weapons": ["wh40k_9e.orks.weapon.big_shoota"], "count": 1},
+                    {"weapons": ["wh40k_9e.orks.weapon.big_shoota"], "count": 1},
+                ]
+            }
+        }
+    }
+    groups = _resolve_model_groups([spec], 10, loadouts, catalog)
+    ids = [g.id for g in groups]
+    assert len(ids) == len(set(ids)), f"duplicate group ids: {ids}"
+    merged = next(g for g in groups if "big_shoota" in g.id)
+    assert merged.count == 2
+
+
+def test_unknown_weapon_ref_in_swap_raises_clear_error() -> None:
+    import pytest
+
+    from gameObjects.unit import ModelGroupSpec, WeaponSwapSpec
+
+    catalog = load_weapon_catalog("orks")
+    spec = ModelGroupSpec(
+        id="boy",
+        name_en="Boy",
+        count_raw="models_max",
+        base_weapon_refs=["wh40k_9e.orks.weapon.slugga"],
+        weapon_swaps=[
+            WeaponSwapSpec(
+                id="special",
+                scope="group",
+                replaces=["wh40k_9e.orks.weapon.slugga"],
+                options=["wh40k_9e.orks.weapon.shota_TYPO"],
+                pick=1,
+                limit="any",
+            )
+        ],
+        priority=1,
+    )
+    loadouts = {"boy": {"swaps": {"special": {"weapons": ["wh40k_9e.orks.weapon.shota_TYPO"]}}}}
+    with pytest.raises(ValueError, match="unknown weapon ref"):
+        _resolve_model_groups([spec], 10, loadouts, catalog)
+
+
+def test_load_yaml_raises_clear_error_on_broken_file(tmp_path) -> None:
+    import pytest
+
+    from gameObjects.loader import YamlDataError, load_yaml
+
+    broken = tmp_path / "broken.yaml"
+    broken.write_text("units:\n  - id: [unclosed")
+    with pytest.raises(YamlDataError, match="broken.yaml"):
+        load_yaml(broken)
+
+
+def test_load_yaml_returns_parsed_data(tmp_path) -> None:
+    from gameObjects.loader import load_yaml
+
+    ok = tmp_path / "ok.yaml"
+    ok.write_text("units:\n  - id: a\n")
+    assert load_yaml(ok) == {"units": [{"id": "a"}]}

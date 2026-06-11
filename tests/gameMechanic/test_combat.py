@@ -455,3 +455,22 @@ class TestResolveAttackReturnTypes:
         defender = DefendParams(toughness=4, save=7, wounds=5)
         _, log = resolve_attack(params, defender, hits_rolled=0)
         assert len(log) > 0
+
+
+# ---------------------------------------------------------------------------
+# resolve_attack — hit modifier logging
+# ---------------------------------------------------------------------------
+
+
+class TestResolveAttackHitModLogging:
+    def test_hit_modifier_nonzero_appears_in_log(self):
+        params = AttackParams(attacks=10, skill=3, strength=4, ap=0, damage=1, hit_modifier=1)
+        defender = DefendParams(toughness=4, save=7, wounds=10)
+        _, log = resolve_attack(params, defender, hits_rolled=5)
+        assert any("hit mod +1" in line for line in log)
+
+    def test_no_hit_modifier_absent_from_log(self):
+        params = AttackParams(attacks=10, skill=3, strength=4, ap=0, damage=1, hit_modifier=0)
+        defender = DefendParams(toughness=4, save=7, wounds=10)
+        _, log = resolve_attack(params, defender, hits_rolled=5)
+        assert not any("hit mod" in line for line in log)

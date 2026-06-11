@@ -104,7 +104,8 @@ def resolve_attack(
     # Hit phase
     hit_mod = min(1, max(-1, params.hit_modifier + (1 if params.mwbd_active else 0)))
     mwbd_note = " (MWBD +1)" if params.mwbd_active else ""
-    log.append(f"Hits: {hits_rolled}{mwbd_note} — skill {params.skill}+")
+    mod_note = f" (hit mod {hit_mod:+d})" if hit_mod else ""
+    log.append(f"Hits: {hits_rolled}{mwbd_note}{mod_note} — skill {params.skill}+")
 
     if hits_rolled == 0:
         log.append("No hits — attack ends.")

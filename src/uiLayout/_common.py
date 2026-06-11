@@ -858,7 +858,6 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
     armour = save["armour"]
     armour_eff = save["armour_eff"]
     invuln = save["invuln"]
-    effective = save["effective"]
     using_invuln = save["using_invuln"]
     stack = save.get("stack", [])
 
@@ -1444,7 +1443,6 @@ def render_group_cards(
     summary with an Edit button; the resolution starts once at least one group has
     declared attacks.
     """
-    waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
     from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
 
     waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
@@ -1557,7 +1555,6 @@ def render_group_assignment(
         st.caption("← Designate a target (▷) from your army list.")
         return
 
-    waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
     from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
 
     waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
@@ -1794,7 +1791,6 @@ def render_attack_declaration(
     if use_melee:
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
-            waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
             from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
 
             waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
