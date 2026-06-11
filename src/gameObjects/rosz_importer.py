@@ -12,6 +12,7 @@ import zipfile
 from pathlib import Path
 
 import yaml
+from defusedxml.ElementTree import fromstring as _safe_fromstring
 
 from gameObjects.loader import load_unit_catalog
 
@@ -145,7 +146,7 @@ def _detect_faction(root: ET.Element) -> str | None:
 
 
 def _validate_and_parse_xml(data: bytes) -> ET.Element:
-    root = ET.fromstring(data)
+    root = _safe_fromstring(data)
     if _BS_NS not in root.tag:
         raise ValueError(f"Not a BattleScribe roster (unexpected root namespace: {root.tag!r})")
     return root

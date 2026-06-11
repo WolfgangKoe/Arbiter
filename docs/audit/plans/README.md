@@ -11,7 +11,7 @@ run every verification command, and update your row below when done.
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
 | 001 | CI-Verifikations-Gates + Coverage einführen | P1 | M | — | DONE — 80 %-Coverage-Gate aktiv (90 % gemessen, 760 Tests grün); Lint-Gates (ruff/black/isort) + mypy (informational) + Coverage in `.woodpecker.yml` und `.github/workflows/deploy.yml`; `pyproject.toml` + `requirements-dev.txt` vollständig. |
-| 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | P1 | S | — | TODO |
+| 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | P1 | S | — | DONE — `_safe_fromstring` ersetzt `ET.fromstring`; Regressionstest für Entity-Expansion; 761 Tests grün. |
 | 003 | WAAAGH-Angriffsbonus zentralisieren (3× Duplikat entfernen) | P2 | S | 001 | TODO |
 | 004 | `lookup()`-`StopIteration` durch klare Fehlermeldung ersetzen | P2 | S | 001 | TODO |
 | 005 | Loader-YAML pro Prozess cachen (Re-Parse pro Rerun beenden) | P3 | S | 001 | TODO |

@@ -108,8 +108,8 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 | Plan | Titel | Warum jetzt | Status |
 |------|-------|-------------|--------|
 | 001-Rest | Woodpecker CI + Lint-Gates | Infrastruktur komplett machen (GitHub Actions ist fertig, Codeberg fehlt noch) | **DONE** (2026-06-11) |
-| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | **NÄCHSTE** |
-| 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | TODO |
+| 002 | defusedxml rosz-Parser | Security-Fix, unabhängig, S-Aufwand | **DONE** (2026-06-11) |
+| 003 | WAAAGH-Bonus zentralisieren | Voraussetzung für P17/P18 — berührt dieselben _common.py-Stellen | **NÄCHSTE** |
 | 004 | lookup() StopIteration-Fallback | Voraussetzung für P17 (Gruppen-Lookup crasht sonst bei State-Divergenz) | TODO |
 | 005 | Loader-YAML cachen | Perf, P3 — nach P15 oder parallel | TODO |
 

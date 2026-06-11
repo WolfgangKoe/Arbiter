@@ -326,3 +326,17 @@ def test_import_roster_orks_roundtrip(tmp_path: Path) -> None:
     assert any(u["id"] == "wh40k_9e.orks.unit.warboss" for u in data["units"])
     assert any(u["id"] == "wh40k_9e.orks.unit.boyz" for u in data["units"])
     assert unmatched == []
+
+
+_BILLION_LAUGHS = b"""<?xml version="1.0"?>
+<!DOCTYPE lolz [
+  <!ENTITY lol "lol">
+  <!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+  <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+]>
+<roster xmlns="http://www.battlescribe.net/schema/rosterSchema">&lol3;</roster>"""
+
+
+def test_parse_ros_rejects_entity_expansion() -> None:
+    with pytest.raises(Exception):
+        parse_ros_bytes(_BILLION_LAUGHS)
