@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Session 39, 2026-06-10 — 594 Tests grün)
+## Aktueller Stand (nach Audit-Session 2026-06-11 — 767 Tests grün)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -83,7 +83,16 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   - `CLAUDE.md`: Sicherheitsnetz-Regel „rote Tests → STOP, Nutzer fragen" + Meßbefehl dokumentiert
   - 166 neue Tests: test_game_log, test_scenarios, test_phase_runner, test_stratagem, test_weapon, test_game_state (swap_players, _reset_phase_state, WAAAGH-Upgrade, reset_game), test_fight, test_shooting
   - Audit-Bericht `docs/audit/2026-06-11-repo-audit.md` + 5 Executor-Pläne `docs/audit/plans/001–005`
-  - Plan 001 vollständig abgeschlossen: Lint-Gates (ruff/black/isort) + mypy (informational) + 80%-Coverage in beiden CIs (`.woodpecker.yml` + `deploy.yml`)
+  - Plan 001 vollständig abgeschlossen: Lint-Gates (ruff/black/isort) + mypy (informational) + 80%-Coverage in beiden CIs
+- **Audit-Session 2026-06-11 — alle 5 Pläne + 3 Findings erledigt (767 Tests grün):**
+  - Plan 001-Rest: `.woodpecker.yml` + Lint-Gates ✅
+  - Plan 002: `defusedxml` schützt XML-Parser vor Entity-Expansion-DoS ✅
+  - Plan 003: `waaagh_attack_bonus()` zentralisiert, 3 Duplikate in `_common.py` entfernt ✅
+  - Plan 004: `lookup()` wirft klare `KeyError` statt nacktem `StopIteration` ✅
+  - Plan 005: `_ROUND_CHOICE_CACHE` + `_ROUND_CHOICE_LABEL_CACHE` in `loader.py` ✅
+  - Finding #8: `.woodpecker.yml` gelöscht — GitHub Actions ist einzige CI ✅
+  - Finding #9: `Makefile` (Flask/Tailwind-Reste) gelöscht ✅
+  - Finding #10: `.env.example` auf `DATA_DIR=data` bereinigt ✅
 
 ---
 
@@ -119,9 +128,8 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
 ## Nächste Schritte (Feature-Plan, priorisiert)
 
-> **Audit-Queue zuerst abarbeiten (s. oben): 001-Rest → 002 → 003 → 004 → 005.**
-> Plans 003 + 004 sind direkte Voraussetzungen für P17/P18 (beide ändern _common.py-Stellen, die 003 erst bereinigt).
-> Ausnahme: dringende Bugs können vorgezogen werden, danach Audit-Queue fortsetzen.
+> **Audit-Queue vollständig abgearbeitet (2026-06-11).** Alle 5 Pläne + Findings #8/#9/#10 erledigt.
+> Nächster Schritt: Feature-Plan, Priorität P17.
 >
 > Review-Runde 2 wurde FREIGEGEBEN und größtenteils umgesetzt (2026-06-10, Session 39, 594 Tests grün).
 > Erledigt: P14, P15 (inkl. per_3 + Necron-Gruppen), P16 (im D5-Renderer), P19, P20 (Logik gepinnt),
