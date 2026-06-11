@@ -1440,7 +1440,9 @@ def render_group_cards(
     declared attacks.
     """
     waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
-    waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
+    from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+
+    waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
     group_models: dict[str, int] = atk_state.get("group_models", {})
     group_decl: dict = st.session_state.get("group_decl", {})  # type: ignore[type-arg]
     group_targets: dict = st.session_state.get("group_targets", {})  # type: ignore[type-arg]
@@ -1551,7 +1553,9 @@ def render_group_assignment(
         return
 
     waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
-    waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
+    from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+
+    waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
     grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
 
     def _val(key: str) -> int:
@@ -1786,7 +1790,9 @@ def render_attack_declaration(
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
             waaagh = st.session_state.get("waaagh_state", {}).get(atk_faction)
-            waaagh_bonus = 1 if (waaagh and atk_unit.has_keyword("ORK")) else 0
+            from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+
+            waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
             total_attacks_maybe = _total_attacks_int(
                 first_melee_profiles[0].attacks,
                 models_alive,

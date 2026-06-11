@@ -110,6 +110,12 @@ def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) 
     return {}
 
 
+def waaagh_attack_bonus(faction: str, unit: Unit) -> int:
+    """+1 Attacks, solange für diese Fraktion ein WAAAGH! aktiv ist und die Einheit profitiert."""
+    waaagh = st.session_state.get("waaagh_state", {}).get(faction)
+    return 1 if (waaagh and unit.has_keyword("ORK")) else 0
+
+
 def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:
     """Return all activated command-phase abilities for a specific unit."""
     all_abilities = load_unit_abilities(faction_dir)

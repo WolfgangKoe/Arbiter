@@ -16,6 +16,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_activated_command_abilities,
     get_active_protocol_modifier,
     get_triggered_abilities,
+    waaagh_attack_bonus,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -525,3 +526,21 @@ def test_get_triggered_abilities_ork_command_returns_empty() -> None:
     }
     triggered = get_triggered_abilities(state, "command", "phase_start")
     assert triggered == []
+
+
+def test_waaagh_bonus_one_for_ork_with_active_waaagh() -> None:
+    _eng.st.session_state = {"waaagh_state": {"Orks": {"stage": 1}}}
+    unit = _make_unit(rules=[], keywords=["ORK", "CORE"])
+    assert waaagh_attack_bonus("Orks", unit) == 1
+
+
+def test_waaagh_bonus_zero_without_active_waaagh() -> None:
+    _eng.st.session_state = {"waaagh_state": {}}
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert waaagh_attack_bonus("Orks", unit) == 0
+
+
+def test_waaagh_bonus_zero_for_non_ork_unit() -> None:
+    _eng.st.session_state = {"waaagh_state": {"Necrons": {"stage": 1}}}
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert waaagh_attack_bonus("Necrons", unit) == 0
