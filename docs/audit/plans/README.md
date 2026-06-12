@@ -21,7 +21,7 @@ run every verification command, and update your row below when done.
 | 010 | Tote Variablen entfernen + F841-Lint-Gate scharf schalten | P2 | S | — (vor 008) | DONE — 5 tote Variablen entfernt; `hit_mod` ins Log; F841 aus per-file-ignores; 2 neue Tests; 771 Tests grün, 90 % Coverage. |
 | 006 | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | P2 | M | — | DONE — `YamlDataError` + `load_yaml` in `loader.py`; 17 Stellen umgestellt; 2 Stellen in `game_state.py`; `import yaml` entfernt; 2 neue Tests; 773 Tests grün, 90 % Coverage. |
 | 007 | Scenario-Namen gegen Allowlist validieren (Pfad-Traversal) | P2 | S | — | DONE — `_VALID_NAME` regex in `scenarios.py`; `get_scenario_data` gibt None bei ungültigem Namen; `save_scenario` wirft ValueError; 3 neue Tests; 776 Tests grün, 90 % Coverage. |
-| 008 | `_common.py` entlasten: Attack-Mathe in gemessenes Modul + Dice-HTML auslagern | P2 | M–L | 010 (zwingend), 009 (empfohlen) | TODO |
+| 008 | `_common.py` entlasten: Attack-Mathe in gemessenes Modul + Dice-HTML auslagern | P2 | M–L | 010 (zwingend), 009 (empfohlen) | DONE — `attack_math.py` (6 Funktionen, 89 % Coverage) + `dice_html.py` (13 Funktionen/Konstanten); `_common.py` von 2084 → 1594 Zeilen; Re-Exports halten alle Aufrufer/Tests stabil; 776 Tests grün, 90 % Coverage. |
 | 011 | WAAAGH datengetrieben (letzte ORK-Hardcodes aus `src/`) | P3 | M | nicht parallel zu 008 | TODO |
 | 012 | Loader-Caching vervollständigen + Sondercache entfernen | P3 | S | 006 (zwingend, gleiche Datei) | TODO |
 

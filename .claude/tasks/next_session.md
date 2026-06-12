@@ -118,11 +118,17 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 ## Audit-Queue (Executor-Sessions) — ⬅️ HIER STARTET DIE NÄCHSTE SESSION
 
 Das Re-Audit vom 2026-06-11 (`docs/audit/2026-06-11-reaudit.md`) hat die Queue mit
-7 neuen Plänen gefüllt. **Nächster Plan = erster offener Eintrag der Tabelle = 009.**
+7 neuen Plänen gefüllt. **Nächster Plan = erster offener Eintrag der Tabelle = 011.**
 
-**Startprompt für die nächste Executor-Session (Plan 008 — einfach kopieren):**
+**Session 40 (2026-06-12): Plan 008 abgeschlossen.**
+- `src/gameMechanic/attack_math.py` (NEU): 6 reine Mathe-Funktionen aus `_common.py` extrahiert; 89 % Coverage; zählt ab sofort ins 80 %-Gate.
+- `src/uiLayout/dice_html.py` (NEU): kompletter SVG-Würfel-Block (13 Funktionen + Konstanten); 490 Zeilen.
+- `src/uiLayout/_common.py`: von 2084 → 1594 Zeilen; Re-Exports halten alle Aufrufer/Tests stabil.
+- **Manuelle UI-Verifikation ausstehend:** Shooting- und Fight-Phase bis zur Resolution durchspielen — Würfelblöcke (HIT/WOUND/SAVE) müssen identisch aussehen (SVG-Würfel, Modifier-Paare, 7+-Handling, Inv.-Zeile). Noch nicht committed.
 
-> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/008-split-common-god-module.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
+**Startprompt für die nächste Executor-Session (Plan 011 — einfach kopieren):**
+
+> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/011-data-driven-waaagh.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
 >
 > Befolge den „Executor instructions"- und den „Drift check"-Block am Anfang der Datei.
 > Führe nach jedem Schritt den angegebenen Verify-Befehl aus und bestätige das erwartete Ergebnis, bevor du weitermachst.
@@ -142,7 +148,7 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 | 010 | `010-dead-vars-f841-gate.md` | 5 tote Variablen raus + F841-Lint scharf | **DONE** (2026-06-11) |
 | 006 | `006-safe-yaml-load.md` | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | **DONE** (2026-06-11) |
 | 007 | `007-scenario-name-validation.md` | Scenario-Namen-Allowlist (Pfad-Traversal) | **DONE** (2026-06-11) |
-| 008 | `008-split-common-god-module.md` | `_common.py`: Attack-Mathe → gemessenes Modul + Dice-HTML auslagern | TODO |
+| 008 | `008-split-common-god-module.md` | `_common.py`: Attack-Mathe → gemessenes Modul + Dice-HTML auslagern | **DONE** (2026-06-12) |
 | 011 | `011-data-driven-waaagh.md` | WAAAGH datengetrieben (P3 — spätestens vor 4. Fraktion) | TODO |
 | 012 | `012-loader-cache-consolidation.md` | Restliche Loader cachen (P3 — zwingend NACH 006) | TODO |
 
