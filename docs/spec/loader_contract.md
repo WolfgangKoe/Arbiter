@@ -201,6 +201,12 @@ Auflösung durch `_resolve_model_groups()` (`gameObjects/loader.py`):
 Einheiten ohne `model_groups` ignorieren `group_loadouts`; `weapon_loadout` (oben) bleibt
 der Mechanismus für homogene Einheiten mit Non-Default-Bewaffnung.
 
+**Plan 013:** Einheiten ohne YAML-`model_groups` erhalten nach dem Roster-Load automatisch
+eine synthetische Gruppe `ModelGroup(id="models", name_en=unit.name_en, count=models,
+weapons=unit.weapons, priority=1)`. Damit läuft die gesamte Deklarations-UI über den
+Gruppen-Flow — es gibt keinen Legacy-Pfad mehr. Die synthetische Gruppe darf NIE in YAML
+auftauchen; `model_groups` mit nur einem Eintrag in `units.yaml` ablehnen.
+
 ---
 
 ## 3. Loader-Ablauf (Ziel 5c)

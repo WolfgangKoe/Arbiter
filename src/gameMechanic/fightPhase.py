@@ -13,11 +13,9 @@ import streamlit as st
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
-from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import (
     group_flow_attacker,
     lookup,
-    render_attack_declaration,
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
@@ -459,33 +457,7 @@ def _active_fight(
     if flags.get("charged"):
         st.markdown("**Fights first** (charged this turn).")
 
-    if unit.model_groups:
-        render_group_cards(faction, uid, unit, unit_state, use_melee=True, phase_key="fight")
-        return
-
-    melee = [w for w in unit.weapons if any(p.is_melee for p in w.profiles)]
-    if melee:
-        models_alive = unit_state.get("models", unit.models_max)
-        per_model_wounds = unit_state["current_wounds"] // max(1, models_alive)
-        live = resolve_bracket_stats(unit, per_model_wounds)
-        skill = int(live["ws"].rstrip("+"))
-        live_attacks = live.get("attacks")
-        for w in melee:
-            p = w.for_phase(use_melee=True)
-            ap_str = f"AP{p.ap}" if p.ap != 0 else "AP0"
-            atk_display = live_attacks if p.attacks in ("Melee", None) else p.attacks
-            if atk_display is None:
-                atk_display = str(unit.attacks)
-            st.caption(
-                f"**{w.name_en}** · A{atk_display} · WS{skill}+ "
-                f"· S{p.strength} · {ap_str} · D{p.damage}"
-            )
-    else:
-        st.caption("No melee weapons.")
-
-    tgts: list[tuple[str, str]] = st.session_state.selected_targets
-    if not tgts:
-        st.caption("Designate a target (▷) to resolve attacks.")
+    render_group_cards(faction, uid, unit, unit_state, use_melee=True, phase_key="fight")
 
 
 def _inactive_target_stats(
@@ -538,31 +510,4 @@ def _render_display(
         render_attack_resolution("fight")
         return True
 
-    sel = st.session_state.selected_unit
-    tgts: list[tuple[str, str]] = st.session_state.selected_targets
-    if sel and tgts:
-        atk_faction, atk_uid = sel
-        def_faction, def_uid = tgts[0]
-
-        # Only the current fight player may initiate attacks
-        if atk_faction != fight_player:
-            return False
-
-        atk_unit, atk_state = lookup(atk_faction, atk_uid)
-        if can_fight_now(atk_state, first, second) and _is_target_engaged(
-            atk_state, def_faction, def_uid
-        ):
-            render_attack_declaration(
-                atk_faction,
-                atk_uid,
-                atk_unit,
-                atk_state,
-                use_melee=True,
-                phase_key="fight",
-            )
-            return True
-        if can_fight(atk_state) and not can_fight_now(atk_state, first, second):
-            st.info("Charged units must fight first — wait for all charged units to activate.")
-        elif can_fight(atk_state) and not _is_target_engaged(atk_state, def_faction, def_uid):
-            st.warning("Target is not engaged with this unit — select an engaged enemy.")
     return False

@@ -8,11 +8,8 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_state import units_key_for
-from gameObjects.loader import resolve_bracket_stats
 from uiLayout._common import (
     group_flow_attacker,
-    lookup,
-    render_attack_declaration,
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
@@ -141,54 +138,17 @@ def _active_shooting(
 
     in_melee = unit_state.get("in_melee", False)
 
-    if unit.model_groups:
-        if in_melee:
-            st.info("Engaged in melee — Pistol weapons only.")
-        render_group_cards(
-            faction,
-            uid,
-            unit,
-            unit_state,
-            use_melee=False,
-            phase_key="shooting",
-            in_melee=in_melee,
-        )
-        return
-
     if in_melee:
-        ranged = [
-            w
-            for w in unit.weapons
-            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
-        ]
         st.info("Engaged in melee — Pistol weapons only.")
-    else:
-        ranged = [w for w in unit.weapons if any(not p.is_melee for p in w.profiles)]
-    if ranged:
-        models_alive = unit_state.get("models", unit.models_max)
-        per_model_wounds = unit_state["current_wounds"] // max(1, models_alive)
-        live_bs = resolve_bracket_stats(unit, per_model_wounds)["bs"]
-        skill = int(live_bs.rstrip("+"))
-        for w in ranged:
-            p = w.for_phase(use_melee=False)
-            ap_str = f"AP{p.ap}" if p.ap != 0 else "AP0"
-            st.caption(
-                f"**{w.name_en}** · A{p.attacks} · BS{skill}+ "
-                f"· S{p.strength} · {ap_str} · D{p.damage}"
-            )
-    else:
-        st.caption("No ranged weapons.")
-
-    tgts: list[tuple[str, str]] = st.session_state.selected_targets
-    if not tgts:
-        st.caption("Designate a target (▷) to resolve attacks.")
-    else:
-        for tgt_faction, tgt_uid in tgts:
-            if target_in_friendly_melee(faction, tgt_faction, tgt_uid):
-                tgt_unit, _ = lookup(tgt_faction, tgt_uid)
-                st.warning(
-                    f"Cannot shoot {tgt_unit.name_en} — friendly unit is engaged in that melee."
-                )
+    render_group_cards(
+        faction,
+        uid,
+        unit,
+        unit_state,
+        use_melee=False,
+        phase_key="shooting",
+        in_melee=in_melee,
+    )
 
 
 def _inactive_target_stats(
@@ -209,23 +169,4 @@ def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
         render_attack_resolution("shooting")
         return True
 
-    sel = st.session_state.selected_unit
-    tgts: list[tuple[str, str]] = st.session_state.selected_targets
-    if sel and tgts:
-        atk_faction, atk_uid = sel
-        def_faction, def_uid = tgts[0]
-        atk_unit, atk_state = lookup(atk_faction, atk_uid)
-        if can_shoot(atk_state, atk_unit) and not target_in_friendly_melee(
-            atk_faction, def_faction, def_uid
-        ):
-            render_attack_declaration(
-                atk_faction,
-                atk_uid,
-                atk_unit,
-                atk_state,
-                use_melee=False,
-                phase_key="shooting",
-                in_melee=atk_state.get("in_melee", False),
-            )
-            return True
     return False

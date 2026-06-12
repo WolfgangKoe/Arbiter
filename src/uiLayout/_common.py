@@ -1,7 +1,7 @@
 """Shared UI utilities for phase handlers.
 
 Provides: lookup, state_badges_html, wound_adjustment_buttons,
-          render_player_column, render_attack_declaration,
+          render_player_column, render_group_cards, render_group_assignment,
           render_attack_resolution, PHASE_RULES.
 
 Handlers import from here — never from gameActionsArea — to avoid circular imports.
@@ -840,6 +840,9 @@ def reset_group_declaration_state() -> None:
     st.session_state.selected_model_group = None
     st.session_state.group_targets = {}
     st.session_state.group_decl = {}
+    sel = st.session_state.get("selected_unit")
+    if sel:
+        st.session_state.pop(f"group_autosel_done_{sel[1]}", None)
 
 
 def group_flow_attacker() -> tuple[str, str, Unit, dict] | None:  # type: ignore[type-arg]
@@ -968,6 +971,20 @@ def render_group_cards(
     group_targets: dict = st.session_state.get("group_targets", {})  # type: ignore[type-arg]
     sel_gid = st.session_state.get("selected_model_group")
 
+    autosel_flag = f"group_autosel_done_{atk_uid}"
+    if sel_gid is None and not st.session_state.get(autosel_flag):
+        eligible = [
+            g
+            for g in atk_unit.model_groups
+            if group_models.get(g.id, g.count) > 0
+            and _group_phase_weapons(g, use_melee, in_melee)
+            and group_decl.get(g.id) is None
+        ]
+        if len(eligible) == 1:
+            st.session_state.selected_model_group = eligible[0].id
+            st.session_state[autosel_flag] = True
+            sel_gid = eligible[0].id
+
     for group in atk_unit.model_groups:
         alive = group_models.get(group.id, group.count)
         if alive == 0:
@@ -1014,11 +1031,31 @@ def render_group_cards(
             st.caption(", ".join(w.name_en for w in grp_weapons))
             if is_sel:
                 assigned = group_targets.get(group.id, [])
-                if assigned:
-                    for tgt_faction, tgt_uid in assigned:
-                        st.caption(f"→ {_target_display_name(tgt_faction, tgt_uid)}")
+                melee_with = atk_state.get("melee_with", [])
+                if phase_key == "fight" and melee_with:
+                    st.caption("Targets (engaged):")
+                    for entry in melee_with:
+                        def_faction, def_uid = entry[0], entry[1]
+                        _, def_state = lookup(def_faction, def_uid)
+                        if def_state.get("destroyed") or def_state.get("in_reserve"):
+                            continue
+                        is_assigned = (def_faction, def_uid) in [(f, u) for f, u in assigned]
+                        tgt_name = _target_display_name(def_faction, def_uid)
+                        btn_label = f"✓ {tgt_name}" if is_assigned else f"＋ {tgt_name}"
+                        if st.button(
+                            btn_label,
+                            key=f"engtgt_{atk_uid}_{group.id}_{def_uid}",
+                            type="primary" if is_assigned else "secondary",
+                            use_container_width=True,
+                        ):
+                            toggle_group_target(def_faction, def_uid)
+                            st.rerun()
                 else:
-                    st.caption("Designate a target (▷) from the enemy army list.")
+                    if assigned:
+                        for tgt_faction, tgt_uid in assigned:
+                            st.caption(f"→ {_target_display_name(tgt_faction, tgt_uid)}")
+                    else:
+                        st.caption("Designate a target (▷) from the enemy army list.")
 
     all_entries = [
         e
@@ -1257,261 +1294,6 @@ def render_group_assignment(
         group_decl[gid] = entries
         st.session_state.group_decl = group_decl
         st.session_state.selected_model_group = None
-        st.rerun()
-
-
-def render_attack_declaration(
-    atk_faction: str,
-    atk_uid: str,
-    atk_unit: Unit,
-    atk_state: dict,  # type: ignore[type-arg]
-    use_melee: bool,
-    phase_key: str,
-    in_melee: bool = False,
-) -> None:
-    """Phase 1 — Declare targets, weapons, model counts. Writes to attack_declaration on confirm."""
-    tgts: list[tuple[str, str]] = st.session_state.selected_targets
-    if not tgts:
-        st.caption("Designate a target (▷) to begin attack declaration.")
-        return
-
-    models_alive = atk_state.get("models", atk_unit.models_max)
-
-    if in_melee and not use_melee:
-        weapons = [
-            w
-            for w in atk_unit.weapons
-            if any(not p.is_melee and p.weapon_type.startswith("Pistol") for p in w.profiles)
-        ]
-    else:
-        weapons = [w for w in atk_unit.weapons if any(p.is_melee == use_melee for p in w.profiles)]
-
-    if not weapons:
-        st.info("No melee weapons." if use_melee else "No ranged weapons.")
-        return
-
-    st.markdown(f"**{atk_unit.name_en}** — Declare Attack")
-    if in_melee:
-        st.info("Engaged in melee — Pistol weapons only.")
-
-    if atk_unit.model_groups:
-        # Model-group units declare group-by-group via render_group_cards /
-        # render_group_assignment in the player areas — never through this path.
-        return
-
-    # In fight phase, always distribute by attacks (not models).
-    # Attacks can be freely split between targets regardless of model count.
-    use_atk_counter = False
-    total_attacks: int = 0
-    if use_melee:
-        first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
-        if first_melee_profiles:
-            from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
-
-            atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
-            total_attacks_maybe = _total_attacks_int(
-                first_melee_profiles[0].attacks,
-                models_alive,
-                atk_unit.attacks + atk_bonus,
-                first_melee_profiles[0].effect,
-                first_melee_profiles[0].max_attacks,
-            )
-            if total_attacks_maybe is not None:
-                use_atk_counter = True
-                total_attacks = total_attacks_maybe
-
-    entries: list[dict] = []  # type: ignore[type-arg]
-    models_assigned = 0
-    attacks_assigned = 0
-
-    for i, (def_faction, def_uid) in enumerate(tgts):
-        def_unit, _ = lookup(def_faction, def_uid)
-
-        with st.container(border=True):
-            st.markdown(f"**→ {def_unit.name_en}**")
-            c_t, c_sv, c_inv = st.columns(3)
-            c_t.metric("T", def_unit.toughness)
-            c_sv.metric("Sv", f"{def_unit.save}+")
-            c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
-
-            if use_atk_counter:
-                # Melee: each weapon gets its own attack counter — no shared count, no multiselect
-                for weapon in weapons:
-                    profiles = [p for p in weapon.profiles if p.is_melee]
-                    if not profiles:
-                        profiles = weapon.profiles
-                    if len(profiles) > 1:
-                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
-                        p_key = f"decl_p_{atk_uid}_{def_uid}_{weapon.name_en}"
-                        sel_p = st.radio(
-                            f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
-                        )
-                        profile_idx = p_names.index(sel_p)
-                    else:
-                        profile_idx = 0
-                    atk_key = f"decl_a_{atk_uid}_{def_uid}_{weapon.name_en}"
-                    restriction = atk_unit.weapon_restrictions.get(weapon.id)
-                    atk_per_model = atk_unit.attacks + atk_bonus
-                    if restriction == "boss_nob_only":
-                        weapon_max = atk_per_model
-                    elif restriction == "1_per_10":
-                        weapon_max = (models_alive // 10) * atk_per_model
-                    elif restriction == "1_per_5":
-                        weapon_max = (models_alive // 5) * atk_per_model
-                    else:
-                        weapon_max = total_attacks
-                    if atk_key not in st.session_state:
-                        is_first = i == 0 and weapon == weapons[0]
-                        st.session_state[atk_key] = weapon_max if is_first else 0
-                    atk_count = st.number_input(
-                        f"{weapon.name_en} — Attacks",
-                        min_value=0,
-                        max_value=weapon_max,
-                        step=1,
-                        key=atk_key,
-                    )
-                    restriction_suffix = (
-                        f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restriction)}]</span>'
-                        if restriction
-                        else ""
-                    )
-                    st.markdown(
-                        f"**{weapon.name_en}**{restriction_suffix} → "
-                        f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                        f"{int(atk_count)}</span> Attacks",
-                        unsafe_allow_html=True,
-                    )
-                    entries.append(
-                        {
-                            "def_faction": def_faction,
-                            "def_uid": def_uid,
-                            "weapon_name": weapon.name_en,
-                            "profile_idx": profile_idx,
-                            "models_count": models_alive,
-                            "atk_override": int(atk_count),
-                        }
-                    )
-                    attacks_assigned += int(atk_count)
-            else:
-                # Shooting: multiselect weapons + model counter (unchanged)
-                if len(weapons) > 1:
-                    sel_w_names: list[str] = st.multiselect(
-                        "Weapons",
-                        [w.name_en for w in weapons],
-                        default=[weapons[0].name_en],
-                        key=f"decl_ws_{atk_uid}_{def_uid}",
-                    )
-                    sel_weapons = [w for w in weapons if w.name_en in sel_w_names]
-                else:
-                    sel_weapons = [weapons[0]]
-                    st.caption(f"Weapon: **{weapons[0].name_en}**")
-
-                models_key = f"decl_m_{atk_uid}_{def_uid}"
-                if models_key not in st.session_state:
-                    st.session_state[models_key] = models_alive if i == 0 else 0
-                models_val = st.number_input(
-                    "Models shooting",
-                    min_value=0,
-                    max_value=models_alive,
-                    step=1,
-                    key=models_key,
-                )
-
-                if not sel_weapons:
-                    st.warning("Select at least one weapon.")
-                else:
-                    for weapon in sel_weapons:
-                        profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
-                        if not profiles:
-                            profiles = weapon.profiles
-                        if len(profiles) > 1:
-                            p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
-                            p_key = f"decl_p_{atk_uid}_{def_uid}_{weapon.name_en}"
-                            sel_p = st.radio(
-                                f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True
-                            )
-                            profile_idx = p_names.index(sel_p)
-                        else:
-                            profile_idx = 0
-                        profile = profiles[profile_idx]
-                        restr = atk_unit.weapon_restrictions.get(weapon.id)
-                        if restr == "boss_nob_only":
-                            eff_models = 1
-                        elif restr == "1_per_10":
-                            eff_models = models_alive // 10
-                        elif restr == "1_per_5":
-                            eff_models = models_alive // 5
-                        else:
-                            eff_models = int(models_val)
-                        displayed_count = _compute_attacks(
-                            profile.attacks,
-                            eff_models,
-                            atk_unit.attacks,
-                            profile.effect,
-                            profile.max_attacks,
-                        )
-                        restr_suffix = (
-                            f' &nbsp;<span style="font-size:0.75rem;color:#94a3b8;">[{_restriction_label(restr)}]</span>'
-                            if restr
-                            else ""
-                        )
-                        st.markdown(
-                            f"**{weapon.name_en}**{restr_suffix} → "
-                            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                            f"{displayed_count}</span> Attacks",
-                            unsafe_allow_html=True,
-                        )
-                        if (
-                            profile.weapon_type.startswith("Rapid Fire")
-                            and profile.range_inches > 0
-                        ):
-                            half = profile.range_inches // 2
-                            st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
-                        entries.append(
-                            {
-                                "def_faction": def_faction,
-                                "def_uid": def_uid,
-                                "weapon_name": weapon.name_en,
-                                "profile_idx": profile_idx,
-                                "models_count": eff_models,
-                            }
-                        )
-                    models_assigned += int(models_val)
-
-    if use_atk_counter:
-        remaining = total_attacks - attacks_assigned
-        if remaining < 0:
-            st.error(f"Too many attacks assigned ({attacks_assigned}/{total_attacks})")
-        elif remaining > 0:
-            st.caption(f"Remaining: {remaining} / {total_attacks} attacks unassigned")
-        else:
-            st.caption(f"✓ {total_attacks} / {total_attacks} attacks assigned")
-        can_start = 0 < attacks_assigned <= total_attacks
-    else:
-        remaining = models_alive - models_assigned
-        if remaining < 0:
-            st.error(f"Too many models assigned ({models_assigned}/{models_alive})")
-        elif remaining > 0:
-            st.caption(f"Remaining: {remaining} / {models_alive} unassigned")
-        else:
-            st.caption(f"✓ {models_alive} / {models_alive} assigned")
-        can_start = 0 < models_assigned <= models_alive
-    if st.button(
-        "Start Resolution →",
-        type="primary",
-        disabled=not can_start,
-        key=f"start_res_{atk_uid}",
-    ):
-        st.session_state.attack_declaration = {
-            "active": True,
-            "atk_faction": atk_faction,
-            "atk_uid": atk_uid,
-            "phase_key": phase_key,
-            "use_melee": use_melee,
-            "in_melee": in_melee,
-            "entries": [e for e in entries if e.get("atk_override", e["models_count"]) > 0],
-            "seq": _next_declaration_seq(),
-        }
         st.rerun()
 
 

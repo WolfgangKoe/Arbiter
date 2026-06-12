@@ -1039,7 +1039,8 @@ def test_load_roster_boyz_has_resolved_model_groups() -> None:
     assert "wh40k_9e.orks.weapon.slugga" not in carrier_ids
 
 
-def test_load_roster_unit_without_groups_has_empty_model_groups() -> None:
+def test_load_roster_unit_without_yaml_groups_gets_synthetic_group() -> None:
+    """Homogeneous units (no model_groups in YAML) receive one synthetic group after loading."""
     from pathlib import Path
 
     roster_path = Path(__file__).parent.parent.parent / "data" / "rosters" / "orks_test.yaml"
@@ -1047,7 +1048,28 @@ def test_load_roster_unit_without_groups_has_empty_model_groups() -> None:
     matched, _ = load_roster(roster_path, catalog)
     gretchin = next((u for u, _ in matched if u.id == "wh40k_9e.orks.unit.gretchin"), None)
     assert gretchin is not None
-    assert gretchin.model_groups == []
+    assert len(gretchin.model_groups) == 1
+    synth = gretchin.model_groups[0]
+    assert synth.id == "models"
+    assert synth.name_en == "Gretchin"
+    assert synth.count == 10  # roster models=10, models_max=40
+    assert synth.priority == 1
+    assert len(synth.weapons) > 0
+
+
+def test_all_roster_units_have_at_least_one_model_group() -> None:
+    """Every unit in a loaded roster must have at least one model group (Plan 013)."""
+    from pathlib import Path
+
+    for roster_name in ("necrons_alpha.yaml", "orks_test.yaml"):
+        roster_path = Path(__file__).parent.parent.parent / "data" / "rosters" / roster_name
+        faction = roster_name.split("_")[0]
+        catalog = load_unit_catalog(faction)
+        matched, _ = load_roster(roster_path, catalog)
+        for unit, _ in matched:
+            assert (
+                len(unit.model_groups) >= 1
+            ), f"{unit.id} in {roster_name} has no model groups after loading"
 
 
 def test_round_choice_abilities_are_cached() -> None:

@@ -235,7 +235,8 @@ pro Gruppe im State:
 ```python
 unit_state["group_models"]: dict[str, int]
 # Init: {group.id: group.count} aus den aufgelösten model_groups (game_state.py)
-# Homogene Einheiten (ohne model_groups): {} — alter Pfad bleibt aktiv
+# Einheiten ohne YAML-model_groups erhalten im Loader eine synthetische Gruppe
+# {"models": count} — damit sind alle Einheiten über denselben Gruppen-Flow deklarierbar.
 ```
 
 **Invarianten:**

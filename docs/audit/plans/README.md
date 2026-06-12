@@ -43,7 +43,7 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| 013 | P18: Einheitlicher Gruppen-Flow (jede Einheit = Gruppen) + Ziele neben Untergruppen | P1 (HOCH) | M–L | — | TODO |
+| 013 | P18: Einheitlicher Gruppen-Flow (jede Einheit = Gruppen) + Ziele neben Untergruppen | P1 (HOCH) | M–L | — | **DONE** (2026-06-12) |
 | 014 | P17: Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten | P1 (HOCH) | M | 013 (zwingend) | TODO |
 | 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |

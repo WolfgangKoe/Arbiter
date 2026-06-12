@@ -1015,5 +1015,14 @@ def load_roster(
                     unit.model_group_specs, models, group_loadouts, weapon_catalog
                 )
                 unit = dataclasses.replace(unit, model_groups=resolved)
+            if not unit.model_groups and unit.weapons:
+                synth = ModelGroup(
+                    id="models",
+                    name_en=unit.name_en,
+                    count=min(models, unit.models_max),
+                    weapons=list(unit.weapons),
+                    priority=1,
+                )
+                unit = dataclasses.replace(unit, model_groups=[synth])
             matched.append((unit, models))
     return matched, unmatched
