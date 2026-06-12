@@ -127,6 +127,7 @@
     amount: D3
     revive: false
 - id: wh40k_9e.necrons.wargear.resurrection_orb
+  handler: resurrection_orb
   name_en: Resurrection Orb
   ability_en: Once per battle, in your Command phase, the bearer can use its resurrection orb. If it does,
     select one friendly <DYNASTY> unit within 6" of the bearer that is not at its Starting Strength and

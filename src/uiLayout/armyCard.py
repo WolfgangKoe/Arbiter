@@ -30,7 +30,7 @@ def _faction_badge(text: str) -> str:
 
 
 def _active_ability_badge(text: str) -> str:
-    """HTML badge for an active army ability (Waaagh!, Command Protocol, …).
+    """HTML badge for an active army ability (faction once-per-battle, Command Protocol, …).
 
     Army abilities grant buffs → ONE generic buff-green badge for all factions
     (design_colors.md §0/§4a). No faction-specific colors in src/.
@@ -294,15 +294,15 @@ def _render_protocol_ui(faction: str) -> None:
             _render_extra_protocol(extra_p, faction, faction_dir, is_active, current_round)
 
 
-def _render_waaagh_ui(
+def _render_once_per_battle_ability_ui(
     faction: str,
     faction_abilities: list[Ability],
     units: list[Unit],
 ) -> None:
-    """Command-phase faction ability UI for factions with once-per-battle activations (WAAAGH! etc.).
+    """Command-phase UI for factions with once-per-battle activated abilities.
 
-    Generic: reads command-phase activated abilities from the passed faction_abilities list.
-    No-ops silently for factions without such abilities (Necrons, Space Marines, etc.).
+    Generic: reads abilities from YAML, stores activation in activated_abilities session key.
+    No-ops silently for factions without such abilities.
     """
     command_activated = [
         a
@@ -321,60 +321,55 @@ def _render_waaagh_ui(
     if load_round_choice_abilities(faction_dir):
         return
 
-    # Find the once-per-battle activated ability (e.g. WAAAGH!)
-    waaagh_ability = next(
+    once_ability = next(
         (a for a in command_activated if any(c.once_per_battle for c in a.conditions)),
         None,
     )
-    if not waaagh_ability:
+    if not once_ability:
         return
 
     phase_key = _current_phase_key()
     current_round = st.session_state.get("round", 1)
     is_active = faction == st.session_state.get("active")
-    waaagh_state: dict = st.session_state.get("waaagh_state", {})
-    player_ws = waaagh_state.get(faction)
+    activated: dict = st.session_state.get("activated_abilities", {})
+    entry = activated.get(faction)
 
-    ability_name = waaagh_ability.name_en.split("—")[0].strip()
+    ability_name = once_ability.name_en.split("—")[0].strip()
 
     st.divider()
 
-    if player_ws:
-        stage = player_ws.get("stage", 1)
-        badge_text = f"{ability_name.upper()} — STAGE {stage}"
+    if entry:
+        # Show the currently active stage's badge_label and active_text from YAML
+        current_id = entry.get("ability_id", once_ability.id)
+        current_ability = next((a for a in faction_abilities if a.id == current_id), once_ability)
+        badge_text = current_ability.badge_label or ability_name.upper()
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-        # Find the ability for the current stage to get its active_text
-        stage_id = player_ws.get("ability_id", waaagh_ability.id)
-        if stage == 2:
-            stage_id = stage_id.replace("stage1", "stage2")
-        stage_ability = next((a for a in faction_abilities if a.id == stage_id), waaagh_ability)
-        if stage_ability.active_text:
-            st.caption(f"↳ {stage_ability.active_text}")
+        if current_ability.active_text:
+            st.caption(f"↳ {current_ability.active_text}")
         return
 
     if not is_active or phase_key != "command":
         st.caption(f"— {ability_name} not called —")
         return
 
-    has_activator = any(check_conditions(waaagh_ability, u, {}) for u in units)
-    required_kws = [kw for c in waaagh_ability.conditions for kw in (c.has_keywords or [])]
+    has_activator = any(check_conditions(once_ability, u, {}) for u in units)
+    required_kws = [kw for c in once_ability.conditions for kw in (c.has_keywords or [])]
     kw_str = " or ".join(required_kws) if required_kws else "activator"
 
     if has_activator:
         st.caption(f"**{ability_name}** — call once per battle (requires {kw_str})")
         if st.button(
             f"Call {ability_name}!",
-            key=f"waaagh_call_{faction}",
+            key=f"once_ability_call_{faction}",
             type="primary",
             use_container_width=True,
         ):
-            waaagh_state[faction] = {
-                "stage": 1,
+            activated[faction] = {
+                "ability_id": once_ability.id,
                 "round_activated": current_round,
-                "ability_id": waaagh_ability.id,
             }
-            st.session_state.waaagh_state = waaagh_state
-            log_action(current_round, "command", faction, f"{ability_name} called — Stage 1 active")
+            st.session_state.activated_abilities = activated
+            log_action(current_round, "command", faction, f"{ability_name} called")
             st.rerun()
     else:
         st.caption(f"— {ability_name} not available (no {kw_str}) —")
@@ -402,8 +397,8 @@ def render_army_card(
         # Command Protocol UI (Necrons — no-op for other factions)
         _render_protocol_ui(faction)
 
-        # Once-per-battle command-phase faction abilities (WAAAGH! etc. — no-op for Necrons)
-        _render_waaagh_ui(faction, faction_abilities, units)
+        # Once-per-battle command-phase faction abilities — no-op if faction has none
+        _render_once_per_battle_ability_ui(faction, faction_abilities, units)
 
         # Triggered ability buttons (phase-dependent)
         _render_triggered_abilities(faction, faction_abilities, units, units_state, phase_key)

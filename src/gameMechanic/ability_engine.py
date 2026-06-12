@@ -110,10 +110,80 @@ def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) 
     return {}
 
 
-def waaagh_attack_bonus(faction: str, unit: Unit) -> int:
-    """+1 Attacks, solange für diese Fraktion ein WAAAGH! aktiv ist und die Einheit profitiert."""
-    waaagh = st.session_state.get("waaagh_state", {}).get(faction)
-    return 1 if (waaagh and unit.has_keyword("ORK")) else 0
+def _unit_matches_target(unit: Unit, effect: dict) -> bool:
+    """True if unit satisfies the effect's target_keywords / target_keywords_any constraints."""
+    required = effect.get("target_keywords", [])
+    any_of = effect.get("target_keywords_any", [])
+    if any(not unit.has_keyword(kw) for kw in required):
+        return False
+    if any_of and not any(unit.has_keyword(kw) for kw in any_of):
+        return False
+    return True
+
+
+def _active_effects_for_faction(faction: str) -> list[dict]:
+    """Raw sub-effect dicts from the faction's currently activated ability, if any."""
+    entry = st.session_state.get("activated_abilities", {}).get(faction)
+    if not entry:
+        return []
+    ability_id: str | None = entry.get("ability_id")
+    if not ability_id:
+        return []
+    abilities = load_faction_abilities(faction_dir_for(faction))
+    ability = next((a for a in abilities if a.id == ability_id), None)
+    if not ability or ability.effect.type != "multi":
+        return []
+    return ability.effect.effects or []
+
+
+def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
+    """Total modifier for a stat from all active faction abilities matching this unit."""
+    total = 0
+    for eff in _active_effects_for_faction(faction):
+        if eff.get("type") == "buff_stat" and eff.get("stat") == stat:
+            if _unit_matches_target(unit, eff):
+                total += int(eff.get("modifier", 0))
+    return total
+
+
+def ability_invuln_save(faction: str, unit: Unit) -> int | None:
+    """Best invuln save granted by active faction abilities for this unit, or None."""
+    best: int | None = None
+    for eff in _active_effects_for_faction(faction):
+        if eff.get("type") == "invuln_save" and _unit_matches_target(unit, eff):
+            val = eff.get("modifier")
+            if val is not None:
+                best = int(val) if best is None else min(best, int(val))
+    return best
+
+
+def ability_badge_label(faction: str, unit: Unit) -> str | None:
+    """Badge label from the active faction ability if this unit benefits, else None.
+
+    The label is read from the ability's badge_label field in YAML — no hardcoded strings.
+    """
+    entry = st.session_state.get("activated_abilities", {}).get(faction)
+    if not entry:
+        return None
+    ability_id: str | None = entry.get("ability_id")
+    if not ability_id:
+        return None
+    abilities = load_faction_abilities(faction_dir_for(faction))
+    ability = next((a for a in abilities if a.id == ability_id), None)
+    if not ability or not ability.badge_label:
+        return None
+    effects = ability.effect.effects or []
+    if effects and not any(_unit_matches_target(unit, eff) for eff in effects):
+        return None
+    return ability.badge_label
+
+
+def charge_after_advance_allowed(faction: str, unit: Unit) -> bool:
+    """True if an active faction ability permits charging after advancing for this unit."""
+    return any(
+        eff.get("type") == "charge_after_advance" and _unit_matches_target(unit, eff)
+        for eff in _active_effects_for_faction(faction)
+    )
 
 
 def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:

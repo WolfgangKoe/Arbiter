@@ -458,17 +458,12 @@ def _render_rp_block(
     models_lost: int,
     tab_key: str,
 ) -> None:
-    """Render Reanimation Protocols block after damage if target is a Necron unit."""
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+    """Render Reanimation Protocols block after damage if the unit has the keyword."""
     from gameMechanic.unit_mutations import heal_unit  # noqa: PLC0415
 
     if models_lost <= 0:
         return
-    try:
-        fdir = faction_dir_for(def_faction)
-    except KeyError:
-        return
-    if not fdir.startswith("necron"):
+    if "reanimationProtocols" not in def_unit.keywords:
         return
 
     rp_key = f"rp_{tab_key}"
@@ -684,7 +679,13 @@ def _render_resolution_tab(
         profiles = weapon.profiles
     profile = profiles[min(profile_idx, len(profiles) - 1)]
 
-    strength = _parse_strength(profile.strength, atk_unit.strength)
+    from gameMechanic.ability_engine import (  # noqa: PLC0415
+        ability_invuln_save,
+        buff_stat_bonus,
+    )
+
+    str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
+    strength = _parse_strength(profile.strength, atk_unit.strength + str_bonus)
     ap = profile.ap
     skill_label = "WS" if use_melee else "BS"
     advanced = atk_state.get("turn_flags", {}).get("advanced", False)
@@ -742,9 +743,18 @@ def _render_resolution_tab(
         modifiers=final_atk_mods,
         use_melee=use_melee,
     )
+    ability_inv = ability_invuln_save(def_faction, def_unit)
+    native_inv = def_unit.invuln_save
+    if ability_inv is not None and (native_inv is None or ability_inv < native_inv):
+        effective_invuln: int | None = ability_inv
+        invuln_from_ability = True
+    else:
+        effective_invuln = native_inv
+        invuln_from_ability = False
+
     save_result = resolve_save(
         base_save=def_unit.save,
-        invuln_save=def_unit.invuln_save,
+        invuln_save=effective_invuln,
         ap=ap,
         save_modifiers=final_save_mods,
     )
@@ -768,11 +778,6 @@ def _render_resolution_tab(
         " Attacks",
         unsafe_allow_html=True,
     )
-    waaagh_atk = st.session_state.get("waaagh_state", {}).get(atk_faction)
-    if waaagh_atk and use_melee:
-        stage = waaagh_atk.get("stage", 1)
-        inv_txt = "5+" if stage == 1 else "6+"
-        st.caption(f"Waaagh! Stage {stage}: +1 Strength · +1 Attacks · {inv_txt} invuln")
 
     # HIT BLOCK
     if weapon_special["auto_hit"]:
@@ -787,12 +792,14 @@ def _render_resolution_tab(
     st.markdown("")
 
     # WOUND BLOCK
-    _render_dice_wound_block(strength, def_unit.toughness, atk_result["wound"]["stack"])
+    _render_dice_wound_block(
+        strength, def_unit.toughness, atk_result["wound"]["stack"], strength_buff=str_bonus
+    )
 
     st.markdown("---")
 
     # SAVE BLOCK
-    _render_dice_save_block(save_result, ap)
+    _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
 
     # Cover checkboxes for save modifiers (phase-bound)
     if is_shooting and show_cover_controls:
@@ -953,9 +960,9 @@ def render_group_cards(
     summary with an Edit button; the resolution starts once at least one group has
     declared attacks.
     """
-    from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+    from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
 
-    waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
+    atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
     group_models: dict[str, int] = atk_state.get("group_models", {})
     group_decl: dict = st.session_state.get("group_decl", {})  # type: ignore[type-arg]
     group_targets: dict = st.session_state.get("group_targets", {})  # type: ignore[type-arg]
@@ -1001,7 +1008,7 @@ def render_group_cards(
                 st.rerun()
             if use_melee:
                 budget = _group_melee_budget(
-                    grp_weapons, alive, (atk_unit.attacks or 0) + waaagh_bonus
+                    grp_weapons, alive, (atk_unit.attacks or 0) + atk_bonus
                 )
                 st.caption(f"{budget} attacks")
             st.caption(", ".join(w.name_en for w in grp_weapons))
@@ -1065,9 +1072,9 @@ def render_group_assignment(
         st.caption("← Designate a target (▷) from your army list.")
         return
 
-    from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+    from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
 
-    waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
+    atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
     grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
 
     def _val(key: str) -> int:
@@ -1083,9 +1090,7 @@ def render_group_assignment(
     group_budget = 0
     weapon_caps: dict[str, int] = {}
     if use_melee:
-        group_budget = _group_melee_budget(
-            grp_weapons, alive, (atk_unit.attacks or 0) + waaagh_bonus
-        )
+        group_budget = _group_melee_budget(grp_weapons, alive, (atk_unit.attacks or 0) + atk_bonus)
         total_assigned = sum(
             _val(f"decl_a_{gid}_{atk_uid}_{d_uid}_{w.name_en}")
             for _, d_uid in tgts
@@ -1144,7 +1149,7 @@ def render_group_assignment(
                         _total_attacks_int(
                             profile.attacks,
                             alive,
-                            atk_unit.attacks + waaagh_bonus,
+                            atk_unit.attacks + atk_bonus,
                             profile.effect,
                             profile.max_attacks,
                         )
@@ -1301,13 +1306,13 @@ def render_attack_declaration(
     if use_melee:
         first_melee_profiles = [p for w in weapons for p in w.profiles if p.is_melee]
         if first_melee_profiles:
-            from gameMechanic.ability_engine import waaagh_attack_bonus  # noqa: PLC0415
+            from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
 
-            waaagh_bonus = waaagh_attack_bonus(atk_faction, atk_unit)
+            atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
             total_attacks_maybe = _total_attacks_int(
                 first_melee_profiles[0].attacks,
                 models_alive,
-                atk_unit.attacks + waaagh_bonus,
+                atk_unit.attacks + atk_bonus,
                 first_melee_profiles[0].effect,
                 first_melee_profiles[0].max_attacks,
             )
@@ -1346,7 +1351,7 @@ def render_attack_declaration(
                         profile_idx = 0
                     atk_key = f"decl_a_{atk_uid}_{def_uid}_{weapon.name_en}"
                     restriction = atk_unit.weapon_restrictions.get(weapon.id)
-                    atk_per_model = atk_unit.attacks + waaagh_bonus
+                    atk_per_model = atk_unit.attacks + atk_bonus
                     if restriction == "boss_nob_only":
                         weapon_max = atk_per_model
                     elif restriction == "1_per_10":

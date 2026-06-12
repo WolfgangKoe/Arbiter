@@ -27,6 +27,8 @@ abilities:
 
   - id: wh40k_9e.orks.faction.waaagh_stage1
     name_en: "Waaagh! — Call Da Waaagh!"
+    badge_label: "WAAAGH! S1"
+    next_stage_id: wh40k_9e.orks.faction.waaagh_stage2
     active_text: "+1 Strength · +1 Attacks · 5+ invuln · Advance & Charge"
     ability_type: activated
     source: faction_rule
@@ -44,20 +46,26 @@ abilities:
       effects:
         - type: charge_after_advance
           target: friendly_orks_core_or_character
+          target_keywords: [ORK]
+          target_keywords_any: [CORE, CHARACTER]
         - type: buff_stat
           target: friendly_orks
+          target_keywords: [ORK]
           stat: strength
           modifier: 1
         - type: buff_stat
           target: friendly_orks
+          target_keywords: [ORK]
           stat: attacks
           modifier: 1
         - type: invuln_save
           target: friendly_orks
+          target_keywords: [ORK]
           modifier: 5
 
   - id: wh40k_9e.orks.faction.waaagh_stage2
     name_en: "Waaagh! — Get Stuck In!"
+    badge_label: "WAAAGH! S2"
     active_text: "+1 Strength · +1 Attacks · 6+ invuln"
     ability_type: passive
     source: faction_rule
@@ -74,14 +82,17 @@ abilities:
       effects:
         - type: buff_stat
           target: friendly_orks
+          target_keywords: [ORK]
           stat: strength
           modifier: 1
         - type: buff_stat
           target: friendly_orks
+          target_keywords: [ORK]
           stat: attacks
           modifier: 1
         - type: invuln_save
           target: friendly_orks
+          target_keywords: [ORK]
           modifier: 6
 
   - id: wh40k_9e.orks.faction.speedwaaagh_stage1

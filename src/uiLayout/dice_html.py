@@ -285,6 +285,7 @@ def _render_dice_wound_block(
     strength: int,
     toughness: int,
     wound_stack: list[dict],  # type: ignore[type-arg]
+    strength_buff: int = 0,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue."""
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
@@ -296,9 +297,16 @@ def _render_dice_wound_block(
     # D5: S/T comparison clearly highlighted; NO "→ N+" — the result is the
     # boxed threshold in the header row below.
     hl = 'style="font-size:1.05rem;font-weight:700;color:#fbbf24;"'
+    if strength_buff > 0:
+        s_style = (
+            f'style="font-size:1.05rem;font-weight:700;color:{_BUFF_COLOR_HEX};'
+            f'border:1px solid {_BUFF_COLOR_HEX};border-radius:3px;padding:0 3px;"'
+        )
+    else:
+        s_style = hl
     st.markdown(block_divider_html(), unsafe_allow_html=True)
     st.markdown(
-        f"**WOUND** &nbsp; <span {hl}>S {strength}</span> "
+        f"**WOUND** &nbsp; <span {s_style}>S {strength}</span> "
         f'<span style="font-size:1.05rem;font-weight:700;color:#e7e5e4;">{rel}</span> '
         f"<span {hl}>T {toughness}</span>",
         unsafe_allow_html=True,
@@ -326,7 +334,7 @@ def _render_dice_wound_block(
         st.markdown("".join(parts), unsafe_allow_html=True)
 
 
-def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-arg]
+def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -> None:  # type: ignore[type-arg]
     """SAVE block: table-aligned rows (label | content) for armour, modifiers, eff, invuln."""
     armour = save["armour"]
     armour_eff = save["armour_eff"]
@@ -371,7 +379,9 @@ def _render_dice_save_block(save: dict, ap: int) -> None:  # type: ignore[type-a
 
     # Invuln save block (separate section)
     if invuln is not None:
-        inv_color = _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
+        inv_color = (
+            _BUFF_COLOR_HEX if ability_invuln else _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
+        )
         active_badge = (
             f'<span style="font-size:10px;color:{inv_color};border:1px solid {inv_color};'
             f'border-radius:3px;padding:0 3px;margin-left:4px;">active</span>'

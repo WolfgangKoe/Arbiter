@@ -109,7 +109,7 @@ def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type
 def _group_melee_budget(grp_weapons: list, alive: int, eff_attacks: int) -> int:  # type: ignore[type-arg]
     """Total melee attacks of a group: base attacks + extra-attack weapon bonuses.
 
-    Base = models × attacks (incl. WAAAGH bonus, passed by the caller).
+    Base = models × attacks (incl. stat bonus from active abilities, passed by the caller).
     Each carried weapon with an extra_attacks effect adds its bonus on top
     (e.g. Choppa: "1 additional attack with this weapon"); capped weapons
     (max_attacks, e.g. attack squig) add exactly their cap.

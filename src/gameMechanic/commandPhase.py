@@ -13,13 +13,12 @@ from gameMechanic.game_state import (
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
+from gameObjects.loader import wargear_ids_with_handler
 from uiLayout._common import (
     lookup,
     state_badges_html,
     wound_adjustment_buttons,
 )
-
-_RES_ORB_ID = "wh40k_9e.necrons.wargear.resurrection_orb"
 
 
 def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
@@ -171,11 +170,12 @@ def _render_resurrection_orb(
     units_state: dict,  # type: ignore[type-arg]
     unit_by_id: dict,  # type: ignore[type-arg]
     bearer_uid: str = "",
+    orb_id: str = "",
 ) -> None:
     st.divider()
     st.markdown("**Resurrection Orb**")
 
-    if st.session_state.wargear_used.get(_RES_ORB_ID, False):
+    if st.session_state.wargear_used.get(orb_id, False):
         st.caption("Already used this battle.")
         return
 
@@ -193,7 +193,7 @@ def _render_resurrection_orb(
             use_container_width=True,
         ):
             name = target_unit.name_en if target_unit else res_orb_target
-            st.session_state.wargear_used[_RES_ORB_ID] = True
+            st.session_state.wargear_used[orb_id] = True
             log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
             st.session_state.res_orb_target_uid = None
             st.rerun()
@@ -238,8 +238,12 @@ def _render_unit_command_abilities(
             _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
 
     unit = unit_by_id.get(unit_id)
-    if unit and _RES_ORB_ID in unit.wargear_ids:
-        _render_resurrection_orb(faction, state, units_state, unit_by_id, selected_state_key)
+    orb_ids = wargear_ids_with_handler(faction_dir, "resurrection_orb")
+    found_orb_id = next((wid for wid in (unit.wargear_ids if unit else []) if wid in orb_ids), None)
+    if found_orb_id:
+        _render_resurrection_orb(
+            faction, state, units_state, unit_by_id, selected_state_key, orb_id=found_orb_id
+        )
     if unit and unit.get_triggered_effect("phase_start", "command", "gain_cp_roll"):
         _render_gain_cp_roll(unit, faction, state)
 

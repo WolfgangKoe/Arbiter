@@ -308,10 +308,14 @@ def render_unit_card(
                 st.markdown(f"**{unit.name_en}**")
 
         # ── State badges + Keywords ────────────────────────────────
-        # Army abilities (Waaagh! etc.) show once in the armyCard, not per unit.
         # Relics show no badge of their own — only their effects (buff/debuff).
         if phase_key != "setup":
             badges = _state_badges_html(state)
+            from gameMechanic.ability_engine import ability_badge_label  # noqa: PLC0415
+
+            ability_lbl = ability_badge_label(faction, unit)
+            if ability_lbl:
+                badges += _badge(ability_lbl, variant="buff")
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)

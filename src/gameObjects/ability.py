@@ -33,6 +33,7 @@ class Effect:
     modifier: int | None = None
     handler: str | None = None
     revive: bool = True  # False = cap heal to current living models, no resurrection
+    effects: list[dict] | None = None  # sub-effects for multi-type effects
 
 
 @dataclass
@@ -49,3 +50,4 @@ class Ability:
     ability_type: str = "triggered"  # "triggered" | "activated"
     badge_label: str | None = None
     active_text: str | None = None
+    next_stage_id: str | None = None

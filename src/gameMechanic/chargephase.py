@@ -80,17 +80,12 @@ def _active_charge(
     """Render charge action for the active player's selected unit."""
     flags = unit_state.get("turn_flags", {})
     if flags.get("advanced"):
-        waaagh = st.session_state.get("waaagh_state", {}).get(faction)
-        waaagh_advance_charge = (
-            waaagh
-            and waaagh.get("stage") == 1
-            and unit.has_keyword("ORK")
-            and (unit.has_keyword("CORE") or unit.has_keyword("CHARACTER"))
-        )
-        if not waaagh_advance_charge:
+        from gameMechanic.ability_engine import charge_after_advance_allowed  # noqa: PLC0415
+
+        if not charge_after_advance_allowed(faction, unit):
             st.warning("Advanced this turn — cannot charge.")
             return
-        st.caption("WAAAGH! Stage 1 — Advance & Charge (ORKS CORE/CHARACTER).")
+        st.caption("Advance & Charge active (faction ability).")
     if flags.get("retreated"):
         st.warning("Retreated this turn — cannot charge.")
         return

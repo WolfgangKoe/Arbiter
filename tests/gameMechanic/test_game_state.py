@@ -590,7 +590,7 @@ class TestResetPhaseState:
 # ---------------------------------------------------------------------------
 
 
-def _turn_state_session(*, waaagh: dict | None = None, round_num: int = 1) -> _S:
+def _turn_state_session(*, activated: dict | None = None, round_num: int = 1) -> _S:
     unit = _full_unit_state()
     unit["turn_flags"]["advanced"] = True
     unit["lost_models_this_turn"] = 3
@@ -602,7 +602,7 @@ def _turn_state_session(*, waaagh: dict | None = None, round_num: int = 1) -> _S
         p2_units={"u2": _full_unit_state()},
         p1_faction_dir="necrons",
         p2_faction_dir="orks",
-        waaagh_state=waaagh or {},
+        activated_abilities=activated or {},
         pending_mortal_undo=None,
     )
     return s
@@ -625,30 +625,43 @@ class TestResetTurnState:
         _gs._reset_turn_state()
         assert s["p1_units"]["u1"]["active_buffs"] == []
 
-    def test_waaagh_stage1_upgrades_to_stage2_on_new_round(self) -> None:
-        # Stage 1 activated in round 1; now it's round 2 → should upgrade to stage 2
+    def test_stage1_upgrades_to_stage2_on_new_round(self) -> None:
+        # Ability with next_stage_id activated in round 1; now round 2 → ability_id advances
         s = _turn_state_session(
-            waaagh={"Orks": {"stage": 1, "round_activated": 1}},
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
+            },
             round_num=2,
         )
         _gs._reset_turn_state()
-        assert s["waaagh_state"]["Orks"]["stage"] == 2
+        assert (
+            s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage2"
+        )
 
-    def test_waaagh_stage1_stays_stage1_in_same_round(self) -> None:
+    def test_stage1_stays_in_same_round(self) -> None:
         s = _turn_state_session(
-            waaagh={"Orks": {"stage": 1, "round_activated": 1}},
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
+            },
             round_num=1,
         )
         _gs._reset_turn_state()
-        assert s["waaagh_state"]["Orks"]["stage"] == 1
+        assert (
+            s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage1"
+        )
 
-    def test_waaagh_stage2_unchanged(self) -> None:
+    def test_stage2_unchanged_no_next_stage(self) -> None:
+        # Stage 2 has no next_stage_id → ability_id must not change
         s = _turn_state_session(
-            waaagh={"Orks": {"stage": 2, "round_activated": 1}},
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 1}
+            },
             round_num=3,
         )
         _gs._reset_turn_state()
-        assert s["waaagh_state"]["Orks"]["stage"] == 2
+        assert (
+            s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage2"
+        )
 
 
 # ---------------------------------------------------------------------------

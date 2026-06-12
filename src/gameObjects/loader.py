@@ -386,12 +386,14 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             modifier=d["effect"].get("modifier"),
             handler=d["effect"].get("handler"),
             revive=d["effect"].get("revive", True),
+            effects=d["effect"].get("effects"),
         ),
         unit_id=d.get("unit_id"),
         wargear_id=d.get("wargear_id"),
         ability_type=d.get("ability_type", "triggered"),
         badge_label=d.get("badge_label"),
         active_text=d.get("active_text"),
+        next_stage_id=d.get("next_stage_id"),
     )
 
 
@@ -588,6 +590,12 @@ def load_wargear_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[t
     data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
     return {e["id"]: e for e in entries if isinstance(e, dict) and "id" in e}
+
+
+def wargear_ids_with_handler(faction_dir: str, handler: str) -> set[str]:
+    """Return IDs of wargear items that carry the given handler tag."""
+    catalog = load_wargear_catalog(faction_dir)
+    return {wid for wid, entry in catalog.items() if entry.get("handler") == handler}
 
 
 def load_relic_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[type-arg]

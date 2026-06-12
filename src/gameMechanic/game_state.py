@@ -299,9 +299,9 @@ def init_state(
     st.session_state.secondary_vp = secondary_vp
 
     # Protocol per-faction keys are not pre-initialized; armyCard sets them on demand
-    st.session_state.waaagh_state: dict = (
+    st.session_state.activated_abilities: dict = (
         {}
-    )  # {player_name: {"stage": 1|2, "round_activated": int}}
+    )  # {player_name: {"ability_id": str, "round_activated": int}}
     st.session_state.psi_attempts_this_phase = 0
     st.session_state.fight_current_player: str | None = None
     st.session_state.attack_declaration: dict = {"active": False, "entries": []}
@@ -393,12 +393,23 @@ def _reset_turn_state() -> None:
             st.session_state[f"protocol_active_{fdir}"] = None
             st.session_state[f"protocol_directive_{fdir}"] = None
             st.session_state[f"protocol_extra_directive_{fdir}"] = None
-    # WAAAGH! Stage 1 → Stage 2 transition: auto-upgrade when a new round begins
-    waaagh = st.session_state.get("waaagh_state", {})
-    for player, ws in waaagh.items():
-        if ws.get("stage") == 1 and ws.get("round_activated", current_round) < current_round:
-            waaagh[player] = {**ws, "stage": 2}
-    st.session_state.waaagh_state = waaagh
+    # Stage transition: if the active ability has a next_stage_id and a new round began, advance
+    from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
+
+    activated = st.session_state.get("activated_abilities", {})
+    for player, entry in activated.items():
+        ability_id = entry.get("ability_id")
+        round_activated = entry.get("round_activated", current_round)
+        if ability_id and round_activated < current_round:
+            try:
+                fdir = faction_dir_for(player)
+            except KeyError:
+                continue
+            abilities = load_faction_abilities(fdir)
+            ability = next((a for a in abilities if a.id == ability_id), None)
+            if ability and ability.next_stage_id:
+                activated[player] = {**entry, "ability_id": ability.next_stage_id}
+    st.session_state.activated_abilities = activated
 
 
 def next_phase() -> None:

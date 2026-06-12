@@ -10,13 +10,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.ability_engine as _eng  # noqa: E402
 from gameMechanic.ability_engine import (  # noqa: E402
+    _unit_matches_target,
+    ability_badge_label,
+    buff_stat_bonus,
+    charge_after_advance_allowed,
     check_conditions,
     check_trigger,
     execute_effect,
     get_activated_command_abilities,
     get_active_protocol_modifier,
     get_triggered_abilities,
-    waaagh_attack_bonus,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -528,19 +531,83 @@ def test_get_triggered_abilities_ork_command_returns_empty() -> None:
     assert triggered == []
 
 
-def test_waaagh_bonus_one_for_ork_with_active_waaagh() -> None:
-    _eng.st.session_state = {"waaagh_state": {"Orks": {"stage": 1}}}
+def _orks_activated_session() -> _S:
+    """Session state with WAAAGH stage 1 active via the generic activated_abilities key."""
+    return _S(
+        activated_abilities={
+            "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
+        },
+        first_player="Orks",
+        p1_faction_dir="orks",
+    )
+
+
+def test_atk_bonus_one_for_ork_with_active_ability() -> None:
+    _eng.st.session_state = _orks_activated_session()
     unit = _make_unit(rules=[], keywords=["ORK", "CORE"])
-    assert waaagh_attack_bonus("Orks", unit) == 1
+    assert buff_stat_bonus("Orks", unit, "attacks") == 1
 
 
-def test_waaagh_bonus_zero_without_active_waaagh() -> None:
-    _eng.st.session_state = {"waaagh_state": {}}
+def test_atk_bonus_zero_without_active_ability() -> None:
+    _eng.st.session_state = {"activated_abilities": {}}
     unit = _make_unit(rules=[], keywords=["ORK"])
-    assert waaagh_attack_bonus("Orks", unit) == 0
+    assert buff_stat_bonus("Orks", unit, "attacks") == 0
 
 
-def test_waaagh_bonus_zero_for_non_ork_unit() -> None:
-    _eng.st.session_state = {"waaagh_state": {"Necrons": {"stage": 1}}}
+def test_atk_bonus_zero_for_non_ork_unit() -> None:
+    _eng.st.session_state = _orks_activated_session()
     unit = _make_unit(rules=[], keywords=["NECRON"])
-    assert waaagh_attack_bonus("Necrons", unit) == 0
+    assert buff_stat_bonus("Orks", unit, "attacks") == 0
+
+
+def test_atk_bonus_applies_to_ork_keyword_unit() -> None:
+    _eng.st.session_state = _orks_activated_session()
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert buff_stat_bonus("Orks", unit, "attacks") == 1
+
+
+def test_atk_bonus_zero_without_ability_id_in_state() -> None:
+    _eng.st.session_state = {"activated_abilities": {"Orks": {}}}
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert buff_stat_bonus("Orks", unit, "attacks") == 0
+
+
+def test_buff_stat_bonus_generic_strength() -> None:
+    _eng.st.session_state = _orks_activated_session()
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert buff_stat_bonus("Orks", unit, "strength") == 1
+    assert buff_stat_bonus("Orks", unit, "toughness") == 0
+
+
+def test_charge_after_advance_requires_core_or_character() -> None:
+    _eng.st.session_state = _orks_activated_session()
+    unit_plain = _make_unit(rules=[], keywords=["ORK"])
+    unit_core = _make_unit(rules=[], keywords=["ORK", "CORE"])
+    unit_char = _make_unit(rules=[], keywords=["ORK", "CHARACTER"])
+    assert not charge_after_advance_allowed("Orks", unit_plain)
+    assert charge_after_advance_allowed("Orks", unit_core)
+    assert charge_after_advance_allowed("Orks", unit_char)
+
+
+def test_ability_badge_label_returns_yaml_value() -> None:
+    _eng.st.session_state = _orks_activated_session()
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert ability_badge_label("Orks", unit) == "WAAAGH! S1"
+
+
+def test_ability_badge_label_none_for_non_matching_unit() -> None:
+    _eng.st.session_state = _orks_activated_session()
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_badge_label("Orks", unit) is None
+
+
+def test_unit_matches_target_any_of_logic() -> None:
+    unit = _make_unit(rules=[], keywords=["ORK", "CORE"])
+    assert _unit_matches_target(
+        unit, {"target_keywords": ["ORK"], "target_keywords_any": ["CORE", "CHARACTER"]}
+    )
+    assert not _unit_matches_target(
+        unit, {"target_keywords": ["ORK"], "target_keywords_any": ["CHARACTER"]}
+    )
+    assert _unit_matches_target(unit, {})
+    assert not _unit_matches_target(unit, {"target_keywords": ["NECRON"]})
