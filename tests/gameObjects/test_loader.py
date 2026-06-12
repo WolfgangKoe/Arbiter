@@ -14,6 +14,7 @@ from gameObjects.loader import (
     _apply_wargear,
     _resolve_model_groups,
     load_army,
+    load_deny_wargear_names,
     load_detachment_types,
     load_faction_abilities,
     load_points,
@@ -23,6 +24,7 @@ from gameObjects.loader import (
     load_round_choice_abilities,
     load_round_choice_label,
     load_stratagems,
+    load_unit_abilities,
     load_unit_catalog,
     load_wargear_catalog,
     load_weapon_catalog,
@@ -1056,6 +1058,22 @@ def test_round_choice_abilities_are_cached() -> None:
 
 def test_round_choice_label_is_cached() -> None:
     assert load_round_choice_label("necrons") == load_round_choice_label("necrons")
+
+
+def test_faction_abilities_are_cached() -> None:
+    assert load_faction_abilities("orks") is load_faction_abilities("orks")
+
+
+def test_stratagems_are_cached() -> None:
+    assert load_stratagems("orks") is load_stratagems("orks")
+
+
+def test_unit_abilities_are_cached() -> None:
+    assert load_unit_abilities("necrons") is load_unit_abilities("necrons")
+
+
+def test_deny_wargear_names_are_cached() -> None:
+    assert load_deny_wargear_names("necrons") is load_deny_wargear_names("necrons")
 
 
 def test_duplicate_per_model_entries_merge_into_one_group() -> None:

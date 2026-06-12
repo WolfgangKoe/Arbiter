@@ -8,17 +8,13 @@ from gameObjects.unit import Unit
 from uiLayout.armyCard import render_army_card
 from uiLayout.detachmentCard import render_detachment_card
 
-_ABILITIES_CACHE: dict[str, list] = {}
-
 
 def _faction_abilities_for(faction: str) -> list:
     faction_dir = faction_dir_for(faction)
-    if faction_dir not in _ABILITIES_CACHE:
-        try:
-            _ABILITIES_CACHE[faction_dir] = load_faction_abilities(faction_dir)
-        except Exception:
-            _ABILITIES_CACHE[faction_dir] = []
-    return _ABILITIES_CACHE[faction_dir]
+    try:
+        return load_faction_abilities(faction_dir)
+    except Exception:
+        return []
 
 
 def _units_for(faction: str) -> list[Unit]:

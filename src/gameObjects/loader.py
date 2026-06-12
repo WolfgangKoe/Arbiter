@@ -28,6 +28,11 @@ _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
 _ROUND_CHOICE_CACHE: dict[str, list] = {}
 _ROUND_CHOICE_LABEL_CACHE: dict[str, str] = {}
+_FACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
+_UNIT_ABILITIES_CACHE: dict[str, list[Ability]] = {}
+_SUBFACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
+_STRATAGEM_CACHE: dict[str, list[Stratagem]] = {}
+_DENY_WARGEAR_CACHE: dict[str, frozenset[str]] = {}
 
 
 class YamlDataError(ValueError):
@@ -442,15 +447,20 @@ def load_faction_abilities(faction_dir: str) -> list[Ability]:
 
     Skips round_choice entries — those are loaded via load_round_choice_abilities().
     """
+    if faction_dir in _FACTION_ABILITIES_CACHE:
+        return _FACTION_ABILITIES_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
     if not path.exists():
-        return []
+        _FACTION_ABILITIES_CACHE[faction_dir] = []
+        return _FACTION_ABILITIES_CACHE[faction_dir]
     data = load_yaml(path)
-    return [
+    result = [
         _ability_from_dict(a)
         for a in data.get("abilities", [])
         if a.get("ability_type") != "round_choice"
     ]
+    _FACTION_ABILITIES_CACHE[faction_dir] = result
+    return result
 
 
 def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
@@ -506,27 +516,38 @@ def load_round_choice_label(faction_dir: str) -> str:
 
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
     """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
+    if faction_dir in _UNIT_ABILITIES_CACHE:
+        return _UNIT_ABILITIES_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "unit_abilities.yaml"
     if not path.exists():
-        return []
+        _UNIT_ABILITIES_CACHE[faction_dir] = []
+        return _UNIT_ABILITIES_CACHE[faction_dir]
     data = load_yaml(path)
-    return [_ability_from_dict(a) for a in data.get("abilities", [])]
+    result = [_ability_from_dict(a) for a in data.get("abilities", [])]
+    _UNIT_ABILITIES_CACHE[faction_dir] = result
+    return result
 
 
 def load_subfaction_abilities(faction_dir: str) -> list[Ability]:
     """Load subfaction abilities from data/wh40k_9e/<faction_dir>/subfaction_abilities.yaml."""
+    if faction_dir in _SUBFACTION_ABILITIES_CACHE:
+        return _SUBFACTION_ABILITIES_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "subfaction_abilities.yaml"
     if not path.exists():
-        return []
+        _SUBFACTION_ABILITIES_CACHE[faction_dir] = []
+        return _SUBFACTION_ABILITIES_CACHE[faction_dir]
     data = load_yaml(path)
     abilities: list[Ability] = []
     for subfaction in data.get("subfactions", []):
         abilities.extend(_ability_from_dict(a) for a in subfaction.get("abilities", []))
+    _SUBFACTION_ABILITIES_CACHE[faction_dir] = abilities
     return abilities
 
 
 def load_stratagems(faction_dir: str) -> list[Stratagem]:
     """Load universal + faction stratagems. Universal ones come first."""
+    if faction_dir in _STRATAGEM_CACHE:
+        return _STRATAGEM_CACHE[faction_dir]
     results: list[Stratagem] = []
     for source in ("_shared", faction_dir):
         path = _DATA_ROOT / source / "stratagems.yaml"
@@ -579,6 +600,7 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                     modifier=modifier,
                 )
             )
+    _STRATAGEM_CACHE[faction_dir] = results
     return results
 
 
@@ -738,16 +760,21 @@ def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
 
     Short name = last segment of the wargear ID (e.g. 'gloom_prism').
     """
+    if faction_dir in _DENY_WARGEAR_CACHE:
+        return _DENY_WARGEAR_CACHE[faction_dir]
     path = _DATA_ROOT / faction_dir / "wargear.yaml"
     if not path.exists():
-        return frozenset()
+        _DENY_WARGEAR_CACHE[faction_dir] = frozenset()
+        return _DENY_WARGEAR_CACHE[faction_dir]
     data = load_yaml(path) or []
     entries = data if isinstance(data, list) else []
-    return frozenset(
+    result = frozenset(
         e["id"].rsplit(".", 1)[-1]
         for e in entries
         if isinstance(e, dict) and e.get("effect", {}).get("type") == "deny_psychic"
     )
+    _DENY_WARGEAR_CACHE[faction_dir] = result
+    return result
 
 
 def load_wargear_abilities(faction_dir: str) -> list[Ability]:
