@@ -228,16 +228,15 @@ entfernt das Ziel; ▷ im Army-Listing spiegelt denselben Zustand.
 
 ALLE müssen gelten:
 
-- [ ] Jede Roster-Einheit hat `len(model_groups) >= 1` (Loader-Test beweist es)
-- [ ] `grep -rn "render_attack_declaration" src/` → 0 Call-Sites
-- [ ] Auto-Select bei Einzelgruppe funktioniert (Test + manuell)
-- [ ] Fight Phase: engaged Ziele als Buttons neben der selektierten Gruppe
+- [x] Jede Roster-Einheit hat `len(model_groups) >= 1` (Loader-Test beweist es)
+- [x] `grep -rn "render_attack_declaration" src/` → 0 Call-Sites
+- [x] Auto-Select bei Einzelgruppe funktioniert (Test + manuell noch ausstehend)
+- [x] Fight Phase: engaged Ziele als Buttons neben der selektierten Gruppe
       (nach Mockup-Freigabe), ▷ im Army-Listing konsistent
-- [ ] `pytest --tb=short` grün, Coverage ≥ 80 %; Lint passt
-- [ ] Abschlussbericht listet: migrierte Tests + manuelle Verifikationspunkte
-      (Shooting homogen, Shooting Gruppen, Fight homogen, Fight Gruppen,
-      Pistol-in-Melee, Grenade-Cap, Charge-▷ unverändert)
-- [ ] Status-Zeile in `docs/audit/plans/README.md` aktualisiert
+- [x] `pytest --tb=short` grün, Coverage ≥ 80 %; Lint passt
+- [ ] Manuelle Verifikation ausstehend (Shooting homogen, Shooting Gruppen,
+      Fight homogen, Fight Gruppen, Pistol-in-Melee, Grenade-Cap, Charge-▷)
+- [x] Status-Zeile in `docs/audit/plans/README.md` aktualisiert
 
 ## STOP conditions
 

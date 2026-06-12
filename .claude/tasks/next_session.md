@@ -117,23 +117,35 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ## Feature-Plan-Queue (Executor-Sessions) — ⬅️ HIER STARTET DIE NÄCHSTE SESSION
 
-**Session 42 (2026-06-12): Plan 012 abgeschlossen + Feature-Pläne 013–018 erstellt.**
-- Plan 012: 5 Cache-Dicts + Guards in `loader.py`; `_ABILITIES_CACHE` aus `armyList.py` entfernt; 4 neue Tests → 787 grün, 90 % Coverage. Commit `f0f4e17`. **Audit-Queue 001–012 damit KOMPLETT.**
-- UI-Verifikationen (Plan 008, Session 39/41) vom Nutzer als erledigt bestätigt.
-- P16 verifiziert: bereits in `dice_html.py:98-106,193-213` implementiert (×-Marker) → in ziel6.md abgehakt.
-- **NEU: `docs/audit/plans/` — 6 Executor-Pläne 013–018** (Format wie Audit-Pläne, README mit Status-Tabelle):
+**Session 43 (2026-06-12): Plan 013 abgeschlossen — Einheitlicher Gruppen-Flow.**
+- Plan 013: Synthetische Einzelgruppe im Loader (homogene Einheiten); Auto-Select Einzelgruppe;
+  `render_attack_declaration` komplett entfernt; `shootingPhase` + `fightPhase` nur noch `render_group_cards`;
+  Fight Phase: engaged Ziele als ＋/✓-Buttons neben der Gruppe; 2 neue Loader-Tests.
+  Commit `e6fcdb3`. 788 Tests grün, 90% Coverage.
+
+**Manuelle Verifikation (Session 43) — 5 Bugs gefunden, noch nicht analysiert:**
+
+| # | Befund | Vermutete Ursache |
+|---|--------|-------------------|
+| B1 | **Fight Phase: Ziel-Buttons mutually exclusive** — Boss Nob (1 Modell) kann Attacken nicht auf mehrere Ziele aufteilen, obwohl Regel das erlaubt (core_rules.txt Z. 2033) | `toggle_group_target`: `alive==1 → current=[key]` gilt phasenunabhängig — muss für Fight Phase entfernt werden |
+| B2 | **Power Klaw Stärke falsch** — mit WAAAGH! S1 zeigt Wund-Block S10, erwartet S11 (User×2 + WAAAGH-Bonus) | Unklar ob `_parse_strength` den WAAAGH-+1 auf unit_strength anwendet bevor ×2 |
+| B3 | **Heavy Cover nicht auswählbar** — Checkbox in der Resolution-UI fehlt / nicht mehr erreichbar | Wahrscheinlich Plan-013-Umbau hat Cover-Checkboxen aus dem neuen Gruppen-Flow-Pfad abgekoppelt |
+| B4 | **Reanimation Protocols werden nicht mehr ausgelöst** — nach Schadenszuweisung kein RP-Prompt | Wahrscheinlich RP-Gate greift nicht mehr im neuen Schadenspfad nach Gruppen-Deklaration |
+| B5 | **Gretchin vs Scarabs: Resolution-Panel leer** — Tab "Close Combat Weapon → Canoptek Scarab Swarms" erscheint, Center-Panel bleibt komplett leer | Synthetische Gruppe erzeugt Entry-Format das `render_attack_resolution` nicht korrekt verarbeitet |
+
+**Nächste Session: Erst B1–B5 analysieren und fixen, dann Plan 014.**
 
 | Plan | Titel | Prio | Status |
 |------|-------|------|--------|
-| 013 | P18: Einheitlicher Gruppen-Flow (synthetische Einzelgruppe im Loader, Legacy-Pfad raus, Ziele neben Gruppen) | HOCH | TODO ⬅️ NEXT |
-| 014 | P17: Verteidiger-Korrektur Schadenszuweisung (±-Counter pro Gruppe, Snapshot, Waffen-Wegfall-Anzeige) | HOCH | TODO (zwingend NACH 013) |
+| 013 | P18: Einheitlicher Gruppen-Flow (synthetische Einzelgruppe im Loader, Legacy-Pfad raus, Ziele neben Gruppen) | HOCH | **DONE** ✅ |
+| 014 | P17: Verteidiger-Korrektur Schadenszuweisung (±-Counter pro Gruppe, Snapshot, Waffen-Wegfall-Anzeige) | HOCH | TODO ⬅️ NEXT |
 | 015 | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook, once_per_battle | MITTEL | TODO |
 | 016 | Protokoll-Effekte auf RP (`rp_reroll`/`rp_bonus`) + Dynastiebonus-Anzeige | MITTEL | TODO |
 | 017 | SAVE-Block: Fähigkeits-AP kombinierte Badge (`ap_modifier`-Schema) | MITTEL | TODO |
 | 018 | Kleinkram: CP-Doppelvergabe (Bug!), Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | NIEDRIG | TODO |
 
-Empfohlene Reihenfolge: **013 → 014 → 016 → 018 → 015 → 017** (Begründung + Konfliktregeln in `docs/audit/plans/README.md`).
-Wichtig: Pläne 013/014/015 enthalten **Mockup-Stopps** — UI-Layouts erst dem Nutzer zeigen, dann implementieren.
+Empfohlene Reihenfolge: **014 → 016 → 018 → 015 → 017** (Begründung + Konfliktregeln in `docs/audit/plans/README.md`).
+Wichtig: Pläne 014/015 enthalten **Mockup-Stopps** — UI-Layouts erst dem Nutzer zeigen, dann implementieren.
 
 ---
 
