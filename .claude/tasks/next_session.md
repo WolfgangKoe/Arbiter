@@ -21,7 +21,7 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Aktueller Stand (nach Audit-Executor-Session 2026-06-11 — 776 Tests grün)
+## Aktueller Stand (nach Session 2026-06-12 — 783 Tests grün, 90 % Coverage)
 
 - Ziel 1–5 vollständig abgeschlossen
 - Ziel 6a–6k vollständig committed (inkl. 6j YAML-Konsolidierung)
@@ -115,29 +115,48 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
 
 ---
 
-## Audit-Queue (Executor-Sessions) — ⬅️ HIER STARTET DIE NÄCHSTE SESSION
+## Feature-Plan-Queue (Executor-Sessions) — ⬅️ HIER STARTET DIE NÄCHSTE SESSION
+
+**Session 42 (2026-06-12): Plan 012 abgeschlossen + Feature-Pläne 013–018 erstellt.**
+- Plan 012: 5 Cache-Dicts + Guards in `loader.py`; `_ABILITIES_CACHE` aus `armyList.py` entfernt; 4 neue Tests → 787 grün, 90 % Coverage. Commit `f0f4e17`. **Audit-Queue 001–012 damit KOMPLETT.**
+- UI-Verifikationen (Plan 008, Session 39/41) vom Nutzer als erledigt bestätigt.
+- P16 verifiziert: bereits in `dice_html.py:98-106,193-213` implementiert (×-Marker) → in ziel6.md abgehakt.
+- **NEU: `docs/audit/plans/` — 6 Executor-Pläne 013–018** (Format wie Audit-Pläne, README mit Status-Tabelle):
+
+| Plan | Titel | Prio | Status |
+|------|-------|------|--------|
+| 013 | P18: Einheitlicher Gruppen-Flow (synthetische Einzelgruppe im Loader, Legacy-Pfad raus, Ziele neben Gruppen) | HOCH | TODO ⬅️ NEXT |
+| 014 | P17: Verteidiger-Korrektur Schadenszuweisung (±-Counter pro Gruppe, Snapshot, Waffen-Wegfall-Anzeige) | HOCH | TODO (zwingend NACH 013) |
+| 015 | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook, once_per_battle | MITTEL | TODO |
+| 016 | Protokoll-Effekte auf RP (`rp_reroll`/`rp_bonus`) + Dynastiebonus-Anzeige | MITTEL | TODO |
+| 017 | SAVE-Block: Fähigkeits-AP kombinierte Badge (`ap_modifier`-Schema) | MITTEL | TODO |
+| 018 | Kleinkram: CP-Doppelvergabe (Bug!), Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | NIEDRIG | TODO |
+
+Empfohlene Reihenfolge: **013 → 014 → 016 → 018 → 015 → 017** (Begründung + Konfliktregeln in `docs/audit/plans/README.md`).
+Wichtig: Pläne 013/014/015 enthalten **Mockup-Stopps** — UI-Layouts erst dem Nutzer zeigen, dann implementieren.
+
+---
+
+## Audit-Queue (ERLEDIGT — Historie)
 
 Das Re-Audit vom 2026-06-11 (`docs/audit/2026-06-11-reaudit.md`) hat die Queue mit
-7 neuen Plänen gefüllt. **Nächster Plan = erster offener Eintrag der Tabelle = 011.**
+7 neuen Plänen gefüllt. Alle Pläne sind abgeschlossen.
 
 **Session 40 (2026-06-12): Plan 008 abgeschlossen.**
 - `src/gameMechanic/attack_math.py` (NEU): 6 reine Mathe-Funktionen aus `_common.py` extrahiert; 89 % Coverage; zählt ab sofort ins 80 %-Gate.
 - `src/uiLayout/dice_html.py` (NEU): kompletter SVG-Würfel-Block (13 Funktionen + Konstanten); 490 Zeilen.
 - `src/uiLayout/_common.py`: von 2084 → 1594 Zeilen; Re-Exports halten alle Aufrufer/Tests stabil.
-- **Manuelle UI-Verifikation ausstehend:** Shooting- und Fight-Phase bis zur Resolution durchspielen — Würfelblöcke (HIT/WOUND/SAVE) müssen identisch aussehen (SVG-Würfel, Modifier-Paare, 7+-Handling, Inv.-Zeile). Noch nicht committed.
+- **Manuelle UI-Verifikation ausstehend:** Shooting- und Fight-Phase bis zur Resolution durchspielen.
 
-**Startprompt für die nächste Executor-Session (Plan 011 — einfach kopieren):**
-
-> Du bist ein Executor ohne Vorkontext. Lies die Datei `docs/audit/plans/011-data-driven-waaagh.md` vollständig, bevor du beginnst, und setze sie dann Schritt für Schritt um.
->
-> Befolge den „Executor instructions"- und den „Drift check"-Block am Anfang der Datei.
-> Führe nach jedem Schritt den angegebenen Verify-Befehl aus und bestätige das erwartete Ergebnis, bevor du weitermachst.
-> Halte dich strikt an den Scope: ändere nur die unter „In scope" gelisteten Dateien, fasse die „Out of scope"-Dateien nicht an.
-> Tritt eine STOP condition ein: anhalten und zurückmelden — nicht improvisieren.
-> Erfülle am Ende alle „Done criteria" und aktualisiere die Status-Zeile dieses Plans in `docs/audit/plans/README.md`.
-> Nicht committen oder pushen — das übernehme ich nach dem Review.
-
-Für die Folge-Sessions denselben Prompt mit dem jeweils nächsten offenen Plan-Dateinamen verwenden.
+**Session 41 (2026-06-12): Plan 011 + vollständige Fraktions-Bereinigung abgeschlossen.**
+- `activated_abilities` (generisch) ersetzt `waaagh_state` in game_state, armyCard, ability_engine
+- `buff_stat_bonus`, `ability_invuln_save`, `ability_badge_label` — generisch, YAML-datengetrieben
+- `waaagh_attack_bonus()` Wrapper entfernt; alle `waaagh_*` lokalen Variablen umbenannt
+- RP-Gate: `fdir.startswith("necron")` → `"reanimationProtocols" not in def_unit.keywords`
+- Resurrection Orb: `_RES_ORB_ID`-Konstante entfernt; `handler: resurrection_orb` in `wargear.yaml`; `wargear_ids_with_handler()` in `loader.py`; commandPhase findet Orb-ID zur Laufzeit
+- WAAAGH-Effekte in Combat (grüner Rahmen) + unitCard-Badge vollständig
+- `grep -rn "waaagh|startswith.*necron|_RES_ORB_ID" src/` → 0 Treffer
+- 783 Tests grün, 90 % Coverage
 
 Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
@@ -149,8 +168,8 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 | 006 | `006-safe-yaml-load.md` | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | **DONE** (2026-06-11) |
 | 007 | `007-scenario-name-validation.md` | Scenario-Namen-Allowlist (Pfad-Traversal) | **DONE** (2026-06-11) |
 | 008 | `008-split-common-god-module.md` | `_common.py`: Attack-Mathe → gemessenes Modul + Dice-HTML auslagern | **DONE** (2026-06-12) |
-| 011 | `011-data-driven-waaagh.md` | WAAAGH datengetrieben (P3 — spätestens vor 4. Fraktion) | TODO |
-| 012 | `012-loader-cache-consolidation.md` | Restliche Loader cachen (P3 — zwingend NACH 006) | TODO |
+| 011 | `011-data-driven-waaagh.md` | WAAAGH datengetrieben (P3 — spätestens vor 4. Fraktion) | **DONE** (2026-06-12) |
+| 012 | `012-loader-cache-consolidation.md` | Restliche Loader cachen (P3 — zwingend NACH 006) | **DONE** (2026-06-12) |
 
 **Konflikt-Regeln:** 006/009/012 ändern alle `loader.py` → nie parallel; 010 zwingend vor 008;
 008 und 011 nicht parallel. Details in `docs/audit/plans/README.md`.
@@ -159,11 +178,12 @@ Reihenfolge einhalten — nächster Plan = erster offener Eintrag:
 
 ---
 
-## Nächste Schritte (Feature-Plan, priorisiert)
+## Nächste Schritte (Feature-Plan, priorisiert) — ⚠️ VERALTET, ersetzt durch `docs/audit/plans/` (Session 42)
 
-> **Re-Audit 2026-06-11 hat die Audit-Queue neu gefüllt (Pläne 006–012, s. oben).**
-> Erst die Executor-Queue abarbeiten (Start: Plan 009), DANN Feature-Plan ab P17.
-> Erst-Audit-Queue (001–005 + #8/#9/#10) ist vollständig erledigt.
+> **Stand 2026-06-12: Diese Liste ist Historie.** Von den Punkten unten sind
+> P20, P14, D5, Farbkonzept, P15, P19 und P16 ERLEDIGT (Details in ziel6.md §6n).
+> P17 + P18 sind als ausgearbeitete Executor-Pläne 014 + 013 in `docs/audit/plans/`;
+> GOs/Necron Command Phase/Gretchin = Pläne 015/016/018. Nur dort weiterarbeiten.
 >
 > Review-Runde 2 wurde FREIGEGEBEN und größtenteils umgesetzt (2026-06-10, Session 39, 594 Tests grün).
 > Erledigt: P14, P15 (inkl. per_3 + Necron-Gruppen), P16 (im D5-Renderer), P19, P20 (Logik gepinnt),
