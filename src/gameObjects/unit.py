@@ -26,7 +26,12 @@ class WeaponSwapSpec:
 
 @dataclass
 class ModelGroupSpec:
-    """Raw model group definition from YAML — count not yet resolved from roster."""
+    """Raw model group definition from YAML — count not yet resolved from roster.
+
+    ``stats`` holds per-group stat overrides (e.g. a Boss Nob with WS 2+, S 5,
+    A 3). Any of: attacks, strength, wounds (int) and ws, bs ("3+"). Missing keys
+    fall back to the unit-level stat — homogeneous groups carry an empty dict.
+    """
 
     id: str
     name_en: str
@@ -34,6 +39,7 @@ class ModelGroupSpec:
     base_weapon_refs: list[str]
     weapon_swaps: list[WeaponSwapSpec]
     priority: int
+    stats: dict[str, int | str] = field(default_factory=dict)
 
 
 @dataclass
@@ -45,6 +51,11 @@ class ModelGroup:
     count: int
     weapons: list[Weapon]
     priority: int
+    stats: dict[str, int | str] = field(default_factory=dict)
+
+    def stat(self, name: str, fallback: int | str | None) -> int | str | None:
+        """Per-group stat override, falling back to the unit-level value."""
+        return self.stats.get(name, fallback)
 
 
 @dataclass

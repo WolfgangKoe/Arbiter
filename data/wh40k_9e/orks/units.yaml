@@ -535,6 +535,7 @@ units:
       - id: boss_nob
         name_en: Boss Nob
         count: 1
+        stats: {attacks: 3, strength: 5, ws: "2+"}
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa
@@ -825,6 +826,7 @@ units:
       - id: boss_nob
         name_en: Boss Nob
         count: 1
+        stats: {attacks: 3, strength: 5, ws: "2+"}
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa
@@ -1086,6 +1088,7 @@ units:
       - id: boss_nob_warbike
         name_en: Boss Nob on Warbike
         count: 1
+        stats: {attacks: 3, strength: 5, ws: "2+"}
         weapons:
           - ref: wh40k_9e.orks.weapon.dakkagun
         weapon_swaps:
@@ -1134,6 +1137,7 @@ units:
       - id: boss_nob
         name_en: Boss Nob
         count: 1
+        stats: {attacks: 3, strength: 5, ws: "2+"}
         weapons:
           - ref: wh40k_9e.orks.weapon.slugga
           - ref: wh40k_9e.orks.weapon.choppa

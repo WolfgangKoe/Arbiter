@@ -281,3 +281,65 @@ def test_regression_retreated_then_stationary_call_still_blocks_move():
     assert not _movement_blocked(
         "moved", state_after_bypass
     ), "Without the UI gate, MOVE would be wrongly enabled after bypass"
+
+
+# ---------------------------------------------------------------------------
+# Veil of Darkness (F7) — teleport removes the unit from melee
+# ---------------------------------------------------------------------------
+
+
+def _veil_session(**units) -> _S:
+    """Session wired to the streamlit mocks that movementPhase + game_state use.
+
+    movementPhase and game_state bind their own `import streamlit as st`; the
+    teleport helpers read session_state through both, so set it on each.
+    """
+    import gameMechanic.game_state as gs
+    import gameMechanic.movementPhase as mp
+
+    s = _S(first_player="Necrons", **units)
+    mp.st.session_state = s
+    gs.st.session_state = s
+    return s
+
+
+def test_veil_teleport_clears_in_melee_and_stashes_prior_state():
+    """F7: a teleported bearer is set up 9\"+ away, so in_melee must clear."""
+    from gameMechanic.movementPhase import _lock_teleport_movement
+
+    s = _veil_session(p1_units={"necron_1": _unit(in_melee=True)}, p2_units={})
+    _lock_teleport_movement("necron_1", "Necrons")
+
+    bearer = s["p1_units"]["necron_1"]
+    assert bearer["in_melee"] is False
+    assert bearer["turn_flags"]["movement_locked"] is True
+    assert bearer["turn_flags"]["veil_prev_in_melee"] is True
+
+
+def test_veil_teleport_from_outside_melee_stashes_false():
+    from gameMechanic.movementPhase import _lock_teleport_movement
+
+    s = _veil_session(p1_units={"necron_1": _unit(in_melee=False)}, p2_units={})
+    _lock_teleport_movement("necron_1", "Necrons")
+
+    bearer = s["p1_units"]["necron_1"]
+    assert bearer["in_melee"] is False
+    assert bearer["turn_flags"]["veil_prev_in_melee"] is False
+
+
+def test_veil_undo_restores_prior_melee_state(monkeypatch):
+    """Undo within the same turn must put the bearer back into melee."""
+    import gameMechanic.movementPhase as mp
+
+    s = _veil_session(p1_units={"necron_1": _unit(in_melee=True)}, p2_units={})
+    monkeypatch.setattr(mp, "log_action", lambda *a, **k: None)
+    mp.st.rerun = lambda *a, **k: None
+
+    mp._lock_teleport_movement("necron_1", "Necrons")
+    assert s["p1_units"]["necron_1"]["in_melee"] is False
+
+    mp._undo_teleport("relic_x", "Necrons", {"round": 1})
+    bearer = s["p1_units"]["necron_1"]
+    assert bearer["in_melee"] is True
+    assert bearer["turn_flags"]["movement_locked"] is False
+    assert "veil_prev_in_melee" not in bearer["turn_flags"]

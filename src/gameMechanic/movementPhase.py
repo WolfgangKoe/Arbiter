@@ -222,16 +222,14 @@ def _render_teleport_effect(
 
             # Mark bearer as moved (locked by teleport ability)
             set_movement_status(uid, faction, "moved")
-            st.session_state[units_key_for(faction)][uid]["turn_flags"]["movement_locked"] = True
+            _lock_teleport_movement(uid, faction)
 
             # Mark optional CORE unit as moved — core_uid IS already the state key
             core_uid = st.session_state.get("veil_core_target_uid")
             core_name = ""
             if core_uid:
                 set_movement_status(core_uid, faction, "moved")
-                st.session_state[units_key_for(faction)][core_uid]["turn_flags"][
-                    "movement_locked"
-                ] = True
+                _lock_teleport_movement(core_uid, faction)
                 core_unit_pair = next(
                     ((sk, cu) for sk, cu in core_candidates if sk == core_uid), None
                 )
@@ -253,6 +251,19 @@ def _render_teleport_effect(
             st.rerun()
 
 
+def _lock_teleport_movement(state_key: str, faction: str) -> None:
+    """Lock a teleported unit's movement and remove it from melee (F7).
+
+    A teleport sets the unit up more than 9" from enemies, so it is no longer in
+    Engagement Range. The prior in_melee value is stashed so _undo_teleport can
+    restore it while the turn is still running.
+    """
+    u_state = st.session_state[units_key_for(faction)][state_key]
+    u_state["turn_flags"]["movement_locked"] = True
+    u_state["turn_flags"]["veil_prev_in_melee"] = u_state.get("in_melee", False)
+    u_state["in_melee"] = False
+
+
 def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: ignore[type-arg]
     """Undo a confirmed teleport ability (only available within the same turn)."""
     used = dict(st.session_state.get("relic_triggered_used", {}))
@@ -265,6 +276,8 @@ def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: i
             u_state["turn_flags"]["movement_locked"] = False
             u_state["movement_choice"] = "stationary"
             u_state["movement_chosen"] = False
+            # Restore pre-teleport melee state (F7)
+            u_state["in_melee"] = u_state["turn_flags"].pop("veil_prev_in_melee", False)
 
     log_action(state["round"], "movement", "teleport", "undone")
     st.rerun()

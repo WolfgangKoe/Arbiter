@@ -13,5 +13,11 @@ units:
     models: 5
   - id: wh40k_9e.necrons.unit.skorpekh_destroyers
     models: 3
+    group_loadouts:
+      skorpekh:
+        swaps:
+          reap_blade_swap:
+            - weapons: [wh40k_9e.necrons.weapon.hyperphase_reap_blade]
+              count: 1
   - id: wh40k_9e.necrons.unit.canoptek_scarabs
     models: 3

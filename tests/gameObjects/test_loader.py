@@ -798,6 +798,64 @@ def test_unit_without_model_groups_has_empty_specs() -> None:
     assert overlord.weapon_restrictions == {}
 
 
+# ---------------------------------------------------------------------------
+# Per-group stat overrides (F2/F4): Boss Nob A 3 / S 5 / WS 2+
+# ---------------------------------------------------------------------------
+
+
+def test_boyz_boss_nob_spec_carries_stat_overrides() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    boss = next(s for s in boyz.model_group_specs if s.id == "boss_nob")
+    assert boss.stats == {"attacks": 3, "strength": 5, "ws": "2+"}
+
+
+def test_ork_boy_spec_has_no_stat_overrides() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    ork_boy = next(s for s in boyz.model_group_specs if s.id == "ork_boy")
+    assert ork_boy.stats == {}
+
+
+def test_resolved_boss_nob_group_exposes_stats_with_fallback() -> None:
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, {}, catalog)
+    boss = next(g for g in groups if g.id == "boss_nob")
+    ork_boy = next(g for g in groups if g.id == "ork_boy")
+    # Override wins; missing keys fall back to the unit-level value
+    assert boss.stat("attacks", boyz.attacks) == 3
+    assert boss.stat("strength", boyz.strength) == 5
+    assert boss.stat("ws", "3+") == "2+"
+    assert boss.stat("toughness", boyz.toughness) == boyz.toughness
+    # Homogeneous rank-and-file group has no overrides → unit value
+    assert ork_boy.stat("attacks", boyz.attacks) == boyz.attacks
+
+
+def test_skorpekh_roster_loadout_splits_reap_blade_subgroup() -> None:
+    """F6: the standard build fields 1 reap-blade per 3 (2 threshers remain)."""
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    catalog = load_weapon_catalog("necrons")
+    loadouts = {
+        "skorpekh": {
+            "swaps": {
+                "reap_blade_swap": [
+                    {"weapons": ["wh40k_9e.necrons.weapon.hyperphase_reap_blade"], "count": 1}
+                ]
+            }
+        }
+    }
+    groups = _resolve_model_groups(skorpekh.model_group_specs, 3, loadouts, catalog)
+    counts = {tuple(sorted(w.id for w in g.weapons)): g.count for g in groups}
+    reap = next(g for g in groups if any("reap_blade" in w.id for w in g.weapons))
+    threshers = next(g for g in groups if all("reap_blade" not in w.id for w in g.weapons))
+    assert reap.count == 1
+    assert threshers.count == 2
+    assert sum(counts.values()) == 3
+
+
 # ── Relic loader tests ───────────────────────────────────────────────────────
 
 

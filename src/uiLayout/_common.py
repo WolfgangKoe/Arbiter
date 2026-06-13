@@ -639,7 +639,6 @@ def _render_resolution_tab(
     use_melee: bool,
     phase_key: str,
     tab_key: str,
-    show_cover_controls: bool = True,
 ) -> None:
     """Render one resolution tab: Hit + Wound table + Save + Cover + Damage."""
     from gameMechanic.combat import (  # noqa: PLC0415
@@ -654,6 +653,12 @@ def _render_resolution_tab(
     weapon_name = entry["weapon_name"]
     profile_idx = entry["profile_idx"]
     models_count = entry["models_count"]
+    # Per-group stat overrides carried from the declaration (Boss Nob etc.);
+    # fall back to the unit-level stats for homogeneous groups.
+    grp_strength = entry.get("atk_strength", atk_unit.strength)
+    grp_attacks = entry.get("atk_attacks", atk_unit.attacks)
+    grp_ws = entry.get("atk_ws")
+    grp_bs = entry.get("atk_bs")
 
     def_unit, def_state = lookup(def_faction, def_uid)
 
@@ -686,8 +691,9 @@ def _render_resolution_tab(
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
     # str_bonus is added after weapon-strength calculation so that ×N weapons
-    # give (User×N) + bonus rather than (User + bonus)×N.
-    strength = _parse_strength(profile.strength, atk_unit.strength) + str_bonus
+    # give (User×N) + bonus rather than (User + bonus)×N. Base strength is the
+    # group's value (e.g. Boss Nob S 5), not the unit-level S.
+    strength = _parse_strength(profile.strength, grp_strength) + str_bonus
     ap = profile.ap
     skill_label = "WS" if use_melee else "BS"
     advanced = atk_state.get("turn_flags", {}).get("advanced", False)
@@ -696,15 +702,17 @@ def _render_resolution_tab(
         1, atk_state.get("models", atk_unit.models_max)
     )
     live = resolve_bracket_stats(atk_unit, per_model_hp)
-    skill = int(live["ws"].rstrip("+")) if use_melee else int(live["bs"].rstrip("+"))
+    # Per-group WS/BS override (e.g. Boss Nob WS 2+) wins over the bracket value.
+    ws_str = grp_ws or live["ws"]
+    bs_str = grp_bs or live["bs"]
+    skill = int(str(ws_str).rstrip("+")) if use_melee else int(str(bs_str).rstrip("+"))
 
     is_shooting = phase_key == "shooting"
     is_fight = phase_key == "fight"
 
-    # Cover is a property of the TARGET, not of the weapon: key per target
-    # (tab_key minus the trailing weapon index) so every weapon tab against the
-    # same unit shares the cover state (P19).
-    cover_key = tab_key.rsplit("_", 1)[0]
+    # Cover checkboxes live inside their own resolution block (Dense → HIT,
+    # Light/Heavy → SAVE), so each weapon×target tab carries its own cover state.
+    cover_key = tab_key
 
     # Read cover checkbox states (checkboxes are rendered later, state read now)
     dense_cover = is_shooting and st.session_state.get(f"dense_cover_{cover_key}", False)
@@ -768,7 +776,7 @@ def _render_resolution_tab(
         str(atk_override)
         if atk_override is not None
         else _compute_attacks(
-            profile.attacks, models_count, atk_unit.attacks, profile.effect, profile.max_attacks
+            profile.attacks, models_count, grp_attacks, profile.effect, profile.max_attacks
         )
     )
     # D5: no redundant weapon profile line — S/T, AP, Sv and damage all appear
@@ -787,8 +795,8 @@ def _render_resolution_tab(
     else:
         _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
 
-    # Dense Cover checkbox: Shooting phase only, affects hit roll → placed near HIT block
-    if is_shooting and show_cover_controls:
+    # Dense Cover checkbox: Shooting phase only, affects hit roll → in the HIT block
+    if is_shooting:
         st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
 
     st.markdown("")
@@ -803,10 +811,10 @@ def _render_resolution_tab(
     # SAVE BLOCK
     _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
 
-    # Cover checkboxes for save modifiers (phase-bound)
-    if is_shooting and show_cover_controls:
+    # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
+    if is_shooting:
         st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{cover_key}")
-    if is_fight and show_cover_controls:
+    if is_fight:
         def_charged = def_state.get("turn_flags", {}).get("charged", False)
         if not def_charged:
             st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{cover_key}")
@@ -1028,9 +1036,8 @@ def render_group_cards(
                 st.session_state.selected_model_group = None if is_sel else group.id
                 st.rerun()
             if use_melee:
-                budget = _group_melee_budget(
-                    grp_weapons, alive, (atk_unit.attacks or 0) + atk_bonus
-                )
+                grp_attacks = int(group.stat("attacks", atk_unit.attacks or 0))
+                budget = _group_melee_budget(grp_weapons, alive, grp_attacks + atk_bonus)
                 st.caption(f"{budget} attacks")
             st.caption(", ".join(w.name_en for w in grp_weapons))
             if is_sel:
@@ -1118,6 +1125,13 @@ def render_group_assignment(
     atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
     grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
 
+    # Per-group stat overrides (e.g. Boss Nob A 3 / S 5 / WS 2+) fall back to the
+    # unit-level value for homogeneous groups.
+    grp_attacks = int(group.stat("attacks", atk_unit.attacks or 0))
+    grp_strength = int(group.stat("strength", atk_unit.strength))
+    grp_ws = group.stat("ws", None)
+    grp_bs = group.stat("bs", None)
+
     def _val(key: str) -> int:
         try:
             return int(st.session_state.get(key, 0) or 0)
@@ -1131,7 +1145,7 @@ def render_group_assignment(
     group_budget = 0
     weapon_caps: dict[str, int] = {}
     if use_melee:
-        group_budget = _group_melee_budget(grp_weapons, alive, (atk_unit.attacks or 0) + atk_bonus)
+        group_budget = _group_melee_budget(grp_weapons, alive, grp_attacks + atk_bonus)
         total_assigned = sum(
             _val(f"decl_a_{gid}_{atk_uid}_{d_uid}_{w.name_en}")
             for _, d_uid in tgts
@@ -1190,7 +1204,7 @@ def render_group_assignment(
                         _total_attacks_int(
                             profile.attacks,
                             alive,
-                            atk_unit.attacks + atk_bonus,
+                            grp_attacks + atk_bonus,
                             profile.effect,
                             profile.max_attacks,
                         )
@@ -1220,6 +1234,10 @@ def render_group_assignment(
                             "profile_idx": profile_idx,
                             "models_count": alive,
                             "atk_override": int(atk_count),
+                            "atk_attacks": grp_attacks,
+                            "atk_strength": grp_strength,
+                            "atk_ws": grp_ws,
+                            "atk_bs": grp_bs,
                         }
                     )
                     attacks_assigned += int(atk_count)
@@ -1282,6 +1300,10 @@ def render_group_assignment(
                             "weapon_name": weapon.name_en,
                             "profile_idx": profile_idx,
                             "models_count": eff_models,
+                            "atk_attacks": grp_attacks,
+                            "atk_strength": grp_strength,
+                            "atk_ws": grp_ws,
+                            "atk_bs": grp_bs,
                         }
                     )
                     models_assigned += eff_models
@@ -1337,30 +1359,9 @@ def render_attack_resolution(phase_key: str) -> None:
         tab_labels.append(f"{entry['weapon_name']} → {def_unit.name_en}")
 
     seq = decl.get("seq", 0)
-    is_shooting = phase_key == "shooting"
-    is_fight = phase_key == "fight"
 
-    # Cover checkboxes — one set per unique target, rendered ABOVE the tabs so
-    # they are visible regardless of which weapon-tab is active (P19).
-    # cover_key must match the formula used inside _render_resolution_tab.
-    targets_cover_seen: set[str] = set()
-    for entry in entries:
-        def_uid = entry["def_uid"]
-        if def_uid in targets_cover_seen:
-            continue
-        targets_cover_seen.add(def_uid)
-        cover_key = f"{seq}_{atk_uid}_{def_uid}"
-        def_unit_c, def_state_c = lookup(entry["def_faction"], def_uid)
-        if is_shooting:
-            c1, c2 = st.columns(2)
-            c1.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
-            c2.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{cover_key}")
-        if is_fight and not def_state_c.get("turn_flags", {}).get("charged"):
-            tgt_label = f" — {def_unit_c.name_en}" if len(targets_cover_seen) > 1 else ""
-            st.checkbox(
-                f"Heavy Cover (+1 Save vs Melee){tgt_label}", key=f"heavy_cover_{cover_key}"
-            )
-
+    # Cover checkboxes are rendered inside each tab's HIT/SAVE block (Option B),
+    # so they appear in the block they actually modify.
     tabs = st.tabs(tab_labels)
     for i, (tab, entry) in enumerate(zip(tabs, entries)):
         with tab:
@@ -1390,7 +1391,6 @@ def render_attack_resolution(phase_key: str) -> None:
                     use_melee,
                     phase_key,
                     tab_key,
-                    show_cover_controls=False,  # rendered above tabs
                 )
 
     all_applied = all(

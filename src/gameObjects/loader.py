@@ -141,6 +141,7 @@ def _parse_model_group_specs(
                 base_weapon_refs=base_weapon_refs,
                 weapon_swaps=swaps,
                 priority=g.get("priority", 1),
+                stats=dict(g.get("stats", {})),
             )
         )
     return specs
@@ -246,6 +247,7 @@ def _resolve_model_groups(
                         count=sub_count,
                         weapons=weapons_resolved,
                         priority=spec.priority,
+                        stats=dict(spec.stats),
                     )
                 )
                 remaining -= sub_count
@@ -258,6 +260,7 @@ def _resolve_model_groups(
                     count=remaining,
                     weapons=_resolve_refs(base_refs, spec.id),
                     priority=spec.priority,
+                    stats=dict(spec.stats),
                 )
             )
 
