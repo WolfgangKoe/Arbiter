@@ -1,13 +1,338 @@
 {
-  "game_id": "2026-06-11T07:07:04.412407",
+  "game_id": "2026-06-12T20:31:05.248737",
   "players": {
-    "first": "Necrons α",
-    "second": "Orks"
+    "first": "Orks",
+    "second": "Necrons α"
   },
   "rounds": [
     {
       "round": 1,
       "phases": [
+        {
+          "phase": "command",
+          "active": "Orks",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Waaagh! called — Stage 1 active"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "+1 CP received"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Morgog's Finkin' Cap: 4+ — +1 CP"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "+1 CP received"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Waaagh! called"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Morgog's Finkin' Cap: 4+ — +1 CP"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Waaagh! called"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "+1 CP received"
+            },
+            {
+              "type": "action",
+              "unit": "Orks",
+              "action": "Morgog's Finkin' Cap: 4+ — +1 CP"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "charged Overlord — success"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "charged Necron Warriors — success"
+            }
+          ]
+        },
+        {
+          "phase": "fight",
+          "active": "Big Mek in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "dealt 2 damage to Overlord"
+            },
+            {
+              "type": "action",
+              "unit": "Big Mek in Mega Armour",
+              "action": "Da Irongob: 1 mortal wound → Overlord"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Warboss in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "movement: moved"
+            },
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Boyz",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "movement: moved"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Gretchin",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Warbikers",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "movement: advanced"
+            },
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "movement: advanced"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Boyz",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "charged Immortals — success"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "charged Necron Warriors — success"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "charged Immortals — success"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "charged Skorpekh Destroyers — success"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Warbikers",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "charged Skorpekh Destroyers — success"
+            },
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "charged Skorpekh Destroyers — success"
+            },
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "charged Canoptek Scarab Swarms — success"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Gretchin",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "charged Canoptek Scarab Swarms — success"
+            },
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "charged Skorpekh Destroyers — success"
+            },
+            {
+              "type": "action",
+              "unit": "Gretchin",
+              "action": "charged Immortals — success"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Warboss in Mega Armour",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Warboss in Mega Armour",
+              "action": "charged Necron Warriors — success"
+            }
+          ]
+        },
+        {
+          "phase": "charge",
+          "active": "Overlord",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Overlord",
+              "action": "Heroic Intervention — engaged 1 unit(s)"
+            },
+            {
+              "type": "action",
+              "unit": "Overlord",
+              "action": "Heroic Intervention — engaged 1 unit(s)"
+            }
+          ]
+        },
+        {
+          "phase": "fight",
+          "active": "Boyz",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Immortals"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Immortals"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Immortals"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Overlord"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 3 damage to Overlord"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 3 damage to Immortals"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 1 damage to Overlord"
+            }
+          ]
+        },
+        {
+          "phase": "morale",
+          "active": "Immortals",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Immortals",
+              "action": "Moraltest automatisch bestanden."
+            },
+            {
+              "type": "action",
+              "unit": "Immortals",
+              "action": "Moraltest automatisch bestanden."
+            }
+          ]
+        },
         {
           "phase": "command",
           "active": "Necrons α",
@@ -20,7 +345,22 @@
             {
               "type": "action",
               "unit": "Necrons α",
-              "action": "Extra: Protocol of the Vengeful Stars — primary"
+              "action": "Extra: Protocol of the Vengeful Stars — secondary"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "Extra: Protocol of the Vengeful Stars — secondary"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "Living Metal: 2 unit(s) healed"
+            },
+            {
+              "type": "action",
+              "unit": "Necrons α",
+              "action": "+1 CP received"
             },
             {
               "type": "action",
@@ -30,177 +370,109 @@
           ]
         },
         {
-          "phase": "movement",
+          "phase": "fight",
           "active": "Overlord",
           "events": [
             {
               "type": "action",
               "unit": "Overlord",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Necron Warriors",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Necron Warriors",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Immortals",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Immortals",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Skorpekh Destroyers",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Skorpekh Destroyers",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "movement",
-          "active": "Canoptek Scarab Swarms",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Canoptek Scarab Swarms",
-              "action": "movement: moved"
-            }
-          ]
-        },
-        {
-          "phase": "shooting",
-          "active": "Necron Warriors",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Necron Warriors",
-              "action": "dealt 5 damage to Boyz"
-            }
-          ]
-        },
-        {
-          "phase": "shooting",
-          "active": "Overlord",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Overlord",
-              "action": "dealt 1 damage to Big Mek in Mega Armour"
-            }
-          ]
-        },
-        {
-          "phase": "shooting",
-          "active": "Immortals",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Immortals",
-              "action": "dealt 4 damage to Gretchin"
-            }
-          ]
-        },
-        {
-          "phase": "charge",
-          "active": "Necron Warriors",
-          "events": [
-            {
-              "type": "action",
-              "unit": "Necron Warriors",
-              "action": "charged Boyz — success"
+              "action": "dealt 4 damage to Boyz"
             },
             {
               "type": "action",
-              "unit": "Necron Warriors",
-              "action": "charged Gretchin — success"
-            }
-          ]
-        },
-        {
-          "phase": "charge",
-          "active": "Overlord",
-          "events": [
-            {
-              "type": "action",
               "unit": "Overlord",
-              "action": "charged Boyz — success"
+              "action": "dealt 3 damage to Boyz"
             }
           ]
         },
         {
-          "phase": "charge",
-          "active": "Warboss in Mega Armour",
+          "phase": "morale",
+          "active": "Boyz",
           "events": [
             {
               "type": "action",
-              "unit": "Warboss in Mega Armour",
-              "action": "Heroic Intervention — engaged 1 unit(s)"
+              "unit": "Boyz",
+              "action": "Moraltest bestanden."
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "Moraltest fehlgeschlagen — 1 Modelle geflohen."
+            }
+          ]
+        },
+        {
+          "phase": "shooting",
+          "active": "Boyz",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Necron Warriors"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 3 damage to Necron Warriors"
+            },
+            {
+              "type": "action",
+              "unit": "Boyz",
+              "action": "dealt 2 damage to Immortals"
             }
           ]
         },
         {
           "phase": "fight",
-          "active": "Overlord",
+          "active": "Warbikers",
           "events": [
             {
               "type": "action",
-              "unit": "Overlord",
-              "action": "dealt 2 damage to Boyz"
+              "unit": "Warbikers",
+              "action": "dealt 5 damage to Canoptek Scarab Swarms"
+            },
+            {
+              "type": "action",
+              "unit": "Warbikers",
+              "action": "dealt 0 damage to Skorpekh Destroyers"
             }
           ]
         },
         {
           "phase": "fight",
-          "active": "Necron Warriors",
+          "active": "Immortals",
           "events": [
             {
               "type": "action",
-              "unit": "Necron Warriors",
+              "unit": "Immortals",
               "action": "dealt 1 damage to Boyz"
             }
           ]
         },
         {
           "phase": "fight",
-          "active": "Warboss in Mega Armour",
+          "active": "Canoptek Scarab Swarms",
           "events": [
             {
               "type": "action",
-              "unit": "Warboss in Mega Armour",
-              "action": "dealt 2 damage to Overlord"
+              "unit": "Canoptek Scarab Swarms",
+              "action": "dealt 4 damage to Warbikers"
             }
           ]
         },
         {
           "phase": "fight",
-          "active": "Boyz",
+          "active": "Skorpekh Destroyers",
           "events": [
             {
               "type": "action",
-              "unit": "Boyz",
-              "action": "dealt 4 damage to Necron Warriors"
+              "unit": "Skorpekh Destroyers",
+              "action": "dealt 1 damage to Warbikers"
             },
             {
               "type": "action",
-              "unit": "Boyz",
-              "action": "dealt 3 damage to Necron Warriors"
+              "unit": "Skorpekh Destroyers",
+              "action": "dealt 2 damage to Boyz"
             }
           ]
         },
@@ -217,23 +489,45 @@
         },
         {
           "phase": "morale",
-          "active": "Boyz",
+          "active": "Canoptek Scarab Swarms",
           "events": [
             {
               "type": "action",
-              "unit": "Boyz",
-              "action": "Moraltest bestanden."
+              "unit": "Canoptek Scarab Swarms",
+              "action": "Moraltest automatisch bestanden."
             }
           ]
         },
         {
           "phase": "morale",
-          "active": "Gretchin",
+          "active": "Warbikers",
           "events": [
             {
               "type": "action",
-              "unit": "Gretchin",
+              "unit": "Warbikers",
               "action": "Moraltest fehlgeschlagen — 1 Modelle geflohen."
+            }
+          ]
+        },
+        {
+          "phase": "command",
+          "active": "Overlord",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Overlord",
+              "action": "Resurrection Orb → Immortals"
+            }
+          ]
+        },
+        {
+          "phase": "movement",
+          "active": "Overlord",
+          "events": [
+            {
+              "type": "action",
+              "unit": "Overlord",
+              "action": "Veil of Darkness: teleport + Necron Warriors"
             }
           ]
         }

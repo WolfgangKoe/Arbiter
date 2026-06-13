@@ -123,17 +123,43 @@ Branch: `dev` (Entwicklung), `main` (stabiler Stand, nur per PR)
   Fight Phase: engaged Ziele als ＋/✓-Buttons neben der Gruppe; 2 neue Loader-Tests.
   Commit `e6fcdb3`. 788 Tests grün, 90% Coverage.
 
-**Manuelle Verifikation (Session 43) — 5 Bugs gefunden, noch nicht analysiert:**
+**Session 44 (2026-06-13): B1–B5 post-013-Bugs behoben.**
+- B1: `toggle_group_target` — fight phase erlaubt 1-Modell-Gruppe mehrere Ziele (`phase_key != "fight"`-Guard)
+- B2: `_render_resolution_tab` — `str_bonus` nach `_parse_strength` addieren (nicht vorher)
+- B3: `render_attack_resolution` — Cover-Checkboxen oberhalb der Tabs, nicht im ersten Tab
+- B4: `_render_rp_block` — `def_unit.rules` statt `.keywords` prüfen
+- B5: `_render_display` (fightPhase) — stale `attack_declaration` verwerfen wenn `atk_faction != fight_player`
+- 2 neue Regressionstests in `test_group_flow.py`
+- Commit `46e03f8`. 790 Tests grün, 90% Coverage.
 
-| # | Befund | Vermutete Ursache |
-|---|--------|-------------------|
-| B1 | **Fight Phase: Ziel-Buttons mutually exclusive** — Boss Nob (1 Modell) kann Attacken nicht auf mehrere Ziele aufteilen, obwohl Regel das erlaubt (core_rules.txt Z. 2033) | `toggle_group_target`: `alive==1 → current=[key]` gilt phasenunabhängig — muss für Fight Phase entfernt werden |
-| B2 | **Power Klaw Stärke falsch** — mit WAAAGH! S1 zeigt Wund-Block S10, erwartet S11 (User×2 + WAAAGH-Bonus) | Unklar ob `_parse_strength` den WAAAGH-+1 auf unit_strength anwendet bevor ×2 |
-| B3 | **Heavy Cover nicht auswählbar** — Checkbox in der Resolution-UI fehlt / nicht mehr erreichbar | Wahrscheinlich Plan-013-Umbau hat Cover-Checkboxen aus dem neuen Gruppen-Flow-Pfad abgekoppelt |
-| B4 | **Reanimation Protocols werden nicht mehr ausgelöst** — nach Schadenszuweisung kein RP-Prompt | Wahrscheinlich RP-Gate greift nicht mehr im neuen Schadenspfad nach Gruppen-Deklaration |
-| B5 | **Gretchin vs Scarabs: Resolution-Panel leer** — Tab "Close Combat Weapon → Canoptek Scarab Swarms" erscheint, Center-Panel bleibt komplett leer | Synthetische Gruppe erzeugt Entry-Format das `render_attack_resolution` nicht korrekt verarbeitet |
+**Manuelle Verifikation (Session 43) — 5 Bugs gefunden und behoben (Session 44, 2026-06-13):**
 
-**Nächste Session: Erst B1–B5 analysieren und fixen, dann Plan 014.**
+| # | Befund | Root Cause | Status |
+|---|--------|------------|--------|
+| B1 | Fight Phase: Ziel-Buttons mutually exclusive (Boss Nob) | `toggle_group_target`: `alive==1 → current=[key]` war phasenunabhängig | ✅ behoben |
+| B2 | Power Klaw Stärke falsch mit WAAAGH! (User×2+1 → erwartet S11) | `str_bonus` vor `_parse_strength` → `(S+1)×2` statt `S×2+1` | ✅ behoben |
+| B3 | Heavy Cover nicht auswählbar | Cover-Checkboxen waren im ersten Tab versteckt; ab Tab 2 nicht sichtbar | ✅ behoben |
+| B4 | Reanimation Protocols werden nicht mehr ausgelöst | RP-Gate prüfte `unit.keywords` statt `unit.rules` | ✅ behoben |
+| B5 | Gretchin vs Scarabs: Resolution leer (wrong fight_player check) | `_render_display` prüfte nicht ob `atk_faction == fight_player` | ✅ behoben |
+
+Commit: `46e03f8` — 790 Tests grün, 90% Coverage.
+
+**Manuelle Verifikation (Session 44, 2026-06-13) — 7 neue Findings (noch nicht analysiert/behoben):**
+
+| # | Befund | Kategorie | Vermutete Ursache |
+|---|--------|-----------|-------------------|
+| F1 | **Dense Cover / Light Cover global statt lokal** — Cover-Checkboxen werden oberhalb aller Tabs gerendert, gehören aber in die jeweiligen HIT- bzw. SAVE-Bereiche der Attack-Resolution | UX/Arch | B3-Fix hat Checkboxen nach oben verschoben (korrekt für Sichtbarkeit), aber falsche Ebene — sollten IN den jeweiligen Block (Dense → HIT, Light/Heavy → SAVE), nicht als Panel-Header |
+| F2 | **Boss Nob: 4. Attacke kann nicht auf Power Klaw gelegt werden** — mit WAAAGH! hat Boss Nob 4 Attacken; UI erlaubt nur 3 auf Power Klaw. Außerdem Frage ob Waffenkombinationen regelkonform sind | Data/Rules | Wahrscheinlich Counter-Cap = Gruppenmodelle×Attacks ohne WAAAGH-Bonus; Waffen-Regeln prüfen (darf Boss Nob Power Klaw + Choppa gleichzeitig einsetzen?) |
+| F3 | **Heavy Cover: wie F1, für Fight Phase** — Heavy Cover Checkbox global statt im SAVE-Bereich | UX/Arch | Identische Ursache wie F1 |
+| F4 | **Boss Nob on Warbike: WAAAGH! Attacken- und Stärke-Bonus fehlt** — wenn eine Einheit WAAAGH-Effekte hat, müssen alle Gruppen konsistent +1 Strength / +1 Attacks erhalten | Bug | WAAAGH-Bonus vermutlich nicht auf synthetische Gruppen angewendet, oder Warbike-Boss-Nob-Gruppe hat fehlendes ORKS-Keyword im Gruppen-Budget |
+| F5 | **Bug B3 nicht vollständig gelöst** — Heavy Cover Checkbox bei Verteidiger-Einheiten in Melee nicht setzbar; das Häkchen lässt sich nicht aktivieren | Bug | Cover-Checkbox wird gerendert aber State-Update schlägt fehl; vermutlich Streamlit-Key-Konflikt oder falscher `charged`-Check |
+| F6 | **Skorpekh Destroyers: falsche Bewaffnung** — bei 3 Modellen muss mindestens 1 Modell eine andere Waffe haben (Reap-Blade/Threshers statt nur Threshers für alle) | Data | `data/wh40k_9e/necrons/units.yaml` — Skorpekh fehlt `model_groups` mit korrekter Waffentrennung; Wahapedia prüfen |
+| F7 | **Veil of Darkness: Bug "MOVED" + "IN MELEE" gleichzeitig** — laut Regeln schließen sich Bewegen und In-Melee-Sein gegenseitig aus; außerdem darf Veil of Darkness vermutlich nicht genutzt werden wenn der Charakter bereits in Melee ist | Bug/Rules | `turn_flags["veil_moved"]` wird gesetzt ohne zu prüfen ob Einheit `in_melee`; Regel nachschlagen ob VoD in Melee erlaubt ist |
+
+**Priorisierung:** F5 (B3-Rest, kritisch), F7 (Rule-Bug), F4 (WAAAGH-Konsistenz), F2 (Data+Rules-Recherche nötig), F6 (Data), F1/F3 (UX).
+**Vor F1/F3 Implementierung:** Nutzer nach Ziel-UI fragen — Cover-Felder IN die Blöcke einbetten oder als eigene Sektion direkt über HIT/SAVE?
+
+**Nächste Session: Erst F5/F7/F4/F2/F6 analysieren und fixen, dann F1/F3 (nach UI-Klärung), dann Plan 014.**
 
 | Plan | Titel | Prio | Status |
 |------|-------|------|--------|
