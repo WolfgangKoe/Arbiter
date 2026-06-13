@@ -463,7 +463,7 @@ def _render_rp_block(
 
     if models_lost <= 0:
         return
-    if "reanimationProtocols" not in def_unit.keywords:
+    if "reanimationProtocols" not in def_unit.rules:
         return
 
     rp_key = f"rp_{tab_key}"
@@ -685,7 +685,9 @@ def _render_resolution_tab(
     )
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
-    strength = _parse_strength(profile.strength, atk_unit.strength + str_bonus)
+    # str_bonus is added after weapon-strength calculation so that ×N weapons
+    # give (User×N) + bonus rather than (User + bonus)×N.
+    strength = _parse_strength(profile.strength, atk_unit.strength) + str_bonus
     ap = profile.ap
     skill_label = "WS" if use_melee else "BS"
     advanced = atk_state.get("turn_flags", {}).get("advanced", False)
@@ -925,8 +927,10 @@ def toggle_group_target(def_faction: str, def_uid: str) -> bool:
         current.remove(key)
     else:
         alive = unit_state.get("group_models", {}).get(gid, group.count)
-        # A single-model group attacks a single target
-        current = [key] if alive == 1 else current + [key]
+        phase_key = PHASES[st.session_state.phase_idx][1]
+        # In shooting phase a single-model group can only shoot one target;
+        # in fight phase even a 1-model group may split attacks across targets.
+        current = [key] if (alive == 1 and phase_key != "fight") else current + [key]
     targets[gid] = current
     st.session_state.group_targets = targets
     return True
@@ -1333,10 +1337,31 @@ def render_attack_resolution(phase_key: str) -> None:
         tab_labels.append(f"{entry['weapon_name']} → {def_unit.name_en}")
 
     seq = decl.get("seq", 0)
+    is_shooting = phase_key == "shooting"
+    is_fight = phase_key == "fight"
+
+    # Cover checkboxes — one set per unique target, rendered ABOVE the tabs so
+    # they are visible regardless of which weapon-tab is active (P19).
+    # cover_key must match the formula used inside _render_resolution_tab.
+    targets_cover_seen: set[str] = set()
+    for entry in entries:
+        def_uid = entry["def_uid"]
+        if def_uid in targets_cover_seen:
+            continue
+        targets_cover_seen.add(def_uid)
+        cover_key = f"{seq}_{atk_uid}_{def_uid}"
+        def_unit_c, def_state_c = lookup(entry["def_faction"], def_uid)
+        if is_shooting:
+            c1, c2 = st.columns(2)
+            c1.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
+            c2.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{cover_key}")
+        if is_fight and not def_state_c.get("turn_flags", {}).get("charged"):
+            tgt_label = f" — {def_unit_c.name_en}" if len(targets_cover_seen) > 1 else ""
+            st.checkbox(
+                f"Heavy Cover (+1 Save vs Melee){tgt_label}", key=f"heavy_cover_{cover_key}"
+            )
+
     tabs = st.tabs(tab_labels)
-    # Cover checkboxes are per TARGET (P19) — render them only in the first
-    # tab of each target, otherwise Streamlit raises DuplicateWidgetID.
-    cover_rendered: set[str] = set()
     for i, (tab, entry) in enumerate(zip(tabs, entries)):
         with tab:
             tab_key = f"{seq}_{atk_uid}_{entry['def_uid']}_{i}"
@@ -1357,8 +1382,6 @@ def render_attack_resolution(phase_key: str) -> None:
                         st.session_state.pop(k, None)
                     st.rerun()
             else:
-                show_cover = entry["def_uid"] not in cover_rendered
-                cover_rendered.add(entry["def_uid"])
                 _render_resolution_tab(
                     entry,
                     atk_faction,
@@ -1367,7 +1390,7 @@ def render_attack_resolution(phase_key: str) -> None:
                     use_melee,
                     phase_key,
                     tab_key,
-                    show_cover_controls=show_cover,
+                    show_cover_controls=False,  # rendered above tabs
                 )
 
     all_applied = all(

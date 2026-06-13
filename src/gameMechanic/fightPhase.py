@@ -506,8 +506,11 @@ def _render_display(
 ) -> bool:
     """Render attack form if applicable. Returns True when the form is shown."""
     decl = st.session_state.get("attack_declaration", {})
-    if decl.get("active") and decl.get("phase_key") == "fight":
-        render_attack_resolution("fight")
-        return True
-
-    return False
+    if not decl.get("active") or decl.get("phase_key") != "fight":
+        return False
+    if decl.get("atk_faction") != fight_player:
+        # Stale declaration from the previous player's fight turn — discard it.
+        st.session_state.attack_declaration = {"active": False, "entries": []}
+        return False
+    render_attack_resolution("fight")
+    return True

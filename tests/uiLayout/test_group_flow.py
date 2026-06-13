@@ -153,6 +153,38 @@ def test_single_living_model_in_larger_group_replaces_target(monkeypatch) -> Non
     assert common.st.session_state.group_targets["ork_boy"] == [("necrons", "immortals")]
 
 
+def test_single_model_group_can_have_multiple_targets_in_fight_phase(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """In the fight phase a 1-model group may split attacks across targets (B1 regression)."""
+    _setup(
+        monkeypatch,
+        groups=[_group("boss_nob", 1)],
+        group_models={"boss_nob": 1},
+        selected_group="boss_nob",
+        phase_idx=_FIGHT_IDX,
+        melee_with=[("necrons", "warriors"), ("necrons", "immortals")],
+    )
+    toggle_group_target("necrons", "warriors")
+    toggle_group_target("necrons", "immortals")
+    assert common.st.session_state.group_targets["boss_nob"] == [
+        ("necrons", "warriors"),
+        ("necrons", "immortals"),
+    ]
+
+
+def test_single_model_group_still_replaces_target_in_shooting_phase(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """In the shooting phase a 1-model group still replaces its single target (B1 regression)."""
+    _setup(
+        monkeypatch,
+        groups=[_group("boss_nob", 1)],
+        group_models={"boss_nob": 1},
+        selected_group="boss_nob",
+        phase_idx=_SHOOTING_IDX,
+    )
+    toggle_group_target("necrons", "warriors")
+    toggle_group_target("necrons", "immortals")
+    assert common.st.session_state.group_targets["boss_nob"] == [("necrons", "immortals")]
+
+
 # ---------------------------------------------------------------------------
 # is_group_target
 # ---------------------------------------------------------------------------
