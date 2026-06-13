@@ -23,15 +23,51 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S46, 2026-06-13 — 797 Tests grün, 90 % Coverage)
+## Aktueller Stand (nach S47, 2026-06-13 — 798 Tests grün, 90 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
 - **S45: Findings F1–F8 verifiziert** (Ergebnis unten). F8 war falsch, F6/F7 ungenau.
-- **S46: Findings F2/F4/F6/F7 + Cover-Layout (Option B) implementiert** (Commit `44a29a5`):
-  per-Gruppe-Stats, Veil cleart `in_melee`, Skorpekh-Roster, Cover in den Blöcken; +7 Tests.
-  Block B (WAAAGH-Persistenz) verifiziert = **kein Bug**. F5 + F8 = nichts zu tun (s. u.).
-- **OFFEN:** manuelle UI-Verifikation (Checkliste unten) + Roster-Audit (Abweichungsliste).
+- **S46: Findings F2/F4/F6/F7 + Cover-Layout (Option B) implementiert** (Commit `44a29a5`).
+- **S47: manuelle Verifikation → Findings G1–G5.** G1/G4/G5 + Necron-Test-Roster gefixt
+  (Commit `e98d89d`). **G2 (Silent King) blockiert** — siehe unten.
+- **OFFEN:** G4 re-verifizieren; **G2** (per-Gruppe-Wunden-Subsystem + Menhir-Datenlücke);
+  Roster-Audit-Reste (Silent King = G2).
+
+---
+
+## Findings G1–G5 (S47 — aus manueller Verifikation)
+
+- **G1 ✅** Granaten-Cap pro **Einheit** (1/Phase, über alle Gruppen geteilt), nicht pro Gruppe.
+  `_render_group_declaration` zieht in anderen Gruppen zugewiesene Granaten ab.
+- **G4 ✅ (gehärtet, RE-VERIFIZIEREN)** Warbikers-Schussphase zeigte vorausgewähltes Ziel.
+  `group_targets` wird nur per Klick/Reset gesetzt → Ursache vermutlich stale `decl_*`-Widget-Keys.
+  `reset_group_declaration_state` löscht jetzt `decl_m_*`/`decl_a_*`/`decl_p_*`/`group_autosel_done_*`.
+  **Bitte im echten Spiel gegenprüfen, ob behoben.**
+- **G5 ✅** Reanimation Protocols **einmal pro Verteidiger-Einheit**, nachdem die angreifende
+  Einheit ALLE Waffen-Tabs abgehandelt hat (vorher pro Tab). `_render_unit_rp` summiert
+  Modellverluste pro `def_uid`. Generisch (Gate `reanimationProtocols`-Rule).
+- **G3 ✅ (teilweise)** `necrons_test.yaml` deckt Skorpekh-Reap / Lychguard-Swap / Lokhust-Enmitic
+  ab. **Silent-King-Variante fehlt → hängt an G2.**
+
+### 🔴 G2 — The Silent King als 3-Modell-Einheit — BLOCKIERT, braucht Entscheidung
+
+Nutzer-Vorgabe: Szarekh (1 Modell, W16) + Triarchal Menhirs (Subgruppe 2 Modelle, **sterben zuerst**).
+
+**Zwei Blocker:**
+1. **Subsystem-Umbau:** Das Schadenssystem (`unit_mutations.apply_damage`/`heal_unit`/Mortal-Pfad,
+   `game_state` group_models-Init, UI-Damage-Block) ist komplett auf **einheitliche** `unit.wounds`
+   gebaut (`models = current_wounds // unit.wounds`). Gemischte Wunden pro Gruppe (Szarekh W16 +
+   Menhirs Wx, auch Boss Nob W2) erfordern **per-Gruppe-HP-Tracking** + Allokationsreihenfolge nach
+   `priority`. Das ist eine echte, eigenständige Erweiterung (generisch zu halten).
+2. **Datenlücke:** Das Triarchal-Menhir-Profil (W/T/Sv) ist in `docs/work/wahapedia_necrons/`
+   **nicht** enthalten (bekannte Scraper-Lücke — nur Szarekhs kombinierte Statline W:9-16).
+   Appendix bestätigt nur die „Menhirs-zuerst"-Regel. Ohne belegte Menhir-Stats keine korrekte Modellierung.
+
+**Vorschlag nächste Session:**
+- Per-Gruppe-Wunden generisch implementieren (verifizierbarer Erst-Konsument: **Boss Nob W2**,
+  Boss Nob on Warbike W4 — echte 9E-Werte, kein Silent King nötig).
+- Silent King erst danach, sobald das Menhir-Profil belegt ist (Nutzer liefert Stats oder bestätigt Annahme).
 
 ---
 
