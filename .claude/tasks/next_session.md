@@ -23,16 +23,16 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S47, 2026-06-13 — 798 Tests grün, 90 % Coverage)
+## Aktueller Stand (nach S47, 2026-06-13 — 804 Tests grün, 89 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
 - **S45: Findings F1–F8 verifiziert** (Ergebnis unten). F8 war falsch, F6/F7 ungenau.
 - **S46: Findings F2/F4/F6/F7 + Cover-Layout (Option B) implementiert** (Commit `44a29a5`).
-- **S47: manuelle Verifikation → Findings G1–G5.** G1/G4/G5 + Necron-Test-Roster gefixt
-  (Commit `e98d89d`). **G2 (Silent King) blockiert** — siehe unten.
-- **OFFEN:** G4 re-verifizieren; **G2** (per-Gruppe-Wunden-Subsystem + Menhir-Datenlücke);
-  Roster-Audit-Reste (Silent King = G2).
+- **S47: manuelle Verifikation → Findings G1–G5 ALLE umgesetzt.**
+  G1/G4/G5 + Necron-Test-Roster (`e98d89d`); **G2 Silent King + per-Gruppe-Wunden** (`cb39cdd`).
+- **OFFEN:** manuelle UI-Verifikation aller G-Fixes (Checkliste unten); Bracket-Präzision Szarekh
+  (Mini-Follow-up, s. G2).
 
 ---
 
@@ -50,24 +50,28 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 - **G3 ✅ (teilweise)** `necrons_test.yaml` deckt Skorpekh-Reap / Lychguard-Swap / Lokhust-Enmitic
   ab. **Silent-King-Variante fehlt → hängt an G2.**
 
-### 🔴 G2 — The Silent King als 3-Modell-Einheit — BLOCKIERT, braucht Entscheidung
+### G2 ✅ — The Silent King als 3-Modell-Einheit (per-Gruppe-Wunden)
 
-Nutzer-Vorgabe: Szarekh (1 Modell, W16) + Triarchal Menhirs (Subgruppe 2 Modelle, **sterben zuerst**).
+Umgesetzt (Commit `cb39cdd`): Szarekh (1 Modell, W16, Bracket) + Triarchal Menhirs (2 Modelle, W7,
+WS5+/BS3+, **sterben zuerst**). Generisches per-Gruppe-HP-Subsystem:
+- `ModelGroup.stats["wounds"]` + `Unit.has_per_group_wounds()`/`group_wound_value()`.
+- `game_state._unit_state`: `group_wounds`-Pool pro Gruppe; `current_wounds` = Summe. Uniforme
+  Einheiten behalten den alten flachen Pfad (kein Test-Bruch).
+- `unit_mutations.apply_damage`/`heal_unit`/`flee_models`: Allokation nach `priority` (Menhirs
+  zuerst, Spillover auf Szarekh; Heilung/RP füllt Menhirs zuerst). Gegated auf `group_wounds` —
+  keine Fraktionslogik.
+- UI-Damage-Block: Einheiten mit gemischten Wunden bekommen ein „Total damage"-Feld (Verluste
+  werden per Gruppe verteilt); `models_lost` wird nach Apply als Delta berechnet.
 
-**Zwei Blocker:**
-1. **Subsystem-Umbau:** Das Schadenssystem (`unit_mutations.apply_damage`/`heal_unit`/Mortal-Pfad,
-   `game_state` group_models-Init, UI-Damage-Block) ist komplett auf **einheitliche** `unit.wounds`
-   gebaut (`models = current_wounds // unit.wounds`). Gemischte Wunden pro Gruppe (Szarekh W16 +
-   Menhirs Wx, auch Boss Nob W2) erfordern **per-Gruppe-HP-Tracking** + Allokationsreihenfolge nach
-   `priority`. Das ist eine echte, eigenständige Erweiterung (generisch zu halten).
-2. **Datenlücke:** Das Triarchal-Menhir-Profil (W/T/Sv) ist in `docs/work/wahapedia_necrons/`
-   **nicht** enthalten (bekannte Scraper-Lücke — nur Szarekhs kombinierte Statline W:9-16).
-   Appendix bestätigt nur die „Menhirs-zuerst"-Regel. Ohne belegte Menhir-Stats keine korrekte Modellierung.
+**Menhir-Stats-Quelle:** Wahapedia-9e-Datasheet (zweites Profil). Die lokale `units_all.txt`
+hatte nur Szarekhs Statline (Scraper schnitt das zweite Profil ab). Verwendete Werte: Menhirs
+**W7, WS5+, BS3+, T7, Sv3+** (Inv4+ via Transtemporal Force Field). **Falls eine Zahl abweicht:
+`data/wh40k_9e/necrons/units.yaml` → `triarchal_menhirs.stats` anpassen.**
 
-**Vorschlag nächste Session:**
-- Per-Gruppe-Wunden generisch implementieren (verifizierbarer Erst-Konsument: **Boss Nob W2**,
-  Boss Nob on Warbike W4 — echte 9E-Werte, kein Silent King nötig).
-- Silent King erst danach, sobald das Menhir-Profil belegt ist (Nutzer liefert Stats oder bestätigt Annahme).
+**Mini-Follow-up (offen):** Szarekhs Schadensbracket (A6→A4→A2) sollte an `group_wounds["szarekh"]`
+hängen, nicht am Unit-Gesamt-`current_wounds`. Aktuell nutzt die Resolution `current_wounds//models`
+als per_model_hp — für den 3-Modell-Silent-King leicht ungenau, wenn Szarekh selbst Wunden hat.
+Betrifft nur die Attacken-/Move-Anzeige beim ANGREIFENDEN Silent King, nicht HP/Tod.
 
 ---
 
