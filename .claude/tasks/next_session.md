@@ -23,11 +23,15 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S45, 2026-06-13 — 790 Tests grün, 90 % Coverage)
+## Aktueller Stand (nach S46, 2026-06-13 — 797 Tests grün, 90 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
-- **S45: Findings F1–F8 vollständig gegen Code/Daten/Regeln verifiziert** (Ergebnis unten).
+- **S45: Findings F1–F8 verifiziert** (Ergebnis unten). F8 war falsch, F6/F7 ungenau.
+- **S46: Findings F2/F4/F6/F7 + Cover-Layout (Option B) implementiert** (Commit `44a29a5`):
+  per-Gruppe-Stats, Veil cleart `in_melee`, Skorpekh-Roster, Cover in den Blöcken; +7 Tests.
+  Block B (WAAAGH-Persistenz) verifiziert = **kein Bug**. F5 + F8 = nichts zu tun (s. u.).
+- **OFFEN:** manuelle UI-Verifikation (Checkliste unten) + Roster-Audit (Abweichungsliste).
 
 ---
 
@@ -77,22 +81,40 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 - Per-Gruppe-Stats: **volles Override-Schema** (`attacks`/`strength`/`wounds`/`ws`/`bs`)
 - Reihenfolge: erst Doku-Cleanup (erledigt), dann Findings, dann Roster-Audit
 
-**Block A — Per-Gruppe-Statarchitektur (F2 + F4, datengetrieben):**
-- `orks/units.yaml` + `necrons/units.yaml`: optionales `stats:` pro `model_group` (Boss Nob `attacks: 3`)
-- `gameObjects/unit.py`: `ModelGroupSpec`/`ModelGroup` um Stat-Overrides erweitern
-- `gameObjects/loader.py`: Stats parsen, Fallback auf Unit-Stat
-- `uiLayout/_common.py`: Budget + Wound-Block lesen `group.attacks ?? atk_unit.attacks` (analog Strength)
-- Tests: Boss Nob A=3 (+WAAAGH=4); homogener Fallback
+**Block A — Per-Gruppe-Statarchitektur (F2 + F4) ✅ S46:** `ModelGroupSpec`/`ModelGroup.stats`
++ `.stat()`-Helper; Loader parst `stats` und propagiert (inkl. Sub-Gruppen/Merge); `_common.py`
+Budget + Resolution lesen Gruppen-`attacks`/`strength`/`ws`/`bs` (Fallback Unit); Boss-Nob-Daten
+(A3/S5/WS2+) in `orks/units.yaml`. Power Klaw mit WAAAGH = S 5×2+1 = 11 ✓.
 
-**Block B — WAAAGH-Persistenz (F4-Rest):** reproduzieren ob `activated_abilities` über Zugwechsel bleibt; nur fixen falls reproduzierbar.
+**Block B — WAAAGH-Persistenz ✅ verifiziert, KEIN Bug:** `_reset_turn_state` löscht
+`activated_abilities` nicht, schaltet nur bei neuer Runde Stage 1 → Stage 2. Stage-1-Invuln steht
+den Orks im Gegnerzug defensiv zur Verfügung.
 
-**Block C — Veil of Darkness (F7):** `movementPhase.py` Teleport-Confirm + `_undo_teleport` `in_melee` clearen; Regressionstest.
+**Block C — Veil of Darkness (F7) ✅ S46:** `_lock_teleport_movement` cleart `in_melee` für Träger
++ CORE-Einheit und merkt den Vorwert; `_undo_teleport` stellt ihn wieder her. 3 Tests.
 
-**Block D — Skorpekh feste Komposition (F6):** `necrons/units.yaml` Reap-Blade-Swap → fester Sub-Gruppen-Split; Roster prüfen.
+**Block D — Skorpekh (F6) ✅ S46:** `units.yaml` ist RAW-korrekt (optionaler `per_3`-Swap);
+`necrons_alpha` + `zarekhan_sol_kampf_2` opten in den Standard-Build (1 Reap-Blade je 3).
 
-**Block E — Cover-Layout Option B (F1/F3):** Refactoring `_render_resolution_tab` — Dense in HIT-, Light/Heavy in SAVE-Block; F5 vorab reproduzieren.
+**Block E — Cover Option B (F1/F3) ✅ S46:** Cover-Checkboxen in HIT-(Dense)/SAVE-(Light/Heavy)
+-Block, per-Tab-Key; Block oberhalb der Tabs entfernt; `show_cover_controls`-Param weg.
 
-**Danach — Roster-Audit:** alle 6 Rosters in `data/rosters/` gegen Datasheets prüfen (Modellzahl, Pflicht-/Wahlwaffen, Komposition); Abweichungsliste vor Änderung vorlegen; nur YAML, `src/` unberührt.
+**F5 / F8 — nichts zu tun:** F8 (Strength-Badge/Invuln) war bereits verdrahtet. F5 (Heavy Cover
+nicht setzbar) = vermutlich korrektes Verhalten (Checkbox nur wenn Verteidiger nicht gechargt) →
+beim manuellen Test an einer nicht-gechargten Einheit gegenprüfen.
+
+### 🔲 Manuelle UI-Verifikation (S46 — Render-Code, PFLICHT vor „fertig")
+
+- Boss Nob (Boyz/Warbike) mit WAAAGH: **4** Attacken auf Power Klaw legbar; Wound-Block zeigt **S 11**.
+- Cover: Dense-Checkbox erscheint im HIT-Block, Light/Heavy im SAVE-Block, **je Tab**; Toggle wirkt.
+- F5: Heavy Cover an nicht-gechargter Melee-Einheit lässt sich aktivieren.
+- Veil aus dem Nahkampf: danach **kein** „IN MELEE"-Badge; Undo stellt Melee wieder her.
+- Skorpekh-Roster (`necrons_alpha`): 2× Threshers + 1× Reap-Blade als getrennte Gruppen.
+
+### 🔲 Roster-Audit (nächster Schritt) — Abweichungsliste VOR Änderung vorlegen
+
+Alle 6 Rosters in `data/rosters/` gegen Datasheets prüfen (Modellzahl, Pflicht-/Wahlwaffen,
+Komposition). Nur YAML, `src/` unberührt. Skorpekh (F6) ist bereits erledigt.
 
 ---
 
