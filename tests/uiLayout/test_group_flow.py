@@ -343,3 +343,36 @@ def test_reset_clears_all_group_state() -> None:
     assert common.st.session_state.selected_model_group is None
     assert common.st.session_state.group_targets == {}
     assert common.st.session_state.group_decl == {}
+
+
+# ---------------------------------------------------------------------------
+# reset_group_declaration_state — clears stale counter widget keys (G4)
+# ---------------------------------------------------------------------------
+
+
+def test_reset_clears_stale_declaration_counter_keys() -> None:
+    """G4: leftover decl_*/group_autosel_done_* keys must not survive a unit switch."""
+    common.st.session_state = FakeSessionState(
+        selected_unit=("orks", "warbikers"),
+        selected_model_group="warbiker",
+        group_targets={"warbiker": [("necrons", "warriors")]},
+        group_decl={"warbiker": [{"weapon_name": "Dakkagun"}]},
+    )
+    # Stale widget state from a previous declaration
+    common.st.session_state["decl_m_warbiker_warbikers_warriors_Dakkagun"] = 3
+    common.st.session_state["decl_a_boss_nob_boyz_overlord_Power klaw"] = 4
+    common.st.session_state["decl_p_warbiker_warbikers_warriors_Dakkagun"] = "Profile 1"
+    common.st.session_state["group_autosel_done_warbikers"] = True
+    common.st.session_state["unrelated_key"] = 99
+
+    reset_group_declaration_state()
+
+    s = common.st.session_state
+    assert s.selected_model_group is None
+    assert s.group_targets == {}
+    assert s.group_decl == {}
+    assert "decl_m_warbiker_warbikers_warriors_Dakkagun" not in s
+    assert "decl_a_boss_nob_boyz_overlord_Power klaw" not in s
+    assert "decl_p_warbiker_warbikers_warriors_Dakkagun" not in s
+    assert "group_autosel_done_warbikers" not in s
+    assert s["unrelated_key"] == 99

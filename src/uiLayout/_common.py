@@ -522,10 +522,10 @@ def _render_damage_block(
         mw = tab_state.get("mortal_wounds", 0)
         total = tab_state.get("total_damage", 0)
         st.success(f"✓ {m_lost} models · {mw} MW · {total} damage applied")
-        _render_rp_block(def_unit, def_faction, def_uid, m_lost, tab_key)
+        # RP is rolled once per defender unit after the whole attacking unit has
+        # resolved (render_attack_resolution), not per weapon tab.
         if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
-            for k in (res_key, f"rp_{tab_key}"):
-                st.session_state.pop(k, None)
+            st.session_state.pop(res_key, None)
             st.rerun()
         return
 
@@ -846,13 +846,21 @@ def _render_resolution_tab(
 
 
 def reset_group_declaration_state() -> None:
-    """Clear group-by-group declaration state (on unit switch, phase change, resolution)."""
+    """Clear group-by-group declaration state (on unit switch, phase change, resolution).
+
+    Also drops the per-target counter/profile widget keys (``decl_m_*``/``decl_a_*``/
+    ``decl_p_*``); otherwise a stale count from a previous declaration reappears the
+    next time the same group+target is selected, looking like a pre-made selection.
+    """
     st.session_state.selected_model_group = None
     st.session_state.group_targets = {}
     st.session_state.group_decl = {}
-    sel = st.session_state.get("selected_unit")
-    if sel:
-        st.session_state.pop(f"group_autosel_done_{sel[1]}", None)
+    for k in list(st.session_state.keys()):
+        if isinstance(k, str) and k.startswith(("decl_m_", "decl_a_", "decl_p_")):
+            del st.session_state[k]
+    for k in list(st.session_state.keys()):
+        if isinstance(k, str) and k.startswith("group_autosel_done_"):
+            del st.session_state[k]
 
 
 def group_flow_attacker() -> tuple[str, str, Unit, dict] | None:  # type: ignore[type-arg]
@@ -1158,10 +1166,26 @@ def render_group_assignment(
             unsafe_allow_html=True,
         )
     else:
-        # One model per unit may throw a grenade per phase (core rules: Grenade)
+        # One model per UNIT may throw a grenade per phase (core rules: Grenade) —
+        # the cap is shared across all model groups, so subtract grenades already
+        # assigned in other groups' finished declarations.
+        all_decl: dict = st.session_state.get("group_decl", {})  # type: ignore[type-arg]
+
+        def _is_grenade(weapon_name: str) -> bool:
+            wp = next((x for x in atk_unit.weapons if x.name_en == weapon_name), None)
+            return bool(wp) and _ranged_profile(wp).weapon_type.startswith("Grenade")
+
+        grenade_used_other = sum(
+            e.get("models_count", 0)
+            for other_gid, other_entries in all_decl.items()
+            if other_gid != gid
+            for e in other_entries
+            if _is_grenade(e["weapon_name"])
+        )
+        grenade_unit_cap = max(0, 1 - grenade_used_other)
         for w in grp_weapons:
             grenade = _ranged_profile(w).weapon_type.startswith("Grenade")
-            weapon_caps[w.name_en] = 1 if grenade else alive
+            weapon_caps[w.name_en] = grenade_unit_cap if grenade else alive
         weapon_assigned = {
             w.name_en: sum(_val(f"decl_m_{gid}_{atk_uid}_{d_uid}_{w.name_en}") for _, d_uid in tgts)
             for w in grp_weapons
@@ -1370,17 +1394,12 @@ def render_attack_resolution(phase_key: str) -> None:
             tab_state = st.session_state.get(res_key, {})
 
             if tab_state.get("applied"):
-                def_unit_t, _ = lookup(entry["def_faction"], entry["def_uid"])
                 m_lost = tab_state.get("models_lost", 0)
                 mw = tab_state.get("mortal_wounds", 0)
                 total = tab_state.get("total_damage", 0)
                 st.success(f"✓ {m_lost} models · {mw} MW · {total} damage")
-                _render_rp_block(
-                    def_unit_t, entry["def_faction"], entry["def_uid"], m_lost, tab_key
-                )
                 if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
-                    for k in (res_key, f"rp_{tab_key}"):
-                        st.session_state.pop(k, None)
+                    st.session_state.pop(res_key, None)
                     st.rerun()
             else:
                 _render_resolution_tab(
@@ -1399,6 +1418,33 @@ def render_attack_resolution(phase_key: str) -> None:
     )
     if all_applied and entries:
         st.markdown("---")
+        _render_unit_rp(seq, atk_uid, entries)
         if st.button("✓ All done — Continue", type="primary", key="all_done"):
             st.session_state.attack_declaration = _empty_attack_declaration()
             st.rerun()
+
+
+def _render_unit_rp(seq: int, atk_uid: str, entries: list[dict]) -> None:  # type: ignore[type-arg]
+    """Reanimation Protocols once per defender unit, summing model losses across
+    all weapon tabs of the attacking unit (the unit has now fully resolved).
+
+    Generic: gated by the ``reanimationProtocols`` rule in _render_rp_block — no
+    faction-specific logic.
+    """
+    seen: list[tuple[str, str]] = []
+    for entry in entries:
+        key = (entry["def_faction"], entry["def_uid"])
+        if key in seen:
+            continue
+        seen.append(key)
+        def_unit, _ = lookup(*key)
+        total_lost = sum(
+            st.session_state.get(f"res_{seq}_{atk_uid}_{e['def_uid']}_{j}", {}).get(
+                "models_lost", 0
+            )
+            for j, e in enumerate(entries)
+            if (e["def_faction"], e["def_uid"]) == key
+        )
+        _render_rp_block(
+            def_unit, key[0], key[1], total_lost, f"unit_{seq}_{atk_uid}_{entry['def_uid']}"
+        )

@@ -1,0 +1,36 @@
+display_name: Necrons — Testspiel
+faction_dir: necrons
+dynasty: nihilakh
+# Test-Roster: deckt die Necron-weapon_swaps-Varianten ab —
+# per_model per_3 (Skorpekh Reap-Blades), group swap (Lychguard Sword+Shield),
+# per_model any (Lokhust Heavy Enmitic Exterminator). Homogene Einheit (Warriors)
+# als trivialer Referenzfall.
+units:
+  - id: wh40k_9e.necrons.unit.overlord
+    models: 1
+    wargear: [wh40k_9e.necrons.wargear.resurrection_orb]
+  - id: wh40k_9e.necrons.unit.warriors
+    models: 10
+  - id: wh40k_9e.necrons.unit.skorpekh_destroyers
+    models: 6
+    group_loadouts:
+      skorpekh:
+        swaps:
+          reap_blade_swap:
+            - weapons: [wh40k_9e.necrons.weapon.hyperphase_reap_blade]
+              count: 2
+  - id: wh40k_9e.necrons.unit.lychguard
+    models: 10
+    group_loadouts:
+      lychguard:
+        swaps:
+          sword_and_shield:
+            weapons: [wh40k_9e.necrons.weapon.hyperphase_sword]
+  - id: wh40k_9e.necrons.unit.lokhust_heavy_destroyers
+    models: 3
+    group_loadouts:
+      lokhust_heavy:
+        swaps:
+          exterminator_swap:
+            - weapons: [wh40k_9e.necrons.weapon.enmitic_exterminator]
+              count: 2
