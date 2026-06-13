@@ -179,8 +179,18 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
     count = min(models, u.models_max) if models is not None else u.models_max
     # model_groups counts are already resolved from the roster in load_roster
     group_models: dict[str, int] = {g.id: g.count for g in u.model_groups} if u.model_groups else {}
+    # Units with per-group wounds (e.g. Szarekh 16 + Triarchal Menhirs 7) track a
+    # separate HP pool per group; current_wounds is their sum.
+    if u.model_groups and u.has_per_group_wounds():
+        group_wounds: dict[str, int] = {
+            g.id: g.count * u.group_wound_value(g) for g in u.model_groups
+        }
+        current_wounds = sum(group_wounds.values())
+    else:
+        group_wounds = {}
+        current_wounds = u.wounds * count
     return {
-        "current_wounds": u.wounds * count,
+        "current_wounds": current_wounds,
         "models": count,
         "models_initial": count,
         "destroyed": False,
@@ -207,6 +217,7 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
         "active_buffs": [],
         "models_lost_since_last_rp": 0,
         "group_models": group_models,
+        "group_wounds": group_wounds,
     }
 
 

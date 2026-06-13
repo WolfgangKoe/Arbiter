@@ -763,3 +763,110 @@ def test_apply_damage_without_group_models_leaves_dict_unchanged() -> None:
     unit = Unit(**{**unit.__dict__, "model_groups": []})
     apply_damage(BOYZ, "Necrons", 3, unit, mortal=True)
     assert session["p1_units"][BOYZ]["group_models"] == {}
+
+
+# ---------------------------------------------------------------------------
+# Per-group wounds (G2): Szarekh 16 + Triarchal Menhirs 7, Menhirs die first
+# ---------------------------------------------------------------------------
+
+SILENT_KING = "wh40k_9e.necrons.unit.the_silent_king"
+
+
+def _silent_king() -> Unit:
+    groups = [
+        ModelGroup(
+            id="triarchal_menhirs",
+            name_en="Triarchal Menhirs",
+            count=2,
+            weapons=[],
+            priority=1,
+            stats={"wounds": 7, "ws": "5+", "bs": "3+"},
+        ),
+        ModelGroup(
+            id="szarekh", name_en="Szarekh", count=1, weapons=[], priority=2, stats={"wounds": 16}
+        ),
+    ]
+    return Unit(
+        id=SILENT_KING,
+        name_en="The Silent King",
+        name_de="Der Stille König",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["Lord of War"],
+        keywords=["NECRONS"],
+        wounds=16,
+        models_min=3,
+        models_max=3,
+        power_level=21,
+        move='8"',
+        bs="2+",
+        ws="2+",
+        strength=5,
+        toughness=7,
+        attacks=6,
+        save=3,
+        invuln_save=4,
+        leadership=10,
+        oc=5,
+        fnp=None,
+        weapons=[],
+        model_groups=groups,
+    )
+
+
+def test_unit_state_inits_per_group_wounds() -> None:
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    assert state["group_wounds"] == {"triarchal_menhirs": 14, "szarekh": 16}
+    assert state["current_wounds"] == 30
+    assert state["models"] == 3
+
+
+def test_homogeneous_unit_has_no_group_wounds() -> None:
+    state = _gs._unit_state(_warriors(), 10)
+    assert state["group_wounds"] == {}
+    assert state["current_wounds"] == 10
+
+
+def _sk_session() -> _S:
+    sk = _silent_king()
+    return _make_session(p1_units={SILENT_KING: _gs._unit_state(sk, 3)})
+
+
+def test_apply_damage_menhirs_take_wounds_first() -> None:
+    session = _sk_session()
+    apply_damage(SILENT_KING, "Necrons", 10, _silent_king(), resolved=True)
+    state = session["p1_units"][SILENT_KING]
+    assert state["group_wounds"]["triarchal_menhirs"] == 4
+    assert state["group_wounds"]["szarekh"] == 16
+    assert state["group_models"] == {"triarchal_menhirs": 1, "szarekh": 1}
+    assert state["models"] == 2
+
+
+def test_apply_damage_spills_into_szarekh_after_menhirs_gone() -> None:
+    session = _sk_session()
+    apply_damage(SILENT_KING, "Necrons", 18, _silent_king(), resolved=True)
+    state = session["p1_units"][SILENT_KING]
+    assert state["group_wounds"]["triarchal_menhirs"] == 0
+    assert state["group_wounds"]["szarekh"] == 12
+    assert state["group_models"] == {"triarchal_menhirs": 0, "szarekh": 1}
+    assert state["models"] == 1
+
+
+def test_apply_damage_destroys_silent_king_at_zero() -> None:
+    session = _sk_session()
+    apply_damage(SILENT_KING, "Necrons", 30, _silent_king(), resolved=True)
+    state = session["p1_units"][SILENT_KING]
+    assert state["destroyed"] is True
+    assert state["models"] == 0
+    assert state["lost_models_this_turn"] == 3
+
+
+def test_heal_restores_menhirs_first() -> None:
+    session = _sk_session()
+    apply_damage(SILENT_KING, "Necrons", 18, _silent_king(), resolved=True)
+    heal_unit(SILENT_KING, "Necrons", 7, _silent_king())
+    state = session["p1_units"][SILENT_KING]
+    assert state["group_wounds"]["triarchal_menhirs"] == 7
+    assert state["group_models"]["triarchal_menhirs"] == 1
+    assert state["models"] == 2

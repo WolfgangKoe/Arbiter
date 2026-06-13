@@ -6,6 +6,10 @@ dynasty: nihilakh
 # per_model any (Lokhust Heavy Enmitic Exterminator). Homogene Einheit (Warriors)
 # als trivialer Referenzfall.
 units:
+  # Mixed per-model wounds in one unit (Szarekh 16 + 2 Triarchal Menhirs 7) —
+  # exercises the per-group-wounds path (Menhirs take wounds first).
+  - id: wh40k_9e.necrons.unit.the_silent_king
+    models: 3
   - id: wh40k_9e.necrons.unit.overlord
     models: 1
     wargear: [wh40k_9e.necrons.wargear.resurrection_orb]

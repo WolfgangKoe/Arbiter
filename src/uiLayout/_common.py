@@ -545,47 +545,83 @@ def _render_damage_block(
     # Half-width block — the damage entry does not need the whole displayArea
     dmg_col, _ = st.columns(2)
 
-    models_lost = 0
-    if not is_single_model:
-        models_lost = dmg_col.number_input(
-            "Models lost",
-            min_value=0,
-            step=1,
-            key=f"ml_{tab_key}",
-        )
-
-    wounds_on_front = 0
-    if is_multi_lp:
-        wf_label = (
-            f"Wounds taken (0–{def_unit.wounds - 1})"
-            if is_single_model
-            else f"Wounds on front model (0–{def_unit.wounds - 1})"
-        )
-        wounds_on_front = dmg_col.number_input(
-            wf_label,
-            min_value=0,
-            max_value=def_unit.wounds - 1,
-            step=1,
-            key=f"wf_{tab_key}",
-        )
-
+    _, def_state = lookup(def_faction, def_uid)
+    is_group_wounds = bool(def_state.get("group_wounds"))
     weapon_special = _detect_weapon_special(profile)
-    mortal_wounds = 0
-    if weapon_special.get("has_mortal_wounds"):
-        mortal_wounds = dmg_col.number_input(
-            "Mortal Wounds",
-            min_value=0,
-            step=1,
-            key=f"mw_{tab_key}",
-        )
 
-    total = apply_damage_attacks(
-        int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
-    )
+    if is_group_wounds:
+        # Mixed per-model wounds in one unit (e.g. Szarekh 16 + Menhirs 7): the
+        # losses are distributed by group/priority in apply_damage, so the user
+        # enters total damage that got through rather than models/front wounds.
+        gw_total = sum(def_state["group_wounds"].values())
+        dmg_col.caption(
+            "Per-group HP: "
+            + " · ".join(
+                f"{g.name_en} {def_state['group_wounds'].get(g.id, 0)}"
+                for g in def_unit.model_groups
+            )
+        )
+        damage_in = dmg_col.number_input(
+            f"Total damage dealt (0–{gw_total})",
+            min_value=0,
+            max_value=gw_total,
+            step=1,
+            key=f"gwd_{tab_key}",
+        )
+        mortal_wounds = 0
+        if weapon_special.get("has_mortal_wounds"):
+            mortal_wounds = dmg_col.number_input(
+                "Mortal Wounds", min_value=0, step=1, key=f"mw_{tab_key}"
+            )
+        total = int(damage_in) + int(mortal_wounds)
+        models_lost = 0  # recomputed post-apply from group_models delta
+    else:
+        models_lost = 0
+        if not is_single_model:
+            models_lost = dmg_col.number_input(
+                "Models lost",
+                min_value=0,
+                step=1,
+                key=f"ml_{tab_key}",
+            )
+
+        wounds_on_front = 0
+        if is_multi_lp:
+            wf_label = (
+                f"Wounds taken (0–{def_unit.wounds - 1})"
+                if is_single_model
+                else f"Wounds on front model (0–{def_unit.wounds - 1})"
+            )
+            wounds_on_front = dmg_col.number_input(
+                wf_label,
+                min_value=0,
+                max_value=def_unit.wounds - 1,
+                step=1,
+                key=f"wf_{tab_key}",
+            )
+
+        mortal_wounds = 0
+        if weapon_special.get("has_mortal_wounds"):
+            mortal_wounds = dmg_col.number_input(
+                "Mortal Wounds",
+                min_value=0,
+                step=1,
+                key=f"mw_{tab_key}",
+            )
+
+        total = apply_damage_attacks(
+            int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
+        )
     btn_label = f"⚔ Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
     if dmg_col.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
+        models_before = def_state.get("models", 0) if is_group_wounds else 0
         if total > 0:
             apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
+        if is_group_wounds:
+            # Real loss only known after priority-based distribution
+            _, def_state_after = lookup(def_faction, def_uid)
+            models_lost = max(0, models_before - def_state_after.get("models", 0))
+        wounds_on_front = 0
         decl = st.session_state.get("attack_declaration", {})
         atk_uid = decl.get("atk_uid", "")
         atk_f = decl.get("atk_faction", "")

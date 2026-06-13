@@ -131,6 +131,14 @@ class Unit:
         needle = keyword.upper()
         return any(kw.upper() == needle for kw in self.keywords)
 
+    def group_wound_value(self, group: ModelGroup) -> int:
+        """Per-model wounds for a group (e.g. Triarchal Menhirs 7), default unit.wounds."""
+        return int(group.stat("wounds", self.wounds) or self.wounds)
+
+    def has_per_group_wounds(self) -> bool:
+        """True if any model group overrides wounds (e.g. Szarekh 16 + Menhirs 7)."""
+        return any("wounds" in g.stats for g in self.model_groups)
+
     def get_triggered_effect(self, timing: str, phase: str, effect: str) -> TriggeredEffect | None:
         for te in self.triggered_effects:
             if te.timing == timing and te.phase == phase and te.effect == effect:

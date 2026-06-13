@@ -37,12 +37,65 @@ def adjust_cp(faction: str, delta: int) -> None:
     st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
 
 
+def _recompute_from_group_wounds(state: dict, unit: Unit) -> None:  # type: ignore[type-arg]
+    """Recompute group_models / models / current_wounds / destroyed from group_wounds."""
+    gw: dict[str, int] = state["group_wounds"]
+    gm: dict[str, int] = state["group_models"]
+    for group in unit.model_groups:
+        wval = unit.group_wound_value(group)
+        remaining = gw.get(group.id, 0)
+        models = (remaining + wval - 1) // wval  # ceil — a partly wounded model still stands
+        gm[group.id] = min(group.count, max(0, models))
+    state["current_wounds"] = sum(gw.values())
+    state["models"] = sum(gm.values())
+    state["destroyed"] = state["current_wounds"] <= 0
+
+
+def _front_group_hp(state: dict, unit: Unit) -> int:  # type: ignore[type-arg]
+    """Remaining HP on the front model of the lowest-priority surviving group."""
+    gw: dict[str, int] = state["group_wounds"]
+    for group in sorted(unit.model_groups, key=lambda g: g.priority):
+        remaining = gw.get(group.id, 0)
+        if remaining <= 0:
+            continue
+        wval = unit.group_wound_value(group)
+        partial = remaining % wval
+        return partial if partial > 0 else wval
+    return 0
+
+
+def _apply_group_wound_damage(state: dict, dmg: int, unit: Unit) -> None:  # type: ignore[type-arg]
+    """Reduce per-group HP pools in priority order (lowest priority = dies first)."""
+    gw: dict[str, int] = state["group_wounds"]
+    for group in sorted(unit.model_groups, key=lambda g: g.priority):
+        if dmg <= 0:
+            break
+        pool = gw.get(group.id, 0)
+        applied = min(dmg, pool)
+        gw[group.id] = pool - applied
+        dmg -= applied
+    _recompute_from_group_wounds(state, unit)
+
+
 def apply_damage(
     uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False, resolved: bool = False
 ) -> None:
     key = units_key_for(faction)
     state = st.session_state[key][uid]
     old_models = state["models"]
+
+    # Per-group wound pools (e.g. Szarekh 16 + Triarchal Menhirs 7): allocate by
+    # priority instead of the flat uniform-wounds path below.
+    if state.get("group_wounds"):
+        if not mortal and not resolved:
+            dmg = min(dmg, _front_group_hp(state, unit))
+        _apply_group_wound_damage(state, dmg, unit)
+        if state["destroyed"] and state.get("melee_with"):
+            leave_melee(uid, faction)
+        lost = old_models - state["models"]
+        if lost > 0:
+            state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + lost
+        return
     # Front-model cap applies only to single-hit damage (wound buttons, old attack form).
     # 6d-v2 passes resolved=True: damage is already the correct total HP reduction.
     if (
@@ -89,9 +142,36 @@ def _restore_group_models(
             return
 
 
+def _heal_group_wounds(state: dict, hp: int, unit: Unit) -> None:  # type: ignore[type-arg]
+    """Refill per-group HP pools, lowest priority first (the group that died first)."""
+    gw: dict[str, int] = state["group_wounds"]
+    for group in sorted(unit.model_groups, key=lambda g: g.priority):
+        if hp <= 0:
+            break
+        cap = group.count * unit.group_wound_value(group)
+        room = cap - gw.get(group.id, 0)
+        added = min(hp, room)
+        gw[group.id] = gw.get(group.id, 0) + added
+        hp -= added
+    _recompute_from_group_wounds(state, unit)
+
+
 def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) -> bool:
     key = units_key_for(faction)
     state = st.session_state[key][uid]
+
+    # Per-group wound pools restore by priority (the group that died first returns first).
+    if state.get("group_wounds"):
+        old_wounds = state["current_wounds"]
+        old_models = state["models"]
+        _heal_group_wounds(state, hp, unit)
+        models_back = state["models"] - old_models
+        if models_back > 0:
+            state["lost_models_this_turn"] = max(
+                0, state.get("lost_models_this_turn", 0) - models_back
+            )
+        return state["current_wounds"] > old_wounds
+
     max_hp = unit.wounds * (unit.models_max if revive else state["models"])
     old_wounds = state["current_wounds"]
     old_models = state["models"]
@@ -179,6 +259,20 @@ def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
     """Remove models that fled a morale test — semantically distinct from combat losses."""
     key = _unit_key(faction)
     state = st.session_state[key][uid]
+    if state.get("group_wounds"):
+        remaining = count
+        gw: dict[str, int] = state["group_wounds"]
+        gm: dict[str, int] = state["group_models"]
+        for group in sorted(unit.model_groups, key=lambda g: g.priority):
+            if remaining <= 0:
+                break
+            rm = min(remaining, gm.get(group.id, 0))
+            gw[group.id] = max(0, gw.get(group.id, 0) - rm * unit.group_wound_value(group))
+            remaining -= rm
+        _recompute_from_group_wounds(state, unit)
+        state["fled_models_this_turn"] = state.get("fled_models_this_turn", 0) + count
+        state["turn_flags"]["morale_tested"] = True
+        return
     wounds_to_remove = count * unit.wounds
     state["current_wounds"] = max(0, state["current_wounds"] - wounds_to_remove)
     if unit.wounds > 0:
