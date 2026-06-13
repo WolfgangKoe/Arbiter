@@ -1575,3 +1575,38 @@ unit_state["group_models"]: dict[str, int]
 - [ ] Ability-Badges auf unitCard sichtbar und korrekt ablaufend
 - [ ] Reset archiviert Log; neues Spiel startet sauber
 - [ ] Archiv-UI im Setup-Screen: Liste, Download, Löschen
+
+---
+
+## Session-Historie (Changelog)
+
+> Aus `next_session.md` übertragen (2026-06-13), damit der Startprompt schlank bleibt.
+> Eine Zeile pro Session — Details stehen in den Teilziel-Abschnitten oben und im Git-Log.
+
+### Feature-Sessions (Ziel 6)
+
+- **S28** WAAAGH! Advance+Charge, +1 Attacks Melee, per-weapon `atk_counter`.
+- **S29** Ork-Waffen-Audit — Befunde 1/2/3 (s. „Ork Waffen-Audit").
+- **S30** `extra_attacks` + `model_restriction`: `WeaponProfile.max_attacks`, Klasse 3a/3b, Boss-Nob-Badges; +25 Tests.
+- **S31** Weapon-Strength-Bugfix: `_parse_strength` akzeptiert `int|str` nativ; `WeaponProfile.ap:int`; 510 Tests.
+- **S32** 6l Relic-Interpreter Phase 1 (`Unit.relic_id`, `load_relic_catalog`, `_apply_relic`, `buff_stat`, Relic-Badge); Heavy-Cover-Charged-Check `atk_state`→`def_state`; 519 Tests.
+- **S33** `_parse_strength` `User×N`-Notation (power_klaw etc.); +14 Regressionstests; 533 Tests.
+- **S34** `1_per_10`-Restrictions (Boyz/Kommandos); Cover-Würfelpaar-Bugfix in `_common.py`; 535 Tests.
+- **S35** 6l Phase 2 datengetrieben: `TriggeredEffect`, alle hardcodierten Fraktions-IDs raus, Veil of Darkness (`movement_locked`), Da Irongob 2-stufig; 547 Tests.
+- **S36** Da-Irongob-Zielfilter, Dakka-`"5/3"`-Parsing, Boss-Nob-Limit pro Ziel, Save-Modifier-AP-Farben; Cover-Farben offen.
+- **S37** Save-Modifier relativ zu `armour` (`save_modifier_die_pair_html`); Shooting-`model_restriction` im Schusspfad; 6m geplant.
+- **S38** 6m Modellgruppen implementiert (Tasks A–E,G/H,I): `model_groups` YAML, `ModelGroup(Spec)`, `_resolve_model_groups`, `group_models`-State, `_apply_group_losses`, `_render_group_declaration`; +13 Tests, 559.
+- **S39** 6m F+J final (subUnitCards in PlayerAreas, Gruppe-für-Gruppe-Flow), Doppelklick-Fix Fight Phase, `reset_group_declaration_state`; 6n A–D+E2 (Engagement-Check, `seq`-Namespacing, `weapon_swaps`-Schema ersetzt `optional_*`, Regelkasten oben/VP unten); 583 Tests. 13 Review-Befunde → 6n.
+- **Coverage-Session (2026-06-11)** 80%-Gate aktiv (`pyproject.toml` omit + `fail_under=80`), `deploy.yml` Dev-Deps; +166 Tests, 760 grün/90%. Audit-Bericht + Pläne 001–005.
+
+### Audit-/Executor-Sessions
+
+- **2026-06-11 (Pläne 001–005 + Findings #8/#9/#10)** CI-Gates (ruff/black/isort/mypy/Coverage), `defusedxml`, `waaagh_attack_bonus()` zentralisiert, `lookup()` KeyError, Loader-Cache; `.woodpecker.yml`/`Makefile`/`.env.example` bereinigt; 767 Tests.
+- **2026-06-11 (Pläne 009/010/006/007)** Roster-Group-Validation, 5 tote Vars + F841-Gate, `load_yaml`-Helper, Scenario-Namen-Allowlist; +9 Tests, 776.
+- **2026-06-11 (Re-Audit)** Bericht `docs/audit/2026-06-11-reaudit.md` (R1–R8) + Pläne 006–012; Token-in-URL widerrufen.
+- **S40 (2026-06-12, Plan 008)** `gameMechanic/attack_math.py` (NEU, gemessen) + `uiLayout/dice_html.py` (NEU); `_common.py` 2084→1594 Zeilen, Re-Exports stabil.
+- **S41 (2026-06-12, Plan 011 + Fraktions-Bereinigung)** `activated_abilities` ersetzt `waaagh_state`; `buff_stat_bonus`/`ability_invuln_save`/`ability_badge_label` generisch; RP-Gate über `keywords`; Resurrection Orb via `handler`; `grep waaagh|necron|_RES_ORB_ID src/` = 0; 783 Tests.
+- **S42 (2026-06-12)** Pläne 012 (Loader-Cache) abgeschlossen; Feature-Plan-Queue auf `docs/audit/plans/013–018` umgestellt.
+- **S43 (2026-06-12, Plan 013)** Einheitlicher Gruppen-Flow: synthetische Einzelgruppe im Loader, Legacy-`render_attack_declaration` entfernt, Ziele neben Gruppen; 788 Tests. Commit `e6fcdb3`.
+- **S44 (2026-06-13)** 5 post-013-Bugs B1–B5 behoben (Ziel-Buttons, `str_bonus`-Reihenfolge, Cover-Position, RP-Gate `rules`, stale `attack_declaration`); 790 Tests. Commit `46e03f8`. + 7 neue Findings F1–F7 dokumentiert.
+- **S45 (2026-06-13)** Ganzheitliche Regelrecherche + Verifikation F1–F8 gegen Code/Daten/Regeln (s. `next_session.md`). Ergebnis: F8 (WAAAGH-Sichtbarkeit) war falsch — Badge/Invuln sind verdrahtet; echter Bug = per-Gruppe-Stats (F2/F4). F6 Skorpekh hat bereits `model_groups` (optionaler statt fester Swap). F7 Flag = `movement_locked` (nicht `veil_moved`); `in_melee` wird nicht gecleart.
