@@ -166,6 +166,10 @@ beim manuellen Test an einer nicht-gechargten Einheit gegenprüfen.
 - F5: Heavy Cover an nicht-gechargter Melee-Einheit lässt sich aktivieren.
 - Veil aus dem Nahkampf: danach **kein** „IN MELEE"-Badge; Undo stellt Melee wieder her.
 - Skorpekh-Roster (`necrons_alpha`): 2× Threshers + 1× Reap-Blade als getrennte Gruppen.
+- **S48 (H1–H7):** Big Mek MA zeigt nur noch mega-blasta + power klaw (bzw. gewählte Swap-Option);
+  Silent King: Szarekh hat Sceptre/Staff/Scythe, Menhirs nur Beam; **Living Metal erscheint NICHT
+  bei voller HP**; MWBD bei Szarekh **2×** nutzbar (PHAERON); Badges MOVED **blau** / Buffs **grün**
+  auch im Silent-King-Roster; RP einmal pro Verteidiger nach „All done".
 
 ### 🔲 Roster-Audit (nächster Schritt) — Abweichungsliste VOR Änderung vorlegen
 
