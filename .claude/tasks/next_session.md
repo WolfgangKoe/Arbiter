@@ -23,7 +23,7 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S47, 2026-06-14 — 807 Tests grün, 89 % Coverage)
+## Aktueller Stand (nach S47, 2026-06-14 — 810 Tests grün, 89 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
@@ -33,6 +33,9 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
   G1/G4/G5 + Necron-Test-Roster (`e98d89d`); **G2 Silent King + per-Gruppe-Wunden** (`cb39cdd`).
 - **S47b: Bracket-Follow-up + Menhir A2** (Commit `446c2b6`). Szarekh-Attacken folgen seinem
   eigenen Bracket; Menhirs fix A2.
+- **S47c: Crash-Fix Silent-King-Gesundheitsbalken** (Commit `7ad42e6`). `st.progress(-0.125)` in
+  `unitCard.py` (uniforme Frontmodell-Formel bei gemischten Wunden). Neuer Helfer
+  `front_group_hp` (Option B) — Frontmodell aus der vordersten überlebenden Gruppe, geclampt [0,1].
 - **OFFEN:** nur noch manuelle UI-Verifikation aller G-Fixes (Checkliste unten).
 
 ---
