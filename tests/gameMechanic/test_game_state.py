@@ -358,7 +358,7 @@ class TestComputeRosterTotalPts:
 
 class TestLoadRosterFor:
     def test_existing_file_returns_matched_units(self) -> None:
-        matched, unmatched, display_name, faction_dir, dynasty = _gs._load_roster_for(
+        matched, unmatched, display_name, faction_dir, dynasty, proto = _gs._load_roster_for(
             "necrons_alpha.yaml", "necrons"
         )
         assert len(matched) > 0
@@ -366,12 +366,12 @@ class TestLoadRosterFor:
         assert isinstance(display_name, str)
 
     def test_existing_file_display_name_from_metadata(self) -> None:
-        _, _, display_name, _, _ = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
+        _, _, display_name, _, _, _ = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
         # display_name comes from YAML metadata or falls back to filename
         assert display_name != ""
 
     def test_missing_file_falls_back_to_full_catalog(self) -> None:
-        matched, unmatched, display_name, faction_dir, dynasty = _gs._load_roster_for(
+        matched, unmatched, display_name, faction_dir, dynasty, proto = _gs._load_roster_for(
             "does_not_exist_xyz.yaml", "necrons"
         )
         # Falls back: full catalog as matched, no unmatched
@@ -380,13 +380,21 @@ class TestLoadRosterFor:
         assert faction_dir == "necrons"
 
     def test_missing_file_display_name_is_filename(self) -> None:
-        _, _, display_name, _, _ = _gs._load_roster_for("missing.yaml", "necrons")
+        _, _, display_name, _, _, _ = _gs._load_roster_for("missing.yaml", "necrons")
         assert display_name == "missing.yaml"
 
     def test_dynasty_propagated_from_metadata(self) -> None:
-        _, _, _, _, dynasty = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
+        _, _, _, _, dynasty, _ = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
         # dynasty may be None or a string — just ensure no crash
         assert dynasty is None or isinstance(dynasty, str)
+
+    def test_protocol_order_from_metadata(self) -> None:
+        # Silent King roster declares dynasty szarekhan; protocol_order optional
+        _, _, _, _, dynasty, proto = _gs._load_roster_for(
+            "necrons_1500pts_silent_king.yaml", "necrons"
+        )
+        assert dynasty == "szarekhan"
+        assert proto is None or isinstance(proto, list)
 
 
 # ---------------------------------------------------------------------------

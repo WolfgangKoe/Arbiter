@@ -59,47 +59,61 @@ def _render_buff_roll_ability(
     units_state: dict,  # type: ignore[type-arg]
     unit_by_id: dict,  # type: ignore[type-arg]
 ) -> None:
-    """Render activate / status UI for any buff_roll command-phase ability."""
+    """Render activate / status UI for any buff_roll command-phase ability.
+
+    Some abilities can be used more than once per Command phase: a PHAERON model
+    may use My Will Be Done one additional time. Uses are tracked as a list of
+    target unit keys; max uses = 1 + 1 if the owning model has the PHAERON keyword.
+    """
     ability_id = ability.id
     cmd_state: dict = st.session_state.get("command_ability_state", {})  # type: ignore[type-arg]
     this_state: dict = cmd_state.get(ability_id, {})  # type: ignore[type-arg]
 
-    target_uid: str | None = this_state.get("target_uid")
+    # Support both the multi-target list and the legacy single-target shape.
+    targets: list[str] = list(
+        this_state.get("targets")
+        or ([this_state["target_uid"]] if this_state.get("target_uid") else [])
+    )
     active_since_round: int | None = this_state.get("active_since_round")
 
     # Expire when a new command phase begins (round has advanced)
     if active_since_round is not None and state["round"] > active_since_round:
-        if target_uid and target_uid in units_state:
-            bufs: list[dict] = units_state[target_uid].get("active_buffs", [])
-            units_state[target_uid]["active_buffs"] = [
-                b for b in bufs if b.get("ability_id") != ability_id
-            ]
+        for t in targets:
+            if t in units_state:
+                bufs: list[dict] = units_state[t].get("active_buffs", [])
+                units_state[t]["active_buffs"] = [
+                    b for b in bufs if b.get("ability_id") != ability_id
+                ]
         cmd_state[ability_id] = {}
         st.session_state.command_ability_state = cmd_state
-        target_uid = None
+        targets = []
+
+    owner = unit_by_id.get(ability.unit_id)
+    max_uses = 1 + (1 if owner and owner.has_keyword("PHAERON") else 0)
+    effect_desc = "re-roll 1s to hit" if ability.effect.type == "reroll_hit_1" else "+1 to hit"
 
     st.divider()
     st.markdown(f"**{ability.name_en}**")
 
     awaiting = st.session_state.get("cmd_awaiting_ability_id") == ability_id
 
-    already_active = target_uid and any(
-        b.get("ability_id") == ability_id
-        for b in units_state.get(target_uid, {}).get("active_buffs", [])
-    )
-    if already_active:
-        target_unit = unit_by_id.get(unit_id_from_state_key(target_uid))
-        name = target_unit.name_en if target_unit else target_uid
-        effect_desc = "re-roll 1s to hit" if ability.effect.type == "reroll_hit_1" else "+1 to hit"
+    for t in targets:
+        target_unit = unit_by_id.get(unit_id_from_state_key(t))
+        name = target_unit.name_en if target_unit else t
         st.success(f"Active — **{name}** {effect_desc} until your next Command Phase.")
-    elif awaiting:
+
+    uses = len(targets)
+    if awaiting:
         st.info("Select an eligible unit from your army list.")
         if st.button("Cancel", key=f"cmd_cancel_{ability_id}", use_container_width=True):
             st.session_state.cmd_awaiting_ability_id = None
             st.rerun()
-    else:
+    elif uses < max_uses:
+        label = f"Activate {ability.name_en}"
+        if max_uses > 1:
+            label += f" ({uses + 1}/{max_uses})"
         if st.button(
-            f"Activate {ability.name_en}",
+            label,
             key=f"cmd_activate_{ability_id}",
             type="primary",
             use_container_width=True,

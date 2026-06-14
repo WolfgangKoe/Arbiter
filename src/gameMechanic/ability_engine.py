@@ -47,8 +47,9 @@ def check_conditions(ability: Ability, unit: Unit, unit_state: dict) -> bool:  #
             if not any(kw.upper() in unit_kw_upper for kw in cond.has_keywords):
                 return False
         if cond.needs_healing:
-            max_hp = unit.wounds * unit_state.get("models", 0)
-            if unit_state.get("current_wounds", 0) >= max_hp:
+            from gameMechanic.unit_mutations import unit_max_hp  # noqa: PLC0415
+
+            if unit_state.get("current_wounds", 0) >= unit_max_hp(unit, unit_state):
                 return False
         # within_inches: spatial tracking not implemented — always passes
         # max_uses: handled by callers against session state

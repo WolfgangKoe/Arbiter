@@ -8,6 +8,20 @@ from gameMechanic.game_state import units_key_for
 from gameObjects.unit import ModelGroup, Unit
 
 
+def unit_max_hp(unit: Unit, state: dict) -> int:  # type: ignore[type-arg]
+    """Maximum HP for the unit's currently-surviving models.
+
+    Per-group-wounds units (e.g. Szarekh 16 + Menhirs 7) sum each group's
+    surviving-model capacity; uniform units use wounds × current models. Used to
+    decide whether a unit still needs healing (Living Metal etc.) — without this,
+    a full mixed-wound unit looks damaged because unit.wounds × models overshoots.
+    """
+    if state.get("group_wounds"):
+        gm = state.get("group_models", {})
+        return sum(gm.get(g.id, 0) * unit.group_wound_value(g) for g in unit.model_groups)
+    return unit.wounds * state.get("models", 0)
+
+
 def _apply_group_losses(
     group_models: dict[str, int],
     lost: int,

@@ -905,6 +905,7 @@ def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
         "display_name": data.get("display_name", ""),
         "faction_dir": data.get("faction_dir", "necrons"),
         "dynasty": data.get("dynasty"),
+        "protocol_order": data.get("protocol_order"),
     }
 
 

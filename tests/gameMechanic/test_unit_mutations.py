@@ -870,3 +870,16 @@ def test_heal_restores_menhirs_first() -> None:
     assert state["group_wounds"]["triarchal_menhirs"] == 7
     assert state["group_models"]["triarchal_menhirs"] == 1
     assert state["models"] == 2
+
+
+def test_unit_max_hp_group_wounds_vs_uniform() -> None:
+    """H3: per-group-wounds max HP is the pool sum, not unit.wounds * models."""
+    from gameMechanic.unit_mutations import unit_max_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    assert unit_max_hp(sk, state) == 30  # 16 + 7 + 7, NOT 16 * 3 = 48
+    assert state["current_wounds"] == 30  # full unit not flagged as damaged
+    # uniform unit unchanged
+    w_state = _gs._unit_state(_warriors(), 10)
+    assert unit_max_hp(_warriors(), w_state) == 10

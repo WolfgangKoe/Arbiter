@@ -144,13 +144,20 @@ units:
     oc: 1
     fnp: null
     rules: []
+    # Datasheet: equipped with kustom mega-blasta + power klaw. The mega-blasta
+    # (first/implied slot) can be replaced with 1 kustom shoota OR 1 killsaw;
+    # plus optionally 1 tellyport blasta. (kombi-rokkit/-skorcha, KFF and grot
+    # oiler omitted — those are not yet in weapons.yaml.)
     weapons:
       - ref: wh40k_9e.orks.weapon.kustom_mega_blasta
-      - ref: wh40k_9e.orks.weapon.kustom_shoota
-      - ref: wh40k_9e.orks.weapon.tellyport_blasta
-      - ref: wh40k_9e.orks.weapon.killsaw
       - ref: wh40k_9e.orks.weapon.power_klaw
-    wargear_options: []
+    wargear_options:
+      - type: replace
+        with: wh40k_9e.orks.weapon.kustom_shoota
+      - type: replace
+        with: wh40k_9e.orks.weapon.killsaw
+      - type: add
+        item: wh40k_9e.orks.weapon.tellyport_blasta
 
   - id: wh40k_9e.orks.unit.big_mek_kff
     name_en: Big Mek with Kustom Force Field

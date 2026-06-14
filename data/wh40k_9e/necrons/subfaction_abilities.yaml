@@ -98,12 +98,31 @@ subfactions:
 
   - id: szarekhan
     name_en: Szarekhan
+    # Dynastic Code = Uncanny Artificers (Wahapedia 9E). NOTE: the Silent King has
+    # the DYNASTIC AGENT keyword and therefore does NOT receive this code (FAQ).
+    # The earlier "Loyal to the Triarch / both directives" entry was incorrect —
+    # "both directives" is a different dynasty's code + a relic/aura, not Szarekhan.
     abilities:
-      - id: necrons.dynasty.szarekhan.loyal_to_the_triarch
-        name_en: Loyal to the Triarch
+      - id: necrons.dynasty.szarekhan.uncanny_artificers_resilient
+        name_en: Uncanny Artificers
         ability_type: triggered
         source: dynastic_code
-        rule_text: "Each time a SZAREKHAN unit uses a Command Protocol, the unit can use both the primary and secondary effects of that protocol."
+        rule_text: "Each time a model with this code would lose a wound as the result of a mortal wound, roll one D6; on a 5+ that wound is not lost."
+        trigger:
+          timing: persistent
+          phase: any
+          stage: active
+          player: either
+        conditions: []
+        effect:
+          type: complex
+          target: self
+          handler: uncannyArtificersMortal
+      - id: necrons.dynasty.szarekhan.uncanny_artificers_lethal
+        name_en: Uncanny Artificers
+        ability_type: triggered
+        source: dynastic_code
+        rule_text: "Each time a unit with this code is selected to shoot or fight, you can re-roll one wound roll."
         trigger:
           timing: persistent
           phase: any
@@ -113,7 +132,7 @@ subfactions:
         effect:
           type: complex
           target: self
-          handler: szarekhanProtocol
+          handler: uncannyArtificersReroll
 
   # ── Supplement Subfactions (Keyword-gated, not Dynasty) ───────────────────
 

@@ -94,8 +94,11 @@ PHASE_RULES: dict[str, str] = {
 # Badge rendering
 # ---------------------------------------------------------------------------
 
+# design_colors.md §0 (FESTGELEGT): MOVED = blue, Buff = green, RESERVE = HEROIC-INT.
+# colour. Must match unitCard._BADGE_COLORS — the two tables had drifted apart
+# (MOVED/Buff were swapped here), so badges looked different in the group-flow area.
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
-    "MOVED": ("#4a9a5a", "#0a1a0a"),
+    "MOVED": ("#60a5fa", "#0a1020"),
     "STATIONARY": ("#6b5f44", "#1c1a14"),
     "ADVANCED": ("#d4a017", "#2e2618"),
     "RETREATED": ("#c04040", "#1e1010"),
@@ -104,11 +107,11 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "FOUGHT": ("#c080e8", "#200a30"),
     "SHOT": ("#40a0b8", "#081418"),
     "CAST": ("#9060d0", "#180a28"),
-    "RESERVE": ("#4090b0", "#101820"),
+    "RESERVE": ("#ff9060", "#2a1208"),
     "DESTROYED": ("#c04040", "#1e1010"),
 }
 
-_BUFF_COLOR: tuple[str, str] = ("#60a5fa", "#0a1020")
+_BUFF_COLOR: tuple[str, str] = ("#4a9a5a", "#0a1a0a")
 _DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
 
 _MOVEMENT_BADGE: dict[str, str] = {

@@ -24,6 +24,7 @@ from gameObjects.loader import (
     load_round_choice_abilities,
     load_round_choice_label,
     load_stratagems,
+    load_subfaction_abilities,
     load_unit_abilities,
     load_unit_catalog,
     load_wargear_catalog,
@@ -1240,3 +1241,43 @@ def test_load_yaml_returns_parsed_data(tmp_path) -> None:
     ok = tmp_path / "ok.yaml"
     ok.write_text("units:\n  - id: a\n")
     assert load_yaml(ok) == {"units": [{"id": "a"}]}
+
+
+# ---------------------------------------------------------------------------
+# H1/H2/H4a: Big Mek MA wargear, Silent King weapons, Szarekhan code
+# ---------------------------------------------------------------------------
+
+
+def test_big_mek_mega_armour_default_and_shoota_swap() -> None:
+    from gameObjects.loader import _apply_wargear
+
+    cat = load_unit_catalog("orks")
+    wcat = load_weapon_catalog("orks")
+    bm = cat["wh40k_9e.orks.unit.big_mek_mega_armour"]
+    names = {w.name_en for w in bm.weapons}
+    assert names == {"Kustom mega-blasta", "Power klaw"}
+    swapped = _apply_wargear(bm, ["wh40k_9e.orks.weapon.kustom_shoota"], wcat, None)
+    sw_names = {w.name_en for w in swapped.weapons}
+    assert "Kustom shoota" in sw_names
+    assert "Kustom mega-blasta" not in sw_names  # replaced, not added
+
+
+def test_silent_king_weapon_distribution() -> None:
+    units, _ = load_army("necrons")
+    sk = next(u for u in units if u.id.endswith("the_silent_king"))
+    groups = _resolve_model_groups(sk.model_group_specs, 3, {}, load_weapon_catalog("necrons"))
+    menhirs = next(g for g in groups if g.id == "triarchal_menhirs")
+    szarekh = next(g for g in groups if g.id == "szarekh")
+    assert [w.name_en for w in menhirs.weapons] == ["Annihilator Beam"]
+    assert {w.name_en for w in szarekh.weapons} == {
+        "Sceptre of Eternal Glory",
+        "Staff of Stars",
+        "Scythe of Dust",
+    }
+
+
+def test_szarekhan_code_is_uncanny_artificers_not_both_directives() -> None:
+    abilities = load_subfaction_abilities("necrons")
+    ids = {a.id for a in abilities}
+    assert any("uncanny_artificers" in i for i in ids)
+    assert not any("loyal_to_the_triarch" in i for i in ids)

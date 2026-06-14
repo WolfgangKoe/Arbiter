@@ -247,9 +247,18 @@ def render_unit_card(
                             }
                         )
                         cmd_state: dict = st.session_state.get("command_ability_state", {})
+                        entry: dict = cmd_state.get(cmd_awaiting_id) or {}
+                        targets: list[str] = list(
+                            entry.get("targets")
+                            or ([entry["target_uid"]] if entry.get("target_uid") else [])
+                        )
+                        if uid not in targets:
+                            targets.append(uid)
                         cmd_state[cmd_awaiting_id] = {
-                            "target_uid": uid,
-                            "active_since_round": st.session_state.round,
+                            "targets": targets,
+                            "active_since_round": entry.get(
+                                "active_since_round", st.session_state.round
+                            ),
                         }
                         st.session_state.command_ability_state = cmd_state
                         st.session_state.cmd_awaiting_ability_id = None

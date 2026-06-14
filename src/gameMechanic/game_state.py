@@ -52,16 +52,19 @@ _DATA_ROOT = Path(__file__).parent.parent.parent / "data"
 def _load_roster_for(
     roster_file: str,
     fallback_faction: str,
-) -> tuple[list[tuple[Unit, int]], list[str], str, str, str | None]:
+) -> tuple[list[tuple[Unit, int]], list[str], str, str, str | None, list[str] | None]:
     """Load a roster; fall back to full catalog if file is missing.
 
-    Returns (matched_entries, unmatched_ids, display_name, faction_dir, dynasty).
+    Returns (matched_entries, unmatched_ids, display_name, faction_dir, dynasty,
+    protocol_order). protocol_order is the optional roster-defined Command Protocol
+    order (round 1..5 → protocol id); None when the roster does not specify one.
     """
     path = _ROSTER_DIR / roster_file
     meta = load_roster_metadata(path)
     faction_dir = meta.get("faction_dir") or fallback_faction
     display_name = meta.get("display_name") or roster_file
     dynasty: str | None = meta.get("dynasty")
+    protocol_order: list[str] | None = meta.get("protocol_order")
 
     catalog = load_unit_catalog(faction_dir)
     if path.exists():
@@ -69,7 +72,7 @@ def _load_roster_for(
     else:
         matched = [(u, u.models_max) for u in catalog.values()]
         unmatched = []
-    return matched, unmatched, display_name, faction_dir, dynasty
+    return matched, unmatched, display_name, faction_dir, dynasty, protocol_order
 
 
 def list_available_rosters() -> list[str]:
@@ -237,11 +240,11 @@ def init_state(
     if "initialized" in st.session_state:
         return
 
-    p1_matched, p1_unmatched, p1_name, p1_faction_dir, p1_dynasty = _load_roster_for(
-        roster_p1, "necrons"
+    p1_matched, p1_unmatched, p1_name, p1_faction_dir, p1_dynasty, p1_proto_order = (
+        _load_roster_for(roster_p1, "necrons")
     )
-    p2_matched, p2_unmatched, p2_name, p2_faction_dir, p2_dynasty = _load_roster_for(
-        roster_p2, "necrons"
+    p2_matched, p2_unmatched, p2_name, p2_faction_dir, p2_dynasty, p2_proto_order = (
+        _load_roster_for(roster_p2, "necrons")
     )
 
     if attacker == "p2":
@@ -249,6 +252,7 @@ def init_state(
         p1_name, p2_name = p2_name, p1_name
         p1_faction_dir, p2_faction_dir = p2_faction_dir, p1_faction_dir
         p1_dynasty, p2_dynasty = p2_dynasty, p1_dynasty
+        p1_proto_order, p2_proto_order = p2_proto_order, p1_proto_order
         p1_unmatched, p2_unmatched = p2_unmatched, p1_unmatched
 
     starting_cp = CP_BY_GAME_SIZE.get(game_size, 3) if game_mode == "matched" else 3
@@ -289,6 +293,14 @@ def init_state(
     st.session_state.p2_faction_dir = p2_faction_dir
     st.session_state.p1_dynasty = p1_dynasty
     st.session_state.p2_dynasty = p2_dynasty
+
+    # Optional roster-defined Command Protocol order (round 1..5 → protocol id),
+    # keyed by player name; the setup UI uses these as defaults (overridable).
+    protocol_assignments: dict = {}
+    for pname, order in ((p1_name, p1_proto_order), (p2_name, p2_proto_order)):
+        if order:
+            protocol_assignments[pname] = {i + 1: pid for i, pid in enumerate(order[:5])}
+    st.session_state.protocol_assignments = protocol_assignments
 
     p1_states, p1_keys = _make_unit_state_dict(p1_matched)
     p2_states, p2_keys = _make_unit_state_dict(p2_matched)

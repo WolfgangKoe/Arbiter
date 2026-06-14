@@ -1105,13 +1105,13 @@ units:
     stats: {wounds: 7, ws: "5+", bs: "3+", attacks: 2}
     weapons:
     - ref: wh40k_9e.necrons.weapon.annihilator_beam
-    - ref: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
   - id: szarekh
     name_en: Szarekh
     count: 1
     priority: 2
     stats: {wounds: 16}
     weapons:
+    - ref: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
     - ref: wh40k_9e.necrons.weapon.staff_of_stars
     - ref: wh40k_9e.necrons.weapon.scythe_of_dust
 - id: wh40k_9e.necrons.unit.triarch_praetorians

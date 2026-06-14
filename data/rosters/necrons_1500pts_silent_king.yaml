@@ -1,5 +1,10 @@
 display_name: Necrons 1500pts - Silent King
 faction_dir: necrons
+# The Silent King is dynasty-locked to Szarekhan (army_rules: fixed_dynasty).
+# Note: Szarekh has the DYNASTIC AGENT keyword, so he does not gain the
+# Uncanny Artificers Dynastic Code (FAQ) — the dynasty drives detachment/
+# stratagem context only.
+dynasty: szarekhan
 units:
 - id: wh40k_9e.necrons.unit.the_silent_king
   models: 3
