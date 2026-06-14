@@ -26,6 +26,7 @@ from gameMechanic.game_state import PHASES, units_key_for
 from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
 from uiLayout._common import (
+    front_group_hp,
     group_target_selectable,
     is_group_target,
     reset_group_declaration_state,
@@ -182,11 +183,22 @@ def render_unit_card(
             st.progress(min(1.0, models_alive / models_initial) if models_initial > 0 else 0)
             st.caption(f"⬡ {models_alive}/{models_initial}")
         else:
-            front_wounds = cur - (models_alive - 1) * unit.wounds if models_alive > 0 else 0
+            # Mixed per-model wounds (e.g. Szarekh 16 + Menhirs 7): the front
+            # model belongs to the lowest-priority surviving group, so derive its
+            # HP and denominator from that group rather than unit.wounds.
+            if state.get("group_wounds"):
+                front_wounds, front_max = front_group_hp(unit, state)
+            elif models_alive > 0:
+                front_wounds, front_max = (
+                    cur - (models_alive - 1) * unit.wounds,
+                    unit.wounds,
+                )
+            else:
+                front_wounds, front_max = 0, unit.wounds
             st.progress(min(1.0, models_alive / models_initial) if models_initial > 0 else 0)
             st.caption(f"⬡ {models_alive}/{models_initial}")
-            st.progress(front_wounds / unit.wounds if unit.wounds > 0 else 0)
-            st.caption(f"❤ {front_wounds}/{unit.wounds}")
+            st.progress(max(0.0, min(1.0, front_wounds / front_max)) if front_max > 0 else 0)
+            st.caption(f"❤ {front_wounds}/{front_max}")
 
         # ── Name / Selector Button ─────────────────────────────────
         if phase_key == "setup":

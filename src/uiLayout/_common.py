@@ -1014,6 +1014,25 @@ def _group_effective_attacks(atk_unit: Unit, group, atk_state: dict) -> int:  # 
     return int(base)
 
 
+def front_group_hp(unit: Unit, state: dict) -> tuple[int, int]:  # type: ignore[type-arg]
+    """Front-model HP for a per-group-wounds unit: (front_wounds, per_model_wounds).
+
+    Returns the partly-wounded front model of the lowest-priority surviving group
+    (the group currently taking damage), so the health bar reflects mixed wounds
+    (e.g. Triarchal Menhirs 7 first, then Szarekh 16). Falls back to (0, 1) if no
+    group has wounds left.
+    """
+    group_wounds: dict[str, int] = state.get("group_wounds") or {}
+    for group in sorted(unit.model_groups, key=lambda g: g.priority):
+        remaining = group_wounds.get(group.id, 0)
+        if remaining <= 0:
+            continue
+        wval = unit.group_wound_value(group)
+        partial = remaining % wval
+        return (partial if partial > 0 else wval, wval)
+    return (0, 1)
+
+
 def _group_phase_weapons(group, use_melee: bool, in_melee: bool) -> list:  # type: ignore[no-untyped-def, type-arg]
     """Weapons of a group usable in the current phase (Pistols only while engaged)."""
     if in_melee and not use_melee:

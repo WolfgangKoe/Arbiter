@@ -428,3 +428,48 @@ def test_group_attacks_homogeneous_unit_falls_back_to_unit_attacks() -> None:
     groups = _resolve_model_groups(boyz.model_group_specs, 10, {}, load_weapon_catalog("orks"))
     ork_boy = next(g for g in groups if g.id == "ork_boy")
     assert common._group_effective_attacks(boyz, ork_boy, {"group_models": {}}) == boyz.attacks
+
+
+# ---------------------------------------------------------------------------
+# front_group_hp — health bar for mixed per-group wounds (Silent King crash fix)
+# ---------------------------------------------------------------------------
+
+
+def test_front_group_hp_menhirs_then_szarekh() -> None:
+    sk, _ = _silent_king_groups()
+    # Full: front model is a Triarchal Menhir (priority 1)
+    assert common.front_group_hp(
+        sk, {"group_wounds": {"triarchal_menhirs": 14, "szarekh": 16}}
+    ) == (
+        7,
+        7,
+    )
+    # Partly wounded menhir
+    assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 9, "szarekh": 16}}) == (
+        2,
+        7,
+    )
+    # Menhirs dead → Szarekh becomes the front model
+    assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 0, "szarekh": 10}}) == (
+        10,
+        16,
+    )
+
+
+def test_front_group_hp_progress_value_always_in_range() -> None:
+    sk, _ = _silent_king_groups()
+    for menhir_w in range(0, 15):
+        for szarekh_w in range(0, 17):
+            fw, fm = common.front_group_hp(
+                sk, {"group_wounds": {"triarchal_menhirs": menhir_w, "szarekh": szarekh_w}}
+            )
+            bar = fw / fm if fm > 0 else 0
+            assert 0.0 <= bar <= 1.0, (menhir_w, szarekh_w, fw, fm)
+
+
+def test_front_group_hp_all_dead_returns_safe_default() -> None:
+    sk, _ = _silent_king_groups()
+    assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 0, "szarekh": 0}}) == (
+        0,
+        1,
+    )
