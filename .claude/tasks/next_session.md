@@ -36,7 +36,13 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 - **S47c: Crash-Fix Silent-King-Gesundheitsbalken** (Commit `7ad42e6`). `st.progress(-0.125)` in
   `unitCard.py` (uniforme Frontmodell-Formel bei gemischten Wunden). Neuer Helfer
   `front_group_hp` (Option B) — Frontmodell aus der vordersten überlebenden Gruppe, geclampt [0,1].
-- **OFFEN:** nur noch manuelle UI-Verifikation aller G-Fixes (Checkliste unten).
+- **S48: Findings H1–H7** (Commit `3e508bb`, 815 Tests grün):
+  - H3 Living-Metal-Bug (gruppen-bewusste `unit_max_hp`); H2 Silent-King-Waffen korrekt verteilt;
+    H1 Big-Mek-MA-Wargear modelliert; H4a Szarekhan-Code = **Uncanny Artificers** (NICHT „beide
+    Direktiven" — das war erfunden; Silent King als DYNASTIC AGENT bekommt gar keinen Code);
+    H4b Roster-Standard `dynasty:`+`protocol_order` (SK-Roster = szarekhan); H5 MWBD 2× bei PHAERON;
+    H7 Badge-Farben in `_common.py` an `design_colors.md` angeglichen (MOVED blau, Buff grün).
+- **OFFEN:** manuelle UI-Verifikation aller G-/H-Fixes (Checkliste unten).
 
 ---
 
