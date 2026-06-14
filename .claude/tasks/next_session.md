@@ -23,7 +23,7 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S47, 2026-06-13 — 804 Tests grün, 89 % Coverage)
+## Aktueller Stand (nach S47, 2026-06-14 — 807 Tests grün, 89 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
@@ -31,8 +31,9 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 - **S46: Findings F2/F4/F6/F7 + Cover-Layout (Option B) implementiert** (Commit `44a29a5`).
 - **S47: manuelle Verifikation → Findings G1–G5 ALLE umgesetzt.**
   G1/G4/G5 + Necron-Test-Roster (`e98d89d`); **G2 Silent King + per-Gruppe-Wunden** (`cb39cdd`).
-- **OFFEN:** manuelle UI-Verifikation aller G-Fixes (Checkliste unten); Bracket-Präzision Szarekh
-  (Mini-Follow-up, s. G2).
+- **S47b: Bracket-Follow-up + Menhir A2** (Commit `446c2b6`). Szarekh-Attacken folgen seinem
+  eigenen Bracket; Menhirs fix A2.
+- **OFFEN:** nur noch manuelle UI-Verifikation aller G-Fixes (Checkliste unten).
 
 ---
 
@@ -68,10 +69,16 @@ hatte nur Szarekhs Statline (Scraper schnitt das zweite Profil ab). Verwendete W
 **W7, WS5+, BS3+, T7, Sv3+** (Inv4+ via Transtemporal Force Field). **Falls eine Zahl abweicht:
 `data/wh40k_9e/necrons/units.yaml` → `triarchal_menhirs.stats` anpassen.**
 
-**Mini-Follow-up (offen):** Szarekhs Schadensbracket (A6→A4→A2) sollte an `group_wounds["szarekh"]`
-hängen, nicht am Unit-Gesamt-`current_wounds`. Aktuell nutzt die Resolution `current_wounds//models`
-als per_model_hp — für den 3-Modell-Silent-King leicht ungenau, wenn Szarekh selbst Wunden hat.
-Betrifft nur die Attacken-/Move-Anzeige beim ANGREIFENDEN Silent King, nicht HP/Tod.
+**Mini-Follow-up ✅ (Commit `446c2b6`):** `_group_effective_attacks` — Gruppen mit eigenem
+`attacks`-Stat sind fix (Menhirs A2); Gruppen ohne (Szarekh, nutzt Unit-Attacks) werden über das
+Bracket anhand der **eigenen** Gruppen-Wunden reduziert (A6→A4→A2). In Deklaration + Owner-Budget
+genutzt. Menhirs `attacks: 2` korrigiert.
+
+**Boss Nob W2 — bewusst NICHT umgesetzt:** Das per-Gruppe-Wunden-System würde den Boss Nob (W2)
+zwar korrekt abbilden, aber dann nutzt die ganze Boyz-Einheit den „Total damage"-Eingabepfad statt
+„Models lost" — für einen 30-Modell-Mob schlechtere UX. Boss Nob bleibt vorerst effektiv W1 (nur
+relevant, wenn er als letztes Modell übrig ist). Falls gewünscht: per-Gruppe-Wunden-UI um eine
+Modell-Counter-Variante erweitern, dann Boss Nob W2/Warbike W4 nachziehen.
 
 ---
 
