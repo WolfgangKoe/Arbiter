@@ -376,3 +376,55 @@ def test_reset_clears_stale_declaration_counter_keys() -> None:
     assert "decl_p_warbiker_warbikers_warriors_Dakkagun" not in s
     assert "group_autosel_done_warbikers" not in s
     assert s["unrelated_key"] == 99
+
+
+# ---------------------------------------------------------------------------
+# _group_effective_attacks — per-group attacks with damage bracket (G2 follow-up)
+# ---------------------------------------------------------------------------
+
+
+def _silent_king_groups():  # type: ignore[no-untyped-def]
+    import dataclasses
+
+    from gameObjects.loader import _resolve_model_groups, load_army, load_weapon_catalog
+
+    units, _ = load_army("necrons")
+    sk = next(u for u in units if u.id.endswith("the_silent_king"))
+    groups = _resolve_model_groups(sk.model_group_specs, 3, {}, load_weapon_catalog("necrons"))
+    return dataclasses.replace(sk, model_groups=groups), groups
+
+
+def _gw_state(menhir_w: int, szarekh_w: int) -> dict:
+    return {
+        "group_wounds": {"triarchal_menhirs": menhir_w, "szarekh": szarekh_w},
+        "group_models": {
+            "triarchal_menhirs": 2 if menhir_w > 0 else 0,
+            "szarekh": 1 if szarekh_w > 0 else 0,
+        },
+    }
+
+
+def test_group_attacks_szarekh_follows_own_bracket() -> None:
+    sk, groups = _silent_king_groups()
+    szarekh = next(g for g in groups if g.id == "szarekh")
+    assert common._group_effective_attacks(sk, szarekh, _gw_state(14, 16)) == 6
+    assert common._group_effective_attacks(sk, szarekh, _gw_state(0, 6)) == 4
+    assert common._group_effective_attacks(sk, szarekh, _gw_state(0, 3)) == 2
+
+
+def test_group_attacks_menhirs_fixed_override() -> None:
+    sk, groups = _silent_king_groups()
+    menhirs = next(g for g in groups if g.id == "triarchal_menhirs")
+    # Explicit A2 — never bracketed regardless of wounds
+    assert common._group_effective_attacks(sk, menhirs, _gw_state(14, 16)) == 2
+    assert common._group_effective_attacks(sk, menhirs, _gw_state(7, 16)) == 2
+
+
+def test_group_attacks_homogeneous_unit_falls_back_to_unit_attacks() -> None:
+    from gameObjects.loader import _resolve_model_groups, load_army, load_weapon_catalog
+
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id.endswith("unit.boyz"))
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, {}, load_weapon_catalog("orks"))
+    ork_boy = next(g for g in groups if g.id == "ork_boy")
+    assert common._group_effective_attacks(boyz, ork_boy, {"group_models": {}}) == boyz.attacks

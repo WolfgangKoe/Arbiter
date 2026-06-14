@@ -988,6 +988,32 @@ def toggle_group_target(def_faction: str, def_uid: str) -> bool:
     return True
 
 
+def _group_effective_attacks(atk_unit: Unit, group, atk_state: dict) -> int:  # type: ignore[no-untyped-def, type-arg]
+    """Attacks per model for a group (before WAAAGH bonus).
+
+    A group with its own ``attacks`` stat is fixed (e.g. Triarchal Menhirs A2).
+    A group that uses the unit-level Attacks (e.g. Szarekh) is reduced by the unit
+    damage bracket, keyed to *that group's own* per-model wounds — so a wounded
+    Szarekh drops to A4/A2 while the (separate) Menhirs are unaffected.
+    """
+    if "attacks" in group.stats:
+        return int(group.stats["attacks"])
+    base = atk_unit.attacks or 0
+    group_wounds = atk_state.get("group_wounds") or {}
+    if atk_unit.damage_bracket and group.id in group_wounds:
+        from gameObjects.loader import resolve_bracket_stats  # noqa: PLC0415
+
+        models = atk_state.get("group_models", {}).get(group.id, group.count) or 1
+        per_model_hp = group_wounds[group.id] // max(1, models)
+        live = resolve_bracket_stats(atk_unit, per_model_hp)
+        if live.get("attacks") is not None:
+            try:
+                return int(str(live["attacks"]).rstrip("+"))
+            except (TypeError, ValueError):
+                pass
+    return int(base)
+
+
 def _group_phase_weapons(group, use_melee: bool, in_melee: bool) -> list:  # type: ignore[no-untyped-def, type-arg]
     """Weapons of a group usable in the current phase (Pistols only while engaged)."""
     if in_melee and not use_melee:
@@ -1080,7 +1106,7 @@ def render_group_cards(
                 st.session_state.selected_model_group = None if is_sel else group.id
                 st.rerun()
             if use_melee:
-                grp_attacks = int(group.stat("attacks", atk_unit.attacks or 0))
+                grp_attacks = _group_effective_attacks(atk_unit, group, atk_state)
                 budget = _group_melee_budget(grp_weapons, alive, grp_attacks + atk_bonus)
                 st.caption(f"{budget} attacks")
             st.caption(", ".join(w.name_en for w in grp_weapons))
@@ -1170,8 +1196,8 @@ def render_group_assignment(
     grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
 
     # Per-group stat overrides (e.g. Boss Nob A 3 / S 5 / WS 2+) fall back to the
-    # unit-level value for homogeneous groups.
-    grp_attacks = int(group.stat("attacks", atk_unit.attacks or 0))
+    # unit-level value for homogeneous groups; bracketed units key off group wounds.
+    grp_attacks = _group_effective_attacks(atk_unit, group, atk_state)
     grp_strength = int(group.stat("strength", atk_unit.strength))
     grp_ws = group.stat("ws", None)
     grp_bs = group.stat("bs", None)

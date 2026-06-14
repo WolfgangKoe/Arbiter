@@ -1102,7 +1102,7 @@ units:
     name_en: Triarchal Menhirs
     count: 2
     priority: 1
-    stats: {wounds: 7, ws: "5+", bs: "3+"}
+    stats: {wounds: 7, ws: "5+", bs: "3+", attacks: 2}
     weapons:
     - ref: wh40k_9e.necrons.weapon.annihilator_beam
     - ref: wh40k_9e.necrons.weapon.sceptre_of_eternal_glory
