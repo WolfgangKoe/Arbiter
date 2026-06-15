@@ -58,7 +58,17 @@ Schnellmessung: `pytest tests/architecture/ --no-cov -q`. Läuft im normalen `py
 
 ## S49 — UI-Findings (manuelle Verifikation, NOCH NICHTS UMGESETZT)
 
-Reihenfolge offen; je Punkt erst Plan + Freigabe. Regelfragen recherchiere ich lokal.
+### ▶ Start nächste Session (bei „Der Plan ist freigegeben")
+
+Die „Freigabe" deckt hier **das Starten + die Regel-Recherche** ab, NICHT das stille Umsetzen:
+diese Liste ist ein Findings-Backlog, kein fertiger Ausführungsplan. Konkret:
+1. Zuerst **neues Logo integrieren** kurz bestätigen lassen (freistellen → Assets ersetzen).
+2. **Regel-Recherche** zu Findings 1 (Boss Nob), 4 (Veil/Retreated), 8 (Protocol-Wechsel/Silent King) —
+   lokal in `docs/work/wahapedia_*`, dann Ergebnis vorlegen.
+3. Pro Finding **kurzen Plan / UI-Mockup** zeigen und auf „ja" warten, bevor Code geändert wird
+   (Findings 7/9 sind UI-Design → Mockup-Pflicht).
+
+Reihenfolge sonst offen; Regelfragen recherchiere ich lokal.
 
 1. **Boss-Nob-Attacken (Regel-Recherche):** zeigt 4 auf Power Klaw. Prüfen: korrekte Gesamtzahl
    (Basis A3 + WAAAGH +1 + Choppa-Extra?), darf Choppa **neben** Power Klaw geführt werden, und
