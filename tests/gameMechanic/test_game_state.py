@@ -13,6 +13,7 @@ import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import (  # noqa: E402
     _make_unit_state_dict,
     compute_roster_total_pts,
+    dynasty_for,
     list_available_rosters,
     next_phase,
     swap_players,
@@ -266,6 +267,11 @@ class TestPlayerKeyHelpers:
     def test_unit_keys_for_first_player(self) -> None:
         self._session()
         assert unit_keys_for("Necrons") == ["key_a"]
+
+    def test_dynasty_for_maps_per_player(self) -> None:
+        _make_session(p1_dynasty="szarekhan", p2_dynasty=None)
+        assert dynasty_for("Necrons") == "szarekhan"
+        assert dynasty_for("Orks") is None
 
     def test_unit_keys_for_second_player(self) -> None:
         self._session()

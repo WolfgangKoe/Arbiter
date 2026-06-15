@@ -2,7 +2,13 @@
 
 import streamlit as st
 
-from gameMechanic.game_state import faction_dir_for, unit_keys_for, units_key_for, units_list_for
+from gameMechanic.game_state import (
+    dynasty_for,
+    faction_dir_for,
+    unit_keys_for,
+    units_key_for,
+    units_list_for,
+)
 from gameObjects.loader import load_faction_abilities
 from gameObjects.unit import Unit
 from uiLayout.armyCard import render_army_card
@@ -39,5 +45,5 @@ def render_army_list(faction: str) -> None:
     subfaction = _subfaction_for(faction)
     faction_abilities = _faction_abilities_for(faction)
 
-    render_army_card(faction, subfaction, faction_abilities, units, states)
+    render_army_card(faction, subfaction, faction_abilities, units, states, dynasty_for(faction))
     render_detachment_card(faction, units, states, unit_keys)

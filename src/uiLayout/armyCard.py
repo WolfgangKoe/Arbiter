@@ -381,6 +381,7 @@ def render_army_card(
     faction_abilities: list[Ability],
     units: list[Unit],
     units_state: dict,  # type: ignore[type-arg]
+    dynasty: str | None = None,
 ) -> None:
     phase_key = _current_phase_key()
 
@@ -392,6 +393,8 @@ def render_army_card(
         badges_html = _faction_badge(faction)
         if subfaction:
             badges_html += _faction_badge(subfaction)
+        if dynasty:
+            badges_html += _faction_badge(dynasty.replace("_", " ").title())
         st.markdown(badges_html, unsafe_allow_html=True)
 
         # Command Protocol UI (Necrons — no-op for other factions)

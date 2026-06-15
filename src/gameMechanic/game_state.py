@@ -127,6 +127,17 @@ def faction_dir_for(player: str) -> str:
     return st.session_state["p2_faction_dir"]
 
 
+def dynasty_for(player: str) -> str | None:
+    """Return a player's dynasty/sub-faction tag (from the roster), or None.
+
+    Generic: the value is whatever the roster declared (e.g. 'szarekhan'); armies
+    without a dynasty (Orks etc.) return None and render no badge.
+    """
+    if player == st.session_state.get("first_player"):
+        return st.session_state.get("p1_dynasty")
+    return st.session_state.get("p2_dynasty")
+
+
 def units_list_for(player: str) -> list[Unit]:
     """Return the Unit-definition list for a player (for stats / name lookups)."""
     if player == st.session_state.get("first_player"):
