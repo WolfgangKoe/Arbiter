@@ -1243,12 +1243,11 @@ def render_group_assignment(
             for _, d_uid in tgts
             for w in grp_weapons
         )
-        st.markdown(
-            f"**{group.name_en}** — {alive} model(s) · "
-            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-            f"{total_assigned} / {group_budget}</span> attacks assigned",
-            unsafe_allow_html=True,
-        )
+        # Filled after the counters render so it reflects the values the widgets
+        # actually hold this run (defaults included). total_assigned above is a
+        # pre-widget session_state read — correct for the overbooking cap, but
+        # stale for display on the first render before defaults are written.
+        header_ph = st.empty()
     else:
         # One model per UNIT may throw a grenade per phase (core rules: Grenade) —
         # the cap is shared across all model groups, so subtract grenades already
@@ -1415,6 +1414,14 @@ def render_group_assignment(
                         }
                     )
                     models_assigned += eff_models
+
+    if use_melee:
+        header_ph.markdown(
+            f"**{group.name_en}** — {alive} model(s) · "
+            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
+            f"{attacks_assigned} / {group_budget}</span> attacks assigned",
+            unsafe_allow_html=True,
+        )
 
     valid = attacks_assigned > 0 if use_melee else models_assigned > 0
 
