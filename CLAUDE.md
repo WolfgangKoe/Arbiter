@@ -24,6 +24,24 @@ Regelfragen **niemals dem Nutzer stellen** — alle Regeln liegen lokal vor:
 
 Vorgehen: Erst lesen, bevor du den Plan für die Implementierung erstellst. Nur wenn nach Lesen der Regeln mehrere UI-Varianten möglich sind, den Nutzer nach dem bevorzugten Layout fragen. 
 
+### Artefakt-Landkarte — welches Dokument wofür
+
+Damit nichts „verloren" geht: jede Frage hat **genau einen** kanonischen Ort.
+
+| Frage | Artefakt |
+|---|---|
+| Was mache ich als Nächstes? (aktueller Stand) | `.claude/tasks/next_session.md` |
+| Was ist insgesamt offen? (zentraler Backlog) | `docs/goals/backlog.md` |
+| Detailplan eines Features (Executor) | `docs/audit/plans/` (+ `README.md` = Queue/Status) |
+| Architektur-Gesamtbild | `docs/spec/architecture.md` |
+| **Architektur-Invarianten (messbar, grün/rot)** | `docs/spec/architecture_invariants.md` (Wächter: `tests/architecture/`) |
+| Prozess-/Phasen-Specs (Attackenabfolge etc.) | `docs/spec/processes.md` |
+| Farbschema (verbindlich) | `docs/spec/design_colors.md` |
+| Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/goals/ziel6.md` |
+
+Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in
+eines dieser Artefakte — sonst driften sie auseinander.
+
 ---
 
 ## Workflow-Regeln (PFLICHT)
@@ -58,6 +76,23 @@ Dieselbe Pflicht wie für Code gilt auch für:
 4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken
 
 **Kritisch beim Update:** `.claude/tasks/next_session.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
+
+### Ganzheitlicher Review-Schritt — Definition of Done
+
+Jede Korrektur/Ergänzung wird **ganzheitlich** betrachtet: Code ↔ App ↔ Spielregeln ↔ Architektur.
+Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet n/a) sind:
+
+1. **Regelkonform** — gegen `docs/work/wahapedia_*/` geprüft (nicht aus dem Gedächtnis).
+2. **Generisch** — keine neuen Fraktions-Strings/-Checks in `src/`; Entscheidungen aus YAML.
+3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 80 %; jeder Bugfix bekommt einen Regressionstest.
+4. **Architektur-Gate grün** — `tests/architecture/` (oder bewusste Änderung +
+   `architecture_invariants.md`/`architecture.md` nachgezogen, kein stilles Aufweichen).
+5. **Clean Code** — `black`/`isort`/`ruff` sauber; Namen erklären *Was*.
+6. **UI manuell verifiziert** — Render-Code (uiLayout, `*Phase.py`) ist nicht von Tests gedeckt →
+   explizit nennen, was zu prüfen ist; nie „fertig" ohne manuelle Prüfung.
+7. **Artefakte aktuell** — `next_session.md` + `docs/goals/backlog.md` + ggf. `ziel*.md` gepflegt.
+
+**Doku-Drift:** Widerspricht Code einer Spec, ist das ein Befund — melden/korrigieren, nicht ignorieren.
 
 ### Standard-Prompts (Kurzschrift)
 
@@ -98,6 +133,14 @@ pytest --tb=short
 ```
 
 Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **80 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+
+### Architektur-Gate — zweite messbare Schranke
+
+Neben der Coverage prüft `tests/architecture/` vier Architektur-Invarianten (gameObjects
+Streamlit-frei, YAML nur über Loader, Layer-Richtung, Generic-src). Bricht ein Wächter, bricht
+der Build (läuft im normalen `pytest` mit). Schnellmessung: `pytest tests/architecture/ --no-cov -q`.
+Status + Schulden-Ledger: `docs/spec/architecture_invariants.md`. Eine Invariante bewusst ändern
+heißt: Wächter + Doku gemeinsam anpassen — nie still aufweichen.
 
 ### Sicherheitsnetz-Regel — PFLICHT
 
