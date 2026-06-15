@@ -44,6 +44,13 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
     H7 Badge-Farben in `_common.py` an `design_colors.md` angeglichen (MOVED blau, Buff grün).
 - **OFFEN:** manuelle UI-Verifikation aller G-/H-Fixes (Checkliste unten).
 
+### 🟢 Architektur-Gate (seit 2026-06-15)
+
+Neben der Coverage gibt es jetzt ein **Architektur-Gate**: `tests/architecture/` setzt 4
+Invarianten durch (gameObjects Streamlit-frei, YAML nur über Loader, Layer-Richtung,
+Generic-src). Status + Schulden-Ledger: [docs/spec/architecture_invariants.md](../../docs/spec/architecture_invariants.md).
+Schnellmessung: `pytest tests/architecture/ --no-cov -q`. Läuft im normalen `pytest` mit.
+
 ---
 
 ## Findings G1–G5 (S47 — aus manueller Verifikation)

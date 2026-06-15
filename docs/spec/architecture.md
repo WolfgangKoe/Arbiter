@@ -12,11 +12,18 @@ One entry point, three bounded modules:
 
 | Module | Responsibility |
 |--------|---------------|
-| `uiLayout/` | How things look. Streamlit render functions. No game logic. |
-| `gameObjects/` | What things are. Pure Python dataclasses + YAML data. No Streamlit. |
-| `gameMechanic/` | What things do. Phase logic, state transitions. No Streamlit. |
+| `uiLayout/` | How things look. Streamlit render functions + shared render hub (`_common.py`). |
+| `gameObjects/` | What things are. Pure Python dataclasses + YAML loader. **No Streamlit** (enforced). |
+| `gameMechanic/` | What things do. Phase logic, state transitions — **and** phase render (`*Phase.py`). |
 
 `app.py` wires them together and is the sole owner of `st.session_state`.
+
+> **Realitäts-Hinweis (2026-06-15):** Die ursprüngliche Vision wollte `gameMechanic/`
+> Streamlit-frei. Tatsächlich rendern die `*Phase.py`-Module UI und importieren
+> Render-Helfer aus `uiLayout._common`. Streamlit-frei gilt **nur** für `gameObjects/`.
+> Welche Invarianten heute messbar durchgesetzt werden — und welche Kopplung bewusst
+> als Schuld geführt wird — steht in [architecture_invariants.md](architecture_invariants.md)
+> (Wächter: `tests/architecture/`).
 
 ---
 
