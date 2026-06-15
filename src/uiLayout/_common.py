@@ -21,7 +21,12 @@ from gameMechanic.attack_math import (  # noqa: F401
     _restriction_label,
     _total_attacks_int,
 )
-from gameMechanic.game_state import PHASES, units_key_for, units_list_for
+from gameMechanic.game_state import (
+    PHASES,
+    active_protocol_buff_labels,
+    units_key_for,
+    units_list_for,
+)
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 from gameObjects.weapon import WeaponProfile
@@ -1456,6 +1461,8 @@ def render_attack_resolution(phase_key: str) -> None:
 
     atk_unit, atk_state = lookup(atk_faction, atk_uid)
     badges = state_badges_html(atk_state)
+    for proto_lbl in active_protocol_buff_labels(atk_faction):
+        badges += _badge(proto_lbl, variant="buff")
 
     st.markdown(f"**{atk_unit.name_en}** — Resolution")
     if badges:

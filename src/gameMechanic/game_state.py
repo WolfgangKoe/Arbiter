@@ -9,6 +9,7 @@ import streamlit as st
 from gameObjects.loader import (
     load_roster,
     load_roster_metadata,
+    load_round_choice_abilities,
     load_unit_catalog,
     load_yaml,
 )
@@ -136,6 +137,54 @@ def dynasty_for(player: str) -> str | None:
     if player == st.session_state.get("first_player"):
         return st.session_state.get("p1_dynasty")
     return st.session_state.get("p2_dynasty")
+
+
+def short_protocol_label(name_en: str) -> str:
+    """Drop the 'Protocol of the ' prefix → 'Undying Legion' (Finding 7).
+
+    Generic string transform — no faction names.
+    """
+    prefix = "Protocol of the "
+    return name_en[len(prefix) :] if name_en.startswith(prefix) else name_en
+
+
+def active_protocol_buff_labels(player: str) -> list[str]:
+    """Short labels for the player's currently-active Command Protocol directives.
+
+    Derived from session state at render time (no stored buff to expire). Covers
+    the round-assigned protocol and the always-active 6th protocol (incl. the
+    dynasty bonus where both directives apply). Empty for factions without a
+    round-choice ability file — gated on data, not on faction names.
+    """
+    try:
+        faction_dir = faction_dir_for(player)
+    except KeyError:
+        return []
+    protocols = load_round_choice_abilities(faction_dir)
+    if not protocols:
+        return []
+
+    labels: list[str] = []
+    by_id = {p.id: p for p in protocols}
+
+    active_id = st.session_state.get(f"protocol_active_{faction_dir}")
+    if active_id and st.session_state.get(f"protocol_directive_{faction_dir}"):
+        p = by_id.get(active_id)
+        if p:
+            labels.append(short_protocol_label(p.name_en))
+
+    # 6th (always-active) protocol: the single one not assigned to any round.
+    assignments = st.session_state.get("protocol_assignments", {}).get(player, {})
+    assigned_ids = set(assignments.values())
+    if len(assigned_ids) >= 5:
+        extras = [p for p in protocols if p.id not in assigned_ids]
+        if len(extras) == 1:
+            extra = extras[0]
+            dynasty = dynasty_for(player)
+            dynasty_bonus = bool(dynasty and dynasty == extra.subfaction_affinity)
+            if dynasty_bonus or st.session_state.get(f"protocol_extra_directive_{faction_dir}"):
+                labels.append(short_protocol_label(extra.name_en))
+    return labels
 
 
 def units_list_for(player: str) -> list[Unit]:

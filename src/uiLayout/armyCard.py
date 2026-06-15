@@ -15,7 +15,12 @@ import streamlit as st
 
 from gameMechanic.ability_engine import check_conditions, execute_effect
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES, faction_dir_for, unit_id_from_state_key
+from gameMechanic.game_state import (
+    PHASES,
+    faction_dir_for,
+    short_protocol_label,
+    unit_id_from_state_key,
+)
 from gameObjects.ability import Ability
 from gameObjects.loader import load_round_choice_abilities, load_round_choice_label
 from gameObjects.unit import Unit
@@ -162,15 +167,16 @@ def _render_extra_protocol(
     extra_directive: str | None = st.session_state.get(extra_key)
     st.caption("*Always active (extra protocol):*")
 
+    short_name = short_protocol_label(protocol.name_en)
     if dynasty_bonus:
-        badge_text = f"{protocol.name_en.upper()} — DYNASTY BONUS (BOTH)"
+        badge_text = f"{short_name.upper()} — DYNASTY BONUS (BOTH)"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         st.caption(f"↳ Primary: {protocol.primary}")
         st.caption(f"↳ Secondary: {protocol.secondary}")
         return
 
     if extra_directive:
-        badge_text = f"{protocol.name_en.upper()} — {extra_directive.upper()}"
+        badge_text = f"{short_name.upper()} — {extra_directive.upper()}"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         chosen_text = protocol.primary if extra_directive == "primary" else protocol.secondary
         st.caption(f"↳ {chosen_text}")
@@ -255,7 +261,9 @@ def _render_protocol_ui(faction: str) -> None:
                 else:
                     st.caption("↳ *Awaiting directive selection*")
             else:
-                badge_text = f"{p.name_en.upper()} — {active_directive.upper()}"
+                badge_text = (
+                    f"{short_protocol_label(p.name_en).upper()} — {active_directive.upper()}"
+                )
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
                 st.caption(f"↳ {chosen_text}")

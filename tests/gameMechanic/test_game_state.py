@@ -12,10 +12,12 @@ import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import (  # noqa: E402
     _make_unit_state_dict,
+    active_protocol_buff_labels,
     compute_roster_total_pts,
     dynasty_for,
     list_available_rosters,
     next_phase,
+    short_protocol_label,
     swap_players,
     unit_id_from_state_key,
     unit_keys_for,
@@ -268,14 +270,47 @@ class TestPlayerKeyHelpers:
         self._session()
         assert unit_keys_for("Necrons") == ["key_a"]
 
+    def test_unit_keys_for_second_player(self) -> None:
+        self._session()
+        assert unit_keys_for("Orks") == ["key_b"]
+
     def test_dynasty_for_maps_per_player(self) -> None:
         _make_session(p1_dynasty="szarekhan", p2_dynasty=None)
         assert dynasty_for("Necrons") == "szarekhan"
         assert dynasty_for("Orks") is None
 
-    def test_unit_keys_for_second_player(self) -> None:
-        self._session()
-        assert unit_keys_for("Orks") == ["key_b"]
+
+class TestProtocolBuffLabels:
+    def test_short_protocol_label_strips_prefix(self) -> None:
+        assert short_protocol_label("Protocol of the Undying Legions") == "Undying Legions"
+        assert short_protocol_label("Waaagh!") == "Waaagh!"
+
+    def test_active_round_protocol_directive_yields_short_label(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_dynasty=None,
+            p2_dynasty=None,
+            protocol_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
+            protocol_directive_necrons="primary",
+            protocol_assignments={},
+        )
+        assert active_protocol_buff_labels("Necrons") == ["Undying Legions"]
+
+    def test_no_directive_selected_yields_no_label(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_dynasty=None,
+            protocol_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
+            protocol_directive_necrons=None,
+            protocol_assignments={},
+        )
+        assert active_protocol_buff_labels("Necrons") == []
+
+    def test_faction_without_protocols_yields_no_label(self) -> None:
+        _make_session(p1_faction_dir="necrons", p2_faction_dir="orks", p2_dynasty=None)
+        assert active_protocol_buff_labels("Orks") == []
 
 
 # ---------------------------------------------------------------------------
