@@ -1615,3 +1615,12 @@ unit_state["group_models"]: dict[str, int]
 - **S47b (2026-06-14, Commit `446c2b6`)** Bracket-Follow-up: `_group_effective_attacks` — Gruppen mit eigenem `attacks` fix (Menhirs A2), Gruppen ohne (Szarekh) über Bracket anhand der eigenen Gruppen-Wunden (A6→A4→A2); in Deklaration + Owner-Budget genutzt; Menhirs `attacks: 2` korrigiert. +3 Tests, 807 grün. Boss Nob W2 bewusst nicht umgesetzt (UX-Abwägung, s. `next_session.md`).
 - **S47c (2026-06-14, Commit `7ad42e6`)** Crash-Fix: Silent-King-Gesundheitsbalken warf `st.progress(-0.125)` (uniforme Frontmodell-Formel bei gemischten Wunden). Neuer Helfer `front_group_hp` (Option B) liest das Frontmodell aus der vordersten überlebenden Gruppe (Menhirs zuerst, dann Szarekh), Balken auf [0,1] geclampt. +3 Tests, 810 grün.
 - **S48 (2026-06-14, Commit `3e508bb`)** Findings H1–H7 aus manueller Verifikation. H3 Living-Metal-Bug (gruppen-bewusste `unit_max_hp`); H2 Silent-King-Waffen (Menhirs = Annihilator Beam, Szarekh = Sceptre+Staff of Stars+Scythe of Dust); H1 Big-Mek-MA-Wargear (mega-blasta XOR shoota/killsaw, + tellyport blasta); H4a Szarekhan-Dynastiecode korrigiert zu **Uncanny Artificers** (5+ vs MW, Re-roll 1 Wound — „beide Direktiven" war erfunden; Silent King = DYNASTIC AGENT → kein Code, FAQ); H4b Roster-Standard `dynasty:`+`protocol_order` (SK = szarekhan); H5 MWBD 2× bei PHAERON-Keyword; H7 Badge-Farben `_common.py` ↔ `design_colors.md` (MOVED blau, Buff grün). +5 Tests, 815 grün.
+- **S49 (2026-06-15, Commits `bd9cbe7`/`bbf0a61`/`fc1dd74`)** Infrastruktur + Logo, keine Gameplay-Fixes.
+  (A) **Architektur-Gate** `tests/architecture/` — 4 messbare Invarianten (gameObjects Streamlit-frei,
+  YAML nur über Loader, Layer-Richtung, Generic-src mit Schulden-Ledger); Doku in
+  `docs/spec/architecture_invariants.md`; `architecture.md` an Realität angeglichen (gameMechanic
+  rendert). (B) **Artefakt-Konsolidierung** — `docs/goals/backlog.md` als zentraler Index;
+  CLAUDE.md Artefakt-Landkarte + Definition-of-Done-Review-Schritt + Arch-Gate; Doku-Drift-Befunde
+  notiert (backlog §4b). (C) **Logo** Soft-Gold integriert (page_icon + Setup-Screen), reproduzierbar
+  via `tools/process_logo.py`. +4 Tests (Arch-Gate), 819 grün. Manuelle UI-Verifikation → neue
+  Findings 1–9 (s. `next_session.md`); neues GPT-Logo bereit, Integration ausstehend.

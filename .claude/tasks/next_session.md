@@ -23,7 +23,7 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S47, 2026-06-14 — 810 Tests grün, 89 % Coverage)
+## Aktueller Stand (nach S49, 2026-06-15 — 819 Tests grün, 89 % Coverage)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
@@ -42,7 +42,10 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
     Direktiven" — das war erfunden; Silent King als DYNASTIC AGENT bekommt gar keinen Code);
     H4b Roster-Standard `dynasty:`+`protocol_order` (SK-Roster = szarekhan); H5 MWBD 2× bei PHAERON;
     H7 Badge-Farben in `_common.py` an `design_colors.md` angeglichen (MOVED blau, Buff grün).
-- **OFFEN:** manuelle UI-Verifikation aller G-/H-Fixes (Checkliste unten).
+- **S49 (2026-06-15):** Architektur-Gate + Artefakt-Konsolidierung + Logo
+  (Commits `bd9cbe7` / `bbf0a61` / `fc1dd74`). Manuelle UI-Verifikation der G-/H-Fixes
+  durchgeführt → **neue Findings 1–9** (Abschnitt „S49 — UI-Findings" unten).
+- **OFFEN:** Findings 1–9 abarbeiten (erst Plan je Punkt, Freigabe) + neues Logo integrieren.
 
 ### 🟢 Architektur-Gate (seit 2026-06-15)
 
@@ -50,6 +53,61 @@ Neben der Coverage gibt es jetzt ein **Architektur-Gate**: `tests/architecture/`
 Invarianten durch (gameObjects Streamlit-frei, YAML nur über Loader, Layer-Richtung,
 Generic-src). Status + Schulden-Ledger: [docs/spec/architecture_invariants.md](../../docs/spec/architecture_invariants.md).
 Schnellmessung: `pytest tests/architecture/ --no-cov -q`. Läuft im normalen `pytest` mit.
+
+---
+
+## S49 — UI-Findings (manuelle Verifikation, NOCH NICHTS UMGESETZT)
+
+Reihenfolge offen; je Punkt erst Plan + Freigabe. Regelfragen recherchiere ich lokal.
+
+1. **Boss-Nob-Attacken (Regel-Recherche):** zeigt 4 auf Power Klaw. Prüfen: korrekte Gesamtzahl
+   (Basis A3 + WAAAGH +1 + Choppa-Extra?), darf Choppa **neben** Power Klaw geführt werden, und
+   darf die **Choppa-Extra-Attacke nicht** auf die Power Klaw gelegt werden (extra_attacks-Cap).
+2. **S11 generisch (Investigation):** S-Berechnung (User×2+1) bei ALLEN Einheiten gegenprüfen,
+   nicht nur Boss Nob.
+3. **Cover Option B:** ✅ bestätigt, nichts offen.
+4. **Veil of Darkness (Regel-Recherche):** Träger steht nach Teleport korrekt nicht mehr „IN MELEE".
+   OFFEN: Gelten die Einheiten danach als **„Retreated"** (kein Schießen/Kämpfen)? RAW prüfen.
+5. **Skorpekh Attacken-Summe (Bug):** linke Zahl „assigned" bleibt **0**, obwohl Nahkampf-Attacken
+   unten zugewiesen sind. Soll = Summe der tatsächlich zugewiesenen Attacken sein.
+6. **S48 H1–H7:** aufgeschlüsselt + verifiziert — Detailstatus in H1/H2/H4a unten.
+7. **Command-Protocol-Buff (Bug + UI):** Buff wird **weder in unitCard noch in den Phasen** angezeigt.
+   Soll als **grüne Buff-Badge** bei jeder betroffenen Einheit + im Phasen-Block erscheinen (wie MWBD).
+   Badge **kürzen**: armyCard ohne „Protocol of the …"-Präfix (→ „Undying Legion"); unitCard noch kürzer.
+8. **Command-Protocol-Setup (UI + Regel-Recherche):** das **permanent-aktive (6.) Protokoll** soll
+   **oben ebenfalls als Dropdown** erscheinen (wie die rundenbasierten); Default bleibt; Auswahl tauscht.
+   Festlegung beim Setup gemäß Regeln. NICHT eingeplant (Plan 016 = nur Effekte). Wechsel-Regeln inkl.
+   **Silent King** recherchieren (Wechsel im Spiel nur mit SK + Fähigkeit?).
+9. **Würfelanzeige Attackenabfolge (UI-Spec):** Spec/Mockup ggf. veraltet → mit Nutzer abstimmen.
+   - 9.1 Randfälle: der Ergebnis-Würfel muss **unter seiner Wert-Spalte** stehen (Bsp.: 5 stand unter 1).
+     „x" soll ein **Würfel-Icon = generelles Miss-Icon** sein (auch im normalen HIT/WOUND/SAVE-Block),
+     rechts neben der 6 platziert (analog 1 links neben 2). **Alle** Fälle abbilden, in denen AP den
+     Standardfall verschiebt. Wiederholungswürfel bisher nie gesehen.
+   - 9.2 Standardfall: Würfel nicht spaltenkonform ausgerichtet; AP-Pfeile nicht entsprechend länger.
+   - Vorgehen: `dice_html.py` + Spec (`ziel6.md §6n D5`) studieren → korrigiertes Layout-Mockup vorlegen.
+
+### S48-Detailstatus (aus S49-Verifikation)
+
+- **H1 (UI-Bug):** YAML korrekt — `tellyport_blasta` ist als optionales `add` modelliert
+  (`orks/units.yaml` big_mek_mega_armour). Die Wargear-UI rendert optionale `add`-Items aber nicht
+  → Render-Pfad prüfen.
+- **H2 (Regel/Daten):** Silent-King-Waffen korrekt, aber **Nahkampf-Verteilung** muss die feste
+  Max-Attackenzahl je Waffe respektieren (max_attacks/extra_attacks).
+- **H3/H5/H7:** ✅ bestätigt.
+- **H4a (Feature, generisch!):** Dynastie liegt im State (`p1_dynasty`/`p2_dynasty`,
+  `game_state.py:294-295`), wird aber **nirgends angezeigt**. Dynastiebonus muss in armyCard +
+  unitCard-Badge + relevanten Phasen sichtbar werden — **keine Fraktionslogik in `src/`** (Arch-Gate!).
+- **H4b:** Roster `dynasty:`/`protocol_order` → Loader (`loader.py:907-908`) → State
+  (`game_state.py:66-67`); Tausch bei `:254`/`:359`.
+
+### Logo — neues GPT-Bild (bereit, Integration ausstehend)
+
+Neues Logo unter `Fotos/ChatGPT Image 15. Juni 2026, 19_47_45.png` — Waffen gerade, Gold/Rot passt.
+**Wichtig:** Bild ist komplett opak (GPT hat ein Karomuster als Hintergrund gemalt). Freistellen via
+neutral-hell-Flood-Fill von den Rändern + 1px-Erosion (wie in S49 erprobt) → dann
+`tools/process_logo.py`-Trim/Square/Icon. Ergebnis sah sauber aus. Aktuell in der App noch die
+Soft-Gold-Variante des **alten** Logos (Commit `fc1dd74`). Nächster Schritt: neues Logo freistellen,
+`assets/arbiter_logo.png` + `arbiter_icon.png` ersetzen, committen.
 
 ---
 
