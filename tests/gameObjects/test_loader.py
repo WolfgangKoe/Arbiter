@@ -59,6 +59,27 @@ def test_overlord_has_staff_of_light() -> None:
     assert melee.is_melee is True
 
 
+def test_silent_king_melee_weapons_respect_per_weapon_attack_cap() -> None:
+    # Scythe of Dust / Staff of Stars are the "N additional AND no more than N"
+    # class: their melee attacks are hard-capped (4 / 3), independent of Szarekh's
+    # bracketed Attacks characteristic (H2). Without max_attacks the cap collapses
+    # to unit.attacks + N and the declaration would over-allocate.
+    from gameMechanic.attack_math import _total_attacks_int
+
+    catalog = load_weapon_catalog("necrons")
+    scythe = catalog["wh40k_9e.necrons.weapon.scythe_of_dust"]
+    staff_melee = next(
+        p for p in catalog["wh40k_9e.necrons.weapon.staff_of_stars"].profiles if p.is_melee
+    )
+    scythe_melee = next(p for p in scythe.profiles if p.is_melee)
+
+    assert scythe_melee.max_attacks == 4
+    assert staff_melee.max_attacks == 3
+    # A6 bearer: cap holds regardless of the high Attacks characteristic.
+    assert _total_attacks_int("*", 1, 6, scythe_melee.effect, scythe_melee.max_attacks) == 4
+    assert _total_attacks_int("*", 1, 6, staff_melee.effect, staff_melee.max_attacks) == 3
+
+
 def test_warriors_models_and_save() -> None:
     units, _ = load_army("necrons")
     warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")

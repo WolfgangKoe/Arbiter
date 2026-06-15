@@ -840,8 +840,9 @@ weapons:
         strength: "User"
         ap: "-2"
         damage: "1"
-        abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon."
+        abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon."
         is_melee: true
+        max_attacks: 3
         effect:
           type: extra_attacks
           amount: 3
@@ -855,8 +856,9 @@ weapons:
         strength: "+3"
         ap: "-4"
         damage: "3"
-        abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon."
+        abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon."
         is_melee: true
+        max_attacks: 4
         effect:
           type: extra_attacks
           amount: 4
