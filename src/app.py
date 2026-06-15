@@ -1,7 +1,12 @@
+from pathlib import Path
+
 import streamlit as st
+
+_ICON = Path(__file__).resolve().parent.parent / "assets" / "arbiter_icon.png"
 
 st.set_page_config(
     page_title="Arbiter",
+    page_icon=str(_ICON) if _ICON.exists() else None,
     layout="wide",
     initial_sidebar_state="collapsed",
 )

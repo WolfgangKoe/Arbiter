@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import random
+from pathlib import Path
 
 import streamlit as st
 
@@ -132,7 +133,16 @@ def _render_secondary_picker(player_label: str, key_prefix: str) -> tuple[list[s
 
 def render_setup_screen() -> None:
     """Render the pre-game setup UI. Calls init_state() on confirmation."""
-    st.title("Arbiter")
+    _logo = Path(__file__).resolve().parents[2] / "assets" / "arbiter_logo.png"
+    if _logo.exists():
+        col_l, col_c, col_r = st.columns([2, 1, 2])
+        with col_c:
+            st.image(str(_logo), use_container_width=True)
+    st.markdown(
+        "<h1 style='text-align:center;color:#d4a017;letter-spacing:0.12em;"
+        "margin-top:0;'>ARBITER</h1>",
+        unsafe_allow_html=True,
+    )
     st.markdown("### Setup")
     st.divider()
 
