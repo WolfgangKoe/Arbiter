@@ -90,6 +90,16 @@ def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: 
     )
 
 
+def miss_die_html(size: int = 32) -> str:
+    """Die-shaped always-miss marker (×).
+
+    The same icon as the value-1 die (left of 2); also used as the general miss
+    icon right of the 6 when a threshold is pushed above 6 (AP / heavy penalty),
+    so misses read as dice everywhere instead of a bare text ×.
+    """
+    return dice_face_svg(1, miss=True, size=size)
+
+
 def dice_row_html(threshold: int) -> str:
     """Row of 6 dice (values 1–6): miss dice left, success dice inside colored frame.
 
@@ -98,12 +108,9 @@ def dice_row_html(threshold: int) -> str:
     the columns stay aligned. Threshold > 6 (impossible): 6 miss dice + red ×.
     """
     if threshold > 6:
+        # All six fail; a miss die right of the 6 marks the impossible 7+ result.
         miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, 7))
-        impossible = (
-            '<span style="font-size:16px;color:#ef4444;vertical-align:middle;'
-            'margin:0 4px;font-weight:bold;">×</span>'
-        )
-        return f'<div style="margin:4px 0;">{miss_dice}{impossible}</div>'
+        return f'<div style="margin:4px 0;">{miss_dice}{miss_die_html()}</div>'
     frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
     success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
     framed = (
@@ -208,10 +215,8 @@ def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str)
         arrow = "←"
         left_die = dice_face_svg(left_val, color="#6b7280")
         if right_raw > 6:
-            right_die = (
-                f'<span style="font-size:16px;color:{color};vertical-align:middle;'
-                f'font-weight:bold;" title="exceeds 6 — save impossible">×</span>'
-            )
+            # Newly-failing value exceeds 6 → miss die marker right of the scale.
+            right_die = miss_die_html()
         else:
             right_die = dice_face_svg(right_val, color=color)
     pair = (
