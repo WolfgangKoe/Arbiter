@@ -39,5 +39,8 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 80
+# Ratchet: locks in the current measured level so coverage can only go up, never
+# silently sink. Raise this as logic is pulled out of the omitted render modules
+# (uiLayout/*, *Phase.py) into tested helpers — the path toward a higher target.
+fail_under = 88
 show_missing = true
