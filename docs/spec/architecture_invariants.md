@@ -25,6 +25,16 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 
 So misst du selbst: `pytest tests/architecture/ tests/docs/ tests/acceptance/ --no-cov -q`
 
+### Schulden-Stand (Baseline — fortschreiben pro Session)
+
+Live nach jedem `pytest`-Lauf im **Schulden-Scoreboard** (`tests/conftest.py`). Anker:
+
+| Datum | INV-4b Vokabular (Tokens) | INV-4 Allowlist (Einträge) | INV-5 AC-IDs |
+|---|---|---|---|
+| 2026-06-16 | 20 | 10 | 5 |
+
+Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
+
 ---
 
 ## INV-2 — erlaubte YAML-Zugriffe (Ausnahmen)

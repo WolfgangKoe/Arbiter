@@ -64,6 +64,9 @@ Die Gates machen die Schuld jetzt **messbar** — also abbauen, nicht wachsen la
 ## Gate-Netz (Messbefehle)
 
 - Tests + Coverage: `pytest --tb=short` (Floor 88 %, `pyproject.toml`).
+- **Schulden-Scoreboard**: erscheint nach jedem `pytest`-Lauf (Hook in `tests/conftest.py`) —
+  Fraktions-Vokabular-Tokens, Namen-Allowlist, AC-IDs, next_session-Zeilen. Baseline 2026-06-16
+  in `architecture_invariants.md`. Ziel: Vokabular-/Allowlist-Zahlen sinken pro Session.
 - Architektur (INV-1..4b): `pytest tests/architecture/ --no-cov -q` · Ledger: `architecture_invariants.md`.
 - Doku + Akzeptanz (INV-5): `pytest tests/docs/ tests/acceptance/ --no-cov -q`.
 - Neues Akzeptanzkriterium: AC in `docs/spec/acceptance/index.md` + `@acceptance("AC-…")`-Test (README dort).
