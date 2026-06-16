@@ -114,13 +114,19 @@ Reihenfolge sonst offen; Regelfragen recherchiere ich lokal.
      9.1 Miss-Icon: `dice_face_svg(1)` zeigt schon ein ×; gewünscht ist ein **Würfel-Icon als
      generelles Miss-Symbol rechts neben der 6** in verschobenen/AP-Fällen (analog 1 links neben 2)
      statt des Text-`×` (`save_modifier_die_pair_html` right_raw>6 und `dice_row_html` threshold>6).
-     **Nutzer-Entscheidung (S50):** 9.1 → **Würfel-Miss-Icon überall** (Text-× ersetzt) ✅ umgesetzt
-     (`81d210c`, `miss_die_html()` + Tests). 9.2 → **Gap auch im Header** gewählt; der Header-Gap ist
-     in `threshold_header_html` (Z. 53-54) **bereits vorhanden** → Header/Würfel sind innerhalb einer
-     Zeile deckungsgleich, KEINE Code-Änderung nötig. **Offen/zu prüfen am laufenden Bild:** ob die
-     Modifier-Paare (AP/Cover) als nicht-spaltentreu empfunden werden (sie zeigen ein from→to-Paar,
-     nicht auf die 1–6-Skala gelegt) und ob die Quer-Zeilen-Ausrichtung (Base vs. Eff.) reicht. Falls
-     ja, später Fix (b) erwägen (Linie ohne eigene Spalte). Spec `§6n D5` ggf. nachziehen.
+     **Nutzer-Entscheidung (S50) + Umsetzung:** 9.1 → **Würfel-Miss-Icon überall** (Text-× ersetzt)
+     ✅ (`81d210c`, `miss_die_html()` + Tests). 9.2 → Header-Gap war bereits da (Header↔Würfel
+     deckungsgleich, vom Nutzer bestätigt: „sieht gut aus"); zusätzlich **Modifier-Paare jetzt
+     spaltentreu mit proportionalem Pfeil** (Option A) ✅ (`1c9a373`): `_aligned_modifier_row_html`
+     legt von-/nach-Würfel unter ihre Wert-Spalten, Connector-Pfeil dazwischen (AP-3 lang, Cover +1
+     kurz), reine getestete `_modifier_columns`. **Noch am Bild zu prüfen:** ob Pfeilrichtung/-länge
+     und Off-Scale-Miss-Würfel (Sv6+ AP-4) visuell stimmen.
+   - **Coverage-Gate (S50):** Nutzer will aggressiv + Logik aus Render-Code herausziehen (Renderer
+     darf nicht ungetestet wachsen). Floor von 80 % → **88 %** angehoben (`e369cc3`, lockt Ist-Stand).
+     **Fahrplan Richtung höher (offen):** pure Logik aus den `omit`-Modulen (`uiLayout/*`,
+     `*Phase.py` in `pyproject.toml`) in getestete Helfer ziehen (Muster: `attack_math.py`,
+     `_modifier_columns`), Modul nach Extraktion aus `omit` nehmen, Floor nachziehen. Kandidaten mit
+     viel Logik: `shootingPhase.py`, `fightPhase.py`, `_common.py` (Deklaration/Resolution).
 
 ### S48-Detailstatus (aus S49-Verifikation)
 
