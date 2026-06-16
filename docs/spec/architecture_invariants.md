@@ -12,16 +12,18 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 
 ---
 
-## Status — geprüft 2026-06-15
+## Status — geprüft 2026-06-16
 
 | # | Invariante | Wächter | Status |
 |---|---|---|---|
 | INV-1 | `gameObjects/` importiert kein Streamlit (reine Datenebene) | `test_gameobjects_streamlit_free.py` | ✅ 0 Verstöße |
 | INV-2 | YAML wird nur über den Loader gelesen (single entry point) | `test_yaml_only_in_loader.py` | ✅ (2 Ausnahmen, begründet) |
 | INV-3 | `gameObjects/` hängt nicht von `gameMechanic`/`uiLayout` ab | `test_layer_imports.py` | ✅ 0 Verstöße |
-| INV-4 | `src/` ist fraktions-generisch (keine Fraktions-Strings im Code) | `test_generic_src.py` | ✅ (Allowlist = aktuelle Schuld) |
+| INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = aktuelle Schuld) |
+| INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = aktuelle Schuld) |
+| INV-5 | Doku-Gesundheit: Spec ↔ Tests ↔ Stand laufen nicht auseinander | `tests/docs/`, `tests/acceptance/` | ✅ |
 
-So misst du selbst: `pytest tests/architecture/ --no-cov -q`
+So misst du selbst: `pytest tests/architecture/ tests/docs/ tests/acceptance/ --no-cov -q`
 
 ---
 
@@ -51,6 +53,40 @@ Zwei Klassen:
 - `uiLayout/setupScreen.py` — fraktionsspezifischer Caption-Text.
 
 Ziel: DEBT-Einträge nach und nach auflösen (Default aus den gewählten Armeen ableiten) und aus der Allowlist entfernen.
+
+---
+
+## INV-4b — datengetriebenes Vokabular-Gate + Ledger
+
+`test_generic_src_vocab.py` erntet das Fraktions-Vokabular **aus den YAML-Daten**
+(`_vocab.py`): jedes Wort, das nur in *einer* Fraktion als Eigenname/ID/Keyword
+vorkommt (`overlord`, `klaw`, `irongob`, `reanimation`, die Fraktionsnamen) plus
+ein kleiner Seed von Konzept-Wörtern (`dynasty`, `waaagh`, `protocol` …). Taucht
+so ein Token in einem `src/`-Bezeichner oder String auf → Leck.
+
+- Neue Fraktion ⇒ Vokabular wächst automatisch mit (kein Handpflege-Block).
+- `STOPWORDS` filtert generisches Englisch/Core-Regelwerk; `LEDGER` listet die
+  **heutige** Schuld pro Datei. Ein neues Token bricht den Build; ein Ledger-Eintrag,
+  der nicht mehr leckt, bricht ebenfalls (Ratchet → Schuld nur kleiner).
+- Aktuelle Hauptschuld (DEBT): `protocol`/`protocols` als generischer Round-Choice-Begriff
+  (Necron-Wort) quer durch `src/`; benannte Items (`orb`, `overlord`, `phaeron`,
+  `irongob`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`) in den Phasen-/Render-Modulen.
+- LEGIT: `gameObjects/rosz_importer.py` (Fraktionslabel-Normalisierung).
+
+---
+
+## INV-5 — Doku-Gate (Spec ↔ Tests ↔ Stand)
+
+Vierte messbare Schranke neben Coverage und Architektur. Durchgesetzt von:
+
+- `tests/acceptance/` — jede Akzeptanz-ID (`AC-…`) in `docs/spec/acceptance/index.md`
+  ist von genau einem Test angepinnt und umgekehrt (fachliche Schranke, Finding #4).
+- `tests/docs/` — messbare Doku-Gesundheit: `next_session.md` unter Zeilenbudget,
+  Kern-Specs existieren, jede Invariante (`INV-N`) hat einen referenzierenden Wächter
+  (Quer-Korrelation Doku ↔ Tests).
+
+Eine fachliche Änderung, die ein Akzeptanzkriterium bricht, wird **rot** → Gespräch
+mit dem Nutzer statt stiller Drift (genau der Fehler hinter Finding 9.2).
 
 ---
 

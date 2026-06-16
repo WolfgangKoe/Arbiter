@@ -1,4 +1,7 @@
 faction: Adeptus Custodes
+# Generic subfaction binding: Custodes pick a Shield Host (roster field 'shield_host').
+subfaction_field: shield_host
+subfaction_label: Shield Host
 round_choice_label: Ka'tahs of the Broadsword
 abilities:
 - id: wh40k_9e.adeptus_custodes.faction.katah_calistus

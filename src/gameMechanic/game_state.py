@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import NamedTuple
 
 import streamlit as st
 
 from gameObjects.loader import (
+    load_faction_display_name,
     load_roster,
     load_roster_metadata,
     load_round_choice_abilities,
+    load_subfaction_meta,
     load_unit_catalog,
     load_yaml,
 )
@@ -56,15 +59,16 @@ def _load_roster_for(
 ) -> tuple[list[tuple[Unit, int]], list[str], str, str, str | None, list[str] | None]:
     """Load a roster; fall back to full catalog if file is missing.
 
-    Returns (matched_entries, unmatched_ids, display_name, faction_dir, dynasty,
-    protocol_order). protocol_order is the optional roster-defined Command Protocol
-    order (round 1..5 → protocol id); None when the roster does not specify one.
+    Returns (matched_entries, unmatched_ids, display_name, faction_dir, subfaction,
+    protocol_order). subfaction is the roster's subfaction choice read via the
+    faction's declared field (generic — no faction-specific vocabulary in src/);
+    protocol_order is the optional roster-defined Command Protocol order.
     """
     path = _ROSTER_DIR / roster_file
     meta = load_roster_metadata(path)
     faction_dir = meta.get("faction_dir") or fallback_faction
     display_name = meta.get("display_name") or roster_file
-    dynasty: str | None = meta.get("dynasty")
+    subfaction: str | None = meta.get("subfaction")
     protocol_order: list[str] | None = meta.get("protocol_order")
 
     catalog = load_unit_catalog(faction_dir)
@@ -73,7 +77,7 @@ def _load_roster_for(
     else:
         matched = [(u, u.models_max) for u in catalog.values()]
         unmatched = []
-    return matched, unmatched, display_name, faction_dir, dynasty, protocol_order
+    return matched, unmatched, display_name, faction_dir, subfaction, protocol_order
 
 
 def list_available_rosters() -> list[str]:
@@ -128,15 +132,55 @@ def faction_dir_for(player: str) -> str:
     return st.session_state["p2_faction_dir"]
 
 
-def dynasty_for(player: str) -> str | None:
-    """Return a player's dynasty/sub-faction tag (from the roster), or None.
+def subfaction_value_for(player: str) -> str | None:
+    """Return a player's raw subfaction tag (from the roster), or None.
 
-    Generic: the value is whatever the roster declared (e.g. 'szarekhan'); armies
-    without a dynasty (Orks etc.) return None and render no badge.
+    Generic: the value is whatever the roster declared (e.g. 'szarekhan',
+    'bad_moons'); used for subfaction-affinity comparisons. Armies that made no
+    subfaction choice return None.
     """
     if player == st.session_state.get("first_player"):
-        return st.session_state.get("p1_dynasty")
-    return st.session_state.get("p2_dynasty")
+        return st.session_state.get("p1_subfaction")
+    return st.session_state.get("p2_subfaction")
+
+
+def faction_display_name_for(player: str) -> str:
+    """Human-readable faction name for a player's armyCard badge (e.g. 'Necrons')."""
+    try:
+        return load_faction_display_name(faction_dir_for(player))
+    except KeyError:
+        return str(player)
+
+
+class SubfactionBadge(NamedTuple):
+    """Resolved subfaction badge for the armyCard. Always renders (never hidden)."""
+
+    text: str
+    # "set"     → a valid subfaction was chosen; buffs may apply
+    # "missing" → roster is valid but made no choice → no buffs, visible placeholder
+    # "error"   → faction declares no subfaction field (data gap) → visible error
+    state: str
+
+
+def subfaction_badge_for(player: str) -> SubfactionBadge:
+    """Resolve a player's subfaction badge generically from faction + roster data.
+
+    Mandatory & always visible: a missing choice shows a 'No <Label>' placeholder
+    (no buffs), a missing faction binding shows a 'No Subfaction' error — never an
+    empty/invisible badge.
+    """
+    try:
+        faction_dir = faction_dir_for(player)
+    except KeyError:
+        return SubfactionBadge("No Subfaction", "error")
+    field, label = load_subfaction_meta(faction_dir)
+    if not field:
+        return SubfactionBadge("No Subfaction", "error")
+    slot = "p1_subfaction" if player == st.session_state.get("first_player") else "p2_subfaction"
+    value = st.session_state.get(slot)
+    if not value:
+        return SubfactionBadge(f"No {label}", "missing")
+    return SubfactionBadge(str(value).replace("_", " ").title(), "set")
 
 
 def short_protocol_label(name_en: str) -> str:
@@ -153,8 +197,8 @@ def active_protocol_buff_labels(player: str) -> list[str]:
 
     Derived from session state at render time (no stored buff to expire). Covers
     the round-assigned protocol and the always-active 6th protocol (incl. the
-    dynasty bonus where both directives apply). Empty for factions without a
-    round-choice ability file — gated on data, not on faction names.
+    subfaction-affinity bonus where both directives apply). Empty for factions
+    without a round-choice ability file — gated on data, not on faction names.
     """
     try:
         faction_dir = faction_dir_for(player)
@@ -180,9 +224,9 @@ def active_protocol_buff_labels(player: str) -> list[str]:
         extras = [p for p in protocols if p.id not in assigned_ids]
         if len(extras) == 1:
             extra = extras[0]
-            dynasty = dynasty_for(player)
-            dynasty_bonus = bool(dynasty and dynasty == extra.subfaction_affinity)
-            if dynasty_bonus or st.session_state.get(f"protocol_extra_directive_{faction_dir}"):
+            subfaction = subfaction_value_for(player)
+            affinity_bonus = bool(subfaction and subfaction == extra.subfaction_affinity)
+            if affinity_bonus or st.session_state.get(f"protocol_extra_directive_{faction_dir}"):
                 labels.append(short_protocol_label(extra.name_en))
     return labels
 
@@ -300,10 +344,10 @@ def init_state(
     if "initialized" in st.session_state:
         return
 
-    p1_matched, p1_unmatched, p1_name, p1_faction_dir, p1_dynasty, p1_proto_order = (
+    p1_matched, p1_unmatched, p1_name, p1_faction_dir, p1_subfaction, p1_proto_order = (
         _load_roster_for(roster_p1, "necrons")
     )
-    p2_matched, p2_unmatched, p2_name, p2_faction_dir, p2_dynasty, p2_proto_order = (
+    p2_matched, p2_unmatched, p2_name, p2_faction_dir, p2_subfaction, p2_proto_order = (
         _load_roster_for(roster_p2, "necrons")
     )
 
@@ -311,7 +355,7 @@ def init_state(
         p1_matched, p2_matched = p2_matched, p1_matched
         p1_name, p2_name = p2_name, p1_name
         p1_faction_dir, p2_faction_dir = p2_faction_dir, p1_faction_dir
-        p1_dynasty, p2_dynasty = p2_dynasty, p1_dynasty
+        p1_subfaction, p2_subfaction = p2_subfaction, p1_subfaction
         p1_proto_order, p2_proto_order = p2_proto_order, p1_proto_order
         p1_unmatched, p2_unmatched = p2_unmatched, p1_unmatched
 
@@ -351,8 +395,8 @@ def init_state(
     st.session_state.p2_units_list = [u for u, _ in p2_matched]
     st.session_state.p1_faction_dir = p1_faction_dir
     st.session_state.p2_faction_dir = p2_faction_dir
-    st.session_state.p1_dynasty = p1_dynasty
-    st.session_state.p2_dynasty = p2_dynasty
+    st.session_state.p1_subfaction = p1_subfaction
+    st.session_state.p2_subfaction = p2_subfaction
 
     # Optional roster-defined Command Protocol order (round 1..5 → protocol id),
     # keyed by player name; the setup UI uses these as defaults (overridable).
@@ -416,7 +460,7 @@ def swap_players() -> None:
     ss.p1_units_list, ss.p2_units_list = ss.p2_units_list, ss.p1_units_list
     ss.p1_unit_keys, ss.p2_unit_keys = ss.p2_unit_keys, ss.p1_unit_keys
     ss.p1_faction_dir, ss.p2_faction_dir = ss.p2_faction_dir, ss.p1_faction_dir
-    ss.p1_dynasty, ss.p2_dynasty = ss.p2_dynasty, ss.p1_dynasty
+    ss.p1_subfaction, ss.p2_subfaction = ss.p2_subfaction, ss.p1_subfaction
 
 
 def reset_game() -> None:

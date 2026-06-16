@@ -29,6 +29,7 @@ _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 _ROUND_CHOICE_CACHE: dict[str, list] = {}
 _ROUND_CHOICE_LABEL_CACHE: dict[str, str] = {}
 _FACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
+_FACTION_META_CACHE: dict[str, dict[str, Any]] = {}
 _UNIT_ABILITIES_CACHE: dict[str, list[Ability]] = {}
 _SUBFACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
 _STRATAGEM_CACHE: dict[str, list[Stratagem]] = {}
@@ -517,6 +518,40 @@ def load_round_choice_label(faction_dir: str) -> str:
     return label
 
 
+def _faction_meta(faction_dir: str) -> dict[str, Any]:
+    """Top-level scalar metadata from faction_abilities.yaml (cached). Empty when missing."""
+    if faction_dir in _FACTION_META_CACHE:
+        return _FACTION_META_CACHE[faction_dir]
+    path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
+    data = load_yaml(path) if path.exists() else None
+    meta = data if isinstance(data, dict) else {}
+    _FACTION_META_CACHE[faction_dir] = meta
+    return meta
+
+
+def load_faction_display_name(faction_dir: str) -> str:
+    """Human-readable faction name for the armyCard faction badge.
+
+    Reads top-level `faction:` from faction_abilities.yaml (e.g. 'Necrons', 'Orks').
+    Falls back to a Title-cased faction_dir so the badge is never blank.
+    """
+    return _faction_meta(faction_dir).get("faction") or faction_dir.replace("_", " ").title()
+
+
+def load_subfaction_meta(faction_dir: str) -> tuple[str | None, str]:
+    """(roster field name, UI label) for this faction's subfaction choice.
+
+    Generic binding: each faction declares which roster key holds its subfaction
+    (`subfaction_field`, e.g. 'dynasty' / 'clan') and how to label it
+    (`subfaction_label`). Returns (None, 'Subfaction') when the faction declares
+    no subfaction concept — the armyCard renders that as an error badge.
+    """
+    meta = _faction_meta(faction_dir)
+    field = meta.get("subfaction_field")
+    label = meta.get("subfaction_label") or "Subfaction"
+    return field, label
+
+
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
     """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
     if faction_dir in _UNIT_ABILITIES_CACHE:
@@ -896,15 +931,23 @@ def scaled_pl(unit: Unit, current_models: int) -> float:
 
 
 def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
-    """Read display_name and faction_dir from a roster file without loading units."""
+    """Read display_name, faction_dir and subfaction from a roster (no unit loading).
+
+    'subfaction' is resolved generically: the faction declares which roster field
+    carries it (`subfaction_field`, e.g. 'dynasty' / 'clan'); we read that field —
+    no faction-specific key hardcoded here.
+    """
     path = Path(roster_path)
     if not path.exists():
         return {}
     data = load_yaml(path)
+    faction_dir = data.get("faction_dir", "necrons")
+    subfaction_field, _ = load_subfaction_meta(faction_dir)
+    subfaction = data.get(subfaction_field) if subfaction_field else None
     return {
         "display_name": data.get("display_name", ""),
-        "faction_dir": data.get("faction_dir", "necrons"),
-        "dynasty": data.get("dynasty"),
+        "faction_dir": faction_dir,
+        "subfaction": str(subfaction) if subfaction else None,
         "protocol_order": data.get("protocol_order"),
     }
 

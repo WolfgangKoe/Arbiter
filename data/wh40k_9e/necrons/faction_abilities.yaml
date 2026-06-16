@@ -1,4 +1,8 @@
 faction: Necrons
+# Generic subfaction binding (see armyCard subfaction badge): which roster field
+# carries this faction's subfaction choice, and how to label it in the UI.
+subfaction_field: dynasty
+subfaction_label: Dynasty
 round_choice_label: Command Protocols
 abilities:
 - id: wh40k_9e.necrons.faction.living_metal

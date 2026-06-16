@@ -7,7 +7,47 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-15
+Letzter Abgleich: 2026-06-16
+
+---
+
+## 0. Aktuelle Findings (S51 — Badge / Protokoll / Würfel)
+
+Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
+Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
+
+- ✅ **#1 Faktion-/Subfaction-Badge** (S51): Faktion-Badge zeigt Faktionsnamen
+  (nicht Roster-Titel); Subfaction-Badge generisch + **immer sichtbar** (Wert /
+  „No <Label>" / „No Subfaction"); helles Blau `#a5b4fc`. Alle Roster mit Pflicht-
+  Subfaction. Pins: `AC-SUBFACTION-01..05`. „dynasty"-Vokabular aus `src/` entfernt.
+- 🔲 **#2b Direktiv-Lock** (Phase 2): Kommandoprotokoll-Direktive nur in der
+  **Kommandophase** wählbar/änderbar, ab Bewegungsphase gesperrt. Buttons in
+  `armyCard._render_directive_buttons`/`_render_extra_protocol` an
+  `phase_key == "command"` koppeln. AC + Regressionstest.
+- 🔲 **#2 Protokoll-Buff-Audit** (Phase 3): **9 von 12** Direktiv-Effekten sind in
+  `ability_engine.get_active_protocol_modifier` **nicht verdrahtet** → unsichtbar.
+  Jeden einzeln verdrahten/anzeigen, je eigener AC. Soll-Tabelle:
+
+  | Protokoll · Direktive | Effekt | Ziel-Anzeige |
+  |---|---|---|
+  | Eternal Guardian · P | save_modifier +1 ✅ | SAVE-Block grün |
+  | Eternal Guardian · S | reroll_save_1 ❌ | SAVE-Hinweis |
+  | Hungry Void · P | hit_modifier +1 (Shooting) ✅ | HIT-Block |
+  | Hungry Void · S | strength_modifier +1 (Shooting) ❌ | WOUND-Block S+1 |
+  | Conquering Tyrant · P | leadership_bonus +1 ❌ | Morale |
+  | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) ❌ | HIT+WOUND Melee |
+  | Sudden Storm · P | move_bonus +1 ❌ | Bewegungs-Badge |
+  | Sudden Storm · S | advance_and_charge ❌ | Charge-Phase |
+  | Undying Legions · P/S | rp_reroll / rp_bonus +1 ❌ | Reanimation-UI |
+  | Vengeful Stars · P | wound_modifier +1 (Shooting) ✅ | WOUND-Block |
+  | Vengeful Stars · S | ap_bonus -1 (Shooting) ❌ | SAVE-Block AP |
+
+  Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
+  Phasen-Block (wie MWBD). Überschneidet sich mit Plan 016.
+- 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
+  Badge-Text (`+1` raus, da Pfeil das ausdrückt) + Badge-Breite (ragt in Würfel
+  „1"). **Soll-Bild zuerst mit Nutzer als AC festlegen**, dann fixen, dann
+  per AC einrasten (Lehre aus Finding 9.2 — nie still ändern).
 
 ---
 
@@ -62,9 +102,23 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 - **Generic-src (INV-4 DEBT):** hartcodierte Fraktions-Defaults aus `src/` entfernen —
   Default-Roster in `game_state.py`, `faction_dir`-Default in `loader.py`, Spielerlabels
   in `gameHeader.py`/`gameProtocoll.py`, Caption in `setupScreen.py`. Ziel: Allowlist leeren.
+- **Generic-src Vokabular (INV-4b DEBT, neu S51):** datengetriebenes Gate
+  (`test_generic_src_vocab.py`) listet Fraktions-Eigennamen in `src/`. Größte Schuld:
+  `protocol`/`protocols` als generischer Round-Choice-Begriff (Necron-Wort) quer durch
+  `src/` → faktion-neutral umbenennen; benannte Items (`orb`, `overlord`, `phaeron`,
+  `irongob`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`, `reanimation`, `arkana`, `dynasty`)
+  in Phasen-/Render-Modulen. Ziel: Ledger schrumpfen (Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
   nicht als Wächter erzwungen.
+- **Test-Mock-Fragilität (S51 entdeckt):** Mehrere `src`-Module lesen das globale
+  `st.session_state` und rufen einander auf (`unit_mutations.set_movement_status` →
+  `game_state.units_key_for`; `ability_engine` → `game_state`/`unit_mutations`). Tests mocken
+  `streamlit` **pro Datei**; wer ein Modul zuerst importiert, bindet dessen `st`. Reihenfolge-
+  abhängig → leicht zerbrechlich (S51: ein neuer Test als erster Importer brach 15 Movement-Tests).
+  Workaround: Akzeptanztest importiert `game_state` lazy. Saubere Lösung: **eine geteilte
+  `streamlit`-Fixture** (conftest) + Tests auf `module.st` statt lokalem `_st_mock` umstellen.
+  Tieferliegend ein Smell: viel globaler `session_state`-Zugriff quer durch die Logik-Module.
 
 ---
 

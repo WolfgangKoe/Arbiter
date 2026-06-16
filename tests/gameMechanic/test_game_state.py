@@ -14,10 +14,10 @@ from gameMechanic.game_state import (  # noqa: E402
     _make_unit_state_dict,
     active_protocol_buff_labels,
     compute_roster_total_pts,
-    dynasty_for,
     list_available_rosters,
     next_phase,
     short_protocol_label,
+    subfaction_value_for,
     swap_players,
     unit_id_from_state_key,
     unit_keys_for,
@@ -40,6 +40,8 @@ class _S(dict):
 def _make_session(**kwargs) -> _S:
     kwargs.setdefault("first_player", "Necrons")
     kwargs.setdefault("second_player", "Orks")
+    kwargs.setdefault("p1_subfaction", None)
+    kwargs.setdefault("p2_subfaction", None)
     s = _S(**kwargs)
     _mut.st.session_state = s
     _gs.st.session_state = s
@@ -274,10 +276,10 @@ class TestPlayerKeyHelpers:
         self._session()
         assert unit_keys_for("Orks") == ["key_b"]
 
-    def test_dynasty_for_maps_per_player(self) -> None:
-        _make_session(p1_dynasty="szarekhan", p2_dynasty=None)
-        assert dynasty_for("Necrons") == "szarekhan"
-        assert dynasty_for("Orks") is None
+    def test_subfaction_value_for_maps_per_player(self) -> None:
+        _make_session(p1_subfaction="szarekhan", p2_subfaction=None)
+        assert subfaction_value_for("Necrons") == "szarekhan"
+        assert subfaction_value_for("Orks") is None
 
 
 class TestProtocolBuffLabels:
@@ -289,8 +291,8 @@ class TestProtocolBuffLabels:
         _make_session(
             p1_faction_dir="necrons",
             p2_faction_dir="orks",
-            p1_dynasty=None,
-            p2_dynasty=None,
+            p1_subfaction=None,
+            p2_subfaction=None,
             protocol_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
             protocol_directive_necrons="primary",
             protocol_assignments={},
@@ -301,7 +303,7 @@ class TestProtocolBuffLabels:
         _make_session(
             p1_faction_dir="necrons",
             p2_faction_dir="orks",
-            p1_dynasty=None,
+            p1_subfaction=None,
             protocol_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
             protocol_directive_necrons=None,
             protocol_assignments={},
@@ -309,7 +311,7 @@ class TestProtocolBuffLabels:
         assert active_protocol_buff_labels("Necrons") == []
 
     def test_faction_without_protocols_yields_no_label(self) -> None:
-        _make_session(p1_faction_dir="necrons", p2_faction_dir="orks", p2_dynasty=None)
+        _make_session(p1_faction_dir="necrons", p2_faction_dir="orks", p2_subfaction=None)
         assert active_protocol_buff_labels("Orks") == []
 
 
@@ -424,17 +426,17 @@ class TestLoadRosterFor:
         _, _, display_name, _, _, _ = _gs._load_roster_for("missing.yaml", "necrons")
         assert display_name == "missing.yaml"
 
-    def test_dynasty_propagated_from_metadata(self) -> None:
-        _, _, _, _, dynasty, _ = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
-        # dynasty may be None or a string — just ensure no crash
-        assert dynasty is None or isinstance(dynasty, str)
+    def test_subfaction_propagated_from_metadata(self) -> None:
+        _, _, _, _, subfaction, _ = _gs._load_roster_for("necrons_alpha.yaml", "necrons")
+        # subfaction may be None or a string — just ensure no crash
+        assert subfaction is None or isinstance(subfaction, str)
 
     def test_protocol_order_from_metadata(self) -> None:
-        # Silent King roster declares dynasty szarekhan; protocol_order optional
-        _, _, _, _, dynasty, proto = _gs._load_roster_for(
+        # Silent King roster declares dynasty szarekhan (the necron subfaction field)
+        _, _, _, _, subfaction, proto = _gs._load_roster_for(
             "necrons_1500pts_silent_king.yaml", "necrons"
         )
-        assert dynasty == "szarekhan"
+        assert subfaction == "szarekhan"
         assert proto is None or isinstance(proto, list)
 
 
@@ -454,8 +456,8 @@ class TestSwapPlayers:
             p2_unit_keys=["key_o"],
             p1_faction_dir="necrons",
             p2_faction_dir="orks",
-            p1_dynasty="nephrekh",
-            p2_dynasty=None,
+            p1_subfaction="nephrekh",
+            p2_subfaction=None,
         )
 
     def test_swap_exchanges_player_names(self) -> None:
@@ -482,11 +484,11 @@ class TestSwapPlayers:
         assert s["p1_faction_dir"] == "orks"
         assert s["p2_faction_dir"] == "necrons"
 
-    def test_swap_exchanges_dynasties(self) -> None:
+    def test_swap_exchanges_subfactions(self) -> None:
         s = self._session()
         swap_players()
-        assert s["p1_dynasty"] is None
-        assert s["p2_dynasty"] == "nephrekh"
+        assert s["p1_subfaction"] is None
+        assert s["p2_subfaction"] == "nephrekh"
 
     def test_double_swap_restores_original(self) -> None:
         s = self._session()

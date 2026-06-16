@@ -1,5 +1,6 @@
 display_name: Orks — Testspiel
 faction_dir: orks
+clan: goffs
 # Test-Roster: deckt alle weapon_swaps-Varianten ab —
 # per_model any (Shoota-Mix), per_model per_10 (Big Shoota),
 # group pick 2 (Boss Nob), per_model pick 2 mit counts (Nobz)

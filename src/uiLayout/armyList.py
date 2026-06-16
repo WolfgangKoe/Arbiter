@@ -3,7 +3,6 @@
 import streamlit as st
 
 from gameMechanic.game_state import (
-    dynasty_for,
     faction_dir_for,
     unit_keys_for,
     units_key_for,
@@ -31,19 +30,11 @@ def _states_for(faction: str) -> dict:  # type: ignore[type-arg]
     return st.session_state[units_key_for(faction)]
 
 
-def _subfaction_for(faction: str) -> str | None:
-    units = _units_for(faction)
-    if units:
-        return units[0].subfaction
-    return None
-
-
 def render_army_list(faction: str) -> None:
     units = _units_for(faction)
     states = _states_for(faction)
     unit_keys = unit_keys_for(faction)
-    subfaction = _subfaction_for(faction)
     faction_abilities = _faction_abilities_for(faction)
 
-    render_army_card(faction, subfaction, faction_abilities, units, states, dynasty_for(faction))
+    render_army_card(faction, faction_abilities, units, states)
     render_detachment_card(faction, units, states, unit_keys)

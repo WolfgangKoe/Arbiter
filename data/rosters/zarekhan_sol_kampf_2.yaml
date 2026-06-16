@@ -1,5 +1,6 @@
 display_name: Zarekhan‘Sol - Kampf 2
 faction_dir: necrons
+dynasty: szarekhan
 units:
 - id: wh40k_9e.necrons.unit.overlord
   models: 1

@@ -35,6 +35,22 @@
 | `--arb-green` | `#166534` | Erfolg |
 | `--arb-blue` | `#1e3a8a` | Info (Phasen-Regelkasten) |
 
+## 2a. Faktion- & Subfaction-Badges (armyCard) — FESTGELEGT 2026-06-16
+
+Generisch für jede Fraktion. Das Subfaction-Badge wird **immer** gerendert (nie
+unsichtbar): gewählter Wert, oder sichtbarer Placeholder/Fehler.
+
+| Badge | Zustand | Farbe (fg) | Beispieltext |
+|---|---|---|---|
+| Faktion | immer | `#a5b4fc` helles Blau | „Necrons", „Orks" |
+| Subfaction | `set` (Wahl getroffen) | `#a5b4fc` helles Blau | „Szarekhan", „Bad Moons" |
+| Subfaction | `missing` (Roster korrekt, keine Wahl) | `#9ca3af` gedämpftes Grau | „No Dynasty", „No Clan" |
+| Subfaction | `error` (kein subfaction_field in Faktion) | `#ef4444` rot | „No Subfaction" |
+
+Hintergrund/Rahmen: `bg #1a1a2e`, Rahmen = fg. Quelle: `armyCard._keyword_badge`.
+Datenbindung: Faktion deklariert `subfaction_field`/`subfaction_label` in
+`faction_abilities.yaml`; das Roster setzt das Feld (`dynasty`/`clan`).
+
 ## 2. Status-Badges auf unitCards (etabliert ✓ — generisch, jede Einheit)
 
 | Badge | Farbe (fg) | Semantik |

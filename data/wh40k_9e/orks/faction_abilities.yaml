@@ -2,6 +2,9 @@
 # Source: Wahapedia 2026-06-03 (https://wahapedia.ru/wh40k9ed/factions/orks/)
 # Format mirrors data/wh40k_9e/necrons/faction_abilities.yaml
 faction: Orks
+# Generic subfaction binding: Orks pick a Clan Kultur (roster field 'clan').
+subfaction_field: clan
+subfaction_label: Clan
 
 abilities:
 

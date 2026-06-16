@@ -1,5 +1,6 @@
 display_name: Orks
 faction_dir: orks
+clan: bad_moons
 units:
 - id: wh40k_9e.orks.unit.big_mek_mega_armour
   models: 1

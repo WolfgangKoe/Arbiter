@@ -18,18 +18,36 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
+    faction_display_name_for,
     short_protocol_label,
+    subfaction_badge_for,
+    subfaction_value_for,
     unit_id_from_state_key,
 )
 from gameObjects.ability import Ability
-from gameObjects.loader import load_round_choice_abilities, load_round_choice_label
+from gameObjects.loader import (
+    load_round_choice_abilities,
+    load_round_choice_label,
+    load_subfaction_meta,
+)
 from gameObjects.unit import Unit
 
+# Faction / subfaction keyword badges (design_colors.md §2a).
+_BADGE_BLUE = "#a5b4fc"  # light blue — faction badge + a chosen subfaction
+_BADGE_MUTED = "#9ca3af"  # subfaction placeholder: roster made no choice (no buffs)
+_BADGE_ERROR = "#ef4444"  # subfaction data error: faction declares no subfaction field
 
-def _faction_badge(text: str) -> str:
+_SUBFACTION_BADGE_COLOR: dict[str, str] = {
+    "set": _BADGE_BLUE,
+    "missing": _BADGE_MUTED,
+    "error": _BADGE_ERROR,
+}
+
+
+def _keyword_badge(text: str, fg: str = _BADGE_BLUE) -> str:
     return (
-        f'<span style="background:#1a1a2e;border:1px solid #4a4a8a;border-radius:2px;'
-        f"padding:2px 8px;font-size:10px;color:#9090d0;letter-spacing:0.07em;"
+        f'<span style="background:#1a1a2e;border:1px solid {fg};border-radius:2px;'
+        f"padding:2px 8px;font-size:10px;color:{fg};letter-spacing:0.07em;"
         f'font-weight:700;margin-right:4px;">{text}</span>'
     )
 
@@ -156,20 +174,20 @@ def _render_extra_protocol(
 ) -> None:
     """Render the always-active 6th protocol with its own directive selection.
 
-    Dynasty bonus: if the faction's dynasty matches the protocol's subfaction_affinity,
-    both directives are active simultaneously (no player choice required).
+    Subfaction bonus: if the player's subfaction matches the protocol's
+    subfaction_affinity, both directives are active simultaneously (no choice).
     """
-    first = st.session_state.get("first_player")
-    dynasty: str | None = st.session_state.get("p1_dynasty" if faction == first else "p2_dynasty")
-    dynasty_bonus = bool(dynasty and dynasty == protocol.subfaction_affinity)
+    subfaction = subfaction_value_for(faction)
+    affinity_bonus = bool(subfaction and subfaction == protocol.subfaction_affinity)
+    _, subfaction_label = load_subfaction_meta(faction_dir)
 
     extra_key = f"protocol_extra_directive_{faction_dir}"
     extra_directive: str | None = st.session_state.get(extra_key)
     st.caption("*Always active (extra protocol):*")
 
     short_name = short_protocol_label(protocol.name_en)
-    if dynasty_bonus:
-        badge_text = f"{short_name.upper()} — DYNASTY BONUS (BOTH)"
+    if affinity_bonus:
+        badge_text = f"{short_name.upper()} — {subfaction_label.upper()} BONUS (BOTH)"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         st.caption(f"↳ Primary: {protocol.primary}")
         st.caption(f"↳ Secondary: {protocol.secondary}")
@@ -385,24 +403,23 @@ def _render_once_per_battle_ability_ui(
 
 def render_army_card(
     faction: str,
-    subfaction: str | None,
     faction_abilities: list[Ability],
     units: list[Unit],
     units_state: dict,  # type: ignore[type-arg]
-    dynasty: str | None = None,
 ) -> None:
     phase_key = _current_phase_key()
 
     with st.container(border=True):
-        army_name = f"{faction}" + (f" — {subfaction}" if subfaction else "")
-        st.markdown(f"**{army_name}**")
+        # Roster title (top) — the player slot key is the roster's display name.
+        st.markdown(f"**{faction}**")
 
-        # Faction keyword badges
-        badges_html = _faction_badge(faction)
-        if subfaction:
-            badges_html += _faction_badge(subfaction)
-        if dynasty:
-            badges_html += _faction_badge(dynasty.replace("_", " ").title())
+        # Faction keyword badge (faction display name) + always-visible subfaction
+        # badge: a chosen value, or a visible 'No <Label>' / 'No Subfaction' marker.
+        subfaction = subfaction_badge_for(faction)
+        badges_html = _keyword_badge(faction_display_name_for(faction))
+        badges_html += _keyword_badge(
+            subfaction.text, _SUBFACTION_BADGE_COLOR.get(subfaction.state, _BADGE_BLUE)
+        )
         st.markdown(badges_html, unsafe_allow_html=True)
 
         # Command Protocol UI (Necrons — no-op for other factions)

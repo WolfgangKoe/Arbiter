@@ -23,6 +23,9 @@ strict = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=src --cov-report=term-missing"
+markers = [
+    "acceptance: pins a Given/When/Then acceptance criterion (docs/spec/acceptance/index.md).",
+]
 
 [tool.coverage.run]
 omit = [
