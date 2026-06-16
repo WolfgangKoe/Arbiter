@@ -23,7 +23,17 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S49, 2026-06-15 — 819 Tests grün, 89 % Coverage)
+## Aktueller Stand (nach S50, 2026-06-16 — 834 Tests grün, 88 % Coverage, Gate-Floor jetzt 88 %)
+
+- **S50 abgeschlossen:** alle S49-Findings 1–9 + H1/H2/H4a + Logo erledigt oder verifiziert
+  (Details unten + Session-Historie in `ziel6.md`). Würfel-Layout 9.1/9.2 umgesetzt (Miss-Würfel-Icon
+  überall, Modifier-Würfel spaltentreu mit proportionalem Pfeil). Protokoll-Tausch über alle Slots.
+  Coverage-Gate von 80 % auf **88 %** angehoben (Ratchet); Extraktions-Fahrplan steht (s. Finding-9-Block).
+- **Nächster Schritt (Vorschlag):** (a) Nutzer-Feedback zum Würfel-Layout am laufenden Bild abwarten,
+  dann (b) Coverage-Extraktion starten — pure Logik aus `shootingPhase.py`/`fightPhase.py`/`_common.py`
+  in getestete Helfer ziehen, aus `omit` nehmen, Floor nachziehen.
+
+### Stand nach S49 (Referenz)
 
 - Ziel 1–5 vollständig; Ziel 6a–6n + Audit-Pläne 001–013 abgeschlossen (Details: ziel6.md).
 - Plan 013 (einheitlicher Gruppen-Flow) live; B1–B5 post-013-Bugs gefixt (Commit `46e03f8`).
