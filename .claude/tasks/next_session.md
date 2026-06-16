@@ -45,7 +45,15 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 - **S49 (2026-06-15):** Architektur-Gate + Artefakt-Konsolidierung + Logo
   (Commits `bd9cbe7` / `bbf0a61` / `fc1dd74`). Manuelle UI-Verifikation der G-/H-Fixes
   durchgeführt → **neue Findings 1–9** (Abschnitt „S49 — UI-Findings" unten).
-- **OFFEN:** Findings 1–9 abarbeiten (erst Plan je Punkt, Freigabe) + neues Logo integrieren.
+- **S50 (2026-06-16):** Freier Lauf durch die S49-Findings. Erledigt + committet:
+  Logo (`79e96ee`), Finding 5 Skorpekh-Header (`1544ecc`), H2 Silent-King-Caps (`a989b1c`),
+  H4a Dynastie-Badge (`59dda19`), Finding 7 Protokoll-Buff-Badge + Kurzlabel (`4f8089f`),
+  Finding 8 6.-Protokoll-Dropdown im Setup (`6eb26dd`). **Verifiziert ohne Code-Änderung:**
+  Finding 1 (Choppa-Extra ist bereits korrekt choppa-gebunden, PK cappt bei 4), Finding 2
+  (S = User×2+1 = 11 regelkonform, Multiplikation vor Addition, generisch), H1 (Loader
+  add/replace korrekt; **es gibt keine Wargear-Picker-UI** → nichts zu rendern).
+  **OFFEN:** nur noch **Finding 9 (Würfelanzeige)** — braucht Layout-Abstimmung (s.u.).
+- **OFFEN (alt):** Findings 1–9 abarbeiten (erst Plan je Punkt, Freigabe) + neues Logo integrieren. ✅ bis auf Finding 9.
 
 ### 🟢 Architektur-Gate (seit 2026-06-15)
 
@@ -95,6 +103,19 @@ Reihenfolge sonst offen; Regelfragen recherchiere ich lokal.
      Standardfall verschiebt. Wiederholungswürfel bisher nie gesehen.
    - 9.2 Standardfall: Würfel nicht spaltenkonform ausgerichtet; AP-Pfeile nicht entsprechend länger.
    - Vorgehen: `dice_html.py` + Spec (`ziel6.md §6n D5`) studieren → korrigiertes Layout-Mockup vorlegen.
+   - **S50-Analyse (Root Cause gefunden, noch NICHT umgesetzt — wartet auf Layout-Abstimmung):**
+     `threshold_header_html` rendert 6 feste `_DIE_SLOT`-Spalten **ohne** Boundary-Gap;
+     `dice_row_html` schiebt aber zwischen Miss- und Erfolgs-Würfel einen **vollen** die-slot
+     breiten `_boundary_gap_html` (34px) ein. Dadurch sind die gerahmten Erfolgswürfel (inkl.
+     Ergebnis-/Eff.-Würfel) um ~1 Spalte gegen den Header verschoben → „5 stand unter 1" (9.2).
+     Fix-Optionen: (a) den Boundary-Gap auch in `threshold_header_html` einsetzen, ODER (b) die
+     Trennlinie ohne eigene Spaltenbreite zwischen Würfel `t-1` und `t` zeichnen. **(b) bevorzugt**
+     (hält 6 Spalten = 6 Würfel), aber visuell zu bestätigen.
+     9.1 Miss-Icon: `dice_face_svg(1)` zeigt schon ein ×; gewünscht ist ein **Würfel-Icon als
+     generelles Miss-Symbol rechts neben der 6** in verschobenen/AP-Fällen (analog 1 links neben 2)
+     statt des Text-`×` (`save_modifier_die_pair_html` right_raw>6 und `dice_row_html` threshold>6).
+     **Offen an den Nutzer:** Soll Fix (b) gelten? Soll das Miss-Würfel-Icon das Text-× überall
+     ersetzen? Spec `§6n D5` ggf. veraltet — aktuelles Wunschlayout bestätigen, bevor ich `dice_html.py` ändere.
 
 ### S48-Detailstatus (aus S49-Verifikation)
 

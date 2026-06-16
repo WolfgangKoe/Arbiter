@@ -1624,3 +1624,18 @@ unit_state["group_models"]: dict[str, int]
   notiert (backlog §4b). (C) **Logo** Soft-Gold integriert (page_icon + Setup-Screen), reproduzierbar
   via `tools/process_logo.py`. +4 Tests (Arch-Gate), 819 grün. Manuelle UI-Verifikation → neue
   Findings 1–9 (s. `next_session.md`); neues GPT-Logo bereit, Integration ausstehend.
+- **S50 (2026-06-16)** Freier Lauf durch die S49-Findings (Commits `79e96ee` Logo / `1544ecc` F5 /
+  `a989b1c` H2 / `59dda19` H4a / `4f8089f` F7 / `6eb26dd` F8). Neues Crest-Logo freigestellt
+  (Flood-Fill + 1px-Erosion, kein Re-Grade) → `assets/`. **Finding 5** Nahkampf-Header zeigte
+  „0 assigned" (Pre-Widget-Read) → Placeholder mit echtem `attacks_assigned`. **H2** Scythe of Dust /
+  Staff of Stars (melee) als „N additional AND no more than N" → `max_attacks` 4/3 (vorher 10/9).
+  **H4a** generisches `dynasty_for()` → Dynastie-Badge auf der armyCard. **Finding 7** generisches
+  `active_protocol_buff_labels()` → grüne Protokoll-Buff-Badge auf jeder unitCard + im
+  Resolution-Block; `short_protocol_label()` entfernt „Protocol of the "-Präfix überall.
+  **Finding 8** explizites 6.-Protokoll-Dropdown im Setup (Default = Rest, Auswahl tauscht den
+  freigewordenen ins Rundenslot). **Verifiziert ohne Änderung:** F1 (Choppa-Extra schon
+  choppa-gebunden), F2 (S=User×2+1=11 regelkonform, generisch), H1 (Loader add/replace korrekt,
+  keine Wargear-Picker-UI). +Tests (loader/game_state). **Offen: Finding 9** (Würfel-Alignment) —
+  Root Cause notiert, wartet auf Layout-Abstimmung. Regel-Recherche: Veil ⇒ **nicht** „Retreated"
+  (kein Fall Back); 6.-Protokoll-Identität fix im Setup, Mid-Game-Wechsel nur per Silent King
+  „Voice of the Triarch" (1×/Spiel).
