@@ -1632,8 +1632,10 @@ unit_state["group_models"]: dict[str, int]
   **H4a** generisches `dynasty_for()` → Dynastie-Badge auf der armyCard. **Finding 7** generisches
   `active_protocol_buff_labels()` → grüne Protokoll-Buff-Badge auf jeder unitCard + im
   Resolution-Block; `short_protocol_label()` entfernt „Protocol of the "-Präfix überall.
-  **Finding 8** explizites 6.-Protokoll-Dropdown im Setup (Default = Rest, Auswahl tauscht den
-  freigewordenen ins Rundenslot). **Verifiziert ohne Änderung:** F1 (Choppa-Extra schon
+  **Finding 8** explizites 6.-Protokoll-Dropdown + **volle Tausch-Logik über alle Slots**
+  (Runde 1–5 + 6.): jeder Slot bietet alle Protokolle, Auswahl tauscht mit dem haltenden Slot
+  (Bijektion via `on_change`-Callback + reine, getestete `_protocol_slots_after_swap`; Folge-
+  änderung nach Nutzer-Feedback). **Verifiziert ohne Änderung:** F1 (Choppa-Extra schon
   choppa-gebunden), F2 (S=User×2+1=11 regelkonform, generisch), H1 (Loader add/replace korrekt,
   keine Wargear-Picker-UI). +Tests (loader/game_state). **Offen: Finding 9** (Würfel-Alignment) —
   Root Cause notiert, wartet auf Layout-Abstimmung. Regel-Recherche: Veil ⇒ **nicht** „Retreated"

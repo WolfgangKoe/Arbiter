@@ -89,15 +89,48 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             st.caption(f"**{ab.name_en}:** {ab.rule_text}")
 
 
-def _render_protocol_assignment(faction: str) -> None:
-    """Pre-assign round-choice abilities (Command Protocols, Ka'tahs) to rounds 1–5.
+def _protocol_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # type: ignore[type-arg]
+    """Return a new slot→protocol map after putting new_val in slot.
 
-    There are six protocols: five are assigned to battle rounds, the sixth is the
-    always-active 'extra' protocol (Necron Command Protocols rule). Its identity is
-    fixed at setup — the player picks it here via the top dropdown; the remaining
-    five fill the round slots. Changing the extra frees exactly one protocol, which
-    swaps into the round the new extra vacated. Mid-game the extra can only change
-    via a dedicated ability (e.g. the Silent King's Voice of the Triarch).
+    The map is a bijection (each protocol in exactly one slot). Assigning a
+    protocol that already sits in another slot swaps the two, so any protocol can
+    be moved into any slot (round or the always-active 6th) and the displaced one
+    takes the slot the chosen protocol came from.
+    """
+    result = dict(slots)
+    old_val = result.get(slot)
+    if new_val == old_val:
+        return result
+    for other, pid in list(result.items()):
+        if other != slot and pid == new_val:
+            result[other] = old_val
+            break
+    result[slot] = new_val
+    return result
+
+
+def _swap_protocol_slot(faction: str, slot) -> None:  # type: ignore[no-untyped-def]
+    """on_change callback: swap protocols between slots, keeping the map a bijection."""
+    slots_key = f"proto_slots_{faction}"
+    widget_key = f"proto_slot_{faction}_{slot}"
+    slots = _protocol_slots_after_swap(
+        st.session_state.get(slots_key, {}), slot, st.session_state[widget_key]
+    )
+    st.session_state[slots_key] = slots
+    # Keep every slot's selectbox in sync with the swapped map.
+    for s, pid in slots.items():
+        st.session_state[f"proto_slot_{faction}_{s}"] = pid
+
+
+def _render_protocol_assignment(faction: str) -> None:
+    """Pre-assign round-choice abilities (Command Protocols, Ka'tahs) to slots.
+
+    Six protocols fill six slots: rounds 1–5 plus the always-active 6th protocol
+    (Necron Command Protocols rule). Every slot is a dropdown over all protocols;
+    picking one already placed elsewhere swaps the two, so the player can freely
+    reorder protocols across rounds and the 6th slot. Identities are fixed at
+    setup — mid-game the 6th can only change via a dedicated ability (e.g. the
+    Silent King's Voice of the Triarch).
     """
     protocols = load_round_choice_abilities(faction_dir_for(faction))
     if not protocols:
@@ -107,42 +140,54 @@ def _render_protocol_assignment(faction: str) -> None:
     st.markdown(f"**{faction} — Protocol Order**")
 
     by_id = {p.id: p for p in protocols}
-    assignments: dict = st.session_state.get("protocol_assignments", {})
-    faction_assignments: dict = dict(assignments.get(faction, {}))
+    ids = [p.id for p in protocols]
 
-    # 6th (always-active) protocol — default to the one not assigned to any round.
-    assigned_ids = {faction_assignments.get(r) for r in range(1, 6)}
-    default_extra = next((p.id for p in protocols if p.id not in assigned_ids), protocols[-1].id)
-    extra_key = f"proto_extra_{faction}"
-    if extra_key not in st.session_state:
-        st.session_state[extra_key] = default_extra
-    extra_id = st.selectbox(
-        "Always active (6th protocol)",
-        options=[p.id for p in protocols],
-        format_func=lambda pid: by_id[pid].name_de,
-        key=extra_key,
-    )
+    # Seed the bijection once: keep any existing round assignments, leftover = 6th.
+    slots_key = f"proto_slots_{faction}"
+    if slots_key not in st.session_state:
+        faction_assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+        slots: dict = {}
+        used: set = set()
+        for r in range(1, 6):
+            pid = faction_assignments.get(r)
+            if pid in by_id and pid not in used:
+                slots[r] = pid
+                used.add(pid)
+        remaining = iter(pid for pid in ids if pid not in used)
+        for r in range(1, 6):
+            if r not in slots:
+                nxt = next(remaining, None)
+                if nxt is not None:
+                    slots[r] = nxt
+        extra = next(remaining, None)
+        if extra is not None:
+            slots["extra"] = extra
+        st.session_state[slots_key] = slots
 
-    round_option_ids = [p.id for p in protocols if p.id != extra_id]
-    for round_num in range(1, 6):
-        taken = {faction_assignments.get(r) for r in range(1, 6) if r != round_num}
-        available = [pid for pid in round_option_ids if pid not in taken]
-        if not available:
-            continue
-        rkey = f"proto_assign_{faction}_{round_num}"
-        # Repair the widget default when the stored choice is no longer valid
-        # (e.g. it just became the extra) — the freed protocol swaps in here.
-        if st.session_state.get(rkey) not in available:
-            st.session_state[rkey] = available[0]
-        chosen = st.selectbox(
-            f"Round {round_num}",
-            options=available,
+    slots = st.session_state[slots_key]
+
+    def _slot_selectbox(slot, label: str) -> None:  # type: ignore[no-untyped-def]
+        if slot not in slots:
+            return
+        widget_key = f"proto_slot_{faction}_{slot}"
+        if widget_key not in st.session_state:
+            st.session_state[widget_key] = slots[slot]
+        st.selectbox(
+            label,
+            options=ids,
             format_func=lambda pid: by_id[pid].name_de,
-            key=rkey,
+            key=widget_key,
+            on_change=_swap_protocol_slot,
+            args=(faction, slot),
         )
-        faction_assignments[round_num] = chosen
 
-    assignments[faction] = faction_assignments
+    _slot_selectbox("extra", "Always active (6th protocol)")
+    for round_num in range(1, 6):
+        _slot_selectbox(round_num, f"Round {round_num}")
+
+    # Persist round assignments for the rest of the app; the 6th is the leftover.
+    assignments = dict(st.session_state.get("protocol_assignments", {}))
+    assignments[faction] = {r: slots[r] for r in range(1, 6) if r in slots}
     st.session_state.protocol_assignments = assignments
 
 
