@@ -114,8 +114,13 @@ Reihenfolge sonst offen; Regelfragen recherchiere ich lokal.
      9.1 Miss-Icon: `dice_face_svg(1)` zeigt schon ein ×; gewünscht ist ein **Würfel-Icon als
      generelles Miss-Symbol rechts neben der 6** in verschobenen/AP-Fällen (analog 1 links neben 2)
      statt des Text-`×` (`save_modifier_die_pair_html` right_raw>6 und `dice_row_html` threshold>6).
-     **Offen an den Nutzer:** Soll Fix (b) gelten? Soll das Miss-Würfel-Icon das Text-× überall
-     ersetzen? Spec `§6n D5` ggf. veraltet — aktuelles Wunschlayout bestätigen, bevor ich `dice_html.py` ändere.
+     **Nutzer-Entscheidung (S50):** 9.1 → **Würfel-Miss-Icon überall** (Text-× ersetzt) ✅ umgesetzt
+     (`81d210c`, `miss_die_html()` + Tests). 9.2 → **Gap auch im Header** gewählt; der Header-Gap ist
+     in `threshold_header_html` (Z. 53-54) **bereits vorhanden** → Header/Würfel sind innerhalb einer
+     Zeile deckungsgleich, KEINE Code-Änderung nötig. **Offen/zu prüfen am laufenden Bild:** ob die
+     Modifier-Paare (AP/Cover) als nicht-spaltentreu empfunden werden (sie zeigen ein from→to-Paar,
+     nicht auf die 1–6-Skala gelegt) und ob die Quer-Zeilen-Ausrichtung (Base vs. Eff.) reicht. Falls
+     ja, später Fix (b) erwägen (Linie ohne eigene Spalte). Spec `§6n D5` ggf. nachziehen.
 
 ### S48-Detailstatus (aus S49-Verifikation)
 
