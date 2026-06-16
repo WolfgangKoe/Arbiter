@@ -157,76 +157,112 @@ def block_divider_html() -> str:
     return '<hr style="border:none;border-top:1px solid #2e2618;margin:10px 0;">'
 
 
-def modifier_die_pair_html(
-    from_thresh: int, to_thresh: int, label: str, value: int, color: str
-) -> str:
-    """Modifier row: badge column + from-die (neutral) + arrow + to-die (colored).
+def _modifier_columns(
+    left_val: int, right_val: int, right_off_scale: bool = False
+) -> tuple[int, int]:
+    """Clamp a modifier's two die values to grid columns 1..6 (pure, testable).
 
-    Convention: lower die value always on left, higher on right (aligns with dice row).
-    Arrow: → for improvements (value > 0), ← for penalties (value < 0).
-    For improvements the threshold decreases, so to_thresh < from_thresh — swap so
-    the lower value (to_thresh) appears on the left and higher (from_thresh) on the right.
+    right_off_scale (a save worsened past 6) anchors the right marker at column 6;
+    the renderer appends a miss die after the 6 for that case.
     """
+    left_col = max(1, min(6, left_val))
+    right_col = 6 if right_off_scale else max(1, min(6, right_val))
+    return left_col, right_col
+
+
+def _modifier_slot_html(inner: str) -> str:
+    return (
+        f'<span style="display:inline-block;width:{_DIE_SLOT}px;text-align:center;'
+        f'vertical-align:middle;">{inner}</span>'
+    )
+
+
+def _aligned_modifier_row_html(
+    label: str,
+    value: int,
+    left_val: int,
+    left_color: str,
+    right_val: int,
+    right_color: str,
+    base_threshold: int,
+    right_off_scale: bool = False,
+) -> str:
+    """Modifier row aligned to the 1..6 scale (D5, Finding 9.2).
+
+    The two dice sit under their own value columns; the slots between them carry a
+    connector arrow, so the visual length is proportional to the shift (AP-3 spans
+    three columns, Cover +1 one). The boundary gap is placed at base_threshold so
+    the columns line up with the header / dice rows above. Off-scale (>6) appends a
+    miss die right of the 6.
+    """
+    left_col, right_col = _modifier_columns(left_val, right_val, right_off_scale)
+    lo, hi = sorted((left_col, right_col))
+    rightward = value < 0  # penalty worsens the threshold → arrow points to higher values
+    slots: list[str] = []
+    for v in range(1, 7):
+        if 2 <= base_threshold <= 6 and v == base_threshold:
+            slots.append(_boundary_gap_html(with_line=False))
+        if v == left_col:
+            inner = dice_face_svg(left_val, color=left_color)
+        elif v == right_col and not right_off_scale:
+            inner = dice_face_svg(right_val, color=right_color)
+        elif lo < v < hi:
+            head = (rightward and v == hi - 1) or (not rightward and v == lo + 1)
+            ch = ("→" if rightward else "←") if head else "─"
+            inner = f'<span style="color:{right_color};font-weight:bold;">{ch}</span>'
+        else:
+            inner = ""
+        slots.append(_modifier_slot_html(inner))
+    if right_off_scale:
+        slots.append(miss_die_html())
     sign = "+" if value > 0 else ("-" if value < 0 else "")
-    arrow = "→" if value > 0 else "←"
+    badge = _badge_chip(f"{label} {sign}{abs(value)}", right_color)
+    content = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
+    return grid_row_html(badge, content)
+
+
+def modifier_die_pair_html(
+    from_thresh: int, to_thresh: int, label: str, value: int, color: str, base_threshold: int = 0
+) -> str:
+    """HIT/WOUND modifier row, aligned to the scale.
+
+    Improvement (value > 0): grey new threshold (lower) ← colored old threshold.
+    Penalty (value < 0): grey from−1 (already missed) → colored from (newly fails).
+    base_threshold positions the boundary gap (defaults to from_thresh).
+    """
+    base = base_threshold or from_thresh
     from_clamped = max(1, min(6, from_thresh))
     to_clamped = max(1, min(6, to_thresh))
-    # Improvements: grey = new threshold, colored = old threshold (newly passes).
-    # Penalties: grey = from_thresh−1 (never hit anyway), colored = from_thresh (newly fails).
     boundary = max(1, min(6, from_thresh - 1))
     if value > 0:
-        left_die = dice_face_svg(to_clamped, color="#6b7280")
-        right_die = dice_face_svg(from_clamped, color=color)
+        left_val, left_color, right_val, right_color = to_clamped, "#6b7280", from_clamped, color
     else:
-        left_die = dice_face_svg(boundary, color="#6b7280")
-        right_die = dice_face_svg(from_clamped, color=color)
-    pair = (
-        f'<div style="display:flex;align-items:center;gap:4px;">'
-        f"{left_die}"
-        f'<span style="color:{color};font-size:12px;font-weight:bold;">'
-        f"{arrow}{sign}{abs(value)}{arrow}</span>"
-        f"{right_die}</div>"
+        left_val, left_color, right_val, right_color = boundary, "#6b7280", from_clamped, color
+    return _aligned_modifier_row_html(
+        label, value, left_val, left_color, right_val, right_color, base
     )
-    return grid_row_html(_badge_chip(label, color), pair)
 
 
 def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str) -> str:
-    """SAVE modifier pair always anchored to the base armour value (never cumulative).
+    """SAVE modifier row, anchored to the base armour value (never cumulative).
 
-    Buff  (value > 0, e.g. Cover+1, armour=3): grün(armour-value) → grau(armour)
-      "A 2 that used to fail at 3+ now passes."
-    Debuff (value < 0, e.g. AP-2,   armour=3): grau(armour-1) → rot(armour+|value|-1)
-      "A 4 that used to pass at 3+ now fails (4-2=2 < 3)."
-    P16 edge: if the newly-failing value exceeds 6 (e.g. Sv 6+ with AP-4), no die
-    can show it — a red × marks the impossible range instead of a clamped die.
+    Buff  (value > 0, e.g. Cover +1, armour 3): colored(armour−value) ← grey(armour).
+    Debuff (value < 0, e.g. AP-2,    armour 3): grey(armour−1) → colored(armour+|value|−1).
+    If the newly-failing value exceeds 6 (e.g. Sv 6+ with AP-4) a miss die marks it.
     """
-    sign = "+" if value > 0 else ("-" if value < 0 else "")
     n = abs(value)
     if value > 0:
-        left_val = max(1, min(6, armour - n))
-        right_val = max(1, min(6, armour))
-        arrow = "→"
-        left_die = dice_face_svg(left_val, color=color)
-        right_die = dice_face_svg(right_val, color="#6b7280")
+        left_val, left_color = max(1, min(6, armour - n)), color
+        right_val, right_color = max(1, min(6, armour)), "#6b7280"
+        off_scale = False
     else:
-        left_val = max(1, min(6, armour - 1))
+        left_val, left_color = max(1, min(6, armour - 1)), "#6b7280"
         right_raw = armour + n - 1
-        right_val = max(1, min(6, right_raw))
-        arrow = "←"
-        left_die = dice_face_svg(left_val, color="#6b7280")
-        if right_raw > 6:
-            # Newly-failing value exceeds 6 → miss die marker right of the scale.
-            right_die = miss_die_html()
-        else:
-            right_die = dice_face_svg(right_val, color=color)
-    pair = (
-        f'<div style="display:flex;align-items:center;gap:4px;">'
-        f"{left_die}"
-        f'<span style="color:{color};font-size:12px;font-weight:bold;">'
-        f"{arrow}{sign}{n}{arrow}</span>"
-        f"{right_die}</div>"
+        right_val, right_color = max(1, min(6, right_raw)), color
+        off_scale = right_raw > 6
+    return _aligned_modifier_row_html(
+        label, value, left_val, left_color, right_val, right_color, min(armour, 6), off_scale
     )
-    return grid_row_html(_badge_chip(label, color), pair)
 
 
 def special_die_html(label: str, content: str = "") -> str:
@@ -261,7 +297,9 @@ def _render_dice_roll_block(
             next_thresh = max(2, current - entry["value"])
             color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
             parts.append(
-                modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
+                modifier_die_pair_html(
+                    current, next_thresh, entry["label"], entry["value"], color, base_threshold=base
+                )
             )
             current = next_thresh
         parts.append(
@@ -327,7 +365,9 @@ def _render_dice_wound_block(
             next_thresh = max(2, current - entry["value"])
             color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
             parts.append(
-                modifier_die_pair_html(current, next_thresh, entry["label"], entry["value"], color)
+                modifier_die_pair_html(
+                    current, next_thresh, entry["label"], entry["value"], color, base_threshold=base
+                )
             )
             current = next_thresh
         parts.append(
