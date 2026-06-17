@@ -112,6 +112,25 @@ Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, 
 - Nachricht: kurz, imperativ, Englisch (`Add shooting phase UI`, `Fix slider crash`)
 - Kein Commit mitten in einer halbfertigen Änderung
 
+### Token-Disziplin & Arbeitsweise (PFLICHT)
+
+Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Token-Nullsumme.
+
+- **Vorab-Schätzung:** Jeder Plan nennt eine grobe Token-Schätzung pro Aufgabe.
+- **Kontext-Korridor < 150k.** Bei **~90 % (~135k)** die Session **geordnet beenden**
+  (`next_session.md` + Commit) und **frisch starten** — nicht in die teure >150k-Zone laufen.
+  Messen: letzter Haupt-Chain-Eintrag im Session-Transcript
+  (`~/.claude/projects/<projekt>/<id>.jsonl`) → `input + cache_read + cache_creation`.
+- **Tasks klein schneiden**, sodass *eine* Aufgabe sicher unter dem Korridor bleibt.
+- **Subagent-Muster für Fleißarbeit:** mechanische, eindeutige Arbeit (viel Lesen,
+  Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —
+  läuft im **isolierten Kontext**, hält das Opus-Hauptfenster schlank. Opus reviewt +
+  finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession.
+- **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
+  `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
+  Report muss beide Quellen zusammenführen (`tools/token_report.py`, geplant).
+- **Freigabe-Pflicht bleibt:** Subagenten/Skills/Memory nie ohne explizite Freigabe.
+
 ---
 
 ## Clean Code
@@ -133,6 +152,17 @@ pytest --tb=short
 ```
 
 Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **80 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+
+### Regel-Abdeckung — Akzeptanz-Katalog (fachliches Sicherheitsnetz)
+
+`docs/spec/acceptance/rules.md` ist der **Nenner**: die Gesamtheit der 9E-Regeln, gegen die
+Implementierungs- und Test-Abdeckung als Prozent gemessen wird. Drei Klassen:
+**A** (App rechnet/erzwingt), **B** (nur am Tisch prüfbar → App zeigt Hinweis),
+**C** (Hybrid: App-Anteil + Tisch-Anteil). Konvention je Regel: `status`
+(implementiert|offen), `getestet: ja — <testname>` | `nein`, `code: datei:funktion`
+(keine Zeilennummern). Wächst **pro Bereich**, Granularität = **Mechanik-Schritt**.
+Ziel-Gate (hart, sobald Ledger=0): jede `status: implementiert`-Regel hat einen Test —
+`getestet: nein` bei `implementiert` ist eine **Schuld** (Ratchet → nur schrumpfen).
 
 ### Architektur-Gate — zweite messbare Schranke
 

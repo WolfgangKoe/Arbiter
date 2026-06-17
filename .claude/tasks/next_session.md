@@ -20,7 +20,13 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S52, 2026-06-17)
+## Aktueller Stand (nach S53, 2026-06-17)
+
+**S53 — Regel-Abdeckung (Akzeptanz-Katalog) + Arbeitsweise verankert.** Neuer Nenner
+`docs/spec/acceptance/rules.md`: Combat-Katalog als verbindliche Vorlage (34 Regeln, Klasse
+A/B/C, stabile `datei:funktion`-Refs + Testnamen). Arbeitsweise in `CLAUDE.md` festgehalten:
+Token-Korridor <150k / 90%-Wind-down, Subagent-für-Fleißarbeit (Sonnet) + Opus-Review,
+getrennte Messung. Noch kein Gate verdrahtet (pytest unverändert).
 
 **S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Reine, verifizierte
 Umbenennung auf den etablierten Begriff `round_choice` (kein Verhaltenswechsel): Klasse
@@ -33,17 +39,19 @@ Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`r
 **S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Badge generisch; `dynasty`-Vokabular raus;
 datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`backlog.md`.
 
-### ▶ Nächster Schritt — Bug: Direktivenwahl im Setup (Backlog §0 #2b, S52 Root-Cause)
+### ▶ Nächster Schritt — Regel-Abdeckung (Akzeptanz-Katalog) ausrollen
 
-**Befund (manuell S52):** Im Setup sind die Protokoll-Direktiven bereits wählbar (regelwidrig);
-das gepinnte aktive Protokoll blockiert zudem die nachträgliche Rundenzuweisung.
-**Regel** (`faction_overview.txt` Z. 546/568): Setup = **nur** Zuweisung der Protokolle zu Runden;
-Direktive erst „at the start of each battle round" (Kommandophase).
-**Root Cause:** `armyCard._render_round_choice_ui` läuft auch im Setup (Seitenleiste in allen Phasen)
-→ Auto-Block (`if not active_id`) aktiviert das Runde-1-Protokoll + zeigt Direktiven-Buttons.
-**Fix (1 Stelle):** in `_render_round_choice_ui` früh `return`, wenn `phase_key == "setup"`
-(Setup-Einstieg ist nur `_render_round_choice_assignment`); zusätzlich Direktiven an
-`phase_key == "command"` koppeln. Render-Code → **manuelle Verifikation**. Plan + Freigabe vorlegen.
+Phase 0 Schritt 1 fertig: Combat-Katalog (`docs/spec/acceptance/rules.md`) als **verbindliche
+Vorlage** (34 Regeln; Klasse A/B/C; stabile `datei:funktion`-Refs + Testnamen). Fixe
+Entscheidungen: Granularität = **Mechanik-Schritt**; Klasse **C** (Hybrid) eingeführt; Referenzen
+stabil+verifizierbar. Combat-Ledger = **2** (R-09 mehrfach-Invuln, R-17 Rapid Fire: implementiert
+ohne Test). Klasse B = 0 % (App zeigt keine Tisch-Hinweise).
+
+Optionen (je eigene Freigabe): (1) **Rollout** weiterer Bereiche per Sonnet-Subagent mit der
+Vorlage (~30–80k/Bereich); (2) **Phase 1 Gate read-only** — `rules.md` ins Schulden-Scoreboard
+(Abdeckung % je Klasse, Ledger-Größe) + Konsistenz-Check (jeder `getestet: ja`-Testname existiert),
+hart-rot erst auf Ansage; (3) **Phase 3** `tools/token_report.py` + `docs/metrics/overview.md`.
+**Empfehlung: erst (2) read-only, dann (1).** Bug #2b u. a. offene Findings bleiben in `backlog.md`.
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
@@ -68,6 +76,8 @@ Direktive erst „at the start of each battle round" (Kommandophase).
 - Architektur (INV-1..4b): `pytest tests/architecture/ --no-cov -q` · Ledger: `architecture_invariants.md`.
 - Doku + Akzeptanz (INV-5): `pytest tests/docs/ tests/acceptance/ --no-cov -q`.
 - Neues Akzeptanzkriterium: AC in `docs/spec/acceptance/index.md` + `@acceptance("AC-…")`-Test (README dort).
+- **Regel-Katalog** (Nenner): `docs/spec/acceptance/rules.md` — Klasse A/B/C, `getestet: ja — <testname>`.
+- **Token-Korridor:** <150k, bei ~135k Session beenden. Fleißarbeit an Sonnet-Subagent (CLAUDE.md).
 
 ---
 
