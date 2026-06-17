@@ -19,7 +19,7 @@ from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
     faction_display_name_for,
-    short_protocol_label,
+    short_round_choice_label,
     subfaction_badge_for,
     subfaction_value_for,
     unit_id_from_state_key,
@@ -135,68 +135,70 @@ def _render_triggered_abilities(
             st.rerun()
 
 
-def _render_directive_buttons(protocol, faction: str, faction_dir: str, round_num: int) -> None:
-    """Show Primary / Secondary directive selection buttons for the active protocol."""
-    st.caption(f"↳ **Primary:** {protocol.primary}")
-    st.caption(f"↳ **Secondary:** {protocol.secondary}")
+def _render_directive_buttons(round_choice, faction: str, faction_dir: str, round_num: int) -> None:
+    """Show Primary / Secondary directive selection buttons for the active ability."""
+    st.caption(f"↳ **Primary:** {round_choice.primary}")
+    st.caption(f"↳ **Secondary:** {round_choice.secondary}")
     col_p, col_s = st.columns(2)
     if col_p.button(
         "Use Primary",
         key=f"cmd_directive_primary_{faction}_{round_num}",
         use_container_width=True,
     ):
-        st.session_state[f"protocol_directive_{faction_dir}"] = "primary"
+        st.session_state[f"round_choice_directive_{faction_dir}"] = "primary"
         st.rerun()
     if col_s.button(
         "Use Secondary",
         key=f"cmd_directive_secondary_{faction}_{round_num}",
         use_container_width=True,
     ):
-        st.session_state[f"protocol_directive_{faction_dir}"] = "secondary"
+        st.session_state[f"round_choice_directive_{faction_dir}"] = "secondary"
         st.rerun()
 
 
-def _get_extra_protocol_id(protocols: list, faction: str) -> str | None:
-    """Return the ID of the 6th (always-active) protocol — the one not assigned to any round.
+def _get_extra_round_choice_id(round_choices: list, faction: str) -> str | None:
+    """Return the ID of the 6th (always-active) ability — the one not assigned to any round.
 
     Returns None when not all 5 round slots are filled (extra can't be determined yet).
     """
-    assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+    assignments = st.session_state.get("round_choice_assignments", {}).get(faction, {})
     assigned_ids = set(assignments.values())
     if len(assigned_ids) < 5:
         return None
-    extras = [p.id for p in protocols if p.id not in assigned_ids]
+    extras = [p.id for p in round_choices if p.id not in assigned_ids]
     return extras[0] if len(extras) == 1 else None
 
 
-def _render_extra_protocol(
-    protocol, faction: str, faction_dir: str, is_active: bool, current_round: int
+def _render_extra_round_choice(
+    round_choice, faction: str, faction_dir: str, is_active: bool, current_round: int
 ) -> None:
-    """Render the always-active 6th protocol with its own directive selection.
+    """Render the always-active 6th ability with its own directive selection.
 
-    Subfaction bonus: if the player's subfaction matches the protocol's
+    Subfaction bonus: if the player's subfaction matches the ability's
     subfaction_affinity, both directives are active simultaneously (no choice).
     """
     subfaction = subfaction_value_for(faction)
-    affinity_bonus = bool(subfaction and subfaction == protocol.subfaction_affinity)
+    affinity_bonus = bool(subfaction and subfaction == round_choice.subfaction_affinity)
     _, subfaction_label = load_subfaction_meta(faction_dir)
 
-    extra_key = f"protocol_extra_directive_{faction_dir}"
+    extra_key = f"round_choice_extra_directive_{faction_dir}"
     extra_directive: str | None = st.session_state.get(extra_key)
-    st.caption("*Always active (extra protocol):*")
+    st.caption("*Always active (extra):*")
 
-    short_name = short_protocol_label(protocol.name_en)
+    short_name = short_round_choice_label(round_choice.name_en)
     if affinity_bonus:
         badge_text = f"{short_name.upper()} — {subfaction_label.upper()} BONUS (BOTH)"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-        st.caption(f"↳ Primary: {protocol.primary}")
-        st.caption(f"↳ Secondary: {protocol.secondary}")
+        st.caption(f"↳ Primary: {round_choice.primary}")
+        st.caption(f"↳ Secondary: {round_choice.secondary}")
         return
 
     if extra_directive:
         badge_text = f"{short_name.upper()} — {extra_directive.upper()}"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-        chosen_text = protocol.primary if extra_directive == "primary" else protocol.secondary
+        chosen_text = (
+            round_choice.primary if extra_directive == "primary" else round_choice.secondary
+        )
         st.caption(f"↳ {chosen_text}")
         if is_active and st.button(
             "Change extra directive",
@@ -206,9 +208,9 @@ def _render_extra_protocol(
             st.session_state[extra_key] = None
             st.rerun()
     else:
-        st.caption(f"**{protocol.name_en}**")
-        st.caption(f"↳ Primary: {protocol.primary}")
-        st.caption(f"↳ Secondary: {protocol.secondary}")
+        st.caption(f"**{round_choice.name_en}**")
+        st.caption(f"↳ Primary: {round_choice.primary}")
+        st.caption(f"↳ Secondary: {round_choice.secondary}")
         if is_active:
             col_p, col_s = st.columns(2)
             if col_p.button(
@@ -216,7 +218,7 @@ def _render_extra_protocol(
             ):
                 st.session_state[extra_key] = "primary"
                 log_action(
-                    current_round, "command", faction, f"Extra: {protocol.name_en} — primary"
+                    current_round, "command", faction, f"Extra: {round_choice.name_en} — primary"
                 )
                 st.rerun()
             if col_s.button(
@@ -226,15 +228,15 @@ def _render_extra_protocol(
             ):
                 st.session_state[extra_key] = "secondary"
                 log_action(
-                    current_round, "command", faction, f"Extra: {protocol.name_en} — secondary"
+                    current_round, "command", faction, f"Extra: {round_choice.name_en} — secondary"
                 )
                 st.rerun()
 
 
-def _render_protocol_ui(faction: str) -> None:
-    """Command Protocol UI — only for factions with command_protocols.yaml.
+def _render_round_choice_ui(faction: str) -> None:
+    """Round-choice ability UI — only for factions with round_choice entries in YAML.
 
-    Only the active player may select/change protocols. The inactive player
+    Only the active player may select/change the ability. The inactive player
     sees read-only status only.
     """
     try:
@@ -242,15 +244,15 @@ def _render_protocol_ui(faction: str) -> None:
     except KeyError:
         return
 
-    protocols = load_round_choice_abilities(faction_dir)
-    if not protocols:
+    round_choices = load_round_choice_abilities(faction_dir)
+    if not round_choices:
         return
 
     phase_key = _current_phase_key()
     is_active = faction == st.session_state.get("active")
-    active_key = f"protocol_active_{faction_dir}"
-    directive_key = f"protocol_directive_{faction_dir}"
-    used_key = f"protocol_used_ids_{faction_dir}"
+    active_key = f"round_choice_active_{faction_dir}"
+    directive_key = f"round_choice_directive_{faction_dir}"
+    used_key = f"round_choice_used_ids_{faction_dir}"
     active_id = st.session_state.get(active_key)
     used_ids: list = st.session_state.get(used_key, [])
     current_round = st.session_state.get("round", 1)
@@ -261,16 +263,16 @@ def _render_protocol_ui(faction: str) -> None:
 
     active_directive: str | None = st.session_state.get(directive_key)
 
-    # Auto-activate the assigned protocol for this round
+    # Auto-activate the assigned ability for this round
     if not active_id:
-        faction_assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+        faction_assignments = st.session_state.get("round_choice_assignments", {}).get(faction, {})
         assigned_id = faction_assignments.get(current_round)
         if assigned_id:
             active_id = assigned_id
             st.session_state[active_key] = assigned_id
 
     if active_id:
-        p = next((p for p in protocols if p.id == active_id), None)
+        p = next((p for p in round_choices if p.id == active_id), None)
         if p:
             if not active_directive:
                 st.caption(f"**{p.name_en}** — active this round")
@@ -280,28 +282,28 @@ def _render_protocol_ui(faction: str) -> None:
                     st.caption("↳ *Awaiting directive selection*")
             else:
                 badge_text = (
-                    f"{short_protocol_label(p.name_en).upper()} — {active_directive.upper()}"
+                    f"{short_round_choice_label(p.name_en).upper()} — {active_directive.upper()}"
                 )
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
                 st.caption(f"↳ {chosen_text}")
     elif phase_key != "command" or not is_active:
-        st.caption("— no protocol selected —")
+        st.caption("— none selected —")
     else:
         # Fallback free selection — active player, command phase, no assignment set
-        available = [p for p in protocols if p.id not in used_ids]
+        available = [p for p in round_choices if p.id not in used_ids]
         if not available:
-            st.caption("All protocols have been used.")
+            st.caption(f"All {label} have been used.")
         else:
             choice = st.radio(
-                "Choose protocol:",
+                label,
                 options=range(len(available)),
                 format_func=lambda i: available[i].name_en,
-                key=f"cmd_protocol_choice_{faction}",
+                key=f"cmd_round_choice_choice_{faction}",
             )
             if st.button(
-                "Activate Protocol",
-                key=f"cmd_protocol_activate_{faction}",
+                "Activate",
+                key=f"cmd_round_choice_activate_{faction}",
                 type="primary",
                 use_container_width=True,
             ):
@@ -309,15 +311,15 @@ def _render_protocol_ui(faction: str) -> None:
                 st.session_state[active_key] = chosen.id
                 st.session_state[used_key] = used_ids + [chosen.id]
                 st.session_state[directive_key] = None
-                log_action(current_round, "command", faction, f"Protocol: {chosen.name_en}")
+                log_action(current_round, "command", faction, f"{label}: {chosen.name_en}")
                 st.rerun()
 
-    # Render the 6th (always-active) protocol when all 5 rounds are assigned
-    extra_id = _get_extra_protocol_id(protocols, faction)
+    # Render the 6th (always-active) ability when all 5 rounds are assigned
+    extra_id = _get_extra_round_choice_id(round_choices, faction)
     if extra_id:
-        extra_p = next((p for p in protocols if p.id == extra_id), None)
+        extra_p = next((p for p in round_choices if p.id == extra_id), None)
         if extra_p:
-            _render_extra_protocol(extra_p, faction, faction_dir, is_active, current_round)
+            _render_extra_round_choice(extra_p, faction, faction_dir, is_active, current_round)
 
 
 def _render_once_per_battle_ability_ui(
@@ -343,7 +345,7 @@ def _render_once_per_battle_ability_ui(
     except KeyError:
         return
 
-    # Factions with round-choice protocols are handled by _render_protocol_ui
+    # Factions with round-choice abilities are handled by _render_round_choice_ui
     if load_round_choice_abilities(faction_dir):
         return
 
@@ -422,8 +424,8 @@ def render_army_card(
         )
         st.markdown(badges_html, unsafe_allow_html=True)
 
-        # Command Protocol UI (Necrons — no-op for other factions)
-        _render_protocol_ui(faction)
+        # Round-choice ability UI (e.g. Necron Command Protocols — no-op otherwise)
+        _render_round_choice_ui(faction)
 
         # Once-per-battle command-phase faction abilities — no-op if faction has none
         _render_once_per_battle_ability_ui(faction, faction_abilities, units)

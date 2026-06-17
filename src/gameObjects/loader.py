@@ -9,8 +9,8 @@ from typing import Any
 import yaml
 
 from gameObjects.ability import Ability, Condition, Effect, Trigger
-from gameObjects.command_protocol import CommandProtocol
 from gameObjects.detachment import DetachmentType, SlotConstraint
+from gameObjects.round_choice_ability import RoundChoiceAbility
 from gameObjects.stratagem import Stratagem, StratagemModifier
 from gameObjects.unit import (
     DamageBracket,
@@ -467,11 +467,11 @@ def load_faction_abilities(faction_dir: str) -> list[Ability]:
     return result
 
 
-def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
+def load_round_choice_abilities(faction_dir: str) -> list[RoundChoiceAbility]:
     """Load round-choice abilities (Protocols, Ka'tahs, Canticles) from faction_abilities.yaml.
 
-    Replaces the old command_protocols.yaml lookup. Any faction with ability_type: round_choice
-    entries in its faction_abilities.yaml is automatically supported — no code change needed.
+    Any faction with ability_type: round_choice entries in its faction_abilities.yaml is
+    automatically supported — no code change needed.
     """
     if faction_dir in _ROUND_CHOICE_CACHE:
         return _ROUND_CHOICE_CACHE[faction_dir]
@@ -486,7 +486,7 @@ def load_round_choice_abilities(faction_dir: str) -> list[CommandProtocol]:
             continue
         dirs = a.get("directives", {})
         result.append(
-            CommandProtocol(
+            RoundChoiceAbility(
                 id=a["id"],
                 name_en=a["name_en"],
                 name_de=a.get("name_de", a["name_en"]),
@@ -948,7 +948,7 @@ def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
         "display_name": data.get("display_name", ""),
         "faction_dir": faction_dir,
         "subfaction": str(subfaction) if subfaction else None,
-        "protocol_order": data.get("protocol_order"),
+        "round_choice_order": data.get("round_choice_order"),
     }
 
 

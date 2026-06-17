@@ -22,7 +22,7 @@ Design principles (see docs/spec/ui_layout.md §4):
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES, active_protocol_buff_labels, units_key_for
+from gameMechanic.game_state import PHASES, active_round_choice_buff_labels, units_key_for
 from gameMechanic.unit_mutations import set_deployment
 from gameObjects.unit import Unit
 from uiLayout._common import (
@@ -337,7 +337,7 @@ def render_unit_card(
             ability_lbl = ability_badge_label(faction, unit)
             if ability_lbl:
                 badges += _badge(ability_lbl, variant="buff")
-            for proto_lbl in active_protocol_buff_labels(faction):
+            for proto_lbl in active_round_choice_buff_labels(faction):
                 badges += _badge(proto_lbl, variant="buff")
             kws = _keywords_html(unit)
             if badges and kws:

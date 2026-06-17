@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class CommandProtocol:
+class RoundChoiceAbility:
     id: str
     name_en: str
     name_de: str

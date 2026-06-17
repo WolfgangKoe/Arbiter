@@ -23,7 +23,7 @@ from gameMechanic.attack_math import (  # noqa: F401
 )
 from gameMechanic.game_state import (
     PHASES,
-    active_protocol_buff_labels,
+    active_round_choice_buff_labels,
     units_key_for,
     units_list_for,
 )
@@ -361,16 +361,19 @@ def _next_declaration_seq() -> int:
     return seq
 
 
-def _protocol_source_label(faction_dir: str) -> str:
-    from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
+def _round_choice_source_label(faction_dir: str) -> str:
+    from gameObjects.loader import (  # noqa: PLC0415
+        load_round_choice_abilities,
+        load_round_choice_label,
+    )
 
-    protocol_id = st.session_state.get(f"protocol_active_{faction_dir}")
-    directive = st.session_state.get(f"protocol_directive_{faction_dir}")
-    if not protocol_id or not directive or not faction_dir:
-        return "Protocol"
-    protocols = load_round_choice_abilities(faction_dir)
-    p = next((proto for proto in protocols if proto.id == protocol_id), None)
-    return f"{p.name_en} ({directive.capitalize()})" if p else "Protocol"
+    active_id = st.session_state.get(f"round_choice_active_{faction_dir}")
+    directive = st.session_state.get(f"round_choice_directive_{faction_dir}")
+    if not active_id or not directive or not faction_dir:
+        return load_round_choice_label(faction_dir)
+    round_choices = load_round_choice_abilities(faction_dir)
+    p = next((rc for rc in round_choices if rc.id == active_id), None)
+    return f"{p.name_en} ({directive.capitalize()})" if p else load_round_choice_label(faction_dir)
 
 
 def _collect_atk_modifiers(
@@ -379,18 +382,23 @@ def _collect_atk_modifiers(
     phase_key: str,
     use_melee: bool,
 ) -> list[dict]:  # type: ignore[type-arg]
-    """Collect hit/wound modifiers for the attacker from protocols, buffs, and active_modifiers."""
-    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    """Collect hit/wound modifiers for the attacker from round-choice abilities, buffs, and active_modifiers."""
+    from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
     try:
         fdir = faction_dir_for(atk_faction)
-        proto = get_active_protocol_modifier(fdir, phase_key, use_melee)
-        label = _protocol_source_label(fdir)
+        proto = get_active_round_choice_modifier(fdir, phase_key, use_melee)
+        label = _round_choice_source_label(fdir)
         if proto.get("hit"):
             mods.append(
-                {"label": label, "value": proto["hit"], "roll_type": "hit", "source": "protocol"}
+                {
+                    "label": label,
+                    "value": proto["hit"],
+                    "roll_type": "hit",
+                    "source": "round_choice",
+                }
             )
         if proto.get("wound"):
             mods.append(
@@ -398,7 +406,7 @@ def _collect_atk_modifiers(
                     "label": label,
                     "value": proto["wound"],
                     "roll_type": "wound",
-                    "source": "protocol",
+                    "source": "round_choice",
                 }
             )
     except KeyError:
@@ -434,16 +442,16 @@ def _collect_def_save_modifiers(
     phase_key: str,
     use_melee: bool,
 ) -> list[dict]:  # type: ignore[type-arg]
-    """Collect save modifiers for the defender from protocols and active_modifiers."""
-    from gameMechanic.ability_engine import get_active_protocol_modifier  # noqa: PLC0415
+    """Collect save modifiers for the defender from round-choice abilities and active_modifiers."""
+    from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
     try:
         fdir = faction_dir_for(def_faction)
-        proto = get_active_protocol_modifier(fdir, phase_key, use_melee)
+        proto = get_active_round_choice_modifier(fdir, phase_key, use_melee)
         if proto.get("save"):
-            label = _protocol_source_label(fdir)
+            label = _round_choice_source_label(fdir)
             mods.append({"label": f"{label} (defender)", "value": proto["save"]})
     except KeyError:
         pass
@@ -1461,7 +1469,7 @@ def render_attack_resolution(phase_key: str) -> None:
 
     atk_unit, atk_state = lookup(atk_faction, atk_uid)
     badges = state_badges_html(atk_state)
-    for proto_lbl in active_protocol_buff_labels(atk_faction):
+    for proto_lbl in active_round_choice_buff_labels(atk_faction):
         badges += _badge(proto_lbl, variant="buff")
 
     st.markdown(f"**{atk_unit.name_en}** — Resolution")

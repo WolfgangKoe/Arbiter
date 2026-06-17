@@ -9,7 +9,7 @@ Internal layout (see docs/spec/ui_layout.md §7):
   │  firstPlayerArea (50%)  │  secondPlayerArea (50%)       │
   │  actions + reactions    │  actions + reactions          │
   ├────────────────────────────────────────────────────────┤
-  │   gameProtocoll tabs  [CommandProtocol | Stratagems]    │
+  │   gameProtocoll tabs  [Stratagems | Battle Log]         │
   └────────────────────────────────────────────────────────┘
 
 All game phases (command → morale) are delegated to phase_runner.
@@ -22,7 +22,11 @@ import streamlit as st
 
 from gameMechanic.game_state import PHASES, faction_dir_for, next_phase, swap_players
 from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
-from gameObjects.loader import get_abilities_for_unit, load_round_choice_abilities
+from gameObjects.loader import (
+    get_abilities_for_unit,
+    load_round_choice_abilities,
+    load_round_choice_label,
+)
 from uiLayout._common import PHASE_RULES, lookup
 
 # ---------------------------------------------------------------------------
@@ -89,13 +93,13 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             st.caption(f"**{ab.name_en}:** {ab.rule_text}")
 
 
-def _protocol_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # type: ignore[type-arg]
-    """Return a new slot→protocol map after putting new_val in slot.
+def _round_choice_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # type: ignore[type-arg]
+    """Return a new slot→ability map after putting new_val in slot.
 
-    The map is a bijection (each protocol in exactly one slot). Assigning a
-    protocol that already sits in another slot swaps the two, so any protocol can
+    The map is a bijection (each ability in exactly one slot). Assigning an
+    ability that already sits in another slot swaps the two, so any ability can
     be moved into any slot (round or the always-active 6th) and the displaced one
-    takes the slot the chosen protocol came from.
+    takes the slot the chosen ability came from.
     """
     result = dict(slots)
     old_val = result.get(slot)
@@ -109,11 +113,11 @@ def _protocol_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # type
     return result
 
 
-def _swap_protocol_slot(faction: str, slot) -> None:  # type: ignore[no-untyped-def]
-    """on_change callback: swap protocols between slots, keeping the map a bijection."""
+def _swap_round_choice_slot(faction: str, slot) -> None:  # type: ignore[no-untyped-def]
+    """on_change callback: swap abilities between slots, keeping the map a bijection."""
     slots_key = f"proto_slots_{faction}"
     widget_key = f"proto_slot_{faction}_{slot}"
-    slots = _protocol_slots_after_swap(
+    slots = _round_choice_slots_after_swap(
         st.session_state.get(slots_key, {}), slot, st.session_state[widget_key]
     )
     st.session_state[slots_key] = slots
@@ -122,30 +126,31 @@ def _swap_protocol_slot(faction: str, slot) -> None:  # type: ignore[no-untyped-
         st.session_state[f"proto_slot_{faction}_{s}"] = pid
 
 
-def _render_protocol_assignment(faction: str) -> None:
+def _render_round_choice_assignment(faction: str) -> None:
     """Pre-assign round-choice abilities (Command Protocols, Ka'tahs) to slots.
 
-    Six protocols fill six slots: rounds 1–5 plus the always-active 6th protocol
-    (Necron Command Protocols rule). Every slot is a dropdown over all protocols;
+    Six abilities fill six slots: rounds 1–5 plus the always-active 6th
+    (Necron Command Protocols rule). Every slot is a dropdown over all abilities;
     picking one already placed elsewhere swaps the two, so the player can freely
-    reorder protocols across rounds and the 6th slot. Identities are fixed at
+    reorder them across rounds and the 6th slot. Identities are fixed at
     setup — mid-game the 6th can only change via a dedicated ability (e.g. the
     Silent King's Voice of the Triarch).
     """
-    protocols = load_round_choice_abilities(faction_dir_for(faction))
-    if not protocols:
+    faction_dir = faction_dir_for(faction)
+    round_choices = load_round_choice_abilities(faction_dir)
+    if not round_choices:
         return
 
     st.divider()
-    st.markdown(f"**{faction} — Protocol Order**")
+    st.markdown(f"**{faction} — {load_round_choice_label(faction_dir)}**")
 
-    by_id = {p.id: p for p in protocols}
-    ids = [p.id for p in protocols]
+    by_id = {p.id: p for p in round_choices}
+    ids = [p.id for p in round_choices]
 
     # Seed the bijection once: keep any existing round assignments, leftover = 6th.
     slots_key = f"proto_slots_{faction}"
     if slots_key not in st.session_state:
-        faction_assignments = st.session_state.get("protocol_assignments", {}).get(faction, {})
+        faction_assignments = st.session_state.get("round_choice_assignments", {}).get(faction, {})
         slots: dict = {}
         used: set = set()
         for r in range(1, 6):
@@ -177,18 +182,18 @@ def _render_protocol_assignment(faction: str) -> None:
             options=ids,
             format_func=lambda pid: by_id[pid].name_de,
             key=widget_key,
-            on_change=_swap_protocol_slot,
+            on_change=_swap_round_choice_slot,
             args=(faction, slot),
         )
 
-    _slot_selectbox("extra", "Always active (6th protocol)")
+    _slot_selectbox("extra", "Always active (6th)")
     for round_num in range(1, 6):
         _slot_selectbox(round_num, f"Round {round_num}")
 
     # Persist round assignments for the rest of the app; the 6th is the leftover.
-    assignments = dict(st.session_state.get("protocol_assignments", {}))
+    assignments = dict(st.session_state.get("round_choice_assignments", {}))
     assignments[faction] = {r: slots[r] for r in range(1, 6) if r in slots}
-    st.session_state.protocol_assignments = assignments
+    st.session_state.round_choice_assignments = assignments
 
 
 def _render_setup() -> None:
@@ -247,7 +252,7 @@ def _render_setup() -> None:
     st.caption(f"Currently selected: **{st.session_state.first_player}** goes first.")
 
     for faction in (slot_a, slot_b):
-        _render_protocol_assignment(faction)
+        _render_round_choice_assignment(faction)
 
     st.divider()
     if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):

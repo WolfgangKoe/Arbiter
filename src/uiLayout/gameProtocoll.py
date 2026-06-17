@@ -1,8 +1,8 @@
-"""gameProtocoll — Command Protocol log + Stratagems tab.
+"""gameProtocoll — Battle Log + Stratagems tab.
 
 Two tabs in the center column below the gameActionDisplayArea:
-  - CommandProtocol: round/phase log navigator (setup summary for now)
-  - Stratagems:      GO list with visibility logic (data structure ready; Ziel 4)
+  - Battle Log:  round/phase log navigator (setup summary for now)
+  - Stratagems:  GO list with visibility logic (data structure ready; Ziel 4)
 
 GO visibility states (see docs/spec/processes.md P-06 and gameObjects/stratagem.py):
   clickable  — conditions met, CP available, not yet used this phase
@@ -71,7 +71,7 @@ def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
     return st.session_state[units_key_for(faction)]
 
 
-def _render_command_protocol() -> None:
+def _render_battle_log() -> None:
     first = st.session_state.get("first_player", "Necrons")
     second = st.session_state.get("second_player", "Orks")
 
@@ -237,8 +237,8 @@ def _render_stratagems() -> None:
 
 
 def render_game_protocoll() -> None:
-    tab_stratagems, tab_protocol = st.tabs(["⚔️ Stratagems", "📋 Command Protocol"])
+    tab_stratagems, tab_log = st.tabs(["⚔️ Stratagems", "📋 Battle Log"])
     with tab_stratagems:
         _render_stratagems()
-    with tab_protocol:
-        _render_command_protocol()
+    with tab_log:
+        _render_battle_log()

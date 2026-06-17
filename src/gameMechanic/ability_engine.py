@@ -67,8 +67,10 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
 _WIRED_EFFECT_TYPES = {"hit_modifier", "wound_modifier", "save_modifier"}
 
 
-def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) -> dict[str, int]:
-    """Return numeric modifiers from the active protocol's chosen directive.
+def get_active_round_choice_modifier(
+    faction_dir: str, phase: str, use_melee: bool
+) -> dict[str, int]:
+    """Return numeric modifiers from the active round-choice ability's chosen directive.
 
     Only effects with wired types (hit_modifier, wound_modifier, save_modifier) are returned.
     Effects for other types (reroll_save_1, move_bonus, etc.) are registered in YAML but
@@ -76,17 +78,17 @@ def get_active_protocol_modifier(faction_dir: str, phase: str, use_melee: bool) 
 
     Returns a dict with any of: {"hit": int, "wound": int, "save": int}.
     """
-    protocol_id: str | None = st.session_state.get(f"protocol_active_{faction_dir}")
-    directive: str | None = st.session_state.get(f"protocol_directive_{faction_dir}")
-    if not protocol_id or not directive:
+    active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
+    directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
+    if not active_id or not directive:
         return {}
 
-    protocols = load_round_choice_abilities(faction_dir)
-    protocol = next((p for p in protocols if p.id == protocol_id), None)
-    if not protocol:
+    round_choices = load_round_choice_abilities(faction_dir)
+    active = next((p for p in round_choices if p.id == active_id), None)
+    if not active:
         return {}
 
-    effect = protocol.primary_effect if directive == "primary" else protocol.secondary_effect
+    effect = active.primary_effect if directive == "primary" else active.secondary_effect
     if not effect:
         return {}
 

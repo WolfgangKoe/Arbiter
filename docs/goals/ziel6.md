@@ -1641,3 +1641,15 @@ unit_state["group_models"]: dict[str, int]
   Root Cause notiert, wartet auf Layout-Abstimmung. Regel-Recherche: Veil ⇒ **nicht** „Retreated"
   (kein Fall Back); 6.-Protokoll-Identität fix im Setup, Mid-Game-Wechsel nur per Silent King
   „Voice of the Triarch" (1×/Spiel).
+- **S51 (2026-06-16, Commits `3af9a7a`/`c31e73e`)** Finding #1 Faktion-/Subfaction-Badge (generisch,
+  immer sichtbar); `dynasty`-Vokabular aus `src/` raus → generisches `subfaction`. Datengetriebenes
+  Generic-src-Vokabular-Gate (`test_generic_src_vocab.py` + `_vocab.py`, Ledger = Schuld, Ratchet) +
+  Doku-/Akzeptanz-Gate (INV-5); Schulden-Scoreboard nach jedem `pytest`. Baseline in
+  `architecture_invariants.md`.
+- **S52 (2026-06-17)** INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt — reine,
+  verifizierte Umbenennung auf `round_choice` (Klasse `CommandProtocol`→`RoundChoiceAbility`, Datei
+  `round_choice_ability.py`, Session-Keys `round_choice_*`, Roster-Feld `round_choice_order`,
+  UI-Strings via `load_round_choice_label()`); `gameProtocoll`-Tab/Funktion korrekt zu „Battle Log".
+  Ledger-Einträge entfernt (Ratchet); Reste LEGIT (`typing.Protocol`) bzw. `reanimation`-Schuld.
+  852 Tests grün, 88.45 %. Manuell verifiziert. **Neuer Befund:** Direktivenwahl im Setup regelwidrig
+  + blockiert Rundenzuweisung → Root-Cause + Fix in `backlog.md` §0 #2b / `next_session.md` notiert.

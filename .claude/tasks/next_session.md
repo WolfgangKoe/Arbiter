@@ -20,44 +20,42 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S51, 2026-06-16)
+## Aktueller Stand (nach S52, 2026-06-17)
 
-**S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Freigegeben Phase 0+1, dann (a)+(b).
+**S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Reine, verifizierte
+Umbenennung auf den etablierten Begriff `round_choice` (kein Verhaltenswechsel): Klasse
+`CommandProtocol`→`RoundChoiceAbility` (Datei `round_choice_ability.py`), Session-Keys
+`protocol_*`→`round_choice_*`, Helfer/Funktionen, Roster-Feld `protocol_order`→`round_choice_order`,
+UI-Strings datengetrieben via `load_round_choice_label()`. Ledger-Einträge entfernt (Ratchet);
+Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`reanimationProtocols`).
+852 Tests grün, Coverage 88.45 %. Manuell verifiziert (Command-UI, Setup-Swap, Battle-Log-Tab).
 
-- **Finding #1 (Badge) ✅** — Faktion-Badge zeigt Faktionsnamen aus YAML (nicht Roster-Titel);
-  Subfaction-Badge **generisch + immer sichtbar** (Wert / „No <Label>" / „No Subfaction"),
-  helles Blau `#a5b4fc`. Roster-Pflichtfeld je Faktion (`dynasty`/`clan`/`shield_host`),
-  in `faction_abilities.yaml` deklariert (`subfaction_field`/`subfaction_label`). Alle Roster gesetzt.
-- **(a) `dynasty`-Vokabular aus `src/` entfernt** → generisches `subfaction` (Wunsch aus /btw).
-- **(b) Datengetriebenes Generic-src-Vokabular-Gate** (`tests/architecture/test_generic_src_vocab.py`
-  + `_vocab.py`): erntet Fraktions-Eigennamen aus den YAMLs, Ledger = aktuelle Schuld, Ratchet.
-- **Doku-Gate** (`tests/docs/`) + **Akzeptanz-Gate** (`tests/acceptance/`, `docs/spec/acceptance/`):
-  AC-IDs ↔ Tests im Gleichtakt; `next_session.md` Zeilenbudget; INV ↔ Wächter-Korrelation.
-  Invarianten-Doku: INV-4b + INV-5 ergänzt (`architecture_invariants.md`).
+**S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Badge generisch; `dynasty`-Vokabular raus;
+datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`backlog.md`.
 
-### ▶ Nächster Schritt — SCHULDEN BESEITIGEN (Priorität, Nutzer-Auftrag S51)
+### ▶ Nächster Schritt — Bug: Direktivenwahl im Setup (Backlog §0 #2b, S52 Root-Cause)
 
-Die Gates machen die Schuld jetzt **messbar** — also abbauen, nicht wachsen lassen. Reihenfolge:
+**Befund (manuell S52):** Im Setup sind die Protokoll-Direktiven bereits wählbar (regelwidrig);
+das gepinnte aktive Protokoll blockiert zudem die nachträgliche Rundenzuweisung.
+**Regel** (`faction_overview.txt` Z. 546/568): Setup = **nur** Zuweisung der Protokolle zu Runden;
+Direktive erst „at the start of each battle round" (Kommandophase).
+**Root Cause:** `armyCard._render_round_choice_ui` läuft auch im Setup (Seitenleiste in allen Phasen)
+→ Auto-Block (`if not active_id`) aktiviert das Runde-1-Protokoll + zeigt Direktiven-Buttons.
+**Fix (1 Stelle):** in `_render_round_choice_ui` früh `return`, wenn `phase_key == "setup"`
+(Setup-Einstieg ist nur `_render_round_choice_assignment`); zusätzlich Direktiven an
+`phase_key == "command"` koppeln. Render-Code → **manuelle Verifikation**. Plan + Freigabe vorlegen.
 
-1. **INV-4b Vokabular-Ledger schrumpfen** (`tests/architecture/test_generic_src_vocab.py` LEDGER):
-   - Größter Brocken: **`protocol`/`protocols`** als generischer Round-Choice-Begriff (Necron-Wort)
-     faktion-neutral umbenennen (z. B. `round_choice`/`directive`) quer durch `src/` → Ledger-Einträge raus.
-   - Danach benannte Items (`orb`, `overlord`, `phaeron`, `irongob`, `gloom`, `prism`, `dakka`,
-     `klaw`, `tesla`, `reanimation`, `arkana`, `dynasty`) aus Phasen-/Render-Modulen in YAML/Daten ziehen.
-   - Jeder entfernte Eintrag = Ratchet (Ledger nur kleiner). Test bricht rot, wenn ein Eintrag
-     veraltet → genau dann Ledger-Zeile löschen.
-2. **INV-4 Allowlist schrumpfen** (`test_generic_src.py`): Default-Roster/`faction_dir`-Default/Spielerlabels
-   aus den gewählten Armeen ableiten statt hartkodieren.
-3. **Test-Mock-Fragilität sauber lösen** (backlog §4, S51 entdeckt): geteilte `streamlit`-Fixture
-   (conftest) + Tests auf `module.st` statt lokalem `_st_mock` umstellen. Tieferliegend: globalen
-   `session_state`-Zugriff in den Logik-Modulen reduzieren.
+### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
-### ▶ Danach — offene Findings (Phasen 2–4, `backlog.md` §0, je eigener Plan + Freigabe)
-
-- **Phase 2 — #2b Direktiv-Lock:** Protokoll-Direktive nur in Kommandophase wählbar.
-- **Phase 3 — #2 Buff-Audit:** 9 nicht-verdrahtete Protokoll-Effekte einzeln anzeigen (Tabelle backlog §0).
-- **Phase 4 — #3/#4 Würfel:** Pfeil/Badge-Text/-Breite — Soll-Bild **erst als AC mit Nutzer** abstimmen.
-- **Coverage-Fahrplan:** Floor 88 %. Pure Logik aus `omit`-Modulen in getestete Helfer ziehen, Floor nachziehen.
+1. **INV-4b Ledger weiter schrumpfen:** benannte Items (`orb`, `overlord`, `phaeron`, `irongob`,
+   `gloom`, `prism`, `dakka`, `klaw`, `tesla`, `reanimation`, `arkana`, `dynasty`) aus Phasen-/
+   Render-Modulen in YAML/Daten ziehen (`protocol`/`protocols` ✅ S52).
+2. **INV-4 Allowlist schrumpfen** (`test_generic_src.py`): Default-Roster/`faction_dir`-Default/
+   Spielerlabels aus den gewählten Armeen ableiten statt hartkodieren.
+3. **Test-Mock-Fragilität** (backlog §4): geteilte `streamlit`-Fixture (conftest) + `module.st`.
+- **Phase 3 — #2 Buff-Audit:** 9 nicht-verdrahtete Direktiv-Effekte einzeln anzeigen (backlog §0).
+- **Phase 4 — #3/#4 Würfel:** Soll-Bild **erst als AC mit Nutzer** abstimmen.
+- **Coverage-Fahrplan:** Floor 88 %. Pure Logik aus `omit`-Modulen in getestete Helfer ziehen.
 
 ---
 

@@ -28,29 +28,24 @@ from tests.architecture._vocab import src_vocab_hits
 LEDGER: dict[str, set[str]] = {
     # --- LEGIT: maps external BattleScribe faction labels to internal slugs ---
     "gameObjects/rosz_importer.py": {"adeptus", "custodes", "necrons", "ork", "orks"},
-    # --- DEBT: 'protocol' is the Necron word for the generic round-choice ---
-    #     mechanism (Custodes Ka'tahs share it). Rename to a faction-neutral term.
-    "gameMechanic/ability_engine.py": {"protocol", "protocols"},
-    "gameMechanic/combat.py": {"protocol"},
+    # --- LEGIT: Python typing.Protocol (structural type), collides with the seed word ---
     "gameMechanic/phase_handler.py": {"protocol"},
-    "gameObjects/command_protocol.py": {"protocol"},
-    "uiLayout/armyCard.py": {"protocol", "protocols"},
-    "uiLayout/gameActionsArea.py": {"protocol", "protocols"},
     # --- DEBT: weapon special-rule names hardcoded in combat maths/render ---
     "gameMechanic/attack_math.py": {"dakka", "klaw", "tesla"},
     "uiLayout/dice_html.py": {"dakka", "klaw", "tesla"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
     "gameMechanic/commandPhase.py": {"orb", "overlord", "phaeron", "resurrection"},
     "gameMechanic/fightPhase.py": {"irongob"},
-    "gameMechanic/game_state.py": {"irongob", "necrons", "orb", "protocol", "protocols"},
+    "gameMechanic/game_state.py": {"irongob", "necrons", "orb"},
     "gameMechanic/movementPhase.py": {"dynasty"},
     "gameMechanic/psychicPhase.py": {"gloom", "prism"},
-    "gameObjects/loader.py": {"arkana", "necrons", "protocol"},
-    "uiLayout/_common.py": {"irongob", "klaw", "protocol", "protocols", "reanimation"},
+    "gameObjects/loader.py": {"arkana", "necrons"},
+    # 'protocols' here is the Necron 'reanimationProtocols' rule key (reanimation debt).
+    "uiLayout/_common.py": {"irongob", "klaw", "protocols", "reanimation"},
     "uiLayout/gameHeader.py": {"necrons", "orks"},
-    "uiLayout/gameProtocoll.py": {"necrons", "orks", "protocol"},
+    "uiLayout/gameProtocoll.py": {"necrons", "orks"},
     "uiLayout/setupScreen.py": {"necrons"},
-    "uiLayout/unitCard.py": {"orb", "protocol"},
+    "uiLayout/unitCard.py": {"orb"},
 }
 
 

@@ -132,7 +132,7 @@ def resolve_attack(
     else:
         effective_save = armour_effective
         if params.ap != 0 or defender.save_modifier != 0:
-            mod_note = f" / Protocol +{defender.save_modifier}" if defender.save_modifier else ""
+            mod_note = f" / save mod +{defender.save_modifier}" if defender.save_modifier else ""
             log.append(
                 f"Armour save {defender.save}+ → {effective_save}+ after AP{params.ap}{mod_note}"
             )

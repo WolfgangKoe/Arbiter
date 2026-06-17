@@ -60,16 +60,16 @@ def _load_roster_for(
     """Load a roster; fall back to full catalog if file is missing.
 
     Returns (matched_entries, unmatched_ids, display_name, faction_dir, subfaction,
-    protocol_order). subfaction is the roster's subfaction choice read via the
+    round_choice_order). subfaction is the roster's subfaction choice read via the
     faction's declared field (generic — no faction-specific vocabulary in src/);
-    protocol_order is the optional roster-defined Command Protocol order.
+    round_choice_order is the optional roster-defined round-choice ability order.
     """
     path = _ROSTER_DIR / roster_file
     meta = load_roster_metadata(path)
     faction_dir = meta.get("faction_dir") or fallback_faction
     display_name = meta.get("display_name") or roster_file
     subfaction: str | None = meta.get("subfaction")
-    protocol_order: list[str] | None = meta.get("protocol_order")
+    round_choice_order: list[str] | None = meta.get("round_choice_order")
 
     catalog = load_unit_catalog(faction_dir)
     if path.exists():
@@ -77,7 +77,7 @@ def _load_roster_for(
     else:
         matched = [(u, u.models_max) for u in catalog.values()]
         unmatched = []
-    return matched, unmatched, display_name, faction_dir, subfaction, protocol_order
+    return matched, unmatched, display_name, faction_dir, subfaction, round_choice_order
 
 
 def list_available_rosters() -> list[str]:
@@ -183,20 +183,22 @@ def subfaction_badge_for(player: str) -> SubfactionBadge:
     return SubfactionBadge(str(value).replace("_", " ").title(), "set")
 
 
-def short_protocol_label(name_en: str) -> str:
-    """Drop the 'Protocol of the ' prefix → 'Undying Legion' (Finding 7).
+def short_round_choice_label(name_en: str) -> str:
+    """Drop a leading '<Type> of the ' qualifier → 'Undying Legions' (Finding 7).
 
-    Generic string transform — no faction names.
+    Generic string transform — no faction names. Names without the marker are
+    returned unchanged (e.g. Custodes Ka'tah stances).
     """
-    prefix = "Protocol of the "
-    return name_en[len(prefix) :] if name_en.startswith(prefix) else name_en
+    marker = " of the "
+    idx = name_en.find(marker)
+    return name_en[idx + len(marker) :] if idx != -1 else name_en
 
 
-def active_protocol_buff_labels(player: str) -> list[str]:
-    """Short labels for the player's currently-active Command Protocol directives.
+def active_round_choice_buff_labels(player: str) -> list[str]:
+    """Short labels for the player's currently-active round-choice directives.
 
     Derived from session state at render time (no stored buff to expire). Covers
-    the round-assigned protocol and the always-active 6th protocol (incl. the
+    the round-assigned ability and the always-active 6th ability (incl. the
     subfaction-affinity bonus where both directives apply). Empty for factions
     without a round-choice ability file — gated on data, not on faction names.
     """
@@ -204,30 +206,32 @@ def active_protocol_buff_labels(player: str) -> list[str]:
         faction_dir = faction_dir_for(player)
     except KeyError:
         return []
-    protocols = load_round_choice_abilities(faction_dir)
-    if not protocols:
+    round_choices = load_round_choice_abilities(faction_dir)
+    if not round_choices:
         return []
 
     labels: list[str] = []
-    by_id = {p.id: p for p in protocols}
+    by_id = {p.id: p for p in round_choices}
 
-    active_id = st.session_state.get(f"protocol_active_{faction_dir}")
-    if active_id and st.session_state.get(f"protocol_directive_{faction_dir}"):
+    active_id = st.session_state.get(f"round_choice_active_{faction_dir}")
+    if active_id and st.session_state.get(f"round_choice_directive_{faction_dir}"):
         p = by_id.get(active_id)
         if p:
-            labels.append(short_protocol_label(p.name_en))
+            labels.append(short_round_choice_label(p.name_en))
 
-    # 6th (always-active) protocol: the single one not assigned to any round.
-    assignments = st.session_state.get("protocol_assignments", {}).get(player, {})
+    # 6th (always-active) ability: the single one not assigned to any round.
+    assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})
     assigned_ids = set(assignments.values())
     if len(assigned_ids) >= 5:
-        extras = [p for p in protocols if p.id not in assigned_ids]
+        extras = [p for p in round_choices if p.id not in assigned_ids]
         if len(extras) == 1:
             extra = extras[0]
             subfaction = subfaction_value_for(player)
             affinity_bonus = bool(subfaction and subfaction == extra.subfaction_affinity)
-            if affinity_bonus or st.session_state.get(f"protocol_extra_directive_{faction_dir}"):
-                labels.append(short_protocol_label(extra.name_en))
+            if affinity_bonus or st.session_state.get(
+                f"round_choice_extra_directive_{faction_dir}"
+            ):
+                labels.append(short_round_choice_label(extra.name_en))
     return labels
 
 
@@ -378,7 +382,7 @@ def init_state(
     st.session_state.used_stratagem_ids: set[str] = set()
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
-    # Protocol state is keyed per faction_dir (set on demand in armyCard)
+    # Round-choice state is keyed per faction_dir (set on demand in armyCard)
     st.session_state.cmd_awaiting_ability_id: str | None = None
     st.session_state.cmd_awaiting_required_kw: list = []
     st.session_state.res_orb_target_uid = None
@@ -398,13 +402,13 @@ def init_state(
     st.session_state.p1_subfaction = p1_subfaction
     st.session_state.p2_subfaction = p2_subfaction
 
-    # Optional roster-defined Command Protocol order (round 1..5 → protocol id),
+    # Optional roster-defined round-choice ability order (round 1..5 → ability id),
     # keyed by player name; the setup UI uses these as defaults (overridable).
-    protocol_assignments: dict = {}
+    round_choice_assignments: dict = {}
     for pname, order in ((p1_name, p1_proto_order), (p2_name, p2_proto_order)):
         if order:
-            protocol_assignments[pname] = {i + 1: pid for i, pid in enumerate(order[:5])}
-    st.session_state.protocol_assignments = protocol_assignments
+            round_choice_assignments[pname] = {i + 1: pid for i, pid in enumerate(order[:5])}
+    st.session_state.round_choice_assignments = round_choice_assignments
 
     p1_states, p1_keys = _make_unit_state_dict(p1_matched)
     p2_states, p2_keys = _make_unit_state_dict(p2_matched)
@@ -425,7 +429,7 @@ def init_state(
     st.session_state.secondaries = secondaries
     st.session_state.secondary_vp = secondary_vp
 
-    # Protocol per-faction keys are not pre-initialized; armyCard sets them on demand
+    # Round-choice per-faction keys are not pre-initialized; armyCard sets them on demand
     st.session_state.activated_abilities: dict = (
         {}
     )  # {player_name: {"ability_id": str, "round_activated": int}}
@@ -517,9 +521,9 @@ def _reset_turn_state() -> None:
     for slot in ("p1_faction_dir", "p2_faction_dir"):
         fdir = st.session_state.get(slot)
         if fdir:
-            st.session_state[f"protocol_active_{fdir}"] = None
-            st.session_state[f"protocol_directive_{fdir}"] = None
-            st.session_state[f"protocol_extra_directive_{fdir}"] = None
+            st.session_state[f"round_choice_active_{fdir}"] = None
+            st.session_state[f"round_choice_directive_{fdir}"] = None
+            st.session_state[f"round_choice_extra_directive_{fdir}"] = None
     # Stage transition: if the active ability has a next_stage_id and a new round began, advance
     from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
 
