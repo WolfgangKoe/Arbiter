@@ -20,7 +20,13 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S53, 2026-06-17)
+## Aktueller Stand (nach S54, 2026-06-17)
+
+**S54 — Regel-Katalog Phase 1 Gate (read-only).** `rules.md` ins Schulden-Scoreboard
+verdrahtet: Abdeckung % je Klasse (A 16/29 · B 0/4 · C 1/1), Ledger-Größe (2: R-COMBAT-09,
+R-COMBAT-17) und Konsistenz-Check (jeder `getestet: ja`-Testname existiert in `tests/`).
+Parser `tests/acceptance/_rules.py` (regex/disk, keine Test-Collection, mirror `_acceptance.py`).
+Reine Messung — kein hart-roter Gate-Test (auf Ansage). 852 Tests grün, Coverage 88.45 %.
 
 **S53 — Regel-Abdeckung (Akzeptanz-Katalog) + Arbeitsweise verankert.** Neuer Nenner
 `docs/spec/acceptance/rules.md`: Combat-Katalog als verbindliche Vorlage (34 Regeln, Klasse
@@ -41,17 +47,16 @@ datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`bac
 
 ### ▶ Nächster Schritt — Regel-Abdeckung (Akzeptanz-Katalog) ausrollen
 
-Phase 0 Schritt 1 fertig: Combat-Katalog (`docs/spec/acceptance/rules.md`) als **verbindliche
-Vorlage** (34 Regeln; Klasse A/B/C; stabile `datei:funktion`-Refs + Testnamen). Fixe
-Entscheidungen: Granularität = **Mechanik-Schritt**; Klasse **C** (Hybrid) eingeführt; Referenzen
-stabil+verifizierbar. Combat-Ledger = **2** (R-09 mehrfach-Invuln, R-17 Rapid Fire: implementiert
-ohne Test). Klasse B = 0 % (App zeigt keine Tisch-Hinweise).
+Phase 0/1 fertig: Combat-Katalog (`docs/spec/acceptance/rules.md`) als **verbindliche Vorlage**
+(34 Regeln; Klasse A/B/C; stabile `datei:funktion`-Refs + Testnamen) **+ Phase-1-Gate read-only
+(S54)** im Scoreboard (Abdeckung %, Ledger, Konsistenz-Check). Fixe Entscheidungen: Granularität =
+**Mechanik-Schritt**; Klasse **C** (Hybrid). Combat-Ledger = **2** (R-09 mehrfach-Invuln, R-17
+Rapid Fire: implementiert ohne Test). Klasse B = 0 % (App zeigt keine Tisch-Hinweise).
 
-Optionen (je eigene Freigabe): (1) **Rollout** weiterer Bereiche per Sonnet-Subagent mit der
-Vorlage (~30–80k/Bereich); (2) **Phase 1 Gate read-only** — `rules.md` ins Schulden-Scoreboard
-(Abdeckung % je Klasse, Ledger-Größe) + Konsistenz-Check (jeder `getestet: ja`-Testname existiert),
-hart-rot erst auf Ansage; (3) **Phase 3** `tools/token_report.py` + `docs/metrics/overview.md`.
-**Empfehlung: erst (2) read-only, dann (1).** Bug #2b u. a. offene Findings bleiben in `backlog.md`.
+Offene Optionen (je eigene Freigabe): (1) **Rollout** weiterer Bereiche per Sonnet-Subagent mit
+der Vorlage (~30–80k/Bereich) — **empfohlen als Nächstes**; (3) **Phase 3** `tools/token_report.py`
++ `docs/metrics/overview.md`. Optional: das Phase-1-Gate **hart-rot** schalten (Konsistenz +
+Ledger-Ratchet als echte Tests) — erst auf Ansage. Bug #2b u. a. Findings bleiben in `backlog.md`.
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
@@ -77,6 +82,8 @@ hart-rot erst auf Ansage; (3) **Phase 3** `tools/token_report.py` + `docs/metric
 - Doku + Akzeptanz (INV-5): `pytest tests/docs/ tests/acceptance/ --no-cov -q`.
 - Neues Akzeptanzkriterium: AC in `docs/spec/acceptance/index.md` + `@acceptance("AC-…")`-Test (README dort).
 - **Regel-Katalog** (Nenner): `docs/spec/acceptance/rules.md` — Klasse A/B/C, `getestet: ja — <testname>`.
+  Seit S54 im Scoreboard (read-only): Abdeckung % je Klasse, Ledger, Konsistenz-Check. Parser:
+  `tests/acceptance/_rules.py`. Noch kein hart-roter Gate-Test (auf Ansage scharfschalten).
 - **Token-Korridor:** <150k, bei ~135k Session beenden. Fleißarbeit an Sonnet-Subagent (CLAUDE.md).
 
 ---

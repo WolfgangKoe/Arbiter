@@ -1653,3 +1653,9 @@ unit_state["group_models"]: dict[str, int]
   Ledger-Einträge entfernt (Ratchet); Reste LEGIT (`typing.Protocol`) bzw. `reanimation`-Schuld.
   852 Tests grün, 88.45 %. Manuell verifiziert. **Neuer Befund:** Direktivenwahl im Setup regelwidrig
   + blockiert Rundenzuweisung → Root-Cause + Fix in `backlog.md` §0 #2b / `next_session.md` notiert.
+- **S53 (2026-06-17)** Regel-Abdeckung (Akzeptanz-Katalog): neuer Nenner `docs/spec/acceptance/rules.md`
+  — Combat-Katalog als verbindliche Vorlage (34 Regeln, Klasse A/B/C, stabile `datei:funktion`-Refs +
+  Testnamen). Arbeitsweise in `CLAUDE.md` verankert (Token-Korridor <150k, Subagent-für-Fleißarbeit).
+- **S54 (2026-06-17)** Regel-Katalog Phase-1-Gate (read-only): `rules.md` ins Schulden-Scoreboard —
+  Abdeckung % je Klasse (A 16/29 · B 0/4 · C 1/1), Ledger (2) + Konsistenz-Check (`getestet: ja`-
+  Testname existiert). Parser `tests/acceptance/_rules.py` (regex/disk). 852 Tests grün, 88.45 %.

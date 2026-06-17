@@ -48,6 +48,30 @@ def _metrics() -> list[str]:
     n_lines = len(next_session.read_text(encoding="utf-8").splitlines())
     lines.append(f"INV-5  Akzeptanzkriterien          : {len(spec_ac_ids())} AC-IDs (alle gepinnt)")
     lines.append(f"INV-5  next_session.md             : {n_lines}/{_NEXT_SESSION_BUDGET} Zeilen")
+
+    # Rule-conformance catalog (rules.md) — coverage % per class, ledger, consistency
+    from tests.acceptance import _rules
+
+    catalog = _rules.parse_rules()
+    per_class = " · ".join(
+        f"{c.klasse}: {c.tested}/{c.total} getestet ({c.pct}%)" for c in _rules.coverage_by_class()
+    )
+    lines.append(f"{f'Regel  rules.md (Nenner={len(catalog)})':<34} : {per_class}")
+
+    debt = _rules.ledger()
+    lines.append(
+        f"{'Regel  Ledger (impl. ohne Test)':<34} : {len(debt)} "
+        f"({', '.join(debt) if debt else 'leer'})  (Ziel: -> 0, ratchet)"
+    )
+
+    missing = _rules.missing_testnames()
+    if missing:
+        broken = ", ".join(f"{rid}:{name}" for rid, name in missing)
+        lines.append(
+            f"{'Regel  Konsistenz (getestet-Refs)':<34} : {len(missing)} FEHLEN -> {broken}"
+        )
+    else:
+        lines.append(f"{'Regel  Konsistenz (getestet-Refs)':<34} : alle Testnamen existieren")
     return lines
 
 
