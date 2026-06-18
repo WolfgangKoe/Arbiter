@@ -21,7 +21,16 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S56, 2026-06-18)
+## Aktueller Stand (nach S57, 2026-06-18)
+
+**S57 — Operating-Model Phase B: Token-Report.** `tools/token_report.py` (neu) führt
+Haupt-Session- und Subagent-Verbrauch **getrennt** zusammen — parst `*.jsonl` (main) +
+`*/subagents/*.jsonl` (sidechain) aus dem Projekt-Transcript-Verzeichnis, summiert je
+Modell-Tier (Opus/Sonnet/Haiku/Fable) und je Session, rendert Markdown. CLI:
+`python tools/token_report.py [--session <id>] [--write]`. Report → `docs/metrics/overview.md`
+(neu), aus `LEITSTAND.md` Feld 4 verlinkt. Reine Aggregation getestet
+(`tests/tools/test_token_report.py`, 6 Tests — tools/ ist nicht coverage-gemessen,
+Netz trotzdem da). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`, kein Streamlit).
 
 **S56 — Operating Model etabliert (Aufbau-/Ablauforganisation).** Governance-Schicht nach
 Luhmann/integraler Sicht: `docs/governance/operating_model.md` (Rollen, Model-Tier inkl. Haiku-
@@ -59,9 +68,6 @@ UI-Strings datengetrieben via `load_round_choice_label()`. Ledger-Einträge entf
 Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`reanimationProtocols`).
 852 Tests grün, Coverage 88.45 %. Manuell verifiziert (Command-UI, Setup-Swap, Battle-Log-Tab).
 
-**S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Badge generisch; `dynasty`-Vokabular raus;
-datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`backlog.md`.
-
 ### ✅ S56 erledigt — Operating Model statt loser Prämissen
 
 Der S55-Wunsch „Arbeitsmuster formalisieren" ist umgesetzt: nicht nur Prämissen-Stichworte,
@@ -77,10 +83,10 @@ steht, Sonnet-Subagent-Muster erprobt (S55). Fixe Entscheidungen: Granularität 
 Klasse A (App rechnet) / B (nur Tisch → Hinweis) / C (Hybrid).
 
 Offene Optionen (je eigene Freigabe): (1) **weiterer Bereich** per Sonnet-Subagent — Movement /
-Charge / Morale (~30–80k/Bereich); (2) **Ledger schrumpfen**: 5 neue R-CMD-Schulden
-(R-CMD-03/04/10/11/12) + 2 Combat (R-09/R-17) als Tests nachziehen (Ratchet → nur kleiner);
-(3) **Phase 3** `tools/token_report.py` + `docs/metrics/overview.md`. Optional: Phase-1-Gate
-**hart-rot** (Konsistenz + Ledger-Ratchet als echte Tests) — erst auf Ansage. Findings: `backlog.md`.
+Charge / Morale (~30–80k/Bereich); (2) **Ledger schrumpfen**: 5 R-CMD-Schulden
+(R-CMD-03/04/10/11/12) + 2 Combat (R-09/R-17) als Tests nachziehen (Ratchet → nur kleiner).
+Phase 3 (Token-Report) ✅ S57. Optional: Phase-1-Gate **hart-rot** (Konsistenz + Ledger-Ratchet
+als echte Tests) — erst auf Ansage. Findings: `backlog.md`.
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
@@ -109,6 +115,7 @@ Charge / Morale (~30–80k/Bereich); (2) **Ledger schrumpfen**: 5 neue R-CMD-Sch
   Seit S54 im Scoreboard (read-only): Abdeckung % je Klasse, Ledger, Konsistenz-Check. Parser:
   `tests/acceptance/_rules.py`. Noch kein hart-roter Gate-Test (auf Ansage scharfschalten).
 - **Token-Korridor:** <150k, bei ~135k Session beenden. Fleißarbeit an Sonnet-Subagent (CLAUDE.md).
+- **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md` (Haupt vs. Subagent, je Tier/Session).
 
 ---
 

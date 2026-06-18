@@ -92,8 +92,9 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟢 Gretchin Cowardly: −1 Attrition ohne RUNTHERD in 6" (→ Plan 018)
 - 🟢 Battle-Log: nach Reset keine alten Einträge (→ Plan 018)
 - 🟢 CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (→ Plan 018)
-- 🟢 **Operating-Model Phase B:** `tools/token_report.py` — Token-/Wer-leistete-was-Report,
-  führt Haupt- + Subagent-Verbrauch zusammen; füttert Leitstand-Feld 4 (`LEITSTAND.md`).
+- ✅ **Operating-Model Phase B (S57):** `tools/token_report.py` + `docs/metrics/overview.md` —
+  Token-/Wer-leistete-was-Report; führt Haupt- + Subagent-Verbrauch getrennt zusammen
+  (je Tier + je Session); aus Leitstand-Feld 4 verlinkt. `--write` regeneriert den Report.
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
 

@@ -136,7 +136,7 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   niedriger das Tier. Vollständige Rollen-/Tier-/Modus-Regeln: `docs/governance/operating_model.md`.
 - **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
   `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
-  Report muss beide Quellen zusammenführen (`tools/token_report.py`, geplant).
+  `tools/token_report.py` führt beide Quellen zusammen (`--write` → `docs/metrics/overview.md`).
 - **Freigabe-Pflicht bleibt:** Subagenten/Skills/Memory nie ohne explizite Freigabe.
 
 ---
