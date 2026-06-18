@@ -31,6 +31,10 @@ Modell-Tier (Opus/Sonnet/Haiku/Fable) und je Session, rendert Markdown. CLI:
 (neu), aus `LEITSTAND.md` Feld 4 verlinkt. Reine Aggregation getestet
 (`tests/tools/test_token_report.py`, 6 Tests — tools/ ist nicht coverage-gemessen,
 Netz trotzdem da). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`, kein Streamlit).
+**Retro → ADR-0002:** stakeholder-gerichtete Artefakte (Leitstand/Reports/Gates) sind für den
+Leser, müssen seine Fragen beantworten; Retro fester Teil von Event 5. Folge im Backlog:
+**Token-Report v2** (lesbare Labels, jüngste oben, Σ-Beschriftung, Subagenten + Aufgabe, Diagramm)
++ „Gates leser-orientiert prüfen".
 
 **S56 — Operating Model etabliert (Aufbau-/Ablauforganisation).** Governance-Schicht nach
 Luhmann/integraler Sicht: `docs/governance/operating_model.md` (Rollen, Model-Tier inkl. Haiku-
@@ -60,13 +64,8 @@ A/B/C, stabile `datei:funktion`-Refs + Testnamen). Arbeitsweise in `CLAUDE.md` f
 Token-Korridor <150k / 90%-Wind-down, Subagent-für-Fleißarbeit (Sonnet) + Opus-Review,
 getrennte Messung. Noch kein Gate verdrahtet (pytest unverändert).
 
-**S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Reine, verifizierte
-Umbenennung auf den etablierten Begriff `round_choice` (kein Verhaltenswechsel): Klasse
-`CommandProtocol`→`RoundChoiceAbility` (Datei `round_choice_ability.py`), Session-Keys
-`protocol_*`→`round_choice_*`, Helfer/Funktionen, Roster-Feld `protocol_order`→`round_choice_order`,
-UI-Strings datengetrieben via `load_round_choice_label()`. Ledger-Einträge entfernt (Ratchet);
-Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`reanimationProtocols`).
-852 Tests grün, Coverage 88.45 %. Manuell verifiziert (Command-UI, Setup-Swap, Battle-Log-Tab).
+**S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Verifizierte Umbenennung
+auf `round_choice` (kein Verhaltenswechsel); Details in `ziel6.md`/`architecture_invariants.md`.
 
 ### ✅ S56 erledigt — Operating Model statt loser Prämissen
 

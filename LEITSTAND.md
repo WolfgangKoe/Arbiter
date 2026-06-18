@@ -45,7 +45,7 @@ Das schließt ein:
 - **Architektur-Gate** — vier Invarianten in `tests/architecture/`; Details + Schulden-Ledger: [docs/spec/architecture_invariants.md](docs/spec/architecture_invariants.md)
 - **Debt-Scoreboard** — läuft bei jedem `pytest`-Lauf mit; zählt offene Regel-Schulden aus dem Rule-Conformance-Catalog
 
-**Token-Report / Wer-leistete-was** — [docs/metrics/overview.md](docs/metrics/overview.md), generiert von `tools/token_report.py`. Führt Haupt-Session- und Subagenten-Verbrauch **getrennt** zusammen (je Modell-Tier + je Session). Neu erzeugen: `python tools/token_report.py --write`.
+**Bericht (kein Gate):** [Token-Report / Wer leistete was](docs/metrics/overview.md) — Haupt- vs. Subagent-Verbrauch je Modell-Tier und Session. Aktualisieren: `python tools/token_report.py --write`.
 
 ---
 

@@ -55,7 +55,9 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    Der 7-Punkte-Review aus [CLAUDE.md](../../CLAUDE.md): Regelkonform · Generisch · Tests grün · Architektur-Gate grün · Clean Code · UI manuell verifiziert · Artefakte aktuell. Erst wenn alle Punkte erfüllt (oder begründet n/a): fertig.
 
 5. **Session-Ende (Retro + Handoff)**
-   [next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) aktualisieren, committen. Retro-Anteil: welche Prämisse sollte sich ändern? → ADR anlegen, wenn ja.
+   [next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) aktualisieren, committen. Der **Retro ist fester, nicht überspringbarer Teil** — und für den Stakeholder nachvollziehbar (was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern). Folgt daraus eine Prämissen-Schärfung → ADR anlegen. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
+
+   **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
 6. **Kontext-Korridor-Event (~135 k Token)**
    Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen.
