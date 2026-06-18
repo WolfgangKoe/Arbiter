@@ -27,9 +27,14 @@ Vorgehen: Erst lesen, bevor du den Plan für die Implementierung erstellst. Nur 
 ### Artefakt-Landkarte — welches Dokument wofür
 
 Damit nichts „verloren" geht: jede Frage hat **genau einen** kanonischen Ort.
+Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er verlinkt alles, dupliziert nichts.
 
 | Frage | Artefakt |
 |---|---|
+| **Gesamtübersicht / Einstiegstür (Stakeholder)** | `LEITSTAND.md` |
+| **Wer entscheidet was? (Rollen, Model-Tier, Events, Modi)** | `docs/governance/operating_model.md` |
+| **Warum fiel eine Konsens-Entscheidung so? (ADR)** | `docs/governance/decisions/` |
+| **Rohe Ideen → gemeinsames Verständnis (Refinement)** | `Fotos/` → `docs/inbox/` |
 | Was mache ich als Nächstes? (aktueller Stand) | `.claude/tasks/next_session.md` |
 | Was ist insgesamt offen? (zentraler Backlog) | `docs/goals/backlog.md` |
 | Detailplan eines Features (Executor) | `docs/audit/plans/` (+ `README.md` = Queue/Status) |
@@ -126,6 +131,9 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —
   läuft im **isolierten Kontext**, hält das Opus-Hauptfenster schlank. Opus reviewt +
   finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession.
+- **Tiering:** Reine Lookups (gebundene Regelsuche, formatfixe Extraktion, ja/nein gegen
+  expliziten Text) an `model: haiku`. Je geschlossener das Konditionalprogramm → desto
+  niedriger das Tier. Vollständige Rollen-/Tier-/Modus-Regeln: `docs/governance/operating_model.md`.
 - **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
   `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
   Report muss beide Quellen zusammenführen (`tools/token_report.py`, geplant).

@@ -6,6 +6,7 @@
 
 **Session-Start:** `CLAUDE.md` (Workflow, Freigabe-Pflicht, Unklarheiten zuerst fragen)
 + `docs/goals/ziel6.md` (Aufgaben/Historie) + `docs/goals/backlog.md` (offener Backlog).
+Einstieg/Gesamtübersicht: `LEITSTAND.md`; Rollen/Model-Tier/Events/Modi: `docs/governance/operating_model.md`.
 
 **Session-Ende:** Checkboxen in `ziel6.md` abhaken + Zeile in die Session-Historie;
 **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen — nie blind überschreiben).
@@ -20,7 +21,16 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S55, 2026-06-18)
+## Aktueller Stand (nach S56, 2026-06-18)
+
+**S56 — Operating Model etabliert (Aufbau-/Ablauforganisation).** Governance-Schicht nach
+Luhmann/integraler Sicht: `docs/governance/operating_model.md` (Rollen, Model-Tier inkl. Haiku-
+Lookup, 7 Events, 4 Entscheidungsmodi Gate/Konsent/Konsens/Veto, Eskalationswege + 2 Diagramme).
+`LEITSTAND.md` = Einstiegstür (verlinkt alles, dupliziert nichts). ADR-Log `docs/governance/
+decisions/` + ADR-0001 (explizites „Ja" bleibt Probe-Session, Review in Retro). `docs/inbox/`
+Refinement-Fluss für `Fotos/`. CLAUDE.md: Artefakt-Landkarte + Haiku-Tiering ergänzt. Doku-only
+(keine Tests berührt). **Manuell zu prüfen:** Mermaid-Diagramme im Viewer. Sonnet-Subagent schrieb
+die 4 Doku-Dateien (28,9k Token, isoliert), Opus reviewte + finalisierte ADR-0001/CLAUDE.md.
 
 **S55 — Regel-Katalog: Bereich Command Phase ausgerollt.** 14 Einträge `R-CMD-01..14`
 (Sonnet-Subagent erfasst die Fleißarbeit, Opus reviewt/finalisiert) in `rules.md`. Nenner jetzt
@@ -52,15 +62,12 @@ Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`r
 **S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Badge generisch; `dynasty`-Vokabular raus;
 datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`backlog.md`.
 
-### ⭐ PRIO nächste Session — Arbeitsmuster formalisieren (Diskussion zuerst)
+### ✅ S56 erledigt — Operating Model statt loser Prämissen
 
-Nutzer-Wunsch (S55): Das erprobte Muster — **Sonnet-Subagent für Fleißarbeit + Opus
-reviewt/finalisiert**, Freigabe-Pflicht, Token-Disziplin — weiter **formalisieren**. Konkret
-zu besprechen (Design, bleibt bei Opus): **explizite Entscheidungsprämissen** definieren
-(welche Entscheidung trifft Subagent vs. Opus; was ist „mechanisch" vs. „Design"; wann ist
-Rückfrage Pflicht) und diese **ggf. mit Gates** absichern (analog Scoreboard/Ratchet). Ablauf:
-erst gemeinsam Soll-Bild klären, dann ggf. in `CLAUDE.md` / Gate-Tests gießen. **Kein
-Vorpreschen — Diskussion vor Umsetzung.** (Der Regel-Katalog-Rollout läuft als Zweittrack.)
+Der S55-Wunsch „Arbeitsmuster formalisieren" ist umgesetzt: nicht nur Prämissen-Stichworte,
+sondern eine ganze Governance-Schicht (`docs/governance/operating_model.md` + `LEITSTAND.md` +
+ADR-Log). Rollen/Tier/Modi/Events/Eskalation dort kanonisch. Offen (optional, erst auf Ansage):
+hartes Gate für Prämissen-Konformität (analog Scoreboard). Phase B/C siehe `backlog.md`.
 
 ### ▶ Nächster Schritt — Regel-Katalog weiter ausrollen / Ledger abbauen
 

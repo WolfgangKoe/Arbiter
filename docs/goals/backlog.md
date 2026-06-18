@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-17
+Letzter Abgleich: 2026-06-18
 
 ---
 
@@ -92,6 +92,10 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟢 Gretchin Cowardly: −1 Attrition ohne RUNTHERD in 6" (→ Plan 018)
 - 🟢 Battle-Log: nach Reset keine alten Einträge (→ Plan 018)
 - 🟢 CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (→ Plan 018)
+- 🟢 **Operating-Model Phase B:** `tools/token_report.py` — Token-/Wer-leistete-was-Report,
+  führt Haupt- + Subagent-Verbrauch zusammen; füttert Leitstand-Feld 4 (`LEITSTAND.md`).
+- 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
+  Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
 
 ---
 
