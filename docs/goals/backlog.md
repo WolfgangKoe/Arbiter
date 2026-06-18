@@ -97,12 +97,11 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   (je Tier + je Session); aus Leitstand-Feld 4 verlinkt. `--write` regeneriert den Report.
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
-- 🟢 **Token-Report v2 (leser-orientiert, → ADR-0002):** Der Report ist für den Stakeholder
-  und muss seine Fragen beantworten. Akzeptanzkriterien: (a) lesbare Session-Labels (Datum +
-  S-Nummer) statt roher UUID; (b) jüngste Session oben (nach Datum sortiert, nicht alphabetisch);
-  (c) klar beschriftet, dass Σ die Gesamtsumme aller Sessions ist; (d) je Session: Anzahl
-  gestarteter Subagenten **und deren Aufgabe** (`agentType`/`description` aus `*.meta.json`);
-  (e) mindestens ein Diagramm (Mermaid rendert in der Stakeholder-Ansicht).
+- ✅ **Token-Report v2 (leser-orientiert, → ADR-0002, S57):** Akzeptanzkriterien erfüllt —
+  (a) Session-Label = Datum + Uhrzeit + Kurz-ID (S-Nummer nicht im Transcript, daher Datum
+  statt S-Nr); (b) jüngste Session oben (nach Startzeit sortiert); (c) Σ als „Σ (alle Sessions)"
+  beschriftet; (d) je Session Subagenten-Anzahl + eigene Detailtabelle (Agent + Aufgabe aus
+  `*.meta.json`); (e) Mermaid-Tortendiagramm der Token je Tier.
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
   u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
   nicht nur maschinen-orientiert zählen.

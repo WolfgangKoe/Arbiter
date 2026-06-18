@@ -105,20 +105,56 @@ def project_dir_for(cwd: Path) -> Path:
     return Path.home() / ".claude" / "projects" / slug
 
 
-def collect_records(project_dir: Path, *, session_filter: str | None = None) -> list[UsageRecord]:
-    """Liest alle Haupt- und Subagent-Transcripts eines Projekts."""
+def parse_first_timestamp(lines: list[str]) -> str | None:
+    """Liefert den ``timestamp`` des ersten Eintrags (Session-Startzeit)."""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        timestamp = entry.get("timestamp")
+        if timestamp:
+            return timestamp
+    return None
+
+
+def read_subagents(subagents_dir: Path) -> list[tuple[str, str]]:
+    """Liest (agentType, description) je Subagent aus den ``*.meta.json``."""
+    subagents: list[tuple[str, str]] = []
+    if not subagents_dir.is_dir():
+        return subagents
+    for meta_file in sorted(subagents_dir.glob("*.meta.json")):
+        try:
+            data = json.loads(meta_file.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        subagents.append((data.get("agentType") or "?", data.get("description") or ""))
+    return subagents
+
+
+@dataclass(frozen=True)
+class SessionMeta:
+    """Lesbare Begleitdaten einer Session (Startzeit, gestartete Subagenten)."""
+
+    started_at: str | None
+    subagents: list[tuple[str, str]]
+
+
+def collect_project(
+    project_dir: Path, *, session_filter: str | None = None
+) -> tuple[list[UsageRecord], dict[str, SessionMeta]]:
+    """Liest Records + Metadaten aller Sessions eines Projekts."""
     records: list[UsageRecord] = []
+    meta: dict[str, SessionMeta] = {}
     for main_file in sorted(project_dir.glob("*.jsonl")):
         session = main_file.stem
         if session_filter and session != session_filter:
             continue
-        records.extend(
-            parse_usage_lines(
-                main_file.read_text(encoding="utf-8").splitlines(),
-                session=session,
-                role="main",
-            )
-        )
+        main_lines = main_file.read_text(encoding="utf-8").splitlines()
+        records.extend(parse_usage_lines(main_lines, session=session, role="main"))
         subagents_dir = project_dir / session / "subagents"
         for sub_file in sorted(subagents_dir.glob("*.jsonl")):
             records.extend(
@@ -128,7 +164,11 @@ def collect_records(project_dir: Path, *, session_filter: str | None = None) -> 
                     role="subagent",
                 )
             )
-    return records
+        meta[session] = SessionMeta(
+            started_at=parse_first_timestamp(main_lines),
+            subagents=read_subagents(subagents_dir),
+        )
+    return records, meta
 
 
 @dataclass(frozen=True)
@@ -182,12 +222,58 @@ def _fmt(value: int) -> str:
 
 
 def _escape_label(label: str) -> str:
-    """Macht Tier-Labels Markdown-sicher (z. B. ``<synthetic>``)."""
+    """Macht Labels Markdown-sicher (z. B. ``<synthetic>``)."""
     return label.replace("<", "&lt;").replace(">", "&gt;")
 
 
-def render_markdown(summary: dict, *, generated_at: str) -> str:
-    """Rendert die Zusammenfassung als Markdown-Report (Leitstand-Feld 4)."""
+def _cell(text: str) -> str:
+    """Sanitisiert freien Text für eine Tabellenzelle (kein Pipe/Umbruch)."""
+    return _escape_label(text).replace("|", "\\|").replace("\n", " ").strip()
+
+
+def session_label(session_id: str, started_at: str | None) -> str:
+    """Lesbares Label: Datum + Uhrzeit, sonst die gekürzte Session-ID."""
+    short = session_id[:8]
+    if not started_at:
+        return short
+    try:
+        when = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+    except ValueError:
+        return short
+    return f"{when:%Y-%m-%d %H:%M} · {short}"
+
+
+def _sessions_newest_first(summary: dict, meta: dict[str, SessionMeta]) -> list[str]:
+    """Session-IDs nach Startzeit absteigend (jüngste zuerst); ohne Zeit ans Ende."""
+    return sorted(
+        summary["by_session"],
+        key=lambda s: (meta.get(s, SessionMeta(None, [])).started_at or "", s),
+        reverse=True,
+    )
+
+
+def _tier_pie(summary: dict) -> list[str]:
+    """Mermaid-Tortendiagramm der Gesamt-Token je Tier (nur Tiers > 0)."""
+    slices = [
+        (tier, bucket.total) for tier, bucket in summary["by_tier"].items() if bucket.total > 0
+    ]
+    if not slices:
+        return []
+    lines = ["```mermaid", "pie showData", "    title Gesamt-Token je Modell-Tier"]
+    for tier, total in sorted(slices, key=lambda item: -item[1]):
+        lines.append(f'    "{_escape_label(tier)}" : {total}')
+    lines.append("```")
+    return lines
+
+
+def render_markdown(
+    summary: dict,
+    *,
+    generated_at: str,
+    meta: dict[str, SessionMeta] | None = None,
+) -> str:
+    """Rendert den Token-Report als Markdown — leser-orientiert (ADR-0002)."""
+    meta = meta or {}
     lines: list[str] = [
         "# Token-Report — Wer leistete was",
         "",
@@ -197,7 +283,13 @@ def render_markdown(summary: dict, *, generated_at: str) -> str:
         "Haupt-Session (Orchestrator) und Subagenten **getrennt** ausgewiesen.",
         "Token-Maß = input + cache_creation + cache_read + output.",
         "",
-        "## Summe je Modell-Tier",
+        "## Gesamt-Token je Modell-Tier",
+        "",
+        "Summe **über alle Sessions** hinweg.",
+        "",
+    ]
+    lines += _tier_pie(summary)
+    lines += [
         "",
         "| Tier | Antworten | Output-Token | Gesamt-Token |",
         "|---|---:|---:|---:|",
@@ -210,24 +302,49 @@ def render_markdown(summary: dict, *, generated_at: str) -> str:
         )
     grand = summary["grand_total"]
     lines.append(
-        f"| **Σ** | **{_fmt(grand.count)}** | **{_fmt(grand.output)}** "
+        f"| **Σ (alle Sessions)** | **{_fmt(grand.count)}** | **{_fmt(grand.output)}** "
         f"| **{_fmt(grand.total)}** |"
     )
 
+    ordered = _sessions_newest_first(summary, meta)
     lines += [
         "",
         "## Je Session — Haupt vs. Subagent",
         "",
-        "| Session | Haupt (gesamt) | Subagent (gesamt) | Subagent-Anteil |",
-        "|---|---:|---:|---:|",
+        "Jüngste Session zuerst.",
+        "",
+        "| Session | Haupt (Token) | Subagent (Token) | Subagent-Anteil | Subagenten |",
+        "|---|---:|---:|---:|---:|",
     ]
-    for session in sorted(summary["by_session"]):
+    for session in ordered:
         roles = summary["by_session"][session]
         main_total = roles["main"].total
         sub_total = roles["subagent"].total
         combined = main_total + sub_total
         share = f"{sub_total / combined * 100:.1f} %" if combined else "—"
-        lines.append(f"| `{session[:8]}` | {_fmt(main_total)} | {_fmt(sub_total)} " f"| {share} |")
+        label = session_label(session, meta.get(session, SessionMeta(None, [])).started_at)
+        n_subagents = len(meta.get(session, SessionMeta(None, [])).subagents)
+        lines.append(
+            f"| {label} | {_fmt(main_total)} | {_fmt(sub_total)} | {share} " f"| {n_subagents} |"
+        )
+
+    detail = [
+        (session, meta[session])
+        for session in ordered
+        if meta.get(session) and meta[session].subagents
+    ]
+    if detail:
+        lines += [
+            "",
+            "## Subagenten — wer wurde wofür gestartet",
+            "",
+            "| Session | Agent | Aufgabe |",
+            "|---|---|---|",
+        ]
+        for session, session_meta in detail:
+            label = session_label(session, session_meta.started_at)
+            for agent_type, description in session_meta.subagents:
+                lines.append(f"| {label} | {_cell(agent_type)} | {_cell(description)} |")
     lines.append("")
     return "\n".join(lines)
 
@@ -254,10 +371,10 @@ def main(argv: list[str] | None = None) -> int:
     if not project_dir.is_dir():
         parser.error(f"Transcript-Verzeichnis nicht gefunden: {project_dir}")
 
-    records = collect_records(project_dir, session_filter=args.session)
+    records, meta = collect_project(project_dir, session_filter=args.session)
     summary = summarize(records)
     generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
-    report = render_markdown(summary, generated_at=generated_at)
+    report = render_markdown(summary, generated_at=generated_at, meta=meta)
 
     if args.write:
         _OUTPUT_DOC.parent.mkdir(parents=True, exist_ok=True)

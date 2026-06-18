@@ -29,12 +29,13 @@ Haupt-Session- und Subagent-Verbrauch **getrennt** zusammen — parst `*.jsonl` 
 Modell-Tier (Opus/Sonnet/Haiku/Fable) und je Session, rendert Markdown. CLI:
 `python tools/token_report.py [--session <id>] [--write]`. Report → `docs/metrics/overview.md`
 (neu), aus `LEITSTAND.md` Feld 4 verlinkt. Reine Aggregation getestet
-(`tests/tools/test_token_report.py`, 6 Tests — tools/ ist nicht coverage-gemessen,
+(`tests/tools/test_token_report.py`, 12 Tests — tools/ ist nicht coverage-gemessen,
 Netz trotzdem da). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`, kein Streamlit).
 **Retro → ADR-0002:** stakeholder-gerichtete Artefakte (Leitstand/Reports/Gates) sind für den
-Leser, müssen seine Fragen beantworten; Retro fester Teil von Event 5. Folge im Backlog:
-**Token-Report v2** (lesbare Labels, jüngste oben, Σ-Beschriftung, Subagenten + Aufgabe, Diagramm)
-+ „Gates leser-orientiert prüfen".
+Leser, müssen seine Fragen beantworten; Retro fester Teil von Event 5.
+**Token-Report v2 ✅** (gleiche Session): lesbare Labels (Datum+Uhrzeit+Kurz-ID; S-Nr nicht im
+Transcript), jüngste oben, „Σ (alle Sessions)", Subagenten-Anzahl + Detailtabelle (Agent+Aufgabe),
+Mermaid-Torte. Offen: „Gates leser-orientiert prüfen" (backlog).
 
 **S56 — Operating Model etabliert (Aufbau-/Ablauforganisation).** Governance-Schicht nach
 Luhmann/integraler Sicht: `docs/governance/operating_model.md` (Rollen, Model-Tier inkl. Haiku-
