@@ -102,9 +102,14 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   statt S-Nr); (b) jüngste Session oben (nach Startzeit sortiert); (c) Σ als „Σ (alle Sessions)"
   beschriftet; (d) je Session Subagenten-Anzahl + eigene Detailtabelle (Agent + Aufgabe aus
   `*.meta.json`); (e) Mermaid-Tortendiagramm der Token je Tier.
-- 🟢 **Token-Report v3 (Effizienz statt Menge, → ADR-0002):** Umbau zu einer Effizienz-Anzeige
-  („wurden die Token gut ausgegeben, werden wir besser/schlechter?"). **Frische Session** (großer,
-  diagrammlastiger Bau, ~50–70k). Akzeptanzkriterien:
+- ✅ **Token-Report v3 (Effizienz statt Menge, → ADR-0002, S58):** Umbau zu einer Effizienz-Anzeige
+  („wurden die Token gut ausgegeben, werden wir besser/schlechter?"). Akzeptanz a–f erfüllt:
+  (a) Fokus-Block letzte Session (Text + Zusammensetzungs-Balken input/cache_creation/cache_read/
+  output); (b) Verlauf 6 Sessions mit theme-sicheren Unicode-Balken Peak-Kontext/Subagent-Anteil/
+  Modell-Mix (`█`Opus·`▓`Sonnet·`▒`Haiku) + Trend ↑/↓; (c) auto-Hinweise (Korridor/Subagent/Tiering);
+  (d) Subagenten-Tabelle Session·Modell·Agent·Aufgabe; (e) Aufgabe aus 1. User-Nachricht +
+  optionaler `docs/metrics/session_notes.yaml`-Link; (f) All-Time-Torte entfernt. 23 Tool-Tests grün.
+  Frühere Spec:
   - (a) **Fokus letzte Session**: Text (Aufgabe, Modelle je Rolle, Tokens, Peak-Kontext vs. 150k,
     Subagent-Anteil, cache_read/Output) **+ Diagramm** = Zusammensetzungs-Balken (input /
     cache_creation / cache_read / output).

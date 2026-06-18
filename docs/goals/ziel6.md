@@ -1659,3 +1659,13 @@ unit_state["group_models"]: dict[str, int]
 - **S54 (2026-06-17)** Regel-Katalog Phase-1-Gate (read-only): `rules.md` ins Schulden-Scoreboard —
   Abdeckung % je Klasse (A 16/29 · B 0/4 · C 1/1), Ledger (2) + Konsistenz-Check (`getestet: ja`-
   Testname existiert). Parser `tests/acceptance/_rules.py` (regex/disk). 852 Tests grün, 88.45 %.
+- **S55 (2026-06-17)** Regel-Katalog: Bereich Command Phase ausgerollt (14 Einträge `R-CMD-01..14`,
+  Sonnet-Subagent + Opus-Review). Nenner 48 (34 Combat + 14 Command); Ledger 7. 852 Tests, 88.45 %.
+- **S56 (2026-06-18)** Operating Model etabliert: `docs/governance/operating_model.md` (Rollen, Model-
+  Tier, 7 Events, 4 Modi), `LEITSTAND.md` als Einstiegstür, ADR-Log + ADR-0001, `docs/inbox/`. Doku-only.
+- **S57 (2026-06-18)** Token-Report v1+v2 (`tools/token_report.py` → `docs/metrics/overview.md`):
+  Haupt vs. Subagent getrennt je Tier/Session, leser-orientiert (ADR-0002). 12 Tool-Tests.
+- **S58 (2026-06-18)** Token-Report v3 (Effizienz statt Menge, ADR-0002): Fokus-Block letzte Session
+  + Verlauf 6 Sessions (theme-sichere Balken Peak-Kontext/Subagent/Modell-Mix + Trend) + auto-Hinweise
+  + Subagenten-Tabelle (Modell) + Aufgabe aus 1. User-Nachricht; All-Time-Torte raus. 23 Tool-Tests,
+  875 gesamt grün, 88.45 %. Bewusster Test-Vertragswechsel (`SessionSummary`) per freigegebener Spec.

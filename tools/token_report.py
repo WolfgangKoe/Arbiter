@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
-"""Token-/„Wer leistete was"-Report — Operating-Model Phase B.
+"""Token-Report — Effizienz statt Menge (Operating-Model Phase B, v3).
 
-Führt den Token-Verbrauch der Haupt-Session (Orchestrator/Opus) und der
-Subagenten (Sonnet/Haiku) **getrennt** zusammen, wie CLAUDE.md es verlangt.
-Quelle sind die Claude-Code-Transcripts unter
-``~/.claude/projects/<slug>/``:
+Beantwortet die Stakeholder-Frage *„wurden die Token gut ausgegeben, werden wir
+besser oder schlechter?"* — nicht bloße Mengen, sondern Effizienz und Trend.
+Quelle sind die Claude-Code-Transcripts unter ``~/.claude/projects/<slug>/``:
 
-* Haupt-Chain   : ``<slug>/<session>.jsonl``           (``isSidechain: false``)
-* Subagenten    : ``<slug>/<session>/subagents/*.jsonl`` (``isSidechain: true``)
+* Haupt-Chain : ``<slug>/<session>.jsonl``            (Orchestrator, Opus)
+* Subagenten  : ``<slug>/<session>/subagents/*.jsonl`` (Sonnet/Haiku, isoliert)
+
+Der Report hat fünf Teile (ADR-0002, leser-orientiert):
+
+1. **Fokus letzte Session** — Aufgabe, Modelle je Rolle, Peak-Kontext vs. 150k,
+   Subagent-Anteil, plus ein Zusammensetzungs-Balken (input/cache_creation/
+   cache_read/output).
+2. **Verlauf (letzte 6 Sessions)** — je Session theme-sichere Unicode-Balken für
+   Peak-Kontext, Subagent-Anteil und Modell-Mix, jeweils mit Trend ↑/↓.
+3. **Hinweise** — auto-generiert (Korridor-Überschreitung, Subagent-Last, Tiering).
+4. **Subagenten** — Session · Modell · Agent · Aufgabe.
 
 Aufruf::
 
@@ -15,8 +24,9 @@ Aufruf::
     python tools/token_report.py --session <id>
     python tools/token_report.py --write    # docs/metrics/overview.md aktualisieren
 
-Token-Maß je Eintrag = ``input + cache_creation + cache_read + output`` —
-konsistent mit der Korridor-Definition in CLAUDE.md.
+Token-Maß je Antwort = ``input + cache_creation + cache_read + output``.
+Peak-Kontext je Session = ``max(input + cache_read + cache_creation)`` über die
+Haupt-Antworten (das ist das Fenster, das der 150k-Korridor begrenzt).
 """
 
 from __future__ import annotations
@@ -24,9 +34,12 @@ from __future__ import annotations
 import argparse
 import json
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
+
+# Kontext-Korridor aus CLAUDE.md — Bezugsgröße für Peak-Kontext und Hinweise.
+CONTEXT_LIMIT = 150_000
 
 # Mapping von Modell-ID-Präfix auf das Tier-Label des Operating Models.
 _MODEL_TIERS: tuple[tuple[str, str], ...] = (
@@ -34,6 +47,26 @@ _MODEL_TIERS: tuple[tuple[str, str], ...] = (
     ("claude-sonnet", "Sonnet"),
     ("claude-haiku", "Haiku"),
     ("claude-fable", "Fable"),
+)
+
+# Modell-Mix-Balken: feste Zeichen je Tier (theme-sicher, keine Farb-Legende).
+_MIX_CHARS: tuple[tuple[str, str], ...] = (
+    ("Opus", "█"),
+    ("Sonnet", "▓"),
+    ("Haiku", "▒"),
+)
+_MIX_OTHER = "·"
+
+# Wrapper-Tags, die keine echte Nutzer-Aufgabe sind (Slash-Kommandos, IDE-Kontext).
+_WRAPPER_TAGS: tuple[str, ...] = (
+    "local-command-caveat",
+    "command-name",
+    "command-message",
+    "command-args",
+    "command-stdout",
+    "ide_selection",
+    "ide_opened_file",
+    "system-reminder",
 )
 
 
@@ -62,6 +95,11 @@ class UsageRecord:
     @property
     def total(self) -> int:
         return self.input_tokens + self.cache_creation + self.cache_read + self.output_tokens
+
+    @property
+    def context(self) -> int:
+        """Belegtes Kontextfenster dieser Antwort (ohne neuen Output)."""
+        return self.input_tokens + self.cache_read + self.cache_creation
 
 
 def parse_usage_lines(lines: list[str], *, session: str, role: str) -> list[UsageRecord]:
@@ -121,9 +159,73 @@ def parse_first_timestamp(lines: list[str]) -> str | None:
     return None
 
 
-def read_subagents(subagents_dir: Path) -> list[tuple[str, str]]:
-    """Liest (agentType, description) je Subagent aus den ``*.meta.json``."""
-    subagents: list[tuple[str, str]] = []
+def _user_text(entry: dict) -> str:
+    """Reiner Text einer user-Nachricht (verbindet text-Blöcke, ignoriert Tools)."""
+    content = (entry.get("message") or {}).get("content")
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return " ".join(
+            block.get("text", "")
+            for block in content
+            if isinstance(block, dict) and block.get("type") == "text"
+        )
+    return ""
+
+
+def _is_wrapper(text: str) -> bool:
+    """Erkennt Slash-Kommando-/IDE-/System-Wrapper statt echter Nutzer-Eingabe."""
+    return text.startswith("<") and any(tag in text[:40] for tag in _WRAPPER_TAGS)
+
+
+def parse_first_user_task(lines: list[str], *, max_len: int = 120) -> str | None:
+    """Die erste echte Nutzer-Aufgabe einer Session (Wrapper-Zeilen übersprungen)."""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if entry.get("type") != "user" or entry.get("isMeta"):
+            continue
+        text = _user_text(entry).strip()
+        if not text or _is_wrapper(text):
+            continue
+        text = " ".join(text.split())
+        return text if len(text) <= max_len else text[: max_len - 1].rstrip() + "…"
+    return None
+
+
+@dataclass(frozen=True)
+class Subagent:
+    """Ein gestarteter Subagent: Typ, Aufgabe und Modell-Tier."""
+
+    agent_type: str
+    description: str
+    tier: str
+
+
+def _first_model(jsonl_path: Path) -> str | None:
+    """Modell-ID aus der ersten assistant-Antwort eines Transcripts."""
+    if not jsonl_path.is_file():
+        return None
+    for line in jsonl_path.read_text(encoding="utf-8").splitlines():
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if entry.get("type") == "assistant":
+            model = (entry.get("message") or {}).get("model")
+            if model:
+                return model
+    return None
+
+
+def read_subagents(subagents_dir: Path) -> list[Subagent]:
+    """Liest (Typ, Aufgabe, Tier) je Subagent aus ``*.meta.json`` + ``*.jsonl``."""
+    subagents: list[Subagent] = []
     if not subagents_dir.is_dir():
         return subagents
     for meta_file in sorted(subagents_dir.glob("*.meta.json")):
@@ -131,16 +233,24 @@ def read_subagents(subagents_dir: Path) -> list[tuple[str, str]]:
             data = json.loads(meta_file.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             continue
-        subagents.append((data.get("agentType") or "?", data.get("description") or ""))
+        jsonl_path = meta_file.with_suffix("").with_suffix(".jsonl")
+        subagents.append(
+            Subagent(
+                agent_type=data.get("agentType") or "?",
+                description=data.get("description") or "",
+                tier=tier_for_model(_first_model(jsonl_path)),
+            )
+        )
     return subagents
 
 
 @dataclass(frozen=True)
 class SessionMeta:
-    """Lesbare Begleitdaten einer Session (Startzeit, gestartete Subagenten)."""
+    """Lesbare Begleitdaten einer Session (Startzeit, Aufgabe, Subagenten)."""
 
     started_at: str | None
-    subagents: list[tuple[str, str]]
+    task: str | None
+    subagents: list[Subagent]
 
 
 def collect_project(
@@ -166,6 +276,7 @@ def collect_project(
             )
         meta[session] = SessionMeta(
             started_at=parse_first_timestamp(main_lines),
+            task=parse_first_user_task(main_lines),
             subagents=read_subagents(subagents_dir),
         )
     return records, meta
@@ -173,52 +284,117 @@ def collect_project(
 
 @dataclass(frozen=True)
 class Bucket:
-    """Aggregierte Summe einer Gruppe von UsageRecords."""
+    """Aggregierte Token-Zusammensetzung einer Gruppe von UsageRecords."""
 
-    total: int
-    output: int
-    count: int
+    input: int = 0
+    cache_creation: int = 0
+    cache_read: int = 0
+    output: int = 0
+    count: int = 0
+
+    @property
+    def total(self) -> int:
+        return self.input + self.cache_creation + self.cache_read + self.output
+
+    def __add__(self, other: Bucket) -> Bucket:
+        return Bucket(
+            input=self.input + other.input,
+            cache_creation=self.cache_creation + other.cache_creation,
+            cache_read=self.cache_read + other.cache_read,
+            output=self.output + other.output,
+            count=self.count + other.count,
+        )
 
 
 def _sum(records: list[UsageRecord]) -> Bucket:
     return Bucket(
-        total=sum(r.total for r in records),
+        input=sum(r.input_tokens for r in records),
+        cache_creation=sum(r.cache_creation for r in records),
+        cache_read=sum(r.cache_read for r in records),
         output=sum(r.output_tokens for r in records),
         count=len(records),
     )
 
 
-def summarize(records: list[UsageRecord]) -> dict:
-    """Verdichtet UsageRecords zu Session- und Tier-Summen (reine Funktion)."""
-    by_session: dict[str, dict[str, Bucket]] = {}
-    by_tier: dict[str, Bucket] = {}
+def _tier_totals(records: list[UsageRecord]) -> dict[str, int]:
+    totals: dict[str, int] = defaultdict(int)
+    for record in records:
+        totals[tier_for_model(record.model)] += record.total
+    return dict(totals)
 
+
+@dataclass(frozen=True)
+class SessionSummary:
+    """Verdichtete Effizienz-Kennzahlen einer Session (reine Aggregation)."""
+
+    session: str
+    main: Bucket
+    subagent: Bucket
+    main_by_tier: dict[str, int] = field(default_factory=dict)
+    sub_by_tier: dict[str, int] = field(default_factory=dict)
+    peak_context: int = 0
+    answers: int = 0
+    over_limit: int = 0
+
+    @property
+    def combined(self) -> Bucket:
+        return self.main + self.subagent
+
+    @property
+    def subagent_share(self) -> float:
+        total = self.combined.total
+        return self.subagent.total / total * 100 if total else 0.0
+
+    @property
+    def by_tier(self) -> dict[str, int]:
+        merged: dict[str, int] = dict(self.main_by_tier)
+        for tier, value in self.sub_by_tier.items():
+            merged[tier] = merged.get(tier, 0) + value
+        return merged
+
+
+def summarize(records: list[UsageRecord]) -> dict:
+    """Verdichtet UsageRecords je Session zu Effizienz-Kennzahlen (reine Funktion)."""
     sessions: dict[str, dict[str, list[UsageRecord]]] = defaultdict(
         lambda: {"main": [], "subagent": []}
     )
-    tiers: dict[str, list[UsageRecord]] = defaultdict(list)
     for record in records:
         sessions[record.session][record.role].append(record)
-        tiers[tier_for_model(record.model)].append(record)
 
+    by_session: dict[str, SessionSummary] = {}
     for session, by_role in sessions.items():
-        by_session[session] = {
-            "main": _sum(by_role["main"]),
-            "subagent": _sum(by_role["subagent"]),
-        }
-    for tier, tier_records in tiers.items():
-        by_tier[tier] = _sum(tier_records)
+        main_records = by_role["main"]
+        contexts = [r.context for r in main_records]
+        by_session[session] = SessionSummary(
+            session=session,
+            main=_sum(main_records),
+            subagent=_sum(by_role["subagent"]),
+            main_by_tier=_tier_totals(main_records),
+            sub_by_tier=_tier_totals(by_role["subagent"]),
+            peak_context=max(contexts, default=0),
+            answers=len(main_records),
+            over_limit=sum(1 for c in contexts if c > CONTEXT_LIMIT),
+        )
 
     return {
-        "by_session": by_session,
-        "by_tier": by_tier,
+        "sessions": by_session,
         "grand_total": _sum(records),
     }
+
+
+# --------------------------------------------------------------------------- #
+# Formatierung                                                                 #
+# --------------------------------------------------------------------------- #
 
 
 def _fmt(value: int) -> str:
     """1234567 -> '1,234,567' (Tausender-Trenner für Lesbarkeit)."""
     return f"{value:,}"
+
+
+def _k(value: int) -> str:
+    """132456 -> '132k' (kompaktes Balken-Label)."""
+    return f"{round(value / 1000)}k"
 
 
 def _escape_label(label: str) -> str:
@@ -229,6 +405,43 @@ def _escape_label(label: str) -> str:
 def _cell(text: str) -> str:
     """Sanitisiert freien Text für eine Tabellenzelle (kein Pipe/Umbruch)."""
     return _escape_label(text).replace("|", "\\|").replace("\n", " ").strip()
+
+
+def bar(value: int, maximum: int, *, width: int = 12, fill: str = "█", empty: str = "░") -> str:
+    """Theme-sicherer Unicode-Balken: gefüllter Anteil ``value/maximum``."""
+    if maximum <= 0:
+        return empty * width
+    filled = max(0, min(width, round(value / maximum * width)))
+    return fill * filled + empty * (width - filled)
+
+
+def model_mix_bar(by_tier: dict[str, int], *, width: int = 12) -> str:
+    """Segmentierter Balken nach Tier-Anteil (█ Opus · ▓ Sonnet · ▒ Haiku · · Rest)."""
+    total = sum(by_tier.values())
+    if total <= 0:
+        return _MIX_OTHER * width
+    known = [tier for tier, _ in _MIX_CHARS if by_tier.get(tier)]
+    others = [tier for tier in by_tier if tier not in dict(_MIX_CHARS) and by_tier[tier]]
+    order = known + others
+    char = dict(_MIX_CHARS)
+
+    raw = {tier: by_tier[tier] / total * width for tier in order}
+    widths = {tier: int(raw[tier]) for tier in order}
+    remainder = width - sum(widths.values())
+    for tier in sorted(order, key=lambda t: raw[t] - widths[t], reverse=True)[:remainder]:
+        widths[tier] += 1
+    return "".join(char.get(tier, _MIX_OTHER) * widths[tier] for tier in order)
+
+
+def trend(current: float | None, previous: float | None, *, tolerance: float = 0.0) -> str:
+    """↑/↓/→ gegenüber der davorliegenden Session (— ohne Vergleichswert)."""
+    if current is None or previous is None:
+        return "—"
+    if current > previous + tolerance:
+        return "↑"
+    if current < previous - tolerance:
+        return "↓"
+    return "→"
 
 
 def session_label(session_id: str, started_at: str | None) -> str:
@@ -243,26 +456,170 @@ def session_label(session_id: str, started_at: str | None) -> str:
     return f"{when:%Y-%m-%d %H:%M} · {short}"
 
 
+def _short_label(session_id: str, started_at: str | None) -> str:
+    """Kompaktes Label für die Verlaufstabelle (MM-TT HH:MM · Kurz-ID)."""
+    short = session_id[:4]
+    if not started_at:
+        return short
+    try:
+        when = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+    except ValueError:
+        return short
+    return f"{when:%m-%d %H:%M} {short}"
+
+
 def _sessions_newest_first(summary: dict, meta: dict[str, SessionMeta]) -> list[str]:
     """Session-IDs nach Startzeit absteigend (jüngste zuerst); ohne Zeit ans Ende."""
     return sorted(
-        summary["by_session"],
-        key=lambda s: (meta.get(s, SessionMeta(None, [])).started_at or "", s),
+        summary["sessions"],
+        key=lambda s: (meta.get(s, _EMPTY_META).started_at or "", s),
         reverse=True,
     )
 
 
-def _tier_pie(summary: dict) -> list[str]:
-    """Mermaid-Tortendiagramm der Gesamt-Token je Tier (nur Tiers > 0)."""
-    slices = [
-        (tier, bucket.total) for tier, bucket in summary["by_tier"].items() if bucket.total > 0
+_EMPTY_META = SessionMeta(None, None, [])
+
+
+def generate_hints(session: SessionSummary) -> list[str]:
+    """Auto-Hinweise zur jüngsten Session (Korridor, Subagent-Last, Tiering)."""
+    hints: list[str] = []
+
+    if session.over_limit:
+        hints.append(
+            f"⚠️ {session.over_limit} von {session.answers} Antworten lagen über dem "
+            f"150k-Korridor — Session früher schneiden."
+        )
+    elif session.peak_context > 0.9 * CONTEXT_LIMIT:
+        hints.append(
+            f"⚠️ Peak-Kontext {_k(session.peak_context)} nahe am 150k-Korridor (>90 %) — "
+            f"geordnet beenden und frisch starten."
+        )
+    else:
+        hints.append(f"✅ Peak-Kontext {_k(session.peak_context)} blieb im 150k-Korridor.")
+
+    share = session.subagent_share
+    if share >= 30:
+        hints.append(
+            f"✅ {share:.0f}% der Token liefen über Subagenten — das Hauptfenster blieb schlank."
+        )
+    elif session.subagent.total == 0 and session.peak_context > 0.5 * CONTEXT_LIMIT:
+        hints.append(
+            "💡 Große Session ohne Subagent — mechanische Fleißarbeit ließe sich an "
+            "Sonnet/Haiku auslagern (CLAUDE.md, Tiering)."
+        )
+
+    low_tier = sum(v for t, v in session.by_tier.items() if t in ("Sonnet", "Haiku"))
+    if low_tier:
+        hints.append(
+            f"✅ {_fmt(low_tier)} Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering."
+        )
+    return hints
+
+
+def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | None) -> list[str]:
+    """Abschnitt „Fokus letzte Session"" — Text + Zusammensetzungs-Balken."""
+    label = session_label(session.session, meta.started_at)
+    task = meta.task or "—"
+    if link:
+        task = f"{task} ([Backlog]({link}))"
+    main_tiers = ", ".join(sorted(session.main_by_tier)) or "—"
+    sub_tiers = ", ".join(sorted(session.sub_by_tier)) or "—"
+    combined = session.combined
+
+    lines = [
+        "## Fokus: letzte Session",
+        "",
+        f"**{_escape_label(label)}**",
+        "",
+        f"- **Aufgabe:** {_cell(task)}",
+        f"- **Modelle:** Haupt {main_tiers} · Subagent {sub_tiers}",
+        f"- **Tokens gesamt:** {_fmt(combined.total)} "
+        f"(Haupt {_fmt(session.main.total)} · Subagent {_fmt(session.subagent.total)}, "
+        f"Anteil {session.subagent_share:.0f} %)",
+        f"- **Peak-Kontext:** {bar(session.peak_context, CONTEXT_LIMIT)} "
+        f"{_k(session.peak_context)} / 150k",
+        f"- **cache_read:** {_fmt(combined.cache_read)} · **Output:** {_fmt(combined.output)}",
+        "",
+        "Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):",
+        "",
+        "```text",
     ]
-    if not slices:
+    parts = (
+        ("input", combined.input),
+        ("cache_creation", combined.cache_creation),
+        ("cache_read", combined.cache_read),
+        ("output", combined.output),
+    )
+    peak = max((value for _, value in parts), default=0)
+    total = combined.total or 1
+    for name, value in parts:
+        share = value / total * 100
+        lines.append(
+            f"{name:<15}▕{bar(value, peak, width=24, empty='░')}▏ {share:>4.0f}%  {_fmt(value)}"
+        )
+    lines += ["```", ""]
+    return lines
+
+
+def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMeta]) -> list[str]:
+    """Abschnitt „Verlauf"" — Balken + Trend je Session (älteste als Vergleich)."""
+    sessions = summary["sessions"]
+    # Trend braucht die jeweils ältere Session — über die volle Liste rechnen.
+    peak = {s: sessions[s].peak_context for s in ordered}
+    share = {s: sessions[s].subagent_share for s in ordered}
+
+    lines = [
+        "## Verlauf (letzte 6 Sessions)",
+        "",
+        "Jüngste zuerst. Balken theme-sicher (Unicode); Trend ↑/↓ ggü. der älteren Session.",
+        "Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.",
+        "",
+        "```text",
+        f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",
+        f"{'-' * 17} {'-' * 22} {'-' * 14} {'-' * 12}",
+    ]
+    for index, session in enumerate(ordered[:6]):
+        summ = sessions[session]
+        older = ordered[index + 1] if index + 1 < len(ordered) else None
+        peak_trend = trend(peak[session], peak[older] if older else None)
+        share_trend = trend(share[session], share[older] if older else None)
+        label = _short_label(session, meta.get(session, _EMPTY_META).started_at)
+        peak_col = (
+            f"{bar(summ.peak_context, CONTEXT_LIMIT)} {_k(summ.peak_context):>4} {peak_trend}"
+        )
+        share_bar = bar(round(summ.subagent_share), 100, width=6)
+        share_col = f"{share_bar} {summ.subagent_share:>3.0f}% {share_trend}"
+        mix_col = model_mix_bar(summ.by_tier)
+        lines.append(f"{label:<17} {peak_col:<22} {share_col:<14} {mix_col:<12}")
+    lines += ["```", ""]
+    return lines
+
+
+def _render_hints(session: SessionSummary) -> list[str]:
+    lines = ["## Hinweise", "", "_Auto-generiert zur jüngsten Session._", ""]
+    lines += [f"- {hint}" for hint in generate_hints(session)]
+    lines.append("")
+    return lines
+
+
+def _render_subagents(ordered: list[str], meta: dict[str, SessionMeta]) -> list[str]:
+    detail = [(s, meta[s]) for s in ordered if meta.get(s) and meta[s].subagents]
+    if not detail:
         return []
-    lines = ["```mermaid", "pie showData", "    title Gesamt-Token je Modell-Tier"]
-    for tier, total in sorted(slices, key=lambda item: -item[1]):
-        lines.append(f'    "{_escape_label(tier)}" : {total}')
-    lines.append("```")
+    lines = [
+        "## Subagenten — wer wurde wofür gestartet",
+        "",
+        "| Session | Modell | Agent | Aufgabe |",
+        "|---|---|---|---|",
+    ]
+    for session, session_meta in detail:
+        label = session_label(session, session_meta.started_at)
+        for sub in session_meta.subagents:
+            lines.append(
+                f"| {label} | {_cell(sub.tier)} | {_cell(sub.agent_type)} "
+                f"| {_cell(sub.description)} |"
+            )
+    lines.append("")
     return lines
 
 
@@ -271,85 +628,66 @@ def render_markdown(
     *,
     generated_at: str,
     meta: dict[str, SessionMeta] | None = None,
+    notes: dict[str, str] | None = None,
 ) -> str:
-    """Rendert den Token-Report als Markdown — leser-orientiert (ADR-0002)."""
+    """Rendert den Effizienz-Report als Markdown (ADR-0002, leser-orientiert)."""
     meta = meta or {}
+    notes = notes or {}
+    grand = summary["grand_total"]
     lines: list[str] = [
-        "# Token-Report — Wer leistete was",
+        "# Token-Report — Effizienz statt Menge",
         "",
         "<!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->",
         f"Stand: {generated_at}",
         "",
-        "Haupt-Session (Orchestrator) und Subagenten **getrennt** ausgewiesen.",
+        "Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*",
+        "Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). "
         "Token-Maß = input + cache_creation + cache_read + output.",
         "",
-        "## Gesamt-Token je Modell-Tier",
-        "",
-        "Summe **über alle Sessions** hinweg.",
-        "",
     ]
-    lines += _tier_pie(summary)
-    lines += [
-        "",
-        "| Tier | Antworten | Output-Token | Gesamt-Token |",
-        "|---|---:|---:|---:|",
-    ]
-    for tier in sorted(summary["by_tier"], key=lambda t: -summary["by_tier"][t].total):
-        bucket = summary["by_tier"][tier]
-        lines.append(
-            f"| {_escape_label(tier)} | {_fmt(bucket.count)} | {_fmt(bucket.output)} "
-            f"| {_fmt(bucket.total)} |"
-        )
-    grand = summary["grand_total"]
-    lines.append(
-        f"| **Σ (alle Sessions)** | **{_fmt(grand.count)}** | **{_fmt(grand.output)}** "
-        f"| **{_fmt(grand.total)}** |"
-    )
 
     ordered = _sessions_newest_first(summary, meta)
-    lines += [
-        "",
-        "## Je Session — Haupt vs. Subagent",
-        "",
-        "Jüngste Session zuerst.",
-        "",
-        "| Session | Haupt (Token) | Subagent (Token) | Subagent-Anteil | Subagenten |",
-        "|---|---:|---:|---:|---:|",
-    ]
-    for session in ordered:
-        roles = summary["by_session"][session]
-        main_total = roles["main"].total
-        sub_total = roles["subagent"].total
-        combined = main_total + sub_total
-        share = f"{sub_total / combined * 100:.1f} %" if combined else "—"
-        label = session_label(session, meta.get(session, SessionMeta(None, [])).started_at)
-        n_subagents = len(meta.get(session, SessionMeta(None, [])).subagents)
-        lines.append(
-            f"| {label} | {_fmt(main_total)} | {_fmt(sub_total)} | {share} " f"| {n_subagents} |"
-        )
+    if not ordered:
+        lines += ["_Keine Session-Daten gefunden._", ""]
+        return "\n".join(lines)
 
-    detail = [
-        (session, meta[session])
-        for session in ordered
-        if meta.get(session) and meta[session].subagents
+    focus = ordered[0]
+    focus_meta = meta.get(focus, _EMPTY_META)
+    lines += _render_focus(summary["sessions"][focus], focus_meta, link=notes.get(focus))
+    lines += _render_history(ordered, summary, meta)
+    lines += _render_hints(summary["sessions"][focus])
+    lines += _render_subagents(ordered, meta)
+    lines += [
+        "---",
+        "",
+        f"Σ über {len(ordered)} Sessions: {_fmt(grand.total)} Token "
+        f"({_fmt(grand.count)} Antworten).",
+        "",
     ]
-    if detail:
-        lines += [
-            "",
-            "## Subagenten — wer wurde wofür gestartet",
-            "",
-            "| Session | Agent | Aufgabe |",
-            "|---|---|---|",
-        ]
-        for session, session_meta in detail:
-            label = session_label(session, session_meta.started_at)
-            for agent_type, description in session_meta.subagents:
-                lines.append(f"| {label} | {_cell(agent_type)} | {_cell(description)} |")
-    lines.append("")
     return "\n".join(lines)
 
 
+# --------------------------------------------------------------------------- #
+# I/O                                                                          #
+# --------------------------------------------------------------------------- #
+
 _OUTPUT_DOC = Path("docs/metrics/overview.md")
+_NOTES_FILE = Path("docs/metrics/session_notes.yaml")
+
+
+def load_session_notes(path: Path) -> dict[str, str]:
+    """Optionale ``<session-id>: link``-Zuordnung (leer, wenn Datei fehlt)."""
+    if not path.is_file():
+        return {}
+    try:
+        import yaml
+
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    return {str(key): str(value) for key, value in data.items() if value}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -374,7 +712,12 @@ def main(argv: list[str] | None = None) -> int:
     records, meta = collect_project(project_dir, session_filter=args.session)
     summary = summarize(records)
     generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
-    report = render_markdown(summary, generated_at=generated_at, meta=meta)
+    report = render_markdown(
+        summary,
+        generated_at=generated_at,
+        meta=meta,
+        notes=load_session_notes(_NOTES_FILE),
+    )
 
     if args.write:
         _OUTPUT_DOC.parent.mkdir(parents=True, exist_ok=True)

@@ -21,7 +21,19 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S57, 2026-06-18)
+## Aktueller Stand (nach S58, 2026-06-18)
+
+**S58 — Token-Report v3: Effizienz statt Menge.** `tools/token_report.py` komplett umgebaut
+(ADR-0002, Akzeptanz a–f aus `backlog.md`): (a) **Fokus letzte Session** = Text (Aufgabe/Modelle
+je Rolle/Tokens/Peak-Kontext vs. 150k/Subagent-Anteil) + Zusammensetzungs-Balken; (b) **Verlauf
+6 Sessions** mit theme-sicheren Unicode-Balken (Peak-Kontext, Subagent-Anteil, Modell-Mix
+`█`Opus·`▓`Sonnet·`▒`Haiku) + Trend ↑/↓ ggü. älterer Session; (c) **auto-Hinweise** (Korridor/
+Subagent-Last/Tiering); (d) **Subagenten-Tabelle** Session·Modell·Agent·Aufgabe (Modell aus
+`agent-*.jsonl`); (e) Aufgabe aus 1. echter User-Nachricht (Wrapper gefiltert) + optionaler
+`session_notes.yaml`-Link; (f) **All-Time-Torte entfernt**. Test komplett neu (23 grün, tools/ nicht
+coverage-gemessen). 875 Tests grün, Coverage 88.45 %. Report → `docs/metrics/overview.md` (`--write`).
+**Bewusster Test-Vertragswechsel** (per freigegebener v3-Spec): altes `by_session`-Dict→`SessionSummary`,
+Pie-Test entfernt (Akzeptanz f). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`).
 
 **S57 — Operating-Model Phase B: Token-Report.** `tools/token_report.py` (neu) führt
 Haupt-Session- und Subagent-Verbrauch **getrennt** zusammen — parst `*.jsonl` (main) +
@@ -53,14 +65,9 @@ die 4 Doku-Dateien (28,9k Token, isoliert), Opus reviewte + finalisierte ADR-000
 Gating) → `backlog.md`. Doku-Drift: 6e-Task `cp_granted_this_phase` war erledigt, jetzt abgehakt.
 852 Tests grün, Coverage 88.45 %.
 
-**S54 — Regel-Katalog Phase 1 Gate (read-only).** `rules.md` ins Schulden-Scoreboard
-verdrahtet: Abdeckung % je Klasse (A 16/29 · B 0/4 · C 1/1), Ledger-Größe (2: R-COMBAT-09,
-R-COMBAT-17) und Konsistenz-Check (jeder `getestet: ja`-Testname existiert in `tests/`).
-Parser `tests/acceptance/_rules.py` (regex/disk, keine Test-Collection, mirror `_acceptance.py`).
-Reine Messung — kein hart-roter Gate-Test (auf Ansage). 852 Tests grün, Coverage 88.45 %.
-
-**S53 — Akzeptanz-Katalog + Arbeitsweise verankert.** Neuer Nenner `rules.md` (Combat-Vorlage,
-34 Regeln, Klasse A/B/C); Token-/Subagent-Arbeitsweise in `CLAUDE.md`. Details: `ziel6.md`.
+**S54/S53 — Regel-Katalog + Gate verankert.** Nenner `rules.md` (Combat-Vorlage, Klasse A/B/C)
++ Token-/Subagent-Arbeitsweise in `CLAUDE.md`; `rules.md` ins Scoreboard verdrahtet (Abdeckung %
+je Klasse, Ledger, Konsistenz-Check; Parser `tests/acceptance/_rules.py`). Details: `ziel6.md`.
 
 **S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Verifizierte Umbenennung
 auf `round_choice` (kein Verhaltenswechsel); Details in `ziel6.md`/`architecture_invariants.md`.
@@ -72,18 +79,16 @@ sondern eine ganze Governance-Schicht (`docs/governance/operating_model.md` + `L
 ADR-Log). Rollen/Tier/Modi/Events/Eskalation dort kanonisch. Offen (optional, erst auf Ansage):
 hartes Gate für Prämissen-Konformität (analog Scoreboard). Phase B/C siehe `backlog.md`.
 
-### ▶ Nächster Schritt — Token-Report v3 (frische Session)
+### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
 
-Effizienz-Umbau statt Mengen-Anzeige. **Vollständige Spec (Akzeptanz a–f) in `backlog.md`:** Fokus
-letzte Session (Text + Zusammensetzungs-Balken) · Verlauf 6 Sessions inkl. aktueller (Peak-Kontext
-vs. 150k + Subagent-Anteil + Modell-Mix, alle als theme-sichere Balken, Trend ↑/↓) · auto-Hinweise ·
-Subagenten-Tabelle (Modell+Aufgabe) · Aufgabe aus 1. User-Nachricht + `session_notes.yaml`-Link.
-**Learning (ADR-0002, aus S57):** Report-Spec erst vollständig festzurren, großen diagrammlastigen
-Bau als frische Session — nicht in eine lange Session stapeln (S57 stapelte S57+v2+v3-Planung).
-
-Alternativen (je eigene Freigabe): Regel-Katalog weiter ausrollen (Movement/Charge/Morale, Sonnet-
-Subagent) oder Ledger schrumpfen (5 R-CMD + 2 Combat als Tests). `rules.md`: Combat 34 + Command 14,
-Nenner 48. Details: `backlog.md`.
+Token-Report-Reihe (v1→v3) ist abgeschlossen. Offene Stränge, je eigene Freigabe:
+1. **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard + Rule-Catalog-Prozente
+   daraufhin durchsehen, ob sie dem Stakeholder *seine* Fragen beantworten (backlog §2). Optional:
+   `docs/metrics/session_notes.yaml` anlegen (Session-ID → Backlog-Link) für sprechende Aufgaben.
+2. **Regel-Katalog weiter ausrollen** (Movement/Charge/Morale, Sonnet-Subagent). `rules.md`:
+   Combat 34 + Command 14, Nenner 48.
+3. **Ledger schrumpfen** (5 R-CMD + 2 Combat als Tests) — Ratchet.
+4. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
