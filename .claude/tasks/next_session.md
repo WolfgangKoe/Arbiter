@@ -59,11 +59,8 @@ R-COMBAT-17) und Konsistenz-Check (jeder `getestet: ja`-Testname existiert in `t
 Parser `tests/acceptance/_rules.py` (regex/disk, keine Test-Collection, mirror `_acceptance.py`).
 Reine Messung — kein hart-roter Gate-Test (auf Ansage). 852 Tests grün, Coverage 88.45 %.
 
-**S53 — Regel-Abdeckung (Akzeptanz-Katalog) + Arbeitsweise verankert.** Neuer Nenner
-`docs/spec/acceptance/rules.md`: Combat-Katalog als verbindliche Vorlage (34 Regeln, Klasse
-A/B/C, stabile `datei:funktion`-Refs + Testnamen). Arbeitsweise in `CLAUDE.md` festgehalten:
-Token-Korridor <150k / 90%-Wind-down, Subagent-für-Fleißarbeit (Sonnet) + Opus-Review,
-getrennte Messung. Noch kein Gate verdrahtet (pytest unverändert).
+**S53 — Akzeptanz-Katalog + Arbeitsweise verankert.** Neuer Nenner `rules.md` (Combat-Vorlage,
+34 Regeln, Klasse A/B/C); Token-/Subagent-Arbeitsweise in `CLAUDE.md`. Details: `ziel6.md`.
 
 **S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Verifizierte Umbenennung
 auf `round_choice` (kein Verhaltenswechsel); Details in `ziel6.md`/`architecture_invariants.md`.
@@ -75,18 +72,18 @@ sondern eine ganze Governance-Schicht (`docs/governance/operating_model.md` + `L
 ADR-Log). Rollen/Tier/Modi/Events/Eskalation dort kanonisch. Offen (optional, erst auf Ansage):
 hartes Gate für Prämissen-Konformität (analog Scoreboard). Phase B/C siehe `backlog.md`.
 
-### ▶ Nächster Schritt — Regel-Katalog weiter ausrollen / Ledger abbauen
+### ▶ Nächster Schritt — Token-Report v3 (frische Session)
 
-Stand: `rules.md` deckt **Combat** (34, R-COMBAT-01..34) + **Command Phase** (14, R-CMD-01..14)
-ab; Nenner **48**, Phase-1-Gate read-only im Scoreboard (Abdeckung %, Ledger, Konsistenz). Vorlage
-steht, Sonnet-Subagent-Muster erprobt (S55). Fixe Entscheidungen: Granularität = **Mechanik-Schritt**;
-Klasse A (App rechnet) / B (nur Tisch → Hinweis) / C (Hybrid).
+Effizienz-Umbau statt Mengen-Anzeige. **Vollständige Spec (Akzeptanz a–f) in `backlog.md`:** Fokus
+letzte Session (Text + Zusammensetzungs-Balken) · Verlauf 6 Sessions inkl. aktueller (Peak-Kontext
+vs. 150k + Subagent-Anteil + Modell-Mix, alle als theme-sichere Balken, Trend ↑/↓) · auto-Hinweise ·
+Subagenten-Tabelle (Modell+Aufgabe) · Aufgabe aus 1. User-Nachricht + `session_notes.yaml`-Link.
+**Learning (ADR-0002, aus S57):** Report-Spec erst vollständig festzurren, großen diagrammlastigen
+Bau als frische Session — nicht in eine lange Session stapeln (S57 stapelte S57+v2+v3-Planung).
 
-Offene Optionen (je eigene Freigabe): (1) **weiterer Bereich** per Sonnet-Subagent — Movement /
-Charge / Morale (~30–80k/Bereich); (2) **Ledger schrumpfen**: 5 R-CMD-Schulden
-(R-CMD-03/04/10/11/12) + 2 Combat (R-09/R-17) als Tests nachziehen (Ratchet → nur kleiner).
-Phase 3 (Token-Report) ✅ S57. Optional: Phase-1-Gate **hart-rot** (Konsistenz + Ledger-Ratchet
-als echte Tests) — erst auf Ansage. Findings: `backlog.md`.
+Alternativen (je eigene Freigabe): Regel-Katalog weiter ausrollen (Movement/Charge/Morale, Sonnet-
+Subagent) oder Ledger schrumpfen (5 R-CMD + 2 Combat als Tests). `rules.md`: Combat 34 + Command 14,
+Nenner 48. Details: `backlog.md`.
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 

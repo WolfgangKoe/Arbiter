@@ -57,7 +57,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 5. **Session-Ende (Retro + Handoff)**
    [next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) aktualisieren, committen. Der **Retro ist fester, nicht überspringbarer Teil** — und für den Stakeholder nachvollziehbar (was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern). Folgt daraus eine Prämissen-Schärfung → ADR anlegen. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
-   **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
+   **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `next_session.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
 6. **Kontext-Korridor-Event (~135 k Token)**
    Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen.

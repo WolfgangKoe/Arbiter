@@ -102,6 +102,22 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   statt S-Nr); (b) jüngste Session oben (nach Startzeit sortiert); (c) Σ als „Σ (alle Sessions)"
   beschriftet; (d) je Session Subagenten-Anzahl + eigene Detailtabelle (Agent + Aufgabe aus
   `*.meta.json`); (e) Mermaid-Tortendiagramm der Token je Tier.
+- 🟢 **Token-Report v3 (Effizienz statt Menge, → ADR-0002):** Umbau zu einer Effizienz-Anzeige
+  („wurden die Token gut ausgegeben, werden wir besser/schlechter?"). **Frische Session** (großer,
+  diagrammlastiger Bau, ~50–70k). Akzeptanzkriterien:
+  - (a) **Fokus letzte Session**: Text (Aufgabe, Modelle je Rolle, Tokens, Peak-Kontext vs. 150k,
+    Subagent-Anteil, cache_read/Output) **+ Diagramm** = Zusammensetzungs-Balken (input /
+    cache_creation / cache_read / output).
+  - (b) **Verlauf letzte 6 Sessions** (inkl. der aktuellen als jüngste Zeile), je als Balken,
+    theme-sicher (Unicode/Schattierung, keine Farb-Legende): **Peak-Kontext** (vs. 150k) +
+    **Subagent-Anteil** + **Modell-Mix** (segmentierter Balken, `█` Opus · `▓` Sonnet · `▒` Haiku),
+    jeweils mit **Trend ↑/↓** ggü. den davorliegenden Sessions.
+  - (c) **Hinweise** auto-generiert, usage-fenster-artig (>150k-Anteil, subagent-heavy, Modellwahl).
+  - (d) **Subagenten-Tabelle**: Session | Modell | Agent | Aufgabe.
+  - (e) **Aufgabe je Session** automatisch aus erster User-Nachricht + optionaler Backlog-Link via
+    `docs/metrics/session_notes.yaml` (`<session-id>: link`).
+  - (f) All-Time-Tortendiagramm **entfernen** (nützt nicht; dunkle Mermaid-Legende unlesbar).
+  - Peak-Kontext = max(`input + cache_read + cache_creation`) je Antwort der Session.
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
   u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
   nicht nur maschinen-orientiert zählen.
