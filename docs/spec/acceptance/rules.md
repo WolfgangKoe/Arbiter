@@ -25,7 +25,7 @@ Jede Regel ist ein `### R-<BEREICH>-<NN>`-Eintrag. Feldkonventionen:
 - **code**: `datei:funktion` — **keine Zeilennummern** (driften). `—` wenn `status: offen`.
 
 IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
-(diese Datei: Attackenabfolge/Combat, Schießen + Nahkampf).
+(diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase).
 
 ---
 
@@ -302,3 +302,119 @@ IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
 - **quelle**: core_rules.txt — "Mortal Wounds … in addition to the normal damage … the target unit still suffers the mortal wounds, even if the normal damage is … saved"
 - **code**: —
 - **regel**: Mortal Wounds als Zusatzschaden: Werden immer angewandt, auch wenn der normale Waffenschaden durch den Rettungswurf geblockt wurde.
+
+---
+
+## Bereich: Command Phase
+
+### R-CMD-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_setup_goes_to_command
+- **quelle**: core_rules.txt — "COMMAND PHASE … Both players muster strategic resources"
+- **code**: game_state.py:next_phase
+- **regel**: Die Command Phase ist die erste Phase jedes Spielerzugs; sie folgt unmittelbar auf das Setup und wird bei jedem Phasenwechsel über `next_phase` korrekt eingeleitet.
+
+### R-CMD-02
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_does_not_award_cp_on_player_switch
+- **quelle**: core_rules.txt — "at the start of your Command phase, before doing anything else, you gain 1 Command point"
+- **code**: commandPhase.py:_render_faction_actions
+- **regel**: Zu Beginn der Command Phase erhält die aktive Spielerseite 1 CP — manuell per Button bestätigt und über das Flag `cp_granted_this_phase` auf einmal pro Phase gesperrt; `next_phase` selbst vergibt kein CP.
+
+### R-CMD-03
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "If your army is Battle-forged, then at the start of your Command phase … you gain 1 Command point"
+- **code**: commandPhase.py:_render_faction_actions
+- **regel**: Der CP-Gewinn pro Command Phase ist regelseitig an den Battle-forged-Status gebunden. (Schuld + Befund: Der Grant-Button wird unabhängig von `game_mode`/Battle-forged angezeigt — eine Unbound-Armee könnte den Bonus ebenfalls erhalten; kein Test prüft das Gating.)
+
+### R-CMD-04
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — Battle-forged CP-Bonus / Spielgröße: Combat Patrol 3 · Incursion 6 · Strike Force 12 · Onslaught 18
+- **code**: game_state.py:init_game_state
+- **regel**: Der CP-Startvorrat richtet sich nach der Spielgröße (`CP_BY_GAME_SIZE`: 3/6/12/18). (Schuld: kein Test prüft die vier Stufen.)
+
+### R-CMD-05
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_clickable_when_all_conditions_met / test_greyed_when_insufficient_cp / test_greyed_when_already_used_this_phase
+- **quelle**: core_rules.txt — "CPs … can be spent to utilise Stratagems"
+- **code**: stratagem.py:stratagem_visibility
+- **regel**: Stratagems kosten CP; `stratagem_visibility()` schaltet einen Button auf `clickable` (CP ausreichend, nicht verwendet), `greyed` (CP fehlen oder bereits genutzt) oder `hidden` (Bedingungen/Phase nicht erfüllt).
+
+### R-CMD-06
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_resets_used_stratagem_ids
+- **quelle**: core_rules.txt — "once per phase" / "once per battle" Stratagem-Restriktionen
+- **code**: game_state.py:_reset_phase_state
+- **regel**: Die Menge der in dieser Phase genutzten Stratagems (`used_stratagem_ids`) wird bei jedem Phasenwechsel geleert, sodass Einmal-pro-Phase-Stratagems regelkonform zurückgesetzt werden.
+
+### R-CMD-07
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Each player can only gain or have refunded a total of 1 CP per battle round as the result of such rules"
+- **code**: —
+- **regel**: CP-Rückerstattungen/-Gewinne aus Abilities oder Stratagems dürfen insgesamt höchstens 1 CP pro Spielrunde ergeben. Die App erzwingt dieses Limit nicht.
+
+### R-CMD-08
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Battle-forged CP bonus and CPs gained at start of Command phase via mission special rules are exempt from this limit"
+- **code**: —
+- **regel**: Der Battle-forged-CP-Bonus und mission-bedingte CP-Gewinne in der Command Phase sind vom 1-CP-pro-Runde-Limit ausgenommen. Nur am Tisch buchführbar; App kann höchstens einen Hinweis zeigen.
+
+### R-CMD-09
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_resolve_command_start_returns_living_metal / test_resolve_command_start_ork_returns_empty
+- **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
+- **code**: commandPhase.py:resolve_command_start
+- **regel**: Datasheet-Fähigkeiten, die in der Command Phase auslösen (`trigger.phase = "command"`, `timing = "phase_start"`), werden generisch für alle berechtigten Einheiten der aktiven Seite ermittelt.
+
+### R-CMD-10
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
+- **code**: commandPhase.py:_render_buff_roll_ability
+- **regel**: Aktivierte Command-Phase-Fähigkeiten vom Typ `buff_roll`/`reroll_hit_1` werden pro ausgewählter Einheit gerendert und ihr Effekt als `active_buffs` im Einheitenzustand eingetragen. (Schuld: kein Test prüft das Eintragen des Buffs.)
+
+### R-CMD-11
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
+- **code**: commandPhase.py:_render_gain_cp_roll
+- **regel**: Fähigkeiten mit `gain_cp_roll`-Effekt (Würfelwurf am Phase-Start; bei Schwellenwert+ erhält die aktive Seite CP) sind einmal pro Command Phase auflösbar und danach gesperrt. (Schuld: kein Test prüft den CP-Gewinn.)
+
+### R-CMD-12
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "COMMAND RE-ROLL … Use this Stratagem after you have made a hit roll, a wound roll, a damage roll, a saving throw, an Advance roll, a charge roll, a Psychic test … 1 CP"
+- **code**: stratagem.py:stratagem_visibility
+- **regel**: Command Re-Roll (1 CP, Core-Stratagem) erlaubt das Wiederholen eines einzelnen Würfels; als `phase_reactive` klassifiziert wird es in der UI nicht proaktiv angeboten (reaktiver Einsatz nach einem Würfelwurf am Tisch). (Schuld: kein Test prüft die reaktive Klassifizierung von `command_re_roll`.)
+
+### R-CMD-13
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "some missions have rules that take place in the Command phase"
+- **code**: —
+- **regel**: Missionsspezifische Regeln, die in/zum Ende der Command Phase wirken (z. B. VP-Vergabe bei progressiven Missionen), sind nur am Tisch auswertbar; die App bietet dafür keinen automatischen Mechanismus.
+
+### R-CMD-14
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_advances_index_within_turn
+- **quelle**: core_rules.txt — "Once you and your opponent have resolved all of these rules … progress to your Movement phase"
+- **code**: game_state.py:next_phase
+- **regel**: Nach Abschluss der Command Phase (Phasenwechsel-Bestätigung) wechselt der Zustand in die Movement Phase; der Phasenindex wird innerhalb des Zugs korrekt fortgeschrieben.

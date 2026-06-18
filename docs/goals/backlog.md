@@ -56,6 +56,12 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Badge-Text (`+1` raus, da Pfeil das ausdrückt) + Badge-Breite (ragt in Würfel
   „1"). **Soll-Bild zuerst mit Nutzer als AC festlegen**, dann fixen, dann
   per AC einrasten (Lehre aus Finding 9.2 — nie still ändern).
+- 🔲 **R-CMD-03 — CP-Grant ohne Battle-forged-Gating** (S55, aus Regel-Katalog):
+  Der „Grant +1 CP"-Button in `commandPhase._render_faction_actions` erscheint für die
+  aktive Seite **unabhängig von `game_mode`/Battle-forged** → eine Unbound-Armee könnte
+  den Command-Phase-Bonus ebenfalls erhalten (Regel: nur Battle-forged). Fix-Ort:
+  `_render_faction_actions` an Battle-forged koppeln + Regressionstest. Ledger-Eintrag
+  `R-CMD-03` in [../spec/acceptance/rules.md](../spec/acceptance/rules.md).
 
 ---
 

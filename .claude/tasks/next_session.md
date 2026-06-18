@@ -20,7 +20,14 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S54, 2026-06-17)
+## Aktueller Stand (nach S55, 2026-06-18)
+
+**S55 — Regel-Katalog: Bereich Command Phase ausgerollt.** 14 Einträge `R-CMD-01..14`
+(Sonnet-Subagent erfasst die Fleißarbeit, Opus reviewt/finalisiert) in `rules.md`. Nenner jetzt
+**48** (34 Combat + 14 Command). Scoreboard: A 22/41 (54%) · B 0/6 · C 1/1; Ledger **7** (2 Combat
++ 5 neu: R-CMD-03/04/10/11/12); Konsistenz grün. Befund R-CMD-03 (CP-Grant ohne Battle-forged-
+Gating) → `backlog.md`. Doku-Drift: 6e-Task `cp_granted_this_phase` war erledigt, jetzt abgehakt.
+852 Tests grün, Coverage 88.45 %.
 
 **S54 — Regel-Katalog Phase 1 Gate (read-only).** `rules.md` ins Schulden-Scoreboard
 verdrahtet: Abdeckung % je Klasse (A 16/29 · B 0/4 · C 1/1), Ledger-Größe (2: R-COMBAT-09,
@@ -45,18 +52,28 @@ Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. `reanimation`-Schuld (`r
 **S51 — Organisations-Schuld + Finding #1 + Gate-Netz.** Badge generisch; `dynasty`-Vokabular raus;
 datengetriebenes Vokabular-Gate + Doku-/Akzeptanz-Gate. Details: `ziel6.md`/`backlog.md`.
 
-### ▶ Nächster Schritt — Regel-Abdeckung (Akzeptanz-Katalog) ausrollen
+### ⭐ PRIO nächste Session — Arbeitsmuster formalisieren (Diskussion zuerst)
 
-Phase 0/1 fertig: Combat-Katalog (`docs/spec/acceptance/rules.md`) als **verbindliche Vorlage**
-(34 Regeln; Klasse A/B/C; stabile `datei:funktion`-Refs + Testnamen) **+ Phase-1-Gate read-only
-(S54)** im Scoreboard (Abdeckung %, Ledger, Konsistenz-Check). Fixe Entscheidungen: Granularität =
-**Mechanik-Schritt**; Klasse **C** (Hybrid). Combat-Ledger = **2** (R-09 mehrfach-Invuln, R-17
-Rapid Fire: implementiert ohne Test). Klasse B = 0 % (App zeigt keine Tisch-Hinweise).
+Nutzer-Wunsch (S55): Das erprobte Muster — **Sonnet-Subagent für Fleißarbeit + Opus
+reviewt/finalisiert**, Freigabe-Pflicht, Token-Disziplin — weiter **formalisieren**. Konkret
+zu besprechen (Design, bleibt bei Opus): **explizite Entscheidungsprämissen** definieren
+(welche Entscheidung trifft Subagent vs. Opus; was ist „mechanisch" vs. „Design"; wann ist
+Rückfrage Pflicht) und diese **ggf. mit Gates** absichern (analog Scoreboard/Ratchet). Ablauf:
+erst gemeinsam Soll-Bild klären, dann ggf. in `CLAUDE.md` / Gate-Tests gießen. **Kein
+Vorpreschen — Diskussion vor Umsetzung.** (Der Regel-Katalog-Rollout läuft als Zweittrack.)
 
-Offene Optionen (je eigene Freigabe): (1) **Rollout** weiterer Bereiche per Sonnet-Subagent mit
-der Vorlage (~30–80k/Bereich) — **empfohlen als Nächstes**; (3) **Phase 3** `tools/token_report.py`
-+ `docs/metrics/overview.md`. Optional: das Phase-1-Gate **hart-rot** schalten (Konsistenz +
-Ledger-Ratchet als echte Tests) — erst auf Ansage. Bug #2b u. a. Findings bleiben in `backlog.md`.
+### ▶ Nächster Schritt — Regel-Katalog weiter ausrollen / Ledger abbauen
+
+Stand: `rules.md` deckt **Combat** (34, R-COMBAT-01..34) + **Command Phase** (14, R-CMD-01..14)
+ab; Nenner **48**, Phase-1-Gate read-only im Scoreboard (Abdeckung %, Ledger, Konsistenz). Vorlage
+steht, Sonnet-Subagent-Muster erprobt (S55). Fixe Entscheidungen: Granularität = **Mechanik-Schritt**;
+Klasse A (App rechnet) / B (nur Tisch → Hinweis) / C (Hybrid).
+
+Offene Optionen (je eigene Freigabe): (1) **weiterer Bereich** per Sonnet-Subagent — Movement /
+Charge / Morale (~30–80k/Bereich); (2) **Ledger schrumpfen**: 5 neue R-CMD-Schulden
+(R-CMD-03/04/10/11/12) + 2 Combat (R-09/R-17) als Tests nachziehen (Ratchet → nur kleiner);
+(3) **Phase 3** `tools/token_report.py` + `docs/metrics/overview.md`. Optional: Phase-1-Gate
+**hart-rot** (Konsistenz + Ledger-Ratchet als echte Tests) — erst auf Ansage. Findings: `backlog.md`.
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)
 
