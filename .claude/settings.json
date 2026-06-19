@@ -54,6 +54,42 @@
             "statusMessage": "Token-Report aktualisieren"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/wolfgang/Dokumente/Arbiter && .venv/bin/python3 tools/freigabe_gate.py",
+            "timeout": 10,
+            "statusMessage": "Freigabe-Gate prüfen"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/wolfgang/Dokumente/Arbiter && .venv/bin/python3 tools/test_report_reminder.py 2>/dev/null || true",
+            "timeout": 10,
+            "statusMessage": "Token-Report-Reminder"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f /home/wolfgang/Dokumente/Arbiter/.claude/.freigabe",
+            "timeout": 5,
+            "statusMessage": "Freigabe-Gate scharf schalten"
+          }
+        ]
       }
     ]
   }

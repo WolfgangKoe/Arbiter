@@ -21,9 +21,23 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S65, 2026-06-19)
+## Aktueller Stand (nach S66, 2026-06-19)
 
-**S65 — #PSI implementiert (Code + Tests, UI-Verifikation ausstehend).**
+**S66 — Operating-Model-Events Hook-vollzogen (committet).** Wurzel: die Events
+waren Prosa, „feuerten gar nicht von selbst" (Stakeholder-Befund). Vollzug aus der
+Prosa in die Harness verlagert: (1) `tools/session_context.py` eskaliert gestuft
+(`gauge_message`: ≥120k ⚠️ + Retro-Vorankündigung, ≥135k ⛔ Stopp). (2) **Hartes
+Freigabe-Gate** `tools/freigabe_gate.py` (PreToolUse Edit/Write/NotebookEdit, Exit 2)
+blockiert, solange Marker `.claude/.freigabe` fehlt; Freigabe physisch via
+`touch .claude/.freigabe`; SessionStart-Hook löscht den Marker → jede Session neu
+scharf. (3) `tools/test_report_reminder.py` (PostToolUse pytest) injiziert die
+Token-Report-Teilen-Pflicht. Subagent-Routing **bewusst nicht** automatisiert (Urteil,
+kein Konditionalprogramm). ADR-0003 + operating_model.md (🔧-Marker) gepflegt. +11
+Tests, **911 grün**, Cov 88.45 %. Bekannte Lücke: Bash-Writes (`>`, `sed -i`) nicht
+gegated. **Manueller Check:** Nach `/clear` Marker weg → erster Edit blockiert bis
+`touch .claude/.freigabe`; ≥120k/≥135k-Eskalation real erst bei hohem Kontext sichtbar.
+
+**S65 — #PSI implementiert (committet, UI-Verifikation noch ausstehend).**
 `refund_deny(denies_used, faction)` + `cleared_deny(psi)` in `src/gameMechanic/psychicPhase.py`
 — reine, nicht-mutierende Helfer. Alle drei aktiv-seitigen Resets routen durch einen
 einheitlichen `_reset_active_power()`: cleart den Power UND refundiert das Deny-Budget der
@@ -31,17 +45,15 @@ inaktiven Fraktion → fixt den Core-Bug (denied+reset = permanent verbranntes B
 Neues symmetrisches **„Undo deny"**-Button (`_render_undo_deny_button`) im Deny-Column:
 gibt Power + Budget zurück. „Skip Deny" verbraucht kein Budget. `deny_faction`-Feld in
 `psi_result` (gesetzt bei Attempt + Skip). +8 Tests (`TestRefundDeny`/`TestClearedDeny`),
-**900 grün**, Cov **88.45 %**. black/isort/ruff clean. **Noch kein Commit** (wartet auf
-manuelle UI-Verifikation + gemeinsamen Commit mit Token-Gauge-Hook).
-**Manuelle Checks:** (a) „Undo deny" nach erfolgreichem Deny → Power zurück + Budget frei;
+**900 grün**, Cov **88.45 %**. black/isort/ruff clean. Committet (d2a9321/cc75490).
+**UI-Verifikation noch offen** — manuelle Checks:
+(a) „Undo deny" nach erfolgreichem Deny → Power zurück + Budget frei;
 (b) aktiv-Reset nach Deny → nächste Power im Zug denybar (Budget refundiert, kein falsches
 „already used"); (c) „Skip Deny" = kein Budgetverbrauch; (d) „Undo deny" nach fehlgeschlagenem
 Deny funktioniert.
 
-**S65 — Live-Token-Gauge-Hook.** `tools/session_context.py` (`UserPromptSubmit`-Hook):
-gibt bei jedem Prompt den aktuellen Kontext-Stand aus (`Session context: ~Xk tokens
-(corridor <150k; wind-down ~135k)`). In `.claude/settings.json` verdrahtet. Verifiziert
-(~81k gemeldet). **Noch kein Commit** (s. o.).
+**S65 — Live-Token-Gauge-Hook** (committet d2a9321): `tools/session_context.py`. In S66
+auf gestufte Eskalation erweitert (s. o.).
 
 **S64 — Psychic-Render-Schuld getestet + Token-Messung prompt-frei.** 5 reine Helfer
 extrahiert (`smite_warp_charge`, `is_manifested`, `perils_pending`, `faction_deny_used`,
@@ -78,5 +90,8 @@ Frühere Sessions (S60–S63): Verlauf in `docs/goals/ziel6.md`.
 - **Regel-Katalog** (Nenner): `docs/spec/acceptance/rules.md` — Klasse A/B/C,
   `getestet: ja — <testname>`. Parser: `tests/acceptance/_rules.py`. Noch kein hart-roter Gate.
 - **Token-Korridor:** <150k, bei ~135k Session beenden; Fleißarbeit an Sonnet-Subagent.
+  `tools/session_context.py` eskaliert ab 120k/135k automatisch (S66).
 - **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md`
-  (läuft automatisch bei `pytest`). Live-Kontext: `tools/session_context.py`-Hook (aktiv).
+  (läuft automatisch bei `pytest`; PostToolUse-Reminder zum Teilen, S66).
+- **Freigabe-Gate (S66, hart):** Edit/Write blockiert bis `touch .claude/.freigabe`;
+  SessionStart re-armt. Vollzieht die Freigabe-Pflicht über die Harness (ADR-0003).

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""UserPromptSubmit hook: print the live context-window size each turn.
+"""UserPromptSubmit hook: surface the live context-window size each turn and
+*escalate* at the corridor thresholds — the Kontext-Korridor-Event from the
+operating model, fired by the harness instead of relying on Claude to remember.
 
 Surfaces the number the 150k corridor bounds, between pytest runs (which only
 refresh docs/metrics/overview.md). Must never fail — a non-zero UserPromptSubmit
@@ -10,12 +12,42 @@ cache_read_input_tokens of the last assistant ``usage`` (CLAUDE.md formula). The
 usage object nests sub-objects (``server_tool_use``, ``cache_creation``,
 ``iterations``), so a ``"usage":{[^}]*}`` grep truncates — we parse the whole
 last usage-bearing line as JSON and read its top-level fields.
+
+Three tiers (CLAUDE.md corridor < 150k, wind-down ~135k):
+
+* < 120k  — neutral gauge.
+* >= 120k — warn: announce the Retro now, prepare the wind-down.
+* >= 135k — stop directive: end the session in order (handoff + commit), do not
+            start new work.
 """
 
 from __future__ import annotations
 
 import json
 import sys
+
+WARN_THRESHOLD = 120_000
+STOP_THRESHOLD = 135_000
+
+
+def gauge_message(total: int) -> str:
+    """Return the context line for ``total`` tokens, escalating at thresholds.
+
+    Pure function so the tiering is unit-testable without a transcript.
+    """
+    k = round(total / 1000)
+    if total >= STOP_THRESHOLD:
+        return (
+            f"⛔ KONTEXT-KORRIDOR ERREICHT (~{k}k >= 135k). Wind-down JETZT: "
+            "Review→Retro→Abschluss, Artefakte aktualisieren, committen — "
+            "KEINE neue Arbeit beginnen, nicht in die >150k-Zone laufen."
+        )
+    if total >= WARN_THRESHOLD:
+        return (
+            f"⚠️ Kontext ~{k}k — Korridor (135k) naht. Retro jetzt vorab "
+            "ankündigen und Wind-down vorbereiten; nur noch kleine Tasks."
+        )
+    return f"Session context: ~{k}k tokens (corridor <150k; wind-down ~135k)"
 
 
 def main() -> None:
@@ -35,10 +67,7 @@ def main() -> None:
                 + usage.get("cache_creation_input_tokens", 0)
                 + usage.get("cache_read_input_tokens", 0)
             )
-            print(
-                f"Session context: ~{round(total / 1000)}k tokens "
-                "(corridor <150k; wind-down ~135k)"
-            )
+            print(gauge_message(total))
             return
     except Exception:
         return  # never break prompt submission
