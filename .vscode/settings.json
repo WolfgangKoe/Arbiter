@@ -1,4 +1,6 @@
 {
   "markdown-mermaid.lightModeTheme": "default",
-  "markdown-mermaid.darkModeTheme": "default"
+  "markdown-mermaid.darkModeTheme": "default",
+  "cSpell.enabled": false,
+  "ltex.enabled": false
 }
