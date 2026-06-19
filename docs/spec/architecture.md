@@ -523,6 +523,23 @@ Defined in `src/constants/colors.py`. Injected once as custom CSS in `app.py`.
 
 ---
 
+## Implementierungs-Muster
+
+Wiederkehrende Muster, die quer über Phasen/Module gelten (aus Sessions destilliert).
+
+### ModelGroup (Ziel 6m)
+Strukturell verschiedene Modelle einer Einheit via `model_groups` in `units.yaml`:
+homogen / strukturell gemischt (`count: remainder`) / per-Model-Split. State liegt in
+`group_models` / `group_wounds`; Tod folgt `priority`. Pro Gruppe sind Stat-Overrides
+möglich (`attacks` / `strength` / `ws` / `bs`).
+
+### Reset-Button-Pattern
+Fähigkeits-gesetzter Zustand braucht ein Undo, solange der Zug läuft:
+`turn_flags["<ability>_locked"]`, die Phasen-UI zeigt das Undo, nach Zugwechsel fällt
+`_locked` weg. Beispiel: Veil of Darkness (`movement_locked`).
+
+---
+
 ## Refactoring Plan
 
 ### Phase 0 — Documentation ✅ (this session)

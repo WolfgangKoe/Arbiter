@@ -21,11 +21,27 @@
       "Read(//home/wolfgang/**)",
       "WebFetch(domain:wahapedia.ru)",
       "WebFetch(domain:www.goonhammer.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python3 -c \"from PIL import Image; im=Image.open\\('Fotos/metallisches_wappen_transparenter_hintergrund.png'\\); print\\(im.size, im.mode\\)\")"
     ],
     "additionalDirectories": [
       "/home/wolfgang/Dokumente/Arbiter/.claude/tasks",
       "/tmp"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/wolfgang/Dokumente/Arbiter && grep -q pytest && .venv/bin/python3 tools/token_report.py --write >/dev/null 2>&1 || true",
+            "timeout": 30,
+            "statusMessage": "Token-Report aktualisieren"
+          }
+        ]
+      }
     ]
   }
 }

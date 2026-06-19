@@ -15,7 +15,8 @@ from __future__ import annotations
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
-_NEXT_SESSION_BUDGET = 160  # keep in sync with tests/docs/test_doc_health.py
+_NEXT_SESSION_BUDGET = 120  # Decke, keep in sync with tests/docs/test_doc_health.py
+_NEXT_SESSION_TRIM_TARGET = 70  # beim Reissen der Decke auf <= dieses Ziel kuerzen
 
 
 def _metrics() -> list[str]:
@@ -47,7 +48,10 @@ def _metrics() -> list[str]:
     next_session = _ROOT / ".claude" / "tasks" / "next_session.md"
     n_lines = len(next_session.read_text(encoding="utf-8").splitlines())
     lines.append(f"INV-5  Akzeptanzkriterien          : {len(spec_ac_ids())} AC-IDs (alle gepinnt)")
-    lines.append(f"INV-5  next_session.md             : {n_lines}/{_NEXT_SESSION_BUDGET} Zeilen")
+    lines.append(
+        f"INV-5  next_session.md             : {n_lines}/{_NEXT_SESSION_BUDGET} Zeilen "
+        f"(Ziel beim Kuerzen: <= {_NEXT_SESSION_TRIM_TARGET})"
+    )
 
     # Rule-conformance catalog (rules.md) — coverage % per class, ledger, consistency
     from tests.acceptance import _rules

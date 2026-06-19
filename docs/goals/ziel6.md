@@ -1673,3 +1673,11 @@ unit_state["group_models"]: dict[str, int]
   Sonnet-Subagent erfasst aus `core_rules.txt`, Opus reviewt gegen Code/Regeln). Nenner 61 (34 Combat
   + 14 Command + 13 Movement); alle 6 implementierten Movement-Regeln getestet → kein neuer Ledger
   (bleibt 7). Scoreboard C 6/6 (100%). FLY/Transport als Klasse B. Doku-only, 875 Tests, 88.45 %.
+- **S60 (2026-06-19)** Regel-Katalog: Bereiche Charge + Morale ausgerollt (`R-CHARGE-01..13` +
+  `R-MORALE-01..13`). Nenner 87. Ledger 7→10 (3 Render-Schuld-Einträge). Befund R-COMBAT-32
+  (impl.+getestet, aber `offen` → backlog §0). Doku-only, 875 Tests, 88.45 %.
+- **S61 (2026-06-19)** Session-Hygiene maschinell verankert: Token-Report-Hook in `settings.json`
+  (bei `pytest` läuft `token_report.py --write`); next_session-Gate auf Hysterese (Decke 120 /
+  Trim-Ziel 70, `test_doc_health.py` + `conftest.py`); Doku-Schulden reduziert — Referenz aus
+  next_session in kanonische Häuser geroutet (Architektur-Muster → `architecture.md`, Regel-Gotchas
+  → neue `docs/spec/rules_insights.md`, Constraints → `CLAUDE.md`). next_session 159→62 Zeilen.

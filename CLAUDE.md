@@ -41,11 +41,20 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | Architektur-Gesamtbild | `docs/spec/architecture.md` |
 | **Architektur-Invarianten (messbar, grün/rot)** | `docs/spec/architecture_invariants.md` (Wächter: `tests/architecture/`) |
 | Prozess-/Phasen-Specs (Attackenabfolge etc.) | `docs/spec/processes.md` |
+| Nicht-offensichtliche Regelerkenntnisse (Implementierungs-Gotchas) | `docs/spec/rules_insights.md` |
 | Farbschema (verbindlich) | `docs/spec/design_colors.md` |
 | Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/goals/ziel6.md` |
 
 Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in
 eines dieser Artefakte — sonst driften sie auseinander.
+
+### Domänen-Constraints (unveränderlich)
+
+- **Seitenleisten:** `first_player` links, `second_player` rechts — Layout nie an `active`
+  binden; `first_player`/`second_player` sind unveränderlich.
+- **Keywords:** in YAML immer `UPPERCASE`.
+- **Waffenstärke:** `_parse_strength(raw, unit_strength)` — nie `int(strength)` direkt.
+  YAML: int = fest, `"+N"` = User+N, `"×N"` = User×N, `"User"` = User.
 
 ---
 
