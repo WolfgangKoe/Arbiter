@@ -42,7 +42,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinnert in ihren Artefakten, nicht im Bewusstsein. Die folgenden Events sind deshalb explizit auf Diskontinuität ausgelegt.
 
-1. **Session-Start (komprimiertes Planning)**
+1. **Planning (Session-Start)**
    [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei lesen → Task + Entscheidungsmodus benennen. Kein erneuter Plan, wenn der Stakeholder "Beginne mit der nächsten Session, der Plan ist freigegeben" sagt.
 
 2. **Plan-Freigabe (Gate-Event)**
@@ -54,8 +54,12 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 4. **DoD-Review (Definition of Done)**
    Der 7-Punkte-Review aus [CLAUDE.md](../../CLAUDE.md): Regelkonform · Generisch · Tests grün · Architektur-Gate grün · Clean Code · UI manuell verifiziert · Artefakte aktuell. Erst wenn alle Punkte erfüllt (oder begründet n/a): fertig.
 
-5. **Session-Ende (Retro + Handoff)**
-   [next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) aktualisieren, committen. Der **Retro ist fester, nicht überspringbarer Teil** — und für den Stakeholder nachvollziehbar (was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern). Folgt daraus eine Prämissen-Schärfung → ADR anlegen. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
+5. **Review → Retro → Abschluss (Session-Ende)**
+   Drei Schritte in dieser Reihenfolge:
+   - **Review** — technischer DoD-Review (Event 4) **plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md).
+   - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `next_session.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
+   - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**.
+   Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
    **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `next_session.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
@@ -145,11 +149,11 @@ Gate-Wächter (pytest · Arch-Gate · Coverage · Debt)
 
 ```mermaid
 graph TD
-    SS[1 · Session-Start<br/>next_session + Ziel lesen]
+    SS[1 · Planning<br/>next_session + Ziel lesen]
     PF[2 · Plan-Freigabe<br/>Plan + Dateien + Token-Schätzung]
     SP[3 · Sprint<br/>Implementierung]
     DOD[4 · DoD-Review<br/>7-Punkte-Check]
-    SE[5 · Session-Ende<br/>Handoff + Commit + Retro]
+    SE[5 · Review→Retro→Abschluss<br/>Review + Retro + Commit/Clear]
     KC[Kontext-Korridor-Event<br/>~135k Token → Wind-down]
     RE[7 · Refinement<br/>Fotos → Inbox → Backlog]
 
@@ -169,7 +173,7 @@ graph TD
 ┌─────────────────────────────────────────────────────────┐
 │                                                         │
 ▼                                                         │
-1 · Session-Start                                         │
+1 · Planning                                              │
     │                                                     │
     ▼                                                     │
 2 · Plan-Freigabe ◄── 7 · Refinement (Fotos→Inbox→Backlog)│
@@ -181,7 +185,7 @@ graph TD
 4 · DoD-Review                             │              │
     │                                      │              │
     ▼                                      ▼              │
-5 · Session-Ende ◄─────────────────────────┘              │
+5 · Review→Retro→Abschluss ◄────────────────┘             │
     │                                                     │
     └─────────────────────────────────────────────────────┘
 ```
