@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-19 18:10 UTC
+Stand: 2026-06-19 18:24 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -12,17 +12,17 @@ Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + ca
 
 - **Aufgabe:** start session + freigabe
 - **Modelle:** Haupt Opus · Subagent —
-- **Tokens gesamt:** 3,345,156 (Haupt 3,345,156 · Subagent 0, Anteil 0 %)
-- **Peak-Kontext:** █████░░░░░░░ 67k / 150k
-- **cache_read:** 3,082,800 · **Output:** 59,855
+- **Tokens gesamt:** 8,292,634 (Haupt 8,292,634 · Subagent 0, Anteil 0 %)
+- **Peak-Kontext:** █████████░░░ 111k / 150k
+- **cache_read:** 7,854,058 · **Output:** 127,765
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  7,594
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    6%  194,907
-cache_read     ▕████████████████████████▏   92%  3,082,800
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    2%  59,855
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  8,674
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  302,137
+cache_read     ▕████████████████████████▏   95%  7,854,058
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    2%  127,765
 ```
 
 ## Verlauf (letzte 6 Sessions)
@@ -33,7 +33,7 @@ Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-19 17:59 ac79  █████░░░░░░░  67k ↑    ░░░░░░   0% →  ████████████
+06-19 17:59 ac79  █████████░░░ 111k ↑    ░░░░░░   0% →  ████████████
 06-19 16:17 5a54  ████░░░░░░░░  54k ↓    ░░░░░░   0% ↓  ████████████
 06-19 15:34 2672  ████████████ 155k ↑    ░░░░░░   1% ↑  ████████████
 06-19 15:00 bfc7  ███████████░ 135k ↓    ░░░░░░   0% ↓  ████████████
@@ -45,7 +45,8 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 67k blieb im 150k-Korridor.
+- ✅ Peak-Kontext 111k blieb im 150k-Korridor.
+- 💡 Große Session ohne Subagent — mechanische Fleißarbeit ließe sich an Sonnet/Haiku auslagern (CLAUDE.md, Tiering).
 
 ## Subagenten — wer wurde wofür gestartet
 
@@ -93,5 +94,5 @@ _Auto-generiert zur jüngsten Session._
 
 ---
 
-Σ über 147 Sessions: 2,391,845,025 Token (22,721 Antworten).
+Σ über 147 Sessions: 2,396,792,503 Token (22,773 Antworten).
 

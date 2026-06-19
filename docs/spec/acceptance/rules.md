@@ -831,10 +831,10 @@ Charge Phase, Morale Phase, Psychic Phase).
 ### R-PSYCHIC-11
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_passes_when_equal_to_warp_charge / test_fails_when_below_warp_charge
 - **quelle**: core_rules.txt — "you must take a Psychic test for that unit by rolling 2D6. If the total is equal to or greater than that power's warp charge value, the Psychic test is passed."
-- **code**: psychicPhase.py:_render_smite_flow
-- **regel**: Psychic Test: 2D6 ≥ Warp-Charge-Wert = bestanden, Kraft manifestiert (`manifested = roll >= wc`). Logik liegt im Render-Code → ungetestet.
+- **code**: psychicPhase.py:is_manifested
+- **regel**: Psychic Test: 2D6 ≥ Warp-Charge-Wert = bestanden, Kraft manifestiert (`is_manifested(roll, wc)`).
 
 ### R-PSYCHIC-12
 - **klasse**: A
@@ -871,26 +871,26 @@ Charge Phase, Morale Phase, Psychic Phase).
 ### R-PSYCHIC-16
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_possible_while_manifested_power_unresolved / test_blocked_after_deny_already_resolved
 - **quelle**: core_rules.txt — "Only one attempt can be made to deny a psychic power."
-- **code**: psychicPhase.py:_render_deny_column
-- **regel**: Pro psychischer Kraft ist nur ein Deny-Versuch erlaubt. Die App erzwingt das über den `denied`-Zustand (None→bool) und zusätzlich ein Deny pro Fraktion/Phase. Render-Code → ungetestet.
+- **code**: psychicPhase.py:can_attempt_deny
+- **regel**: Pro psychischer Kraft ist nur ein Deny-Versuch erlaubt. Die App erzwingt das über den `denied`-Zustand (None→bool) und zusätzlich ein Deny pro Fraktion/Phase (`can_attempt_deny` / `faction_deny_used`).
 
 ### R-PSYCHIC-17
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_base_warp_charge_is_5
 - **quelle**: core_rules.txt — "Smite has a warp charge value of 5."
-- **code**: psychicPhase.py:_render_smite_flow
-- **regel**: Smite hat Warp Charge 5 — Basiswert der Manifestationsschwelle (`wc = 5 + …`). Render-Code → ungetestet.
+- **code**: psychicPhase.py:smite_warp_charge
+- **regel**: Smite hat Warp Charge 5 — Basiswert der Manifestationsschwelle (`SMITE_BASE_WARP_CHARGE`).
 
 ### R-PSYCHIC-18
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_rises_by_one_per_prior_attempt
 - **quelle**: core_rules.txt — "Add 1 to the warp charge value of this psychic power for each other attempt that has been made to manifest this power by a unit from your army in this phase"
-- **code**: psychicPhase.py:_render_smite_flow
-- **regel**: Smites Warp Charge steigt je vorherigem Smite-Versuch der eigenen Armee in dieser Phase um 1 (`psi_attempts_this_phase`). Render-Code → ungetestet.
+- **code**: psychicPhase.py:smite_warp_charge
+- **regel**: Smites Warp Charge steigt je vorherigem Smite-Versuch der eigenen Armee in dieser Phase um 1 (`smite_warp_charge(psi_attempts_this_phase)`).
 
 ### R-PSYCHIC-19
 - **klasse**: B
@@ -919,10 +919,10 @@ Charge Phase, Morale Phase, Psychic Phase).
 ### R-PSYCHIC-22
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_pending_when_perils_and_not_applied / test_not_pending_once_applied
 - **quelle**: core_rules.txt — "When a PSYKER unit suffers Perils of the Warp, it suffers D3 mortal wounds."
-- **code**: psychicPhase.py:_render_psi_result
-- **regel**: Bei Perils of the Warp erleidet die PSYKER-Einheit D3 Mortal Wounds (per `apply_damage`, mortal). Render-Code → ungetestet.
+- **code**: psychicPhase.py:perils_pending
+- **regel**: Bei Perils of the Warp erleidet die PSYKER-Einheit D3 Mortal Wounds (per `apply_damage`, mortal); das Perils-Gate (`perils_pending`) erzwingt die Auflösung vor allem anderen.
 
 ### R-PSYCHIC-23
 - **klasse**: A

@@ -32,6 +32,13 @@ hat 0 sidechain-Zeilen → `tail -1` = letzter Haupt-Chain-Eintrag). Peak/Subage
 Verlauf liest man aus `docs/metrics/overview.md` (pytest-Hook schreibt sie bei jedem Lauf) —
 nicht neu aus Transcripts rechnen. Verifiziert prompt-frei. Tests: 876 grün, Cov 88.45 %.
 
+**S64 — Psychic-Render-Schuld getestet (Punkt 2, Ledger 15→10).** Fünf regeltragende
+Berechnungen aus den `_render_*`-Funktionen in `psychicPhase.py` in reine, getestete Helfer
+gezogen (verhaltenserhaltend): `smite_warp_charge` (R-PSYCHIC-17/18), `is_manifested`
+(R-PSYCHIC-11), `perils_pending` (R-PSYCHIC-22), `faction_deny_used`/`can_attempt_deny`
+(R-PSYCHIC-16). +16 Tests (892 grün), A-Abdeckung 38→43 (55 %). UI verhaltenserhaltend →
+manuell zu prüfen (Smite/Perils/Deny rendern unverändert).
+
 **S63 — Permission-Prompts reduziert (Punkt 6 erledigt).** Transcript-Scan (50 jüngste
 Sessions, `/fewer-permission-prompts`): Die häufigsten Read-Befehle (`grep`/`sed`/`find`/`ls`/
 `git diff/status/log` …) sind **auto-erlaubt** → prompten ohnehin nicht; `pytest`/`streamlit`
@@ -63,9 +70,9 @@ Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
 1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
    (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
-2. **Ledger schrumpfen** (jetzt 15) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
-   R-CHARGE-09/10, R-MORALE-02 + R-PSYCHIC-11/16/17/18/22. Die Psychic-Schuld ist Smite-Manifest-
-   Logik im Render-Code → in reine Funktionen ziehen + testen (backlog §0/§2).
+2. **Ledger schrumpfen** (jetzt 10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
+   R-CHARGE-09/10, R-MORALE-02. Psychic-Schuld erledigt (S64). Verbleibende sind v. a.
+   Command/Combat-Render-Logik → gleiches Muster (reine Funktion + Test, backlog §0/§2).
 3. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.

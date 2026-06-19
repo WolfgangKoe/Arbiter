@@ -87,6 +87,42 @@ def cast_eligibility(unit_state: dict) -> tuple[bool, str | None]:  # type: igno
     return True, None
 
 
+SMITE_BASE_WARP_CHARGE = 5
+PERILS_DAMAGE_DIE = "W3"
+
+
+def smite_warp_charge(prior_attempts_this_phase: int) -> int:
+    """R-PSYCHIC-17/18: Smite has Warp Charge 5, +1 per prior manifest attempt this phase."""
+    return SMITE_BASE_WARP_CHARGE + prior_attempts_this_phase
+
+
+def is_manifested(roll: int, warp_charge: int) -> bool:
+    """R-PSYCHIC-11: a Psychic test passes when 2D6 is equal to or greater than the warp charge."""
+    return roll >= warp_charge
+
+
+def perils_pending(psi: dict) -> bool:  # type: ignore[type-arg]
+    """R-PSYCHIC-22 gate: Perils was suffered but its mortal wounds are not yet applied."""
+    return bool(psi.get("perils")) and not psi.get("perils_applied")
+
+
+def faction_deny_used(denies_used: dict, faction: str) -> bool:  # type: ignore[type-arg]
+    """R-PSYCHIC-16: a faction may attempt Deny the Witch at most once per Psychic Phase."""
+    return bool(denies_used.get(faction))
+
+
+def can_attempt_deny(
+    psi: dict | None, faction: str, denies_used: dict  # type: ignore[type-arg]
+) -> bool:
+    """R-PSYCHIC-16: only one deny attempt per power — possible only while a manifested
+    power is still unresolved (``denied is None``) and the faction has not denied this phase."""
+    if faction_deny_used(denies_used, faction):
+        return False
+    if psi is None or not psi.get("manifested"):
+        return False
+    return psi.get("denied") is None
+
+
 # ---------------------------------------------------------------------------
 # Column rendering
 # ---------------------------------------------------------------------------
@@ -141,7 +177,7 @@ def _render_smite_flow(
         return
 
     # No active result — show manifest input.
-    wc = 5 + st.session_state.get("psi_attempts_this_phase", 0)
+    wc = smite_warp_charge(st.session_state.get("psi_attempts_this_phase", 0))
     st.markdown(f"**Smite** — Warp Charge {wc}")
     roll = st.number_input(
         "2D6 roll",
@@ -156,7 +192,7 @@ def _render_smite_flow(
         type="primary",
         use_container_width=True,
     ):
-        manifested = roll >= wc
+        manifested = is_manifested(int(roll), wc)
         perils = is_perils(int(roll))
         st.session_state.psi_attempts_this_phase = (
             st.session_state.get("psi_attempts_this_phase", 0) + 1
@@ -191,17 +227,15 @@ def _render_psi_result(
 ) -> None:
     roll: int = psi["roll"]
     manifested: bool = psi["manifested"]
-    perils: bool = psi["perils"]
-    perils_applied: bool = psi["perils_applied"]
     denied = psi["denied"]  # None | True | False
 
     # Perils must be resolved before anything else.
-    if perils and not perils_applied:
+    if perils_pending(psi):
         if manifested:
             st.error(f"**Perils of the Warp!** Roll {roll} — power manifested.")
         else:
             st.error(f"**Perils of the Warp!** Roll {roll} — power failed.")
-        st.markdown(f"Apply W3 mortal wounds to *{unit.name_en}*:")
+        st.markdown(f"Apply {PERILS_DAMAGE_DIE} mortal wounds to *{unit.name_en}*:")
         perils_dmg = st.number_input(
             "Perils damage (1–3)",
             min_value=1,
@@ -305,7 +339,8 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
         return
 
     # Each faction may deny at most once per Psychic Phase (Deny 1 / Gloom Prism).
-    if st.session_state.get("psychic_denies_used", {}).get(faction):
+    denies_used = st.session_state.get("psychic_denies_used", {})
+    if faction_deny_used(denies_used, faction):
         st.caption("Deny already used this phase (Deny 1 / Gloom Prism: once per phase).")
         return
 
@@ -327,7 +362,9 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
         st.warning("Deny failed.")
         return
 
-    # denied is None → deny attempt possible.
+    # Rule gate (R-PSYCHIC-16): only one attempt, while the power is still unresolved.
+    if not can_attempt_deny(psi, faction, denies_used):
+        return
     manifest_roll: int = psi["roll"]
     st.markdown(f"**Deny the Witch: 2D6 > {manifest_roll}**")
     deny_roll = st.number_input(

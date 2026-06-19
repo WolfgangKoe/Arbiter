@@ -1,7 +1,8 @@
 """Tests for psychicPhase.py — Ziel 4f: pure helper functions.
 
 Covers docs/spec/processes.md P-12 (Psychic Phase).
-Tests verify: has_psyker, can_deny, is_perils, smite_damage_die, deny_succeeds.
+Tests verify: has_psyker, can_deny, is_perils, smite_damage_die, deny_succeeds,
+smite_warp_charge, is_manifested, perils_pending, faction_deny_used, can_attempt_deny.
 """
 
 from __future__ import annotations
@@ -13,12 +14,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.psychicPhase import (
+    can_attempt_deny,
     can_deny,
     cast_eligibility,
     deny_succeeds,
+    faction_deny_used,
     has_psyker,
+    is_manifested,
     is_perils,
+    perils_pending,
     smite_damage_die,
+    smite_warp_charge,
 )
 
 # ---------------------------------------------------------------------------
@@ -192,3 +198,88 @@ class TestCastEligibility:
         eligible, reason = cast_eligibility(_flags(retreated=True, cast=True))
         assert eligible is False
         assert "Retreated" in reason
+
+
+# ---------------------------------------------------------------------------
+# smite_warp_charge — R-PSYCHIC-17 (base 5) / R-PSYCHIC-18 (+1 per prior attempt)
+# ---------------------------------------------------------------------------
+
+
+class TestSmiteWarpCharge:
+    def test_base_warp_charge_is_5(self):
+        assert smite_warp_charge(0) == 5
+
+    def test_rises_by_one_per_prior_attempt(self):
+        assert smite_warp_charge(1) == 6
+        assert smite_warp_charge(3) == 8
+
+
+# ---------------------------------------------------------------------------
+# is_manifested — R-PSYCHIC-11 (2D6 >= warp charge passes)
+# ---------------------------------------------------------------------------
+
+
+class TestIsManifested:
+    def test_passes_when_equal_to_warp_charge(self):
+        # "equal to or greater" — equal is enough
+        assert is_manifested(5, 5) is True
+
+    def test_passes_when_greater(self):
+        assert is_manifested(7, 5) is True
+
+    def test_fails_when_below_warp_charge(self):
+        assert is_manifested(4, 5) is False
+
+    def test_respects_raised_warp_charge(self):
+        # After a prior attempt the threshold is 6 — a roll of 5 now fails
+        assert is_manifested(5, 6) is False
+
+
+# ---------------------------------------------------------------------------
+# perils_pending — R-PSYCHIC-22 (Perils mortal wounds resolved before anything else)
+# ---------------------------------------------------------------------------
+
+
+class TestPerilsPending:
+    def test_pending_when_perils_and_not_applied(self):
+        assert perils_pending({"perils": True, "perils_applied": False}) is True
+
+    def test_not_pending_once_applied(self):
+        assert perils_pending({"perils": True, "perils_applied": True}) is False
+
+    def test_not_pending_without_perils(self):
+        assert perils_pending({"perils": False, "perils_applied": False}) is False
+
+
+# ---------------------------------------------------------------------------
+# faction_deny_used / can_attempt_deny — R-PSYCHIC-16 (one deny per power & faction/phase)
+# ---------------------------------------------------------------------------
+
+
+class TestFactionDenyUsed:
+    def test_true_when_faction_marked(self):
+        assert faction_deny_used({"Orks": True}, "Orks") is True
+
+    def test_false_when_faction_absent(self):
+        assert faction_deny_used({}, "Orks") is False
+
+
+class TestCanAttemptDeny:
+    def test_possible_while_manifested_power_unresolved(self):
+        psi = {"manifested": True, "denied": None}
+        assert can_attempt_deny(psi, "Necrons", {}) is True
+
+    def test_blocked_when_faction_already_denied_this_phase(self):
+        psi = {"manifested": True, "denied": None}
+        assert can_attempt_deny(psi, "Necrons", {"Necrons": True}) is False
+
+    def test_blocked_after_deny_already_resolved(self):
+        # denied is no longer None — only one attempt per power
+        assert can_attempt_deny({"manifested": True, "denied": False}, "Necrons", {}) is False
+        assert can_attempt_deny({"manifested": True, "denied": True}, "Necrons", {}) is False
+
+    def test_blocked_when_power_not_manifested(self):
+        assert can_attempt_deny({"manifested": False, "denied": None}, "Necrons", {}) is False
+
+    def test_blocked_when_no_active_manifest(self):
+        assert can_attempt_deny(None, "Necrons", {}) is False
