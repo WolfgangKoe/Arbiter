@@ -133,8 +133,13 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Vorab-Schätzung:** Jeder Plan nennt eine grobe Token-Schätzung pro Aufgabe.
 - **Kontext-Korridor < 150k.** Bei **~90 % (~135k)** die Session **geordnet beenden**
   (`next_session.md` + Commit) und **frisch starten** — nicht in die teure >150k-Zone laufen.
-  Messen: letzter Haupt-Chain-Eintrag im Session-Transcript
-  (`~/.claude/projects/<projekt>/<id>.jsonl`) → `input + cache_read + cache_creation`.
+  Messen (prompt-frei, **kein `python3`** — das müsste sonst Arbitrary-Code allowlisten):
+  Live-Kontextstand = `grep -o '"usage":{[^}]*}' <transcript> | tail -1`, dann
+  `input_tokens + cache_creation_input_tokens + cache_read_input_tokens` summieren
+  (Transcript: `~/.claude/projects/<projekt>/<id>.jsonl`; das Hauptfile enthält nur die
+  Haupt-Chain, daher `tail -1` = letzter Eintrag). Peak-Kontext, Subagent-Anteil und
+  Verlauf stehen schon in `docs/metrics/overview.md` (der pytest-Hook schreibt sie bei
+  jedem Lauf) — dort prompt-frei lesen, nicht erneut aus den Transcripts rechnen.
 - **Tasks klein schneiden**, sodass *eine* Aufgabe sicher unter dem Korridor bleibt.
 - **Subagent-Muster für Fleißarbeit:** mechanische, eindeutige Arbeit (viel Lesen,
   Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —

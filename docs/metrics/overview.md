@@ -1,28 +1,28 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-19 16:04 UTC
+Stand: 2026-06-19 18:10 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-19 15:34 · 2672bd18**
+**2026-06-19 17:59 · ac794a89**
 
-- **Aufgabe:** Start next session. Mir hast du in der letzten Sesssion gefühlt tausendmal gesagt,dass ich den Hook scharf stellen soll…
-- **Modelle:** Haupt Opus · Subagent Sonnet
-- **Tokens gesamt:** 10,773,930 (Haupt 10,609,907 · Subagent 164,023, Anteil 2 %)
-- **Peak-Kontext:** ███████████░ 136k / 150k
-- **cache_read:** 10,155,930 · **Output:** 160,025
+- **Aufgabe:** start session + freigabe
+- **Modelle:** Haupt Opus · Subagent —
+- **Tokens gesamt:** 3,345,156 (Haupt 3,345,156 · Subagent 0, Anteil 0 %)
+- **Peak-Kontext:** █████░░░░░░░ 67k / 150k
+- **cache_read:** 3,082,800 · **Output:** 59,855
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  13,219
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  444,756
-cache_read     ▕████████████████████████▏   94%  10,155,930
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  160,025
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  7,594
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    6%  194,907
+cache_read     ▕████████████████████████▏   92%  3,082,800
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    2%  59,855
 ```
 
 ## Verlauf (letzte 6 Sessions)
@@ -33,20 +33,19 @@ Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-19 15:34 2672  ███████████░ 136k ↑    ░░░░░░   2% ↑  ████████████
+06-19 17:59 ac79  █████░░░░░░░  67k ↑    ░░░░░░   0% →  ████████████
+06-19 16:17 5a54  ████░░░░░░░░  54k ↓    ░░░░░░   0% ↓  ████████████
+06-19 15:34 2672  ████████████ 155k ↑    ░░░░░░   1% ↑  ████████████
 06-19 15:00 bfc7  ███████████░ 135k ↓    ░░░░░░   0% ↓  ████████████
 06-19 14:28 42c5  ████████████ 171k ↑    ░░░░░░   7% ↑  ███████████▓
 06-18 20:32 e634  ██████░░░░░░  81k ↓    ░░░░░░   0% ↓  ████████████
-06-18 20:32 9f42  ████████████ 156k ↑    ░░░░░░   4% ↑  ███████████▓
-06-18 20:18 e5d8  █████████░░░ 117k ↓    ░░░░░░   0% →  ████████████
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ Peak-Kontext 136k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
-- ✅ 164,023 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 67k blieb im 150k-Korridor.
 
 ## Subagenten — wer wurde wofür gestartet
 
@@ -94,5 +93,5 @@ _Auto-generiert zur jüngsten Session._
 
 ---
 
-Σ über 145 Sessions: 2,382,077,730 Token (22,579 Antworten).
+Σ über 147 Sessions: 2,391,845,025 Token (22,721 Antworten).
 

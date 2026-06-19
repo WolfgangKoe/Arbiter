@@ -21,16 +21,22 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S63, 2026-06-19)
+## Aktueller Stand (nach S64, 2026-06-19)
+
+**S64 — Token-Mess-Reads prompt-frei (Punkt 0 erledigt).** `python3`-Reads aus der
+Token-Messung verbannt (würde sonst Arbitrary-Code allowlisten). **jq ist auf dem System
+nicht installiert** → `grep`/`tail` statt jq. Kanonik jetzt in `CLAUDE.md` („Messen:"):
+Live-Kontext = `grep -o '"usage":{[^}]*}' <transcript> | tail -1`, dann
+`input_tokens + cache_creation_input_tokens + cache_read_input_tokens` summieren (Hauptfile
+hat 0 sidechain-Zeilen → `tail -1` = letzter Haupt-Chain-Eintrag). Peak/Subagent-Anteil/
+Verlauf liest man aus `docs/metrics/overview.md` (pytest-Hook schreibt sie bei jedem Lauf) —
+nicht neu aus Transcripts rechnen. Verifiziert prompt-frei. Tests: 876 grün, Cov 88.45 %.
 
 **S63 — Permission-Prompts reduziert (Punkt 6 erledigt).** Transcript-Scan (50 jüngste
 Sessions, `/fewer-permission-prompts`): Die häufigsten Read-Befehle (`grep`/`sed`/`find`/`ls`/
 `git diff/status/log` …) sind **auto-erlaubt** → prompten ohnehin nicht; `pytest`/`streamlit`
 stehen schon in der Allowlist. Einzige sichere Ergänzung: `Bash(ruff check *)` in
-`.claude/settings.json`. **Erkenntnis (offen):** Die Token-Mess-Reads der Subagent-`*.jsonl`
-prompten nur, weil sie über `python3` laufen — das darf nicht blanket-allowlistet werden
-(= beliebiger Code). Fix: diese Reads auf `jq`/`grep`/`cat` (auto-erlaubt) umstellen statt
-`python3 -c`/-Skript. Gilt auch für `find …*.meta.json` (schon auto-erlaubt).
+`.claude/settings.json`.
 
 **S62 — Doku-Drift R-COMBAT-32 geschlossen + Hook scharf bestätigt.** (a) Token-Report-Hook
 empirisch verifiziert: `pytest`-Kommando ohne eigenen Schreibzugriff ließ `overview.md` neu
@@ -55,9 +61,6 @@ getestet, aber `offen` markiert → backlog §0). Details: `ziel6.md` / `backlog
 Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-0. **OFFEN aus S63 — als Erstes vollziehen:** Token-Mess-Reads von `python3 -c`/-Skript auf
-   `jq`/`grep`/`cat` umstellen (auto-erlaubt → prompt-frei, ohne Arbitrary-Code-Allowlist).
-   Betrifft die Subagent-`*.jsonl`- und `*.meta.json`-Reads der Token-Messung. Noch NICHT erledigt.
 1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
    (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
 2. **Ledger schrumpfen** (jetzt 15) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
@@ -67,9 +70,9 @@ Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
 5. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
-6. ✅ **Permission-Prompts reduziert (S63):** `Bash(ruff check *)` allowlistet. Rest war schon
-   auto-erlaubt/vorhanden. **Folge-Aufgabe:** Token-Mess-Reads von `python3 -c`/-Skript auf
-   `jq`/`grep`/`cat` umstellen (auto-erlaubt → prompt-frei, ohne Arbitrary-Code-Allowlist).
+6. ✅ **Permission-Prompts reduziert (S63):** `Bash(ruff check *)` allowlistet, Rest war schon
+   auto-erlaubt. ✅ **Token-Mess-Reads prompt-frei (S64):** `grep`/`tail` + `overview.md` statt
+   `python3` — Kanonik in `CLAUDE.md`.
 
 ---
 
