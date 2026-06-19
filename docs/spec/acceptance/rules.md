@@ -25,7 +25,8 @@ Jede Regel ist ein `### R-<BEREICH>-<NN>`-Eintrag. Feldkonventionen:
 - **code**: `datei:funktion` — **keine Zeilennummern** (driften). `—` wenn `status: offen`.
 
 IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
-(diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase, Movement Phase).
+(diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase, Movement Phase,
+Charge Phase, Morale Phase).
 
 ---
 
@@ -526,3 +527,219 @@ IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
 - **quelle**: core_rules.txt — "Units can embark in a friendly TRANSPORT if every model ends a Normal Move, an Advance or a Fall Back within 3\" of it. A unit cannot embark within a TRANSPORT that is within Engagement Range of any enemy models."
 - **code**: —
 - **regel**: Eine Einheit kann nach Normal Move, Advance oder Fall Back in ein befreundetes TRANSPORT-Modell einsteigen, sofern alle Modelle innerhalb 3" davon enden, das Transportmodell nicht in Engagement Range eines Feindes steht und die Einheit nicht in derselben Phase ausgestiegen ist. Abstände sind nur am Tisch prüfbar.
+
+---
+
+## Bereich: Charge Phase
+
+### R-CHARGE-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_resets_charge_phase_step
+- **quelle**: core_rules.txt — "The Charge phase is split into two steps. First you charge with your units. Then your opponent performs Heroic Interventions."
+- **code**: chargephase.py:ChargePhaseHandler.render_active
+- **regel**: Die Charge Phase besteht aus genau zwei Schritten: (1) Charges der aktiven Seite, (2) Heroic Interventions der inaktiven Seite. Die App führt die Schritte über den Zustand `charge_phase_step` (1→2); beim Phasenwechsel wird er auf 1 zurückgesetzt.
+
+### R-CHARGE-02
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_charge_after_advance_requires_core_or_character
+- **quelle**: core_rules.txt — "An eligible unit is one that is within 12\" of any enemy units at the start of the Charge phase. Units that have Advanced … Fell Back … or … within Engagement Range … are not eligible units."
+- **code**: chargephase.py:_active_charge / ability_engine.py:charge_after_advance_allowed
+- **regel**: Charge-Berechtigung: Hybrid — die App erzwingt die Sperren für Advanced (außer faktionsseitige Advance-&-Charge-Ausnahme), Fall Back und bereits in Engagement Range stehende Einheiten (App-Anteil); ob eine Einheit innerhalb 12" eines Feindes steht, ist Tisch-Anteil.
+
+### R-CHARGE-03
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "No unit can be selected to charge more than once in each Charge phase."
+- **code**: —
+- **regel**: Jede Einheit darf pro Charge Phase höchstens einmal zum Laden ausgewählt werden. (App erzwingt keine harte Sperre — die Charge-Buttons bleiben nach erfolgtem Charge klickbar; analog R-MOVE-01.)
+
+### R-CHARGE-04
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you must select one or more enemy units within 12\" of it as the targets of its charge. The target(s) of this charge do not need to be visible to the charging unit."
+- **code**: —
+- **regel**: Beim Charge-Deklarieren wird mindestens ein feindliches Ziel innerhalb 12" gewählt (mehrere erlaubt); die Ziele müssen nicht sichtbar sein. Die App lässt zwar Ziele auswählen, prüft aber weder die 12"-Reichweite noch die Sichtbarkeitsfreiheit — beides ist nur am Tisch prüfbar.
+
+### R-CHARGE-05
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you then make a charge roll for your unit by rolling 2D6. This is the maximum number of inches each model in the charging unit can now be moved"
+- **code**: —
+- **regel**: Der Charge Roll besteht aus 2D6; das Ergebnis ist die maximale Bewegungsdistanz jedes Modells. Der Wurf und die Distanzmessung erfolgen am Tisch; die App zeigt nur einen Hinweis und bietet Erfolg/Fehlschlag-Buttons.
+
+### R-CHARGE-06
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_set_charged_sets_charged_flag / test_set_charged_enters_melee_for_both_units / test_set_charged_multiple_targets
+- **quelle**: core_rules.txt — "the unit's charge roll must be sufficient that it is able to end that move in unit coherency and within Engagement Range of every unit that was a target of its charge … If this is impossible, the charge fails and no models … move this phase."
+- **code**: chargephase.py:_active_charge / unit_mutations.py:set_charged
+- **regel**: Gültiger Charge: Hybrid — ob der 2D6-Wurf reicht, um in Kohärenz und in Engagement Range jedes Ziels zu enden, ohne nicht-gewählte Feinde zu berühren, ist Tisch-Anteil. Bei bestätigtem Erfolg setzt die App `charged` und registriert die Einheit für alle Ziele im Nahkampf (`set_charged`); bei Fehlschlag bewegt sich nichts (App-Anteil).
+
+### R-CHARGE-07
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "each of those units can fire Overwatch before the charge roll is made … an unmodified hit roll of 6 is always required for a successful hit roll, irrespective of … Ballistic Skill or any hit roll modifiers"
+- **code**: —
+- **regel**: Overwatch wird nach Charge-Deklaration, aber vor dem Charge Roll ausgelöst; Treffer nur auf unmodifizierter 6, unabhängig von BS und Modifikatoren. Die App zeigt bisher nur einen Hinweis, erzwingt nichts. (Siehe auch R-COMBAT-23.)
+
+### R-CHARGE-08
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "A unit cannot fire Overwatch if there are any enemy units within Engagement Range of it."
+- **code**: —
+- **regel**: Eine Einheit in Engagement Range eines Feindes darf keinen Overwatch feuern, auch wenn sie Ziel eines Charges ist. (Bedingung von R-CHARGE-07; Overwatch insgesamt noch nicht implementiert.)
+
+### R-CHARGE-09
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "An eligible CHARACTER unit is one that is not within Engagement Range of any enemy units, but is within 3\" horizontally and 5\" vertically of an enemy unit."
+- **code**: chargephase.py:_render_hi_phase
+- **regel**: Heroic Intervention nur für CHARACTER-Einheiten, die nicht im Nahkampf stehen und in 3" horizontal / 5" vertikal eines Feindes sind. Die App erzwingt die CHARACTER- und Nicht-im-Nahkampf-Bedingung (App-Anteil); die 3"/5"-Distanz ist Tisch-Anteil. (Schuld: die Eligibility-Filterung liegt in Render-Code und ist ungetestet.)
+
+### R-CHARGE-10
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "No unit can perform more than one Heroic Intervention in each enemy Charge phase. A unit can never perform a Heroic Intervention in their own Charge phase."
+- **code**: chargephase.py:_render_hi_phase / _render_hi_target_selection
+- **regel**: Jede CHARACTER-Einheit darf pro gegnerischer Charge Phase höchstens eine Heroic Intervention durchführen; das Flag `heroic_intervened` sperrt eine zweite. Der Heroic-Intervention-Schritt läuft ausschließlich für die inaktive Seite, nie in der eigenen Charge Phase. (Schuld: Render-Code, ungetestet.)
+
+### R-CHARGE-11
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you can move each model in that unit up to 3\" … Each model in the unit must finish its Heroic Intervention move closer to the closest enemy model."
+- **code**: —
+- **regel**: Bei einer Heroic Intervention bewegt sich jedes Modell bis zu 3" und muss näher am nächstgelegenen Feind enden als zuvor. Bewegungsdistanz, Endposition und Kohärenz sind nur am Tisch prüfbar.
+
+### R-CHARGE-12
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Charging Over Terrain … A model can be moved over terrain features that are 1\" or less in height as if they were not there … Models cannot finish a charge move mid-climb"
+- **code**: —
+- **regel**: Beim Charge Move gelten dieselben Geländeregeln wie bei jeder Bewegung: Merkmale bis 1" Höhe werden ignoriert, höhere erklommen (vertikale Distanz zählt), kein Modell darf mitten auf einem Merkmal enden. Nur am Tisch prüfbar. (Analog R-MOVE-11, auf den Charge Move angewandt.)
+
+### R-CHARGE-13
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Flying When Charging … its models can be moved across other models (and their bases) as if they were not there"
+- **code**: —
+- **regel**: FLY-Einheiten dürfen beim Charge Move über andere Modelle und Bases hinwegfliegen, müssen aber wie normale Modelle auf freier Fläche und in Kohärenz enden. Bewegungspfad und Endposition sind nur am Tisch prüfbar. (Analog R-MOVE-12, auf den Charge Move angewandt.)
+
+---
+
+## Bereich: Morale Phase
+
+### R-MORALE-01
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "The Morale phase is split into two steps. First you take Morale tests for your units. Then you remove any out-of-coherency models."
+- **code**: —
+- **regel**: Die Morale Phase besteht aus zwei Schritten: (1) Morale Tests, (2) Unit Coherency Checks. Nur Schritt 1 ist in `moralePhase.py` umgesetzt; der Unit-Coherency-Check-Schritt (R-MORALE-12/13) fehlt noch, daher gilt die vollständige Zwei-Schritt-Struktur als offen.
+
+### R-MORALE-02
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Starting with the player whose turn is taking place, the players must alternate selecting a unit … that has had models destroyed this turn and taking a Morale test for it."
+- **code**: moralePhase.py:_render_faction_morale
+- **regel**: Morale-Test-Pflicht: Die App zeigt Tests nur für Einheiten mit Verlusten dieser Runde (`lost_models_this_turn > 0`), überspringt Einzelmodell- und zerstörte Einheiten (App-Anteil). Die abwechselnde Auswahlreihenfolge beider Spieler (beginnend mit dem aktiven) ist Tisch-Anteil. (Schuld: die Filterung liegt in Render-Code und ist ungetestet.)
+
+### R-MORALE-03
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_flee_marks_morale_tested
+- **quelle**: core_rules.txt — "A unit only needs to take one Morale test in each phase."
+- **code**: moralePhase.py:_render_unit_morale / unit_mutations.py:flee_models
+- **regel**: Jede Einheit testet pro Morale Phase höchstens einmal; das Flag `morale_tested` (gesetzt bei bestandenem Test bzw. bei Flucht) blockiert einen erneuten Test in derselben Phase.
+
+### R-MORALE-04
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_typical_case / test_auto_pass_above_6 / test_always_fails_threshold_1 / test_fails_only_on_6
+- **quelle**: core_rules.txt — "roll one D6 and add the number of models from the unit that have been destroyed this turn. If the result is equal to or less than the highest Leadership … the Morale test is passed."
+- **code**: moralePhase.py:_fail_threshold
+- **regel**: Morale Test = D6 + diese Runde verlorene Modelle gegen den höchsten Ld der Einheit; `_fail_threshold` errechnet den kleinsten fehlschlagenden W6-Wert (Ld − Verluste + 1). Die Sonderregel „unmodifizierte 1 besteht immer" wird am Tisch beurteilt (kein App-Würfel).
+
+### R-MORALE-05
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_flee_reduces_models / test_flee_sets_fled_counter
+- **quelle**: core_rules.txt — "the Morale test is failed, one model flees that unit … You decide which model … flees – that model is removed from play and counts as having been destroyed."
+- **code**: unit_mutations.py:flee_models
+- **regel**: Bei fehlgeschlagenem Test flieht mindestens ein Modell nach Wahl des Spielers; `flee_models` entfernt die Modelle, reduziert Wunden/Modelle entsprechend und führt den Flucht-Zähler (`fled_models_this_turn`).
+
+### R-MORALE-06
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Combat Attrition Tests … roll one D6 for each remaining model in that unit … for each result of 1, one model … flees."
+- **code**: —
+- **regel**: Nach dem ersten fliehenden Modell wird für jedes verbleibende Modell 1 D6 gewürfelt; jede 1 lässt ein weiteres Modell fliehen. Die App rechnet die Attrition-Würfel nicht — sie erfragt nur die Gesamtzahl geflohener Modelle vom Spieler.
+
+### R-MORALE-07
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Subtract 1 from Combat Attrition tests if unit is below Half-strength." / rules_appendix.txt — "below Half-strength … less than half that unit's Starting Strength"
+- **code**: —
+- **regel**: Eine Einheit ist unter Half-strength, wenn die verbleibenden Modelle weniger als die Hälfte der Starting Strength betragen; dann wird von jedem Combat-Attrition-Würfel 1 abgezogen (Ergebnis 1–2 → flieht). Die App wertet den Half-strength-Status für die Attrition nicht aus.
+
+### R-MORALE-08
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_flee_all_models_marks_destroyed
+- **quelle**: core_rules.txt — "those models … count as having been destroyed, but they never trigger any rules that are used when a model is destroyed."
+- **code**: unit_mutations.py:flee_models
+- **regel**: Durch Flucht entfernte Modelle gelten als zerstört (markieren die Einheit als `destroyed`, wenn alle fliehen), lösen aber keine „bei Zerstörung"-Effekte aus — `flee_models` ist ein vom Kampfschaden getrennter Pfad.
+
+### R-MORALE-09
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "INSANE BRAVERY … Use this Stratagem before you take a Morale test … That test is automatically passed … once per battle."
+- **code**: —
+- **regel**: Insane Bravery (Core-Stratagem, 2 CP) lässt einen Morale Test automatisch bestehen (kein Modell flieht); einmal pro Schlacht. In der Morale-Phase-UI noch nicht als Stratagem angebunden.
+
+### R-MORALE-10
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: rules_appendix.txt — "those that automatically pass Morale tests or cause no models to flee take precedence."
+- **code**: —
+- **regel**: Konfliktregel: Bei sich widersprechenden Morale-Regeln haben jene Vorrang, die einen Test automatisch bestehen lassen oder das Fliehen verhindern, vor solchen, die automatisch fehlschlagen lassen. Eine reine Schiedsregel — nur am Tisch anwendbar.
+
+### R-MORALE-11
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: rules_appendix.txt — "such models do not count as having been destroyed this turn — exclude them when determining if a unit has to take a Morale test, and when determining what to add to a D6 roll."
+- **code**: —
+- **regel**: In derselben Runde zerstörte und wieder zurückgebrachte Modelle (z. B. Reanimation) zählen für den Morale Test nicht als zerstört: weder für die Test-Pflicht noch für die zum W6 addierte Verlustzahl. Die App verrechnet zurückgebrachte Modelle bisher nicht gegen `lost_models_this_turn`.
+
+### R-MORALE-12
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Each player must now remove models, one at a time, from any of the units … that are no longer in unit coherency, until only a single group … remains in play and in unit coherency."
+- **code**: —
+- **regel**: Zweiter Schritt der Morale Phase: Jeder Spieler entfernt nacheinander Modelle aus nicht-kohärenten Einheiten, bis nur eine zusammenhängende, kohärente Gruppe bleibt. Kohärenz (2" horizontal, 5" vertikal) ist nur am Tisch prüfbar; in der App nicht umgesetzt.
+
+### R-MORALE-13
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "The models removed count as having been destroyed, but … never trigger any rules … Models removed because of this do not cause their unit to take another Morale test."
+- **code**: —
+- **regel**: Durch den Unit Coherency Check entfernte Modelle gelten als zerstört, lösen aber keine „bei Zerstörung"-Effekte aus und verursachen keinen weiteren Morale Test für ihre Einheit. Noch nicht umgesetzt (hängt an R-MORALE-12).

@@ -21,7 +21,20 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S59, 2026-06-19)
+## Aktueller Stand (nach S60, 2026-06-19)
+
+**S60 — Regel-Katalog: Bereiche Charge Phase + Morale Phase ausgerollt.** 13 `R-CHARGE-01..13`
++ 13 `R-MORALE-01..13` (Sonnet-Subagent erfasst die Fleißarbeit aus `core_rules.txt` Charge
+Z. 1768–1935 / Morale Z. 2087–2161 + Appendix, Opus reviewt gegen echten Code + Regeln/finalisiert)
+in `rules.md`. Nenner jetzt **87** (34 Combat + 14 Command + 13 Movement + 13 Charge + 13 Morale).
+Scoreboard: A 28/58 (48%) · B 0/19 · C **8/10 (80%)**; Konsistenz grün (0 fehlende Testnamen).
+**Ledger 7→10**: 3 neue implementiert-aber-ungetestet-Einträge surfacen bestehende Render-Schuld
+(`R-CHARGE-09`/`R-CHARGE-10` = HI-Eligibility/Once-per-Phase in `chargephase._render_hi_phase`;
+`R-MORALE-02` = Verlust-Filter in `moralePhase._render_faction_morale`). **Befund** (→ backlog):
+`R-COMBAT-32` („charged fight first") ist als `offen` markiert, aber real implementiert+getestet
+(`fightPhase.can_fight`, `test_charged_can_fight`/`test_charged_takes_priority_over_advanced`) →
+Doku-Drift, im Combat-Bereich nachzuziehen. Fight-First aus Charge-Bereich auf R-COMBAT-32
+referenziert statt dupliziert. Doku-only, kein `src/`. 875 Tests grün, Coverage 88.45 %.
 
 **S59 — Regel-Katalog: Bereich Movement Phase ausgerollt.** 13 Einträge `R-MOVE-01..13`
 (Sonnet-Subagent erfasst die Fleißarbeit aus `core_rules.txt` Z. 702–970, Opus reviewt gegen Code +
@@ -30,40 +43,20 @@ Alle 6 implementierten Movement-Regeln haben **echte Tests** → **kein neuer Le
 (bleibt 7). Scoreboard: A 23/43 (53%) · B 0/12 · C **6/6 (100%)**; Konsistenz grün.
 FLY/Transport als Klasse B (raum-/tischgemessen, analog R-COMBAT-27..29). Doku-only, kein `src/`.
 
-**S58 — Token-Report v3: Effizienz statt Menge.** `tools/token_report.py` komplett umgebaut
-(ADR-0002, Akzeptanz a–f aus `backlog.md`): (a) **Fokus letzte Session** = Text (Aufgabe/Modelle
-je Rolle/Tokens/Peak-Kontext vs. 150k/Subagent-Anteil) + Zusammensetzungs-Balken; (b) **Verlauf
-6 Sessions** mit theme-sicheren Unicode-Balken (Peak-Kontext, Subagent-Anteil, Modell-Mix
-`█`Opus·`▓`Sonnet·`▒`Haiku) + Trend ↑/↓ ggü. älterer Session; (c) **auto-Hinweise** (Korridor/
-Subagent-Last/Tiering); (d) **Subagenten-Tabelle** Session·Modell·Agent·Aufgabe (Modell aus
-`agent-*.jsonl`); (e) Aufgabe aus 1. echter User-Nachricht (Wrapper gefiltert) + optionaler
-`session_notes.yaml`-Link; (f) **All-Time-Torte entfernt**. Test komplett neu (23 grün, tools/ nicht
-coverage-gemessen). 875 Tests grün, Coverage 88.45 %. Report → `docs/metrics/overview.md` (`--write`).
-**Bewusster Test-Vertragswechsel** (per freigegebener v3-Spec): altes `by_session`-Dict→`SessionSummary`,
-Pie-Test entfernt (Akzeptanz f). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`).
+**S58 — Token-Report v3: Effizienz statt Menge.** `tools/token_report.py` zur Effizienz-Anzeige
+umgebaut (ADR-0002, Akzeptanz a–f aus `backlog.md`): Fokus-Block letzte Session + 6-Session-Verlauf
+(theme-sichere Unicode-Balken, Modell-Mix, Trends) + auto-Hinweise + Subagenten-Tabelle; All-Time-
+Torte entfernt. Bewusster Test-Vertragswechsel (23 Tool-Tests neu). Details → `backlog.md` §2.
 
-**S57 — Operating-Model Phase B: Token-Report.** `tools/token_report.py` (neu) führt
-Haupt-Session- und Subagent-Verbrauch **getrennt** zusammen — parst `*.jsonl` (main) +
-`*/subagents/*.jsonl` (sidechain) aus dem Projekt-Transcript-Verzeichnis, summiert je
-Modell-Tier (Opus/Sonnet/Haiku/Fable) und je Session, rendert Markdown. CLI:
-`python tools/token_report.py [--session <id>] [--write]`. Report → `docs/metrics/overview.md`
-(neu), aus `LEITSTAND.md` Feld 4 verlinkt. Reine Aggregation getestet
-(`tests/tools/test_token_report.py`, 12 Tests — tools/ ist nicht coverage-gemessen,
-Netz trotzdem da). Generic-src/Arch-Gate/UI: n/a (Tool außerhalb `src/`, kein Streamlit).
-**Retro → ADR-0002:** stakeholder-gerichtete Artefakte (Leitstand/Reports/Gates) sind für den
-Leser, müssen seine Fragen beantworten; Retro fester Teil von Event 5.
-**Token-Report v2 ✅** (gleiche Session): lesbare Labels (Datum+Uhrzeit+Kurz-ID; S-Nr nicht im
-Transcript), jüngste oben, „Σ (alle Sessions)", Subagenten-Anzahl + Detailtabelle (Agent+Aufgabe),
-Mermaid-Torte. Offen: „Gates leser-orientiert prüfen" (backlog).
+**S57 — Operating-Model Phase B: Token-Report (v1+v2).** `tools/token_report.py` (neu) führt
+Haupt-Session- und Subagent-Verbrauch **getrennt** zusammen (je Modell-Tier + je Session) →
+`docs/metrics/overview.md`, aus `LEITSTAND.md` verlinkt; getestet `tests/tools/`. **Retro →
+ADR-0002 + [[feedback_session_close_routine]]:** stakeholder-Artefakte müssen Leserfragen
+beantworten; Token-Report beim Test-Start teilen. Details → `backlog.md` §2.
 
-**S56 — Operating Model etabliert (Aufbau-/Ablauforganisation).** Governance-Schicht nach
-Luhmann/integraler Sicht: `docs/governance/operating_model.md` (Rollen, Model-Tier inkl. Haiku-
-Lookup, 7 Events, 4 Entscheidungsmodi Gate/Konsent/Konsens/Veto, Eskalationswege + 2 Diagramme).
-`LEITSTAND.md` = Einstiegstür (verlinkt alles, dupliziert nichts). ADR-Log `docs/governance/
-decisions/` + ADR-0001 (explizites „Ja" bleibt Probe-Session, Review in Retro). `docs/inbox/`
-Refinement-Fluss für `Fotos/`. CLAUDE.md: Artefakt-Landkarte + Haiku-Tiering ergänzt. Doku-only
-(keine Tests berührt). **Manuell zu prüfen:** Mermaid-Diagramme im Viewer. Sonnet-Subagent schrieb
-die 4 Doku-Dateien (28,9k Token, isoliert), Opus reviewte + finalisierte ADR-0001/CLAUDE.md.
+**S56 — Operating Model etabliert** (Governance-Schicht: `operating_model.md` Rollen/Model-Tier/
+7 Events/4 Entscheidungsmodi; `LEITSTAND.md` Einstiegstür; ADR-Log + ADR-0001; `docs/inbox/`
+Refinement). Details → `ziel6.md` Historie.
 
 **S55 — Regel-Katalog: Bereich Command Phase ausgerollt.** 14 Einträge `R-CMD-01..14`
 (Sonnet-Subagent erfasst die Fleißarbeit, Opus reviewt/finalisiert) in `rules.md`. Nenner jetzt
@@ -75,15 +68,26 @@ Gating) → `backlog.md`. Doku-Drift: 6e-Task `cp_granted_this_phase` war erledi
 **S54/S53 — Regel-Katalog + Gate verankert** (Nenner-Vorlage, Scoreboard-Verdrahtung, Parser
 `tests/acceptance/_rules.py`); **S52 — INV-4b `protocol`→`round_choice`.** Details: `ziel6.md`.
 
-### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
+### ▶ ZUERST (S61, vor allem anderen): Token-Report-Hook einrichten
+
+**Pflicht, kein „frei wählbar".** In S60 ist die Session-Abschluss-Routine (Token-Report beim
+Test-Start, [[feedback_session_close_routine]]) **nicht automatisch** gegriffen, weil sie nur als
+Memory vorlag, nicht an einen Auslöser gekoppelt war. Lösung: **Hook in `settings.json`**
+(via `update-config`-Skill, Freigabe nötig), der beim `pytest`-Start `python tools/token_report.py
+--write` mitlaufen lässt bzw. am Sessionende an Peak-Kontext/Korridor-% erinnert — maschinell
+durchsetzbar statt „Gedächtnis". Erst danach den gewählten Strang beginnen.
+
+### ▶ Danach — frei wählbar (je eigene Freigabe)
 
 Token-Report-Reihe (v1→v3) ist abgeschlossen. Offene Stränge, je eigene Freigabe:
 1. **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard + Rule-Catalog-Prozente
    daraufhin durchsehen, ob sie dem Stakeholder *seine* Fragen beantworten (backlog §2). Optional:
    `docs/metrics/session_notes.yaml` anlegen (Session-ID → Backlog-Link) für sprechende Aufgaben.
-2. **Regel-Katalog weiter ausrollen** — **Movement ✅ S59**; nächste Bereiche **Charge/Morale**
-   (Sonnet-Subagent, je eigene Session). `rules.md`: Combat 34 + Command 14 + Movement 13, Nenner 61.
-3. **Ledger schrumpfen** (5 R-CMD + 2 Combat als Tests) — Ratchet.
+2. **Regel-Katalog weiter ausrollen** — **Movement ✅ S59**, **Charge/Morale ✅ S60**; nächster
+   Bereich **Psychic Phase** (Sonnet-Subagent, eigene Session). `rules.md`: Combat 34 + Command 14
+   + Movement 13 + Charge 13 + Morale 13, Nenner **87**.
+3. **Ledger schrumpfen** (jetzt 10: 5 R-CMD + 2 Combat + R-CHARGE-09/10 + R-MORALE-02 als Tests)
+   — Ratchet. Plus **Befund R-COMBAT-32** (als implementiert+getestet nachziehen, → backlog §0).
 4. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
 
 ### ▶ Danach — Schulden weiter abbauen + offene Findings (`backlog.md`)

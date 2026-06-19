@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-18
+Letzter Abgleich: 2026-06-19
 
 ---
 
@@ -56,6 +56,14 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Badge-Text (`+1` raus, da Pfeil das ausdrückt) + Badge-Breite (ragt in Würfel
   „1"). **Soll-Bild zuerst mit Nutzer als AC festlegen**, dann fixen, dann
   per AC einrasten (Lehre aus Finding 9.2 — nie still ändern).
+- 🔲 **R-COMBAT-32 — Doku-Drift im Regel-Katalog** (S60): „Charging Units Fight First" ist in
+  [../spec/acceptance/rules.md](../spec/acceptance/rules.md) als `status: offen` / `getestet: nein`
+  markiert, **aber real implementiert**: `fightPhase.can_fight` macht gechargte Einheiten
+  kampfberechtigt und `_any_charged_remain` erzwingt die Fight-First-Reihenfolge; getestet durch
+  `test_charged_can_fight` / `test_charged_takes_priority_over_advanced`. In der Charge/Morale-
+  Session bewusst **nicht** still umgeschrieben (ändert Combat-Klasse-A-Abdeckung). Fix-Ort:
+  R-COMBAT-32 auf `implementiert` + Testnamen + `code: fightPhase.py:can_fight` setzen (eine
+  bewusste Katalog-Korrektur, separat verifizieren ob auch die *Reihenfolge* getestet ist).
 - 🔲 **R-CMD-03 — CP-Grant ohne Battle-forged-Gating** (S55, aus Regel-Katalog):
   Der „Grant +1 CP"-Button in `commandPhase._render_faction_actions` erscheint für die
   aktive Seite **unabhängig von `game_mode`/Battle-forged** → eine Unbound-Armee könnte
