@@ -123,9 +123,46 @@ def can_attempt_deny(
     return psi.get("denied") is None
 
 
+def refund_deny(denies_used: dict, faction: str | None) -> dict:  # type: ignore[type-arg]
+    """Return a copy of the deny-budget map with ``faction``'s deny refunded.
+
+    A power reset (or a deny undo) takes back the whole attempt, so the
+    once-per-phase deny spent against it is returned. ``None`` means nothing was
+    spent — the map is returned unchanged. Pure: the input map is not mutated.
+    """
+    refunded = dict(denies_used)
+    if faction is not None:
+        refunded.pop(faction, None)
+    return refunded
+
+
+def cleared_deny(psi: dict) -> dict:  # type: ignore[type-arg]
+    """Return a copy of ``psi`` with the deny decision undone (back to unresolved).
+
+    Symmetric counterpart to the active side's reset: ``denied``/``deny_roll``/
+    ``deny_faction`` go back to ``None`` while the manifested power stands. Pure:
+    the input dict is not mutated.
+    """
+    cleared = dict(psi)
+    cleared["denied"] = None
+    cleared["deny_roll"] = None
+    cleared["deny_faction"] = None
+    return cleared
+
+
 # ---------------------------------------------------------------------------
 # Column rendering
 # ---------------------------------------------------------------------------
+
+
+def _reset_active_power() -> None:
+    """Clear the current power and refund any deny the inactive faction spent on it."""
+    psi = st.session_state.get("psi_result")
+    deny_faction = psi.get("deny_faction") if psi else None
+    st.session_state.psi_result = None
+    st.session_state.psychic_denies_used = refund_deny(
+        st.session_state.get("psychic_denies_used", {}), deny_faction
+    )
 
 
 def _render_psychic_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
@@ -206,6 +243,7 @@ def _render_smite_flow(
             "perils_applied": False,
             "denied": None,
             "deny_roll": None,
+            "deny_faction": None,
         }
         outcome = "manifested" if manifested else "failed"
         perils_note = " (Perils!)" if perils else ""
@@ -265,7 +303,7 @@ def _render_psi_result(
     if not manifested:
         st.warning(f"Roll {roll} — Power failed (< 5).")
         if st.button("Reset", key=f"psi_reset_{faction}_{uid}", use_container_width=True):
-            st.session_state.psi_result = None
+            _reset_active_power()
             st.rerun()
         return
 
@@ -273,7 +311,7 @@ def _render_psi_result(
     if denied is True:
         st.warning(f"Roll {roll} — Manifested, but Denied!")
         if st.button("Reset", key=f"psi_reset_denied_{faction}_{uid}", use_container_width=True):
-            st.session_state.psi_result = None
+            _reset_active_power()
             st.rerun()
         return
 
@@ -322,7 +360,7 @@ def _render_psi_result(
                 st.rerun()
 
     if st.button("Reset (skip Smite)", key=f"psi_skip_{faction}_{uid}", use_container_width=True):
-        st.session_state.psi_result = None
+        _reset_active_power()
         st.rerun()
 
 
@@ -338,31 +376,34 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
         st.caption("No PSYKER or deny wargear — cannot deny.")
         return
 
-    # Each faction may deny at most once per Psychic Phase (Deny 1 / Gloom Prism).
     denies_used = st.session_state.get("psychic_denies_used", {})
+    psi = st.session_state.get("psi_result")
+
+    if psi is None or not psi.get("manifested"):
+        st.caption(
+            "Waiting for psychic manifest attempt."
+            if psi is None
+            else "Manifest failed — no deny needed."
+        )
+        return
+
+    denied = psi.get("denied")
+
+    # Already decided against *this* power — offer the symmetric undo.
+    if denied is True:
+        st.success("Denied!")
+        _render_undo_deny_button(faction, psi, denies_used)
+        return
+
+    if denied is False:
+        st.warning("Deny failed." if psi.get("deny_roll") is not None else "Deny skipped.")
+        _render_undo_deny_button(faction, psi, denies_used)
+        return
+
+    # Undecided (denied is None): gate by the once-per-phase budget (R-PSYCHIC-16).
     if faction_deny_used(denies_used, faction):
         st.caption("Deny already used this phase (Deny 1 / Gloom Prism: once per phase).")
         return
-
-    psi = st.session_state.get("psi_result")
-
-    if psi is None:
-        st.caption("Waiting for psychic manifest attempt.")
-        return
-
-    if not psi.get("manifested"):
-        st.caption("Manifest failed — no deny needed.")
-        return
-
-    if psi.get("denied") is True:
-        st.success("Denied!")
-        return
-
-    if psi.get("denied") is False:
-        st.warning("Deny failed.")
-        return
-
-    # Rule gate (R-PSYCHIC-16): only one attempt, while the power is still unresolved.
     if not can_attempt_deny(psi, faction, denies_used):
         return
     manifest_roll: int = psi["roll"]
@@ -385,6 +426,7 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
             succeeded = deny_succeeds(manifest_roll, int(deny_roll))
             psi["denied"] = succeeded
             psi["deny_roll"] = int(deny_roll)
+            psi["deny_faction"] = faction
             st.session_state.psi_result = psi
             # Mark deny as used for this faction — only one deny per phase.
             used = st.session_state.get("psychic_denies_used", {})
@@ -400,7 +442,19 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
             st.rerun()
     with col_b:
         if st.button("Skip Deny", key=f"deny_skip_{faction}", use_container_width=True):
-            # Explicitly mark as not denied so Smite proceeds.
+            # Explicitly mark as not denied so Smite proceeds (skip keeps the budget).
             psi["denied"] = False
+            psi["deny_faction"] = faction
             st.session_state.psi_result = psi
             st.rerun()
+
+
+def _render_undo_deny_button(
+    faction: str, psi: dict, denies_used: dict  # type: ignore[type-arg]
+) -> None:
+    """Symmetric reset for the inactive side: take the deny decision back and
+    refund the once-per-phase budget so the power returns to undecided."""
+    if st.button("Undo deny", key=f"deny_undo_{faction}", use_container_width=True):
+        st.session_state.psi_result = cleared_deny(psi)
+        st.session_state.psychic_denies_used = refund_deny(denies_used, psi.get("deny_faction"))
+        st.rerun()

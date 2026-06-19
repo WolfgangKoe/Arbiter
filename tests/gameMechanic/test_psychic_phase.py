@@ -17,12 +17,14 @@ from gameMechanic.psychicPhase import (
     can_attempt_deny,
     can_deny,
     cast_eligibility,
+    cleared_deny,
     deny_succeeds,
     faction_deny_used,
     has_psyker,
     is_manifested,
     is_perils,
     perils_pending,
+    refund_deny,
     smite_damage_die,
     smite_warp_charge,
 )
@@ -283,3 +285,55 @@ class TestCanAttemptDeny:
 
     def test_blocked_when_no_active_manifest(self):
         assert can_attempt_deny(None, "Necrons", {}) is False
+
+
+# ---------------------------------------------------------------------------
+# refund_deny — #PSI (unified reset: a power reset / deny undo returns the budget)
+# ---------------------------------------------------------------------------
+
+
+class TestRefundDeny:
+    def test_refunds_the_named_faction(self):
+        assert refund_deny({"Necrons": True}, "Necrons") == {}
+
+    def test_leaves_other_factions_untouched(self):
+        assert refund_deny({"Necrons": True, "Orks": True}, "Necrons") == {"Orks": True}
+
+    def test_none_faction_is_a_no_op(self):
+        # An active-side reset of a power that was never denied refunds nothing.
+        assert refund_deny({"Orks": True}, None) == {"Orks": True}
+
+    def test_unknown_faction_is_a_no_op(self):
+        assert refund_deny({"Necrons": True}, "Orks") == {"Necrons": True}
+
+    def test_does_not_mutate_input(self):
+        original = {"Necrons": True}
+        refund_deny(original, "Necrons")
+        assert original == {"Necrons": True}
+
+
+# ---------------------------------------------------------------------------
+# cleared_deny — #PSI (symmetric undo: deny decision goes back to unresolved)
+# ---------------------------------------------------------------------------
+
+
+class TestClearedDeny:
+    def test_resets_deny_fields_to_none(self):
+        psi = {"denied": True, "deny_roll": 9, "deny_faction": "Necrons"}
+        cleared = cleared_deny(psi)
+        assert cleared["denied"] is None
+        assert cleared["deny_roll"] is None
+        assert cleared["deny_faction"] is None
+
+    def test_preserves_the_manifested_power(self):
+        psi = {"roll": 8, "manifested": True, "denied": False, "deny_roll": None}
+        cleared = cleared_deny(psi)
+        assert cleared["roll"] == 8
+        assert cleared["manifested"] is True
+
+    def test_does_not_mutate_input(self):
+        psi = {"denied": True, "deny_roll": 9, "deny_faction": "Necrons"}
+        cleared_deny(psi)
+        assert psi["denied"] is True
+        assert psi["deny_roll"] == 9
+        assert psi["deny_faction"] == "Necrons"
