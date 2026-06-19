@@ -25,7 +25,7 @@ Jede Regel ist ein `### R-<BEREICH>-<NN>`-Eintrag. Feldkonventionen:
 - **code**: `datei:funktion` — **keine Zeilennummern** (driften). `—` wenn `status: offen`.
 
 IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
-(diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase).
+(diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase, Movement Phase).
 
 ---
 
@@ -418,3 +418,111 @@ IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
 - **quelle**: core_rules.txt — "Once you and your opponent have resolved all of these rules … progress to your Movement phase"
 - **code**: game_state.py:next_phase
 - **regel**: Nach Abschluss der Command Phase (Phasenwechsel-Bestätigung) wechselt der Zustand in die Movement Phase; der Phasenindex wird innerhalb des Zugs korrekt fortgeschrieben.
+
+---
+
+## Bereich: Movement Phase
+
+### R-MOVE-01
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "No unit can be selected to move more than once in each Movement phase"
+- **code**: —
+- **regel**: Jede Einheit darf pro Bewegungsphase höchstens einmal zum Bewegen ausgewählt werden; eine zweite Bewegungsauswahl ist unzulässig. (App erzwingt keine harte Sperre — die Bewegungs-Buttons bleiben nach Auswahl klickbar.)
+
+### R-MOVE-02
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_scenario_3_normal_move / test_scenario_8_advanced_sets_flag
+- **quelle**: core_rules.txt — "it can either make a Normal Move, it can Advance, or it can Remain Stationary"
+- **code**: movementPhase.py:_active_movement
+- **regel**: Eine Einheit außerhalb der Engagement Range wählt genau eine von drei Bewegungsoptionen: Normal Move, Advance oder Remain Stationary; die App erzwingt die Auswahl per Button (App-Anteil), die zurückgelegte Distanz wird am Tisch gemessen (Tisch-Anteil).
+
+### R-MOVE-03
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_scenario_9_in_melee_stationary_stationary_allowed
+- **quelle**: core_rules.txt — "within Engagement Range of any enemy models … it can either Remain Stationary or it can Fall Back"
+- **code**: movementPhase.py:_active_movement
+- **regel**: Eine Einheit in Engagement Range eines Feindes darf ausschließlich Remain Stationary oder Fall Back wählen; Normal Move und Advance sind gesperrt. Die App erzwingt die Sperre über das `in_melee`-Flag; ob die Einheit tatsächlich in Engagement Range (1" horizontal, 5" vertikal) steht, ist Tisch-Anteil.
+
+### R-MOVE-04
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Normal Move: Models move up to M\". Cannot move within Engagement Range of any enemy models."
+- **code**: —
+- **regel**: Bei einer normalen Bewegung darf jedes Modell bis zu M Zoll zurücklegen und darf nicht innerhalb der Engagement Range eines feindlichen Modells enden. Distanz und Endposition sind nur am Tisch prüfbar.
+
+### R-MOVE-05
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_set_movement_status_advanced_sets_turn_flag / test_advanced_cannot_shoot
+- **quelle**: core_rules.txt — "Advance: Models move up to M\"+D6\". … Units that Advance cannot shoot or charge this turn."
+- **code**: unit_mutations.py:set_movement_status
+- **regel**: Bei einem Advance wird ein D6 zum M-Wert addiert (Maximaldistanz M+D6 Zoll, am Tisch gemessen); die App setzt das `advanced`-Flag, das Schießen und Laden in dieser Runde erzwingt-sperrt (App-Anteil).
+
+### R-MOVE-06
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_scenario_1_stationary_no_action
+- **quelle**: core_rules.txt — "Remain Stationary: Models cannot move this phase. Any units … not selected to move … are assumed to have Remained Stationary"
+- **code**: unit_mutations.py:set_movement_status
+- **regel**: Eine Einheit, die Remain Stationary wählt, setzt keine Bewegungs-Flags (`advanced`/`retreated` bleiben false) und gilt als unbewegte Einheit dieser Phase; nicht ausgewählte Einheiten gelten ebenfalls als unbewegt.
+
+### R-MOVE-07
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Fall Back: Models move up to M\". … it cannot end its move within Engagement Range of any enemy models – if it cannot do this then it cannot Fall Back."
+- **code**: —
+- **regel**: Eine zurückweichende Einheit bewegt jedes Modell bis zu M Zoll, darf durch Engagement Ranges hindurchbewegen, muss aber außerhalb aller feindlichen Engagement Ranges enden; ist das unmöglich, kann sie nicht zurückweichen. Distanz und Endposition sind nur am Tisch prüfbar.
+
+### R-MOVE-08
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_retreated_cannot_shoot / test_retreated_blocks_cast
+- **quelle**: core_rules.txt — "A unit cannot declare a charge in the same turn that it Fell Back. … cannot shoot or attempt to manifest a psychic power … unless it is TITANIC."
+- **code**: unit_mutations.py:set_movement_status
+- **regel**: Fall Back setzt das `retreated`-Flag, das Schießen, Psykraft-Wirken und Laden in dieser Runde erzwingt-sperrt (App-Anteil). Die TITANIC-Ausnahme (darf trotz Fall Back schießen/Psykräfte wirken) ist noch nicht abgebildet.
+
+### R-MOVE-09
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "a unit must finish any type of move in unit coherency"
+- **code**: —
+- **regel**: Jede Einheit muss nach jeder Bewegung Einheitenkohärenz wahren: alle Modelle innerhalb 2" horizontal und 5" vertikal von mindestens einem anderen Modell; ab 6 Modellen zu mindestens zwei anderen. Ist Kohärenz unmöglich, darf die Bewegung nicht ausgeführt werden. Nur am Tisch prüfbar.
+
+### R-MOVE-10
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_scenario_13_deploy_from_reserve_sets_moved
+- **quelle**: core_rules.txt — "Reinforcement units cannot make a Normal Move, an Advance, Fall Back or Remain Stationary this turn. Reinforcement units always count as having moved this turn."
+- **code**: movementPhase.py:_render_reinforcements_step
+- **regel**: Verstärkungseinheiten werden im Reinforcements-Schritt aufgestellt und gelten dabei automatisch als bewegt (`movement_choice = "moved"`, kein Advance-Flag); App-Anteil. Der Mindestabstand ≥9" von Feinden und die Vernichtung nicht eingesetzter Reserven am Spielende sind Tisch-Anteil.
+
+### R-MOVE-11
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "A model can be moved over terrain features that are 1\" or less in height as if they were not there … Models cannot finish any kind of move mid-climb"
+- **code**: —
+- **regel**: Geländemerkmale bis 1" Höhe werden ignoriert; höhere Merkmale werden erklommen (vertikale Distanz zählt zur Bewegung); kein Modell darf eine Bewegung halbfertig auf einem Merkmal beenden. Nur am Tisch prüfbar.
+
+### R-MOVE-12
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "FLY … models can be moved across other models … and they can be moved within Engagement Range of enemy models … cannot finish their move … on top of another model … or within Engagement Range"
+- **code**: —
+- **regel**: Einheiten mit dem FLY-Schlüsselwort dürfen bei Normal Move, Advance und Fall Back über andere Modelle hinweg und durch Engagement Ranges fliegen sowie vertikale Distanzen ignorieren, dürfen aber nicht auf einem Modell oder innerhalb einer Engagement Range enden. Bewegungspfad und Endposition sind nur am Tisch prüfbar.
+
+### R-MOVE-13
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Units can embark in a friendly TRANSPORT if every model ends a Normal Move, an Advance or a Fall Back within 3\" of it. A unit cannot embark within a TRANSPORT that is within Engagement Range of any enemy models."
+- **code**: —
+- **regel**: Eine Einheit kann nach Normal Move, Advance oder Fall Back in ein befreundetes TRANSPORT-Modell einsteigen, sofern alle Modelle innerhalb 3" davon enden, das Transportmodell nicht in Engagement Range eines Feindes steht und die Einheit nicht in derselben Phase ausgestiegen ist. Abstände sind nur am Tisch prüfbar.

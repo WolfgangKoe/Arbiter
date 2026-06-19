@@ -21,7 +21,14 @@ Start: `streamlit run src/app.py` (Port 8501). Branch `dev` (Entwicklung), `main
 
 ---
 
-## Aktueller Stand (nach S58, 2026-06-18)
+## Aktueller Stand (nach S59, 2026-06-19)
+
+**S59 — Regel-Katalog: Bereich Movement Phase ausgerollt.** 13 Einträge `R-MOVE-01..13`
+(Sonnet-Subagent erfasst die Fleißarbeit aus `core_rules.txt` Z. 702–970, Opus reviewt gegen Code +
+Regeln/finalisiert) in `rules.md`. Nenner jetzt **61** (34 Combat + 14 Command + 13 Movement).
+Alle 6 implementierten Movement-Regeln haben **echte Tests** → **kein neuer Ledger-Eintrag**
+(bleibt 7). Scoreboard: A 23/43 (53%) · B 0/12 · C **6/6 (100%)**; Konsistenz grün.
+FLY/Transport als Klasse B (raum-/tischgemessen, analog R-COMBAT-27..29). Doku-only, kein `src/`.
 
 **S58 — Token-Report v3: Effizienz statt Menge.** `tools/token_report.py` komplett umgebaut
 (ADR-0002, Akzeptanz a–f aus `backlog.md`): (a) **Fokus letzte Session** = Text (Aufgabe/Modelle
@@ -65,19 +72,8 @@ die 4 Doku-Dateien (28,9k Token, isoliert), Opus reviewte + finalisierte ADR-000
 Gating) → `backlog.md`. Doku-Drift: 6e-Task `cp_granted_this_phase` war erledigt, jetzt abgehakt.
 852 Tests grün, Coverage 88.45 %.
 
-**S54/S53 — Regel-Katalog + Gate verankert.** Nenner `rules.md` (Combat-Vorlage, Klasse A/B/C)
-+ Token-/Subagent-Arbeitsweise in `CLAUDE.md`; `rules.md` ins Scoreboard verdrahtet (Abdeckung %
-je Klasse, Ledger, Konsistenz-Check; Parser `tests/acceptance/_rules.py`). Details: `ziel6.md`.
-
-**S52 — INV-4b: `protocol`/`protocols`-Vokabular aus `src/` entfernt.** Verifizierte Umbenennung
-auf `round_choice` (kein Verhaltenswechsel); Details in `ziel6.md`/`architecture_invariants.md`.
-
-### ✅ S56 erledigt — Operating Model statt loser Prämissen
-
-Der S55-Wunsch „Arbeitsmuster formalisieren" ist umgesetzt: nicht nur Prämissen-Stichworte,
-sondern eine ganze Governance-Schicht (`docs/governance/operating_model.md` + `LEITSTAND.md` +
-ADR-Log). Rollen/Tier/Modi/Events/Eskalation dort kanonisch. Offen (optional, erst auf Ansage):
-hartes Gate für Prämissen-Konformität (analog Scoreboard). Phase B/C siehe `backlog.md`.
+**S54/S53 — Regel-Katalog + Gate verankert** (Nenner-Vorlage, Scoreboard-Verdrahtung, Parser
+`tests/acceptance/_rules.py`); **S52 — INV-4b `protocol`→`round_choice`.** Details: `ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
 
@@ -85,8 +81,8 @@ Token-Report-Reihe (v1→v3) ist abgeschlossen. Offene Stränge, je eigene Freig
 1. **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard + Rule-Catalog-Prozente
    daraufhin durchsehen, ob sie dem Stakeholder *seine* Fragen beantworten (backlog §2). Optional:
    `docs/metrics/session_notes.yaml` anlegen (Session-ID → Backlog-Link) für sprechende Aufgaben.
-2. **Regel-Katalog weiter ausrollen** (Movement/Charge/Morale, Sonnet-Subagent). `rules.md`:
-   Combat 34 + Command 14, Nenner 48.
+2. **Regel-Katalog weiter ausrollen** — **Movement ✅ S59**; nächste Bereiche **Charge/Morale**
+   (Sonnet-Subagent, je eigene Session). `rules.md`: Combat 34 + Command 14 + Movement 13, Nenner 61.
 3. **Ledger schrumpfen** (5 R-CMD + 2 Combat als Tests) — Ratchet.
 4. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
 

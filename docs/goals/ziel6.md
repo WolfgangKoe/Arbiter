@@ -1669,3 +1669,7 @@ unit_state["group_models"]: dict[str, int]
   + Verlauf 6 Sessions (theme-sichere Balken Peak-Kontext/Subagent/Modell-Mix + Trend) + auto-Hinweise
   + Subagenten-Tabelle (Modell) + Aufgabe aus 1. User-Nachricht; All-Time-Torte raus. 23 Tool-Tests,
   875 gesamt grün, 88.45 %. Bewusster Test-Vertragswechsel (`SessionSummary`) per freigegebener Spec.
+- **S59 (2026-06-19)** Regel-Katalog: Bereich Movement Phase ausgerollt (13 Einträge `R-MOVE-01..13`,
+  Sonnet-Subagent erfasst aus `core_rules.txt`, Opus reviewt gegen Code/Regeln). Nenner 61 (34 Combat
+  + 14 Command + 13 Movement); alle 6 implementierten Movement-Regeln getestet → kein neuer Ledger
+  (bleibt 7). Scoreboard C 6/6 (100%). FLY/Transport als Klasse B. Doku-only, 875 Tests, 88.45 %.
