@@ -17,6 +17,7 @@
       "Bash(.venv/bin/python tools/wahapedia_scraper.py *)",
       "Bash(mkdir -p data/wahapedia_reference*)",
       "Bash(grep -v \"^$\")",
+      "Bash(ruff check *)",
       "Bash(xargs grep -o 'id: [^$]*')",
       "Read(//home/wolfgang/**)",
       "WebFetch(domain:wahapedia.ru)",

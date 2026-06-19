@@ -21,7 +21,16 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S62, 2026-06-19)
+## Aktueller Stand (nach S63, 2026-06-19)
+
+**S63 — Permission-Prompts reduziert (Punkt 6 erledigt).** Transcript-Scan (50 jüngste
+Sessions, `/fewer-permission-prompts`): Die häufigsten Read-Befehle (`grep`/`sed`/`find`/`ls`/
+`git diff/status/log` …) sind **auto-erlaubt** → prompten ohnehin nicht; `pytest`/`streamlit`
+stehen schon in der Allowlist. Einzige sichere Ergänzung: `Bash(ruff check *)` in
+`.claude/settings.json`. **Erkenntnis (offen):** Die Token-Mess-Reads der Subagent-`*.jsonl`
+prompten nur, weil sie über `python3` laufen — das darf nicht blanket-allowlistet werden
+(= beliebiger Code). Fix: diese Reads auf `jq`/`grep`/`cat` (auto-erlaubt) umstellen statt
+`python3 -c`/-Skript. Gilt auch für `find …*.meta.json` (schon auto-erlaubt).
 
 **S62 — Doku-Drift R-COMBAT-32 geschlossen + Hook scharf bestätigt.** (a) Token-Report-Hook
 empirisch verifiziert: `pytest`-Kommando ohne eigenen Schreibzugriff ließ `overview.md` neu
@@ -55,12 +64,9 @@ Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
 5. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
-6. **Permission-Prompts reduzieren (Nutzerwunsch S62):** read-only-Bash-Muster (z. B. die
-   `find`/`python3`-Lesebefehle für `*.meta.json` + Subagent-`*.jsonl` der Token-Messung) in
-   `.claude/settings.json` `permissions.allow` aufnehmen — am besten via Skill
-   `/fewer-permission-prompts` (scannt Transcripts, schlägt Allowlist vor). Ziel: freigegebene
-   Pläne nicht durch wiederholte Read-only-Bestätigungen blockieren. Nur Lesen/Inspektion
-   allowlisten, nichts Schreibendes/Löschendes.
+6. ✅ **Permission-Prompts reduziert (S63):** `Bash(ruff check *)` allowlistet. Rest war schon
+   auto-erlaubt/vorhanden. **Folge-Aufgabe:** Token-Mess-Reads von `python3 -c`/-Skript auf
+   `jq`/`grep`/`cat` umstellen (auto-erlaubt → prompt-frei, ohne Arbitrary-Code-Allowlist).
 
 ---
 
