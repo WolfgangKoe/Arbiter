@@ -16,15 +16,17 @@ Letzter Abgleich: 2026-06-19
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
 Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
 
-- 🔲 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64, Nutzer-Befund
-  aus UI-Verifikation): Der Reset ist asymmetrisch — Smite/Manifest hat „Reset"-Buttons,
-  **Deny nicht** (einmal gesetzt bleibt `psi_result.denied` hängen, lässt sich nicht
-  zurücknehmen). Ziel: ein gemeinsames, reines Zustandsmodell der Psi-Abläufe
-  (manifest → deny → resolve) mit **einheitlichem Reset**, aus dem Render-Code (`psychicPhase.py`)
-  gezogen und **testabgedeckt**. Verwandt: `can_deny` erkennt Deny-Wargear über `rules` statt
-  über `wargear_ids`+`handler` (wie `resurrection_orb`) — „Gloom Prism echt optional per Roster
-  wählbar" bräuchte denselben Umbau (sonst nur als Basis-rule modellierbar, S64). AC + reine
-  Helfer als Regressionstest.
+- 🔲 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
+  fertig — UI-Verifikation + Commit ausstehend): Code + Tests grün (900 Tests, 88.45 %).
+  Reine Helfer `refund_deny`/`cleared_deny` in `psychicPhase.py`; einheitlicher
+  `_reset_active_power()` refundiert das Deny-Budget der inaktiven Fraktion (fixt: denied +
+  reset = permanent verbranntes Budget); symmetrisches „Undo deny"-Button (`_render_undo_deny_button`);
+  „Skip Deny" verbraucht kein Budget; `deny_faction`-Feld in `psi_result`. +8 Tests
+  (`TestRefundDeny`/`TestClearedDeny`). **Noch offen:** manuelle UI-Checks (a) „Undo deny"
+  nach erfolgreichem Deny; (b) aktiv-Reset → nächste Power denybar; (c) Skip Deny = kein
+  Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
+  Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
+  Prism als echter Wargear-Choice — eigenständiger Task).
 - ✅ **#1 Faktion-/Subfaction-Badge** (S51): Faktion-Badge zeigt Faktionsnamen
   (nicht Roster-Titel); Subfaction-Badge generisch + **immer sichtbar** (Wert /
   „No <Label>" / „No Subfaction"); helles Blau `#a5b4fc`. Alle Roster mit Pflicht-

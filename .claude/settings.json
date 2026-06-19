@@ -31,6 +31,18 @@
     ]
   },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/wolfgang/Dokumente/Arbiter && .venv/bin/python3 tools/session_context.py 2>/dev/null || true",
+            "timeout": 10,
+            "statusMessage": "Session-Kontext messen"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",

@@ -21,70 +21,51 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S64, 2026-06-19)
+## Aktueller Stand (nach S65, 2026-06-19)
 
-**S64 — Token-Mess-Reads prompt-frei (Punkt 0 erledigt).** `python3`-Reads aus der
-Token-Messung verbannt (würde sonst Arbitrary-Code allowlisten). **jq ist auf dem System
-nicht installiert** → `grep`/`tail` statt jq. Kanonik jetzt in `CLAUDE.md` („Messen:"):
-Live-Kontext = `grep -o '"usage":{[^}]*}' <transcript> | tail -1`, dann
-`input_tokens + cache_creation_input_tokens + cache_read_input_tokens` summieren (Hauptfile
-hat 0 sidechain-Zeilen → `tail -1` = letzter Haupt-Chain-Eintrag). Peak/Subagent-Anteil/
-Verlauf liest man aus `docs/metrics/overview.md` (pytest-Hook schreibt sie bei jedem Lauf) —
-nicht neu aus Transcripts rechnen. Verifiziert prompt-frei. Tests: 876 grün, Cov 88.45 %.
+**S65 — #PSI implementiert (Code + Tests, UI-Verifikation ausstehend).**
+`refund_deny(denies_used, faction)` + `cleared_deny(psi)` in `src/gameMechanic/psychicPhase.py`
+— reine, nicht-mutierende Helfer. Alle drei aktiv-seitigen Resets routen durch einen
+einheitlichen `_reset_active_power()`: cleart den Power UND refundiert das Deny-Budget der
+inaktiven Fraktion → fixt den Core-Bug (denied+reset = permanent verbranntes Budget).
+Neues symmetrisches **„Undo deny"**-Button (`_render_undo_deny_button`) im Deny-Column:
+gibt Power + Budget zurück. „Skip Deny" verbraucht kein Budget. `deny_faction`-Feld in
+`psi_result` (gesetzt bei Attempt + Skip). +8 Tests (`TestRefundDeny`/`TestClearedDeny`),
+**900 grün**, Cov **88.45 %**. black/isort/ruff clean. **Noch kein Commit** (wartet auf
+manuelle UI-Verifikation + gemeinsamen Commit mit Token-Gauge-Hook).
+**Manuelle Checks:** (a) „Undo deny" nach erfolgreichem Deny → Power zurück + Budget frei;
+(b) aktiv-Reset nach Deny → nächste Power im Zug denybar (Budget refundiert, kein falsches
+„already used"); (c) „Skip Deny" = kein Budgetverbrauch; (d) „Undo deny" nach fehlgeschlagenem
+Deny funktioniert.
 
-**S64 — Psychic-Render-Schuld getestet (Punkt 2, Ledger 15→10).** Fünf regeltragende
-Berechnungen aus den `_render_*`-Funktionen in `psychicPhase.py` in reine, getestete Helfer
-gezogen (verhaltenserhaltend): `smite_warp_charge` (R-PSYCHIC-17/18), `is_manifested`
-(R-PSYCHIC-11), `perils_pending` (R-PSYCHIC-22), `faction_deny_used`/`can_attempt_deny`
-(R-PSYCHIC-16). +16 Tests (892 grün), A-Abdeckung 38→43 (55 %). UI vom Nutzer verifiziert.
+**S65 — Live-Token-Gauge-Hook.** `tools/session_context.py` (`UserPromptSubmit`-Hook):
+gibt bei jedem Prompt den aktuellen Kontext-Stand aus (`Session context: ~Xk tokens
+(corridor <150k; wind-down ~135k)`). In `.claude/settings.json` verdrahtet. Verifiziert
+(~81k gemeldet). **Noch kein Commit** (s. o.).
 
-**S64 — Test-Roster + Befund.** `orks.yaml` Weirdboy (PSYKER), `necrons_test.yaml` Canoptek
-Spyder (deny via `gloom_prism` Basis-rule wie `fabricatorClawArray`; Phantom-Waffe
-`gloom_prism_upgrade` aus `units.yaml` entfernt). **Befund (Nutzer):** Deny nicht resettbar,
-Smite schon → asymmetrischer Reset, Detail in backlog §0 (#PSI) → next-step #1.
+**S64 — Psychic-Render-Schuld getestet + Token-Messung prompt-frei.** 5 reine Helfer
+extrahiert (`smite_warp_charge`, `is_manifested`, `perils_pending`, `faction_deny_used`,
+`can_attempt_deny`); +16 Tests (892 grün). Token-Messung: `jq` nicht installiert →
+`grep`/`tail` statt `jq`; Kanonik in `CLAUDE.md`. Test-Roster Weirdboy + Canoptek Spyder.
+Befund (Nutzer): Deny nicht resettbar, Smite schon → asymmetrischer Reset → S65 gelöst.
 
-**S63 — Permission-Prompts reduziert (Punkt 6 erledigt).** Transcript-Scan (50 jüngste
-Sessions, `/fewer-permission-prompts`): Die häufigsten Read-Befehle (`grep`/`sed`/`find`/`ls`/
-`git diff/status/log` …) sind **auto-erlaubt** → prompten ohnehin nicht; `pytest`/`streamlit`
-stehen schon in der Allowlist. Einzige sichere Ergänzung: `Bash(ruff check *)` in
-`.claude/settings.json`.
-
-**S62 — Doku-Drift R-COMBAT-32 geschlossen + Hook scharf bestätigt.** (a) Token-Report-Hook
-empirisch verifiziert: `pytest`-Kommando ohne eigenen Schreibzugriff ließ `overview.md` neu
-schreiben → Hook feuert (im `/hooks`-Menü gibt es **keinen** „scharf"-Knopf; Beweis = Auslösen).
-(b) R-COMBAT-32 („Charging Units Fight First"): Verifikation ergab, dass nur die *Berechtigung*
-getestet war, der *Reihenfolge*-Zweig (`can_fight_now`/`_any_charged_remain`) ungedeckt →
-Regressionstest `test_non_charged_waits_while_charged_pending` ergänzt, dann Katalog auf
-`implementiert`/`getestet: ja`/`code: fightPhase.py:can_fight_now`. A-Abdeckung 28→29 (50 %).
-(c) **Regel-Katalog: Psychic Phase** `R-PSYCHIC-01..24` (Sonnet erfasst, Opus reviewt gegen
-`psychicPhase.py`). Nenner 87→111; Ledger 10→15 (5 Render-Schuld R-PSYCHIC-11/16/17/18/22).
-Review-Fix: R-PSYCHIC-23 `offen` (App revidiert `manifested` nach Perils nicht).
-
-**S61 — Session-Hygiene maschinell verankert.** Token-Report-Hook in `settings.json` (bei
-`pytest` läuft `token_report.py --write`); next_session-Gate auf **Hysterese** (Decke 120 /
-Trim-Ziel 70); Doku-Schulden geroutet (Architektur → `architecture.md`, Regel-Gotchas →
-`docs/spec/rules_insights.md`, Constraints → `CLAUDE.md`).
-
-**S60 — Regel-Katalog: Charge + Morale.** `R-CHARGE-01..13` + `R-MORALE-01..13` in `rules.md`,
-Nenner **87**. Scoreboard A 28/58 · B 0/19 · C 8/10. Ledger 10. Befund R-COMBAT-32 (impl.+
-getestet, aber `offen` markiert → backlog §0). Details: `ziel6.md` / `backlog.md`.
-
-Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
+Frühere Sessions (S60–S63): Verlauf in `docs/goals/ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-1. **★ Psychic-Phase: generische Flow-/Reset-Struktur (Nutzer-Wunsch S64).** Reset ist
-   asymmetrisch — Smite/Manifest resettbar, **Deny nicht**. Ziel: ein gemeinsames reines
-   Zustandsmodell (manifest → deny → resolve) mit einheitlichem Reset, aus dem Render-Code
-   gezogen + **testabgedeckt**. Scope/Detail: backlog §0 (#PSI).
-2. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
+1. **★ UI-Verifikation #PSI (Checkliste S65 oben) + Commit.** Code + Tests grün (S65);
+   UI-Checks (a)–(d) manuell abhaken → #PSI + Token-Gauge-Hook gemeinsam committen.
+2. **CLAUDE.md Token-Messung aktualisieren.** `Messen:`-Absatz auf `tools/session_context.py`
+   / Hook umzeigen statt rohem `grep [^}]*` (verschachtelte `usage`-Objekte brechen den
+   Regex — s. S65-Befund).
+3. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
    (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
-3. **Ledger schrumpfen** (jetzt 10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
-   R-CHARGE-09/10, R-MORALE-02. Psychic-Schuld erledigt (S64). Verbleibende v. a.
-   Command/Combat-Render-Logik → gleiches Muster (reine Funktion + Test, backlog §0/§2).
-4. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
+4. **Ledger schrumpfen** (jetzt 10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
+   R-CHARGE-09/10, R-MORALE-02. Verbleibende v. a. Command/Combat-Render-Logik → gleiches
+   Muster (reine Funktion + Test, backlog §0/§2).
+5. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
    Stakeholder-Fragen durchsehen (backlog §2).
-5. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
-6. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
+6. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
+7. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
 
 ---
 
@@ -98,4 +79,4 @@ Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
   `getestet: ja — <testname>`. Parser: `tests/acceptance/_rules.py`. Noch kein hart-roter Gate.
 - **Token-Korridor:** <150k, bei ~135k Session beenden; Fleißarbeit an Sonnet-Subagent.
 - **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md`
-  (läuft jetzt automatisch bei `pytest`).
+  (läuft automatisch bei `pytest`). Live-Kontext: `tools/session_context.py`-Hook (aktiv).

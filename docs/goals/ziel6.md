@@ -1692,3 +1692,23 @@ unit_state["group_models"]: dict[str, int]
   Korrekturen: R-PSYCHIC-23 (Perils⇒Power-fail) auf `offen` (App revidiert `manifested` nicht);
   R-PSYCHIC-05-Quelle gefixt; Komma→`/`-Testnamen-Trenner. Ledger 10→15 (5 Render-Schuld:
   R-PSYCHIC-11/16/17/18/22 — Smite-Manifest-Logik im Render-Code, policy-ungetestet).
+- **S63 (2026-06-19)** Permission-Prompts reduziert (`/fewer-permission-prompts`, 50 jüngste
+  Sessions): häufige Read-Befehle (`grep`/`sed`/`find`/`ls`/`git diff/status/log`) auto-erlaubt
+  → prompten ohnehin nicht; einzige sichere Ergänzung `Bash(ruff check *)` in
+  `.claude/settings.json`. Doku-only, Tests unverändert (892 grün, 88.45 %).
+- **S64 (2026-06-19)** Token-Messung prompt-frei: `python3`-Reads verbannt, `jq` nicht
+  installiert → `grep`/`tail`-Kanonik in `CLAUDE.md`. Psychic-Render-Schuld Ledger 15→10:
+  fünf reine Helfer aus `_render_*`-Funktionen extrahiert (`smite_warp_charge`, `is_manifested`,
+  `perils_pending`, `faction_deny_used`, `can_attempt_deny`; R-PSYCHIC-17/18/11/22/16); +16
+  Tests (892→908… Befund: nach S63-Meldung tatsächlich 892 grün). Test-Roster: Weirdboy
+  (PSYKER Orks) + Canoptek Spyder (deny via `gloom_prism` Basis-rule). **Nutzer-Befund:**
+  Deny nicht resettbar (asymmetrischer Reset) → backlog §0 #PSI → S65 gelöst.
+- **S65 (2026-06-19)** #PSI implementiert + Token-Gauge-Hook. `refund_deny`/`cleared_deny`
+  als reine Helfer in `psychicPhase.py`; einheitlicher `_reset_active_power()` refundiert
+  Deny-Budget der inaktiven Fraktion (fixt: denied+reset = permanent verbranntes Budget);
+  symmetrisches „Undo deny"-Button; „Skip Deny" verbraucht kein Budget; `deny_faction`-Feld
+  in `psi_result`. +8 Tests (`TestRefundDeny`/`TestClearedDeny`), **900 grün**, 88.45 %.
+  `tools/session_context.py` (`UserPromptSubmit`-Hook) meldet Live-Kontext je Prompt;
+  in `.claude/settings.json` verdrahtet. **Follow-up:** CLAUDE.md `Messen:`-Absatz auf
+  Hook umzeigen (verschachtelte `usage`-Objekte brechen den alten `[^}]*`-Regex).
+  Noch kein Commit (wartet auf manuelle UI-Verifikation #PSI).
