@@ -130,3 +130,21 @@ def test_none_current_player_returns_without_rerun(monkeypatch) -> None:  # type
 
     assert fp.st.session_state.fight_current_player is None
     fp.st.rerun.assert_not_called()
+
+
+def test_non_charged_waits_while_charged_pending(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """R-COMBAT-32 (Charging Units Fight First): a non-charged unit may not fight
+    while an enemy charged unit has not yet fought — it must wait its turn. This
+    covers the ordering branch of can_fight_now, not just eligibility."""
+    non_charged = _unit_state(in_melee=True, charged=False)
+    enemy_charged = _unit_state(in_melee=True, charged=True)
+    _setup(
+        monkeypatch, a_state=non_charged, b_state=enemy_charged, current="A", selected=("A", "u1")
+    )
+
+    # The non-charged unit is generally eligible...
+    assert fp.can_fight(non_charged) is True
+    # ...but must wait while the charged enemy is still pending.
+    assert fp.can_fight_now(non_charged, "A", "B") is False
+    # The charged unit itself fights first.
+    assert fp.can_fight_now(enemy_charged, "A", "B") is True

@@ -21,15 +21,23 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S61, 2026-06-19)
+## Aktueller Stand (nach S62, 2026-06-19)
 
-**S61 — Session-Hygiene maschinell verankert.** (a) Token-Report-Hook in `settings.json`:
-bei `pytest` läuft `python tools/token_report.py --write` mit → `overview.md` ist beim
-Session-Abschluss frisch ([[feedback_session_close_routine]] jetzt erzwungen). (b) next_session-
-Gate auf **Hysterese** umgestellt: Decke 120 / Trim-Ziel 70 (`test_doc_health.py`,
-`conftest.py`) — kein Schwellen-Geklingel mehr. (c) Doku-Schulden reduziert: Referenz aus
-next_session in kanonische Häuser geroutet — Architektur-Muster → `architecture.md`,
-Regel-Gotchas → neue `docs/spec/rules_insights.md`, Domänen-Constraints → `CLAUDE.md`.
+**S62 — Doku-Drift R-COMBAT-32 geschlossen + Hook scharf bestätigt.** (a) Token-Report-Hook
+empirisch verifiziert: `pytest`-Kommando ohne eigenen Schreibzugriff ließ `overview.md` neu
+schreiben → Hook feuert (im `/hooks`-Menü gibt es **keinen** „scharf"-Knopf; Beweis = Auslösen).
+(b) R-COMBAT-32 („Charging Units Fight First"): Verifikation ergab, dass nur die *Berechtigung*
+getestet war, der *Reihenfolge*-Zweig (`can_fight_now`/`_any_charged_remain`) ungedeckt →
+Regressionstest `test_non_charged_waits_while_charged_pending` ergänzt, dann Katalog auf
+`implementiert`/`getestet: ja`/`code: fightPhase.py:can_fight_now`. A-Abdeckung 28→29 (50 %).
+(c) **Regel-Katalog: Psychic Phase** `R-PSYCHIC-01..24` (Sonnet erfasst, Opus reviewt gegen
+`psychicPhase.py`). Nenner 87→111; Ledger 10→15 (5 Render-Schuld R-PSYCHIC-11/16/17/18/22).
+Review-Fix: R-PSYCHIC-23 `offen` (App revidiert `manifested` nach Perils nicht).
+
+**S61 — Session-Hygiene maschinell verankert.** Token-Report-Hook in `settings.json` (bei
+`pytest` läuft `token_report.py --write`); next_session-Gate auf **Hysterese** (Decke 120 /
+Trim-Ziel 70); Doku-Schulden geroutet (Architektur → `architecture.md`, Regel-Gotchas →
+`docs/spec/rules_insights.md`, Constraints → `CLAUDE.md`).
 
 **S60 — Regel-Katalog: Charge + Morale.** `R-CHARGE-01..13` + `R-MORALE-01..13` in `rules.md`,
 Nenner **87**. Scoreboard A 28/58 · B 0/19 · C 8/10. Ledger 10. Befund R-COMBAT-32 (impl.+
@@ -38,10 +46,11 @@ getestet, aber `offen` markiert → backlog §0). Details: `ziel6.md` / `backlog
 Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-1. **Regel-Katalog weiter:** Movement/Charge/Morale ✅; nächster Bereich **Psychic Phase**
-   (Sonnet-Subagent, eigene Session).
-2. **Ledger schrumpfen** (jetzt 10) — Ratchet. Plus **R-COMBAT-32** als impl.+getestet
-   nachziehen (Doku-Drift, backlog §0).
+1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
+   (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
+2. **Ledger schrumpfen** (jetzt 15) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
+   R-CHARGE-09/10, R-MORALE-02 + R-PSYCHIC-11/16/17/18/22. Die Psychic-Schuld ist Smite-Manifest-
+   Logik im Render-Code → in reine Funktionen ziehen + testen (backlog §0/§2).
 3. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.

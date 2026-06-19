@@ -26,7 +26,7 @@ Jede Regel ist ein `### R-<BEREICH>-<NN>`-Eintrag. Feldkonventionen:
 
 IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
 (diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase, Movement Phase,
-Charge Phase, Morale Phase).
+Charge Phase, Morale Phase, Psychic Phase).
 
 ---
 
@@ -282,10 +282,10 @@ Charge Phase, Morale Phase).
 
 ### R-COMBAT-32
 - **klasse**: A
-- **status**: offen
-- **getestet**: nein
+- **status**: implementiert
+- **getestet**: ja — test_non_charged_waits_while_charged_pending
 - **quelle**: core_rules.txt — "Charging Units Fight First" (Fight Phase)
-- **code**: —
+- **code**: fightPhase.py:can_fight_now
 - **regel**: In der Kampfphase kämpfen Einheiten, die in dieser Runde gechargt haben, zuerst — vor allen anderen Einheiten.
 
 ### R-COMBAT-33
@@ -743,3 +743,199 @@ Charge Phase, Morale Phase).
 - **quelle**: core_rules.txt — "The models removed count as having been destroyed, but … never trigger any rules … Models removed because of this do not cause their unit to take another Morale test."
 - **code**: —
 - **regel**: Durch den Unit Coherency Check entfernte Modelle gelten als zerstört, lösen aber keine „bei Zerstörung"-Effekte aus und verursachen keinen weiteren Morale Test für ihre Einheit. Noch nicht umgesetzt (hängt an R-MORALE-12).
+
+---
+
+## Bereich: Psychic Phase
+
+### R-PSYCHIC-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_has_psyker_true
+- **quelle**: core_rules.txt — "Some models have the PSYKER keyword. In the Psychic phase, PSYKERS can attempt to manifest psychic powers"
+- **code**: psychicPhase.py:has_psyker
+- **regel**: Eine Einheit kann in der Psychic Phase agieren, wenn mindestens ein Modell das Keyword PSYKER trägt.
+
+### R-PSYCHIC-02
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_retreated_blocks_cast
+- **quelle**: core_rules.txt — "PSYKER units that Fell Back this turn (other than TITANIC units) are not eligible"
+- **code**: psychicPhase.py:cast_eligibility
+- **regel**: Eine PSYKER-Einheit, die in diesem Zug Fall Back gemacht hat (`retreated`), darf keine psychischen Kräfte manifestieren.
+
+### R-PSYCHIC-03
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "(other than TITANIC units) are not eligible"
+- **code**: —
+- **regel**: TITANIC-Einheiten sind von der Fall-Back-Sperre ausgenommen und dürfen nach einem Rückzug weiterhin manifestieren. `cast_eligibility` blockiert alle Retreated-Einheiten und kennt diese Ausnahme nicht.
+
+### R-PSYCHIC-04
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_already_cast_blocks_cast
+- **quelle**: core_rules.txt — "No unit can be selected to manifest psychic powers more than once in each Psychic phase."
+- **code**: psychicPhase.py:cast_eligibility
+- **regel**: Eine PSYKER-Einheit darf pro Psychic Phase höchstens einmal zum Manifestieren ausgewählt werden (`cast`-Flag).
+
+### R-PSYCHIC-05
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_advanced_does_not_block
+- **quelle**: core_rules.txt — "PSYKER units that Fell Back this turn … are not eligible" (nur Fall Back wird als Ausschluss genannt)
+- **code**: psychicPhase.py:cast_eligibility
+- **regel**: Eine PSYKER-Einheit, die in diesem Zug Advanced hat, bleibt manifestierberechtigt — Advanced ist kein Ausschlussgrund (`cast_eligibility` prüft nur `retreated`/`cast`).
+
+### R-PSYCHIC-06
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "All PSYKERS know the Smite psychic power."
+- **code**: —
+- **regel**: Jede PSYKER-Einheit kennt automatisch Smite; weitere Kräfte stehen auf dem Datasheet. Die App bietet nur Smite an, ohne die Kräfteliste je Einheit zu verwalten.
+
+### R-PSYCHIC-07
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Each psychic power has a warp charge value – the higher this is, the more difficult it is to manifest the psychic power."
+- **code**: —
+- **regel**: Jede psychische Kraft hat einen Warp-Charge-Wert, der die Mindestsumme des Psychic Tests bestimmt. Generisch (über Smite hinaus) nicht abgebildet.
+
+### R-PSYCHIC-08
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "A PSYKER unit generates their powers before the battle."
+- **code**: —
+- **regel**: PSYKER-Einheiten bestimmen ihre psychischen Kräfte vor Spielbeginn. Kein Generierungs-Schritt in der App.
+
+### R-PSYCHIC-09
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you cannot attempt to manifest the same psychic power more than once in the same battle round, even with different PSYKER units"
+- **code**: —
+- **regel**: Dieselbe Kraft (außer Smite) darf pro Schlachtrunde nur einmal manifestiert werden, auch über verschiedene PSYKER hinweg. Mangels Nicht-Smite-Kräften nicht implementiert.
+
+### R-PSYCHIC-10
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "The same PSYKER unit cannot attempt to manifest Smite more than once during the same battle round."
+- **code**: —
+- **regel**: Dieselbe PSYKER-Einheit darf Smite pro Schlachtrunde nur einmal versuchen. Die App sperrt pro Phase über das `cast`-Flag, nicht pro Schlachtrunde.
+
+### R-PSYCHIC-11
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you must take a Psychic test for that unit by rolling 2D6. If the total is equal to or greater than that power's warp charge value, the Psychic test is passed."
+- **code**: psychicPhase.py:_render_smite_flow
+- **regel**: Psychic Test: 2D6 ≥ Warp-Charge-Wert = bestanden, Kraft manifestiert (`manifested = roll >= wc`). Logik liegt im Render-Code → ungetestet.
+
+### R-PSYCHIC-12
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_is_perils_on_2 / test_is_perils_on_12
+- **quelle**: core_rules.txt — "If you roll a double 1 or a double 6 when taking a Psychic test, that unit immediately suffers Perils of the Warp."
+- **code**: psychicPhase.py:is_perils
+- **regel**: Eine Doppel-1 (Summe 2) oder Doppel-6 (Summe 12) beim Psychic Test löst sofort Perils of the Warp aus.
+
+### R-PSYCHIC-13
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "select one of their PSYKER units that is within 24" of the PSYKER unit attempting to manifest the power"
+- **code**: —
+- **regel**: Deny the Witch ist nur möglich, wenn die deny-fähige Gegnereinheit innerhalb 24" der manifestierenden Einheit steht. Abstandsprüfung nur am Tisch.
+
+### R-PSYCHIC-14
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_can_deny_via_psyker_keyword / test_can_deny_via_gloom_prism
+- **quelle**: core_rules.txt — "The opposing player can then select one of their PSYKER units … and attempt to deny that power"
+- **code**: psychicPhase.py:can_deny
+- **regel**: Deny the Witch kann von einer feindlichen PSYKER-Einheit oder einer Einheit mit Deny-Wargear (z. B. Gloom Prism) versucht werden.
+
+### R-PSYCHIC-15
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_deny_succeeds_greater / test_deny_fails_equal
+- **quelle**: core_rules.txt — "If the total is greater than the result of the Psychic test, the Deny the Witch test is passed and the psychic power is denied."
+- **code**: psychicPhase.py:deny_succeeds
+- **regel**: Deny-the-Witch-Test: 2D6 muss strikt größer als das Psychic-Test-Ergebnis sein (gleich genügt nicht), um die Kraft zu verweigern.
+
+### R-PSYCHIC-16
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Only one attempt can be made to deny a psychic power."
+- **code**: psychicPhase.py:_render_deny_column
+- **regel**: Pro psychischer Kraft ist nur ein Deny-Versuch erlaubt. Die App erzwingt das über den `denied`-Zustand (None→bool) und zusätzlich ein Deny pro Fraktion/Phase. Render-Code → ungetestet.
+
+### R-PSYCHIC-17
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Smite has a warp charge value of 5."
+- **code**: psychicPhase.py:_render_smite_flow
+- **regel**: Smite hat Warp Charge 5 — Basiswert der Manifestationsschwelle (`wc = 5 + …`). Render-Code → ungetestet.
+
+### R-PSYCHIC-18
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Add 1 to the warp charge value of this psychic power for each other attempt that has been made to manifest this power by a unit from your army in this phase"
+- **code**: psychicPhase.py:_render_smite_flow
+- **regel**: Smites Warp Charge steigt je vorherigem Smite-Versuch der eigenen Armee in dieser Phase um 1 (`psi_attempts_this_phase`). Render-Code → ungetestet.
+
+### R-PSYCHIC-19
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "the closest enemy unit within 18" of and visible to the psyker suffers D3 mortal wounds"
+- **code**: —
+- **regel**: Smite trifft die nächste sichtbare Gegnereinheit innerhalb 18". Abstand und Sichtlinie sind nur am Tisch prüfbar; die App lässt das Ziel manuell wählen.
+
+### R-PSYCHIC-20
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_w3_on_5 / test_w3_on_10
+- **quelle**: core_rules.txt — "the closest enemy unit within 18" … suffers D3 mortal wounds"
+- **code**: psychicPhase.py:smite_damage_die
+- **regel**: Bei erfolgreichem Smite mit Psychic-Test-Ergebnis ≤ 10 erleidet das Ziel D3 Mortal Wounds.
+
+### R-PSYCHIC-21
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_w6_on_11 / test_w6_on_12
+- **quelle**: core_rules.txt — "If the result of the Psychic test was 11 or more, that unit suffers D6 mortal wounds instead."
+- **code**: psychicPhase.py:smite_damage_die
+- **regel**: Bei Smite mit Psychic-Test-Ergebnis ≥ 11 erleidet das Ziel stattdessen D6 Mortal Wounds.
+
+### R-PSYCHIC-22
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: core_rules.txt — "When a PSYKER unit suffers Perils of the Warp, it suffers D3 mortal wounds."
+- **code**: psychicPhase.py:_render_psi_result
+- **regel**: Bei Perils of the Warp erleidet die PSYKER-Einheit D3 Mortal Wounds (per `apply_damage`, mortal). Render-Code → ungetestet.
+
+### R-PSYCHIC-23
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "If a PSYKER unit is destroyed by Perils of the Warp while attempting to manifest a psychic power, that power automatically fails to manifest."
+- **code**: —
+- **regel**: Wird die PSYKER-Einheit durch Perils zerstört, schlägt die Kraft automatisch fehl. Die App revidiert `manifested` nach dem Perils-Schaden nicht — Mechanik fehlt.
+
+### R-PSYCHIC-24
+- **klasse**: C
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "every unit within 6" of it immediately suffers D3 mortal wounds"
+- **code**: —
+- **regel**: Wird ein PSYKER durch Perils zerstört, erleiden alle Einheiten in 6" je D3 Mortal Wounds (App-Anteil: Schaden anwenden; Tisch-Anteil: 6"-Reichweite). Splash-Schaden nicht implementiert.

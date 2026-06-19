@@ -1681,3 +1681,14 @@ unit_state["group_models"]: dict[str, int]
   Trim-Ziel 70, `test_doc_health.py` + `conftest.py`); Doku-Schulden reduziert — Referenz aus
   next_session in kanonische Häuser geroutet (Architektur-Muster → `architecture.md`, Regel-Gotchas
   → neue `docs/spec/rules_insights.md`, Constraints → `CLAUDE.md`). next_session 159→62 Zeilen.
+- **S62 (2026-06-19)** Doku-Drift R-COMBAT-32 geschlossen („Charging Units Fight First"). Bei der
+  Verifikation zeigte sich: nur die *Berechtigung* war getestet, der *Reihenfolge*-Zweig
+  (`can_fight_now`/`_any_charged_remain` — Nicht-Gecharger wartet) war ungedeckt → Regressionstest
+  `test_non_charged_waits_while_charged_pending` ergänzt, dann R-COMBAT-32 auf `implementiert` +
+  `getestet: ja` + `code: fightPhase.py:can_fight_now`. Klasse-A-Abdeckung 28→29 (50 %), Ledger
+  unberührt (war `offen`). 876 Tests grün, 88.45 %. Token-Report-Hook empirisch als scharf bestätigt.
+  Danach **Regel-Katalog: Bereich Psychic Phase** ausgerollt (`R-PSYCHIC-01..24`, Sonnet-Subagent
+  erfasst aus `core_rules.txt`, Opus reviewt gegen `psychicPhase.py`/Tests). Nenner 87→111. Review-
+  Korrekturen: R-PSYCHIC-23 (Perils⇒Power-fail) auf `offen` (App revidiert `manifested` nicht);
+  R-PSYCHIC-05-Quelle gefixt; Komma→`/`-Testnamen-Trenner. Ledger 10→15 (5 Render-Schuld:
+  R-PSYCHIC-11/16/17/18/22 — Smite-Manifest-Logik im Render-Code, policy-ungetestet).

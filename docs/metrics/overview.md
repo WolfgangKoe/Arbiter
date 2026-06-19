@@ -1,28 +1,28 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-19 15:24 UTC
+Stand: 2026-06-19 16:04 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-19 15:00 · bfc7a852**
+**2026-06-19 15:34 · 2672bd18**
 
-- **Aufgabe:** Wir beginnen die nächste Session. Folgende Dinge bitte als erstes erledigen. 1. Den Hook installieren, den wir in next_…
-- **Modelle:** Haupt Opus · Subagent —
-- **Tokens gesamt:** 3,093,981 (Haupt 3,093,981 · Subagent 0, Anteil 0 %)
-- **Peak-Kontext:** █████████░░░ 114k / 150k
-- **cache_read:** 2,685,886 · **Output:** 80,205
+- **Aufgabe:** Start next session. Mir hast du in der letzten Sesssion gefühlt tausendmal gesagt,dass ich den Hook scharf stellen soll…
+- **Modelle:** Haupt Opus · Subagent Sonnet
+- **Tokens gesamt:** 10,773,930 (Haupt 10,609,907 · Subagent 164,023, Anteil 2 %)
+- **Peak-Kontext:** ███████████░ 136k / 150k
+- **cache_read:** 10,155,930 · **Output:** 160,025
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  13,696
-cache_creation ▕███░░░░░░░░░░░░░░░░░░░░░▏   10%  314,194
-cache_read     ▕████████████████████████▏   87%  2,685,886
-output         ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    3%  80,205
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  13,219
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  444,756
+cache_read     ▕████████████████████████▏   94%  10,155,930
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  160,025
 ```
 
 ## Verlauf (letzte 6 Sessions)
@@ -33,25 +33,26 @@ Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-19 15:00 bfc7  █████████░░░ 114k ↓    ░░░░░░   0% ↓  ████████████
+06-19 15:34 2672  ███████████░ 136k ↑    ░░░░░░   2% ↑  ████████████
+06-19 15:00 bfc7  ███████████░ 135k ↓    ░░░░░░   0% ↓  ████████████
 06-19 14:28 42c5  ████████████ 171k ↑    ░░░░░░   7% ↑  ███████████▓
 06-18 20:32 e634  ██████░░░░░░  81k ↓    ░░░░░░   0% ↓  ████████████
 06-18 20:32 9f42  ████████████ 156k ↑    ░░░░░░   4% ↑  ███████████▓
 06-18 20:18 e5d8  █████████░░░ 117k ↓    ░░░░░░   0% →  ████████████
-06-18 18:53 e155  ████████████ 198k ↑    ░░░░░░   0% ↓  ████████████
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 114k blieb im 150k-Korridor.
-- 💡 Große Session ohne Subagent — mechanische Fleißarbeit ließe sich an Sonnet/Haiku auslagern (CLAUDE.md, Tiering).
+- ⚠️ Peak-Kontext 136k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
+- ✅ 164,023 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## Subagenten — wer wurde wofür gestartet
 
 | Session | Modell | Agent | Aufgabe |
 |---|---|---|---|
+| 2026-06-19 15:34 · 2672bd18 | Sonnet | general-purpose | Draft Psychic Phase rule catalog |
 | 2026-06-19 14:28 · 42c5e10a | Sonnet | general-purpose | Draft Charge/Morale rule entries |
 | 2026-06-18 20:32 · 9f42d3f0 | Sonnet | general-purpose | Draft R-MOVE rule catalog entries |
 | 2026-06-18 17:54 · 31e0b9d7 | Sonnet | general-purpose | Draft governance operating-model docs |
@@ -93,5 +94,5 @@ _Auto-generiert zur jüngsten Session._
 
 ---
 
-Σ über 144 Sessions: 2,366,376,202 Token (22,391 Antworten).
+Σ über 145 Sessions: 2,382,077,730 Token (22,579 Antworten).
 

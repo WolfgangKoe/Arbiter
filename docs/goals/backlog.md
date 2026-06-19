@@ -56,14 +56,13 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Badge-Text (`+1` raus, da Pfeil das ausdrückt) + Badge-Breite (ragt in Würfel
   „1"). **Soll-Bild zuerst mit Nutzer als AC festlegen**, dann fixen, dann
   per AC einrasten (Lehre aus Finding 9.2 — nie still ändern).
-- 🔲 **R-COMBAT-32 — Doku-Drift im Regel-Katalog** (S60): „Charging Units Fight First" ist in
-  [../spec/acceptance/rules.md](../spec/acceptance/rules.md) als `status: offen` / `getestet: nein`
-  markiert, **aber real implementiert**: `fightPhase.can_fight` macht gechargte Einheiten
-  kampfberechtigt und `_any_charged_remain` erzwingt die Fight-First-Reihenfolge; getestet durch
-  `test_charged_can_fight` / `test_charged_takes_priority_over_advanced`. In der Charge/Morale-
-  Session bewusst **nicht** still umgeschrieben (ändert Combat-Klasse-A-Abdeckung). Fix-Ort:
-  R-COMBAT-32 auf `implementiert` + Testnamen + `code: fightPhase.py:can_fight` setzen (eine
-  bewusste Katalog-Korrektur, separat verifizieren ob auch die *Reihenfolge* getestet ist).
+- ✅ **R-COMBAT-32 — Doku-Drift im Regel-Katalog** (S60→S62 erledigt): „Charging Units Fight
+  First" stand als `offen`/`getestet: nein`, war aber implementiert. Bei der Verifikation (S62)
+  zeigte sich: nur die *Berechtigung* war getestet, der *Reihenfolge*-Zweig (Nicht-Gecharger
+  wartet, solange ein Gecharger offen ist — `can_fight_now`/`_any_charged_remain`) war ungedeckt.
+  Daher Regressionstest `test_non_charged_waits_while_charged_pending` ergänzt, dann R-COMBAT-32
+  auf `implementiert` + `getestet: ja` + `code: fightPhase.py:can_fight_now` gesetzt. Klasse-A-
+  Abdeckung 28→29. (Ledger unberührt: Regel war `offen`, nicht impl.-ohne-Test.)
 - 🔲 **R-CMD-03 — CP-Grant ohne Battle-forged-Gating** (S55, aus Regel-Katalog):
   Der „Grant +1 CP"-Button in `commandPhase._render_faction_actions` erscheint für die
   aktive Seite **unabhängig von `game_mode`/Battle-forged** → eine Unbound-Armee könnte
@@ -94,6 +93,13 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
+- 🟢 **Psychic-Ledger schrumpfen (S62):** Smite-Manifest-Logik (`R-PSYCHIC-11/16/17/18/22`) lebt
+  im Render-Code (`_render_smite_flow`/`_render_psi_result`/`_render_deny_column`) → policy-
+  ungetestet. Reine Funktionen extrahieren (Schwelle `roll≥wc`, Warp-Charge-Eskalation, Perils-
+  Schaden, Deny-once) + Tests → Ledger 15→10.
+- 🟢 **Psychic-Lücken (S62, aus Regel-Katalog):** `R-PSYCHIC-23` (Perils zerstört Psyker ⇒ Power
+  schlägt fehl; App revidiert `manifested` nicht) und `R-PSYCHIC-24` (Perils-Splash D3 an Einheiten
+  in 6") sind `offen` — beide brauchen einen Unit-Destroyed-Check nach Perils-Schaden.
 - 🟡 GO-Buttons kontextuell in gameActionArea (aktiver + inaktiver Spieler) statt Liste
 - 🟡 Necron Command Phase: Regelkasten immer ganz oben (alle Phasen prüfen)
 - 🟡 SAVE-Block: Fähigkeit + AP als eine Badge (`Enslaved AP-1`) — YAML-Erweiterung (→ Plan 017)
