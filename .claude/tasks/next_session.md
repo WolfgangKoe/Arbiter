@@ -55,6 +55,12 @@ Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
 5. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
+6. **Permission-Prompts reduzieren (Nutzerwunsch S62):** read-only-Bash-Muster (z. B. die
+   `find`/`python3`-Lesebefehle für `*.meta.json` + Subagent-`*.jsonl` der Token-Messung) in
+   `.claude/settings.json` `permissions.allow` aufnehmen — am besten via Skill
+   `/fewer-permission-prompts` (scannt Transcripts, schlägt Allowlist vor). Ziel: freigegebene
+   Pläne nicht durch wiederholte Read-only-Bestätigungen blockieren. Nur Lesen/Inspektion
+   allowlisten, nichts Schreibendes/Löschendes.
 
 ---
 
