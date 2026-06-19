@@ -55,6 +55,9 @@ getestet, aber `offen` markiert → backlog §0). Details: `ziel6.md` / `backlog
 Frühere Sessions (S52–S59): Verlauf in `docs/goals/ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
+0. **OFFEN aus S63 — als Erstes vollziehen:** Token-Mess-Reads von `python3 -c`/-Skript auf
+   `jq`/`grep`/`cat` umstellen (auto-erlaubt → prompt-frei, ohne Arbitrary-Code-Allowlist).
+   Betrifft die Subagent-`*.jsonl`- und `*.meta.json`-Reads der Token-Messung. Noch NICHT erledigt.
 1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
    (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
 2. **Ledger schrumpfen** (jetzt 15) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
