@@ -13,6 +13,8 @@ units:
   - id: wh40k_9e.necrons.unit.overlord
     models: 1
     wargear: [wh40k_9e.necrons.wargear.resurrection_orb]
+  - id: wh40k_9e.necrons.unit.canoptek_spyder
+    models: 1
   - id: wh40k_9e.necrons.unit.warriors
     models: 10
   - id: wh40k_9e.necrons.unit.skorpekh_destroyers

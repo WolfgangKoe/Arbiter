@@ -428,12 +428,11 @@ units:
   rules:
   - livingMetal
   - fabricatorClawArray
+  - gloom_prism
   weapons:
   - ref: wh40k_9e.necrons.weapon.particle_beamer
   - ref: wh40k_9e.necrons.weapon.automaton_claws
-  wargear_options:
-  - type: add
-    item: wh40k_9e.necrons.weapon.gloom_prism_upgrade
+  wargear_options: []
 - id: wh40k_9e.necrons.unit.triarch_stalker
   name_en: Triarch Stalker
   name_de: Triarch-Stalker

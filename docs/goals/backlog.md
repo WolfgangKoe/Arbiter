@@ -16,6 +16,15 @@ Letzter Abgleich: 2026-06-19
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
 Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
 
+- 🔲 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64, Nutzer-Befund
+  aus UI-Verifikation): Der Reset ist asymmetrisch — Smite/Manifest hat „Reset"-Buttons,
+  **Deny nicht** (einmal gesetzt bleibt `psi_result.denied` hängen, lässt sich nicht
+  zurücknehmen). Ziel: ein gemeinsames, reines Zustandsmodell der Psi-Abläufe
+  (manifest → deny → resolve) mit **einheitlichem Reset**, aus dem Render-Code (`psychicPhase.py`)
+  gezogen und **testabgedeckt**. Verwandt: `can_deny` erkennt Deny-Wargear über `rules` statt
+  über `wargear_ids`+`handler` (wie `resurrection_orb`) — „Gloom Prism echt optional per Roster
+  wählbar" bräuchte denselben Umbau (sonst nur als Basis-rule modellierbar, S64). AC + reine
+  Helfer als Regressionstest.
 - ✅ **#1 Faktion-/Subfaction-Badge** (S51): Faktion-Badge zeigt Faktionsnamen
   (nicht Roster-Titel); Subfaction-Badge generisch + **immer sichtbar** (Wert /
   „No <Label>" / „No Subfaction"); helles Blau `#a5b4fc`. Alle Roster mit Pflicht-
