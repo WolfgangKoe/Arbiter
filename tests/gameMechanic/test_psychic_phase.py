@@ -337,3 +337,36 @@ class TestClearedDeny:
         assert psi["denied"] is True
         assert psi["deny_roll"] == 9
         assert psi["deny_faction"] == "Necrons"
+
+
+# ---------------------------------------------------------------------------
+# Deny refund flow — #PSI regression (S65 core bug: a deny followed by a reset
+# must not permanently burn the once-per-phase deny budget). The end-states
+# below were verified manually in the UI; these tests compose the pure helpers
+# to lock the post-reset/post-undo state the UI relies on.
+# ---------------------------------------------------------------------------
+
+
+class TestDenyRefundFlow:
+    def test_active_reset_after_deny_makes_next_power_denyable(self):
+        # (b) The faction denied a power, then the active side reset it. The
+        # refund must return the budget so the *next* manifested power is
+        # deny-able again — no false "already used this phase".
+        refunded = refund_deny({"Necrons": True}, "Necrons")
+        next_power = {"manifested": True, "denied": None}
+        assert can_attempt_deny(next_power, "Necrons", refunded) is True
+
+    def test_undo_after_successful_deny_reopens_the_power(self):
+        # (a) Undo deny: cleared_deny + refund_deny return the power to
+        # undecided and free the budget, so the same faction may deny again.
+        psi = {"manifested": True, "denied": True, "deny_roll": 9, "deny_faction": "Necrons"}
+        reopened = cleared_deny(psi)
+        refunded = refund_deny({"Necrons": True}, psi["deny_faction"])
+        assert can_attempt_deny(reopened, "Necrons", refunded) is True
+
+    def test_undo_after_failed_deny_reopens_the_power(self):
+        # (d) Same flow when the prior deny had failed (denied False).
+        psi = {"manifested": True, "denied": False, "deny_roll": 5, "deny_faction": "Necrons"}
+        reopened = cleared_deny(psi)
+        refunded = refund_deny({"Necrons": True}, psi["deny_faction"])
+        assert can_attempt_deny(reopened, "Necrons", refunded) is True
