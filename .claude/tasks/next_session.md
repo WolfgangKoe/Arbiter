@@ -21,31 +21,33 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S68, 2026-06-20)
+## Aktueller Stand (nach S69, 2026-06-20)
 
-**S68 — vier S67-Nutzerwünsche umgesetzt (Operating-Model/Tooling/Doku).**
-(1) **Vorausschauender Review/Retro-Fragenkatalog** in `operating_model.md` Event 5 (Retro-
-Schritt): Review+Retro schauen jetzt auch nach VORN (Qualität · Operating-Model · Hooks/Gates ·
-blinde Flecken · Automatisierung · Doku/Backlog · Skalierung in kleinen Experimenten · Kontext-
-Versorgung · Priorität · Engpass). (2) CLAUDE.md neue Subsection **„Haltung"** (ganzheitlich ·
-konstruktiv-kritisch · lösungsorientiert · vorausschauend · stakeholder-verständlich) für
-Planning + Abschluss. (3) **Composition-Bar-Legende + Zielwerte** in `token_report.py`
-(input/cache_creation/cache_read/output; cache_read hoch = gut, Output gegen Qualität gewichtet —
-nicht maximieren). (4) **Model-Mix-Zeichen** getauscht (Opus/Sonnet-Kontrast): `█` Opus · `·`
-Sonnet · `▒` Haiku · `▓` sonstige; Test bewusst mitgezogen. **915 grün, Cov 91.88 %**, Nenner=121.
+**S69 — Prozess festgehalten + Ledger ehrlich geschrumpft.** (1) **ADR-0004**: Skill-/Claude-
+Inhalte über die API nur per Subagent ziehen (direktes Laden kostete ~300k Token) — CLAUDE.md
+(Token-Disziplin) + ADR + Memory. (2) **History-Rotation-Tool** `tools/rotate_history.py` (+Test):
+hängt Stand-Einzeiler an `ziel6.md`, setzt Stand-Block hier zurück — am Ende dieser Session
+selbst dogfood-genutzt. (3) **Ledger 10 → 8** via Sonnet-Subagent (34 % Token-Anteil, isoliert):
+R-CMD-04 + R-CMD-12 ehrlich getestet. **Opus-Review fand zwei Katalog-Fehler:** R-COMBAT-09-Logik
+liegt in `ability_engine.py:ability_invuln_save` (nicht `resolve_save`) → code-Ref korrigiert,
+Test noch offen; R-COMBAT-17 rechnet die App gar nicht (nur Hinweis-Caption) → auf **Klasse C**
+reklassifiziert. Vertragstests des Subagenten (resolve_save/_compute_attacks) bleiben als
+Extra-Coverage. **R-CMD-03 Befund** (deine Frage c): CP-Grant-Button ist ungated — `game_mode`/
+Battle-forged wird nicht geprüft; risikoarmer Bug (alle Rosters battle-forged), Fix = 1-Zeilen-
+Guard, offen. **952 grün, Cov 91.88 %**, Nenner=121, Ledger=8.
 
-Frühere Sessions (S60–S67): Verlauf in `docs/goals/ziel6.md` (Session-Historie, ab Zeile ~1581).
+Frühere Sessions (S60–S68): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-0. ~~History-Rotation `next_session.md → ziel6.md` automatisieren~~ ✅ **S69** — `tools/rotate_history.py`
-   (Helfer-Tool, manuell am Abschluss; Mechanik automatisiert, Verdichten bleibt Urteil).
-0b. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5): knappe
-   „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl. Token-Report
-   bleibt reine Kosten/Effizienz-Linse (cache_read hoch = warmer, günstiger Kontext; Output = Spend).
-1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic/Battle-Round ✅; nächster Bereich
-   offen (z. B. Deployment / Mission-Scoring — Sonnet-Subagent, eigene Session).
-2. **Ledger schrumpfen** (10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12, R-CHARGE-09/10,
-   R-MORALE-02. Muster: reine Funktion + Test (backlog §0/§2).
+1. **ZUERST: R-COMBAT-09-Test** auf `ability_engine.py:ability_invuln_save` (zwei aktive Invuln-
+   Effekte → kleinerer gewinnt) → dann `getestet: ja` setzen. Ledger 8 → 7. Schnell, fachlich.
+2. **R-CMD-03-Fix klären + umsetzen** (Frage c offen): 1-Zeilen-Guard `game_mode == "matched"` vor
+   CP-Grant in `commandPhase.py`; Render → Logik in testbaren Helfer ziehen + Test. Eigene Freigabe.
+3. **Render-Ledger (Klasse 2)** in kleinen Extract-Refactors: R-CMD-10/11 (commandPhase),
+   R-CHARGE-09/10 (chargephase), R-MORALE-02 (moralePhase) — je Phase-Datei, Logik raus + Test.
+3b. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5): knappe
+   „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl.
+4b. **Regel-Katalog weiter:** nächster Bereich offen (Deployment / Mission-Scoring — Sonnet-Subagent).
 3. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
    Stakeholder-Fragen durchsehen (backlog §2).
 4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.

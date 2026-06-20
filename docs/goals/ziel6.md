@@ -1736,3 +1736,4 @@ unit_state["group_models"]: dict[str, int]
   hoch = gut, Output gegen Qualität gewichtet, nicht maximieren). (4) **Model-Mix-Zeichen**
   getauscht für Opus/Sonnet-Kontrast: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige
   (Test mitgezogen — bewusster Verhaltenswechsel). **915 grün, 91.88 %**.
+- **S69 (2026-06-20)** ADR-0004 (Skill-Fetch nur per Subagent, ~300k-Befund) + History-Rotation-Tool `tools/rotate_history.py` (Stand→ziel6, next_session schlank; +9 Tests). Ledger 10→8 via Sonnet-Subagent: R-CMD-04/12 ehrlich getestet; R-COMBAT-09 code-Ref auf `ability_invuln_save` korrigiert (Test offen), R-COMBAT-17 auf Klasse C reklassifiziert (App zeigt nur Hinweis, rechnet nicht). R-CMD-03 Befund: CP-Grant ungated — risikoarmer Bug, Fix offen. 952 grün, 91.88 %.

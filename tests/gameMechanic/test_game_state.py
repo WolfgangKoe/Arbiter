@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import (  # noqa: E402
+    CP_BY_GAME_SIZE,
     _make_unit_state_dict,
     active_round_choice_buff_labels,
     compute_roster_total_pts,
@@ -739,3 +740,57 @@ class TestResetGame:
             _gs.reset_game()
 
         assert len(s) == 0
+
+
+# ---------------------------------------------------------------------------
+# R-CMD-04: CP start pool per game size (CP_BY_GAME_SIZE + init_state)
+# ---------------------------------------------------------------------------
+
+
+class TestCpByGameSize:
+    """R-CMD-04: CP starting pool matches game size table from core rules.
+
+    Combat Patrol → 3 CP · Incursion → 6 CP · Strike Force → 12 CP · Onslaught → 18 CP.
+    The constant CP_BY_GAME_SIZE is the authoritative lookup; init_state uses it
+    to populate st.session_state.cp for both players.
+    """
+
+    def test_combat_patrol_starts_at_3_cp(self) -> None:
+        assert CP_BY_GAME_SIZE["Combat Patrol"] == 3
+
+    def test_incursion_starts_at_6_cp(self) -> None:
+        assert CP_BY_GAME_SIZE["Incursion"] == 6
+
+    def test_strike_force_starts_at_12_cp(self) -> None:
+        assert CP_BY_GAME_SIZE["Strike Force"] == 12
+
+    def test_onslaught_starts_at_18_cp(self) -> None:
+        assert CP_BY_GAME_SIZE["Onslaught"] == 18
+
+    def test_all_four_game_sizes_present(self) -> None:
+        assert set(CP_BY_GAME_SIZE.keys()) == {
+            "Combat Patrol",
+            "Incursion",
+            "Strike Force",
+            "Onslaught",
+        }
+
+    def test_init_state_incursion_sets_cp_6_for_both_players(self) -> None:
+        """init_state() applies CP_BY_GAME_SIZE via game_mode='matched'."""
+        s = _make_session()
+        init_state(game_size="Incursion", game_mode="matched")
+        cp_values = list(s["cp"].values())
+        assert all(v == 6 for v in cp_values), f"Expected 6 CP each, got {cp_values}"
+
+    def test_init_state_strike_force_sets_cp_12_for_both_players(self) -> None:
+        s = _make_session()
+        init_state(game_size="Strike Force", game_mode="matched")
+        cp_values = list(s["cp"].values())
+        assert all(v == 12 for v in cp_values), f"Expected 12 CP each, got {cp_values}"
+
+    def test_init_state_non_matched_game_mode_defaults_to_3_cp(self) -> None:
+        # Unmatched / open play ignores game_size → falls back to 3 CP
+        s = _make_session()
+        init_state(game_size="Strike Force", game_mode="open")
+        cp_values = list(s["cp"].values())
+        assert all(v == 3 for v in cp_values), f"Expected fallback 3 CP each, got {cp_values}"

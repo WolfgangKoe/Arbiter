@@ -7,6 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.stratagem import Stratagem, stratagem_visibility  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -120,3 +121,73 @@ class TestStratagemsClickable:
     def test_clickable_different_strat_id_not_in_used_set(self) -> None:
         strat = _strat(sid="other.strat")
         assert _vis(strat, used={"different.strat"}) == "clickable"
+
+
+# ---------------------------------------------------------------------------
+# R-CMD-12: Command Re-Roll is phase_reactive → always hidden proactively
+# ---------------------------------------------------------------------------
+
+_COMMAND_RE_ROLL_ID = "wh40k_9e.shared.stratagem.command_re_roll"
+
+
+def _load_command_re_roll() -> Stratagem:
+    """Load the Command Re-Roll stratagem from the shared YAML data."""
+    stratagems = load_stratagems("necrons")  # shared stratagems are always included
+    match = next((s for s in stratagems if s.id == _COMMAND_RE_ROLL_ID), None)
+    assert match is not None, f"Stratagem {_COMMAND_RE_ROLL_ID!r} not found in shared data"
+    return match
+
+
+class TestCommandReRollIsPhaseReactive:
+    """R-CMD-12: command_re_roll is classified as phase_reactive → hidden in proactive UI.
+
+    The stratagem must never be offered proactively; it is only used reactively
+    after a roll has been made at the table.  stratagem_visibility() returns
+    'hidden' for any phase_reactive stratagem regardless of CP or conditions.
+    """
+
+    def test_command_re_roll_has_phase_reactive_timing(self) -> None:
+        strat = _load_command_re_roll()
+        assert strat.timing == "phase_reactive"
+
+    def test_command_re_roll_hidden_in_shooting_phase_with_conditions_met(self) -> None:
+        strat = _load_command_re_roll()
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+        )
+        assert result == "hidden"
+
+    def test_command_re_roll_hidden_in_fight_phase_with_conditions_met(self) -> None:
+        strat = _load_command_re_roll()
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="fight",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+        )
+        assert result == "hidden"
+
+    def test_command_re_roll_hidden_even_with_excess_cp(self) -> None:
+        # Having 99 CP must not make a phase_reactive stratagem proactively visible
+        strat = _load_command_re_roll()
+        result = stratagem_visibility(
+            strat,
+            cp_available=99,
+            current_phase="charge",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+        )
+        assert result == "hidden"
+
+    def test_phase_reactive_timing_on_synthetic_strat_returns_hidden(self) -> None:
+        # Confirm the visibility rule in isolation (no YAML dependency)
+        strat = _strat(timing="phase_reactive", phase="any", stage="active")
+        assert _vis(strat, cp=10, current_phase="shooting", current_stage="active") == "hidden"

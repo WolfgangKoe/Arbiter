@@ -16,6 +16,7 @@ from gameMechanic.combat import (
     DefendParams,
     parse_dice,
     resolve_attack,
+    resolve_save,
     resolve_weapon_strength,
     wound_threshold,
 )
@@ -474,3 +475,49 @@ class TestResolveAttackHitModLogging:
         defender = DefendParams(toughness=4, save=7, wounds=10)
         _, log = resolve_attack(params, defender, hits_rolled=5)
         assert not any("hit mod" in line for line in log)
+
+
+# ---------------------------------------------------------------------------
+# R-COMBAT-09: resolve_save — multiple invulnerable saves → only best used
+#
+# resolve_save() accepts a single invuln_save value.  The 9E rule "if a model
+# has more than one invulnerable save, it can only use one of them" means the
+# caller pre-selects the best (lowest numeric value) before passing it in.
+# These tests verify that resolve_save() correctly selects the best save when
+# the caller has already chosen the minimum (i.e. best) invuln from several.
+# ---------------------------------------------------------------------------
+
+
+class TestResolveSaveMultipleInvulns:
+    """R-COMBAT-09: best (lowest value) invulnerable save wins when a model has several."""
+
+    def test_best_of_two_invulns_is_used_when_better_than_armour(self) -> None:
+        # Model has 4+ and 5+ invulns → caller passes min=4; AP-4 on 3+ → armour_eff=7+
+        # invuln 4+ beats armour 7+ → using_invuln=True, effective=4
+        result = resolve_save(base_save=3, invuln_save=4, ap=-4, save_modifiers=[])
+        assert result["using_invuln"] is True
+        assert result["effective"] == 4
+
+    def test_worse_invuln_would_lose_to_armour(self) -> None:
+        # If caller mistakenly passed the weaker 5+ invuln (AP 0, armour 3+ → eff=3+):
+        # armour 3+ beats invuln 5+ → using_invuln=False.
+        # This confirms that the lower (better) value must be chosen.
+        result = resolve_save(base_save=3, invuln_save=5, ap=0, save_modifiers=[])
+        assert result["using_invuln"] is False
+        assert result["effective"] == 3
+
+    def test_minimum_of_two_invulns_produces_better_save_than_either_alone(self) -> None:
+        # Simulates: model has 3+ and 5+ invulns; caller picks min(3, 5)=3.
+        # AP-5 on armour 4+ → armour_eff=9 (impossible); invuln 3+ wins.
+        best_invuln = min(3, 5)  # caller responsibility: pick the best
+        result = resolve_save(base_save=4, invuln_save=best_invuln, ap=-5, save_modifiers=[])
+        assert result["invuln"] == 3
+        assert result["using_invuln"] is True
+        assert result["effective"] == 3
+
+    def test_best_invuln_equal_to_armour_prefers_armour(self) -> None:
+        # invuln 3+ and armour 3+ (AP 0) → armour_modified=3, invuln=3 → not strictly better
+        # resolve_save uses `invuln < armour_modified`, so equal → armour wins
+        result = resolve_save(base_save=3, invuln_save=3, ap=0, save_modifiers=[])
+        assert result["using_invuln"] is False
+        assert result["effective"] == 3

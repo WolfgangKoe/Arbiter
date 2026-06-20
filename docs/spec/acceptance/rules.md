@@ -101,8 +101,8 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: nein
 - **quelle**: core_rules.txt — "Invulnerable Saves" — "If a model has more than one invulnerable save, it can only use one of them"
-- **code**: combat.py:resolve_save
-- **regel**: Hat ein Modell mehrere Invulnerable Saves, wird nur der beste verwendet (kleinster Zahlenwert). (Schuld: bisher nur implizit über R-08 abgedeckt.)
+- **code**: ability_engine.py:ability_invuln_save
+- **regel**: Hat ein Modell mehrere Invulnerable Saves, wird nur der beste verwendet (kleinster Zahlenwert). Die „bester von mehreren"-Auswahl liegt in `ability_invuln_save` (`min(...)` über alle aktiven Invuln-Effekte), NICHT in `resolve_save` (nimmt einen Einzelwert). (Schuld: Test gehört auf `ability_invuln_save` — S69-Befund, code-Ref korrigiert; Test offen.)
 
 ### R-COMBAT-10
 - **klasse**: A
@@ -161,12 +161,12 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **regel**: Heavy-Waffe (INFANTRY): -1 auf Trefferwürfe, wenn die Einheit sich in dieser Runde bewegt hat (Advance gilt ebenfalls als Bewegung).
 
 ### R-COMBAT-17
-- **klasse**: A
+- **klasse**: C
 - **status**: implementiert
 - **getestet**: nein
 - **quelle**: core_rules.txt — "RAPID FIRE … double the number of attacks … if its target is within half the weapon's range"
-- **code**: attack_math.py:_compute_attacks / attack_math.py:_total_attacks_int
-- **regel**: Rapid-Fire-Waffe: Angriffszahl wird verdoppelt, wenn das Ziel innerhalb der halben Reichweite ist. (Schuld: bisher nur Integrations-Smoke in test_shooting.py, kein Unit-Test der Berechnung.)
+- **code**: _common.py (Rapid-Fire-Hinweis-Caption)
+- **regel**: Rapid-Fire-Waffe: Angriffszahl wird verdoppelt, wenn das Ziel innerhalb der halben Reichweite ist. App-Anteil: zeigt nur einen Hinweis-Caption (`[RAPID FIRE · ½ = …"]`); die Verdopplung selbst rechnet die App NICHT — das ist Tisch-Anteil. (S69-Befund: war fälschlich Klasse A „App rechnet" mit `code: attack_math` — `_compute_attacks` ist range-agnostisch und verdoppelt nicht. Auf Klasse C korrigiert.)
 
 ### R-COMBAT-18
 - **klasse**: A
@@ -335,7 +335,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CMD-04
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_combat_patrol_starts_at_3_cp
 - **quelle**: core_rules.txt — Battle-forged CP-Bonus / Spielgröße: Combat Patrol 3 · Incursion 6 · Strike Force 12 · Onslaught 18
 - **code**: game_state.py:init_state
 - **regel**: Der CP-Startvorrat richtet sich nach der Spielgröße (`CP_BY_GAME_SIZE`: 3/6/12/18). (Schuld: kein Test prüft die vier Stufen.)
@@ -399,7 +399,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CMD-12
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_command_re_roll_has_phase_reactive_timing
 - **quelle**: core_rules.txt — "COMMAND RE-ROLL … Use this Stratagem after you have made a hit roll, a wound roll, a damage roll, a saving throw, an Advance roll, a charge roll, a Psychic test … 1 CP"
 - **code**: stratagem.py:stratagem_visibility
 - **regel**: Command Re-Roll (1 CP, Core-Stratagem) erlaubt das Wiederholen eines einzelnen Würfels; als `phase_reactive` klassifiziert wird es in der UI nicht proaktiv angeboten (reaktiver Einsatz nach einem Würfelwurf am Tisch). (Schuld: kein Test prüft die reaktive Klassifizierung von `command_re_roll`.)

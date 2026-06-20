@@ -1,28 +1,28 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-20 08:13 UTC
+Stand: 2026-06-20 09:35 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-20 07:29 · 70489832**
+**2026-06-20 08:44 · f4c215ad**
 
-- **Aufgabe:** Start Session
-- **Modelle:** Haupt Opus · Subagent —
-- **Tokens gesamt:** 6,360,175 (Haupt 6,360,175 · Subagent 0, Anteil 0 %)
-- **Peak-Kontext:** ████████░░░░ 94k / 150k
-- **cache_read:** 5,822,742 · **Output:** 75,337
+- **Aufgabe:** start session + Freigabe: Hinweis festhalten Claude-Skill über die API NUR durch einen Subagenten ziehen lassen! Das ha…
+- **Modelle:** Haupt Opus · Subagent Sonnet
+- **Tokens gesamt:** 16,605,536 (Haupt 10,938,094 · Subagent 5,667,442, Anteil 34 %)
+- **Peak-Kontext:** ███████████░ 132k / 150k
+- **cache_read:** 15,532,474 · **Output:** 193,434
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  12,608
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  449,488
-cache_read     ▕████████████████████████▏   92%  5,822,742
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  75,337
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  24,387
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  855,241
+cache_read     ▕████████████████████████▏   94%  15,532,474
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  193,434
 ```
 
 **Legende & Zielwerte:**
@@ -42,25 +42,27 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-20 07:29 7048  ████████░░░░  94k ↓    ░░░░░░   0% ↓  ████████████
+06-20 08:44 f4c2  ███████████░ 132k ↓    ██░░░░  34% ↑  ████████····
+06-20 07:29 7048  ████████████ 304k ↑    ░░░░░░   0% ↓  ████████████
 06-19 20:08 f76d  ████████████ 152k ↑    ░░░░░░   6% ↑  ███████████·
 06-19 19:31 1273  █████████░░░ 110k ↑    ░░░░░░   0% ↓  ████████████
 06-19 18:53 7f15  █████████░░░ 107k ↓    █░░░░░  12% ↑  ███████████·
 06-19 17:59 ac79  ████████████ 194k ↑    ░░░░░░   0% →  ████████████
-06-19 16:17 5a54  ████░░░░░░░░  54k ↓    ░░░░░░   0% ↓  ████████████
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 94k blieb im 150k-Korridor.
-- 💡 Große Session ohne Subagent — mechanische Fleißarbeit ließe sich an Sonnet/Haiku auslagern (CLAUDE.md, Tiering).
+- ✅ Peak-Kontext 132k blieb im 150k-Korridor.
+- ✅ 34% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 5,667,442 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## Subagenten — wer wurde wofür gestartet
 
 | Session | Modell | Agent | Aufgabe |
 |---|---|---|---|
+| 2026-06-20 08:44 · f4c215ad | Sonnet | general-purpose | Klasse-1 Ledger-Tests + R-CMD-03 Befund |
 | 2026-06-19 20:08 · f76dbdd8 | Sonnet | general-purpose | Battle-Round rules catalog |
 | 2026-06-19 18:53 · 7f1575c3 | Sonnet | general-purpose | Prepare next session docs |
 | 2026-06-19 15:34 · 2672bd18 | Sonnet | general-purpose | Draft Psychic Phase rule catalog |
@@ -105,5 +107,5 @@ _Auto-generiert zur jüngsten Session._
 
 ---
 
-Σ über 151 Sessions: 2,456,789,112 Token (23,435 Antworten).
+Σ über 152 Sessions: 2,477,411,399 Token (23,675 Antworten).
 
