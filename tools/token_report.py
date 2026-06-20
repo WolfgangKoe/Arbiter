@@ -50,12 +50,13 @@ _MODEL_TIERS: tuple[tuple[str, str], ...] = (
 )
 
 # Modell-Mix-Balken: feste Zeichen je Tier (theme-sicher, keine Farb-Legende).
+# Opus █ vs. Sonnet · = starker Kontrast für die beiden häufigsten Tiers.
 _MIX_CHARS: tuple[tuple[str, str], ...] = (
     ("Opus", "█"),
-    ("Sonnet", "▓"),
+    ("Sonnet", "·"),
     ("Haiku", "▒"),
 )
-_MIX_OTHER = "·"
+_MIX_OTHER = "▓"
 
 # Wrapper-Tags, die keine echte Nutzer-Aufgabe sind (Slash-Kommandos, IDE-Kontext).
 _WRAPPER_TAGS: tuple[str, ...] = (
@@ -416,7 +417,7 @@ def bar(value: int, maximum: int, *, width: int = 12, fill: str = "█", empty: 
 
 
 def model_mix_bar(by_tier: dict[str, int], *, width: int = 12) -> str:
-    """Segmentierter Balken nach Tier-Anteil (█ Opus · ▓ Sonnet · ▒ Haiku · · Rest)."""
+    """Segmentierter Balken nach Tier-Anteil (█ Opus · · Sonnet · ▒ Haiku · ▓ Rest)."""
     total = sum(by_tier.values())
     if total <= 0:
         return _MIX_OTHER * width
@@ -558,6 +559,24 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
             f"{name:<15}▕{bar(value, peak, width=24, empty='░')}▏ {share:>4.0f}%  {_fmt(value)}"
         )
     lines += ["```", ""]
+    lines += [
+        "**Legende & Zielwerte:**",
+        "",
+        "- **input** — neue, ungecachte Tokens → niedrig halten.",
+        "- **cache_creation** — erstmals gecacht (einmalig teurer) → moderat, unvermeidbar "
+        "bei neuem Kontext.",
+        "- **cache_read** — aus warmem Cache gelesen (günstig) → **hoher Anteil = gut** "
+        "(Kontext bleibt warm, Cache-TTL ~5 Min).",
+        "- **output** — generierte Tokens; **kein Selbstzweck — Qualität vor Menge.** Ein "
+        "höherer Output-Anteil *relativ zu* cache_read kann Ziele schneller erreichen, "
+        "*sofern das Ergebnis trägt*; viel cache_read bei wenig substanziellem Output = "
+        "Reibung, „Mist“-Output ist schädlich, nicht gut.",
+        "",
+        "**Zielbild:** hoher cache_read-Anteil + niedriger input-Anteil = effizientes "
+        "Arbeiten; Output bewusst gegen Qualität gewichtet (nicht maximieren). Viele "
+        "Cache-Misses (hoher input nach Pausen > 5 Min) sind ein Warnsignal.",
+        "",
+    ]
     return lines
 
 
@@ -572,7 +591,7 @@ def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMe
         "## Verlauf (letzte 6 Sessions)",
         "",
         "Jüngste zuerst. Balken theme-sicher (Unicode); Trend ↑/↓ ggü. der älteren Session.",
-        "Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.",
+        "Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
         "",
         "```text",
         f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",

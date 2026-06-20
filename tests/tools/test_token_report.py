@@ -178,8 +178,8 @@ def test_bar_fills_proportionally_and_clamps():
 def test_model_mix_bar_segments_by_tier_share():
     mix = model_mix_bar({"Opus": 6, "Sonnet": 3, "Haiku": 3}, width=12)
     assert len(mix) == 12
-    assert mix.count("█") == 6 and mix.count("▓") == 3 and mix.count("▒") == 3
-    assert model_mix_bar({}, width=4) == "····"
+    assert mix.count("█") == 6 and mix.count("·") == 3 and mix.count("▒") == 3
+    assert model_mix_bar({}, width=4) == "▓▓▓▓"
 
 
 def test_trend_compares_to_previous():

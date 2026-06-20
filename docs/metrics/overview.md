@@ -1,57 +1,67 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-19 19:19 UTC
+Stand: 2026-06-20 08:13 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-19 18:53 · 7f1575c3**
+**2026-06-20 07:29 · 70489832**
 
-- **Aufgabe:** start session +freigabe
-- **Modelle:** Haupt Opus · Subagent Sonnet
-- **Tokens gesamt:** 6,205,091 (Haupt 5,183,197 · Subagent 1,021,894, Anteil 16 %)
-- **Peak-Kontext:** ███████░░░░░ 92k / 150k
-- **cache_read:** 5,711,558 · **Output:** 120,706
+- **Aufgabe:** Start Session
+- **Modelle:** Haupt Opus · Subagent —
+- **Tokens gesamt:** 6,360,175 (Haupt 6,360,175 · Subagent 0, Anteil 0 %)
+- **Peak-Kontext:** ████████░░░░ 94k / 150k
+- **cache_read:** 5,822,742 · **Output:** 75,337
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  10,029
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    6%  362,798
-cache_read     ▕████████████████████████▏   92%  5,711,558
-output         ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    2%  120,706
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  12,608
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  449,488
+cache_read     ▕████████████████████████▏   92%  5,822,742
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  75,337
 ```
+
+**Legende & Zielwerte:**
+
+- **input** — neue, ungecachte Tokens → niedrig halten.
+- **cache_creation** — erstmals gecacht (einmalig teurer) → moderat, unvermeidbar bei neuem Kontext.
+- **cache_read** — aus warmem Cache gelesen (günstig) → **hoher Anteil = gut** (Kontext bleibt warm, Cache-TTL ~5 Min).
+- **output** — generierte Tokens; **kein Selbstzweck — Qualität vor Menge.** Ein höherer Output-Anteil *relativ zu* cache_read kann Ziele schneller erreichen, *sofern das Ergebnis trägt*; viel cache_read bei wenig substanziellem Output = Reibung, „Mist“-Output ist schädlich, nicht gut.
+
+**Zielbild:** hoher cache_read-Anteil + niedriger input-Anteil = effizientes Arbeiten; Output bewusst gegen Qualität gewichtet (nicht maximieren). Viele Cache-Misses (hoher input nach Pausen > 5 Min) sind ein Warnsignal.
 
 ## Verlauf (letzte 6 Sessions)
 
 Jüngste zuerst. Balken theme-sicher (Unicode); Trend ↑/↓ ggü. der älteren Session.
-Modell-Mix: `█` Opus · `▓` Sonnet · `▒` Haiku · `·` sonstige.
+Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-19 18:53 7f15  ███████░░░░░  92k ↓    █░░░░░  16% ↑  ██████████▓▓
+06-20 07:29 7048  ████████░░░░  94k ↓    ░░░░░░   0% ↓  ████████████
+06-19 20:08 f76d  ████████████ 152k ↑    ░░░░░░   6% ↑  ███████████·
+06-19 19:31 1273  █████████░░░ 110k ↑    ░░░░░░   0% ↓  ████████████
+06-19 18:53 7f15  █████████░░░ 107k ↓    █░░░░░  12% ↑  ███████████·
 06-19 17:59 ac79  ████████████ 194k ↑    ░░░░░░   0% →  ████████████
 06-19 16:17 5a54  ████░░░░░░░░  54k ↓    ░░░░░░   0% ↓  ████████████
-06-19 15:34 2672  ████████████ 155k ↑    ░░░░░░   1% ↑  ████████████
-06-19 15:00 bfc7  ███████████░ 135k ↓    ░░░░░░   0% ↓  ████████████
-06-19 14:28 42c5  ████████████ 171k ↑    ░░░░░░   7% ↑  ███████████▓
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 92k blieb im 150k-Korridor.
-- ✅ 1,021,894 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 94k blieb im 150k-Korridor.
+- 💡 Große Session ohne Subagent — mechanische Fleißarbeit ließe sich an Sonnet/Haiku auslagern (CLAUDE.md, Tiering).
 
 ## Subagenten — wer wurde wofür gestartet
 
 | Session | Modell | Agent | Aufgabe |
 |---|---|---|---|
+| 2026-06-19 20:08 · f76dbdd8 | Sonnet | general-purpose | Battle-Round rules catalog |
 | 2026-06-19 18:53 · 7f1575c3 | Sonnet | general-purpose | Prepare next session docs |
 | 2026-06-19 15:34 · 2672bd18 | Sonnet | general-purpose | Draft Psychic Phase rule catalog |
 | 2026-06-19 14:28 · 42c5e10a | Sonnet | general-purpose | Draft Charge/Morale rule entries |
@@ -95,5 +105,5 @@ _Auto-generiert zur jüngsten Session._
 
 ---
 
-Σ über 148 Sessions: 2,422,847,053 Token (23,008 Antworten).
+Σ über 151 Sessions: 2,456,789,112 Token (23,435 Antworten).
 

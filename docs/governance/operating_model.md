@@ -60,6 +60,20 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    Drei Schritte in dieser Reihenfolge:
    - **Review** 🔧 — technischer DoD-Review (Event 4) **plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md). **Harter Vollzug:** `tools/test_report_reminder.py` (PostToolUse auf pytest) injiziert diese Teil-Pflicht nach jedem Testlauf.
    - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `next_session.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
+
+     **Vorausschauender Fragenkatalog (Review + Retro schauen auch nach VORN):** Neben dem Rückblick prüft der Orchestrator jede Session-Ende-Retro diese Fragen — und beantwortet sie für den Stakeholder nachvollziehbar (nicht nur rhetorisch):
+     - **Qualität** — Was würde die Qualität (Code, Regeltreue, Tests, Doku) konkret heben?
+     - **Operating-Model** — Wo reibt der Prozess? Was am Operating-Model selbst verbessern?
+     - **Hooks/Gates** — Welcher manuelle, sich wiederholende Schritt ist ein Hook-/Gate-Kandidat (Konditionalprogramm → Harness statt Erinnerung)?
+     - **Blinde Flecken** — Was übersehen wir gerade? Welche Annahme ist ungeprüft?
+     - **Automatisierung** — Was lässt sich automatisieren, ohne Urteil zu ersetzen?
+     - **Doku/Backlog** — Lässt sich Doku/Backlog besser strukturieren, damit nichts driftet?
+     - **Skalierung** — Wie werden wir besser / skalieren die Umsetzung? **Leitprinzip: vorausschauend, kleine Experimente, KEIN großer Umbau.**
+     - **Kontext-Versorgung** — Wie stellen wir sicher, dass Claude jederzeit die nötigen Infos/Hinweise hat (z. B. Haiku-/Sonnet-Beobachter-Subagent, der Lücken meldet)?
+     - **Priorität** — Ist die nächste geplante Aufgabe (in `next_session.md`) noch die richtige Priorität — gegen `backlog.md` geprüft?
+     - **Engpass** — Welche Schuld-/Ledger-Position blockiert aktuell am meisten?
+
+     Antworten, die eine Änderung auslösen, werden konkret abgelegt: Prozess-/Hook-Idee → `next_session.md` (oder Backlog §2), Prämissen-Schärfung → ADR.
    - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**.
    Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 

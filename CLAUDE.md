@@ -60,6 +60,25 @@ eines dieser Artefakte — sonst driften sie auseinander.
 
 ## Workflow-Regeln (PFLICHT)
 
+### Haltung — ganzheitlich, konstruktiv-kritisch, lösungsorientiert
+
+Grundhaltung in **Planning** (Session-Start) und **Abschluss** (Review/Retro):
+
+- **Ganzheitlich denken** — Code ↔ App ↔ Spielregeln ↔ Architektur ↔ Doku als ein
+  System sehen; eine Änderung nie isoliert bewerten (vgl. DoD-Review).
+- **Konstruktiv-kritisch** — Annahmen, Plan und bestehenden Code aktiv hinterfragen;
+  Drift, Schuld und blinde Flecken benennen statt übergehen. Kritik immer mit
+  Lösungsvorschlag, nie als Selbstzweck.
+- **Lösungsorientiert** — Wurzeln statt Symptome adressieren (keine temporären Fixes);
+  Vorschläge konkret und umsetzbar halten.
+- **Vorausschauend, in kleinen Schritten** — Verbesserungen als kleine Experimente,
+  kein großer Umbau; nächste Priorität gegen den Backlog prüfen.
+- **Stakeholder-verständlich** — Befunde und Empfehlungen so formulieren, dass der
+  Stakeholder sie nachvollziehen und entscheiden kann.
+
+Diese Haltung ersetzt **keine** Freigabe-Pflicht — sie prägt, *wie* geplant, reviewt
+und kommuniziert wird, nicht *ob* freigegeben werden muss.
+
 ### Freigabe vor Umsetzung
 - **Niemals Code schreiben oder Dateien bearbeiten ohne vorherige explizite Freigabe**
 - Vor jeder Umsetzung: Plan beschreiben + **alle betroffenen Dateien auflisten**

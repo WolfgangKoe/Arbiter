@@ -1712,3 +1712,27 @@ unit_state["group_models"]: dict[str, int]
   in `.claude/settings.json` verdrahtet. **Follow-up:** CLAUDE.md `Messen:`-Absatz auf
   Hook umzeigen (verschachtelte `usage`-Objekte brechen den alten `[^}]*`-Regex).
   Noch kein Commit (wartet auf manuelle UI-Verifikation #PSI).
+- **S66 (2026-06-19)** Operating-Model-Events Hook-vollzogen (Wurzel: Events waren Prosa,
+  „feuerten nicht von selbst"). `tools/session_context.py` eskaliert gestuft (≥120k ⚠️ +
+  Retro-Vorankündigung, ≥135k ⛔ Stopp). Hartes Freigabe-Gate `tools/freigabe_gate.py`
+  (PreToolUse Edit/Write/NotebookEdit, Exit 2) blockt bis Marker `.claude/.freigabe`;
+  SessionStart löscht ihn → jede Session neu scharf. `tools/test_report_reminder.py`
+  (PostToolUse pytest) injiziert Token-Report-Teilen-Pflicht. Subagent-Routing bewusst
+  NICHT automatisiert (Urteil, kein Konditionalprogramm). ADR-0003 + operating_model.md
+  (🔧-Marker). +11 Tests, **911 grün**, 88.45 %. Lücke: Bash-Writes (`>`, `sed -i`) nicht gegated.
+- **S67 (2026-06-20)** #PSI verifiziert + abgeschlossen: `TestDenyRefundFlow` (3 Regressions-
+  tests) nageln die S65-Fix-End-Zustände fest. Neuer Katalog-Bereich **Battle-Round-Struktur**
+  R-ROUND-01..10 (Sonnet-Subagent + Opus-Review). Doku-Drift `init_game_state`→`init_state`
+  (3×); R-ROUND-06 gedeckt → Ledger zurück auf 10. CLAUDE.md Token-Messung zeigt auf den
+  `session_context.py`-Hook (statt rohem Regex). **915 grün, 91.88 %**, Nenner=121.
+  Commits 61d6811, 1b264a4, c9504a4.
+- **S68 (2026-06-20)** Vier S67-Nutzerwünsche (Operating-Model/Tooling/Doku): (1) **Voraus-
+  schauender Review/Retro-Fragenkatalog** in `operating_model.md` Event 5 (Retro) — Qualität ·
+  Operating-Model · Hooks/Gates · blinde Flecken · Automatisierung · Doku/Backlog · Skalierung
+  (kleine Experimente, kein Umbau) · Kontext-Versorgung · Priorität · Engpass. (2) CLAUDE.md
+  neue Subsection **„Haltung"** (ganzheitlich · konstruktiv-kritisch · lösungsorientiert ·
+  vorausschauend · stakeholder-verständlich) für Planning + Abschluss. (3) **Composition-Bar-
+  Legende + Zielwerte** in `token_report.py` (input/cache_creation/cache_read/output; cache_read
+  hoch = gut, Output gegen Qualität gewichtet, nicht maximieren). (4) **Model-Mix-Zeichen**
+  getauscht für Opus/Sonnet-Kontrast: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige
+  (Test mitgezogen — bewusster Verhaltenswechsel). **915 grün, 91.88 %**.
