@@ -42,6 +42,22 @@ def test_save_modifier_past_six_uses_miss_die_not_text_cross() -> None:
     assert _CROSS_STROKE in html
 
 
+def test_buff_arrow_points_right() -> None:
+    # Cover +2 on Sv 5+ → eff. 3+: the success window widens, arrow points right
+    # (lower rolls now suffice). Regression for the Plan 022 arrow-direction fix.
+    html = save_modifier_die_pair_html(5, 2, "Cover", "#4a9a5a")
+    assert "→" in html
+    assert "←" not in html
+
+
+def test_debuff_arrow_points_left() -> None:
+    # AP-3 on Sv 3+ → eff. 6+: the save worsens, higher rolls are needed, arrow
+    # points left. Regression for the Plan 022 arrow-direction fix.
+    html = save_modifier_die_pair_html(3, -3, "AP-3", "#ef4444")
+    assert "←" in html
+    assert "→" not in html
+
+
 def test_modifier_columns_clamp_to_grid() -> None:
     # AP-3 on Sv 4+: from 3 (last old-fail) to 6 (best roll now fails) — 3 columns.
     assert _modifier_columns(3, 6) == (3, 6)

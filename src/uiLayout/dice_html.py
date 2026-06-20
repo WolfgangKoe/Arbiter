@@ -197,7 +197,9 @@ def _aligned_modifier_row_html(
     """
     left_col, right_col = _modifier_columns(left_val, right_val, right_off_scale)
     lo, hi = sorted((left_col, right_col))
-    rightward = value < 0  # penalty worsens the threshold → arrow points to higher values
+    rightward = (
+        value > 0
+    )  # buff widens the success window → arrow points right (lower rolls suffice)
     slots: list[str] = []
     for v in range(1, 7):
         if 2 <= base_threshold <= 6 and v == base_threshold:
