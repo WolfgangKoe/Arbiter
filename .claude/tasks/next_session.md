@@ -21,7 +21,19 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S66, 2026-06-19)
+## Aktueller Stand (nach S67, 2026-06-20)
+
+**S67 — #PSI verifiziert + abgeschlossen, Battle-Round-Katalog, Doku-Fixes (committet).**
+(1) UI-Verifikation #PSI vom Nutzer bestätigt („passt alles") → 3 Regressionstests
+`TestDenyRefundFlow` nageln die S65-Fix-End-Zustände fest (aktiv-Reset/Undo → Budget
+refundiert, Power wieder denybar); Flow (c) „Skip" ist Render-Code, manuell verifiziert.
+(2) Neuer Katalog-Bereich **Battle-Round-Struktur** R-ROUND-01..10 (Sonnet-Subagent +
+Opus-Review): Turn-Struktur, fixer `first_player`, Phasenreihenfolge, Turn-Wechsel,
+Rundenzähler, Spiellänge, Timing simultaner Regeln. (3) Doku-Drift gefixt:
+`init_game_state`→`init_state` (3×, inkl. vorbestehender R-CMD-04); R-ROUND-06 mit
+`test_init_state_sets_round_to_one` gedeckt → Ledger zurück auf **10**. (4) CLAUDE.md
+Token-Messung zeigt nun auf den `tools/session_context.py`-Hook (statt rohem Regex).
+**915 grün, Cov 91.88 %**, Nenner=121. Commits 61d6811, 1b264a4, c9504a4.
 
 **S66 — Operating-Model-Events Hook-vollzogen (committet).** Wurzel: die Events
 waren Prosa, „feuerten gar nicht von selbst" (Stakeholder-Befund). Vollzug aus der
@@ -45,12 +57,7 @@ inaktiven Fraktion → fixt den Core-Bug (denied+reset = permanent verbranntes B
 Neues symmetrisches **„Undo deny"**-Button (`_render_undo_deny_button`) im Deny-Column:
 gibt Power + Budget zurück. „Skip Deny" verbraucht kein Budget. `deny_faction`-Feld in
 `psi_result` (gesetzt bei Attempt + Skip). +8 Tests (`TestRefundDeny`/`TestClearedDeny`),
-**900 grün**, Cov **88.45 %**. black/isort/ruff clean. Committet (d2a9321/cc75490).
-**UI-Verifikation noch offen** — manuelle Checks:
-(a) „Undo deny" nach erfolgreichem Deny → Power zurück + Budget frei;
-(b) aktiv-Reset nach Deny → nächste Power im Zug denybar (Budget refundiert, kein falsches
-„already used"); (c) „Skip Deny" = kein Budgetverbrauch; (d) „Undo deny" nach fehlgeschlagenem
-Deny funktioniert.
+Committet (d2a9321/cc75490). **In S67 UI-verifiziert + per `TestDenyRefundFlow` regressionsgetestet → #PSI abgeschlossen.**
 
 **S65 — Live-Token-Gauge-Hook** (committet d2a9321): `tools/session_context.py`. In S66
 auf gestufte Eskalation erweitert (s. o.).
@@ -64,14 +71,10 @@ Befund (Nutzer): Deny nicht resettbar, Smite schon → asymmetrischer Reset → 
 Frühere Sessions (S60–S63): Verlauf in `docs/goals/ziel6.md`.
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-1. **★ UI-Verifikation #PSI (Checkliste S65 oben) + Commit.** Code + Tests grün (S65);
-   UI-Checks (a)–(d) manuell abhaken → #PSI + Token-Gauge-Hook gemeinsam committen.
-2. **CLAUDE.md Token-Messung aktualisieren.** `Messen:`-Absatz auf `tools/session_context.py`
-   / Hook umzeigen statt rohem `grep [^}]*` (verschachtelte `usage`-Objekte brechen den
-   Regex — s. S65-Befund).
-3. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic ✅; nächster Bereich offen
-   (z. B. Deployment / Mission-Scoring / Battle-Round-Struktur — Sonnet-Subagent, eigene Session).
-4. **Ledger schrumpfen** (jetzt 10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
+✅ Erledigt in S67: UI-Verifikation #PSI · CLAUDE.md Token-Messung · Battle-Round-Katalog.
+1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic/Battle-Round ✅; nächster Bereich
+   offen (z. B. Deployment / Mission-Scoring — Sonnet-Subagent, eigene Session).
+2. **Ledger schrumpfen** (jetzt 10) — Ratchet: R-COMBAT-09/17, R-CMD-03/04/10/11/12,
    R-CHARGE-09/10, R-MORALE-02. Verbleibende v. a. Command/Combat-Render-Logik → gleiches
    Muster (reine Funktion + Test, backlog §0/§2).
 5. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
