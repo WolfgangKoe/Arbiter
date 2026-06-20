@@ -41,12 +41,16 @@ Speichern+Commit noch durchgehen.
   `arkana`, Items `orb`/`overlord`/`phaeron`/`gloom`/`prism`/`dynasty`,
   Default-Roster-Hardcode (`game_state.py`), `faction_dir`-Default `"necrons"` in `loader.py`
 
-### ▶ Nächste Session = Plan 014 (Defender-Correction)
+### ▶ Nächste Session = Plan 022 (Dice Display Rework)
 
-**Reihenfolge:** 014 → 022 → 020 → 021 → 016 → 018 → 015 → 017
-
-Plan: `docs/audit/plans/014-defender-correction.md` — vor Start Freigabe einholen.
-Plan 022 hat aktiven Arrow-Direction-Bug (`dice_html.py:200`), Spec: `docs/spec/dice_display.md`.
+**Reihenfolge (neu 2026-06-21):** 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017
+**022 zuerst:** aktiver Arrow-Direction-Bug (`dice_html.py:200`, Buff/Debuff invertiert),
+Risk MEDIUM, Spec + Testkatalog fertig (`docs/spec/dice_display.md` §8/§10).
+**014 danach:** Refinement 2026-06-21 **neu geplant** (alte Fassung hatte
+`group_wounds`-Namenskollision + Scope-Selbstwiderspruch). Neue Richtung: `group_wounds`
+universell für ALLE Gruppen-Einheiten → ein Schadenspfad. **Risk HIGH** (Regressionsfläche
+Heal-/Damage-Pfad) — Plan: `docs/audit/plans/014-p17-defender-loss-allocation.md`.
+Beide Pläne: vor Start Freigabe einholen.
 
 ### Offene Fragen / Retro-Vormerke
 - **Output ↔ cache_read als Tempo-Indikator:** Zielwert-Feintuning `token_report.py`-Legende.

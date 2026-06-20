@@ -51,7 +51,8 @@ Jede Änderung braucht HTML-Output-Tests. Spec: `docs/spec/dice_display.md`.
 - `src/uiLayout/dice_html.py` — keine Edge-Case-Behandlung für 6+ / gegen-1
 - `src/gameMechanic/ability_engine.py` — kein `color_hint`-Feld im Modifier-Dict
 - `src/gameMechanic/attack_math.py` — `dakka`/`klaw`/`tesla` als Literal-Keys
-- `tests/uiLayout/` — kein `test_dice_html.py` (muss neu angelegt werden)
+- `tests/uiLayout/test_dice_html.py` — existiert, aber **minimal** (~1.8 KB);
+  muss zur vollen Suite aus `dice_display.md §8` ausgebaut werden
 
 ## Commands you will need
 
@@ -106,7 +107,13 @@ bewusst invertiert?).
 ### Step 2: Badge truncate
 
 `dice_html.py`: `_badge_chip()`: CSS `white-space:nowrap` →
-`overflow:hidden; text-overflow:ellipsis` (Breite 96px bleibt).
+`overflow:hidden; text-overflow:ellipsis` (Breite 96px bleibt). Lange Labels
+werden am Rand abgeschnitten (Ellipsis), statt in Slot 1 zu ragen.
+
+**Badge-Wert bleibt erhalten** (Stakeholder-Entscheid 2026-06-21): Label zeigt
+weiter `AP-1`, `AP-2` usw. — aus Spieler-Gewohnheit und konsistent zu allen
+anderen Profilwerten. Der Pfeil ist redundant, das ist gewollt. Labels werden
+nur **gekürzt** (z. B. „Power Klaw"), nicht der Zahlenwert entfernt.
 
 Test: `test_long_badge_does_not_overflow` — langer Label-String erzeugt
 kein `white-space:nowrap` im HTML-Output.

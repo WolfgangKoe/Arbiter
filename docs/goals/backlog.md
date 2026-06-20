@@ -61,9 +61,11 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
   Phasen-Block (wie MWBD). Überschneidet sich mit Plan 016.
 - 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
-  Badge-Text (`+1` raus, da Pfeil das ausdrückt) + Badge-Breite (ragt in Würfel
-  „1"). **Soll-Bild zuerst mit Nutzer als AC festlegen**, dann fixen, dann
-  per AC einrasten (Lehre aus Finding 9.2 — nie still ändern).
+  Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
+  Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist
+  bewusst redundant). Labels nur **kürzen** (truncate/ellipsis), nicht den Wert entfernen.
+  Soll-Bild als AC in `docs/spec/dice_display.md` festgelegt → Plan 022, dann per AC
+  einrasten (Lehre aus Finding 9.2 — nie still ändern).
 - ✅ **R-COMBAT-32 — Doku-Drift im Regel-Katalog** (S60→S62 erledigt): „Charging Units Fight
   First" stand als `offen`/`getestet: nein`, war aber implementiert. Bei der Verifikation (S62)
   zeigte sich: nur die *Berechtigung* war getestet, der *Reihenfolge*-Zweig (Nicht-Gecharger
@@ -78,8 +80,11 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   `_render_faction_actions` an Battle-forged koppeln + Regressionstest. Ledger-Eintrag
   `R-CMD-03` in [../spec/acceptance/rules.md](../spec/acceptance/rules.md).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
-  - **Cluster 4 — `dynasty`** (`movementPhase.py`): UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
-  - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`): `"Gloom Prism"` ist Necron-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
+  - ✅ **Konsens 2026-06-21 (jetzt umsetzbar, kein Schema-Risiko):** Cluster 4 + 5 als XS-Fixes
+    freigegeben — entweder kleiner gemeinsamer Plan oder Teil von Plan 018. Cluster 1/2/3/6 bleiben
+    an ihren Plänen (022/020/021), weil sie das YAML-Schema berühren (eigener Designentscheid je Plan).
+  - **Cluster 4 — `dynasty`** (`movementPhase.py`) ✅ Konsens: UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
+  - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`) ✅ Konsens: `"Gloom Prism"` ist **Necron**-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
   - **Cluster 3 — `orb`/`overlord`/`phaeron`/`resurrection`** (`commandPhase.py`): Option B (generischer Activated-Wargear-Flow) → Plan 020.
   - **Cluster 6 — `arkana`** (`loader.py`): Arkana nach `faction_abilities.yaml` (generische Datei je Fraktion), Loader generisch → Plan 021.
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
@@ -103,8 +108,8 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | TODO |
 | [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | TODO |
 
-**Empfohlene Reihenfolge: 019 → 014 → 022 → 020 → 021 → 016 → 018 → 015 → 017.**
-019 vor 014 (UI-Pattern zuerst konsolidieren); 022 hat bekannten Bug (Arrow-Direction-Fix, HOCH).
+**Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017.**
+022 zuerst (aktiver Arrow-Direction-Bug, Spec fertig); 014 danach (neu geplant, group_wounds universell, Risk HIGH).
 
 ---
 
@@ -163,7 +168,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🔲 **Lethal Hits (R-CMB-XX, Refinement 2026-06-20):** Unmod. Treffer-6 = kein Wundwurf, Schaden direkt mit Overflow (wie Mortal Wounds). Nicht implementiert. Eigener Plan nach Plan 014.
 - 🔲 **Deadly Demise (R-CMB-YY, Refinement 2026-06-20):** Modell zerstört → Mortal Wounds auf Einheiten in X". YAML-Daten vorhanden, Handler fehlt. Eigener Plan.
 - 🔲 **Voice of the Triarch (R-CMD-XX, Refinement 2026-06-20):** Silent King — `voiceOfTheTriarch`-Handler fehlt (YAML-Basis fertig: `alter_command_protocol`). → Plan 016 oder eigener kleiner Plan.
-- 🔲 **Subagent-Archiv REWORK (Refinement 2026-06-20):** S72-Bug: Duplikat-Tabellen in `overview.md`. Fix: (1) `docs/metrics/session_archive.md` als separate, wachsende Archiv-Datei; (2) `overview.md` bekommt Link + SA-Peaks als Inline-Subzeilen im Verlaufsblock; (3) Session-ID-Deduplizierung bei `--write` (kein Doppel-Append). Render-Funktionen `_render_subagent_archive` + `_render_subagents` zusammenführen.
+- 🔲 **Subagent-Archiv REWORK (Refinement 2026-06-20, geschärft 2026-06-21):** S72-Bug: Duplikat-Tabellen in `overview.md`. Fix: (1) `docs/metrics/session_archive.md` als separate, wachsende Archiv-Datei; (2) `overview.md` bekommt Link + SA-Peaks als Inline-Subzeilen im Verlaufsblock (Format: `Refinement/overview_concept.md`); (3) **Session-ID-Deduplizierung bei `--write`** — überschreibt `overview.md` während einer Session mehrfach, darf dieselbe Session-ID **nicht** doppelt ins Archiv anhängen (idempotent je Session-ID). Die **Anzahl der Auslösungen wird NICHT dokumentiert** (Stakeholder 2026-06-21). Render-Funktionen `_render_subagent_archive` + `_render_subagents` zusammenführen; die breite Tabelle „## Subagenten — wer wurde wofür gestartet" entfällt komplett.
 
 ---
 

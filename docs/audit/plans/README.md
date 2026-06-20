@@ -54,11 +54,11 @@ run every verification command, and update your row below when done.
 | [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | P2 (MITTEL) | S | — | TODO |
 | [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | TODO |
 
-**Empfohlene Reihenfolge: 019 → 014 → 022 → 020 → 021 → 016 → 018 → 015 → 017.**
-019 vor 014 (UI Target Consolidation als Fundament für Subgruppen-Auswahl).
-022 hat aktiven Bug (Arrow-Direction-Fix, HOCH). 013/014 sind die HOCH-Items
-und bauen aufeinander auf. 016 und 018 sind unabhängig. 015 ist das größte
-Stück und profitiert vom vereinheitlichten Flow aus 013. 017 zuletzt.
+**Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017.**
+022 zuerst: aktiver Arrow-Direction-Bug (MEDIUM Risk), Spec + Testkatalog fertig.
+014 danach: Refinement 2026-06-21 **neu geplant** (group_wounds universell, Risk HIGH).
+016 und 018 sind unabhängig. 015 ist das größte Stück und profitiert vom
+vereinheitlichten Flow aus 013. 017 zuletzt.
 
 **Dependency notes (Feature-Queue):**
 - **014 zwingend NACH 013**: 013 macht jede Einheit zur Gruppen-Einheit

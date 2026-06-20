@@ -188,3 +188,68 @@ Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
 | D3 | Edge Cases 6+ / gegen-1 fehlen | Plan 022 Step 4 |
 | D4 | `color_hint`-Feld nicht vorhanden | Plan 022 Step 3 |
 | D5 | `dakka`/`klaw`/`tesla`-Literals in `attack_math.py` (INV-4b) | Plan 022 Step 5 |
+
+---
+
+## 10. Detaillierte Beispielgeometrie (Stakeholder-Mockups, Refinement 2026-06-21)
+
+> Verbindliche Slot-Geometrie für den Executor. `[ | ]` = Erfolgsschwelle aus dem
+> Profil. `[leer]` = Slot ohne Inhalt. `[✕]` = Miss-Symbol. `[↺]` = Reroll-Symbol
+> (= App-weites Reset-Glyph). Trailing `[✕]` ganz rechts = Off-Scale-Miss (> 6).
+> Buff = grün `[+N→]`, Debuff = rot `[←N]`. Jeder Block braucht einen HTML-Test.
+
+### 10.1 Reroll-Wurf (z. B. „wiederhole Trefferwurf von 1")
+
+`[↺]` steht **unterhalb** des betroffenen Slots; rechts die Off-Scale-Spalte.
+
+```
+        [leer][Slot1][Slot2][ | ][Slot3][Slot4][Slot5][Slot6][✕]
+[Badge] [↺]
+```
+
+### 10.2 Always-Fail (z. B. Quantum Shield: Wundwürfe 1–3 scheitern)
+
+`[✕]` unterhalb jedes betroffenen Slots. **Perspektiv-Farbe** (§5.1): für den
+Verteidiger Buff (grün), für den würfelnden Angreifer Debuff (rot) — über
+`color_hint` gesteuert, NICHT über das Vorzeichen.
+
+```
+        [leer][Slot1][Slot2][ | ]   [Slot3][Slot4][Slot5][Slot6][✕]
+[Badge] [✕]   [✕]          [leer][✕]
+```
+
+### 10.3 Standardfall — Buff +1 und Debuff −2 bei Schwelle 3+
+
+```
+         [leer][Slot1][Slot2][ | ]   [Slot3][Slot4][Slot5][Slot6][✕]
+[Debuff] [leer]      [2]      [←2]   [─]    [5]
+[Buff]   [leer]      [2]      [+1→]  [3]
+```
+
+### 10.4 Grenzfall gegen die 6 — Rüstung 6+, diverse Modifier
+
+Debuffs über 6 erzeugen einen Off-Scale-Miss `[✕]` rechts; Buffs ziehen die
+effektive Schwelle nach links.
+
+```
+           [leer][Slot1][Slot2][Slot3][Slot4][Slot5][ | ][Slot6][✕]
+[Debuff-1] [leer]                            [5]    [←1] [6]
+[Debuff-2] [leer]                            [5]    [←2] [─]   [✕]
+[Debuff-3] [leer]                            [5]    [←3] [─]   [✕]
+[Buff+1]   [leer]                            [5]    [+1→][6]
+[Buff+2]   [leer]                     [4]    [─]    [+2→][6]
+[Buff+3]   [leer]              [3]    [─]    [─]    [+3→][6]
+```
+
+### 10.5 Grenzfall gegen die 1 — Rüstung 2+, diverse Modifier
+
+Spiegelbildlich zu 10.4. Slot 1 bleibt **immer** `[✕]` (Invariante §1): ein
+unmodifiziertes 1 misslingt; ein Debuff, der unter 1 drückt, erzeugt Off-Scale-Miss.
+
+```
+           [leer][Slot1][ | ][Slot2][Slot3][Slot4][Slot5][Slot6][✕]
+[Debuff-1] [✕]   [←1] [2]
+[Debuff-2] [✕]   [←2] [─]   [3]
+[Buff+1]   [✕]   [+1→][2]
+[Buff+2]   [✕]   [+2→][2]   (Slot 1 bleibt ✕ — Invariante absolut)
+```
