@@ -49,7 +49,7 @@ run every verification command, and update your row below when done.
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 | 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
-| [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | P2 (MITTEL) | S | — | TODO |
+| [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | P2 (MITTEL) | S | — | **DONE** (2026-06-20) — `TargetSelectionRequest` + `pending_target_request` ersetzt 3 alte State-Keys; `render_unit_selectbox` für Veil + Mortal-Target; 1007 Tests grün. |
 | [020](020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | P2 (MITTEL) | S–M | 019 (empf.) | TODO |
 | [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | P2 (MITTEL) | S | — | TODO |
 | [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | TODO |

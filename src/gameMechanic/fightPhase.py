@@ -19,6 +19,7 @@ from uiLayout._common import (
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
+    render_unit_selectbox,
     state_badges_html,
     wound_adjustment_buttons,
 )
@@ -169,20 +170,13 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
             and not enemy_units_state.get(sk, {}).get("in_reserve")
             and _is_target_engaged(atk_state, enemy_faction, sk)
         ]
-        target_options: list[tuple[str | None, str]] = [(None, "— Select target unit —")] + [
-            (sk, eu.name_en) for sk, eu in candidates
-        ]
-        target_labels = [label for _, label in target_options]
-        current_target = pending.get("target_uid")
-        current_idx = next((i for i, (k, _) in enumerate(target_options) if k == current_target), 0)
-        chosen_idx = st.selectbox(
+        candidate_dicts = [{"uid": sk, "name": eu.name_en} for sk, eu in candidates]
+        selected_target = render_unit_selectbox(
             'Target enemy unit (verify within 1" on table):',
-            options=range(len(target_labels)),
-            format_func=lambda i: target_labels[i],
-            index=current_idx,
-            key="mortal_target_select",
+            candidate_dicts,
+            "mortal_target_uid",
+            none_label="— Select target unit —",
         )
-        selected_target = target_options[chosen_idx][0]
 
         col1, col2 = st.columns(2)
         with col1:

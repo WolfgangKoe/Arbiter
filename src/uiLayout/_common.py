@@ -209,6 +209,49 @@ def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-ar
 # ---------------------------------------------------------------------------
 
 
+def render_unit_selectbox(
+    label: str,
+    candidates: list[dict],  # type: ignore[type-arg]
+    state_key: str,
+    *,
+    none_label: str | None = None,
+) -> str | None:
+    """Render a unit-selection selectbox and persist the chosen uid to session_state.
+
+    Each candidate dict must have a ``uid`` key; ``custom_name`` or ``name`` are used
+    for display. Returns the selected uid, or None when candidates is empty or the
+    none-sentinel option is selected.
+
+    ``none_label``: when set, prepends a ``None``-uid option with this label (e.g.
+    "— Select target unit —"). The user choosing it sets session_state[state_key] to
+    None and returns None.
+    """
+    options: list[str | None] = []
+    labels: list[str] = []
+    if none_label is not None:
+        options.append(None)
+        labels.append(none_label)
+    for u in candidates:
+        options.append(u["uid"])
+        labels.append(u.get("custom_name") or u.get("name", u["uid"]))
+
+    if not options:
+        return None
+
+    current = st.session_state.get(state_key)
+    current_idx = options.index(current) if current in options else 0
+    chosen_idx = st.selectbox(
+        label,
+        range(len(options)),
+        format_func=lambda i: labels[i],
+        index=current_idx,
+        key=f"select_{state_key}",
+    )
+    selected = options[chosen_idx]
+    st.session_state[state_key] = selected
+    return selected
+
+
 def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
     """Render ±1/2/3 wound-adjustment buttons for a unit."""
     bc = st.columns(6)

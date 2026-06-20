@@ -22,7 +22,12 @@ Design principles (see docs/spec/ui_layout.md §4):
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import PHASES, active_round_choice_buff_labels, units_key_for
+from gameMechanic.game_state import (
+    PHASES,
+    TargetSelectionRequest,
+    active_round_choice_buff_labels,
+    units_key_for,
+)
 from gameMechanic.unit_mutations import apply_buff_to_unit, set_deployment
 from gameObjects.unit import Unit
 from uiLayout._common import (
@@ -215,69 +220,58 @@ def render_unit_card(
                 st.rerun()
 
         elif is_active:
-            cmd_awaiting_id: str | None = (
-                st.session_state.get("cmd_awaiting_ability_id") if phase_key == "command" else None
-            )
-            revive_wargear_awaiting = phase_key == "command" and st.session_state.get(
-                "revive_wargear_awaiting_target", False
+            _ptr: TargetSelectionRequest | None = (
+                st.session_state.get("pending_target_request") if phase_key == "command" else None
             )
 
-            if cmd_awaiting_id:
-                required_kws: list[str] = st.session_state.get("cmd_awaiting_required_kw", [])
-                eligible = not required_kws or any(unit.has_keyword(kw) for kw in required_kws)
-                if eligible:
+            if _ptr is not None:
+                # Excluded unit (e.g. bearer) shows as plain text
+                if uid == _ptr.exclude_uid:
+                    st.markdown(f"**{unit.name_en}**")
+                elif _ptr.required_keywords and not all(
+                    unit.has_keyword(kw) for kw in _ptr.required_keywords
+                ):
+                    # Wrong keyword — show as ineligible plain text
+                    st.markdown(f"**{unit.name_en}**")
+                else:
+                    symbol = "▶" if _ptr.effect_type else "▷"
                     if st.button(
-                        f"▶ {unit.name_en}",
-                        key=f"cmd_tgt_{cmd_awaiting_id}_{faction}_{uid}",
+                        f"{symbol} {unit.name_en}",
+                        key=f"tgt_{uid}_{_ptr.ability_id}",
                         type="secondary",
                         use_container_width=True,
                     ):
-                        badge = (
-                            st.session_state.get("cmd_awaiting_badge_label")
-                            or cmd_awaiting_id.split(".")[-1]
-                        )
-                        effect_type = st.session_state.get("cmd_awaiting_effect_type", "")
-                        unit_state = st.session_state[units_key_for(faction)][uid]
-                        apply_buff_to_unit(unit_state, cmd_awaiting_id, badge, effect_type)
-                        cmd_state: dict = st.session_state.get("command_ability_state", {})
-                        entry: dict = cmd_state.get(cmd_awaiting_id) or {}
-                        targets: list[str] = list(
-                            entry.get("targets")
-                            or ([entry["target_uid"]] if entry.get("target_uid") else [])
-                        )
-                        if uid not in targets:
-                            targets.append(uid)
-                        cmd_state[cmd_awaiting_id] = {
-                            "targets": targets,
-                            "active_since_round": entry.get(
-                                "active_since_round", st.session_state.round
-                            ),
-                        }
-                        st.session_state.command_ability_state = cmd_state
-                        st.session_state.cmd_awaiting_ability_id = None
-                        log_action(
-                            st.session_state.round,
-                            "command",
-                            faction,
-                            f"{badge} → {unit.name_en}",
-                        )
-                        st.rerun()
-                else:
-                    st.markdown(f"**{unit.name_en}**")
-
-            elif revive_wargear_awaiting:
-                if uid == st.session_state.get("wargear_awaiting_bearer_uid"):
-                    st.markdown(f"**{unit.name_en}**")
-                else:
-                    if st.button(
-                        f"▷ {unit.name_en}",
-                        key=f"revive_wargear_tgt_{faction}_{uid}",
-                        type="secondary",
-                        use_container_width=True,
-                    ):
-                        st.session_state.revive_wargear_target_uid = uid
-                        st.session_state.revive_wargear_awaiting_target = False
-                        st.session_state.wargear_awaiting_bearer_uid = None
+                        if _ptr.effect_type:
+                            # Buff ability → apply buff and update command_ability_state
+                            unit_state = st.session_state[units_key_for(faction)][uid]
+                            apply_buff_to_unit(
+                                unit_state, _ptr.ability_id, _ptr.badge_label, _ptr.effect_type
+                            )
+                            cmd_state: dict = st.session_state.get("command_ability_state", {})
+                            entry: dict = cmd_state.get(_ptr.ability_id) or {}
+                            targets: list[str] = list(
+                                entry.get("targets")
+                                or ([entry["target_uid"]] if entry.get("target_uid") else [])
+                            )
+                            if uid not in targets:
+                                targets.append(uid)
+                            cmd_state[_ptr.ability_id] = {
+                                "targets": targets,
+                                "active_since_round": entry.get(
+                                    "active_since_round", st.session_state.round
+                                ),
+                            }
+                            st.session_state.command_ability_state = cmd_state
+                            log_action(
+                                st.session_state.round,
+                                "command",
+                                faction,
+                                f"{_ptr.badge_label} → {unit.name_en}",
+                            )
+                        else:
+                            # Wargear/revive ability → store selected target uid
+                            st.session_state.revive_wargear_target_uid = uid
+                        st.session_state.pending_target_request = None
                         st.rerun()
 
             else:

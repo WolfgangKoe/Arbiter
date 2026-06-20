@@ -5,6 +5,7 @@ import streamlit as st
 from gameMechanic.ability_engine import get_activated_command_abilities, get_triggered_abilities
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import (
+    TargetSelectionRequest,
     faction_dir_for,
     unit_id_from_state_key,
     units_key_for,
@@ -135,7 +136,8 @@ def _render_buff_roll_ability(
     st.divider()
     st.markdown(f"**{ability.name_en}**")
 
-    awaiting = st.session_state.get("cmd_awaiting_ability_id") == ability_id
+    _ptr = st.session_state.get("pending_target_request")
+    awaiting = _ptr is not None and _ptr.ability_id == ability_id
 
     for t in targets:
         target_unit = unit_by_id.get(unit_id_from_state_key(t))
@@ -146,7 +148,7 @@ def _render_buff_roll_ability(
     if awaiting:
         st.info("Select an eligible unit from your army list.")
         if st.button("Cancel", key=f"cmd_cancel_{ability_id}", use_container_width=True):
-            st.session_state.cmd_awaiting_ability_id = None
+            st.session_state.pending_target_request = None
             st.rerun()
     elif uses < max_uses:
         label = f"Activate {ability.name_en}"
@@ -158,13 +160,16 @@ def _render_buff_roll_ability(
             type="primary",
             use_container_width=True,
         ):
-            st.session_state.cmd_awaiting_ability_id = ability_id
-            st.session_state.cmd_awaiting_required_kw = [
-                kw for cond in ability.conditions for kw in (cond.has_keywords or [])
-            ]
-            st.session_state.cmd_awaiting_badge_label = ability.badge_label or ability.name_en
-            st.session_state.cmd_awaiting_effect_type = ability.effect.type
-            st.session_state.revive_wargear_awaiting_target = False
+            required_kws = [kw for cond in ability.conditions for kw in (cond.has_keywords or [])]
+            st.session_state.pending_target_request = TargetSelectionRequest(
+                ability_id=ability_id,
+                required_keywords=required_kws,
+                exclude_uid=None,
+                faction_filter="own",
+                multi=False,
+                badge_label=ability.badge_label or ability.name_en,
+                effect_type=ability.effect.type,
+            )
             st.rerun()
 
 
@@ -253,11 +258,13 @@ def _render_resurrection_orb(
             log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
             st.session_state.revive_wargear_target_uid = None
             st.rerun()
-    elif st.session_state.get("revive_wargear_awaiting_target", False):
+    elif (
+        st.session_state.get("pending_target_request") is not None
+        and st.session_state.pending_target_request.ability_id == f"revive_wargear_{orb_id}"
+    ):
         st.info("Select a target unit from your army list.")
         if st.button("Cancel", key="revive_wargear_cancel", use_container_width=True):
-            st.session_state.revive_wargear_awaiting_target = False
-            st.session_state.wargear_awaiting_bearer_uid = None
+            st.session_state.pending_target_request = None
             st.rerun()
     else:
         if st.button(
@@ -266,9 +273,15 @@ def _render_resurrection_orb(
             type="primary",
             use_container_width=True,
         ):
-            st.session_state.revive_wargear_awaiting_target = True
-            st.session_state.wargear_awaiting_bearer_uid = bearer_uid
-            st.session_state.cmd_awaiting_ability_id = None
+            st.session_state.pending_target_request = TargetSelectionRequest(
+                ability_id=f"revive_wargear_{orb_id}",
+                required_keywords=[],
+                exclude_uid=bearer_uid,
+                faction_filter="own",
+                multi=False,
+                badge_label="Revive",
+                effect_type="",
+            )
             st.rerun()
 
 

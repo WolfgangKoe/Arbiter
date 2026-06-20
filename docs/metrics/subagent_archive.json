@@ -409,5 +409,102 @@
       "peak_context": 47294,
       "started_at": "2026-06-19T20:08:36.869Z"
     }
+  ],
+  "58e914b6-8836-4170-b0ed-31ef2c2b047b": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Plan 019 — UI Target Consolidation implementieren",
+      "tier": "Sonnet",
+      "peak_context": 108657,
+      "started_at": "2026-06-20T20:11:54.567Z"
+    }
+  ],
+  "63cc3dfb-1f77-407e-8b8b-1880799a2c9f": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Update next_session.md and plans README with refinement outcomes",
+      "tier": "Sonnet",
+      "peak_context": 41076,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Resume backlog.md update (gate now open)",
+      "tier": "Sonnet",
+      "peak_context": 30312,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Research: buff/debuff perspective data model + mortal wounds tracking in app",
+      "tier": "Sonnet",
+      "peak_context": 43595,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Resume Plans 019-022 + dice spec creation (gate now open)",
+      "tier": "Sonnet",
+      "peak_context": 54328,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Rewrite Plan 014 completely based on session decisions",
+      "tier": "Sonnet",
+      "peak_context": 31657,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Update backlog.md with all refinement decisions",
+      "tier": "Sonnet",
+      "peak_context": 27644,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "UI consolidation research: model/unit selection patterns across app and rules",
+      "tier": "Sonnet",
+      "peak_context": 82053,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Resume Plan 014 rewrite (gate now open)",
+      "tier": "Sonnet",
+      "peak_context": 36125,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Create Plans 019-022 stubs + dice_display spec",
+      "tier": "Sonnet",
+      "peak_context": 41933,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Cluster 3 schema details: resurrection orb YAML + commandPhase code",
+      "tier": "Sonnet",
+      "peak_context": 34961,
+      "started_at": "2026-06-20T17:19:22.078Z"
+    }
+  ],
+  "a8998517-2112-4d2e-81c7-a466f21e5ea5": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Gather Plan 014 spec, dice display UI details, INV-4b vocab details",
+      "tier": "Sonnet",
+      "peak_context": 46252,
+      "started_at": "2026-06-20T17:19:22.032Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Analyze Refinement concept + gather context for planning session",
+      "tier": "Sonnet",
+      "peak_context": 67061,
+      "started_at": "2026-06-20T17:19:22.032Z"
+    }
   ]
 }

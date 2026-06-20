@@ -1,28 +1,28 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-20 12:11 UTC
+Stand: 2026-06-20 20:45 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-20 11:42 · 7e13ac5a**
+**2026-06-20 20:11 · 58e914b6**
 
-- **Aufgabe:** start next session
-- **Modelle:** Haupt Opus · Subagent Sonnet
-- **Tokens gesamt:** 11,932,933 (Haupt 8,345,688 · Subagent 3,587,245, Anteil 30 %)
-- **Peak-Kontext:** ██████████░░ 131k / 150k
-- **cache_read:** 11,101,162 · **Output:** 176,278
+- **Aufgabe:** start session. DU MUSST DICH AN DIE VORGABEN UNSERES OPERATING MODELLS HALTEN! Kontextfenster, Tests schreiben, Hooks u…
+- **Modelle:** Haupt Sonnet · Subagent Sonnet
+- **Tokens gesamt:** 15,662,209 (Haupt 6,133,442 · Subagent 9,528,767, Anteil 61 %)
+- **Peak-Kontext:** ███████░░░░░ 91k / 150k
+- **cache_read:** 15,096,868 · **Output:** 92,902
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  43,561
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  611,932
-cache_read     ▕████████████████████████▏   93%  11,101,162
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  176,278
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  301
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    3%  472,138
+cache_read     ▕████████████████████████▏   96%  15,096,868
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  92,902
 ```
 
 **Legende & Zielwerte:**
@@ -42,21 +42,21 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-20 11:42 7e13  ██████████░░ 131k ↓    ██░░░░  30% ↓  ████████····
+06-20 20:11 58e9  ███████░░░░░  91k ↓    ████░░  61% ↑  ············
+06-20 19:54 78e2  █████████░░░ 107k ↓    ░░░░░░   0% ↓  ············
+06-20 17:19 63cc  ████████████ 156k ↑    ███░░░  48% ↓  ············
+06-20 17:19 a899  █████░░░░░░░  57k ↓    █████░  82% ↑  ············
+06-20 11:42 7e13  ████████████ 154k ↑    █░░░░░  21% ↓  █████████···
 06-20 11:04 5abd  ███████████░ 138k ↓    ██░░░░  35% ↑  ████████····
-06-20 09:41 593c  ████████████ 165k ↑    ██░░░░  30% ↑  ████████····
-06-20 08:44 f4c2  ███████████░ 144k ↓    ██░░░░  28% ↑  █████████···
-06-20 07:29 7048  ████████████ 304k ↑    ░░░░░░   0% ↓  ████████████
-06-19 20:08 f76d  ████████████ 152k ↑    ░░░░░░   6% ↑  ███████████·
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 131k blieb im 150k-Korridor.
-- ✅ 30% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 3,587,245 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 91k blieb im 150k-Korridor.
+- ✅ 61% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 15,662,209 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## Subagenten im 150k-Korridor
 
@@ -65,15 +65,26 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: Fix setup-phase a… ██░░░░░░░░░░  30k    ✅
-2   general-purpose: Generic-src quick… ███░░░░░░░░░  41k    ✅
-3   general-purpose: Archive per-sessi… ████░░░░░░░░  51k    ✅
+1   general-purpose: Plan 019 — UI Tar… █████████░░░ 109k    ✅
 ```
 
 ## Subagenten — wer wurde wofür gestartet
 
 | Session | Modell | Agent | Aufgabe | Peak |
 |---|---|---|---|---|
+| 2026-06-20 20:11 · 58e914b6 | Sonnet | general-purpose | Plan 019 — UI Target Consolidation implementieren | 109k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Update next_session.md and plans README with refinement outcomes | 41k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume backlog.md update (gate now open) | 30k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Research: buff/debuff perspective data model + mortal wounds tracking in app | 44k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume Plans 019-022 + dice spec creation (gate now open) | 54k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Rewrite Plan 014 completely based on session decisions | 32k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Update backlog.md with all refinement decisions | 28k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | UI consolidation research: model/unit selection patterns across app and rules | 82k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume Plan 014 rewrite (gate now open) | 36k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Create Plans 019-022 stubs + dice_display spec | 42k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Cluster 3 schema details: resurrection orb YAML + commandPhase code | 35k ✅ |
+| 2026-06-20 17:19 · a8998517 | Sonnet | general-purpose | Gather Plan 014 spec, dice display UI details, INV-4b vocab details | 46k ✅ |
+| 2026-06-20 17:19 · a8998517 | Sonnet | general-purpose | Analyze Refinement concept + gather context for planning session | 67k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Fix setup-phase ability leak | 30k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Generic-src quick-wins and renames | 41k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Archive per-session subagent peaks | 51k ✅ |
@@ -130,6 +141,19 @@ _Akkumuliert über alle Sessions — ältere Einträge bleiben bei Neugenerierun
 
 | Session | Modell | Agent | Aufgabe | Peak |
 |---|---|---|---|---|
+| 2026-06-20 20:11 · 58e914b6 | Sonnet | general-purpose | Plan 019 — UI Target Consolidation implementieren | 109k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Update next_session.md and plans README with refinement outcomes | 41k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume backlog.md update (gate now open) | 30k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Research: buff/debuff perspective data model + mortal wounds tracking in app | 44k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume Plans 019-022 + dice spec creation (gate now open) | 54k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Rewrite Plan 014 completely based on session decisions | 32k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Update backlog.md with all refinement decisions | 28k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | UI consolidation research: model/unit selection patterns across app and rules | 82k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Resume Plan 014 rewrite (gate now open) | 36k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Create Plans 019-022 stubs + dice_display spec | 42k ✅ |
+| 2026-06-20 17:19 · 63cc3dfb | Sonnet | general-purpose | Cluster 3 schema details: resurrection orb YAML + commandPhase code | 35k ✅ |
+| 2026-06-20 17:19 · a8998517 | Sonnet | general-purpose | Gather Plan 014 spec, dice display UI details, INV-4b vocab details | 46k ✅ |
+| 2026-06-20 17:19 · a8998517 | Sonnet | general-purpose | Analyze Refinement concept + gather context for planning session | 67k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Fix setup-phase ability leak | 30k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Generic-src quick-wins and renames | 41k ✅ |
 | 2026-06-20 11:42 · 7e13ac5a | Sonnet | general-purpose | Archive per-session subagent peaks | 51k ✅ |
@@ -182,5 +206,5 @@ _Akkumuliert über alle Sessions — ältere Einträge bleiben bei Neugenerierun
 
 ---
 
-Σ über 155 Sessions: 2,540,818,156 Token (24,526 Antworten).
+Σ über 159 Sessions: 2,582,275,366 Token (25,177 Antworten).
 

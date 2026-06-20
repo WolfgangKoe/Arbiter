@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import NamedTuple
 
@@ -17,6 +18,24 @@ from gameObjects.loader import (
     load_yaml,
 )
 from gameObjects.unit import Unit
+
+
+@dataclass
+class TargetSelectionRequest:
+    """A pending target-selection request placed in st.session_state.pending_target_request.
+
+    Exactly one slot exists; a new request overwrites any previous one.
+    Set to None to cancel.
+    """
+
+    ability_id: str  # unique identifier (used as widget key suffix)
+    required_keywords: list[str] = field(default_factory=list)  # [] = all eligible
+    exclude_uid: str | None = None  # exclude this state_key (e.g. the bearer)
+    faction_filter: str | None = None  # "own" | "enemy" | None
+    multi: bool = False  # whether multiple targets are allowed
+    badge_label: str = ""  # button label shown on the unit card
+    effect_type: str = ""  # "buff_roll" | "reroll_hit_1" | "" (revive/wargear)
+
 
 PHASES: list[tuple[str, str]] = [
     ("Setup", "setup"),
@@ -383,11 +402,10 @@ def init_state(
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)
-    st.session_state.cmd_awaiting_ability_id: str | None = None
-    st.session_state.cmd_awaiting_required_kw: list = []
+    st.session_state.pending_target_request: TargetSelectionRequest | None = None
     st.session_state.revive_wargear_target_uid = None
     st.session_state.wargear_used: dict[str, bool] = {}
-    st.session_state.wargear_awaiting_bearer_uid: str | None = None
+    st.session_state.mortal_target_uid: str | None = None
     st.session_state.relic_triggered_used: dict[str, bool] = {}
     st.session_state.morgog_cap_rolled_this_phase = False
     st.session_state.pending_triggered_relic: dict | None = None
@@ -479,6 +497,8 @@ def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
     st.session_state.morgog_cap_rolled_this_phase = False
     st.session_state.pending_triggered_relic = None
+    st.session_state.pending_target_request = None
+    st.session_state.mortal_target_uid = None
     st.session_state.veil_awaiting_confirm = False
     st.session_state.veil_core_target_uid = None
     for k in list(st.session_state.keys()):

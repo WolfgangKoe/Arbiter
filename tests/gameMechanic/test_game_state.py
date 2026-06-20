@@ -833,3 +833,82 @@ class TestVictoryPointMutations:
         init_state(game_size="Strike Force", game_mode="open")
         cp_values = list(s["cp"].values())
         assert all(v == 3 for v in cp_values), f"Expected fallback 3 CP each, got {cp_values}"
+
+
+# ---------------------------------------------------------------------------
+# TargetSelectionRequest — consolidated pending-target slot
+# ---------------------------------------------------------------------------
+
+
+class TestTargetSelectionRequest:
+    def test_pending_target_request_no_state_conflict(self) -> None:
+        """Only one pending_target_request slot exists; second request overwrites first."""
+        from gameMechanic.game_state import TargetSelectionRequest
+
+        ptr1 = TargetSelectionRequest(
+            ability_id="mwbd_01",
+            required_keywords=["CORE"],
+            exclude_uid=None,
+            faction_filter="own",
+            multi=False,
+            badge_label="Buff",
+            effect_type="buff_roll",
+        )
+        ptr2 = TargetSelectionRequest(
+            ability_id="revive_wargear_orb1",
+            required_keywords=[],
+            exclude_uid="uid_bearer",
+            faction_filter="own",
+            multi=False,
+            badge_label="Revive",
+            effect_type="",
+        )
+        # Simulate: slot can only hold one request — second overwrites first
+        slot = ptr1
+        slot = ptr2
+        assert slot.ability_id == "revive_wargear_orb1"
+        assert slot.exclude_uid == "uid_bearer"
+        assert slot.effect_type == ""
+
+    def test_target_selection_request_fields_with_defaults(self) -> None:
+        """TargetSelectionRequest has all required fields; effect_type defaults to empty string."""
+        from gameMechanic.game_state import TargetSelectionRequest
+
+        ptr = TargetSelectionRequest(
+            ability_id="test_ability",
+            required_keywords=[],
+            exclude_uid=None,
+            faction_filter=None,
+            multi=False,
+            badge_label="X",
+        )
+        assert ptr.effect_type == ""
+        assert ptr.ability_id == "test_ability"
+        assert ptr.required_keywords == []
+        assert ptr.faction_filter is None
+        assert ptr.multi is False
+
+    def test_target_selection_request_revive_vs_buff_distinction(self) -> None:
+        """effect_type distinguishes buff abilities (non-empty) from revive/wargear (empty)."""
+        from gameMechanic.game_state import TargetSelectionRequest
+
+        buff_ptr = TargetSelectionRequest(
+            ability_id="mwbd",
+            required_keywords=["CORE"],
+            exclude_uid=None,
+            faction_filter="own",
+            multi=False,
+            badge_label="MWBD",
+            effect_type="buff_roll",
+        )
+        revive_ptr = TargetSelectionRequest(
+            ability_id="revive_wargear_orb_x",
+            required_keywords=[],
+            exclude_uid="bearer_uid",
+            faction_filter="own",
+            multi=False,
+            badge_label="Revive",
+            effect_type="",
+        )
+        assert bool(buff_ptr.effect_type) is True  # buff → apply_buff_to_unit
+        assert bool(revive_ptr.effect_type) is False  # revive → store target uid

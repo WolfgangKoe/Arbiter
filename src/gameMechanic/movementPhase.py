@@ -12,7 +12,7 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import set_deployment, set_movement_status
 from gameObjects.unit import TriggeredEffect
-from uiLayout._common import lookup, render_player_column
+from uiLayout._common import lookup, render_player_column, render_unit_selectbox
 
 
 class MovementPhaseHandler:
@@ -190,25 +190,13 @@ def _render_teleport_effect(
             continue
         core_candidates.append((state_key, cu))
 
-    core_options: list[tuple[str | None, str]] = [(None, "— Bearer only (no second unit) —")]
-    for sk, cu in core_candidates:
-        core_options.append((sk, cu.name_en))
-
-    labels = [label for _, label in core_options]
-    current_target = st.session_state.get("veil_core_target_uid")
-    current_idx = next(
-        (i for i, (uid_opt, _) in enumerate(core_options) if uid_opt == current_target),
-        0,
-    )
-
-    chosen_idx = st.selectbox(
+    core_candidates_dicts = [{"uid": sk, "name": cu.name_en} for sk, cu in core_candidates]
+    render_unit_selectbox(
         'Optional: select a DYNASTY CORE unit within 3"',
-        options=range(len(labels)),
-        format_func=lambda i: labels[i],
-        index=current_idx,
-        key="veil_core_select",
+        core_candidates_dicts,
+        "veil_core_target_uid",
+        none_label="— Bearer only (no second unit) —",
     )
-    st.session_state.veil_core_target_uid = core_options[chosen_idx][0]
 
     col1, col2 = st.columns(2)
     with col1:
