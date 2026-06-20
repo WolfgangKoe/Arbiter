@@ -70,6 +70,20 @@ Befund (Nutzer): Deny nicht resettbar, Smite schon → asymmetrischer Reset → 
 
 Frühere Sessions (S60–S63): Verlauf in `docs/goals/ziel6.md`.
 
+### ▶▶ TOP-PRIO nächste Session (S67-Nutzerwünsche — zuerst, je eigene Freigabe)
+1. **Operating-Model: vorausschauender Review/Retro-Fragenkatalog.** Review+Retro sollen auch
+   nach VORN schauen. Fragen (Nutzer): Qualität verbessern? · Operating-Model verbessern? ·
+   Hooks/Gates nötig? · Was übersehen wir? · Was automatisieren? · Doku/Backlog besser
+   strukturieren? · besser werden / Umsetzung skalieren (vorausschauend, kleine Experimente,
+   KEIN großer Umbau)? · wie sicherstellen, dass Claude jederzeit die nötigen Infos/Hinweise
+   bekommt (evtl. Haiku/Sonnet-Beobachter-Subagent)? — Claude ergänzt + nach operating_model.md.
+2. **CLAUDE.md Kulturregeln:** ganzheitliche, konstruktiv-kritische, lösungsorientierte Haltung
+   für Planning + Abschluss festhalten.
+3. **Token-Bar-Legende + Zielwerte** (input/cache_creation/cache_read/output) in overview.md:
+   erklären + anzustrebende Werte für effizientes Arbeiten (z. B. hoher cache_read-Anteil = gut).
+4. **Model-Mix-Zeichen tauschen** (besserer Opus/Sonnet-Kontrast): `█ Opus · · Sonnet · ▒ Haiku ·
+   ▓ sonstige` (Sonnet→Leerzeichen, sonstige→▓). In tools/token_report.py + overview.md.
+
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
 ✅ Erledigt in S67: UI-Verifikation #PSI · CLAUDE.md Token-Messung · Battle-Round-Katalog.
 1. **Regel-Katalog weiter:** Movement/Charge/Morale/Psychic/Battle-Round ✅; nächster Bereich
