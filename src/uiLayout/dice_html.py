@@ -131,11 +131,31 @@ _BADGE_COL_W = 96  # left badge column (D5): AP-X, Heavy Cover, MWBD, Eff., …
 
 
 def _badge_chip(label: str, color: str) -> str:
+    # Long labels (e.g. "Power Klaw") are clipped with an ellipsis instead of
+    # spilling into dice slot 1. Single-line truncation needs the canonical trio:
+    # a bounded width + overflow:hidden + text-overflow:ellipsis (white-space:nowrap).
     return (
         f'<span style="font-size:11px;color:{color};background:#111827;'
         f"border:1px solid {color};border-radius:3px;padding:1px 5px;"
-        f'white-space:nowrap;">{label}</span>'
+        f"display:inline-block;max-width:{_BADGE_COL_W - 8}px;overflow:hidden;"
+        f'text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;">{label}</span>'
     )
+
+
+def _modifier_color(entry: dict) -> str:  # type: ignore[type-arg]
+    """Colour for a modifier badge/arrow (dice_display.md §6).
+
+    An explicit ``color_hint`` ('buff' | 'debuff') wins when present — needed for
+    perspective-dependent effects like Quantum Shield, where the sign of ``value``
+    does not match who benefits. Otherwise the sign decides (value > 0 → buff/green),
+    keeping older modifier dicts that carry no hint backward compatible.
+    """
+    hint = entry.get("color_hint")
+    if hint == "buff":
+        return _BUFF_COLOR_HEX
+    if hint == "debuff":
+        return _DEBUFF_COLOR_HEX
+    return _BUFF_COLOR_HEX if entry.get("value", 0) > 0 else _DEBUFF_COLOR_HEX
 
 
 def grid_row_html(label_html: str, content: str) -> str:
@@ -297,7 +317,7 @@ def _render_dice_roll_block(
         parts = []
         for entry in stack:
             next_thresh = max(2, current - entry["value"])
-            color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
+            color = _modifier_color(entry)
             parts.append(
                 modifier_die_pair_html(
                     current, next_thresh, entry["label"], entry["value"], color, base_threshold=base
@@ -365,7 +385,7 @@ def _render_dice_wound_block(
         parts = []
         for entry in wound_stack:
             next_thresh = max(2, current - entry["value"])
-            color = _BUFF_COLOR_HEX if entry["value"] > 0 else _DEBUFF_COLOR_HEX
+            color = _modifier_color(entry)
             parts.append(
                 modifier_die_pair_html(
                     current, next_thresh, entry["label"], entry["value"], color, base_threshold=base
@@ -406,7 +426,7 @@ def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -
     if ap != 0:
         rows.append(save_modifier_die_pair_html(armour, ap, f"AP{ap}", _DEBUFF_COLOR_HEX))
     for m in stack:
-        color = _BUFF_COLOR_HEX if m["value"] > 0 else _DEBUFF_COLOR_HEX
+        color = _modifier_color(m)
         rows.append(save_modifier_die_pair_html(armour, m["value"], m["label"], color))
 
     # Effective save row: always shows the armour-path result (after AP + cover).
