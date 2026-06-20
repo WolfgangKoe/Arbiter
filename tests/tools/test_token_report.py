@@ -15,11 +15,11 @@ from tools.token_report import (
     Subagent,
     UsageRecord,
     _context_status,
-    _render_subagent_archive,
     _render_subagent_corridor,
     _subagent_peak_context,
     bar,
     generate_hints,
+    load_session_archive,
     load_subagent_archive,
     merge_session_into_archive,
     model_mix_bar,
@@ -28,7 +28,8 @@ from tools.token_report import (
     parse_usage_lines,
     read_subagents,
     render_markdown,
-    save_subagent_archive,
+    render_session_archive_md,
+    save_session_archive,
     session_label,
     summarize,
     tier_for_model,
@@ -294,10 +295,10 @@ def test_render_markdown_has_v3_sections_and_no_pie():
     md = render_markdown(summarize(records), generated_at="x", meta=meta)
 
     assert "Effizienz statt Menge" in md
-    assert "## Fokus: letzte Session" in md
+    assert "## Jüngste Session" in md  # Plan-023: Heading umbenannt
     assert "Token-Report v3 bauen" in md  # Aufgabe aus Meta
     assert "## Verlauf (letzte 6 Sessions)" in md
-    assert "## Hinweise" in md
+    assert "## (Retro-)Hinweise" in md  # Plan-023: Heading umbenannt
     assert "Peak-Kontext" in md
     assert "150k" in md
     assert "pie showData" not in md  # All-Time-Torte entfernt (Akzeptanz f)
@@ -318,14 +319,15 @@ def test_render_markdown_orders_newest_session_first():
     assert md.index("06-18") < md.index("06-01")
 
 
-def test_render_markdown_lists_subagents_with_model_and_task():
+def test_render_markdown_corridor_shows_subagent():
+    """Der 150k-Korridor-Abschnitt zeigt Subagenten der jüngsten Session."""
     records = [_record("s1", "main", "claude-opus-4-8", inp=10)]
-    meta = {"s1": SessionMeta(None, None, [Subagent("Explore", "Suche Aufrufer", "Sonnet")])}
+    sub = Subagent("Explore", "Suche Aufrufer", "Sonnet", peak_context=40_000)
+    meta = {"s1": SessionMeta(None, None, [sub])}
     md = render_markdown(summarize(records), generated_at="x", meta=meta)
 
-    assert "Subagenten — wer wurde wofür gestartet" in md
-    assert "| Session | Modell | Agent | Aufgabe | Peak |" in md
-    assert "Sonnet" in md and "Explore" in md and "Suche Aufrufer" in md
+    assert "150k-Korridor für Subagenten" in md  # Plan-023: Heading
+    assert "Explore" in md and "Suche Aufrufer" in md
 
 
 def test_render_markdown_applies_session_note_link():
@@ -361,9 +363,10 @@ def test_merge_session_into_archive_is_idempotent():
     archive = merge_session_into_archive(archive, "sess-A", [sub], "2026-06-20T10:00:00Z")
 
     assert list(archive.keys()) == ["sess-A"]
-    assert len(archive["sess-A"]) == 1
-    assert archive["sess-A"][0]["description"] == "Audit YAML"
-    assert archive["sess-A"][0]["peak_context"] == 60_000
+    entry = archive["sess-A"]
+    assert len(entry["subagents"]) == 1
+    assert entry["subagents"][0]["description"] == "Audit YAML"
+    assert entry["subagents"][0]["peak_context"] == 60_000
 
 
 def test_merge_session_into_archive_accumulates_distinct_sessions():
@@ -375,8 +378,8 @@ def test_merge_session_into_archive_accumulates_distinct_sessions():
     archive = merge_session_into_archive(archive, "sess-B", [sub_b], "2026-06-20T09:00:00Z")
 
     assert set(archive.keys()) == {"sess-A", "sess-B"}
-    assert archive["sess-A"][0]["description"] == "Task A"
-    assert archive["sess-B"][0]["description"] == "Task B"
+    assert archive["sess-A"]["subagents"][0]["description"] == "Task A"
+    assert archive["sess-B"]["subagents"][0]["description"] == "Task B"
 
 
 def test_merge_session_into_archive_skips_sessions_without_subagents():
@@ -389,67 +392,150 @@ def test_load_subagent_archive_returns_empty_for_missing_file(tmp_path):
     assert load_subagent_archive(tmp_path / "no-such.json") == {}
 
 
-def test_save_and_load_subagent_archive_round_trips(tmp_path):
-    archive_path = tmp_path / "metrics" / "subagent_archive.json"
+def test_save_and_load_session_archive_round_trips(tmp_path):
+    archive_path = tmp_path / "metrics" / "session_archive.json"
     sub = Subagent("Explore", "Round-trip test", "Haiku", peak_context=30_000)
     archive = merge_session_into_archive({}, "sess-rt", [sub], "2026-06-20T12:00:00Z")
 
-    save_subagent_archive(archive_path, archive)
-    loaded = load_subagent_archive(archive_path)
+    save_session_archive(archive_path, archive)
+    loaded = load_session_archive(archive_path)
 
     assert loaded == archive
-    assert loaded["sess-rt"][0]["tier"] == "Haiku"
-    assert loaded["sess-rt"][0]["peak_context"] == 30_000
+    assert loaded["sess-rt"]["subagents"][0]["tier"] == "Haiku"
+    assert loaded["sess-rt"]["subagents"][0]["peak_context"] == 30_000
 
 
-def test_render_subagent_archive_newest_first():
-    """Der Archiv-Render gibt jüngste Sessions zuerst aus."""
-    archive = {
-        "old": [
-            {
-                "agent_type": "Explore",
-                "description": "Old task",
-                "tier": "Sonnet",
-                "peak_context": 20_000,
-                "started_at": "2026-06-01T09:00:00Z",
-            }
-        ],
-        "new": [
-            {
-                "agent_type": "general-purpose",
-                "description": "New task",
-                "tier": "Opus",
-                "peak_context": 50_000,
-                "started_at": "2026-06-20T09:00:00Z",
-            }
-        ],
-    }
-    lines = _render_subagent_archive(archive, meta={})
-    combined = "\n".join(lines)
-    assert "Subagent-Archiv (je Session)" in combined
-    assert combined.index("New task") < combined.index("Old task")
+# --- Plan-023-Tests -------------------------------------------------------- #
 
 
-def test_render_subagent_archive_empty_returns_no_section():
-    """Leeres Archiv erzeugt keinen Abschnitt."""
-    assert _render_subagent_archive({}, meta={}) == []
-
-
-def test_render_markdown_includes_archive_section():
-    """render_markdown gibt den Archiv-Abschnitt weiter wenn subagent_archive nicht leer."""
+def test_overview_has_no_wide_subagent_table():
+    """„## Subagenten — wer wurde wofür gestartet" darf nicht in overview erscheinen."""
     records = [_record("s1", "main", "claude-opus-4-8", inp=10)]
-    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "Archiv-Test", [])}
+    sub = Subagent("Explore", "Some task", "Sonnet", peak_context=40_000)
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [sub])}
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+    assert "## Subagenten — wer wurde wofür gestartet" not in md
+
+
+def test_overview_section_order():
+    """Verlauf < Jüngste < (Retro-)Hinweise < 150k-Korridor < Zusammensetzung < Vergangene."""
+    records = [_record("s1", "main", "claude-opus-4-8", inp=100, cr=50_000)]
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [])}
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+
+    headings = [
+        "## Verlauf",
+        "## Jüngste Session",
+        "## (Retro-)Hinweise",
+        "## 150k-Korridor für Subagenten",
+        "## Zusammensetzung der Antworten",
+        "## Vergangene Sessions",
+    ]
+    positions = [md.index(h) for h in headings]
+    assert positions == sorted(positions), f"Falsche Reihenfolge: {positions}"
+
+
+def test_overview_links_to_session_archive():
+    """overview.md muss einen Link auf session_archive.md enthalten."""
+    records = [_record("s1", "main", "claude-opus-4-8", inp=10)]
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [])}
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+    assert "session_archive.md" in md
+
+
+def test_composition_section_present():
+    """„## Zusammensetzung der Antworten" mit allen 4 Balken-Labels."""
+    records = [_record("s1", "main", "claude-opus-4-8", inp=100, cc=200, cr=1000, out=50)]
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [])}
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+
+    assert "## Zusammensetzung der Antworten" in md
+    for label in ("input", "cache_creation", "cache_read", "output"):
+        assert label in md, f"Balken-Label fehlt: {label}"
+
+
+def test_session_archive_md_has_main_and_sa_rows():
+    """render_session_archive_md: Hauptzeile + SA_1-Subzeile vorhanden."""
     archive = {
-        "s1": [
+        "sess1": {
+            "started_at": "2026-06-20T11:42:00Z",
+            "task": "some task",
+            "peak_context": 131_000,
+            "subagent_share": 30.0,
+            "by_tier": {"Opus": 8_000_000, "Sonnet": 3_000_000},
+            "subagents": [
+                {
+                    "agent_type": "general-purpose",
+                    "description": "Fix setup-phase arch",
+                    "tier": "Sonnet",
+                    "peak_context": 30_000,
+                    "started_at": "2026-06-20T11:42:00Z",
+                }
+            ],
+        }
+    }
+    md = render_session_archive_md(archive, generated_at="2026-06-20 12:00 UTC")
+
+    assert "# Session-Archiv" in md
+    # Hauptzeile: label enthält Datum aus started_at
+    assert "06-20" in md
+    # Subzeile
+    assert "SA_1" in md
+    assert "Fix setup-phase arch" in md
+
+
+def test_merge_session_idempotent():
+    """Zweimal dieselbe session_id mergen → genau 1 Eintrag, keine Duplikat-Subagenten."""
+    sub = Subagent("general-purpose", "Task X", "Sonnet", peak_context=50_000)
+    archive: dict = {}
+    archive = merge_session_into_archive(
+        archive,
+        "sid-1",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Task X",
+        peak_context=100_000,
+        subagent_share=30.0,
+        by_tier={"Opus": 70_000, "Sonnet": 30_000},
+    )
+    archive = merge_session_into_archive(
+        archive,
+        "sid-1",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Task X",
+        peak_context=100_000,
+        subagent_share=30.0,
+        by_tier={"Opus": 70_000, "Sonnet": 30_000},
+    )
+
+    assert list(archive.keys()) == ["sid-1"]
+    assert len(archive["sid-1"]["subagents"]) == 1
+
+
+def test_load_archive_migrates_old_list_schema(tmp_path):
+    """Altes {sid: [...]} Format wird on-the-fly in neues Dict-Schema migriert."""
+    old_data = {
+        "old-sess": [
             {
                 "agent_type": "Explore",
-                "description": "Archiv-Aufgabe",
+                "description": "Old sub",
                 "tier": "Sonnet",
-                "peak_context": 60_000,
-                "started_at": "2026-06-20T09:00:00Z",
+                "peak_context": 40_000,
+                "started_at": "2026-06-01T09:00:00Z",
             }
         ]
     }
-    md = render_markdown(summarize(records), generated_at="x", meta=meta, subagent_archive=archive)
-    assert "Subagent-Archiv (je Session)" in md
-    assert "Archiv-Aufgabe" in md
+    archive_path = tmp_path / "subagent_archive.json"
+    archive_path.write_text(json.dumps(old_data), encoding="utf-8")
+
+    loaded = load_session_archive(archive_path)
+
+    assert "old-sess" in loaded
+    entry = loaded["old-sess"]
+    assert isinstance(entry, dict), "Migration muss ein Dict zurückgeben"
+    assert "subagents" in entry
+    assert len(entry["subagents"]) == 1
+    assert entry["subagents"][0]["description"] == "Old sub"
+    assert entry["started_at"] == "2026-06-01T09:00:00Z"
+    assert entry["peak_context"] is None  # kein Wert im alten Format

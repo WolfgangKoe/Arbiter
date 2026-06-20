@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Token-Report — Effizienz statt Menge (Operating-Model Phase B, v3).
 
-Beantwortet die Stakeholder-Frage *„wurden die Token gut ausgegeben, werden wir
+Beantwortet die Stakeholder-Frage *"wurden die Token gut ausgegeben, werden wir
 besser oder schlechter?"* — nicht bloße Mengen, sondern Effizienz und Trend.
 Quelle sind die Claude-Code-Transcripts unter ``~/.claude/projects/<slug>/``:
 
@@ -534,7 +534,7 @@ def generate_hints(session: SessionSummary) -> list[str]:
 
 
 def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | None) -> list[str]:
-    """Abschnitt „Fokus letzte Session"" — Text + Zusammensetzungs-Balken."""
+    """Abschnitt 'Jüngste Session' — nur Stats-Block (kein Balken-Block)."""
     label = session_label(session.session, meta.started_at)
     task = meta.task or "—"
     if link:
@@ -543,8 +543,8 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
     sub_tiers = ", ".join(sorted(session.sub_by_tier)) or "—"
     combined = session.combined
 
-    lines = [
-        "## Fokus: letzte Session",
+    return [
+        "## Jüngste Session",
         "",
         f"**{_escape_label(label)}**",
         "",
@@ -557,10 +557,12 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
         f"{_k(session.peak_context)} / 150k",
         f"- **cache_read:** {_fmt(combined.cache_read)} · **Output:** {_fmt(combined.output)}",
         "",
-        "Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):",
-        "",
-        "```text",
     ]
+
+
+def _render_composition(session: SessionSummary) -> list[str]:
+    """Abschnitt 'Zusammensetzung der Antworten' — Balken-Block + Legende."""
+    combined = session.combined
     parts = (
         ("input", combined.input),
         ("cache_creation", combined.cache_creation),
@@ -569,13 +571,20 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
     )
     peak = max((value for _, value in parts), default=0)
     total = combined.total or 1
+
+    lines: list[str] = [
+        "## Zusammensetzung der Antworten",
+        "",
+        "```text",
+    ]
     for name, value in parts:
         share = value / total * 100
         lines.append(
             f"{name:<15}▕{bar(value, peak, width=24, empty='░')}▏ {share:>4.0f}%  {_fmt(value)}"
         )
-    lines += ["```", ""]
     lines += [
+        "```",
+        "",
         "**Legende & Zielwerte:**",
         "",
         "- **input** — neue, ungecachte Tokens → niedrig halten.",
@@ -586,7 +595,7 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
         "- **output** — generierte Tokens; **kein Selbstzweck — Qualität vor Menge.** Ein "
         "höherer Output-Anteil *relativ zu* cache_read kann Ziele schneller erreichen, "
         "*sofern das Ergebnis trägt*; viel cache_read bei wenig substanziellem Output = "
-        "Reibung, „Mist“-Output ist schädlich, nicht gut.",
+        'Reibung, "Mist"-Output ist schädlich, nicht gut.',
         "",
         "**Zielbild:** hoher cache_read-Anteil + niedriger input-Anteil = effizientes "
         "Arbeiten; Output bewusst gegen Qualität gewichtet (nicht maximieren). Viele "
@@ -597,7 +606,7 @@ def _render_focus(session: SessionSummary, meta: SessionMeta, *, link: str | Non
 
 
 def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMeta]) -> list[str]:
-    """Abschnitt „Verlauf"" — Balken + Trend je Session (älteste als Vergleich)."""
+    """Abschnitt "Verlauf"" — Balken + Trend je Session (älteste als Vergleich)."""
     sessions = summary["sessions"]
     # Trend braucht die jeweils ältere Session — über die volle Liste rechnen.
     peak = {s: sessions[s].peak_context for s in ordered}
@@ -631,7 +640,7 @@ def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMe
 
 
 def _render_hints(session: SessionSummary) -> list[str]:
-    lines = ["## Hinweise", "", "_Auto-generiert zur jüngsten Session._", ""]
+    lines = ["## (Retro-)Hinweise", "", "_Auto-generiert zur jüngsten Session._", ""]
     lines += [f"- {hint}" for hint in generate_hints(session)]
     lines.append("")
     return lines
@@ -649,9 +658,9 @@ def _context_status(peak: int | None) -> str:
 
 
 def _render_subagent_corridor(latest_meta: SessionMeta) -> list[str]:
-    """Abschnitt „Subagenten im 150k-Korridor" für die jüngste Session."""
+    """Abschnitt "150k-Korridor für Subagenten" für die jüngste Session."""
     lines = [
-        "## Subagenten im 150k-Korridor",
+        "## 150k-Korridor für Subagenten",
         "",
         "_Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._",
         "",
@@ -677,44 +686,22 @@ def _render_subagent_corridor(latest_meta: SessionMeta) -> list[str]:
     return lines
 
 
-def _render_subagents(ordered: list[str], meta: dict[str, SessionMeta]) -> list[str]:
-    detail = [(s, meta[s]) for s in ordered if meta.get(s) and meta[s].subagents]
-    if not detail:
-        return []
-    lines = [
-        "## Subagenten — wer wurde wofür gestartet",
-        "",
-        "| Session | Modell | Agent | Aufgabe | Peak |",
-        "|---|---|---|---|---|",
-    ]
-    for session, session_meta in detail:
-        label = session_label(session, session_meta.started_at)
-        for sub in session_meta.subagents:
-            peak_cell = (
-                f"{_k(sub.peak_context)} {_context_status(sub.peak_context)}"
-                if sub.peak_context is not None
-                else "—"
-            )
-            lines.append(
-                f"| {label} | {_cell(sub.tier)} | {_cell(sub.agent_type)} "
-                f"| {_cell(sub.description)} | {_cell(peak_cell)} |"
-            )
-    lines.append("")
-    return lines
-
-
 def render_markdown(
     summary: dict,
     *,
     generated_at: str,
     meta: dict[str, SessionMeta] | None = None,
     notes: dict[str, str] | None = None,
-    subagent_archive: dict[str, list[dict]] | None = None,
+    subagent_archive: dict | None = None,  # unused in overview; kept for API compat
 ) -> str:
-    """Rendert den Effizienz-Report als Markdown (ADR-0002, leser-orientiert)."""
+    """Rendert den Effizienz-Report als Markdown (ADR-0002, leser-orientiert).
+
+    Reihenfolge (Plan 023):
+      Header → Verlauf → Jüngste Session → (Retro-)Hinweise → 150k-Korridor →
+      Zusammensetzung der Antworten → Vergangene Sessions (Link) → Σ-Zeile.
+    """
     meta = meta or {}
     notes = notes or {}
-    subagent_archive = subagent_archive or {}
     grand = summary["grand_total"]
     lines: list[str] = [
         "# Token-Report — Effizienz statt Menge",
@@ -735,12 +722,19 @@ def render_markdown(
 
     focus = ordered[0]
     focus_meta = meta.get(focus, _EMPTY_META)
-    lines += _render_focus(summary["sessions"][focus], focus_meta, link=notes.get(focus))
+    focus_summary = summary["sessions"][focus]
+
     lines += _render_history(ordered, summary, meta)
-    lines += _render_hints(summary["sessions"][focus])
+    lines += _render_focus(focus_summary, focus_meta, link=notes.get(focus))
+    lines += _render_hints(focus_summary)
     lines += _render_subagent_corridor(focus_meta)
-    lines += _render_subagents(ordered, meta)
-    lines += _render_subagent_archive(subagent_archive, meta)
+    lines += _render_composition(focus_summary)
+    lines += [
+        "## Vergangene Sessions",
+        "",
+        "→ vollständige Historie: [session_archive.md](session_archive.md)",
+        "",
+    ]
     lines += [
         "---",
         "",
@@ -756,11 +750,27 @@ def render_markdown(
 # --------------------------------------------------------------------------- #
 
 
-def load_subagent_archive(path: Path) -> dict[str, list[dict]]:
-    """Lädt das persistente Subagent-Archiv aus ``path`` (leer, wenn Datei fehlt).
+def _migrate_old_list_entry(value: list) -> dict:
+    """Hebt einen alten Listen-Eintrag ``[{...}, ...]`` in das neue Dict-Schema."""
+    started_at = value[0].get("started_at") if value else None
+    return {
+        "started_at": started_at,
+        "task": None,
+        "peak_context": None,
+        "subagent_share": None,
+        "by_tier": {},
+        "subagents": value,
+    }
 
-    Struktur: ``{session_id: [{"agent_type": ..., "description": ..., "tier": ...,
-    "peak_context": int|null, "started_at": str|null}, ...], ...}``
+
+def load_session_archive(path: Path) -> dict[str, dict]:
+    """Lädt das persistente Session-Archiv aus ``path`` (leer, wenn Datei fehlt).
+
+    Neues Schema: ``{session_id: {"started_at": ..., "task": ..., "peak_context": int|null,
+    "subagent_share": float|null, "by_tier": {...}, "subagents": [...]}}``.
+
+    Rückwärtskompatibilität: Einträge im alten Listen-Format (``value`` ist ``list``)
+    werden on-the-fly in das neue Dict-Schema gehoben — keine Daten gehen verloren.
     """
     if not path.is_file():
         return {}
@@ -770,7 +780,19 @@ def load_subagent_archive(path: Path) -> dict[str, list[dict]]:
         return {}
     if not isinstance(data, dict):
         return {}
-    return data
+    result: dict[str, dict] = {}
+    for sid, value in data.items():
+        if isinstance(value, list):
+            result[sid] = _migrate_old_list_entry(value)
+        elif isinstance(value, dict):
+            result[sid] = value
+    return result
+
+
+# Kept for backward compatibility with tests and callers that reference the old name.
+def load_subagent_archive(path: Path) -> dict:
+    """Alias für ``load_session_archive`` (rückwärtskompatibel)."""
+    return load_session_archive(path)
 
 
 def _subagents_to_records(subagents: list[Subagent], started_at: str | None) -> list[dict]:
@@ -788,25 +810,38 @@ def _subagents_to_records(subagents: list[Subagent], started_at: str | None) -> 
 
 
 def merge_session_into_archive(
-    archive: dict[str, list[dict]],
+    archive: dict[str, dict],
     session_id: str,
     subagents: list[Subagent],
     started_at: str | None,
-) -> dict[str, list[dict]]:
-    """Fügt die Subagenten einer Session in das Archiv ein (Upsert, idempotent).
+    *,
+    task: str | None = None,
+    peak_context: int | None = None,
+    subagent_share: float | None = None,
+    by_tier: dict[str, int] | None = None,
+) -> dict[str, dict]:
+    """Fügt eine Session in das Archiv ein (Upsert, idempotent).
 
-    Läuft der Hook mehrfach für dieselbe Session, wird der bestehende Eintrag
-    überschrieben (keyed by ``session_id``) — keine Duplikate.
+    Speichert das volle Session-Dict (started_at, task, peak_context, subagent_share,
+    by_tier, subagents). Mehrfacher Aufruf mit derselben ``session_id`` überschreibt
+    den Eintrag — keine Duplikate.
     Sessions ohne Subagenten werden nicht archiviert.
     """
     updated = dict(archive)
     if subagents:
-        updated[session_id] = _subagents_to_records(subagents, started_at)
+        updated[session_id] = {
+            "started_at": started_at,
+            "task": task,
+            "peak_context": peak_context,
+            "subagent_share": subagent_share,
+            "by_tier": by_tier or {},
+            "subagents": _subagents_to_records(subagents, started_at),
+        }
     return updated
 
 
-def save_subagent_archive(path: Path, archive: dict[str, list[dict]]) -> None:
-    """Schreibt das Subagent-Archiv als JSON nach ``path``."""
+def save_session_archive(path: Path, archive: dict[str, dict]) -> None:
+    """Schreibt das Session-Archiv als JSON nach ``path``."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(archive, ensure_ascii=False, indent=2) + "\n",
@@ -814,56 +849,110 @@ def save_subagent_archive(path: Path, archive: dict[str, list[dict]]) -> None:
     )
 
 
-def _render_subagent_archive(
-    archive: dict[str, list[dict]],
-    meta: dict[str, SessionMeta],
-) -> list[str]:
-    """Abschnitt „Subagent-Archiv (je Session)" — ältere Sessions bleiben erhalten."""
-    # Sessions mit Subagenten, neueste zuerst (nach started_at; Fallback: session_id).
-    sessions_with_subs = [sid for sid in archive if archive[sid]]
-    if not sessions_with_subs:
-        return []
+# Kept for backward compatibility with tests and callers that reference the old name.
+def save_subagent_archive(path: Path, archive: dict) -> None:
+    """Alias für ``save_session_archive`` (rückwärtskompatibel)."""
+    save_session_archive(path, archive)
 
-    def _sort_key(sid: str) -> tuple[str, str]:
-        # Prefer started_at from live meta; fall back to archive record's started_at field.
-        live_started = meta.get(sid, _EMPTY_META).started_at
-        if live_started:
-            return (live_started, sid)
-        first_rec = archive[sid][0] if archive[sid] else {}
-        return (first_rec.get("started_at") or "", sid)
 
-    ordered = sorted(sessions_with_subs, key=_sort_key, reverse=True)
+def _archive_subagents(entry: dict | list) -> list[dict]:
+    """Gibt die Subagenten-Liste aus einem Archiv-Eintrag zurück (neues und altes Schema)."""
+    if isinstance(entry, list):
+        return entry
+    return entry.get("subagents") or []
 
-    lines = [
-        "## Subagent-Archiv (je Session)",
+
+def _archive_started_at(entry: dict | list, sid: str) -> str | None:
+    """Gibt started_at aus einem Archiv-Eintrag zurück (neues und altes Schema)."""
+    if isinstance(entry, list):
+        return entry[0].get("started_at") if entry else None
+    return entry.get("started_at")
+
+
+def render_session_archive_md(archive: dict[str, dict | list], *, generated_at: str) -> str:
+    """Rendert das vollständige Session-Archiv als Markdown (session_archive.md).
+
+    Struktur je Session: Hauptzeile (Label · Peak-Balken · Subagent-Anteil · Modell-Mix)
+    + Subzeilen je Subagent (SA_N· Peak-Balken + Status + Aufgabe).
+    Sessions durch ``---``-Trenner getrennt, jüngste zuerst.
+    Fehlende Hauptzeilen-Werte (aus migrierten Alt-Sessions) → ``—``/leere Balken.
+    """
+
+    def _entry_started_at(entry: dict | list, sid: str) -> str | None:
+        return _archive_started_at(entry, sid)
+
+    def _entry_subs(entry: dict | list) -> list[dict]:
+        return _archive_subagents(entry)
+
+    ordered = sorted(
+        archive.keys(),
+        key=lambda sid: (_entry_started_at(archive[sid], sid) or "", sid),
+        reverse=True,
+    )
+
+    header_lines = [
+        "# Session-Archiv",
         "",
-        "_Akkumuliert über alle Sessions — ältere Einträge bleiben bei Neugenerierung erhalten._",
+        "<!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->",
+        f"Stand: {generated_at}",
         "",
-        "| Session | Modell | Agent | Aufgabe | Peak |",
-        "|---|---|---|---|---|",
+        "Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).",
+        "Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
+        "",
+        "```text",
+        f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",
+        f"{'-' * 17} {'-' * 22} {'-' * 14} {'-' * 12}",
     ]
-    for sid in ordered:
-        # Use live meta for label if available, otherwise reconstruct from archive.
-        live_meta = meta.get(sid)
-        if live_meta:
-            label = session_label(sid, live_meta.started_at)
-        else:
-            first_started = archive[sid][0].get("started_at") if archive[sid] else None
-            label = session_label(sid, first_started)
 
-        for rec in archive[sid]:
-            peak_val = rec.get("peak_context")
-            if peak_val is not None:
-                peak_cell = f"{_k(peak_val)} {_context_status(peak_val)}"
+    body_lines: list[str] = []
+    for index, sid in enumerate(ordered):
+        entry = archive[sid]
+        is_new_schema = isinstance(entry, dict)
+
+        started_at = _entry_started_at(entry, sid)
+        label = _short_label(sid, started_at)
+
+        # Hauptzeilen-Felder aus dem neuen Schema; Migration liefert None für fehlende Werte.
+        peak = entry.get("peak_context") if is_new_schema else None
+        share = entry.get("subagent_share") if is_new_schema else None
+        by_tier: dict[str, int] = (entry.get("by_tier") or {}) if is_new_schema else {}
+
+        peak_col: str
+        if peak is not None:
+            status = _context_status(peak)
+            peak_col = f"{bar(peak, CONTEXT_LIMIT)} {_k(peak):>4} {status}"
+        else:
+            peak_col = "—"
+
+        share_col: str
+        if share is not None:
+            share_bar = bar(round(share), 100, width=6)
+            share_col = f"{share_bar} {share:>3.0f}%"
+        else:
+            share_col = "—"
+
+        mix_col = model_mix_bar(by_tier) if by_tier else "—"
+
+        body_lines.append(f"{label:<17} {peak_col:<22} {share_col:<14} {mix_col:<12}")
+
+        # Subzeilen je Subagent.
+        for sa_index, rec in enumerate(_entry_subs(entry), start=1):
+            sa_peak = rec.get("peak_context")
+            sa_desc = (rec.get("description") or "").strip()
+            if len(sa_desc) > 35:
+                sa_desc = sa_desc[:34] + "…"
+            if sa_peak is not None:
+                sa_peak_col = (
+                    f"{bar(sa_peak, CONTEXT_LIMIT)} {_k(sa_peak):>4} {_context_status(sa_peak)}"
+                )
             else:
-                peak_cell = "—"
-            lines.append(
-                f"| {_cell(label)} | {_cell(rec.get('tier') or '?')} "
-                f"| {_cell(rec.get('agent_type') or '?')} "
-                f"| {_cell(rec.get('description') or '')} | {_cell(peak_cell)} |"
-            )
-    lines.append("")
-    return lines
+                sa_peak_col = "—"
+            body_lines.append(f"{'':9}SA_{sa_index}·  {sa_peak_col:<22} {sa_desc}")
+
+        body_lines.append(f"{'-' * 17} {'-' * 22} {'-' * 14} {'-' * 12}")
+
+    all_lines = header_lines + body_lines + ["```", ""]
+    return "\n".join(all_lines)
 
 
 # --------------------------------------------------------------------------- #
@@ -871,8 +960,10 @@ def _render_subagent_archive(
 # --------------------------------------------------------------------------- #
 
 _OUTPUT_DOC = Path("docs/metrics/overview.md")
+_ARCHIVE_MD = Path("docs/metrics/session_archive.md")
 _NOTES_FILE = Path("docs/metrics/session_notes.yaml")
-_ARCHIVE_FILE = Path("docs/metrics/subagent_archive.json")
+_OLD_ARCHIVE_FILE = Path("docs/metrics/subagent_archive.json")
+_ARCHIVE_FILE = Path("docs/metrics/session_archive.json")
 
 
 def load_session_notes(path: Path) -> dict[str, str]:
@@ -896,7 +987,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--write",
         action="store_true",
-        help=f"Report nach {_OUTPUT_DOC} schreiben (sonst stdout).",
+        help=f"Report nach {_OUTPUT_DOC} und {_ARCHIVE_MD} schreiben (sonst stdout).",
     )
     parser.add_argument(
         "--project-dir",
@@ -913,11 +1004,28 @@ def main(argv: list[str] | None = None) -> int:
     summary = summarize(records)
     generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
 
-    # Subagent-Archiv: laden, mit aktuellen Session-Daten mergen (Upsert).
-    archive = load_subagent_archive(_ARCHIVE_FILE)
+    # Session-Archiv: laden (neue Datei; einmalige Migration aus Altdatei wenn nötig).
+    if _ARCHIVE_FILE.is_file():
+        archive = load_session_archive(_ARCHIVE_FILE)
+    elif _OLD_ARCHIVE_FILE.is_file():
+        # Einmalige Migration: altes subagent_archive.json ins neue Schema heben.
+        archive = load_session_archive(_OLD_ARCHIVE_FILE)
+    else:
+        archive = {}
+
+    # Aktuelle Sessions in das Archiv mergen (Upsert, idempotent je session_id).
+    sessions_summary = summary["sessions"]
     for session_id, session_meta in meta.items():
+        session_summ = sessions_summary.get(session_id)
         archive = merge_session_into_archive(
-            archive, session_id, session_meta.subagents, session_meta.started_at
+            archive,
+            session_id,
+            session_meta.subagents,
+            session_meta.started_at,
+            task=session_meta.task,
+            peak_context=session_summ.peak_context if session_summ else None,
+            subagent_share=session_summ.subagent_share if session_summ else None,
+            by_tier=session_summ.by_tier if session_summ else None,
         )
 
     report = render_markdown(
@@ -925,14 +1033,18 @@ def main(argv: list[str] | None = None) -> int:
         generated_at=generated_at,
         meta=meta,
         notes=load_session_notes(_NOTES_FILE),
-        subagent_archive=archive,
     )
 
     if args.write:
         _OUTPUT_DOC.parent.mkdir(parents=True, exist_ok=True)
         _OUTPUT_DOC.write_text(report + "\n", encoding="utf-8")
-        save_subagent_archive(_ARCHIVE_FILE, archive)
         print(f"Report geschrieben: {_OUTPUT_DOC}")
+
+        save_session_archive(_ARCHIVE_FILE, archive)
+
+        archive_md = render_session_archive_md(archive, generated_at=generated_at)
+        _ARCHIVE_MD.write_text(archive_md + "\n", encoding="utf-8")
+        print(f"Archiv geschrieben: {_ARCHIVE_MD}")
     else:
         print(report)
     return 0

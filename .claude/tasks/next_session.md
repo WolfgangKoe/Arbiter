@@ -21,7 +21,16 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S75, 2026-06-20)
+## Aktueller Stand (nach S76, 2026-06-21)
+
+**S76 (Plan 023 DONE — noch nicht committet):** Overview-/Session-Archiv-Rework.
+`overview.md` schlank (18 KB→3.9 KB), Reihenfolge nach `Refinement/overview_concept.md`;
+neue auto-generierte `docs/metrics/session_archive.md` (Hauptzeile + SA-Subzeilen,
+dedup je Session-ID); Archiv-Schema session-weit (`session_archive.json`), Migration
+aus `subagent_archive.json` verlustfrei (Altdatei bleibt als Netz); tote Renderer
+`_render_subagents`/`_render_subagent_archive` entfernt. 1011 grün, Cov 92.44 %.
+Kleiner Feinschliff-Kandidat: SA-Subzeilen-Spalten fluchten optisch nicht 100 % mit
+der Hauptzeile (lesbar, kosmetisch).
 
 **S75 (kein Code committet):** Hartes Kontext-Gate (PreToolUse-Block) prototypisiert
 und auf Stakeholder-Entscheid **wieder entfernt**. Grund: bei *einer* Schwelle = 135k
@@ -43,7 +52,7 @@ Speichern+Commit noch durchgehen.
 
 ### ▶ Nächste Session = Plan 022 (Dice Display Rework)
 
-**Reihenfolge (neu 2026-06-21):** 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017
+**Reihenfolge (neu 2026-06-21):** 023 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017
 **022 zuerst:** aktiver Arrow-Direction-Bug (`dice_html.py:200`, Buff/Debuff invertiert),
 Risk MEDIUM, Spec + Testkatalog fertig (`docs/spec/dice_display.md` §8/§10).
 **014 danach:** Refinement 2026-06-21 **neu geplant** (alte Fassung hatte

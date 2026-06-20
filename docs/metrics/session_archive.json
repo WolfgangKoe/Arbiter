@@ -1,0 +1,894 @@
+{
+  "0041c5ee-47b8-45cc-aa19-31abe1066d69": {
+    "started_at": "2026-05-31T14:05:57.022Z",
+    "task": "Was wäre denn effizienter bei der Strukturierung? Hmm, vielleicht lohnt sich eine Extra-Datei, weil ja auch Ausrüstunge…",
+    "peak_context": 92592,
+    "subagent_share": 21.1300977279978,
+    "by_tier": {
+      "Sonnet": 4709452,
+      "Haiku": 1261713
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Explore data directory structure and spec",
+        "tier": "Haiku",
+        "peak_context": 47696,
+        "started_at": "2026-05-31T14:05:57.022Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Explore wahapedia scraper capabilities",
+        "tier": "Haiku",
+        "peak_context": 34591,
+        "started_at": "2026-05-31T14:05:57.022Z"
+      }
+    ]
+  },
+  "05f4c40e-7f44-4451-8d20-29eee4025c22": {
+    "started_at": "2026-05-24T22:10:11.327Z",
+    "task": "Was brauchen wir, um das Frontend mit Hilfe von trailwindCSS zu schreiben?",
+    "peak_context": 146415,
+    "subagent_share": 1.3691482800984072,
+    "by_tier": {
+      "Sonnet": 13347869,
+      "Haiku": 185289
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Explore web frontend files",
+        "tier": "Haiku",
+        "peak_context": 35116,
+        "started_at": "2026-05-24T22:10:11.327Z"
+      }
+    ]
+  },
+  "147f87c8-fcaa-4bb2-ac10-05644ff69669": {
+    "started_at": "2026-06-07T17:39:30.134Z",
+    "task": "Beginne mit der nächsten Session. Der Plan ist freigegeben.",
+    "peak_context": 160431,
+    "subagent_share": 7.642011262905838,
+    "by_tier": {
+      "Sonnet": 17224667,
+      "Haiku": 1425227
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Audit all YAML data files across all factions for structural redundancy",
+        "tier": "Haiku",
+        "peak_context": 48907,
+        "started_at": "2026-06-07T17:39:30.134Z"
+      }
+    ]
+  },
+  "15dddda1-0b08-4538-8a17-b7b10d10c2b4": {
+    "started_at": "2026-06-04T07:32:20.867Z",
+    "task": "Beginne mit next_session.md. Meines Wissens muss ich noch ein paar Fragen beantworten. Z.B. zu den \"powers.yaml\" Ich fi…",
+    "peak_context": 98830,
+    "subagent_share": 30.758574693897373,
+    "by_tier": {
+      "Sonnet": 5601716
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Subfaction affinity verification Necrons + Custodes",
+        "tier": "Sonnet",
+        "peak_context": 20347,
+        "started_at": "2026-06-04T07:32:20.867Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "WH40K 9E core rules research for shared_abilities",
+        "tier": "Sonnet",
+        "peak_context": 53105,
+        "started_at": "2026-06-04T07:32:20.867Z"
+      }
+    ]
+  },
+  "2672bd18-4c21-4b30-b755-38a6830471ba": {
+    "started_at": "2026-06-19T15:34:53.230Z",
+    "task": "Start next session. Mir hast du in der letzten Sesssion gefühlt tausendmal gesagt,dass ich den Hook scharf stellen soll…",
+    "peak_context": 154675,
+    "subagent_share": 1.0707546175203508,
+    "by_tier": {
+      "Opus": 15154426,
+      "Sonnet": 164023
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft Psychic Phase rule catalog",
+        "tier": "Sonnet",
+        "peak_context": 28912,
+        "started_at": "2026-06-19T15:34:53.230Z"
+      }
+    ]
+  },
+  "3019eacd-95c7-4491-b18f-fca8a766fbde": {
+    "started_at": "2026-06-03T21:37:12.677Z",
+    "task": "Beginne mit next_Session.md. Der n",
+    "peak_context": 173574,
+    "subagent_share": 17.27440105228002,
+    "by_tier": {
+      "Sonnet": 19902319,
+      "Haiku": 4155916
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Explore data layer: YAML files, loader, schemas",
+        "tier": "Haiku",
+        "peak_context": 31002,
+        "started_at": "2026-06-03T21:37:12.677Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Explore code callers and test patterns",
+        "tier": "Haiku",
+        "peak_context": 48939,
+        "started_at": "2026-06-03T21:37:12.677Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Explore Ork data files and full arkana.yaml for cleanup audit",
+        "tier": "Haiku",
+        "peak_context": 46332,
+        "started_at": "2026-06-03T21:37:12.677Z"
+      }
+    ]
+  },
+  "31e0b9d7-ba52-419e-babb-983e0365c250": {
+    "started_at": "2026-06-18T17:54:32.671Z",
+    "task": "Lass uns mit der nächsten Session starten und ein paar Entscheidungsprämissen für die Weiterarbeit in diesem Projekt fo…",
+    "peak_context": 98406,
+    "subagent_share": 7.72890177882935,
+    "by_tier": {
+      "Opus": 3851845,
+      "Sonnet": 322642
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft governance operating-model docs",
+        "tier": "Sonnet",
+        "peak_context": 28385,
+        "started_at": "2026-06-18T17:54:32.671Z"
+      }
+    ]
+  },
+  "32f76ee9-9486-4304-9765-007271efab2e": {
+    "started_at": "2026-06-05T18:15:27.569Z",
+    "task": "Beginne mit der nächsten Session, ich erteile die Freigabe.",
+    "peak_context": 196745,
+    "subagent_share": 3.747340018598773,
+    "by_tier": {
+      "Sonnet": 38266580,
+      "Haiku": 1489807
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Ork unit abilities gap analysis",
+        "tier": "Haiku",
+        "peak_context": 75651,
+        "started_at": "2026-06-05T18:15:27.569Z"
+      }
+    ]
+  },
+  "33526f8d-0f94-4d6c-b45f-09f71dbd0ef4": {
+    "started_at": "2026-05-31T17:28:41.008Z",
+    "task": "Du machst gerade irgendwie nicht das, was ich will. Ich sage, du sollst \"next_session.md\" anpassen, erstellst aber neue…",
+    "peak_context": 121310,
+    "subagent_share": 31.121916657907217,
+    "by_tier": {
+      "Sonnet": 12719599
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia: PL, Punkte, Brackets für Necrons fetchen",
+        "tier": "Sonnet",
+        "peak_context": 74898,
+        "started_at": "2026-05-31T17:28:41.008Z"
+      }
+    ]
+  },
+  "366a7c8e-5792-474c-864a-905febb99cba": {
+    "started_at": "2026-05-30T03:54:55.741Z",
+    "task": "Könntest du bitte in goals.md am Anfang eine ähnliche Tabelle anlegen, wie du es in next_session.md tust, wo man eine Ü…",
+    "peak_context": 129163,
+    "subagent_share": 25.70639352483302,
+    "by_tier": {
+      "Sonnet": 10319425
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Documentation consistency audit",
+        "tier": "Sonnet",
+        "peak_context": 73907,
+        "started_at": "2026-05-30T03:54:55.741Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia setup rules research",
+        "tier": "Sonnet",
+        "peak_context": 12682,
+        "started_at": "2026-05-30T03:54:55.741Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "BattleScribe XML format research",
+        "tier": "Sonnet",
+        "peak_context": 87360,
+        "started_at": "2026-05-30T03:54:55.741Z"
+      }
+    ]
+  },
+  "42c5e10a-262d-466e-80fd-540bcfbf930f": {
+    "started_at": "2026-06-19T14:28:56.525Z",
+    "task": "start session + Freigabe",
+    "peak_context": 170822,
+    "subagent_share": 6.584776205119243,
+    "by_tier": {
+      "Opus": 13341339,
+      "Sonnet": 940422
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft Charge/Morale rule entries",
+        "tier": "Sonnet",
+        "peak_context": 46563,
+        "started_at": "2026-06-19T14:28:56.525Z"
+      }
+    ]
+  },
+  "4e6f19df-45a6-4f68-ae45-241aeca43432": {
+    "started_at": "2026-06-02T18:50:30.031Z",
+    "task": "Wir haben nun den Startscreen überarbeitet. Allerdings sollten wir da noch etwas nacharbeiten. Recherchiere bitte auf W…",
+    "peak_context": 189510,
+    "subagent_share": 3.9677635350462253,
+    "by_tier": {
+      "Sonnet": 20100467
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia game setup rules research",
+        "tier": "Sonnet",
+        "peak_context": 35931,
+        "started_at": "2026-06-02T18:50:30.031Z"
+      }
+    ]
+  },
+  "51558266-33d7-4281-adab-3bd39b158f1f": {
+    "started_at": "2026-06-03T18:08:35.770Z",
+    "task": "Lies bitte next_session.md. Ich bin mit der Commandphase nicht zufrieden. Es gibt viele Fähigkeiten von Charaktermodell…",
+    "peak_context": 155431,
+    "subagent_share": 10.853020163332157,
+    "by_tier": {
+      "Sonnet": 17124312,
+      "Haiku": 2084765
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Vollständige Ability-Analyse aller Fraktionen",
+        "tier": "Haiku",
+        "peak_context": 81089,
+        "started_at": "2026-06-03T18:08:35.770Z"
+      }
+    ]
+  },
+  "593cf2bf-6da6-44dd-b5f4-ec42392d3372": {
+    "started_at": "2026-06-20T09:41:38.218Z",
+    "task": "start session + freigabe",
+    "peak_context": 164714,
+    "subagent_share": 30.278896139733103,
+    "by_tier": {
+      "Opus": 20718379,
+      "<synthetic>": 0,
+      "Sonnet": 8997701
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Add subagent peak-context to overview",
+        "tier": "Sonnet",
+        "peak_context": 52050,
+        "started_at": "2026-06-20T09:41:38.218Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Extract render-ledger logic + tests",
+        "tier": "Sonnet",
+        "peak_context": 103700,
+        "started_at": "2026-06-20T09:41:38.218Z"
+      }
+    ]
+  },
+  "5abd5c7c-e30f-4156-9c56-029bda8c69da": {
+    "started_at": "2026-06-20T11:04:57.433Z",
+    "task": "start session + freigabe. Du hattest in der letzten Retro einen wichtigen Punkt gemacht: Lehre: „Subagent-grün\" ≠ „verd…",
+    "peak_context": 137587,
+    "subagent_share": 35.157197283635114,
+    "by_tier": {
+      "Opus": 11923362,
+      "Sonnet": 6464742
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Inventory INV-4b tokens/allowlist",
+        "tier": "Sonnet",
+        "peak_context": 64972,
+        "started_at": "2026-06-20T11:04:57.433Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Prep rules catalog: deployment/scoring",
+        "tier": "Sonnet",
+        "peak_context": 86283,
+        "started_at": "2026-06-20T11:04:57.433Z"
+      }
+    ]
+  },
+  "63304cc4-462b-4d6b-8479-9a97113b815e": {
+    "started_at": "2026-06-03T14:06:21.774Z",
+    "task": "Fange wir mit next_session.md an. Welche Fragen hast du an mich?",
+    "peak_context": 64293,
+    "subagent_share": 10.158592010230883,
+    "by_tier": {
+      "Sonnet": 2023233,
+      "Haiku": 228772
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Read key UI files for Ziel 6 analysis",
+        "tier": "Haiku",
+        "peak_context": 43473,
+        "started_at": "2026-06-03T14:06:21.774Z"
+      }
+    ]
+  },
+  "754eff0d-b00b-479d-9d1e-0409e119932d": {
+    "started_at": "2026-06-11T20:14:36.537Z",
+    "task": "Ich habe docs/audit/plans/Read.me weitesgehend abgearbeitet. Bevor ich die übrigen Findings fixen lasse, möchte ich ger…",
+    "peak_context": 222351,
+    "subagent_share": 13.987704727586609,
+    "by_tier": {
+      "Fable": 18083938,
+      "Haiku": 2940891
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Audit model-groups code correctness",
+        "tier": "Haiku",
+        "peak_context": 74863,
+        "started_at": "2026-06-11T20:14:36.537Z"
+      }
+    ]
+  },
+  "7e13ac5a-a08c-4b82-8b52-67cb87b98630": {
+    "started_at": "2026-06-20T11:42:20.015Z",
+    "task": "start next session",
+    "peak_context": 153596,
+    "subagent_share": 21.46281051714781,
+    "by_tier": {
+      "Opus": 13126526,
+      "Sonnet": 3587245
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Fix setup-phase ability leak",
+        "tier": "Sonnet",
+        "peak_context": 29907,
+        "started_at": "2026-06-20T11:42:20.015Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Generic-src quick-wins and renames",
+        "tier": "Sonnet",
+        "peak_context": 40755,
+        "started_at": "2026-06-20T11:42:20.015Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Archive per-session subagent peaks",
+        "tier": "Sonnet",
+        "peak_context": 51154,
+        "started_at": "2026-06-20T11:42:20.015Z"
+      }
+    ]
+  },
+  "7f1575c3-75ae-4f3f-86e0-97ec218c2c0c": {
+    "started_at": "2026-06-19T18:53:31.364Z",
+    "task": "start session +freigabe",
+    "peak_context": 106620,
+    "subagent_share": 12.39176092819309,
+    "by_tier": {
+      "Opus": 7224666,
+      "Sonnet": 1021894
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Prepare next session docs",
+        "tier": "Sonnet",
+        "peak_context": 65342,
+        "started_at": "2026-06-19T18:53:31.364Z"
+      }
+    ]
+  },
+  "804d9ccd-ba70-41e8-8619-88b1c8c438b1": {
+    "started_at": "2026-05-31T05:07:52.741Z",
+    "task": "Machen wir weiterr.",
+    "peak_context": 148479,
+    "subagent_share": 2.2579125929062966,
+    "by_tier": {
+      "Sonnet": 12051928,
+      "<synthetic>": 0
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Fetch Wahapedia Necrons stratagems page",
+        "tier": "Sonnet",
+        "peak_context": 38633,
+        "started_at": "2026-05-31T05:07:52.741Z"
+      }
+    ]
+  },
+  "86550f2b-0945-4ec1-98dd-bd72f66d4e5e": {
+    "started_at": "2026-06-17T16:45:22.912Z",
+    "task": "Bevor wir mit der nächsten Session starten, möchte ich zwei Themen angehen und ggf. in unserem Workflow implementieren.…",
+    "peak_context": 147925,
+    "subagent_share": 15.141675591682091,
+    "by_tier": {
+      "Opus": 8772640,
+      "Sonnet": 1565344
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Combat rule catalog draft",
+        "tier": "Sonnet",
+        "peak_context": 77752,
+        "started_at": "2026-06-17T16:45:22.912Z"
+      }
+    ]
+  },
+  "9f42d3f0-0600-4d13-b903-edc498864aa9": {
+    "started_at": "2026-06-18T20:32:34.135Z",
+    "task": "start session + freigabe",
+    "peak_context": 156040,
+    "subagent_share": 4.193340407064191,
+    "by_tier": {
+      "Opus": 15561161,
+      "Sonnet": 681093
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft R-MOVE rule catalog entries",
+        "tier": "Sonnet",
+        "peak_context": 34222,
+        "started_at": "2026-06-18T20:32:34.135Z"
+      }
+    ]
+  },
+  "a176c827-7a51-449c-bc5e-4dbaa1dc622d": {
+    "started_at": "2026-06-11T16:49:35.562Z",
+    "task": "npx skills add shadcn/improve",
+    "peak_context": 177520,
+    "subagent_share": 52.34987138934171,
+    "by_tier": {
+      "Sonnet": 93615,
+      "<synthetic>": 0,
+      "Opus": 11592296,
+      "Haiku": 12838495
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Audit test coverage and docs",
+        "tier": "Haiku",
+        "peak_context": 49064,
+        "started_at": "2026-06-11T16:49:35.562Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit security and input handling",
+        "tier": "Haiku",
+        "peak_context": 45159,
+        "started_at": "2026-06-11T16:49:35.562Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit correctness and bugs",
+        "tier": "Haiku",
+        "peak_context": 70629,
+        "started_at": "2026-06-11T16:49:35.562Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit tech debt and architecture",
+        "tier": "Haiku",
+        "peak_context": 40355,
+        "started_at": "2026-06-11T16:49:35.562Z"
+      }
+    ]
+  },
+  "bc940273-dd68-4de7-aca0-abf7ab6d67d9": {
+    "started_at": "2026-06-04T19:40:37.161Z",
+    "task": "Mein Session-Limit ist fast aufgebraucht. Ich hätte daher gerne folgendes von dir: Halte deine Erkenntnisse fest. Am be…",
+    "peak_context": 142771,
+    "subagent_share": 10.033310271424671,
+    "by_tier": {
+      "Sonnet": 7757977,
+      "<synthetic>": 0,
+      "Haiku": 865189
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Scan for faction-specific hardcoding in gameMechanics",
+        "tier": "Haiku",
+        "peak_context": 56143,
+        "started_at": "2026-06-04T19:40:37.161Z"
+      }
+    ]
+  },
+  "bdc63d07-913f-4e2b-93ec-64cf695e94fc": {
+    "started_at": "2026-06-04T12:18:26.306Z",
+    "task": "Wir müssen nun eine Bereinigungssession für die Attackenabfolge einlegen. Diese trifft auf alle Kampfsequenzen zu, was…",
+    "peak_context": 144608,
+    "subagent_share": 10.174051047212473,
+    "by_tier": {
+      "Sonnet": 9242346
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia 9E rules research",
+        "tier": "Sonnet",
+        "peak_context": 31354,
+        "started_at": "2026-06-04T12:18:26.306Z"
+      }
+    ]
+  },
+  "be0fc36f-3f7b-4aba-81f0-cdb7cbdab06a": {
+    "started_at": "2026-06-17T18:07:55.110Z",
+    "task": "Tokenstand und -schätzung für die Task?",
+    "peak_context": 111655,
+    "subagent_share": 27.983789324203308,
+    "by_tier": {
+      "Opus": 6631257,
+      "<synthetic>": 0,
+      "Sonnet": 2576749
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft Command Phase rule catalog",
+        "tier": "Sonnet",
+        "peak_context": 65033,
+        "started_at": "2026-06-17T18:07:55.110Z"
+      }
+    ]
+  },
+  "d46eacfb-3756-4a5e-ac14-510bced2312d": {
+    "started_at": "2026-06-01T20:22:45.129Z",
+    "task": "Setze den Plan laut next_session.md fort. Freigabe",
+    "peak_context": 139352,
+    "subagent_share": 9.344550351095512,
+    "by_tier": {
+      "Sonnet": 15117138,
+      "<synthetic>": 0,
+      "Haiku": 1558239
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Test file analysis for session state keys",
+        "tier": "Haiku",
+        "peak_context": 39086,
+        "started_at": "2026-06-01T20:22:45.129Z"
+      }
+    ]
+  },
+  "db34412f-bdca-4f4a-90c1-37fe61f807ea": {
+    "started_at": "2026-05-26T18:34:42.613Z",
+    "task": "Beginne laut next_session.md mit dem Plan. Ich gebe ihn explizit frei,",
+    "peak_context": 138350,
+    "subagent_share": 17.22813238046581,
+    "by_tier": {
+      "Sonnet": 12243045
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Ziel 1A — uiLayout Struktursplit",
+        "tier": "Sonnet",
+        "peak_context": 55595,
+        "started_at": "2026-05-26T18:34:42.613Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ziel 1B — gameObjects Foundation",
+        "tier": "Sonnet",
+        "peak_context": 38826,
+        "started_at": "2026-05-26T18:34:42.613Z"
+      }
+    ]
+  },
+  "dc2b02fb-1455-4b67-8bf4-85c620bc0fcc": {
+    "started_at": "2026-05-31T12:32:09.657Z",
+    "task": "Wir starten die nächste Session. Du hattest noch ein paar Fragen gestellt: Das ist ein guter Commit-Punkt.Soll ich eine…",
+    "peak_context": 119515,
+    "subagent_share": 38.20729664760351,
+    "by_tier": {
+      "Sonnet": 11523100
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia relic + weapon ability texts",
+        "tier": "Sonnet",
+        "peak_context": 63529,
+        "started_at": "2026-05-31T12:32:09.657Z"
+      }
+    ]
+  },
+  "e114e70f-a9a5-40aa-aff2-d3ec210b894f": {
+    "started_at": "2026-05-28T07:37:12.034Z",
+    "task": "Wir haben uns in der letzten Sesssion auf ein Vorgehen für diese Session geeinigt, lies next_session.md und leg los. Du…",
+    "peak_context": 85192,
+    "subagent_share": 11.71937897707973,
+    "by_tier": {
+      "Sonnet": 3889003
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "A1+A2 architecture research for Arbiter review doc",
+        "tier": "Sonnet",
+        "peak_context": 72726,
+        "started_at": "2026-05-28T07:37:12.034Z"
+      }
+    ]
+  },
+  "e259fb10-28e5-4a2b-a6bf-f4fc29e2938f": {
+    "started_at": "2026-06-03T20:39:14.710Z",
+    "task": "Beginne mit der nächsten Session. Du hast hier die Freigabe. Ich habe ein wenig die Sorge, dass wir wieder zu sehr auf…",
+    "peak_context": 161352,
+    "subagent_share": 4.847889252983231,
+    "by_tier": {
+      "Sonnet": 15835064,
+      "Haiku": 306662
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Research faction abilities across all factions",
+        "tier": "Haiku",
+        "peak_context": 27098,
+        "started_at": "2026-06-03T20:39:14.710Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Research faction command-phase mechanics on Wahapedia",
+        "tier": "Sonnet",
+        "peak_context": 21144,
+        "started_at": "2026-06-03T20:39:14.710Z"
+      }
+    ]
+  },
+  "ead78f19-c77a-41ae-ae1d-761e005a4d8c": {
+    "started_at": "2026-06-04T17:42:13.984Z",
+    "task": "WIr müssen dringend an der Arbeitsweise arbeiten. Und CLAUDE.md verschlanken. Da steht auch immer noch etwas von \"flask…",
+    "peak_context": 166299,
+    "subagent_share": 4.66717393869604,
+    "by_tier": {
+      "Sonnet": 10076119
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia data fetch + YAML comparison for Necrons and Orks",
+        "tier": "Sonnet",
+        "peak_context": 57309,
+        "started_at": "2026-06-04T17:42:13.984Z"
+      }
+    ]
+  },
+  "f4c215ad-bd7c-4d6b-8e4a-ad71d73de4f9": {
+    "started_at": "2026-06-20T08:44:34.795Z",
+    "task": "start session + Freigabe: Hinweis festhalten Claude-Skill über die API NUR durch einen Subagenten ziehen lassen! Das ha…",
+    "peak_context": 143538,
+    "subagent_share": 28.37242585497119,
+    "by_tier": {
+      "Opus": 14307734,
+      "Sonnet": 5667442
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Klasse-1 Ledger-Tests + R-CMD-03 Befund",
+        "tier": "Sonnet",
+        "peak_context": 96450,
+        "started_at": "2026-06-20T08:44:34.795Z"
+      }
+    ]
+  },
+  "f76dbdd8-fb01-4e75-bc02-30d3dc44d5e1": {
+    "started_at": "2026-06-19T20:08:36.869Z",
+    "task": "start session - Was steht als nächstes auf dem Plan?",
+    "peak_context": 152410,
+    "subagent_share": 5.796610980662692,
+    "by_tier": {
+      "Opus": 15195651,
+      "<synthetic>": 0,
+      "Sonnet": 935033
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Battle-Round rules catalog",
+        "tier": "Sonnet",
+        "peak_context": 47294,
+        "started_at": "2026-06-19T20:08:36.869Z"
+      }
+    ]
+  },
+  "58e914b6-8836-4170-b0ed-31ef2c2b047b": {
+    "started_at": "2026-06-20T20:11:54.567Z",
+    "task": "start session. DU MUSST DICH AN DIE VORGABEN UNSERES OPERATING MODELLS HALTEN! Kontextfenster, Tests schreiben, Hooks u…",
+    "peak_context": 92640,
+    "subagent_share": 59.099487603782485,
+    "by_tier": {
+      "Sonnet": 16123265
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 019 — UI Target Consolidation implementieren",
+        "tier": "Sonnet",
+        "peak_context": 108657,
+        "started_at": "2026-06-20T20:11:54.567Z"
+      }
+    ]
+  },
+  "63cc3dfb-1f77-407e-8b8b-1880799a2c9f": {
+    "started_at": "2026-06-20T17:19:22.078Z",
+    "task": "Start next session. Wir haben es als Refinement vermerkt. Zu dem \"subagent-Archiv\" habe ich zwischenzeitlich ein Konzep…",
+    "peak_context": 155872,
+    "subagent_share": 48.11465946143835,
+    "by_tier": {
+      "Sonnet": 13395458
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Update next_session.md and plans README with refinement outcomes",
+        "tier": "Sonnet",
+        "peak_context": 41076,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Resume backlog.md update (gate now open)",
+        "tier": "Sonnet",
+        "peak_context": 30312,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Research: buff/debuff perspective data model + mortal wounds tracking in app",
+        "tier": "Sonnet",
+        "peak_context": 43595,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Resume Plans 019-022 + dice spec creation (gate now open)",
+        "tier": "Sonnet",
+        "peak_context": 54328,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Rewrite Plan 014 completely based on session decisions",
+        "tier": "Sonnet",
+        "peak_context": 31657,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Update backlog.md with all refinement decisions",
+        "tier": "Sonnet",
+        "peak_context": 27644,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "UI consolidation research: model/unit selection patterns across app and rules",
+        "tier": "Sonnet",
+        "peak_context": 82053,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Resume Plan 014 rewrite (gate now open)",
+        "tier": "Sonnet",
+        "peak_context": 36125,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Create Plans 019-022 stubs + dice_display spec",
+        "tier": "Sonnet",
+        "peak_context": 41933,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Cluster 3 schema details: resurrection orb YAML + commandPhase code",
+        "tier": "Sonnet",
+        "peak_context": 34961,
+        "started_at": "2026-06-20T17:19:22.078Z"
+      }
+    ]
+  },
+  "a8998517-2112-4d2e-81c7-a466f21e5ea5": {
+    "started_at": "2026-06-20T17:19:22.032Z",
+    "task": "Start next session. Wir haben es als Refinement vermerkt. Zu dem \"subagent-Archiv\" habe ich zwischenzeitlich ein Konzep…",
+    "peak_context": 56940,
+    "subagent_share": 81.9760002874968,
+    "by_tier": {
+      "Sonnet": 4146133
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Gather Plan 014 spec, dice display UI details, INV-4b vocab details",
+        "tier": "Sonnet",
+        "peak_context": 46252,
+        "started_at": "2026-06-20T17:19:22.032Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Analyze Refinement concept + gather context for planning session",
+        "tier": "Sonnet",
+        "peak_context": 67061,
+        "started_at": "2026-06-20T17:19:22.032Z"
+      }
+    ]
+  },
+  "07026b3b-2a5e-42fa-897e-1236431d8970": {
+    "started_at": "2026-06-20T22:36:41.525Z",
+    "task": "start Session, was sind dienächsten Schritte, bitte vorlegen und eine Tolen Schätzung dran.",
+    "peak_context": 118676,
+    "subagent_share": 50.9874277717969,
+    "by_tier": {
+      "Opus": 7250197,
+      "Sonnet": 7542328
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Implement Plan 023 overview rework",
+        "tier": "Sonnet",
+        "peak_context": 92558,
+        "started_at": "2026-06-20T22:36:41.525Z"
+      }
+    ]
+  }
+}
