@@ -167,6 +167,10 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —
   läuft im **isolierten Kontext**, hält das Opus-Hauptfenster schlank. Opus reviewt +
   finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession.
+- **Skill-/Claude-Inhalte über die API NUR per Subagent ziehen (PFLICHT):** Skill-Definitionen
+  oder andere Inhalte über die Claude-/Skill-API **nie direkt im Opus-Hauptfenster** laden —
+  immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt. Direktes
+  Laden kostete einmalig **~300k Token** und flutete den Kontext (S69-Befund, ADR-0004).
 - **Tiering:** Reine Lookups (gebundene Regelsuche, formatfixe Extraktion, ja/nein gegen
   expliziten Text) an `model: haiku`. Je geschlossener das Konditionalprogramm → desto
   niedriger das Tier. Vollständige Rollen-/Tier-/Modus-Regeln: `docs/governance/operating_model.md`.
