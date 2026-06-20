@@ -26,7 +26,7 @@ Jede Regel ist ein `### R-<BEREICH>-<NN>`-Eintrag. Feldkonventionen:
 
 IDs sind stabil und werden nie wiederverwendet. Der Katalog wächst pro Bereich
 (diese Datei: Attackenabfolge/Combat (Schießen + Nahkampf), Command Phase, Movement Phase,
-Charge Phase, Morale Phase, Psychic Phase).
+Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ---
 
@@ -337,7 +337,7 @@ Charge Phase, Morale Phase, Psychic Phase).
 - **status**: implementiert
 - **getestet**: nein
 - **quelle**: core_rules.txt — Battle-forged CP-Bonus / Spielgröße: Combat Patrol 3 · Incursion 6 · Strike Force 12 · Onslaught 18
-- **code**: game_state.py:init_game_state
+- **code**: game_state.py:init_state
 - **regel**: Der CP-Startvorrat richtet sich nach der Spielgröße (`CP_BY_GAME_SIZE`: 3/6/12/18). (Schuld: kein Test prüft die vier Stufen.)
 
 ### R-CMD-05
@@ -939,3 +939,87 @@ Charge Phase, Morale Phase, Psychic Phase).
 - **quelle**: core_rules.txt — "every unit within 6" of it immediately suffers D3 mortal wounds"
 - **code**: —
 - **regel**: Wird ein PSYKER durch Perils zerstört, erleiden alle Einheiten in 6" je D3 Mortal Wounds (App-Anteil: Schaden anwenden; Tisch-Anteil: 6"-Reichweite). Splash-Schaden nicht implementiert.
+
+---
+
+## Bereich: Battle-Round-Struktur
+
+### R-ROUND-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_setup_goes_to_command
+- **quelle**: core_rules.txt — "Warhammer 40,000 is played in a series of battle rounds. In each battle round, both players have a turn."
+- **code**: game_state.py:next_phase
+- **regel**: Das Spiel besteht aus einer Folge von Battle Rounds. In jeder Battle Round hat jeder Spieler genau einen Turn.
+
+### R-ROUND-02
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_switches_active_player_after_necrons_morale
+- **quelle**: core_rules.txt — "The same player always takes the first turn in each battle round – the mission you are playing will tell you which player this is."
+- **code**: game_state.py:init_state
+- **regel**: Immer derselbe Spieler hat den ersten Turn jeder Battle Round. `first_player` wird bei Spielstart gesetzt und bleibt unveränderlich (Layout-Seitenleiste ist ebenfalls fest gebunden).
+
+### R-ROUND-03
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_advances_index_within_turn
+- **quelle**: core_rules.txt — "Each turn consists of a series of phases, which must be resolved in the following order: 1. COMMAND PHASE … 7. MORALE PHASE"
+- **code**: game_state.py:next_phase
+- **regel**: Innerhalb eines Turns sind die Phasen fix geordnet: Command → Movement → Psychic → Shooting → Charge → Fight → Morale. Die App erzwingt diese Reihenfolge über `phase_idx` (nur Vorwärts-Schritt). Für Command als ersten Schritt siehe auch R-CMD-01.
+
+### R-ROUND-04
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_switches_active_player_after_necrons_morale
+- **quelle**: core_rules.txt — "Once a player's turn has ended, their opponent then starts their turn."
+- **code**: game_state.py:next_phase
+- **regel**: Nach Abschluss der Morale Phase wechselt `active` zum anderen Spieler; dessen Turn beginnt (phase_idx zurück auf 1 = Command Phase).
+
+### R-ROUND-05
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_increments_round_after_orks_morale
+- **quelle**: core_rules.txt — "Once both players have completed a turn, the battle round has been completed and the next one begins"
+- **code**: game_state.py:next_phase
+- **regel**: Nachdem der zweite Spieler seine Morale Phase abgeschlossen hat, ist die Battle Round vollständig; `round` wird um 1 erhöht und der erste Spieler beginnt seinen Turn der neuen Runde.
+
+### R-ROUND-06
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_init_state_sets_round_to_one
+- **quelle**: core_rules.txt — "The first battle round begins."
+- **code**: game_state.py:init_state
+- **regel**: Bei Spielstart wird der Rundenzähler auf 1 gesetzt (`st.session_state.round = 1`). Der erste Turn gehört dem `first_player`.
+
+### R-ROUND-07
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "The battle ends when all of the models in one player's army have been destroyed, or once the fifth battle round has ended (whichever comes first)."
+- **code**: —
+- **regel**: Das Spiel endet nach 5 Battle Rounds oder wenn alle Modelle einer Armee vernichtet sind. Die App zeigt keine automatische Spielende-Erkennung und keinen „Spiel beendet"-Zustand.
+
+### R-ROUND-08
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Each mission will tell you when the battle ends. This will typically be after a set number of battle rounds have been completed, or when one player has achieved a certain victory condition."
+- **code**: —
+- **regel**: Missionsspezifische Siegbedingungen (z. B. Missionsziele, VP-Zählung) legen das Spielende fest. Die App zeigt keinen VP-Vergleich oder Siegbedingungscheck — nur am Tisch prüfbar.
+
+### R-ROUND-09
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "If these things occur before or after the battle, or at the start or end of a battle round, the players roll off and the winner decides in what order the rules are resolved."
+- **code**: —
+- **regel**: Gleichzeitige Regeln „am Start/Ende der Battle Round" werden per Roll-off entschieden (nicht per aktivem Spieler). Während des Turns entscheidet der aktive Spieler. Die App erzwingt diese Unterscheidung nicht.
+
+### R-ROUND-10
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "When this happens during the battle, the player whose turn it is chooses the order."
+- **code**: —
+- **regel**: Gleichzeitige Regeln *während* des Turns (nicht Battle-Round-Start/-Ende) werden vom Spieler aufgelöst, der am Zug ist. Die App unterstützt keine explizite Reihenfolge-Auswahl bei simultanen Effekten.

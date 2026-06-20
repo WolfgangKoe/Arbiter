@@ -14,6 +14,7 @@ from gameMechanic.game_state import (  # noqa: E402
     _make_unit_state_dict,
     active_round_choice_buff_labels,
     compute_roster_total_pts,
+    init_state,
     list_available_rosters,
     next_phase,
     short_round_choice_label,
@@ -119,6 +120,13 @@ def test_next_phase_does_not_award_cp_on_player_switch() -> None:
     next_phase()
     assert session["cp"]["Necrons"] == 4
     assert session["cp"]["Orks"] == 4
+
+
+def test_init_state_sets_round_to_one() -> None:
+    """R-ROUND-06: a fresh game starts on battle round 1."""
+    session = _make_session()
+    init_state()
+    assert session["round"] == 1
 
 
 # ---------------------------------------------------------------------------
