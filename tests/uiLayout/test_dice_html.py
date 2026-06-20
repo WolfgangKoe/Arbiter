@@ -14,8 +14,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from uiLayout.dice_html import (  # noqa: E402
     _modifier_color,
     _modifier_columns,
+    always_fail_marker_row_html,
     dice_row_html,
     miss_die_html,
+    reroll_marker_row_html,
     save_modifier_die_pair_html,
 )
 
@@ -82,6 +84,48 @@ def test_color_without_hint_falls_back_to_value_sign() -> None:
     # Backward compatibility: dicts without color_hint keep the sign-based colour.
     assert _modifier_color({"value": 2}) == _BUFF_GREEN
     assert _modifier_color({"value": -2}) == _DEBUFF_RED
+
+
+def test_slot_1_always_shows_x() -> None:
+    # Invariant (dice_display.md §1): an unmodified 1 always fails — for every
+    # threshold the value-1 die is drawn as a miss cross, never a success die.
+    for threshold in range(2, 7):
+        html = dice_row_html(threshold)
+        assert _CROSS_STROKE in html
+
+
+def test_buff_cannot_make_1_succeed() -> None:
+    # Even at the lowest reachable threshold (2+, after any buff), the 1 stays a
+    # miss die outside the success frame (dice_display.md §3.3).
+    html = dice_row_html(2)
+    assert _CROSS_STROKE in html  # the value-1 miss die is still rendered
+
+
+def test_debuff_beyond_6_shows_x_slot() -> None:
+    # Sv 6+ with AP-2 → newly-failing value 7 is off-scale → a miss die marks it
+    # right of the 6 (dice_display.md §3.2 / §10.4).
+    html = save_modifier_die_pair_html(6, -2, "AP-2", _DEBUFF_RED)
+    assert _CROSS_STROKE in html
+    assert "×" not in html  # off-scale miss reads as a die, never a bare text ×
+
+
+def test_reroll_marker_correct_slot() -> None:
+    # ↺ sits under exactly the re-rolled slot(s) (dice_display.md §10.1).
+    html = reroll_marker_row_html([1])
+    assert html.count("↺") == 1
+
+
+def test_always_fail_marks_correct_slots() -> None:
+    # Quantum Shield (attacker view): slots 1–3 always fail → three ✕ markers in red.
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff")
+    assert html.count("✕") == 3
+    assert _DEBUFF_RED in html
+
+
+def test_always_fail_color_hint_buff_is_green() -> None:
+    # Defender's perspective: the same auto-fail is a benefit → green (§5.1).
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="buff")
+    assert _BUFF_GREEN in html
 
 
 def test_modifier_columns_clamp_to_grid() -> None:

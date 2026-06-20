@@ -297,6 +297,57 @@ def special_die_html(label: str, content: str = "") -> str:
     )
 
 
+_REROLL_GLYPH = "↺"  # app-wide reset/redo glyph (gameHeader, _common, gameProtocoll)
+_AUTO_FAIL_GLYPH = "✕"  # below-slot annotation; distinct from the die-shaped miss icon
+
+
+def _marker_row_html(
+    label_html: str, glyph: str, marker_slots: set[int], base_threshold: int, color: str
+) -> str:
+    """Sub-row aligned to the 1..6 grid with *glyph* under each marker slot.
+
+    Shared layout for the reroll (↺) and always-fail (✕) annotations: the glyph
+    sits in the same die-sized column as the value it refers to, so it lines up
+    under the dice rows above (dice_display.md §10.1 / §10.2).
+    """
+    slots: list[str] = []
+    for v in range(1, 7):
+        if 2 <= base_threshold <= 6 and v == base_threshold:
+            slots.append(_boundary_gap_html(with_line=False))
+        inner = (
+            f'<span style="color:{color};font-weight:bold;">{glyph}</span>'
+            if v in marker_slots
+            else ""
+        )
+        slots.append(_modifier_slot_html(inner))
+    content = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
+    return grid_row_html(label_html, content)
+
+
+def reroll_marker_row_html(slots: list[int], base_threshold: int = 0) -> str:
+    """↺ marker below each re-rolled slot (dice_display.md §10.1).
+
+    Display building block — not yet wired into a roll block; a producer that
+    feeds reroll data (e.g. reroll_hit_1) into the dice block consumes it later.
+    """
+    badge = _badge_chip("Reroll", "#f59e0b")
+    return _marker_row_html(badge, _REROLL_GLYPH, set(slots), base_threshold, "#f59e0b")
+
+
+def always_fail_marker_row_html(
+    slots: list[int], base_threshold: int = 0, color_hint: str | None = None
+) -> str:
+    """✕ marker below each always-failing slot (dice_display.md §5 / §10.2).
+
+    color_hint sets the perspective colour: the defender sees a buff (green, the
+    attacker's low rolls fail), the rolling attacker a debuff (red). Display
+    building block — wired once a producer (e.g. Quantum Shield) supplies the slots.
+    """
+    color = _modifier_color({"color_hint": color_hint, "value": -1})
+    badge = _badge_chip("Auto-fail", color)
+    return _marker_row_html(badge, _AUTO_FAIL_GLYPH, set(slots), base_threshold, color)
+
+
 def _render_dice_roll_block(
     title: str,
     skill_label: str,
