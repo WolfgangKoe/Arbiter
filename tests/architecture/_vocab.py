@@ -21,7 +21,7 @@ _DATA = _ROOT / "data"
 _SRC = _ROOT / "src"
 
 # A token is an alphabetic run of length >= 3, lowercased. snake_case and
-# CamelCase identifiers are split first so 'pending_irongob' -> {pending, irongob}.
+# CamelCase identifiers are split first so 'pending_camelCase' -> {pending, camel, case}.
 _WORD = re.compile(r"[a-z]{3,}")
 _CAMEL = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 

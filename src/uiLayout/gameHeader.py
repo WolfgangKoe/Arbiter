@@ -246,8 +246,8 @@ def _phase_badges_html(phase_idx: int) -> str:
 
 
 def render_game_header() -> None:
-    first = st.session_state.get("first_player", "Necrons")
-    second = st.session_state.get("second_player", "Orks")
+    first = st.session_state.get("first_player", "Player 1")
+    second = st.session_state.get("second_player", "Player 2")
     phase_idx = st.session_state.phase_idx
     phase_name, phase_key = PHASES[phase_idx]
     active = st.session_state.active

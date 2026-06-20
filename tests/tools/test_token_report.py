@@ -15,16 +15,20 @@ from tools.token_report import (
     Subagent,
     UsageRecord,
     _context_status,
+    _render_subagent_archive,
     _render_subagent_corridor,
     _subagent_peak_context,
     bar,
     generate_hints,
+    load_subagent_archive,
+    merge_session_into_archive,
     model_mix_bar,
     parse_first_timestamp,
     parse_first_user_task,
     parse_usage_lines,
     read_subagents,
     render_markdown,
+    save_subagent_archive,
     session_label,
     summarize,
     tier_for_model,
@@ -344,3 +348,108 @@ def test_render_markdown_escapes_angle_bracket_task():
 def test_render_markdown_handles_empty_summary():
     md = render_markdown(summarize([]), generated_at="x", meta={})
     assert "Keine Session-Daten" in md
+
+
+# --- Subagent-Archiv ----------------------------------------------------- #
+
+
+def test_merge_session_into_archive_is_idempotent():
+    """Dieselbe Session zweimal einfügen ergibt genau einen Eintrag."""
+    sub = Subagent("Explore", "Audit YAML", "Sonnet", peak_context=60_000)
+    archive: dict = {}
+    archive = merge_session_into_archive(archive, "sess-A", [sub], "2026-06-20T10:00:00Z")
+    archive = merge_session_into_archive(archive, "sess-A", [sub], "2026-06-20T10:00:00Z")
+
+    assert list(archive.keys()) == ["sess-A"]
+    assert len(archive["sess-A"]) == 1
+    assert archive["sess-A"][0]["description"] == "Audit YAML"
+    assert archive["sess-A"][0]["peak_context"] == 60_000
+
+
+def test_merge_session_into_archive_accumulates_distinct_sessions():
+    """Zwei verschiedene Sessions werden beide behalten."""
+    sub_a = Subagent("Explore", "Task A", "Sonnet", peak_context=40_000)
+    sub_b = Subagent("general-purpose", "Task B", "Opus", peak_context=80_000)
+    archive: dict = {}
+    archive = merge_session_into_archive(archive, "sess-A", [sub_a], "2026-06-19T09:00:00Z")
+    archive = merge_session_into_archive(archive, "sess-B", [sub_b], "2026-06-20T09:00:00Z")
+
+    assert set(archive.keys()) == {"sess-A", "sess-B"}
+    assert archive["sess-A"][0]["description"] == "Task A"
+    assert archive["sess-B"][0]["description"] == "Task B"
+
+
+def test_merge_session_into_archive_skips_sessions_without_subagents():
+    """Sessions ohne Subagenten werden nicht archiviert."""
+    archive = merge_session_into_archive({}, "sess-empty", [], "2026-06-20T10:00:00Z")
+    assert "sess-empty" not in archive
+
+
+def test_load_subagent_archive_returns_empty_for_missing_file(tmp_path):
+    assert load_subagent_archive(tmp_path / "no-such.json") == {}
+
+
+def test_save_and_load_subagent_archive_round_trips(tmp_path):
+    archive_path = tmp_path / "metrics" / "subagent_archive.json"
+    sub = Subagent("Explore", "Round-trip test", "Haiku", peak_context=30_000)
+    archive = merge_session_into_archive({}, "sess-rt", [sub], "2026-06-20T12:00:00Z")
+
+    save_subagent_archive(archive_path, archive)
+    loaded = load_subagent_archive(archive_path)
+
+    assert loaded == archive
+    assert loaded["sess-rt"][0]["tier"] == "Haiku"
+    assert loaded["sess-rt"][0]["peak_context"] == 30_000
+
+
+def test_render_subagent_archive_newest_first():
+    """Der Archiv-Render gibt jüngste Sessions zuerst aus."""
+    archive = {
+        "old": [
+            {
+                "agent_type": "Explore",
+                "description": "Old task",
+                "tier": "Sonnet",
+                "peak_context": 20_000,
+                "started_at": "2026-06-01T09:00:00Z",
+            }
+        ],
+        "new": [
+            {
+                "agent_type": "general-purpose",
+                "description": "New task",
+                "tier": "Opus",
+                "peak_context": 50_000,
+                "started_at": "2026-06-20T09:00:00Z",
+            }
+        ],
+    }
+    lines = _render_subagent_archive(archive, meta={})
+    combined = "\n".join(lines)
+    assert "Subagent-Archiv (je Session)" in combined
+    assert combined.index("New task") < combined.index("Old task")
+
+
+def test_render_subagent_archive_empty_returns_no_section():
+    """Leeres Archiv erzeugt keinen Abschnitt."""
+    assert _render_subagent_archive({}, meta={}) == []
+
+
+def test_render_markdown_includes_archive_section():
+    """render_markdown gibt den Archiv-Abschnitt weiter wenn subagent_archive nicht leer."""
+    records = [_record("s1", "main", "claude-opus-4-8", inp=10)]
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "Archiv-Test", [])}
+    archive = {
+        "s1": [
+            {
+                "agent_type": "Explore",
+                "description": "Archiv-Aufgabe",
+                "tier": "Sonnet",
+                "peak_context": 60_000,
+                "started_at": "2026-06-20T09:00:00Z",
+            }
+        ]
+    }
+    md = render_markdown(summarize(records), generated_at="x", meta=meta, subagent_archive=archive)
+    assert "Subagent-Archiv (je Session)" in md
+    assert "Archiv-Aufgabe" in md

@@ -652,7 +652,7 @@ def _render_damage_block(
                 try:
                     atk_unit, _ = lookup(atk_f, atk_uid)
                     if atk_unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee"):
-                        st.session_state.pending_irongob = {
+                        st.session_state.pending_triggered_relic = {
                             "uid": atk_uid,
                             "faction": atk_f,
                             "step": "initial",

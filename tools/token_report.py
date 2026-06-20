@@ -709,10 +709,12 @@ def render_markdown(
     generated_at: str,
     meta: dict[str, SessionMeta] | None = None,
     notes: dict[str, str] | None = None,
+    subagent_archive: dict[str, list[dict]] | None = None,
 ) -> str:
     """Rendert den Effizienz-Report als Markdown (ADR-0002, leser-orientiert)."""
     meta = meta or {}
     notes = notes or {}
+    subagent_archive = subagent_archive or {}
     grand = summary["grand_total"]
     lines: list[str] = [
         "# Token-Report — Effizienz statt Menge",
@@ -738,6 +740,7 @@ def render_markdown(
     lines += _render_hints(summary["sessions"][focus])
     lines += _render_subagent_corridor(focus_meta)
     lines += _render_subagents(ordered, meta)
+    lines += _render_subagent_archive(subagent_archive, meta)
     lines += [
         "---",
         "",
@@ -749,11 +752,127 @@ def render_markdown(
 
 
 # --------------------------------------------------------------------------- #
+# Subagent-Archiv (je Session, akkumulierend)                                  #
+# --------------------------------------------------------------------------- #
+
+
+def load_subagent_archive(path: Path) -> dict[str, list[dict]]:
+    """Lädt das persistente Subagent-Archiv aus ``path`` (leer, wenn Datei fehlt).
+
+    Struktur: ``{session_id: [{"agent_type": ..., "description": ..., "tier": ...,
+    "peak_context": int|null, "started_at": str|null}, ...], ...}``
+    """
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    return data
+
+
+def _subagents_to_records(subagents: list[Subagent], started_at: str | None) -> list[dict]:
+    """Konvertiert ``Subagent``-Objekte in archivierbare Dicts."""
+    return [
+        {
+            "agent_type": sub.agent_type,
+            "description": sub.description,
+            "tier": sub.tier,
+            "peak_context": sub.peak_context,
+            "started_at": started_at,
+        }
+        for sub in subagents
+    ]
+
+
+def merge_session_into_archive(
+    archive: dict[str, list[dict]],
+    session_id: str,
+    subagents: list[Subagent],
+    started_at: str | None,
+) -> dict[str, list[dict]]:
+    """Fügt die Subagenten einer Session in das Archiv ein (Upsert, idempotent).
+
+    Läuft der Hook mehrfach für dieselbe Session, wird der bestehende Eintrag
+    überschrieben (keyed by ``session_id``) — keine Duplikate.
+    Sessions ohne Subagenten werden nicht archiviert.
+    """
+    updated = dict(archive)
+    if subagents:
+        updated[session_id] = _subagents_to_records(subagents, started_at)
+    return updated
+
+
+def save_subagent_archive(path: Path, archive: dict[str, list[dict]]) -> None:
+    """Schreibt das Subagent-Archiv als JSON nach ``path``."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(archive, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _render_subagent_archive(
+    archive: dict[str, list[dict]],
+    meta: dict[str, SessionMeta],
+) -> list[str]:
+    """Abschnitt „Subagent-Archiv (je Session)" — ältere Sessions bleiben erhalten."""
+    # Sessions mit Subagenten, neueste zuerst (nach started_at; Fallback: session_id).
+    sessions_with_subs = [sid for sid in archive if archive[sid]]
+    if not sessions_with_subs:
+        return []
+
+    def _sort_key(sid: str) -> tuple[str, str]:
+        # Prefer started_at from live meta; fall back to archive record's started_at field.
+        live_started = meta.get(sid, _EMPTY_META).started_at
+        if live_started:
+            return (live_started, sid)
+        first_rec = archive[sid][0] if archive[sid] else {}
+        return (first_rec.get("started_at") or "", sid)
+
+    ordered = sorted(sessions_with_subs, key=_sort_key, reverse=True)
+
+    lines = [
+        "## Subagent-Archiv (je Session)",
+        "",
+        "_Akkumuliert über alle Sessions — ältere Einträge bleiben bei Neugenerierung erhalten._",
+        "",
+        "| Session | Modell | Agent | Aufgabe | Peak |",
+        "|---|---|---|---|---|",
+    ]
+    for sid in ordered:
+        # Use live meta for label if available, otherwise reconstruct from archive.
+        live_meta = meta.get(sid)
+        if live_meta:
+            label = session_label(sid, live_meta.started_at)
+        else:
+            first_started = archive[sid][0].get("started_at") if archive[sid] else None
+            label = session_label(sid, first_started)
+
+        for rec in archive[sid]:
+            peak_val = rec.get("peak_context")
+            if peak_val is not None:
+                peak_cell = f"{_k(peak_val)} {_context_status(peak_val)}"
+            else:
+                peak_cell = "—"
+            lines.append(
+                f"| {_cell(label)} | {_cell(rec.get('tier') or '?')} "
+                f"| {_cell(rec.get('agent_type') or '?')} "
+                f"| {_cell(rec.get('description') or '')} | {_cell(peak_cell)} |"
+            )
+    lines.append("")
+    return lines
+
+
+# --------------------------------------------------------------------------- #
 # I/O                                                                          #
 # --------------------------------------------------------------------------- #
 
 _OUTPUT_DOC = Path("docs/metrics/overview.md")
 _NOTES_FILE = Path("docs/metrics/session_notes.yaml")
+_ARCHIVE_FILE = Path("docs/metrics/subagent_archive.json")
 
 
 def load_session_notes(path: Path) -> dict[str, str]:
@@ -793,16 +912,26 @@ def main(argv: list[str] | None = None) -> int:
     records, meta = collect_project(project_dir, session_filter=args.session)
     summary = summarize(records)
     generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
+
+    # Subagent-Archiv: laden, mit aktuellen Session-Daten mergen (Upsert).
+    archive = load_subagent_archive(_ARCHIVE_FILE)
+    for session_id, session_meta in meta.items():
+        archive = merge_session_into_archive(
+            archive, session_id, session_meta.subagents, session_meta.started_at
+        )
+
     report = render_markdown(
         summary,
         generated_at=generated_at,
         meta=meta,
         notes=load_session_notes(_NOTES_FILE),
+        subagent_archive=archive,
     )
 
     if args.write:
         _OUTPUT_DOC.parent.mkdir(parents=True, exist_ok=True)
         _OUTPUT_DOC.write_text(report + "\n", encoding="utf-8")
+        save_subagent_archive(_ARCHIVE_FILE, archive)
         print(f"Report geschrieben: {_OUTPUT_DOC}")
     else:
         print(report)

@@ -32,6 +32,7 @@ Live nach jedem `pytest`-Lauf im **Schulden-Scoreboard** (`tests/conftest.py`). 
 | Datum | INV-4b Vokabular (Tokens) | INV-4 Allowlist (Einträge) | INV-5 AC-IDs |
 |---|---|---|---|
 | 2026-06-16 | 20 | 10 | 5 |
+| 2026-06-20 | 19 | 5 | 5 |
 
 Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
 
@@ -59,8 +60,10 @@ Zwei Klassen:
 **DEBT (Cleanup-Aufgaben → [backlog.md](../goals/backlog.md)):**
 - `gameMechanic/game_state.py` — hartcodierte Default-Roster (`necrons_alpha.yaml`/`necrons_beta.yaml`).
 - `gameObjects/loader.py` — `faction_dir`-Default `"necrons"`.
-- `uiLayout/gameHeader.py`, `uiLayout/gameProtocoll.py` — Default-Spielerlabels `"Necrons"`/`"Orks"`.
-- `uiLayout/setupScreen.py` — fraktionsspezifischer Caption-Text.
+
+  _Erledigt 2026-06-20:_ `gameHeader.py`/`gameProtocoll.py` Default-Spielerlabels
+  (`"Necrons"`/`"Orks"` → `"Player 1/2"`) und `setupScreen.py` Caption (fraktions-neutral) —
+  aus Allowlist entfernt (10 → 5 Einträge).
 
 Ziel: DEBT-Einträge nach und nach auflösen (Default aus den gewählten Armeen ableiten) und aus der Allowlist entfernen.
 
@@ -80,7 +83,9 @@ so ein Token in einem `src/`-Bezeichner oder String auf → Leck.
   der nicht mehr leckt, bricht ebenfalls (Ratchet → Schuld nur kleiner).
 - Aktuelle Hauptschuld (DEBT): `protocol`/`protocols` als generischer Round-Choice-Begriff
   (Necron-Wort) quer durch `src/`; benannte Items (`orb`, `overlord`, `phaeron`,
-  `irongob`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`) in den Phasen-/Render-Modulen.
+  `gloom`, `prism`, `dakka`, `klaw`, `tesla`) in den Phasen-/Render-Modulen.
+  (`irongob` 2026-06-20 erledigt: State-Key `pending_irongob` → `pending_triggered_relic`,
+  `res_orb_*` → `revive_wargear_*`.)
 - LEGIT: `gameObjects/rosz_importer.py` (Fraktionslabel-Normalisierung).
 
 ---

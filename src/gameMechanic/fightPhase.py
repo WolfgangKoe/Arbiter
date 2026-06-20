@@ -125,7 +125,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
     Step 'initial': target selection + Failed / Continue buttons.
     Step 'assign':  +/- wound counter + Back / Apply buttons.
     """
-    pending = st.session_state.get("pending_irongob") or {}
+    pending = st.session_state.get("pending_triggered_relic") or {}
     uid = pending.get("uid", "")
     faction = pending.get("faction", "")
     step = pending.get("step", "initial")
@@ -135,7 +135,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
     unit, _ = lookup(faction, uid)
     te = unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee")
     if not te:
-        st.session_state.pending_irongob = None
+        st.session_state.pending_triggered_relic = None
         return
 
     display_name = unit.relic_name or unit.relic_id
@@ -190,7 +190,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                 log_action(
                     state["round"], "fight", unit.name_en, f"{display_name}: failed — no effect"
                 )
-                st.session_state.pending_irongob = None
+                st.session_state.pending_triggered_relic = None
                 st.rerun()
         with col2:
             if st.button(
@@ -204,7 +204,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                 updated["step"] = "assign"
                 updated["target_uid"] = selected_target
                 updated["target_faction"] = enemy_faction
-                st.session_state.pending_irongob = updated
+                st.session_state.pending_triggered_relic = updated
                 st.rerun()
 
     # ------------------------------------------------------------------
@@ -225,7 +225,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
             if st.button("−", key="mortal_minus", disabled=mortals <= 0, use_container_width=True):
                 updated = dict(pending)
                 updated["mortals"] = mortals - 1
-                st.session_state.pending_irongob = updated
+                st.session_state.pending_triggered_relic = updated
                 st.rerun()
         with col_count:
             st.markdown(
@@ -238,7 +238,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
             ):
                 updated = dict(pending)
                 updated["mortals"] = mortals + 1
-                st.session_state.pending_irongob = updated
+                st.session_state.pending_triggered_relic = updated
                 st.rerun()
 
         col1, col2 = st.columns(2)
@@ -247,7 +247,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                 updated = dict(pending)
                 updated["step"] = "initial"
                 updated["mortals"] = 0
-                st.session_state.pending_irongob = updated
+                st.session_state.pending_triggered_relic = updated
                 st.rerun()
         with col2:
             plural = "s" if mortals != 1 else ""
@@ -276,7 +276,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                     unit.name_en,
                     f"{display_name}: {mortals} mortal wound{plural} → {target_unit.name_en}",
                 )
-                st.session_state.pending_irongob = None
+                st.session_state.pending_triggered_relic = None
                 st.rerun()
 
 
@@ -334,7 +334,7 @@ class FightPhaseHandler:
         second: str = state["second_player"]
         active_player: str = st.session_state.active
 
-        if st.session_state.get("pending_irongob"):
+        if st.session_state.get("pending_triggered_relic"):
             _render_mortal_after_melee(state)
             return
 

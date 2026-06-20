@@ -70,6 +70,11 @@ def _current_phase_key() -> str:
     return PHASES[st.session_state.phase_idx][1]
 
 
+def _ability_section_visible(phase_key: str) -> bool:
+    """Round-choice and once-per-battle UI appear from the command phase on, never in setup."""
+    return phase_key != "setup"
+
+
 def _ability_matches_phase(ability: Ability, phase_key: str) -> bool:
     phases = ability.trigger.phase
     if isinstance(phases, list):
@@ -249,6 +254,8 @@ def _render_round_choice_ui(faction: str) -> None:
         return
 
     phase_key = _current_phase_key()
+    if not _ability_section_visible(phase_key):
+        return
     is_active = faction == st.session_state.get("active")
     active_key = f"round_choice_active_{faction_dir}"
     directive_key = f"round_choice_directive_{faction_dir}"
@@ -357,6 +364,8 @@ def _render_once_per_battle_ability_ui(
         return
 
     phase_key = _current_phase_key()
+    if not _ability_section_visible(phase_key):
+        return
     current_round = st.session_state.get("round", 1)
     is_active = faction == st.session_state.get("active")
     activated: dict = st.session_state.get("activated_abilities", {})

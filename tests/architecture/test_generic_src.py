@@ -42,11 +42,6 @@ ALLOWLIST: dict[str, set[str]] = {
     # selected armies instead. Tracked: docs/goals/backlog.md (generic-src).
     "gameMechanic/game_state.py": {"necron"},
     "gameObjects/loader.py": {"necron"},
-    # DEBT — default player labels "Necrons"/"Orks" as session_state fallbacks.
-    "uiLayout/gameHeader.py": {"necron", "ork"},
-    "uiLayout/gameProtocoll.py": {"necron", "ork"},
-    # DEBT — faction-specific caption text in the setup screen.
-    "uiLayout/setupScreen.py": {"necron"},
 }
 
 

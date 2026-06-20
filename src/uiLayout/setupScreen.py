@@ -431,7 +431,7 @@ def _render_rosz_import() -> None:
             label_visibility="collapsed",
         )
         if uploaded is None:
-            st.caption("Supports BattleScribe .rosz exports for Necrons. Wargear is not imported.")
+            st.caption("Supports BattleScribe .rosz exports. Wargear is not imported.")
             return
 
         # Deduplicate: only process each unique file once per session

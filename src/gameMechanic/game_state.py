@@ -385,12 +385,12 @@ def init_state(
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)
     st.session_state.cmd_awaiting_ability_id: str | None = None
     st.session_state.cmd_awaiting_required_kw: list = []
-    st.session_state.res_orb_target_uid = None
+    st.session_state.revive_wargear_target_uid = None
     st.session_state.wargear_used: dict[str, bool] = {}
     st.session_state.wargear_awaiting_bearer_uid: str | None = None
     st.session_state.relic_triggered_used: dict[str, bool] = {}
     st.session_state.morgog_cap_rolled_this_phase = False
-    st.session_state.pending_irongob: dict | None = None
+    st.session_state.pending_triggered_relic: dict | None = None
     st.session_state.veil_awaiting_confirm: bool = False
     st.session_state.veil_core_target_uid: str | None = None
 
@@ -478,7 +478,7 @@ def reset_game() -> None:
 def _reset_phase_state() -> None:
     st.session_state.cp_granted_this_phase = False
     st.session_state.morgog_cap_rolled_this_phase = False
-    st.session_state.pending_irongob = None
+    st.session_state.pending_triggered_relic = None
     st.session_state.veil_awaiting_confirm = False
     st.session_state.veil_core_target_uid = None
     for k in list(st.session_state.keys()):

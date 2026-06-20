@@ -164,7 +164,7 @@ def _render_buff_roll_ability(
             ]
             st.session_state.cmd_awaiting_badge_label = ability.badge_label or ability.name_en
             st.session_state.cmd_awaiting_effect_type = ability.effect.type
-            st.session_state.res_orb_awaiting_target = False
+            st.session_state.revive_wargear_awaiting_target = False
             st.rerun()
 
 
@@ -235,38 +235,38 @@ def _render_resurrection_orb(
         st.caption("Already used this battle.")
         return
 
-    res_orb_target = st.session_state.get("res_orb_target_uid")
-    if res_orb_target:
-        target_unit = unit_by_id.get(res_orb_target)
+    revive_wargear_target = st.session_state.get("revive_wargear_target_uid")
+    if revive_wargear_target:
+        target_unit = unit_by_id.get(revive_wargear_target)
         if target_unit:
             st.caption(f'Target: **{target_unit.name_en}** — verify within 6" on table')
             wound_adjustment_buttons(
-                st.session_state.get("active", ""), res_orb_target, target_unit
+                st.session_state.get("active", ""), revive_wargear_target, target_unit
             )
         if st.button(
             "Confirm & Close Resurrection Orb",
-            key="cmd_res_orb_confirm",
+            key="cmd_revive_wargear_confirm",
             use_container_width=True,
         ):
-            name = target_unit.name_en if target_unit else res_orb_target
+            name = target_unit.name_en if target_unit else revive_wargear_target
             st.session_state.wargear_used[orb_id] = True
             log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
-            st.session_state.res_orb_target_uid = None
+            st.session_state.revive_wargear_target_uid = None
             st.rerun()
-    elif st.session_state.get("res_orb_awaiting_target", False):
+    elif st.session_state.get("revive_wargear_awaiting_target", False):
         st.info("Select a target unit from your army list.")
-        if st.button("Cancel", key="res_orb_cancel", use_container_width=True):
-            st.session_state.res_orb_awaiting_target = False
+        if st.button("Cancel", key="revive_wargear_cancel", use_container_width=True):
+            st.session_state.revive_wargear_awaiting_target = False
             st.session_state.wargear_awaiting_bearer_uid = None
             st.rerun()
     else:
         if st.button(
             "Use Resurrection Orb",
-            key="cmd_res_orb",
+            key="cmd_revive_wargear",
             type="primary",
             use_container_width=True,
         ):
-            st.session_state.res_orb_awaiting_target = True
+            st.session_state.revive_wargear_awaiting_target = True
             st.session_state.wargear_awaiting_bearer_uid = bearer_uid
             st.session_state.cmd_awaiting_ability_id = None
             st.rerun()

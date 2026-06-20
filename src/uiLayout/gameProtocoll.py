@@ -72,8 +72,8 @@ def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
 
 
 def _render_battle_log() -> None:
-    first = st.session_state.get("first_player", "Necrons")
-    second = st.session_state.get("second_player", "Orks")
+    first = st.session_state.get("first_player", "Player 1")
+    second = st.session_state.get("second_player", "Player 2")
 
     st.caption(
         f"**Round** {st.session_state.get('round', 1)}  ·  "

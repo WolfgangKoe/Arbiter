@@ -131,7 +131,7 @@ def _make_session(extra: dict | None = None) -> _S:
         round=1,
         active_modifiers=[],
         morgog_cap_rolled_this_phase=True,
-        pending_irongob={"uid": "some.unit", "faction": "Orks"},
+        pending_triggered_relic={"uid": "some.unit", "faction": "Orks"},
         cp_granted_this_phase=True,
         used_stratagem_ids=set(),
         fight_current_player=None,
@@ -153,12 +153,12 @@ def test_reset_phase_clears_morgog_flag() -> None:
     assert session.morgog_cap_rolled_this_phase is False
 
 
-def test_reset_phase_clears_pending_irongob() -> None:
+def test_reset_phase_clears_pending_triggered_relic() -> None:
     session = _make_session()
     _st_mock.session_state = session
     _gs.st.session_state = session
     _gs._reset_phase_state()
-    assert session.pending_irongob is None
+    assert session.pending_triggered_relic is None
 
 
 def test_relic_triggered_used_persists_across_phase_reset() -> None:

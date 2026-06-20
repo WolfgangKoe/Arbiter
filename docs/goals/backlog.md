@@ -31,18 +31,15 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   (nicht Roster-Titel); Subfaction-Badge generisch + **immer sichtbar** (Wert /
   „No <Label>" / „No Subfaction"); helles Blau `#a5b4fc`. Alle Roster mit Pflicht-
   Subfaction. Pins: `AC-SUBFACTION-01..05`. „dynasty"-Vokabular aus `src/` entfernt.
-- 🔲 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause): Direktive darf **nur in der
-  Kommandophase** wählbar sein — **nicht im Setup** (`faction_overview.txt` Z. 568:
-  Direktive „at the start of each battle round"; Setup = nur Zuweisung zu Runden, Z. 546)
-  und ab Bewegungsphase gesperrt. **Bug (S52 manuell entdeckt):**
-  `armyCard._render_round_choice_ui` läuft auch im Setup (Seitenleiste in allen Phasen),
-  aktiviert per Auto-Block (`if not active_id`) das Runde-1-Protokoll + zeigt Direktiven-
-  Buttons; das gepinnte `round_choice_active`/`_directive` blockiert zudem die nachträgliche
-  Rundenzuweisung. **Fix:** in `_render_round_choice_ui` früh `return`, wenn
-  `phase_key == "setup"` (einziger Setup-Einstieg ist `_render_round_choice_assignment`);
-  zusätzlich Direktiven-Buttons (`_render_directive_buttons`/`_render_extra_round_choice`)
-  an `phase_key == "command"` koppeln. Render-Code → manuelle Verifikation. AC + ggf.
-  reiner Gating-Helfer als Regressionstest.
+- 🟡 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause): **Setup-Leck erledigt 2026-06-20.**
+  Bug (Nutzer-Screenshots): Protokoll-Direktiven-Buttons + WAAAGH-Status erschienen im Setup
+  und wurden durch den First-Player-Toggle (`active` gesetzt) sogar wählbar; der Auto-Block
+  `if not active_id` schrieb `round_choice_active_*` schon im Setup. **Fix:** reiner Helfer
+  `_ability_section_visible(phase_key)` (`!= "setup"`) + früher `return` in
+  `armyCard._render_round_choice_ui` **und** `_render_once_per_battle_ability_ui`;
+  Regressionstest `test_ability_sections_hidden_in_setup_only`. Render-Code → manuelle
+  Verifikation steht (s. u.). **Offen (Rest #2b):** Direktive ab Bewegungsphase sperren
+  (eigener kleiner Task).
 - 🔲 **#2 Protokoll-Buff-Audit** (Phase 3): **9 von 12** Direktiv-Effekten sind in
   `ability_engine.get_active_round_choice_modifier` **nicht verdrahtet** → unsichtbar.
   Jeden einzeln verdrahten/anzeigen, je eigener AC. Soll-Tabelle:
@@ -180,9 +177,13 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   `protocol`/`protocols` faktion-neutral als `round_choice` umbenannt (Klasse
   `RoundChoiceAbility`, Session-Keys `round_choice_*`, Datei `round_choice_ability.py`),
   Ledger-Einträge entfernt; Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. zur
-  `reanimation`-Schuld (`reanimationProtocols`). Verbleibend: benannte Items (`orb`, `overlord`,
-  `phaeron`, `irongob`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`, `reanimation`, `arkana`,
-  `dynasty`) aus Phasen-/Render-Modulen in YAML/Daten ziehen. Ziel: Ledger schrumpfen (Ratchet).
+  `reanimation`-Schuld (`reanimationProtocols`). ✅ **2026-06-20:** Quick-Wins (Spielerlabels
+  `gameHeader`/`gameProtocoll`, Caption `setupScreen`) → generisch; Renames
+  `pending_irongob` → `pending_triggered_relic`, `res_orb_*` → `revive_wargear_*`
+  (`irongob` komplett raus; INV-4 Allowlist 10→5, INV-4b 20→19 Tokens). Verbleibend:
+  benannte Items (`orb`, `overlord`, `phaeron`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`,
+  `reanimation`, `arkana`, `dynasty`) aus Phasen-/Render-Modulen in YAML/Daten ziehen
+  (Schema-Urteil → Konsens). Ziel: Ledger schrumpfen (Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
   nicht als Wächter erzwungen.

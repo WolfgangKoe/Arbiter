@@ -35,17 +35,12 @@ LEDGER: dict[str, set[str]] = {
     "uiLayout/dice_html.py": {"dakka", "klaw", "tesla"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
     "gameMechanic/commandPhase.py": {"orb", "overlord", "phaeron", "resurrection"},
-    "gameMechanic/fightPhase.py": {"irongob"},
-    "gameMechanic/game_state.py": {"irongob", "necrons", "orb"},
+    "gameMechanic/game_state.py": {"necrons"},
     "gameMechanic/movementPhase.py": {"dynasty"},
     "gameMechanic/psychicPhase.py": {"gloom", "prism"},
     "gameObjects/loader.py": {"arkana", "necrons"},
     # 'protocols' here is the Necron 'reanimationProtocols' rule key (reanimation debt).
-    "uiLayout/_common.py": {"irongob", "klaw", "protocols", "reanimation"},
-    "uiLayout/gameHeader.py": {"necrons", "orks"},
-    "uiLayout/gameProtocoll.py": {"necrons", "orks"},
-    "uiLayout/setupScreen.py": {"necrons"},
-    "uiLayout/unitCard.py": {"orb"},
+    "uiLayout/_common.py": {"klaw", "protocols", "reanimation"},
 }
 
 

@@ -1,0 +1,413 @@
+{
+  "0041c5ee-47b8-45cc-aa19-31abe1066d69": [
+    {
+      "agent_type": "Explore",
+      "description": "Explore data directory structure and spec",
+      "tier": "Haiku",
+      "peak_context": 47696,
+      "started_at": "2026-05-31T14:05:57.022Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Explore wahapedia scraper capabilities",
+      "tier": "Haiku",
+      "peak_context": 34591,
+      "started_at": "2026-05-31T14:05:57.022Z"
+    }
+  ],
+  "05f4c40e-7f44-4451-8d20-29eee4025c22": [
+    {
+      "agent_type": "Explore",
+      "description": "Explore web frontend files",
+      "tier": "Haiku",
+      "peak_context": 35116,
+      "started_at": "2026-05-24T22:10:11.327Z"
+    }
+  ],
+  "147f87c8-fcaa-4bb2-ac10-05644ff69669": [
+    {
+      "agent_type": "Explore",
+      "description": "Audit all YAML data files across all factions for structural redundancy",
+      "tier": "Haiku",
+      "peak_context": 48907,
+      "started_at": "2026-06-07T17:39:30.134Z"
+    }
+  ],
+  "15dddda1-0b08-4538-8a17-b7b10d10c2b4": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Subfaction affinity verification Necrons + Custodes",
+      "tier": "Sonnet",
+      "peak_context": 20347,
+      "started_at": "2026-06-04T07:32:20.867Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "WH40K 9E core rules research for shared_abilities",
+      "tier": "Sonnet",
+      "peak_context": 53105,
+      "started_at": "2026-06-04T07:32:20.867Z"
+    }
+  ],
+  "2672bd18-4c21-4b30-b755-38a6830471ba": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Draft Psychic Phase rule catalog",
+      "tier": "Sonnet",
+      "peak_context": 28912,
+      "started_at": "2026-06-19T15:34:53.230Z"
+    }
+  ],
+  "3019eacd-95c7-4491-b18f-fca8a766fbde": [
+    {
+      "agent_type": "Explore",
+      "description": "Explore data layer: YAML files, loader, schemas",
+      "tier": "Haiku",
+      "peak_context": 31002,
+      "started_at": "2026-06-03T21:37:12.677Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Explore code callers and test patterns",
+      "tier": "Haiku",
+      "peak_context": 48939,
+      "started_at": "2026-06-03T21:37:12.677Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Explore Ork data files and full arkana.yaml for cleanup audit",
+      "tier": "Haiku",
+      "peak_context": 46332,
+      "started_at": "2026-06-03T21:37:12.677Z"
+    }
+  ],
+  "31e0b9d7-ba52-419e-babb-983e0365c250": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Draft governance operating-model docs",
+      "tier": "Sonnet",
+      "peak_context": 28385,
+      "started_at": "2026-06-18T17:54:32.671Z"
+    }
+  ],
+  "32f76ee9-9486-4304-9765-007271efab2e": [
+    {
+      "agent_type": "Explore",
+      "description": "Ork unit abilities gap analysis",
+      "tier": "Haiku",
+      "peak_context": 75651,
+      "started_at": "2026-06-05T18:15:27.569Z"
+    }
+  ],
+  "33526f8d-0f94-4d6c-b45f-09f71dbd0ef4": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia: PL, Punkte, Brackets für Necrons fetchen",
+      "tier": "Sonnet",
+      "peak_context": 74898,
+      "started_at": "2026-05-31T17:28:41.008Z"
+    }
+  ],
+  "366a7c8e-5792-474c-864a-905febb99cba": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Documentation consistency audit",
+      "tier": "Sonnet",
+      "peak_context": 73907,
+      "started_at": "2026-05-30T03:54:55.741Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia setup rules research",
+      "tier": "Sonnet",
+      "peak_context": 12682,
+      "started_at": "2026-05-30T03:54:55.741Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "BattleScribe XML format research",
+      "tier": "Sonnet",
+      "peak_context": 87360,
+      "started_at": "2026-05-30T03:54:55.741Z"
+    }
+  ],
+  "42c5e10a-262d-466e-80fd-540bcfbf930f": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Draft Charge/Morale rule entries",
+      "tier": "Sonnet",
+      "peak_context": 46563,
+      "started_at": "2026-06-19T14:28:56.525Z"
+    }
+  ],
+  "4e6f19df-45a6-4f68-ae45-241aeca43432": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia game setup rules research",
+      "tier": "Sonnet",
+      "peak_context": 35931,
+      "started_at": "2026-06-02T18:50:30.031Z"
+    }
+  ],
+  "51558266-33d7-4281-adab-3bd39b158f1f": [
+    {
+      "agent_type": "Explore",
+      "description": "Vollständige Ability-Analyse aller Fraktionen",
+      "tier": "Haiku",
+      "peak_context": 81089,
+      "started_at": "2026-06-03T18:08:35.770Z"
+    }
+  ],
+  "593cf2bf-6da6-44dd-b5f4-ec42392d3372": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Add subagent peak-context to overview",
+      "tier": "Sonnet",
+      "peak_context": 52050,
+      "started_at": "2026-06-20T09:41:38.218Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Extract render-ledger logic + tests",
+      "tier": "Sonnet",
+      "peak_context": 103700,
+      "started_at": "2026-06-20T09:41:38.218Z"
+    }
+  ],
+  "5abd5c7c-e30f-4156-9c56-029bda8c69da": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Inventory INV-4b tokens/allowlist",
+      "tier": "Sonnet",
+      "peak_context": 64972,
+      "started_at": "2026-06-20T11:04:57.433Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Prep rules catalog: deployment/scoring",
+      "tier": "Sonnet",
+      "peak_context": 86283,
+      "started_at": "2026-06-20T11:04:57.433Z"
+    }
+  ],
+  "63304cc4-462b-4d6b-8479-9a97113b815e": [
+    {
+      "agent_type": "Explore",
+      "description": "Read key UI files for Ziel 6 analysis",
+      "tier": "Haiku",
+      "peak_context": 43473,
+      "started_at": "2026-06-03T14:06:21.774Z"
+    }
+  ],
+  "754eff0d-b00b-479d-9d1e-0409e119932d": [
+    {
+      "agent_type": "Explore",
+      "description": "Audit model-groups code correctness",
+      "tier": "Haiku",
+      "peak_context": 74863,
+      "started_at": "2026-06-11T20:14:36.537Z"
+    }
+  ],
+  "7e13ac5a-a08c-4b82-8b52-67cb87b98630": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Fix setup-phase ability leak",
+      "tier": "Sonnet",
+      "peak_context": 29907,
+      "started_at": "2026-06-20T11:42:20.015Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Generic-src quick-wins and renames",
+      "tier": "Sonnet",
+      "peak_context": 40755,
+      "started_at": "2026-06-20T11:42:20.015Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Archive per-session subagent peaks",
+      "tier": "Sonnet",
+      "peak_context": 51154,
+      "started_at": "2026-06-20T11:42:20.015Z"
+    }
+  ],
+  "7f1575c3-75ae-4f3f-86e0-97ec218c2c0c": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Prepare next session docs",
+      "tier": "Sonnet",
+      "peak_context": 65342,
+      "started_at": "2026-06-19T18:53:31.364Z"
+    }
+  ],
+  "804d9ccd-ba70-41e8-8619-88b1c8c438b1": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Fetch Wahapedia Necrons stratagems page",
+      "tier": "Sonnet",
+      "peak_context": 38633,
+      "started_at": "2026-05-31T05:07:52.741Z"
+    }
+  ],
+  "86550f2b-0945-4ec1-98dd-bd72f66d4e5e": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Combat rule catalog draft",
+      "tier": "Sonnet",
+      "peak_context": 77752,
+      "started_at": "2026-06-17T16:45:22.912Z"
+    }
+  ],
+  "9f42d3f0-0600-4d13-b903-edc498864aa9": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Draft R-MOVE rule catalog entries",
+      "tier": "Sonnet",
+      "peak_context": 34222,
+      "started_at": "2026-06-18T20:32:34.135Z"
+    }
+  ],
+  "a176c827-7a51-449c-bc5e-4dbaa1dc622d": [
+    {
+      "agent_type": "Explore",
+      "description": "Audit test coverage and docs",
+      "tier": "Haiku",
+      "peak_context": 49064,
+      "started_at": "2026-06-11T16:49:35.562Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Audit security and input handling",
+      "tier": "Haiku",
+      "peak_context": 45159,
+      "started_at": "2026-06-11T16:49:35.562Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Audit correctness and bugs",
+      "tier": "Haiku",
+      "peak_context": 70629,
+      "started_at": "2026-06-11T16:49:35.562Z"
+    },
+    {
+      "agent_type": "Explore",
+      "description": "Audit tech debt and architecture",
+      "tier": "Haiku",
+      "peak_context": 40355,
+      "started_at": "2026-06-11T16:49:35.562Z"
+    }
+  ],
+  "bc940273-dd68-4de7-aca0-abf7ab6d67d9": [
+    {
+      "agent_type": "Explore",
+      "description": "Scan for faction-specific hardcoding in gameMechanics",
+      "tier": "Haiku",
+      "peak_context": 56143,
+      "started_at": "2026-06-04T19:40:37.161Z"
+    }
+  ],
+  "bdc63d07-913f-4e2b-93ec-64cf695e94fc": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia 9E rules research",
+      "tier": "Sonnet",
+      "peak_context": 31354,
+      "started_at": "2026-06-04T12:18:26.306Z"
+    }
+  ],
+  "be0fc36f-3f7b-4aba-81f0-cdb7cbdab06a": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Draft Command Phase rule catalog",
+      "tier": "Sonnet",
+      "peak_context": 65033,
+      "started_at": "2026-06-17T18:07:55.110Z"
+    }
+  ],
+  "d46eacfb-3756-4a5e-ac14-510bced2312d": [
+    {
+      "agent_type": "Explore",
+      "description": "Test file analysis for session state keys",
+      "tier": "Haiku",
+      "peak_context": 39086,
+      "started_at": "2026-06-01T20:22:45.129Z"
+    }
+  ],
+  "db34412f-bdca-4f4a-90c1-37fe61f807ea": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Ziel 1A — uiLayout Struktursplit",
+      "tier": "Sonnet",
+      "peak_context": 55595,
+      "started_at": "2026-05-26T18:34:42.613Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Ziel 1B — gameObjects Foundation",
+      "tier": "Sonnet",
+      "peak_context": 38826,
+      "started_at": "2026-05-26T18:34:42.613Z"
+    }
+  ],
+  "dc2b02fb-1455-4b67-8bf4-85c620bc0fcc": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia relic + weapon ability texts",
+      "tier": "Sonnet",
+      "peak_context": 63529,
+      "started_at": "2026-05-31T12:32:09.657Z"
+    }
+  ],
+  "e114e70f-a9a5-40aa-aff2-d3ec210b894f": [
+    {
+      "agent_type": "general-purpose",
+      "description": "A1+A2 architecture research for Arbiter review doc",
+      "tier": "Sonnet",
+      "peak_context": 72726,
+      "started_at": "2026-05-28T07:37:12.034Z"
+    }
+  ],
+  "e259fb10-28e5-4a2b-a6bf-f4fc29e2938f": [
+    {
+      "agent_type": "Explore",
+      "description": "Research faction abilities across all factions",
+      "tier": "Haiku",
+      "peak_context": 27098,
+      "started_at": "2026-06-03T20:39:14.710Z"
+    },
+    {
+      "agent_type": "general-purpose",
+      "description": "Research faction command-phase mechanics on Wahapedia",
+      "tier": "Sonnet",
+      "peak_context": 21144,
+      "started_at": "2026-06-03T20:39:14.710Z"
+    }
+  ],
+  "ead78f19-c77a-41ae-ae1d-761e005a4d8c": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Wahapedia data fetch + YAML comparison for Necrons and Orks",
+      "tier": "Sonnet",
+      "peak_context": 57309,
+      "started_at": "2026-06-04T17:42:13.984Z"
+    }
+  ],
+  "f4c215ad-bd7c-4d6b-8e4a-ad71d73de4f9": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Klasse-1 Ledger-Tests + R-CMD-03 Befund",
+      "tier": "Sonnet",
+      "peak_context": 96450,
+      "started_at": "2026-06-20T08:44:34.795Z"
+    }
+  ],
+  "f76dbdd8-fb01-4e75-bc02-30d3dc44d5e1": [
+    {
+      "agent_type": "general-purpose",
+      "description": "Battle-Round rules catalog",
+      "tier": "Sonnet",
+      "peak_context": 47294,
+      "started_at": "2026-06-19T20:08:36.869Z"
+    }
+  ]
+}

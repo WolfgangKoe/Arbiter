@@ -218,8 +218,8 @@ def render_unit_card(
             cmd_awaiting_id: str | None = (
                 st.session_state.get("cmd_awaiting_ability_id") if phase_key == "command" else None
             )
-            res_orb_awaiting = phase_key == "command" and st.session_state.get(
-                "res_orb_awaiting_target", False
+            revive_wargear_awaiting = phase_key == "command" and st.session_state.get(
+                "revive_wargear_awaiting_target", False
             )
 
             if cmd_awaiting_id:
@@ -265,18 +265,18 @@ def render_unit_card(
                 else:
                     st.markdown(f"**{unit.name_en}**")
 
-            elif res_orb_awaiting:
+            elif revive_wargear_awaiting:
                 if uid == st.session_state.get("wargear_awaiting_bearer_uid"):
                     st.markdown(f"**{unit.name_en}**")
                 else:
                     if st.button(
                         f"▷ {unit.name_en}",
-                        key=f"res_orb_tgt_{faction}_{uid}",
+                        key=f"revive_wargear_tgt_{faction}_{uid}",
                         type="secondary",
                         use_container_width=True,
                     ):
-                        st.session_state.res_orb_target_uid = uid
-                        st.session_state.res_orb_awaiting_target = False
+                        st.session_state.revive_wargear_target_uid = uid
+                        st.session_state.revive_wargear_awaiting_target = False
                         st.session_state.wargear_awaiting_bearer_uid = None
                         st.rerun()
 

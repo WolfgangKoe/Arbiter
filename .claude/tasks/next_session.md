@@ -21,7 +21,19 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S71, 2026-06-20)
+## Aktueller Stand (nach S72, 2026-06-20)
+
+**S72 — 4 Tasks via 3 parallele Sonnet-Subagenten (disjunkte Dateimengen), Opus reviewt.**
+(1) **Setup-Bug (Nutzer-Fund, = Backlog #2b):** Protokoll-Direktiven + WAAAGH erschienen im
+Setup und wurden per First-Player-Toggle wählbar → reiner Helfer `_ability_section_visible`
++ früher `return` in `armyCard._render_round_choice_ui`/`_render_once_per_battle_ability_ui`;
+Test `test_ability_sections_hidden_in_setup_only`. (2) **INV-4b Quick-Wins:** Spielerlabels
+(`gameHeader`/`gameProtocoll` → `Player 1/2`) + `setupScreen`-Caption generisch. (3) **Renames:**
+`pending_irongob` → `pending_triggered_relic`, `res_orb_*` → `revive_wargear_*` (`irongob` ganz
+raus). → **INV-4 Allowlist 10→5, INV-4b 20→19 Tokens.** (4) **Subagent-Peak-Archiv** (Retro S71):
+`token_report.py` akkumuliert je Session den Subagent-Peak idempotent in
+`docs/metrics/subagent_archive.json` → in `overview.md` „Subagent-Archiv (je Session)".
+**1004 grün, Cov 92.40 %, Floor 90.** Manuelle UI-Prüfung offen (s. u.).
 
 **S71 — Subagent-Checkliste verankert · Coverage-Floor 90 % · Katalog Deployment/Scoring.**
 (1) **Selbstprüf-Checkliste für Subagenten** kanonisch im Operating Model (Event 3
@@ -35,32 +47,29 @@ Deployment (R-DEPLOY-01..09) + Mission-Scoring (R-SCORE-01..13); die 3 implement
 (`adjust_vp`, `adjust_secondary_vp`, VP-Render) mit **5 neuen VP-Tests** als `getestet: ja`
 → keine neue Schuld. **995 grün, Cov 92.40 %, Floor 90.**
 
-**Vorbereitet (Subagent reviewt, Verdrahtung offen) — INV-4b/INV-4 Ledger:**
+**INV-4b/INV-4 Ledger — Restschuld (Quick-Wins + `irongob`/`res_orb` erledigt S72):**
 - **LEGIT (keine Schuld):** `rosz_importer._FACTION_MAP` (I/O-Normalisierung), `typing.Protocol`.
-  Mögliche **stale Ledger-Einträge:** `dynasty`/`gloom`/`prism` (nur in Docstrings).
-- **Quick-Wins (S, kein Test):** Fallback `"Necrons"/"Orks"` → `"Player 1/2"` in
-  `gameHeader.py`+`gameProtocoll.py`; `setupScreen.py:434` Caption ohne Fraktionsname.
-- **Renames (M, Tests mit):** `pending_irongob` → `pending_triggered_relic`; `res_orb_*`-
-  State-Keys → generisch (`commandPhase`/`unitCard`/`game_state`).
-- **Schema-Urteil (Konsens nötig):** `dakka`/`klaw`/`tesla` (Prosa-Suche → typisierte YAML-
-  Felder), `reanimationProtocols`-String, `arkana`-Sektion, Default-Roster-Hardcode
-  (`game_state.py` → `list_available_rosters()`).
+- **Schema-Urteil (Konsens nötig, NICHT Autopilot):** `dakka`/`klaw`/`tesla` (Prosa-Suche →
+  typisierte YAML-Felder), `reanimationProtocols`-String/`reanimation`, `arkana`-Sektion,
+  benannte Items `orb`/`overlord`/`phaeron`/`gloom`/`prism`/`dynasty`, Default-Roster-Hardcode
+  (`game_state.py` → `list_available_rosters()`), `faction_dir`-Default `"necrons"` in `loader.py`.
 
 Frühere Sessions (S60–S70): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-### ▶ Nächster Schritt — INV-4b verdrahten (je eigene Freigabe)
-1. **Quick-Wins zuerst** (risikoarm), dann **Renames mit Test-Update**; je Token grep-
-   Vollständigkeit belegen, Ledger in `architecture_invariants.md` schrumpfen.
-2. **Schema-/`arkana`-/Default-Roster-Fälle = Konsens** (Gate-Aufweichung/Prämisse) —
-   nicht im Autopilot; Optionen mit Stakeholder klären.
-3. Übrige offene Punkte: #3 Gates leser-orientiert prüfen (ADR-0002); #5 Refinement-
-   Automatisierung; #6 Subagent-Peak-Hook (Design, Opus).
+### ▶ Nächster Schritt (Plan-Liste mit Token-Schätzung in S72 erstellt — Prio 5–9)
+1. **Manuelle UI-Verifikation S72-Bug** (PFLICHT vor „fertig"): Setup → keine Protokoll-/
+   WAAAGH-Sektion in beiden Seitenleisten; First-Player-Toggle ändert daran nichts;
+   Befehlsphase → Sektionen erscheinen normal.
+2. **Plan 014** (Verteidiger-Schadenszuweisung, HOCH) — **Mockup-STOP** zuerst; fasst
+   `_common.py` flächig an, nie parallel zu anderen `_common`-Tasks.
+3. **#2 Protokoll-Buff-Audit** (9/12 Direktiv-Effekte unverdrahtet) — je Direktive eigener AC.
+4. **#3/#4 Würfelanzeige** — Soll-Bild zuerst als AC mit Nutzer festlegen.
+5. **Schema-/`arkana`-/Default-Roster-Fälle = Konsens** — nicht im Autopilot.
 
 ### Offene Frage / Retro-Vormerkung
-- **Retro-Maßnahme (Nutzer S71, Screenshots):** Die Subagent-Peak-Darstellung „je Subagent
-  der letzten Session" soll je **abgeschlossener Session erhalten/archiviert** bleiben (nicht
-  überschrieben) — Session-Archiv im Token-Report/`overview.md`. In nächster Session umsetzen
-  (`tools/token_report.py`); Verlaufstabelle bleibt, zusätzlich Pro-Session-Subagent-Block sichern.
+- ✅ **Retro-Maßnahme (Nutzer S71): Subagent-Peak je Session archivieren — erledigt S72.**
+  `token_report.py` merged idempotent in `docs/metrics/subagent_archive.json`; `overview.md`
+  zeigt „Subagent-Archiv (je Session)" (neueste zuerst), Verlaufstabelle bleibt.
 - **Output ↔ cache_read als Tempo-Indikator** (S68): Output gegen Qualität gewichten, nicht
   maximieren — Interpretation in der Retro gemeinsam geschärft; ggf. Zielwert-Feintuning in
   `token_report.py`-Legende nachziehen, falls sich ein konkreter Korridor ergibt.

@@ -551,7 +551,7 @@ def _reset_phase_session(**extra) -> _S:
         round=1,
         cp_granted_this_phase=True,
         morgog_cap_rolled_this_phase=True,
-        pending_irongob="something",
+        pending_triggered_relic="something",
         veil_awaiting_confirm=True,
         veil_core_target_uid="some_uid",
         applied_triggered_veil="used",
@@ -586,10 +586,10 @@ class TestResetPhaseState:
         _gs._reset_phase_state()
         assert s["morgog_cap_rolled_this_phase"] is False
 
-    def test_clears_pending_irongob(self) -> None:
+    def test_clears_pending_triggered_relic(self) -> None:
         s = _reset_phase_session()
         _gs._reset_phase_state()
-        assert s["pending_irongob"] is None
+        assert s["pending_triggered_relic"] is None
 
     def test_clears_veil_state(self) -> None:
         s = _reset_phase_session()
