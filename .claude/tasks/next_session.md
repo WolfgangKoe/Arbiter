@@ -33,7 +33,8 @@ Test `test_ability_sections_hidden_in_setup_only`. (2) **INV-4b Quick-Wins:** Sp
 raus). → **INV-4 Allowlist 10→5, INV-4b 20→19 Tokens.** (4) **Subagent-Peak-Archiv** (Retro S71):
 `token_report.py` akkumuliert je Session den Subagent-Peak idempotent in
 `docs/metrics/subagent_archive.json` → in `overview.md` „Subagent-Archiv (je Session)".
-**1004 grün, Cov 92.40 %, Floor 90.** Manuelle UI-Prüfung offen (s. u.).
+**1004 grün, Cov 92.40 %, Floor 90.** Setup-Fix vom Nutzer manuell verifiziert ✅.
+⚠️ **#4 falsch verstanden** — Duplikat-Tabelle statt Pro-Session-Zusammenfassung (s. Refinement).
 
 **S71 — Subagent-Checkliste verankert · Coverage-Floor 90 % · Katalog Deployment/Scoring.**
 (1) **Selbstprüf-Checkliste für Subagenten** kanonisch im Operating Model (Event 3
@@ -56,15 +57,24 @@ Deployment (R-DEPLOY-01..09) + Mission-Scoring (R-SCORE-01..13); die 3 implement
 
 Frühere Sessions (S60–S70): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-### ▶ Nächster Schritt (Plan-Liste mit Token-Schätzung in S72 erstellt — Prio 5–9)
-1. **Manuelle UI-Verifikation S72-Bug** (PFLICHT vor „fertig"): Setup → keine Protokoll-/
-   WAAAGH-Sektion in beiden Seitenleisten; First-Player-Toggle ändert daran nichts;
-   Befehlsphase → Sektionen erscheinen normal.
-2. **Plan 014** (Verteidiger-Schadenszuweisung, HOCH) — **Mockup-STOP** zuerst; fasst
-   `_common.py` flächig an, nie parallel zu anderen `_common`-Tasks.
-3. **#2 Protokoll-Buff-Audit** (9/12 Direktiv-Effekte unverdrahtet) — je Direktive eigener AC.
-4. **#3/#4 Würfelanzeige** — Soll-Bild zuerst als AC mit Nutzer festlegen.
-5. **Schema-/`arkana`-/Default-Roster-Fälle = Konsens** — nicht im Autopilot.
+### ▶ Nächste Session = REFINEMENT (Themen herunterbrechen, dann je eigener Plan + Freigabe)
+
+**Neu vom Nutzer (S72):**
+1. **Silent King — Command-Protocol-Switch:** Der Stille König hat eine Fähigkeit, die
+   Command Protocols wechselt. Regeln **recherchieren** (`docs/work/wahapedia_necrons/`,
+   Szarekh/Triarchen) — Vorgehen: erst lesen. Ergebnis: entweder **BUG/Anforderungslücke**
+   anlegen (+ ggf. **Regel-Katalog-Ledger-Eintrag**) **oder** „regelkonform → nichts zu tun"
+   dokumentieren. Kein Code ohne Regelbeleg.
+2. **Subagent-Archiv REWORK (Missverständnis korrigieren!):** Die in S72 gebaute **Duplikat-
+   Tabelle** in `overview.md` ist NICHT gewünscht. Soll: **je Session eine sinnvolle
+   Zusammenfassung MIT den Pro-Session-Diagrammen** (Zusammensetzungs-Balken/Peak/Modell-Mix
+   wie im Fokus-Block) **automatisiert** in eine **gesonderte Datei** (oder klar abgetrennt)
+   archiviert — KEINE zweite Tabelle. Duplikat-Tabelle + ggf. `subagent_archive.json`-Format
+   überarbeiten. **Bei Unklarheit ZUERST fragen** (Lehre S72).
+
+**Herunterzubrechen (Backlog, Prio):** Plan 014 (Mockup-STOP), #2 Protokoll-Buff-Audit
+(9/12 Direktiv-Effekte unverdrahtet), #3/#4 Würfelanzeige (Soll-Bild als AC), Schema-/
+`arkana`-/Default-Roster-Konsens.
 
 ### Offene Frage / Retro-Vormerkung
 - ✅ **Retro-Maßnahme (Nutzer S71): Subagent-Peak je Session archivieren — erledigt S72.**
