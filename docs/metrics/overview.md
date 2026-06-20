@@ -1,28 +1,28 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-20 11:03 UTC
+Stand: 2026-06-20 11:28 UTC
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
 
 ## Fokus: letzte Session
 
-**2026-06-20 09:41 · 593cf2bf**
+**2026-06-20 11:04 · 5abd5c7c**
 
-- **Aufgabe:** start session + freigabe
-- **Modelle:** Haupt <synthetic>, Opus · Subagent Sonnet
-- **Tokens gesamt:** 28,890,772 (Haupt 19,893,071 · Subagent 8,997,701, Anteil 31 %)
-- **Peak-Kontext:** ████████████ 162k / 150k
-- **cache_read:** 27,306,771 · **Output:** 235,119
+- **Aufgabe:** start session + freigabe. Du hattest in der letzten Retro einen wichtigen Punkt gemacht: Lehre: „Subagent-grün" ≠ „verd…
+- **Modelle:** Haupt Opus · Subagent Sonnet
+- **Tokens gesamt:** 14,469,857 (Haupt 8,005,115 · Subagent 6,464,742, Anteil 45 %)
+- **Peak-Kontext:** █████████░░░ 114k / 150k
+- **cache_read:** 13,618,066 · **Output:** 158,050
 
 Zusammensetzung aller Antworten (input / cache_creation / cache_read / output):
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  32,539
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  1,316,343
-cache_read     ▕████████████████████████▏   95%  27,306,771
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  235,119
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  25,032
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  668,709
+cache_read     ▕████████████████████████▏   94%  13,618,066
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  158,050
 ```
 
 **Legende & Zielwerte:**
@@ -42,21 +42,21 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-20 09:41 593c  ████████████ 162k ↑    ██░░░░  31% ↑  ████████····
+06-20 11:04 5abd  █████████░░░ 114k ↓    ███░░░  45% ↑  ███████·····
+06-20 09:41 593c  ████████████ 165k ↑    ██░░░░  30% ↑  ████████····
 06-20 08:44 f4c2  ███████████░ 144k ↓    ██░░░░  28% ↑  █████████···
 06-20 07:29 7048  ████████████ 304k ↑    ░░░░░░   0% ↓  ████████████
 06-19 20:08 f76d  ████████████ 152k ↑    ░░░░░░   6% ↑  ███████████·
 06-19 19:31 1273  █████████░░░ 110k ↑    ░░░░░░   0% ↓  ████████████
-06-19 18:53 7f15  █████████░░░ 107k ↓    █░░░░░  12% ↑  ███████████·
 ```
 
 ## Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ 27 von 217 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
-- ✅ 31% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 8,997,701 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 114k blieb im 150k-Korridor.
+- ✅ 45% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 6,464,742 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## Subagenten im 150k-Korridor
 
@@ -65,14 +65,16 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: Add subagent peak… ████░░░░░░░░  52k    ✅
-2   general-purpose: Extract render-le… ████████░░░░ 104k    ✅
+1   general-purpose: Inventory INV-4b … █████░░░░░░░  65k    ✅
+2   general-purpose: Prep rules catalo… ███████░░░░░  86k    ✅
 ```
 
 ## Subagenten — wer wurde wofür gestartet
 
 | Session | Modell | Agent | Aufgabe | Peak |
 |---|---|---|---|---|
+| 2026-06-20 11:04 · 5abd5c7c | Sonnet | general-purpose | Inventory INV-4b tokens/allowlist | 65k ✅ |
+| 2026-06-20 11:04 · 5abd5c7c | Sonnet | general-purpose | Prep rules catalog: deployment/scoring | 86k ✅ |
 | 2026-06-20 09:41 · 593cf2bf | Sonnet | general-purpose | Add subagent peak-context to overview | 52k ✅ |
 | 2026-06-20 09:41 · 593cf2bf | Sonnet | general-purpose | Extract render-ledger logic + tests | 104k ✅ |
 | 2026-06-20 08:44 · f4c215ad | Sonnet | general-purpose | Klasse-1 Ledger-Tests + R-CMD-03 Befund | 96k ✅ |
@@ -120,5 +122,5 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 
 ---
 
-Σ über 153 Sessions: 2,509,671,811 Token (24,050 Antworten).
+Σ über 154 Sessions: 2,524,966,976 Token (24,300 Antworten).
 

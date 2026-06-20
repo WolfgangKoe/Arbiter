@@ -117,7 +117,7 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 
 1. **Regelkonform** — gegen `docs/work/wahapedia_*/` geprüft (nicht aus dem Gedächtnis).
 2. **Generisch** — keine neuen Fraktions-Strings/-Checks in `src/`; Entscheidungen aus YAML.
-3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 80 %; jeder Bugfix bekommt einen Regressionstest.
+3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 90 %; jeder Bugfix bekommt einen Regressionstest.
 4. **Architektur-Gate grün** — `tests/architecture/` (oder bewusste Änderung +
    `architecture_invariants.md`/`architecture.md` nachgezogen, kein stilles Aufweichen).
 5. **Clean Code** — `black`/`isort`/`ruff` sauber; Namen erklären *Was*.
@@ -166,7 +166,9 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Subagent-Muster für Fleißarbeit:** mechanische, eindeutige Arbeit (viel Lesen,
   Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —
   läuft im **isolierten Kontext**, hält das Opus-Hauptfenster schlank. Opus reviewt +
-  finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession.
+  finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession. **Jeder Auftrag
+  enthält eine Selbstprüf-Checkliste** (u. a. Verdrahtung per `grep` belegen) — „Subagent-
+  grün" ≠ „verdrahtet"; Details: `docs/governance/operating_model.md` Event 3 (Sprint).
 - **Skill-/Claude-Inhalte über die API NUR per Subagent ziehen (PFLICHT):** Skill-Definitionen
   oder andere Inhalte über die Claude-/Skill-API **nie direkt im Opus-Hauptfenster** laden —
   immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt. Direktes
@@ -199,7 +201,7 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 pytest --tb=short
 ```
 
-Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **80 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **90 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
 
 ### Regel-Abdeckung — Akzeptanz-Katalog (fachliches Sicherheitsnetz)
 

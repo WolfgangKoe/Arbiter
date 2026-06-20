@@ -1023,3 +1023,183 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **quelle**: core_rules.txt — "When this happens during the battle, the player whose turn it is chooses the order."
 - **code**: —
 - **regel**: Gleichzeitige Regeln *während* des Turns (nicht Battle-Round-Start/-Ende) werden vom Spieler aufgelöst, der am Zug ist. Die App unterstützt keine explizite Reihenfolge-Auswahl bei simultanen Effekten.
+
+## Bereich: Deployment / Aufstellung
+
+### R-DEPLOY-01
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "The players then alternate deploying their units, one at a time, starting with the player who did not pick their deployment zone."
+- **code**: —
+- **regel**: Aufstellungsreihenfolge: Spieler stellen abwechselnd je eine Einheit auf; es beginnt der Spieler, der seine Aufstellungszone nicht gewählt hat. Jedes Modell muss vollständig in der eigenen Zone enden. Nur am Tisch prüfbar; die App kennt keine geometrische Aufstellungszone.
+
+### R-DEPLOY-02
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_in_reserve_cannot_shoot / test_in_reserve_cannot_fight / test_in_reserve_takes_priority
+- **quelle**: core_rules.txt — "abilities that allow [a unit] to be set up in a location other than the battlefield"; "Reinforcement units … always count as having moved this turn."
+- **code**: unit_mutations.py:set_deployment
+- **regel**: Einheiten können als Reserve aufgestellt werden (`deployment = "reserve"`, `in_reserve = True`); die App sperrt dann Schießen, Kämpfen und Angreifen (App-Anteil). Mindestabstand 9", Aufstellungszone und früheste Runde sind Tisch-Anteil.
+
+### R-DEPLOY-03
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "the players must roll off after all other units have been set up and alternate setting up these units, starting with the winner."
+- **code**: —
+- **regel**: Post-Deployment-Aufstellung: Einheiten, die nach der normalen Aufstellung gesetzt werden, werden nach einem Roll-off abwechselnd platziert. Abfolge und Roll-off sind nur am Tisch prüfbar.
+
+### R-DEPLOY-04
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "such models can overhang a deployment zone if it is not possible to set them up otherwise … their base must still be wholly within their deployment zone."
+- **code**: —
+- **regel**: Große Modelle (typisch AIRCRAFT) dürfen die Aufstellungszone überhängen, wenn kein vollständiges Aufstellen möglich ist; die Base muss vollständig in der Zone liegen. Nur am Tisch prüfbar.
+
+### R-DEPLOY-05
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "that unit cannot be set up in any location other than on the battlefield unless specified in the redeployment ability itself."
+- **code**: —
+- **regel**: Wird eine eigentlich außerhalb des Schlachtfelds aufzustellende Einheit für eine Redeployment-Fähigkeit gewählt, darf sie nur noch auf dem Schlachtfeld aufgestellt werden (außer die Fähigkeit erlaubt anderes). Nur am Tisch prüfbar.
+
+### R-DEPLOY-06
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Only Battle-forged armies can use Strategic Reserves … Must pay CPs to place units into Strategic Reserves."
+- **code**: —
+- **regel**: Strategic Reserves: Nur Battle-forged Armeen dürfen Einheiten in die Strategischen Reserven legen; vor der Schlacht werden CPs nach Power Rating bezahlt. Die App implementiert keinen Strategic-Reserve-Mechanismus.
+
+### R-DEPLOY-07
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Strategic Reserve units cannot arrive in the first battle round … Cannot be set up within 9\" of enemy models."
+- **code**: —
+- **regel**: Einheiten aus Strategischen Reserven rücken frühestens in Runde 2 ein, ab Runde 2 nur innerhalb 6" eigener/neutraler Kanten, ab Runde 3 aller Kanten außer der feindlichen Grundkante; mindestens 9" Abstand zu Feinden. Nur am Tisch prüfbar.
+
+### R-DEPLOY-08
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "AIRCRAFT … can be set up anywhere on the battlefield that is more than 9\" from any enemy models … can move off the edge of the battlefield … placed into Strategic Reserves."
+- **code**: —
+- **regel**: AIRCRAFT dürfen beim Einrücken aus Strategischen Reserven überall (>9" von Feinden) statt nur an einer Kante aufgestellt werden und dürfen die Spielfeldkante freiwillig verlassen (zurück in die Reserven). Nur am Tisch prüfbar.
+
+### R-DEPLOY-09
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Fortifications cannot be setup within 3\" of other terrain features (except hills). Fortifications cannot be placed into Strategic Reserves."
+- **code**: —
+- **regel**: Fortifikationen müssen mindestens 3" von anderem Gelände (außer Hügeln) aufgestellt werden und können nicht in Strategische Reserven gelegt werden. Nur am Tisch prüfbar.
+
+## Bereich: Mission-Scoring / Victory Points
+
+### R-SCORE-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_adjust_vp_adds_delta_to_faction_score / test_adjust_vp_floors_at_zero
+- **quelle**: core_rules.txt — "the player with the most victory points is the victor (in the case of a tie, the battle is a draw)."
+- **code**: unit_mutations.py:adjust_vp
+- **regel**: Siegpunkte werden je Fraktion verfolgt (`st.session_state.vp`); `adjust_vp` erhöht/senkt den Stand und kappt bei 0. Den automatischen Sieger-Check (meiste VP, Gleichstand = Unentschieden) macht die App nicht.
+
+### R-SCORE-02
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Slay the Warlord: A player scores 1 victory point if the enemy Warlord is destroyed at the end of the battle."
+- **code**: —
+- **regel**: Slay the Warlord: 1 VP, wenn der gegnerische Warlord am Spielende zerstört ist. Die App kennt kein Warlord-Flag; der VP wird manuell eingetragen.
+
+### R-SCORE-03
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "At the end of each player's Command phase, the player whose turn it is scores 1 victory point for each objective marker they currently control."
+- **code**: —
+- **regel**: Capture and Control (primär): Am Ende der eigenen Command Phase 1 VP je kontrolliertem Missionsziel. Die App bietet keine Missionsziel-Kontrolle; VP werden manuell eingetragen.
+
+### R-SCORE-04
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "if one player controls more objective markers than their opponent does at the end of the battle, they score 1 bonus victory point."
+- **code**: —
+- **regel**: Capture and Control (Bonus): Am Spielende 1 Bonus-VP für den Spieler mit mehr kontrollierten Missionszielen. Nur am Tisch prüfbar.
+
+### R-SCORE-05
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "A model is in range of an objective marker if it is within 3\" horizontally and 5\" vertically of that objective marker."
+- **code**: —
+- **regel**: Reichweite zu einem Missionsziel: Modell ≤3" horizontal und ≤5" vertikal vom Marker. Distanz nur am Tisch messbar.
+
+### R-SCORE-06
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "a player controls an objective marker while they have more models within range of it than their opponent does. A model can only be counted towards controlling one objective marker per turn."
+- **code**: —
+- **regel**: Kontrollprinzip: Ein Missionsziel kontrolliert, wer mehr Modelle in Reichweite hat; ein Modell zählt pro Zug nur für ein Missionsziel. Nur am Tisch prüfbar.
+
+### R-SCORE-07
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "AIRCRAFT units and units with the Fortifications Battlefield Role can never control objective markers."
+- **code**: —
+- **regel**: AIRCRAFT und Fortifikationen können Missionsziele nie kontrollieren, auch bei Modellen in Reichweite. Nur am Tisch prüfbar.
+
+### R-SCORE-08
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "Objective Secured: A player controls an objective marker if they have any models with this ability within range … even if there are more enemy models within range."
+- **code**: —
+- **regel**: Objective Secured: Einheiten mit dieser Fähigkeit kontrollieren ein Missionsziel auch bei feindlicher Übermacht (bei beidseitigem OS gilt Mehrheit). Die App erfasst das Keyword in YAML, wertet es für Missionsziel-Kontrolle aber nicht aus.
+
+### R-SCORE-09
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_adjust_secondary_vp_adds_within_slot / test_adjust_secondary_vp_caps_at_fifteen / test_adjust_secondary_vp_floors_at_zero
+- **quelle**: core_rules.txt — Matched-Play secondary objectives (manueller VP-Tracker)
+- **code**: unit_mutations.py:adjust_secondary_vp
+- **regel**: Sekundärziele: Die App führt bis zu 3 benannte Sekundärziel-Slots je Spieler mit manuellem VP-Tracker; `adjust_secondary_vp` kappt jeden Slot auf [0, 15] (App-Anteil). Die tatsächliche Erfüllung ist Tisch-Anteil.
+
+### R-SCORE-10
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_adjust_vp_adds_delta_to_faction_score
+- **quelle**: core_rules.txt — "the player with the most victory points is the victor"; App-Konfiguration vp_phase / vp_from_round
+- **code**: unit_mutations.py:adjust_vp
+- **regel**: Primär-VP werden über +5/+1/-1/-5-Schaltflächen manuell angepasst (Kernlogik `adjust_vp`, getestet); die VP-Anzeige ist auf eine Phase (`vp_phase`) und früheste Runde (`vp_from_round`) konfigurierbar — das Gating liegt im Render-Code (manuell verifiziert, Coverage-ausgeschlossen).
+
+### R-SCORE-11
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "If neither player manages to achieve a victory then the game is considered to be a draw."
+- **code**: —
+- **regel**: Unentschieden bei gleicher VP-Zahl. Die App zeigt keinen automatischen Spielende-/Sieger-Status.
+
+### R-SCORE-12
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "If, at the end of the battle, one army has been destroyed, the player commanding the opposing army is the victor."
+- **code**: —
+- **regel**: Sieg durch vollständige Vernichtung der gegnerischen Armee, unabhängig vom VP-Stand. Die App verfolgt zerstörte Einheiten, prüft aber nicht, ob eine ganze Armee vernichtet ist.
+
+### R-SCORE-13
+- **klasse**: B
+- **status**: offen
+- **getestet**: nein
+- **quelle**: core_rules.txt — "you can nominate one model … to be your Warlord. That model gains the WARLORD keyword."
+- **code**: —
+- **regel**: Warlord-Nominierung vor dem Spiel: genau ein Modell (kein FORTIFICATION) wird Warlord und erhält das WARLORD-Keyword; ein CHARACTER kann zusätzlich einen Warlord Trait erhalten. Die App kennt keinen Nominierungs-Schritt.

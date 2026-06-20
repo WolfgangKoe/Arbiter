@@ -21,47 +21,46 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S70, 2026-06-20)
+## Aktueller Stand (nach S71, 2026-06-20)
 
-**S70 — Regel-Ledger 8 → 1 + Overview-Ausbau.** (1) **R-COMBAT-09** getestet
-(`ability_invuln_save`, kleinster Invuln gewinnt). (2) **Render-Ledger via Sonnet-
-Subagent** extrahiert: R-CMD-03 (Battle-forged-Gate `can_gain_command_point`, gated
-matched/crusade), R-CMD-10 (`apply_buff_to_unit` → `unit_mutations.py`, idempotent),
-R-CMD-11 (`resolve_gain_cp_roll`), R-CHARGE-09/10 (`hi_eligible_units`/
-`hi_already_performed`), R-MORALE-02 (`morale_test_required`). **Opus-Review-Befund:**
-der Subagent hatte 3 von 6 Helfern als *verwaiste Parallel-Implementierungen* angelegt
-(grün getestet, aber nie vom Render-Code aufgerufen) — Opus hat alle drei verdrahtet,
-`apply_buff_to_unit` in die richtige Heimat (`unit_mutations`) verschoben und Katalog-
-`code:`-Refs korrigiert. **Lehre → [[feedback-proactive-subagent-prep]]:** Subagenten
-künftig Selbstprüf-Checkliste „grep belegt: Nicht-Test-Code ruft jeden Helfer auf"
-mitgeben. (3) **Overview erweitert** (token_report.py, Sonnet-Subagent): Subagent-
-**Peak-Korridor (150k)**-Diagramm + Peak-Spalte in „wer wofür" — wir sehen jetzt, ob
-Subagenten selbst im Korridor bleiben. **985 grün, Cov 92.25 %, Ledger=1** (nur
-R-COMBAT-17, Rapid-Fire-Distanz = reiner Tisch-Anteil, kein sinnvoller Test).
+**S71 — Subagent-Checkliste verankert · Coverage-Floor 90 % · Katalog Deployment/Scoring.**
+(1) **Selbstprüf-Checkliste für Subagenten** kanonisch im Operating Model (Event 3
+„Sprint") verankert — „Subagent-grün ≠ verdrahtet"; Verdrahtung per `grep` belegen, Heimat,
+Gates, Beleg zurückliefern; Querverweis in `CLAUDE.md` (Subagent-Muster). Dogfooded:
+beide Subagenten lieferten grep-Belege + Ratchet-/LEGIT-Warnungen.
+(2) **Coverage-Floor 88 → 90 %** (`pyproject.toml`); CLAUDE.md-Drift 80→90 gefixt;
+Messbefehl-Zeile aktualisiert. (3) **Ziel-Fortschritt-Zeile** im Review-Event verankert
+(`operating_model.md` Event 5). (4) **Regel-Katalog +2 Bereiche** via Sonnet-Subagent:
+Deployment (R-DEPLOY-01..09) + Mission-Scoring (R-SCORE-01..13); die 3 implementiert-Fälle
+(`adjust_vp`, `adjust_secondary_vp`, VP-Render) mit **5 neuen VP-Tests** als `getestet: ja`
+→ keine neue Schuld. **995 grün, Cov 92.40 %, Floor 90.**
 
-**Vorausschauend arbeiten (Nutzer-Direktive S70, [[feedback-proactive-subagent-prep]]):**
-ToDos der nächsten Session(s) im Blick halten und Subagenten **vorarbeiten** lassen,
-sodass im besten Fall nur Review bleibt. Subagent-Peak im Overview-Diagramm beobachten.
+**Vorbereitet (Subagent reviewt, Verdrahtung offen) — INV-4b/INV-4 Ledger:**
+- **LEGIT (keine Schuld):** `rosz_importer._FACTION_MAP` (I/O-Normalisierung), `typing.Protocol`.
+  Mögliche **stale Ledger-Einträge:** `dynasty`/`gloom`/`prism` (nur in Docstrings).
+- **Quick-Wins (S, kein Test):** Fallback `"Necrons"/"Orks"` → `"Player 1/2"` in
+  `gameHeader.py`+`gameProtocoll.py`; `setupScreen.py:434` Caption ohne Fraktionsname.
+- **Renames (M, Tests mit):** `pending_irongob` → `pending_triggered_relic`; `res_orb_*`-
+  State-Keys → generisch (`commandPhase`/`unitCard`/`game_state`).
+- **Schema-Urteil (Konsens nötig):** `dakka`/`klaw`/`tesla` (Prosa-Suche → typisierte YAML-
+  Felder), `reanimationProtocols`-String, `arkana`-Sektion, Default-Roster-Hardcode
+  (`game_state.py` → `list_available_rosters()`).
 
-Frühere Sessions (S60–S69): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+Frühere Sessions (S60–S70): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-**Vorab prüfen:** Welcher Schritt lässt sich als Fleißarbeit an einen Subagenten
-vorab geben (nur Review bleibt)? Subagent-Peak im Overview-Korridor-Diagramm checken.
-1. **Regel-Katalog weiter (Nenner wächst):** nächster Bereich offen — Deployment /
-   Mission-Scoring. **Subagent-Vorarbeit-Kandidat** (Klasse A/B/C-Entwurf nach Format;
-   Opus reviewt). Selbstprüf-Checkliste „Helfer verdrahtet?" mitgeben.
-2. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5):
-   knappe „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl.
-3. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
-   Stakeholder-Fragen durchsehen (backlog §2).
-4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen
-   (20 Tokens, 10 Allowlist-Einträge). **Subagent-Vorarbeit-Kandidat** je Token.
-5. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
-6. **Hook-Idee (Nutzer S70):** wenn Subagent-Peak verlässlich im Overview steht, später
-   einen Hook bauen, der mehr Subagenten-Nutzung erlaubt, ohne Überblicksverlust.
+### ▶ Nächster Schritt — INV-4b verdrahten (je eigene Freigabe)
+1. **Quick-Wins zuerst** (risikoarm), dann **Renames mit Test-Update**; je Token grep-
+   Vollständigkeit belegen, Ledger in `architecture_invariants.md` schrumpfen.
+2. **Schema-/`arkana`-/Default-Roster-Fälle = Konsens** (Gate-Aufweichung/Prämisse) —
+   nicht im Autopilot; Optionen mit Stakeholder klären.
+3. Übrige offene Punkte: #3 Gates leser-orientiert prüfen (ADR-0002); #5 Refinement-
+   Automatisierung; #6 Subagent-Peak-Hook (Design, Opus).
 
 ### Offene Frage / Retro-Vormerkung
+- **Retro-Maßnahme (Nutzer S71, Screenshots):** Die Subagent-Peak-Darstellung „je Subagent
+  der letzten Session" soll je **abgeschlossener Session erhalten/archiviert** bleiben (nicht
+  überschrieben) — Session-Archiv im Token-Report/`overview.md`. In nächster Session umsetzen
+  (`tools/token_report.py`); Verlaufstabelle bleibt, zusätzlich Pro-Session-Subagent-Block sichern.
 - **Output ↔ cache_read als Tempo-Indikator** (S68): Output gegen Qualität gewichten, nicht
   maximieren — Interpretation in der Retro gemeinsam geschärft; ggf. Zielwert-Feintuning in
   `token_report.py`-Legende nachziehen, falls sich ein konkreter Korridor ergibt.
@@ -69,7 +68,7 @@ vorab geben (nur Review bleibt)? Subagent-Peak im Overview-Korridor-Diagramm che
 ---
 
 ## Gate-Netz (Messbefehle)
-- Tests + Coverage: `pytest --tb=short` (Floor 88 %, `pyproject.toml`).
+- Tests + Coverage: `pytest --tb=short` (Floor 90 %, `pyproject.toml`).
 - **Schulden-Scoreboard** erscheint nach jedem `pytest` (`tests/conftest.py`): Vokabular-
   Tokens, Allowlist, AC-IDs, next_session-Zeilen, Regel-Katalog-%. Ziel: Zahlen sinken.
 - Architektur (INV-1..4b): `pytest tests/architecture/ --no-cov -q` · Ledger:

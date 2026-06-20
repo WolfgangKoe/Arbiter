@@ -782,6 +782,45 @@ class TestCpByGameSize:
         cp_values = list(s["cp"].values())
         assert all(v == 6 for v in cp_values), f"Expected 6 CP each, got {cp_values}"
 
+
+# ---------------------------------------------------------------------------
+# R-SCORE-01 / R-SCORE-09 / R-SCORE-10: victory-point mutations
+# ---------------------------------------------------------------------------
+
+
+class TestVictoryPointMutations:
+    """R-SCORE-01/-09/-10: primary and secondary VP adjustments.
+
+    Primary VP per faction never drops below 0; each secondary-objective slot is
+    clamped to the 0–15 matched-play band. The mutation helpers are the tested
+    core logic behind the (render-only) VP scoring controls.
+    """
+
+    def test_adjust_vp_adds_delta_to_faction_score(self) -> None:
+        _make_session(vp={"Necrons": 3, "Orks": 0})
+        _mut.adjust_vp("Necrons", 5)
+        assert _mut.st.session_state.vp["Necrons"] == 8
+
+    def test_adjust_vp_floors_at_zero(self) -> None:
+        _make_session(vp={"Necrons": 2, "Orks": 0})
+        _mut.adjust_vp("Necrons", -5)
+        assert _mut.st.session_state.vp["Necrons"] == 0
+
+    def test_adjust_secondary_vp_adds_within_slot(self) -> None:
+        _make_session(secondary_vp={"p1": [0, 0, 0], "p2": [0, 0, 0]})
+        _mut.adjust_secondary_vp("p1", 1, 7)
+        assert _mut.st.session_state.secondary_vp["p1"] == [0, 7, 0]
+
+    def test_adjust_secondary_vp_caps_at_fifteen(self) -> None:
+        _make_session(secondary_vp={"p1": [10, 0, 0], "p2": [0, 0, 0]})
+        _mut.adjust_secondary_vp("p1", 0, 20)
+        assert _mut.st.session_state.secondary_vp["p1"][0] == 15
+
+    def test_adjust_secondary_vp_floors_at_zero(self) -> None:
+        _make_session(secondary_vp={"p1": [3, 0, 0], "p2": [0, 0, 0]})
+        _mut.adjust_secondary_vp("p1", 0, -10)
+        assert _mut.st.session_state.secondary_vp["p1"][0] == 0
+
     def test_init_state_strike_force_sets_cp_12_for_both_players(self) -> None:
         s = _make_session()
         init_state(game_size="Strike Force", game_mode="matched")
