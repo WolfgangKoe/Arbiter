@@ -74,7 +74,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      - **Engpass** — Welche Schuld-/Ledger-Position blockiert aktuell am meisten?
 
      Antworten, die eine Änderung auslösen, werden konkret abgelegt: Prozess-/Hook-Idee → `next_session.md` (oder Backlog §2), Prämissen-Schärfung → ADR.
-   - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**.
+   - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**. **History-Rotation:** den verdichteten Stand mit `python tools/rotate_history.py --session <N> --summary "…"` als Einzeiler nach `ziel6.md` einhängen und den Stand-Block in `next_session.md` zurücksetzen (hält den Startprompt unter dem 120-Zeilen-Gate; das Verdichten bleibt Urteil).
    Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
    **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `next_session.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).

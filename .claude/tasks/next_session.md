@@ -37,9 +37,8 @@ Sonnet · `▒` Haiku · `▓` sonstige; Test bewusst mitgezogen. **915 grün, C
 Frühere Sessions (S60–S67): Verlauf in `docs/goals/ziel6.md` (Session-Historie, ab Zeile ~1581).
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-0. **History-Rotation** `next_session.md → ziel6.md` als kleiner Checklisten-/Hook-Schritt beim
-   Abschluss automatisieren (S68-Befund: Historie wandert heute manuell, treibt die Zeilenzahl).
-   Kleines Experiment, kein Umbau.
+0. ~~History-Rotation `next_session.md → ziel6.md` automatisieren~~ ✅ **S69** — `tools/rotate_history.py`
+   (Helfer-Tool, manuell am Abschluss; Mechanik automatisiert, Verdichten bleibt Urteil).
 0b. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5): knappe
    „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl. Token-Report
    bleibt reine Kosten/Effizienz-Linse (cache_read hoch = warmer, günstiger Kontext; Output = Spend).
@@ -71,5 +70,7 @@ Frühere Sessions (S60–S67): Verlauf in `docs/goals/ziel6.md` (Session-Histori
   `tools/session_context.py` eskaliert ab 120k/135k automatisch (S66).
 - **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md`
   (läuft automatisch bei `pytest`; PostToolUse-Reminder zum Teilen, S66).
+- **History-Rotation (Abschluss):** `python tools/rotate_history.py --session <N> --summary "…"`
+  hängt den Stand-Einzeiler an `ziel6.md` an und setzt den Stand-Block hier zurück (S69).
 - **Freigabe-Gate (S66, hart):** Edit/Write blockiert bis `touch .claude/.freigabe`;
   SessionStart re-armt. Vollzieht die Freigabe-Pflicht über die Harness (ADR-0003).
