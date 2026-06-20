@@ -57,24 +57,32 @@ Deployment (R-DEPLOY-01..09) + Mission-Scoring (R-SCORE-01..13); die 3 implement
 
 Frühere Sessions (S60–S70): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-### ▶ Nächste Session = REFINEMENT (Themen herunterbrechen, dann je eigener Plan + Freigabe)
+### ▶ Nächste Session = Plan 019 (UI Target Consolidation)
 
-**Neu vom Nutzer (S72):**
-1. **Silent King — Command-Protocol-Switch:** Der Stille König hat eine Fähigkeit, die
-   Command Protocols wechselt. Regeln **recherchieren** (`docs/work/wahapedia_necrons/`,
-   Szarekh/Triarchen) — Vorgehen: erst lesen. Ergebnis: entweder **BUG/Anforderungslücke**
-   anlegen (+ ggf. **Regel-Katalog-Ledger-Eintrag**) **oder** „regelkonform → nichts zu tun"
-   dokumentieren. Kein Code ohne Regelbeleg.
-2. **Subagent-Archiv REWORK (Missverständnis korrigieren!):** Die in S72 gebaute **Duplikat-
-   Tabelle** in `overview.md` ist NICHT gewünscht. Soll: **je Session eine sinnvolle
-   Zusammenfassung MIT den Pro-Session-Diagrammen** (Zusammensetzungs-Balken/Peak/Modell-Mix
-   wie im Fokus-Block) **automatisiert** in eine **gesonderte Datei** (oder klar abgetrennt)
-   archiviert — KEINE zweite Tabelle. Duplikat-Tabelle + ggf. `subagent_archive.json`-Format
-   überarbeiten. **Bei Unklarheit ZUERST fragen** (Lehre S72).
+Refinement-Session 2026-06-20 abgeschlossen. Mit Plan 019 beginnen.
+**Reihenfolge:** 019 → 014 → 022 → 020 → 021 → 016 → 018 → 015 → 017.
 
-**Herunterzubrechen (Backlog, Prio):** Plan 014 (Mockup-STOP), #2 Protokoll-Buff-Audit
-(9/12 Direktiv-Effekte unverdrahtet), #3/#4 Würfelanzeige (Soll-Bild als AC), Schema-/
-`arkana`-/Default-Roster-Konsens.
+**Neue Pläne angelegt (019–022):**
+- **Plan 019** (MITTEL, VOR 014): UI Target Consolidation — `pending_target_request`-Mechanismus
+  konsolidiert MWBD/Orb/Subgruppen-Auswahl; `render_unit_selectbox()` für Veil+Mortal-Target.
+- **Plan 020** (MITTEL): Resurrections-Orb → generischer Activated-Wargear-Flow (Option B);
+  State-Keys orb-id-gebunden (Bug: 2 Overlords = Konflikt); YAML `once_per_battle: true`.
+- **Plan 021** (MITTEL): Arkana → `faction_abilities.yaml`, `loader.py` generisch.
+- **Plan 022** (HOCH, aktiver Bug): Dice Display Rework — Arrow-Direction-Fix + Badge-Truncate +
+  Edge-Cases + `color_hint`-Feld. **KOMPLETTE HTML-TEST-SUITE PFLICHT.**
+
+**Refinement-Entscheidungen (2026-06-20):**
+- **Plan 014 neu:** interaktive Echtzeit-Subgruppen-Auswahl VOR Apply (3 Zustände A/B/C), nicht Post-hoc.
+  Mortal-Wound-Overflow via `mortal=True` bereits implementiert. Lethal Hits = eigener Plan.
+- **Tests = HARTES Akzeptanzkriterium** (dauerhaft): Unit/AC/Architektur/Manuell je Plan.
+  Render-Code (`dice_html`, `uiLayout`) braucht HTML-Output-Tests.
+- **Arrow-Direction-Bug** in `dice_html.py:200`: `rightward = value < 0` FALSCH → `rightward = value > 0`.
+  Spec: `docs/spec/dice_display.md` angelegt.
+- **INV-4b:** Cluster 4 (`dynasty`) + 5 (`gloom/prism`) XS-Fix; Cluster 3 → Plan 020; Cluster 6 → Plan 021.
+- **Neue Regel-Lücken:** Voice of the Triarch (YAML fertig, Handler fehlt → Plan 016);
+  Lethal Hits + Deadly Demise (je eigener Plan).
+- **Subagent-Archiv REWORK:** `session_archive.md` als separate wachsende Datei;
+  Session-ID-Deduplizierung bei `--write`; SA-Peaks als Subzeilen im Verlaufsblock.
 
 ### Offene Frage / Retro-Vormerkung
 - ✅ **Retro-Maßnahme (Nutzer S71): Subagent-Peak je Session archivieren — erledigt S72.**

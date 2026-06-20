@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-19
+Letzter Abgleich: 2026-06-20
 
 ---
 
@@ -77,6 +77,13 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   den Command-Phase-Bonus ebenfalls erhalten (Regel: nur Battle-forged). Fix-Ort:
   `_render_faction_actions` an Battle-forged koppeln + Regressionstest. Ledger-Eintrag
   `R-CMD-03` in [../spec/acceptance/rules.md](../spec/acceptance/rules.md).
+- 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
+  - **Cluster 4 — `dynasty`** (`movementPhase.py`): UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
+  - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`): `"Gloom Prism"` ist Necron-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
+  - **Cluster 3 — `orb`/`overlord`/`phaeron`/`resurrection`** (`commandPhase.py`): Option B (generischer Activated-Wargear-Flow) → Plan 020.
+  - **Cluster 6 — `arkana`** (`loader.py`): Arkana nach `faction_abilities.yaml` (generische Datei je Fraktion), Loader generisch → Plan 021.
+  - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
+  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
 
 ---
 
@@ -91,9 +98,13 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [018](../audit/plans/018-low-prio-cleanup.md) | Kleinkram: CP-Doppelvergabe, Battle-Log-Reset, Gretchin, Modifier | NIEDRIG | TODO |
 | [015](../audit/plans/015-contextual-reactive-stratagems.md) | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook | MITTEL | TODO |
 | [017](../audit/plans/017-ability-ap-combined-badge.md) | SAVE-Block: Fähigkeit+AP kombinierte Badge | MITTEL | TODO |
+| [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | TODO |
+| [020](../audit/plans/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | MITTEL | TODO |
+| [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | TODO |
+| [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | TODO |
 
-**Empfohlene Reihenfolge: 014 → 016 → 018 → 015 → 017.** 014/015 haben Mockup-STOPPs
-(UI erst vorlegen). 014 zwingend nach 013, beide ändern `_common.py` flächig — nie parallel.
+**Empfohlene Reihenfolge: 019 → 014 → 022 → 020 → 021 → 016 → 018 → 015 → 017.**
+019 vor 014 (UI-Pattern zuerst konsolidieren); 022 hat bekannten Bug (Arrow-Direction-Fix, HOCH).
 
 ---
 
@@ -148,6 +159,11 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
   u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
   nicht nur maschinen-orientiert zählen.
+- 🔲 **color_hint-Feld im Modifier-Dict (Refinement 2026-06-20):** Optionales `color_hint: "buff" | "debuff"` im Modifier-Dict für nicht-numerische Modifier (z.B. Quantum Shield). Default: wertbasiert. Rückwärtskompatibel. → `ability_engine.py`, `dice_html.py`, Tests.
+- 🔲 **Lethal Hits (R-CMB-XX, Refinement 2026-06-20):** Unmod. Treffer-6 = kein Wundwurf, Schaden direkt mit Overflow (wie Mortal Wounds). Nicht implementiert. Eigener Plan nach Plan 014.
+- 🔲 **Deadly Demise (R-CMB-YY, Refinement 2026-06-20):** Modell zerstört → Mortal Wounds auf Einheiten in X". YAML-Daten vorhanden, Handler fehlt. Eigener Plan.
+- 🔲 **Voice of the Triarch (R-CMD-XX, Refinement 2026-06-20):** Silent King — `voiceOfTheTriarch`-Handler fehlt (YAML-Basis fertig: `alter_command_protocol`). → Plan 016 oder eigener kleiner Plan.
+- 🔲 **Subagent-Archiv REWORK (Refinement 2026-06-20):** S72-Bug: Duplikat-Tabellen in `overview.md`. Fix: (1) `docs/metrics/session_archive.md` als separate, wachsende Archiv-Datei; (2) `overview.md` bekommt Link + SA-Peaks als Inline-Subzeilen im Verlaufsblock; (3) Session-ID-Deduplizierung bei `--write` (kein Doppel-Append). Render-Funktionen `_render_subagent_archive` + `_render_subagents` zusammenführen.
 
 ---
 
@@ -216,6 +232,10 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 
 Vorschlag: architecture.md in einer eigenen kleinen Doku-Session aktualisieren (Schema +
 Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung freigeben.**
+
+- **Dice Display Arrow-Direction-Bug (`dice_html.py`):** `rightward = value < 0` → Debuffs zeigen Pfeil rechts, Buffs links (FALSCH). Korrekt: Buff=rechts[→], Debuff=links[←]. Spec angelegt: `docs/spec/dice_display.md`. HTML-Test-Suite fehlt vollständig → Plan 022 (HOCH).
+- **commandPhase.py State-Keys nicht orb-id-gebunden:** `revive_wargear_awaiting_target` etc. sind globale Slots → Bug bei 2 Overlords mit Orb im Roster. → Plan 020.
+- **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
 
 ## 5. Größere geplante Ziele
 

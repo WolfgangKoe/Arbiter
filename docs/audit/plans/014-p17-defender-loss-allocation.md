@@ -1,4 +1,4 @@
-# Plan 014: P17 — Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten
+# Plan 014: P17 — Interaktive Schadenszuweisung auf Subgruppen (Defender Loss Allocation)
 
 > **Executor instructions**: Follow this plan step by step. Run every
 > verification command and confirm the expected result before moving to the
@@ -9,51 +9,86 @@
 > **Drift check (run first)**:
 > Plan 013 MUSS abgeschlossen sein (Status DONE in `docs/audit/plans/README.md`).
 > `grep -n "render_attack_declaration" src/` → 0 Call-Sites (Beweis, dass 013 lief).
-> Die Zeilennummern unten stammen von Commit `f0f4e17` (VOR 013) — nach 013
-> verschoben, die Funktionsnamen gelten weiter. Bei strukturellen Abweichungen
-> in `_render_damage_block`/`_apply_group_losses`: STOP.
+> `grep -n "_render_damage_block\|apply_damage\|_apply_group_losses" src/uiLayout/_common.py src/gameMechanic/unit_mutations.py`
+> → Funktionen existieren, Signaturen stimmen mit Step-Beschreibungen unten überein.
+> Bei strukturellen Abweichungen: STOP.
 
 ## Status
 
-- **Priority**: P1 (HOCH — ziel6.md §6n P17, nachgeschärft 2026-06-10)
+- **Priority**: P1-HOCH (ziel6.md §6n P17, nachgeschärft Refinement 2026-06-20)
 - **Effort**: M
 - **Risk**: MEDIUM (greift in den Schadenspfad ein; Gruppen-Buchhaltung muss konsistent bleiben)
-- **Depends on**: 013 (zwingend — ein Code-Pfad; beide ändern `_common.py`)
+- **Depends on**: 013 (zwingend — ein Code-Pfad; beide ändern `_common.py`); 019 (empfohlen vorher)
 - **Category**: feature (Regelkonformität Verlust-Zuweisung)
-- **Planned at**: commit `f0f4e17`, 2026-06-12
+- **Planned at**: Refinement 2026-06-20
+- **Branch**: `feature/014-defender-loss-allocation`
 
 ## Why this matters
 
-Regel (9E): Der **Verteidiger** entscheidet, welche Modelle als Verluste
-entfernt werden. Die App verteilt Verluste heute automatisch nach
-`priority` (`_apply_group_losses`, `unit_mutations.py:11-23`) — Standardmodelle
-sterben zuerst. Kritischer Fall (Nutzer): Nobz mit gemischter Bewaffnung —
-WELCHER Nob fällt, bestimmt die verfügbaren Waffen der Folgerunden. Ohne
-Korrekturmöglichkeit „bricht die Logik". Nutzer-Entscheidung (2026-06-10):
-Zielauswahl bleibt auf Einheiten-Ebene (Untergruppen des Verteidigers sind
-für den Angreifer unsichtbar — regelkonform), aber NACH „Apply Damage"
-bekommt der Verteidiger ±-Counter pro Gruppe (Summe = Verluste, Default =
-priority-Verteilung). Danach muss klar erkennbar sein, welche Waffen
-weggefallen sind.
+Regel (9E, Verteidiger wählt Verluste): Der **Verteidiger** bestimmt, welche
+Modelle Schaden erhalten. Kritisch: Nobz mit gemischter Bewaffnung — WELCHER Nob
+fällt, bestimmt die verfügbaren Waffen der Folgerunden. Ohne interaktive Wahl
+„bricht die Logik" (Nutzer-Originalformulierung).
+
+**Lock-Regel (9E):** Ist ein Modell bereits angeschlagen (hat Wunden verloren,
+aber lebt noch), MÜSSEN alle weiteren Wunden dieses Turns auf dieses Modell
+gelenkt werden — andere Subgruppen sind gesperrt. Erst nach Zerstörung des
+angeschlagenen Modells ist freie Wahl wieder möglich.
+
+**Mortal Wounds (Overflow):** `mortal=True` ist bereits im Code implementiert
+und erlaubt Overflow über Modell-Grenzen hinaus. Der neue interaktive Flow muss
+diesen Parameter korrekt weiterreichen.
+
+**Lethal Hits:** OUT OF SCOPE (eigener Plan nach 014).
 
 ## Current state
 
-- `unit_mutations.py:40-72` — `apply_damage()`: reduziert `current_wounds` →
-  `models`; `lost = old_models - models`; ruft `_apply_group_losses(state
-  ["group_models"], lost, unit.model_groups)` (priority-aufsteigend).
-- `_common.py:502-626` — `_render_damage_block()`: Apply-Button (Z. 586) ruft
-  `apply_damage(..., resolved=True)`; schreibt `st.session_state[res_key] =
-  {"applied": True, "models_lost": …, …}` (Z. 619-625). Applied-Branch
-  (Z. 520-530): Success-Zeile + `_render_rp_block` + „↺ Reset"-Button.
-- `_common.py:454-499` — `_render_rp_block()`: Reanimation nach Verlusten;
-  `heal_unit` → `_restore_group_models` füllt nach priority zurück.
-- Nach Plan 013 hat JEDE Einheit `model_groups`; die Korrektur-UI ist nur
-  relevant, wenn die Einheit VOR dem Schaden mehr als eine Gruppe mit
-  lebenden Modellen hatte (synthetische Einzelgruppen-Einheiten: nichts zu
-  korrigieren).
-- `render_group_cards` (`_common.py:971-977`) überspringt Gruppen mit
-  `alive == 0` bereits — „Waffen weg" ist dort implizit sichtbar; es fehlt
-  die EXPLIZITE Anzeige im Korrektur-Moment.
+- `unit_mutations.py` — `apply_damage()`: reduziert `current_wounds` → `models`;
+  `lost = old_models - models`; ruft `_apply_group_losses(state["group_models"],
+  lost, unit.model_groups)` (priority-aufsteigend). Kein Lock-Check, keine
+  Subgruppen-Auswahl.
+- `_common.py` — `_render_damage_block()`: Apply-Button ruft `apply_damage(...,
+  resolved=True)`; schreibt `st.session_state[res_key] = {"applied": True,
+  "models_lost": …, …}`. Die Subgruppen-Auswahl fehlt komplett — sie muss VOR
+  dem Apply-Button eingebaut werden.
+- Nach Plan 013 hat JEDE Einheit `model_groups`; synthetische Einzelgruppen-
+  Einheiten (homogen) haben genau eine Gruppe — dort kein interaktives UI nötig.
+
+## 3 Zustände der Subgruppen-Auswahl
+
+### Zustand A — Freie Wahl (kein angeschlagenes Modell)
+
+```
+SCHADENSZUWEISUNG — Nobz (5 Modelle · 3 LP je Modell)
+ Subgruppe               Modelle   LP             Ausrüstung
+ ──────────────────────────────────────────────────────────
+ Nob – Power Klaw+BC       2       ●●● ●●●        Power Klaw, Big Choppa
+ Nob – 2× Kill Saw         2       ●●● ●●●        Kill Saw ×2
+ Nob – Slugga+Choppa       1       ●●●            Slugga, Choppa
+ → Kein Modell angeschlagen. Welche Subgruppe erhält den nächsten Schaden?
+   ○ Nob – Power Klaw+BC
+   ○ Nob – 2× Kill Saw
+   ○ Nob – Slugga+Choppa
+```
+
+### Zustand B — Gesperrt (angeschlagenes Modell vorhanden)
+
+```
+ Nob – Power Klaw+BC       2       ●●● ●●●   [—]  Power Klaw, Big Choppa
+ Nob – 2× Kill Saw     ►  2       ●●● ●○○   [▶]  Kill Saw ×2
+                                    └─ 1 LP verbleibend
+ Nob – Slugga+Choppa       1       ●●●       [—]  Slugga, Choppa
+ ⚠ Angeschlagenes Modell muss zuerst abgehandelt werden.
+   [ Schaden → Nob 2× Kill Saw ]
+```
+
+### Zustand C — Modell zerstört
+
+```
+ ✕ Nob – 2× Kill Saw: 1 Modell vernichtet.
+   ⚠ [Wenn letztes Modell der Subgruppe: Fähigkeit verloren — Kill Saw ×2 nicht mehr verfügbar]
+ → Nächster Schaden: freie Wahl (s. Zustand A)
+```
 
 ## Commands you will need
 
@@ -62,173 +97,217 @@ weggefallen sind.
 | venv | `source .venv/bin/activate` | `(.venv)` |
 | Mutations-Tests | `python -m pytest tests/gameMechanic/test_unit_mutations.py -q` | grün |
 | Gruppen-Tests | `python -m pytest tests/uiLayout/test_group_flow.py -q` | grün |
-| Vollsuite | `pytest --tb=short` | grün, ≥80 % |
+| Vollsuite | `pytest --tb=short` | grün, ≥ 90 % |
+| Lint | `ruff check src/ && black --check src/ && isort --check-only src/` | passt |
+| App | `streamlit run src/app.py` | Port 8501 |
 
 ## Scope
 
 **In scope**:
-- `src/gameMechanic/unit_mutations.py` — neue Funktion `reallocate_group_losses()`
-- `src/uiLayout/_common.py` — Snapshot vor Schaden + Korrektur-UI im
-  Applied-Branch von `_render_damage_block`; Waffen-Wegfall-Anzeige
-- Tests: `tests/gameMechanic/test_unit_mutations.py` + UI-State-Tests
+- `src/gameMechanic/unit_mutations.py` — neue Funktionen `select_damage_target_group()`,
+  `get_locked_group()`; Lock-Check in `apply_damage`
+- `src/uiLayout/_common.py` — `_render_damage_block()`: neue Subgruppen-Auswahl
+  VOR dem Apply-Button (Zustand A/B/C); Mortal-Wound-Overflow korrekt weiterreichen
+- Tests: PFLICHT auf 4 Schichten (siehe Test plan)
 
 **Out of scope** (NICHT anfassen):
-- Tracking, in welcher Gruppe das verwundete FRONTMODELL steht
-  (Mehrwunden-Einheiten): bewusste Limitation — `current_wounds` bleibt
-  Unit-Level. Im Abschlussbericht als bekannte Grenze dokumentieren;
-  ziel6.md nennt es „Folgefrage bei Umsetzung".
-- Angreifer-seitige Sicht auf Verteidiger-Gruppen (bleibt verborgen).
-- Morale-/Flee-Pfad (`flee_models` hat keine Gruppen-Reduktion — falls das
-  auffällt: NUR melden, separates Thema).
+- Frontmodell-Tracking (Mehrwunden-Einheit): `current_wounds` bleibt Unit-Level;
+  im Abschlussbericht als bekannte Limitation dokumentieren
+- Lethal Hits Overflow → eigener Plan nach 014
+- Angreifer-seitige Sicht auf Verteidiger-Gruppen (bleibt verborgen)
+- Morale-/Flee-Pfad (`flee_models` ohne Gruppen-Reduktion — falls auffällig: NUR melden)
+- YAML-Daten — keine Änderungen
 
 ## Git workflow
 
-- Branch: `feature/014-defender-loss-allocation`.
-- Commit-Stil: z. B. `Add defender loss reallocation per model group`.
-- Nicht pushen/PR ohne Anweisung.
+- Branch: `feature/014-defender-loss-allocation`
+- Commit-Stil imperativ Englisch, z. B. `Add select_damage_target_group and lock logic`
+- Mehrere Commits erlaubt (sinnvolle Schnitte: Step 1 / Step 2 / Step 3+4)
+- Nicht pushen/PR ohne Anweisung
 
 ## Steps
 
-### Step 1: Mutation `reallocate_group_losses()`
+### Step 1: State-Erweiterung in `unit_mutations.py`
 
-In `unit_mutations.py`:
+Zwei neue Funktionen ergänzen:
 
 ```python
-def reallocate_group_losses(
-    uid: str,
-    faction: str,
-    losses_by_group: dict[str, int],
-    group_models_before: dict[str, int],
-) -> None:
-    """Defender's choice: redistribute this attack's model losses across groups.
+def select_damage_target_group(uid: str, faction: str, group_id: str) -> None:
+    """Defender's choice: set the active subgroup for the next damage application.
 
-    losses_by_group must sum to the models actually lost; each group's losses
-    are capped by its pre-damage count. Overwrites group_models accordingly.
+    Stores group_id as damage_active_group_id in the unit's session state.
+    Raises ValueError if group_id is not a known group of this unit.
     """
 ```
 
-- Validierung (bei Verstoß `ValueError`): jede Gruppe `0 <= losses <=
-  group_models_before[gid]`; `sum(losses_by_group.values()) ==
-  sum(before) - state["models"]`-Verluste dieses Angriffs (siehe Step 2 —
-  die Zahl kommt als Snapshot mit).
-- Anwendung: `state["group_models"][gid] = group_models_before[gid] - losses`.
-- Konsistenz-Invariante danach: `sum(group_models.values()) == state["models"]`
-  (assert/Exception, nicht stilles Weiterlaufen).
+```python
+def get_locked_group(uid: str, faction: str) -> str | None:
+    """Return the group_id that must receive the next wound, or None if free choice.
 
-**Verify**: Neue Unit-Tests (s. Test plan) grün:
-`python -m pytest tests/gameMechanic/test_unit_mutations.py -q`.
-
-### Step 2: Snapshot vor dem Schaden
-
-`_render_damage_block`, Apply-Zweig (vor dem `apply_damage`-Aufruf, Z. 588):
-`group_models_before = dict(def_state["group_models"])` und
-`models_before = def_state["models"]` erfassen; beide zusätzlich in den
-`res_key`-State schreiben (`"group_models_before"`, `"models_before"`).
-(`def_state` via `lookup(def_faction, def_uid)` — im Apply-Zweig verfügbar
-machen, falls dort bisher nur `def_unit` herumgereicht wird.)
-
-**Verify**: Bestehende Tests grün (reine State-Erweiterung).
-
-### Step 3: Korrektur-UI im Applied-Branch
-
-Im Applied-Branch von `_render_damage_block` (nach der Success-Zeile, VOR
-`_render_rp_block`), NUR wenn alle drei gelten:
-1. `models_lost > 0`,
-2. die Einheit hatte vor dem Schaden ≥ 2 Gruppen mit Modellen
-   (`group_models_before`),
-3. RP wurde noch nicht angewendet (`rp_{tab_key}` nicht applied — sonst
-   stimmt die priority-basierte Rückgabe nicht mehr; Korrektur dann gesperrt
-   mit Hinweis „Korrektur vor RP durchführen").
-
-UI (Verteidiger-Korrektur):
-
-```
-Verluste zuweisen (Verteidiger) — 3 Modelle:
-  Nob (PK+BC)      [− 2 +]   power klaw, big choppa
-  Nob (2 Killsaws) [− 1 +]   2× killsaw
-  [✓ Zuweisung übernehmen]
+    A group is locked when any of its models has taken wounds but is not yet
+    destroyed (i.e., group_wounds[gid] > 0 for that group).
+    Returns the first such group_id found, or None if no group is wounded.
+    """
 ```
 
-- Ein `st.number_input` pro Gruppe (Key `lossfix_{tab_key}_{gid}`),
-  `min_value=0`, `max_value=group_models_before[gid]`, Default = die
-  automatische priority-Verteilung (rekonstruierbar: `before[gid] -
-  state["group_models"][gid]`).
-- Caption pro Gruppe: Waffennamen (`", ".join(w.name_en for w in group.weapons)`).
-- Summen-Zeile live: `zugewiesen X / Verluste Y`; Übernehmen-Button
-  disabled bei `X != Y`.
-- Button ruft `reallocate_group_losses(...)`; danach `st.rerun()`.
-- Nach Übernahme (und auch nach der automatischen Verteilung): Gruppen, die
-  durch DIESEN Angriff auf 0 fielen (`before[gid] > 0 and group_models[gid]
-  == 0`), explizit ausweisen:
-  `st.warning("Weggefallen: Nob (2 Killsaws) — killsaw nicht mehr verfügbar")`.
+**Lock-Check in `apply_damage`:**
+- Vor Anwendung prüfen: wenn `get_locked_group()` einen `gid` zurückgibt UND
+  `damage_active_group_id != gid` → ValueError (UI verhindert das, Defensiv-Check
+  für Tests und direkte Aufrufe).
+- Mortal-Wound-Overflow (`mortal=True`) bleibt als Parameter erhalten und wird
+  korrekt durch den neuen Pfad weitergereicht.
 
-Die Korrektur bleibt bis „↺ Reset" bzw. RP-Anwendung wiederholbar (Counter
-behalten ihren State; erneutes Übernehmen überschreibt ausgehend vom
-Snapshot — deshalb rechnet `reallocate_group_losses` immer von
-`group_models_before` aus, nie inkrementell).
+**State-Felder** (in `group_models`-State der Einheit):
+- `damage_active_group_id: str | None` — vom Verteidiger gewählte Gruppe
+- `group_wounds: dict[str, int]` — aktuelle Wunden des Frontmodells je Gruppe
+  (0 wenn kein angeschlagenes Modell in dieser Gruppe)
 
-**Verify**: Manuell (Streamlit): Nobz-Roster (2×PK+BC, 2×2-Killsaws) in der
-Shooting Phase beschießen, 2 Modelle Verlust → Default nimmt priority-Gruppe;
-Korrektur auf die Killsaw-Gruppe umverteilen → subUnitCards in der Fight
-Phase zeigen die korrigierten Bestände; Warnung nennt die weggefallene Waffe.
+**Verify**:
+```
+python -m pytest tests/gameMechanic/test_unit_mutations.py -q
+```
+→ grün (neue Tests aus Test plan Step 1).
 
-### Step 4: RP-Wechselwirkung absichern
+### Step 2: UI in `_common.py` — Subgruppen-Auswahl VOR Apply-Button
 
-`_render_rp_block` wird im Applied-Branch NACH der Korrektur gerendert.
-Sicherstellen (Test): Korrektur → DANN RP-Heal → `_restore_group_models`
-füllt ab der neuen Verteilung nach priority auf; Invariante
-`sum(group_models) == models` hält. Umgekehrt (RP zuerst) ist die Korrektur
-gesperrt (Step 3, Bedingung 3).
+In `_render_damage_block()`, VOR dem Apply-Button, NUR wenn die Einheit mehr als
+eine aktive Gruppe hat (`alive > 0` je Gruppe):
 
-**Verify**: Neuer Test (s. Test plan) + `pytest --tb=short` grün.
+**Zustand A** (kein Lock: `get_locked_group() is None`):
+- Radioauswahl aus aktiven Subgruppen (Gruppen mit `alive > 0`)
+- Key: `dmg_target_grp_{tab_key}`; Default: erste Gruppe (nach priority)
+- Caption je Option: Gruppenname + Waffennamen
+- Auswahl ruft `select_damage_target_group()` beim nächsten Apply
 
-### Step 5: Vollsuite + Lint + Doku
+**Zustand B** (Lock aktiv: `get_locked_group()` liefert `gid`):
+- Tabelle zeigt alle Gruppen; gesperrte hervorgehoben (`►`), andere `[—]`
+- LP-Anzeige für angeschlagenes Modell (`group_wounds[gid]` verbleibend)
+- Direkter Schaden-Button nur auf die gesperrte Gruppe
+- Warntext: „Angeschlagenes Modell muss zuerst abgehandelt werden."
 
-- `pytest --tb=short` grün, ≥80 %; Lint passt.
-- `docs/spec/unit_states.md`: Abschnitt „Verlust-Korrektur (P17)" mit
-  Snapshot-Mechanik und RP-Sperr-Regel ergänzen.
+**Zustand C** (nach Modell-Zerstörung, `models_lost > 0` im letzten Apply):
+- Zerstörungs-Meldung: `✕ <Gruppenname>: 1 Modell vernichtet.`
+- Wenn `group_models[gid] == 0` (letzte Modell der Subgruppe): Ausrüstungs-Warnung
+  `st.warning(f"Fähigkeit verloren — <Waffenliste> nicht mehr verfügbar")`
+- Danach: freie Wahl wieder möglich (zurück zu Zustand A)
 
-## Test plan
+Pattern orientiert sich an `pending_target_request` aus Plan 019 (wenn vorhanden),
+sonst analog zu bestehenden `st.radio`-Patterns in `_common.py`.
 
-- `reallocate_group_losses`: Happy Path; Summe ≠ Verluste → ValueError;
-  Gruppe über `before`-Cap → ValueError; Invariante nach Anwendung.
-- Default-Rekonstruktion: priority-Verteilung == `before - after`.
-- Korrektur + anschließendes RP-Heal: Auffüllung konsistent.
-- Synthetische Einzelgruppe (nach 013): Korrektur-UI erscheint NICHT
-  (State-Test über die Render-Bedingung, Bedingung 2).
-- Regressionstest Nobz-Fall: Killsaw-Gruppe auf 0 → `render_group_cards`
-  bietet killsaw nicht mehr an (über `group_models`-State prüfbar).
+**Verify**: Bestehende Tests grün (reine UI-Erweiterung vor dem Button).
+
+### Step 3: Tests (PFLICHT — 4 Schichten)
+
+**Schicht 1 — Unit-Tests `tests/gameMechanic/test_unit_mutations.py`:**
+
+- `test_select_damage_target_group_sets_state`: Happy Path — `group_id` wird
+  in State geschrieben.
+- `test_select_damage_target_group_invalid_group_raises`: unbekannte `group_id`
+  → ValueError.
+- `test_get_locked_group_returns_none_when_no_wounded`: kein angeschlagenes
+  Modell → `None`.
+- `test_get_locked_group_returns_wounded_group`: Gruppe mit `group_wounds > 0`
+  → liefert diese `gid`.
+- `test_lock_invariante_apply_damage_wrong_group_raises`: Lock aktiv + falscher
+  `group_id` in `apply_damage` → ValueError.
+- `test_mortal_wound_overflow_through_new_flow`: `mortal=True` liefert Overflow
+  korrekt (Regression).
+- `test_single_group_unit_no_interactive_ui_needed`: Einzelgruppen-Einheit
+  (nach Plan 013) → `get_locked_group` und `select_damage_target_group` funktionieren,
+  aber UI-Bedingung `len(active_groups) > 1` ist False.
+
+**Schicht 2 — Acceptance-Tests `tests/uiLayout/test_group_flow.py`:**
+
+- `test_zustand_a_b_c_transition_nobz`: Nobz-Szenario (2 × PK+BC, 2 × Kill Saw,
+  1 × Slugga+Choppa); Schaden auf Kill-Saw-Gruppe → Zustand B (Lock); weiterer
+  Schaden zerstört Modell → Zustand C (Warnung); danach Zustand A (freie Wahl).
+- `test_regressionstest_nobz_killsaw_group_destroyed`: Kill-Saw-Gruppe auf 0 →
+  `group_models["kill_saw"] == 0`; Ausrüstungs-Warnung enthält „Kill Saw".
+
+**Schicht 3 — Architektur-Test (bestehend):**
+
+`pytest tests/architecture/ --no-cov -q` → grün.
+Kein neuer Fraktions-String in `src/` eingeführt (prüfen mit
+`grep -rn "necron\|ork\|custodes" src/gameMechanic/unit_mutations.py`
+→ kein Treffer).
+
+**Schicht 4 — Manuelle Verifikation (Nobz-Roster):**
+
+Roster: Nobz-Einheit mit Subgruppen `2 × Nob (PK+BC)`, `2 × Nob (Kill Saw ×2)`,
+`1 × Nob (Slugga+Choppa)`.
+
+| Schritt | Erwartetes Verhalten |
+|---|---|
+| Schaden auf Kill-Saw-Gruppe wählen | Zustand A zeigt Radio; Auswahl möglich |
+| Ersten Schaden anwenden (1 Wunde, Modell lebt) | Lock → Zustand B; andere Gruppen gesperrt |
+| Weiteren Schaden anwenden (Modell stirbt) | Zustand C: Vernichtungs-Meldung |
+| Kill Saw letztes Modell stirbt | Ausrüstungs-Warnung: „Kill Saw ×2 nicht mehr verfügbar" |
+| Nächste Schadensrunde | Zustand A: freie Wahl wiederhergestellt |
+| Einzelgruppen-Einheit (Warriors) | Keine Subgruppen-Auswahl angezeigt |
+
+**Verify nach allen manuellen Schritten**: `pytest --tb=short` → grün.
+
+### Step 4: Vollsuite + Lint + Doku
+
+- `pytest --tb=short` grün, Coverage ≥ 90 %; kein neuer uncovered Pfad.
+- `ruff check src/ && black --check src/ && isort --check-only src/` → passt.
+- Abschlussbericht im `next_session.md`: manuelle Verifikationspunkte auflisten
+  + bekannte Limitation Frontmodell-Tracking explizit dokumentieren.
+
+## Test plan (Zusammenfassung)
+
+| Test | Datei | Typ |
+|---|---|---|
+| `select_damage_target_group` Happy Path | `test_unit_mutations.py` | Unit |
+| `select_damage_target_group` invalid group | `test_unit_mutations.py` | Unit |
+| `get_locked_group` kein verwundetes Modell | `test_unit_mutations.py` | Unit |
+| `get_locked_group` verwundete Gruppe | `test_unit_mutations.py` | Unit |
+| Lock-Invariante: falscher group_id → ValueError | `test_unit_mutations.py` | Unit |
+| Mortal-Wound-Overflow Regression | `test_unit_mutations.py` | Unit |
+| Einzelgruppe: kein interaktives UI | `test_unit_mutations.py` | Unit |
+| Zustand A→B→C Transition (Nobz) | `test_group_flow.py` | AC |
+| Kill-Saw-Gruppe zerstört → Warnung | `test_group_flow.py` | AC |
+| Kein Fraktions-String in src/ | `tests/architecture/` | Architektur |
+| Nobz-Roster alle 3 Zustände | manuell | Manuell |
+| Fähigkeits-Warnung bei Gruppen-Zerstörung | manuell | Manuell |
+| Einzelgruppen-Einheit ohne UI | manuell | Manuell |
 
 ## Done criteria
 
 ALLE müssen gelten:
 
-- [ ] `reallocate_group_losses` mit Validierung + Invariante; Tests grün
-- [ ] Korrektur-UI: ±-Counter pro Gruppe, Default = priority, Summen-Gate,
-      Waffen-Captions, Wegfall-Warnung
-- [ ] Snapshot (`group_models_before`) im res-State; Korrektur wiederholbar
-- [ ] RP-Sperre: nach RP keine Korrektur mehr (Hinweis statt Counter)
-- [ ] `pytest --tb=short` grün, Coverage ≥ 80 %; Lint passt
-- [ ] Abschlussbericht: manuelle Verifikationspunkte (Nobz-Fall Shooting +
-      Fight, Einzelgruppen-Einheit ohne Korrektur-UI) + dokumentierte
-      Limitation Frontmodell-Tracking
+- [ ] `select_damage_target_group()` und `get_locked_group()` implementiert, mit
+      Validierung und Unit-Tests grün
+- [ ] Lock-Check in `apply_damage`: falscher `group_id` bei Lock → ValueError (getestet)
+- [ ] Mortal-Wound-Overflow (`mortal=True`) korrekt durch neuen Flow weitergereicht
+      (Regressionstest grün)
+- [ ] Zustand A/B/C korrekt gerendert; Locked-State persistiert zwischen Renders
+- [ ] Einzelgruppen-Einheiten: kein interaktives Subgruppen-UI (Bedingung `len > 1`)
+- [ ] `pytest --tb=short` grün, Coverage ≥ 90 %; Lint sauber
+- [ ] Manuell verifiziert: Nobz-Roster alle 3 Zustände; Fähigkeits-Warnung erscheint;
+      Warriors ohne Subgruppen-UI
 - [ ] Status-Zeile in `docs/audit/plans/README.md` aktualisiert
 
 ## STOP conditions
 
-- Plan 013 ist nicht DONE → STOP (falscher Ausgangszustand).
+- Plan 013 nicht DONE → STOP (falscher Ausgangszustand; `_render_damage_block`
+  und `model_groups`-Invariante fehlen).
 - `_render_damage_block` hat nach 013 eine strukturell andere Apply-Mechanik
-  (z. B. kein `res_key`-State mehr) → STOP, neu planen.
-- Die UI bräuchte eine Korrektur über MEHRERE Resolution-Tabs hinweg
-  (gleicher Verteidiger, mehrere Waffen): Snapshot-pro-Tab reicht dann nicht
-  → melden, Designentscheidung des Nutzers.
-- Mehrwunden-Einheit mit Gruppen, bei der das Frontmodell-Problem real
-  auftritt (Schaden „hängt" zwischen Gruppen): dokumentieren + melden,
-  NICHT improvisieren.
+  (z. B. kein `res_key`-State mehr) → STOP, Neuplanung nötig.
+- Mehrwunden-Einheit ohne Subgruppen, bei der Frontmodell-Problem real auftritt
+  (Schaden „hängt" zwischen Gruppen): dokumentieren, kein interaktives UI zeigen,
+  NICHT improvisieren — melden.
+- Lethal Hits Overflow wird für Korrektheit nötig → STOP, eigener Plan nach 014.
+- Ein Test wird rot, der NICHT zu den neuen Features gehört → STOP, melden.
 
 ## Maintenance notes
 
-- Die Korrektur arbeitet IMMER vom Snapshot aus (idempotent). Wer später
-  Undo/Redo für ganze Angriffe baut, kann denselben Snapshot nutzen.
+- `select_damage_target_group` / `get_locked_group` sind UI-unabhängig — wenn
+  Undo/Redo für ganze Angriffe gebaut wird, können dieselben State-Felder genutzt
+  werden.
 - Wenn Morale-Verluste (`flee_models`) später gruppenfähig werden, dieselbe
-  Korrektur-UI wiederverwenden (Funktion ist UI-unabhängig).
+  Lock-Logik wiederverwenden.
+- Frontmodell-Tracking (Mehrwunden-Einheit, Wunden zwischen Gruppen): bewusste
+  bekannte Limitation; `current_wounds` bleibt Unit-Level. Ziel6.md nennt es
+  „Folgefrage bei Umsetzung". Im Abschlussbericht explizit als Einschränkung
+  benennen.

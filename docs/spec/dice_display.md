@@ -1,0 +1,190 @@
+# Dice Display Spec
+
+> Kanonisches Dokument für die Würfelanzeige in `src/uiLayout/dice_html.py`.
+> Änderungen an `dice_html.py` müssen hier reflektiert und durch Tests in
+> `tests/uiLayout/test_dice_html.py` abgedeckt sein.
+> Letzte Aktualisierung: 2026-06-20 (Refinement-Session)
+
+---
+
+## 1. Zeilenstruktur
+
+Jede Modifier-Zeile besteht aus:
+
+```
+[BADGE] [  1 ][  2 ][ | ][  3 ][  4 ][  5 ][  6 ]
+```
+
+| Element | Breite | Beschreibung |
+|---|---|---|
+| `[BADGE]` | 96 px | Label + Wert (z. B. `"AP −2"`); CSS `overflow:hidden; text-overflow:ellipsis` |
+| `[Slot N]` | 34 px | je 32 px SVG + 2 px Margin |
+| `[ \| ]` | variabel | Erfolgsschwelle (Trennzeichen Fail-Zone / Success-Zone) |
+
+**Invariante (unveränderlich):** Slot 1 zeigt **immer** `[✕]`. Ein
+unmodifiziertes Würfelergebnis von 1 misslingt immer — kein Buff kann das
+aufheben.
+
+### 1.1 Schwellen-Position
+
+| Profil-Wert | `[ | ]` sitzt zwischen |
+|---|---|
+| 2+ | Slot 1 und Slot 2 |
+| 3+ | Slot 2 und Slot 3 |
+| 4+ | Slot 3 und Slot 4 |
+| 5+ | Slot 4 und Slot 5 |
+| 6+ | Slot 5 und Slot 6 |
+
+---
+
+## 2. Richtungskonvention
+
+> **Korrektur zum früheren Code:** `dice_html.py:200` hatte `rightward = value < 0`
+> — Richtung war invertiert. Korrekt: `rightward = value > 0`.
+> Gefixt in Plan 022 (2026-06-20). Bei Regressionen: `test_buff_arrow_points_right`
+> und `test_debuff_arrow_points_left` schlagen fehl.
+
+| Modifier-Typ | Pfeil-Richtung | Farbe | Bedeutung |
+|---|---|---|---|
+| **Buff (+)** | RECHTS `[→]` | Grün `#4a9a5a` | Effektiver Würfelwert steigt — niedrigere Ergebnisse genügen |
+| **Debuff (−)** | LINKS `[←]` | Rot `#ef4444` | Effektiver Würfelwert sinkt — höhere Ergebnisse nötig |
+
+### 2.1 Pfeil-Label-Format
+
+| Modifier | Label |
+|---|---|
+| Debuff −N | `[←N]` (z. B. `[←1]`, `[←2]`) |
+| Buff +N | `[+N→]` (z. B. `[+1→]`, `[+2→]`) |
+
+---
+
+## 3. Modifier-Fälle
+
+### 3.1 Standardfall — Basis 3+
+
+```
+         [✕ ][  2 ][ | ][  3 ][  4 ][  5 ][  6 ]
+Debuff-1: [✕ ][  2 ][←1 ][  3 ]
+Buff +1:  [✕ ][  2 ][+1→][  3 ]
+Debuff-2: [✕ ][  2 ][←2 ][  ─ ][  4 ]
+Buff +2:  [✕ ][  2 ][+2→][  3 ]           ← Slot 1 bleibt ✕ (Invariante)
+Debuff-3: [✕ ][  2 ][←3 ][  ─ ][  ─ ][  5 ]
+Buff +3:  [✕ ][  2 ][+3→][  3 ]           ← Slot 1 bleibt ✕ (Invariante)
+```
+
+### 3.2 Grenzfall — Basis 6+
+
+```
+         [✕ ][  2 ][  3 ][  4 ][  5 ][ | ][  6 ]
+Debuff-1:                        [  5 ][←1 ][  6 ]
+Debuff-2:                        [  5 ][←2 ][  ─ ][✕ ]   ← über 6 = immer miss
+Debuff-3:                        [  5 ][←3 ][  ─ ][  ─ ][✕ ]
+Buff +1:                         [  5 ][+1→][  6 ]
+Buff +2:                    [  4 ][  ─ ][+2→][  6 ]
+Buff +3:               [  3 ][  ─ ][  ─ ][+3→][  6 ]
+```
+
+### 3.3 Grenzfall — Buff gegen die 1 (Basis 3+)
+
+```
+         [✕ ][  2 ][ | ][  3 ]
+Buff +2:  [✕ ][  2 ][+2→][  3 ]   ← Slot 1 = ✕, Buff ändert nichts
+Buff +3:  [✕ ][  2 ][+3→][  3 ]   ← identisch (Invariante gilt absolut)
+```
+
+---
+
+## 4. Reroll-Marker
+
+Reroll-Würfe zeigen das `↺`-Symbol **unterhalb** des betroffenen Slots.
+
+```
+         [✕ ][  2 ][ | ][  3 ][  4 ][  5 ][  6 ]
+Reroll 1:  ↺
+Reroll 1-2: ↺    ↺
+```
+
+---
+
+## 5. Always-Fail-Marker
+
+Fähigkeiten, die bestimmte Würfelergebnisse immer scheitern lassen, zeigen
+`✕` **unterhalb** der betroffenen Slots (zusätzlich zum regulären Slot-Inhalt).
+
+```
+         [✕ ][  2 ][ | ][  3 ][  4 ][  5 ][  6 ]
+QShield:   ✕    ✕           ✕         ← 1, 2 und 3 scheitern immer (Angreifer-Perspektive)
+```
+
+### 5.1 Perspektivabhängige Farbe (Quantum Shield)
+
+Quantum Shield ist kontextabhängig:
+
+| Perspektive | Bedeutung | `color_hint` | Farbe |
+|---|---|---|---|
+| Verteidiger | Angreifer-Würfe 1–3 scheitern → Vorteil | `"buff"` | Grün `#4a9a5a` |
+| Angreifer | Eigene Würfe 1–3 scheitern → Nachteil | `"debuff"` | Rot `#ef4444` |
+
+Steuerung: optionales `color_hint: "buff" | "debuff"` im Modifier-Dict
+(aus `ability_engine.py`). Wenn nicht gesetzt: wertbasierte Farbe (Vorzeichen).
+
+---
+
+## 6. `color_hint`-Feld
+
+Optionales Feld im Modifier-Dict (rückwärtskompatibel):
+
+```python
+{
+    "value": -3,           # Würfelmodifikator
+    "color_hint": "buff",  # optional; überschreibt Vorzeichen-basierte Farbe
+}
+```
+
+| `color_hint` | Farbe |
+|---|---|
+| `"buff"` | Grün `#4a9a5a` |
+| `"debuff"` | Rot `#ef4444` |
+| nicht gesetzt | wertbasiert (`value > 0` → grün, `value < 0` → rot) |
+
+---
+
+## 7. Farbschema
+
+| Wert / Hinweis | Farbe | Hex |
+|---|---|---|
+| Buff / `color_hint: "buff"` | Grün | `#4a9a5a` |
+| Debuff / `color_hint: "debuff"` | Rot | `#ef4444` |
+
+Beide Werte sind in `docs/spec/design_colors.md §3` (Effekt-Badges) verankert.
+
+---
+
+## 8. Test-Anforderungen (PFLICHT)
+
+Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
+`tests/uiLayout/test_dice_html.py`. Neue Fälle erweitern die Tabelle.
+
+| Test | Was wird geprüft | Plan |
+|------|-----------------|------|
+| `test_buff_arrow_points_right` | Buff → Pfeil rechts (Regression) | 022 |
+| `test_debuff_arrow_points_left` | Debuff → Pfeil links (Regression) | 022 |
+| `test_slot_1_always_shows_x` | Slot 1 = ✕, unabhängig von Modifier | 022 |
+| `test_long_badge_does_not_overflow` | Badge truncated bei > 96 px | 022 |
+| `test_color_hint_overrides_value_sign` | `color_hint` > Vorzeichen | 022 |
+| `test_debuff_beyond_6_shows_x_slot` | Debuff über 6 → ✕ rechts | 022 |
+| `test_buff_cannot_make_1_succeed` | Buff macht 1 nie zu Erfolg | 022 |
+| `test_reroll_marker_correct_slot` | ↺ unter korrektem Slot | 022 |
+| `test_always_fail_marks_correct_slots` | ✕ unter allen auto-fail-Slots | 022 |
+
+---
+
+## 9. Bekannte offene Punkte
+
+| ID | Beschreibung | Plan |
+|---|---|---|
+| D1 | Arrow-Direction-Bug (`rightward = value < 0` invertiert) | Plan 022 Step 1 |
+| D2 | Badge-Breite / Overflow bei langen Labels | Plan 022 Step 2 |
+| D3 | Edge Cases 6+ / gegen-1 fehlen | Plan 022 Step 4 |
+| D4 | `color_hint`-Feld nicht vorhanden | Plan 022 Step 3 |
+| D5 | `dakka`/`klaw`/`tesla`-Literals in `attack_math.py` (INV-4b) | Plan 022 Step 5 |
