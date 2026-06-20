@@ -21,7 +21,15 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S74, 2026-06-20)
+## Aktueller Stand (nach S75, 2026-06-20)
+
+**S75 (kein Code committet):** Hartes Kontext-Gate (PreToolUse-Block) prototypisiert
+und auf Stakeholder-Entscheid **wieder entfernt**. Grund: bei *einer* Schwelle = 135k
+blockt das Gate genau den Wind-down (Edit/Commit), den es selbst fordert → latenter
+Deadlock. **Offen bleibt:** Kontext-Schutz ist weiter NUR Advisory (`session_context.py`
+am Turn-Start) — er warnt, stoppt nicht; deshalb liefen S63/S70 auf 154/156k. Falls
+erneut angegangen: Block-Schwelle **oberhalb** des 135k-Wind-downs (z. B. 145k), damit
+Speichern+Commit noch durchgehen.
 
 **Plan 019 DONE:** `TargetSelectionRequest` + `pending_target_request` ersetzt
 `cmd_awaiting_ability_id`/`cmd_awaiting_required_kw`/`wargear_awaiting_bearer_uid`;
