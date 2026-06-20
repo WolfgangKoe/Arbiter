@@ -99,10 +99,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-COMBAT-09
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_ability_invuln_save_picks_best_of_multiple
 - **quelle**: core_rules.txt — "Invulnerable Saves" — "If a model has more than one invulnerable save, it can only use one of them"
 - **code**: ability_engine.py:ability_invuln_save
-- **regel**: Hat ein Modell mehrere Invulnerable Saves, wird nur der beste verwendet (kleinster Zahlenwert). Die „bester von mehreren"-Auswahl liegt in `ability_invuln_save` (`min(...)` über alle aktiven Invuln-Effekte), NICHT in `resolve_save` (nimmt einen Einzelwert). (Schuld: Test gehört auf `ability_invuln_save` — S69-Befund, code-Ref korrigiert; Test offen.)
+- **regel**: Hat ein Modell mehrere Invulnerable Saves, wird nur der beste verwendet (kleinster Zahlenwert). Die „bester von mehreren"-Auswahl liegt in `ability_invuln_save` (`min(...)` über alle aktiven Invuln-Effekte), NICHT in `resolve_save` (nimmt einen Einzelwert).
 
 ### R-COMBAT-10
 - **klasse**: A

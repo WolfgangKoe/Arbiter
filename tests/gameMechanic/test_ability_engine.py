@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
+
 _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -12,6 +14,7 @@ import gameMechanic.ability_engine as _eng  # noqa: E402
 from gameMechanic.ability_engine import (  # noqa: E402
     _unit_matches_target,
     ability_badge_label,
+    ability_invuln_save,
     buff_stat_bonus,
     charge_after_advance_allowed,
     check_conditions,
@@ -611,3 +614,46 @@ def test_unit_matches_target_any_of_logic() -> None:
     )
     assert _unit_matches_target(unit, {})
     assert not _unit_matches_target(unit, {"target_keywords": ["NECRON"]})
+
+
+# ---------------------------------------------------------------------------
+# ability_invuln_save — R-COMBAT-09: best (smallest) of multiple invuln saves
+# ---------------------------------------------------------------------------
+
+
+def test_ability_invuln_save_picks_best_of_multiple(monkeypatch: pytest.MonkeyPatch) -> None:
+    """R-COMBAT-09: two active invuln effects → the smaller value (better save) wins."""
+    monkeypatch.setattr(
+        _eng,
+        "_active_effects_for_faction",
+        lambda faction: [
+            {"type": "invuln_save", "modifier": 5},
+            {"type": "invuln_save", "modifier": 4},
+        ],
+    )
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_invuln_save("Necrons", unit) == 4
+
+
+def test_ability_invuln_save_none_without_invuln_effect(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No invuln_save effect active → no granted invuln save."""
+    monkeypatch.setattr(
+        _eng,
+        "_active_effects_for_faction",
+        lambda faction: [{"type": "buff_stat", "stat": "attacks", "modifier": 1}],
+    )
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_invuln_save("Necrons", unit) is None
+
+
+def test_ability_invuln_save_skips_non_matching_unit(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An invuln effect targeting other keywords does not apply to this unit."""
+    monkeypatch.setattr(
+        _eng,
+        "_active_effects_for_faction",
+        lambda faction: [
+            {"type": "invuln_save", "modifier": 4, "target_keywords": ["VEHICLE"]},
+        ],
+    )
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_invuln_save("Necrons", unit) is None
