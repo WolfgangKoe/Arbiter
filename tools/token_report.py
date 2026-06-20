@@ -201,11 +201,12 @@ def parse_first_user_task(lines: list[str], *, max_len: int = 120) -> str | None
 
 @dataclass(frozen=True)
 class Subagent:
-    """Ein gestarteter Subagent: Typ, Aufgabe und Modell-Tier."""
+    """Ein gestarteter Subagent: Typ, Aufgabe, Modell-Tier und Peak-Kontext."""
 
     agent_type: str
     description: str
     tier: str
+    peak_context: int | None = None
 
 
 def _first_model(jsonl_path: Path) -> str | None:
@@ -224,8 +225,22 @@ def _first_model(jsonl_path: Path) -> str | None:
     return None
 
 
+def _subagent_peak_context(jsonl_path: Path) -> int | None:
+    """Peak-Kontext aus einem Subagenten-Transcript (None wenn fehlend/unlesbar)."""
+    if not jsonl_path.is_file():
+        return None
+    try:
+        lines = jsonl_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    records = parse_usage_lines(lines, session="", role="subagent")
+    if not records:
+        return None
+    return max(r.context for r in records)
+
+
 def read_subagents(subagents_dir: Path) -> list[Subagent]:
-    """Liest (Typ, Aufgabe, Tier) je Subagent aus ``*.meta.json`` + ``*.jsonl``."""
+    """Liest (Typ, Aufgabe, Tier, Peak-Kontext) je Subagent aus ``*.meta.json`` + ``*.jsonl``."""
     subagents: list[Subagent] = []
     if not subagents_dir.is_dir():
         return subagents
@@ -240,6 +255,7 @@ def read_subagents(subagents_dir: Path) -> list[Subagent]:
                 agent_type=data.get("agentType") or "?",
                 description=data.get("description") or "",
                 tier=tier_for_model(_first_model(jsonl_path)),
+                peak_context=_subagent_peak_context(jsonl_path),
             )
         )
     return subagents
@@ -621,6 +637,46 @@ def _render_hints(session: SessionSummary) -> list[str]:
     return lines
 
 
+def _context_status(peak: int | None) -> str:
+    """✅/⚠️/⛔ je nach Peak-Kontext im 150k-Korridor (— wenn unbekannt)."""
+    if peak is None:
+        return "—"
+    if peak >= CONTEXT_LIMIT:
+        return "⛔"
+    if peak >= round(0.8 * CONTEXT_LIMIT):
+        return "⚠️"
+    return "✅"
+
+
+def _render_subagent_corridor(latest_meta: SessionMeta) -> list[str]:
+    """Abschnitt „Subagenten im 150k-Korridor" für die jüngste Session."""
+    lines = [
+        "## Subagenten im 150k-Korridor",
+        "",
+        "_Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._",
+        "",
+    ]
+    if not latest_meta.subagents:
+        lines += ["_keine Subagenten in der letzten Session._", ""]
+        return lines
+    lines.append("```text")
+    lines.append(f"{'#':<3} {'Agent / Aufgabe':<35} {'Peak-Kontext / 150k':<20} {'Status'}")
+    lines.append(f"{'-' * 3} {'-' * 35} {'-' * 20} {'-' * 6}")
+    for index, sub in enumerate(latest_meta.subagents, start=1):
+        label = f"{sub.agent_type}: {sub.description}"
+        if len(label) > 35:
+            label = label[:34] + "…"
+        if sub.peak_context is None:
+            peak_col = "—"
+            status = "—"
+        else:
+            peak_col = f"{bar(sub.peak_context, CONTEXT_LIMIT)} {_k(sub.peak_context):>4}"
+            status = _context_status(sub.peak_context)
+        lines.append(f"{index:<3} {label:<35} {peak_col:<20} {status}")
+    lines += ["```", ""]
+    return lines
+
+
 def _render_subagents(ordered: list[str], meta: dict[str, SessionMeta]) -> list[str]:
     detail = [(s, meta[s]) for s in ordered if meta.get(s) and meta[s].subagents]
     if not detail:
@@ -628,15 +684,20 @@ def _render_subagents(ordered: list[str], meta: dict[str, SessionMeta]) -> list[
     lines = [
         "## Subagenten — wer wurde wofür gestartet",
         "",
-        "| Session | Modell | Agent | Aufgabe |",
-        "|---|---|---|---|",
+        "| Session | Modell | Agent | Aufgabe | Peak |",
+        "|---|---|---|---|---|",
     ]
     for session, session_meta in detail:
         label = session_label(session, session_meta.started_at)
         for sub in session_meta.subagents:
+            peak_cell = (
+                f"{_k(sub.peak_context)} {_context_status(sub.peak_context)}"
+                if sub.peak_context is not None
+                else "—"
+            )
             lines.append(
                 f"| {label} | {_cell(sub.tier)} | {_cell(sub.agent_type)} "
-                f"| {_cell(sub.description)} |"
+                f"| {_cell(sub.description)} | {_cell(peak_cell)} |"
             )
     lines.append("")
     return lines
@@ -675,6 +736,7 @@ def render_markdown(
     lines += _render_focus(summary["sessions"][focus], focus_meta, link=notes.get(focus))
     lines += _render_history(ordered, summary, meta)
     lines += _render_hints(summary["sessions"][focus])
+    lines += _render_subagent_corridor(focus_meta)
     lines += _render_subagents(ordered, meta)
     lines += [
         "---",

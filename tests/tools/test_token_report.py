@@ -14,6 +14,9 @@ from tools.token_report import (
     SessionMeta,
     Subagent,
     UsageRecord,
+    _context_status,
+    _render_subagent_corridor,
+    _subagent_peak_context,
     bar,
     generate_hints,
     model_mix_bar,
@@ -114,10 +117,64 @@ def test_read_subagents_reads_task_and_model_tier(tmp_path):
     (sub_dir / "agent-1.meta.json").write_text(
         json.dumps({"agentType": "Explore", "description": "Audit YAML"})
     )
-    (sub_dir / "agent-1.jsonl").write_text(_assistant_line("claude-sonnet-4-6", output_tokens=1))
+    (sub_dir / "agent-1.jsonl").write_text(
+        _assistant_line("claude-sonnet-4-6", input_tokens=50_000, output_tokens=1)
+    )
 
     subagents = read_subagents(sub_dir)
-    assert subagents == [Subagent("Explore", "Audit YAML", "Sonnet")]
+    assert len(subagents) == 1
+    sub = subagents[0]
+    assert sub.agent_type == "Explore"
+    assert sub.description == "Audit YAML"
+    assert sub.tier == "Sonnet"
+    assert sub.peak_context == 50_000
+
+
+def test_subagent_peak_context_returns_none_for_missing_file(tmp_path):
+    assert _subagent_peak_context(tmp_path / "no-such.jsonl") is None
+
+
+def test_subagent_peak_context_returns_max_context(tmp_path):
+    jsonl = tmp_path / "agent.jsonl"
+    jsonl.write_text(
+        "\n".join(
+            [
+                _assistant_line(
+                    "claude-sonnet-4-6", input_tokens=30_000, cache_read_input_tokens=20_000
+                ),
+                _assistant_line("claude-sonnet-4-6", input_tokens=80_000),
+            ]
+        )
+    )
+    # max(30k+20k, 80k) = 80k
+    assert _subagent_peak_context(jsonl) == 80_000
+
+
+def test_context_status_thresholds():
+    assert _context_status(None) == "—"
+    assert _context_status(0) == "✅"
+    assert _context_status(119_999) == "✅"
+    assert _context_status(120_000) == "⚠️"
+    assert _context_status(149_999) == "⚠️"
+    assert _context_status(150_000) == "⛔"
+    assert _context_status(200_000) == "⛔"
+
+
+def test_render_subagent_corridor_no_subagents():
+    meta = SessionMeta("2026-06-18T09:00:00Z", "task", [])
+    lines = _render_subagent_corridor(meta)
+    assert any("keine Subagenten" in line for line in lines)
+
+
+def test_render_subagent_corridor_shows_peak_bar():
+    sub = Subagent("Explore", "Audit YAML", "Sonnet", peak_context=60_000)
+    meta = SessionMeta("2026-06-18T09:00:00Z", "task", [sub])
+    lines = _render_subagent_corridor(meta)
+    combined = "\n".join(lines)
+    assert "60k" in combined
+    assert "✅" in combined
+    assert "Explore" in combined
+    assert "150k" in combined  # 150k reference in column header
 
 
 # --- Aggregation --------------------------------------------------------- #
@@ -263,7 +320,7 @@ def test_render_markdown_lists_subagents_with_model_and_task():
     md = render_markdown(summarize(records), generated_at="x", meta=meta)
 
     assert "Subagenten — wer wurde wofür gestartet" in md
-    assert "| Session | Modell | Agent | Aufgabe |" in md
+    assert "| Session | Modell | Agent | Aufgabe | Peak |" in md
     assert "Sonnet" in md and "Explore" in md and "Suche Aufrufer" in md
 
 

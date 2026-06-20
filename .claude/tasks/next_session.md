@@ -21,37 +21,45 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S69, 2026-06-20)
+## Aktueller Stand (nach S70, 2026-06-20)
 
-**S69 — Prozess festgehalten + Ledger ehrlich geschrumpft.** (1) **ADR-0004**: Skill-/Claude-
-Inhalte über die API nur per Subagent ziehen (direktes Laden kostete ~300k Token) — CLAUDE.md
-(Token-Disziplin) + ADR + Memory. (2) **History-Rotation-Tool** `tools/rotate_history.py` (+Test):
-hängt Stand-Einzeiler an `ziel6.md`, setzt Stand-Block hier zurück — am Ende dieser Session
-selbst dogfood-genutzt. (3) **Ledger 10 → 8** via Sonnet-Subagent (34 % Token-Anteil, isoliert):
-R-CMD-04 + R-CMD-12 ehrlich getestet. **Opus-Review fand zwei Katalog-Fehler:** R-COMBAT-09-Logik
-liegt in `ability_engine.py:ability_invuln_save` (nicht `resolve_save`) → code-Ref korrigiert,
-Test noch offen; R-COMBAT-17 rechnet die App gar nicht (nur Hinweis-Caption) → auf **Klasse C**
-reklassifiziert. Vertragstests des Subagenten (resolve_save/_compute_attacks) bleiben als
-Extra-Coverage. **R-CMD-03 Befund** (deine Frage c): CP-Grant-Button ist ungated — `game_mode`/
-Battle-forged wird nicht geprüft; risikoarmer Bug (alle Rosters battle-forged), Fix = 1-Zeilen-
-Guard, offen. **952 grün, Cov 91.88 %**, Nenner=121, Ledger=8.
+**S70 — Regel-Ledger 8 → 1 + Overview-Ausbau.** (1) **R-COMBAT-09** getestet
+(`ability_invuln_save`, kleinster Invuln gewinnt). (2) **Render-Ledger via Sonnet-
+Subagent** extrahiert: R-CMD-03 (Battle-forged-Gate `can_gain_command_point`, gated
+matched/crusade), R-CMD-10 (`apply_buff_to_unit` → `unit_mutations.py`, idempotent),
+R-CMD-11 (`resolve_gain_cp_roll`), R-CHARGE-09/10 (`hi_eligible_units`/
+`hi_already_performed`), R-MORALE-02 (`morale_test_required`). **Opus-Review-Befund:**
+der Subagent hatte 3 von 6 Helfern als *verwaiste Parallel-Implementierungen* angelegt
+(grün getestet, aber nie vom Render-Code aufgerufen) — Opus hat alle drei verdrahtet,
+`apply_buff_to_unit` in die richtige Heimat (`unit_mutations`) verschoben und Katalog-
+`code:`-Refs korrigiert. **Lehre → [[feedback-proactive-subagent-prep]]:** Subagenten
+künftig Selbstprüf-Checkliste „grep belegt: Nicht-Test-Code ruft jeden Helfer auf"
+mitgeben. (3) **Overview erweitert** (token_report.py, Sonnet-Subagent): Subagent-
+**Peak-Korridor (150k)**-Diagramm + Peak-Spalte in „wer wofür" — wir sehen jetzt, ob
+Subagenten selbst im Korridor bleiben. **985 grün, Cov 92.25 %, Ledger=1** (nur
+R-COMBAT-17, Rapid-Fire-Distanz = reiner Tisch-Anteil, kein sinnvoller Test).
 
-Frühere Sessions (S60–S68): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+**Vorausschauend arbeiten (Nutzer-Direktive S70, [[feedback-proactive-subagent-prep]]):**
+ToDos der nächsten Session(s) im Blick halten und Subagenten **vorarbeiten** lassen,
+sodass im besten Fall nur Review bleibt. Subagent-Peak im Overview-Diagramm beobachten.
+
+Frühere Sessions (S60–S69): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — frei wählbar (je eigene Freigabe)
-1. **ZUERST: R-COMBAT-09-Test** auf `ability_engine.py:ability_invuln_save` (zwei aktive Invuln-
-   Effekte → kleinerer gewinnt) → dann `getestet: ja` setzen. Ledger 8 → 7. Schnell, fachlich.
-2. **R-CMD-03-Fix klären + umsetzen** (Frage c offen): 1-Zeilen-Guard `game_mode == "matched"` vor
-   CP-Grant in `commandPhase.py`; Render → Logik in testbaren Helfer ziehen + Test. Eigene Freigabe.
-3. **Render-Ledger (Klasse 2)** in kleinen Extract-Refactors: R-CMD-10/11 (commandPhase),
-   R-CHARGE-09/10 (chargephase), R-MORALE-02 (moralePhase) — je Phase-Datei, Logik raus + Test.
-3b. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5): knappe
-   „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl.
-4b. **Regel-Katalog weiter:** nächster Bereich offen (Deployment / Mission-Scoring — Sonnet-Subagent).
+**Vorab prüfen:** Welcher Schritt lässt sich als Fleißarbeit an einen Subagenten
+vorab geben (nur Review bleibt)? Subagent-Peak im Overview-Korridor-Diagramm checken.
+1. **Regel-Katalog weiter (Nenner wächst):** nächster Bereich offen — Deployment /
+   Mission-Scoring. **Subagent-Vorarbeit-Kandidat** (Klasse A/B/C-Entwurf nach Format;
+   Opus reviewt). Selbstprüf-Checkliste „Helfer verdrahtet?" mitgeben.
+2. **Output↔Ziel-Fortschritt-Zeile** im Review verankern (`operating_model.md` Event 5):
+   knappe „Ziel-Fortschritt: ja/teils/nein, woran sichtbar" — Soll-Ist ohne Token-Zielzahl.
 3. **Gates leser-orientiert prüfen (ADR-0002):** Debt-Scoreboard + Katalog-% gegen
    Stakeholder-Fragen durchsehen (backlog §2).
-4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen.
+4. **INV-4b/INV-4 Ledger schrumpfen:** benannte Tokens/Allowlist aus `src/` in YAML ziehen
+   (20 Tokens, 10 Allowlist-Einträge). **Subagent-Vorarbeit-Kandidat** je Token.
 5. **Operating-Model Phase C:** Refinement automatisieren (`Fotos/` → `docs/inbox/`, backlog §2).
+6. **Hook-Idee (Nutzer S70):** wenn Subagent-Peak verlässlich im Overview steht, später
+   einen Hook bauen, der mehr Subagenten-Nutzung erlaubt, ohne Überblicksverlust.
 
 ### Offene Frage / Retro-Vormerkung
 - **Output ↔ cache_read als Tempo-Indikator** (S68): Output gegen Qualität gewichten, nicht
