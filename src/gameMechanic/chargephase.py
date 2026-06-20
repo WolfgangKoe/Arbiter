@@ -149,6 +149,36 @@ def _inactive_charge(
 # ---------------------------------------------------------------------------
 
 
+def hi_already_performed(unit_state: dict) -> bool:  # type: ignore[type-arg]
+    """Return True when the unit has already performed a Heroic Intervention this phase.
+
+    Implements the once-per-enemy-Charge-Phase guard from R-CHARGE-10.
+    """
+    return bool(unit_state.get("turn_flags", {}).get("heroic_intervened"))
+
+
+def hi_eligible_units(all_units: list, units_data: dict) -> list:  # type: ignore[type-arg]
+    """Return units eligible for Heroic Intervention.
+
+    Eligibility (App-enforced portion of R-CHARGE-09 / R-CHARGE-10):
+    - Not destroyed.
+    - Not already in melee (in_melee is False).
+    - Has not already performed a Heroic Intervention this enemy Charge Phase
+      (heroic_intervened flag is False).
+    - Has the CHARACTER keyword.
+
+    The 3"/5" proximity condition is table-side only and not checked here.
+    """
+    return [
+        u
+        for u in all_units
+        if not units_data.get(u.id, {}).get("destroyed")
+        and not units_data.get(u.id, {}).get("in_melee")
+        and not hi_already_performed(units_data.get(u.id, {}))
+        and u.has_keyword("CHARACTER")
+    ]
+
+
 def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: ignore[type-arg]
     """Step 2: Heroic Intervention window for the inactive player."""
     st.markdown("### ⚔ Heroic Intervention")
@@ -167,14 +197,7 @@ def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: 
     all_units = units_list_for(inactive)
     units_data = st.session_state[key]
 
-    eligible = [
-        u
-        for u in all_units
-        if not units_data.get(u.id, {}).get("destroyed")
-        and not units_data.get(u.id, {}).get("in_melee")
-        and not units_data.get(u.id, {}).get("turn_flags", {}).get("heroic_intervened")
-        and u.has_keyword("CHARACTER")
-    ]
+    eligible = hi_eligible_units(all_units, units_data)
 
     if not eligible:
         st.info("No eligible CHARACTER units — Heroic Intervention not possible.")

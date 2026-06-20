@@ -51,6 +51,24 @@ def adjust_cp(faction: str, delta: int) -> None:
     st.session_state.cp[faction] = max(0, st.session_state.cp[faction] + delta)
 
 
+def apply_buff_to_unit(
+    unit_state: dict,  # type: ignore[type-arg]
+    ability_id: str,
+    badge_label: str,
+    effect_type: str,
+) -> None:
+    """Record an activated command-phase buff in a unit's active_buffs list.
+
+    Idempotent for the same ability_id: adds the entry only if no buff with
+    that ability_id already exists.  Called by the render layer after the
+    player activates a buff_roll/reroll_hit_1 ability and picks a target.
+    """
+    buffs: list[dict] = unit_state.setdefault("active_buffs", [])  # type: ignore[type-arg]
+    if any(b.get("ability_id") == ability_id for b in buffs):
+        return
+    buffs.append({"ability_id": ability_id, "badge_label": badge_label, "effect_type": effect_type})
+
+
 def _recompute_from_group_wounds(state: dict, unit: Unit) -> None:  # type: ignore[type-arg]
     """Recompute group_models / models / current_wounds / destroyed from group_wounds."""
     gw: dict[str, int] = state["group_wounds"]

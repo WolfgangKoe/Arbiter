@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.moralePhase import _fail_threshold
+from gameMechanic.moralePhase import _fail_threshold, morale_test_required
 from gameMechanic.unit_mutations import flee_models
 
 # ---------------------------------------------------------------------------
@@ -142,3 +142,55 @@ class TestFleeModels:
             flee_models("u1", "Necrons", 2, unit)
         assert unit_state["models"] == 3
         assert unit_state["current_wounds"] == 9
+
+
+# ---------------------------------------------------------------------------
+# R-MORALE-02 — morale_test_required (filter for units that must test)
+# ---------------------------------------------------------------------------
+
+
+def _mock_unit(models_max: int = 5) -> MagicMock:
+    u = MagicMock()
+    u.models_max = models_max
+    return u
+
+
+def _alive_state(lost: int = 0) -> dict:
+    return {"destroyed": False, "lost_models_this_turn": lost}
+
+
+class TestMoraleTestRequired:
+    def test_unit_with_losses_requires_test(self) -> None:
+        """Units with at least one model lost this turn must take a Morale test."""
+        unit = _mock_unit(models_max=10)
+        state = _alive_state(lost=2)
+        assert morale_test_required(unit, state) is True
+
+    def test_unit_with_no_losses_skipped(self) -> None:
+        """Units that suffered no losses this turn are excluded."""
+        unit = _mock_unit(models_max=10)
+        state = _alive_state(lost=0)
+        assert morale_test_required(unit, state) is False
+
+    def test_single_model_unit_always_skipped(self) -> None:
+        """Single-model units never take Morale tests regardless of lost_models_this_turn."""
+        unit = _mock_unit(models_max=1)
+        state = _alive_state(lost=1)
+        assert morale_test_required(unit, state) is False
+
+    def test_destroyed_unit_skipped(self) -> None:
+        """Destroyed units must not be presented with a Morale test."""
+        unit = _mock_unit(models_max=5)
+        state = {"destroyed": True, "lost_models_this_turn": 3}
+        assert morale_test_required(unit, state) is False
+
+    def test_multi_model_unit_alive_with_losses_requires_test(self) -> None:
+        unit = _mock_unit(models_max=20)
+        state = _alive_state(lost=5)
+        assert morale_test_required(unit, state) is True
+
+    def test_unit_with_losses_but_destroyed_skipped(self) -> None:
+        """Destroyed flag takes priority even when lost_models_this_turn > 0."""
+        unit = _mock_unit(models_max=10)
+        state = {"destroyed": True, "lost_models_this_turn": 10}
+        assert morale_test_required(unit, state) is False

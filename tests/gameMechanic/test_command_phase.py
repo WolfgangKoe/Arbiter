@@ -10,7 +10,11 @@ sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.game_state as _gs  # noqa: E402
-from gameMechanic.commandPhase import resolve_command_start  # noqa: E402
+from gameMechanic.commandPhase import (  # noqa: E402
+    can_gain_command_point,
+    resolve_command_start,
+    resolve_gain_cp_roll,
+)
 from gameObjects.loader import load_army  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -74,3 +78,59 @@ def test_resolve_command_start_ork_returns_empty() -> None:
     }
     triggered = resolve_command_start(state)
     assert triggered == []
+
+
+# ---------------------------------------------------------------------------
+# R-CMD-03 — can_gain_command_point (Battle-forged gate)
+# ---------------------------------------------------------------------------
+
+
+class TestCanGainCommandPoint:
+    def test_matched_play_is_battle_forged(self) -> None:
+        """Matched Play armies are Battle-forged → CP grant allowed."""
+        assert can_gain_command_point("matched") is True
+
+    def test_crusade_is_battle_forged(self) -> None:
+        """Crusade armies are also Battle-forged → CP grant allowed."""
+        assert can_gain_command_point("crusade") is True
+
+    def test_open_play_is_not_battle_forged(self) -> None:
+        """Open Play armies are Unbound → CP grant must be blocked."""
+        assert can_gain_command_point("open") is False
+
+    def test_unknown_mode_is_not_battle_forged(self) -> None:
+        """Unexpected game_mode values are treated as non-Battle-forged."""
+        assert can_gain_command_point("unknown") is False
+
+
+# ---------------------------------------------------------------------------
+# R-CMD-11 — resolve_gain_cp_roll (gain_cp_roll resolution + once-per-phase lock)
+# ---------------------------------------------------------------------------
+
+
+class TestResolveGainCpRoll:
+    def test_success_returns_cp_delta(self) -> None:
+        """Roll at/above threshold → active side gains `amount` CP and phase locks."""
+        cp_delta, locked = resolve_gain_cp_roll(amount=1, roll_succeeded=True, already_rolled=False)
+        assert cp_delta == 1
+        assert locked is True
+
+    def test_failure_returns_zero_but_locks(self) -> None:
+        """Roll below threshold → no CP gained, but phase is still locked."""
+        cp_delta, locked = resolve_gain_cp_roll(
+            amount=1, roll_succeeded=False, already_rolled=False
+        )
+        assert cp_delta == 0
+        assert locked is True
+
+    def test_lock_prevents_second_resolution(self) -> None:
+        """Calling resolve_gain_cp_roll when already_rolled=True raises ValueError."""
+        import pytest
+
+        with pytest.raises(ValueError, match="already resolved"):
+            resolve_gain_cp_roll(amount=1, roll_succeeded=True, already_rolled=True)
+
+    def test_success_with_multi_cp_amount(self) -> None:
+        cp_delta, locked = resolve_gain_cp_roll(amount=2, roll_succeeded=True, already_rolled=False)
+        assert cp_delta == 2
+        assert locked is True

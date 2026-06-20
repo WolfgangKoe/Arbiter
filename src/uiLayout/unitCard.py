@@ -23,7 +23,7 @@ import streamlit as st
 
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import PHASES, active_round_choice_buff_labels, units_key_for
-from gameMechanic.unit_mutations import set_deployment
+from gameMechanic.unit_mutations import apply_buff_to_unit, set_deployment
 from gameObjects.unit import Unit
 from uiLayout._common import (
     front_group_hp,
@@ -238,14 +238,7 @@ def render_unit_card(
                         )
                         effect_type = st.session_state.get("cmd_awaiting_effect_type", "")
                         unit_state = st.session_state[units_key_for(faction)][uid]
-                        unit_state.setdefault("active_buffs", [])
-                        unit_state["active_buffs"].append(
-                            {
-                                "ability_id": cmd_awaiting_id,
-                                "badge_label": badge,
-                                "effect_type": effect_type,
-                            }
-                        )
+                        apply_buff_to_unit(unit_state, cmd_awaiting_id, badge, effect_type)
                         cmd_state: dict = st.session_state.get("command_ability_state", {})
                         entry: dict = cmd_state.get(cmd_awaiting_id) or {}
                         targets: list[str] = list(

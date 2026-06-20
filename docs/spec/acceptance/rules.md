@@ -327,10 +327,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CMD-03
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_matched_play_is_battle_forged / test_open_play_is_not_battle_forged
 - **quelle**: core_rules.txt — "If your army is Battle-forged, then at the start of your Command phase … you gain 1 Command point"
-- **code**: commandPhase.py:_render_faction_actions
-- **regel**: Der CP-Gewinn pro Command Phase ist regelseitig an den Battle-forged-Status gebunden. (Schuld + Befund: Der Grant-Button wird unabhängig von `game_mode`/Battle-forged angezeigt — eine Unbound-Armee könnte den Bonus ebenfalls erhalten; kein Test prüft das Gating.)
+- **code**: commandPhase.py:can_gain_command_point
+- **regel**: Der CP-Gewinn pro Command Phase ist regelseitig an den Battle-forged-Status gebunden. `can_gain_command_point(game_mode)` gibt True für `matched`/`crusade`, False für `open`. Der Grant-Button ist für Open-Play-Armeen ausgeblendet.
 
 ### R-CMD-04
 - **klasse**: A
@@ -383,18 +383,18 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CMD-10
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_adds_buff_to_empty_active_buffs / test_buff_records_correct_effect_type
 - **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
-- **code**: commandPhase.py:_render_buff_roll_ability
-- **regel**: Aktivierte Command-Phase-Fähigkeiten vom Typ `buff_roll`/`reroll_hit_1` werden pro ausgewählter Einheit gerendert und ihr Effekt als `active_buffs` im Einheitenzustand eingetragen. (Schuld: kein Test prüft das Eintragen des Buffs.)
+- **code**: unit_mutations.py:apply_buff_to_unit (Schreibstelle: uiLayout/unitCard.py)
+- **regel**: Aktivierte Command-Phase-Fähigkeiten vom Typ `buff_roll`/`reroll_hit_1` werden pro ausgewählter Einheit gerendert und ihr Effekt als `active_buffs` im Einheitenzustand eingetragen. `apply_buff_to_unit` ist idempotent für dieselbe ability_id.
 
 ### R-CMD-11
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_success_returns_cp_delta / test_lock_prevents_second_resolution
 - **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
-- **code**: commandPhase.py:_render_gain_cp_roll
-- **regel**: Fähigkeiten mit `gain_cp_roll`-Effekt (Würfelwurf am Phase-Start; bei Schwellenwert+ erhält die aktive Seite CP) sind einmal pro Command Phase auflösbar und danach gesperrt. (Schuld: kein Test prüft den CP-Gewinn.)
+- **code**: commandPhase.py:resolve_gain_cp_roll
+- **regel**: Fähigkeiten mit `gain_cp_roll`-Effekt (Würfelwurf am Phase-Start; bei Schwellenwert+ erhält die aktive Seite CP) sind einmal pro Command Phase auflösbar und danach gesperrt. `resolve_gain_cp_roll` wirft ValueError bei Doppelaufruf.
 
 ### R-CMD-12
 - **klasse**: A
@@ -599,18 +599,18 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CHARGE-09
 - **klasse**: C
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_character_not_in_melee_is_eligible / test_non_character_is_ineligible / test_character_in_melee_is_ineligible
 - **quelle**: core_rules.txt — "An eligible CHARACTER unit is one that is not within Engagement Range of any enemy units, but is within 3\" horizontally and 5\" vertically of an enemy unit."
-- **code**: chargephase.py:_render_hi_phase
-- **regel**: Heroic Intervention nur für CHARACTER-Einheiten, die nicht im Nahkampf stehen und in 3" horizontal / 5" vertikal eines Feindes sind. Die App erzwingt die CHARACTER- und Nicht-im-Nahkampf-Bedingung (App-Anteil); die 3"/5"-Distanz ist Tisch-Anteil. (Schuld: die Eligibility-Filterung liegt in Render-Code und ist ungetestet.)
+- **code**: chargephase.py:hi_eligible_units
+- **regel**: Heroic Intervention nur für CHARACTER-Einheiten, die nicht im Nahkampf stehen und in 3" horizontal / 5" vertikal eines Feindes sind. Die App erzwingt die CHARACTER- und Nicht-im-Nahkampf-Bedingung (App-Anteil); die 3"/5"-Distanz ist Tisch-Anteil.
 
 ### R-CHARGE-10
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_character_already_intervened_is_ineligible / test_returns_true_when_flag_set
 - **quelle**: core_rules.txt — "No unit can perform more than one Heroic Intervention in each enemy Charge phase. A unit can never perform a Heroic Intervention in their own Charge phase."
-- **code**: chargephase.py:_render_hi_phase / _render_hi_target_selection
-- **regel**: Jede CHARACTER-Einheit darf pro gegnerischer Charge Phase höchstens eine Heroic Intervention durchführen; das Flag `heroic_intervened` sperrt eine zweite. Der Heroic-Intervention-Schritt läuft ausschließlich für die inaktive Seite, nie in der eigenen Charge Phase. (Schuld: Render-Code, ungetestet.)
+- **code**: chargephase.py:hi_already_performed / hi_eligible_units
+- **regel**: Jede CHARACTER-Einheit darf pro gegnerischer Charge Phase höchstens eine Heroic Intervention durchführen; das Flag `heroic_intervened` sperrt eine zweite. Der Heroic-Intervention-Schritt läuft ausschließlich für die inaktive Seite, nie in der eigenen Charge Phase.
 
 ### R-CHARGE-11
 - **klasse**: B
@@ -651,10 +651,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-MORALE-02
 - **klasse**: C
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_unit_with_losses_requires_test / test_single_model_unit_always_skipped / test_destroyed_unit_skipped
 - **quelle**: core_rules.txt — "Starting with the player whose turn is taking place, the players must alternate selecting a unit … that has had models destroyed this turn and taking a Morale test for it."
-- **code**: moralePhase.py:_render_faction_morale
-- **regel**: Morale-Test-Pflicht: Die App zeigt Tests nur für Einheiten mit Verlusten dieser Runde (`lost_models_this_turn > 0`), überspringt Einzelmodell- und zerstörte Einheiten (App-Anteil). Die abwechselnde Auswahlreihenfolge beider Spieler (beginnend mit dem aktiven) ist Tisch-Anteil. (Schuld: die Filterung liegt in Render-Code und ist ungetestet.)
+- **code**: moralePhase.py:morale_test_required
+- **regel**: Morale-Test-Pflicht: Die App zeigt Tests nur für Einheiten mit Verlusten dieser Runde (`lost_models_this_turn > 0`), überspringt Einzelmodell- und zerstörte Einheiten (App-Anteil). Die abwechselnde Auswahlreihenfolge beider Spieler (beginnend mit dem aktiven) ist Tisch-Anteil.
 
 ### R-MORALE-03
 - **klasse**: A

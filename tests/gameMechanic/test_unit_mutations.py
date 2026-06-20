@@ -13,6 +13,7 @@ import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.game_state import next_phase  # noqa: E402
 from gameMechanic.unit_mutations import (  # noqa: E402
+    apply_buff_to_unit,
     apply_damage,
     enter_melee,
     heal_unit,
@@ -883,3 +884,49 @@ def test_unit_max_hp_group_wounds_vs_uniform() -> None:
     # uniform unit unchanged
     w_state = _gs._unit_state(_warriors(), 10)
     assert unit_max_hp(_warriors(), w_state) == 10
+
+
+# ---------------------------------------------------------------------------
+# R-CMD-10 — apply_buff_to_unit (buff_roll / reroll_hit_1 recording)
+# ---------------------------------------------------------------------------
+
+
+class TestApplyBuffToUnit:
+    def test_adds_buff_to_empty_active_buffs(self) -> None:
+        """Activating a buff on a unit with no buffs records it in active_buffs."""
+        unit_state: dict = {"active_buffs": []}
+        apply_buff_to_unit(unit_state, "mwbd", "MWBD", "buff_roll")
+        assert len(unit_state["active_buffs"]) == 1
+        assert unit_state["active_buffs"][0]["ability_id"] == "mwbd"
+
+    def test_buff_records_correct_effect_type(self) -> None:
+        unit_state: dict = {"active_buffs": []}
+        apply_buff_to_unit(unit_state, "reroll_ability", "RR1", "reroll_hit_1")
+        assert unit_state["active_buffs"][0]["effect_type"] == "reroll_hit_1"
+
+    def test_buff_records_badge_label(self) -> None:
+        unit_state: dict = {"active_buffs": []}
+        apply_buff_to_unit(unit_state, "mwbd", "My Will Be Done", "buff_roll")
+        assert unit_state["active_buffs"][0]["badge_label"] == "My Will Be Done"
+
+    def test_idempotent_when_same_ability_applied_twice(self) -> None:
+        """Applying the same ability_id twice must not create a duplicate buff entry."""
+        unit_state: dict = {"active_buffs": []}
+        apply_buff_to_unit(unit_state, "mwbd", "MWBD", "buff_roll")
+        apply_buff_to_unit(unit_state, "mwbd", "MWBD", "buff_roll")
+        assert len(unit_state["active_buffs"]) == 1
+
+    def test_initialises_active_buffs_key_when_missing(self) -> None:
+        """Unit state without active_buffs key gets the key created."""
+        unit_state: dict = {}
+        apply_buff_to_unit(unit_state, "mwbd", "MWBD", "buff_roll")
+        assert "active_buffs" in unit_state
+        assert len(unit_state["active_buffs"]) == 1
+
+    def test_different_abilities_both_recorded(self) -> None:
+        unit_state: dict = {"active_buffs": []}
+        apply_buff_to_unit(unit_state, "mwbd", "MWBD", "buff_roll")
+        apply_buff_to_unit(unit_state, "waaagh", "WAAAGH!", "buff_roll")
+        ids = [b["ability_id"] for b in unit_state["active_buffs"]]
+        assert "mwbd" in ids
+        assert "waaagh" in ids

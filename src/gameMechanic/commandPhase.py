@@ -30,11 +30,25 @@ def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # ty
 # ---------------------------------------------------------------------------
 
 
+def can_gain_command_point(game_mode: str) -> bool:
+    """Return True when the army is Battle-forged and therefore eligible for the CP grant.
+
+    In 9E the Command-Phase +1 CP is gated on the army being Battle-forged.
+    Matched Play and Crusade armies are Battle-forged; Open Play armies are not.
+    The app stores the chosen mode in session_state.game_mode ('matched' | 'open' | 'crusade').
+    """
+    return game_mode in ("matched", "crusade")
+
+
 def _render_faction_actions(
     faction: str,
     state: dict,  # type: ignore[type-arg]
 ) -> None:
     st.divider()
+    game_mode: str = st.session_state.get("game_mode", "matched")
+    if not can_gain_command_point(game_mode):
+        st.caption("Open Play — no Battle-forged CP grant.")
+        return
     st.markdown(f"**+1 CP for {faction}**")
     already_granted = st.session_state.get("cp_granted_this_phase", False)
     if already_granted:
@@ -45,6 +59,32 @@ def _render_faction_actions(
             log_action(state["round"], "command", faction, "+1 CP received")
             st.session_state.cp_granted_this_phase = True
             st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# Pure helpers — extracted so they are testable without Streamlit
+# ---------------------------------------------------------------------------
+
+
+def resolve_gain_cp_roll(
+    amount: int,
+    roll_succeeded: bool,
+    already_rolled: bool,
+) -> tuple[int, bool]:
+    """Resolve a once-per-phase gain_cp_roll: return (cp_delta, locked).
+
+    Args:
+        amount: number of CP to gain on a successful roll.
+        roll_succeeded: True when the player reported a roll at or above the threshold.
+        already_rolled: True when the lock flag is already set (once-per-phase).
+
+    Returns:
+        (cp_delta, locked): cp_delta is `amount` on success else 0; locked is always
+        True after a resolution. Raises ValueError if already_rolled is True.
+    """
+    if already_rolled:
+        raise ValueError("gain_cp_roll already resolved this Command Phase")
+    return (amount if roll_succeeded else 0), True
 
 
 # ---------------------------------------------------------------------------
@@ -160,16 +200,18 @@ def _render_gain_cp_roll(unit, faction: str, state: dict) -> None:  # type: igno
             type="primary",
             use_container_width=True,
         ):
-            adjust_cp(faction, amount)
+            cp_delta, locked = resolve_gain_cp_roll(amount, True, False)
+            adjust_cp(faction, cp_delta)
             log_action(
-                state["round"], "command", faction, f"{display_name}: {threshold}+ — +{amount} CP"
+                state["round"], "command", faction, f"{display_name}: {threshold}+ — +{cp_delta} CP"
             )
-            st.session_state.morgog_cap_rolled_this_phase = True
+            st.session_state.morgog_cap_rolled_this_phase = locked
             st.rerun()
     with col2:
         if st.button(fail_label, key=f"cp_roll_fail_{unit.relic_id}", use_container_width=True):
+            _, locked = resolve_gain_cp_roll(amount, False, False)
             log_action(state["round"], "command", faction, f"{display_name}: failed — no CP")
-            st.session_state.morgog_cap_rolled_this_phase = True
+            st.session_state.morgog_cap_rolled_this_phase = locked
             st.rerun()
 
 

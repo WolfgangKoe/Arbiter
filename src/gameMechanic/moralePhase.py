@@ -10,6 +10,21 @@ from gameMechanic.unit_mutations import flee_models
 from gameObjects.unit import Unit
 
 
+def morale_test_required(unit, unit_state: dict) -> bool:  # type: ignore[type-arg]
+    """Return True when a unit must take a Morale test this phase (App-enforced filter).
+
+    Implements the R-MORALE-02 filter:
+    - Skips single-model units (models_max == 1) — they never test.
+    - Skips destroyed units.
+    - Requires at least one model lost this turn (lost_models_this_turn > 0).
+    """
+    if unit.models_max == 1:
+        return False
+    if unit_state.get("destroyed"):
+        return False
+    return unit_state.get("lost_models_this_turn", 0) > 0
+
+
 def _fail_threshold(leadership: int, lost: int) -> int:
     """Minimum D6 result that causes the morale test to fail.
 
@@ -65,10 +80,7 @@ def _render_faction_morale(
         unit = units.get(uid)
         if unit is None:
             continue
-        if unit.models_max == 1 or unit_state.get("destroyed"):
-            continue
-        lost = unit_state.get("lost_models_this_turn", 0)
-        if lost == 0:
+        if not morale_test_required(unit, unit_state):
             continue
         any_test = True
         st.divider()
