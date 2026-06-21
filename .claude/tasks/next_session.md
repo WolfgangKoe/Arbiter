@@ -42,8 +42,8 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
    `buff_stat`-Annahme gegen den echten Handler — bricht sie, bleibt das Arkanum `descriptive`, STOP).
    Step 6 = strukturiertes Schema + Punktkosten für die übrigen 11 Arkana. **Vorarbeit liegt vor:**
    `docs/audit/plans/024-arkana-research-digest.md` (Sonnet, Schema je Arkanum + Begründungen).
-   **⚠️ ENTSCHEIDUNG vor Step 6a:** Recherche zeigt **alle 12 Punktkosten +5 zu hoch** vs. Wahapedia, nicht
-   nur die 3 im Plan — alle korrigieren oder nur die 3? (Stakeholder fragen.)
+   **✅ ENTSCHEIDEN (S86):** **alle 12** Punktkosten in Step 6 auf die Wahapedia-Werte korrigieren (+5-Offset
+   aus Plan-021-Migration), nicht nur die 3 im Plan. Werte-Tabelle im Digest.
    **PFLICHT-TESTNETZ pro Step:** (a) Unit; (b) Acceptance/State; (c) INV-4b-Gate; (d) manuelle UI; (e) Doku.
 2. **Manuelle UI-Verifikationen einsammeln** (Render, von Tests nicht gedeckt): Step-1–4-Anzeigen (S+1/AP/
    Move/Reroll/RP); Orb-Zwei-Orb-Fix (necrons_1500pts_silent_king); 014 Nobz Zustand A/B/C; 022 „Power Klaw".
@@ -56,6 +56,9 @@ proaktiv per Sonnet-Sweep abgefangen — Muster beibehalten.
 (Arkana-Migration). S83 Plan 020. Details → `docs/goals/ziel6.md`.
 
 ### Offene Fragen / Retro-Vormerke
+- **Follow-up ADR-0006 (S86):** `CLAUDE.md` (Token-Disziplin/Subagent-Muster) um einen Verweis auf
+  [ADR-0006](../../docs/governance/decisions/0006-subagent-grossausgaben-als-datei.md) ergänzen —
+  Subagent-Großausgaben als Datei zurückgeben (Verweis statt Volltext) + Permanent/Temporär-Deklaration.
 - **ADR-0005-Lücke:** Freigabe-Gate feuert sauber im **Opus-Hauptkontext**; offen: auch im **Subagent**?
 - **Doku-Drift:** `architecture.md` §session_state — `group_wounds` universell (backlog §4b).
 - **INV-4b Restschuld:** noch `dynasty` (movementPhase), `gloom/prism` (psychicPhase → Cluster 5),

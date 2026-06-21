@@ -1,5 +1,8 @@
 # Plan 024 — Arkana Research Digest (Step 6 Vorarbeit)
 
+> **Lebensdauer (ADR-0006): DAUERHAFT.** Plan-Companion-Referenz unter `docs/`;
+> bleibt erhalten, bis Plan 024 vollständig umgesetzt und abgeschlossen ist.
+
 > Recherche per Sonnet-Subagent (S86, 2026-06-22), gegen
 > `docs/work/wahapedia_necrons/faction_overview.txt` (Z. 2639–2844) geprüft, von
 > Opus reviewt. Vorlage für die Step-6-YAML-Edits — **kein Dispatch**, nur
@@ -11,8 +14,10 @@
 Plan 024 listete nur 3 Punktkosten-Korrekturen. Die Recherche zeigt: **alle 12
 YAML-Einträge sind exakt 5 Punkte höher** als die Wahapedia-Tabelle
 (`faction_overview.txt` Z. 2639–2677). Die Plan-021-Migration übernahm
-systematisch +5 pro Arkanum. **Entscheidung vor Step 6a nötig:** alle 12
-korrigieren oder nur die 3 im Plan genannten?
+systematisch +5 pro Arkanum.
+
+**✅ ENTSCHEIDEN (Stakeholder, S86):** **Alle 12** Punktkosten in Step 6 auf die
+Wahapedia-Werte (rechte Spalte unten) korrigieren — nicht nur die 3 im Plan.
 
 | Arkanum | YAML | Wahapedia | im Plan? |
 |---|---|---|---|
