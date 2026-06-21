@@ -44,3 +44,4 @@ Nächste Retrospektive — oder konkretes Datum, wenn absehbar.
 | [0002](0002-stakeholder-artefakte-und-retro.md) | Stakeholder-Artefakte sind für den Leser; Retro fester Teil von Event 5 | angenommen | 2026-06-18 |
 | [0003](0003-events-als-hooks-vollzogen.md) | Operating-Model-Events werden von der Harness vollzogen, nicht erinnert | angenommen | 2026-06-19 |
 | [0004](0004-skill-fetch-nur-per-subagent.md) | Skill-/Claude-Inhalte über die API nur per Subagent ziehen | angenommen | 2026-06-20 |
+| [0005](0005-stehende-subagent-freigabe.md) | Stehende Freigabe für Subagenten-Einsatz (verengt 0001) | angenommen | 2026-06-21 |

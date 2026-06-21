@@ -88,8 +88,14 @@ und kommuniziert wird, nicht *ob* freigegeben werden muss.
 ### Was NIEMALS ohne explizite Freigabe passiert
 Dieselbe Pflicht wie für Code gilt auch für:
 - Memory-Einträge schreiben oder ändern
-- Subagents starten
 - Skills aufrufen, die Dateien oder Einstellungen ändern (z.B. `update-config`)
+
+**Ausnahme — Subagenten: stehende Freigabe.** Subagenten dürfen **ohne Einzel-Freigabe**
+eingesetzt werden, wann immer angebracht (Sonnet/Haiku billiger als Opus) — ich schlage sie
+proaktiv vor und starte sie selbst, statt pro Fall zu fragen. Pflicht bleibt **Transparenz**
+(Auftrag + Tier nennen) und die Freigabe-Pflicht für **datei-/einstellungsändernde** Arbeit:
+Code-/Memory-/Skill-Edits laufen weiter durchs Freigabe-Gate, auch wenn ein Subagent sie macht.
+Begründung: [ADR-0005](docs/governance/decisions/0005-stehende-subagent-freigabe.md).
 
 ### Was „Freigabe" bedeutet
 - ✓ Explizit: „ja", „mach es", „ok", „Freigabe", „mach weiter"
@@ -129,7 +135,13 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 
 ### Standard-Prompts (Kurzschrift)
 
-**Session starten** (Plan aus `next_session.md` ist bereits freigegeben):
+**Session starten — Plan vorlegen** (Default):
+> start next session
+
+→ `next_session.md` + Zieldatei + `backlog.md` lesen, dann **Planning vorlegen**: Prioritäten-
+Vorschlag + grobe Token-Schätzung je Aufgabe + Modus-Label. **Auf Freigabe warten**, dann starten.
+
+**Session starten — direkt los** (Plan ist schon freigegeben, Shortcut):
 > Beginne mit der nächsten Session. Der Plan ist freigegeben.
 
 → `next_session.md` + Zieldatei lesen, direkt mit der ersten Aufgabe starten — kein erneuter Plan nötig.  
@@ -138,7 +150,10 @@ Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, 
 **Session beenden + committen:**
 > Bereite die nächste Session vor. Committen.
 
-→ `next_session.md` aktualisieren (Stand, nächster Schritt, neue Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
+→ **Review** (DoD + Sessionstand) → **Retro** (getrennter Schritt) endet mit einer **nummerierten,
+entscheidbaren Maßnahmen-Liste**; der Stakeholder wählt/gibt frei → **Abschluss** schreibt nur das
+Freigegebene in die Artefakte: `next_session.md` aktualisieren (Stand, nächster Schritt, neue
+Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
 
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen
@@ -179,7 +194,9 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
   `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
   `tools/token_report.py` führt beide Quellen zusammen (`--write` → `docs/metrics/overview.md`).
-- **Freigabe-Pflicht bleibt:** Subagenten/Skills/Memory nie ohne explizite Freigabe.
+- **Subagenten = stehende Freigabe (PROAKTIV):** keine Einzel-Freigabe nötig — bei Fleißarbeit
+  selbst einen Subagenten vorschlagen + starten (s. „Was NIEMALS ohne Freigabe"). Freigabe-Pflicht
+  bleibt nur für **datei-/einstellungsändernde** Arbeit (Code/Memory/Skill) — auch via Subagent.
 
 ---
 

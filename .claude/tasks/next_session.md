@@ -5,21 +5,36 @@
      rules_insights.md, Constraints → CLAUDE.md. -->
 
 ## ⚠️ Session-Regeln
-- **Start lesen:** `CLAUDE.md` (Freigabe-Pflicht, bei Unklarheit zuerst fragen)
-  + `docs/goals/ziel6.md` (Aufgaben/Historie) + `docs/goals/backlog.md` (Backlog).
+- **Start "start next session" → Planning vorlegen** (Prioritäten + Token-Schätzung), erst nach
+  Freigabe los; Shortcut „Plan ist freigegeben" = direkt los. **Lesen:** `CLAUDE.md` (Freigabe,
+  bei Unklarheit fragen) + `docs/goals/ziel6.md` (Aufgaben/Historie) + `docs/goals/backlog.md`.
   Einstieg: `LEITSTAND.md`; Rollen/Tier/Events/Modi: `docs/governance/operating_model.md`.
-- **Ende:** Checkboxen in `ziel6.md` + Historien-Zeile; **diese Datei** aktualisieren
-  (ZUERST lesen, dann ergänzen — nie blind überschreiben).
+- **Ende:** Review → Retro → **Maßnahmen-Entscheid** (Stakeholder wählt) → Abschluss: Checkboxen
+  in `ziel6.md` + Historien-Zeile; **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen).
 - **Doku-Gate:** Decke **120** Zeilen (Test rot darüber). Beim Reißen **tief auf ≤ 70**
   kürzen, nicht knapp drunter — Erledigtes → `backlog.md`/`ziel6.md`, Referenz → s. o.
-- **Freigabe vor Umsetzung; kein Memory/Subagent/Skill ohne Freigabe; rote vorher-grüne
-  Tests = STOP + fragen.** Details: `CLAUDE.md`.
+- **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten
+  = stehende Freigabe (proaktiv, ohne Nachfrage, ADR-0005); rote vorher-grüne Tests =
+  STOP + fragen.** Details: `CLAUDE.md`.
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 `streamlit run src/app.py` (Port 8501). Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
+
+## Aktueller Stand (nach S81, 2026-06-21)
+
+**S81 (Branch `feature/014-defender-loss-allocation`) — 3 Retro-Maßnahmen (Prozess) DONE:**
+Doku-/Memory-Arbeit, keine src-Änderung; Doku-/Architektur-Gates grün (16 passed).
+- **M1 — Maßnahmen-Entscheid:** Event 5 bekommt Schritt „Maßnahmen-Entscheid" (Review & Retro
+  getrennt, Retro endet mit nummerierter Liste → Stakeholder wählt → Abschluss schreibt nur
+  Freigegebenes). `operating_model.md` E5 · `CLAUDE.md` Standard-Prompts.
+- **M2 — Planning-Default:** „start next session" ⇒ Planning vorlegen (Prioritäten + Token-
+  Schätzung), auf Freigabe warten; Shortcut „Plan ist freigegeben" bleibt. `operating_model.md` E1.
+- **M3 — Stehende Subagent-Freigabe (ADR-0005):** Subagenten ohne Einzel-Freigabe selbst
+  starten; Edit-Pflicht hängt am *Effekt*, nicht am Werkzeug. **Offene Lücke** (ADR-Review-Termin):
+  feuert `freigabe_gate.py` auch im Subagent-Kontext? Sonst Regel „Subagent liefert nur Entwürfe".
 
 ## Aktueller Stand (nach S80, 2026-06-21)
 
@@ -51,32 +66,11 @@ Vollsuite 1080 grün, Cov **92,85 %**, Gate 92 %, ruff/black/isort/Architektur g
   Magnitude `←N` landet bei shift>1 rechts neben dem Grenz-Slot statt darin. Optionen +
   Regressionsfläche: `docs/inbox/finding-dice-display-7plus.md` (Design-Entscheid offen → Opus).
 
-## Aktueller Stand (nach S79, 2026-06-21)
-
-**S79 (Branch `feature/022-dice-display-rework`) — Renderer ins Sicherheitsnetz (4-Phasen-Lauf):**
-1069 grün, Cov 92,87 %, Gate **92 %**.
-- **Phase 0 — Naht:** `dice_html.py` gesplittet → streamlit-freies, coverage-**gemessenes**
-  `dice_compose.py` (Builder, 100 %) + geomittetes `dice_html.py` (3 Render-Fn). `omit`
-  explizit statt Glob `src/uiLayout/*`.
-- **Phase 1 — HI-Crash GEFIXT:** Wurzel `StreamlitDuplicateElementKey` (Duplikat-Squads
-  teilen `unit.id`), **nicht** `int("User×N")`. State-Key gefädelt + `perform_heroic_intervention()`
-  extrahiert, 16 Tests. Manuell bestätigt.
-- **Phase 2 — Badges GEFIXT:** „AP-4 -4"-Doppelung (`save_ap_modifier_row_html`) + Buff-Badge
-  grün (`badge_color` semantisch). 22 Tests, dice_compose 88→100 %. Manuell bestätigt (AP+Cover).
-- **Phase 3 — Kodifiziert:** **INV-6** (Render/Composition-Seam) + Guard
-  `tests/architecture/test_render_composition_seam.py` + Ratchet `fail_under` 90→92.
-
-**🆕 S79-UI-Findings (Backlog, NICHT umgesetzt — eingeplant):**
-1. **Silent-King-Zielaufteilung Fernkampf:** 2 Fernkampfwaffen, aktuell nur 1 Ziel wählbar →
-   Regeln (Select Targets) prüfen, Test, ggf. Ziel-pro-Waffe.
-2. **Off-Scale-/„7+"-Save-Grenze:** „7-Augen"-Würfel + `|`-Grenze (`[6] | [✕]`) → `dice_display.md` + Tests.
-3. **AP-/SAVE-Magnitude-Position:** `-N` gehört unter `|` → Spec + Tests (verwandt Befund B/C).
-4. **Invuln-SAVE-Badge** weiterhin chaotisch (out of scope S79) → mit Plan 017.
-- **Befund B/C** (HIT-Geometrie) weiter offen → eigener Plan.
-
-**S77/S78 (Historie):** Plan 022 Dice Display Rework DONE (`1ce131a`..`ecad9bf`); Befund A
-(Pfeil-Magnitude) + CET-Zeiten. Noch nicht verdrahtet: `reroll_marker_row_html`/
-`always_fail_marker_row_html` (warten auf Produzent Quantum Shield/`reroll_hit_1`).
+**S77–S79 (Historie, verdichtet):** Plan 022 Dice Display Rework DONE (`1ce131a`..`ecad9bf`);
+S79 Renderer ins Sicherheitsnetz (`dice_compose.py`-Naht 100 %, HI-Crash-Fix, Badge-Fix,
+**INV-6** + Ratchet `fail_under`→92). Alle S79-UI-Findings (Silent-King-Ziel, 7+-Grenze,
+Magnitude-Position, Invuln-Badge, Befund B/C) liegen im **Backlog** (`backlog.md` §UI). Noch
+nicht verdrahtet: `reroll_marker_row_html`/`always_fail_marker_row_html` (warten auf Produzent).
 
 **INV-4b/INV-4 Restschuld (nach S77):**
 - **LEGIT:** `rosz_importer._FACTION_MAP`, `typing.Protocol`
