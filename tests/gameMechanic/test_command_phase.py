@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 import gameMechanic.game_state as _gs  # noqa: E402
 from gameMechanic.commandPhase import (  # noqa: E402
     _wargear_once_per_battle,
+    _wargear_state_key,
     can_gain_command_point,
     resolve_command_start,
     resolve_gain_cp_roll,
@@ -163,3 +164,11 @@ class TestActivatedWargear:
         targets.pop("revive_wargear_orb_a", None)
         assert "revive_wargear_orb_a" not in targets
         assert targets["revive_wargear_orb_b"] == "necron_immortals#1"
+
+    def test_same_wargear_two_instances_get_distinct_state_keys(self) -> None:
+        # Two Overlords carrying the SAME resurrection orb must not share
+        # once-per-battle / target state — the key includes the bearer instance.
+        orb = "wh40k_9e.necrons.wargear.resurrection_orb"
+        first = _wargear_state_key("wh40k_9e.necrons.unit.overlord", orb)
+        second = _wargear_state_key("wh40k_9e.necrons.unit.overlord#1", orb)
+        assert first != second

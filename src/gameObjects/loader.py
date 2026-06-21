@@ -453,7 +453,8 @@ def load_unit_catalog(faction_dir: str) -> dict[str, Unit]:
 def load_faction_abilities(faction_dir: str) -> list[Ability]:
     """Load faction abilities from data/wh40k_9e/<faction_dir>/faction_abilities.yaml.
 
-    Skips round_choice entries — those are loaded via load_round_choice_abilities().
+    Skips round_choice entries (loaded via load_round_choice_abilities) and
+    descriptive entries (rules-text/points only, no effect dispatch — e.g. Arkana).
     """
     if faction_dir in _FACTION_ABILITIES_CACHE:
         return _FACTION_ABILITIES_CACHE[faction_dir]
@@ -465,7 +466,7 @@ def load_faction_abilities(faction_dir: str) -> list[Ability]:
     result = [
         _ability_from_dict(a)
         for a in data.get("abilities", [])
-        if a.get("ability_type") != "round_choice"
+        if a.get("ability_type") not in ("round_choice", "descriptive")
     ]
     _FACTION_ABILITIES_CACHE[faction_dir] = result
     return result
@@ -912,11 +913,25 @@ def resolve_bracket_stats(unit: Unit, current_wounds: int) -> dict[str, str | No
     return base
 
 
+def _add_faction_ability_costs(faction_dir: str, result: dict[str, int]) -> None:
+    """Merge cost_pts from faction_abilities.yaml (e.g. Arkana) into the points map.
+
+    Generic: any faction_abilities entry carrying cost_pts contributes its cost —
+    no per-category key is referenced here.
+    """
+    path = _DATA_ROOT / faction_dir / "faction_abilities.yaml"
+    if not path.exists():
+        return
+    for entry in load_yaml(path).get("abilities", []):
+        if "cost_pts" in entry:
+            result[entry["id"]] = int(entry["cost_pts"])
+
+
 def load_points(faction_dir: str) -> dict[str, int]:
     """Load points.yaml and return a flat id → point-cost dict.
 
     Per-unit entries store the flat cost; per-model entries store the per-model cost.
-    Wargear and arkana sections are also included.
+    Wargear costs and faction-ability cost_pts (e.g. Arkana) are also included.
     """
     path = _DATA_ROOT / faction_dir / "points.yaml"
     if not path.exists():
@@ -928,8 +943,7 @@ def load_points(faction_dir: str) -> dict[str, int]:
         result[uid] = int(cost)
     for uid, entry in (data.get("wargear") or {}).items():
         result[uid] = int(entry.get("points", 0))
-    for uid, entry in (data.get("arkana") or {}).items():
-        result[uid] = int(entry.get("points", 0))
+    _add_faction_ability_costs(faction_dir, result)
     return result
 
 

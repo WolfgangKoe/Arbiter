@@ -6,6 +6,14 @@ faction_dir: necrons
 # stratagem context only.
 dynasty: szarekhan
 units:
+# Two Resurrection-Orb carriers — manual test fixture for the Plan 020 two-orb
+# state fix (each orb activates independently; activating one must not affect the other).
+- id: wh40k_9e.necrons.unit.overlord
+  models: 1
+  wargear: [wh40k_9e.necrons.wargear.resurrection_orb]
+- id: wh40k_9e.necrons.unit.overlord
+  models: 1
+  wargear: [wh40k_9e.necrons.wargear.resurrection_orb]
 - id: wh40k_9e.necrons.unit.the_silent_king
   models: 3
 - id: wh40k_9e.necrons.unit.royal_warden

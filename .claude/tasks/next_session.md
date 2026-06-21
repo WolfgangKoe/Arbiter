@@ -23,44 +23,43 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S83, 2026-06-21)
+## Aktueller Stand (nach S84, 2026-06-21)
 
-**S83 (Branch `feature/014-defender-loss-allocation`) — Plan 020 Generic Activated Wargear DONE:**
-Vollsuite **1088 grün**, Cov **92,90 %**, Gate 92 %, ruff/black/isort + Architektur-Gate grün.
-- **A** `_render_resurrection_orb` → generisch `_render_activated_wargear` (Name/`once_per_battle`
-  aus YAML; Lookup via `activated_wargear_ids` = `ability_type: activated`, nicht mehr Handler-String
-  `"resurrection_orb"`; loggt Träger-Name statt Literal `"Overlord"`).
-- **B** Zwei-Orb-Bug gefixt: `revive_wargear_target_uid` jetzt **Dict je Wargear** (Key = Request-ID)
-  in `commandPhase.py` + `unitCard.py` + `game_state.py`.
-- **C** Orb-YAML `max_uses: 1` → `once_per_battle: true`; Renderer liest das Flag.
-- **D** INV-4b-Allowlist-Eintrag `commandPhase.py {orb,overlord,phaeron,resurrection}` **entfernt**
-  (Ledger geschrumpft) → Cluster 3 (`orb/overlord/resurrection`) **und** `phaeron` erledigt.
-- **E** PHAERON-Literal generalisiert: neues `extra_uses`-Feld auf `Ability` + `bonus_uses_for(unit)`;
-  +1-Nutzung kommt jetzt aus den 3 MWBD-YAML-Einträgen (9E-Regel erhalten, kein src-Literal).
-- **Step 4 (heal_nearby_unit-Dispatcher) bewusst verworfen** — Orb nutzt manuelle
-  `wound_adjustment_buttons` am Tisch (kein Engine-Heal) → Dispatcher wäre toter Code.
-- Erwartete Migration: `test_resurrection_orb_wargear_source` prüft jetzt `once_per_battle` (statt max_uses).
+**S84 (Branch `feature/014-defender-loss-allocation`) — Plan 021 (Teil) + Orb-Bug-Fix:**
+Vollsuite **1092 grün**, Cov **92,96 %**, alle Gates grün.
+- **Plan 021 (NUR Daten-Migration + Loader, NICHT „Arkana fertig"):** 12 Arkana →
+  `faction_abilities.yaml` (mit `power_delta` **und** `cost_pts`); `load_faction_abilities`
+  überspringt `descriptive`; `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`);
+  `points.yaml`-`arkana:`-Sektion entfernt; INV-4b-Literal `"arkana"` aus `loader.py` raus.
+- **⚠️ Arkana-Effekte NICHT modelliert** — `ability_type: descriptive` ist ein **Stopgap**
+  („nicht engine-dispatchbar"). Die Regeltexte enthalten echte trigger/conditions/effect → Plan 024.
+- **Orb-Bug gefixt:** zwei Träger **derselben** Unit-Id (zwei Overlords m. Res-Orb) teilten den
+  once-per-battle-State, weil `wargear_used`/`request_id` nur nach `wargear_id` geschlüsselt waren.
+  Fix: `_wargear_state_key(bearer_uid, wargear_id)` in `commandPhase.py` → State je Träger-Instanz;
+  +Regressionstest `test_same_wargear_two_instances_get_distinct_state_keys`.
 
-### ▶ Nächste Session = manueller Orb-Check + Plan 021
+### ▶ Nächste Session
+1. **Manueller Orb-Tisch-Re-Check** (Render-Code, nicht test-gedeckt): Roster
+   `necrons_1500pts_silent_king.yaml` hat **zwei Overlord-Orbs** — prüfen, dass Aktivierung #1
+   den Orb von #2 jetzt **nicht mehr** sperrt (Fix verifizieren).
+2. **Plan 024 anlegen + umsetzen — „Arkana + Protokoll: Effekt-Modellierung & Bedingungssichtbarkeit":**
+   Arkana `descriptive` → echte `trigger`/`conditions`/`effect` (engine-dispatchbar), **gemeinsam**
+   mit den fehlenden Protokoll-Direktiven-Bedingungen (Backlog #2: 9/12 Direktiv-Effekte unverdrahtet,
+   Bedingungen im UI unsichtbar). Das ist das **eigentliche Ziel** hinter Plan 021.
+3. Danach Queue: 016 → 018 → 015 → 017.
 
-**Zuerst (offener manueller UI-Check zu Plan 020 — Render-Code nicht test-gedeckt):** Im
-`data/rosters/necrons_1500pts_silent_king.yaml` einen **zweiten Orb-Träger (Overlord mit
-Resurrection Orb)** ergänzen → damit den Zwei-Orb-State-Fix (B) am Tisch verifizieren (beide Orbs
-unabhängig aktivierbar; einer aktiviert ≠ stört den anderen). Weitere Checks: Orb erscheint mit
-YAML-Namen; Use→Ziel→Confirm→„Already used".
-**Dann Plan 021** (Arkana → `faction_abilities.yaml` + Loader generisch) aus
-`docs/audit/plans/README.md`. Reihenfolge: 014✓ 020✓ → **021** → 016 → 018 → 015 → 017.
+**Drift-Lehre S84:** Plan 021 nahm an `load_faction_abilities` existiere nicht — existierte aber
+(STOP-Bedingung). Künftig Drift-Check **vor** der Token-/Effort-Schätzung gewichten; Pläne als
+„Stand kann veraltet sein" lesen.
 
-**Historie verdichtet:** S82 Plan 014 Teil B (UI A/B/C) DONE + manuell verifiziert. S81 3 Retro-
-Maßnahmen (M1 Maßnahmen-Entscheid, M2 Planning-Default, M3 ADR-0005 stehende Subagent-Freigabe).
-S80 Plan 014 Teil A (`group_wounds` universell). Details → `docs/goals/ziel6.md`.
+**Historie verdichtet:** S83 Plan 020 (generic activated wargear). S82 Plan 014 Teil B (UI A/B/C).
+S81 3 Retro-Maßnahmen. Details → `docs/goals/ziel6.md`.
 
 ### Offene Fragen / Retro-Vormerke
-- **ADR-0005-Lücke (teil-beantwortet S83):** `freigabe_gate.py` feuerte sauber im **Opus-Hauptkontext**
-  (Edit blockiert bis `touch .claude/.freigabe`). Offen bleibt nur: feuert es auch im **Subagent**-Kontext?
+- **ADR-0005-Lücke:** Freigabe-Gate feuert sauber im **Opus-Hauptkontext**; offen: auch im **Subagent**?
 - **Doku-Drift:** `architecture.md` §session_state — `group_wounds` universell (backlog §4b).
 - **INV-4b Restschuld:** noch `dynasty` (movementPhase), `gloom/prism` (psychicPhase → Cluster 5),
-  `arkana` (loader → Plan 021), `reanimation`/`protocols` (_common). Ratchet weiter schrumpfen.
+  `necrons`-Defaults (game_state/loader). `arkana` erledigt (S84). Ratchet weiter schrumpfen.
 
 ---
 

@@ -86,7 +86,7 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   - **Cluster 4 — `dynasty`** (`movementPhase.py`) ✅ Konsens: UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
   - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`) ✅ Konsens: `"Gloom Prism"` ist **Necron**-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
   - ✅ **Cluster 3 — `orb`/`overlord`/`resurrection` + `phaeron`** (`commandPhase.py`) **erledigt S83 (Plan 020):** generischer Activated-Wargear-Flow (`_render_activated_wargear`, Lookup via `ability_type: activated`); PHAERON-Bonus datengetrieben (`extra_uses`); Allowlist-Eintrag entfernt.
-  - **Cluster 6 — `arkana`** (`loader.py`): Arkana nach `faction_abilities.yaml` (generische Datei je Fraktion), Loader generisch → Plan 021.
+  - ✅ **Cluster 6 — `arkana`** (`loader.py`) **erledigt S84 (Plan 021):** Arkana in `faction_abilities.yaml`, `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`), `"arkana"`-Literal aus `loader.py` entfernt. **Effekt-Modellierung weiterhin offen → Plan 024** (Arkana `descriptive`-Stopgap → echte trigger/conditions/effect, gemeinsam mit Protokoll-Bedingungssichtbarkeit, vgl. #2).
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
   - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
 
@@ -105,7 +105,7 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [017](../audit/plans/017-ability-ap-combined-badge.md) | SAVE-Block: Fähigkeit+AP kombinierte Badge | MITTEL | TODO |
 | [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | TODO |
 | [020](../audit/plans/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | MITTEL | ✅ DONE (S83) |
-| [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | TODO |
+| [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | ✅ DONE (S84) — nur Daten-Migration + generischer Loader + INV-4b-Literal; Effekte offen → Plan 024 |
 | [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | TODO |
 
 **Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017.**

@@ -104,6 +104,17 @@ def test_living_metal_ability_id_and_trigger() -> None:
     assert living_metal.conditions[0].has_rules == ["livingMetal"]
 
 
+def test_load_faction_abilities_excludes_descriptive_arkana() -> None:
+    # Arkana are descriptive (no trigger/effect) and must be skipped, not built
+    # into Ability objects — building one would KeyError on the required fields.
+    ids = {a.id for a in load_faction_abilities("necrons")}
+    assert not any(i.startswith("wh40k_9e.necrons.arkana.") for i in ids)
+
+
+def test_load_faction_abilities_missing_file_returns_empty() -> None:
+    assert load_faction_abilities("eldar") == []
+
+
 def test_load_detachment_types_returns_at_least_five() -> None:
     types = load_detachment_types()
     assert len(types) >= 5
@@ -230,6 +241,13 @@ def test_load_points_per_model_warriors() -> None:
 def test_load_points_includes_wargear() -> None:
     pts = load_points("necrons")
     assert pts["wh40k_9e.necrons.wargear.resurrection_orb"] == 25
+
+
+def test_load_points_includes_arkana_cost() -> None:
+    # Arkana costs now live in faction_abilities.yaml (cost_pts), read generically.
+    pts = load_points("necrons")
+    assert pts["wh40k_9e.necrons.arkana.quantum_orb"] == 20
+    assert pts["wh40k_9e.necrons.arkana.failsafe_overcharger"] == 30
 
 
 def test_load_points_missing_faction_returns_empty() -> None:

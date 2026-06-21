@@ -233,6 +233,16 @@ def _wargear_once_per_battle(wargear: dict) -> bool:  # type: ignore[type-arg]
     return any(c.get("once_per_battle") for c in wargear.get("conditions", []))
 
 
+def _wargear_state_key(bearer_uid: str, wargear_id: str) -> str:
+    """Per-bearer-instance state key for an activated wargear.
+
+    Two units carrying the same wargear (same wargear_id — e.g. two Overlords each
+    with a Resurrection Orb) must not share once-per-battle / target state. Including
+    the bearer's per-instance uid keeps each bearer's activation independent.
+    """
+    return f"revive_wargear_{bearer_uid}_{wargear_id}"
+
+
 def _render_activated_wargear(
     faction: str,
     state: dict,  # type: ignore[type-arg]
@@ -249,13 +259,13 @@ def _render_activated_wargear(
     """
     wargear_id = wargear["id"]
     name = wargear.get("name_en", wargear_id)
-    request_id = f"revive_wargear_{wargear_id}"
+    request_id = _wargear_state_key(bearer_uid, wargear_id)
     once_per_battle = _wargear_once_per_battle(wargear)
 
     st.divider()
     st.markdown(f"**{name}**")
 
-    if once_per_battle and st.session_state.wargear_used.get(wargear_id, False):
+    if once_per_battle and st.session_state.wargear_used.get(request_id, False):
         st.caption("Already used this battle.")
         return
 
@@ -273,7 +283,7 @@ def _render_activated_wargear(
         ):
             target_name = target_unit.name_en if target_unit else target_uid
             bearer_name = bearer.name_en if bearer else "Bearer"
-            st.session_state.wargear_used[wargear_id] = True
+            st.session_state.wargear_used[request_id] = True
             log_action(state["round"], "command", bearer_name, f"{name} → {target_name}")
             targets.pop(request_id, None)
             st.rerun()
