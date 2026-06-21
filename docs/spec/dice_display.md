@@ -176,6 +176,13 @@ Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
 | `test_buff_cannot_make_1_succeed` | Buff macht 1 nie zu Erfolg | 022 |
 | `test_reroll_marker_correct_slot` | ↺ unter korrektem Slot | 022 |
 | `test_always_fail_marks_correct_slots` | ✕ unter allen auto-fail-Slots | 022 |
+| `test_multi_step_debuff_arrow_carries_magnitude` | Debuff ≥2 → `←N` am Pfeilkopf (§2.1) | 022/S78 |
+| `test_multi_step_buff_arrow_carries_magnitude` | Buff ≥2 → `+N→` am Pfeilkopf (§2.1) | 022/S78 |
+| `test_single_step_debuff_magnitude_rides_in_boundary_gap` | Shift 1 → `←1` im Boundary-Gap (§3.1) | 022/S78 |
+| `test_single_step_buff_magnitude_rides_in_boundary_gap` | Shift 1 → `+1→` im Boundary-Gap (§3.1) | 022/S78 |
+| `test_off_scale_debuff_arrow_carries_magnitude` | Off-Scale → `←N` mit echter Magnitude | 022/S78 |
+| `test_hit_debuff_arrow_carries_magnitude` | HIT-Zeile trägt `←N` (Geometrie = B, separat) | 022/S78 |
+| `test_buff_magnitude_uses_buff_colour_not_context_grey` | Pfeil-Label in Modifier-Farbe, nicht Grau | 022/S78 |
 
 ---
 
@@ -195,6 +202,9 @@ Alle D1–D5 in Plan 022 erledigt (2026-06-21). Tabelle als Historie.
 sind getestete Anzeige-Bausteine, aber noch **nicht** in einen Roll-Block verdrahtet —
 sie werden konsumiert, sobald ein Produzent Reroll-/Auto-fail-Slots liefert
 (z. B. Quantum Shield, `reroll_hit_1`).
+
+| D6 | Pfeil-Magnitude `←N`/`+N→` fehlte (Befund A) | S78 | ✅ GEFIXT (`_arrow_span` + Boundary-Gap-Label) |
+| D7 | HIT/WOUND-Debuff-Geometrie spreizt nicht mit Magnitude (Befund B); Slot-1-Invariante bei HIT-Buff verletzt (Befund C) | — | ⏳ OFFEN → eigener Plan (`modifier_die_pair_html`-Rework, getestet → Regressionsfläche) |
 
 ---
 

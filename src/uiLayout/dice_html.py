@@ -197,6 +197,10 @@ def _modifier_slot_html(inner: str) -> str:
     )
 
 
+def _glyph_span(glyph: str, color: str) -> str:
+    return f'<span style="color:{color};font-weight:bold;">{glyph}</span>'
+
+
 def _aligned_modifier_row_html(
     label: str,
     value: int,
@@ -217,21 +221,28 @@ def _aligned_modifier_row_html(
     """
     left_col, right_col = _modifier_columns(left_val, right_val, right_off_scale)
     lo, hi = sorted((left_col, right_col))
+    shift = hi - lo
     rightward = (
         value > 0
     )  # buff widens the success window → arrow points right (lower rolls suffice)
+    glyph_color = _BUFF_COLOR_HEX if rightward else _DEBUFF_COLOR_HEX
+    head_glyph = f"+{abs(value)}→" if rightward else f"←{abs(value)}"  # spec §2.1
     slots: list[str] = []
     for v in range(1, 7):
         if 2 <= base_threshold <= 6 and v == base_threshold:
-            slots.append(_boundary_gap_html(with_line=False))
+            # A 1-column shift leaves no slot between the two dice, so the magnitude
+            # label rides in the boundary gap that sits between them (spec §3.1 ±1).
+            if shift == 1 and v == hi and lo == hi - 1:
+                slots.append(_modifier_slot_html(_glyph_span(head_glyph, glyph_color)))
+            else:
+                slots.append(_boundary_gap_html(with_line=False))
         if v == left_col:
             inner = dice_face_svg(left_val, color=left_color)
         elif v == right_col and not right_off_scale:
             inner = dice_face_svg(right_val, color=right_color)
         elif lo < v < hi:
             head = (rightward and v == hi - 1) or (not rightward and v == lo + 1)
-            ch = ("→" if rightward else "←") if head else "─"
-            inner = f'<span style="color:{right_color};font-weight:bold;">{ch}</span>'
+            inner = _glyph_span(head_glyph if head else "─", glyph_color)
         else:
             inner = ""
         slots.append(_modifier_slot_html(inner))

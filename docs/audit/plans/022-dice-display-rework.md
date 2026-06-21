@@ -112,8 +112,14 @@ werden am Rand abgeschnitten (Ellipsis), statt in Slot 1 zu ragen.
 
 **Badge-Wert bleibt erhalten** (Stakeholder-Entscheid 2026-06-21): Label zeigt
 weiter `AP-1`, `AP-2` usw. — aus Spieler-Gewohnheit und konsistent zu allen
-anderen Profilwerten. Der Pfeil ist redundant, das ist gewollt. Labels werden
-nur **gekürzt** (z. B. „Power Klaw"), nicht der Zahlenwert entfernt.
+anderen Profilwerten. Labels werden nur **gekürzt** (z. B. „Power Klaw"), nicht
+der Zahlenwert entfernt.
+
+> **Korrektur (Stakeholder-Entscheid 2026-06-21, S78):** Der Pfeil ist **nicht**
+> redundant — Spec §2.1 fordert die Magnitude am Pfeil (`←N` / `+N→`). Umgesetzt in
+> `_aligned_modifier_row_html` (Befund A). Badge **und** Pfeil zeigen den Wert; das ist
+> gewollt. Offen als eigener Plan (Befund B/C): HIT/WOUND-Debuff-Geometrie spreizt nicht
+> mit der Magnitude, Slot-1-Invariante bei HIT-Buff verletzt.
 
 Test: `test_long_badge_does_not_overflow` — langer Label-String erzeugt
 kein `white-space:nowrap` im HTML-Output.

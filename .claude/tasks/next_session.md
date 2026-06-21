@@ -21,7 +21,25 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S77, 2026-06-21)
+## Aktueller Stand (nach S78, 2026-06-21)
+
+**S78 (Branch `feature/022-dice-display-rework`):** Befund A + CET, 1029 grün, Cov 92.35 %.
+- **Pfeil-Magnitude (Befund A, Spec §2.1):** `←N`/`+N→` am Pfeilkopf bzw. (Shift 1) im
+  Boundary-Gap; Label in Modifier-Farbe (`_glyph_span`/`glyph_color`). 7 neue Tests.
+  Visuell bestätigt (`←4` rot, `+1→` grün). `arrow`↔„Tachyon Arrow"-INV-4b-Kollision per
+  Rename gelöst (Guard nicht aufgeweicht).
+- **CET-Zeiten:** `token_report.py` zeigt Zeiten in `Europe/Berlin` (DST-korrekt) statt UTC.
+- **Befund B/C** (HIT-Debuff-Geometrie spreizt nicht, Slot-1-Invariante bei HIT-Buff) →
+  eigener Plan, Backlog.
+
+**🔴 Neue Bugs (S78, UI-Verifikation — NICHT umgesetzt, nur notiert):**
+1. **Heroic Intervention crasht** (Ork-YAML): Button → Ork-Armeeliste verschwand komplett,
+   App handlungsunfähig. Tests fehlen (Muster wie FightPhase-Crash). → Bugfix-Plan.
+2. **Badge „AP-4 -4"**: Wert doppelt (Label „AP-4" + angehängtes „-4"). → entdoppeln + Test.
+3. **Buff-Badge nicht grün** (Light Cover): Badge-Chip nutzt `right_color`=grau bei Buffs;
+   Farb-Test fehlt; offene Perspektiv-Frage (`color_hint` für SAVE-Badge nicht ausgewertet).
+4. **Invuln-Badge chaotisch** (3 Teile) → eine Badge „Invuln 4+" (mit Plan 017 lösen).
+Alle 4 im Backlog. Vor Plan 014 entscheiden, welche Bugs Vorrang haben.
 
 **S77 (Plan 022 DONE — committet, Branch `feature/022-dice-display-rework`):**
 Dice Display Rework, 5 Commits (`1ce131a`..`ecad9bf`). 1022 grün, Cov 92.35 %.

@@ -17,6 +17,7 @@ from uiLayout.dice_html import (  # noqa: E402
     always_fail_marker_row_html,
     dice_row_html,
     miss_die_html,
+    modifier_die_pair_html,
     reroll_marker_row_html,
     save_modifier_die_pair_html,
 )
@@ -62,6 +63,50 @@ def test_debuff_arrow_points_left() -> None:
     html = save_modifier_die_pair_html(3, -3, "AP-3", "#ef4444")
     assert "←" in html
     assert "→" not in html
+
+
+# --- Pfeil-Magnitude (spec §2.1: Debuff "←N", Buff "+N→") ---------------------
+
+
+def test_multi_step_debuff_arrow_carries_magnitude() -> None:
+    # AP-2 on Sv 3+ spans two columns → arrowhead labelled "←2", not a bare "←".
+    html = save_modifier_die_pair_html(3, -2, "AP-2", _DEBUFF_RED)
+    assert "←2" in html
+
+
+def test_multi_step_buff_arrow_carries_magnitude() -> None:
+    # Cover +2 on Sv 5+ spans two columns → arrowhead labelled "+2→".
+    html = save_modifier_die_pair_html(5, 2, "Cover", _BUFF_GREEN)
+    assert "+2→" in html
+
+
+def test_single_step_debuff_magnitude_rides_in_boundary_gap() -> None:
+    # A 1-column shift has no slot between the dice; "←1" must still appear (§3.1).
+    html = save_modifier_die_pair_html(3, -1, "AP-1", _DEBUFF_RED)
+    assert "←1" in html
+
+
+def test_single_step_buff_magnitude_rides_in_boundary_gap() -> None:
+    html = save_modifier_die_pair_html(5, 1, "Cover", _BUFF_GREEN)
+    assert "+1→" in html
+
+
+def test_off_scale_debuff_arrow_carries_magnitude() -> None:
+    # Sv 6+ with AP-4 pushes the save past 6 → label still reports the true shift.
+    html = save_modifier_die_pair_html(6, -4, "AP-4", _DEBUFF_RED)
+    assert "←4" in html
+
+
+def test_hit_debuff_arrow_carries_magnitude() -> None:
+    # HIT/WOUND rows also carry the number (geometry width is tracked separately).
+    html = modifier_die_pair_html(3, 5, "X", -2, _DEBUFF_RED, base_threshold=3)
+    assert "←2" in html
+
+
+def test_buff_magnitude_uses_buff_colour_not_context_grey() -> None:
+    # The numbered arrow is the modifier's colour (green), never the grey context die.
+    html = save_modifier_die_pair_html(5, 2, "Cover", _BUFF_GREEN)
+    assert f'color:{_BUFF_GREEN};font-weight:bold;">+2→' in html
 
 
 def test_long_badge_does_not_overflow() -> None:
