@@ -11,8 +11,8 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import units_key_for, units_list_for
-from gameMechanic.unit_mutations import enter_melee, set_charged
+from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
+from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
 from uiLayout._common import lookup, render_melee_engagements, render_player_column
 
 
@@ -157,8 +157,10 @@ def hi_already_performed(unit_state: dict) -> bool:  # type: ignore[type-arg]
     return bool(unit_state.get("turn_flags", {}).get("heroic_intervened"))
 
 
-def hi_eligible_units(all_units: list, units_data: dict) -> list:  # type: ignore[type-arg]
-    """Return units eligible for Heroic Intervention.
+def hi_eligible_units(
+    all_units: list, unit_keys: list[str], units_data: dict  # type: ignore[type-arg]
+) -> list[tuple]:  # type: ignore[type-arg]
+    """Return (Unit, state_key) pairs eligible for Heroic Intervention.
 
     Eligibility (App-enforced portion of R-CHARGE-09 / R-CHARGE-10):
     - Not destroyed.
@@ -168,13 +170,14 @@ def hi_eligible_units(all_units: list, units_data: dict) -> list:  # type: ignor
     - Has the CHARACTER keyword.
 
     The 3"/5" proximity condition is table-side only and not checked here.
+    Uses STATE KEYS (not unit.id) so duplicate squads are handled correctly.
     """
     return [
-        u
-        for u in all_units
-        if not units_data.get(u.id, {}).get("destroyed")
-        and not units_data.get(u.id, {}).get("in_melee")
-        and not hi_already_performed(units_data.get(u.id, {}))
+        (u, ukey)
+        for u, ukey in zip(all_units, unit_keys)
+        if not units_data.get(ukey, {}).get("destroyed")
+        and not units_data.get(ukey, {}).get("in_melee")
+        and not hi_already_performed(units_data.get(ukey, {}))
         and u.has_keyword("CHARACTER")
     ]
 
@@ -195,18 +198,19 @@ def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: 
 
     key = units_key_for(inactive)
     all_units = units_list_for(inactive)
+    unit_keys = unit_keys_for(inactive)
     units_data = st.session_state[key]
 
-    eligible = hi_eligible_units(all_units, units_data)
+    eligible = hi_eligible_units(all_units, unit_keys, units_data)
 
     if not eligible:
         st.info("No eligible CHARACTER units — Heroic Intervention not possible.")
     else:
-        for unit in eligible:
+        for unit, ukey in eligible:
             cols = st.columns([4, 2])
             cols[0].markdown(f"*{unit.name_en}*")
-            if cols[1].button("Intervene", key=f"hi_{inactive}_{unit.id}"):
-                st.session_state.pending_hi = (inactive, unit.id)
+            if cols[1].button("Intervene", key=f"hi_{inactive}_{ukey}"):
+                st.session_state.pending_hi = (inactive, ukey)
                 st.session_state.hi_targets = []
                 st.rerun()
 
@@ -217,26 +221,25 @@ def _render_hi_target_selection(
     state: dict,  # type: ignore[type-arg]
 ) -> None:
     """Show enemy unit selector for the intervening CHARACTER unit."""
-    hi_faction, hi_uid = pending
-    hi_unit, _ = lookup(hi_faction, hi_uid)
+    hi_faction, hi_key = pending
+    hi_unit, _ = lookup(hi_faction, hi_key)
     hi_targets: list[str] = st.session_state.get("hi_targets", [])
 
     st.markdown(f"**{hi_unit.name_en}** — select enemy units to engage:")
     st.caption("Tap a unit to toggle; confirm when ready.")
 
-    active_units = units_list_for(active)
     active_data = st.session_state[units_key_for(active)]
 
-    for enemy in active_units:
-        if active_data.get(enemy.id, {}).get("destroyed"):
+    for enemy, ekey in zip(units_list_for(active), unit_keys_for(active)):
+        if active_data.get(ekey, {}).get("destroyed"):
             continue
-        is_sel = enemy.id in hi_targets
+        is_sel = ekey in hi_targets
         prefix = "✓ " if is_sel else ""
-        if st.button(f"{prefix}{enemy.name_en}", key=f"hi_tgt_{active}_{enemy.id}"):
+        if st.button(f"{prefix}{enemy.name_en}", key=f"hi_tgt_{active}_{ekey}"):
             if is_sel:
-                hi_targets.remove(enemy.id)
+                hi_targets.remove(ekey)
             else:
-                hi_targets.append(enemy.id)
+                hi_targets.append(ekey)
             st.session_state.hi_targets = hi_targets
             st.rerun()
 
@@ -249,15 +252,13 @@ def _render_hi_target_selection(
             disabled=not hi_targets,
             use_container_width=True,
         ):
-            hi_state = st.session_state[units_key_for(hi_faction)][hi_uid]
-            hi_state["turn_flags"]["heroic_intervened"] = True
-            for tgt_uid in hi_targets:
-                enter_melee(hi_uid, hi_faction, tgt_uid, active)
-            log_action(
+            perform_heroic_intervention(
+                hi_faction,
+                hi_key,
+                active,
+                hi_targets,
                 state["round"],
-                "charge",
                 hi_unit.name_en,
-                f"Heroic Intervention — engaged {len(hi_targets)} unit(s)",
             )
             st.session_state.pending_hi = None
             st.session_state.hi_targets = []

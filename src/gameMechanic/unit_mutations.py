@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for
 from gameObjects.unit import ModelGroup, Unit
 
@@ -345,6 +346,26 @@ def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) ->
 def apply_mortal_wounds(uid: str, faction: str, count: int, unit: Unit) -> None:
     """Apply mortal wounds — no armour save, no front-model cap."""
     apply_damage(uid, faction, count, unit, mortal=True)
+
+
+def perform_heroic_intervention(
+    faction: str,
+    unit_key: str,
+    target_faction: str,
+    target_keys: list[str],
+    round_no: int,
+    unit_name: str,
+) -> None:
+    """Apply a Heroic Intervention: mark the flag, enter melee with each target, log.
+
+    Operates on STATE KEYS (duplicate-squad safe). Mirrors R-CHARGE-09/10 enforcement.
+    """
+    st.session_state[_unit_key(faction)][unit_key]["turn_flags"]["heroic_intervened"] = True
+    for tgt_key in target_keys:
+        enter_melee(unit_key, faction, tgt_key, target_faction)
+    log_action(
+        round_no, "charge", unit_name, f"Heroic Intervention — engaged {len(target_keys)} unit(s)"
+    )
 
 
 def reset_turn_flags(uid: str, faction: str) -> None:

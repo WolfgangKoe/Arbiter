@@ -302,38 +302,38 @@ class TestHiEligibleUnits:
     def test_character_not_in_melee_is_eligible(self) -> None:
         unit = _make_unit_kw("CHARACTER", "INFANTRY")
         units_data = {unit.id: _hi_unit_state()}
-        result = hi_eligible_units([unit], units_data)
-        assert unit in result
+        result = hi_eligible_units([unit], [unit.id], units_data)
+        assert unit in [u for u, _ in result]
 
     def test_non_character_is_ineligible(self) -> None:
         """Units without CHARACTER keyword may not perform Heroic Intervention."""
         unit = _make_unit_kw("INFANTRY")
         units_data = {unit.id: _hi_unit_state()}
-        result = hi_eligible_units([unit], units_data)
-        assert unit not in result
+        result = hi_eligible_units([unit], [unit.id], units_data)
+        assert unit not in [u for u, _ in result]
 
     def test_character_in_melee_is_ineligible(self) -> None:
         """Characters already in Engagement Range (in_melee=True) are excluded."""
         unit = _make_unit_kw("CHARACTER")
         units_data = {unit.id: _hi_unit_state(in_melee=True)}
-        result = hi_eligible_units([unit], units_data)
-        assert unit not in result
+        result = hi_eligible_units([unit], [unit.id], units_data)
+        assert unit not in [u for u, _ in result]
 
     def test_character_destroyed_is_ineligible(self) -> None:
         unit = _make_unit_kw("CHARACTER")
         units_data = {unit.id: _hi_unit_state(destroyed=True)}
-        result = hi_eligible_units([unit], units_data)
-        assert unit not in result
+        result = hi_eligible_units([unit], [unit.id], units_data)
+        assert unit not in [u for u, _ in result]
 
     def test_character_already_intervened_is_ineligible(self) -> None:
         """heroic_intervened flag blocks a second HI (R-CHARGE-10 guard)."""
         unit = _make_unit_kw("CHARACTER")
         units_data = {unit.id: _hi_unit_state(heroic_intervened=True)}
-        result = hi_eligible_units([unit], units_data)
-        assert unit not in result
+        result = hi_eligible_units([unit], [unit.id], units_data)
+        assert unit not in [u for u, _ in result]
 
     def test_empty_unit_list_returns_empty(self) -> None:
-        assert hi_eligible_units([], {}) == []
+        assert hi_eligible_units([], [], {}) == []
 
     def test_mixed_list_only_returns_eligible(self) -> None:
         char = _make_unit_kw("CHARACTER")
@@ -344,9 +344,9 @@ class TestHiEligibleUnits:
             "char": _hi_unit_state(),
             "inf": _hi_unit_state(),
         }
-        result = hi_eligible_units([char, infantry], units_data)
-        assert char in result
-        assert infantry not in result
+        result = hi_eligible_units([char, infantry], [char.id, infantry.id], units_data)
+        assert char in [u for u, _ in result]
+        assert infantry not in [u for u, _ in result]
 
 
 # ---------------------------------------------------------------------------
