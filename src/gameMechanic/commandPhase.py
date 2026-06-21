@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
 from gameMechanic.ability_engine import get_activated_command_abilities, get_triggered_abilities
@@ -14,7 +16,7 @@ from gameMechanic.game_state import (
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import wargear_ids_with_handler
+from gameObjects.loader import activated_wargear_ids, load_wargear_catalog
 from uiLayout._common import (
     lookup,
     state_badges_html,
@@ -102,9 +104,9 @@ def _render_buff_roll_ability(
 ) -> None:
     """Render activate / status UI for any buff_roll command-phase ability.
 
-    Some abilities can be used more than once per Command phase: a PHAERON model
-    may use My Will Be Done one additional time. Uses are tracked as a list of
-    target unit keys; max uses = 1 + 1 if the owning model has the PHAERON keyword.
+    Some abilities grant extra uses when the owning model has a given keyword
+    (data-driven via the ability's ``extra_uses``). Uses are tracked as a list
+    of target unit keys; max uses = 1 + the owner's data-driven keyword bonus.
     """
     ability_id = ability.id
     cmd_state: dict = st.session_state.get("command_ability_state", {})  # type: ignore[type-arg]
@@ -130,7 +132,7 @@ def _render_buff_roll_ability(
         targets = []
 
     owner = unit_by_id.get(ability.unit_id)
-    max_uses = 1 + (1 if owner and owner.has_keyword("PHAERON") else 0)
+    max_uses = 1 + ability.bonus_uses_for(owner)
     effect_desc = "re-roll 1s to hit" if ability.effect.type == "reroll_hit_1" else "+1 to hit"
 
     st.divider()
@@ -221,60 +223,77 @@ def _render_gain_cp_roll(unit, faction: str, state: dict) -> None:  # type: igno
 
 
 # ---------------------------------------------------------------------------
-# Resurrection Orb — wargear, separate from unit_abilities system
+# Activated wargear — generic flow (target selection + manual adjustment),
+# separate from the unit_abilities system. Data-driven from wargear.yaml.
 # ---------------------------------------------------------------------------
 
 
-def _render_resurrection_orb(
+def _wargear_once_per_battle(wargear: dict) -> bool:  # type: ignore[type-arg]
+    """Read the once_per_battle flag from a wargear entry's conditions."""
+    return any(c.get("once_per_battle") for c in wargear.get("conditions", []))
+
+
+def _render_activated_wargear(
     faction: str,
     state: dict,  # type: ignore[type-arg]
     units_state: dict,  # type: ignore[type-arg]
     unit_by_id: dict,  # type: ignore[type-arg]
+    bearer: Any,
+    wargear: dict,  # type: ignore[type-arg]
     bearer_uid: str = "",
-    orb_id: str = "",
 ) -> None:
-    st.divider()
-    st.markdown("**Resurrection Orb**")
+    """Generic renderer for ``ability_type: activated`` wargear.
 
-    if st.session_state.wargear_used.get(orb_id, False):
+    Name and once_per_battle are read from the wargear entry; all session
+    state is namespaced by wargear id so multiple bearers never collide.
+    """
+    wargear_id = wargear["id"]
+    name = wargear.get("name_en", wargear_id)
+    request_id = f"revive_wargear_{wargear_id}"
+    once_per_battle = _wargear_once_per_battle(wargear)
+
+    st.divider()
+    st.markdown(f"**{name}**")
+
+    if once_per_battle and st.session_state.wargear_used.get(wargear_id, False):
         st.caption("Already used this battle.")
         return
 
-    revive_wargear_target = st.session_state.get("revive_wargear_target_uid")
-    if revive_wargear_target:
-        target_unit = unit_by_id.get(revive_wargear_target)
+    targets = st.session_state.get("revive_wargear_target_uid", {})
+    target_uid = targets.get(request_id)
+    if target_uid:
+        target_unit = unit_by_id.get(target_uid)
         if target_unit:
             st.caption(f'Target: **{target_unit.name_en}** — verify within 6" on table')
-            wound_adjustment_buttons(
-                st.session_state.get("active", ""), revive_wargear_target, target_unit
-            )
+            wound_adjustment_buttons(st.session_state.get("active", ""), target_uid, target_unit)
         if st.button(
-            "Confirm & Close Resurrection Orb",
-            key="cmd_revive_wargear_confirm",
+            f"Confirm & Close {name}",
+            key=f"cmd_revive_wargear_confirm_{wargear_id}",
             use_container_width=True,
         ):
-            name = target_unit.name_en if target_unit else revive_wargear_target
-            st.session_state.wargear_used[orb_id] = True
-            log_action(state["round"], "command", "Overlord", f"Resurrection Orb → {name}")
-            st.session_state.revive_wargear_target_uid = None
+            target_name = target_unit.name_en if target_unit else target_uid
+            bearer_name = bearer.name_en if bearer else "Bearer"
+            st.session_state.wargear_used[wargear_id] = True
+            log_action(state["round"], "command", bearer_name, f"{name} → {target_name}")
+            targets.pop(request_id, None)
             st.rerun()
     elif (
         st.session_state.get("pending_target_request") is not None
-        and st.session_state.pending_target_request.ability_id == f"revive_wargear_{orb_id}"
+        and st.session_state.pending_target_request.ability_id == request_id
     ):
         st.info("Select a target unit from your army list.")
-        if st.button("Cancel", key="revive_wargear_cancel", use_container_width=True):
+        if st.button("Cancel", key=f"revive_wargear_cancel_{wargear_id}", use_container_width=True):
             st.session_state.pending_target_request = None
             st.rerun()
     else:
         if st.button(
-            "Use Resurrection Orb",
-            key="cmd_revive_wargear",
+            f"Use {name}",
+            key=f"cmd_revive_wargear_{wargear_id}",
             type="primary",
             use_container_width=True,
         ):
             st.session_state.pending_target_request = TargetSelectionRequest(
-                ability_id=f"revive_wargear_{orb_id}",
+                ability_id=request_id,
                 required_keywords=[],
                 exclude_uid=bearer_uid,
                 faction_filter="own",
@@ -307,12 +326,19 @@ def _render_unit_command_abilities(
             _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
 
     unit = unit_by_id.get(unit_id)
-    orb_ids = wargear_ids_with_handler(faction_dir, "resurrection_orb")
-    found_orb_id = next((wid for wid in (unit.wargear_ids if unit else []) if wid in orb_ids), None)
-    if found_orb_id:
-        _render_resurrection_orb(
-            faction, state, units_state, unit_by_id, selected_state_key, orb_id=found_orb_id
-        )
+    activated_ids = activated_wargear_ids(faction_dir)
+    catalog = load_wargear_catalog(faction_dir)
+    for wid in unit.wargear_ids if unit else []:
+        if wid in activated_ids:
+            _render_activated_wargear(
+                faction,
+                state,
+                units_state,
+                unit_by_id,
+                unit,
+                catalog[wid],
+                bearer_uid=selected_state_key,
+            )
     if unit and unit.get_triggered_effect("phase_start", "command", "gain_cp_roll"):
         _render_gain_cp_roll(unit, faction, state)
 

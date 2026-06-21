@@ -31,7 +31,6 @@ LEDGER: dict[str, set[str]] = {
     # --- LEGIT: Python typing.Protocol (structural type), collides with the seed word ---
     "gameMechanic/phase_handler.py": {"protocol"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
-    "gameMechanic/commandPhase.py": {"orb", "overlord", "phaeron", "resurrection"},
     "gameMechanic/game_state.py": {"necrons"},
     "gameMechanic/movementPhase.py": {"dynasty"},
     "gameMechanic/psychicPhase.py": {"gloom", "prism"},

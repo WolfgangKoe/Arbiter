@@ -144,7 +144,7 @@
     player: active
   conditions:
   - within_inches: 6
-    max_uses: 1
+    once_per_battle: true
   effect:
     type: complex
     target: selected_unit

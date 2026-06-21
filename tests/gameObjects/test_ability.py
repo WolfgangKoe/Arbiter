@@ -131,9 +131,35 @@ def test_resurrection_orb_wargear_source() -> None:
     orb = next(a for a in abilities if a.id == "wh40k_9e.necrons.wargear.resurrection_orb.ability")
     assert orb.source == "wargear"
     assert orb.wargear_id == "wh40k_9e.necrons.wargear.resurrection_orb"
-    assert orb.conditions[0].max_uses == 1
+    # Schema unified (Plan 020): once_per_battle replaces the old max_uses: 1
+    assert orb.conditions[0].once_per_battle is True
+    assert orb.conditions[0].max_uses is None
     assert orb.effect.type == "complex"
     assert orb.effect.handler == "resurrectionOrb"
+
+
+class _KeywordUnit:
+    def __init__(self, keywords: list[str]) -> None:
+        self._keywords = keywords
+
+    def has_keyword(self, keyword: str) -> bool:
+        return keyword in self._keywords
+
+
+def test_mwbd_extra_uses_loaded_from_yaml() -> None:
+    abilities = load_unit_abilities("necrons")
+    mwbd = next(
+        a for a in abilities if a.name_en == "My Will Be Done" and "overlord" in (a.unit_id or "")
+    )
+    assert [(e.has_keyword, e.bonus) for e in mwbd.extra_uses] == [("PHAERON", 1)]
+
+
+def test_bonus_uses_for_grants_keyword_bonus() -> None:
+    abilities = load_unit_abilities("necrons")
+    mwbd = next(a for a in abilities if a.name_en == "My Will Be Done")
+    assert mwbd.bonus_uses_for(_KeywordUnit(["PHAERON"])) == 1
+    assert mwbd.bonus_uses_for(_KeywordUnit(["INFANTRY"])) == 0
+    assert mwbd.bonus_uses_for(None) == 0
 
 
 def test_overlord_has_rules_field_loaded() -> None:

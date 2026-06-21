@@ -9,6 +9,9 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.overlord
+    extra_uses:
+      - has_keyword: PHAERON
+        bonus: 1
     rule_text: "In your Command phase, select one friendly DYNASTY CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
     trigger:
       timing: phase_any
@@ -128,6 +131,9 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.catacomb_command_barge
+    extra_uses:
+      - has_keyword: PHAERON
+        bonus: 1
     rule_text: "In your Command phase, select one friendly <DYNASTY> CORE unit within 9\". Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
     trigger:
       timing: phase_any
@@ -245,6 +251,9 @@ abilities:
     ability_type: activated
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.the_silent_king
+    extra_uses:
+      - has_keyword: PHAERON
+        bonus: 1
     rule_text: "In your Command phase, you can select one friendly NECRONS CORE or TRIARCH PRAETORIANS unit within 9\" of Szarekh. Until the start of your next Command phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll. Each unit can only be selected for this ability once per phase. Phaeron: this model can use this ability one additional time per turn."
     trigger:
       timing: phase_any

@@ -407,7 +407,7 @@ def init_state(
     st.session_state.command_ability_state: dict = {}
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)
     st.session_state.pending_target_request: TargetSelectionRequest | None = None
-    st.session_state.revive_wargear_target_uid = None
+    st.session_state.revive_wargear_target_uid: dict[str, str] = {}
     st.session_state.wargear_used: dict[str, bool] = {}
     st.session_state.mortal_target_uid: str | None = None
     st.session_state.relic_triggered_used: dict[str, bool] = {}

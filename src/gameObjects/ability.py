@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -37,6 +38,17 @@ class Effect:
 
 
 @dataclass
+class ExtraUses:
+    """Extra activation uses an ability gains when its owner has a keyword.
+
+    Data-driven (read from YAML) so no faction keyword is hardcoded in src/.
+    """
+
+    has_keyword: str
+    bonus: int = 1
+
+
+@dataclass
 class Ability:
     id: str
     name_en: str
@@ -51,3 +63,10 @@ class Ability:
     badge_label: str | None = None
     active_text: str | None = None
     next_stage_id: str | None = None
+    extra_uses: list[ExtraUses] = field(default_factory=list)
+
+    def bonus_uses_for(self, unit: Any) -> int:
+        """Extra activation uses granted by the owner's keywords (data-driven)."""
+        if unit is None:
+            return 0
+        return sum(e.bonus for e in self.extra_uses if unit.has_keyword(e.has_keyword))

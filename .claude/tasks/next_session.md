@@ -23,68 +23,44 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S82, 2026-06-21)
+## Aktueller Stand (nach S83, 2026-06-21)
 
-**S82 (Branch `feature/014-defender-loss-allocation`) — Plan 014 Teil B (UI A/B/C) DONE:**
-Vollsuite **1082 grün**, Cov **92,85 %**, Gate 92 %, ruff/black/isort grün.
-- **Step 3 UI** in `_common.py`: `_render_subgroup_selector()` (neu) + Verdrahtung in
-  `_render_damage_block()`. Nur bei `len(aktive Gruppen) > 1`: **A** freie Radio-Wahl
-  (→ `select_damage_target_group` beim Apply), **B** Lock-Warnung auf `get_locked_group()`
-  (gerichtetes Ziel erzwungen), **C** „Subgruppe verloren"-Warnung in der Apply-Zusammenfassung
-  (über `wiped_groups` im `res_key`-State). Single-Group/legacy → `damage_active_group_id=None`.
-- **Schicht 2** (Sonnet-Subagent, ADR-0005): `test_group_flow.py` +2 (A→B→C-Transition +
-  Kill-Saw-Zerstörung), 31 grün. Werte: Kill Saw 6 HP, +1→5 (Lock), +2→3 (Release).
-- **▶ Manuelle UI-Verifikation NOCH OFFEN** (Render-Code nicht test-gedeckt): Nobz 3 Zustände
-  (App), Warriors/homogen ohne Selektor, Szarekh+Menhirs-Pools unverändert. Klick-Schritte:
-  `docs/audit/plans/014-...md` Step 4 Schicht 4.
-- **Doku-Drift TODO:** `architecture.md` §session_state-Schema — `group_wounds` jetzt universell
-  (backlog §4b).
+**S83 (Branch `feature/014-defender-loss-allocation`) — Plan 020 Generic Activated Wargear DONE:**
+Vollsuite **1088 grün**, Cov **92,90 %**, Gate 92 %, ruff/black/isort + Architektur-Gate grün.
+- **A** `_render_resurrection_orb` → generisch `_render_activated_wargear` (Name/`once_per_battle`
+  aus YAML; Lookup via `activated_wargear_ids` = `ability_type: activated`, nicht mehr Handler-String
+  `"resurrection_orb"`; loggt Träger-Name statt Literal `"Overlord"`).
+- **B** Zwei-Orb-Bug gefixt: `revive_wargear_target_uid` jetzt **Dict je Wargear** (Key = Request-ID)
+  in `commandPhase.py` + `unitCard.py` + `game_state.py`.
+- **C** Orb-YAML `max_uses: 1` → `once_per_battle: true`; Renderer liest das Flag.
+- **D** INV-4b-Allowlist-Eintrag `commandPhase.py {orb,overlord,phaeron,resurrection}` **entfernt**
+  (Ledger geschrumpft) → Cluster 3 (`orb/overlord/resurrection`) **und** `phaeron` erledigt.
+- **E** PHAERON-Literal generalisiert: neues `extra_uses`-Feld auf `Ability` + `bonus_uses_for(unit)`;
+  +1-Nutzung kommt jetzt aus den 3 MWBD-YAML-Einträgen (9E-Regel erhalten, kein src-Literal).
+- **Step 4 (heal_nearby_unit-Dispatcher) bewusst verworfen** — Orb nutzt manuelle
+  `wound_adjustment_buttons` am Tisch (kein Engine-Heal) → Dispatcher wäre toter Code.
+- Erwartete Migration: `test_resurrection_orb_wargear_source` prüft jetzt `once_per_battle` (statt max_uses).
 
-## Aktueller Stand (nach S81, 2026-06-21)
+### ▶ Nächste Session = manueller Orb-Check + Plan 021
 
-**S81 (Branch `feature/014-defender-loss-allocation`) — 3 Retro-Maßnahmen (Prozess) DONE:**
-Doku-/Memory-Arbeit, keine src-Änderung; Doku-/Architektur-Gates grün (16 passed).
-- **M1 — Maßnahmen-Entscheid:** Event 5 bekommt Schritt „Maßnahmen-Entscheid" (Review & Retro
-  getrennt, Retro endet mit nummerierter Liste → Stakeholder wählt → Abschluss schreibt nur
-  Freigegebenes). `operating_model.md` E5 · `CLAUDE.md` Standard-Prompts.
-- **M2 — Planning-Default:** „start next session" ⇒ Planning vorlegen (Prioritäten + Token-
-  Schätzung), auf Freigabe warten; Shortcut „Plan ist freigegeben" bleibt. `operating_model.md` E1.
-- **M3 — Stehende Subagent-Freigabe (ADR-0005):** Subagenten ohne Einzel-Freigabe selbst
-  starten; Edit-Pflicht hängt am *Effekt*, nicht am Werkzeug. **Offene Lücke** (ADR-Review-Termin):
-  feuert `freigabe_gate.py` auch im Subagent-Kontext? Sonst Regel „Subagent liefert nur Entwürfe".
+**Zuerst (offener manueller UI-Check zu Plan 020 — Render-Code nicht test-gedeckt):** Im
+`data/rosters/necrons_1500pts_silent_king.yaml` einen **zweiten Orb-Träger (Overlord mit
+Resurrection Orb)** ergänzen → damit den Zwei-Orb-State-Fix (B) am Tisch verifizieren (beide Orbs
+unabhängig aktivierbar; einer aktiviert ≠ stört den anderen). Weitere Checks: Orb erscheint mit
+YAML-Namen; Use→Ziel→Confirm→„Already used".
+**Dann Plan 021** (Arkana → `faction_abilities.yaml` + Loader generisch) aus
+`docs/audit/plans/README.md`. Reihenfolge: 014✓ 020✓ → **021** → 016 → 018 → 015 → 017.
 
-## Aktueller Stand (nach S80, 2026-06-21)
-
-**S80 (Historie) — Plan 014 Teil A (Logik) DONE:** `group_wounds` universell (jede Einheit mit
-`model_groups`), `damage_active_group_id`, `select_damage_target_group`/`get_locked_group`
-(`pool % wval != 0` ⇒ Lock), gerichteter Schaden + Lock-Check; Default-Pfad byte-identisch. 12
-Tests (Schicht 1/1b). Subagenten-Befunde (Silent-King-Zielsplit regelwidrig, Dice 7+/Magnitude)
-liegen im **Backlog §UI**; LinkedIn-Grundlagendatei `Refinement/operating_model_luhmann_wilber_graves.md`.
-
-**S77–S79 (Historie, verdichtet):** Plan 022 Dice Display Rework DONE (`1ce131a`..`ecad9bf`);
-S79 Renderer ins Sicherheitsnetz (`dice_compose.py`-Naht 100 %, HI-Crash-Fix, Badge-Fix,
-**INV-6** + Ratchet `fail_under`→92). Alle S79-UI-Findings (Silent-King-Ziel, 7+-Grenze,
-Magnitude-Position, Invuln-Badge, Befund B/C) liegen im **Backlog** (`backlog.md` §UI). Noch
-nicht verdrahtet: `reroll_marker_row_html`/`always_fail_marker_row_html` (warten auf Produzent).
-
-**INV-4b/INV-4 Restschuld (nach S77):**
-- **LEGIT:** `rosz_importer._FACTION_MAP`, `typing.Protocol`
-- **Schema-Urteil (Konsens nötig):** `reanimationProtocols`/`reanimation`,
-  `arkana`, Items `orb`/`overlord`/`phaeron`/`gloom`/`prism`/`dynasty`,
-  Default-Roster-Hardcode (`game_state.py`), `faction_dir`-Default `"necrons"` in `loader.py`
-  (`dakka`/`klaw`/`tesla` in S77 erledigt)
-
-### ▶ Nächste Session = Plan 020 (nach manueller 014-Verifikation)
-
-**Reihenfolge (2026-06-21):** 023/022 (DONE) → 014 **Teil A+B DONE** → 020 → 021 → 016 → 018 →
-015 → 017. **Zuerst** die offene manuelle UI-Verifikation für 014 erledigen (s. S82-Block:
-Nobz 3 Zustände, Warriors ohne Selektor, Szarekh-Pools) — Render-Code ist nicht test-gedeckt.
-Danach Plan 020 aus `docs/audit/plans/README.md` (Queue/Status) ziehen.
+**Historie verdichtet:** S82 Plan 014 Teil B (UI A/B/C) DONE + manuell verifiziert. S81 3 Retro-
+Maßnahmen (M1 Maßnahmen-Entscheid, M2 Planning-Default, M3 ADR-0005 stehende Subagent-Freigabe).
+S80 Plan 014 Teil A (`group_wounds` universell). Details → `docs/goals/ziel6.md`.
 
 ### Offene Fragen / Retro-Vormerke
-- **ADR-0005-Lücke testen (S82-Maßnahme):** Einmal verifizieren, ob `freigabe_gate.py` im
-  Subagent-Kontext feuert (kleiner Probelauf). Wenn nicht → Regel „Subagent liefert nur Entwürfe".
-- **Output ↔ cache_read als Tempo-Indikator:** Zielwert-Feintuning `token_report.py`-Legende.
+- **ADR-0005-Lücke (teil-beantwortet S83):** `freigabe_gate.py` feuerte sauber im **Opus-Hauptkontext**
+  (Edit blockiert bis `touch .claude/.freigabe`). Offen bleibt nur: feuert es auch im **Subagent**-Kontext?
+- **Doku-Drift:** `architecture.md` §session_state — `group_wounds` universell (backlog §4b).
+- **INV-4b Restschuld:** noch `dynasty` (movementPhase), `gloom/prism` (psychicPhase → Cluster 5),
+  `arkana` (loader → Plan 021), `reanimation`/`protocols` (_common). Ratchet weiter schrumpfen.
 
 ---
 
@@ -97,3 +73,5 @@ Danach Plan 020 aus `docs/audit/plans/README.md` (Queue/Status) ziehen.
 - **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md`.
 - **History-Rotation:** `python tools/rotate_history.py --session <N> --summary "…"`.
 - **Freigabe-Gate:** Edit/Write blockiert bis `touch .claude/.freigabe`; SessionStart re-armt.
+</content>
+</invoke>

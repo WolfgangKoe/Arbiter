@@ -8,7 +8,7 @@ from typing import Any
 
 import yaml
 
-from gameObjects.ability import Ability, Condition, Effect, Trigger
+from gameObjects.ability import Ability, Condition, Effect, ExtraUses, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.round_choice_ability import RoundChoiceAbility
 from gameObjects.stratagem import Stratagem, StratagemModifier
@@ -403,6 +403,10 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
         badge_label=d.get("badge_label"),
         active_text=d.get("active_text"),
         next_stage_id=d.get("next_stage_id"),
+        extra_uses=[
+            ExtraUses(has_keyword=e["has_keyword"], bonus=e.get("bonus", 1))
+            for e in d.get("extra_uses", [])
+        ],
     )
 
 
@@ -656,6 +660,12 @@ def wargear_ids_with_handler(faction_dir: str, handler: str) -> set[str]:
     """Return IDs of wargear items that carry the given handler tag."""
     catalog = load_wargear_catalog(faction_dir)
     return {wid for wid, entry in catalog.items() if entry.get("handler") == handler}
+
+
+def activated_wargear_ids(faction_dir: str) -> set[str]:
+    """Return IDs of wargear with ability_type 'activated' (faction-agnostic)."""
+    catalog = load_wargear_catalog(faction_dir)
+    return {wid for wid, entry in catalog.items() if entry.get("ability_type") == "activated"}
 
 
 def load_relic_catalog(faction_dir: str) -> dict[str, dict]:  # type: ignore[type-arg]

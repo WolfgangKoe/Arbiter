@@ -269,8 +269,11 @@ def render_unit_card(
                                 f"{_ptr.badge_label} → {unit.name_en}",
                             )
                         else:
-                            # Wargear/revive ability → store selected target uid
-                            st.session_state.revive_wargear_target_uid = uid
+                            # Wargear/revive ability → store target uid per wargear
+                            # (keyed by request id so multiple bearers never collide)
+                            targets = st.session_state.get("revive_wargear_target_uid") or {}
+                            targets[_ptr.ability_id] = uid
+                            st.session_state.revive_wargear_target_uid = targets
                         st.session_state.pending_target_request = None
                         st.rerun()
 

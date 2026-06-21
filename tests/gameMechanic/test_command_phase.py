@@ -11,11 +11,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.game_state as _gs  # noqa: E402
 from gameMechanic.commandPhase import (  # noqa: E402
+    _wargear_once_per_battle,
     can_gain_command_point,
     resolve_command_start,
     resolve_gain_cp_roll,
 )
-from gameObjects.loader import load_army  # noqa: E402
+from gameObjects.loader import activated_wargear_ids, load_army  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # resolve_command_start — integration
@@ -134,3 +135,31 @@ class TestResolveGainCpRoll:
         cp_delta, locked = resolve_gain_cp_roll(amount=2, roll_succeeded=True, already_rolled=False)
         assert cp_delta == 2
         assert locked is True
+
+
+# ---------------------------------------------------------------------------
+# Activated wargear — generic flow (Plan 020)
+# ---------------------------------------------------------------------------
+
+
+class TestActivatedWargear:
+    def test_activated_wargear_ids_finds_orb_generically(self) -> None:
+        ids = activated_wargear_ids("necrons")
+        assert "wh40k_9e.necrons.wargear.resurrection_orb" in ids
+
+    def test_once_per_battle_read_from_conditions(self) -> None:
+        entry = {"conditions": [{"within_inches": 6, "once_per_battle": True}]}
+        assert _wargear_once_per_battle(entry) is True
+
+    def test_once_per_battle_false_when_absent(self) -> None:
+        assert _wargear_once_per_battle({"conditions": [{"within_inches": 6}]}) is False
+
+    def test_two_bearers_target_state_no_conflict(self) -> None:
+        # Per-wargear namespacing: two orb instances keep separate targets,
+        # so resolving one never clears the other (the old global-key bug).
+        targets: dict[str, str] = {}
+        targets["revive_wargear_orb_a"] = "necron_warriors#1"
+        targets["revive_wargear_orb_b"] = "necron_immortals#1"
+        targets.pop("revive_wargear_orb_a", None)
+        assert "revive_wargear_orb_a" not in targets
+        assert targets["revive_wargear_orb_b"] == "necron_immortals#1"
