@@ -21,6 +21,36 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
+## Aktueller Stand (nach S80, 2026-06-21)
+
+**S80 (Branch `feature/014-defender-loss-allocation`) — Plan 014 Teil A (Logik) DONE:**
+Vollsuite 1080 grün, Cov **92,85 %**, Gate 92 %, ruff/black/isort/Architektur grün.
+- **Step 1 — `group_wounds` universell:** `game_state._unit_state` befüllt den Per-Gruppen-
+  HP-Pool jetzt für **jede** Einheit mit `model_groups` (nicht mehr nur bei gemischten
+  Wundenwerten). `current_wounds` homogener Einheiten **unverändert** (Summe identisch);
+  neues State-Feld `damage_active_group_id` (default None). Szarekh/Menhir-Regression grün.
+- **Step 2 — Lock + gerichteter Schaden (`unit_mutations`):** `select_damage_target_group()`,
+  `get_locked_group()` (`pool % wval != 0` ⇒ angeschlagenes Frontmodell), `_group_front_hp`,
+  `_apply_directed_group_damage`. `apply_damage`: **Default-Pfad byte-identisch** (kein
+  `damage_active_group_id` ⇒ alter Priority-Spill) — nur bei gewählter Gruppe gerichtet +
+  Lock-Check (falsche Gruppe → ValueError); `mortal=True` ignoriert Lock (Overflow). 12 neue
+  Tests (Schicht 1 + 1b). **Designnote:** `get_locked_group` nahm `unit` als Param (Plan-
+  Pseudocode ohne — `group_wound_value` braucht die Unit).
+- **▶ Teil B offen (nächste Session):** Step 3 UI Zustand A/B/C in `_common.py` +
+  Schicht-2-Acceptance (`test_group_flow.py`) + manuelle Nobz/Szarekh-Verifikation.
+- **Parallel erledigt:** LinkedIn-Grundlagendatei `Refinement/operating_model_luhmann_wilber_graves.md`
+  (Luhmann/Wilber/Graves + Gates/Hooks); 2 Subagenten-Befunde in `docs/inbox/` (s. u.).
+
+### S80-Subagenten-Befunde (Backlog, NICHT umgesetzt)
+- **Silent-King Zielaufteilung — REGEL GEKLÄRT:** Core Rules: „If a model has more than one
+  ranged weapon, it can split the weapons between different enemy units." → Waffen-Split auf
+  **verschiedene** Ziele ist erlaubt; alle Attacken **einer** Waffe auf dieselbe Einheit.
+  **Aktuelle App-Beschränkung (1 Ziel) ist regelwidrig** → UI auf „Ziel pro Waffe" + Staff-of-
+  Stars-Sperre ≤8 W beachten. Detail: `docs/inbox/finding-silent-king-target-split.md`.
+- **Dice-Display 7+/Magnitude — Gap-Analyse:** `threshold_header_html` ohne threshold=7-Logik;
+  Magnitude `←N` landet bei shift>1 rechts neben dem Grenz-Slot statt darin. Optionen +
+  Regressionsfläche: `docs/inbox/finding-dice-display-7plus.md` (Design-Entscheid offen → Opus).
+
 ## Aktueller Stand (nach S79, 2026-06-21)
 
 **S79 (Branch `feature/022-dice-display-rework`) — Renderer ins Sicherheitsnetz (4-Phasen-Lauf):**
@@ -55,14 +85,17 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
   Default-Roster-Hardcode (`game_state.py`), `faction_dir`-Default `"necrons"` in `loader.py`
   (`dakka`/`klaw`/`tesla` in S77 erledigt)
 
-### ▶ Nächste Session = Plan 014 (Defender Loss Allocation)
+### ▶ Nächste Session = Plan 014 **Teil B** (UI Zustand A/B/C)
 
-**Reihenfolge (neu 2026-06-21):** 023/022 (DONE) → 014 → 020 → 021 → 016 → 018 → 015 → 017
-**014:** Refinement 2026-06-21 **neu geplant** (alte Fassung hatte
-`group_wounds`-Namenskollision + Scope-Selbstwiderspruch). Neue Richtung: `group_wounds`
-universell für ALLE Gruppen-Einheiten → ein Schadenspfad. **Risk HIGH** (Regressionsfläche
-Heal-/Damage-Pfad) — Plan: `docs/audit/plans/014-p17-defender-loss-allocation.md`.
-Beide Pläne: vor Start Freigabe einholen.
+**Reihenfolge (neu 2026-06-21):** 023/022 (DONE) → 014 **Teil A DONE** → 014 Teil B → 020 →
+021 → 016 → 018 → 015 → 017
+**014 Teil B:** Step 3 aus `docs/audit/plans/014-p17-defender-loss-allocation.md` — in
+`_common.py:_render_damage_block()` Subgruppen-Auswahl VOR dem Apply-Button (nur bei
+`len(aktive Gruppen) > 1`): Zustand A (freie Wahl, `select_damage_target_group`), B (Lock auf
+`get_locked_group()`), C (Zerstörungs-/Fähigkeitsverlust-Warnung). Dann Schicht-2-Tests
+(`test_group_flow.py`: A→B→C-Transition Nobz) + manuelle Verifikation (Nobz 3 Zustände,
+Warriors ohne UI, Szarekh-Pools). Die Logik (`damage_active_group_id`, Lock, gerichteter
+Schaden) steht bereits aus Teil A — Teil B verdrahtet nur das Render-UI.
 
 ### Offene Fragen / Retro-Vormerke
 - **Output ↔ cache_read als Tempo-Indikator:** Zielwert-Feintuning `token_report.py`-Legende.

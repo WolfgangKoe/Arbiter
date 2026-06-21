@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-21 12:33 CEST
+Stand: 2026-06-21 15:24 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,31 +14,30 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-21 10:05 de63  ███████████░ 137k ↓    █████░  81% ↑  ██··········
+06-21 13:14 a977  ████████████ 153k ↓    █░░░░░  19% ↓  ██████████··
+06-21 10:05 de63  ████████████ 177k ↑    ████░░  72% ↑  ███·········
 06-21 09:07 e19e  ███████████░ 142k ↓    ░░░░░░   0% ↓  ████████████
 06-21 01:12 8fce  ████████████ 162k ↑    ░░░░░░   8% ↓  ███████████·
 06-21 00:36 0702  ███████████░ 135k ↓    ███░░░  42% ↑  ███████·····
 06-20 23:17 333b  ████████████ 144k ↑    ░░░░░░   0% →  ████████████
-06-20 22:50 6feb  ███████░░░░░  88k ↓    ░░░░░░   0% ↓  ██████······
 ```
 
 ## Jüngste Session
 
-**2026-06-21 10:05 · de63fb54**
+**2026-06-21 13:14 · a977e6b5**
 
-- **Aufgabe:** Hier ist Abshcluss der letzten Session Session‑Abschluss (S78) Geliefert: Befund A (Pfeil‑Magnitude ←N/+N→) — umgesetzt…
+- **Aufgabe:** Start session. Was steht als nächstes im Backlog auf "zu tun"? bitte Auflisten und Tokenschätzung bitte.
 - **Modelle:** Haupt Opus · Subagent Sonnet
-- **Tokens gesamt:** 39,843,921 (Haupt 7,636,013 · Subagent 32,207,908, Anteil 81 %)
-- **Peak-Kontext:** ███████████░ 137k / 150k
-- **cache_read:** 37,845,220 · **Output:** 292,655
+- **Tokens gesamt:** 15,969,259 (Haupt 12,971,467 · Subagent 2,997,792, Anteil 19 %)
+- **Peak-Kontext:** ████████████ 153k / 150k
+- **cache_read:** 15,057,968 · **Output:** 190,328
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ Peak-Kontext 137k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
-- ✅ 81% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 32,207,908 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ⚠️ 9 von 118 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
+- ✅ 2,997,792 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,20 +46,17 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: Reproduce Heroic … ████████████ 167k    ⛔
-2   general-purpose: Phase 2 badge bug… ████░░░░░░░░  55k    ✅
-3   general-purpose: Phase 3 codify in… █████░░░░░░░  60k    ✅
-4   general-purpose: Phase 0 dice_html… ██████░░░░░░  71k    ✅
-5   general-purpose: Phase 1 HI fix + … ██████░░░░░░  72k    ✅
+1   general-purpose: Silent-King targe… ███░░░░░░░░░  33k    ✅
+2   general-purpose: Dice display 7+ g… ██████░░░░░░  80k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  15,879
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  1,690,167
-cache_read     ▕████████████████████████▏   95%  37,845,220
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  292,655
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  37,529
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  683,434
+cache_read     ▕████████████████████████▏   94%  15,057,968
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  190,328
 ```
 
 **Legende & Zielwerte:**
@@ -78,5 +74,5 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 165 Sessions: 2,692,897,274 Token (26,556 Antworten).
+Σ über 166 Sessions: 2,714,055,879 Token (26,770 Antworten).
 

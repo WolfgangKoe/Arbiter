@@ -914,10 +914,10 @@
   "de63fb54-6c04-4d00-a507-62d2daa3cceb": {
     "started_at": "2026-06-21T08:05:00.084Z",
     "task": "Hier ist Abshcluss der letzten Session Session‑Abschluss (S78) Geliefert: Befund A (Pfeil‑Magnitude ←N/+N→) — umgesetzt…",
-    "peak_context": 137014,
-    "subagent_share": 80.83518687831953,
+    "peak_context": 176734,
+    "subagent_share": 71.52025634737981,
     "by_tier": {
-      "Opus": 7636013,
+      "Opus": 12825359,
       "Sonnet": 32207908
     },
     "subagents": [
@@ -955,6 +955,32 @@
         "tier": "Sonnet",
         "peak_context": 71796,
         "started_at": "2026-06-21T08:05:00.084Z"
+      }
+    ]
+  },
+  "a977e6b5-a073-4d4b-a43e-1616a50d55e4": {
+    "started_at": "2026-06-21T11:14:12.565Z",
+    "task": "Start session. Was steht als nächstes im Backlog auf \"zu tun\"? bitte Auflisten und Tokenschätzung bitte.",
+    "peak_context": 152616,
+    "subagent_share": 18.77226739199358,
+    "by_tier": {
+      "Opus": 12971467,
+      "Sonnet": 2997792
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Silent-King target split research",
+        "tier": "Sonnet",
+        "peak_context": 33437,
+        "started_at": "2026-06-21T11:14:12.565Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Dice display 7+ gap analysis",
+        "tier": "Sonnet",
+        "peak_context": 79713,
+        "started_at": "2026-06-21T11:14:12.565Z"
       }
     ]
   }

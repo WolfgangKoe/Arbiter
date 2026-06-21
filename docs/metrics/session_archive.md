@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-21 12:33 CEST
+Stand: 2026-06-21 15:24 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,11 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-21 10:05 de63  ███████████░ 137k ⚠️   █████░  81%    ██··········
+06-21 13:14 a977  ████████████ 153k ⛔    █░░░░░  19%    ██████████··
+         SA_1·  ███░░░░░░░░░  33k ✅    Silent-King target split research
+         SA_2·  ██████░░░░░░  80k ✅    Dice display 7+ gap analysis
+----------------- ---------------------- -------------- ------------
+06-21 10:05 de63  ████████████ 177k ⛔    ████░░  72%    ███·········
          SA_1·  ████████████ 167k ⛔    Reproduce Heroic Intervention crash
          SA_2·  ████░░░░░░░░  55k ✅    Phase 2 badge bugfixes + coverage …
          SA_3·  █████░░░░░░░  60k ✅    Phase 3 codify invariant + ratchet

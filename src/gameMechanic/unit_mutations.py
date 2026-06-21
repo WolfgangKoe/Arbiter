@@ -110,6 +110,59 @@ def _apply_group_wound_damage(state: dict, dmg: int, unit: Unit) -> None:  # typ
     _recompute_from_group_wounds(state, unit)
 
 
+def select_damage_target_group(uid: str, faction: str, group_id: str) -> None:
+    """Defender's choice: set the group that receives the next damage application.
+
+    Raises ValueError if group_id is not a known group of this unit.
+    """
+    key = units_key_for(faction)
+    state = st.session_state[key][uid]
+    if group_id not in state.get("group_wounds", {}):
+        raise ValueError(f"unknown group_id {group_id!r} for unit {uid}")
+    state["damage_active_group_id"] = group_id
+
+
+def get_locked_group(uid: str, faction: str, unit: Unit) -> str | None:
+    """Return the group whose front model is wounded-but-alive, else None.
+
+    A group is locked when its HP pool is not an integer multiple of the
+    per-model wounds (group_wounds[gid] % wval != 0) — a single model stands
+    partly damaged and 9E forces all further wounds onto it until it dies. At
+    most one group can be locked at a time.
+    """
+    key = units_key_for(faction)
+    state = st.session_state[key][uid]
+    gw: dict[str, int] = state.get("group_wounds", {})
+    for group in unit.model_groups:
+        pool = gw.get(group.id, 0)
+        if pool > 0 and pool % unit.group_wound_value(group) != 0:
+            return group.id
+    return None
+
+
+def _group_front_hp(state: dict, unit: Unit, group_id: str) -> int:  # type: ignore[type-arg]
+    """Remaining HP on the front (partly wounded) model of one specific group."""
+    remaining = state["group_wounds"].get(group_id, 0)
+    if remaining <= 0:
+        return 0
+    group = next((g for g in unit.model_groups if g.id == group_id), None)
+    if group is None:
+        return 0
+    wval = unit.group_wound_value(group)
+    partial = remaining % wval
+    return partial if partial > 0 else wval
+
+
+def _apply_directed_group_damage(
+    state: dict, dmg: int, unit: Unit, group_id: str  # type: ignore[type-arg]
+) -> None:
+    """Reduce only the chosen group's HP pool (defender's directed allocation)."""
+    gw: dict[str, int] = state["group_wounds"]
+    pool = gw.get(group_id, 0)
+    gw[group_id] = max(0, pool - dmg)
+    _recompute_from_group_wounds(state, unit)
+
+
 def apply_damage(
     uid: str, faction: str, dmg: int, unit: Unit, mortal: bool = False, resolved: bool = False
 ) -> None:
@@ -117,12 +170,26 @@ def apply_damage(
     state = st.session_state[key][uid]
     old_models = state["models"]
 
-    # Per-group wound pools (e.g. Szarekh 16 + Triarchal Menhirs 7): allocate by
-    # priority instead of the flat uniform-wounds path below.
+    # Per-group wound pools (e.g. Szarekh 16 + Triarchal Menhirs 7, and homogeneous
+    # squads). When the defender has directed damage to a group, allocate there and
+    # enforce the wounded-model lock; otherwise keep the priority-spill default.
     if state.get("group_wounds"):
-        if not mortal and not resolved:
-            dmg = min(dmg, _front_group_hp(state, unit))
-        _apply_group_wound_damage(state, dmg, unit)
+        active = state.get("damage_active_group_id")
+        if active is not None and not mortal:
+            locked = get_locked_group(uid, faction, unit)
+            if locked is not None and active != locked:
+                raise ValueError(
+                    f"group {locked!r} has a wounded model and must receive damage, not {active!r}"
+                )
+            if not resolved:
+                dmg = min(dmg, _group_front_hp(state, unit, active))
+            _apply_directed_group_damage(state, dmg, unit, active)
+        else:
+            # Default (no directed target) or mortal overflow — unchanged behavior.
+            # mortal=True ignores the lock and spills across group boundaries.
+            if not mortal and not resolved:
+                dmg = min(dmg, _front_group_hp(state, unit))
+            _apply_group_wound_damage(state, dmg, unit)
         if state["destroyed"] and state.get("melee_with"):
             leave_melee(uid, faction)
         lost = old_models - state["models"]

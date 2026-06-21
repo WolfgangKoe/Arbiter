@@ -912,3 +912,81 @@ class TestTargetSelectionRequest:
         )
         assert bool(buff_ptr.effect_type) is True  # buff → apply_buff_to_unit
         assert bool(revive_ptr.effect_type) is False  # revive → store target uid
+
+
+# ---------------------------------------------------------------------------
+# Plan 014 — group_wounds is now the canonical per-group HP pool for ALL groups
+# ---------------------------------------------------------------------------
+
+
+def _group_unit(groups, wounds=3):  # type: ignore[no-untyped-def]
+    from gameObjects.unit import Unit  # noqa: PLC0415
+
+    return Unit(
+        id="test.group_unit",
+        name_en="G",
+        name_de="G",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Elites"],
+        keywords=[],
+        wounds=wounds,
+        models_min=1,
+        models_max=sum(g.count for g in groups),
+        power_level=4,
+        move='6"',
+        bs="3+",
+        ws="3+",
+        strength=4,
+        toughness=4,
+        attacks=3,
+        save=4,
+        invuln_save=None,
+        leadership=7,
+        oc=1,
+        fnp=None,
+        weapons=[],
+        model_groups=groups,
+    )
+
+
+def test_group_wounds_populated_for_all_group_units() -> None:
+    """Homogeneous group units now carry a per-group HP pool and an unchanged sum."""
+    from gameObjects.unit import ModelGroup  # noqa: PLC0415
+
+    groups = [
+        ModelGroup(id="g_klaw", name_en="Klaw", count=2, weapons=[], priority=1),
+        ModelGroup(id="g_saw", name_en="Saw", count=3, weapons=[], priority=2),
+    ]
+    state = _gs._unit_state(_group_unit(groups, wounds=3))
+    assert state["group_wounds"] == {"g_klaw": 6, "g_saw": 9}
+    # current_wounds identical to wounds × models (5 models × 3 LP).
+    assert state["current_wounds"] == 15
+    assert state["damage_active_group_id"] is None
+
+
+def test_mixed_wound_unit_group_wounds_unchanged() -> None:
+    """Per-group wound overrides (Szarekh 16 + Menhirs 7) stay exactly as before."""
+    from gameObjects.unit import ModelGroup  # noqa: PLC0415
+
+    groups = [
+        ModelGroup(
+            id="szarekh",
+            name_en="Szarekh",
+            count=1,
+            weapons=[],
+            priority=2,
+            stats={"wounds": 16},
+        ),
+        ModelGroup(
+            id="menhirs",
+            name_en="Triarchal Menhirs",
+            count=3,
+            weapons=[],
+            priority=1,
+            stats={"wounds": 7},
+        ),
+    ]
+    state = _gs._unit_state(_group_unit(groups, wounds=16))
+    assert state["group_wounds"] == {"szarekh": 16, "menhirs": 21}
+    assert state["current_wounds"] == 37

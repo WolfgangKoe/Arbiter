@@ -44,7 +44,7 @@ run every verification command, and update your row below when done.
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
 | 013 | P18: Einheitlicher Gruppen-Flow (jede Einheit = Gruppen) + Ziele neben Untergruppen | P1 (HOCH) | M–L | — | **DONE** (2026-06-12) |
-| 014 | P17: Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten | P1 (HOCH) | M | 013 (zwingend) | TODO |
+| 014 | P17: Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten | P1 (HOCH) | M | 013 (zwingend) | **IN PROGRESS** (S80) — **Teil A DONE**: `group_wounds` universell (game_state), Lock-Logik + gerichteter Schaden (`select_damage_target_group`/`get_locked_group`/`apply_damage`-Lenkung), 12 Tests, Vollsuite grün 92.85 %. **Teil B offen**: UI Zustand A/B/C in `_common.py` + `test_group_flow.py` + manuelle Nobz/Szarekh-Verifikation. |
 | 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |

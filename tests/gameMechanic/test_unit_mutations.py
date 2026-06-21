@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
+
 _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -16,8 +18,10 @@ from gameMechanic.unit_mutations import (  # noqa: E402
     apply_buff_to_unit,
     apply_damage,
     enter_melee,
+    get_locked_group,
     heal_unit,
     leave_melee,
+    select_damage_target_group,
     set_charged,
     set_movement_status,
 )
@@ -930,3 +934,140 @@ class TestApplyBuffToUnit:
         ids = [b["ability_id"] for b in unit_state["active_buffs"]]
         assert "mwbd" in ids
         assert "waaagh" in ids
+
+
+# ---------------------------------------------------------------------------
+# Plan 014 — Defender loss allocation: directed damage + wounded-model lock
+# ---------------------------------------------------------------------------
+
+NOBZ = "wh40k_9e.orks.unit.nobz"
+
+
+def _nobz_groups() -> list[ModelGroup]:
+    """Three same-wound (3 LP) Nob subgroups distinguished only by wargear."""
+    return [
+        ModelGroup(id="nob_klaw", name_en="Nob – Power Klaw", count=2, weapons=[], priority=1),
+        ModelGroup(id="nob_saw", name_en="Nob – Kill Saw", count=2, weapons=[], priority=2),
+        ModelGroup(id="nob_slugga", name_en="Nob – Slugga", count=1, weapons=[], priority=3),
+    ]
+
+
+def _nobz_unit() -> Unit:
+    return Unit(
+        id=NOBZ,
+        name_en="Nobz",
+        name_de="Nobz",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Elites"],
+        keywords=["ORK", "CORE"],
+        wounds=3,
+        models_min=5,
+        models_max=5,
+        power_level=6,
+        move='5"',
+        bs="5+",
+        ws="3+",
+        strength=5,
+        toughness=4,
+        attacks=3,
+        save=4,
+        invuln_save=None,
+        leadership=7,
+        oc=1,
+        fnp=None,
+        weapons=[],
+        model_groups=_nobz_groups(),
+    )
+
+
+def _nobz_state(group_wounds: dict, active: str | None = None) -> dict:
+    """Build a Nobz unit-state with the given per-group HP pools (3 LP per model)."""
+    group_models = {gid: -(-pool // 3) for gid, pool in group_wounds.items()}  # ceil
+    return {
+        "current_wounds": sum(group_wounds.values()),
+        "models": sum(group_models.values()),
+        "models_initial": 5,
+        "destroyed": False,
+        "in_melee": False,
+        "lost_models_this_turn": 0,
+        "melee_with": [],
+        "group_models": group_models,
+        "group_wounds": dict(group_wounds),
+        "damage_active_group_id": active,
+    }
+
+
+def _nobz_session(state: dict) -> _S:
+    return _make_session(first_player="Orks", second_player="Necrons", p1_units={NOBZ: state})
+
+
+def test_select_damage_target_group_sets_state() -> None:
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3})
+    _nobz_session(state)
+    select_damage_target_group(NOBZ, "Orks", "nob_saw")
+    assert state["damage_active_group_id"] == "nob_saw"
+
+
+def test_select_damage_target_group_invalid_group_raises() -> None:
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3})
+    _nobz_session(state)
+    with pytest.raises(ValueError):
+        select_damage_target_group(NOBZ, "Orks", "nob_does_not_exist")
+
+
+def test_get_locked_group_returns_none_when_no_wounded() -> None:
+    """All pools are integer multiples of 3 LP — every front model is intact."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3})
+    _nobz_session(state)
+    assert get_locked_group(NOBZ, "Orks", _nobz_unit()) is None
+
+
+def test_get_locked_group_returns_wounded_group() -> None:
+    """nob_saw pool 4 = one intact (3) + one wounded (1) model → locked."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 4, "nob_slugga": 3})
+    _nobz_session(state)
+    assert get_locked_group(NOBZ, "Orks", _nobz_unit()) == "nob_saw"
+
+
+def test_lock_invariante_apply_damage_wrong_group_raises() -> None:
+    """With nob_saw locked, directing damage to another group must raise."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 4, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    with pytest.raises(ValueError):
+        apply_damage(NOBZ, "Orks", 2, _nobz_unit(), mortal=False)
+
+
+def test_lock_invariante_apply_damage_locked_group_allowed() -> None:
+    """Directing damage to the locked group itself is allowed and kills its model."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 4, "nob_slugga": 3}, active="nob_saw")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 1, _nobz_unit(), mortal=False)
+    assert state["group_wounds"]["nob_saw"] == 3  # wounded model removed, one intact left
+    assert state["group_wounds"]["nob_klaw"] == 6  # other groups untouched
+
+
+def test_directed_damage_reduces_only_chosen_group() -> None:
+    """Defender's chosen group takes the hit; sibling groups stay untouched."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 3, _nobz_unit(), mortal=False)
+    assert state["group_wounds"]["nob_klaw"] == 3
+    assert state["group_wounds"]["nob_saw"] == 6
+    assert state["group_wounds"]["nob_slugga"] == 3
+
+
+def test_mortal_wound_overflow_ignores_lock() -> None:
+    """mortal=True bypasses the lock and spills across group boundaries."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 4, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    # No ValueError despite the active group differing from the locked one.
+    apply_damage(NOBZ, "Orks", 5, _nobz_unit(), mortal=True)
+    assert state["current_wounds"] == 6 + 4 + 3 - 5
+
+
+def test_single_group_unit_no_interactive_ui_needed() -> None:
+    """A homogeneous single-group unit has exactly one active subgroup → no choice."""
+    state = _nobz_state({"nob_klaw": 6})
+    active_groups = [gid for gid, n in state["group_models"].items() if n > 0]
+    assert len(active_groups) == 1
