@@ -22,6 +22,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     execute_effect,
     get_activated_command_abilities,
     get_active_round_choice_modifier,
+    get_active_round_choice_rerolls,
     get_triggered_abilities,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -510,6 +511,39 @@ def test_leadership_bonus_wired() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
     result = get_active_round_choice_modifier("necrons", "morale", False)
     assert result == {"leadership": 1}
+
+
+def test_reroll_save_1_eternal_guardian_s() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "secondary")
+    assert get_active_round_choice_rerolls("necrons", "shooting", False) == {"reroll_save_1"}
+
+
+def test_reroll_hit_wound_1_conquering_tyrant_s_melee() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    result = get_active_round_choice_rerolls("necrons", "fight", True)
+    assert result == {"reroll_hit_1", "reroll_wound_1"}
+
+
+def test_reroll_hit_wound_skipped_in_shooting() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    assert get_active_round_choice_rerolls("necrons", "shooting", False) == set()
+
+
+def test_reroll_empty_when_no_directive() -> None:
+    _protocol_session(None, None)
+    assert get_active_round_choice_rerolls("necrons", "shooting", False) == set()
+
+
+def test_advance_and_charge_via_directive() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", "secondary")
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert charge_after_advance_allowed("Necrons", unit) is True
+
+
+def test_advance_and_charge_inactive_returns_false() -> None:
+    _protocol_session(None, None)
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert charge_after_advance_allowed("Necrons", unit) is False
 
 
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:

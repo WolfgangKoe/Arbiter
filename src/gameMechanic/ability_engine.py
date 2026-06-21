@@ -75,6 +75,28 @@ _WIRED_EFFECT_TYPES = {
 }
 
 
+def _active_directive_effect(faction_dir: str) -> dict | None:  # type: ignore[type-arg]
+    """The effect dict of the faction's currently chosen round-choice directive, or None."""
+    active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
+    directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
+    if not active_id or not directive:
+        return None
+    active = next((p for p in load_round_choice_abilities(faction_dir) if p.id == active_id), None)
+    if not active:
+        return None
+    return active.primary_effect if directive == "primary" else active.secondary_effect
+
+
+def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: ignore[type-arg]
+    """True if the directive's phase does not apply in the given melee/ranged context."""
+    effect_phase = effect.get("phase", "any")
+    if effect_phase == "shooting" and use_melee:
+        return True
+    if effect_phase == "melee" and not use_melee:
+        return True
+    return False
+
+
 def get_active_round_choice_modifier(
     faction_dir: str, phase: str, use_melee: bool
 ) -> dict[str, int]:
@@ -88,29 +110,14 @@ def get_active_round_choice_modifier(
     Returns a dict with any of: {"hit", "wound", "save", "strength", "ap", "move",
     "leadership"} mapped to int.
     """
-    active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
-    directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
-    if not active_id or not directive:
-        return {}
-
-    round_choices = load_round_choice_abilities(faction_dir)
-    active = next((p for p in round_choices if p.id == active_id), None)
-    if not active:
-        return {}
-
-    effect = active.primary_effect if directive == "primary" else active.secondary_effect
+    effect = _active_directive_effect(faction_dir)
     if not effect:
         return {}
 
     effect_type = effect.get("type", "")
     if effect_type not in _WIRED_EFFECT_TYPES:
         return {}
-
-    # Phase applicability check
-    effect_phase = effect.get("phase", "any")
-    if effect_phase == "shooting" and use_melee:
-        return {}
-    if effect_phase == "melee" and not use_melee:
+    if _directive_phase_excluded(effect, use_melee):
         return {}
 
     value = effect.get("value", 0)
@@ -131,6 +138,37 @@ def get_active_round_choice_modifier(
         # this value is informational only and has no display consumer today.
         return {"leadership": value}
     return {}
+
+
+# Reroll-directive effect type -> the reroll flags it grants.
+_REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {
+    "reroll_save_1": {"reroll_save_1"},  # Eternal Guardian S
+    "reroll_hit_wound_1": {"reroll_hit_1", "reroll_wound_1"},  # Conquering Tyrant S (melee)
+}
+
+
+def get_active_round_choice_rerolls(faction_dir: str, phase: str, use_melee: bool) -> set[str]:
+    """Return reroll flags from the active round-choice directive (may be empty).
+
+    Separate from get_active_round_choice_modifier because rerolls are flags, not
+    numeric modifiers — keeping the dict[str, int] contract of that function clean.
+    Flags: reroll_save_1, reroll_hit_1, reroll_wound_1.
+    """
+    effect = _active_directive_effect(faction_dir)
+    if not effect:
+        return set()
+    flags = _REROLL_DIRECTIVE_FLAGS.get(effect.get("type", ""))
+    if not flags:
+        return set()
+    if _directive_phase_excluded(effect, use_melee):
+        return set()
+    return set(flags)
+
+
+def _active_directive_has_type(faction_dir: str, effect_type: str) -> bool:
+    """True if the faction's active round-choice directive has the given effect type."""
+    effect = _active_directive_effect(faction_dir)
+    return bool(effect) and effect.get("type") == effect_type
 
 
 def _unit_matches_target(unit: Unit, effect: dict) -> bool:
@@ -202,11 +240,18 @@ def ability_badge_label(faction: str, unit: Unit) -> str | None:
 
 
 def charge_after_advance_allowed(faction: str, unit: Unit) -> bool:
-    """True if an active faction ability permits charging after advancing for this unit."""
-    return any(
+    """True if an active faction ability or round-choice directive permits charging
+    after advancing for this unit.
+
+    Two sources: a per-unit activated ability (charge_after_advance effect) or the
+    army-wide active round-choice directive (advance_and_charge, e.g. Sudden Storm S).
+    """
+    if any(
         eff.get("type") == "charge_after_advance" and _unit_matches_target(unit, eff)
         for eff in _active_effects_for_faction(faction)
-    )
+    ):
+        return True
+    return _active_directive_has_type(faction_dir_for(faction), "advance_and_charge")
 
 
 def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:
