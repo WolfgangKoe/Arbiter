@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-20
+Letzter Abgleich: 2026-06-22
 
 ---
 
@@ -16,13 +16,14 @@ Letzter Abgleich: 2026-06-20
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
 Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
 
-- 🔲 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
-  fertig — UI-Verifikation + Commit ausstehend): Code + Tests grün (900 Tests, 88.45 %).
+- 🟡 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
+  fertig — **committed** cc75490/1d8b8ba; offen nur noch manuelle UI-Checks): Code + Tests grün
+  (Stand jetzt ≥1109 Tests, 93 %; die Zahlen „900/88 %" waren der S65-Stand).
   Reine Helfer `refund_deny`/`cleared_deny` in `psychicPhase.py`; einheitlicher
   `_reset_active_power()` refundiert das Deny-Budget der inaktiven Fraktion (fixt: denied +
   reset = permanent verbranntes Budget); symmetrisches „Undo deny"-Button (`_render_undo_deny_button`);
   „Skip Deny" verbraucht kein Budget; `deny_faction`-Feld in `psi_result`. +8 Tests
-  (`TestRefundDeny`/`TestClearedDeny`). **Noch offen:** manuelle UI-Checks (a) „Undo deny"
+  (`TestRefundDeny`/`TestClearedDeny`). Token-Gauge-Hook ist live. **Noch offen:** manuelle UI-Checks (a) „Undo deny"
   nach erfolgreichem Deny; (b) aktiv-Reset → nächste Power denybar; (c) Skip Deny = kein
   Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
   Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
@@ -103,14 +104,15 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [018](../audit/plans/018-low-prio-cleanup.md) | Kleinkram: CP-Doppelvergabe, Battle-Log-Reset, Gretchin, Modifier | NIEDRIG | TODO |
 | [015](../audit/plans/015-contextual-reactive-stratagems.md) | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook | MITTEL | TODO |
 | [017](../audit/plans/017-ability-ap-combined-badge.md) | SAVE-Block: Fähigkeit+AP kombinierte Badge | MITTEL | TODO |
-| [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | TODO |
+| [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | ✅ DONE (2026-06-20) |
 | [020](../audit/plans/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | MITTEL | ✅ DONE (S83) |
 | [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | ✅ DONE (S84) — nur Daten-Migration + generischer Loader + INV-4b-Literal; Effekte offen → Plan 024 |
 | [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | ✅ DONE (S77) |
-| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | TODO — angelegt S85, NICHT umgesetzt; voller Testnetz-Mandat |
+| [023](../audit/plans/023-overview-archive-rework.md) | Subagent-Archiv Rework: schlanke overview.md + separate session_archive.md | MITTEL | ✅ DONE (S85, 2026-06-21) |
+| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | 🟡 IN PROGRESS — Steps 1–4 (Direktiv-Wiring + RP) DONE S86; Steps 5–7 (Failsafe-Dispatch + Arkana-Schema) offen |
 
-**Empfohlene Reihenfolge (akt. S85): 019·022·014·020·021·023 DONE → 024 → 016 → 018 → 015 → 017.**
-024 (angelegt S85, NICHT umgesetzt): Directive-Wiring + Arkana-Schema — **voller 4-Schichten-Testnetz-Mandat pro Step (Unit + Acceptance + INV-4b + manuelle UI) + Doku-Pflege.**
+**Empfohlene Reihenfolge (akt. S86): 019·022·014·020·021·023 DONE → 024 (Steps 1–4 ✅, 5–7 offen) → 016 → 018 → 015 → 017.**
+024 Steps 5–7 (offen): Failsafe-Dispatch-Pilot + Arkana-Schema — **voller 4-Schichten-Testnetz-Mandat pro Step (Unit + Acceptance + INV-4b + manuelle UI) + Doku-Pflege.** Steps 1–4 (Direktiv-Wiring + RP) sind S86 erledigt.
 
 ---
 
@@ -247,8 +249,8 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 Vorschlag: architecture.md in einer eigenen kleinen Doku-Session aktualisieren (Schema +
 Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung freigeben.**
 
-- **Dice Display Arrow-Direction-Bug (`dice_html.py`):** `rightward = value < 0` → Debuffs zeigen Pfeil rechts, Buffs links (FALSCH). Korrekt: Buff=rechts[→], Debuff=links[←]. Spec angelegt: `docs/spec/dice_display.md`. HTML-Test-Suite fehlt vollständig → Plan 022 (HOCH).
-- **commandPhase.py State-Keys nicht orb-id-gebunden:** `revive_wargear_awaiting_target` etc. sind globale Slots → Bug bei 2 Overlords mit Orb im Roster. → Plan 020.
+- ✅ **Dice Display Arrow-Direction-Bug (`dice_html.py`)** — erledigt (Plan 022, S77): `rightward = (value > 0)` in `dice_compose.py`, Buff=rechts[→]/Debuff=links[←]; Tests `test_buff_arrow_points_right`/`test_debuff_arrow_points_left` pinnen das Verhalten.
+- ✅ **commandPhase.py State-Keys nicht orb-id-gebunden** — erledigt (Plan 020, S83): globale Slots durch `pending_target_request` mit `TargetSelectionRequest.ability_id`-Diskriminator ersetzt; `revive_wargear_awaiting_target` existiert nicht mehr in `src/`.
 - **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
 
 ## 5. Größere geplante Ziele
