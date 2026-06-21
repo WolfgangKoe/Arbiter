@@ -471,6 +471,23 @@ def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
     assert result == {}
 
 
+def test_strength_modifier_wired_in_shooting() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    assert result == {"strength": 1}
+
+
+def test_strength_modifier_skipped_in_melee() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    result = get_active_round_choice_modifier("necrons", "fight", True)
+    assert result == {}
+
+
+def test_strength_modifier_inactive_returns_empty() -> None:
+    _protocol_session(None, None)
+    assert get_active_round_choice_modifier("necrons", "shooting", False) == {}
+
+
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     result = get_active_round_choice_modifier("orks", "shooting", False)

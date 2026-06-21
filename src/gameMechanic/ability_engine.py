@@ -64,7 +64,12 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
     return False
 
 
-_WIRED_EFFECT_TYPES = {"hit_modifier", "wound_modifier", "save_modifier"}
+_WIRED_EFFECT_TYPES = {
+    "hit_modifier",
+    "wound_modifier",
+    "save_modifier",
+    "strength_modifier",
+}
 
 
 def get_active_round_choice_modifier(
@@ -72,11 +77,12 @@ def get_active_round_choice_modifier(
 ) -> dict[str, int]:
     """Return numeric modifiers from the active round-choice ability's chosen directive.
 
-    Only effects with wired types (hit_modifier, wound_modifier, save_modifier) are returned.
-    Effects for other types (reroll_save_1, move_bonus, etc.) are registered in YAML but
-    not yet wired into combat — they are silently skipped here.
+    Only effects with wired types (hit_modifier, wound_modifier, save_modifier,
+    strength_modifier) are returned. Effects for other types (reroll_save_1, move_bonus,
+    etc.) are registered in YAML but not yet wired into combat — they are silently
+    skipped here.
 
-    Returns a dict with any of: {"hit": int, "wound": int, "save": int}.
+    Returns a dict with any of: {"hit": int, "wound": int, "save": int, "strength": int}.
     """
     active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
     directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
@@ -110,6 +116,8 @@ def get_active_round_choice_modifier(
         return {"wound": value}
     if effect_type == "save_modifier":
         return {"save": value}
+    if effect_type == "strength_modifier":
+        return {"strength": value}
     return {}
 
 
