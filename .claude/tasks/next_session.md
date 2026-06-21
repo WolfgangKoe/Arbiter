@@ -23,6 +23,23 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
+## Aktueller Stand (nach S82, 2026-06-21)
+
+**S82 (Branch `feature/014-defender-loss-allocation`) — Plan 014 Teil B (UI A/B/C) DONE:**
+Vollsuite **1082 grün**, Cov **92,85 %**, Gate 92 %, ruff/black/isort grün.
+- **Step 3 UI** in `_common.py`: `_render_subgroup_selector()` (neu) + Verdrahtung in
+  `_render_damage_block()`. Nur bei `len(aktive Gruppen) > 1`: **A** freie Radio-Wahl
+  (→ `select_damage_target_group` beim Apply), **B** Lock-Warnung auf `get_locked_group()`
+  (gerichtetes Ziel erzwungen), **C** „Subgruppe verloren"-Warnung in der Apply-Zusammenfassung
+  (über `wiped_groups` im `res_key`-State). Single-Group/legacy → `damage_active_group_id=None`.
+- **Schicht 2** (Sonnet-Subagent, ADR-0005): `test_group_flow.py` +2 (A→B→C-Transition +
+  Kill-Saw-Zerstörung), 31 grün. Werte: Kill Saw 6 HP, +1→5 (Lock), +2→3 (Release).
+- **▶ Manuelle UI-Verifikation NOCH OFFEN** (Render-Code nicht test-gedeckt): Nobz 3 Zustände
+  (App), Warriors/homogen ohne Selektor, Szarekh+Menhirs-Pools unverändert. Klick-Schritte:
+  `docs/audit/plans/014-...md` Step 4 Schicht 4.
+- **Doku-Drift TODO:** `architecture.md` §session_state-Schema — `group_wounds` jetzt universell
+  (backlog §4b).
+
 ## Aktueller Stand (nach S81, 2026-06-21)
 
 **S81 (Branch `feature/014-defender-loss-allocation`) — 3 Retro-Maßnahmen (Prozess) DONE:**
@@ -38,33 +55,11 @@ Doku-/Memory-Arbeit, keine src-Änderung; Doku-/Architektur-Gates grün (16 pass
 
 ## Aktueller Stand (nach S80, 2026-06-21)
 
-**S80 (Branch `feature/014-defender-loss-allocation`) — Plan 014 Teil A (Logik) DONE:**
-Vollsuite 1080 grün, Cov **92,85 %**, Gate 92 %, ruff/black/isort/Architektur grün.
-- **Step 1 — `group_wounds` universell:** `game_state._unit_state` befüllt den Per-Gruppen-
-  HP-Pool jetzt für **jede** Einheit mit `model_groups` (nicht mehr nur bei gemischten
-  Wundenwerten). `current_wounds` homogener Einheiten **unverändert** (Summe identisch);
-  neues State-Feld `damage_active_group_id` (default None). Szarekh/Menhir-Regression grün.
-- **Step 2 — Lock + gerichteter Schaden (`unit_mutations`):** `select_damage_target_group()`,
-  `get_locked_group()` (`pool % wval != 0` ⇒ angeschlagenes Frontmodell), `_group_front_hp`,
-  `_apply_directed_group_damage`. `apply_damage`: **Default-Pfad byte-identisch** (kein
-  `damage_active_group_id` ⇒ alter Priority-Spill) — nur bei gewählter Gruppe gerichtet +
-  Lock-Check (falsche Gruppe → ValueError); `mortal=True` ignoriert Lock (Overflow). 12 neue
-  Tests (Schicht 1 + 1b). **Designnote:** `get_locked_group` nahm `unit` als Param (Plan-
-  Pseudocode ohne — `group_wound_value` braucht die Unit).
-- **▶ Teil B offen (nächste Session):** Step 3 UI Zustand A/B/C in `_common.py` +
-  Schicht-2-Acceptance (`test_group_flow.py`) + manuelle Nobz/Szarekh-Verifikation.
-- **Parallel erledigt:** LinkedIn-Grundlagendatei `Refinement/operating_model_luhmann_wilber_graves.md`
-  (Luhmann/Wilber/Graves + Gates/Hooks); 2 Subagenten-Befunde in `docs/inbox/` (s. u.).
-
-### S80-Subagenten-Befunde (Backlog, NICHT umgesetzt)
-- **Silent-King Zielaufteilung — REGEL GEKLÄRT:** Core Rules: „If a model has more than one
-  ranged weapon, it can split the weapons between different enemy units." → Waffen-Split auf
-  **verschiedene** Ziele ist erlaubt; alle Attacken **einer** Waffe auf dieselbe Einheit.
-  **Aktuelle App-Beschränkung (1 Ziel) ist regelwidrig** → UI auf „Ziel pro Waffe" + Staff-of-
-  Stars-Sperre ≤8 W beachten. Detail: `docs/inbox/finding-silent-king-target-split.md`.
-- **Dice-Display 7+/Magnitude — Gap-Analyse:** `threshold_header_html` ohne threshold=7-Logik;
-  Magnitude `←N` landet bei shift>1 rechts neben dem Grenz-Slot statt darin. Optionen +
-  Regressionsfläche: `docs/inbox/finding-dice-display-7plus.md` (Design-Entscheid offen → Opus).
+**S80 (Historie) — Plan 014 Teil A (Logik) DONE:** `group_wounds` universell (jede Einheit mit
+`model_groups`), `damage_active_group_id`, `select_damage_target_group`/`get_locked_group`
+(`pool % wval != 0` ⇒ Lock), gerichteter Schaden + Lock-Check; Default-Pfad byte-identisch. 12
+Tests (Schicht 1/1b). Subagenten-Befunde (Silent-King-Zielsplit regelwidrig, Dice 7+/Magnitude)
+liegen im **Backlog §UI**; LinkedIn-Grundlagendatei `Refinement/operating_model_luhmann_wilber_graves.md`.
 
 **S77–S79 (Historie, verdichtet):** Plan 022 Dice Display Rework DONE (`1ce131a`..`ecad9bf`);
 S79 Renderer ins Sicherheitsnetz (`dice_compose.py`-Naht 100 %, HI-Crash-Fix, Badge-Fix,
@@ -79,17 +74,12 @@ nicht verdrahtet: `reroll_marker_row_html`/`always_fail_marker_row_html` (warten
   Default-Roster-Hardcode (`game_state.py`), `faction_dir`-Default `"necrons"` in `loader.py`
   (`dakka`/`klaw`/`tesla` in S77 erledigt)
 
-### ▶ Nächste Session = Plan 014 **Teil B** (UI Zustand A/B/C)
+### ▶ Nächste Session = Plan 020 (nach manueller 014-Verifikation)
 
-**Reihenfolge (neu 2026-06-21):** 023/022 (DONE) → 014 **Teil A DONE** → 014 Teil B → 020 →
-021 → 016 → 018 → 015 → 017
-**014 Teil B:** Step 3 aus `docs/audit/plans/014-p17-defender-loss-allocation.md` — in
-`_common.py:_render_damage_block()` Subgruppen-Auswahl VOR dem Apply-Button (nur bei
-`len(aktive Gruppen) > 1`): Zustand A (freie Wahl, `select_damage_target_group`), B (Lock auf
-`get_locked_group()`), C (Zerstörungs-/Fähigkeitsverlust-Warnung). Dann Schicht-2-Tests
-(`test_group_flow.py`: A→B→C-Transition Nobz) + manuelle Verifikation (Nobz 3 Zustände,
-Warriors ohne UI, Szarekh-Pools). Die Logik (`damage_active_group_id`, Lock, gerichteter
-Schaden) steht bereits aus Teil A — Teil B verdrahtet nur das Render-UI.
+**Reihenfolge (2026-06-21):** 023/022 (DONE) → 014 **Teil A+B DONE** → 020 → 021 → 016 → 018 →
+015 → 017. **Zuerst** die offene manuelle UI-Verifikation für 014 erledigen (s. S82-Block:
+Nobz 3 Zustände, Warriors ohne Selektor, Szarekh-Pools) — Render-Code ist nicht test-gedeckt.
+Danach Plan 020 aus `docs/audit/plans/README.md` (Queue/Status) ziehen.
 
 ### Offene Fragen / Retro-Vormerke
 - **Output ↔ cache_read als Tempo-Indikator:** Zielwert-Feintuning `token_report.py`-Legende.

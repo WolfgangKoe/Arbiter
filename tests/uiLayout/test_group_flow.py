@@ -473,3 +473,148 @@ def test_front_group_hp_all_dead_returns_safe_default() -> None:
         0,
         1,
     )
+
+
+# ---------------------------------------------------------------------------
+# Plan 014 Teil B — Defender loss allocation: A→B→C state transition
+# These tests exercise apply_damage / select_damage_target_group / get_locked_group
+# from gameMechanic.unit_mutations using the same Nobz fixture pattern as
+# tests/gameMechanic/test_unit_mutations.py (see _nobz_*  helpers there).
+# ---------------------------------------------------------------------------
+
+import gameMechanic.game_state as _gf_gs  # noqa: E402
+import gameMechanic.unit_mutations as _gf_mut  # noqa: E402
+from gameMechanic.unit_mutations import (  # noqa: E402
+    apply_damage,
+    get_locked_group,
+    select_damage_target_group,
+)
+from gameObjects.unit import ModelGroup, Unit  # noqa: E402
+
+_NOBZ_ID = "wh40k_9e.orks.unit.nobz"
+
+
+def _gf_nobz_unit() -> Unit:
+    """Nobz unit: 2 groups (Kill Saw + Slugga), 3 wounds per model, no stat overrides."""
+    return Unit(
+        id=_NOBZ_ID,
+        name_en="Nobz",
+        name_de="Nobz",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Elites"],
+        keywords=["ORK", "CORE"],
+        wounds=3,
+        models_min=4,
+        models_max=4,
+        power_level=6,
+        move='5"',
+        bs="5+",
+        ws="3+",
+        strength=5,
+        toughness=4,
+        attacks=3,
+        save=4,
+        invuln_save=None,
+        leadership=7,
+        oc=1,
+        fnp=None,
+        weapons=[],
+        model_groups=[
+            ModelGroup(id="nob_killsaw", name_en="Nob – Kill Saw", count=2, weapons=[], priority=1),
+            ModelGroup(id="nob_slugga", name_en="Nob – Slugga", count=2, weapons=[], priority=2),
+        ],
+    )
+
+
+def _gf_nobz_state(group_wounds: dict, active: str | None = None) -> dict:
+    """Build a Nobz unit-state from per-group HP pools (3 LP per model, ceil division)."""
+    group_models = {gid: -(-pool // 3) for gid, pool in group_wounds.items()}
+    return {
+        "current_wounds": sum(group_wounds.values()),
+        "models": sum(group_models.values()),
+        "destroyed": False,
+        "in_melee": False,
+        "lost_models_this_turn": 0,
+        "melee_with": [],
+        "group_models": group_models,
+        "group_wounds": dict(group_wounds),
+        "damage_active_group_id": active,
+    }
+
+
+class _GfSession(dict):
+    def __getattr__(self, key: str):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
+
+    def __setattr__(self, key: str, value: object) -> None:
+        self[key] = value
+
+
+def _gf_make_session(state: dict) -> _GfSession:
+    """Wire session_state on both modules (mirrors _make_session in test_unit_mutations)."""
+    s = _GfSession(first_player="Orks", second_player="Necrons", p1_units={_NOBZ_ID: state})
+    _gf_mut.st.session_state = s
+    _gf_gs.st.session_state = s
+    return s
+
+
+def test_zustand_a_b_c_transition_nobz() -> None:
+    """A→B→C: free choice → wounded-model lock → lock released after model dies.
+
+    Setup: 2 groups (Kill Saw × 2, Slugga × 2), 3 LP each model.
+    Damage sequence chosen so pool % 3 != 0 after step 1 (→ Zustand B).
+    """
+    # Zustand A: all pools are integer multiples of 3 → no wounded model → no lock.
+    # Kill Saw: 2 models × 3 LP = 6 HP. Slugga: 2 models × 3 LP = 6 HP.
+    state = _gf_nobz_state({"nob_killsaw": 6, "nob_slugga": 6})
+    _gf_make_session(state)
+    unit = _gf_nobz_unit()
+
+    assert get_locked_group(_NOBZ_ID, "Orks", unit) is None  # Zustand A
+
+    # Defender picks Kill Saw group as target, then apply 1 damage (front model gets 1 wound).
+    # After: pool = 5, 5 % 3 = 2 ≠ 0 → front Nob is wounded-but-alive → Zustand B.
+    select_damage_target_group(_NOBZ_ID, "Orks", "nob_killsaw")
+    apply_damage(_NOBZ_ID, "Orks", 1, unit, mortal=False)
+    assert state["group_wounds"]["nob_killsaw"] == 5
+    assert get_locked_group(_NOBZ_ID, "Orks", unit) == "nob_killsaw"  # Zustand B
+
+    # In Zustand B: directing damage to the OTHER group must raise ValueError.
+    state["damage_active_group_id"] = "nob_slugga"
+    import pytest as _pytest
+
+    with _pytest.raises(ValueError):
+        apply_damage(_NOBZ_ID, "Orks", 1, unit, mortal=False)
+
+    # Drain the remaining 2 HP from the wounded Kill Saw model → pool = 3, 3 % 3 = 0
+    # → that model is dead, next model is intact → get_locked_group returns None (Zustand C / A).
+    state["damage_active_group_id"] = "nob_killsaw"
+    apply_damage(_NOBZ_ID, "Orks", 2, unit, mortal=False)
+    assert state["group_wounds"]["nob_killsaw"] == 3
+    assert get_locked_group(_NOBZ_ID, "Orks", unit) is None  # back to free choice
+
+
+def test_regressionstest_nobz_killsaw_group_destroyed() -> None:
+    """Kill Saw group (2 models × 3 LP = 6 HP) reduced to 0; Slugga group stays untouched.
+
+    Verifies that group_models[nob_killsaw] reaches 0 and the sibling group is unaffected.
+    """
+    state = _gf_nobz_state({"nob_killsaw": 6, "nob_slugga": 6}, active="nob_killsaw")
+    _gf_make_session(state)
+    unit = _gf_nobz_unit()
+
+    # Confirm the group name carries "Kill Saw" (spec check).
+    ks_group = next(g for g in unit.model_groups if g.id == "nob_killsaw")
+    assert "Kill Saw" in ks_group.name_en
+
+    # Apply 6 damage (resolved=True bypasses per-model front cap) → entire Kill Saw pool gone.
+    apply_damage(_NOBZ_ID, "Orks", 6, unit, mortal=False, resolved=True)
+
+    assert state["group_wounds"]["nob_killsaw"] == 0
+    assert state["group_models"]["nob_killsaw"] == 0  # all Kill Saw models destroyed
+    assert state["group_wounds"]["nob_slugga"] == 6  # Slugga group untouched
+    assert state["group_models"]["nob_slugga"] == 2  # both Sluggas alive

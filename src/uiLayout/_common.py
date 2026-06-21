@@ -560,6 +560,47 @@ def _render_rp_block(
         st.rerun()
 
 
+def _render_subgroup_selector(
+    def_unit: Unit,
+    def_state: dict,  # type: ignore[type-arg]
+    active_groups: list,  # type: ignore[type-arg]
+    locked_gid: str | None,
+    dmg_col,
+    tab_key: str,
+) -> str:
+    """Defender's per-group damage allocation (Zustand A/B). Returns the target gid.
+
+    A — no wounded model: free radio choice (default: lowest priority).
+    B — a model is wounded-but-alive: choice is forced onto that group and a
+        warning explains the 9E lock. Zustand C (a group wiped out) is reported
+        in the post-apply summary, not here.
+    """
+    gw: dict[str, int] = def_state["group_wounds"]
+
+    def _label(group) -> str:
+        weapons = ", ".join(w.name_en for w in group.weapons) or group.name_en
+        return f"{group.name_en} — {weapons} ({gw.get(group.id, 0)} HP)"
+
+    if locked_gid is not None:
+        locked = next((g for g in active_groups if g.id == locked_gid), None)
+        if locked is not None:
+            wval = def_unit.group_wound_value(locked)
+            front = gw.get(locked_gid, 0) % wval or wval
+            dmg_col.warning(
+                f"► Angeschlagenes Modell in **{locked.name_en}** (noch {front} LP) "
+                "muss zuerst abgehandelt werden."
+            )
+        return locked_gid
+
+    ids = [g.id for g in active_groups]
+    return dmg_col.radio(
+        "Schaden zuweisen an Subgruppe",
+        options=ids,
+        format_func=lambda gid: _label(next(g for g in active_groups if g.id == gid)),
+        key=f"dmg_target_grp_{tab_key}",
+    )
+
+
 def _render_damage_block(
     def_unit: Unit,
     def_faction: str,
@@ -573,7 +614,11 @@ def _render_damage_block(
     from gameMechanic.combat import apply_damage_attacks  # noqa: PLC0415
     from gameMechanic.game_log import log_action  # noqa: PLC0415
     from gameMechanic.game_state import units_key_for  # noqa: PLC0415
-    from gameMechanic.unit_mutations import apply_damage  # noqa: PLC0415
+    from gameMechanic.unit_mutations import (  # noqa: PLC0415
+        apply_damage,
+        get_locked_group,
+        select_damage_target_group,
+    )
 
     res_key = f"res_{tab_key}"
     tab_state = st.session_state.get(res_key, {})
@@ -583,6 +628,9 @@ def _render_damage_block(
         mw = tab_state.get("mortal_wounds", 0)
         total = tab_state.get("total_damage", 0)
         st.success(f"✓ {m_lost} models · {mw} MW · {total} damage applied")
+        # Zustand C — a directed subgroup was wiped out by the last apply.
+        for gname, weapons in tab_state.get("wiped_groups", []):
+            st.warning(f"✕ Subgruppe **{gname}** verloren — {weapons} nicht mehr verfügbar")
         # RP is rolled once per defender unit after the whole attacking unit has
         # resolved (render_attack_resolution), not per weapon tab.
         if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
@@ -610,7 +658,22 @@ def _render_damage_block(
     is_group_wounds = bool(def_state.get("group_wounds"))
     weapon_special = _detect_weapon_special(profile)
 
+    chosen_gid = None
     if is_group_wounds:
+        # 9E loss allocation: when more than one subgroup is still alive, the
+        # defender chooses which group takes the damage (Zustand A); a wounded-
+        # but-alive model locks its group (Zustand B). Single active group → no
+        # choice, fall back to the priority-spill default (damage_active_group_id
+        # stays None).
+        active_groups = sorted(
+            (g for g in def_unit.model_groups if def_state["group_models"].get(g.id, 0) > 0),
+            key=lambda g: g.priority,
+        )
+        if len(active_groups) > 1:
+            locked_gid = get_locked_group(def_uid, def_faction, def_unit)
+            chosen_gid = _render_subgroup_selector(
+                def_unit, def_state, active_groups, locked_gid, dmg_col, tab_key
+            )
         # Mixed per-model wounds in one unit (e.g. Szarekh 16 + Menhirs 7): the
         # losses are distributed by group/priority in apply_damage, so the user
         # enters total damage that got through rather than models/front wounds.
@@ -676,12 +739,27 @@ def _render_damage_block(
     btn_label = f"⚔ Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
     if dmg_col.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
         models_before = def_state.get("models", 0) if is_group_wounds else 0
+        groups_before = dict(def_state.get("group_models", {})) if is_group_wounds else {}
+        if is_group_wounds:
+            # Direct the next apply to the chosen group (Zustand A/B). Single
+            # active group → clear the target so the priority-spill default runs.
+            if chosen_gid is not None:
+                select_damage_target_group(def_uid, def_faction, chosen_gid)
+            else:
+                def_state["damage_active_group_id"] = None
         if total > 0:
             apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
+        wiped_groups: list = []  # type: ignore[type-arg]
         if is_group_wounds:
             # Real loss only known after priority-based distribution
             _, def_state_after = lookup(def_faction, def_uid)
             models_lost = max(0, models_before - def_state_after.get("models", 0))
+            gm_after = def_state_after.get("group_models", {})
+            wiped_groups = [
+                (g.name_en, ", ".join(w.name_en for w in g.weapons) or g.name_en)
+                for g in def_unit.model_groups
+                if groups_before.get(g.id, 0) > 0 and gm_after.get(g.id, 0) == 0
+            ]
         wounds_on_front = 0
         decl = st.session_state.get("attack_declaration", {})
         atk_uid = decl.get("atk_uid", "")
@@ -719,6 +797,7 @@ def _render_damage_block(
             "wounds_on_front": int(wounds_on_front),
             "mortal_wounds": int(mortal_wounds),
             "total_damage": total,
+            "wiped_groups": wiped_groups,
         }
         st.rerun()
 
