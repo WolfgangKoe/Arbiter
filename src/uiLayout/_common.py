@@ -30,10 +30,7 @@ from gameMechanic.game_state import (
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 from gameObjects.weapon import WeaponProfile
-from uiLayout.dice_html import (  # noqa: F401
-    _render_dice_roll_block,
-    _render_dice_save_block,
-    _render_dice_wound_block,
+from uiLayout.dice_compose import (  # noqa: F401
     block_divider_html,
     dice_face_svg,
     dice_row_html,
@@ -42,6 +39,11 @@ from uiLayout.dice_html import (  # noqa: F401
     save_modifier_die_pair_html,
     special_die_html,
     threshold_header_html,
+)
+from uiLayout.dice_html import (  # noqa: F401
+    _render_dice_roll_block,
+    _render_dice_save_block,
+    _render_dice_wound_block,
 )
 
 # ---------------------------------------------------------------------------

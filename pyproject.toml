@@ -29,7 +29,17 @@ markers = [
 
 [tool.coverage.run]
 omit = [
-    "src/uiLayout/*",
+    "src/uiLayout/__init__.py",
+    "src/uiLayout/_common.py",
+    "src/uiLayout/armyCard.py",
+    "src/uiLayout/armyList.py",
+    "src/uiLayout/detachmentCard.py",
+    "src/uiLayout/dice_html.py",
+    "src/uiLayout/gameActionsArea.py",
+    "src/uiLayout/gameHeader.py",
+    "src/uiLayout/gameProtocoll.py",
+    "src/uiLayout/setupScreen.py",
+    "src/uiLayout/unitCard.py",
     "src/app.py",
     "src/constants/*",
     "src/gameMechanic/commandPhase.py",
@@ -43,7 +53,9 @@ omit = [
 
 [tool.coverage.report]
 # Ratchet: locks in the current measured level so coverage can only go up, never
-# silently sink. Raise this as logic is pulled out of the omitted render modules
-# (uiLayout/*, *Phase.py) into tested helpers — the path toward a higher target.
-fail_under = 90
+# silently sink. Raised from 90 → 92 to lock in gains from the dice_compose.py
+# seam (INV-6): pure composition logic now lives in a measured module. Raise this
+# further as more logic is pulled out of the omitted render modules
+# (uiLayout/*, *Phase.py) into tested helpers.
+fail_under = 92
 show_missing = true

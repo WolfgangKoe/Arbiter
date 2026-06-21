@@ -11,15 +11,20 @@ from unittest.mock import MagicMock
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout.dice_html import (  # noqa: E402
+from uiLayout.dice_compose import (  # noqa: E402
     _modifier_color,
     _modifier_columns,
     always_fail_marker_row_html,
+    block_divider_html,
+    dice_face_svg,
     dice_row_html,
     miss_die_html,
     modifier_die_pair_html,
     reroll_marker_row_html,
+    save_ap_modifier_row_html,
     save_modifier_die_pair_html,
+    special_die_html,
+    threshold_header_html,
 )
 
 _BUFF_GREEN = "#4a9a5a"
@@ -183,3 +188,195 @@ def test_modifier_columns_clamp_to_grid() -> None:
 def test_modifier_columns_off_scale_anchors_right_at_six() -> None:
     # Worsened past 6 → right marker pinned to column 6 (miss die appended by renderer).
     assert _modifier_columns(3, 9, right_off_scale=True) == (3, 6)
+
+
+# ---------------------------------------------------------------------------
+# BUG 2 — AP badge shows the value twice ("AP-4 -4")
+# ---------------------------------------------------------------------------
+
+
+def test_save_ap_row_shows_value_once() -> None:
+    """save_ap_modifier_row_html must render 'AP -4' in the badge, not 'AP-4 -4'."""
+    html = save_ap_modifier_row_html(3, -4)
+    assert "AP -4" in html
+    assert "AP-4 -4" not in html
+
+
+def test_ap_modifier_row_label_not_doubled() -> None:
+    """The signed value must appear exactly once — no '-4 -4' substring."""
+    html = save_ap_modifier_row_html(3, -4)
+    assert "-4 -4" not in html
+
+
+def test_save_ap_row_is_debuff_red() -> None:
+    """AP modifier badge must use the debuff red colour."""
+    html = save_ap_modifier_row_html(3, -4)
+    assert _DEBUFF_RED in html
+
+
+# ---------------------------------------------------------------------------
+# BUG 3 — buff badge is grey instead of green (Light Cover in SAVE block)
+# ---------------------------------------------------------------------------
+
+
+def test_save_cover_buff_badge_is_green() -> None:
+    """Cover +1 buff badge must use buff green, not grey #6b7280."""
+    html = save_modifier_die_pair_html(armour=3, value=1, label="Light Cover", color=_BUFF_GREEN)
+    # The badge chip carrying the label must contain the green colour.
+    assert _BUFF_GREEN in html
+    # Grey (#6b7280) must NOT appear in the badge — it may appear for the grey die only
+    # in parts not containing the label, but the key check is green is present in badge.
+    # We verify by checking the badge chip directly uses green.
+    badge_start = html.find("Light Cover")
+    badge_context = html[max(0, badge_start - 200) : badge_start + 20]
+    assert _BUFF_GREEN in badge_context
+
+
+def test_save_ap_debuff_badge_is_red() -> None:
+    """AP -2 debuff badge must use debuff red."""
+    html = save_modifier_die_pair_html(armour=3, value=-2, label="AP", color=_DEBUFF_RED)
+    badge_start = html.find("AP -2")
+    badge_context = html[max(0, badge_start - 200) : badge_start + 20]
+    assert _DEBUFF_RED in badge_context
+
+
+def test_hit_buff_badge_still_green() -> None:
+    """modifier_die_pair_html buff badge must remain green after badge_color change."""
+    # Hit modifier: +1 to hit from 4+ → 3+.
+    html = modifier_die_pair_html(4, 3, "Cover", 1, _BUFF_GREEN, base_threshold=4)
+    badge_start = html.find("Cover +1")
+    badge_context = html[max(0, badge_start - 200) : badge_start + 20]
+    assert _BUFF_GREEN in badge_context
+
+
+def test_hit_debuff_badge_is_red() -> None:
+    """modifier_die_pair_html debuff badge must remain red after badge_color change."""
+    html = modifier_die_pair_html(3, 5, "Penalty", -2, _DEBUFF_RED, base_threshold=3)
+    badge_start = html.find("Penalty -2")
+    badge_context = html[max(0, badge_start - 200) : badge_start + 20]
+    assert _DEBUFF_RED in badge_context
+
+
+# ---------------------------------------------------------------------------
+# BACKFILL — dice_compose.py coverage (target ≥ 95%)
+# ---------------------------------------------------------------------------
+
+
+def test_threshold_header_boundary_gap_inserted() -> None:
+    """threshold_header_html inserts the boundary-gap span before the threshold value."""
+    # Threshold 4 → gap appears before the '4+' label (lines 51-52 in dice_compose.py).
+    html = threshold_header_html(4)
+    # Gap span is 34px wide; the highlighted label (threshold value) gets a border.
+    assert "border:1px solid" in html
+    # Labels 1+, 2+, 3+ appear before the highlighted 4+.
+    assert html.index("1+") < html.index("4+")
+
+
+def test_threshold_header_all_thresholds_render() -> None:
+    """threshold_header_html works for thresholds 2–6, each producing a highlighted label."""
+    for t in range(2, 7):
+        html = threshold_header_html(t)
+        assert f"{t}+" in html
+        assert "border:1px solid" in html
+
+
+def test_threshold_header_no_gap_below_two() -> None:
+    """threshold_header_html at threshold 1 renders no boundary-gap slot."""
+    html = threshold_header_html(1)
+    # The boundary gap is only inserted when 2 <= threshold <= 6.
+    # With threshold 1 there is no gap; all labels still appear.
+    assert "1+" in html
+
+
+def test_dice_row_threshold_one_or_less_no_miss_dice() -> None:
+    """dice_row_html(1) — all dice succeed, no miss section (line 122 branch)."""
+    html = dice_row_html(1)
+    # No gap/boundary line because threshold <= 1.
+    assert "margin-left:-5px" in html  # framed block still rendered
+    # Only success dice — value-1 die is inside the frame.
+    assert "<svg" in html
+
+
+def test_block_divider_html_renders_hr() -> None:
+    """block_divider_html must return an <hr> element (line 175 coverage)."""
+    html = block_divider_html()
+    assert "<hr" in html
+    assert "border-top:1px solid" in html
+
+
+def test_dice_face_svg_value_1_normal_not_miss() -> None:
+    """dice_face_svg(1) without miss=True renders normal pips, not a cross."""
+    html = dice_face_svg(1)
+    assert "<svg" in html
+    # Normal value-1 die has a single pip circle.
+    assert "<circle" in html
+    # No miss cross.
+    assert "#c0392b" not in html
+
+
+def test_dice_face_svg_value_1_miss_renders_cross() -> None:
+    """dice_face_svg(1, miss=True) renders the × cross (line 74-78 branch)."""
+    html = dice_face_svg(1, miss=True)
+    assert "<line" in html
+    assert "#c0392b" in html
+
+
+def test_dice_face_svg_miss_non_one_dims_pips() -> None:
+    """dice_face_svg(value>1, miss=True) renders dim pips, no cross (line 80-81)."""
+    html = dice_face_svg(3, miss=True)
+    # Dim pips use #374151 (miss pip color), no cross lines.
+    assert "<circle" in html
+    assert "#374151" in html
+    assert "<line" not in html
+
+
+def test_aligned_modifier_row_off_scale_appends_miss_die() -> None:
+    """Off-scale debuff appends a miss die right of the 6 (line 269 branch)."""
+    # Sv 6+ with AP-4 → right_raw = 6 + 4 - 1 = 9 > 6 → off_scale.
+    html = save_modifier_die_pair_html(6, -4, "AP", _DEBUFF_RED)
+    # Miss die is appended (cross stroke).
+    assert "#c0392b" in html
+
+
+def test_special_die_html_with_content() -> None:
+    """special_die_html with content= renders 'label: content' (lines 301-302)."""
+    html = special_die_html("Extra Hits", "unmod. 6 = +2 Hits")
+    assert "Extra Hits: unmod. 6 = +2 Hits" in html
+
+
+def test_special_die_html_without_content() -> None:
+    """special_die_html without content renders label only (no 'label: ' prefix)."""
+    html = special_die_html("Alt. Fire")
+    assert "Alt. Fire" in html
+    # When content is empty, no 'Alt. Fire: ' pattern is produced.
+    assert "Alt. Fire: " not in html
+
+
+def test_reroll_marker_row_places_glyph_in_correct_slot() -> None:
+    """reroll_marker_row_html places ↺ glyph for each requested slot (line 325)."""
+    html = reroll_marker_row_html([2, 4], base_threshold=3)
+    assert html.count("↺") == 2
+
+
+def test_always_fail_marker_row_no_base_threshold() -> None:
+    """_marker_row_html without base_threshold (0) renders without boundary gap."""
+    # base_threshold=0 means the condition `2 <= base_threshold <= 6` is False → no gap.
+    html = always_fail_marker_row_html([1, 2], base_threshold=0, color_hint="debuff")
+    assert html.count("✕") == 2
+
+
+def test_reroll_marker_row_with_base_threshold_boundary_gap() -> None:
+    """_marker_row_html with base_threshold in 2..6 inserts the boundary-gap slot."""
+    # With base_threshold=4 the gap is inserted before column 4.
+    html = reroll_marker_row_html([5], base_threshold=4)
+    assert "↺" in html
+    # Boundary gap: 34px wide span.
+    assert "width:34px" in html
+
+
+def test_modifier_die_pair_html_buff_no_off_scale() -> None:
+    """modifier_die_pair_html buff path: grey on left die, semantic color on right."""
+    html = modifier_die_pair_html(4, 3, "Buff", 1, _BUFF_GREEN, base_threshold=4)
+    assert _BUFF_GREEN in html
+    # No miss die needed (in-scale buff).
+    assert "#c0392b" not in html

@@ -12,7 +12,7 @@ One entry point, three bounded modules:
 
 | Module | Responsibility |
 |--------|---------------|
-| `uiLayout/` | How things look. Streamlit render functions + shared render hub (`_common.py`). |
+| `uiLayout/` | How things look. Streamlit render functions + shared render hub (`_common.py`). Pure HTML/SVG building blocks in `dice_compose.py` (Streamlit-free, coverage-measured — INV-6). |
 | `gameObjects/` | What things are. Pure Python dataclasses + YAML loader. **No Streamlit** (enforced). |
 | `gameMechanic/` | What things do. Phase logic, state transitions — **and** phase render (`*Phase.py`). |
 

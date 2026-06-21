@@ -22,6 +22,7 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 | INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = aktuelle Schuld) |
 | INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = aktuelle Schuld) |
 | INV-5 | Doku-Gesundheit: Spec ↔ Tests ↔ Stand laufen nicht auseinander | `tests/docs/`, `tests/acceptance/` | ✅ |
+| INV-6 | Reine HTML/SVG-Komposition liegt in `dice_compose.py` — Streamlit-frei und Coverage-gemessen | `test_render_composition_seam.py` | ✅ 0 Verstöße |
 
 So misst du selbst: `pytest tests/architecture/ tests/docs/ tests/acceptance/ --no-cov -q`
 
@@ -102,6 +103,28 @@ Vierte messbare Schranke neben Coverage und Architektur. Durchgesetzt von:
 
 Eine fachliche Änderung, die ein Akzeptanzkriterium bricht, wird **rot** → Gespräch
 mit dem Nutzer statt stiller Drift (genau der Fehler hinter Finding 9.2).
+
+---
+
+## INV-6 — Render/Composition-Seam (dice_compose.py)
+
+**Regel:** Alle reinen HTML/SVG-Bausteine für die Angriffs-UI (SVG-Würfelgesichter,
+Schwellenwert-Header, Modifier-Zeilen, Grid-Zeilen) leben in `src/uiLayout/dice_compose.py`.
+Dieses Modul importiert kein Streamlit und ist vollständig durch Unit-Tests abgedeckt.
+Nur die drei `st.markdown`-Wrapper-Funktionen verbleiben im ausgenommenen `dice_html.py`.
+
+**Motivation:** Render-Logik, die in Streamlit-Render-Funktionen versteckt war, wurde nicht
+von der Coverage erfasst und hat wiederholt zu schwer auffindbaren Bugs geführt (Heroic-
+Intervention Duplicate-Key-Crash, Badge-Kompositions-Fehler in `dice_html.py`). Die Seam
+stellt sicher, dass Kompositions-Logik immer messbar bleibt.
+
+**Wächter:** `tests/architecture/test_render_composition_seam.py`
+- Assert 1: `dice_compose.py` enthält kein `import streamlit` (AST-geprüft).
+- Assert 2: `dice_compose.py` steht nicht in `[tool.coverage.run] omit`; kein
+  `src/uiLayout/*`-Wildcard, der das Modul stillschweigend verschlucken würde.
+
+**Coverage-Ratchet:** `fail_under` von 90 auf 92 angehoben (2026-06-21) — lockert die
+durch diese Seam gewonnene Mess-Abdeckung fest.
 
 ---
 
