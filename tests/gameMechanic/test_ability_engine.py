@@ -488,6 +488,30 @@ def test_strength_modifier_inactive_returns_empty() -> None:
     assert get_active_round_choice_modifier("necrons", "shooting", False) == {}
 
 
+def test_ap_bonus_wired_shooting() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
+    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    assert result == {"ap": -1}
+
+
+def test_ap_bonus_skipped_in_melee() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
+    result = get_active_round_choice_modifier("necrons", "fight", True)
+    assert result == {}
+
+
+def test_move_bonus_wired_movement() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", "primary")
+    result = get_active_round_choice_modifier("necrons", "movement", False)
+    assert result == {"move": 1}
+
+
+def test_leadership_bonus_wired() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
+    result = get_active_round_choice_modifier("necrons", "morale", False)
+    assert result == {"leadership": 1}
+
+
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     result = get_active_round_choice_modifier("orks", "shooting", False)

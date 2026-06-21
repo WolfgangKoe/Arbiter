@@ -69,6 +69,9 @@ _WIRED_EFFECT_TYPES = {
     "wound_modifier",
     "save_modifier",
     "strength_modifier",
+    "ap_bonus",
+    "move_bonus",
+    "leadership_bonus",
 }
 
 
@@ -77,12 +80,13 @@ def get_active_round_choice_modifier(
 ) -> dict[str, int]:
     """Return numeric modifiers from the active round-choice ability's chosen directive.
 
-    Only effects with wired types (hit_modifier, wound_modifier, save_modifier,
-    strength_modifier) are returned. Effects for other types (reroll_save_1, move_bonus,
-    etc.) are registered in YAML but not yet wired into combat — they are silently
-    skipped here.
+    Only numeric effect types in _WIRED_EFFECT_TYPES are returned (hit/wound/save/
+    strength_modifier, ap/move/leadership_bonus). Non-numeric effects (reroll_save_1,
+    advance_and_charge, rp_reroll, etc.) are queried via dedicated functions and are
+    silently skipped here.
 
-    Returns a dict with any of: {"hit": int, "wound": int, "save": int, "strength": int}.
+    Returns a dict with any of: {"hit", "wound", "save", "strength", "ap", "move",
+    "leadership"} mapped to int.
     """
     active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
     directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
@@ -118,6 +122,14 @@ def get_active_round_choice_modifier(
         return {"save": value}
     if effect_type == "strength_modifier":
         return {"strength": value}
+    if effect_type == "ap_bonus":
+        return {"ap": value}  # Vengeful Stars S: -1 (improves AP of shooting weapons)
+    if effect_type == "move_bonus":
+        return {"move": value}  # Sudden Storm P: +1" Move
+    if effect_type == "leadership_bonus":
+        # Conquering Tyrant P: +1 Ld. Morale phase is not wired into the UI yet —
+        # this value is informational only and has no display consumer today.
+        return {"leadership": value}
     return {}
 
 
