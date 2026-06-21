@@ -1,13 +1,20 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-21 10:02 CEST
+Stand: 2026-06-21 12:33 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
+----------------- ---------------------- -------------- ------------
+06-21 10:05 de63  ███████████░ 137k ⚠️   █████░  81%    ██··········
+         SA_1·  ████████████ 167k ⛔    Reproduce Heroic Intervention crash
+         SA_2·  ████░░░░░░░░  55k ✅    Phase 2 badge bugfixes + coverage …
+         SA_3·  █████░░░░░░░  60k ✅    Phase 3 codify invariant + ratchet
+         SA_4·  ██████░░░░░░  71k ✅    Phase 0 dice_html split
+         SA_5·  ██████░░░░░░  72k ✅    Phase 1 HI fix + extraction + tests
 ----------------- ---------------------- -------------- ------------
 06-21 01:12 8fce  ████████████ 162k ⛔    ░░░░░░   8%    ███████████·
          SA_1·  ████░░░░░░░░  48k ✅    Investigate Step 5 INV-4b generali…

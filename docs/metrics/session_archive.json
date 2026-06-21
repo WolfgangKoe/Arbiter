@@ -910,5 +910,52 @@
         "started_at": "2026-06-20T23:12:58.574Z"
       }
     ]
+  },
+  "de63fb54-6c04-4d00-a507-62d2daa3cceb": {
+    "started_at": "2026-06-21T08:05:00.084Z",
+    "task": "Hier ist Abshcluss der letzten Session Session‑Abschluss (S78) Geliefert: Befund A (Pfeil‑Magnitude ←N/+N→) — umgesetzt…",
+    "peak_context": 137014,
+    "subagent_share": 80.83518687831953,
+    "by_tier": {
+      "Opus": 7636013,
+      "Sonnet": 32207908
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Reproduce Heroic Intervention crash",
+        "tier": "Sonnet",
+        "peak_context": 167115,
+        "started_at": "2026-06-21T08:05:00.084Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase 2 badge bugfixes + coverage backfill",
+        "tier": "Sonnet",
+        "peak_context": 54890,
+        "started_at": "2026-06-21T08:05:00.084Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase 3 codify invariant + ratchet",
+        "tier": "Sonnet",
+        "peak_context": 59622,
+        "started_at": "2026-06-21T08:05:00.084Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase 0 dice_html split",
+        "tier": "Sonnet",
+        "peak_context": 70931,
+        "started_at": "2026-06-21T08:05:00.084Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase 1 HI fix + extraction + tests",
+        "tier": "Sonnet",
+        "peak_context": 71796,
+        "started_at": "2026-06-21T08:05:00.084Z"
+      }
+    ]
   }
 }

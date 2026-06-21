@@ -21,40 +21,32 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S78, 2026-06-21)
+## Aktueller Stand (nach S79, 2026-06-21)
 
-**S78 (Branch `feature/022-dice-display-rework`):** Befund A + CET, 1029 grün, Cov 92.35 %.
-- **Pfeil-Magnitude (Befund A, Spec §2.1):** `←N`/`+N→` am Pfeilkopf bzw. (Shift 1) im
-  Boundary-Gap; Label in Modifier-Farbe (`_glyph_span`/`glyph_color`). 7 neue Tests.
-  Visuell bestätigt (`←4` rot, `+1→` grün). `arrow`↔„Tachyon Arrow"-INV-4b-Kollision per
-  Rename gelöst (Guard nicht aufgeweicht).
-- **CET-Zeiten:** `token_report.py` zeigt Zeiten in `Europe/Berlin` (DST-korrekt) statt UTC.
-- **Befund B/C** (HIT-Debuff-Geometrie spreizt nicht, Slot-1-Invariante bei HIT-Buff) →
-  eigener Plan, Backlog.
+**S79 (Branch `feature/022-dice-display-rework`) — Renderer ins Sicherheitsnetz (4-Phasen-Lauf):**
+1069 grün, Cov 92,87 %, Gate **92 %**.
+- **Phase 0 — Naht:** `dice_html.py` gesplittet → streamlit-freies, coverage-**gemessenes**
+  `dice_compose.py` (Builder, 100 %) + geomittetes `dice_html.py` (3 Render-Fn). `omit`
+  explizit statt Glob `src/uiLayout/*`.
+- **Phase 1 — HI-Crash GEFIXT:** Wurzel `StreamlitDuplicateElementKey` (Duplikat-Squads
+  teilen `unit.id`), **nicht** `int("User×N")`. State-Key gefädelt + `perform_heroic_intervention()`
+  extrahiert, 16 Tests. Manuell bestätigt.
+- **Phase 2 — Badges GEFIXT:** „AP-4 -4"-Doppelung (`save_ap_modifier_row_html`) + Buff-Badge
+  grün (`badge_color` semantisch). 22 Tests, dice_compose 88→100 %. Manuell bestätigt (AP+Cover).
+- **Phase 3 — Kodifiziert:** **INV-6** (Render/Composition-Seam) + Guard
+  `tests/architecture/test_render_composition_seam.py` + Ratchet `fail_under` 90→92.
 
-**🔴 Neue Bugs (S78, UI-Verifikation — NICHT umgesetzt, nur notiert):**
-1. **Heroic Intervention crasht** (Ork-YAML): Button → Ork-Armeeliste verschwand komplett,
-   App handlungsunfähig. Tests fehlen (Muster wie FightPhase-Crash). → Bugfix-Plan.
-2. **Badge „AP-4 -4"**: Wert doppelt (Label „AP-4" + angehängtes „-4"). → entdoppeln + Test.
-3. **Buff-Badge nicht grün** (Light Cover): Badge-Chip nutzt `right_color`=grau bei Buffs;
-   Farb-Test fehlt; offene Perspektiv-Frage (`color_hint` für SAVE-Badge nicht ausgewertet).
-4. **Invuln-Badge chaotisch** (3 Teile) → eine Badge „Invuln 4+" (mit Plan 017 lösen).
-Alle 4 im Backlog. Vor Plan 014 entscheiden, welche Bugs Vorrang haben.
+**🆕 S79-UI-Findings (Backlog, NICHT umgesetzt — eingeplant):**
+1. **Silent-King-Zielaufteilung Fernkampf:** 2 Fernkampfwaffen, aktuell nur 1 Ziel wählbar →
+   Regeln (Select Targets) prüfen, Test, ggf. Ziel-pro-Waffe.
+2. **Off-Scale-/„7+"-Save-Grenze:** „7-Augen"-Würfel + `|`-Grenze (`[6] | [✕]`) → `dice_display.md` + Tests.
+3. **AP-/SAVE-Magnitude-Position:** `-N` gehört unter `|` → Spec + Tests (verwandt Befund B/C).
+4. **Invuln-SAVE-Badge** weiterhin chaotisch (out of scope S79) → mit Plan 017.
+- **Befund B/C** (HIT-Geometrie) weiter offen → eigener Plan.
 
-**S77 (Plan 022 DONE — committet, Branch `feature/022-dice-display-rework`):**
-Dice Display Rework, 5 Commits (`1ce131a`..`ecad9bf`). 1022 grün, Cov 92.35 %.
-- Step 1: Arrow-Direction-Fix (`rightward = value > 0`) + 2 Regressionstests.
-- Step 2: Badge-Truncate (Ellipsis statt Overflow in Slot 1).
-- Step 3: `_modifier_color()` — `color_hint` ('buff'|'debuff') schlägt Vorzeichen
-  (für perspektivabhängige Effekte wie Quantum Shield), rückwärtskompatibel.
-- Step 4: Guard-Tests (Slot-1-Invariante, Buff-gegen-1, Debuff>6) + neue Anzeige-
-  Bausteine `reroll_marker_row_html`/`always_fail_marker_row_html` — **noch nicht
-  verdrahtet** (warten auf Produzent: Quantum Shield, `reroll_hit_1`).
-- Step 5 (INV-4b Cluster 1): `_detect_weapon_special` datengetrieben via `effect.type`
-  (`extra_hits`/`alternating_fire`/`hit_roll_penalty`). YAML normalisiert: 9 Dakka-
-  Profile + Beast Snagga klaw. Ledger 19→16 Tokens; `attack_math.py`+`dice_html.py`
-  auf null gepinnt. Plan nannte fälschlich `ability_engine.py` für `color_hint` —
-  echter Ort ist Konsument `dice_html.py` (Modifier-Dicts kommen aus combat/_common).
+**S77/S78 (Historie):** Plan 022 Dice Display Rework DONE (`1ce131a`..`ecad9bf`); Befund A
+(Pfeil-Magnitude) + CET-Zeiten. Noch nicht verdrahtet: `reroll_marker_row_html`/
+`always_fail_marker_row_html` (warten auf Produzent Quantum Shield/`reroll_hit_1`).
 
 **INV-4b/INV-4 Restschuld (nach S77):**
 - **LEGIT:** `rosz_importer._FACTION_MAP`, `typing.Protocol`
