@@ -52,11 +52,11 @@ run every verification command, and update your row below when done.
 | [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | P2 (MITTEL) | S | — | **DONE** (2026-06-20) — `TargetSelectionRequest` + `pending_target_request` ersetzt 3 alte State-Keys; `render_unit_selectbox` für Veil + Mortal-Target; 1007 Tests grün. |
 | [020](020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | P2 (MITTEL) | S–M | 019 (empf.) | TODO |
 | [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | P2 (MITTEL) | S | — | TODO |
-| [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | TODO |
+| [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | DONE (S77) |
 | [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework: `overview.md` schlank + separate `session_archive.md` (dedup, auto) | P0 (HÖCHSTE) | M | — | **DONE** (2026-06-21) — overview.md 18 KB→3.9 KB, Reihenfolge nach Konzept; neue `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration aus `subagent_archive.json` verlustfrei; tote Renderer `_render_subagents`/`_render_subagent_archive` entfernt; 1011 Tests grün, 92.44 %. |
 
-**Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 023 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017.**
-022 zuerst: aktiver Arrow-Direction-Bug (MEDIUM Risk), Spec + Testkatalog fertig.
+**Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 023 (DONE) → 022 (DONE) → 014 → 020 → 021 → 016 → 018 → 015 → 017.**
+014 als Nächstes: Defender Loss Allocation, `group_wounds` universell (Risk HIGH).
 014 danach: Refinement 2026-06-21 **neu geplant** (group_wounds universell, Risk HIGH).
 016 und 018 sind unabhängig. 015 ist das größte Stück und profitiert vom
 vereinheitlichten Flow aus 013. 017 zuletzt.

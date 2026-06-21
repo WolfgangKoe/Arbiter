@@ -21,41 +21,34 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S76, 2026-06-21)
+## Aktueller Stand (nach S77, 2026-06-21)
 
-**S76 (Plan 023 DONE — noch nicht committet):** Overview-/Session-Archiv-Rework.
-`overview.md` schlank (18 KB→3.9 KB), Reihenfolge nach `Refinement/overview_concept.md`;
-neue auto-generierte `docs/metrics/session_archive.md` (Hauptzeile + SA-Subzeilen,
-dedup je Session-ID); Archiv-Schema session-weit (`session_archive.json`), Migration
-aus `subagent_archive.json` verlustfrei (Altdatei bleibt als Netz); tote Renderer
-`_render_subagents`/`_render_subagent_archive` entfernt. 1011 grün, Cov 92.44 %.
-Kleiner Feinschliff-Kandidat: SA-Subzeilen-Spalten fluchten optisch nicht 100 % mit
-der Hauptzeile (lesbar, kosmetisch).
+**S77 (Plan 022 DONE — committet, Branch `feature/022-dice-display-rework`):**
+Dice Display Rework, 5 Commits (`1ce131a`..`ecad9bf`). 1022 grün, Cov 92.35 %.
+- Step 1: Arrow-Direction-Fix (`rightward = value > 0`) + 2 Regressionstests.
+- Step 2: Badge-Truncate (Ellipsis statt Overflow in Slot 1).
+- Step 3: `_modifier_color()` — `color_hint` ('buff'|'debuff') schlägt Vorzeichen
+  (für perspektivabhängige Effekte wie Quantum Shield), rückwärtskompatibel.
+- Step 4: Guard-Tests (Slot-1-Invariante, Buff-gegen-1, Debuff>6) + neue Anzeige-
+  Bausteine `reroll_marker_row_html`/`always_fail_marker_row_html` — **noch nicht
+  verdrahtet** (warten auf Produzent: Quantum Shield, `reroll_hit_1`).
+- Step 5 (INV-4b Cluster 1): `_detect_weapon_special` datengetrieben via `effect.type`
+  (`extra_hits`/`alternating_fire`/`hit_roll_penalty`). YAML normalisiert: 9 Dakka-
+  Profile + Beast Snagga klaw. Ledger 19→16 Tokens; `attack_math.py`+`dice_html.py`
+  auf null gepinnt. Plan nannte fälschlich `ability_engine.py` für `color_hint` —
+  echter Ort ist Konsument `dice_html.py` (Modifier-Dicts kommen aus combat/_common).
 
-**S75 (kein Code committet):** Hartes Kontext-Gate (PreToolUse-Block) prototypisiert
-und auf Stakeholder-Entscheid **wieder entfernt**. Grund: bei *einer* Schwelle = 135k
-blockt das Gate genau den Wind-down (Edit/Commit), den es selbst fordert → latenter
-Deadlock. **Offen bleibt:** Kontext-Schutz ist weiter NUR Advisory (`session_context.py`
-am Turn-Start) — er warnt, stoppt nicht; deshalb liefen S63/S70 auf 154/156k. Falls
-erneut angegangen: Block-Schwelle **oberhalb** des 135k-Wind-downs (z. B. 145k), damit
-Speichern+Commit noch durchgehen.
-
-**Plan 019 DONE:** `TargetSelectionRequest` + `pending_target_request` ersetzt
-`cmd_awaiting_ability_id`/`cmd_awaiting_required_kw`/`wargear_awaiting_bearer_uid`;
-`render_unit_selectbox` für Veil + Mortal-Target. 1007 grün, Cov 92.40 %.
-
-**INV-4b/INV-4 Restschuld:**
+**INV-4b/INV-4 Restschuld (nach S77):**
 - **LEGIT:** `rosz_importer._FACTION_MAP`, `typing.Protocol`
-- **Schema-Urteil (Konsens nötig):** `dakka`/`klaw`/`tesla`, `reanimationProtocols`/`reanimation`,
+- **Schema-Urteil (Konsens nötig):** `reanimationProtocols`/`reanimation`,
   `arkana`, Items `orb`/`overlord`/`phaeron`/`gloom`/`prism`/`dynasty`,
   Default-Roster-Hardcode (`game_state.py`), `faction_dir`-Default `"necrons"` in `loader.py`
+  (`dakka`/`klaw`/`tesla` in S77 erledigt)
 
-### ▶ Nächste Session = Plan 022 (Dice Display Rework)
+### ▶ Nächste Session = Plan 014 (Defender Loss Allocation)
 
-**Reihenfolge (neu 2026-06-21):** 023 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017
-**022 zuerst:** aktiver Arrow-Direction-Bug (`dice_html.py:200`, Buff/Debuff invertiert),
-Risk MEDIUM, Spec + Testkatalog fertig (`docs/spec/dice_display.md` §8/§10).
-**014 danach:** Refinement 2026-06-21 **neu geplant** (alte Fassung hatte
+**Reihenfolge (neu 2026-06-21):** 023/022 (DONE) → 014 → 020 → 021 → 016 → 018 → 015 → 017
+**014:** Refinement 2026-06-21 **neu geplant** (alte Fassung hatte
 `group_wounds`-Namenskollision + Scope-Selbstwiderspruch). Neue Richtung: `group_wounds`
 universell für ALLE Gruppen-Einheiten → ein Schadenspfad. **Risk HIGH** (Regressionsfläche
 Heal-/Damage-Pfad) — Plan: `docs/audit/plans/014-p17-defender-loss-allocation.md`.
