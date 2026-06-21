@@ -30,9 +30,6 @@ LEDGER: dict[str, set[str]] = {
     "gameObjects/rosz_importer.py": {"adeptus", "custodes", "necrons", "ork", "orks"},
     # --- LEGIT: Python typing.Protocol (structural type), collides with the seed word ---
     "gameMechanic/phase_handler.py": {"protocol"},
-    # --- DEBT: weapon special-rule names hardcoded in combat maths/render ---
-    "gameMechanic/attack_math.py": {"dakka", "klaw", "tesla"},
-    "uiLayout/dice_html.py": {"dakka", "klaw", "tesla"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
     "gameMechanic/commandPhase.py": {"orb", "overlord", "phaeron", "resurrection"},
     "gameMechanic/game_state.py": {"necrons"},
@@ -40,7 +37,7 @@ LEDGER: dict[str, set[str]] = {
     "gameMechanic/psychicPhase.py": {"gloom", "prism"},
     "gameObjects/loader.py": {"arkana", "necrons"},
     # 'protocols' here is the Necron 'reanimationProtocols' rule key (reanimation debt).
-    "uiLayout/_common.py": {"klaw", "protocols", "reanimation"},
+    "uiLayout/_common.py": {"protocols", "reanimation"},
 }
 
 

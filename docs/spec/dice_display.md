@@ -181,13 +181,20 @@ Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
 
 ## 9. Bekannte offene Punkte
 
-| ID | Beschreibung | Plan |
-|---|---|---|
-| D1 | Arrow-Direction-Bug (`rightward = value < 0` invertiert) | Plan 022 Step 1 |
-| D2 | Badge-Breite / Overflow bei langen Labels | Plan 022 Step 2 |
-| D3 | Edge Cases 6+ / gegen-1 fehlen | Plan 022 Step 4 |
-| D4 | `color_hint`-Feld nicht vorhanden | Plan 022 Step 3 |
-| D5 | `dakka`/`klaw`/`tesla`-Literals in `attack_math.py` (INV-4b) | Plan 022 Step 5 |
+Alle D1–D5 in Plan 022 erledigt (2026-06-21). Tabelle als Historie.
+
+| ID | Beschreibung | Plan | Status |
+|---|---|---|---|
+| D1 | Arrow-Direction-Bug (`rightward = value < 0` invertiert) | Plan 022 Step 1 | ✅ GEFIXT (`rightward = value > 0`) |
+| D2 | Badge-Breite / Overflow bei langen Labels | Plan 022 Step 2 | ✅ GEFIXT (Ellipsis-Truncate) |
+| D3 | Edge Cases 6+ / gegen-1 fehlen | Plan 022 Step 4 | ✅ Marker-Bausteine + Guard-Tests |
+| D4 | `color_hint`-Feld nicht vorhanden | Plan 022 Step 3 | ✅ `_modifier_color()` |
+| D5 | `dakka`/`klaw`/`tesla`-Literals (INV-4b) | Plan 022 Step 5 | ✅ datengetrieben via `effect.type` |
+
+**Verdrahtungs-Hinweis (D3):** `reroll_marker_row_html` / `always_fail_marker_row_html`
+sind getestete Anzeige-Bausteine, aber noch **nicht** in einen Roll-Block verdrahtet —
+sie werden konsumiert, sobald ein Produzent Reroll-/Auto-fail-Slots liefert
+(z. B. Quantum Shield, `reroll_hit_1`).
 
 ---
 

@@ -95,13 +95,26 @@ def _total_attacks_int(
 
 
 def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type-arg]
-    """Detect special weapon abilities from profile fields."""
+    """Detect special weapon abilities from structured YAML fields (INV-4b).
+
+    All flags derive from the data-driven ``effect`` block or generic profile
+    fields — no faction-specific weapon names live in src/. The internal keys are
+    generic rule descriptions (``extra_hits``, ``alternating_fire``,
+    ``hit_roll_penalty``), not Necron/Ork proper nouns.
+    """
     abilities = profile.abilities or ""
+    effect = profile.effect or {}
+    effect_type = effect.get("type", "")
     return {
         "auto_hit": "Auto-hits" in abilities,
-        "tesla": "additional hits" in abilities,
-        "dakka": profile.weapon_type == "Dakka",
-        "klaw_penalty": profile.is_melee and "subtract" in abilities,
+        "extra_hits": effect_type == "extra_hits",
+        "alternating_fire": effect_type == "alternating_fire",
+        "hit_roll_penalty": (
+            profile.is_melee
+            and effect_type == "debuff_roll"
+            and effect.get("stat") == "hit_roll"
+            and (effect.get("modifier") or 0) < 0
+        ),
         "has_mortal_wounds": "mortal wound" in abilities.lower(),
     }
 

@@ -826,9 +826,9 @@ def _render_resolution_tab(
 
     final_atk_mods = list(base_atk_mods)
     final_save_mods = list(base_save_mods)
-    if weapon_special["klaw_penalty"]:
+    if weapon_special["hit_roll_penalty"]:
         final_atk_mods.append(
-            {"label": "Power Klaw", "value": -1, "roll_type": "hit", "source": "weapon"}
+            {"label": "−1 to Hit", "value": -1, "roll_type": "hit", "source": "weapon"}
         )
     if dense_cover:
         final_atk_mods.append(

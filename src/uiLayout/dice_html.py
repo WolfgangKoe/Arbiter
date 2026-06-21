@@ -384,12 +384,12 @@ def _render_dice_roll_block(
         st.markdown("".join(parts), unsafe_allow_html=True)
     if weapon_special:
         badges = []
-        if weapon_special.get("tesla"):
-            badges.append(special_die_html("Tesla", "unmod. 6 = +2 Hits"))
-        if weapon_special.get("dakka"):
-            badges.append(special_die_html("Dakka"))
-        if weapon_special.get("klaw_penalty"):
-            badges.append(special_die_html("Power Klaw", "−1 to Hit"))
+        if weapon_special.get("extra_hits"):
+            badges.append(special_die_html("Extra Hits", "unmod. 6 = +2 Hits"))
+        if weapon_special.get("alternating_fire"):
+            badges.append(special_die_html("Alt. Fire"))
+        if weapon_special.get("hit_roll_penalty"):
+            badges.append(special_die_html("−1 to Hit"))
         if badges:
             st.markdown(
                 f'<div style="margin-top:4px;">{"".join(badges)}</div>',

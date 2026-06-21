@@ -19,6 +19,8 @@ weapons:
     name_en: Kustom shoota
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 18
         attacks: 6/4
         strength: 4
@@ -87,6 +89,8 @@ weapons:
     name_en: Big shoota
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 36
         attacks: 5/3
         strength: 5
@@ -111,6 +115,8 @@ weapons:
     name_en: Dakkagun
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 18
         attacks: 5/3
         strength: 5
@@ -278,6 +284,8 @@ weapons:
     name_en: Shoota
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 18
         attacks: 3/2
         strength: 4
@@ -297,6 +305,10 @@ weapons:
         damage: 2
         abilities: "Each time an attack is made with this weapon, subtract"
         is_melee: true
+        effect:
+          type: debuff_roll
+          stat: hit_roll
+          modifier: -1
 
   - id: wh40k_9e.orks.weapon.beastchoppa
     name_en: Beastchoppa
@@ -345,6 +357,8 @@ weapons:
     name_en: Mork’s Roar
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 36
         attacks: 16/12
         strength: 5
@@ -673,6 +687,8 @@ weapons:
     name_en: Mek speshul
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 30
         attacks: 14/10
         strength: 5
@@ -709,6 +725,8 @@ weapons:
     name_en: Rivet kannon
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 36
         attacks: 9/6
         strength: 7
@@ -733,6 +751,8 @@ weapons:
     name_en: Twin big shoota
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 36
         attacks: 10/6
         strength: 5
@@ -1006,6 +1026,8 @@ weapons:
     name_en: Supa-shoota
     profiles:
       - weapon_type: Dakka
+        effect:
+          type: alternating_fire
         range_inches: 36
         attacks: 6/4
         strength: 6
