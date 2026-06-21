@@ -56,7 +56,8 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    - **Verdrahtung:** für jeden neuen Helfer per `grep` belegen, dass **Nicht-Test-Code** ihn aufruft — kein verwaister Parallel-Pfad (S70: 3/6 Helfer grün getestet, aber nie verdrahtet).
    - **Heimat:** neuer Code sitzt im richtigen Modul (z. B. State-Mutationen in `unit_mutations.py`), nicht als Duplikat.
    - **Gates:** `pytest --tb=short` grün, Coverage-Floor gehalten, keine vorher-grünen Tests rot; **Generic-src** (keine Fraktions-Strings/-Checks in `src/`).
-   - **Beleg zurückliefern:** Ergebnis nennt die `grep`-Ausgabe / Belegzeilen, nicht nur „getestet, grün".
+   - **Format vor Rückgabe:** Subagent führt `black` + `ruff` (+ `isort`) auf seine Dateien aus, bevor er meldet — sonst muss der Orchestrator nachformatieren (S82-Reibung).
+   - **Beleg zurückliefern (festes Format):** Endbericht KNAPP und in fester Reihenfolge — (1) pytest-Zusammenfassungszeile, (2) grep-Belegzeilen, (3) `git diff --stat`, (4) ggf. gewählte Werte. Nicht nur „getestet, grün"; kein Volltext (S82: verstümmelter Bericht → alles selbst nachgeprüft).
 
    **„Subagent-grün" ≠ „verdrahtet":** Der Orchestrator-Review prüft Wiring + Architektur-Heimat, nicht nur die Testfarbe (S70-Lehre).
 

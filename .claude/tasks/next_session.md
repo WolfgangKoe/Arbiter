@@ -82,6 +82,8 @@ Nobz 3 Zustände, Warriors ohne Selektor, Szarekh-Pools) — Render-Code ist nic
 Danach Plan 020 aus `docs/audit/plans/README.md` (Queue/Status) ziehen.
 
 ### Offene Fragen / Retro-Vormerke
+- **ADR-0005-Lücke testen (S82-Maßnahme):** Einmal verifizieren, ob `freigabe_gate.py` im
+  Subagent-Kontext feuert (kleiner Probelauf). Wenn nicht → Regel „Subagent liefert nur Entwürfe".
 - **Output ↔ cache_read als Tempo-Indikator:** Zielwert-Feintuning `token_report.py`-Legende.
 
 ---
