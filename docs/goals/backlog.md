@@ -98,7 +98,7 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 
 | Plan | Titel | Prio | Status |
 |------|-------|------|--------|
-| [014](../audit/plans/014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | HOCH | TODO |
+| [014](../audit/plans/014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | HOCH | ✅ DONE (S82) — manuelle UI-Verifikation offen |
 | [016](../audit/plans/016-necron-protocol-effects.md) | Protokoll-Effekte auf RP/Living Metal + Dynastiebonus | MITTEL | TODO |
 | [018](../audit/plans/018-low-prio-cleanup.md) | Kleinkram: CP-Doppelvergabe, Battle-Log-Reset, Gretchin, Modifier | NIEDRIG | TODO |
 | [015](../audit/plans/015-contextual-reactive-stratagems.md) | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook | MITTEL | TODO |
@@ -106,10 +106,11 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | TODO |
 | [020](../audit/plans/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | MITTEL | ✅ DONE (S83) |
 | [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | ✅ DONE (S84) — nur Daten-Migration + generischer Loader + INV-4b-Literal; Effekte offen → Plan 024 |
-| [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | TODO |
+| [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | ✅ DONE (S77) |
+| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | TODO — angelegt S85, NICHT umgesetzt; voller Testnetz-Mandat |
 
-**Empfohlene Reihenfolge (neu 2026-06-21): 019 (DONE) → 022 → 014 → 020 → 021 → 016 → 018 → 015 → 017.**
-022 zuerst (aktiver Arrow-Direction-Bug, Spec fertig); 014 danach (neu geplant, group_wounds universell, Risk HIGH).
+**Empfohlene Reihenfolge (akt. S85): 019·022·014·020·021·023 DONE → 024 → 016 → 018 → 015 → 017.**
+024 (angelegt S85, NICHT umgesetzt): Directive-Wiring + Arkana-Schema — **voller 4-Schichten-Testnetz-Mandat pro Step (Unit + Acceptance + INV-4b + manuelle UI) + Doku-Pflege.**
 
 ---
 

@@ -23,37 +23,43 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S84, 2026-06-21)
+## Aktueller Stand (nach S85, 2026-06-21)
 
-**S84 (Branch `feature/014-defender-loss-allocation`) — Plan 021 (Teil) + Orb-Bug-Fix:**
-Vollsuite **1092 grün**, Cov **92,96 %**, alle Gates grün.
-- **Plan 021 (NUR Daten-Migration + Loader, NICHT „Arkana fertig"):** 12 Arkana →
-  `faction_abilities.yaml` (mit `power_delta` **und** `cost_pts`); `load_faction_abilities`
-  überspringt `descriptive`; `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`);
-  `points.yaml`-`arkana:`-Sektion entfernt; INV-4b-Literal `"arkana"` aus `loader.py` raus.
-- **⚠️ Arkana-Effekte NICHT modelliert** — `ability_type: descriptive` ist ein **Stopgap**
-  („nicht engine-dispatchbar"). Die Regeltexte enthalten echte trigger/conditions/effect → Plan 024.
-- **Orb-Bug gefixt:** zwei Träger **derselben** Unit-Id (zwei Overlords m. Res-Orb) teilten den
-  once-per-battle-State, weil `wargear_used`/`request_id` nur nach `wargear_id` geschlüsselt waren.
-  Fix: `_wargear_state_key(bearer_uid, wargear_id)` in `commandPhase.py` → State je Träger-Instanz;
-  +Regressionstest `test_same_wargear_two_instances_get_distinct_state_keys`.
+**S85 (Branch `feature/014-defender-loss-allocation`) — Doku-Drift bereinigt + Orb-Bug fertig + Plan 024 angelegt:**
+- **Drift-Befund:** Pläne **022 (DONE S77)** und **014 (DONE S82, Teil A+B)** waren längst code-fertig +
+  getestet + committet, aber `backlog.md`/README zeigten noch TODO/IN-PROGRESS. Status korrigiert.
+  **Offen bei beiden nur:** manuelle UI-Verifikation (Render-Code).
+- **Orb-Bug (S84-Fix war unvollständig) GEFIXT:** zweiter Overlord-ResOrb zeigte keine Reanimations-
+  Buttons. Wurzel: drei **Streamlit-Widget-Keys** in `commandPhase._render_activated_wargear`
+  (`cmd_revive_wargear*`) nur nach `wargear_id` geschlüsselt → Duplikat-Key bei zwei Trägern →
+  „Use"-Button kollidiert, `pending_target_request` für Orb #2 nie gesetzt. Fix: Keys über das bereits
+  bearer-scoped `request_id` führen; +Test `test_two_orb_bearers_render_distinct_button_keys`.
+  `test_command_phase.py` 16 grün. **⚠️ Manuelle Tisch-Re-Verifikation offen** (Render).
+- **Plan 024 angelegt** (`docs/audit/plans/024-arkana-protocol-effect-modeling.md`), per Sonnet-Subagent
+  recherchiert + von Opus verifiziert. **Ehrlicher Befund:** aus der YAML sind alle 12 Arkana identische
+  `descriptive`-Stubs — Dispatchbarkeit folgt allein aus dem **Regeltext** vs. vorhandene Handler. **Nur
+  9 Protokoll-Direktiven + 1 Arkanum (Failsafe, Annahme) real machbar**; 10/12 Arkana brauchen neue
+  Engine-Subsysteme → bleiben begründet `descriptive`. Bonus: 3 Punktkosten weichen ab (failsafe 30→25,
+  atavindicator 25→20, nanomines 30→25).
 
 ### ▶ Nächste Session
-1. **Manueller Orb-Tisch-Re-Check** (Render-Code, nicht test-gedeckt): Roster
-   `necrons_1500pts_silent_king.yaml` hat **zwei Overlord-Orbs** — prüfen, dass Aktivierung #1
-   den Orb von #2 jetzt **nicht mehr** sperrt (Fix verifizieren).
-2. **Plan 024 anlegen + umsetzen — „Arkana + Protokoll: Effekt-Modellierung & Bedingungssichtbarkeit":**
-   Arkana `descriptive` → echte `trigger`/`conditions`/`effect` (engine-dispatchbar), **gemeinsam**
-   mit den fehlenden Protokoll-Direktiven-Bedingungen (Backlog #2: 9/12 Direktiv-Effekte unverdrahtet,
-   Bedingungen im UI unsichtbar). Das ist das **eigentliche Ziel** hinter Plan 021.
+1. **Plan 024 umsetzen — frischer Start** (Step 1 = `strength_modifier`-Direktiv-Pilot end-to-end).
+   ⚠️⚠️ **PFLICHT-TESTNETZ pro Step — NICHT optional, ausdrücklich gefordert (S85):** (a) **Unit**-Tests
+   je neue Funktion/Verzweigung; (b) **Acceptance/State**-Tests; (c) **INV-4b-Architektur-Gate** (kein
+   neuer Faction-String in `src/`); (d) **manuelle UI-Verifikation** (Render-Code); (e) **Doku-Pflege**
+   (`faction_abilities.md`, `backlog.md` #2, Plans-README, Akzeptanzkatalog). Done-Kriterien des Plans
+   abarbeiten. Step 5 (Failsafe) verifiziert die `buff_stat`-Annahme gegen den echten Handler — bricht
+   sie, bleibt das Arkanum `descriptive` (STOP).
+2. **Manuelle UI-Verifikationen einsammeln** (Render-Code, von Tests nicht gedeckt): Orb-Zwei-Orb-Fix am
+   Tisch (necrons_1500pts_silent_king); 014 Nobz Zustand A/B/C + Szarekh-Pools; 022 „Power Klaw"-Truncation.
 3. Danach Queue: 016 → 018 → 015 → 017.
 
-**Drift-Lehre S84:** Plan 021 nahm an `load_faction_abilities` existiere nicht — existierte aber
-(STOP-Bedingung). Künftig Drift-Check **vor** der Token-/Effort-Schätzung gewichten; Pläne als
-„Stand kann veraltet sein" lesen.
+**Drift-Lehre (verstärkt S85):** Schon zum **zweiten** Mal hing Plan-Status der Realität hinterher (S84:
+`load_faction_abilities`; S85: 022/014 längst DONE). **Drift-Check IMMER vor Effort-Schätzung** — Code-
+Stand selbst prüfen, Pläne als „Stand kann veraltet sein" lesen.
 
-**Historie verdichtet:** S83 Plan 020 (generic activated wargear). S82 Plan 014 Teil B (UI A/B/C).
-S81 3 Retro-Maßnahmen. Details → `docs/goals/ziel6.md`.
+**Historie verdichtet:** S84 Plan 021 (Arkana-Daten-Migration) + Orb-State-Key-Fix. S83 Plan 020.
+S82 Plan 014 Teil B. Details → `docs/goals/ziel6.md`.
 
 ### Offene Fragen / Retro-Vormerke
 - **ADR-0005-Lücke:** Freigabe-Gate feuert sauber im **Opus-Hauptkontext**; offen: auch im **Subagent**?

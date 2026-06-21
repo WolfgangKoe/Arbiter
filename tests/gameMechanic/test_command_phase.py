@@ -172,3 +172,56 @@ class TestActivatedWargear:
         first = _wargear_state_key("wh40k_9e.necrons.unit.overlord", orb)
         second = _wargear_state_key("wh40k_9e.necrons.unit.overlord#1", orb)
         assert first != second
+
+    def test_two_orb_bearers_render_distinct_button_keys(self) -> None:
+        # Regression: two Overlords carrying the SAME Resurrection Orb must get
+        # DISTINCT Streamlit widget keys for the activate button. With a shared
+        # key the second button collides and never sets pending_target_request,
+        # so the second orb's per-model revive buttons never appear. Button keys
+        # route through the bearer-scoped request_id.
+        from gameMechanic.commandPhase import _render_activated_wargear
+
+        captured: list[str] = []
+
+        def _record_button(*args: object, **kwargs: object) -> bool:
+            captured.append(str(kwargs.get("key", "")))
+            return False
+
+        session = _S(
+            wargear_used={},
+            revive_wargear_target_uid={},
+            pending_target_request=None,
+            active="Necrons",
+        )
+        _st_mock.session_state = session
+        orig_button = _st_mock.button
+        _st_mock.button = _record_button
+        try:
+            wargear = {
+                "id": "wh40k_9e.necrons.wargear.resurrection_orb",
+                "name_en": "Resurrection Orb",
+            }
+            _render_activated_wargear(
+                "Necrons",
+                {},
+                {},
+                {},
+                None,
+                wargear,
+                bearer_uid="wh40k_9e.necrons.unit.overlord",
+            )
+            _render_activated_wargear(
+                "Necrons",
+                {},
+                {},
+                {},
+                None,
+                wargear,
+                bearer_uid="wh40k_9e.necrons.unit.overlord#1",
+            )
+        finally:
+            _st_mock.button = orig_button
+
+        assert len(captured) == 2
+        assert captured[0] != captured[1]
+        assert all(k.startswith("cmd_revive_wargear_") for k in captured)

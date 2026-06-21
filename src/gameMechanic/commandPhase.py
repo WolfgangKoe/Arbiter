@@ -254,8 +254,9 @@ def _render_activated_wargear(
 ) -> None:
     """Generic renderer for ``ability_type: activated`` wargear.
 
-    Name and once_per_battle are read from the wargear entry; all session
-    state is namespaced by wargear id so multiple bearers never collide.
+    Name and once_per_battle are read from the wargear entry; both session
+    state AND Streamlit widget keys are namespaced by ``request_id`` (bearer +
+    wargear id) so two bearers of the same wargear never collide.
     """
     wargear_id = wargear["id"]
     name = wargear.get("name_en", wargear_id)
@@ -278,7 +279,7 @@ def _render_activated_wargear(
             wound_adjustment_buttons(st.session_state.get("active", ""), target_uid, target_unit)
         if st.button(
             f"Confirm & Close {name}",
-            key=f"cmd_revive_wargear_confirm_{wargear_id}",
+            key=f"cmd_revive_wargear_confirm_{request_id}",
             use_container_width=True,
         ):
             target_name = target_unit.name_en if target_unit else target_uid
@@ -292,13 +293,13 @@ def _render_activated_wargear(
         and st.session_state.pending_target_request.ability_id == request_id
     ):
         st.info("Select a target unit from your army list.")
-        if st.button("Cancel", key=f"revive_wargear_cancel_{wargear_id}", use_container_width=True):
+        if st.button("Cancel", key=f"revive_wargear_cancel_{request_id}", use_container_width=True):
             st.session_state.pending_target_request = None
             st.rerun()
     else:
         if st.button(
             f"Use {name}",
-            key=f"cmd_revive_wargear_{wargear_id}",
+            key=f"cmd_revive_wargear_{request_id}",
             type="primary",
             use_container_width=True,
         ):
