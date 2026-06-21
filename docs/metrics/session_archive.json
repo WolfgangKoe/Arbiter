@@ -894,10 +894,10 @@
   "8fce93a2-ba95-499b-9184-f7c3c39ae565": {
     "started_at": "2026-06-20T23:12:58.574Z",
     "task": "Start session. Was sind die nächsten Schritte mit Tokenschätzung.",
-    "peak_context": 143009,
-    "subagent_share": 10.59647979573328,
+    "peak_context": 162471,
+    "subagent_share": 8.144707299025177,
     "by_tier": {
-      "Opus": 16792918,
+      "Opus": 22447184,
       "<synthetic>": 0,
       "Sonnet": 1990367
     },

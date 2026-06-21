@@ -274,7 +274,8 @@ def test_generate_hints_praises_subagent_offloading():
 
 
 def test_session_label_uses_date_when_timestamp_present():
-    assert session_label("abcdef1234", "2026-06-18T18:53:21.000Z") == "2026-06-18 18:53 · abcdef12"
+    # UTC-Zeitstempel werden in lokaler Zeit (Europe/Berlin) gezeigt: 18:53Z → 20:53 CEST (S78).
+    assert session_label("abcdef1234", "2026-06-18T18:53:21.000Z") == "2026-06-18 20:53 · abcdef12"
 
 
 def test_session_label_falls_back_to_short_id_without_timestamp():

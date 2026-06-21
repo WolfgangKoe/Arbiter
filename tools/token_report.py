@@ -35,8 +35,13 @@ import argparse
 import json
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+# Zeitstempel in lokaler Zeit (Europe/Berlin = CET/CEST, DST-korrekt) statt UTC,
+# damit die Overview-Zeiten zur Wanduhr des Stakeholders passen (S78).
+_LOCAL_TZ = ZoneInfo("Europe/Berlin")
 
 # Kontext-Korridor aus CLAUDE.md — Bezugsgröße für Peak-Kontext und Hinweise.
 CONTEXT_LIMIT = 150_000
@@ -467,7 +472,7 @@ def session_label(session_id: str, started_at: str | None) -> str:
     if not started_at:
         return short
     try:
-        when = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+        when = datetime.fromisoformat(started_at.replace("Z", "+00:00")).astimezone(_LOCAL_TZ)
     except ValueError:
         return short
     return f"{when:%Y-%m-%d %H:%M} · {short}"
@@ -479,7 +484,7 @@ def _short_label(session_id: str, started_at: str | None) -> str:
     if not started_at:
         return short
     try:
-        when = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+        when = datetime.fromisoformat(started_at.replace("Z", "+00:00")).astimezone(_LOCAL_TZ)
     except ValueError:
         return short
     return f"{when:%m-%d %H:%M} {short}"
@@ -1002,7 +1007,7 @@ def main(argv: list[str] | None = None) -> int:
 
     records, meta = collect_project(project_dir, session_filter=args.session)
     summary = summarize(records)
-    generated_at = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
+    generated_at = datetime.now(_LOCAL_TZ).strftime("%Y-%m-%d %H:%M %Z")
 
     # Session-Archiv: laden (neue Datei; einmalige Migration aus Altdatei wenn nötig).
     if _ARCHIVE_FILE.is_file():
