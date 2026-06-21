@@ -875,10 +875,10 @@
   "07026b3b-2a5e-42fa-897e-1236431d8970": {
     "started_at": "2026-06-20T22:36:41.525Z",
     "task": "start Session, was sind dienächsten Schritte, bitte vorlegen und eine Tolen Schätzung dran.",
-    "peak_context": 118676,
-    "subagent_share": 50.9874277717969,
+    "peak_context": 134622,
+    "subagent_share": 41.57896387765467,
     "by_tier": {
-      "Opus": 7250197,
+      "Opus": 10597441,
       "Sonnet": 7542328
     },
     "subagents": [
@@ -888,6 +888,26 @@
         "tier": "Sonnet",
         "peak_context": 92558,
         "started_at": "2026-06-20T22:36:41.525Z"
+      }
+    ]
+  },
+  "8fce93a2-ba95-499b-9184-f7c3c39ae565": {
+    "started_at": "2026-06-20T23:12:58.574Z",
+    "task": "Start session. Was sind die nächsten Schritte mit Tokenschätzung.",
+    "peak_context": 143009,
+    "subagent_share": 10.59647979573328,
+    "by_tier": {
+      "Opus": 16792918,
+      "<synthetic>": 0,
+      "Sonnet": 1990367
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Investigate Step 5 INV-4b generalization",
+        "tier": "Sonnet",
+        "peak_context": 47603,
+        "started_at": "2026-06-20T23:12:58.574Z"
       }
     ]
   }

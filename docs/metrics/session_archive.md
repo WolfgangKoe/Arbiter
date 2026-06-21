@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-20 23:08 UTC
+Stand: 2026-06-21 06:59 UTC
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,10 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-20 22:36 0702  █████████░░░ 119k ✅    ███░░░  51%    ██████······
+06-20 23:12 8fce  ███████████░ 143k ⚠️   █░░░░░  11%    ███████████·
+         SA_1·  ████░░░░░░░░  48k ✅    Investigate Step 5 INV-4b generali…
+----------------- ---------------------- -------------- ------------
+06-20 22:36 0702  ███████████░ 135k ⚠️   ███░░░  42%    ███████·····
          SA_1·  ███████░░░░░  93k ✅    Implement Plan 023 overview rework
 ----------------- ---------------------- -------------- ------------
 06-20 20:11 58e9  ███████░░░░░  93k ✅    ████░░  59%    ············
