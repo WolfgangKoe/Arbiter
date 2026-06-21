@@ -171,6 +171,24 @@ def _active_directive_has_type(faction_dir: str, effect_type: str) -> bool:
     return bool(effect) and effect.get("type") == effect_type
 
 
+def get_active_rp_modifiers(faction_dir: str) -> dict[str, int | bool]:
+    """Return Reanimation Protocol modifiers from the active round-choice directive.
+
+    Undying Legions P (rp_reroll) -> {"rp_reroll": True}
+    Undying Legions S (rp_bonus)  -> {"rp_bonus": int}
+    Any other / no directive      -> {}
+    """
+    effect = _active_directive_effect(faction_dir)
+    if not effect:
+        return {}
+    effect_type = effect.get("type", "")
+    if effect_type == "rp_reroll":
+        return {"rp_reroll": True}
+    if effect_type == "rp_bonus":
+        return {"rp_bonus": int(effect.get("value", 0))}
+    return {}
+
+
 def _unit_matches_target(unit: Unit, effect: dict) -> bool:
     """True if unit satisfies the effect's target_keywords / target_keywords_any constraints."""
     required = effect.get("target_keywords", [])

@@ -23,6 +23,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_activated_command_abilities,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
+    get_active_rp_modifiers,
     get_triggered_abilities,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -544,6 +545,21 @@ def test_advance_and_charge_inactive_returns_false() -> None:
     _protocol_session(None, None)
     unit = _make_unit(rules=[], keywords=["NECRON"])
     assert charge_after_advance_allowed("Necrons", unit) is False
+
+
+def test_rp_reroll_undying_legions_p() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
+    assert get_active_rp_modifiers("necrons") == {"rp_reroll": True}
+
+
+def test_rp_bonus_undying_legions_s() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    assert get_active_rp_modifiers("necrons") == {"rp_bonus": 1}
+
+
+def test_rp_modifier_empty_when_other_directive() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
+    assert get_active_rp_modifiers("necrons") == {}
 
 
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:
