@@ -46,6 +46,11 @@ _LOCAL_TZ = ZoneInfo("Europe/Berlin")
 # Kontext-Korridor aus CLAUDE.md — Bezugsgröße für Peak-Kontext und Hinweise.
 CONTEXT_LIMIT = 150_000
 
+# Client-seitige Fehler-/Interrupt-Stubs (z. B. „API Error: 529 Overloaded")
+# tragen dieses Pseudo-Modell und Null-Usage — kein echter LLM-Call. Sie dürfen
+# nicht als Antwort zählen, sonst erscheint eine Geister-Session mit 0k-Peak.
+SYNTHETIC_MODEL = "<synthetic>"
+
 # Mapping von Modell-ID-Präfix auf das Tier-Label des Operating Models.
 _MODEL_TIERS: tuple[tuple[str, str], ...] = (
     ("claude-opus", "Opus"),
@@ -126,6 +131,8 @@ def parse_usage_lines(lines: list[str], *, session: str, role: str) -> list[Usag
         if entry.get("type") != "assistant":
             continue
         message = entry.get("message") or {}
+        if message.get("model") == SYNTHETIC_MODEL:
+            continue
         usage = message.get("usage")
         if not usage:
             continue

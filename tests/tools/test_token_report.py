@@ -83,6 +83,28 @@ def test_parse_usage_lines_skips_non_assistant_and_broken_lines():
     assert records[0].total == 10
 
 
+def test_parse_usage_lines_skips_synthetic_error_stub():
+    # „API Error: 529 Overloaded" o. Ä. erscheint als <synthetic>-Assistant mit
+    # Null-Usage — kein echter LLM-Call. Würde es gezählt, entstünde eine
+    # Geister-Session mit 0k-Peak im Report (S88-Befund bae8).
+    lines = [
+        _assistant_line("<synthetic>", input_tokens=0, output_tokens=0, cache_read_input_tokens=0),
+        _assistant_line("claude-opus-4-8", input_tokens=7, output_tokens=3),
+    ]
+    records = parse_usage_lines(lines, session="s1", role="main")
+    assert len(records) == 1
+    assert records[0].model == "claude-opus-4-8"
+
+
+def test_parse_usage_lines_synthetic_only_session_yields_no_records():
+    records = parse_usage_lines(
+        [_assistant_line("<synthetic>", input_tokens=0, output_tokens=0)],
+        session="ghost",
+        role="main",
+    )
+    assert records == []
+
+
 def test_parse_first_timestamp_returns_first_seen():
     lines = [
         "",
