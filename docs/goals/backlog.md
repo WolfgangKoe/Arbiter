@@ -183,6 +183,19 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🔲 **Voice of the Triarch (R-CMD-XX, Refinement 2026-06-20):** Silent King — `voiceOfTheTriarch`-Handler fehlt (YAML-Basis fertig: `alter_command_protocol`). → Plan 016 oder eigener kleiner Plan.
 - ✅ **Subagent-Archiv REWORK (Plan 023, DONE 2026-06-21):** overview.md schlank (18 KB→3.9 KB), Reihenfolge nach `overview_concept.md`; separate auto-generierte `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration verlustfrei; tote Renderer entfernt; 1011 Tests grün. — _Ursprung:_ S72-Bug: Duplikat-Tabellen in `overview.md`. Fix: (1) `docs/metrics/session_archive.md` als separate, wachsende Archiv-Datei; (2) `overview.md` bekommt Link + SA-Peaks als Inline-Subzeilen im Verlaufsblock (Format: `Refinement/overview_concept.md`); (3) **Session-ID-Deduplizierung bei `--write`** — überschreibt `overview.md` während einer Session mehrfach, darf dieselbe Session-ID **nicht** doppelt ins Archiv anhängen (idempotent je Session-ID). Die **Anzahl der Auslösungen wird NICHT dokumentiert** (Stakeholder 2026-06-21). Render-Funktionen `_render_subagent_archive` + `_render_subagents` zusammenführen; die breite Tabelle „## Subagenten — wer wurde wofür gestartet" entfällt komplett.
 
+- 🔲 **Failsafe/Arkana-Aktivator-UI fehlt (S88-Befund, eigener kleiner Plan):** `activated`-Einträge
+  aus `faction_abilities.yaml` mit `once_per_battle: false` werden bei `round_choice`-Fraktionen
+  (Necrons/Custodes) **nirgends** als Aktivator gerendert. Ursache: `armyCard._render_once_per_battle_ability_ui`
+  ([armyCard.py:356-364](../../src/uiLayout/armyCard.py#L356-L364)) `return`-t früh, wenn die Fraktion
+  `round_choice`-Fähigkeiten hat, **und** surface-t nur eine `once_per_battle: true`-Fähigkeit; die
+  commandPhase-Pfade (`get_activated_command_abilities`/`activated_wargear_ids`) lesen nur
+  `unit_abilities.yaml` + `wargear.yaml`, **nie** `faction_abilities.yaml`. Folge: Failsafe Overcharger
+  ist engine-dispatchbar (`buff_stat_bonus`, unit-getestet) **aber nie aktivierbar**. Kein
+  Regressions-Bug (Picker war Plan-024-Scope-Out), aber generische Lücke für künftige aktivierbare
+  Fraktionsfähigkeiten. Fix: generischen Aktivator für `activated`-`faction_abilities` (unabhängig von
+  `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
+  (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
+
 ---
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
@@ -250,6 +263,12 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 
 Vorschlag: architecture.md in einer eigenen kleinen Doku-Session aktualisieren (Schema +
 Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung freigeben.**
+
+- **`faction_abilities.md` Z. 42/197 — entferntes `auto_round_1` (S88-Befund):** Tabelle Z. 42
+  („Runde 1: Eternal Guardian auto-aktiv (`auto_round_1: true`)") + Phase-2-Liste Z. 197
+  referenzieren noch das `auto_round_1`-Flag, das in 6e Bug 1 aus YAML/Dataclass/UI/commandPhase
+  **entfernt** wurde (Regeln erlauben freie Verteilung der Protokolle auf Runden 1–5). Reine
+  Doku-Altlast → bei der `architecture.md`-Doku-Session mitbereinigen. **Vor Änderung freigeben.**
 
 - ✅ **Dice Display Arrow-Direction-Bug (`dice_html.py`)** — erledigt (Plan 022, S77): `rightward = (value > 0)` in `dice_compose.py`, Buff=rechts[→]/Debuff=links[←]; Tests `test_buff_arrow_points_right`/`test_debuff_arrow_points_left` pinnen das Verhalten.
 - ✅ **commandPhase.py State-Keys nicht orb-id-gebunden** — erledigt (Plan 020, S83): globale Slots durch `pending_target_request` mit `TargetSelectionRequest.ability_id`-Diskriminator ersetzt; `revive_wargear_awaiting_target` existiert nicht mehr in `src/`.

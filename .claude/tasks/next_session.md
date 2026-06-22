@@ -23,9 +23,20 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
-## Aktueller Stand (nach S87, 2026-06-22)
+## Aktueller Stand (nach S88, 2026-06-22)
 
-**S87 (Branch `feature/024-arkana-protocol-effect-modeling`) — Plan 024 Steps 5–6 DONE** (Commit `7b6a23e`,
+**S88 (Branch `feature/024-arkana-protocol-effect-modeling`) — Plan 024 Step 7 DONE → Plan 024 VOLLSTÄNDIG** (Commit `300c094`,
+1116 grün/93 %, INV-4b grün, ruff/black/isort sauber):
+- **Step 7 (Doku-only):** `faction_abilities.md` neuer Abschnitt „Direktiv-Wiring-Status" (3 kanonische
+  Abfrage-Fn + `_WIRED_EFFECT_TYPES`) + „Arkana Dispatch-/Display-Status" (1 dispatchbar, 11 begründet
+  `descriptive` mit Subsystem-Tabelle); `backlog.md` #2 Engine-Wiring 12/12 abgehakt, Anzeige = Rest;
+  Plans-README + Reihenfolge auf 024 DONE.
+- **⚠️ BEFUND (manueller UI-Test übersprungen, Stakeholder-Entscheid):** Failsafe Overcharger ist
+  engine-dispatchbar **aber hat keinen UI-Aktivator** → Step-5-Plan-Zeile „aktivierbar via
+  `_render_activated_wargear`" ist faktisch nicht durchführbar. Kein Regressions-Bug (Picker war
+  Plan-024-Scope-Out), aber Anzeige-/Aktivator-Lücke. Details + Follow-up s. „Nächste Session".
+
+**S87 — Plan 024 Steps 5–6 DONE** (Commit `7b6a23e`,
 1116 grün/93 %, INV-4b unverändert 11):
 - **Step 5:** `failsafe_overcharger` → `ability_type: activated`, dispatcht +1 Attacks auf CANOPTEK über die
   **vorhandene** `buff_stat`/`multi`-Infra — **kein STOP, kein neues Dataclass-Feld** (Befund: flache
@@ -35,12 +46,16 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 - 2 vorher-grüne Loader-Tests auf neuen Sollzustand nachgezogen (failsafe lädt jetzt; quantum_orb 15, failsafe 25).
 
 ### ▶ Nächste Session
-1. **Plan 024 Step 7 (Doku, vertagt) ZUERST:** `docs/spec/faction_abilities.md` (Direktiv-Wiring ✅ + welche
-   Arkana warum `descriptive` bleiben), `docs/goals/backlog.md` #2 (Direktiven abhaken + INV-4b Cluster 6
-   Dispatch-Status), Status-Zeile in `docs/audit/plans/README.md`. Dann Plan 024 vollständig DONE.
-2. **Manueller UI-Test vorbereiten + durchführen:** ein **Roster** bereitstellen/finden, das `failsafe_overcharger`
-   (TECHNOMANCER) + Arkana enthält, in der App laden und prüfen: lädt korrekt, Failsafe in Command-Phase
-   aktivierbar, +1-Attacks-Anzeige auf CANOPTEK. Plus Steps-1–4-Anzeigen (S+1/AP/Move/Reroll/RP).
+1. **NEUER Follow-up (aus S88-Befund) — Failsafe/Arkana-Aktivator-UI fehlt:** `activated`-Einträge aus
+   `faction_abilities.yaml` mit `once_per_battle: false` werden bei `round_choice`-Fraktionen (Necrons/Custodes)
+   **nirgends** als Aktivator gerendert: `armyCard._render_once_per_battle_ability_ui` (armyCard.py:356-364)
+   `return`-t früh für round_choice-Fraktionen UND surface-t nur `once_per_battle: true`; die commandPhase-
+   Pfade lesen nur `unit_abilities.yaml`/`wargear.yaml`, nie `faction_abilities.yaml`. Eigener kleiner Plan:
+   generischen Aktivator + CANOPTEK-Target-Picker (war Plan-024-Scope-Out). **Erst danach** ist der
+   manuelle Failsafe-UI-Test (Command-Phase aktivierbar, +1 Attacks auf CANOPTEK) durchführbar.
+2. **Manueller UI-Test (re-skopiert, ohne Failsafe):** anzeigbare Direktiven prüfen — Eternal Guardian P
+   (SAVE+1 grün), Hungry Void P (HIT+1), Vengeful Stars P (WOUND+1) + Arkana zeigen engl. `rule_text` in
+   `armyList`. Steps-1–4-Direktiven S+1/AP/Move/Reroll/RP sind engine-verdrahtet, **Anzeige offen** (backlog #2).
 3. **BUG `docs/metrics/overview.md`:** wird nach einem Lauf wieder mit Müll (0-Werte) überschrieben — echte Werte
    nur kurz sichtbar, dann „gelöscht". Ursache finden (token_report/Hook-Reihenfolge?) und fixen.
 4. Danach Queue: 016 → 018 → 015 → 017.
