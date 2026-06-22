@@ -41,26 +41,28 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Regressionstest `test_ability_sections_hidden_in_setup_only`. Render-Code → manuelle
   Verifikation steht (s. u.). **Offen (Rest #2b):** Direktive ab Bewegungsphase sperren
   (eigener kleiner Task).
-- 🔲 **#2 Protokoll-Buff-Audit** (Phase 3): **9 von 12** Direktiv-Effekten sind in
-  `ability_engine.get_active_round_choice_modifier` **nicht verdrahtet** → unsichtbar.
-  Jeden einzeln verdrahten/anzeigen, je eigener AC. Soll-Tabelle:
+- 🟡 **#2 Protokoll-Buff-Audit** (Phase 3): **Engine-Wiring erledigt (Plan 024,
+  S86/S87)** — alle 12 Direktiv-Effekte sind jetzt engine-seitig verdrahtet
+  (vorher 3/12); offen bleibt nur noch die **Anzeige** (Badge/Block) je Direktive.
+  Spalte „Engine" = liefert die Funktion den Effekt; Spalte „Anzeige" = Render-Code
+  (Plan 016/017-Gebiet, manuelle Verifikation):
 
-  | Protokoll · Direktive | Effekt | Ziel-Anzeige |
-  |---|---|---|
-  | Eternal Guardian · P | save_modifier +1 ✅ | SAVE-Block grün |
-  | Eternal Guardian · S | reroll_save_1 ❌ | SAVE-Hinweis |
-  | Hungry Void · P | hit_modifier +1 (Shooting) ✅ | HIT-Block |
-  | Hungry Void · S | strength_modifier +1 (Shooting) ❌ | WOUND-Block S+1 |
-  | Conquering Tyrant · P | leadership_bonus +1 ❌ | Morale |
-  | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) ❌ | HIT+WOUND Melee |
-  | Sudden Storm · P | move_bonus +1 ❌ | Bewegungs-Badge |
-  | Sudden Storm · S | advance_and_charge ❌ | Charge-Phase |
-  | Undying Legions · P/S | rp_reroll / rp_bonus +1 ❌ | Reanimation-UI |
-  | Vengeful Stars · P | wound_modifier +1 (Shooting) ✅ | WOUND-Block |
-  | Vengeful Stars · S | ap_bonus -1 (Shooting) ❌ | SAVE-Block AP |
+  | Protokoll · Direktive | Effekt | Engine | Anzeige |
+  |---|---|---|---|
+  | Eternal Guardian · P | save_modifier +1 | ✅ | ✅ SAVE-Block grün |
+  | Eternal Guardian · S | reroll_save_1 | ✅ (`get_active_round_choice_rerolls`) | 🔲 SAVE-Hinweis |
+  | Hungry Void · P | hit_modifier +1 (Shooting) | ✅ | ✅ HIT-Block |
+  | Hungry Void · S | strength_modifier +1 (Shooting) | ✅ | 🔲 WOUND-Block S+1 |
+  | Conquering Tyrant · P | leadership_bonus +1 | ✅ (informativ, kein UI-Konsument) | 🔲 Morale |
+  | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) | ✅ (`get_active_round_choice_rerolls`) | 🔲 HIT+WOUND Melee |
+  | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
+  | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
+  | Undying Legions · P/S | rp_reroll / rp_bonus +1 | ✅ (`get_active_rp_modifiers`) | 🔲 Reanimation-UI |
+  | Vengeful Stars · P | wound_modifier +1 (Shooting) | ✅ | ✅ WOUND-Block |
+  | Vengeful Stars · S | ap_bonus -1 (Shooting) | ✅ | 🔲 SAVE-Block AP |
 
   Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
-  Phasen-Block (wie MWBD). Überschneidet sich mit Plan 016.
+  Phasen-Block (wie MWBD). Anzeige-Rest überschneidet sich mit Plan 016/017.
 - 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
   Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
   Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist
@@ -87,7 +89,7 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   - **Cluster 4 — `dynasty`** (`movementPhase.py`) ✅ Konsens: UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
   - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`) ✅ Konsens: `"Gloom Prism"` ist **Necron**-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
   - ✅ **Cluster 3 — `orb`/`overlord`/`resurrection` + `phaeron`** (`commandPhase.py`) **erledigt S83 (Plan 020):** generischer Activated-Wargear-Flow (`_render_activated_wargear`, Lookup via `ability_type: activated`); PHAERON-Bonus datengetrieben (`extra_uses`); Allowlist-Eintrag entfernt.
-  - ✅ **Cluster 6 — `arkana`** (`loader.py`) **erledigt S84 (Plan 021):** Arkana in `faction_abilities.yaml`, `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`), `"arkana"`-Literal aus `loader.py` entfernt. **Effekt-Modellierung weiterhin offen → Plan 024** (Arkana `descriptive`-Stopgap → echte trigger/conditions/effect, gemeinsam mit Protokoll-Bedingungssichtbarkeit, vgl. #2).
+  - ✅ **Cluster 6 — `arkana`** (`loader.py`) **erledigt S84 (Plan 021):** Arkana in `faction_abilities.yaml`, `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`), `"arkana"`-Literal aus `loader.py` entfernt. **Effekt-Modellierung Plan 024 (S87) abgeschlossen:** alle 12 Arkana haben strukturiertes `trigger`/`conditions`/`effect` + engl. `rule_text`; **1 dispatchbar** (Failsafe Overcharger → `activated`, `buff_stat`), **11 bleiben begründet `descriptive`** (fehlende Engine-Subsysteme — Tabelle in `docs/spec/faction_abilities.md`). Kein neuer Faction-String in `src/` → INV-4b unverändert.
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
   - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
 
@@ -109,10 +111,10 @@ Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README
 | [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | ✅ DONE (S84) — nur Daten-Migration + generischer Loader + INV-4b-Literal; Effekte offen → Plan 024 |
 | [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | ✅ DONE (S77) |
 | [023](../audit/plans/023-overview-archive-rework.md) | Subagent-Archiv Rework: schlanke overview.md + separate session_archive.md | MITTEL | ✅ DONE (S85, 2026-06-21) |
-| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | 🟡 IN PROGRESS — Steps 1–4 (Direktiv-Wiring + RP) DONE S86; Steps 5–7 (Failsafe-Dispatch + Arkana-Schema) offen |
+| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | ✅ DONE (S88) — Steps 1–4 (Direktiv-Wiring + RP, S86) · 5–6 (Failsafe `activated`-Dispatch + Arkana-Schema + Kosten, S87) · 7 (Doku, S88); 11/12 Arkana begründet `descriptive`. Manuelle UI-Verifikation offen |
 
-**Empfohlene Reihenfolge (akt. S86): 019·022·014·020·021·023 DONE → 024 (Steps 1–4 ✅, 5–7 offen) → 016 → 018 → 015 → 017.**
-024 Steps 5–7 (offen): Failsafe-Dispatch-Pilot + Arkana-Schema — **voller 4-Schichten-Testnetz-Mandat pro Step (Unit + Acceptance + INV-4b + manuelle UI) + Doku-Pflege.** Steps 1–4 (Direktiv-Wiring + RP) sind S86 erledigt.
+**Empfohlene Reihenfolge (akt. S88): 019·022·014·020·021·023·024 DONE → 016 → 018 → 015 → 017.**
+024 abgeschlossen (S88). **Offen nur** die manuelle UI-Verifikation (Failsafe aktivierbar + Direktiv-Anzeigen). Nächstes Stück: **016**.
 
 ---
 

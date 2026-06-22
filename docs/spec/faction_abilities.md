@@ -82,6 +82,61 @@ Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigen
 
 ---
 
+### Direktiv-Wiring-Status (Plan 024, S86 — Steps 1–4)
+
+Die aktive `round_choice`-Direktive liefert ihren Effekt **nicht** mehr direkt an
+die Konsumenten; alle lesen über drei kanonische Abfrage-Funktionen in
+`ability_engine.py` (nie direkt aus `session_state`):
+
+| Funktion | Rückgabe | deckt ab |
+|----------|----------|----------|
+| `get_active_round_choice_modifier(faction_dir, phase, use_melee)` | `dict[str,int]` (Keys `hit`/`wound`/`save`/`strength`/`ap`/`move`/`leadership`) | numerische Direktiven |
+| `get_active_round_choice_rerolls(faction_dir, phase, use_melee)` | `set[str]` (`reroll_save_1`/`reroll_hit_1`/`reroll_wound_1`) | Reroll-Direktiven |
+| `get_active_rp_modifiers(faction_dir)` | `dict[str,int\|bool]` (`rp_reroll`/`rp_bonus`) | Undying Legions P/S |
+
+`_WIRED_EFFECT_TYPES` ist die autoritative Liste der numerischen Effekttypen
+(`hit_modifier`, `wound_modifier`, `save_modifier`, `strength_modifier`,
+`ap_bonus`, `move_bonus`, `leadership_bonus`). Ein neuer Eintrag dort wirkt
+automatisch für **jede** Fraktion mit `round_choice`-Direktiven — kein
+fraktionsspezifischer Code. `charge_after_advance_allowed` prüft zusätzlich die
+aktive Direktive auf `type: advance_and_charge` (Sudden Storm S).
+
+Damit sind alle 12 Necron-Direktiv-Effekte engine-seitig verdrahtet (vorher nur
+3 von 12). Status der **Anzeige**-Verbindung je Effekt: Backlog #2 (Protokoll-Buff-Audit).
+Hinweise ohne UI-Konsument heute: `leadership` (Morale-Phase nicht voll verdrahtet,
+`# TODO` im Code).
+
+### Arkana — Dispatch- vs. Display-Status (Plan 024, S87 — Steps 5–6)
+
+12 Cryptek-Arkana liegen in `data/wh40k_9e/necrons/faction_abilities.yaml`
+(`category: arkana`). Alle haben strukturiertes `trigger`/`conditions`/`effect`
++ englischen `rule_text` (Schema = Doku/Display, **keine** Dispatch-Pflicht). Die
+Einstufung „dispatchbar" folgt aus dem Regeltext × vorhandenen Engine-Handlern,
+NICHT aus der YAML.
+
+- **1 dispatchbar** (`ability_type: activated`): **Failsafe Overcharger** — „+1
+  Attacks auf eine CANOPTEK-Einheit" mappt auf das vorhandene `buff_stat`-Muster
+  (`buff_stat_bonus`). Aktivierbar in der Command-Phase über `_render_activated_wargear`.
+- **11 bleiben `descriptive`** — jeweils, weil ein Engine-Subsystem **fehlt**:
+
+  | Arkanum | fehlendes Subsystem |
+  |---------|---------------------|
+  | Atavindicator, Metalodermal Tesla Weave, Quantum Orb | Mortal-Wound-Handler |
+  | Hypermaterial Ablator, Prismatic Obfuscatron | räumliches Proximity-Tracking |
+  | Photonic Transubjector | Damage-Nullify-Hook im Save-Loop |
+  | Dimensional Sanctum | Ability-Grant-Dispatch |
+  | Phylacterine Hive | Meta-Ability-Targeting |
+  | Countertemporal Nanomines | Halve-Movement-Modifier |
+  | Cryptogeometric Adjuster | Enemy-Direction-Hit-Debuff |
+  | Cortical Subjugator Scarabs | HI-Eligibility-Grant + Unit-Auswahl |
+
+  Sobald eines dieser Subsysteme existiert (eigener Plan), kann der betreffende
+  Eintrag aufgewertet werden — **ohne** `src/` anzufassen (alles aus YAML-Feldern).
+
+Punktkosten gegen `wahapedia_necrons/faction_overview.txt` korrigiert (alle 12 −5).
+
+---
+
 ## Kategorie 2 — Einmalig-Deklariert (`one_time`)
 
 **Mechanik:** Einmal pro Partie in der Befehlsphase aktiviert. Mehrere Stages möglich (Stage 1 diese Runde, Stage 2 folgerundeAuto-Übergang).
