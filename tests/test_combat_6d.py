@@ -1,7 +1,12 @@
 """Tests for Ziel-6d combat helpers: resolve_attack_modifiers, resolve_save, resolve_fnp,
 apply_damage_attacks."""
 
-from gameMechanic.combat import (
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+from gameMechanic.combat import (  # noqa: E402
     apply_damage_attacks,
     resolve_attack_modifiers,
     resolve_fnp,

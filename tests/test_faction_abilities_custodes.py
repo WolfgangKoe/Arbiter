@@ -1,6 +1,11 @@
 """Tests for Custodes Ka'tah loading via the generic round_choice pipeline."""
 
-from gameObjects.loader import (
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+from gameObjects.loader import (  # noqa: E402
     load_round_choice_abilities,
     load_round_choice_label,
 )

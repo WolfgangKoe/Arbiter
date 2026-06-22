@@ -1,10 +1,13 @@
 """Tests for Orks faction ability data — WAAAGH!, ObjSec migration, powers."""
 
+import sys
 from pathlib import Path
 
 import yaml
 
-from gameObjects.loader import load_faction_abilities, load_unit_abilities
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+from gameObjects.loader import load_faction_abilities, load_unit_abilities  # noqa: E402
 
 _DATA_ROOT = Path(__file__).parent.parent / "data" / "wh40k_9e"
 

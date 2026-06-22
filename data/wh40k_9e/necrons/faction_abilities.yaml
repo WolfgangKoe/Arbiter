@@ -157,86 +157,252 @@ abilities:
 # effect; modelling those + protocol condition-visibility is a follow-up plan.
 - id: wh40k_9e.necrons.arkana.failsafe_overcharger
   name_en: Failsafe Overcharger
-  ability_type: descriptive
+  ability_type: activated
   category: arkana
+  source: arkana
   power_delta: 2
-  cost_pts: 30
-  description: 'Nur für ein TECHNOMANT-Modell. In deiner Befehlsphase kannst du eine befreundete KANOPTECH-Einheit innerhalb von 9 Zoll um den Träger auswählen. Addiere bis zum Beginn deiner nächsten Befehlsphase 1 zum Attackenwert der Modelle der gewählten Einheit. Wenn die Einheit eine MONSTER- oder FAHRZEUG-Einheit ist, addiere W3 zum Attackenwert der Modelle statt 1.'
+  cost_pts: 25
+  active_text: "+1 Attacks · CANOPTEK in 9\""
+  rule_text: "TECHNOMANCER model only. In your Command phase, select one friendly
+    CANOPTEK unit within 9\" of the bearer. Until the start of your next Command
+    phase, add 1 to the Attacks characteristic of models in that unit (add D3
+    instead if it is a MONSTER or VEHICLE unit). The D3 variant is table-side only."
+  trigger:
+    timing: phase_any
+    phase: command
+    player: active
+  conditions:
+    - has_keywords: [TECHNOMANCER]
+      once_per_battle: false
+  effect:
+    type: multi
+    effects:
+      - type: buff_stat
+        target: friendly_canoptek
+        target_keywords: [CANOPTEK]
+        stat: attacks
+        modifier: 1
 - id: wh40k_9e.necrons.arkana.countertemporal_nanomines
   name_en: Countertemporal Nanomines
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 2
-  cost_pts: 30
-  description: 'Nur für ein CHRONOMANT-Modell. In deiner Fernkampfphase kannst du eine feindliche Einheit innerhalb von 18 Zoll um den Träger auswählen. Halbiere bis zum Beginn deines nächsten Zuges jeden Vorrücken- und Angriffswurf für die gewählte Einheit.'
+  cost_pts: 25
+  rule_text: "CHRONOMANCER model only. In your Shooting phase, you can select one enemy
+    unit within 18\" of the bearer. Until the start of your next turn, halve Advance
+    rolls and charge rolls made for that unit."
+  trigger:
+    timing: phase_any
+    phase: shooting
+    player: active
+  conditions:
+    - has_keywords: [CHRONOMANCER]
+  effect:
+    type: halve_movement
+    affects: [advance_roll, charge_roll]
+    target_keywords: []
 - id: wh40k_9e.necrons.arkana.atavindicator
   name_en: Atavindicator
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 25
-  description: 'Nur für ein PSYCHOMANT-Modell. Wähle am Ende deiner Bewegungsphase eine feindliche Einheit (ausgenommen FAHRZEUG-Einheiten) innerhalb von 18 Zoll um den Träger und wirf 3W6; wenn die Summe dem Moralwert der gewählten Einheit entspricht oder höher ist, erleidet die feindliche Einheit W3 tödliche Verwundungen.'
+  cost_pts: 20
+  rule_text: "PSYCHOMANCER model only. At the end of your Movement phase, select one enemy
+    unit (excluding VEHICLE units) within 18\" of the bearer and roll 3D6: if the total
+    is equal to or greater than that enemy unit's Leadership characteristic, it suffers
+    D3 mortal wounds."
+  trigger:
+    timing: phase_end
+    phase: movement
+    player: active
+  conditions:
+    - has_keywords: [PSYCHOMANCER]
+  effect:
+    type: mortal_wounds
+    roll: 3d6
+    threshold: target_leadership
+    wounds: d3
+    target_keywords: []
 - id: wh40k_9e.necrons.arkana.dimensional_sanctum
   name_en: Dimensional Sanctum
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 15
+  cost_pts: 10
   grants_ability: wh40k_9e.necrons.unit.dimensional_translocation
-  description: 'Der Träger erhält die Fähigkeit Dimensionale Translokation (Seite 80).'
+  rule_text: "The bearer gains the Dimensional Translocation ability."
+  trigger:
+    timing: persistent
+    phase: any
+    player: either
+  conditions: []
+  effect:
+    type: ability_grant
+    ability_id: wh40k_9e.necrons.unit.dimensional_translocation
 - id: wh40k_9e.necrons.arkana.hypermaterial_ablator
   name_en: Hypermaterial Ablator
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 25
-  description: 'In deiner Befehlsphase kannst du eine befreundete <DYNASTIE>-KERN- oder <DYNASTIE>-KANOPTECH-Einheit innerhalb von 9 Zoll um den Träger auswählen. Bis zum Beginn deiner nächsten Befehlsphase wird die gewählte Einheit bei jeder Fernkampfattacke gegen sich behandelt, als profitiere sie von leichter Deckung.'
+  cost_pts: 20
+  rule_text: "In your Command phase, you can select one friendly <DYNASTY> CORE or
+    <DYNASTY> CANOPTEK unit within 9\" of the bearer. Until the start of your next
+    Command phase, each time a ranged attack is made against that unit, if the attacker
+    is more than 12\" away, then the unit you selected is treated as having the benefits
+    of light cover."
+  trigger:
+    timing: phase_any
+    phase: command
+    player: active
+  conditions: []
+  effect:
+    type: cover_grant
+    cover_type: light_cover
+    target_keywords: [CORE]
+    target_keywords_any: [CORE, CANOPTEK]
 - id: wh40k_9e.necrons.arkana.cortical_subjugator_scarabs
   name_en: Cortical Subjugator Scarabs
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 15
-  description: 'Einmal pro Schlacht kannst du zu Beginn des Schritts Heroische Interventionen in der Angriffsphase deines Gegners eine befreundete <DYNASTIE>-Einheit innerhalb von 6 Zoll um den Träger auswählen. Sofern sich die Einheit nicht in Nahkampfreichweite einer feindlichen Einheit befindet, kann sie wie ein CHARAKTERMODELL eine Heroische Intervention durchführen.'
+  cost_pts: 10
+  rule_text: "Once per battle, at the start of the Heroic Interventions step of your
+    opponent's Charge phase, you can select one friendly <DYNASTY> unit within 6\" of
+    the bearer. Unless that unit is within Engagement Range of any enemy units, it can
+    perform a Heroic Intervention as if it were a CHARACTER."
+  trigger:
+    timing: phase_start
+    phase: charge
+    player: enemy
+  conditions:
+    - once_per_battle: true
+  effect:
+    type: hi_grant
+    target_keywords: [DYNASTY]
 - id: wh40k_9e.necrons.arkana.cryptogeometric_adjuster
   name_en: Cryptogeometric Adjuster
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 15
-  description: 'Zu Beginn der Fernkampfphase deines Gegners kannst du eine feindliche Einheit auswählen, die sich innerhalb von 12 Zoll befindet und für den Träger sichtbar ist. Ziehe bis zum Ende der Phase bei jeder Attacke eines Modells der gewählten Einheit 1 vom Trefferwurf ab.'
+  cost_pts: 10
+  rule_text: "At the start of your opponent's Shooting phase, you can select one enemy
+    unit that is within 12\" of and visible to the bearer. Until the end of the phase,
+    each time a model in that unit makes an attack, subtract 1 from that attack's hit
+    roll."
+  trigger:
+    timing: phase_start
+    phase: shooting
+    player: enemy
+  conditions: []
+  effect:
+    type: hit_debuff
+    modifier: -1
+    applies_to: attacks_made_by_target
+    target_keywords: []
 - id: wh40k_9e.necrons.arkana.metalodermal_tesla_weave
   name_en: Metalodermal Tesla Weave
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 20
-  description: 'Am Ende des Schritts Angriffe in der Angriffsphase deines Gegners kannst du eine feindliche Einheit auswählen, die in dieser Phase eine Angriffsbewegung innerhalb von 6 Zoll um den Träger beendet hat. Wirf einen W6; bei 2+ erleidet die feindliche Einheit W3 tödliche Verwundungen.'
+  cost_pts: 15
+  rule_text: "At the end of the Charges step of your opponent's Charge phase, you can
+    select one enemy unit that finished a charge move within 6\" of the bearer this
+    phase. Roll one D6: on a 2+, that enemy unit suffers D3 mortal wounds."
+  trigger:
+    timing: phase_end
+    phase: charge
+    player: enemy
+  conditions: []
+  effect:
+    type: mortal_wounds
+    roll: 1d6
+    threshold: 2
+    wounds: d3
+    target_keywords: []
 - id: wh40k_9e.necrons.arkana.photonic_transubjector
   name_en: Photonic Transubjector
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 20
-  description: 'Einmal pro Zug, wenn das erste Mal ein Schutzwurf für den Träger misslingt, wird der Schadenswert der Attacke zu 0 geändert.'
+  cost_pts: 15
+  rule_text: "Once per turn, the first time a saving throw is failed for the bearer,
+    the Damage characteristic of that attack is changed to 0."
+  trigger:
+    timing: persistent
+    phase: any
+    player: either
+  conditions:
+    - once_per_turn: true
+  effect:
+    type: damage_nullify
+    set_damage_to: 0
 - id: wh40k_9e.necrons.arkana.phylacterine_hive
   name_en: Phylacterine Hive
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 20
-  description: 'Nur für ein TECHNOMANT-Modell. Einmal pro Schlacht kannst du, wenn der Träger seine Fähigkeit Riten der Reanimation einsetzt, eine befreundete <DYNASTIE>-KANOPTECH-, <DYNASTIE>-DESTRUKTORKULT- oder TRIARCHAT-PRÄTORIANER-Einheit auswählen, die statt einer befreundeten <DYNASTIE>-KERN-Einheit von der Fähigkeit betroffen wird.'
+  cost_pts: 15
+  rule_text: "TECHNOMANCER model only. Once per battle, when the bearer uses its Rites
+    of Reanimation ability, you can select one friendly <DYNASTY> CANOPTEK, <DYNASTY>
+    DESTROYER CULT or TRIARCH PRAETORIAN unit to be affected by that ability instead
+    of one friendly <DYNASTY> CORE unit."
+  trigger:
+    timing: persistent
+    phase: any
+    player: active
+  conditions:
+    - has_keywords: [TECHNOMANCER]
+      once_per_battle: true
+  effect:
+    type: meta_ability
+    modifies_ability: rites_of_reanimation
 - id: wh40k_9e.necrons.arkana.prismatic_obfuscatron
   name_en: Prismatic Obfuscatron
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 20
-  description: 'Solange der Träger nicht das nächste infrage kommende Ziel ist, können feindliche Modelle ihn nicht als Ziel für Fernkampfattacken auswählen.'
+  cost_pts: 15
+  rule_text: "Unless the bearer is the closest eligible target, enemy models cannot
+    target it with ranged attacks."
+  trigger:
+    timing: persistent
+    phase: any
+    player: either
+  conditions: []
+  effect:
+    type: untargetable
+    condition: not_closest_eligible_target
 - id: wh40k_9e.necrons.arkana.quantum_orb
   name_en: Quantum Orb
   ability_type: descriptive
   category: arkana
+  source: arkana
   power_delta: 1
-  cost_pts: 20
-  description: 'Nur für ein PLASMANT-Modell. Einmal pro Schlacht kann der Träger in deiner Befehlsphase diesen Gegenstand der Kryptomanten-Arkana aktivieren. Wähle einen beliebigen Punkt auf dem Schlachtfeld innerhalb von 24 Zoll um den Träger. Wirf zu Beginn deiner nächsten Befehlsphase einen W6 für jede Einheit innerhalb von 6 Zoll um diesen Punkt.'
+  cost_pts: 15
+  rule_text: "PLASMANCER model only. Once per battle, in your Command phase, the bearer
+    can activate this item of Cryptek Arkana. If it does, select one point on the
+    battlefield anywhere within 24\" of the bearer and place a marker on that point.
+    At the start of your next Command phase, roll one D6 for each unit within 6\" of
+    the centre of that marker, subtracting 1 if the unit is a CHARACTER. On a 4-5,
+    that unit suffers D3 mortal wounds, and on a 6, that unit suffers 3 mortal wounds.
+    The marker is then removed."
+  trigger:
+    timing: phase_any
+    phase: command
+    player: active
+  conditions:
+    - has_keywords: [PLASMANCER]
+      once_per_battle: true
+  effect:
+    type: deferred_aoe_mortal_wounds
+    aoe_radius_inches: 6

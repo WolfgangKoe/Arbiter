@@ -673,6 +673,43 @@ def test_buff_stat_bonus_generic_strength() -> None:
     assert buff_stat_bonus("Orks", unit, "toughness") == 0
 
 
+# ---------------------------------------------------------------------------
+# Failsafe Overcharger dispatch pilot (Plan 024 Step 5)
+# ---------------------------------------------------------------------------
+
+_FAILSAFE_ID = "wh40k_9e.necrons.arkana.failsafe_overcharger"
+
+
+def test_failsafe_overcharger_loaded_as_activated() -> None:
+    from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
+
+    abilities = load_faction_abilities("necrons")
+    failsafe = next((a for a in abilities if a.id == _FAILSAFE_ID), None)
+    assert failsafe is not None
+    assert failsafe.ability_type == "activated"
+    assert failsafe.effect.type == "multi"
+
+
+def _failsafe_activated_session() -> _S:
+    return _S(
+        activated_abilities={"Necrons": {"ability_id": _FAILSAFE_ID, "round_activated": 1}},
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+    )
+
+
+def test_failsafe_overcharger_buff_stat_applied() -> None:
+    _eng.st.session_state = _failsafe_activated_session()
+    canoptek = _make_unit(rules=[], keywords=["NECRON", "CANOPTEK"])
+    assert buff_stat_bonus("Necrons", canoptek, "attacks") == 1
+
+
+def test_failsafe_overcharger_skips_non_canoptek_unit() -> None:
+    _eng.st.session_state = _failsafe_activated_session()
+    warrior = _make_unit(rules=[], keywords=["NECRON", "CORE"])
+    assert buff_stat_bonus("Necrons", warrior, "attacks") == 0
+
+
 def test_charge_after_advance_requires_core_or_character() -> None:
     _eng.st.session_state = _orks_activated_session()
     unit_plain = _make_unit(rules=[], keywords=["ORK"])

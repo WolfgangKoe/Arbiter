@@ -105,10 +105,14 @@ def test_living_metal_ability_id_and_trigger() -> None:
 
 
 def test_load_faction_abilities_excludes_descriptive_arkana() -> None:
-    # Arkana are descriptive (no trigger/effect) and must be skipped, not built
-    # into Ability objects — building one would KeyError on the required fields.
-    ids = {a.id for a in load_faction_abilities("necrons")}
-    assert not any(i.startswith("wh40k_9e.necrons.arkana.") for i in ids)
+    # Descriptive arkana (no trigger/effect) must be skipped, not built into
+    # Ability objects. The Failsafe Overcharger is the exception: it is now
+    # ability_type: activated (Plan 024 Step 5) and IS dispatched, so it loads.
+    abilities = load_faction_abilities("necrons")
+    descriptive = [a.id for a in abilities if a.ability_type == "descriptive"]
+    assert descriptive == []
+    ids = {a.id for a in abilities}
+    assert "wh40k_9e.necrons.arkana.failsafe_overcharger" in ids
 
 
 def test_load_faction_abilities_missing_file_returns_empty() -> None:
@@ -246,8 +250,8 @@ def test_load_points_includes_wargear() -> None:
 def test_load_points_includes_arkana_cost() -> None:
     # Arkana costs now live in faction_abilities.yaml (cost_pts), read generically.
     pts = load_points("necrons")
-    assert pts["wh40k_9e.necrons.arkana.quantum_orb"] == 20
-    assert pts["wh40k_9e.necrons.arkana.failsafe_overcharger"] == 30
+    assert pts["wh40k_9e.necrons.arkana.quantum_orb"] == 15
+    assert pts["wh40k_9e.necrons.arkana.failsafe_overcharger"] == 25
 
 
 def test_load_points_missing_faction_returns_empty() -> None:
