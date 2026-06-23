@@ -130,6 +130,56 @@ def test_init_state_sets_round_to_one() -> None:
     assert session["round"] == 1
 
 
+def test_round_choice_directive_persists_across_mid_round_turn_switch() -> None:
+    """A command protocol stays active for the whole battle round (both turns).
+
+    Switching from the first player's turn to the second player's must NOT clear the
+    round-choice protocol/directive — defensive directive effects (e.g. Eternal Guardian
+    save bonus, Undying Legions RP re-roll) must apply during the opponent's turn.
+    Regression: previously cleared per-turn in _reset_turn_state.
+    """
+    session = _phase_session(phase_idx=7, active="Necrons", round_num=1)
+    session["p1_faction_dir"] = "necrons"
+    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_necrons"] = "primary"
+    next_phase()  # Necrons morale done → switch to Orks, still battle round 1
+    assert session["active"] == "Orks"
+    assert session["round"] == 1
+    assert (
+        session["round_choice_active_necrons"]
+        == "wh40k_9e.necrons.faction.protocol_undying_legions"
+    )
+    assert session["round_choice_directive_necrons"] == "primary"
+
+
+def test_round_choice_directive_cleared_at_new_battle_round() -> None:
+    """When both players have acted and a new battle round begins, round-choice resets."""
+    session = _phase_session(phase_idx=7, active="Orks", round_num=1)
+    session["p1_faction_dir"] = "necrons"
+    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_necrons"] = "primary"
+    session["round_choice_extra_directive_necrons"] = "secondary"
+    next_phase()  # Orks morale done → back to first player → battle round 2
+    assert session["active"] == "Necrons"
+    assert session["round"] == 2
+    assert session["round_choice_active_necrons"] is None
+    assert session["round_choice_directive_necrons"] is None
+    assert session["round_choice_extra_directive_necrons"] is None
+
+
+def test_phase_change_clears_group_autosel_guard() -> None:
+    """Group auto-select guard is phase-scoped.
+
+    Regression: the guard was never cleared on a phase/turn change, so on re-selecting a
+    single-group unit (e.g. Necron Warriors) in a later phase the auto-select was skipped,
+    leaving selected_model_group=None and blocking enemy target selection.
+    """
+    session = _phase_session(phase_idx=1, active="Necrons")
+    session["group_autosel_done_u1"] = True
+    next_phase()  # Command → Movement: _reset_phase_state runs
+    assert "group_autosel_done_u1" not in session
+
+
 # ---------------------------------------------------------------------------
 # active_buffs and command_ability_state
 # ---------------------------------------------------------------------------

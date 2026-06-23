@@ -506,7 +506,7 @@ def _reset_phase_state() -> None:
     st.session_state.veil_awaiting_confirm = False
     st.session_state.veil_core_target_uid = None
     for k in list(st.session_state.keys()):
-        if k.startswith("applied_triggered_"):
+        if k.startswith("applied_triggered_") or k.startswith("group_autosel_done_"):
             del st.session_state[k]
     st.session_state.used_stratagem_ids = set()
     st.session_state.fight_current_player = None
@@ -542,12 +542,6 @@ def _reset_turn_state() -> None:
             state["movement_choice"] = "stationary"
             state["movement_chosen"] = False
             state["active_buffs"] = []
-    for slot in ("p1_faction_dir", "p2_faction_dir"):
-        fdir = st.session_state.get(slot)
-        if fdir:
-            st.session_state[f"round_choice_active_{fdir}"] = None
-            st.session_state[f"round_choice_directive_{fdir}"] = None
-            st.session_state[f"round_choice_extra_directive_{fdir}"] = None
     # Stage transition: if the active ability has a next_stage_id and a new round began, advance
     from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
 
@@ -567,6 +561,21 @@ def _reset_turn_state() -> None:
     st.session_state.activated_abilities = activated
 
 
+def _reset_round_choice_state() -> None:
+    """Clear round-choice protocol + directive at the start of a new battle round.
+
+    Round-choice state is battle-round-scoped: a command protocol stays active for the
+    whole battle round (both players' turns), so it must NOT be cleared on the mid-round
+    turn switch. Clearing only here lets each player re-select at the next round's start.
+    """
+    for slot in ("p1_faction_dir", "p2_faction_dir"):
+        fdir = st.session_state.get(slot)
+        if fdir:
+            st.session_state[f"round_choice_active_{fdir}"] = None
+            st.session_state[f"round_choice_directive_{fdir}"] = None
+            st.session_state[f"round_choice_extra_directive_{fdir}"] = None
+
+
 def next_phase() -> None:
     idx = st.session_state.phase_idx
     num = len(PHASES)
@@ -577,8 +586,11 @@ def next_phase() -> None:
         st.session_state.phase_idx = 1
         _reset_phase_state()
     elif idx >= num - 1:  # Morale done → switch player
-        st.session_state.active = second if st.session_state.active == first else first
-        st.session_state.round += 1 if st.session_state.active == first else 0
+        new_active = second if st.session_state.active == first else first
+        st.session_state.active = new_active
+        if new_active == first:  # both players have acted → a new battle round begins
+            st.session_state.round += 1
+            _reset_round_choice_state()
         _reset_turn_state()
         _reset_phase_state()
         st.session_state.phase_idx = 1

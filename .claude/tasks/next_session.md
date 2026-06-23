@@ -19,88 +19,50 @@
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
-`streamlit run src/app.py` (Port 8501). Branch `dev` (Arbeit), `main` (nur per PR).
+`streamlit run src/app.py` (Port 8501; **venv aktivieren:** `source .venv/bin/activate`).
+Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
 
-## Aktueller Stand (nach S89, 2026-06-23)
+## Aktueller Stand (nach S90, 2026-06-23)
 
-**S89 (Branch `feature/016-protocol-rp-effects`) — overview.md-Geisterbug + Undying-Legions-Datenbug** (1123 grün/93 %, INV-4b grün, lint sauber):
-- **A — overview.md Geister-Session GEFIXT** (Commit `785aeb0`, eigener Branch `fix/overview-metrics-overwrite`):
-  `parse_usage_lines` zählte `<synthetic>`-Stubs (z. B. „API Error: 529 Overloaded", Null-Usage) als Antwort →
-  Session mit nur solchem Stub erschien als 0k-Geisterzeile (`▓`-Mix). Fix: `model == "<synthetic>"` überspringen
-  (Konstante `SYNTHETIC_MODEL`). +2 Regressionstests. End-to-End belegt (bae8 weg).
-- **B — Plan 016 GESTOPPT + refokussiert (Daten-/Regel-Bug):** Plan-016-Prämisse falsch. Verifiziert gegen
-  `wahapedia_necrons/faction_overview.txt`: Undying Legions **D1** = *Living-Metal*-Bonus („+1 additional lost wound
-  each Living Metal use"), **D2** = RP-Reroll **eines** Würfels. YAML modellierte `secondary` fälschlich als
-  `rp_bonus` „+1 model returned" (Phantom-Effekt, **kein Konsument** in src). Stakeholder-Entscheid: Datenbug zuerst,
-  Wiring-Schema „Direktive zielt auf Ability-Trigger".
-  - **YAML** ([faction_abilities.yaml:119-138](../../data/wh40k_9e/necrons/faction_abilities.yaml#L119)): `secondary.effect`
-    `rp_bonus` → **`heal_bonus`** mit `target_rule: livingMetal, value: 1`; Labels engl. präzisiert (primary „one die").
-  - **Engine** ([ability_engine.py](../../src/gameMechanic/ability_engine.py)): neue Fn `get_active_heal_bonus(faction_dir, unit)`
-    (matcht `target_rule` gegen `unit.rules`); Heil-Pfad in `execute_effect` addiert Bonus (KeyError-guard für Minimal-State);
-    Phantom-`rp_bonus`-Zweig aus `get_active_rp_modifiers` entfernt. +5 Engine-Tests (alt `test_rp_bonus…` auf Sollzustand umgestellt).
-  - **Anzeige:** `_rp_directive_hints` (rein, RP-Block-Caption „re-roll one RP die") in `_common.py`; Living-Metal-Bonus-Caption
-    in `armyCard._render_triggered_abilities`. **Wortlaut datengetrieben** (Label aus YAML) — INV-4b-Falle „Protocol"-Literal
-    vermieden (RP-Abkürzung).
+**S90 (Branch `feature/016-protocol-rp-effects`) — 3 Direktiv-/State-Bugs gefixt** (1126 grün/93 %,
+INV-4b grün). Gefunden per manueller UI-Verifikation + 3 read-only Investigations-Subagenten:
+- **Bug 1+4 (Direktive im 2. Zug tot):** Round-Choice-State ist KAMPFRUNDEN-weit (beide Züge), wurde
+  aber pro Zug in `_reset_turn_state` gelöscht → Eternal-Guardian-Save + Undying-Legions-RP-Reroll
+  fielen auf Verteidigung (Gegnerzug) aus. Fix: neuer `_reset_round_choice_state`, nur am Kampfrunden-
+  Anfang (`next_phase`, `active==first_player`). Regelbeleg: faction_overview.txt:564-568, core_rules.txt:639/667.
+- **Bug 5 (Zielauswahl blockiert ab Runde 2):** `group_autosel_done_*`-Guard nie beim Phasenwechsel
+  gelöscht → Single-Group-Einheiten (Warriors) übersprangen Auto-Select, `selected_model_group=None`
+  sperrte Ziele. Fix: Guard in `_reset_phase_state` mitlöschen. (Workaround war Ab-/Neuwählen.)
+- **Bug 2 (Living Metal heilt nur 1):** Code korrekt (+1 wird addiert); `needs_healing` deckelt auf
+  Max-HP → Bonus nur bei ≥2 verlorenen Wunden sichtbar; zusätzlich durch Bug 4 maskiert. Per Bug-4-Fix abgesichert.
+- +3 Regressionstests (Persistenz über Zugwechsel · Reset bei neuer Runde · Autosel-Guard-Clear).
 
-### ⚠️ Carry-over S89 (offen)
-1. **Manuelle UI-Verifikation (PFLICHT, Render-Code):** (a) RP-Block zeigt „⟳ … re-roll one RP die" wenn Undying-Legions-
-   **primary** aktiv + Necron-Verteidiger Modelle verliert; (b) Command-Phase: Living-Metal-Apply zeigt „↑ Directive active:
-   +1 wound per Living Metal use" wenn **secondary** aktiv; heilt dann 2 statt 1.
-2. **Test-Schuld:** `_rp_directive_hints` + die armyCard-Caption haben **keinen** eigenen Test (Display-Wrapper; Engine-Logik
-   ist getestet). Kleiner Test in `tests/uiLayout/test_common.py` nachziehen (gemeinsamer streamlit-Mock, session_state setzen).
-3. **Doku-Schuld:** Undying-Legions-Befund in `docs/spec/rules_insights.md` festhalten (D1=Living Metal, nicht RP-Modell-Rückkehr);
-   `faction_abilities.md` ggf. nachziehen. Backlog #2-Zeile „Undying Legions P/S" entsprechend korrigiert.
-4. **Plan-016-Rest (verschoben):** Dynastiebonus-Kennzeichnung (alter Step 4) + restliche Direktiv-Anzeigen (backlog #2).
-
-## Aktueller Stand (nach S88, 2026-06-22)
-
-**S88 (Branch `feature/024-arkana-protocol-effect-modeling`) — Plan 024 Step 7 DONE → Plan 024 VOLLSTÄNDIG** (Commit `300c094`,
-1116 grün/93 %, INV-4b grün, ruff/black/isort sauber):
-- **Step 7 (Doku-only):** `faction_abilities.md` neuer Abschnitt „Direktiv-Wiring-Status" (3 kanonische
-  Abfrage-Fn + `_WIRED_EFFECT_TYPES`) + „Arkana Dispatch-/Display-Status" (1 dispatchbar, 11 begründet
-  `descriptive` mit Subsystem-Tabelle); `backlog.md` #2 Engine-Wiring 12/12 abgehakt, Anzeige = Rest;
-  Plans-README + Reihenfolge auf 024 DONE.
-- **⚠️ BEFUND (manueller UI-Test übersprungen, Stakeholder-Entscheid):** Failsafe Overcharger ist
-  engine-dispatchbar **aber hat keinen UI-Aktivator** → Step-5-Plan-Zeile „aktivierbar via
-  `_render_activated_wargear`" ist faktisch nicht durchführbar. Kein Regressions-Bug (Picker war
-  Plan-024-Scope-Out), aber Anzeige-/Aktivator-Lücke. Details + Follow-up s. „Nächste Session".
-
-**S87 — Plan 024 Steps 5–6 DONE** (Commit `7b6a23e`,
-1116 grün/93 %, INV-4b unverändert 11):
-- **Step 5:** `failsafe_overcharger` → `ability_type: activated`, dispatcht +1 Attacks auf CANOPTEK über die
-  **vorhandene** `buff_stat`/`multi`-Infra — **kein STOP, kein neues Dataclass-Feld** (Befund: flache
-  `effect:`-Form aus dem Plan würde NICHT dispatchen; `_active_effects_for_faction` verlangt `effect.type==multi`).
-- **Step 6:** alle 11 restlichen Arkana mit engl. `rule_text` + `trigger/conditions/effect` (bleiben
-  `descriptive`, kein Dispatch); **alle 12** Kosten −5 auf Wahapedia (Step-6-Fleißarbeit per Sonnet-Subagent).
-- 2 vorher-grüne Loader-Tests auf neuen Sollzustand nachgezogen (failsafe lädt jetzt; quantum_orb 15, failsafe 25).
-
-### ▶ Nächste Session
-1. **NEUER Follow-up (aus S88-Befund) — Failsafe/Arkana-Aktivator-UI fehlt:** `activated`-Einträge aus
-   `faction_abilities.yaml` mit `once_per_battle: false` werden bei `round_choice`-Fraktionen (Necrons/Custodes)
-   **nirgends** als Aktivator gerendert: `armyCard._render_once_per_battle_ability_ui` (armyCard.py:356-364)
-   `return`-t früh für round_choice-Fraktionen UND surface-t nur `once_per_battle: true`; die commandPhase-
-   Pfade lesen nur `unit_abilities.yaml`/`wargear.yaml`, nie `faction_abilities.yaml`. Eigener kleiner Plan:
-   generischen Aktivator + CANOPTEK-Target-Picker (war Plan-024-Scope-Out). **Erst danach** ist der
-   manuelle Failsafe-UI-Test (Command-Phase aktivierbar, +1 Attacks auf CANOPTEK) durchführbar.
-2. **Manueller UI-Test (re-skopiert, ohne Failsafe):** anzeigbare Direktiven prüfen — Eternal Guardian P
-   (SAVE+1 grün), Hungry Void P (HIT+1), Vengeful Stars P (WOUND+1) + Arkana zeigen engl. `rule_text` in
-   `armyList`. Steps-1–4-Direktiven S+1/AP/Move/Reroll/RP sind engine-verdrahtet, **Anzeige offen** (backlog #2).
-3. **BUG `docs/metrics/overview.md`:** wird nach einem Lauf wieder mit Müll (0-Werte) überschrieben — echte Werte
-   nur kurz sichtbar, dann „gelöscht". Ursache finden (token_report/Hook-Reihenfolge?) und fixen.
-4. Danach Queue: 016 → 018 → 015 → 017.
+### ⚠️ Carry-over S90 (offen)
+1. **Manuelle UI-Verifikation (PFLICHT, Render-Code) — ERNEUT nach Fix:** (a) Eternal-Guardian-Save zeigt
+   „(defender)" wenn Necrons im GEGNERZUG beschossen werden; (b) Undying-Legions-Primary: RP-Reroll-Hint
+   erscheint wenn Necron-Einheit im Gegnerzug Modelle verliert; (c) Living-Metal-Secondary: heilt 2 bei
+   livingMetal-Einheit mit ≥2 verlorenen Wunden; (d) Bug 5: Runde-2-Fernkampf, Warrior wählen → Ziel sofort wählbar.
+2. **Bug 3 — Zweitspieler-Direktiv-Wahl (NEUER Plan-016-Step, Stakeholder „später"):** Direktive nur für
+   aktiven Spieler in Befehlsphase wählbar (armyCard.py:296,307). Zweitspieler kann am Rundenanfang
+   (= Gegner-Befehlsphase) nicht wählen. Step: Direktiv-Buttons entkoppeln (wählbar sobald Protokoll aktiv
+   + Direktive offen, jede Phase) — neue UI-Logik, **eigene Freigabe**.
+3. **Plan 016 Anzeige-Rest (Subagent-Slicing → `docs/audit/plans/016`):** *Group A* (~35k) Eternal Guardian S
+   + Conquering Tyrant S reroll-Captions, gemeinsamer `_round_choice_reroll_hints`-Helper (Muster: `_rp_directive_hints`).
+   *Group C* (~20k) Sudden Storm P „+N\" Move"-Badge (movementPhase) + Conquering Tyrant P Morale (Morale-UI fehlt evtl. → prüfen).
+   **Steps 4/5 (Hungry Void S +1S, Vengeful Stars S AP-1) → Plan 017** (Stakeholder-Entscheid: Mathe+Anzeige
+   unverdrahtet, überschneidet SAVE-AP-Badge). Dynastiebonus-Anzeige bereits erledigt (`_render_extra_round_choice`).
+   Voice of the Triarch = eigener Plan.
+4. **Reihenfolge:** Plan 016 Anzeige-Rest (Group A → C) → 018 → 015 → 017 (017 nimmt Steps 4/5 auf).
 
 ### Offene Fragen / Retro-Vormerke
-- **Follow-up ADR-0006 (S86):** `CLAUDE.md` (Token-Disziplin/Subagent-Muster) um einen Verweis auf
-  [ADR-0006](../../docs/governance/decisions/0006-subagent-grossausgaben-als-datei.md) ergänzen —
-  Subagent-Großausgaben als Datei zurückgeben (Verweis statt Volltext) + Permanent/Temporär-Deklaration.
-- **ADR-0005 geklärt (S87):** Freigabe-Gate feuert **auch im Subagent** — Subagent verweigert korrekt das
-  Selbst-Setzen. Marker verfällt bei **SessionStart** (nicht Stop) → bei Session-Grenzen mitten in der Arbeit
-  neu `touch .claude/.freigabe` nötig (in S87 passiert).
-- **Doku-Drift:** `architecture.md` §session_state — `group_wounds` universell (backlog §4b).
-- **INV-4b Restschuld:** noch `dynasty` (movementPhase), `gloom/prism` (psychicPhase → Cluster 5),
-  `necrons`-Defaults (game_state/loader). `arkana` erledigt (S84). Ratchet weiter schrumpfen.
+- **Doku-Sync ausstehend:** backlog #2 / ziel6 6e um Bug-3-Step + „Reset kampfrunden-weit" ergänzen (in S90 nur
+  in dieser Datei). Bei nächstem Full-Wind-down nachziehen.
+- **ADR-0006-Verweis (S86):** `CLAUDE.md` Token-Disziplin um Verweis auf ADR-0006 ergänzen (Subagent-Großausgaben als Datei).
+- **INV-4b Restschuld:** `dynasty` (movementPhase), `gloom/prism` (psychicPhase → Cluster 5), `necrons`-Defaults
+  (game_state/loader). Ratchet weiter schrumpfen.
+- **Mock-Fragilität (backlog §4):** geteilte streamlit-Fixture (conftest) statt per-Datei-Mock.
 
 ---
 
@@ -113,5 +75,3 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 - **Token-Report:** `python tools/token_report.py --write` → `docs/metrics/overview.md`.
 - **History-Rotation:** `python tools/rotate_history.py --session <N> --summary "…"`.
 - **Freigabe-Gate:** Edit/Write blockiert bis `touch .claude/.freigabe`; SessionStart re-armt.
-</content>
-</invoke>
