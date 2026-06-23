@@ -291,7 +291,6 @@
     "subagent_share": 30.278896139733103,
     "by_tier": {
       "Opus": 20718379,
-      "<synthetic>": 0,
       "Sonnet": 8997701
     },
     "subagents": [
@@ -433,8 +432,7 @@
     "peak_context": 148479,
     "subagent_share": 2.2579125929062966,
     "by_tier": {
-      "Sonnet": 12051928,
-      "<synthetic>": 0
+      "Sonnet": 12051928
     },
     "subagents": [
       {
@@ -491,7 +489,6 @@
     "subagent_share": 52.34987138934171,
     "by_tier": {
       "Sonnet": 93615,
-      "<synthetic>": 0,
       "Opus": 11592296,
       "Haiku": 12838495
     },
@@ -533,7 +530,6 @@
     "subagent_share": 10.033310271424671,
     "by_tier": {
       "Sonnet": 7757977,
-      "<synthetic>": 0,
       "Haiku": 865189
     },
     "subagents": [
@@ -571,7 +567,6 @@
     "subagent_share": 27.983789324203308,
     "by_tier": {
       "Opus": 6631257,
-      "<synthetic>": 0,
       "Sonnet": 2576749
     },
     "subagents": [
@@ -591,7 +586,6 @@
     "subagent_share": 9.344550351095512,
     "by_tier": {
       "Sonnet": 15117138,
-      "<synthetic>": 0,
       "Haiku": 1558239
     },
     "subagents": [
@@ -735,7 +729,6 @@
     "subagent_share": 5.796610980662692,
     "by_tier": {
       "Opus": 15195651,
-      "<synthetic>": 0,
       "Sonnet": 935033
     },
     "subagents": [
@@ -898,7 +891,6 @@
     "subagent_share": 8.144707299025177,
     "by_tier": {
       "Opus": 22447184,
-      "<synthetic>": 0,
       "Sonnet": 1990367
     },
     "subagents": [
@@ -961,10 +953,10 @@
   "a977e6b5-a073-4d4b-a43e-1616a50d55e4": {
     "started_at": "2026-06-21T11:14:12.565Z",
     "task": "Start session. Was steht als nächstes im Backlog auf \"zu tun\"? bitte Auflisten und Tokenschätzung bitte.",
-    "peak_context": 152616,
-    "subagent_share": 18.77226739199358,
+    "peak_context": 159749,
+    "subagent_share": 17.238689085571306,
     "by_tier": {
-      "Opus": 12971467,
+      "Opus": 14392115,
       "Sonnet": 2997792
     },
     "subagents": [
@@ -981,6 +973,162 @@
         "tier": "Sonnet",
         "peak_context": 79713,
         "started_at": "2026-06-21T11:14:12.565Z"
+      }
+    ]
+  },
+  "e9855b01-8352-4d98-8da6-5d1ede512e5b": {
+    "started_at": "2026-06-21T13:27:36.027Z",
+    "task": "start next session. Was sind die Todos. Bitte mit TOken Sesssion. Aus der Retro gibt es foglende Maßnahmen. 1. Im Absch…",
+    "peak_context": 162515,
+    "subagent_share": 6.100665696669082,
+    "by_tier": {
+      "Opus": 18281052,
+      "Sonnet": 1187725
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Schicht-2 Acceptance-Tests schreiben",
+        "tier": "Sonnet",
+        "peak_context": 47509,
+        "started_at": "2026-06-21T13:27:36.027Z"
+      }
+    ]
+  },
+  "92d944c7-a9d1-4071-8e8f-8ae2a2ed21f4": {
+    "started_at": "2026-06-21T18:33:16.599Z",
+    "task": "start session",
+    "peak_context": 161757,
+    "subagent_share": 3.825725708154367,
+    "by_tier": {
+      "Opus": 15965320,
+      "Sonnet": 635086
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Research two-orb shared-state bug",
+        "tier": "Sonnet",
+        "peak_context": 29033,
+        "started_at": "2026-06-21T18:33:16.599Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft Arkana YAML migration",
+        "tier": "Sonnet",
+        "peak_context": 26000,
+        "started_at": "2026-06-21T18:33:16.599Z"
+      }
+    ]
+  },
+  "73d2ad0c-b893-414f-9771-fbca6a43f8c9": {
+    "started_at": "2026-06-21T20:47:30.245Z",
+    "task": "start session",
+    "peak_context": 185186,
+    "subagent_share": 10.29469868364448,
+    "by_tier": {
+      "Opus": 13395463,
+      "Sonnet": 1537281
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Investigate orb revive-button bug",
+        "tier": "Sonnet",
+        "peak_context": 30714,
+        "started_at": "2026-06-21T20:47:30.245Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Research + draft Plan 024",
+        "tier": "Sonnet",
+        "peak_context": 73681,
+        "started_at": "2026-06-21T20:47:30.245Z"
+      }
+    ]
+  },
+  "08bbe656-4873-4623-b3cf-e6445fece12d": {
+    "started_at": "2026-06-21T21:51:05.950Z",
+    "task": "start session",
+    "peak_context": 172490,
+    "subagent_share": 16.748522281908063,
+    "by_tier": {
+      "Opus": 23825986,
+      "Sonnet": 4793309
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Arkana-Schema-Recherche Step 6",
+        "tier": "Sonnet",
+        "peak_context": 37455,
+        "started_at": "2026-06-21T21:51:05.950Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Doku-Drift-Sweep Backlog/Plans",
+        "tier": "Sonnet",
+        "peak_context": 66446,
+        "started_at": "2026-06-21T21:51:05.950Z"
+      }
+    ]
+  },
+  "6b94d085-ad46-420f-97b3-7940398cd72d": {
+    "started_at": "2026-06-21T22:21:12.574Z",
+    "task": "start session",
+    "peak_context": 144823,
+    "subagent_share": 18.628008031082746,
+    "by_tier": {
+      "Opus": 16274636,
+      "Sonnet": 3725656
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Arkana Batch 1 YAML",
+        "tier": "Sonnet",
+        "peak_context": 28566,
+        "started_at": "2026-06-21T22:21:12.574Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Step 6 Arkana YAML + Tests",
+        "tier": "Sonnet",
+        "peak_context": 34333,
+        "started_at": "2026-06-21T22:21:12.574Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Restliche 10 Arkana + Tests",
+        "tier": "Sonnet",
+        "peak_context": 56799,
+        "started_at": "2026-06-21T22:21:12.574Z"
+      }
+    ]
+  },
+  "2813de22-ab1b-4263-bb6d-6fd5ba54d52b": {
+    "started_at": "2026-06-22T11:28:14.199Z",
+    "task": "start session",
+    "peak_context": 156492,
+    "subagent_share": 4.110197072413753,
+    "by_tier": {
+      "Opus": 18488254,
+      "Sonnet": 792476
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Verify Undying Legions + Living Metal rules",
+        "tier": "Sonnet",
+        "peak_context": 26885,
+        "started_at": "2026-06-22T11:28:14.199Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Investigate overview.md overwrite bug",
+        "tier": "Sonnet",
+        "peak_context": 43706,
+        "started_at": "2026-06-22T11:28:14.199Z"
       }
     ]
   }

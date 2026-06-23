@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-21 15:24 CEST
+Stand: 2026-06-23 21:17 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,31 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-21 13:14 a977  ████████████ 153k ⛔    █░░░░░  19%    ██████████··
+06-22 13:28 2813  ████████████ 156k ⛔    ░░░░░░   4%    ████████████
+         SA_1·  ██░░░░░░░░░░  27k ✅    Verify Undying Legions + Living Me…
+         SA_2·  ███░░░░░░░░░  44k ✅    Investigate overview.md overwrite …
+----------------- ---------------------- -------------- ------------
+06-22 00:21 6b94  ████████████ 145k ⚠️   █░░░░░  19%    ██████████··
+         SA_1·  ██░░░░░░░░░░  29k ✅    Arkana Batch 1 YAML
+         SA_2·  ███░░░░░░░░░  34k ✅    Step 6 Arkana YAML + Tests
+         SA_3·  █████░░░░░░░  57k ✅    Restliche 10 Arkana + Tests
+----------------- ---------------------- -------------- ------------
+06-21 23:51 08bb  ████████████ 172k ⛔    █░░░░░  17%    ██████████··
+         SA_1·  ███░░░░░░░░░  37k ✅    Arkana-Schema-Recherche Step 6
+         SA_2·  █████░░░░░░░  66k ✅    Doku-Drift-Sweep Backlog/Plans
+----------------- ---------------------- -------------- ------------
+06-21 22:47 73d2  ████████████ 185k ⛔    █░░░░░  10%    ███████████·
+         SA_1·  ██░░░░░░░░░░  31k ✅    Investigate orb revive-button bug
+         SA_2·  ██████░░░░░░  74k ✅    Research + draft Plan 024
+----------------- ---------------------- -------------- ------------
+06-21 20:33 92d9  ████████████ 162k ⛔    ░░░░░░   4%    ████████████
+         SA_1·  ██░░░░░░░░░░  29k ✅    Research two-orb shared-state bug
+         SA_2·  ██░░░░░░░░░░  26k ✅    Draft Arkana YAML migration
+----------------- ---------------------- -------------- ------------
+06-21 15:27 e985  ████████████ 163k ⛔    ░░░░░░   6%    ███████████·
+         SA_1·  ████░░░░░░░░  48k ✅    Schicht-2 Acceptance-Tests schreib…
+----------------- ---------------------- -------------- ------------
+06-21 13:14 a977  ████████████ 160k ⛔    █░░░░░  17%    ██████████··
          SA_1·  ███░░░░░░░░░  33k ✅    Silent-King target split research
          SA_2·  ██████░░░░░░  80k ✅    Dice display 7+ gap analysis
 ----------------- ---------------------- -------------- ------------
