@@ -21,6 +21,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     check_trigger,
     execute_effect,
     get_activated_command_abilities,
+    get_active_heal_bonus,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
     get_active_rp_modifiers,
@@ -278,6 +279,29 @@ def test_execute_effect_heal_heals_unit() -> None:
     ability = _living_metal_ability()
     result = execute_effect(ability, "test.unit", "Necrons", unit)
     assert result is True
+    assert session["p1_units"]["test.unit"]["current_wounds"] == 5
+
+
+def test_execute_effect_heal_adds_active_directive_bonus() -> None:
+    """Undying Legions S (+1 wound per Living Metal use) lifts the heal amount."""
+    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="necrons",
+        p1_units={"test.unit": {"current_wounds": 3, "models": 2, "destroyed": False}},
+    )
+    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_necrons"] = "secondary"
+    _mut.st.session_state = session
+    _st_mock.session_state = session
+    unit = _make_unit(rules=["livingMetal"])
+    result = execute_effect(
+        unit=unit, ability=_living_metal_ability(), uid="test.unit", faction="Necrons"
+    )
+    assert result is True
+    # base 1 + directive 1 = 2 wounds healed: 3 -> 5
     assert session["p1_units"]["test.unit"]["current_wounds"] == 5
 
 
@@ -552,14 +576,40 @@ def test_rp_reroll_undying_legions_p() -> None:
     assert get_active_rp_modifiers("necrons") == {"rp_reroll": True}
 
 
-def test_rp_bonus_undying_legions_s() -> None:
+def test_rp_modifiers_empty_for_undying_legions_secondary() -> None:
+    # Secondary is a Living-Metal heal_bonus per RAW, NOT a Reanimation-pool
+    # effect — get_active_rp_modifiers must not surface it (S89 data fix).
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
-    assert get_active_rp_modifiers("necrons") == {"rp_bonus": 1}
+    assert get_active_rp_modifiers("necrons") == {}
 
 
 def test_rp_modifier_empty_when_other_directive() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
     assert get_active_rp_modifiers("necrons") == {}
+
+
+def test_heal_bonus_undying_legions_secondary_applies_to_living_metal() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    unit = _make_unit(rules=["livingMetal"])
+    assert get_active_heal_bonus("necrons", unit) == 1
+
+
+def test_heal_bonus_zero_when_unit_lacks_target_rule() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    unit = _make_unit(rules=[])  # no livingMetal -> directive does not match
+    assert get_active_heal_bonus("necrons", unit) == 0
+
+
+def test_heal_bonus_zero_for_reroll_directive() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
+    unit = _make_unit(rules=["livingMetal"])
+    assert get_active_heal_bonus("necrons", unit) == 0
+
+
+def test_heal_bonus_zero_when_no_directive() -> None:
+    _protocol_session(None, None)
+    unit = _make_unit(rules=["livingMetal"])
+    assert get_active_heal_bonus("necrons", unit) == 0
 
 
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:

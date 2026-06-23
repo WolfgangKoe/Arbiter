@@ -60,6 +60,10 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
     """Apply ability effect to a unit. Returns True if state actually changed."""
     if ability.effect.type == "heal":
         hp = int(ability.effect.amount or 1)
+        try:
+            hp += get_active_heal_bonus(faction_dir_for(faction), unit)
+        except KeyError:
+            pass  # no faction-dir in session (e.g. minimal test state) -> no bonus
         return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
     return False
 
@@ -175,18 +179,32 @@ def get_active_rp_modifiers(faction_dir: str) -> dict[str, int | bool]:
     """Return Reanimation Protocol modifiers from the active round-choice directive.
 
     Undying Legions P (rp_reroll) -> {"rp_reroll": True}
-    Undying Legions S (rp_bonus)  -> {"rp_bonus": int}
     Any other / no directive      -> {}
     """
     effect = _active_directive_effect(faction_dir)
     if not effect:
         return {}
-    effect_type = effect.get("type", "")
-    if effect_type == "rp_reroll":
+    if effect.get("type", "") == "rp_reroll":
         return {"rp_reroll": True}
-    if effect_type == "rp_bonus":
-        return {"rp_bonus": int(effect.get("value", 0))}
     return {}
+
+
+def get_active_heal_bonus(faction_dir: str, unit: Unit) -> int:
+    """Extra wounds healed from an active directive's ``heal_bonus`` effect.
+
+    The directive names its target ability data-driven via ``target_rule``
+    (e.g. Undying Legions S -> Living Metal). Generic: any faction/directive
+    with a ``heal_bonus`` effect applies when the healed unit carries the
+    matching rule. Returns 0 when no such directive is active or the rule
+    does not match.
+    """
+    effect = _active_directive_effect(faction_dir)
+    if not effect or effect.get("type") != "heal_bonus":
+        return 0
+    target_rule = effect.get("target_rule")
+    if target_rule and target_rule not in unit.rules:
+        return 0
+    return int(effect.get("value", 0))
 
 
 def _unit_matches_target(unit: Unit, effect: dict) -> bool:

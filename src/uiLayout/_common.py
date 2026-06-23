@@ -512,6 +512,24 @@ def _collect_def_save_modifiers(
 # ---------------------------------------------------------------------------
 
 
+def _rp_directive_hints(def_faction: str) -> list[str]:
+    """Caption strings for active round-choice directives that grant an RP re-roll.
+
+    Pure: reads session state via the engine, returns display text. The label is
+    data-driven from the directive's YAML name — no faction literals.
+    """
+    from gameMechanic.ability_engine import get_active_rp_modifiers  # noqa: PLC0415
+    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+
+    try:
+        fdir = faction_dir_for(def_faction)
+    except KeyError:
+        return []
+    if not get_active_rp_modifiers(fdir).get("rp_reroll"):
+        return []
+    return [f"⟳ {_round_choice_source_label(fdir)}: re-roll one RP die."]
+
+
 def _render_rp_block(
     def_unit: Unit,
     def_faction: str,
@@ -540,6 +558,8 @@ def _render_rp_block(
         f"**REANIMATION PROTOCOLS** &nbsp; "
         f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel** · Erfolg: 5+"
     )
+    for hint in _rp_directive_hints(def_faction):
+        st.caption(hint)
     # Half-width block — keep the RP entry compact
     rp_col, _ = st.columns(2)
     models_back = rp_col.number_input(

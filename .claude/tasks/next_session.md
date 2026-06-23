@@ -23,6 +23,37 @@ Digitaler Spielbegleiter für WH40k 9E, Streamlit (Python). Start:
 
 ---
 
+## Aktueller Stand (nach S89, 2026-06-23)
+
+**S89 (Branch `feature/016-protocol-rp-effects`) — overview.md-Geisterbug + Undying-Legions-Datenbug** (1123 grün/93 %, INV-4b grün, lint sauber):
+- **A — overview.md Geister-Session GEFIXT** (Commit `785aeb0`, eigener Branch `fix/overview-metrics-overwrite`):
+  `parse_usage_lines` zählte `<synthetic>`-Stubs (z. B. „API Error: 529 Overloaded", Null-Usage) als Antwort →
+  Session mit nur solchem Stub erschien als 0k-Geisterzeile (`▓`-Mix). Fix: `model == "<synthetic>"` überspringen
+  (Konstante `SYNTHETIC_MODEL`). +2 Regressionstests. End-to-End belegt (bae8 weg).
+- **B — Plan 016 GESTOPPT + refokussiert (Daten-/Regel-Bug):** Plan-016-Prämisse falsch. Verifiziert gegen
+  `wahapedia_necrons/faction_overview.txt`: Undying Legions **D1** = *Living-Metal*-Bonus („+1 additional lost wound
+  each Living Metal use"), **D2** = RP-Reroll **eines** Würfels. YAML modellierte `secondary` fälschlich als
+  `rp_bonus` „+1 model returned" (Phantom-Effekt, **kein Konsument** in src). Stakeholder-Entscheid: Datenbug zuerst,
+  Wiring-Schema „Direktive zielt auf Ability-Trigger".
+  - **YAML** ([faction_abilities.yaml:119-138](../../data/wh40k_9e/necrons/faction_abilities.yaml#L119)): `secondary.effect`
+    `rp_bonus` → **`heal_bonus`** mit `target_rule: livingMetal, value: 1`; Labels engl. präzisiert (primary „one die").
+  - **Engine** ([ability_engine.py](../../src/gameMechanic/ability_engine.py)): neue Fn `get_active_heal_bonus(faction_dir, unit)`
+    (matcht `target_rule` gegen `unit.rules`); Heil-Pfad in `execute_effect` addiert Bonus (KeyError-guard für Minimal-State);
+    Phantom-`rp_bonus`-Zweig aus `get_active_rp_modifiers` entfernt. +5 Engine-Tests (alt `test_rp_bonus…` auf Sollzustand umgestellt).
+  - **Anzeige:** `_rp_directive_hints` (rein, RP-Block-Caption „re-roll one RP die") in `_common.py`; Living-Metal-Bonus-Caption
+    in `armyCard._render_triggered_abilities`. **Wortlaut datengetrieben** (Label aus YAML) — INV-4b-Falle „Protocol"-Literal
+    vermieden (RP-Abkürzung).
+
+### ⚠️ Carry-over S89 (offen)
+1. **Manuelle UI-Verifikation (PFLICHT, Render-Code):** (a) RP-Block zeigt „⟳ … re-roll one RP die" wenn Undying-Legions-
+   **primary** aktiv + Necron-Verteidiger Modelle verliert; (b) Command-Phase: Living-Metal-Apply zeigt „↑ Directive active:
+   +1 wound per Living Metal use" wenn **secondary** aktiv; heilt dann 2 statt 1.
+2. **Test-Schuld:** `_rp_directive_hints` + die armyCard-Caption haben **keinen** eigenen Test (Display-Wrapper; Engine-Logik
+   ist getestet). Kleiner Test in `tests/uiLayout/test_common.py` nachziehen (gemeinsamer streamlit-Mock, session_state setzen).
+3. **Doku-Schuld:** Undying-Legions-Befund in `docs/spec/rules_insights.md` festhalten (D1=Living Metal, nicht RP-Modell-Rückkehr);
+   `faction_abilities.md` ggf. nachziehen. Backlog #2-Zeile „Undying Legions P/S" entsprechend korrigiert.
+4. **Plan-016-Rest (verschoben):** Dynastiebonus-Kennzeichnung (alter Step 4) + restliche Direktiv-Anzeigen (backlog #2).
+
 ## Aktueller Stand (nach S88, 2026-06-22)
 
 **S88 (Branch `feature/024-arkana-protocol-effect-modeling`) — Plan 024 Step 7 DONE → Plan 024 VOLLSTÄNDIG** (Commit `300c094`,

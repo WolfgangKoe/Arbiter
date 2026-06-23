@@ -57,7 +57,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) | ✅ (`get_active_round_choice_rerolls`) | 🔲 HIT+WOUND Melee |
   | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
   | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
-  | Undying Legions · P/S | rp_reroll / rp_bonus +1 | ✅ (`get_active_rp_modifiers`) | 🔲 Reanimation-UI |
+  | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89) |
+  | Undying Legions · S | **heal_bonus** Living Metal +1 (war fälschlich `rp_bonus` „model returned" — S89-Datenfix) | ✅ (`get_active_heal_bonus`) | ✅ Caption (S89, manuell offen) |
   | Vengeful Stars · P | wound_modifier +1 (Shooting) | ✅ | ✅ WOUND-Block |
   | Vengeful Stars · S | ap_bonus -1 (Shooting) | ✅ | 🔲 SAVE-Block AP |
 

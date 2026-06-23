@@ -121,8 +121,8 @@ abilities:
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: szarekhan
-  primary: Re-roll Reanimation Protocols
-  secondary: +1 model returned per Reanimation Protocol
+  primary: Re-roll one Reanimation Protocol die
+  secondary: +1 wound restored each Living Metal use
   directives:
     primary:
       effect:
@@ -130,7 +130,8 @@ abilities:
         phase: any
     secondary:
       effect:
-        type: rp_bonus
+        type: heal_bonus
+        target_rule: livingMetal
         value: 1
         phase: any
 - id: wh40k_9e.necrons.faction.protocol_vengeful_stars

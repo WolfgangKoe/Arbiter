@@ -13,7 +13,11 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.ability_engine import check_conditions, execute_effect
+from gameMechanic.ability_engine import (
+    check_conditions,
+    execute_effect,
+    get_active_heal_bonus,
+)
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import (
     PHASES,
@@ -114,6 +118,12 @@ def _render_triggered_abilities(
         if not eligible:
             st.caption(f"{ability.name_en} — no units eligible")
             continue
+
+        if ability.effect.type == "heal":
+            sample = unit_by_id[unit_id_from_state_key(eligible[0])]
+            bonus = get_active_heal_bonus(faction_dir_for(faction), sample)
+            if bonus:
+                st.caption(f"↑ Directive active: +{bonus} wound per {ability.name_en} use")
 
         already_applied = st.session_state.get(f"applied_triggered_{ability.id}", False)
         n = len(eligible)
