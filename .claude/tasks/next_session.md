@@ -24,23 +24,30 @@ Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
 
-## Aktueller Stand (nach S91, 2026-06-24)
+## Aktueller Stand (nach S92, 2026-06-24)
 
-**S91 (Branch `feature/016-protocol-rp-effects`) — Mirror-Match-Protokoll-Kollision gefixt** (1129 grün/93 %,
-INV-4b grün, Formatter sauber). Root Cause: Protokoll-Laufzeit-State (active/directive/used_ids/extra_directive)
-war per `faction_dir` gekeyt → zwei Necron-Armeen teilten `round_choice_*_necrons`; Spieler-1-Wahl überschrieb
-Spieler 2 (auch die Kampf-Engine las den geteilten Key). Fix: neuer Helfer `round_choice_state_key(player, kind)`
-keyt **pro Spieler-Slot**; Engine-Fns nehmen `player`, leiten `faction_dir` nur fürs Laden ab. Dateien: game_state,
-ability_engine, _common, armyCard + test_ability_engine/test_game_state (Konvention, Assertions unverändert) +
-neu test_round_choice_player_keyed (3 Mirror-Match-Regressionstests). Lifecycle (S90) unberührt.
-**Befund:** Tests sind reihenfolgenabhängig (Backlog §4 Mock-Fragilität) — Fix selbst grün (Vollsuite+Einzeldatei).
+**S92 (auf `feature/016`) — UI-Verifikation: 1a ✅; 1b+1c als ECHTE Bugs bestätigt, Wurzel eingegrenzt, NICHT gefixt.**
+0b (Mirror-Match: Spieler-2-Karte unverändert) ✅ · 1a (Eternal Guardian Save „(defender)" im Gegnerzug) ✅.
+**1b** (Undying-Legions-P RP-Reroll-Hint im Gegnerzug) + **1c** (Undying-Legions-S Living-Metal +1 Heilung) erscheinen
+NICHT — Setup vom User korrekt (Primary/Secondary aktiv, Modell zerstört, Living-Metal-Einheit). Diagnose: **Engine
+ist korrekt** — Wegwerf-Repro (`scratchpad/repro.py`) liefert `get_active_rp_modifiers`→`{rp_reroll:True}` und
+`get_active_heal_bonus`→`1` bei direkt gesetztem State; `target_rule livingMetal` steht in `unit.rules` (kein
+Mismatch); statische Write/Read-Kette nutzt durchgängig denselben `faction`-Key (Roster-Name, `render_army_card`).
+⇒ Ursache ist ein **Laufzeit-State-Unterschied** (Direktiv-Keys real anders gesetzt als gelesen), nur mit
+Live-`session_state`-Werten pinbar. Widerspruch: 1a (gleicher Gegnerzug-Verteidiger-Kontext) funktioniert.
+**NÄCHSTER SCHRITT (vom Stakeholder FREIGEGEBEN):** temporären Debug-Probe in `render_army_card`
+([armyCard.py:426](../../src/uiLayout/armyCard.py#L426)) — `st.expander` mit `faction`, `session_state.active`,
+4× `round_choice_*_<faction>`-Keys (active/directive/used_ids/extra_directive). User reproduziert 1b+1c **einmal**
+→ Wurzel pinnen → Fix + Regressionstest → Probe entfernen → Vollsuite → Re-Verify. Bugs gehören zu **016**.
 
-**S91 — Kontext-Engineering-Initiative gestartet** (Stakeholder-Wunsch, Rahmen: LangChain Write/Select/Compress/
-Isolate). Entscheidungen: (a) Subagent-Ergebnisse **nur bei Umfang** in `docs/handoff/`-Datei (Lebenszyklus
-erzeugt→verarbeitet→gelöscht), kleine Antworten inline; (b) **jede Session automatisch** ein read-only Auditor
-(schlägt vor, schreibt Findings) + Optimierer (ändert nur Freigegebenes); (c) **Regeldateien verbatim heilig** —
-nur additiver Index. Auditor-Pilot lief → `docs/handoff/context-audit-S91.md` (Top: ziel6.md 1744 Z. komprimieren).
-Setup-Artefakte (governance-Doc, SessionStart-Hook, Regel-Index) brauchen je eigene Freigabe → frische Session.
+**S92 — Branch-Befund (wichtig):** `main` ist **331 Commits** hinter `feature/016`; aktiver Integrations-Branch
+ist `dev` (=016−35). Branch `chore/context-engineering-and-test-fixture` von `dev` angelegt für die unten vertagten
+chore-Aufgaben; „schnell mergen→dev→Branch löschen". Aufgabe 1 (Mock-Fixture) berührt Tests → die 016-only
+`test_round_choice_player_keyed.py` beim späteren 016→dev-Merge nachmigrieren.
+
+**S91 (historisch):** Mirror-Match-Kollision gefixt (`round_choice_state_key(player,kind)`, pro Spieler-Slot;
+1129 grün/93 %). Kontext-Engineering-Initiative gestartet (Write/Select/Compress/Isolate; je Session Auditor+
+Optimierer; Regeldateien verbatim heilig; `docs/handoff/context-audit-S91.md`).
 
 **S90 (historisch):** 3 Direktiv-/State-Bugs gefixt (Direktive im 2. Zug · Zielauswahl Runde 2 · Living Metal).
 
@@ -50,10 +57,17 @@ Setup-Artefakte (governance-Doc, SessionStart-Hook, Regel-Index) brauchen je eig
    `docs/handoff/context-audit-S91.md` durch Optimierer verarbeiten + danach löschen. Je eigene Freigabe.
 0b. **Manuelle UI-Verifikation S91 (PFLICHT, Render-Code):** Necron-vs-Necron, Befehlsphase — Spieler-1-Protokoll/
    Direktive wählen → Spieler-2-Karte bleibt unverändert (eigene Wahl/Badge). Das war das Original-Symptom.
-1. **Manuelle UI-Verifikation (PFLICHT, Render-Code) — ERNEUT nach Fix:** (a) Eternal-Guardian-Save zeigt
-   „(defender)" wenn Necrons im GEGNERZUG beschossen werden; (b) Undying-Legions-Primary: RP-Reroll-Hint
-   erscheint wenn Necron-Einheit im Gegnerzug Modelle verliert; (c) Living-Metal-Secondary: heilt 2 bei
-   livingMetal-Einheit mit ≥2 verlorenen Wunden; (d) Bug 5: Runde-2-Fernkampf, Warrior wählen → Ziel sofort wählbar.
+1. **Manuelle UI-Verifikation (S92-Stand):** (a) Eternal-Guardian-Save „(defender)" im Gegnerzug ✅;
+   (b) Undying-Legions-P RP-Reroll-Hint ❌ + (c) Living-Metal-S heilt 2 ❌ → **echte 016-Bugs, Debug-Probe siehe
+   Stand oben**; (d) Bug 5: Runde-2-Fernkampf Zielwahl — **noch nicht geprüft**.
+1b. **Vertagter S92-chore-Plan (Branch `chore/context-engineering-and-test-fixture` von `dev`, je Freigabe):**
+   *Aufg. 4* Sonnet-Subagent zieht Präsentation (`curl -u andrena:slides4all
+   https://peter-wegner-slides.pages.dev/context-engineering-andrena-v2/`, Inhalt = minifiziertes Vue-JS → Text
+   extrahieren) → `docs/reference/context-engineering-slides.md` + Ideen für auto-`overview.md`. *Aufg. 3* neuer
+   read-only Auditor (Sonnet) → `docs/handoff/context-audit-S92.md` (neue Dateien, NICHT die 8 aus S91); Optimierer
+   arbeitet `context-audit-S91.md`-Findings #3/#4/#6/#7 ab (XS/S) + danach S91-Datei löschen; #1 ziel6.md-Kompression
+   (L) eigener Slot. *Aufg. 1* Mock-Fixture: geteilte streamlit-Fixture in `tests/conftest.py`, 17 Testdateien von
+   `_st_mock` auf `module.st` (Opus-Pilot 1 Datei → Sonnet-Subagent Rest → Opus-Review). Reihenfolge: 1b/1c-Fix zuerst.
 2. **Bug 3 — Zweitspieler-Direktiv-Wahl (NEUER Plan-016-Step, Stakeholder „später"):** Direktive nur für
    aktiven Spieler in Befehlsphase wählbar (armyCard.py:296,307). Zweitspieler kann am Rundenanfang
    (= Gegner-Befehlsphase) nicht wählen. Step: Direktiv-Buttons entkoppeln (wählbar sobald Protokoll aktiv
@@ -67,6 +81,9 @@ Setup-Artefakte (governance-Doc, SessionStart-Hook, Regel-Index) brauchen je eig
 4. **Reihenfolge:** Plan 016 Anzeige-Rest (Group A → C) → 018 → 015 → 017 (017 nimmt Steps 4/5 auf).
 
 ### Offene Fragen / Retro-Vormerke
+- **S92-Lehre Repro-zuerst:** bei „Engine oder Verdrahtung?" sofort Isolations-Repro schreiben statt langer statischer Analyse (spart Kontext).
+- **S92-Lehre Branch-Check:** vor `git checkout -b … <base>` den aktiven Branch prüfen (`main` war 331 zurück; aktiv = `dev`).
+- **S92-Lehre Plan-Realismus:** nicht 4 Aufgaben + Pflicht-Verifikation in einen Korridor; konservativer schneiden.
 - **Doku-Sync ausstehend:** backlog #2 / ziel6 6e um Bug-3-Step + „Reset kampfrunden-weit" ergänzen (in S90 nur
   in dieser Datei). Bei nächstem Full-Wind-down nachziehen.
 - **ADR-0006-Verweis (S86):** `CLAUDE.md` Token-Disziplin um Verweis auf ADR-0006 ergänzen (Subagent-Großausgaben als Datei).
