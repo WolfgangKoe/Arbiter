@@ -1109,10 +1109,10 @@
   "2813de22-ab1b-4263-bb6d-6fd5ba54d52b": {
     "started_at": "2026-06-22T11:28:14.199Z",
     "task": "start session",
-    "peak_context": 156492,
-    "subagent_share": 4.110197072413753,
+    "peak_context": 170764,
+    "subagent_share": 3.4091854540342275,
     "by_tier": {
-      "Opus": 18488254,
+      "Opus": 22452842,
       "Sonnet": 792476
     },
     "subagents": [
@@ -1129,6 +1129,58 @@
         "tier": "Sonnet",
         "peak_context": 43706,
         "started_at": "2026-06-22T11:28:14.199Z"
+      }
+    ]
+  },
+  "0ab45673-5761-4c5e-a471-177c946f9de8": {
+    "started_at": "2026-06-23T19:27:55.660Z",
+    "task": "start session. Ich brauche exakte Anweisungen für die manuelle UI-Verifikation, ansosnten den üblichen Plan",
+    "peak_context": 166457,
+    "subagent_share": 26.77858651930572,
+    "by_tier": {
+      "Opus": 15339775,
+      "Sonnet": 2170970
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase state audit target selection",
+        "tier": "Sonnet",
+        "peak_context": 78757,
+        "started_at": "2026-06-23T19:27:55.660Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Command Protocol timing research",
+        "tier": "Opus",
+        "peak_context": 49564,
+        "started_at": "2026-06-23T19:27:55.660Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 016 continuation slicing",
+        "tier": "Opus",
+        "peak_context": 83818,
+        "started_at": "2026-06-23T19:27:55.660Z"
+      }
+    ]
+  },
+  "fb5f6a02-56a2-434c-b966-f5397d9b5f1d": {
+    "started_at": "2026-06-24T18:32:51.653Z",
+    "task": "Ich bin ein wenig lost. Wo stehen wir jetzt?",
+    "peak_context": 158841,
+    "subagent_share": 4.77029402661173,
+    "by_tier": {
+      "Opus": 20678425,
+      "Sonnet": 1035834
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Context-engineering audit",
+        "tier": "Sonnet",
+        "peak_context": 79423,
+        "started_at": "2026-06-24T18:32:51.653Z"
       }
     ]
   }

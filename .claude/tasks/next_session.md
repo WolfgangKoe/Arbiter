@@ -24,22 +24,32 @@ Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
 
-## Aktueller Stand (nach S90, 2026-06-23)
+## Aktueller Stand (nach S91, 2026-06-24)
 
-**S90 (Branch `feature/016-protocol-rp-effects`) — 3 Direktiv-/State-Bugs gefixt** (1126 grün/93 %,
-INV-4b grün). Gefunden per manueller UI-Verifikation + 3 read-only Investigations-Subagenten:
-- **Bug 1+4 (Direktive im 2. Zug tot):** Round-Choice-State ist KAMPFRUNDEN-weit (beide Züge), wurde
-  aber pro Zug in `_reset_turn_state` gelöscht → Eternal-Guardian-Save + Undying-Legions-RP-Reroll
-  fielen auf Verteidigung (Gegnerzug) aus. Fix: neuer `_reset_round_choice_state`, nur am Kampfrunden-
-  Anfang (`next_phase`, `active==first_player`). Regelbeleg: faction_overview.txt:564-568, core_rules.txt:639/667.
-- **Bug 5 (Zielauswahl blockiert ab Runde 2):** `group_autosel_done_*`-Guard nie beim Phasenwechsel
-  gelöscht → Single-Group-Einheiten (Warriors) übersprangen Auto-Select, `selected_model_group=None`
-  sperrte Ziele. Fix: Guard in `_reset_phase_state` mitlöschen. (Workaround war Ab-/Neuwählen.)
-- **Bug 2 (Living Metal heilt nur 1):** Code korrekt (+1 wird addiert); `needs_healing` deckelt auf
-  Max-HP → Bonus nur bei ≥2 verlorenen Wunden sichtbar; zusätzlich durch Bug 4 maskiert. Per Bug-4-Fix abgesichert.
-- +3 Regressionstests (Persistenz über Zugwechsel · Reset bei neuer Runde · Autosel-Guard-Clear).
+**S91 (Branch `feature/016-protocol-rp-effects`) — Mirror-Match-Protokoll-Kollision gefixt** (1129 grün/93 %,
+INV-4b grün, Formatter sauber). Root Cause: Protokoll-Laufzeit-State (active/directive/used_ids/extra_directive)
+war per `faction_dir` gekeyt → zwei Necron-Armeen teilten `round_choice_*_necrons`; Spieler-1-Wahl überschrieb
+Spieler 2 (auch die Kampf-Engine las den geteilten Key). Fix: neuer Helfer `round_choice_state_key(player, kind)`
+keyt **pro Spieler-Slot**; Engine-Fns nehmen `player`, leiten `faction_dir` nur fürs Laden ab. Dateien: game_state,
+ability_engine, _common, armyCard + test_ability_engine/test_game_state (Konvention, Assertions unverändert) +
+neu test_round_choice_player_keyed (3 Mirror-Match-Regressionstests). Lifecycle (S90) unberührt.
+**Befund:** Tests sind reihenfolgenabhängig (Backlog §4 Mock-Fragilität) — Fix selbst grün (Vollsuite+Einzeldatei).
 
-### ⚠️ Carry-over S90 (offen)
+**S91 — Kontext-Engineering-Initiative gestartet** (Stakeholder-Wunsch, Rahmen: LangChain Write/Select/Compress/
+Isolate). Entscheidungen: (a) Subagent-Ergebnisse **nur bei Umfang** in `docs/handoff/`-Datei (Lebenszyklus
+erzeugt→verarbeitet→gelöscht), kleine Antworten inline; (b) **jede Session automatisch** ein read-only Auditor
+(schlägt vor, schreibt Findings) + Optimierer (ändert nur Freigegebenes); (c) **Regeldateien verbatim heilig** —
+nur additiver Index. Auditor-Pilot lief → `docs/handoff/context-audit-S91.md` (Top: ziel6.md 1744 Z. komprimieren).
+Setup-Artefakte (governance-Doc, SessionStart-Hook, Regel-Index) brauchen je eigene Freigabe → frische Session.
+
+**S90 (historisch):** 3 Direktiv-/State-Bugs gefixt (Direktive im 2. Zug · Zielauswahl Runde 2 · Living Metal).
+
+### ⚠️ Carry-over (offen)
+0. **Kontext-Engineering-Setup (NEU, frische Session):** governance-Doc `context_engineering.md` + SessionStart-Hook
+   (Auditor auto) + Regel-Index (Stichwort→Datei:Zeilen, verbatim heilig) + ziel6.md-Kompression (Auditor-Top-Finding).
+   `docs/handoff/context-audit-S91.md` durch Optimierer verarbeiten + danach löschen. Je eigene Freigabe.
+0b. **Manuelle UI-Verifikation S91 (PFLICHT, Render-Code):** Necron-vs-Necron, Befehlsphase — Spieler-1-Protokoll/
+   Direktive wählen → Spieler-2-Karte bleibt unverändert (eigene Wahl/Badge). Das war das Original-Symptom.
 1. **Manuelle UI-Verifikation (PFLICHT, Render-Code) — ERNEUT nach Fix:** (a) Eternal-Guardian-Save zeigt
    „(defender)" wenn Necrons im GEGNERZUG beschossen werden; (b) Undying-Legions-Primary: RP-Reroll-Hint
    erscheint wenn Necron-Einheit im Gegnerzug Modelle verliert; (c) Living-Metal-Secondary: heilt 2 bei

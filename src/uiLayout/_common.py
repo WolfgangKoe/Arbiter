@@ -406,15 +406,20 @@ def _next_declaration_seq() -> int:
     return seq
 
 
-def _round_choice_source_label(faction_dir: str) -> str:
+def _round_choice_source_label(player: str) -> str:
+    from gameMechanic.game_state import (  # noqa: PLC0415
+        faction_dir_for,
+        round_choice_state_key,
+    )
     from gameObjects.loader import (  # noqa: PLC0415
         load_round_choice_abilities,
         load_round_choice_label,
     )
 
-    active_id = st.session_state.get(f"round_choice_active_{faction_dir}")
-    directive = st.session_state.get(f"round_choice_directive_{faction_dir}")
-    if not active_id or not directive or not faction_dir:
+    faction_dir = faction_dir_for(player)
+    active_id = st.session_state.get(round_choice_state_key(player, "active"))
+    directive = st.session_state.get(round_choice_state_key(player, "directive"))
+    if not active_id or not directive:
         return load_round_choice_label(faction_dir)
     round_choices = load_round_choice_abilities(faction_dir)
     p = next((rc for rc in round_choices if rc.id == active_id), None)
@@ -429,13 +434,11 @@ def _collect_atk_modifiers(
 ) -> list[dict]:  # type: ignore[type-arg]
     """Collect hit/wound modifiers for the attacker from round-choice abilities, buffs, and active_modifiers."""
     from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
     try:
-        fdir = faction_dir_for(atk_faction)
-        proto = get_active_round_choice_modifier(fdir, phase_key, use_melee)
-        label = _round_choice_source_label(fdir)
+        proto = get_active_round_choice_modifier(atk_faction, phase_key, use_melee)
+        label = _round_choice_source_label(atk_faction)
         if proto.get("hit"):
             mods.append(
                 {
@@ -489,14 +492,12 @@ def _collect_def_save_modifiers(
 ) -> list[dict]:  # type: ignore[type-arg]
     """Collect save modifiers for the defender from round-choice abilities and active_modifiers."""
     from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
     try:
-        fdir = faction_dir_for(def_faction)
-        proto = get_active_round_choice_modifier(fdir, phase_key, use_melee)
+        proto = get_active_round_choice_modifier(def_faction, phase_key, use_melee)
         if proto.get("save"):
-            label = _round_choice_source_label(fdir)
+            label = _round_choice_source_label(def_faction)
             mods.append({"label": f"{label} (defender)", "value": proto["save"]})
     except KeyError:
         pass
@@ -522,12 +523,12 @@ def _rp_directive_hints(def_faction: str) -> list[str]:
     from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
 
     try:
-        fdir = faction_dir_for(def_faction)
+        faction_dir_for(def_faction)  # validate player slot; raises if unknown
     except KeyError:
         return []
-    if not get_active_rp_modifiers(fdir).get("rp_reroll"):
+    if not get_active_rp_modifiers(def_faction).get("rp_reroll"):
         return []
-    return [f"⟳ {_round_choice_source_label(fdir)}: re-roll one RP die."]
+    return [f"⟳ {_round_choice_source_label(def_faction)}: re-roll one RP die."]
 
 
 def _render_rp_block(

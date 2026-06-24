@@ -292,8 +292,8 @@ def test_execute_effect_heal_adds_active_directive_bonus() -> None:
         p2_faction_dir="necrons",
         p1_units={"test.unit": {"current_wounds": 3, "models": 2, "destroyed": False}},
     )
-    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
-    session["round_choice_directive_necrons"] = "secondary"
+    session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_Necrons"] = "secondary"
     _mut.st.session_state = session
     _st_mock.session_state = session
     unit = _make_unit(rules=["livingMetal"])
@@ -444,119 +444,121 @@ def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> No
 
 
 def _protocol_session(protocol_id: str | None, directive: str | None) -> _S:
+    # Round-choice runtime state is keyed by the player slot ("Necrons"), not the
+    # faction directory — see round_choice_state_key (mirror-match safe).
     session = _S(
         first_player="Necrons",
         p1_faction_dir="necrons",
         p2_faction_dir="necrons",
     )
-    session["round_choice_active_necrons"] = protocol_id
-    session["round_choice_directive_necrons"] = directive
+    session["round_choice_active_Necrons"] = protocol_id
+    session["round_choice_directive_Necrons"] = directive
     _st_mock.session_state = session
     return session
 
 
 def test_protocol_modifier_no_active_protocol_returns_empty() -> None:
     _protocol_session(None, None)
-    assert get_active_round_choice_modifier("necrons", "shooting", False) == {}
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
 
 def test_protocol_modifier_no_directive_returns_empty() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", None)
-    assert get_active_round_choice_modifier("necrons", "shooting", False) == {}
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
 
 def test_protocol_modifier_hungry_void_primary_hit_in_shooting() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
-    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    result = get_active_round_choice_modifier("Necrons", "shooting", False)
     assert result == {"hit": 1}
 
 
 def test_protocol_modifier_hungry_void_primary_no_effect_in_melee() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
-    result = get_active_round_choice_modifier("necrons", "fight", True)
+    result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
 
 
 def test_protocol_modifier_vengeful_stars_primary_wound_in_shooting() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "primary")
-    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    result = get_active_round_choice_modifier("Necrons", "shooting", False)
     assert result == {"wound": 1}
 
 
 def test_protocol_modifier_eternal_guardian_primary_save_any_phase() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "primary")
-    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    result = get_active_round_choice_modifier("Necrons", "shooting", False)
     assert result == {"save": 1}
-    result_melee = get_active_round_choice_modifier("necrons", "fight", True)
+    result_melee = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result_melee == {"save": 1}
 
 
 def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    result = get_active_round_choice_modifier("necrons", "fight", True)
+    result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
 
 
 def test_strength_modifier_wired_in_shooting() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
-    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    result = get_active_round_choice_modifier("Necrons", "shooting", False)
     assert result == {"strength": 1}
 
 
 def test_strength_modifier_skipped_in_melee() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
-    result = get_active_round_choice_modifier("necrons", "fight", True)
+    result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
 
 
 def test_strength_modifier_inactive_returns_empty() -> None:
     _protocol_session(None, None)
-    assert get_active_round_choice_modifier("necrons", "shooting", False) == {}
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
 
 def test_ap_bonus_wired_shooting() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
-    result = get_active_round_choice_modifier("necrons", "shooting", False)
+    result = get_active_round_choice_modifier("Necrons", "shooting", False)
     assert result == {"ap": -1}
 
 
 def test_ap_bonus_skipped_in_melee() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
-    result = get_active_round_choice_modifier("necrons", "fight", True)
+    result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
 
 
 def test_move_bonus_wired_movement() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", "primary")
-    result = get_active_round_choice_modifier("necrons", "movement", False)
+    result = get_active_round_choice_modifier("Necrons", "movement", False)
     assert result == {"move": 1}
 
 
 def test_leadership_bonus_wired() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
-    result = get_active_round_choice_modifier("necrons", "morale", False)
+    result = get_active_round_choice_modifier("Necrons", "morale", False)
     assert result == {"leadership": 1}
 
 
 def test_reroll_save_1_eternal_guardian_s() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "secondary")
-    assert get_active_round_choice_rerolls("necrons", "shooting", False) == {"reroll_save_1"}
+    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == {"reroll_save_1"}
 
 
 def test_reroll_hit_wound_1_conquering_tyrant_s_melee() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    result = get_active_round_choice_rerolls("necrons", "fight", True)
+    result = get_active_round_choice_rerolls("Necrons", "fight", True)
     assert result == {"reroll_hit_1", "reroll_wound_1"}
 
 
 def test_reroll_hit_wound_skipped_in_shooting() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    assert get_active_round_choice_rerolls("necrons", "shooting", False) == set()
+    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
 
 
 def test_reroll_empty_when_no_directive() -> None:
     _protocol_session(None, None)
-    assert get_active_round_choice_rerolls("necrons", "shooting", False) == set()
+    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
 
 
 def test_advance_and_charge_via_directive() -> None:
@@ -573,43 +575,43 @@ def test_advance_and_charge_inactive_returns_false() -> None:
 
 def test_rp_reroll_undying_legions_p() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
-    assert get_active_rp_modifiers("necrons") == {"rp_reroll": True}
+    assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
 
 
 def test_rp_modifiers_empty_for_undying_legions_secondary() -> None:
     # Secondary is a Living-Metal heal_bonus per RAW, NOT a Reanimation-pool
     # effect — get_active_rp_modifiers must not surface it (S89 data fix).
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
-    assert get_active_rp_modifiers("necrons") == {}
+    assert get_active_rp_modifiers("Necrons") == {}
 
 
 def test_rp_modifier_empty_when_other_directive() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
-    assert get_active_rp_modifiers("necrons") == {}
+    assert get_active_rp_modifiers("Necrons") == {}
 
 
 def test_heal_bonus_undying_legions_secondary_applies_to_living_metal() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
     unit = _make_unit(rules=["livingMetal"])
-    assert get_active_heal_bonus("necrons", unit) == 1
+    assert get_active_heal_bonus("Necrons", unit) == 1
 
 
 def test_heal_bonus_zero_when_unit_lacks_target_rule() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
     unit = _make_unit(rules=[])  # no livingMetal -> directive does not match
-    assert get_active_heal_bonus("necrons", unit) == 0
+    assert get_active_heal_bonus("Necrons", unit) == 0
 
 
 def test_heal_bonus_zero_for_reroll_directive() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
     unit = _make_unit(rules=["livingMetal"])
-    assert get_active_heal_bonus("necrons", unit) == 0
+    assert get_active_heal_bonus("Necrons", unit) == 0
 
 
 def test_heal_bonus_zero_when_no_directive() -> None:
     _protocol_session(None, None)
     unit = _make_unit(rules=["livingMetal"])
-    assert get_active_heal_bonus("necrons", unit) == 0
+    assert get_active_heal_bonus("Necrons", unit) == 0
 
 
 def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:

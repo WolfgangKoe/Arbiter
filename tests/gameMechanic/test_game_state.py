@@ -140,31 +140,31 @@ def test_round_choice_directive_persists_across_mid_round_turn_switch() -> None:
     """
     session = _phase_session(phase_idx=7, active="Necrons", round_num=1)
     session["p1_faction_dir"] = "necrons"
-    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
-    session["round_choice_directive_necrons"] = "primary"
+    session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_Necrons"] = "primary"
     next_phase()  # Necrons morale done → switch to Orks, still battle round 1
     assert session["active"] == "Orks"
     assert session["round"] == 1
     assert (
-        session["round_choice_active_necrons"]
+        session["round_choice_active_Necrons"]
         == "wh40k_9e.necrons.faction.protocol_undying_legions"
     )
-    assert session["round_choice_directive_necrons"] == "primary"
+    assert session["round_choice_directive_Necrons"] == "primary"
 
 
 def test_round_choice_directive_cleared_at_new_battle_round() -> None:
     """When both players have acted and a new battle round begins, round-choice resets."""
     session = _phase_session(phase_idx=7, active="Orks", round_num=1)
     session["p1_faction_dir"] = "necrons"
-    session["round_choice_active_necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
-    session["round_choice_directive_necrons"] = "primary"
-    session["round_choice_extra_directive_necrons"] = "secondary"
+    session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
+    session["round_choice_directive_Necrons"] = "primary"
+    session["round_choice_extra_directive_Necrons"] = "secondary"
     next_phase()  # Orks morale done → back to first player → battle round 2
     assert session["active"] == "Necrons"
     assert session["round"] == 2
-    assert session["round_choice_active_necrons"] is None
-    assert session["round_choice_directive_necrons"] is None
-    assert session["round_choice_extra_directive_necrons"] is None
+    assert session["round_choice_active_Necrons"] is None
+    assert session["round_choice_directive_Necrons"] is None
+    assert session["round_choice_extra_directive_Necrons"] is None
 
 
 def test_phase_change_clears_group_autosel_guard() -> None:
@@ -352,8 +352,8 @@ class TestRoundChoiceBuffLabels:
             p2_faction_dir="orks",
             p1_subfaction=None,
             p2_subfaction=None,
-            round_choice_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
-            round_choice_directive_necrons="primary",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
+            round_choice_directive_Necrons="primary",
             round_choice_assignments={},
         )
         assert active_round_choice_buff_labels("Necrons") == ["Undying Legions"]
@@ -363,8 +363,8 @@ class TestRoundChoiceBuffLabels:
             p1_faction_dir="necrons",
             p2_faction_dir="orks",
             p1_subfaction=None,
-            round_choice_active_necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
-            round_choice_directive_necrons=None,
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
+            round_choice_directive_Necrons=None,
             round_choice_assignments={},
         )
         assert active_round_choice_buff_labels("Necrons") == []

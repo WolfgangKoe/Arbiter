@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-23 21:17 CEST
+Stand: 2026-06-24 21:28 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-22 13:28 2813  ████████████ 156k ⛔    ░░░░░░   4%    ████████████
+06-24 20:32 fb5f  ████████████ 159k ⛔    ░░░░░░   5%    ███████████·
+         SA_1·  ██████░░░░░░  79k ✅    Context-engineering audit
+----------------- ---------------------- -------------- ------------
+06-23 21:27 0ab4  ████████████ 166k ⛔    ██░░░░  27%    ███████████·
+         SA_1·  ██████░░░░░░  79k ✅    Phase state audit target selection
+         SA_2·  ████░░░░░░░░  50k ✅    Command Protocol timing research
+         SA_3·  ███████░░░░░  84k ✅    Plan 016 continuation slicing
+----------------- ---------------------- -------------- ------------
+06-22 13:28 2813  ████████████ 171k ⛔    ░░░░░░   3%    ████████████
          SA_1·  ██░░░░░░░░░░  27k ✅    Verify Undying Legions + Living Me…
          SA_2·  ███░░░░░░░░░  44k ✅    Investigate overview.md overwrite …
 ----------------- ---------------------- -------------- ------------

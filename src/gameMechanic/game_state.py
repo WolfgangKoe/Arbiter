@@ -151,6 +151,17 @@ def faction_dir_for(player: str) -> str:
     return st.session_state["p2_faction_dir"]
 
 
+def round_choice_state_key(player: str, kind: str) -> str:
+    """Session-state key for a player's per-battle-round protocol state.
+
+    Keyed by the **player slot**, never the faction directory: two armies of the
+    same faction (a mirror match) share one ``faction_dir`` but must keep fully
+    independent protocol/directive state. ``kind`` is one of:
+    active, directive, used_ids, extra_directive.
+    """
+    return f"round_choice_{kind}_{player}"
+
+
 def subfaction_value_for(player: str) -> str | None:
     """Return a player's raw subfaction tag (from the roster), or None.
 
@@ -232,8 +243,8 @@ def active_round_choice_buff_labels(player: str) -> list[str]:
     labels: list[str] = []
     by_id = {p.id: p for p in round_choices}
 
-    active_id = st.session_state.get(f"round_choice_active_{faction_dir}")
-    if active_id and st.session_state.get(f"round_choice_directive_{faction_dir}"):
+    active_id = st.session_state.get(round_choice_state_key(player, "active"))
+    if active_id and st.session_state.get(round_choice_state_key(player, "directive")):
         p = by_id.get(active_id)
         if p:
             labels.append(short_round_choice_label(p.name_en))
@@ -248,7 +259,7 @@ def active_round_choice_buff_labels(player: str) -> list[str]:
             subfaction = subfaction_value_for(player)
             affinity_bonus = bool(subfaction and subfaction == extra.subfaction_affinity)
             if affinity_bonus or st.session_state.get(
-                f"round_choice_extra_directive_{faction_dir}"
+                round_choice_state_key(player, "extra_directive")
             ):
                 labels.append(short_round_choice_label(extra.name_en))
     return labels
@@ -567,13 +578,16 @@ def _reset_round_choice_state() -> None:
     Round-choice state is battle-round-scoped: a command protocol stays active for the
     whole battle round (both players' turns), so it must NOT be cleared on the mid-round
     turn switch. Clearing only here lets each player re-select at the next round's start.
+
+    Keyed per player slot, not faction directory, so a mirror match resets each army's
+    state independently.
     """
-    for slot in ("p1_faction_dir", "p2_faction_dir"):
-        fdir = st.session_state.get(slot)
-        if fdir:
-            st.session_state[f"round_choice_active_{fdir}"] = None
-            st.session_state[f"round_choice_directive_{fdir}"] = None
-            st.session_state[f"round_choice_extra_directive_{fdir}"] = None
+    for slot in ("first_player", "second_player"):
+        player = st.session_state.get(slot)
+        if player:
+            st.session_state[round_choice_state_key(player, "active")] = None
+            st.session_state[round_choice_state_key(player, "directive")] = None
+            st.session_state[round_choice_state_key(player, "extra_directive")] = None
 
 
 def next_phase() -> None:

@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.game_state import faction_dir_for, units_key_for
+from gameMechanic.game_state import (
+    faction_dir_for,
+    round_choice_state_key,
+    units_key_for,
+)
 from gameMechanic.unit_mutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import (
@@ -61,7 +65,7 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
     if ability.effect.type == "heal":
         hp = int(ability.effect.amount or 1)
         try:
-            hp += get_active_heal_bonus(faction_dir_for(faction), unit)
+            hp += get_active_heal_bonus(faction, unit)
         except KeyError:
             pass  # no faction-dir in session (e.g. minimal test state) -> no bonus
         return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
@@ -79,12 +83,17 @@ _WIRED_EFFECT_TYPES = {
 }
 
 
-def _active_directive_effect(faction_dir: str) -> dict | None:  # type: ignore[type-arg]
-    """The effect dict of the faction's currently chosen round-choice directive, or None."""
-    active_id: str | None = st.session_state.get(f"round_choice_active_{faction_dir}")
-    directive: str | None = st.session_state.get(f"round_choice_directive_{faction_dir}")
+def _active_directive_effect(player: str) -> dict | None:  # type: ignore[type-arg]
+    """The effect dict of the player's currently chosen round-choice directive, or None.
+
+    State is keyed by the player slot (mirror-match safe); the ability definitions
+    are loaded via the player's faction directory.
+    """
+    active_id: str | None = st.session_state.get(round_choice_state_key(player, "active"))
+    directive: str | None = st.session_state.get(round_choice_state_key(player, "directive"))
     if not active_id or not directive:
         return None
+    faction_dir = faction_dir_for(player)
     active = next((p for p in load_round_choice_abilities(faction_dir) if p.id == active_id), None)
     if not active:
         return None
@@ -101,9 +110,7 @@ def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: i
     return False
 
 
-def get_active_round_choice_modifier(
-    faction_dir: str, phase: str, use_melee: bool
-) -> dict[str, int]:
+def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -> dict[str, int]:
     """Return numeric modifiers from the active round-choice ability's chosen directive.
 
     Only numeric effect types in _WIRED_EFFECT_TYPES are returned (hit/wound/save/
@@ -114,7 +121,7 @@ def get_active_round_choice_modifier(
     Returns a dict with any of: {"hit", "wound", "save", "strength", "ap", "move",
     "leadership"} mapped to int.
     """
-    effect = _active_directive_effect(faction_dir)
+    effect = _active_directive_effect(player)
     if not effect:
         return {}
 
@@ -151,14 +158,14 @@ _REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {
 }
 
 
-def get_active_round_choice_rerolls(faction_dir: str, phase: str, use_melee: bool) -> set[str]:
+def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) -> set[str]:
     """Return reroll flags from the active round-choice directive (may be empty).
 
     Separate from get_active_round_choice_modifier because rerolls are flags, not
     numeric modifiers — keeping the dict[str, int] contract of that function clean.
     Flags: reroll_save_1, reroll_hit_1, reroll_wound_1.
     """
-    effect = _active_directive_effect(faction_dir)
+    effect = _active_directive_effect(player)
     if not effect:
         return set()
     flags = _REROLL_DIRECTIVE_FLAGS.get(effect.get("type", ""))
@@ -169,19 +176,19 @@ def get_active_round_choice_rerolls(faction_dir: str, phase: str, use_melee: boo
     return set(flags)
 
 
-def _active_directive_has_type(faction_dir: str, effect_type: str) -> bool:
-    """True if the faction's active round-choice directive has the given effect type."""
-    effect = _active_directive_effect(faction_dir)
+def _active_directive_has_type(player: str, effect_type: str) -> bool:
+    """True if the player's active round-choice directive has the given effect type."""
+    effect = _active_directive_effect(player)
     return bool(effect) and effect.get("type") == effect_type
 
 
-def get_active_rp_modifiers(faction_dir: str) -> dict[str, int | bool]:
+def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     """Return Reanimation Protocol modifiers from the active round-choice directive.
 
     Undying Legions P (rp_reroll) -> {"rp_reroll": True}
     Any other / no directive      -> {}
     """
-    effect = _active_directive_effect(faction_dir)
+    effect = _active_directive_effect(player)
     if not effect:
         return {}
     if effect.get("type", "") == "rp_reroll":
@@ -189,7 +196,7 @@ def get_active_rp_modifiers(faction_dir: str) -> dict[str, int | bool]:
     return {}
 
 
-def get_active_heal_bonus(faction_dir: str, unit: Unit) -> int:
+def get_active_heal_bonus(player: str, unit: Unit) -> int:
     """Extra wounds healed from an active directive's ``heal_bonus`` effect.
 
     The directive names its target ability data-driven via ``target_rule``
@@ -198,7 +205,7 @@ def get_active_heal_bonus(faction_dir: str, unit: Unit) -> int:
     matching rule. Returns 0 when no such directive is active or the rule
     does not match.
     """
-    effect = _active_directive_effect(faction_dir)
+    effect = _active_directive_effect(player)
     if not effect or effect.get("type") != "heal_bonus":
         return 0
     target_rule = effect.get("target_rule")
@@ -287,7 +294,7 @@ def charge_after_advance_allowed(faction: str, unit: Unit) -> bool:
         for eff in _active_effects_for_faction(faction)
     ):
         return True
-    return _active_directive_has_type(faction_dir_for(faction), "advance_and_charge")
+    return _active_directive_has_type(faction, "advance_and_charge")
 
 
 def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Ability]:

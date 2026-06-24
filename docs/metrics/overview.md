@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-23 21:17 CEST
+Stand: 2026-06-24 21:28 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,30 +14,30 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-22 13:28 2813  ████████████ 156k ↑    ░░░░░░   4% ↑  ████████████
+06-24 20:32 fb5f  ████████████ 159k ↓    ░░░░░░   5% ↓  ███████████·
+06-23 21:27 0ab4  ████████████ 166k ↓    ██░░░░  27% ↑  ███████████·
+06-22 13:28 2813  ████████████ 171k ↑    ░░░░░░   3% ↑  ████████████
 06-22 12:58 2627  ███████████░ 142k ↓    ░░░░░░   0% ↓  ████████████
 06-22 00:21 6b94  ████████████ 145k ↓    █░░░░░  19% ↑  ██████████··
 06-21 23:51 08bb  ████████████ 172k ↓    █░░░░░  17% ↑  ██████████··
-06-21 22:47 73d2  ████████████ 185k ↑    █░░░░░  10% ↑  ███████████·
-06-21 20:33 92d9  ████████████ 162k ↓    ░░░░░░   4% ↑  ████████████
 ```
 
 ## Jüngste Session
 
-**2026-06-22 13:28 · 2813de22**
+**2026-06-24 20:32 · fb5f6a02**
 
-- **Aufgabe:** start session
+- **Aufgabe:** Ich bin ein wenig lost. Wo stehen wir jetzt?
 - **Modelle:** Haupt Opus · Subagent Sonnet
-- **Tokens gesamt:** 19,280,730 (Haupt 18,488,254 · Subagent 792,476, Anteil 4 %)
-- **Peak-Kontext:** ████████████ 156k / 150k
-- **cache_read:** 18,030,336 · **Output:** 192,087
+- **Tokens gesamt:** 21,714,259 (Haupt 20,678,425 · Subagent 1,035,834, Anteil 5 %)
+- **Peak-Kontext:** ████████████ 159k / 150k
+- **cache_read:** 20,628,825 · **Output:** 269,354
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ 8 von 180 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
-- ✅ 792,476 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ⚠️ 12 von 204 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
+- ✅ 1,035,834 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -46,17 +46,16 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: Verify Undying Le… ██░░░░░░░░░░  27k    ✅
-2   general-purpose: Investigate overv… ███░░░░░░░░░  44k    ✅
+1   general-purpose: Context-engineeri… ██████░░░░░░  79k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  29,738
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  1,028,569
-cache_read     ▕████████████████████████▏   94%  18,030,336
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  192,087
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  38,925
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    4%  777,155
+cache_read     ▕████████████████████████▏   95%  20,628,825
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  269,354
 ```
 
 **Legende & Zielwerte:**
@@ -74,5 +73,5 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 174 Sessions: 2,866,567,678 Token (28,387 Antworten).
+Σ über 168 Sessions: 2,825,445,516 Token (27,801 Antworten).
 

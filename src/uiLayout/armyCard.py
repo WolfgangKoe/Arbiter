@@ -23,6 +23,7 @@ from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
     faction_display_name_for,
+    round_choice_state_key,
     short_round_choice_label,
     subfaction_badge_for,
     subfaction_value_for,
@@ -121,7 +122,7 @@ def _render_triggered_abilities(
 
         if ability.effect.type == "heal":
             sample = unit_by_id[unit_id_from_state_key(eligible[0])]
-            bonus = get_active_heal_bonus(faction_dir_for(faction), sample)
+            bonus = get_active_heal_bonus(faction, sample)
             if bonus:
                 st.caption(f"↑ Directive active: +{bonus} wound per {ability.name_en} use")
 
@@ -150,7 +151,7 @@ def _render_triggered_abilities(
             st.rerun()
 
 
-def _render_directive_buttons(round_choice, faction: str, faction_dir: str, round_num: int) -> None:
+def _render_directive_buttons(round_choice, faction: str, round_num: int) -> None:
     """Show Primary / Secondary directive selection buttons for the active ability."""
     st.caption(f"↳ **Primary:** {round_choice.primary}")
     st.caption(f"↳ **Secondary:** {round_choice.secondary}")
@@ -160,14 +161,14 @@ def _render_directive_buttons(round_choice, faction: str, faction_dir: str, roun
         key=f"cmd_directive_primary_{faction}_{round_num}",
         use_container_width=True,
     ):
-        st.session_state[f"round_choice_directive_{faction_dir}"] = "primary"
+        st.session_state[round_choice_state_key(faction, "directive")] = "primary"
         st.rerun()
     if col_s.button(
         "Use Secondary",
         key=f"cmd_directive_secondary_{faction}_{round_num}",
         use_container_width=True,
     ):
-        st.session_state[f"round_choice_directive_{faction_dir}"] = "secondary"
+        st.session_state[round_choice_state_key(faction, "directive")] = "secondary"
         st.rerun()
 
 
@@ -196,7 +197,7 @@ def _render_extra_round_choice(
     affinity_bonus = bool(subfaction and subfaction == round_choice.subfaction_affinity)
     _, subfaction_label = load_subfaction_meta(faction_dir)
 
-    extra_key = f"round_choice_extra_directive_{faction_dir}"
+    extra_key = round_choice_state_key(faction, "extra_directive")
     extra_directive: str | None = st.session_state.get(extra_key)
     st.caption("*Always active (extra):*")
 
@@ -267,9 +268,9 @@ def _render_round_choice_ui(faction: str) -> None:
     if not _ability_section_visible(phase_key):
         return
     is_active = faction == st.session_state.get("active")
-    active_key = f"round_choice_active_{faction_dir}"
-    directive_key = f"round_choice_directive_{faction_dir}"
-    used_key = f"round_choice_used_ids_{faction_dir}"
+    active_key = round_choice_state_key(faction, "active")
+    directive_key = round_choice_state_key(faction, "directive")
+    used_key = round_choice_state_key(faction, "used_ids")
     active_id = st.session_state.get(active_key)
     used_ids: list = st.session_state.get(used_key, [])
     current_round = st.session_state.get("round", 1)
@@ -294,7 +295,7 @@ def _render_round_choice_ui(faction: str) -> None:
             if not active_directive:
                 st.caption(f"**{p.name_en}** — active this round")
                 if is_active:
-                    _render_directive_buttons(p, faction, faction_dir, current_round)
+                    _render_directive_buttons(p, faction, current_round)
                 else:
                     st.caption("↳ *Awaiting directive selection*")
             else:
