@@ -1044,7 +1044,17 @@ def _render_resolution_tab(
 
     # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
     if is_shooting:
-        st.checkbox("Light Cover (+1 Save vs Ranged)", key=f"light_cover_{cover_key}")
+        from gameMechanic.ability_engine import (  # noqa: PLC0415
+            get_active_round_choice_ignores_cover_half_range,
+        )
+        from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
+
+        short = (
+            _round_choice_short_label(atk_faction)
+            if get_active_round_choice_ignores_cover_half_range(atk_faction)
+            else None
+        )
+        st.checkbox(light_cover_label(short), key=f"light_cover_{cover_key}")
     if is_fight:
         def_charged = def_state.get("turn_flags", {}).get("charged", False)
         if not def_charged:

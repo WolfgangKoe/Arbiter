@@ -23,6 +23,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_activated_command_abilities,
     get_active_heal_bonus,
     get_active_round_choice_ap_on_wound_6,
+    get_active_round_choice_ignores_cover_half_range,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
     get_active_round_choice_strength_if_charged,
@@ -491,10 +492,19 @@ def test_ap_on_wound_6_inactive_returns_zero() -> None:
     assert get_active_round_choice_ap_on_wound_6("Necrons", True) == 0
 
 
-def test_protocol_modifier_vengeful_stars_primary_wound_in_shooting() -> None:
+def test_protocol_modifier_vengeful_stars_primary_ap_on_wound_6_in_shooting() -> None:
+    # Plan 025 Step 3: D1 migrated from wound_modifier → ap_on_unmod_wound_6 (ranged).
+    # Generic modifier dict no longer returns a wound key; the dedicated fn is used.
     _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "primary")
     result = get_active_round_choice_modifier("Necrons", "shooting", False)
-    assert result == {"wound": 1}
+    assert result == {}
+    assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=False) == 1
+
+
+def test_protocol_modifier_vengeful_stars_primary_ap_on_wound_6_not_in_melee() -> None:
+    # D1 phase=shooting — must not fire in melee.
+    _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "primary")
+    assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=True) == 0
 
 
 def test_protocol_modifier_eternal_guardian_primary_save_any_phase() -> None:
@@ -549,16 +559,18 @@ def test_modifier_inactive_returns_empty() -> None:
     assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
 
-def test_ap_bonus_wired_shooting() -> None:
+def test_vengeful_stars_secondary_ignore_cover_half_range_active() -> None:
+    # Plan 025 Step 3: D2 migrated from ap_bonus → ignore_cover_half_range (ranged, class B).
+    # Generic modifier dict no longer returns an ap key for this directive.
     _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
     result = get_active_round_choice_modifier("Necrons", "shooting", False)
-    assert result == {"ap": -1}
-
-
-def test_ap_bonus_skipped_in_melee() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_vengeful_stars", "secondary")
-    result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
+    assert get_active_round_choice_ignores_cover_half_range("Necrons") is True
+
+
+def test_vengeful_stars_secondary_ignore_cover_false_when_inactive() -> None:
+    _protocol_session(None, None)
+    assert get_active_round_choice_ignores_cover_half_range("Necrons") is False
 
 
 def test_move_bonus_wired_movement() -> None:
@@ -749,17 +761,17 @@ def test_dynasty_affinity_other_subfaction_inert() -> None:
 def test_round_and_extra_modifiers_accumulate() -> None:
     # Round-assigned directive AND the 6th protocol's directive both feed the engine.
     # Round slot: Eternal Guardian primary (save +1, any phase).
-    # 6th: Vengeful Stars primary (wound +1, shooting).
+    # 6th: Vengeful Stars primary (ap_on_unmod_wound_6 ranged, Plan 025 Step 3).
+    # The wound key is no longer contributed by Vengeful D1 — only save from Eternal.
     _extra_protocol_session(
         "wh40k_9e.necrons.faction.protocol_vengeful_stars",
         extra_directive="primary",
         round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
         round_directive="primary",
     )
-    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {
-        "save": 1,
-        "wound": 1,
-    }
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {"save": 1}
+    # The ap_on_wound_6 effect from the 6th Vengeful protocol is reachable via the dedicated fn.
+    assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=False) == 1
 
 
 # ---------------------------------------------------------------------------

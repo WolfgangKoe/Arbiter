@@ -59,8 +59,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
   | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89; UI-verifiziert S93) |
   | Undying Legions · S | **heal_bonus** Living Metal +1 (war fälschlich `rp_bonus` „model returned" — S89-Datenfix) | ✅ (`get_active_heal_bonus`) | ✅ Caption (S89; UI-verifiziert S93) |
-  | Vengeful Stars · P | wound_modifier +1 (Shooting) | ✅ | ✅ WOUND-Block |
-  | Vengeful Stars · S | ap_bonus -1 (Shooting) | ✅ | 🔲 SAVE-Block AP |
+  | Vengeful Stars · P | **9E-D1:** unmod. Wound-6 → AP +1 (**ranged**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (Plan 025 Step 3) |
+  | Vengeful Stars · S | **9E-D2:** kein Light Cover ≤ halbe Reichweite (**ranged**, `ignore_cover_half_range`, Klasse B/Hybrid) | ✅ (`get_active_round_choice_ignores_cover_half_range` → Hinweis) | ✅ grüne Badge an Light-Cover-Checkbox (Plan 025 Step 3) |
 
   Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
   Phasen-Block (wie MWBD). Anzeige-Rest überschneidet sich mit Plan 016/017.
@@ -76,8 +76,9 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
     aber **kein UI-Konsument liest ihn** (`_collect_atk_modifiers`/`_collect_def_save_modifiers` fragen
     nur `hit`/`wound`/`save` ab, nicht `strength`/`ap`). Hungry-S/Vengeful-S wirken im Kampf **gar nicht**.
     **S98:** Hungry-S ist behoben — Plan 025 Step 2 faltet den bedingten +1-S in `str_bonus`
-    (eigener `strength_if_charged`-Pfad, **nicht** der tote `strength`-Modifier). **Vengeful-S
-    (`ap_bonus`) bleibt tot bis Step 3.**
+    (eigener `strength_if_charged`-Pfad, **nicht** der tote `strength`-Modifier). **S98+ (Step 3):
+    der tote `ap_bonus`-Pfad ist entfernt — Vengeful-S ist jetzt 9E-D2 `ignore_cover_half_range`
+    (Klasse B/Hybrid, Hinweis an der Light-Cover-Checkbox), Vengeful-P ist 9E-D1 `ap_on_unmod_wound_6`.**
   - **Wurzel-Lösung (Design-Korrektur S98):** Kein generischer Caption-Block mehr — Direktiv-Effekte
     werden ins **Dice-UI** integriert (S blau wie WAAAGH; trigger-bedingt als Würfelzeile mit Symbol,
     `value_triggered_die_row_html`). **Anzeige ist ab S97 Pflichtteil jedes 025-Steps.** Reine

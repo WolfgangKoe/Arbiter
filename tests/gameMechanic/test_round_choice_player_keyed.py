@@ -18,6 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 import gameMechanic.ability_engine as _eng  # noqa: E402
 import gameMechanic.game_state as _gs  # noqa: E402
 from gameMechanic.ability_engine import (  # noqa: E402
+    get_active_round_choice_ap_on_wound_6,
+    get_active_round_choice_ignores_cover_half_range,
     get_active_round_choice_modifier,
 )
 from gameMechanic.game_state import (  # noqa: E402
@@ -38,7 +40,9 @@ def _install(session: "_S") -> None:
 
 # Vehicle protocols with numeric shooting/any-phase modifiers (Hungry Void's
 # directives are now per-die/conditional, not numeric — see Plan 025 Step 2).
-_VENGEFUL_STARS = "wh40k_9e.necrons.faction.protocol_vengeful_stars"  # primary: wound +1 (shooting)
+# primary: ap_on_unmod_wound_6 (shooting, class B) — no longer a generic wound modifier
+# (Plan 025 Step 3). secondary: ignore_cover_half_range (shooting, class B).
+_VENGEFUL_STARS = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
 _ETERNAL_GUARDIAN = "wh40k_9e.necrons.faction.protocol_eternal_guardian"  # primary: save +1
 
 
@@ -72,7 +76,12 @@ def test_mirror_match_protocol_modifiers_are_player_independent() -> None:
     _install(session)
 
     # Each army sees only its own directive's effect, despite the shared faction.
-    assert get_active_round_choice_modifier("P1", "shooting", False) == {"wound": 1}
+    # Vengeful Stars primary is class B (ap_on_unmod_wound_6), so it no longer shows
+    # up in the generic numeric-modifier dict — it is read via the dedicated function,
+    # which is itself player-keyed and so still proves the per-player isolation.
+    assert get_active_round_choice_modifier("P1", "shooting", False) == {}
+    assert get_active_round_choice_ap_on_wound_6("P1", use_melee=False) == 1
+    assert get_active_round_choice_ap_on_wound_6("P2", use_melee=False) == 0
     assert get_active_round_choice_modifier("P2", "shooting", False) == {"save": 1}
 
 
@@ -83,8 +92,24 @@ def test_mirror_match_one_player_choice_does_not_leak_to_other() -> None:
     # P2 has made no choice at all.
     _install(session)
 
-    assert get_active_round_choice_modifier("P1", "shooting", False) == {"wound": 1}
+    # Vengeful Stars primary (class B) reads via the dedicated AP-on-6 function;
+    # P2 made no choice, so neither the modifier dict nor the class-B effects leak.
+    assert get_active_round_choice_modifier("P1", "shooting", False) == {}
+    assert get_active_round_choice_ap_on_wound_6("P1", use_melee=False) == 1
     assert get_active_round_choice_modifier("P2", "shooting", False) == {}
+    assert get_active_round_choice_ap_on_wound_6("P2", use_melee=False) == 0
+
+
+def test_mirror_match_vengeful_stars_secondary_is_player_independent() -> None:
+    """Vengeful Stars D2 (ignore_cover_half_range, class B) stays per-player keyed."""
+    session = _mirror_session()
+    session[round_choice_state_key("P1", "active")] = _VENGEFUL_STARS
+    session[round_choice_state_key("P1", "directive")] = "secondary"
+    # P2 has made no choice at all.
+    _install(session)
+
+    assert get_active_round_choice_ignores_cover_half_range("P1") is True
+    assert get_active_round_choice_ignores_cover_half_range("P2") is False
 
 
 def test_reset_clears_each_player_independently() -> None:

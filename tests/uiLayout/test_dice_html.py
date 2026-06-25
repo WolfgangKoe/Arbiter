@@ -18,6 +18,7 @@ from uiLayout.dice_compose import (  # noqa: E402
     block_divider_html,
     dice_face_svg,
     dice_row_html,
+    light_cover_label,
     miss_die_html,
     modifier_die_pair_html,
     reroll_marker_row_html,
@@ -402,3 +403,34 @@ def test_value_triggered_die_row_boundary_gap_follows_threshold() -> None:
     """A base_threshold in 2..6 inserts the die-wide boundary gap for alignment."""
     html = value_triggered_die_row_html("Dir", 6, "AP-1", _BUFF_GREEN, base_threshold=4)
     assert "width:34px" in html
+
+
+# ---------------------------------------------------------------------------
+# light_cover_label — Vengeful Stars D2 inline hint (Plan 025 Step 3)
+# ---------------------------------------------------------------------------
+
+
+def test_light_cover_label_plain_without_directive() -> None:
+    """No directive active → plain label, no badge or hint text."""
+    label = light_cover_label(None)
+    assert label == "Light Cover (+1 Save vs Ranged)"
+    assert ":green-badge" not in label
+    assert "half range" not in label
+
+
+def test_light_cover_label_with_directive_contains_badge() -> None:
+    """Active directive → label carries a :green-badge with the protocol short name."""
+    label = light_cover_label("Vengeful Stars")
+    assert ":green-badge[Vengeful Stars]" in label
+
+
+def test_light_cover_label_with_directive_contains_hint_text() -> None:
+    """Active directive → label carries the No-Light-Cover-half-range hint."""
+    label = light_cover_label("Vengeful Stars")
+    assert "No Light Cover ≤ half range" in label
+
+
+def test_light_cover_label_with_directive_preserves_base_text() -> None:
+    """Base text must be present regardless of the directive."""
+    label = light_cover_label("Vengeful Stars")
+    assert "Light Cover (+1 Save vs Ranged)" in label

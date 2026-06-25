@@ -251,6 +251,17 @@ def _active_directive_has_type(player: str, effect_type: str) -> bool:
     return any(e.get("type") == effect_type for e in _active_directive_effects(player))
 
 
+def get_active_round_choice_ignores_cover_half_range(player: str) -> bool:
+    """True if an active directive negates the target's Light Cover within half range.
+
+    Vengeful Stars D2, ranged (9E). Class B/hybrid: half-range is a table measurement,
+    so the App only surfaces the hint inline — the player still toggles Light Cover
+    manually. Returns False when no such directive is active (regardless of phase,
+    because the firing model must confirm half-range at the table anyway).
+    """
+    return _active_directive_has_type(player, "ignore_cover_half_range")
+
+
 def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     """Return Reanimation Protocol modifiers from the active round-choice directive.
 

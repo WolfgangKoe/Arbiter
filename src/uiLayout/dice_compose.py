@@ -2,6 +2,26 @@
 
 from __future__ import annotations
 
+
+def light_cover_label(directive_short_label: str | None = None) -> str:
+    """Checkbox label for the Light Cover toggle.
+
+    When a directive negates Light Cover within half range (Vengeful Stars D2),
+    a green badge and hint are appended inline so the player sees the hint right
+    where they would tick the box. The checkbox remains manually settable.
+
+    Args:
+        directive_short_label: short protocol name (e.g. "Vengeful Stars") when
+            the directive is active; None for the plain label.
+    """
+    base = "Light Cover (+1 Save vs Ranged)"
+    if directive_short_label:
+        return (
+            f"{base}  :green-badge[{directive_short_label}]" " :green[No Light Cover ≤ half range]"
+        )
+    return base
+
+
 _THRESHOLD_COLOR: dict[int, str] = {
     2: "#22c55e",
     3: "#22c55e",

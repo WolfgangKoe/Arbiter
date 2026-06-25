@@ -128,8 +128,20 @@ ein Regelkonformitäts-Bruch (DoD #1) und macht jede darauf aufbauende Anzeige
    `get_active_round_choice_strength_if_charged`; +1 S in `str_bonus` gefaltet → S blau im
    WOUND-Block wie WAAAGH. Test-Migrationen (Hungry-Vehikel-Tests → Vengeful/dedizierte
    Fns) + neue Engine-/Dice-Tests. 1144 grün, 93,18 %. Anzeige = Pflichtteil erfüllt.
-3. **Vengeful Stars (A).** D1 `ap_on_unmod_wound_6` (ranged, teilt Logik mit Step 2),
-   D2 `ignore_cover_half_range`. Engine + combat/cover + Tests.
+3. ✅ **DONE (S99) — Vengeful Stars.** D1 `ap_on_unmod_wound_6` (**ranged, Klasse B** —
+   teilt Logik/Anzeige mit Step 2; bereits phasen-generisch verdrahtet → nur YAML-Tausch
+   + Verifikationstest, `[AP-1]`-Zeile im Schuss-WOUND-Block). D2 `ignore_cover_half_range`
+   (**Klasse B/Hybrid** — halbe Reichweite ist Tischmessung) über neue Engine-Fn
+   `get_active_round_choice_ignores_cover_half_range` + reine Label-Fn `light_cover_label`:
+   grüne `:green-badge`-Inline-Anzeige an der Light-Cover-Checkbox (Häkchen bleibt manuell).
+   Tot-Pfad `ap_bonus` ersetzt. 1150 grün / 93,16 %. Anzeige = Pflichtteil erfüllt;
+   manuelle UI-Verifikation offen (s. u.).
+   - **Test-Migration (Sicherheitsnetz):** `test_ability_engine.py` (Primary `{"wound":1}`
+     → `{}` + dedizierte AP-on-6-Fn; Secondary `ap_bonus` → `ignore_cover_half_range`)
+     **und** `tests/gameMechanic/test_round_choice_player_keyed.py` — zwei Mirror-Match-
+     Tests prüften Vengeful-Primary noch als `{"wound":1}`; migriert auf `{}` +
+     player-keyed `get_active_round_choice_ap_on_wound_6(..., use_melee=False)==1` (+ neuer
+     Secondary-Mirror-Test für `ignore_cover_half_range`). (Nachgetragen S99.)
 4. **Eternal Guardian (A + B).** D1 `light_cover_if_stationary` (bedingter Cover-
    Grant im SAVE-Block), D2 Hold Steady/Set to Defend = B-Hinweis.
 5. **Conquering Tyrant (A + B).** D1 +3" Aura = B-Hinweis, D2 `shoot_after_fall_back`
@@ -150,6 +162,9 @@ ein Regelkonformitäts-Bruch (DoD #1) und macht jede darauf aufbauende Anzeige
 
 ## Test plan
 
+- **Scoping-Pflichtschritt vor jedem Daten-Step (S99-Lehre):** `grep -rn "<alter_effekt_typ>" tests/`
+  über den zu ersetzenden Effekt-Typ laufen lassen → ALLE Testdateien in die Migrationsliste
+  aufnehmen (Step 3 verfehlte `test_round_choice_player_keyed.py`, weil die Liste unvollständig war).
 - Pro Step: neue Effekt-Tests (Engine + ggf. HTML-Output/Hint), dann **Vollsuite**
   `pytest --tb=short` (nicht nur `-k`), Coverage ≥ 90 %, Architektur-Gate grün.
 - Jeder ersetzte erfundene Effekt: alter Test wird zum neuen Verhalten migriert

@@ -141,18 +141,19 @@ abilities:
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: mephrit
-  primary: +1 to wound rolls (Shooting)
-  secondary: Improve AP of Shooting weapons by 1
+  primary: 'Ranged: unmodified wound roll of 6 improves this attack''s AP by 1'
+  secondary: 'Ranged: target gains no benefit from Light Cover when the firing model is within half range'
   directives:
     primary:
       effect:
-        type: wound_modifier
+        type: ap_on_unmod_wound_6
         value: 1
         phase: shooting
     secondary:
+      # 9E Directive 2: class B/hybrid — half-range is a table measurement; App
+      # surfaces the hint inline at the Light Cover checkbox (ignore_cover_half_range).
       effect:
-        type: ap_bonus
-        value: -1
+        type: ignore_cover_half_range
         phase: shooting
 # Cryptek Arkana (Codex Necrons 9E, p. 61). Migrated from arkana.yaml / points.yaml
 # (Plan 021): data move + generic loader only. ability_type is a STOPGAP marker
