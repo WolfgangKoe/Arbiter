@@ -407,6 +407,8 @@ def set_in_melee(uid: str, faction: str, value: bool) -> None:
 def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) -> None:
     key = units_key_for(faction)
     st.session_state[key][uid]["turn_flags"]["charged"] = True
+    target_key = units_key_for(target_faction)
+    st.session_state[target_key][target_uid]["turn_flags"]["was_charged"] = True
     enter_melee(uid, faction, target_uid, target_faction)
 
 

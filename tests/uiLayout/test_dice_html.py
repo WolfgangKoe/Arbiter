@@ -25,6 +25,7 @@ from uiLayout.dice_compose import (  # noqa: E402
     save_modifier_die_pair_html,
     special_die_html,
     threshold_header_html,
+    value_triggered_die_row_html,
 )
 
 _BUFF_GREEN = "#4a9a5a"
@@ -380,3 +381,24 @@ def test_modifier_die_pair_html_buff_no_off_scale() -> None:
     assert _BUFF_GREEN in html
     # No miss die needed (in-scale buff).
     assert "#c0392b" not in html
+
+
+def test_value_triggered_die_row_shows_content_in_trigger_column() -> None:
+    """value_triggered_die_row_html renders the chip text and the directive label."""
+    html = value_triggered_die_row_html("Hungry Void", 6, "AP-1", _BUFF_GREEN, base_threshold=3)
+    assert "AP-1" in html
+    assert "Hungry Void" in html
+    assert _BUFF_GREEN in html
+
+
+def test_value_triggered_die_row_uses_buff_green_for_attacker_benefit() -> None:
+    """The AP-on-6 row reads as an attacker buff (green), like any other buff."""
+    html = value_triggered_die_row_html("Hungry Void", 6, "AP-1", _BUFF_GREEN)
+    assert _BUFF_GREEN in html
+    assert _DEBUFF_RED not in html
+
+
+def test_value_triggered_die_row_boundary_gap_follows_threshold() -> None:
+    """A base_threshold in 2..6 inserts the die-wide boundary gap for alignment."""
+    html = value_triggered_die_row_html("Dir", 6, "AP-1", _BUFF_GREEN, base_threshold=4)
+    assert "width:34px" in html

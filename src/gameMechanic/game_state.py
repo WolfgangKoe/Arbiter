@@ -350,6 +350,7 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
             "advanced": False,
             "retreated": False,
             "charged": False,
+            "was_charged": False,
             "shot": False,
             "fought": False,
             "cast": False,

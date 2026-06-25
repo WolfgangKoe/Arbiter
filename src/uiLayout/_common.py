@@ -426,6 +426,22 @@ def _round_choice_source_label(player: str) -> str:
     return f"{p.name_en} ({directive.capitalize()})" if p else load_round_choice_label(faction_dir)
 
 
+def _round_choice_short_label(player: str) -> str:
+    """Short protocol name for compact dice badges — drops the 'Protocol of the '
+    qualifier and the directive suffix, matching the unitCard directive badge."""
+    from gameMechanic.game_state import (  # noqa: PLC0415
+        faction_dir_for,
+        round_choice_state_key,
+        short_round_choice_label,
+    )
+    from gameObjects.loader import load_round_choice_abilities  # noqa: PLC0415
+
+    active_id = st.session_state.get(round_choice_state_key(player, "active"))
+    abilities = load_round_choice_abilities(faction_dir_for(player))
+    p = next((rc for rc in abilities if rc.id == active_id), None)
+    return short_round_choice_label(p.name_en) if p else ""
+
+
 def _collect_atk_modifiers(
     atk_faction: str,
     atk_state: dict,  # type: ignore[type-arg]
@@ -884,9 +900,22 @@ def _render_resolution_tab(
     from gameMechanic.ability_engine import (  # noqa: PLC0415
         ability_invuln_save,
         buff_stat_bonus,
+        get_active_round_choice_ap_on_wound_6,
+        get_active_round_choice_strength_if_charged,
     )
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
+    # Hungry Void D2: +1 S in melee if the attacker charged, was charged, or did a
+    # Heroic Intervention. Folded into str_bonus so the WOUND block highlights the
+    # raised S in blue exactly like a WAAAGH! strength buff.
+    try:
+        str_bonus += get_active_round_choice_strength_if_charged(
+            atk_faction, atk_state.get("turn_flags", {}), use_melee
+        )
+        on_six_ap = get_active_round_choice_ap_on_wound_6(atk_faction, use_melee)
+        on_six_label = _round_choice_short_label(atk_faction) if on_six_ap else ""
+    except KeyError:
+        on_six_ap, on_six_label = 0, ""
     # str_bonus is added after weapon-strength calculation so that ×N weapons
     # give (User×N) + bonus rather than (User + bonus)×N. Base strength is the
     # group's value (e.g. Boss Nob S 5), not the unit-level S.
@@ -1000,7 +1029,12 @@ def _render_resolution_tab(
 
     # WOUND BLOCK
     _render_dice_wound_block(
-        strength, def_unit.toughness, atk_result["wound"]["stack"], strength_buff=str_bonus
+        strength,
+        def_unit.toughness,
+        atk_result["wound"]["stack"],
+        strength_buff=str_bonus,
+        on_six_ap=on_six_ap,
+        on_six_label=on_six_label,
     )
 
     st.markdown("---")

@@ -69,19 +69,19 @@ abilities:
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: novokh
-  primary: +1 to hit (Shooting)
-  secondary: +1 Strength (Shooting weapons)
+  primary: 'Melee: unmodified wound roll of 6 improves this attack''s AP by 1'
+  secondary: 'Melee: +1 Strength if this unit charged, was charged, or made a Heroic Intervention'
   directives:
     primary:
       effect:
-        type: hit_modifier
+        type: ap_on_unmod_wound_6
         value: 1
-        phase: shooting
+        phase: melee
     secondary:
       effect:
-        type: strength_modifier
+        type: strength_if_charged
         value: 1
-        phase: shooting
+        phase: melee
 - id: wh40k_9e.necrons.faction.protocol_conquering_tyrant
   name_en: Protocol of the Conquering Tyrant
   ability_type: round_choice

@@ -51,8 +51,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   |---|---|---|---|
   | Eternal Guardian · P | save_modifier +1 | ✅ | ✅ SAVE-Block grün |
   | Eternal Guardian · S | reroll_save_1 | ✅ (`get_active_round_choice_rerolls`) | 🔲 SAVE-Hinweis |
-  | Hungry Void · P | hit_modifier +1 (Shooting) | ✅ | ✅ HIT-Block |
-  | Hungry Void · S | strength_modifier +1 (Shooting) | ✅ | 🔲 WOUND-Block S+1 |
+  | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
+  | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
   | Conquering Tyrant · P | leadership_bonus +1 | ✅ (informativ, kein UI-Konsument) | 🔲 Morale |
   | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) | ✅ (`get_active_round_choice_rerolls`) | 🔲 HIT+WOUND Melee |
   | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
@@ -75,9 +75,13 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   - **„Engine ✅" ist irreführend für `strength_modifier`/`ap_bonus`:** Die Engine-Fn liefert den Wert,
     aber **kein UI-Konsument liest ihn** (`_collect_atk_modifiers`/`_collect_def_save_modifiers` fragen
     nur `hit`/`wound`/`save` ab, nicht `strength`/`ap`). Hungry-S/Vengeful-S wirken im Kampf **gar nicht**.
-  - **Wurzel-Lösung:** Plan 025 **Step 2b** baut einen generischen, `enforcement`-getriebenen
-    Direktiv-Hinweisblock, der diese 🔲-Lücken Schritt für Schritt ablöst. **Anzeige ist ab S97
-    Pflichtteil jedes 025-Steps** (kein Verschieben mehr — Stakeholder-Vorgabe S97).
+    **S98:** Hungry-S ist behoben — Plan 025 Step 2 faltet den bedingten +1-S in `str_bonus`
+    (eigener `strength_if_charged`-Pfad, **nicht** der tote `strength`-Modifier). **Vengeful-S
+    (`ap_bonus`) bleibt tot bis Step 3.**
+  - **Wurzel-Lösung (Design-Korrektur S98):** Kein generischer Caption-Block mehr — Direktiv-Effekte
+    werden ins **Dice-UI** integriert (S blau wie WAAAGH; trigger-bedingt als Würfelzeile mit Symbol,
+    `value_triggered_die_row_html`). **Anzeige ist ab S97 Pflichtteil jedes 025-Steps.** Reine
+    B-Tisch-Hinweise ohne Würfel-Mechanik (Sudden Storm S) bleiben gesondert offen.
 - 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
   Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
   Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist

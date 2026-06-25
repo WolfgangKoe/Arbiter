@@ -22,8 +22,10 @@ from gameMechanic.ability_engine import (  # noqa: E402
     execute_effect,
     get_activated_command_abilities,
     get_active_heal_bonus,
+    get_active_round_choice_ap_on_wound_6,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
+    get_active_round_choice_strength_if_charged,
     get_active_rp_modifiers,
     get_triggered_abilities,
 )
@@ -467,16 +469,26 @@ def test_protocol_modifier_no_directive_returns_empty() -> None:
     assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
 
-def test_protocol_modifier_hungry_void_primary_hit_in_shooting() -> None:
+def test_hungry_void_primary_not_a_numeric_modifier() -> None:
+    # 9E D1 (ap_on_unmod_wound_6) is a per-die, class-B effect — never surfaced as
+    # a numeric hit/wound/save modifier. Migrated from the old hit_modifier vehicle.
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
-    result = get_active_round_choice_modifier("Necrons", "shooting", False)
-    assert result == {"hit": 1}
+    assert get_active_round_choice_modifier("Necrons", "fight", True) == {}
 
 
-def test_protocol_modifier_hungry_void_primary_no_effect_in_melee() -> None:
+def test_ap_on_wound_6_hungry_void_primary_melee() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
-    result = get_active_round_choice_modifier("Necrons", "fight", True)
-    assert result == {}
+    assert get_active_round_choice_ap_on_wound_6("Necrons", True) == 1
+
+
+def test_ap_on_wound_6_skipped_in_shooting() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
+    assert get_active_round_choice_ap_on_wound_6("Necrons", False) == 0
+
+
+def test_ap_on_wound_6_inactive_returns_zero() -> None:
+    _protocol_session(None, None)
+    assert get_active_round_choice_ap_on_wound_6("Necrons", True) == 0
 
 
 def test_protocol_modifier_vengeful_stars_primary_wound_in_shooting() -> None:
@@ -499,19 +511,40 @@ def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
     assert result == {}
 
 
-def test_strength_modifier_wired_in_shooting() -> None:
+def test_strength_if_charged_hungry_void_secondary_when_charged() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
-    result = get_active_round_choice_modifier("Necrons", "shooting", False)
-    assert result == {"strength": 1}
+    assert get_active_round_choice_strength_if_charged("Necrons", {"charged": True}, True) == 1
 
 
-def test_strength_modifier_skipped_in_melee() -> None:
+def test_strength_if_charged_when_was_charged() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
-    result = get_active_round_choice_modifier("Necrons", "fight", True)
-    assert result == {}
+    assert get_active_round_choice_strength_if_charged("Necrons", {"was_charged": True}, True) == 1
 
 
-def test_strength_modifier_inactive_returns_empty() -> None:
+def test_strength_if_charged_when_heroic_intervened() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    flags = {"heroic_intervened": True}
+    assert get_active_round_choice_strength_if_charged("Necrons", flags, True) == 1
+
+
+def test_strength_if_charged_zero_when_not_charged() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    assert get_active_round_choice_strength_if_charged("Necrons", {}, True) == 0
+
+
+def test_strength_if_charged_zero_in_shooting() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    assert get_active_round_choice_strength_if_charged("Necrons", {"charged": True}, False) == 0
+
+
+def test_strength_if_charged_not_a_numeric_modifier() -> None:
+    # Secondary directive is consumed via the dedicated function, not the generic
+    # numeric-modifier dict. Migrated from the old strength_modifier vehicle.
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "secondary")
+    assert get_active_round_choice_modifier("Necrons", "fight", True) == {}
+
+
+def test_modifier_inactive_returns_empty() -> None:
     _protocol_session(None, None)
     assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
 
@@ -716,16 +749,16 @@ def test_dynasty_affinity_other_subfaction_inert() -> None:
 def test_round_and_extra_modifiers_accumulate() -> None:
     # Round-assigned directive AND the 6th protocol's directive both feed the engine.
     # Round slot: Eternal Guardian primary (save +1, any phase).
-    # 6th: Hungry Void primary (hit +1, shooting).
+    # 6th: Vengeful Stars primary (wound +1, shooting).
     _extra_protocol_session(
-        "wh40k_9e.necrons.faction.protocol_hungry_void",
+        "wh40k_9e.necrons.faction.protocol_vengeful_stars",
         extra_directive="primary",
         round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
         round_directive="primary",
     )
     assert get_active_round_choice_modifier("Necrons", "shooting", False) == {
         "save": 1,
-        "hit": 1,
+        "wound": 1,
     }
 
 

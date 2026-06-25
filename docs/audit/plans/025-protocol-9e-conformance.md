@@ -43,6 +43,15 @@ Beim Scoping von Step 2 (Hungry Void) zwei strukturelle Befunde + Konsens-Entsch
 - **DoD-Ergänzung (verbindlich ab jetzt):** **Anzeige ist Pflichtteil JEDES 025-Steps** — kein
   Verschieben von Render auf „später/Backlog". Jeder neue/geänderte Effekt nennt seine Anzeige.
 
+**Design-Korrektur S98 (Stakeholder):** Der separate **Caption-Hinweisblock** aus Step 2b wurde
+für die kampf-relevanten Direktiven **verworfen**. Stattdessen werden Direktiv-Effekte ins
+bestehende **Dice-UI-Vokabular** integriert: numerische Buffs wie WAAAGH (S blau im WOUND-Block),
+trigger-bedingte Effekte als eigene Würfelzeile mit Symbol in der Auslöser-Spalte
+(`value_triggered_die_row_html`, z. B. `[AP-1]` in der 6er-Spalte). Step 2b als Caption-Block
+entfällt damit; sein Rest-Anliegen (reine B-Tisch-Hinweise wie **Sudden Storm S**, die keine
+Würfel-Mechanik haben) bleibt offen und wird gesondert gelöst (nicht als Caption-Sammelblock).
+Begründung Stakeholder: Konsistenz „wie jeder andere Buff" + Bedarf nach echtem Design-System.
+
 > Der generische Hinweisblock ist die Wurzel-Lösung für die aufgelaufenen 🔲-Anzeige-Lücken
 > in `backlog.md` §0 #2 (Reroll-Save-Hinweis, S+1-WOUND, AP-im-SAVE …) — diese werden über
 > `enforcement` Schritt für Schritt vom Block abgedeckt statt einzeln nachgezogen.
@@ -112,8 +121,13 @@ ein Regelkonformitäts-Bruch (DoD #1) und macht jede darauf aufbauende Anzeige
    substanziell konform. Sudden Storm S (`advance_and_charge`) → echtes D2
    (Aktion + Ranged); P/S-Labels von Undying Legions an D1/D2-Nummerierung
    angleichen. Keine neuen Engine-Typen außer Sudden Storm D2 (B-Hinweis).
-2. **Hungry Void (A).** D1 `ap_on_unmod_wound_6` (melee), D2 `strength_if_charged`
-   (melee, Bedingung charged/charge/HI). Engine + combat + Tests.
+2. ✅ **DONE (S98) — Hungry Void.** D1 `ap_on_unmod_wound_6` (melee, **Klasse B** —
+   Combat zähl-basiert, Tisch-Hinweis als `[AP-1]`-Zeile im WOUND-Block via neuem
+   `value_triggered_die_row_html`). D2 `strength_if_charged` (melee, **Klasse A**) über
+   neues `was_charged`-Flag (`turn_flags`-Init + `set_charged` markiert Ziel) + Engine-Fn
+   `get_active_round_choice_strength_if_charged`; +1 S in `str_bonus` gefaltet → S blau im
+   WOUND-Block wie WAAAGH. Test-Migrationen (Hungry-Vehikel-Tests → Vengeful/dedizierte
+   Fns) + neue Engine-/Dice-Tests. 1144 grün, 93,18 %. Anzeige = Pflichtteil erfüllt.
 3. **Vengeful Stars (A).** D1 `ap_on_unmod_wound_6` (ranged, teilt Logik mit Step 2),
    D2 `ignore_cover_half_range`. Engine + combat/cover + Tests.
 4. **Eternal Guardian (A + B).** D1 `light_cover_if_stationary` (bedingter Cover-

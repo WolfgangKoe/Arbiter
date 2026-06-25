@@ -206,6 +206,46 @@ def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) ->
     return flags
 
 
+def get_active_round_choice_strength_if_charged(
+    player: str, turn_flags: dict[str, bool], use_melee: bool
+) -> int:
+    """+N Strength from a ``strength_if_charged`` directive (Hungry Void D2, melee).
+
+    Class A: the App computes it. Fires only when the attacking unit made a charge
+    move, was charged, or performed a Heroic Intervention this turn (9E wording).
+    The charge condition is read from the attacker's ``turn_flags`` so the rule
+    lives in one tested place. Returns 0 in shooting or when no such directive is
+    active. Sums across every active directive (round-assigned + 6th / dynasty).
+    """
+    if not use_melee:
+        return 0
+    charged = turn_flags.get("charged") or turn_flags.get("was_charged")
+    if not (charged or turn_flags.get("heroic_intervened")):
+        return 0
+    return sum(
+        effect.get("value", 0)
+        for effect in _active_directive_effects(player)
+        if effect.get("type") == "strength_if_charged"
+        and not _directive_phase_excluded(effect, use_melee)
+    )
+
+
+def get_active_round_choice_ap_on_wound_6(player: str, use_melee: bool) -> int:
+    """AP improvement applied on an unmodified wound roll of 6 (Hungry Void D1, melee).
+
+    Class B: combat is count-based (the App never sees individual dice faces), so
+    the per-die effect is applied at the table — this drives the ``[AP-N]``-on-6
+    display row only. Returns the AP magnitude (e.g. 1) or 0 when no such directive
+    is active or the phase does not match. Sums across every active directive.
+    """
+    return sum(
+        effect.get("value", 0)
+        for effect in _active_directive_effects(player)
+        if effect.get("type") == "ap_on_unmod_wound_6"
+        and not _directive_phase_excluded(effect, use_melee)
+    )
+
+
 def _active_directive_has_type(player: str, effect_type: str) -> bool:
     """True if any active round-choice directive has the given effect type."""
     return any(e.get("type") == effect_type for e in _active_directive_effects(player))

@@ -16,6 +16,7 @@ from uiLayout.dice_compose import (
     save_modifier_die_pair_html,
     special_die_html,
     threshold_header_html,
+    value_triggered_die_row_html,
 )
 
 
@@ -73,8 +74,15 @@ def _render_dice_wound_block(
     toughness: int,
     wound_stack: list[dict],  # type: ignore[type-arg]
     strength_buff: int = 0,
+    on_six_ap: int = 0,
+    on_six_label: str = "",
 ) -> None:
-    """WOUND block: S vs T header, dice row, modifier pairs in blue."""
+    """WOUND block: S vs T header, dice row, modifier pairs in blue.
+
+    on_six_ap > 0 adds a value-triggered row showing ``[AP-N]`` in the 6 column
+    (Hungry Void D1: unmodified wound roll of 6 improves AP). on_six_label is the
+    data-driven directive name shown in the badge column.
+    """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
     base = wound_threshold(strength, toughness)
@@ -102,6 +110,20 @@ def _render_dice_wound_block(
         grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
+    if on_six_ap > 0:
+        # Hungry Void D1 (class B): on an unmodified wound roll of 6, AP improves.
+        # Applied at the table — shown as [AP-N] in the 6 column. Benefits the
+        # attacker, so it reads as a buff (green), like any other attacker buff.
+        st.markdown(
+            value_triggered_die_row_html(
+                on_six_label or "Directive",
+                6,
+                f"AP-{on_six_ap}",
+                _BUFF_COLOR_HEX,
+                base_threshold=base,
+            ),
+            unsafe_allow_html=True,
+        )
     if wound_stack:
         current = base
         parts = []

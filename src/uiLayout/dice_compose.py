@@ -374,3 +374,34 @@ def always_fail_marker_row_html(
     color = _modifier_color({"color_hint": color_hint, "value": -1})
     badge = _badge_chip("Auto-fail", color)
     return _marker_row_html(badge, _AUTO_FAIL_GLYPH, set(slots), base_threshold, color)
+
+
+def _triggered_die_chip_html(content: str, color: str) -> str:
+    """Die-shaped box (32px, like a face) holding short text such as 'AP-1'."""
+    return (
+        f'<span style="display:inline-block;width:30px;height:30px;line-height:30px;'
+        f"border:1.5px solid {color};border-radius:4px;background:#1e293b;"
+        f"font-size:9px;font-weight:700;color:{color};text-align:center;"
+        f'vertical-align:middle;box-sizing:border-box;">{content}</span>'
+    )
+
+
+def value_triggered_die_row_html(
+    label: str, trigger_value: int, content: str, color: str, base_threshold: int = 0
+) -> str:
+    """Die-shaped chip in the *trigger_value* column, all other slots empty.
+
+    For directive effects that fire on a specific unmodified roll — Hungry Void D1:
+    on an unmodified wound roll of 6, improve AP by 1, shown as ``[AP-1]`` in the 6
+    column. Reads like the dice rows above: the chip sits in the same die-sized slot
+    as the value it triggers on. base_threshold keeps the boundary gap aligned with
+    the dice rows above so the columns stay flush.
+    """
+    slots: list[str] = []
+    for v in range(1, 7):
+        if 2 <= base_threshold <= 6 and v == base_threshold:
+            slots.append(_boundary_gap_html(with_line=False))
+        inner = _triggered_die_chip_html(content, color) if v == trigger_value else ""
+        slots.append(_modifier_slot_html(inner))
+    row = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
+    return grid_row_html(_badge_chip(label, color), row)

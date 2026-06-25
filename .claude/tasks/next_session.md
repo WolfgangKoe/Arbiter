@@ -21,6 +21,22 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
+## Aktueller Stand (nach S98, 2026-06-25)
+
+**S98 — Plan 025 Step 2 (Hungry Void) FERTIG + committed.** D1 `ap_on_unmod_wound_6` (melee, **B** —
+Combat zähl-basiert → Tisch-Hinweis als `[AP-1]`-Zeile im WOUND-Block, neuer generischer Helper
+`value_triggered_die_row_html`). D2 `strength_if_charged` (melee, **A**) über neues `was_charged`-Flag
+(`turn_flags`-Init + `set_charged` markiert Ziel) + Engine-Fn `get_active_round_choice_strength_if_charged`;
++1 S in `str_bonus` gefaltet → **S blau wie WAAAGH**. 1144 grün / 93,18 %. **UI verifiziert** (Primär/Sekundär/
+Schuss-Gegenprobe ok); Badge-Label auf Kurznamen („Hungry Void") gekürzt via `_round_choice_short_label`.
+**Design-Korrektur S98 (Stakeholder):** kein Caption-Hinweisblock (Step 2b verworfen) — Direktiv-Effekte
+gehören ins **Dice-UI-Vokabular**. Reines B-Tisch-Hinweis-Rest-Anliegen (Sudden Storm S) bleibt gesondert offen.
+
+**⚠️ Eternal-Guardian-Befund (Stakeholder S98, für Step 4):** armyCard-Anzeige falsch + **vermutlich
+fachlich falsch**. Deckt sich mit backlog §4b: YAML hat noch die **erfundenen** Effekte (save +1 /
+`reroll_save_1`) statt 9E-D1 (Light Cover wenn nicht bewegt) / D2 (Hold Steady·Set to Defend). Step 4
+muss beides beheben (Daten **und** armyCard-Render). Vor Step 4 die armyCard-Direktiv-Anzeige genau ansehen.
+
 ## Aktueller Stand (nach S97, 2026-06-25)
 
 **S97 — nur Planung/Scoping + Doku, KEIN Code geschrieben.** Step 2 (Hungry Void) gescoped; dabei
@@ -47,13 +63,11 @@ greift nicht beim rundenzugewiesenen Protokoll (war als S96-Notiz da, jetzt als 
 Protokolle Primary=9E-D1). 1135 grün / 93,11 %. Detail → `session_archive.md` / git.
 
 ### Nächster Schritt
-**Plan 025 Step 2 (Logik) — Freigabe-Punkt 1:** Hungry D1 → `ap_on_unmod_wound_6` (melee, **B**),
-D2 → `strength_if_charged` (melee, **A**, value 1). Neues `was_charged`-Flag (`set_charged` markiert
-nur Charger; turn_flags-Init + Reset in game_state). Pure Fn `get_active_round_choice_strength_if_charged`;
-Konsum in `_common.py` Strength-Berechnung. Test-Migrationen (hungry_void primary/secondary, strength_modifier)
-+ neue Tests + **Vollsuite**.
-**Dann Step 2b (Anzeige) — Freigabe-Punkt 2:** generischer Hinweisblock (s. o.).
-Reihenfolge gesamt: 025(Rest, je Step mit Anzeige) → 016(Rest) → 018 → 015 → 017.
+**Plan 025 Step 3 (Vengeful Stars, A) — eigener Freigabe-Punkt:** D1 `ap_on_unmod_wound_6` (**ranged**,
+teilt Logik/Anzeige mit Step 2 — `value_triggered_die_row_html` ist generisch, nur phase=shooting), D2
+`ignore_cover_half_range`. **Damit wird auch Vengeful-S behoben** (heute toter `ap_bonus`-Pfad). Anzeige =
+Pflichtteil (Dice-UI, kein Caption-Block). Danach **Step 4 = Eternal Guardian** (s. Befund oben: Daten **und**
+armyCard-Render). Reihenfolge gesamt: 025(Step 3→4→5→6, je mit Anzeige) → 016(Rest) → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
 0. **Kontext-Engineering / Regel-Kuratierung (eigene Session, Maßnahme C).** Quelle:
