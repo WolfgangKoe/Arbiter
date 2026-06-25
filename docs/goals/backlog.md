@@ -295,6 +295,22 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
 - ✅ **Dice Display Arrow-Direction-Bug (`dice_html.py`)** — erledigt (Plan 022, S77): `rightward = (value > 0)` in `dice_compose.py`, Buff=rechts[→]/Debuff=links[←]; Tests `test_buff_arrow_points_right`/`test_debuff_arrow_points_left` pinnen das Verhalten.
 - ✅ **commandPhase.py State-Keys nicht orb-id-gebunden** — erledigt (Plan 020, S83): globale Slots durch `pending_target_request` mit `TargetSelectionRequest.ability_id`-Diskriminator ersetzt; `revive_wargear_awaiting_target` existiert nicht mehr in `src/`.
 - **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
+- 🔴 **Command-Protocol-Direktiven nicht regelkonform (S95-Befund, Plan 016 Group A blockiert):**
+  Die in `data/wh40k_9e/necrons/faction_abilities.yaml` modellierten Direktiv-Effekte weichen
+  von den echten 9E-Protokollen ab (`docs/work/wahapedia_necrons/faction_overview.txt` Z. 583 ff.):
+  | Protokoll · Direktive | YAML-Modell | Wahapedia 9E (kanonisch) |
+  |---|---|---|
+  | Eternal Guardian · P | „+1 to all saving throws" | D1: Light Cover, wenn nicht bewegt |
+  | Eternal Guardian · S | „Re-roll saving throws of 1" (`reroll_save_1`) | D2: Hold Steady / Set to Defend bei gegner. Charge |
+  | Conquering Tyrant · P | „+1 Leadership" | D1: +3" Aura-Reichweite |
+  | Conquering Tyrant · S | „Re-roll hit & wound of 1 (Melee)" (`reroll_hit_wound_1`) | D2: nach Fall Back schießen (−1 Hit) |
+  **Entscheid gefallen (S95): Variante (b)** — auf echte 9E-Regeln umstellen.
+  → **[Plan 025](../audit/plans/025-protocol-9e-conformance.md)** (heruntergebrochen, je
+  Protokoll ein Step). Vollständige Regelprüfung aller 6 Protokolle dort. Nuance: **Sudden
+  Storm P** (+1" Move) ist bereits konform, **Undying Legions** substanziell konform (nur P/S
+  vs. D1/D2 vertauscht); die anderen vier sind erfunden. 025 rückt **vor 016/017** — Plan 016
+  Group A + Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte verschwinden), 016
+  behält nur RP-Hint + Dynastiebonus.
 
 ## 5. Größere geplante Ziele
 

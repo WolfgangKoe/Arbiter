@@ -21,3 +21,9 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   more than N" → fester Cap N (`max_attacks`). Boss-Nob-Waffen: nur der Boss Nob trägt
   Spezialwaffen.
 - **Skorpekh Destroyers:** feste Komposition 1 Reap-Blade je 3 Modelle (kein Wahl-Wargear).
+- **⚠️ Necron Command Protocols — App-Modell ≠ 9E-Regel:** Die YAML-Direktiven
+  (`faction_abilities.yaml`: „+1 save / reroll save 1", „+1 Ld / reroll hit&wound 1") sind eine
+  **vereinfachte, nicht-kanonische** Fassung. Echte 9E-Direktiven (z. B. Eternal Guardian = Light
+  Cover / Charge-Reaktion; Conquering Tyrant = Aura-Range / Fall-Back-Schuss) stehen in
+  `wahapedia_necrons/faction_overview.txt`. Offener Entscheid → `backlog.md` §4b. Nicht still
+  „korrigieren" — Engine + Tests hängen am vereinfachten Modell.

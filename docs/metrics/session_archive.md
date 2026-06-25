@@ -1,13 +1,18 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-25 18:42 CEST
+Stand: 2026-06-25 20:21 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
+----------------- ---------------------- -------------- ------------
+06-25 19:02 0aa5  ████████████ 149k ⚠️   ██░░░░  27%    █████████···
+         SA_1·  ████░░░░░░░░  48k ✅    Refinement-Bilder als Text extrahi…
+         SA_2·  ██████░░░░░░  76k ✅    Context-Engineering-Slides holen
+         SA_3·  ████░░░░░░░░  47k ✅    Logo + Inbox-Findings im Code prüf…
 ----------------- ---------------------- -------------- ------------
 06-24 21:32 9726  ████████████ 162k ⛔    █░░░░░  18%    ██████████··
          SA_1·  █████░░░░░░░  66k ✅    Kontext-Audit S92 (neue Dateien)

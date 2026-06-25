@@ -54,11 +54,15 @@ run every verification command, and update your row below when done.
 | [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | P2 (MITTEL) | S | — | ✅ DONE (S84) — 12 Arkana → `faction_abilities.yaml` (`descriptive`+`cost_pts`); `load_faction_abilities` skippt descriptive; `load_points` liest cost_pts generisch via `_add_faction_ability_costs`; INV-4b `arkana`-Literal entfernt; 1091 Tests, 92.96 % |
 | [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | DONE (S77) |
 | [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework: `overview.md` schlank + separate `session_archive.md` (dedup, auto) | P0 (HÖCHSTE) | M | — | **DONE** (2026-06-21) — overview.md 18 KB→3.9 KB, Reihenfolge nach Konzept; neue `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration aus `subagent_archive.json` verlustfrei; tote Renderer `_render_subagents`/`_render_subagent_archive` entfernt; 1011 Tests grün, 92.44 %. |
+| [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | TODO — blockiert 016/017; sechs Protokolle, neue Engine-Effekt-Typen (`ap_on_unmod_wound_6`, `light_cover_if_stationary`, `strength_if_charged`, `ignore_cover_half_range`, `shoot_after_fall_back`); Sudden Storm P + Undying Legions schon konform. |
 | [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring (9 Protokoll-Direktiven) + Arkana-Schema + 1 Dispatch-Pilot (Failsafe) | P2 (MITTEL-HOCH) | M | 021 ✅ | ✅ **DONE (S87/S88)** — Steps 1–4 (strength/ap/move/leadership-Direktiven + rerolls + advance_and_charge + RP-Modifikatoren, S86), Steps 5–6 (Failsafe Overcharger → `activated` `buff_stat`-Dispatch; alle 12 Arkana strukturiert + engl. `rule_text`; alle 12 Punktkosten −5 vs. Wahapedia; 11/12 bleiben begründet `descriptive`, S87), Step 7 (Lint + Doku: `faction_abilities.md` Wiring-/Arkana-Status, `backlog.md` #2, S88). 1116 Tests grün/93 %, INV-4b grün. **Offen nur:** manuelle UI-Verifikation (Failsafe aktivierbar + Direktiv-Anzeigen). |
 
-**Empfohlene Reihenfolge (akt. S88, 2026-06-22): 019·023·022·014·020·021·024 DONE → 016 → 018 → 015 → 017.**
-024 abgeschlossen (S88, Step 7 Doku); **offen nur** die manuelle UI-Verifikation. Nächstes Stück: **016** (Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus).
-016 und 018 sind unabhängig. 015 ist das größte Stück und profitiert vom
+**Empfohlene Reihenfolge (akt. S95, 2026-06-25): 019·023·022·014·020·021·024 DONE → 025 → 016 → 018 → 015 → 017.**
+**025 (NEU, S95) rückt vor 016/017**: Der S95-Befund zeigte, dass die Command-Protocol-
+Direktiven im YAML nicht-kanonisch sind; Stakeholder-Entscheid (b) = auf echte 9E-Regeln
+umstellen. 016 Group A / Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte
+verschwinden); 016 behält nur RP-Hint + Dynastiebonus, 017 muss die neuen AP-on-6-Effekte
+mitdenken. 016 und 018 sind unabhängig. 015 ist das größte Stück und profitiert vom
 vereinheitlichten Flow aus 013. 017 zuletzt.
 
 **Dependency notes (Feature-Queue):**

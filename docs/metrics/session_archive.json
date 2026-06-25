@@ -1209,5 +1209,38 @@
         "started_at": "2026-06-24T19:32:33.155Z"
       }
     ]
+  },
+  "0aa5ba9d-f82c-4d2e-8f35-e6416ce68c31": {
+    "started_at": "2026-06-25T17:02:16.647Z",
+    "task": "start session. Was haben wir alles, z.T. habe ich in den letzten Sessions ein paar Sacehn reingeworfen. Die möchte ich…",
+    "peak_context": 149484,
+    "subagent_share": 26.840740367164145,
+    "by_tier": {
+      "Opus": 7840641,
+      "Sonnet": 2876582
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Refinement-Bilder als Text extrahieren",
+        "tier": "Sonnet",
+        "peak_context": 47721,
+        "started_at": "2026-06-25T17:02:16.647Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Context-Engineering-Slides holen",
+        "tier": "Sonnet",
+        "peak_context": 76218,
+        "started_at": "2026-06-25T17:02:16.647Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Logo + Inbox-Findings im Code prüfen",
+        "tier": "Sonnet",
+        "peak_context": 46821,
+        "started_at": "2026-06-25T17:02:16.647Z"
+      }
+    ]
   }
 }
