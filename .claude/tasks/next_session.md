@@ -24,21 +24,20 @@ Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
 
-## Aktueller Stand (nach S92, 2026-06-24)
+## Aktueller Stand (nach S93, 2026-06-25)
 
-**S92 (auf `feature/016`) — UI-Verifikation: 1a ✅; 1b+1c als ECHTE Bugs bestätigt, Wurzel eingegrenzt, NICHT gefixt.**
-0b (Mirror-Match: Spieler-2-Karte unverändert) ✅ · 1a (Eternal Guardian Save „(defender)" im Gegnerzug) ✅.
-**1b** (Undying-Legions-P RP-Reroll-Hint im Gegnerzug) + **1c** (Undying-Legions-S Living-Metal +1 Heilung) erscheinen
-NICHT — Setup vom User korrekt (Primary/Secondary aktiv, Modell zerstört, Living-Metal-Einheit). Diagnose: **Engine
-ist korrekt** — Wegwerf-Repro (`scratchpad/repro.py`) liefert `get_active_rp_modifiers`→`{rp_reroll:True}` und
-`get_active_heal_bonus`→`1` bei direkt gesetztem State; `target_rule livingMetal` steht in `unit.rules` (kein
-Mismatch); statische Write/Read-Kette nutzt durchgängig denselben `faction`-Key (Roster-Name, `render_army_card`).
-⇒ Ursache ist ein **Laufzeit-State-Unterschied** (Direktiv-Keys real anders gesetzt als gelesen), nur mit
-Live-`session_state`-Werten pinbar. Widerspruch: 1a (gleicher Gegnerzug-Verteidiger-Kontext) funktioniert.
-**NÄCHSTER SCHRITT (vom Stakeholder FREIGEGEBEN):** temporären Debug-Probe in `render_army_card`
-([armyCard.py:426](../../src/uiLayout/armyCard.py#L426)) — `st.expander` mit `faction`, `session_state.active`,
-4× `round_choice_*_<faction>`-Keys (active/directive/used_ids/extra_directive). User reproduziert 1b+1c **einmal**
-→ Wurzel pinnen → Fix + Regressionstest → Probe entfernen → Vollsuite → Re-Verify. Bugs gehören zu **016**.
+**S93 (auf `feature/016`) — Wurzel-Fix 1b/1c GEFIXT + UI-verifiziert. Vollsuite 1135 grün, 93,11 %.**
+**Wurzel (statische Analyse, ohne Debug-Probe):** alle Direktiv-Effekte liefen durch `_active_directive_effect(player)`,
+der **nur** die runden-zugewiesenen Keys (`round_choice_active/directive`) las — die ganze **6.-Protokoll-Klasse**
+(`extra_directive`) + den **Dynastie-Affinitäts-Fall** „beide Direktiven" ignorierte. Darum erschien 1a (Eternal Guardian
+= runden-zugewiesen) ✅, aber 1b/1c (Undying Legions = 6. Protokoll) ❌. **Fix:** `_active_directive_effect` →
+`_active_directive_effects(player) -> list` (runden-zugewiesen + 6./Affinität), alle 5 Engine-Reads aggregieren über die
+Liste; `_extra_directive_effects`-Helper + Mapping-Dict `_MODIFIER_RESULT_KEY`. **+6 Regressionstests** (1b/1c via 6.,
+Affinität an/aus, Akkumulation, 6.-inaktiv). Nebeneffekt: Dynastiebonus (6e Bug 3) ist erstmals **wirksam** verdrahtet,
+nicht nur kosmetisch. **UI-Verifikation:** 1b RP-Reroll-Hint sichtbar ✅ · 1c Living-Metal +1 ✅ · Dynasty-Bonus-Badge ✅.
+**NEU offen (keine Regression):** Eternal Guardian **S** (`reroll_save_1`) wird im SAVE-Block **nicht** als Buff
+angezeigt — Engine liefert (`get_active_round_choice_rerolls`), nur Rendering fehlt → backlog #2-Tabelle 🔲 SAVE-Hinweis,
+Plan 016 Group A (gemeinsamer `_round_choice_reroll_hints`-Helper mit Conquering Tyrant S).
 
 **S92 — Branch-Befund (wichtig):** `main` ist **331 Commits** hinter `feature/016`; aktiver Integrations-Branch
 ist `dev` (=016−35). Branch `chore/context-engineering-and-test-fixture` von `dev` angelegt für die unten vertagten
@@ -57,9 +56,10 @@ Optimierer; Regeldateien verbatim heilig; `docs/handoff/context-audit-S91.md`).
    `docs/handoff/context-audit-S91.md` durch Optimierer verarbeiten + danach löschen. Je eigene Freigabe.
 0b. **Manuelle UI-Verifikation S91 (PFLICHT, Render-Code):** Necron-vs-Necron, Befehlsphase — Spieler-1-Protokoll/
    Direktive wählen → Spieler-2-Karte bleibt unverändert (eigene Wahl/Badge). Das war das Original-Symptom.
-1. **Manuelle UI-Verifikation (S92-Stand):** (a) Eternal-Guardian-Save „(defender)" im Gegnerzug ✅;
-   (b) Undying-Legions-P RP-Reroll-Hint ❌ + (c) Living-Metal-S heilt 2 ❌ → **echte 016-Bugs, Debug-Probe siehe
-   Stand oben**; (d) Bug 5: Runde-2-Fernkampf Zielwahl — **noch nicht geprüft**.
+1. **Manuelle UI-Verifikation (S93-Stand):** (a) Eternal-Guardian-Save „(defender)" ✅; (b) Undying-Legions-P
+   RP-Reroll-Hint ✅ (S93, RP-Hint darf optisch *deutlicher* — Design-Crew unten); (c) Living-Metal-S +1 ✅ (S93);
+   (d) Bug 5: Runde-2-Fernkampf Zielwahl — **noch nicht geprüft**. **NEU:** (e) Eternal Guardian **S** reroll_save_1
+   im SAVE-Block nicht als Buff angezeigt → Plan 016 Group A (siehe #3).
 1b. **Vertagter S92-chore-Plan (Branch `chore/context-engineering-and-test-fixture` von `dev`, je Freigabe):**
    *Aufg. 4* Sonnet-Subagent zieht Präsentation (`curl -u andrena:slides4all
    https://peter-wegner-slides.pages.dev/context-engineering-andrena-v2/`, Inhalt = minifiziertes Vue-JS → Text
@@ -81,6 +81,15 @@ Optimierer; Regeldateien verbatim heilig; `docs/handoff/context-audit-S91.md`).
 4. **Reihenfolge:** Plan 016 Anzeige-Rest (Group A → C) → 018 → 015 → 017 (017 nimmt Steps 4/5 auf).
 
 ### Offene Fragen / Retro-Vormerke
+- **S93-Maßnahme — Design-System-Crew (Stakeholder, eigene Session):** Subagenten-Gespann für *Designsystem +
+  UI-Komponenten-Vereinheitlichung* (Opus plant/reviewt, Sonnet sucht Inkonsistenzen, Sonnet setzt um — oder 2×Sonnet).
+  Erster konkreter Auftrag = einheitliche **Buff-/Direktiv-Hinweis-Komponente** (RP-Hint deutlicher, konsistent mit
+  MWBD/SAVE-Badges); deckt zugleich Plan 016 Group A (reroll-Hints) ab. Code-Edits bleiben freigabepflichtig.
+- **S93-Lehre Resolver-Blick:** bei „Engine oder Verdrahtung?" zuerst prüfen, *welche State-Klassen der zentrale
+  Resolver liest* — `_active_directive_effect` ignorierte die ganze `extra_directive`-Klasse. Statische Analyse
+  ersparte hier die freigegebene Debug-Probe + 1 Repro-Zyklus (ergänzt die S92-Lehre „Repro-zuerst", ersetzt sie nicht).
+- **S93-Frage Freigabe-Gate:** Gate re-armte mitten in freigegebener Umsetzung (nach Kontext-Summarization/Continuation)
+  und blockierte den Test-Edit. Prüfen, ob der Re-Arm nur bei echtem SessionStart statt bei Continuation feuern soll.
 - **S92-Lehre Repro-zuerst:** bei „Engine oder Verdrahtung?" sofort Isolations-Repro schreiben statt langer statischer Analyse (spart Kontext).
 - **S92-Lehre Branch-Check:** vor `git checkout -b … <base>` den aktiven Branch prüfen (`main` war 331 zurück; aktiv = `dev`).
 - **S92-Lehre Plan-Realismus:** nicht 4 Aufgaben + Pflicht-Verifikation in einen Korridor; konservativer schneiden.

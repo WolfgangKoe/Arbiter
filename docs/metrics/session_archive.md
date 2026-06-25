@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-24 21:28 CEST
+Stand: 2026-06-25 18:42 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,11 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-24 20:32 fb5f  ████████████ 159k ⛔    ░░░░░░   5%    ███████████·
+06-24 21:32 9726  ████████████ 162k ⛔    █░░░░░  18%    ██████████··
+         SA_1·  █████░░░░░░░  66k ✅    Kontext-Audit S92 (neue Dateien)
+         SA_2·  ███░░░░░░░░░  42k ✅    Präsentation auswerten
+----------------- ---------------------- -------------- ------------
+06-24 20:32 fb5f  ████████████ 177k ⛔    ░░░░░░   4%    ████████████
          SA_1·  ██████░░░░░░  79k ✅    Context-engineering audit
 ----------------- ---------------------- -------------- ------------
 06-23 21:27 0ab4  ████████████ 166k ⛔    ██░░░░  27%    ███████████·

@@ -621,6 +621,110 @@ def test_protocol_modifier_ork_faction_no_protocols_returns_empty() -> None:
 
 
 # ---------------------------------------------------------------------------
+# 6th (always-active) protocol + dynasty bonus — effects must reach the engine,
+# not only the badge/caption (S93 root-cause fix for bugs 1b/1c).
+# ---------------------------------------------------------------------------
+
+_ALL_PROTOCOLS = [
+    "wh40k_9e.necrons.faction.protocol_eternal_guardian",
+    "wh40k_9e.necrons.faction.protocol_hungry_void",
+    "wh40k_9e.necrons.faction.protocol_conquering_tyrant",
+    "wh40k_9e.necrons.faction.protocol_sudden_storm",
+    "wh40k_9e.necrons.faction.protocol_undying_legions",
+    "wh40k_9e.necrons.faction.protocol_vengeful_stars",
+]
+
+
+def _extra_protocol_session(
+    extra_id: str,
+    *,
+    extra_directive: str | None = None,
+    subfaction: str | None = None,
+    round_active: str | None = None,
+    round_directive: str | None = None,
+) -> _S:
+    """Session where ``extra_id`` is the always-active 6th protocol.
+
+    The other five protocols fill rounds 1-5 (so ``extra_id`` is the leftover).
+    Optionally also assigns a round-assigned protocol and a subfaction.
+    """
+    assigned = [p for p in _ALL_PROTOCOLS if p != extra_id]
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    session["round_choice_active_Necrons"] = round_active
+    session["round_choice_directive_Necrons"] = round_directive
+    session["round_choice_assignments"] = {
+        "Necrons": {i + 1: pid for i, pid in enumerate(assigned)}
+    }
+    if extra_directive:
+        session["round_choice_extra_directive_Necrons"] = extra_directive
+    if subfaction:
+        session["p1_subfaction"] = subfaction
+    _st_mock.session_state = session
+    return session
+
+
+def test_extra_protocol_rp_reroll_via_6th_directive() -> None:
+    # Bug 1b: Undying Legions as the always-active 6th protocol, primary directive
+    # chosen -> RP re-roll must be active (previously only the round slot was read).
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="primary"
+    )
+    assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
+
+
+def test_extra_protocol_heal_bonus_via_6th_directive() -> None:
+    # Bug 1c: Undying Legions as the 6th protocol, secondary directive -> Living
+    # Metal +1 heal.
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="secondary"
+    )
+    unit = _make_unit(rules=["livingMetal"])
+    assert get_active_heal_bonus("Necrons", unit) == 1
+
+
+def test_extra_protocol_inactive_without_directive() -> None:
+    # 6th protocol present but no directive chosen and no affinity -> no effect.
+    _extra_protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions")
+    assert get_active_rp_modifiers("Necrons") == {}
+    assert get_active_heal_bonus("Necrons", _make_unit(rules=["livingMetal"])) == 0
+
+
+def test_dynasty_affinity_activates_both_directives() -> None:
+    # Bug 3 wiring: matching subfaction -> the 6th protocol's BOTH directives apply
+    # with no explicit choice. Undying Legions affinity is szarekhan: primary
+    # (rp_reroll) and secondary (heal_bonus) are both active.
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="szarekhan"
+    )
+    assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
+    assert get_active_heal_bonus("Necrons", _make_unit(rules=["livingMetal"])) == 1
+
+
+def test_dynasty_affinity_other_subfaction_inert() -> None:
+    # Non-matching subfaction -> no implicit both-directive activation.
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="nihilakh"
+    )
+    assert get_active_rp_modifiers("Necrons") == {}
+
+
+def test_round_and_extra_modifiers_accumulate() -> None:
+    # Round-assigned directive AND the 6th protocol's directive both feed the engine.
+    # Round slot: Eternal Guardian primary (save +1, any phase).
+    # 6th: Hungry Void primary (hit +1, shooting).
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_hungry_void",
+        extra_directive="primary",
+        round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        round_directive="primary",
+    )
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {
+        "save": 1,
+        "hit": 1,
+    }
+
+
+# ---------------------------------------------------------------------------
 # get_activated_command_abilities — unit-scoped activated abilities
 # ---------------------------------------------------------------------------
 

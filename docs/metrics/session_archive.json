@@ -1168,10 +1168,10 @@
   "fb5f6a02-56a2-434c-b966-f5397d9b5f1d": {
     "started_at": "2026-06-24T18:32:51.653Z",
     "task": "Ich bin ein wenig lost. Wo stehen wir jetzt?",
-    "peak_context": 158841,
-    "subagent_share": 4.77029402661173,
+    "peak_context": 176731,
+    "subagent_share": 4.146135802584769,
     "by_tier": {
-      "Opus": 20678425,
+      "Opus": 23947284,
       "Sonnet": 1035834
     },
     "subagents": [
@@ -1181,6 +1181,32 @@
         "tier": "Sonnet",
         "peak_context": 79423,
         "started_at": "2026-06-24T18:32:51.653Z"
+      }
+    ]
+  },
+  "97265ed9-6d1d-401e-b151-1af239759ae6": {
+    "started_at": "2026-06-24T19:32:33.155Z",
+    "task": "start session. Wir müssen folgendes mal angehen, damit es uns nicht wieder auf die Füße fällt: 1. diese Mockup-Problema…",
+    "peak_context": 162082,
+    "subagent_share": 18.28301738489619,
+    "by_tier": {
+      "Opus": 14056063,
+      "Sonnet": 3144845
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Kontext-Audit S92 (neue Dateien)",
+        "tier": "Sonnet",
+        "peak_context": 65729,
+        "started_at": "2026-06-24T19:32:33.155Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Präsentation auswerten",
+        "tier": "Sonnet",
+        "peak_context": 42149,
+        "started_at": "2026-06-24T19:32:33.155Z"
       }
     ]
   }

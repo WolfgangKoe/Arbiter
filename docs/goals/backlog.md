@@ -57,13 +57,17 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) | ✅ (`get_active_round_choice_rerolls`) | 🔲 HIT+WOUND Melee |
   | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
   | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
-  | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89) |
-  | Undying Legions · S | **heal_bonus** Living Metal +1 (war fälschlich `rp_bonus` „model returned" — S89-Datenfix) | ✅ (`get_active_heal_bonus`) | ✅ Caption (S89, manuell offen) |
+  | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89; UI-verifiziert S93) |
+  | Undying Legions · S | **heal_bonus** Living Metal +1 (war fälschlich `rp_bonus` „model returned" — S89-Datenfix) | ✅ (`get_active_heal_bonus`) | ✅ Caption (S89; UI-verifiziert S93) |
   | Vengeful Stars · P | wound_modifier +1 (Shooting) | ✅ | ✅ WOUND-Block |
   | Vengeful Stars · S | ap_bonus -1 (Shooting) | ✅ | 🔲 SAVE-Block AP |
 
   Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
   Phasen-Block (wie MWBD). Anzeige-Rest überschneidet sich mit Plan 016/017.
+  **S93-Engine-Befund:** alle Direktiv-Reads lasen bisher nur die runden-zugewiesene Direktive; das **6. (immer-aktive)
+  Protokoll** (`extra_directive`) + der **Dynastie-Affinitäts-Fall** (beide Direktiven) wurden ignoriert — kosmetisch, nicht
+  wirksam. Gefixt: `_active_directive_effects` aggregiert beide Quellen (alle 5 Reads). Damit ist auch der **Dynastiebonus
+  (6e Bug 3) erstmals wirksam** verdrahtet. Offen bleibt nur Eternal Guardian **S** SAVE-Hinweis (Plan 016 Group A).
 - 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
   Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
   Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist

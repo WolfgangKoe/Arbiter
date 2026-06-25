@@ -584,8 +584,8 @@ Fehler wenn Summe > Gesamtattacken (zu viele)
 
 - [x] Living Metal: einmalig pro Phase ✅ (2026-06-08)
 - [x] 6. Protokoll: einmalig im Setup für das gesamte Spiel festgelegt (nicht jede Runde neu) ✅ (2026-06-05, 6e Bug 2)
-- [ ] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden
-- [ ] Dynastiebonus: wenn Direktive durch Dynastiezugehörigkeit gilt → Effekt anzeigen
+- [x] Protokoll-Effekte auf Living Metal / RP-Verbesserungen abbilden ✅ (Engine S86; 6./Dynastie-Direktive S93)
+- [x] Dynastiebonus: Effekt wirkt (Affinität → beide Direktiven engine-seitig aktiv) ✅ (S93); Anzeige-Badge ✅ (UI-verifiziert S93)
 - [ ] Anzeigereihenfolge: Regelkasten immer ganz oben (alle Phasen prüfen)
 
 ### WAAAGH! + Sonstiges

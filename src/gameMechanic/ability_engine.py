@@ -5,6 +5,7 @@ import streamlit as st
 from gameMechanic.game_state import (
     faction_dir_for,
     round_choice_state_key,
+    subfaction_value_for,
     units_key_for,
 )
 from gameMechanic.unit_mutations import heal_unit
@@ -72,32 +73,77 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
     return False
 
 
-_WIRED_EFFECT_TYPES = {
-    "hit_modifier",
-    "wound_modifier",
-    "save_modifier",
-    "strength_modifier",
-    "ap_bonus",
-    "move_bonus",
-    "leadership_bonus",
+# Numeric directive effect types -> the key they contribute in the modifier dict.
+# ap_bonus: Vengeful Stars S (-1, improves AP of shooting weapons).
+# move_bonus: Sudden Storm P (+1" Move).
+# leadership_bonus: Conquering Tyrant P (+1 Ld; Morale UI not wired yet, informational).
+_MODIFIER_RESULT_KEY = {
+    "hit_modifier": "hit",
+    "wound_modifier": "wound",
+    "save_modifier": "save",
+    "strength_modifier": "strength",
+    "ap_bonus": "ap",
+    "move_bonus": "move",
+    "leadership_bonus": "leadership",
 }
 
 
-def _active_directive_effect(player: str) -> dict | None:  # type: ignore[type-arg]
-    """The effect dict of the player's currently chosen round-choice directive, or None.
+def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  # type: ignore[type-arg]
+    """Effect dict(s) of the player's always-active 6th round-choice ability.
 
-    State is keyed by the player slot (mirror-match safe); the ability definitions
-    are loaded via the player's faction directory.
+    The 6th ability is the single one not assigned to any battle round. Its
+    directive is stored under the ``extra_directive`` key. When the player's
+    subfaction matches the ability's ``subfaction_affinity``, BOTH directives
+    apply simultaneously (dynasty bonus) — mirrors the display logic in
+    ``armyCard._render_extra_round_choice`` / ``game_state``.
+    """
+    assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})
+    assigned_ids = set(assignments.values())
+    if len(assigned_ids) < 5:
+        return []
+    extras = [p for p in round_choices if p.id not in assigned_ids]
+    if len(extras) != 1:
+        return []
+    extra = extras[0]
+    subfaction = subfaction_value_for(player)
+    if subfaction and subfaction == extra.subfaction_affinity:
+        return [extra.primary_effect, extra.secondary_effect]
+    extra_directive = st.session_state.get(round_choice_state_key(player, "extra_directive"))
+    if extra_directive:
+        return [extra.primary_effect if extra_directive == "primary" else extra.secondary_effect]
+    return []
+
+
+def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-arg]
+    """All effect dicts active for the player from round-choice directives.
+
+    Aggregates the round-assigned protocol's chosen directive AND the always-active
+    6th protocol's directive (incl. the dynasty bonus where both directives apply).
+    State is keyed by the player slot (mirror-match safe); ability definitions load
+    via the player's faction directory. Returns ``[]`` for factions without
+    round-choice abilities or when nothing is selected (no faction-dir lookup needed).
     """
     active_id: str | None = st.session_state.get(round_choice_state_key(player, "active"))
     directive: str | None = st.session_state.get(round_choice_state_key(player, "directive"))
-    if not active_id or not directive:
-        return None
-    faction_dir = faction_dir_for(player)
-    active = next((p for p in load_round_choice_abilities(faction_dir) if p.id == active_id), None)
-    if not active:
-        return None
-    return active.primary_effect if directive == "primary" else active.secondary_effect
+    assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})
+    has_round = bool(active_id and directive)
+    has_extra_setup = len({*assignments.values()}) >= 5
+    if not has_round and not has_extra_setup:
+        return []
+
+    round_choices = load_round_choice_abilities(faction_dir_for(player))
+    if not round_choices:
+        return []
+
+    effects: list[dict] = []  # type: ignore[type-arg]
+    if has_round:
+        active = next((p for p in round_choices if p.id == active_id), None)
+        if active:
+            effects.append(
+                active.primary_effect if directive == "primary" else active.secondary_effect
+            )
+    effects.extend(_extra_directive_effects(player, round_choices))
+    return [e for e in effects if e]
 
 
 def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: ignore[type-arg]
@@ -113,42 +159,25 @@ def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: i
 def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -> dict[str, int]:
     """Return numeric modifiers from the active round-choice ability's chosen directive.
 
-    Only numeric effect types in _WIRED_EFFECT_TYPES are returned (hit/wound/save/
+    Only numeric effect types in _MODIFIER_RESULT_KEY are returned (hit/wound/save/
     strength_modifier, ap/move/leadership_bonus). Non-numeric effects (reroll_save_1,
     advance_and_charge, rp_reroll, etc.) are queried via dedicated functions and are
     silently skipped here.
 
     Returns a dict with any of: {"hit", "wound", "save", "strength", "ap", "move",
-    "leadership"} mapped to int.
+    "leadership"} mapped to int. Effects from multiple active directives (round-assigned
+    plus the always-active 6th / dynasty protocol) accumulate per key.
     """
-    effect = _active_directive_effect(player)
-    if not effect:
-        return {}
-
-    effect_type = effect.get("type", "")
-    if effect_type not in _WIRED_EFFECT_TYPES:
-        return {}
-    if _directive_phase_excluded(effect, use_melee):
-        return {}
-
-    value = effect.get("value", 0)
-    if effect_type == "hit_modifier":
-        return {"hit": value}
-    if effect_type == "wound_modifier":
-        return {"wound": value}
-    if effect_type == "save_modifier":
-        return {"save": value}
-    if effect_type == "strength_modifier":
-        return {"strength": value}
-    if effect_type == "ap_bonus":
-        return {"ap": value}  # Vengeful Stars S: -1 (improves AP of shooting weapons)
-    if effect_type == "move_bonus":
-        return {"move": value}  # Sudden Storm P: +1" Move
-    if effect_type == "leadership_bonus":
-        # Conquering Tyrant P: +1 Ld. Morale phase is not wired into the UI yet —
-        # this value is informational only and has no display consumer today.
-        return {"leadership": value}
-    return {}
+    result: dict[str, int] = {}
+    for effect in _active_directive_effects(player):
+        effect_type = effect.get("type", "")
+        key = _MODIFIER_RESULT_KEY.get(effect_type)
+        if not key:
+            continue
+        if _directive_phase_excluded(effect, use_melee):
+            continue
+        result[key] = result.get(key, 0) + effect.get("value", 0)
+    return result
 
 
 # Reroll-directive effect type -> the reroll flags it grants.
@@ -163,23 +192,23 @@ def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) ->
 
     Separate from get_active_round_choice_modifier because rerolls are flags, not
     numeric modifiers — keeping the dict[str, int] contract of that function clean.
-    Flags: reroll_save_1, reroll_hit_1, reroll_wound_1.
+    Flags: reroll_save_1, reroll_hit_1, reroll_wound_1. Unions the flags of every
+    active directive (round-assigned plus the always-active 6th / dynasty protocol).
     """
-    effect = _active_directive_effect(player)
-    if not effect:
-        return set()
-    flags = _REROLL_DIRECTIVE_FLAGS.get(effect.get("type", ""))
-    if not flags:
-        return set()
-    if _directive_phase_excluded(effect, use_melee):
-        return set()
-    return set(flags)
+    flags: set[str] = set()
+    for effect in _active_directive_effects(player):
+        granted = _REROLL_DIRECTIVE_FLAGS.get(effect.get("type", ""))
+        if not granted:
+            continue
+        if _directive_phase_excluded(effect, use_melee):
+            continue
+        flags |= granted
+    return flags
 
 
 def _active_directive_has_type(player: str, effect_type: str) -> bool:
-    """True if the player's active round-choice directive has the given effect type."""
-    effect = _active_directive_effect(player)
-    return bool(effect) and effect.get("type") == effect_type
+    """True if any active round-choice directive has the given effect type."""
+    return any(e.get("type") == effect_type for e in _active_directive_effects(player))
 
 
 def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
@@ -187,11 +216,11 @@ def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
 
     Undying Legions P (rp_reroll) -> {"rp_reroll": True}
     Any other / no directive      -> {}
+
+    Considers every active directive, so the effect fires whether Undying Legions is
+    the round-assigned protocol or the always-active 6th / dynasty protocol.
     """
-    effect = _active_directive_effect(player)
-    if not effect:
-        return {}
-    if effect.get("type", "") == "rp_reroll":
+    if any(e.get("type") == "rp_reroll" for e in _active_directive_effects(player)):
         return {"rp_reroll": True}
     return {}
 
@@ -203,15 +232,18 @@ def get_active_heal_bonus(player: str, unit: Unit) -> int:
     (e.g. Undying Legions S -> Living Metal). Generic: any faction/directive
     with a ``heal_bonus`` effect applies when the healed unit carries the
     matching rule. Returns 0 when no such directive is active or the rule
-    does not match.
+    does not match. Sums across every active directive (round-assigned plus the
+    always-active 6th / dynasty protocol).
     """
-    effect = _active_directive_effect(player)
-    if not effect or effect.get("type") != "heal_bonus":
-        return 0
-    target_rule = effect.get("target_rule")
-    if target_rule and target_rule not in unit.rules:
-        return 0
-    return int(effect.get("value", 0))
+    bonus = 0
+    for effect in _active_directive_effects(player):
+        if effect.get("type") != "heal_bonus":
+            continue
+        target_rule = effect.get("target_rule")
+        if target_rule and target_rule not in unit.rules:
+            continue
+        bonus += int(effect.get("value", 0))
+    return bonus
 
 
 def _unit_matches_target(unit: Unit, effect: dict) -> bool:
