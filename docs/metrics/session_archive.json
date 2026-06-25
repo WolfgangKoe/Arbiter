@@ -1242,5 +1242,24 @@
         "started_at": "2026-06-25T17:02:16.647Z"
       }
     ]
+  },
+  "bb3dbf84-67bc-4f25-a9fd-27baf30b72d8": {
+    "started_at": "2026-06-25T18:53:37.962Z",
+    "task": "ÜBerlege, wofür du Subagenten einsetzen kannst. Wichtig!",
+    "peak_context": 118215,
+    "subagent_share": 26.800153236975504,
+    "by_tier": {
+      "Opus": 7056444,
+      "Haiku": 2583527
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Recherche combat/engine Verdrahtung",
+        "tier": "Haiku",
+        "peak_context": 55529,
+        "started_at": "2026-06-25T18:53:37.962Z"
+      }
+    ]
   }
 }

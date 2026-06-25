@@ -1,13 +1,16 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-25 20:52 CEST
+Stand: 2026-06-25 22:37 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
+----------------- ---------------------- -------------- ------------
+06-25 20:53 bb3d  █████████░░░ 118k ✅    ██░░░░  27%    █████████▒▒▒
+         SA_1·  ████░░░░░░░░  56k ✅    Recherche combat/engine Verdrahtung
 ----------------- ---------------------- -------------- ------------
 06-25 19:02 0aa5  ████████████ 149k ⚠️   ██░░░░  27%    █████████···
          SA_1·  ████░░░░░░░░  48k ✅    Refinement-Bilder als Text extrahi…

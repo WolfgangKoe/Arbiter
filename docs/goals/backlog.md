@@ -68,6 +68,16 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Protokoll** (`extra_directive`) + der **Dynastie-Affinitäts-Fall** (beide Direktiven) wurden ignoriert — kosmetisch, nicht
   wirksam. Gefixt: `_active_directive_effects` aggregiert beide Quellen (alle 5 Reads). Damit ist auch der **Dynastiebonus
   (6e Bug 3) erstmals wirksam** verdrahtet. Offen bleibt nur Eternal Guardian **S** SAVE-Hinweis (Plan 016 Group A).
+  **S97-Befund (Nutzer-Screenshots + Scoping) — die Tabelle ist zu optimistisch:**
+  - **Reroll-of-1-Save-Hinweis fehlt in der UI** (Eternal Guardian S, Z. „🔲 SAVE-Hinweis"): Soll laut
+    Plan 024 = Reroll-Hinweis im SAVE-Block (⟳-Caption wie RP, `_rp_directive_hints`-Muster). Screenshot
+    S97 zeigt den SAVE-Block **ohne** diesen Hinweis. Bestätigter Anzeige-Bug, nicht nur „offen".
+  - **„Engine ✅" ist irreführend für `strength_modifier`/`ap_bonus`:** Die Engine-Fn liefert den Wert,
+    aber **kein UI-Konsument liest ihn** (`_collect_atk_modifiers`/`_collect_def_save_modifiers` fragen
+    nur `hit`/`wound`/`save` ab, nicht `strength`/`ap`). Hungry-S/Vengeful-S wirken im Kampf **gar nicht**.
+  - **Wurzel-Lösung:** Plan 025 **Step 2b** baut einen generischen, `enforcement`-getriebenen
+    Direktiv-Hinweisblock, der diese 🔲-Lücken Schritt für Schritt ablöst. **Anzeige ist ab S97
+    Pflichtteil jedes 025-Steps** (kein Verschieben mehr — Stakeholder-Vorgabe S97).
 - 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
   Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
   Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist
@@ -217,7 +227,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
   statt nur ausgeblendet). Anzeige-/UX-Thema (verwandt mit der Eligibility-Anzeige der Schussphase und
   dem Silent-King-Ziel-pro-Waffe-Finding). Eigener Plan.
-- 🔲 **Dynastie-Affinität „beide Direktiven" greift nicht beim rundenzugewiesenen Protokoll (S96-UI-Befund):**
+- 🔲 **Dynastie-Affinität „beide Direktiven" greift nicht beim rundenzugewiesenen Protokoll (S96-UI-Befund, S97 vom Stakeholder erneut bestätigt — als Bug zu führen, nicht nur Notiz):**
   Regel (`faction_overview.txt` Z. 862–871): wird das Affinitäts-Protokoll *aktiv* (egal ob 6./permanent
   oder einer Runde zugeteilt) und hat die ganze Armee den Dynastie-Code, gelten **beide** Direktiven statt
   einer. Aktuell greift das nur für das **6. (permanent aktive)** Protokoll (`_extra_directive_effects` in
@@ -229,8 +239,8 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Engine + UI + Regressionstest. Verwandt mit Plan 016 (Dynastiebonus-Anzeige).
 - 🔲 **Sudden Storm S — B-Hinweis anzeigen (`shoot_during_action`, S96):** Plan 025 Step 1 hat die Direktive
   datenseitig auf 9E-D2 korrigiert (Typ `shoot_during_action`, kein Engine-Effekt). Der Tisch-Hinweis hat
-  noch **keine** sichtbare Anzeige. Stakeholder-Wunsch: **im Zuge der Sudden-Storm-Anzeige-Umsetzung** den
-  Hinweis mit einbauen (Render-Code, manuelle Verifikation). → Plan 025 Anzeige-Teil bzw. 016/eigener.
+  noch **keine** sichtbare Anzeige. **S97: wird vom generischen Direktiv-Hinweisblock (Plan 025 Step 2b,
+  `enforcement: table`) mit abgedeckt** — nicht mehr separat nachzuziehen.
 
 ---
 

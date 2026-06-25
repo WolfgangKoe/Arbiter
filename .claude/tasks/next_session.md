@@ -21,25 +21,39 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S96, 2026-06-25)
+## Aktueller Stand (nach S97, 2026-06-25)
 
-**S96 — Plan 025 Step 1 erledigt (Command Protocols → 9E).** Sudden Storm D2 vom erfundenen
-`advance_and_charge` auf die echte 9E-D2 (`shoot_during_action`, reiner B-Hinweis) korrigiert;
-Undying-Legions Primary/Secondary **getauscht** → jetzt alle 6 Protokolle einheitlich **Primary =
-9E-Direktive 1**. Nur Daten + Docstring + 8 Test-Migrationen, **keine** Engine-Logik (Reader sind
-effekt-typ-basiert). 1135 grün / 93,11 %; UI verifiziert (Direktiv-Texte + Button-Reihenfolge ok).
-**Zwei neue Befunde (backlog §2):** (1) Dynastie-Affinität „beide Direktiven" greift nur beim 6./
-permanenten, **nicht** beim rundenzugewiesenen Protokoll — Engine+UI-Gap; (2) Sudden-Storm-B-Hinweis
-braucht noch Render-Anzeige (im Zuge der Sudden-Storm-Anzeige einbauen).
+**S97 — nur Planung/Scoping + Doku, KEIN Code geschrieben.** Step 2 (Hungry Void) gescoped; dabei
+**zwei strukturelle Befunde** + Konsens-Entscheide (alle in Plan 025 „Update S97" + backlog §0/§2):
+1. **Combat ist zähl-basiert** (`resolve_attack(... wounds_rolled: int ...)`, kennt keine einzelnen
+   Würfelaugen) → `ap_on_unmod_wound_6` ist **nicht** als A-Effekt machbar. **Konsens: D1 Hungry +
+   Vengeful A → B** (Tisch-Hinweis). Pro-Würfel-Umbau = eigener großer Plan, vorerst nicht gewollt.
+2. **Latente Drift:** `strength_modifier`/`ap_bonus` sind engine-gemappt + getestet, aber in
+   `_collect_atk_modifiers`/`_collect_def_save_modifiers` **nie konsumiert** → Hungry-S/Vengeful-S
+   wirken im Kampf gar nicht. backlog-§0-„Engine ✅" war zu optimistisch.
 
-**Vorher (S95):** Regeldrift gefunden + Entscheid (b) → Plan 025 angelegt (je Protokoll ein Step,
-A/B-Effekt-Klassen). 016 Group A + Conquering-Tyrant-P-Morale werden durch 025 obsolet. Detail →
-`session_archive.md` / git.
+**Stakeholder-Kritik S97 (ernst nehmen):** Ich habe Anzeige-Anforderungen wiederholt auf „später"
+geschoben statt zu fragen → Schuld türmt sich. **Neue verbindliche Regel: Anzeige ist Pflichtteil
+JEDES 025-Steps** (in Plan 025 DoD verankert). Daraus: **Step 2b = generischer Direktiv-Hinweisblock**
+(YAML-Feld `enforcement: app|table`, pure Fn `directive_hints`, Caption `✓ angewandt` / `⚠ am Tisch`),
+der die aufgelaufenen 🔲-Anzeige-Lücken (Reroll-Save-Hinweis, S+1-WOUND, AP-im-SAVE, Sudden-Storm-B)
+Schritt für Schritt ablöst.
+
+**Vom Stakeholder gemeldete offene Bugs (S97, in backlog dokumentiert):** (a) Reroll-of-1-Save-Hinweis
+fehlt in der UI (Soll: ⟳-Caption im SAVE-Block, Plan 024); (b) Dynastie-Affinität „beide Direktiven"
+greift nicht beim rundenzugewiesenen Protokoll (war als S96-Notiz da, jetzt als Bug geführt).
+
+**Vorher (S96):** Plan 025 Step 1 erledigt (Sudden Storm D2 + Undying-Legions-Tausch → alle 6
+Protokolle Primary=9E-D1). 1135 grün / 93,11 %. Detail → `session_archive.md` / git.
 
 ### Nächster Schritt
-**Plan 025 Step 2 — Hungry Void (A-Effekte):** D1 `ap_on_unmod_wound_6` (melee), D2
-`strength_if_charged` (Bedingung charged/charge/HI). Neue Engine-Typen + combat + Tests, eigener
-Freigabe-Punkt + Vollsuite. Reihenfolge gesamt: 025(Rest) → 016(Rest) → 018 → 015 → 017.
+**Plan 025 Step 2 (Logik) — Freigabe-Punkt 1:** Hungry D1 → `ap_on_unmod_wound_6` (melee, **B**),
+D2 → `strength_if_charged` (melee, **A**, value 1). Neues `was_charged`-Flag (`set_charged` markiert
+nur Charger; turn_flags-Init + Reset in game_state). Pure Fn `get_active_round_choice_strength_if_charged`;
+Konsum in `_common.py` Strength-Berechnung. Test-Migrationen (hungry_void primary/secondary, strength_modifier)
++ neue Tests + **Vollsuite**.
+**Dann Step 2b (Anzeige) — Freigabe-Punkt 2:** generischer Hinweisblock (s. o.).
+Reihenfolge gesamt: 025(Rest, je Step mit Anzeige) → 016(Rest) → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
 0. **Kontext-Engineering / Regel-Kuratierung (eigene Session, Maßnahme C).** Quelle:

@@ -9,6 +9,44 @@
 - **Risk**: MITTEL — verändert verdrahtete + getestete Effekte; jeder Schritt ist
   ein eigener Freigabe-Punkt, Vollsuite nach jedem Daten-/Verhaltens-Step.
 
+## Update S97 (2026-06-25) — Reklassifikation D1, Anzeige als Pflichtteil
+
+Beim Scoping von Step 2 (Hungry Void) zwei strukturelle Befunde + Konsens-Entscheide:
+
+1. **Combat ist zähl-basiert** (`resolve_attack(... wounds_rolled: int ...)` — *player-provided
+   dice counts*, `combat.py:86-94`). Die App sieht **nie einzelne Würfelaugen**. Damit ist
+   `ap_on_unmod_wound_6` (Hungry D1, später Vengeful D1) **nicht** als A-Effekt abbildbar →
+   **Konsens: D1 Hungry + Vengeful von A → B reklassifiziert** (Tisch-Hinweis). Eine
+   Pro-Würfel-Umstellung wäre ein eigener großer Plan (vom Stakeholder vorerst nicht gewollt).
+2. **Latente Drift (S97):** `strength_modifier`/`ap_bonus` sind in der Engine gemappt **und
+   getestet** (`get_active_round_choice_modifier` → `{"strength":1}`/`{"ap":-1}`), werden aber
+   in `_collect_atk_modifiers`/`_collect_def_save_modifiers` (`_common.py:440/498`) **nie
+   konsumiert** → die aktuellen Hungry-S/Vengeful-S-Effekte wirken im Kampf **gar nicht**. Die
+   `backlog.md`-§0-Tabelle „Engine ✅" ist insoweit irreführend (liefert Wert ≠ Konsument liest ihn).
+
+**Konsens-Entscheide (S97):**
+- **Step 2 (Logik):** Hungry D1 → `ap_on_unmod_wound_6` (phase melee, **B**); D2 →
+  `strength_if_charged` (value 1, phase melee, **A**). D2 braucht ein neues `was_charged`-Flag
+  (`set_charged` markiert bisher nur den Charger; `turn_flags` kennt `charged`/`heroic_intervened`,
+  nicht „was charged"). Neue pure Engine-Fn `get_active_round_choice_strength_if_charged`; Konsum
+  in `_common.py` Strength-Berechnung (repariert nebenbei den toten `strength`-Pfad).
+- **Step 2b (Anzeige) — NEU, eigener Freigabe-Punkt direkt nach Step 2:** generischer
+  **Direktiv-Hinweisblock**, der **jede** aktive Direktive zeigt (A wie B), datengetrieben aus
+  den YAML-`primary`/`secondary`-Texten. Neues YAML-Feld **`enforcement: app|table`** je
+  `effect` (deckt sich mit A/B/C-Katalog); pure Fn `directive_hints(player, use_melee) ->
+  [{text, enforced}]`; Render als Caption im Attacken-Block (konsistent zu `_rp_directive_hints`):
+  `✓ … — von der App angewandt` / `⚠ … — am Tisch anwenden`. `enforcement` wird **nur** für die
+  schon-9E-konformen Direktiven gesetzt (Sudden Storm, Undying Legions, Hungry Void); die noch
+  erfundenen (Vengeful/Eternal/Conquering) bekommen es in ihren Steps 3-5 → erscheinen erst dann
+  im Block (keine falsche Anzeige). **Sammelt die verschobene Sudden-Storm-B-Hint-Schuld (Step 1)
+  mit ein.**
+- **DoD-Ergänzung (verbindlich ab jetzt):** **Anzeige ist Pflichtteil JEDES 025-Steps** — kein
+  Verschieben von Render auf „später/Backlog". Jeder neue/geänderte Effekt nennt seine Anzeige.
+
+> Der generische Hinweisblock ist die Wurzel-Lösung für die aufgelaufenen 🔲-Anzeige-Lücken
+> in `backlog.md` §0 #2 (Reroll-Save-Hinweis, S+1-WOUND, AP-im-SAVE …) — diese werden über
+> `enforcement` Schritt für Schritt vom Block abgedeckt statt einzeln nachgezogen.
+
 ## Decision (Konsens, S95)
 
 Der Stakeholder hat entschieden: **Variante (b)** — die in
