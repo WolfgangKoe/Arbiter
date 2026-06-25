@@ -38,6 +38,46 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 ---
 
+## Spezialisierte Subagenten (Roster)
+
+Die fünf Grundrollen oben sind die *Stellen-Typen*. In der Praxis setzt der Orchestrator daraus
+benannte **Spezial-Subagenten** für wiederkehrende Aufgaben zusammen — damit wir mit der Zeit ein
+festes, verbesserbares Repertoire haben (statt jeden Auftrag neu zu erfinden). Tier ist die
+Faustregel-Untergrenze; der Orchestrator darf nach Urteil höher gehen.
+
+| Spezial-Subagent | Tier | Read/Write | Dient Event | Typische Aufgabe |
+|---|---|---|---|---|
+| **Recherche / Regel-Lookup** | Haiku (Lookup) · Sonnet (Synthese) | **Read** | Planning · Sprint | Wahapedia-Texte, Codebase-Mapping, Web-Fetch (z. B. Slides), Rule-Conformance-Catalog befüllen |
+| **Auditor / Reviewer** | Sonnet → Opus urteilt | **Read** | DoD · Review | `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg |
+| **Kontextkuratierung / Beobachter** | Haiku · Sonnet | **Read** | laufend · Review | Kontext-/Wissens-Lücken melden, Token-Sinks aufspüren, Regel-Index-Pflege vorschlagen |
+| **Refinement-Extraktor** | Sonnet | Read + Write (`docs/inbox/`) | Refinement | Fotos aus `Fotos/` lesen, Idee als strukturierten Text in die Inbox extrahieren |
+| **Artefaktpflege** | Sonnet | Read + begrenzt Write | Abschluss | Doku/Backlog/Metrics konsistent halten, Drift melden (Schreibzugriff freigabepflichtig) |
+| **Aufräumen / Tech-Schuld** | Sonnet | **Write** | Sprint | Mechanische Cleanups nach fixem Plan (INV-4b-Literale, tote Pfade, Format) — freigabepflichtig |
+| **Design-System-Crew** | Opus plant/reviewt · Sonnet sucht · Sonnet setzt um | **Write** | Sprint | UI-Komponenten vereinheitlichen (z. B. gemeinsame Buff-/Hinweis-Komponente) — Code-Edits freigabepflichtig |
+| **Executor / Implementer** | Sonnet | **Write** | Sprint | Implementierung nach vollständig freigegebenem Plan; kein eigenes Design |
+
+## Gemeinsame Regeln für alle Subagenten
+
+Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
+[context-engineering-slides.md](../reference/context-engineering-slides.md) Slide 17, „Sub-Agents"):
+
+1. **Read/Write-Asymmetrie.** Lesende/prüfende Subagenten (Recherche, Auditor, Beobachter) sind stark
+   und gut parallelisierbar — eigenes Fenster, nur **verdichtetes Ergebnis** zurück. Schreibende
+   Subagenten am **selben, eng gekoppelten Code** sind schwach (Merge-Kosten sind *semantisch*) → höchstens
+   einer pro gekoppeltem Bereich, sequenziell; disjunkte Dateien dürfen parallel laufen.
+2. **Enger Vertrag** in jedem Auftrag: **Ziel · Scope/Grenzen · erlaubte Tools/Quellen · Effort-Budget ·
+   Output-Format**. Verhindert Duplikate und Lücken; Ergebnisse als referenzierbare Artefakte.
+3. **Selbstprüf-Checkliste** (Pflicht, Details siehe Event 3 „Sprint"): Verdrahtung per `grep` belegen,
+   Code-Heimat, Gates grün, Format vor Rückgabe, Beleg im festen Format. Fehlt sie, ist der Auftrag unvollständig.
+4. **Kanal-Regel:** Subagenten reden **nie direkt** mit dem Stakeholder — sie eskalieren über den
+   Orchestrator, der mediiert, bündelt und reviewt. „Subagent-grün" ≠ „verdrahtet".
+5. **Freigabe bleibt:** Datei-/einstellungsändernde Arbeit (Code/Memory/Skill) ist freigabepflichtig —
+   auch via Subagent ([ADR-0005](decisions/0005-stehende-subagent-freigabe.md)). Read-only-Subagenten = stehende Freigabe.
+6. **Kosten:** Multi-Agent kostet grob das **15-fache** an Token ggü. einem einfachen Chat → gezielt
+   einsetzen (Fleißarbeit/Read-Fan-out), nicht reflexhaft.
+
+---
+
 ## Ablauforganisation: Events
 
 Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinnert in ihren Artefakten, nicht im Bewusstsein. Die folgenden Events sind deshalb explizit auf Diskontinuität ausgelegt.

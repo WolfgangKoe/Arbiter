@@ -201,6 +201,23 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
   (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
 
+- 🔲 **Army-List-UX „weniger Scrollen" (Refinement-Skizze IMG_4051, S94 gesichert):** Übergeordnetes
+  UX-Ziel, abgehandelte Einheiten weniger im Weg zu haben. Drei Bausteine: (a) abgehandelte Unit-Card
+  automatisch ans **Ende** der Armeeliste schieben; (b) nach **Phasenwechsel** den Fokus auf die nächste
+  relevante Unit-Card setzen; (c) optionales manuelles **Umsortieren/Switch** von Cards. Offene technische
+  Frage aus der Skizze: ist Reorder/Auto-Scroll in Streamlit überhaupt sauber umsetzbar? → eigener Plan,
+  zuerst Streamlit-Machbarkeit klären.
+- 🔲 **Quantum Shielding (Refinement-Skizze IMG_4041, S94 gesichert):** Setzt den Rettungswurf (Invuln)
+  auf einen **festen Wert (4+)** — keine additive Modifikation, kein Modifier-Pfeil in der Würfelanzeige.
+  Eigener Mechanik-Typ „Invuln auf festen Wert setzen" (vs. der bestehenden additiven Modifier-Logik).
+  Überschneidet sich mit dem SAVE-/Invuln-Badge-Bereich (Plan 017, „Invuln-Badge chaotisch"). Regel
+  zuerst gegen `docs/work/wahapedia_necrons/` prüfen. Eigener Plan oder Teil von Plan 017.
+- 🔲 **Waffen-Block: Rapid-Fire-Count + Range anzeigen (Refinement-Skizze IMG_4038, S94 gesichert):** Im
+  Waffen-Auswahl-Block der Schussphase je Waffe die **Anzahl Attacken inkl. Rapid Fire** sowie die
+  **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
+  statt nur ausgeblendet). Anzeige-/UX-Thema (verwandt mit der Eligibility-Anzeige der Schussphase und
+  dem Silent-King-Ziel-pro-Waffe-Finding). Eigener Plan.
+
 ---
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
