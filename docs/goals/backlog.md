@@ -217,6 +217,20 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
   statt nur ausgeblendet). Anzeige-/UX-Thema (verwandt mit der Eligibility-Anzeige der Schussphase und
   dem Silent-King-Ziel-pro-Waffe-Finding). Eigener Plan.
+- 🔲 **Dynastie-Affinität „beide Direktiven" greift nicht beim rundenzugewiesenen Protokoll (S96-UI-Befund):**
+  Regel (`faction_overview.txt` Z. 862–871): wird das Affinitäts-Protokoll *aktiv* (egal ob 6./permanent
+  oder einer Runde zugeteilt) und hat die ganze Armee den Dynastie-Code, gelten **beide** Direktiven statt
+  einer. Aktuell greift das nur für das **6. (permanent aktive)** Protokoll (`_extra_directive_effects` in
+  [ability_engine.py](../../src/gameMechanic/ability_engine.py)); im **Round-Zweig** von `_active_directive_effects`
+  ([ability_engine.py:139-144](../../src/gameMechanic/ability_engine.py#L139)) wird nur die *eine* gewählte
+  Direktive angehängt, und die UI ([armyCard.py](../../src/uiLayout/armyCard.py) `_render_directive_buttons`)
+  verlangt weiter eine manuelle Primary/Secondary-Wahl. Soll: bei Affinität auch im Round-Zweig **beide**
+  automatisch aktivieren + UI analog zum Extra-Protokoll-Pfad (kein Wahlzwang, „beide aktiv"-Anzeige).
+  Engine + UI + Regressionstest. Verwandt mit Plan 016 (Dynastiebonus-Anzeige).
+- 🔲 **Sudden Storm S — B-Hinweis anzeigen (`shoot_during_action`, S96):** Plan 025 Step 1 hat die Direktive
+  datenseitig auf 9E-D2 korrigiert (Typ `shoot_during_action`, kein Engine-Effekt). Der Tisch-Hinweis hat
+  noch **keine** sichtbare Anzeige. Stakeholder-Wunsch: **im Zuge der Sudden-Storm-Anzeige-Umsetzung** den
+  Hinweis mit einbauen (Render-Code, manuelle Verifikation). → Plan 025 Anzeige-Teil bzw. 016/eigener.
 
 ---
 

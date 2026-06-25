@@ -283,7 +283,7 @@ def test_execute_effect_heal_heals_unit() -> None:
 
 
 def test_execute_effect_heal_adds_active_directive_bonus() -> None:
-    """Undying Legions S (+1 wound per Living Metal use) lifts the heal amount."""
+    """Undying Legions D1/primary (+1 wound per Living Metal use) lifts the heal amount."""
     import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
 
     session = _S(
@@ -293,7 +293,7 @@ def test_execute_effect_heal_adds_active_directive_bonus() -> None:
         p1_units={"test.unit": {"current_wounds": 3, "models": 2, "destroyed": False}},
     )
     session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_undying_legions"
-    session["round_choice_directive_Necrons"] = "secondary"
+    session["round_choice_directive_Necrons"] = "primary"
     _mut.st.session_state = session
     _st_mock.session_state = session
     unit = _make_unit(rules=["livingMetal"])
@@ -561,10 +561,12 @@ def test_reroll_empty_when_no_directive() -> None:
     assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
 
 
-def test_advance_and_charge_via_directive() -> None:
+def test_sudden_storm_secondary_does_not_grant_advance_and_charge() -> None:
+    # 9E Directive 2 of Sudden Storm is "shoot during an Action" (B-hint), NOT
+    # advance-and-charge (Plan 025 Step 1: that effect was non-canonical).
     _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", "secondary")
     unit = _make_unit(rules=[], keywords=["NECRON"])
-    assert charge_after_advance_allowed("Necrons", unit) is True
+    assert charge_after_advance_allowed("Necrons", unit) is False
 
 
 def test_advance_and_charge_inactive_returns_false() -> None:
@@ -573,15 +575,16 @@ def test_advance_and_charge_inactive_returns_false() -> None:
     assert charge_after_advance_allowed("Necrons", unit) is False
 
 
-def test_rp_reroll_undying_legions_p() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
+def test_rp_reroll_undying_legions_secondary() -> None:
+    # 9E Directive 2 = RP re-roll (Plan 025 Step 1: slots aligned to D1/D2 order).
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
     assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
 
 
-def test_rp_modifiers_empty_for_undying_legions_secondary() -> None:
-    # Secondary is a Living-Metal heal_bonus per RAW, NOT a Reanimation-pool
+def test_rp_modifiers_empty_for_undying_legions_primary() -> None:
+    # Primary (9E Directive 1) is a Living-Metal heal_bonus, NOT a Reanimation-pool
     # effect — get_active_rp_modifiers must not surface it (S89 data fix).
-    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
     assert get_active_rp_modifiers("Necrons") == {}
 
 
@@ -590,20 +593,21 @@ def test_rp_modifier_empty_when_other_directive() -> None:
     assert get_active_rp_modifiers("Necrons") == {}
 
 
-def test_heal_bonus_undying_legions_secondary_applies_to_living_metal() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+def test_heal_bonus_undying_legions_primary_applies_to_living_metal() -> None:
+    # 9E Directive 1 = Living Metal +1 heal (Plan 025 Step 1: slots aligned to D1/D2).
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
     unit = _make_unit(rules=["livingMetal"])
     assert get_active_heal_bonus("Necrons", unit) == 1
 
 
 def test_heal_bonus_zero_when_unit_lacks_target_rule() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
     unit = _make_unit(rules=[])  # no livingMetal -> directive does not match
     assert get_active_heal_bonus("Necrons", unit) == 0
 
 
 def test_heal_bonus_zero_for_reroll_directive() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
     unit = _make_unit(rules=["livingMetal"])
     assert get_active_heal_bonus("Necrons", unit) == 0
 
@@ -664,19 +668,20 @@ def _extra_protocol_session(
 
 
 def test_extra_protocol_rp_reroll_via_6th_directive() -> None:
-    # Bug 1b: Undying Legions as the always-active 6th protocol, primary directive
-    # chosen -> RP re-roll must be active (previously only the round slot was read).
+    # Bug 1b: Undying Legions as the always-active 6th protocol, secondary directive
+    # (9E D2 = RP re-roll) chosen -> RP re-roll active (previously only the round slot
+    # was read). Slots aligned to D1/D2 order in Plan 025 Step 1.
     _extra_protocol_session(
-        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="primary"
+        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="secondary"
     )
     assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
 
 
 def test_extra_protocol_heal_bonus_via_6th_directive() -> None:
-    # Bug 1c: Undying Legions as the 6th protocol, secondary directive -> Living
-    # Metal +1 heal.
+    # Bug 1c: Undying Legions as the 6th protocol, primary directive (9E D1 = Living
+    # Metal +1 heal).
     _extra_protocol_session(
-        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="secondary"
+        "wh40k_9e.necrons.faction.protocol_undying_legions", extra_directive="primary"
     )
     unit = _make_unit(rules=["livingMetal"])
     assert get_active_heal_bonus("Necrons", unit) == 1

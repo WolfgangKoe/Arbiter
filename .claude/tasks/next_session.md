@@ -21,24 +21,25 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S95, 2026-06-25)
+## Aktueller Stand (nach S96, 2026-06-25)
 
-**S95 (Doku/Planung, kein Code) — Command-Protocol-Regeldrift gefunden + (b) entschieden.** Bei der
-Pflicht-Regelprüfung für Plan 016 Group A fiel auf: die 6 Necron-Command-Protocol-Direktiven im YAML
-sind **nicht-kanonisch** (z. B. Eternal Guardian „+1 Save", Conquering Tyrant „+1 Ld" — gibt es in 9E
-nicht). Vollständige Prüfung aller 6: **Sudden Storm P (+1" Move) konform; Undying Legions substanziell
-konform** (P/S vs. D1/D2 vertauscht); die anderen vier erfunden. **Stakeholder-Entscheid (b):** auf
-echte 9E-Regeln umstellen → **[Plan 025](../../docs/audit/plans/025-protocol-9e-conformance.md)** angelegt
-(je Protokoll ein Step, A/B-Effekt-Klassen, neue Engine-Typen benannt). Befund in `backlog.md` §4b +
-`rules_insights.md`. **025 rückt vor 016/017**; dadurch werden **016 Group A + Conquering-Tyrant-P-Morale
-obsolet** (Effekte verschwinden) — 016 behält nur RP-Hint + Dynastiebonus, 017 muss AP-on-6 mitdenken.
+**S96 — Plan 025 Step 1 erledigt (Command Protocols → 9E).** Sudden Storm D2 vom erfundenen
+`advance_and_charge` auf die echte 9E-D2 (`shoot_during_action`, reiner B-Hinweis) korrigiert;
+Undying-Legions Primary/Secondary **getauscht** → jetzt alle 6 Protokolle einheitlich **Primary =
+9E-Direktive 1**. Nur Daten + Docstring + 8 Test-Migrationen, **keine** Engine-Logik (Reader sind
+effekt-typ-basiert). 1135 grün / 93,11 %; UI verifiziert (Direktiv-Texte + Button-Reihenfolge ok).
+**Zwei neue Befunde (backlog §2):** (1) Dynastie-Affinität „beide Direktiven" greift nur beim 6./
+permanenten, **nicht** beim rundenzugewiesenen Protokoll — Engine+UI-Gap; (2) Sudden-Storm-B-Hinweis
+braucht noch Render-Anzeige (im Zuge der Sudden-Storm-Anzeige einbauen).
 
-**Vorher (S93/S94):** Wurzel-Fix 1b/1c (`_active_directive_effects`) — Dynastiebonus erstmals wirksam,
-1135 grün/93,11 %; Repo aufgeräumt + Subagenten-Roster. Detail → `session_archive.md` / git.
+**Vorher (S95):** Regeldrift gefunden + Entscheid (b) → Plan 025 angelegt (je Protokoll ein Step,
+A/B-Effekt-Klassen). 016 Group A + Conquering-Tyrant-P-Morale werden durch 025 obsolet. Detail →
+`session_archive.md` / git.
 
 ### Nächster Schritt
-**Plan 025 Step 1** (XS, risikoarm, eigene Freigabe): Sudden Storm + Undying Legions verifizieren &
-relabeln. Danach Step 2 ff. (Engine-Effekte). Reihenfolge gesamt: 025 → 016(Rest) → 018 → 015 → 017.
+**Plan 025 Step 2 — Hungry Void (A-Effekte):** D1 `ap_on_unmod_wound_6` (melee), D2
+`strength_if_charged` (Bedingung charged/charge/HI). Neue Engine-Typen + combat + Tests, eigener
+Freigabe-Punkt + Vollsuite. Reihenfolge gesamt: 025(Rest) → 016(Rest) → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
 0. **Kontext-Engineering / Regel-Kuratierung (eigene Session, Maßnahme C).** Quelle:

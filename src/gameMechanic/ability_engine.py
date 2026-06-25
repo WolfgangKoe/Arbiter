@@ -319,7 +319,9 @@ def charge_after_advance_allowed(faction: str, unit: Unit) -> bool:
     after advancing for this unit.
 
     Two sources: a per-unit activated ability (charge_after_advance effect) or the
-    army-wide active round-choice directive (advance_and_charge, e.g. Sudden Storm S).
+    army-wide active round-choice directive (advance_and_charge). The directive branch
+    is generic; no shipped protocol currently grants it (Sudden Storm S was corrected
+    to its canonical 9E directive in Plan 025).
     """
     if any(
         eff.get("type") == "charge_after_advance" and _unit_matches_target(unit, eff)

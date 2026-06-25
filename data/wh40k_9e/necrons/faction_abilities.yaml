@@ -105,7 +105,7 @@ abilities:
   source: faction_rule
   subfaction_affinity: nephrekh
   primary: +1" Move
-  secondary: Can Advance and Charge in the same turn
+  secondary: If performing an Action, can still make ranged attacks without it failing
   directives:
     primary:
       effect:
@@ -113,26 +113,28 @@ abilities:
         value: 1
         phase: movement
     secondary:
+      # 9E Directive 2: table-only (B-hint), no engine computation. App surfaces a hint.
       effect:
-        type: advance_and_charge
-        phase: charge
+        type: shoot_during_action
+        phase: any
 - id: wh40k_9e.necrons.faction.protocol_undying_legions
   name_en: Protocol of the Undying Legions
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: szarekhan
-  primary: Re-roll one Reanimation Protocol die
-  secondary: +1 wound restored each Living Metal use
+  # Slots ordered to match 9E directive numbering: Primary = Directive 1, Secondary = Directive 2.
+  primary: +1 wound restored each Living Metal use
+  secondary: Re-roll one Reanimation Protocol die
   directives:
     primary:
-      effect:
-        type: rp_reroll
-        phase: any
-    secondary:
       effect:
         type: heal_bonus
         target_rule: livingMetal
         value: 1
+        phase: any
+    secondary:
+      effect:
+        type: rp_reroll
         phase: any
 - id: wh40k_9e.necrons.faction.protocol_vengeful_stars
   name_en: Protocol of the Vengeful Stars
