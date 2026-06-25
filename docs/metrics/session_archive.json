@@ -1246,10 +1246,10 @@
   "bb3dbf84-67bc-4f25-a9fd-27baf30b72d8": {
     "started_at": "2026-06-25T18:53:37.962Z",
     "task": "ÜBerlege, wofür du Subagenten einsetzen kannst. Wichtig!",
-    "peak_context": 118215,
-    "subagent_share": 26.800153236975504,
+    "peak_context": 123687,
+    "subagent_share": 23.514820462331034,
     "by_tier": {
-      "Opus": 7056444,
+      "Opus": 8403276,
       "Haiku": 2583527
     },
     "subagents": [
@@ -1259,6 +1259,32 @@
         "tier": "Haiku",
         "peak_context": 55529,
         "started_at": "2026-06-25T18:53:37.962Z"
+      }
+    ]
+  },
+  "c50fcaa1-e151-44e2-a2b5-b43df0fc14db": {
+    "started_at": "2026-06-25T21:18:00.701Z",
+    "task": "Danke für die Design-Frage, So muss es sein. Für D2 ist hier ein Hinweis sinnvoll, weil wir hier eine Hybrid Ability ha…",
+    "peak_context": 120578,
+    "subagent_share": 43.86590488454587,
+    "by_tier": {
+      "Opus": 8146763,
+      "Sonnet": 4576385
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Implement Plan 025 Step 3",
+        "tier": "Sonnet",
+        "peak_context": 77591,
+        "started_at": "2026-06-25T21:18:00.701Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Continue Step 3 implementation",
+        "tier": "Opus",
+        "peak_context": 39010,
+        "started_at": "2026-06-25T21:18:00.701Z"
       }
     ]
   }
