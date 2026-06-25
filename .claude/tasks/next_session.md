@@ -24,36 +24,36 @@ Branch `dev` (Arbeit), `main` (nur per PR).
 
 ---
 
-## Aktueller Stand (nach S93, 2026-06-25)
+## Aktueller Stand (nach S94, 2026-06-25)
+
+**S94 (auf `feature/016`, Commit a7c67a6) — Repo aufgeräumt + Arbeitsweise geschärft.** `Refinement/` geleert
+(Logo lag schon in `assets/`); 3 Foto-Ideen → backlog §2; Context-Engineering-Slides → `docs/reference/`;
+Subagenten-Roster + gemeinsame Regeln in `operating_model.md`. **Retro-Befund:** Tiering missachtet (Recherche an
+Sonnet statt Haiku), weil die Regel nicht im Session-Kontext aktiv war → Carry-over #0.
 
 **S93 (auf `feature/016`) — Wurzel-Fix 1b/1c GEFIXT + UI-verifiziert. Vollsuite 1135 grün, 93,11 %.**
-**Wurzel (statische Analyse, ohne Debug-Probe):** alle Direktiv-Effekte liefen durch `_active_directive_effect(player)`,
-der **nur** die runden-zugewiesenen Keys (`round_choice_active/directive`) las — die ganze **6.-Protokoll-Klasse**
-(`extra_directive`) + den **Dynastie-Affinitäts-Fall** „beide Direktiven" ignorierte. Darum erschien 1a (Eternal Guardian
-= runden-zugewiesen) ✅, aber 1b/1c (Undying Legions = 6. Protokoll) ❌. **Fix:** `_active_directive_effect` →
-`_active_directive_effects(player) -> list` (runden-zugewiesen + 6./Affinität), alle 5 Engine-Reads aggregieren über die
-Liste; `_extra_directive_effects`-Helper + Mapping-Dict `_MODIFIER_RESULT_KEY`. **+6 Regressionstests** (1b/1c via 6.,
-Affinität an/aus, Akkumulation, 6.-inaktiv). Nebeneffekt: Dynastiebonus (6e Bug 3) ist erstmals **wirksam** verdrahtet,
-nicht nur kosmetisch. **UI-Verifikation:** 1b RP-Reroll-Hint sichtbar ✅ · 1c Living-Metal +1 ✅ · Dynasty-Bonus-Badge ✅.
-**NEU offen (keine Regression):** Eternal Guardian **S** (`reroll_save_1`) wird im SAVE-Block **nicht** als Buff
-angezeigt — Engine liefert (`get_active_round_choice_rerolls`), nur Rendering fehlt → backlog #2-Tabelle 🔲 SAVE-Hinweis,
-Plan 016 Group A (gemeinsamer `_round_choice_reroll_hints`-Helper mit Conquering Tyrant S).
+`_active_directive_effects(player)->list` aggregiert runden-zugewiesene + 6.-Protokoll/Affinitäts-Direktiven (alle 5
+Engine-Reads); Dynastiebonus dadurch erstmals **wirksam** verdrahtet. +6 Regressionstests. **Offen (keine Regression):**
+Eternal Guardian **S** (`reroll_save_1`) SAVE-Hinweis fehlt im Rendering → Plan 016 Group A (gemeinsamer
+`_round_choice_reroll_hints`-Helper mit Conquering Tyrant S). Detail → ziel6.md-Historie.
 
-**S92 — Branch-Befund (wichtig):** `main` ist **331 Commits** hinter `feature/016`; aktiver Integrations-Branch
-ist `dev` (=016−35). Branch `chore/context-engineering-and-test-fixture` von `dev` angelegt für die unten vertagten
-chore-Aufgaben; „schnell mergen→dev→Branch löschen". Aufgabe 1 (Mock-Fixture) berührt Tests → die 016-only
-`test_round_choice_player_keyed.py` beim späteren 016→dev-Merge nachmigrieren.
-
-**S91 (historisch):** Mirror-Match-Kollision gefixt (`round_choice_state_key(player,kind)`, pro Spieler-Slot;
-1129 grün/93 %). Kontext-Engineering-Initiative gestartet (Write/Select/Compress/Isolate; je Session Auditor+
-Optimierer; Regeldateien verbatim heilig; `docs/handoff/context-audit-S91.md`).
-
-**S90 (historisch):** 3 Direktiv-/State-Bugs gefixt (Direktive im 2. Zug · Zielauswahl Runde 2 · Living Metal).
+**S92/S91/S90 (historisch):** Branch-Befund (`main` 331 Commits hinter `feature/016`, aktiv = `dev` =016−35; 016-only
+`test_round_choice_player_keyed.py` beim 016→dev-Merge nachmigrieren); Mirror-Match-Kollision gefixt
+(`round_choice_state_key(player,kind)`); Kontext-Engineering-Initiative gestartet; 3 Direktiv-/State-Bugs gefixt.
+Detail → ziel6.md-Historie. Der S92-`chore/...`-Branch entfällt (Stakeholder-Entscheid S94: ein Branch, getrennte Commits).
 
 ### ⚠️ Carry-over (offen)
-0. **Kontext-Engineering-Setup (NEU, frische Session):** governance-Doc `context_engineering.md` + SessionStart-Hook
-   (Auditor auto) + Regel-Index (Stichwort→Datei:Zeilen, verbatim heilig) + ziel6.md-Kompression (Auditor-Top-Finding).
-   `docs/handoff/context-audit-S91.md` durch Optimierer verarbeiten + danach löschen. Je eigene Freigabe.
+0. **Kontext-Engineering / Regel-Kuratierung (NEU priorisiert, eigene Session; verschmilzt mit Prinzipien-Revision #5).**
+   Quelle liegt vor: `docs/reference/context-engineering-slides.md` (Write/Select/Compress/Isolate). Maßnahmen aus S94-Retro:
+   - **(a) Session-scoped Regel-Injektion (Kern):** SessionStart-Hook + Regel-Index (Stichwort→Datei:Zeilen, verbatim heilig)
+     lädt NUR die fürs aktuelle Session-Ziel relevanten Regeln in den Kontext — je Session andere. Behebt das Tiering-Versäumnis
+     (Haiku-für-Lookups muss aktiv präsent sein). = „Select"-Hebel.
+   - **(b) Subagent-Ergebnis → Datei statt in den Orchestrator-Kontext kippen:** Vertrag schreibt Ergebnis nach `docs/handoff/`,
+     gibt nur Pointer + Kurzfazit zurück. = „Write/Isolate".
+   - **(c) Handoff-Datei-Lebenszyklus:** Repo so strukturieren, dass jeder Agent schnell zu den Kernpunkten kommt → relevanten
+     Kontext liest → arbeitet → auslagert → Datei löscht, wenn nicht mehr gebraucht (z.B. nach erfolgreicher Implementierung).
+   - **(d)** governance-Doc `context_engineering.md` + ziel6.md-Kompression; `docs/handoff/context-audit-S91.md` verarbeiten + löschen.
+   Prinzipien-Revision: Slides ↔ CLAUDE.md/operating_model abgleichen. Je eigene Freigabe.
 0b. **Manuelle UI-Verifikation S91 (PFLICHT, Render-Code):** Necron-vs-Necron, Befehlsphase — Spieler-1-Protokoll/
    Direktive wählen → Spieler-2-Karte bleibt unverändert (eigene Wahl/Badge). Das war das Original-Symptom.
 1. **Manuelle UI-Verifikation (S93-Stand):** (a) Eternal-Guardian-Save „(defender)" ✅; (b) Undying-Legions-P
