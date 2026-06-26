@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-26 18:14 CEST
+Stand: 2026-06-26 22:36 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,18 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-26 17:27 23e6  █████████░░░ 116k ✅    ██░░░░  39%    █████████···
+06-26 22:24 654b  ██████████░░ 121k ⚠️   ██░░░░  32%    ████████····
+         SA_1·  ██████░░░░░░  78k ✅    Draft Doku-Org + Reporting plans
+----------------- ---------------------- -------------- ------------
+06-26 18:17 0c87  ██████████░░ 128k ⚠️   ████░░  71%    ████········
+         SA_1·  █████████░░░ 110k ✅    Migrate tests + docs Step 4
+         SA_2·  █████░░░░░░░  60k ✅    Implement Plan 025 Step 4 D1
+         SA_3·  █████░░░░░░░  67k ✅    D2 plan 026 erstellen
+         SA_4·  ████░░░░░░░░  49k ✅    Fix Variante-C dice badge bugs
+----------------- ---------------------- -------------- ------------
+06-26 17:27 23e6  ██████████░░ 128k ⚠️   ██░░░░  37%    █████████···
          SA_1·  ████████░░░░  99k ✅    Detail-plan Plan 025 Step 4
-         SA_2·  ████░░░░░░░░  55k ✅    Session-Abschluss S102 + Commit
+         SA_2·  █████░░░░░░░  57k ✅    Session-Abschluss S102 + Commit
 ----------------- ---------------------- -------------- ------------
 06-26 16:32 cf15  ███████████░ 136k ⚠️   █░░░░░  14%    ██████████··
          SA_1·  ███░░░░░░░░░  39k ✅    Draft agent_scopes index file

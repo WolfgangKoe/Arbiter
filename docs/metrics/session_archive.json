@@ -1357,11 +1357,11 @@
   "23e6416b-bd40-49ff-8738-b75f06656719": {
     "started_at": "2026-06-26T15:27:07.928Z",
     "task": "start session",
-    "peak_context": 115932,
-    "subagent_share": 38.854819184289056,
+    "peak_context": 127825,
+    "subagent_share": 36.60551434573527,
     "by_tier": {
-      "Opus": 7522439,
-      "Sonnet": 2718983
+      "Opus": 8543291,
+      "Sonnet": 2945071
     },
     "subagents": [
       {
@@ -1375,8 +1375,67 @@
         "agent_type": "general-purpose",
         "description": "Session-Abschluss S102 + Commit",
         "tier": "Sonnet",
-        "peak_context": 55319,
+        "peak_context": 57010,
         "started_at": "2026-06-26T15:27:07.928Z"
+      }
+    ]
+  },
+  "0c87a0bc-ee31-40ce-8c41-30ff7f557ef7": {
+    "started_at": "2026-06-26T16:17:26.585Z",
+    "task": "start session",
+    "peak_context": 128066,
+    "subagent_share": 70.63302852321226,
+    "by_tier": {
+      "Opus": 7843393,
+      "Sonnet": 18864819
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Migrate tests + docs Step 4",
+        "tier": "Sonnet",
+        "peak_context": 110217,
+        "started_at": "2026-06-26T16:17:26.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Implement Plan 025 Step 4 D1",
+        "tier": "Sonnet",
+        "peak_context": 59994,
+        "started_at": "2026-06-26T16:17:26.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "D2 plan 026 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 67363,
+        "started_at": "2026-06-26T16:17:26.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Fix Variante-C dice badge bugs",
+        "tier": "Sonnet",
+        "peak_context": 48622,
+        "started_at": "2026-06-26T16:17:26.585Z"
+      }
+    ]
+  },
+  "654bda63-0b36-4af1-8db9-42fd9db8952e": {
+    "started_at": "2026-06-26T20:24:51.846Z",
+    "task": "start session",
+    "peak_context": 120748,
+    "subagent_share": 32.46301026282589,
+    "by_tier": {
+      "Opus": 3578080,
+      "Sonnet": 1719876
+    },
+    "subagents": [
+      {
+        "agent_type": "Plan",
+        "description": "Draft Doku-Org + Reporting plans",
+        "tier": "Sonnet",
+        "peak_context": 77522,
+        "started_at": "2026-06-26T20:24:51.846Z"
       }
     ]
   }

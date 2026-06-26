@@ -45,6 +45,12 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 | **Sonnet** | Synthese aus mehreren Quellen, Implementierung nach fixem Plan, Code-Review-Befund erstellen |
 | **Opus** | Offene Zweckprogramme, Architekturentscheidungen, Scope-Klärung mit Stakeholder, Urteil über Subagenten-Befunde, Prämissen-Änderungen |
 
+> **MUST (O2, S103):** Reine Lookups / format-fixe Extraktion / ja-nein-gegen-Text laufen als
+> **Default mit `model: haiku`**. Eine Abweichung **nach oben** (Sonnet/Opus) braucht eine
+> **explizite Begründung im Auftrag** — fehlt sie, ist Haiku zu wählen. Grund: Der Stakeholder
+> sieht in der Token-/Modell-Übersicht praktisch nie Haiku; ohne harten Default wird das Tiering
+> ignoriert und Geld verschenkt. Das Tier ist im Chat transparent zu nennen.
+
 ---
 
 ## Spezialisierte Subagenten (Roster)
@@ -52,7 +58,8 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 Die fünf Grundrollen oben sind die *Stellen-Typen*. In der Praxis setzt der Orchestrator daraus
 benannte **Spezial-Subagenten** für wiederkehrende Aufgaben zusammen — damit wir mit der Zeit ein
 festes, verbesserbares Repertoire haben (statt jeden Auftrag neu zu erfinden). Tier ist die
-Faustregel-Untergrenze; der Orchestrator darf nach Urteil höher gehen.
+Faustregel-Untergrenze; der Orchestrator darf nach Urteil höher gehen — dann aber **mit
+expliziter Begründung im Auftrag** (O2-MUST, s. o.), sonst gilt die Untergrenze.
 
 | Spezial-Subagent | Tier | Read/Write | Dient Event | Typische Aufgabe |
 |---|---|---|---|---|

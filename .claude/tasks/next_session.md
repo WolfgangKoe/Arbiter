@@ -28,7 +28,15 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S103, 2026-06-26)
+## Aktueller Stand (nach S104, 2026-06-26)
+
+**S104 — Org-/Reporting-Vorbereitung (O2 verankert + Pläne 027/028 angelegt).**
+- **A (O2-MUST):** Tiering-Default Haiku in `CLAUDE.md` + `operating_model.md` geschärft
+  (Abweichung nach oben nur mit Begründung im Auftrag); feedback-Memory existierte schon.
+- **B:** Pläne **027** (Doku-Org/ADR-0007, O1) + **028** (Reporting/Kontext, O3–O7) + README-Queue.
+- **Retro-Lehren (S104):** (1) Plan-Subagent ist READ-ONLY → gab vollen Plan-Text zurück
+  (70k→126k-Sprung); Plan-Dateien künftig per Executor-SA **mit Write** (gibt nur Pfad zurück).
+  (2) Live-Gauge (`session_context.py`) ist die verlässliche Kontextzahl, nicht die overview-Tabelle (O4).
 
 **S103 — Plan 025 Step 4 (Eternal Guardian D1) + Bug-Fixes + Plan 026.**
 - **Step 4 committed (`a060345`):** D1 `light_cover_if_stationary` (Klasse A) — Auto-Light-Cover
@@ -44,28 +52,16 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 **S102:** Gate-Fix (`docs/handoff/`-Exemption) + Mailbox-Pilot real. **S101:** ADR-0007 dünner Koordinator.
 
-### Nächster Schritt — Organisations- & Reporting-Umbau (delegiert, simplizistisch)
-Stakeholder-Anliegen S103, geklärte Entscheidungen unten. **Zwei Pläne anlegen** (Planner-Subagent):
-ein **Doku-Org**-Schritt + ein **Reporting**-Plan. Danach Plan-025-Linie fort (Reihenfolge:
-025 Step 4 ✅ → 5 → 6 → 016 → 018 → 015 → 026 → 017).
+### Nächster Schritt — Pläne 028 + 027 ausführen, dann 025-Linie fort
+Pläne **angelegt (S104)**. Reihenfolge: **028** (Step 1 O3 Schwelle 135k → Step 2a O4-Archiv-Bug+Test;
+Step 2b wartet auf A/B-Entscheid **Hook vs. `--write`-Aufruf**) → **027** (Doku-Org; „Pilot"-Marker
+raus = **entschieden S104**) → dann 025-Linie (5 → 6 → 016 → 018 → 015 → 026 → 017). Executor-
+Subagenten mit **Write**; Koordinator reviewt.
 
-**Geklärte Entscheidungen (S103):**
-- **O1 Doku-Alignment:** `next_session`/`CLAUDE.md`/`operating_model.md` vollständig auf neue
-  Arbeitsweise (ADR-0007 dünner Koordinator) bringen; `docs/reference/agent_scopes.md` einbinden.
-  Querverweise über **stabile Abschnitts-Anker — KEINE Zeilennummern** (driften).
-- **O2 Modellwahl-MUST (sofort befolgen):** reine Lookups/format-fixe Tasks → **Default Haiku**;
-  Abweichung nach oben (Sonnet/Opus) nur mit **expliziter Begründung im Auftrag**. In `CLAUDE.md`
-  + `operating_model.md` + feedback-Memory verankern. (User sieht kaum Haiku — Tiering wird ignoriert.)
-- **O3 ⚠️-Schwelle:** Kontext-Warnung erst **>135k** (nicht 120k) — `tools/session_context.py`.
-- **O4 Report-Überschreib-BUG:** User bekam korrekten Stand, danach mit **Altdaten überschrieben**
-  (falsch) — `tools/token_report.py`/`overview.md`-Pipeline. Wurzel finden+fixen. User will eher
-  **MEHR/Echtzeit**-Updates (bei Subagent-Start/-Ende), nicht weniger.
-- **O5 Modellmix:** **Koordinator (Opus-Hauptthread) raus** aus dem „Modellmix" — nur Subagenten.
-- **O6 Neue Kontext-Sicht:** „womit ist MEIN Fenster gefüllt" — Aufschlüsselung **nach Quelle**
-  (Datei-Reads / Tool-Ausgaben / Subagent-Reports / System+Memory / Konversation). An die
-  **Peter-Wegner-Präsentation** (im Repo — finden+lesen via Subagent) ausrichten.
-- **O7 Bessere Planning-Darstellung:** Planning bleibt an Subagent delegiert, aber die Präsentation
-  muss klarer/lesbarer werden.
+**Geklärte Entscheidungen (S103) — in Pläne überführt:** O1 → Plan **027**; O3–O7 → Plan **028**;
+**O2 ✅ verankert (S104)** (CLAUDE.md + operating_model.md + Memory). Detail-Wortlaut in den Plänen.
+**Reliability-Vermerk (Maßnahme 3):** Live-Gauge (`session_context.py`) = verlässliche Zahl;
+overview.md-Tabelle ist archiv-abgeleitet (O4) → in overview kennzeichnen, welche Zahl live/archiv ist.
 - **Befund Overwatch-Anzeige:** „trifft auf 6+" ist falsch, sobald Hold Steady (5+) greift →
   gehört zu Plan 026/015; bei den GO-Hinweisen vermerken.
 

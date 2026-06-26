@@ -188,9 +188,12 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   oder andere Inhalte über die Claude-/Skill-API **nie direkt im Opus-Hauptfenster** laden —
   immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt. Direktes
   Laden kostete einmalig **~300k Token** und flutete den Kontext (S69-Befund, ADR-0004).
-- **Tiering:** Reine Lookups (gebundene Regelsuche, formatfixe Extraktion, ja/nein gegen
-  expliziten Text) an `model: haiku`. Je geschlossener das Konditionalprogramm → desto
-  niedriger das Tier. Vollständige Rollen-/Tier-/Modus-Regeln: `docs/governance/operating_model.md`.
+- **Tiering (MUST, O2):** Reine Lookups (gebundene Regelsuche, formatfixe Extraktion, ja/nein
+  gegen expliziten Text) laufen als **Default mit `model: haiku`**. Eine Abweichung **nach oben**
+  (Sonnet/Opus) braucht eine **explizite Begründung im Auftrag** — sonst Haiku. Tier im Chat
+  transparent nennen. Je geschlossener das Konditionalprogramm → desto niedriger das Tier.
+  Grund: ohne harten Default wird das Tiering ignoriert (S103). Vollständige Rollen-/Tier-/Modus-
+  Regeln: `docs/governance/operating_model.md`.
 - **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
   `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
   `tools/token_report.py` führt beide Quellen zusammen (`--write` → `docs/metrics/overview.md`).
