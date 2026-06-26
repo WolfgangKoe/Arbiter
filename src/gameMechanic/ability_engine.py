@@ -5,6 +5,7 @@ import streamlit as st
 from gameMechanic.game_state import (
     faction_dir_for,
     round_choice_state_key,
+    short_round_choice_label,
     subfaction_value_for,
     units_key_for,
 )
@@ -88,6 +89,15 @@ _MODIFIER_RESULT_KEY = {
 }
 
 
+def _tagged_effect(effect: dict, source_id: str) -> dict:  # type: ignore[type-arg]
+    """Return a shallow copy of *effect* annotated with its source ability id.
+
+    The loader caches effect dicts and shares them across callers, so we must
+    copy before adding ``_source_id`` — never mutate the cached original.
+    """
+    return {**effect, "_source_id": source_id}
+
+
 def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  # type: ignore[type-arg]
     """Effect dict(s) of the player's always-active 6th round-choice ability.
 
@@ -96,6 +106,9 @@ def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  #
     subfaction matches the ability's ``subfaction_affinity``, BOTH directives
     apply simultaneously (dynasty bonus) — mirrors the display logic in
     ``armyCard._render_extra_round_choice`` / ``game_state``.
+
+    Each returned dict carries ``_source_id`` so callers can identify which
+    round-choice ability the effect originates from (used by badge label resolution).
     """
     assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})
     assigned_ids = set(assignments.values())
@@ -107,10 +120,14 @@ def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  #
     extra = extras[0]
     subfaction = subfaction_value_for(player)
     if subfaction and subfaction == extra.subfaction_affinity:
-        return [extra.primary_effect, extra.secondary_effect]
+        return [
+            _tagged_effect(extra.primary_effect, extra.id),
+            _tagged_effect(extra.secondary_effect, extra.id),
+        ]
     extra_directive = st.session_state.get(round_choice_state_key(player, "extra_directive"))
     if extra_directive:
-        return [extra.primary_effect if extra_directive == "primary" else extra.secondary_effect]
+        raw = extra.primary_effect if extra_directive == "primary" else extra.secondary_effect
+        return [_tagged_effect(raw, extra.id)]
     return []
 
 
@@ -122,6 +139,10 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     State is keyed by the player slot (mirror-match safe); ability definitions load
     via the player's faction directory. Returns ``[]`` for factions without
     round-choice abilities or when nothing is selected (no faction-dir lookup needed).
+
+    Each returned dict carries ``_source_id`` identifying the source round-choice
+    ability, enabling callers to resolve the correct badge label (e.g. via
+    ``get_short_label_for_effect_type``).
     """
     active_id: str | None = st.session_state.get(round_choice_state_key(player, "active"))
     directive: str | None = st.session_state.get(round_choice_state_key(player, "directive"))
@@ -139,9 +160,8 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     if has_round:
         active = next((p for p in round_choices if p.id == active_id), None)
         if active:
-            effects.append(
-                active.primary_effect if directive == "primary" else active.secondary_effect
-            )
+            raw = active.primary_effect if directive == "primary" else active.secondary_effect
+            effects.append(_tagged_effect(raw, active.id))
     effects.extend(_extra_directive_effects(player, round_choices))
     return [e for e in effects if e]
 
@@ -260,6 +280,30 @@ def get_active_round_choice_ignores_cover_half_range(player: str) -> bool:
     because the firing model must confirm half-range at the table anyway).
     """
     return _active_directive_has_type(player, "ignore_cover_half_range")
+
+
+def get_short_label_for_effect_type(player: str, effect_type: str) -> str | None:
+    """Short protocol name for the first active directive effect matching *effect_type*.
+
+    Resolves the label from the effect's ``_source_id`` (set by
+    ``_active_directive_effects`` / ``_extra_directive_effects``) rather than
+    always reading the round-assigned ``active`` slot.  This ensures the badge
+    label reflects the *actual* source protocol — e.g. Vengeful Stars when it
+    is the always-active 6th protocol rather than the round-assigned one.
+
+    Returns ``None`` when no active directive has the requested effect type
+    (callers should fall back to their previous behaviour in that case).
+    """
+    round_choices = load_round_choice_abilities(faction_dir_for(player))
+    by_id = {p.id: p for p in round_choices}
+    for effect in _active_directive_effects(player):
+        if effect.get("type") != effect_type:
+            continue
+        source_id = effect.get("_source_id")
+        ability = by_id.get(source_id) if source_id else None
+        if ability:
+            return short_round_choice_label(ability.name_en)
+    return None
 
 
 def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:

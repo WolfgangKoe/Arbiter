@@ -21,27 +21,18 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S99, 2026-06-25)
+## Aktueller Stand (nach S100, 2026-06-26)
+
+**S100 — Badge-Label-Bug FIXED + committed (UI-verifiziert).** `_active_directive_effects` /
+`_extra_directive_effects` taggen jedes Effect-Dict mit `_source_id` (Kopie statt Mutation des
+gecachten Dicts); neuer Helper `get_short_label_for_effect_type(player, effect_type)` löst das Label
+über `_source_id` auf (gleiche Kurzname-Quelle `short_round_choice_label`). Beide `_common.py`-Badges
+(AP Z. 918, Light-Cover Z. 1060) nutzen ihn mit Fallback. 1154 grün / 93,20 %; +4 Regressionstests.
+INV-4b leicht reduziert (Rename generisch). Sonnet-Subagent (65 % Token-Anteil), Opus-reviewt.
 
 **S99 — Plan 025 Step 3 (Vengeful Stars) Code+Tests FERTIG + committed.** D1 `ap_on_unmod_wound_6`
-(**ranged, B**) = nur YAML-Tausch (Wiring war phasen-generisch) → `[AP-1]`-Zeile im Schuss-WOUND-Block.
-D2 `ignore_cover_half_range` (**B/Hybrid**) über neue Engine-Fn `get_active_round_choice_ignores_cover_half_range`
-+ reine Label-Fn `light_cover_label` → grüne `:green-badge`-Inline-Anzeige an der Light-Cover-Checkbox.
-Toter `ap_bonus`-Pfad ersetzt. 1150 grün / 93,16 %. 5 Tests migriert (Sicherheitsnetz, Stakeholder-ok).
-
-**UI-Verifikation S99 (Stakeholder):** Würfel + Effekt D1 **und** D2 korrekt — **ABER Badge-Label-Bug** (s. u.).
-
-### ⚠️ Bug: Falsches Protokoll-Label in Würfel-Badges (Schuss-WOUND + Light-Cover) — Fix als nächstes
-**Symptome:** `[AP-1]`-Trigger-Zeile und Light-Cover-Badge zeigen „Eternal Guardian" statt „Vengeful Stars",
-wenn Vengeful Stars das **6./Extra-Protokoll** ist. **Ursache (Subagent S99, bestätigt):**
-`_round_choice_short_label` (`_common.py:429`) liest immer den `active`-Slot (rundenzugewiesen). Effect-Dicts
-aus `_active_directive_effects` tragen **keine Protokoll-Identität** (Loader `loader.py:500-501` setzt nur
-{type,value,phase}). Bug tritt **nur** beim Extra-Protokoll auf; kommt der Effekt vom rundenzugewiesenen, stimmt das Label.
-**Bug-Stellen:** `_common.py:916` (AP-Badge) + `_common.py:1052-1053` (Light-Cover-Badge).
-**Fix-Skizze:** (1) `_active_directive_effects` reichert je Effect-Dict `"_protocol_id"` engine-seitig an;
-(2) neuer Helper `get_short_label_for_effect_type(player, effect_type) -> str | None` (sucht Protokoll per ID,
-gibt Kurznamen); (3) beide `_common.py`-Aufrufe umstellen; (4) Test: Vengeful als Extra → Label „Vengeful Stars".
-**Scope:** 3 Dateien, additiv, kein Generic-Verstoß. ~25–35k Tokens.
+(**ranged, B**) → `[AP-1]`-Zeile im Schuss-WOUND-Block. D2 `ignore_cover_half_range` (**B/Hybrid**) über
+`get_active_round_choice_ignores_cover_half_range` + `light_cover_label` → grüne Badge an Light-Cover-Checkbox.
 
 **S98 (Step 2, Hungry Void):** D1 AP-on-6 melee (B) + D2 `strength_if_charged` melee (A, S blau wie WAAAGH).
 Design-Korrektur: Direktiv-Effekte ins **Dice-UI-Vokabular** (kein Caption-Block; Step 2b verworfen). Detail → git.
@@ -51,9 +42,10 @@ YAML hat noch **erfundene** Effekte (save +1 / `reroll_save_1`) statt 9E-D1 (Lig
 D2 (Hold Steady·Set to Defend). Step 4 behebt beides (Daten **und** armyCard-Render).
 
 ### Nächster Schritt
-**Zuerst: Badge-Label-Bug fixen** (s. o. — kleiner, klarer Fix, eigener Freigabe-Punkt). **Danach Plan 025
-Step 4 = Eternal Guardian** (Daten **und** armyCard-Render; vor Start armyCard-Direktiv-Anzeige genau ansehen).
-Reihenfolge gesamt: Label-Bug → 025(Step 4→5→6, je mit Anzeige) → 016(Rest) → 018 → 015 → 017.
+**Plan 025 Step 4 = Eternal Guardian** (Daten **und** armyCard-Render; vor Start armyCard-Direktiv-Anzeige
+genau ansehen — YAML hat noch erfundene Effekte save +1 / `reroll_save_1` statt 9E-D1 Light-Cover-wenn-nicht-
+bewegt / D2 Hold Steady·Set to Defend). D1 `light_cover_if_stationary` (Klasse A, SAVE-Block) + D2 B-Hinweis.
+Reihenfolge gesamt: 025(Step 4→5→6, je mit Anzeige) → 016(Rest) → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
 0. **Kontext-Engineering / Regel-Kuratierung (eigene Session, Maßnahme C).** Quelle:
@@ -67,7 +59,8 @@ Reihenfolge gesamt: Label-Bug → 025(Step 4→5→6, je mit Anzeige) → 016(Re
    INV-4b-Restschuld (`dynasty`/`gloom`/`prism`/`necrons`-Defaults) laufen nebenher, je eigene Freigabe.
 2. **Manuelle UI-Verifikation (offen, PFLICHT, Render-Code):** (a) S91 Mirror-Protokoll — Necron-vs-Necron
    Befehlsphase: Spieler-1-Wahl lässt Spieler-2-Karte unverändert. (b) Bug 5: Runde-2-Fernkampf-Zielwahl.
-   (Eternal-Guardian-Save / Undying-Legions-RP / Living-Metal-S waren S93 ✅.)
+   (Eternal-Guardian-Save / Undying-Legions-RP / Living-Metal-S waren S93 ✅; **Badge-Label Vengeful Stars
+   als 6./Extra-Protokoll war S100 ✅** — AP- und Light-Cover-Badge zeigen korrekt „Vengeful Stars".)
 
 ### Offene Fragen / Vormerke
 - **Design-System-Crew (eigene Session):** Subagenten-Gespann Designsystem + Buff-/Direktiv-Hinweis-

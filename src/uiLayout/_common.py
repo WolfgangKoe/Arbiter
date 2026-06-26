@@ -902,6 +902,7 @@ def _render_resolution_tab(
         buff_stat_bonus,
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
+        get_short_label_for_effect_type,
     )
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
@@ -913,7 +914,12 @@ def _render_resolution_tab(
             atk_faction, atk_state.get("turn_flags", {}), use_melee
         )
         on_six_ap = get_active_round_choice_ap_on_wound_6(atk_faction, use_melee)
-        on_six_label = _round_choice_short_label(atk_faction) if on_six_ap else ""
+        on_six_label = (
+            get_short_label_for_effect_type(atk_faction, "ap_on_unmod_wound_6")
+            or _round_choice_short_label(atk_faction)
+            if on_six_ap
+            else ""
+        )
     except KeyError:
         on_six_ap, on_six_label = 0, ""
     # str_bonus is added after weapon-strength calculation so that ×N weapons
@@ -1046,11 +1052,13 @@ def _render_resolution_tab(
     if is_shooting:
         from gameMechanic.ability_engine import (  # noqa: PLC0415
             get_active_round_choice_ignores_cover_half_range,
+            get_short_label_for_effect_type,
         )
         from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
 
         short = (
-            _round_choice_short_label(atk_faction)
+            get_short_label_for_effect_type(atk_faction, "ignore_cover_half_range")
+            or _round_choice_short_label(atk_faction)
             if get_active_round_choice_ignores_cover_half_range(atk_faction)
             else None
         )

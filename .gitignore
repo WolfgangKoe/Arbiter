@@ -10,3 +10,6 @@ dist/
 .pytest_cache/
 tailwindcss
 .claude/.freigabe
+
+# Runtime game log (regenerated on each run/test) — not source state
+data/log/game_log.json

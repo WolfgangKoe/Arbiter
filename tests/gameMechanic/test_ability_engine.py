@@ -28,6 +28,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_rerolls,
     get_active_round_choice_strength_if_charged,
     get_active_rp_modifiers,
+    get_short_label_for_effect_type,
     get_triggered_abilities,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -772,6 +773,59 @@ def test_round_and_extra_modifiers_accumulate() -> None:
     assert get_active_round_choice_modifier("Necrons", "shooting", False) == {"save": 1}
     # The ap_on_wound_6 effect from the 6th Vengeful protocol is reachable via the dedicated fn.
     assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=False) == 1
+
+
+def test_get_short_label_for_effect_type_returns_source_protocol_not_round_active() -> None:
+    # Regression: when Vengeful Stars is the 6th (extra) protocol and Eternal Guardian
+    # is round-assigned, the AP-on-wound-6 badge must show "Vengeful Stars", NOT
+    # "Eternal Guardian" (the round-active one). Previously _round_choice_short_label
+    # always read the round-active slot, causing wrong labels for extra-protocol effects.
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_vengeful_stars",
+        extra_directive="primary",
+        round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        round_directive="primary",
+    )
+    label = get_short_label_for_effect_type("Necrons", "ap_on_unmod_wound_6")
+    assert label == "Vengeful Stars", (
+        f"Expected 'Vengeful Stars' but got {label!r}. "
+        "The label must reflect the effect's actual source protocol, not the round-assigned one."
+    )
+
+
+def test_get_short_label_for_effect_type_ignore_cover_returns_source_protocol() -> None:
+    # Regression: Light Cover badge also uses get_short_label_for_effect_type.
+    # Vengeful Stars secondary (ignore_cover_half_range) as the 6th protocol —
+    # the label must be "Vengeful Stars" regardless of the round-assigned protocol.
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_vengeful_stars",
+        extra_directive="secondary",
+        round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        round_directive="primary",
+    )
+    label = get_short_label_for_effect_type("Necrons", "ignore_cover_half_range")
+    assert label == "Vengeful Stars", f"Expected 'Vengeful Stars' but got {label!r}."
+
+
+def test_get_short_label_for_effect_type_returns_none_when_inactive() -> None:
+    # No ap_on_unmod_wound_6 active → must return None (not crash, not return stale data).
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        extra_directive="primary",
+    )
+    label = get_short_label_for_effect_type("Necrons", "ap_on_unmod_wound_6")
+    assert label is None
+
+
+def test_get_short_label_for_effect_type_round_assigned_protocol_correct() -> None:
+    # When Vengeful Stars IS the round-assigned protocol (not the 6th), the label
+    # should still resolve correctly to "Vengeful Stars".
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
+    session["round_choice_directive_Necrons"] = "primary"
+    _st_mock.session_state = session
+    label = get_short_label_for_effect_type("Necrons", "ap_on_unmod_wound_6")
+    assert label == "Vengeful Stars"
 
 
 # ---------------------------------------------------------------------------

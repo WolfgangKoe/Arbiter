@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-22
+Letzter Abgleich: 2026-06-26 (S100 — Badge-Label-Bug bei 6./Extra-Protokoll gefixt; Plan 025 Step 3 Anzeige bestätigt)
 
 ---
 
