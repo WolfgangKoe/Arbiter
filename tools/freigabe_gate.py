@@ -14,6 +14,11 @@ A SessionStart hook removes the marker each session, so the gate re-arms every
 session instead of decaying into "always open". The stakeholder re-grants with
 ``touch .claude/.freigabe`` after a plan is approved.
 
+Exempt: writes under ``docs/handoff/`` (the ADR-0007 mailbox). That directory is
+a planning/coordination artifact, not code — the NEEDS-DECISION round-trip that
+*produces* the Freigabe happens before any plan is approved, so gating it would
+deadlock the very mechanism that grants approval. Code paths stay gated.
+
 Known gap: only Edit/Write/NotebookEdit are gated. File writes via Bash
 (``>``, ``sed -i`` ...) are out of scope by design — gating all Bash would block
 reads and pytest.
@@ -25,7 +30,9 @@ import json
 import sys
 from pathlib import Path
 
-MARKER = Path(__file__).resolve().parent.parent / ".claude" / ".freigabe"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+MARKER = REPO_ROOT / ".claude" / ".freigabe"
+HANDOFF_DIR = REPO_ROOT / "docs" / "handoff"
 
 DENY_REASON = (
     "🔒 Freigabe-Gate aktiv: kein freigegebener Plan. Zeige dem Stakeholder "
@@ -40,14 +47,29 @@ def is_allowed(marker: Path) -> bool:
     return marker.exists()
 
 
+def is_exempt(file_path: str | None) -> bool:
+    """Mailbox writes (``docs/handoff/``) bypass the gate — planning artifacts,
+    not code; see module docstring."""
+    if not file_path:
+        return False
+    try:
+        resolved = Path(file_path).resolve()
+    except Exception:
+        return False
+    return resolved == HANDOFF_DIR or HANDOFF_DIR in resolved.parents
+
+
 def main() -> None:
     # Never break the harness on malformed input — fail open is unsafe for a
     # gate, so fail *closed* would block everything; instead, on parse failure
     # we allow, because a broken gate must not wedge the session. The marker
     # check below is the actual enforcement path.
     try:
-        json.load(sys.stdin)  # consume payload; matcher already scoped the tool
+        payload = json.load(sys.stdin)
     except Exception:
+        return
+    file_path = (payload.get("tool_input") or {}).get("file_path")
+    if is_exempt(file_path):
         return
     if is_allowed(MARKER):
         return

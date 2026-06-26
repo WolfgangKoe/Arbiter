@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-26 (S100 — Badge-Label-Bug bei 6./Extra-Protokoll gefixt; Plan 025 Step 3 Anzeige bestätigt)
+Letzter Abgleich: 2026-06-26 (S102 — Gate-Fix docs/handoff Exemption; Plan 025 Step 4 D1 bereit/D2 herausgeschnitten)
 
 ---
 
@@ -49,8 +49,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
 
   | Protokoll · Direktive | Effekt | Engine | Anzeige |
   |---|---|---|---|
-  | Eternal Guardian · P | save_modifier +1 | ✅ | ✅ SAVE-Block grün |
-  | Eternal Guardian · S | reroll_save_1 | ✅ (`get_active_round_choice_rerolls`) | 🔲 SAVE-Hinweis |
+  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | 🔲 Bereit (Mailbox Part A) | 🔲 Step 4 → Executor-Subagent |
+  | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | 🔲 YAML-Übergang `hold_steady_or_set_to_defend` + TODO | 🔲 D2-Plan (nach Plan 015) |
   | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
   | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
   | Conquering Tyrant · P | leadership_bonus +1 | ✅ (informativ, kein UI-Konsument) | 🔲 Morale |
@@ -324,7 +324,9 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
 - ✅ **Dice Display Arrow-Direction-Bug (`dice_html.py`)** — erledigt (Plan 022, S77): `rightward = (value > 0)` in `dice_compose.py`, Buff=rechts[→]/Debuff=links[←]; Tests `test_buff_arrow_points_right`/`test_debuff_arrow_points_left` pinnen das Verhalten.
 - ✅ **commandPhase.py State-Keys nicht orb-id-gebunden** — erledigt (Plan 020, S83): globale Slots durch `pending_target_request` mit `TargetSelectionRequest.ability_id`-Diskriminator ersetzt; `revive_wargear_awaiting_target` existiert nicht mehr in `src/`.
 - **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
-- 🔴 **Command-Protocol-Direktiven nicht regelkonform (S95-Befund, Plan 016 Group A blockiert):**
+- 🔴 **Command-Protocol-Direktiven nicht regelkonform (S95-Befund, Plan 016 Group A blockiert;
+  Plan 025 Step 4 = D1 bereit → Mailbox-Plan `docs/handoff/plan-025-step4.md` Teil A vom
+  **Executor-Subagent** umsetzen lassen, nicht im Koordinator-Fenster):**
   Die in `data/wh40k_9e/necrons/faction_abilities.yaml` modellierten Direktiv-Effekte weichen
   von den echten 9E-Protokollen ab (`docs/work/wahapedia_necrons/faction_overview.txt` Z. 583 ff.):
   | Protokoll · Direktive | YAML-Modell | Wahapedia 9E (kanonisch) |

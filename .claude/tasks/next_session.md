@@ -14,6 +14,12 @@
   Erledigtes → `backlog.md`/`session_archive.md`, Referenz → s. o.
 - **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten =
   stehende Freigabe (proaktiv, ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
+- **⚠️ KOORDINATOR DELEGIERT MEHR (Retromaßnahme S102):** Detail-Sichtung, Planung, Implementierung
+  UND Review laufen als Subagenten — der Koordinator routet, hält Gates, liest nur Marker/Pfade,
+  nie Vollergebnisse. Entscheidungen gehören IN die Mailbox (`docs/handoff/`, NEEDS-DECISION →
+  ANSWERED), NICHT in den Chat. S102-Lehre: Opus-Fenster lief auf ~112k, weil der Koordinator den
+  Backlog selbst las und Entscheidungen im Chat ausgab statt über die Mailbox. Nicht selbst
+  implementieren, wenn ein Executor-Subagent es kann.
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
@@ -21,65 +27,45 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S101, 2026-06-26)
+## Aktueller Stand (nach S102, 2026-06-26)
 
-**S101 — Operating-Model-Umbau (ADR-0007) + Mailbox-Pilot grün.** Carry-over #0 (Kontext-Engineering)
-im Kern adressiert: **dünner persistenter Koordinator**, Detail-Planung + finales Review als Subagenten
-ausgelagert, Kanal-Regel gelockert (durchreichen statt urteilen). Neu: `ADR-0007`, Index
-`docs/reference/agent_scopes.md` (14 Aufgabentypen), `docs/handoff/README.md` (Mailbox/Status-Marker).
-`operating_model.md`-Delta (Roster, Kanal-Regel ×2, Event 1/5, Pilot-Banner) + CLAUDE.md-Verweis.
-Mailbox-Round-Trip **verifiziert** (Subagent schreibt→`SendMessage`→liest, Kontext intakt). 3 Sonnet-
-Subagenten trugen die Leselast, Opus-Fenster blieb ~117k. Docs/Arch-Gate grün (16).
+**S102 — Gate-Fix + ADR-0007-Mailbox-Pilot real + D2-Neubewertung.**
+- **Gate-Fix:** `tools/freigabe_gate.py` nimmt `docs/handoff/`-Writes aus dem Freigabe-Gate aus
+  (ADR-0007-Mailbox ist Planungsartefakt, kein Code); +4 Regressionstests. Vollsuite grün (1158,
+  93,20 %). Live-Hook verifiziert.
+- **Mailbox-Pilot real:** Planner-Subagent (Sonnet) schrieb Detail-Planung für Plan 025 Step 4
+  nach `docs/handoff/plan-025-step4.md`; Stakeholder antwortete IN der Datei (ANSWERED).
+- **D2 neu bewertet:** Eternal Guardian D2 (Hold Steady/Set to Defend) ist kein reiner
+  Tisch-Hinweis — Hold Steady = Overwatch 5+ statt 6; Set to Defend = +1 Hit next Fight. Hängt
+  an Plan 015 (Overwatch nicht implementiert). **D2 herausgeschnitten**, eigener Plan.
+- **4 Entscheidungen (A1/B1/B2/B3):** D1 nur im Shooting-Block (A1); D2 raus aus Step 4 (B1);
+  D2-YAML als Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (B2); eigener D2-Plan
+  deckt beide Hälften, abhängig Plan 015 (B3). Detail → `docs/handoff/plan-025-step4.md`.
 
-
-**S100 — Badge-Label-Bug FIXED + committed (UI-verifiziert).** `_active_directive_effects` /
-`_extra_directive_effects` taggen jedes Effect-Dict mit `_source_id` (Kopie statt Mutation des
-gecachten Dicts); neuer Helper `get_short_label_for_effect_type(player, effect_type)` löst das Label
-über `_source_id` auf (gleiche Kurzname-Quelle `short_round_choice_label`). Beide `_common.py`-Badges
-(AP Z. 918, Light-Cover Z. 1060) nutzen ihn mit Fallback. 1154 grün / 93,20 %; +4 Regressionstests.
-INV-4b leicht reduziert (Rename generisch). Sonnet-Subagent (65 % Token-Anteil), Opus-reviewt.
-
-**S99 — Plan 025 Step 3 (Vengeful Stars) Code+Tests FERTIG + committed.** D1 `ap_on_unmod_wound_6`
-(**ranged, B**) → `[AP-1]`-Zeile im Schuss-WOUND-Block. D2 `ignore_cover_half_range` (**B/Hybrid**) über
-`get_active_round_choice_ignores_cover_half_range` + `light_cover_label` → grüne Badge an Light-Cover-Checkbox.
-
-**S98 (Step 2, Hungry Void):** D1 AP-on-6 melee (B) + D2 `strength_if_charged` melee (A, S blau wie WAAAGH).
-Design-Korrektur: Direktiv-Effekte ins **Dice-UI-Vokabular** (kein Caption-Block; Step 2b verworfen). Detail → git.
-
-**⚠️ Eternal-Guardian-Befund (für Step 4):** armyCard-Anzeige falsch + **vermutlich fachlich falsch** (backlog §4b):
-YAML hat noch **erfundene** Effekte (save +1 / `reroll_save_1`) statt 9E-D1 (Light Cover wenn nicht bewegt) /
-D2 (Hold Steady·Set to Defend). Step 4 behebt beides (Daten **und** armyCard-Render).
+**S101:** ADR-0007 + Mailbox-Pilot grün; dünner Koordinator, Planung/Review als Subagenten.
+**S100:** Badge-Label-Bug gefixt. **S99:** Plan 025 Step 3 (Vengeful Stars) fertig.
 
 ### Nächster Schritt
-**Plan 025 Step 4 = Eternal Guardian** (Daten **und** armyCard-Render; vor Start armyCard-Direktiv-Anzeige
-genau ansehen — YAML hat noch erfundene Effekte save +1 / `reroll_save_1` statt 9E-D1 Light-Cover-wenn-nicht-
-bewegt / D2 Hold Steady·Set to Defend). D1 `light_cover_if_stationary` (Klasse A, SAVE-Block) + D2 B-Hinweis.
-Reihenfolge gesamt: 025(Step 4→5→6, je mit Anzeige) → 016(Rest) → 018 → 015 → 017.
+**Plan 025 Step 4 = nur D1** (Eternal Guardian Light Cover bei stationär, Variante C,
+nur Shooting-Block). Mailbox-Plan `docs/handoff/plan-025-step4.md` Teil A (D1) liegt bereit.
+→ **Executor-Subagent** umsetzen lassen, nicht im Koordinator-Fenster.
+D2 = eigener Plan (abhängig Plan 015 Overwatch). Reihenfolge: 025(Step 4→5→6) → 016 → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
-0. **Kontext-Engineering — S101 im Kern adressiert (ADR-0007).** Dünner Koordinator, ausgelagerte
-   Planung/Review, Index + Handoff/Mailbox, Round-Trip verifiziert. **Rest offen:** (a) `operating_model.md`
-   Diagramme A/B „Orchestrator→Koordinator" nachziehen; (b) „Pilot"-Vorbehalt (ADR-0007 + Banner) streichen
-   nach erstem echten Stakeholder-Mailbox-Einsatz; (c) `docs/handoff/context-audit-S91.md` verarbeiten +
-   löschen; (d) **Voll-Flow-Pilot** Planner→Executor→Reviewer am ersten echten Task (Plan 025 Step 4);
-   (e) offen aus Maßnahme C: SessionStart-Regel-**Injektion** (Regeln je Ziel verbatim) — behebt
-   Tiering-/Regel-Lücken; „zufällig im Kontext" reicht nicht (S95-Beleg).
-1. **Plan 025** = aktive Hauptlinie (s. o.). Bug 3 (Zweitspieler-Direktiv-Wahl, armyCard.py:296/307) +
-   INV-4b-Restschuld (`dynasty`/`gloom`/`prism`/`necrons`-Defaults) laufen nebenher, je eigene Freigabe.
-2. **Manuelle UI-Verifikation (offen, PFLICHT, Render-Code):** (a) S91 Mirror-Protokoll — Necron-vs-Necron
-   Befehlsphase: Spieler-1-Wahl lässt Spieler-2-Karte unverändert. (b) Bug 5: Runde-2-Fernkampf-Zielwahl.
-   (Eternal-Guardian-Save / Undying-Legions-RP / Living-Metal-S waren S93 ✅; **Badge-Label Vengeful Stars
-   als 6./Extra-Protokoll war S100 ✅** — AP- und Light-Cover-Badge zeigen korrekt „Vengeful Stars".)
+0. **Kontext-Engineering — S101+S102 real adressiert (ADR-0007).** Dünner Koordinator,
+   Mailbox-Pilot läuft (NEEDS-DECISION→ANSWERED verifiziert). **Neuer Befund S102:**
+   Freigabe-Gate blockierte anfangs `docs/handoff/` → gefixt (Exemption). **Rest offen:**
+   (a) `operating_model.md`-Diagramme A/B nachziehen; (b) „Pilot"-Vorbehalt nach echtem Einsatz
+   streichen; (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
+   (e) SessionStart-Regel-Injektion (S95-Beleg).
+1. **Plan 025** aktive Hauptlinie (s. o.); Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld laufen nebenher.
+2. **Manuelle UI-Verifikation (offen, PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron
+   Befehlsphase; (b) Bug 5: Runde-2-Fernkampf-Zielwahl.
 
 ### Offene Fragen / Vormerke
-- **Design-System-Crew (eigene Session):** Subagenten-Gespann Designsystem + Buff-/Direktiv-Hinweis-
-  Komponente (RP-Hint deutlicher, konsistent mit MWBD/SAVE). Greift, sobald 025 die Effekte festlegt.
-- **S95-Prozess-Vormerk (nicht entschieden):** Regelkonformität evtl. schon **beim YAML-Modellieren**
-  prüfen, nicht erst bei Anzeige — als DoD-#1-Ergänzung erwägen.
-- **Lehren:** „Engine oder Verdrahtung?" → erst prüfen, welche State-Klassen der Resolver liest (S93);
-  Repro-zuerst (S92); Branch-Check (aktiv = `feature/016`).
-- **Kleine Doku-Vormerke:** backlog #2 / ziel6 6e um Bug-3-Step + „Reset kampfrunden-weit" (S90);
-  Freigabe-Gate Re-Arm nur bei echtem SessionStart prüfen; `CLAUDE.md` um ADR-0006-Verweis ergänzen.
+- **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.
+- **S95-Prozess-Vormerk:** Regelkonformität beim YAML-Modellieren prüfen (DoD-#1-Ergänzung).
+- **Kleine Doku-Vormerke:** `CLAUDE.md` um ADR-0006-Verweis; backlog #2/ziel6 6e Bug-3-Step.
 
 ---
 

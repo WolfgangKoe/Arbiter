@@ -82,7 +82,11 @@ Spieler), nicht als zentrale Liste.
 - Tests + ggf. `data/wh40k_9e/necrons/unit_abilities.yaml` (HI-Fähigkeit, Step 4)
 
 **Out of scope** (NICHT anfassen):
-- Set to Defend (kein Stratagem, separate Regel) — nicht bauen.
+- Set to Defend (kein Stratagem, separate Regel) — nicht bauen im Rahmen dieses Plans.
+  **Abhängiger Konsument (S102-Vermerk):** Eternal Guardian D2 hängt an diesem Plan als
+  Voraussetzung: Hold Steady → Overwatch trifft 5+ statt 6 (braucht Overwatch-Hook aus
+  Step 2); Set to Defend → +1 Hit im nächsten Fight. Sobald Plan 015 Overwatch liefert,
+  deckt der künftige D2-Plan beide Hälften ab (Plan 025 Step 4 B3-Entscheid, S102).
 - Automatische Distanz-/Sichtlinien-Prüfung — Tisch-Verantwortung wie überall.
 - Übrige `timing: phase_reactive`-GOs (z. B. Emergency Disembarkation):
   Infrastruktur aus Step 2 trägt sie, aber eigene Effekt-UIs sind NICHT Teil

@@ -142,8 +142,18 @@ ein Regelkonformitäts-Bruch (DoD #1) und macht jede darauf aufbauende Anzeige
      Tests prüften Vengeful-Primary noch als `{"wound":1}`; migriert auf `{}` +
      player-keyed `get_active_round_choice_ap_on_wound_6(..., use_melee=False)==1` (+ neuer
      Secondary-Mirror-Test für `ignore_cover_half_range`). (Nachgetragen S99.)
-4. **Eternal Guardian (A + B).** D1 `light_cover_if_stationary` (bedingter Cover-
-   Grant im SAVE-Block), D2 Hold Steady/Set to Defend = B-Hinweis.
+4. **Eternal Guardian — nur D1 (S102-Entscheid).** `light_cover_if_stationary` (Klasse A):
+   bei `movement_choice == "stationary"` erhält die Einheit Light Cover; Anzeige Variante C
+   (Checkbox bleibt, bei D1 aktiv + stationär vorgehakt + disabled; Badge via
+   `light_cover_label`-Muster). **Nur im Shooting-Block** (A1: Fight-SAVE-Block als
+   Backlog-Notiz). Detail-Plan in Mailbox: `docs/handoff/plan-025-step4.md` Teil A → vom
+   **Executor-Subagent** umsetzen lassen.
+   **D2 herausgeschnitten (B1):** Hold Steady (Overwatch 5+ statt 6) / Set to Defend
+   (+1 Hit im nächsten Fight) = eigener Plan, abhängig Plan 015 (Overwatch). YAML-Übergang
+   (B2): `type: hold_steady_or_set_to_defend, phase: any, enforcement: table` + TODO-Kommentar
+   mit Verweis auf D2-Plan + 9E-Sekundärtext (ersetzt erfundenes `reroll_save_1`). D2-Plan
+   deckt beide Hälften (B3); Hold-Steady-Hälfte hängt an Plan-015-Overwatch, Set-to-Defend
+   ist ein Fight-+1-Hit-Modifier; Vermerk in Plan 015 ergänzt.
 5. **Conquering Tyrant (A + B).** D1 +3" Aura = B-Hinweis, D2 `shoot_after_fall_back`
    (−1 Hit) = A. Engine + Phasen-Konsum + Tests.
 6. **Aufräumen + Akzeptanz-Katalog.** Alte erfundene Effekt-Typen (`save_modifier`
