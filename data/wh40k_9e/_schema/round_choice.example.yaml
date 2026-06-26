@@ -2,12 +2,12 @@
 # Verwendung: Necrons (Command Protocols), Adeptus Custodes (Martial Ka'tah),
 #             Adeptus Mechanicus (Canticles), Tyranids (Synaptic Imperatives)
 #
-# Dateiname pro Fraktion: data/wh40k_9e/<faction_dir>/command_protocols.yaml
-# Geladen von: gameObjects/loader.py → load_command_protocols(faction_dir)
-# UI: uiLayout/armyCard._render_protocol_ui() — automatisch aktiv wenn Datei vorhanden
+# Dateiname pro Fraktion: data/wh40k_9e/<faction_dir>/faction_abilities.yaml
+# Geladen von: gameObjects/loader.py → load_round_choice_abilities(faction_dir)
+# UI: uiLayout/armyCard._render_round_choice_ui() — automatisch aktiv wenn Einträge vorhanden
 #
 # Regeln:
-# - Jede Option max. 1× pro Partie verwendbar (tracked via used_protocol_ids)
+# - Jede Option max. 1× pro Partie verwendbar (tracked via round_choice_assignments)
 # - Reihenfolge: entweder frei oder geordnet (ordered: true)
 # - secondary + secondary_effect sind OPTIONAL (z.B. Canticles haben nur einen Effekt)
 
@@ -25,11 +25,10 @@ protocols:
       phase: shooting   # "shooting" | "melee" | "any"
 
     # Stance B = Secondary = Stoic (optional — weglassen für single-effect Fähigkeiten)
-    secondary: "Stoic Stance: +1 to all saving throws."
+    secondary: "Stoic Stance: Reroll hit and wound rolls of 1 (Melee)."
     secondary_effect:
-      type: save_modifier
-      value: 1
-      phase: any
+      type: reroll_hit_wound_1
+      phase: melee
 
 # VARIANTE B — Ohne Stances / Single-Effect (Adeptus Mechanicus Canticles)
   - id: example.faction.protocol.canticle_style
@@ -42,21 +41,29 @@ protocols:
     # secondary: (kein secondary = keine Stance-Wahl; UI zeigt nur Auto-Apply)
     # secondary_effect: (ebenfalls leer)
 
-# VARIANTE C — Auto-aktivierte erste Option (Necrons: Eternal Guardian in Runde 1)
-# Wird über eine Sonderlogik im UI gehandhabt:
-# In armyCard._render_protocol_ui(): if current_round == 1: auto-set zu dieser ID
-# Keine YAML-Eigenschaft nötig — Logik im Code via _ETERNAL_GUARDIAN_ID-Konstante.
-# Für andere Fraktionen mit ähnlicher Auto-Aktivierung: Konstante in armyCard extrahieren.
+# VARIANTE C — Effekt greift nur bei bestimmter Bewegungswahl (Necrons: Eternal Guardian D1)
+# light_cover_if_stationary: App prüft movement_choice == "stationary" UND aktive Direktive.
+# Bei Treffer: Checkbox im SAVE-Block vorgehakt + disabled; +1 Save fließt in die Würfel.
+# Kein YAML-Flag nötig — type: light_cover_if_stationary in primary_effect reicht.
+# Ähnliche Bedingungseffekte: strength_if_charged prüft charged/was-charged/HI.
 
 # VARIANTE D — Geordnete Reihenfolge (Adeptus Custodes: Ka'tah-Reihenfolge)
 # Alle Optionen haben einen "order"-Wert; UI erzwingt sequenziellen Fortschritt.
 # Noch nicht implementiert — für Phase 2 geplant.
 # Wenn ordered: true, darf nur die nächste Option in der Reihenfolge gewählt werden.
 
-# Wired effect types (in ability_engine.get_active_protocol_modifier()):
-#   hit_modifier, wound_modifier, save_modifier
+# Wired effect types (Auswahl; vollständige Liste in ability_engine.py):
 #
-# Noch nicht wired (Display only):
-#   strength_modifier, attacks_modifier, ap_bonus, move_bonus,
-#   advance_and_charge, reroll_hit_wound_1, reroll_save_1,
-#   leadership_bonus, rp_reroll, rp_bonus
+# Numerisch (get_active_round_choice_modifier → hit/wound/strength/ap/move/leadership):
+#   hit_modifier, wound_modifier, strength_modifier, ap_bonus, move_bonus, leadership_bonus
+#
+# Flagbasiert (eigene get_active_round_choice_*-Funktionen):
+#   reroll_hit_wound_1        → get_active_round_choice_rerolls (Melee)
+#   advance_and_charge        → charge_after_advance_allowed
+#   rp_reroll                 → get_active_rp_modifiers
+#   heal_bonus                → get_active_heal_bonus
+#   light_cover_if_stationary → get_active_round_choice_light_cover_if_stationary (Klasse A)
+#   ignore_cover_half_range   → get_active_round_choice_ignores_cover_half_range (Klasse B)
+#   strength_if_charged       → get_active_round_choice_strength_if_charged (Klasse A)
+#   ap_on_unmod_wound_6       → enforcement: table (Klasse B, Display-only)
+#   hold_steady_or_set_to_defend → enforcement: table (Klasse B, Display-only, Plan 015)

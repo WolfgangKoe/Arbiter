@@ -944,9 +944,29 @@ def _render_resolution_tab(
     # Light/Heavy → SAVE), so each weapon×target tab carries its own cover state.
     cover_key = tab_key
 
+    # Variante C: determine auto_light_cover BEFORE reading checkbox state so the
+    # modifier reaches resolve_save on the same Streamlit run that the directive
+    # first becomes active (not one run later via session_state write).
+    if is_shooting:
+        from gameMechanic.ability_engine import (  # noqa: PLC0415
+            get_active_round_choice_ignores_cover_half_range,
+            get_active_round_choice_light_cover_if_stationary,
+            get_short_label_for_effect_type,
+        )
+        from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
+
+        auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
+    else:
+        auto_light_cover = False
+
     # Read cover checkbox states (checkboxes are rendered later, state read now)
     dense_cover = is_shooting and st.session_state.get(f"dense_cover_{cover_key}", False)
-    light_cover = is_shooting and st.session_state.get(f"light_cover_{cover_key}", False)
+    # Fold auto_light_cover into light_cover so resolve_save sees the +1 on the
+    # same run it is first computed (avoids one-rerun delay of the old
+    # session_state-write approach).
+    light_cover = is_shooting and (
+        auto_light_cover or st.session_state.get(f"light_cover_{cover_key}", False)
+    )
     heavy_cover = (
         is_fight
         and st.session_state.get(f"heavy_cover_{cover_key}", False)
@@ -1047,21 +1067,8 @@ def _render_resolution_tab(
     _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
 
     # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
+    # Imports were already resolved at the top of this block (above resolve_save).
     if is_shooting:
-        from gameMechanic.ability_engine import (  # noqa: PLC0415
-            get_active_round_choice_ignores_cover_half_range,
-            get_active_round_choice_light_cover_if_stationary,
-            get_short_label_for_effect_type,
-        )
-        from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
-
-        # Variante C: auto-inject Light Cover when an active directive grants it (e.g. D1
-        # light_cover_if_stationary). Pre-tick + lock the checkbox; the existing
-        # light_cover→+1-Save path fires automatically — no second modifier (no double-+1).
-        auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
-        if auto_light_cover:
-            st.session_state[f"light_cover_{cover_key}"] = True
-
         short = (
             get_short_label_for_effect_type(atk_faction, "ignore_cover_half_range")
             or _round_choice_short_label(atk_faction)
@@ -1071,9 +1078,13 @@ def _render_resolution_tab(
         if auto_light_cover:
             # Badge label is data-driven from YAML (e.g. "Eternal Guardian"); always non-empty
             # for any correctly wired directive. Empty string silently omits the badge.
+            # Buff-Badges are green per design_colors.md §3 — :green-badge not :blue-badge.
+            # No session_state write here: light_cover was already folded in above; a
+            # redundant write would trigger Streamlit's "widget value set via Session State"
+            # warning alongside the disabled checkbox.
             d1_label = get_short_label_for_effect_type(def_faction, "light_cover_if_stationary")
             st.checkbox(
-                light_cover_label(short) + (f"  :blue-badge[{d1_label}]" if d1_label else ""),
+                light_cover_label(short) + (f"  :green-badge[{d1_label}]" if d1_label else ""),
                 key=f"light_cover_{cover_key}",
                 value=True,
                 disabled=True,

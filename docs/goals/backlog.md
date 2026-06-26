@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-26 (S102 — Gate-Fix docs/handoff Exemption; Plan 025 Step 4 D1 bereit/D2 herausgeschnitten)
+Letzter Abgleich: 2026-06-26 (S103 — Bug 1 Render-Reihenfolge Auto-Light-Cover + Bug 2 blau→grün gefixt; round_choice.example.yaml bereinigt)
 
 ---
 
@@ -15,6 +15,14 @@ Letzter Abgleich: 2026-06-26 (S102 — Gate-Fix docs/handoff Exemption; Plan 025
 
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
 Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
+
+- ✅ **Bug 1 — Auto-Light-Cover Render-Reihenfolge (S103):** `auto_light_cover` wurde erst
+  nach `resolve_save`/`_render_dice_save_block` in den Session-State geschrieben → +1-Save-Modifier
+  fehlte in den Würfeln beim ersten Auftauchen. Fix: Import + `auto_light_cover`-Berechnung vor
+  Z. 949 hochgezogen; `light_cover` faltet `auto_light_cover` direkt, kein session_state-Umweg.
+- ✅ **Bug 2 — Buff-Badge blau statt grün (S103):** `:blue-badge[…]` → `:green-badge[…]` gemäß
+  `design_colors.md` §3 (Buff-Farbe = Grün `#4a9a5a`); gleichzeitig redundante session_state-
+  Zuweisung im Checkbox-Block entfernt (verhindert Streamlit-„widget set via Session State"-Warnung).
 
 - 🟡 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
   fertig — **committed** cc75490/1d8b8ba; offen nur noch manuelle UI-Checks): Code + Tests grün
@@ -49,7 +57,7 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
 
   | Protokoll · Direktive | Effekt | Engine | Anzeige |
   |---|---|---|---|
-  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | ✅ `get_active_round_choice_light_cover_if_stationary` (Plan 025 Step 4) | ✅ Variante C im SAVE-Block (Plan 025 Step 4) |
+  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | ✅ `get_active_round_choice_light_cover_if_stationary` (Plan 025 Step 4) | ✅ Variante C im SAVE-Block (Plan 025 Step 4) — ✅ in Würfeln sichtbar (Bug 1 Render-Reihenfolge + Bug 2 blau→grün gefixt, S103) |
   | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | ✅ YAML-Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (Step 4) | 🔲 D2-Plan (nach Plan 015) |
   | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
   | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
