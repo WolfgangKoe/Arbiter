@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-26 17:22 CEST
+Stand: 2026-06-26 18:14 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,11 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-26 16:32 cf15  ██████████░░ 120k ✅    █░░░░░  18%    ██████████··
+06-26 17:27 23e6  █████████░░░ 116k ✅    ██░░░░  39%    █████████···
+         SA_1·  ████████░░░░  99k ✅    Detail-plan Plan 025 Step 4
+         SA_2·  ████░░░░░░░░  55k ✅    Session-Abschluss S102 + Commit
+----------------- ---------------------- -------------- ------------
+06-26 16:32 cf15  ███████████░ 136k ⚠️   █░░░░░  14%    ██████████··
          SA_1·  ███░░░░░░░░░  39k ✅    Draft agent_scopes index file
          SA_2·  ██░░░░░░░░░░  22k ✅    Mailbox round-trip pilot
          SA_3·  █████░░░░░░░  58k ✅    Claude Code subagent capabilities

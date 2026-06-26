@@ -1317,10 +1317,10 @@
   "cf1566cc-5ba0-4b7f-a6e1-c1e08ff66e22": {
     "started_at": "2026-06-26T14:32:32.631Z",
     "task": "Beginnen wir die nächste Session, allerdings unterbrechen wir den aktuellen Plan und ziehen den Carry-over vor. Ich möc…",
-    "peak_context": 119691,
-    "subagent_share": 18.199439988311017,
+    "peak_context": 136478,
+    "subagent_share": 13.719453113023322,
     "by_tier": {
-      "Opus": 6788362,
+      "Opus": 9463507,
       "Sonnet": 1403967
     },
     "subagents": [
@@ -1351,6 +1351,32 @@
         "tier": "Sonnet",
         "peak_context": 39740,
         "started_at": "2026-06-26T14:32:32.631Z"
+      }
+    ]
+  },
+  "23e6416b-bd40-49ff-8738-b75f06656719": {
+    "started_at": "2026-06-26T15:27:07.928Z",
+    "task": "start session",
+    "peak_context": 115932,
+    "subagent_share": 38.854819184289056,
+    "by_tier": {
+      "Opus": 7522439,
+      "Sonnet": 2718983
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Detail-plan Plan 025 Step 4",
+        "tier": "Sonnet",
+        "peak_context": 99258,
+        "started_at": "2026-06-26T15:27:07.928Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Session-Abschluss S102 + Commit",
+        "tier": "Sonnet",
+        "peak_context": 55319,
+        "started_at": "2026-06-26T15:27:07.928Z"
       }
     ]
   }
