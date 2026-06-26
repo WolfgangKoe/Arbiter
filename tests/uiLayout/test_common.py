@@ -7,11 +7,21 @@ from unittest.mock import MagicMock
 
 import pytest
 
-sys.modules["streamlit"] = MagicMock()
+_st_mock = MagicMock()
+sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.ability_engine as _eng  # noqa: E402
+import gameMechanic.game_state as _gs  # noqa: E402
 import uiLayout._common as common  # noqa: E402
-from uiLayout._common import _parse_strength, state_badges_html  # noqa: E402
+from gameMechanic.ability_engine import (  # noqa: E402
+    get_active_round_choice_light_cover_if_stationary,
+)
+from uiLayout._common import (  # noqa: E402
+    _collect_def_save_modifiers,
+    _parse_strength,
+    state_badges_html,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -321,3 +331,82 @@ def test_lookup_raises_keyerror_for_unknown_unit(monkeypatch) -> None:
     )
     with pytest.raises(KeyError, match="out of sync"):
         common.lookup("Necrons", "missing.unit")
+
+
+# ---------------------------------------------------------------------------
+# Eternal Guardian D1 — light_cover_if_stationary (Plan 025 Step 4)
+# ---------------------------------------------------------------------------
+
+
+class _SS(dict):
+    """Minimal session-state stand-in (attribute + key access)."""
+
+    def __getattr__(self, key: str):  # type: ignore[override]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
+
+    def __setattr__(self, key: str, value: object) -> None:
+        self[key] = value
+
+
+def _eg_session(*, stationary: bool) -> _SS:
+    """Session with Eternal Guardian primary active; unit movement set accordingly.
+
+    Binds the session onto every module's ``st`` reference — not just the local mock —
+    because ability_engine, game_state, and _common each hold their own imported ``st``
+    object captured at import time (see test_round_choice_player_keyed._install).
+    """
+    session = _SS(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="necrons",
+    )
+    session["round_choice_active_Necrons"] = "wh40k_9e.necrons.faction.protocol_eternal_guardian"
+    session["round_choice_directive_Necrons"] = "primary"
+    movement = "stationary" if stationary else "moved"
+    session["p1_units"] = {"test.unit": {"movement_choice": movement}}
+    _st_mock.session_state = session
+    _eng.st.session_state = session
+    _gs.st.session_state = session
+    common.st.session_state = session
+    return session
+
+
+def test_eternal_guardian_d1_light_cover_true_when_stationary() -> None:
+    # D1 active + unit did not move → engine returns True (auto-grant condition met).
+    _eg_session(stationary=True)
+    assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is True
+
+
+def test_eternal_guardian_d1_light_cover_false_when_moved() -> None:
+    # D1 active + unit moved → engine returns False (condition not met).
+    _eg_session(stationary=False)
+    assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is False
+
+
+def test_collect_def_save_modifiers_no_double_light_cover() -> None:
+    # Eternal Guardian D1 active + unit stationary → _collect_def_save_modifiers must NOT
+    # add a light-cover modifier. The +1 from D1 is injected solely via the checkbox
+    # mechanic in the render path (Variante C). Adding it here would cause a double-+1.
+    _eg_session(stationary=True)
+    # No active_modifiers in session → empty result regardless of D1 state.
+    mods = _collect_def_save_modifiers("Necrons", "shooting", False, "test.unit")
+    assert mods == [], (
+        f"Expected no save modifier from _collect_def_save_modifiers "
+        f"(light cover must come from checkbox only), got: {mods}"
+    )
+
+
+def test_collect_def_save_modifiers_passes_active_modifiers() -> None:
+    # Non-light-cover active_modifiers still flow through (unrelated to D1).
+    session = _eg_session(stationary=True)
+    session["active_modifiers"] = [
+        {
+            "source": "Test Stratagem",
+            "effect": {"roll_type": "save", "target": "defender", "value": 1},
+        }
+    ]
+    mods = _collect_def_save_modifiers("Necrons", "shooting", False, "test.unit")
+    assert mods == [{"label": "Test Stratagem", "value": 1}]

@@ -52,18 +52,23 @@ abilities:
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: nihilakh
-  primary: +1 to all saving throws until next Command phase
-  secondary: Re-roll saving throws of 1
+  primary: "Each time an attack is made against this unit, if it did not make a Normal Move, Advance or Fall Back this battle round, this unit receives the benefit of Light Cover"
+  secondary: "When an enemy declares a charge against this unit and it is not in Engagement Range: Hold Steady (Overwatch hits on 5+) or Set to Defend (no Overwatch, but +1 Hit in next Fight phase)"
   directives:
     primary:
       effect:
-        type: save_modifier
-        value: 1
+        type: light_cover_if_stationary
         phase: any
     secondary:
+      # 9E Directive 2: Hold Steady / Set to Defend. Real attack-sequence effect, but
+      # its wiring depends on Plan 015 Overwatch (not yet built). Modelled as table-only
+      # transition so Step 4 carries the correct 9E text without claiming a dead engine
+      # effect. TODO: replace `enforcement: table` with real effect types
+      # (overwatch_hit_threshold / hit_bonus_next_fight) in the dedicated D2 plan.
       effect:
-        type: reroll_save_1
+        type: hold_steady_or_set_to_defend
         phase: any
+        enforcement: table
 - id: wh40k_9e.necrons.faction.protocol_hungry_void
   name_en: Protocol of the Hungry Void
   ability_type: round_choice

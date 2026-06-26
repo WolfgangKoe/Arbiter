@@ -20,6 +20,7 @@ import gameMechanic.game_state as _gs  # noqa: E402
 from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_ap_on_wound_6,
     get_active_round_choice_ignores_cover_half_range,
+    get_active_round_choice_light_cover_if_stationary,
     get_active_round_choice_modifier,
 )
 from gameMechanic.game_state import (  # noqa: E402
@@ -43,7 +44,8 @@ def _install(session: "_S") -> None:
 # primary: ap_on_unmod_wound_6 (shooting, class B) — no longer a generic wound modifier
 # (Plan 025 Step 3). secondary: ignore_cover_half_range (shooting, class B).
 _VENGEFUL_STARS = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
-_ETERNAL_GUARDIAN = "wh40k_9e.necrons.faction.protocol_eternal_guardian"  # primary: save +1
+# Plan 025 Step 4: primary is now light_cover_if_stationary (class A), not save +1.
+_ETERNAL_GUARDIAN = "wh40k_9e.necrons.faction.protocol_eternal_guardian"
 
 
 class _S(dict):
@@ -73,16 +75,20 @@ def test_mirror_match_protocol_modifiers_are_player_independent() -> None:
     session[round_choice_state_key("P1", "directive")] = "primary"
     session[round_choice_state_key("P2", "active")] = _ETERNAL_GUARDIAN
     session[round_choice_state_key("P2", "directive")] = "primary"
+    # P2 unit is stationary so the light-cover condition is met.
+    session["p2_units"] = {"test.unit": {"movement_choice": "stationary"}}
     _install(session)
 
     # Each army sees only its own directive's effect, despite the shared faction.
-    # Vengeful Stars primary is class B (ap_on_unmod_wound_6), so it no longer shows
-    # up in the generic numeric-modifier dict — it is read via the dedicated function,
-    # which is itself player-keyed and so still proves the per-player isolation.
+    # Vengeful Stars primary is class B (ap_on_unmod_wound_6), no longer in generic dict.
     assert get_active_round_choice_modifier("P1", "shooting", False) == {}
     assert get_active_round_choice_ap_on_wound_6("P1", use_melee=False) == 1
     assert get_active_round_choice_ap_on_wound_6("P2", use_melee=False) == 0
-    assert get_active_round_choice_modifier("P2", "shooting", False) == {"save": 1}
+    # Plan 025 Step 4: Eternal Guardian primary is light_cover_if_stationary, not save +1.
+    # Generic modifier dict is empty; dedicated fn confirms the per-player isolation.
+    assert get_active_round_choice_modifier("P2", "shooting", False) == {}
+    assert get_active_round_choice_light_cover_if_stationary("P2", "test.unit") is True
+    assert get_active_round_choice_light_cover_if_stationary("P1", "test.unit") is False
 
 
 def test_mirror_match_one_player_choice_does_not_leak_to_other() -> None:

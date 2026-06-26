@@ -49,8 +49,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
 
   | Protokoll · Direktive | Effekt | Engine | Anzeige |
   |---|---|---|---|
-  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | 🔲 Bereit (Mailbox Part A) | 🔲 Step 4 → Executor-Subagent |
-  | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | 🔲 YAML-Übergang `hold_steady_or_set_to_defend` + TODO | 🔲 D2-Plan (nach Plan 015) |
+  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | ✅ `get_active_round_choice_light_cover_if_stationary` (Plan 025 Step 4) | ✅ Variante C im SAVE-Block (Plan 025 Step 4) |
+  | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | ✅ YAML-Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (Step 4) | 🔲 D2-Plan (nach Plan 015) |
   | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
   | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
   | Conquering Tyrant · P | leadership_bonus +1 | ✅ (informativ, kein UI-Konsument) | 🔲 Morale |

@@ -505,18 +505,16 @@ def _collect_def_save_modifiers(
     def_faction: str,
     phase_key: str,
     use_melee: bool,
+    def_uid: str = "",
 ) -> list[dict]:  # type: ignore[type-arg]
-    """Collect save modifiers for the defender from round-choice abilities and active_modifiers."""
-    from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
+    """Collect save modifiers for the defender from round-choice abilities and active_modifiers.
 
+    Note: light_cover_if_stationary (Eternal Guardian D1) is NOT collected here — it is
+    injected via the Light Cover checkbox mechanic in the render path (Variante C), so
+    the +1 from the checkbox is applied once automatically. Adding it here AND via the
+    checkbox would cause a double-+1 modifier.
+    """
     mods: list[dict] = []  # type: ignore[type-arg]
-    try:
-        proto = get_active_round_choice_modifier(def_faction, phase_key, use_melee)
-        if proto.get("save"):
-            label = _round_choice_source_label(def_faction)
-            mods.append({"label": f"{label} (defender)", "value": proto["save"]})
-    except KeyError:
-        pass
     for m in st.session_state.get("active_modifiers", []):
         eff = m.get("effect", {})
         if eff.get("roll_type") == "save" and eff.get("target") in ("defender", "any"):
@@ -957,7 +955,7 @@ def _render_resolution_tab(
 
     # Build modifier lists including cover effects
     base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee)
-    base_save_mods = _collect_def_save_modifiers(def_faction, phase_key, use_melee)
+    base_save_mods = _collect_def_save_modifiers(def_faction, phase_key, use_melee, def_uid)
 
     weapon_special = _detect_weapon_special(profile)
 
@@ -1052,9 +1050,17 @@ def _render_resolution_tab(
     if is_shooting:
         from gameMechanic.ability_engine import (  # noqa: PLC0415
             get_active_round_choice_ignores_cover_half_range,
+            get_active_round_choice_light_cover_if_stationary,
             get_short_label_for_effect_type,
         )
         from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
+
+        # Variante C: auto-inject Light Cover when an active directive grants it (e.g. D1
+        # light_cover_if_stationary). Pre-tick + lock the checkbox; the existing
+        # light_cover→+1-Save path fires automatically — no second modifier (no double-+1).
+        auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
+        if auto_light_cover:
+            st.session_state[f"light_cover_{cover_key}"] = True
 
         short = (
             get_short_label_for_effect_type(atk_faction, "ignore_cover_half_range")
@@ -1062,7 +1068,18 @@ def _render_resolution_tab(
             if get_active_round_choice_ignores_cover_half_range(atk_faction)
             else None
         )
-        st.checkbox(light_cover_label(short), key=f"light_cover_{cover_key}")
+        if auto_light_cover:
+            # Badge label is data-driven from YAML (e.g. "Eternal Guardian"); always non-empty
+            # for any correctly wired directive. Empty string silently omits the badge.
+            d1_label = get_short_label_for_effect_type(def_faction, "light_cover_if_stationary")
+            st.checkbox(
+                light_cover_label(short) + (f"  :blue-badge[{d1_label}]" if d1_label else ""),
+                key=f"light_cover_{cover_key}",
+                value=True,
+                disabled=True,
+            )
+        else:
+            st.checkbox(light_cover_label(short), key=f"light_cover_{cover_key}")
     if is_fight:
         def_charged = def_state.get("turn_flags", {}).get("charged", False)
         if not def_charged:

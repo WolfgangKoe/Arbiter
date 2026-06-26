@@ -1203,3 +1203,15 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **quelle**: core_rules.txt — "you can nominate one model … to be your Warlord. That model gains the WARLORD keyword."
 - **code**: —
 - **regel**: Warlord-Nominierung vor dem Spiel: genau ein Modell (kein FORTIFICATION) wird Warlord und erhält das WARLORD-Keyword; ein CHARACTER kann zusätzlich einen Warlord Trait erhalten. Die App kennt keinen Nominierungs-Schritt.
+
+---
+
+## Bereich: Fraktionsfähigkeiten — Necron Command Protocols
+
+### R-PROTO-01
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_eternal_guardian_d1_light_cover_true_when_stationary / test_eternal_guardian_d1_light_cover_false_when_moved / test_protocol_modifier_eternal_guardian_primary_no_generic_save_key / test_light_cover_if_stationary_eternal_guardian_primary_when_stationary / test_light_cover_if_stationary_eternal_guardian_primary_when_moved / test_light_cover_if_stationary_false_when_directive_inactive
+- **quelle**: wahapedia_necrons/faction_overview.txt Z. 585–599 — "Directive 1: Each time an attack is made against this unit, if it did not make a Normal Move, Advance or Fall Back this battle round, this unit receives the benefit of Light Cover."
+- **code**: ability_engine.py:get_active_round_choice_light_cover_if_stationary
+- **regel**: Eternal Guardian Direktive 1 (Klasse A): App gewährt Light Cover automatisch, wenn das Protocol aktiv ist UND die Verteidiger-Einheit sich in dieser Runde nicht bewegt hat (`movement_choice == "stationary"`). Variante C: bestehende Light-Cover-Checkbox wird programmatisch vorgehakt und gesperrt; der +1-Save-Modifier fließt einmalig über die Checkbox-Mechanik — kein zweiter Collector-Eintrag. Gilt in jeder Phase (any); UI-Anzeige aktuell nur im Shooting-SAVE-Block (A1-Entscheidung Step 4).

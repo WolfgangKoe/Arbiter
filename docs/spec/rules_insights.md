@@ -27,3 +27,11 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   Cover / Charge-Reaktion; Conquering Tyrant = Aura-Range / Fall-Back-Schuss) stehen in
   `wahapedia_necrons/faction_overview.txt`. Offener Entscheid → `backlog.md` §4b. Nicht still
   „korrigieren" — Engine + Tests hängen am vereinfachten Modell.
+- **Eternal Guardian D1 — Stationär-Bedingung (Plan 025 Step 4):** D1 gilt 9E-wörtlich „each
+  time an attack is made against this unit" (jede Phase). Implementiert: Bedingung ist
+  `state["movement_choice"] == "stationary"` (gesetzt in `unit_mutations.py`). **Variante C:**
+  Checkbox vorgehakt + disabled nur im Shooting-SAVE-Block (A1-Entscheidung: pragmatisch, deckt
+  90 %). Light Cover wird **NICHT** zusätzlich in `_collect_def_save_modifiers` gesammelt — das
+  würde Doppel-+1 erzeugen. Die Checkbox-Mechanik setzt den +1 genau einmal. Engine-Fn:
+  `get_active_round_choice_light_cover_if_stationary(def_player, def_uid)`. Fallback-Label im
+  Badge kommt aus YAML via `get_short_label_for_effect_type` — kein Fraktions-String im Code.

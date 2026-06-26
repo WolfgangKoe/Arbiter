@@ -24,6 +24,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_heal_bonus,
     get_active_round_choice_ap_on_wound_6,
     get_active_round_choice_ignores_cover_half_range,
+    get_active_round_choice_light_cover_if_stationary,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
     get_active_round_choice_strength_if_charged,
@@ -508,12 +509,33 @@ def test_protocol_modifier_vengeful_stars_primary_ap_on_wound_6_not_in_melee() -
     assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=True) == 0
 
 
-def test_protocol_modifier_eternal_guardian_primary_save_any_phase() -> None:
+def test_protocol_modifier_eternal_guardian_primary_no_generic_save_key() -> None:
+    # Plan 025 Step 4: D1 migrated from save_modifier → light_cover_if_stationary.
+    # The generic modifier dict must NOT return a "save" key for Eternal Guardian primary.
     _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "primary")
-    result = get_active_round_choice_modifier("Necrons", "shooting", False)
-    assert result == {"save": 1}
-    result_melee = get_active_round_choice_modifier("Necrons", "fight", True)
-    assert result_melee == {"save": 1}
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
+    assert get_active_round_choice_modifier("Necrons", "fight", True) == {}
+
+
+def test_light_cover_if_stationary_eternal_guardian_primary_when_stationary() -> None:
+    # D1 active + unit did not move → light cover granted automatically.
+    session = _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "primary")
+    session["p1_units"] = {"test.unit": {"movement_choice": "stationary"}}
+    assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is True
+
+
+def test_light_cover_if_stationary_eternal_guardian_primary_when_moved() -> None:
+    # D1 active + unit moved → no automatic light cover.
+    session = _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "primary")
+    session["p1_units"] = {"test.unit": {"movement_choice": "moved"}}
+    assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is False
+
+
+def test_light_cover_if_stationary_false_when_directive_inactive() -> None:
+    # No protocol active → always False regardless of movement.
+    session = _protocol_session(None, None)
+    session["p1_units"] = {"test.unit": {"movement_choice": "stationary"}}
+    assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is False
 
 
 def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
@@ -584,11 +606,6 @@ def test_leadership_bonus_wired() -> None:
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
     result = get_active_round_choice_modifier("Necrons", "morale", False)
     assert result == {"leadership": 1}
-
-
-def test_reroll_save_1_eternal_guardian_s() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_eternal_guardian", "secondary")
-    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == {"reroll_save_1"}
 
 
 def test_reroll_hit_wound_1_conquering_tyrant_s_melee() -> None:
@@ -761,16 +778,16 @@ def test_dynasty_affinity_other_subfaction_inert() -> None:
 
 def test_round_and_extra_modifiers_accumulate() -> None:
     # Round-assigned directive AND the 6th protocol's directive both feed the engine.
-    # Round slot: Eternal Guardian primary (save +1, any phase).
-    # 6th: Vengeful Stars primary (ap_on_unmod_wound_6 ranged, Plan 025 Step 3).
-    # The wound key is no longer contributed by Vengeful D1 — only save from Eternal.
+    # Plan 025 Step 4: Eternal Guardian primary is now light_cover_if_stationary — it no
+    # longer contributes a "save" key to the generic modifier dict. The generic dict is
+    # empty; only the Vengeful D1 ap_on_wound_6 effect is reachable via the dedicated fn.
     _extra_protocol_session(
         "wh40k_9e.necrons.faction.protocol_vengeful_stars",
         extra_directive="primary",
         round_active="wh40k_9e.necrons.faction.protocol_eternal_guardian",
         round_directive="primary",
     )
-    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {"save": 1}
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
     # The ap_on_wound_6 effect from the 6th Vengeful protocol is reachable via the dedicated fn.
     assert get_active_round_choice_ap_on_wound_6("Necrons", use_melee=False) == 1
 

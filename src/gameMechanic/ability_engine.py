@@ -78,10 +78,10 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
 # ap_bonus: Vengeful Stars S (-1, improves AP of shooting weapons).
 # move_bonus: Sudden Storm P (+1" Move).
 # leadership_bonus: Conquering Tyrant P (+1 Ld; Morale UI not wired yet, informational).
+# save_modifier removed: Eternal Guardian P1 is now light_cover_if_stationary (Plan 025 Step 4).
 _MODIFIER_RESULT_KEY = {
     "hit_modifier": "hit",
     "wound_modifier": "wound",
-    "save_modifier": "save",
     "strength_modifier": "strength",
     "ap_bonus": "ap",
     "move_bonus": "move",
@@ -201,8 +201,8 @@ def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -
 
 
 # Reroll-directive effect type -> the reroll flags it grants.
+# reroll_save_1 removed: Eternal Guardian S is now hold_steady_or_set_to_defend (Plan 025 Step 4).
 _REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {
-    "reroll_save_1": {"reroll_save_1"},  # Eternal Guardian S
     "reroll_hit_wound_1": {"reroll_hit_1", "reroll_wound_1"},  # Conquering Tyrant S (melee)
 }
 
@@ -280,6 +280,20 @@ def get_active_round_choice_ignores_cover_half_range(player: str) -> bool:
     because the firing model must confirm half-range at the table anyway).
     """
     return _active_directive_has_type(player, "ignore_cover_half_range")
+
+
+def get_active_round_choice_light_cover_if_stationary(def_player: str, def_uid: str) -> bool:
+    """True if the defending unit benefits from Light Cover (Eternal Guardian D1):
+    directive active AND unit did not move this battle round (movement_choice == 'stationary').
+
+    Class A — the App grants Light Cover automatically. Aggregates round-assigned AND
+    always-active 6th/dynasty directive via _active_directive_effects (same pattern as
+    get_active_round_choice_ignores_cover_half_range).
+    """
+    if not _active_directive_has_type(def_player, "light_cover_if_stationary"):
+        return False
+    state = st.session_state.get(units_key_for(def_player), {}).get(def_uid, {})
+    return state.get("movement_choice") == "stationary"
 
 
 def get_short_label_for_effect_type(player: str, effect_type: str) -> str | None:
