@@ -197,6 +197,11 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Subagenten = stehende Freigabe (PROAKTIV):** keine Einzel-Freigabe nötig — bei Fleißarbeit
   selbst einen Subagenten vorschlagen + starten (s. „Was NIEMALS ohne Freigabe"). Freigabe-Pflicht
   bleibt nur für **datei-/einstellungsändernde** Arbeit (Code/Memory/Skill) — auch via Subagent.
+- **Dünner Koordinator (ADR-0007):** Detail-Planung + finales Review laufen als Subagenten; der
+  Koordinator routet, hält Gates, liest nur **Pfade/Marker** — nicht volle Ergebnisse. Subagent↔
+  Stakeholder asynchron über **Mailbox-Datei** (`docs/handoff/`, Marker `NEEDS-DECISION`/`ANSWERED`/
+  `DONE`), Resumption per `SendMessage` (intakter Kontext). Scoping je Aufgabe über den Index
+  `docs/reference/agent_scopes.md`. Verfassung: `docs/governance/operating_model.md` (Pilot-Status).
 
 ---
 

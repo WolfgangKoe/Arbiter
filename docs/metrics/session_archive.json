@@ -1298,10 +1298,10 @@
   "bfe55b74-b4d9-43a5-b0e0-a2d0c22b24f5": {
     "started_at": "2026-06-25T22:01:49.217Z",
     "task": "Freigabe. Bitte nutze Haiku oder Sonnet Agenten so viel wie öglich.",
-    "peak_context": 69346,
-    "subagent_share": 65.24034468628128,
+    "peak_context": 88629,
+    "subagent_share": 42.76300058728284,
     "by_tier": {
-      "Opus": 2379321,
+      "Opus": 5977265,
       "Sonnet": 4465744
     },
     "subagents": [
@@ -1311,6 +1311,46 @@
         "tier": "Sonnet",
         "peak_context": 66399,
         "started_at": "2026-06-25T22:01:49.217Z"
+      }
+    ]
+  },
+  "cf1566cc-5ba0-4b7f-a6e1-c1e08ff66e22": {
+    "started_at": "2026-06-26T14:32:32.631Z",
+    "task": "Beginnen wir die nächste Session, allerdings unterbrechen wir den aktuellen Plan und ziehen den Carry-over vor. Ich möc…",
+    "peak_context": 119691,
+    "subagent_share": 18.199439988311017,
+    "by_tier": {
+      "Opus": 6788362,
+      "Sonnet": 1403967
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Draft agent_scopes index file",
+        "tier": "Sonnet",
+        "peak_context": 38975,
+        "started_at": "2026-06-26T14:32:32.631Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Mailbox round-trip pilot",
+        "tier": "Sonnet",
+        "peak_context": 22089,
+        "started_at": "2026-06-26T14:32:32.631Z"
+      },
+      {
+        "agent_type": "claude-code-guide",
+        "description": "Claude Code subagent capabilities",
+        "tier": "Sonnet",
+        "peak_context": 57890,
+        "started_at": "2026-06-26T14:32:32.631Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Repo index / codebase map research",
+        "tier": "Sonnet",
+        "peak_context": 39740,
+        "started_at": "2026-06-26T14:32:32.631Z"
       }
     ]
   }

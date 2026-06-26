@@ -21,7 +21,16 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S100, 2026-06-26)
+## Aktueller Stand (nach S101, 2026-06-26)
+
+**S101 — Operating-Model-Umbau (ADR-0007) + Mailbox-Pilot grün.** Carry-over #0 (Kontext-Engineering)
+im Kern adressiert: **dünner persistenter Koordinator**, Detail-Planung + finales Review als Subagenten
+ausgelagert, Kanal-Regel gelockert (durchreichen statt urteilen). Neu: `ADR-0007`, Index
+`docs/reference/agent_scopes.md` (14 Aufgabentypen), `docs/handoff/README.md` (Mailbox/Status-Marker).
+`operating_model.md`-Delta (Roster, Kanal-Regel ×2, Event 1/5, Pilot-Banner) + CLAUDE.md-Verweis.
+Mailbox-Round-Trip **verifiziert** (Subagent schreibt→`SendMessage`→liest, Kontext intakt). 3 Sonnet-
+Subagenten trugen die Leselast, Opus-Fenster blieb ~117k. Docs/Arch-Gate grün (16).
+
 
 **S100 — Badge-Label-Bug FIXED + committed (UI-verifiziert).** `_active_directive_effects` /
 `_extra_directive_effects` taggen jedes Effect-Dict mit `_source_id` (Kopie statt Mutation des
@@ -48,13 +57,13 @@ bewegt / D2 Hold Steady·Set to Defend). D1 `light_cover_if_stationary` (Klasse 
 Reihenfolge gesamt: 025(Step 4→5→6, je mit Anzeige) → 016(Rest) → 018 → 015 → 017.
 
 ### ⚠️ Carry-over (offen)
-0. **Kontext-Engineering / Regel-Kuratierung (eigene Session, Maßnahme C).** Quelle:
-   `docs/reference/context-engineering-slides.md`. (a) SessionStart-Regel-Injektion (relevante Regeln je
-   Ziel verbatim in den Kontext) — behebt Tiering-/Regel-Lücken. (b) Subagent-Ergebnis → `docs/handoff/`-
-   Datei statt in Orchestrator-Kontext. (c) Handoff-Lebenszyklus (lesen→arbeiten→auslagern→löschen).
-   (d) governance-Doc `context_engineering.md`; `docs/handoff/context-audit-S91.md` verarbeiten + löschen.
-   **S95-Beleg (warum Kern):** Die Regelprüfung griff nur, weil sie *expliziter Plan-Schritt* war — nicht
-   aus zuverlässiger Gewohnheit. Assurance braucht **Injektion oder Gate**, nicht „zufällig im Kontext".
+0. **Kontext-Engineering — S101 im Kern adressiert (ADR-0007).** Dünner Koordinator, ausgelagerte
+   Planung/Review, Index + Handoff/Mailbox, Round-Trip verifiziert. **Rest offen:** (a) `operating_model.md`
+   Diagramme A/B „Orchestrator→Koordinator" nachziehen; (b) „Pilot"-Vorbehalt (ADR-0007 + Banner) streichen
+   nach erstem echten Stakeholder-Mailbox-Einsatz; (c) `docs/handoff/context-audit-S91.md` verarbeiten +
+   löschen; (d) **Voll-Flow-Pilot** Planner→Executor→Reviewer am ersten echten Task (Plan 025 Step 4);
+   (e) offen aus Maßnahme C: SessionStart-Regel-**Injektion** (Regeln je Ziel verbatim) — behebt
+   Tiering-/Regel-Lücken; „zufällig im Kontext" reicht nicht (S95-Beleg).
 1. **Plan 025** = aktive Hauptlinie (s. o.). Bug 3 (Zweitspieler-Direktiv-Wahl, armyCard.py:296/307) +
    INV-4b-Restschuld (`dynasty`/`gloom`/`prism`/`necrons`-Defaults) laufen nebenher, je eigene Freigabe.
 2. **Manuelle UI-Verifikation (offen, PFLICHT, Render-Code):** (a) S91 Mirror-Protokoll — Necron-vs-Necron

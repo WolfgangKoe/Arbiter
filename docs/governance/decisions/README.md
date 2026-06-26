@@ -46,3 +46,4 @@ Nächste Retrospektive — oder konkretes Datum, wenn absehbar.
 | [0004](0004-skill-fetch-nur-per-subagent.md) | Skill-/Claude-Inhalte über die API nur per Subagent ziehen | angenommen | 2026-06-20 |
 | [0005](0005-stehende-subagent-freigabe.md) | Stehende Freigabe für Subagenten-Einsatz (verengt 0001) | angenommen | 2026-06-21 |
 | [0006](0006-subagent-grossausgaben-als-datei.md) | Subagenten geben Großausgaben als Datei zurück (Permanent/Temporär-Konvention) | angenommen | 2026-06-22 |
+| [0007](0007-duenner-koordinator-und-datei-kanal.md) | Dünner persistenter Koordinator; Planung/Review ausgelagert; Stakeholder-Kanal über Datei | angenommen | 2026-06-26 |

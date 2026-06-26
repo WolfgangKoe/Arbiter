@@ -2,6 +2,14 @@
 
 Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (Kommunikationswege/Zuständigkeiten) und 3 (Personal/Model-Tier). Sie ist iterierbar wie Code: Änderungen werden per ADR dokumentiert und per Commit versioniert. Die Kultur (Prämisse 4 — Simplicity First, No Laziness, Generic src/, Freigabe vor Umsetzung) lebt in [CLAUDE.md](../../CLAUDE.md) und wird gepflegt, nicht pro Task entschieden.
 
+> **Status — im Übergang (ADR-0007, Pilot).** Das Modell stellt auf einen **dünnen, persistenten
+> Koordinator** um: Detail-**Planung** und finales **Review** wandern in Subagenten; der Koordinator
+> routet, hält die Gates und eskaliert, ohne Quelldateien oder volle Ergebnisse zu lesen.
+> Subagent↔Stakeholder läuft asynchron über eine **Mailbox-Datei** ([docs/handoff/README.md](../handoff/README.md));
+> Scoping über den **Index** ([docs/reference/agent_scopes.md](../reference/agent_scopes.md)). Die folgenden
+> Rollen/Events sind entsprechend markiert; verbindlich wird die Mailbox erst nach dem Pilot-Round-Trip
+> ([ADR-0007](decisions/0007-duenner-koordinator-und-datei-kanal.md)).
+
 ---
 
 ## Fundament: vier Entscheidungsprämissen
@@ -19,10 +27,11 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 | Rolle | Tier | Delegierbar? | Kernaufgaben |
 |---|---|---|---|
-| **Orchestrator / "Arbiter"** | Opus, Hauptsession | NICHT delegierbar | Vereint Scrum-Master (Prozess-Hüter) + Tech-Lead (finales Review) + Kontext-Hüter. Tasks schneiden, Entscheidungsmodus wählen, Subagenten routen und reviewen, Freigabe-Gate mit Stakeholder halten, Artefakte pflegen. Hier lebt der Sinn. |
+| **Koordinator / "Arbiter"** (ADR-0007) | Opus, Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. |
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
-| **Auditor / Reviewer** | Sonnet liefert Befund → Opus wertet | Befund: ja; Urteil: nein | `/code-review`, `/improve` — Sonnet sammelt, Opus entscheidet. |
+| **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
+| **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil) | Ja — als Subagent | Liest `next_session.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
 | **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 80 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
 
 ### Tiering-Faustregel
@@ -48,7 +57,8 @@ Faustregel-Untergrenze; der Orchestrator darf nach Urteil höher gehen.
 | Spezial-Subagent | Tier | Read/Write | Dient Event | Typische Aufgabe |
 |---|---|---|---|---|
 | **Recherche / Regel-Lookup** | Haiku (Lookup) · Sonnet (Synthese) | **Read** | Planning · Sprint | Wahapedia-Texte, Codebase-Mapping, Web-Fetch (z. B. Slides), Rule-Conformance-Catalog befüllen |
-| **Auditor / Reviewer** | Sonnet → Opus urteilt | **Read** | DoD · Review | `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg |
+| **Reviewer / Auditor** (ADR-0007) | **Opus** (Urteil) | **Read** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
+| **Planner** (ADR-0007) | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `next_session.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
 | **Kontextkuratierung / Beobachter** | Haiku · Sonnet | **Read** | laufend · Review | Kontext-/Wissens-Lücken melden, Token-Sinks aufspüren, Regel-Index-Pflege vorschlagen |
 | **Refinement-Extraktor** | Sonnet | Read + Write (`docs/inbox/`) | Refinement | Fotos aus `Fotos/` lesen, Idee als strukturierten Text in die Inbox extrahieren |
 | **Artefaktpflege** | Sonnet | Read + begrenzt Write | Abschluss | Doku/Backlog/Metrics konsistent halten, Drift melden (Schreibzugriff freigabepflichtig) |
@@ -69,8 +79,11 @@ Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
    Output-Format**. Verhindert Duplikate und Lücken; Ergebnisse als referenzierbare Artefakte.
 3. **Selbstprüf-Checkliste** (Pflicht, Details siehe Event 3 „Sprint"): Verdrahtung per `grep` belegen,
    Code-Heimat, Gates grün, Format vor Rückgabe, Beleg im festen Format. Fehlt sie, ist der Auftrag unvollständig.
-4. **Kanal-Regel:** Subagenten reden **nie direkt** mit dem Stakeholder — sie eskalieren über den
-   Orchestrator, der mediiert, bündelt und reviewt. „Subagent-grün" ≠ „verdrahtet".
+4. **Kanal-Regel (ADR-0007):** Subagenten reden **nie direkt** mit dem Stakeholder — sie eskalieren
+   über den Koordinator. Der reicht Befunde/Fragen **wortgleich** durch und nennt die **Herkunft**
+   („Befund des Reviewer-Subagenten, nicht nachgerechnet"); er urteilt nicht selbst. Asynchrone
+   Stakeholder-Entscheidungen laufen über die **Mailbox-Datei** (`docs/handoff/`), Resumption per
+   `SendMessage`. „Subagent-grün" ≠ „verdrahtet".
 5. **Freigabe bleibt:** Datei-/einstellungsändernde Arbeit (Code/Memory/Skill) ist freigabepflichtig —
    auch via Subagent ([ADR-0005](decisions/0005-stehende-subagent-freigabe.md)). Read-only-Subagenten = stehende Freigabe.
 6. **Kosten:** Multi-Agent kostet grob das **15-fache** an Token ggü. einem einfachen Chat → gezielt
@@ -85,7 +98,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 **🔧 = Hook-vollzogen:** Events, die als Konditionalprogramm formulierbar sind, feuert die Harness (`.claude/settings.json` + `tools/*.py`) statt sie der Erinnerung des Orchestrators zu überlassen. Siehe [ADR-0003](decisions/0003-events-als-hooks-vollzogen.md).
 
 1. **Planning (Session-Start)** — zwei Varianten:
-   - **Default ("start next session"):** [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Orchestrator sofort loslegen.
+   - **Default ("start next session"):** [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Koordinator sofort loslegen. **Auslagerung (ADR-0007):** Den Planning-Entwurf erstellt ein **Planner-Subagent** (liest next_session + Ziel + Backlog + Index) und legt ihn als Datei ab; der Koordinator legt ihn dem Stakeholder zur Freigabe vor, ohne die Quellen selbst zu lesen.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `next_session.md` starten.
 
 2. **Plan-Freigabe (Gate-Event)** 🔧
@@ -106,7 +119,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
 5. **Review → Retro → Abschluss (Session-Ende)**
    Drei Schritte in dieser Reihenfolge:
-   - **Review** 🔧 — technischer DoD-Review (Event 4) **plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Dazu eine knappe **Ziel-Fortschritt-Zeile** — „Ziel-Fortschritt: ja / teils / nein, woran sichtbar" (Soll-Ist gegen das aktive Ziel, **ohne** Token-Zielzahl): koppelt den Output an den Ziel-Fortschritt, nicht an die Token-Menge. Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md). **Harter Vollzug:** `tools/test_report_reminder.py` (PostToolUse auf pytest) injiziert diese Teil-Pflicht nach jedem Testlauf.
+   - **Review** 🔧 — den technischen DoD-Review (Event 4) erstellt ein **Reviewer-Subagent** (Opus, ADR-0007) im eigenen Fenster und liefert ihn als Datei; der Koordinator reicht ihn durch (Herkunft nennen). **Plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Dazu eine knappe **Ziel-Fortschritt-Zeile** — „Ziel-Fortschritt: ja / teils / nein, woran sichtbar" (Soll-Ist gegen das aktive Ziel, **ohne** Token-Zielzahl): koppelt den Output an den Ziel-Fortschritt, nicht an die Token-Menge. Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md). **Harter Vollzug:** `tools/test_report_reminder.py` (PostToolUse auf pytest) injiziert diese Teil-Pflicht nach jedem Testlauf.
    - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `next_session.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
 
      **Vorausschauender Fragenkatalog (Review + Retro schauen auch nach VORN):** Neben dem Rückblick prüft der Orchestrator jede Session-Ende-Retro diese Fragen — und beantwortet sie für den Stakeholder nachvollziehbar (nicht nur rhetorisch):
@@ -158,7 +171,7 @@ Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 - **Eine Prämisse selbst würde sich ändern** — das ist eine Konsens-Entscheidung, kein Sprint-Task
 - **Verhaltensbruch** — rote Tests, die evtl. gewollt sind → STOP, Stakeholder fragen
 
-**Kanal-Regel:** Subagenten reden **nicht direkt** mit dem Stakeholder. Sie eskalieren über den Orchestrator, der mediiert und bündelt. Der Orchestrator ist der einzige Kommunikationskanal zum Stakeholder.
+**Kanal-Regel (ADR-0007):** Subagenten reden **nicht direkt** mit dem Stakeholder. Sie eskalieren über den Koordinator, der **wortgleich durchreicht** und die **Herkunft** nennt (er urteilt nicht selbst). Asynchrone Entscheidungen laufen über die **Mailbox-Datei** (`docs/handoff/`); der Subagent wird per `SendMessage` mit intaktem Kontext fortgesetzt. Der Koordinator bleibt der einzige Kommunikationskanal zum Stakeholder.
 
 ---
 

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-26 00:23 CEST
+Stand: 2026-06-26 17:22 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-26 00:01 bfe5  ██████░░░░░░  69k ✅    ████░░  65%    ████········
+06-26 16:32 cf15  ██████████░░ 120k ✅    █░░░░░  18%    ██████████··
+         SA_1·  ███░░░░░░░░░  39k ✅    Draft agent_scopes index file
+         SA_2·  ██░░░░░░░░░░  22k ✅    Mailbox round-trip pilot
+         SA_3·  █████░░░░░░░  58k ✅    Claude Code subagent capabilities
+         SA_4·  ███░░░░░░░░░  40k ✅    Repo index / codebase map research
+----------------- ---------------------- -------------- ------------
+06-26 00:01 bfe5  ███████░░░░░  89k ✅    ███░░░  43%    ███████·····
          SA_1·  █████░░░░░░░  66k ✅    Badge-Label-Bug fix (Plan 025)
 ----------------- ---------------------- -------------- ------------
 06-25 23:18 c50f  ████████████ 145k ⚠️   ██░░░░  36%    ████████····
