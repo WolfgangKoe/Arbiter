@@ -27,29 +27,46 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S102, 2026-06-26)
+## Aktueller Stand (nach S103, 2026-06-26)
 
-**S102 — Gate-Fix + ADR-0007-Mailbox-Pilot real + D2-Neubewertung.**
-- **Gate-Fix:** `tools/freigabe_gate.py` nimmt `docs/handoff/`-Writes aus dem Freigabe-Gate aus
-  (ADR-0007-Mailbox ist Planungsartefakt, kein Code); +4 Regressionstests. Vollsuite grün (1158,
-  93,20 %). Live-Hook verifiziert.
-- **Mailbox-Pilot real:** Planner-Subagent (Sonnet) schrieb Detail-Planung für Plan 025 Step 4
-  nach `docs/handoff/plan-025-step4.md`; Stakeholder antwortete IN der Datei (ANSWERED).
-- **D2 neu bewertet:** Eternal Guardian D2 (Hold Steady/Set to Defend) ist kein reiner
-  Tisch-Hinweis — Hold Steady = Overwatch 5+ statt 6; Set to Defend = +1 Hit next Fight. Hängt
-  an Plan 015 (Overwatch nicht implementiert). **D2 herausgeschnitten**, eigener Plan.
-- **4 Entscheidungen (A1/B1/B2/B3):** D1 nur im Shooting-Block (A1); D2 raus aus Step 4 (B1);
-  D2-YAML als Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (B2); eigener D2-Plan
-  deckt beide Hälften, abhängig Plan 015 (B3). Detail → `docs/handoff/plan-025-step4.md`.
+**S103 — Plan 025 Step 4 (Eternal Guardian D1) + Bug-Fixes + Plan 026.**
+- **Step 4 committed (`a060345`):** D1 `light_cover_if_stationary` (Klasse A) — Auto-Light-Cover
+  im Shooting-SAVE-Block bei stationär (Variante C: Checkbox vorgehakt+disabled). D2-secondary als
+  9E-Übergang (`hold_steady_or_set_to_defend`, `enforcement: table`); erfundenes `reroll_save_1` raus.
+  Engine-Fn liest State layer-sicher via `units_key_for` (kein uiLayout-Import).
+- **UI-Verifikation fand 2 Bugs → gefixt (UNCOMMITTED):** (1) Auto-Light-Cover floss nicht in die
+  Würfel (Render-Reihenfolge: `auto_light_cover` jetzt VOR `resolve_save` in `light_cover` gefaltet);
+  (2) Badge blau→grün (`design_colors.md §3`). Schema-Beispiel `round_choice.example.yaml` entdriftet.
+  Vollsuite 1164 grün, 93,22 %, Arch-Gate 8.
+- **Plan 026 angelegt:** `docs/audit/plans/026-eternal-guardian-d2-...md` (D2 Hold Steady/Set to
+  Defend, abhängig Plan 015 Overwatch); README + Plan 015 mit Abhängigkeits-Vermerk.
 
-**S101:** ADR-0007 + Mailbox-Pilot grün; dünner Koordinator, Planung/Review als Subagenten.
-**S100:** Badge-Label-Bug gefixt. **S99:** Plan 025 Step 3 (Vengeful Stars) fertig.
+**S102:** Gate-Fix (`docs/handoff/`-Exemption) + Mailbox-Pilot real. **S101:** ADR-0007 dünner Koordinator.
 
-### Nächster Schritt
-**Plan 025 Step 4 = nur D1** (Eternal Guardian Light Cover bei stationär, Variante C,
-nur Shooting-Block). Mailbox-Plan `docs/handoff/plan-025-step4.md` Teil A (D1) liegt bereit.
-→ **Executor-Subagent** umsetzen lassen, nicht im Koordinator-Fenster.
-D2 = eigener Plan (abhängig Plan 015 Overwatch). Reihenfolge: 025(Step 4→5→6) → 016 → 018 → 015 → 017.
+### Nächster Schritt — Organisations- & Reporting-Umbau (delegiert, simplizistisch)
+Stakeholder-Anliegen S103, geklärte Entscheidungen unten. **Zwei Pläne anlegen** (Planner-Subagent):
+ein **Doku-Org**-Schritt + ein **Reporting**-Plan. Danach Plan-025-Linie fort (Reihenfolge:
+025 Step 4 ✅ → 5 → 6 → 016 → 018 → 015 → 026 → 017).
+
+**Geklärte Entscheidungen (S103):**
+- **O1 Doku-Alignment:** `next_session`/`CLAUDE.md`/`operating_model.md` vollständig auf neue
+  Arbeitsweise (ADR-0007 dünner Koordinator) bringen; `docs/reference/agent_scopes.md` einbinden.
+  Querverweise über **stabile Abschnitts-Anker — KEINE Zeilennummern** (driften).
+- **O2 Modellwahl-MUST (sofort befolgen):** reine Lookups/format-fixe Tasks → **Default Haiku**;
+  Abweichung nach oben (Sonnet/Opus) nur mit **expliziter Begründung im Auftrag**. In `CLAUDE.md`
+  + `operating_model.md` + feedback-Memory verankern. (User sieht kaum Haiku — Tiering wird ignoriert.)
+- **O3 ⚠️-Schwelle:** Kontext-Warnung erst **>135k** (nicht 120k) — `tools/session_context.py`.
+- **O4 Report-Überschreib-BUG:** User bekam korrekten Stand, danach mit **Altdaten überschrieben**
+  (falsch) — `tools/token_report.py`/`overview.md`-Pipeline. Wurzel finden+fixen. User will eher
+  **MEHR/Echtzeit**-Updates (bei Subagent-Start/-Ende), nicht weniger.
+- **O5 Modellmix:** **Koordinator (Opus-Hauptthread) raus** aus dem „Modellmix" — nur Subagenten.
+- **O6 Neue Kontext-Sicht:** „womit ist MEIN Fenster gefüllt" — Aufschlüsselung **nach Quelle**
+  (Datei-Reads / Tool-Ausgaben / Subagent-Reports / System+Memory / Konversation). An die
+  **Peter-Wegner-Präsentation** (im Repo — finden+lesen via Subagent) ausrichten.
+- **O7 Bessere Planning-Darstellung:** Planning bleibt an Subagent delegiert, aber die Präsentation
+  muss klarer/lesbarer werden.
+- **Befund Overwatch-Anzeige:** „trifft auf 6+" ist falsch, sobald Hold Steady (5+) greift →
+  gehört zu Plan 026/015; bei den GO-Hinweisen vermerken.
 
 ### ⚠️ Carry-over (offen)
 0. **Kontext-Engineering — S101+S102 real adressiert (ADR-0007).** Dünner Koordinator,
@@ -60,7 +77,8 @@ D2 = eigener Plan (abhängig Plan 015 Overwatch). Reihenfolge: 025(Step 4→5→
    (e) SessionStart-Regel-Injektion (S95-Beleg).
 1. **Plan 025** aktive Hauptlinie (s. o.); Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld laufen nebenher.
 2. **Manuelle UI-Verifikation (offen, PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron
-   Befehlsphase; (b) Bug 5: Runde-2-Fernkampf-Zielwahl.
+   Befehlsphase; (b) Bug 5: Runde-2-Fernkampf-Zielwahl; (c) **S103 Bug-Fixes:** stationär+D1 →
+   grünes +1-Save-Badge IN den Würfeln + Eff.-Save besser; Checkbox-Badge grün statt blau.
 
 ### Offene Fragen / Vormerke
 - **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.

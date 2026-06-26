@@ -55,9 +55,10 @@ run every verification command, and update your row below when done.
 | [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | DONE (S77) |
 | [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework: `overview.md` schlank + separate `session_archive.md` (dedup, auto) | P0 (HÖCHSTE) | M | — | **DONE** (2026-06-21) — overview.md 18 KB→3.9 KB, Reihenfolge nach Konzept; neue `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration aus `subagent_archive.json` verlustfrei; tote Renderer `_render_subagents`/`_render_subagent_archive` entfernt; 1011 Tests grün, 92.44 %. |
 | [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | TODO — blockiert 016/017; sechs Protokolle, neue Engine-Effekt-Typen (`ap_on_unmod_wound_6`, `light_cover_if_stationary`, `strength_if_charged`, `ignore_cover_half_range`, `shoot_after_fall_back`); Sudden Storm P + Undying Legions schon konform. |
+| [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
 | [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring (9 Protokoll-Direktiven) + Arkana-Schema + 1 Dispatch-Pilot (Failsafe) | P2 (MITTEL-HOCH) | M | 021 ✅ | ✅ **DONE (S87/S88)** — Steps 1–4 (strength/ap/move/leadership-Direktiven + rerolls + advance_and_charge + RP-Modifikatoren, S86), Steps 5–6 (Failsafe Overcharger → `activated` `buff_stat`-Dispatch; alle 12 Arkana strukturiert + engl. `rule_text`; alle 12 Punktkosten −5 vs. Wahapedia; 11/12 bleiben begründet `descriptive`, S87), Step 7 (Lint + Doku: `faction_abilities.md` Wiring-/Arkana-Status, `backlog.md` #2, S88). 1116 Tests grün/93 %, INV-4b grün. **Offen nur:** manuelle UI-Verifikation (Failsafe aktivierbar + Direktiv-Anzeigen). |
 
-**Empfohlene Reihenfolge (akt. S95, 2026-06-25): 019·023·022·014·020·021·024 DONE → 025 → 016 → 018 → 015 → 017.**
+**Empfohlene Reihenfolge (akt. S102, 2026-06-26): 019·023·022·014·020·021·024 DONE → 025 → 016 → 018 → 015 → 026 → 017.**
 **025 (NEU, S95) rückt vor 016/017**: Der S95-Befund zeigte, dass die Command-Protocol-
 Direktiven im YAML nicht-kanonisch sind; Stakeholder-Entscheid (b) = auf echte 9E-Regeln
 umstellen. 016 Group A / Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte
@@ -73,6 +74,10 @@ vereinheitlichten Flow aus 013. 017 zuletzt.
   anderen `loader.py`-Arbeiten ausführen.
 - **015 ändert `fightPhase.py` + `chargephase.py`** — nicht parallel zu 013
   (ändert `fightPhase.py`-Dispatch).
+- **026 zwingend NACH 015 Step 2**: Hold Steady dockt an Overwatch-Reaktiv-Infrastruktur
+  und HIT-Block-Threshold aus Plan 015; Set to Defend braucht `active_modifiers`-Expiry-
+  Schema das durch Plan 015 stabil ist. Beide ändern `chargephase.py` (`_inactive_charge`)
+  — 015 zuerst, 026 danach.
 - **016 und 017 berühren beide den Resolution-Tab in `_common.py`**
   (RP-Block bzw. SAVE-Block) — nacheinander, Reihenfolge egal.
 - **018** ist vier unabhängige Mini-Tasks; 018.4 (Modifier-Konsolidierung

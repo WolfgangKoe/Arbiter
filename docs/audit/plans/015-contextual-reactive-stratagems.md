@@ -83,10 +83,13 @@ Spieler), nicht als zentrale Liste.
 
 **Out of scope** (NICHT anfassen):
 - Set to Defend (kein Stratagem, separate Regel) — nicht bauen im Rahmen dieses Plans.
-  **Abhängiger Konsument (S102-Vermerk):** Eternal Guardian D2 hängt an diesem Plan als
-  Voraussetzung: Hold Steady → Overwatch trifft 5+ statt 6 (braucht Overwatch-Hook aus
-  Step 2); Set to Defend → +1 Hit im nächsten Fight. Sobald Plan 015 Overwatch liefert,
-  deckt der künftige D2-Plan beide Hälften ab (Plan 025 Step 4 B3-Entscheid, S102).
+  **Abhängiger Konsument (S102-Vermerk, Plan 026):** Eternal Guardian D2 hängt an diesem
+  Plan als Voraussetzung: Hold Steady → Overwatch trifft 5+ statt 6 (braucht Overwatch-Hook
+  aus Step 2 dieses Plans); Set to Defend → +1 Hit im nächsten Fight (Fight-Modifier,
+  erstmals in Plan 026 gebaut). Sobald Plan 015 Step 2 abgeschlossen ist, kann Plan 026
+  (D2-Hold-Steady/Set-to-Defend) umgesetzt werden — er dockt an `_inactive_charge` und
+  den HIT-Block-Threshold-Mechanismus aus diesem Plan. Plan 025 Step 4 B3-Entscheid
+  (S102): eigener D2-Plan deckt beide Hälften; Vermerk hier ergänzt 2026-06-26.
 - Automatische Distanz-/Sichtlinien-Prüfung — Tisch-Verantwortung wie überall.
 - Übrige `timing: phase_reactive`-GOs (z. B. Emergency Disembarkation):
   Infrastruktur aus Step 2 trägt sie, aber eigene Effekt-UIs sind NICHT Teil
