@@ -26,7 +26,22 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S107, 2026-06-27)
+## Aktueller Stand (nach S108, 2026-06-27)
+
+**S108 — Plan 030 (Conquering-Tyrant-UI-Bugs), voll delegiert; am Wochenlimit gestoppt — NICHT committet.**
+- **Bug 1 ✅ gefixt + UI-verifiziert:** `atk_uid` in beide Entry-Dicts (`_common.py:render_group_assignment`)
+  → D2 −1-Hit-Debuff erscheint rot. Schließt Carry-over (d). Test `test_fall_back_hit_mod_wiring_requires_atk_uid_in_entry`.
+- **Bug 2 ✗ NICHT gefixt (= Carry-over (b) „Bug 5"):** Selection-State-Hang bei Zielwahl besteht WEITER,
+  trotz `reset_group_declaration_state()` an „Reset Declaration" + „All done" (`_common.py:render_attack_resolution`).
+  ⚠️ Root-Cause war fehldiagnostiziert; Test `test_all_done_clears_group_autosel_guard` prüft nur den Reset-Helper
+  isoliert (Tautologie) → fing den echten Hang NICHT. Nächste Session: echten Blockier-State im UI-Pfad finden
+  (Enemy-Target bleibt disabled, bis die Eigen-Einheit ab-/angewählt wird). Code+Test bleiben vorerst (kein Schaden), neu untersuchen.
+- **Neuer Befund — Multi-Debuff-Anzeige (P3, niedrig):** Bei gestapelten Hit-Debuffs (Conquering Tyrant −1
+  + Dense Cover −1) wählt für die DARSTELLUNG der zweite Debuff (Dense Cover) die effektive Erfolgsgrenze.
+  Der ±1-Cap rechnet korrekt (Eff. 4+, nicht 5+) — reines Anzeige-/Attributionsproblem im Hit-Modifier-Renderpfad
+  (`_render_resolution_tab` / `dice_compose.py`). Nur gesammelt, keine Umsetzung.
+- **Plan 030** geschrieben (`docs/audit/plans/030-conquering-tyrant-ui-bugfixes.md`) + Queue (README.md);
+  Status anpassen: Bug 1 done, Bug 2 RE-OPEN. Working-Tree offen: `_common.py` (4 Z.) + 2 Test-Dateien, Vollsuite 1177 grün/93,02 %.
 
 **S107 — Plan 025 abgeschlossen (Necron-Protokolle 9E-konform), voll delegiert.**
 - **Plan 025 ✅ DONE** (alle Steps 1–6). Step 4 (Eternal Guardian D1) war schon S104 committet;
@@ -69,8 +84,8 @@ Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** 
   (e) SessionStart-Regel-Injektion (S95-Beleg). [(f) M3 ✅ · (g) M4 ✅ — S106]
 - **Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.**
 - **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (b) Bug 5 Runde-2-Fernkampf-Zielwahl; (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln;
-  (d) **025 Step 5:** Conquering Tyrant D2 — Necron Fall-Back-Einheit → Shooting-HIT-Block zeigt −1 (Fall-Back-Label); ohne Fall Back kein Effekt; D1 erzeugt keinen Würfel-Modifier.
+  (b) **Bug 5 / Bug 2 = OFFEN** — Zielwahl-Hang besteht trotz S108-Fixversuch (s. Stand oben), echten Blockier-State finden;
+  (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln; (d) **025 Step 5 ✅ verifiziert S108** (D2 −1 rot).
 
 ### Offene Fragen / Vormerke
 - **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.

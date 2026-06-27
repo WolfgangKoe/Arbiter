@@ -1604,6 +1604,7 @@ def render_group_assignment(
                             "atk_strength": grp_strength,
                             "atk_ws": grp_ws,
                             "atk_bs": grp_bs,
+                            "atk_uid": atk_uid,
                         }
                     )
                     attacks_assigned += int(atk_count)
@@ -1670,6 +1671,7 @@ def render_group_assignment(
                             "atk_strength": grp_strength,
                             "atk_ws": grp_ws,
                             "atk_bs": grp_bs,
+                            "atk_uid": atk_uid,
                         }
                     )
                     models_assigned += eff_models
@@ -1724,6 +1726,7 @@ def render_attack_resolution(phase_key: str) -> None:
 
     if st.button("↺ Reset Declaration", key="reset_decl"):
         st.session_state.attack_declaration = _empty_attack_declaration()
+        reset_group_declaration_state()
         st.rerun()
 
     if not entries:
@@ -1773,6 +1776,7 @@ def render_attack_resolution(phase_key: str) -> None:
         _render_unit_rp(seq, atk_uid, entries)
         if st.button("✓ All done — Continue", type="primary", key="all_done"):
             st.session_state.attack_declaration = _empty_attack_declaration()
+            reset_group_declaration_state()
             st.rerun()
 
 

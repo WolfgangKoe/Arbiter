@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-27 14:35 CEST
+Stand: 2026-06-27 15:10 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,12 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-27 12:39 9ef7  ██████████░░ 130k ⚠️   ████░░  70%    █········▒▒▒
+06-27 14:42 5af7  █████░░░░░░░  57k ✅    █████░  89%    ███·········
+         SA_1·  ██████░░░░░░  73k ✅    Executor: zwei Tyrant-Bugs fixen
+         SA_2·  ████████░░░░ 105k ✅    Planungs-Entwurf zwei Tyrant-Bugs
+         SA_3·  █████░░░░░░░  59k ✅    Planner: kanonischer Detailplan
+----------------- ---------------------- -------------- ------------
+06-27 12:39 9ef7  ███████████░ 137k ⚠️   ████░░  68%    ██·······▒▒▒
          SA_1·  █████░░░░░░░  59k ✅    Executor Plan 025 Step 6
          SA_2·  ███░░░░░░░░░  41k ✅    Root-Cause D2 Schuss-Sperre
          SA_3·  █████░░░░░░░  58k ✅    Executor Plan 025 Step 4
@@ -20,7 +25,8 @@ Session           Peak-Kontext           Subagent       Modell-Mix
          SA_8·  █████░░░░░░░  64k ✅    Fix D2 Schuss-Sperre
          SA_9·  ████░░░░░░░░  47k ✅    Review D2-Bugfix
          SA_10·  ███░░░░░░░░░  36k ✅    Abschluss-Artefakte S107
-         SA_11·  ████░░░░░░░░  51k ✅    Reviewer Plan 025 Steps 5+6
+         SA_11·  ██░░░░░░░░░░  26k ✅    Abschluss-Stand S107 final
+         SA_12·  ████░░░░░░░░  51k ✅    Reviewer Plan 025 Steps 5+6
 ----------------- ---------------------- -------------- ------------
 06-27 10:21 02e7  ██░░░░░░░░░░  26k ✅    ███░░░  42%    ············
          SA_1·  ██░░░░░░░░░░  20k ✅    Planning-Entwurf nächste Session

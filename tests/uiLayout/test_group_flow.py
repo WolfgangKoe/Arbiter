@@ -378,6 +378,32 @@ def test_reset_clears_stale_declaration_counter_keys() -> None:
     assert s["unrelated_key"] == 99
 
 
+def test_all_done_clears_group_autosel_guard() -> None:
+    """Bug 2 regression: finishing an attack resolution ("All done — Continue" /
+    "Reset Declaration") must clear ``group_autosel_done_<uid>`` so that re-selecting
+    the SAME unit in the SAME phase re-triggers auto-select.
+
+    Before the fix, only ``attack_declaration`` was reset while the guard flag stayed
+    set → auto-select skipped → ``selected_model_group`` stayed None → the enemy-target
+    button (``group_target_selectable``) remained disabled. Both completion buttons now
+    also call ``reset_group_declaration_state()``.
+    """
+    common.st.session_state = FakeSessionState(
+        selected_unit=("necrons", "warriors"),
+        selected_model_group=None,
+        group_targets={},
+        group_decl={},
+    )
+    common.st.session_state["group_autosel_done_warriors"] = True
+
+    # Both completion buttons run this after resetting attack_declaration.
+    reset_group_declaration_state()
+
+    # Guard cleared → next render's auto-select branch (sel_gid is None and not flag)
+    # will fire again, so the unit becomes targetable once more.
+    assert "group_autosel_done_warriors" not in common.st.session_state
+
+
 # ---------------------------------------------------------------------------
 # _group_effective_attacks — per-group attacks with damage bracket (G2 follow-up)
 # ---------------------------------------------------------------------------

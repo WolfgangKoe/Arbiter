@@ -642,6 +642,30 @@ def test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_inactive() 
     assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == 0
 
 
+def test_fall_back_hit_mod_wiring_requires_atk_uid_in_entry() -> None:
+    """Bug 1: _render_resolution_tab reads ``entry.get("atk_uid", "")`` and feeds it
+    to get_active_round_choice_shoot_after_fall_back. With the resolution-tab read
+    path, a populated ``atk_uid`` yields the −1 Hit debuff; the old buggy entry dict
+    (no ``atk_uid`` → empty string) silently dropped it to 0.
+    """
+    session = _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "retreated"}}
+
+    # Mirrors the exact read in _common._render_resolution_tab:
+    #     atk_uid = entry.get("atk_uid", "")
+    fixed_entry = {"def_faction": "Necrons", "def_uid": "uid-target", "atk_uid": "uid-overlord"}
+    buggy_entry = {"def_faction": "Necrons", "def_uid": "uid-target"}  # pre-fix: no atk_uid
+
+    assert (
+        get_active_round_choice_shoot_after_fall_back("Necrons", fixed_entry.get("atk_uid", ""))
+        == -1
+    )
+    assert (
+        get_active_round_choice_shoot_after_fall_back("Necrons", buggy_entry.get("atk_uid", ""))
+        == 0
+    )
+
+
 def test_reroll_empty_when_no_directive() -> None:
     _protocol_session(None, None)
     assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
