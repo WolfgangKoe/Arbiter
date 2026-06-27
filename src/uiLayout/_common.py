@@ -947,17 +947,23 @@ def _render_resolution_tab(
     # Variante C: determine auto_light_cover BEFORE reading checkbox state so the
     # modifier reaches resolve_save on the same Streamlit run that the directive
     # first becomes active (not one run later via session_state write).
+    # Also resolve shoot_after_fall_back (Conquering Tyrant D2) here so its −1 Hit
+    # modifier is folded in before resolve_attack_modifiers runs.
+    atk_uid = entry.get("atk_uid", "")
     if is_shooting:
         from gameMechanic.ability_engine import (  # noqa: PLC0415
             get_active_round_choice_ignores_cover_half_range,
             get_active_round_choice_light_cover_if_stationary,
+            get_active_round_choice_shoot_after_fall_back,
             get_short_label_for_effect_type,
         )
         from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
 
         auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
+        fall_back_hit_mod = get_active_round_choice_shoot_after_fall_back(atk_faction, atk_uid)
     else:
         auto_light_cover = False
+        fall_back_hit_mod = 0
 
     # Read cover checkbox states (checkboxes are rendered later, state read now)
     dense_cover = is_shooting and st.session_state.get(f"dense_cover_{cover_key}", False)
@@ -984,6 +990,21 @@ def _render_resolution_tab(
     if weapon_special["hit_roll_penalty"]:
         final_atk_mods.append(
             {"label": "−1 to Hit", "value": -1, "roll_type": "hit", "source": "weapon"}
+        )
+    if fall_back_hit_mod:
+        # D2 (shoot_after_fall_back): −1 Hit when shooting after Fall Back (9E canonical).
+        # Label is data-driven from YAML via get_short_label_for_effect_type — no hardcoded
+        # faction string (Generic-src rule). Falls back to generic round-choice label.
+        fall_back_label = get_short_label_for_effect_type(
+            atk_faction, "shoot_after_fall_back"
+        ) or _round_choice_short_label(atk_faction)
+        final_atk_mods.append(
+            {
+                "label": f"{fall_back_label} (Fall Back)",
+                "value": fall_back_hit_mod,
+                "roll_type": "hit",
+                "source": "round_choice",
+            }
         )
     if dense_cover:
         final_atk_mods.append(

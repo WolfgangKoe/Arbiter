@@ -182,12 +182,12 @@ ein Regelkonformitäts-Bruch (DoD #1) und macht jede darauf aufbauende Anzeige
 
 ## Done criteria
 
-- [ ] Alle 6 Protokolle: `primary`/`secondary` + `effect` = 9E-Direktiven.
-- [ ] Keine erfundenen Direktiv-Effekt-Typen mehr in `src/`/Tests ohne Konsument.
-- [ ] Neue A-Effekte engine-seitig verdrahtet + getestet; B-Effekte als Hinweis.
-- [ ] `rules.md` + `backlog.md` §0/§4b aktuell; INV-4b grün.
-- [ ] Manuelle UI-Verifikation je A-Effekt benannt (Render-Code).
-- [ ] README-Status-Zeile aktualisiert.
+- [x] Alle 6 Protokolle: `primary`/`secondary` + `effect` = 9E-Direktiven.
+- [x] Keine erfundenen Direktiv-Effekt-Typen mehr in `src/`/Tests ohne Konsument.
+- [x] Neue A-Effekte engine-seitig verdrahtet + getestet; B-Effekte als Hinweis.
+- [x] `rules.md` + `backlog.md` §0/§4b aktuell; INV-4b grün.
+- [x] Manuelle UI-Verifikation je A-Effekt benannt (Render-Code).
+- [x] README-Status-Zeile aktualisiert.
 
 ## STOP conditions
 

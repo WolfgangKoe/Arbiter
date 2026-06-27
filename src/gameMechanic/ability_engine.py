@@ -75,17 +75,11 @@ def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool
 
 
 # Numeric directive effect types -> the key they contribute in the modifier dict.
-# ap_bonus: Vengeful Stars S (-1, improves AP of shooting weapons).
 # move_bonus: Sudden Storm P (+1" Move).
-# leadership_bonus: Conquering Tyrant P (+1 Ld; Morale UI not wired yet, informational).
-# save_modifier removed: Eternal Guardian P1 is now light_cover_if_stationary (Plan 025 Step 4).
+# Removed (Plan 025 Step 6): hit_modifier, wound_modifier, strength_modifier, ap_bonus
+# (no active YAML consumers; migrated to specific effect types).
 _MODIFIER_RESULT_KEY = {
-    "hit_modifier": "hit",
-    "wound_modifier": "wound",
-    "strength_modifier": "strength",
-    "ap_bonus": "ap",
     "move_bonus": "move",
-    "leadership_bonus": "leadership",
 }
 
 
@@ -179,14 +173,12 @@ def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: i
 def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -> dict[str, int]:
     """Return numeric modifiers from the active round-choice ability's chosen directive.
 
-    Only numeric effect types in _MODIFIER_RESULT_KEY are returned (hit/wound/save/
-    strength_modifier, ap/move/leadership_bonus). Non-numeric effects (reroll_save_1,
-    advance_and_charge, rp_reroll, etc.) are queried via dedicated functions and are
-    silently skipped here.
+    Only numeric effect types in _MODIFIER_RESULT_KEY are returned (currently only move_bonus).
+    Non-numeric effects (advance_and_charge, rp_reroll, etc.) are queried via dedicated
+    functions and are silently skipped here.
 
-    Returns a dict with any of: {"hit", "wound", "save", "strength", "ap", "move",
-    "leadership"} mapped to int. Effects from multiple active directives (round-assigned
-    plus the always-active 6th / dynasty protocol) accumulate per key.
+    Returns a dict with any of: {"move"} mapped to int. Effects from multiple active
+    directives (round-assigned plus the always-active 6th / dynasty protocol) accumulate per key.
     """
     result: dict[str, int] = {}
     for effect in _active_directive_effects(player):
@@ -202,9 +194,8 @@ def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -
 
 # Reroll-directive effect type -> the reroll flags it grants.
 # reroll_save_1 removed: Eternal Guardian S is now hold_steady_or_set_to_defend (Plan 025 Step 4).
-_REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {
-    "reroll_hit_wound_1": {"reroll_hit_1", "reroll_wound_1"},  # Conquering Tyrant S (melee)
-}
+# reroll_hit_wound_1 removed: Conquering Tyrant S is now shoot_after_fall_back (Plan 025 Step 5).
+_REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {}
 
 
 def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) -> set[str]:
@@ -212,8 +203,8 @@ def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) ->
 
     Separate from get_active_round_choice_modifier because rerolls are flags, not
     numeric modifiers — keeping the dict[str, int] contract of that function clean.
-    Flags: reroll_save_1, reroll_hit_1, reroll_wound_1. Unions the flags of every
-    active directive (round-assigned plus the always-active 6th / dynasty protocol).
+    Flags: reroll_hit_1, reroll_wound_1. Unions the flags of every active directive
+    (round-assigned plus the always-active 6th / dynasty protocol).
     """
     flags: set[str] = set()
     for effect in _active_directive_effects(player):
@@ -294,6 +285,27 @@ def get_active_round_choice_light_cover_if_stationary(def_player: str, def_uid: 
         return False
     state = st.session_state.get(units_key_for(def_player), {}).get(def_uid, {})
     return state.get("movement_choice") == "stationary"
+
+
+def get_active_round_choice_shoot_after_fall_back(atk_player: str, atk_uid: str) -> int:
+    """Hit modifier from Conquering Tyrant D2 (shoot_after_fall_back) when active.
+
+    Class A: returns −1 (as a negative int) when the directive is active AND the
+    attacking unit's movement_choice == 'fall_back'. Returns 0 otherwise.
+
+    9E rule: "This unit is eligible to shoot in a turn in which it Fell Back, but if
+    it does, then until the end of the turn, each time a model in this unit makes a
+    ranged attack, subtract 1 from that attack's hit roll."
+    """
+    if not _active_directive_has_type(atk_player, "shoot_after_fall_back"):
+        return 0
+    state = st.session_state.get(units_key_for(atk_player), {}).get(atk_uid, {})
+    if state.get("movement_choice") != "fall_back":
+        return 0
+    effects = _active_directive_effects(atk_player)
+    return sum(
+        e.get("hit_modifier", 0) for e in effects if e.get("type") == "shoot_after_fall_back"
+    )
 
 
 def get_short_label_for_effect_type(player: str, effect_type: str) -> str | None:

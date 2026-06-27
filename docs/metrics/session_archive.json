@@ -1480,11 +1480,11 @@
   "8203a146-a640-4a98-bd0f-9eb1c73cb91d": {
     "started_at": "2026-06-27T05:30:58.795Z",
     "task": "<task-notification> <task-id>a951ea494cc8979f5</task-id> <tool-use-id>toolu_01MLzqhpAjhsjhZXenwccMV2</tool-use-id> <out…",
-    "peak_context": 108109,
-    "subagent_share": 88.97307802910214,
+    "peak_context": 130627,
+    "subagent_share": 82.06232843365142,
     "by_tier": {
       "Sonnet": 16620124,
-      "Opus": 8113308
+      "Opus": 8322079
     },
     "subagents": [
       {
@@ -1505,7 +1505,7 @@
         "agent_type": "general-purpose",
         "description": "Executor Paket B Verschlankung",
         "tier": "Sonnet",
-        "peak_context": 206937,
+        "peak_context": 207557,
         "started_at": "2026-06-27T05:30:58.795Z"
       },
       {
@@ -1521,6 +1521,72 @@
         "tier": "Sonnet",
         "peak_context": 72770,
         "started_at": "2026-06-27T05:30:58.795Z"
+      }
+    ]
+  },
+  "02e71d8f-05fe-4882-83eb-07d8b90523a3": {
+    "started_at": "2026-06-27T08:21:11.957Z",
+    "task": "start session",
+    "peak_context": 25747,
+    "subagent_share": 41.91193389812781,
+    "by_tier": {
+      "Sonnet": 60108
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 19985,
+        "started_at": "2026-06-27T08:21:11.957Z"
+      }
+    ]
+  },
+  "9ef7a257-4712-477e-b5c2-0a34c9c6db4c": {
+    "started_at": "2026-06-27T10:39:53.671Z",
+    "task": "start session",
+    "peak_context": 65777,
+    "subagent_share": 83.47343070674125,
+    "by_tier": {
+      "Haiku": 3662180,
+      "Sonnet": 8675210,
+      "Opus": 656646
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Plan 025 Step 6",
+        "tier": "Haiku",
+        "peak_context": 58976,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Plan 025 Step 4",
+        "tier": "Sonnet",
+        "peak_context": 57805,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Plan 025 Step 5",
+        "tier": "Sonnet",
+        "peak_context": 93383,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 72796,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer Plan 025 Steps 5+6",
+        "tier": "Opus",
+        "peak_context": 41587,
+        "started_at": "2026-06-27T10:39:53.671Z"
       }
     ]
   }

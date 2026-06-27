@@ -47,6 +47,10 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 **Offene Entscheidungen:** <NEEDS-DECISION wenn vorhanden>
 ```
 
+**Pflichtschritte (Planner):**
+- **Vor dem Einplanen:** offene vs. erledigte Steps gegen `git log --oneline` +
+  `.claude/tasks/next_session.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
+
 **Konventionen:**
 - `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k).
 - `Modus`: `Gate` = Freigabe vor Umsetzung erforderlich; `Konsent` = kein Widerspruch
@@ -83,6 +87,10 @@ Endbericht KNAPP, in fester Reihenfolge:
 3. git diff --stat (falls Schreib-Task)
 4. Gewählte Werte / Befunde
 Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
+
+## Pflichten für den Executor-Subagent
+- **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
+  macht niemals `git commit`, `git add` oder andere Verdrahtung der Git-History.
 
 ## Selbstprüf-Checkliste (Pflicht vor Rückgabe)
 - [ ] Verdrahtung: neuer Code per grep belegt, dass Nicht-Test-Code ihn aufruft

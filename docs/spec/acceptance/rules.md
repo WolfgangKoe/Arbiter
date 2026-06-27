@@ -1215,3 +1215,19 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 585–599 — "Directive 1: Each time an attack is made against this unit, if it did not make a Normal Move, Advance or Fall Back this battle round, this unit receives the benefit of Light Cover."
 - **code**: ability_engine.py:get_active_round_choice_light_cover_if_stationary
 - **regel**: Eternal Guardian Direktive 1 (Klasse A): App gewährt Light Cover automatisch, wenn das Protocol aktiv ist UND die Verteidiger-Einheit sich in dieser Runde nicht bewegt hat (`movement_choice == "stationary"`). Variante C: bestehende Light-Cover-Checkbox wird programmatisch vorgehakt und gesperrt; der +1-Save-Modifier fließt einmalig über die Checkbox-Mechanik — kein zweiter Collector-Eintrag. Gilt in jeder Phase (any); UI-Anzeige aktuell nur im Shooting-SAVE-Block (A1-Entscheidung Step 4).
+
+### R-PROTO-02
+- **klasse**: B
+- **status**: implementiert
+- **getestet**: nein
+- **quelle**: wahapedia_necrons/faction_overview.txt Z. 700–711 — "Directive 1: Add 3\" to the range of this unit's aura abilities (to a maximum of 12\") and increase the range of the following abilities this unit has by 3\" (to a maximum of 12\"): Lord's Will; My Will Be Done; Rites of Reanimation."
+- **code**: faction_abilities.yaml:protocol_conquering_tyrant.directives.primary (enforcement: table)
+- **regel**: Conquering Tyrant Direktive 1 (Klasse B): +3" Aura-Reichweite (max 12"). Kein App-Effekt (keine Distanzmessung implementiert). App zeigt Tisch-Hinweis. YAML: `type: aura_range_bonus, enforcement: table`.
+
+### R-PROTO-03
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_when_fell_back / test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_not_fell_back / test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_inactive / test_conquering_tyrant_secondary_not_a_generic_numeric_modifier
+- **quelle**: wahapedia_necrons/faction_overview.txt Z. 712–721 — "Directive 2: This unit is eligible to shoot in a turn in which it Fell Back, but if it does, then until the end of the turn, each time a model in this unit makes a ranged attack, subtract 1 from that attack's hit roll."
+- **code**: ability_engine.py:get_active_round_choice_shoot_after_fall_back / uiLayout/_common.py:_render_resolution_tab
+- **regel**: Conquering Tyrant Direktive 2 (Klasse A): Einheit darf nach Fall Back schießen; wenn sie es tut, −1 auf alle Treffer-Würfe (Fernkampf). Engine liest `movement_choice == "fall_back"` der angreifenden Einheit; Modifier wird als Eintrag in `final_atk_mods` (HIT, roll_type="hit", value=-1) in `_render_resolution_tab` injiziert. Nur in der Shooting-Phase aktiv.

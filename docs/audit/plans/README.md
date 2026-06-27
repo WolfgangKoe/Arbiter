@@ -26,14 +26,15 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | TODO — blockiert 016/017; sechs Protokolle, neue Engine-Effekt-Typen (`ap_on_unmod_wound_6`, `light_cover_if_stationary`, `strength_if_charged`, `ignore_cover_half_range`, `shoot_after_fall_back`); Sudden Storm P + Undying Legions schon konform. |
+| [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | DONE — alle Steps 1–6; Necron-Protokolle 9E-konform; unblockt 016/017 |
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
 | 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
 | 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
 | [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
+| 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | TODO — toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift); Engine-Effekt `strength_if_charged` analog Hungry Void D2 verdrahten. |
 
-**Empfohlene Reihenfolge (akt. S105): 025 → 016 → 018 → 015 → 026 → 017.**
+**Empfohlene Reihenfolge (akt. S107): 016 → 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
 016 Group A / Conquering-Tyrant-P-Morale obsolet nach 025; 016 behält nur RP-Hint + Dynastiebonus.
 016 und 018 sind unabhängig. 015 = größtes Stück. 017 zuletzt.

@@ -49,8 +49,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | ✅ YAML-Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (Step 4) | 🔲 D2-Plan (nach Plan 015) |
   | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
   | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
-  | Conquering Tyrant · P | leadership_bonus +1 | ✅ (informativ, kein UI-Konsument) | 🔲 Morale |
-  | Conquering Tyrant · S | reroll_hit_wound_1 (Melee) | ✅ (`get_active_round_choice_rerolls`) | 🔲 HIT+WOUND Melee |
+  | Conquering Tyrant · P | **9E-D1:** +3" Aura-Reichweite (`aura_range_bonus`, **Klasse B**, `enforcement: table`) | n/a (Tisch) | 🔲 Tisch-Hinweis (Plan 025 Step 5) |
+  | Conquering Tyrant · S | **9E-D2:** nach Fall Back schießen, −1 Hit (**ranged**, `shoot_after_fall_back`, **Klasse A**) | ✅ `get_active_round_choice_shoot_after_fall_back` (Plan 025 Step 5) | ✅ −1-Hit-Modifier im HIT-Block Shooting (Plan 025 Step 5) |
   | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
   | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
   | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89; UI-verifiziert S93) |
@@ -147,6 +147,13 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Fraktionsfähigkeiten. Fix: generischen Aktivator für `activated`-`faction_abilities` (unabhängig von
   `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
   (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
+- 🔲 **Custodes Rendax Ka'tah Secondary — toter `strength_modifier`-Pfad (Plan 025 Step 6):** In
+  `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml`, Protokoll `type: rendax_kath` (oder
+  ähnlich), `secondary`-Effekt `type: strength_modifier` mit Zielwert `+1 S nach Charge` — der
+  `strength_modifier`-Typ wurde bei Plan 025 Step 6 aus der Engine entfernt (war toter Pfad, vorher
+  nie konsumiert). Braucht eigene `strength_if_charged`-Verdrahtung analog Hungry Void D2 (auch
+  Charge-bedingt; S97-S98-Befund). YAML → `type: strength_if_charged, value: 1, phase: melee`; Engine-Fn
+  existiert bereits; nur Konsum + Test.
 
 - 🔲 **Army-List-UX „weniger Scrollen" (Refinement-Skizze IMG_4051, S94 gesichert):** Übergeordnetes
   UX-Ziel, abgehandelte Einheiten weniger im Weg zu haben. Drei Bausteine: (a) abgehandelte Unit-Card

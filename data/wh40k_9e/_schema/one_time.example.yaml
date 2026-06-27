@@ -41,10 +41,6 @@ abilities:
       stage: 1
       badge_label: "EXAMPLE — STAGE 1"
       effects:
-        - description: "+1 Strength"
-          type: strength_modifier
-          value: 1
-          phase: fight
         - description: "+1 Attacks"
           type: attacks_modifier
           value: 1
@@ -68,10 +64,6 @@ abilities:
       stage: 2
       badge_label: "EXAMPLE — STAGE 2"
       effects:
-        - description: "+1 Strength"
-          type: strength_modifier
-          value: 1
-          phase: fight
         - description: "+1 Attacks"
           type: attacks_modifier
           value: 1

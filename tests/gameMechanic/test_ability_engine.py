@@ -27,6 +27,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
     get_active_round_choice_modifier,
     get_active_round_choice_rerolls,
+    get_active_round_choice_shoot_after_fall_back,
     get_active_round_choice_strength_if_charged,
     get_active_rp_modifiers,
     get_short_label_for_effect_type,
@@ -538,7 +539,10 @@ def test_light_cover_if_stationary_false_when_directive_inactive() -> None:
     assert get_active_round_choice_light_cover_if_stationary("Necrons", "test.unit") is False
 
 
-def test_protocol_modifier_conquering_tyrant_secondary_not_wired() -> None:
+def test_conquering_tyrant_secondary_not_a_generic_numeric_modifier() -> None:
+    # 9E Directive 2 (shoot_after_fall_back) is not a generic numeric modifier — it is
+    # only active in the shooting phase when the unit Fell Back, queried via the
+    # dedicated get_active_round_choice_shoot_after_fall_back function.
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
     result = get_active_round_choice_modifier("Necrons", "fight", True)
     assert result == {}
@@ -602,21 +606,37 @@ def test_move_bonus_wired_movement() -> None:
     assert result == {"move": 1}
 
 
-def test_leadership_bonus_wired() -> None:
+def test_conquering_tyrant_primary_aura_range_bonus_not_a_numeric_modifier() -> None:
+    # 9E Directive 1: +3" aura range. Class B (table-only), enforcement: table.
+    # The App does NOT compute a numeric modifier for this — get_active_round_choice_modifier
+    # must return {} (no "leadership" key, no hit/wound/strength/ap/move key).
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
-    result = get_active_round_choice_modifier("Necrons", "morale", False)
-    assert result == {"leadership": 1}
+    result = get_active_round_choice_modifier("Necrons", "any", False)
+    assert result == {}
 
 
-def test_reroll_hit_wound_1_conquering_tyrant_s_melee() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    result = get_active_round_choice_rerolls("Necrons", "fight", True)
-    assert result == {"reroll_hit_1", "reroll_wound_1"}
+def test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_when_fell_back() -> (
+    None
+):
+    # 9E Directive 2: eligible to shoot after Fall Back with −1 Hit. Class A.
+    # units_key_for("Necrons") == "p1_units" because first_player == "Necrons".
+    session = _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "fall_back"}}
+    assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == -1
 
 
-def test_reroll_hit_wound_skipped_in_shooting() -> None:
-    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
+def test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_not_fell_back() -> None:
+    # No penalty if the unit did not Fall Back.
+    session = _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "normal"}}
+    assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == 0
+
+
+def test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_inactive() -> None:
+    # Directive not active → no modifier.
+    session = _protocol_session(None, None)
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "fall_back"}}
+    assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == 0
 
 
 def test_reroll_empty_when_no_directive() -> None:

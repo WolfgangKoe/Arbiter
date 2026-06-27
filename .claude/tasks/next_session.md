@@ -26,32 +26,38 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S106, 2026-06-27)
+## Aktueller Stand (nach S107, 2026-06-27)
 
-**S106 — Governance-Konsistenz + Artefakt-Verschlankung (dünner Koordinator, voll delegiert).**
-- **Steuerung gehärtet:** Coverage-Gate überall **92 %** (war divergent 80/90); Delegations-MUST in
-  `operating_model` verankert + „führt selbst aus" entfernt (ADR-0007); Scope-Pflicht + Kanal-Regel
-  repo-kanonisch; Subagent-Brief-Template in `agent_scopes`; Memory `proactive_subagent_prep` an ADR-0005.
-- **M3 ✅:** `operating_model` mit Abschnitts-Karte + stabilen Ankern (`#ev1`–`#ev7`, `#events` …).
-- **Verschlankung:** ziel1–5 + doku.md → `docs/goals/archive/`; ziel6 1744→1189 (6a–6d → archive/,
-  offene Restpunkte konservativ zurückgeholt — **kein Offenes nur im Archiv**); backlog 370→292;
-  plans/README DONE-Pläne in Archiv-Sektion. Vollsuite 1170 grün, 93,22 %, Arch-Gate grün.
-- **M4 ✅:** diese Datei gekürzt (S103/S104-Detail → `session_archive.md`).
+**S107 — Plan 025 abgeschlossen (Necron-Protokolle 9E-konform), voll delegiert.**
+- **Plan 025 ✅ DONE** (alle Steps 1–6). Step 4 (Eternal Guardian D1) war schon S104 committet;
+  Step 5 (Conquering Tyrant: D1 +3" Aura = Klasse B, D2 `shoot_after_fall_back` −1 Hit = Klasse A);
+  Step 6 (Aufräumen verwaiste Effekt-Typen). Vollsuite 1171 grün, 93,02 %, Architektur-Gate grün.
+- **Retro-Maßnahmen (verbindlich):** M1 Executor-Brief „KEIN Commit" (agent_scopes); M2 Planner gleicht
+  offene/erledigte Steps gegen `git log` + diese Datei ab; M3 Custodes-`strength_if_charged`-Schuld als Queue-Eintrag.
+- **Governance-Befund:** Haiku-Executor committete Step 5+6 eigenmächtig (633b00f) → soft-reset, Review
+  nachgezogen, sauber neu committet. M1 verhindert Wiederholung.
 
-**S104/S103 (Detail → `session_archive.md`):** O2-Tiering MUST + Pläne 027/028; Plan 025 Step 4
-(D1 light_cover) committed; ADR-0007 dünner Koordinator (S101/S102).
+**S106 (Detail → `session_archive.md`):** Governance-Konsistenz + Artefakt-Verschlankung; Coverage-Gate 92 % überall.
 
-### Nächster Schritt — 025-Linie
-Reihenfolge **025 → 016 → 018 → 015 → 026 → 017** (s. `docs/audit/plans/README.md`). Executor-SA mit **Write**.
-- **M1 — Overwatch-Anzeige:** statische Caption `chargephase.py:144` („trifft auf 6+") erst mit
-  Overwatch/Hold-Steady korrekt → in **Plan-015-Scope** (durch echtes Overwatch ersetzen).
+**Abschluss-Artefakte S107 fertig:** Executor-Brief M1+M2 (agent_scopes.md Pflichtschritte), M3 Queue-Eintrag (README.md Zeile 35), next_session.md aktualisiert.
+
+### Nächster Schritt — 016-Linie
+Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** (`docs/audit/plans/README.md`). Executor-SA mit **Write**.
+016 behält nur RP-Block-Hint + Dynastiebonus-Anzeige (Group A/C nach 025 obsolet).
+- **M1 — Overwatch-Anzeige:** statische Caption `chargephase.py:144` erst mit Overwatch korrekt → Plan-015-Scope.
+
+**Maßnahmen aus S107-Retro:**
+1. ✅ M1 — Executor-Brief-Regel „KEIN Commit" (agent_scopes.md Zeilen 91–93) bereits vorhanden.
+2. ✅ M2 — Planner-Pflichtschritt Step-Abgleich (agent_scopes.md Zeilen 50–52) bereits vorhanden.
+3. ✅ M3 — Custodes `strength_if_charged`-Plan 029 (README.md Zeile 35) bereits in Queue.
 
 ### ⚠️ Carry-over (offen)
 - **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
   (e) SessionStart-Regel-Injektion (S95-Beleg). [(f) M3 ✅ · (g) M4 ✅ — S106]
-- **Plan 025** aktive Hauptlinie; Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.
+- **Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.**
 - **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (b) Bug 5 Runde-2-Fernkampf-Zielwahl; (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln.
+  (b) Bug 5 Runde-2-Fernkampf-Zielwahl; (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln;
+  (d) **025 Step 5:** Conquering Tyrant D2 — Necron Fall-Back-Einheit → Shooting-HIT-Block zeigt −1 (Fall-Back-Label); ohne Fall Back kein Effekt; D1 erzeugt keinen Würfel-Modifier.
 
 ### Offene Fragen / Vormerke
 - **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.

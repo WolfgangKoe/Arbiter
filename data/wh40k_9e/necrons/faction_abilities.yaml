@@ -92,18 +92,26 @@ abilities:
   ability_type: round_choice
   source: faction_rule
   subfaction_affinity: sautekh
-  primary: +1 Leadership
-  secondary: Re-roll hit and wound rolls of 1 (Melee)
+  primary: "Add 3\" to the range of this unit's aura abilities (to a maximum of 12\"),
+    including Lord's Will, My Will Be Done, and Rites of Reanimation"
+  secondary: "This unit is eligible to shoot in a turn in which it Fell Back, but if
+    it does, subtract 1 from each ranged attack's hit roll until the end of the turn"
   directives:
     primary:
+      # 9E Directive 1: +3" aura range. Class B — table-only (no spatial tracking in App).
       effect:
-        type: leadership_bonus
-        value: 1
+        type: aura_range_bonus
+        value: 3
+        max: 12
         phase: any
+        enforcement: table
     secondary:
+      # 9E Directive 2: shoot after Fall Back with −1 Hit. Class A — App computes the
+      # hit penalty when movement_choice == "fall_back".
       effect:
-        type: reroll_hit_wound_1
-        phase: melee
+        type: shoot_after_fall_back
+        hit_modifier: -1
+        phase: shooting
 - id: wh40k_9e.necrons.faction.protocol_sudden_storm
   name_en: Protocol of the Sudden Storm
   ability_type: round_choice

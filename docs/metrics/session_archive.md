@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-27 08:15 CEST
+Stand: 2026-06-27 13:44 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,20 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-27 07:30 8203  █████████░░░ 108k ✅    █████░  89%    ████········
+06-27 12:39 9ef7  █████░░░░░░░  66k ✅    █████░  83%    █········▒▒▒
+         SA_1·  █████░░░░░░░  59k ✅    Executor Plan 025 Step 6
+         SA_2·  █████░░░░░░░  58k ✅    Executor Plan 025 Step 4
+         SA_3·  ███████░░░░░  93k ✅    Executor Plan 025 Step 5
+         SA_4·  ██████░░░░░░  73k ✅    Planning-Entwurf nächste Session
+         SA_5·  ███░░░░░░░░░  42k ✅    Reviewer Plan 025 Steps 5+6
+----------------- ---------------------- -------------- ------------
+06-27 10:21 02e7  ██░░░░░░░░░░  26k ✅    ███░░░  42%    ············
+         SA_1·  ██░░░░░░░░░░  20k ✅    Planning-Entwurf nächste Session
+----------------- ---------------------- -------------- ------------
+06-27 07:30 8203  ██████████░░ 131k ⚠️   █████░  82%    ████········
          SA_1·  ██████░░░░░░  79k ✅    Executor Paket A+C Steuerung
          SA_2·  █████░░░░░░░  58k ✅    Finales Doku-Konsistenz-Review
-         SA_3·  ████████████ 207k ⛔    Executor Paket B Verschlankung
+         SA_3·  ████████████ 208k ⛔    Executor Paket B Verschlankung
          SA_4·  ████░░░░░░░░  55k ✅    Governance-Konsistenz-Audit
          SA_5·  ██████░░░░░░  73k ✅    Planungsartefakt-Inventur
 ----------------- ---------------------- -------------- ------------

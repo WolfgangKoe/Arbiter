@@ -18,25 +18,24 @@ protocols:
   - id: example.faction.protocol.option_with_stances
     name_en: "Option With Two Stances"
     # Stance A = Primary = Aggressive
-    primary: "Aggressive Stance: +1 to hit rolls in the Shooting Phase."
+    primary: "Aggressive Stance: Bonus to hit in the Shooting Phase."
     primary_effect:
-      type: hit_modifier
-      value: 1
+      type: advance_and_charge
       phase: shooting   # "shooting" | "melee" | "any"
 
     # Stance B = Secondary = Stoic (optional — weglassen für single-effect Fähigkeiten)
-    secondary: "Stoic Stance: Reroll hit and wound rolls of 1 (Melee)."
+    secondary: "Stoic Stance: Reroll advance rolls (Melee)."
     secondary_effect:
-      type: reroll_hit_wound_1
+      type: rp_reroll
       phase: melee
 
 # VARIANTE B — Ohne Stances / Single-Effect (Adeptus Mechanicus Canticles)
   - id: example.faction.protocol.canticle_style
     name_en: "Single-Effect Option (Canticle Style)"
-    primary: "Chant: Add 1 to the Strength of models in this unit."
+    primary: "Chant: Invulnerable save in this phase."
     primary_effect:
-      type: strength_modifier
-      value: 1
+      type: invuln_save
+      value: 5
       phase: fight
     # secondary: (kein secondary = keine Stance-Wahl; UI zeigt nur Auto-Apply)
     # secondary_effect: (ebenfalls leer)
@@ -54,11 +53,7 @@ protocols:
 
 # Wired effect types (Auswahl; vollständige Liste in ability_engine.py):
 #
-# Numerisch (get_active_round_choice_modifier → hit/wound/strength/ap/move/leadership):
-#   hit_modifier, wound_modifier, strength_modifier, ap_bonus, move_bonus, leadership_bonus
-#
 # Flagbasiert (eigene get_active_round_choice_*-Funktionen):
-#   reroll_hit_wound_1        → get_active_round_choice_rerolls (Melee)
 #   advance_and_charge        → charge_after_advance_allowed
 #   rp_reroll                 → get_active_rp_modifiers
 #   heal_bonus                → get_active_heal_bonus
@@ -67,3 +62,4 @@ protocols:
 #   strength_if_charged       → get_active_round_choice_strength_if_charged (Klasse A)
 #   ap_on_unmod_wound_6       → enforcement: table (Klasse B, Display-only)
 #   hold_steady_or_set_to_defend → enforcement: table (Klasse B, Display-only, Plan 015)
+#   invuln_save               → effect.value = save value
