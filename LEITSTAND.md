@@ -27,7 +27,7 @@ Dort steht: was zuletzt getan wurde, was als nächstes ansteht, offene Fragen. W
 | Artefakt | Was es ist |
 |---|---|
 | [docs/goals/backlog.md](docs/goals/backlog.md) | Zentraler Backlog — die einzige Stelle für priorisierte offene Aufgaben |
-| [docs/goals/](docs/goals/) | Alle Zieldateien (ziel1.md … zielN.md) mit Checkboxen und Detailstatus |
+| [docs/goals/](docs/goals/) | Aktive Zieldateien (ziel6.md … ziel8.md) mit Checkboxen und Detailstatus; erledigte Ziele unter `archive/` |
 
 ---
 
@@ -41,7 +41,7 @@ pytest --tb=short
 ```
 
 Das schließt ein:
-- **Coverage-Gate** ≥ 80 % (Konfiguration in `pyproject.toml`; Render-Code ausgeschlossen — siehe [CLAUDE.md](CLAUDE.md))
+- **Coverage-Gate** ≥ 92 % (Konfiguration in `pyproject.toml`; Render-Code ausgeschlossen — siehe [CLAUDE.md](CLAUDE.md))
 - **Architektur-Gate** — vier Invarianten in `tests/architecture/`; Details + Schulden-Ledger: [docs/spec/architecture_invariants.md](docs/spec/architecture_invariants.md)
 - **Debt-Scoreboard** — läuft bei jedem `pytest`-Lauf mit; zählt offene Regel-Schulden aus dem Rule-Conformance-Catalog
 

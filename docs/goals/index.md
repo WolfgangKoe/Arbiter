@@ -14,37 +14,37 @@ Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 
 | Ziel | Status |
 |------|--------|
-| Ziel 1A — uiLayout/ Struktursplit | ✅ fertig |
-| Ziel 1B — gameObjects/ Foundation | ✅ fertig |
-| Ziel 2 — Command Phase | ✅ fertig |
-| Ziel 3 — Combat Foundation | ✅ fertig |
-| Ziel A — Architektur-Review | ✅ fertig |
-| Ziel 4a — Badges & Einheitenzustand | ✅ fertig |
-| Ziel 4b — armyCard + unitCard Redesign | ✅ fertig |
-| Ziel 4c — Ability Engine Refactoring | ✅ fertig |
-| Ziel 4d — Befehlsphase vollständig | ✅ fertig |
-| Ziel 4e — Bewegungsphase vollständig | ✅ fertig |
-| Ziel 4f — Psychic Phase | ✅ fertig |
-| Ziel 4f.1 — Psychic Phase Nachbesserungen | ✅ fertig (4f.1.c offen) |
-| Ziel 4g — Angriffsphase (Charge Phase) | ✅ fertig |
-| Ziel 4h — Moralphase | ✅ fertig |
-| **Ziel 5 — Setup & Datenlage** | ✅ fertig (2026-06-03) |
-| Ziel 5a — Datenstruktur & Spec | ✅ fertig |
-| Ziel 5b — Necrons Katalog | ✅ fertig |
-| Ziel 5c — Loader-Refactoring | ✅ fertig |
-| Ziel 5d — BattleScribe Importer | ✅ fertig |
-| Ziel 5e — Setup-Screen Redesign | ✅ fertig |
-| Ziel 5f — Stratagems PoC | ✅ fertig (2026-06-03) |
-| Ziel 5g — Regelkonformer Setup-Flow | ✅ fertig |
-| Ziel 5h — Orks-Katalog | ✅ fertig |
-| Ziel 5i — Abschluss: Offene Punkte | ✅ fertig (2026-06-03) |
-| Ziel 5j — FW Necrons + Ork Datenqualität | ✅ fertig (2026-06-03) |
+| Ziel 1A — uiLayout/ Struktursplit | ✅ fertig (archiviert) |
+| Ziel 1B — gameObjects/ Foundation | ✅ fertig (archiviert) |
+| Ziel 2 — Command Phase | ✅ fertig (archiviert) |
+| Ziel 3 — Combat Foundation | ✅ fertig (archiviert) |
+| Ziel A — Architektur-Review | ✅ fertig (archiviert) |
+| Ziel 4a — Badges & Einheitenzustand | ✅ fertig (archiviert) |
+| Ziel 4b — armyCard + unitCard Redesign | ✅ fertig (archiviert) |
+| Ziel 4c — Ability Engine Refactoring | ✅ fertig (archiviert) |
+| Ziel 4d — Befehlsphase vollständig | ✅ fertig (archiviert) |
+| Ziel 4e — Bewegungsphase vollständig | ✅ fertig (archiviert) |
+| Ziel 4f — Psychic Phase | ✅ fertig (archiviert) |
+| Ziel 4f.1 — Psychic Phase Nachbesserungen | ✅ fertig (archiviert) |
+| Ziel 4g — Angriffsphase (Charge Phase) | ✅ fertig (archiviert) |
+| Ziel 4h — Moralphase | ✅ fertig (archiviert) |
+| **Ziel 5 — Setup & Datenlage** | ✅ fertig (2026-06-03, archiviert) |
+| Ziel 5a — Datenstruktur & Spec | ✅ fertig (archiviert) |
+| Ziel 5b — Necrons Katalog | ✅ fertig (archiviert) |
+| Ziel 5c — Loader-Refactoring | ✅ fertig (archiviert) |
+| Ziel 5d — BattleScribe Importer | ✅ fertig (archiviert) |
+| Ziel 5e — Setup-Screen Redesign | ✅ fertig (archiviert) |
+| Ziel 5f — Stratagems PoC | ✅ fertig (2026-06-03, archiviert) |
+| Ziel 5g — Regelkonformer Setup-Flow | ✅ fertig (archiviert) |
+| Ziel 5h — Orks-Katalog | ✅ fertig (archiviert) |
+| Ziel 5i — Abschluss: Offene Punkte | ✅ fertig (2026-06-03, archiviert) |
+| Ziel 5j — FW Necrons + Ork Datenqualität | ✅ fertig (2026-06-03, archiviert) |
 | **Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz** | ⬜ spec fertig (2026-06-03) |
 | Ziel 7 — Crusade-Erweiterung | ⬜ geplant |
 | Ziel 8 — Wahapedia Faction Fetcher | ⬜ geplant |
 | Design-Block — UI-Theme | ⏳ eigene Session |
 
-Details je Ziel: `ziel1.md` – `ziel8.md` · Doku-Bereinigung: `doku.md`
+Details je Ziel: `archive/ziel1.md` – `archive/ziel5.md` (erledigt, archiviert) · `ziel6.md` – `ziel8.md` · Doku-Bereinigung: `archive/doku.md`
 
 ---
 

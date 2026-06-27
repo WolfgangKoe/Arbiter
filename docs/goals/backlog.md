@@ -16,14 +16,6 @@ Letzter Abgleich: 2026-06-26 (S103 — Bug 1 Render-Reihenfolge Auto-Light-Cover
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
 Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
 
-- ✅ **Bug 1 — Auto-Light-Cover Render-Reihenfolge (S103):** `auto_light_cover` wurde erst
-  nach `resolve_save`/`_render_dice_save_block` in den Session-State geschrieben → +1-Save-Modifier
-  fehlte in den Würfeln beim ersten Auftauchen. Fix: Import + `auto_light_cover`-Berechnung vor
-  Z. 949 hochgezogen; `light_cover` faltet `auto_light_cover` direkt, kein session_state-Umweg.
-- ✅ **Bug 2 — Buff-Badge blau statt grün (S103):** `:blue-badge[…]` → `:green-badge[…]` gemäß
-  `design_colors.md` §3 (Buff-Farbe = Grün `#4a9a5a`); gleichzeitig redundante session_state-
-  Zuweisung im Checkbox-Block entfernt (verhindert Streamlit-„widget set via Session State"-Warnung).
-
 - 🟡 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
   fertig — **committed** cc75490/1d8b8ba; offen nur noch manuelle UI-Checks): Code + Tests grün
   (Stand jetzt ≥1109 Tests, 93 %; die Zahlen „900/88 %" waren der S65-Stand).
@@ -36,10 +28,6 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
   Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
   Prism als echter Wargear-Choice — eigenständiger Task).
-- ✅ **#1 Faktion-/Subfaction-Badge** (S51): Faktion-Badge zeigt Faktionsnamen
-  (nicht Roster-Titel); Subfaction-Badge generisch + **immer sichtbar** (Wert /
-  „No <Label>" / „No Subfaction"); helles Blau `#a5b4fc`. Alle Roster mit Pflicht-
-  Subfaction. Pins: `AC-SUBFACTION-01..05`. „dynasty"-Vokabular aus `src/` entfernt.
 - 🟡 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause): **Setup-Leck erledigt 2026-06-20.**
   Bug (Nutzer-Screenshots): Protokoll-Direktiven-Buttons + WAAAGH-Status erschienen im Setup
   und wurden durch den First-Player-Toggle (`active` gesetzt) sogar wählbar; der Auto-Block
@@ -97,13 +85,6 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   bewusst redundant). Labels nur **kürzen** (truncate/ellipsis), nicht den Wert entfernen.
   Soll-Bild als AC in `docs/spec/dice_display.md` festgelegt → Plan 022, dann per AC
   einrasten (Lehre aus Finding 9.2 — nie still ändern).
-- ✅ **R-COMBAT-32 — Doku-Drift im Regel-Katalog** (S60→S62 erledigt): „Charging Units Fight
-  First" stand als `offen`/`getestet: nein`, war aber implementiert. Bei der Verifikation (S62)
-  zeigte sich: nur die *Berechtigung* war getestet, der *Reihenfolge*-Zweig (Nicht-Gecharger
-  wartet, solange ein Gecharger offen ist — `can_fight_now`/`_any_charged_remain`) war ungedeckt.
-  Daher Regressionstest `test_non_charged_waits_while_charged_pending` ergänzt, dann R-COMBAT-32
-  auf `implementiert` + `getestet: ja` + `code: fightPhase.py:can_fight_now` gesetzt. Klasse-A-
-  Abdeckung 28→29. (Ledger unberührt: Regel war `offen`, nicht impl.-ohne-Test.)
 - 🔲 **R-CMD-03 — CP-Grant ohne Battle-forged-Gating** (S55, aus Regel-Katalog):
   Der „Grant +1 CP"-Button in `commandPhase._render_faction_actions` erscheint für die
   aktive Seite **unabhängig von `game_mode`/Battle-forged** → eine Unbound-Armee könnte
@@ -111,38 +92,15 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   `_render_faction_actions` an Battle-forged koppeln + Regressionstest. Ledger-Eintrag
   `R-CMD-03` in [../spec/acceptance/rules.md](../spec/acceptance/rules.md).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
-  - ✅ **Konsens 2026-06-21 (jetzt umsetzbar, kein Schema-Risiko):** Cluster 4 + 5 als XS-Fixes
-    freigegeben — entweder kleiner gemeinsamer Plan oder Teil von Plan 018. Cluster 1/2/3/6 bleiben
-    an ihren Plänen (022/020/021), weil sie das YAML-Schema berühren (eigener Designentscheid je Plan).
-  - **Cluster 4 — `dynasty`** (`movementPhase.py`) ✅ Konsens: UI-String `"DYNASTY CORE unit"` raus → Label aus Unit-YAML lesen (Keyword `DYNASTY` steht dort). XS-Fix.
-  - **Cluster 5 — `gloom`/`prism`** (`psychicPhase.py`) ✅ Konsens: `"Gloom Prism"` ist **Necron**-Wargear (nicht Custodes). Tooltip-Text generalisieren → Wargear-Name aus YAML lesen, Fallback: `"Deny-Once-Wargear"`. XS-Fix.
-  - ✅ **Cluster 3 — `orb`/`overlord`/`resurrection` + `phaeron`** (`commandPhase.py`) **erledigt S83 (Plan 020):** generischer Activated-Wargear-Flow (`_render_activated_wargear`, Lookup via `ability_type: activated`); PHAERON-Bonus datengetrieben (`extra_uses`); Allowlist-Eintrag entfernt.
-  - ✅ **Cluster 6 — `arkana`** (`loader.py`) **erledigt S84 (Plan 021):** Arkana in `faction_abilities.yaml`, `load_points` liest `cost_pts` generisch (`_add_faction_ability_costs`), `"arkana"`-Literal aus `loader.py` entfernt. **Effekt-Modellierung Plan 024 (S87) abgeschlossen:** alle 12 Arkana haben strukturiertes `trigger`/`conditions`/`effect` + engl. `rule_text`; **1 dispatchbar** (Failsafe Overcharger → `activated`, `buff_stat`), **11 bleiben begründet `descriptive`** (fehlende Engine-Subsysteme — Tabelle in `docs/spec/faction_abilities.md`). Kein neuer Faction-String in `src/` → INV-4b unverändert.
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
   - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
+  - _(Cluster 3 ✅ Plan 020, Cluster 4/5 ✅ XS-Fix, Cluster 6 ✅ Plan 021/024 — erledigt, aus Backlog entfernt)_
 
 ---
 
 ## 1. Aktive Implementierungs-Pläne (Executor-Queue)
 
-Detailpläne + Abhängigkeiten: [../audit/plans/README.md](../audit/plans/README.md). Pläne 001–013 = DONE.
-
-| Plan | Titel | Prio | Status |
-|------|-------|------|--------|
-| [014](../audit/plans/014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | HOCH | ✅ DONE (S82) — manuelle UI-Verifikation offen |
-| [016](../audit/plans/016-necron-protocol-effects.md) | Protokoll-Effekte auf RP/Living Metal + Dynastiebonus | MITTEL | TODO |
-| [018](../audit/plans/018-low-prio-cleanup.md) | Kleinkram: CP-Doppelvergabe, Battle-Log-Reset, Gretchin, Modifier | NIEDRIG | TODO |
-| [015](../audit/plans/015-contextual-reactive-stratagems.md) | Reaktive Stratagems: Overwatch, Counter-Offensive, HI-Hook | MITTEL | TODO |
-| [017](../audit/plans/017-ability-ap-combined-badge.md) | SAVE-Block: Fähigkeit+AP kombinierte Badge | MITTEL | TODO |
-| [019](../audit/plans/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | MITTEL | ✅ DONE (2026-06-20) |
-| [020](../audit/plans/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | MITTEL | ✅ DONE (S83) |
-| [021](../audit/plans/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | MITTEL | ✅ DONE (S84) — nur Daten-Migration + generischer Loader + INV-4b-Literal; Effekte offen → Plan 024 |
-| [022](../audit/plans/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | HOCH | ✅ DONE (S77) |
-| [023](../audit/plans/023-overview-archive-rework.md) | Subagent-Archiv Rework: schlanke overview.md + separate session_archive.md | MITTEL | ✅ DONE (S85, 2026-06-21) |
-| [024](../audit/plans/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | MITTEL-HOCH | ✅ DONE (S88) — Steps 1–4 (Direktiv-Wiring + RP, S86) · 5–6 (Failsafe `activated`-Dispatch + Arkana-Schema + Kosten, S87) · 7 (Doku, S88); 11/12 Arkana begründet `descriptive`. Manuelle UI-Verifikation offen |
-
-**Empfohlene Reihenfolge (akt. S88): 019·022·014·020·021·023·024 DONE → 016 → 018 → 015 → 017.**
-024 abgeschlossen (S88). **Offen nur** die manuelle UI-Verifikation (Failsafe aktivierbar + Direktiv-Anzeigen). Nächstes Stück: **016**.
+Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README.md) (kanonisch)
 
 ---
 
@@ -163,44 +121,12 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟢 Gretchin Cowardly: −1 Attrition ohne RUNTHERD in 6" (→ Plan 018)
 - 🟢 Battle-Log: nach Reset keine alten Einträge (→ Plan 018)
 - 🟢 CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (→ Plan 018)
-- ✅ **Operating-Model Phase B (S57):** `tools/token_report.py` + `docs/metrics/overview.md` —
-  Token-/Wer-leistete-was-Report; führt Haupt- + Subagent-Verbrauch getrennt zusammen
-  (je Tier + je Session); aus Leitstand-Feld 4 verlinkt. `--write` regeneriert den Report.
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
-- ✅ **Token-Report v2 (leser-orientiert, → ADR-0002, S57):** Akzeptanzkriterien erfüllt —
-  (a) Session-Label = Datum + Uhrzeit + Kurz-ID (S-Nummer nicht im Transcript, daher Datum
-  statt S-Nr); (b) jüngste Session oben (nach Startzeit sortiert); (c) Σ als „Σ (alle Sessions)"
-  beschriftet; (d) je Session Subagenten-Anzahl + eigene Detailtabelle (Agent + Aufgabe aus
-  `*.meta.json`); (e) Mermaid-Tortendiagramm der Token je Tier.
-- ✅ **Token-Report v3 (Effizienz statt Menge, → ADR-0002, S58):** Umbau zu einer Effizienz-Anzeige
-  („wurden die Token gut ausgegeben, werden wir besser/schlechter?"). Akzeptanz a–f erfüllt:
-  (a) Fokus-Block letzte Session (Text + Zusammensetzungs-Balken input/cache_creation/cache_read/
-  output); (b) Verlauf 6 Sessions mit theme-sicheren Unicode-Balken Peak-Kontext/Subagent-Anteil/
-  Modell-Mix (`█`Opus·`▓`Sonnet·`▒`Haiku) + Trend ↑/↓; (c) auto-Hinweise (Korridor/Subagent/Tiering);
-  (d) Subagenten-Tabelle Session·Modell·Agent·Aufgabe; (e) Aufgabe aus 1. User-Nachricht +
-  optionaler `docs/metrics/session_notes.yaml`-Link; (f) All-Time-Torte entfernt. 23 Tool-Tests grün.
-  Frühere Spec:
-  - (a) **Fokus letzte Session**: Text (Aufgabe, Modelle je Rolle, Tokens, Peak-Kontext vs. 150k,
-    Subagent-Anteil, cache_read/Output) **+ Diagramm** = Zusammensetzungs-Balken (input /
-    cache_creation / cache_read / output).
-  - (b) **Verlauf letzte 6 Sessions** (inkl. der aktuellen als jüngste Zeile), je als Balken,
-    theme-sicher (Unicode/Schattierung, keine Farb-Legende): **Peak-Kontext** (vs. 150k) +
-    **Subagent-Anteil** + **Modell-Mix** (segmentierter Balken, `█` Opus · `▓` Sonnet · `▒` Haiku),
-    jeweils mit **Trend ↑/↓** ggü. den davorliegenden Sessions.
-  - (c) **Hinweise** auto-generiert, usage-fenster-artig (>150k-Anteil, subagent-heavy, Modellwahl).
-  - (d) **Subagenten-Tabelle**: Session | Modell | Agent | Aufgabe.
-  - (e) **Aufgabe je Session** automatisch aus erster User-Nachricht + optionaler Backlog-Link via
-    `docs/metrics/session_notes.yaml` (`<session-id>: link`).
-  - (f) All-Time-Tortendiagramm **entfernen** (nützt nicht; dunkle Mermaid-Legende unlesbar).
-  - Peak-Kontext = max(`input + cache_read + cache_creation`) je Antwort der Session.
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
   u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
   nicht nur maschinen-orientiert zählen.
 - 🔲 **color_hint-Feld im Modifier-Dict (Refinement 2026-06-20):** Optionales `color_hint: "buff" | "debuff"` im Modifier-Dict für nicht-numerische Modifier (z.B. Quantum Shield). Default: wertbasiert. Rückwärtskompatibel. → `ability_engine.py`, `dice_html.py`, Tests.
-- ✅ **BUG Heroic Intervention crasht (S78 → FIXED S79):** Wurzel war `StreamlitDuplicateElementKey` bei **Duplikat-Squads**, die `unit.id` teilen (z. B. Necron 3× Warriors) — **nicht** `int("User×N")` (Hypothese per Laufzeit-Repro widerlegt). Fix: State-Key (`#N`) durch den HI-Flow gefädelt (`hi_eligible_units`, beide Render-Fn, Confirm) + Mutation in getestete `perform_heroic_intervention()` (`unit_mutations.py`) extrahiert. 16 Regressionstests (inkl. „erste Squad bleibt unberührt").
-- ✅ **BUG Badge „AP-4 -4" doppelt (S78 → FIXED S79):** Label-Komposition für AP in gemessenen Helper `save_ap_modifier_row_html` geholt (Label „AP", Wert genau einmal angehängt → „AP -4"). Tests pinnen „AP -4" und Nicht-Vorkommen „-4 -4".
-- ✅ **BUG Buff-Badge nicht grün (S78 → FIXED S79):** Badge nutzt jetzt semantische `badge_color` (`_modifier_color`/`color_hint`) statt `right_color` → Light Cover grün (`design_colors.md` §0, manuell bestätigt). Tests pinnen Buff=grün / Debuff=rot. Perspektiv-Frage durch §0 entschieden (Cover = Buff).
 - 🔲 **Invuln-SAVE-Badge-Bereich chaotisch (S78):** Zeigt drei Teile („Inv 4+", „active", „AP/Cover N/A"), die teils keinen Sinn ergeben. Soll: **eine** klare Badge, z. B. „Invuln 4+". Überschneidet sich mit **Plan 017** (SAVE-Block Fähigkeit+AP kombinierte Badge) → dort mitlösen oder eigener kleiner Task.
 - 🔲 **Dice-Display Modifier-Geometrie (Befund B/C, S78):** HIT/WOUND-**Debuff** spreizt nicht mit der Magnitude — `modifier_die_pair_html` zeigt immer `from-1 → from` (−1/−2/−3 sehen identisch aus), Spec §3.1 will den farbigen Würfel mit der Magnitude nach rechts wandern lassen. Zusätzlich verletzt HIT-**Buff** die Slot-1-Invariante (grauer Würfel rutscht auf Spalte 1, §3.3 will min. 2). SAVE-Geometrie ist korrekt. **Eigener Plan** (`modifier_die_pair_html` getestet → Regressionsfläche; eigenes Test-Netz). Die Pfeil-**Zahl** (Befund A) ist bereits umgesetzt (S78).
 - 🔲 **Silent-King-Zielaufteilung Fernkampf (S79-UI-Befund; Regel S80 GEKLÄRT):** Ein Modell mit **zwei** Fernkampfwaffen (Silent King: Sceptre of Eternal Glory / Staff of Stars) kann aktuell nur **eine** Feind-Einheit als Ziel wählen — **regelwidrig**. Core Rules: „If a model has more than one ranged weapon, it can split the weapons between different enemy units." Alle Attacken **einer** Waffe gehen auf dieselbe Einheit. → UI auf **Ziel-pro-Waffe** umbauen + alle Ziele vor dem ersten Wurf deklarieren; Staff-of-Stars-Sperre ≤8 W beachten; Regressionstest. Detail: `docs/inbox/finding-silent-king-target-split.md`. Eigener Plan.
@@ -209,8 +135,6 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🔲 **Lethal Hits (R-CMB-XX, Refinement 2026-06-20):** Unmod. Treffer-6 = kein Wundwurf, Schaden direkt mit Overflow (wie Mortal Wounds). Nicht implementiert. Eigener Plan nach Plan 014.
 - 🔲 **Deadly Demise (R-CMB-YY, Refinement 2026-06-20):** Modell zerstört → Mortal Wounds auf Einheiten in X". YAML-Daten vorhanden, Handler fehlt. Eigener Plan.
 - 🔲 **Voice of the Triarch (R-CMD-XX, Refinement 2026-06-20):** Silent King — `voiceOfTheTriarch`-Handler fehlt (YAML-Basis fertig: `alter_command_protocol`). → Plan 016 oder eigener kleiner Plan.
-- ✅ **Subagent-Archiv REWORK (Plan 023, DONE 2026-06-21):** overview.md schlank (18 KB→3.9 KB), Reihenfolge nach `overview_concept.md`; separate auto-generierte `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration verlustfrei; tote Renderer entfernt; 1011 Tests grün. — _Ursprung:_ S72-Bug: Duplikat-Tabellen in `overview.md`. Fix: (1) `docs/metrics/session_archive.md` als separate, wachsende Archiv-Datei; (2) `overview.md` bekommt Link + SA-Peaks als Inline-Subzeilen im Verlaufsblock (Format: `Refinement/overview_concept.md`); (3) **Session-ID-Deduplizierung bei `--write`** — überschreibt `overview.md` während einer Session mehrfach, darf dieselbe Session-ID **nicht** doppelt ins Archiv anhängen (idempotent je Session-ID). Die **Anzahl der Auslösungen wird NICHT dokumentiert** (Stakeholder 2026-06-21). Render-Funktionen `_render_subagent_archive` + `_render_subagents` zusammenführen; die breite Tabelle „## Subagenten — wer wurde wofür gestartet" entfällt komplett.
-
 - 🔲 **Failsafe/Arkana-Aktivator-UI fehlt (S88-Befund, eigener kleiner Plan):** `activated`-Einträge
   aus `faction_abilities.yaml` mit `once_per_battle: false` werden bei `round_choice`-Fraktionen
   (Necrons/Custodes) **nirgends** als Aktivator gerendert. Ursache: `armyCard._render_once_per_battle_ability_ui`
@@ -329,8 +253,6 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
   **entfernt** wurde (Regeln erlauben freie Verteilung der Protokolle auf Runden 1–5). Reine
   Doku-Altlast → bei der `architecture.md`-Doku-Session mitbereinigen. **Vor Änderung freigeben.**
 
-- ✅ **Dice Display Arrow-Direction-Bug (`dice_html.py`)** — erledigt (Plan 022, S77): `rightward = (value > 0)` in `dice_compose.py`, Buff=rechts[→]/Debuff=links[←]; Tests `test_buff_arrow_points_right`/`test_debuff_arrow_points_left` pinnen das Verhalten.
-- ✅ **commandPhase.py State-Keys nicht orb-id-gebunden** — erledigt (Plan 020, S83): globale Slots durch `pending_target_request` mit `TargetSelectionRequest.ability_id`-Diskriminator ersetzt; `revive_wargear_awaiting_target` existiert nicht mehr in `src/`.
 - **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
 - 🔴 **Command-Protocol-Direktiven nicht regelkonform (S95-Befund, Plan 016 Group A blockiert;
   Plan 025 Step 4 = D1 bereit → Mailbox-Plan `docs/handoff/plan-025-step4.md` Teil A vom

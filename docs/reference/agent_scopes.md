@@ -59,3 +59,40 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 ## So nutzt der Koordinator das
 
 Der Koordinator liest diese Tabelle, wählt den passenden Aufgabentyp, und kopiert die **Pflicht-Lesen**-Spalte direkt als `erlaubte Quellen` in den Subagent-Brief. Der Subagent liest ausschließlich diese Dateien — kein freies Repo-Wandern. Dateien aus der **Optional**-Spalte werden nur dann hinzugefügt, wenn der Koordinator sie für den konkreten Auftrag als notwendig einschätzt. Damit bleibt der Subagent-Kontext schlank und der Koordinator behält die Übersicht.
+
+---
+
+## Subagent-Brief — Pflichtfelder
+
+Jeder Koordinator-Brief an einen Subagenten enthält diese Felder (keine Felder auslassen):
+
+```
+## Ziel
+<1–2 Sätze: Was soll der Subagent erreichen?>
+
+## Scope / erlaubte Quellen
+<Pflicht-Lesen-Spalte aus Scope-Tabelle oben — Subagent liest NUR diese, kein freies Repo-Wandern>
+
+## Erlaubte Tools
+<z.B. Read, Bash (read-only), Write/Edit (nur mit Freigabe)>
+
+## Output- / Rückgabeformat
+Endbericht KNAPP, in fester Reihenfolge:
+1. pytest-Zusammenfassungszeile (falls relevant)
+2. grep-Belegzeilen (Verdrahtung)
+3. git diff --stat (falls Schreib-Task)
+4. Gewählte Werte / Befunde
+Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
+
+## Selbstprüf-Checkliste (Pflicht vor Rückgabe)
+- [ ] Verdrahtung: neuer Code per grep belegt, dass Nicht-Test-Code ihn aufruft
+- [ ] Heimat: neuer Code sitzt im richtigen Modul
+- [ ] Gates: pytest grün, Coverage-Floor ≥ 92 % gehalten, keine vorher-grünen Tests rot
+- [ ] Generic-src: keine Fraktions-Strings/-Checks in src/
+- [ ] Format: black + ruff (+ isort) ausgeführt
+- [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
+      NIE direkt im Chat mit dem Stakeholder kommuniziert
+```
+
+**Kanal-Pflicht:** Stakeholder-Entscheidungen gehen **ausschließlich** über die Mailbox
+`docs/handoff/` (Marker `NEEDS-DECISION`) — nie direkt im Chat. Der Koordinator leitet weiter.

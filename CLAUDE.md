@@ -123,7 +123,7 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 
 1. **Regelkonform** — gegen `docs/work/wahapedia_*/` geprüft (nicht aus dem Gedächtnis).
 2. **Generisch** — keine neuen Fraktions-Strings/-Checks in `src/`; Entscheidungen aus YAML.
-3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 90 %; jeder Bugfix bekommt einen Regressionstest.
+3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 92 %; jeder Bugfix bekommt einen Regressionstest.
 4. **Architektur-Gate grün** — `tests/architecture/` (oder bewusste Änderung +
    `architecture_invariants.md`/`architecture.md` nachgezogen, kein stilles Aufweichen).
 5. **Clean Code** — `black`/`isort`/`ruff` sauber; Namen erklären *Was*.
@@ -138,22 +138,27 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 **Session starten — Plan vorlegen** (Default):
 > start next session
 
-→ `next_session.md` + Zieldatei + `backlog.md` lesen, dann **Planning vorlegen**: Prioritäten-
-Vorschlag + grobe Token-Schätzung je Aufgabe + Modus-Label. **Auf Freigabe warten**, dann starten.
+→ **Planner-Subagent beauftragen** (liest `next_session.md` + Zieldatei + `backlog.md` + Index laut
+`agent_scopes.md`, legt Planning-Entwurf als Datei ab); Koordinator legt den Entwurf dem Stakeholder
+vor. **Auf Freigabe warten**, dann Executor-Subagent starten.
 
 **Session starten — direkt los** (Plan ist schon freigegeben, Shortcut):
 > Beginne mit der nächsten Session. Der Plan ist freigegeben.
 
-→ `next_session.md` + Zieldatei lesen, direkt mit der ersten Aufgabe starten — kein erneuter Plan nötig.  
+→ Koordinator liest `next_session.md` (Pfade/Marker), beauftragt direkt den ersten Executor-Subagent —
+kein erneuter Plan nötig.  
 Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, hat dieses Vorrang.
 
 **Session beenden + committen:**
 > Bereite die nächste Session vor. Committen.
 
-→ **Review** (DoD + Sessionstand) → **Retro** (getrennter Schritt) endet mit einer **nummerierten,
-entscheidbaren Maßnahmen-Liste**; der Stakeholder wählt/gibt frei → **Abschluss** schreibt nur das
-Freigegebene in die Artefakte: `next_session.md` aktualisieren (Stand, nächster Schritt, neue
-Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
+→ **Review** via Reviewer-Subagent (Opus, DoD + Sessionstand; Befund als Datei, Koordinator reicht
+wortgleich durch) → **Retro** (getrennter Schritt, Koordinator moderiert) endet mit einer
+**nummerierten, entscheidbaren Maßnahmen-Liste**; der Stakeholder wählt/gibt frei → **Abschluss**
+schreibt nur das Freigegebene in die Artefakte: `next_session.md` aktualisieren (Stand, nächster
+Schritt, neue Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
+**Freigabe-Gate bleibt:** Plan + Dateiliste zeigen, auf explizite Freigabe warten — nur das "wer tut
+die Arbeit" ist delegiert.
 
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen
@@ -207,6 +212,9 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   Stakeholder asynchron über **Mailbox-Datei** (`docs/handoff/`, Marker `NEEDS-DECISION`/`ANSWERED`/
   `DONE`), Resumption per `SendMessage` (intakter Kontext). Scoping je Aufgabe über den Index
   `docs/reference/agent_scopes.md`. Verfassung: `docs/governance/operating_model.md` (ADR-0007, seit S102 verbindlich).
+- **Kanal-Regel:** Inhaltliche Subagenten (Planner/Executor/Reviewer) kommunizieren mit dem
+  Stakeholder NIE direkt im Chat, sondern über die Mailbox-Datei (`docs/handoff/`, Marker
+  `NEEDS-DECISION`/`ANSWERED`/`DONE`) via Koordinator (operating_model.md, ADR-0007).
 
 ---
 
@@ -228,7 +236,7 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 pytest --tb=short
 ```
 
-Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **90 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **92 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
 
 ### Regel-Abdeckung — Akzeptanz-Katalog (fachliches Sicherheitsnetz)
 

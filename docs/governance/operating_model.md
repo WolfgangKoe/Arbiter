@@ -12,27 +12,49 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 ---
 
-## Fundament: vier Entscheidungsprämissen
+## Abschnitts-Karte {#map}
+
+| Abschnitt | Anker | Zweck (3–5 Worte) |
+|---|---|---|
+| Fundament: vier Entscheidungsprämissen | [§fund](#fund) | Prämissen-Übersicht, Artefakt-Zuordnung |
+| Aufbauorganisation: Rollen & Model-Tier | [§roles](#roles) | Wer macht was, welches Tier |
+| Spezialisierte Subagenten (Roster) | [§roster](#roster) | Wiederkehrende Spezial-Subagenten |
+| Gemeinsame Regeln für alle Subagenten | [§subrules](#subrules) | Leitplanken, Scope-Pflicht |
+| Ablauforganisation: Events | [§events](#events) | Event-Zyklus (1–7) |
+| Event 1 · Planning | [§ev1](#ev1) | Session-Start, Planner-SA |
+| Event 2 · Plan-Freigabe | [§ev2](#ev2) | Gate vor Implementierung |
+| Event 3 · Sprint | [§ev3](#ev3) | Implementierung via Executor-SA |
+| Event 4 · DoD-Review | [§ev4](#ev4) | 7-Punkte-Fertig-Check |
+| Event 5 · Review→Retro→Abschluss | [§ev5](#ev5) | Session-Ende, Reviewer-SA |
+| Event 6 · Kontext-Korridor | [§ev6](#ev6) | Wind-down bei ~135k Token |
+| Event 7 · Refinement | [§ev7](#ev7) | Fotos → Inbox → Backlog |
+| Entscheidungsmodi | [§modes](#modes) | Gate/Konsent/Konsens/Veto |
+| Eskalation & Kommunikationswege | [§escalate](#escalate) | Kanal-Regel, Mailbox |
+| Visualisierung | [§viz](#viz) | Diagramme A + B |
+
+---
+
+## Fundament: vier Entscheidungsprämissen {#fund}
 
 | Prämisse | Was sie bei uns ist | Kanonisches Artefakt |
 |---|---|---|
-| **1 · Programme** | Zweckprogramme (Ziele, Backlog, nächster Schritt) + Konditionalprogramme (Tests, Coverage-Gate ≥ 80 %, Architektur-Gate, Rule-Conformance-Catalog, Debt-Scoreboard, CLAUDE.md-Regeln) | [docs/goals/](../goals/) · [docs/spec/architecture_invariants.md](../spec/architecture_invariants.md) |
+| **1 · Programme** | Zweckprogramme (Ziele, Backlog, nächster Schritt) + Konditionalprogramme (Tests, Coverage-Gate ≥ 92 %, Architektur-Gate, Rule-Conformance-Catalog, Debt-Scoreboard, CLAUDE.md-Regeln) | [docs/goals/](../goals/) · [docs/spec/architecture_invariants.md](../spec/architecture_invariants.md) |
 | **2 · Kommunikationswege / Zuständigkeiten** | Wer redet mit wem, wer entscheidet in welchem Modus, wie Eskalation fließt | dieses Dokument |
 | **3 · Personal / Model-Tier** | Welche Rolle bekommt welches Modell, Tiering-Faustregel | dieses Dokument (Abschnitt "Rollen & Model-Tier") |
 | **4 · Kultur** | Prinzipien, die nicht pro Task neu verhandelt werden; Freigabe-Pflicht, Generic-src-Regel, No-Laziness-Standard | [CLAUDE.md](../../CLAUDE.md) |
 
 ---
 
-## Aufbauorganisation: Rollen & Model-Tier
+## Aufbauorganisation: Rollen & Model-Tier {#roles}
 
 | Rolle | Tier | Delegierbar? | Kernaufgaben |
 |---|---|---|---|
-| **Koordinator / "Arbiter"** (ADR-0007) | Opus, Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. |
+| **Koordinator / "Arbiter"** (ADR-0007) | Opus, Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. |
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
 | **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
 | **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil) | Ja — als Subagent | Liest `next_session.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
-| **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 80 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
+| **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 92 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
 
 ### Tiering-Faustregel
 
@@ -53,7 +75,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 ---
 
-## Spezialisierte Subagenten (Roster)
+## Spezialisierte Subagenten (Roster) {#roster}
 
 Die fünf Grundrollen oben sind die *Stellen-Typen*. In der Praxis setzt der Orchestrator daraus
 benannte **Spezial-Subagenten** für wiederkehrende Aufgaben zusammen — damit wir mit der Zeit ein
@@ -73,7 +95,7 @@ expliziter Begründung im Auftrag** (O2-MUST, s. o.), sonst gilt die Untergrenze
 | **Design-System-Crew** | Opus plant/reviewt · Sonnet sucht · Sonnet setzt um | **Write** | Sprint | UI-Komponenten vereinheitlichen (z. B. gemeinsame Buff-/Hinweis-Komponente) — Code-Edits freigabepflichtig |
 | **Executor / Implementer** | Sonnet | **Write** | Sprint | Implementierung nach vollständig freigegebenem Plan; kein eigenes Design |
 
-## Gemeinsame Regeln für alle Subagenten
+## Gemeinsame Regeln für alle Subagenten {#subrules}
 
 Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
 [context-engineering-slides.md](../reference/context-engineering-slides.md) Slide 17, „Sub-Agents"):
@@ -95,24 +117,27 @@ Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
    auch via Subagent ([ADR-0005](decisions/0005-stehende-subagent-freigabe.md)). Read-only-Subagenten = stehende Freigabe.
 6. **Kosten:** Multi-Agent kostet grob das **15-fache** an Token ggü. einem einfachen Chat → gezielt
    einsetzen (Fleißarbeit/Read-Fan-out), nicht reflexhaft.
+7. **Scope-Pflicht:** Jeder Koordinator-Brief übernimmt die Pflicht-Lesen-Spalte aus
+   `docs/reference/agent_scopes.md` als `erlaubte Quellen` — der Subagent liest ausschließlich
+   diese, kein freies Repo-Wandern.
 
 ---
 
-## Ablauforganisation: Events
+## Ablauforganisation: Events {#events}
 
 Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinnert in ihren Artefakten, nicht im Bewusstsein. Die folgenden Events sind deshalb explizit auf Diskontinuität ausgelegt.
 
 **🔧 = Hook-vollzogen:** Events, die als Konditionalprogramm formulierbar sind, feuert die Harness (`.claude/settings.json` + `tools/*.py`) statt sie der Erinnerung des Orchestrators zu überlassen. Siehe [ADR-0003](decisions/0003-events-als-hooks-vollzogen.md).
 
-1. **Planning (Session-Start)** — zwei Varianten:
+1. <a id="ev1"></a>**Planning (Session-Start)** — zwei Varianten:
    - **Default ("start next session"):** [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Koordinator sofort loslegen. **Auslagerung (ADR-0007):** Den Planning-Entwurf erstellt ein **Planner-Subagent** (liest next_session + Ziel + Backlog + Index) und legt ihn als Datei ab; der Koordinator legt ihn dem Stakeholder zur Freigabe vor, ohne die Quellen selbst zu lesen.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `next_session.md` starten.
 
-2. **Plan-Freigabe (Gate-Event)** 🔧
+2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
    Orchestrator legt vor: Plan + betroffene Dateien + grobe Token-Schätzung + Modus-Label (Gate / Konsent / Konsens). Stakeholder gibt explizit frei. Erst danach Implementierung. **Harter Vollzug:** `tools/freigabe_gate.py` blockiert Edit/Write/NotebookEdit, bis der Stakeholder physisch freigibt (`touch .claude/.freigabe`); SessionStart entfernt den Marker → jede Session neu scharf.
 
-3. **Sprint (Implementierung)**
-   Orchestrator führt selbst aus oder routet an Subagenten. **Stehende Subagent-Freigabe ([ADR-0005](decisions/0005-stehende-subagent-freigabe.md)):** Der Orchestrator setzt Subagenten ohne Einzel-Freigabe ein, wann immer angebracht — er schlägt sie proaktiv vor und startet sie selbst (Tiering-Entscheidung bleibt sein Urteil), nennt aber transparent Auftrag + Tier. Datei-/einstellungsändernde Arbeit (Code/Memory/Skill) bleibt freigabepflichtig — auch wenn ein Subagent sie ausführt. Subagenten laufen im isolierten Kontext, eskalieren Überraschungen sofort. **Jeder Subagent-Auftrag enthält eine Selbstprüf-Checkliste** — fehlt sie, ist der Auftrag unvollständig. Sie hält den Opus-Review billig, weil der Subagent seine Arbeit selbst belegt:
+3. <a id="ev3"></a>**Sprint (Implementierung)**
+   Orchestrator routet an Subagenten (ADR-0007) — keine Direkt-Ausführung. **Stehende Subagent-Freigabe ([ADR-0005](decisions/0005-stehende-subagent-freigabe.md)):** Der Orchestrator setzt Subagenten ohne Einzel-Freigabe ein, wann immer angebracht — er schlägt sie proaktiv vor und startet sie selbst (Tiering-Entscheidung bleibt sein Urteil), nennt aber transparent Auftrag + Tier. Datei-/einstellungsändernde Arbeit (Code/Memory/Skill) bleibt freigabepflichtig — auch wenn ein Subagent sie ausführt. Subagenten laufen im isolierten Kontext, eskalieren Überraschungen sofort. **Jeder Subagent-Auftrag enthält eine Selbstprüf-Checkliste** — fehlt sie, ist der Auftrag unvollständig. Sie hält den Opus-Review billig, weil der Subagent seine Arbeit selbst belegt:
    - **Verdrahtung:** für jeden neuen Helfer per `grep` belegen, dass **Nicht-Test-Code** ihn aufruft — kein verwaister Parallel-Pfad (S70: 3/6 Helfer grün getestet, aber nie verdrahtet).
    - **Heimat:** neuer Code sitzt im richtigen Modul (z. B. State-Mutationen in `unit_mutations.py`), nicht als Duplikat.
    - **Gates:** `pytest --tb=short` grün, Coverage-Floor gehalten, keine vorher-grünen Tests rot; **Generic-src** (keine Fraktions-Strings/-Checks in `src/`).
@@ -121,10 +146,10 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
    **„Subagent-grün" ≠ „verdrahtet":** Der Orchestrator-Review prüft Wiring + Architektur-Heimat, nicht nur die Testfarbe (S70-Lehre).
 
-4. **DoD-Review (Definition of Done)**
+4. <a id="ev4"></a>**DoD-Review (Definition of Done)**
    Der 7-Punkte-Review aus [CLAUDE.md](../../CLAUDE.md): Regelkonform · Generisch · Tests grün · Architektur-Gate grün · Clean Code · UI manuell verifiziert · Artefakte aktuell. Erst wenn alle Punkte erfüllt (oder begründet n/a): fertig.
 
-5. **Review → Retro → Abschluss (Session-Ende)**
+5. <a id="ev5"></a>**Review → Retro → Abschluss (Session-Ende)**
    Drei Schritte in dieser Reihenfolge:
    - **Review** 🔧 — den technischen DoD-Review (Event 4) erstellt ein **Reviewer-Subagent** (Opus, ADR-0007) im eigenen Fenster und liefert ihn als Datei; der Koordinator reicht ihn durch (Herkunft nennen). **Plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Dazu eine knappe **Ziel-Fortschritt-Zeile** — „Ziel-Fortschritt: ja / teils / nein, woran sichtbar" (Soll-Ist gegen das aktive Ziel, **ohne** Token-Zielzahl): koppelt den Output an den Ziel-Fortschritt, nicht an die Token-Menge. Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md). **Harter Vollzug:** `tools/test_report_reminder.py` (PostToolUse auf pytest) injiziert diese Teil-Pflicht nach jedem Testlauf.
    - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `next_session.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
@@ -148,19 +173,19 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
    **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `next_session.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
-6. **Kontext-Korridor-Event (~135 k Token)** 🔧
+6. <a id="ev6"></a>**Kontext-Korridor-Event (~135 k Token)** 🔧
    Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen. **Harter Vollzug:** `tools/session_context.py` (UserPromptSubmit) eskaliert gestuft — ≥120 k Warnung + Retro-Vorankündigung, ≥135 k laute Stopp-Direktive.
 
-7. **Refinement-Event**
+7. <a id="ev7"></a>**Refinement-Event**
    Ideen aus [Fotos/](../../Fotos/) → [docs/inbox/](../inbox/) → gemeinsames Verständnis mit Stakeholder → akzeptierte Ideen in [backlog.md](../goals/backlog.md). Siehe [docs/inbox/README.md](../inbox/README.md).
 
 ---
 
-## Entscheidungsmodi
+## Entscheidungsmodi {#modes}
 
 | Modus | Wann | Wer entscheidet | Beispiele |
 |---|---|---|---|
-| **Gate / Konditional** | Geschlossene, deterministische Frage | Das Programm — niemand stimmt ab | Regelkonformität ja/nein, Tests grün, Coverage ≥ 80 %, Architektur-Invariante |
+| **Gate / Konditional** | Geschlossene, deterministische Frage | Das Programm — niemand stimmt ab | Regelkonformität ja/nein, Tests grün, Coverage ≥ 92 %, Architektur-Invariante |
 | **Konsent** (kein Einspruch genügt) | Bounded Entscheidung mit klarem Default | Orchestrator schlägt vor; Gates + Stakeholder haben Einspruch | Konkrete Implementierungswahl in freigegebenem Ziel, Modell-Tier-Wahl für Subagent |
 | **Konsens** (echte Ausrichtung) | Mehrdeutig, Sinn-tragend | Stakeholder + Orchestrator gemeinsam | Scope (Fraktion vs. global), UI-Layout-Konzept, Ziel-Priorität, Prämissen-Änderung |
 | **Veto** ("Einspruch schlägt alles") | Deontische Grenze — kein Abwägen | Jeder einzelne Wächter | Rote Tests (evtl. gewollt → STOP), Architektur-Gate-Bruch, Generic-src-Verletzung, Security |
@@ -169,7 +194,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
 ---
 
-## Eskalation & Kommunikationswege
+## Eskalation & Kommunikationswege {#escalate}
 
 Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 
@@ -182,7 +207,7 @@ Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 
 ---
 
-## Visualisierung
+## Visualisierung {#viz}
 
 ### Diagramm A — Aufbauorganisation / Kommunikationswege
 

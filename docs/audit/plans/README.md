@@ -12,7 +12,7 @@ Each executor: read the plan fully before starting, honor its STOP conditions,
 run every verification command, and update your row below when done.
 
 **Projekt-Grundregeln (gelten für jeden Plan):**
-- `pytest --tb=short` = Messbefehl; Coverage-Gate 80 % (Stand 013-Planung: 90 %, 787 Tests).
+- `pytest --tb=short` = Messbefehl; Coverage-Gate 92 % (`fail_under` in `pyproject.toml`).
 - Wird ein VORHER grüner Test rot und steht NICHT in der „erwartete
   Test-Migrationen"-Liste des Plans: STOP, Nutzer fragen (CLAUDE.md).
 - Render-Code (uiLayout, *Phase.py) ist von der Coverage ausgenommen →
@@ -22,51 +22,21 @@ run every verification command, and update your row below when done.
   zeigen, Freigabe abwarten, dann implementieren. Die betroffenen Steps sind
   in den Plänen 013/014/015/016 markiert.
 
-## Execution order & status
-
-| Plan | Title | Priority | Effort | Depends on | Status |
-|------|-------|----------|--------|------------|--------|
-| 001 | CI-Verifikations-Gates + Coverage einführen | P1 | M | — | DONE — 80 %-Coverage-Gate aktiv (90 % gemessen, 760 Tests grün); Lint-Gates (ruff/black/isort) + mypy (informational) + Coverage in `.woodpecker.yml` und `.github/workflows/deploy.yml`; `pyproject.toml` + `requirements-dev.txt` vollständig. |
-| 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | P1 | S | — | DONE — `_safe_fromstring` ersetzt `ET.fromstring`; Regressionstest für Entity-Expansion; 761 Tests grün. |
-| 003 | WAAAGH-Angriffsbonus zentralisieren (3× Duplikat entfernen) | P2 | S | 001 | DONE — `waaagh_attack_bonus()` in `ability_engine.py`; 3 Duplikate in `_common.py` ersetzt; 3 neue Tests; 764 Tests grün. |
-| 004 | `lookup()`-`StopIteration` durch klare Fehlermeldung ersetzen | P2 | S | 001 | DONE — KeyError mit "out of sync"-Meldung; Regressionstest; 765 Tests grün. |
-| 005 | Loader-YAML pro Prozess cachen (Re-Parse pro Rerun beenden) | P3 | S | 001 | DONE — `_ROUND_CHOICE_CACHE` + `_ROUND_CHOICE_LABEL_CACHE`; 2 neue Tests; 767 Tests grün. |
-| 009 | Modellgruppen: Duplikat-IDs mergen, unbekannte Weapon-Refs laut melden | P2 | S | — | DONE — `_resolve_refs` helper + merge-block in `_resolve_model_groups`; 2 neue Tests; 769 Tests grün, 90 % Coverage. |
-| 010 | Tote Variablen entfernen + F841-Lint-Gate scharf schalten | P2 | S | — (vor 008) | DONE — 5 tote Variablen entfernt; `hit_mod` ins Log; F841 aus per-file-ignores; 2 neue Tests; 771 Tests grün, 90 % Coverage. |
-| 006 | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | P2 | M | — | DONE — `YamlDataError` + `load_yaml` in `loader.py`; 17 Stellen umgestellt; 2 Stellen in `game_state.py`; `import yaml` entfernt; 2 neue Tests; 773 Tests grün, 90 % Coverage. |
-| 007 | Scenario-Namen gegen Allowlist validieren (Pfad-Traversal) | P2 | S | — | DONE — `_VALID_NAME` regex in `scenarios.py`; `get_scenario_data` gibt None bei ungültigem Namen; `save_scenario` wirft ValueError; 3 neue Tests; 776 Tests grün, 90 % Coverage. |
-| 008 | `_common.py` entlasten: Attack-Mathe in gemessenes Modul + Dice-HTML auslagern | P2 | M–L | 010 (zwingend), 009 (empfohlen) | DONE — `attack_math.py` (6 Funktionen, 89 % Coverage) + `dice_html.py` (13 Funktionen/Konstanten); `_common.py` von 2084 → 1594 Zeilen; Re-Exports halten alle Aufrufer/Tests stabil; 776 Tests grün, 90 % Coverage. |
-| 011 | WAAAGH datengetrieben (letzte ORK-Hardcodes aus `src/`) | P3 | M | nicht parallel zu 008 | DONE — `_unit_matches_target` + `active_waaagh_effects` + `charge_after_advance_allowed` in `ability_engine.py`; `waaagh_attack_bonus` liest Sub-Effekte aus YAML; `chargephase.py`-Hardcode ersetzt; `target_keywords`/`target_keywords_any` in `faction_abilities.yaml` (waaagh_stage1/2); `Effect.effects: list[dict]|None` neu; 4 neue Tests + 2 bestehende Tests aktualisiert; 780 Tests grün, 90 % Coverage. |
-| 012 | Loader-Caching vervollständigen + Sondercache entfernen | P3 | S | 006 (zwingend, gleiche Datei) | DONE — 5 Cache-Dicts + Guards in `loader.py` (`_FACTION_ABILITIES_CACHE`, `_UNIT_ABILITIES_CACHE`, `_SUBFACTION_ABILITIES_CACHE`, `_STRATAGEM_CACHE`, `_DENY_WARGEAR_CACHE`); `_ABILITIES_CACHE` aus `armyList.py` entfernt; 4 neue Identitäts-Tests; 787 Tests grün, 90 % Coverage. |
-
-## Feature-Queue (Pläne 013–018, 2026-06-12)
+## Offene Pläne (aktive Queue)
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| 013 | P18: Einheitlicher Gruppen-Flow (jede Einheit = Gruppen) + Ziele neben Untergruppen | P1 (HOCH) | M–L | — | **DONE** (2026-06-12) |
-| 014 | P17: Verteidiger-Korrektur bei Schadenszuweisung gegen Gruppen-Einheiten | P1 (HOCH) | M | 013 (zwingend) | ✅ **DONE** (Teil A S80 + Teil B S82) — `group_wounds` universell, Lock-Logik (`select_damage_target_group`/`get_locked_group`/`apply_damage`-Lenkung), UI Zustand A/B/C in `_common.py`, `test_group_flow.py` grün. **Offen nur:** manuelle Nobz/Szarekh-UI-Verifikation. |
-| 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
-| 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
-| 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
-| 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
-| [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` (MWBD/Orb/Subgruppe) | P2 (MITTEL) | S | — | **DONE** (2026-06-20) — `TargetSelectionRequest` + `pending_target_request` ersetzt 3 alte State-Keys; `render_unit_selectbox` für Veil + Mortal-Target; 1007 Tests grün. |
-| [020](020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch (Option B) | P2 (MITTEL) | S–M | 019 (empf.) | ✅ DONE (S83) — Step 4 verworfen, PHAERON generalisiert; manueller Zwei-Orb-Check offen |
-| [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | P2 (MITTEL) | S | — | ✅ DONE (S84) — 12 Arkana → `faction_abilities.yaml` (`descriptive`+`cost_pts`); `load_faction_abilities` skippt descriptive; `load_points` liest cost_pts generisch via `_add_faction_ability_costs`; INV-4b `arkana`-Literal entfernt; 1091 Tests, 92.96 % |
-| [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | P1 (HOCH) | M | — | DONE (S77) |
-| [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework: `overview.md` schlank + separate `session_archive.md` (dedup, auto) | P0 (HÖCHSTE) | M | — | **DONE** (2026-06-21) — overview.md 18 KB→3.9 KB, Reihenfolge nach Konzept; neue `session_archive.md` (Hauptzeile + SA-Subzeilen, dedup je Session-ID); Schema-Migration aus `subagent_archive.json` verlustfrei; tote Renderer `_render_subagents`/`_render_subagent_archive` entfernt; 1011 Tests grün, 92.44 %. |
 | [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | TODO — blockiert 016/017; sechs Protokolle, neue Engine-Effekt-Typen (`ap_on_unmod_wound_6`, `light_cover_if_stationary`, `strength_if_charged`, `ignore_cover_half_range`, `shoot_after_fall_back`); Sudden Storm P + Undying Legions schon konform. |
+| 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
+| 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
+| 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
 | [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
-| [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring (9 Protokoll-Direktiven) + Arkana-Schema + 1 Dispatch-Pilot (Failsafe) | P2 (MITTEL-HOCH) | M | 021 ✅ | ✅ **DONE (S87/S88)** — Steps 1–4 (strength/ap/move/leadership-Direktiven + rerolls + advance_and_charge + RP-Modifikatoren, S86), Steps 5–6 (Failsafe Overcharger → `activated` `buff_stat`-Dispatch; alle 12 Arkana strukturiert + engl. `rule_text`; alle 12 Punktkosten −5 vs. Wahapedia; 11/12 bleiben begründet `descriptive`, S87), Step 7 (Lint + Doku: `faction_abilities.md` Wiring-/Arkana-Status, `backlog.md` #2, S88). 1116 Tests grün/93 %, INV-4b grün. **Offen nur:** manuelle UI-Verifikation (Failsafe aktivierbar + Direktiv-Anzeigen). |
-| [027](027-doku-org-alignment.md) | Doku-Org-Alignment: ADR-0007 dünner Koordinator vollständig in next_session/CLAUDE/operating_model/agent_scopes nachziehen (O1) | P2 (MITTEL) | S–M | — | **DONE** (2026-06-26) — Pilot-Vorbehalt gestrichen (operating_model + ADR-0007); Diagramme A/B nachgezogen (Planner+Reviewer als Subagenten); next_session ADR-0007-Regeln + agent_scopes als Pflichtlektüre; CLAUDE.md ADR-0006-Verweis + Pilot-Status entfernt; agent_scopes Reporting/Token-Tooling-Scope. |
-| [028](028-reporting-kontext-umbau.md) | Reporting-/Kontext-Umbau (O3–O7): Warnschwelle 135k, Archiv-Überschreib-Bug, Modellmix ohne Koordinator, Kontext-nach-Quelle, Planning-Template | P1 (HOCH) | M | 023 ✅ | **DONE** (2026-06-26) — O3 135k-Schwelle; O4 peak-basierter Upsert (Option B: `--write` nach Subagent); O5 Mix-Balken nur sub_by_tier; O6 Kontext-Quellen-Abschnitt; O7 Planning-Template in agent_scopes.md. 1170 Tests grün, 93.22 %, Lint sauber. |
+| 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 
-**Empfohlene Reihenfolge (akt. S102, 2026-06-26): 019·023·022·014·020·021·024 DONE → 025 → 016 → 018 → 015 → 026 → 017.**
-**025 (NEU, S95) rückt vor 016/017**: Der S95-Befund zeigte, dass die Command-Protocol-
-Direktiven im YAML nicht-kanonisch sind; Stakeholder-Entscheid (b) = auf echte 9E-Regeln
-umstellen. 016 Group A / Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte
-verschwinden); 016 behält nur RP-Hint + Dynastiebonus, 017 muss die neuen AP-on-6-Effekte
-mitdenken. 016 und 018 sind unabhängig. 015 ist das größte Stück und profitiert vom
-vereinheitlichten Flow aus 013. 017 zuletzt.
+**Empfohlene Reihenfolge (akt. S105): 025 → 016 → 018 → 015 → 026 → 017.**
+025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
+016 Group A / Conquering-Tyrant-P-Morale obsolet nach 025; 016 behält nur RP-Hint + Dynastiebonus.
+016 und 018 sind unabhängig. 015 = größtes Stück. 017 zuletzt.
 
 **Dependency notes (Feature-Queue):**
 - **014 zwingend NACH 013**: 013 macht jede Einheit zur Gruppen-Einheit
@@ -96,39 +66,6 @@ vereinheitlichten Flow aus 013. 017 zuletzt.
 
 Status-Werte: TODO | IN PROGRESS | DONE | BLOCKED (mit Einzeiler-Grund) | REJECTED (mit Begründung)
 
-**Empfohlene Ausführungsreihenfolge der offenen Pläne:** 009 → 010 → 006 → 007 → 008 → 011 → 012.
-(011/012 sind P3 und können beliebig nach hinten rutschen; 012 erst nach 006.)
-
-## Dependency notes
-
-- **001 zuerst.** Es etabliert die Verifikations-Gates (Lint/Coverage), die jede
-  Folge-Änderung absichern. 003/004/005 sind „depends on 001" nur im Sinne von
-  *reihenfolge-empfohlen* — sie laufen technisch auch ohne, profitieren aber von
-  den Gates. 002 ist davon unabhängig und kann parallel zu 001 laufen.
-- 002 und 001 fassen beide CI-/Dependency-Dateien an (`requirements*.txt`, CI-YAML).
-  Werden sie parallel von verschiedenen Executors bearbeitet, droht ein Merge-Konflikt
-  in `requirements.txt`/`requirements-dev.txt` — nacheinander mergen.
-- **010 zwingend vor 008**: Plan 008 verschiebt Code, in dem eine der toten
-  Variablen liegt (`_render_dice_save_block`).
-- **006, 009 und 012 ändern alle `loader.py`** — strikt nacheinander ausführen
-  (Reihenfolge: 009 → 006 → 012), nie parallel.
-- **008 und 011 berühren beide die `ability_engine`-Importe in `_common.py`** —
-  nicht parallel ausführen.
-
-## Findings aus dem Audit, die NICHT als Plan vorliegen
-
-Diese standen im Bericht, wurden aber (noch) nicht zur Umsetzung ausgewählt:
-
-- **#6** ✅ jetzt geplant → Plan 006 (Re-Audit 2026-06-11).
-- **#7** ✅ jetzt geplant → Plan 007 (Re-Audit 2026-06-11).
-- **#8** ✅ Woodpecker-Pipeline gelöscht; GitHub Actions ist die einzige CI.
-- **#9** ✅ `Makefile` (Flask/Tailwind-Reste) gelöscht.
-- **#10** ✅ `.env.example` auf `DATA_DIR=data` reduziert (FLASK_*-Einträge entfernt).
-- **#11** ✅ jetzt geplant → Plan 008 (Re-Audit 2026-06-11; nachgeschärft:
-  Mathe-Extraktion ins Coverage-Netz statt kosmetischer Voll-Split).
-- **Rest von #3** (WAAAGH-Keyword-Hardcodes) → Plan 011; **Rest von #5**
-  (übrige ungecachte Loader) → Plan 012.
-
 ## Findings considered and rejected (nicht erneut auditieren)
 
 - `weapon_max == 0`-„Crash" (`_common.py:1836`): `st.number_input(min=0, max=0)` crasht nicht,
@@ -148,3 +85,32 @@ Diese standen im Bericht, wurden aber (noch) nicht zur Umsetzung ausgewählt:
 Das im Erst-Audit gefundene GitHub-Token in der Remote-URL wurde bei GitHub
 **widerrufen** und aus `.git/config` entfernt (vom Nutzer bestätigt). Kein
 offener Punkt mehr.
+
+---
+
+## Abgeschlossene Pläne (Archiv)
+
+| Plan | Titel | Abgeschlossen |
+|------|-------|---------------|
+| 001 | CI-Verifikations-Gates + Coverage einführen | 2026-06-11 |
+| 002 | `.rosz`-XML-Parsing gegen Entity-Expansion härten (`defusedxml`) | 2026-06-11 |
+| 003 | WAAAGH-Angriffsbonus zentralisieren | 2026-06-11 |
+| 004 | `lookup()`-`StopIteration` durch klare Fehlermeldung ersetzen | 2026-06-11 |
+| 005 | Loader-YAML pro Prozess cachen | 2026-06-11 |
+| 006 | `yaml.safe_load` → `load_yaml`-Helper mit klarer Fehlermeldung | 2026-06-11 |
+| 007 | Scenario-Namen gegen Allowlist validieren (Pfad-Traversal) | 2026-06-11 |
+| 008 | `_common.py` entlasten: Attack-Mathe + Dice-HTML auslagern | 2026-06-12 (S40) |
+| 009 | Modellgruppen: Duplikat-IDs mergen, unbekannte Weapon-Refs melden | 2026-06-11 |
+| 010 | Tote Variablen entfernen + F841-Lint-Gate scharf schalten | 2026-06-11 |
+| 011 | WAAAGH datengetrieben (letzte ORK-Hardcodes aus `src/`) | 2026-06-12 (S41) |
+| 012 | Loader-Caching vervollständigen + Sondercache entfernen | 2026-06-12 (S42) |
+| 013 | P18: Einheitlicher Gruppen-Flow + Ziele neben Untergruppen | 2026-06-12 (S43) |
+| [014](014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | S80+S82 |
+| [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` | 2026-06-20 (S74) |
+| [020](020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch | S83 |
+| [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | S84 |
+| [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | S77 |
+| [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework | 2026-06-21 (S85) |
+| [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | S87/S88 |
+| [027](027-doku-org-alignment.md) | Doku-Org-Alignment: ADR-0007 dünner Koordinator | 2026-06-26 |
+| [028](028-reporting-kontext-umbau.md) | Reporting-/Kontext-Umbau (O3–O7) | 2026-06-26 |
