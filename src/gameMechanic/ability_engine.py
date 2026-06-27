@@ -291,7 +291,7 @@ def get_active_round_choice_shoot_after_fall_back(atk_player: str, atk_uid: str)
     """Hit modifier from Conquering Tyrant D2 (shoot_after_fall_back) when active.
 
     Class A: returns −1 (as a negative int) when the directive is active AND the
-    attacking unit's movement_choice == 'fall_back'. Returns 0 otherwise.
+    attacking unit's movement_choice == 'retreated'. Returns 0 otherwise.
 
     9E rule: "This unit is eligible to shoot in a turn in which it Fell Back, but if
     it does, then until the end of the turn, each time a model in this unit makes a
@@ -300,7 +300,7 @@ def get_active_round_choice_shoot_after_fall_back(atk_player: str, atk_uid: str)
     if not _active_directive_has_type(atk_player, "shoot_after_fall_back"):
         return 0
     state = st.session_state.get(units_key_for(atk_player), {}).get(atk_uid, {})
-    if state.get("movement_choice") != "fall_back":
+    if state.get("movement_choice") != "retreated":
         return 0
     effects = _active_directive_effects(atk_player)
     return sum(

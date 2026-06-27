@@ -620,8 +620,11 @@ def test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_whe
 ):
     # 9E Directive 2: eligible to shoot after Fall Back with −1 Hit. Class A.
     # units_key_for("Necrons") == "p1_units" because first_player == "Necrons".
+    # Migration note: movement_choice is "retreated" (the value the app sets in
+    # movementPhase.py / unit_mutations.py) — the earlier "fall_back" value was
+    # app-foreign and never matched actual session state (bug root cause).
     session = _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
-    session["p1_units"] = {"uid-overlord": {"movement_choice": "fall_back"}}
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "retreated"}}
     assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == -1
 
 
@@ -635,7 +638,7 @@ def test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_not_fell_ba
 def test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_inactive() -> None:
     # Directive not active → no modifier.
     session = _protocol_session(None, None)
-    session["p1_units"] = {"uid-overlord": {"movement_choice": "fall_back"}}
+    session["p1_units"] = {"uid-overlord": {"movement_choice": "retreated"}}
     assert get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord") == 0
 
 

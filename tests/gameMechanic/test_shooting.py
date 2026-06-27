@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from unittest.mock import MagicMock
-
+from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
 from gameMechanic.shootingPhase import can_shoot
 
@@ -74,6 +74,63 @@ class TestCanShoot:
         unit.has_keyword.return_value = False
         unit.weapons = [weapon]
         assert can_shoot(self._state(in_melee=True), unit) is False
+
+
+# ---------------------------------------------------------------------------
+# can_shoot — Conquering Tyrant D2 (shoot_after_fall_back) exemption
+# ---------------------------------------------------------------------------
+
+_D2_ENGINE_PATH = "gameMechanic.shootingPhase.get_active_round_choice_shoot_after_fall_back"
+
+
+class TestCanShootD2FallBackExemption:
+    """Conquering Tyrant D2 allows a retreated unit to shoot (−1 Hit, Class A)."""
+
+    def _retreated_state(self) -> dict:
+        return {"turn_flags": {"retreated": True}, "in_melee": False, "in_reserve": False}
+
+    def test_retreated_unit_with_active_d2_can_shoot(self):
+        # D2 active: get_active_round_choice_shoot_after_fall_back returns −1 → exempt.
+        with patch(_D2_ENGINE_PATH, return_value=-1):
+            assert can_shoot(self._retreated_state(), faction="Necrons", uid="uid-overlord") is True
+
+    def test_retreated_unit_without_d2_cannot_shoot(self):
+        # D2 inactive: no exemption → normal retreated block applies.
+        with patch(_D2_ENGINE_PATH, return_value=0):
+            assert (
+                can_shoot(self._retreated_state(), faction="Necrons", uid="uid-overlord") is False
+            )
+
+    def test_retreated_unit_without_faction_uid_cannot_shoot(self):
+        # No faction/uid provided → D2 lookup skipped → retreated block applies.
+        # Regression guard: old call sites without faction/uid remain safe.
+        assert can_shoot(self._retreated_state()) is False
+
+    def test_d2_minus_one_hit_modifier_is_returned_when_retreated(self):
+        # Verifies that get_active_round_choice_shoot_after_fall_back returns −1
+        # when movement_choice == "retreated" and D2 is active — the value that
+        # _common.py folds into the hit modifier row (9E canonical −1 Hit).
+        # Patches both ability_engine.st and game_state.st so the dict-based
+        # session state reaches all layers without a live Streamlit runtime.
+        import gameMechanic.ability_engine as _eng
+        import gameMechanic.game_state as _gs
+
+        session = {
+            "first_player": "Necrons",
+            "p1_faction_dir": "necrons",
+            "p2_faction_dir": "necrons",
+            "round_choice_active_Necrons": "wh40k_9e.necrons.faction.protocol_conquering_tyrant",
+            "round_choice_directive_Necrons": "secondary",
+            "round_choice_assignments": {},
+            "p1_units": {"uid-overlord": {"movement_choice": "retreated"}},
+        }
+        st_mock = MagicMock()
+        st_mock.session_state = session
+        with patch.object(_eng, "st", st_mock), patch.object(_gs, "st", st_mock):
+            result = get_active_round_choice_shoot_after_fall_back("Necrons", "uid-overlord")
+        assert (
+            result == -1
+        ), "D2 must return −1 when movement_choice == 'retreated' and directive is active"
 
 
 # ---------------------------------------------------------------------------

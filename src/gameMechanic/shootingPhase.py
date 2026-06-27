@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
 from gameMechanic.game_state import units_key_for
 from uiLayout._common import (
     group_flow_attacker,
@@ -17,17 +18,31 @@ from uiLayout._common import (
 )
 
 
-def can_shoot(unit_state: dict, unit=None) -> bool:  # type: ignore[type-arg]
+def can_shoot(
+    unit_state: dict,
+    unit=None,  # type: ignore[type-arg]
+    faction: str | None = None,
+    uid: str | None = None,
+) -> bool:
     """Return True if the unit may shoot this turn.
 
     9E: units that advanced, retreated, are in melee (unless VEHICLE/MONSTER), or in reserve
     cannot shoot. VEHICLE and MONSTER units may shoot even while in melee (Big Guns Never Tire).
+
+    Exception: if faction and uid are provided and an active shoot_after_fall_back effect
+    grants the unit permission to shoot after falling back (e.g. Conquering Tyrant D2),
+    the retreated block is bypassed. The advanced and in_reserve blocks remain enforced.
     """
     flags = unit_state.get("turn_flags", {})
     if flags.get("shot"):
         return False
-    if flags.get("advanced") or flags.get("retreated") or unit_state.get("in_reserve"):
+    if flags.get("advanced") or unit_state.get("in_reserve"):
         return False
+    if flags.get("retreated"):
+        if faction and uid and get_active_round_choice_shoot_after_fall_back(faction, uid) != 0:
+            pass  # D2 exemption: unit may shoot after falling back
+        else:
+            return False
     if unit_state.get("in_melee"):
         if unit is not None and (unit.has_keyword("VEHICLE") or unit.has_keyword("MONSTER")):
             return True
@@ -73,7 +88,7 @@ class ShootingPhaseHandler:
         ginfo = group_flow_attacker()
         if ginfo is not None:
             atk_faction, atk_uid, atk_unit, atk_state = ginfo
-            if can_shoot(atk_state, atk_unit):
+            if can_shoot(atk_state, atk_unit, faction=atk_faction, uid=atk_uid):
                 in_melee = atk_state.get("in_melee", False)
 
                 def group_override() -> None:
@@ -125,7 +140,7 @@ def _active_shooting(
     if flags.get("shot"):
         st.info("Already shot this phase.")
         return
-    if not can_shoot(unit_state, unit):
+    if not can_shoot(unit_state, unit, faction=faction, uid=uid):
         if flags.get("advanced"):
             st.warning("Advanced this turn — cannot shoot.")
         elif flags.get("retreated"):
