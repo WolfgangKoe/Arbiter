@@ -59,12 +59,15 @@ agent_scopes Reporting/Token-Tooling + als Pflichtlektüre; CLAUDE.md ADR-0006-V
 Nächste Pläne: **025-Linie** (025 → 016 → 018 → 015 → 026 → 017). Executor-SA mit **Write**.
 
 **Reliability-Vermerk:** Live-Gauge (`session_context.py`) = verlässliche Zahl; overview.md archiv-abgeleitet.
-- **Befund Overwatch-Anzeige:** „trifft auf 6+" falsch bei Hold Steady (5+) → Plan 026/015.
+- **M1 — Befund Overwatch-Anzeige:** statische Caption `chargephase.py:144` („trifft auf 6+")
+  ist erst mit Overwatch/Hold-Steady korrekt → in **Plan-015-Scope** aufnehmen (durch echtes Overwatch ersetzen).
 
 ### ⚠️ Carry-over (offen)
 0. **ADR-0007 vollständig umgesetzt (O1 ✅).** Offen noch:
    (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
-   (e) SessionStart-Regel-Injektion (S95-Beleg).
+   (e) SessionStart-Regel-Injektion (S95-Beleg);
+   (f) **M3:** Governance-Doku bis auf Zeilennummer indizieren (präzise Querverweise);
+   (g) **M4:** diese Datei auf ≤70 Zeilen kürzen — Erledigtes (S103/S104-Detail) → `session_archive.md`.
 1. **Plan 025** aktive Hauptlinie; Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.
 2. **Manuelle UI-Verifikation (offen, PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron
    Befehlsphase; (b) Bug 5: Runde-2-Fernkampf-Zielwahl; (c) **S103 Bug-Fixes:** stationär+D1 →
