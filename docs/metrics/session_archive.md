@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-27 13:44 CEST
+Stand: 2026-06-27 14:35 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,12 +9,18 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-27 12:39 9ef7  █████░░░░░░░  66k ✅    █████░  83%    █········▒▒▒
+06-27 12:39 9ef7  ██████████░░ 130k ⚠️   ████░░  70%    █········▒▒▒
          SA_1·  █████░░░░░░░  59k ✅    Executor Plan 025 Step 6
-         SA_2·  █████░░░░░░░  58k ✅    Executor Plan 025 Step 4
-         SA_3·  ███████░░░░░  93k ✅    Executor Plan 025 Step 5
-         SA_4·  ██████░░░░░░  73k ✅    Planning-Entwurf nächste Session
-         SA_5·  ███░░░░░░░░░  42k ✅    Reviewer Plan 025 Steps 5+6
+         SA_2·  ███░░░░░░░░░  41k ✅    Root-Cause D2 Schuss-Sperre
+         SA_3·  █████░░░░░░░  58k ✅    Executor Plan 025 Step 4
+         SA_4·  ████░░░░░░░░  49k ✅    Doku-Fix Plan 025 Abschluss
+         SA_5·  ███░░░░░░░░░  36k ✅    Abschluss-Artefakte S107
+         SA_6·  ███████░░░░░  93k ✅    Executor Plan 025 Step 5
+         SA_7·  ██████░░░░░░  73k ✅    Planning-Entwurf nächste Session
+         SA_8·  █████░░░░░░░  64k ✅    Fix D2 Schuss-Sperre
+         SA_9·  ████░░░░░░░░  47k ✅    Review D2-Bugfix
+         SA_10·  ███░░░░░░░░░  36k ✅    Abschluss-Artefakte S107
+         SA_11·  ████░░░░░░░░  51k ✅    Reviewer Plan 025 Steps 5+6
 ----------------- ---------------------- -------------- ------------
 06-27 10:21 02e7  ██░░░░░░░░░░  26k ✅    ███░░░  42%    ············
          SA_1·  ██░░░░░░░░░░  20k ✅    Planning-Entwurf nächste Session

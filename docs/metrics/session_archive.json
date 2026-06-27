@@ -1545,12 +1545,12 @@
   "9ef7a257-4712-477e-b5c2-0a34c9c6db4c": {
     "started_at": "2026-06-27T10:39:53.671Z",
     "task": "start session",
-    "peak_context": 65777,
-    "subagent_share": 83.47343070674125,
+    "peak_context": 130039,
+    "subagent_share": 70.40777103539655,
     "by_tier": {
-      "Haiku": 3662180,
-      "Sonnet": 8675210,
-      "Opus": 656646
+      "Haiku": 5187037,
+      "Sonnet": 12441873,
+      "Opus": 2406200
     },
     "subagents": [
       {
@@ -1562,9 +1562,30 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Root-Cause D2 Schuss-Sperre",
+        "tier": "Sonnet",
+        "peak_context": 41233,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Executor Plan 025 Step 4",
         "tier": "Sonnet",
         "peak_context": 57805,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Doku-Fix Plan 025 Abschluss",
+        "tier": "Haiku",
+        "peak_context": 48841,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Artefakte S107",
+        "tier": "Haiku",
+        "peak_context": 35632,
         "started_at": "2026-06-27T10:39:53.671Z"
       },
       {
@@ -1583,9 +1604,30 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Fix D2 Schuss-Sperre",
+        "tier": "Sonnet",
+        "peak_context": 63633,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review D2-Bugfix",
+        "tier": "Opus",
+        "peak_context": 46834,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Artefakte S107",
+        "tier": "Haiku",
+        "peak_context": 36319,
+        "started_at": "2026-06-27T10:39:53.671Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Reviewer Plan 025 Steps 5+6",
         "tier": "Opus",
-        "peak_context": 41587,
+        "peak_context": 50823,
         "started_at": "2026-06-27T10:39:53.671Z"
       }
     ]
