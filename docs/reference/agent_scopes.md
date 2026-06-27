@@ -26,6 +26,33 @@ Schnellnavigation für den Koordinator: zu einer Aufgabe genau die nötigen Date
 | **Spielkopf / VP / CP / Log** | `src/uiLayout/gameHeader.py`, `src/uiLayout/gameProtocoll.py`, `src/gameMechanic/game_log.py`, `src/gameMechanic/game_state.py` | `src/app.py` |
 | **Regel-Recherche** (9E-Kernregeln, Fraktionsregeln, Gotchas) | `docs/work/wahapedia_core_rules/core_rules.txt`, `docs/work/wahapedia_core_rules/rules_appendix.txt`, `docs/work/schlachtrunde.md` | `docs/work/wahapedia_necrons/`, `docs/work/wahapedia_orks/`, `docs/work/wahapedia_adeptus_custodes/`, `docs/spec/rules_insights.md` |
 | **Doku / Backlog pflegen** (next_session, Ziele, Backlog) | `.claude/tasks/next_session.md`, `docs/goals/backlog.md`, `LEITSTAND.md` | `docs/goals/index.md`, `docs/goals/ziel*.md`, `docs/audit/plans/` |
+| **Reporting / Token-Tooling** (`token_report.py`, `session_context.py`, Schwellen) | `tools/token_report.py`, `tools/session_context.py`, `docs/metrics/overview.md`, `tests/tools/test_token_report.py` | `docs/metrics/session_archive.json`, `docs/metrics/session_archive.md` |
+
+---
+
+## Planning — Ausgabe-Template
+
+Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
+
+```
+## Planning — <Datum>
+
+**Priorität:** <P1/P2/P3>   **Scope:** <1 Satz>
+
+| Aufgabe | Effort | Token-Schätzung | Modus |
+|---------|--------|-----------------|-------|
+| …       | XS/S/M | ~Nk             | Gate/Konsent/Konsens |
+
+**Nächster Schritt:** <Datei>/<Abschnitt>
+**Offene Entscheidungen:** <NEEDS-DECISION wenn vorhanden>
+```
+
+**Konventionen:**
+- `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k).
+- `Modus`: `Gate` = Freigabe vor Umsetzung erforderlich; `Konsent` = kein Widerspruch
+  reicht; `Konsens` = aktive Zustimmung aller Beteiligten.
+- `NEEDS-DECISION` im Ausgabe-Template markieren, wenn eine Stakeholder-Entscheidung
+  blockiert — der Koordinator trägt sie als offene Frage aus.
 
 ---
 

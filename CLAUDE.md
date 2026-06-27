@@ -168,8 +168,8 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Kontext-Korridor < 150k.** Bei **~90 % (~135k)** die Session **geordnet beenden**
   (`next_session.md` + Commit) und **frisch starten** — nicht in die teure >150k-Zone laufen.
   Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
-  Kontextstand **automatisch pro Turn** an und eskaliert an den Schwellen (≥120k ⚠️,
-  ≥135k ⛔ Stopp) — kein manuelles Rechnen nötig. Er liest die letzte `usage`-tragende
+  Kontextstand **automatisch pro Turn** an und eskaliert ab ≥135k ⚠️⛔ Stopp —
+  kein manuelles Rechnen nötig. Er liest die letzte `usage`-tragende
   Transcript-Zeile (`~/.claude/projects/<projekt>/<id>.jsonl`), parst sie **als ganzes
   JSON** und summiert `input_tokens + cache_creation_input_tokens +
   cache_read_input_tokens`. Wichtig: **nicht** mit `grep -o '"usage":{[^}]*}'` rechnen —
@@ -199,12 +199,14 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   `tools/token_report.py` führt beide Quellen zusammen (`--write` → `docs/metrics/overview.md`).
 - **Subagenten = stehende Freigabe (PROAKTIV):** keine Einzel-Freigabe nötig — bei Fleißarbeit
   selbst einen Subagenten vorschlagen + starten (s. „Was NIEMALS ohne Freigabe"). Freigabe-Pflicht
-  bleibt nur für **datei-/einstellungsändernde** Arbeit (Code/Memory/Skill) — auch via Subagent.
+  bleibt nur für **datei-/einstellungsändernde** Arbeit (Code/Memory/Skill) — auch via Subagent
+  ([ADR-0005](docs/governance/decisions/0005-stehende-subagent-freigabe.md),
+  [ADR-0006](docs/governance/decisions/0006-subagent-grossausgaben-als-datei.md)).
 - **Dünner Koordinator (ADR-0007):** Detail-Planung + finales Review laufen als Subagenten; der
   Koordinator routet, hält Gates, liest nur **Pfade/Marker** — nicht volle Ergebnisse. Subagent↔
   Stakeholder asynchron über **Mailbox-Datei** (`docs/handoff/`, Marker `NEEDS-DECISION`/`ANSWERED`/
   `DONE`), Resumption per `SendMessage` (intakter Kontext). Scoping je Aufgabe über den Index
-  `docs/reference/agent_scopes.md`. Verfassung: `docs/governance/operating_model.md` (Pilot-Status).
+  `docs/reference/agent_scopes.md`. Verfassung: `docs/governance/operating_model.md` (ADR-0007, seit S102 verbindlich).
 
 ---
 

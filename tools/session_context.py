@@ -15,10 +15,9 @@ last usage-bearing line as JSON and read its top-level fields.
 
 Three tiers (CLAUDE.md corridor < 150k, wind-down ~135k):
 
-* < 120k  — neutral gauge.
-* >= 120k — warn: announce the Retro now, prepare the wind-down.
-* >= 135k — stop directive: end the session in order (handoff + commit), do not
-            start new work.
+* < 135k  — neutral gauge.
+* >= 135k — warn + stop directive: end the session in order (handoff + commit),
+            do not start new work.
 """
 
 from __future__ import annotations
@@ -26,7 +25,7 @@ from __future__ import annotations
 import json
 import sys
 
-WARN_THRESHOLD = 120_000
+WARN_THRESHOLD = 135_000
 STOP_THRESHOLD = 135_000
 
 

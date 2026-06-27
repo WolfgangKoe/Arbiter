@@ -1383,10 +1383,9 @@
   "0c87a0bc-ee31-40ce-8c41-30ff7f557ef7": {
     "started_at": "2026-06-26T16:17:26.585Z",
     "task": "start session",
-    "peak_context": 128066,
-    "subagent_share": 70.63302852321226,
+    "peak_context": 142058,
+    "subagent_share": 68.42664788836204,
     "by_tier": {
-      "Opus": 7843393,
       "Sonnet": 18864819
     },
     "subagents": [
@@ -1423,10 +1422,10 @@
   "654bda63-0b36-4af1-8db9-42fd9db8952e": {
     "started_at": "2026-06-26T20:24:51.846Z",
     "task": "start session",
-    "peak_context": 120748,
-    "subagent_share": 32.46301026282589,
+    "peak_context": 140676,
+    "subagent_share": 24.33257444182426,
     "by_tier": {
-      "Opus": 3578080,
+      "Opus": 5348328,
       "Sonnet": 1719876
     },
     "subagents": [
@@ -1436,6 +1435,45 @@
         "tier": "Sonnet",
         "peak_context": 77522,
         "started_at": "2026-06-26T20:24:51.846Z"
+      }
+    ]
+  },
+  "72c53db3-e80a-422f-99af-303abe55dfcf": {
+    "started_at": "2026-06-26T20:48:28.478Z",
+    "task": "Start session",
+    "peak_context": 78329,
+    "subagent_share": 84.98793992572223,
+    "by_tier": {
+      "Sonnet": 10536396
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 027 doc alignment",
+        "tier": "Sonnet",
+        "peak_context": 66585,
+        "started_at": "2026-06-26T20:48:28.478Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review Plan 028 DoD",
+        "tier": "Sonnet",
+        "peak_context": 40485,
+        "started_at": "2026-06-26T20:48:28.478Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 028 reporting rework",
+        "tier": "Sonnet",
+        "peak_context": 93382,
+        "started_at": "2026-06-26T20:48:28.478Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review Plan 027 doc alignment",
+        "tier": "Sonnet",
+        "peak_context": 24353,
+        "started_at": "2026-06-26T20:48:28.478Z"
       }
     ]
   }

@@ -441,7 +441,7 @@ def test_overview_has_no_wide_subagent_table():
 
 
 def test_overview_section_order():
-    """Verlauf < Jüngste < (Retro-)Hinweise < 150k-Korridor < Zusammensetzung < Vergangene."""
+    """Abschnittsreihenfolge der Overview (s. Assertions unten)."""
     records = [_record("s1", "main", "claude-opus-4-8", inp=100, cr=50_000)]
     meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [])}
     md = render_markdown(summarize(records), generated_at="x", meta=meta)
@@ -452,6 +452,7 @@ def test_overview_section_order():
         "## (Retro-)Hinweise",
         "## 150k-Korridor für Subagenten",
         "## Zusammensetzung der Antworten",
+        "## Kontext-Zusammensetzung (nach Quelle, approximiert)",
         "## Vergangene Sessions",
     ]
     positions = [md.index(h) for h in headings]
@@ -562,3 +563,147 @@ def test_load_archive_migrates_old_list_schema(tmp_path):
     assert entry["subagents"][0]["description"] == "Old sub"
     assert entry["started_at"] == "2026-06-01T09:00:00Z"
     assert entry["peak_context"] is None  # kein Wert im alten Format
+
+
+# --- Plan-028 O4: peak-basierter Upsert (Archiv-Überschreib-Bug) ------------ #
+
+
+def test_merge_does_not_overwrite_higher_existing_peak():
+    """Archiv-Eintrag mit peak=131k bleibt, wenn neuer Lauf nur peak=80k liefert."""
+    sub = Subagent("Explore", "Task A", "Sonnet", peak_context=80_000)
+    archive: dict = {}
+    # Erst guter Eintrag mit hohem Peak schreiben.
+    archive = merge_session_into_archive(
+        archive,
+        "sess-peak",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Original",
+        peak_context=131_000,
+        subagent_share=40.0,
+        by_tier={"Opus": 100_000, "Sonnet": 31_000},
+    )
+    # Dann partieller Lauf mit niedrigerem Peak — darf NICHT überschreiben.
+    archive = merge_session_into_archive(
+        archive,
+        "sess-peak",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Partial",
+        peak_context=80_000,
+        subagent_share=20.0,
+        by_tier={"Opus": 60_000, "Sonnet": 20_000},
+    )
+    entry = archive["sess-peak"]
+    assert entry["peak_context"] == 131_000, "Hoher Peak muss erhalten bleiben"
+    assert entry["task"] == "Original", "Aufgabe darf nicht überschrieben werden"
+
+
+def test_merge_overwrites_when_new_peak_is_higher():
+    """Neuer Lauf mit peak=131k überschreibt alten Eintrag mit peak=50k."""
+    sub = Subagent("Explore", "Task B", "Sonnet", peak_context=131_000)
+    archive: dict = {}
+    # Erst niedrigen Eintrag.
+    archive = merge_session_into_archive(
+        archive,
+        "sess-update",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Partial",
+        peak_context=50_000,
+        subagent_share=10.0,
+        by_tier={"Opus": 40_000, "Sonnet": 10_000},
+    )
+    # Dann vollständigere Daten mit höherem Peak — MUSS überschreiben.
+    archive = merge_session_into_archive(
+        archive,
+        "sess-update",
+        [sub],
+        "2026-06-20T10:00:00Z",
+        task="Full",
+        peak_context=131_000,
+        subagent_share=40.0,
+        by_tier={"Opus": 90_000, "Sonnet": 41_000},
+    )
+    entry = archive["sess-update"]
+    assert entry["peak_context"] == 131_000, "Höherer Peak muss gewinnen"
+    assert entry["task"] == "Full", "Aktuellere Aufgabe muss übernommen werden"
+
+
+def test_merge_adds_new_session():
+    """Neue Session (nicht im Archiv) wird hinzugefügt."""
+    sub = Subagent("general-purpose", "Task C", "Opus", peak_context=90_000)
+    archive: dict = {}
+    archive = merge_session_into_archive(
+        archive,
+        "sess-new",
+        [sub],
+        "2026-06-21T08:00:00Z",
+        task="Neue Aufgabe",
+        peak_context=90_000,
+        subagent_share=25.0,
+        by_tier={"Opus": 70_000, "Sonnet": 20_000},
+    )
+    assert "sess-new" in archive
+    assert archive["sess-new"]["peak_context"] == 90_000
+    assert archive["sess-new"]["task"] == "Neue Aufgabe"
+
+
+# --- Plan-028 O5: Modellmix-Balken nur Subagenten-Tiers -------------------- #
+
+
+def test_mix_bar_uses_subagent_tiers_only():
+    """Der Modellmix-Balken im Verlauf darf den Koordinator (Opus-Haupt) nicht enthalten.
+
+    Prüft, dass _render_history sub_by_tier (nicht by_tier) für den Mix-Balken nutzt.
+    Szenario: Haupt = 100% Opus, Subagent = 100% Sonnet → Balken muss rein Sonnet zeigen.
+    """
+    records = [
+        # Hauptthread: nur Opus
+        _record("s1", "main", "claude-opus-4-8", inp=100_000),
+        # Subagent: nur Sonnet
+        _record("s1", "subagent", "claude-sonnet-4-6", inp=50_000),
+        # Ältere Session als Vergleichspunkt für Trend
+        _record("s0", "main", "claude-opus-4-8", inp=10_000),
+    ]
+    meta = {
+        "s1": SessionMeta("2026-06-20T10:00:00Z", "Neue Session", []),
+        "s0": SessionMeta("2026-06-01T09:00:00Z", "Alte Session", []),
+    }
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+
+    # Die Verlaufs-Legende muss "(Subagenten)" enthalten.
+    assert "Modell-Mix (Subagenten)" in md
+
+    # Für s1: sub_by_tier = {"Sonnet": 50_000}, main_by_tier = {"Opus": 100_000}.
+    # Der Mix-Balken für s1 muss rein aus Sonnet-Zeichen (·) bestehen — kein Opus (█).
+    # Wir prüfen, dass nach dem s1-Label keine █-Zeichen im Mix-Balken stehen.
+    # Der Verlauf ist im ```text-Block; wir extrahieren die s1-Zeile.
+    verlauf_block = md.split("```text")[1].split("```")[0]
+    s1_line = next(
+        (line for line in verlauf_block.splitlines() if "06-20" in line),
+        None,
+    )
+    assert s1_line is not None, "s1-Zeile nicht im Verlauf gefunden"
+    # Die letzte Spalte (Mix-Balken, 12 Zeichen) darf kein █ enthalten.
+    mix_part = s1_line[-12:]
+    assert "█" not in mix_part, f"Opus-Zeichen im Subagenten-Mix-Balken: '{mix_part}'"
+    assert "·" in mix_part, f"Sonnet-Zeichen fehlen im Mix-Balken: '{mix_part}'"
+
+
+# --- Plan-028 O6: Kontext-Quellen-Abschnitt --------------------------------- #
+
+
+def test_context_sources_section_present():
+    """render_markdown enthält den neuen Abschnitt 'Kontext-Zusammensetzung (nach Quelle)'."""
+    records = [_record("s1", "main", "claude-opus-4-8", inp=100, cc=200, cr=1_000, out=50)]
+    meta = {"s1": SessionMeta("2026-06-20T09:00:00Z", "task", [])}
+    md = render_markdown(summarize(records), generated_at="x", meta=meta)
+
+    assert "## Kontext-Zusammensetzung (nach Quelle, approximiert)" in md
+    assert "approximiert" in md  # explizit als Approximation gekennzeichnet
+    # Alle vier Quellen-Labels vorhanden
+    for label in ("Warm (System/Memory/History)", "Neu gecacht", "Ungecacht", "Generiert"):
+        assert label in md, f"Quellen-Label fehlt: {label}"
+    # Slide-Bezug in Legende
+    assert "context-engineering-slides.md" in md

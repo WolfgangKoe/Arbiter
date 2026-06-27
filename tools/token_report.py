@@ -617,6 +617,60 @@ def _render_composition(session: SessionSummary) -> list[str]:
     return lines
 
 
+def _render_context_sources(session: SessionSummary) -> list[str]:
+    """Abschnitt 'Kontext-Zusammensetzung (nach Quelle, approximiert)'.
+
+    Übersetzt die vier Token-Felder in Kontext-Quellen, orientiert an der
+    Peter-Wegner-Präsentation (context-engineering-slides.md, Abschnitt
+    „Messen zuerst: /context"). Exakte Per-Quelle-Aufschlüsselung liefert das
+    Transcript nicht — diese Sicht ist eine Approximation und so beschriftet.
+
+    Quellen-Mapping:
+      Warm (System/Memory/History)   ← cache_read_input_tokens
+      Neu gecacht (Tool-Ausgaben)    ← cache_creation_input_tokens
+      Ungecacht (neue Inhalte)       ← input_tokens
+      Generiert (Output)             ← output_tokens
+    """
+    combined = session.combined
+    parts = (
+        ("Warm (System/Memory/History)", combined.cache_read),
+        ("Neu gecacht (Tool-Ausgaben)", combined.cache_creation),
+        ("Ungecacht (neue Inhalte)", combined.input),
+        ("Generiert (Output)", combined.output),
+    )
+    peak = max((value for _, value in parts), default=0)
+    total = combined.total or 1
+
+    lines: list[str] = [
+        "## Kontext-Zusammensetzung (nach Quelle, approximiert)",
+        "",
+        "_Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht "
+        "verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._",
+        "",
+        "```text",
+    ]
+    for name, value in parts:
+        share = value / total * 100
+        lines.append(
+            f"{name:<30}▕{bar(value, peak, width=20, empty='░')}▏ {share:>4.0f}%  {_fmt(value)}"
+        )
+    lines += [
+        "```",
+        "",
+        "**Legende (Slide-Kategorien):**",
+        "",
+        "- **Warm** (`cache_read`) — System-Prompt, CLAUDE.md, Memory, stabiler Verlauf "
+        "(bereits im Cache; günstig). Hoher Anteil = warmer Kontext = effizient.",
+        "- **Neu gecacht** (`cache_creation`) — neue Datei-Inhalte, Tool-Ausgaben, die "
+        "erstmals gecacht werden (einmalig teurer, danach warm).",
+        "- **Ungecacht** (`input`) — frische Konversations-Token, die noch nicht im Cache "
+        "sind. Niedriger Anteil anstreben.",
+        "- **Generiert** (`output`) — Antwort-Token. Kein Selbstzweck; Qualität vor Menge.",
+        "",
+    ]
+    return lines
+
+
 def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMeta]) -> list[str]:
     """Abschnitt "Verlauf"" — Balken + Trend je Session (älteste als Vergleich)."""
     sessions = summary["sessions"]
@@ -628,7 +682,7 @@ def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMe
         "## Verlauf (letzte 6 Sessions)",
         "",
         "Jüngste zuerst. Balken theme-sicher (Unicode); Trend ↑/↓ ggü. der älteren Session.",
-        "Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
+        "Modell-Mix (Subagenten): `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
         "",
         "```text",
         f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",
@@ -645,7 +699,7 @@ def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMe
         )
         share_bar = bar(round(summ.subagent_share), 100, width=6)
         share_col = f"{share_bar} {summ.subagent_share:>3.0f}% {share_trend}"
-        mix_col = model_mix_bar(summ.by_tier)
+        mix_col = model_mix_bar(summ.sub_by_tier)
         lines.append(f"{label:<17} {peak_col:<22} {share_col:<14} {mix_col:<12}")
     lines += ["```", ""]
     return lines
@@ -741,6 +795,7 @@ def render_markdown(
     lines += _render_hints(focus_summary)
     lines += _render_subagent_corridor(focus_meta)
     lines += _render_composition(focus_summary)
+    lines += _render_context_sources(focus_summary)
     lines += [
         "## Vergangene Sessions",
         "",
@@ -832,23 +887,33 @@ def merge_session_into_archive(
     subagent_share: float | None = None,
     by_tier: dict[str, int] | None = None,
 ) -> dict[str, dict]:
-    """Fügt eine Session in das Archiv ein (Upsert, idempotent).
+    """Fügt eine Session in das Archiv ein (peak-basierter Upsert).
 
-    Speichert das volle Session-Dict (started_at, task, peak_context, subagent_share,
-    by_tier, subagents). Mehrfacher Aufruf mit derselben ``session_id`` überschreibt
-    den Eintrag — keine Duplikate.
+    Schreibt nur, wenn die Session neu ist ODER der neue ``peak_context`` größer
+    ist als der bestehende — vollständigere Transcript-Daten gewinnen, fragmentierte
+    verlieren (Plan 028 O4, Option B: gefahrloses wiederholtes ``--write``).
     Sessions ohne Subagenten werden nicht archiviert.
     """
+    if not subagents:
+        return archive
+
+    existing = archive.get(session_id)
+    new_peak = peak_context or 0
+    existing_peak = (existing.get("peak_context") or 0) if existing is not None else 0
+
+    if existing is not None and new_peak <= existing_peak:
+        # Bestehender Eintrag hat mindestens gleich vollständige Transcript-Daten → behalten.
+        return archive
+
     updated = dict(archive)
-    if subagents:
-        updated[session_id] = {
-            "started_at": started_at,
-            "task": task,
-            "peak_context": peak_context,
-            "subagent_share": subagent_share,
-            "by_tier": by_tier or {},
-            "subagents": _subagents_to_records(subagents, started_at),
-        }
+    updated[session_id] = {
+        "started_at": started_at,
+        "task": task,
+        "peak_context": peak_context,
+        "subagent_share": subagent_share,
+        "by_tier": by_tier or {},
+        "subagents": _subagents_to_records(subagents, started_at),
+    }
     return updated
 
 
@@ -1037,7 +1102,7 @@ def main(argv: list[str] | None = None) -> int:
             task=session_meta.task,
             peak_context=session_summ.peak_context if session_summ else None,
             subagent_share=session_summ.subagent_share if session_summ else None,
-            by_tier=session_summ.by_tier if session_summ else None,
+            by_tier=session_summ.sub_by_tier if session_summ else None,
         )
 
     report = render_markdown(

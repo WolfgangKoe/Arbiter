@@ -2,12 +2,12 @@
 
 Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (Kommunikationswege/Zuständigkeiten) und 3 (Personal/Model-Tier). Sie ist iterierbar wie Code: Änderungen werden per ADR dokumentiert und per Commit versioniert. Die Kultur (Prämisse 4 — Simplicity First, No Laziness, Generic src/, Freigabe vor Umsetzung) lebt in [CLAUDE.md](../../CLAUDE.md) und wird gepflegt, nicht pro Task entschieden.
 
-> **Status — im Übergang (ADR-0007, Pilot).** Das Modell stellt auf einen **dünnen, persistenten
-> Koordinator** um: Detail-**Planung** und finales **Review** wandern in Subagenten; der Koordinator
+> **Status — verbindlich (ADR-0007, seit S102).** Das Modell nutzt einen **dünnen, persistenten
+> Koordinator**: Detail-**Planung** und finales **Review** wandern in Subagenten; der Koordinator
 > routet, hält die Gates und eskaliert, ohne Quelldateien oder volle Ergebnisse zu lesen.
 > Subagent↔Stakeholder läuft asynchron über eine **Mailbox-Datei** ([docs/handoff/README.md](../handoff/README.md));
 > Scoping über den **Index** ([docs/reference/agent_scopes.md](../reference/agent_scopes.md)). Die folgenden
-> Rollen/Events sind entsprechend markiert; verbindlich wird die Mailbox erst nach dem Pilot-Round-Trip
+> Rollen/Events sind entsprechend markiert
 > ([ADR-0007](decisions/0007-duenner-koordinator-und-datei-kanal.md)).
 
 ---
@@ -190,19 +190,22 @@ Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 graph TD
     S[Stakeholder<br/>Wolfgang]
     A[Orchestrator<br/>Arbiter · Opus]
+    PL[Planner<br/>Opus-Subagent]
     RR[Regel-Recherche<br/>Haiku / Sonnet]
     EX[Executor<br/>Sonnet]
-    AU[Auditor<br/>Sonnet]
+    RV[Reviewer<br/>Opus-Subagent]
     GW[Gate-Wächter<br/>pytest · Arch-Gate · Coverage · Debt]
     INC[Increment<br/>App]
 
     S <-->|Plan-Freigabe<br/>Eskalation| A
+    A -->|Planning-Auftrag| PL
     A -->|Auftrag + fixierter Plan| EX
     A -->|Lookup-Auftrag| RR
-    A -->|Review-Auftrag| AU
+    A -->|Review-Auftrag| RV
+    PL -->|Entwurf als Datei| A
     EX -->|Eskalation über Arbiter| A
     RR -->|Befund| A
-    AU -->|Befund| A
+    RV -->|Befund als Datei| A
     EX -->|Code| INC
     GW -->|beschränkt| INC
 ```
@@ -214,17 +217,17 @@ Stakeholder ←─────────────────────�
     │  Plan-Freigabe / Eskalation                       │
     ▼                                                   │
 Orchestrator (Arbiter · Opus) ──────── eskaliert ──────┘
-    │          │           │
-    ▼          ▼           ▼
-Executor   Regel-       Auditor
-(Sonnet)   Recherche    (Sonnet)
-    │      (H/Sonnet)       │
-    │          └────────────┘
-    │           Befunde → Arbiter
-    ▼
-Increment (App)
-    ▲
-    │  beschränkt
+    │      │        │           │
+    ▼      ▼        ▼           ▼
+Planner Executor Regel-      Reviewer
+(Opus-SA)(Sonnet) Recherche  (Opus-SA)
+    │       │    (H/Sonnet)      │
+    │       │        └───────────┘
+    │       │         Befunde → Arbiter
+    ▼       ▼
+Entwurf  Increment (App)
+als Datei   ▲
+            │  beschränkt
 Gate-Wächter (pytest · Arch-Gate · Coverage · Debt)
 ```
 
@@ -238,7 +241,7 @@ graph TD
     PF[2 · Plan-Freigabe<br/>Plan + Dateien + Token-Schätzung]
     SP[3 · Sprint<br/>Implementierung]
     DOD[4 · DoD-Review<br/>7-Punkte-Check]
-    SE[5 · Review→Retro→Abschluss<br/>Review + Retro + Commit/Clear]
+    SE[5 · Review (Reviewer-SA)→Retro→Abschluss<br/>Review + Retro + Commit/Clear]
     KC[Kontext-Korridor-Event<br/>~135k Token → Wind-down]
     RE[7 · Refinement<br/>Fotos → Inbox → Backlog]
 
@@ -270,7 +273,7 @@ graph TD
 4 · DoD-Review                             │              │
     │                                      │              │
     ▼                                      ▼              │
-5 · Review→Retro→Abschluss ◄────────────────┘             │
+5 · Review (Reviewer-SA)→Retro→Abschluss ◄──┘             │
     │                                                     │
     └─────────────────────────────────────────────────────┘
 ```

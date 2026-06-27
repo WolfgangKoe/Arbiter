@@ -7,19 +7,18 @@
 - **Start „start next session" → Planning vorlegen** (Prioritäten + Token-Schätzung), erst nach
   Freigabe los; Shortcut „Plan ist freigegeben" = direkt los. **Lesen:** `CLAUDE.md` +
   `docs/goals/ziel6.md` + `docs/goals/backlog.md`. Einstieg `LEITSTAND.md`; Rollen/Tier/Modi:
-  `docs/governance/operating_model.md`.
-- **Ende:** Review → Retro → **Maßnahmen-Entscheid** (Stakeholder wählt) → Abschluss: **diese
-  Datei** aktualisieren (ZUERST lesen, dann ergänzen) + ggf. ziel6-Checkboxen.
+  `docs/governance/operating_model.md`. **Subagent-Briefing:** Scope aus
+  `docs/reference/agent_scopes.md` wählen (Pflicht-Lesen-Spalte → erlaubte Quellen im Brief).
+- **ADR-0007 (verbindlich seit S102):** Koordinator routet — liest keine Quelldateien/Vollergebnisse;
+  Detail-Planung → Planner-Subagent; finales Review → Reviewer-Subagent (Opus). Asynchrone
+  Stakeholder-Entscheidungen über Mailbox (`docs/handoff/`, NEEDS-DECISION → ANSWERED), nicht Chat.
+  Details: `docs/governance/operating_model.md` [#ablauforganisation-events].
+- **Ende:** Review (Reviewer-SA) → Retro → **Maßnahmen-Entscheid** (Stakeholder wählt) →
+  Abschluss: **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen) + ggf. ziel6-Checkboxen.
 - **Doku-Gate:** Decke **120** Zeilen (Test rot darüber). Beim Reißen **tief auf ≤ 70** kürzen —
   Erledigtes → `backlog.md`/`session_archive.md`, Referenz → s. o.
 - **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten =
   stehende Freigabe (proaktiv, ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
-- **⚠️ KOORDINATOR DELEGIERT MEHR (Retromaßnahme S102):** Detail-Sichtung, Planung, Implementierung
-  UND Review laufen als Subagenten — der Koordinator routet, hält Gates, liest nur Marker/Pfade,
-  nie Vollergebnisse. Entscheidungen gehören IN die Mailbox (`docs/handoff/`, NEEDS-DECISION →
-  ANSWERED), NICHT in den Chat. S102-Lehre: Opus-Fenster lief auf ~112k, weil der Koordinator den
-  Backlog selbst las und Entscheidungen im Chat ausgab statt über die Mailbox. Nicht selbst
-  implementieren, wenn ein Executor-Subagent es kann.
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
@@ -52,27 +51,21 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 **S102:** Gate-Fix (`docs/handoff/`-Exemption) + Mailbox-Pilot real. **S101:** ADR-0007 dünner Koordinator.
 
-### Nächster Schritt — Pläne 028 + 027 ausführen, dann 025-Linie fort
-Pläne **angelegt (S104)**. Reihenfolge: **028** (Step 1 O3 Schwelle 135k → Step 2a O4-Archiv-Bug+Test;
-Step 2b wartet auf A/B-Entscheid **Hook vs. `--write`-Aufruf**) → **027** (Doku-Org; „Pilot"-Marker
-raus = **entschieden S104**) → dann 025-Linie (5 → 6 → 016 → 018 → 015 → 026 → 017). Executor-
-Subagenten mit **Write**; Koordinator reviewt.
+### Nächster Schritt — 025-Linie fort (027 ✅ + 028 ✅ DONE)
+**Plan 027 DONE (S105, 2026-06-26):** Pilot-Vorbehalt gestrichen (operating_model + ADR-0007);
+Diagramme A/B nachgezogen (Planner+Reviewer als Subagenten); next_session ADR-0007-Regeln;
+agent_scopes Reporting/Token-Tooling + als Pflichtlektüre; CLAUDE.md ADR-0006-Verweis.
+**Plan 028 DONE (S105, 2026-06-26):** O3 (135k-Schwelle), O4 (peak-Upsert), O5–O7 fertig.
+Nächste Pläne: **025-Linie** (025 → 016 → 018 → 015 → 026 → 017). Executor-SA mit **Write**.
 
-**Geklärte Entscheidungen (S103) — in Pläne überführt:** O1 → Plan **027**; O3–O7 → Plan **028**;
-**O2 ✅ verankert (S104)** (CLAUDE.md + operating_model.md + Memory). Detail-Wortlaut in den Plänen.
-**Reliability-Vermerk (Maßnahme 3):** Live-Gauge (`session_context.py`) = verlässliche Zahl;
-overview.md-Tabelle ist archiv-abgeleitet (O4) → in overview kennzeichnen, welche Zahl live/archiv ist.
-- **Befund Overwatch-Anzeige:** „trifft auf 6+" ist falsch, sobald Hold Steady (5+) greift →
-  gehört zu Plan 026/015; bei den GO-Hinweisen vermerken.
+**Reliability-Vermerk:** Live-Gauge (`session_context.py`) = verlässliche Zahl; overview.md archiv-abgeleitet.
+- **Befund Overwatch-Anzeige:** „trifft auf 6+" falsch bei Hold Steady (5+) → Plan 026/015.
 
 ### ⚠️ Carry-over (offen)
-0. **Kontext-Engineering — S101+S102 real adressiert (ADR-0007).** Dünner Koordinator,
-   Mailbox-Pilot läuft (NEEDS-DECISION→ANSWERED verifiziert). **Neuer Befund S102:**
-   Freigabe-Gate blockierte anfangs `docs/handoff/` → gefixt (Exemption). **Rest offen:**
-   (a) `operating_model.md`-Diagramme A/B nachziehen; (b) „Pilot"-Vorbehalt nach echtem Einsatz
-   streichen; (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
+0. **ADR-0007 vollständig umgesetzt (O1 ✅).** Offen noch:
+   (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
    (e) SessionStart-Regel-Injektion (S95-Beleg).
-1. **Plan 025** aktive Hauptlinie (s. o.); Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld laufen nebenher.
+1. **Plan 025** aktive Hauptlinie; Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.
 2. **Manuelle UI-Verifikation (offen, PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron
    Befehlsphase; (b) Bug 5: Runde-2-Fernkampf-Zielwahl; (c) **S103 Bug-Fixes:** stationär+D1 →
    grünes +1-Save-Badge IN den Würfeln + Eff.-Save besser; Checkbox-Badge grün statt blau.
@@ -80,7 +73,7 @@ overview.md-Tabelle ist archiv-abgeleitet (O4) → in overview kennzeichnen, wel
 ### Offene Fragen / Vormerke
 - **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.
 - **S95-Prozess-Vormerk:** Regelkonformität beim YAML-Modellieren prüfen (DoD-#1-Ergänzung).
-- **Kleine Doku-Vormerke:** `CLAUDE.md` um ADR-0006-Verweis; backlog #2/ziel6 6e Bug-3-Step.
+- **Kleine Doku-Vormerke:** backlog #2/ziel6 6e Bug-3-Step.
 
 ---
 

@@ -78,5 +78,7 @@ per-Subagent-Pfad-ACL zur Laufzeit gibt es nicht; Scoping ist Vertrags-Disziplin
   Claude-Code-CLI verifiziert**. **Pilot vor Verbindlichkeit:** einen echten Mailbox-Round-Trip
   (Subagent schreibt → Koordinator weckt per `SendMessage` → Subagent liest) durchspielen; erst wenn
   er trägt, gilt die Mailbox im Operating Model als verbindlich.
+  → Pilot S102 durchgelaufen (NEEDS-DECISION→ANSWERED in `docs/handoff/` verifiziert).
 - Offen: ob das „wortgleiche Durchreichen" des Koordinators unter Druck ehrlich bleibt — Review
   nächste Retro.
+  → S102-Retro: kein Befund.

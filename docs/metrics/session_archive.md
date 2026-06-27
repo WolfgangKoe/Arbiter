@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-26 22:36 CEST
+Stand: 2026-06-27 07:21 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,16 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-26 22:24 654b  ██████████░░ 121k ⚠️   ██░░░░  32%    ████████····
+06-26 22:48 72c5  ██████░░░░░░  78k ✅    █████░  85%    ············
+         SA_1·  █████░░░░░░░  67k ✅    Execute Plan 027 doc alignment
+         SA_2·  ███░░░░░░░░░  40k ✅    Review Plan 028 DoD
+         SA_3·  ███████░░░░░  93k ✅    Execute Plan 028 reporting rework
+         SA_4·  ██░░░░░░░░░░  24k ✅    Review Plan 027 doc alignment
+----------------- ---------------------- -------------- ------------
+06-26 22:24 654b  ███████████░ 141k ⚠️   █░░░░░  24%    █████████···
          SA_1·  ██████░░░░░░  78k ✅    Draft Doku-Org + Reporting plans
 ----------------- ---------------------- -------------- ------------
-06-26 18:17 0c87  ██████████░░ 128k ⚠️   ████░░  71%    ████········
+06-26 18:17 0c87  ███████████░ 142k ⚠️   ████░░  68%    ············
          SA_1·  █████████░░░ 110k ✅    Migrate tests + docs Step 4
          SA_2·  █████░░░░░░░  60k ✅    Implement Plan 025 Step 4 D1
          SA_3·  █████░░░░░░░  67k ✅    D2 plan 026 erstellen
