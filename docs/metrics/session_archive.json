@@ -1642,18 +1642,18 @@
   "5af7bc21-6a1b-4ef8-a61b-829265283255": {
     "started_at": "2026-06-27T12:42:38.341Z",
     "task": "Start Session. Folgende Ergänzungen für Planungs-Agent. 2 Bugs zum Concering Tyrant Protokoll: 1. D2: Retreat & Shoot f…",
-    "peak_context": 56573,
-    "subagent_share": 88.95388611235842,
+    "peak_context": 80410,
+    "subagent_share": 78.00149376875872,
     "by_tier": {
       "Sonnet": 8314568,
-      "Opus": 2923753
+      "Opus": 2998966
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
         "description": "Executor: zwei Tyrant-Bugs fixen",
         "tier": "Sonnet",
-        "peak_context": 72734,
+        "peak_context": 73922,
         "started_at": "2026-06-27T12:42:38.341Z"
       },
       {
@@ -1669,6 +1669,39 @@
         "tier": "Sonnet",
         "peak_context": 59296,
         "started_at": "2026-06-27T12:42:38.341Z"
+      }
+    ]
+  },
+  "5ed6267d-a142-4b0c-8bc2-7a4afd8e1960": {
+    "started_at": "2026-06-28T16:27:52.035Z",
+    "task": "Start Session. Folgende Ergänzungen für Planungs-Agent. 2 Bugs zum Concering Tyrant Protokoll: 1. D2: Retreat & Shoot f…",
+    "peak_context": 148549,
+    "subagent_share": 68.23593377396467,
+    "by_tier": {
+      "Sonnet": 19153988,
+      "Opus": 1908861
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: Conquering-Tyrant 2 Bugs",
+        "tier": "Sonnet",
+        "peak_context": 154592,
+        "started_at": "2026-06-28T16:27:52.035Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Conquering-Tyrant Bug 1+2",
+        "tier": "Sonnet",
+        "peak_context": 97334,
+        "started_at": "2026-06-28T16:27:52.035Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Dense-Cover Anzeige-Fix",
+        "tier": "Sonnet",
+        "peak_context": 51737,
+        "started_at": "2026-06-28T16:27:52.035Z"
       }
     ]
   }

@@ -26,46 +26,35 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S108, 2026-06-27)
+## Aktueller Stand (nach S109, 2026-06-28)
 
-**S108 — Plan 030 (Conquering-Tyrant-UI-Bugs), voll delegiert; am Wochenlimit gestoppt — NICHT committet.**
-- **Bug 1 ✅ gefixt + UI-verifiziert:** `atk_uid` in beide Entry-Dicts (`_common.py:render_group_assignment`)
-  → D2 −1-Hit-Debuff erscheint rot. Schließt Carry-over (d). Test `test_fall_back_hit_mod_wiring_requires_atk_uid_in_entry`.
-- **Bug 2 ✗ NICHT gefixt (= Carry-over (b) „Bug 5"):** Selection-State-Hang bei Zielwahl besteht WEITER,
-  trotz `reset_group_declaration_state()` an „Reset Declaration" + „All done" (`_common.py:render_attack_resolution`).
-  ⚠️ Root-Cause war fehldiagnostiziert; Test `test_all_done_clears_group_autosel_guard` prüft nur den Reset-Helper
-  isoliert (Tautologie) → fing den echten Hang NICHT. Nächste Session: echten Blockier-State im UI-Pfad finden
-  (Enemy-Target bleibt disabled, bis die Eigen-Einheit ab-/angewählt wird). Code+Test bleiben vorerst (kein Schaden), neu untersuchen.
-- **Neuer Befund — Multi-Debuff-Anzeige (P3, niedrig):** Bei gestapelten Hit-Debuffs (Conquering Tyrant −1
-  + Dense Cover −1) wählt für die DARSTELLUNG der zweite Debuff (Dense Cover) die effektive Erfolgsgrenze.
-  Der ±1-Cap rechnet korrekt (Eff. 4+, nicht 5+) — reines Anzeige-/Attributionsproblem im Hit-Modifier-Renderpfad
-  (`_render_resolution_tab` / `dice_compose.py`). Nur gesammelt, keine Umsetzung.
-- **Plan 030** geschrieben (`docs/audit/plans/030-conquering-tyrant-ui-bugfixes.md`) + Queue (README.md);
-  Status anpassen: Bug 1 done, Bug 2 RE-OPEN. Working-Tree offen: `_common.py` (4 Z.) + 2 Test-Dateien, Vollsuite 1177 grün/93,02 %.
+**S109 — Plan 030 (Conquering-Tyrant-UI-Bugs) abgeschlossen + committet, voll delegiert.**
+- **Bug 1 (D2 −1-Hit nicht sichtbar) ✅ VERIFIZIERT ok:** Kein Code-Defekt — `atk_uid` greift (synthetische
+  `models`-Gruppe via `loader.py:1089`), `can_shoot` und −1-Erzeuger lesen denselben State; `can_shoot`
+  erlaubt das Schießen nach Fall Back NUR via `get_active_round_choice_shoot_after_fall_back` (shootingPhase.py:42).
+  In der App geprüft: roter „Conquering (Fall Back) −1" erscheint korrekt. Ursprungsreport war transient/Workflow.
+- **Bug 2 (Zielwahl-Hang) ✅ GEFIXT:** Helfer `_single_eligible_group` (`_common.py`) in `group_target_selectable`
+  UND `render_group_cards` verdrahtet (DRY) → Enemy-Target selektierbar, wenn Auto-Select greifen würde
+  (zweiter Spieler: `left` vor `center`, app.py:39). 2 echte Regressionstests (`test_group_flow.py`), keine Tautologie.
+- **Dense-Cover-Anzeige (Hit) ✅ GEFIXT:** `_render_dice_roll_block` (`dice_html.py`) war verkettet
+  (`current = next_thresh`) → zweiter Debuff bezog sich auf den effektiven statt den Profil-Wurf. Jetzt
+  base-verankert + ±1-Cap pro Anzeige; Test `test_stacked_hit_debuffs_both_reference_base_threshold`.
+- Vollsuite **1182 grün / 93,02 %**, Architektur **8/8**. Neu: `tests/uiLayout/test_resolution_tab.py`.
 
-**S107 — Plan 025 abgeschlossen (Necron-Protokolle 9E-konform), voll delegiert.**
-- **Plan 025 ✅ DONE** (alle Steps 1–6). Step 4 (Eternal Guardian D1) war schon S104 committet;
-  Step 5 (Conquering Tyrant: D1 +3" Aura = Klasse B, D2 `shoot_after_fall_back` −1 Hit = Klasse A);
-  Step 6 (Aufräumen verwaiste Effekt-Typen). Vollsuite 1171 grün, 93,02 %, Architektur-Gate grün.
-- **Bugfix (UI-Verifikation):** Conquering Tyrant D2 funktionierte nie in der App — Engine-Fn prüfte
-  `movement_choice == "fall_back"`, die App setzt aber `"retreated"`; zusätzlich blockte `can_shoot` ohne D2-Ausnahme.
-  Fix committet (ffcdfe2): `ability_engine.py` auf `"retreated"` angeglichen, `can_shoot` mit generischer D2-Ausnahme
-  (über Effekt-Typ `shoot_after_fall_back`). Vollsuite 1175 grün, 93,02 %.
-- **Test-Validitäts-Befund (fürs Retro):** Step-5-Tests setzten `movement_choice: "fall_back"` direkt — ein App-fremder Zustand →
-  der Bug rutschte durch Review+Tests. Lehre: Tests müssen den von der App tatsächlich gesetzten State verwenden.
-- **Retro-Maßnahmen (verbindlich):** M1 Executor-Brief „KEIN Commit" (agent_scopes); M2 Planner gleicht
-  offene/erledigte Steps gegen `git log` + diese Datei ab; M3 Custodes-`strength_if_charged`-Schuld als Queue-Eintrag;
-  M4 Metrik-Automatisierung beim Abschluss (`token_report.py --write` + `rotate_history.py` — Koordinator stößt an).
-- **Governance-Befund:** Haiku-Executor committete Step 5+6 eigenmächtig (633b00f) → soft-reset, Review
-  nachgezogen, sauber neu committet. M1 verhindert Wiederholung.
+**S107 — Plan 025 DONE (Necron-Protokolle 9E) + D2 Fall-Back-Schuss-Bugfix.** Retro M1–M4 verbindlich (Executor
+„KEIN Commit"; Planner Step-Abgleich; M3 Custodes-Schuld Queue; M4 Metrik-Automatisierung). Detail → `session_archive.md`.
 
 **S106 (Detail → `session_archive.md`):** Governance-Konsistenz + Artefakt-Verschlankung; Coverage-Gate 92 % überall.
-
-**Abschluss-Artefakte S107 fertig:** Executor-Brief M1+M2 (agent_scopes.md Pflichtschritte), M3 Queue-Eintrag (README.md Zeile 35), next_session.md aktualisiert.
 
 ### Nächster Schritt — 016-Linie
 Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** (`docs/audit/plans/README.md`). Executor-SA mit **Write**.
 016 behält nur RP-Block-Hint + Dynastiebonus-Anzeige (Group A/C nach 025 obsolet).
+- **Wound-Anzeige Verkettungs-Bug (S109-Befund, PRIO):** `_render_dice_wound_block` (`dice_html.py:126-138`) hat
+  denselben `current = next_thresh`-Verkettungsfehler wie der S109-gefixte Hit-Block. Stacked Wound-Debuffs müssen
+  ebenfalls base-verankert + ±1-Cap angezeigt werden — identischer Fix + Regressionstest (analog `test_resolution_tab.py`).
+- **Coverage → ~100 % (Stakeholder-Wunsch S109, PRIO):** Lücken letzter Lauf: `scenarios.py` 81 % (78-88,95-111),
+  `unit_mutations.py` 87 %, `attack_math.py` 87 %, `loader.py` 89 %, `game_state.py` 92 %, `ability_engine.py` 94 %
+  (71-72,113,151,190,211-216,388,392,424,427,431), `rosz_importer.py` 95 %, `unit.py` 99 %. Tests bis nahe 100 % ergänzen.
 - **M1 — Overwatch-Anzeige:** statische Caption `chargephase.py:144` erst mit Overwatch korrekt → Plan-015-Scope.
 - **rotate_history.py Marker-Drift (Erstaufgabe):** Tool erwartet Marker `### ▶ Nächster Schritt`, diese Datei nutzt
   `### Nächster Schritt — 016-Linie`. Entweder Tool an aktuelles Format anpassen ODER Marker angleichen —
@@ -84,8 +73,7 @@ Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** 
   (e) SessionStart-Regel-Injektion (S95-Beleg). [(f) M3 ✅ · (g) M4 ✅ — S106]
 - **Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.**
 - **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (b) **Bug 5 / Bug 2 = OFFEN** — Zielwahl-Hang besteht trotz S108-Fixversuch (s. Stand oben), echten Blockier-State finden;
-  (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln; (d) **025 Step 5 ✅ verifiziert S108** (D2 −1 rot).
+  (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln. [(b) Bug 2 ✅ S109 · (d) D2 −1 ✅ S109]
 
 ### Offene Fragen / Vormerke
 - **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.

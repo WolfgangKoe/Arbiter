@@ -36,17 +36,15 @@ def _render_dice_roll_block(
         unsafe_allow_html=True,
     )
     if stack:
-        current = base
         parts = []
         for entry in stack:
-            next_thresh = max(2, current - entry["value"])
+            next_thresh = max(2, max(base - 1, min(base + 1, base - entry["value"])))
             color = _modifier_color(entry)
             parts.append(
                 modifier_die_pair_html(
-                    current, next_thresh, entry["label"], entry["value"], color, base_threshold=base
+                    base, next_thresh, entry["label"], entry["value"], color, base_threshold=base
                 )
             )
-            current = next_thresh
         parts.append(
             grid_row_html(
                 f'<span style="color:#f8fafc;font-weight:600;">Eff. {modified}+</span>',

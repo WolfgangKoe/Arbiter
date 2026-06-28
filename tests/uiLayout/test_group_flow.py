@@ -34,8 +34,8 @@ class FakeSessionState(dict):
         self[name] = value
 
 
-def _group(gid: str, count: int) -> SimpleNamespace:
-    return SimpleNamespace(id=gid, count=count)
+def _group(gid: str, count: int, weapons: list | None = None) -> SimpleNamespace:
+    return SimpleNamespace(id=gid, count=count, weapons=weapons or [])
 
 
 def _setup(  # type: ignore[no-untyped-def]
@@ -237,14 +237,52 @@ def test_selectable_for_legacy_unit_without_groups(monkeypatch) -> None:  # type
 
 
 def test_not_selectable_without_selected_group(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Group flow active but no group picked yet — ▷ stays disabled."""
+    """Group flow active, no group picked, no auto-select (no weapons) — ▷ stays disabled."""
     _setup(
         monkeypatch,
-        groups=[_group("ork_boy", 9)],
+        groups=[_group("ork_boy", 9)],  # weapons=[] → not eligible → auto-select stays None
         group_models={"ork_boy": 9},
         selected_group=None,
     )
     assert group_target_selectable("necrons", "warriors") is False
+
+
+def test_selectable_when_sole_eligible_group_would_auto_select(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Bug 2 regression: second player as attacker — left column renders BEFORE center.
+
+    selected_model_group is None when group_target_selectable is evaluated, but
+    render_group_cards (center) would immediately auto-select the single eligible group.
+    Without the fix: _single_eligible_group not consulted → returns False → target button
+    disabled → player must deselect+reselect to unblock.
+    With the fix: _single_eligible_group detects the sole eligible group → returns True.
+    """
+    ranged_profile = SimpleNamespace(is_melee=False, weapon_type="Rapid Fire")
+    ranged_weapon = SimpleNamespace(profiles=[ranged_profile])
+    _setup(
+        monkeypatch,
+        groups=[_group("warriors_models", 10, weapons=[ranged_weapon])],
+        group_models={"warriors_models": 10},
+        selected_group=None,  # centre column hasn't run yet — auto-select pending
+        phase_idx=_SHOOTING_IDX,
+    )
+    assert group_target_selectable("necrons", "target_unit") is True
+
+
+def test_not_selectable_when_multiple_eligible_groups_no_selection(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Two eligible groups: auto-select does NOT fire → group must be chosen explicitly."""
+    ranged_profile = SimpleNamespace(is_melee=False, weapon_type="Rapid Fire")
+    ranged_weapon = SimpleNamespace(profiles=[ranged_profile])
+    _setup(
+        monkeypatch,
+        groups=[
+            _group("group_a", 5, weapons=[ranged_weapon]),
+            _group("group_b", 5, weapons=[ranged_weapon]),
+        ],
+        group_models={"group_a": 5, "group_b": 5},
+        selected_group=None,
+        phase_idx=_SHOOTING_IDX,
+    )
+    assert group_target_selectable("necrons", "target_unit") is False
 
 
 def test_shooting_allows_any_enemy(monkeypatch) -> None:  # type: ignore[no-untyped-def]

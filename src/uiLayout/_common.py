@@ -1197,12 +1197,36 @@ def _in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -> bool
     return any(fac == atk_faction for fac, _ in def_state.get("melee_with", []))
 
 
+def _single_eligible_group(atk_unit: Unit, atk_state: dict, use_melee: bool, in_melee: bool):  # type: ignore[no-untyped-def, type-arg]
+    """Return the sole undeclared, alive, weapon-capable group — or None.
+
+    Mirrors the auto-select condition in render_group_cards so that
+    group_target_selectable can anticipate the upcoming auto-select and keep
+    target buttons enabled even before the center column has rendered.
+    """
+    group_models: dict[str, int] = atk_state.get("group_models", {})
+    group_decl: dict = st.session_state.get("group_decl", {})  # type: ignore[type-arg]
+    eligible = [
+        g
+        for g in atk_unit.model_groups
+        if group_models.get(g.id, g.count) > 0
+        and _group_phase_weapons(g, use_melee, in_melee)
+        and group_decl.get(g.id) is None
+    ]
+    return eligible[0] if len(eligible) == 1 else None
+
+
 def group_target_selectable(def_faction: str, def_uid: str) -> bool:
     """Whether ▷ may select this enemy as a target right now.
 
     Shooting: targets in melee with the attacker's friends are blocked (9E).
     Group flow: a group must be selected first; in the fight phase only
     engaged enemies are legal targets (Engagement Range, core rules).
+
+    When the left column (enemy targets) renders before the center column
+    (auto-select), selected_model_group may still be None even though
+    auto-select will immediately pick the only eligible group.  We treat
+    that case as "effectively selected" so target buttons stay enabled.
     """
     phase_key = PHASES[st.session_state.phase_idx][1]
     if phase_key not in ("shooting", "fight"):
@@ -1214,7 +1238,13 @@ def group_target_selectable(def_faction: str, def_uid: str) -> bool:
     if info is None:
         return True
     if not st.session_state.get("selected_model_group"):
-        return False
+        # A group is not yet selected, but auto-select may be about to pick the
+        # sole eligible group (render_group_cards runs later in the same Rerun).
+        _, _, atk_unit, atk_state = info
+        use_melee = phase_key == "fight"
+        in_melee = atk_state.get("in_melee", False)
+        if _single_eligible_group(atk_unit, atk_state, use_melee, in_melee) is None:
+            return False
     if phase_key != "fight":
         return True
     _, _, _, atk_state = info
@@ -1336,17 +1366,11 @@ def render_group_cards(
 
     autosel_flag = f"group_autosel_done_{atk_uid}"
     if sel_gid is None and not st.session_state.get(autosel_flag):
-        eligible = [
-            g
-            for g in atk_unit.model_groups
-            if group_models.get(g.id, g.count) > 0
-            and _group_phase_weapons(g, use_melee, in_melee)
-            and group_decl.get(g.id) is None
-        ]
-        if len(eligible) == 1:
-            st.session_state.selected_model_group = eligible[0].id
+        solo = _single_eligible_group(atk_unit, atk_state, use_melee, in_melee)
+        if solo is not None:
+            st.session_state.selected_model_group = solo.id
             st.session_state[autosel_flag] = True
-            sel_gid = eligible[0].id
+            sel_gid = solo.id
 
     for group in atk_unit.model_groups:
         alive = group_models.get(group.id, group.count)

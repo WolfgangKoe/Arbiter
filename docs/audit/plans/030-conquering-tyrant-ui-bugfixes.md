@@ -1,22 +1,19 @@
 # Plan 030 — Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts + Selection-State-Reset
 
-> **Executor-Anweisung:** Plan vollständig lesen. Beide Steps als isolierte Einheiten
-> behandeln; nach jedem Step Vollsuite + Lint. STOP-Bedingungen sind bindend.
-> Bug 2 zuerst (kleiner, isoliert), dann Bug 1 (mehr Test-Aufwand).
->
-> **Drift-Check (zuerst ausführen):**
-> `grep -n "atk_uid" src/uiLayout/_common.py | head -20`
-> Erwartet: `atk_uid = entry.get("atk_uid", "")` in `_render_resolution_tab` —
-> aber KEIN `"atk_uid"` in den `entries.append`-Blöcken der Ranged/Melee-Pfade.
-> Wenn `"atk_uid"` bereits in BEIDEN `entries.append`-Blöcken vorkommt → Bug 1
-> bereits gefixt, melden.
->
-> `grep -n "reset_group_declaration_state" src/uiLayout/_common.py`
-> Erwartet: Aufrufe in `render_group_cards` / `unitCard.py`, aber NICHT beim
-> „All done — Continue"- und „↺ Reset Declaration"-Button in `render_attack_resolution`.
-> Wenn `reset_group_declaration_state()` dort bereits steht → Bug 2 bereits gefixt, melden.
-
 ## Status
+
+- **Bug 2 (Zielwahl-Hang)**: ✅ ERLEDIGT (S109, 2026-06-28) — `_single_eligible_group`-Helfer extrahiert;
+  `group_target_selectable` antizipiert Auto-Select; `render_group_cards` nutzt denselben Helfer (DRY).
+  Tests: `test_selectable_when_sole_eligible_group_would_auto_select` + `test_not_selectable_when_multiple_eligible_groups_no_selection`.
+- **Bug 1 (D2 −1 Hit nicht sichtbar)**: ✅ ANALYSIERT, KEIN CODE-DEFEKT (S109, 2026-06-28).
+  Charakterisierungstest grün: `test_fall_back_hit_modifier_renders_red_in_hit_block` (`tests/uiLayout/test_resolution_tab.py`).
+  Root-Cause: Kein Code-Defekt nachweisbar. atk_uid, movement_choice-Key und Render-Pfad vollständig korrekt.
+  Wahrscheinliche Ursache: Direktiv nicht als "secondary" aktiviert (Kandidat 1) ODER Auto-Hit-Waffe (Kandidat 3).
+  Verifikation: In App Conquering Tyrant D2 als "secondary" + Retreat-Button + nicht-auto-hit Waffe → HIT-Block.
+- **Dense Cover stacked debuffs (Anzeige-Fix)**: ✅ ERLEDIGT (S109, 2026-06-28) —
+  `_render_dice_roll_block` entkettet: jeder Debuff zeigt unabhängig relativ zu `base` (kein `current = next_thresh`).
+  Regressionstest: `test_stacked_hit_debuffs_both_reference_base_threshold` (`tests/uiLayout/test_resolution_tab.py`).
+  Vollsuite: 1182 passed, Coverage 93 %, Architektur-Gate 8/8 grün.
 
 - **Priority**: P1 (HOCH) — beide Bugs reproduzierbar und aus manueller UI-Verifikation
   (S108) entstanden; blockieren korrekten Conquering-Tyrant-D2-Workflow.
