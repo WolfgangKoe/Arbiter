@@ -231,6 +231,23 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   Workaround: Akzeptanztest importiert `game_state` lazy. Saubere Lösung: **eine geteilte
   `streamlit`-Fixture** (conftest) + Tests auf `module.st` statt lokalem `_st_mock` umstellen.
   Tieferliegend ein Smell: viel globaler `session_state`-Zugriff quer durch die Logik-Module.
+- 🔲 **DRY ±1-Cap-Helper (S110-Retro-M1):** Hit- und Wound-Block in `dice_html.py` teilen
+  identische ±1-Cap-Logik (`_render_dice_roll_block` + `_render_dice_wound_block`) → gemeinsamen
+  Helper extrahieren. Kleiner Refactor, kein Verhaltenswechsel; Tests müssen weiter grün bleiben.
+- 🔲 **Test-Schuld conftest-Mock-Hack (S110-Retro-M2):** `tests/gameMechanic/conftest.py`
+  re-pointet st-Mocks global über `sys.modules` (reihenfolge-abhängiger Quick-Fix aus S110
+  Isolations-Fix) → mittelfristig durch eine **session-scoped Streamlit-Mock-Fixture** ersetzen,
+  die alle `gameMechanic`-Tests einheitlich nutzen (analog zur sauberen Lösung aus Test-Mock-Fragilität oben).
+- 🔲 **Coverage-Schuld: game_state + ability_engine (S110-Retro-M3, explizit):**
+  `game_state.py` 92 % + `ability_engine.py` 94 % auf ~98–99 % bringen. Ungedeckte Zeilen:
+  `game_state`: 119, 129, 181-182, 204-205, 237-238, 256-264, 384, 394-399, 444, 477, 567-568.
+  `ability_engine`: 71-72, 113, 151, 190, 211-216, 388, 392, 424, 427, 431.
+  Explizit als Schuld führen, damit der „~100 %-Wunsch" nicht still als erledigt gilt.
+- 🔲 **Prozess: Executor-Auftrags-Checkliste härten (S110-Retro-M4):** Executor-Brief muss
+  echtes `ruff`/pre-commit **VOR** dem „grün"-Claim verlangen (nicht nur pytest). Außerdem:
+  Token-/Zeit-Budget-Cap im Auftrag gegen Rabbit-Holes (Lehre aus S110-Lauf 2b: 161k/66 min);
+  Schätzung + harter Stop-Punkt obligatorisch. Betrifft `docs/reference/agent_scopes.md`
+  (Executor-Brief-Checkliste, Z. 91–93 ff.) → bei nächster Scope-Pflege einarbeiten.
 
 ---
 

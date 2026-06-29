@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-29 20:37 CEST
+Stand: 2026-06-29 20:44 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,15 +9,16 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-28 20:02 1b3d  █████████░░░ 110k ✅    █████░  79%    ···········▒
+06-28 20:02 1b3d  ██████████░░ 121k ⚠️   ████░░  75%    ···········▒
          SA_1·  ███░░░░░░░░░  39k ✅    Schritt A Wound-Bug fixen
-         SA_2·  ████████████ 159k ⛔    Schritt B Lauf 2b
-         SA_3·  ██████████░░ 125k ⚠️   Schritt B Coverage Lauf 2
-         SA_4·  █████░░░░░░░  67k ✅    Schritt B Coverage Lauf 1
-         SA_5·  ███░░░░░░░░░  43k ✅    Schritt 0 Nebenpunkte
-         SA_6·  ██░░░░░░░░░░  27k ✅    Marker-Fix korrigieren
-         SA_7·  ██░░░░░░░░░░  29k ✅    Ruff-Lint-Fehler beheben
-         SA_8·  ████░░░░░░░░  45k ✅    Planning-Entwurf nächste Session
+         SA_2·  ███░░░░░░░░░  31k ✅    DoD-Review S110
+         SA_3·  ████████████ 159k ⛔    Schritt B Lauf 2b
+         SA_4·  ██████████░░ 125k ⚠️   Schritt B Coverage Lauf 2
+         SA_5·  █████░░░░░░░  67k ✅    Schritt B Coverage Lauf 1
+         SA_6·  ███░░░░░░░░░  43k ✅    Schritt 0 Nebenpunkte
+         SA_7·  ██░░░░░░░░░░  27k ✅    Marker-Fix korrigieren
+         SA_8·  ██░░░░░░░░░░  29k ✅    Ruff-Lint-Fehler beheben
+         SA_9·  ████░░░░░░░░  45k ✅    Planning-Entwurf nächste Session
 ----------------- ---------------------- -------------- ------------
 06-28 18:27 5ed6  ████████████ 153k ⛔    ████░░  64%    █···········
          SA_1·  ████████████ 155k ⛔    Planner: Conquering-Tyrant 2 Bugs

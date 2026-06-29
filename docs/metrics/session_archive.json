@@ -1708,12 +1708,12 @@
   "1b3d129b-2092-4002-bbba-31d35986fdc9": {
     "started_at": "2026-06-28T18:02:05.761Z",
     "task": "start next session",
-    "peak_context": 109622,
-    "subagent_share": 78.68673567632543,
+    "peak_context": 120695,
+    "subagent_share": 75.48223199640812,
     "by_tier": {
       "Sonnet": 28343136,
-      "Opus": 543259,
-      "Haiku": 1623138
+      "Opus": 786104,
+      "Haiku": 1653086
     },
     "subagents": [
       {
@@ -1721,6 +1721,13 @@
         "description": "Schritt A Wound-Bug fixen",
         "tier": "Sonnet",
         "peak_context": 38918,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S110",
+        "tier": "Opus",
+        "peak_context": 31392,
         "started_at": "2026-06-28T18:02:05.761Z"
       },
       {
@@ -1762,7 +1769,7 @@
         "agent_type": "general-purpose",
         "description": "Ruff-Lint-Fehler beheben",
         "tier": "Haiku",
-        "peak_context": 28663,
+        "peak_context": 29438,
         "started_at": "2026-06-28T18:02:05.761Z"
       },
       {
