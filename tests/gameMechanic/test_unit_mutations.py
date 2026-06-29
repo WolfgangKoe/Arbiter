@@ -1071,3 +1071,252 @@ def test_single_group_unit_no_interactive_ui_needed() -> None:
     state = _nobz_state({"nob_klaw": 6})
     active_groups = [gid for gid, n in state["group_models"].items() if n > 0]
     assert len(active_groups) == 1
+
+
+# ---------------------------------------------------------------------------
+# adjust_cp — line 52
+# ---------------------------------------------------------------------------
+
+
+def test_adjust_cp_increases_cp() -> None:
+    session = _make_session(cp={"Necrons": 3, "Orks": 4})
+    _mut.adjust_cp("Necrons", 2)
+    assert session["cp"]["Necrons"] == 5
+
+
+def test_adjust_cp_does_not_go_below_zero() -> None:
+    session = _make_session(cp={"Necrons": 1, "Orks": 4})
+    _mut.adjust_cp("Necrons", -5)
+    assert session["cp"]["Necrons"] == 0
+
+
+# ---------------------------------------------------------------------------
+# _front_group_hp — lines 89-97
+# (indirect via apply_damage without resolved=True and without directed target)
+# ---------------------------------------------------------------------------
+
+
+def test_apply_damage_group_wounds_without_directed_caps_to_front_model() -> None:
+    """Without a directed active group, damage is capped to the front model's HP."""
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    # Start at full (30 HP): Menhir 1 = 7 HP, Menhir 2 = 7 HP, Szarekh = 16 HP
+    _make_session(p1_units={SILENT_KING: state})
+    # resolved=False → front-model cap applies; Menhir front-model = 7 LP
+    apply_damage(SILENT_KING, "Necrons", 100, _silent_king(), resolved=False)
+    # Only 7 damage (front Menhir) should be applied
+    assert state["group_wounds"]["triarchal_menhirs"] == 7
+    assert state["group_wounds"]["szarekh"] == 16
+
+
+def test_front_group_hp_returns_zero_when_all_groups_empty() -> None:
+    """_front_group_hp returns 0 when no group has remaining HP."""
+    from gameMechanic.unit_mutations import _front_group_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    state["group_wounds"] = {"triarchal_menhirs": 0, "szarekh": 0}
+    assert _front_group_hp(state, sk) == 0
+
+
+def test_front_group_hp_returns_full_wval_when_model_intact() -> None:
+    """_front_group_hp returns wval when the front model is not partially wounded."""
+    from gameMechanic.unit_mutations import _front_group_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    # Menhirs at exactly 2 full models (14), Szarekh full (16)
+    state["group_wounds"] = {"triarchal_menhirs": 14, "szarekh": 16}
+    assert _front_group_hp(state, sk) == 7  # menhir wval = 7, no partial
+
+
+def test_front_group_hp_returns_partial_when_model_partly_wounded() -> None:
+    """_front_group_hp returns the remaining partial HP of a partly wounded model."""
+    from gameMechanic.unit_mutations import _front_group_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    # One Menhir at 3 of 7 HP remaining (partly wounded)
+    state["group_wounds"] = {"triarchal_menhirs": 3, "szarekh": 16}
+    assert _front_group_hp(state, sk) == 3
+
+
+# ---------------------------------------------------------------------------
+# _group_front_hp — lines 147, 150 (group is None / remaining <= 0)
+# ---------------------------------------------------------------------------
+
+
+def test_group_front_hp_returns_zero_when_pool_empty() -> None:
+    """_group_front_hp returns 0 when the group's HP pool is 0."""
+    from gameMechanic.unit_mutations import _group_front_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    state["group_wounds"] = {"triarchal_menhirs": 0, "szarekh": 16}
+    assert _group_front_hp(state, sk, "triarchal_menhirs") == 0
+
+
+def test_group_front_hp_returns_zero_for_unknown_group_id() -> None:
+    """_group_front_hp returns 0 for a group_id not in unit.model_groups."""
+    from gameMechanic.unit_mutations import _group_front_hp
+
+    sk = _silent_king()
+    state = _gs._unit_state(sk, 3)
+    assert _group_front_hp(state, sk, "nonexistent_group") == 0
+
+
+# ---------------------------------------------------------------------------
+# apply_damage group_wounds path: no directed target AND no resolved → uses _front_group_hp
+# line 191
+# ---------------------------------------------------------------------------
+
+
+def test_directed_group_mortal_wound_spills_freely() -> None:
+    """mortal=True with group_wounds but no directed group uses priority spill (line 191)."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3})
+    _nobz_session(state)
+    # No active group, mortal=True → spills across boundaries, no cap
+    apply_damage(NOBZ, "Orks", 7, _nobz_unit(), mortal=True)
+    assert state["current_wounds"] == 6 + 6 + 3 - 7
+
+
+# ---------------------------------------------------------------------------
+# apply_damage: destroyed group_wounds unit leaves melee — line 194
+# ---------------------------------------------------------------------------
+
+
+def test_apply_damage_group_wounds_destroyed_leaves_melee() -> None:
+    """Destroying a group_wounds unit clears its melee engagement."""
+    session = _make_session(
+        first_player="Necrons",
+        second_player="Orks",
+        p1_units={SILENT_KING: _gs._unit_state(_silent_king(), 3)},
+        p2_units={BOYZ: _unit()},
+    )
+    enter_melee(SILENT_KING, "Necrons", BOYZ, "Orks")
+    assert session["p1_units"][SILENT_KING]["in_melee"] is True
+    apply_damage(SILENT_KING, "Necrons", 30, _silent_king(), resolved=True)
+    assert session["p1_units"][SILENT_KING]["in_melee"] is False
+    assert session["p1_units"][SILENT_KING]["melee_with"] == []
+
+
+# ---------------------------------------------------------------------------
+# apply_damage: destroyed regular unit leaves melee — line 220
+# ---------------------------------------------------------------------------
+
+
+def test_apply_damage_regular_destroyed_leaves_melee() -> None:
+    """Destroying a regular (non-group-wounds) unit in melee calls leave_melee."""
+    session = _two_unit_session()
+    enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
+    assert session["p1_units"][OVERLORD]["in_melee"] is True
+    apply_damage(OVERLORD, "Necrons", 99, _overlord(), mortal=True)
+    assert session["p1_units"][OVERLORD]["destroyed"] is True
+    assert session["p1_units"][OVERLORD]["in_melee"] is False
+
+
+# ---------------------------------------------------------------------------
+# heal_unit: group_wounds path, _restore_group_models skips full groups — line 237
+# ---------------------------------------------------------------------------
+
+
+def test_restore_group_models_skips_already_full_group() -> None:
+    """Healing a fully-intact group leaves it at its maximum count."""
+    from gameMechanic.unit_mutations import _restore_group_models
+
+    groups = [
+        ModelGroup(id="ork_boy", name_en="Ork Boy", count=9, weapons=[], priority=1),
+        ModelGroup(id="boss_nob", name_en="Boss Nob", count=1, weapons=[], priority=2),
+    ]
+    group_models = {"ork_boy": 9, "boss_nob": 0}  # ork boys full, nob dead
+    _restore_group_models(group_models, 2, groups)
+    assert group_models["ork_boy"] == 9  # full → skipped
+    assert group_models["boss_nob"] == 1  # restored first (lower priority = died first)
+
+
+# ---------------------------------------------------------------------------
+# flee_models with group_wounds — lines 363-375
+# ---------------------------------------------------------------------------
+
+
+def _silent_king_with_turn_flags() -> dict:
+    state = _gs._unit_state(_silent_king(), 3)
+    state["turn_flags"] = {"morale_tested": False}
+    state["fled_models_this_turn"] = 0
+    return state
+
+
+def test_flee_models_group_wounds_removes_wound_pools() -> None:
+    """flee_models with group_wounds reduces the wound pools and recomputes state."""
+    state = _silent_king_with_turn_flags()
+    _make_session(p1_units={SILENT_KING: state})
+    _mut.flee_models(SILENT_KING, "Necrons", 1, _silent_king())
+    # 1 model fled = 1 Menhir (priority=1), wval=7 → pool drops by 7
+    assert state["group_wounds"]["triarchal_menhirs"] == 7
+    assert state["group_models"]["triarchal_menhirs"] == 1
+    assert state["fled_models_this_turn"] == 1
+    assert state["turn_flags"]["morale_tested"] is True
+
+
+def test_flee_models_group_wounds_sets_morale_tested() -> None:
+    """flee_models always sets morale_tested=True for the group_wounds path."""
+    state = _silent_king_with_turn_flags()
+    _make_session(p1_units={SILENT_KING: state})
+    _mut.flee_models(SILENT_KING, "Necrons", 0, _silent_king())
+    assert state["turn_flags"]["morale_tested"] is True
+
+
+# ---------------------------------------------------------------------------
+# set_in_melee — lines 403-404
+# ---------------------------------------------------------------------------
+
+
+def test_set_in_melee_sets_value_true() -> None:
+    session = _two_unit_session()
+    _mut.set_in_melee(OVERLORD, "Necrons", True)
+    assert session["p1_units"][OVERLORD]["in_melee"] is True
+
+
+def test_set_in_melee_sets_value_false() -> None:
+    session = _two_unit_session()
+    session["p1_units"][OVERLORD]["in_melee"] = True
+    _mut.set_in_melee(OVERLORD, "Necrons", False)
+    assert session["p1_units"][OVERLORD]["in_melee"] is False
+
+
+# ---------------------------------------------------------------------------
+# apply_mortal_wounds — line 417
+# ---------------------------------------------------------------------------
+
+
+def test_apply_mortal_wounds_delegates_to_apply_damage_mortal() -> None:
+    """apply_mortal_wounds applies damage with mortal=True (bypasses front-model cap)."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+            }
+        }
+    )
+    _mut.apply_mortal_wounds(WARRIORS, "Necrons", 3, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["current_wounds"] == 7
+    assert state["models"] == 7
+
+
+# ---------------------------------------------------------------------------
+# reset_turn_flags — lines 441-444
+# ---------------------------------------------------------------------------
+
+
+def test_reset_turn_flags_clears_all_flags() -> None:
+    """reset_turn_flags sets every boolean flag in turn_flags to False."""
+    session = _two_unit_session()
+    session["p1_units"][OVERLORD]["turn_flags"]["charged"] = True
+    session["p1_units"][OVERLORD]["turn_flags"]["shot"] = True
+    _mut.reset_turn_flags(OVERLORD, "Necrons")
+    flags = session["p1_units"][OVERLORD]["turn_flags"]
+    assert all(v is False for v in flags.values())

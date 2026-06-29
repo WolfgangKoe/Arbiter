@@ -39,9 +39,9 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 
 **Priorität:** <P1/P2/P3>   **Scope:** <1 Satz>
 
-| Aufgabe | Effort | Token-Schätzung | Modus |
-|---------|--------|-----------------|-------|
-| …       | XS/S/M | ~Nk             | Gate/Konsent/Konsens |
+| Aufgabe | Effort | Token-Schätzung | Modus | Subagent(en) + Tier | Scope-Zeile / Dateien |
+|---------|--------|-----------------|-------|---------------------|----------------------|
+| …       | XS/S/M | ~Nk             | Gate/Konsent/Konsens | Planner/Executor/Reviewer + Haiku/Sonnet/Opus | `Scope-Tabelle` Z. N |
 
 **Nächster Schritt:** <Datei>/<Abschnitt>
 **Offene Entscheidungen:** <NEEDS-DECISION wenn vorhanden>

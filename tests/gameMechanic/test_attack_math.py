@@ -88,3 +88,232 @@ class TestTotalAttacksIntRapidFire:
         # Dice-based attacks (e.g. "D6") cannot be pre-computed → None
         result = _total_attacks_int("D6", 3, unit_attacks=4)
         assert result is None
+
+
+# ---------------------------------------------------------------------------
+# _restriction_label — lines 41-46
+# ---------------------------------------------------------------------------
+
+from gameMechanic.attack_math import _restriction_label  # noqa: E402
+
+
+class TestRestrictionLabel:
+    def test_boss_nob_only_returns_human_readable(self) -> None:
+        assert _restriction_label("boss_nob_only") == "Boss Nob only"
+
+    def test_1_per_10_returns_human_readable(self) -> None:
+        assert _restriction_label("1_per_10") == "1 per 10 models"
+
+    def test_1_per_5_returns_human_readable(self) -> None:
+        assert _restriction_label("1_per_5") == "1 per 5 models"
+
+    def test_unknown_restriction_passes_through(self) -> None:
+        assert _restriction_label("custom_restriction") == "custom_restriction"
+
+
+# ---------------------------------------------------------------------------
+# _compute_attacks — line 66 (slash "/" branch)
+# ---------------------------------------------------------------------------
+
+
+class TestComputeAttacksSlashBranch:
+    def test_slash_attacks_takes_first_value(self) -> None:
+        # "2/4" → use 2 per model (e.g. alternating fire modes)
+        assert _compute_attacks("2/4", 3, unit_attacks=1) == "6"
+
+    def test_slash_attacks_multiple_models(self) -> None:
+        assert _compute_attacks("3/6", 5, unit_attacks=2) == "15"
+
+
+# ---------------------------------------------------------------------------
+# _total_attacks_int — line 90 (slash "/" branch)
+# ---------------------------------------------------------------------------
+
+
+class TestTotalAttacksIntSlashBranch:
+    def test_slash_attacks_returns_first_value_times_models(self) -> None:
+        assert _total_attacks_int("2/4", 3, unit_attacks=1) == 6
+
+    def test_slash_attacks_single_model(self) -> None:
+        assert _total_attacks_int("1/2", 1, unit_attacks=1) == 1
+
+
+# ---------------------------------------------------------------------------
+# _detect_weapon_special — lines 105-108, 136
+# ---------------------------------------------------------------------------
+
+from gameMechanic.attack_math import _detect_weapon_special  # noqa: E402
+from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
+
+
+def _make_profile(
+    abilities: str = "",
+    is_melee: bool = False,
+    effect: dict | None = None,
+    max_attacks: int | None = None,
+) -> WeaponProfile:
+    return WeaponProfile(
+        weapon_type="Melee" if is_melee else "Rapid Fire",
+        range_inches=0 if is_melee else 24,
+        attacks="1",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=is_melee,
+        abilities=abilities,
+        effect=effect,
+        max_attacks=max_attacks,
+    )
+
+
+class TestDetectWeaponSpecial:
+    def test_auto_hit_detected_from_abilities(self) -> None:
+        profile = _make_profile(abilities="Auto-hits, ignore cover")
+        result = _detect_weapon_special(profile)
+        assert result["auto_hit"] is True
+
+    def test_auto_hit_false_when_not_in_abilities(self) -> None:
+        profile = _make_profile(abilities="Blast")
+        result = _detect_weapon_special(profile)
+        assert result["auto_hit"] is False
+
+    def test_extra_hits_detected_from_effect(self) -> None:
+        profile = _make_profile(effect={"type": "extra_hits", "on": 6, "extra": 1})
+        result = _detect_weapon_special(profile)
+        assert result["extra_hits"] is True
+
+    def test_alternating_fire_detected_from_effect(self) -> None:
+        profile = _make_profile(effect={"type": "alternating_fire"})
+        result = _detect_weapon_special(profile)
+        assert result["alternating_fire"] is True
+
+    def test_hit_roll_penalty_detected_for_melee_debuff(self) -> None:
+        profile = _make_profile(
+            is_melee=True,
+            effect={"type": "debuff_roll", "stat": "hit_roll", "modifier": -1},
+        )
+        result = _detect_weapon_special(profile)
+        assert result["hit_roll_penalty"] is True
+
+    def test_hit_roll_penalty_false_when_not_melee(self) -> None:
+        profile = _make_profile(
+            is_melee=False,
+            effect={"type": "debuff_roll", "stat": "hit_roll", "modifier": -1},
+        )
+        result = _detect_weapon_special(profile)
+        assert result["hit_roll_penalty"] is False
+
+    def test_hit_roll_penalty_false_when_modifier_positive(self) -> None:
+        profile = _make_profile(
+            is_melee=True,
+            effect={"type": "debuff_roll", "stat": "hit_roll", "modifier": 1},
+        )
+        result = _detect_weapon_special(profile)
+        assert result["hit_roll_penalty"] is False
+
+    def test_mortal_wound_detected_case_insensitive(self) -> None:
+        profile = _make_profile(abilities="Causes 1 Mortal Wound on a 6+")
+        result = _detect_weapon_special(profile)
+        assert result["has_mortal_wounds"] is True
+
+    def test_no_special_properties_all_false(self) -> None:
+        profile = _make_profile()
+        result = _detect_weapon_special(profile)
+        assert result == {
+            "auto_hit": False,
+            "extra_hits": False,
+            "alternating_fire": False,
+            "hit_roll_penalty": False,
+            "has_mortal_wounds": False,
+        }
+
+    def test_none_effect_handled_gracefully(self) -> None:
+        profile = _make_profile(effect=None)
+        result = _detect_weapon_special(profile)
+        assert result["extra_hits"] is False
+        assert result["alternating_fire"] is False
+        assert result["hit_roll_penalty"] is False
+
+
+# ---------------------------------------------------------------------------
+# _group_melee_budget — line 136 (skips weapons without melee profile / non-extra-attacks)
+# ---------------------------------------------------------------------------
+
+from gameMechanic.attack_math import _group_melee_budget  # noqa: E402
+
+
+def _melee_weapon_with_extra_attacks(amount: int) -> Weapon:
+    profile = WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="1",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=True,
+        effect={"type": "extra_attacks", "amount": amount},
+    )
+    return Weapon(id="w1", name_en="Extra Attack Weapon", profiles=[profile])
+
+
+def _ranged_weapon() -> Weapon:
+    profile = WeaponProfile(
+        weapon_type="Rapid Fire",
+        range_inches=24,
+        attacks="2",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    return Weapon(id="w2", name_en="Ranged Weapon", profiles=[profile])
+
+
+def _melee_weapon_no_effect() -> Weapon:
+    profile = WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="1",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=True,
+        effect=None,
+    )
+    return Weapon(id="w3", name_en="Plain Melee", profiles=[profile])
+
+
+class TestGroupMeleeBudget:
+    def test_no_extra_attack_weapons_returns_base(self) -> None:
+        # No weapons at all → budget = alive × eff_attacks
+        assert _group_melee_budget([], alive=3, eff_attacks=2) == 6
+
+    def test_extra_attack_weapon_adds_bonus(self) -> None:
+        w = _melee_weapon_with_extra_attacks(1)
+        assert _group_melee_budget([w], alive=3, eff_attacks=2) == 9  # 6 base + 3×1
+
+    def test_ranged_weapon_skipped_no_melee_profile(self) -> None:
+        # Ranged weapon has no melee profile → skipped (line 136 'continue')
+        w = _ranged_weapon()
+        assert _group_melee_budget([w], alive=3, eff_attacks=2) == 6  # unchanged
+
+    def test_melee_weapon_without_extra_attacks_effect_skipped(self) -> None:
+        # Melee weapon with no effect → skipped (not extra_attacks type)
+        w = _melee_weapon_no_effect()
+        assert _group_melee_budget([w], alive=3, eff_attacks=2) == 6
+
+    def test_max_attacks_weapon_uses_cap(self) -> None:
+        # max_attacks set → uses cap instead of effect amount
+        profile = WeaponProfile(
+            weapon_type="Melee",
+            range_inches=0,
+            attacks="1",
+            strength=4,
+            ap=0,
+            damage="1",
+            is_melee=True,
+            effect={"type": "extra_attacks", "amount": 99},
+            max_attacks=2,
+        )
+        w = Weapon(id="w4", name_en="Capped", profiles=[profile])
+        assert _group_melee_budget([w], alive=3, eff_attacks=2) == 6 + 6  # base 6 + 3×2

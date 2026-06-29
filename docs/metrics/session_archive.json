@@ -1675,8 +1675,8 @@
   "5ed6267d-a142-4b0c-8bc2-7a4afd8e1960": {
     "started_at": "2026-06-28T16:27:52.035Z",
     "task": "Start Session. Folgende Ergänzungen für Planungs-Agent. 2 Bugs zum Concering Tyrant Protokoll: 1. D2: Retreat & Shoot f…",
-    "peak_context": 148549,
-    "subagent_share": 68.23593377396467,
+    "peak_context": 153066,
+    "subagent_share": 64.13181830582391,
     "by_tier": {
       "Sonnet": 19153988,
       "Opus": 1908861
@@ -1702,6 +1702,75 @@
         "tier": "Sonnet",
         "peak_context": 51737,
         "started_at": "2026-06-28T16:27:52.035Z"
+      }
+    ]
+  },
+  "1b3d129b-2092-4002-bbba-31d35986fdc9": {
+    "started_at": "2026-06-28T18:02:05.761Z",
+    "task": "start next session",
+    "peak_context": 109622,
+    "subagent_share": 78.68673567632543,
+    "by_tier": {
+      "Sonnet": 28343136,
+      "Opus": 543259,
+      "Haiku": 1623138
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Schritt A Wound-Bug fixen",
+        "tier": "Sonnet",
+        "peak_context": 38918,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Schritt B Lauf 2b",
+        "tier": "Sonnet",
+        "peak_context": 159238,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Schritt B Coverage Lauf 2",
+        "tier": "Sonnet",
+        "peak_context": 124600,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Schritt B Coverage Lauf 1",
+        "tier": "Sonnet",
+        "peak_context": 66751,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Schritt 0 Nebenpunkte",
+        "tier": "Haiku",
+        "peak_context": 43035,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Marker-Fix korrigieren",
+        "tier": "Haiku",
+        "peak_context": 27184,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ruff-Lint-Fehler beheben",
+        "tier": "Haiku",
+        "peak_context": 28663,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 45187,
+        "started_at": "2026-06-28T18:02:05.761Z"
       }
     ]
   }

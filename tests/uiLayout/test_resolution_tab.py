@@ -17,7 +17,7 @@ from unittest.mock import MagicMock
 sys.modules.setdefault("streamlit", MagicMock())
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout.dice_html import _render_dice_roll_block  # noqa: E402
+from uiLayout.dice_html import _render_dice_roll_block, _render_dice_wound_block  # noqa: E402
 
 _DEBUFF_RED = "#ef4444"
 
@@ -136,6 +136,54 @@ def test_stacked_hit_debuffs_both_reference_base_threshold(monkeypatch) -> None:
     assert (
         "Eff. 4+" in combined_html
     ), f"Expected 'Eff. 4+' in combined HTML, got:\n{combined_html[:400]}"
+
+
+def test_stacked_wound_debuffs_both_reference_base_threshold(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Regression: two stacked −1 Wound debuffs must BOTH reference the base threshold,
+    not each other (chained). base=4 (S4 vs T4), two debuffs.
+
+    Expected: BOTH modifier die-pairs show the red die at value 4 (the base threshold).
+    Without the fix (chained): modifier_die_pair_html gets called as (4,5,...) then (5,6,...).
+    The second call's red 'from' die would be at value 5, not 4.
+
+    The signal used: for a −1 penalty with base=4, modifier_die_pair_html renders the
+    colored (red) die at from_thresh=4. So with fix: dice_face_svg(4, color="#ef4444")
+    appears TWICE. With the old chained code: the second call passes from_thresh=5,
+    producing a red die-5 instead — so red-4 appears only once.
+    """
+    captured = _collect_markdown(monkeypatch)
+
+    debuff_a = {"label": "Modifier A", "value": -1, "roll_type": "wound", "source": "global"}
+    debuff_b = {"label": "Modifier B", "value": -1, "roll_type": "wound", "source": "global"}
+
+    # S4 vs T4 → wound_threshold = 4; two −1 wound debuffs stacked
+    _render_dice_wound_block(
+        strength=4,
+        toughness=4,
+        wound_stack=[debuff_a, debuff_b],
+        strength_buff=0,
+        on_six_ap=0,
+    )
+
+    combined_html = "\n".join(captured)
+
+    from uiLayout.dice_compose import dice_face_svg  # noqa: PLC0415
+
+    red_die_4 = dice_face_svg(4, color=_DEBUFF_RED)
+    count_red_4 = combined_html.count(red_die_4)
+    assert count_red_4 >= 2, (
+        f"Expected red die-4 (from_thresh=4) to appear at least twice — "
+        f"once per stacked wound debuff anchored to base=4. "
+        f"Got {count_red_4} occurrence(s). "
+        f"Chained rendering would use from_thresh=5 for the second debuff, "
+        f"producing a red die-5 instead of red die-4.\n"
+        f"Combined HTML snippet:\n{combined_html[:800]}"
+    )
+
+    # Sanity: effective row shows 9E-capped result (net=-2 capped to -1 → eff 5+)
+    assert (
+        "Eff. 5+" in combined_html
+    ), f"Expected 'Eff. 5+' in combined HTML, got:\n{combined_html[:400]}"
 
 
 def test_no_fall_back_modifier_no_red_in_hit_block(monkeypatch) -> None:  # type: ignore[no-untyped-def]

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-28 19:59 CEST
+Stand: 2026-06-29 20:37 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,17 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-28 18:27 5ed6  ████████████ 149k ⚠️   ████░░  68%    █···········
+06-28 20:02 1b3d  █████████░░░ 110k ✅    █████░  79%    ···········▒
+         SA_1·  ███░░░░░░░░░  39k ✅    Schritt A Wound-Bug fixen
+         SA_2·  ████████████ 159k ⛔    Schritt B Lauf 2b
+         SA_3·  ██████████░░ 125k ⚠️   Schritt B Coverage Lauf 2
+         SA_4·  █████░░░░░░░  67k ✅    Schritt B Coverage Lauf 1
+         SA_5·  ███░░░░░░░░░  43k ✅    Schritt 0 Nebenpunkte
+         SA_6·  ██░░░░░░░░░░  27k ✅    Marker-Fix korrigieren
+         SA_7·  ██░░░░░░░░░░  29k ✅    Ruff-Lint-Fehler beheben
+         SA_8·  ████░░░░░░░░  45k ✅    Planning-Entwurf nächste Session
+----------------- ---------------------- -------------- ------------
+06-28 18:27 5ed6  ████████████ 153k ⛔    ████░░  64%    █···········
          SA_1·  ████████████ 155k ⛔    Planner: Conquering-Tyrant 2 Bugs
          SA_2·  ████████░░░░  97k ✅    Executor: Conquering-Tyrant Bug 1+2
          SA_3·  ████░░░░░░░░  52k ✅    Executor: Dense-Cover Anzeige-Fix

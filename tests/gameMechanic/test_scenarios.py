@@ -276,3 +276,119 @@ def test_get_scenario_data_accepts_valid_names() -> None:
 def test_save_scenario_rejects_invalid_name() -> None:
     with pytest.raises(ValueError, match="Invalid scenario name"):
         _sc.save_scenario("../evil")
+
+
+# ---------------------------------------------------------------------------
+# load_scenario — lines 78-88 (requires st.session_state mock)
+# ---------------------------------------------------------------------------
+
+
+class TestLoadScenario:
+    def _make_st_session(self, data: dict) -> object:
+        """Build a mock st.session_state that behaves like a dict-iteration object."""
+        # Use a plain dict; wrap with __iter__ compatible object
+        state = {k: v for k, v in data.items()}
+
+        class _FakeState:
+            def __iter__(self_inner):
+                return iter(state)
+
+            def __getitem__(self_inner, key: str):
+                return state[key]
+
+            def __setitem__(self_inner, key: str, value: object) -> None:
+                state[key] = value
+
+            def get(self_inner, key: str, default=None):
+                return state.get(key, default)
+
+        return _FakeState()
+
+    def test_load_scenario_returns_false_when_not_found(self, tmp_path: Path, monkeypatch) -> None:
+        monkeypatch.setattr(_sc, "_SCENARIOS_DIR", tmp_path)
+        fake_state = self._make_st_session({"round": 1})
+        monkeypatch.setattr(_sc.st, "session_state", fake_state)
+        assert _sc.load_scenario("no_such_file") is False
+
+    def test_load_scenario_returns_true_and_patches_state(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        monkeypatch.setattr(_sc, "_SCENARIOS_DIR", tmp_path)
+        (tmp_path / "my_save.json").write_text('{"round": 3, "phase_idx": 2}')
+        base_data = {
+            "round": 1,
+            "phase_idx": 0,
+            "phase_stage": "active",
+            "first_player": "Necrons",
+            "second_player": "Orks",
+            "cp": {"Necrons": 6, "Orks": 6},
+            "vp": {"Necrons": 0, "Orks": 0},
+        }
+        fake_state = self._make_st_session(base_data)
+        monkeypatch.setattr(_sc.st, "session_state", fake_state)
+        result = _sc.load_scenario("my_save")
+        assert result is True
+        assert fake_state["round"] == 3
+        assert fake_state["phase_idx"] == 2
+
+    def test_load_scenario_private_keys_excluded(self, tmp_path: Path, monkeypatch) -> None:
+        """Keys starting with '_' must not be passed to apply_scenario."""
+        monkeypatch.setattr(_sc, "_SCENARIOS_DIR", tmp_path)
+        (tmp_path / "snap.json").write_text('{"round": 2}')
+        base_data = {"round": 1, "_internal": "skip_me"}
+        fake_state = self._make_st_session(base_data)
+        monkeypatch.setattr(_sc.st, "session_state", fake_state)
+        _sc.load_scenario("snap")
+        # _internal key must still be in state (not wiped) but was not sent to apply
+        assert fake_state["round"] == 2
+
+
+# ---------------------------------------------------------------------------
+# save_scenario — lines 95-111
+# ---------------------------------------------------------------------------
+
+
+class TestSaveScenario:
+    def _make_st_session_for_save(self, data: dict):  # type: ignore[no-untyped-def]
+        state = dict(data)
+
+        class _FakeState:
+            def get(self_inner, key: str, default=None):
+                return state.get(key, default)
+
+        return _FakeState()
+
+    def test_save_scenario_writes_json_file(self, tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+        monkeypatch.setattr(_sc, "_SCENARIOS_DIR", tmp_path)
+        fake_state = self._make_st_session_for_save(
+            {
+                "round": 2,
+                "phase_idx": 3,
+                "active": "Necrons",
+                "phase_stage": "start",
+                "cp": {"Necrons": 5, "Orks": 3},
+                "vp": {"Necrons": 10, "Orks": 5},
+                "p1_units": {"u1": {"current_wounds": 5}},
+                "p2_units": {},
+            }
+        )
+        monkeypatch.setattr(_sc.st, "session_state", fake_state)
+        _sc.save_scenario("test_snap")
+        saved = json.loads((tmp_path / "test_snap.json").read_text())
+        assert saved["round"] == 2
+        assert saved["phase_idx"] == 3
+        assert saved["cp"] == {"Necrons": 5, "Orks": 3}
+        assert saved["vp"] == {"Necrons": 10, "Orks": 5}
+        assert "p1_units" in saved["unit_patches"]
+
+    def test_save_scenario_creates_scenarios_dir(self, tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+        new_dir = tmp_path / "sub" / "scenarios"
+        monkeypatch.setattr(_sc, "_SCENARIOS_DIR", new_dir)
+        fake_state = self._make_st_session_for_save({"p1_units": {}, "p2_units": {}})
+        monkeypatch.setattr(_sc.st, "session_state", fake_state)
+        _sc.save_scenario("auto_create")
+        assert (new_dir / "auto_create.json").exists()
+
+    def test_save_scenario_rejects_slash_in_name(self) -> None:
+        with pytest.raises(ValueError, match="Invalid scenario name"):
+            _sc.save_scenario("path/traversal")

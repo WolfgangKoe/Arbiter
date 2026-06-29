@@ -46,7 +46,7 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 **S106 (Detail → `session_archive.md`):** Governance-Konsistenz + Artefakt-Verschlankung; Coverage-Gate 92 % überall.
 
-### Nächster Schritt — 016-Linie
+### ▶ Nächster Schritt — 016-Linie
 Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** (`docs/audit/plans/README.md`). Executor-SA mit **Write**.
 016 behält nur RP-Block-Hint + Dynastiebonus-Anzeige (Group A/C nach 025 obsolet).
 - **Wound-Anzeige Verkettungs-Bug (S109-Befund, PRIO):** `_render_dice_wound_block` (`dice_html.py:126-138`) hat
@@ -56,9 +56,6 @@ Plan 025 ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** 
   `unit_mutations.py` 87 %, `attack_math.py` 87 %, `loader.py` 89 %, `game_state.py` 92 %, `ability_engine.py` 94 %
   (71-72,113,151,190,211-216,388,392,424,427,431), `rosz_importer.py` 95 %, `unit.py` 99 %. Tests bis nahe 100 % ergänzen.
 - **M1 — Overwatch-Anzeige:** statische Caption `chargephase.py:144` erst mit Overwatch korrekt → Plan-015-Scope.
-- **rotate_history.py Marker-Drift (Erstaufgabe):** Tool erwartet Marker `### ▶ Nächster Schritt`, diese Datei nutzt
-  `### Nächster Schritt — 016-Linie`. Entweder Tool an aktuelles Format anpassen ODER Marker angleichen —
-  entscheiden + fixen, damit die M4-Automatisierung beim Abschluss durchläuft.
 - **Planning-Template-Erweiterung (offen, unbestätigt):** Stakeholder wünscht im Planner-Ausgabe-Template (`docs/reference/agent_scopes.md` Z. 33 ff.)
   zwei zusätzliche Spalten — „Subagent(en) + Tier" (Tier-Default nach O2/operating_model, ggf. Executor→Reviewer-Paar)
   und „Scope-Zeile / Dateien" (konkrete Pflicht-Lesen-Dateien aus der Scope-Tabelle). Vorschlag lag vor, Freigabe steht noch aus.

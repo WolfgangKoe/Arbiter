@@ -28,15 +28,14 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
   Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
   Prism als echter Wargear-Choice — eigenständiger Task).
-- 🟡 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause): **Setup-Leck erledigt 2026-06-20.**
+- 🔴 **[PRIO-NÄCHSTE] #2b Direktiv-Lock** (Phase 2, S52 Root-Cause): **Setup-Leck erledigt 2026-06-20.**
   Bug (Nutzer-Screenshots): Protokoll-Direktiven-Buttons + WAAAGH-Status erschienen im Setup
   und wurden durch den First-Player-Toggle (`active` gesetzt) sogar wählbar; der Auto-Block
   `if not active_id` schrieb `round_choice_active_*` schon im Setup. **Fix:** reiner Helfer
   `_ability_section_visible(phase_key)` (`!= "setup"`) + früher `return` in
   `armyCard._render_round_choice_ui` **und** `_render_once_per_battle_ability_ui`;
   Regressionstest `test_ability_sections_hidden_in_setup_only`. Render-Code → manuelle
-  Verifikation steht (s. u.). **Offen (Rest #2b):** Direktive ab Bewegungsphase sperren
-  (eigener kleiner Task).
+  Verifikation steht (s. u.). **Offen (Rest #2b, nächste größere Aufgabe):** Direktive ab Bewegungsphase sperren.
 - 🟡 **#2 Protokoll-Buff-Audit** (Phase 3): **Engine-Wiring erledigt (Plan 024,
   S86/S87)** — alle 12 Direktiv-Effekte sind jetzt engine-seitig verdrahtet
   (vorher 3/12); offen bleibt nur noch die **Anzeige** (Badge/Block) je Direktive.
