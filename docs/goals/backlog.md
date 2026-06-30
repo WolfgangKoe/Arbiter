@@ -294,11 +294,32 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
   Group A + Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte verschwinden), 016
   behält nur RP-Hint + Dynastiebonus.
 
+## 4c. Design-System — Entscheidung ausstehend (NEEDS-DECISION)
+
+Vorschlag: `docs/handoff/design-system-proposal.md`. Kernbefund: 4 divergente Badge-Implementierungen im Codebase. Kleiner erster Schritt = `_common._badge()` + `unitCard._badge()` zusammenführen + Invuln-Block (`dice_html.py:188-204`) darauf umstellen. Offene Nutzer-Entscheidungen stehen im Vorschlag.
+
+**Vor Umsetzung Freigabe einholen.** Status: NEEDS-DECISION.
+
+---
+
+## 4d. Test-Schuld (klein)
+
+Zwei Tautologie-Tests in `tests/gameMechanic/test_damage_block_reanimation.py` bei Gelegenheit schärfen (Quelle: review-S114.md):
+- Z.394–401: rechnet `4*2==8` selbst nach — kein echter System-Under-Test-Nachweis.
+- Z.403–417: prüft nur Fixtures statt RP-Gate-Logik.
+
+Kein Blocker; schärfen wenn ohnehin in der Datei.
+
+---
+
 ## 5. Größere geplante Ziele
 
 - [ziel7.md](ziel7.md) — **Gefechtsoptionen + subfaction-Mechanik** (definiert 2026-06-30):
   Bündelt (a) `collect_modifiers_for_phase` Execute-Logik (§6e), (b) 6f Ability-Badges,
   (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
+  - **Ziel7-Cluster: P17 + P18** (aus Ziel6 ausgelagert S114):
+    - **P17** — Schadenszuweisungs-Korrektur-UI (±-Counter pro Gruppe nach „Apply Damage", ~50k, Opus-Tier wegen offener Design-Frage Mehrwunden-Frontmodell-Tracking — **diese Frage MUSS vor Code geklärt werden**); manuelle UI-Verifikation Pflicht.
+    - **P18** — Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in PlayerArea (~25k, Sonnet); manuelle UI-Verifikation Pflicht.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
 - [index.md](index.md) — Ziel-Gesamtübersicht

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-30 22:00 CEST
+Stand: 2026-06-30 22:44 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-30 20:54 ac89  ████████░░░░ 104k ✅    ████░░  64%    ██····▒▒▒▒▒▒
+06-30 22:03 8996  █████████░░░ 111k ✅    █████░  82%    ············
+         SA_1·  █████████░░░ 109k ✅    Design-System Research/Vorschlag
+         SA_2·  ████████░░░░  97k ✅    Session-Planung Ziel6-Abschluss
+         SA_3·  ████████░░░░  98k ✅    Ziel6 Status-Inventar
+         SA_4·  ███████░░░░░  92k ✅    Executor Test-Paket P1 P2 P4
+         SA_5·  █████░░░░░░░  61k ✅    DoD-Review Session S114
+         SA_6·  █████░░░░░░░  68k ✅    Executor commandPhase Hinweis
+----------------- ---------------------- -------------- ------------
+06-30 20:54 ac89  █████████░░░ 108k ✅    ████░░  62%    ██····▒▒▒▒▒▒
          SA_1·  █████░░░░░░░  59k ✅    Abschluss-Review S113 (DoD)
          SA_2·  ██████░░░░░░  74k ✅    Abschluss-Artefakte S113 schreiben
          SA_3·  ███░░░░░░░░░  32k ✅    T2a: WAAAGH-Drift read-only klären

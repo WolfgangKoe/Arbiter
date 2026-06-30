@@ -16,7 +16,8 @@ from gameMechanic.game_state import (
 from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.ability import Ability
-from gameObjects.loader import activated_wargear_ids, load_wargear_catalog
+from gameObjects.loader import activated_wargear_ids, load_unit_abilities, load_wargear_catalog
+from gameObjects.unit import Unit
 from uiLayout._common import (
     lookup,
     state_badges_html,
@@ -26,6 +27,45 @@ from uiLayout._common import (
 
 def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
     return get_triggered_abilities(state, "command", "phase_start")
+
+
+# ---------------------------------------------------------------------------
+# Pure helpers — army-wide command-phase ability checks (exported for tests)
+# ---------------------------------------------------------------------------
+
+
+def unit_has_command_ability(unit: Unit, faction_dir: str) -> bool:
+    """Return True when *unit* has at least one command-phase ability.
+
+    Checks three orthogonal sources (all data-driven, no faction strings):
+    1. Activated unit abilities with trigger phase "command".
+    2. Activated wargear (ability_type: activated in wargear.yaml).
+    3. Triggered relics that fire at command phase_start (e.g. gain_cp_roll).
+    """
+    unit_abilities = load_unit_abilities(faction_dir)
+    for a in unit_abilities:
+        if a.ability_type != "activated":
+            continue
+        if a.unit_id != unit.id:
+            continue
+        phases = a.trigger.phase if isinstance(a.trigger.phase, list) else [a.trigger.phase]
+        if "command" in phases:
+            return True
+
+    activated_ids = activated_wargear_ids(faction_dir)
+    if any(wid in activated_ids for wid in unit.wargear_ids):
+        return True
+
+    if unit.get_triggered_effect("phase_start", "command", "gain_cp_roll") is not None:
+        return True
+
+    return False
+
+
+def units_with_command_abilities(player: str) -> list[Unit]:
+    """Return all units in *player*'s army that have at least one command-phase ability."""
+    faction_dir = faction_dir_for(player)
+    return [u for u in units_list_for(player) if unit_has_command_ability(u, faction_dir)]
 
 
 # ---------------------------------------------------------------------------
@@ -355,6 +395,25 @@ def _render_unit_command_abilities(
 
 
 # ---------------------------------------------------------------------------
+# Army-wide command-phase hint (render only)
+# ---------------------------------------------------------------------------
+
+
+def _render_command_ability_hint(faction: str) -> None:
+    """Show which units in *faction*'s army have command-phase abilities.
+
+    Analogous to the PSYKER hint in the psychic phase: always visible in the
+    active column so the player knows which unit to select. Render-only — not
+    covered by automated tests; must be verified manually.
+    """
+    able_units = units_with_command_abilities(faction)
+    if not able_units:
+        return
+    names = ", ".join(u.name_en for u in able_units)
+    st.caption(f"Units with command-phase abilities: {names}")
+
+
+# ---------------------------------------------------------------------------
 # PhaseHandler implementation
 # ---------------------------------------------------------------------------
 
@@ -406,6 +465,8 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
     units_state: dict = state[units_key]  # type: ignore[type-arg]
 
     _render_faction_actions(faction, state)
+
+    _render_command_ability_hint(faction)
 
     # Render activated command-phase abilities for the selected unit (any faction)
     if sel and sel[0] == faction:

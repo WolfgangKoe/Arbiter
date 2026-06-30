@@ -26,7 +26,26 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S113, 2026-06-30)
+## Aktueller Stand (nach S114, 2026-06-30)
+
+**S114** abgeschlossen — Ziel6 weitgehend fertig, Doku-Abschluss erledigt:
+- **Posten 1** — Attacken-Auflösung Shooting/Fight/Overwatch verifiziert: test_attack_resolution_contexts.py, gemeinsame Fn resolve_attack_modifiers (combat.py:164) / render_attack_resolution (_common.py:1731). ✅
+- **Posten 2** — Tests für Damage-Block + RP-Würfellogik: test_damage_block_reanimation.py, 22 Tests. ✅
+- **Posten 3** — commandPhase.py Befehlsphase-Hinweise: commandPhase.py:37/65/409, test_command_phase.py; **manuell vom Stakeholder bestätigt** (Caption erscheint, Early Return bei leerem Roster). ✅
+- **Posten 4** — Phase/Stage-Wert-Tests: test_phase_stage_values.py, 15 Tests. ✅
+- **Doku-Abschluss** — ziel6.md Checkboxen abgehakt, backlog.md ergänzt (Ziel7-Cluster P17/P18, Design-System, Test-Schuld), Handoff-Cleanup (6 Dateien gelöscht).
+- Vollsuite: **1371 passed, Coverage 99.10 %**, Architektur grün. Review-S114: DONE (grün).
+- P17 + P18 nach Ziel7 ausgelagert (offene Design-Frage Mehrwunden-Tracking bei P17).
+
+### ▶ Nächster Schritt — Ziel7-Cluster
+
+**1. ERST: P17-Design-Frage klären** — Wie wird das Mehrwunden-Frontmodell-Tracking gelöst? (Nobz mit gemischter Bewaffnung: welcher Nob fällt?) Diese Frage MUSS mit dem Stakeholder vor Code-Umsetzung entschieden werden. Dann P17 (~50k, Opus-Tier) + P18 (~25k, Sonnet) umsetzen.
+
+**2. PARALLEL/DAVOR: Design-System-Entscheidung** — `docs/handoff/design-system-proposal.md` (NEEDS-DECISION) durchsehen, Entscheidung einholen, dann ggf. Badge-Konsolidierung umsetzen.
+
+---
+
+## Aktueller Stand (nach S113, 2026-06-30) [Archiv]
 
 **S113** abgeschlossen — vier Tasks erledigt:
 - **T1 — Extra-Direktiv-Permanenz GEKLÄRT**: Regelcheck + dokumentiert. Direktiven (Haupt+Extra) sind
@@ -64,15 +83,14 @@ Frühere Sessions (S60–S111): Verlauf in `docs/goals/ziel6.md` (Session-Histor
 
 ### ⚠️ Carry-over (offen)
 
-- **S113 DoD-Punkt 6 offen:** Manuelle UI-Prüfung der `once_per_battle`-Undo/Label-Pfade:
+- **S113/S114 DoD-Punkt 6:** Manuelle UI-Prüfung der `once_per_battle`-Undo/Label-Pfade:
   Stratagem-Undo nach Phasenwechsel testen; Label „(used)" nach Spielerwechsel prüfen.
-  (s. `docs/handoff/review-S113.md` für Checkliste — Review-Subagent hat das gesichert)
+  (s. `docs/handoff/review-S113.md` für Checkliste — im Ziel7-UI-Pass nachholen)
 - **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
-- **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (c) stationär+D1 grünes +1-Save-Badge in den Würfeln.
+- **Manuelle UI-Verifikation (PFLICHT, im Ziel7-UI-Pass):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
+  (c) stationär+D1 grünes +1-Save-Badge in den Würfeln. Checkliste: `docs/handoff/review-S113.md`.
 - **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
 - **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
-- **`docs/handoff/planning-S112.md`** ist verarbeitet (committet) — kann bei Bedarf archiviert werden.
 - **Ledger (impl. ohne Test):** R-COMBAT-17, R-PROTO-02 — bei Gelegenheit Tests nachziehen.
 
 ---

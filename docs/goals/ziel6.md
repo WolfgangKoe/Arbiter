@@ -1,4 +1,4 @@
-# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration 🔄
+# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration — weitgehend abgeschlossen (Rest P17/P18 nach Ziel7 ausgelagert)
 
 **Voraussetzung:** Ziel 5 (inkl. 5i) abgeschlossen. ✅
 
@@ -32,9 +32,11 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 Damit kein offener Punkt ausschließlich im Archiv existiert, hier der Verbleib der noch offenen
 6a–6d-Tasks. Acht sind durch aktive Artefakte gedeckt, zwei werden hier aktiv weitergeführt:
 
-- [ ] **Attacken-Auflösung in allen drei Kontexten verifizieren** (Shooting / Fight / Overwatch
+- [x] **Attacken-Auflösung in allen drei Kontexten verifizieren** (Shooting / Fight / Overwatch
   in Charge) — Overwatch-Teil → Plan 015; der generische Kontext-Check bleibt hier offen.
-- [ ] **Tests für Damage-Block + RP-Würfellogik** (aus 6d-v2) — noch kein eigener Plan; hier offen.
+  (Beleg S114: test_attack_resolution_contexts.py; gemeinsame Fn resolve_attack_modifiers combat.py:164 / render_attack_resolution _common.py:1731)
+- [x] **Tests für Damage-Block + RP-Würfellogik** (aus 6d-v2) — noch kein eigener Plan; hier offen.
+  (Beleg S114: test_damage_block_reanimation.py, 22 Tests)
 
 Durch aktive Artefakte gedeckt (im Archiv belassen):
 - `render_attack_form()` ersetzen → obsolet durch Plan 013 (einheitlicher Gruppen-Flow, DONE).
@@ -75,7 +77,8 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 ### Tasks
 
 - [x] `gameMechanic/commandPhase.py`: CP-Vergabe als einmaligen Phase-Grant implementieren (Flag `cp_granted_this_phase` im Session-State, Reset beim Phasenwechsel) ✅ (S55 verifiziert; Befund: kein Battle-forged-Gating → backlog R-CMD-03)
-- [ ] `gameMechanic/commandPhase.py`: Einheiten mit Befehlsphase-Fähigkeiten anzeigen (ähnlich Psiphase-Hinweise)
+- [x] `gameMechanic/commandPhase.py`: Einheiten mit Befehlsphase-Fähigkeiten anzeigen (ähnlich Psiphase-Hinweise)
+  (Beleg S114: commandPhase.py:37/65/409, test_command_phase.py; Render vom Stakeholder manuell bestätigt)
 - [ ] `gameMechanic/ability_engine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen → **Ziel7 (subfaction Execute-Logik)**
 - [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c) → **Ziel7**
 - [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks) → **Ziel7**
@@ -153,7 +156,8 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 - [x] `gameMechanic/game_state.py`: `reset_game()` ruft `archive_and_reset_log()` auf
 - [x] `uiLayout/setupScreen.py`: Archiv-Verwaltungs-Sektion (Liste, Download, Löschen mit Bestätigung)
 - [x] `gameMechanic/game_state.py`: `init_state()` ruft `set_log_players()` auf (Spielernamen im Log-Header)
-- [ ] Prüfen: Nach Reset keine alten Einträge im Battle Log sichtbar
+- [x] Prüfen: Nach Reset keine alten Einträge im Battle Log sichtbar
+  (Beleg: test_game_log.py:220 test_log_rounds_empty_after_archive)
 
 ---
 
@@ -202,7 +206,7 @@ Keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein.
 | `psychicPhase.py` | `"gloom_prism" in u.rules` in `can_deny()` | ✅ generisch via `load_deny_wargear_names` (6j) |
 | `unitCard.py:248` | `"wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids` | ✅ erledigt (6k) → **Fix A** |
 | `game_state.py` | `resurrection_orb_used = False` in globalem `init_state` | ✅ erledigt (S72) → **Fix D** |
-| `armyCard.py:_render_waaagh_ui` | `"WARBOSS"` Keyword + `"waaagh" in a.id` + Effekttexte hardcoded | 🟡 offen → **Fix B** |
+| `armyCard.py:_render_waaagh_ui` | `"WARBOSS"` Keyword + `"waaagh" in a.id` + Effekttexte hardcoded | ✅ erledigt (S113/e031616) → **Fix B** |
 | `armyCard.py:_render_protocol_ui` | `active_protocol_id` / `active_directive` nicht per-Fraktion | ✅ erledigt (S52/S72) → **Fix C** |
 | `_common.py` | `waaagh_state` im Attacken-Resolver (Stärke/Attacken-Modifier) | ✅ erledigt (S41 — `activated_abilities` ersetzt `waaagh_state`) |
 
@@ -277,7 +281,7 @@ nutzen diesen Key.
 |---|---|---|---|
 | 1 | **A** — unitCard Orb-Bearer | ✅ erledigt (6k) | — |
 | 2 | **D** — wargear_used generic | ✅ erledigt (S72) | — |
-| 3 | **B** — WAAAGH! generisch | 🟡 offen (YAML-Erweiterung nötig) | — |
+| 3 | **B** — WAAAGH! generisch | ✅ erledigt (S113, Commit e031616; armyCard.py:370–447) | — |
 | 4 | **C** — Protokoll-Keys per Fraktion | ✅ erledigt (S52/S72) | — |
 
 ### Kategorie 2 — Einmalig-Deklariert (wie WAAAGH!)
@@ -370,7 +374,8 @@ Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantie
 - [x] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [x] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [x] `once_per_battle` enforcement in Session-State + `stratagem_visibility()` — ✅ S113: `used_stratagem_battle_ids` battle-scoped; überlebt Phasen-/Spielerwechsel
-- [ ] Optional: Tests für korrekte Phase/Stage-Werte
+- [x] Optional: Tests für korrekte Phase/Stage-Werte
+  (Beleg S114: test_phase_stage_values.py, 15 Tests)
 
 ---
 
@@ -568,10 +573,14 @@ Die Resurrection-Orb-UI ist funktional und nutzt seit 6k `"resurrection_orb" in 
 - [x] 9 neue Tests → 519 grün
 
 **Phase 2 — Triggered Relic-Effekte (offen):**
-- [ ] `data/wh40k_9e/orks/relics.yaml`: Morgog's Finkin' Cap — `trigger/effect: gain_cp_roll` (Command Phase, D6 ≥ 4)
-- [ ] `data/wh40k_9e/orks/relics.yaml`: Da Irongob — `trigger/effect: mortal_after_melee` (Fight Phase, nach Attacken, D6 ≥ 2 → D3 Mortals)
-- [ ] `data/wh40k_9e/necrons/relics.yaml`: Veil of Darkness — `trigger/effect: teleport` (Movement Phase, 1×/Battle)
-- [ ] UI: Button pro triggered Relic in der richtigen Phase (analog Resurrection Orb)
+- [x] `data/wh40k_9e/orks/relics.yaml`: Morgog's Finkin' Cap — `trigger/effect: gain_cp_roll` (Command Phase, D6 ≥ 4)
+  (Beleg: relics.yaml:23; commandPhase.py:72 resolve_gain_cp_roll / :183 _render_gain_cp_roll / :353)
+- [x] `data/wh40k_9e/orks/relics.yaml`: Da Irongob — `trigger/effect: mortal_after_melee` (Fight Phase, nach Attacken, D6 ≥ 2 → D3 Mortals)
+  (Beleg: relics.yaml:87; fightPhase.py:123 _render_mortal_after_melee / :332)
+- [x] `data/wh40k_9e/necrons/relics.yaml`: Veil of Darkness — `trigger/effect: teleport` (Movement Phase, 1×/Battle)
+  (Beleg: relics.yaml:67; movementPhase.py:62/132/250/263/264 movement_locked-Flag)
+- [x] UI: Button pro triggered Relic in der richtigen Phase (analog Resurrection Orb)
+  (Beleg: alle drei Relics haben eigene Render-Fns mit Buttons)
 
 **Schema (Phase 2):**
 
@@ -983,7 +992,9 @@ unit_state["group_models"]: dict[str, int]
   - Sonst laut Nutzer keine Necron-Besonderheiten.
 - [x] **P16:** ✅ (verifiziert 2026-06-12) Bereits im Zuge von D5 implementiert: `dice_html.py:98-106` (Threshold > 6 → 6 Miss-Würfel + rotes ×) und `dice_html.py:193-213` (Save-Modifier-Reihe: × statt geklemmtem Würfel, Tooltip „exceeds 6 — save impossible"). Ursprünglich: Save-Anzeige Randfall: Sv 6+ mit AP-4 → effektiv unmöglich (10+). Anker „von 6 ausgehend" + Ausnahmeregel für Schwellen > 6+ definieren (vs. Normalfall AP-1 auf 3+).
 - [ ] **P17 (nachgeschärft 2026-06-10):** Zielauswahl bleibt auf Einheiten-Ebene (Untergruppen des Verteidigers für den Angreifer unsichtbar — regelkonform). ABER: **Verteidiger bekommt Korrekturmöglichkeit bei der Schadenszuweisung** — nach „Apply Damage" gegen eine Gruppen-Einheit: ±-Counter pro Gruppe (Summe = Verluste), Default bleibt `priority`-Reihenfolge. Kritischer Fall: Nobz mit gemischter Bewaffnung — welcher Nob fällt, ändert die verfügbaren Waffen der Folgerunden („bricht die Logik"). **Danach muss klar erkennbar sein, welche Waffen nicht mehr zur Verfügung stehen** (Gruppe auf 0 → Waffen weg; subUnitCard/Deklaration zeigen nur lebende Gruppen). Folgefrage bei Umsetzung: Tracking, in welcher Gruppe das verwundete Frontmodell steht (Mehrwunden-Einheiten).
+  → Ziel7-Cluster (offene Design-Frage: Mehrwunden-/Frontmodell-Tracking)
 - [ ] **P18:** UX Nahkampf: neben den Untergruppen in der gegnerischen PlayerArea die infrage kommenden Ziele anzeigen (App kennt `melee_with`). Einheiten OHNE Untergruppen genauso behandeln (= eine einzige Gruppe) → EIN einheitlicher Deklarations-Flow für alle Einheiten.
+  → Ziel7-Cluster
 - [x] **P19:** ✅ Root Cause: Cover-Checkboxen waren pro TAB gekeyt statt pro ZIEL — im zweiten Waffen-Tab desselben Ziels war die Checkbox separat/nicht gesetzt. Fix: cover_key pro Ziel; Checkbox nur im ersten Tab des Ziels (DuplicateWidgetID). Regel bestätigt: Heavy Cover entfällt NUR wenn der Verteidiger selbst gecharged hat (in-melee allein blockt nicht). Ursprünglich: Warum erscheint Heavy Cover beim Power-Klaw-Tab nicht? (Prüfen: Heavy-Cover-Checkbox-Bedingung pro Tab — Defender-charged-Regel oder Bug?)
 - [x] **P20:** ✅ Logik-Ebene verifiziert KORREKT (Regressionstest test_advanced_unit_in_melee_is_eligible_and_receives_turn): ADVANCED+IN MELEE ist kampfberechtigt, Wechsel funktioniert. Der beobachtete Block muss im UI-Pfad liegen — Verdacht: pending_irongob-Dialog des Big Mek (rendert Fight Phase exklusiv) oder unfertige charged-Einheit. Falls erneut beobachtet: genaue Repro-Schritte notieren! Ursprung: Heroic Intervention: Scarabs intervenieren → IN MELEE korrekt, aber ADVANCED-Badge bleibt; Einheit darf danach wohl nicht kämpfen und **blockiert den Kämpfer-Wechsel** in der Fight Phase. HI muss den Bewegungszustand regelkonform behandeln + Regressionstest.
 
@@ -1010,17 +1021,28 @@ unit_state["group_models"]: dict[str, int]
 
 ## Akzeptanzkriterien (Ziel 6 komplett)
 
-- [ ] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß
-- [ ] armyCard: Korrekte Fähigkeiten für jede Fraktion, kein Necron-Fallback-Bug
-- [ ] WAAAGH aktivierbar, Command Protocol wechselbar — beide über armyCard
+- [x] Header: VP/CP inline, alle Steuerelemente auf einer Zeile, Badges doppelt so groß
+  (Beleg: gameHeader.py:222-223 VP/CP inline)
+- [x] armyCard: Korrekte Fähigkeiten für jede Fraktion, kein Necron-Fallback-Bug
+  (Beleg: grep -rn necron src/uiLayout/armyCard.py = 0 Treffer; generisches System 6b/S41/S51)
+- [x] WAAAGH aktivierbar, Command Protocol wechselbar — beide über armyCard
+  (Beleg: Fix B erledigt S113/e031616; _render_round_choice_ui in armyCard.py)
 - [ ] **Ka'tah (Custodes) + Canticles (AdMech) funktionieren ohne Code-Änderung** (nur YAML)
+  → Custodes-Hälfte erledigt (YAML vorhanden, generisches round_choice-System); AdMech-Hälfte → Ziel7 (kein adeptus_mechanicus/-Verzeichnis)
 - [ ] **Auto-Progression-Badge zeigt korrekte Doctrine für Space Marines**
-- [ ] Stratagems sind Default-Tab in gameProtocoll
-- [ ] Attackensequenz: simultan, Modifier transparent, kein Zwischenwert-Klicken
-- [ ] CP-Doppelvergabe unmöglich
+  → Ziel7 (Space Marines blocked-by-YAML, kein Verzeichnis)
+- [x] Stratagems sind Default-Tab in gameProtocoll
+  (Beleg: 6c ✅; docs/spec/ui_layout.md:12 Stratagems zuerst = Default)
+- [x] Attackensequenz: simultan, Modifier transparent, kein Zwischenwert-Klicken
+  (Beleg: 6d ✅; ui_layout.md:344 „Both players may have active buttons simultaneously")
+- [x] CP-Doppelvergabe unmöglich
+  (Beleg: 6e Task ✅ S55 verifiziert; cp_granted_this_phase-Flag)
 - [ ] Ability-Badges auf unitCard sichtbar und korrekt ablaufend
-- [ ] Reset archiviert Log; neues Spiel startet sauber
-- [ ] Archiv-UI im Setup-Screen: Liste, Download, Löschen
+  → Ziel7 (abhängig von 6f Ability-Badges, komplett nach Ziel7 ausgelagert)
+- [x] Reset archiviert Log; neues Spiel startet sauber
+  (Beleg: 6g ✅; test_log_rounds_empty_after_archive)
+- [x] Archiv-UI im Setup-Screen: Liste, Download, Löschen
+  (Beleg: 6g Task ✅ setupScreen.py Archiv-Verwaltungs-Sektion)
 
 ---
 

@@ -1936,8 +1936,8 @@
   "ac896ba0-b2c5-40ec-a82d-1a0cac12b5ac": {
     "started_at": "2026-06-30T18:54:30.061Z",
     "task": "start Session mit dem Planner Subagenten",
-    "peak_context": 104103,
-    "subagent_share": 63.72264693816574,
+    "peak_context": 107654,
+    "subagent_share": 61.70599935095103,
     "by_tier": {
       "Opus": 2086378,
       "Haiku": 5406548,
@@ -2006,6 +2006,60 @@
         "tier": "Opus",
         "peak_context": 65705,
         "started_at": "2026-06-30T18:54:30.061Z"
+      }
+    ]
+  },
+  "8996deff-f5ed-497f-b336-997d6fff234f": {
+    "started_at": "2026-06-30T20:03:15.469Z",
+    "task": "Beginne die nächste Session und starte den Plan-subagenten. Mich interessiert vor allem, was noch zur Erfüllung von zie…",
+    "peak_context": 110582,
+    "subagent_share": 81.85105074522984,
+    "by_tier": {
+      "Sonnet": 16396342,
+      "Opus": 665327
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Design-System Research/Vorschlag",
+        "tier": "Sonnet",
+        "peak_context": 108895,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Session-Planung Ziel6-Abschluss",
+        "tier": "Sonnet",
+        "peak_context": 96957,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ziel6 Status-Inventar",
+        "tier": "Sonnet",
+        "peak_context": 97908,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Test-Paket P1 P2 P4",
+        "tier": "Sonnet",
+        "peak_context": 92263,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review Session S114",
+        "tier": "Opus",
+        "peak_context": 61063,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor commandPhase Hinweis",
+        "tier": "Sonnet",
+        "peak_context": 67776,
+        "started_at": "2026-06-30T20:03:15.469Z"
       }
     ]
   }

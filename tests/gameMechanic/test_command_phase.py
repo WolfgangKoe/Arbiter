@@ -16,6 +16,8 @@ from gameMechanic.commandPhase import (  # noqa: E402
     can_gain_command_point,
     resolve_command_start,
     resolve_gain_cp_roll,
+    unit_has_command_ability,
+    units_with_command_abilities,
 )
 from gameObjects.loader import activated_wargear_ids, load_army  # noqa: E402
 
@@ -225,3 +227,195 @@ class TestActivatedWargear:
         assert len(captured) == 2
         assert captured[0] != captured[1]
         assert all(k.startswith("cmd_revive_wargear_") for k in captured)
+
+
+# ---------------------------------------------------------------------------
+# unit_has_command_ability — army-wide command-phase ability detection helper
+# ---------------------------------------------------------------------------
+
+
+class TestUnitHasCommandAbility:
+    """unit_has_command_ability must be data-driven and render-free."""
+
+    def test_overlord_has_command_ability_via_unit_ability(self) -> None:
+        """Overlord has 'My Will Be Done' (unit_ability, phase: command) → True."""
+        units, _ = load_army("necrons")
+        overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+        assert unit_has_command_ability(overlord, "necrons") is True
+
+    def test_necron_lord_has_command_ability_via_unit_ability(self) -> None:
+        """Necron Lord has 'The Lord's Will' (unit_ability, phase: command) → True."""
+        units, _ = load_army("necrons")
+        lord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.necron_lord")
+        assert unit_has_command_ability(lord, "necrons") is True
+
+    def test_warriors_have_no_command_ability(self) -> None:
+        """Warriors only have a triggered RP ability — no command-phase ability → False."""
+        units, _ = load_army("necrons")
+        warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+        assert unit_has_command_ability(warriors, "necrons") is False
+
+    def test_unit_with_activated_wargear_has_command_ability(self) -> None:
+        """A unit whose wargear_ids include an activated wargear entry → True.
+
+        This tests the wargear branch directly: create a minimal unit with the
+        Resurrection Orb wargear id, which has ability_type: activated.
+        """
+        from gameObjects.unit import Unit
+
+        orb_id = "wh40k_9e.necrons.wargear.resurrection_orb"
+        dummy = Unit(
+            id="wh40k_9e.necrons.unit.dummy_bearer",
+            name_en="Dummy Bearer",
+            name_de="Dummy Träger",
+            faction="Necrons",
+            subfaction=None,
+            battlefield_role=["HQ"],
+            keywords=["NECRONS"],
+            wounds=4,
+            models_min=1,
+            models_max=1,
+            power_level=4,
+            move='5"',
+            bs="3+",
+            ws="3+",
+            strength=4,
+            toughness=4,
+            attacks=3,
+            save=3,
+            invuln_save=None,
+            leadership=10,
+            oc=1,
+            fnp=None,
+            wargear_ids=[orb_id],
+        )
+        assert unit_has_command_ability(dummy, "necrons") is True
+
+    def test_unit_without_activated_wargear_and_no_ability_returns_false(self) -> None:
+        """Unit with no command-phase unit_ability, no activated wargear, no relic → False."""
+        from gameObjects.unit import Unit
+
+        bare = Unit(
+            id="wh40k_9e.necrons.unit.bare_unit",
+            name_en="Bare Unit",
+            name_de="Bare Unit",
+            faction="Necrons",
+            subfaction=None,
+            battlefield_role=["Troops"],
+            keywords=["NECRONS"],
+            wounds=1,
+            models_min=10,
+            models_max=10,
+            power_level=3,
+            move='5"',
+            bs="3+",
+            ws="3+",
+            strength=4,
+            toughness=4,
+            attacks=1,
+            save=4,
+            invuln_save=None,
+            leadership=10,
+            oc=2,
+            fnp=None,
+            wargear_ids=[],
+        )
+        assert unit_has_command_ability(bare, "necrons") is False
+
+    def test_unit_with_gain_cp_roll_relic_has_command_ability(self) -> None:
+        """Unit with a gain_cp_roll triggered effect at phase_start/command → True.
+
+        The TriggeredEffect is set directly (no YAML lookup needed) — tests the
+        third source branch of unit_has_command_ability.
+        """
+        from gameObjects.unit import TriggeredEffect, Unit
+
+        relic_te = TriggeredEffect(
+            timing="phase_start",
+            phase="command",
+            effect="gain_cp_roll",
+        )
+        bearer = Unit(
+            id="wh40k_9e.necrons.unit.relic_bearer",
+            name_en="Relic Bearer",
+            name_de="Relic Bearer",
+            faction="Necrons",
+            subfaction=None,
+            battlefield_role=["HQ"],
+            keywords=["NECRONS"],
+            wounds=4,
+            models_min=1,
+            models_max=1,
+            power_level=4,
+            move='5"',
+            bs="3+",
+            ws="3+",
+            strength=4,
+            toughness=4,
+            attacks=3,
+            save=3,
+            invuln_save=None,
+            leadership=10,
+            oc=1,
+            fnp=None,
+            wargear_ids=[],
+            triggered_effects=[relic_te],
+        )
+        assert unit_has_command_ability(bearer, "necrons") is True
+
+
+# ---------------------------------------------------------------------------
+# units_with_command_abilities — army-wide aggregator (integration)
+# ---------------------------------------------------------------------------
+
+
+class TestUnitsWithCommandAbilities:
+    """units_with_command_abilities must return only units with command-phase abilities."""
+
+    def test_necrons_includes_overlord_and_necron_lord(self) -> None:
+        """Necron army must list Overlord and Necron Lord among units with command abilities."""
+        session = _S(
+            first_player="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="necrons",
+        )
+        _st_mock.session_state = session
+        _gs.st.session_state = session
+
+        units, _ = load_army("necrons")
+        session["p1_units_list"] = units
+
+        able = units_with_command_abilities("Necrons")
+        able_ids = {u.id for u in able}
+        assert "wh40k_9e.necrons.unit.overlord" in able_ids
+        assert "wh40k_9e.necrons.unit.necron_lord" in able_ids
+
+    def test_necrons_excludes_warriors(self) -> None:
+        """Warriors have no command-phase ability → excluded from the army-wide list."""
+        session = _S(
+            first_player="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="necrons",
+        )
+        _st_mock.session_state = session
+        _gs.st.session_state = session
+
+        units, _ = load_army("necrons")
+        session["p1_units_list"] = units
+
+        able = units_with_command_abilities("Necrons")
+        able_ids = {u.id for u in able}
+        assert "wh40k_9e.necrons.unit.warriors" not in able_ids
+
+    def test_empty_army_returns_empty_list(self) -> None:
+        """Army with no units → empty result, no crash."""
+        session = _S(
+            first_player="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="necrons",
+        )
+        _st_mock.session_state = session
+        _gs.st.session_state = session
+        session["p1_units_list"] = []
+
+        assert units_with_command_abilities("Necrons") == []
