@@ -5,6 +5,12 @@ Dies ist **kein** Akzeptanz-Katalog (das ist `acceptance/rules.md`, parser-gepr�
 Nenner) und **keine** Rohquelle (das sind `docs/work/wahapedia_*/`), sondern die kurze
 Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie Gedächtnis.
 
+- **Necron Command Protocols — Direktiv-Wahl ist runden-scoped:** Haupt- wie Extra-Direktive
+  werden **jede Runde** neu gewählt (`faction_overview.txt` Z. 568/579: „at the start of each
+  battle round"). Sie bleiben NICHT einmal fix. App-Implementierung: `game_state.py`
+  `_reset_round_choice_state()` (~Z. 583) öffnet das Fenster pro Runde. Einzige Ausnahme: **Voice
+  of the Triarch** (Silent King) schaltet das *aktive Protokoll* um — ändert aber nicht die
+  pro-Runde-Direktiv-Wahl.
 - **WAAAGH! Stage 1:** ORKS CORE/CHARACTER dürfen nach Advance chargen; +1 S / +1 A für
   ALLE ORKS.
 - **Cover:** Dense (−1 Hit) + Light (+1 Save) nur Shooting; Heavy (+1 Save) nur Melee,

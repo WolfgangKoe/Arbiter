@@ -191,3 +191,100 @@ class TestCommandReRollIsPhaseReactive:
         # Confirm the visibility rule in isolation (no YAML dependency)
         strat = _strat(timing="phase_reactive", phase="any", stage="active")
         assert _vis(strat, cp=10, current_phase="shooting", current_stage="active") == "hidden"
+
+
+# ---------------------------------------------------------------------------
+# R-STR-01: once_per_battle — battle-scoped enforcement
+# ---------------------------------------------------------------------------
+
+
+def _once_per_battle_strat(sid: str = "test.opb_strat") -> Stratagem:
+    return Stratagem(
+        id=sid,
+        name_en="Once Per Battle GO",
+        cp_cost=1,
+        phase="any",
+        stage="active",
+        player="active",
+        once_per_battle=True,
+    )
+
+
+class TestOncePerBattleEnforcement:
+    """R-STR-01: A once_per_battle stratagem must stay greyed after phase and player switches.
+
+    The battle-scoped used_in_battle set is checked independently of used_this_phase.
+    A normal (once_per_phase) stratagem must not be affected by the battle-set.
+    """
+
+    def test_once_per_battle_greyed_when_in_battle_set(self) -> None:
+        strat = _once_per_battle_strat()
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+            used_in_battle={"test.opb_strat"},
+        )
+        assert result == "greyed"
+
+    def test_once_per_battle_greyed_across_phase_change(self) -> None:
+        """After a phase reset used_this_phase is empty, but used_in_battle persists.
+
+        The stratagem must remain greyed — simulating a new phase where the
+        phase-scoped set was cleared but the battle-scoped set was not.
+        """
+        strat = _once_per_battle_strat()
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="fight",  # different phase than where it was used
+            current_stage="active",
+            used_this_phase=set(),  # phase was reset
+            conditions_met=True,
+            used_in_battle={"test.opb_strat"},  # battle set still contains the id
+        )
+        assert result == "greyed"
+
+    def test_once_per_battle_clickable_when_not_in_battle_set(self) -> None:
+        strat = _once_per_battle_strat()
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+            used_in_battle=set(),
+        )
+        assert result == "clickable"
+
+    def test_normal_stratagem_unaffected_by_battle_set(self) -> None:
+        """A non-once_per_battle stratagem is not blocked by the battle-scoped set."""
+        strat = _strat(sid="test.normal_strat")  # once_per_battle defaults to False
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+            used_in_battle={"test.normal_strat"},  # id in battle set, but not once_per_battle
+        )
+        assert result == "clickable"
+
+    def test_once_per_battle_without_battle_set_falls_back_to_phase_check(self) -> None:
+        """When used_in_battle is None (legacy call), the phase check still applies."""
+        strat = _once_per_battle_strat(sid="test.opb_strat_legacy")
+        result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase={"test.opb_strat_legacy"},
+            conditions_met=True,
+            used_in_battle=None,  # no battle set provided
+        )
+        assert result == "greyed"

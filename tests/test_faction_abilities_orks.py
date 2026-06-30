@@ -28,6 +28,18 @@ class TestOrksWaaagh:
         ids = [a.id for a in abilities]
         assert "wh40k_9e.orks.faction.ere_we_go" in ids
 
+    def test_waaagh_stage1_active_text_lists_buffs(self) -> None:
+        abilities = load_faction_abilities("orks")
+        waaagh_s1 = next(a for a in abilities if a.id == "wh40k_9e.orks.faction.waaagh_stage1")
+        expected = "+1 Strength · +1 Attacks · 5+ invuln · Advance & Charge"
+        assert waaagh_s1.active_text == expected
+
+    def test_waaagh_stage2_active_text_lists_buffs(self) -> None:
+        abilities = load_faction_abilities("orks")
+        waaagh_s2 = next(a for a in abilities if a.id == "wh40k_9e.orks.faction.waaagh_stage2")
+        expected = "+1 Strength · +1 Attacks · 6+ invuln"
+        assert waaagh_s2.active_text == expected
+
 
 class TestOrksObjectiveSecuredMigration:
     def test_objective_secured_not_in_faction_abilities(self) -> None:

@@ -130,6 +130,7 @@ def _render_stratagems() -> None:
     current_phase = PHASES[phase_idx][1]
     current_stage = st.session_state.get("phase_stage", "active")
     used_ids: set[str] = st.session_state.get("used_stratagem_ids", set())
+    used_battle_ids: set[str] = st.session_state.get("used_stratagem_battle_ids", set())
 
     st.caption(f"**{active_faction}** (active) · CP: **{cp_active}**")
     st.caption(f"**{inactive_faction}** (inactive) · CP: **{cp_inactive}**")
@@ -166,7 +167,9 @@ def _render_stratagems() -> None:
             unit_for_check = sel_faction_unit[1]
         met = _conditions_met(s.conditions, unit_for_check)
 
-        vis = stratagem_visibility(s, cp_for_strat, current_phase, current_stage, used_ids, met)
+        vis = stratagem_visibility(
+            s, cp_for_strat, current_phase, current_stage, used_ids, met, used_battle_ids
+        )
         if vis != "hidden":
             visible.append((s, vis, spending_faction))
 
@@ -176,18 +179,19 @@ def _render_stratagems() -> None:
 
     for i, (strat, vis, spending_faction) in enumerate(visible):
         disabled = vis == "greyed"
+        is_used = strat.id in used_ids or strat.id in used_battle_ids
         label = f"**{strat.name_en}** · {strat.cp_cost} CP"
         if strat.player == "inactive":
             label += f" *({inactive_faction})*"
         if vis == "greyed":
-            if strat.id in used_ids:
+            if is_used:
                 label += " *(used)*"
             else:
                 label += " *(CP insufficient)*"
 
         with st.expander(label, expanded=False):
             st.caption(strat.rule_text)
-            if strat.id in used_ids:
+            if is_used:
                 if st.button(
                     f"↺ Rückgängig (+{strat.cp_cost} CP)",
                     key=f"strat_undo_{strat.id}_{phase_idx}_{i}",
@@ -195,6 +199,9 @@ def _render_stratagems() -> None:
                     adjust_cp(spending_faction, strat.cp_cost)
                     used_ids.discard(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
+                    if strat.once_per_battle:
+                        used_battle_ids.discard(strat.id)
+                        st.session_state.used_stratagem_battle_ids = used_battle_ids
                     st.session_state.active_modifiers = [
                         m
                         for m in st.session_state.get("active_modifiers", [])
@@ -209,6 +216,9 @@ def _render_stratagems() -> None:
                     adjust_cp(spending_faction, -strat.cp_cost)
                     used_ids.add(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
+                    if strat.once_per_battle:
+                        used_battle_ids.add(strat.id)
+                        st.session_state.used_stratagem_battle_ids = used_battle_ids
                     if strat.modifier is not None:
                         m = strat.modifier
                         active_mods = st.session_state.get("active_modifiers", [])

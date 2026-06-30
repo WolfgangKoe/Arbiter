@@ -1888,8 +1888,8 @@
   "fce6bdee-cf39-422b-970d-6dc4c2e5aca9": {
     "started_at": "2026-06-30T16:46:02.522Z",
     "task": "start session. Prüfe nextsession und starte einen Planungs-Subagenten",
-    "peak_context": 126379,
-    "subagent_share": 78.58533271174072,
+    "peak_context": 132762,
+    "subagent_share": 74.85748687241434,
     "by_tier": {
       "Sonnet": 17555545,
       "Haiku": 1203589,
@@ -1930,6 +1930,82 @@
         "tier": "Sonnet",
         "peak_context": 119279,
         "started_at": "2026-06-30T16:46:02.522Z"
+      }
+    ]
+  },
+  "ac896ba0-b2c5-40ec-a82d-1a0cac12b5ac": {
+    "started_at": "2026-06-30T18:54:30.061Z",
+    "task": "start Session mit dem Planner Subagenten",
+    "peak_context": 104103,
+    "subagent_share": 63.72264693816574,
+    "by_tier": {
+      "Opus": 2086378,
+      "Haiku": 5406548,
+      "Sonnet": 3027676
+    },
+    "subagents": [
+      {
+        "agent_type": "claude",
+        "description": "Abschluss-Review S113 (DoD)",
+        "tier": "Opus",
+        "peak_context": 58964,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Abschluss-Artefakte S113 schreiben",
+        "tier": "Haiku",
+        "peak_context": 73803,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "T2a: WAAAGH-Drift read-only klären",
+        "tier": "Haiku",
+        "peak_context": 31647,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "T1: S112-Befund schließen",
+        "tier": "Haiku",
+        "peak_context": 29478,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "T1: S112-Befund schließen",
+        "tier": "Haiku",
+        "peak_context": 30093,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "B1/B2 Fix Undo+Label battle-scope",
+        "tier": "Haiku",
+        "peak_context": 32325,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "active_text Inhaltstest WAAAGH",
+        "tier": "Haiku",
+        "peak_context": 42158,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "T2b: once_per_battle battle-scope",
+        "tier": "Sonnet",
+        "peak_context": 68111,
+        "started_at": "2026-06-30T18:54:30.061Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Opus",
+        "peak_context": 65705,
+        "started_at": "2026-06-30T18:54:30.061Z"
       }
     ]
   }

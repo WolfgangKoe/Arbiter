@@ -144,6 +144,10 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    - **Format vor Rückgabe:** Subagent führt `black` + `ruff` (+ `isort`) auf seine Dateien aus, bevor er meldet — sonst muss der Orchestrator nachformatieren (S82-Reibung).
    - **Beleg zurückliefern (festes Format):** Endbericht KNAPP und in fester Reihenfolge — (1) pytest-Zusammenfassungszeile, (2) grep-Belegzeilen, (3) `git diff --stat`, (4) ggf. gewählte Werte. Nicht nur „getestet, grün"; kein Volltext (S82: verstümmelter Bericht → alles selbst nachgeprüft).
 
+   **Maßnahme 1 (Executor-Briefing, S113):** Jeder datei-ändernde Subagent-Auftrag enthält die Standardzeile „**Freigabe liegt vor — Koordinator hält das Gate; editiere direkt**", damit der Executor nicht fälschlich das Freigabe-Gate auf sich selbst anwendet und eine Resume-Runde kostet.
+
+   **Maßnahme 3 (Planner-Dateiliste, S113):** Der Planner belegt **jede Datei in der Plan-Dateiliste per grep** (wo die betroffene Logik real liegt) — keine geratenen Pfade.
+
    **„Subagent-grün" ≠ „verdrahtet":** Der Orchestrator-Review prüft Wiring + Architektur-Heimat, nicht nur die Testfarbe (S70-Lehre).
 
 4. <a id="ev4"></a>**DoD-Review (Definition of Done)**

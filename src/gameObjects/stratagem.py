@@ -75,6 +75,7 @@ def stratagem_visibility(
     current_stage: str,
     used_this_phase: set[str],
     conditions_met: bool,
+    used_in_battle: set[str] | None = None,
 ) -> Literal["clickable", "greyed", "hidden"]:
     """Return the display state for a stratagem given the current game context.
 
@@ -86,6 +87,9 @@ def stratagem_visibility(
     current_stage:    "start" | "active" | "end"
     used_this_phase:  Set of stratagem IDs already used this phase.
     conditions_met:   Whether unit/keyword conditions for this GO are satisfied.
+    used_in_battle:   Battle-scoped set of once_per_battle stratagem IDs already used.
+                      When provided, a once_per_battle stratagem in this set is greyed
+                      out regardless of phase or player turn.
     """
     if not conditions_met:
         return "hidden"
@@ -99,6 +103,9 @@ def stratagem_visibility(
     if stratagem.stage != current_stage:
         return "hidden"
 
+    if stratagem.once_per_battle and used_in_battle is not None:
+        if stratagem.id in used_in_battle:
+            return "greyed"
     if stratagem.id in used_this_phase:
         return "greyed"
     if cp_available < stratagem.cp_cost:

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-30 20:51 CEST
+Stand: 2026-06-30 22:00 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-30 18:46 fce6  ██████████░░ 126k ⚠️   █████░  79%    ███········▒
+06-30 20:54 ac89  ████████░░░░ 104k ✅    ████░░  64%    ██····▒▒▒▒▒▒
+         SA_1·  █████░░░░░░░  59k ✅    Abschluss-Review S113 (DoD)
+         SA_2·  ██████░░░░░░  74k ✅    Abschluss-Artefakte S113 schreiben
+         SA_3·  ███░░░░░░░░░  32k ✅    T2a: WAAAGH-Drift read-only klären
+         SA_4·  ██░░░░░░░░░░  29k ✅    T1: S112-Befund schließen
+         SA_5·  ██░░░░░░░░░░  30k ✅    T1: S112-Befund schließen
+         SA_6·  ███░░░░░░░░░  32k ✅    B1/B2 Fix Undo+Label battle-scope
+         SA_7·  ███░░░░░░░░░  42k ✅    active_text Inhaltstest WAAAGH
+         SA_8·  █████░░░░░░░  68k ✅    T2b: once_per_battle battle-scope
+         SA_9·  █████░░░░░░░  66k ✅    Planning-Entwurf nächste Session
+----------------- ---------------------- -------------- ------------
+06-30 18:46 fce6  ███████████░ 133k ⚠️   ████░░  75%    ███········▒
          SA_1·  █████░░░░░░░  60k ✅    Planungs-Entwurf S112
          SA_2·  ████░░░░░░░░  49k ✅    Ziel-Renumbering ausführen
          SA_3·  ███░░░░░░░░░  40k ✅    Doku-Drift 92 auf 99

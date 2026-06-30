@@ -26,39 +26,47 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S112, 2026-06-30)
+## Aktueller Stand (nach S113, 2026-06-30)
 
-**S112** lief glatt: **Plan 031** (Protokoll-Direktiven-Timing) ist gefixt und committet (533e313) —
-Wahl von `is_active` entkoppelt (beide Spieler wählen am Rundenanfang), „Change extra directive"-
-Button raus, Haupt- und Extra-Direktive über `_directive_window_open()` UNABHÄNGIG gegated,
-Runde-1-Fenster geschlossen. Stakeholder hat den Doppel-Direktiven-Fix am App verifiziert.
-Danach **Ziel6 konsolidiert + Ziel7 ausgelagert + Renumbering** committet (efe12e1): neues
-**Ziel7 = Gefechtsoptionen + subfaction-Mechanik**, Crusade→ziel8, Faction Fetcher→ziel9; Doku-Drift
-92→99 %. Vollsuite 1303 / 99,09 %, Architektur 8/8, Docs-Tests 8/8 grün. **Offen für S113:** der
-neue Befund zur Extra-Direktiven-Permanenz (s. Priorität 1) und die manuelle UI-Re-Verifikation läuft.
+**S113** abgeschlossen — vier Tasks erledigt:
+- **T1 — Extra-Direktiv-Permanenz GEKLÄRT**: Regelcheck + dokumentiert. Direktiven (Haupt+Extra) sind
+  **jede Runde** neu wählbar, nicht einmal fix. App korrekt; nur Voice of the Triarch (Silent King)
+  noch nicht verdrahtet (Folge-Task S114/T3).
+- **T2b — `once_per_battle` battle-scope**: `used_stratagem_battle_ids` ersetzt phase-scoped
+  `used_stratagem_ids`, überlebt Phasen-/Spielerwechsel. Vollständig getestet.
+- **T2a — Fix B WAAAGH! generisch**: `active_text`-Feld wird aus YAML geladen + gerendert;
+  Inhaltstest (S1+S2) ergänzt. ✅ ERLEDIGT (nicht wie Z.54 behauptet noch „offen").
+- **B1/B2 — Undo + Label-Fix**: Stratagem-Undo nach Phasenwechsel möglich; Label zeigt jetzt
+  korrekt `(used)` vs. `(CP insufficient)`.
+Vollsuite: **1311 passed, 99.10 % Coverage**, Architektur 8/8. **DoD-Punkt 6 offen:**
+manuelle UI-Prüfung der once_per_battle-Undo/Label-Pfade (Stratagem-Phase, Spielerwechsel).
 
 Frühere Sessions (S60–S111): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — Prioritäten (S113)
 
-**1. NEUER BEFUND (P-hoch, regel-prüfen DANN fixen) — Permanenz der Extra-Direktive.**
-   Stakeholder-Vermutung: Direktive des permanent aktiven (Extra-)Protokolls wird EINMAL zu
-   Spielbeginn gewählt und bleibt den Rest des Spiels FIX (nur eine Silent-King-Fähigkeit
-   könnte das beeinflussen). Aktuelles Verhalten: `_reset_round_choice_state()` öffnet das
-   Extra-Fenster JEDE Runde neu → Extra-Direktive ist aktuell pro Runde neu wählbar.
-   **Regel-Spannung:** `faction_overview.txt` Z. 579 sagt wörtlich „select which directive …
-   **at the start of each battle round**" — das stützt eher „jede Runde wählbar", NICHT „einmal fix".
-   → ZUERST Regel sauber klären (Z. 568/579 + Silent-King/Szarekh-Fähigkeit in
-   `wahapedia_necrons/` suchen), DANN entscheiden ob Fix nötig. Nicht raten.
+**1. GEKLÄRT — Extra-Direktiven-Permanenz (regelkonform, kein Fix nötig).**
+   Stakeholder-Vermutung war, Direktive des permanent aktiven (Extra-)Protokolls würde EINMAL
+   zu Spielbeginn fest gewählt. **Regelcheck (faction_overview.txt Z. 568/579) belegt:**
+   „When a command protocol becomes active … select which directive … **at the start of each battle
+   round**" — beide Direktiven (Haupt + Extra) sind **jede Runde** neu wählbar, NICHT einmal fix.
+   App korrekt: `_reset_round_choice_state()` in `game_state.py` (~Z. 583) öffnet das Fenster
+   pro Runde neu (docstring zitiert Z. 568/579). Einzige Ausnahme: **Voice of the Triarch**
+   (Silent King, `unit_abilities.yaml:272–288`) schaltet das *aktive Protokoll* um — ändert aber
+   nicht die pro-Runde-Direktiv-Wahl. Handler noch nicht verdrahtet → Folge-Task T3.
 
-**2. Ziel6-Reste (klein, NICHT YAML-blockiert):** (a) Fix B WAAAGH! generisch — `active_text`-
-   Feld im YAML fehlt noch; (b) `once_per_battle`-Enforcement battle-scope statt phase-scope
-   (`stratagem.py:59`, `used_stratagem_ids` ist phase-scoped). Beide bewusst Ziel6-Rest (Stakeholder-Entscheid S112).
+**2. Ziel6-Rückhalt:** (a) ✅ Fix B WAAAGH! generisch — `active_text` geladen+gerendert (S113, erledigt);
+   (b) ✅ `once_per_battle`-Enforcement battle-scope (S113, erledigt).
 
-**3. Ziel7 ausdetaillieren:** wenn aktiv — `ziel7.md` ist aktuell nur Scope-Stub.
+**3. S114 = T3 Voice of the Triarch** — Silent-King-Handler `voiceOfTheTriarch` verdrahten;
+   hängt an generischer Aktivator-UI (backlog §0; S113 Befund: `faction_abilities`-Aktivatoren
+   ohne `once_per_battle: false` sind nirgends gemountet). Eigener kleiner Plan.
 
 ### ⚠️ Carry-over (offen)
 
+- **S113 DoD-Punkt 6 offen:** Manuelle UI-Prüfung der `once_per_battle`-Undo/Label-Pfade:
+  Stratagem-Undo nach Phasenwechsel testen; Label „(used)" nach Spielerwechsel prüfen.
+  (s. `docs/handoff/review-S113.md` für Checkliste — Review-Subagent hat das gesichert)
 - **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
 - **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
   (c) stationär+D1 grünes +1-Save-Badge in den Würfeln.

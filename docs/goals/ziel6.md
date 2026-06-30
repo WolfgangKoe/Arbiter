@@ -369,7 +369,7 @@ Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantie
 - [x] `orks/stratagems.yaml`: alle 28 GOs vollständig — `effect`, `once_per_battle`, `timing/event`, `player` bei tough_as_squig_hide + orks_is_never_beaten korrigiert
 - [x] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [x] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
-- [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()` — Datenfeld gesetzt; UI nutzt `used_stratagem_ids` (phase-scope), aber kein battle-scope; bleibt offen (kein Ziel7-Kandidat, da kein YAML-Block)
+- [x] `once_per_battle` enforcement in Session-State + `stratagem_visibility()` — ✅ S113: `used_stratagem_battle_ids` battle-scoped; überlebt Phasen-/Spielerwechsel
 - [ ] Optional: Tests für korrekte Phase/Stage-Werte
 
 ---
