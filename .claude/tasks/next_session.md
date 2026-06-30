@@ -37,11 +37,25 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 - Vollsuite: **1371 passed, Coverage 99.10 %**, Architektur grün. Review-S114: DONE (grün).
 - P17 + P18 nach Ziel7 ausgelagert (offene Design-Frage Mehrwunden-Tracking bei P17).
 
-### ▶ Nächster Schritt — Ziel7-Cluster
+### ▶ Nächster Schritt — Ziel7-Cluster (nach S114)
 
-**1. ERST: P17-Design-Frage klären** — Wie wird das Mehrwunden-Frontmodell-Tracking gelöst? (Nobz mit gemischter Bewaffnung: welcher Nob fällt?) Diese Frage MUSS mit dem Stakeholder vor Code-Umsetzung entschieden werden. Dann P17 (~50k, Opus-Tier) + P18 (~25k, Sonnet) umsetzen.
+**0. Design-System Schritt 1 umsetzen** (Design-System-Crew, operating_model.md:95):
+   - `docs/spec/design_system.md` anlegen + `design_colors.md` konsolidieren (alles an einem Platz).
+   - Badge vereinheitlichen: `_common._badge` + `unitCard._badge` + `armyCard.py` + Invuln-Block (`dice_html.py:188-204`).
+   - Zentrale Symbol-Konstanten anlegen (▶◀✓✕＋⚔↺).
+   - Einfachen Token-Wertesatz (Radius/Padding/Font-Size je Badge-Klasse) vorschlagen + vom User bestätigen lassen.
+   - Hinweis-Konvention (info/warning/success/error) festlegen + vom User bestätigen lassen.
+   - Entscheidungsgrundlage: `docs/handoff/design-system-proposal.md` (ANSWERED, S114).
 
-**2. PARALLEL/DAVOR: Design-System-Entscheidung** — `docs/handoff/design-system-proposal.md` (NEEDS-DECISION) durchsehen, Entscheidung einholen, dann ggf. Badge-Konsolidierung umsetzen.
+**1. ERST: P17-Design-Frage klären** — Wie wird das Mehrwunden-Frontmodell-Tracking gelöst? (Nobz mit gemischter Bewaffnung: welcher Nob fällt?) Diese Frage MUSS mit dem Stakeholder VOR Code-Umsetzung entschieden werden. Dann P17 (~50k, Opus-Tier) + P18 (~25k, Sonnet) umsetzen.
+
+**2. Regel-Ledger auf 0 bringen** (parallel, Stakeholder-Wunsch): Tests für `R-COMBAT-17` und `R-PROTO-02` nachziehen (impl. ohne Test — backlog §Carry-over).
+
+**3. Retro-Maßnahmen S114 verankern** — prüfen, WO in den Regeln (CLAUDE.md / operating_model.md / agent_scopes.md) sie am besten sitzen, dann eintragen:
+   1. Planner-Auftrag MUSS jede Checkbox in allen Unterabschnitten + stale-vs-offen mit Code-Beleg prüfen.
+   2. Haken-Sync bei Ziel-Start/Abschluss.
+   3. Executor lässt `pre-commit run --files …` (nicht nur `ruff check`).
+   4. Stakeholder-Entscheidungen früher im Sessionverlauf einplanen, nicht in der Wind-down-Zone.
 
 ---
 

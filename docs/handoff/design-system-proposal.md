@@ -1,4 +1,4 @@
-STATUS: NEEDS-DECISION
+STATUS: ANSWERED
 Lebensdauer: dauerhaft bis Stakeholder-Entscheidung, danach in `docs/spec/design_system.md` (falls
 beschlossen) überführen und diese Datei löschen.
 
@@ -209,3 +209,17 @@ Komponentenfall ergänzt (Ratchet-Prinzip, analog Rule-Catalog-Gate).
 
 *Hinweis: Dieser Bericht trifft keine Farb- oder Layout-Entscheidung. Alle Hex-Werte/Maße oben
 sind Ist-Zustand-Zitate aus dem Code, keine Empfehlung des Subagenten.*
+
+---
+
+## Stakeholder-Entscheidungen (S114, 2026-06-30)
+
+1. **Eigene Spec anlegen:** Ja — `docs/spec/design_system.md` anlegen. `design_colors.md` dort integrieren ODER in denselben Ordner verschieben; Ziel: alles an EINEM Platz, sinnvoll zerteilt falls nötig.
+
+2. **Token-Werte:** Einfachste Wahl bevorzugt (User unschlüssig, UI sieht überall ähnlich aus). Bedingung: EIN verbindlicher Wertesatz, der an ALLEN Stellen funktioniert. Die Umsetzungs-Session schlägt einen konkreten, möglichst simplen Satz (Radius/Padding/Font-Size je Badge-Klasse) vor und legt ihn dem User zur Bestätigung vor.
+
+3. **Schritt-1-Umfang:** `armyCard.py` darf bereits in Schritt 1 mit rein — zusätzlich zu `_common._badge` + `unitCard._badge` + Invuln-Block (`dice_html.py:188-204`). Startauswahl ansonsten als gut bestätigt.
+
+4. **Symbol-Konstanten:** Ja, zentrale Konstantenliste gewünscht (▶◀✓✕＋⚔↺) — damit fehlende Symbole konsistent ergänzt und Symbole projektweit konsistent getauscht werden können.
+
+5. **Hinweis-Konvention (info/warning/success/error):** Ja, verbindliche Konvention gewünscht. Konkrete Regel (z.B. „Fehlschlag=warning, nur echte Regelverletzung=error") wird in der Umsetzungs-Session festgelegt und dem User vorgelegt.

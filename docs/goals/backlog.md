@@ -294,11 +294,16 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
   Group A + Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte verschwinden), 016
   behält nur RP-Hint + Dynastiebonus.
 
-## 4c. Design-System — Entscheidung ausstehend (NEEDS-DECISION)
+## 4c. Design-System — Entscheidungen getroffen, Umsetzung nächste Session
 
-Vorschlag: `docs/handoff/design-system-proposal.md`. Kernbefund: 4 divergente Badge-Implementierungen im Codebase. Kleiner erster Schritt = `_common._badge()` + `unitCard._badge()` zusammenführen + Invuln-Block (`dice_html.py:188-204`) darauf umstellen. Offene Nutzer-Entscheidungen stehen im Vorschlag.
+Vorschlag: `docs/handoff/design-system-proposal.md` (→ ANSWERED, S114 2026-06-30). Kernbefund: 4 divergente Badge-Implementierungen im Codebase. Entscheidungen gefallen:
+- `docs/spec/design_system.md` anlegen + `design_colors.md` integrieren/konsolidieren.
+- Schritt-1-Umfang: `_common._badge()` + `unitCard._badge()` + `armyCard.py` + Invuln-Block (`dice_html.py:188-204`).
+- Token-Wertesatz (Radius/Padding/Font-Size): Umsetzungs-Session schlägt simpelsten Satz vor, User bestätigt.
+- Zentrale Symbol-Konstantenliste (▶◀✓✕＋⚔↺) anlegen.
+- Hinweis-Konvention (info/warning/success/error): Umsetzungs-Session legt Regel vor, User bestätigt.
 
-**Vor Umsetzung Freigabe einholen.** Status: NEEDS-DECISION.
+**Umsetzung = nächste Session. Freigabe vor Code-Änderungen einholen.**
 
 ---
 
