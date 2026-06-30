@@ -95,6 +95,23 @@ def test_next_phase_setup_goes_to_command() -> None:
     assert session["phase_idx"] == 1
 
 
+def test_next_phase_setup_to_command_opens_directive_window_round_1() -> None:
+    """Regression: entering the first Command phase (round 1) opens the directive window.
+
+    Battle round 1 also has an assigned protocol (Wahapedia Z. 557/568), so the
+    directive selection window must be open for BOTH players at the start of round 1 —
+    not only from round 2 on. init_state() sets directive_pending=False; the
+    Setup→Command transition must flip it True for both slots.
+    """
+    from gameMechanic.game_state import round_choice_state_key
+
+    session = _phase_session(phase_idx=0, active="Necrons")
+    next_phase()
+
+    for player in ("Necrons", "Orks"):
+        assert session[round_choice_state_key(player, "directive_pending")] is True
+
+
 def test_next_phase_advances_index_within_turn() -> None:
     session = _phase_session(phase_idx=1, active="Necrons")
     next_phase()
@@ -1426,3 +1443,25 @@ def test_reset_turn_state_keyerror_on_faction_dir_for_continues() -> None:
     _gs._reset_turn_state()
     # Turn flags should still be reset for actual units
     assert all(v is False for v in s["p1_units"]["u1"]["turn_flags"].values())
+
+
+# ---------------------------------------------------------------------------
+# Plan 031 Step 2 — directive_pending flag (Wahapedia Z. 568/579)
+# ---------------------------------------------------------------------------
+
+
+def test_init_state_directive_pending_false_for_both_players() -> None:
+    """init_state() sets directive_pending=False for both player slots.
+
+    No directive selection window is open at game start. The window opens only
+    via _reset_round_choice_state() called at each battle round start.
+    """
+    from gameMechanic.game_state import round_choice_state_key
+
+    s = _make_session()
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
+    # first_player and second_player are now set by init_state
+    p1 = s["first_player"]
+    p2 = s["second_player"]
+    assert s[round_choice_state_key(p1, "directive_pending")] is False
+    assert s[round_choice_state_key(p2, "directive_pending")] is False

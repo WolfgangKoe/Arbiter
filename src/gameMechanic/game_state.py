@@ -157,7 +157,10 @@ def round_choice_state_key(player: str, kind: str) -> str:
     Keyed by the **player slot**, never the faction directory: two armies of the
     same faction (a mirror match) share one ``faction_dir`` but must keep fully
     independent protocol/directive state. ``kind`` is one of:
-    active, directive, used_ids, extra_directive.
+    active, directive, used_ids, extra_directive, directive_pending.
+    ``directive_pending`` is True between round-start reset and the moment the
+    player confirms their directive choice; it gates the directive-selection UI
+    for both players simultaneously (not tied to ``is_active``).
     """
     return f"round_choice_{kind}_{player}"
 
@@ -463,7 +466,11 @@ def init_state(
     st.session_state.secondaries = secondaries
     st.session_state.secondary_vp = secondary_vp
 
-    # Round-choice per-faction keys are not pre-initialized; armyCard sets them on demand
+    # Round-choice per-faction keys are not pre-initialized; armyCard sets them on demand.
+    # directive_pending starts False: no directive window open at game start (round 1
+    # window opens only when the first Command phase begins, triggered by next_phase).
+    for _pname in (p1_name, p2_name):
+        st.session_state[round_choice_state_key(_pname, "directive_pending")] = False
     st.session_state.activated_abilities: dict = (
         {}
     )  # {player_name: {"ability_id": str, "round_activated": int}}
@@ -582,6 +589,12 @@ def _reset_round_choice_state() -> None:
 
     Keyed per player slot, not faction directory, so a mirror match resets each army's
     state independently.
+
+    ``directive_pending`` is set to True for both players: according to the rules, both
+    players choose their directive simultaneously at the start of each battle round
+    (Wahapedia faction_overview.txt, Z. 568 + Z. 579 — "at the start of each battle
+    round"). The UI uses this flag instead of ``is_active`` to grant both players the
+    selection window at the same time.
     """
     for slot in ("first_player", "second_player"):
         player = st.session_state.get(slot)
@@ -589,6 +602,7 @@ def _reset_round_choice_state() -> None:
             st.session_state[round_choice_state_key(player, "active")] = None
             st.session_state[round_choice_state_key(player, "directive")] = None
             st.session_state[round_choice_state_key(player, "extra_directive")] = None
+            st.session_state[round_choice_state_key(player, "directive_pending")] = True
 
 
 def next_phase() -> None:
@@ -597,8 +611,13 @@ def next_phase() -> None:
     first = st.session_state.first_player
     second = st.session_state.second_player
 
-    if idx == 0:  # Setup → first Command phase
+    if idx == 0:  # Setup → first Command phase (start of battle round 1)
         st.session_state.phase_idx = 1
+        # Battle round 1 also begins here: open the directive window for both players
+        # (Wahapedia Z. 568 — "at the start of each battle round … select one of its
+        # directives"). Same canonical round-start reset as the round 2+ path; clearing
+        # active/directive on None is a no-op at game start.
+        _reset_round_choice_state()
         _reset_phase_state()
     elif idx >= num - 1:  # Morale done → switch player
         new_active = second if st.session_state.active == first else first

@@ -130,3 +130,34 @@ def test_reset_clears_each_player_independently() -> None:
     for player in ("P1", "P2"):
         assert session[round_choice_state_key(player, "active")] is None
         assert session[round_choice_state_key(player, "directive")] is None
+
+
+def test_reset_sets_directive_pending_true_for_both_players() -> None:
+    """Both players must be able to choose their directive at round start simultaneously.
+
+    Wahapedia faction_overview.txt Z. 568/579: directive selection happens
+    "at the start of each battle round" — not per-turn, so both players must
+    have the selection window open at the same time (not gated by is_active).
+    """
+    session = _mirror_session()
+    _install(session)
+
+    _reset_round_choice_state()
+
+    for player in ("P1", "P2"):
+        assert session[round_choice_state_key(player, "directive_pending")] is True
+
+
+def test_reset_directive_pending_independent_per_player() -> None:
+    """directive_pending is keyed per player slot, not shared."""
+    session = _mirror_session()
+    # Simulate P1 having already chosen (pending=False) before reset
+    session[round_choice_state_key("P1", "directive_pending")] = False
+    session[round_choice_state_key("P2", "directive_pending")] = False
+    _install(session)
+
+    _reset_round_choice_state()
+
+    # After reset both are True regardless of prior state
+    assert session[round_choice_state_key("P1", "directive_pending")] is True
+    assert session[round_choice_state_key("P2", "directive_pending")] is True
