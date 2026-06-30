@@ -26,44 +26,36 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S111, 2026-06-30)
+## Aktueller Stand (nach S112, 2026-06-30)
 
-**S111 — Coverage-Sprint + Plan-016-Linie abgeschlossen + Protokoll-Bugs identifiziert.**
+**S112** lief glatt: **Plan 031** (Protokoll-Direktiven-Timing) ist gefixt und committet (533e313) —
+Wahl von `is_active` entkoppelt (beide Spieler wählen am Rundenanfang), „Change extra directive"-
+Button raus, Haupt- und Extra-Direktive über `_directive_window_open()` UNABHÄNGIG gegated,
+Runde-1-Fenster geschlossen. Stakeholder hat den Doppel-Direktiven-Fix am App verifiziert.
+Danach **Ziel6 konsolidiert + Ziel7 ausgelagert + Renumbering** committet (efe12e1): neues
+**Ziel7 = Gefechtsoptionen + subfaction-Mechanik**, Crusade→ziel8, Faction Fetcher→ziel9; Doku-Drift
+92→99 %. Vollsuite 1303 / 99,09 %, Architektur 8/8, Docs-Tests 8/8 grün. **Offen für S113:** der
+neue Befund zur Extra-Direktiven-Permanenz (s. Priorität 1) und die manuelle UI-Re-Verifikation läuft.
 
-- **game_state.py 92 → 100 %** (+17 Tests). **ability_engine.py 94 → 100 %** (+9 Tests).
-- **Toter Reroll-Loop entfernt:** `get_active_round_choice_rerolls` + `_REROLL_DIRECTIVE_FLAGS`
-  aus `ability_engine.py` gelöscht (kein Necron-Protokoll gibt Reroll; war Dead Code).
-- **Plan 016 — generischer `get_active_protocol_effects()`-Helper (Step 2) + RP-Hints (Step 3)**
-  weitgehend verdrahtet. Plan-Drift: `rp_bonus`-`max_value` NICHT auf „Modelle verloren" gesetzt —
-  regelwidrig wäre es; D1=`heal_bonus`, D2=`rp_reroll`; `max_value=models_lost` ist korrekt.
-  Step 4 Dynasty-Badge war bereits vollständig. LEDGER-Eintrag `protocol` in
-  `test_generic_src_vocab.py` (LEGIT — generischer Funktionsname, kein Fraktions-String).
-- **Vollsuite:** 1294 passed / 99,09 %, Architektur 8/8 grün, ruff+black sauber.
-- **Coverage-Gate auf 99 % angehoben** (`pyproject.toml` `fail_under`); 0,09 % Puffer —
-  neue Bugfixes können es brechen (Ratchet: dann Tests nachziehen).
-- **oD-6 (Wound-Block 2× −1, base 4+ → Eff. 5+) ✅** vom Stakeholder visuell verifiziert (Carry-over S110).
-- **Doku-Drift offen:** „92 %"-Erwähnungen in CLAUDE.md/backlog.md/operating_model.md/
-  agent_scopes.md/architecture_invariants.md auf 99 % nachziehen (nur Gate-Bezug, nicht jede Erwähnung).
+Frühere Sessions (S60–S111): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-**Protokoll-Bugs identifiziert (regelwidrig, dokumentiert in Plan 031):**
-- **Bug 1:** Direktiven-Wahl an `is_active` gekoppelt → zweiter Spieler wählt erst nach
-  vollständigem ersten Zug (unerlaubter Informationsvorteil). Soll: Pending-Flag am Rundenanfang.
-- **Bug 2:** „Change extra directive"-Button erlaubt nachträgliche Änderung in jeder Phase →
-  reaktive Anpassung regelwidrig. Soll: Block entfernen; Wahl ab Fix auf Rundenanfang-Fenster begrenzt.
+### ▶ Nächster Schritt — Prioritäten (S113)
 
-### ▶ Nächster Schritt — Prioritäten (S112)
+**1. NEUER BEFUND (P-hoch, regel-prüfen DANN fixen) — Permanenz der Extra-Direktive.**
+   Stakeholder-Vermutung: Direktive des permanent aktiven (Extra-)Protokolls wird EINMAL zu
+   Spielbeginn gewählt und bleibt den Rest des Spiels FIX (nur eine Silent-King-Fähigkeit
+   könnte das beeinflussen). Aktuelles Verhalten: `_reset_round_choice_state()` öffnet das
+   Extra-Fenster JEDE Runde neu → Extra-Direktive ist aktuell pro Runde neu wählbar.
+   **Regel-Spannung:** `faction_overview.txt` Z. 579 sagt wörtlich „select which directive …
+   **at the start of each battle round**" — das stützt eher „jede Runde wählbar", NICHT „einmal fix".
+   → ZUERST Regel sauber klären (Z. 568/579 + Silent-King/Szarekh-Fähigkeit in
+   `wahapedia_necrons/` suchen), DANN entscheiden ob Fix nötig. Nicht raten.
 
-**1. Plan 031 (NEU, P-hoch) — Protokoll-Meta-Timing-Bugs fixen** (regelwidrig).
-   Step 1: „Change extra directive"-Block (`armyCard.py` Z. 219–225) entfernen (XS).
-   Step 2: Pending-Flag-Mechanik in `game_state.py:_reset_round_choice_state()` + `is_active`-
-   Entkoppelung in `armyCard.py:_render_round_choice_ui()` (S–M). GENERISCH, Regressionstests + manuelle UI-Prüfung.
+**2. Ziel6-Reste (klein, NICHT YAML-blockiert):** (a) Fix B WAAAGH! generisch — `active_text`-
+   Feld im YAML fehlt noch; (b) `once_per_battle`-Enforcement battle-scope statt phase-scope
+   (`stratagem.py:59`, `used_stratagem_ids` ist phase-scoped). Beide bewusst Ziel6-Rest (Stakeholder-Entscheid S112).
 
-**2. Ziel6.md konsolidieren/abschließen:** großer offener Backlog (6e/6f/6g/6h Kat1–3,
-   Relics, T'au/AdMech/Tyranids) — je Punkt entscheiden: erledigt / bewusst-offen (daten-first) /
-   in aktivem Plan. Nichts verlieren; viele Punkte sind bewusst zurückgestellt (YAML fehlt).
-
-**3. subfaction-Buffs mechanisch (Plan 018/§6e):** Infrastruktur + Badge fertig & generisch,
-   aber Execute-Logik fehlt (`collect_modifiers_for_phase`). Stakeholder erwägt Bündelung in Ziel7.
+**3. Ziel7 ausdetaillieren:** wenn aktiv — `ziel7.md` ist aktuell nur Scope-Stub.
 
 ### ⚠️ Carry-over (offen)
 
@@ -72,13 +64,8 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
   (c) stationär+D1 grünes +1-Save-Badge in den Würfeln.
 - **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
 - **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
-
-### ⚠️ OFFENE ENTSCHEIDUNG (Stakeholder beim Session-Start)
-
-„Gefechtsoptionen" sind NICHT Teil von Ziel6 (nur Vorwärtsverweis auf Ziel7/Crusade).
-Die gewünschte „Auslagerung als Ziel7" ist eine NEU-DEFINITION, kein Verschieben.
-**Frage:** Ziel7 = Gefechtsoptionen + subfaction-Mechanik bündeln? Renumbering der Folge-Ziele bestätigen?
-→ NICHT selbst umsetzen, nur als Entscheidung vormerken.
+- **`docs/handoff/planning-S112.md`** ist verarbeitet (committet) — kann bei Bedarf archiviert werden.
+- **Ledger (impl. ohne Test):** R-COMBAT-17, R-PROTO-02 — bei Gelegenheit Tests nachziehen.
 
 ---
 

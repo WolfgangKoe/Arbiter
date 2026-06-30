@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-30 18:37 CEST
+Stand: 2026-06-30 20:51 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,18 +9,26 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-29 20:55 c673  ██████████░░ 122k ⚠️   █████░  79%    █··········▒
+06-30 18:46 fce6  ██████████░░ 126k ⚠️   █████░  79%    ███········▒
+         SA_1·  █████░░░░░░░  60k ✅    Planungs-Entwurf S112
+         SA_2·  ████░░░░░░░░  49k ✅    Ziel-Renumbering ausführen
+         SA_3·  ███░░░░░░░░░  40k ✅    Doku-Drift 92 auf 99
+         SA_4·  ██████████░░ 119k ✅    Plan 031 Executor
+         SA_5·  ██████████░░ 119k ✅    Ziel6 konsolidieren Ziel7
+----------------- ---------------------- -------------- ------------
+06-29 20:55 c673  ████████████ 162k ⛔    ████░░  74%    █··········▒
          SA_1·  ██░░░░░░░░░░  30k ✅    Toten Reroll-Loop analysieren
          SA_2·  ████░░░░░░░░  49k ✅    Recherche 2 Protokoll-Meta-Bugs
          SA_3·  ███░░░░░░░░░  39k ✅    Recherche 2 Protokoll-Meta-Bugs
          SA_4·  ██████░░░░░░  78k ✅    Planning-Entwurf nächste Session
-         SA_5·  ███░░░░░░░░░  39k ✅    Coverage-Gate auf 99 setzen
+         SA_5·  ███░░░░░░░░░  41k ✅    Coverage-Gate auf 99 setzen
          SA_6·  █████░░░░░░░  64k ✅    Executor B: ability_engine Coverag…
          SA_7·  ███████░░░░░  85k ✅    Executor A: game_state Coverage
-         SA_8·  █████░░░░░░░  66k ✅    Bestandsaufnahme Ziel6/Audit/subfa…
-         SA_9·  ███████░░░░░  81k ✅    Executor C: Plan 016 RP-Hints + Mo…
-         SA_10·  ██░░░░░░░░░░  25k ✅    Coverage-Gate auf 99 setzen
-         SA_11·  ███░░░░░░░░░  36k ✅    Bestandsaufnahme Ziel6/Audit/subfa…
+         SA_8·  ████░░░░░░░░  46k ✅    Befunde sichern + next_session akt…
+         SA_9·  █████░░░░░░░  66k ✅    Bestandsaufnahme Ziel6/Audit/subfa…
+         SA_10·  ███████░░░░░  81k ✅    Executor C: Plan 016 RP-Hints + Mo…
+         SA_11·  ██░░░░░░░░░░  25k ✅    Coverage-Gate auf 99 setzen
+         SA_12·  ███░░░░░░░░░  36k ✅    Bestandsaufnahme Ziel6/Audit/subfa…
 ----------------- ---------------------- -------------- ------------
 06-28 20:02 1b3d  ███████████░ 135k ⚠️   ████░░  73%    ···········▒
          SA_1·  ███░░░░░░░░░  39k ✅    Schritt A Wound-Bug fixen

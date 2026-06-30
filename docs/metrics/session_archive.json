@@ -1791,12 +1791,12 @@
   "c67384fd-92ce-4c37-b832-5629f95a602b": {
     "started_at": "2026-06-29T18:55:46.159Z",
     "task": "start session. Ich habe noch folgendes offen, dafür bitte die App starten oD-6 UI-Check: Im laufenden Streamlit bei 2 g…",
-    "peak_context": 121688,
-    "subagent_share": 78.57970665455966,
+    "peak_context": 162066,
+    "subagent_share": 73.62730842814909,
     "by_tier": {
       "Haiku": 2171523,
-      "Sonnet": 19214905,
-      "Opus": 774492
+      "Sonnet": 19855297,
+      "Opus": 897390
     },
     "subagents": [
       {
@@ -1831,7 +1831,7 @@
         "agent_type": "claude",
         "description": "Coverage-Gate auf 99 setzen",
         "tier": "Haiku",
-        "peak_context": 39094,
+        "peak_context": 41238,
         "started_at": "2026-06-29T18:55:46.159Z"
       },
       {
@@ -1846,6 +1846,13 @@
         "description": "Executor A: game_state Coverage",
         "tier": "Sonnet",
         "peak_context": 85480,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Befunde sichern + next_session aktualisieren",
+        "tier": "Sonnet",
+        "peak_context": 45965,
         "started_at": "2026-06-29T18:55:46.159Z"
       },
       {
@@ -1875,6 +1882,54 @@
         "tier": "Sonnet",
         "peak_context": 36266,
         "started_at": "2026-06-29T18:55:46.159Z"
+      }
+    ]
+  },
+  "fce6bdee-cf39-422b-970d-6dc4c2e5aca9": {
+    "started_at": "2026-06-30T16:46:02.522Z",
+    "task": "start session. Prüfe nextsession und starte einen Planungs-Subagenten",
+    "peak_context": 126379,
+    "subagent_share": 78.58533271174072,
+    "by_tier": {
+      "Sonnet": 17555545,
+      "Haiku": 1203589,
+      "Opus": 6141688
+    },
+    "subagents": [
+      {
+        "agent_type": "Plan",
+        "description": "Planungs-Entwurf S112",
+        "tier": "Sonnet",
+        "peak_context": 60433,
+        "started_at": "2026-06-30T16:46:02.522Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ziel-Renumbering ausführen",
+        "tier": "Sonnet",
+        "peak_context": 48681,
+        "started_at": "2026-06-30T16:46:02.522Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Doku-Drift 92 auf 99",
+        "tier": "Haiku",
+        "peak_context": 40481,
+        "started_at": "2026-06-30T16:46:02.522Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 031 Executor",
+        "tier": "Sonnet",
+        "peak_context": 119085,
+        "started_at": "2026-06-30T16:46:02.522Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ziel6 konsolidieren Ziel7",
+        "tier": "Sonnet",
+        "peak_context": 119279,
+        "started_at": "2026-06-30T16:46:02.522Z"
       }
     ]
   }

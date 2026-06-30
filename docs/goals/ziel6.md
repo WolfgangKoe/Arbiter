@@ -1190,3 +1190,4 @@ unit_state["group_models"]: dict[str, int]
 - **S74 (2026-06-20)** Plan 019 via Sonnet-Subagent: `TargetSelectionRequest`-Dataclass + `pending_target_request` ersetzt `cmd_awaiting_ability_id`/`cmd_awaiting_required_kw`/`wargear_awaiting_bearer_uid`; `render_unit_selectbox`-Helper für Veil-of-Darkness + Mortal-Target; 3 neue Tests in `test_game_state.py`. 1007 Tests grün, Cov 92.40 %, Floor 90.
 - **S107 (2026-06-27)** Plan 025 DONE (Conquering Tyrant 9E) + D2 Fall-Back-Schuss-Bugfix; Retro M1/M2/M3/M4
 - **S109 (2026-06-28)** Conquering Tyrant: Bug2 Zielwahl-Hang + Dense-Cover-Anzeige (Hit) gefixt; Bug1 verifiziert ok
+- **S112 (2026-06-30)** Plan 031 Protokoll-Direktiven-Timing gefixt (is_active entkoppelt, unabhaengige Haupt/Extra-Wahl, Runde-1-Fenster); Ziel6 konsolidiert + Ziel7 (Gefechtsoptionen+subfaction) ausgelagert, Renumbering Crusade->8/Fetcher->9; Doku-Drift 92->99%
