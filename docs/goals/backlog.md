@@ -7,7 +7,7 @@
 > Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
 > entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
 
-Letzter Abgleich: 2026-06-26 (S103 — Bug 1 Render-Reihenfolge Auto-Light-Cover + Bug 2 blau→grün gefixt; round_choice.example.yaml bereinigt)
+Letzter Abgleich: 2026-06-30 (S112 — Coverage-Schuld M3 erledigt (100 %), §5 Ziel7 neu definiert, Ziel6 6e/6f/6h Kat1–3 nach Ziel7 ausgelagert)
 
 ---
 
@@ -238,11 +238,9 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   re-pointet st-Mocks global über `sys.modules` (reihenfolge-abhängiger Quick-Fix aus S110
   Isolations-Fix) → mittelfristig durch eine **session-scoped Streamlit-Mock-Fixture** ersetzen,
   die alle `gameMechanic`-Tests einheitlich nutzen (analog zur sauberen Lösung aus Test-Mock-Fragilität oben).
-- 🔲 **Coverage-Schuld: game_state + ability_engine (S110-Retro-M3, explizit):**
-  `game_state.py` 92 % + `ability_engine.py` 94 % auf ~98–99 % bringen. Ungedeckte Zeilen:
-  `game_state`: 119, 129, 181-182, 204-205, 237-238, 256-264, 384, 394-399, 444, 477, 567-568.
-  `ability_engine`: 71-72, 113, 151, 190, 211-216, 388, 392, 424, 427, 431.
-  Explizit als Schuld führen, damit der „~100 %-Wunsch" nicht still als erledigt gilt.
+- ✅ **Coverage-Schuld: game_state + ability_engine (S110-Retro-M3) — ERLEDIGT (S111):**
+  `game_state.py` 100 % (+17 Tests) + `ability_engine.py` 100 % (+9 Tests). Coverage-Gate
+  auf **99 %** angehoben (`pyproject.toml fail_under = 99`). Toter Reroll-Code entfernt.
 - 🔲 **Prozess: Executor-Auftrags-Checkliste härten (S110-Retro-M4):** Executor-Brief muss
   echtes `ruff`/pre-commit **VOR** dem „grün"-Claim verlangen (nicht nur pytest). Außerdem:
   Token-/Zeit-Budget-Cap im Auftrag gegen Rabbit-Holes (Lehre aus S110-Lauf 2b: 161k/66 min);
@@ -298,9 +296,12 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
 
 ## 5. Größere geplante Ziele
 
-- [ziel7.md](ziel7.md) — Crusade-Erweiterung (geplant)
-- [ziel8.md](ziel8.md) — Wahapedia Faction Fetcher (geplant)
-- [index.md](index.md) — Ziel-Gesamtübersicht 1–8
+- [ziel7.md](ziel7.md) — **Gefechtsoptionen + subfaction-Mechanik** (definiert 2026-06-30):
+  Bündelt (a) `collect_modifiers_for_phase` Execute-Logik (§6e), (b) 6f Ability-Badges,
+  (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
+- [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
+- [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
+- [index.md](index.md) — Ziel-Gesamtübersicht
 
 ---
 

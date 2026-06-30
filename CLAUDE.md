@@ -123,7 +123,7 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 
 1. **Regelkonform** — gegen `docs/work/wahapedia_*/` geprüft (nicht aus dem Gedächtnis).
 2. **Generisch** — keine neuen Fraktions-Strings/-Checks in `src/`; Entscheidungen aus YAML.
-3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 92 %; jeder Bugfix bekommt einen Regressionstest.
+3. **Tests grün** — `pytest --tb=short`, Coverage ≥ 99 %; jeder Bugfix bekommt einen Regressionstest.
 4. **Architektur-Gate grün** — `tests/architecture/` (oder bewusste Änderung +
    `architecture_invariants.md`/`architecture.md` nachgezogen, kein stilles Aufweichen).
 5. **Clean Code** — `black`/`isort`/`ruff` sauber; Namen erklären *Was*.
@@ -236,7 +236,7 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 pytest --tb=short
 ```
 
-Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **92 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
+Die Coverage-Konfiguration steht in `pyproject.toml` (`[tool.coverage.run]`). Sie schließt Streamlit-Render-Code aus, der keine eigenständige Business-Logik enthält (siehe unten). Der Gate liegt bei **99 %** auf dem so gemessenen Code — darunter schlägt der Build fehl. Gleiches Gate gilt im CI (`deploy.yml`).
 
 ### Regel-Abdeckung — Akzeptanz-Katalog (fachliches Sicherheitsnetz)
 

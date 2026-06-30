@@ -95,7 +95,7 @@ Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
 ## Selbstprüf-Checkliste (Pflicht vor Rückgabe)
 - [ ] Verdrahtung: neuer Code per grep belegt, dass Nicht-Test-Code ihn aufruft
 - [ ] Heimat: neuer Code sitzt im richtigen Modul
-- [ ] Gates: pytest grün, Coverage-Floor ≥ 92 % gehalten, keine vorher-grünen Tests rot
+- [ ] Gates: pytest grün, Coverage-Floor ≥ 99 % gehalten, keine vorher-grünen Tests rot
 - [ ] Generic-src: keine Fraktions-Strings/-Checks in src/
 - [ ] Format: black + ruff (+ isort) ausgeführt
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,

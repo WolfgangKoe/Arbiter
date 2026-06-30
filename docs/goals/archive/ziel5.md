@@ -382,7 +382,7 @@ Alle Damage-Brackets entsprechend angepasst.
 | Lücke | Beschreibung | Status |
 |-------|-------------|--------|
 | Melee-Attack-Form Orks | Warboss-Angriff (Charge + Fight Phase) manuell verifiziert 2026-06-03. | ✅ |
-| Adeptus Custodes | Nur Placeholder-Dateien. | Nach Ziel 8 |
+| Adeptus Custodes | Nur Placeholder-Dateien. | Nach Ziel 9 (Faction Fetcher) |
 
 ### E2E-Verifikation — Stand 2026-06-03
 

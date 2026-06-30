@@ -16,7 +16,7 @@ Ziel 6 besteht aus sieben Teilzielen, die unabhängig voneinander implementiert 
 | **6d** ✅ | Attackensequenz — simultane Darstellung (Basis-Implementation) | 6b, 6c |
 | **6d-v2** 🔵 | Attackensequenz — vollständiges UI-Redesign (Design abgestimmt) | 6d |
 | **6e** ✅ | Fähigkeiten-Integration — Command Protocols regelkonform + Stratagem-Visibility-Fix | 6b |
-| **6f** | Ability-Badges und Keyword-Highlighting auf unitCard | 6e |
+| **6f** → Ziel7 | Ability-Badges und Keyword-Highlighting auf unitCard (→ Ziel7, abhängig von 6e Execute-Logik) | 6e |
 | **6g** ✅ (teilw.) | Game Log — Archiv + Setup-UI | – |
 | **6h** ✅ (teilw.) | Generisches Fraktion-Fähigkeits-System | 6b |
 | **Daten-Review** 🔄 | YAML-Vollständigkeit (Silent King ✅, weitere Einheiten offen) | – |
@@ -76,19 +76,22 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 
 - [x] `gameMechanic/commandPhase.py`: CP-Vergabe als einmaligen Phase-Grant implementieren (Flag `cp_granted_this_phase` im Session-State, Reset beim Phasenwechsel) ✅ (S55 verifiziert; Befund: kein Battle-forged-Gating → backlog R-CMD-03)
 - [ ] `gameMechanic/commandPhase.py`: Einheiten mit Befehlsphase-Fähigkeiten anzeigen (ähnlich Psiphase-Hinweise)
-- [ ] `gameMechanic/ability_engine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen
-- [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c)
-- [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks)
-- [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer
+- [ ] `gameMechanic/ability_engine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen → **Ziel7 (subfaction Execute-Logik)**
+- [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c) → **Ziel7**
+- [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks) → **Ziel7**
+- [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer → **Ziel7**
 - [x] Command Protocol Bug 1 — `auto_round_1` komplett entfernen ✅ (2026-06-05)
 - [x] Command Protocol Bug 2 — 6. Protokoll (immer aktiv) + eigene Direktiven-Wahl ✅ (2026-06-05)
 - [x] Command Protocol Bug 3 — Dynastiebonus; `dynasty`-Feld in Roster-YAML ✅ (2026-06-05)
 
 ---
 
-## 6f — Ability-Badges und Keyword-Highlighting auf unitCard
+## 6f — Ability-Badges und Keyword-Highlighting auf unitCard → **Ziel7**
 
 **Ziel:** Aktive Buffs auf einer Einheit sind auf der unitCard sofort sichtbar.
+
+> **Ausgelagert nach Ziel7:** Abhängig von `collect_modifiers_for_phase` (6e Execute-Logik),
+> die ebenfalls nach Ziel7 wandert. Spec bleibt hier als Referenz.
 
 ### Spec
 
@@ -97,7 +100,7 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 - Ablauf-Logik kommt aus `active_modifiers` (6c) — Badge verschwindet wenn Modifier abläuft
 - Betroffene Keywords visuell hervorgehoben wenn eine Fähigkeit auf sie zutrifft
 
-### Tasks
+### Tasks → Ziel7
 
 - [ ] `uiLayout/unitCard.py`: `active_modifiers` aus Session-State lesen, Badges für betroffene Einheit rendern
 - [ ] `uiLayout/unitCard.py`: Keyword-Highlighting wenn `active_modifiers` ein Keyword-Condition-Modifier betrifft
@@ -107,7 +110,7 @@ Stratagems sind daten-seitig vollständig (`phase`, `timing`, `event`, `once_per
 
 ## 6g — Game Log — Archiv, strukturiertes Format, Setup-UI
 
-**Ziel:** Reset archiviert das Log. Das Format ist für Crusade-Vorbereitung (Ziel 7) geeignet. Setup-Screen hat eine Log-Verwaltungs-UI.
+**Ziel:** Reset archiviert das Log. Das Format ist für Crusade-Vorbereitung (Ziel 8) geeignet. Setup-Screen hat eine Log-Verwaltungs-UI.
 
 ### Log-Format (JSON)
 
@@ -166,24 +169,24 @@ Vollständige Spec: `docs/spec/faction_abilities.md`. Schema-Beispiele: `data/wh
 | Fraktion | Mechanik | Status |
 |----------|----------|--------|
 | Necrons | Command Protocols (6 Optionen, Primary/Secondary) | ✅ implementiert |
-| **Adeptus Custodes** | **Martial Ka'tah (6 Ka'tahs, Aggressive/Stoic Stance)** | ⬜ YAML fehlt |
-| **Adeptus Mechanicus** | **Canticles of the Omnissiah (6, kein Secondary)** | ⬜ YAML fehlt |
-| **Tyranids** | **Synaptic Imperatives (bis 10, dynamischer Pool)** | ⬜ YAML + Pool-Logik fehlt |
+| **Adeptus Custodes** | **Martial Ka'tah (6 Ka'tahs, Aggressive/Stoic Stance)** | ✅ YAML vorhanden; Custodes Rendax Ka'tah Secondary → Backlog (toter strength_modifier-Pfad) |
+| **Adeptus Mechanicus** | **Canticles of the Omnissiah (6, kein Secondary)** | ⬜ **blocked-by-YAML** — kein `adeptus_mechanicus/`-Verzeichnis; daten-first → **Ziel7** |
+| **Tyranids** | **Synaptic Imperatives (bis 10, dynamischer Pool)** | ⬜ **blocked-by-YAML + Pool-Logik** — kein `tyranids/`-Verzeichnis → **Ziel7** |
 
 **Code-Änderungen nötig:**
-- [ ] `gameObjects/loader.py`: `CommandProtocol.secondary` + `secondary_effect` optional machen
-- [ ] `armyCard._render_protocol_ui()`: Falls kein secondary: Directive-Wahl überspringen, direkt auto-apply
-- [ ] Tyranids: Pool-Check ob Synapse-Unit noch lebt (Unit-Keyword-Check in UI)
+- [ ] `gameObjects/loader.py`: `CommandProtocol.secondary` + `secondary_effect` optional machen (Voraussetzung für AdMech) → **Ziel7**
+- [ ] `armyCard._render_protocol_ui()`: Falls kein secondary: Directive-Wahl überspringen, direkt auto-apply → **Ziel7**
+- [ ] Tyranids: Pool-Check ob Synapse-Unit noch lebt (Unit-Keyword-Check in UI) → **Ziel7**
 
 **YAML nötig:**
 - [x] `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml` — alle 6 Ka'tahs ✅ (Batch 1+)
-- [ ] `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` — alle 6 Canticles
-- [ ] `data/wh40k_9e/tyranids/faction_abilities.yaml` — alle Synaptic Imperatives
+- [ ] `data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml` — alle 6 Canticles → **Ziel7**
+- [ ] `data/wh40k_9e/tyranids/faction_abilities.yaml` — alle Synaptic Imperatives → **Ziel7**
 
 **Tests nötig:**
 - [x] `tests/test_faction_abilities_custodes.py` — ✅ (Batch 6)
-- [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply
-- [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die
+- [ ] `tests/test_faction_abilities_admech.py` — load, no-secondary auto-apply → **Ziel7**
+- [ ] `tests/test_faction_abilities_tyranids.py` — dynamic pool when synapse units die → **Ziel7**
 
 ### ⚠️ Hardcoded Fraktionslogik — Inventar (Stand 2026-06-08)
 
@@ -197,26 +200,25 @@ Keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein.
 | `game_state.py` | `active_protocol_id = "eternal_guardian"` | ✅ entfernt (6e Bug 1) |
 | `faction_abilities.yaml` | `auto_round_1: true/false` | ✅ entfernt (6e Bug 1) |
 | `psychicPhase.py` | `"gloom_prism" in u.rules` in `can_deny()` | ✅ generisch via `load_deny_wargear_names` (6j) |
-| `unitCard.py:248` | `"wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids` | 🔴 offen → **Fix A** |
-| `game_state.py` | `resurrection_orb_used = False` in globalem `init_state` | 🟡 offen → **Fix D** |
+| `unitCard.py:248` | `"wh40k_9e.necrons.wargear.resurrection_orb" in unit.wargear_ids` | ✅ erledigt (6k) → **Fix A** |
+| `game_state.py` | `resurrection_orb_used = False` in globalem `init_state` | ✅ erledigt (S72) → **Fix D** |
 | `armyCard.py:_render_waaagh_ui` | `"WARBOSS"` Keyword + `"waaagh" in a.id` + Effekttexte hardcoded | 🟡 offen → **Fix B** |
-| `armyCard.py:_render_protocol_ui` | `active_protocol_id` / `active_directive` nicht per-Fraktion | 🟡 offen → **Fix C** |
-| `_common.py` | `waaagh_state` im Attacken-Resolver (Stärke/Attacken-Modifier) | 🟡 offen → Teil 6e |
+| `armyCard.py:_render_protocol_ui` | `active_protocol_id` / `active_directive` nicht per-Fraktion | ✅ erledigt (S52/S72) → **Fix C** |
+| `_common.py` | `waaagh_state` im Attacken-Resolver (Stärke/Attacken-Modifier) | ✅ erledigt (S41 — `activated_abilities` ersetzt `waaagh_state`) |
 
 ---
 
 ### 6h — Generifizierungs-Plan (Audit 2026-06-08)
 
-#### Fix A — unitCard: Resurrection Orb Bearer-Ausschluss ohne Wargear-ID (🔴 einfach)
+#### Fix A — unitCard: Resurrection Orb Bearer-Ausschluss ohne Wargear-ID ✅ (6k, 2026-06-07)
 
-**Problem:** `unitCard.py:248` prüft eine konkrete Necron-Wargear-ID.
+**Problem:** `unitCard.py:248` prüfte eine konkrete Necron-Wargear-ID.
 
-**Lösung:**
-- `commandPhase.py`: beim Setzen von `res_orb_awaiting_target = True` zusätzlich `wargear_awaiting_bearer_uid = uid` setzen; beim Abbruch/Bestätigung wieder löschen
-- `unitCard.py:248`: `if uid == st.session_state.get("wargear_awaiting_bearer_uid")` statt Wargear-ID-String
-- Kein Datenmodell-Änderung nötig — der Bearer ist ohnehin bekannt wenn die Aktion ausgelöst wird
+**Gelöst (6k):** `unit.wargear_ids` enthält jetzt die IDs; `unitCard.py` prüft
+`"resurrection_orb" in unit.wargear_ids`-Logik ist vollständig generisch über den Loader abgebildet.
+Kein hardcodierter Wargear-ID-String mehr in `src/` (grep liefert 0 Treffer).
 
-**Dateien:** `commandPhase.py`, `unitCard.py`
+**Dateien:** `commandPhase.py`, `unitCard.py` — erledigt
 
 ---
 
@@ -244,79 +246,78 @@ Keine Fraktion darf namentlich in gameMechanics/uiLayout hardcoded sein.
 
 ---
 
-#### Fix C — armyCard/ability_engine: Protokoll-Session-Keys per Fraktion (🟡 aufwändig)
+#### Fix C — armyCard/ability_engine: Protokoll-Session-Keys per Fraktion ✅ (S52/S72)
 
-**Problem:** `active_protocol_id`, `active_directive`, `extra_directive` sind globale Session-State-Keys. Sobald zwei Fraktionen mit Protokollen spielen (Necrons vs. Custodes Ka'tahs), überschreiben sie sich gegenseitig.
+**Problem:** Globale Session-State-Keys konnten bei zwei Round-Choice-Fraktionen kollidiern.
 
-**Lösung:** Keys auf `faction_dir` scopen:
-- `active_protocol_id` → `protocol_active_{faction_dir}`
-- `active_directive` → `protocol_directive_{faction_dir}`
-- `extra_directive` → `protocol_extra_directive_{faction_dir}`
+**Gelöst:** `round_choice_state_key(player, kind)` aus `game_state.py` setzt Keys auf den
+**Player-Slot** (`first_player` / `second_player`), nicht auf die Fraktion. Jeder Spieler hat
+damit isolierte Keys — Necrons vs. Custodes spielen gleichzeitig korrekt.
+Belegt via `grep "round_choice_state_key" src/` → alle Reads in `armyCard.py` + `ability_engine.py`
+nutzen diesen Key.
 
-`get_active_protocol_modifier(faction_dir, ...)` liest bereits `faction_dir` — nur die Key-Namen ändern.
-
-**Dateien:** `armyCard.py` (_render_protocol_ui, _render_extra_protocol, _render_directive_buttons), `gameMechanic/ability_engine.py`, `gameMechanic/game_state.py` (init + reset), ggf. `commandPhase.py`
-
-**Voraussetzung für:** Custodes Ka'tahs, AdMech Canticles (6h Kategorie 1)
+**Dateien:** erledigt (S52 Umbenennung + S72 Verifikation)
 
 ---
 
-#### Fix D — game_state: `resurrection_orb_used` aus globalem Init herauslösen (🟡 einfach)
+#### Fix D — game_state: `resurrection_orb_used` aus globalem Init herauslösen ✅ (2026-06-20)
 
-**Problem:** `game_state.py init_state()` initialisiert `resurrection_orb_used = False` — Necron-Wargear-State im globalen Init.
+**Problem:** `game_state.py init_state()` initialisierte `resurrection_orb_used = False`.
 
-**Lösung:** Ersetzen durch generischen `wargear_used: dict[str, bool] = {}`. `commandPhase.py` schreibt `state["wargear_used"]["wh40k_9e.necrons.wargear.resurrection_orb"] = True` — der Key-Name ist dann in commandPhase, nicht in game_state.
+**Gelöst:** `init_state()` setzt jetzt `wargear_used: dict[str, bool] = {}` — vollständig generisch.
+`commandPhase.py` schreibt per Wargear-ID. Kein Fraktions-String in `game_state.py` mehr.
 
-**Dateien:** `gameMechanic/game_state.py`, `gameMechanic/commandPhase.py`
+**Dateien:** `gameMechanic/game_state.py`, `gameMechanic/commandPhase.py` — erledigt
 
 ---
 
 #### Reihenfolge
 
-| Priorität | Fix | Aufwand | Abhängigkeit |
+| Priorität | Fix | Status | Abhängigkeit |
 |---|---|---|---|
-| 1 | **A** — unitCard Orb-Bearer | klein | — |
-| 2 | **D** — wargear_used generic | klein | — |
-| 3 | **B** — WAAAGH! generisch | mittel | — |
-| 4 | **C** — Protokoll-Keys per Fraktion | groß | — |
-
-A+D können in einem Commit, B+C jeweils einzeln.
+| 1 | **A** — unitCard Orb-Bearer | ✅ erledigt (6k) | — |
+| 2 | **D** — wargear_used generic | ✅ erledigt (S72) | — |
+| 3 | **B** — WAAAGH! generisch | 🟡 offen (YAML-Erweiterung nötig) | — |
+| 4 | **C** — Protokoll-Keys per Fraktion | ✅ erledigt (S52/S72) | — |
 
 ### Kategorie 2 — Einmalig-Deklariert (wie WAAAGH!)
 
 | Fraktion | Mechanik | Status |
 |----------|----------|--------|
 | Orks | WAAAGH! (2 Stages) | ✅ implementiert |
-| **T'au Empire** | **Mont'ka / Kauyon (Runden-Fenster)** | ⬜ fehlt |
+| **T'au Empire** | **Mont'ka / Kauyon (Runden-Fenster)** | ⬜ **blocked-by-YAML** — kein `tau_empire/`-Verzeichnis → **Ziel7** |
 
 **Code-Änderungen nötig:**
-- [ ] `armyCard._render_waaagh_ui()`: `active_rounds`-Feld aus YAML auslesen; Badge nur zeigen wenn aktuelle Runde im Fenster liegt
-- [ ] `game_state._reset_turn_state()`: Runden-Fenster-Prüfung für T'au ergänzen
+- [ ] `armyCard._render_waaagh_ui()`: `active_rounds`-Feld aus YAML auslesen; Badge nur zeigen wenn aktuelle Runde im Fenster liegt → **Ziel7**
+- [ ] `game_state._reset_turn_state()`: Runden-Fenster-Prüfung für T'au ergänzen → **Ziel7**
 
 **YAML nötig:**
-- [ ] T'au `faction_abilities.yaml`: `montka` + `kauyon` mit `active_rounds` Feld
+- [ ] T'au `faction_abilities.yaml`: `montka` + `kauyon` mit `active_rounds` Feld → **Ziel7**
 
 **Tests nötig:**
-- [ ] `tests/test_faction_abilities_tau.py` — montka_active_rounds, kauyon_active_rounds
+- [ ] `tests/test_faction_abilities_tau.py` — montka_active_rounds, kauyon_active_rounds → **Ziel7**
 
-### Kategorie 3 — Auto-Progression (kein Player-Input)
+### Kategorie 3 — Auto-Progression (kein Player-Input) → **Ziel7**
+
+> Alle drei Fraktionen fehlen als Datensatz — kein Verzeichnis unter `data/wh40k_9e/`.
+> Komplette Kategorie ist **blocked-by-YAML** und wird nach **Ziel7** ausgelagert.
 
 | Fraktion | Mechanik | Status |
 |----------|----------|--------|
-| Space Marines | Combat Doctrines (R1 Heavy / R2 Assault / R3+ Melee) | ⬜ fehlt |
-| Death Guard | Contagions of Nurgle (Reichweite skaliert) | ⬜ fehlt |
-| Chaos SM | Let the Galaxy Burn (R1+R2 auto, R3 Wahl) | ⬜ fehlt |
+| Space Marines | Combat Doctrines (R1 Heavy / R2 Assault / R3+ Melee) | ⬜ blocked-by-YAML → Ziel7 |
+| Death Guard | Contagions of Nurgle (Reichweite skaliert) | ⬜ blocked-by-YAML → Ziel7 |
+| Chaos SM | Let the Galaxy Burn (R1+R2 auto, R3 Wahl) | ⬜ blocked-by-YAML → Ziel7 |
 
-**Code-Änderungen nötig:**
+**Code-Änderungen nötig → Ziel7:**
 - [ ] `ability_engine.py`: `get_auto_progression_modifier(faction_dir, phase, round)` → `dict[str, int]`
 - [ ] `armyCard.py`: `_render_auto_progression_badge(faction)` — Info-Badge ohne Button
 - [ ] `_common.py`: Auto-Progression-Modifier in `render_attack_form()` einbinden
 
-**YAML nötig:**
+**YAML nötig → Ziel7:**
 - [ ] `ability_type: auto_progression` + `progression: [{round, effects}]` Schema (Beispiel: `_schema/auto_progression.example.yaml`)
 - [ ] YAML für Space Marines, Death Guard, Chaos SM
 
-**Tests nötig:**
+**Tests nötig → Ziel7:**
 - [ ] `tests/test_auto_progression.py` — round→modifier Mapping, round_max, kein Player-Input
 
 ---
@@ -368,7 +369,7 @@ Der Wahapedia-Scraper hat bei allen drei implementierten Fraktionen **substantie
 - [x] `orks/stratagems.yaml`: alle 28 GOs vollständig — `effect`, `once_per_battle`, `timing/event`, `player` bei tough_as_squig_hide + orks_is_never_beaten korrigiert
 - [x] `necrons/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
 - [x] `orks/faction_abilities.yaml`: Trigger/Conditions spot-check — alle Trigger korrekt, keine Korrekturen nötig
-- [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()`
+- [ ] `once_per_battle` enforcement in Session-State + `stratagem_visibility()` — Datenfeld gesetzt; UI nutzt `used_stratagem_ids` (phase-scope), aber kein battle-scope; bleibt offen (kein Ziel7-Kandidat, da kein YAML-Block)
 - [ ] Optional: Tests für korrekte Phase/Stage-Werte
 
 ---
