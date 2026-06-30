@@ -192,31 +192,6 @@ def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -
     return result
 
 
-# Reroll-directive effect type -> the reroll flags it grants.
-# reroll_save_1 removed: Eternal Guardian S is now hold_steady_or_set_to_defend (Plan 025 Step 4).
-# reroll_hit_wound_1 removed: Conquering Tyrant S is now shoot_after_fall_back (Plan 025 Step 5).
-_REROLL_DIRECTIVE_FLAGS: dict[str, set[str]] = {}
-
-
-def get_active_round_choice_rerolls(player: str, phase: str, use_melee: bool) -> set[str]:
-    """Return reroll flags from the active round-choice directive (may be empty).
-
-    Separate from get_active_round_choice_modifier because rerolls are flags, not
-    numeric modifiers — keeping the dict[str, int] contract of that function clean.
-    Flags: reroll_hit_1, reroll_wound_1. Unions the flags of every active directive
-    (round-assigned plus the always-active 6th / dynasty protocol).
-    """
-    flags: set[str] = set()
-    for effect in _active_directive_effects(player):
-        granted = _REROLL_DIRECTIVE_FLAGS.get(effect.get("type", ""))
-        if not granted:
-            continue
-        if _directive_phase_excluded(effect, use_melee):
-            continue
-        flags |= granted
-    return flags
-
-
 def get_active_round_choice_strength_if_charged(
     player: str, turn_flags: dict[str, bool], use_melee: bool
 ) -> int:
@@ -332,16 +307,30 @@ def get_short_label_for_effect_type(player: str, effect_type: str) -> str | None
     return None
 
 
+def get_active_protocol_effects(player: str, types: set[str]) -> list[dict]:  # type: ignore[type-arg]
+    """Raw effect dicts of the active directive(s) whose type is in *types*.
+
+    Includes the dynasty protocol's BOTH directives when the subfaction affinity
+    matches (6th-protocol rule, Bug-3 fix). Generic: works for any faction with
+    round_choice abilities. Returns ``[]`` when nothing matches or no protocol
+    is active.
+
+    Each returned dict carries ``_source_id`` for label resolution via
+    ``get_short_label_for_effect_type``.
+    """
+    return [e for e in _active_directive_effects(player) if e.get("type") in types]
+
+
 def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     """Return Reanimation Protocol modifiers from the active round-choice directive.
 
     Undying Legions P (rp_reroll) -> {"rp_reroll": True}
     Any other / no directive      -> {}
 
-    Considers every active directive, so the effect fires whether Undying Legions is
-    the round-assigned protocol or the always-active 6th / dynasty protocol.
+    Delegates to ``get_active_protocol_effects`` so dynasty/6th-protocol
+    effects are included automatically.
     """
-    if any(e.get("type") == "rp_reroll" for e in _active_directive_effects(player)):
+    if get_active_protocol_effects(player, {"rp_reroll"}):
         return {"rp_reroll": True}
     return {}
 

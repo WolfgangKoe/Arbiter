@@ -1708,11 +1708,11 @@
   "1b3d129b-2092-4002-bbba-31d35986fdc9": {
     "started_at": "2026-06-28T18:02:05.761Z",
     "task": "start next session",
-    "peak_context": 120695,
-    "subagent_share": 75.48223199640812,
+    "peak_context": 135281,
+    "subagent_share": 72.62447322315043,
     "by_tier": {
-      "Sonnet": 28343136,
-      "Opus": 786104,
+      "Sonnet": 28763163,
+      "Opus": 1316650,
       "Haiku": 1653086
     },
     "subagents": [
@@ -1727,7 +1727,7 @@
         "agent_type": "general-purpose",
         "description": "DoD-Review S110",
         "tier": "Opus",
-        "peak_context": 31392,
+        "peak_context": 45425,
         "started_at": "2026-06-28T18:02:05.761Z"
       },
       {
@@ -1778,6 +1778,103 @@
         "tier": "Sonnet",
         "peak_context": 45187,
         "started_at": "2026-06-28T18:02:05.761Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Artefakte schreiben",
+        "tier": "Sonnet",
+        "peak_context": 42129,
+        "started_at": "2026-06-28T18:02:05.761Z"
+      }
+    ]
+  },
+  "c67384fd-92ce-4c37-b832-5629f95a602b": {
+    "started_at": "2026-06-29T18:55:46.159Z",
+    "task": "start session. Ich habe noch folgendes offen, dafür bitte die App starten oD-6 UI-Check: Im laufenden Streamlit bei 2 g…",
+    "peak_context": 121688,
+    "subagent_share": 78.57970665455966,
+    "by_tier": {
+      "Haiku": 2171523,
+      "Sonnet": 19214905,
+      "Opus": 774492
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Toten Reroll-Loop analysieren",
+        "tier": "Haiku",
+        "peak_context": 30438,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Recherche 2 Protokoll-Meta-Bugs",
+        "tier": "Sonnet",
+        "peak_context": 49246,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Recherche 2 Protokoll-Meta-Bugs",
+        "tier": "Sonnet",
+        "peak_context": 38927,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 77662,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Coverage-Gate auf 99 setzen",
+        "tier": "Haiku",
+        "peak_context": 39094,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Executor B: ability_engine Coverage + Dead-Code",
+        "tier": "Sonnet",
+        "peak_context": 64246,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Executor A: game_state Coverage",
+        "tier": "Sonnet",
+        "peak_context": 85480,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Bestandsaufnahme Ziel6/Audit/subfaction",
+        "tier": "Sonnet",
+        "peak_context": 65658,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Executor C: Plan 016 RP-Hints + Mockup",
+        "tier": "Sonnet",
+        "peak_context": 81284,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Coverage-Gate auf 99 setzen",
+        "tier": "Haiku",
+        "peak_context": 24619,
+        "started_at": "2026-06-29T18:55:46.159Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Bestandsaufnahme Ziel6/Audit/subfaction",
+        "tier": "Sonnet",
+        "peak_context": 36266,
+        "started_at": "2026-06-29T18:55:46.159Z"
       }
     ]
   }

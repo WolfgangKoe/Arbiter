@@ -30,6 +30,10 @@ LEDGER: dict[str, set[str]] = {
     "gameObjects/rosz_importer.py": {"adeptus", "custodes", "necrons", "ork", "orks"},
     # --- LEGIT: Python typing.Protocol (structural type), collides with the seed word ---
     "gameMechanic/phase_handler.py": {"protocol"},
+    # --- LEGIT: get_active_protocol_effects — generic helper for any round_choice faction;
+    #     'protocol' here is the round_choice concept (Command Protocols, Ka'tah, …),
+    #     not a Necron-specific string. Function name, not a faction decision. ---
+    "gameMechanic/ability_engine.py": {"protocol"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
     "gameMechanic/game_state.py": {"necrons"},
     "gameMechanic/movementPhase.py": {"dynasty"},

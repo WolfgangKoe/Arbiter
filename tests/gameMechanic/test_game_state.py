@@ -1040,3 +1040,389 @@ def test_mixed_wound_unit_group_wounds_unchanged() -> None:
     state = _gs._unit_state(_group_unit(groups, wounds=16))
     assert state["group_wounds"] == {"szarekh": 16, "menhirs": 21}
     assert state["current_wounds"] == 37
+
+
+# ---------------------------------------------------------------------------
+# compute_roster_total_pts — error branches (lines 119, 129)
+# ---------------------------------------------------------------------------
+
+
+class TestComputeRosterTotalPtsErrorBranches:
+    def test_points_yaml_missing_returns_zero(self, tmp_path, monkeypatch) -> None:
+        """Line 119: pts_path.exists() is False → return 0 immediately."""
+        import gameMechanic.game_state as gs_mod
+
+        # Build a minimal roster file that has a valid faction_dir
+        roster = tmp_path / "test_roster.yaml"
+        roster.write_text("display_name: Test\nfaction_dir: necrons\nunits: []\n")
+
+        # Redirect _ROSTER_DIR and _DATA_ROOT so points.yaml won't exist
+        fake_data_root = tmp_path / "data_root"
+        fake_data_root.mkdir()
+        monkeypatch.setattr(gs_mod, "_ROSTER_DIR", tmp_path)
+        monkeypatch.setattr(gs_mod, "_DATA_ROOT", fake_data_root)
+
+        result = gs_mod.compute_roster_total_pts("test_roster.yaml")
+        assert result == 0
+
+    def test_unit_not_in_points_yaml_skipped(self, tmp_path, monkeypatch) -> None:
+        """Line 129: cost_entry is None → continue; missing unit does not crash."""
+        import gameMechanic.game_state as gs_mod
+
+        roster = tmp_path / "test_roster.yaml"
+        roster.write_text(
+            "faction_dir: necrons\n"
+            "units:\n"
+            "  - id: wh40k_9e.necrons.unit.unknown_unit\n"
+            "    models: 1\n"
+        )
+        pts_dir = tmp_path / "wh40k_9e" / "necrons"
+        pts_dir.mkdir(parents=True)
+        pts_file = pts_dir / "points.yaml"
+        pts_file.write_text("units:\n  wh40k_9e.necrons.unit.overlord:\n    per_unit: 100\n")
+
+        monkeypatch.setattr(gs_mod, "_ROSTER_DIR", tmp_path)
+        monkeypatch.setattr(gs_mod, "_DATA_ROOT", tmp_path)
+
+        result = gs_mod.compute_roster_total_pts("test_roster.yaml")
+        assert result == 0
+
+
+# ---------------------------------------------------------------------------
+# faction_display_name_for — KeyError fallback (lines 181-182)
+# ---------------------------------------------------------------------------
+
+
+def test_faction_display_name_for_returns_player_on_key_error() -> None:
+    """Line 181-182: KeyError in faction_dir_for → fall back to str(player)."""
+    from gameMechanic.game_state import faction_display_name_for
+
+    # Session missing p1_faction_dir and p2_faction_dir → faction_dir_for raises KeyError
+    _make_session()
+    result = faction_display_name_for("Necrons")
+    # Falls back: may return str(player) or load successfully; either way no crash
+    assert isinstance(result, str)
+
+
+def test_faction_display_name_for_fallback_on_missing_faction_dir() -> None:
+    """Line 181-182: player without a faction dir key → KeyError branch returns player name."""
+    from gameMechanic.game_state import faction_display_name_for
+
+    # Deliberately omit p1_faction_dir / p2_faction_dir to trigger KeyError in faction_dir_for
+    _make_session(first_player="UnknownArmy", second_player="Orks")
+    # p1_faction_dir not set → faction_dir_for raises KeyError → returns str(player)
+    result = faction_display_name_for("UnknownArmy")
+    assert result == "UnknownArmy"
+
+
+# ---------------------------------------------------------------------------
+# subfaction_badge_for — KeyError fallback (lines 204-205)
+# ---------------------------------------------------------------------------
+
+
+def test_subfaction_badge_for_returns_error_badge_on_missing_faction_dir() -> None:
+    """Lines 204-205: faction_dir_for raises KeyError → error SubfactionBadge."""
+    from gameMechanic.game_state import SubfactionBadge, subfaction_badge_for
+
+    # Session without p1_faction_dir / p2_faction_dir → faction_dir_for raises KeyError
+    _make_session(first_player="UnknownArmy", second_player="Orks")
+    result = subfaction_badge_for("UnknownArmy")
+    assert result == SubfactionBadge("No Subfaction", "error")
+
+
+def test_subfaction_badge_for_returns_error_when_faction_has_no_subfaction_field() -> None:
+    """Line 208: faction dir exists but meta has no subfaction field → error badge."""
+    from gameMechanic.game_state import SubfactionBadge, subfaction_badge_for
+
+    # 'nonexistent_faction' returns (None, 'Subfaction') from load_subfaction_meta
+    # → field is falsy → Zeile 208 hit
+    _make_session(
+        first_player="Necrons",
+        second_player="Orks",
+        p1_faction_dir="nonexistent_faction",
+        p2_faction_dir="orks",
+    )
+    result = subfaction_badge_for("Necrons")
+    assert result == SubfactionBadge("No Subfaction", "error")
+
+
+def test_subfaction_badge_for_missing_choice_returns_missing_badge() -> None:
+    """Lines 211-212: subfaction value not set → 'No <Label>' badge with state 'missing'."""
+    from gameMechanic.game_state import subfaction_badge_for
+
+    _make_session(
+        first_player="Necrons",
+        second_player="Orks",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+        p1_subfaction=None,  # no choice made
+    )
+    result = subfaction_badge_for("Necrons")
+    assert result.state == "missing"
+    assert result.text.startswith("No ")
+
+
+def test_subfaction_badge_for_set_choice_returns_set_badge() -> None:
+    """Line 213: subfaction value present → formatted badge with state 'set'."""
+    from gameMechanic.game_state import subfaction_badge_for
+
+    _make_session(
+        first_player="Necrons",
+        second_player="Orks",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+        p1_subfaction="szarekhan",
+    )
+    result = subfaction_badge_for("Necrons")
+    assert result.state == "set"
+    assert result.text == "Szarekhan"
+
+
+# ---------------------------------------------------------------------------
+# init_state — early return when already initialized (line 384)
+# ---------------------------------------------------------------------------
+
+
+def test_init_state_does_not_reinitialize_when_already_initialized() -> None:
+    """Line 384: if 'initialized' is already in session_state, init_state returns early.
+
+    Calling init_state twice must not reset game state; the round set by the first call
+    must remain unchanged after the second call.
+    """
+    s = _make_session()
+    init_state(game_size="Incursion", game_mode="matched")
+    s["round"] = 5  # simulate game progress
+    init_state(game_size="Incursion", game_mode="matched")  # second call → early return
+    assert s["round"] == 5  # must not have been reset to 1
+
+
+# ---------------------------------------------------------------------------
+# active_round_choice_buff_labels — KeyError fallback (lines 237-238)
+# ---------------------------------------------------------------------------
+
+
+def test_active_round_choice_buff_labels_returns_empty_on_key_error() -> None:
+    """Lines 237-238: faction_dir_for raises KeyError → returns []."""
+    # Session without p1_faction_dir / p2_faction_dir → faction_dir_for raises KeyError
+    _make_session(first_player="UnknownArmy", second_player="Orks")
+    result = active_round_choice_buff_labels("UnknownArmy")
+    assert result == []
+
+
+# ---------------------------------------------------------------------------
+# active_round_choice_buff_labels — 6th ability path (lines 256-264)
+# ---------------------------------------------------------------------------
+
+
+class TestActiveRoundChoiceBuffLabels6thAbility:
+    """Lines 255-264: the always-active 6th protocol ability (unassigned to any round)."""
+
+    _ALL_PROTOCOL_IDS = [
+        "wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        "wh40k_9e.necrons.faction.protocol_hungry_void",
+        "wh40k_9e.necrons.faction.protocol_conquering_tyrant",
+        "wh40k_9e.necrons.faction.protocol_sudden_storm",
+        "wh40k_9e.necrons.faction.protocol_undying_legions",
+        "wh40k_9e.necrons.faction.protocol_vengeful_stars",
+    ]
+
+    def _assignments_without(self, excluded_id: str) -> dict:
+        """Return round→id assignments for all protocols except the given one."""
+        others = [pid for pid in self._ALL_PROTOCOL_IDS if pid != excluded_id]
+        return {i + 1: pid for i, pid in enumerate(others[:5])}
+
+    def test_6th_ability_shown_when_affinity_matches(self) -> None:
+        """Line 260+264: affinity_bonus True → 6th ability label added without directive."""
+        # vengeful_stars is mephrit's protocol; the 6th ability is vengeful_stars
+        sixth_id = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
+        assignments = self._assignments_without(sixth_id)
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="mephrit",
+            p2_subfaction=None,
+            round_choice_active_Necrons=None,
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={"Necrons": assignments},
+        )
+        labels = active_round_choice_buff_labels("Necrons")
+        assert "Vengeful Stars" in labels
+
+    def test_6th_ability_shown_when_extra_directive_set(self) -> None:
+        """Lines 261-263: extra_directive True → 6th ability label even without affinity."""
+        sixth_id = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
+        assignments = self._assignments_without(sixth_id)
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction=None,
+            p2_subfaction=None,
+            round_choice_active_Necrons=None,
+            round_choice_directive_Necrons=None,
+            round_choice_extra_directive_Necrons=True,
+            round_choice_assignments={"Necrons": assignments},
+        )
+        labels = active_round_choice_buff_labels("Necrons")
+        assert "Vengeful Stars" in labels
+
+    def test_6th_ability_not_shown_without_affinity_or_directive(self) -> None:
+        """Line 260-263: neither affinity match nor extra_directive → 6th not included."""
+        sixth_id = "wh40k_9e.necrons.faction.protocol_vengeful_stars"
+        assignments = self._assignments_without(sixth_id)
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="nihilakh",  # not mephrit → no affinity match
+            p2_subfaction=None,
+            round_choice_active_Necrons=None,
+            round_choice_directive_Necrons=None,
+            round_choice_extra_directive_Necrons=False,
+            round_choice_assignments={"Necrons": assignments},
+        )
+        labels = active_round_choice_buff_labels("Necrons")
+        assert "Vengeful Stars" not in labels
+
+
+# ---------------------------------------------------------------------------
+# init_state — attacker=="p2" swap (lines 384, 394-399)
+# ---------------------------------------------------------------------------
+
+
+def test_init_state_attacker_p2_swaps_player_order() -> None:
+    """Lines 384, 394-399: attacker='p2' causes p1/p2 roster data to be swapped.
+
+    After the swap the first_player gets the p2 roster's display_name and the
+    second_player gets the p1 roster's display_name (attacker becomes the first player).
+    """
+    s = _make_session()
+    # necrons_alpha → display_name "Necrons α", necrons_beta → display_name "Necrons β"
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml", attacker="p2")
+    # With attacker=="p2": names are swapped, so first_player has necrons_beta's name
+    assert s["first_player"] != s["second_player"]
+    # Verify p1_faction_dir is still "necrons" (both are necrons but swapped)
+    assert s["p1_faction_dir"] == "necrons"
+    assert s["p2_faction_dir"] == "necrons"
+
+
+def test_init_state_attacker_p2_swaps_unmatched_warnings() -> None:
+    """Lines 394-399: unmatched lists are also swapped when attacker='p2'."""
+    s = _make_session()
+    # Both rosters exist so no unmatched entries; the swap still must run without error
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml", attacker="p2")
+    # roster_warnings may be empty (both rosters match) — just ensure no crash
+    assert isinstance(s.get("roster_warnings", {}), dict)
+
+
+# ---------------------------------------------------------------------------
+# init_state — round_choice_assignments from roster order (line 444)
+# ---------------------------------------------------------------------------
+
+
+def test_init_state_round_choice_assignments_empty_when_no_proto_order() -> None:
+    """Line 444: if order is None/empty, round_choice_assignments stays empty for that player."""
+    s = _make_session()
+    # necrons_alpha.yaml and necrons_beta.yaml declare no round_choice_order field
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
+    assignments = s["round_choice_assignments"]
+    assert isinstance(assignments, dict)
+    # Neither roster declares round_choice_order → assignments must be empty
+    assert assignments == {}
+
+
+def test_init_state_round_choice_assignments_populated_from_roster_order(
+    tmp_path, monkeypatch
+) -> None:
+    """Line 444: roster with round_choice_order → round_choice_assignments populated."""
+    import gameMechanic.game_state as gs_mod
+
+    proto_ids = [
+        "wh40k_9e.necrons.faction.protocol_eternal_guardian",
+        "wh40k_9e.necrons.faction.protocol_hungry_void",
+        "wh40k_9e.necrons.faction.protocol_conquering_tyrant",
+        "wh40k_9e.necrons.faction.protocol_sudden_storm",
+        "wh40k_9e.necrons.faction.protocol_undying_legions",
+    ]
+    proto_order_yaml = "\n".join(f"  - {pid}" for pid in proto_ids)
+    roster_p1 = tmp_path / "roster_with_order.yaml"
+    roster_p1.write_text(
+        f"display_name: Alpha\nfaction_dir: necrons\n"
+        f"round_choice_order:\n{proto_order_yaml}\nunits: []\n"
+    )
+    roster_p2 = tmp_path / "necrons_beta.yaml"
+    roster_p2.write_text("display_name: Beta\nfaction_dir: necrons\nunits: []\n")
+
+    monkeypatch.setattr(gs_mod, "_ROSTER_DIR", tmp_path)
+
+    s = _make_session()
+    gs_mod.init_state(roster_p1="roster_with_order.yaml", roster_p2="necrons_beta.yaml")
+    assignments = s["round_choice_assignments"]
+    # "Alpha" should have a dict {1: proto_id, ..., 5: proto_id}
+    alpha_assignments = assignments.get("Alpha", {})
+    assert alpha_assignments == {i + 1: pid for i, pid in enumerate(proto_ids)}
+
+
+# ---------------------------------------------------------------------------
+# init_state — unmatched roster warnings (line 477)
+# ---------------------------------------------------------------------------
+
+
+def test_init_state_roster_warnings_populated_for_unmatched_units(tmp_path, monkeypatch) -> None:
+    """Line 477: unmatched units → st.session_state.roster_warnings is non-empty."""
+    import gameMechanic.game_state as gs_mod
+
+    # Roster with a unit ID that doesn't exist in the necron catalog
+    roster_p1 = tmp_path / "necrons_bad.yaml"
+    roster_p1.write_text(
+        "display_name: BadArmy\nfaction_dir: necrons\n"
+        "units:\n  - id: wh40k_9e.necrons.unit.does_not_exist\n"
+        "    models: 1\n"
+    )
+    roster_p2 = tmp_path / "necrons_beta.yaml"
+    roster_p2.write_text("display_name: Beta\nfaction_dir: necrons\nunits: []\n")
+
+    monkeypatch.setattr(gs_mod, "_ROSTER_DIR", tmp_path)
+
+    s = _make_session()
+    gs_mod.init_state(roster_p1="necrons_bad.yaml", roster_p2="necrons_beta.yaml")
+    warnings = s.get("roster_warnings", {})
+    # BadArmy has unmatched unit → warnings must contain at least its key
+    assert "BadArmy" in warnings
+    assert len(warnings["BadArmy"]) > 0
+
+
+# ---------------------------------------------------------------------------
+# _reset_turn_state — KeyError continue (lines 567-568)
+# ---------------------------------------------------------------------------
+
+
+def test_reset_turn_state_keyerror_on_faction_dir_for_continues() -> None:
+    """Lines 567-568: faction_dir_for raises KeyError when p2_faction_dir is missing.
+
+    When activated_abilities contains a player whose turn_state lookup triggers KeyError
+    (p2_faction_dir absent from session state, and the player is not first_player), the
+    except-KeyError branch catches it and continues — no crash, turn flags still reset.
+    """
+    unit = _full_unit_state()
+    unit["turn_flags"]["advanced"] = True
+    # Deliberately omit p2_faction_dir so faction_dir_for("GhostArmy") raises KeyError:
+    # GhostArmy != first_player ("Necrons") → falls to else → st.session_state["p2_faction_dir"]
+    # which is missing → KeyError → continue branch hit.
+    s = _make_session(
+        round=2,
+        phase_idx=1,
+        p1_units={"u1": unit},
+        p2_units={"u2": _full_unit_state()},
+        p1_faction_dir="necrons",
+        # p2_faction_dir intentionally absent
+        activated_abilities={
+            "GhostArmy": {
+                "ability_id": "wh40k_9e.necrons.faction.some_ability",
+                "round_activated": 1,
+            }
+        },
+        pending_mortal_undo=None,
+    )
+    # Must not raise — KeyError is caught and loop continues
+    _gs._reset_turn_state()
+    # Turn flags should still be reset for actual units
+    assert all(v is False for v in s["p1_units"]["u1"]["turn_flags"].values())

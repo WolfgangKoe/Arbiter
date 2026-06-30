@@ -57,5 +57,5 @@ omit = [
 # seam (INV-6): pure composition logic now lives in a measured module. Raise this
 # further as more logic is pulled out of the omitted render modules
 # (uiLayout/*, *Phase.py) into tested helpers.
-fail_under = 92
+fail_under = 99
 show_missing = true

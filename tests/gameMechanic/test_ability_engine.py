@@ -22,11 +22,11 @@ from gameMechanic.ability_engine import (  # noqa: E402
     execute_effect,
     get_activated_command_abilities,
     get_active_heal_bonus,
+    get_active_protocol_effects,
     get_active_round_choice_ap_on_wound_6,
     get_active_round_choice_ignores_cover_half_range,
     get_active_round_choice_light_cover_if_stationary,
     get_active_round_choice_modifier,
-    get_active_round_choice_rerolls,
     get_active_round_choice_shoot_after_fall_back,
     get_active_round_choice_strength_if_charged,
     get_active_rp_modifiers,
@@ -666,11 +666,6 @@ def test_fall_back_hit_mod_wiring_requires_atk_uid_in_entry() -> None:
     )
 
 
-def test_reroll_empty_when_no_directive() -> None:
-    _protocol_session(None, None)
-    assert get_active_round_choice_rerolls("Necrons", "shooting", False) == set()
-
-
 def test_sudden_storm_secondary_does_not_grant_advance_and_charge() -> None:
     # 9E Directive 2 of Sudden Storm is "shoot during an Action" (B-hint), NOT
     # advance-and-charge (Plan 025 Step 1: that effect was non-canonical).
@@ -820,6 +815,71 @@ def test_dynasty_affinity_other_subfaction_inert() -> None:
     _extra_protocol_session(
         "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="nihilakh"
     )
+    assert get_active_rp_modifiers("Necrons") == {}
+
+
+# ---------------------------------------------------------------------------
+# get_active_protocol_effects — generic directive-effect filter (Plan 016 Step 2)
+# ---------------------------------------------------------------------------
+
+
+def test_get_active_protocol_effects_empty_when_no_protocol_active() -> None:
+    """No active protocol -> empty list for any requested type set."""
+    _protocol_session(None, None)
+    assert get_active_protocol_effects("Necrons", {"rp_reroll"}) == []
+
+
+def test_get_active_protocol_effects_returns_rp_reroll_for_undying_legions_secondary() -> None:
+    """Undying Legions D2 (rp_reroll) is returned when requested by type."""
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    effects = get_active_protocol_effects("Necrons", {"rp_reroll"})
+    assert len(effects) == 1
+    assert effects[0]["type"] == "rp_reroll"
+
+
+def test_get_active_protocol_effects_type_filter_excludes_non_matching() -> None:
+    """rp_reroll directive is NOT returned when a different type set is requested."""
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    effects = get_active_protocol_effects("Necrons", {"heal_bonus"})
+    assert effects == []
+
+
+def test_get_active_protocol_effects_dynasty_both_directives_included() -> None:
+    """Dynasty bonus activates both directives of the 6th protocol;
+    get_active_protocol_effects returns effects of both types."""
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="szarekhan"
+    )
+    rp_effects = get_active_protocol_effects("Necrons", {"rp_reroll"})
+    heal_effects = get_active_protocol_effects("Necrons", {"heal_bonus"})
+    assert len(rp_effects) == 1
+    assert rp_effects[0]["type"] == "rp_reroll"
+    assert len(heal_effects) == 1
+    assert heal_effects[0]["type"] == "heal_bonus"
+
+
+def test_get_active_protocol_effects_multi_type_query_returns_all_matching() -> None:
+    """Querying multiple types at once includes every matching effect."""
+    _extra_protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="szarekhan"
+    )
+    effects = get_active_protocol_effects("Necrons", {"rp_reroll", "heal_bonus"})
+    types_found = {e["type"] for e in effects}
+    assert types_found == {"rp_reroll", "heal_bonus"}
+
+
+def test_get_active_protocol_effects_carries_source_id() -> None:
+    """Returned effect dicts have _source_id for label resolution."""
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    effects = get_active_protocol_effects("Necrons", {"rp_reroll"})
+    assert all("_source_id" in e for e in effects)
+
+
+def test_get_active_rp_modifiers_delegates_to_protocol_effects() -> None:
+    """get_active_rp_modifiers returns rp_reroll:True iff get_active_protocol_effects finds it."""
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "secondary")
+    assert get_active_rp_modifiers("Necrons") == {"rp_reroll": True}
+    _protocol_session("wh40k_9e.necrons.faction.protocol_undying_legions", "primary")
     assert get_active_rp_modifiers("Necrons") == {}
 
 
@@ -1109,3 +1169,147 @@ def test_ability_invuln_save_skips_non_matching_unit(monkeypatch: pytest.MonkeyP
     )
     unit = _make_unit(rules=[], keywords=["NECRON"])
     assert ability_invuln_save("Necrons", unit) is None
+
+
+# ---------------------------------------------------------------------------
+# Coverage gap tests — branches not reached by the tests above
+# ---------------------------------------------------------------------------
+
+
+def test_execute_effect_heal_keyerror_in_heal_bonus_is_silenced() -> None:
+    """Z.71-72: KeyError from get_active_heal_bonus (no faction-dir in session) is caught.
+
+    The heal still applies with the base amount; no exception escapes.
+    """
+    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+
+    # Session has a round-choice active but NO faction_dir keys, so faction_dir_for
+    # raises KeyError inside get_active_heal_bonus → the except branch (Z.71-72) fires.
+    session: dict = {
+        "first_player": "Necrons",
+        "round_choice_active_Necrons": "wh40k_9e.necrons.faction.protocol_undying_legions",
+        "round_choice_directive_Necrons": "primary",
+        "p1_units": {"test.unit": {"current_wounds": 4, "models": 2, "destroyed": False}},
+    }
+    _mut.st.session_state = session
+    _eng.st.session_state = session
+    unit = _make_unit(rules=["livingMetal"])
+    result = execute_effect(_living_metal_ability(), "test.unit", "Necrons", unit)
+    # Heal succeeds (base 1 HP: 4 → 5), bonus silently skipped.
+    assert result is True
+    assert session["p1_units"]["test.unit"]["current_wounds"] == 5
+
+
+def test_extra_directive_effects_returns_empty_when_all_protocols_assigned() -> None:
+    """Z.113: _extra_directive_effects returns [] when all 6 protocols are assigned
+    (no unassigned extra remains → len(extras) == 0 != 1).
+    """
+    # Assign all 6 protocols to rounds 1-6 → no leftover extra.
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    session["round_choice_active_Necrons"] = None
+    session["round_choice_directive_Necrons"] = None
+    session["round_choice_assignments"] = {
+        "Necrons": {i + 1: pid for i, pid in enumerate(_ALL_PROTOCOLS)}
+    }
+    session["round_choice_extra_directive_Necrons"] = "primary"
+    _st_mock.session_state = session
+    # No extra protocol available → no effect active → modifier dict is empty.
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
+
+
+def test_active_directive_effects_empty_for_faction_without_round_choices() -> None:
+    """Z.151: _active_directive_effects returns [] when load_round_choice_abilities
+    returns [] (faction has no round-choice YAML — unknown faction_dir).
+    """
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="unknown_faction_no_yaml",
+        p2_faction_dir="necrons",
+    )
+    session["round_choice_active_Necrons"] = "some.id"
+    session["round_choice_directive_Necrons"] = "primary"
+    _st_mock.session_state = session
+    assert get_active_round_choice_modifier("Necrons", "shooting", False) == {}
+
+
+def test_modifier_skips_phase_excluded_effect() -> None:
+    """Z.190: a move_bonus effect with phase=melee is skipped in shooting context."""
+    _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", "primary")
+    # Sudden Storm primary is move_bonus with phase=any — it IS included.
+    # We patch _active_directive_effects to return a melee-only move_bonus so Z.190 fires.
+    original = _eng._active_directive_effects
+
+    def _patched(player: str):  # type: ignore[no-untyped-def]
+        return [{"type": "move_bonus", "value": 2, "phase": "melee"}]
+
+    _eng._active_directive_effects = _patched
+    try:
+        result = get_active_round_choice_modifier("Necrons", "shooting", False)
+    finally:
+        _eng._active_directive_effects = original
+    assert result == {}
+
+
+def test_active_effects_for_faction_returns_empty_without_ability_id() -> None:
+    """Z.364: _active_effects_for_faction returns [] when entry has no ability_id key."""
+    _eng.st.session_state = {"activated_abilities": {"Orks": {"round_activated": 1}}}
+    unit = _make_unit(rules=[], keywords=["ORK"])
+    assert buff_stat_bonus("Orks", unit, "attacks") == 0
+
+
+def test_active_effects_for_faction_returns_empty_for_non_multi_ability(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Z.368: _active_effects_for_faction returns [] when ability effect.type != 'multi'."""
+    from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
+
+    abilities = load_faction_abilities("necrons")
+    # Use Living Metal (type='heal', not 'multi') to hit the non-multi branch.
+    heal_ability = next(
+        (a for a in abilities if a.effect.type == "heal"),
+        None,
+    )
+    assert heal_ability is not None, "Need a heal-type ability in necrons YAML"
+    _eng.st.session_state = {
+        "activated_abilities": {"Necrons": {"ability_id": heal_ability.id}},
+        "first_player": "Necrons",
+        "p1_faction_dir": "necrons",
+    }
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert buff_stat_bonus("Necrons", unit, "attacks") == 0
+
+
+def test_ability_badge_label_none_without_activated_entry() -> None:
+    """Z.400: ability_badge_label returns None when no activated_abilities entry exists."""
+    _eng.st.session_state = {"activated_abilities": {}}
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_badge_label("Necrons", unit) is None
+
+
+def test_ability_badge_label_none_when_entry_has_no_ability_id() -> None:
+    """Z.403: ability_badge_label returns None when entry exists but has no ability_id."""
+    _eng.st.session_state = {"activated_abilities": {"Necrons": {"round_activated": 1}}}
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_badge_label("Necrons", unit) is None
+
+
+def test_ability_badge_label_none_when_ability_has_no_badge_label(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Z.407: ability_badge_label returns None when the matched ability has no badge_label."""
+    from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
+
+    abilities = load_faction_abilities("necrons")
+    # Pick any necron ability that has no badge_label set (badge_label is None/empty).
+    no_badge = next(
+        (a for a in abilities if not a.badge_label),
+        None,
+    )
+    assert no_badge is not None, "Need an ability without badge_label in necrons YAML"
+    _eng.st.session_state = {
+        "activated_abilities": {"Necrons": {"ability_id": no_badge.id}},
+        "first_player": "Necrons",
+        "p1_faction_dir": "necrons",
+    }
+    unit = _make_unit(rules=[], keywords=["NECRON"])
+    assert ability_badge_label("Necrons", unit) is None

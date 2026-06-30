@@ -26,6 +26,7 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
+| [031](031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | P-HOCH | S–M | 025 ✅, 016 | TODO — Step 1 (Bug 2): „Change extra directive"-Block in `armyCard.py` Z. 219–225 entfernen; Step 2 (Bug 1): Pending-Flag-Mechanik in `game_state.py` + `is_active`-Entkoppelung in `armyCard.py`; je Regressionstest PFLICHT; manuelle UI-Verifikation zwingend (Render-Code test-ausgeschlossen). |
 | [030](030-conquering-tyrant-ui-bugfixes.md) | Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts (D2 −1-Hit-Anzeige) + Selection-State-Reset nach All-done (Bug-5-Regression) | P1 (HOCH) | XS–S | 025 ✅ | TODO — Bug 2 zuerst (`reset_group_declaration_state()` nach All-done/Reset), dann Bug 1 (`"atk_uid"` in beide `entries.append`-Blöcke); je Regressions-/Unit-Test PFLICHT. |
 | [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | DONE — alle Steps 1–6; Necron-Protokolle 9E-konform; unblockt 016/017 |
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
@@ -33,7 +34,7 @@ run every verification command, and update your row below when done.
 | 015 | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO |
 | [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
-| 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | TODO — toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift); Engine-Effekt `strength_if_charged` analog Hungry Void D2 verdrahten. |
+| 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | TODO — toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift); Engine-Effekt `strength_if_charged` analog Hungry Void D2 verdrahten. ⚠️ **DIVERGENZ:** Plandatei `029-*.md` fehlt im Verzeichnis — TODO: anlegen oder Eintrag hier als REJECTED markieren, bevor Plan 029 beauftragt wird. |
 
 **Empfohlene Reihenfolge (akt. S107): 016 → 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).

@@ -26,77 +26,64 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S110, 2026-06-29)
+## Aktueller Stand (nach S111, 2026-06-30)
 
-**S110 — Wound-Verkettungs-Bug + Coverage-Sprint + Test-Isolations-Fix (Commit b25e1f7).**
-- **Wound-Verkettungs-Bug ✅ GEFIXT:** `_render_dice_wound_block` (`dice_html.py`) hatte denselben
-  `current = next_thresh`-Fehler wie S109-Hit-Fix. Jetzt base-verankert + ±1-Cap; Test
-  `test_stacked_wound_debuffs_both_reference_base_threshold`.
-- **Coverage 97,29 %** (war 93,02 %): scenarios 100 %, attack_math 99 %, unit_mutations 99 %, loader 98 %.
-  Noch offen: `game_state.py` 92 %, `ability_engine.py` 94 % (siehe nächster Schritt).
-- **Test-Isolations-Fix:** 2 neue conftest.py (gameObjects = Loader-Caches leeren; gameMechanic =
-  st-Mock re-pointing via sys.modules) → behob 50 Subset-Run-Failures.
-- Nebenpunkte: Planning-Template in `agent_scopes.md` +2 Spalten; Backlog #2b hochgestuft;
-  rotate_history-Marker-Drift (▶) behoben.
-- Vollsuite **1260 grün / 97,29 %**, Architektur **8/8**, ruff+black sauber.
+**S111 — Coverage-Sprint + Plan-016-Linie abgeschlossen + Protokoll-Bugs identifiziert.**
 
-**S109 — Plan 030 (Conquering-Tyrant-UI-Bugs) abgeschlossen + committet, voll delegiert.**
-- **Bug 1 (D2 −1-Hit nicht sichtbar) ✅ VERIFIZIERT ok:** Kein Code-Defekt — `atk_uid` greift (synthetische
-  `models`-Gruppe via `loader.py:1089`), `can_shoot` und −1-Erzeuger lesen denselben State.
-  In der App geprüft: roter „Conquering (Fall Back) −1" erscheint korrekt.
-- **Bug 2 (Zielwahl-Hang) ✅ GEFIXT:** Helfer `_single_eligible_group` (`_common.py`) verdrahtet.
-- **Dense-Cover-Anzeige (Hit) ✅ GEFIXT:** base-verankert + ±1-Cap; Test `test_stacked_hit_debuffs_both_reference_base_threshold`.
+- **game_state.py 92 → 100 %** (+17 Tests). **ability_engine.py 94 → 100 %** (+9 Tests).
+- **Toter Reroll-Loop entfernt:** `get_active_round_choice_rerolls` + `_REROLL_DIRECTIVE_FLAGS`
+  aus `ability_engine.py` gelöscht (kein Necron-Protokoll gibt Reroll; war Dead Code).
+- **Plan 016 — generischer `get_active_protocol_effects()`-Helper (Step 2) + RP-Hints (Step 3)**
+  weitgehend verdrahtet. Plan-Drift: `rp_bonus`-`max_value` NICHT auf „Modelle verloren" gesetzt —
+  regelwidrig wäre es; D1=`heal_bonus`, D2=`rp_reroll`; `max_value=models_lost` ist korrekt.
+  Step 4 Dynasty-Badge war bereits vollständig. LEDGER-Eintrag `protocol` in
+  `test_generic_src_vocab.py` (LEGIT — generischer Funktionsname, kein Fraktions-String).
+- **Vollsuite:** 1294 passed / 99,09 %, Architektur 8/8 grün, ruff+black sauber.
+- **Coverage-Gate auf 99 % angehoben** (`pyproject.toml` `fail_under`); 0,09 % Puffer —
+  neue Bugfixes können es brechen (Ratchet: dann Tests nachziehen).
+- **oD-6 (Wound-Block 2× −1, base 4+ → Eff. 5+) ✅** vom Stakeholder visuell verifiziert (Carry-over S110).
+- **Doku-Drift offen:** „92 %"-Erwähnungen in CLAUDE.md/backlog.md/operating_model.md/
+  agent_scopes.md/architecture_invariants.md auf 99 % nachziehen (nur Gate-Bezug, nicht jede Erwähnung).
 
-**S107 — Plan 025 DONE (Necron-Protokolle 9E) + D2 Fall-Back-Schuss-Bugfix.** Retro M1–M4 verbindlich (Executor
-„KEIN Commit"; Planner Step-Abgleich; M3 Custodes-Schuld Queue; M4 Metrik-Automatisierung). Detail → `session_archive.md`.
+**Protokoll-Bugs identifiziert (regelwidrig, dokumentiert in Plan 031):**
+- **Bug 1:** Direktiven-Wahl an `is_active` gekoppelt → zweiter Spieler wählt erst nach
+  vollständigem ersten Zug (unerlaubter Informationsvorteil). Soll: Pending-Flag am Rundenanfang.
+- **Bug 2:** „Change extra directive"-Button erlaubt nachträgliche Änderung in jeder Phase →
+  reaktive Anpassung regelwidrig. Soll: Block entfernen; Wahl ab Fix auf Rundenanfang-Fenster begrenzt.
 
-**S106 (Detail → `session_archive.md`):** Governance-Konsistenz + Artefakt-Verschlankung; Coverage-Gate 92 % überall.
+### ▶ Nächster Schritt — Prioritäten (S112)
 
-### ▶ Nächster Schritt — Coverage-Reste + 016-Linie
-Plan 025 ✅ DONE, Wound-Bug ✅ DONE → Reihenfolge jetzt **016 → 018 → 015 → 026 → 017** (`docs/audit/plans/README.md`).
-016 behält nur RP-Block-Hint + Dynastiebonus-Anzeige (Group A/C nach 025 obsolet).
+**1. Plan 031 (NEU, P-hoch) — Protokoll-Meta-Timing-Bugs fixen** (regelwidrig).
+   Step 1: „Change extra directive"-Block (`armyCard.py` Z. 219–225) entfernen (XS).
+   Step 2: Pending-Flag-Mechanik in `game_state.py:_reset_round_choice_state()` + `is_active`-
+   Entkoppelung in `armyCard.py:_render_round_choice_ui()` (S–M). GENERISCH, Regressionstests + manuelle UI-Prüfung.
 
-**1. Coverage-Reste → ~100 % (PRIO, zwei verbleibende Module):**
-- **`game_state.py` 92 %** — ungedeckte Zeilen: 119, 129, 181-182, 204-205, 237-238, 256-264, 384, 394-399, 444, 477, 567-568.
-- **`ability_engine.py` 94 %** — ungedeckte Zeilen: 71-72, 113, 151, 190, 211-216, 388, 392, 424, 427, 431.
-  Tests ergänzen bis ~98–99 % je Modul. Executor-SA mit Write, Tier Sonnet.
+**2. Ziel6.md konsolidieren/abschließen:** großer offener Backlog (6e/6f/6g/6h Kat1–3,
+   Relics, T'au/AdMech/Tyranids) — je Punkt entscheiden: erledigt / bewusst-offen (daten-first) /
+   in aktivem Plan. Nichts verlieren; viele Punkte sind bewusst zurückgestellt (YAML fehlt).
 
-**2. Plan 016 (C) — RP-Block-Hints + Dynastiebonus-Anzeige** (war für S110 vorgesehen, verschoben).
-
-- **M1 — Overwatch-Anzeige:** statische Caption `chargephase.py:144` erst mit Overwatch korrekt → Plan-015-Scope.
-- **Planning-Template-Erweiterung (offen, unbestätigt):** Stakeholder wünscht im Planner-Ausgabe-Template (`docs/reference/agent_scopes.md` Z. 33 ff.)
-  zwei zusätzliche Spalten — „Subagent(en) + Tier" (Tier-Default nach O2/operating_model, ggf. Executor→Reviewer-Paar)
-  und „Scope-Zeile / Dateien" (konkrete Pflicht-Lesen-Dateien aus der Scope-Tabelle). Vorschlag lag vor, Freigabe steht noch aus.
-
-**Maßnahmen aus S107-Retro:**
-1. ✅ M1 — Executor-Brief-Regel „KEIN Commit" (agent_scopes.md Zeilen 91–93) bereits vorhanden.
-2. ✅ M2 — Planner-Pflichtschritt Step-Abgleich (agent_scopes.md Zeilen 50–52) bereits vorhanden.
-3. ✅ M3 — Custodes `strength_if_charged`-Plan 029 (README.md Zeile 35) bereits in Queue.
+**3. subfaction-Buffs mechanisch (Plan 018/§6e):** Infrastruktur + Badge fertig & generisch,
+   aber Execute-Logik fehlt (`collect_modifiers_for_phase`). Stakeholder erwägt Bündelung in Ziel7.
 
 ### ⚠️ Carry-over (offen)
-- **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen;
-  (e) SessionStart-Regel-Injektion (S95-Beleg). [(f) M3 ✅ · (g) M4 ✅ — S106]
-- **Bug 3 (Zweitspieler-Direktiv-Wahl) + INV-4b-Restschuld nebenher.**
-- **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (c) S103 stationär+D1 grünes +1-Save-Badge IN den Würfeln. [(b) Bug 2 ✅ S109 · (d) D2 −1 ✅ S109]
-- **Manuelle UI-Prüfung (DoD-6, S110 offen):** Wound-Block bei 2 gestapelten −1-Wound-Debuffs
-  (base 4+) → beide Modifier müssen auf base 4+ verankert sein, Eff.-Zeile „5+" (nicht 6+).
-  Im laufenden Streamlit visuell prüfen.
-- **Retro-Maßnahme 1 (DRY, S110):** Hit- und Wound-Block teilen identische ±1-Cap-Logik →
-  gemeinsamen Helper in `dice_html.py` extrahieren (Backlog-Eintrag vorhanden).
-- **Retro-Maßnahme 2 (Test-Schuld, S110):** `gameMechanic/conftest.py` re-pointet st-Mocks global
-  über sys.modules (reihenfolge-abhängiger Quick-Fix) → mittelfristig durch eine session-scoped
-  Streamlit-Mock-Fixture ersetzen (Backlog-Eintrag vorhanden).
 
-### Offene Fragen / Vormerke
-- **Design-System-Crew:** Buff-/Direktiv-Hinweis-Komponente, sobald 025 Effekte festlegt.
-- **S95-Vormerk:** Regelkonformität beim YAML-Modellieren prüfen (DoD-#1-Ergänzung).
-- **doku.md** nach `archive/` verschoben (war erledigtes Audit) — bei Bedarf ganz löschbar.
+- **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
+- **Manuelle UI-Verifikation (PFLICHT):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
+  (c) stationär+D1 grünes +1-Save-Badge in den Würfeln.
+- **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
+- **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
+
+### ⚠️ OFFENE ENTSCHEIDUNG (Stakeholder beim Session-Start)
+
+„Gefechtsoptionen" sind NICHT Teil von Ziel6 (nur Vorwärtsverweis auf Ziel7/Crusade).
+Die gewünschte „Auslagerung als Ziel7" ist eine NEU-DEFINITION, kein Verschieben.
+**Frage:** Ziel7 = Gefechtsoptionen + subfaction-Mechanik bündeln? Renumbering der Folge-Ziele bestätigen?
+→ NICHT selbst umsetzen, nur als Entscheidung vormerken.
 
 ---
 
 ## Gate-Netz (Messbefehle)
-- Tests + Coverage: `pytest --tb=short` (Floor **92 %**, `pyproject.toml`); **Schulden-Scoreboard** danach.
+- Tests + Coverage: `pytest --tb=short` (Floor **99 %**, `pyproject.toml`); **Schulden-Scoreboard** danach.
 - Architektur: `pytest tests/architecture/ --no-cov -q`. Doku/Akzeptanz: `pytest tests/docs/ tests/acceptance/ --no-cov -q`.
 - **Token-Korridor** <150k, bei ~135k beenden; Fleißarbeit PROAKTIV an Sonnet-Subagent.
 - **Token-Report + History (M4, PFLICHT beim Abschluss):** `python tools/token_report.py --write` + `python tools/rotate_history.py --session <N> --summary "…"` — Koordinator stößt an.
