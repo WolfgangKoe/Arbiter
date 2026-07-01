@@ -50,6 +50,16 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 **Pflichtschritte (Planner):**
 - **Vor dem Einplanen:** offene vs. erledigte Steps gegen `git log --oneline` +
   `.claude/tasks/next_session.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
+- **Checkbox-Vollständigkeit:** alle Unterabschnitte der aktiven Zieldatei durchgehen —
+  jede Checkbox auf `stale` (Check gesetzt, aber Code nicht committet) vs. `wirklich offen`
+  prüfen. Beleg: `git log --oneline | grep -i <stichwort>` oder `grep -rn <symbol> src/`.
+  Keine Checkbox als „erledigt" markieren ohne Code-Beleg; keine als „offen" einplanen
+  ohne Verifikation, dass sie nicht bereits committet ist.
+- **Entscheidungs-Timing:** Tasks mit Modus `Konsens` (aktive Stakeholder-Entscheidung nötig)
+  immer **früh im Plan** platzieren — nicht ans Ende, nicht in Aufgaben verpacken, die erst
+  nach > 90 k Token erreicht werden. Faustregel: jede `NEEDS-DECISION`-abhängige Aufgabe
+  muss als eigenständiger erster oder zweiter Schritt erscheinen, damit der Stakeholder bei
+  vollem Kontext-Headroom entscheiden kann.
 
 **Konventionen:**
 - `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k).
@@ -97,7 +107,7 @@ Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
 - [ ] Heimat: neuer Code sitzt im richtigen Modul
 - [ ] Gates: pytest grün, Coverage-Floor ≥ 99 % gehalten, keine vorher-grünen Tests rot
 - [ ] Generic-src: keine Fraktions-Strings/-Checks in src/
-- [ ] Format: black + ruff (+ isort) ausgeführt
+- [ ] Format: `pre-commit run --files <geänderte Dateien>` ausgeführt und sauber (nicht nur `ruff check`)
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
       NIE direkt im Chat mit dem Stakeholder kommuniziert
 ```

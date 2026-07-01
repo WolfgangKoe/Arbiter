@@ -110,9 +110,12 @@ Begründung: [ADR-0005](docs/governance/decisions/0005-stehende-subagent-freigab
 
 ### Session-Workflow
 1. **Session-Start:** `.claude/tasks/next_session.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
+   → **Checkbox-Sync: jeden Haken gegen `git log --oneline` verifizieren** — stale Checks
+   (gesetzt, aber Code fehlt) sofort melden, bevor der Plan aufgebaut wird.
 2. **Plan zeigen** → Freigabe einholen → Implementieren
 3. **Session-Ende:** `.claude/tasks/next_session.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
-4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken
+4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken — **nur wenn Code committet**; stale Checks
+   explizit öffnen und in den nächsten Schritt übernehmen, nicht still stehen lassen.
 
 **Kritisch beim Update:** `.claude/tasks/next_session.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
 

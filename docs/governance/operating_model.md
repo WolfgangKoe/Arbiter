@@ -131,6 +131,10 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
 1. <a id="ev1"></a>**Planning (Session-Start)** — zwei Varianten:
    - **Default ("start next session"):** [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Koordinator sofort loslegen. **Auslagerung (ADR-0007):** Den Planning-Entwurf erstellt ein **Planner-Subagent** (liest next_session + Ziel + Backlog + Index) und legt ihn als Datei ab; der Koordinator legt ihn dem Stakeholder zur Freigabe vor, ohne die Quellen selbst zu lesen.
+
+     Reihenfolge-Pflicht: Aufgaben mit `Modus: Konsens` (Stakeholder-Entscheidung blockiert
+     Umsetzung) stehen im Plan VOR rein mechanischen Tasks — nicht in der Wind-down-Zone
+     (~135k), wo Headroom fehlt. Details: `docs/reference/agent_scopes.md` → Pflichtschritte.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `next_session.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
@@ -141,7 +145,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    - **Verdrahtung:** für jeden neuen Helfer per `grep` belegen, dass **Nicht-Test-Code** ihn aufruft — kein verwaister Parallel-Pfad (S70: 3/6 Helfer grün getestet, aber nie verdrahtet).
    - **Heimat:** neuer Code sitzt im richtigen Modul (z. B. State-Mutationen in `unit_mutations.py`), nicht als Duplikat.
    - **Gates:** `pytest --tb=short` grün, Coverage-Floor gehalten, keine vorher-grünen Tests rot; **Generic-src** (keine Fraktions-Strings/-Checks in `src/`).
-   - **Format vor Rückgabe:** Subagent führt `black` + `ruff` (+ `isort`) auf seine Dateien aus, bevor er meldet — sonst muss der Orchestrator nachformatieren (S82-Reibung).
+   - **Format vor Rückgabe:** Subagent führt `pre-commit run --files <geänderte Dateien>` aus, bevor er meldet — deckt `black`, `isort`, `ruff` und alle weiteren konfigurierten Hooks atomar ab. Einzelne Tool-Aufrufe (`ruff check` allein) sind nicht ausreichend (S114-Befund). Schlägt ein Hook an: Fix einarbeiten, erneut laufen, erst dann melden.
    - **Beleg zurückliefern (festes Format):** Endbericht KNAPP und in fester Reihenfolge — (1) pytest-Zusammenfassungszeile, (2) grep-Belegzeilen, (3) `git diff --stat`, (4) ggf. gewählte Werte. Nicht nur „getestet, grün"; kein Volltext (S82: verstümmelter Bericht → alles selbst nachgeprüft).
 
    **Maßnahme 1 (Executor-Briefing, S113):** Jeder datei-ändernde Subagent-Auftrag enthält die Standardzeile „**Freigabe liegt vor — Koordinator hält das Gate; editiere direkt**", damit der Executor nicht fälschlich das Freigabe-Gate auf sich selbst anwendet und eine Resume-Runde kostet.
