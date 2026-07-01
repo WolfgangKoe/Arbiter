@@ -43,11 +43,9 @@ Frühere Sessions (S60–S115): Verlauf in `docs/goals/ziel6.md` (Session-Histor
 ### ▶ Nächster Schritt — Ziel7-Cluster
 
 **Erledigt in S116:** Design-System Schritt 1 (Task 0) ✓ · Regel-Ledger auf 0 (Task 2) ✓.
+**P18 war stale-offen** — bereits in `e6fcdb3` (S43, Plan 013) umgesetzt; S117 verifiziert + abgehakt.
 
-**1. P18** [~25k, Sonnet]: Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in
-   PlayerArea; manuelle UI-Verifikation Pflicht.
-
-**2. Design-System Schritt 2** [offen, Sonnet]: die in `design_system.md` etablierten `badge()`/`chip()`-
+**1. Design-System Schritt 2** [offen, Sonnet]: die in `design_system.md` etablierten `badge()`/`chip()`-
    Helfer + Symbol-Konstanten auf die restlichen Render-Stellen ausrollen; Token-Wertesatz je Badge-Klasse
    final vom User bestätigen lassen, falls noch offen.
 

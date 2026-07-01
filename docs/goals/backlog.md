@@ -326,7 +326,9 @@ Kein Blocker; schärfen wenn ohnehin in der Datei.
     - **P17 — erledigt (S115):** Mechanik steht+getestet — Pre-Apply-Zielauswahl (`_render_subgroup_selector`,
       `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unit_mutations.py`); Vor-Auswahl+Lock
       akzeptiert, ±-Zähler verworfen. Details: `docs/goals/ziel6.md` P17.
-    - **P18** — Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in PlayerArea (~25k, Sonnet); manuelle UI-Verifikation Pflicht.
+    - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
+      einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
+      Einzelgruppe für Einheiten ohne `model_groups`) + `melee_with`-Ziel-Anzeige. Getestet: `test_group_flow.py`.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
 - [index.md](index.md) — Ziel-Gesamtübersicht
