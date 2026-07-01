@@ -30,6 +30,7 @@ from gameMechanic.game_state import (
 from gameMechanic.unit_mutations import apply_damage, heal_unit
 from gameObjects.unit import Unit
 from gameObjects.weapon import WeaponProfile
+from uiLayout.badges import badge
 from uiLayout.dice_compose import (  # noqa: F401
     block_divider_html,
     dice_face_svg,
@@ -138,11 +139,7 @@ def _badge(text: str, variant: str = "") -> str:
         fg, bg = _DEBUFF_COLOR
     else:
         fg, bg = ("#c9a84c", "#2e2618")
-    return (
-        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
-        f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
-        f'font-weight:600;margin-right:3px;">{text}</span>'
-    )
+    return badge(text, fg, bg)
 
 
 def state_badges_html(unit_state: dict) -> str:  # type: ignore[type-arg]
@@ -525,6 +522,20 @@ def _collect_def_save_modifiers(
 # ---------------------------------------------------------------------------
 # 6d-v2 Damage + RP blocks
 # ---------------------------------------------------------------------------
+
+
+def _rapid_fire_caption(weapon_type: str, range_inches: int) -> str | None:
+    """Generate Rapid Fire caption text if applicable.
+
+    Returns the caption string for Rapid Fire weapons showing half-range, or None
+    if the weapon is not Rapid Fire or has no range.
+
+    Implements R-COMBAT-17 (Klasse C): App displays Rapid Fire range hint.
+    """
+    if weapon_type.startswith("Rapid Fire") and range_inches > 0:
+        half = range_inches // 2
+        return f'[RAPID FIRE · {range_inches}" · ½ = {half}"]'
+    return None
 
 
 def _rp_directive_hints(def_faction: str) -> list[str]:
@@ -1675,9 +1686,9 @@ def render_group_assignment(
                         profile.effect,
                         profile.max_attacks,
                     )
-                    if profile.weapon_type.startswith("Rapid Fire") and profile.range_inches > 0:
-                        half = profile.range_inches // 2
-                        st.caption(f'[RAPID FIRE · {profile.range_inches}" · ½ = {half}"]')
+                    rf_caption = _rapid_fire_caption(profile.weapon_type, profile.range_inches)
+                    if rf_caption:
+                        st.caption(rf_caption)
                     st.markdown(
                         f"**{weapon.name_en}** → "
                         f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'

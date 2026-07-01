@@ -12,4 +12,13 @@ tailwindcss
 .claude/.freigabe
 
 # Runtime game log (regenerated on each run/test) — not source state
-data/log/game_log.json
+data/log/
+
+# Coverage / test artifacts
+.coverage
+
+# Claude Code tooling artifacts — not project source state
+.agents/
+.claude/skills/
+.claude/worktrees/
+skills-lock.json

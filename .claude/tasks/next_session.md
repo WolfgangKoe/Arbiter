@@ -26,33 +26,30 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S115, 2026-07-01)
+## Aktueller Stand (nach S116, 2026-07-01)
 
-**S115** — reine Doku-/Status-Session, kein Produktivcode:
-- **(a)** S114-Retro-Maßnahmen in Prozess-Docs verankert (Commit `c5fe153`).
-- **(b)** P17 erledigt: Vor-Auswahl + Wounded-Lock (`_render_subgroup_selector`,
-  `apply_damage`/`get_locked_group`) akzeptiert; ±-Zähler-Ansatz verworfen (ziel6 abgehakt).
-- **(c)** Plan 031 als bereits erledigt bestätigt (`533e313`), README-Status nachgezogen.
-- **(d)** Zwei neue Retro-Maßnahmen in `agent_scopes.md` verankert (Plan-Status im selben
-  Commit; Mechanik- statt Binär-Status im Backlog). Vollsuite 1371 passed, 99.10 %, Arch 8/8.
+**S116 committed** (Review GO, 1390 passed, 99.11 %, Arch-Gate grün, Ledger „impl. ohne Test" = 0):
+Design-System Schritt 1 (`badges.py`/`symbols.py`/`design_system.md`, 4 Badge-Stellen konsolidiert),
+Regel-Ledger auf 0 (R-COMBAT-17 Rapid-Fire-Caption + R-PROTO-02 datengetriebener Aura-Hinweis),
+Invuln-Cleanup (SAVE-Block ohne `active`/`AP-Cover`, nur `Inv N+`). Abschluss-Fixes: E501 in `_vocab.py`,
+`.gitignore` gegen Tooling-Artefakte gehärtet.
 
-Frühere Sessions (S60–S114): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+**⚠️ OFFEN — manuelle UI-Verifikation S116** (Render-Code coverage-ausgenommen, vor P18-UI-Pass prüfen):
+Badge-Optik pixelidentisch; Invuln-Zeile nur noch `Inv N+`; Aura-Info-Box nur bei Direktive-1-primary;
+Rapid-Fire-Caption; Glyphen (`⚔`/`↺`/Pfeile). Report: `docs/handoff/review-S116.md` (untracked).
+
+Frühere Sessions (S60–S115): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — Ziel7-Cluster
 
-**0. Design-System Schritt 1** [offen, ~35–45k, Sonnet; Gate: Token-Werte + Hinweis-Konvention
-   erst bestätigen] (Design-System-Crew, operating_model.md:95):
-   - `docs/spec/design_system.md` anlegen + `design_colors.md` konsolidieren (alles an einem Platz).
-   - Badge vereinheitlichen: `_common._badge` + `unitCard._badge` + `armyCard.py` + Invuln-Block (`dice_html.py:188-204`).
-   - Zentrale Symbol-Konstanten anlegen (▶◀✓✕＋⚔↺).
-   - Token-Wertesatz (Radius/Padding/Font-Size je Badge-Klasse) + Hinweis-Konvention
-     (info/warning/success/error) vorschlagen + vom User bestätigen lassen.
-   - Entscheidungsgrundlage: `docs/handoff/design-system-proposal.md` (ANSWERED, S114).
+**Erledigt in S116:** Design-System Schritt 1 (Task 0) ✓ · Regel-Ledger auf 0 (Task 2) ✓.
 
 **1. P18** [~25k, Sonnet]: Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in
    PlayerArea; manuelle UI-Verifikation Pflicht.
 
-**2. Regel-Ledger auf 0**: Tests für `R-COMBAT-17` und `R-PROTO-02` nachziehen (impl. ohne Test).
+**2. Design-System Schritt 2** [offen, Sonnet]: die in `design_system.md` etablierten `badge()`/`chip()`-
+   Helfer + Symbol-Konstanten auf die restlichen Render-Stellen ausrollen; Token-Wertesatz je Badge-Klasse
+   final vom User bestätigen lassen, falls noch offen.
 
 ### ⚠️ Carry-over (offen)
 

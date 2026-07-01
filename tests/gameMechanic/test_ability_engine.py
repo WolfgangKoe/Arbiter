@@ -16,6 +16,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     ability_badge_label,
     ability_invuln_save,
     buff_stat_bonus,
+    build_aura_range_hint_text,
     charge_after_advance_allowed,
     check_conditions,
     check_trigger,
@@ -613,6 +614,35 @@ def test_conquering_tyrant_primary_aura_range_bonus_not_a_numeric_modifier() -> 
     _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
     result = get_active_round_choice_modifier("Necrons", "any", False)
     assert result == {}
+
+
+def test_build_aura_range_hint_text_primary_contains_value_max_names_and_table_note() -> None:
+    # R-PROTO-02 (Class B, table-only): with Conquering Tyrant Directive 1 active, the
+    # table hint must surface +3" / max 12", the affected aura ability names (from the
+    # YAML `affects` list — no faction/name literals in src/), and the table-only note.
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "primary")
+    text = build_aura_range_hint_text("Necrons")
+    assert text is not None
+    assert '+3"' in text
+    assert '12"' in text
+    assert "Lord's Will" in text
+    assert "My Will Be Done" in text
+    assert "Rites of Reanimation" in text
+    assert "Table-only" in text
+
+
+def test_build_aura_range_hint_text_secondary_returns_none() -> None:
+    # Directive 2 (shoot_after_fall_back) is NOT aura_range_bonus → no hint.
+    # Regression guard against "hint always visible".
+    _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
+    assert build_aura_range_hint_text("Necrons") is None
+
+
+def test_build_aura_range_hint_text_other_protocol_without_effect_returns_none() -> None:
+    # A protocol whose active directive has no aura_range_bonus effect → None.
+    # Proves the hint is driven by effect.type, not by a faction/protocol name (Generic-src).
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", "primary")
+    assert build_aura_range_hint_text("Necrons") is None
 
 
 def test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_when_fell_back() -> (

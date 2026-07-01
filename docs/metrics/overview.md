@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-01 20:28 CEST
+Stand: 2026-07-01 21:54 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,44 +14,48 @@ Modell-Mix (Subagenten): `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonst
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
+07-01 21:41 bf59  ████░░░░░░░░  53k ↓    ███░░░  43% ↓  ████████████
+07-01 20:29 49a0  ████████████ 144k ↑    ████░░  74% ↑  ███████··▒▒▒
 07-01 18:47 b870  ███░░░░░░░░░  32k ↓    ░░░░░░   0% ↓  ▓▓▓▓▓▓▓▓▓▓▓▓
-06-30 23:20 9fe6  ██████████░░ 121k ↓    ████░░  59% ↓  █·········▒▒
+06-30 23:20 9fe6  ██████████░░ 122k ↓    ███░░░  57% ↓  █·········▒▒
 06-30 22:03 8996  ███████████░ 140k ↑    ████░░  72% ↑  ············
 06-30 20:54 ac89  █████████░░░ 108k ↓    ████░░  62% ↓  ██····▒▒▒▒▒▒
-06-30 18:46 fce6  ███████████░ 133k ↓    ████░░  75% ↑  ███········▒
-06-29 20:55 c673  ████████████ 162k ↑    ████░░  74% ↑  █··········▒
 ```
 
 ## Jüngste Session
 
-**2026-07-01 18:47 · b870f718**
+**2026-07-01 21:41 · bf595349**
 
-- **Aufgabe:** Sonnet 5 ist nun verfügbar. Passe bitte die Settings an, damit Sonnet 5 statt Sonnet 4.6 genutzt wird.
-- **Modelle:** Haupt Sonnet · Subagent —
-- **Tokens gesamt:** 463,616 (Haupt 463,616 · Subagent 0, Anteil 0 %)
-- **Peak-Kontext:** ███░░░░░░░░░ 32k / 150k
-- **cache_read:** 367,473 · **Output:** 6,340
+- **Aufgabe:** Bereite die nächste Session vor. Committen.
+- **Modelle:** Haupt Opus · Subagent Opus
+- **Tokens gesamt:** 2,890,745 (Haupt 1,660,865 · Subagent 1,229,880, Anteil 43 %)
+- **Peak-Kontext:** ████░░░░░░░░ 53k / 150k
+- **cache_read:** 2,518,391 · **Output:** 52,378
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 32k blieb im 150k-Korridor.
-- ✅ 463,616 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 53k blieb im 150k-Korridor.
+- ✅ 43% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
 
 ## 150k-Korridor für Subagenten
 
 _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 
-_keine Subagenten in der letzten Session._
+```text
+#   Agent / Aufgabe                     Peak-Kontext / 150k  Status
+--- ----------------------------------- -------------------- ------
+1   general-purpose: DoD-Review S116 u… ████░░░░░░░░  53k    ✅
+```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  33
-cache_creation ▕██████░░░░░░░░░░░░░░░░░░▏   19%  89,770
-cache_read     ▕████████████████████████▏   79%  367,473
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  6,340
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  24,863
+cache_creation ▕███░░░░░░░░░░░░░░░░░░░░░▏   10%  295,113
+cache_read     ▕████████████████████████▏   87%  2,518,391
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    2%  52,378
 ```
 
 **Legende & Zielwerte:**
@@ -68,10 +72,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   79%  367,473
-Neu gecacht (Tool-Ausgaben)   ▕█████░░░░░░░░░░░░░░░▏   19%  89,770
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  33
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  6,340
+Warm (System/Memory/History)  ▕████████████████████▏   87%  2,518,391
+Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏   10%  295,113
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    1%  24,863
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    2%  52,378
 ```
 
 **Legende (Slide-Kategorien):**
@@ -87,5 +91,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 151 Sessions: 2,982,991,873 Token (30,123 Antworten).
+Σ über 153 Sessions: 3,020,906,123 Token (30,714 Antworten).
 

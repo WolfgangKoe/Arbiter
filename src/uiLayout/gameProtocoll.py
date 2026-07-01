@@ -16,6 +16,7 @@ from pathlib import Path
 
 import streamlit as st
 
+from constants.symbols import SYM_RESET, SYM_SWORDS
 from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
@@ -193,7 +194,7 @@ def _render_stratagems() -> None:
             st.caption(strat.rule_text)
             if is_used:
                 if st.button(
-                    f"↺ Rückgängig (+{strat.cp_cost} CP)",
+                    f"{SYM_RESET} Rückgängig (+{strat.cp_cost} CP)",
                     key=f"strat_undo_{strat.id}_{phase_idx}_{i}",
                 ):
                     adjust_cp(spending_faction, strat.cp_cost)
@@ -247,7 +248,7 @@ def _render_stratagems() -> None:
 
 
 def render_game_protocoll() -> None:
-    tab_stratagems, tab_log = st.tabs(["⚔️ Stratagems", "📋 Battle Log"])
+    tab_stratagems, tab_log = st.tabs([f"{SYM_SWORDS} Stratagems", "📋 Battle Log"])
     with tab_stratagems:
         _render_stratagems()
     with tab_log:

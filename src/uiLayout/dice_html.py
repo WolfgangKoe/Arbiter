@@ -146,7 +146,6 @@ def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -
     armour = save["armour"]
     armour_eff = save["armour_eff"]
     invuln = save["invuln"]
-    using_invuln = save["using_invuln"]
     stack = save.get("stack", [])
 
     # D5: Sv value next to the SAVE title — consistent with WS/BS in the HIT title
@@ -189,14 +188,7 @@ def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -
         inv_color = (
             _BUFF_COLOR_HEX if ability_invuln else _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
         )
-        active_badge = (
-            f'<span style="font-size:10px;color:{inv_color};border:1px solid {inv_color};'
-            f'border-radius:3px;padding:0 3px;margin-left:4px;">active</span>'
-            if using_invuln
-            else ""
-        )
-        note = '<span style="font-size:10px;color:#4b5563;margin-left:4px;">AP/Cover N/A</span>'
-        inv_label = f"Inv {invuln}+{active_badge}{note}"
+        inv_label = f'<span style="color:{inv_color};font-weight:600;">Inv {invuln}+</span>'
         inv_row = grid_row_html(
             inv_label,
             threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),

@@ -163,9 +163,9 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-COMBAT-17
 - **klasse**: C
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_rapid_fire_caption_shown_for_rapid_fire_weapon
 - **quelle**: core_rules.txt — "RAPID FIRE … double the number of attacks … if its target is within half the weapon's range"
-- **code**: _common.py (Rapid-Fire-Hinweis-Caption)
+- **code**: _common.py:_rapid_fire_caption
 - **regel**: Rapid-Fire-Waffe: Angriffszahl wird verdoppelt, wenn das Ziel innerhalb der halben Reichweite ist. App-Anteil: zeigt nur einen Hinweis-Caption (`[RAPID FIRE · ½ = …"]`); die Verdopplung selbst rechnet die App NICHT — das ist Tisch-Anteil. (S69-Befund: war fälschlich Klasse A „App rechnet" mit `code: attack_math` — `_compute_attacks` ist range-agnostisch und verdoppelt nicht. Auf Klasse C korrigiert.)
 
 ### R-COMBAT-18
@@ -1219,10 +1219,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-PROTO-02
 - **klasse**: B
 - **status**: implementiert
-- **getestet**: nein
+- **getestet**: ja — test_build_aura_range_hint_text_primary_contains_value_max_names_and_table_note / test_build_aura_range_hint_text_secondary_returns_none / test_build_aura_range_hint_text_other_protocol_without_effect_returns_none
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 700–711 — "Directive 1: Add 3\" to the range of this unit's aura abilities (to a maximum of 12\") and increase the range of the following abilities this unit has by 3\" (to a maximum of 12\"): Lord's Will; My Will Be Done; Rites of Reanimation."
-- **code**: faction_abilities.yaml:protocol_conquering_tyrant.directives.primary (enforcement: table)
-- **regel**: Conquering Tyrant Direktive 1 (Klasse B): +3" Aura-Reichweite (max 12"). Kein App-Effekt (keine Distanzmessung implementiert). App zeigt Tisch-Hinweis. YAML: `type: aura_range_bonus, enforcement: table`.
+- **code**: ability_engine.py:build_aura_range_hint_text / uiLayout/armyCard.py:_render_aura_range_hint (Anzeige an drei Round-Choice-Stellen); faction_abilities.yaml:protocol_conquering_tyrant.directives.primary (enforcement: table, affects-Liste)
+- **regel**: Conquering Tyrant Direktive 1 (Klasse B): +3" Aura-Reichweite (max 12"). Kein App-Effekt (keine Distanzmessung implementiert). App zeigt Tisch-Hinweis (`st.info`, design_system.md §3), sichtbar nur bei aktiver `aura_range_bonus`-Direktive. Text datengetrieben aus `value`/`max` + `affects`-Liste im YAML (keine Fraktions-/Namens-Literale in `src/`). YAML: `type: aura_range_bonus, enforcement: table`.
 
 ### R-PROTO-03
 - **klasse**: A

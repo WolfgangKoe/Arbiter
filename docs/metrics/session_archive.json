@@ -2080,8 +2080,8 @@
   "9fe69255-3cde-446b-a039-df01a64feddc": {
     "started_at": "2026-06-30T21:20:05.634Z",
     "task": "start session starte einen Subagenten,der den Plan vorlegt",
-    "peak_context": 120582,
-    "subagent_share": 58.70121643931393,
+    "peak_context": 121788,
+    "subagent_share": 56.684844519016785,
     "by_tier": {
       "Sonnet": 7557355,
       "Opus": 627791,
@@ -2143,6 +2143,79 @@
         "tier": "Sonnet",
         "peak_context": 48274,
         "started_at": "2026-06-30T21:20:05.634Z"
+      }
+    ]
+  },
+  "49a041a1-e6ad-40ea-beec-d181dd2f4ef8": {
+    "started_at": "2026-07-01T18:29:09.836Z",
+    "task": "Starte die Neue Session beauftrage den Planner-Agenten",
+    "peak_context": 143762,
+    "subagent_share": 74.19181634774166,
+    "by_tier": {
+      "Sonnet": 4699127,
+      "Opus": 14833841,
+      "Haiku": 5998043
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Invuln SAVE-Block bereinigen",
+        "tier": "Sonnet",
+        "peak_context": 51151,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "R-PROTO-02 UI-Hinweis Recherche",
+        "tier": "Sonnet",
+        "peak_context": 98581,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "next_session.md Stand-Zeiger",
+        "tier": "Haiku",
+        "peak_context": 24893,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Opus",
+        "peak_context": 58532,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 0 Design-System Konsens-Vorschlag",
+        "tier": "Sonnet",
+        "peak_context": 108616,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 2 Regel-Ledger auf 0",
+        "tier": "Haiku",
+        "peak_context": 76899,
+        "started_at": "2026-07-01T18:29:09.836Z"
+      }
+    ]
+  },
+  "bf595349-8fb3-48fd-a30b-81c69c1422d6": {
+    "started_at": "2026-07-01T19:41:40.637Z",
+    "task": "Bereite die nächste Session vor. Committen.",
+    "peak_context": 52803,
+    "subagent_share": 42.54543378955944,
+    "by_tier": {
+      "Opus": 1229880
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S116 uncommitted",
+        "tier": "Opus",
+        "peak_context": 53185,
+        "started_at": "2026-07-01T19:41:40.637Z"
       }
     ]
   }

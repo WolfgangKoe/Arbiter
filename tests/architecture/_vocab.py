@@ -163,6 +163,9 @@ STOPWORDS: frozenset[str] = frozenset(
         "sweep",
         "combat",
         "fire",
+        # generic 9E rules concept (15× in core_rules.txt);
+        # Necron aura_range_bonus + Ork aura abilities share it
+        "aura",
         "power",
         "stage",
         "strike",

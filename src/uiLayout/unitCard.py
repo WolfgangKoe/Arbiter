@@ -21,6 +21,7 @@ Design principles (see docs/spec/ui_layout.md §4):
 
 import streamlit as st
 
+from constants.symbols import SYM_COLLAPSE, SYM_EXPAND, SYM_EXPAND_ALT
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import (
     PHASES,
@@ -37,6 +38,7 @@ from uiLayout._common import (
     reset_group_declaration_state,
     toggle_group_target,
 )
+from uiLayout.badges import badge, chip
 
 # design_colors.md §0: MOVED = blau (vormals Buff-Blau), Buff = grün (vormals
 # MOVED-Grün), RESERVE = HEROIC-INT.-Farbe (temporäre Sonderzustände).
@@ -70,11 +72,7 @@ def _badge(text: str, variant: str = "") -> str:
         fg, bg = _DEBUFF_COLOR
     else:
         fg, bg = ("#c9a84c", "#2e2618")
-    return (
-        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
-        f"padding:1px 6px;font-size:10px;color:{fg};letter-spacing:0.06em;"
-        f'font-weight:600;margin-right:3px;">{text}</span>'
-    )
+    return badge(text, fg, bg)
 
 
 _MOVEMENT_BADGE: dict[str, str] = {
@@ -128,11 +126,7 @@ def _keyword_chip(kw: str, highlighted: bool) -> str:
         fg, bg, border = "#f5d080", "#3a2e10", "#f5d080"
     else:
         fg, bg, border = "#6b5f44", "#1c1a14", "#2e2618"
-    return (
-        f'<span style="background:{bg};border:1px solid {border};border-radius:2px;'
-        f"padding:1px 5px;font-size:9px;color:{fg};letter-spacing:0.05em;"
-        f'margin-right:2px;">{kw}</span>'
-    )
+    return chip(kw, fg, bg, border)
 
 
 def _keywords_html(unit: Unit) -> str:
@@ -209,7 +203,7 @@ def render_unit_card(
         if phase_key == "setup":
             sel = st.session_state.selected_unit
             is_sel = sel == (faction, uid)
-            label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
+            label = f"{SYM_COLLAPSE} {unit.name_en}" if is_sel else f"{SYM_EXPAND} {unit.name_en}"
             if st.button(
                 label,
                 key=f"sel_{faction}_{uid}",
@@ -234,7 +228,7 @@ def render_unit_card(
                     # Wrong keyword — show as ineligible plain text
                     st.markdown(f"**{unit.name_en}**")
                 else:
-                    symbol = "▶" if _ptr.effect_type else "▷"
+                    symbol = SYM_EXPAND if _ptr.effect_type else SYM_EXPAND_ALT
                     if st.button(
                         f"{symbol} {unit.name_en}",
                         key=f"tgt_{uid}_{_ptr.ability_id}",
@@ -280,7 +274,9 @@ def render_unit_card(
             else:
                 sel = st.session_state.selected_unit
                 is_sel = sel == (faction, uid)
-                label = f"◀ {unit.name_en}" if is_sel else f"▶ {unit.name_en}"
+                label = (
+                    f"{SYM_COLLAPSE} {unit.name_en}" if is_sel else f"{SYM_EXPAND} {unit.name_en}"
+                )
                 if st.button(
                     label,
                     key=f"sel_{faction}_{uid}",
@@ -298,7 +294,11 @@ def render_unit_card(
             if phase_key in _TARGET_PHASES:
                 tgts: list[tuple[str, str]] = st.session_state.selected_targets
                 is_tgt = (faction, uid) in tgts or is_group_target(faction, uid)
-                label = f"◀ {unit.name_en}" if is_tgt else f"▷ {unit.name_en}"
+                label = (
+                    f"{SYM_COLLAPSE} {unit.name_en}"
+                    if is_tgt
+                    else f"{SYM_EXPAND_ALT} {unit.name_en}"
+                )
                 if st.button(
                     label,
                     key=f"tgt_{faction}_{uid}",

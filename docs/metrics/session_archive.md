@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-01 20:28 CEST
+Stand: 2026-07-01 21:54 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-30 23:20 9fe6  ██████████░░ 121k ⚠️   ████░░  59%    █·········▒▒
+07-01 21:41 bf59  ████░░░░░░░░  53k ✅    ███░░░  43%    ████████████
+         SA_1·  ████░░░░░░░░  53k ✅    DoD-Review S116 uncommitted
+----------------- ---------------------- -------------- ------------
+07-01 20:29 49a0  ████████████ 144k ⚠️   ████░░  74%    ███████··▒▒▒
+         SA_1·  ████░░░░░░░░  51k ✅    Invuln SAVE-Block bereinigen
+         SA_2·  ████████░░░░  99k ✅    R-PROTO-02 UI-Hinweis Recherche
+         SA_3·  ██░░░░░░░░░░  25k ✅    next_session.md Stand-Zeiger
+         SA_4·  █████░░░░░░░  59k ✅    Planning-Entwurf nächste Session
+         SA_5·  █████████░░░ 109k ✅    Task 0 Design-System Konsens-Vorsc…
+         SA_6·  ██████░░░░░░  77k ✅    Task 2 Regel-Ledger auf 0
+----------------- ---------------------- -------------- ------------
+06-30 23:20 9fe6  ██████████░░ 122k ⚠️   ███░░░  57%    █·········▒▒
          SA_1·  ██████░░░░░░  70k ✅    Plan 031 Timing-Bugs fixen
          SA_2·  █████░░░░░░░  56k ✅    Planning-Entwurf nächste Session
          SA_3·  ████░░░░░░░░  44k ✅    Retro-Maßnahmen einfügen (Neustart)

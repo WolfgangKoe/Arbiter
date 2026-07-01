@@ -410,3 +410,91 @@ def test_collect_def_save_modifiers_passes_active_modifiers() -> None:
     ]
     mods = _collect_def_save_modifiers("Necrons", "shooting", False, "test.unit")
     assert mods == [{"label": "Test Stratagem", "value": 1}]
+
+
+# ---------------------------------------------------------------------------
+# R-COMBAT-17: Rapid Fire hint caption
+# ---------------------------------------------------------------------------
+
+
+def test_rapid_fire_caption_shown_for_rapid_fire_weapon() -> None:
+    """R-COMBAT-17: Rapid Fire weapon with positive range shows half-range hint."""
+    from uiLayout._common import _rapid_fire_caption
+
+    caption = _rapid_fire_caption("Rapid Fire 12", 12)
+    assert caption == '[RAPID FIRE · 12" · ½ = 6"]'
+
+
+def test_rapid_fire_caption_shown_for_rapid_fire_assault_variant() -> None:
+    """R-COMBAT-17: 'Rapid Fire Assault' variant also triggers caption."""
+    from uiLayout._common import _rapid_fire_caption
+
+    caption = _rapid_fire_caption("Rapid Fire Assault 18", 18)
+    assert caption == '[RAPID FIRE · 18" · ½ = 9"]'
+
+
+def test_rapid_fire_caption_hidden_for_non_rapid_fire() -> None:
+    """R-COMBAT-17: Non-Rapid-Fire weapon returns None (no caption)."""
+    from uiLayout._common import _rapid_fire_caption
+
+    caption = _rapid_fire_caption("Bolter", 24)
+    assert caption is None
+
+
+def test_rapid_fire_caption_hidden_for_zero_range() -> None:
+    """R-COMBAT-17: Rapid Fire weapon with zero range returns None."""
+    from uiLayout._common import _rapid_fire_caption
+
+    caption = _rapid_fire_caption("Rapid Fire 0", 0)
+    assert caption is None
+
+
+def test_rapid_fire_caption_rounds_down_half_range() -> None:
+    """R-COMBAT-17: Half-range uses integer division (rounds down)."""
+    from uiLayout._common import _rapid_fire_caption
+
+    caption = _rapid_fire_caption("Rapid Fire 15", 15)
+    assert caption == '[RAPID FIRE · 15" · ½ = 7"]'  # 15 // 2 = 7, not 7.5
+
+
+# ---------------------------------------------------------------------------
+# R-PROTO-02: Conquering Tyrant Directive 1 (Aura Range Bonus)
+# ---------------------------------------------------------------------------
+
+
+def test_conquering_tyrant_primary_aura_range_bonus_data_feeds_hint() -> None:
+    """R-PROTO-02: the aura_range_bonus effect carries the data the table hint needs.
+
+    Structural check of the ``affects`` list the hint builder reads. The actual display
+    behaviour (text content, visibility only for an active aura_range_bonus directive) is
+    covered by the Streamlit-free ability_engine tests
+    (``test_build_aura_range_hint_text_*``) — this test just guards the YAML contract.
+    """
+    from pathlib import Path
+
+    import yaml
+
+    yaml_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "data/wh40k_9e/necrons/faction_abilities.yaml"
+    )
+    with open(yaml_path) as f:
+        data = yaml.safe_load(f)
+
+    protocol = None
+    for item in data.get("abilities", []):
+        if item.get("id") == "wh40k_9e.necrons.faction.protocol_conquering_tyrant":
+            protocol = item
+            break
+
+    assert protocol is not None, "protocol_conquering_tyrant not found in abilities"
+    primary_effect = protocol["directives"]["primary"].get("effect", {})
+    assert primary_effect.get("type") == "aura_range_bonus"
+    assert primary_effect.get("value") == 3
+    assert primary_effect.get("max") == 12
+    assert primary_effect.get("enforcement") == "table"
+    assert primary_effect.get("affects") == [
+        "Lord's Will",
+        "My Will Be Done",
+        "Rites of Reanimation",
+    ]

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from constants.symbols import SYM_CROSS, SYM_RESET
+
 
 def light_cover_label(directive_short_label: str | None = None) -> str:
     """Checkbox label for the Light Cover toggle.
@@ -345,8 +347,8 @@ def special_die_html(label: str, content: str = "") -> str:
     )
 
 
-_REROLL_GLYPH = "↺"  # app-wide reset/redo glyph (gameHeader, _common, gameProtocoll)
-_AUTO_FAIL_GLYPH = "✕"  # below-slot annotation; distinct from the die-shaped miss icon
+_REROLL_GLYPH = SYM_RESET  # app-wide reset/redo glyph (gameHeader, _common, gameProtocoll)
+_AUTO_FAIL_GLYPH = SYM_CROSS  # below-slot annotation; distinct from the die-shaped miss icon
 
 
 def _marker_row_html(

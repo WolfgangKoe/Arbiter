@@ -99,12 +99,18 @@ abilities:
   directives:
     primary:
       # 9E Directive 1: +3" aura range. Class B — table-only (no spatial tracking in App).
+      # `affects` names the aura abilities this bonus applies to (9E text). The App
+      # surfaces these names in the table-only hint, data-driven (no faction literals in src/).
       effect:
         type: aura_range_bonus
         value: 3
         max: 12
         phase: any
         enforcement: table
+        affects:
+          - Lord's Will
+          - My Will Be Done
+          - Rites of Reanimation
     secondary:
       # 9E Directive 2: shoot after Fall Back with −1 Hit. Class A — App computes the
       # hit penalty when movement_choice == "fall_back".

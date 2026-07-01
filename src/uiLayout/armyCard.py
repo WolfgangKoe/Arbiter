@@ -14,6 +14,7 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.ability_engine import (
+    build_aura_range_hint_text,
     check_conditions,
     execute_effect,
     get_active_heal_bonus,
@@ -36,6 +37,7 @@ from gameObjects.loader import (
     load_subfaction_meta,
 )
 from gameObjects.unit import Unit
+from uiLayout.badges import badge
 
 # Faction / subfaction keyword badges (design_colors.md §2a).
 _BADGE_BLUE = "#a5b4fc"  # light blue — faction badge + a chosen subfaction
@@ -49,12 +51,13 @@ _SUBFACTION_BADGE_COLOR: dict[str, str] = {
 }
 
 
+_KEYWORD_BADGE_BG = "#1a1a2e"  # dark blue-grey behind faction/subfaction badges
+_ACTIVE_ABILITY_FG = "#4a9a5a"  # buff-green (design_colors.md §0/§4a)
+_ACTIVE_ABILITY_BG = "#0a1a0a"
+
+
 def _keyword_badge(text: str, fg: str = _BADGE_BLUE) -> str:
-    return (
-        f'<span style="background:#1a1a2e;border:1px solid {fg};border-radius:2px;'
-        f"padding:2px 8px;font-size:10px;color:{fg};letter-spacing:0.07em;"
-        f'font-weight:700;margin-right:4px;">{text}</span>'
-    )
+    return badge(text, fg, _KEYWORD_BADGE_BG, margin_right="4px")
 
 
 def _active_ability_badge(text: str) -> str:
@@ -63,12 +66,7 @@ def _active_ability_badge(text: str) -> str:
     Army abilities grant buffs → ONE generic buff-green badge for all factions
     (design_colors.md §0/§4a). No faction-specific colors in src/.
     """
-    fg, bg = "#4a9a5a", "#0a1a0a"
-    return (
-        f'<span style="background:{bg};border:1px solid {fg};border-radius:2px;'
-        f"padding:2px 8px;font-size:10px;color:{fg};letter-spacing:0.07em;"
-        f'font-weight:700;margin-right:4px;">{text}</span>'
-    )
+    return badge(text, _ACTIVE_ABILITY_FG, _ACTIVE_ABILITY_BG, margin_right="4px")
 
 
 def _current_phase_key() -> str:
@@ -206,6 +204,18 @@ def _get_extra_round_choice_id(round_choices: list, faction: str) -> str | None:
     return extras[0] if len(extras) == 1 else None
 
 
+def _render_aura_range_hint(faction: str) -> None:
+    """Render the table-only aura-range hint when an ``aura_range_bonus`` directive is active.
+
+    Data-driven via ``build_aura_range_hint_text`` (effect type + YAML ``affects`` list) —
+    no faction/ability literals here. Silently renders nothing when no such directive is
+    active. Hint type ``info`` per design_system.md §3 (neutral table reminder, Class B).
+    """
+    hint = build_aura_range_hint_text(faction)
+    if hint:
+        st.info(hint)
+
+
 def _render_extra_round_choice(
     round_choice, faction: str, faction_dir: str, current_round: int
 ) -> None:
@@ -230,6 +240,7 @@ def _render_extra_round_choice(
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         st.caption(f"↳ Primary: {round_choice.primary}")
         st.caption(f"↳ Secondary: {round_choice.secondary}")
+        _render_aura_range_hint(faction)
         return
 
     if extra_directive:
@@ -239,6 +250,7 @@ def _render_extra_round_choice(
             round_choice.primary if extra_directive == "primary" else round_choice.secondary
         )
         st.caption(f"↳ {chosen_text}")
+        _render_aura_range_hint(faction)
         # "Change extra directive" button intentionally removed: the extra directive is
         # chosen at the start of each battle round (Wahapedia Z. 579) and locked for
         # the whole round. The only valid reset path is _reset_round_choice_state().
@@ -332,6 +344,7 @@ def _render_round_choice_ui(faction: str) -> None:
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
                 st.caption(f"↳ {chosen_text}")
+                _render_aura_range_hint(faction)
     elif not is_active or phase_key != "command":
         st.caption("— none selected —")
     else:

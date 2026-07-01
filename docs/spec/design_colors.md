@@ -2,6 +2,10 @@
 
 > 6n E2: Bestandsaufnahme + Nutzer-Entscheidungen (Session 39, Review-Runde 2).
 > **Regel: Farbentscheidungen trifft der Nutzer.**
+>
+> Kanonischer Ort für **Farben**. Nicht-farbliche Design-Tokens (Badge/Chip-Geometrie),
+> die Hinweis-Konvention (info/warning/success/error) und die Symbol-Konstanten stehen in
+> [`design_system.md`](design_system.md).
 
 ## 0. BESCHLOSSEN (2026-06-10) — bei Umsetzung exakte Hex-Werte vorlegen
 
