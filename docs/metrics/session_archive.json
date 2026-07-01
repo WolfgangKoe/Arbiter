@@ -2012,11 +2012,11 @@
   "8996deff-f5ed-497f-b336-997d6fff234f": {
     "started_at": "2026-06-30T20:03:15.469Z",
     "task": "Beginne die nächste Session und starte den Plan-subagenten. Mich interessiert vor allem, was noch zur Erfüllung von zie…",
-    "peak_context": 110582,
-    "subagent_share": 81.85105074522984,
+    "peak_context": 139952,
+    "subagent_share": 72.43066145090555,
     "by_tier": {
-      "Sonnet": 16396342,
-      "Opus": 665327
+      "Sonnet": 20485683,
+      "Opus": 856974
     },
     "subagents": [
       {
@@ -2024,6 +2024,13 @@
         "description": "Design-System Research/Vorschlag",
         "tier": "Sonnet",
         "peak_context": 108895,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Write S114 final",
+        "tier": "Sonnet",
+        "peak_context": 48961,
         "started_at": "2026-06-30T20:03:15.469Z"
       },
       {
@@ -2049,9 +2056,16 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Abschluss-Doku S114",
+        "tier": "Sonnet",
+        "peak_context": 80868,
+        "started_at": "2026-06-30T20:03:15.469Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "DoD-Review Session S114",
         "tier": "Opus",
-        "peak_context": 61063,
+        "peak_context": 65317,
         "started_at": "2026-06-30T20:03:15.469Z"
       },
       {
@@ -2060,6 +2074,75 @@
         "tier": "Sonnet",
         "peak_context": 67776,
         "started_at": "2026-06-30T20:03:15.469Z"
+      }
+    ]
+  },
+  "9fe69255-3cde-446b-a039-df01a64feddc": {
+    "started_at": "2026-06-30T21:20:05.634Z",
+    "task": "start session starte einen Subagenten,der den Plan vorlegt",
+    "peak_context": 120582,
+    "subagent_share": 58.70121643931393,
+    "by_tier": {
+      "Sonnet": 7557355,
+      "Opus": 627791,
+      "Haiku": 1903329
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 031 Timing-Bugs fixen",
+        "tier": "Sonnet",
+        "peak_context": 70044,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Planning-Entwurf nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 56442,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen einfügen (Neustart)",
+        "tier": "Sonnet",
+        "peak_context": 43810,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Session-Review (DoD)",
+        "tier": "Opus",
+        "peak_context": 40237,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Doku-Edits S115",
+        "tier": "Sonnet",
+        "peak_context": 58893,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Verifiziere Frontmodell-Wundzuteilung",
+        "tier": "Haiku",
+        "peak_context": 49876,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen einfügen",
+        "tier": "Sonnet",
+        "peak_context": 24358,
+        "started_at": "2026-06-30T21:20:05.634Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Retro-Maßnahmen Platzierungs-Entwurf",
+        "tier": "Sonnet",
+        "peak_context": 48274,
+        "started_at": "2026-06-30T21:20:05.634Z"
       }
     ]
   }

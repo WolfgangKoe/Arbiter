@@ -28,15 +28,15 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ## Aktueller Stand (nach S115, 2026-07-01)
 
-**S115** abgeschlossen — reine Doku-/Status-Session:
-- **(a)** Retro-Maßnahmen S114 in Prozess-Docs verankert (Commit `c5fe153`).
-- **(b)** P17-Scope entschieden → Vor-Auswahl+Lock akzeptiert = **P17 erledigt** (ziel6 abgehakt):
-  Pre-Apply-Zielauswahl (`_render_subgroup_selector`, `_common.py`) + Wounded-Lock
-  (`apply_damage`/`get_locked_group`, `unit_mutations.py`); ±-Zähler-Ansatz verworfen.
-- **(c)** Plan 031 als bereits erledigt bestätigt (`533e313`) + README-Status nachgezogen.
-- **(d)** Zwei neue Retro-Maßnahmen verankert (`docs/reference/agent_scopes.md`): Plan-Status
-  im selben Commit; Mechanik- statt Binär-Status im Backlog.
-- Vollsuite: **1371 passed, Coverage 99.10 %**, Architektur 8/8.
+**S115** — reine Doku-/Status-Session, kein Produktivcode:
+- **(a)** S114-Retro-Maßnahmen in Prozess-Docs verankert (Commit `c5fe153`).
+- **(b)** P17 erledigt: Vor-Auswahl + Wounded-Lock (`_render_subgroup_selector`,
+  `apply_damage`/`get_locked_group`) akzeptiert; ±-Zähler-Ansatz verworfen (ziel6 abgehakt).
+- **(c)** Plan 031 als bereits erledigt bestätigt (`533e313`), README-Status nachgezogen.
+- **(d)** Zwei neue Retro-Maßnahmen in `agent_scopes.md` verankert (Plan-Status im selben
+  Commit; Mechanik- statt Binär-Status im Backlog). Vollsuite 1371 passed, 99.10 %, Arch 8/8.
+
+Frühere Sessions (S60–S114): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — Ziel7-Cluster
 

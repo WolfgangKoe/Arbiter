@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-06-30 22:44 CEST
+Stand: 2026-07-01 20:28 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,13 +9,25 @@ Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-06-30 22:03 8996  █████████░░░ 111k ✅    █████░  82%    ············
+06-30 23:20 9fe6  ██████████░░ 121k ⚠️   ████░░  59%    █·········▒▒
+         SA_1·  ██████░░░░░░  70k ✅    Plan 031 Timing-Bugs fixen
+         SA_2·  █████░░░░░░░  56k ✅    Planning-Entwurf nächste Session
+         SA_3·  ████░░░░░░░░  44k ✅    Retro-Maßnahmen einfügen (Neustart)
+         SA_4·  ███░░░░░░░░░  40k ✅    Session-Review (DoD)
+         SA_5·  █████░░░░░░░  59k ✅    Abschluss-Doku-Edits S115
+         SA_6·  ████░░░░░░░░  50k ✅    Verifiziere Frontmodell-Wundzuteil…
+         SA_7·  ██░░░░░░░░░░  24k ✅    Retro-Maßnahmen einfügen
+         SA_8·  ████░░░░░░░░  48k ✅    Retro-Maßnahmen Platzierungs-Entwu…
+----------------- ---------------------- -------------- ------------
+06-30 22:03 8996  ███████████░ 140k ⚠️   ████░░  72%    ············
          SA_1·  █████████░░░ 109k ✅    Design-System Research/Vorschlag
-         SA_2·  ████████░░░░  97k ✅    Session-Planung Ziel6-Abschluss
-         SA_3·  ████████░░░░  98k ✅    Ziel6 Status-Inventar
-         SA_4·  ███████░░░░░  92k ✅    Executor Test-Paket P1 P2 P4
-         SA_5·  █████░░░░░░░  61k ✅    DoD-Review Session S114
-         SA_6·  █████░░░░░░░  68k ✅    Executor commandPhase Hinweis
+         SA_2·  ████░░░░░░░░  49k ✅    Abschluss-Write S114 final
+         SA_3·  ████████░░░░  97k ✅    Session-Planung Ziel6-Abschluss
+         SA_4·  ████████░░░░  98k ✅    Ziel6 Status-Inventar
+         SA_5·  ███████░░░░░  92k ✅    Executor Test-Paket P1 P2 P4
+         SA_6·  ██████░░░░░░  81k ✅    Abschluss-Doku S114
+         SA_7·  █████░░░░░░░  65k ✅    DoD-Review Session S114
+         SA_8·  █████░░░░░░░  68k ✅    Executor commandPhase Hinweis
 ----------------- ---------------------- -------------- ------------
 06-30 20:54 ac89  █████████░░░ 108k ✅    ████░░  62%    ██····▒▒▒▒▒▒
          SA_1·  █████░░░░░░░  59k ✅    Abschluss-Review S113 (DoD)
