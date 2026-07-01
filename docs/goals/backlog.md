@@ -322,8 +322,10 @@ Kein Blocker; schärfen wenn ohnehin in der Datei.
 - [ziel7.md](ziel7.md) — **Gefechtsoptionen + subfaction-Mechanik** (definiert 2026-06-30):
   Bündelt (a) `collect_modifiers_for_phase` Execute-Logik (§6e), (b) 6f Ability-Badges,
   (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
-  - **Ziel7-Cluster: P17 + P18** (aus Ziel6 ausgelagert S114):
-    - **P17** — Schadenszuweisungs-Korrektur-UI (±-Counter pro Gruppe nach „Apply Damage", ~50k, Opus-Tier wegen offener Design-Frage Mehrwunden-Frontmodell-Tracking — **diese Frage MUSS vor Code geklärt werden**); manuelle UI-Verifikation Pflicht.
+  - **Ziel7-Cluster: P18** (aus Ziel6 ausgelagert S114; P17 erledigt S115):
+    - **P17 — erledigt (S115):** Mechanik steht+getestet — Pre-Apply-Zielauswahl (`_render_subgroup_selector`,
+      `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unit_mutations.py`); Vor-Auswahl+Lock
+      akzeptiert, ±-Zähler verworfen. Details: `docs/goals/ziel6.md` P17.
     - **P18** — Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in PlayerArea (~25k, Sonnet); manuelle UI-Verifikation Pflicht.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)

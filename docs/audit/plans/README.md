@@ -26,7 +26,6 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| [031](031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | P-HOCH | S–M | 025 ✅, 016 | TODO — Step 1 (Bug 2): „Change extra directive"-Block in `armyCard.py` Z. 219–225 entfernen; Step 2 (Bug 1): Pending-Flag-Mechanik in `game_state.py` + `is_active`-Entkoppelung in `armyCard.py`; je Regressionstest PFLICHT; manuelle UI-Verifikation zwingend (Render-Code test-ausgeschlossen). |
 | [030](030-conquering-tyrant-ui-bugfixes.md) | Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts (D2 −1-Hit-Anzeige) + Selection-State-Reset nach All-done (Bug-5-Regression) | P1 (HOCH) | XS–S | 025 ✅ | TODO — Bug 2 zuerst (`reset_group_declaration_state()` nach All-done/Reset), dann Bug 1 (`"atk_uid"` in beide `entries.append`-Blöcke); je Regressions-/Unit-Test PFLICHT. |
 | [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | DONE — alle Steps 1–6; Necron-Protokolle 9E-konform; unblockt 016/017 |
 | 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
@@ -117,3 +116,4 @@ offener Punkt mehr.
 | [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | S87/S88 |
 | [027](027-doku-org-alignment.md) | Doku-Org-Alignment: ADR-0007 dünner Koordinator | 2026-06-26 |
 | [028](028-reporting-kontext-umbau.md) | Reporting-/Kontext-Umbau (O3–O7) | 2026-06-26 |
+| [031](031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | `533e313`, umgesetzt vor S115, in S115 verifiziert (Vollsuite grün) |

@@ -60,6 +60,10 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   nach > 90 k Token erreicht werden. Faustregel: jede `NEEDS-DECISION`-abhängige Aufgabe
   muss als eigenständiger erster oder zweiter Schritt erscheinen, damit der Stakeholder bei
   vollem Kontext-Headroom entscheiden kann.
+- **Teil-Status statt binär:** Backlog-/`next_session.md`-Einträge für teil-implementierte
+  Mechaniken beschreiben „Mechanik X steht+getestet; offen = Variante Y" statt nur
+  offen/erledigt. Grund: S115 — die P17-Lock-Mechanik stand, der Eintrag las aber wie
+  „nichts da".
 
 **Konventionen:**
 - `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k).
@@ -101,6 +105,10 @@ Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
   macht niemals `git commit`, `git add` oder andere Verdrahtung der Git-History.
+- **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
+  setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
+  kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war
+  längst gefixt).
 
 ## Selbstprüf-Checkliste (Pflicht vor Rückgabe)
 - [ ] Verdrahtung: neuer Code per grep belegt, dass Nicht-Test-Code ihn aufruft

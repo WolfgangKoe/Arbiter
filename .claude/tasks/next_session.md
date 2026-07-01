@@ -26,86 +26,44 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S114, 2026-06-30)
+## Aktueller Stand (nach S115, 2026-07-01)
 
-**S114** abgeschlossen — Ziel6 weitgehend fertig, Doku-Abschluss erledigt:
-- **Posten 1** — Attacken-Auflösung Shooting/Fight/Overwatch verifiziert: test_attack_resolution_contexts.py, gemeinsame Fn resolve_attack_modifiers (combat.py:164) / render_attack_resolution (_common.py:1731). ✅
-- **Posten 2** — Tests für Damage-Block + RP-Würfellogik: test_damage_block_reanimation.py, 22 Tests. ✅
-- **Posten 3** — commandPhase.py Befehlsphase-Hinweise: commandPhase.py:37/65/409, test_command_phase.py; **manuell vom Stakeholder bestätigt** (Caption erscheint, Early Return bei leerem Roster). ✅
-- **Posten 4** — Phase/Stage-Wert-Tests: test_phase_stage_values.py, 15 Tests. ✅
-- **Doku-Abschluss** — ziel6.md Checkboxen abgehakt, backlog.md ergänzt (Ziel7-Cluster P17/P18, Design-System, Test-Schuld), Handoff-Cleanup (6 Dateien gelöscht).
-- Vollsuite: **1371 passed, Coverage 99.10 %**, Architektur grün. Review-S114: DONE (grün).
-- P17 + P18 nach Ziel7 ausgelagert (offene Design-Frage Mehrwunden-Tracking bei P17).
+**S115** abgeschlossen — reine Doku-/Status-Session:
+- **(a)** Retro-Maßnahmen S114 in Prozess-Docs verankert (Commit `c5fe153`).
+- **(b)** P17-Scope entschieden → Vor-Auswahl+Lock akzeptiert = **P17 erledigt** (ziel6 abgehakt):
+  Pre-Apply-Zielauswahl (`_render_subgroup_selector`, `_common.py`) + Wounded-Lock
+  (`apply_damage`/`get_locked_group`, `unit_mutations.py`); ±-Zähler-Ansatz verworfen.
+- **(c)** Plan 031 als bereits erledigt bestätigt (`533e313`) + README-Status nachgezogen.
+- **(d)** Zwei neue Retro-Maßnahmen verankert (`docs/reference/agent_scopes.md`): Plan-Status
+  im selben Commit; Mechanik- statt Binär-Status im Backlog.
+- Vollsuite: **1371 passed, Coverage 99.10 %**, Architektur 8/8.
 
-### ▶ Nächster Schritt — Ziel7-Cluster (nach S114)
+### ▶ Nächster Schritt — Ziel7-Cluster
 
-**0. Design-System Schritt 1 umsetzen** (Design-System-Crew, operating_model.md:95):
+**0. Design-System Schritt 1** [offen, ~35–45k, Sonnet; Gate: Token-Werte + Hinweis-Konvention
+   erst bestätigen] (Design-System-Crew, operating_model.md:95):
    - `docs/spec/design_system.md` anlegen + `design_colors.md` konsolidieren (alles an einem Platz).
    - Badge vereinheitlichen: `_common._badge` + `unitCard._badge` + `armyCard.py` + Invuln-Block (`dice_html.py:188-204`).
    - Zentrale Symbol-Konstanten anlegen (▶◀✓✕＋⚔↺).
-   - Einfachen Token-Wertesatz (Radius/Padding/Font-Size je Badge-Klasse) vorschlagen + vom User bestätigen lassen.
-   - Hinweis-Konvention (info/warning/success/error) festlegen + vom User bestätigen lassen.
+   - Token-Wertesatz (Radius/Padding/Font-Size je Badge-Klasse) + Hinweis-Konvention
+     (info/warning/success/error) vorschlagen + vom User bestätigen lassen.
    - Entscheidungsgrundlage: `docs/handoff/design-system-proposal.md` (ANSWERED, S114).
 
-**1. ERST: P17-Design-Frage klären** — Wie wird das Mehrwunden-Frontmodell-Tracking gelöst? (Nobz mit gemischter Bewaffnung: welcher Nob fällt?) Diese Frage MUSS mit dem Stakeholder VOR Code-Umsetzung entschieden werden. Dann P17 (~50k, Opus-Tier) + P18 (~25k, Sonnet) umsetzen.
+**1. P18** [~25k, Sonnet]: Einheitlicher Deklarations-Flow + Untergruppen-Ziel-Anzeige in
+   PlayerArea; manuelle UI-Verifikation Pflicht.
 
-**2. Regel-Ledger auf 0 bringen** (parallel, Stakeholder-Wunsch): Tests für `R-COMBAT-17` und `R-PROTO-02` nachziehen (impl. ohne Test — backlog §Carry-over).
-
-**3. Retro-Maßnahmen S114 verankern** — prüfen, WO in den Regeln (CLAUDE.md / operating_model.md / agent_scopes.md) sie am besten sitzen, dann eintragen:
-   1. Planner-Auftrag MUSS jede Checkbox in allen Unterabschnitten + stale-vs-offen mit Code-Beleg prüfen.
-   2. Haken-Sync bei Ziel-Start/Abschluss.
-   3. Executor lässt `pre-commit run --files …` (nicht nur `ruff check`).
-   4. Stakeholder-Entscheidungen früher im Sessionverlauf einplanen, nicht in der Wind-down-Zone.
-
----
-
-## Aktueller Stand (nach S113, 2026-06-30) [Archiv]
-
-**S113** abgeschlossen — vier Tasks erledigt:
-- **T1 — Extra-Direktiv-Permanenz GEKLÄRT**: Regelcheck + dokumentiert. Direktiven (Haupt+Extra) sind
-  **jede Runde** neu wählbar, nicht einmal fix. App korrekt; nur Voice of the Triarch (Silent King)
-  noch nicht verdrahtet (Folge-Task S114/T3).
-- **T2b — `once_per_battle` battle-scope**: `used_stratagem_battle_ids` ersetzt phase-scoped
-  `used_stratagem_ids`, überlebt Phasen-/Spielerwechsel. Vollständig getestet.
-- **T2a — Fix B WAAAGH! generisch**: `active_text`-Feld wird aus YAML geladen + gerendert;
-  Inhaltstest (S1+S2) ergänzt. ✅ ERLEDIGT (nicht wie Z.54 behauptet noch „offen").
-- **B1/B2 — Undo + Label-Fix**: Stratagem-Undo nach Phasenwechsel möglich; Label zeigt jetzt
-  korrekt `(used)` vs. `(CP insufficient)`.
-Vollsuite: **1311 passed, 99.10 % Coverage**, Architektur 8/8. **DoD-Punkt 6 offen:**
-manuelle UI-Prüfung der once_per_battle-Undo/Label-Pfade (Stratagem-Phase, Spielerwechsel).
-
-Frühere Sessions (S60–S111): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
-
-### ▶ Nächster Schritt — Prioritäten (S113)
-
-**1. GEKLÄRT — Extra-Direktiven-Permanenz (regelkonform, kein Fix nötig).**
-   Stakeholder-Vermutung war, Direktive des permanent aktiven (Extra-)Protokolls würde EINMAL
-   zu Spielbeginn fest gewählt. **Regelcheck (faction_overview.txt Z. 568/579) belegt:**
-   „When a command protocol becomes active … select which directive … **at the start of each battle
-   round**" — beide Direktiven (Haupt + Extra) sind **jede Runde** neu wählbar, NICHT einmal fix.
-   App korrekt: `_reset_round_choice_state()` in `game_state.py` (~Z. 583) öffnet das Fenster
-   pro Runde neu (docstring zitiert Z. 568/579). Einzige Ausnahme: **Voice of the Triarch**
-   (Silent King, `unit_abilities.yaml:272–288`) schaltet das *aktive Protokoll* um — ändert aber
-   nicht die pro-Runde-Direktiv-Wahl. Handler noch nicht verdrahtet → Folge-Task T3.
-
-**2. Ziel6-Rückhalt:** (a) ✅ Fix B WAAAGH! generisch — `active_text` geladen+gerendert (S113, erledigt);
-   (b) ✅ `once_per_battle`-Enforcement battle-scope (S113, erledigt).
-
-**3. S114 = T3 Voice of the Triarch** — Silent-King-Handler `voiceOfTheTriarch` verdrahten;
-   hängt an generischer Aktivator-UI (backlog §0; S113 Befund: `faction_abilities`-Aktivatoren
-   ohne `once_per_battle: false` sind nirgends gemountet). Eigener kleiner Plan.
+**2. Regel-Ledger auf 0**: Tests für `R-COMBAT-17` und `R-PROTO-02` nachziehen (impl. ohne Test).
 
 ### ⚠️ Carry-over (offen)
 
-- **S113/S114 DoD-Punkt 6:** Manuelle UI-Prüfung der `once_per_battle`-Undo/Label-Pfade:
-  Stratagem-Undo nach Phasenwechsel testen; Label „(used)" nach Spielerwechsel prüfen.
-  (s. `docs/handoff/review-S113.md` für Checkliste — im Ziel7-UI-Pass nachholen)
+- **Manuelle UI-Verifikation (PFLICHT, im Ziel7-UI-Pass):** once_per_battle-Undo/Label-Pfade
+  (Stratagem-Phase, Spielerwechsel); Mirror-Protokoll Necron-vs-Necron Befehlsphase; stationär+D1
+  grünes +1-Save-Badge in den Würfeln. Checkliste: `docs/handoff/review-S113.md`.
 - **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
-- **Manuelle UI-Verifikation (PFLICHT, im Ziel7-UI-Pass):** (a) Mirror-Protokoll Necron-vs-Necron Befehlsphase;
-  (c) stationär+D1 grünes +1-Save-Badge in den Würfeln. Checkliste: `docs/handoff/review-S113.md`.
 - **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
 - **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
-- **Ledger (impl. ohne Test):** R-COMBAT-17, R-PROTO-02 — bei Gelegenheit Tests nachziehen.
+
+Frühere Sessions (S60–S114): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ---
 
