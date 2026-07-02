@@ -13,6 +13,16 @@ from collections.abc import Callable
 
 import streamlit as st
 
+from constants.symbols import (
+    SYM_ADD,
+    SYM_CHECK,
+    SYM_COLLAPSE,
+    SYM_CROSS,
+    SYM_EXPAND,
+    SYM_EXPAND_ALT,
+    SYM_RESET,
+    SYM_SWORDS,
+)
 from gameMechanic.attack_math import (  # noqa: F401
     _compute_attacks,
     _detect_weapon_special,
@@ -289,13 +299,15 @@ def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None: 
         p2: {u.id: u for u in units_list_for(p2)},
     }
 
-    st.markdown("**⚔ Engaged with:**")
+    st.markdown(f"**{SYM_SWORDS} Engaged with:**")
     for i, (enemy_fac, enemy_uid) in enumerate(list(melee_with)):
         enemy_unit = units_by_faction.get(enemy_fac, {}).get(enemy_uid)
         name = enemy_unit.name_en if enemy_unit else enemy_uid
         cols = st.columns([4, 1])
         cols[0].markdown(f"- {name}")
-        if cols[1].button("Break ✕", key=f"break_{faction}_{uid}_{enemy_fac}_{enemy_uid}_{i}"):
+        if cols[1].button(
+            f"Break {SYM_CROSS}", key=f"break_{faction}_{uid}_{enemy_fac}_{enemy_uid}_{i}"
+        ):
             leave_melee_pair(uid, faction, enemy_uid, enemy_fac)
             st.rerun()
 
@@ -334,7 +346,7 @@ def render_player_column(
     (e.g. charge declaration) to hide the manual wound adjustment buttons.
     """
     is_active = faction == state["active"]
-    indicator = "▶" if is_active else "◀"
+    indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
 
     if is_active:
@@ -576,7 +588,7 @@ def _render_rp_block(
     if rp_state.get("applied"):
         mb = rp_state.get("models_back", 0)
         if mb > 0:
-            st.caption(f"RP: {mb} models returned ✓")
+            st.caption(f"RP: {mb} models returned {SYM_CHECK}")
         return
 
     rp_dice = models_lost * def_unit.wounds
@@ -673,13 +685,15 @@ def _render_damage_block(
         m_lost = tab_state.get("models_lost", 0)
         mw = tab_state.get("mortal_wounds", 0)
         total = tab_state.get("total_damage", 0)
-        st.success(f"✓ {m_lost} models · {mw} MW · {total} damage applied")
+        st.success(f"{SYM_CHECK} {m_lost} models · {mw} MW · {total} damage applied")
         # Zustand C — a directed subgroup was wiped out by the last apply.
         for gname, weapons in tab_state.get("wiped_groups", []):
-            st.warning(f"✕ Subgruppe **{gname}** verloren — {weapons} nicht mehr verfügbar")
+            st.warning(
+                f"{SYM_CROSS} Subgruppe **{gname}** verloren — {weapons} nicht mehr verfügbar"
+            )
         # RP is rolled once per defender unit after the whole attacking unit has
         # resolved (render_attack_resolution), not per weapon tab.
-        if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
+        if st.button(f"{SYM_RESET} Reset", key=f"res_reset_{tab_key}"):
             st.session_state.pop(res_key, None)
             st.rerun()
         return
@@ -782,7 +796,9 @@ def _render_damage_block(
         total = apply_damage_attacks(
             int(models_lost), int(wounds_on_front), int(mortal_wounds), def_unit.wounds
         )
-    btn_label = f"⚔ Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
+    btn_label = (
+        f"{SYM_SWORDS} Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
+    )
     if dmg_col.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
         models_before = def_state.get("models", 0) if is_group_wounds else 0
         groups_before = dict(def_state.get("group_models", {})) if is_group_wounds else {}
@@ -1394,7 +1410,7 @@ def render_group_cards(
         with st.container(border=True):
             entries = group_decl.get(group.id)
             if entries is not None and sel_gid != group.id:
-                st.markdown(f"**✓ {group.name_en}** ({alive})")
+                st.markdown(f"**{SYM_CHECK} {group.name_en}** ({alive})")
                 for e in entries:
                     count = e.get("atk_override", e["models_count"])
                     if count > 0:
@@ -1412,7 +1428,11 @@ def render_group_cards(
                 continue
 
             is_sel = sel_gid == group.id
-            label = f"◀ {group.name_en} ({alive})" if is_sel else f"▶ {group.name_en} ({alive})"
+            label = (
+                f"{SYM_COLLAPSE} {group.name_en} ({alive})"
+                if is_sel
+                else f"{SYM_EXPAND} {group.name_en} ({alive})"
+            )
             if st.button(
                 label,
                 key=f"selgrp_{atk_uid}_{group.id}",
@@ -1438,7 +1458,9 @@ def render_group_cards(
                             continue
                         is_assigned = (def_faction, def_uid) in [(f, u) for f, u in assigned]
                         tgt_name = _target_display_name(def_faction, def_uid)
-                        btn_label = f"✓ {tgt_name}" if is_assigned else f"＋ {tgt_name}"
+                        btn_label = (
+                            f"{SYM_CHECK} {tgt_name}" if is_assigned else f"{SYM_ADD} {tgt_name}"
+                        )
                         if st.button(
                             btn_label,
                             key=f"engtgt_{atk_uid}_{group.id}_{def_uid}",
@@ -1452,7 +1474,9 @@ def render_group_cards(
                         for tgt_faction, tgt_uid in assigned:
                             st.caption(f"→ {_target_display_name(tgt_faction, tgt_uid)}")
                     else:
-                        st.caption("Designate a target (▷) from the enemy army list.")
+                        st.caption(
+                            f"Designate a target ({SYM_EXPAND_ALT}) from the enemy army list."
+                        )
 
     all_entries = [
         e
@@ -1503,7 +1527,7 @@ def render_group_assignment(
     alive = atk_state.get("group_models", {}).get(gid, group.count)
     tgts: list[tuple[str, str]] = st.session_state.get("group_targets", {}).get(gid, [])
     if not tgts:
-        st.caption("← Designate a target (▷) from your army list.")
+        st.caption(f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.")
         return
 
     from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
@@ -1722,7 +1746,7 @@ def render_group_assignment(
     valid = attacks_assigned > 0 if use_melee else models_assigned > 0
 
     if st.button(
-        "✓ Group done",
+        f"{SYM_CHECK} Group done",
         type="primary",
         disabled=not valid,
         key=f"grp_done_{atk_uid}_{gid}",
@@ -1759,7 +1783,7 @@ def render_attack_resolution(phase_key: str) -> None:
     if badges:
         st.markdown(badges, unsafe_allow_html=True)
 
-    if st.button("↺ Reset Declaration", key="reset_decl"):
+    if st.button(f"{SYM_RESET} Reset Declaration", key="reset_decl"):
         st.session_state.attack_declaration = _empty_attack_declaration()
         reset_group_declaration_state()
         st.rerun()
@@ -1787,8 +1811,8 @@ def render_attack_resolution(phase_key: str) -> None:
                 m_lost = tab_state.get("models_lost", 0)
                 mw = tab_state.get("mortal_wounds", 0)
                 total = tab_state.get("total_damage", 0)
-                st.success(f"✓ {m_lost} models · {mw} MW · {total} damage")
-                if st.button("↺ Reset", key=f"res_reset_{tab_key}"):
+                st.success(f"{SYM_CHECK} {m_lost} models · {mw} MW · {total} damage")
+                if st.button(f"{SYM_RESET} Reset", key=f"res_reset_{tab_key}"):
                     st.session_state.pop(res_key, None)
                     st.rerun()
             else:
@@ -1809,7 +1833,7 @@ def render_attack_resolution(phase_key: str) -> None:
     if all_applied and entries:
         st.markdown("---")
         _render_unit_rp(seq, atk_uid, entries)
-        if st.button("✓ All done — Continue", type="primary", key="all_done"):
+        if st.button(f"{SYM_CHECK} All done — Continue", type="primary", key="all_done"):
             st.session_state.attack_declaration = _empty_attack_declaration()
             reset_group_declaration_state()
             st.rerun()

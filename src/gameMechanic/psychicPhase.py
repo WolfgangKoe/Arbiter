@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage
@@ -167,7 +168,7 @@ def _reset_active_power() -> None:
 
 def _render_psychic_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
     is_active = faction == state["active"]
-    indicator = "▶" if is_active else "◀"
+    indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
 
     if is_active:

@@ -1214,3 +1214,4 @@ unit_state["group_models"]: dict[str, int]
 - **S112 (2026-06-30)** Plan 031 Protokoll-Direktiven-Timing gefixt (is_active entkoppelt, unabhaengige Haupt/Extra-Wahl, Runde-1-Fenster); Ziel6 konsolidiert + Ziel7 (Gefechtsoptionen+subfaction) ausgelagert, Renumbering Crusade->8/Fetcher->9; Doku-Drift 92->99%
 - **S115 (2026-07-01)** Retro-Maßnahmen S114 verankert; P17 (Vor-Auswahl+Lock) + Plan 031 als erledigt bestätigt; 2 neue Retro-Maßnahmen
 - **S116 (2026-07-01)** Design-System Schritt 1 (badges/symbols/design_system.md), Regel-Ledger auf 0 (R-COMBAT-17 + R-PROTO-02 Aura-Hinweis), Invuln-Cleanup
+- **S117 (2026-07-02)** Fable integriert (ADR-0008: Koordinator-Tier, Tiering-Tabelle, token_report ▚); DS-2 Glyph-Rollout fertig (28 Stellen + Chip, 10 Dateien); P18 als stale-offen erkannt (S43) + abgehakt; M1/M2 Prozess-Maßnahmen verankert

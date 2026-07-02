@@ -26,28 +26,30 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S116, 2026-07-01)
+## Aktueller Stand (nach S117, 2026-07-02)
 
-**S116 committed** (Review GO, 1390 passed, 99.11 %, Arch-Gate grün, Ledger „impl. ohne Test" = 0):
-Design-System Schritt 1 (`badges.py`/`symbols.py`/`design_system.md`, 4 Badge-Stellen konsolidiert),
-Regel-Ledger auf 0 (R-COMBAT-17 Rapid-Fire-Caption + R-PROTO-02 datengetriebener Aura-Hinweis),
-Invuln-Cleanup (SAVE-Block ohne `active`/`AP-Cover`, nur `Inv N+`). Abschluss-Fixes: E501 in `_vocab.py`,
-`.gitignore` gegen Tooling-Artefakte gehärtet.
+**S117 committed** (Review GO, 1390 passed, 99.11 %, Arch-Gate 8/8): DS-2 Glyph-Rollout fertig
+(28 Stellen + 1 Chip-Migration, 10 Dateien; `design_system.md` Ratchet-Rest = 0); P18 als stale-offen
+erkannt (bereits S43/`e6fcdb3`) + abgehakt; **Fable integriert** (ADR-0008: Koordinator „Fable
+präferiert, Opus Fallback", Fable-Tiering-Zeile, Reviewer-Ausnahme; `token_report.py` rendert
+Fable als `▚`, Legende aus einer Quelle). Retro-Maßnahmen M1 (Vollsuite einmal/Ende/Vordergrund)
++ M2 (Budget-Eskalation >2×) in `operating_model.md` verankert.
 
-**⚠️ OFFEN — manuelle UI-Verifikation S116** (Render-Code coverage-ausgenommen, vor P18-UI-Pass prüfen):
-Badge-Optik pixelidentisch; Invuln-Zeile nur noch `Inv N+`; Aura-Info-Box nur bei Direktive-1-primary;
-Rapid-Fire-Caption; Glyphen (`⚔`/`↺`/Pfeile). Report: `docs/handoff/review-S116.md` (untracked).
+**⚠️ OFFEN — gesammelte manuelle UI-Verifikation** (Render-Code coverage-ausgenommen):
+S116-Punkte (Badges, `Inv N+`, Aura-Box, Rapid-Fire-Caption; `docs/handoff/review-S116.md`) +
+S117 DS-2-8-Punkte-Checkliste (`docs/handoff/exec-DS2.md` §5) — beide Handoffs untracked.
 
-Frühere Sessions (S60–S115): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+Frühere Sessions (S60–S116): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — Ziel7-Cluster
 
-**Erledigt in S116:** Design-System Schritt 1 (Task 0) ✓ · Regel-Ledger auf 0 (Task 2) ✓.
-**P18 war stale-offen** — bereits in `e6fcdb3` (S43, Plan 013) umgesetzt; S117 verifiziert + abgehakt.
+**Ziel7-Cluster ist LEER** — Design-System Schritt 1+2 ✓, Regel-Ledger 0 ✓, P17 ✓, P18 ✓ (stale, S43).
 
-**1. Design-System Schritt 2** [offen, Sonnet]: die in `design_system.md` etablierten `badge()`/`chip()`-
-   Helfer + Symbol-Konstanten auf die restlichen Render-Stellen ausrollen; Token-Wertesatz je Badge-Klasse
-   final vom User bestätigen lassen, falls noch offen.
+**1. Nächste Priorität im Planning klären** (Planner-Subagent gegen `backlog.md`): Kandidaten sind
+   die Carry-over unten (ADR-0007-Reste, S110-Retro-Maßnahmen, Plan-029-Klärung) oder ein neues
+   Backlog-Ziel (z.B. §6-Cluster: collect_modifiers/6f/6h — siehe backlog.md).
+**2. Gesammelte manuelle UI-Verifikation abzeichnen** (S113/S116/S117, siehe oben + Carry-over) —
+   idealerweise ein einziger UI-Pass am laufenden Streamlit.
 
 ### ⚠️ Carry-over (offen)
 
@@ -57,8 +59,6 @@ Frühere Sessions (S60–S115): Verlauf in `docs/goals/ziel6.md` (Session-Histor
 - **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
 - **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
 - **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
-
-Frühere Sessions (S60–S114): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
 ---
 

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_EXPAND, SYM_SWORDS
 from gameMechanic.game_state import PHASES, faction_dir_for, next_phase, swap_players
 from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
 from gameObjects.loader import (
@@ -28,6 +29,7 @@ from gameObjects.loader import (
     load_round_choice_label,
 )
 from uiLayout._common import PHASE_RULES, lookup
+from uiLayout.badges import chip
 
 # ---------------------------------------------------------------------------
 # Setup phase rendering
@@ -42,12 +44,7 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
     st.caption(faction + (f" · {unit.subfaction}" if unit.subfaction else ""))
 
     if unit.keywords:
-        kw_html = "".join(
-            f'<span style="background:#1c1a14;border:1px solid #2e2618;border-radius:2px;'
-            f"padding:1px 5px;font-size:9px;color:#6b5f44;letter-spacing:0.05em;"
-            f'margin-right:2px;">{kw}</span>'
-            for kw in unit.keywords
-        )
+        kw_html = "".join(chip(kw, "#6b5f44", "#1c1a14", "#2e2618") for kw in unit.keywords)
         st.markdown(kw_html, unsafe_allow_html=True)
 
     st.divider()
@@ -218,8 +215,8 @@ def _render_setup() -> None:
             "   - **Normal** — deployed on the battlefield\n"
             "   - **Stationary** — deployed but will not move in turn 1\n"
             "   - **Reserve** — arrives from turn 2 onwards\n\n"
-            "Click a unit name (▶) to view its full data profile here.\n\n"
-            "When ready, click **⚔ Start Game** below."
+            f"Click a unit name ({SYM_EXPAND}) to view its full data profile here.\n\n"
+            f"When ready, click **{SYM_SWORDS} Start Game** below."
         )
 
     st.divider()
@@ -255,7 +252,12 @@ def _render_setup() -> None:
         _render_round_choice_assignment(faction)
 
     st.divider()
-    if st.button("⚔ Start Game", key="setup_start_game", type="primary", use_container_width=True):
+    if st.button(
+        f"{SYM_SWORDS} Start Game",
+        key="setup_start_game",
+        type="primary",
+        use_container_width=True,
+    ):
         next_phase()
         st.rerun()
 

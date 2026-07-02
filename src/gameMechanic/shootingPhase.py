@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_EXPAND_ALT
 from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
 from gameMechanic.game_state import units_key_for
 from uiLayout._common import (
@@ -108,7 +109,7 @@ class ShootingPhaseHandler:
                 state,
                 active_content=_active_shooting,
                 inactive_content=_inactive_target_stats,
-                no_target_caption="← Designate a target (▷) from your army list.",
+                no_target_caption=f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.",
                 inactive_override=group_override if first != atk_faction else None,
                 show_wound_buttons=False,
             )
@@ -118,7 +119,7 @@ class ShootingPhaseHandler:
                 state,
                 active_content=_active_shooting,
                 inactive_content=_inactive_target_stats,
-                no_target_caption="← Designate a target (▷) from your army list.",
+                no_target_caption=f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.",
                 inactive_override=group_override if second != atk_faction else None,
                 show_wound_buttons=False,
             )

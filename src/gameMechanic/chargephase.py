@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_CHECK, SYM_EXPAND_ALT, SYM_SWORDS
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
@@ -39,7 +40,7 @@ class ChargePhaseHandler:
                     state,
                     active_content=_active_charge,
                     inactive_content=_inactive_charge,
-                    no_target_caption="← Designate a target (▷) from your army list.",
+                    no_target_caption=f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.",
                     show_wound_buttons=False,
                 )
             with col2:
@@ -48,7 +49,7 @@ class ChargePhaseHandler:
                     state,
                     active_content=_active_charge,
                     inactive_content=_inactive_charge,
-                    no_target_caption="← Designate a target (▷) from your army list.",
+                    no_target_caption=f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.",
                     show_wound_buttons=False,
                 )
 
@@ -96,7 +97,9 @@ def _active_charge(
 
     tgts: list[tuple[str, str]] = st.session_state.selected_targets
     if not tgts:
-        st.info("Select one or more **targets** to charge from the enemy army list (▷).")
+        st.info(
+            f"Select one or more **targets** to charge from the enemy army list ({SYM_EXPAND_ALT})."
+        )
         return
 
     for tgt_faction, tgt_uid in tgts:
@@ -184,7 +187,7 @@ def hi_eligible_units(
 
 def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: ignore[type-arg]
     """Step 2: Heroic Intervention window for the inactive player."""
-    st.markdown("### ⚔ Heroic Intervention")
+    st.markdown(f"### {SYM_SWORDS} Heroic Intervention")
     st.info(
         "Inactive player's CHARACTER units not in melee, within 3\" of an enemy, "
         'may move up to 3" — must end closer to the nearest enemy model.'
@@ -234,7 +237,7 @@ def _render_hi_target_selection(
         if active_data.get(ekey, {}).get("destroyed"):
             continue
         is_sel = ekey in hi_targets
-        prefix = "✓ " if is_sel else ""
+        prefix = f"{SYM_CHECK} " if is_sel else ""
         if st.button(f"{prefix}{enemy.name_en}", key=f"hi_tgt_{active}_{ekey}"):
             if is_sel:
                 hi_targets.remove(ekey)

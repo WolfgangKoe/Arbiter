@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_COLLAPSE, SYM_EXPAND_ALT, SYM_SWORDS
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
@@ -376,7 +377,7 @@ def _render_fight_column(
 ) -> None:
     """Render one fight column — attacker side or target/waiting side."""
     is_my_turn = faction == fight_player
-    indicator = "⚔" if is_my_turn else "◀"
+    indicator = SYM_SWORDS if is_my_turn else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
 
     if is_my_turn:
@@ -420,7 +421,7 @@ def _render_fight_column(
                 st.divider()
                 wound_adjustment_buttons(faction, uid, unit)
         elif st.session_state.get("selected_unit"):
-            st.caption("← Designate a target (▷) from your army list.")
+            st.caption(f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.")
         else:
             st.caption("Waiting — opponent selects a unit to fight.")
 

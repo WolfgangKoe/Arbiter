@@ -4,6 +4,7 @@ from typing import Any
 
 import streamlit as st
 
+from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
 from gameMechanic.ability_engine import get_activated_command_abilities, get_triggered_abilities
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import (
@@ -442,7 +443,7 @@ class CommandPhaseHandler:
 
 def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
     is_active = faction == state["active"]
-    indicator = "▶" if is_active else "◀"
+    indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
 
     if not is_active:

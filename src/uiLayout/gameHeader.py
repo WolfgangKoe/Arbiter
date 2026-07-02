@@ -2,6 +2,7 @@
 
 import streamlit as st
 
+from constants.symbols import SYM_RESET
 from gameMechanic.game_state import PHASES, next_phase, reset_game
 from uiLayout._common import reset_group_declaration_state
 
@@ -296,7 +297,7 @@ def render_game_header() -> None:
                 reset_group_declaration_state()
                 st.rerun()
         with rst_c:
-            if st.button("↺", key="reset_game", use_container_width=True):
+            if st.button(SYM_RESET, key="reset_game", use_container_width=True):
                 reset_game()
                 st.rerun()
         with next_c:

@@ -8,6 +8,7 @@ from pathlib import Path
 
 import streamlit as st
 
+from constants.symbols import SYM_CROSS
 from gameMechanic.game_log import list_archived_logs
 from gameMechanic.game_state import (
     CP_BY_GAME_SIZE,
@@ -393,7 +394,7 @@ def _render_archive_section() -> None:
                 col_dl.caption("—")
 
             if col_del.button(
-                "✕",
+                SYM_CROSS,
                 key=f"archive_del_{entry['filename']}",
                 use_container_width=True,
             ):

@@ -111,3 +111,15 @@ Weitere Glyph-Literale (`✓`/`✕`/`＋`/`⚔` in Phase-Modulen) werden auf die
 gezogen, **wenn die Stelle ohnehin angefasst wird** — nicht als isolierter Refactor-Commit.
 Neue Badges/Chips werden direkt gegen `badges.py` gebaut, statt eine fünfte Kopie zu
 erzeugen (Ratchet-Prinzip, analog Rule-Catalog-Gate).
+
+**Schritt 2 (S117/S118) abgeschlossen:** Rollout auf die restlichen 10 Produktivdateien
+(`_common.py`, `chargephase.py`, `moralePhase.py`, `shootingPhase.py`, `fightPhase.py`,
+`commandPhase.py`, `psychicPhase.py`, `gameActionsArea.py`, `gameHeader.py`,
+`setupScreen.py`) — alle `▶ ◀ ▷ ✓ ✕ ＋ ⚔ ↺`-Literale in Code-Ausdrücken auf die
+`symbols.py`-Konstanten gezogen, dazu die Keyword-Chip-Stelle in
+`gameActionsArea._display_unit_datasheet` auf `chip()` migriert. Bewusste Ausnahmen bleiben
+Literal, kein Ratchet-Anspruch: `gameHeader._phase_badges_html` (eigene dritte
+Geometrie-Klasse, kein Badge im Sinne von §1.1), `dice_compose._badge_chip` (S115 bereits
+eigenständig), der `←`-Pfeil (keine Konstante in §4 vorgesehen) sowie das `⬇`-Download-Icon
+in `setupScreen.py` (kein Semantik-Match in §4). Der Ratchet-Rest ist damit auf Null —
+neue Literale, die künftig hinzukommen, werden wieder gegen diesen Stand geprüft.

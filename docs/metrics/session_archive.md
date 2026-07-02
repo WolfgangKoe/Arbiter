@@ -1,16 +1,21 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-01 21:54 CEST
+Stand: 2026-07-02 20:34 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
-Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
+Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-01 21:41 bf59  ████░░░░░░░░  53k ✅    ███░░░  43%    ████████████
-         SA_1·  ████░░░░░░░░  53k ✅    DoD-Review S116 uncommitted
+07-01 21:41 bf59  ███████████░ 143k ⚠️   ████░░  70%    ▚▚▚█········
+         SA_1·  █████░░░░░░░  60k ✅    Plan design-system step 2
+         SA_2·  ████████████ 280k ⛔    Fable ins Token-Reporting integrie…
+         SA_3·  ████░░░░░░░░  53k ✅    DoD-Review S116 uncommitted
+         SA_4·  ████████░░░░  96k ✅    Execute DS-2 glyph rollout
+         SA_5·  ███░░░░░░░░░  41k ✅    DoD-Review S117 vor Commit
+         SA_6·  ████░░░░░░░░  55k ✅    Plan P18 declaration flow
 ----------------- ---------------------- -------------- ------------
 07-01 20:29 49a0  ████████████ 144k ⚠️   ████░░  74%    ███████··▒▒▒
          SA_1·  ████░░░░░░░░  51k ✅    Invuln SAVE-Block bereinigen
@@ -271,7 +276,7 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 06-17 18:45 8655  ████████████ 148k ⚠️   █░░░░░  15%    ██████████··
          SA_1·  ██████░░░░░░  78k ✅    Combat rule catalog draft
 ----------------- ---------------------- -------------- ------------
-06-11 22:14 754e  ████████████ 222k ⛔    █░░░░░  14%    ▒▒▓▓▓▓▓▓▓▓▓▓
+06-11 22:14 754e  ████████████ 222k ⛔    █░░░░░  14%    ▚▚▚▚▚▚▚▚▚▚▒▒
          SA_1·  ██████░░░░░░  75k ✅    Audit model-groups code correctness
 ----------------- ---------------------- -------------- ------------
 06-11 18:49 a176  ████████████ 178k ⛔    ███░░░  52%    ██████▒▒▒▒▒▒

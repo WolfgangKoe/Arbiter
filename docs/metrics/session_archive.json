@@ -2204,17 +2204,54 @@
   "bf595349-8fb3-48fd-a30b-81c69c1422d6": {
     "started_at": "2026-07-01T19:41:40.637Z",
     "task": "Bereite die nächste Session vor. Committen.",
-    "peak_context": 52803,
-    "subagent_share": 42.54543378955944,
+    "peak_context": 142531,
+    "subagent_share": 70.20042734378296,
     "by_tier": {
-      "Opus": 1229880
+      "Sonnet": 22283044,
+      "Fable": 7565331,
+      "Opus": 1757472
     },
     "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan design-system step 2",
+        "tier": "Sonnet",
+        "peak_context": 59810,
+        "started_at": "2026-07-01T19:41:40.637Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Fable ins Token-Reporting integrieren",
+        "tier": "Sonnet",
+        "peak_context": 279895,
+        "started_at": "2026-07-01T19:41:40.637Z"
+      },
       {
         "agent_type": "general-purpose",
         "description": "DoD-Review S116 uncommitted",
         "tier": "Opus",
         "peak_context": 53185,
+        "started_at": "2026-07-01T19:41:40.637Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute DS-2 glyph rollout",
+        "tier": "Sonnet",
+        "peak_context": 95600,
+        "started_at": "2026-07-01T19:41:40.637Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S117 vor Commit",
+        "tier": "Opus",
+        "peak_context": 41125,
+        "started_at": "2026-07-01T19:41:40.637Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan P18 declaration flow",
+        "tier": "Sonnet",
+        "peak_context": 55238,
         "started_at": "2026-07-01T19:41:40.637Z"
       }
     ]

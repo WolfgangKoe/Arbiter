@@ -5,8 +5,8 @@ Beantwortet die Stakeholder-Frage *"wurden die Token gut ausgegeben, werden wir
 besser oder schlechter?"* — nicht bloße Mengen, sondern Effizienz und Trend.
 Quelle sind die Claude-Code-Transcripts unter ``~/.claude/projects/<slug>/``:
 
-* Haupt-Chain : ``<slug>/<session>.jsonl``            (Orchestrator, Opus)
-* Subagenten  : ``<slug>/<session>/subagents/*.jsonl`` (Sonnet/Haiku, isoliert)
+* Haupt-Chain : ``<slug>/<session>.jsonl``            (Orchestrator, Fable/Opus)
+* Subagenten  : ``<slug>/<session>/subagents/*.jsonl`` (Subagenten-Tiers, isoliert)
 
 Der Report hat fünf Teile (ADR-0002, leser-orientiert):
 
@@ -60,13 +60,23 @@ _MODEL_TIERS: tuple[tuple[str, str], ...] = (
 )
 
 # Modell-Mix-Balken: feste Zeichen je Tier (theme-sicher, keine Farb-Legende).
-# Opus █ vs. Sonnet · = starker Kontrast für die beiden häufigsten Tiers.
+# Reihenfolge = höchstes Tier zuerst (Fable, Opus, Sonnet, Haiku); Fable ▚ / Opus █ /
+# Sonnet · = starker Kontrast für die häufigsten Tiers.
 _MIX_CHARS: tuple[tuple[str, str], ...] = (
+    ("Fable", "▚"),
     ("Opus", "█"),
     ("Sonnet", "·"),
     ("Haiku", "▒"),
 )
 _MIX_OTHER = "▓"
+
+
+def _mix_legend() -> str:
+    """Baut die Modell-Mix-Legende aus der Tier-Symbol-Tabelle (eine Quelle für alle
+    Konsumenten — kein zweiter hartkodierter Legenden-Text im Modul)."""
+    parts = " · ".join(f"`{char}` {tier}" for tier, char in _MIX_CHARS)
+    return f"{parts} · `{_MIX_OTHER}` sonstige"
+
 
 # Wrapper-Tags, die keine echte Nutzer-Aufgabe sind (Slash-Kommandos, IDE-Kontext).
 _WRAPPER_TAGS: tuple[str, ...] = (
@@ -445,7 +455,7 @@ def bar(value: int, maximum: int, *, width: int = 12, fill: str = "█", empty: 
 
 
 def model_mix_bar(by_tier: dict[str, int], *, width: int = 12) -> str:
-    """Segmentierter Balken nach Tier-Anteil (█ Opus · · Sonnet · ▒ Haiku · ▓ Rest)."""
+    """Segmentierter Balken nach Tier-Anteil (▚ Fable · █ Opus · · Sonnet · ▒ Haiku · ▓ Rest)."""
     total = sum(by_tier.values())
     if total <= 0:
         return _MIX_OTHER * width
@@ -682,7 +692,7 @@ def _render_history(ordered: list[str], summary: dict, meta: dict[str, SessionMe
         "## Verlauf (letzte 6 Sessions)",
         "",
         "Jüngste zuerst. Balken theme-sicher (Unicode); Trend ↑/↓ ggü. der älteren Session.",
-        "Modell-Mix (Subagenten): `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
+        f"Modell-Mix (Subagenten): {_mix_legend()}.",
         "",
         "```text",
         f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",
@@ -974,7 +984,7 @@ def render_session_archive_md(archive: dict[str, dict | list], *, generated_at: 
         f"Stand: {generated_at}",
         "",
         "Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).",
-        "Modell-Mix: `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.",
+        f"Modell-Mix: {_mix_legend()}.",
         "",
         "```text",
         f"{'Session':<17} {'Peak-Kontext':<22} {'Subagent':<14} {'Modell-Mix':<12}",

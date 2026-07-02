@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from constants.symbols import SYM_CHECK
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import flee_models
@@ -131,7 +132,7 @@ def _render_unit_morale(
 
     col_pass, col_fail = st.columns(2)
     with col_pass:
-        if st.button("✓ Bestanden", key=f"morale_pass_{uid}"):
+        if st.button(f"{SYM_CHECK} Bestanden", key=f"morale_pass_{uid}"):
             flags["morale_tested"] = True
             log_action(state["round"], "morale", unit.name_en, "Moraltest bestanden.")
             st.rerun()

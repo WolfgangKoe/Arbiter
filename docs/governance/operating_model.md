@@ -5,6 +5,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 > **Status — verbindlich (ADR-0007, seit S102).** Das Modell nutzt einen **dünnen, persistenten
 > Koordinator**: Detail-**Planung** und finales **Review** wandern in Subagenten; der Koordinator
 > routet, hält die Gates und eskaliert, ohne Quelldateien oder volle Ergebnisse zu lesen.
+> Koordinator-Tier: **Fable präferiert, Opus als Fallback** ([ADR-0008](decisions/0008-fable-als-bevorzugter-koordinator.md), seit S117).
 > Subagent↔Stakeholder läuft asynchron über eine **Mailbox-Datei** ([docs/handoff/README.md](../handoff/README.md));
 > Scoping über den **Index** ([docs/reference/agent_scopes.md](../reference/agent_scopes.md)). Die folgenden
 > Rollen/Events sind entsprechend markiert
@@ -49,10 +50,10 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 | Rolle | Tier | Delegierbar? | Kernaufgaben |
 |---|---|---|---|
-| **Koordinator / "Arbiter"** (ADR-0007) | Opus, Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. |
+| **Koordinator / "Arbiter"** (ADR-0007, [ADR-0008](decisions/0008-fable-als-bevorzugter-koordinator.md)) | **Fable** (präferiert, sofern verfügbar) · Opus (Fallback), Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. |
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
-| **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
+| **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich; **Fable nur bei Prämissen-/Architektur-Urteil** mit expliziter Begründung (ADR-0008) | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
 | **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil) | Ja — als Subagent | Liest `next_session.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
 | **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 99 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
 
@@ -65,7 +66,8 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 |---|---|
 | **Haiku** | Reine Lookups, Klassifikation nach festem Schema, deterministische Extraktion |
 | **Sonnet** | Synthese aus mehreren Quellen, Implementierung nach fixem Plan, Code-Review-Befund erstellen |
-| **Opus** | Offene Zweckprogramme, Architekturentscheidungen, Scope-Klärung mit Stakeholder, Urteil über Subagenten-Befunde, Prämissen-Änderungen |
+| **Opus** | Offene Zweckprogramme, Architekturentscheidungen, Scope-Klärung mit Stakeholder, Urteil über Subagenten-Befunde |
+| **Fable** (ADR-0008) | Koordinator-Sitz (persistentes Urteil, nicht delegierbar), Prämissen-/Verfassungsänderungen, Konsens-Entscheidungen mit dem Stakeholder — **nicht** für delegierbare Subagent-Arbeit |
 
 > **MUST (O2, S103):** Reine Lookups / format-fixe Extraktion / ja-nein-gegen-Text laufen als
 > **Default mit `model: haiku`**. Eine Abweichung **nach oben** (Sonnet/Opus) braucht eine
@@ -106,6 +108,8 @@ Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
    einer pro gekoppeltem Bereich, sequenziell; disjunkte Dateien dürfen parallel laufen.
 2. **Enger Vertrag** in jedem Auftrag: **Ziel · Scope/Grenzen · erlaubte Tools/Quellen · Effort-Budget ·
    Output-Format**. Verhindert Duplikate und Lücken; Ergebnisse als referenzierbare Artefakte.
+   **Budget-Eskalation (M2, S117):** Überschreitet ein Subagent sein genanntes Token-Budget um mehr
+   als das Doppelte, bricht er ab und eskaliert mit Zwischenstand an den Koordinator — nicht weiterlaufen.
 3. **Selbstprüf-Checkliste** (Pflicht, Details siehe Event 3 „Sprint"): Verdrahtung per `grep` belegen,
    Code-Heimat, Gates grün, Format vor Rückgabe, Beleg im festen Format. Fehlt sie, ist der Auftrag unvollständig.
 4. **Kanal-Regel (ADR-0007):** Subagenten reden **nie direkt** mit dem Stakeholder — sie eskalieren
@@ -145,6 +149,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    - **Verdrahtung:** für jeden neuen Helfer per `grep` belegen, dass **Nicht-Test-Code** ihn aufruft — kein verwaister Parallel-Pfad (S70: 3/6 Helfer grün getestet, aber nie verdrahtet).
    - **Heimat:** neuer Code sitzt im richtigen Modul (z. B. State-Mutationen in `unit_mutations.py`), nicht als Duplikat.
    - **Gates:** `pytest --tb=short` grün, Coverage-Floor gehalten, keine vorher-grünen Tests rot; **Generic-src** (keine Fraktions-Strings/-Checks in `src/`).
+   - **Vollsuite-Disziplin (M1, S117):** Die Vollsuite läuft **einmal, am Ende, im Vordergrund** — nicht als Hintergrund-Job (Subagent pausiert sonst und kostet eine Resume-Runde) und nicht mehrfach zwischendurch (S117: zwei Executoren pausierten am Hintergrund-pytest; einer verbrauchte ~3× Budget durch Mehrfach-Läufe).
    - **Format vor Rückgabe:** Subagent führt `pre-commit run --files <geänderte Dateien>` aus, bevor er meldet — deckt `black`, `isort`, `ruff` und alle weiteren konfigurierten Hooks atomar ab. Einzelne Tool-Aufrufe (`ruff check` allein) sind nicht ausreichend (S114-Befund). Schlägt ein Hook an: Fix einarbeiten, erneut laufen, erst dann melden.
    - **Beleg zurückliefern (festes Format):** Endbericht KNAPP und in fester Reihenfolge — (1) pytest-Zusammenfassungszeile, (2) grep-Belegzeilen, (3) `git diff --stat`, (4) ggf. gewählte Werte. Nicht nur „getestet, grün"; kein Volltext (S82: verstümmelter Bericht → alles selbst nachgeprüft).
 
@@ -222,7 +227,7 @@ Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 ```mermaid
 graph TD
     S[Stakeholder<br/>Wolfgang]
-    A[Orchestrator<br/>Arbiter · Opus]
+    A[Orchestrator<br/>Arbiter · Fable/Opus]
     PL[Planner<br/>Opus-Subagent]
     RR[Regel-Recherche<br/>Haiku / Sonnet]
     EX[Executor<br/>Sonnet]
@@ -249,7 +254,7 @@ graph TD
 Stakeholder ←──────────────────────────────────────────┐
     │  Plan-Freigabe / Eskalation                       │
     ▼                                                   │
-Orchestrator (Arbiter · Opus) ──────── eskaliert ──────┘
+Orchestrator (Arbiter · Fable/Opus) ── eskaliert ──────┘
     │      │        │           │
     ▼      ▼        ▼           ▼
 Planner Executor Regel-      Reviewer
