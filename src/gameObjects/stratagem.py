@@ -112,3 +112,16 @@ def stratagem_visibility(
         return "greyed"
 
     return "clickable"
+
+
+def stratagem_undo_visible(
+    stratagem_id: str,
+    used_this_phase: set[str],
+    used_in_battle: set[str],
+) -> bool:
+    """Return True only while the stratagem's own phase-window is still open.
+
+    Undo must disappear once the phase changes, even if the stratagem stays
+    battle-greyed afterwards (once_per_battle persists; the undo window does not).
+    """
+    return stratagem_id in used_this_phase

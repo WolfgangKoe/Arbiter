@@ -26,7 +26,7 @@ from gameMechanic.game_state import (
 )
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.loader import load_stratagems
-from gameObjects.stratagem import stratagem_visibility
+from gameObjects.stratagem import stratagem_undo_visible, stratagem_visibility
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -181,6 +181,7 @@ def _render_stratagems() -> None:
     for i, (strat, vis, spending_faction) in enumerate(visible):
         disabled = vis == "greyed"
         is_used = strat.id in used_ids or strat.id in used_battle_ids
+        undo_visible = stratagem_undo_visible(strat.id, used_ids, used_battle_ids)
         label = f"**{strat.name_en}** · {strat.cp_cost} CP"
         if strat.player == "inactive":
             label += f" *({inactive_faction})*"
@@ -192,7 +193,7 @@ def _render_stratagems() -> None:
 
         with st.expander(label, expanded=False):
             st.caption(strat.rule_text)
-            if is_used:
+            if undo_visible:
                 if st.button(
                     f"{SYM_RESET} Rückgängig (+{strat.cp_cost} CP)",
                     key=f"strat_undo_{strat.id}_{phase_idx}_{i}",

@@ -8,7 +8,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameObjects.loader import load_stratagems  # noqa: E402
-from gameObjects.stratagem import Stratagem, stratagem_visibility  # noqa: E402
+from gameObjects.stratagem import (  # noqa: E402
+    Stratagem,
+    stratagem_undo_visible,
+    stratagem_visibility,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -288,3 +292,30 @@ class TestOncePerBattleEnforcement:
             used_in_battle=None,  # no battle set provided
         )
         assert result == "greyed"
+
+
+# ---------------------------------------------------------------------------
+# P21: stratagem_undo_visible() — undo button must not survive a phase change
+# ---------------------------------------------------------------------------
+
+
+class TestUndoHiddenAfterPhaseResetButBattleGreyedPersists:
+    """P21 regression: the ↺-undo button must disappear once the phase that used
+    the stratagem has passed, even though the once_per_battle greyed-out label
+    correctly persists until the battle ends (S113 behavior, kept intact).
+    """
+
+    def test_undo_visible_when_used_this_phase_only(self) -> None:
+        assert stratagem_undo_visible("s.strat", {"s.strat"}, set()) is True
+
+    def test_undo_hidden_after_phase_reset_but_battle_greyed_persists(self) -> None:
+        # Phase changed → used_this_phase was reset to empty by _reset_phase_state(),
+        # but the battle-scoped set still holds the id (S113 once_per_battle behavior).
+        assert stratagem_undo_visible("s.strat", set(), {"s.strat"}) is False
+
+    def test_undo_visible_when_used_in_both_sets(self) -> None:
+        # Just used, still within the same phase window: both sets contain it.
+        assert stratagem_undo_visible("s.strat", {"s.strat"}, {"s.strat"}) is True
+
+    def test_undo_hidden_when_not_used_anywhere(self) -> None:
+        assert stratagem_undo_visible("s.strat", set(), set()) is False
