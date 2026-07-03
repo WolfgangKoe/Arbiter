@@ -180,6 +180,16 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   verlangt weiter eine manuelle Primary/Secondary-Wahl. Soll: bei Affinität auch im Round-Zweig **beide**
   automatisch aktivieren + UI analog zum Extra-Protokoll-Pfad (kein Wahlzwang, „beide aktiv"-Anzeige).
   Engine + UI + Regressionstest. Verwandt mit Plan 016 (Dynastiebonus-Anzeige).
+- 🟢 **Regel-Index für Wahapedia-Texte (context-audit-S91, verarbeitet S118):** additiver
+  Stichwort→`datei:zeilenbereich`-Index als `docs/work/rule_index.md` (Format:
+  `Lethal Hits → core_rules.txt:1420-1435`) — ~23k Zeilen Regeltext sind nur per `grep`
+  durchsuchbar; kein Wortlaut berührt, beschleunigt Haiku-Lookups.
+- 🟢 **CLAUDE.md Token-Disziplin entschlacken (context-audit-S91, verarbeitet S118):**
+  `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem
+  Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagern; in CLAUDE.md nur
+  2-Zeilen-Verweis. Freigabepflichtig (CLAUDE.md-Änderung).
+- 🟢 **Backlog-§0-Hygiene (context-audit-S91, verarbeitet S118):** §0-Überschrift „S51" datieren;
+  erledigte ✅-Einträge inline nach `ziel6.md`-Historie auslagern statt hier stehen lassen.
 - 🔲 **Sudden Storm S — B-Hinweis anzeigen (`shoot_during_action`, S96):** Plan 025 Step 1 hat die Direktive
   datenseitig auf 9E-D2 korrigiert (Typ `shoot_during_action`, kein Engine-Effekt). Der Tisch-Hinweis hat
   noch **keine** sichtbare Anzeige. **S97: wird vom generischen Direktiv-Hinweisblock (Plan 025 Step 2b,
@@ -315,6 +325,11 @@ Zwei Tautologie-Tests in `tests/gameMechanic/test_damage_block_reanimation.py` b
 
 Kein Blocker; schärfen wenn ohnehin in der Datei.
 
+Modul-Level-`sys.modules["streamlit"]`-Mocks in 11 Testdateien konsolidieren (Follow-up aus
+S118-M2: `tests/gameMechanic/conftest.py` hat jetzt die session-scoped Fixture
+`_canonical_streamlit_mock`; die per-File-Mocks vor dem ersten src-Import sind noch dezentral).
+Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
+
 ---
 
 ## 5. Größere geplante Ziele
@@ -329,6 +344,17 @@ Kein Blocker; schärfen wenn ohnehin in der Datei.
     - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
       einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
       Einzelgruppe für Einheiten ohne `model_groups`) + `melee_with`-Ziel-Anzeige. Getestet: `test_group_flow.py`.
+    - **P19 — once_per_battle pro Spieler (UI-Pass-Befund S118, Stakeholder):** eingesetzte
+      once_per_battle-Gefechtsoption blockt aktuell BEIDE Spieler (Bug — 9E: Einschränkung gilt
+      je Spieler) + UI zeigt nicht, welcher Spieler sie eingesetzt hat. Quelle: `ui-pass-S118.md` S113-Punkt 3.
+    - **P20 — Rapid Fire halbe Reichweite (UI-Pass-Befund S118, Stakeholder):** Attackenzahl muss
+      angebbar sein, wenn Modelle Ziele innerhalb halber Reichweite wählen; gecappt auf die
+      Attackenzahl bei voller Reichweite (z. B. 10 bei 10 Warriors mit Gauss Flayer).
+      Quelle: `ui-pass-S118.md` S116-Punkt 4.
+    - **P21 — BUG: Stratagem-Undo überlebt Phasenwechsel (UI-Pass-Befund S118, Stakeholder):**
+      ↺-Undo-Button wird nach Phasenwechsel/im nächsten Zug noch angeboten — darf nur im selben
+      Phasenfenster verfügbar sein. Widerspricht dem S113-Blocker-B1-Codebefund („laut Code NICHT
+      angeboten") → Live-Verhalten vs. Code-Analyse abgleichen. Quelle: `ui-pass-S118.md` S113-Punkt 5.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
 - [index.md](index.md) — Ziel-Gesamtübersicht

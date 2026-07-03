@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-02 20:34 CEST
+Stand: 2026-07-03 19:26 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-01 21:41 bf59  ███████████░ 143k ⚠️   ████░░  70%    ▚▚▚█········
+07-02 20:35 aa33  ██████████░░ 131k ⚠️   ██░░░░  38%    ▚▚▚▚▚██·····
+         SA_1·  █████░░░░░░░  60k ✅    DRY-Helper ±1-Cap dice_html
+         SA_2·  ███████░░░░░  89k ✅    Planning-Entwurf S118 erstellen
+         SA_3·  ██████░░░░░░  73k ✅    context-audit-S91 verarbeiten
+         SA_4·  ████░░░░░░░░  53k ✅    DoD-Review S118 durchführen
+         SA_5·  █████░░░░░░░  61k ✅    Streamlit-Mock-Fixture einführen
+         SA_6·  ███░░░░░░░░░  36k ✅    UI-Pass-Checkliste konsolidieren
+----------------- ---------------------- -------------- ------------
+07-01 21:41 bf59  ████████████ 144k ⚠️   ████░░  69%    ▚▚▚█········
          SA_1·  █████░░░░░░░  60k ✅    Plan design-system step 2
          SA_2·  ████████████ 280k ⛔    Fable ins Token-Reporting integrie…
          SA_3·  ████░░░░░░░░  53k ✅    DoD-Review S116 uncommitted

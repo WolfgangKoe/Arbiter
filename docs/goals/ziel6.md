@@ -1215,3 +1215,4 @@ unit_state["group_models"]: dict[str, int]
 - **S115 (2026-07-01)** Retro-Maßnahmen S114 verankert; P17 (Vor-Auswahl+Lock) + Plan 031 als erledigt bestätigt; 2 neue Retro-Maßnahmen
 - **S116 (2026-07-01)** Design-System Schritt 1 (badges/symbols/design_system.md), Regel-Ledger auf 0 (R-COMBAT-17 + R-PROTO-02 Aura-Hinweis), Invuln-Cleanup
 - **S117 (2026-07-02)** Fable integriert (ADR-0008: Koordinator-Tier, Tiering-Tabelle, token_report ▚); DS-2 Glyph-Rollout fertig (28 Stellen + Chip, 10 Dateien); P18 als stale-offen erkannt (S43) + abgehakt; M1/M2 Prozess-Maßnahmen verankert
+- **S118 (2026-07-03)** Carry-over-Cluster abgebaut: Plan 029 REJECTED, ADR-0007-Reste c/e erledigt, DRY-Cap-Helper dice_html, st-Mock-Fixture; UI-Pass 17/20 → P19/P20/P21

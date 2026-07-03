@@ -20,6 +20,16 @@ from uiLayout.dice_compose import (
 )
 
 
+def _capped_modifier_threshold(base: int, modifier_total: int) -> int:
+    """Threshold after the 9E hit/wound modifier cap: at most ±1 from base, floor 2+.
+
+    ``modifier_total`` may be a single modifier value or an uncapped sum; a positive
+    modifier lowers the threshold, a negative one raises it — never by more than one
+    step from ``base``, and never below 2+.
+    """
+    return max(2, max(base - 1, min(base + 1, base - modifier_total)))
+
+
 def _render_dice_roll_block(
     title: str,
     skill_label: str,
@@ -38,7 +48,7 @@ def _render_dice_roll_block(
     if stack:
         parts = []
         for entry in stack:
-            next_thresh = max(2, max(base - 1, min(base + 1, base - entry["value"])))
+            next_thresh = _capped_modifier_threshold(base, entry["value"])
             color = _modifier_color(entry)
             parts.append(
                 modifier_die_pair_html(
@@ -84,8 +94,7 @@ def _render_dice_wound_block(
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
     base = wound_threshold(strength, toughness)
-    net = min(1, max(-1, sum(e["value"] for e in wound_stack)))
-    modified = max(2, base - net)
+    modified = _capped_modifier_threshold(base, sum(e["value"] for e in wound_stack))
     rel = ">" if strength > toughness else ("=" if strength == toughness else "<")
     # D5: S/T comparison clearly highlighted; NO "→ N+" — the result is the
     # boxed threshold in the header row below.
@@ -125,7 +134,7 @@ def _render_dice_wound_block(
     if wound_stack:
         parts = []
         for entry in wound_stack:
-            next_thresh = max(2, max(base - 1, min(base + 1, base - entry["value"])))
+            next_thresh = _capped_modifier_threshold(base, entry["value"])
             color = _modifier_color(entry)
             parts.append(
                 modifier_die_pair_html(

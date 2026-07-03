@@ -26,39 +26,31 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S117, 2026-07-02)
+## Aktueller Stand (nach S118, 2026-07-03)
 
-**S117 committed** (Review GO, 1390 passed, 99.11 %, Arch-Gate 8/8): DS-2 Glyph-Rollout fertig
-(28 Stellen + 1 Chip-Migration, 10 Dateien; `design_system.md` Ratchet-Rest = 0); P18 als stale-offen
-erkannt (bereits S43/`e6fcdb3`) + abgehakt; **Fable integriert** (ADR-0008: Koordinator „Fable
-präferiert, Opus Fallback", Fable-Tiering-Zeile, Reviewer-Ausnahme; `token_report.py` rendert
-Fable als `▚`, Legende aus einer Quelle). Retro-Maßnahmen M1 (Vollsuite einmal/Ende/Vordergrund)
-+ M2 (Budget-Eskalation >2×) in `operating_model.md` verankert.
+**S118 committed** (Review GO, 1393 passed, 99,11 %, Arch-Gate 8/8; `docs/handoff/review-S118.md`):
+Carry-over-Cluster abgebaut — Plan 029 REJECTED; Carry-over (e) gestrichen (überholt);
+`context-audit-S91.md` verarbeitet + gelöscht; DRY-Helper `_capped_modifier_threshold`
+(`dice_html.py`); session-scoped `_canonical_streamlit_mock`-Fixture (`conftest.py`).
+**UI-Pass S118 DONE** (17/20, `ui-pass-S118.md`) → Ziel7-Anforderungen **P19/P20/P21** in
+`backlog.md` §5 (P21 = Bug: ↺-Undo überlebt Phasenwechsel). Retro verankert: Marker-Kontinuität
+(operating_model Event 2), Test-Schuld §4d, Handoff-Hygiene.
+**Merksatz (P21):** UI-Verhaltens-Claims aus Code-Analysen erst nach Live-Verifikation glauben.
 
-**⚠️ OFFEN — gesammelte manuelle UI-Verifikation** (Render-Code coverage-ausgenommen):
-S116-Punkte (Badges, `Inv N+`, Aura-Box, Rapid-Fire-Caption; `docs/handoff/review-S116.md`) +
-S117 DS-2-8-Punkte-Checkliste (`docs/handoff/exec-DS2.md` §5) — beide Handoffs untracked.
+Frühere Sessions (S60–S117): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-Frühere Sessions (S60–S116): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+### ▶ Nächster Schritt — Ziel7-Cluster (P19/P20/P21)
 
-### ▶ Nächster Schritt — Ziel7-Cluster
-
-**Ziel7-Cluster ist LEER** — Design-System Schritt 1+2 ✓, Regel-Ledger 0 ✓, P17 ✓, P18 ✓ (stale, S43).
-
-**1. Nächste Priorität im Planning klären** (Planner-Subagent gegen `backlog.md`): Kandidaten sind
-   die Carry-over unten (ADR-0007-Reste, S110-Retro-Maßnahmen, Plan-029-Klärung) oder ein neues
-   Backlog-Ziel (z.B. §6-Cluster: collect_modifiers/6f/6h — siehe backlog.md).
-**2. Gesammelte manuelle UI-Verifikation abzeichnen** (S113/S116/S117, siehe oben + Carry-over) —
-   idealerweise ein einziger UI-Pass am laufenden Streamlit.
+Planner-Subagent plant gegen `backlog.md` §5 (Ziel7-Cluster): **P21 (Bug) zuerst** — Undo-
+Lebensdauer fixen, dabei Live-Verhalten vs. S113-Code-Analyse abgleichen (Root Cause). Danach
+P19 (per-Spieler-Tracking) und P20 (Rapid-Fire-Eingabe). Alternative im Planning abwägen:
+§6-Cluster (collect_modifiers/6f/6h).
 
 ### ⚠️ Carry-over (offen)
 
-- **Manuelle UI-Verifikation (PFLICHT, im Ziel7-UI-Pass):** once_per_battle-Undo/Label-Pfade
-  (Stratagem-Phase, Spielerwechsel); Mirror-Protokoll Necron-vs-Necron Befehlsphase; stationär+D1
-  grünes +1-Save-Badge in den Würfeln. Checkliste: `docs/handoff/review-S113.md`.
-- **ADR-0007-Reste:** (c) `docs/handoff/context-audit-S91.md` verarbeiten + löschen; (e) SessionStart-Regel-Injektion.
-- **Retro-Maßnahmen (S110):** (1) DRY-Helper Hit/Wound ±1-Cap in `dice_html.py`; (2) st-Mock-Fixture.
-- **Plan-029-Datei fehlt** (in README.md als Divergenz markiert) — vor Beauftragung anlegen oder REJECTED.
+- **Manuelle UI-Verifikation (Rest aus S113 — war NICHT im S118-Pass):** Mirror-Protokoll
+  Necron-vs-Necron Befehlsphase; stationär+D1 grünes +1-Save-Badge in den Würfeln.
+  Quelle: `docs/handoff/review-S113.md`.
 
 ---
 

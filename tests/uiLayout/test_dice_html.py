@@ -28,6 +28,7 @@ from uiLayout.dice_compose import (  # noqa: E402
     threshold_header_html,
     value_triggered_die_row_html,
 )
+from uiLayout.dice_html import _capped_modifier_threshold  # noqa: E402
 
 _BUFF_GREEN = "#4a9a5a"
 _DEBUFF_RED = "#ef4444"
@@ -434,3 +435,27 @@ def test_light_cover_label_with_directive_preserves_base_text() -> None:
     """Base text must be present regardless of the directive."""
     label = light_cover_label("Vengeful Stars")
     assert "Light Cover (+1 Save vs Ranged)" in label
+
+
+# ---------------------------------------------------------------------------
+# _capped_modifier_threshold — 9E ±1 hit/wound modifier cap (S110 retro M1)
+# ---------------------------------------------------------------------------
+
+
+def test_capped_threshold_single_modifier_shifts_one_step() -> None:
+    """A single ±1 modifier moves the threshold exactly one step."""
+    assert _capped_modifier_threshold(4, 1) == 3  # buff lowers the threshold
+    assert _capped_modifier_threshold(4, -1) == 5  # debuff raises it
+    assert _capped_modifier_threshold(4, 0) == 4  # no modifier → base
+
+
+def test_capped_threshold_caps_stacked_modifiers_at_plus_minus_one() -> None:
+    """9E rule: the summed modifier never shifts the threshold by more than ±1."""
+    assert _capped_modifier_threshold(4, 3) == 3  # +3 capped to +1 → 3+
+    assert _capped_modifier_threshold(4, -3) == 5  # −3 capped to −1 → 5+
+
+
+def test_capped_threshold_never_drops_below_two() -> None:
+    """Even a capped buff cannot produce a threshold below 2+ (a 1 always fails)."""
+    assert _capped_modifier_threshold(2, 1) == 2
+    assert _capped_modifier_threshold(2, 5) == 2

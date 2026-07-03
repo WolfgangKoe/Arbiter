@@ -2204,8 +2204,8 @@
   "bf595349-8fb3-48fd-a30b-81c69c1422d6": {
     "started_at": "2026-07-01T19:41:40.637Z",
     "task": "Bereite die nächste Session vor. Committen.",
-    "peak_context": 142531,
-    "subagent_share": 70.20042734378296,
+    "peak_context": 144071,
+    "subagent_share": 69.31301057077872,
     "by_tier": {
       "Sonnet": 22283044,
       "Fable": 7565331,
@@ -2253,6 +2253,62 @@
         "tier": "Sonnet",
         "peak_context": 55238,
         "started_at": "2026-07-01T19:41:40.637Z"
+      }
+    ]
+  },
+  "aa337077-8a94-430e-b981-6a28d3be6be0": {
+    "started_at": "2026-07-02T18:35:18.428Z",
+    "task": "Start session. Lass den Plan von einem Subagenten vorlegen",
+    "peak_context": 131195,
+    "subagent_share": 38.2676735066702,
+    "by_tier": {
+      "Sonnet": 2833807,
+      "Fable": 3434216,
+      "Opus": 973012,
+      "Haiku": 284135
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "DRY-Helper ±1-Cap dice_html",
+        "tier": "Sonnet",
+        "peak_context": 60044,
+        "started_at": "2026-07-02T18:35:18.428Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S118 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 88604,
+        "started_at": "2026-07-02T18:35:18.428Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "context-audit-S91 verarbeiten",
+        "tier": "Sonnet",
+        "peak_context": 72865,
+        "started_at": "2026-07-02T18:35:18.428Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S118 durchführen",
+        "tier": "Opus",
+        "peak_context": 53136,
+        "started_at": "2026-07-02T18:35:18.428Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Streamlit-Mock-Fixture einführen",
+        "tier": "Sonnet",
+        "peak_context": 61359,
+        "started_at": "2026-07-02T18:35:18.428Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "UI-Pass-Checkliste konsolidieren",
+        "tier": "Haiku",
+        "peak_context": 36467,
+        "started_at": "2026-07-02T18:35:18.428Z"
       }
     ]
   }
