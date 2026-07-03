@@ -20,7 +20,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.attack_math import _compute_attacks, _total_attacks_int  # noqa: E402
+from gameMechanic.attack_math import (  # noqa: E402
+    _compute_attacks,
+    _rapid_fire_input_cap,
+    _total_attacks_int,
+)
 
 # ---------------------------------------------------------------------------
 # R-COMBAT-17 — Rapid Fire: attack doubling at half range
@@ -88,6 +92,43 @@ class TestTotalAttacksIntRapidFire:
         # Dice-based attacks (e.g. "D6") cannot be pre-computed → None
         result = _total_attacks_int("D6", 3, unit_attacks=4)
         assert result is None
+
+
+class TestRapidFireInputCap:
+    """P20 (S119): ranged group-assignment "models" field cap doubles for Rapid Fire.
+
+    core_rules.txt:1578-1586 — Rapid Fire doubles a model's attacks when its
+    target is within half range. The app has no target-range input, so the
+    caller (render_group_assignment) uses this field's raised max as the
+    attack-count lever, letting the player enter up to twice the physical
+    model count. Only the cap changes here — the default value is a caller
+    concern (base_cap, unchanged), not part of this pure function's contract.
+    """
+
+    def test_rapid_fire_doubles_base_cap(self) -> None:
+        assert _rapid_fire_input_cap("Rapid Fire", 10) == 20
+
+    def test_rapid_fire_n_variant_doubles_base_cap(self) -> None:
+        # "Rapid Fire 2" (printed attack characteristic in the type string)
+        # still matches the prefix check — the per-model rate is a separate
+        # concern (attacks string), not this cap.
+        assert _rapid_fire_input_cap("Rapid Fire 2", 10) == 20
+
+    def test_non_rapid_fire_cap_unchanged(self) -> None:
+        assert _rapid_fire_input_cap("Assault 2", 10) == 10
+
+    def test_grenade_cap_unchanged(self) -> None:
+        assert _rapid_fire_input_cap("Grenade", 1) == 1
+
+    def test_pistol_cap_unchanged(self) -> None:
+        assert _rapid_fire_input_cap("Pistol", 5) == 5
+
+    def test_zero_base_cap_stays_zero(self) -> None:
+        # No models alive (or grenade cap already exhausted) → still 0 doubled
+        assert _rapid_fire_input_cap("Rapid Fire", 0) == 0
+
+    def test_melee_weapon_type_unchanged(self) -> None:
+        assert _rapid_fire_input_cap("Melee", 4) == 4
 
 
 # ---------------------------------------------------------------------------

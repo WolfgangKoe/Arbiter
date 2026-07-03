@@ -94,6 +94,23 @@ def _total_attacks_int(
         return None
 
 
+def _rapid_fire_input_cap(weapon_type: str, base_cap: int) -> int:
+    """Return the max value for the ranged group-assignment "models" field.
+
+    Rapid Fire doubles a model's attacks when its target is within half the
+    weapon's range (core_rules.txt:1578-1586: "double the number of attacks
+    it makes if its target is within half the weapon's range"). The app has
+    no target-range input, so the models field in the group-assignment UI
+    doubles as the attack-count lever: the player may enter up to twice the
+    unit's physical model count for a Rapid Fire weapon to represent the
+    doubled attack total (P20, S119). Only the field's *maximum* changes —
+    the default stays at base_cap (out-of-half-range), set by the caller.
+    """
+    if weapon_type.startswith("Rapid Fire"):
+        return base_cap * 2
+    return base_cap
+
+
 def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type-arg]
     """Detect special weapon abilities from structured YAML fields (INV-4b).
 

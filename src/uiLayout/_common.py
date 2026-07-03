@@ -28,6 +28,7 @@ from gameMechanic.attack_math import (  # noqa: F401
     _detect_weapon_special,
     _group_melee_budget,
     _parse_strength,
+    _rapid_fire_input_cap,
     _restriction_label,
     _total_attacks_int,
 )
@@ -1584,9 +1585,16 @@ def render_group_assignment(
             if _is_grenade(e["weapon_name"])
         )
         grenade_unit_cap = max(0, 1 - grenade_used_other)
+        base_weapon_caps: dict[str, int] = {}
         for w in grp_weapons:
-            grenade = _ranged_profile(w).weapon_type.startswith("Grenade")
-            weapon_caps[w.name_en] = grenade_unit_cap if grenade else alive
+            ranged_profile = _ranged_profile(w)
+            grenade = ranged_profile.weapon_type.startswith("Grenade")
+            base_cap = grenade_unit_cap if grenade else alive
+            base_weapon_caps[w.name_en] = base_cap
+            # P20 (S119): Rapid Fire doubles attacks within half range. The app
+            # has no range input, so the field's max is raised to let the player
+            # represent the doubled total; the default (below) stays at base_cap.
+            weapon_caps[w.name_en] = _rapid_fire_input_cap(ranged_profile.weapon_type, base_cap)
         weapon_assigned = {
             w.name_en: sum(_val(f"decl_m_{gid}_{atk_uid}_{d_uid}_{w.name_en}") for _, d_uid in tgts)
             for w in grp_weapons
@@ -1686,10 +1694,13 @@ def render_group_assignment(
                         profile_idx = 0
                     profile = profiles[profile_idx]
                     cap = weapon_caps.get(weapon.name_en, alive)
+                    base_cap = base_weapon_caps.get(weapon.name_en, alive)
                     models_key = f"decl_m_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
                     if models_key not in st.session_state:
                         # Grenades start at 0 (optional); everything else fires fully
-                        st.session_state[models_key] = cap if (i == 0 and cap > 1) else 0
+                        # at the base (out-of-half-range) count — Rapid Fire's raised
+                        # cap (above) widens the field's ceiling only, not the default.
+                        st.session_state[models_key] = base_cap if (i == 0 and base_cap > 1) else 0
                     # Remaining models for this weapon cap the counter
                     others = weapon_assigned[weapon.name_en] - _val(models_key)
                     weapon_max = max(0, cap - others)
