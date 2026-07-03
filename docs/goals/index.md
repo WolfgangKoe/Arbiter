@@ -39,7 +39,7 @@ Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 | Ziel 5h — Orks-Katalog | ✅ fertig (archiviert) |
 | Ziel 5i — Abschluss: Offene Punkte | ✅ fertig (2026-06-03, archiviert) |
 | Ziel 5j — FW Necrons + Ork Datenqualität | ✅ fertig (2026-06-03, archiviert) |
-| **Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz** | ⬜ spec fertig (2026-06-03) |
+| **Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz** | ✅ erreicht (S119, 2026-07-03) |
 | Ziel 7 — Gefechtsoptionen + subfaction-Mechanik | ⬜ geplant |
 | Ziel 8 — Crusade-Erweiterung | ⬜ geplant |
 | Ziel 9 — Wahapedia Faction Fetcher | ⬜ geplant |

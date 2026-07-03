@@ -1,4 +1,10 @@
-# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration — weitgehend abgeschlossen (Rest P17/P18 nach Ziel7 ausgelagert)
+# Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz, Fähigkeiten-Integration — ERREICHT / abgeschlossen (S119, 2026-07-03)
+
+**Status:** ERREICHT / abgeschlossen (S119, 2026-07-03). Begründung: alle noch offenen Checkboxen
+in diesem Dokument sind ausnahmslos nach Ziel7 ausgelagert (Tags „→ Ziel7" bzw. 6e/6f/6h-
+Kategorien 1–3/Auto-Progression sowie die Akzeptanzkriterien Ka'tah/AdMech, Auto-Progression-Badge,
+Ability-Badges). **Kein Fake-Abhaken:** die ausgelagerten Punkte bleiben hier bewusst als `[ ]`
+stehen — Weiterführung in [ziel7.md](ziel7.md).
 
 **Voraussetzung:** Ziel 5 (inkl. 5i) abgeschlossen. ✅
 

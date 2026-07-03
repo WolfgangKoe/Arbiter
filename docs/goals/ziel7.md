@@ -54,8 +54,8 @@ Abhängig von `collect_modifiers_for_phase` (6e Execute-Logik):
 - [ ] YAML-Schema `ability_type: auto_progression` + YAML für Space Marines, Death Guard, Chaos SM
 - [ ] `tests/test_auto_progression.py`
 
-**Fix B — WAAAGH! generisch (noch offen aus 6h):**
+**Fix B — WAAAGH! generisch:**
 
-- [ ] `armyCard.py:_render_waaagh_ui`: Ability-Suche, WARBOSS-Keyword und Effekttexte vollständig generisch (via YAML `active_text`-Feld)
-- [ ] `gameObjects/ability.py`: optionales `active_text: str | None`
-- [ ] `data/wh40k_9e/orks/faction_abilities.yaml`: `active_text` ergänzen
+- [x] `armyCard.py:_render_waaagh_ui`: Ability-Suche, WARBOSS-Keyword und Effekttexte vollständig generisch (via YAML `active_text`-Feld) (S113, e031616 — Drift-Nachzug S119)
+- [x] `gameObjects/ability.py`: optionales `active_text: str | None` (S113, e031616 — Drift-Nachzug S119)
+- [x] `data/wh40k_9e/orks/faction_abilities.yaml`: `active_text` ergänzen (S113, e031616 — Drift-Nachzug S119)

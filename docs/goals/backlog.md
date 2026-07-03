@@ -344,17 +344,30 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
     - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
       einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
       Einzelgruppe für Einheiten ohne `model_groups`) + `melee_with`-Ziel-Anzeige. Getestet: `test_group_flow.py`.
-    - **P19 — once_per_battle pro Spieler (UI-Pass-Befund S118, Stakeholder):** eingesetzte
-      once_per_battle-Gefechtsoption blockt aktuell BEIDE Spieler (Bug — 9E: Einschränkung gilt
-      je Spieler) + UI zeigt nicht, welcher Spieler sie eingesetzt hat. Quelle: `ui-pass-S118.md` S113-Punkt 3.
-    - **P20 — Rapid Fire halbe Reichweite (UI-Pass-Befund S118, Stakeholder):** Attackenzahl muss
-      angebbar sein, wenn Modelle Ziele innerhalb halber Reichweite wählen; gecappt auf die
-      Attackenzahl bei voller Reichweite (z. B. 10 bei 10 Warriors mit Gauss Flayer).
-      Quelle: `ui-pass-S118.md` S116-Punkt 4.
-    - **P21 — BUG: Stratagem-Undo überlebt Phasenwechsel (UI-Pass-Befund S118, Stakeholder):**
-      ↺-Undo-Button wird nach Phasenwechsel/im nächsten Zug noch angeboten — darf nur im selben
-      Phasenfenster verfügbar sein. Widerspricht dem S113-Blocker-B1-Codebefund („laut Code NICHT
-      angeboten") → Live-Verhalten vs. Code-Analyse abgleichen. Quelle: `ui-pass-S118.md` S113-Punkt 5.
+    - **P19 — once_per_battle pro Spieler — ERLEDIGT (2026-07-03, Commit `1f9d82b`):** eingesetzte
+      once_per_battle-Gefechtsoption blockte zuvor BEIDE Spieler (Bug — 9E: Einschränkung gilt
+      je Spieler) + UI zeigte nicht, welcher Spieler sie eingesetzt hat. Vollsuite 1405 passed /
+      99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S113-Punkt 3.
+    - **P20 — Rapid Fire halbe Reichweite — ERLEDIGT (2026-07-03, Commit `dfebd27`):** Attackenzahl
+      ist jetzt angebbar, wenn Modelle Ziele innerhalb halber Reichweite wählen; gecappt auf die
+      Attackenzahl bei voller Reichweite (z. B. 10 bei 10 Warriors mit Gauss Flayer). Vollsuite
+      1405 passed / 99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S116-Punkt 4.
+    - **P21 — BUG: Stratagem-Undo überlebt Phasenwechsel — ERLEDIGT (2026-07-03, Commit `dde16f3`):**
+      ↺-Undo-Button wurde nach Phasenwechsel/im nächsten Zug noch angeboten — jetzt nur im selben
+      Phasenfenster verfügbar. Widersprach dem S113-Blocker-B1-Codebefund („laut Code NICHT
+      angeboten") — Live-Verhalten vs. Code-Analyse abgeglichen, Root Cause gefixt. Vollsuite
+      1405 passed / 99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S113-Punkt 5.
+
+    **Neue offene Befunde (S119-Live-Test + Code-Analyse, noch ungeplant):**
+    - 🔲 **Stratagem-Doppelanzeige:** `_shared`-Stratagems erscheinen 2× ohne Spieler-Zuordnung
+      (`loader.py:590-597` lädt `_shared` je Spieler; `gameProtocoll.py:143-150` konkateniert).
+    - 🔲 **Stratagem-Attributions-Bug:** `spending_faction` wird aus `s.player` abgeleitet statt aus
+      der Quell-Liste — beide Duplikate eines `player:active`-Stratagems werden demselben Spieler
+      zugeschrieben (`gameProtocoll.py:165`).
+    - 🔲 **`used_stratagem_ids` (phase-scoped) ist global statt per Spieler-Slot** (Muster:
+      `round_choice_state_key`, `game_state.py:154-165`).
+    - Verweis: Lösung = Spieler-A/B-Bereichs-Split, wird in Ziel7-Neustrukturierung geplant
+      (`docs/handoff/plan-ziel7-restruktur.md`).
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
 - [index.md](index.md) — Ziel-Gesamtübersicht
