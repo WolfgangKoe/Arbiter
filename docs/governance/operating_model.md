@@ -50,7 +50,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 | Rolle | Tier | Delegierbar? | Kernaufgaben |
 |---|---|---|---|
-| **Koordinator / "Arbiter"** (ADR-0007, [ADR-0008](decisions/0008-fable-als-bevorzugter-koordinator.md)) | **Fable** (präferiert, sofern verfügbar) · Opus (Fallback), Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. |
+| **Koordinator / "Arbiter"** | **Fable** (präferiert, sofern verfügbar) · Opus (Fallback), Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. |
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
 | **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich; **Fable nur bei Prämissen-/Architektur-Urteil** mit expliziter Begründung (ADR-0008) | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
@@ -67,7 +67,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 | **Haiku** | Reine Lookups, Klassifikation nach festem Schema, deterministische Extraktion |
 | **Sonnet** | Synthese aus mehreren Quellen, Implementierung nach fixem Plan, Code-Review-Befund erstellen |
 | **Opus** | Offene Zweckprogramme, Architekturentscheidungen, Scope-Klärung mit Stakeholder, Urteil über Subagenten-Befunde |
-| **Fable** (ADR-0008) | Koordinator-Sitz (persistentes Urteil, nicht delegierbar), Prämissen-/Verfassungsänderungen, Konsens-Entscheidungen mit dem Stakeholder — **nicht** für delegierbare Subagent-Arbeit |
+| **Fable** | Koordinator-Sitz (persistentes Urteil, nicht delegierbar), Prämissen-/Verfassungsänderungen, Konsens-Entscheidungen mit dem Stakeholder — **nicht** für delegierbare Subagent-Arbeit |
 
 > **MUST (O2, S103):** Reine Lookups / format-fixe Extraktion / ja-nein-gegen-Text laufen als
 > **Default mit `model: haiku`**. Eine Abweichung **nach oben** (Sonnet/Opus) braucht eine
@@ -88,8 +88,8 @@ expliziter Begründung im Auftrag** (O2-MUST, s. o.), sonst gilt die Untergrenze
 | Spezial-Subagent | Tier | Read/Write | Dient Event | Typische Aufgabe |
 |---|---|---|---|---|
 | **Recherche / Regel-Lookup** | Haiku (Lookup) · Sonnet (Synthese) | **Read** | Planning · Sprint | Wahapedia-Texte, Codebase-Mapping, Web-Fetch (z. B. Slides), Rule-Conformance-Catalog befüllen |
-| **Reviewer / Auditor** (ADR-0007) | **Opus** (Urteil) | **Read** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
-| **Planner** (ADR-0007) | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `next_session.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
+| **Reviewer / Auditor** | **Opus** (Urteil) | **Read** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
+| **Planner** | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `next_session.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
 | **Kontextkuratierung / Beobachter** | Haiku · Sonnet | **Read** | laufend · Review | Kontext-/Wissens-Lücken melden, Token-Sinks aufspüren, Regel-Index-Pflege vorschlagen |
 | **Refinement-Extraktor** | Sonnet | Read + Write (`docs/inbox/`) | Refinement | Fotos aus `Fotos/` lesen, Idee als strukturierten Text in die Inbox extrahieren |
 | **Artefaktpflege** | Sonnet | Read + begrenzt Write | Abschluss | Doku/Backlog/Metrics konsistent halten, Drift melden (Schreibzugriff freigabepflichtig) |
