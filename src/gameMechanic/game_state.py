@@ -418,7 +418,7 @@ def init_state(
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
     st.session_state.used_stratagem_ids: set[str] = set()
-    st.session_state.used_stratagem_battle_ids: set[str] = set()
+    st.session_state.used_stratagem_battle_ids: dict[str, set[str]] = {}
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)

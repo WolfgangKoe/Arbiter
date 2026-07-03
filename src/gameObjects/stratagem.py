@@ -87,9 +87,11 @@ def stratagem_visibility(
     current_stage:    "start" | "active" | "end"
     used_this_phase:  Set of stratagem IDs already used this phase.
     conditions_met:   Whether unit/keyword conditions for this GO are satisfied.
-    used_in_battle:   Battle-scoped set of once_per_battle stratagem IDs already used.
-                      When provided, a once_per_battle stratagem in this set is greyed
-                      out regardless of phase or player turn.
+    used_in_battle:   Battle-scoped set of once_per_battle stratagem IDs already used
+                      by the spending player. When provided, a once_per_battle
+                      stratagem in this set is greyed out regardless of phase, for
+                      the remainder of this player's battle — not a global lock
+                      shared across both players.
     """
     if not conditions_met:
         return "hidden"

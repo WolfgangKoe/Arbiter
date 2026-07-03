@@ -295,6 +295,50 @@ class TestOncePerBattleEnforcement:
 
 
 # ---------------------------------------------------------------------------
+# P19: once_per_battle stratagems are scoped per spending player, not global
+# ---------------------------------------------------------------------------
+
+
+class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
+    """P19 regression: `used_stratagem_battle_ids` (game_state.py) is a dict
+    keyed by spending faction, not a single global set shared by both players.
+    gameProtocoll.py slices it per player (`used_battle_ids_by_faction.get(
+    spending_faction, set())`) before calling stratagem_visibility() — this
+    test exercises that same slicing pattern to prove one player's usage of a
+    once_per_battle stratagem does not grey out the identical stratagem ID
+    for the other player.
+    """
+
+    def test_battle_scoped_stratagem_used_by_one_player_does_not_block_other(
+        self,
+    ) -> None:
+        strat = _once_per_battle_strat(sid="opb.strat_x")
+        used_battle_ids_by_faction: dict[str, set[str]] = {"Necrons": {"opb.strat_x"}}
+
+        necrons_result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+            used_in_battle=used_battle_ids_by_faction.get("Necrons", set()),
+        )
+        orks_result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=set(),
+            conditions_met=True,
+            used_in_battle=used_battle_ids_by_faction.get("Orks", set()),
+        )
+
+        assert necrons_result == "greyed"
+        assert orks_result == "clickable"
+
+
+# ---------------------------------------------------------------------------
 # P21: stratagem_undo_visible() — undo button must not survive a phase change
 # ---------------------------------------------------------------------------
 

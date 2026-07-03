@@ -701,13 +701,14 @@ class TestResetPhaseState:
     def test_does_not_reset_used_stratagem_battle_ids(self) -> None:
         """used_stratagem_battle_ids is battle-scoped and must survive phase resets.
 
-        Regression guard: _reset_phase_state() must NOT clear the battle-scoped set —
+        Regression guard: _reset_phase_state() must NOT clear the battle-scoped dict —
         only reset_game() (which wipes the entire session state) removes it.
         A once_per_battle stratagem used in an earlier phase must stay blocked.
+        Per-player dict (P19 fix): keyed by spending faction, not a global set.
         """
-        s = _reset_phase_session(used_stratagem_battle_ids={"opb.strat_x"})
+        s = _reset_phase_session(used_stratagem_battle_ids={"Necrons": {"opb.strat_x"}})
         _gs._reset_phase_state()
-        assert s["used_stratagem_battle_ids"] == {"opb.strat_x"}
+        assert s["used_stratagem_battle_ids"] == {"Necrons": {"opb.strat_x"}}
 
     def test_removes_expired_phase_modifiers(self) -> None:
         # phase_idx=1 → current_phase="command"; modifier for "command" should be removed
