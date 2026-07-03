@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-03 19:26 CEST
+Stand: 2026-07-03 22:16 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-02 20:35 aa33  ██████████░░ 131k ⚠️   ██░░░░  38%    ▚▚▚▚▚██·····
+07-03 19:27 2927  ████████░░░░ 104k ✅    █████░  90%    ▚···········
+         SA_1·  █████░░░░░░░  65k ✅    Stratagem-Anzeige-Analyse S119
+         SA_2·  █████████░░░ 114k ✅    Doku: Ziel6 schließen/archivieren
+         SA_3·  ████████░░░░ 102k ✅    Executor Task 3 P20 Rapid-Fire
+         SA_4·  ████░░░░░░░░  52k ✅    Reviewer DoD-Review S119
+         SA_5·  ████████████ 146k ⚠️   Planner-Entwurf für S119
+         SA_6·  ██████░░░░░░  78k ✅    Executor Task 2 P19-Fix
+         SA_7·  ███████░░░░░  88k ✅    Abschluss S119 ausführen
+         SA_8·  █████░░░░░░░  65k ✅    Executor Task 1 P21-Bugfix
+         SA_9·  ███████████░ 132k ⚠️   Planner Ziel7-Neustrukturierung
+----------------- ---------------------- -------------- ------------
+07-02 20:35 aa33  ███████████░ 133k ⚠️   ██░░░░  37%    ▚▚▚▚▚██·····
          SA_1·  █████░░░░░░░  60k ✅    DRY-Helper ±1-Cap dice_html
          SA_2·  ███████░░░░░  89k ✅    Planning-Entwurf S118 erstellen
          SA_3·  ██████░░░░░░  73k ✅    context-audit-S91 verarbeiten

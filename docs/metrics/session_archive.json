@@ -2259,8 +2259,8 @@
   "aa337077-8a94-430e-b981-6a28d3be6be0": {
     "started_at": "2026-07-02T18:35:18.428Z",
     "task": "Start session. Lass den Plan von einem Subagenten vorlegen",
-    "peak_context": 131195,
-    "subagent_share": 38.2676735066702,
+    "peak_context": 133003,
+    "subagent_share": 36.53792239918747,
     "by_tier": {
       "Sonnet": 2833807,
       "Fable": 3434216,
@@ -2309,6 +2309,82 @@
         "tier": "Haiku",
         "peak_context": 36467,
         "started_at": "2026-07-02T18:35:18.428Z"
+      }
+    ]
+  },
+  "2927d113-a76a-4d9f-8202-425c2aecb123": {
+    "started_at": "2026-07-03T17:27:59.973Z",
+    "task": "start session",
+    "peak_context": 104384,
+    "subagent_share": 90.39960715790588,
+    "by_tier": {
+      "Sonnet": 29284445,
+      "Fable": 2957176,
+      "Opus": 992783
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Anzeige-Analyse S119",
+        "tier": "Sonnet",
+        "peak_context": 64708,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Doku: Ziel6 schließen/archivieren",
+        "tier": "Sonnet",
+        "peak_context": 114395,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Task 3 P20 Rapid-Fire",
+        "tier": "Sonnet",
+        "peak_context": 101850,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer DoD-Review S119",
+        "tier": "Opus",
+        "peak_context": 51531,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner-Entwurf für S119",
+        "tier": "Sonnet",
+        "peak_context": 145833,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Task 2 P19-Fix",
+        "tier": "Sonnet",
+        "peak_context": 77556,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss S119 ausführen",
+        "tier": "Sonnet",
+        "peak_context": 88040,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Task 1 P21-Bugfix",
+        "tier": "Sonnet",
+        "peak_context": 64609,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner Ziel7-Neustrukturierung",
+        "tier": "Sonnet",
+        "peak_context": 131505,
+        "started_at": "2026-07-03T17:27:59.973Z"
       }
     ]
   }

@@ -26,31 +26,29 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S118, 2026-07-03)
+## Aktueller Stand (nach S119, 2026-07-03)
 
-**S118 committed** (Review GO, 1393 passed, 99,11 %, Arch-Gate 8/8; `docs/handoff/review-S118.md`):
-Carry-over-Cluster abgebaut — Plan 029 REJECTED; Carry-over (e) gestrichen (überholt);
-`context-audit-S91.md` verarbeitet + gelöscht; DRY-Helper `_capped_modifier_threshold`
-(`dice_html.py`); session-scoped `_canonical_streamlit_mock`-Fixture (`conftest.py`).
-**UI-Pass S118 DONE** (17/20, `ui-pass-S118.md`) → Ziel7-Anforderungen **P19/P20/P21** in
-`backlog.md` §5 (P21 = Bug: ↺-Undo überlebt Phasenwechsel). Retro verankert: Marker-Kontinuität
-(operating_model Event 2), Test-Schuld §4d, Handoff-Hygiene.
-**Merksatz (P21):** UI-Verhaltens-Claims aus Code-Analysen erst nach Live-Verifikation glauben.
+**S119 committed** (Review GO uneingeschränkt, 1405 passed, 99,11 %, Arch-Gate 8/8;
+`docs/handoff/review-S119.md`): Ziel7-Cluster gefixt — P21 Undo phase-scoped (dde16f3), P19
+per-Spieler-Tracking (1f9d82b), P20 Rapid-Fire-Cap verdoppelt (dfebd27); Ziel6 GESCHLOSSEN/
+archiviert (b3ebfd5). UI-Verifikation vollständig bestätigt inkl. S113-Carry-over
+(Mirror-Befehlsphase, +1-Save-Badge) — Carry-over-Block damit leer, entfernt.
+Live-Test-Befunde S119 (`backlog.md` §5): Stratagem-Doppelanzeige, Attributions-Bug
+(`spending_faction` aus `s.player` statt Quell-Liste), globales phase-Set.
 
-Frühere Sessions (S60–S117): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+Frühere Sessions (S60–S118): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
 
-### ▶ Nächster Schritt — Ziel7-Cluster (P19/P20/P21)
+### ▶ Nächster Schritt
 
-Planner-Subagent plant gegen `backlog.md` §5 (Ziel7-Cluster): **P21 (Bug) zuerst** — Undo-
-Lebensdauer fixen, dabei Live-Verhalten vs. S113-Code-Analyse abgleichen (Root Cause). Danach
-P19 (per-Spieler-Tracking) und P20 (Rapid-Fire-Eingabe). Alternative im Planning abwägen:
-§6-Cluster (collect_modifiers/6f/6h).
+Stufe A aus `docs/handoff/plan-ziel7-restruktur.md` (Marker ANSWERED, FREIGEGEBEN): Task 0
+YAML-Drift (Counter-Offensive + Insane Bravery → `player: both`) → Task 1 Spieler-Spalten-Split
+(`first_player` links/`second_player` rechts, Attribution aus Quell-Liste,
+`stratagem_usable_by_player()`) → Task 2 `used_stratagem_ids` auf Dict-Form. Entscheidungen:
+Design Option 1 (nur Sektions-Header), Dict-Form-Konvention, ziel7-§0-Block übernehmen,
+(inactive)-Suffix nach Split entfernen. Danach Stufe B (Necrons), C (Orks), UX-Pass vor Ziel8.
 
-### ⚠️ Carry-over (offen)
-
-- **Manuelle UI-Verifikation (Rest aus S113 — war NICHT im S118-Pass):** Mirror-Protokoll
-  Necron-vs-Necron Befehlsphase; stationär+D1 grünes +1-Save-Badge in den Würfeln.
-  Quelle: `docs/handoff/review-S113.md`.
+**Merksatz S119:** Per-Spieler-State nie über Fraktions-/Anzeigenamen keyen —
+Player-Slot-Muster (`round_choice_state_key`); P19-Mirror-Lücke wird durch S120-Umbau geschlossen.
 
 ---
 
