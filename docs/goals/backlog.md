@@ -355,16 +355,50 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
       angeboten") — Live-Verhalten vs. Code-Analyse abgeglichen, Root Cause gefixt. Vollsuite
       1405 passed / 99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S113-Punkt 5.
 
-    **Neue offene Befunde (S119-Live-Test + Code-Analyse, noch ungeplant):**
-    - 🔲 **Stratagem-Doppelanzeige:** `_shared`-Stratagems erscheinen 2× ohne Spieler-Zuordnung
-      (`loader.py:590-597` lädt `_shared` je Spieler; `gameProtocoll.py:143-150` konkateniert).
-    - 🔲 **Stratagem-Attributions-Bug:** `spending_faction` wird aus `s.player` abgeleitet statt aus
-      der Quell-Liste — beide Duplikate eines `player:active`-Stratagems werden demselben Spieler
-      zugeschrieben (`gameProtocoll.py:165`).
-    - 🔲 **`used_stratagem_ids` (phase-scoped) ist global statt per Spieler-Slot** (Muster:
-      `round_choice_state_key`, `game_state.py:154-165`).
-    - Verweis: Lösung = Spieler-A/B-Bereichs-Split, wird in Ziel7-Neustrukturierung geplant
-      (`docs/handoff/plan-ziel7-restruktur.md`).
+    **Neue offene Befunde (S119-Live-Test + Code-Analyse) — Stufe A erledigt (S120/S121):**
+    - ✅ **Stratagem-Doppelanzeige — ERLEDIGT (Task 1, Commit `8c124c3`):** Zwei-Spalten-Split
+      (`first_player`/`second_player`) + `stratagem_usable_by_player()`, je Spieler eigene Liste
+      (kein `_shared`-Konkat mehr).
+    - ✅ **Stratagem-Attributions-Bug — ERLEDIGT (Task 1, Commit `8c124c3`):** Die Spalte selbst ist
+      der spending player — keine Ableitung aus `s.player` mehr nötig.
+    - ✅ **`used_stratagem_ids` (phase-scoped) global statt per Spieler-Slot — ERLEDIGT (Task 2,
+      Commit `396fdec`):** Dict-Form pro Spieler, analog `cp`/`used_stratagem_battle_ids`.
+    - Umsetzung: `docs/handoff/plan-ziel7-restruktur.md` Stufe A Task 0 (`f9279fe`, YAML-Drift
+      Counter-Offensive/Insane Bravery → `both`), Task 1 (`8c124c3`), Task 2 (`396fdec`). Handoff-
+      Datei nach Abschluss gelöscht (S121), Struktur+Kandidatenliste in `docs/goals/ziel7.md` §0
+      überführt (kein Informationsverlust).
+    - **Manuelle UI-Verifikation S121:** Punkte 1, 2, 5–7 der Checkliste bestätigt; Punkte 3+4
+      (Fire Overwatch/Counter-Offensive, `timing: phase_reactive`) NICHT prüfbar — brauchen die
+      reaktive Stratagem-UI aus Plan 015 (`docs/audit/plans/015-contextual-reactive-stratagems.md`,
+      TODO) → s. F4 unten.
+
+    **Neue Findings (S121-UI-Verifikation, noch offen):**
+    - 🔴 **F1 — Disruption Fields: Effekt-Semantik falsch**
+      (`data/wh40k_9e/necrons/stratagems.yaml` `disruption_fields`): Kartentext „add 1 to the
+      Strength characteristic" — implementiert ist aber ein **+1 auf den Verwundungswurf**
+      (`modifier: {roll_type: wound, value: 1}`). Nur zufällig gleichwertig, wenn die
+      Toughness-Schwelle nicht kippt (S+1 kann die Wound-Tabelle von 4+ auf 3+ verschieben oder
+      eben nicht — Wound-Roll+1 tut es immer). Muss als Stärke-Modifier auf die Modelle der
+      Einheit wirken, nicht als Wurf-Modifier. Der Attackensequenz-Modifier-Mechanismus
+      (`StratagemModifier` in `src/gameObjects/stratagem.py`) kennt aktuell nur
+      `roll_type: hit|wound|save` — ein echter Stat-Modifier (Strength vor dem Wound-Roll) ist
+      dort noch nicht vorgesehen. Gehört in die generische „Stratagem-Effekt auf Attackensequenz"-
+      Arbeit; bisher kein eigener Plan-Abschnitt dafür — nächster Anknüpfungspunkt ist
+      `collect_modifiers_for_phase` (Ziel7 §6e, `docs/goals/ziel7.md`), das dieselbe Klasse von
+      Stat- vs. Wurf-Modifier-Unterscheidung für Ability-Modifier bereits als offen führt.
+    - ✅ **F2 — Weirdboy-Stab VERIFIZIERT (S121):** App zeigt effektive Stärke S8 — korrekt.
+      Wahapedia (`docs/work/wahapedia_orks/units_all.txt:143/147`): Weirdboy S5, Staff „+3" →
+      5+3=8; YAML (`units.yaml:262`, `weapons.yaml:250`) konsistent. Kein Handlungsbedarf.
+    - 🔴 **F3 — Natürliche 1 in der Würfel-UI wird bei modifizierten Zielwerten als Erfolg gezeigt:**
+      Eine gewürfelte 1 ist regelseitig IMMER ein Fehlschlag (unmodified 1 always fails). Bei
+      modifizierten Zielwerten (z. B. „Eff. 1+" durch Heavy Cover) markiert die Save-/
+      Wound-Darstellung die 1 fälschlich als Erfolg. Zwei Teilaufgaben: (a) prüfen, ob `combat.py`
+      die natürliche 1 korrekt als Fehlschlag *wertet* (nur die Darstellung falsch ist) oder der
+      Bug auch die Berechnung betrifft; (b) UI: die 1 in den Würfelreihen nie als Erfolg markieren
+      — „Eff. 1+" → Erfolgsreihe beginnt bei 2. Kein Plan-Abschnitt bisher — Fund hier hinterlegt.
+    - 🟡 **F4 — Stufe-A-Verifikationspunkte 3+4 setzen Plan 015 voraus** (s. o.): Plan 015
+      (Priorität P2, `docs/audit/plans/README.md`) schaltet damit auch die Reaktiv-UI-Prüfung für
+      Fire Overwatch/Counter-Offensive frei — als Kandidat für die nächste Session vormerken.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
 - [index.md](index.md) — Ziel-Gesamtübersicht

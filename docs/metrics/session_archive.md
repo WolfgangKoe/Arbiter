@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-04 14:01 CEST
+Stand: 2026-07-04 14:33 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,12 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 09:55 f800  ████████░░░░  97k ✅    ████░░  70%    ▚▚▚▚▚▚▚▚····
-         SA_1·  █████████░░░ 111k ✅    Executor: Task 0 YAML-Drift
+07-04 09:55 f800  █████████░░░ 111k ✅    ████░░  73%    ▚▚▚▚▚▚······
+         SA_1·  █████████░░░ 112k ✅    Executor: Task 0 YAML-Drift
          SA_2·  ███████░░░░░  84k ✅    Planner: Planning-Entwurf S121
-         SA_3·  █████░░░░░░░  62k ✅    Root-Cause: Crash + fehlende Strat…
+         SA_3·  █████████░░░ 109k ✅    Executor: Findings + Task 4 Doku
+         SA_4·  █████░░░░░░░  62k ✅    Root-Cause: Crash + fehlende Strat…
+         SA_5·  ██░░░░░░░░░░  30k ✅    Lookup: Weirdboy Stab Stärke
 ----------------- ---------------------- -------------- ------------
 07-03 22:31 622e  ██████████░░ 126k ⚠️   █████░  82%    ▚▚▚·········
          SA_1·  ████░░░░░░░░  51k ✅    Review S120 nach DoD

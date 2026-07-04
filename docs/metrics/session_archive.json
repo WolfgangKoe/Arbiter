@@ -2440,18 +2440,19 @@
   "f800d10f-b67c-4037-9674-7d30c853c856": {
     "started_at": "2026-07-04T07:55:41.691Z",
     "task": "start session - Plan durch Subagenten vorlegen",
-    "peak_context": 96513,
-    "subagent_share": 69.99090870679842,
+    "peak_context": 110956,
+    "subagent_share": 73.41889416305207,
     "by_tier": {
-      "Sonnet": 5014623,
-      "Fable": 8833753
+      "Sonnet": 10463495,
+      "Fable": 9280511,
+      "Haiku": 439301
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
         "description": "Executor: Task 0 YAML-Drift",
         "tier": "Sonnet",
-        "peak_context": 110816,
+        "peak_context": 111797,
         "started_at": "2026-07-04T07:55:41.691Z"
       },
       {
@@ -2463,9 +2464,23 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Executor: Findings + Task 4 Doku",
+        "tier": "Sonnet",
+        "peak_context": 109265,
+        "started_at": "2026-07-04T07:55:41.691Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Root-Cause: Crash + fehlende Stratagems",
         "tier": "Sonnet",
         "peak_context": 61960,
+        "started_at": "2026-07-04T07:55:41.691Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Lookup: Weirdboy Stab Stärke",
+        "tier": "Haiku",
+        "peak_context": 29657,
         "started_at": "2026-07-04T07:55:41.691Z"
       }
     ]
