@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-04 15:37 CEST
+Stand: 2026-07-04 20:20 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 14:45 b13e  █████░░░░░░░  62k ✅    █████░  88%    ▚▚··········
-         SA_1·  █████░░░░░░░  59k ✅    F1: Disruption Fields Stärke-Fix
-         SA_2·  ██████████░░ 122k ⚠️   S122-Planungsentwurf erstellen
-         SA_3·  ██████░░░░░░  77k ✅    F3: Natürliche 1 = Fehlschlag
+07-04 14:45 b13e  ████████████ 146k ⚠️   ████░░  67%    ▚▚▚█·······▒
+         SA_1·  ████░░░░░░░░  47k ✅    S122-Review (DoD + Sessionstand)
+         SA_2·  ███░░░░░░░░░  41k ✅    Mehrphasen-Stratagem-Verdrahtung p…
+         SA_3·  █████░░░░░░░  68k ✅    Plan 015 Step 1 umsetzen
+         SA_4·  ██████░░░░░░  71k ✅    F1: Disruption Fields Stärke-Fix
+         SA_5·  ██████████░░ 122k ⚠️   S122-Planungsentwurf erstellen
+         SA_6·  █████████░░░ 113k ✅    F3: Natürliche 1 = Fehlschlag
+         SA_7·  ██████░░░░░░  79k ✅    Stufe B: Stratagem-Delta-Scoping
 ----------------- ---------------------- -------------- ------------
 07-04 09:55 f800  ███████████░ 133k ⚠️   ████░░  67%    ▚▚▚▚▚█······
          SA_1·  █████████░░░ 112k ✅    Executor: Task 0 YAML-Drift
@@ -399,3 +403,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 <!-- Verdichteter Stand je Session (`tools/rotate_history.py --summary`) — bleibt bei jedem `--write` erhalten, siehe `_extract_manual_history`. -->
 - **S120 (2026-07-04)** Design-System-Wiedervorlage aufgedeckt (Code fertig seit S116-118); Handoff-Waechter + DoD-7-Verschaerfung; ziel6 archiviert, Rotation -> session_archive
 - **S121 (2026-07-04)** Stufe A Spieler-Spalten-Split komplett (player:both, Spalten-Split, Dict-Form) + CCW-Crashfix aus UI-Test; Review GO ohne Auflagen
+- **S122 (2026-07-04)** F3 natürliche 1 als Miss + Save-Floor 2+ (8ae7252, Nachfix abc4256 Eff.-Anzeige grün/Variante A); F1 Disruption Fields Stärke-Modifier (0c54fe7); Plan 015 Step 1 durch Ziel7 Stufe A abgedeckt (4effd99); Stufe-B-Scoping 59/59 (stichprobenbasiert); Review GO, UI verifiziert; Retro M1 Anzeige-Pfad-Beleg

@@ -2496,18 +2496,41 @@
   "b13e1713-6232-484e-800b-39c694dc3a76": {
     "started_at": "2026-07-04T12:45:08.014Z",
     "task": "start session",
-    "peak_context": 61503,
-    "subagent_share": 88.28521297372743,
+    "peak_context": 146252,
+    "subagent_share": 67.0701724526917,
     "by_tier": {
-      "Sonnet": 11367468,
-      "Fable": 1979027
+      "Opus": 1117350,
+      "Haiku": 2442251,
+      "Sonnet": 15624689,
+      "Fable": 6958629
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
+        "description": "S122-Review (DoD + Sessionstand)",
+        "tier": "Opus",
+        "peak_context": 46919,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Mehrphasen-Stratagem-Verdrahtung prüfen",
+        "tier": "Haiku",
+        "peak_context": 41007,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 015 Step 1 umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 68475,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "F1: Disruption Fields Stärke-Fix",
         "tier": "Sonnet",
-        "peak_context": 59053,
+        "peak_context": 71430,
         "started_at": "2026-07-04T12:45:08.014Z"
       },
       {
@@ -2521,7 +2544,14 @@
         "agent_type": "general-purpose",
         "description": "F3: Natürliche 1 = Fehlschlag",
         "tier": "Sonnet",
-        "peak_context": 76820,
+        "peak_context": 112701,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stufe B: Stratagem-Delta-Scoping",
+        "tier": "Haiku",
+        "peak_context": 78525,
         "started_at": "2026-07-04T12:45:08.014Z"
       }
     ]

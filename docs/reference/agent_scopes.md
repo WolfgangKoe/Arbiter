@@ -119,6 +119,9 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 
 ## Selbstprüf-Checkliste (Pflicht vor Rückgabe)
 - [ ] Verdrahtung: neuer Code per grep belegt, dass Nicht-Test-Code ihn aufruft
+- [ ] Anzeige-Pfad (bei Fixes mit sichtbarem UI-Effekt): Beleg umfasst den *angezeigten*
+      Wert (HTML-Output-Test des Render-Pfads), nicht nur die Berechnungsfunktion —
+      Anzeige-Code kann lokal neu rechnen (S122-Befund: Eff.-Zeile ignorierte resolve_save-Floor)
 - [ ] Heimat: neuer Code sitzt im richtigen Modul
 - [ ] Gates: pytest grün, Coverage-Floor ≥ 99 % gehalten, keine vorher-grünen Tests rot
 - [ ] Generic-src: keine Fraktions-Strings/-Checks in src/

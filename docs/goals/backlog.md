@@ -197,6 +197,25 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 
 ---
 
+- 🔲 **Audit-Pläne bereinigen (Stakeholder-Auftrag S122, für S123+):** Subagent-Durchgang über
+  `docs/audit/plans/` + README-Queue — erledigte/überholte Pläne archivieren bzw. Status
+  korrigieren; jeden Plan gegen Code + `git log` verifizieren, nicht nur Statuszeilen lesen
+  (Anlass: Plan-015-Step-1-Befund S122 — Plan-Inhalte waren durch den Ziel7-Track längst
+  abgedeckt). Tier: Sonnet (Abgleich mit Bewertung, kein reiner Lookup).
+- 🔲 **Boarding-Actions-Stratagems laden (Stakeholder-Entscheid S122, → ziel7 Stufe C):**
+  NANOSCARAB VIRUS + MINDSHACKLE SCARABS in `necrons/stratagems.yaml` aufnehmen, sobald die
+  Hatchway-Abhängigkeit geklärt ist (Entscheid: JA, laden — nicht dauerhaft ausschließen).
+- 🔲 **Variable CP-Kosten in der UI anzeigen (Stakeholder-Entscheid S122):** 5 Necron-Stratagems
+  haben variable Kosten (z. B. „3/1 CP"); YAML trägt bewusst das Minimum, `rule_text` erklärt.
+  UI soll die Variabilität zeigen (z. B. „1 CP (3 CP für TITANIC)") — es wird mit titanischen
+  Einheiten gespielt. UI-Design für Stratagem-Karte nötig.
+- 🔲 **/improve-Session vorbereiten (Stakeholder-Auftrag S122, für S123+):** Eigene Session für
+  den `/improve`-Skill (read-only Codebase-Audit → priorisierte, in sich geschlossene
+  Umsetzungspläne für Executor-Subagenten). Vorbereitung: bereinigte Plan-Queue (Task oben
+  zuerst), grüne Vollsuite als Baseline, Scope-Entscheid des Stakeholders (Bugs/Tech-Debt/
+  UX/Roadmap) einholen; Ergebnis-Pläne in die `docs/audit/plans/`-Queue einsortieren.
+  Token-intensiv → eigene Session.
+
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
 
 Render-Code ist von der Coverage ausgenommen → muss manuell geprüft werden.

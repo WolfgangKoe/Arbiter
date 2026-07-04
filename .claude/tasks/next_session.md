@@ -30,28 +30,31 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S121, 2026-07-04)
+## Aktueller Stand (nach S122, 2026-07-04)
 
-**S121 committed:** Stufe A Spieler-Spalten-Split komplett (`f9279fe`/`8c124c3`/`396fdec`:
-`player: both`-Regelfix, zwei feste Spalten mit `stratagem_usable_by_player()`,
-`used_stratagem_ids` als Dict pro Spieler-Slot) + `464bb40` (Bugfix aus UI-Test: CCW-Fallback
-`ap="0"`→`ap=0`, Crash bei Einheiten ohne Nahkampfwaffe) + `6ebb04a` (ziel7 §0, Findings
-F1–F4 im Backlog, Handoff gelöscht). Review: **GO ohne Auflagen.** UI-Verifikation: 1, 2, 5–7
-bestätigt; 3+4 blockiert durch Plan 015. Retro M1+M2 in `agent_scopes.md` verankert.
+**S122:** F3 (nat. 1 = Miss + Save-Floor 2+, `8ae7252`; Nachfix Eff.-Anzeige 2+/grün + Mini-
+Zeilen-×, `abc4256`) · F1 (Disruption Fields = Stärke-Modifier, `0c54fe7`) · Plan 015 Step 1
+war bereits durch Ziel7 Stufe A abgedeckt (`4effd99`, Steps 2–4 offen). Stufe-B-Scoping:
+59/59 Stratagems, Conditions nur STICHPROBE → Pflichtauftrag (a). Mehrphasen-Verdrahtung
+geprüft: korrekt. Review **GO**, UI-Verifikation F1+F3 bestätigt ✅. Retro M1 (Anzeige-
+Pfad-Beleg) in `agent_scopes.md`.
 
-Frühere Sessions (S60–S120): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S121): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-Planungskandidaten S122 (Stakeholder priorisiert im Planning):
-(a) **Plan 015** reaktive Stratagem-UI (`docs/audit/plans/015-contextual-reactive-stratagems.md`,
-TODO) — entsperrt Checkpunkte 3+4 (Fire Overwatch, Counter-Offensive sichtbar/nutzbar);
-(b) **F1** Disruption Fields: Stärke-Modifier statt Wound-Roll-Modifier (`backlog.md` §5);
-(c) **F3** natürliche 1 nie als Erfolg in der Würfel-UI (Berechnung prüfen + Darstellung);
-(d) danach ziel7 **Stufe B** (Necrons) / **C** (Orks) aus `ziel7.md` §0, UX-Pass vor Ziel8.
+Planungskandidaten S123 (Stakeholder priorisiert im Planning):
+(a) **PFLICHT (Stakeholder: „AUF JEDEN FALL"): vollständiger Feld-Abgleich der modifier-/
+Effekt-Semantik** aller Necron-Stratagems gegen Wahapedia — Stichproben reichen nicht, jede
+Diskrepanz finden (Anlass: F1 war genau so ein Fall; Review-Befund: `stratagem_strength_bonus`
+summiert ohne `unit_key`-Scoping — mitprüfen);
+(b) **Audit-Pläne bereinigen** (Backlog §2, Sonnet-Durchgang, vor /improve);
+(c) **/improve-Session vorbereiten** (Backlog §2, eigene Session);
+(d) **Plan 015 Steps 2–4** (Mockup-Gate VOR Step 2) / ziel7 **Stufe B** Umsetzung, **C** (Orks;
+inkl. Boarding-Actions-Entscheid + variable CP-Kosten-UI, Backlog §2).
 
-**Merksatz S121:** Verifikations-Checklisten nur mit gegen den Ist-Stand prüfbaren Punkten;
-Executor-Endbericht immer in derselben Antwort wie das Suite-Ende.
+**Merksatz S122:** Bei UI-relevanten Fixes den *angezeigten* Wert belegen (HTML-Output-Test) —
+Anzeige-Code kann lokal neu rechnen und den Mechanik-Fix ignorieren (Eff.-1+-Wiring-Gap).
 
 ---
 
