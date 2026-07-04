@@ -10,7 +10,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.stratagem import (  # noqa: E402
     Stratagem,
+    is_core_stratagem,
     stratagem_undo_visible,
+    stratagem_usable_by_player,
     stratagem_visibility,
 )
 
@@ -397,3 +399,73 @@ class TestCounterOffensiveAndInsaneBraveryAreBothPlayer:
     def test_insane_bravery_player_is_both(self) -> None:
         strat = _load_shared_stratagem(_INSANE_BRAVERY_ID)
         assert strat.player == "both"
+
+
+# ---------------------------------------------------------------------------
+# S121 Task 1: stratagem_usable_by_player() — player-column filter
+# ---------------------------------------------------------------------------
+
+
+class TestStratagemUsableByPlayer:
+    """Full truth table for the player-split filter (3 player values × 2 roles).
+
+    Each rendered player column calls this with `is_this_player_active =
+    (column player == active faction)`; the column itself is the spending player.
+    """
+
+    def test_active_field_usable_by_active_player(self) -> None:
+        assert stratagem_usable_by_player("active", True) is True
+
+    def test_active_field_not_usable_by_inactive_player(self) -> None:
+        assert stratagem_usable_by_player("active", False) is False
+
+    def test_inactive_field_not_usable_by_active_player(self) -> None:
+        assert stratagem_usable_by_player("inactive", True) is False
+
+    def test_inactive_field_usable_by_inactive_player(self) -> None:
+        assert stratagem_usable_by_player("inactive", False) is True
+
+    def test_both_field_usable_by_active_player(self) -> None:
+        assert stratagem_usable_by_player("both", True) is True
+
+    def test_both_field_usable_by_inactive_player(self) -> None:
+        assert stratagem_usable_by_player("both", False) is True
+
+
+class TestPlayerColumnRegressions:
+    """S119 Findings #1 + #2 regressions for the player-split column model.
+
+    Finding #1 (duplicates): each column loads exactly one list —
+    load_stratagems(faction) — so the source list itself must be free of
+    duplicate ids (previously two loaded lists were concatenated).
+    Finding #2 (attribution): a `player: active` stratagem passes the filter
+    only in the active player's column, never in the inactive player's.
+    """
+
+    def test_no_duplicate_stratagem_ids_within_one_column_source(self) -> None:
+        for faction in ("necrons", "orks"):
+            ids = [s.id for s in load_stratagems(faction)]
+            assert len(ids) == len(set(ids)), f"duplicate stratagem ids for {faction!r}"
+
+    def test_active_stratagem_attributed_to_active_column_only(self) -> None:
+        strat = _strat(sid="test.active_only")  # player="active" (helper default)
+        active_column = [s for s in [strat] if stratagem_usable_by_player(s.player, True)]
+        inactive_column = [s for s in [strat] if stratagem_usable_by_player(s.player, False)]
+        assert active_column == [strat]
+        assert inactive_column == []
+
+
+class TestIsCoreStratagem:
+    """Section-header classifier: shared/core namespace vs faction namespace."""
+
+    def test_shared_id_is_core(self) -> None:
+        assert is_core_stratagem("wh40k_9e.shared.stratagem.command_re_roll") is True
+
+    def test_faction_id_is_not_core(self) -> None:
+        assert is_core_stratagem("wh40k_9e.necrons.stratagem.resurrection_protocols") is False
+
+    def test_all_loaded_shared_stratagems_classified_core(self) -> None:
+        shared_prefix = "wh40k_9e.shared."
+        for s in load_stratagems("necrons"):
+            expected = s.id.startswith(shared_prefix)
+            assert is_core_stratagem(s.id) is expected, s.id

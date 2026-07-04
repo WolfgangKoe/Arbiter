@@ -68,6 +68,32 @@ class Stratagem:
 # ── GO visibility helper ──────────────────────────────────────────────────────
 
 
+_SHARED_ID_MARKER = ".shared."
+
+
+def is_core_stratagem(stratagem_id: str) -> bool:
+    """Whether the id belongs to the shared/core pool (game-wide, not faction-specific).
+
+    Shared stratagem ids follow the ``<edition>.shared.stratagem.<name>`` namespace
+    (see data/wh40k_9e/_shared/stratagems.yaml); faction ids carry the faction dir
+    instead of ``shared``. Used by the player-split renderer for section headers.
+    """
+    return _SHARED_ID_MARKER in stratagem_id
+
+
+def stratagem_usable_by_player(player_field: str, is_this_player_active: bool) -> bool:
+    """Whether a stratagem's `player` field permits use by the given player.
+
+    player_field: Stratagem.player ("active" | "inactive" | "both").
+    is_this_player_active: True if the player in question currently holds the turn.
+    """
+    if player_field == "both":
+        return True
+    if player_field == "active":
+        return is_this_player_active
+    return not is_this_player_active
+
+
 def stratagem_visibility(
     stratagem: Stratagem,
     cp_available: int,

@@ -26,7 +26,12 @@ from gameMechanic.game_state import (
 )
 from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.loader import load_stratagems
-from gameObjects.stratagem import stratagem_undo_visible, stratagem_visibility
+from gameObjects.stratagem import (
+    is_core_stratagem,
+    stratagem_undo_visible,
+    stratagem_usable_by_player,
+    stratagem_visibility,
+)
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -118,15 +123,41 @@ def _conditions_met(conditions: list[str], unit=None) -> bool:
     return all(unit.has_keyword(kw) for kw in conditions)
 
 
+def _selected_unit_for(player: str):
+    """Return the selected unit object if it belongs to `player`, else None."""
+    sel = st.session_state.get("selected_unit")
+    if sel is None:
+        return None
+    sel_faction, sel_state_key = sel
+    if sel_faction != player:
+        return None
+    real_uid = unit_id_from_state_key(sel_state_key)
+    for u in units_list_for(player):
+        if u.id == real_uid:
+            return u
+    return None
+
+
 def _render_stratagems() -> None:
+    """Two fixed player columns: first_player left, second_player right.
+
+    Layout is bound to first_player/second_player (domain constraint), never
+    to `active` — only the usable-filter inside each column depends on whose
+    turn it is.
+    """
     active_faction = st.session_state.get("active", "—")
     first = st.session_state.get("first_player", "")
     second = st.session_state.get("second_player", "")
-    inactive_faction = second if active_faction == first else first
 
+    left, right = st.columns(2)
+    for player, col in ((first, left), (second, right)):
+        with col:
+            _render_stratagem_column(player, player == active_faction)
+
+
+def _render_stratagem_column(player: str, is_active: bool) -> None:
+    """Render one player's stratagem list; `player` IS the spending faction."""
     cp = st.session_state.get("cp", {})
-    cp_active = cp.get(active_faction, 0)
-    cp_inactive = cp.get(inactive_faction, 0)
     phase_idx = st.session_state.get("phase_idx", 0)
     current_phase = PHASES[phase_idx][1]
     current_stage = st.session_state.get("phase_stage", "active")
@@ -134,61 +165,47 @@ def _render_stratagems() -> None:
     used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
         "used_stratagem_battle_ids", {}
     )
+    used_battle_ids = used_battle_ids_by_faction.get(player, set())
 
-    st.caption(f"**{active_faction}** (active) · CP: **{cp_active}**")
-    st.caption(f"**{inactive_faction}** (inactive) · CP: **{cp_inactive}**")
+    role = "active" if is_active else "inactive"
+    st.caption(f"**{player}** ({role}) · CP: **{cp.get(player, 0)}**")
     st.divider()
 
     try:
-        stratagems_active = load_stratagems(faction_dir_for(active_faction))
-        stratagems_inactive = (
-            load_stratagems(faction_dir_for(inactive_faction)) if inactive_faction else []
-        )
+        stratagems = load_stratagems(faction_dir_for(player))
     except Exception:
         st.warning("Could not load stratagems.")
         return
-    stratagems = stratagems_active + stratagems_inactive
 
-    # Resolve selected unit for unit-level condition check
-    sel = st.session_state.get("selected_unit")
-    sel_faction_unit: tuple[str, object] | None = None
-    if sel is not None:
-        sel_faction, sel_state_key = sel
-        real_uid = unit_id_from_state_key(sel_state_key)
-        for u in units_list_for(sel_faction):
-            if u.id == real_uid:
-                sel_faction_unit = (sel_faction, u)
-                break
+    unit_for_check = _selected_unit_for(player)
 
     visible = []
     for s in stratagems:
-        spending_faction = inactive_faction if s.player == "inactive" else active_faction
-        cp_for_strat = cp_inactive if s.player == "inactive" else cp_active
-
-        unit_for_check = None
-        if sel_faction_unit is not None and sel_faction_unit[0] == spending_faction:
-            unit_for_check = sel_faction_unit[1]
+        if not stratagem_usable_by_player(s.player, is_active):
+            continue
         met = _conditions_met(s.conditions, unit_for_check)
-        used_battle_ids = used_battle_ids_by_faction.get(spending_faction, set())
-
         vis = stratagem_visibility(
-            s, cp_for_strat, current_phase, current_stage, used_ids, met, used_battle_ids
+            s, cp.get(player, 0), current_phase, current_stage, used_ids, met, used_battle_ids
         )
         if vis != "hidden":
-            visible.append((s, vis, spending_faction))
+            visible.append((s, vis))
 
     if not visible:
         st.caption(f"No stratagems available in the **{current_phase.capitalize()}** phase.")
         return
 
-    for i, (strat, vis, spending_faction) in enumerate(visible):
+    # Section headers (design option 1): core/shared first, then faction-specific.
+    visible.sort(key=lambda entry: not is_core_stratagem(entry[0].id))
+    in_core_section: bool | None = None
+    for i, (strat, vis) in enumerate(visible):
+        is_core = is_core_stratagem(strat.id)
+        if is_core != in_core_section:
+            st.caption("**Core**" if is_core else f"**{player}**")
+            in_core_section = is_core
         disabled = vis == "greyed"
-        used_battle_ids = used_battle_ids_by_faction.get(spending_faction, set())
         is_used = strat.id in used_ids or strat.id in used_battle_ids
         undo_visible = stratagem_undo_visible(strat.id, used_ids, used_battle_ids)
         label = f"**{strat.name_en}** · {strat.cp_cost} CP"
-        if strat.player == "inactive":
-            label += f" *({inactive_faction})*"
         if vis == "greyed":
             if is_used:
                 label += " *(used)*"
@@ -200,14 +217,14 @@ def _render_stratagems() -> None:
             if undo_visible:
                 if st.button(
                     f"{SYM_RESET} Rückgängig (+{strat.cp_cost} CP)",
-                    key=f"strat_undo_{strat.id}_{phase_idx}_{i}",
+                    key=f"strat_undo_{player}_{strat.id}_{phase_idx}_{i}",
                 ):
-                    adjust_cp(spending_faction, strat.cp_cost)
+                    adjust_cp(player, strat.cp_cost)
                     used_ids.discard(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
                     if strat.once_per_battle:
                         used_battle_ids.discard(strat.id)
-                        used_battle_ids_by_faction[spending_faction] = used_battle_ids
+                        used_battle_ids_by_faction[player] = used_battle_ids
                         st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
                     st.session_state.active_modifiers = [
                         m
@@ -218,14 +235,14 @@ def _render_stratagems() -> None:
             elif not disabled:
                 if st.button(
                     f"Use — spend {strat.cp_cost} CP",
-                    key=f"strat_{strat.id}_{phase_idx}_{i}",
+                    key=f"strat_{player}_{strat.id}_{phase_idx}_{i}",
                 ):
-                    adjust_cp(spending_faction, -strat.cp_cost)
+                    adjust_cp(player, -strat.cp_cost)
                     used_ids.add(strat.id)
                     st.session_state.used_stratagem_ids = used_ids
                     if strat.once_per_battle:
                         used_battle_ids.add(strat.id)
-                        used_battle_ids_by_faction[spending_faction] = used_battle_ids
+                        used_battle_ids_by_faction[player] = used_battle_ids
                         st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
                     if strat.modifier is not None:
                         m = strat.modifier
