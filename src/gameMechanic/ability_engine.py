@@ -414,6 +414,23 @@ def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
     return total
 
 
+def stratagem_strength_bonus(active_modifiers: list[dict]) -> int:
+    """Total Strength-characteristic bonus from active stratagem modifiers (e.g. Disruption Fields).
+
+    Mirrors buff_stat_bonus's role but reads from the generic active_modifiers list
+    (StratagemModifier entries via gameProtocoll.py) instead of faction ability effects.
+    """
+    total = 0
+    for m in active_modifiers:
+        eff = m.get("effect", {})
+        if eff.get("roll_type") == "strength" and eff.get("target", "attacker") in (
+            "attacker",
+            "any",
+        ):
+            total += int(eff.get("value", 0))
+    return total
+
+
 def ability_invuln_save(faction: str, unit: Unit) -> int | None:
     """Best invuln save granted by active faction abilities for this unit, or None."""
     best: int | None = None

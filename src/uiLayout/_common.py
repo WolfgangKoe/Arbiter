@@ -929,9 +929,14 @@ def _render_resolution_tab(
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
+        stratagem_strength_bonus,
     )
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
+    # Disruption Fields (and similar stratagems): +1 S from an active_modifiers
+    # entry with roll_type=="strength", folded in the same way as the faction-
+    # ability buff above so the WOUND block highlights the raised S in blue.
+    str_bonus += stratagem_strength_bonus(st.session_state.get("active_modifiers", []))
     # Hungry Void D2: +1 S in melee if the attacker charged, was charged, or did a
     # Heroic Intervention. Folded into str_bonus so the WOUND block highlights the
     # raised S in blue exactly like a WAAAGH! strength buff.

@@ -373,19 +373,19 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
       TODO) → s. F4 unten.
 
     **Neue Findings (S121-UI-Verifikation, noch offen):**
-    - 🔴 **F1 — Disruption Fields: Effekt-Semantik falsch**
-      (`data/wh40k_9e/necrons/stratagems.yaml` `disruption_fields`): Kartentext „add 1 to the
-      Strength characteristic" — implementiert ist aber ein **+1 auf den Verwundungswurf**
-      (`modifier: {roll_type: wound, value: 1}`). Nur zufällig gleichwertig, wenn die
-      Toughness-Schwelle nicht kippt (S+1 kann die Wound-Tabelle von 4+ auf 3+ verschieben oder
-      eben nicht — Wound-Roll+1 tut es immer). Muss als Stärke-Modifier auf die Modelle der
-      Einheit wirken, nicht als Wurf-Modifier. Der Attackensequenz-Modifier-Mechanismus
-      (`StratagemModifier` in `src/gameObjects/stratagem.py`) kennt aktuell nur
-      `roll_type: hit|wound|save` — ein echter Stat-Modifier (Strength vor dem Wound-Roll) ist
-      dort noch nicht vorgesehen. Gehört in die generische „Stratagem-Effekt auf Attackensequenz"-
-      Arbeit; bisher kein eigener Plan-Abschnitt dafür — nächster Anknüpfungspunkt ist
-      `collect_modifiers_for_phase` (Ziel7 §6e, `docs/goals/ziel7.md`), das dieselbe Klasse von
-      Stat- vs. Wurf-Modifier-Unterscheidung für Ability-Modifier bereits als offen führt.
+    - ✅ **F1 — Disruption Fields: Effekt-Semantik korrigiert (S122):**
+      Kartentext (`docs/work/wahapedia_necrons/faction_overview.txt:2379`) „add 1 to the Strength
+      characteristic of models in that unit" — `data/wh40k_9e/necrons/stratagems.yaml`
+      `disruption_fields.modifier.roll_type` war `wound` (+1 auf den Verwundungswurf, nur
+      zufällig gleichwertig solange die Toughness-Schwelle nicht kippt), jetzt `strength` (echter
+      Stat-Modifier vor der Wound-Tabelle). Totes `effect: {type: buff_stat, ...}`-Feld entfernt
+      (bei Stratagems nirgends konsumiert, nur `Ability.effect` wird gelesen — per grep bestätigt).
+      Neue reine Funktion `stratagem_strength_bonus()` (`src/gameMechanic/ability_engine.py`)
+      summiert `roll_type=="strength"`-Einträge aus `active_modifiers`; als dritte Quelle in
+      `str_bonus` (`src/uiLayout/_common.py`, vor `wound_threshold()`) verdrahtet, analog
+      `buff_stat_bonus()`/`get_active_round_choice_strength_if_charged()`. Kein Doppel-Konsum:
+      `_collect_atk_modifiers()`s bestehendes `rt in ("hit","wound")`-Gate lässt `"strength"`
+      bereits unberührt.
     - ✅ **F2 — Weirdboy-Stab VERIFIZIERT (S121):** App zeigt effektive Stärke S8 — korrekt.
       Wahapedia (`docs/work/wahapedia_orks/units_all.txt:143/147`): Weirdboy S5, Staff „+3" →
       5+3=8; YAML (`units.yaml:262`, `weapons.yaml:250`) konsistent. Kein Handlungsbedarf.

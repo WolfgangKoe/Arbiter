@@ -384,13 +384,9 @@ stratagems:
     player: active
     conditions: [CORE]
     once_per_phase: true
-    effect:
-      type: buff_stat
-      stat: strength
-      modifier: 1
     rule_text: "Use this Stratagem in the Fight phase, when a NECRONS CORE unit from your army is selected to fight. Until the end of the phase, add 1 to the Strength characteristic of models in that unit."
     modifier:
-      roll_type: wound
+      roll_type: strength
       value: 1
       target: attacker
       expires_at: phase_end

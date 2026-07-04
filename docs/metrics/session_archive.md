@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-04 14:44 CEST
+Stand: 2026-07-04 15:37 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,12 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 09:55 f800  ███████████░ 132k ⚠️   ████░░  67%    ▚▚▚▚▚█······
+07-04 14:45 b13e  █████░░░░░░░  62k ✅    █████░  88%    ▚▚··········
+         SA_1·  █████░░░░░░░  59k ✅    F1: Disruption Fields Stärke-Fix
+         SA_2·  ██████████░░ 122k ⚠️   S122-Planungsentwurf erstellen
+         SA_3·  ██████░░░░░░  77k ✅    F3: Natürliche 1 = Fehlschlag
+----------------- ---------------------- -------------- ------------
+07-04 09:55 f800  ███████████░ 133k ⚠️   ████░░  67%    ▚▚▚▚▚█······
          SA_1·  █████████░░░ 112k ✅    Executor: Task 0 YAML-Drift
          SA_2·  ███████░░░░░  84k ✅    Planner: Planning-Entwurf S121
          SA_3·  █████████░░░ 109k ✅    Executor: Findings + Task 4 Doku

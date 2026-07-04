@@ -33,6 +33,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_rp_modifiers,
     get_short_label_for_effect_type,
     get_triggered_abilities,
+    stratagem_strength_bonus,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -1085,6 +1086,56 @@ def test_buff_stat_bonus_generic_strength() -> None:
     unit = _make_unit(rules=[], keywords=["ORK"])
     assert buff_stat_bonus("Orks", unit, "strength") == 1
     assert buff_stat_bonus("Orks", unit, "toughness") == 0
+
+
+# ---------------------------------------------------------------------------
+# S122 F1: stratagem_strength_bonus (Disruption Fields — real Strength modifier,
+# not a Wound-roll bonus)
+# ---------------------------------------------------------------------------
+
+
+def _strength_modifier_entry(
+    value: int = 1, target: str = "attacker", roll_type: str = "strength"
+) -> dict:
+    return {
+        "unit_key": None,
+        "source": "Disruption Fields",
+        "effect": {"roll_type": roll_type, "value": value, "target": target, "phase": "fight"},
+        "expires_at_phase": "fight",
+        "expires_at_round": None,
+    }
+
+
+def test_stratagem_strength_bonus_empty_list_is_zero() -> None:
+    assert stratagem_strength_bonus([]) == 0
+
+
+def test_stratagem_strength_bonus_matching_entry() -> None:
+    mods = [_strength_modifier_entry(value=1, target="attacker")]
+    assert stratagem_strength_bonus(mods) == 1
+
+
+def test_stratagem_strength_bonus_target_any_counts() -> None:
+    mods = [_strength_modifier_entry(value=2, target="any")]
+    assert stratagem_strength_bonus(mods) == 2
+
+
+def test_stratagem_strength_bonus_ignores_wrong_roll_type() -> None:
+    mods = [_strength_modifier_entry(roll_type="wound")]
+    assert stratagem_strength_bonus(mods) == 0
+
+
+def test_stratagem_strength_bonus_ignores_wrong_target() -> None:
+    mods = [_strength_modifier_entry(target="defender")]
+    assert stratagem_strength_bonus(mods) == 0
+
+
+def test_stratagem_strength_bonus_sums_multiple_entries() -> None:
+    mods = [
+        _strength_modifier_entry(value=1),
+        _strength_modifier_entry(value=1),
+    ]
+    assert stratagem_strength_bonus(mods) == 2
 
 
 # ---------------------------------------------------------------------------

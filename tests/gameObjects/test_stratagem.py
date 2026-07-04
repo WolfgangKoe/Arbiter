@@ -510,3 +510,32 @@ class TestIsCoreStratagem:
         for s in load_stratagems("necrons"):
             expected = s.id.startswith(shared_prefix)
             assert is_core_stratagem(s.id) is expected, s.id
+
+
+_DISRUPTION_FIELDS_ID = "wh40k_9e.necrons.stratagem.disruption_fields"
+
+
+class TestDisruptionFieldsIsStrengthModifier:
+    """S122 F1 regression: Disruption Fields buffs Strength, not the Wound roll.
+
+    Card text (wahapedia_necrons/faction_overview.txt): "Until the end of the
+    phase, add 1 to the Strength characteristic of models in that unit." — a
+    real characteristic modifier (can shift the wound-table threshold), not a
+    flat +1 on the Wound roll. Guards against regressing modifier.roll_type
+    back to "wound".
+    """
+
+    def _load(self) -> Stratagem:
+        stratagems = load_stratagems("necrons")
+        match = next((s for s in stratagems if s.id == _DISRUPTION_FIELDS_ID), None)
+        assert match is not None, f"Stratagem {_DISRUPTION_FIELDS_ID!r} not found"
+        return match
+
+    def test_modifier_roll_type_is_strength(self) -> None:
+        strat = self._load()
+        assert strat.modifier is not None
+        assert strat.modifier.roll_type == "strength"
+
+    def test_no_dead_buff_stat_effect_field(self) -> None:
+        strat = self._load()
+        assert strat.effect is None

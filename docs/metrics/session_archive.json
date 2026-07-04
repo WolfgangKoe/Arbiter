@@ -2440,8 +2440,8 @@
   "f800d10f-b67c-4037-9674-7d30c853c856": {
     "started_at": "2026-07-04T07:55:41.691Z",
     "task": "start session - Plan durch Subagenten vorlegen",
-    "peak_context": 132132,
-    "subagent_share": 67.41672907369026,
+    "peak_context": 132910,
+    "subagent_share": 66.85357525347939,
     "by_tier": {
       "Sonnet": 10463495,
       "Fable": 9280511,
@@ -2490,6 +2490,39 @@
         "tier": "Opus",
         "peak_context": 54526,
         "started_at": "2026-07-04T07:55:41.691Z"
+      }
+    ]
+  },
+  "b13e1713-6232-484e-800b-39c694dc3a76": {
+    "started_at": "2026-07-04T12:45:08.014Z",
+    "task": "start session",
+    "peak_context": 61503,
+    "subagent_share": 88.28521297372743,
+    "by_tier": {
+      "Sonnet": 11367468,
+      "Fable": 1979027
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "F1: Disruption Fields Stärke-Fix",
+        "tier": "Sonnet",
+        "peak_context": 59053,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S122-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 121993,
+        "started_at": "2026-07-04T12:45:08.014Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "F3: Natürliche 1 = Fehlschlag",
+        "tier": "Sonnet",
+        "peak_context": 76820,
+        "started_at": "2026-07-04T12:45:08.014Z"
       }
     ]
   }
