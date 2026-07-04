@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-04 12:25 CEST
+Stand: 2026-07-04 14:01 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,10 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 09:55 f800  ██████░░░░░░  71k ✅    █████░  76%    ▚▚▚▚▚▚▚·····
-         SA_1·  ████████░░░░  98k ✅    Executor: Task 0 YAML-Drift
+07-04 09:55 f800  ████████░░░░  97k ✅    ████░░  70%    ▚▚▚▚▚▚▚▚····
+         SA_1·  █████████░░░ 111k ✅    Executor: Task 0 YAML-Drift
          SA_2·  ███████░░░░░  84k ✅    Planner: Planning-Entwurf S121
+         SA_3·  █████░░░░░░░  62k ✅    Root-Cause: Crash + fehlende Strat…
 ----------------- ---------------------- -------------- ------------
 07-03 22:31 622e  ██████████░░ 126k ⚠️   █████░  82%    ▚▚▚·········
          SA_1·  ████░░░░░░░░  51k ✅    Review S120 nach DoD

@@ -2440,18 +2440,18 @@
   "f800d10f-b67c-4037-9674-7d30c853c856": {
     "started_at": "2026-07-04T07:55:41.691Z",
     "task": "start session - Plan durch Subagenten vorlegen",
-    "peak_context": 70912,
-    "subagent_share": 75.77819874197421,
+    "peak_context": 96513,
+    "subagent_share": 69.99090870679842,
     "by_tier": {
-      "Sonnet": 3593338,
-      "Fable": 5790437
+      "Sonnet": 5014623,
+      "Fable": 8833753
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
         "description": "Executor: Task 0 YAML-Drift",
         "tier": "Sonnet",
-        "peak_context": 97969,
+        "peak_context": 110816,
         "started_at": "2026-07-04T07:55:41.691Z"
       },
       {
@@ -2459,6 +2459,13 @@
         "description": "Planner: Planning-Entwurf S121",
         "tier": "Sonnet",
         "peak_context": 83889,
+        "started_at": "2026-07-04T07:55:41.691Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Root-Cause: Crash + fehlende Stratagems",
+        "tier": "Sonnet",
+        "peak_context": 61960,
         "started_at": "2026-07-04T07:55:41.691Z"
       }
     ]

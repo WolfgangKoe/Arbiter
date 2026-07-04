@@ -183,6 +183,19 @@ def test_unit_with_no_melee_weapon_gets_ccw() -> None:
     assert ccw is not None
 
 
+def test_ccw_fallback_ap_is_int() -> None:
+    """S121 regression: _CCW_PROFILE carried ap="0" (str) — every unit without an
+    explicit melee weapon (e.g. Gretchin) crashed in save resolution
+    (combat.py resolve_save: abs("0") → TypeError). WeaponProfile.ap is int."""
+    units, _ = load_army("orks")
+    gretchin = next(u for u in units if u.id == "wh40k_9e.orks.unit.gretchin")
+    ccw = next(
+        p for w in gretchin.weapons for p in w.profiles if p.name_en == "Close Combat Weapon"
+    )
+    assert isinstance(ccw.ap, int)
+    assert ccw.ap == 0
+
+
 def test_all_units_have_at_least_one_melee_profile() -> None:
     units, _ = load_army("necrons")
     missing = [u.id for u in units if not any(p.is_melee for w in u.weapons for p in w.profiles)]

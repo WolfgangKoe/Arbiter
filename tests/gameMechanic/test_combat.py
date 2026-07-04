@@ -521,3 +521,28 @@ class TestResolveSaveMultipleInvulns:
         result = resolve_save(base_save=3, invuln_save=3, ap=0, save_modifiers=[])
         assert result["using_invuln"] is False
         assert result["effective"] == 3
+
+
+# ---------------------------------------------------------------------------
+# S121 regression: CCW fallback profile must work in save resolution
+# ---------------------------------------------------------------------------
+
+
+class TestResolveSaveWithCcwFallbackWeapon:
+    """S121 regression: the loader's CCW fallback profile carried ap="0" (str),
+    so every unit without an explicit melee weapon (e.g. Gretchin) crashed in
+    resolve_save (abs("0") → TypeError). The fallback ap must flow through
+    resolve_save like any YAML-loaded int.
+    """
+
+    def test_resolve_save_with_ccw_fallback_weapon_does_not_crash(self) -> None:
+        from gameObjects.loader import _CCW_PROFILE
+
+        result = resolve_save(
+            base_save=5,
+            invuln_save=None,
+            ap=_CCW_PROFILE.ap,
+            save_modifiers=[],
+        )
+        assert result["effective"] == 5
+        assert result["using_invuln"] is False
