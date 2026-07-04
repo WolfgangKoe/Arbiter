@@ -417,7 +417,9 @@ def init_state(
     st.session_state.phase_stage = "active"
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
-    st.session_state.used_stratagem_ids: set[str] = set()
+    # Both stratagem-usage trackers are keyed per player slot (like `cp`):
+    # phase-scoped and battle-scoped usage never leak across players.
+    st.session_state.used_stratagem_ids: dict[str, set[str]] = {}
     st.session_state.used_stratagem_battle_ids: dict[str, set[str]] = {}
     st.session_state.active_modifiers: list[dict] = []
     st.session_state.command_ability_state: dict = {}
@@ -528,7 +530,9 @@ def _reset_phase_state() -> None:
     for k in list(st.session_state.keys()):
         if k.startswith("applied_triggered_") or k.startswith("group_autosel_done_"):
             del st.session_state[k]
-    st.session_state.used_stratagem_ids = set()
+    # Cleared for BOTH player slots on every phase change (behavior unchanged;
+    # structure is per-player since S121 Task 2).
+    st.session_state.used_stratagem_ids = {}
     st.session_state.fight_current_player = None
     st.session_state.attack_declaration = {"active": False, "entries": []}
     st.session_state.selected_model_group = None

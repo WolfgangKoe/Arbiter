@@ -341,6 +341,47 @@ class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
 
 
 # ---------------------------------------------------------------------------
+# S121 Task 2: once_per_phase usage is scoped per spending player, not global
+# ---------------------------------------------------------------------------
+
+
+class TestPhaseScopedStratagemUsedByOnePlayerDoesNotBlockOther:
+    """S121 Task 2 regression (analog to P19, phase scale): `used_stratagem_ids`
+    (game_state.py) is a dict keyed by player slot, not a single global set.
+    gameProtocoll.py slices it per column (`used_ids_by_player.get(player,
+    set())`) before calling stratagem_visibility() — one player's use of a
+    stratagem this phase must not grey out the identical stratagem ID in the
+    other player's column.
+    """
+
+    def test_phase_scoped_stratagem_used_by_one_player_does_not_block_other(
+        self,
+    ) -> None:
+        strat = _strat(sid="opp.strat_y", phase="any")
+        used_ids_by_player: dict[str, set[str]] = {"Necrons": {"opp.strat_y"}}
+
+        necrons_result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=used_ids_by_player.get("Necrons", set()),
+            conditions_met=True,
+        )
+        orks_result = stratagem_visibility(
+            strat,
+            cp_available=10,
+            current_phase="shooting",
+            current_stage="active",
+            used_this_phase=used_ids_by_player.get("Orks", set()),
+            conditions_met=True,
+        )
+
+        assert necrons_result == "greyed"
+        assert orks_result == "clickable"
+
+
+# ---------------------------------------------------------------------------
 # P21: stratagem_undo_visible() — undo button must not survive a phase change
 # ---------------------------------------------------------------------------
 

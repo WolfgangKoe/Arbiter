@@ -622,7 +622,7 @@ def _reset_phase_session(**extra) -> _S:
         veil_awaiting_confirm=True,
         veil_core_target_uid="some_uid",
         applied_triggered_veil="used",
-        used_stratagem_ids={"strat_a"},
+        used_stratagem_ids={"Necrons": {"strat_a"}, "Orks": {"strat_b"}},
         fight_current_player="Necrons",
         attack_declaration={"active": True, "entries": ["e1"]},
         selected_model_group="grp1",
@@ -672,9 +672,11 @@ class TestResetPhaseState:
         assert "applied_triggered_veil" not in s
 
     def test_resets_used_stratagem_ids(self) -> None:
+        # Behavior unchanged since S121 Task 2: cleared on every phase change for
+        # BOTH player slots — only the structure is per-player (dict) now.
         s = _reset_phase_session()
         _gs._reset_phase_state()
-        assert s["used_stratagem_ids"] == set()
+        assert s["used_stratagem_ids"] == {}
 
     def test_resets_fight_current_player(self) -> None:
         s = _reset_phase_session()

@@ -161,7 +161,8 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
     phase_idx = st.session_state.get("phase_idx", 0)
     current_phase = PHASES[phase_idx][1]
     current_stage = st.session_state.get("phase_stage", "active")
-    used_ids: set[str] = st.session_state.get("used_stratagem_ids", set())
+    used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
+    used_ids = used_ids_by_player.get(player, set())
     used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
         "used_stratagem_battle_ids", {}
     )
@@ -221,7 +222,8 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
                 ):
                     adjust_cp(player, strat.cp_cost)
                     used_ids.discard(strat.id)
-                    st.session_state.used_stratagem_ids = used_ids
+                    used_ids_by_player[player] = used_ids
+                    st.session_state.used_stratagem_ids = used_ids_by_player
                     if strat.once_per_battle:
                         used_battle_ids.discard(strat.id)
                         used_battle_ids_by_faction[player] = used_battle_ids
@@ -239,7 +241,8 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
                 ):
                     adjust_cp(player, -strat.cp_cost)
                     used_ids.add(strat.id)
-                    st.session_state.used_stratagem_ids = used_ids
+                    used_ids_by_player[player] = used_ids
+                    st.session_state.used_stratagem_ids = used_ids_by_player
                     if strat.once_per_battle:
                         used_battle_ids.add(strat.id)
                         used_battle_ids_by_faction[player] = used_battle_ids

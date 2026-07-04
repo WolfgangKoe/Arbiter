@@ -2440,18 +2440,18 @@
   "f800d10f-b67c-4037-9674-7d30c853c856": {
     "started_at": "2026-07-04T07:55:41.691Z",
     "task": "start session - Plan durch Subagenten vorlegen",
-    "peak_context": 59054,
-    "subagent_share": 77.39129070274429,
+    "peak_context": 70912,
+    "subagent_share": 75.77819874197421,
     "by_tier": {
       "Sonnet": 3593338,
-      "Fable": 2620911
+      "Fable": 5790437
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
         "description": "Executor: Task 0 YAML-Drift",
         "tier": "Sonnet",
-        "peak_context": 80265,
+        "peak_context": 97969,
         "started_at": "2026-07-04T07:55:41.691Z"
       },
       {
