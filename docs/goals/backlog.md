@@ -389,13 +389,13 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
     - ✅ **F2 — Weirdboy-Stab VERIFIZIERT (S121):** App zeigt effektive Stärke S8 — korrekt.
       Wahapedia (`docs/work/wahapedia_orks/units_all.txt:143/147`): Weirdboy S5, Staff „+3" →
       5+3=8; YAML (`units.yaml:262`, `weapons.yaml:250`) konsistent. Kein Handlungsbedarf.
-    - 🔴 **F3 — Natürliche 1 in der Würfel-UI wird bei modifizierten Zielwerten als Erfolg gezeigt:**
-      Eine gewürfelte 1 ist regelseitig IMMER ein Fehlschlag (unmodified 1 always fails). Bei
-      modifizierten Zielwerten (z. B. „Eff. 1+" durch Heavy Cover) markiert die Save-/
-      Wound-Darstellung die 1 fälschlich als Erfolg. Zwei Teilaufgaben: (a) prüfen, ob `combat.py`
-      die natürliche 1 korrekt als Fehlschlag *wertet* (nur die Darstellung falsch ist) oder der
-      Bug auch die Berechnung betrifft; (b) UI: die 1 in den Würfelreihen nie als Erfolg markieren
-      — „Eff. 1+" → Erfolgsreihe beginnt bei 2. Kein Plan-Abschnitt bisher — Fund hier hinterlegt.
+    - ✅ **F3 — Natürliche 1 in der Würfel-UI — ERLEDIGT (S122, 2026-07-04):**
+      (a) `resolve_save()` (`combat.py`) floort den effektiven Save jetzt analog zu Hit/Wound
+      auf 2 (`max(2, …)`) — „Eff. 1+" wird weder gewertet noch angezeigt; (b) `dice_row_html()`
+      (`dice_compose.py`) zeichnet den Wert-1-Würfel bei Schwelle ≤ 1 als ✕-Miss innerhalb des
+      Erfolgsrahmens. Spec: `docs/spec/dice_display.md` §1 Randfall; Tests:
+      `test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame`,
+      `test_save_floored_at_2_armour_path`, `test_save_floored_at_2_invuln_path`.
     - 🟡 **F4 — Stufe-A-Verifikationspunkte 3+4 setzen Plan 015 voraus** (s. o.): Plan 015
       (Priorität P2, `docs/audit/plans/README.md`) schaltet damit auch die Reaktiv-UI-Prüfung für
       Fire Overwatch/Counter-Offensive frei — als Kandidat für die nächste Session vormerken.

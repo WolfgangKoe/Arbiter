@@ -132,7 +132,13 @@ def dice_row_html(threshold: int) -> str:
         miss_dice = "".join(dice_face_svg(v, miss=True) for v in range(1, 7))
         return f'<div style="margin:4px 0;">{miss_dice}{miss_die_html()}</div>'
     frame_color = _THRESHOLD_COLOR.get(threshold, "#f97316")
-    success_dice = "".join(dice_face_svg(v, color=frame_color) for v in range(threshold, 7))
+    # An unmodified 1 always fails (core_rules.txt: Hit/Wound/Save rolls) — even when
+    # threshold <= 1 pulls it into the success range mathematically, it must still
+    # render as the ×-miss die, never as a normal success pip.
+    success_dice = "".join(
+        dice_face_svg(1, miss=True) if v == 1 else dice_face_svg(v, color=frame_color)
+        for v in range(threshold, 7)
+    )
     framed = (
         f'<span style="border:2px solid {frame_color};border-radius:5px;'
         f"padding:2px 3px;display:inline-block;vertical-align:middle;"

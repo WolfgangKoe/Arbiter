@@ -247,7 +247,9 @@ def resolve_save(
         "armour": base_save,
         "armour_eff": armour_eff,
         "invuln": invuln_save,
-        "effective": min(effective, 7),
+        # An unmodified roll of 1 always fails (core_rules.txt), so no save — armour
+        # or invulnerable — can ever be effectively better than 2+.
+        "effective": max(2, min(effective, 7)),
         "using_invuln": using_invuln,
         "save_bonus": save_bonus,
         "stack": save_modifiers,

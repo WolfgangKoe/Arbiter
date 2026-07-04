@@ -292,12 +292,27 @@ def test_threshold_header_no_gap_below_two() -> None:
 
 
 def test_dice_row_threshold_one_or_less_no_miss_dice() -> None:
-    """dice_row_html(1) — all dice succeed, no miss section (line 122 branch)."""
+    """dice_row_html(1) — no separate miss section (line 122 branch), but the
+    value-1 die inside the frame still shows the ×-miss marker (unmodified 1
+    always fails — core_rules.txt), never a normal success pip.
+    """
     html = dice_row_html(1)
     # No gap/boundary line because threshold <= 1.
     assert "margin-left:-5px" in html  # framed block still rendered
-    # Only success dice — value-1 die is inside the frame.
+    # Value-1 die is inside the frame but rendered as the always-miss cross.
     assert "<svg" in html
+    assert _CROSS_STROKE in html
+
+
+def test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame() -> None:
+    """Regression (S122/F3): threshold <= 1 used to draw the value-1 die as a normal
+    success pip because range(threshold, 7) pulled it into the success frame. An
+    unmodified roll of 1 always fails (Hit/Wound/Save, core_rules.txt), so it must
+    render with the ×-miss cross even though it sits inside the colored success frame.
+    """
+    for threshold in (1, 0, -3):
+        html = dice_row_html(threshold)
+        assert _CROSS_STROKE in html, f"threshold={threshold} must show the miss cross for value 1"
 
 
 def test_block_divider_html_renders_hr() -> None:

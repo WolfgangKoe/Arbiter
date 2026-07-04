@@ -25,6 +25,14 @@ Jede Modifier-Zeile besteht aus:
 unmodifiziertes Würfelergebnis von 1 misslingt immer — kein Buff kann das
 aufheben.
 
+**Randfall Schwelle ≤ 1 (S122/F3):** Drücken Modifikatoren den effektiven
+Zielwert auf 1+ oder besser, beginnt `dice_row_html` den Erfolgsrahmen bei
+Wert 1 — der Wert-1-Würfel wird dann **innerhalb** des Rahmens trotzdem als
+✕-Miss-Würfel gezeichnet (nie als normaler Erfolgspip). Rechenseitig floort
+`resolve_save()` (`combat.py`) den effektiven Save analog zu Hit/Wound auf
+minimal 2 (`max(2, …)`), sodass „Eff. 1+" weder angezeigt noch gewertet wird
+(Regel: „An unmodified roll of 1 always fails", core_rules.txt Hit/Wound/Save).
+
 ### 1.1 Schwellen-Position
 
 | Profil-Wert | `[ | ]` sitzt zwischen |
@@ -183,6 +191,8 @@ Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
 | `test_off_scale_debuff_arrow_carries_magnitude` | Off-Scale → `←N` mit echter Magnitude | 022/S78 |
 | `test_hit_debuff_arrow_carries_magnitude` | HIT-Zeile trägt `←N` (Geometrie = B, separat) | 022/S78 |
 | `test_buff_magnitude_uses_buff_colour_not_context_grey` | Pfeil-Label in Modifier-Farbe, nicht Grau | 022/S78 |
+| `test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame` | Schwelle ≤ 1 → Wert 1 als ✕ im Erfolgsrahmen (§1 Randfall) | S122/F3 |
+| `test_save_floored_at_2_armour_path` / `test_save_floored_at_2_invuln_path` | `resolve_save()` floort effektiven Save auf 2 (`test_combat_6d.py`) | S122/F3 |
 
 ---
 

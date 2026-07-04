@@ -175,6 +175,25 @@ def test_save_capped_at_7():
     assert result["effective"] == 7
 
 
+def test_save_floored_at_2_armour_path():
+    """Regression (S122/F3): an unmodified 1 always fails (core_rules.txt), so no
+    save can ever be effectively better than 2+, even with strong buffs (e.g.
+    high Cover stacking on an already-good armour save).
+    """
+    mods = [{"label": "Cover", "value": 1}]
+    result = resolve_save(2, None, 0, mods)  # armour 2+, +1 bonus → would be 1+
+    assert result["effective"] == 2
+    assert result["using_invuln"] is False
+
+
+def test_save_floored_at_2_invuln_path():
+    """Same floor applies via the invulnerable-save branch (invuln is still a
+    saving throw rolled on a D6 — unmodified 1 always fails)."""
+    result = resolve_save(6, 1, 0, [])  # invuln 1+ beats armour 6+
+    assert result["using_invuln"] is True
+    assert result["effective"] == 2
+
+
 def test_save_stack_returned():
     mods = [{"label": "Protocol", "value": 1}]
     result = resolve_save(4, None, 0, mods)
