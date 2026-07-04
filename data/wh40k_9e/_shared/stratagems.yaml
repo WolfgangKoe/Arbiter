@@ -84,7 +84,7 @@ stratagems:
     cp_cost: 2
     phase: fight
     stage: active
-    player: inactive
+    player: both  # Fight phase alternates between both players (core_rules.txt:1941)
     conditions: []
     once_per_phase: true
     timing: phase_reactive
@@ -98,7 +98,7 @@ stratagems:
     cp_cost: 2
     phase: morale
     stage: active
-    player: active
+    player: both  # Morale phase alternates between both players (core_rules.txt:2094)
     conditions: []
     once_per_phase: false
     once_per_battle: true  # rule text: "once per battle"

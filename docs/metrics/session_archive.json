@@ -2399,11 +2399,11 @@
   "622e1eb5-2c7b-4883-aa97-ef423e89acab": {
     "started_at": "2026-07-03T20:31:43.659Z",
     "task": "<task-notification> <task-id>aa547245ccf957e39</task-id> <tool-use-id>toolu_017ra8SugfobQvLCE1P3LSfw</tool-use-id> <out…",
-    "peak_context": 118552,
-    "subagent_share": 67.7380600236062,
+    "peak_context": 125852,
+    "subagent_share": 82.05002874170421,
     "by_tier": {
       "Opus": 1253534,
-      "Sonnet": 4629584,
+      "Sonnet": 24052764,
       "Fable": 6743843
     },
     "subagents": [
@@ -2432,8 +2432,34 @@
         "agent_type": "general-purpose",
         "description": "S120-Abschluss: ziel6-Archiv + Maßnahmen",
         "tier": "Sonnet",
-        "peak_context": 73371,
+        "peak_context": 157996,
         "started_at": "2026-07-03T20:31:43.659Z"
+      }
+    ]
+  },
+  "f800d10f-b67c-4037-9674-7d30c853c856": {
+    "started_at": "2026-07-04T07:55:41.691Z",
+    "task": "start session - Plan durch Subagenten vorlegen",
+    "peak_context": 52477,
+    "subagent_share": 77.37556841493046,
+    "by_tier": {
+      "Sonnet": 3593338,
+      "Fable": 651895
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Task 0 YAML-Drift",
+        "tier": "Sonnet",
+        "peak_context": 59140,
+        "started_at": "2026-07-04T07:55:41.691Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: Planning-Entwurf S121",
+        "tier": "Sonnet",
+        "peak_context": 83889,
+        "started_at": "2026-07-04T07:55:41.691Z"
       }
     ]
   }

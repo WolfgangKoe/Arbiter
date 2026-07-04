@@ -363,3 +363,37 @@ class TestUndoHiddenAfterPhaseResetButBattleGreyedPersists:
 
     def test_undo_hidden_when_not_used_anywhere(self) -> None:
         assert stratagem_undo_visible("s.strat", set(), set()) is False
+
+
+# ---------------------------------------------------------------------------
+# S121 Task 0: Counter-Offensive + Insane Bravery player-field YAML drift fix
+# ---------------------------------------------------------------------------
+
+_COUNTER_OFFENSIVE_ID = "wh40k_9e.shared.stratagem.counter_offensive"
+_INSANE_BRAVERY_ID = "wh40k_9e.shared.stratagem.insane_bravery"
+
+
+def _load_shared_stratagem(stratagem_id: str) -> Stratagem:
+    """Load a single shared stratagem by id from the YAML data."""
+    stratagems = load_stratagems("necrons")  # shared stratagems are always included
+    match = next((s for s in stratagems if s.id == stratagem_id), None)
+    assert match is not None, f"Stratagem {stratagem_id!r} not found in shared data"
+    return match
+
+
+class TestCounterOffensiveAndInsaneBraveryAreBothPlayer:
+    """S121 Task 0 regression: Fight and Morale phases alternate between both
+    players (core_rules.txt:1941, core_rules.txt:2094), so Counter-Offensive and
+    Insane Bravery must be usable by either player, not just one side.
+
+    Prior to this fix, the YAML drifted to `player: inactive` (Counter-Offensive)
+    and `player: active` (Insane Bravery) — a rules bug fixed here.
+    """
+
+    def test_counter_offensive_player_is_both(self) -> None:
+        strat = _load_shared_stratagem(_COUNTER_OFFENSIVE_ID)
+        assert strat.player == "both"
+
+    def test_insane_bravery_player_is_both(self) -> None:
+        strat = _load_shared_stratagem(_INSANE_BRAVERY_ID)
+        assert strat.player == "both"
