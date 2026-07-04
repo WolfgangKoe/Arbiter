@@ -60,6 +60,10 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   nach > 90 k Token erreicht werden. Faustregel: jede `NEEDS-DECISION`-abhängige Aufgabe
   muss als eigenständiger erster oder zweiter Schritt erscheinen, damit der Stakeholder bei
   vollem Kontext-Headroom entscheiden kann.
+- **Prüfbare Checklisten:** Manuelle Verifikations-Checklisten nur aus Punkten bauen, die
+  gegen den **aktuellen Implementierungsstand** prüfbar sind; Punkte, die offene Pläne
+  voraussetzen, explizit als „blockiert durch <Plan>" kennzeichnen. Grund: S121 — Punkte 3+4
+  der Stufe-A-Checkliste setzten die noch fehlende Reaktiv-UI (Plan 015) voraus.
 - **Teil-Status statt binär:** Backlog-/`next_session.md`-Einträge für teil-implementierte
   Mechaniken beschreiben „Mechanik X steht+getestet; offen = Variante Y" statt nur
   offen/erledigt. Grund: S115 — die P17-Lock-Mechanik stand, der Eintrag las aber wie
@@ -101,6 +105,9 @@ Endbericht KNAPP, in fester Reihenfolge:
 3. git diff --stat (falls Schreib-Task)
 4. Gewählte Werte / Befunde
 Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
+Vollsuite/Langläufer im VORDERGRUND abwarten — Endbericht in DERSELBEN Antwort
+wie das Suite-Ende, nie vorher zurückkehren (S121: zwei Leerläufe durch
+vorzeitige Rückkehr bei Hintergrund-pytest).
 
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor

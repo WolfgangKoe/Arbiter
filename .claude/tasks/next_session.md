@@ -30,30 +30,28 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S120, 2026-07-04)
+## Aktueller Stand (nach S121, 2026-07-04)
 
-**S120 committed:** deckte auf, dass der Design-System-Konsens (Retro-Vorschlag) eine
-**Wiedervorlage** war — Code seit S116–S118 längst fertig (Commits 143d848/3915f8c/29f4f81).
-Umgesetzt: Doku-Drift-Fixes (design_system.md §1.1, backlog §4c geschlossen), neuer
-Handoff-Hygiene-Wächter `tests/docs/test_handoff_hygiene.py` (STATUS-Marker-Pflicht,
-DONE blockiert den Build), CLAUDE.md-Verankerungen (Thema ≠ Planning-Skip, Entscheidung ≠
-Umsetzungs-Freigabe; DoD-7: Doku-Nachzug im selben Schritt sonst NO-GO), Handoff-Ordner
-11→3 Dateien, `ziel6.md` nach `archive/` verschoben + Rotationsziel jetzt `session_archive.md`.
-Review S120: **GO mit Auflagen** (A1 umgesetzt, A2 → M3 notiert, A3 → M4 umgesetzt).
+**S121 committed:** Stufe A Spieler-Spalten-Split komplett (`f9279fe`/`8c124c3`/`396fdec`:
+`player: both`-Regelfix, zwei feste Spalten mit `stratagem_usable_by_player()`,
+`used_stratagem_ids` als Dict pro Spieler-Slot) + `464bb40` (Bugfix aus UI-Test: CCW-Fallback
+`ap="0"`→`ap=0`, Crash bei Einheiten ohne Nahkampfwaffe) + `6ebb04a` (ziel7 §0, Findings
+F1–F4 im Backlog, Handoff gelöscht). Review: **GO ohne Auflagen.** UI-Verifikation: 1, 2, 5–7
+bestätigt; 3+4 blockiert durch Plan 015. Retro M1+M2 in `agent_scopes.md` verankert.
 
-Frühere Sessions (S60–S119): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S120): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-Stufe A aus `docs/handoff/plan-ziel7-restruktur.md` (Marker ANSWERED, FREIGEGEBEN): Task 0
-YAML-Drift (Counter-Offensive + Insane Bravery → `player: both`) → Task 1 Spieler-Spalten-Split
-(`first_player` links/`second_player` rechts, Attribution aus Quell-Liste,
-`stratagem_usable_by_player()`) → Task 2 `used_stratagem_ids` auf Dict-Form. Entscheidungen:
-Design Option 1 (nur Sektions-Header), Dict-Form-Konvention, ziel7-§0-Block übernehmen,
-(inactive)-Suffix nach Split entfernen. Danach Stufe B (Necrons), C (Orks), UX-Pass vor Ziel8.
+Planungskandidaten S122 (Stakeholder priorisiert im Planning):
+(a) **Plan 015** reaktive Stratagem-UI (`docs/audit/plans/015-contextual-reactive-stratagems.md`,
+TODO) — entsperrt Checkpunkte 3+4 (Fire Overwatch, Counter-Offensive sichtbar/nutzbar);
+(b) **F1** Disruption Fields: Stärke-Modifier statt Wound-Roll-Modifier (`backlog.md` §5);
+(c) **F3** natürliche 1 nie als Erfolg in der Würfel-UI (Berechnung prüfen + Darstellung);
+(d) danach ziel7 **Stufe B** (Necrons) / **C** (Orks) aus `ziel7.md` §0, UX-Pass vor Ziel8.
 
-**Merksatz S120:** Umsetzung ohne Haken + Doku-Nachzug = nicht fertig; „folgt der Empfehlung"
-beantwortet nur die Entscheidungsfrage, ist keine Umsetzungs-Freigabe.
+**Merksatz S121:** Verifikations-Checklisten nur mit gegen den Ist-Stand prüfbaren Punkten;
+Executor-Endbericht immer in derselben Antwort wie das Suite-Ende.
 
 ---
 

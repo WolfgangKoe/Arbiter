@@ -2440,12 +2440,13 @@
   "f800d10f-b67c-4037-9674-7d30c853c856": {
     "started_at": "2026-07-04T07:55:41.691Z",
     "task": "start session - Plan durch Subagenten vorlegen",
-    "peak_context": 110956,
-    "subagent_share": 73.41889416305207,
+    "peak_context": 132132,
+    "subagent_share": 67.41672907369026,
     "by_tier": {
       "Sonnet": 10463495,
       "Fable": 9280511,
-      "Haiku": 439301
+      "Haiku": 439301,
+      "Opus": 1256545
     },
     "subagents": [
       {
@@ -2481,6 +2482,13 @@
         "description": "Lookup: Weirdboy Stab Stärke",
         "tier": "Haiku",
         "peak_context": 29657,
+        "started_at": "2026-07-04T07:55:41.691Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S121",
+        "tier": "Opus",
+        "peak_context": 54526,
         "started_at": "2026-07-04T07:55:41.691Z"
       }
     ]

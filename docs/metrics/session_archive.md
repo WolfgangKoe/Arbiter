@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-04 14:33 CEST
+Stand: 2026-07-04 14:44 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,12 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 09:55 f800  █████████░░░ 111k ✅    ████░░  73%    ▚▚▚▚▚▚······
+07-04 09:55 f800  ███████████░ 132k ⚠️   ████░░  67%    ▚▚▚▚▚█······
          SA_1·  █████████░░░ 112k ✅    Executor: Task 0 YAML-Drift
          SA_2·  ███████░░░░░  84k ✅    Planner: Planning-Entwurf S121
          SA_3·  █████████░░░ 109k ✅    Executor: Findings + Task 4 Doku
          SA_4·  █████░░░░░░░  62k ✅    Root-Cause: Crash + fehlende Strat…
          SA_5·  ██░░░░░░░░░░  30k ✅    Lookup: Weirdboy Stab Stärke
+         SA_6·  ████░░░░░░░░  55k ✅    Reviewer: DoD-Review S121
 ----------------- ---------------------- -------------- ------------
 07-03 22:31 622e  ██████████░░ 126k ⚠️   █████░  82%    ▚▚▚·········
          SA_1·  ████░░░░░░░░  51k ✅    Review S120 nach DoD
@@ -392,3 +393,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 
 <!-- Verdichteter Stand je Session (`tools/rotate_history.py --summary`) — bleibt bei jedem `--write` erhalten, siehe `_extract_manual_history`. -->
 - **S120 (2026-07-04)** Design-System-Wiedervorlage aufgedeckt (Code fertig seit S116-118); Handoff-Waechter + DoD-7-Verschaerfung; ziel6 archiviert, Rotation -> session_archive
+- **S121 (2026-07-04)** Stufe A Spieler-Spalten-Split komplett (player:both, Spalten-Split, Dict-Form) + CCW-Crashfix aus UI-Test; Review GO ohne Auflagen
