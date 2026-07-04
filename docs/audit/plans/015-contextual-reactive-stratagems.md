@@ -104,7 +104,16 @@ Spieler), nicht als zentrale Liste.
 
 ## Steps
 
-### Step 1: `once_per_battle` enforced
+### Step 1: `once_per_battle` enforced — ✅ ERLEDIGT (vorab via Ziel7 Stufe A, festgestellt S122)
+
+> Bereits umgesetzt außerhalb dieses Plans: T2b `4330bdc` (Battle-Set +
+> Visibility), P19 `1f9d82b` (pro Spieler-Slot statt global), P21 `dde16f3`
+> (Undo nur im Phasenfenster), S121 `396fdec` (Dict-Struktur analog fürs
+> Phase-Set). Session-Key heißt `used_stratagem_battle_ids` (statt wie unten
+> geplant `used_stratagem_ids_battle`). Tests: `tests/gameObjects/
+> test_stratagem.py` (R-STR-01 + P19-Regression),
+> `tests/gameMechanic/test_game_state.py`
+> (`test_does_not_reset_used_stratagem_battle_ids`).
 
 1. `game_state.py`: neuer Session-Key `used_stratagem_ids_battle: set[str]`
    (Init + `reset_game`; in `_reset_phase_state` NICHT leeren).
@@ -218,7 +227,8 @@ HI-Kandidaten; ohne Ability → nicht.
 
 ALLE müssen gelten:
 
-- [ ] `once_per_battle` wirkt über Phasen hinweg (Test)
+- [x] `once_per_battle` wirkt über Phasen hinweg (Test) — vorab via Ziel7
+      Stufe A (`4330bdc`, `1f9d82b`, `dde16f3`, `396fdec`; s. Step 1)
 - [ ] Fire Overwatch im Charge-Fenster nutzbar; Hit nur auf unmodifizierte 6
 - [ ] Counter-Offensive unterbricht die Alternation regelkonform
 - [ ] HI-Eligibility über `can_heroic_intervene` (kein CHARACTER-Hardcode in chargephase)
