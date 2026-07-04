@@ -33,6 +33,20 @@ Wert 1 — der Wert-1-Würfel wird dann **innerhalb** des Rahmens trotzdem als
 minimal 2 (`max(2, …)`), sodass „Eff. 1+" weder angezeigt noch gewertet wird
 (Regel: „An unmodified roll of 1 always fails", core_rules.txt Hit/Wound/Save).
 
+Konkretes Soll-Bild im SAVE-Block (Stakeholder-Entscheid S122, Variante A):
+
+- **Eff.-Zeile floort auch in der Anzeige bei 2+** (`dice_html.py`,
+  `_render_dice_save_block`): Label nie „Eff. 1+", Rahmen 2–6; die Farbe folgt
+  der normalen Schwellen-Konvention (§7 / `_THRESHOLD_COLOR`) und ist bei der
+  gefloorten 2 damit **grün** — orange kodiert Schwellen-Schwere, nie
+  „modifiziert".
+- **Modifier-Mini-Zeile:** Drückt ein Buff den Zielwert unter 2+
+  (`armour − value ≤ 1`), steht der Quell-Würfel für eine natürliche 1 und wird
+  als ×-Miss-Face gezeichnet: `[✕] +1→ [2]` statt `[1] +1→ [2]`
+  (`save_modifier_die_pair_html`, Parameter `left_miss`).
+- **Inv-Zeile bleibt konventionsgemäß** in ihrer Schwellenfarbe (z. B. Inv 4+
+  → amber) — „alles grün" bezieht sich nur auf die gefloorte Eff.-Zeile.
+
 ### 1.1 Schwellen-Position
 
 | Profil-Wert | `[ | ]` sitzt zwischen |
@@ -193,6 +207,8 @@ Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
 | `test_buff_magnitude_uses_buff_colour_not_context_grey` | Pfeil-Label in Modifier-Farbe, nicht Grau | 022/S78 |
 | `test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame` | Schwelle ≤ 1 → Wert 1 als ✕ im Erfolgsrahmen (§1 Randfall) | S122/F3 |
 | `test_save_floored_at_2_armour_path` / `test_save_floored_at_2_invuln_path` | `resolve_save()` floort effektiven Save auf 2 (`test_combat_6d.py`) | S122/F3 |
+| `test_effective_save_row_floors_display_at_2_and_renders_green` | Eff.-Zeile zeigt nie „1+", gefloorte 2 → grüner Rahmen (§1 Soll-Bild) | S122/F3 |
+| `test_save_modifier_row_natural_one_source_die_shows_miss_cross` | Mini-Zeile: Buff-Ziel ≤ 1 → Quell-Würfel als ×-Miss-Face (Variante A) | S122/F3 |
 
 ---
 

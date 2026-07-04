@@ -11,6 +11,7 @@ from unittest.mock import MagicMock
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from uiLayout import dice_html as dice_html_module  # noqa: E402
 from uiLayout.dice_compose import (  # noqa: E402
     _modifier_color,
     _modifier_columns,
@@ -313,6 +314,43 @@ def test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame() -
     for threshold in (1, 0, -3):
         html = dice_row_html(threshold)
         assert _CROSS_STROKE in html, f"threshold={threshold} must show the miss cross for value 1"
+
+
+def test_effective_save_row_floors_display_at_2_and_renders_green() -> None:
+    """Regression (S122/F3, Variante A): the Eff. row in the SAVE block must floor
+    its displayed threshold at 2+ (unmodified 1 always fails) and, per the normal
+    threshold colour convention, render the floored 2 with the green frame.
+    Sv 4+ with a +3 buff would compute 1+ unfloored; base row (4 → amber) and
+    modifier row (buff green #4a9a5a) never emit #22c55e, so the green proves
+    the Eff. row's frame colour.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    save = {
+        "armour": 4,
+        "armour_eff": 4,
+        "invuln": None,
+        "effective": 2,
+        "using_invuln": False,
+        "save_bonus": 3,
+        "stack": [{"label": "Heavy Cover", "value": 3}],
+    }
+    dice_html_module._render_dice_save_block(save, ap=0)
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Eff. 2+" in html
+    assert "Eff. 1+" not in html
+    assert "#22c55e" in html  # floored threshold 2 → green frame (threshold convention)
+
+
+def test_save_modifier_row_natural_one_source_die_shows_miss_cross() -> None:
+    """Regression (S122/F3, Variante A): when a save buff pushes the target below
+    2+ (armour − value ≤ 1), the source die of the modifier mini-row stands for a
+    natural 1 — which always fails — and must render as the ×-miss face.
+    """
+    html = save_modifier_die_pair_html(2, 1, "Heavy Cover", _BUFF_GREEN)
+    assert _CROSS_STROKE in html  # [✕] +1→ [2]
+    # Control: a buff that stays at 2+ or worse keeps the normal pip die.
+    html_ok = save_modifier_die_pair_html(5, 2, "Cover", _BUFF_GREEN)
+    assert _CROSS_STROKE not in html_ok
 
 
 def test_block_divider_html_renders_hr() -> None:

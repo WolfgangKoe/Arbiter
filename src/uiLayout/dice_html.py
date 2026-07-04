@@ -180,7 +180,9 @@ def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -
     # Effective save row: always shows the armour-path result (after AP + cover).
     # Invuln is shown separately below with its own row — not mixed into this value.
     if has_modifiers:
-        armour_modified = armour_eff - sum(m["value"] for m in stack)
+        # Floor at 2+ (S122/F3): an unmodified 1 always fails, so the effective
+        # save is never shown better than 2+ — mirrors resolve_save()'s max(2, …).
+        armour_modified = max(2, armour_eff - sum(m["value"] for m in stack))
         eff_clamped = min(armour_modified, 7)
         eff_label_text = f"{armour_modified}+" if armour_modified <= 6 else "—"
         rows.append(

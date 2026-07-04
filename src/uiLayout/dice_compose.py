@@ -237,6 +237,7 @@ def _aligned_modifier_row_html(
     base_threshold: int,
     right_off_scale: bool = False,
     badge_color: str | None = None,
+    left_miss: bool = False,
 ) -> str:
     """Modifier row aligned to the 1..6 scale (D5, Finding 9.2).
 
@@ -244,7 +245,8 @@ def _aligned_modifier_row_html(
     connector arrow, so the visual length is proportional to the shift (AP-3 spans
     three columns, Cover +1 one). The boundary gap is placed at base_threshold so
     the columns line up with the header / dice rows above. Off-scale (>6) appends a
-    miss die right of the 6.
+    miss die right of the 6. left_miss draws the left die as the ×-miss face —
+    used when it stands for a natural 1, which always fails (S122/F3, Variante A).
     """
     left_col, right_col = _modifier_columns(left_val, right_val, right_off_scale)
     lo, hi = sorted((left_col, right_col))
@@ -264,7 +266,11 @@ def _aligned_modifier_row_html(
             else:
                 slots.append(_boundary_gap_html(with_line=False))
         if v == left_col:
-            inner = dice_face_svg(left_val, color=left_color)
+            inner = (
+                dice_face_svg(1, miss=True)
+                if left_miss
+                else dice_face_svg(left_val, color=left_color)
+            )
         elif v == right_col and not right_off_scale:
             inner = dice_face_svg(right_val, color=right_color)
         elif lo < v < hi:
@@ -310,17 +316,21 @@ def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str)
     Buff  (value > 0, e.g. Cover +1, armour 3): colored(armour−value) ← grey(armour).
     Debuff (value < 0, e.g. AP-2,    armour 3): grey(armour−1) → colored(armour+|value|−1).
     If the newly-failing value exceeds 6 (e.g. Sv 6+ with AP-4) a miss die marks it.
+    If a buff pushes the target below 2+ (armour − value ≤ 1), the source die stands
+    for a natural 1 — which always fails — and is drawn as the ×-miss face (S122/F3).
     """
     n = abs(value)
     if value > 0:
         left_val, left_color = max(1, min(6, armour - n)), color
         right_val, right_color = max(1, min(6, armour)), "#6b7280"
         off_scale = False
+        left_miss = armour - n <= 1
     else:
         left_val, left_color = max(1, min(6, armour - 1)), "#6b7280"
         right_raw = armour + n - 1
         right_val, right_color = max(1, min(6, right_raw)), color
         off_scale = right_raw > 6
+        left_miss = False
     return _aligned_modifier_row_html(
         label,
         value,
@@ -331,6 +341,7 @@ def save_modifier_die_pair_html(armour: int, value: int, label: str, color: str)
         min(armour, 6),
         off_scale,
         badge_color=color,
+        left_miss=left_miss,
     )
 
 
