@@ -14,7 +14,7 @@
 
 ## Status
 
-- **Priority**: P3 (MITTEL, ziel6.md Z. 498 + next_session „Fähigkeit + AP kombiniert")
+- **Priority**: P3 (MITTEL, archive/ziel6.md Z. 498 + next_session „Fähigkeit + AP kombiniert")
 - **Effort**: S–M (inkl. Recherche-Step — der eigentliche Engpass ist die Datenfrage)
 - **Risk**: LOW–MEDIUM (Anzeige + eine AP-Rechenstelle)
 - **Depends on**: 014 (gleiche Datei `_common.py` — nacheinander); 016 empfohlen
@@ -24,7 +24,7 @@
 
 ## Why this matters
 
-ziel6.md (Z. 498): „SAVE Modifier-Paare: Fähigkeit + AP kombiniert als eine
+archive/ziel6.md (Z. 498): „SAVE Modifier-Paare: Fähigkeit + AP kombiniert als eine
 Badge darstellen (z. B. `Enslaved AP-1`) — erfordert Datenarchitektur (6j)."
 Heute kennt der SAVE-Block AP nur als Waffen-Eigenschaft (`profile.ap`,
 `_render_resolution_tab`, `_common.py:689`). Fähigkeiten/Direktiven, die AP

@@ -1,4 +1,4 @@
-ANSWERED
+STATUS: ANSWERED
 
 # R-PROTO-02 — UI-Hinweis für Conquering-Tyrant-Direktive 1 (Aura-Range +3", max 12")
 

@@ -1,9 +1,15 @@
-# Design-System — verbindlich (beschlossen S115, 2026-07-01)
+# Design-System — verbindlich (beschlossen S115, 2026-07-01; bestätigt S120, 2026-07-03)
 
 > **Regel: Design-Entscheidungen trifft der Nutzer** (wie beim Farbschema).
 > Diese Spec deckt Geometrie (Badge/Chip-Maße), die Hinweis-Konvention und die
 > Symbol-Konstanten ab. **Farben** stehen weiterhin verbindlich in
 > [`design_colors.md`](design_colors.md) — hier NICHT dupliziert, nur referenziert.
+>
+> **S120-Nachtrag:** Der Konsens-Vorschlag aus `docs/handoff/design-system-consensus.md`
+> (Task 0, Phase 1) wurde am 2026-07-03 vom Stakeholder mit der Default-Empfehlung in
+> allen fünf Entscheidungsfragen bestätigt — die Werte in §2–§4 waren bereits identisch
+> umgesetzt (S115), keine inhaltliche Änderung nötig. Die Handoff-Datei wurde danach
+> gelöscht (Lebensdauer laut Datei-Kopf: bis Stakeholder-Entscheidung).
 
 ## 0. Governance & Artefakt-Zuschnitt
 
@@ -31,12 +37,17 @@ Call-Site** (sie stammen aus den semantischen Tabellen in `design_colors.md`).
 
 | Builder | Zweck | Konsumenten |
 |---|---|---|
-| `badge(text, fg, bg, *, margin_right)` | Status / Buff / Debuff / Faction / Army-Ability | `_common._badge`, `unitCard._badge`, `armyCard._keyword_badge` + `_active_ability_badge`, `dice_html` Invuln-„active" |
-| `chip(text, fg, bg, border, *, margin_right)` | Keyword-Chip / sekundärer Hinweis | `unitCard._keyword_chip`, `dice_html` Invuln-„AP/Cover N/A" |
+| `badge(text, fg, bg, *, margin_right)` | Status / Buff / Debuff / Faction / Army-Ability | `_common._badge`, `unitCard._badge`, `armyCard._keyword_badge` + `_active_ability_badge` |
+| `chip(text, fg, bg, border, *, margin_right)` | Keyword-Chip / sekundärer Hinweis | `unitCard._keyword_chip`, `gameActionsArea._display_unit_datasheet` (seit S117/S118) |
 
-Der Invuln-Block (`dice_html.py`, `_render_dice_save_block`) baut das Label jetzt aus
-diesen Bausteinen statt aus drei losen HTML-Fragmenten (Backlog-Befund S78, Z. 129):
-„active" = `badge(...)`, „AP/Cover N/A" = `chip(...)` mit gedämpfter Farbe.
+Der Invuln-Block (`dice_html.py`, `_render_dice_save_block`) wurde in S116 bewusst
+**gestrichen**, nicht auf die Bausteine umgestellt (Commit `143d848`: „Invuln cleanup:
+drop active badge + AP/Cover N/A chip from SAVE block"): „active"-Badge und
+„AP/Cover N/A"-Hinweis entfielen ersatzlos; übrig bleibt nur die `Inv N+`-Zeile als
+eingefärbter `<span>` (Buff-Grün bei ability-basiertem Invuln) — kein
+`badge()`/`chip()`-Aufruf. Der Backlog-Befund S78 (drei lose HTML-Fragmente, Z. 129)
+ist damit durch Streichung erledigt. *(Korrigiert S120, 2026-07-03 — die frühere
+Formulierung „baut das Label aus diesen Bausteinen" beschrieb einen nie gebauten Stand.)*
 
 **Nicht Teil des gemeinsamen Builders (bewusst):** `dice_compose._badge_chip` — das
 Dice-Modifier-Label hat eine eigene Sonder-Geometrie (feste Spaltenbreite +

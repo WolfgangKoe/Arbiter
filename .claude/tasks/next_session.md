@@ -4,7 +4,7 @@
 <!-- Referenz NICHT hier: Architektur → architecture.md, Regel-Gotchas → rules_insights.md, Constraints → CLAUDE.md. -->
 
 ## ⚠️ Session-Regeln
-- **Start „start next session" → Planner-Subagent beauftragen** (liest `CLAUDE.md` + `docs/goals/ziel6.md`
+- **Start „start next session" → Planner-Subagent beauftragen** (liest `CLAUDE.md` + `docs/goals/archive/ziel6.md`
   + `docs/goals/backlog.md`, Scope aus `docs/reference/agent_scopes.md`); Entwurf als Datei, Koordinator
   legt vor, erst nach Freigabe los. Shortcut „Plan ist freigegeben" = direkt los. Einstieg `LEITSTAND.md`;
   Rollen/Tier/Modi: `docs/governance/operating_model.md`.
@@ -13,11 +13,15 @@
   Entscheidungen über Mailbox (`docs/handoff/`, NEEDS-DECISION → ANSWERED), nicht Chat.
   Details: `docs/governance/operating_model.md` [#events].
 - **Ende:** Review (Reviewer-SA) → Retro → **Maßnahmen-Entscheid** (Stakeholder wählt) →
-  Abschluss: **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen) + ggf. ziel6-Checkboxen.
+  Abschluss: **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen) + ggf. Ziel-Checkboxen.
 - **Doku-Gate:** Decke **120** Zeilen (Test rot darüber). Beim Reißen **tief auf ≤ 70** kürzen —
   Erledigtes → `backlog.md`/`session_archive.md`, Referenz → s. o.
 - **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten =
   stehende Freigabe (proaktiv, ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
+- **Checkbox-Sync prüft auch Commit-Behauptungen:** Session-Start-Sync nicht nur gegen Ziel-Checkboxen,
+  sondern auch Titel wie „archive/close" gegen Datei-Realität verifizieren (b3ebfd5 behauptete
+  Archivierung ohne Vollzug, S119→S120-Befund). Restrisiko bewusst nicht test-bewacht — Kompensation:
+  Reviewer-Pflicht + dieser Sync.
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
@@ -26,17 +30,18 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S119, 2026-07-03)
+## Aktueller Stand (nach S120, 2026-07-04)
 
-**S119 committed** (Review GO uneingeschränkt, 1405 passed, 99,11 %, Arch-Gate 8/8;
-`docs/handoff/review-S119.md`): Ziel7-Cluster gefixt — P21 Undo phase-scoped (dde16f3), P19
-per-Spieler-Tracking (1f9d82b), P20 Rapid-Fire-Cap verdoppelt (dfebd27); Ziel6 GESCHLOSSEN/
-archiviert (b3ebfd5). UI-Verifikation vollständig bestätigt inkl. S113-Carry-over
-(Mirror-Befehlsphase, +1-Save-Badge) — Carry-over-Block damit leer, entfernt.
-Live-Test-Befunde S119 (`backlog.md` §5): Stratagem-Doppelanzeige, Attributions-Bug
-(`spending_faction` aus `s.player` statt Quell-Liste), globales phase-Set.
+**S120 committed:** deckte auf, dass der Design-System-Konsens (Retro-Vorschlag) eine
+**Wiedervorlage** war — Code seit S116–S118 längst fertig (Commits 143d848/3915f8c/29f4f81).
+Umgesetzt: Doku-Drift-Fixes (design_system.md §1.1, backlog §4c geschlossen), neuer
+Handoff-Hygiene-Wächter `tests/docs/test_handoff_hygiene.py` (STATUS-Marker-Pflicht,
+DONE blockiert den Build), CLAUDE.md-Verankerungen (Thema ≠ Planning-Skip, Entscheidung ≠
+Umsetzungs-Freigabe; DoD-7: Doku-Nachzug im selben Schritt sonst NO-GO), Handoff-Ordner
+11→3 Dateien, `ziel6.md` nach `archive/` verschoben + Rotationsziel jetzt `session_archive.md`.
+Review S120: **GO mit Auflagen** (A1 umgesetzt, A2 → M3 notiert, A3 → M4 umgesetzt).
 
-Frühere Sessions (S60–S118): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+Frühere Sessions (S60–S119): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
@@ -47,8 +52,8 @@ YAML-Drift (Counter-Offensive + Insane Bravery → `player: both`) → Task 1 Sp
 Design Option 1 (nur Sektions-Header), Dict-Form-Konvention, ziel7-§0-Block übernehmen,
 (inactive)-Suffix nach Split entfernen. Danach Stufe B (Necrons), C (Orks), UX-Pass vor Ziel8.
 
-**Merksatz S119:** Per-Spieler-State nie über Fraktions-/Anzeigenamen keyen —
-Player-Slot-Muster (`round_choice_state_key`); P19-Mirror-Lücke wird durch S120-Umbau geschlossen.
+**Merksatz S120:** Umsetzung ohne Haken + Doku-Nachzug = nicht fertig; „folgt der Empfehlung"
+beantwortet nur die Entscheidungsfrage, ist keine Umsetzungs-Freigabe.
 
 ---
 

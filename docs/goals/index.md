@@ -45,7 +45,7 @@ Details: `docs/spec/architecture.md` · UI-Spec: `docs/spec/ui_layout.md`
 | Ziel 9 — Wahapedia Faction Fetcher | ⬜ geplant |
 | Design-Block — UI-Theme | ⏳ eigene Session |
 
-Details je Ziel: `archive/ziel1.md` – `archive/ziel5.md` (erledigt, archiviert) · `ziel6.md` – `ziel9.md` · Doku-Bereinigung: `archive/doku.md`
+Details je Ziel: `archive/ziel1.md` – `archive/ziel6.md` (erledigt, archiviert) · `ziel7.md` – `ziel9.md` · Doku-Bereinigung: `archive/doku.md`
 
 ---
 

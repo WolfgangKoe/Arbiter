@@ -10,11 +10,13 @@ import json
 
 from tools.token_report import (
     CONTEXT_LIMIT,
+    MANUAL_HISTORY_HEADER,
     Bucket,
     SessionMeta,
     Subagent,
     UsageRecord,
     _context_status,
+    _extract_manual_history,
     _render_subagent_corridor,
     _subagent_peak_context,
     bar,
@@ -506,6 +508,45 @@ def test_session_archive_md_has_main_and_sa_rows():
     # Subzeile
     assert "SA_1" in md
     assert "Fix setup-phase arch" in md
+
+
+def test_session_archive_md_appends_empty_manual_history_section_by_default():
+    """Ohne ``manual_history`` steht trotzdem die Kopfzeile für die Rotation da."""
+    md = render_session_archive_md({}, generated_at="2026-07-04 08:00 CEST")
+    assert MANUAL_HISTORY_HEADER in md
+
+
+def test_session_archive_md_includes_passed_manual_history_verbatim():
+    """Übergebene manuelle Historie (aus einer bestehenden Datei) landet im Output."""
+    manual = f"{MANUAL_HISTORY_HEADER}\n\n- **S120 (2026-07-04)** Testzeile.\n"
+    md = render_session_archive_md({}, generated_at="2026-07-04 08:00 CEST", manual_history=manual)
+    assert "- **S120 (2026-07-04)** Testzeile." in md
+
+
+def test_render_session_archive_md_survives_repeated_write_with_rotated_line():
+    """Regressionstest S120: eine per rotate_history.py angehängte Zeile darf bei einem
+    erneuten ``token_report.py --write`` nicht verschwinden."""
+    first_md = render_session_archive_md({}, generated_at="2026-07-04 08:00 CEST")
+    # Simuliert tools/rotate_history.py: hängt eine Zeile ans Dateiende an.
+    rotated_md = f"{first_md.rstrip()}\n- **S120 (2026-07-04)** Testzeile.\n"
+
+    manual_history = _extract_manual_history(rotated_md)
+    second_md = render_session_archive_md(
+        {}, generated_at="2026-07-04 09:00 CEST", manual_history=manual_history
+    )
+
+    assert "- **S120 (2026-07-04)** Testzeile." in second_md
+
+
+def test_extract_manual_history_returns_empty_when_header_missing():
+    assert _extract_manual_history("# Session-Archiv\n\nkein Marker hier.\n") == ""
+
+
+def test_extract_manual_history_returns_section_from_header_to_end():
+    text = f"# Session-Archiv\n\n...\n\n{MANUAL_HISTORY_HEADER}\n\n- **S1** x.\n"
+    result = _extract_manual_history(text)
+    assert result.startswith(MANUAL_HISTORY_HEADER)
+    assert result.endswith("- **S1** x.")
 
 
 def test_merge_session_idempotent():

@@ -16,10 +16,15 @@ Jede Handoff-Datei deklariert in ihrer **ersten Zeile** einen Status:
 
 | Marker | Bedeutung | Wer handelt als Nächstes |
 |---|---|---|
-| `STATUS: DONE` | Ergebnis fertig, nur zur Ablage/Review | Koordinator (liest bei Bedarf gezielt) |
+| `STATUS: DONE` | Ergebnis fertig → Erkenntnisse in Backlog/Spec überführen, **Datei löschen** (DoD Punkt 7) | wer den Marker setzt, löscht im selben Schritt |
 | `STATUS: NEEDS-DECISION` | Subagent braucht eine Stakeholder-Entscheidung | Koordinator legt vor → Stakeholder antwortet |
 | `STATUS: ANSWERED` | Stakeholder hat geantwortet (Antwort steht in der Datei) | Koordinator weckt den Subagenten per `SendMessage` |
-| `STATUS: IN-PROGRESS` | Subagent arbeitet noch / mehrteilig | — |
+| `STATUS: IN-PROGRESS` | Subagent arbeitet noch / mehrteilig — nur **während** eines Laufs; vor Lauf-Ende auf einen der drei anderen Marker setzen (der Wächter akzeptiert nur diese) | — |
+
+**Wächter (S120):** `tests/docs/test_handoff_hygiene.py` bricht den Build, wenn Zeile 1 nicht mit
+`STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE` beginnt — oder wenn ein `DONE`-Handoff liegen bleibt.
+`DONE` ist damit ein **Durchgangszustand** (Setzen + Löschen im selben Schritt), kein Ablagezustand —
+der Wächter erzwingt das absichtlich, statt einen Bug zu markieren.
 
 ## Mailbox-Round-Trip (Ablauf)
 
@@ -38,7 +43,3 @@ Jede Handoff-Datei deklariert in ihrer **ersten Zeile** einen Status:
   **Lösch-Kriterium** explizit („löschen nach Umsetzung von X").
 - **Lebenszyklus:** lesen → arbeiten → auslagern → **löschen**. Erledigte temporäre Handoffs werden
   entfernt, nicht angesammelt — der Ordner bleibt klein.
-
-## Offene Altlast
-
-- `context-audit-S91.md` — noch zu verarbeiten und danach zu löschen (Carry-over aus `next_session.md`).

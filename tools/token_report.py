@@ -956,13 +956,42 @@ def _archive_started_at(entry: dict | list, sid: str) -> str | None:
     return entry.get("started_at")
 
 
-def render_session_archive_md(archive: dict[str, dict | list], *, generated_at: str) -> str:
+MANUAL_HISTORY_HEADER = "## Session-Historie (manuell, rotiert per `tools/rotate_history.py`)"
+_MANUAL_HISTORY_COMMENT = (
+    "<!-- Verdichteter Stand je Session (`tools/rotate_history.py --summary`) — "
+    "bleibt bei jedem `--write` erhalten, siehe `_extract_manual_history`. -->"
+)
+
+
+def _extract_manual_history(existing_md: str) -> str:
+    """Liest den manuell rotierten Abschnitt aus einer vorhandenen ``session_archive.md``.
+
+    `render_session_archive_md` überschreibt die Datei bei jedem `--write` komplett neu
+    aus dem JSON-Archiv. Ohne diese Übernahme würde eine per `tools/rotate_history.py`
+    angehängte Session-Zeile beim nächsten `--write` sofort wieder verschwinden
+    (S120-Befund, seit S120 ist `session_archive.md` das Rotationsziel statt `ziel6.md`).
+    Gibt den Abschnitt ab `MANUAL_HISTORY_HEADER` bis Dateiende zurück, oder ``""``,
+    wenn die Datei den Abschnitt noch nicht enthält (Bootstrap-Fall).
+    """
+    idx = existing_md.find(MANUAL_HISTORY_HEADER)
+    if idx == -1:
+        return ""
+    return existing_md[idx:].rstrip("\n")
+
+
+def render_session_archive_md(
+    archive: dict[str, dict | list], *, generated_at: str, manual_history: str = ""
+) -> str:
     """Rendert das vollständige Session-Archiv als Markdown (session_archive.md).
 
     Struktur je Session: Hauptzeile (Label · Peak-Balken · Subagent-Anteil · Modell-Mix)
     + Subzeilen je Subagent (SA_N· Peak-Balken + Status + Aufgabe).
     Sessions durch ``---``-Trenner getrennt, jüngste zuerst.
     Fehlende Hauptzeilen-Werte (aus migrierten Alt-Sessions) → ``—``/leere Balken.
+
+    Hängt am Ende zusätzlich den manuell rotierten Abschnitt an (``manual_history``,
+    typischerweise das Ergebnis von `_extract_manual_history` der zuvor bestehenden
+    Datei) — ohne Übergabe wird nur der leere Abschnitt mit Kopfzeile gerendert.
     """
 
     def _entry_started_at(entry: dict | list, sid: str) -> str | None:
@@ -1039,7 +1068,12 @@ def render_session_archive_md(archive: dict[str, dict | list], *, generated_at: 
         body_lines.append(f"{'-' * 17} {'-' * 22} {'-' * 14} {'-' * 12}")
 
     all_lines = header_lines + body_lines + ["```", ""]
-    return "\n".join(all_lines)
+    section = (
+        manual_history.rstrip("\n")
+        if manual_history
+        else (f"{MANUAL_HISTORY_HEADER}\n\n{_MANUAL_HISTORY_COMMENT}")
+    )
+    return "\n".join(all_lines) + f"\n{section}\n"
 
 
 # --------------------------------------------------------------------------- #
@@ -1129,8 +1163,14 @@ def main(argv: list[str] | None = None) -> int:
 
         save_session_archive(_ARCHIVE_FILE, archive)
 
-        archive_md = render_session_archive_md(archive, generated_at=generated_at)
-        _ARCHIVE_MD.write_text(archive_md + "\n", encoding="utf-8")
+        existing_archive_md = (
+            _ARCHIVE_MD.read_text(encoding="utf-8") if _ARCHIVE_MD.is_file() else ""
+        )
+        manual_history = _extract_manual_history(existing_archive_md)
+        archive_md = render_session_archive_md(
+            archive, generated_at=generated_at, manual_history=manual_history
+        )
+        _ARCHIVE_MD.write_text(archive_md, encoding="utf-8")
         print(f"Archiv geschrieben: {_ARCHIVE_MD}")
     else:
         print(report)

@@ -29,7 +29,7 @@
 das `_reset_phase_state()` bei JEDEM Phasenwechsel löscht
 (`game_state.py:348`) — auch beim Zurücknavigieren (←) in die Command Phase.
 Wer ← → drückt, kann demselben Spieler beliebig oft +1 CP geben.
-Akzeptanzkriterium ziel6.md: „CP-Doppelvergabe unmöglich".
+Akzeptanzkriterium archive/ziel6.md: „CP-Doppelvergabe unmöglich".
 
 ### Steps
 
@@ -84,7 +84,7 @@ ist damit MÖGLICHERWEISE bereits behoben — aber unverifiziert, und
 
 - Test grün; manueller Reset-Durchlauf sauber.
 - Falls NICHT reproduzierbar: im Bericht „bereits behoben durch <Commit/
-  Mechanik>" dokumentieren, Checkbox in ziel6.md abhaken, Test trotzdem
+  Mechanik>" dokumentieren, Checkbox in archive/ziel6.md abhaken, Test trotzdem
   ergänzen (sichert den Zustand).
 
 ---
@@ -200,5 +200,5 @@ dazu; die Sammelstellen sollen EINMAL existieren.
 - [ ] 18.3: Attrition-Hinweis datengetrieben; Threshold-Helper getestet
 - [ ] 18.4: Collector in der Engine, direkt getestet
 - [ ] `pytest --tb=short` grün, ≥80 %; Lint passt
-- [ ] ziel6.md: zugehörige Checkboxen (6g-Rest, 6e-CP, Gretchin) abgehakt
+- [ ] archive/ziel6.md: zugehörige Checkboxen (6g-Rest, 6e-CP, Gretchin) abgehakt
 - [ ] Status-Zeile in `docs/audit/plans/README.md` aktualisiert

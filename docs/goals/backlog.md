@@ -189,7 +189,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagern; in CLAUDE.md nur
   2-Zeilen-Verweis. Freigabepflichtig (CLAUDE.md-Änderung).
 - 🟢 **Backlog-§0-Hygiene (context-audit-S91, verarbeitet S118):** §0-Überschrift „S51" datieren;
-  erledigte ✅-Einträge inline nach `ziel6.md`-Historie auslagern statt hier stehen lassen.
+  erledigte ✅-Einträge inline nach `session_archive.md`-Historie auslagern statt hier stehen lassen.
 - 🔲 **Sudden Storm S — B-Hinweis anzeigen (`shoot_during_action`, S96):** Plan 025 Step 1 hat die Direktive
   datenseitig auf 9E-D2 korrigiert (Typ `shoot_during_action`, kein Engine-Effekt). Der Tisch-Hinweis hat
   noch **keine** sichtbare Anzeige. **S97: wird vom generischen Direktiv-Hinweisblock (Plan 025 Step 2b,
@@ -304,22 +304,19 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
   Group A + Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte verschwinden), 016
   behält nur RP-Hint + Dynastiebonus.
 
-## 4c. Design-System — Entscheidungen getroffen, Umsetzung nächste Session
+## 4c. Design-System — ERLEDIGT (S116–S118; Doku-Abgleich S120, 2026-07-03)
 
-Vorschlag: `docs/handoff/design-system-proposal.md` (→ ANSWERED, S114 2026-06-30). Kernbefund: 4 divergente Badge-Implementierungen im Codebase. Entscheidungen gefallen:
-- `docs/spec/design_system.md` anlegen + `design_colors.md` integrieren/konsolidieren.
-- Schritt-1-Umfang: `_common._badge()` + `unitCard._badge()` + `armyCard.py` + Invuln-Block (`dice_html.py:188-204`).
-- Token-Wertesatz (Radius/Padding/Font-Size): Umsetzungs-Session schlägt simpelsten Satz vor, User bestätigt.
-- Zentrale Symbol-Konstantenliste (▶◀✓✕＋⚔↺) anlegen.
-- Hinweis-Konvention (info/warning/success/error): Umsetzungs-Session legt Regel vor, User bestätigt.
-
-**Umsetzung = nächste Session. Freigabe vor Code-Änderungen einholen.**
+Kernbefund (S114): 4 divergente Badge-Implementierungen. Vollständig umgesetzt:
+- `docs/spec/design_system.md` angelegt (§0–§5), Farben bleiben in `design_colors.md` (Commit `143d848`, S116).
+- Schritt 1: `badges.py` (`badge()`/`chip()`) + `symbols.py` (8 Konstanten), 4 Call-Sites konsolidiert; Invuln-Block (`dice_html.py`) bewusst gestrichen statt umgestellt (`143d848`).
+- Schritt 2: Glyph-/Chip-Rollout auf die restlichen 10 Produktivdateien (`3915f8c` S117, `29f4f81` S118) — Ratchet-Rest auf Null (Details: `design_system.md` §5).
+- Stakeholder hat den Wertesatz + Hinweis-Konvention S120 (2026-07-03) final bestätigt; Handoff-Dateien (`design-system-proposal.md`, `design-system-consensus.md`) gemäß Lifecycle gelöscht.
 
 ---
 
 ## 4d. Test-Schuld (klein)
 
-Zwei Tautologie-Tests in `tests/gameMechanic/test_damage_block_reanimation.py` bei Gelegenheit schärfen (Quelle: review-S114.md):
+Zwei Tautologie-Tests in `tests/gameMechanic/test_damage_block_reanimation.py` bei Gelegenheit schärfen (Quelle: DoD-Review S114; Handoff gelöscht S120):
 - Z.394–401: rechnet `4*2==8` selbst nach — kein echter System-Under-Test-Nachweis.
 - Z.403–417: prüft nur Fixtures statt RP-Gate-Logik.
 
@@ -340,7 +337,7 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
   - **Ziel7-Cluster: P18** (aus Ziel6 ausgelagert S114; P17 erledigt S115):
     - **P17 — erledigt (S115):** Mechanik steht+getestet — Pre-Apply-Zielauswahl (`_render_subgroup_selector`,
       `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unit_mutations.py`); Vor-Auswahl+Lock
-      akzeptiert, ±-Zähler verworfen. Details: `docs/goals/ziel6.md` P17.
+      akzeptiert, ±-Zähler verworfen. Details: `docs/goals/archive/ziel6.md` P17.
     - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
       einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
       Einzelgruppe für Einheiten ohne `model_groups`) + `melee_with`-Ziel-Anzeige. Getestet: `test_group_flow.py`.
@@ -382,4 +379,4 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
 | Was ist insgesamt offen? | **dieser Index** |
 | Detailplan eines Features? | [../audit/plans/](../audit/plans/) |
 | Architektur-Bild + Invarianten? | [../spec/architecture.md](../spec/architecture.md) · [../spec/architecture_invariants.md](../spec/architecture_invariants.md) |
-| Ziel-Historie / Changelog? | [ziel6.md](ziel6.md) „Session-Historie" |
+| Ziel-Historie / Changelog? | [session_archive.md](../metrics/session_archive.md) „Session-Historie" |

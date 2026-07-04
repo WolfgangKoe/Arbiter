@@ -10,7 +10,7 @@ _NEXT_SESSION_SAMPLE = """# Startprompt — Nächste Session
 
 Alter Stand-Text, der beim Reset verschwinden soll.
 
-Frühere Sessions (S60–S67): Verlauf in `docs/goals/ziel6.md` (Session-Historie).
+Frühere Sessions (S60–S67): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt — frei wählbar
 1. Etwas, das erhalten bleiben muss.

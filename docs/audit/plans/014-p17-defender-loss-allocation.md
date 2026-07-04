@@ -18,7 +18,7 @@
 
 ## Status
 
-- **Priority**: P1-HOCH (ziel6.md §6n P17, neu geplant Refinement 2026-06-21)
+- **Priority**: P1-HOCH (archive/ziel6.md §6n P17, neu geplant Refinement 2026-06-21)
 - **Effort**: M–L (Schadenspfad-Vereinheitlichung berührt alle Gruppen-Einheiten)
 - **Risk**: HIGH (greift in den zentralen Schadenspfad ein; Regressionsfläche groß)
 - **Depends on**: 013 (zwingend — ein Code-Pfad, beide ändern `_common.py`);

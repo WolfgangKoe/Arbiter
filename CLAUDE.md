@@ -43,7 +43,7 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | Prozess-/Phasen-Specs (Attackenabfolge etc.) | `docs/spec/processes.md` |
 | Nicht-offensichtliche Regelerkenntnisse (Implementierungs-Gotchas) | `docs/spec/rules_insights.md` |
 | Farbschema (verbindlich) | `docs/spec/design_colors.md` |
-| Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/goals/ziel6.md` |
+| Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/metrics/session_archive.md` |
 
 Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in
 eines dieser Artefakte — sonst driften sie auseinander.
@@ -132,7 +132,11 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 5. **Clean Code** — `black`/`isort`/`ruff` sauber; Namen erklären *Was*.
 6. **UI manuell verifiziert** — Render-Code (uiLayout, `*Phase.py`) ist nicht von Tests gedeckt →
    explizit nennen, was zu prüfen ist; nie „fertig" ohne manuelle Prüfung.
-7. **Artefakte aktuell** — `next_session.md` + `docs/goals/backlog.md` + ggf. `ziel*.md` gepflegt.
+7. **Artefakte aktuell — im selben Schritt wie die Umsetzung, nicht erst am Session-Ende:**
+   Backlog-/Ziel-Checkbox abhaken, Handoff-Marker auf DONE (Datei gemäß Lifecycle-Zeile löschen),
+   betroffene Specs nachziehen. Umsetzung ohne Haken + Doku-Nachzug = NICHT fertig → Review NO-GO.
+   Jeder Executor-Auftrag führt diesen Punkt in seiner Selbstprüf-Checkliste
+   (Anlass: S116–S118-Drift → Wiedervorlage S120).
 
 **Doku-Drift:** Widerspricht Code einer Spec, ist das ein Befund — melden/korrigieren, nicht ignorieren.
 
@@ -150,7 +154,11 @@ vor. **Auf Freigabe warten**, dann Executor-Subagent starten.
 
 → Koordinator liest `next_session.md` (Pfade/Marker), beauftragt direkt den ersten Executor-Subagent —
 kein erneuter Plan nötig.  
-Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, hat dieses Vorrang.
+Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, hat dieses Vorrang
+**als Planungsgegenstand** — der Planning-Schritt (Planner-Entwurf vorlegen → explizite Freigabe →
+erst dann Executor) entfällt dadurch NICHT. Eine mitgelieferte Entscheidung (z. B. „folgt der
+Empfehlung" zu einer NEEDS-DECISION-Datei) beantwortet nur die Entscheidungsfrage — sie ist
+**keine** Umsetzungs-Freigabe (S120-Befund).
 
 **Session beenden + committen:**
 > Bereite die nächste Session vor. Committen.

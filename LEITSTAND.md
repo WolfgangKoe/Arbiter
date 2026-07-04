@@ -27,7 +27,7 @@ Dort steht: was zuletzt getan wurde, was als nächstes ansteht, offene Fragen. W
 | Artefakt | Was es ist |
 |---|---|
 | [docs/goals/backlog.md](docs/goals/backlog.md) | Zentraler Backlog — die einzige Stelle für priorisierte offene Aufgaben |
-| [docs/goals/](docs/goals/) | Aktive Zieldateien (ziel6.md … ziel9.md) mit Checkboxen und Detailstatus; erledigte Ziele unter `archive/` |
+| [docs/goals/](docs/goals/) | Aktive Zieldateien (ziel7.md … ziel9.md) mit Checkboxen und Detailstatus; erledigte Ziele unter `archive/` |
 
 ---
 

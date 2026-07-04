@@ -2315,10 +2315,11 @@
   "2927d113-a76a-4d9f-8202-425c2aecb123": {
     "started_at": "2026-07-03T17:27:59.973Z",
     "task": "start session",
-    "peak_context": 104384,
-    "subagent_share": 90.39960715790588,
+    "peak_context": 123659,
+    "subagent_share": 88.03165674794579,
     "by_tier": {
-      "Sonnet": 29284445,
+      "Sonnet": 31210512,
+      "Haiku": 337784,
       "Fable": 2957176,
       "Opus": 992783
     },
@@ -2328,6 +2329,13 @@
         "description": "Stratagem-Anzeige-Analyse S119",
         "tier": "Sonnet",
         "peak_context": 64708,
+        "started_at": "2026-07-03T17:27:59.973Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "R-PROTO-02 ANSWERED + Commit",
+        "tier": "Haiku",
+        "peak_context": 30077,
         "started_at": "2026-07-03T17:27:59.973Z"
       },
       {
@@ -2369,7 +2377,7 @@
         "agent_type": "general-purpose",
         "description": "Abschluss S119 ausführen",
         "tier": "Sonnet",
-        "peak_context": 88040,
+        "peak_context": 102227,
         "started_at": "2026-07-03T17:27:59.973Z"
       },
       {
@@ -2385,6 +2393,47 @@
         "tier": "Sonnet",
         "peak_context": 131505,
         "started_at": "2026-07-03T17:27:59.973Z"
+      }
+    ]
+  },
+  "622e1eb5-2c7b-4883-aa97-ef423e89acab": {
+    "started_at": "2026-07-03T20:31:43.659Z",
+    "task": "<task-notification> <task-id>aa547245ccf957e39</task-id> <tool-use-id>toolu_017ra8SugfobQvLCE1P3LSfw</tool-use-id> <out…",
+    "peak_context": 118552,
+    "subagent_share": 67.7380600236062,
+    "by_tier": {
+      "Opus": 1253534,
+      "Sonnet": 4629584,
+      "Fable": 6743843
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Review S120 nach DoD",
+        "tier": "Opus",
+        "peak_context": 50731,
+        "started_at": "2026-07-03T20:31:43.659Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Phase-2-Plan Design-System entwerfen",
+        "tier": "Sonnet",
+        "peak_context": 107558,
+        "started_at": "2026-07-03T20:31:43.659Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Konsens in design_system.md überführen",
+        "tier": "Sonnet",
+        "peak_context": 101631,
+        "started_at": "2026-07-03T20:31:43.659Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S120-Abschluss: ziel6-Archiv + Maßnahmen",
+        "tier": "Sonnet",
+        "peak_context": 73371,
+        "started_at": "2026-07-03T20:31:43.659Z"
       }
     ]
   }

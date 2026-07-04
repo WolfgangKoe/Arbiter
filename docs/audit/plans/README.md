@@ -5,7 +5,7 @@ Source audit: [../2026-06-11-repo-audit.md](../2026-06-11-repo-audit.md).
 Plans 006–012 added by the re-audit on 2026-06-11 (evening), planned against
 commit `225d13b`. Source: [../2026-06-11-reaudit.md](../2026-06-11-reaudit.md).
 Plans 013–018 (Feature-Queue) added 2026-06-12, planned against commit
-`f0f4e17`. Source: offene Punkte aus `docs/goals/ziel6.md` §6n (P17/P18) und
+`f0f4e17`. Source: offene Punkte aus `docs/goals/archive/ziel6.md` §6n (P17/P18) und
 `.claude/tasks/next_session.md` „Offene Tasks" (MITTEL + NIEDRIG).
 
 Each executor: read the plan fully before starting, honor its STOP conditions,
@@ -59,7 +59,7 @@ run every verification command, and update your row below when done.
 
 **Bewusst NICHT geplant (Feature-Queue):**
 - **P16 (Sv>6+-Randfall)**: bereits implementiert in `dice_html.py:98-106,
-  193-213` (×-Marker) — Checkbox in ziel6.md abgehakt, kein Plan nötig.
+  193-213` (×-Marker) — Checkbox in archive/ziel6.md abgehakt, kein Plan nötig.
 - **P20 (HI-Blockade)**: Logik-Ebene verifiziert korrekt (Regressionstest
   vorhanden); ohne neue Repro-Schritte nicht weiter verfolgbar.
 - **Farbkonzept**: beschlossen + umgesetzt 2026-06-10 (`docs/spec/design_colors.md`).

@@ -1,7 +1,7 @@
 # Archiv — Teilziele 6a–6d, ausgelagert 2026-06-27
 
 > Diese Datei enthält die weitgehend abgeschlossenen Teilziele 6a, 6b, 6c, 6d (inkl. 6d-v2, 6d-v3,
-> Testsession-Fixes) aus `docs/goals/ziel6.md`. Der Großteil ist ✅. **Einzelne 6d-v2/v3- und
+> Testsession-Fixes) aus `docs/goals/archive/ziel6.md`. Der Großteil ist ✅. **Einzelne 6d-v2/v3- und
 > Testsession-Punkte sind noch offen** — sie werden über aktive Pläne (013 DONE / 015 / 017 / 018)
 > bzw. den Backlog weiterverfolgt; der Verbleib jedes offenen Punktes steht in `ziel6.md` unter
 > „Offene Restpunkte aus 6a–6d". Kein offener Punkt existiert ausschließlich hier.

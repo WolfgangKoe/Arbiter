@@ -1,4 +1,4 @@
-ANSWERED
+STATUS: ANSWERED
 
 # Planning — Ziel7-Neustrukturierung (2026-07-03)
 
@@ -91,7 +91,7 @@ Spieler-Slot getrennt.
 | 3 | Manuelle UI-Verifikation (Render-Code, PFLICHT) | — | in 1+2 enthalten | Gate | Stakeholder | siehe Checkliste unten |
 
 **Reihenfolge zwingend:** 0 → 1 → 2 (Task 2 baut auf denselben Zeilen wie Task 1 auf — analog
-zum Reihenfolge-Hinweis aus `plan-S119.md`: erst Task 1 fertig committen, dann Task 2 beginnen,
+zum Reihenfolge-Hinweis aus dem S119-Plan (Handoff gelöscht S120): erst Task 1 fertig committen, dann Task 2 beginnen,
 nicht parallel im selben Diff).
 
 ### Task 0 — YAML-Drift fixen
@@ -244,7 +244,7 @@ gilt und Stufe B als „zweite Anwendung des Musters" den Delta-Prozess für Stu
 
 ## UX-/UI-Pass vor Ziel8 — Kandidatenliste (Entscheidungsvorlage, keine Priorisierung)
 
-Quellen `ui-pass-S118.md` und `review-S113.md` sind **vollständig abgearbeitet** (17/20 direkt
+Quellen UI-Pass S118 und Review S113 (Handoffs gelöscht) sind **vollständig abgearbeitet** (17/20 direkt
 erfüllt, die restlichen 3 als P19/P20/P21 committet) — daraus gibt es aktuell **keine offenen
 Punkte** mehr für diesen Pass. Die folgende Liste sind eigene Beobachtungen aus dem Render-Code
 (`gameProtocoll.py`) im Zuge dieser Planung — rein als Sammlung für den Stakeholder, keine

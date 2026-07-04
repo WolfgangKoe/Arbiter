@@ -20,7 +20,7 @@
 | **Relic-Badge** | ENTFÄLLT — nur Effekt-Badges (Buff/Debuff), kein eigener Relic-Stil |
 | **Wargear-Keyword-Blau** | ENTFÄLLT analog — Wargear/Weapon-Abilities = Buff/Debuff |
 | **Fraktionsfarben (4c)** | NEIN — einheitliches Gold-Theme |
-| **Würfel-Sequenz (4b)** | definiert durch D5-Spez + Referenz-Screenshot (ziel6.md §6n Review-Runde 2); Cover-/Buff-Würfel = Buff-Grün |
+| **Würfel-Sequenz (4b)** | definiert durch D5-Spez + Referenz-Screenshot (archive/ziel6.md §6n Review-Runde 2); Cover-/Buff-Würfel = Buff-Grün |
 
 ---
 
@@ -85,7 +85,7 @@ Buffs → gleiche Kategorie, konsistent und schlank („damit die Farben nicht a
 Badge erscheint grün in der armyCard. Das hardcodierte `#b8e040` entfällt (E1).
 
 **4b Würfel-Sequenz** = definiert durch die D5-Spezifikation + Referenz-Screenshot
-(ziel6.md §6n Review-Runde 2); Cover-Würfel = Buff-Grün.
+(archive/ziel6.md §6n Review-Runde 2); Cover-Würfel = Buff-Grün.
 
 **4c Fraktionsfarben: NEIN** — einheitliches Gold-Theme.
 

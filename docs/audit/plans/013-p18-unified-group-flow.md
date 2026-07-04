@@ -13,7 +13,7 @@
 
 ## Status
 
-- **Priority**: P1 (HOCH — ziel6.md §6n P18, vom Nutzer freigegebene Review-Runde 2)
+- **Priority**: P1 (HOCH — archive/ziel6.md §6n P18, vom Nutzer freigegebene Review-Runde 2)
 - **Effort**: M–L
 - **Risk**: MEDIUM (entfernt den Legacy-Deklarationspfad; viele Tests betroffen — erwartete Migrationen unten gelistet)
 - **Depends on**: —
