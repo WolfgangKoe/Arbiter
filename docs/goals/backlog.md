@@ -48,7 +48,7 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | ✅ YAML-Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (Step 4) | 🔲 D2-Plan (nach Plan 015) |
   | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
   | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
-  | Conquering Tyrant · P | **9E-D1:** +3" Aura-Reichweite (`aura_range_bonus`, **Klasse B**, `enforcement: table`) | n/a (Tisch) | 🔲 Tisch-Hinweis (Plan 025 Step 5) |
+  | Conquering Tyrant · P | **9E-D1:** +3" Aura-Reichweite (`aura_range_bonus`, **Klasse B**, `enforcement: table`) | n/a (Tisch) | ✅ Tisch-Hinweis (umgesetzt S116, nachgezogen S127) |
   | Conquering Tyrant · S | **9E-D2:** nach Fall Back schießen, −1 Hit (**ranged**, `shoot_after_fall_back`, **Klasse A**) | ✅ `get_active_round_choice_shoot_after_fall_back` (Plan 025 Step 5) | ✅ −1-Hit-Modifier im HIT-Block Shooting (Plan 025 Step 5) |
   | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
   | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
@@ -93,7 +93,7 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   ohne diesen Backlog-Punkt zu schließen).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
-  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
+  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → 🔲 **INV-4-Allowlist auf 0** (terminiert, Größe S, Ziel: S128): die 2 verbleibenden `necron`-Defaults in `game_state.py`/`loader.py` durch Ableitung aus den gewählten Armeen/Rostern ersetzen.
   - _(Cluster 3 ✅ Plan 020, Cluster 4/5 ✅ XS-Fix, Cluster 6 ✅ Plan 021/024 — erledigt, aus Backlog entfernt)_
 
 ---
@@ -254,6 +254,10 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   benannte Items (`orb`, `overlord`, `phaeron`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`,
   `reanimation`, `arkana`, `dynasty`) aus Phasen-/Render-Modulen in YAML/Daten ziehen
   (Schema-Urteil → Konsens). Ziel: Ledger schrumpfen (Ratchet).
+- 🔲 **mypy-Bestand modulweise abbauen** (Baseline 134, Stand 2026-07-05; Folgearbeit zu
+  Plan 038): Reihenfolge `gameMechanic/` und `gameObjects/` zuerst, `uiLayout/` zuletzt; pro
+  Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel, s.
+  [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
   nicht als Wächter erzwungen.

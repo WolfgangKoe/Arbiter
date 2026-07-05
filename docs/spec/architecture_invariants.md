@@ -34,6 +34,7 @@ Live nach jedem `pytest`-Lauf im **Schulden-Scoreboard** (`tests/conftest.py`). 
 |---|---|---|---|
 | 2026-06-16 | 20 | 10 | 5 |
 | 2026-06-20 | 19 | 5 | 5 |
+| 2026-07-05 | 11 | 5 | 5 |
 
 Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
 
