@@ -634,8 +634,8 @@ def next_phase() -> None:
         _reset_phase_state()
         st.session_state.phase_idx = 1
     else:
-        st.session_state.phase_idx = idx + 1
         _reset_phase_state()
+        st.session_state.phase_idx = idx + 1
 
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []

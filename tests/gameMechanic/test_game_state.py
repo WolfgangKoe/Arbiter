@@ -198,6 +198,41 @@ def test_phase_change_clears_group_autosel_guard() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Phase-scoped modifier expiry (Plan 033) — must expire at the END of the
+# activation phase, not when that phase next begins.
+# ---------------------------------------------------------------------------
+
+
+def test_phase_end_modifier_removed_when_its_phase_ends() -> None:
+    """A phase_end modifier activated in Shooting must be gone right after Shooting ends.
+
+    Regression: next_phase() used to advance phase_idx to the NEW phase before calling
+    _reset_phase_state(), so the filter compared against "charge" instead of "shooting"
+    and the modifier survived until the opponent's next Shooting phase.
+    """
+    session = _phase_session(phase_idx=4, active="Necrons")  # shooting
+    session["active_modifiers"] = [{"expires_at_phase": "shooting", "buff": "+1 str"}]
+    next_phase()  # shooting → charge
+    assert session["active_modifiers"] == []
+
+
+def test_phase_end_modifier_survives_other_phase_transitions() -> None:
+    """A modifier tied to a not-yet-ended phase must survive the current transition."""
+    session = _phase_session(phase_idx=4, active="Necrons")  # shooting
+    session["active_modifiers"] = [{"expires_at_phase": "charge", "buff": "+1 hit"}]
+    next_phase()  # shooting → charge: charge has only just begun, modifier stays
+    assert session["active_modifiers"] == [{"expires_at_phase": "charge", "buff": "+1 hit"}]
+
+
+def test_phase_end_modifier_removed_at_player_switch() -> None:
+    """Guards the already-correct player-switch branch (Morale → new active player)."""
+    session = _phase_session(phase_idx=7, active="Necrons")  # morale
+    session["active_modifiers"] = [{"expires_at_phase": "morale", "buff": "+1 hit"}]
+    next_phase()  # morale → player switch
+    assert session["active_modifiers"] == []
+
+
+# ---------------------------------------------------------------------------
 # active_buffs and command_ability_state
 # ---------------------------------------------------------------------------
 
