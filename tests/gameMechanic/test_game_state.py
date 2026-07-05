@@ -237,9 +237,19 @@ def test_phase_end_modifier_removed_at_player_switch() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_reset_turn_state_clears_active_buffs() -> None:
-    unit_with_buff = _unit_state_dict()
-    unit_with_buff["active_buffs"] = [
+def test_reset_turn_state_clears_active_buffs_only_for_new_active_player() -> None:
+    """ "Until your next Command phase": only the incoming active player's buffs expire.
+
+    Regression: _reset_turn_state() used to blanket-clear active_buffs for BOTH
+    players on every turn switch, halving the duration of buffs like "My Will Be
+    Done" (they must survive the opponent's whole turn).
+    """
+    p1_unit = _unit_state_dict()
+    p1_unit["active_buffs"] = [
+        {"ability_id": "mwbd", "badge_label": "MWBD", "effect_type": "buff_roll"}
+    ]
+    p2_unit = _unit_state_dict()
+    p2_unit["active_buffs"] = [
         {"ability_id": "mwbd", "badge_label": "MWBD", "effect_type": "buff_roll"}
     ]
     session = _make_session(
@@ -249,12 +259,14 @@ def test_reset_turn_state_clears_active_buffs() -> None:
         cp={"Necrons": 4, "Orks": 4},
         selected_unit=None,
         selected_targets=[],
-        p1_units={"u1": unit_with_buff},
-        p2_units={"u2": _unit_state_dict()},
+        p1_units={"u1": p1_unit},
+        p2_units={"u2": p2_unit},
     )
-    next_phase()
+    next_phase()  # Orks' morale done → switch to Necrons (first_player, p1_units)
     assert session["p1_units"]["u1"]["active_buffs"] == []
-    assert session["p2_units"]["u2"]["active_buffs"] == []
+    assert session["p2_units"]["u2"]["active_buffs"] == [
+        {"ability_id": "mwbd", "badge_label": "MWBD", "effect_type": "buff_roll"}
+    ]
 
 
 def test_reset_turn_state_does_not_clear_command_ability_state() -> None:
@@ -272,6 +284,44 @@ def test_reset_turn_state_does_not_clear_command_ability_state() -> None:
     )
     next_phase()
     assert session["command_ability_state"] == existing
+
+
+# ---------------------------------------------------------------------------
+# active_buffs across full player-switch cycles ("until your next Command
+# phase" must survive the opponent's entire turn — Plan 035)
+# ---------------------------------------------------------------------------
+
+
+def test_buff_survives_switch_to_opponent() -> None:
+    """A buff activated by the first player survives the switch to the opponent's turn."""
+    session = _phase_session(phase_idx=7, active="Necrons")
+    session["p1_units"]["u1"]["active_buffs"] = [{"ability_id": "mwbd"}]
+    next_phase()  # Necrons' morale done → switch to Orks
+    assert session["active"] == "Orks"
+    assert session["p1_units"]["u1"]["active_buffs"] == [{"ability_id": "mwbd"}]
+
+
+def test_buff_cleared_when_owner_turn_returns() -> None:
+    """The buff is cleared once its owner's next Command phase begins."""
+    session = _phase_session(phase_idx=7, active="Orks")
+    session["p1_units"]["u1"]["active_buffs"] = [{"ability_id": "mwbd"}]
+    next_phase()  # Orks' morale done → switch back to Necrons: owner's turn begins
+    assert session["active"] == "Necrons"
+    assert session["p1_units"]["u1"]["active_buffs"] == []
+
+
+def test_second_player_buff_survives_full_first_turn() -> None:
+    """A buff activated by the second player survives the opponent's entire following turn."""
+    session = _phase_session(phase_idx=7, active="Orks")
+    session["p2_units"]["u2"]["active_buffs"] = [{"ability_id": "mwbd"}]
+    next_phase()  # Orks' morale done → switch to Necrons: not the owner's turn, buff survives
+    assert session["active"] == "Necrons"
+    assert session["p2_units"]["u2"]["active_buffs"] == [{"ability_id": "mwbd"}]
+
+    session["phase_idx"] = 7
+    next_phase()  # Necrons' morale done → switch back to Orks: owner's turn begins, buff clears
+    assert session["active"] == "Orks"
+    assert session["p2_units"]["u2"]["active_buffs"] == []
 
 
 def test_unit_state_active_buffs_starts_empty() -> None:
@@ -766,7 +816,9 @@ class TestResetPhaseState:
 # ---------------------------------------------------------------------------
 
 
-def _turn_state_session(*, activated: dict | None = None, round_num: int = 1) -> _S:
+def _turn_state_session(
+    *, activated: dict | None = None, round_num: int = 1, active: str = "Necrons"
+) -> _S:
     unit = _full_unit_state()
     unit["turn_flags"]["advanced"] = True
     unit["lost_models_this_turn"] = 3
@@ -774,6 +826,7 @@ def _turn_state_session(*, activated: dict | None = None, round_num: int = 1) ->
     s = _make_session(
         round=round_num,
         phase_idx=1,
+        active=active,
         p1_units={"u1": unit},
         p2_units={"u2": _full_unit_state()},
         p1_faction_dir="necrons",
@@ -796,10 +849,17 @@ class TestResetTurnState:
         _gs._reset_turn_state()
         assert s["p1_units"]["u1"]["lost_models_this_turn"] == 0
 
-    def test_clears_active_buffs(self) -> None:
-        s = _turn_state_session()
+    def test_clears_active_buffs_for_new_active_player(self) -> None:
+        """The unit's buff is cleared because "Necrons" (p1) is the incoming active player."""
+        s = _turn_state_session(active="Necrons")
         _gs._reset_turn_state()
         assert s["p1_units"]["u1"]["active_buffs"] == []
+
+    def test_keeps_active_buffs_for_non_active_player(self) -> None:
+        """The buff survives because "Orks" (p2), not its owner "Necrons", is now active."""
+        s = _turn_state_session(active="Orks")
+        _gs._reset_turn_state()
+        assert s["p1_units"]["u1"]["active_buffs"] == [{"ability_id": "mwbd"}]
 
     def test_stage1_upgrades_to_stage2_on_new_round(self) -> None:
         # Ability with next_stage_id activated in round 1; now round 2 → ability_id advances

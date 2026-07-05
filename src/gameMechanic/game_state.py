@@ -565,6 +565,14 @@ def _reset_turn_state() -> None:
             state["fled_models_this_turn"] = 0
             state["movement_choice"] = "stationary"
             state["movement_chosen"] = False
+    # "Until the start of your next Command phase": Buffs erlöschen genau dann,
+    # wenn ihr Besitzer wieder am Zug ist. st.session_state.active ist an dieser
+    # Stelle bereits der NEUE aktive Spieler (next_phase setzt active vor dem
+    # Reset) — also werden nur dessen Einheiten geleert; der Buff des
+    # nicht-aktiven Spielers überdauert dessen kompletten gegnerischen Zug.
+    new_active = st.session_state.get("active")
+    if new_active is not None:
+        for state in st.session_state[units_key_for(new_active)].values():
             state["active_buffs"] = []
     # Stage transition: if the active ability has a next_stage_id and a new round began, advance
     from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
