@@ -2559,8 +2559,8 @@
   "4f34b17d-7c1d-4670-8c9e-1b602a742078": {
     "started_at": "2026-07-04T18:21:12.898Z",
     "task": "start session",
-    "peak_context": 121656,
-    "subagent_share": 85.74613356285961,
+    "peak_context": 124121,
+    "subagent_share": 84.62325411091477,
     "by_tier": {
       "Sonnet": 38876780,
       "Opus": 1142965
@@ -2642,6 +2642,45 @@
         "tier": "Sonnet",
         "peak_context": 91062,
         "started_at": "2026-07-04T18:21:12.898Z"
+      }
+    ]
+  },
+  "06c903a9-1a89-4279-916e-f46b13b0d598": {
+    "started_at": "2026-07-05T06:37:33.496Z",
+    "task": "<task-notification> <task-id>aa626a408ef671ba4</task-id> <tool-use-id>toolu_01Pv5NfwenLUHp4V21hguKJ9</tool-use-id> <out…",
+    "peak_context": 203530,
+    "subagent_share": 67.09595507373463,
+    "by_tier": {
+      "Sonnet": 25878461
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "Audit correctness/bugs",
+        "tier": "Sonnet",
+        "peak_context": 187707,
+        "started_at": "2026-07-05T06:37:33.496Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit security",
+        "tier": "Sonnet",
+        "peak_context": 96053,
+        "started_at": "2026-07-05T06:37:33.496Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit tests/debt/perf",
+        "tier": "Sonnet",
+        "peak_context": 105443,
+        "started_at": "2026-07-05T06:37:33.496Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Audit deps/DX/docs/direction",
+        "tier": "Sonnet",
+        "peak_context": 51949,
+        "started_at": "2026-07-05T06:37:33.496Z"
       }
     ]
   }

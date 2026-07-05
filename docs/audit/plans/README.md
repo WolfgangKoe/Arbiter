@@ -7,6 +7,8 @@ commit `225d13b`. Source: [../2026-06-11-reaudit.md](../2026-06-11-reaudit.md).
 Plans 013–018 (Feature-Queue) added 2026-06-12, planned against commit
 `f0f4e17`. Source: offene Punkte aus `docs/goals/archive/ziel6.md` §6n (P17/P18) und
 `.claude/tasks/next_session.md` „Offene Tasks" (MITTEL + NIEDRIG).
+Plans 033–041 added by the full re-audit on 2026-07-05, planned against commit
+`f6c464a`. Source: [../2026-07-05-repo-audit.md](../2026-07-05-repo-audit.md).
 
 Each executor: read the plan fully before starting, honor its STOP conditions,
 run every verification command, and update your row below when done.
@@ -34,6 +36,15 @@ run every verification command, and update your row below when done.
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 | 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | REJECTED (S118, Stakeholder) — Custodes-Ausbau wird gesammelt nach dem Faction-Fetcher nachgeholt; keine Plandatei angelegt. Merkposten bleibt: toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift). |
 | [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
+| [033](033-phase-modifier-expiry-ordering.md) | Phasen-Modifier-Expiry: `_reset_phase_state()` vor `phase_idx`-Inkrement (Stratagem-Buffs leaken in Folgephasen) | P1 (HOCH) | S | — | TODO |
+| [034](034-state-key-lookups-vereinheitlichen.md) | State-Key-Lookups vereinheitlichen: Moraltest-Skip bei Duplikat-Trupps + 3 UI-Stellen (`unit_id_from_state_key`) | P1 (HOCH) | S | — (nicht parallel zu 015) | TODO |
+| [035](035-active-buffs-rundenexpiry.md) | `active_buffs` überleben Zugwechsel: Expiry „bis zur nächsten eigenen Command Phase" (MWBD) | P1 (HOCH) | M | 033 (gleiche Datei, nacheinander) | TODO |
+| [036](036-rosz-import-haerten.md) | `.rosz`-Import härten: Stored-XSS über Roster-Namen + Zip-Bomb-Dekompressions-Cap | P1 (HOCH) | S | — | TODO |
+| [037](037-deps-pinnen-pip-audit-docker-nonroot.md) | Dependencies pinnen, `pip-audit` im CI, Docker non-root | P2 (MITTEL) | S | — | TODO |
+| [038](038-mypy-ratchet-gate.md) | mypy-Ratchet-Gate: Fehlerbestand einfrieren (~136), CI-Step blocking statt informational | P2 (MITTEL) | M | — | TODO |
+| [039](039-dx-kleinkram-readme-xdist.md) | DX-Kleinkram: README-Setup, tote `DATA_DIR` entfernen, pytest-xdist | P3 (NIEDRIG) | S | — | TODO |
+| [040](040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) | P2 (MITTEL) | S–M | 033, 035 (gleiche Datei) | TODO |
+| [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034, 040; NICHT parallel zu 015/026 | TODO |
 
 **Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
@@ -55,6 +66,18 @@ run every verification command, and update your row below when done.
   — 015 zuerst, 026 danach.
 - **018** ist vier unabhängige Mini-Tasks; 018.4 (Modifier-Konsolidierung
   berührt `_common.py` + `ability_engine.py`) → nach 017 ausführen (016 ist bereits erledigt).
+
+**Dependency notes (Audit 2026-07-05, Pläne 033–041):**
+- **033 → 035 → 040 strikt nacheinander**: alle drei ändern `game_state.py`
+  (Reset-Pfade); 040 zusätzlich `phase_runner.py`/Handler.
+- **034 nicht parallel zu 015**: beide ändern `fightPhase.py` (034 nur
+  `_render_melee_pairs`, 015 den Reaktiv-Dispatch) — 034 zuerst (S-Effort).
+- **041 zwingend NACH 034 + 040 und NICHT parallel zu 015/026**: extrahiert aus
+  `fightPhase.py`/`psychicPhase.py`/`movementPhase.py`; Stufe 2+ (weitere
+  `_common.py`-Cluster) erst nach Review von Stufe 1 planen.
+- **Empfohlene Reihenfolge der neuen Pläne**: 033 → 034 → 036 → 035 → 037 →
+  040 → 038 → 039 → 041. Verzahnung mit der Alt-Queue: die P1-Bugfixes
+  (033–036) vor 018/015 ziehen; 041 erst nach 015/026.
 
 **Bewusst NICHT geplant (Feature-Queue):**
 - **P16 (Sv>6+-Randfall)**: bereits implementiert in `dice_html.py:98-106,
@@ -80,6 +103,20 @@ Status-Werte: TODO | IN PROGRESS | DONE | BLOCKED (mit Einzeiler-Grund) | REJECT
   [../2026-06-11-reaudit.md](../2026-06-11-reaudit.md), Abschnitt „Geprüft & sauber").
   Caching weiterer Loader (`load_weapon_catalog`, `load_roster`, …) bewusst
   verworfen: keine Rerun-Call-Sites, nur Initialisierung.
+- Audit 2026-07-05: **Setup-Screen-YAML-Reload pro Rerun** (`setupScreen.py:221-222`
+  → `load_yaml` uncached): bestätigt, aber Kleinstdateien nur auf dem
+  Setup-Screen — Nutzen unter Planschwelle, kein Plan.
+- Audit 2026-07-05: **6 ungenutzte Loader-Funktionen** (`load_weapon_abilities`,
+  `wargear_ids_with_handler`, `load_wargear_abilities`, `load_detachment_types`,
+  `load_points`, `scaled_pl` — je 0 Aufrufer in src/tools): teils mutmaßlich
+  Scaffolding für ziel9 → Merkposten: Intent mit Stakeholder klären, kein
+  blinder Löschplan.
+- Audit 2026-07-05: **3 handgerollte Undo-Muster** (`_undo_teleport`,
+  `pending_mortal_undo`, `refund_deny`): Duplikation an der „dritte
+  Wiederholung"-Schwelle — Konsolidierung erst bei einem 4. Undo-Fall.
+- Audit 2026-07-05: **`weapon = next(..., weapons[0])`-Fallback**
+  (`_common.py:918`): defensiv, kein konstruierbarer Live-Pfad — nur bei
+  Refactorings am `in_melee`-Timing erneut ansehen.
 
 ## Sicherheits-Callout (erledigt 2026-06-11)
 

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 08:36 CEST
+Stand: 2026-07-05 12:59 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-04 20:21 4f34  ██████████░░ 122k ⚠️   █████░  86%    ············
+07-05 08:37 06c9  ████████████ 204k ⛔    ████░░  67%    ············
+         SA_1·  ████████████ 188k ⛔    Audit correctness/bugs
+         SA_2·  ████████░░░░  96k ✅    Audit security
+         SA_3·  ████████░░░░ 105k ✅    Audit tests/debt/perf
+         SA_4·  ████░░░░░░░░  52k ✅    Audit deps/DX/docs/direction
+----------------- ---------------------- -------------- ------------
+07-04 20:21 4f34  ██████████░░ 124k ⚠️   █████░  85%    ············
          SA_1·  ███████████░ 133k ⚠️   HOCH-Datenfixes + Stufe-B-Paket
          SA_2·  —                      Auditpläne ins Archiv verschieben
          SA_3·  ██████░░░░░░  76k ✅    Planning-Entwurf S123 erstellen
@@ -418,3 +424,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S121 (2026-07-04)** Stufe A Spieler-Spalten-Split komplett (player:both, Spalten-Split, Dict-Form) + CCW-Crashfix aus UI-Test; Review GO ohne Auflagen
 - **S122 (2026-07-04)** F3 natürliche 1 als Miss + Save-Floor 2+ (8ae7252, Nachfix abc4256 Eff.-Anzeige grün/Variante A); F1 Disruption Fields Stärke-Modifier (0c54fe7); Plan 015 Step 1 durch Ziel7 Stufe A abgedeckt (4effd99); Stufe-B-Scoping 59/59 (stichprobenbasiert); Review GO, UI verifiziert; Retro M1 Anzeige-Pfad-Beleg
 - **S123 (2026-07-05)** Necron-Stratagem-Vollabgleich 59/59 (27 Befunde, Header stale=Live-Bugs); unit_key-Scoping-Fix stratagem_strength_bonus; 5 HOCH-Datenfixes; Plan 032 angelegt; Auditpläne: 27 DONE-Dateien ins Archiv, 5 aktiv
+- **S124 (2026-07-05)** /improve-Vollaudit: 11 Befunde verifiziert, Pläne 033-041 angelegt (4 Correctness-Bugs, XSS/Zip-Bomb, mypy-Ratchet, totes Lifecycle, INV-6-Extraktion); Reihenfolge 033→034→036→035→037→040→038→039→041 freigegeben
