@@ -39,9 +39,6 @@ class MoralePhaseHandler:
 
     phase_name: str = "morale"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -59,9 +56,6 @@ class MoralePhaseHandler:
             _render_faction_morale(first, unit_map[first], state_map[first], state)
         with col2:
             _render_faction_morale(second, unit_map[second], state_map[second], state)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 # ---------------------------------------------------------------------------

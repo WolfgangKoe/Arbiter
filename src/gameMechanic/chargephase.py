@@ -22,9 +22,6 @@ class ChargePhaseHandler:
 
     phase_name: str = "charge"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -65,9 +62,6 @@ class ChargePhaseHandler:
                 st.rerun()
         else:
             _render_hi_phase(inactive, active, state)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 # ---------------------------------------------------------------------------

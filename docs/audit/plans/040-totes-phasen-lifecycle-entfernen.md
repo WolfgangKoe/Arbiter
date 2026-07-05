@@ -11,8 +11,10 @@
 
 ## Status
 
+- **Status**: **DONE** (S126, 2026-07-05 — erweiterter Scope per Stakeholder-Freigabe:
+  Mitfix Stratagem-Sichtbarkeit + `scenarios.py`-Zweitbezug + `gameProtocoll.py`)
 - **Priority**: P2
-- **Effort**: S–M
+- **Effort**: M (angehoben von S–M wegen Mitfix + Drift-Funden)
 - **Risk**: LOW–MED (nur Löschung; Risiko = übersehener Nutzer des Mechanismus)
 - **Depends on**: 033, 035 (gleiche Datei `game_state.py` — nacheinander)
 - **Category**: tech-debt
@@ -32,6 +34,22 @@ phase-navigation button in gameProtocoll". Obendrein ist
 (`game_state.py:642-643` macht dasselbe live) — ein Drift-Kandidat. Die tote
 Schicht führt jeden Leser (und jedes Modell) in die Irre, wie Phasenwechsel
 funktionieren.
+
+**Mitfix Stratagem-Sichtbarkeit (Stakeholder-Entscheidung, S126):** Nach dem
+Entfernen der Stage-Maschine wäre `current_stage` faktisch immer `"active"`
+gewesen — der Hart-Filter `if stratagem.stage != current_stage: return "hidden"`
+in `stratagem.py:stratagem_visibility()` hätte damit alle Stratagems mit
+`stage: start`/`end` dauerhaft versteckt (u. a. `dimensional_corridor`,
+`dimensional_destabilisation`, mehrere Ork-Klan-Stratagems). Regelbefund:
+`stage` ist KEINE 9E-Regel, sondern App-Konstrukt — 9E kodifiziert nur die
+Phasen-Bindung (`core_rules.txt:673-676`); das Timing innerhalb der Phase steht
+im `rule_text` (UI-Expander). Daher wurde der Filter-Zweig samt
+`current_stage`-Parameter ersatzlos entfernt (Option B); das
+`Stratagem.stage`-Datenfeld bleibt erhalten (Parallele zu `ability.stage`).
+Spec nachgezogen: `docs/spec/acceptance/rules.md` R-CMD-05. Zusätzlicher
+Drift-Fund im erweiterten Scope: `scenarios.py:save_scenario()` schrieb und
+`gameProtocoll.py` las `phase_stage` — beide mitbereinigt (Legacy-Szenario-JSONs
+mit `phase_stage`-Key werden ignoriert, Regressionstest vorhanden).
 
 ## Current state
 
@@ -170,12 +188,14 @@ Sicherheitsnetz ist die unveränderte restliche Suite plus der 0-Treffer-grep.
 
 ## Done criteria
 
-- [ ] `grep -rn "advance_stage\|render_start\|render_end\|phase_stage" src/` → 0 Treffer
-- [ ] `pytest --tb=short` exit 0, Coverage ≥ 99 %
-- [ ] Nur die gelisteten Tests wurden entfernt/angepasst
-- [ ] `phase_handler.py`-Docstring beschreibt den realen Dispatch
-- [ ] `git status`: nur In-Scope-Dateien geändert
-- [ ] Status-Zeile in `docs/audit/plans/README.md` aktualisiert
+- [x] `grep -rn "advance_stage\|render_start\|render_end\|phase_stage" src/` → 0 Treffer
+- [x] `pytest --tb=short` exit 0, Coverage ≥ 99 % (99,11 %, 1451 Tests)
+- [x] Nur die gelisteten Tests wurden entfernt/angepasst (+ erweiterter Scope:
+      `test_stratagem.py`-Migration für den Mitfix, `test_scenarios.py`-Migration
+      für den `scenarios.py`-Zweitbezug — beide vom erweiterten Auftrag gedeckt)
+- [x] `phase_handler.py`-Docstring beschreibt den realen Dispatch
+- [x] `git status`: nur In-Scope-Dateien geändert (In-Scope = Basisplan + erweiterter Scope)
+- [x] Status-Zeile in `docs/audit/plans/README.md` aktualisiert
 
 ## STOP conditions
 

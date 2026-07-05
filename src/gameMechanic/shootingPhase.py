@@ -70,9 +70,6 @@ class ShootingPhaseHandler:
 
     phase_name: str = "shooting"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -123,9 +120,6 @@ class ShootingPhaseHandler:
                 inactive_override=group_override if second != atk_faction else None,
                 show_wound_buttons=False,
             )
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 # ---------------------------------------------------------------------------

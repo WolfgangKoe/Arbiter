@@ -414,7 +414,6 @@ def init_state(
     st.session_state.vp = {p1_name: 0, p2_name: 0}
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []
-    st.session_state.phase_stage = "active"
     st.session_state.active_effect = None
     st.session_state.cp_granted_this_phase = False
     # Both stratagem-usage trackers are keyed per player slot (like `cp`):

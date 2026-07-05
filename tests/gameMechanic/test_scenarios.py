@@ -30,7 +30,6 @@ def _base_state(**overrides: object) -> dict:
     state: dict = {
         "round": 1,
         "phase_idx": 0,
-        "phase_stage": "active",
         "first_player": "Necrons",
         "second_player": "Orks",
         "cp": {"Necrons": 6, "Orks": 6},
@@ -78,24 +77,25 @@ class TestApplyScenarioScalarKeys:
         apply_scenario({"phase_idx": 4}, state)
         assert state["phase_idx"] == 4
 
-    def test_sets_phase_stage(self) -> None:
+    def test_legacy_phase_stage_key_is_ignored(self) -> None:
+        # Plan 040: the dead phase-stage machinery is gone. Old scenario JSON
+        # files may still carry a "phase_stage" key — it must be ignored, not
+        # copied into the live state.
         state = _base_state()
         apply_scenario({"phase_stage": "end"}, state)
-        assert state["phase_stage"] == "end"
+        assert "phase_stage" not in state
 
     def test_missing_keys_leave_state_unchanged(self) -> None:
         state = _base_state()
         apply_scenario({}, state)
         assert state["round"] == 1
         assert state["phase_idx"] == 0
-        assert state["phase_stage"] == "active"
 
-    def test_all_three_scalar_keys_set_together(self) -> None:
+    def test_both_scalar_keys_set_together(self) -> None:
         state = _base_state()
-        apply_scenario({"round": 2, "phase_idx": 5, "phase_stage": "start"}, state)
+        apply_scenario({"round": 2, "phase_idx": 5}, state)
         assert state["round"] == 2
         assert state["phase_idx"] == 5
-        assert state["phase_stage"] == "start"
 
 
 # ---------------------------------------------------------------------------
@@ -318,7 +318,6 @@ class TestLoadScenario:
         base_data = {
             "round": 1,
             "phase_idx": 0,
-            "phase_stage": "active",
             "first_player": "Necrons",
             "second_player": "Orks",
             "cp": {"Necrons": 6, "Orks": 6},
@@ -365,7 +364,6 @@ class TestSaveScenario:
                 "round": 2,
                 "phase_idx": 3,
                 "active": "Necrons",
-                "phase_stage": "start",
                 "cp": {"Necrons": 5, "Orks": 3},
                 "vp": {"Necrons": 10, "Orks": 5},
                 "p1_units": {"u1": {"current_wounds": 5}},

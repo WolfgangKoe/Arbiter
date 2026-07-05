@@ -20,9 +20,6 @@ class MovementPhaseHandler:
 
     phase_name: str = "movement"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -36,9 +33,6 @@ class MovementPhaseHandler:
             render_player_column(second, state, active_content=_active_movement)
             if second == state["active"]:
                 _render_reinforcements_step(second)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 # ---------------------------------------------------------------------------

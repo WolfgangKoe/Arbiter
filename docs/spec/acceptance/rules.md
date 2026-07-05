@@ -346,7 +346,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **getestet**: ja — test_clickable_when_all_conditions_met / test_greyed_when_insufficient_cp / test_greyed_when_already_used_this_phase
 - **quelle**: core_rules.txt — "CPs … can be spent to utilise Stratagems"
 - **code**: stratagem.py:stratagem_visibility
-- **regel**: Stratagems kosten CP; `stratagem_visibility()` schaltet einen Button auf `clickable` (CP ausreichend, nicht verwendet), `greyed` (CP fehlen oder bereits genutzt) oder `hidden` (Bedingungen/Phase nicht erfüllt).
+- **regel**: Stratagems kosten CP; `stratagem_visibility()` schaltet einen Button auf `clickable` (CP ausreichend, nicht verwendet), `greyed` (CP fehlen oder bereits genutzt) oder `hidden` (Bedingungen/Phase nicht erfüllt). Das YAML-Feld `stage` ist bewusst KEIN Sichtbarkeits-Kriterium: 9E kodifiziert nur die Phasen-Bindung; das Timing innerhalb der Phase („at the start of…"/„at the end of…") steht im `rule_text` des Expanders (Plan 040, Test: test_start_and_end_stage_stratagems_visible_in_matching_phase).
 
 ### R-CMD-06
 - **klasse**: A

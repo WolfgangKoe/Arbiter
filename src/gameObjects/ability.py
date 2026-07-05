@@ -10,7 +10,9 @@ class Trigger:
     phase: str | list[str]
     player: str = "active"  # "active" | "inactive" | "either"
     event: str | None = None
-    stage: str = "active"  # "start" | "active" | "end" — maps to phase_stage in session_state
+    stage: str = (
+        "active"  # "start" | "active" | "end" — data schema only; timing info lives in rule text
+    )
 
 
 @dataclass

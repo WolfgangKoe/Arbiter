@@ -21,9 +21,6 @@ class PsychicPhaseHandler:
 
     phase_name: str = "psychic"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -37,10 +34,6 @@ class PsychicPhaseHandler:
             _render_psychic_column(first, state)
         with col2:
             _render_psychic_column(second, state)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        st.session_state.psi_result = None
-        st.session_state.psychic_denies_used = {}
 
 
 # ---------------------------------------------------------------------------

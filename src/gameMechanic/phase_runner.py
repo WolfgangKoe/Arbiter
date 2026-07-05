@@ -8,9 +8,6 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.ability_engine import (
-    get_triggered_abilities,
-)
 from gameMechanic.phase_handler import PhaseHandler
 
 # ---------------------------------------------------------------------------
@@ -26,7 +23,7 @@ PHASE_REGISTRY: dict[str, PhaseHandler] = {}
 
 
 def render_current_phase(state: dict) -> None:  # type: ignore[type-arg]
-    """Look up the handler for the current phase and render its active stage."""
+    """Look up the handler for the current phase and render it."""
     from gameMechanic.game_state import PHASES  # noqa: PLC0415
 
     phase_key: str = PHASES[state["phase_idx"]][1]
@@ -35,31 +32,7 @@ def render_current_phase(state: dict) -> None:  # type: ignore[type-arg]
         st.warning(f"Phase '{phase_key}' has no registered handler.")
         return
 
-    stage: str = state.get("phase_stage", "active")
-
-    # Fire ability hooks at phase transitions (start / end).
-    if stage in ("start", "end"):
-        get_triggered_abilities(state, phase_key, f"phase_{stage}")
-
-    getattr(handler, f"render_{stage}")(state)
-
-
-def advance_stage(state: dict) -> None:  # type: ignore[type-arg]
-    """Advance the phase stage: start → active → end → next_phase.
-
-    Called by the phase-navigation button in gameProtocoll.
-    At end → next_phase transition, turn_flags are reset by engine.next_phase().
-    """
-    from gameMechanic.game_state import next_phase  # noqa: PLC0415
-
-    stage: str = state.get("phase_stage", "active")
-    if stage == "start":
-        state["phase_stage"] = "active"
-    elif stage == "active":
-        state["phase_stage"] = "end"
-    else:
-        state["phase_stage"] = "active"
-        next_phase()
+    handler.render_active(state)
 
 
 # ---------------------------------------------------------------------------

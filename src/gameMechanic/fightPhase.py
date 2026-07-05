@@ -326,9 +326,6 @@ class FightPhaseHandler:
 
     phase_name: str = "fight"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -363,9 +360,6 @@ class FightPhaseHandler:
             _render_fight_column(first, state, fight_player, first, second)
         with col2:
             _render_fight_column(second, state, fight_player, first, second)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 # ---------------------------------------------------------------------------

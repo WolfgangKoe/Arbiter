@@ -43,7 +43,6 @@ def _vis(
     stratagem: Stratagem,
     cp: int = 5,
     current_phase: str = "shooting",
-    current_stage: str = "active",
     used: set[str] | None = None,
     conditions_met: bool = True,
 ) -> str:
@@ -51,7 +50,6 @@ def _vis(
         stratagem,
         cp_available=cp,
         current_phase=current_phase,
-        current_stage=current_stage,
         used_this_phase=used or set(),
         conditions_met=conditions_met,
     )
@@ -71,9 +69,6 @@ class TestStratagemsHidden:
 
     def test_hidden_when_wrong_phase(self) -> None:
         assert _vis(_strat(phase="command"), current_phase="shooting") == "hidden"
-
-    def test_hidden_when_wrong_stage(self) -> None:
-        assert _vis(_strat(stage="start"), current_stage="active") == "hidden"
 
     def test_hidden_when_multi_phase_list_and_wrong_phase(self) -> None:
         strat = _strat(phase=["command", "movement"])
@@ -130,6 +125,45 @@ class TestStratagemsClickable:
 
 
 # ---------------------------------------------------------------------------
+# Plan 040 regression: `stage` is NOT a visibility criterion
+# ---------------------------------------------------------------------------
+
+
+class TestStageIsNotAVisibilityCriterion:
+    """Plan 040 regression: after removing the dead phase-stage machinery,
+    the runtime stage is always "active" — stratagems annotated with
+    stage="start"/"end" must NOT be hidden by that annotation. 9E only
+    codifies the phase binding (core_rules.txt:673-676); within-phase timing
+    lives in the rule_text shown in the UI expander.
+    """
+
+    def test_start_and_end_stage_stratagems_visible_in_matching_phase(self) -> None:
+        # Synthetic: one start-stage and one end-stage stratagem, conditions
+        # met, matching phase, enough CP → both clickable, never hidden.
+        assert _vis(_strat(stage="start")) == "clickable"
+        assert _vis(_strat(stage="end")) == "clickable"
+
+    def test_real_start_and_end_stage_stratagems_clickable_in_their_phase(self) -> None:
+        # Real loaded examples that the old stage filter permanently hid
+        # (resurrection_protocols is timing=phase_reactive → reactively hidden
+        # by design, so the non-reactive movement-phase pair is used instead).
+        stratagems = {s.id: s for s in load_stratagems("necrons")}
+        corridor = stratagems["wh40k_9e.necrons.stratagem.dimensional_corridor"]
+        destabilisation = stratagems["wh40k_9e.necrons.stratagem.dimensional_destabilisation"]
+        assert corridor.stage == "start"
+        assert destabilisation.stage == "end"
+        for strat in (corridor, destabilisation):
+            result = stratagem_visibility(
+                strat,
+                cp_available=10,
+                current_phase="movement",
+                used_this_phase=set(),
+                conditions_met=True,
+            )
+            assert result == "clickable", strat.id
+
+
+# ---------------------------------------------------------------------------
 # R-CMD-12: Command Re-Roll is phase_reactive → always hidden proactively
 # ---------------------------------------------------------------------------
 
@@ -162,7 +196,6 @@ class TestCommandReRollIsPhaseReactive:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
         )
@@ -174,7 +207,6 @@ class TestCommandReRollIsPhaseReactive:
             strat,
             cp_available=10,
             current_phase="fight",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
         )
@@ -187,7 +219,6 @@ class TestCommandReRollIsPhaseReactive:
             strat,
             cp_available=99,
             current_phase="charge",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
         )
@@ -196,7 +227,7 @@ class TestCommandReRollIsPhaseReactive:
     def test_phase_reactive_timing_on_synthetic_strat_returns_hidden(self) -> None:
         # Confirm the visibility rule in isolation (no YAML dependency)
         strat = _strat(timing="phase_reactive", phase="any", stage="active")
-        assert _vis(strat, cp=10, current_phase="shooting", current_stage="active") == "hidden"
+        assert _vis(strat, cp=10, current_phase="shooting") == "hidden"
 
 
 # ---------------------------------------------------------------------------
@@ -229,7 +260,6 @@ class TestOncePerBattleEnforcement:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
             used_in_battle={"test.opb_strat"},
@@ -247,7 +277,6 @@ class TestOncePerBattleEnforcement:
             strat,
             cp_available=10,
             current_phase="fight",  # different phase than where it was used
-            current_stage="active",
             used_this_phase=set(),  # phase was reset
             conditions_met=True,
             used_in_battle={"test.opb_strat"},  # battle set still contains the id
@@ -260,7 +289,6 @@ class TestOncePerBattleEnforcement:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
             used_in_battle=set(),
@@ -274,7 +302,6 @@ class TestOncePerBattleEnforcement:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
             used_in_battle={"test.normal_strat"},  # id in battle set, but not once_per_battle
@@ -288,7 +315,6 @@ class TestOncePerBattleEnforcement:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase={"test.opb_strat_legacy"},
             conditions_met=True,
             used_in_battle=None,  # no battle set provided
@@ -321,7 +347,6 @@ class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
             used_in_battle=used_battle_ids_by_faction.get("Necrons", set()),
@@ -330,7 +355,6 @@ class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=set(),
             conditions_met=True,
             used_in_battle=used_battle_ids_by_faction.get("Orks", set()),
@@ -364,7 +388,6 @@ class TestPhaseScopedStratagemUsedByOnePlayerDoesNotBlockOther:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=used_ids_by_player.get("Necrons", set()),
             conditions_met=True,
         )
@@ -372,7 +395,6 @@ class TestPhaseScopedStratagemUsedByOnePlayerDoesNotBlockOther:
             strat,
             cp_available=10,
             current_phase="shooting",
-            current_stage="active",
             used_this_phase=used_ids_by_player.get("Orks", set()),
             conditions_met=True,
         )

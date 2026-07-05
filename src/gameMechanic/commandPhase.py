@@ -424,9 +424,6 @@ class CommandPhaseHandler:
 
     phase_name: str = "command"
 
-    def render_start(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
-
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
         second: str = state["second_player"]
@@ -436,9 +433,6 @@ class CommandPhaseHandler:
             _render_command_column(first, state)
         with col2:
             _render_command_column(second, state)
-
-    def render_end(self, state: dict) -> None:  # type: ignore[type-arg]
-        pass
 
 
 def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]

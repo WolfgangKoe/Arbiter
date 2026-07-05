@@ -38,8 +38,8 @@ run every verification command, and update your row below when done.
 | [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
 | [038](038-mypy-ratchet-gate.md) | mypy-Ratchet-Gate: Fehlerbestand einfrieren (~136), CI-Step blocking statt informational | P2 (MITTEL) | M | — | TODO |
 | [039](039-dx-kleinkram-readme-xdist.md) | DX-Kleinkram: README-Setup, tote `DATA_DIR` entfernen, pytest-xdist | P3 (NIEDRIG) | S | — | TODO |
-| [040](040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) | P2 (MITTEL) | S–M | 033 ✅, 035 ✅ (gleiche Datei — Deps erledigt S125) | TODO |
-| [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040; NICHT parallel zu 015/026 | TODO |
+| [040](040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) + Mitfix Stratagem-Sichtbarkeit (`stage`-Hart-Filter entfernt) | P2 (MITTEL) | M | 033 ✅, 035 ✅ (gleiche Datei — Deps erledigt S125) | DONE (S126, 2026-07-05; erweiterter Scope: `scenarios.py`-Zweitbezug + `gameProtocoll.py` mitbereinigt, Regressionstest `test_start_and_end_stage_stratagems_visible_in_matching_phase`) |
+| [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040 ✅; NICHT parallel zu 015/026 | TODO |
 
 **Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
@@ -64,13 +64,13 @@ run every verification command, and update your row below when done.
 
 **Dependency notes (Audit 2026-07-05, Pläne 033–041):**
 - **033, 034, 035, 036, 037 erledigt (S125, 2026-07-05)** — committet + auf
-  `feature/016` konsolidiert, Pläne archiviert. Verbleibend: 040, 038, 039, 041.
+  `feature/016` konsolidiert, Pläne archiviert. 040 erledigt (S126). Verbleibend: 038, 039, 041.
 - **040 strikt nach 033/035**: alle drei ändern `game_state.py` (Reset-Pfade);
   033/035 sind erledigt, 040 zusätzlich `phase_runner.py`/Handler.
 - **041 zwingend NACH 034 (✅) + 040 und NICHT parallel zu 015/026**: extrahiert aus
   `fightPhase.py`/`psychicPhase.py`/`movementPhase.py`; Stufe 2+ (weitere
   `_common.py`-Cluster) erst nach Review von Stufe 1 planen.
-- **Empfohlene Reihenfolge der Rest-Pläne**: 040 → 038 → 039 → 041. Verzahnung
+- **Empfohlene Reihenfolge der Rest-Pläne**: 038 → 039 → 041 (040 ✅ S126). Verzahnung
   mit der Alt-Queue: 041 erst nach 015/026.
 
 **Bewusst NICHT geplant (Feature-Queue):**

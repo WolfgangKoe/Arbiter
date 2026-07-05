@@ -50,7 +50,9 @@ class Stratagem:
     name_en: str
     cp_cost: int  # 0 = free
     phase: str | list[str]  # "command" | "movement" | ... | "any" | ["shooting", "fight"]
-    stage: Literal["start", "active", "end"]  # when in the phase it may be used
+    stage: Literal[
+        "start", "active", "end"
+    ]  # data schema only — no visibility filter; timing lives in rule_text
     player: Literal["active", "inactive", "both"]  # who may use it
     conditions: list[str] = field(default_factory=list)  # keyword conditions
     rule_text: str = ""
@@ -98,19 +100,22 @@ def stratagem_visibility(
     stratagem: Stratagem,
     cp_available: int,
     current_phase: str,
-    current_stage: str,
     used_this_phase: set[str],
     conditions_met: bool,
     used_in_battle: set[str] | None = None,
 ) -> Literal["clickable", "greyed", "hidden"]:
     """Return the display state for a stratagem given the current game context.
 
+    Visibility depends on phase, conditions, CP and usage — NOT on the
+    ``stage`` field: 9E only codifies the phase binding; within-phase timing
+    ("at the start of…", "at the end of…") lives in the rule text shown in
+    the stratagem expander (see docs/spec/acceptance/rules.md, Stratagems).
+
     Parameters
     ----------
     stratagem:        The stratagem to evaluate.
     cp_available:     CP pool of the player who could use this stratagem.
     current_phase:    e.g. "shooting"
-    current_stage:    "start" | "active" | "end"
     used_this_phase:  Set of stratagem IDs already used this phase.
     conditions_met:   Whether unit/keyword conditions for this GO are satisfied.
     used_in_battle:   Battle-scoped set of once_per_battle stratagem IDs already used
@@ -128,8 +133,6 @@ def stratagem_visibility(
         phases = phase if isinstance(phase, list) else [phase]
         if current_phase not in phases:
             return "hidden"
-    if stratagem.stage != current_stage:
-        return "hidden"
 
     if stratagem.once_per_battle and used_in_battle is not None:
         if stratagem.id in used_in_battle:

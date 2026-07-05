@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 17:00 CEST
+Stand: 2026-07-05 18:34 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 13:00 5226  ███████████░ 141k ⚠️   █████░  76%    ············
+07-05 17:03 121e  ██████░░░░░░  81k ✅    █████░  85%    ▚▚▚·········
+         SA_1·  ██████░░░░░░  74k ✅    Planungsentwurf Session 126
+         SA_2·  ██████████░░ 126k ⚠️   UI-Verifikationsanleitung 034/036
+         SA_3·  ███████░░░░░  84k ✅    Executor Plan 040 erweitert
+         SA_4·  ██████░░░░░░  74k ✅    Mitfix-Design Stratagem-Stage
+----------------- ---------------------- -------------- ------------
+07-05 13:00 5226  ████████████ 144k ⚠️   ████░░  74%    ············
          SA_1·  ████░░░░░░░░  56k ✅    Execute Plan 037 deps pinning dock…
          SA_2·  ███████░░░░░  86k ✅    Execute Plan 035 active_buffs expi…
          SA_3·  ████░░░░░░░░  49k ✅    Review session commits against DoD

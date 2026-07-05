@@ -25,7 +25,7 @@ def get_scenario_data(name: str) -> dict[str, Any] | None:
 
 def apply_scenario(data: dict[str, Any], state: dict[str, Any]) -> None:
     """Patch a state dict with scenario data. Pure function — safe for tests."""
-    for key in ("round", "phase_idx", "phase_stage"):
+    for key in ("round", "phase_idx"):
         if key in data:
             state[key] = data[key]
 
@@ -99,7 +99,6 @@ def save_scenario(name: str) -> None:
         "round": st.session_state.get("round", 1),
         "phase_idx": st.session_state.get("phase_idx", 0),
         "active": st.session_state.get("active", ""),
-        "phase_stage": st.session_state.get("phase_stage", "active"),
         "cp": dict(st.session_state.get("cp", {})),
         "vp": dict(st.session_state.get("vp", {})),
         "unit_patches": {

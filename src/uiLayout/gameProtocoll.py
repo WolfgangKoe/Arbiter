@@ -177,7 +177,6 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
     cp = st.session_state.get("cp", {})
     phase_idx = st.session_state.get("phase_idx", 0)
     current_phase = PHASES[phase_idx][1]
-    current_stage = st.session_state.get("phase_stage", "active")
     used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
     used_ids = used_ids_by_player.get(player, set())
     used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
@@ -203,7 +202,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             continue
         met = _conditions_met(s.conditions, unit_for_check)
         vis = stratagem_visibility(
-            s, cp.get(player, 0), current_phase, current_stage, used_ids, met, used_battle_ids
+            s, cp.get(player, 0), current_phase, used_ids, met, used_battle_ids
         )
         if vis != "hidden":
             visible.append((s, vis))

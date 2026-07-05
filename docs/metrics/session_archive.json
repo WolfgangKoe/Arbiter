@@ -2687,8 +2687,8 @@
   "52263574-1b75-4ddb-95cc-f7d0088834e0": {
     "started_at": "2026-07-05T11:00:39.744Z",
     "task": "„Beginne mit der nächsten Session. Der Plan ist freigegeben.\"",
-    "peak_context": 140877,
-    "subagent_share": 75.64271049399262,
+    "peak_context": 144298,
+    "subagent_share": 73.58995834104302,
     "by_tier": {
       "Sonnet": 30101536,
       "Opus": 1087185
@@ -2742,6 +2742,46 @@
         "tier": "Sonnet",
         "peak_context": 58677,
         "started_at": "2026-07-05T11:00:39.744Z"
+      }
+    ]
+  },
+  "121e0a1c-7049-4420-a155-72d2abd1fccc": {
+    "started_at": "2026-07-05T15:03:54.872Z",
+    "task": "start session, bitte Plan vorlegen",
+    "peak_context": 81220,
+    "subagent_share": 84.62510813729709,
+    "by_tier": {
+      "Sonnet": 13331663,
+      "Fable": 3522959
+    },
+    "subagents": [
+      {
+        "agent_type": "Plan",
+        "description": "Planungsentwurf Session 126",
+        "tier": "Sonnet",
+        "peak_context": 74180,
+        "started_at": "2026-07-05T15:03:54.872Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "UI-Verifikationsanleitung 034/036",
+        "tier": "Sonnet",
+        "peak_context": 126228,
+        "started_at": "2026-07-05T15:03:54.872Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Plan 040 erweitert",
+        "tier": "Sonnet",
+        "peak_context": 83942,
+        "started_at": "2026-07-05T15:03:54.872Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Mitfix-Design Stratagem-Stage",
+        "tier": "Sonnet",
+        "peak_context": 74074,
+        "started_at": "2026-07-05T15:03:54.872Z"
       }
     ]
   }
