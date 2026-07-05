@@ -134,10 +134,11 @@ Jede Phase implementiert das `PhaseHandler`-Protocol:
 ```python
 class PhaseHandler(Protocol):
     phase_name: ClassVar[str]
-    def render_start(self, state: dict) -> None: ...   # phase_start Ability-Hooks + UI
-    def render_active(self, state: dict) -> None: ...  # Hauptinteraktion
-    def render_end(self, state: dict) -> None: ...     # phase_end Ability-Hooks + UI
+    def render_active(self, state: dict) -> None: ...  # einzige View der Phase
 ```
+
+Es gibt kein Stage-Konzept (`start`/`active`/`end`) mehr — jede Phase hat genau
+eine Render-View.
 
 #### PhaseRunner
 
@@ -146,15 +147,16 @@ class PhaseHandler(Protocol):
 ```python
 def render_current_phase(state: dict) -> None:
     handler = PHASE_REGISTRY[state["phase"]]
-    stage   = state.get("phase_stage", "active")
-    triggered = get_triggered_abilities(state, state["phase"], f"phase_{stage}")
-    getattr(handler, f"render_{stage}")(state)
-
-def advance_stage(state: dict) -> None:
-    # start → active → end → next_phase (mit turn_flags reset)
+    handler.render_active(state)
 ```
 
-Der "→ Weiter"-Button ruft ausschließlich `advance_stage()` auf.
+Phasenübergänge laufen ausschließlich über `game_state.next_phase()` — der
+"→ Weiter"-Button (`gameHeader.py`) ruft `next_phase()` direkt auf. Bei jedem
+Aufruf setzt `next_phase()` unbedingt `selected_unit`/`selected_targets`/
+`psi_result`/`psychic_denies_used` zurück; der Reset der `turn_flags`
+(`advanced`, `retreated`, `charged`, `shot`, `fought`) läuft separat in
+`_reset_turn_state()`, nur beim Spielerwechsel nach der Moralphase — keine
+separate Stage-Übergangsfunktion.
 
 #### combat.py — Kritische Datei
 
@@ -239,7 +241,7 @@ class Stratagem:
     name_en: str
     cp_cost: int                              # 0 = free
     phase: str                                # "command" | "movement" | ...
-    stage: Literal["start", "active", "end"]  # phase stage when it may be used
+    stage: Literal["start", "active", "end"]  # data schema only — no visibility filter; timing lives in rule_text
     player: Literal["active", "inactive", "both"]
     conditions: list[str]                     # keyword conditions for eligibility
     rule_text: str
@@ -324,9 +326,6 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
         },
         "p2": { ... },  # same structure
     },
-
-    # Phase stage (within the current phase)
-    "phase_stage":   Literal["start", "active", "end"],
 
     # Active effect waiting for player confirmation (None when no effect is pending)
     # Set by gameMechanic phase modules; cleared after player confirms.

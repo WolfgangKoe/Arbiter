@@ -11,13 +11,13 @@
 |------|--------------------------------------------------|--------------------|
 | P-01 | Unit wählen / abwählen                           | alle               |
 | P-02 | Gegner-Einheit als Ziel designieren              | shooting/charge/fight |
-| P-03 | Phasenstadien — Weiter-Logik (PhaseRunner)       | alle               |
+| P-03 | "→ Weiter"-Button — Phasenübergang (PhaseRunner) | alle               |
 | P-04 | Effektbestätigung — Schaden in PlayerArea        | alle (Effekt-Trigger) |
 | P-05 | CommandPhase — Living Metal Heilung              | command            |
 | P-06 | GO-Sichtbarkeit — Prüfkette                      | alle (Stratagems)  |
 | P-07 | Schussphase — vollständiger Ablauf               | shooting           |
 | P-08 | AttackSequence — Auflösungsreihenfolge           | shooting / fight   |
-| P-09 | PhaseRunner — start → active → end              | alle               |
+| P-09 | PhaseRunner — Dispatch auf render_active         | alle               |
 | P-10 | Bewegungsphase — vollständiger Ablauf            | movement           |
 | P-11 | Befehlsphase — Kommandoprotokolle (Necrons)      | command            |
 | P-12 | Psychic Phase — vollständiger Ablauf             | psychic            |
@@ -64,29 +64,26 @@ flowchart TD
 
 ---
 
-## P-03 — Phasenstadien — Weiter-Logik (alle Phasen)
+## P-03 — "→ Weiter"-Button — Phasenübergang (alle Phasen)
 
-Jede Phase durchläuft drei Stadien: **start → active → end**.
-Der „→"-Pfeil springt erst durch Stadien, dann zur nächsten Phase.
+Jede Phase hat genau **eine** Ansicht (`render_active`). Es gibt kein Stage-
+Konzept (`start`/`active`/`end`) — der „→"-Pfeil springt direkt zur nächsten
+Phase.
 
 ```mermaid
 flowchart TD
-    A[Spieler klickt →] --> B{phase_stage?}
-    B -- start --> C{gibt es Effekte\nfür 'active'?}
-    C -- ja --> D[phase_stage = active\nst.rerun]
-    C -- nein --> E{gibt es Effekte\nfür 'end'?}
-    E -- ja --> F[phase_stage = end\nst.rerun]
-    E -- nein --> G[next_phase\nphase_stage = start für neue Phase]
-    B -- active --> E
-    B -- end --> H[next_phase\nphase_stage = start]
-    D --> Z[PlayerArea zeigt\nrelevante Aktionen für Stadium]
-    F --> Z
-    G --> Z
-    H --> Z
+    A[Spieler klickt →] --> B[next_phase aufgerufen]
+    B --> C{letzte Phase\nder Runde? morale}
+    C -- ja --> D[Spielerwechsel\n_reset_turn_state\nneue Runde ggf. +1]
+    C -- nein --> E[phase_idx + 1]
+    D --> F[selected_unit/-targets\nzurückgesetzt, st.rerun]
+    E --> F
 ```
 
-**Hinweis:** Kein hartes Sperren — nur ein Hinweis wenn End-Effekte existieren.
-Ein Phasensprung ist immer möglich (bewusste Entscheidung des Spielers).
+**Hinweis:** Kein hartes Sperren — ein Phasensprung ist immer möglich
+(bewusste Entscheidung des Spielers). Der Turn-Flag-Reset (`advanced`,
+`retreated`, `charged`, `shot`, `fought`, …) läuft in `_reset_turn_state`,
+nur beim Spielerwechsel nach der Moralphase.
 
 ---
 
@@ -114,8 +111,8 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Befehlsphase beginnt\nphase_stage = start] --> B[resolve_command_start\nCP +1 wenn Battle-Forged]
-    B --> C[get_triggered_abilities\nphase=command, stage=start]
+    A[Befehlsphase beginnt] --> B[resolve_command_start\nCP +1 wenn Battle-Forged]
+    B --> C[get_triggered_abilities\nphase=command, timing=phase_start]
     C --> D{Einheiten mit\nlivingMetal Regel?}
     D -- ja --> E[apply_living_metal\nfür jede berechtigte Einheit]
     E --> F[Heilungs-Ergebnis\nin PlayerArea anzeigen]
@@ -135,18 +132,23 @@ Verhindert dass Modelle über ihre Startanzahl hinaus geheilt werden.
 ```mermaid
 flowchart TD
     A[Phase beginnt] --> B[Alle Stratagems\nder Armee laden]
-    B --> C{Stratagem-Phase\n= aktuelle Phase?}
+    B --> C{Bedingungen\nerfüllt?}
     C -- nein --> HIDE[nicht anzeigen]
-    C -- ja --> D{Stratagem-Stage\n= aktueller phase_stage?}
+    C -- ja --> T{timing =\nphase_reactive?}
+    T -- ja --> HIDE
+    T -- nein --> D{Stratagem-Phase\n= aktuelle Phase?}
     D -- nein --> HIDE
-    D -- ja --> E{Bedingungen\nerfüllt?}
-    E -- nein --> HIDE
-    E -- ja --> F{Bereits diese\nPhase eingesetzt?}
+    D -- ja --> F{Bereits diese\nPhase/Battle eingesetzt?}
     F -- ja --> GREY[anzeigen, ausgegraut]
     F -- nein --> G{CP ausreichend?}
     G -- nein --> GREY
     G -- ja --> CLICK[anzeigen, klickbar]
 ```
+
+**`stage` ist KEIN Sichtbarkeitskriterium:** 9E bindet Stratagems nur an die
+Phase; Innerhalb-der-Phase-Timing ("at the start of…", "at the end of…") steht
+im Fließtext (`rule_text`) und wird der Spielerin/dem Spieler angezeigt, nicht
+hart gefiltert (siehe `docs/spec/acceptance/rules.md`, R-CMD-05).
 
 **Player-Sichtbarkeit:** `player = "active"` → nur aktiver Spieler sieht GO.
 `player = "inactive"` → nur inaktiver Spieler (Reaktion auf Gegneraktion).
@@ -278,44 +280,36 @@ Die Funktion selbst sieht nur `int` — kein String-Parsing in `combat.py`.
 
 ---
 
-## P-09 — PhaseRunner — start → active → end (alle Phasen)
+## P-09 — PhaseRunner — Dispatch auf render_active (alle Phasen)
 
 `phase_runner.py` ist der einzige Eintrittspunkt für `gameActionsArea.py`.
+Jede Phase hat genau eine View; es gibt kein Stage-Konzept mehr.
 
 ```mermaid
 flowchart TD
-    AREA[gameActionsArea\nruft render_current_phase auf] --> PR[PhaseRunner\nliest state.phase + state.phase_stage]
+    AREA[gameActionsArea\nruft render_current_phase auf] --> PR[PhaseRunner\nliest state.phase_idx → phase_key]
     PR --> REG{PHASE_REGISTRY\nHandler gefunden?}
-    REG -- nein --> ERR[Fehler: unbekannte Phase]
-    REG -- ja --> STAGE{phase_stage?}
-
-    STAGE -- start --> HS[get_triggered_abilities\nphase, 'phase_start'\n→ Ability-Hook-Liste]
-    HS --> RS[handler.render_start\nstate + triggered]
-
-    STAGE -- active --> RA[handler.render_active\nstate]
-
-    STAGE -- end --> HE[get_triggered_abilities\nphase, 'phase_end'\n→ Ability-Hook-Liste]
-    HE --> RE[handler.render_end\nstate + triggered]
-
-    RS --> WEITER[Spieler klickt →\nadvance_stage aufgerufen]
-    RA --> WEITER
-    RE --> WEITER
-
-    WEITER --> ADV{Welche stage\nist aktuell?}
-    ADV -- start --> TOACTIVE[phase_stage = active\nst.rerun]
-    ADV -- active --> TOEND[phase_stage = end\nst.rerun]
-    ADV -- end --> NEXT[next_phase\nreset_turn_flags für aktiven Spieler\nphase_stage = start\nst.rerun]
+    REG -- nein --> WARN[st.warning:\nkein Handler registriert]
+    REG -- ja --> RA[handler.render_active\nstate]
+    RA --> WEITER[Spieler klickt →\nnext_phase aufgerufen]
+    WEITER --> ADV{letzte Phase\nder Runde? morale}
+    ADV -- nein --> IDX[phase_idx + 1\nst.rerun]
+    ADV -- ja --> SWITCH[Spielerwechsel\n_reset_turn_state\nst.rerun]
 ```
 
-**Turn-Flag-Reset** in `advance_stage` beim Übergang `end → next_phase`:
+**Turn-Flag-Reset** in `_reset_turn_state` (`game_state.py`), beim
+Spielerwechsel nach der Moralphase — nicht bei jedem Phasenübergang:
 ```python
-def reset_turn_flags(faction: str, state: dict) -> None:
-    units_key = f"{faction.lower()}_units"
-    for uid in state[units_key]:
-        state[units_key][uid]["turn_flags"] = {
-            "advanced": False, "retreated": False,
-            "charged": False, "shot": False, "fought": False,
-        }
+def _reset_turn_state() -> None:
+    for key in ("p1_units", "p2_units"):
+        for state in st.session_state[key].values():
+            flags = state["turn_flags"]
+            for flag in flags:
+                flags[flag] = False
+            state["lost_models_this_turn"] = 0
+            state["fled_models_this_turn"] = 0
+            state["movement_choice"] = "stationary"
+            state["movement_chosen"] = False
 ```
 
 Alle Phasen sind vollständig implementiert (Ziel 4).

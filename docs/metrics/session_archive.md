@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 18:34 CEST
+Stand: 2026-07-05 19:40 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,11 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 17:03 121e  ██████░░░░░░  81k ✅    █████░  85%    ▚▚▚·········
+07-05 17:03 121e  ██████████░░ 130k ⚠️   ████░░  70%    ▚▚▚▚█·······
          SA_1·  ██████░░░░░░  74k ✅    Planungsentwurf Session 126
-         SA_2·  ██████████░░ 126k ⚠️   UI-Verifikationsanleitung 034/036
-         SA_3·  ███████░░░░░  84k ✅    Executor Plan 040 erweitert
-         SA_4·  ██████░░░░░░  74k ✅    Mitfix-Design Stratagem-Stage
+         SA_2·  █████░░░░░░░  63k ✅    Reviewer S126 DoD-Review
+         SA_3·  ██████████░░ 126k ⚠️   UI-Verifikationsanleitung 034/036
+         SA_4·  ██████████░░ 125k ⚠️   Executor Plan 040 erweitert
+         SA_5·  ██████░░░░░░  76k ✅    Spec-Drift-Fix 040
+         SA_6·  ██████░░░░░░  74k ✅    Mitfix-Design Stratagem-Stage
 ----------------- ---------------------- -------------- ------------
 07-05 13:00 5226  ████████████ 144k ⚠️   ████░░  74%    ············
          SA_1·  ████░░░░░░░░  56k ✅    Execute Plan 037 deps pinning dock…
@@ -441,3 +443,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S123 (2026-07-05)** Necron-Stratagem-Vollabgleich 59/59 (27 Befunde, Header stale=Live-Bugs); unit_key-Scoping-Fix stratagem_strength_bonus; 5 HOCH-Datenfixes; Plan 032 angelegt; Auditpläne: 27 DONE-Dateien ins Archiv, 5 aktiv
 - **S124 (2026-07-05)** /improve-Vollaudit: 11 Befunde verifiziert, Pläne 033-041 angelegt (4 Correctness-Bugs, XSS/Zip-Bomb, mypy-Ratchet, totes Lifecycle, INV-6-Extraktion); Reihenfolge 033→034→036→035→037→040→038→039→041 freigegeben
 - **S125 (2026-07-05)** Pläne 033-037 umgesetzt: 4 P1-Bugs (Phasen-Modifier-Expiry, State-Key-Lookups Duplikat-Trupps, active_buffs-Zugwechsel, rosz-Import-Härtung XSS/Zip-Bomb) + P2 Deps-Pinning/pip-audit/Docker-nonroot; auf feature/016 konsolidiert, Pläne archiviert
+- **S126 (2026-07-05)** Plan 040 + Mitfix: tote Stage-Maschine entfernt, Stratagem-stage-Hart-Filter raus (start/end-Stratagems waren dauerhaft hidden); UI-Verifikationen 034/036/040 durch Stakeholder bestätigt; Spec-Drift (architecture/processes/ui_layout) nachgezogen

@@ -2748,11 +2748,12 @@
   "121e0a1c-7049-4420-a155-72d2abd1fccc": {
     "started_at": "2026-07-05T15:03:54.872Z",
     "task": "start session, bitte Plan vorlegen",
-    "peak_context": 81220,
-    "subagent_share": 84.62510813729709,
+    "peak_context": 129569,
+    "subagent_share": 69.78282983403875,
     "by_tier": {
-      "Sonnet": 13331663,
-      "Fable": 3522959
+      "Sonnet": 18382100,
+      "Opus": 1703687,
+      "Fable": 10575159
     },
     "subagents": [
       {
@@ -2760,6 +2761,13 @@
         "description": "Planungsentwurf Session 126",
         "tier": "Sonnet",
         "peak_context": 74180,
+        "started_at": "2026-07-05T15:03:54.872Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer S126 DoD-Review",
+        "tier": "Opus",
+        "peak_context": 63147,
         "started_at": "2026-07-05T15:03:54.872Z"
       },
       {
@@ -2773,7 +2781,14 @@
         "agent_type": "general-purpose",
         "description": "Executor Plan 040 erweitert",
         "tier": "Sonnet",
-        "peak_context": 83942,
+        "peak_context": 125480,
+        "started_at": "2026-07-05T15:03:54.872Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Spec-Drift-Fix 040",
+        "tier": "Sonnet",
+        "peak_context": 76377,
         "started_at": "2026-07-05T15:03:54.872Z"
       },
       {

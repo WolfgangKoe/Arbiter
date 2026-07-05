@@ -373,16 +373,14 @@ all attributes, keyword list, ability rule texts.
 The selector button in unitCard is active in setup phase for this purpose (unlike normal phases
 where it drives game actions). Deployment selectbox remains on the unitCard as before.
 
-### Phase stages
+### Phase transitions
 
-Each phase has three stages: **start → active → end**.
-The → arrow advances through stages first, then to the next phase (see [processes.md P-03](processes.md)).
-
-| Stage  | Typical effects                                              |
-|--------|--------------------------------------------------------------|
-| start  | Automatic triggers: Living Metal, CP gain, protocol select   |
-| active | Manual player actions: movement, shooting, fight, abilities  |
-| end    | Reactive triggers: Reanimation Protocols, morale tests       |
+There are no phase sub-stages. The → arrow advances directly to the next phase
+via `game_state.next_phase()` (see [processes.md P-03](processes.md)): automatic
+start-of-phase effects fire via `timing: phase_start` triggers, per-phase state
+is reset in `_reset_phase_state()`, and each phase renders a single view
+(`render_active`). Reactive mechanics (e.g. Reanimation Protocols) are handled
+inside the phase views themselves.
 
 ---
 

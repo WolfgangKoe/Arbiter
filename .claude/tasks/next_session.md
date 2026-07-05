@@ -30,49 +30,46 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S125, 2026-07-05)
+## Aktueller Stand (nach S126, 2026-07-05)
 
-**S125 (Audit-Pläne 033–037 umgesetzt):** Alle vier P1-Bugs + die P2-Deps-Härtung
-committet und auf `feature/016-protocol-rp-effects` konsolidiert (5 Commits linear,
-Sub-Branches gelöscht), Pläne nach `docs/audit/plans/archive/` verschoben:
-- `3ec5ad9` **033** Phasen-Modifier-Expiry (`_reset_phase_state()` vor `phase_idx`)
-- `57c1593` **034** State-Key-Lookups bei Duplikat-Trupps (`unit_id_from_state_key`)
-- `45db5b4` **036** `.rosz`-Import gehärtet (Sanitize + 20-MB-Cap + `html.escape`)
-- `1be845f` **035** `active_buffs` besitzer-bedingt leeren (MWBD überdauert Gegnerzug)
-- `c5ea24f` **037** Deps gepinnt, `pip-audit`-CI, Docker non-root
-Reviewer-Subagent (Opus): **GO**, keine Blocker. Vollsuite 1461 passed, Coverage
-99,12 % (`game_state.py` 100 %), Architektur-Gate grün, INV-4b-Ratchet unverändert.
-Verbleibende Audit-Queue: 040 → 038 → 039 → 041 (s. `docs/audit/plans/README.md`).
+**S126 (Plan 040 + Mitfix):** `5982751` — tote Stage-Maschine entfernt (`advance_stage`,
+`render_start/end`, `phase_stage`) **plus** Stakeholder-Mitfix: Stage-Hart-Filter aus
+`stratagem_visibility()` raus — `stage: start/end`-Stratagems waren dauerhaft `hidden`
+(Bestandsbug). `Stratagem.stage`/`Ability.stage` bleiben als Datenfelder ohne Verhalten.
+2 vorher grüne Szenario-Tests mit Stakeholder-OK migriert (`test_legacy_phase_stage_key_
+is_ignored`). Vollsuite 1451 passed, Coverage 99,11 %, alle Gates grün. Plan 040 archiviert.
+Review-Blocker (Spec-Drift `architecture.md`/`processes.md`/`ui_layout.md`) noch in S126
+nachgezogen. **UI verifiziert (Stakeholder):** 034 alle 4 Punkte ✅, 036 Header ✅,
+040 Dimensional Corridor sichtbar ✅ + RP-Gegenprobe ✅ + Legacy-Szenarien laden ✅.
 
-Frühere Sessions (S60–S124): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S125): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-**Plan 040 ausführen** (Totes Phasen-Lifecycle entfernen, P2, S–M) — Deps 033/035
-sind erledigt. Danach **038 → 039 → 041**. Regeln: 041 zwingend nach 034 (✅) + 040
-und NICHT parallel zu 015/026; 041 erst nach 015/026. Jeder Plan self-contained
-(Drift-Check gegen `f6c464a` eingebaut) → Executor-Subagent direkt beauftragbar.
+**Plan 038 ausführen** (mypy-Ratchet-Gate, P2, M), danach **039 → 041**. Regeln:
+041 zwingend nach 034 (✅) + 040 (✅), NICHT parallel zu 015/026, erst nach 015/026.
+Pläne self-contained → Executor-Subagent direkt beauftragbar.
 
-**Offene Verifikationen aus S125 (VOR Merge nach `main`, Render-/Runtime-Code — nicht test-gedeckt):**
-- **034 UI** mit `data/rosters/necrons_1500pts_silent_king.yaml`: (1) zweiter
-  Warriors-Trupp bekommt Moraltest, (2) Battle-Log-Snapshot listet beide Duplikate
-  mit Klarnamen, (3) Melee-Liste zeigt Klarnamen statt `#N`, (4) Resurrection-Orb-
-  Heal-UI rendert für Duplikat-Ziel.
-- **036 UI**: Header zeigt legitime Spielernamen unverändert (Escaping-Artefakte prüfen).
+**Offene Verifikation (VOR Merge nach `main`):**
 - **037 Docker**: `docker build` + `docker run --rm arbiter-test id -u` → 1000 +
   Port-7860-Smoke beim nächsten HF-Spaces-Deploy (lokal kein Docker).
 
 **Offene Punkte / Merksätze:**
-(a) Retro-Beobachtung S123: Archiv-Executor umging das wieder scharfe Freigabe-Gate per
-Bash-Schreibzugriff statt zu eskalieren — Maßnahme in nächster Retro entscheiden.
+(a) Retro S123: Archiv-Executor umging das Freigabe-Gate per Bash-Schreibzugriff —
+Maßnahme in nächster Retro entscheiden.
 (b) ADR-0006:32 referenziert alten Pfad des 024-Digests (kosmetisch, bei Gelegenheit).
 (c) Merkposten `hand_of_the_phaeron`/ExtraUses steht in Plan 032.
 (d) Direction-Entscheide offen (Audit S124): ziel9-Fetcher vorziehen? Deployment-Phase
 bauen oder ADR „bleibt am Tisch"? Mission-Scoring (eine Mission end-to-end)?
 (e) Merkposten: 6 ungenutzte Loader-Funktionen (`load_points` u. a.) — Intent klären
 (ziel9-Scaffolding?), dann löschen/behalten (Rejected-Liste plans/README).
-(f) Retro-Beobachtung S124: 9 Pläne inline schreiben sprengte den Korridor (~190k) —
-künftig ab ~6 Plänen splitten oder Entwürfe an Sonnet delegieren, Opus finalisiert.
+(f) Retro S124: ab ~6 Plänen splitten oder Entwürfe an Sonnet delegieren.
+(g) Retro S126: Lösch-Pläne → Executor-Selbstprüfliste MUSS entfernte Bezeichner
+auch über `docs/spec/` greppen (S126-Blocker: 2 Specs beschrieben Gelöschtes).
+(h) Retro S126: App VOR jeder UI-Verifikation neu starten (alter Prozess/State
+lieferte 4 falsche ❌); UI-Prüfanleitungen vorher gegen Roster-Realität validieren
+(Flayed-Ones-Check ohne Roster-Deckung, „Szenario-UI" existiert nicht — nur
+`?scenario=`-Query-Param).
 
 ---
 
