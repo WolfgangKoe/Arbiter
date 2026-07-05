@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements-dev.txt
 
+      - name: Dependency vulnerability scan
+        run: pip-audit -r requirements.txt
+
       - name: Lint
         run: |
           ruff check src/
