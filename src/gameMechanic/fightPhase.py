@@ -12,7 +12,12 @@ import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND_ALT, SYM_SWORDS
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
+from gameMechanic.game_state import (
+    unit_id_from_state_key,
+    unit_keys_for,
+    units_key_for,
+    units_list_for,
+)
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
 from uiLayout._common import (
     group_flow_attacker,
@@ -482,8 +487,8 @@ def _render_melee_pairs() -> None:
             if key in seen:
                 continue
             seen.add(key)
-            a = name_map[p1].get(uid, uid)
-            b = name_map.get(fac, {}).get(enemy_uid, enemy_uid)
+            a = name_map[p1].get(unit_id_from_state_key(uid), uid)
+            b = name_map.get(fac, {}).get(unit_id_from_state_key(enemy_uid), enemy_uid)
             pairs.append(f"**{a}** ↔ **{b}**")
     if pairs:
         st.markdown("**Active Melee Engagements:**")

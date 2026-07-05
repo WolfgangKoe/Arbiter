@@ -103,8 +103,8 @@ def _render_battle_log() -> None:
         st.caption(f"**{faction}**")
         names = _unit_name_map(faction)
         states = _state_for(faction)
-        for uid, name in names.items():
-            s = states.get(uid, {})
+        for uid, s in states.items():
+            name = names.get(unit_id_from_state_key(uid), uid)
             deployment = s.get("deployment", "—")
             status = "DESTROYED" if s.get("destroyed") else deployment
             st.caption(f"  {name}: {status}")

@@ -6,7 +6,7 @@ import streamlit as st
 
 from constants.symbols import SYM_CHECK
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import units_key_for, units_list_for
+from gameMechanic.game_state import unit_id_from_state_key, units_key_for, units_list_for
 from gameMechanic.unit_mutations import flee_models
 from gameObjects.unit import Unit
 
@@ -78,7 +78,7 @@ def _render_faction_morale(
     st.markdown(f"**{faction}**")
     any_test = False
     for uid, unit_state in unit_states.items():
-        unit = units.get(uid)
+        unit = units.get(unit_id_from_state_key(uid))
         if unit is None:
             continue
         if not morale_test_required(unit, unit_state):

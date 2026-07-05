@@ -4,11 +4,29 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import MagicMock
 
+sys.modules.setdefault("streamlit", MagicMock())
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
-from gameMechanic.fightPhase import _dice_max, _is_target_engaged, can_fight
+import gameMechanic.fightPhase as fp  # noqa: E402
+from gameMechanic.combat import AttackParams, DefendParams, resolve_attack  # noqa: E402
+from gameMechanic.fightPhase import _dice_max, _is_target_engaged, can_fight  # noqa: E402
+
+
+class FakeSessionState(dict):
+    """Dict with attribute access — mirrors streamlit's session_state API."""
+
+    def __getattr__(self, name):  # type: ignore[no-untyped-def]
+        try:
+            return self[name]
+        except KeyError as exc:
+            raise AttributeError(name) from exc
+
+    def __setattr__(self, name, value):  # type: ignore[no-untyped-def]
+        self[name] = value
+
 
 # ---------------------------------------------------------------------------
 # can_fight — pure-function tests
@@ -169,3 +187,40 @@ class TestDiceMax:
 
     def test_empty_string_returns_3(self) -> None:
         assert _dice_max("") == 3
+
+
+# ---------------------------------------------------------------------------
+# _render_melee_pairs — duplicate-squad state-key resolution (Plan 034)
+# ---------------------------------------------------------------------------
+
+
+class TestRenderMeleePairsDuplicateSquad:
+    def test_melee_pairs_show_names_for_duplicate_squads(self, monkeypatch) -> None:
+        """A melee_with entry keyed by a duplicate-squad state key ('u1#1')
+        must resolve to the unit's real name, not fall back to showing the
+        raw internal state key. name_map is bare-ID-keyed, so the lookup must
+        strip the '#N' suffix before indexing (regression)."""
+        warriors = SimpleNamespace(id="u1", name_en="Necron Warriors")
+        boyz = SimpleNamespace(id="u2", name_en="Boyz")
+        monkeypatch.setattr(
+            fp,
+            "units_list_for",
+            lambda player: [warriors] if player == "Necrons" else [boyz],
+        )
+        monkeypatch.setattr(
+            fp,
+            "units_key_for",
+            lambda player: "p1_units" if player == "Necrons" else "p2_units",
+        )
+        fp.st.session_state = FakeSessionState(
+            first_player="Necrons",
+            second_player="Orks",
+            p1_units={"u1#1": {"melee_with": [["Orks", "u2"]]}},
+        )
+        markdown_calls: list[str] = []
+        fp.st.markdown = lambda msg: markdown_calls.append(msg)
+
+        fp._render_melee_pairs()
+
+        assert any("Necron Warriors" in c and "Boyz" in c for c in markdown_calls)
+        assert not any("#1" in c for c in markdown_calls)

@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from gameMechanic import moralePhase
 from gameMechanic.moralePhase import _fail_threshold, morale_test_required
 from gameMechanic.unit_mutations import flee_models
 
@@ -194,3 +195,34 @@ class TestMoraleTestRequired:
         unit = _mock_unit(models_max=10)
         state = {"destroyed": True, "lost_models_this_turn": 10}
         assert morale_test_required(unit, state) is False
+
+
+# ---------------------------------------------------------------------------
+# _render_faction_morale — duplicate-squad state-key resolution (Plan 034)
+# ---------------------------------------------------------------------------
+
+
+class TestRenderFactionMoraleDuplicateSquad:
+    def test_duplicate_squad_gets_morale_test(self, monkeypatch) -> None:
+        """The second copy of a duplicated squad (state key 'u1#1') must still
+        be offered a Morale test. `units` is keyed by bare unit ID, so the
+        lookup must resolve the '#1' suffix before indexing — otherwise the
+        duplicate copy is silently skipped (regression for the morale-test
+        bug: only 'u1' has losses here, 'u1#1' also needs an offered test)."""
+        unit = _mock_unit(models_max=10)
+
+        rendered_uids: list[str] = []
+        monkeypatch.setattr(
+            moralePhase,
+            "_render_unit_morale",
+            lambda faction, uid, u, unit_state, state: rendered_uids.append(uid),
+        )
+
+        moralePhase._render_faction_morale(
+            "Necrons",
+            {"u1": unit},
+            {"u1": _alive_state(lost=0), "u1#1": _alive_state(lost=2)},
+            {"round": 1},
+        )
+
+        assert rendered_uids == ["u1#1"]

@@ -314,7 +314,7 @@ def _render_activated_wargear(
     targets = st.session_state.get("revive_wargear_target_uid", {})
     target_uid = targets.get(request_id)
     if target_uid:
-        target_unit = unit_by_id.get(target_uid)
+        target_unit = unit_by_id.get(unit_id_from_state_key(target_uid))
         if target_unit:
             st.caption(f'Target: **{target_unit.name_en}** — verify within 6" on table')
             wound_adjustment_buttons(st.session_state.get("active", ""), target_uid, target_unit)

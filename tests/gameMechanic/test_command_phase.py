@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 # Stub streamlit before importing commandPhase
 _st_mock = MagicMock()
@@ -227,6 +227,52 @@ class TestActivatedWargear:
         assert len(captured) == 2
         assert captured[0] != captured[1]
         assert all(k.startswith("cmd_revive_wargear_") for k in captured)
+
+    def test_wargear_heal_ui_renders_for_duplicate_target(self) -> None:
+        """revive_wargear_target_uid can hold a duplicate-squad state key
+        ('...#1'); unit_by_id is bare-ID-keyed, so the object lookup must
+        resolve the suffix before indexing — otherwise the heal UI
+        (wound_adjustment_buttons) never renders for the second copy of a
+        squad (regression). wound_adjustment_buttons itself must still be
+        called with the FULL state key (it indexes session state, not the
+        bare-ID map)."""
+        from gameMechanic.commandPhase import _render_activated_wargear, _wargear_state_key
+
+        target_unit = MagicMock()
+        target_unit.name_en = "Necron Warriors"
+        unit_by_id = {"wh40k_9e.necrons.unit.warriors": target_unit}
+
+        wargear = {
+            "id": "wh40k_9e.necrons.wargear.resurrection_orb",
+            "name_en": "Resurrection Orb",
+        }
+        request_id = _wargear_state_key("wh40k_9e.necrons.unit.overlord", wargear["id"])
+
+        session = _S(
+            wargear_used={},
+            revive_wargear_target_uid={request_id: "wh40k_9e.necrons.unit.warriors#1"},
+            active="Necrons",
+        )
+        _st_mock.session_state = session
+        orig_button = _st_mock.button
+        _st_mock.button = MagicMock(return_value=False)
+        try:
+            with patch("gameMechanic.commandPhase.wound_adjustment_buttons") as mock_wound:
+                _render_activated_wargear(
+                    "Necrons",
+                    {"round": 1},
+                    {},
+                    unit_by_id,
+                    None,
+                    wargear,
+                    bearer_uid="wh40k_9e.necrons.unit.overlord",
+                )
+        finally:
+            _st_mock.button = orig_button
+
+        mock_wound.assert_called_once_with(
+            "Necrons", "wh40k_9e.necrons.unit.warriors#1", target_unit
+        )
 
 
 # ---------------------------------------------------------------------------
