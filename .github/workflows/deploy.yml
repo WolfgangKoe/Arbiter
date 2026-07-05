@@ -34,7 +34,7 @@ jobs:
         run: python tools/mypy_gate.py
 
       - name: Run tests with coverage
-        run: pytest --tb=short
+        run: pytest -n auto --tb=short
 
   deploy:
     runs-on: ubuntu-latest

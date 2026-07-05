@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 19:55 CEST
+Stand: 2026-07-05 20:06 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,7 +14,7 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 19:41 67da  █████░░░░░░░  61k ↓    █████░  83% ↑  ···········▒
+07-05 19:41 67da  █████░░░░░░░  68k ↓    █████░  89% ↑  ▚▚··········
 07-05 17:03 121e  ██████████░░ 130k ↓    ████░░  69% ↓  ▚▚▚▚█·······
 07-05 13:00 5226  ████████████ 144k ↓    ████░░  74% ↑  ············
 07-05 08:37 06c9  ████████████ 205k ↑    ████░░  66% ↓  ············
@@ -27,18 +27,18 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 **2026-07-05 19:41 · 67da766e**
 
 - **Aufgabe:** Du hast die Freigabe für den Plan. Sobald die Subagenten dafür laufen, beauftrage einen weiteren, der prüft, was mit /h…
-- **Modelle:** Haupt Fable · Subagent Haiku, Sonnet
-- **Tokens gesamt:** 7,881,723 (Haupt 1,302,660 · Subagent 6,579,063, Anteil 83 %)
-- **Peak-Kontext:** █████░░░░░░░ 61k / 150k
-- **cache_read:** 6,760,121 · **Output:** 80,169
+- **Modelle:** Haupt Fable · Subagent Fable, Haiku, Sonnet
+- **Tokens gesamt:** 15,672,899 (Haupt 1,768,310 · Subagent 13,904,589, Anteil 89 %)
+- **Peak-Kontext:** █████░░░░░░░ 68k / 150k
+- **cache_read:** 14,246,078 · **Output:** 99,469
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 61k blieb im 150k-Korridor.
-- ✅ 83% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 6,579,063 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 68k blieb im 150k-Korridor.
+- ✅ 89% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 11,709,987 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -49,17 +49,17 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 --- ----------------------------------- -------------------- ------
 1   Explore: r-proto-02 Löschbarkeit p… ██░░░░░░░░░░  26k    ✅
 2   general-purpose: Planning-Entwurf … ███████░░░░░  90k    ✅
-3   general-purpose: Plan 038+039 ausf… ██████░░░░░░  76k    ✅
+3   general-purpose: Plan 038+039 ausf… ███████░░░░░  93k    ✅
 4   Explore: Ratchet/Ledger-Trend anal… ████░░░░░░░░  53k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  16,616
-cache_creation ▕████░░░░░░░░░░░░░░░░░░░░▏   13%  1,024,817
-cache_read     ▕████████████████████████▏   86%  6,760,121
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  80,169
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  25,429
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    8%  1,301,923
+cache_read     ▕████████████████████████▏   91%  14,246,078
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  99,469
 ```
 
 **Legende & Zielwerte:**
@@ -76,10 +76,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   86%  6,760,121
-Neu gecacht (Tool-Ausgaben)   ▕███░░░░░░░░░░░░░░░░░▏   13%  1,024,817
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  16,616
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  80,169
+Warm (System/Memory/History)  ▕████████████████████▏   91%  14,246,078
+Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏    8%  1,301,923
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  25,429
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  99,469
 ```
 
 **Legende (Slide-Kategorien):**
@@ -95,5 +95,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 128 Sessions: 2,924,834,443 Token (30,157 Antworten).
+Σ über 128 Sessions: 2,932,625,619 Token (30,249 Antworten).
 

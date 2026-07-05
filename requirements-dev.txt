@@ -6,4 +6,5 @@ mypy
 pre-commit
 pytest
 pytest-cov
+pytest-xdist
 pip-audit
