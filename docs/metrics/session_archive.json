@@ -2648,8 +2648,8 @@
   "06c903a9-1a89-4279-916e-f46b13b0d598": {
     "started_at": "2026-07-05T06:37:33.496Z",
     "task": "<task-notification> <task-id>aa626a408ef671ba4</task-id> <tool-use-id>toolu_01Pv5NfwenLUHp4V21hguKJ9</tool-use-id> <out…",
-    "peak_context": 203530,
-    "subagent_share": 67.09595507373463,
+    "peak_context": 205273,
+    "subagent_share": 66.03992800198989,
     "by_tier": {
       "Sonnet": 25878461
     },
@@ -2681,6 +2681,67 @@
         "tier": "Sonnet",
         "peak_context": 51949,
         "started_at": "2026-07-05T06:37:33.496Z"
+      }
+    ]
+  },
+  "52263574-1b75-4ddb-95cc-f7d0088834e0": {
+    "started_at": "2026-07-05T11:00:39.744Z",
+    "task": "„Beginne mit der nächsten Session. Der Plan ist freigegeben.\"",
+    "peak_context": 140877,
+    "subagent_share": 75.64271049399262,
+    "by_tier": {
+      "Sonnet": 30101536,
+      "Opus": 1087185
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 037 deps pinning docker",
+        "tier": "Sonnet",
+        "peak_context": 56117,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 035 active_buffs expiry",
+        "tier": "Sonnet",
+        "peak_context": 86023,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review session commits against DoD",
+        "tier": "Opus",
+        "peak_context": 49426,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 036 rosz import hardening",
+        "tier": "Sonnet",
+        "peak_context": 86697,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 034 state-key lookups",
+        "tier": "Sonnet",
+        "peak_context": 119848,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 036 rosz import hardening",
+        "tier": "Sonnet",
+        "peak_context": 66919,
+        "started_at": "2026-07-05T11:00:39.744Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Execute Plan 033 phase modifier expiry",
+        "tier": "Sonnet",
+        "peak_context": 58677,
+        "started_at": "2026-07-05T11:00:39.744Z"
       }
     ]
   }

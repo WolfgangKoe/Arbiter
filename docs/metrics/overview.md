@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 12:59 CEST
+Stand: 2026-07-05 17:00 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,31 +14,31 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 08:37 06c9  ████████████ 204k ↑    ████░░  67% ↓  ············
+07-05 13:00 5226  ███████████░ 141k ↓    █████░  76% ↑  ············
+07-05 08:37 06c9  ████████████ 205k ↑    ████░░  66% ↓  ············
 07-04 20:21 4f34  ██████████░░ 124k ↓    █████░  85% ↑  ············
 07-04 14:45 b13e  ████████████ 147k ↑    ████░░  67% ↓  ▚▚▚█·······▒
 07-04 09:55 f800  ███████████░ 133k ↑    ████░░  67% ↓  ▚▚▚▚▚█······
 07-03 22:31 622e  ██████████░░ 126k ↑    █████░  82% ↓  ▚▚▚·········
-07-03 19:27 2927  ██████████░░ 124k ↓    █████░  88% ↑  ▚···········
 ```
 
 ## Jüngste Session
 
-**2026-07-05 08:37 · 06c903a9**
+**2026-07-05 13:00 · 52263574**
 
-- **Aufgabe:** &lt;task-notification&gt; &lt;task-id&gt;aa626a408ef671ba4&lt;/task-id&gt; &lt;tool-use-id&gt;toolu_01Pv5NfwenLUHp4V21hguKJ9&lt;/tool-use-id&gt; &lt;out…
-- **Modelle:** Haupt Fable · Subagent Sonnet
-- **Tokens gesamt:** 38,569,331 (Haupt 12,690,870 · Subagent 25,878,461, Anteil 67 %)
-- **Peak-Kontext:** ████████████ 204k / 150k
-- **cache_read:** 35,045,852 · **Output:** 400,082
+- **Aufgabe:** „Beginne mit der nächsten Session. Der Plan ist freigegeben."
+- **Modelle:** Haupt Fable, Opus · Subagent Opus, Sonnet
+- **Tokens gesamt:** 41,231,628 (Haupt 10,042,907 · Subagent 31,188,721, Anteil 76 %)
+- **Peak-Kontext:** ███████████░ 141k / 150k
+- **cache_read:** 38,210,461 · **Output:** 227,712
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ 32 von 110 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
-- ✅ 67% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 25,878,461 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ⚠️ Peak-Kontext 141k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
+- ✅ 76% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 30,101,536 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,19 +47,22 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   Explore: Audit correctness/bugs     ████████████ 188k    ⛔
-2   Explore: Audit security             ████████░░░░  96k    ✅
-3   Explore: Audit tests/debt/perf      ████████░░░░ 105k    ✅
-4   Explore: Audit deps/DX/docs/direct… ████░░░░░░░░  52k    ✅
+1   general-purpose: Execute Plan 037 … ████░░░░░░░░  56k    ✅
+2   general-purpose: Execute Plan 035 … ███████░░░░░  86k    ✅
+3   general-purpose: Review session co… ████░░░░░░░░  49k    ✅
+4   general-purpose: Execute Plan 036 … ███████░░░░░  87k    ✅
+5   general-purpose: Execute Plan 034 … ██████████░░ 120k    ✅
+6   general-purpose: Execute Plan 036 … █████░░░░░░░  67k    ✅
+7   general-purpose: Execute Plan 033 … █████░░░░░░░  59k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  33,351
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    8%  3,090,046
-cache_read     ▕████████████████████████▏   91%  35,045,852
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  400,082
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  41,590
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  2,751,865
+cache_read     ▕████████████████████████▏   93%  38,210,461
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  227,712
 ```
 
 **Legende & Zielwerte:**
@@ -76,10 +79,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   91%  35,045,852
-Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏    8%  3,090,046
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  33,351
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  400,082
+Warm (System/Memory/History)  ▕████████████████████▏   93%  38,210,461
+Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    7%  2,751,865
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  41,590
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  227,712
 ```
 
 **Legende (Slide-Kategorien):**
@@ -95,5 +98,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 125 Sessions: 2,829,754,567 Token (28,735 Antworten).
+Σ über 126 Sessions: 2,871,602,947 Token (29,349 Antworten).
 

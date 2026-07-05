@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 12:59 CEST
+Stand: 2026-07-05 17:00 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 08:37 06c9  ████████████ 204k ⛔    ████░░  67%    ············
+07-05 13:00 5226  ███████████░ 141k ⚠️   █████░  76%    ············
+         SA_1·  ████░░░░░░░░  56k ✅    Execute Plan 037 deps pinning dock…
+         SA_2·  ███████░░░░░  86k ✅    Execute Plan 035 active_buffs expi…
+         SA_3·  ████░░░░░░░░  49k ✅    Review session commits against DoD
+         SA_4·  ███████░░░░░  87k ✅    Execute Plan 036 rosz import harde…
+         SA_5·  ██████████░░ 120k ✅    Execute Plan 034 state-key lookups
+         SA_6·  █████░░░░░░░  67k ✅    Execute Plan 036 rosz import harde…
+         SA_7·  █████░░░░░░░  59k ✅    Execute Plan 033 phase modifier ex…
+----------------- ---------------------- -------------- ------------
+07-05 08:37 06c9  ████████████ 205k ⛔    ████░░  66%    ············
          SA_1·  ████████████ 188k ⛔    Audit correctness/bugs
          SA_2·  ████████░░░░  96k ✅    Audit security
          SA_3·  ████████░░░░ 105k ✅    Audit tests/debt/perf
@@ -425,3 +434,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S122 (2026-07-04)** F3 natürliche 1 als Miss + Save-Floor 2+ (8ae7252, Nachfix abc4256 Eff.-Anzeige grün/Variante A); F1 Disruption Fields Stärke-Modifier (0c54fe7); Plan 015 Step 1 durch Ziel7 Stufe A abgedeckt (4effd99); Stufe-B-Scoping 59/59 (stichprobenbasiert); Review GO, UI verifiziert; Retro M1 Anzeige-Pfad-Beleg
 - **S123 (2026-07-05)** Necron-Stratagem-Vollabgleich 59/59 (27 Befunde, Header stale=Live-Bugs); unit_key-Scoping-Fix stratagem_strength_bonus; 5 HOCH-Datenfixes; Plan 032 angelegt; Auditpläne: 27 DONE-Dateien ins Archiv, 5 aktiv
 - **S124 (2026-07-05)** /improve-Vollaudit: 11 Befunde verifiziert, Pläne 033-041 angelegt (4 Correctness-Bugs, XSS/Zip-Bomb, mypy-Ratchet, totes Lifecycle, INV-6-Extraktion); Reihenfolge 033→034→036→035→037→040→038→039→041 freigegeben
+- **S125 (2026-07-05)** Pläne 033-037 umgesetzt: 4 P1-Bugs (Phasen-Modifier-Expiry, State-Key-Lookups Duplikat-Trupps, active_buffs-Zugwechsel, rosz-Import-Härtung XSS/Zip-Bomb) + P2 Deps-Pinning/pip-audit/Docker-nonroot; auf feature/016 konsolidiert, Pläne archiviert

@@ -36,15 +36,10 @@ run every verification command, and update your row below when done.
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 | 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | REJECTED (S118, Stakeholder) — Custodes-Ausbau wird gesammelt nach dem Faction-Fetcher nachgeholt; keine Plandatei angelegt. Merkposten bleibt: toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift). |
 | [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
-| [033](033-phase-modifier-expiry-ordering.md) | Phasen-Modifier-Expiry: `_reset_phase_state()` vor `phase_idx`-Inkrement (Stratagem-Buffs leaken in Folgephasen) | P1 (HOCH) | S | — | DONE (Executor-Subagent, 2026-07-05) — `else`-Zweig in `next_phase()` gefixt, 3 Regressionstests, Vollsuite grün (1448 passed, 99.12 % Coverage), noch nicht committet. |
-| [034](034-state-key-lookups-vereinheitlichen.md) | State-Key-Lookups vereinheitlichen: Moraltest-Skip bei Duplikat-Trupps + 3 UI-Stellen (`unit_id_from_state_key`) | P1 (HOCH) | S | — (nicht parallel zu 015) | DONE (Executor-Subagent, 2026-07-05) — 4 Lookups gefixt (moralePhase, gameProtocoll, fightPhase, commandPhase), 4 Regressionstests, Vollsuite grün (1452 passed, 99.12 % Coverage), noch nicht committet. |
-| [035](035-active-buffs-rundenexpiry.md) | `active_buffs` überleben Zugwechsel: Expiry „bis zur nächsten eigenen Command Phase" (MWBD) | P1 (HOCH) | M | 033 (gleiche Datei, nacheinander) | DONE (Executor-Subagent, 2026-07-05) — `_reset_turn_state()` leert `active_buffs` jetzt nur noch für die Einheiten des neuen aktiven Spielers (`units_key_for`), Besitzer-Buff überdauert den kompletten gegnerischen Zug. 2 Tests migriert + 4 neu, Vollsuite grün (1461 passed, 99.12 % Coverage), noch nicht committet. |
-| [036](036-rosz-import-haerten.md) | `.rosz`-Import härten: Stored-XSS über Roster-Namen + Zip-Bomb-Dekompressions-Cap | P1 (HOCH) | S | — | DONE (Executor-Subagent, 2026-07-05) — `_sanitize_roster_name()` in beiden Parse-Funktionen, 20-MB-Dekompressions-Cap in `parse_rosz_bytes`, `html.escape(active)` in `gameHeader.py`; grep bestätigt: einzige Spielername-Senke. 5 Regressionstests, Vollsuite grün (1457 passed, 99.12 % Coverage), noch nicht committet. |
-| [037](037-deps-pinnen-pip-audit-docker-nonroot.md) | Dependencies pinnen, `pip-audit` im CI, Docker non-root | P2 (MITTEL) | S | — | DONE (Executor-Subagent, 2026-07-05) — `requirements.txt` exakt gepinnt (streamlit==1.57.0, pyyaml==6.0.3, defusedxml==0.7.1, alle per `pip show` verifiziert); `pip-audit` zu `requirements-dev.txt` ergänzt, lokal 0 Findings, blocking CI-Step in `deploy.yml` (test-Job, vor Lint); Dockerfile: `useradd`+`chown -R /app`+`USER appuser`+`ENV HOME` vor `CMD`. Vollsuite grün (1461 passed, 99.12 % Coverage), Lint sauber, noch nicht committet. Docker-Runtime-Verifikation AUSSTEHEND — Docker in dieser Umgebung nicht verfügbar (`command -v docker` exit 1), Prüfung (`docker build`/`id -u`/Smoke-Test) beim nächsten HF-Spaces-Deploy nachholen. |
 | [038](038-mypy-ratchet-gate.md) | mypy-Ratchet-Gate: Fehlerbestand einfrieren (~136), CI-Step blocking statt informational | P2 (MITTEL) | M | — | TODO |
 | [039](039-dx-kleinkram-readme-xdist.md) | DX-Kleinkram: README-Setup, tote `DATA_DIR` entfernen, pytest-xdist | P3 (NIEDRIG) | S | — | TODO |
-| [040](040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) | P2 (MITTEL) | S–M | 033, 035 (gleiche Datei) | TODO |
-| [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034, 040; NICHT parallel zu 015/026 | TODO |
+| [040](040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) | P2 (MITTEL) | S–M | 033 ✅, 035 ✅ (gleiche Datei — Deps erledigt S125) | TODO |
+| [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040; NICHT parallel zu 015/026 | TODO |
 
 **Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
@@ -68,16 +63,15 @@ run every verification command, and update your row below when done.
   berührt `_common.py` + `ability_engine.py`) → nach 017 ausführen (016 ist bereits erledigt).
 
 **Dependency notes (Audit 2026-07-05, Pläne 033–041):**
-- **033 → 035 → 040 strikt nacheinander**: alle drei ändern `game_state.py`
-  (Reset-Pfade); 040 zusätzlich `phase_runner.py`/Handler.
-- **034 nicht parallel zu 015**: beide ändern `fightPhase.py` (034 nur
-  `_render_melee_pairs`, 015 den Reaktiv-Dispatch) — 034 zuerst (S-Effort).
-- **041 zwingend NACH 034 + 040 und NICHT parallel zu 015/026**: extrahiert aus
+- **033, 034, 035, 036, 037 erledigt (S125, 2026-07-05)** — committet + auf
+  `feature/016` konsolidiert, Pläne archiviert. Verbleibend: 040, 038, 039, 041.
+- **040 strikt nach 033/035**: alle drei ändern `game_state.py` (Reset-Pfade);
+  033/035 sind erledigt, 040 zusätzlich `phase_runner.py`/Handler.
+- **041 zwingend NACH 034 (✅) + 040 und NICHT parallel zu 015/026**: extrahiert aus
   `fightPhase.py`/`psychicPhase.py`/`movementPhase.py`; Stufe 2+ (weitere
   `_common.py`-Cluster) erst nach Review von Stufe 1 planen.
-- **Empfohlene Reihenfolge der neuen Pläne**: 033 → 034 → 036 → 035 → 037 →
-  040 → 038 → 039 → 041. Verzahnung mit der Alt-Queue: die P1-Bugfixes
-  (033–036) vor 018/015 ziehen; 041 erst nach 015/026.
+- **Empfohlene Reihenfolge der Rest-Pläne**: 040 → 038 → 039 → 041. Verzahnung
+  mit der Alt-Queue: 041 erst nach 015/026.
 
 **Bewusst NICHT geplant (Feature-Queue):**
 - **P16 (Sv>6+-Randfall)**: bereits implementiert in `dice_html.py:98-106,
@@ -156,5 +150,10 @@ offener Punkt mehr.
 | [030](archive/030-conquering-tyrant-ui-bugfixes.md) | Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts (D2 −1-Hit-Anzeige) + Selection-State-Reset nach All-done | S109, 2026-06-28 (`834a676` Bug 1 + `2b05055` Zielwahl-Hang/Stacked-Debuffs; Status-Sektion des Plans selbst bereits als ERLEDIGT/ANALYSIERT geführt, Queue-Zeile war stale — S123-Befund) |
 | [016](archive/016-necron-protocol-effects.md) | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | S123-Verifikation: bereits umgesetzt — `get_active_rp_modifiers`/`get_active_heal_bonus` (`df880dd`, `aa22cf7`), 6./Dynastie-Direktiven-Aggregation (`2517f05`), RP-Block-Hinweise `_rp_directive_hints` (`_common.py`, `aa22cf7`), Dynastiebonus-„BOTH"-Badge (`armyCard.py` `_render_extra_round_choice`, `2cd8357`) + Dynastie-Namensbadge (`59dda19`); UI bereits verifiziert S89/S93 (siehe `backlog.md` §0 Protokoll-Tabelle). Queue-Zeile war stale (Funktionsnamen im Plantext noch vor-025-Rename). |
 | [031](archive/031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | `533e313`, umgesetzt vor S115, in S115 verifiziert (Vollsuite grün) |
+| [033](archive/033-phase-modifier-expiry-ordering.md) | Phasen-Modifier-Expiry: `_reset_phase_state()` vor `phase_idx`-Inkrement | S125, 2026-07-05 (`3ec5ad9`; 3 Regressionstests) |
+| [034](archive/034-state-key-lookups-vereinheitlichen.md) | State-Key-Lookups bei Duplikat-Trupps (Moraltest-Skip + 3 UI-Stellen) | S125, 2026-07-05 (`57c1593`; 4 Regressionstests) |
+| [035](archive/035-active-buffs-rundenexpiry.md) | `active_buffs` überleben Zugwechsel (MWBD, besitzer-bedingtes Leeren) | S125, 2026-07-05 (`1be845f`; 2 migriert + 4 neu) |
+| [036](archive/036-rosz-import-haerten.md) | `.rosz`-Import härten: Stored-XSS + Zip-Bomb-Cap + `html.escape` | S125, 2026-07-05 (`45db5b4`; 5 Regressionstests) |
+| [037](archive/037-deps-pinnen-pip-audit-docker-nonroot.md) | Deps pinnen, `pip-audit`-CI, Docker non-root | S125, 2026-07-05 (`c5ea24f`; Docker-Runtime-Check offen — kein lokaler Docker) |
 
 `archive/024-arkana-research-digest.md` (Plan-024-Companion, ADR-0006) liegt seit Plan 024 vollständig umgesetzt (alle 12 Punktkosten + Schema, s. Step 6) ebenfalls in `archive/` — Lebensdauer-Bedingung erfüllt.
