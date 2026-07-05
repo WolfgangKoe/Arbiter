@@ -84,12 +84,13 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   bewusst redundant). Labels nur **kürzen** (truncate/ellipsis), nicht den Wert entfernen.
   Soll-Bild als AC in `docs/spec/dice_display.md` festgelegt → Plan 022, dann per AC
   einrasten (Lehre aus Finding 9.2 — nie still ändern).
-- 🔲 **R-CMD-03 — CP-Grant ohne Battle-forged-Gating** (S55, aus Regel-Katalog):
-  Der „Grant +1 CP"-Button in `commandPhase._render_faction_actions` erscheint für die
-  aktive Seite **unabhängig von `game_mode`/Battle-forged** → eine Unbound-Armee könnte
-  den Command-Phase-Bonus ebenfalls erhalten (Regel: nur Battle-forged). Fix-Ort:
-  `_render_faction_actions` an Battle-forged koppeln + Regressionstest. Ledger-Eintrag
-  `R-CMD-03` in [../spec/acceptance/rules.md](../spec/acceptance/rules.md).
+- ✅ **R-CMD-03 — CP-Grant ohne Battle-forged-Gating — ERLEDIGT (S123-Verifikation):**
+  `commandPhase.can_gain_command_point(game_mode)` gated den „Grant +1 CP"-Button bereits
+  (`_render_faction_actions` returnt für Open Play früh, zeigt „Open Play — no Battle-forged
+  CP grant."). Ledger-Eintrag [../spec/acceptance/rules.md](../spec/acceptance/rules.md) §R-CMD-03
+  führt `status: implementiert`, getestet: `test_matched_play_is_battle_forged` /
+  `test_open_play_is_not_battle_forged`. Eintrag hier war stale (Fix + Ledger-Update erfolgten,
+  ohne diesen Backlog-Punkt zu schließen).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
   - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → eigener kleiner Task nach Plan 019/020.
@@ -125,7 +126,11 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
   u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
   nicht nur maschinen-orientiert zählen.
-- 🔲 **color_hint-Feld im Modifier-Dict (Refinement 2026-06-20):** Optionales `color_hint: "buff" | "debuff"` im Modifier-Dict für nicht-numerische Modifier (z.B. Quantum Shield). Default: wertbasiert. Rückwärtskompatibel. → `ability_engine.py`, `dice_html.py`, Tests.
+- ✅ **color_hint-Feld im Modifier-Dict — ERLEDIGT (Plan 022 Step 3, S77):** Optionales
+  `color_hint: "buff" | "debuff"` gewinnt gegen die wertbasierte Farbe (`_modifier_color`,
+  `dice_compose.py`), rückwärtskompatibel ohne das Feld. Getestet: `test_color_hint_overrides_value_sign`,
+  `test_always_fail_color_hint_buff_is_green` u. a. (`tests/uiLayout/test_dice_html.py`). Eintrag hier
+  war stale — Quantum-Shield-Verdrahtung selbst (Konsument) bleibt offen (s. „Quantum Shielding" unten).
 - 🔲 **Invuln-SAVE-Badge-Bereich chaotisch (S78):** Zeigt drei Teile („Inv 4+", „active", „AP/Cover N/A"), die teils keinen Sinn ergeben. Soll: **eine** klare Badge, z. B. „Invuln 4+". Überschneidet sich mit **Plan 017** (SAVE-Block Fähigkeit+AP kombinierte Badge) → dort mitlösen oder eigener kleiner Task.
 - 🔲 **Dice-Display Modifier-Geometrie (Befund B/C, S78):** HIT/WOUND-**Debuff** spreizt nicht mit der Magnitude — `modifier_die_pair_html` zeigt immer `from-1 → from` (−1/−2/−3 sehen identisch aus), Spec §3.1 will den farbigen Würfel mit der Magnitude nach rechts wandern lassen. Zusätzlich verletzt HIT-**Buff** die Slot-1-Invariante (grauer Würfel rutscht auf Spalte 1, §3.3 will min. 2). SAVE-Geometrie ist korrekt. **Eigener Plan** (`modifier_die_pair_html` getestet → Regressionsfläche; eigenes Test-Netz). Die Pfeil-**Zahl** (Befund A) ist bereits umgesetzt (S78).
 - 🔲 **Silent-King-Zielaufteilung Fernkampf (S79-UI-Befund; Regel S80 GEKLÄRT):** Ein Modell mit **zwei** Fernkampfwaffen (Silent King: Sceptre of Eternal Glory / Staff of Stars) kann aktuell nur **eine** Feind-Einheit als Ziel wählen — **regelwidrig**. Core Rules: „If a model has more than one ranged weapon, it can split the weapons between different enemy units." Alle Attacken **einer** Waffe gehen auf dieselbe Einheit. → UI auf **Ziel-pro-Waffe** umbauen + alle Ziele vor dem ersten Wurf deklarieren; Staff-of-Stars-Sperre ≤8 W beachten; Regressionstest. Detail: `docs/inbox/finding-silent-king-target-split.md`. Eigener Plan.
@@ -316,7 +321,7 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
   | Conquering Tyrant · P | „+1 Leadership" | D1: +3" Aura-Reichweite |
   | Conquering Tyrant · S | „Re-roll hit & wound of 1 (Melee)" (`reroll_hit_wound_1`) | D2: nach Fall Back schießen (−1 Hit) |
   **Entscheid gefallen (S95): Variante (b)** — auf echte 9E-Regeln umstellen.
-  → **[Plan 025](../audit/plans/025-protocol-9e-conformance.md)** (heruntergebrochen, je
+  → **[Plan 025](../audit/plans/archive/025-protocol-9e-conformance.md)** (heruntergebrochen, je
   Protokoll ein Step). Vollständige Regelprüfung aller 6 Protokolle dort. Nuance: **Sudden
   Storm P** (+1" Move) ist bereits konform, **Undying Legions** substanziell konform (nur P/S
   vs. D1/D2 vertauscht); die anderen vier sind erfunden. 025 rückt **vor 016/017** — Plan 016

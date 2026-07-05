@@ -1094,11 +1094,17 @@ def test_buff_stat_bonus_generic_strength() -> None:
 # ---------------------------------------------------------------------------
 
 
+_ATK_UID = "wh40k_9e.necrons.unit.warriors"
+
+
 def _strength_modifier_entry(
-    value: int = 1, target: str = "attacker", roll_type: str = "strength"
+    value: int = 1,
+    target: str = "attacker",
+    roll_type: str = "strength",
+    unit_key: str | None = _ATK_UID,
 ) -> dict:
     return {
-        "unit_key": None,
+        "unit_key": unit_key,
         "source": "Disruption Fields",
         "effect": {"roll_type": roll_type, "value": value, "target": target, "phase": "fight"},
         "expires_at_phase": "fight",
@@ -1107,27 +1113,27 @@ def _strength_modifier_entry(
 
 
 def test_stratagem_strength_bonus_empty_list_is_zero() -> None:
-    assert stratagem_strength_bonus([]) == 0
+    assert stratagem_strength_bonus([], _ATK_UID) == 0
 
 
 def test_stratagem_strength_bonus_matching_entry() -> None:
     mods = [_strength_modifier_entry(value=1, target="attacker")]
-    assert stratagem_strength_bonus(mods) == 1
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 1
 
 
 def test_stratagem_strength_bonus_target_any_counts() -> None:
     mods = [_strength_modifier_entry(value=2, target="any")]
-    assert stratagem_strength_bonus(mods) == 2
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 2
 
 
 def test_stratagem_strength_bonus_ignores_wrong_roll_type() -> None:
     mods = [_strength_modifier_entry(roll_type="wound")]
-    assert stratagem_strength_bonus(mods) == 0
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
 
 
 def test_stratagem_strength_bonus_ignores_wrong_target() -> None:
     mods = [_strength_modifier_entry(target="defender")]
-    assert stratagem_strength_bonus(mods) == 0
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
 
 
 def test_stratagem_strength_bonus_sums_multiple_entries() -> None:
@@ -1135,7 +1141,23 @@ def test_stratagem_strength_bonus_sums_multiple_entries() -> None:
         _strength_modifier_entry(value=1),
         _strength_modifier_entry(value=1),
     ]
-    assert stratagem_strength_bonus(mods) == 2
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 2
+
+
+def test_stratagem_strength_bonus_scoped_to_activating_unit_only() -> None:
+    """Regression (S122 bug): a Strength stratagem activated for one unit (e.g.
+    Disruption Fields declared for the Necron Warriors squad) must not buff a
+    different attacker's Strength roll in the same phase.
+    """
+    mods = [_strength_modifier_entry(value=1, unit_key="wh40k_9e.necrons.unit.warriors#1")]
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
+    assert stratagem_strength_bonus(mods, "wh40k_9e.necrons.unit.warriors#1") == 1
+
+
+def test_stratagem_strength_bonus_legacy_none_unit_key_not_applied_globally() -> None:
+    """Pre-fix entries with unit_key=None must no longer buff every attacker."""
+    mods = [_strength_modifier_entry(value=1, unit_key=None)]
+    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
 
 
 # ---------------------------------------------------------------------------

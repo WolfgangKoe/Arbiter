@@ -11,8 +11,10 @@ Plans 013–018 (Feature-Queue) added 2026-06-12, planned against commit
 Each executor: read the plan fully before starting, honor its STOP conditions,
 run every verification command, and update your row below when done.
 
+**Archiv-Konvention:** Abgeschlossene Pläne sowie offene Pläne, deren Anforderung bereits vollständig andernorts (Backlog/Ziel7–9) kanonisch weitergeführt wird, liegen unter [`archive/`](archive/) — nicht löschen, nur zur Referenz. Die Queue-Tabelle unten führt nur noch aktive Pläne.
+
 **Projekt-Grundregeln (gelten für jeden Plan):**
-- `pytest --tb=short` = Messbefehl; Coverage-Gate 92 % (`fail_under` in `pyproject.toml`).
+- `pytest --tb=short` = Messbefehl; Coverage-Gate 99 % (`fail_under` in `pyproject.toml`, angehoben S111).
 - Wird ein VORHER grüner Test rot und steht NICHT in der „erwartete
   Test-Migrationen"-Liste des Plans: STOP, Nutzer fragen (CLAUDE.md).
 - Render-Code (uiLayout, *Phase.py) ist von der Coverage ausgenommen →
@@ -26,19 +28,18 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| [030](030-conquering-tyrant-ui-bugfixes.md) | Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts (D2 −1-Hit-Anzeige) + Selection-State-Reset nach All-done (Bug-5-Regression) | P1 (HOCH) | XS–S | 025 ✅ | TODO — Bug 2 zuerst (`reset_group_declaration_state()` nach All-done/Reset), dann Bug 1 (`"atk_uid"` in beide `entries.append`-Blöcke); je Regressions-/Unit-Test PFLICHT. |
-| [025](025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | P1 (HOCH) | L | 024 ✅ | DONE — alle Steps 1–6; Necron-Protokolle 9E-konform; unblockt 016/017 |
-| 016 | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | P2 (MITTEL) | S–M | — | TODO |
 | 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
 | [015](015-contextual-reactive-stratagems.md) | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO — Step 1 (once_per_battle enforced) bereits durch Ziel7 Stufe A abgedeckt (T2b `4330bdc`, P19 `1f9d82b`, P21 `dde16f3`, S121 `396fdec`; Session-Key heißt `used_stratagem_battle_ids`); Steps 2–4 offen, Mockup-Gate vor Step 2 (S122-Drift-Befund). |
 | [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 | 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | REJECTED (S118, Stakeholder) — Custodes-Ausbau wird gesammelt nach dem Faction-Fetcher nachgeholt; keine Plandatei angelegt. Merkposten bleibt: toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift). |
+| [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
 
-**Empfohlene Reihenfolge (akt. S107): 016 → 018 → 015 → 026 → 017.**
+**Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
-016 Group A / Conquering-Tyrant-P-Morale obsolet nach 025; 016 behält nur RP-Hint + Dynastiebonus.
-016 und 018 sind unabhängig. 015 = größtes Stück. 017 zuletzt.
+016 Group A / Conquering-Tyrant-P-Morale wurde durch 025 obsolet; der verbleibende Rest
+(RP-Hint + Dynastiebonus) ist bereits implementiert und UI-verifiziert (S89/S93) — siehe Archiv unten.
+015 = größtes verbleibendes Stück. 017 zuletzt.
 
 **Dependency notes (Feature-Queue):**
 - **014 zwingend NACH 013**: 013 macht jede Einheit zur Gruppen-Einheit
@@ -52,10 +53,8 @@ run every verification command, and update your row below when done.
   und HIT-Block-Threshold aus Plan 015; Set to Defend braucht `active_modifiers`-Expiry-
   Schema das durch Plan 015 stabil ist. Beide ändern `chargephase.py` (`_inactive_charge`)
   — 015 zuerst, 026 danach.
-- **016 und 017 berühren beide den Resolution-Tab in `_common.py`**
-  (RP-Block bzw. SAVE-Block) — nacheinander, Reihenfolge egal.
 - **018** ist vier unabhängige Mini-Tasks; 018.4 (Modifier-Konsolidierung
-  berührt `_common.py` + `ability_engine.py`) → nach 014/016/017 ausführen.
+  berührt `_common.py` + `ability_engine.py`) → nach 017 ausführen (016 ist bereits erledigt).
 
 **Bewusst NICHT geplant (Feature-Queue):**
 - **P16 (Sv>6+-Randfall)**: bereits implementiert in `dice_html.py:98-106,
@@ -107,13 +106,18 @@ offener Punkt mehr.
 | 011 | WAAAGH datengetrieben (letzte ORK-Hardcodes aus `src/`) | 2026-06-12 (S41) |
 | 012 | Loader-Caching vervollständigen + Sondercache entfernen | 2026-06-12 (S42) |
 | 013 | P18: Einheitlicher Gruppen-Flow + Ziele neben Untergruppen | 2026-06-12 (S43) |
-| [014](014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | S80+S82 |
-| [019](019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` | 2026-06-20 (S74) |
-| [020](020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch | S83 |
-| [021](021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | S84 |
-| [022](022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | S77 |
-| [023](023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework | 2026-06-21 (S85) |
-| [024](024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | S87/S88 |
-| [027](027-doku-org-alignment.md) | Doku-Org-Alignment: ADR-0007 dünner Koordinator | 2026-06-26 |
-| [028](028-reporting-kontext-umbau.md) | Reporting-/Kontext-Umbau (O3–O7) | 2026-06-26 |
-| [031](031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | `533e313`, umgesetzt vor S115, in S115 verifiziert (Vollsuite grün) |
+| [014](archive/014-p17-defender-loss-allocation.md) | P17: Verteidiger-Korrektur Schadenszuweisung (Gruppen) | S80+S82 |
+| [019](archive/019-ui-target-consolidation.md) | UI Target Consolidation: `pending_target_request` | 2026-06-20 (S74) |
+| [020](archive/020-generic-activated-wargear.md) | Generic Activated Wargear: Resurrections-Orb → generisch | S83 |
+| [021](archive/021-faction-abilities-arkana.md) | Arkana → `faction_abilities.yaml` + Loader generisch | S84 |
+| [022](archive/022-dice-display-rework.md) | Dice Display Rework: Arrow-Fix + Edge Cases + color_hint + Tests | S77 |
+| [023](archive/023-overview-archive-rework.md) | Overview-/Session-Archiv-Rework | 2026-06-21 (S85) |
+| [024](archive/024-arkana-protocol-effect-modeling.md) | Directive-Wiring + Arkana-Schema + Failsafe-Dispatch-Pilot | S87/S88 |
+| [025](archive/025-protocol-9e-conformance.md) | Command Protocols auf echte 9E-Direktiven bringen (Stakeholder-Entscheid b, S95) | alle Steps 1–6 erledigt, unblockte 016/017; Queue-Zeile war stale (S123-Befund) — hierher nachgezogen |
+| [027](archive/027-doku-org-alignment.md) | Doku-Org-Alignment: ADR-0007 dünner Koordinator | 2026-06-26 |
+| [028](archive/028-reporting-kontext-umbau.md) | Reporting-/Kontext-Umbau (O3–O7) | 2026-06-26 |
+| [030](archive/030-conquering-tyrant-ui-bugfixes.md) | Conquering Tyrant UI-Bugfixes: atk_uid in Entry-Dicts (D2 −1-Hit-Anzeige) + Selection-State-Reset nach All-done | S109, 2026-06-28 (`834a676` Bug 1 + `2b05055` Zielwahl-Hang/Stacked-Debuffs; Status-Sektion des Plans selbst bereits als ERLEDIGT/ANALYSIERT geführt, Queue-Zeile war stale — S123-Befund) |
+| [016](archive/016-necron-protocol-effects.md) | Necron Command Phase: Protokoll-Effekte auf RP/Living Metal + Dynastiebonus-Anzeige | S123-Verifikation: bereits umgesetzt — `get_active_rp_modifiers`/`get_active_heal_bonus` (`df880dd`, `aa22cf7`), 6./Dynastie-Direktiven-Aggregation (`2517f05`), RP-Block-Hinweise `_rp_directive_hints` (`_common.py`, `aa22cf7`), Dynastiebonus-„BOTH"-Badge (`armyCard.py` `_render_extra_round_choice`, `2cd8357`) + Dynastie-Namensbadge (`59dda19`); UI bereits verifiziert S89/S93 (siehe `backlog.md` §0 Protokoll-Tabelle). Queue-Zeile war stale (Funktionsnamen im Plantext noch vor-025-Rename). |
+| [031](archive/031-protocol-meta-timing-bugs.md) | Protokoll-Meta-Timing: Direktiven-Wahl am Rundenanfang + Sperre nach Wahl | `533e313`, umgesetzt vor S115, in S115 verifiziert (Vollsuite grün) |
+
+`archive/024-arkana-research-digest.md` (Plan-024-Companion, ADR-0006) liegt seit Plan 024 vollständig umgesetzt (alle 12 Punktkosten + Schema, s. Step 6) ebenfalls in `archive/` — Lebensdauer-Bedingung erfüllt.

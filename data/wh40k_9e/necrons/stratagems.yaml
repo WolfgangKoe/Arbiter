@@ -1,7 +1,8 @@
 # Necron stratagems — WH40k 9E
 # Source: Wahapedia 2026-05-31 (https://wahapedia.ru/wh40k9ed/factions/necrons/)
 # Format matches gameObjects/stratagem.py Stratagem dataclass.
-# Loader support: Ziel 5c (not yet loaded at runtime).
+# Loader support: loaded live at runtime via load_stratagems("necrons") —
+#   see src/uiLayout/gameProtocoll.py:176 (Protocol UI) and ziel7.md Stufe B.
 #
 # conditions: unit must have ALL listed keywords to qualify.
 # detachment: if set, stratagem requires this detachment type.
@@ -12,7 +13,9 @@
 #
 # EXCLUDED: Boarding Actions supplement stratagems (NANOSCARAB VIRUS,
 #   MINDSHACKLE SCARABS) — require Hatchway mechanics from that supplement.
-# Total: 59 stratagems (37 Core + 6 Dynastic + 8 Cult of the Cryptek + 8 Annihilation Legion)
+# Total: 60 stratagems (38 Core + 6 Dynastic + 8 Cult of the Cryptek + 8 Annihilation Legion)
+#   — Resurrection Protocols has two independent rule variants (1 CP INFANTRY NOBLE/CRYPTEK,
+#   2 CP CHARACTER), both modelled as separate entries (S123-Vollabgleich).
 
 stratagems:
 
@@ -226,8 +229,11 @@ stratagems:
     player: active
     conditions: [TOMB BLADES]
     once_per_phase: true
-    effect:
-      type: buff_weapon_type
+    # effect intentionally unmodelled: rule grants two distinct effects (Rapid Fire weapons
+    # treated as Assault 2; no Advance+Assault hit-roll penalty) — the previous
+    # "buff_weapon_type" entry had no parameters and modelled neither. Needs a weapon-type
+    # override effect (from/to) plus a restriction-negation effect; see
+    # docs/audit/plans/032-necron-stratagem-semantics.md.
     rule_text: "Use this Stratagem in your Shooting phase. Select one TOMB BLADES unit from your army. Until the end of the phase: All Rapid Fire weapons that models in that unit are equipped with are treated as being Assault 2 weapons. Models in that unit do not suffer the penalty to hit rolls incurred for firing Assault weapons in the same turn that their unit has Advanced."
 
   - id: wh40k_9e.necrons.stratagem.disintegration_capacitors
@@ -263,10 +269,10 @@ stratagems:
     player: active
     conditions: [CORE, INFANTRY]
     once_per_phase: true
-    effect:
-      type: buff_roll
-      stat: hit
-      modifier: 1
+    # effect intentionally unmodelled: rule is "unmodified hit roll of 6 = 1 extra hit,
+    # Rapid Fire weapons only" — no extra-hit-on-unmodified-6 effect type with weapon-type
+    # restriction exists yet (previous buff_roll hit +1 was factually wrong for ALL attacks
+    # and has been removed). See docs/audit/plans/032-necron-stratagem-semantics.md.
     rule_text: "Use this Stratagem in your Shooting phase, when a CORE INFANTRY unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Rapid Fire weapon, an unmodified hit roll of 6 scores one additional hit."
 
   - id: wh40k_9e.necrons.stratagem.reanimation_prioritisation
@@ -395,10 +401,10 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.whirling_onslaught
     name_en: Whirling Onslaught
     cp_cost: 1
-    phase: [shooting, fight]  # rule: "selected as the target of an attack" — only in attack phases
+    phase: any  # rule: "any phase, when ... is selected as the target of an attack"
     stage: active
     player: inactive
-    conditions: [DESTROYER CULT]
+    conditions: [DESTROYER CULT]  # rule targets SKORPEKH DESTROYERS or SKORPEKH LORD only — OR not modelable, see plan 032
     once_per_phase: true
     timing: phase_reactive
     event: on_target  # triggers when unit is selected as attack target
@@ -413,7 +419,7 @@ stratagems:
       target: defender
       expires_at: phase_end
       source_label: "Whirling Onslaught"
-    rule_text: "Use this Stratagem in your Shooting phase or the Fight phase, when a DESTROYER CULT unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's wound roll."
+    rule_text: "Use this Stratagem in any phase, when a SKORPEKH DESTROYERS or SKORPEKH LORD unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's wound roll."
 
   - id: wh40k_9e.necrons.stratagem.entropic_strike
     name_en: Entropic Strike
@@ -448,7 +454,7 @@ stratagems:
     phase: any  # triggers on destroy — can happen in any phase
     stage: end   # roll at end of phase
     player: both  # your model can be destroyed in either player's turn
-    conditions: [INFANTRY]
+    conditions: [INFANTRY]  # rule targets INFANTRY NOBLE or INFANTRY CRYPTEK only — OR not modelable, see plan 032
     once_per_phase: false
     timing: phase_reactive
     event: on_destroy
@@ -456,6 +462,21 @@ stratagems:
       type: reanimate
       amount: "D3"
     rule_text: "Use this Stratagem in any phase, when a NECRONS INFANTRY NOBLE or NECRONS INFANTRY CRYPTEK model from your army is destroyed. You can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when that model is destroyed. If you do, then on a 4+, set that model back up on the battlefield as close as possible to where they were destroyed and more than 1\" away from any enemy models, with D3 wounds remaining. This Stratagem cannot be used to set the same model back up more than once per battle."
+
+  - id: wh40k_9e.necrons.stratagem.resurrection_protocols_character
+    name_en: Resurrection Protocols
+    cp_cost: 2
+    phase: any  # triggers on destroy — can happen in any phase
+    stage: end   # roll at end of phase
+    player: both  # your model can be destroyed in either player's turn
+    conditions: [CHARACTER]
+    once_per_phase: false
+    timing: phase_reactive
+    event: on_destroy
+    effect:
+      type: reanimate
+      amount: "D3"
+    rule_text: "Use this Stratagem in any phase, when a NECRONS CHARACTER model from your army is destroyed. You can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when that model is destroyed. If you do so, then on a 4+, set that model back up on the battlefield as close as possible to where they were destroyed and more than 1\" away from any enemy models, with D3 wounds remaining. This Stratagem cannot be used to set the same model back up more than once per battle."
 
   - id: wh40k_9e.necrons.stratagem.quantum_deflection
     name_en: Quantum Deflection
@@ -800,16 +821,18 @@ stratagems:
   - id: wh40k_9e.necrons.stratagem.efficient_disintegration
     name_en: Efficient Disintegration
     cp_cost: 2
-    phase: shooting  # rule text: "selected to shoot"
+    phase: any  # rule: "any phase, when ... is selected to shoot"
     stage: active
     player: active   # "from your army is selected to shoot" — always your active turn
     detachment: annihilation_legion
-    conditions: [LOKHUST DESTROYERS]
+    conditions: [LOKHUST DESTROYERS]  # rule also allows LOKHUST HEAVY DESTROYERS — OR not modelable, see plan 032
     once_per_phase: true
+    timing: phase_reactive
+    event: on_declaration  # triggers when unit is selected to shoot
     effect:
       type: buff_roll
       stat: damage
-      modifier: 1
+      modifier: 1  # applies only to gauss cannon/gauss destructor attacks — weapon-type restriction not modelable, see plan 032
     rule_text: "Use this Stratagem in any phase, when a LOKHUST DESTROYERS or LOKHUST HEAVY DESTROYERS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a gauss cannon or gauss destructor, add 1 to the damage roll for that attack."
 
   - id: wh40k_9e.necrons.stratagem.hyperphase_impalement

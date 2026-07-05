@@ -414,14 +414,21 @@ def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
     return total
 
 
-def stratagem_strength_bonus(active_modifiers: list[dict]) -> int:
+def stratagem_strength_bonus(active_modifiers: list[dict], unit_key: str | None) -> int:
     """Total Strength-characteristic bonus from active stratagem modifiers (e.g. Disruption Fields).
 
     Mirrors buff_stat_bonus's role but reads from the generic active_modifiers list
     (StratagemModifier entries via gameProtocoll.py) instead of faction ability effects.
+
+    Scoped to `unit_key` (the attacker's state key): a modifier only counts if it was
+    activated for this exact unit. Entries without a matching unit_key (including the
+    legacy `unit_key: None`) are ignored — otherwise a stratagem activated for one unit
+    (e.g. Disruption Fields on unit X) would buff every attacker's Strength.
     """
     total = 0
     for m in active_modifiers:
+        if m.get("unit_key") != unit_key:
+            continue
         eff = m.get("effect", {})
         if eff.get("roll_type") == "strength" and eff.get("target", "attacker") in (
             "attacker",

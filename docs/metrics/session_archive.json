@@ -2496,8 +2496,8 @@
   "b13e1713-6232-484e-800b-39c694dc3a76": {
     "started_at": "2026-07-04T12:45:08.014Z",
     "task": "start session",
-    "peak_context": 146252,
-    "subagent_share": 67.0701724526917,
+    "peak_context": 146878,
+    "subagent_share": 66.56533857757351,
     "by_tier": {
       "Opus": 1117350,
       "Haiku": 2442251,
@@ -2553,6 +2553,95 @@
         "tier": "Haiku",
         "peak_context": 78525,
         "started_at": "2026-07-04T12:45:08.014Z"
+      }
+    ]
+  },
+  "4f34b17d-7c1d-4670-8c9e-1b602a742078": {
+    "started_at": "2026-07-04T18:21:12.898Z",
+    "task": "start session",
+    "peak_context": 121656,
+    "subagent_share": 85.74613356285961,
+    "by_tier": {
+      "Sonnet": 38876780,
+      "Opus": 1142965
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "HOCH-Datenfixes + Stufe-B-Paket",
+        "tier": "Sonnet",
+        "peak_context": 132553,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Auditpläne ins Archiv verschieben",
+        "tier": "<synthetic>",
+        "peak_context": null,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S123 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 75538,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S123",
+        "tier": "Opus",
+        "peak_context": 57919,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Doku S123",
+        "tier": "Sonnet",
+        "peak_context": 43459,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Engine-Fix unit_key-Scoping",
+        "tier": "Sonnet",
+        "peak_context": 101198,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Auditpläne und Artefakte bereinigen",
+        "tier": "Sonnet",
+        "peak_context": 149525,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Abgleich Teil 2/3",
+        "tier": "Sonnet",
+        "peak_context": 94467,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Abgleich Teil 3/3 + Engine-Check",
+        "tier": "Sonnet",
+        "peak_context": 88466,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Auditpläne ins Archiv verschieben",
+        "tier": "Sonnet",
+        "peak_context": 91973,
+        "started_at": "2026-07-04T18:21:12.898Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Abgleich Teil 1/3",
+        "tier": "Sonnet",
+        "peak_context": 91062,
+        "started_at": "2026-07-04T18:21:12.898Z"
       }
     ]
   }

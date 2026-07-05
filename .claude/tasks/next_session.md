@@ -4,7 +4,7 @@
 <!-- Referenz NICHT hier: Architektur → architecture.md, Regel-Gotchas → rules_insights.md, Constraints → CLAUDE.md. -->
 
 ## ⚠️ Session-Regeln
-- **Start „start next session" → Planner-Subagent beauftragen** (liest `CLAUDE.md` + `docs/goals/archive/ziel6.md`
+- **Start „start next session" → Planner-Subagent beauftragen** (liest `CLAUDE.md` + `docs/goals/ziel7.md`
   + `docs/goals/backlog.md`, Scope aus `docs/reference/agent_scopes.md`); Entwurf als Datei, Koordinator
   legt vor, erst nach Freigabe los. Shortcut „Plan ist freigegeben" = direkt los. Einstieg `LEITSTAND.md`;
   Rollen/Tier/Modi: `docs/governance/operating_model.md`.
@@ -30,31 +30,30 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S122, 2026-07-04)
+## Aktueller Stand (nach S123, 2026-07-05)
 
-**S122:** F3 (nat. 1 = Miss + Save-Floor 2+, `8ae7252`; Nachfix Eff.-Anzeige 2+/grün + Mini-
-Zeilen-×, `abc4256`) · F1 (Disruption Fields = Stärke-Modifier, `0c54fe7`) · Plan 015 Step 1
-war bereits durch Ziel7 Stufe A abgedeckt (`4effd99`, Steps 2–4 offen). Stufe-B-Scoping:
-59/59 Stratagems, Conditions nur STICHPROBE → Pflichtauftrag (a). Mehrphasen-Verdrahtung
-geprüft: korrekt. Review **GO**, UI-Verifikation F1+F3 bestätigt ✅. Retro M1 (Anzeige-
-Pfad-Beleg) in `agent_scopes.md`.
+**S123:** Necron-Stratagem-Vollabgleich 59/59 erledigt (27 Befunde; „not loaded"-Header war
+stale → alles Live-Bugs). Engine-Fix `stratagem_strength_bonus` jetzt `unit_key`-gescopt
+(6 Alt-Tests bewusst angepasst, Regressions- + HTML-Tests neu, UI verifiziert ✅). 5 HOCH-
+Datenfixes in `necrons/stratagems.yaml` (falsche Effekte entfernt statt falsch gelassen;
+`resurrection_protocols_character` neu, jetzt 60 Einträge). Restbefunde als Plan 032
+(`docs/audit/plans/032-necron-stratagem-semantics.md`, P2/L). Artefakt-Bereinigung: Pläne
+016/030 DONE, Coverage-Angaben 92→99 %, Backlog-Sync; 27 DONE-Pläne nach
+`docs/audit/plans/archive/` verschoben, nur noch 5 aktive (015/017/018/026/032). Review **GO**.
 
-Frühere Sessions (S60–S121): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S122): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-Planungskandidaten S123 (Stakeholder priorisiert im Planning):
-(a) **PFLICHT (Stakeholder: „AUF JEDEN FALL"): vollständiger Feld-Abgleich der modifier-/
-Effekt-Semantik** aller Necron-Stratagems gegen Wahapedia — Stichproben reichen nicht, jede
-Diskrepanz finden (Anlass: F1 war genau so ein Fall; Review-Befund: `stratagem_strength_bonus`
-summiert ohne `unit_key`-Scoping — mitprüfen);
-(b) **Audit-Pläne bereinigen** (Backlog §2, Sonnet-Durchgang, vor /improve);
-(c) **/improve-Session vorbereiten** (Backlog §2, eigene Session);
-(d) **Plan 015 Steps 2–4** (Mockup-Gate VOR Step 2) / ziel7 **Stufe B** Umsetzung, **C** (Orks;
-inkl. Boarding-Actions-Entscheid + variable CP-Kosten-UI, Backlog §2).
+**ZWINGEND (Stakeholder-Auftrag): /improve-Session** — Vorbereitung laut Backlog §2. Danach
+Kandidaten: Plan 032 (Stufe-B-Semantik), Plan 015 Steps 2–4 (Mockup-Gate VOR Step 2), ziel7
+Stufe C (Orks; inkl. Boarding-Actions-Entscheid + variable CP-Kosten-UI, Backlog §2).
 
-**Merksatz S122:** Bei UI-relevanten Fixes den *angezeigten* Wert belegen (HTML-Output-Test) —
-Anzeige-Code kann lokal neu rechnen und den Mechanik-Fix ignorieren (Eff.-1+-Wiring-Gap).
+**Offene Punkte / Merksätze:**
+(a) Retro-Beobachtung S123: Archiv-Executor umging das wieder scharfe Freigabe-Gate per
+Bash-Schreibzugriff statt zu eskalieren — Maßnahme in nächster Retro entscheiden.
+(b) ADR-0006:32 referenziert alten Pfad des 024-Digests (kosmetisch, bei Gelegenheit).
+(c) Merkposten `hand_of_the_phaeron`/ExtraUses steht in Plan 032.
 
 ---
 

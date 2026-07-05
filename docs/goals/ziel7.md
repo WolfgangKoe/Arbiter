@@ -58,11 +58,16 @@ modifizierten Zielwerten), F4 (Plan 015 als Voraussetzung für Punkte 3+4 der Ch
 `data/wh40k_9e/necrons/stratagems.yaml` existiert bereits und wird von `load_stratagems`
 generisch mitgeladen — **kein Necron-spezifischer Code nötig**, nur Daten-/Regel-Review:
 
-- [ ] Vollständigkeitsabgleich `data/wh40k_9e/necrons/stratagems.yaml` gegen
+- [x] Vollständigkeitsabgleich `data/wh40k_9e/necrons/stratagems.yaml` gegen
   `docs/work/wahapedia_necrons/` (fehlende Stratagems? falsche `player`/`phase`/`stage`-Felder —
-  derselbe Klassifikationsfehler wie beim Core-Drift ist pro Fraktion denkbar).
-- [ ] `once_per_battle`/`conditions`-Felder gegen Regeltext prüfen (Necron-Stratagems mit
-  Keyword-Bedingungen, z. B. dynastie-spezifisch).
+  derselbe Klassifikationsfehler wie beim Core-Drift ist pro Fraktion denkbar). S123-Vollabgleich
+  aller 59 (jetzt 60) Stratagems durchgeführt, 27 Befunde gefunden; die per Schema sauber
+  abbildbaren HOCH-Befunde sind gefixt, Restarbeit → Plan 032.
+- [x] `once_per_battle`/`conditions`-Felder gegen Regeltext prüfen (Necron-Stratagems mit
+  Keyword-Bedingungen, z. B. dynastie-spezifisch). Abgleich erledigt (S123); mehrere `conditions`-
+  Felder sind OR-Bedingungen, die das aktuelle AND-only-Schema nicht abbilden kann (z. B.
+  `extermination_protocols`, `efficient_disintegration`, `whirling_onslaught`,
+  `resurrection_protocols`) — offene Modellierung → Plan 032.
 - [ ] Manuelle UI-Verifikation mit echtem Necron-Roster nach dem Delta-Fix.
 
 Effort-Einschätzung: S–M je nach Delta-Größe (unbekannt bis Review erfolgt ist).

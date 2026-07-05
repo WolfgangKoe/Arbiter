@@ -889,6 +889,7 @@ def _render_resolution_tab(
 
     def_faction = entry["def_faction"]
     def_uid = entry["def_uid"]
+    atk_uid = entry.get("atk_uid", "")
     weapon_name = entry["weapon_name"]
     profile_idx = entry["profile_idx"]
     models_count = entry["models_count"]
@@ -936,7 +937,7 @@ def _render_resolution_tab(
     # Disruption Fields (and similar stratagems): +1 S from an active_modifiers
     # entry with roll_type=="strength", folded in the same way as the faction-
     # ability buff above so the WOUND block highlights the raised S in blue.
-    str_bonus += stratagem_strength_bonus(st.session_state.get("active_modifiers", []))
+    str_bonus += stratagem_strength_bonus(st.session_state.get("active_modifiers", []), atk_uid)
     # Hungry Void D2: +1 S in melee if the attacker charged, was charged, or did a
     # Heroic Intervention. Folded into str_bonus so the WOUND block highlights the
     # raised S in blue exactly like a WAAAGH! strength buff.
@@ -982,7 +983,6 @@ def _render_resolution_tab(
     # first becomes active (not one run later via session_state write).
     # Also resolve shoot_after_fall_back (Conquering Tyrant D2) here so its −1 Hit
     # modifier is folded in before resolve_attack_modifiers runs.
-    atk_uid = entry.get("atk_uid", "")
     if is_shooting:
         from gameMechanic.ability_engine import (  # noqa: PLC0415
             get_active_round_choice_ignores_cover_half_range,

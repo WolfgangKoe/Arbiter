@@ -207,3 +207,78 @@ def test_no_fall_back_modifier_no_red_in_hit_block(monkeypatch) -> None:  # type
         f"Expected no #ef4444 in HIT block without fall_back modifier, "
         f"but found it in:\n{combined_html}"
     )
+
+
+# ---------------------------------------------------------------------------
+# S122 F1 fix — display path: stratagem_strength_bonus scoping must reach the
+# rendered WOUND block. A Strength stratagem (e.g. Disruption Fields) activated
+# for one unit must not highlight the S value for a different attacker.
+# ---------------------------------------------------------------------------
+
+
+def test_strength_stratagem_scoped_to_activating_unit_shows_buff_border(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """The attacker the stratagem was activated for sees the green buff border on S."""
+    from gameMechanic.ability_engine import stratagem_strength_bonus  # noqa: PLC0415
+    from uiLayout.dice_compose import _BUFF_COLOR_HEX  # noqa: PLC0415
+
+    active_modifiers = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.warriors",
+            "source": "Disruption Fields",
+            "effect": {"roll_type": "strength", "value": 1, "target": "attacker", "phase": "fight"},
+            "expires_at_phase": "fight",
+            "expires_at_round": None,
+        }
+    ]
+    str_bonus = stratagem_strength_bonus(active_modifiers, "wh40k_9e.necrons.unit.warriors")
+    assert str_bonus == 1
+
+    captured = _collect_markdown(monkeypatch)
+    _render_dice_wound_block(
+        strength=4 + str_bonus,
+        toughness=4,
+        wound_stack=[],
+        strength_buff=str_bonus,
+        on_six_ap=0,
+    )
+    combined_html = "\n".join(captured)
+    assert _BUFF_COLOR_HEX in combined_html, (
+        f"Expected buff colour {_BUFF_COLOR_HEX} in WOUND block for the unit the "
+        f"stratagem was activated for, but got:\n{combined_html}"
+    )
+
+
+def test_strength_stratagem_not_scoped_to_other_unit_shows_no_buff_border(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """Regression (S122 bug): a different attacker in the same phase gets no S buff."""
+    from gameMechanic.ability_engine import stratagem_strength_bonus  # noqa: PLC0415
+    from uiLayout.dice_compose import _BUFF_COLOR_HEX  # noqa: PLC0415
+
+    active_modifiers = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.warriors",
+            "source": "Disruption Fields",
+            "effect": {"roll_type": "strength", "value": 1, "target": "attacker", "phase": "fight"},
+            "expires_at_phase": "fight",
+            "expires_at_round": None,
+        }
+    ]
+    str_bonus = stratagem_strength_bonus(active_modifiers, "wh40k_9e.necrons.unit.immortals")
+    assert str_bonus == 0
+
+    captured = _collect_markdown(monkeypatch)
+    _render_dice_wound_block(
+        strength=4 + str_bonus,
+        toughness=4,
+        wound_stack=[],
+        strength_buff=str_bonus,
+        on_six_ap=0,
+    )
+    combined_html = "\n".join(captured)
+    assert _BUFF_COLOR_HEX not in combined_html, (
+        f"Expected no buff colour {_BUFF_COLOR_HEX} in WOUND block for an attacker the "
+        f"stratagem was NOT activated for, but found it in:\n{combined_html}"
+    )

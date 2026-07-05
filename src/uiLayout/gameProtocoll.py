@@ -138,6 +138,23 @@ def _selected_unit_for(player: str):
     return None
 
 
+def _selected_state_key_for(player: str) -> str | None:
+    """Return the raw state key (uid) of the unit selected by `player`, else None.
+
+    Same (faction, state_key) tuple _selected_unit_for reads, but returns the state
+    key itself instead of the resolved Unit object — this is the format attack-
+    resolution entries use for atk_uid, so a stratagem modifier can be scoped to
+    exactly the unit that was selected when the stratagem was activated.
+    """
+    sel = st.session_state.get("selected_unit")
+    if sel is None:
+        return None
+    sel_faction, sel_state_key = sel
+    if sel_faction != player:
+        return None
+    return sel_state_key
+
+
 def _render_stratagems() -> None:
     """Two fixed player columns: first_player left, second_player right.
 
@@ -252,7 +269,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
                         active_mods = st.session_state.get("active_modifiers", [])
                         active_mods.append(
                             {
-                                "unit_key": None,
+                                "unit_key": _selected_state_key_for(player),
                                 "source": strat.name_en,
                                 "effect": {
                                     "roll_type": m.roll_type,

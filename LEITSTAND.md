@@ -41,7 +41,7 @@ pytest --tb=short
 ```
 
 Das schließt ein:
-- **Coverage-Gate** ≥ 92 % (Konfiguration in `pyproject.toml`; Render-Code ausgeschlossen — siehe [CLAUDE.md](CLAUDE.md))
+- **Coverage-Gate** ≥ 99 % (Konfiguration in `pyproject.toml`; Render-Code ausgeschlossen — siehe [CLAUDE.md](CLAUDE.md))
 - **Architektur-Gate** — vier Invarianten in `tests/architecture/`; Details + Schulden-Ledger: [docs/spec/architecture_invariants.md](docs/spec/architecture_invariants.md)
 - **Debt-Scoreboard** — läuft bei jedem `pytest`-Lauf mit; zählt offene Regel-Schulden aus dem Rule-Conformance-Catalog
 
@@ -53,10 +53,9 @@ Das schließt ein:
 
 | Ort | Rolle |
 |---|---|
-| [Fotos/](Fotos/) | Roher Einwurf — Bilder, Skizzen, Fotos von Notizen; unstrukturiert |
 | [docs/inbox/](docs/inbox/) | Aufbereiteter Eingang — Ideen als strukturierter Text, bereit für Refinement |
 
-Ablauf: Fotos/ → Subagent extrahiert Idee als Text nach docs/inbox/ → Refinement-Event mit Stakeholder → akzeptierte Ideen wandern in [docs/goals/backlog.md](docs/goals/backlog.md). Details: [docs/inbox/README.md](docs/inbox/README.md).
+Ablauf: roher Einwurf (Notizen, Skizzen) → Subagent extrahiert Idee als Text nach docs/inbox/ → Refinement-Event mit Stakeholder → akzeptierte Ideen wandern in [docs/goals/backlog.md](docs/goals/backlog.md). Details: [docs/inbox/README.md](docs/inbox/README.md).
 
 ---
 
