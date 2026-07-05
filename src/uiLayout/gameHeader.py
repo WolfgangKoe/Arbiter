@@ -1,5 +1,7 @@
 """gameHeader — CSS injection, VP/CP steppers, round/phase navigation."""
 
+import html
+
 import streamlit as st
 
 from constants.symbols import SYM_RESET
@@ -266,7 +268,7 @@ def render_game_header() -> None:
     st.markdown(
         f'<div style="text-align:center;font-size:1.0rem;font-weight:600;'
         f'letter-spacing:0.1em;color:#fbbf24;text-transform:uppercase;margin-bottom:6px;">'
-        f"{phase_name} · {active}</div>",
+        f"{phase_name} · {html.escape(active)}</div>",
         unsafe_allow_html=True,
     )
 

@@ -18,6 +18,9 @@ from gameObjects.loader import load_unit_catalog
 
 _BS_NS = "http://www.battlescribe.net/schema/rosterSchema"
 _MAX_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
+_MAX_DECOMPRESSED_BYTES = 20 * 1024 * 1024  # .ros-XML sind < 1 MB; 20 MB ist großzügig
+
+_NAME_STRIP_RE = re.compile(r"[<>&\"']")
 
 _ROSTERS_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
@@ -145,6 +148,12 @@ def _detect_faction(root: ET.Element) -> str | None:
     return None
 
 
+def _sanitize_roster_name(raw: str) -> str:
+    """Remove HTML-active characters from an imported roster name."""
+    cleaned = _NAME_STRIP_RE.sub("", raw).strip()
+    return cleaned or "imported_roster"
+
+
 def _validate_and_parse_xml(data: bytes) -> ET.Element:
     root = _safe_fromstring(data)
     if _BS_NS not in root.tag:
@@ -161,11 +170,17 @@ def parse_rosz_bytes(data: bytes) -> tuple[str, ET.Element]:
             ros_files = [n for n in zf.namelist() if n.endswith(".ros")]
             if not ros_files:
                 raise ValueError("No .ros file found inside the .rosz archive")
+            info = zf.getinfo(ros_files[0])
+            if info.file_size > _MAX_DECOMPRESSED_BYTES:
+                raise ValueError(
+                    f"Roster XML too large when decompressed "
+                    f"({info.file_size:,} bytes; max 20 MB)"
+                )
             xml_bytes = zf.read(ros_files[0])
     except zipfile.BadZipFile as exc:
         raise ValueError(f"Invalid .rosz file (not a ZIP archive): {exc}") from exc
     root = _validate_and_parse_xml(xml_bytes)
-    return root.attrib.get("name", "imported_roster"), root
+    return _sanitize_roster_name(root.attrib.get("name", "imported_roster")), root
 
 
 def parse_ros_bytes(data: bytes) -> tuple[str, ET.Element]:
@@ -173,7 +188,7 @@ def parse_ros_bytes(data: bytes) -> tuple[str, ET.Element]:
     if len(data) > _MAX_SIZE_BYTES:
         raise ValueError(f"File too large ({len(data):,} bytes; max 5 MB)")
     root = _validate_and_parse_xml(data)
-    return root.attrib.get("name", "imported_roster"), root
+    return _sanitize_roster_name(root.attrib.get("name", "imported_roster")), root
 
 
 def import_roster(

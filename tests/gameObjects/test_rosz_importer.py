@@ -243,6 +243,55 @@ def test_parse_rosz_rejects_zip_without_ros() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Roster name sanitization (stored-XSS hardening, Plan 036)
+# ---------------------------------------------------------------------------
+
+
+def _make_ros_xml_with_raw_name_attr(name_attr_value: str) -> bytes:
+    """Build a minimal .ros XML with a hand-crafted (already XML-escaped) name attribute.
+
+    Unlike `_make_ros_xml`, this does not further escape `name_attr_value` — callers
+    pass valid XML attribute content (e.g. using `&lt;`/`&gt;` entities) so the parsed
+    `name` attribute can contain HTML-active characters after XML entity decoding.
+    """
+    return (
+        f'<?xml version="1.0" encoding="utf-8"?>'
+        f'<roster xmlns="{_BS_NS}" name="{name_attr_value}">'
+        f"<forces></forces></roster>"
+    ).encode()
+
+
+def test_roster_name_html_chars_stripped() -> None:
+    xml = _make_ros_xml_with_raw_name_attr("&lt;script&gt;alert(1)&lt;/script&gt;Necrons")
+    roster_name, _root = parse_ros_bytes(xml)
+    assert roster_name == "scriptalert(1)/scriptNecrons"
+    for ch in "<>&\"'":
+        assert ch not in roster_name
+
+
+def test_roster_name_only_html_chars_falls_back() -> None:
+    xml = _make_ros_xml_with_raw_name_attr("&lt;&gt;")
+    roster_name, _root = parse_ros_bytes(xml)
+    assert roster_name == "imported_roster"
+
+
+def test_rosz_decompression_bomb_rejected() -> None:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("roster.ros", b"0" * (21 * 1024 * 1024))
+    bomb_bytes = buf.getvalue()
+    assert len(bomb_bytes) < 5 * 1024 * 1024  # passes the compressed-size check
+    with pytest.raises(ValueError, match="too large"):
+        parse_rosz_bytes(bomb_bytes)
+
+
+def test_rosz_normal_size_still_parses() -> None:
+    data = _make_rosz_bytes("Test Army")
+    roster_name, _root = parse_rosz_bytes(data)
+    assert roster_name == "Test Army"
+
+
+# ---------------------------------------------------------------------------
 # import_roster (round-trip)
 # ---------------------------------------------------------------------------
 
@@ -307,6 +356,32 @@ def test_import_roster_unknown_faction_raises(tmp_path: Path) -> None:
     roster_name, root = parse_ros_bytes(xml_bytes)
     with pytest.raises(ValueError, match="_FACTION_CATALOGUE_MAP"):
         import_roster(roster_name, root, output_dir=tmp_path)
+
+
+def test_display_name_sanitized_in_written_yaml(tmp_path: Path) -> None:
+    import yaml
+
+    xml_bytes = _make_ros_xml_with_raw_name_attr(
+        "&lt;img src=x onerror=alert(1)&gt;Necrons"
+    ).replace(
+        b"<forces></forces></roster>",
+        (
+            b'<forces><force catalogueName="Necrons"><selections>'
+            b'<selection xmlns="' + _BS_NS.encode() + b'" type="unit" name="Overlord" '
+            b'quantity="1"><selections>'
+            b'<selection xmlns="' + _BS_NS.encode() + b'" type="model" name="Overlord" '
+            b'quantity="1"/></selections></selection>'
+            b"</selections></force></forces></roster>"
+        ),
+    )
+    roster_name, root = parse_ros_bytes(xml_bytes)
+    out_path, _unmatched = import_roster(
+        roster_name, root, faction_dir="necrons", output_dir=tmp_path
+    )
+    data = yaml.safe_load(out_path.read_text())
+    for ch in "<>&\"'":
+        assert ch not in data["display_name"]
+    assert data["display_name"] == "img src=x onerror=alert(1)Necrons"
 
 
 def test_import_roster_orks_roundtrip(tmp_path: Path) -> None:
