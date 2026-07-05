@@ -128,6 +128,34 @@ durch diese Seam gewonnene Mess-Abdeckung fest.
 
 ---
 
+## Typ-Ratchet — mypy-Fehlerbestand einfrieren (`tools/mypy_gate.py`)
+
+**Regel:** `pyproject.toml` konfiguriert `[tool.mypy] strict = true`, aber der
+CI-Step lief bis Plan 038 mit `continue-on-error: true` — der Fehlerbestand
+konnte unbemerkt wachsen. Seit Plan 038 ist der Bestand eingefroren:
+**der Zähler darf nur noch sinken.**
+
+**Wächter:** `tools/mypy_gate.py` (eigenständiges Skript, NICHT `tests/architecture/` —
+mypy braucht ~20–30 s, die lokale Vollsuite läuft viele Male pro Session und
+darf nicht langsamer werden). CI-Step in `.github/workflows/deploy.yml`
+(„Type check (ratchet gate)") ruft es blocking auf.
+
+**Baseline:** 134 Fehler (gemessen 2026-07-05, Plan 038).
+
+**Ratchet-Logik (beidseitig, INV-4b-Muster):**
+- gemessen N > BASELINE → Build rot, „neue Fehler beheben, nicht Baseline erhöhen".
+- gemessen N < BASELINE → Build ebenfalls rot, „BASELINE im selben Commit auf N senken"
+  (Schrumpfen wird sofort eingelockt, nicht optional nachgezogen).
+- gemessen N == BASELINE → Build grün.
+
+Der Abbau des Bestands ist bewusst **kein Teil dieses Plans** — Backlog-Kandidat
+(beste Reihenfolge laut `tools/mypy_gate.py`-Wartungshinweis: zuerst `gameMechanic/`
+und `gameObjects/`, `uiLayout/` zuletzt wegen manueller Render-Verifikation).
+mypy-Versions-Upgrades ändern die Fehlerzahl → BASELINE im selben Commit wie das
+Upgrade anpassen (Richtung im Commit begründen).
+
+---
+
 ## NICHT erzwungen — bewusste Abweichung vom Ursprungsbild
 
 Die ursprüngliche Vision ([architecture.md](architecture.md)) wollte `gameMechanic/` Streamlit-frei.

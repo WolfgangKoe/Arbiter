@@ -36,7 +36,6 @@ run every verification command, and update your row below when done.
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |
 | 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | REJECTED (S118, Stakeholder) — Custodes-Ausbau wird gesammelt nach dem Faction-Fetcher nachgeholt; keine Plandatei angelegt. Merkposten bleibt: toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift). |
 | [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
-| [038](038-mypy-ratchet-gate.md) | mypy-Ratchet-Gate: Fehlerbestand einfrieren (~136), CI-Step blocking statt informational | P2 (MITTEL) | M | — | TODO |
 | [039](039-dx-kleinkram-readme-xdist.md) | DX-Kleinkram: README-Setup, tote `DATA_DIR` entfernen, pytest-xdist | P3 (NIEDRIG) | S | — | TODO |
 | [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040 ✅; NICHT parallel zu 015/026 | TODO |
 
@@ -63,13 +62,14 @@ run every verification command, and update your row below when done.
 
 **Dependency notes (Audit 2026-07-05, Pläne 033–041):**
 - **033, 034, 035, 036, 037 erledigt (S125, 2026-07-05)** — committet + auf
-  `feature/016` konsolidiert, Pläne archiviert. 040 erledigt (S126). Verbleibend: 038, 039, 041.
+  `feature/016` konsolidiert, Pläne archiviert. 040 erledigt (S126). 038 erledigt (S127).
+  Verbleibend: 039, 041.
 - **040 strikt nach 033/035**: alle drei ändern `game_state.py` (Reset-Pfade);
   033/035 sind erledigt, 040 zusätzlich `phase_runner.py`/Handler.
 - **041 zwingend NACH 034 (✅) + 040 und NICHT parallel zu 015/026**: extrahiert aus
   `fightPhase.py`/`psychicPhase.py`/`movementPhase.py`; Stufe 2+ (weitere
   `_common.py`-Cluster) erst nach Review von Stufe 1 planen.
-- **Empfohlene Reihenfolge der Rest-Pläne**: 038 → 039 → 041 (040 ✅ S126). Verzahnung
+- **Empfohlene Reihenfolge der Rest-Pläne**: 039 → 041 (038/040 ✅). Verzahnung
   mit der Alt-Queue: 041 erst nach 015/026.
 
 **Bewusst NICHT geplant (Feature-Queue):**
@@ -155,5 +155,6 @@ offener Punkt mehr.
 | [036](archive/036-rosz-import-haerten.md) | `.rosz`-Import härten: Stored-XSS + Zip-Bomb-Cap + `html.escape` | S125, 2026-07-05 (`45db5b4`; 5 Regressionstests) |
 | [037](archive/037-deps-pinnen-pip-audit-docker-nonroot.md) | Deps pinnen, `pip-audit`-CI, Docker non-root | S125, 2026-07-05 (`c5ea24f`; Docker-Runtime-Check offen — kein lokaler Docker) |
 | [040](archive/040-totes-phasen-lifecycle-entfernen.md) | Totes Phasen-Lifecycle entfernen (`advance_stage`, `render_start/end`, `phase_stage`) + Mitfix Stratagem-Sichtbarkeit (`stage`-Hart-Filter entfernt, Regressionstest `test_start_and_end_stage_stratagems_visible_in_matching_phase`) | S126, 2026-07-05 (`5982751`; erweiterter Scope: `scenarios.py`-Zweitbezug + `gameProtocoll.py` mitbereinigt; UI verifiziert: Dimensional Corridor sichtbar, RP-Gegenprobe, Legacy-Szenarien laden) |
+| [038](archive/038-mypy-ratchet-gate.md) | mypy-Ratchet-Gate: Fehlerbestand eingefroren (Baseline 134), CI-Step blocking statt informational (`tools/mypy_gate.py`) | S127, 2026-07-05 (Baseline gemessen und lokal + beidseitig gegengeprüft: N>Baseline und N<Baseline lösen je exit 1 aus; kein `src/`-Edit) |
 
 `archive/024-arkana-research-digest.md` (Plan-024-Companion, ADR-0006) liegt seit Plan 024 vollständig umgesetzt (alle 12 Punktkosten + Schema, s. Step 6) ebenfalls in `archive/` — Lebensdauer-Bedingung erfüllt.

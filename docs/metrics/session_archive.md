@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 19:40 CEST
+Stand: 2026-07-05 19:55 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 17:03 121e  ██████████░░ 130k ⚠️   ████░░  70%    ▚▚▚▚█·······
+07-05 19:41 67da  █████░░░░░░░  61k ✅    █████░  83%    ···········▒
+         SA_1·  ██░░░░░░░░░░  26k ✅    r-proto-02 Löschbarkeit prüfen
+         SA_2·  ███████░░░░░  90k ✅    Planning-Entwurf S127 erstellen
+         SA_3·  ██████░░░░░░  76k ✅    Plan 038+039 ausführen
+         SA_4·  ████░░░░░░░░  53k ✅    Ratchet/Ledger-Trend analysieren
+----------------- ---------------------- -------------- ------------
+07-05 17:03 121e  ██████████░░ 130k ⚠️   ████░░  69%    ▚▚▚▚█·······
          SA_1·  ██████░░░░░░  74k ✅    Planungsentwurf Session 126
          SA_2·  █████░░░░░░░  63k ✅    Reviewer S126 DoD-Review
          SA_3·  ██████████░░ 126k ⚠️   UI-Verifikationsanleitung 034/036

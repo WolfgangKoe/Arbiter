@@ -2748,8 +2748,8 @@
   "121e0a1c-7049-4420-a155-72d2abd1fccc": {
     "started_at": "2026-07-05T15:03:54.872Z",
     "task": "start session, bitte Plan vorlegen",
-    "peak_context": 129569,
-    "subagent_share": 69.78282983403875,
+    "peak_context": 130239,
+    "subagent_share": 69.36922267623046,
     "by_tier": {
       "Sonnet": 18382100,
       "Opus": 1703687,
@@ -2797,6 +2797,46 @@
         "tier": "Sonnet",
         "peak_context": 74074,
         "started_at": "2026-07-05T15:03:54.872Z"
+      }
+    ]
+  },
+  "67da766e-1d54-4de5-848f-81caa7ad3583": {
+    "started_at": "2026-07-05T17:41:55.240Z",
+    "task": "Du hast die Freigabe für den Plan. Sobald die Subagenten dafür laufen, beauftrage einen weiteren, der prüft, was mit /h…",
+    "peak_context": 61325,
+    "subagent_share": 83.4723955662994,
+    "by_tier": {
+      "Haiku": 441442,
+      "Sonnet": 6137621
+    },
+    "subagents": [
+      {
+        "agent_type": "Explore",
+        "description": "r-proto-02 Löschbarkeit prüfen",
+        "tier": "Haiku",
+        "peak_context": 25844,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S127 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 90167,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Plan 038+039 ausführen",
+        "tier": "Sonnet",
+        "peak_context": 76106,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Ratchet/Ledger-Trend analysieren",
+        "tier": "Sonnet",
+        "peak_context": 53399,
+        "started_at": "2026-07-05T17:41:55.240Z"
       }
     ]
   }
