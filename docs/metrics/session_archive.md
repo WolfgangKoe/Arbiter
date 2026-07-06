@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-05 20:06 CEST
+Stand: 2026-07-06 17:58 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,11 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 19:41 67da  █████░░░░░░░  68k ✅    █████░  88%    ▚···········
+07-05 19:41 67da  ███████░░░░░  92k ✅    █████░  85%    ▚▚█·········
          SA_1·  ██░░░░░░░░░░  26k ✅    r-proto-02 Löschbarkeit prüfen
          SA_2·  ███████░░░░░  90k ✅    Planning-Entwurf S127 erstellen
-         SA_3·  ███████░░░░░  92k ✅    Plan 038+039 ausführen
-         SA_4·  ████░░░░░░░░  53k ✅    Ratchet/Ledger-Trend analysieren
+         SA_3·  ███░░░░░░░░░  39k ✅    Session-Abschluss S127 durchführen
+         SA_4·  ███░░░░░░░░░  36k ✅    S127 DoD-Review durchführen
+         SA_5·  ████████░░░░  95k ✅    Plan 038+039 ausführen
+         SA_6·  █████░░░░░░░  68k ✅    Doku-Paket S127 umsetzen
+         SA_7·  ████░░░░░░░░  53k ✅    Ratchet/Ledger-Trend analysieren
 ----------------- ---------------------- -------------- ------------
 07-05 17:03 121e  ██████████░░ 130k ⚠️   ████░░  69%    ▚▚▚▚█·······
          SA_1·  ██████░░░░░░  74k ✅    Planungsentwurf Session 126
@@ -450,3 +453,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S124 (2026-07-05)** /improve-Vollaudit: 11 Befunde verifiziert, Pläne 033-041 angelegt (4 Correctness-Bugs, XSS/Zip-Bomb, mypy-Ratchet, totes Lifecycle, INV-6-Extraktion); Reihenfolge 033→034→036→035→037→040→038→039→041 freigegeben
 - **S125 (2026-07-05)** Pläne 033-037 umgesetzt: 4 P1-Bugs (Phasen-Modifier-Expiry, State-Key-Lookups Duplikat-Trupps, active_buffs-Zugwechsel, rosz-Import-Härtung XSS/Zip-Bomb) + P2 Deps-Pinning/pip-audit/Docker-nonroot; auf feature/016 konsolidiert, Pläne archiviert
 - **S126 (2026-07-05)** Plan 040 + Mitfix: tote Stage-Maschine entfernt, Stratagem-stage-Hart-Filter raus (start/end-Stratagems waren dauerhaft hidden); UI-Verifikationen 034/036/040 durch Stakeholder bestätigt; Spec-Drift (architecture/processes/ui_layout) nachgezogen
+- **S127 (2026-07-05)** Plans 038+039 done (mypy ratchet gate baseline 134, README/DX, CI 3x faster), r-proto-02 handoff closed, debt scoreboard refreshed, ledger reduction roadmap adopted

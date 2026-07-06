@@ -2803,12 +2803,13 @@
   "67da766e-1d54-4de5-848f-81caa7ad3583": {
     "started_at": "2026-07-05T17:41:55.240Z",
     "task": "Du hast die Freigabe für den Plan. Sobald die Subagenten dafür laufen, beauftrage einen weiteren, der prüft, was mit /h…",
-    "peak_context": 67566,
-    "subagent_share": 87.57931199765791,
+    "peak_context": 91683,
+    "subagent_share": 85.29791380883593,
     "by_tier": {
       "Haiku": 441442,
-      "Sonnet": 11268545,
-      "Fable": 758515
+      "Sonnet": 15497202,
+      "Opus": 743553,
+      "Fable": 3141863
     },
     "subagents": [
       {
@@ -2827,9 +2828,30 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Session-Abschluss S127 durchführen",
+        "tier": "Sonnet",
+        "peak_context": 38817,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S127 DoD-Review durchführen",
+        "tier": "Opus",
+        "peak_context": 36188,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Plan 038+039 ausführen",
         "tier": "Sonnet",
-        "peak_context": 91841,
+        "peak_context": 95309,
+        "started_at": "2026-07-05T17:41:55.240Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Doku-Paket S127 umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 67857,
         "started_at": "2026-07-05T17:41:55.240Z"
       },
       {

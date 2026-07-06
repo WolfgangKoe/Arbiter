@@ -22,6 +22,10 @@
   sondern auch Titel wie „archive/close" gegen Datei-Realität verifizieren (b3ebfd5 behauptete
   Archivierung ohne Vollzug, S119→S120-Befund). Restrisiko bewusst nicht test-bewacht — Kompensation:
   Reviewer-Pflicht + dieser Sync.
+- **Start-Sync prüft auch `docs/handoff/` auf liegengebliebene ANSWERED/DONE-Dateien** (r-proto-02
+  lag seit S116).
+- **Executor-Aufträge enthalten die Klausel:** Dateiänderungen nur über Edit/Write-Tools, Bash nur
+  lesend/git/pytest (Freigabe-Gate-Umgehung S123).
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
@@ -30,33 +34,32 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S126, 2026-07-05)
+## Aktueller Stand (nach S127, 2026-07-05)
 
-**S126 (Plan 040 + Mitfix):** `5982751` — tote Stage-Maschine entfernt (`advance_stage`,
-`render_start/end`, `phase_stage`) **plus** Stakeholder-Mitfix: Stage-Hart-Filter aus
-`stratagem_visibility()` raus — `stage: start/end`-Stratagems waren dauerhaft `hidden`
-(Bestandsbug). `Stratagem.stage`/`Ability.stage` bleiben als Datenfelder ohne Verhalten.
-2 vorher grüne Szenario-Tests mit Stakeholder-OK migriert (`test_legacy_phase_stage_key_
-is_ignored`). Vollsuite 1451 passed, Coverage 99,11 %, alle Gates grün. Plan 040 archiviert.
-Review-Blocker (Spec-Drift `architecture.md`/`processes.md`/`ui_layout.md`) noch in S126
-nachgezogen. **UI verifiziert (Stakeholder):** 034 alle 4 Punkte ✅, 036 Header ✅,
-040 Dimensional Corridor sichtbar ✅ + RP-Gegenprobe ✅ + Legacy-Szenarien laden ✅.
+S127 (Pläne 038+039 + Doku-Paket): `db87d48` mypy-Ratchet-Gate (tools/mypy_gate.py, Baseline
+134, deploy.yml-Gate statt continue-on-error). `69d6484`+`6500c94` README-Setup komplett,
+.env.example gelöscht, pytest-xdist in CI (218s→75s). `868ec36` r-proto-02-Handoff geschlossen
+(war seit S116 umgesetzt, Backlog Z.51 ✅), Schulden-Tabelle nachgezogen (2026-07-05: INV-4b 11
+· INV-4 5 · INV-5 5), Backlog-Einträge: INV-4-Allowlist→0 (S128) + mypy-Abbau modulweise.
+Review: GO, keine Blocker. Vollsuite 1456 passed, Coverage 99,11 %. Kein UI-Code berührt.
 
-Frühere Sessions (S60–S125): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S126): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-**Plan 038 ausführen** (mypy-Ratchet-Gate, P2, M), danach **039 → 041**. Regeln:
-041 zwingend nach 034 (✅) + 040 (✅), NICHT parallel zu 015/026, erst nach 015/026.
-Pläne self-contained → Executor-Subagent direkt beauftragbar.
+**INV-4-Mini-Task ausführen** (Allowlist 5→0: `necrons`-Defaults in `game_state.py`/`loader.py`
+aus gewählten Rostern ableiten, Größe S, terminiert S128 — Backlog Z.~96). Daneben nächsten
+Plan aus der Queue planen: 041 verbleibt, Regel beachten: 041 NICHT parallel zu 015/026, erst
+nach 015/026 — Reihenfolge klärt der Planner.
+**Stehende Regel (Retro S127, Maßnahme 1):** Jede Session enthält mind. einen Ledger-Abbau-
+Schritt, bis alle „→0"-Ledger bei 0 sind: INV-4 (S128) → INV-4b (11 Tokens, 2–3 Schritte) →
+mypy (Baseline 134, modulweise, Baseline-Senkung im selben Commit).
 
 **Offene Verifikation (VOR Merge nach `main`):**
 - **037 Docker**: `docker build` + `docker run --rm arbiter-test id -u` → 1000 +
   Port-7860-Smoke beim nächsten HF-Spaces-Deploy (lokal kein Docker).
 
 **Offene Punkte / Merksätze:**
-(a) Retro S123: Archiv-Executor umging das Freigabe-Gate per Bash-Schreibzugriff —
-Maßnahme in nächster Retro entscheiden.
 (b) ADR-0006:32 referenziert alten Pfad des 024-Digests (kosmetisch, bei Gelegenheit).
 (c) Merkposten `hand_of_the_phaeron`/ExtraUses steht in Plan 032.
 (d) Direction-Entscheide offen (Audit S124): ziel9-Fetcher vorziehen? Deployment-Phase
