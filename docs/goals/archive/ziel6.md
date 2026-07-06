@@ -1041,7 +1041,11 @@ unit_state["group_models"]: dict[str, int]
 - [x] Attackensequenz: simultan, Modifier transparent, kein Zwischenwert-Klicken
   (Beleg: 6d ✅; ui_layout.md:344 „Both players may have active buttons simultaneously")
 - [x] CP-Doppelvergabe unmöglich
-  (Beleg: 6e Task ✅ S55 verifiziert; cp_granted_this_phase-Flag)
+  (Beleg: 6e Task ✅ S55 verifiziert mit cp_granted_this_phase-Flag — Flag erlaubte
+  aber Doppelvergabe bei ←/→-Phasennavigation, da `_reset_phase_state()` es bei
+  jedem Phasenwechsel löschte. Echt geschlossen durch Plan 018 Task 18.1, S128:
+  `cp_grants`-Set aus `(round, faction)`-Paaren, übersteht Phasen-Resets, nur
+  `reset_game()` löscht es.)
 - [ ] Ability-Badges auf unitCard sichtbar und korrekt ablaufend
   → Ziel7 (abhängig von 6f Ability-Badges, komplett nach Ziel7 ausgelagert)
 - [x] Reset archiviert Log; neues Spiel startet sauber

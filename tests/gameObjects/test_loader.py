@@ -306,6 +306,33 @@ def test_load_roster_metadata_alpha() -> None:
     assert meta["faction_dir"] == "necrons"
 
 
+def test_load_roster_metadata_missing_faction_dir_returns_none(tmp_path: Path) -> None:
+    """A roster omitting faction_dir must surface None, not a silent faction default.
+
+    Regression for INV-4 cleanup (S128): loader.py no longer falls back to "necrons"
+    when a roster's faction_dir key is absent.
+    """
+    roster_path = tmp_path / "no_faction_dir.yaml"
+    roster_path.write_text("display_name: Broken\nunits: []\n")
+    meta = load_roster_metadata(roster_path)
+    assert meta["faction_dir"] is None
+    assert meta["subfaction"] is None
+
+
+def test_load_roster_missing_faction_dir_raises(tmp_path: Path) -> None:
+    """load_roster on a roster without faction_dir fails loudly instead of assuming Necrons.
+
+    Regression for INV-4 cleanup (S128).
+    """
+    import pytest
+
+    catalog = load_unit_catalog("necrons")
+    roster_path = tmp_path / "no_faction_dir.yaml"
+    roster_path.write_text("display_name: Broken\nunits: []\n")
+    with pytest.raises(ValueError, match="faction_dir"):
+        load_roster(roster_path, catalog)
+
+
 def test_load_roster_alpha_resolves_overlord() -> None:
     catalog = load_unit_catalog("necrons")
     matched, unmatched = load_roster(_ROSTER_DIR / "necrons_alpha.yaml", catalog)

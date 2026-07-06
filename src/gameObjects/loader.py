@@ -965,8 +965,8 @@ def load_roster_metadata(roster_path: str | Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     data = load_yaml(path)
-    faction_dir = data.get("faction_dir", "necrons")
-    subfaction_field, _ = load_subfaction_meta(faction_dir)
+    faction_dir = data.get("faction_dir")
+    subfaction_field, _ = load_subfaction_meta(faction_dir) if faction_dir else (None, "Subfaction")
     subfaction = data.get(subfaction_field) if subfaction_field else None
     return {
         "display_name": data.get("display_name", ""),
@@ -1060,7 +1060,9 @@ def load_roster(
         return [], [f"roster-not-found:{path}"]
     data = load_yaml(path)
 
-    faction_dir = data.get("faction_dir", "necrons")
+    faction_dir = data.get("faction_dir")
+    if not faction_dir:
+        raise ValueError(f"Roster {path} is missing required 'faction_dir'.")
     weapon_catalog = load_weapon_catalog(faction_dir)
     wargear_catalog = load_wargear_catalog(faction_dir)
     relic_catalog = load_relic_catalog(faction_dir)

@@ -141,6 +141,104 @@ class TestResolveGainCpRoll:
 
 
 # ---------------------------------------------------------------------------
+# Plan 018 Task 18.1 — CP grant locked per (round, faction), not a global flag
+# ---------------------------------------------------------------------------
+
+
+class TestRenderFactionActionsCpGrant:
+    """_render_faction_actions must not allow double-granting CP for the same round.
+
+    Regression for the bug fixed in Task 18.1: the old cp_granted_this_phase flag was
+    cleared by _reset_phase_state() on every phase change, so ←/→ navigation back into
+    the Command phase let the same faction claim +1 CP again. cp_grants is a
+    (round, faction) set that _reset_phase_state() does not touch.
+    """
+
+    def _session(self, **extra: object) -> _S:
+        defaults: dict[str, object] = {
+            "game_mode": "matched",
+            "cp": {"Necrons": 4, "Orks": 4},
+            "cp_grants": set(),
+        }
+        defaults.update(extra)
+        session = _S(**defaults)
+        _st_mock.session_state = session
+        _gs.st.session_state = session
+        return session
+
+    def test_first_grant_awards_cp_and_locks_round_faction(self) -> None:
+        session = self._session()
+        with (
+            patch.object(_st_mock, "button", return_value=True),
+            patch("gameMechanic.commandPhase.log_action"),
+        ):
+            from gameMechanic.commandPhase import _render_faction_actions
+
+            _render_faction_actions("Necrons", {"round": 1})
+
+        assert session.cp["Necrons"] == 5
+        assert (1, "Necrons") in session.cp_grants
+
+    def test_second_render_same_round_does_not_reaward(self) -> None:
+        """Already-granted (round, faction) must hide the button — no re-award possible."""
+        session = self._session(cp_grants={(1, "Necrons")})
+        with (
+            patch.object(_st_mock, "button", return_value=True) as mock_button,
+            patch("gameMechanic.commandPhase.log_action"),
+        ):
+            from gameMechanic.commandPhase import _render_faction_actions
+
+            _render_faction_actions("Necrons", {"round": 1})
+            assert not mock_button.called
+
+        assert session.cp["Necrons"] == 4
+
+    def test_back_and_forward_navigation_does_not_regrant(self) -> None:
+        """Regression: _reset_phase_state() must not clear cp_grants (the Task 18.1 bug)."""
+        session = self._session(cp_grants={(1, "Necrons")}, phase_idx=1, round=1)
+        _gs._reset_phase_state()  # simulates the reset every ←/→ phase navigation triggers
+        assert session.cp_grants == {(1, "Necrons")}
+
+        with (
+            patch.object(_st_mock, "button", return_value=True) as mock_button,
+            patch("gameMechanic.commandPhase.log_action"),
+        ):
+            from gameMechanic.commandPhase import _render_faction_actions
+
+            _render_faction_actions("Necrons", {"round": 1})
+            assert not mock_button.called
+
+        assert session.cp["Necrons"] == 4
+
+    def test_new_round_allows_new_grant(self) -> None:
+        session = self._session(cp_grants={(1, "Necrons")})
+        with (
+            patch.object(_st_mock, "button", return_value=True),
+            patch("gameMechanic.commandPhase.log_action"),
+        ):
+            from gameMechanic.commandPhase import _render_faction_actions
+
+            _render_faction_actions("Necrons", {"round": 2})
+
+        assert session.cp["Necrons"] == 5
+        assert session.cp_grants == {(1, "Necrons"), (2, "Necrons")}
+
+    def test_second_player_has_independent_grant(self) -> None:
+        session = self._session(cp_grants={(1, "Necrons")})
+        with (
+            patch.object(_st_mock, "button", return_value=True),
+            patch("gameMechanic.commandPhase.log_action"),
+        ):
+            from gameMechanic.commandPhase import _render_faction_actions
+
+            _render_faction_actions("Orks", {"round": 1})
+
+        assert session.cp["Orks"] == 5
+        assert (1, "Orks") in session.cp_grants
+        assert (1, "Necrons") in session.cp_grants  # untouched
+
+
+# ---------------------------------------------------------------------------
 # Activated wargear — generic flow (Plan 020)
 # ---------------------------------------------------------------------------
 

@@ -82,10 +82,18 @@ def _load_roster_for(
     round_choice_order). subfaction is the roster's subfaction choice read via the
     faction's declared field (generic — no faction-specific vocabulary in src/);
     round_choice_order is the optional roster-defined round-choice ability order.
+
+    `fallback_faction` only applies when the roster declares no `faction_dir` at
+    all — every roster shipped in `data/rosters/` declares one, so this is a
+    defensive default, never a real faction choice.
     """
     path = _ROSTER_DIR / roster_file
     meta = load_roster_metadata(path)
     faction_dir = meta.get("faction_dir") or fallback_faction
+    if not faction_dir:
+        raise ValueError(
+            f"Roster '{roster_file}' declares no faction_dir and no fallback was given."
+        )
     display_name = meta.get("display_name") or roster_file
     subfaction: str | None = meta.get("subfaction")
     round_choice_order: list[str] | None = meta.get("round_choice_order")
@@ -371,8 +379,8 @@ def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[typ
 
 
 def init_state(
-    roster_p1: str = "necrons_alpha.yaml",
-    roster_p2: str = "necrons_beta.yaml",
+    roster_p1: str,
+    roster_p2: str,
     game_size: str = "Incursion",
     vp_phase: str = "Morale",
     vp_from_round: int = 1,
@@ -387,10 +395,10 @@ def init_state(
         return
 
     p1_matched, p1_unmatched, p1_name, p1_faction_dir, p1_subfaction, p1_proto_order = (
-        _load_roster_for(roster_p1, "necrons")
+        _load_roster_for(roster_p1, "")
     )
     p2_matched, p2_unmatched, p2_name, p2_faction_dir, p2_subfaction, p2_proto_order = (
-        _load_roster_for(roster_p2, "necrons")
+        _load_roster_for(roster_p2, "")
     )
 
     if attacker == "p2":
@@ -415,7 +423,12 @@ def init_state(
     st.session_state.selected_unit = None
     st.session_state.selected_targets = []
     st.session_state.active_effect = None
-    st.session_state.cp_granted_this_phase = False
+    # Per-(round, faction) CP grant lock — survives phase navigation (←/→) within the
+    # same round; only reset_game() (full session wipe) clears it. Replaces the old
+    # single global cp_granted_this_phase flag, which _reset_phase_state() cleared on
+    # every phase change and therefore allowed re-granting CP by navigating back into
+    # the Command phase (Plan 018 Task 18.1).
+    st.session_state.cp_grants = set()  # set[tuple[int, str]] — (round, faction) pairs
     # Both stratagem-usage trackers are keyed per player slot (like `cp`):
     # phase-scoped and battle-scoped usage never leak across players.
     st.session_state.used_stratagem_ids: dict[str, set[str]] = {}
@@ -519,7 +532,8 @@ def reset_game() -> None:
 
 
 def _reset_phase_state() -> None:
-    st.session_state.cp_granted_this_phase = False
+    # cp_grants is intentionally NOT touched here — it must survive phase
+    # navigation within the same round (Plan 018 Task 18.1).
     st.session_state.morgog_cap_rolled_this_phase = False
     st.session_state.pending_triggered_relic = None
     st.session_state.pending_target_request = None

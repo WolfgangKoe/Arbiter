@@ -195,7 +195,16 @@ dazu; die Sammelstellen sollen EINMAL existieren.
 
 ## Done criteria
 
-- [ ] 18.1: CP-Grant pro (Runde, Spieler) genau einmal; Flag entfernt; Tests
+- [x] 18.1: CP-Grant pro (Runde, Spieler) genau einmal; Flag entfernt; Tests
+  (S128: `cp_grants: set[tuple[int, str]]` ersetzt `cp_granted_this_phase`;
+  `game_state.py` init_state + `_reset_phase_state` (Key bleibt unangetastet);
+  `commandPhase.py:_render_faction_actions` prüft `(round, faction) in cp_grants`;
+  0 Code-Treffer für `cp_granted_this_phase` in src/tests — nur 2 historische
+  Kommentare/Docstrings referenzieren den alten Namen. Tests: 5 neue/migrierte
+  in test_command_phase.py (`TestRenderFactionActionsCpGrant`) +
+  test_game_state.py (`test_does_not_reset_cp_grants`,
+  `test_init_state_sets_empty_cp_grants`); Vollsuite 1465 passed, Coverage
+  99.11 %, Architektur-Gate 8 passed.)
 - [ ] 18.2: Reset-Log-Verhalten verifiziert/gefixt + Regressionstest
 - [ ] 18.3: Attrition-Hinweis datengetrieben; Threshold-Helper getestet
 - [ ] 18.4: Collector in der Engine, direkt getestet

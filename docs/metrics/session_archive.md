@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-06 17:58 CEST
+Stand: 2026-07-06 21:08 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-05 19:41 67da  ███████░░░░░  92k ✅    █████░  85%    ▚▚█·········
+07-06 17:59 89a0  ██████░░░░░░  74k ✅    ██████  93%    ▚▚▚·········
+         SA_1·  ████████████ 160k ⛔    Planning-Entwurf S128 erstellen
+         SA_2·  █████████░░░ 114k ✅    Executor: INV-4-Ledger-Abbau
+         SA_3·  ██████████░░ 119k ✅    Executor: Plan 018 Task 18.1
+----------------- ---------------------- -------------- ------------
+07-05 19:41 67da  ███████░░░░░  94k ✅    █████░  85%    ▚▚··········
          SA_1·  ██░░░░░░░░░░  26k ✅    r-proto-02 Löschbarkeit prüfen
          SA_2·  ███████░░░░░  90k ✅    Planning-Entwurf S127 erstellen
-         SA_3·  ███░░░░░░░░░  39k ✅    Session-Abschluss S127 durchführen
+         SA_3·  █████░░░░░░░  60k ✅    Session-Abschluss S127 durchführen
          SA_4·  ███░░░░░░░░░  36k ✅    S127 DoD-Review durchführen
          SA_5·  ████████░░░░  95k ✅    Plan 038+039 ausführen
          SA_6·  █████░░░░░░░  68k ✅    Doku-Paket S127 umsetzen

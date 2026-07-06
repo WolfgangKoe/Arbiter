@@ -35,10 +35,8 @@ LEDGER: dict[str, set[str]] = {
     #     not a Necron-specific string. Function name, not a faction decision. ---
     "gameMechanic/ability_engine.py": {"protocol"},
     # --- DEBT: Necron / Ork named items + relics + faction defaults ---
-    "gameMechanic/game_state.py": {"necrons"},
     "gameMechanic/movementPhase.py": {"dynasty"},
     "gameMechanic/psychicPhase.py": {"gloom", "prism"},
-    "gameObjects/loader.py": {"necrons"},
     # 'protocols' here is the Necron 'reanimationProtocols' rule key (reanimation debt).
     "uiLayout/_common.py": {"protocols", "reanimation"},
 }

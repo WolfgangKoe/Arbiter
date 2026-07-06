@@ -94,14 +94,15 @@ def _render_faction_actions(
         st.caption("Open Play — no Battle-forged CP grant.")
         return
     st.markdown(f"**+1 CP for {faction}**")
-    already_granted = st.session_state.get("cp_granted_this_phase", False)
+    grant_key = (state["round"], faction)
+    already_granted = grant_key in st.session_state.cp_grants
     if already_granted:
         st.caption("Already granted this phase.")
     else:
         if st.button("Grant +1 CP", key="cmd_cp", type="primary", use_container_width=True):
             adjust_cp(faction, 1)
             log_action(state["round"], "command", faction, "+1 CP received")
-            st.session_state.cp_granted_this_phase = True
+            st.session_state.cp_grants.add(grant_key)
             st.rerun()
 
 

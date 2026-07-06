@@ -2803,11 +2803,11 @@
   "67da766e-1d54-4de5-848f-81caa7ad3583": {
     "started_at": "2026-07-05T17:41:55.240Z",
     "task": "Du hast die Freigabe für den Plan. Sobald die Subagenten dafür laufen, beauftrage einen weiteren, der prüft, was mit /h…",
-    "peak_context": 91683,
-    "subagent_share": 85.29791380883593,
+    "peak_context": 93514,
+    "subagent_share": 85.4688315430386,
     "by_tier": {
       "Haiku": 441442,
-      "Sonnet": 15497202,
+      "Sonnet": 16881677,
       "Opus": 743553,
       "Fable": 3141863
     },
@@ -2830,7 +2830,7 @@
         "agent_type": "general-purpose",
         "description": "Session-Abschluss S127 durchführen",
         "tier": "Sonnet",
-        "peak_context": 38817,
+        "peak_context": 59528,
         "started_at": "2026-07-05T17:41:55.240Z"
       },
       {
@@ -2860,6 +2860,39 @@
         "tier": "Sonnet",
         "peak_context": 53399,
         "started_at": "2026-07-05T17:41:55.240Z"
+      }
+    ]
+  },
+  "89a05bf1-06ea-4a3e-bab6-3d1246ebd640": {
+    "started_at": "2026-07-06T15:59:42.992Z",
+    "task": "start session",
+    "peak_context": 74069,
+    "subagent_share": 92.65807449545551,
+    "by_tier": {
+      "Sonnet": 25845394,
+      "Fable": 7817833
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S128 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 160176,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: INV-4-Ledger-Abbau",
+        "tier": "Sonnet",
+        "peak_context": 113946,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Plan 018 Task 18.1",
+        "tier": "Sonnet",
+        "peak_context": 119344,
+        "started_at": "2026-07-06T15:59:42.992Z"
       }
     ]
   }

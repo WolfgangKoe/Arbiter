@@ -30,7 +30,7 @@ run every verification command, and update your row below when done.
 
 | Plan | Titel | Priorität | Effort | Depends on | Status |
 |------|-------|-----------|--------|------------|--------|
-| 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO |
+| 018 | Kleinkram-Sammelplan: CP-Doppelvergabe, Battle-Log-Reset, Gretchin Cowardly, Modifier-Konsolidierung | P3 (NIEDRIG) | M | — | TODO — 18.1 (CP-Doppelvergabe) erledigt S128; 18.2-18.4 offen |
 | [015](015-contextual-reactive-stratagems.md) | Reaktive Stratagems kontextuell: Overwatch, Counter-Offensive, HI-Erweiterung, once_per_battle | P2 (MITTEL) | L | 013 (empfohlen) | TODO — Step 1 (once_per_battle enforced) bereits durch Ziel7 Stufe A abgedeckt (T2b `4330bdc`, P19 `1f9d82b`, P21 `dde16f3`, S121 `396fdec`; Session-Key heißt `used_stratagem_battle_ids`); Steps 2–4 offen, Mockup-Gate vor Step 2 (S122-Drift-Befund). |
 | [026](026-eternal-guardian-d2-hold-steady-set-to-defend.md) | Eternal Guardian D2: Hold Steady (Overwatch 5+) + Set to Defend (+1 Hit nächste Fight Phase) | P2 (MITTEL) | M | 025 ✅ (D2-YAML-Übergang), **015 (ZWINGEND — Overwatch-Infrastruktur)** | TODO — abhängig von Plan 015 Step 2; Hold Steady senkt Overwatch-Schwelle 6→5+; Set to Defend fügt persistenten +1-Hit-Modifier bis Ende nächste Fight Phase hinzu; Defender-Choice-Box in `_inactive_charge`. |
 | 017 | SAVE-Block: Fähigkeit + AP als kombinierte Badge (Datenarchitektur) | P3 (MITTEL) | S–M | 014 (gleiche Datei) | TODO |

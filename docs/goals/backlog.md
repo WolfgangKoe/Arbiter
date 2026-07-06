@@ -93,7 +93,12 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   ohne diesen Backlog-Punkt zu schließen).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
-  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): 2 verbleibende Debt-Einträge (hardcodierte `"necrons"`-Defaults) → 🔲 **INV-4-Allowlist auf 0** (terminiert, Größe S, Ziel: S128): die 2 verbleibenden `necron`-Defaults in `game_state.py`/`loader.py` durch Ableitung aus den gewählten Armeen/Rostern ersetzen.
+  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): ✅ **erledigt S128** — die 2
+    DEBT-Einträge (hardcodierte `"necrons"`-Defaults) sind aufgelöst: `init_state()`s
+    `roster_p1`/`roster_p2` sind Pflichtparameter, `loader.py`s `faction_dir`-Default entfernt
+    (klarer `ValueError` statt stillem Necron-Fallback). Allowlist 5 → 3 Einträge (nur noch
+    LEGIT-Rest `rosz_importer.py`, nicht 0 — der bleibt dauerhaft). Details:
+    [architecture_invariants.md](../spec/architecture_invariants.md) INV-4.
   - _(Cluster 3 ✅ Plan 020, Cluster 4/5 ✅ XS-Fix, Cluster 6 ✅ Plan 021/024 — erledigt, aus Backlog entfernt)_
 
 ---
@@ -120,7 +125,9 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🟡 SAVE-Block: Fähigkeit + AP als eine Badge (`Enslaved AP-1`) — YAML-Erweiterung (→ Plan 017)
 - 🟢 Gretchin Cowardly: −1 Attrition ohne RUNTHERD in 6" (→ Plan 018)
 - 🟢 Battle-Log: nach Reset keine alten Einträge (→ Plan 018)
-- 🟢 CP-Doppelvergabe-Fix + `collect_modifiers_for_phase()` (→ Plan 018)
+- ✅ **CP-Doppelvergabe-Fix — ERLEDIGT (Plan 018 Task 18.1, S128):** `cp_grants`-Set aus
+  `(round, faction)`-Paaren ersetzt `cp_granted_this_phase`-Flag; übersteht ←/→-Phasennavigation.
+- 🟢 `collect_modifiers_for_phase()` (→ Plan 018 Task 18.4, noch offen)
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente

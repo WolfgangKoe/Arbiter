@@ -132,7 +132,6 @@ def _make_session(extra: dict | None = None) -> _S:
         active_modifiers=[],
         morgog_cap_rolled_this_phase=True,
         pending_triggered_relic={"uid": "some.unit", "faction": "Orks"},
-        cp_granted_this_phase=True,
         used_stratagem_ids={},
         fight_current_player=None,
         attack_declaration={"active": False, "entries": []},

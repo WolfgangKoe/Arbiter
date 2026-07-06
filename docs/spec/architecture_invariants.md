@@ -19,7 +19,7 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 | INV-1 | `gameObjects/` importiert kein Streamlit (reine Datenebene) | `test_gameobjects_streamlit_free.py` | ✅ 0 Verstöße |
 | INV-2 | YAML wird nur über den Loader gelesen (single entry point) | `test_yaml_only_in_loader.py` | ✅ (2 Ausnahmen, begründet) |
 | INV-3 | `gameObjects/` hängt nicht von `gameMechanic`/`uiLayout` ab | `test_layer_imports.py` | ✅ 0 Verstöße |
-| INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = aktuelle Schuld) |
+| INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = nur noch LEGIT-Rest, DEBT S128 aufgelöst) |
 | INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = aktuelle Schuld) |
 | INV-5 | Doku-Gesundheit: Spec ↔ Tests ↔ Stand laufen nicht auseinander | `tests/docs/`, `tests/acceptance/` | ✅ |
 | INV-6 | Reine HTML/SVG-Komposition liegt in `dice_compose.py` — Streamlit-frei und Coverage-gemessen | `test_render_composition_seam.py` | ✅ 0 Verstöße |
@@ -35,6 +35,7 @@ Live nach jedem `pytest`-Lauf im **Schulden-Scoreboard** (`tests/conftest.py`). 
 | 2026-06-16 | 20 | 10 | 5 |
 | 2026-06-20 | 19 | 5 | 5 |
 | 2026-07-05 | 11 | 5 | 5 |
+| 2026-07-06 | 11 | 3 | 5 |
 
 Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
 
@@ -59,15 +60,27 @@ Zwei Klassen:
 **LEGIT (dauerhaft):**
 - `gameObjects/rosz_importer.py` — mappt externe BattleScribe-Fraktionslabels auf interne Slugs (I/O-Normalisierung an der Import-Grenze, keine Spiellogik).
 
-**DEBT (Cleanup-Aufgaben → [backlog.md](../goals/backlog.md)):**
-- `gameMechanic/game_state.py` — hartcodierte Default-Roster (`necrons_alpha.yaml`/`necrons_beta.yaml`).
-- `gameObjects/loader.py` — `faction_dir`-Default `"necrons"`.
+**DEBT:** keine offenen Einträge mehr — beide verbliebenen DEBT-Zeilen sind S128 aufgelöst
+(siehe unten). Allowlist ist jetzt reiner LEGIT-Rest (3 Tokens, 1 Datei).
 
   _Erledigt 2026-06-20:_ `gameHeader.py`/`gameProtocoll.py` Default-Spielerlabels
   (`"Necrons"`/`"Orks"` → `"Player 1/2"`) und `setupScreen.py` Caption (fraktions-neutral) —
   aus Allowlist entfernt (10 → 5 Einträge).
 
-Ziel: DEBT-Einträge nach und nach auflösen (Default aus den gewählten Armeen ableiten) und aus der Allowlist entfernen.
+  _Erledigt 2026-07-06 (S128):_ `gameMechanic/game_state.py` — hartcodierte Default-Roster
+  (`necrons_alpha.yaml`/`necrons_beta.yaml`) entfernt: `init_state()`s `roster_p1`/`roster_p2`
+  sind jetzt Pflichtparameter (einziger Prod-Aufrufer `setupScreen.py` übergab ohnehin immer
+  explizite Werte). `_load_roster_for`s `fallback_faction` kommt jetzt faktions-neutral (`""`)
+  vom Aufrufer und wirft einen klaren `ValueError`, falls weder Roster noch Fallback einen
+  `faction_dir` liefern — statt still Necrons zu laden.
+  `gameObjects/loader.py` — `faction_dir`-Default `"necrons"` in `load_roster_metadata()` und
+  `load_roster()` entfernt: fehlt `faction_dir` in der Roster-YAML, liefert
+  `load_roster_metadata()` `None` (generisch, kein Fraktions-Rateversuch) und `load_roster()`
+  wirft einen `ValueError` (jede der 7 Roster-YAMLs im Repo deklariert `faction_dir` bereits
+  explizit — der Pfad war totes Gewicht). Allowlist 5 → 3 Einträge (nur noch der LEGIT-Rest
+  `rosz_importer.py`).
+
+Ziel erreicht: Allowlist enthält nur noch den dauerhaften LEGIT-Eintrag.
 
 ---
 

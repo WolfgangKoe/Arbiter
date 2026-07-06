@@ -319,10 +319,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-CMD-02
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: ja — test_next_phase_does_not_award_cp_on_player_switch
+- **getestet**: ja — test_next_phase_does_not_award_cp_on_player_switch / test_second_render_same_round_does_not_reaward / test_back_and_forward_navigation_does_not_regrant / test_new_round_allows_new_grant / test_second_player_has_independent_grant
 - **quelle**: core_rules.txt — "at the start of your Command phase, before doing anything else, you gain 1 Command point"
 - **code**: commandPhase.py:_render_faction_actions
-- **regel**: Zu Beginn der Command Phase erhält die aktive Spielerseite 1 CP — manuell per Button bestätigt und über das Flag `cp_granted_this_phase` auf einmal pro Phase gesperrt; `next_phase` selbst vergibt kein CP.
+- **regel**: Zu Beginn der Command Phase erhält die aktive Spielerseite 1 CP — manuell per Button bestätigt und über `cp_grants` (Set aus `(round, faction)`-Paaren, übersteht Phasen-Reset/←→-Navigation) auf genau einmal pro Runde gesperrt; `next_phase` selbst vergibt kein CP. Ersetzt seit Plan 018 Task 18.1 das alte globale `cp_granted_this_phase`-Flag, das bei Rück-Navigation in die Command Phase eine Doppelvergabe erlaubte.
 
 ### R-CMD-03
 - **klasse**: A

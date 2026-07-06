@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
+
 _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -143,8 +145,15 @@ def test_next_phase_does_not_award_cp_on_player_switch() -> None:
 def test_init_state_sets_round_to_one() -> None:
     """R-ROUND-06: a fresh game starts on battle round 1."""
     session = _make_session()
-    init_state()
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
     assert session["round"] == 1
+
+
+def test_init_state_sets_empty_cp_grants() -> None:
+    """Task 18.1: cp_grants starts empty — no (round, faction) pair pre-granted."""
+    session = _make_session()
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
+    assert session["cp_grants"] == set()
 
 
 def test_round_choice_directive_persists_across_mid_round_turn_switch() -> None:
@@ -600,6 +609,22 @@ class TestLoadRosterFor:
         assert subfaction == "szarekhan"
         assert proto is None or isinstance(proto, list)
 
+    def test_roster_without_faction_dir_and_no_fallback_raises(self, tmp_path, monkeypatch) -> None:
+        """A roster that omits faction_dir must fail loudly, not silently load Necrons.
+
+        Regression for INV-4 cleanup (S128): the "necrons" fallback default was removed
+        from game_state.py/loader.py — callers that hit a roster with no faction_dir and
+        no explicit fallback must get a clear error instead of a wrong faction.
+        """
+        import gameMechanic.game_state as gs_mod
+
+        roster = tmp_path / "no_faction_dir.yaml"
+        roster.write_text("display_name: Broken\nunits: []\n")
+        monkeypatch.setattr(gs_mod, "_ROSTER_DIR", tmp_path)
+
+        with pytest.raises(ValueError, match="faction_dir"):
+            gs_mod._load_roster_for("no_faction_dir.yaml", "")
+
 
 # ---------------------------------------------------------------------------
 # swap_players — exchanges all p1/p2 session state (lines 332-338)
@@ -701,7 +726,7 @@ def _reset_phase_session(**extra) -> _S:
     s = _make_session(
         phase_idx=1,
         round=1,
-        cp_granted_this_phase=True,
+        cp_grants={(1, "Necrons")},
         morgog_cap_rolled_this_phase=True,
         pending_triggered_relic="something",
         veil_awaiting_confirm=True,
@@ -728,10 +753,16 @@ def _reset_phase_session(**extra) -> _S:
 
 
 class TestResetPhaseState:
-    def test_clears_cp_granted_flag(self) -> None:
+    def test_does_not_reset_cp_grants(self) -> None:
+        """Task 18.1 regression: cp_grants must survive phase resets (←/→ navigation).
+
+        Previously cp_granted_this_phase was cleared on every phase change, which let
+        a player re-grant CP by navigating back into the Command phase. cp_grants is
+        keyed per (round, faction) and only cleared by reset_game() (full state wipe).
+        """
         s = _reset_phase_session()
         _gs._reset_phase_state()
-        assert s["cp_granted_this_phase"] is False
+        assert s["cp_grants"] == {(1, "Necrons")}
 
     def test_clears_morgog_cap_flag(self) -> None:
         s = _reset_phase_session()
@@ -954,7 +985,12 @@ class TestCpByGameSize:
     def test_init_state_incursion_sets_cp_6_for_both_players(self) -> None:
         """init_state() applies CP_BY_GAME_SIZE via game_mode='matched'."""
         s = _make_session()
-        init_state(game_size="Incursion", game_mode="matched")
+        init_state(
+            roster_p1="necrons_alpha.yaml",
+            roster_p2="necrons_beta.yaml",
+            game_size="Incursion",
+            game_mode="matched",
+        )
         cp_values = list(s["cp"].values())
         assert all(v == 6 for v in cp_values), f"Expected 6 CP each, got {cp_values}"
 
@@ -999,14 +1035,24 @@ class TestVictoryPointMutations:
 
     def test_init_state_strike_force_sets_cp_12_for_both_players(self) -> None:
         s = _make_session()
-        init_state(game_size="Strike Force", game_mode="matched")
+        init_state(
+            roster_p1="necrons_alpha.yaml",
+            roster_p2="necrons_beta.yaml",
+            game_size="Strike Force",
+            game_mode="matched",
+        )
         cp_values = list(s["cp"].values())
         assert all(v == 12 for v in cp_values), f"Expected 12 CP each, got {cp_values}"
 
     def test_init_state_non_matched_game_mode_defaults_to_3_cp(self) -> None:
         # Unmatched / open play ignores game_size → falls back to 3 CP
         s = _make_session()
-        init_state(game_size="Strike Force", game_mode="open")
+        init_state(
+            roster_p1="necrons_alpha.yaml",
+            roster_p2="necrons_beta.yaml",
+            game_size="Strike Force",
+            game_mode="open",
+        )
         cp_values = list(s["cp"].values())
         assert all(v == 3 for v in cp_values), f"Expected fallback 3 CP each, got {cp_values}"
 
@@ -1316,9 +1362,19 @@ def test_init_state_does_not_reinitialize_when_already_initialized() -> None:
     must remain unchanged after the second call.
     """
     s = _make_session()
-    init_state(game_size="Incursion", game_mode="matched")
+    init_state(
+        roster_p1="necrons_alpha.yaml",
+        roster_p2="necrons_beta.yaml",
+        game_size="Incursion",
+        game_mode="matched",
+    )
     s["round"] = 5  # simulate game progress
-    init_state(game_size="Incursion", game_mode="matched")  # second call → early return
+    init_state(
+        roster_p1="necrons_alpha.yaml",
+        roster_p2="necrons_beta.yaml",
+        game_size="Incursion",
+        game_mode="matched",
+    )  # second call → early return
     assert s["round"] == 5  # must not have been reset to 1
 
 

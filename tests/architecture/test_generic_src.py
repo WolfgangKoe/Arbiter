@@ -40,8 +40,11 @@ ALLOWLIST: dict[str, set[str]] = {
     "gameObjects/rosz_importer.py": {"necron", "ork", "custodes"},
     # DEBT — hardcoded default rosters / default faction. Should derive from the
     # selected armies instead. Tracked: docs/goals/backlog.md (generic-src).
-    "gameMechanic/game_state.py": {"necron"},
-    "gameObjects/loader.py": {"necron"},
+    #
+    # Resolved S128: game_state.py's default rosters and loader.py's faction_dir
+    # default both derived their "necrons" fallback from a hardcoded literal.
+    # Both now require faction_dir to come from the roster (or an explicit,
+    # faction-neutral caller-supplied fallback) — no more entries here.
 }
 
 
