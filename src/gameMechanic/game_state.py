@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import NamedTuple
+from typing import Any, NamedTuple, cast
 
 import streamlit as st
 
@@ -126,7 +126,7 @@ def compute_roster_total_pts(roster_file: str) -> int:
     if not pts_path.exists():
         return 0
     pts_data = load_yaml(pts_path) or {}
-    units_pts: dict[str, dict] = pts_data.get("units") or {}
+    units_pts: dict[str, dict[str, Any]] = pts_data.get("units") or {}
     roster_data = load_yaml(roster_path) or {}
     total = 0
     for entry in roster_data.get("units", []):
@@ -155,8 +155,8 @@ def units_key_for(player: str) -> str:
 def faction_dir_for(player: str) -> str:
     """Return the data-directory name for a player's faction."""
     if player == st.session_state.get("first_player"):
-        return st.session_state["p1_faction_dir"]
-    return st.session_state["p2_faction_dir"]
+        return cast(str, st.session_state["p1_faction_dir"])
+    return cast(str, st.session_state["p2_faction_dir"])
 
 
 def round_choice_state_key(player: str, kind: str) -> str:
@@ -279,8 +279,8 @@ def active_round_choice_buff_labels(player: str) -> list[str]:
 def units_list_for(player: str) -> list[Unit]:
     """Return the Unit-definition list for a player (for stats / name lookups)."""
     if player == st.session_state.get("first_player"):
-        return st.session_state.get("p1_units_list", [])
-    return st.session_state.get("p2_units_list", [])
+        return cast(list[Unit], st.session_state.get("p1_units_list", []))
+    return cast(list[Unit], st.session_state.get("p2_units_list", []))
 
 
 def unit_keys_for(player: str) -> list[str]:
@@ -290,8 +290,8 @@ def unit_keys_for(player: str) -> list[str]:
     is appended (e.g. 'wh40k_9e.necrons.unit.warriors#1' for the second squad).
     """
     if player == st.session_state.get("first_player"):
-        return st.session_state.get("p1_unit_keys", [])
-    return st.session_state.get("p2_unit_keys", [])
+        return cast(list[str], st.session_state.get("p1_unit_keys", []))
+    return cast(list[str], st.session_state.get("p2_unit_keys", []))
 
 
 def unit_id_from_state_key(state_key: str) -> str:
@@ -309,14 +309,14 @@ def unit_id_from_state_key(state_key: str) -> str:
 
 def _make_unit_state_dict(
     matched: list[tuple[Unit, int]],
-) -> tuple[dict, list[str]]:  # type: ignore[type-arg]
+) -> tuple[dict[str, dict[str, Any]], list[str]]:
     """Build the state dict and ordered key list for a matched unit list.
 
     Duplicate unit IDs are disambiguated with a '#N' suffix so each unit
     instance has its own independent state.
     """
     counts: dict[str, int] = {}
-    state_dict: dict[str, dict] = {}  # type: ignore[type-arg]
+    state_dict: dict[str, dict[str, Any]] = {}
     keys: list[str] = []
     for u, m in matched:
         n = counts.get(u.id, 0)
@@ -327,7 +327,7 @@ def _make_unit_state_dict(
     return state_dict, keys
 
 
-def _unit_state(u: Unit, models: int | None = None) -> dict:  # type: ignore[type-arg]
+def _unit_state(u: Unit, models: int | None = None) -> dict[str, Any]:
     count = min(models, u.models_max) if models is not None else u.models_max
     # model_groups counts are already resolved from the roster in load_roster
     group_models: dict[str, int] = {g.id: g.count for g in u.model_groups} if u.model_groups else {}
@@ -388,8 +388,8 @@ def init_state(
     mission: str | None = None,
     attacker: str | None = None,
     use_secondaries: bool = False,
-    secondaries: dict | None = None,  # type: ignore[type-arg]
-    secondary_vp: dict | None = None,  # type: ignore[type-arg]
+    secondaries: dict[str, Any] | None = None,
+    secondary_vp: dict[str, Any] | None = None,
 ) -> None:
     if "initialized" in st.session_state:
         return
@@ -431,20 +431,20 @@ def init_state(
     st.session_state.cp_grants = set()  # set[tuple[int, str]] — (round, faction) pairs
     # Both stratagem-usage trackers are keyed per player slot (like `cp`):
     # phase-scoped and battle-scoped usage never leak across players.
-    st.session_state.used_stratagem_ids: dict[str, set[str]] = {}
-    st.session_state.used_stratagem_battle_ids: dict[str, set[str]] = {}
-    st.session_state.active_modifiers: list[dict] = []
-    st.session_state.command_ability_state: dict = {}
+    st.session_state.used_stratagem_ids = {}  # dict[str, set[str]]
+    st.session_state.used_stratagem_battle_ids = {}  # dict[str, set[str]]
+    st.session_state.active_modifiers = []  # list[dict]
+    st.session_state.command_ability_state = {}
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)
-    st.session_state.pending_target_request: TargetSelectionRequest | None = None
-    st.session_state.revive_wargear_target_uid: dict[str, str] = {}
-    st.session_state.wargear_used: dict[str, bool] = {}
-    st.session_state.mortal_target_uid: str | None = None
-    st.session_state.relic_triggered_used: dict[str, bool] = {}
+    st.session_state.pending_target_request = None  # TargetSelectionRequest | None
+    st.session_state.revive_wargear_target_uid = {}  # dict[str, str]
+    st.session_state.wargear_used = {}  # dict[str, bool]
+    st.session_state.mortal_target_uid = None  # str | None
+    st.session_state.relic_triggered_used = {}  # dict[str, bool]
     st.session_state.morgog_cap_rolled_this_phase = False
-    st.session_state.pending_triggered_relic: dict | None = None
-    st.session_state.veil_awaiting_confirm: bool = False
-    st.session_state.veil_core_target_uid: str | None = None
+    st.session_state.pending_triggered_relic = None  # dict | None
+    st.session_state.veil_awaiting_confirm = False
+    st.session_state.veil_core_target_uid = None  # str | None
 
     # Unit lists for stat/name lookups (indexed by player slot, not faction)
     st.session_state.p1_units_list = [u for u, _ in p1_matched]
@@ -456,7 +456,7 @@ def init_state(
 
     # Optional roster-defined round-choice ability order (round 1..5 → ability id),
     # keyed by player name; the setup UI uses these as defaults (overridable).
-    round_choice_assignments: dict = {}
+    round_choice_assignments: dict[str, dict[int, str]] = {}
     for pname, order in ((p1_name, p1_proto_order), (p2_name, p2_proto_order)):
         if order:
             round_choice_assignments[pname] = {i + 1: pid for i, pid in enumerate(order[:5])}
@@ -486,15 +486,14 @@ def init_state(
     # window opens only when the first Command phase begins, triggered by next_phase).
     for _pname in (p1_name, p2_name):
         st.session_state[round_choice_state_key(_pname, "directive_pending")] = False
-    st.session_state.activated_abilities: dict = (
-        {}
-    )  # {player_name: {"ability_id": str, "round_activated": int}}
+    # {player_name: {"ability_id": str, "round_activated": int}}
+    st.session_state.activated_abilities = {}
     st.session_state.psi_attempts_this_phase = 0
-    st.session_state.fight_current_player: str | None = None
-    st.session_state.attack_declaration: dict = {"active": False, "entries": []}
-    st.session_state.charge_phase_step: int = 1
-    st.session_state.pending_hi: tuple | None = None
-    st.session_state.hi_targets: list = []
+    st.session_state.fight_current_player = None  # str | None
+    st.session_state.attack_declaration = {"active": False, "entries": []}
+    st.session_state.charge_phase_step = 1
+    st.session_state.pending_hi = None  # tuple | None
+    st.session_state.hi_targets = []  # list[str]
     if p1_unmatched or p2_unmatched:
         st.session_state.roster_warnings = {
             p1_name: p1_unmatched,
@@ -541,7 +540,9 @@ def _reset_phase_state() -> None:
     st.session_state.veil_awaiting_confirm = False
     st.session_state.veil_core_target_uid = None
     for k in list(st.session_state.keys()):
-        if k.startswith("applied_triggered_") or k.startswith("group_autosel_done_"):
+        # str(k): SessionStateProxy keys are typed str | int but stringified at
+        # runtime; str() narrows for mypy without changing behavior.
+        if str(k).startswith(("applied_triggered_", "group_autosel_done_")):
             del st.session_state[k]
     # Cleared for BOTH player slots on every phase change (behavior unchanged;
     # structure is per-player since S121 Task 2).

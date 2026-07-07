@@ -49,7 +49,9 @@ Durch aktive Artefakte gedeckt (im Archiv belassen):
 - Fähigkeit + AP kombinierte Badge → Plan 017 (backlog 🟡).
 - Counterattack-GO / Overwatch-GO / Non-CHARACTER-HI → Plan 015.
 - GO-Buttons kontextuell → backlog 🟡. Regelkasten immer oben → backlog 🟡.
-- Gretchin Cowardly → Plan 018 (backlog 🟢).
+- Gretchin Cowardly → Plan 018 (backlog 🟢). ✅ **erledigt S128** (Task 18.3:
+  Effekttyp `attrition_modifier`, `_attrition_threshold`-Helper, Hinweisblock in
+  `moralePhase.py`; Details: `docs/audit/plans/018-low-prio-cleanup.md`).
 
 ---
 

@@ -357,6 +357,47 @@ def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     return {}
 
 
+def get_after_attack_revive_ability(
+    faction: str,
+    unit: Unit,
+    unit_state: dict,  # type: ignore[type-arg]
+) -> Ability | None:
+    """The unit's revive-after-enemy-attack ability, or None (data-driven).
+
+    Generic INV-4b seam: a faction declares a triggered ability with
+    ``effect.type: reanimate`` and ``trigger.event: after_enemy_attack`` in its
+    faction_abilities.yaml (e.g. Necron Reanimation Protocols). Label
+    (``name_en``), dice formula (``effect.amount``) and success threshold
+    (``effect.modifier``) come from that YAML entry — src/ knows only this
+    generic shape. Conditions (rule key, unit not destroyed) are checked
+    against the YAML-declared conditions via ``check_conditions``.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return None
+    for ability in load_faction_abilities(faction_dir):
+        if ability.effect.type != "reanimate":
+            continue
+        if ability.trigger.event != "after_enemy_attack":
+            continue
+        if check_conditions(ability, unit, unit_state):
+            return ability
+    return None
+
+
+def revive_dice_count(amount: str | None, models_lost: int, wounds_per_model: int) -> int:
+    """Dice granted by a revive ability's ``amount`` formula.
+
+    ``"D6_per_wound"`` → one die per wound of the destroyed models (e.g. 9E
+    Reanimation Protocols: models_lost × wounds per model). Any other or
+    missing formula → one die per destroyed model.
+    """
+    if amount == "D6_per_wound":
+        return models_lost * wounds_per_model
+    return models_lost
+
+
 def get_active_heal_bonus(player: str, unit: Unit) -> int:
     """Extra wounds healed from an active directive's ``heal_bonus`` effect.
 

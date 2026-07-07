@@ -10,11 +10,15 @@ import re
 import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
+from typing import Any
 
-import yaml
-from defusedxml.ElementTree import fromstring as _safe_fromstring
+# types-PyYAML / types-defusedxml are not in requirements-dev.txt — no stubs.
+import yaml  # type: ignore[import-untyped]
+from defusedxml.ElementTree import fromstring as _safe_fromstring  # type: ignore[import-untyped]
 
 from gameObjects.loader import load_unit_catalog
+from gameObjects.unit import Unit
+from gameObjects.weapon import Weapon
 
 _BS_NS = "http://www.battlescribe.net/schema/rosterSchema"
 _MAX_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
@@ -38,7 +42,7 @@ def _normalize(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
 
 
-def _build_name_map(catalog: dict) -> dict[str, str]:
+def _build_name_map(catalog: dict[str, Unit]) -> dict[str, str]:
     """Build normalized-display-name and slug → unit-id lookup."""
     mapping: dict[str, str] = {}
     for uid, unit in catalog.items():
@@ -48,7 +52,7 @@ def _build_name_map(catalog: dict) -> dict[str, str]:
     return mapping
 
 
-def _build_weapon_name_map(weapon_catalog: dict) -> dict[str, str]:
+def _build_weapon_name_map(weapon_catalog: dict[str, Weapon]) -> dict[str, str]:
     """Build normalized-display-name and slug → weapon-id lookup."""
     mapping: dict[str, str] = {}
     for wid, weapon in weapon_catalog.items():
@@ -76,7 +80,7 @@ def _match_unit_name(bs_name: str, name_map: dict[str, str], faction_dir: str) -
     return None
 
 
-def _collect_upgrade_names(element: ET.Element, ns: dict) -> list[str]:
+def _collect_upgrade_names(element: ET.Element, ns: dict[str, str]) -> list[str]:
     """Recursively collect all 'upgrade' selection names inside element."""
     names: list[str] = []
     sub_sels = element.find("bs:selections", ns)
@@ -127,7 +131,7 @@ def _extract_units(root: ET.Element) -> list[tuple[str, int, list[str]]]:
     return units
 
 
-def _count_models(unit_sel: ET.Element, ns: dict) -> int:
+def _count_models(unit_sel: ET.Element, ns: dict[str, str]) -> int:
     sub_sels = unit_sel.find("bs:selections", ns)
     if sub_sels is None:
         return 0
@@ -155,7 +159,7 @@ def _sanitize_roster_name(raw: str) -> str:
 
 
 def _validate_and_parse_xml(data: bytes) -> ET.Element:
-    root = _safe_fromstring(data)
+    root: ET.Element = _safe_fromstring(data)
     if _BS_NS not in root.tag:
         raise ValueError(f"Not a BattleScribe roster (unexpected root namespace: {root.tag!r})")
     return root
@@ -223,14 +227,14 @@ def import_roster(
     weapon_name_map = _build_weapon_name_map(weapon_catalog)
     bs_units = _extract_units(root)
 
-    matched: list[dict] = []
+    matched: list[dict[str, Any]] = []
     unmatched: list[str] = []
     for name, count, wargear_names in bs_units:
         uid = _match_unit_name(name, name_map, faction_dir)
         if uid is None:
             unmatched.append(name)
         else:
-            entry: dict = {"id": uid, "models": count}
+            entry: dict[str, Any] = {"id": uid, "models": count}
             matched_wargear = [
                 weapon_name_map[_normalize(wn)]
                 for wn in wargear_names

@@ -72,6 +72,12 @@
     unit and up to one friendly DYNASTY CORE unit within 3" of the bearer from the battlefield and set
     them up anywhere on the battlefield more than 9" from any enemy models. If two units are set up using
     this relic, both units must be set up wholly within 6" of each other.
+  # UI texts for the teleport dialog (movementPhase) — faction flavour lives
+  # here, not in src/ (INV-4b: data-driven).
+  prompt_text: 'Once per battle: remove this unit (and optionally one DYNASTY CORE unit
+    within 3") from the battlefield and set up both more than 9" from any enemy models.
+    Both units count as having moved this turn.'
+  selector_label: 'Optional: select a DYNASTY CORE unit within 3"'
 - id: wh40k_9e.necrons.relic.leerenschnitter
   name_en: Voidreaper
   is_relic: true

@@ -158,6 +158,25 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Fraktionsfähigkeiten. Fix: generischen Aktivator für `activated`-`faction_abilities` (unabhängig von
   `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
   (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
+- 🟢 **Effekt-Feld `modifier` → `success_on` umbenennen (S128-Folge, Paket 1c/Paket 3
+  Parallelsperre):** Die Reanimation-Ability nutzt aktuell das generische `modifier`-Feld
+  für die Erfolgsschwelle (5+); klarer wäre ein benanntes `success_on`-Feld. Betrifft
+  `gameObjects/ability.py` + `gameObjects/loader.py` (beide durch Paket 3 in S128 gesperrt)
+  + `necrons/faction_abilities.yaml` + 2 Asserts in den Ability-Tests. Reine Rename-Arbeit,
+  kein Verhaltenswechsel.
+- 🟢 **`types-PyYAML` + `types-defusedxml` in `requirements-dev.txt` aufnehmen (S128-Folge):**
+  danach die 3 `[import-untyped]`-`# type: ignore`-Kommentare in `gameObjects/` entfernen —
+  im selben Schritt, sonst meldet mypy `unused-ignore` (neuer Fehler gegen die Baseline).
+- 🟢 **`condition_prompt`/`applies_when` als First-Class-Felder in der Effect-Dataclass +
+  Loader (S128-Folge, Plan 018 Task 18.3):** Aktuell reiten beide Felder als Roh-Dict in der
+  `effects`-Subliste mit, weil `Ability`/`Effect` keine eigenen Felder dafür haben (s.
+  Kommentar in `orks/unit_abilities.yaml` beim Gretchin-Cowardly-Eintrag). Sauberere
+  Modellierung, sobald ein zweiter Konsument auftaucht.
+- 🟢 **Daten-Altlast `gretchin_mob` (S128-Fund, `orks/unit_abilities.yaml`):** `rule_text`
+  klingt nach einer 8E-Formulierung („must take a Morale test if it suffers any
+  casualties") — gegen `docs/work/wahapedia_orks/` prüfen, ob die 9E-Bedingung abweicht
+  (9E: Morale Test nur bei Verlusten UND unter Half-strength, sonst optional?), ggf.
+  korrigieren.
 - 🔲 **Custodes Rendax Ka'tah Secondary — toter `strength_modifier`-Pfad (Plan 025 Step 6):** In
   `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml`, Protokoll `type: rendax_kath` (oder
   ähnlich), `secondary`-Effekt `type: strength_modifier` mit Zielwert `+1 S nach Charge` — der
@@ -249,22 +268,34 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 - **Generic-src (INV-4 DEBT):** hartcodierte Fraktions-Defaults aus `src/` entfernen —
   Default-Roster in `game_state.py`, `faction_dir`-Default in `loader.py`, Spielerlabels
   in `gameHeader.py`/`gameProtocoll.py`, Caption in `setupScreen.py`. Ziel: Allowlist leeren.
-- **Generic-src Vokabular (INV-4b DEBT, S51; `protocol` erledigt S52):** datengetriebenes
-  Gate (`test_generic_src_vocab.py`) listet Fraktions-Eigennamen in `src/`. ✅ **S52:**
-  `protocol`/`protocols` faktion-neutral als `round_choice` umbenannt (Klasse
-  `RoundChoiceAbility`, Session-Keys `round_choice_*`, Datei `round_choice_ability.py`),
-  Ledger-Einträge entfernt; Reste LEGIT (`typing.Protocol` in `phase_handler`) bzw. zur
-  `reanimation`-Schuld (`reanimationProtocols`). ✅ **2026-06-20:** Quick-Wins (Spielerlabels
-  `gameHeader`/`gameProtocoll`, Caption `setupScreen`) → generisch; Renames
-  `pending_irongob` → `pending_triggered_relic`, `res_orb_*` → `revive_wargear_*`
-  (`irongob` komplett raus; INV-4 Allowlist 10→5, INV-4b 20→19 Tokens). Verbleibend:
-  benannte Items (`orb`, `overlord`, `phaeron`, `gloom`, `prism`, `dakka`, `klaw`, `tesla`,
-  `reanimation`, `arkana`, `dynasty`) aus Phasen-/Render-Modulen in YAML/Daten ziehen
-  (Schema-Urteil → Konsens). Ziel: Ledger schrumpfen (Ratchet).
-- 🔲 **mypy-Bestand modulweise abbauen** (Baseline 134, Stand 2026-07-05; Folgearbeit zu
-  Plan 038): Reihenfolge `gameMechanic/` und `gameObjects/` zuerst, `uiLayout/` zuletzt; pro
-  Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel, s.
-  [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
+- ✅ **Generic-src Vokabular (INV-4b DEBT, S51; `protocol` erledigt S52) — DEBT komplett
+  aufgelöst (S128 Teil 2, Paket 1):** datengetriebenes Gate (`test_generic_src_vocab.py`)
+  listet Fraktions-Eigennamen in `src/`. ✅ **S52:** `protocol`/`protocols` faktion-neutral
+  als `round_choice` umbenannt (Klasse `RoundChoiceAbility`, Session-Keys `round_choice_*`,
+  Datei `round_choice_ability.py`), Ledger-Einträge entfernt; Reste LEGIT (`typing.Protocol`
+  in `phase_handler`) bzw. zur `reanimation`-Schuld (`reanimationProtocols`). ✅
+  **2026-06-20:** Quick-Wins (Spielerlabels `gameHeader`/`gameProtocoll`, Caption
+  `setupScreen`) → generisch; Renames `pending_irongob` → `pending_triggered_relic`,
+  `res_orb_*` → `revive_wargear_*` (`irongob` komplett raus; INV-4 Allowlist 10→5, INV-4b
+  20→19 Tokens). ✅ **S128 Teil 2:** die drei verbliebenen DEBT-Cluster aufgelöst —
+  **a)** `dynasty` (`movementPhase.py`): Teleport-Relic-Texte nach `necrons/relics.yaml`
+  verlagert (`prompt_text`/`selector_label`); **b)** `gloom`/`prism` (`psychicPhase.py`):
+  Deny-Caption fraktions-neutral formuliert; **c)** `protocols`/`reanimation`
+  (`uiLayout/_common.py`): `reanimationProtocols`-Key-Abfrage durch den generischen
+  Effekttyp `reanimate` ersetzt (Option B, Konsens-Entscheid
+  `docs/handoff/decision_revive_key_s128.md`, seit S128 gelöscht) — Label + Schwelle
+  (`success_on`) kommen jetzt aus der Necron-YAML, `src/` kennt nur noch den generischen
+  Effekttyp. Ledger jetzt **nur noch LEGIT** (6 Tokens, 3 Dateien: `rosz_importer.py` +
+  `protocol`-Kollision in `phase_handler.py`/`ability_engine.py`). Die früher hier
+  gelisteten Items `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren bereits
+  vor S128 aus `src/` entfernt — dieser Eintrag war insofern Doku-Drift, jetzt korrigiert.
+  Details: [architecture_invariants.md](../spec/architecture_invariants.md) INV-4b.
+- 🟡 **mypy-Bestand modulweise abbauen** (Baseline jetzt 82, Stand 2026-07-06 S128 Teil 2;
+  Folgearbeit zu Plan 038): `gameMechanic/game_state.py` (−34, Paket 2) und `gameObjects/`
+  komplett (−18, Paket 3) sind erledigt. Verbleibend: Rest von `gameMechanic/` (übrige
+  Dateien außer `game_state.py`), dann `uiLayout/` zuletzt (manuelle Render-Verifikation
+  nötig). Pro Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
+  s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
   nicht als Wächter erzwungen.

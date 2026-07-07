@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-06 21:08 CEST
+Stand: 2026-07-06 22:32 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-06 17:59 89a0  ██████░░░░░░  74k ✅    ██████  93%    ▚▚▚·········
+07-06 17:59 89a0  ██████████░░ 130k ⚠️   █████░  91%    ▚▚▚▚▚·······
          SA_1·  ████████████ 160k ⛔    Planning-Entwurf S128 erstellen
-         SA_2·  █████████░░░ 114k ✅    Executor: INV-4-Ledger-Abbau
-         SA_3·  ██████████░░ 119k ✅    Executor: Plan 018 Task 18.1
+         SA_2·  █████████░░░ 112k ✅    Paket 4: Task 18.3 Gretchin
+         SA_3·  ████░░░░░░░░  46k ✅    Abschluss S128: next_session + Rep…
+         SA_4·  ████████████ 163k ⛔    Konsolidierung + finale Messung S1…
+         SA_5·  ███████░░░░░  91k ✅    Paket 3: mypy gameObjects/
+         SA_6·  █████████░░░ 114k ✅    Executor: INV-4-Ledger-Abbau
+         SA_7·  ████████████ 161k ⛔    Paket 1: INV-4b-Abbau + Option B
+         SA_8·  ██████████░░ 119k ✅    Executor: Plan 018 Task 18.1
+         SA_9·  ███████░░░░░  84k ✅    Paket 2: mypy game_state.py
+         SA_10·  █████░░░░░░░  67k ✅    Review S128 (DoD, GO/NO-GO)
 ----------------- ---------------------- -------------- ------------
 07-05 19:41 67da  ███████░░░░░  94k ✅    █████░  85%    ▚▚··········
          SA_1·  ██░░░░░░░░░░  26k ✅    r-proto-02 Löschbarkeit prüfen
@@ -459,3 +466,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S125 (2026-07-05)** Pläne 033-037 umgesetzt: 4 P1-Bugs (Phasen-Modifier-Expiry, State-Key-Lookups Duplikat-Trupps, active_buffs-Zugwechsel, rosz-Import-Härtung XSS/Zip-Bomb) + P2 Deps-Pinning/pip-audit/Docker-nonroot; auf feature/016 konsolidiert, Pläne archiviert
 - **S126 (2026-07-05)** Plan 040 + Mitfix: tote Stage-Maschine entfernt, Stratagem-stage-Hart-Filter raus (start/end-Stratagems waren dauerhaft hidden); UI-Verifikationen 034/036/040 durch Stakeholder bestätigt; Spec-Drift (architecture/processes/ui_layout) nachgezogen
 - **S127 (2026-07-05)** Plans 038+039 done (mypy ratchet gate baseline 134, README/DX, CI 3x faster), r-proto-02 handoff closed, debt scoreboard refreshed, ledger reduction roadmap adopted
+- **S128 (2026-07-06)** Parallel-Session: INV-4 5→3, INV-4b nur LEGIT, mypy 134→82, Plan 018.1+018.3, RP-Block YAML-getrieben

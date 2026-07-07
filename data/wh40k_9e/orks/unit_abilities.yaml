@@ -274,6 +274,32 @@ abilities:
       type: special_morale
       target: self
 
+  - id: wh40k_9e.orks.unit.gretchin.cowardly
+    name_en: Cowardly
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.gretchin
+    rule_text: "Unless a friendly <CLAN> RUNTHERD model is within 6\" of this unit, each time a model in this unit makes a Combat Attrition test, subtract 1 from the result."
+    trigger:
+      timing: persistent
+      phase: morale
+      stage: active
+      player: either
+    conditions:
+      - has_keywords: [GRETCHIN]
+    effect:
+      type: attrition_modifier
+      modifier: -1
+      target: self
+      # condition_prompt/applies_when ride in the raw sub-effect list because the
+      # Ability/Effect dataclasses have no first-class fields for them yet
+      # (schema follow-up noted in Plan 018 / faction_abilities.md). Semantics:
+      # applies_when: false = the modifier is active while the prompted table
+      # condition is NOT ticked (Cowardly: no RUNTHERD nearby).
+      effects:
+        - condition_prompt: "Friendly RUNTHERD within 6\"?"
+          applies_when: false
+
   # ── Elites — Kommandos ────────────────────────────────────────────────────
 
   - id: wh40k_9e.orks.unit.kommandos.sneaky_gitz

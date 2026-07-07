@@ -744,6 +744,14 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **code**: —
 - **regel**: Durch den Unit Coherency Check entfernte Modelle gelten als zerstört, lösen aber keine „bei Zerstörung"-Effekte aus und verursachen keinen weiteren Morale Test für ihre Einheit. Noch nicht umgesetzt (hängt an R-MORALE-12).
 
+### R-MORALE-14
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_full_strength_no_modifier_flees_on_1 / test_below_half_strength_raises_threshold / test_minus_one_modifier_raises_threshold / test_cowardly_ability_loaded_with_attrition_modifier
+- **quelle**: core_rules.txt — "Combat Attrition Tests … roll one D6 for each remaining model in that unit … for each result of 1, one model … flees." / rules_appendix.txt — "Subtract 1 from Combat Attrition tests if unit is below Half-strength." / `orks/unit_abilities.yaml` (Cowardly Grots) — "subtract 1 from the result" ohne RUNTHERD in 6"
+- **code**: moralePhase.py:_attrition_threshold
+- **regel**: Nach fehlgeschlagenem Morale Test zeigt die App den Combat-Attrition-Schwellwert (ab welchem W6-Ergebnis ein weiteres Modell flieht): Basis 1, +1 wenn die Einheit unter Half-strength ist, +1 je aktivem `attrition_modifier`-Ability (z. B. Gretchin Cowardly ohne RUNTHERD in 6" — Nutzer-Checkbox, Tisch-Bedingung). Die W6-Würfe selbst bleiben Tisch-Verantwortung — die App würfelt nicht (Hybrid App-Anzeige + Tisch-Wurf, Klasse C). R-MORALE-06/07 bleiben `offen`, da das eigentliche Würfeln weiterhin manuell erfolgt.
+
 ---
 
 ## Bereich: Psychic Phase

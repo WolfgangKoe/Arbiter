@@ -202,3 +202,18 @@ def test_reanimation_protocols_is_triggered() -> None:
     abilities = load_faction_abilities("necrons")
     rp = next(a for a in abilities if a.id == "wh40k_9e.necrons.faction.reanimation_protocols")
     assert rp.ability_type == "triggered"
+
+
+def test_reanimation_protocols_yaml_declares_ui_config() -> None:
+    """Option B (S128): das YAML liefert Gate-Event, Label, Würfelformel und
+    5+-Schwelle für den RP-Block — src/ kennt nur die generische Effekt-Form.
+    Tippfehler hier würden das RP-Gate still brechen (Regressionsschutz)."""
+    abilities = load_faction_abilities("necrons")
+    rp = next(a for a in abilities if a.effect.type == "reanimate")
+    assert rp.id == "wh40k_9e.necrons.faction.reanimation_protocols"
+    assert rp.name_en == "Reanimation Protocols"
+    assert rp.trigger.event == "after_enemy_attack"
+    assert rp.conditions and rp.conditions[0].has_rules == ["reanimationProtocols"]
+    assert rp.conditions[0].unit_not_destroyed is True
+    assert rp.effect.amount == "D6_per_wound"
+    assert rp.effect.modifier == 5  # success threshold (5+)

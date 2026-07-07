@@ -206,7 +206,13 @@ dazu; die Sammelstellen sollen EINMAL existieren.
   `test_init_state_sets_empty_cp_grants`); Vollsuite 1465 passed, Coverage
   99.11 %, Architektur-Gate 8 passed.)
 - [ ] 18.2: Reset-Log-Verhalten verifiziert/gefixt + Regressionstest
-- [ ] 18.3: Attrition-Hinweis datengetrieben; Threshold-Helper getestet
+- [x] 18.3: Attrition-Hinweis datengetrieben; Threshold-Helper getestet
+  (S128: Effekttyp `attrition_modifier` + `condition_prompt`/`applies_when` in der rohen
+  `effects`-Subliste (Ability/Effect-Dataclass hat noch keine First-Class-Felder dafür —
+  Backlog-Folge-Task); `orks/unit_abilities.yaml` Gretchin-Cowardly-Eintrag; reiner Helfer
+  `_attrition_threshold()` in `moralePhase.py` (Basis 1, +1 Halbstärke, +1 je aktivem
+  Modifier); Hinweisblock im Failed-Morale-Zweig. Tests: `TestAttritionThreshold`,
+  `TestCowardlyYamlEntry` (`tests/gameMechanic/test_morale_phase.py`).)
 - [ ] 18.4: Collector in der Engine, direkt getestet
 - [ ] `pytest --tb=short` grün, ≥80 %; Lint passt
 - [ ] archive/ziel6.md: zugehörige Checkboxen (6g-Rest, 6e-CP, Gretchin) abgehakt

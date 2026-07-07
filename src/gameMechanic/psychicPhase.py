@@ -396,7 +396,7 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
 
     # Undecided (denied is None): gate by the once-per-phase budget (R-PSYCHIC-16).
     if faction_deny_used(denies_used, faction):
-        st.caption("Deny already used this phase (Deny 1 / Gloom Prism: once per phase).")
+        st.caption("Deny already used this phase (one deny attempt per phase per source).")
         return
     if not can_attempt_deny(psi, faction, denies_used):
         return

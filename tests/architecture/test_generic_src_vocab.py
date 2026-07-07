@@ -34,11 +34,6 @@ LEDGER: dict[str, set[str]] = {
     #     'protocol' here is the round_choice concept (Command Protocols, Ka'tah, …),
     #     not a Necron-specific string. Function name, not a faction decision. ---
     "gameMechanic/ability_engine.py": {"protocol"},
-    # --- DEBT: Necron / Ork named items + relics + faction defaults ---
-    "gameMechanic/movementPhase.py": {"dynasty"},
-    "gameMechanic/psychicPhase.py": {"gloom", "prism"},
-    # 'protocols' here is the Necron 'reanimationProtocols' rule key (reanimation debt).
-    "uiLayout/_common.py": {"protocols", "reanimation"},
 }
 
 

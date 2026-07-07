@@ -31,8 +31,10 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_shoot_after_fall_back,
     get_active_round_choice_strength_if_charged,
     get_active_rp_modifiers,
+    get_after_attack_revive_ability,
     get_short_label_for_effect_type,
     get_triggered_abilities,
+    revive_dice_count,
     stratagem_strength_bonus,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -1416,3 +1418,105 @@ def test_ability_badge_label_none_when_ability_has_no_badge_label(
     }
     unit = _make_unit(rules=[], keywords=["NECRON"])
     assert ability_badge_label("Necrons", unit) is None
+
+
+# ---------------------------------------------------------------------------
+# get_after_attack_revive_ability / revive_dice_count — data-driven RP gate
+# (INV-4b Option B: gate/label/threshold/dice formula come from faction YAML)
+# ---------------------------------------------------------------------------
+
+
+def _revive_session() -> _S:
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+    )
+    _st_mock.session_state = session
+    return session
+
+
+def test_revive_ability_found_for_unit_with_rp_rule() -> None:
+    """Warriors-artige Einheit (reanimationProtocols) bekommt die YAML-Fähigkeit."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols"])
+    ability = get_after_attack_revive_ability("Necrons", unit, {"destroyed": False})
+    assert ability is not None
+    assert ability.effect.type == "reanimate"
+    assert ability.trigger.event == "after_enemy_attack"
+
+
+def test_revive_ability_yaml_delivers_label_threshold_and_formula() -> None:
+    """Label, 5+-Schwelle und Würfelformel kommen aus faction_abilities.yaml,
+    nicht aus src/ (Option B, S128)."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols"])
+    ability = get_after_attack_revive_ability("Necrons", unit, {"destroyed": False})
+    assert ability is not None
+    assert ability.name_en == "Reanimation Protocols"
+    assert ability.effect.modifier == 5  # success threshold: 5+
+    assert ability.effect.amount == "D6_per_wound"
+
+
+def test_revive_ability_none_for_unit_without_rule() -> None:
+    """Overlord-artige Einheit (kein reanimationProtocols) → kein Revive-Block."""
+    _revive_session()
+    unit = _make_unit(rules=["livingMetal"])
+    assert get_after_attack_revive_ability("Necrons", unit, {"destroyed": False}) is None
+
+
+def test_revive_ability_none_for_destroyed_unit() -> None:
+    """9E: 'if any models were destroyed but this unit was NOT destroyed' —
+    die YAML-Condition unit_not_destroyed blockt zerstörte Einheiten."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols"])
+    assert get_after_attack_revive_ability("Necrons", unit, {"destroyed": True}) is None
+
+
+def test_revive_ability_requires_after_enemy_attack_event() -> None:
+    """Eine reanimate-Fähigkeit ohne trigger.event after_enemy_attack zählt nicht
+    (z. B. künftige Command-Phase-Revives laufen über eigene Gates)."""
+    from unittest.mock import patch
+
+    _revive_session()
+    wrong_event = Ability(
+        id="test.revive.wrong_event",
+        name_en="Wrong Event Revive",
+        source="faction_rule",
+        rule_text="",
+        trigger=Trigger(timing="phase_start", phase="command", player="active", event=None),
+        conditions=[],
+        effect=Effect(type="reanimate", target="self"),
+    )
+    unit = _make_unit(rules=["reanimationProtocols"])
+    with patch.object(_eng, "load_faction_abilities", return_value=[wrong_event]):
+        assert get_after_attack_revive_ability("Necrons", unit, {"destroyed": False}) is None
+
+
+def test_revive_ability_none_for_faction_without_revive_yaml() -> None:
+    """Orks deklarieren keine reanimate-Fähigkeit → None (fraktionsblind)."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols"])
+    assert get_after_attack_revive_ability("Orks", unit, {"destroyed": False}) is None
+
+
+def test_revive_ability_none_for_unknown_player_slot() -> None:
+    """Fehlende faction_dir im Session-State (KeyError) → None statt Crash."""
+    _st_mock.session_state = _S(first_player="Necrons")
+    unit = _make_unit(rules=["reanimationProtocols"])
+    assert get_after_attack_revive_ability("Necrons", unit, {"destroyed": False}) is None
+
+
+def test_revive_dice_count_d6_per_wound() -> None:
+    """D6_per_wound: 4 gefallene 2-Wunden-Modelle → 8 Würfel (RP-Formel)."""
+    assert revive_dice_count("D6_per_wound", 4, 2) == 8
+
+
+def test_revive_dice_count_d6_per_wound_single_wound_models() -> None:
+    assert revive_dice_count("D6_per_wound", 3, 1) == 3
+
+
+def test_revive_dice_count_default_one_die_per_model() -> None:
+    """Unbekannte/fehlende Formel → ein Würfel pro gefallenem Modell."""
+    assert revive_dice_count(None, 4, 2) == 4
+    assert revive_dice_count("other_formula", 5, 3) == 5

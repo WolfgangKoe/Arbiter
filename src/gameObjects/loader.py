@@ -6,7 +6,8 @@ import dataclasses
 from pathlib import Path
 from typing import Any
 
-import yaml
+# types-PyYAML is not in requirements-dev.txt, so mypy has no stubs for yaml.
+import yaml  # type: ignore[import-untyped]
 
 from gameObjects.ability import Ability, Condition, Effect, ExtraUses, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
@@ -26,7 +27,7 @@ from gameObjects.weapon import Weapon, WeaponProfile
 _DATA_ROOT = Path(__file__).parent.parent.parent / "data" / "wh40k_9e"
 _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
-_ROUND_CHOICE_CACHE: dict[str, list] = {}
+_ROUND_CHOICE_CACHE: dict[str, list[RoundChoiceAbility]] = {}
 _ROUND_CHOICE_LABEL_CACHE: dict[str, str] = {}
 _FACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
 _FACTION_META_CACHE: dict[str, dict[str, Any]] = {}
@@ -103,10 +104,10 @@ def load_weapon_catalog(faction_dir: str) -> dict[str, Weapon]:
     return {w["id"]: _weapon_from_dict(w) for w in data.get("weapons", [])}
 
 
-def load_weapon_abilities(faction_dir: str) -> dict[str, list[dict]]:
+def load_weapon_abilities(faction_dir: str) -> dict[str, list[dict[str, Any]]]:
     """Return weapon_id → list[effect dicts] from inline effect fields in weapons.yaml."""
     catalog = load_weapon_catalog(faction_dir)
-    result: dict[str, list[dict]] = {}
+    result: dict[str, list[dict[str, Any]]] = {}
     for weapon_id, weapon in catalog.items():
         effects = [p.effect for p in weapon.profiles if p.effect is not None]
         if effects:
@@ -518,7 +519,7 @@ def load_round_choice_label(faction_dir: str) -> str:
         _ROUND_CHOICE_LABEL_CACHE[faction_dir] = "Round Abilities"
         return _ROUND_CHOICE_LABEL_CACHE[faction_dir]
     data = load_yaml(path)
-    label = data.get("round_choice_label", "Round Abilities")
+    label: str = data.get("round_choice_label", "Round Abilities")
     _ROUND_CHOICE_LABEL_CACHE[faction_dir] = label
     return label
 

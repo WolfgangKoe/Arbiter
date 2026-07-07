@@ -343,3 +343,22 @@ def test_veil_undo_restores_prior_melee_state(monkeypatch):
     assert bearer["in_melee"] is True
     assert bearer["turn_flags"]["movement_locked"] is False
     assert "veil_prev_in_melee" not in bearer["turn_flags"]
+
+
+def test_veil_relic_yaml_carries_teleport_ui_texts():
+    """INV-4b (S128): die DYNASTY-CORE-Dialogtexte kommen aus relics.yaml
+    (prompt_text/selector_label), nicht mehr aus movementPhase.py."""
+    from gameObjects.loader import load_relic_catalog
+
+    veil = load_relic_catalog("necrons")["wh40k_9e.necrons.relic.schleier_der_finsternis"]
+    assert "DYNASTY CORE" in veil["prompt_text"]
+    assert "Once per battle" in veil["prompt_text"]
+    assert "DYNASTY CORE" in veil["selector_label"]
+
+
+def test_teleport_fallback_texts_are_faction_neutral():
+    """Fallback-Texte in movementPhase dürfen kein Fraktions-Vokabular tragen."""
+    import gameMechanic.movementPhase as mp
+
+    assert "DYNASTY" not in mp._TELEPORT_PROMPT_FALLBACK
+    assert "DYNASTY" not in mp._TELEPORT_SELECTOR_FALLBACK

@@ -7,9 +7,12 @@ Getestete Produktiv-Funktionen:
   - get_active_rp_modifiers (src/gameMechanic/ability_engine.py:324)
 
 RP-Spielregel (Wahapedia core_rules + Necron-YAML):
-  - Nur Einheiten mit `reanimationProtocols` in ihrer rules-Liste triggern RP.
-  - Würfelanzahl = models_lost × unit.wounds (wounds pro Modell = Würfel).
-  - Erfolg auf 5+ (App-Konvention: user zählt Erfolge und gibt models_back ein).
+  - Gate ist datengetrieben (S128 Option B): _render_rp_block fragt
+    get_after_attack_revive_ability (ability_engine) — die YAML-Fähigkeit
+    (effect.type reanimate, conditions.has_rules reanimationProtocols)
+    entscheidet, welche Einheiten triggern.
+  - Würfelanzahl = models_lost × unit.wounds (amount: D6_per_wound aus YAML).
+  - Erfolg auf 5+ (effect.modifier aus YAML; User zählt Erfolge, gibt models_back ein).
   - RP wird über heal_unit angewendet: hp = models_back × unit.wounds.
   - Rückkehrende Modelle reduzieren lost_models_this_turn (9E: zählen nicht als
     gefallen für Moraltest).
@@ -392,27 +395,27 @@ class TestHealUnitReanimationProtocols:
         assert state["current_wounds"] == 10
 
     def test_rp_dice_count_equals_models_lost_times_wounds(self):
-        """RP-Würfelanzahl: models_lost × unit.wounds — belegt die Formel aus _render_rp_block."""
-        # _render_rp_block berechnet: rp_dice = models_lost * def_unit.wounds
-        # Diese Formel mit 2-Wunden-Modellen testen
-        models_lost = 4
-        wounds_per_model = 2
-        expected_dice = models_lost * wounds_per_model
-        assert expected_dice == 8  # 4 × 2 = 8 Würfel
+        """RP-Würfelanzahl: models_lost × unit.wounds — die Formel kommt jetzt
+        aus revive_dice_count (ability_engine, amount: D6_per_wound aus YAML)."""
+        from gameMechanic.ability_engine import revive_dice_count
+
+        assert revive_dice_count("D6_per_wound", 4, 2) == 8  # 4 × 2 = 8 Würfel
 
     def test_rp_not_triggered_for_unit_without_reanimation_protocols(self):
         """Overlord (kein reanimationProtocols) bekommt keine RP-Auslösung.
 
-        Die Produkt-Gate ist in _render_rp_block: ``if "reanimationProtocols" not in unit.rules``
-        Hier testen wir, dass heal_unit trotzdem funktioniert (es prüft das Flag nicht selbst),
-        aber die RP-Bedingung schlägt für Nicht-RP-Einheiten fehl.
+        Das Produkt-Gate ist datengetrieben (S128 Option B): _render_rp_block →
+        get_after_attack_revive_ability; die YAML-Condition has_rules
+        [reanimationProtocols] schlägt für Nicht-RP-Einheiten fehl (Gate-Tests:
+        test_ability_engine.py::test_revive_ability_*).
         """
         overlord = _overlord_unit()
         # Overlord hat kein reanimationProtocols in rules
         assert "reanimationProtocols" not in overlord.rules
 
     def test_warriors_have_reanimation_protocols_rule(self):
-        """Warriors tragen reanimationProtocols in ihrer rules-Liste — RP-Gate passiert."""
+        """Warriors tragen reanimationProtocols in ihrer rules-Liste — die
+        YAML-Condition des datengetriebenen RP-Gates passiert."""
         warriors = _warriors_unit()
         assert "reanimationProtocols" in warriors.rules
 

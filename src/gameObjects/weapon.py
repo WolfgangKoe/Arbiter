@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -13,7 +14,7 @@ class WeaponProfile:
     abilities: str = ""
     ignores_fnp: bool = False
     name_en: str = ""  # only set for dual-profile weapons (e.g. "Shooting", "Melee")
-    effect: dict | None = None
+    effect: dict[str, Any] | None = None
     max_attacks: int | None = None
 
 

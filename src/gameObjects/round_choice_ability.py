@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -10,6 +11,6 @@ class RoundChoiceAbility:
     name_de: str
     primary: str
     secondary: str
-    primary_effect: dict = field(default_factory=dict)
-    secondary_effect: dict = field(default_factory=dict)
+    primary_effect: dict[str, Any] = field(default_factory=dict)
+    secondary_effect: dict[str, Any] = field(default_factory=dict)
     subfaction_affinity: str | None = None

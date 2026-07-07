@@ -2866,11 +2866,12 @@
   "89a05bf1-06ea-4a3e-bab6-3d1246ebd640": {
     "started_at": "2026-07-06T15:59:42.992Z",
     "task": "start session",
-    "peak_context": 74069,
-    "subagent_share": 92.65807449545551,
+    "peak_context": 129516,
+    "subagent_share": 91.38977325009525,
     "by_tier": {
-      "Sonnet": 25845394,
-      "Fable": 7817833
+      "Sonnet": 47905065,
+      "Fable": 37727932,
+      "Opus": 1578678
     },
     "subagents": [
       {
@@ -2882,6 +2883,34 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Paket 4: Task 18.3 Gretchin",
+        "tier": "Sonnet",
+        "peak_context": 112199,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss S128: next_session + Reports",
+        "tier": "Sonnet",
+        "peak_context": 45916,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Konsolidierung + finale Messung S128",
+        "tier": "Sonnet",
+        "peak_context": 163217,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Paket 3: mypy gameObjects/",
+        "tier": "Sonnet",
+        "peak_context": 91117,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Executor: INV-4-Ledger-Abbau",
         "tier": "Sonnet",
         "peak_context": 113946,
@@ -2889,9 +2918,30 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Paket 1: INV-4b-Abbau + Option B",
+        "tier": "Sonnet",
+        "peak_context": 160557,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Executor: Plan 018 Task 18.1",
         "tier": "Sonnet",
         "peak_context": 119344,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Paket 2: mypy game_state.py",
+        "tier": "Sonnet",
+        "peak_context": 83639,
+        "started_at": "2026-07-06T15:59:42.992Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review S128 (DoD, GO/NO-GO)",
+        "tier": "Opus",
+        "peak_context": 66900,
         "started_at": "2026-07-06T15:59:42.992Z"
       }
     ]

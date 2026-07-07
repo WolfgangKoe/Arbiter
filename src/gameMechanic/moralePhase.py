@@ -6,9 +6,22 @@ import streamlit as st
 
 from constants.symbols import SYM_CHECK
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import unit_id_from_state_key, units_key_for, units_list_for
+from gameMechanic.game_state import (
+    faction_dir_for,
+    unit_id_from_state_key,
+    units_key_for,
+    units_list_for,
+)
 from gameMechanic.unit_mutations import flee_models
+from gameObjects.ability import Ability
+from gameObjects.loader import get_abilities_for_unit
 from gameObjects.unit import Unit
+
+# Combat Attrition (9E core rules): after a failed Morale test and the first
+# fled model, roll one D6 per remaining model; each (modified) result of 1
+# flees. Being below Half-strength subtracts 1 from each roll.
+_ATTRITION_EFFECT_TYPE = "attrition_modifier"
+_ATTRITION_BASE_THRESHOLD = 1
 
 
 def morale_test_required(unit, unit_state: dict) -> bool:  # type: ignore[type-arg]
@@ -32,6 +45,48 @@ def _fail_threshold(leadership: int, lost: int) -> int:
     Test fails when D6 + lost > leadership, i.e. D6 >= leadership - lost + 1.
     """
     return leadership - lost + 1
+
+
+def attrition_modifier_abilities(abilities: list[Ability]) -> list[Ability]:
+    """Abilities whose effect modifies Combat Attrition tests (data-driven filter)."""
+    return [a for a in abilities if a.effect.type == _ATTRITION_EFFECT_TYPE]
+
+
+def attrition_condition(ability: Ability) -> tuple[str | None, bool]:
+    """Table-condition prompt and applies_when flag for an attrition modifier.
+
+    The prompt text and flag ride in the effect's raw sub-effect list
+    (``condition_prompt`` / ``applies_when``) because the Ability schema has no
+    first-class fields for them yet. ``applies_when`` states for which checkbox
+    state the modifier is active — ``False`` means the modifier applies while
+    the prompted condition is NOT ticked (e.g. no herder model nearby).
+    Distance checks stay table responsibility (same pattern as Cover).
+    """
+    for sub in ability.effect.effects or []:
+        if "condition_prompt" in sub:
+            return str(sub["condition_prompt"]), bool(sub.get("applies_when", True))
+    return None, True
+
+
+def _attrition_threshold(
+    unit: Unit,
+    unit_state: dict,  # type: ignore[type-arg]
+    ability_mods: list[int],
+) -> int:
+    """Highest (unmodified) D6 result at which a model flees a Combat Attrition test.
+
+    Base: a modified roll of 1 flees. Attrition tests are taken AFTER the first
+    model has fled the failed Morale test, so Half-strength is checked against
+    ``models - 1``. Each active ability modifier shifts the roll by its value —
+    a -1 modifier therefore raises the flee threshold by 1. Clamped to 0..6
+    (0 = no roll can flee, 6 = every roll flees).
+    """
+    initial = unit_state.get("models_initial") or unit.models_max
+    remaining = unit_state["models"] - 1
+    threshold = _ATTRITION_BASE_THRESHOLD - sum(ability_mods)
+    if remaining * 2 < initial:
+        threshold += 1
+    return max(0, min(6, threshold))
 
 
 class MoralePhaseHandler:
@@ -143,6 +198,7 @@ def _render_unit_morale(
             step=1,
             key=f"morale_fled_count_{uid}",
         )
+        _render_attrition_hint(faction, uid, unit, unit_state)
         if st.button("Bestätigen", key=f"morale_confirm_{uid}"):
             flee_models(uid, faction, int(fled_count), unit)
             log_action(
@@ -153,3 +209,40 @@ def _render_unit_morale(
             )
             st.session_state.pop(f"morale_failed_{uid}", None)
             st.rerun()
+
+
+def _render_attrition_hint(
+    faction: str,
+    uid: str,
+    unit: Unit,
+    unit_state: dict,  # type: ignore[type-arg]
+) -> None:
+    """Display-only Combat Attrition hint — the D6 rolls stay on the table.
+
+    Renders one checkbox per conditional attrition modifier (prompt text comes
+    from YAML) and shows the resulting flee threshold. The fled-count input
+    above stays the single source of truth for the state mutation.
+    """
+    abilities = get_abilities_for_unit(unit, faction_dir_for(faction))
+    active_mods: list[int] = []
+    for ability in attrition_modifier_abilities(abilities):
+        modifier = ability.effect.modifier or 0
+        prompt, applies_when = attrition_condition(ability)
+        if prompt is None:
+            active_mods.append(modifier)
+            continue
+        checked = st.checkbox(prompt, key=f"attrition_cond_{uid}_{ability.id}")
+        if checked == applies_when:
+            active_mods.append(modifier)
+    threshold = _attrition_threshold(unit, unit_state, active_mods)
+    dice = max(unit_state["models"] - 1, 0)
+    if threshold <= 0:
+        st.caption(
+            f"Combat Attrition: 1 W6 pro verbleibendem Modell ({dice}) — "
+            "kein Modell flieht (Modifikatoren heben jedes Ergebnis über 1)."
+        )
+    else:
+        st.caption(
+            f"Combat Attrition: 1 W6 pro verbleibendem Modell ({dice}) — "
+            f"flieht bei Ergebnis ≤ {threshold}."
+        )

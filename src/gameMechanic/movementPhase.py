@@ -9,10 +9,26 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.game_log import log_action
-from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
+from gameMechanic.game_state import (
+    faction_dir_for,
+    unit_keys_for,
+    units_key_for,
+    units_list_for,
+)
 from gameMechanic.unit_mutations import set_deployment, set_movement_status
+from gameObjects.loader import load_relic_catalog
 from gameObjects.unit import TriggeredEffect
 from uiLayout._common import lookup, render_player_column, render_unit_selectbox
+
+# Fallbacks when a teleport relic's YAML entry carries no UI texts. Faction
+# flavour (e.g. which keyword the second unit must carry) lives in the relic's
+# prompt_text/selector_label fields in relics.yaml (INV-4b: data-driven).
+_TELEPORT_PROMPT_FALLBACK = (
+    "Once per battle: remove this unit (and optionally one eligible unit "
+    'within 3") from the battlefield and set up both more than 9" from any '
+    "enemy models. Both units count as having moved this turn."
+)
+_TELEPORT_SELECTOR_FALLBACK = 'Optional: select a CORE unit within 3"'
 
 
 class MovementPhaseHandler:
@@ -117,6 +133,7 @@ def _render_teleport_effect(
     """
     relic_id = unit.relic_id
     display_name = unit.relic_name or relic_id
+    relic_entry = load_relic_catalog(faction_dir_for(faction)).get(relic_id) or {}
 
     st.divider()
     st.markdown(f"**{display_name}**")
@@ -144,11 +161,7 @@ def _render_teleport_effect(
     awaiting = st.session_state.get("veil_awaiting_confirm", False)
 
     if not awaiting:
-        st.caption(
-            "Once per battle: remove this unit (and optionally one DYNASTY CORE unit "
-            'within 3") from the battlefield and set up both more than 9" from any '
-            "enemy models. Both units count as having moved this turn."
-        )
+        st.caption(relic_entry.get("prompt_text") or _TELEPORT_PROMPT_FALLBACK)
         if st.button(
             f"Prepare {display_name}",
             key=f"teleport_prepare_{uid}",
@@ -186,7 +199,7 @@ def _render_teleport_effect(
 
     core_candidates_dicts = [{"uid": sk, "name": cu.name_en} for sk, cu in core_candidates]
     render_unit_selectbox(
-        'Optional: select a DYNASTY CORE unit within 3"',
+        relic_entry.get("selector_label") or _TELEPORT_SELECTOR_FALLBACK,
         core_candidates_dicts,
         "veil_core_target_uid",
         none_label="— Bearer only (no second unit) —",

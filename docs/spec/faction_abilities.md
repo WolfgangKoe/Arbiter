@@ -137,6 +137,39 @@ Punktkosten gegen `wahapedia_necrons/faction_overview.txt` korrigiert (alle 12 �
 
 ---
 
+### Effekttyp `attrition_modifier` (Combat Attrition, Plan 018 Task 18.3, S128)
+
+**Mechanik:** Modifiziert den Combat-Attrition-Schwellwert einer Einheit (App zeigt den
+Schwellwert an, die W6-Würfe selbst bleiben Tisch-Verantwortung — Klasse C). Beispiel:
+Gretchin „Cowardly" (`orks/unit_abilities.yaml`) — ohne RUNTHERD in 6" ein zusätzlicher
+Modifier auf jeden Attrition-Wurf.
+
+```yaml
+effect:
+  type: attrition_modifier
+  modifier: -1
+  target: self
+  effects:
+    - condition_prompt: "Friendly RUNTHERD within 6\"?"
+      applies_when: false
+```
+
+**Konvention `condition_prompt`/`applies_when`:** Ein roher Sub-Eintrag in `effects` statt
+eines First-Class-Felds auf `Ability`/`Effect` (Schema-Follow-up, s. Backlog-Task
+„`condition_prompt`/`applies_when` als First-Class-Felder"). `condition_prompt` ist der
+Wortlaut der Nutzer-Checkbox (Tisch-Bedingung, die die App nicht selbst prüfen kann —
+gleiches Muster wie Cover); `applies_when` legt fest, bei welchem Checkbox-Zustand der
+Modifier aktiv ist (`false` = aktiv, solange die Checkbox NICHT gesetzt ist, wie bei
+Cowardly Grots).
+
+**Engine:** `moralePhase.attrition_modifier_abilities()` filtert die passenden Fähigkeiten;
+`moralePhase._attrition_threshold(unit, unit_state, active_modifiers)` errechnet den
+W6-Schwellwert (Basis 1, +1 wenn die Einheit unter halber Stärke ist, +1 je aktivem
+Modifier). Reine Funktion, direkt getestet (`TestAttritionThreshold`,
+`tests/gameMechanic/test_morale_phase.py`).
+
+---
+
 ## Kategorie 2 — Einmalig-Deklariert (`one_time`)
 
 **Mechanik:** Einmal pro Partie in der Befehlsphase aktiviert. Mehrere Stages möglich (Stage 1 diese Runde, Stage 2 folgerundeAuto-Übergang).

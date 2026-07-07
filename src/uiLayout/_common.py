@@ -576,12 +576,24 @@ def _render_rp_block(
     models_lost: int,
     tab_key: str,
 ) -> None:
-    """Render Reanimation Protocols block after damage if the unit has the keyword."""
+    """Render the revive block after damage if the unit has a matching ability.
+
+    Data-driven (INV-4b): gate, label, dice formula and success threshold come
+    from the faction's YAML-declared revive ability (effect type ``reanimate``,
+    trigger event ``after_enemy_attack`` — e.g. Necron Reanimation Protocols);
+    src/ knows only the generic effect shape.
+    """
+    from gameMechanic.ability_engine import (  # noqa: PLC0415
+        get_after_attack_revive_ability,
+        revive_dice_count,
+    )
     from gameMechanic.unit_mutations import heal_unit  # noqa: PLC0415
 
     if models_lost <= 0:
         return
-    if "reanimationProtocols" not in def_unit.rules:
+    unit_state = st.session_state.get(units_key_for(def_faction), {}).get(def_uid, {})
+    ability = get_after_attack_revive_ability(def_faction, def_unit, unit_state)
+    if ability is None:
         return
 
     rp_key = f"rp_{tab_key}"
@@ -592,10 +604,11 @@ def _render_rp_block(
             st.caption(f"RP: {mb} models returned {SYM_CHECK}")
         return
 
-    rp_dice = models_lost * def_unit.wounds
+    rp_dice = revive_dice_count(ability.effect.amount, models_lost, def_unit.wounds)
+    threshold = f" · Erfolg: {ability.effect.modifier}+" if ability.effect.modifier else ""
     st.markdown(
-        f"**REANIMATION PROTOCOLS** &nbsp; "
-        f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel** · Erfolg: 5+"
+        f"**{ability.name_en.upper()}** &nbsp; "
+        f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel**{threshold}"
     )
     for hint in _rp_directive_hints(def_faction):
         st.caption(hint)
@@ -1859,8 +1872,8 @@ def _render_unit_rp(seq: int, atk_uid: str, entries: list[dict]) -> None:  # typ
     """Reanimation Protocols once per defender unit, summing model losses across
     all weapon tabs of the attacking unit (the unit has now fully resolved).
 
-    Generic: gated by the ``reanimationProtocols`` rule in _render_rp_block — no
-    faction-specific logic.
+    Generic: gated in _render_rp_block by the unit's YAML-declared revive
+    ability (effect type ``reanimate``) — no faction-specific logic.
     """
     seen: list[tuple[str, str]] = []
     for entry in entries:

@@ -26,6 +26,14 @@
   lag seit S116).
 - **Executor-Aufträge enthalten die Klausel:** Dateiänderungen nur über Edit/Write-Tools, Bash nur
   lesend/git/pytest (Freigabe-Gate-Umgehung S123).
+- **Zero-Error-Policy mypy:** Baseline sinkt jede Session weiter Richtung 0; Abweichung nach oben
+  nur mit Begründung im selben Commit (z. B. mypy-Upgrade).
+- **Parallel-Modus ist Standard für Ledger-Abbau:** dateidisjunkte Pakete + Koordinator-
+  Konsolidierung (S128: 4 Pakete erfolgreich).
+- **Parallel-Briefs:** Vorher-Messungen nur gegen `git show HEAD:` — **kein `git stash`** im
+  geteilten Baum.
+- **Jede Executor-Selbstprüfliste enthält `python tools/mypy_gate.py`** (S128: 18.1-Executor riss
+  das Gate unbemerkt).
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
@@ -34,26 +42,30 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S127, 2026-07-05)
+## Aktueller Stand (nach S128, 2026-07-06)
 
-S127 (Pläne 038+039 + Doku-Paket): `db87d48` mypy-Ratchet-Gate (tools/mypy_gate.py, Baseline
-134, deploy.yml-Gate statt continue-on-error). `69d6484`+`6500c94` README-Setup komplett,
-.env.example gelöscht, pytest-xdist in CI (218s→75s). `868ec36` r-proto-02-Handoff geschlossen
-(war seit S116 umgesetzt, Backlog Z.51 ✅), Schulden-Tabelle nachgezogen (2026-07-05: INV-4b 11
-· INV-4 5 · INV-5 5), Backlog-Einträge: INV-4-Allowlist→0 (S128) + mypy-Abbau modulweise.
-Review: GO, keine Blocker. Vollsuite 1456 passed, Coverage 99,11 %. Kein UI-Code berührt.
+S128 (2026-07-06, 2 Commits: af3bc5a + Abschluss-Commit folgt): INV-4-Allowlist 5→3 (Roster-
+Pflichtparameter statt necrons-Defaults); Plan 018.1 CP-Doppelvergabe gefixt (`cp_grants`-Set);
+danach 4 PARALLELE Executor-Pakete: INV-4b-Ledger 11→6 nur LEGIT (inkl. Option B:
+reanimationProtocols komplett aus src/, RP-Block YAML-getrieben via ability_engine-Helper),
+mypy game_state 34→0 + gameObjects 18→0, Baseline 134→82; Plan 018.3 Gretchin
+Cowardly/Attrition-Hinweis (Klasse C). Vollsuite 1496 passed, Coverage 99,12 %, Architektur
+8/8, Review GO. UI Teil 2 vom Stakeholder verifiziert (bis auf Deny-Caption-Mini-Check, s. u.).
 
-Frühere Sessions (S60–S126): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S127): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-**INV-4-Mini-Task ausführen** (Allowlist 5→0: `necrons`-Defaults in `game_state.py`/`loader.py`
-aus gewählten Rostern ableiten, Größe S, terminiert S128 — Backlog Z.~96). Daneben nächsten
-Plan aus der Queue planen: 041 verbleibt, Regel beachten: 041 NICHT parallel zu 015/026, erst
-nach 015/026 — Reihenfolge klärt der Planner.
-**Stehende Regel (Retro S127, Maßnahme 1):** Jede Session enthält mind. einen Ledger-Abbau-
-Schritt, bis alle „→0"-Ledger bei 0 sind: INV-4 (S128) → INV-4b (11 Tokens, 2–3 Schritte) →
-mypy (Baseline 134, modulweise, Baseline-Senkung im selben Commit).
+1. **BUG (Planungsgegenstand S129, Stakeholder-Auftrag):** Psychic-Phase-State-Blocker — Ork
+   Weirdboy manifestiert (z. B. Smite, „Roll 7 — Manifested! Waiting for deny attempt… (W3
+   mortal wounds)"), aber Gegner (Necrons) hat keine Deny-Fähigkeit („No PSYKER or deny
+   wargear — cannot deny"): Das Spiel wartet trotzdem auf den Deny-Versuch, Schaden kann nicht
+   angewendet werden; nur „Reset (skip Smite)" möglich. Erwartung: ohne gegnerische
+   Deny-Fähigkeit den Deny-Wartezustand automatisch überspringen. Vermutlich
+   `psychicPhase.py`-State-Machine. Regressionstest Pflicht.
+2. Ledger-Abbau-Schritt (stehende Regel): mypy weiter senken — Reihenfolge gameMechanic/ →
+   gameObjects/ (fertig) → uiLayout/ zuletzt.
+3. Queue: Plan 018.2+18.4 offen, dann 015 → 026 → 017; 041 erst nach 015/026.
 
 **Offene Verifikation (VOR Merge nach `main`):**
 - **037 Docker**: `docker build` + `docker run --rm arbiter-test id -u` → 1000 +
@@ -73,6 +85,9 @@ auch über `docs/spec/` greppen (S126-Blocker: 2 Specs beschrieben Gelöschtes).
 lieferte 4 falsche ❌); UI-Prüfanleitungen vorher gegen Roster-Realität validieren
 (Flayed-Ones-Check ohne Roster-Deckung, „Szenario-UI" existiert nicht — nur
 `?scenario=`-Query-Param).
+(i) Deny-Caption-Mini-Check (Psychic-Phase): 2. Deny-Versuch → neutrale Caption „one deny
+attempt per phase per source" — einziger unbestätigter UI-Punkt aus S128, risikoarm.
+(j) Fehlender R-Eintrag RP-Mechanik in `rules.md` (Akzeptanz-Katalog) — Planning klären.
 
 ---
 

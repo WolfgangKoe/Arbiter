@@ -20,7 +20,7 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 | INV-2 | YAML wird nur über den Loader gelesen (single entry point) | `test_yaml_only_in_loader.py` | ✅ (2 Ausnahmen, begründet) |
 | INV-3 | `gameObjects/` hängt nicht von `gameMechanic`/`uiLayout` ab | `test_layer_imports.py` | ✅ 0 Verstöße |
 | INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = nur noch LEGIT-Rest, DEBT S128 aufgelöst) |
-| INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = aktuelle Schuld) |
+| INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = nur noch LEGIT, DEBT S128 Teil 2 aufgelöst) |
 | INV-5 | Doku-Gesundheit: Spec ↔ Tests ↔ Stand laufen nicht auseinander | `tests/docs/`, `tests/acceptance/` | ✅ |
 | INV-6 | Reine HTML/SVG-Komposition liegt in `dice_compose.py` — Streamlit-frei und Coverage-gemessen | `test_render_composition_seam.py` | ✅ 0 Verstöße |
 
@@ -36,6 +36,7 @@ Live nach jedem `pytest`-Lauf im **Schulden-Scoreboard** (`tests/conftest.py`). 
 | 2026-06-20 | 19 | 5 | 5 |
 | 2026-07-05 | 11 | 5 | 5 |
 | 2026-07-06 | 11 | 3 | 5 |
+| 2026-07-06 (nach Teil 2) | 6 | 3 | 5 |
 
 Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
 
@@ -96,12 +97,29 @@ so ein Token in einem `src/`-Bezeichner oder String auf → Leck.
 - `STOPWORDS` filtert generisches Englisch/Core-Regelwerk; `LEDGER` listet die
   **heutige** Schuld pro Datei. Ein neues Token bricht den Build; ein Ledger-Eintrag,
   der nicht mehr leckt, bricht ebenfalls (Ratchet → Schuld nur kleiner).
-- Aktuelle Hauptschuld (DEBT): `protocol`/`protocols` als generischer Round-Choice-Begriff
-  (Necron-Wort) quer durch `src/`; benannte Items (`orb`, `overlord`, `phaeron`,
-  `gloom`, `prism`, `dakka`, `klaw`, `tesla`) in den Phasen-/Render-Modulen.
-  (`irongob` 2026-06-20 erledigt: State-Key `pending_irongob` → `pending_triggered_relic`,
-  `res_orb_*` → `revive_wargear_*`.)
-- LEGIT: `gameObjects/rosz_importer.py` (Fraktionslabel-Normalisierung).
+- **DEBT aufgelöst (2026-07-06, S128 Teil 2, Paket 1):**
+  - **a) `dynasty`** (`movementPhase.py`): Teleport-Relic-Prompt-/Selector-Texte
+    („DYNASTY CORE …") nach `necrons/relics.yaml` verlagert (neue Felder
+    `prompt_text`/`selector_label`); `load_relic_catalog` liefert die Raw-Dicts,
+    kein Loader-Code-Change nötig.
+  - **b) `gloom`/`prism`** (`psychicPhase.py`): Deny-Caption faktion-neutral
+    („once per phase per source" statt „Gloom Prism: once per phase").
+  - **c) `protocols`/`reanimation`** (`uiLayout/_common.py`): Necron-Rule-Key
+    `reanimationProtocols` durch den bereits vorhandenen generischen Effekttyp
+    `reanimate` ersetzt (Option B, Stakeholder-Entscheid `docs/handoff/decision_revive_key_s128.md`,
+    seit S128 gelöscht) — `_render_rp_block` fragt die Ability-Engine nach einer
+    aktiven `effect.type == "reanimate"`-Fähigkeit statt den Necron-Key direkt zu
+    lesen; Label + Schwelle (`success_on`) kommen jetzt aus der YAML-Fähigkeit statt
+    hartcodiert in `src/`. `reanimationProtocols` bleibt rein Necron-intern
+    (units.yaml ↔ conditions), taucht in `src/` nicht mehr auf.
+  - Frühere Einträge `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren
+    bereits vor S128 aus `src/` entfernt — dieser Absatz war insofern Doku-Drift
+    (in früheren Sessions nicht nachgezogen), jetzt korrigiert.
+- LEGIT (verbleibender Rest, 6 Tokens / 3 Dateien): `gameObjects/rosz_importer.py`
+  (Fraktionslabel-Normalisierung, 5 Tokens) + `protocol` in
+  `gameMechanic/phase_handler.py` (`typing.Protocol`) und
+  `gameMechanic/ability_engine.py` (generischer Round-Choice-Helfername) — je
+  eine Kollision mit dem Seed-Wort, kein Fraktions-Leck.
 
 ---
 
@@ -154,7 +172,12 @@ mypy braucht ~20–30 s, die lokale Vollsuite läuft viele Male pro Session und
 darf nicht langsamer werden). CI-Step in `.github/workflows/deploy.yml`
 („Type check (ratchet gate)") ruft es blocking auf.
 
-**Baseline:** 134 Fehler (gemessen 2026-07-05, Plan 038).
+**Baseline:** 82 Fehler (gemessen 2026-07-06, S128 Teil 2; vorher 134, Plan 038).
+Abbau: **−34** `gameMechanic/game_state.py` (Paket 2 — Inline-Annotationen an
+`st.session_state.*` auf typisierte Zwischenvariablen/`cast` umgestellt) + **−18**
+`gameObjects/` komplett (Paket 3 — `rosz_importer.py`/`loader.py`/
+`round_choice_ability.py`/`weapon.py`/`ability.py`) = **−52** gesamt, reine
+Typannotationen ohne Verhaltensänderung (Vollsuite grün, 1496 passed).
 
 **Ratchet-Logik (beidseitig, INV-4b-Muster):**
 - gemessen N > BASELINE → Build rot, „neue Fehler beheben, nicht Baseline erhöhen".

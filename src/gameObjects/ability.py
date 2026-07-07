@@ -36,7 +36,7 @@ class Effect:
     modifier: int | None = None
     handler: str | None = None
     revive: bool = True  # False = cap heal to current living models, no resurrection
-    effects: list[dict] | None = None  # sub-effects for multi-type effects
+    effects: list[dict[str, Any]] | None = None  # sub-effects for multi-type effects
 
 
 @dataclass
