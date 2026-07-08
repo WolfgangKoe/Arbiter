@@ -1320,3 +1320,114 @@ def test_reset_turn_flags_clears_all_flags() -> None:
     _mut.reset_turn_flags(OVERLORD, "Necrons")
     flags = session["p1_units"][OVERLORD]["turn_flags"]
     assert all(v is False for v in flags.values())
+
+
+# ---------------------------------------------------------------------------
+# activate_morale_auto_pass / confirm_morale_auto_pass — Insane Bravery (R-MORALE-09)
+# ---------------------------------------------------------------------------
+
+
+def test_activate_morale_auto_pass_sets_flag() -> None:
+    session = _two_unit_session()
+    _mut.activate_morale_auto_pass(OVERLORD, "Necrons")
+    assert session["p1_units"][OVERLORD]["turn_flags"]["morale_auto_pass"] is True
+
+
+def test_confirm_morale_auto_pass_marks_tested_and_clears_flag() -> None:
+    session = _two_unit_session()
+    session["p1_units"][OVERLORD]["turn_flags"]["morale_auto_pass"] = True
+    _mut.confirm_morale_auto_pass(OVERLORD, "Necrons")
+    flags = session["p1_units"][OVERLORD]["turn_flags"]
+    assert flags["morale_tested"] is True
+    assert flags["morale_auto_pass"] is False
+
+
+def test_confirm_morale_auto_pass_does_not_touch_models() -> None:
+    """No dice, no models flee — only the two turn_flags bookkeeping fields change."""
+    session = _two_unit_session()
+    _mut.confirm_morale_auto_pass(OVERLORD, "Necrons")
+    state = session["p1_units"][OVERLORD]
+    assert state["models"] == 1
+    assert state["destroyed"] is False
+
+
+# ---------------------------------------------------------------------------
+# activate_desperate_breakout / apply_desperate_breakout_casualties /
+# resolve_desperate_breakout — Desperate Breakout (R-MOVE-14)
+# ---------------------------------------------------------------------------
+
+
+def _melee_warriors_state(models: int = 10) -> dict:
+    return {
+        "current_wounds": models,
+        "models": models,
+        "destroyed": False,
+        "in_melee": True,
+        "in_reserve": False,
+        "deployment": "normal",
+        "lost_models_this_turn": 0,
+        "movement_choice": None,
+        "melee_with": [],
+        "turn_flags": {
+            "advanced": False,
+            "retreated": False,
+            "charged": False,
+            "shot": False,
+            "fought": False,
+            "desperate_breakout_pending": False,
+        },
+    }
+
+
+def test_activate_desperate_breakout_sets_pending_flag() -> None:
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state()})
+    _mut.activate_desperate_breakout(WARRIORS, "Necrons")
+    assert session["p1_units"][WARRIORS]["turn_flags"]["desperate_breakout_pending"] is True
+
+
+def test_apply_desperate_breakout_casualties_removes_models() -> None:
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state(models=10)})
+    _mut.apply_desperate_breakout_casualties(WARRIORS, "Necrons", 3, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["models"] == 7
+    assert state["current_wounds"] == 7
+    assert state["lost_models_this_turn"] == 3
+
+
+def test_apply_desperate_breakout_casualties_zero_is_noop() -> None:
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state(models=10)})
+    _mut.apply_desperate_breakout_casualties(WARRIORS, "Necrons", 0, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["models"] == 10
+    assert state["lost_models_this_turn"] == 0
+
+
+def test_apply_desperate_breakout_casualties_does_not_set_morale_tested() -> None:
+    """Distinct from flee_models: these are real losses, not a Morale-test resolution."""
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state(models=10)})
+    _mut.apply_desperate_breakout_casualties(WARRIORS, "Necrons", 2, _warriors())
+    assert session["p1_units"][WARRIORS]["turn_flags"].get("morale_tested") is not True
+
+
+def test_resolve_desperate_breakout_sets_retreated_and_clears_pending() -> None:
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state(models=10)})
+    session["p1_units"][WARRIORS]["turn_flags"]["desperate_breakout_pending"] = True
+    _mut.resolve_desperate_breakout(WARRIORS, "Necrons", 2, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["models"] == 8
+    assert state["turn_flags"]["desperate_breakout_pending"] is False
+    assert state["turn_flags"]["retreated"] is True
+    assert state["movement_choice"] == "retreated"
+    assert state["in_melee"] is False
+
+
+def test_resolve_desperate_breakout_destroyed_unit_skips_fall_back() -> None:
+    """A unit wiped out by the casualty roll cannot Fall Back — nothing left to move."""
+    session = _make_session(p1_units={WARRIORS: _melee_warriors_state(models=3)})
+    session["p1_units"][WARRIORS]["turn_flags"]["desperate_breakout_pending"] = True
+    _mut.resolve_desperate_breakout(WARRIORS, "Necrons", 3, _warriors())
+    state = session["p1_units"][WARRIORS]
+    assert state["destroyed"] is True
+    assert state["turn_flags"]["desperate_breakout_pending"] is False
+    assert state["turn_flags"]["retreated"] is False
+    assert state["movement_choice"] is None

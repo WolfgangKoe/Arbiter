@@ -528,6 +528,14 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **code**: —
 - **regel**: Eine Einheit kann nach Normal Move, Advance oder Fall Back in ein befreundetes TRANSPORT-Modell einsteigen, sofern alle Modelle innerhalb 3" davon enden, das Transportmodell nicht in Engagement Range eines Feindes steht und die Einheit nicht in derselben Phase ausgestiegen ist. Abstände sind nur am Tisch prüfbar.
 
+### R-MOVE-14
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_apply_desperate_breakout_casualties_removes_models / test_apply_desperate_breakout_casualties_zero_is_noop / test_resolve_desperate_breakout_sets_retreated_and_clears_pending / test_resolve_desperate_breakout_destroyed_unit_skips_fall_back / test_spend_stratagem_desperate_breakout_activates_pending_flag_for_unit
+- **quelle**: rules_appendix.txt — "Desperate Breakout … roll to see if any models in that unit are destroyed … any roll-off, test or other roll is then triggered and resolved … the unit the Stratagem was used on will still be unable to do anything else this turn." / stratagems.yaml rule_text — "Roll one D6 for each model in that unit; for each result of 1, one model … is destroyed. Assuming that unit was not destroyed, it can now attempt to Fall Back, and … its models can be moved across enemy models as if they were not there."
+- **code**: unit_mutations.py:apply_desperate_breakout_casualties / unit_mutations.py:resolve_desperate_breakout / movementPhase.py:_render_desperate_breakout
+- **regel**: Desperate Breakout (Core-Stratagem, 2 CP, `effect.type: move`, `handler: fall_back_through_models`) markiert beim Aktivieren die ausgewählte Einheit als `desperate_breakout_pending`; die Movement-Phase-UI fragt daraufhin die vom Spieler gewürfelte Verlustzahl ab (1 Modell pro gewürfelter 1) und entfernt sie App-seitig (Klasse A). Überlebt die Einheit, setzt die App sie automatisch auf `retreated` (verlässt Nahkampf, sperrt Schießen/Laden/Psi-Kräfte wie ein normales Fall Back, öffnet das Cut-Them-Down-Reaktionsfenster). Ob die Einheit ihre Fall-Back-Bewegung tatsächlich außerhalb jeder gegnerischen Engagement Range beenden kann (inkl. „Bewegung durch Modelle hindurch"), bleibt Tisch-Anteil (Klasse C, wie der normale Fall Back R-MOVE-07/08).
+
 ---
 
 ## Bereich: Charge Phase
@@ -706,11 +714,11 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-MORALE-09
 - **klasse**: A
-- **status**: offen
-- **getestet**: nein
+- **status**: implementiert
+- **getestet**: ja — test_activate_morale_auto_pass_sets_flag / test_confirm_morale_auto_pass_marks_tested_and_clears_flag / test_spend_stratagem_auto_pass_morale_activates_flag_for_unit / test_spend_stratagem_auto_pass_morale_noop_without_unit_key
 - **quelle**: core_rules.txt — "INSANE BRAVERY … Use this Stratagem before you take a Morale test … That test is automatically passed … once per battle."
-- **code**: —
-- **regel**: Insane Bravery (Core-Stratagem, 2 CP) lässt einen Morale Test automatisch bestehen (kein Modell flieht); einmal pro Schlacht. In der Morale-Phase-UI noch nicht als Stratagem angebunden.
+- **code**: unit_mutations.py:activate_morale_auto_pass / unit_mutations.py:confirm_morale_auto_pass / _common.py:spend_stratagem (effect dispatch) / moralePhase.py:_render_unit_morale
+- **regel**: Insane Bravery (Core-Stratagem, 2 CP, `effect.type: auto_pass_morale`) markiert beim Aktivieren (im Stratagems-Tab, für die ausgewählte Einheit) einen `morale_auto_pass`-Flag auf dieser Einheit; die Morale-Phase-UI zeigt daraufhin für genau diese Einheit einen automatisch bestandenen Test (kein W6, kein Modell flieht) statt der normalen Test-Buttons. Das einmal-pro-Schlacht-Limit läuft über die bestehende `once_per_battle`-CP-Buchhaltung des Stratagems selbst.
 
 ### R-MORALE-10
 - **klasse**: B

@@ -14,7 +14,7 @@ from gameMechanic.game_state import (
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import flee_models
+from gameMechanic.unit_mutations import confirm_morale_auto_pass, flee_models
 from gameObjects.ability import Ability
 from gameObjects.loader import get_abilities_for_unit
 from gameObjects.unit import Unit
@@ -158,6 +158,19 @@ def _render_unit_morale(
             st.warning(f"Fehlgeschlagen — {fled} Modelle geflohen.")
         else:
             st.success("Moraltest bestanden.")
+        return
+
+    if flags.get("morale_auto_pass"):
+        st.success(f"{SYM_CHECK} Insane Bravery active — Morale test automatically passed.")
+        if st.button("Confirm (Insane Bravery)", key=f"morale_insane_bravery_{uid}"):
+            confirm_morale_auto_pass(uid, faction)
+            log_action(
+                state["round"],
+                "morale",
+                unit.name_en,
+                "Insane Bravery — Moraltest automatisch bestanden.",
+            )
+            st.rerun()
         return
 
     ld = unit.leadership

@@ -32,6 +32,7 @@ from gameObjects.stratagem import (
     stratagem_usable_by_player,
     stratagem_visibility,
 )
+from uiLayout._common import spend_stratagem
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -255,38 +256,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
                     f"Use — spend {strat.cp_cost} CP",
                     key=f"strat_{player}_{strat.id}_{phase_idx}_{i}",
                 ):
-                    adjust_cp(player, -strat.cp_cost)
-                    used_ids.add(strat.id)
-                    used_ids_by_player[player] = used_ids
-                    st.session_state.used_stratagem_ids = used_ids_by_player
-                    if strat.once_per_battle:
-                        used_battle_ids.add(strat.id)
-                        used_battle_ids_by_faction[player] = used_battle_ids
-                        st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
-                    if strat.modifier is not None:
-                        m = strat.modifier
-                        active_mods = st.session_state.get("active_modifiers", [])
-                        active_mods.append(
-                            {
-                                "unit_key": _selected_state_key_for(player),
-                                "source": strat.name_en,
-                                "effect": {
-                                    "roll_type": m.roll_type,
-                                    "value": m.value,
-                                    "target": m.target,
-                                    "phase": m.phase or current_phase,
-                                },
-                                "expires_at_phase": (
-                                    current_phase if m.expires_at == "phase_end" else None
-                                ),
-                                "expires_at_round": (
-                                    None
-                                    if m.expires_at != "turn_end"
-                                    else st.session_state.get("round", 1)
-                                ),
-                            }
-                        )
-                        st.session_state.active_modifiers = active_mods
+                    spend_stratagem(strat, player, _selected_state_key_for(player))
                     st.rerun()
 
 

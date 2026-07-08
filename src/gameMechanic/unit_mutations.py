@@ -355,10 +355,13 @@ def leave_melee_pair(
             enemy_state["in_melee"] = False
 
 
-def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
-    """Remove models that fled a morale test — semantically distinct from combat losses."""
-    key = _unit_key(faction)
-    state = st.session_state[key][uid]
+def _remove_whole_models(state: dict, unit: Unit, count: int) -> None:  # type: ignore[type-arg]
+    """Remove `count` whole models from `state` — shared by every "model destroyed
+    directly, no save, no wound-by-wound damage roll" path (Morale flee, Desperate
+    Breakout casualties). Handles both the group_wounds pool (mixed-wound units)
+    and the plain current_wounds/models bookkeeping, destroying the unit outright
+    once its wound pool is exhausted.
+    """
     if state.get("group_wounds"):
         remaining = count
         gw: dict[str, int] = state["group_wounds"]
@@ -370,8 +373,6 @@ def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
             gw[group.id] = max(0, gw.get(group.id, 0) - rm * unit.group_wound_value(group))
             remaining -= rm
         _recompute_from_group_wounds(state, unit)
-        state["fled_models_this_turn"] = state.get("fled_models_this_turn", 0) + count
-        state["turn_flags"]["morale_tested"] = True
         return
     wounds_to_remove = count * unit.wounds
     state["current_wounds"] = max(0, state["current_wounds"] - wounds_to_remove)
@@ -383,8 +384,84 @@ def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
         state["destroyed"] = True
         state["current_wounds"] = 0
         state["models"] = 0
+
+
+def flee_models(uid: str, faction: str, count: int, unit: Unit) -> None:
+    """Remove models that fled a morale test — semantically distinct from combat losses."""
+    key = _unit_key(faction)
+    state = st.session_state[key][uid]
+    _remove_whole_models(state, unit, count)
     state["fled_models_this_turn"] = state.get("fled_models_this_turn", 0) + count
     state["turn_flags"]["morale_tested"] = True
+
+
+def activate_morale_auto_pass(uid: str, faction: str) -> None:
+    """Mark a unit to auto-pass its next Morale test this phase (Insane Bravery, R-MORALE-09).
+
+    Set when the Insane Bravery stratagem is spent for this unit (see
+    uiLayout/_common.py:spend_stratagem's effect dispatch). Consumed by
+    ``confirm_morale_auto_pass`` once the Morale phase actually renders the test
+    for this unit — no dice are rolled and no models flee.
+    """
+    st.session_state[_unit_key(faction)][uid]["turn_flags"]["morale_auto_pass"] = True
+
+
+def confirm_morale_auto_pass(uid: str, faction: str) -> None:
+    """Consume an active Insane Bravery auto-pass: mark the Morale test as passed.
+
+    No dice are rolled and no models flee — mirrors the bookkeeping flee_models
+    does on a normal test, minus any model loss.
+    """
+    flags = st.session_state[_unit_key(faction)][uid]["turn_flags"]
+    flags["morale_tested"] = True
+    flags["morale_auto_pass"] = False
+
+
+def activate_desperate_breakout(uid: str, faction: str) -> None:
+    """Mark a unit as pending Desperate Breakout resolution (R-MOVE-14).
+
+    Set when the Desperate Breakout stratagem is spent for this unit (see
+    uiLayout/_common.py:spend_stratagem's effect dispatch). The Movement phase
+    UI then renders the casualty-roll input for this unit; ``resolve_desperate_breakout``
+    applies the result once the player confirms it.
+    """
+    st.session_state[_unit_key(faction)][uid]["turn_flags"]["desperate_breakout_pending"] = True
+
+
+def apply_desperate_breakout_casualties(uid: str, faction: str, count: int, unit: Unit) -> None:
+    """Remove `count` whole models destroyed by the Desperate Breakout casualty roll.
+
+    core_rules.txt (Desperate Breakout): "Roll one D6 for each model in that unit;
+    for each result of 1, one model in that unit of your choice is destroyed."
+    These models are genuinely destroyed (not the flee/Combat-Attrition
+    death-trigger exemption), so — unlike flee_models — they count toward
+    ``lost_models_this_turn`` for this turn's own Morale test and do not touch
+    ``morale_tested``.
+    """
+    if count <= 0:
+        return
+    state = st.session_state[_unit_key(faction)][uid]
+    _remove_whole_models(state, unit, count)
+    state["lost_models_this_turn"] = state.get("lost_models_this_turn", 0) + count
+
+
+def resolve_desperate_breakout(uid: str, faction: str, casualties: int, unit: Unit) -> None:
+    """Apply a Desperate Breakout casualty roll, then Fall Back.
+
+    Casualties are removed first (mirrors the rule's sequencing: the destruction
+    roll happens, then — assuming the unit survives — it Falls Back). If the
+    roll destroys the unit outright, ``set_movement_status`` is skipped (nothing
+    left to move); the pending flag is cleared either way, since the stratagem's
+    one resolution window is consumed once the player confirms the roll result.
+    Fall Back's own consequences (leaves melee, locks shooting/charging/psychic
+    powers this turn) come from ``set_movement_status`` — the same path a normal
+    Fall Back uses (R-MOVE-08).
+    """
+    apply_desperate_breakout_casualties(uid, faction, casualties, unit)
+    state = st.session_state[_unit_key(faction)][uid]
+    state["turn_flags"]["desperate_breakout_pending"] = False
+    if not state.get("destroyed"):
+        set_movement_status(uid, faction, "retreated")
 
 
 def set_movement_status(uid: str, faction: str, status: str) -> None:

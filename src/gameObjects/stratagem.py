@@ -103,6 +103,7 @@ def stratagem_visibility(
     used_this_phase: set[str],
     conditions_met: bool,
     used_in_battle: set[str] | None = None,
+    reactive_trigger_active: bool = False,
 ) -> Literal["clickable", "greyed", "hidden"]:
     """Return the display state for a stratagem given the current game context.
 
@@ -123,10 +124,19 @@ def stratagem_visibility(
                       stratagem in this set is greyed out regardless of phase, for
                       the remainder of this player's battle — not a global lock
                       shared across both players.
+    reactive_trigger_active: For `timing == "phase_reactive"` stratagems only — True
+                      when the caller has determined that this stratagem's specific
+                      reactive moment (e.g. "an enemy charge was just declared") is
+                      open right now. Defaults to False, which keeps every
+                      phase_reactive stratagem hidden in proactive listings (the
+                      central Stratagems tab never offers them — Plan 015). Contextual
+                      reactive-GO boxes (gameProtocoll.py/_common.py) pass True only
+                      for the one stratagem whose window they just opened; the normal
+                      phase/CP/used checks below still apply on top of this gate.
     """
     if not conditions_met:
         return "hidden"
-    if stratagem.timing == "phase_reactive":
+    if stratagem.timing == "phase_reactive" and not reactive_trigger_active:
         return "hidden"
     phase = stratagem.phase
     if phase != "any":
@@ -143,6 +153,29 @@ def stratagem_visibility(
         return "greyed"
 
     return "clickable"
+
+
+def reactive_stratagems_for(stratagems: list[Stratagem], phase: str, event: str) -> list[Stratagem]:
+    """Return the ``phase_reactive`` stratagems matching an open (phase, event) window.
+
+    Pure data-shape filter — the single entry point phase handlers use to look up
+    which reactive GOs could apply to a moment that just occurred (e.g. "an enemy
+    charge was declared" → phase="charge", event="on_declaration"). Deliberately
+    does NOT check the `player` field, CP, or usage: those depend on WHICH player
+    is eligible to react, which varies per stratagem (e.g. Counter-Offensive keys
+    off `fight_current_player`, not the generic active/inactive split) — callers
+    resolve that via `stratagem_usable_by_player()` and `stratagem_visibility()`
+    (passing `reactive_trigger_active=True`) themselves.
+    """
+    matched = []
+    for s in stratagems:
+        if s.timing != "phase_reactive" or s.event != event:
+            continue
+        phases = s.phase if isinstance(s.phase, list) else [s.phase]
+        if "any" not in phases and phase not in phases:
+            continue
+        matched.append(s)
+    return matched
 
 
 def stratagem_undo_visible(

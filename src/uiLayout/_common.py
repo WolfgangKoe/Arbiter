@@ -35,10 +35,25 @@ from gameMechanic.attack_math import (  # noqa: F401
 from gameMechanic.game_state import (
     PHASES,
     active_round_choice_buff_labels,
+    faction_dir_for,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import apply_damage, heal_unit
+from gameMechanic.unit_mutations import (
+    activate_desperate_breakout,
+    activate_morale_auto_pass,
+    adjust_cp,
+    apply_damage,
+    heal_unit,
+)
+from gameObjects.ability import Effect
+from gameObjects.loader import load_stratagems
+from gameObjects.stratagem import (
+    Stratagem,
+    reactive_stratagems_for,
+    stratagem_usable_by_player,
+    stratagem_visibility,
+)
 from gameObjects.unit import Unit
 from gameObjects.weapon import WeaponProfile
 from uiLayout.badges import badge
@@ -274,7 +289,10 @@ def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
                 type="primary" if is_mortal else "secondary",
             ):
                 if delta < 0:
+                    _, unit_state = lookup(faction, uid)
+                    was_destroyed = bool(unit_state.get("destroyed"))
                     apply_damage(uid, faction, -delta, unit, mortal=is_mortal)
+                    _maybe_flag_transport_destroyed(faction, uid, unit, was_destroyed)
                 else:
                     heal_unit(uid, faction, delta, unit)
                 st.rerun()
@@ -349,6 +367,7 @@ def render_player_column(
     is_active = faction == state["active"]
     indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
+    _render_pending_emergency_disembarkation(faction)
 
     if is_active:
         sel = st.session_state.selected_unit
@@ -386,6 +405,236 @@ def render_player_column(
             st.caption(no_target_caption)
         else:
             st.caption("—")
+
+
+# ---------------------------------------------------------------------------
+# Reactive stratagems — contextual GO boxes (Plan 015)
+# ---------------------------------------------------------------------------
+#
+# `stratagem_visibility()` hides every `timing: phase_reactive` stratagem in the
+# central Stratagems tab (gameProtocoll.py) unconditionally — that pool is only
+# ever surfaced here, at the exact moment a phase handler detects the rule
+# trigger the stratagem's `event` field names (e.g. "an enemy charge was just
+# declared"). `spend_stratagem` is the single CP/usage/modifier bookkeeping path
+# for ANY stratagem use, central-list or contextual — gameProtocoll.py's list
+# calls it too (Plan 015 Step 2).
+
+
+def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None) -> None:
+    """Deduct CP, mark the stratagem used (phase + battle-scoped), register its modifier.
+
+    The one canonical spend path: CP accounting, once-per-battle/phase tracking,
+    and `active_modifiers` registration must never drift apart between the central
+    Stratagems-tab list and contextual reactive boxes.
+    """
+    adjust_cp(faction, -strat.cp_cost)
+
+    used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
+    used_ids = used_ids_by_player.get(faction, set())
+    used_ids.add(strat.id)
+    used_ids_by_player[faction] = used_ids
+    st.session_state.used_stratagem_ids = used_ids_by_player
+
+    if strat.once_per_battle:
+        used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
+            "used_stratagem_battle_ids", {}
+        )
+        used_battle_ids = used_battle_ids_by_faction.get(faction, set())
+        used_battle_ids.add(strat.id)
+        used_battle_ids_by_faction[faction] = used_battle_ids
+        st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
+
+    if strat.modifier is not None:
+        m = strat.modifier
+        current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+        active_mods = st.session_state.get("active_modifiers", [])
+        active_mods.append(
+            {
+                "unit_key": unit_key,
+                "source": strat.name_en,
+                "effect": {
+                    "roll_type": m.roll_type,
+                    "value": m.value,
+                    "target": m.target,
+                    "phase": m.phase or current_phase,
+                },
+                "expires_at_phase": (current_phase if m.expires_at == "phase_end" else None),
+                "expires_at_round": (
+                    None if m.expires_at != "turn_end" else st.session_state.get("round", 1)
+                ),
+            }
+        )
+        st.session_state.active_modifiers = active_mods
+
+    if strat.effect is not None and unit_key is not None:
+        _apply_stratagem_effect(strat.effect, faction, unit_key)
+
+
+def _apply_stratagem_effect(effect: Effect, faction: str, unit_key: str) -> None:
+    """Dispatch a stratagem's machine-readable ``effect`` to the unit it targets.
+
+    Data-driven on ``effect.type`` (mirrors the Ability effect-dispatch pattern in
+    gameMechanic/ability_engine.py) — new effect types are added here as new
+    branches, never via a stratagem-name check. Currently handles the two Core
+    Stratagem effect types with an App-enforceable component (Plan 016 S130):
+    ``auto_pass_morale`` (Insane Bravery) and ``move`` with
+    ``handler: fall_back_through_models`` (Desperate Breakout). No-ops for any
+    other effect type (e.g. attack-sequence stratagems, which use `.modifier`
+    instead) — silently ignored here on purpose, same as an unmatched unit_key.
+    """
+    if effect.type == "auto_pass_morale":
+        activate_morale_auto_pass(unit_key, faction)
+    elif effect.type == "move" and effect.handler == "fall_back_through_models":
+        activate_desperate_breakout(unit_key, faction)
+
+
+def render_reactive_stratagem_box(
+    faction: str,
+    phase: str,
+    event: str,
+    *,
+    decline_key: str,
+    context_caption: str,
+    unit_key_for_modifier: str | None = None,
+    on_spent: Callable[[Stratagem], None] | None = None,
+    on_resolved: Callable[[], None] | None = None,
+) -> None:
+    """Render reactive-GO box(es) for `faction` while a (phase, event) window is open.
+
+    Call this from the phase handler at the exact moment a reactive window opens
+    (e.g. right after an enemy charge target is declared, in the defender's
+    column). Loads `faction`'s stratagem pool (shared + faction-specific),
+    filters via `reactive_stratagems_for()`, and renders a Use/Pass control for
+    each stratagem still clickable or greyed for this player.
+
+    decline_key — identifies this trigger occurrence (e.g. the charged target's
+    uid) so a "Pass" only suppresses the box for that one occurrence; cleared on
+    the next phase change (`reactive_declined`, reset in `_reset_phase_state()`).
+
+    on_spent(stratagem) — invoked after a successful spend, for stratagem-specific
+    side effects beyond CP/usage bookkeeping (e.g. Counter-Offensive reassigning
+    `fight_current_player`).
+
+    on_resolved() — invoked after EITHER Use or Pass, for clearing the caller's own
+    pending-window marker (e.g. `pending_fall_back`).
+    """
+    declined: set[str] = st.session_state.get("reactive_declined", set())
+    is_active = faction == st.session_state.get("active")
+
+    try:
+        stratagems = load_stratagems(faction_dir_for(faction))
+    except Exception:
+        return
+
+    candidates = reactive_stratagems_for(stratagems, phase, event)
+    if not candidates:
+        return
+
+    cp = st.session_state.get("cp", {}).get(faction, 0)
+    used_ids = st.session_state.get("used_stratagem_ids", {}).get(faction, set())
+    used_battle_ids = st.session_state.get("used_stratagem_battle_ids", {}).get(faction, set())
+
+    for strat in candidates:
+        if not stratagem_usable_by_player(strat.player, is_active):
+            continue
+        full_decline_key = f"{faction}:{event}:{strat.id}:{decline_key}"
+        if full_decline_key in declined:
+            continue
+        vis = stratagem_visibility(
+            strat,
+            cp,
+            phase,
+            used_ids,
+            True,
+            used_battle_ids,
+            reactive_trigger_active=True,
+        )
+        if vis == "hidden":
+            continue
+
+        with st.container(border=True):
+            st.markdown(
+                f"{SYM_SWORDS} **Reaction available — {strat.name_en}** ({strat.cp_cost} CP)"
+            )
+            st.caption(context_caption)
+            with st.expander("Rule text", expanded=False):
+                st.caption(strat.rule_text)
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button(
+                    f"Use — spend {strat.cp_cost} CP",
+                    key=f"reactive_use_{full_decline_key}",
+                    type="primary",
+                    disabled=(vis == "greyed"),
+                    use_container_width=True,
+                ):
+                    spend_stratagem(strat, faction, unit_key_for_modifier)
+                    if on_spent is not None:
+                        on_spent(strat)
+                    if on_resolved is not None:
+                        on_resolved()
+                    st.rerun()
+            with c2:
+                if st.button(
+                    "Pass",
+                    key=f"reactive_pass_{full_decline_key}",
+                    use_container_width=True,
+                ):
+                    declined.add(full_decline_key)
+                    st.session_state.reactive_declined = declined
+                    if on_resolved is not None:
+                        on_resolved()
+                    st.rerun()
+
+
+def _clear_pending_transport_destroyed() -> None:
+    st.session_state.pending_transport_destroyed = None
+
+
+def _maybe_flag_transport_destroyed(
+    faction: str, uid: str, unit: Unit, was_destroyed_before: bool
+) -> None:
+    """Open the Emergency Disembarkation reactive window when a TRANSPORT is destroyed.
+
+    Compares before/after `destroyed` state so a rerun that leaves an already-dead
+    TRANSPORT alone does not keep re-opening the window. Coverage note: this is
+    called from every damage-application choke point within this session's scope
+    (`wound_adjustment_buttons`, `_render_damage_block`, and fightPhase.py's
+    post-fight mortal-wound handler) — psychic-phase mortal wounds (Smite, Perils)
+    are NOT covered (psychicPhase.py is outside Plan 015's file scope this
+    session; documented as a known gap in the session report).
+    """
+    if was_destroyed_before or not unit.has_keyword("TRANSPORT"):
+        return
+    _, unit_state = lookup(faction, uid)
+    if unit_state.get("destroyed"):
+        st.session_state.pending_transport_destroyed = {"faction": faction, "uid": uid}
+
+
+def _render_pending_emergency_disembarkation(faction: str) -> None:
+    """Render the Emergency Disembarkation box in the TRANSPORT owner's own column.
+
+    `player: both` in the YAML means either side's column filter would pass this
+    stratagem — the real gate is ownership: only the player whose TRANSPORT was
+    just destroyed may use it, so this checks `faction` against the marker
+    directly rather than routing through the active/inactive split.
+    """
+    marker = st.session_state.get("pending_transport_destroyed")
+    if not marker or marker.get("faction") != faction:
+        return
+    try:
+        unit, _ = lookup(faction, marker["uid"])
+    except KeyError:
+        st.session_state.pending_transport_destroyed = None
+        return
+    render_reactive_stratagem_box(
+        faction,
+        phase=PHASES[st.session_state.get("phase_idx", 0)][1],
+        event="on_destroy",
+        decline_key=marker["uid"],
+        context_caption=f"{unit.name_en} (TRANSPORT) was destroyed.",
+        on_resolved=_clear_pending_transport_destroyed,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -823,8 +1072,10 @@ def _render_damage_block(
                 select_damage_target_group(def_uid, def_faction, chosen_gid)
             else:
                 def_state["damage_active_group_id"] = None
+        was_destroyed_before = bool(def_state.get("destroyed"))
         if total > 0:
             apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
+            _maybe_flag_transport_destroyed(def_faction, def_uid, def_unit, was_destroyed_before)
         wiped_groups: list = []  # type: ignore[type-arg]
         if is_group_wounds:
             # Real loss only known after priority-based distribution

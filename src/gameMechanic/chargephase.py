@@ -16,7 +16,12 @@ from constants.symbols import SYM_CHECK, SYM_EXPAND_ALT, SYM_SWORDS
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
-from uiLayout._common import lookup, render_melee_engagements, render_player_column
+from uiLayout._common import (
+    lookup,
+    render_melee_engagements,
+    render_player_column,
+    render_reactive_stratagem_box,
+)
 
 
 class ChargePhaseHandler:
@@ -139,8 +144,27 @@ def _active_charge(
 def _inactive_charge(
     faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
 ) -> None:
-    """Inactive player target view for Charge Phase."""
+    """Inactive player target view for Charge Phase.
+
+    This is exactly the Fire Overwatch reactive window (core_rules.txt Z. 1907-1934,
+    3240): the enemy has declared `unit` a charge target but the charge roll has not
+    been made yet (rendered as long as `unit` stays in `selected_targets` — the
+    Charge Successful/Failed buttons clear that list once the roll is resolved).
+    """
     st.caption("Overwatch: only unmodified 6s hit.")
+    charger = st.session_state.get("selected_unit")
+    charger_name = ""
+    if charger:
+        charger_unit, _ = lookup(*charger)
+        charger_name = charger_unit.name_en
+    render_reactive_stratagem_box(
+        faction,
+        phase="charge",
+        event="on_declaration",
+        decline_key=uid,
+        context_caption=f"{unit.name_en} was declared a charge target"
+        + (f" by {charger_name}." if charger_name else "."),
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -13,10 +13,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.ability_engine as _eng  # noqa: E402
 import gameMechanic.game_state as _gs  # noqa: E402
+import gameMechanic.unit_mutations as _um  # noqa: E402
 import uiLayout._common as common  # noqa: E402
 from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
+from gameObjects.ability import Effect  # noqa: E402
 from uiLayout._common import (  # noqa: E402
     _collect_def_save_modifiers,
     _parse_strength,
@@ -498,3 +500,423 @@ def test_conquering_tyrant_primary_aura_range_bonus_data_feeds_hint() -> None:
         "My Will Be Done",
         "Rites of Reanimation",
     ]
+
+
+# ---------------------------------------------------------------------------
+# Plan 015 — spend_stratagem() canonical CP/usage/modifier bookkeeping
+# ---------------------------------------------------------------------------
+
+
+def _strat(
+    sid: str = "test.strat",
+    cp_cost: int = 1,
+    once_per_battle: bool = False,
+    modifier=None,
+    effect=None,
+) -> object:
+    from gameObjects.stratagem import Stratagem
+
+    return Stratagem(
+        id=sid,
+        name_en="Test GO",
+        cp_cost=cp_cost,
+        phase="any",
+        stage="active",
+        player="both",
+        once_per_battle=once_per_battle,
+        modifier=modifier,
+        effect=effect,
+    )
+
+
+def _spend_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
+    session = _SS(
+        cp={"Necrons": 5},
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        active_modifiers=[],
+        phase_idx=5,  # "charge"
+        round=2,
+        **extra,
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _um.st.session_state = session
+    return session
+
+
+def test_spend_stratagem_deducts_cp() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(cp_cost=2), "Necrons")
+    assert session["cp"]["Necrons"] == 3
+
+
+def test_spend_stratagem_marks_used_this_phase() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons")
+    assert "strat.a" in session["used_stratagem_ids"]["Necrons"]
+
+
+def test_spend_stratagem_once_per_battle_marks_battle_set_too() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.opb", once_per_battle=True), "Necrons")
+    assert "strat.opb" in session["used_stratagem_battle_ids"]["Necrons"]
+
+
+def test_spend_stratagem_without_once_per_battle_leaves_battle_set_untouched() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.normal"), "Necrons")
+    assert session["used_stratagem_battle_ids"] == {}
+
+
+def test_spend_stratagem_registers_active_modifier_with_unit_key() -> None:
+    from gameObjects.stratagem import StratagemModifier
+
+    session = _spend_session()
+    modifier = StratagemModifier(
+        roll_type="wound",
+        value=1,
+        target="attacker",
+        expires_at="phase_end",
+        source_label="Test GO",
+    )
+    common.spend_stratagem(_strat(sid="strat.mod", modifier=modifier), "Necrons", "unit#1")
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "unit#1"
+    assert mods[0]["effect"]["roll_type"] == "wound"
+    assert mods[0]["expires_at_phase"] == "charge"  # phase_end → current phase
+
+
+# ---------------------------------------------------------------------------
+# S130 — spend_stratagem() effect dispatch: Insane Bravery / Desperate Breakout
+# ---------------------------------------------------------------------------
+
+
+def _effect_spend_session(unit_key: str = "unit#1") -> _SS:  # type: ignore[no-untyped-def]
+    session = _SS(
+        first_player="Necrons",
+        cp={"Necrons": 5},
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        active_modifiers=[],
+        phase_idx=1,  # "movement"
+        round=2,
+        p1_units={unit_key: {"turn_flags": {}}},
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _um.st.session_state = session
+    return session
+
+
+def test_spend_stratagem_auto_pass_morale_activates_flag_for_unit() -> None:
+    session = _effect_spend_session()
+    strat = _strat(sid="strat.insane_bravery", effect=Effect(type="auto_pass_morale"))
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    assert session["p1_units"]["unit#1"]["turn_flags"]["morale_auto_pass"] is True
+
+
+def test_spend_stratagem_auto_pass_morale_noop_without_unit_key() -> None:
+    """No selected unit to target — CP is still spent, but no flag is set anywhere."""
+    session = _effect_spend_session()
+    strat = _strat(sid="strat.insane_bravery", effect=Effect(type="auto_pass_morale"))
+    common.spend_stratagem(strat, "Necrons", None)
+    assert session["cp"]["Necrons"] == 4
+    assert session["p1_units"]["unit#1"]["turn_flags"] == {}
+
+
+def test_spend_stratagem_desperate_breakout_activates_pending_flag_for_unit() -> None:
+    session = _effect_spend_session()
+    strat = _strat(
+        sid="strat.desperate_breakout",
+        effect=Effect(type="move", handler="fall_back_through_models"),
+    )
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    assert session["p1_units"]["unit#1"]["turn_flags"]["desperate_breakout_pending"] is True
+
+
+def test_spend_stratagem_unrelated_effect_type_is_noop() -> None:
+    """Regression: an effect type outside the dispatch table touches no turn_flags."""
+    session = _effect_spend_session()
+    strat = _strat(sid="strat.other", effect=Effect(type="heal"))
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    assert session["p1_units"]["unit#1"]["turn_flags"] == {}
+
+
+# ---------------------------------------------------------------------------
+# Plan 015 — _maybe_flag_transport_destroyed()
+# ---------------------------------------------------------------------------
+
+
+def test_flags_transport_destroyed_when_newly_destroyed() -> None:
+    unit = SimpleNamespace(keywords=["TRANSPORT", "VEHICLE"])
+    unit.has_keyword = lambda kw: kw in unit.keywords
+    session = _SS(p1_units={"tank#1": {"destroyed": True}}, first_player="Necrons")
+    common.st.session_state = session
+    _gs.st.session_state = session
+    monkeypatch_units = common.units_list_for
+    common.units_list_for = lambda faction: [SimpleNamespace(id="tank")]
+    try:
+        common._maybe_flag_transport_destroyed(
+            "Necrons", "tank#1", unit, was_destroyed_before=False
+        )
+    finally:
+        common.units_list_for = monkeypatch_units
+    assert session["pending_transport_destroyed"] == {"faction": "Necrons", "uid": "tank#1"}
+
+
+def test_does_not_flag_when_already_destroyed_before() -> None:
+    unit = SimpleNamespace(keywords=["TRANSPORT"])
+    unit.has_keyword = lambda kw: kw in unit.keywords
+    session = _SS(p1_units={"tank#1": {"destroyed": True}}, first_player="Necrons")
+    common.st.session_state = session
+    _gs.st.session_state = session
+    monkeypatch_units = common.units_list_for
+    common.units_list_for = lambda faction: [SimpleNamespace(id="tank")]
+    try:
+        common._maybe_flag_transport_destroyed("Necrons", "tank#1", unit, was_destroyed_before=True)
+    finally:
+        common.units_list_for = monkeypatch_units
+    assert "pending_transport_destroyed" not in session
+
+
+def test_does_not_flag_non_transport_unit() -> None:
+    unit = SimpleNamespace(keywords=["INFANTRY"])
+    unit.has_keyword = lambda kw: kw in unit.keywords
+    session = _SS(p1_units={"warrior#1": {"destroyed": True}}, first_player="Necrons")
+    common.st.session_state = session
+    _gs.st.session_state = session
+    monkeypatch_units = common.units_list_for
+    common.units_list_for = lambda faction: [SimpleNamespace(id="warrior")]
+    try:
+        common._maybe_flag_transport_destroyed(
+            "Necrons", "warrior#1", unit, was_destroyed_before=False
+        )
+    finally:
+        common.units_list_for = monkeypatch_units
+    assert "pending_transport_destroyed" not in session
+
+
+# ---------------------------------------------------------------------------
+# Plan 015 — render_reactive_stratagem_box(): real Fire Overwatch data end-to-end
+# ---------------------------------------------------------------------------
+
+
+class _FakeCtx:
+    """No-op context manager stand-in for st.container()/st.expander()/columns()."""
+
+    def __enter__(self):  # type: ignore[no-untyped-def]
+        return self
+
+    def __exit__(self, *exc):  # type: ignore[no-untyped-def]
+        return False
+
+
+def _reactive_box_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
+    base = dict(
+        first_player="Necrons",
+        second_player="Orks",
+        active="Orks",  # Necrons is the inactive/defending column
+        p1_faction_dir="necrons",
+        p2_faction_dir="necrons",
+        cp={"Necrons": 5},
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        active_modifiers=[],
+        reactive_declined=set(),
+    )
+    base.update(extra)
+    return _SS(**base)
+
+
+def _install_reactive_box_widgets(monkeypatch, session, clicked_key: str | None = None):  # type: ignore[no-untyped-def]
+    """Patch the shared streamlit mock's widget surface for one render call.
+
+    `common.st`, `game_state.st`, and `unit_mutations.st` are all the SAME
+    MagicMock object (all three modules did `import streamlit as st` against
+    the identical `sys.modules["streamlit"]` stand-in) — patching attributes
+    on it (via monkeypatch, auto-restored after the test) makes `spend_stratagem`
+    → `adjust_cp` see the same session as `render_reactive_stratagem_box` itself,
+    instead of a stale `session_state` left over from an earlier test.
+    """
+    markdown_calls: list[str] = []
+    rerun_calls: list[int] = []
+    monkeypatch.setattr(common.st, "session_state", session)
+    monkeypatch.setattr(_gs.st, "session_state", session)
+    monkeypatch.setattr(_um.st, "session_state", session)
+    monkeypatch.setattr(common.st, "markdown", lambda text, **kw: markdown_calls.append(text))
+    monkeypatch.setattr(common.st, "caption", lambda text, **kw: None)
+    monkeypatch.setattr(common.st, "container", lambda **kw: _FakeCtx())
+    monkeypatch.setattr(common.st, "expander", lambda *a, **kw: _FakeCtx())
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(_FakeCtx() for _ in range(n)))
+    monkeypatch.setattr(common.st, "button", lambda label, key=None, **kw: key == clicked_key)
+    monkeypatch.setattr(common.st, "rerun", lambda: rerun_calls.append(1))
+    return markdown_calls, rerun_calls
+
+
+def test_fire_overwatch_box_shown_when_window_open_for_defender(monkeypatch) -> None:
+    """Real shared-data end-to-end check: Fire Overwatch (player=inactive) surfaces
+    in the target's own column while the Charge reactive window is open."""
+    session = _reactive_box_session()
+    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="Warriors were declared a charge target.",
+    )
+
+    combined = "\n".join(markdown_calls)
+    assert "Fire Overwatch" in combined
+
+
+def test_fire_overwatch_box_hidden_for_active_player_column(monkeypatch) -> None:
+    """player=inactive: the charging (active) player's own column must not see it."""
+    session = _reactive_box_session(active="Necrons")  # Necrons is now the charger
+    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="irrelevant",
+    )
+
+    combined = "\n".join(markdown_calls)
+    assert "Fire Overwatch" not in combined
+
+
+def test_use_button_spends_cp_marks_used_and_reruns(monkeypatch) -> None:
+    session = _reactive_box_session()
+    use_key = (
+        "reactive_use_Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
+    )
+    _, rerun_calls = _install_reactive_box_widgets(monkeypatch, session, clicked_key=use_key)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert session["cp"]["Necrons"] == 4  # 5 - 1 CP
+    assert "wh40k_9e.shared.stratagem.fire_overwatch" in session["used_stratagem_ids"]["Necrons"]
+    assert rerun_calls == [1]
+
+
+def test_pass_button_declines_without_spending_cp(monkeypatch) -> None:
+    session = _reactive_box_session()
+    pass_key = (
+        "reactive_pass_Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
+    )
+    _, rerun_calls = _install_reactive_box_widgets(monkeypatch, session, clicked_key=pass_key)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert session["cp"]["Necrons"] == 5  # untouched
+    assert (
+        "Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
+        in session["reactive_declined"]
+    )
+    assert rerun_calls == [1]
+
+
+def test_declined_occurrence_does_not_reappear(monkeypatch) -> None:
+    """A previously-passed occurrence (same decline_key) stays suppressed."""
+    session = _reactive_box_session(
+        reactive_declined={
+            "Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
+        }
+    )
+    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="irrelevant",
+    )
+
+    combined = "\n".join(markdown_calls)
+    assert "Fire Overwatch" not in combined
+
+
+# ---------------------------------------------------------------------------
+# Plan 015 — _render_pending_emergency_disembarkation() + render_player_column wiring
+# ---------------------------------------------------------------------------
+
+
+def test_no_pending_transport_destroyed_renders_nothing(monkeypatch) -> None:
+    session = _SS(pending_transport_destroyed=None)
+    common.st.session_state = session
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", spy)
+
+    common._render_pending_emergency_disembarkation("Necrons")
+
+    spy.assert_not_called()
+
+
+def test_pending_transport_destroyed_for_other_faction_renders_nothing(monkeypatch) -> None:
+    """Ownership gate: only the TRANSPORT's own faction sees the box."""
+    session = _SS(pending_transport_destroyed={"faction": "Orks", "uid": "trukk#1"})
+    common.st.session_state = session
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", spy)
+
+    common._render_pending_emergency_disembarkation("Necrons")
+
+    spy.assert_not_called()
+
+
+def test_pending_transport_destroyed_for_own_faction_renders_box(monkeypatch) -> None:
+    session = _SS(
+        pending_transport_destroyed={"faction": "Necrons", "uid": "ghost_ark#1"},
+        phase_idx=4,  # "shooting"
+    )
+    common.st.session_state = session
+    ghost_ark = SimpleNamespace(name_en="Ghost Ark")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (ghost_ark, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", spy)
+
+    common._render_pending_emergency_disembarkation("Necrons")
+
+    spy.assert_called_once()
+    call = spy.call_args
+    assert call.args[0] == "Necrons"
+    assert call.kwargs["event"] == "on_destroy"
+    assert call.kwargs["decline_key"] == "ghost_ark#1"
+    assert "Ghost Ark" in call.kwargs["context_caption"]
+
+
+def test_render_player_column_calls_emergency_disembarkation_check(monkeypatch) -> None:
+    """Wiring check: render_player_column must consult the pending marker for
+    EVERY faction column, regardless of active/inactive role (charge, movement,
+    and shooting phases all share this one render function)."""
+    session = _SS(
+        active="Orks",
+        selected_unit=None,
+        selected_targets=[],
+        pending_transport_destroyed=None,
+    )
+    common.st.session_state = session
+    spy = MagicMock()
+    monkeypatch.setattr(common, "_render_pending_emergency_disembarkation", spy)
+
+    common.render_player_column("Necrons", {"active": "Orks"}, active_content=lambda *a: None)
+
+    spy.assert_called_once_with("Necrons")

@@ -17,10 +17,19 @@ from gameMechanic.game_state import (
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import set_deployment, set_movement_status
+from gameMechanic.unit_mutations import (
+    resolve_desperate_breakout,
+    set_deployment,
+    set_movement_status,
+)
 from gameObjects.loader import load_relic_catalog
-from gameObjects.unit import TriggeredEffect
-from uiLayout._common import lookup, render_player_column, render_unit_selectbox
+from gameObjects.unit import TriggeredEffect, Unit
+from uiLayout._common import (
+    lookup,
+    render_player_column,
+    render_reactive_stratagem_box,
+    render_unit_selectbox,
+)
 
 # Fallbacks when a teleport relic's YAML entry carries no UI texts. Faction
 # flavour (e.g. which keyword the second unit must carry) lives in the relic's
@@ -52,6 +61,8 @@ class MovementPhaseHandler:
             if second == state["active"]:
                 _render_reinforcements_step(second)
 
+        _render_pending_cut_them_down(first, second)
+
 
 # ---------------------------------------------------------------------------
 # Phase-specific content helpers
@@ -69,6 +80,10 @@ def _active_movement(
     in_melee = unit_state.get("in_melee", False)
     current = unit_state.get("movement_choice") or "none"
     flags = unit_state.get("turn_flags", {})
+
+    if flags.get("desperate_breakout_pending"):
+        _render_desperate_breakout(uid, unit, faction, unit_state, state)
+        return
 
     # Movement was locked by an ability (e.g. teleport) — block normal movement buttons
     if flags.get("movement_locked"):
@@ -108,6 +123,13 @@ def _active_movement(
             help=tip,
         ):
             set_movement_status(uid, faction, value)
+            if value == "retreated":
+                # Opens the Cut Them Down reactive window (core_rules.txt Z. 773-778) —
+                # "before any models in that unit are moved"; this app has no separate
+                # movement-execution step, so the window opens immediately on
+                # declaration and stays open until the enemy uses/passes it or the
+                # phase ends (_reset_phase_state clears the marker).
+                st.session_state.pending_fall_back = {"faction": faction, "uid": uid}
             log_action(st.session_state.round, "movement", unit.name_en, f"movement: {value}")
             st.rerun()
 
@@ -117,6 +139,59 @@ def _active_movement(
     te = unit.get_triggered_effect("phase_start", "movement", "teleport")
     if te:
         _render_teleport_effect(uid, unit, faction, state, unit_state, te)
+
+
+def _render_desperate_breakout(
+    uid: str,
+    unit: Unit,
+    faction: str,
+    unit_state: dict,  # type: ignore[type-arg]
+    state: dict,  # type: ignore[type-arg]
+) -> None:
+    """Resolve a pending Desperate Breakout: casualty roll, then Fall Back.
+
+    Class C (Hybrid, R-MOVE-14): the App applies the destroyed-model count the
+    player reports and the resulting Fall Back (leaves melee; locks
+    shooting/charging/manifesting powers this turn — same as a normal Fall
+    Back, R-MOVE-08). Whether the unit can actually find a valid Fall Back path
+    and ending square outside every enemy's Engagement Range stays a table
+    judgement (core_rules.txt: Fall Back "cannot end its move within Engagement
+    Range of any enemy models — if it cannot do this then it cannot Fall
+    Back"); rules_appendix.txt notes that if a rule prevents Falling Back, no
+    further models are destroyed beyond the casualty roll already resolved here.
+    """
+    st.divider()
+    st.markdown("**Desperate Breakout**")
+    st.info(
+        "Roll 1 D6 per model in this unit; for each result of 1, one model of "
+        "your choice is destroyed. Then attempt to Fall Back (models may move "
+        "across enemy models); verify at the table that it can end outside "
+        "every enemy's Engagement Range — if it cannot, the unit still cannot "
+        "do anything else this turn."
+    )
+    casualties = st.number_input(
+        "Models destroyed (rolled a 1)",
+        min_value=0,
+        max_value=unit_state["models"],
+        step=1,
+        key=f"desperate_breakout_casualties_{uid}",
+    )
+    if st.button(
+        "Confirm Desperate Breakout",
+        key=f"desperate_breakout_confirm_{uid}",
+        type="primary",
+        use_container_width=True,
+    ):
+        resolve_desperate_breakout(uid, faction, int(casualties), unit)
+        log_action(
+            state["round"],
+            "movement",
+            unit.name_en,
+            f"Desperate Breakout — {int(casualties)} model(s) destroyed, Fall Back.",
+        )
+        if not unit_state.get("destroyed"):
+            st.session_state.pending_fall_back = {"faction": faction, "uid": uid}
+        st.rerun()
 
 
 def _render_teleport_effect(
@@ -278,6 +353,38 @@ def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: i
 
     log_action(state["round"], "movement", "teleport", "undone")
     st.rerun()
+
+
+def _clear_pending_fall_back() -> None:
+    st.session_state.pending_fall_back = None
+
+
+def _render_pending_cut_them_down(first: str, second: str) -> None:
+    """Render the Cut Them Down box for the enemy of a unit that just Fell Back.
+
+    `player: inactive` in the YAML means the box is for the OTHER faction —
+    Cut Them Down punishes the enemy's Fall Back, not your own.
+    """
+    marker = st.session_state.get("pending_fall_back")
+    if not marker:
+        return
+    retreat_faction = marker["faction"]
+    enemy_faction = second if retreat_faction == first else first
+    try:
+        unit, _ = lookup(retreat_faction, marker["uid"])
+    except KeyError:
+        st.session_state.pending_fall_back = None
+        return
+
+    st.divider()
+    render_reactive_stratagem_box(
+        enemy_faction,
+        phase="movement",
+        event="on_declaration",
+        decline_key=marker["uid"],
+        context_caption=f"{unit.name_en} ({retreat_faction}) is Falling Back.",
+        on_resolved=_clear_pending_fall_back,
+    )
 
 
 def _render_reinforcements_step(faction: str) -> None:

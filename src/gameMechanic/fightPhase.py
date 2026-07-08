@@ -21,12 +21,16 @@ from gameMechanic.game_state import (
     units_list_for,
 )
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
+from gameObjects.stratagem import Stratagem
 from uiLayout._common import (
+    _maybe_flag_transport_destroyed,
+    _render_pending_emergency_disembarkation,
     group_flow_attacker,
     lookup,
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
+    render_reactive_stratagem_box,
     render_unit_selectbox,
     state_badges_html,
     wound_adjustment_buttons,
@@ -79,6 +83,35 @@ def _has_eligible_units(player: str, first: str, second: str) -> bool:
         if can_fight_now(s, first, second):
             return True
     return False
+
+
+def _any_unit_fought(first: str, second: str) -> bool:
+    """Return True if any unit (either side) has already fought this Fight Phase.
+
+    Counter-Offensive's rule_text gates on "after an enemy unit has fought in
+    this turn" — without this check the reactive box would also appear before
+    the very first activation, when `fight_current_player` is merely the
+    phase-opening priority pick, not a post-fight handoff.
+    """
+    for player in (first, second):
+        for s in st.session_state[units_key_for(player)].values():
+            if s.get("turn_flags", {}).get("fought"):
+                return True
+    return False
+
+
+def _apply_counter_offensive(faction: str) -> None:
+    """Let `faction` cut back in immediately after using Counter-Offensive.
+
+    No extra suppression flag is needed: `_advance_fight_turn_if_needed` only
+    auto-flips `fight_current_player` away from `faction` once ITS selected unit
+    has fought, or when it has no eligible units left — neither is true right
+    after this call (that is exactly why the box was offered), so the normal
+    alternation logic leaves `faction` in place until it actually fights.
+    """
+    st.session_state.fight_current_player = faction
+    st.session_state.selected_unit = None
+    st.session_state.selected_targets = []
 
 
 def _advance_fight_turn_if_needed(first: str, second: str) -> None:
@@ -260,7 +293,15 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                 disabled=mortals <= 0,
                 use_container_width=True,
             ):
+                was_destroyed_before = bool(
+                    st.session_state[units_key_for(target_faction)]
+                    .get(target_uid, {})
+                    .get("destroyed")
+                )
                 apply_mortal_wounds(target_uid, target_faction, mortals, target_unit)
+                _maybe_flag_transport_destroyed(
+                    target_faction, target_uid, target_unit, was_destroyed_before
+                )
                 st.session_state[units_key_for(faction)][uid]["turn_flags"][
                     "mortal_effect_applied"
                 ] = True
@@ -380,6 +421,7 @@ def _render_fight_column(
     is_my_turn = faction == fight_player
     indicator = SYM_SWORDS if is_my_turn else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
+    _render_pending_emergency_disembarkation(faction)
 
     if is_my_turn:
         sel = st.session_state.selected_unit
@@ -407,6 +449,23 @@ def _render_fight_column(
             if eligible:
                 render_group_assignment(atk_faction, atk_uid, atk_unit, atk_state, use_melee=True)
                 return
+
+        if _any_unit_fought(first, second) and _has_eligible_units(faction, first, second):
+
+            def _on_counter_offensive_spent(_strat: Stratagem, _faction: str = faction) -> None:
+                _apply_counter_offensive(_faction)
+
+            render_reactive_stratagem_box(
+                faction,
+                phase="fight",
+                event="on_declaration",
+                decline_key=f"co_{fight_player}",
+                context_caption=(
+                    f"You just fought — {fight_player} is next up. "
+                    "Cut back in before they activate a unit?"
+                ),
+                on_spent=_on_counter_offensive_spent,
+            )
 
         targets: list[tuple[str, str]] = st.session_state.selected_targets
         matching = [t for t in targets if t[0] == faction]

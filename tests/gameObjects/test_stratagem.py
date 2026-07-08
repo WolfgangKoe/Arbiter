@@ -11,6 +11,7 @@ from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.stratagem import (  # noqa: E402
     Stratagem,
     is_core_stratagem,
+    reactive_stratagems_for,
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
@@ -27,6 +28,8 @@ def _strat(
     cp_cost: int = 1,
     timing: str | None = None,
     sid: str = "test.strat",
+    event: str | None = None,
+    player: str = "active",
 ) -> Stratagem:
     return Stratagem(
         id=sid,
@@ -34,8 +37,9 @@ def _strat(
         cp_cost=cp_cost,
         phase=phase,
         stage=stage,
-        player="active",
+        player=player,
         timing=timing,
+        event=event,
     )
 
 
@@ -45,6 +49,8 @@ def _vis(
     current_phase: str = "shooting",
     used: set[str] | None = None,
     conditions_met: bool = True,
+    used_in_battle: set[str] | None = None,
+    reactive_trigger_active: bool = False,
 ) -> str:
     return stratagem_visibility(
         stratagem,
@@ -52,6 +58,8 @@ def _vis(
         current_phase=current_phase,
         used_this_phase=used or set(),
         conditions_met=conditions_met,
+        used_in_battle=used_in_battle,
+        reactive_trigger_active=reactive_trigger_active,
     )
 
 
@@ -64,8 +72,18 @@ class TestStratagemsHidden:
     def test_hidden_when_conditions_not_met(self) -> None:
         assert _vis(_strat(), conditions_met=False) == "hidden"
 
-    def test_hidden_when_phase_reactive(self) -> None:
+    def test_hidden_when_phase_reactive_by_default(self) -> None:
+        """Plan 015: phase_reactive stays hidden unless a reactive window is open.
+
+        `reactive_trigger_active` defaults to False — every existing caller (the
+        central Stratagems-tab list) keeps getting "hidden" for phase_reactive GOs
+        exactly as before this session's contextual reactive-box infrastructure
+        was added.
+        """
         assert _vis(_strat(timing="phase_reactive")) == "hidden"
+
+    def test_hidden_when_phase_reactive_and_reactive_trigger_active_false(self) -> None:
+        assert _vis(_strat(timing="phase_reactive"), reactive_trigger_active=False) == "hidden"
 
     def test_hidden_when_wrong_phase(self) -> None:
         assert _vis(_strat(phase="command"), current_phase="shooting") == "hidden"
@@ -122,6 +140,109 @@ class TestStratagemsClickable:
     def test_clickable_different_strat_id_not_in_used_set(self) -> None:
         strat = _strat(sid="other.strat")
         assert _vis(strat, used={"different.strat"}) == "clickable"
+
+
+# ---------------------------------------------------------------------------
+# Plan 015: reactive_trigger_active opens the phase_reactive gate contextually
+# ---------------------------------------------------------------------------
+
+
+class TestReactiveTriggerActive:
+    """A phase_reactive stratagem becomes evaluable (not hidden) only while its
+    reactive window is open — `reactive_trigger_active=True` — and then still
+    goes through the normal phase/CP/used checks like any other stratagem.
+    """
+
+    def test_reactive_and_trigger_active_and_phase_matches_is_clickable(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge")
+        assert _vis(strat, current_phase="charge", reactive_trigger_active=True) == "clickable"
+
+    def test_reactive_and_trigger_active_but_wrong_phase_is_hidden(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge")
+        assert _vis(strat, current_phase="shooting", reactive_trigger_active=True) == "hidden"
+
+    def test_reactive_and_trigger_active_but_conditions_not_met_is_hidden(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge")
+        assert (
+            _vis(
+                strat,
+                current_phase="charge",
+                reactive_trigger_active=True,
+                conditions_met=False,
+            )
+            == "hidden"
+        )
+
+    def test_reactive_and_trigger_active_but_insufficient_cp_is_greyed(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge", cp_cost=2)
+        assert _vis(strat, cp=1, current_phase="charge", reactive_trigger_active=True) == "greyed"
+
+    def test_reactive_and_trigger_active_but_already_used_is_greyed(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge", sid="reactive.used")
+        assert (
+            _vis(
+                strat,
+                current_phase="charge",
+                used={"reactive.used"},
+                reactive_trigger_active=True,
+            )
+            == "greyed"
+        )
+
+    def test_reactive_and_trigger_active_with_phase_any_is_clickable(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="any")
+        assert _vis(strat, current_phase="morale", reactive_trigger_active=True) == "clickable"
+
+
+# ---------------------------------------------------------------------------
+# Plan 015: reactive_stratagems_for() — pure (phase, event) data-shape filter
+# ---------------------------------------------------------------------------
+
+
+class TestReactiveStratagemsFor:
+    def test_matches_stratagem_with_matching_phase_and_event(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge", event="on_declaration")
+        assert reactive_stratagems_for([strat], "charge", "on_declaration") == [strat]
+
+    def test_excludes_non_reactive_stratagem(self) -> None:
+        strat = _strat(timing=None, phase="charge", event="on_declaration")
+        assert reactive_stratagems_for([strat], "charge", "on_declaration") == []
+
+    def test_excludes_wrong_event(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="charge", event="on_destroy")
+        assert reactive_stratagems_for([strat], "charge", "on_declaration") == []
+
+    def test_excludes_wrong_phase_single(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="fight", event="on_declaration")
+        assert reactive_stratagems_for([strat], "charge", "on_declaration") == []
+
+    def test_excludes_wrong_phase_list(self) -> None:
+        strat = _strat(timing="phase_reactive", phase=["movement", "shooting"], event="after_roll")
+        assert reactive_stratagems_for([strat], "charge", "after_roll") == []
+
+    def test_includes_phase_any_regardless_of_current_phase(self) -> None:
+        strat = _strat(timing="phase_reactive", phase="any", event="on_destroy")
+        assert reactive_stratagems_for([strat], "morale", "on_destroy") == [strat]
+
+    def test_includes_matching_phase_within_list(self) -> None:
+        strat = _strat(
+            timing="phase_reactive", phase=["movement", "psychic", "shooting"], event="after_roll"
+        )
+        assert reactive_stratagems_for([strat], "shooting", "after_roll") == [strat]
+
+    def test_real_shared_reactive_stratagems_match_their_documented_trigger(self) -> None:
+        """The 5 shared reactive stratagems each surface at their own (phase, event)."""
+        stratagems = load_stratagems("necrons")
+        cases = [
+            ("wh40k_9e.shared.stratagem.fire_overwatch", "charge", "on_declaration"),
+            ("wh40k_9e.shared.stratagem.counter_offensive", "fight", "on_declaration"),
+            ("wh40k_9e.shared.stratagem.cut_them_down", "movement", "on_declaration"),
+            ("wh40k_9e.shared.stratagem.emergency_disembarkation", "shooting", "on_destroy"),
+            ("wh40k_9e.shared.stratagem.command_re_roll", "fight", "after_roll"),
+        ]
+        for sid, phase, event in cases:
+            matched = reactive_stratagems_for(stratagems, phase, event)
+            assert any(s.id == sid for s in matched), f"{sid} did not match ({phase}, {event})"
 
 
 # ---------------------------------------------------------------------------

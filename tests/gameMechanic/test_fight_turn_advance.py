@@ -148,3 +148,61 @@ def test_non_charged_waits_while_charged_pending(monkeypatch) -> None:  # type: 
     assert fp.can_fight_now(non_charged, "A", "B") is False
     # The charged unit itself fights first.
     assert fp.can_fight_now(enemy_charged, "A", "B") is True
+
+
+# ---------------------------------------------------------------------------
+# Plan 015 — Counter-Offensive: _any_unit_fought() + _apply_counter_offensive()
+# ---------------------------------------------------------------------------
+
+
+def test_any_unit_fought_false_before_any_fight_this_phase(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    a_state = _unit_state(fought=False)
+    b_state = _unit_state(fought=False)
+    _setup(monkeypatch, a_state=a_state, b_state=b_state, current="A", selected=None)
+
+    assert fp._any_unit_fought("A", "B") is False
+
+
+def test_any_unit_fought_true_after_one_side_fought(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    a_state = _unit_state(fought=True)
+    b_state = _unit_state(fought=False)
+    _setup(monkeypatch, a_state=a_state, b_state=b_state, current="B", selected=None)
+
+    assert fp._any_unit_fought("A", "B") is True
+
+
+def test_apply_counter_offensive_reassigns_fight_current_player_and_clears_selection(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """Counter-Offensive (core_rules.txt: 'Select one of your own eligible units and
+    fight with it next.') lets X cut back in — no extra suppression flag is needed
+    because _advance_fight_turn_if_needed only flips away from X once X's selected
+    unit has fought, which is not yet true right after this call."""
+    monkeypatch.setattr(fp, "units_key_for", lambda player: f"{player}_units")
+    monkeypatch.setattr(fp, "lookup", lambda faction, uid: (None, {}))
+    fp.st.session_state = FakeSessionState(
+        fight_current_player="B",
+        selected_unit=("B", "u2"),
+        selected_targets=[("B", "u2")],
+        # A already fought with u1, but still has a second, not-yet-fought unit
+        # eligible to fight via Counter-Offensive.
+        A_units={
+            "u1": _unit_state(fought=True),
+            "u3": _unit_state(fought=False, in_melee=True),
+        },
+        B_units={"u2": _unit_state(fought=False, in_melee=True)},
+    )
+    fp.st.rerun = MagicMock()
+
+    fp._apply_counter_offensive("A")
+
+    assert fp.st.session_state.fight_current_player == "A"
+    assert fp.st.session_state.selected_unit is None
+    assert fp.st.session_state.selected_targets == []
+
+    # The natural alternation logic leaves "A" in place — no immediate flip-back,
+    # since A has not (yet) selected+fought its remaining eligible unit ("u3").
+    fp.st.rerun.reset_mock()
+    fp._advance_fight_turn_if_needed("A", "B")
+    assert fp.st.session_state.fight_current_player == "A"
+    fp.st.rerun.assert_not_called()

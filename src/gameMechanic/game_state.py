@@ -367,8 +367,10 @@ def _unit_state(u: Unit, models: int | None = None) -> dict[str, Any]:
             "cast": False,
             "heroic_intervened": False,
             "morale_tested": False,
+            "morale_auto_pass": False,
             "movement_locked": False,
             "mortal_effect_applied": False,
+            "desperate_breakout_pending": False,
         },
         "active_buffs": [],
         "models_lost_since_last_rp": 0,
@@ -494,6 +496,13 @@ def init_state(
     st.session_state.charge_phase_step = 1
     st.session_state.pending_hi = None  # tuple | None
     st.session_state.hi_targets = []  # list[str]
+    # Reactive-stratagem infrastructure (Plan 015): a Fall Back / TRANSPORT-destroyed
+    # marker opens a contextual GO box (Cut Them Down / Emergency Disembarkation)
+    # outside the render call that caused it; `reactive_declined` remembers which
+    # specific occurrence a player passed on, so the box does not re-nag every rerun.
+    st.session_state.pending_fall_back = None  # dict | None — {"faction", "uid"}
+    st.session_state.pending_transport_destroyed = None  # dict | None — {"faction", "uid"}
+    st.session_state.reactive_declined = set()  # set[str] — "{faction}:{event}:{decline_key}"
     if p1_unmatched or p2_unmatched:
         st.session_state.roster_warnings = {
             p1_name: p1_unmatched,
@@ -555,6 +564,11 @@ def _reset_phase_state() -> None:
     st.session_state.charge_phase_step = 1
     st.session_state.pending_hi = None
     st.session_state.hi_targets = []
+    # Reactive-stratagem windows are phase-scoped — a Fall Back/TRANSPORT-destroyed
+    # marker from the previous phase must not leak a GO box into the next one.
+    st.session_state.pending_fall_back = None
+    st.session_state.pending_transport_destroyed = None
+    st.session_state.reactive_declined = set()
     current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
     current_round = st.session_state.get("round", 1)
     st.session_state.active_modifiers = [
