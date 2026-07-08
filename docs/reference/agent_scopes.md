@@ -130,5 +130,21 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
       NIE direkt im Chat mit dem Stakeholder kommuniziert
 ```
 
+## Auftragsgrößen-Gate (Retromaßnahme S130 — PFLICHT)
+
+- **Kein Executor-Brief über Effort M.** L-Aufgaben MÜSSEN vor Vergabe in 2–3 in sich
+  abgeschlossene Teil-Briefs ≤ M geschnitten werden (ein Schritt = ein Brief, jeweils
+  eigenständig grün). Der Koordinator prüft das VOR jedem `Agent`-Aufruf.
+- **Test-Budget je Brief:** während der Entwicklung nur gezielte Tests
+  (`pytest <datei> -q --no-cov`), genau **eine** Vollsuite am Ende des Briefs.
+- **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~150k
+  Eigenverbrauch, gibt er den Zwischenstand zurück (geänderte Dateien + offene
+  Schritte) statt weiterzuarbeiten.
+
+Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
+entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
+
+---
+
 **Kanal-Pflicht:** Stakeholder-Entscheidungen gehen **ausschließlich** über die Mailbox
 `docs/handoff/` (Marker `NEEDS-DECISION`) — nie direkt im Chat. Der Koordinator leitet weiter.
