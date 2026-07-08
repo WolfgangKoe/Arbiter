@@ -15,7 +15,7 @@ from gameMechanic.game_log import log_action
 from gameMechanic.game_state import units_key_for, units_list_for
 from gameMechanic.unit_mutations import apply_damage
 from gameObjects.unit import Unit
-from uiLayout._common import lookup
+from uiLayout._common import lookup, render_inline_command_reroll
 
 
 class PsychicPhaseHandler:
@@ -286,6 +286,12 @@ def _render_psi_result(
     roll: int = psi["roll"]
     manifested: bool = psi["manifested"]
     denied = psi["denied"]  # None | True | False
+    # Command Re-Roll (core_rules.txt Z. 3124-3130): the manifest roll is still
+    # "the last roll" only while no later roll has superseded it (no deny
+    # attempt has resolved yet) and, if Perils triggered, its mortal wounds
+    # have not already been applied — that's a real consequence this app
+    # cannot cleanly undo, so the offer stops appearing once it lands.
+    manifest_rerollable = psi.get("deny_faction") is None and not psi.get("perils_applied")
 
     # Perils must be resolved before anything else.
     if perils_pending(psi):
@@ -293,6 +299,10 @@ def _render_psi_result(
             st.error(f"**Perils of the Warp!** Roll {roll} — power manifested.")
         else:
             st.error(f"**Perils of the Warp!** Roll {roll} — power failed.")
+        if manifest_rerollable:
+            render_inline_command_reroll(
+                faction, "psychic", reopen_key=f"psi_manifest_{uid}", on_reroll=_reset_active_power
+            )
         st.markdown(f"Apply {PERILS_DAMAGE_DIE} mortal wounds to *{unit.name_en}*:")
         perils_dmg = st.number_input(
             "Perils damage (1–3)",
@@ -322,6 +332,10 @@ def _render_psi_result(
     # Power failed (and no perils, or perils already applied).
     if not manifested:
         st.warning(f"Roll {roll} — Power failed (< 5).")
+        if manifest_rerollable:
+            render_inline_command_reroll(
+                faction, "psychic", reopen_key=f"psi_manifest_{uid}", on_reroll=_reset_active_power
+            )
         if st.button("Reset", key=f"psi_reset_{faction}_{uid}", use_container_width=True):
             _reset_active_power()
             st.rerun()
@@ -343,6 +357,11 @@ def _render_psi_result(
         st.success(f"Roll {roll} — Manifested! No deny possible. ({die} mortal wounds)")
     else:
         st.success(f"Roll {roll} — Manifested! Deny failed. ({die} mortal wounds)")
+
+    if manifest_rerollable:
+        render_inline_command_reroll(
+            faction, "psychic", reopen_key=f"psi_manifest_{uid}", on_reroll=_reset_active_power
+        )
 
     targets = smite_targets(st.session_state.selected_targets, faction)
     if not targets:
@@ -471,12 +490,34 @@ def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type
             st.rerun()
 
 
+def _undo_deny(faction: str, psi: dict, denies_used: dict) -> None:  # type: ignore[type-arg]
+    """Return the deny decision to undecided and refund the once-per-phase budget.
+
+    Shared by the plain "Undo deny" button and the Command Re-Roll offer below
+    — both reopen the exact same state, the CP/usage bookkeeping is what
+    differs (spend_stratagem via render_inline_command_reroll vs. free undo).
+    """
+    st.session_state.psi_result = cleared_deny(psi)
+    st.session_state.psychic_denies_used = refund_deny(denies_used, psi.get("deny_faction"))
+
+
 def _render_undo_deny_button(
     faction: str, psi: dict, denies_used: dict  # type: ignore[type-arg]
 ) -> None:
     """Symmetric reset for the inactive side: take the deny decision back and
-    refund the once-per-phase budget so the power returns to undecided."""
+    refund the once-per-phase budget so the power returns to undecided.
+
+    Command Re-Roll (core_rules.txt Z. 3124-3130) applies only when an actual
+    Deny the Witch test was rolled — "Skip Deny" declined the attempt, so
+    there is no roll to re-roll (`deny_roll` stays None in that case).
+    """
+    if psi.get("deny_roll") is not None:
+        render_inline_command_reroll(
+            faction,
+            "psychic",
+            reopen_key=f"deny_{faction}",
+            on_reroll=lambda: _undo_deny(faction, psi, denies_used),
+        )
     if st.button("Undo deny", key=f"deny_undo_{faction}", use_container_width=True):
-        st.session_state.psi_result = cleared_deny(psi)
-        st.session_state.psychic_denies_used = refund_deny(denies_used, psi.get("deny_faction"))
+        _undo_deny(faction, psi, denies_used)
         st.rerun()

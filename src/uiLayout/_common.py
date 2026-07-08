@@ -587,6 +587,67 @@ def render_reactive_stratagem_box(
                     st.rerun()
 
 
+# ---------------------------------------------------------------------------
+# Command Re-Roll — non-blocking inline offer (S130 Plan 015 Option c)
+# ---------------------------------------------------------------------------
+#
+# Unlike render_reactive_stratagem_box's Use/Pass dialog, Command Re-Roll is
+# "Pull, not Push": a single small button next to an already-shown roll
+# result. Ignoring it costs nothing and the flow keeps moving — there is no
+# Pass control and no decline-tracking set. Data-driven via the stratagem's
+# own (phase, event="after_roll") window — no stratagem-name string check.
+
+
+def render_inline_command_reroll(
+    faction: str,
+    phase: str,
+    *,
+    reopen_key: str,
+    on_reroll: Callable[[], None],
+) -> None:
+    """Render the inline ``↻ <name> (N CP)`` offer next to a just-made roll.
+
+    Call this at the exact spot a phase handler shows a roll result that is
+    still "the last roll" — i.e. before any later roll/step has superseded
+    it. Unlike render_reactive_stratagem_box (an active Use/Pass dialog that
+    shows a greyed-out button when CP is short), this Pull-not-Push offer is
+    fully absent — not merely disabled — once CP is short or the stratagem
+    was already spent this phase: a non-blocking hint has no reason to clutter
+    the screen with something the player cannot act on.
+
+    `on_reroll` owns the domain-specific reopening (e.g. popping an "applied"
+    flag so the caller's own input widgets return to editable) — this
+    function only owns the CP/usage bookkeeping, so callers with a locked
+    value and callers with a still-editable value can share it.
+    """
+    try:
+        stratagems = load_stratagems(faction_dir_for(faction))
+    except Exception:
+        return
+
+    candidates = reactive_stratagems_for(stratagems, phase, "after_roll")
+    if not candidates:
+        return
+
+    is_active = faction == st.session_state.get("active")
+    cp = st.session_state.get("cp", {}).get(faction, 0)
+    used_ids = st.session_state.get("used_stratagem_ids", {}).get(faction, set())
+
+    for strat in candidates:
+        if not stratagem_usable_by_player(strat.player, is_active):
+            continue
+        vis = stratagem_visibility(strat, cp, phase, used_ids, True, reactive_trigger_active=True)
+        if vis != "clickable":
+            continue
+        if st.button(
+            f"{SYM_RESET} {strat.name_en} ({strat.cp_cost} CP)",
+            key=f"cmd_reroll_{faction}_{phase}_{strat.id}_{reopen_key}",
+        ):
+            spend_stratagem(strat, faction)
+            on_reroll()
+            st.rerun()
+
+
 def _clear_pending_transport_destroyed() -> None:
     st.session_state.pending_transport_destroyed = None
 
@@ -927,6 +988,7 @@ def _render_damage_block(
     def_faction: str,
     def_uid: str,
     profile,
+    atk_faction: str,
     atk_unit_name: str,
     phase_key: str,
     tab_key: str,
@@ -954,6 +1016,16 @@ def _render_damage_block(
             st.warning(
                 f"{SYM_CROSS} Subgruppe **{gname}** verloren — {weapons} nicht mehr verfügbar"
             )
+        # Command Re-Roll (core_rules.txt Z. 3124-3130): a damage roll is the
+        # attacker's dice, so `atk_faction` pays — reopens the same fields the
+        # plain Reset below reopens, plus the CP/usage bookkeeping Reset alone
+        # does not do.
+        render_inline_command_reroll(
+            atk_faction,
+            phase_key,
+            reopen_key=f"dmg_{tab_key}",
+            on_reroll=lambda: st.session_state.pop(res_key, None),
+        )
         # RP is rolled once per defender unit after the whole attacking unit has
         # resolved (render_attack_resolution), not per weapon tab.
         if st.button(f"{SYM_RESET} Reset", key=f"res_reset_{tab_key}"):
@@ -1429,6 +1501,7 @@ def _render_resolution_tab(
         def_faction,
         def_uid,
         profile,
+        atk_faction,
         atk_unit.name_en,
         phase_key,
         tab_key,

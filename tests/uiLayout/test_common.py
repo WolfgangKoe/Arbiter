@@ -920,3 +920,190 @@ def test_render_player_column_calls_emergency_disembarkation_check(monkeypatch) 
     common.render_player_column("Necrons", {"active": "Orks"}, active_content=lambda *a: None)
 
     spy.assert_called_once_with("Necrons")
+
+
+# ---------------------------------------------------------------------------
+# S130 — render_inline_command_reroll(): non-blocking Command Re-Roll offer
+# (Option c — Pull, not Push): unlike render_reactive_stratagem_box's Use/Pass
+# dialog, this is a single button with NO greyed-out state — it is fully
+# absent once CP is short or already spent this phase, real _shared stratagem
+# data (command_re_roll, event=after_roll) end-to-end via _reactive_box_session.
+# ---------------------------------------------------------------------------
+
+_COMMAND_REROLL_ID = "wh40k_9e.shared.stratagem.command_re_roll"
+
+
+def _reroll_widgets(monkeypatch, session, clicked_key: str | None = None):  # type: ignore[no-untyped-def]
+    button_calls: list[tuple] = []  # type: ignore[type-arg]
+    rerun_calls: list[int] = []
+    monkeypatch.setattr(common.st, "session_state", session)
+    monkeypatch.setattr(_gs.st, "session_state", session)
+    monkeypatch.setattr(_um.st, "session_state", session)
+
+    def _button(label, key=None, **kw):  # type: ignore[no-untyped-def]
+        button_calls.append((label, key))
+        return key == clicked_key
+
+    monkeypatch.setattr(common.st, "button", _button)
+    monkeypatch.setattr(common.st, "rerun", lambda: rerun_calls.append(1))
+    return button_calls, rerun_calls
+
+
+def test_command_reroll_visible_and_clickable_spends_cp(monkeypatch) -> None:
+    session = _reactive_box_session()
+    key = f"cmd_reroll_Necrons_charge_{_COMMAND_REROLL_ID}_t1"
+    button_calls, rerun_calls = _reroll_widgets(monkeypatch, session, clicked_key=key)
+    reopened = []
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: reopened.append(1)
+    )
+
+    assert any("Command Re-Roll" in label for label, _ in button_calls)
+    assert session["cp"]["Necrons"] == 4  # 5 - 1 CP
+    assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Necrons"]
+    assert reopened == [1]
+    assert rerun_calls == [1]
+
+
+def test_command_reroll_hidden_when_cp_zero(monkeypatch) -> None:
+    session = _reactive_box_session(cp={"Necrons": 0})
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: None
+    )
+
+    assert button_calls == []
+
+
+def test_command_reroll_hidden_after_already_used_this_phase(monkeypatch) -> None:
+    session = _reactive_box_session(used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}})
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: None
+    )
+
+    assert button_calls == []
+
+
+def test_command_reroll_hidden_in_phase_without_after_roll_stratagem(monkeypatch) -> None:
+    """ "morale" is not in command_re_roll's phase list — no roll happens there."""
+    session = _reactive_box_session()
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+
+    common.render_inline_command_reroll(
+        "Necrons", "morale", reopen_key="t1", on_reroll=lambda: None
+    )
+
+    assert button_calls == []
+
+
+def test_command_reroll_not_clicked_leaves_cp_and_usage_untouched(monkeypatch) -> None:
+    """Ignoring the offer (not clicking it) must cost nothing — Pull, not Push."""
+    session = _reactive_box_session()
+    button_calls, rerun_calls = _reroll_widgets(monkeypatch, session, clicked_key=None)
+    reopened = []
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: reopened.append(1)
+    )
+
+    assert session["cp"]["Necrons"] == 5
+    assert session["used_stratagem_ids"] == {}
+    assert reopened == []
+    assert rerun_calls == []
+
+
+# ---------------------------------------------------------------------------
+# S130 — _render_damage_block(): Command Re-Roll wired at the post-Apply lock
+# (Hit/Wound/Save have no separately captured roll in this app — see session
+# report; the collapsed "damage applied" result is the one closest analogue,
+# attributed to the attacker since only the damage die is actually theirs).
+# ---------------------------------------------------------------------------
+
+
+def test_damage_block_offers_command_reroll_after_apply(monkeypatch) -> None:
+    session = _SS(
+        res_tab1={
+            "applied": True,
+            "models_lost": 1,
+            "mortal_wounds": 0,
+            "total_damage": 3,
+            "wiped_groups": [],
+        }
+    )
+    common.st.session_state = session
+    monkeypatch.setattr(common.st, "success", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+
+    common._render_damage_block(None, "Necrons", "u1", None, "Orks", "Boyz", "shooting", "tab1")
+
+    spy.assert_called_once()
+    call = spy.call_args
+    assert call.args[0] == "Orks"  # the attacker's damage roll — attacker pays
+    assert call.args[1] == "shooting"
+    assert call.kwargs["reopen_key"] == "dmg_tab1"
+
+
+def test_damage_block_command_reroll_reopens_the_applied_result(monkeypatch) -> None:
+    session = _SS(
+        res_tab1={
+            "applied": True,
+            "models_lost": 1,
+            "mortal_wounds": 0,
+            "total_damage": 3,
+            "wiped_groups": [],
+        }
+    )
+    common.st.session_state = session
+    monkeypatch.setattr(common.st, "success", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    captured = {}
+
+    def _fake_reroll(faction, phase, *, reopen_key, on_reroll):  # type: ignore[no-untyped-def]
+        captured["on_reroll"] = on_reroll
+
+    monkeypatch.setattr(common, "render_inline_command_reroll", _fake_reroll)
+
+    common._render_damage_block(None, "Necrons", "u1", None, "Orks", "Boyz", "shooting", "tab1")
+    captured["on_reroll"]()
+
+    assert "res_tab1" not in session
+
+
+class _ColStub:
+    """Stand-in for the st.columns() half-width block used by the pre-Apply
+    damage fields — supports the widget calls _render_damage_block makes on
+    it (number_input/caption/button), unlike the generic _FakeCtx."""
+
+    def number_input(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return 0
+
+    def caption(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return None
+
+    def button(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return False
+
+
+def test_damage_block_no_offer_before_damage_applied(monkeypatch) -> None:
+    """Before Apply, the fields are still directly editable — nothing is
+    "locked" yet, so there is nothing here for Command Re-Roll to reopen."""
+    session = _SS(res_tab1={})
+    common.st.session_state = session
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+    unit = SimpleNamespace(wounds=1, models_max=5)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (unit, {"group_wounds": {}}))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(_ColStub() for _ in range(n)))
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    profile = SimpleNamespace(damage="1", abilities="", effect=None, is_melee=False)
+
+    common._render_damage_block(unit, "Necrons", "u1", profile, "Orks", "Boyz", "shooting", "tab1")
+
+    spy.assert_not_called()
