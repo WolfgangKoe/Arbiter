@@ -205,7 +205,17 @@ dazu; die Sammelstellen sollen EINMAL existieren.
   test_game_state.py (`test_does_not_reset_cp_grants`,
   `test_init_state_sets_empty_cp_grants`); Vollsuite 1465 passed, Coverage
   99.11 %, Architektur-Gate 8 passed.)
-- [ ] 18.2: Reset-Log-Verhalten verifiziert/gefixt + Regressionstest
+- [x] 18.2: Reset-Log-Verhalten verifiziert + Regressionstest
+  (S129: Bug NICHT reproduzierbar — bereits behoben durch die bestehende Mechanik:
+  `game_log.py` hält keinen Modul-State (nur Pfad-Konstanten), `archive_and_reset_log()`
+  verschiebt die Datei ins Archiv + schreibt eine frische, `gameProtocoll._load_game_log()`
+  liest die Datei bei jedem Render neu. Regressionstest
+  `test_reset_game_clears_battle_log_for_next_render`
+  (`tests/uiLayout/test_game_protocoll.py`) fährt den echten Pfad
+  `reset_game()` → `archive_and_reset_log()` und liest über `_load_game_log()` zurück —
+  sichert auch die Kopplung der zwei unabhängigen Pfad-Definitionen (`_LOG_FILE`
+  CWD-relativ vs. `_LOG_PATH` repo-verankert). ziel6-Checkbox (Z. 167) war bereits gesetzt.
+  Vollsuite 1501 passed, Coverage 99.12 %.)
 - [x] 18.3: Attrition-Hinweis datengetrieben; Threshold-Helper getestet
   (S128: Effekttyp `attrition_modifier` + `condition_prompt`/`applies_when` in der rohen
   `effects`-Subliste (Ability/Effect-Dataclass hat noch keine First-Class-Felder dafür —

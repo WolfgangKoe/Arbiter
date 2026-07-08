@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from constants.symbols import SYM_CHECK, SYM_EXPAND_ALT, SYM_SWORDS
@@ -20,7 +22,7 @@ from uiLayout._common import lookup, render_melee_engagements, render_player_col
 class ChargePhaseHandler:
     """PhaseHandler for the Charge Phase."""
 
-    phase_name: str = "charge"
+    phase_name: ClassVar[str] = "charge"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

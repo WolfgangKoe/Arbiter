@@ -216,4 +216,4 @@ def test_reanimation_protocols_yaml_declares_ui_config() -> None:
     assert rp.conditions and rp.conditions[0].has_rules == ["reanimationProtocols"]
     assert rp.conditions[0].unit_not_destroyed is True
     assert rp.effect.amount == "D6_per_wound"
-    assert rp.effect.modifier == 5  # success threshold (5+)
+    assert rp.effect.success_on == 5  # success threshold (5+)

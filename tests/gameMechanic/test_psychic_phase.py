@@ -21,11 +21,13 @@ from gameMechanic.psychicPhase import (
     deny_succeeds,
     faction_deny_used,
     has_psyker,
+    initial_deny_state,
     is_manifested,
     is_perils,
     perils_pending,
     refund_deny,
     smite_damage_die,
+    smite_targets,
     smite_warp_charge,
 )
 
@@ -99,6 +101,75 @@ class TestCanDeny:
     def test_can_deny_mixed_army_one_psyker(self):
         units = [_Unit(keywords=["Infantry"]), _Unit(keywords=["PSYKER"])]
         assert can_deny(units) is True
+
+
+# ---------------------------------------------------------------------------
+# initial_deny_state — #PSI regression (S129): opponent without any deny
+# capability must never leave the power stuck in the "awaiting a deny
+# attempt" (None) limbo — it resolves unopposed instead.
+# ---------------------------------------------------------------------------
+
+
+class TestInitialDenyState:
+    def test_no_deny_capability_resolves_unopposed_immediately(self):
+        # Opponent has neither PSYKER keyword nor deny wargear — Deny the Witch
+        # (core_rules.txt:1274) can only be attempted by a PSYKER unit, so no
+        # attempt is possible and the power is never contested.
+        opponent_units = [_Unit(keywords=["Infantry"], rules=[])]
+        assert initial_deny_state(opponent_units) is False
+
+    def test_psyker_opponent_leaves_power_awaiting_a_deny_attempt(self):
+        opponent_units = [_Unit(keywords=["PSYKER"])]
+        assert initial_deny_state(opponent_units) is None
+
+    def test_deny_wargear_opponent_leaves_power_awaiting_a_deny_attempt(self):
+        opponent_units = [
+            _Unit(
+                id="wh40k_9e.necrons.unit.canoptek_spyder",
+                keywords=["VEHICLE", "CANOPTEK"],
+                rules=["gloom_prism"],
+            )
+        ]
+        assert initial_deny_state(opponent_units) is None
+
+    def test_empty_opponent_army_resolves_unopposed(self):
+        assert initial_deny_state([]) is False
+
+
+# ---------------------------------------------------------------------------
+# smite_targets — #PSI regression (S129): the damage button renders exactly
+# for the selected enemy units; own-faction selections never count as targets.
+# ---------------------------------------------------------------------------
+
+
+class TestSmiteTargets:
+    def test_selected_enemy_unit_becomes_smite_target(self):
+        selected = [("Necrons", "necron_warriors")]
+        assert smite_targets(selected, "Orks") == [("Necrons", "necron_warriors")]
+
+    def test_own_faction_selection_is_never_a_target(self):
+        selected = [("Orks", "weirdboy")]
+        assert smite_targets(selected, "Orks") == []
+
+    def test_empty_selection_yields_no_targets(self):
+        assert smite_targets([], "Orks") == []
+
+
+class TestAutoResolveSmiteFlow:
+    def test_no_deny_opponent_flows_from_manifest_to_damage_ready(self):
+        # S129 end-to-end (pure state): opponent without deny capability →
+        # power resolves unopposed at manifest time (denied False, no limbo),
+        # a clicked enemy unit is a valid Smite target → damage path unlocked.
+        opponent_units = [_Unit(keywords=["Infantry"], rules=[])]
+        denied = initial_deny_state(opponent_units)
+        assert denied is False  # never "waiting for deny attempt"
+
+        psi = {"manifested": True, "denied": denied}
+        # No deny attempt may be started against the auto-resolved power.
+        assert can_attempt_deny(psi, "Necrons", {}) is False
+
+        targets = smite_targets([("Necrons", "necron_warriors")], "Orks")
+        assert targets == [("Necrons", "necron_warriors")]
 
 
 # ---------------------------------------------------------------------------

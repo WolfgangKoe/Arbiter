@@ -12,9 +12,9 @@ import zipfile
 from pathlib import Path
 from typing import Any
 
-# types-PyYAML / types-defusedxml are not in requirements-dev.txt — no stubs.
-import yaml  # type: ignore[import-untyped]
-from defusedxml.ElementTree import fromstring as _safe_fromstring  # type: ignore[import-untyped]
+# types-PyYAML / types-defusedxml are installed.
+import yaml
+from defusedxml.ElementTree import fromstring as _safe_fromstring
 
 from gameObjects.loader import load_unit_catalog
 from gameObjects.unit import Unit

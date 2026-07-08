@@ -6,8 +6,8 @@ import dataclasses
 from pathlib import Path
 from typing import Any
 
-# types-PyYAML is not in requirements-dev.txt, so mypy has no stubs for yaml.
-import yaml  # type: ignore[import-untyped]
+# types-PyYAML is installed, mypy has stubs for yaml.
+import yaml
 
 from gameObjects.ability import Ability, Condition, Effect, ExtraUses, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
@@ -394,6 +394,7 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             amount=d["effect"].get("amount"),
             stat=d["effect"].get("stat"),
             modifier=d["effect"].get("modifier"),
+            success_on=d["effect"].get("success_on"),
             handler=d["effect"].get("handler"),
             revive=d["effect"].get("revive", True),
             effects=d["effect"].get("effects"),

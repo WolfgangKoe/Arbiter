@@ -47,9 +47,9 @@ abilities:
     type: reanimate
     target: self
     amount: D6_per_wound
-    # modifier = success threshold: each die that rolls N+ revives (9E RP: 5+).
+    # success_on = success threshold: each die that rolls N+ revives (9E RP: 5+).
     # UI gate/label/dice formula/threshold are driven from this entry (INV-4b).
-    modifier: 5
+    success_on: 5
 - id: wh40k_9e.necrons.faction.protocol_eternal_guardian
   name_en: Protocol of the Eternal Guardian
   ability_type: round_choice

@@ -6,6 +6,8 @@ Ziel 4:  Full turn_flags tracking, advance-roll, reserve deployment.
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from gameMechanic.game_log import log_action
@@ -34,7 +36,7 @@ _TELEPORT_SELECTOR_FALLBACK = 'Optional: select a CORE unit within 3"'
 class MovementPhaseHandler:
     """PhaseHandler for the Movement Phase."""
 
-    phase_name: str = "movement"
+    phase_name: ClassVar[str] = "movement"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

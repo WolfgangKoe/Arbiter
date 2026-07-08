@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND_ALT, SYM_SWORDS
@@ -324,7 +326,7 @@ def _maybe_render_mortal_undo(state: dict) -> None:  # type: ignore[type-arg]
 class FightPhaseHandler:
     """PhaseHandler for the Fight Phase."""
 
-    phase_name: str = "fight"
+    phase_name: ClassVar[str] = "fight"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

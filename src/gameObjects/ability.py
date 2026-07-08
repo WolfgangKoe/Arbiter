@@ -34,6 +34,7 @@ class Effect:
     amount: str | None = None
     stat: str | None = None
     modifier: int | None = None
+    success_on: int | None = None  # alias for reanimate effects; modifier for other types
     handler: str | None = None
     revive: bool = True  # False = cap heal to current living models, no resurrection
     effects: list[dict[str, Any]] | None = None  # sub-effects for multi-type effects

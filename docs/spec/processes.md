@@ -451,6 +451,8 @@ psi_result: dict | None = {
 |---|---|---|
 | `has_psyker` | `(units) → bool` | Prüft PSYKER-Keyword |
 | `can_deny` | `(units) → bool` | PSYKER-Keyword ODER `"gloom_prism"` in `unit.rules` |
+| `initial_deny_state` | `(opponent_units) → bool \| None` | `False` wenn `can_deny(opponent_units)` nein (kein Deny-Versuch möglich, S129-Fix), sonst `None` (wartet auf Deny-Versuch) |
+| `smite_targets` | `(selected_targets, caster_faction) → list` | Smite-Ziele = gewählte Einheiten fremder Fraktion; Klick-Auswahl via Unit-Cards des inaktiven Spielers (`_TARGET_PHASES` in `unitCard.py` muss `"psychic"` enthalten, S129-Fix) |
 | `is_perils` | `(roll) → bool` | `roll in (2, 12)` |
 | `smite_damage_die` | `(roll) → str` | `"W6"` bei ≥ 11, sonst `"W3"` |
 | `deny_succeeds` | `(manifest, deny) → bool` | `deny > manifest` (strikt größer) |

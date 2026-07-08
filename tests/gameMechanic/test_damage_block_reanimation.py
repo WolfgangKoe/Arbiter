@@ -12,7 +12,7 @@ RP-Spielregel (Wahapedia core_rules + Necron-YAML):
     (effect.type reanimate, conditions.has_rules reanimationProtocols)
     entscheidet, welche Einheiten triggern.
   - Würfelanzahl = models_lost × unit.wounds (amount: D6_per_wound aus YAML).
-  - Erfolg auf 5+ (effect.modifier aus YAML; User zählt Erfolge, gibt models_back ein).
+  - Erfolg auf 5+ (effect.success_on aus YAML; User zählt Erfolge, gibt models_back ein).
   - RP wird über heal_unit angewendet: hp = models_back × unit.wounds.
   - Rückkehrende Modelle reduzieren lost_models_this_turn (9E: zählen nicht als
     gefallen für Moraltest).

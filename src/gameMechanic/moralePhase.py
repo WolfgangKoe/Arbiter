@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from constants.symbols import SYM_CHECK
@@ -92,7 +94,7 @@ def _attrition_threshold(
 class MoralePhaseHandler:
     """PhaseHandler for the Morale Phase."""
 
-    phase_name: str = "morale"
+    phase_name: ClassVar[str] = "morale"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

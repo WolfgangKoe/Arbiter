@@ -290,11 +290,14 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   gelisteten Items `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren bereits
   vor S128 aus `src/` entfernt — dieser Eintrag war insofern Doku-Drift, jetzt korrigiert.
   Details: [architecture_invariants.md](../spec/architecture_invariants.md) INV-4b.
-- 🟡 **mypy-Bestand modulweise abbauen** (Baseline jetzt 82, Stand 2026-07-06 S128 Teil 2;
-  Folgearbeit zu Plan 038): `gameMechanic/game_state.py` (−34, Paket 2) und `gameObjects/`
-  komplett (−18, Paket 3) sind erledigt. Verbleibend: Rest von `gameMechanic/` (übrige
-  Dateien außer `game_state.py`), dann `uiLayout/` zuletzt (manuelle Render-Verifikation
-  nötig). Pro Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
+- 🟡 **mypy-Bestand modulweise abbauen** (Baseline jetzt 75, Stand 2026-07-07 S129 Task 3;
+  Folgearbeit zu Plan 038): `gameMechanic/game_state.py` (−34, Paket 2), `gameObjects/`
+  komplett (−18, Paket 3) und `gameMechanic/phase_runner.py` (−7, Root Cause: `phase_name`
+  in den sieben Phase-Handlern war als Instanzattribut statt `ClassVar[str]` annotiert —
+  Protocol-Mismatch gegen `PhaseHandler.phase_name: ClassVar[str]`) sind erledigt. Verbleibend:
+  Rest von `gameMechanic/` (übrige Dateien außer `game_state.py`/`phase_runner.py`), dann
+  `uiLayout/` zuletzt (manuelle Render-Verifikation nötig). Pro Schritt Baseline in
+  `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
   s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
@@ -467,6 +470,9 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
       Fire Overwatch/Counter-Offensive frei — als Kandidat für die nächste Session vormerken.
 - [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
 - [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
+- 🟡 **Richtungsentscheid offen (Audit S124, aus next_session.md verschoben S129):** ziel9-Fetcher
+  vorziehen? Eigene Deployment-Phase bauen oder ADR „bleibt am Tisch"? Mission-Scoring (eine
+  Mission end-to-end)? — noch nicht entschieden, Stakeholder-Input nötig.
 - [index.md](index.md) — Ziel-Gesamtübersicht
 
 ---

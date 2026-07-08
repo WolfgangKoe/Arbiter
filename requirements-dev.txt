@@ -3,6 +3,8 @@ black
 isort
 ruff
 mypy
+types-PyYAML
+types-defusedxml
 pre-commit
 pytest
 pytest-cov

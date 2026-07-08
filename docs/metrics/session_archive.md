@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-06 22:32 CEST
+Stand: 2026-07-08 07:51 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,24 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-06 17:59 89a0  ██████████░░ 130k ⚠️   █████░  91%    ▚▚▚▚▚·······
+07-07 18:58 ab9b  ███████████░ 135k ⚠️   █████░  80%    ▚▚▚······▒▒▒
+         SA_1·  █████░░░░░░░  66k ✅    Task 6: Rename modifier→success_on
+         SA_2·  —                      rp-Fälle + revive-Fähigkeiten rech…
+         SA_3·  █████████░░░ 116k ✅    Gate-Fixes + S130-Handoff
+         SA_4·  ████████░░░░  94k ✅    Task 1: Deny-Blocker-Bugfix
+         SA_5·  ████░░░░░░░░  50k ✅    Ledger-Check ability_engine-Begrif…
+         SA_6·  ████████░░░░  96k ✅    Planning-Entwurf S129 erstellen
+         SA_7·  ██████░░░░░░  81k ✅    Task 4: Battle-Log-Reset prüfen
+         SA_8·  █████░░░░░░░  63k ✅    Task 7+8: Katalog + ADR-Fix
+         SA_9·  █████░░░░░░░  66k ✅    rp-Fälle + revive-Fähigkeiten rech…
+         SA_10·  ███░░░░░░░░░  34k ✅    Suche opponent-Faction Helper
+         SA_11·  █████░░░░░░░  66k ✅    Task 3: mypy phase_runner.py
+         SA_12·  ███░░░░░░░░░  34k ✅    Task 5: type-stubs + Ignores
+----------------- ---------------------- -------------- ------------
+07-06 17:59 89a0  ████████████ 146k ⚠️   █████░  90%    ▚▚▚▚▚·······
          SA_1·  ████████████ 160k ⛔    Planning-Entwurf S128 erstellen
          SA_2·  █████████░░░ 112k ✅    Paket 4: Task 18.3 Gretchin
-         SA_3·  ████░░░░░░░░  46k ✅    Abschluss S128: next_session + Rep…
+         SA_3·  ██████░░░░░░  74k ✅    Abschluss S128: next_session + Rep…
          SA_4·  ████████████ 163k ⛔    Konsolidierung + finale Messung S1…
          SA_5·  ███████░░░░░  91k ✅    Paket 3: mypy gameObjects/
          SA_6·  █████████░░░ 114k ✅    Executor: INV-4-Ledger-Abbau

@@ -2866,11 +2866,11 @@
   "89a05bf1-06ea-4a3e-bab6-3d1246ebd640": {
     "started_at": "2026-07-06T15:59:42.992Z",
     "task": "start session",
-    "peak_context": 129516,
-    "subagent_share": 91.38977325009525,
+    "peak_context": 145989,
+    "subagent_share": 90.41138500751848,
     "by_tier": {
-      "Sonnet": 47905065,
-      "Fable": 37727932,
+      "Sonnet": 48718309,
+      "Fable": 38040397,
       "Opus": 1578678
     },
     "subagents": [
@@ -2892,7 +2892,7 @@
         "agent_type": "general-purpose",
         "description": "Abschluss S128: next_session + Reports",
         "tier": "Sonnet",
-        "peak_context": 45916,
+        "peak_context": 73994,
         "started_at": "2026-07-06T15:59:42.992Z"
       },
       {
@@ -2943,6 +2943,103 @@
         "tier": "Opus",
         "peak_context": 66900,
         "started_at": "2026-07-06T15:59:42.992Z"
+      }
+    ]
+  },
+  "ab9b709c-1ec7-4612-ab6c-fbb50a770d12": {
+    "started_at": "2026-07-07T16:58:21.674Z",
+    "task": "start next session",
+    "peak_context": 135302,
+    "subagent_share": 80.09616832667847,
+    "by_tier": {
+      "Haiku": 11207776,
+      "Fable": 9392817,
+      "Sonnet": 21235204
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 6: Rename modifier→success_on",
+        "tier": "Haiku",
+        "peak_context": 66136,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "rp-Fälle + revive-Fähigkeiten recherchieren",
+        "tier": "<synthetic>",
+        "peak_context": null,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Gate-Fixes + S130-Handoff",
+        "tier": "Sonnet",
+        "peak_context": 115740,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1: Deny-Blocker-Bugfix",
+        "tier": "Sonnet",
+        "peak_context": 94255,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Ledger-Check ability_engine-Begriffe",
+        "tier": "Haiku",
+        "peak_context": 49503,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S129 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 95834,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 4: Battle-Log-Reset prüfen",
+        "tier": "Sonnet",
+        "peak_context": 80685,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 7+8: Katalog + ADR-Fix",
+        "tier": "Haiku",
+        "peak_context": 63487,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "rp-Fälle + revive-Fähigkeiten recherchieren",
+        "tier": "Sonnet",
+        "peak_context": 66347,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Suche opponent-Faction Helper",
+        "tier": "Haiku",
+        "peak_context": 33791,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 3: mypy phase_runner.py",
+        "tier": "Sonnet",
+        "peak_context": 65734,
+        "started_at": "2026-07-07T16:58:21.674Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 5: type-stubs + Ignores",
+        "tier": "Haiku",
+        "peak_context": 34455,
+        "started_at": "2026-07-07T16:58:21.674Z"
       }
     ]
   }

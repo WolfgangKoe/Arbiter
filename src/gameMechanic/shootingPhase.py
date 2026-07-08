@@ -5,6 +5,8 @@ Ziel 3c: can_shoot(), full AttackSequence via combat.py.
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from constants.symbols import SYM_EXPAND_ALT
@@ -68,7 +70,7 @@ def target_in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -
 class ShootingPhaseHandler:
     """PhaseHandler for the Shooting Phase."""
 
-    phase_name: str = "shooting"
+    phase_name: ClassVar[str] = "shooting"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

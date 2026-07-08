@@ -1239,3 +1239,15 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 712–721 — "Directive 2: This unit is eligible to shoot in a turn in which it Fell Back, but if it does, then until the end of the turn, each time a model in this unit makes a ranged attack, subtract 1 from that attack's hit roll."
 - **code**: ability_engine.py:get_active_round_choice_shoot_after_fall_back / uiLayout/_common.py:_render_resolution_tab
 - **regel**: Conquering Tyrant Direktive 2 (Klasse A): Einheit darf nach Fall Back schießen; wenn sie es tut, −1 auf alle Treffer-Würfe (Fernkampf). Engine liest `movement_choice == "fall_back"` der angreifenden Einheit; Modifier wird als Eintrag in `final_atk_mods` (HIT, roll_type="hit", value=-1) in `_render_resolution_tab` injiziert. Nur in der Shooting-Phase aktiv.
+
+---
+
+## Bereich: Fraktionsfähigkeiten — Necron Reanimation Protocols
+
+### R-NEC-01
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_rp_restores_models_after_damage / test_rp_reduces_lost_models_this_turn / test_rp_dice_count_equals_models_lost_times_wounds
+- **quelle**: wahapedia_necrons/faction_overview.txt Z. 501–520 — "Each time an enemy unit shoots or fights, after it makes its attacks, if any models in this unit were destroyed as a result of those attacks but this unit was not destroyed, this unit's reanimation protocols are enacted and those destroyed models begin to reassemble. Each time a unit's reanimation protocols are enacted, make Reanimation Protocol rolls for that unit by rolling a number of D6 equal to the combined Wounds characteristics of all the reassembling models. Each Reanimation Protocol roll of 5+ is put into a pool."
+- **code**: ability_engine.py:get_after_attack_revive_ability / unit_mutations.py:heal_unit
+- **regel**: Reanimation Protocols (Klasse C, Hybrid): App-Anteil — Nach gegnerischen Angriffen (Shooting/Fight-Phase) werden zerstörte Modelle wiederbelebt, wenn die Einheit selbst nicht zerstört wurde. Die App berechnet die Würfelanzahl (D6 = Summe der Wounds aller zerstörten Modelle, aus `effect.amount: D6_per_wound` in `faction_abilities.yaml`). Die Erfolgsschwelle ist fest auf 5+ verdrahtet (`effect.success_on: 5`). Die App speichert die Anzahl der erfolgreichen Würfel (5+) über `models_back`-Eingabe und wendet die Heilung via `heal_unit` an; dabei wird `lost_models_this_turn` entsprechend reduziert (9E-Regel: rückgebrachte Modelle zählen nicht zum Moraltest). Tisch-Anteil — Spieler würfelt die D6 am Tisch und zählt die 5+ manuell; Positionierung des wiederbekehrten Modells (muss in Engagement Range bestimmter Feinde stehen, etc.) erfolgt am Tisch. Datengetrieben über S128 Option B: Trigger (YAML `reanimationProtocols`-Bedingung) und Parameter (`success_on`, `D6_per_wound`) aus der Faction-Abilities-Definition, nicht hardcoded in `src/`.

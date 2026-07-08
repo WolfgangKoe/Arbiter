@@ -161,3 +161,23 @@ def test_state_badges_mwbd_shown() -> None:
 def test_state_badges_empty_state_returns_empty() -> None:
     html = _state_badges_html(_state())
     assert html == ""
+
+
+# ---------------------------------------------------------------------------
+# _TARGET_PHASES — #PSI regression (S129): the psychic phase must offer the
+# inactive player's unit cards as Smite target selectors. Without "psychic"
+# here no enemy card is clickable, selected_targets stays empty and the Smite
+# damage button can never appear.
+# ---------------------------------------------------------------------------
+
+
+def test_psychic_phase_offers_enemy_cards_as_smite_target_selectors() -> None:
+    from uiLayout.unitCard import _TARGET_PHASES
+
+    assert "psychic" in _TARGET_PHASES
+
+
+def test_target_phases_keep_the_existing_attack_phases() -> None:
+    from uiLayout.unitCard import _TARGET_PHASES
+
+    assert {"shooting", "charge", "fight"} <= _TARGET_PHASES

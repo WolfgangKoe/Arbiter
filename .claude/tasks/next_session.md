@@ -4,90 +4,33 @@
 <!-- Referenz NICHT hier: Architektur → architecture.md, Regel-Gotchas → rules_insights.md, Constraints → CLAUDE.md. -->
 
 ## ⚠️ Session-Regeln
-- **Start „start next session" → Planner-Subagent beauftragen** (liest `CLAUDE.md` + `docs/goals/ziel7.md`
-  + `docs/goals/backlog.md`, Scope aus `docs/reference/agent_scopes.md`); Entwurf als Datei, Koordinator
-  legt vor, erst nach Freigabe los. Shortcut „Plan ist freigegeben" = direkt los. Einstieg `LEITSTAND.md`;
-  Rollen/Tier/Modi: `docs/governance/operating_model.md`.
-- **ADR-0007 (verbindlich seit S102):** Koordinator routet — liest keine Quelldateien/Vollergebnisse;
-  Detail-Planung → Planner-Subagent; finales Review → Reviewer-Subagent. Asynchrone Stakeholder-
-  Entscheidungen über Mailbox (`docs/handoff/`, NEEDS-DECISION → ANSWERED), nicht Chat.
-  Details: `docs/governance/operating_model.md` [#events].
-- **Ende:** Review (Reviewer-SA) → Retro → **Maßnahmen-Entscheid** (Stakeholder wählt) →
-  Abschluss: **diese Datei** aktualisieren (ZUERST lesen, dann ergänzen) + ggf. Ziel-Checkboxen.
-- **Doku-Gate:** Decke **120** Zeilen (Test rot darüber). Beim Reißen **tief auf ≤ 70** kürzen —
-  Erledigtes → `backlog.md`/`session_archive.md`, Referenz → s. o.
-- **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten =
-  stehende Freigabe (proaktiv, ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
-- **Checkbox-Sync prüft auch Commit-Behauptungen:** Session-Start-Sync nicht nur gegen Ziel-Checkboxen,
-  sondern auch Titel wie „archive/close" gegen Datei-Realität verifizieren (b3ebfd5 behauptete
-  Archivierung ohne Vollzug, S119→S120-Befund). Restrisiko bewusst nicht test-bewacht — Kompensation:
-  Reviewer-Pflicht + dieser Sync.
-- **Start-Sync prüft auch `docs/handoff/` auf liegengebliebene ANSWERED/DONE-Dateien** (r-proto-02
-  lag seit S116).
-- **Executor-Aufträge enthalten die Klausel:** Dateiänderungen nur über Edit/Write-Tools, Bash nur
-  lesend/git/pytest (Freigabe-Gate-Umgehung S123).
-- **Zero-Error-Policy mypy:** Baseline sinkt jede Session weiter Richtung 0; Abweichung nach oben
-  nur mit Begründung im selben Commit (z. B. mypy-Upgrade).
-- **Parallel-Modus ist Standard für Ledger-Abbau:** dateidisjunkte Pakete + Koordinator-
-  Konsolidierung (S128: 4 Pakete erfolgreich).
-- **Parallel-Briefs:** Vorher-Messungen nur gegen `git show HEAD:` — **kein `git stash`** im
-  geteilten Baum.
-- **Jede Executor-Selbstprüfliste enthält `python tools/mypy_gate.py`** (S128: 18.1-Executor riss
-  das Gate unbemerkt).
+- **Start:** „start next session" → Planner-Subagent (`CLAUDE.md`+`docs/goals/ziel7.md`+`docs/goals/backlog.md`, Scope `docs/reference/agent_scopes.md`) legt Entwurf vor, Koordinator zeigt ihn, erst nach Freigabe los; „Plan ist freigegeben" = Shortcut direkt los. Einstieg `LEITSTAND.md`, Rollen/Tier `docs/governance/operating_model.md`.
+- **ADR-0007:** Koordinator routet, liest keine Quelldateien/Vollergebnisse — Detail-Planung/Review laufen als Subagenten; Stakeholder-Entscheidungen async über Mailbox (`docs/handoff/`, NEEDS-DECISION→ANSWERED), nicht Chat.
+- **Ende:** Review (Reviewer-SA) → Retro → Maßnahmen-Entscheid (Stakeholder) → Abschluss: diese Datei aktualisieren (ZUERST lesen) + ggf. Ziel-Checkboxen.
+- **Doku-Gate:** Decke 120 Zeilen (Test rot darüber); beim Reißen tief auf ≤ 70 kürzen (Erledigtes → `backlog.md`/`session_archive.md`).
+- **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten = stehende Freigabe (ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
+- **Sync-Pflicht bei Session-Start:** Checkbox-Sync auch gegen Commit-Titel wie „archive/close" prüfen (S119/S120-Befund); `docs/handoff/` auf liegengebliebene ANSWERED/DONE-Dateien prüfen (r-proto-02 lag seit S116).
+- **Executor-Klausel:** Dateiänderungen nur über Edit/Write, Bash nur lesend/git/pytest (S123); Selbstprüfliste enthält `python tools/mypy_gate.py` (S128).
+- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0, Abweichung nach oben nur mit Begründung im Commit.
+- **Parallel-Modus Standard für Ledger-Abbau:** dateidisjunkte Pakete, Vorher-Messung nur gegen `git show HEAD:` (kein `git stash` im geteilten Baum).
+- **Retro-Merkposten:** ab ~6 Plänen splitten/an Sonnet delegieren (S124); Lösch-Pläne-Selbstprüfliste MUSS entfernte Bezeichner auch über `docs/spec/` greppen (S126); App VOR jeder UI-Verifikation neu starten + Prüfanleitungen gegen Roster-Realität validieren (S126).
 
 ## Was ist Arbiter?
-Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
-(Port 8501; **venv:** `source .venv/bin/activate`). Branch `feature/016` (Arbeit), `main` (nur PR).
-**App permanent laufen lassen:** bei Session-Start nur kurz prüfen (`curl -s -o /dev/null -w "%{http_code}" http://localhost:8501` → 200), nur bei Bedarf neu starten — nicht den Nutzer fragen.
+Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py` (Port 8501; **venv:** `source .venv/bin/activate`). Branch `feature/016` (Arbeit), `main` (nur PR). **App permanent laufen lassen:** bei Session-Start nur kurz prüfen (`curl -s -o /dev/null -w "%{http_code}" http://localhost:8501` → 200), nur bei Bedarf neu starten — nicht den Nutzer fragen.
 
 ---
 
-## Aktueller Stand (nach S128, 2026-07-06)
+## Aktueller Stand (nach S129, 2026-07-08)
 
-S128 (2026-07-06, 2 Commits: af3bc5a + Abschluss-Commit folgt): INV-4-Allowlist 5→3 (Roster-
-Pflichtparameter statt necrons-Defaults); Plan 018.1 CP-Doppelvergabe gefixt (`cp_grants`-Set);
-danach 4 PARALLELE Executor-Pakete: INV-4b-Ledger 11→6 nur LEGIT (inkl. Option B:
-reanimationProtocols komplett aus src/, RP-Block YAML-getrieben via ability_engine-Helper),
-mypy game_state 34→0 + gameObjects 18→0, Baseline 134→82; Plan 018.3 Gretchin
-Cowardly/Attrition-Hinweis (Klasse C). Vollsuite 1496 passed, Coverage 99,12 %, Architektur
-8/8, Review GO. UI Teil 2 vom Stakeholder verifiziert (bis auf Deny-Caption-Mini-Check, s. u.).
-
-Frühere Sessions (S60–S127): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+S129: Psychic-Phase-Blocker gefixt (`initial_deny_state` liefert `denied=False` statt ewig `None`, wenn der Gegner nicht denyen kann) + Smite-Ziele waren nie wählbar (`_TARGET_PHASES` fehlte `"psychic"`, jetzt `smite_targets()` mit Parameter `own_faction`, INV-4b-konform); mypy `phase_runner.py` 7→0, Baseline 82→75; Plan 018.2 bestätigt erledigt. Vollsuite 1505 passed, Coverage 99,12 %. Details: `docs/goals/backlog.md`, `docs/audit/plans/README.md`; Historie S60–S128: `docs/metrics/session_archive.md`.
 
 ### ▶ Nächster Schritt
 
-1. **BUG (Planungsgegenstand S129, Stakeholder-Auftrag):** Psychic-Phase-State-Blocker — Ork
-   Weirdboy manifestiert (z. B. Smite, „Roll 7 — Manifested! Waiting for deny attempt… (W3
-   mortal wounds)"), aber Gegner (Necrons) hat keine Deny-Fähigkeit („No PSYKER or deny
-   wargear — cannot deny"): Das Spiel wartet trotzdem auf den Deny-Versuch, Schaden kann nicht
-   angewendet werden; nur „Reset (skip Smite)" möglich. Erwartung: ohne gegnerische
-   Deny-Fähigkeit den Deny-Wartezustand automatisch überspringen. Vermutlich
-   `psychicPhase.py`-State-Machine. Regressionstest Pflicht.
-2. Ledger-Abbau-Schritt (stehende Regel): mypy weiter senken — Reihenfolge gameMechanic/ →
-   gameObjects/ (fertig) → uiLayout/ zuletzt.
-3. Queue: Plan 018.2+18.4 offen, dann 015 → 026 → 017; 041 erst nach 015/026.
+1. **rp/directive-Vokabular sichtbar machen** (Stakeholder-freigegeben, S129): (a) Seeds `directive`+`reanimate` (→necrons) in `tests/architecture/_vocab.py` — KEIN `revive` (Orks „Surly as a Squiggoth" ≠ Core Rules „Resurrected Models"); (b) „rp" in `src/` ausschreiben: `rp_reroll`→`reanimation_protocols_reroll` (`ability_engine.py:355`, `necrons/faction_abilities.yaml`, `_schema/round_choice.example.yaml`), `get_active_rp_modifiers`→`get_active_reanimation_protocols_modifiers`, `_render_rp_block`/`_render_unit_rp`/Widget-Keys/`_rp_directive_hints` (`_common.py`), `models_lost_since_last_rp` (`game_state.py:374`); YAML-Werte `stat: rp`/`reroll_rp`/`buff_rp` bleiben; (c) `directive`→`round_choice` in den 4 `ability_engine`-Helfern; (d) neue Scanner-Funde als LEGIT ins Ledger (`test_generic_src_vocab.py`, `architecture_invariants.md`); (e) Backlog-Eintrag: reanimate-Pfad-Erweiterbarkeit (Trigger nur `after_enemy_attack`, Formel nur `D6_per_wound` — Squiggoth-Muster passt nicht).
+2. mypy-Ledger weiter senken (Rest `gameMechanic/` außer `game_state.py`/`phase_runner.py`, dann `uiLayout/` zuletzt). Details: `docs/goals/backlog.md`.
+3. Queue: 018.4 offen (nach 017), dann 015 → 026 → 017; 041 erst nach 015/026. Details: `docs/audit/plans/README.md`.
 
-**Offene Verifikation (VOR Merge nach `main`):**
-- **037 Docker**: `docker build` + `docker run --rm arbiter-test id -u` → 1000 +
-  Port-7860-Smoke beim nächsten HF-Spaces-Deploy (lokal kein Docker).
-
-**Offene Punkte / Merksätze:**
-(b) ADR-0006:32 referenziert alten Pfad des 024-Digests (kosmetisch, bei Gelegenheit).
-(c) Merkposten `hand_of_the_phaeron`/ExtraUses steht in Plan 032.
-(d) Direction-Entscheide offen (Audit S124): ziel9-Fetcher vorziehen? Deployment-Phase
-bauen oder ADR „bleibt am Tisch"? Mission-Scoring (eine Mission end-to-end)?
-(e) Merkposten: 6 ungenutzte Loader-Funktionen (`load_points` u. a.) — Intent klären
-(ziel9-Scaffolding?), dann löschen/behalten (Rejected-Liste plans/README).
-(f) Retro S124: ab ~6 Plänen splitten oder Entwürfe an Sonnet delegieren.
-(g) Retro S126: Lösch-Pläne → Executor-Selbstprüfliste MUSS entfernte Bezeichner
-auch über `docs/spec/` greppen (S126-Blocker: 2 Specs beschrieben Gelöschtes).
-(h) Retro S126: App VOR jeder UI-Verifikation neu starten (alter Prozess/State
-lieferte 4 falsche ❌); UI-Prüfanleitungen vorher gegen Roster-Realität validieren
-(Flayed-Ones-Check ohne Roster-Deckung, „Szenario-UI" existiert nicht — nur
-`?scenario=`-Query-Param).
-(i) Deny-Caption-Mini-Check (Psychic-Phase): 2. Deny-Versuch → neutrale Caption „one deny
-attempt per phase per source" — einziger unbestätigter UI-Punkt aus S128, risikoarm.
-(j) Fehlender R-Eintrag RP-Mechanik in `rules.md` (Akzeptanz-Katalog) — Planning klären.
+**Offen:** 037 Docker-Smoke vor Merge (`docker build` + `docker run --rm arbiter-test id -u` → 1000, Port-7860 beim HF-Deploy); Deny-Caption-Prüfung (Task 2) blockiert — braucht Roster mit Deny-Einheit auf Gegenseite (Option: Rollen tauschen, Orks-Weirdboy denied); Smite-Fix manuell verifizieren (Psychic-Phase → Manifest ohne gegnerischen Deny → „No deny possible." → Klick auf Gegner-Einheit → Damage-Button); Direction-Entscheide (Audit S124: ziel9-Fetcher/Deployment-Phase/Mission-Scoring) → `docs/goals/backlog.md` §5.
 
 ---
 

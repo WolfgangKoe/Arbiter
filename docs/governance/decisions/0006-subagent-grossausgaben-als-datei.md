@@ -29,7 +29,7 @@ nur bei Bedarf und gezielt.
 Datei deklariert in ihrem Kopf, ob sie **dauerhaft** oder **temporär** ist:
 
 - **Dauerhaft** — bleibt als Referenz/Artefakt (z. B. ein Plan-Companion wie
-  `docs/audit/plans/024-arkana-research-digest.md`). Lebt unter `docs/`.
+  `docs/audit/plans/archive/024-arkana-research-digest.md`). Lebt unter `docs/`.
 - **Temporär** — Wegwerf-Zwischenstand; die Datei nennt **explizit das
   Lösch-Kriterium** („löschen nach Umsetzung von Plan 024 Step 6" o. ä.). Lebt
   unter einem klar temporären Pfad (z. B. `/tmp/` oder `docs/inbox/`), nie

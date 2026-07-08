@@ -60,7 +60,10 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
 _BUFF_COLOR: tuple[str, str] = ("#4a9a5a", "#0a1a0a")
 _DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
 
-_TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight"})
+# Phases in which the inactive player's unit cards act as target selectors.
+# "psychic" is required for Smite: without it no enemy card is clickable and
+# selected_targets stays empty — the damage button can never appear (S129 fix).
+_TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight", "psychic"})
 
 
 def _badge(text: str, variant: str = "") -> str:

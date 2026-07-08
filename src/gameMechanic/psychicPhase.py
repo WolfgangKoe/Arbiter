@@ -6,6 +6,8 @@ Scope: Smite only. Blessing-flow (friendly target) follows in a later goal.
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
@@ -19,7 +21,7 @@ from uiLayout._common import lookup
 class PsychicPhaseHandler:
     """PhaseHandler for the Psychic Phase."""
 
-    phase_name: str = "psychic"
+    phase_name: ClassVar[str] = "psychic"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]
@@ -57,6 +59,26 @@ def can_deny(units: list[Unit]) -> bool:
             except Exception:
                 pass
     return any(u.has_keyword("PSYKER") or any(r in deny_names for r in u.rules) for u in units)
+
+
+def initial_deny_state(opponent_units: list[Unit]) -> bool | None:
+    """R-PSYCHIC-16 / Deny the Witch (core_rules.txt:1274, 1302-1313): only a
+    PSYKER unit (or deny wargear) may attempt to deny a psychic power. If the
+    opponent has neither, no deny attempt is possible — the power resolves
+    unopposed (``False``) instead of sitting in the ``None`` "awaiting a deny
+    attempt" state forever."""
+    return None if can_deny(opponent_units) else False
+
+
+def smite_targets(
+    selected_targets: list[tuple[str, str]], own_faction: str
+) -> list[tuple[str, str]]:
+    """Smite targets = every selected unit that is not the PSYKER's own faction.
+
+    The damage button renders once this list is non-empty; the selection itself
+    comes from the inactive player's unit cards (``_TARGET_PHASES`` in
+    ``uiLayout/unitCard.py`` must include ``"psychic"`` — S129 fix)."""
+    return [t for t in selected_targets if t[0] != own_faction]
 
 
 def is_perils(roll: int) -> bool:
@@ -228,6 +250,10 @@ def _render_smite_flow(
         st.session_state.psi_attempts_this_phase = (
             st.session_state.get("psi_attempts_this_phase", 0) + 1
         )
+        opponent = (
+            state["second_player"] if faction == state["first_player"] else state["first_player"]
+        )
+        denied = initial_deny_state(units_list_for(opponent))
         st.session_state.psi_result = {
             "faction": faction,
             "uid": uid,
@@ -235,7 +261,7 @@ def _render_smite_flow(
             "manifested": manifested,
             "perils": perils,
             "perils_applied": False,
-            "denied": None,
+            "denied": denied,
             "deny_roll": None,
             "deny_faction": None,
         }
@@ -313,10 +339,12 @@ def _render_psi_result(
     die = smite_damage_die(roll)
     if denied is None:
         st.success(f"Roll {roll} — Manifested! Waiting for deny attempt… ({die} mortal wounds)")
+    elif psi.get("deny_faction") is None:
+        st.success(f"Roll {roll} — Manifested! No deny possible. ({die} mortal wounds)")
     else:
         st.success(f"Roll {roll} — Manifested! Deny failed. ({die} mortal wounds)")
 
-    targets = [t for t in st.session_state.selected_targets if t[0] != faction]
+    targets = smite_targets(st.session_state.selected_targets, faction)
     if not targets:
         st.caption(
             "① Click an enemy unit in their army list to mark it as Smite target,"

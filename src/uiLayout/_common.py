@@ -605,7 +605,7 @@ def _render_rp_block(
         return
 
     rp_dice = revive_dice_count(ability.effect.amount, models_lost, def_unit.wounds)
-    threshold = f" · Erfolg: {ability.effect.modifier}+" if ability.effect.modifier else ""
+    threshold = f" · Erfolg: {ability.effect.success_on}+" if ability.effect.success_on else ""
     st.markdown(
         f"**{ability.name_en.upper()}** &nbsp; "
         f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel**{threshold}"

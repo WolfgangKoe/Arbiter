@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 import streamlit as st
 
@@ -423,7 +423,7 @@ def _render_command_ability_hint(faction: str) -> None:
 class CommandPhaseHandler:
     """PhaseHandler for the Command Phase."""
 
-    phase_name: str = "command"
+    phase_name: ClassVar[str] = "command"
 
     def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
         first: str = state["first_player"]

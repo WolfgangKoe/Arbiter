@@ -1454,7 +1454,7 @@ def test_revive_ability_yaml_delivers_label_threshold_and_formula() -> None:
     ability = get_after_attack_revive_ability("Necrons", unit, {"destroyed": False})
     assert ability is not None
     assert ability.name_en == "Reanimation Protocols"
-    assert ability.effect.modifier == 5  # success threshold: 5+
+    assert ability.effect.success_on == 5  # success threshold: 5+
     assert ability.effect.amount == "D6_per_wound"
 
 

@@ -368,7 +368,7 @@ def get_after_attack_revive_ability(
     ``effect.type: reanimate`` and ``trigger.event: after_enemy_attack`` in its
     faction_abilities.yaml (e.g. Necron Reanimation Protocols). Label
     (``name_en``), dice formula (``effect.amount``) and success threshold
-    (``effect.modifier``) come from that YAML entry — src/ knows only this
+    (``effect.success_on``) come from that YAML entry — src/ knows only this
     generic shape. Conditions (rule key, unit not destroyed) are checked
     against the YAML-declared conditions via ``check_conditions``.
     """
