@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-09 22:14 CEST
+Stand: 2026-07-10 01:43 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,13 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-09 20:34 5769  ████████░░░░ 102k ✅    █████░  82%    ▚··········▒
+07-09 20:34 5769  ████████░░░░ 103k ✅    █████░  81%    ▚··········▒
          SA_1·  ███████████░ 131k ⚠️   Executor 1a: GO-Karten-Baustein
          SA_2·  ██████████░░ 127k ⚠️   S132 Planning-Entwurf erstellen
          SA_3·  █████░░░░░░░  59k ✅    Executor 4: Doku-Nachzug Tisch-Wurf
          SA_4·  ███░░░░░░░░░  41k ✅    Executor 3: Start-Game-Button vers…
          SA_5·  █████████░░░ 115k ✅    Executor 1b: Stratagems-Liste auf …
          SA_6·  █████░░░░░░░  65k ✅    Executor 2: Re-Roll-Angebot Advanc…
+----------------- ---------------------- -------------- ------------
+07-09 20:34 19cb  ████████████ 162k ⛔    ██░░░░  25%    ·······▒▒▒▒▒
+         SA_1·  █████░░░░░░░  66k ✅    S132-Defekte untersuchen (5 Befund…
+         SA_2·  ████░░░░░░░░  51k ✅    K4: Alt.-Fire-Badge Erklärtext
+         SA_3·  █████░░░░░░░  61k ✅    K1: GO-Karte echte Button-Anatomie
 ----------------- ---------------------- -------------- ------------
 07-09 17:14 bd4b  ████████████ 173k ⛔    ████░░  62%    ▚···········
          SA_1·  ███░░░░░░░░░  41k ✅    DoD-Review Sessionstand S131
@@ -512,3 +517,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S128 (2026-07-06)** Parallel-Session: INV-4 5→3, INV-4b nur LEGIT, mypy 134→82, Plan 018.1+018.3, RP-Block YAML-getrieben
 - **S130 (2026-07-09)** Alle 7 shared-Gefechtsoptionen integriert: reaktive Stratagem-UI (Plan 015 teilweise), Insane Bravery, Desperate Breakout, Command Re-Roll inline 3/9; Retro: Auftragsgroessen-Gate nach 403k-Vorfall
 - **S131 (2026-07-09)** GO-UI-Design-System entschieden (GO-Karte, 4 Zustände, 3 Orte, Vollrückgängig-Standard); Klassifikation 95 GOs + UI-Inventar 17 Muster als Referenz; Roadmap 6 Pakete S132-S134+; Scroll-Bug Setup->Spielstart gefixt (verifiziert)
+- **S132 (2026-07-10)** GO-UI Paket 1+2: go_card.py-Baustein + Stratagems-Liste auf GO-Karten, Re-Roll-Angebot Advance/Charge, Start-Game-Button, Doku-Nachzug §6.3; Stakeholder-Review NO-GO mit 5 Befunden (S132_defects.md), K1/K4 als Hintergrund-Agenten neu gestartet, K2-Design entschieden, K3 nach S133

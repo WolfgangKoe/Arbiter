@@ -20,20 +20,23 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S131, 2026-07-09)
+## Aktueller Stand (nach S132, 2026-07-10)
 
-S131 = Design-Session: GO-UI-Design-System entschieden + verankert (`docs/spec/design_system.md` §6 — EINE GO-Karte, 4 Zustände ruhend/bereit/verwendet/gesperrt, 3 Orte, Tisch-Wurf-Baustein, Vollrückgängig-Undo, Wortlaut Use/Undo/Confirm, Englisch). Referenzen: `docs/reference/go_klassifikation.md` (95 GOs, 3 Achsen) + `docs/reference/ui_inventar_gameactionarea.md` (17 Muster). Roadmap 6 Pakete S132–S134+ in `backlog.md` §2. **Fixierte Grundannahme: App würfelt NICHT** — Tischwürfe, App erinnert/bucht; Undo = Versehens-Korrektur, Schiedsrichter erst am Phasen-/Zug-/Rundenende. Scroll-Bug Setup→Spielstart gefixt (`_scroll_to_top`-Flag, `render_scroll_to_top()`), **manuell verifiziert**. Review GO; Vollsuite 1582 passed, Coverage 99,14 %, mypy 75 = Baseline.
+S132 (Commit `0a94adb`): GO-UI Paket 1+2 — `go_card.py` (4 Zustände, Akkordeon-Fix) + `render_go_card`/`undo_stratagem` in `_common.py`; Stratagems-Liste auf GO-Karten; Re-Roll-Angebot Advance/Charge; Start-Game-Button unter Erstspieler-Auswahl; Doku-Nachzug §6.3. Vollsuite 1608 passed, Cov 99,15 %, mypy 75 = Baseline. **Stakeholder-Review = NO-GO, 5 Befunde** → `docs/handoff/S132_defects.md`. K1 (Karten-Anatomie, Fix-Plan in `S132_K1_result.md`) + K4 (Alt.-Fire-Text) beim Abschluss als Hintergrund-Agenten neu gestartet (erster Lauf starb an Session-Limit/Freigabe-Gate) — Ergebnisse in `docs/handoff/S132_K*_result.md`, **ungeprüft**.
 
-Frühere Sessions (S60–S130): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S131): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S132)
+### ▶ Nächster Schritt (S133)
 
-1. **Paket 1 (M):** GO-Karten-Baustein bauen (4 Zustände, Voll-/Kompaktform, Akkordeon-Fix: klappt nie selbst zu) + zentrale Stratagems-Liste darauf umstellen. Spec: `design_system.md` §6.
-2. **Paket 2 (M):** Command Re-Roll für Advance/Charge, ohne Wurf-Eingabe-Baustein (Stakeholder-Auflage; Spec `design_system.md` §6.3).
-3. **Klein (S):** „Start Game"-Button unter die Erstspieler-Auswahl verschieben (Stakeholder-Beobachtung ③, `docs/handoff/Stakeholder_Beobachtungen.md` — Datei NICHT löschen!).
-4. **Refinement:** Spielvorbereitungs-Screen überarbeiten (Beobachtung ②, unkonkret) — erst Mockup-Schritt mit Stakeholder, dann Auftrag (Backlog §2).
+1. **K1/K4-Ergebnisse konsumieren:** Marker prüfen, EINE Vollsuite, manuelle UI-Prüfung (CP genau 1×, Button in Header-Zeile, Zustandsfarben, Alt.-Fire-Text), Handoffs löschen.
+2. **K3 starten (XS, beauftragt+freigegeben, noch nicht gelaufen):** `orks/stratagems.yaml` „Get Stuck In, Ladz!" `conditions: [BOYZ, BEAST SNAGGA]` + Regressionstest + Vollsuite (Datenänderung!).
+3. **K2 (S–M, Design ENTSCHIEDEN, noch unbeauftragt):** Re-Roll als GO-Kompaktkarte, **dauerhaft sichtbar im Einheiten-Kontext der Phase, auch vor der Entscheidung** + Undo; erfordert Bewegungsphasen-UI-Umbau. Stakeholder-State-Modell: Einheit anfangs „Stationary" → zeige Move/Advance/Command-Reroll; „in melee" → nur Retreat (kein Re-Roll); Reserve → kommt ins Spiel nachdem alle bewegt/vorgerückt; „Stay Stationary" nur als Reset-Button, ersetzt den gedrückten Moved/Advanced/Retreat-Button (Funktion existierte schon). **Planner: Regeln nachprüfen (Fall Back/Reserven) + notierte State-Änderungen sichten.**
+4. **Paket 3:** reaktive Stratagem-Box (`render_reactive_stratagem_box`, `_common.py:523`) auf GO-Karte + `before_battle`-Fix.
+5. **Beobachtung ④ (XS–S):** Profilkarte Setup — doppeltes `""` beim Bewegungswert, Profilwert-Reihenfolge (`Stakeholder_Beobachtungen.md` + Screenshots). Danach **Refinement Beobachtung ②** (Mockup mit Stakeholder).
 
-**Offen:** S130-GO-Verifikation + Necron-Roster-Check bewusst auf nach dem UI-Umbau verschoben (Roadmap-Paket 7); Scroll-Render iframe→parent coverage-frei → in die manuelle Checkliste nach Umbau; `before_battle`-Fix jetzt Teil von Paket 3 (S133); 037 Docker-Smoke vor Merge; Deny-Caption-Prüfung blockiert (braucht Roster mit Deny-Einheit); Direction-Entscheide (Ziel9/Deployment/Mission-Scoring) → Backlog §5, weiter vertagt bis Ziel7 Stufe B/C.
+**Retro-Vorschläge S132 (Entscheid ausstehend):** ① Handoff-Konvention: Stakeholder legt Beobachtungen/Screenshots asynchron ab, beeinflusst Sessionplan NICHT, Verarbeitung delegierbar. ② DONE-Handoffs sofort konsumieren+löschen BEVOR der nächste Executor die Vollsuite startet (Hygiene-Gate riss). ③ Brief-Baustein: bei Harness-Auto-Backgrounding von pytest TaskOutput abwarten statt stehenzubleiben. ④ UI-Briefs: Selbstprüfpunkt „Anatomie-Abgleich gegen design_system, keine funktionslosen Attrappen". ⑤ Freigabe-Marker setzt NUR der Stakeholder (Koordinator hat in S132 einmal selbst getouct).
+
+**Offen:** `_common.py` wächst weiter (Refactor-Notiz Backlog §4); S130-GO-Verifikation + Necron-Roster-Check nach UI-Umbau (Paket 7); Scroll-Render iframe→parent in manuelle Checkliste; 037 Docker-Smoke vor Merge; Deny-Caption-Prüfung blockiert; Direction-Entscheide → Backlog §5, vertagt bis Ziel7 Stufe B/C.
 
 ---
 

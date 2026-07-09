@@ -3188,8 +3188,8 @@
   "576987de-d759-46bc-8e14-926c8e0c22c5": {
     "started_at": "2026-07-09T18:34:49.407Z",
     "task": "start session",
-    "peak_context": 101855,
-    "subagent_share": 82.35044044660384,
+    "peak_context": 103382,
+    "subagent_share": 81.29413622158458,
     "by_tier": {
       "Sonnet": 21138554,
       "Fable": 3203912,
@@ -3236,6 +3236,39 @@
         "description": "Executor 2: Re-Roll-Angebot Advance/Charge",
         "tier": "Sonnet",
         "peak_context": 64525,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      }
+    ]
+  },
+  "19cb3956-bcd8-41eb-9296-3876fcd52e0e": {
+    "started_at": "2026-07-09T18:34:49.407Z",
+    "task": "start session",
+    "peak_context": 161577,
+    "subagent_share": 24.62709189525444,
+    "by_tier": {
+      "Sonnet": 2209728,
+      "Haiku": 1377022
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S132-Defekte untersuchen (5 Befunde)",
+        "tier": "Sonnet",
+        "peak_context": 66137,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "K4: Alt.-Fire-Badge Erklärtext",
+        "tier": "Haiku",
+        "peak_context": 50692,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "K1: GO-Karte echte Button-Anatomie",
+        "tier": "Sonnet",
+        "peak_context": 60626,
         "started_at": "2026-07-09T18:34:49.407Z"
       }
     ]
