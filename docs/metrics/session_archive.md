@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-09 20:32 CEST
+Stand: 2026-07-09 22:14 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-09 17:14 bd4b  ████████████ 167k ⛔    ████░░  66%    ▚···········
+07-09 20:34 5769  ████████░░░░ 102k ✅    █████░  82%    ▚··········▒
+         SA_1·  ███████████░ 131k ⚠️   Executor 1a: GO-Karten-Baustein
+         SA_2·  ██████████░░ 127k ⚠️   S132 Planning-Entwurf erstellen
+         SA_3·  █████░░░░░░░  59k ✅    Executor 4: Doku-Nachzug Tisch-Wurf
+         SA_4·  ███░░░░░░░░░  41k ✅    Executor 3: Start-Game-Button vers…
+         SA_5·  █████████░░░ 115k ✅    Executor 1b: Stratagems-Liste auf …
+         SA_6·  █████░░░░░░░  65k ✅    Executor 2: Re-Roll-Angebot Advanc…
+----------------- ---------------------- -------------- ------------
+07-09 17:14 bd4b  ████████████ 173k ⛔    ████░░  62%    ▚···········
          SA_1·  ███░░░░░░░░░  41k ✅    DoD-Review Sessionstand S131
          SA_2·  ████████░░░░ 100k ✅    GO-Klassifikation aus Wahapedia re…
          SA_3·  ██████████░░ 124k ⚠️   Design-Entscheide in Specs übertra…

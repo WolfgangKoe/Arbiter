@@ -11,12 +11,13 @@ GO visibility states (see docs/spec/processes.md P-06 and gameObjects/stratagem.
 """
 
 import json
+from collections.abc import Callable
 from itertools import groupby
 from pathlib import Path
 
 import streamlit as st
 
-from constants.symbols import SYM_RESET, SYM_SWORDS
+from constants.symbols import SYM_SWORDS
 from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
@@ -24,15 +25,16 @@ from gameMechanic.game_state import (
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import adjust_cp
 from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
+    Stratagem,
     is_core_stratagem,
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
 )
-from uiLayout._common import spend_stratagem
+from uiLayout._common import render_go_card, spend_stratagem, undo_stratagem
+from uiLayout.go_card import GoCardState
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -156,6 +158,47 @@ def _selected_state_key_for(player: str) -> str | None:
     return sel_state_key
 
 
+def _go_state_and_reason(
+    strat: Stratagem, vis: str, used_ids: set[str], used_battle_ids: set[str]
+) -> tuple[GoCardState, str | None]:
+    """Map (`stratagem_visibility`, undo window) to a GO-card state + locked reason.
+
+    Central-list-specific (design_system.md §6, S132 1b): `stratagem_visibility()`
+    only ever returns "clickable"/"greyed" here — `conditions_met=False` already
+    filtered the stratagem out as "hidden" before this runs, so "dormant" never
+    appears in the central list (only 1a's isolated card demo shows that state).
+    "greyed" splits into two GO states depending on whether THIS phase's
+    activation window is still open (`stratagem_undo_visible`): open → "used"
+    (Undo offered), closed → "locked" (reason "used" for a once_per_battle
+    stratagem spent in an earlier phase, else "CP insufficient").
+    """
+    if vis == "clickable":
+        return "ready", None
+    if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
+        return "used", None
+    reason = "used" if strat.id in used_battle_ids else "CP insufficient"
+    return "locked", reason
+
+
+def _use_callback(strat: Stratagem, player: str) -> Callable[[], None]:
+    """Factory for the GO card's on_use callback.
+
+    A dedicated factory function (rather than a lambda inline in the loop
+    body) so each call gets its own closure over `strat`/`player` — a bare
+    `lambda: spend_stratagem(strat, ...)` written directly in the loop would
+    capture the loop variable *by reference*, so every card's callback would
+    resolve to the LAST stratagem once actually invoked. A `lambda strat=strat:`
+    default-arg workaround avoids that but defeats mypy's type inference for
+    the lambda in strict mode — this factory gets both right.
+    """
+    return lambda: spend_stratagem(strat, player, _selected_state_key_for(player))
+
+
+def _undo_callback(strat: Stratagem, player: str) -> Callable[[], None]:
+    """Factory for the GO card's on_undo callback (see `_use_callback`)."""
+    return lambda: undo_stratagem(strat, player)
+
+
 def _render_stratagems() -> None:
     """Two fixed player columns: first_player left, second_player right.
 
@@ -220,44 +263,18 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
         if is_core != in_core_section:
             st.caption("**Core**" if is_core else f"**{player}**")
             in_core_section = is_core
-        disabled = vis == "greyed"
-        is_used = strat.id in used_ids or strat.id in used_battle_ids
-        undo_visible = stratagem_undo_visible(strat.id, used_ids, used_battle_ids)
-        label = f"**{strat.name_en}** · {strat.cp_cost} CP"
-        if vis == "greyed":
-            if is_used:
-                label += " *(used)*"
-            else:
-                label += " *(CP insufficient)*"
-
-        with st.expander(label, expanded=False):
-            st.caption(strat.rule_text)
-            if undo_visible:
-                if st.button(
-                    f"{SYM_RESET} Rückgängig (+{strat.cp_cost} CP)",
-                    key=f"strat_undo_{player}_{strat.id}_{phase_idx}_{i}",
-                ):
-                    adjust_cp(player, strat.cp_cost)
-                    used_ids.discard(strat.id)
-                    used_ids_by_player[player] = used_ids
-                    st.session_state.used_stratagem_ids = used_ids_by_player
-                    if strat.once_per_battle:
-                        used_battle_ids.discard(strat.id)
-                        used_battle_ids_by_faction[player] = used_battle_ids
-                        st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
-                    st.session_state.active_modifiers = [
-                        m
-                        for m in st.session_state.get("active_modifiers", [])
-                        if m.get("source") != strat.name_en
-                    ]
-                    st.rerun()
-            elif not disabled:
-                if st.button(
-                    f"Use — spend {strat.cp_cost} CP",
-                    key=f"strat_{player}_{strat.id}_{phase_idx}_{i}",
-                ):
-                    spend_stratagem(strat, player, _selected_state_key_for(player))
-                    st.rerun()
+        state, locked_reason = _go_state_and_reason(strat, vis, used_ids, used_battle_ids)
+        render_go_card(
+            key=f"{player}_{strat.id}_{phase_idx}_{i}",
+            name=strat.name_en,
+            cp_cost=strat.cp_cost,
+            state=state,
+            keywords=strat.conditions,
+            rule_text=strat.rule_text,
+            locked_reason=locked_reason,
+            on_use=_use_callback(strat, player),
+            on_undo=_undo_callback(strat, player),
+        )
 
 
 def render_game_protocoll() -> None:

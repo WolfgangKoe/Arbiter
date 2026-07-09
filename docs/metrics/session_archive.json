@@ -3119,8 +3119,8 @@
   "bd4b682f-8af2-4a9b-b637-77366de69191": {
     "started_at": "2026-07-09T15:14:32.258Z",
     "task": "start session",
-    "peak_context": 167165,
-    "subagent_share": 65.57185848965965,
+    "peak_context": 173462,
+    "subagent_share": 62.31956367628443,
     "by_tier": {
       "Opus": 642143,
       "Sonnet": 19890599,
@@ -3182,6 +3182,61 @@
         "tier": "Sonnet",
         "peak_context": 79196,
         "started_at": "2026-07-09T15:14:32.258Z"
+      }
+    ]
+  },
+  "576987de-d759-46bc-8e14-926c8e0c22c5": {
+    "started_at": "2026-07-09T18:34:49.407Z",
+    "task": "start session",
+    "peak_context": 101855,
+    "subagent_share": 82.35044044660384,
+    "by_tier": {
+      "Sonnet": 21138554,
+      "Fable": 3203912,
+      "Haiku": 1922563
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 1a: GO-Karten-Baustein",
+        "tier": "Sonnet",
+        "peak_context": 131326,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S132 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 127368,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 4: Doku-Nachzug Tisch-Wurf",
+        "tier": "Haiku",
+        "peak_context": 58545,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 3: Start-Game-Button verschieben",
+        "tier": "Haiku",
+        "peak_context": 40809,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 1b: Stratagems-Liste auf GO-Karte",
+        "tier": "Sonnet",
+        "peak_context": 115498,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 2: Re-Roll-Angebot Advance/Charge",
+        "tier": "Sonnet",
+        "peak_context": 64525,
+        "started_at": "2026-07-09T18:34:49.407Z"
       }
     ]
   }

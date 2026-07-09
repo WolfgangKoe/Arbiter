@@ -72,6 +72,7 @@ from uiLayout.dice_html import (  # noqa: F401
     _render_dice_save_block,
     _render_dice_wound_block,
 )
+from uiLayout.go_card import GoCardState, action_slot_text, go_card_html
 
 # ---------------------------------------------------------------------------
 # Phase description texts
@@ -470,6 +471,37 @@ def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None)
         _apply_stratagem_effect(strat.effect, faction, unit_key)
 
 
+def undo_stratagem(strat: Stratagem, faction: str) -> None:
+    """Full rollback of `spend_stratagem` while the activation window is still open.
+
+    CP restored, both usage sets cleared, and any `active_modifiers` entry this
+    stratagem registered removed — the exact counterpart `spend_stratagem`'s
+    docstring names. Lives next to it so any future Undo affordance (today only
+    the central Stratagems-list GO card, gameProtocoll.py, offers one) shares
+    this bookkeeping instead of re-deriving it.
+    """
+    adjust_cp(faction, strat.cp_cost)
+
+    used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
+    used_ids = used_ids_by_player.get(faction, set())
+    used_ids.discard(strat.id)
+    used_ids_by_player[faction] = used_ids
+    st.session_state.used_stratagem_ids = used_ids_by_player
+
+    if strat.once_per_battle:
+        used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
+            "used_stratagem_battle_ids", {}
+        )
+        used_battle_ids = used_battle_ids_by_faction.get(faction, set())
+        used_battle_ids.discard(strat.id)
+        used_battle_ids_by_faction[faction] = used_battle_ids
+        st.session_state.used_stratagem_battle_ids = used_battle_ids_by_faction
+
+    st.session_state.active_modifiers = [
+        m for m in st.session_state.get("active_modifiers", []) if m.get("source") != strat.name_en
+    ]
+
+
 def _apply_stratagem_effect(effect: Effect, faction: str, unit_key: str) -> None:
     """Dispatch a stratagem's machine-readable ``effect`` to the unit it targets.
 
@@ -646,6 +678,105 @@ def render_inline_command_reroll(
             spend_stratagem(strat, faction)
             on_reroll()
             st.rerun()
+
+
+# ---------------------------------------------------------------------------
+# GO card — canonical Use/Undo + accordion wrapper (design_system.md §6, Plan 016 S132 1a)
+# ---------------------------------------------------------------------------
+#
+# Thin Streamlit shell around uiLayout.go_card.go_card_html(): renders the pure
+# HTML card body, then the one real action widget (Use/Undo) and the optional
+# rule-text accordion. Callers own the state (dormant/ready/used/locked) and
+# the on_use/on_undo bookkeeping (typically spend_stratagem / its undo
+# counterpart) — this function only owns rendering and the accordion's
+# open/closed flag. NOT yet wired into any call site (that migration is a
+# separate step); this is the reusable building block only.
+
+
+def _resolve_go_card_action(
+    accordion_key: str,
+    has_rule_text: bool,
+    state: GoCardState,
+    on_use: Callable[[], None] | None,
+    on_undo: Callable[[], None] | None,
+) -> None:
+    """`on_click` handler for the GO card's action button.
+
+    Must run as an `on_click` callback, not inline after the button (see
+    `render_go_card` docstring): it writes `st.session_state[accordion_key]`,
+    and that key already belongs to the expander widget rendered earlier in
+    the same script run — Streamlit forbids reassigning a keyed widget's
+    session_state value later in the *same* run (`StreamlitAPIException`).
+    A callback runs between the click and the next script run, before the
+    expander is re-instantiated, so the reset is legal there.
+    """
+    if has_rule_text:
+        st.session_state[accordion_key] = False
+    if state == "used" and on_undo is not None:
+        on_undo()
+    elif state == "ready" and on_use is not None:
+        on_use()
+
+
+def render_go_card(
+    key: str,
+    name: str,
+    cp_cost: int,
+    state: GoCardState,
+    *,
+    keywords: list[str] | None = None,
+    rule_text: str = "",
+    compact: bool = False,
+    locked_reason: str | None = None,
+    on_use: Callable[[], None] | None = None,
+    on_undo: Callable[[], None] | None = None,
+) -> None:
+    """Render one GO card: HTML body + the real Use/Undo button + rule-text accordion.
+
+    `key` must be unique per card instance (e.g. ``f"{faction}_{strat.id}"``) —
+    it seeds both the action button's widget key and the accordion's
+    session_state flag.
+
+    Accordion fix (S130 root cause, design_system.md §6.1): a bare
+    ``st.expander(label, expanded=False)`` only sets the widget's *initial*
+    value — once a user opens it, Streamlit keeps that open state across every
+    later rerun on its own, regardless of what `expanded=` the code passes on
+    the next run (there is no `key`, so nothing round-trips through
+    `session_state` to let the code force it shut again). Giving the expander
+    an explicit `key` makes `st.session_state[key]` the single source of
+    truth: ordinary reruns leave the user's own toggle alone, but the action
+    button's callback (`_resolve_go_card_action`) explicitly resets the flag
+    to False on every Use/Undo — closing the accordion again unless the user
+    re-opens it.
+
+    on_use/on_undo — invoked when the button is pressed in the "ready"/"used"
+    state respectively; not called for "dormant"/"locked" (button rendered
+    disabled, so this never fires for them regardless).
+    """
+    st.markdown(
+        go_card_html(
+            name,
+            cp_cost,
+            state,
+            keywords=keywords,
+            compact=compact,
+            locked_reason=locked_reason,
+        ),
+        unsafe_allow_html=True,
+    )
+
+    accordion_key = f"go_card_rule_open_{key}"
+    if rule_text:
+        with st.expander("Rule text", key=accordion_key, expanded=False):
+            st.caption(rule_text)
+
+    st.button(
+        action_slot_text(state, cp_cost),
+        key=f"go_card_action_{key}",
+        disabled=state in ("dormant", "locked"),
+        on_click=_resolve_go_card_action,
+        args=(accordion_key, bool(rule_text), state, on_use, on_undo),
+    )
 
 
 def _clear_pending_transport_destroyed() -> None:

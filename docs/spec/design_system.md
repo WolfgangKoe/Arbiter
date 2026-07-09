@@ -205,21 +205,24 @@ gelöst: eigener Ort statt Sonderphase. Achse (b) und die vollständige 95-GO-Ta
 
 Die App würfelt nicht. Jede Stelle „Spieler trägt Tischwurf ein" wird **ein** Baustein:
 Label-Schema `⟨Wurf⟩ (D6/2D6)`, Zahlenfeld, darunter ein Anker-Slot für wurf-bezogene
-GO-Karten (Kompaktform). Gilt für: Advance-Wurf, Charge-Wurf, Morale-Test, Manifest/Deny,
-Damage-Block — die Attackenabfolge bekommt so je einen Anker bei Treffer / Verwundung /
-Rüstung / Rettung / Schadenszuweisung.
+GO-Karten (Kompaktform). Gilt für: Morale-Test, Manifest/Deny, Damage-Block — die
+Attackenabfolge bekommt so je einen Anker bei Treffer / Verwundung / Rüstung / Rettung /
+Schadenszuweisung.
 
-Beispiel — Command Re-Roll beim Advance (aktiver Spieler, Button-UI der Bewegungsphase):
+**Gegenbeispiel — Advance/Charge:** Diese Wurf-Arten haben KEINE Werterfassung; statt
+Tisch-Wurf-Baustein bietet die App nur (a) den Zustand (Advanced/Charged oder nicht) und
+(b) ein Inline-Command-Re-Roll-Angebot (Button, 1 CP, ohne Wertfeld).
+
+Beispiel — Command Re-Roll beim Deny (aktiver Spieler, Psychic Phase):
 
 ```
-[Move] [Advance ✓] [Stationary] [Retreat]
-Advance roll (D6):  [ 3 ]
-▸ Command Re-Roll · 1 CP                   [Use]     ← ruhend bis Wert da, dann bereit
+Deny roll (D6): [ 4 ]
+▸ Command Re-Roll · 1 CP                   [Use]     ← bereit, wenn Wert da
 ```
 
 Ablauf: Wert eintragen → Karte wird „bereit" → `[Use]` bucht 1 CP, Feld öffnet sich für
 den neuen Tischwurf → Karte „verwendet" mit `[↺ Undo (+1 CP)]` = Vollrückgängig (alter Wert
-+ CP zurück). Gleiches Muster gilt für Charge und alle 11 Wurf-GOs (Umsetzung als
++ CP zurück). Gleiches Muster gilt für alle Wurf-GOs außer Advance/Charge (Umsetzung als
 Roadmap-Pakete, s. `../goals/backlog.md` §2).
 
 ### 6.4 Wortlaut-Konventionen

@@ -29,7 +29,7 @@ Frühere Sessions (S60–S130): Verlauf in `docs/metrics/session_archive.md` (Se
 ### ▶ Nächster Schritt (S132)
 
 1. **Paket 1 (M):** GO-Karten-Baustein bauen (4 Zustände, Voll-/Kompaktform, Akkordeon-Fix: klappt nie selbst zu) + zentrale Stratagems-Liste darauf umstellen. Spec: `design_system.md` §6.
-2. **Paket 2 (M):** Tisch-Wurf-Eingabe-Baustein + Command Re-Roll für Advance/Charge (Stakeholder-Auflage; Mockup in `design_system.md` §6).
+2. **Paket 2 (M):** Command Re-Roll für Advance/Charge, ohne Wurf-Eingabe-Baustein (Stakeholder-Auflage; Spec `design_system.md` §6.3).
 3. **Klein (S):** „Start Game"-Button unter die Erstspieler-Auswahl verschieben (Stakeholder-Beobachtung ③, `docs/handoff/Stakeholder_Beobachtungen.md` — Datei NICHT löschen!).
 4. **Refinement:** Spielvorbereitungs-Screen überarbeiten (Beobachtung ②, unkonkret) — erst Mockup-Schritt mit Stakeholder, dann Auftrag (Backlog §2).
 

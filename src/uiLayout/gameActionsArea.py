@@ -248,9 +248,6 @@ def _render_setup() -> None:
             st.rerun()
     st.caption(f"Currently selected: **{st.session_state.first_player}** goes first.")
 
-    for faction in (slot_a, slot_b):
-        _render_round_choice_assignment(faction)
-
     st.divider()
     if st.button(
         f"{SYM_SWORDS} Start Game",
@@ -260,6 +257,9 @@ def _render_setup() -> None:
     ):
         next_phase()
         st.rerun()
+
+    for faction in (slot_a, slot_b):
+        _render_round_choice_assignment(faction)
 
 
 # ---------------------------------------------------------------------------

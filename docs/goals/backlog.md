@@ -121,8 +121,8 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
   als 6-Pakete-Roadmap, **jedes Paket geht einzeln durchs Freigabe-Gate**:
   - 🟢 **Paket 1 (S132):** GO-Karten-Baustein (4 Zustände, Voll/Kompakt, Akkordeon-Fix) +
     zentrale Stratagem-Liste auf den Baustein umstellen.
-  - 🟢 **Paket 2 (S132):** Tisch-Wurf-Baustein + Command Re-Roll bei Advance-/Charge-Wurf —
-    löst die Stakeholder-Auflage S130 (s. u.) für diese beiden Wurf-Arten ein.
+  - 🟢 **Paket 2 (S132):** Command Re-Roll für Advance/Charge (ohne Wurf-Eingabe-Baustein) —
+    löst die Stakeholder-Auflage S130 (s. u.) ein.
   - 🟢 **Paket 3 (S133):** Reaktive Boxen → GO-Karte migrieren; `before_battle`-Liste im
     ArmySetup (macht die 13 bisher nie matchenden GOs erstmals sichtbar — löst den
     S131-Kandidaten „`before_battle` sichtbar machen" unten ab).
@@ -343,6 +343,9 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
   nicht als Wächter erzwungen.
+- 🔲 **`_common.py` refactoren (Stakeholder-Auftrag S132):** `src/uiLayout/_common.py`
+  (2218 Zeilen) in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei
+  werden. Verwandt mit der Layer-Kopplung oben (gleicher Render-Hub).
 - **Test-Mock-Fragilität (S51 entdeckt):** Mehrere `src`-Module lesen das globale
   `st.session_state` und rufen einander auf (`unit_mutations.set_movement_status` →
   `game_state.units_key_for`; `ability_engine` → `game_state`/`unit_mutations`). Tests mocken

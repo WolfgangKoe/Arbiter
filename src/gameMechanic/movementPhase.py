@@ -26,6 +26,7 @@ from gameObjects.loader import load_relic_catalog
 from gameObjects.unit import TriggeredEffect, Unit
 from uiLayout._common import (
     lookup,
+    render_inline_command_reroll,
     render_player_column,
     render_reactive_stratagem_box,
     render_unit_selectbox,
@@ -132,6 +133,11 @@ def _active_movement(
                 st.session_state.pending_fall_back = {"faction": faction, "uid": uid}
             log_action(st.session_state.round, "movement", unit.name_en, f"movement: {value}")
             st.rerun()
+
+    if current == "advanced":
+        # Advance-Wurf liegt frisch auf dem Tisch — nothing to reopen on reroll
+        # (the app never captured a roll value for Advance in the first place).
+        render_inline_command_reroll(faction, "movement", reopen_key=uid, on_reroll=lambda: None)
 
     if in_melee:
         st.caption("Unit is in melee — only Stay Stationary or Retreat allowed.")

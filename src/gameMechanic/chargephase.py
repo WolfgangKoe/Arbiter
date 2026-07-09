@@ -18,6 +18,7 @@ from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
 from uiLayout._common import (
     lookup,
+    render_inline_command_reroll,
     render_melee_engagements,
     render_player_column,
     render_reactive_stratagem_box,
@@ -108,6 +109,9 @@ def _active_charge(
         st.markdown(f"**Target:** {tgt_unit.name_en}")
 
     st.caption("Roll **2D6** — must equal or beat the distance to the closest target model.")
+    # Re-Roll offer sits before the Successful/Failed decision — the app never
+    # captured the roll value, so there is nothing to reopen on reroll.
+    render_inline_command_reroll(faction, "charge", reopen_key=uid, on_reroll=lambda: None)
 
     c1, c2 = st.columns(2)
     with c1:

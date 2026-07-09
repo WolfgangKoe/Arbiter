@@ -1,7 +1,8 @@
-"""Tests for uiLayout/gameProtocoll.py — Battle Log deployment snapshot.
+"""Tests for uiLayout/gameProtocoll.py — Battle Log deployment snapshot + the
+central Stratagems-list GO-card migration (design_system.md §6, S132 1b).
 
-Regression target: the deployment snapshot iterated the bare-ID-keyed name
-map instead of the (possibly '#N'-suffixed) state dict, so duplicate squads
+Regression target (Battle Log): the deployment snapshot iterated the bare-ID-keyed
+name map instead of the (possibly '#N'-suffixed) state dict, so duplicate squads
 never appeared. See Plan 034.
 """
 
@@ -17,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 import gameMechanic.game_log as gl  # noqa: E402
 import gameMechanic.game_state as gs  # noqa: E402
 import uiLayout.gameProtocoll as gp  # noqa: E402
+from gameObjects.stratagem import Stratagem  # noqa: E402
 
 
 class FakeSessionState(dict):
@@ -100,3 +102,148 @@ def test_reset_game_clears_battle_log_for_next_render(monkeypatch, tmp_path: Pat
     assert len(archived) == 1
     archived_data = json.loads(archived[0].read_text())
     assert archived_data["rounds"][0]["phases"][0]["events"][0]["action"] == "fired at Boyz"
+
+
+# ---------------------------------------------------------------------------
+# _go_state_and_reason() — pure vis -> GO-card-state mapping (no Streamlit)
+# ---------------------------------------------------------------------------
+
+
+def _make_stratagem(
+    id_: str = "s1",
+    name_en: str = "Test Strat",
+    cp_cost: int = 1,
+    once_per_battle: bool = False,
+) -> Stratagem:
+    return Stratagem(
+        id=id_,
+        name_en=name_en,
+        cp_cost=cp_cost,
+        phase="any",
+        stage="active",
+        player="both",
+        once_per_battle=once_per_battle,
+    )
+
+
+def test_go_state_and_reason_clickable_maps_to_ready() -> None:
+    strat = _make_stratagem()
+    assert gp._go_state_and_reason(strat, "clickable", set(), set()) == ("ready", None)
+
+
+def test_go_state_and_reason_greyed_with_open_undo_window_maps_to_used() -> None:
+    """A stratagem used THIS phase (still discard-able) becomes "used", not
+    "locked" — the Undo button must stay offered."""
+    strat = _make_stratagem(id_="s1")
+    assert gp._go_state_and_reason(strat, "greyed", {"s1"}, set()) == ("used", None)
+
+
+def test_go_state_and_reason_once_per_battle_spent_earlier_maps_to_locked_used() -> None:
+    """A once_per_battle stratagem spent in a previous phase: the phase-scoped
+    undo window is closed (id not in used_ids), so it must render "locked"
+    with reason "used" — not "used" (no Undo) and not the generic CP reason."""
+    strat = _make_stratagem(id_="s1", once_per_battle=True)
+    assert gp._go_state_and_reason(strat, "greyed", set(), {"s1"}) == ("locked", "used")
+
+
+def test_go_state_and_reason_cp_insufficient_maps_to_locked_with_cp_reason() -> None:
+    strat = _make_stratagem(id_="s1")
+    assert gp._go_state_and_reason(strat, "greyed", set(), set()) == (
+        "locked",
+        "CP insufficient",
+    )
+
+
+# ---------------------------------------------------------------------------
+# _render_stratagem_column() — wiring: render_go_card gets the mapped state,
+# Use/Undo route through the canonical spend_stratagem/undo_stratagem path
+# ---------------------------------------------------------------------------
+
+
+def test_render_stratagem_column_maps_visibility_to_go_card_state(monkeypatch) -> None:
+    """Regression: the central list must hand render_go_card the MAPPED
+    ready/used/locked GO state (via _go_state_and_reason), not the raw
+    clickable/greyed string stratagem_visibility() returns."""
+    ready_strat = _make_stratagem(id_="ready.strat", name_en="Ready GO", cp_cost=1)
+    used_strat = _make_stratagem(id_="used.strat", name_en="Used GO", cp_cost=2)
+
+    session = FakeSessionState(
+        cp={"Necrons": 1},
+        phase_idx=0,
+        used_stratagem_ids={"Necrons": {"used.strat"}},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [ready_strat, used_strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Necrons", True)
+
+    by_name = {c["name"]: c for c in captured}
+    assert by_name["Ready GO"]["state"] == "ready"
+    assert by_name["Ready GO"]["locked_reason"] is None
+    assert by_name["Used GO"]["state"] == "used"
+    assert by_name["Used GO"]["locked_reason"] is None
+
+
+def test_render_stratagem_column_use_action_routes_through_spend_stratagem(
+    monkeypatch,
+) -> None:
+    """The GO card's on_use callback must call the canonical spend_stratagem
+    path with (stratagem, player, selected-unit state key) — the same
+    bookkeeping the reactive box and inline offer use, so CP/usage tracking
+    never drifts between the three GO surfaces."""
+    strat = _make_stratagem(id_="ready.strat", name_en="Ready GO", cp_cost=1)
+    session = FakeSessionState(
+        cp={"Necrons": 1},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    spend_calls: list[tuple] = []
+    monkeypatch.setattr(gp, "spend_stratagem", lambda *args: spend_calls.append(args))
+
+    gp._render_stratagem_column("Necrons", True)
+    captured[0]["on_use"]()
+
+    assert spend_calls == [(strat, "Necrons", None)]
+
+
+def test_render_stratagem_column_undo_action_routes_through_undo_stratagem(
+    monkeypatch,
+) -> None:
+    """The GO card's on_undo callback must call the canonical undo_stratagem
+    counterpart with (stratagem, player) — full-rollback bookkeeping stays in
+    one place instead of being re-inlined at the call site."""
+    strat = _make_stratagem(id_="used.strat", name_en="Used GO", cp_cost=2)
+    session = FakeSessionState(
+        cp={"Necrons": 0},
+        phase_idx=0,
+        used_stratagem_ids={"Necrons": {"used.strat"}},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    undo_calls: list[tuple] = []
+    monkeypatch.setattr(gp, "undo_stratagem", lambda *args: undo_calls.append(args))
+
+    gp._render_stratagem_column("Necrons", True)
+    captured[0]["on_undo"]()
+
+    assert undo_calls == [(strat, "Necrons")]
