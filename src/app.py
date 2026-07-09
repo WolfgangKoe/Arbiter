@@ -23,7 +23,7 @@ if "initialized" not in st.session_state:
 
 from uiLayout.armyList import render_army_list  # noqa: E402
 from uiLayout.gameActionsArea import render_game_actions_area  # noqa: E402
-from uiLayout.gameHeader import render_game_header  # noqa: E402
+from uiLayout.gameHeader import render_game_header, render_scroll_to_top  # noqa: E402
 from uiLayout.gameProtocoll import render_game_protocoll  # noqa: E402
 
 _scenario = st.query_params.get("scenario")
@@ -32,6 +32,9 @@ if _scenario and "scenario_loaded" not in st.session_state:
 
     load_scenario(_scenario)
     st.session_state.scenario_loaded = True
+
+if st.session_state.pop("_scroll_to_top", False):
+    render_scroll_to_top()
 
 render_game_header()
 st.divider()

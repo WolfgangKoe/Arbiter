@@ -111,22 +111,46 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
 
 ## 2. Offene Tasks (kleiner als ein Plan)
 
+- ✅ **GO-UI-Design-System — ENTSCHIEDEN (S131, 2026-07-09, Retro-Maßnahme 5 aus S130
+  eingelöst):** GO-Karte (4 Zustände ruhend/bereit/verwendet/gesperrt, Voll-/Kompaktform,
+  Akkordeon-Fix), Orte-Zuordnung über die GO-Klassifikation, Tisch-Wurf-Eingabe-Baustein
+  inkl. Command-Re-Roll-Muster, Wortlaut-Konventionen (eine Vokabel-Familie Use/Undo/
+  Confirm) — verbindliche Spec: [../spec/design_system.md](../spec/design_system.md) §6.
+  Klassifikations-Referenz (95 GOs, 3 Achsen):
+  [../reference/go_klassifikation.md](../reference/go_klassifikation.md). Umsetzung läuft
+  als 6-Pakete-Roadmap, **jedes Paket geht einzeln durchs Freigabe-Gate**:
+  - 🟢 **Paket 1 (S132):** GO-Karten-Baustein (4 Zustände, Voll/Kompakt, Akkordeon-Fix) +
+    zentrale Stratagem-Liste auf den Baustein umstellen.
+  - 🟢 **Paket 2 (S132):** Tisch-Wurf-Baustein + Command Re-Roll bei Advance-/Charge-Wurf —
+    löst die Stakeholder-Auflage S130 (s. u.) für diese beiden Wurf-Arten ein.
+  - 🟢 **Paket 3 (S133):** Reaktive Boxen → GO-Karte migrieren; `before_battle`-Liste im
+    ArmySetup (macht die 13 bisher nie matchenden GOs erstmals sichtbar — löst den
+    S131-Kandidaten „`before_battle` sichtbar machen" unten ab).
+  - 🟢 **Paket 4 (S133):** Inline-Anker Attackenabfolge (5 Wurfbereiche: Treffer/
+    Verwundung/Rüstung/Rettung/Schadenszuweisung) + restliche Command-Re-Roll-Wurf-Arten —
+    löst den Rest der Stakeholder-Auflage S130 ein.
+  - 🟢 **Paket 5 (S134+):** Wortlaut-/Sprach-Bereinigung (Englisch durchgehend, Use/Undo/
+    Confirm-Familie), eine CP-Anzeige, ein Stepper-Baustein.
+  - 🟢 **Paket 6 (S134+, eigenes Konzept-Inkrement):** Einheiten-Auswahl in die
+    GameActionArea ziehen (Heroische-Intervention-Muster verallgemeinern), Zielauswahl
+    entschlacken.
+  - 🔲 **Danach:** manuelle UI-Verifikation (S130-Checkliste + neues Design), Stakeholder.
 - 🟢 **Command Re-Roll auf alle 9 Wurf-Arten ausweiten (Stakeholder-AUFLAGE, S130):** Heute
   inline verdrahtet nur für Damage/Psychic/Deny (R-CMD-12, 3/9). Stakeholder wörtlich: Man kann
   die GO auch bei den übrigen Würfen „in irgendeiner Form anzeigen — bei Charge- und Advance-
   Würfen recht gut integrierbar; bei der Attackenfolge müssen wir uns überlegen, wie. Aber bitte
-  nicht außen vor lassen!" Voraussetzung je Stelle: ersetzbaren Einzelwurf erfassen (Hit/Wound/
-  Save/Attackenzahl sind heute nur Schwellen-/Erfolgsanzeigen). Charge/Advance zuerst (S/M),
-  Attackenfolge nach UI-Design-Entscheid.
-- 🟢 **GO-UI-Design-System ergänzen (Retro-Maßnahme 5, S130):** VOR der Implementierung jeder
-  weiteren Gefechtsoption die UI festlegen — begrenzt auf wenige Standard-Komponenten (z. B.
-  „Liste unten" + „Inline"), generelle Funktion einheitlich. Konkret offen: Command Re-Roll hat
-  keinen „Undo"-Button wie die anderen GOs → Design-System um Undo-Standard erweitern
-  (`docs/spec/design_colors.md`/UI-Spec ergänzen, Mockup-Gate wieder einhalten).
+  nicht außen vor lassen!" Umsetzung läuft über die Design-System-Roadmap oben: Advance/Charge
+  in Paket 2 (S132), Attackenfolge in Paket 4 (S133).
 - 🟢 **Fraktions-Stratagems `before_battle` sichtbar machen (S131-Kandidat):** 6 Necron- +
-  7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — Vor-Schlacht-Schritt
-  oder Sonderbehandlung in `stratagem_visibility()`; danach §6e-Modifier-Engine für die
-  ~56 teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
+  7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — löst über Paket 3
+  (S133, s. o.) mit der neuen ArmySetup-Liste; danach §6e-Modifier-Engine für die ~56
+  teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
+- 🔲 **Spielvorbereitungs-Screen überarbeiten (Stakeholder-Beobachtung 2, S131 — Refinement
+  nötig):** Stakeholder-Beobachtung aus `docs/handoff/Stakeholder_Beobachtungen.md` Punkt 2
+  („Den Spielvorbereitungsscreen müssen wir überarbeiten"). Noch kein Konzept — braucht
+  eigenes Refinement, bevor daraus ein Plan wird. Punkt 1 derselben Datei (Scroll-Bug
+  Setup→Spielstart) läuft separat als S131-Aufgabe (s. `planning_s131.md` Aufgabe 5); Punkt 3
+  (Start-Game-Button-Position) ist noch unbehandelt — ggf. Teil dieses Refinements.
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 

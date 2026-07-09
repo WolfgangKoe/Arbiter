@@ -128,7 +128,18 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Format: `pre-commit run --files <geänderte Dateien>` ausgeführt und sauber (nicht nur `ruff check`)
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
       NIE direkt im Chat mit dem Stakeholder kommuniziert
+- [ ] Handoff-Marker: jede nach docs/handoff/ geschriebene Datei hat Zeile 1
+      `STATUS: NEEDS-DECISION|ANSWERED|DONE` — der Koordinator nennt den Marker im Brief
+      (S131: zwei rote Doku-Gates nur durch fehlende Marker)
 ```
+
+## Grundannahmen-Block in Konzept-Aufträgen (Retromaßnahme S131 — PFLICHT)
+
+Jedes Konzept-/Design-Dokument beginnt mit einem Abschnitt **„Grundannahmen"**
+(Weltbild, das dem Entwurf zugrunde liegt — z. B. „gewürfelt wird am Tisch, nicht in
+der App"), den der Stakeholder VOR den Detail-Entscheidungen bestätigt. Anlass: S131 —
+die Fehlannahme „App würfelt" kostete eine komplette Konzept-Iteration. Bewährter
+Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
 
 ## Auftragsgrößen-Gate (Retromaßnahme S130 — PFLICHT)
 
@@ -137,9 +148,11 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   eigenständig grün). Der Koordinator prüft das VOR jedem `Agent`-Aufruf.
 - **Test-Budget je Brief:** während der Entwicklung nur gezielte Tests
   (`pytest <datei> -q --no-cov`), genau **eine** Vollsuite am Ende des Briefs.
-  Die Vollsuite läuft **immer im Vordergrund** — pytest NIE als Hintergrund-Task
-  starten; Endbericht in derselben Antwort wie das Suite-Ende (S121/S130-Befund:
-  vorzeitige Rückkehr kostete ein ~171k-Resume).
+  Die Vollsuite läuft **immer im Vordergrund** — konkret: im selben Tool-Call auf das
+  Suite-Ende warten (Timeout großzügig setzen), `run_in_background` für pytest ist
+  VERBOTEN; Endbericht in derselben Antwort wie das Suite-Ende (S121/S130-Befund:
+  vorzeitige Rückkehr kostete ein ~171k-Resume; S131: Executor legte sich trotz
+  Klausel mit wartendem Hintergrund-pytest schlafen → Resume nötig).
 - **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~150k
   Eigenverbrauch, gibt er den Zwischenstand zurück (geänderte Dateien + offene
   Schritte) statt weiterzuarbeiten. Prüfintervall: nach jedem ~20. Tool-Call den

@@ -43,6 +43,7 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | Prozess-/Phasen-Specs (Attackenabfolge etc.) | `docs/spec/processes.md` |
 | Nicht-offensichtliche Regelerkenntnisse (Implementierungs-Gotchas) | `docs/spec/rules_insights.md` |
 | Farbschema (verbindlich) | `docs/spec/design_colors.md` |
+| UI-Design-System (GO-Karte, Bausteine, Wortlaut) | `docs/spec/design_system.md` |
 | Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/metrics/session_archive.md` |
 
 Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in

@@ -3,6 +3,7 @@
 import html
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from constants.symbols import SYM_RESET
 from gameMechanic.game_state import PHASES, next_phase, reset_game
@@ -212,6 +213,33 @@ header[data-testid="stHeader"] { display: none !important; }
 
 </style>
 """
+
+
+def render_scroll_to_top() -> None:
+    """Scroll the app's main content area back to the top.
+
+    Streamlit keeps the browser's scroll position across a rerun, so
+    swapping the (long) setup screen for the phase screen would otherwise
+    open already scrolled to the bottom. `st.markdown` cannot run <script>
+    tags (they're inserted via innerHTML, which browsers never execute), so
+    this uses `components.html`, which renders in its own iframe and does
+    execute scripts; the script then reaches into the parent document to
+    scroll the real page. Call once, guarded by a session_state flag that
+    the caller clears immediately after.
+    """
+    components.html(
+        """
+        <script>
+        (function () {
+            const doc = window.parent.document;
+            const target = doc.querySelector('section[data-testid="stMain"]') || doc.scrollingElement;
+            if (target) { target.scrollTo(0, 0); }
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
 
 _SCORE_NUM = "font-size:4.5rem;font-weight:700;color:#fbbf24;line-height:1.0;"
 _SCORE_LBL = "font-size:4.5rem;font-weight:700;color:#6b5f44;margin-left:6px;letter-spacing:0.1em;line-height:1.0;"

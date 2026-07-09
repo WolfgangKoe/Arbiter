@@ -156,6 +156,16 @@ def test_init_state_sets_empty_cp_grants() -> None:
     assert session["cp_grants"] == set()
 
 
+def test_init_state_sets_scroll_to_top_flag() -> None:
+    """S131 bug: the phase screen must open scrolled to the top, not wherever the
+    long setup screen was scrolled to. init_state() sets a one-shot flag that
+    app.py consumes (pop) on the phase screen's first render to trigger a
+    scroll-to-top; the flag itself is pure state, verified here."""
+    session = _make_session()
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
+    assert session["_scroll_to_top"] is True
+
+
 def test_round_choice_directive_persists_across_mid_round_turn_switch() -> None:
     """A command protocol stays active for the whole battle round (both turns).
 

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-09 07:35 CEST
+Stand: 2026-07-09 20:32 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-08 16:31 b31b  ████████████ 166k ⛔    ██████  93%    ············
+07-09 17:14 bd4b  ████████████ 167k ⛔    ████░░  66%    ▚···········
+         SA_1·  ███░░░░░░░░░  41k ✅    DoD-Review Sessionstand S131
+         SA_2·  ████████░░░░ 100k ✅    GO-Klassifikation aus Wahapedia re…
+         SA_3·  ██████████░░ 124k ⚠️   Design-Entscheide in Specs übertra…
+         SA_4·  ██████████░░ 123k ⚠️   UI-Ist-Inventar GameActionArea ers…
+         SA_5·  █████░░░░░░░  69k ✅    GO-UI-Konzept mit Mockups entwerfen
+         SA_6·  ██████░░░░░░  76k ✅    S131 neu planen nach Stakeholder-F…
+         SA_7·  ████░░░░░░░░  56k ✅    Scroll-Bug nach Spielstart fixen
+         SA_8·  ██████░░░░░░  79k ✅    Planning-Entwurf S131 erstellen
+----------------- ---------------------- -------------- ------------
+07-08 16:31 b31b  ████████████ 167k ⛔    ██████  93%    ············
          SA_1·  █████████░░░ 113k ✅    Stratagem-Integrations-Gap-Analyse
          SA_2·  —                      Reviewer: DoD-Review S130
          SA_3·  ████████████ 175k ⛔    Executor: Insane Bravery + Breakout
@@ -493,3 +503,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S127 (2026-07-05)** Plans 038+039 done (mypy ratchet gate baseline 134, README/DX, CI 3x faster), r-proto-02 handoff closed, debt scoreboard refreshed, ledger reduction roadmap adopted
 - **S128 (2026-07-06)** Parallel-Session: INV-4 5→3, INV-4b nur LEGIT, mypy 134→82, Plan 018.1+018.3, RP-Block YAML-getrieben
 - **S130 (2026-07-09)** Alle 7 shared-Gefechtsoptionen integriert: reaktive Stratagem-UI (Plan 015 teilweise), Insane Bravery, Desperate Breakout, Command Re-Roll inline 3/9; Retro: Auftragsgroessen-Gate nach 403k-Vorfall
+- **S131 (2026-07-09)** GO-UI-Design-System entschieden (GO-Karte, 4 Zustände, 3 Orte, Vollrückgängig-Standard); Klassifikation 95 GOs + UI-Inventar 17 Muster als Referenz; Roadmap 6 Pakete S132-S134+; Scroll-Bug Setup->Spielstart gefixt (verifiziert)

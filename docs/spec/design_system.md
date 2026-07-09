@@ -10,6 +10,16 @@
 > allen fünf Entscheidungsfragen bestätigt — die Werte in §2–§4 waren bereits identisch
 > umgesetzt (S115), keine inhaltliche Änderung nötig. Die Handoff-Datei wurde danach
 > gelöscht (Lebensdauer laut Datei-Kopf: bis Stakeholder-Entscheidung).
+>
+> **S131-Nachtrag (entschieden 2026-07-09):** §6 ergänzt — die GO-Karte (Gefechtsoptionen-
+> UI), der Tisch-Wurf-Eingabe-Baustein und die Wortlaut-Konventionen sind jetzt
+> verbindlicher Standard für jeden weiteren UI-Auftrag an Gefechtsoptionen. Quelle:
+> `docs/handoff/design_system_konzept_s131.md` (Stakeholder hat alle 4 Entscheidungsfragen
+> mit der Empfehlung beantwortet). Orte-Zuordnung stützt sich auf
+> [`../reference/go_klassifikation.md`](../reference/go_klassifikation.md) (95-GO-Katalog,
+> 3 Achsen). Umsetzung läuft als Roadmap über S132–S134+ (Pakete in
+> [`../goals/backlog.md`](../goals/backlog.md) §2) — jedes Paket geht einzeln durchs
+> Freigabe-Gate, diese Spec ist der Maßstab dafür.
 
 ## 0. Governance & Artefakt-Zuschnitt
 
@@ -134,3 +144,108 @@ Geometrie-Klasse, kein Badge im Sinne von §1.1), `dice_compose._badge_chip` (S1
 eigenständig), der `←`-Pfeil (keine Konstante in §4 vorgesehen) sowie das `⬇`-Download-Icon
 in `setupScreen.py` (kein Semantik-Match in §4). Der Ratchet-Rest ist damit auf Null —
 neue Literale, die künftig hinzukommen, werden wieder gegen diesen Stand geprüft.
+
+## 6. Gefechtsoptionen-UI — GO-Karte, Tisch-Wurf-Baustein, Wortlaut (entschieden S131, 2026-07-09)
+
+Zweck: verbindlicher UI-Standard für jede Gefechtsoption (GO — Stratagems + vergleichbare
+optionale Regeln), damit künftige Aufträge nicht wieder eigene Bauformen erfinden (Anlass:
+S130-Befund — GOs existierten bereits in drei divergenten Formen: reaktive Box, Inline-Offer,
+Tab-Schalter). Grundlage: `docs/handoff/design_system_konzept_s131.md` (vom Stakeholder mit
+der Empfehlung in allen 4 Fragen bestätigt) und die GO-Klassifikation in
+[`../reference/go_klassifikation.md`](../reference/go_klassifikation.md).
+
+### 6.1 Die GO-Karte — eine Komponente, drei Orte, vier Zustände
+
+Statt drei Bauformen gibt es genau **eine** Komponente, überall gleich aufgebaut, nur in
+Voll- oder Kompaktform gerendert:
+
+```
+▸ Fire Overwatch · 1 CP                    [Use]
+[CORE] [CHARGE] [reaktiv]
+   (▸ klappt den Regeltext aus — nur dafür)
+```
+
+- Header-Zeile: Name · CP-Kosten · genau **ein** Aktions-Slot rechts (`[Use]` oder `[↺]`).
+- Keyword-Chips wie in der UnitCard (bestehender `chip()`-Baustein aus §1.1).
+- Regeltext nur ausklappbar (Akkordeon-Fix: klappt nie von selbst zu — S130-Beschwerde).
+- Kein Pass-Button (passen = `[Use]` nicht drücken), keine CP-Gesamtanzeige auf der Karte
+  (die steht nur im GameHeader, s. §6.4).
+
+Vier Zustände ersetzen das bisherige plötzliche Auftauchen der reaktiven Box:
+
+| Zustand | Wann | Darstellung |
+|---|---|---|
+| ruhend | Trigger (noch) nicht erfüllt | sichtbar, gedimmt, `[Use]` disabled |
+| bereit | Trigger erfüllt, CP reichen | hervorgehoben (Gold-Primary, s. §6.5), `[Use]` aktiv |
+| verwendet | Use gedrückt, Fenster noch offen | `[↺ Undo (+N CP)]` statt `[Use]` |
+| gesperrt | CP fehlen / Voraussetzung weg | gedimmt, Grund als Suffix im Header |
+
+Undo ist überall **Vollrückgängig** (CP zurück, Effekt/Wert zurück), solange das
+Aktivierungsfenster offen ist — der Schiedsrichter-Moment kommt erst am Phasen-/Zug-/
+Rundenende, nicht bei jedem Klick (App ist Erinnerer/Entscheidungshelfer, würfelt selbst
+nicht — Regel bleibt unverändert gegenüber dem Bestand).
+
+### 6.2 Orte-Zuordnung (aus der GO-Klassifikation, Achse b)
+
+| Klassifikation (Achse b) | Ort | Form |
+|---|---|---|
+| spielweit (12 GOs, `before_battle`) | Liste im ArmySetup, vor „Start Game" | Vollform |
+| phasenweit/proaktiv (~22) | zentrale Stratagems-Liste (Spielerseite) | Vollform |
+| bei_ereignis (~45) | zentrale Liste (ruhend) **+** Inline-Anker am auslösenden Schritt | Voll + Kompakt |
+| vor_wurf / nach_wurf (11) | Inline-Anker direkt an der Wurf-Eingabe | Kompakt |
+
+Die zentrale Liste ist der **Planungs-Überblick** („was habe ich diese Phase?"), der
+Inline-Anker die **Erinnerung am Ort des Geschehens** — beide rendern dieselbe Karte aus
+derselben Buchhaltung (`spend_stratagem`-Pipeline), nichts wird doppelt gebucht. Damit ist
+auch der `before_battle`-Sichtbarkeitsfix (13 GOs matchen `PHASES` heute nie) konzeptionell
+gelöst: eigener Ort statt Sonderphase. Achse (b) und die vollständige 95-GO-Tabelle:
+[`../reference/go_klassifikation.md`](../reference/go_klassifikation.md).
+
+### 6.3 Tisch-Wurf-Eingabe-Baustein
+
+Die App würfelt nicht. Jede Stelle „Spieler trägt Tischwurf ein" wird **ein** Baustein:
+Label-Schema `⟨Wurf⟩ (D6/2D6)`, Zahlenfeld, darunter ein Anker-Slot für wurf-bezogene
+GO-Karten (Kompaktform). Gilt für: Advance-Wurf, Charge-Wurf, Morale-Test, Manifest/Deny,
+Damage-Block — die Attackenabfolge bekommt so je einen Anker bei Treffer / Verwundung /
+Rüstung / Rettung / Schadenszuweisung.
+
+Beispiel — Command Re-Roll beim Advance (aktiver Spieler, Button-UI der Bewegungsphase):
+
+```
+[Move] [Advance ✓] [Stationary] [Retreat]
+Advance roll (D6):  [ 3 ]
+▸ Command Re-Roll · 1 CP                   [Use]     ← ruhend bis Wert da, dann bereit
+```
+
+Ablauf: Wert eintragen → Karte wird „bereit" → `[Use]` bucht 1 CP, Feld öffnet sich für
+den neuen Tischwurf → Karte „verwendet" mit `[↺ Undo (+1 CP)]` = Vollrückgängig (alter Wert
++ CP zurück). Gleiches Muster gilt für Charge und alle 11 Wurf-GOs (Umsetzung als
+Roadmap-Pakete, s. `../goals/backlog.md` §2).
+
+### 6.4 Wortlaut-Konventionen
+
+- **Sprache:** durchgehend Englisch (Ist-Befund: `moralePhase.py` komplett Deutsch,
+  Subgruppen-Selector gemischt → Bereinigung als Roadmap-Paket, s. §6.6).
+- **Aktions-Vokabular — eine Familie statt vier:** `Use (N CP)` · `↺ Undo (+N CP)` ·
+  `Confirm ⟨Aktion⟩` / `Cancel` · Toggle-Auswahl mit `✓`-Präfix (wie Heroische
+  Intervention). „Reset", „Undo deny", „Rückgängig" u. Ä. entfallen zugunsten dieser
+  Familie.
+- **Eine** CP-Anzeige (GameHeader) — keine zweite Doppel-Caption auf der GO-Karte oder im
+  Tab.
+- **Ein** Stepper-Baustein (`wound_adjustment_buttons` bleibt kanonisch; der Zweitbau in
+  `fightPhase.py` wird auf ihn migriert).
+
+### 6.5 Farben
+
+Keine neuen Farb-Token für die GO-Karte — Zuordnung innerhalb des bestehenden Schemas
+([`design_colors.md`](design_colors.md)): Zustand „bereit" = **Gold-Primary**-Rahmen
+(`--arb-accent`, wie ein ausgewählter Zustands-Button), „ruhend"/„gesperrt" = Secondary
+gedimmt (`--arb-muted`). Kein `--arb-go-ready`- o. ä. Sondertoken.
+
+### 6.6 Umsetzung
+
+Die Migration von Bestand (reaktive Box, Inline-Offer, Tab-Schalter) auf die GO-Karte läuft
+als Mehr-Session-Roadmap (6 Pakete, S132–S134+) — Details, Reihenfolge und Freigabe-Stand:
+[`../goals/backlog.md`](../goals/backlog.md) §2. Jedes Paket geht einzeln durchs
+Freigabe-Gate; diese Spec (§6.1–§6.5) ist dabei der Maßstab, gegen den jeder Auftrag
+geprüft wird.

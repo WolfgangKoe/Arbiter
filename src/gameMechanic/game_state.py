@@ -414,6 +414,11 @@ def init_state(
     starting_cp = CP_BY_GAME_SIZE.get(game_size, 3) if game_mode == "matched" else 3
 
     st.session_state.initialized = True
+    # One-shot flag: the browser keeps its scroll position across the rerun
+    # that swaps the (long) setup screen for the phase screen, so the game
+    # screen would otherwise open scrolled to the bottom. Consumed and
+    # cleared by the phase screen's first render (app.py).
+    st.session_state["_scroll_to_top"] = True
     st.session_state.round = 1
     st.session_state.phase_idx = 0
     st.session_state.first_player = p1_name

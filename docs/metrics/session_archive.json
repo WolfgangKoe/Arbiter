@@ -3046,8 +3046,8 @@
   "b31bd07f-ccdd-4cb4-845c-25ddc766f4d3": {
     "started_at": "2026-07-08T14:31:58.980Z",
     "task": "start session",
-    "peak_context": 166165,
-    "subagent_share": 93.14975719472451,
+    "peak_context": 167144,
+    "subagent_share": 92.91833638978123,
     "by_tier": {
       "Sonnet": 185118140,
       "Opus": 1369079,
@@ -3113,6 +3113,75 @@
         "tier": "Sonnet",
         "peak_context": 97789,
         "started_at": "2026-07-08T14:31:58.903Z"
+      }
+    ]
+  },
+  "bd4b682f-8af2-4a9b-b637-77366de69191": {
+    "started_at": "2026-07-09T15:14:32.258Z",
+    "task": "start session",
+    "peak_context": 167165,
+    "subagent_share": 65.57185848965965,
+    "by_tier": {
+      "Opus": 642143,
+      "Sonnet": 19890599,
+      "Fable": 1115752
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review Sessionstand S131",
+        "tier": "Opus",
+        "peak_context": 41074,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "GO-Klassifikation aus Wahapedia recherchieren",
+        "tier": "Sonnet",
+        "peak_context": 100214,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Design-Entscheide in Specs übertragen",
+        "tier": "Sonnet",
+        "peak_context": 124344,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "UI-Ist-Inventar GameActionArea erstellen",
+        "tier": "Sonnet",
+        "peak_context": 122599,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "GO-UI-Konzept mit Mockups entwerfen",
+        "tier": "Sonnet",
+        "peak_context": 68615,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S131 neu planen nach Stakeholder-Feedback",
+        "tier": "Sonnet",
+        "peak_context": 75917,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Scroll-Bug nach Spielstart fixen",
+        "tier": "Sonnet",
+        "peak_context": 56084,
+        "started_at": "2026-07-09T15:14:32.258Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S131 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 79196,
+        "started_at": "2026-07-09T15:14:32.258Z"
       }
     ]
   }
