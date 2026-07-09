@@ -2949,11 +2949,11 @@
   "ab9b709c-1ec7-4612-ab6c-fbb50a770d12": {
     "started_at": "2026-07-07T16:58:21.674Z",
     "task": "start next session",
-    "peak_context": 135302,
-    "subagent_share": 80.09616832667847,
+    "peak_context": 138101,
+    "subagent_share": 79.38868605591102,
     "by_tier": {
       "Haiku": 11207776,
-      "Fable": 9392817,
+      "Fable": 10264120,
       "Sonnet": 21235204
     },
     "subagents": [
@@ -3040,6 +3040,79 @@
         "tier": "Haiku",
         "peak_context": 34455,
         "started_at": "2026-07-07T16:58:21.674Z"
+      }
+    ]
+  },
+  "b31bd07f-ccdd-4cb4-845c-25ddc766f4d3": {
+    "started_at": "2026-07-08T14:31:58.980Z",
+    "task": "start session",
+    "peak_context": 166165,
+    "subagent_share": 93.14975719472451,
+    "by_tier": {
+      "Sonnet": 185118140,
+      "Opus": 1369079,
+      "Fable": 1361605
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Integrations-Gap-Analyse",
+        "tier": "Sonnet",
+        "peak_context": 112654,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S130",
+        "tier": "<synthetic>",
+        "peak_context": null,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Insane Bravery + Breakout",
+        "tier": "Sonnet",
+        "peak_context": 175154,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S130 (Retry)",
+        "tier": "Opus",
+        "peak_context": 60174,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Plan 015 reaktive Stratagems",
+        "tier": "Sonnet",
+        "peak_context": 400680,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Command Re-Roll inline",
+        "tier": "Sonnet",
+        "peak_context": 244229,
+        "started_at": "2026-07-08T14:31:58.980Z"
+      }
+    ]
+  },
+  "cf5bc6b9-defd-41bc-b763-db51f1eac779": {
+    "started_at": "2026-07-08T14:31:58.903Z",
+    "task": "start session",
+    "peak_context": 48150,
+    "subagent_share": 78.94712699975398,
+    "by_tier": {
+      "Sonnet": 2082536
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf Session S130",
+        "tier": "Sonnet",
+        "peak_context": 97789,
+        "started_at": "2026-07-08T14:31:58.903Z"
       }
     ]
   }

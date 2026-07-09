@@ -137,9 +137,13 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   eigenständig grün). Der Koordinator prüft das VOR jedem `Agent`-Aufruf.
 - **Test-Budget je Brief:** während der Entwicklung nur gezielte Tests
   (`pytest <datei> -q --no-cov`), genau **eine** Vollsuite am Ende des Briefs.
+  Die Vollsuite läuft **immer im Vordergrund** — pytest NIE als Hintergrund-Task
+  starten; Endbericht in derselben Antwort wie das Suite-Ende (S121/S130-Befund:
+  vorzeitige Rückkehr kostete ein ~171k-Resume).
 - **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~150k
   Eigenverbrauch, gibt er den Zwischenstand zurück (geänderte Dateien + offene
-  Schritte) statt weiterzuarbeiten.
+  Schritte) statt weiterzuarbeiten. Prüfintervall: nach jedem ~20. Tool-Call den
+  Eigenverbrauch schätzen; ab ~120k nur noch abschließen, nichts Neues beginnen.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

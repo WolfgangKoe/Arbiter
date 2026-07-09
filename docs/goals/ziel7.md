@@ -40,6 +40,11 @@ gelöscht (S121, Lifecycle-Regel), Inhalt (inkl. Stufe B/C und UX-Kandidatenlist
 - [x] Manuelle UI-Verifikation (S121): Checklisten-Punkte 1, 2, 5–7 bestätigt. Punkte 3+4
   (Fire Overwatch/Counter-Offensive, `timing: phase_reactive`) NICHT prüfbar — brauchen die
   reaktive Stratagem-UI aus Plan 015 (offen, s. Stufe A unten in `docs/audit/plans/README.md`).
+- [x] **S130: alle 7 `_shared`-Stratagems integriert** (`b5c774b`, `2e3aa98`): 4 reaktive
+  anwählbar (Plan 015 teilweise), Insane Bravery auto-pass (R-MORALE-09), Desperate Breakout
+  (R-MOVE-14), Command Re-Roll inline für Damage/Psychic/Deny (R-CMD-12, 3/9 Wurf-Arten —
+  Rest = Stakeholder-Auflage im Backlog). Manuelle UI-Prüfung inkl. Punkte 3+4 jetzt OFFEN
+  und prüfbar (7-Punkte-Checkliste in `.claude/tasks/next_session.md`).
 - Nebenbei gefixt (nicht Teil der ursprünglichen Stufe-A-Tasks, im selben Zug behoben): CCW-
   Fallback-Crash `ap="0"` → `ap=0` in der Save-Resolution (Gretchin). Commit `464bb40`.
 

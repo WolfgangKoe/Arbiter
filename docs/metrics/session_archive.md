@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-08 07:51 CEST
+Stand: 2026-07-09 07:35 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-07 18:58 ab9b  ███████████░ 135k ⚠️   █████░  80%    ▚▚▚······▒▒▒
+07-08 16:31 b31b  ████████████ 166k ⛔    ██████  93%    ············
+         SA_1·  █████████░░░ 113k ✅    Stratagem-Integrations-Gap-Analyse
+         SA_2·  —                      Reviewer: DoD-Review S130
+         SA_3·  ████████████ 175k ⛔    Executor: Insane Bravery + Breakout
+         SA_4·  █████░░░░░░░  60k ✅    Reviewer: DoD-Review S130 (Retry)
+         SA_5·  ████████████ 401k ⛔    Executor: Plan 015 reaktive Strata…
+         SA_6·  ████████████ 244k ⛔    Executor: Command Re-Roll inline
+----------------- ---------------------- -------------- ------------
+07-08 16:31 cf5b  ████░░░░░░░░  48k ✅    █████░  79%    ············
+         SA_1·  ████████░░░░  98k ✅    Planning-Entwurf Session S130
+----------------- ---------------------- -------------- ------------
+07-07 18:58 ab9b  ███████████░ 138k ⚠️   █████░  79%    ▚▚▚······▒▒▒
          SA_1·  █████░░░░░░░  66k ✅    Task 6: Rename modifier→success_on
          SA_2·  —                      rp-Fälle + revive-Fähigkeiten rech…
          SA_3·  █████████░░░ 116k ✅    Gate-Fixes + S130-Handoff
@@ -481,3 +492,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S126 (2026-07-05)** Plan 040 + Mitfix: tote Stage-Maschine entfernt, Stratagem-stage-Hart-Filter raus (start/end-Stratagems waren dauerhaft hidden); UI-Verifikationen 034/036/040 durch Stakeholder bestätigt; Spec-Drift (architecture/processes/ui_layout) nachgezogen
 - **S127 (2026-07-05)** Plans 038+039 done (mypy ratchet gate baseline 134, README/DX, CI 3x faster), r-proto-02 handoff closed, debt scoreboard refreshed, ledger reduction roadmap adopted
 - **S128 (2026-07-06)** Parallel-Session: INV-4 5→3, INV-4b nur LEGIT, mypy 134→82, Plan 018.1+018.3, RP-Block YAML-getrieben
+- **S130 (2026-07-09)** Alle 7 shared-Gefechtsoptionen integriert: reaktive Stratagem-UI (Plan 015 teilweise), Insane Bravery, Desperate Breakout, Command Re-Roll inline 3/9; Retro: Auftragsgroessen-Gate nach 403k-Vorfall

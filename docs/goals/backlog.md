@@ -111,6 +111,23 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
 
 ## 2. Offene Tasks (kleiner als ein Plan)
 
+- 🟢 **Command Re-Roll auf alle 9 Wurf-Arten ausweiten (Stakeholder-AUFLAGE, S130):** Heute
+  inline verdrahtet nur für Damage/Psychic/Deny (R-CMD-12, 3/9). Stakeholder wörtlich: Man kann
+  die GO auch bei den übrigen Würfen „in irgendeiner Form anzeigen — bei Charge- und Advance-
+  Würfen recht gut integrierbar; bei der Attackenfolge müssen wir uns überlegen, wie. Aber bitte
+  nicht außen vor lassen!" Voraussetzung je Stelle: ersetzbaren Einzelwurf erfassen (Hit/Wound/
+  Save/Attackenzahl sind heute nur Schwellen-/Erfolgsanzeigen). Charge/Advance zuerst (S/M),
+  Attackenfolge nach UI-Design-Entscheid.
+- 🟢 **GO-UI-Design-System ergänzen (Retro-Maßnahme 5, S130):** VOR der Implementierung jeder
+  weiteren Gefechtsoption die UI festlegen — begrenzt auf wenige Standard-Komponenten (z. B.
+  „Liste unten" + „Inline"), generelle Funktion einheitlich. Konkret offen: Command Re-Roll hat
+  keinen „Undo"-Button wie die anderen GOs → Design-System um Undo-Standard erweitern
+  (`docs/spec/design_colors.md`/UI-Spec ergänzen, Mockup-Gate wieder einhalten).
+- 🟢 **Fraktions-Stratagems `before_battle` sichtbar machen (S131-Kandidat):** 6 Necron- +
+  7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — Vor-Schlacht-Schritt
+  oder Sonderbehandlung in `stratagem_visibility()`; danach §6e-Modifier-Engine für die
+  ~56 teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
+
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
 - 🟢 **Psychic-Ledger schrumpfen (S62):** Smite-Manifest-Logik (`R-PSYCHIC-11/16/17/18/22`) lebt
@@ -158,13 +175,13 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Fraktionsfähigkeiten. Fix: generischen Aktivator für `activated`-`faction_abilities` (unabhängig von
   `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
   (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
-- 🟢 **Effekt-Feld `modifier` → `success_on` umbenennen (S128-Folge, Paket 1c/Paket 3
+- ✅ *(erledigt S129, `3d9b26e` — Review-S130-Befund geschlossen)* **Effekt-Feld `modifier` → `success_on` umbenennen (S128-Folge, Paket 1c/Paket 3
   Parallelsperre):** Die Reanimation-Ability nutzt aktuell das generische `modifier`-Feld
   für die Erfolgsschwelle (5+); klarer wäre ein benanntes `success_on`-Feld. Betrifft
   `gameObjects/ability.py` + `gameObjects/loader.py` (beide durch Paket 3 in S128 gesperrt)
   + `necrons/faction_abilities.yaml` + 2 Asserts in den Ability-Tests. Reine Rename-Arbeit,
   kein Verhaltenswechsel.
-- 🟢 **`types-PyYAML` + `types-defusedxml` in `requirements-dev.txt` aufnehmen (S128-Folge):**
+- ✅ *(erledigt S129, `3d9b26e` — Review-S130-Befund geschlossen)* **`types-PyYAML` + `types-defusedxml` in `requirements-dev.txt` aufnehmen (S128-Folge):**
   danach die 3 `[import-untyped]`-`# type: ignore`-Kommentare in `gameObjects/` entfernen —
   im selben Schritt, sonst meldet mypy `unused-ignore` (neuer Fehler gegen die Baseline).
 - 🟢 **`condition_prompt`/`applies_when` als First-Class-Felder in der Effect-Dataclass +

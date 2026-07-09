@@ -48,15 +48,19 @@ def is_allowed(marker: Path) -> bool:
 
 
 def is_exempt(file_path: str | None) -> bool:
-    """Mailbox writes (``docs/handoff/``) bypass the gate — planning artifacts,
-    not code; see module docstring."""
+    """Mailbox writes (``docs/handoff/``) and anything outside the repo bypass
+    the gate. The gate protects the repo; scratchpad drafts (e.g. Planner
+    output under ``/tmp/claude-*``) are coordination artifacts, not code —
+    blocking them forced Plan-Entwürfe inline in den Chat (S130-Retro, M3)."""
     if not file_path:
         return False
     try:
         resolved = Path(file_path).resolve()
     except Exception:
         return False
-    return resolved == HANDOFF_DIR or HANDOFF_DIR in resolved.parents
+    if resolved == HANDOFF_DIR or HANDOFF_DIR in resolved.parents:
+        return True
+    return REPO_ROOT not in resolved.parents and resolved != REPO_ROOT
 
 
 def main() -> None:
