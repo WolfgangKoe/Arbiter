@@ -12,6 +12,7 @@ from gameObjects.stratagem import (  # noqa: E402
     Stratagem,
     is_core_stratagem,
     reactive_stratagems_for,
+    stratagem_conditions_met,
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
@@ -707,3 +708,69 @@ class TestDisruptionFieldsIsStrengthModifier:
     def test_no_dead_buff_stat_effect_field(self) -> None:
         strat = self._load()
         assert strat.effect is None
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4a — stratagem_conditions_met() keyword gate
+# ---------------------------------------------------------------------------
+
+
+class _KeywordUnit:
+    def __init__(self, *keywords: str) -> None:
+        self._keywords = {kw.upper() for kw in keywords}
+
+    def has_keyword(self, keyword: str) -> bool:
+        return keyword.upper() in self._keywords
+
+
+class TestStratagemConditionsMet:
+    def test_no_conditions_true_without_unit(self) -> None:
+        assert stratagem_conditions_met([], None) is True
+
+    def test_conditions_without_unit_is_false(self) -> None:
+        """No army-wide fallback — a keyword-gated GO stays hidden without an
+        explicit unit, never shown for every unit by default."""
+        assert stratagem_conditions_met(["FLAYED ONES"], None) is False
+
+    def test_unit_with_all_required_keywords_is_met(self) -> None:
+        unit = _KeywordUnit("NECRONS", "INFANTRY", "FLAYED ONES")
+        assert stratagem_conditions_met(["FLAYED ONES"], unit) is True
+
+    def test_unit_missing_a_required_keyword_is_not_met(self) -> None:
+        unit = _KeywordUnit("NECRONS", "INFANTRY")
+        assert stratagem_conditions_met(["FLAYED ONES"], unit) is False
+
+    def test_multiple_conditions_require_all_keywords(self) -> None:
+        unit = _KeywordUnit("NECRONS", "DESTROYER CULT")
+        assert stratagem_conditions_met(["NECRONS", "DESTROYER CULT"], unit) is True
+        assert stratagem_conditions_met(["NECRONS", "SKORPEKH LORD"], unit) is False
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4a — Shadows of Drazak data fix: was missing its `modifier:` block,
+# so activating it spent CP without ever registering the hit-roll debuff.
+# ---------------------------------------------------------------------------
+
+_SHADOWS_OF_DRAZAK_ID = "wh40k_9e.necrons.stratagem.shadows_of_drazak"
+
+
+class TestShadowsOfDrazakHasModifierBlock:
+    def _load(self) -> Stratagem:
+        stratagems = load_stratagems("necrons")
+        match = next((s for s in stratagems if s.id == _SHADOWS_OF_DRAZAK_ID), None)
+        assert match is not None, f"Stratagem {_SHADOWS_OF_DRAZAK_ID!r} not found"
+        return match
+
+    def test_modifier_is_not_none(self) -> None:
+        """Without this, spend_stratagem's `if strat.modifier is not None` guard
+        (uiLayout/_common.py) never registers anything — Use would spend CP for
+        no in-app effect."""
+        strat = self._load()
+        assert strat.modifier is not None
+
+    def test_modifier_matches_effect_stat_hit(self) -> None:
+        strat = self._load()
+        assert strat.modifier is not None
+        assert strat.modifier.roll_type == "hit"
+        assert strat.modifier.value == -1
+        assert strat.modifier.target == "defender"

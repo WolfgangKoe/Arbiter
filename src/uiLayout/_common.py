@@ -52,6 +52,7 @@ from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
     reactive_stratagems_for,
+    stratagem_conditions_met,
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
@@ -621,6 +622,9 @@ def render_reactive_stratagem_box(
     decline_key: str,
     context_caption: str,
     unit_key_for_modifier: str | None = None,
+    unit_for_conditions: Unit | None = None,
+    effect_type: str | None = None,
+    effect_stat: str | None = None,
     on_spent: Callable[[Stratagem], None] | None = None,
     on_resolved: Callable[[], None] | None = None,
 ) -> None:
@@ -643,6 +647,23 @@ def render_reactive_stratagem_box(
     a stable per-occurrence widget key (e.g. the charged target's uid) so two
     concurrent occurrences of the same stratagem never collide.
 
+    unit_for_conditions — the unit `strat.conditions` (keyword gate) must be
+    checked against, e.g. the targeted defender for an `on_target` anchor.
+    Defaults to None, which only stays correct for callers whose reactive
+    stratagems carry no keyword conditions (Fire Overwatch, Cut Them Down,
+    Counter-Offensive — all `conditions: []` today); a future keyword-gated
+    reactive GO with no `unit_for_conditions` passed is hidden rather than
+    shown for every unit (fail-safe, mirrors gameProtocoll.py's central-list
+    gate via the same `stratagem_conditions_met`).
+
+    effect_type/effect_stat — narrow `candidates` beyond (phase, event) to
+    stratagems whose machine-readable `effect` matches (e.g.
+    effect_type="debuff_roll", effect_stat="hit" for the Hit-roll anchor vs.
+    effect_stat="wound" for the Wound-roll anchor, S135 Paket 4a) — several
+    `on_target` reactive GOs can share one (phase, event) window but belong at
+    different anchors depending on which roll they modify. None (default)
+    keeps every (phase, event) match, as before.
+
     on_spent(stratagem) — invoked after a successful spend, for stratagem-specific
     side effects beyond CP/usage bookkeeping (e.g. Counter-Offensive reassigning
     `fight_current_player`).
@@ -658,6 +679,14 @@ def render_reactive_stratagem_box(
         return
 
     candidates = reactive_stratagems_for(stratagems, phase, event)
+    if effect_type is not None:
+        candidates = [
+            c for c in candidates if c.effect is not None and c.effect.type == effect_type
+        ]
+    if effect_stat is not None:
+        candidates = [
+            c for c in candidates if c.effect is not None and c.effect.stat == effect_stat
+        ]
     if not candidates:
         return
 
@@ -668,12 +697,13 @@ def render_reactive_stratagem_box(
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
             continue
+        met = stratagem_conditions_met(strat.conditions, unit_for_conditions)
         vis = stratagem_visibility(
             strat,
             cp,
             phase,
             used_ids,
-            True,
+            met,
             used_battle_ids,
             reactive_trigger_active=True,
         )
@@ -1015,8 +1045,21 @@ def _collect_atk_modifiers(
     atk_state: dict,  # type: ignore[type-arg]
     phase_key: str,
     use_melee: bool,
+    def_uid: str = "",
 ) -> list[dict]:  # type: ignore[type-arg]
-    """Collect hit/wound modifiers for the attacker from round-choice abilities, buffs, and active_modifiers."""
+    """Collect hit/wound modifiers for this attack from round-choice abilities, buffs, and active_modifiers.
+
+    `def_uid` scopes defender-registered modifiers (e.g. Shadows of Drazak, Whirling
+    Onslaught — reactive GOs the DEFENDER activates on their own targeted unit,
+    S135 Paket 4a) to attacks made against that exact unit: only a
+    `target: "defender"` entry whose `unit_key` matches `def_uid` applies here,
+    mirroring `stratagem_strength_bonus`'s attacker-side `unit_key` scoping so
+    one unit's activated GO never silently debuffs attacks against a different
+    unit. `target: "attacker"/"any"` entries stay unscoped (pre-existing
+    behaviour, unchanged) — they are registered by the attacking unit's own
+    stratagem use, and the caller only ever renders one attacker's tabs at a
+    time.
+    """
     from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
@@ -1056,16 +1099,22 @@ def _collect_atk_modifiers(
     for m in st.session_state.get("active_modifiers", []):
         eff = m.get("effect", {})
         rt = eff.get("roll_type")
+        if rt not in ("hit", "wound"):
+            continue
         tgt = eff.get("target", "attacker")
-        if rt in ("hit", "wound") and tgt in ("attacker", "any"):
-            mods.append(
-                {
-                    "label": m.get("source", "Modifier"),
-                    "value": eff.get("value", 0),
-                    "roll_type": rt,
-                    "source": "stratagem",
-                }
-            )
+        applies = tgt in ("attacker", "any") or (
+            tgt == "defender" and def_uid and m.get("unit_key") == def_uid
+        )
+        if not applies:
+            continue
+        mods.append(
+            {
+                "label": m.get("source", "Modifier"),
+                "value": eff.get("value", 0),
+                "roll_type": rt,
+                "source": "stratagem",
+            }
+        )
     return mods
 
 
@@ -1600,7 +1649,7 @@ def _render_resolution_tab(
     )
 
     # Build modifier lists including cover effects
-    base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee)
+    base_atk_mods = _collect_atk_modifiers(atk_faction, atk_state, phase_key, use_melee, def_uid)
     base_save_mods = _collect_def_save_modifiers(def_faction, phase_key, use_melee, def_uid)
 
     weapon_special = _detect_weapon_special(profile)
@@ -1686,6 +1735,23 @@ def _render_resolution_tab(
     else:
         _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
 
+    # Hit-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): the defender's own
+    # reactive GOs that debuff THIS attack's hit roll (e.g. Shadows of Drazak)
+    # — trigger is "unit selected as target of an attack" (event="on_target"),
+    # scoped to effect_type/effect_stat so a wound-roll GO sharing the same
+    # (phase, event) window does not also show up here.
+    render_reactive_stratagem_box(
+        def_faction,
+        phase_key,
+        "on_target",
+        decline_key=tab_key,
+        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
+        unit_key_for_modifier=def_uid,
+        unit_for_conditions=def_unit,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
     # Dense Cover checkbox: Shooting phase only, affects hit roll → in the HIT block
     if is_shooting:
         st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
@@ -1700,6 +1766,20 @@ def _render_resolution_tab(
         strength_buff=str_bonus,
         on_six_ap=on_six_ap,
         on_six_label=on_six_label,
+    )
+
+    # Wound-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): same trigger as
+    # above, filtered to the wound-roll debuff (e.g. Whirling Onslaught).
+    render_reactive_stratagem_box(
+        def_faction,
+        phase_key,
+        "on_target",
+        decline_key=tab_key,
+        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
+        unit_key_for_modifier=def_uid,
+        unit_for_conditions=def_unit,
+        effect_type="debuff_roll",
+        effect_stat="wound",
     )
 
     st.markdown("---")

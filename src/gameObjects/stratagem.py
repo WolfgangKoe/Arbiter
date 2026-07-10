@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from gameObjects.ability import Effect
+from gameObjects.unit import Unit
 
 
 @dataclass(frozen=True)
@@ -81,6 +82,25 @@ def is_core_stratagem(stratagem_id: str) -> bool:
     instead of ``shared``. Used by the player-split renderer for section headers.
     """
     return _SHARED_ID_MARKER in stratagem_id
+
+
+def stratagem_conditions_met(conditions: list[str], unit: Unit | None = None) -> bool:
+    """Return True if a stratagem's keyword conditions are satisfied by `unit`.
+
+    Requires an explicit unit — no army-wide fallback, since that would show
+    unit-specific GOs (e.g. a FLAYED ONES-gated reactive stratagem) even when
+    no matching unit is selected/targeted. Shared home for keyword-condition
+    checks: the central Stratagems list (gameProtocoll.py) and the reactive
+    inline anchors (uiLayout._common.render_reactive_stratagem_box) both call
+    this rather than keeping two independent copies (moved here from
+    gameProtocoll._conditions_met, S135 Paket 4a — the reactive anchors now
+    need the same keyword gate the central list already had).
+    """
+    if not conditions:
+        return True
+    if unit is None:
+        return False
+    return all(unit.has_keyword(kw) for kw in conditions)
 
 
 def stratagem_usable_by_player(player_field: str, is_this_player_active: bool) -> bool:

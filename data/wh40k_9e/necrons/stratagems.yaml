@@ -485,6 +485,12 @@ stratagems:
       stat: hit
       modifier: -1
     rule_text: "Use this Stratagem in any phase, when a FLAYED ONES unit from your army is selected as the target of an attack. Until the end of the phase, each time an attack is made against that unit, subtract 1 from that attack's hit roll."
+    modifier:
+      roll_type: hit
+      value: -1
+      target: defender
+      expires_at: phase_end
+      source_label: "Shadows of Drazak"
 
   - id: wh40k_9e.necrons.stratagem.revenge_of_the_doomstalker
     name_en: Revenge of the Doomstalker

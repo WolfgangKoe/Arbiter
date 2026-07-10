@@ -20,6 +20,7 @@ from gameMechanic.ability_engine import (  # noqa: E402
 )
 from gameObjects.ability import Effect  # noqa: E402
 from uiLayout._common import (  # noqa: E402
+    _collect_atk_modifiers,
     _collect_def_save_modifiers,
     _parse_strength,
     state_badges_html,
@@ -412,6 +413,86 @@ def test_collect_def_save_modifiers_passes_active_modifiers() -> None:
     ]
     mods = _collect_def_save_modifiers("Necrons", "shooting", False, "test.unit")
     assert mods == [{"label": "Test Stratagem", "value": 1}]
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4a — _collect_atk_modifiers(): defender-scoped hit/wound modifiers
+# (Shadows of Drazak, Whirling Onslaught — reactive GOs the DEFENDER activates
+# on their own targeted unit, registered with target="defender" + unit_key).
+# ---------------------------------------------------------------------------
+
+
+def test_collect_atk_modifiers_defender_scoped_to_targeted_unit() -> None:
+    """A target="defender" modifier registered for the exact unit being attacked
+    applies — mirrors stratagem_strength_bonus's attacker-side unit_key scoping."""
+    _eg_session(stationary=True)
+    common.st.session_state["active_modifiers"] = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.flayed_ones",
+            "source": "Shadows of Drazak",
+            "effect": {"roll_type": "hit", "value": -1, "target": "defender"},
+        }
+    ]
+    mods = _collect_atk_modifiers(
+        "Orks", {}, "shooting", False, def_uid="wh40k_9e.necrons.unit.flayed_ones"
+    )
+    assert mods == [
+        {"label": "Shadows of Drazak", "value": -1, "roll_type": "hit", "source": "stratagem"}
+    ]
+
+
+def test_collect_atk_modifiers_defender_not_scoped_to_other_unit() -> None:
+    """The same modifier must NOT apply when a DIFFERENT unit is being attacked —
+    otherwise activating it for one unit would debuff attacks against every unit."""
+    _eg_session(stationary=True)
+    common.st.session_state["active_modifiers"] = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.flayed_ones",
+            "source": "Shadows of Drazak",
+            "effect": {"roll_type": "hit", "value": -1, "target": "defender"},
+        }
+    ]
+    mods = _collect_atk_modifiers(
+        "Orks", {}, "shooting", False, def_uid="wh40k_9e.necrons.unit.warriors"
+    )
+    assert mods == []
+
+
+def test_collect_atk_modifiers_defender_target_ignored_without_def_uid() -> None:
+    """Regression guard: callers that omit def_uid (default "") must not leak a
+    defender-scoped modifier — the empty string can never match a real unit_key."""
+    _eg_session(stationary=True)
+    common.st.session_state["active_modifiers"] = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.flayed_ones",
+            "source": "Shadows of Drazak",
+            "effect": {"roll_type": "hit", "value": -1, "target": "defender"},
+        }
+    ]
+    mods = _collect_atk_modifiers("Orks", {}, "shooting", False)
+    assert mods == []
+
+
+def test_collect_atk_modifiers_attacker_target_unscoped_by_def_uid() -> None:
+    """Pre-existing behaviour unchanged: an attacker/any-targeted modifier still
+    applies regardless of def_uid — only the new defender branch is unit_key-scoped."""
+    _eg_session(stationary=True)
+    common.st.session_state["active_modifiers"] = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.warriors",
+            "source": "Extermination Protocols",
+            "effect": {"roll_type": "hit", "value": 1, "target": "attacker"},
+        }
+    ]
+    mods = _collect_atk_modifiers("Necrons", {}, "shooting", False, def_uid="anything")
+    assert mods == [
+        {
+            "label": "Extermination Protocols",
+            "value": 1,
+            "roll_type": "hit",
+            "source": "stratagem",
+        }
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -865,6 +946,169 @@ def test_use_action_invokes_on_spent_and_on_resolved(monkeypatch) -> None:
 
     assert spent_calls == ["wh40k_9e.shared.stratagem.fire_overwatch"]
     assert resolved_calls == [1]
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4a — Hit-/Wound-Anker: render_reactive_stratagem_box's new
+# effect_type/effect_stat filter and unit_for_conditions keyword gate, real
+# Necrons data (Shadows of Drazak = hit debuff, Whirling Onslaught = wound
+# debuff — both event="on_target", phase="any", so both would otherwise share
+# one window; the effect_stat filter is what routes each to its own anchor).
+# ---------------------------------------------------------------------------
+
+
+def _unit_with_keywords(*keywords: str):  # type: ignore[no-untyped-def]
+    return SimpleNamespace(has_keyword=lambda kw: kw in keywords)
+
+
+def test_shadows_of_drazak_shown_at_hit_anchor_for_matching_unit(monkeypatch) -> None:
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    flayed_ones = _unit_with_keywords("FLAYED ONES")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=flayed_ones,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
+    assert any(c["name"] == "Shadows of Drazak" for c in captured)
+
+
+def test_shadows_of_drazak_absent_at_wound_anchor(monkeypatch) -> None:
+    """The effect_stat filter keeps a hit-debuff GO off the wound anchor even
+    though both share the same (phase, event) window."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    flayed_ones = _unit_with_keywords("FLAYED ONES")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=flayed_ones,
+        effect_type="debuff_roll",
+        effect_stat="wound",
+    )
+
+    assert all(c["name"] != "Shadows of Drazak" for c in captured)
+
+
+def test_shadows_of_drazak_hidden_without_matching_keyword_unit(monkeypatch) -> None:
+    """Keyword gate (S135 Paket 4a): a Necrons unit without FLAYED ONES must not
+    see this card — unlike the pre-existing callers, this GO carries a real
+    `conditions` list, so the keyword check now actually matters."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    warriors = _unit_with_keywords("NECRONS", "INFANTRY")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=warriors,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
+    assert all(c["name"] != "Shadows of Drazak" for c in captured)
+
+
+def test_shadows_of_drazak_hidden_without_any_unit_passed(monkeypatch) -> None:
+    """Fail-safe default: omitting unit_for_conditions hides a keyword-gated
+    reactive GO rather than showing it for every unit."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
+    assert all(c["name"] != "Shadows of Drazak" for c in captured)
+
+
+def test_whirling_onslaught_shown_at_wound_anchor_for_matching_unit(monkeypatch) -> None:
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    destroyer = _unit_with_keywords("DESTROYER CULT")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=destroyer,
+        effect_type="debuff_roll",
+        effect_stat="wound",
+    )
+
+    assert any(c["name"] == "Whirling Onslaught" for c in captured)
+
+
+def test_whirling_onslaught_absent_at_hit_anchor(monkeypatch) -> None:
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    destroyer = _unit_with_keywords("DESTROYER CULT")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=destroyer,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
+    assert all(c["name"] != "Whirling Onslaught" for c in captured)
+
+
+def test_shadows_of_drazak_use_registers_defender_scoped_hit_modifier(monkeypatch) -> None:
+    """End-to-end (data fix, S135 Paket 4a): Shadows of Drazak was missing its
+    `modifier:` YAML block, so Use spent CP but never actually debuffed anything.
+    After the fix, Use must register a target="defender" hit modifier scoped to
+    the targeted unit's key — exactly what _collect_atk_modifiers's def_uid
+    scoping (above) then reads back out."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    flayed_ones = _unit_with_keywords("FLAYED ONES")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_key_for_modifier="wh40k_9e.necrons.unit.flayed_ones",
+        unit_for_conditions=flayed_ones,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+    captured[0]["on_use"]()
+
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "wh40k_9e.necrons.unit.flayed_ones"
+    assert mods[0]["effect"]["roll_type"] == "hit"
+    assert mods[0]["effect"]["value"] == -1
+    assert mods[0]["effect"]["target"] == "defender"
 
 
 # ---------------------------------------------------------------------------

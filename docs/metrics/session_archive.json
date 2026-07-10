@@ -3437,12 +3437,20 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 62117,
-    "subagent_share": 81.98302996202503,
+    "peak_context": 71862,
+    "subagent_share": 94.74258003040875,
     "by_tier": {
-      "Sonnet": 5466908
+      "Sonnet": 39977017,
+      "Fable": 1220405
     },
     "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Paket 4a: Hit-/Wound-Anker",
+        "tier": "Sonnet",
+        "peak_context": 222117,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
       {
         "agent_type": "general-purpose",
         "description": "S135 Planning-Entwurf erstellen",

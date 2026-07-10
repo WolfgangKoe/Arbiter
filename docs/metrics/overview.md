@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 16:22 CEST
+Stand: 2026-07-10 19:48 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,7 +14,7 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  █████░░░░░░░  62k ↓    █████░  82% ↓  ············
+07-10 16:04 54b0  ██████░░░░░░  72k ↓    ██████  95% ↑  ············
 07-10 13:33 b069  ████████████ 152k ↓    █████░  87% ↓  ▚▚▚▚▚·······
 07-10 01:56 86c3  ████████████ 163k ↑    █████░  87% ↑  ▚▚··········
 07-09 20:34 5769  ████████░░░░ 103k ↓    █████░  81% ↑  ▚··········▒
@@ -27,18 +27,18 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 **2026-07-10 16:04 · 54b0c4dc**
 
 - **Aufgabe:** start session
-- **Modelle:** Haupt Fable · Subagent Sonnet
-- **Tokens gesamt:** 6,668,341 (Haupt 1,201,433 · Subagent 5,466,908, Anteil 82 %)
-- **Peak-Kontext:** █████░░░░░░░ 62k / 150k
-- **cache_read:** 5,741,382 · **Output:** 61,679
+- **Modelle:** Haupt Fable · Subagent Fable, Sonnet
+- **Tokens gesamt:** 43,483,534 (Haupt 2,286,112 · Subagent 41,197,422, Anteil 95 %)
+- **Peak-Kontext:** ██████░░░░░░ 72k / 150k
+- **cache_read:** 40,405,719 · **Output:** 147,440
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 62k blieb im 150k-Korridor.
-- ✅ 82% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 5,466,908 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ Peak-Kontext 72k blieb im 150k-Korridor.
+- ✅ 95% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 39,977,017 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,17 +47,18 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: S135 Planning-Ent… ███████░░░░░  93k    ✅
-2   general-purpose: Aufgabe 1: Entsch… ███████░░░░░  85k    ✅
+1   general-purpose: Paket 4a: Hit-/Wo… ████████████ 222k    ⛔
+2   general-purpose: S135 Planning-Ent… ███████░░░░░  93k    ✅
+3   general-purpose: Aufgabe 1: Entsch… ███████░░░░░  85k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  91,579
-cache_creation ▕███░░░░░░░░░░░░░░░░░░░░░▏   12%  773,701
-cache_read     ▕████████████████████████▏   86%  5,741,382
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  61,679
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  109,277
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    6%  2,821,098
+cache_read     ▕████████████████████████▏   93%  40,405,719
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  147,440
 ```
 
 **Legende & Zielwerte:**
@@ -74,10 +75,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   86%  5,741,382
-Neu gecacht (Tool-Ausgaben)   ▕███░░░░░░░░░░░░░░░░░▏   12%  773,701
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    1%  91,579
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  61,679
+Warm (System/Memory/History)  ▕████████████████████▏   93%  40,405,719
+Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    6%  2,821,098
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  109,277
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    0%  147,440
 ```
 
 **Legende (Slide-Kategorien):**
@@ -93,5 +94,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 114 Sessions: 3,224,444,113 Token (32,675 Antworten).
+Σ über 114 Sessions: 3,261,259,306 Token (32,924 Antworten).
 

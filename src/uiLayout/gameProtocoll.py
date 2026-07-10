@@ -29,6 +29,7 @@ from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
     is_core_stratagem,
+    stratagem_conditions_met,
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
@@ -113,19 +114,6 @@ def _render_battle_log() -> None:
             st.caption(f"  {name}: {status}")
 
 
-def _conditions_met(conditions: list[str], unit=None) -> bool:
-    """Return True if conditions are satisfied.
-
-    Requires an explicit unit — no army-wide fallback, as that would show
-    unit-specific stratagems even when nothing relevant is selected.
-    """
-    if not conditions:
-        return True
-    if unit is None:
-        return False
-    return all(unit.has_keyword(kw) for kw in conditions)
-
-
 def _selected_unit_for(player: str):
     """Return the selected unit object if it belongs to `player`, else None."""
     sel = st.session_state.get("selected_unit")
@@ -150,8 +138,8 @@ def _effect_gate_met(
     `uiLayout._common._apply_stratagem_effect` already uses — rather than a
     stratagem id/name check (INV-4b: no faction- or GO-name string literals in
     src/). `conditions` (keyword-based) is orthogonal and stays in
-    `_conditions_met`; this covers a requirement keywords cannot express: the
-    selected unit's own turn state.
+    `stratagem_conditions_met`; this covers a requirement keywords cannot
+    express: the selected unit's own turn state.
 
     Today the only effect shape this recognises is `type="move",
     handler="fall_back_through_models"` (Desperate Breakout, S133-D Befund 4):
@@ -304,7 +292,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             continue
         if not stratagem_usable_by_player(s.player, is_active):
             continue
-        met = _conditions_met(s.conditions, unit_for_check)
+        met = stratagem_conditions_met(s.conditions, unit_for_check)
         vis = stratagem_visibility(
             s, cp.get(player, 0), current_phase, used_ids, met, used_battle_ids
         )
@@ -325,7 +313,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             in_core_section = is_core
         state, locked_reason = _go_state_and_reason(strat, vis, used_ids, used_battle_ids)
         if state == "ready":
-            # Keyword conditions (_conditions_met) already passed above — this
+            # Keyword conditions (stratagem_conditions_met) already passed above — this
             # is the per-unit-state gate (S133-D Befund 4) keywords cannot
             # express: only overrides an otherwise-ready card, never a card
             # already "used"/"locked" for another reason.
