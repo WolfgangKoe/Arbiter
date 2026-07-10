@@ -1112,6 +1112,168 @@ def test_shadows_of_drazak_use_registers_defender_scoped_hit_modifier(monkeypatc
 
 
 # ---------------------------------------------------------------------------
+# S135 Paket 4b — Save-Anker: render_reactive_stratagem_box's effect_type
+# filter for the invuln-save complex, real Necrons data (Quantum Deflection,
+# event="on_target", phase="any" — the same window the Hit-/Wound-Anker
+# above use, routed to its own anchor via effect_type="invuln_save"). Tough
+# as Squig-Hide (Orks, effect_type="restriction") deliberately shares no
+# filter value with this anchor — see the _render_damage_block-adjacent
+# comment in _common.py for why its YAML `modifier:` block is not treated as
+# a real hit/wound bonus here.
+# ---------------------------------------------------------------------------
+
+
+def test_quantum_deflection_shown_at_save_anchor_for_matching_unit(monkeypatch) -> None:
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=shielded,
+        effect_type="invuln_save",
+    )
+
+    assert any(c["name"] == "Quantum Deflection" for c in captured)
+
+
+def test_quantum_deflection_hidden_without_matching_keyword_unit(monkeypatch) -> None:
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    warriors = _unit_with_keywords("NECRONS", "INFANTRY")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=warriors,
+        effect_type="invuln_save",
+    )
+
+    assert all(c["name"] != "Quantum Deflection" for c in captured)
+
+
+def test_quantum_deflection_absent_at_hit_anchor(monkeypatch) -> None:
+    """The effect_type filter keeps the invuln-save GO off the debuff_roll anchors."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_for_conditions=shielded,
+        effect_type="debuff_roll",
+        effect_stat="hit",
+    )
+
+    assert all(c["name"] != "Quantum Deflection" for c in captured)
+
+
+def test_quantum_deflection_use_registers_defender_scoped_invuln_modifier(monkeypatch) -> None:
+    """End-to-end: Use must register a target="defender" invuln_save modifier
+    scoped to the targeted unit's key — exactly what _stratagem_invuln_save
+    (below) then reads back out for the Save block's effective-invuln calc."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="shooting",
+        event="on_target",
+        decline_key="tab-1",
+        context_caption="irrelevant",
+        unit_key_for_modifier="wh40k_9e.necrons.unit.warriors",
+        unit_for_conditions=shielded,
+        effect_type="invuln_save",
+    )
+    captured[0]["on_use"]()
+
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "wh40k_9e.necrons.unit.warriors"
+    assert mods[0]["effect"]["roll_type"] == "invuln_save"
+    assert mods[0]["effect"]["value"] == 4
+    assert mods[0]["effect"]["target"] == "defender"
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4b — spend_stratagem() effect dispatch: invuln_save
+# (Quantum Deflection's own _apply_stratagem_effect branch, isolated from the
+# real-data GO-card tests above)
+# ---------------------------------------------------------------------------
+
+
+def test_spend_stratagem_invuln_save_registers_active_modifier_for_unit() -> None:
+    session = _effect_spend_session()
+    strat = _strat(sid="strat.quantum_deflection", effect=Effect(type="invuln_save", modifier=4))
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "unit#1"
+    assert mods[0]["source"] == "Test GO"
+    assert mods[0]["effect"]["roll_type"] == "invuln_save"
+    assert mods[0]["effect"]["value"] == 4
+    assert mods[0]["effect"]["target"] == "defender"
+
+
+def test_spend_stratagem_invuln_save_without_modifier_value_is_noop() -> None:
+    """Regression: a malformed invuln_save effect (no modifier value) must not
+    crash or register a meaningless active_modifiers entry."""
+    session = _effect_spend_session()
+    strat = _strat(sid="strat.x", effect=Effect(type="invuln_save"))
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    assert session["active_modifiers"] == []
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4b — _stratagem_invuln_save(): read-back side for the Save block
+# (mirrors ability_engine.ability_invuln_save's "lowest value wins" semantics
+# but reads active_modifiers instead of activated faction abilities)
+# ---------------------------------------------------------------------------
+
+
+def test_stratagem_invuln_save_returns_lowest_value_for_matching_unit() -> None:
+    session = _SS(
+        active_modifiers=[
+            {"unit_key": "u1", "effect": {"roll_type": "invuln_save", "value": 5}},
+            {"unit_key": "u1", "effect": {"roll_type": "invuln_save", "value": 4}},
+            {"unit_key": "u2", "effect": {"roll_type": "invuln_save", "value": 2}},
+            {"unit_key": "u1", "effect": {"roll_type": "save", "value": 1}},
+        ]
+    )
+    common.st.session_state = session
+    assert common._stratagem_invuln_save("u1") == 4
+
+
+def test_stratagem_invuln_save_none_when_no_active_modifiers() -> None:
+    session = _SS(active_modifiers=[])
+    common.st.session_state = session
+    assert common._stratagem_invuln_save("u1") is None
+
+
+def test_stratagem_invuln_save_ignores_other_units_and_roll_types() -> None:
+    session = _SS(
+        active_modifiers=[
+            {"unit_key": "u2", "effect": {"roll_type": "invuln_save", "value": 4}},
+            {"unit_key": "u1", "effect": {"roll_type": "hit", "value": -1}},
+        ]
+    )
+    common.st.session_state = session
+    assert common._stratagem_invuln_save("u1") is None
+
+
+# ---------------------------------------------------------------------------
 # Plan 015 — _render_pending_emergency_disembarkation() + render_player_column wiring
 # ---------------------------------------------------------------------------
 
@@ -1274,10 +1436,12 @@ def test_command_reroll_not_clicked_leaves_cp_and_usage_untouched(monkeypatch) -
 
 
 # ---------------------------------------------------------------------------
-# S130 — _render_damage_block(): Command Re-Roll wired at the post-Apply lock
-# (Hit/Wound/Save have no separately captured roll in this app — see session
-# report; the collapsed "damage applied" result is the one closest analogue,
-# attributed to the attacker since only the damage die is actually theirs).
+# S130/S135 Paket 4b — _render_damage_block(): Command Re-Roll wired at the
+# post-Apply lock (Hit/Wound/Save have no separately captured roll in this
+# app — see session report; the collapsed "damage applied" result is the one
+# closest analogue, attributed to the attacker since only the damage die is
+# actually theirs). Migrated from render_inline_command_reroll's Pull-not-Push
+# offer to the canonical render_reactive_stratagem_box GO card in Paket 4b.
 # ---------------------------------------------------------------------------
 
 
@@ -1295,7 +1459,7 @@ def test_damage_block_offers_command_reroll_after_apply(monkeypatch) -> None:
     monkeypatch.setattr(common.st, "success", lambda *a, **kw: None)
     monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
     spy = MagicMock()
-    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", spy)
 
     common._render_damage_block(None, "Necrons", "u1", None, "Orks", "Boyz", "shooting", "tab1")
 
@@ -1303,7 +1467,9 @@ def test_damage_block_offers_command_reroll_after_apply(monkeypatch) -> None:
     call = spy.call_args
     assert call.args[0] == "Orks"  # the attacker's damage roll — attacker pays
     assert call.args[1] == "shooting"
-    assert call.kwargs["reopen_key"] == "dmg_tab1"
+    assert call.args[2] == "after_roll"
+    assert call.kwargs["decline_key"] == "dmg_tab1"
+    assert call.kwargs["effect_type"] == "reroll"
 
 
 def test_damage_block_command_reroll_reopens_the_applied_result(monkeypatch) -> None:
@@ -1321,13 +1487,13 @@ def test_damage_block_command_reroll_reopens_the_applied_result(monkeypatch) -> 
     monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
     captured = {}
 
-    def _fake_reroll(faction, phase, *, reopen_key, on_reroll):  # type: ignore[no-untyped-def]
-        captured["on_reroll"] = on_reroll
+    def _fake_reroll(faction, phase, event, *, decline_key, context_caption, **kw):  # type: ignore[no-untyped-def]
+        captured["on_resolved"] = kw["on_resolved"]
 
-    monkeypatch.setattr(common, "render_inline_command_reroll", _fake_reroll)
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", _fake_reroll)
 
     common._render_damage_block(None, "Necrons", "u1", None, "Orks", "Boyz", "shooting", "tab1")
-    captured["on_reroll"]()
+    captured["on_resolved"]()
 
     assert "res_tab1" not in session
 
@@ -1353,7 +1519,7 @@ def test_damage_block_no_offer_before_damage_applied(monkeypatch) -> None:
     session = _SS(res_tab1={})
     common.st.session_state = session
     spy = MagicMock()
-    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(wounds=1, models_max=5)
     monkeypatch.setattr(common, "lookup", lambda faction, uid: (unit, {"group_wounds": {}}))
     monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)

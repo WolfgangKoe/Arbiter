@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 19:48 CEST
+Stand: 2026-07-10 20:12 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,7 +14,7 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  ██████░░░░░░  72k ↓    ██████  95% ↑  ············
+07-10 16:04 54b0  ███████░░░░░  86k ↓    ██████  95% ↑  ············
 07-10 13:33 b069  ████████████ 152k ↓    █████░  87% ↓  ▚▚▚▚▚·······
 07-10 01:56 86c3  ████████████ 163k ↑    █████░  87% ↑  ▚▚··········
 07-09 20:34 5769  ████████░░░░ 103k ↓    █████░  81% ↑  ▚··········▒
@@ -28,17 +28,17 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 
 - **Aufgabe:** start session
 - **Modelle:** Haupt Fable · Subagent Fable, Sonnet
-- **Tokens gesamt:** 43,483,534 (Haupt 2,286,112 · Subagent 41,197,422, Anteil 95 %)
-- **Peak-Kontext:** ██████░░░░░░ 72k / 150k
-- **cache_read:** 40,405,719 · **Output:** 147,440
+- **Tokens gesamt:** 70,700,503 (Haupt 3,517,343 · Subagent 67,183,160, Anteil 95 %)
+- **Peak-Kontext:** ███████░░░░░ 86k / 150k
+- **cache_read:** 66,882,146 · **Output:** 258,370
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 72k blieb im 150k-Korridor.
+- ✅ Peak-Kontext 86k blieb im 150k-Korridor.
 - ✅ 95% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 39,977,017 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ 65,073,741 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,18 +47,20 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: Paket 4a: Hit-/Wo… ████████████ 222k    ⛔
-2   general-purpose: S135 Planning-Ent… ███████░░░░░  93k    ✅
-3   general-purpose: Aufgabe 1: Entsch… ███████░░░░░  85k    ✅
+1   general-purpose: B6 Kurz-Mockup er… ██████░░░░░░  77k    ✅
+2   general-purpose: Paket 4b: Save-/D… ████████████ 199k    ⛔
+3   general-purpose: Paket 4a: Hit-/Wo… ████████████ 222k    ⛔
+4   general-purpose: S135 Planning-Ent… ███████░░░░░  93k    ✅
+5   general-purpose: Aufgabe 1: Entsch… ███████░░░░░  85k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  109,277
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    6%  2,821,098
-cache_read     ▕████████████████████████▏   93%  40,405,719
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  147,440
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  136,869
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  3,423,118
+cache_read     ▕████████████████████████▏   95%  66,882,146
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  258,370
 ```
 
 **Legende & Zielwerte:**
@@ -75,10 +77,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   93%  40,405,719
-Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    6%  2,821,098
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  109,277
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    0%  147,440
+Warm (System/Memory/History)  ▕████████████████████▏   95%  66,882,146
+Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    5%  3,423,118
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  136,869
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    0%  258,370
 ```
 
 **Legende (Slide-Kategorien):**
@@ -94,5 +96,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 114 Sessions: 3,261,259,306 Token (32,924 Antworten).
+Σ über 114 Sessions: 3,288,476,275 Token (33,153 Antworten).
 

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 19:48 CEST
+Stand: 2026-07-10 20:12 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,10 +9,12 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  ██████░░░░░░  72k ✅    ██████  95%    ············
-         SA_1·  ████████████ 222k ⛔    Paket 4a: Hit-/Wound-Anker
-         SA_2·  ███████░░░░░  93k ✅    S135 Planning-Entwurf erstellen
-         SA_3·  ███████░░░░░  85k ✅    Aufgabe 1: Entscheidungen auflösen
+07-10 16:04 54b0  ███████░░░░░  86k ✅    ██████  95%    ············
+         SA_1·  ██████░░░░░░  77k ✅    B6 Kurz-Mockup erstellen
+         SA_2·  ████████████ 182k ⛔    Paket 4b: Save-/Damage-Anker
+         SA_3·  ████████████ 222k ⛔    Paket 4a: Hit-/Wound-Anker
+         SA_4·  ███████░░░░░  93k ✅    S135 Planning-Entwurf erstellen
+         SA_5·  ███████░░░░░  85k ✅    Aufgabe 1: Entscheidungen auflösen
 ----------------- ---------------------- -------------- ------------
 07-10 13:33 b069  ████████████ 152k ⛔    █████░  87%    ▚▚▚▚▚·······
          SA_1·  █████░░░░░░░  59k ✅    DoD-Review Sessionstand S134

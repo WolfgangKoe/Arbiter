@@ -47,7 +47,6 @@ from gameMechanic.unit_mutations import (
     apply_damage,
     heal_unit,
 )
-from gameObjects.ability import Effect
 from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
@@ -476,7 +475,7 @@ def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None)
         st.session_state.active_modifiers = active_mods
 
     if strat.effect is not None and unit_key is not None:
-        _apply_stratagem_effect(strat.effect, faction, unit_key)
+        _apply_stratagem_effect(strat, faction, unit_key)
 
 
 def undo_stratagem(strat: Stratagem, faction: str) -> None:
@@ -510,22 +509,48 @@ def undo_stratagem(strat: Stratagem, faction: str) -> None:
     ]
 
 
-def _apply_stratagem_effect(effect: Effect, faction: str, unit_key: str) -> None:
+def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> None:
     """Dispatch a stratagem's machine-readable ``effect`` to the unit it targets.
 
     Data-driven on ``effect.type`` (mirrors the Ability effect-dispatch pattern in
     gameMechanic/ability_engine.py) — new effect types are added here as new
-    branches, never via a stratagem-name check. Currently handles the two Core
-    Stratagem effect types with an App-enforceable component (Plan 016 S130):
-    ``auto_pass_morale`` (Insane Bravery) and ``move`` with
-    ``handler: fall_back_through_models`` (Desperate Breakout). No-ops for any
-    other effect type (e.g. attack-sequence stratagems, which use `.modifier`
-    instead) — silently ignored here on purpose, same as an unmatched unit_key.
+    branches, never via a stratagem-name check. Handles: ``auto_pass_morale``
+    (Insane Bravery), ``move`` with ``handler: fall_back_through_models``
+    (Desperate Breakout, Plan 016 S130), and ``invuln_save`` (Quantum
+    Deflection, S135 Paket 4b) — the latter registers an ``active_modifiers``
+    entry with ``roll_type: "invuln_save"`` so the Save block's invuln
+    computation (``_stratagem_invuln_save``) picks it up the same way
+    ``ability_invuln_save`` already reads faction-ability-granted invulns;
+    ``undo_stratagem``'s generic ``source``-name cleanup removes it again
+    unchanged. No-ops for any other effect type (e.g. attack-sequence
+    stratagems, which use `.modifier` instead) — silently ignored here on
+    purpose, same as an unmatched unit_key.
     """
+    effect = strat.effect
+    if effect is None:  # caller already checked; narrows the type for mypy
+        return
     if effect.type == "auto_pass_morale":
         activate_morale_auto_pass(unit_key, faction)
     elif effect.type == "move" and effect.handler == "fall_back_through_models":
         activate_desperate_breakout(unit_key, faction)
+    elif effect.type == "invuln_save" and effect.modifier is not None:
+        current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+        active_mods = st.session_state.get("active_modifiers", [])
+        active_mods.append(
+            {
+                "unit_key": unit_key,
+                "source": strat.name_en,
+                "effect": {
+                    "roll_type": "invuln_save",
+                    "value": effect.modifier,
+                    "target": "defender",
+                    "phase": current_phase,
+                },
+                "expires_at_phase": current_phase,
+                "expires_at_round": None,
+            }
+        )
+        st.session_state.active_modifiers = active_mods
 
 
 def _reactive_go_state(
@@ -1139,6 +1164,29 @@ def _collect_def_save_modifiers(
     return mods
 
 
+def _stratagem_invuln_save(def_uid: str) -> int | None:
+    """Best invuln save granted by an active stratagem for this unit, or None.
+
+    Mirrors `ability_invuln_save`'s "lowest value wins" semantics but reads
+    `active_modifiers` (the `spend_stratagem`/`_apply_stratagem_effect`
+    bookkeeping) instead of activated faction abilities — the two are
+    separate session-state sources with independent lifecycles, so this stays
+    a distinct lookup rather than folding into `ability_invuln_save` (S135
+    Paket 4b, Quantum Deflection Save-anchor).
+    """
+    best: int | None = None
+    for m in st.session_state.get("active_modifiers", []):
+        if m.get("unit_key") != def_uid:
+            continue
+        eff = m.get("effect", {})
+        if eff.get("roll_type") != "invuln_save":
+            continue
+        val = eff.get("value")
+        if val is not None:
+            best = int(val) if best is None else min(best, int(val))
+    return best
+
+
 # ---------------------------------------------------------------------------
 # 6d-v2 Damage + RP blocks
 # ---------------------------------------------------------------------------
@@ -1319,12 +1367,18 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
         # Command Re-Roll (core_rules.txt Z. 3124-3130): a damage roll is the
         # attacker's dice, so `atk_faction` pays — reopens the same fields the
         # plain Reset below reopens, plus the CP/usage bookkeeping Reset alone
-        # does not do.
-        render_inline_command_reroll(
+        # does not do. Migrated from the Pull-not-Push inline offer to the
+        # canonical GO card (design_system.md §6.2/§6.3, S135 Paket 4b) — the
+        # Damage roll is one of the wurf-GOs with real value capture, unlike
+        # Advance/Charge, which keep the bespoke inline offer per §6.3.
+        render_reactive_stratagem_box(
             atk_faction,
             phase_key,
-            reopen_key=f"dmg_{tab_key}",
-            on_reroll=lambda: st.session_state.pop(res_key, None),
+            "after_roll",
+            decline_key=f"dmg_{tab_key}",
+            context_caption=f"{atk_unit_name} made a damage roll.",
+            effect_type="reroll",
+            on_resolved=lambda: st.session_state.pop(res_key, None),
         )
         # RP is rolled once per defender unit after the whole attacking unit has
         # resolved (render_attack_resolution), not per weapon tab.
@@ -1694,9 +1748,15 @@ def _render_resolution_tab(
         use_melee=use_melee,
     )
     ability_inv = ability_invuln_save(def_faction, def_unit)
+    strat_inv = _stratagem_invuln_save(def_uid)
+    bonus_inv = (
+        min(v for v in (ability_inv, strat_inv) if v is not None)
+        if ability_inv is not None or strat_inv is not None
+        else None
+    )
     native_inv = def_unit.invuln_save
-    if ability_inv is not None and (native_inv is None or ability_inv < native_inv):
-        effective_invuln: int | None = ability_inv
+    if bonus_inv is not None and (native_inv is None or bonus_inv < native_inv):
+        effective_invuln: int | None = bonus_inv
         invuln_from_ability = True
     else:
         effective_invuln = native_inv
@@ -1786,6 +1846,24 @@ def _render_resolution_tab(
 
     # SAVE BLOCK
     _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
+
+    # Save-Anker (design_system.md §6.2/§6.3, S135 Paket 4b): the defender's own
+    # reactive GOs that grant/improve an invulnerable save for THIS attack (e.g.
+    # Quantum Deflection) — same on_target trigger as the Hit-/Wound-Anker above,
+    # scoped to effect_type="invuln_save" so it never shares those anchors, and
+    # so Tough as Squig-Hide (effect_type="restriction", a wound-roll auto-fail
+    # threshold rather than a roll modifier — not implemented via the modifier
+    # stack, S135 Paket 4b scope note) correctly stays off this anchor too.
+    render_reactive_stratagem_box(
+        def_faction,
+        phase_key,
+        "on_target",
+        decline_key=tab_key,
+        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
+        unit_key_for_modifier=def_uid,
+        unit_for_conditions=def_unit,
+        effect_type="invuln_save",
+    )
 
     # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
     # Imports were already resolved at the top of this block (above resolve_save).

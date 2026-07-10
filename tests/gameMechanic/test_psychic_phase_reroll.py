@@ -1,16 +1,21 @@
-"""S130 — Command Re-Roll wiring for the Psychic Phase (manifest + Deny the Witch).
+"""S130/S135 Paket 4b — Command Re-Roll wiring for the Psychic Phase (manifest +
+Deny the Witch).
 
-`_render_psi_result` / `_render_undo_deny_button` call render_inline_command_reroll
-(uiLayout._common) at the exact spots where the manifest roll or the Deny the
-Witch roll is still "the last roll" (core_rules.txt Z. 3124-3130) — gated so a
-LATER roll (a deny attempt superseding the manifest) or an already-applied
-Perils consequence correctly suppresses the offer.
+`_render_manifest_reroll` / `_render_undo_deny_button` call
+render_reactive_stratagem_box (uiLayout._common) at the exact spots where the
+manifest roll or the Deny the Witch roll is still "the last roll"
+(core_rules.txt Z. 3124-3130) — gated so a LATER roll (a deny attempt
+superseding the manifest) or an already-applied Perils consequence correctly
+suppresses the offer. Migrated from the Pull-not-Push inline offer
+(render_inline_command_reroll) to the canonical GO card in S135 Paket 4b
+(design_system.md §6.2/§6.3) — Advance/Charge are the only wurf-GOs that keep
+the bespoke inline offer (§6.3 exception).
 
-These tests spy on render_inline_command_reroll rather than simulating full
+These tests spy on render_reactive_stratagem_box rather than simulating full
 widget interaction — its own visibility/spend contract is covered end-to-end
 with real stratagem data in tests/uiLayout/test_common.py. Here the contract
-under test is: WHEN psychicPhase calls it (faction/phase/gating), and whether
-its on_reroll callback correctly reopens the state.
+under test is: WHEN psychicPhase calls it (faction/phase/event/gating), and
+whether its on_resolved callback correctly reopens the state.
 """
 
 from __future__ import annotations
@@ -77,7 +82,7 @@ def test_manifest_reroll_offered_when_failed(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
 
     pp._render_psi_result("Necrons", "cryptek#1", unit, _base_psi(manifested=False), _state())
@@ -86,14 +91,16 @@ def test_manifest_reroll_offered_when_failed(monkeypatch) -> None:
     call = spy.call_args
     assert call.args[0] == "Necrons"
     assert call.args[1] == "psychic"
-    assert call.kwargs["reopen_key"] == "psi_manifest_cryptek#1"
+    assert call.args[2] == "after_roll"
+    assert call.kwargs["decline_key"] == "psi_manifest_cryptek#1"
+    assert call.kwargs["effect_type"] == "reroll"
 
 
 def test_manifest_reroll_offered_while_waiting_for_deny(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(denied=None, deny_faction=None)
 
@@ -106,7 +113,7 @@ def test_manifest_reroll_offered_when_no_deny_possible(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(denied=False, deny_faction=None)
 
@@ -120,7 +127,7 @@ def test_manifest_reroll_not_offered_once_denied(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(denied=True, deny_roll=9, deny_faction="Orks")
 
@@ -133,7 +140,7 @@ def test_manifest_reroll_not_offered_after_deny_failed(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(denied=False, deny_roll=5, deny_faction="Orks")
 
@@ -146,7 +153,7 @@ def test_manifest_reroll_offered_during_perils_pending(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(roll=12, perils=True, perils_applied=False, manifested=True)
 
@@ -161,7 +168,7 @@ def test_manifest_reroll_not_offered_after_perils_applied(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS(selected_targets=[])
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(roll=2, perils=True, perils_applied=True, manifested=False)
 
@@ -170,22 +177,22 @@ def test_manifest_reroll_not_offered_after_perils_applied(monkeypatch) -> None:
     spy.assert_not_called()
 
 
-def test_manifest_reroll_on_reroll_resets_active_power(monkeypatch) -> None:
+def test_manifest_reroll_on_resolved_resets_active_power(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     session = _SS(selected_targets=[], psychic_denies_used={})
     pp.st.session_state = session
     captured = {}
 
-    def _fake_reroll(faction, phase, *, reopen_key, on_reroll):  # type: ignore[no-untyped-def]
-        captured["on_reroll"] = on_reroll
+    def _fake_reroll(faction, phase, event, *, decline_key, context_caption, **kw):  # type: ignore[no-untyped-def]
+        captured["on_resolved"] = kw["on_resolved"]
 
-    monkeypatch.setattr(pp, "render_inline_command_reroll", _fake_reroll)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", _fake_reroll)
     unit = SimpleNamespace(name_en="Cryptek")
     psi = _base_psi(manifested=False)
     session.psi_result = psi
 
     pp._render_psi_result("Necrons", "cryptek#1", unit, psi, _state())
-    captured["on_reroll"]()
+    captured["on_resolved"]()
 
     assert session.psi_result is None
 
@@ -199,7 +206,7 @@ def test_deny_reroll_offered_when_deny_roll_was_made(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS()
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     psi = _base_psi(denied=True, deny_roll=9, deny_faction="Orks")
 
     pp._render_undo_deny_button("Orks", psi, {"Orks": True})
@@ -208,13 +215,14 @@ def test_deny_reroll_offered_when_deny_roll_was_made(monkeypatch) -> None:
     call = spy.call_args
     assert call.args[0] == "Orks"
     assert call.args[1] == "psychic"
+    assert call.args[2] == "after_roll"
 
 
 def test_deny_reroll_not_offered_when_deny_was_skipped(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS()
     spy = MagicMock()
-    monkeypatch.setattr(pp, "render_inline_command_reroll", spy)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", spy)
     psi = _base_psi(denied=False, deny_roll=None, deny_faction="Orks")
 
     pp._render_undo_deny_button("Orks", psi, {"Orks": True})
@@ -222,20 +230,20 @@ def test_deny_reroll_not_offered_when_deny_was_skipped(monkeypatch) -> None:
     spy.assert_not_called()
 
 
-def test_deny_reroll_on_reroll_reopens_and_refunds_budget(monkeypatch) -> None:
+def test_deny_reroll_on_resolved_reopens_and_refunds_budget(monkeypatch) -> None:
     _quiet_widgets(monkeypatch)
     pp.st.session_state = _SS()
     captured = {}
 
-    def _fake_reroll(faction, phase, *, reopen_key, on_reroll):  # type: ignore[no-untyped-def]
-        captured["on_reroll"] = on_reroll
+    def _fake_reroll(faction, phase, event, *, decline_key, context_caption, **kw):  # type: ignore[no-untyped-def]
+        captured["on_resolved"] = kw["on_resolved"]
 
-    monkeypatch.setattr(pp, "render_inline_command_reroll", _fake_reroll)
+    monkeypatch.setattr(pp, "render_reactive_stratagem_box", _fake_reroll)
     psi = _base_psi(denied=True, deny_roll=9, deny_faction="Orks")
     denies_used = {"Orks": True}
 
     pp._render_undo_deny_button("Orks", psi, denies_used)
-    captured["on_reroll"]()
+    captured["on_resolved"]()
 
     assert pp.st.session_state.psi_result["denied"] is None
     assert pp.st.session_state.psi_result["deny_roll"] is None

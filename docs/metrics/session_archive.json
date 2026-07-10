@@ -3437,13 +3437,27 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 71862,
-    "subagent_share": 94.74258003040875,
+    "peak_context": 86372,
+    "subagent_share": 94.59953939192721,
     "by_tier": {
-      "Sonnet": 39977017,
-      "Fable": 1220405
+      "Sonnet": 59503664,
+      "Fable": 2109419
     },
     "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "B6 Kurz-Mockup erstellen",
+        "tier": "Sonnet",
+        "peak_context": 76754,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Paket 4b: Save-/Damage-Anker",
+        "tier": "Sonnet",
+        "peak_context": 182347,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
       {
         "agent_type": "general-purpose",
         "description": "Paket 4a: Hit-/Wound-Anker",

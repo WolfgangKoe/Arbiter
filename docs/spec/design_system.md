@@ -223,19 +223,17 @@ eigener Ort statt Sonderphase. Achse (b) und die vollständige GO-Tabelle:
 **Paket-4-Schuld (Anker folgen S134/S135):** Der Stakeholder hat die Übergangs-Ausnahme
 abgelehnt — reaktive GOs sind ab S134 komplett aus der zentralen Liste, auch wenn ihr
 Inline-Anker noch fehlt. Bis Paket 4 die Anker liefert, sind folgende `phase_reactive`-GOs
-vorübergehend nirgends aktivierbar (grep-Stand S134; vorhandene Anker-Fenster:
-movement/charge/fight × `on_declaration`, `on_destroy` nur bei TRANSPORT-Tod,
-`after_roll` via Advance-/Charge-/Psychic-/Damage-Anker):
+vorübergehend nirgends aktivierbar (grep-Stand S135 Paket 4b; vorhandene Anker-Fenster:
+movement/charge/fight × `on_declaration`, `on_destroy` nur bei TRANSPORT-Tod, Hit-/Wound-/
+Save-Anker × `on_target` (effect_type-gescoped), `after_roll` via Advance-/Charge-/Psychic-/
+Damage-Anker):
 
 | GO | (phase, event) | fehlender Anker |
 |---|---|---|
 | Desperate Breakout (Shared) | movement, — | Use-Anker an der in-melee-Unit (nur die Auflösungskarte nach Use existiert, `movementPhase.py`) |
 | Aetheric Interception (Necrons) | movement, on_set_up | kein `on_set_up`-Fenster |
-| Reanimation Prioritisation (Necrons) | shooting, on_target | kein `on_target`-Fenster |
-| Whirling Onslaught (Necrons) | any, on_target | kein `on_target`-Fenster |
-| Quantum Deflection (Necrons) | any, on_target | kein `on_target`-Fenster |
-| Shadows of Drazak (Necrons) | any, on_target | kein `on_target`-Fenster |
-| Tough as Squig-Hide (Orks) | any, on_target | kein `on_target`-Fenster |
+| Reanimation Prioritisation (Necrons) | shooting, on_target | `effect.type: reanimate` gehört zur Attackenfolge/Reanimation-Priorisierung, nicht zum Hit-/Wound-/Save-Komplex — Paket 4c |
+| Tough as Squig-Hide (Orks) | any, on_target | `effect.type: restriction` (unmodifizierter Wundwurf 1–3 scheitert, kein additiver Modifier) — passt in keinen der drei Hit-/Wound-/Save-Anker-Filter, eigener Mechanik-Ausbau nötig, Paket 4c |
 | Resurrection Protocols (Necrons) | any, on_destroy | `on_destroy`-Fenster öffnet nur bei TRANSPORT-Tod, nicht beim eigentlichen Trigger |
 | Curse of the Phaeron (Necrons) | any, on_destroy | dito |
 | Revenge of the Doomstalker (Necrons) | any, on_destroy | dito |
@@ -245,7 +243,9 @@ movement/charge/fight × `on_declaration`, `on_destroy` nur bei TRANSPORT-Tod,
 | Orks is Never Beaten (Orks) | fight, on_destroy | dito |
 
 Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll, Cut Them Down,
-Emergency Disembarkation, Fire Overwatch, Counter-Offensive, Efficient Disintegration.
+Emergency Disembarkation, Fire Overwatch, Counter-Offensive, Efficient Disintegration,
+Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught (Wound-Anker, Paket 4a),
+Quantum Deflection (Save-Anker, Paket 4b).
 
 ### 6.3 Tisch-Wurf-Eingabe-Baustein
 
