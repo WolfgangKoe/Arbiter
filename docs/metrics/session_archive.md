@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 21:00 CEST
+Stand: 2026-07-10 21:19 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,14 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  ██████████░░ 131k ⚠️   ██████  92%    ▚···········
+07-10 16:04 54b0  ████████████ 173k ⛔    █████░  87%    ▚···········
          SA_1·  ██████░░░░░░  77k ✅    B6 Kurz-Mockup erstellen
          SA_2·  ████████████ 177k ⛔    Paket 4c: Attacken-Fenster + Rest
          SA_3·  ████████████ 205k ⛔    Paket 4b: Save-/Damage-Anker
-         SA_4·  ████████████ 222k ⛔    Paket 4a: Hit-/Wound-Anker
-         SA_5·  ███████░░░░░  93k ✅    S135 Planning-Entwurf erstellen
-         SA_6·  ███████░░░░░  85k ✅    Aufgabe 1: Entscheidungen auflösen
-         SA_7·  ██████████░░ 120k ✅    B6-Fix + B1-Probe-Patch
+         SA_4·  ██████░░░░░░  77k ✅    S135 DoD-Abschlussreview
+         SA_5·  ████████████ 222k ⛔    Paket 4a: Hit-/Wound-Anker
+         SA_6·  ███████░░░░░  93k ✅    S135 Planning-Entwurf erstellen
+         SA_7·  ███████░░░░░  85k ✅    Aufgabe 1: Entscheidungen auflösen
+         SA_8·  ██████████░░ 120k ✅    B6-Fix + B1-Probe-Patch
 ----------------- ---------------------- -------------- ------------
 07-10 13:33 b069  ████████████ 152k ⛔    █████░  87%    ▚▚▚▚▚·······
          SA_1·  █████░░░░░░░  59k ✅    DoD-Review Sessionstand S134
@@ -551,4 +552,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S131 (2026-07-09)** GO-UI-Design-System entschieden (GO-Karte, 4 Zustände, 3 Orte, Vollrückgängig-Standard); Klassifikation 95 GOs + UI-Inventar 17 Muster als Referenz; Roadmap 6 Pakete S132-S134+; Scroll-Bug Setup->Spielstart gefixt (verifiziert)
 - **S132 (2026-07-10)** GO-UI Paket 1+2: go_card.py-Baustein + Stratagems-Liste auf GO-Karten, Re-Roll-Angebot Advance/Charge, Start-Game-Button, Doku-Nachzug §6.3; Stakeholder-Review NO-GO mit 5 Befunden (S132_defects.md), K1/K4 als Hintergrund-Agenten neu gestartet, K2-Design entschieden, K3 nach S133
 - **S133 (2026-07-10)** GO-Karten-Anatomie neu (Container, Use/Undo, Akkordeon in Karte), Desperate-Breakout-Gating, K2-Bewegungs-State-Modell + Re-Roll-Kompaktkarte, Reaktiv-Box→GO-Karte, K3-Conditions, Profilkarten-Fixes; mypy 75→63; §6.2-Sichtbarkeits-Invariante
-- **S135 (2026-07-10)** Aufgabe 1: S134-Entscheidungen B2/B4/B7/B9/B10 per Stakeholder-Regel aufgelöst, B10 in CLAUDE.md eingearbeitet; bewusster Stopp nach Aufgabe 1 (Nutzungslimit), Paket 4a freigegeben offen
+- **S135 (2026-07-10)** S134-Entscheidungen aufgelöst (B10 in CLAUDE.md); Paket 4 komplett (4a/4b/4c: Hit/Wound/Save-Anker, Reroll-Ablösung, Attacken-Re-Roll, 3 Schuld-GOs aktivierbar, Folge-Split empfohlen); B6 nebeneinander + Read-directive (verifiziert); B1-Probe-Patch + Ansage; Review GO; 1673 passed / 99,12 %

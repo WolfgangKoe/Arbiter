@@ -133,10 +133,12 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     ↺ Undo; Desperate-Breakout-Doppler behoben. **Bestätigter MAJOR:** 14
     `phase_reactive`-GOs bis Paket 4 nirgends aktivierbar (Schuld-Tabelle
     `design_system.md` §6.2) — deshalb Paket 4 = S135 Top-Prio.
-  - 🟢 **Paket 4 (S135, TOP-PRIO; Split 4a/4b/4c s. `next_session.md`):** Inline-Anker
-    Attackenabfolge (5 Wurfbereiche: Treffer/Verwundung/Rüstung/Rettung/
-    Schadenszuweisung) + restliche Command-Re-Roll-Wurf-Arten — löst den Rest der
-    Stakeholder-Auflage S130 ein und baut die §6.2-Schuld-Tabelle ab.
+  - ✅ **Paket 4 (ERLEDIGT S135, Commits `d66755e`/`0aa7dc6`/`96e7997`):** Inline-Anker
+    Hit/Wound/Save + Damage/Psychic/Deny-Reroll-Ablösung + Attacken-Feld-Re-Roll —
+    3 Schuld-GOs aktivierbar. Rest: 10 GOs an 3 fehlenden Ereignis-Fenstern →
+    Folge-Split lt. 4c-Bewertung (`design_system.md` §6.2): generisches `on_destroy`
+    (7 GOs) und `on_set_up`+`on_target` — Paket-Nummern bei Einplanung NEU vergeben
+    (Kollision mit Paket 5/6 unten vermeiden).
   - 🟢 **Paket 5 (S134+):** Wortlaut-/Sprach-Bereinigung (Englisch durchgehend, Use/Undo/
     Confirm-Familie), eine CP-Anzeige, ein Stepper-Baustein.
   - 🟢 **Paket 6 (S134+, eigenes Konzept-Inkrement):** Einheiten-Auswahl in die
@@ -144,7 +146,8 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     entschlacken.
   - 🔲 **Danach:** manuelle UI-Verifikation (S130-Checkliste + neues Design), Stakeholder.
 - 🟢 **Command Re-Roll auf alle 9 Wurf-Arten ausweiten (Stakeholder-AUFLAGE, S130):** Heute
-  inline verdrahtet nur für Damage/Psychic/Deny (R-CMD-12, 3/9). Stakeholder wörtlich: Man kann
+  inline verdrahtet nur für Damage/Psychic/Deny (R-CMD-12; Stand S135: 4/9 — Attacken-Feld
+  Nahkampf neu, Damage/Psychic/Deny als GO-Karte migriert). Stakeholder wörtlich: Man kann
   die GO auch bei den übrigen Würfen „in irgendeiner Form anzeigen — bei Charge- und Advance-
   Würfen recht gut integrierbar; bei der Attackenfolge müssen wir uns überlegen, wie. Aber bitte
   nicht außen vor lassen!" Umsetzung läuft über die Design-System-Roadmap oben: Advance/Charge

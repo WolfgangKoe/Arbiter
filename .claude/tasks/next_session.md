@@ -22,45 +22,42 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ## Aktueller Stand (nach S135, 2026-07-10)
 
-S135 nach Aufgabe 1 **bewusst gestoppt** (Nutzungslimit ~10 %). Erledigt: Plan S135
-erstellt + freigegeben (`docs/handoff/S135_planning.md`, STATUS: ANSWERED); alle offenen
-S134-Entscheidungen per Stakeholder-Regel („Empfehlungen gelten, außer Kommentar ändert
-sie") aufgelöst — `S134_offene_punkte.md` STATUS: ANSWERED mit Entscheidungsblöcken:
-B2 = Option C (A jetzt, Wizard-Zielbild mit B4-Datenkarte), Faction-Ability-Wahl
-unabhängig; B4-Refinement P1 App-Design-System + Wahapedia-IA, P2 nur 9E-Datasheet-
-Spalten, P3 Wargear-Chip ja; B7 P1 = Option B Mini-Header (via B9-Kommentar „kein
-Stepper"), P2 = Design-System-Baustein; B7/B9 als EIN Konzept-Handoff bündeln;
-B10 beide CLAUDE.md-Formulierungen eingearbeitet. Backlog §2 nachgezogen. Doku-/
-Acceptance-Gate 18 passed; keine `src/`-Änderungen (Vollsuite daher nicht nötig).
+S135 (nach Limit-Reset voll durchgeführt, Review **GO**): S134-Entscheidungen aufgelöst
+(`S134_offene_punkte.md` ANSWERED: B2=Option C, B7=Mini-Header, B7/B9=EIN Konzept-Handoff,
+B10 in CLAUDE.md). **Paket 4 KOMPLETT** (`d66755e`/`0aa7dc6`/`96e7997`): Hit-/Wound-/
+Save-Anker + Damage/Psychic/Deny-Reroll-Ablösung (14 Tests planmäßig migriert;
+Advance/Charge behält Inline-Button, §6.3) + Attacken-Feld-Re-Roll (nur Nahkampf).
+Aktivierbar: Shadows of Drazak (+Datenfix `modifier:`), Whirling Onslaught, Quantum
+Deflection (inkl. invuln_save-Wirkung). Rest-Schuld 10 GOs an 3 fehlenden Fenstern →
+Folge-Split s. Schritt 3. **B6 umgesetzt + Stakeholder-verifiziert** (`9993771`):
+Setup-Blöcke nebeneinander, „Read directive"-Dropdown (geteilter Helper mit armyCard,
+INV-4b 18→17), Trennlinie. **B1-Probe:** Patch + zweistufige Ansage
+`docs/handoff/S135_B1_probe.md` — Stufe-1-Befund ausstehend. Lehre: Seed-Wörter
+(„protocol") in UI-Labels meiden (INV-4b). Vollsuite 1673 passed / 99,12 %, mypy 62.
 
 Frühere Sessions (S60–S134): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S135 — Plan ist freigegeben, Shortcut direkt starten)
+### ▶ Nächster Schritt (S136)
 
-0. **Erster Schritt: Aufgabe 2 aus `docs/handoff/S135_planning.md`** (Paket 4a
-   Hit-/Wound-Anker, Executor + Sonnet, ~30k) — Aufgabe 1 (Entscheidungen) ist bereits
-   erledigt, siehe Stand oben.
-1. **Paket 4 (TOP-PRIO — löst die 14 nicht aktivierbaren reaktiven GOs auf).** Split
-   (aus S134-Plan v3, Briefs ≤ M): **4a** Hit-+Wound-Anker (`_common.py`, Kompaktkarte am
-   Wurfbereich; M); **4b** Save-+Damage-Anker + Ablösung der 3
-   `render_inline_command_reroll`-Call-Sites (Damage/Psychic/Deny; M); **4c**
-   Anzahl-Attacken-Fenster + R-CMD-12-Restabgleich (9 Wurf-Arten) + §6.2-Schuld-Tabelle
-   abbauen + go_klassifikation-Nachzug (S–M). Fehlende Ereignis-Fenster (`on_target`,
-   `on_set_up`, generisches `on_destroy`) in 4c bewerten, ggf. eigener Folge-Split.
-2. **Welle 2 (aus S134 verschoben):** Task 7 Dakka (`S133_plan.md`; NACH 4a/4b —
-   `_common.py`-Kollision); Task 8 `before_battle` in `PHASES` + ArmySetup-Liste
+1. **B1 Scroll-Sprung — Stufe-1-Befund abfragen** („Setup-Phase → Slot ändern →
+   springt der Screen? Ja/Nein"); je Befund Patch `S135_B1_probe.patch` anwenden
+   (Stufe 2, Ansage + Interpretationstabelle in `S135_B1_probe.md`) → gezielter Fix
+   + Regressionstest. KEIN Fix vor dem Browser-Befund.
+2. **Welle 2 (aus S134/S135 verschoben, Kollision durch Paket-4-Abschluss aufgehoben):**
+   Task 7 Dakka (`S133_plan.md`); Task 8 `before_battle` in `PHASES` + ArmySetup-Liste
    (GO-Zählung nach BA-Bereinigung neu verifizieren); B8 redundanter Statusbereich raus
    (`…21-36-36.png`); B4-Sofortteil ++/OC-Spalten aus `_datasheet_stat_row()`
    (`gameActionsArea.py:62-63`).
-3. **B1 Scroll-Sprung — Hypothesen-Verifikation (XS, Stakeholder-Auftrag „Prüfe deine
-   Hypothesen"):** H1 Fokus-Autoscroll vs. H2 DOM-Remount durch Sechsfach-Key-Rewrite
-   (`_render_round_choice_assignment`, `gameActionsArea.py` on_change). Ablauf MIT exakter
-   Test-Ansage: Executor baut Probe-Variante (Key-Rewrite deaktiviert) → Koordinator gibt
-   dem Stakeholder die genaue Ansage („App neu laden → Setup-Phase → einen
-   Command-Protocol-Slot ändern → springt der Screen noch? Ja/Nein") → je Befund gezielter
-   Fix + Regressionstest. KEIN Fix vor dem Browser-Befund.
-4. ~~Offene Entscheidungen (Diskussion)~~ — **ERLEDIGT S135 Aufgabe 1**, s. Stand oben
-   (`S134_offene_punkte.md` STATUS: ANSWERED).
+3. **Folge-Split aus 4c einplanen** (`design_system.md` §6.2): generisches `on_destroy`
+   (7 GOs, größter Hebel); `on_set_up` (Aetheric Interception) + `on_target`-Sonderfälle
+   (Reanimation Prioritisation, Tough as Squig-Hide — eigene Auswertungslogik).
+   ACHTUNG: Backlog-Design-Roadmap hat bereits ein anderes Paket 5/6 — Nummern neu vergeben.
+4. **Manuelle UI-Checkliste 4a–4c + B6-Trennlinie** (S135-Review, git `Add S135 DoD
+   review`) mit dem
+   Stakeholder abarbeiten (Hit-/Wound-/Save-Karten, Damage/Psychic/Deny-GO-Karten,
+   Attacken-Re-Roll nur Nahkampf).
+5. **B7/B9-Konzept-Handoff** (EIN Dokument, Entscheidung S135) + **B2 Option A**
+   Umsetzung einplanen.
 
 **Prozess (S134 freigegeben):** Vollsuite bei parallelen Wellen nur EINMAL zentral am
 Wellen-Ende, nicht je Executor → `operating_model.md` Event 3 (Vollsuite-Disziplin).

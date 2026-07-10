@@ -1,5 +1,6 @@
 STATUS: ANSWERED
-Freigegeben S135, Umsetzung gestoppt nach Aufgabe 1 (Nutzungslimit).
+Freigegeben S135; umgesetzt: Aufgaben 1–5 + 10 (Paket 4a/4b/4c, B6, B1-Probe);
+Aufgaben 6–9 (Welle 2, Dakka) → S136, s. `next_session.md`.
 
 # S135 — Planning-Entwurf
 

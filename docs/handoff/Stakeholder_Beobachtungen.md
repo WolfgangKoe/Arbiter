@@ -18,7 +18,7 @@ Regeln:
 
 ## Beobachtungen (Eingang)
 
-_(aktuell leer — neue Beobachtungen bitte hier als Bulletpoints eintragen)_
+- Was der Command Reroll Button bei der Attackzuweisung machen soll, ist mir schleierhaft. (s. Bildschirmfoto vom 2026-07-10 21-17-14) Der ergäbe höchstens Sinn, wenn die Attackenzahl gewürfelt würde. ABer ich weiß nicht, ob die Regeln das erlauben.
 
 ## Zuletzt überführt
 

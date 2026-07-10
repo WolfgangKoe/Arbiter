@@ -3437,11 +3437,12 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 131159,
-    "subagent_share": 92.42422101328108,
+    "peak_context": 173446,
+    "subagent_share": 86.66144131856348,
     "by_tier": {
       "Sonnet": 90974957,
-      "Fable": 4580592
+      "Fable": 8266529,
+      "Opus": 1096656
     },
     "subagents": [
       {
@@ -3463,6 +3464,13 @@
         "description": "Paket 4b: Save-/Damage-Anker",
         "tier": "Sonnet",
         "peak_context": 205493,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S135 DoD-Abschlussreview",
+        "tier": "Opus",
+        "peak_context": 76969,
         "started_at": "2026-07-10T14:04:06.724Z"
       },
       {
