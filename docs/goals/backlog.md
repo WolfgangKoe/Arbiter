@@ -123,9 +123,11 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     zentrale Stratagem-Liste auf den Baustein umstellen.
   - 🟢 **Paket 2 (S132):** Command Re-Roll für Advance/Charge (ohne Wurf-Eingabe-Baustein) —
     löst die Stakeholder-Auflage S130 (s. u.) ein.
-  - 🟢 **Paket 3 (S133):** Reaktive Boxen → GO-Karte migrieren; `before_battle`-Liste im
-    ArmySetup (macht die 13 bisher nie matchenden GOs erstmals sichtbar — löst den
-    S131-Kandidaten „`before_battle` sichtbar machen" unten ab).
+  - ✅ **Paket 3a (S133):** Reaktive Boxen → GO-Karte migriert (Fire Overwatch/Cut Them
+    Down/Counter-Offensive als Kompaktkarte, Pass-Button entfällt per §6.1).
+  - 🟢 **Paket 3b (S134):** `before_battle`-Liste im ArmySetup (macht die 13 bisher nie
+    matchenden GOs erstmals sichtbar — löst den S131-Kandidaten „`before_battle` sichtbar
+    machen" unten ab).
   - 🟢 **Paket 4 (S133):** Inline-Anker Attackenabfolge (5 Wurfbereiche: Treffer/
     Verwundung/Rüstung/Rettung/Schadenszuweisung) + restliche Command-Re-Roll-Wurf-Arten —
     löst den Rest der Stakeholder-Auflage S130 ein.

@@ -3,12 +3,9 @@ STATUS: NEEDS-DECISION
 DIESE DATEI ENTHÄLT BEOBACHTUNGEN VOM STAKEHOLDER! NICHT OHNE GENEHMIGUNG LÖSCHEN!!! 
 Werden einzelne Punkte mit DONE markiert, können sie gelöscht werden und alle Screenshots, die darin referenziert werden, sofern sie nicht in anderen Punkte referenziert werden.
 
-
-1. DONE - Nach Start des Spiels ist der nächste Screen ganz nach unten gescrollt. Stattdessen sollte der Nutzer die Seite von oben an gezeigt bekommen. Aktuell also, dass man den GameHeader vollständig sieht. In Bildschirmfoto vom 2026-07-09 17-34-26 sieht man, wie der Bildschirm starten sollte, nachdem der Start Spiel Button gedrückt wurde. 
+1. Wenn ich im Setup-Screen bin und dort die Command Protocols einstelle, "springt" der Bildschirm so, dass das erste Protokoll oben bündig ist. Das sollte bitte entfallen.
 
 2. Den Spielvorbereitungsscreen müssen wir überarbeiten. 
-
-3. Der "Start Game" Button sollte unter den beiden Auswahlbuttons erscheinen, welcher Spieler zuerst beginnt. 
 
 4. An sich finde ich es gut, wenn die Profilkarte beim Setup-Screen gezeigt wird. Dann kann man in Ruhe jede Einheit durchgehen, wenn man möchte. ABER: Schön ist anders! (s. Bildschirmfoto vom 2026-07-09 20-53-48)
 - Beim Bewegungswert stehen zwei """", Da soll nur einmal """ stehen. 
@@ -29,3 +26,5 @@ Werden einzelne Punkte mit DONE markiert, können sie gelöscht werden und alle 
 8. Der rot markierte Bereich in Bildschirmfoto vom 2026-07-09 21-36-36 ist redundant in jeder Phase. Bitte entfernen. ES reicht wenn es im Battle log erscheint. 
 
 9. Irgendwie fehlt in jeder Phase eine explizite Angabe der Unterphasenschritte. Z.B. in der Bewegungsphase, dass erst alle Einheiten auf dem Feld bewegt werden und dann die Reserven reingeholt werden können. Die in den vorigen Punkten genannten Texte sind doppelt und dreifach im Frontend zu sehen. Die Subpahsen-Phasen sind komplett unsichtbar. 
+
+10. Im Code sehe ich viele Kommentare. Das gefällt mir nicht so gut. Dies sollte an sich alles im Spec stehen. Der Code selbst sollte im Sinne von Clean Code Prinzipien selbsterklärend sein. Und dann vielleicht ein Kommentar, der auf die richtige Spec zeigt. 

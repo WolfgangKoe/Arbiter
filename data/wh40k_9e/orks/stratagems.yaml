@@ -151,7 +151,7 @@ stratagems:
     phase: fight
     stage: active
     player: active
-    conditions: [BOYZ]
+    conditions: [BOYZ, BEAST SNAGGA]
     once_per_phase: true
     effect:
       type: move

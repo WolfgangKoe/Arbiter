@@ -67,7 +67,7 @@ def _render_dice_roll_block(
         if weapon_special.get("extra_hits"):
             badges.append(special_die_html("Extra Hits", "unmod. 6 = +2 Hits"))
         if weapon_special.get("alternating_fire"):
-            badges.append(special_die_html("Alt. Fire"))
+            badges.append(special_die_html("Alt. Fire", "First attacks if within half range"))
         if weapon_special.get("hit_roll_penalty"):
             badges.append(special_die_html("−1 to Hit"))
         if badges:

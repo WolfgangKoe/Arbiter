@@ -191,12 +191,18 @@ nicht — Regel bleibt unverändert gegenüber dem Bestand).
 |---|---|---|
 | spielweit (12 GOs, `before_battle`) | Liste im ArmySetup, vor „Start Game" | Vollform |
 | phasenweit/proaktiv (~22) | zentrale Stratagems-Liste (Spielerseite) | Vollform |
-| bei_ereignis (~45) | zentrale Liste (ruhend) **+** Inline-Anker am auslösenden Schritt | Voll + Kompakt |
+| bei_ereignis (~45) | ruhend: zentrale Liste; bei aktivem Auslöser: **nur** Inline-Anker | Voll bzw. Kompakt |
 | vor_wurf / nach_wurf (11) | Inline-Anker direkt an der Wurf-Eingabe | Kompakt |
 
 Die zentrale Liste ist der **Planungs-Überblick** („was habe ich diese Phase?"), der
 Inline-Anker die **Erinnerung am Ort des Geschehens** — beide rendern dieselbe Karte aus
-derselben Buchhaltung (`spend_stratagem`-Pipeline), nichts wird doppelt gebucht. Damit ist
+derselben Buchhaltung (`spend_stratagem`-Pipeline), nichts wird doppelt gebucht.
+
+**Sichtbarkeits-Invariante (Stakeholder-Entscheid S133):** Eine GO-Karte ist zu jedem
+Zeitpunkt genau **einmal** sichtbar — entweder inline im Einheiten-/Wurf-Kontext **oder**
+in der zentralen Liste, nie an beiden Orten zugleich; auch nie mehrfach (z. B. pro Unit),
+wenn ein Anker genügt. Wird der Inline-Anker aktiv, verschwindet die Karte aus der
+zentralen Liste (und umgekehrt). Damit ist
 auch der `before_battle`-Sichtbarkeitsfix (13 GOs matchen `PHASES` heute nie) konzeptionell
 gelöst: eigener Ort statt Sonderphase. Achse (b) und die vollständige 95-GO-Tabelle:
 [`../reference/go_klassifikation.md`](../reference/go_klassifikation.md).
@@ -229,10 +235,14 @@ Roadmap-Pakete, s. `../goals/backlog.md` §2).
 
 - **Sprache:** durchgehend Englisch (Ist-Befund: `moralePhase.py` komplett Deutsch,
   Subgruppen-Selector gemischt → Bereinigung als Roadmap-Paket, s. §6.6).
-- **Aktions-Vokabular — eine Familie statt vier:** `Use (N CP)` · `↺ Undo (+N CP)` ·
+- **Aktions-Vokabular — eine Familie statt vier:** `Use` · `↺ Undo` ·
   `Confirm ⟨Aktion⟩` / `Cancel` · Toggle-Auswahl mit `✓`-Präfix (wie Heroische
-  Intervention). „Reset", „Undo deny", „Rückgängig" u. Ä. entfallen zugunsten dieser
-  Familie.
+  Intervention). CP-Kosten stehen bereits im Karten-Header (§6.1) — der Button
+  wiederholt sie nicht (S133-D Befund 1: diese Zeile hatte zuvor `Use (N CP)` /
+  `↺ Undo (+N CP)` verlangt, ein spec-interner Widerspruch zu den §6.1-Mockups,
+  die durchgehend das nackte `[Use]` zeigen — Stakeholder-Entscheid löst ihn
+  zugunsten §6.1). „Reset", „Undo deny", „Rückgängig" u. Ä. entfallen zugunsten
+  dieser Familie.
 - **Eine** CP-Anzeige (GameHeader) — keine zweite Doppel-Caption auf der GO-Karte oder im
   Tab.
 - **Ein** Stepper-Baustein (`wound_adjustment_buttons` bleibt kanonisch; der Zweitbau in

@@ -28,12 +28,40 @@ from gameObjects.loader import (
     load_round_choice_abilities,
     load_round_choice_label,
 )
+from gameObjects.unit import Unit
 from uiLayout._common import PHASE_RULES, lookup
 from uiLayout.badges import chip
 
 # ---------------------------------------------------------------------------
 # Setup phase rendering
 # ---------------------------------------------------------------------------
+
+
+def _datasheet_stat_row(unit: Unit) -> list[tuple[str, str]]:
+    """Ordered (label, value) pairs for the datasheet stat row.
+
+    Follows the 9E datasheet characteristic order M/WS/BS/S/T/W/A/Ld/Sv
+    (docs/work/wahapedia_core_rules/core_rules.txt, "4. Profiles"), with the
+    app's own ++ (invulnerable save) and OC (Objective Control) columns
+    appended at the end.
+
+    ``unit.move`` already carries its trailing inch mark from the YAML data
+    (e.g. ``'6"'``) — it must be used as-is, never re-suffixed with another
+    ``"``, or the value renders doubled (e.g. ``6""``).
+    """
+    return [
+        ("M", str(unit.move)),
+        ("WS", str(unit.ws)),
+        ("BS", str(unit.bs)),
+        ("S", str(unit.strength)),
+        ("T", str(unit.toughness)),
+        ("W", str(unit.wounds)),
+        ("A", str(unit.attacks) if unit.attacks is not None else "—"),
+        ("Ld", str(unit.leadership) if unit.leadership is not None else "—"),
+        ("Sv", f"{unit.save}+"),
+        ("++", f"{unit.invuln_save}+" if unit.invuln_save else "—"),
+        ("OC", str(unit.oc)),
+    ]
 
 
 def _display_unit_datasheet(faction: str, uid: str) -> None:
@@ -49,20 +77,9 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
 
     st.divider()
 
-    stat_cols = st.columns(7)
-    for col, lbl, val in zip(
-        stat_cols,
-        ["M", "T", "Sv", "W", "++", "Ld", "OC"],
-        [
-            f'{unit.move}"',
-            unit.toughness,
-            f"{unit.save}+",
-            unit.wounds,
-            f"{unit.invuln_save}+" if unit.invuln_save else "—",
-            unit.leadership,
-            unit.oc,
-        ],
-    ):
+    stats = _datasheet_stat_row(unit)
+    stat_cols = st.columns(len(stats))
+    for col, (lbl, val) in zip(stat_cols, stats):
         col.metric(lbl, val)
 
     st.divider()

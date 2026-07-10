@@ -3243,11 +3243,11 @@
   "19cb3956-bcd8-41eb-9296-3876fcd52e0e": {
     "started_at": "2026-07-09T18:34:49.407Z",
     "task": "start session",
-    "peak_context": 161577,
-    "subagent_share": 24.62709189525444,
+    "peak_context": 173425,
+    "subagent_share": 37.54914404068481,
     "by_tier": {
-      "Sonnet": 2209728,
-      "Haiku": 1377022
+      "Sonnet": 4981411,
+      "Haiku": 3051088
     },
     "subagents": [
       {
@@ -3270,6 +3270,90 @@
         "tier": "Sonnet",
         "peak_context": 60626,
         "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "K4-Relaunch: Alt.-Fire-Erklärtext",
+        "tier": "Haiku",
+        "peak_context": 45958,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "K1-Relaunch: GO-Karte Anatomie-Fix",
+        "tier": "Sonnet",
+        "peak_context": 78532,
+        "started_at": "2026-07-09T18:34:49.407Z"
+      }
+    ]
+  },
+  "86c3e13b-c99c-4bf9-9ca6-5f2e5df5263b": {
+    "started_at": "2026-07-09T23:56:21.580Z",
+    "task": "start session, bitte App starten",
+    "peak_context": 160284,
+    "subagent_share": 87.84396463476267,
+    "by_tier": {
+      "Opus": 1779577,
+      "Sonnet": 87278608,
+      "Fable": 13668532,
+      "Haiku": 3035266
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S133 DoD-Review (Reviewer)",
+        "tier": "Opus",
+        "peak_context": 59666,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S133-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 109768,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1: K1/K4-Handoffs konsumieren",
+        "tier": "Sonnet",
+        "peak_context": 57310,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T5: K2 Bewegungsphasen-Umbau",
+        "tier": "Sonnet",
+        "peak_context": 187507,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3: Profilkarte Setup-Fixes",
+        "tier": "Sonnet",
+        "peak_context": 71847,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T6: Reaktiv-Box auf GO-Karte",
+        "tier": "Sonnet",
+        "peak_context": 221206,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4: S133-D Desperate-Breakout-Fixes",
+        "tier": "Sonnet",
+        "peak_context": 218257,
+        "started_at": "2026-07-09T23:56:21.580Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2: K3 Stratagem-Conditions Fix",
+        "tier": "Haiku",
+        "peak_context": 79016,
+        "started_at": "2026-07-09T23:56:21.580Z"
       }
     ]
   }

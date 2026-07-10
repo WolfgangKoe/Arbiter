@@ -703,16 +703,6 @@ def test_does_not_flag_non_transport_unit() -> None:
 # ---------------------------------------------------------------------------
 
 
-class _FakeCtx:
-    """No-op context manager stand-in for st.container()/st.expander()/columns()."""
-
-    def __enter__(self):  # type: ignore[no-untyped-def]
-        return self
-
-    def __exit__(self, *exc):  # type: ignore[no-untyped-def]
-        return False
-
-
 def _reactive_box_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
     base = dict(
         first_player="Necrons",
@@ -724,42 +714,33 @@ def _reactive_box_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
         used_stratagem_ids={},
         used_stratagem_battle_ids={},
         active_modifiers=[],
-        reactive_declined=set(),
     )
     base.update(extra)
     return _SS(**base)
 
 
-def _install_reactive_box_widgets(monkeypatch, session, clicked_key: str | None = None):  # type: ignore[no-untyped-def]
-    """Patch the shared streamlit mock's widget surface for one render call.
-
-    `common.st`, `game_state.st`, and `unit_mutations.st` are all the SAME
-    MagicMock object (all three modules did `import streamlit as st` against
-    the identical `sys.modules["streamlit"]` stand-in) — patching attributes
-    on it (via monkeypatch, auto-restored after the test) makes `spend_stratagem`
-    → `adjust_cp` see the same session as `render_reactive_stratagem_box` itself,
-    instead of a stale `session_state` left over from an earlier test.
+def _install_reactive_box_session(monkeypatch, session):  # type: ignore[no-untyped-def]
+    """Point common/game_state/unit_mutations at the SAME session_state (see
+    module docstring on why all three must share one object) and spy on
+    `render_go_card` — the same pattern test_game_protocoll.py uses for the
+    central Stratagems list (S133 Task 6: the reactive box now builds on the
+    identical GO-card infrastructure, so its own Streamlit wiring — button/
+    container/accordion — is manually-verified render code, not re-mocked
+    widget-by-widget per call site).
     """
-    markdown_calls: list[str] = []
-    rerun_calls: list[int] = []
     monkeypatch.setattr(common.st, "session_state", session)
     monkeypatch.setattr(_gs.st, "session_state", session)
     monkeypatch.setattr(_um.st, "session_state", session)
-    monkeypatch.setattr(common.st, "markdown", lambda text, **kw: markdown_calls.append(text))
-    monkeypatch.setattr(common.st, "caption", lambda text, **kw: None)
-    monkeypatch.setattr(common.st, "container", lambda **kw: _FakeCtx())
-    monkeypatch.setattr(common.st, "expander", lambda *a, **kw: _FakeCtx())
-    monkeypatch.setattr(common.st, "columns", lambda n: tuple(_FakeCtx() for _ in range(n)))
-    monkeypatch.setattr(common.st, "button", lambda label, key=None, **kw: key == clicked_key)
-    monkeypatch.setattr(common.st, "rerun", lambda: rerun_calls.append(1))
-    return markdown_calls, rerun_calls
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    return captured
 
 
 def test_fire_overwatch_box_shown_when_window_open_for_defender(monkeypatch) -> None:
     """Real shared-data end-to-end check: Fire Overwatch (player=inactive) surfaces
     in the target's own column while the Charge reactive window is open."""
     session = _reactive_box_session()
-    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+    captured = _install_reactive_box_session(monkeypatch, session)
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -769,14 +750,19 @@ def test_fire_overwatch_box_shown_when_window_open_for_defender(monkeypatch) -> 
         context_caption="Warriors were declared a charge target.",
     )
 
-    combined = "\n".join(markdown_calls)
-    assert "Fire Overwatch" in combined
+    assert any(c["name"] == "Fire Overwatch" for c in captured)
 
 
 def test_fire_overwatch_box_hidden_for_active_player_column(monkeypatch) -> None:
-    """player=inactive: the charging (active) player's own column must not see it."""
+    """player=inactive: the charging (active) player's own column must not see it.
+
+    Other (phase="charge", event="on_declaration") reactive stratagems this
+    faction DOES hold as the active player (e.g. Necrons' own Efficient
+    Disintegration) legitimately still render here — only Fire Overwatch
+    itself must be absent.
+    """
     session = _reactive_box_session(active="Necrons")  # Necrons is now the charger
-    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+    captured = _install_reactive_box_session(monkeypatch, session)
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -786,16 +772,14 @@ def test_fire_overwatch_box_hidden_for_active_player_column(monkeypatch) -> None
         context_caption="irrelevant",
     )
 
-    combined = "\n".join(markdown_calls)
-    assert "Fire Overwatch" not in combined
+    assert all(c["name"] != "Fire Overwatch" for c in captured)
 
 
-def test_use_button_spends_cp_marks_used_and_reruns(monkeypatch) -> None:
+def test_use_action_spends_cp_and_marks_used(monkeypatch) -> None:
+    """The GO card's on_use callback routes through the canonical spend_stratagem
+    path — same CP/usage bookkeeping the central list and inline offer share."""
     session = _reactive_box_session()
-    use_key = (
-        "reactive_use_Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
-    )
-    _, rerun_calls = _install_reactive_box_widgets(monkeypatch, session, clicked_key=use_key)
+    captured = _install_reactive_box_session(monkeypatch, session)
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -804,43 +788,38 @@ def test_use_button_spends_cp_marks_used_and_reruns(monkeypatch) -> None:
         decline_key="target-uid-1",
         context_caption="irrelevant",
     )
+    captured[0]["on_use"]()
 
     assert session["cp"]["Necrons"] == 4  # 5 - 1 CP
     assert "wh40k_9e.shared.stratagem.fire_overwatch" in session["used_stratagem_ids"]["Necrons"]
-    assert rerun_calls == [1]
 
 
-def test_pass_button_declines_without_spending_cp(monkeypatch) -> None:
-    session = _reactive_box_session()
-    pass_key = (
-        "reactive_pass_Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
-    )
-    _, rerun_calls = _install_reactive_box_widgets(monkeypatch, session, clicked_key=pass_key)
-
-    common.render_reactive_stratagem_box(
-        "Necrons",
-        phase="charge",
-        event="on_declaration",
-        decline_key="target-uid-1",
-        context_caption="irrelevant",
-    )
-
-    assert session["cp"]["Necrons"] == 5  # untouched
-    assert (
-        "Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
-        in session["reactive_declined"]
-    )
-    assert rerun_calls == [1]
-
-
-def test_declined_occurrence_does_not_reappear(monkeypatch) -> None:
-    """A previously-passed occurrence (same decline_key) stays suppressed."""
+def test_already_used_this_phase_shows_locked_card(monkeypatch) -> None:
+    """No Pass button (design_system.md §6.1: "passen = [Use] nicht drücken") —
+    this migration removes the old Pass-button/decline-suppression mechanic.
+    The CP-safety guarantee it protected (never spendable twice in one phase)
+    now lives in the state mapping instead: a stratagem already used this
+    phase renders "locked", not "ready", for every later occurrence."""
     session = _reactive_box_session(
-        reactive_declined={
-            "Necrons:on_declaration:wh40k_9e.shared.stratagem.fire_overwatch:target-uid-1"
-        }
+        used_stratagem_ids={"Necrons": {"wh40k_9e.shared.stratagem.fire_overwatch"}}
     )
-    markdown_calls, _ = _install_reactive_box_widgets(monkeypatch, session)
+    captured = _install_reactive_box_session(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-2",
+        context_caption="irrelevant",
+    )
+
+    assert captured[0]["state"] == "locked"
+    assert captured[0]["locked_reason"] == "used"
+
+
+def test_cp_insufficient_shows_locked_card_with_cp_reason(monkeypatch) -> None:
+    session = _reactive_box_session(cp={"Necrons": 0})
+    captured = _install_reactive_box_session(monkeypatch, session)
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -850,8 +829,32 @@ def test_declined_occurrence_does_not_reappear(monkeypatch) -> None:
         context_caption="irrelevant",
     )
 
-    combined = "\n".join(markdown_calls)
-    assert "Fire Overwatch" not in combined
+    assert captured[0]["state"] == "locked"
+    assert captured[0]["locked_reason"] == "CP insufficient"
+
+
+def test_use_action_invokes_on_spent_and_on_resolved(monkeypatch) -> None:
+    """The two hooks the removed Pass button used to also trigger on decline
+    now fire on Use only (render_reactive_stratagem_box docstring) — Use is
+    the only action left that can close the caller's pending-window marker."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+    spent_calls: list[str] = []
+    resolved_calls: list[int] = []
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-1",
+        context_caption="irrelevant",
+        on_spent=lambda strat: spent_calls.append(strat.id),
+        on_resolved=lambda: resolved_calls.append(1),
+    )
+    captured[0]["on_use"]()
+
+    assert spent_calls == ["wh40k_9e.shared.stratagem.fire_overwatch"]
+    assert resolved_calls == [1]
 
 
 # ---------------------------------------------------------------------------

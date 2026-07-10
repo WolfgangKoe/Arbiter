@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 import gameMechanic.game_log as gl  # noqa: E402
 import gameMechanic.game_state as gs  # noqa: E402
 import uiLayout.gameProtocoll as gp  # noqa: E402
+from gameObjects.ability import Effect  # noqa: E402
 from gameObjects.stratagem import Stratagem  # noqa: E402
 
 
@@ -155,6 +156,61 @@ def test_go_state_and_reason_cp_insufficient_maps_to_locked_with_cp_reason() -> 
 
 
 # ---------------------------------------------------------------------------
+# _effect_gate_met() — S133-D Befund 4: per-unit-state gate for GOs whose
+# effect requires "not yet moved this phase" + "in Engagement Range"
+# (rules_appendix.txt 2618-2625, Desperate Breakout). Pure, no Streamlit.
+# ---------------------------------------------------------------------------
+
+
+def _make_fall_back_stratagem() -> Stratagem:
+    return _make_stratagem(id_="desperate_breakout", name_en="Desperate Breakout", cp_cost=2)
+
+
+def _with_fall_back_effect(strat: Stratagem) -> Stratagem:
+    from dataclasses import replace
+
+    return replace(strat, effect=Effect(type="move", handler="fall_back_through_models"))
+
+
+def test_effect_gate_met_true_when_stratagem_has_no_effect() -> None:
+    strat = _make_stratagem()
+    assert gp._effect_gate_met(strat, None) == (True, None)
+
+
+def test_effect_gate_met_true_for_unrelated_effect_shape() -> None:
+    from dataclasses import replace
+
+    strat = replace(_make_stratagem(), effect=Effect(type="auto_pass_morale"))
+    assert gp._effect_gate_met(strat, {"movement_chosen": True, "in_melee": False}) == (
+        True,
+        None,
+    )
+
+
+def test_effect_gate_met_false_when_no_unit_selected() -> None:
+    strat = _with_fall_back_effect(_make_fall_back_stratagem())
+    assert gp._effect_gate_met(strat, None) == (False, "select an eligible unit")
+
+
+def test_effect_gate_met_false_when_unit_already_moved_this_phase() -> None:
+    strat = _with_fall_back_effect(_make_fall_back_stratagem())
+    unit_state = {"movement_chosen": True, "in_melee": True}
+    assert gp._effect_gate_met(strat, unit_state) == (False, "unit already moved this phase")
+
+
+def test_effect_gate_met_false_when_unit_not_in_engagement_range() -> None:
+    strat = _with_fall_back_effect(_make_fall_back_stratagem())
+    unit_state = {"movement_chosen": False, "in_melee": False}
+    assert gp._effect_gate_met(strat, unit_state) == (False, "unit not in Engagement Range")
+
+
+def test_effect_gate_met_true_when_not_moved_and_in_engagement_range() -> None:
+    strat = _with_fall_back_effect(_make_fall_back_stratagem())
+    unit_state = {"movement_chosen": False, "in_melee": True}
+    assert gp._effect_gate_met(strat, unit_state) == (True, None)
+
+
+# ---------------------------------------------------------------------------
 # _render_stratagem_column() — wiring: render_go_card gets the mapped state,
 # Use/Undo route through the canonical spend_stratagem/undo_stratagem path
 # ---------------------------------------------------------------------------
@@ -188,6 +244,81 @@ def test_render_stratagem_column_maps_visibility_to_go_card_state(monkeypatch) -
     assert by_name["Ready GO"]["locked_reason"] is None
     assert by_name["Used GO"]["state"] == "used"
     assert by_name["Used GO"]["locked_reason"] is None
+
+
+def test_render_stratagem_column_locks_gated_stratagem_for_ineligible_unit(monkeypatch) -> None:
+    """S133-D Befund 4: a stratagem gated on unit state (not yet moved + in
+    Engagement Range) must render "locked" with the gate reason when the
+    selected unit fails the gate — even though CP/phase/conditions alone would
+    otherwise make it "ready". Befund 3: the card must also show which unit
+    it is bound to."""
+    from dataclasses import replace
+
+    strat = replace(
+        _make_stratagem(id_="db", name_en="Desperate Breakout", cp_cost=2),
+        effect=Effect(type="move", handler="fall_back_through_models"),
+    )
+    unit = SimpleNamespace(id="boyz", name_en="Boyz Mob")
+    session = FakeSessionState(
+        cp={"Orks": 2},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=("Orks", "boyz"),
+        p1_units={"boyz": {"movement_chosen": True, "in_melee": True}},
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "orks")
+    monkeypatch.setattr(gp, "units_list_for", lambda player: [unit])
+    monkeypatch.setattr(gp, "units_key_for", lambda player: "p1_units")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Orks", True)
+
+    card = captured[0]
+    assert card["state"] == "locked"
+    assert card["locked_reason"] == "unit already moved this phase"
+    assert card["target_name"] == "Boyz Mob"
+
+
+def test_render_stratagem_column_ready_for_gated_stratagem_when_unit_eligible(
+    monkeypatch,
+) -> None:
+    """Counterpart: the same gated stratagem is "ready" once the selected unit
+    has not yet moved this phase and is in Engagement Range."""
+    from dataclasses import replace
+
+    strat = replace(
+        _make_stratagem(id_="db", name_en="Desperate Breakout", cp_cost=2),
+        effect=Effect(type="move", handler="fall_back_through_models"),
+    )
+    unit = SimpleNamespace(id="boyz", name_en="Boyz Mob")
+    session = FakeSessionState(
+        cp={"Orks": 2},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=("Orks", "boyz"),
+        p1_units={"boyz": {"movement_chosen": False, "in_melee": True}},
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "orks")
+    monkeypatch.setattr(gp, "units_list_for", lambda player: [unit])
+    monkeypatch.setattr(gp, "units_key_for", lambda player: "p1_units")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Orks", True)
+
+    card = captured[0]
+    assert card["state"] == "ready"
+    assert card["locked_reason"] is None
+    assert card["target_name"] == "Boyz Mob"
 
 
 def test_render_stratagem_column_use_action_routes_through_spend_stratagem(

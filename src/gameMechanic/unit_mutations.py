@@ -473,7 +473,45 @@ def set_movement_status(uid: str, faction: str, status: str) -> None:
     state["movement_choice"] = status
     state["movement_chosen"] = True
     if status == "retreated":
+        # Stash the engagements leave_melee() is about to clear so a later
+        # Reset ("Stay Stationary" — S133 K2) can restore them; see
+        # reset_movement_to_stationary().
+        flags["pre_retreat_melee_with"] = [list(p) for p in state.get("melee_with", [])]
         leave_melee(uid, faction)
+
+
+def reset_movement_to_stationary(uid: str, faction: str) -> None:
+    """Undo a Move/Advance/Retreat declaration back to Stationary.
+
+    Backs the movementPhase "Stay Stationary" Reset button (S133 K2
+    decision item 3): the button replaces whichever Move/Advance/Retreat
+    button fired, it is never a 4th initial movement choice, and it always
+    lands on "stationary" — no Retreated→Move/Advance path opens through it,
+    reusing set_movement_status for the actual state change exactly as the
+    pre-refactor "Stay Stationary" button already did.
+
+    A prior Retreat also stashed the melee engagements leave_melee() cleared
+    (set_movement_status above); those are restored here first, so the
+    unit's pre-Retreat "in melee" dependency (Move/Advance disabled, only
+    Retreat offered) reappears exactly as it was before Retreat was chosen —
+    for a non-Retreat reset (Moved/Advanced), there is no stash and this is a
+    no-op beyond the plain stationary transition.
+    """
+    key = units_key_for(faction)
+    state = st.session_state[key][uid]
+    stash = state["turn_flags"].pop("pre_retreat_melee_with", None)
+    if stash:
+        for enemy_faction, enemy_uid in stash:
+            enemy_state = st.session_state[units_key_for(enemy_faction)].get(enemy_uid)
+            if enemy_state is None:
+                continue
+            pair = [faction, uid]
+            if pair not in enemy_state["melee_with"]:
+                enemy_state["melee_with"].append(pair)
+            enemy_state["in_melee"] = True
+        state["melee_with"] = [list(p) for p in stash]
+        state["in_melee"] = True
+    set_movement_status(uid, faction, "stationary")
 
 
 def set_in_melee(uid: str, faction: str, value: bool) -> None:

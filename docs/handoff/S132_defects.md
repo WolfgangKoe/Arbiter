@@ -98,6 +98,9 @@ sobald Wortlaut aus Regelwerk verifiziert. Aufwand: **XS**, aber Regelrecherche 
    sichtbar sein (auch VOR der Advance/Charge-Entscheidung, als Vorschau ohne Trigger-Kontext)
    oder nur „bleibt stehen mit Undo, nachdem die zugehörige Aktion erfolgt ist" (aktuelles
    Trigger-Fenster, nur Undo ergänzt)? Das ändert Scope/Aufwand von Befund 2 spürbar.
+
+   Antwort: Ja, soll er. 
 2. **Befund 1 — Options-Wahl:** Option A (echte Spalten-Lösung, empfohlen) vs. Option B
    (Zwischenschritt, nur Dopplung weg) — oder direkt Paket 3/4-Rahmen abwarten und Befund 1 dort
    mit erledigen?
+   Antwort: Mir scheint eine echte Spaltenlösung die beste Wahl zu sein. In der Profildarstellung sind immer noch ein paar Fehler drin. In der 9. Edition gibt es meines Wissens kein "++" und kein "OC" im Profil. Das wird anders geregelt.

@@ -1,13 +1,23 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 01:43 CEST
+Stand: 2026-07-10 13:31 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
+----------------- ---------------------- -------------- ------------
+07-10 01:56 86c3  ████████████ 160k ⛔    █████░  88%    ▚▚··········
+         SA_1·  █████░░░░░░░  60k ✅    S133 DoD-Review (Reviewer)
+         SA_2·  █████████░░░ 110k ✅    S133-Planungsentwurf erstellen
+         SA_3·  █████░░░░░░░  57k ✅    T1: K1/K4-Handoffs konsumieren
+         SA_4·  ████████████ 188k ⛔    T5: K2 Bewegungsphasen-Umbau
+         SA_5·  ██████░░░░░░  72k ✅    T3: Profilkarte Setup-Fixes
+         SA_6·  ████████████ 221k ⛔    T6: Reaktiv-Box auf GO-Karte
+         SA_7·  ████████████ 218k ⛔    T4: S133-D Desperate-Breakout-Fixes
+         SA_8·  ██████░░░░░░  79k ✅    T2: K3 Stratagem-Conditions Fix
 ----------------- ---------------------- -------------- ------------
 07-09 20:34 5769  ████████░░░░ 103k ✅    █████░  81%    ▚··········▒
          SA_1·  ███████████░ 131k ⚠️   Executor 1a: GO-Karten-Baustein
@@ -17,10 +27,12 @@ Session           Peak-Kontext           Subagent       Modell-Mix
          SA_5·  █████████░░░ 115k ✅    Executor 1b: Stratagems-Liste auf …
          SA_6·  █████░░░░░░░  65k ✅    Executor 2: Re-Roll-Angebot Advanc…
 ----------------- ---------------------- -------------- ------------
-07-09 20:34 19cb  ████████████ 162k ⛔    ██░░░░  25%    ·······▒▒▒▒▒
+07-09 20:34 19cb  ████████████ 173k ⛔    ██░░░░  38%    ·······▒▒▒▒▒
          SA_1·  █████░░░░░░░  66k ✅    S132-Defekte untersuchen (5 Befund…
          SA_2·  ████░░░░░░░░  51k ✅    K4: Alt.-Fire-Badge Erklärtext
          SA_3·  █████░░░░░░░  61k ✅    K1: GO-Karte echte Button-Anatomie
+         SA_4·  ████░░░░░░░░  46k ✅    K4-Relaunch: Alt.-Fire-Erklärtext
+         SA_5·  ██████░░░░░░  79k ✅    K1-Relaunch: GO-Karte Anatomie-Fix
 ----------------- ---------------------- -------------- ------------
 07-09 17:14 bd4b  ████████████ 173k ⛔    ████░░  62%    ▚···········
          SA_1·  ███░░░░░░░░░  41k ✅    DoD-Review Sessionstand S131
@@ -518,3 +530,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S130 (2026-07-09)** Alle 7 shared-Gefechtsoptionen integriert: reaktive Stratagem-UI (Plan 015 teilweise), Insane Bravery, Desperate Breakout, Command Re-Roll inline 3/9; Retro: Auftragsgroessen-Gate nach 403k-Vorfall
 - **S131 (2026-07-09)** GO-UI-Design-System entschieden (GO-Karte, 4 Zustände, 3 Orte, Vollrückgängig-Standard); Klassifikation 95 GOs + UI-Inventar 17 Muster als Referenz; Roadmap 6 Pakete S132-S134+; Scroll-Bug Setup->Spielstart gefixt (verifiziert)
 - **S132 (2026-07-10)** GO-UI Paket 1+2: go_card.py-Baustein + Stratagems-Liste auf GO-Karten, Re-Roll-Angebot Advance/Charge, Start-Game-Button, Doku-Nachzug §6.3; Stakeholder-Review NO-GO mit 5 Befunden (S132_defects.md), K1/K4 als Hintergrund-Agenten neu gestartet, K2-Design entschieden, K3 nach S133
+- **S133 (2026-07-10)** GO-Karten-Anatomie neu (Container, Use/Undo, Akkordeon in Karte), Desperate-Breakout-Gating, K2-Bewegungs-State-Modell + Re-Roll-Kompaktkarte, Reaktiv-Box→GO-Karte, K3-Conditions, Profilkarten-Fixes; mypy 75→63; §6.2-Sichtbarkeits-Invariante

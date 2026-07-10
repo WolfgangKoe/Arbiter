@@ -2,7 +2,10 @@
 
 go_card.py is pure composition — no Streamlit — so it is asserted directly at
 the HTML level, same seam as test_badges.py / dice_compose.py (INV-6). Covers
-all four states, full vs. compact form, keyword chips, and CP display.
+all four states, full vs. compact form, keyword chips, target-unit display,
+CP display, and the per-state container border style (S133-D Befund 2: the
+card's border is now a real Streamlit container the caller colours via a
+scoped ``st-key-`` CSS override, not an HTML ``<div>`` drawn by this module).
 """
 
 import sys
@@ -10,36 +13,81 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout.go_card import action_slot_text, go_card_html  # noqa: E402
+from uiLayout.go_card import (  # noqa: E402
+    action_slot_text,
+    go_card_container_style,
+    go_card_html,
+)
 
 # ---------------------------------------------------------------------------
-# action_slot_text()
+# action_slot_text() — S133-D Befund 1: plain "Use"/"↺ Undo", no CP echo
 # ---------------------------------------------------------------------------
 
 
 def test_action_slot_text_is_use_for_dormant() -> None:
-    assert action_slot_text("dormant", 1) == "Use (1 CP)"
+    assert action_slot_text("dormant") == "Use"
 
 
 def test_action_slot_text_is_use_for_ready() -> None:
-    assert action_slot_text("ready", 2) == "Use (2 CP)"
+    assert action_slot_text("ready") == "Use"
 
 
 def test_action_slot_text_is_use_for_locked() -> None:
-    assert action_slot_text("locked", 1) == "Use (1 CP)"
+    assert action_slot_text("locked") == "Use"
 
 
 def test_action_slot_text_is_undo_for_used() -> None:
-    assert action_slot_text("used", 1) == "↺ Undo (+1 CP)"
+    assert action_slot_text("used") == "↺ Undo"
 
 
-def test_action_slot_text_reflects_cp_cost() -> None:
-    assert action_slot_text("ready", 0) == "Use (0 CP)"
-    assert action_slot_text("used", 3) == "↺ Undo (+3 CP)"
+def test_action_slot_text_never_echoes_cp_cost() -> None:
+    # CP already stands in the card header — the button must never repeat it.
+    assert "CP" not in action_slot_text("ready")
+    assert "CP" not in action_slot_text("used")
 
 
 # ---------------------------------------------------------------------------
-# go_card_html() — name / CP display, all four states
+# go_card_container_style() — per-state border colour, scoped to the caller's
+# container key (S133-D Befund 2)
+# ---------------------------------------------------------------------------
+
+
+def test_go_card_container_style_dormant_is_dimmed_muted_border() -> None:
+    css = go_card_container_style("box_1", "dormant")
+    assert ".st-key-box_1" in css
+    assert "border-color:#6b5f44" in css
+    assert "opacity:0.55" in css
+
+
+def test_go_card_container_style_ready_is_accent_border_full_opacity() -> None:
+    css = go_card_container_style("box_1", "ready")
+    assert "border-color:#d4a017" in css
+    assert "opacity:1" in css
+
+
+def test_go_card_container_style_used_stays_accent_bordered() -> None:
+    css = go_card_container_style("box_1", "used")
+    assert "border-color:#d4a017" in css
+    assert "opacity:1" in css
+
+
+def test_go_card_container_style_locked_is_dimmed_muted_border() -> None:
+    css = go_card_container_style("box_1", "locked")
+    assert "border-color:#6b5f44" in css
+    assert "opacity:0.55" in css
+
+
+def test_go_card_container_style_sanitizes_key_like_streamlit_does() -> None:
+    # Streamlit turns a key into a class by replacing non [a-zA-Z0-9_-] chars
+    # with "-" — the selector must use the exact same transform, or the
+    # override silently never matches the real DOM node.
+    css = go_card_container_style("go_card_box_Orks_unit#1", "ready")
+    assert ".st-key-go_card_box_Orks_unit-1" in css
+    assert "#1" not in css.split("{")[0]
+
+
+# ---------------------------------------------------------------------------
+# go_card_html() — header content: name / CP / target / locked reason
 # ---------------------------------------------------------------------------
 
 
@@ -49,31 +97,12 @@ def test_go_card_shows_name_and_cp_cost() -> None:
     assert "1 CP" in html
 
 
-def test_go_card_dormant_is_dimmed_with_muted_border() -> None:
-    html = go_card_html("Command Re-Roll", 1, "dormant")
-    assert "border:1px solid #6b5f44" in html
-    assert "opacity:0.55" in html
-    assert "Use (1 CP)" in html
-
-
-def test_go_card_ready_is_highlighted_with_accent_border() -> None:
+def test_go_card_html_carries_no_border_or_opacity_styling() -> None:
+    # The border/opacity now live in go_card_container_style(), applied to the
+    # surrounding st.container — go_card_html is header content only.
     html = go_card_html("Fire Overwatch", 1, "ready")
-    assert "border:1px solid #d4a017" in html
-    assert "opacity:1" in html
-    assert "Use (1 CP)" in html
-
-
-def test_go_card_used_shows_undo_and_stays_accent_bordered() -> None:
-    html = go_card_html("Fire Overwatch", 1, "used")
-    assert "border:1px solid #d4a017" in html
-    assert "opacity:1" in html
-    assert "↺ Undo (+1 CP)" in html
-
-
-def test_go_card_locked_is_dimmed_with_muted_border() -> None:
-    html = go_card_html("Fractal Targeting", 1, "locked")
-    assert "border:1px solid #6b5f44" in html
-    assert "opacity:0.55" in html
+    assert "border:1px solid" not in html
+    assert "opacity:" not in html
 
 
 def test_go_card_locked_appends_reason_suffix_to_header() -> None:
@@ -90,6 +119,16 @@ def test_go_card_reason_only_applies_to_locked_state() -> None:
     # locked_reason is a no-op outside "locked" — other states never show it.
     html = go_card_html("Fire Overwatch", 1, "ready", locked_reason="should not appear")
     assert "should not appear" not in html
+
+
+def test_go_card_shows_target_unit_name_when_given() -> None:
+    html = go_card_html("Desperate Breakout", 2, "used", target_name="Boyz Mob")
+    assert "Boyz Mob" in html
+
+
+def test_go_card_omits_target_span_when_not_given() -> None:
+    html = go_card_html("Fire Overwatch", 1, "ready")
+    assert "→" not in html
 
 
 # ---------------------------------------------------------------------------
@@ -112,13 +151,6 @@ def test_go_card_compact_form_omits_keyword_chips_even_when_given() -> None:
     html = go_card_html("Command Re-Roll", 1, "ready", keywords=["CORE"], compact=True)
     assert ">CORE<" not in html
     assert "margin-top:4px" not in html
-
-
-def test_go_card_compact_form_uses_tighter_padding() -> None:
-    full = go_card_html("Fire Overwatch", 1, "ready")
-    compact = go_card_html("Command Re-Roll", 1, "ready", compact=True)
-    assert "padding:6px 8px" in full
-    assert "padding:3px 6px" in compact
 
 
 def test_go_card_compact_form_still_shows_name_and_cp() -> None:

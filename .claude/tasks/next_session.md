@@ -9,34 +9,57 @@
 - **Ende:** Review (Reviewer-SA) → Retro → Maßnahmen-Entscheid (Stakeholder) → Abschluss: diese Datei aktualisieren (ZUERST lesen) + ggf. Ziel-Checkboxen.
 - **Doku-Gate:** Decke 120 Zeilen (Test rot darüber); beim Reißen tief auf ≤ 70 kürzen (Erledigtes → `backlog.md`/`session_archive.md`).
 - **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten = stehende Freigabe (ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
-- **Auftragsgrößen-Gate (S130):** kein Executor-Brief > Effort M; Test-Budget (EINE Vollsuite, im selben Tool-Call abwarten, `run_in_background` für pytest VERBOTEN — S131 erneut verletzt) + Selbst-Stopp in jedem Brief → `agent_scopes.md`.
+- **Auftragsgrößen-Gate (S130):** kein Executor-Brief > Effort M; Test-Budget (EINE Vollsuite, im selben Tool-Call abwarten, `run_in_background` für pytest VERBOTEN) + Selbst-Stopp in jedem Brief → `agent_scopes.md`.
 - **Handoff-Marker-Pflicht (S131):** jeder Brief, der nach `docs/handoff/` schreibt, nennt den STATUS-Marker für Zeile 1.
 - **Grundannahmen-Block (S131):** Konzept-Dokumente starten mit bestätigungspflichtigen Grundannahmen (App würfelt NICHT — Tischwürfe!) → `agent_scopes.md`.
 - **Executor-Klausel:** Dateiänderungen nur über Edit/Write, Bash nur lesend/git/pytest (S123); Selbstprüfliste enthält `python tools/mypy_gate.py` (S128).
-- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0.
+- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (S133: 75→63).
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py` (Port 8501; **venv:** `source .venv/bin/activate`). Branch `feature/016` (Arbeit), `main` (nur PR). App bei Session-Start nur per curl prüfen, bei Bedarf selbst neu starten.
 
 ---
 
-## Aktueller Stand (nach S132, 2026-07-10)
+## Aktueller Stand (nach S133, 2026-07-10)
 
-S132 (Commit `0a94adb`): GO-UI Paket 1+2 — `go_card.py` (4 Zustände, Akkordeon-Fix) + `render_go_card`/`undo_stratagem` in `_common.py`; Stratagems-Liste auf GO-Karten; Re-Roll-Angebot Advance/Charge; Start-Game-Button unter Erstspieler-Auswahl; Doku-Nachzug §6.3. Vollsuite 1608 passed, Cov 99,15 %, mypy 75 = Baseline. **Stakeholder-Review = NO-GO, 5 Befunde** → `docs/handoff/S132_defects.md`. K1 (Karten-Anatomie, Fix-Plan in `S132_K1_result.md`) + K4 (Alt.-Fire-Text) beim Abschluss als Hintergrund-Agenten neu gestartet (erster Lauf starb an Session-Limit/Freigabe-Gate) — Ergebnisse in `docs/handoff/S132_K*_result.md`, **ungeprüft**.
+S133 (6 Executor-Tasks, 2 Wellen): S132-K1/K4 konsumiert; K3-Conditions ✓; Profilkarte
+Setup (`6""`→`6"`, 9E-Reihenfolge) ✓; S133-D: GO-Karten-Anatomie neu (EIN
+`st.container(border=True)`, Button nur `Use`/`↺ Undo`, CP nur Header, Akkordeon IN der
+Karte), Desperate-Breakout-Gating (nicht bewegt + in ER, danach „retreated") + Zieleinheit
+im Header; K2: in melee ⇒ nur Retreat, „Stay Stationary" = Reset (stellt in-melee +
+Abhängigkeit wieder her), Reserven nach allen Feldbewegungen, Re-Roll als GO-Kompaktkarte;
+Paket 3a Reaktiv-Box→GO-Karte (Pass-Button entfällt). `design_system.md` §6.4→§6.1
+angeglichen + **NEU §6.2 Sichtbarkeits-Invariante** (GO-Karte genau 1× — inline ODER
+Liste). Vollsuite 1637 passed, Cov 99,11 %, mypy 75→63. Review: GO (`S133_review.md`).
 
-Frühere Sessions (S60–S131): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S132): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S133)
+### ▶ Nächster Schritt (S134)
 
-1. **K1/K4-Ergebnisse konsumieren:** Marker prüfen, EINE Vollsuite, manuelle UI-Prüfung (CP genau 1×, Button in Header-Zeile, Zustandsfarben, Alt.-Fire-Text), Handoffs löschen.
-2. **K3 starten (XS, beauftragt+freigegeben, noch nicht gelaufen):** `orks/stratagems.yaml` „Get Stuck In, Ladz!" `conditions: [BOYZ, BEAST SNAGGA]` + Regressionstest + Vollsuite (Datenänderung!).
-3. **K2 (S–M, Design ENTSCHIEDEN, noch unbeauftragt):** Re-Roll als GO-Kompaktkarte, **dauerhaft sichtbar im Einheiten-Kontext der Phase, auch vor der Entscheidung** + Undo; erfordert Bewegungsphasen-UI-Umbau. Stakeholder-State-Modell: Einheit anfangs „Stationary" → zeige Move/Advance/Command-Reroll; „in melee" → nur Retreat (kein Re-Roll); Reserve → kommt ins Spiel nachdem alle bewegt/vorgerückt; „Stay Stationary" nur als Reset-Button, ersetzt den gedrückten Moved/Advanced/Retreat-Button (Funktion existierte schon). **Planner: Regeln nachprüfen (Fall Back/Reserven) + notierte State-Änderungen sichten.**
-4. **Paket 3:** reaktive Stratagem-Box (`render_reactive_stratagem_box`, `_common.py:523`) auf GO-Karte + `before_battle`-Fix.
-5. **Beobachtung ④ (XS–S):** Profilkarte Setup — doppeltes `""` beim Bewegungswert, Profilwert-Reihenfolge (`Stakeholder_Beobachtungen.md` + Screenshots). Danach **Refinement Beobachtung ②** (Mockup mit Stakeholder).
+1. **UI-Befunde gegen die neue §6.2-Invariante (Stakeholder-Feedback, Prio):**
+   (a) Desperate Breakout erscheint doppelt (inline + zentrale Liste) — entweder/oder;
+   (b) Fire-Overwatch-Karte ohne Undo-Button; (c) Re-Roll-Karte 1× statt pro Unit.
+2. **Welle 3 aus S133 (verschoben, Briefs fertig in `S133_plan.md` Tasks 7+8):**
+   Task 7 K4-Dakka an die Attackenzuweisung (Badge im Hit-Block raus, Regel
+   `wahapedia_orks/faction_overview.txt:626`); Task 8 Paket 3b `before_battle` in
+   `PHASES` + ArmySetup-Liste. Vorher Datei-Overlap per `git diff --stat` prüfen.
+3. **Refinement mit Stakeholder:** profileCard als definierter Baustein (Beobachtung ④-Rest:
+   YAML→Datenkarte im Setup, tabellarische Waffenanzeige); danach Beobachtung ②
+   (Spielvorbereitungsscreen); neu: Beobachtung ① Scroll-Sprung bei Command Protocols.
+4. **Kleinkram/Schulden:** `reactive_declined` totes State (`game_state.py:510/576`)
+   bei nächster Berührung entfernen; Charge-Re-Roll noch Inline-Offer (Karte = neuer Scope);
+   `render_inline_command_reroll` hat noch 3 Call-Sites (Damage/Psychic/Deny, Paket 4).
 
-**Retro-Vorschläge S132 (Entscheid ausstehend):** ① Handoff-Konvention: Stakeholder legt Beobachtungen/Screenshots asynchron ab, beeinflusst Sessionplan NICHT, Verarbeitung delegierbar. ② DONE-Handoffs sofort konsumieren+löschen BEVOR der nächste Executor die Vollsuite startet (Hygiene-Gate riss). ③ Brief-Baustein: bei Harness-Auto-Backgrounding von pytest TaskOutput abwarten statt stehenzubleiben. ④ UI-Briefs: Selbstprüfpunkt „Anatomie-Abgleich gegen design_system, keine funktionslosen Attrappen". ⑤ Freigabe-Marker setzt NUR der Stakeholder (Koordinator hat in S132 einmal selbst getouct).
+**Retro S133 (entschieden):** NUR „§6.2-Sichtbarkeits-Invariante" angenommen (umgesetzt);
+bewusst abgelehnt: pytest-Backgrounding-Brief-Baustein, Ergebnisdatei-früh-Baustein.
+Beobachtung fürs Protokoll: 3 Executor-Stalls am pytest-Auto-Backgrounding (scharfe
+Klausel in T6 half); 2 Agenten-Abbrüche am API-Session-Limit (Wiederaufnahme via
+SendMessage funktionierte, nichts verloren).
 
-**Offen:** `_common.py` wächst weiter (Refactor-Notiz Backlog §4); S130-GO-Verifikation + Necron-Roster-Check nach UI-Umbau (Paket 7); Scroll-Render iframe→parent in manuelle Checkliste; 037 Docker-Smoke vor Merge; Deny-Caption-Prüfung blockiert; Direction-Entscheide → Backlog §5, vertagt bis Ziel7 Stufe B/C.
+**Offen (unverändert):** `_common.py` wächst weiter (Refactor-Notiz Backlog §4);
+S130-GO-Verifikation + Necron-Roster-Check nach UI-Umbau (Paket 7); Scroll-Render
+iframe→parent in manueller Checkliste; 037 Docker-Smoke vor Merge; Deny-Caption-Prüfung
+blockiert; Direction-Entscheide → Backlog §5, vertagt bis Ziel7 Stufe B/C.
 
 ---
 

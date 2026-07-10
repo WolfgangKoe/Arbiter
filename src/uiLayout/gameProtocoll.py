@@ -141,6 +141,41 @@ def _selected_unit_for(player: str):
     return None
 
 
+def _effect_gate_met(
+    strat: Stratagem, unit_state: dict | None  # type: ignore[type-arg]
+) -> tuple[bool, str | None]:
+    """Generic unit-state gate for GOs whose effect requires a specific movement state.
+
+    Dispatches on `effect.type`/`effect.handler` — the same shape-based dispatch
+    `uiLayout._common._apply_stratagem_effect` already uses — rather than a
+    stratagem id/name check (INV-4b: no faction- or GO-name string literals in
+    src/). `conditions` (keyword-based) is orthogonal and stays in
+    `_conditions_met`; this covers a requirement keywords cannot express: the
+    selected unit's own turn state.
+
+    Today the only effect shape this recognises is `type="move",
+    handler="fall_back_through_models"` (Desperate Breakout, S133-D Befund 4):
+    rules_appendix.txt 2618-2625 — "Select one unit from your army that has
+    not been selected to move this phase and which is in Engagement Range with
+    at least one enemy unit." `movement_chosen` is the same flag
+    `set_movement_status()` sets for every movement declaration; `in_melee` is
+    the same field every other "Engagement Range" check in this codebase reads
+    (see e.g. movementPhase.py's Retreat-only-in-melee gating). Any other
+    effect shape (or no effect) is always gate-met — those GOs have no
+    per-unit state requirement beyond `conditions`.
+    """
+    effect = strat.effect
+    if effect is None or effect.type != "move" or effect.handler != "fall_back_through_models":
+        return True, None
+    if unit_state is None:
+        return False, "select an eligible unit"
+    if unit_state.get("movement_chosen"):
+        return False, "unit already moved this phase"
+    if not unit_state.get("in_melee"):
+        return False, "unit not in Engagement Range"
+    return True, None
+
+
 def _selected_state_key_for(player: str) -> str | None:
     """Return the raw state key (uid) of the unit selected by `player`, else None.
 
@@ -156,6 +191,21 @@ def _selected_state_key_for(player: str) -> str | None:
     if sel_faction != player:
         return None
     return sel_state_key
+
+
+def _selected_unit_state_for(player: str) -> dict | None:  # type: ignore[type-arg]
+    """Return the raw unit_state dict for the unit selected by `player`, else None.
+
+    Companion to `_selected_state_key_for` — `_effect_gate_met` needs the state
+    dict itself (movement_chosen/in_melee), not just the key.
+    """
+    state_key = _selected_state_key_for(player)
+    if state_key is None:
+        return None
+    unit_state: dict | None = st.session_state.get(units_key_for(player), {}).get(  # type: ignore[type-arg]
+        state_key
+    )
+    return unit_state
 
 
 def _go_state_and_reason(
@@ -239,6 +289,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
         return
 
     unit_for_check = _selected_unit_for(player)
+    unit_state_for_check = _selected_unit_state_for(player)
 
     visible = []
     for s in stratagems:
@@ -264,6 +315,17 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             st.caption("**Core**" if is_core else f"**{player}**")
             in_core_section = is_core
         state, locked_reason = _go_state_and_reason(strat, vis, used_ids, used_battle_ids)
+        if state == "ready":
+            # Keyword conditions (_conditions_met) already passed above — this
+            # is the per-unit-state gate (S133-D Befund 4) keywords cannot
+            # express: only overrides an otherwise-ready card, never a card
+            # already "used"/"locked" for another reason.
+            gate_met, gate_reason = _effect_gate_met(strat, unit_state_for_check)
+            if not gate_met:
+                state, locked_reason = "locked", gate_reason
+        target_name = (
+            unit_for_check.name_en if strat.effect is not None and unit_for_check else None
+        )
         render_go_card(
             key=f"{player}_{strat.id}_{phase_idx}_{i}",
             name=strat.name_en,
@@ -272,6 +334,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             keywords=strat.conditions,
             rule_text=strat.rule_text,
             locked_reason=locked_reason,
+            target_name=target_name,
             on_use=_use_callback(strat, player),
             on_undo=_undo_callback(strat, player),
         )

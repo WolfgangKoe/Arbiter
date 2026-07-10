@@ -520,6 +520,19 @@ def test_load_stratagems_shared_ids_namespace() -> None:
     assert len(shared) == 7
 
 
+def test_load_ork_stratagems_get_stuck_in_ladz_has_conditions() -> None:
+    """Regression test: Get Stuck In, Ladz! must have conditions [BOYZ, BEAST SNAGGA].
+
+    The stratagem targets BOYZ or BEAST SNAGGA BOYZ units (Wahapedia_orks/stratagems.txt:285).
+    """
+    stratagems = load_stratagems("orks")
+    strat = next(
+        (s for s in stratagems if s.id == "wh40k_9e.orks.stratagem.get_stuck_in_ladz"), None
+    )
+    assert strat is not None, "Stratagem 'Get Stuck In, Ladz!' not found in loaded orks stratagems"
+    assert strat.conditions == ["BOYZ", "BEAST SNAGGA"]
+
+
 # ---------------------------------------------------------------------------
 # 6k: load_wargear_catalog, _apply_persistent_effect, _apply_wargear + wargear_ids
 # ---------------------------------------------------------------------------

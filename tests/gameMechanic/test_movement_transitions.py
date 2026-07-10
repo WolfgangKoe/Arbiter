@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.unit_mutations as _mut  # noqa: E402
 from gameMechanic.unit_mutations import (  # noqa: E402
+    reset_movement_to_stationary,
     set_movement_status,
 )
 
@@ -362,3 +363,175 @@ def test_teleport_fallback_texts_are_faction_neutral():
 
     assert "DYNASTY" not in mp._TELEPORT_PROMPT_FALLBACK
     assert "DYNASTY" not in mp._TELEPORT_SELECTOR_FALLBACK
+
+
+# ---------------------------------------------------------------------------
+# S133 K2 — "Stay Stationary" as a Reset button (reset_movement_to_stationary)
+# ---------------------------------------------------------------------------
+
+
+def test_reset_after_retreat_restores_stationary_and_melee_dependency():
+    """Retreat → Reset: unit is 'stationary' again AND the in-melee dependency
+    (melee_with + in_melee) reappears exactly as before Retreat was declared."""
+    s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
+
+    set_movement_status("necron_1", "Necrons", "retreated")
+    necron = s["p1_units"]["necron_1"]
+    assert necron["in_melee"] is False
+    assert necron["melee_with"] == []
+
+    reset_movement_to_stationary("necron_1", "Necrons")
+    necron = s["p1_units"]["necron_1"]
+    ork = s["p2_units"]["ork_1"]
+
+    assert necron["movement_choice"] == "stationary"
+    assert necron["turn_flags"]["retreated"] is False
+    assert necron["in_melee"] is True
+    assert necron["melee_with"] == [["Orks", "ork_1"]]
+    assert ork["in_melee"] is True
+    assert ork["melee_with"] == [["Necrons", "necron_1"]]
+    assert "pre_retreat_melee_with" not in necron["turn_flags"]
+
+
+def test_reset_after_retreat_never_reopens_move_or_advance():
+    """Reset always lands on 'stationary' — never a Retreated→Move/Advance path."""
+    s = _session_with_two_units(n_in_melee=True, o_in_melee=True)
+    set_movement_status("necron_1", "Necrons", "retreated")
+    reset_movement_to_stationary("necron_1", "Necrons")
+    state = s["p1_units"]["necron_1"]
+    # Back in melee → the UI gate blocks MOVED/ADVANCED again, same as any
+    # freshly in-melee unit — the pre-Retreat dependency is restored, not a
+    # new bypass.
+    assert _movement_blocked("moved", state)
+    assert _movement_blocked("advanced", state)
+    assert not _movement_blocked("retreated", state)
+
+
+def test_reset_after_moved_is_plain_stationary_no_melee_side_effects():
+    """Reset after a plain Move (never in melee) is a no-frills stationary reset."""
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
+    set_movement_status("u1", "Necrons", "moved")
+    reset_movement_to_stationary("u1", "Necrons")
+    state = s["p1_units"]["u1"]
+    assert state["movement_choice"] == "stationary"
+    assert state["in_melee"] is False
+    assert state["melee_with"] == []
+
+
+def test_reset_after_advanced_clears_advanced_flag():
+    """Reset after an Advance clears the advanced flag along with the choice."""
+    s = _make_session(p1_units={"u1": _unit()}, p2_units={})
+    set_movement_status("u1", "Necrons", "advanced")
+    reset_movement_to_stationary("u1", "Necrons")
+    state = s["p1_units"]["u1"]
+    assert state["movement_choice"] == "stationary"
+    assert state["turn_flags"]["advanced"] is False
+
+
+# ---------------------------------------------------------------------------
+# S133 K2 — Reinforcements gated behind "all field units resolved"
+# ---------------------------------------------------------------------------
+
+
+def test_all_field_units_resolved_false_when_a_unit_never_moved():
+    import gameMechanic.movementPhase as mp
+
+    unit_untouched = _unit()
+    unit_untouched.pop("movement_choice", None)
+    unit_untouched["movement_chosen"] = False
+    reserve = _unit()
+    reserve["in_reserve"] = True
+    s = _veil_session(p1_units={"u1": unit_untouched, "u2": reserve}, p2_units={})
+    assert mp._all_field_units_resolved("Necrons") is False
+    assert s  # keep reference alive for clarity
+
+
+def test_all_field_units_resolved_true_once_every_field_unit_chose():
+    import gameMechanic.movementPhase as mp
+
+    unit_a = _unit()
+    unit_a["movement_chosen"] = True
+    reserve = _unit()
+    reserve["in_reserve"] = True
+    _veil_session(p1_units={"u1": unit_a, "u2": reserve}, p2_units={})
+    assert mp._all_field_units_resolved("Necrons") is True
+
+
+def test_all_field_units_resolved_ignores_destroyed_units():
+    import gameMechanic.movementPhase as mp
+
+    destroyed = _unit()
+    destroyed["destroyed"] = True
+    destroyed["movement_chosen"] = False
+    _veil_session(p1_units={"u1": destroyed}, p2_units={})
+    assert mp._all_field_units_resolved("Necrons") is True
+
+
+# ---------------------------------------------------------------------------
+# S133 K2 item 1 — Advance re-roll GO-card state resolution (_advance_reroll_state)
+#
+# Pure decision function (no Streamlit) — direct unit tests, same spirit as
+# test_go_card.py's HTML-output tests for the state→style mapping.
+# ---------------------------------------------------------------------------
+
+
+def _reroll_strat():
+    from gameObjects.stratagem import Stratagem
+
+    return Stratagem(
+        id="wh40k_9e.shared.stratagem.command_re_roll",
+        name_en="Command Re-Roll",
+        cp_cost=1,
+        phase=["movement"],
+        stage="active",
+        player="both",
+        timing="phase_reactive",
+        event="after_roll",
+    )
+
+
+def test_advance_reroll_state_locked_when_in_melee():
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    state, reason = _advance_reroll_state(_reroll_strat(), True, "advanced", 3, set(), set())
+    assert state == "locked"
+    assert reason == "unit is in melee"
+
+
+def test_advance_reroll_state_locked_when_no_advance_roll_open():
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "none", 3, set(), set())
+    assert state == "locked"
+    assert reason == "no Advance roll open"
+
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "moved", 3, set(), set())
+    assert state == "locked"
+    assert reason == "no Advance roll open"
+
+
+def test_advance_reroll_state_ready_when_advanced_and_cp_available():
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "advanced", 3, set(), set())
+    assert state == "ready"
+    assert reason is None
+
+
+def test_advance_reroll_state_used_after_spend_while_window_open():
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    strat = _reroll_strat()
+    used_ids = {strat.id}
+    state, reason = _advance_reroll_state(strat, False, "advanced", 3, used_ids, set())
+    assert state == "used"
+    assert reason is None
+
+
+def test_advance_reroll_state_locked_cp_insufficient_when_not_used():
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    strat = _reroll_strat()
+    state, reason = _advance_reroll_state(strat, False, "advanced", 0, set(), set())
+    assert state == "locked"
+    assert reason == "CP insufficient"

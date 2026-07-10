@@ -400,12 +400,10 @@ def test_special_die_html_with_content() -> None:
     assert "Extra Hits: unmod. 6 = +2 Hits" in html
 
 
-def test_special_die_html_without_content() -> None:
-    """special_die_html without content renders label only (no 'label: ' prefix)."""
-    html = special_die_html("Alt. Fire")
-    assert "Alt. Fire" in html
-    # When content is empty, no 'Alt. Fire: ' pattern is produced.
-    assert "Alt. Fire: " not in html
+def test_special_die_html_alternating_fire_has_explanation() -> None:
+    """special_die_html with Alt. Fire content renders explanation."""
+    html = special_die_html("Alt. Fire", "First attacks if within half range")
+    assert "Alt. Fire: First attacks if within half range" in html
 
 
 def test_reroll_marker_row_places_glyph_in_correct_slot() -> None:

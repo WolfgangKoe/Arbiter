@@ -10,6 +10,7 @@ Handlers import from here — never from gameActionsArea — to avoid circular i
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any, cast
 
 import streamlit as st
 
@@ -54,8 +55,8 @@ from gameObjects.stratagem import (
     stratagem_usable_by_player,
     stratagem_visibility,
 )
-from gameObjects.unit import Unit
-from gameObjects.weapon import WeaponProfile
+from gameObjects.unit import ModelGroup, Unit
+from gameObjects.weapon import Weapon, WeaponProfile
 from uiLayout.badges import badge
 from uiLayout.dice_compose import (  # noqa: F401
     block_divider_html,
@@ -72,7 +73,12 @@ from uiLayout.dice_html import (  # noqa: F401
     _render_dice_save_block,
     _render_dice_wound_block,
 )
-from uiLayout.go_card import GoCardState, action_slot_text, go_card_html
+from uiLayout.go_card import (
+    GoCardState,
+    action_slot_text,
+    go_card_container_style,
+    go_card_html,
+)
 
 # ---------------------------------------------------------------------------
 # Phase description texts
@@ -341,8 +347,8 @@ def render_player_column(
     faction: str,
     state: dict,  # type: ignore[type-arg]
     *,
-    active_content: Callable[[str, str, Unit, dict, dict], None],
-    inactive_content: Callable[[str, str, Unit, dict], None] | None = None,
+    active_content: Callable[[str, str, Unit, dict, dict], None],  # type: ignore[type-arg]
+    inactive_content: Callable[[str, str, Unit, dict], None] | None = None,  # type: ignore[type-arg]
     no_target_caption: str = "—",
     inactive_override: Callable[[], None] | None = None,
     show_wound_buttons: bool = True,
@@ -520,6 +526,76 @@ def _apply_stratagem_effect(effect: Effect, faction: str, unit_key: str) -> None
         activate_desperate_breakout(unit_key, faction)
 
 
+def _reactive_go_state(
+    strat: Stratagem, vis: str, used_ids: set[str], used_battle_ids: set[str]
+) -> tuple[GoCardState, str | None]:
+    """Map `stratagem_visibility()`'s clickable/greyed to a GO-card state, for
+    reactive GO boxes only.
+
+    Mirrors gameProtocoll.py's ``_go_state_and_reason()`` / movementPhase.py's
+    ``_advance_reroll_state()`` shape (clickable → ready) but — unlike either —
+    never maps "greyed" to "used": a reactive box's render is entirely gated
+    by the CALLER's own pending-window marker (e.g. `pending_fall_back`),
+    which the Use action clears (see `_reactive_use_callback`) to take over
+    the removed Pass button's window-closing role (design_system.md §6.1: no
+    Pass control). Once that marker is gone the box never renders again this
+    phase, so a "used" state with Undo offered would never get a chance to
+    redisplay — the reactive box offered no Undo before this migration and,
+    for that structural reason, still doesn't; "greyed" becomes "locked"
+    instead, same as an unspendable central-list card.
+    """
+    if vis == "clickable":
+        return "ready", None
+    reason = "used" if (strat.id in used_ids or strat.id in used_battle_ids) else "CP insufficient"
+    return "locked", reason
+
+
+def _context_caption_renderer(caption: str) -> Callable[[], None]:
+    """Factory for a reactive GO card's `expanded_content` — shows the one-line
+    "why this card appeared right now" text (e.g. "Warriors were declared a
+    charge target") inside the card's own bordered container (S133-D Befund 2:
+    never a free-floating caption outside the card). A bare
+    ``lambda: st.caption(caption)`` fails mypy (``st.caption`` returns a
+    ``DeltaGenerator``, not ``None``) — this wraps it in a real function with
+    an explicit ``-> None`` body instead.
+    """
+
+    def _render() -> None:
+        st.caption(caption)
+
+    return _render
+
+
+def _reactive_use_callback(
+    strat: Stratagem,
+    faction: str,
+    unit_key_for_modifier: str | None,
+    on_spent: Callable[[Stratagem], None] | None,
+    on_resolved: Callable[[], None] | None,
+) -> Callable[[], None]:
+    """Factory for a reactive GO card's on_use callback (see gameProtocoll's
+    `_use_callback` for why a factory, not an inline loop-body lambda, is
+    required — closing over `strat`/`faction` by value, not the loop
+    variable).
+
+    Beyond the canonical `spend_stratagem` bookkeeping every GO card's Use
+    button performs, a reactive box's Use also fires the two hooks the pre-
+    migration Pass button used to share: `on_spent` (stratagem-specific side
+    effect, e.g. Counter-Offensive reassigning `fight_current_player`) and
+    `on_resolved` (clearing the caller's own pending-window marker) — now
+    Use-only, since §6.1 leaves no Pass action to also trigger them.
+    """
+
+    def _use() -> None:
+        spend_stratagem(strat, faction, unit_key_for_modifier)
+        if on_spent is not None:
+            on_spent(strat)
+        if on_resolved is not None:
+            on_resolved()
+
+    return _use
+
+
 def render_reactive_stratagem_box(
     faction: str,
     phase: str,
@@ -531,26 +607,32 @@ def render_reactive_stratagem_box(
     on_spent: Callable[[Stratagem], None] | None = None,
     on_resolved: Callable[[], None] | None = None,
 ) -> None:
-    """Render reactive-GO box(es) for `faction` while a (phase, event) window is open.
+    """Render reactive GO card(s) for `faction` while a (phase, event) window is open.
 
     Call this from the phase handler at the exact moment a reactive window opens
     (e.g. right after an enemy charge target is declared, in the defender's
     column). Loads `faction`'s stratagem pool (shared + faction-specific),
-    filters via `reactive_stratagems_for()`, and renders a Use/Pass control for
-    each stratagem still clickable or greyed for this player.
+    filters via `reactive_stratagems_for()`, and renders one compact GO card
+    (`render_go_card`, design_system.md §6.1/§6.2 inline-anchor form) per
+    stratagem still clickable or greyed for this player — the canonical card
+    infrastructure Task 4/5 built for the central Stratagems list, not a
+    parallel bespoke box (S130 finding this whole migration closes out).
 
-    decline_key — identifies this trigger occurrence (e.g. the charged target's
-    uid) so a "Pass" only suppresses the box for that one occurrence; cleared on
-    the next phase change (`reactive_declined`, reset in `_reset_phase_state()`).
+    No Pass control (§6.1: "passen = [Use] nicht drücken") — a card the
+    player does not click just keeps showing "ready" until CP/usage make it
+    "locked" or the caller's own pending-window marker goes away (cleared by
+    `on_resolved`, now wired to Use only — see `_reactive_use_callback`).
+    `decline_key` therefore no longer feeds a suppression set; it only seeds
+    a stable per-occurrence widget key (e.g. the charged target's uid) so two
+    concurrent occurrences of the same stratagem never collide.
 
     on_spent(stratagem) — invoked after a successful spend, for stratagem-specific
     side effects beyond CP/usage bookkeeping (e.g. Counter-Offensive reassigning
     `fight_current_player`).
 
-    on_resolved() — invoked after EITHER Use or Pass, for clearing the caller's own
+    on_resolved() — invoked after Use, for clearing the caller's own
     pending-window marker (e.g. `pending_fall_back`).
     """
-    declined: set[str] = st.session_state.get("reactive_declined", set())
     is_active = faction == st.session_state.get("active")
 
     try:
@@ -569,9 +651,6 @@ def render_reactive_stratagem_box(
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
             continue
-        full_decline_key = f"{faction}:{event}:{strat.id}:{decline_key}"
-        if full_decline_key in declined:
-            continue
         vis = stratagem_visibility(
             strat,
             cp,
@@ -584,50 +663,31 @@ def render_reactive_stratagem_box(
         if vis == "hidden":
             continue
 
-        with st.container(border=True):
-            st.markdown(
-                f"{SYM_SWORDS} **Reaction available — {strat.name_en}** ({strat.cp_cost} CP)"
-            )
-            st.caption(context_caption)
-            with st.expander("Rule text", expanded=False):
-                st.caption(strat.rule_text)
-            c1, c2 = st.columns(2)
-            with c1:
-                if st.button(
-                    f"Use — spend {strat.cp_cost} CP",
-                    key=f"reactive_use_{full_decline_key}",
-                    type="primary",
-                    disabled=(vis == "greyed"),
-                    use_container_width=True,
-                ):
-                    spend_stratagem(strat, faction, unit_key_for_modifier)
-                    if on_spent is not None:
-                        on_spent(strat)
-                    if on_resolved is not None:
-                        on_resolved()
-                    st.rerun()
-            with c2:
-                if st.button(
-                    "Pass",
-                    key=f"reactive_pass_{full_decline_key}",
-                    use_container_width=True,
-                ):
-                    declined.add(full_decline_key)
-                    st.session_state.reactive_declined = declined
-                    if on_resolved is not None:
-                        on_resolved()
-                    st.rerun()
+        state, locked_reason = _reactive_go_state(strat, vis, used_ids, used_battle_ids)
+        render_go_card(
+            key=f"reactive_{faction}_{event}_{strat.id}_{decline_key}",
+            name=strat.name_en,
+            cp_cost=strat.cp_cost,
+            state=state,
+            rule_text=strat.rule_text,
+            compact=True,
+            locked_reason=locked_reason,
+            expanded_content=_context_caption_renderer(context_caption),
+            on_use=_reactive_use_callback(
+                strat, faction, unit_key_for_modifier, on_spent, on_resolved
+            ),
+        )
 
 
 # ---------------------------------------------------------------------------
 # Command Re-Roll — non-blocking inline offer (S130 Plan 015 Option c)
 # ---------------------------------------------------------------------------
 #
-# Unlike render_reactive_stratagem_box's Use/Pass dialog, Command Re-Roll is
+# Unlike render_reactive_stratagem_box's GO card, Command Re-Roll is
 # "Pull, not Push": a single small button next to an already-shown roll
-# result. Ignoring it costs nothing and the flow keeps moving — there is no
-# Pass control and no decline-tracking set. Data-driven via the stratagem's
-# own (phase, event="after_roll") window — no stratagem-name string check.
+# result, not a bordered card — Ignoring it costs nothing and the flow keeps
+# moving. Data-driven via the stratagem's own (phase, event="after_roll")
+# window — no stratagem-name string check.
 
 
 def render_inline_command_reroll(
@@ -641,11 +701,11 @@ def render_inline_command_reroll(
 
     Call this at the exact spot a phase handler shows a roll result that is
     still "the last roll" — i.e. before any later roll/step has superseded
-    it. Unlike render_reactive_stratagem_box (an active Use/Pass dialog that
-    shows a greyed-out button when CP is short), this Pull-not-Push offer is
-    fully absent — not merely disabled — once CP is short or the stratagem
-    was already spent this phase: a non-blocking hint has no reason to clutter
-    the screen with something the player cannot act on.
+    it. Unlike render_reactive_stratagem_box (a GO card that shows a "locked"
+    state when CP is short), this Pull-not-Push offer is fully absent — not
+    merely disabled — once CP is short or the stratagem was already spent
+    this phase: a non-blocking hint has no reason to clutter the screen with
+    something the player cannot act on.
 
     `on_reroll` owns the domain-specific reopening (e.g. popping an "applied"
     flag so the caller's own input widgets return to editable) — this
@@ -689,8 +749,11 @@ def render_inline_command_reroll(
 # rule-text accordion. Callers own the state (dormant/ready/used/locked) and
 # the on_use/on_undo bookkeeping (typically spend_stratagem / its undo
 # counterpart) — this function only owns rendering and the accordion's
-# open/closed flag. NOT yet wired into any call site (that migration is a
-# separate step); this is the reusable building block only.
+# open/closed flag. Wired into the central Stratagems list
+# (uiLayout.gameProtocoll._render_stratagem_column, Task 5) and the reactive
+# GO box below (render_reactive_stratagem_box, Task 6/S133 Paket 3a) — the
+# one card builder both surfaces share, per S130's no-parallel-structure
+# finding.
 
 
 def _resolve_go_card_action(
@@ -728,14 +791,29 @@ def render_go_card(
     rule_text: str = "",
     compact: bool = False,
     locked_reason: str | None = None,
+    target_name: str | None = None,
+    expanded_content: Callable[[], None] | None = None,
     on_use: Callable[[], None] | None = None,
     on_undo: Callable[[], None] | None = None,
 ) -> None:
-    """Render one GO card: HTML body + the real Use/Undo button + rule-text accordion.
+    """Render one GO card: one bordered container, header + button + accordion inside.
 
     `key` must be unique per card instance (e.g. ``f"{faction}_{strat.id}"``) —
-    it seeds both the action button's widget key and the accordion's
-    session_state flag.
+    it seeds the container's widget key, the action button's widget key and
+    the accordion's session_state flag.
+
+    Single container (S133-D Befund 2, generalised beyond Desperate Breakout):
+    the whole card — header line, action button, rule-text accordion, and any
+    ``expanded_content`` — renders inside ONE ``st.container(border=True,
+    key=...)``. The K1 version instead drew its border as an HTML ``<div>``
+    around only the header text (in the left of two ``st.columns``), so the
+    button (right column) and the rule-text accordion (a separate top-level
+    element rendered after both columns closed) were never actually inside
+    that border — nothing in the DOM grouped them, they only happened to sit
+    below a bordered-looking box. `go_card_container_style()` recolours this
+    one container's border per state (Gold-Primary ready/used, dimmed
+    dormant/locked, §6.5) via a scoped ``st-key-<key>`` CSS override, since
+    Streamlit's container border alone only offers one fixed theme colour.
 
     Accordion fix (S130 root cause, design_system.md §6.1): a bare
     ``st.expander(label, expanded=False)`` only sets the widget's *initial*
@@ -752,31 +830,52 @@ def render_go_card(
     on_use/on_undo — invoked when the button is pressed in the "ready"/"used"
     state respectively; not called for "dormant"/"locked" (button rendered
     disabled, so this never fires for them regardless).
+
+    target_name — shown on the header line (S133-D Befund 3): which unit this
+    GO is bound to, so using it never happens against an unnoticed selection.
+
+    expanded_content — an optional callable rendering additional widgets (e.g.
+    a table-roll input + confirm button for a GO whose resolution needs more
+    than Use/Undo, such as Desperate Breakout) *inside* this same bordered
+    container, directly under the header/button row — never a free-floating
+    block elsewhere in the phase flow (S133-D Befund 2).
     """
-    st.markdown(
-        go_card_html(
-            name,
-            cp_cost,
-            state,
-            keywords=keywords,
-            compact=compact,
-            locked_reason=locked_reason,
-        ),
-        unsafe_allow_html=True,
-    )
+    box_key = f"go_card_box_{key}"
+    st.markdown(go_card_container_style(box_key, state), unsafe_allow_html=True)
 
     accordion_key = f"go_card_rule_open_{key}"
-    if rule_text:
-        with st.expander("Rule text", key=accordion_key, expanded=False):
-            st.caption(rule_text)
 
-    st.button(
-        action_slot_text(state, cp_cost),
-        key=f"go_card_action_{key}",
-        disabled=state in ("dormant", "locked"),
-        on_click=_resolve_go_card_action,
-        args=(accordion_key, bool(rule_text), state, on_use, on_undo),
-    )
+    with st.container(border=True, key=box_key):
+        card_col, action_col = st.columns([5, 2])
+        with card_col:
+            st.markdown(
+                go_card_html(
+                    name,
+                    cp_cost,
+                    state,
+                    keywords=keywords,
+                    compact=compact,
+                    locked_reason=locked_reason,
+                    target_name=target_name,
+                ),
+                unsafe_allow_html=True,
+            )
+
+        with action_col:
+            st.button(
+                action_slot_text(state),
+                key=f"go_card_action_{key}",
+                disabled=state in ("dormant", "locked"),
+                on_click=_resolve_go_card_action,
+                args=(accordion_key, bool(rule_text), state, on_use, on_undo),
+            )
+
+        if rule_text:
+            with st.expander("Rule text", key=accordion_key, expanded=False):
+                st.caption(rule_text)
+
+        if expanded_content is not None:
+            expanded_content()
 
 
 def _clear_pending_transport_destroyed() -> None:
@@ -852,7 +951,7 @@ def _next_declaration_seq() -> int:
     Without it, res_/rp_ keys from an earlier resolution of the same unit and
     target survive in session_state and the new tabs start as already applied.
     """
-    seq = st.session_state.get("attack_decl_seq", 0) + 1
+    seq = int(st.session_state.get("attack_decl_seq", 0)) + 1
     st.session_state.attack_decl_seq = seq
     return seq
 
@@ -1076,9 +1175,9 @@ def _render_rp_block(
 def _render_subgroup_selector(
     def_unit: Unit,
     def_state: dict,  # type: ignore[type-arg]
-    active_groups: list,  # type: ignore[type-arg]
+    active_groups: list[ModelGroup],
     locked_gid: str | None,
-    dmg_col,
+    dmg_col: Any,
     tab_key: str,
 ) -> str:
     """Defender's per-group damage allocation (Zustand A/B). Returns the target gid.
@@ -1090,7 +1189,7 @@ def _render_subgroup_selector(
     """
     gw: dict[str, int] = def_state["group_wounds"]
 
-    def _label(group) -> str:
+    def _label(group: ModelGroup) -> str:
         weapons = ", ".join(w.name_en for w in group.weapons) or group.name_en
         return f"{group.name_en} — {weapons} ({gw.get(group.id, 0)} HP)"
 
@@ -1106,15 +1205,18 @@ def _render_subgroup_selector(
         return locked_gid
 
     ids = [g.id for g in active_groups]
-    return dmg_col.radio(
-        "Schaden zuweisen an Subgruppe",
-        options=ids,
-        format_func=lambda gid: _label(next(g for g in active_groups if g.id == gid)),
-        key=f"dmg_target_grp_{tab_key}",
+    return cast(
+        str,
+        dmg_col.radio(
+            "Schaden zuweisen an Subgruppe",
+            options=ids,
+            format_func=lambda gid: _label(next(g for g in active_groups if g.id == gid)),
+            key=f"dmg_target_grp_{tab_key}",
+        ),
     )
 
 
-def _render_damage_block(
+def _render_damage_block(  # type: ignore[no-untyped-def]
     def_unit: Unit,
     def_faction: str,
     def_uid: str,
@@ -1363,7 +1465,7 @@ def _render_resolution_tab(
     # Per-group stat overrides carried from the declaration (Boss Nob etc.);
     # fall back to the unit-level stats for homogeneous groups.
     grp_strength = entry.get("atk_strength", atk_unit.strength)
-    grp_attacks = entry.get("atk_attacks", atk_unit.attacks)
+    grp_attacks = cast(int, entry.get("atk_attacks", atk_unit.attacks))
     grp_ws = entry.get("atk_ws")
     grp_bs = entry.get("atk_bs")
 
@@ -2012,7 +2114,7 @@ def render_group_assignment(
     # Per-group stat overrides (e.g. Boss Nob A 3 / S 5 / WS 2+) fall back to the
     # unit-level value for homogeneous groups; bracketed units key off group wounds.
     grp_attacks = _group_effective_attacks(atk_unit, group, atk_state)
-    grp_strength = int(group.stat("strength", atk_unit.strength))
+    grp_strength = int(cast(int, group.stat("strength", atk_unit.strength)))
     grp_ws = group.stat("ws", None)
     grp_bs = group.stat("bs", None)
 
@@ -2022,7 +2124,7 @@ def render_group_assignment(
         except (TypeError, ValueError):
             return 0
 
-    def _ranged_profile(weapon) -> WeaponProfile:  # type: ignore[no-untyped-def]
+    def _ranged_profile(weapon: Weapon) -> WeaponProfile:
         return next((p for p in weapon.profiles if not p.is_melee), weapon.profiles[0])
 
     # Budget overview on top; counters below are capped so overbooking is impossible.
@@ -2048,7 +2150,7 @@ def render_group_assignment(
 
         def _is_grenade(weapon_name: str) -> bool:
             wp = next((x for x in atk_unit.weapons if x.name_en == weapon_name), None)
-            return bool(wp) and _ranged_profile(wp).weapon_type.startswith("Grenade")
+            return wp is not None and _ranged_profile(wp).weapon_type.startswith("Grenade")
 
         grenade_used_other = sum(
             e.get("models_count", 0)
@@ -2190,7 +2292,7 @@ def render_group_assignment(
                     displayed_count = _compute_attacks(
                         profile.attacks,
                         eff_models,
-                        atk_unit.attacks,
+                        cast(int, atk_unit.attacks),
                         profile.effect,
                         profile.max_attacks,
                     )
