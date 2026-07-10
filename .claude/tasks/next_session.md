@@ -39,11 +39,10 @@ Frühere Sessions (S60–S134): Verlauf in `docs/metrics/session_archive.md` (Se
 
 ### ▶ Nächster Schritt (S136)
 
-1. **B1 Scroll-Sprung — Stufe 2 läuft:** Stufe 1 = **JA, springt** (auch auf B6-Layout).
-   Probe-Patch ist im Working Tree ANGEWENDET (uncommitted; zurücknehmen:
-   `git apply -R docs/handoff/S135_B1_probe.patch`). Stufe-2-Befund beim Stakeholder
-   abfragen → Interpretationstabelle in `S135_B1_probe.md` → gezielter Fix +
-   Regressionstest. KEIN Fix vor dem Befund.
+1. **B1 Scroll-Sprung — H2 WIDERLEGT (Ja/Ja, S135):** Key-Rewrite ist NICHT die
+   Ursache; Patch zurückgenommen. S136: H1-Probe (Fokus-Autoscroll) bzw. Drittursache
+   (Layout-Shift durch `st.columns`) mit neuer Test-Ansage untersuchen —
+   Befund-Doku `S135_B1_probe.md` (ANSWERED). KEIN Fix vor Browser-Befund.
 1b. **4c-Nachbesserung (Stakeholder-Befund, UI noch nicht passend):** Attacken-Re-Roll
    (a) unverständlich platziert — warum in der Kachel des ausgewählten Modells?;
    (b) erscheint auch bei FESTEM Attackenwert der Waffe (sinnlos — nur bei

@@ -1,4 +1,9 @@
-STATUS: NEEDS-DECISION
+STATUS: ANSWERED
+
+> **Ergebnis (S135-Ende):** Stufe 1 = JA, Stufe 2 (mit Patch) = JA → **H2 widerlegt**
+> (Sechsfach-Key-Rewrite ist NICHT die Ursache). Patch wurde zurückgenommen.
+> Nächster Schritt (S136): H1-Probe (Fokus-Autoscroll) bzw. Drittursache
+> (Layout-Shift durch `st.columns`) untersuchen — s. Interpretationstabelle Zeile 2.
 
 # S135 — B1 Scroll-Sprung: Probe-Patch zur Hypothesen-Verifikation
 

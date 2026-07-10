@@ -3437,8 +3437,8 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 192259,
-    "subagent_share": 84.61864968347747,
+    "peak_context": 196454,
+    "subagent_share": 83.51700881515295,
     "by_tier": {
       "Sonnet": 90974957,
       "Fable": 8266529,

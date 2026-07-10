@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 21:26 CEST
+Stand: 2026-07-10 21:31 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,7 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  ████████████ 192k ⛔    █████░  85%    ▚···········
+07-10 16:04 54b0  ████████████ 196k ⛔    █████░  84%    ▚···········
          SA_1·  ██████░░░░░░  77k ✅    B6 Kurz-Mockup erstellen
          SA_2·  ████████████ 177k ⛔    Paket 4c: Attacken-Fenster + Rest
          SA_3·  ████████████ 205k ⛔    Paket 4b: Save-/Damage-Anker
