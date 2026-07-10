@@ -37,6 +37,7 @@ from gameObjects.loader import (
     load_subfaction_meta,
 )
 from gameObjects.unit import Unit
+from uiLayout._common import render_round_choice_directives
 from uiLayout.badges import badge
 
 # Faction / subfaction keyword badges (design_colors.md §2a).
@@ -172,8 +173,7 @@ def _render_directive_buttons(round_choice, faction: str, round_num: int) -> Non
     closes this window independently of the extra directive's window.
     """
     directive_key = round_choice_state_key(faction, "directive")
-    st.caption(f"↳ **Primary:** {round_choice.primary}")
-    st.caption(f"↳ **Secondary:** {round_choice.secondary}")
+    render_round_choice_directives(round_choice, bold=True)
     col_p, col_s = st.columns(2)
     if col_p.button(
         "Use Primary",
@@ -238,8 +238,7 @@ def _render_extra_round_choice(
     if affinity_bonus:
         badge_text = f"{short_name.upper()} — {subfaction_label.upper()} BONUS (BOTH)"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
-        st.caption(f"↳ Primary: {round_choice.primary}")
-        st.caption(f"↳ Secondary: {round_choice.secondary}")
+        render_round_choice_directives(round_choice)
         _render_aura_range_hint(faction)
         return
 
@@ -259,8 +258,7 @@ def _render_extra_round_choice(
         # independently of the main directive's window (Wahapedia Z. 568/579).
         if _directive_window_open(faction, "extra_directive"):
             st.caption(f"**{round_choice.name_en}**")
-            st.caption(f"↳ Primary: {round_choice.primary}")
-            st.caption(f"↳ Secondary: {round_choice.secondary}")
+            render_round_choice_directives(round_choice)
             col_p, col_s = st.columns(2)
             if col_p.button(
                 "Primary", key=f"extra_dir_p_{faction}_{current_round}", use_container_width=True

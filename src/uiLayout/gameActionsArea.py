@@ -29,7 +29,7 @@ from gameObjects.loader import (
     load_round_choice_label,
 )
 from gameObjects.unit import Unit
-from uiLayout._common import PHASE_RULES, lookup
+from uiLayout._common import PHASE_RULES, lookup, render_round_choice_directives
 from uiLayout.badges import chip
 
 # ---------------------------------------------------------------------------
@@ -149,6 +149,13 @@ def _render_round_choice_assignment(faction: str) -> None:
     reorder them across rounds and the 6th slot. Identities are fixed at
     setup — mid-game the 6th can only change via a dedicated ability (e.g. the
     Silent King's Voice of the Triarch).
+
+    Below the six slot dropdowns, a separate read-only "Read directive" dropdown
+    lets the player look up any ability's directive text (Primary/Secondary)
+    without touching the assignment above (S135 B6, Stakeholder-Skizze). The
+    label deliberately avoids the faction seed word the INV-4b vocabulary guard
+    flags — "directive" is the generic round-choice term the data model itself
+    uses (RoundChoiceAbility.primary/.secondary).
     """
     faction_dir = faction_dir_for(faction)
     round_choices = load_round_choice_abilities(faction_dir)
@@ -208,6 +215,23 @@ def _render_round_choice_assignment(faction: str) -> None:
     assignments = dict(st.session_state.get("round_choice_assignments", {}))
     assignments[faction] = {r: slots[r] for r in range(1, 6) if r in slots}
     st.session_state.round_choice_assignments = assignments
+
+    # Read-only lookup: independent of the slot selectboxes above — picking an
+    # ability here only changes which directive text is shown, it never
+    # touches proto_slots_<faction> (Stakeholder-Skizze, S135 B6). The divider
+    # separates it visually from the six assignment slots so it does not read
+    # as a seventh assignment (Stakeholder-Feedback nach Browser-Verifikation).
+    st.divider()
+    read_key = f"proto_read_{faction}"
+    if read_key not in st.session_state:
+        st.session_state[read_key] = ids[0]
+    read_id = st.selectbox(
+        "Read directive",
+        options=ids,
+        format_func=lambda pid: by_id[pid].name_de,
+        key=read_key,
+    )
+    render_round_choice_directives(by_id[read_id])
 
 
 def _render_setup() -> None:
@@ -274,8 +298,14 @@ def _render_setup() -> None:
         next_phase()
         st.rerun()
 
-    for faction in (slot_a, slot_b):
-        _render_round_choice_assignment(faction)
+    # Nebeneinander (Stakeholder-Mockup, S135 B6): fixed slot order (slot_a/
+    # slot_b never swap — see the comment above), not first_player/second_player
+    # and not active, so the columns never jump when the roll-off winner changes.
+    col_proto_a, col_proto_b = st.columns(2)
+    with col_proto_a:
+        _render_round_choice_assignment(slot_a)
+    with col_proto_b:
+        _render_round_choice_assignment(slot_b)
 
 
 # ---------------------------------------------------------------------------

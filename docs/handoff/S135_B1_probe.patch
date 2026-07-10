@@ -1,0 +1,21 @@
+diff --git a/src/uiLayout/gameActionsArea.py b/src/uiLayout/gameActionsArea.py
+index 9bc756b..a201f52 100644
+--- a/src/uiLayout/gameActionsArea.py
++++ b/src/uiLayout/gameActionsArea.py
+@@ -135,9 +135,13 @@ def _swap_round_choice_slot(faction: str, slot) -> None:  # type: ignore[no-unty
+         st.session_state.get(slots_key, {}), slot, st.session_state[widget_key]
+     )
+     st.session_state[slots_key] = slots
+-    # Keep every slot's selectbox in sync with the swapped map.
+-    for s, pid in slots.items():
+-        st.session_state[f"proto_slot_{faction}_{s}"] = pid
++    # B1-PROBE (S135, NICHT committen): Sechsfach-Key-Rewrite deaktiviert, um
++    # Hypothese H2 (DOM-Remount durch das Neuschreiben aller sechs Widget-Keys
++    # im on_change) zu isolieren. Nebenwirkung waehrend der Probe: der
++    # Partner-Slot eines Swaps zeigt bis zum naechsten Rerun einen veralteten
++    # Wert — fuer den Scroll-Test irrelevant.
++    # for s, pid in slots.items():
++    #     st.session_state[f"proto_slot_{faction}_{s}"] = pid
+ 
+ 
+ def _render_round_choice_assignment(faction: str) -> None:

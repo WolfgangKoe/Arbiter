@@ -48,6 +48,7 @@ from gameMechanic.unit_mutations import (
     heal_unit,
 )
 from gameObjects.loader import load_stratagems
+from gameObjects.round_choice_ability import RoundChoiceAbility
 from gameObjects.stratagem import (
     Stratagem,
     reactive_stratagems_for,
@@ -1027,6 +1028,29 @@ def _next_declaration_seq() -> int:
     seq = int(st.session_state.get("attack_decl_seq", 0)) + 1
     st.session_state.attack_decl_seq = seq
     return seq
+
+
+# ---------------------------------------------------------------------------
+# Round-choice directive text — shared by armyCard's in-game directive UI and
+# gameActionsArea's setup-phase read-dropdown (S135 B6)
+# ---------------------------------------------------------------------------
+
+
+def render_round_choice_directives(round_choice: RoundChoiceAbility, *, bold: bool = False) -> None:
+    """Render the Primary/Secondary directive texts for one round-choice ability.
+
+    Single source for ``RoundChoiceAbility.primary``/``.secondary`` — armyCard's
+    in-game directive UI (``armyCard.py``) and the setup-phase read-dropdown
+    (``gameActionsArea.py::_render_round_choice_assignment``) both call this
+    instead of re-assembling the two-line caption text at each render site.
+    ``bold`` matches the one existing call site that labelled the lines
+    **Primary:**/**Secondary:** (the main directive's selection prompt); every
+    other site — including the new setup-phase reader — uses the plain form.
+    """
+    label_primary = "**Primary:**" if bold else "Primary:"
+    label_secondary = "**Secondary:**" if bold else "Secondary:"
+    st.caption(f"↳ {label_primary} {round_choice.primary}")
+    st.caption(f"↳ {label_secondary} {round_choice.secondary}")
 
 
 def _round_choice_source_label(player: str) -> str:

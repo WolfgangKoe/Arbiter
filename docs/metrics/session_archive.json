@@ -3437,11 +3437,11 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 109230,
-    "subagent_share": 93.38047092774698,
+    "peak_context": 131159,
+    "subagent_share": 92.42422101328108,
     "by_tier": {
-      "Sonnet": 77914156,
-      "Fable": 2966096
+      "Sonnet": 90974957,
+      "Fable": 4580592
     },
     "subagents": [
       {
@@ -3455,7 +3455,7 @@
         "agent_type": "general-purpose",
         "description": "Paket 4c: Attacken-Fenster + Rest",
         "tier": "Sonnet",
-        "peak_context": 146052,
+        "peak_context": 176783,
         "started_at": "2026-07-10T14:04:06.724Z"
       },
       {
@@ -3484,6 +3484,13 @@
         "description": "Aufgabe 1: Entscheidungen auflösen",
         "tier": "Sonnet",
         "peak_context": 85070,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B6-Fix + B1-Probe-Patch",
+        "tier": "Sonnet",
+        "peak_context": 119548,
         "started_at": "2026-07-10T14:04:06.724Z"
       }
     ]
