@@ -220,20 +220,20 @@ doppelt gebucht. Der `before_battle`-Sichtbarkeitsfix bleibt konzeptionell gelö
 eigener Ort statt Sonderphase. Achse (b) und die vollständige GO-Tabelle:
 [`../reference/go_klassifikation.md`](../reference/go_klassifikation.md).
 
-**Paket-4-Schuld (Anker folgen S134/S135):** Der Stakeholder hat die Übergangs-Ausnahme
-abgelehnt — reaktive GOs sind ab S134 komplett aus der zentralen Liste, auch wenn ihr
-Inline-Anker noch fehlt. Bis Paket 4 die Anker liefert, sind folgende `phase_reactive`-GOs
-vorübergehend nirgends aktivierbar (grep-Stand S135 Paket 4b; vorhandene Anker-Fenster:
-movement/charge/fight × `on_declaration`, `on_destroy` nur bei TRANSPORT-Tod, Hit-/Wound-/
-Save-Anker × `on_target` (effect_type-gescoped), `after_roll` via Advance-/Charge-/Psychic-/
-Damage-Anker):
+**Paket-4-Schuld (Anker folgen S134/S135, Ist-Stand nach 4a/4b/4c):** Der Stakeholder hat
+die Übergangs-Ausnahme abgelehnt — reaktive GOs sind ab S134 komplett aus der zentralen
+Liste, auch wenn ihr Inline-Anker noch fehlt. Nach Paket 4a–4c sind folgende
+`phase_reactive`-GOs weiterhin nirgends aktivierbar (grep-Stand S135 Paket 4c; vorhandene
+Anker-Fenster: movement/charge/fight × `on_declaration`, `on_destroy` nur bei
+TRANSPORT-Tod, Hit-/Wound-/Save-Anker × `on_target` (effect_type-gescoped), `after_roll`
+via Advance-/Charge-/Psychic-/Damage-/Anzahl-Attacken-Anker):
 
 | GO | (phase, event) | fehlender Anker |
 |---|---|---|
 | Desperate Breakout (Shared) | movement, — | Use-Anker an der in-melee-Unit (nur die Auflösungskarte nach Use existiert, `movementPhase.py`) |
-| Aetheric Interception (Necrons) | movement, on_set_up | kein `on_set_up`-Fenster |
-| Reanimation Prioritisation (Necrons) | shooting, on_target | `effect.type: reanimate` gehört zur Attackenfolge/Reanimation-Priorisierung, nicht zum Hit-/Wound-/Save-Komplex — Paket 4c |
-| Tough as Squig-Hide (Orks) | any, on_target | `effect.type: restriction` (unmodifizierter Wundwurf 1–3 scheitert, kein additiver Modifier) — passt in keinen der drei Hit-/Wound-/Save-Anker-Filter, eigener Mechanik-Ausbau nötig, Paket 4c |
+| Aetheric Interception (Necrons) | movement, on_set_up | kein `on_set_up`-Fenster (neues Ereignis, kein bestehender Anker erweiterbar) |
+| Reanimation Prioritisation (Necrons) | shooting, on_target | `effect.type: reanimate` gehört zur Attackenfolge/Reanimation-Priorisierung, nicht zum Hit-/Wound-/Save-Komplex — bewertet in Paket 4c (s. u.), nicht gebaut |
+| Tough as Squig-Hide (Orks) | any, on_target | `effect.type: restriction` (unmodifizierter Wundwurf 1–3 scheitert, kein additiver Modifier) — passt in keinen der drei Hit-/Wound-/Save-Anker-Filter, eigener Mechanik-Ausbau nötig — bewertet in Paket 4c (s. u.), nicht gebaut |
 | Resurrection Protocols (Necrons) | any, on_destroy | `on_destroy`-Fenster öffnet nur bei TRANSPORT-Tod, nicht beim eigentlichen Trigger |
 | Curse of the Phaeron (Necrons) | any, on_destroy | dito |
 | Revenge of the Doomstalker (Necrons) | any, on_destroy | dito |
@@ -242,10 +242,44 @@ Damage-Anker):
 | Careen! (Orks) | any, on_destroy | dito |
 | Orks is Never Beaten (Orks) | fight, on_destroy | dito |
 
-Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll, Cut Them Down,
-Emergency Disembarkation, Fire Overwatch, Counter-Offensive, Efficient Disintegration,
-Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught (Wound-Anker, Paket 4a),
-Quantum Deflection (Save-Anker, Paket 4b).
+Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll (inkl. Anzahl-Attacken-Fenster,
+Paket 4c), Cut Them Down, Emergency Disembarkation, Fire Overwatch, Counter-Offensive,
+Efficient Disintegration, Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught
+(Wound-Anker, Paket 4a), Quantum Deflection (Save-Anker, Paket 4b).
+
+**Bewertung fehlender Ereignis-Fenster (Paket 4c, nur Doku — kein Bau):** drei
+Fenster fehlen komplett bzw. sind zu eng gescopt, betreffen zusammen 10 der 11 oben
+gelisteten GOs (alle außer Desperate Breakout, dessen fehlender Use-Anker ein
+separates Problem ist — kein Ereignis-Fenster fehlt dort, nur die Verdrahtung):
+
+- **`on_set_up`** (Aetheric Interception, 1 GO) — existiert im Code gar nicht; der
+  Trigger liegt im gegnerischen Reinforcements-Schritt (`movementPhase.py`), einer
+  bisher UI-technisch nicht behandelten Stelle.
+- **`on_target` außerhalb des Hit-/Wound-/Save-Modifier-Stacks** (Reanimation
+  Prioritisation, Tough as Squig-Hide, 2 GOs) — beide sind kein additiver
+  Wurf-Modifier: Reanimation Prioritisation ist eine Zusatz-Aktion (Reanimate direkt
+  bei Ziel-Auswahl), Tough as Squig-Hide ist ein Auto-Fail-Schwellenwert
+  (unmodifizierter Wundwurf 1–3 scheitert) — beides bräuchte eigene Auswertungslogik
+  statt eines Modifier-Eintrags in `resolve_attack_modifiers`/`resolve_save`.
+- **generisches `on_destroy`** (Resurrection Protocols, Curse of the Phaeron,
+  Revenge of the Doomstalker, Canoptek Overdrive, Murderous Demise, Careen!, Orks is
+  Never Beaten — 7 GOs, größter Cluster; Resurrection Protocols zählt hier als eine
+  Zeile der Debt-Tabelle, obwohl es als Infantry-/Character-Variante zwei separate
+  Stratagems in `go_klassifikation.md` §2 sind) — der bestehende `on_destroy`-Hook feuert nur
+  beim TRANSPORT-Tod (Emergency Disembarkation); eine generische Version muss an jede
+  Stelle, an der ein Modell/eine Einheit über alle Phasen hinweg als zerstört gilt
+  (`unit_mutations.py`, `combat.py`, Morale-Verluste), nicht nur an einen einzelnen
+  Aufruf.
+
+**Empfehlung: eigener Folge-Split, in zwei Pakete statt einem.** Begründung: die drei
+Fenster sind architektonisch verschieden (neues Setup-Phase-Ereignis / Mechanik-Ausbau am
+Modifier-Stack / Querschnitts-Hook über alle Phasen) und der `on_destroy`-Cluster allein
+ist mit 7 GOs so groß, dass er zusammen mit den zwei `on_target`-Sonderfällen ein
+S-Aufwand-Paket sprengen würde (Analogie: Paket 4a/4b/4c waren je S–M für 1–3 GOs).
+Vorschlag: **Paket 5** = generisches `on_destroy` (größter Hebel, 7 GOs, ein
+Querschnitts-Hook statt sieben Einzellösungen); **Paket 6** = `on_set_up` +
+die zwei `on_target`-Sonderfälle (kleiner, aber je eigene Mechanik, kein gemeinsamer
+Hook — daher eigenes Paket statt Anhängsel an 5).
 
 ### 6.3 Tisch-Wurf-Eingabe-Baustein
 

@@ -1,9 +1,20 @@
 # Gefechtsoptionen-Klassifikation
 
-> Stand S131 (2026-07-09). Quelle für [`../spec/design_system.md`](../spec/design_system.md)
-> §6.2 (Orte-Zuordnung der GO-Karte). Ursprünglich als Recherche-Auftrag S131 Aufgabe 2
-> erstellt, jetzt dauerhafte Referenz — bei neuen/geänderten Fraktions-Stratagems hier
-> nachziehen.
+> Stand S131 (2026-07-09), Nachzug S135 Paket 4c. Quelle für
+> [`../spec/design_system.md`](../spec/design_system.md) §6.2 (Orte-Zuordnung der GO-Karte).
+> Ursprünglich als Recherche-Auftrag S131 Aufgabe 2 erstellt, jetzt dauerhafte Referenz —
+> bei neuen/geänderten Fraktions-Stratagems hier nachziehen.
+>
+> **S135 Paket 4c — Anker-Umsetzungsstand.** Die Achsen-Klassifikation unten (Tabelle §2)
+> bleibt unverändert; nachgezogen ist nur der Ist-Stand der Anker-Umsetzung, den
+> `design_system.md` §6.2 führt. 10 der 11 in §6.2 als "aktuell nicht aktivierbar"
+> geführten reaktiven GOs bleiben offen, weil ihnen eines von drei fehlenden
+> Ereignis-Fenstern fehlt (`on_set_up`, `on_target` außerhalb des Hit-/Wound-/
+> Save-Modifier-Stacks, generisches `on_destroy`) — Bewertung + Empfehlung für einen
+> Folge-Split (vorgeschlagen: Paket 5 `on_destroy`, Paket 6 `on_set_up` +
+> `on_target`-Sonderfälle) steht in `design_system.md` §6.2, nicht hier verdoppelt.
+> Die 11. GO (Desperate Breakout) fehlt ihr Anker aus einem anderen Grund — kein
+> Ereignis-Fenster fehlt, nur die Use-Anker-Verdrahtung an der in-melee-Unit selbst.
 
 Grundlage für das Design-System: **UI-unabhängige** Einteilung aller Gefechtsoptionen (GOs) —
 Stratagems + vergleichbare optionale Regeln. Verworfenes Vorkonzept „reaktive Box / Inline-Reroll /

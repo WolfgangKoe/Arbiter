@@ -19,6 +19,8 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
 from gameObjects.ability import Effect  # noqa: E402
+from gameObjects.unit import ModelGroup, Unit  # noqa: E402
+from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 from uiLayout._common import (  # noqa: E402
     _collect_atk_modifiers,
     _collect_def_save_modifiers,
@@ -1433,6 +1435,121 @@ def test_command_reroll_not_clicked_leaves_cp_and_usage_untouched(monkeypatch) -
     assert session["used_stratagem_ids"] == {}
     assert reopened == []
     assert rerun_calls == []
+
+
+# ---------------------------------------------------------------------------
+# S135 Paket 4c — render_group_assignment(): Anzahl-Attacken-Anker. Command
+# Re-Roll's own rule text names "the dice to determine the number of attacks
+# made by a weapon" as one of R-CMD-12's 9 reactive windows — this wires the
+# melee "<Weapon> — Attacks" field (decl_a_*), the only place in this app
+# where a possibly dice-based Attacks characteristic is typed in as a number.
+# Like Advance/Charge, the field has no "applied" lock to reopen (it stays
+# directly editable until "Group done"), so on_reroll is a no-op — the call
+# only owns the CP/usage bookkeeping (attacker pays, it is the attacker's
+# own dice).
+# ---------------------------------------------------------------------------
+
+
+def _melee_group_fixture():  # type: ignore[no-untyped-def]
+    profile = WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="D6",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=True,
+    )
+    weapon = Weapon(id="w1", name_en="Choppa", profiles=[profile])
+    group = ModelGroup(id="g1", name_en="Boyz", count=5, weapons=[weapon], priority=1)
+    unit = Unit(
+        id="test.unit.boyz",
+        name_en="Boyz",
+        name_de="Boyz",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["Troops"],
+        keywords=["ORKS", "INFANTRY"],
+        wounds=1,
+        models_min=5,
+        models_max=20,
+        power_level=5,
+        move='6"',
+        bs="5+",
+        ws="3+",
+        strength=4,
+        toughness=4,
+        attacks=2,
+        save=6,
+        invuln_save=None,
+        leadership=7,
+        oc=2,
+        fnp=None,
+        model_groups=[group],
+    )
+    return unit, group
+
+
+def _group_assignment_session():  # type: ignore[no-untyped-def]
+    return _SS(
+        selected_model_group="g1",
+        group_targets={"g1": [("Necrons", "u_def")]},
+        group_decl={},
+    )
+
+
+def test_render_group_assignment_offers_command_reroll_on_attack_count(monkeypatch) -> None:
+    unit, _ = _melee_group_fixture()
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 3)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    spy.assert_called_once()
+    call = spy.call_args
+    assert call.args[0] == "Orks"  # the attacker rolled the dice — attacker pays
+    assert call.args[1] == "fight"
+    assert call.kwargs["reopen_key"] == "decl_a_g1_atk1_u_def_Choppa"
+    assert callable(call.kwargs["on_reroll"])
+    call.kwargs["on_reroll"]()  # no-op — must not raise
+
+
+def test_render_group_assignment_no_offer_when_not_melee(monkeypatch) -> None:
+    """Ranged group assignment has no per-weapon Attacks field — nothing to react to."""
+    unit, group = _melee_group_fixture()
+    ranged_profile = WeaponProfile(
+        weapon_type="Rapid Fire 1",
+        range_inches=24,
+        attacks="1",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    group.weapons.append(Weapon(id="w2", name_en="Slugga", profiles=[ranged_profile]))
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 0)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    spy.assert_not_called()
 
 
 # ---------------------------------------------------------------------------

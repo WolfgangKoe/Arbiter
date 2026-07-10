@@ -3437,11 +3437,11 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 86372,
-    "subagent_share": 94.59953939192721,
+    "peak_context": 109230,
+    "subagent_share": 93.38047092774698,
     "by_tier": {
-      "Sonnet": 59503664,
-      "Fable": 2109419
+      "Sonnet": 77914156,
+      "Fable": 2966096
     },
     "subagents": [
       {
@@ -3453,9 +3453,16 @@
       },
       {
         "agent_type": "general-purpose",
+        "description": "Paket 4c: Attacken-Fenster + Rest",
+        "tier": "Sonnet",
+        "peak_context": 146052,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
+      {
+        "agent_type": "general-purpose",
         "description": "Paket 4b: Save-/Damage-Anker",
         "tier": "Sonnet",
-        "peak_context": 182347,
+        "peak_context": 205493,
         "started_at": "2026-07-10T14:04:06.724Z"
       },
       {

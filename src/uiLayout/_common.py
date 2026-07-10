@@ -2410,6 +2410,20 @@ def render_group_assignment(
                         step=1,
                         key=atk_key,
                     )
+                    # Anzahl-Attacken-Anker (design_system.md §6.2/§6.3, S135
+                    # Paket 4c): Command Re-Roll's own rule text explicitly
+                    # covers "the dice to determine the number of attacks made
+                    # by a weapon" — this field is where that value is entered
+                    # (a dice-based Attacks characteristic, e.g. D3/D6, gets
+                    # typed in here after being rolled at the table). Like
+                    # Advance/Charge (chargephase.py), there is no "applied"
+                    # lock before "Group done" — the number_input stays
+                    # directly editable, so on_reroll is a no-op; the call only
+                    # owns the CP/usage bookkeeping (attacker pays — it is the
+                    # attacker's own dice).
+                    render_inline_command_reroll(
+                        atk_faction, "fight", reopen_key=atk_key, on_reroll=lambda: None
+                    )
                     entries.append(
                         {
                             "def_faction": def_faction,
