@@ -1,4 +1,4 @@
-STATUS: NEEDS-DECISION
+STATUS: ANSWERED
 
 # S134 — Offene Punkte zur Diskussion (Stakeholder)
 
@@ -29,6 +29,11 @@ hineineditieren (bewährter Rückkanal).
    in Welle 2/S135 umgesetzt? **Empfehlung:** unabhängig umsetzen (Entscheid steht),
    das B2-Konzept übernimmt sie dann als gegeben.
 
+**Entscheidung (S135):** Beide Empfehlungen übernommen, kein Kommentar vorhanden.
+Struktur = Option C (Option A jetzt umsetzen, Wizard-Zielbild erst zusammen mit der
+Datenkarte aus B4). Scope-Frage: Faction-Ability-Wahl (B6) unabhängig vom B2-Konzept
+umsetzen — das B2-Konzept übernimmt den fertigen B6-Stand als gegeben.
+
 ## B4 — profileCard / Datenkarte (eigenes Refinement)
 
 **Sofortteil läuft separat** (++/OC raus, s. Plan v3 Welle 2). Fürs Refinement zu entscheiden:
@@ -48,6 +53,14 @@ hineineditieren (bewährter Rückkanal).
    **Empfehlung:** als Baustein in `design_system.md` spezifizieren (ein Renderer,
    mehrere Orte) — genau dafür ist das Refinement da.
    Antwort: Aktuell möchte ich die Profilcard nur im Setup Screen anzeigen lassen. Innerhalb des Spiels brauche ich nur die darin befindlichen WErte, die es dann braucht. ALso so wie es jetzt schon ist. 
+
+**Entscheidung (S135):** Punkte 1–3 = Empfehlung übernommen, kein Kommentar zu diesen
+Punkten vorhanden: (1) App-Design-System mit Wahapedia-Informationsarchitektur,
+(2) nur 9E-Datasheet-Spalten (Range/Type/S/AP/D/Abilities), keine berechneten Werte,
+(3) Wargear-/Relic-Auswahl als Chip sichtbar. Punkt 4 war bereits durch den
+Stakeholder-Kommentar entschieden (nur Setup-Screen, In-Game-Anzeige bleibt wie
+jetzt) — der Kommentar überstimmt hier die Empfehlung „auch Baustein für
+In-Game/Armybuilder".
 
 ## B6 — Faction-Ability-Wahl in die Spieler-Spalten (Entscheid steht, Detail offen)
 
@@ -73,6 +86,12 @@ offen, die der Executor nicht selbst treffen darf:
    - Option B: einzeiliger Mini-Header (nur Phasenname), Erklärtext weg.
    - **Empfehlung: A**, WENN B9-Stepper kommt (der Stepper wird der neue Anker); bis
      dahin B (sonst ist die Phase im Content-Bereich unbenannt).
+
+   **Entscheidung (S135):** Option B (einzeiliger Mini-Header, nur Phasenname). Die
+   Empfehlung ist selbst konditional auf B9 formuliert („A wenn Stepper kommt, sonst
+   B"); der Stakeholder-Kommentar zu B9 Punkt 3 wählt ausdrücklich C als
+   Zwischenlösung (kein Stepper in S135) — also greift der „sonst B"-Fall aus der
+   eigenen Empfehlung, kein Widerspruch.
 2. **B7 — Hinweis-Konvention:** Wie werden schwache Hinweise („Select unit", „No PSYKER
    unit available") gestärkt?
    - Option A: `st.info`/`st.warning`-Boxen (auffällig, aber laut — konterkariert das
@@ -80,6 +99,9 @@ offen, die der Executor nicht selbst treffen darf:
    - Option B: eigener Hinweis-Baustein im Design-System (dezente Farbfläche +
      Symbol-Konstante aus `symbols.py`, eine Größe über Caption).
    - **Empfehlung: B** — als §-Erweiterung in `design_system.md`, dann überall gleich.
+
+   **Entscheidung (S135):** Option B (eigener Hinweis-Baustein im Design-System) —
+   Empfehlung übernommen, kein Kommentar vorhanden.
 3. **B9 — Darstellung + Verhalten des Subphasen-Steppers:**
    - Option A: horizontale Stepper-Chips oben in der Phase („① Feldbewegungen →
      ② Reinforcements"), aktueller Schritt hervorgehoben, **manuell** weitergeschaltet.
@@ -99,6 +121,10 @@ offen, die der Executor nicht selbst treffen darf:
    ersetzt der Stepper) — B8 bleibt davon unabhängig. **Empfehlung:** ja, ein Handoff
    mit Grundannahmen-Block, Umsetzung S135+.
 
+   **Entscheidung (S135):** Ja, EIN Konzept-Handoff für B7+B9 — Empfehlung übernommen,
+   kein Kommentar. Grundannahmen-Block Pflicht (App bleibt Begleiter, kein Zwang);
+   B8 bleibt davon unabhängig (läuft bereits separat in Welle 2).
+
 ## B10 — Formulierungsvorschläge CLAUDE.md (freigabepflichtig, hier NUR Text)
 
 **Vorschlag 1 — Kommentar-Konvention** (neuer Bulletpoint im Abschnitt „Clean Code"):
@@ -117,3 +143,9 @@ offen, die der Executor nicht selbst treffen darf:
 > | **Stakeholder-Beobachtungen (stehender Eingang)** | `docs/handoff/Stakeholder_Beobachtungen.md` |
 
 Beide Änderungen werden erst nach expliziter Freigabe in CLAUDE.md eingetragen.
+
+**Entscheidung (S135):** Beide Formulierungsvorschläge übernommen, kein Kommentar
+spricht dagegen — die Freigabe-Bedingung dieser Datei ist mit der Freigabe des
+S135-Plans erfüllt. Kommentar-Konvention-Bulletpoint (Abschnitt „Clean Code") und
+Artefakt-Landkarten-Zeile „Stakeholder-Beobachtungen (stehender Eingang)" wurden
+exakt wie oben formuliert in `CLAUDE.md` eingearbeitet.

@@ -45,6 +45,7 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | Farbschema (verbindlich) | `docs/spec/design_colors.md` |
 | UI-Design-System (GO-Karte, Bausteine, Wortlaut) | `docs/spec/design_system.md` |
 | Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/metrics/session_archive.md` |
+| **Stakeholder-Beobachtungen (stehender Eingang)** | `docs/handoff/Stakeholder_Beobachtungen.md` |
 
 Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in
 eines dieser Artefakte — sonst driften sie auseinander.
@@ -237,6 +238,14 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - Kein tiefes Verschachteln — Early Returns bevorzugen
 - DRY: erst ab der **dritten** Wiederholung abstrahieren
 - **Type Hints** überall; Formatter: `black` + `isort`; Linter: `ruff`
+- **Kommentar-Konvention:** Code erklärt sich selbst (sprechende Namen, kleine
+  Funktionen); Regel- und Design-Erklärungen gehören in die zuständige Spec unter
+  `docs/spec/`, nicht in Kommentare. Erlaubt sind nur: (a) ein kurzer
+  Verweis-Kommentar auf die Spec (`# → docs/spec/<datei>.md §<n>`), (b) ein
+  *Warum*-Kommentar für nicht offensichtliche Entscheidungen (Gotchas,
+  Regel-Randfälle) mit Quellenangabe. Docstrings bleiben für die öffentliche API,
+  erzählen aber keine Spec nach. Abbau bestehender Erklär-Kommentare als Ratchet:
+  bei jeder Modul-Berührung in die Spec verschieben — kein Big-Bang-Durchgang.
 
 ---
 

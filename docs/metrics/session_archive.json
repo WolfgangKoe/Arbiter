@@ -3360,13 +3360,13 @@
   "b0698466-9c04-4bf0-b26f-d51920a648ec": {
     "started_at": "2026-07-10T11:33:40.876Z",
     "task": "start session",
-    "peak_context": 149396,
-    "subagent_share": 87.29014142975642,
+    "peak_context": 151864,
+    "subagent_share": 86.52765415860168,
     "by_tier": {
       "Opus": 1718834,
       "Sonnet": 27365870,
       "Haiku": 198378,
-      "Fable": 21283444
+      "Fable": 21904894
     },
     "subagents": [
       {
@@ -3415,7 +3415,7 @@
         "agent_type": "general-purpose",
         "description": "Planning-Entwurf für nächste Session",
         "tier": "Sonnet",
-        "peak_context": 206027,
+        "peak_context": 207100,
         "started_at": "2026-07-10T11:33:40.876Z"
       },
       {
@@ -3431,6 +3431,31 @@
         "tier": "Sonnet",
         "peak_context": 115883,
         "started_at": "2026-07-10T11:33:40.876Z"
+      }
+    ]
+  },
+  "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
+    "started_at": "2026-07-10T14:04:06.724Z",
+    "task": "start session",
+    "peak_context": 62117,
+    "subagent_share": 81.98302996202503,
+    "by_tier": {
+      "Sonnet": 5466908
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S135 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 93190,
+        "started_at": "2026-07-10T14:04:06.724Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Aufgabe 1: Entscheidungen auflösen",
+        "tier": "Sonnet",
+        "peak_context": 85070,
+        "started_at": "2026-07-10T14:04:06.724Z"
       }
     ]
   }

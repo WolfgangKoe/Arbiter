@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 16:02 CEST
+Stand: 2026-07-10 16:22 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,14 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 13:33 b069  ████████████ 149k ⚠️   █████░  87%    ▚▚▚▚▚·······
+07-10 16:04 54b0  █████░░░░░░░  62k ✅    █████░  82%    ············
+         SA_1·  ███████░░░░░  93k ✅    S135 Planning-Entwurf erstellen
+         SA_2·  ███████░░░░░  85k ✅    Aufgabe 1: Entscheidungen auflösen
+----------------- ---------------------- -------------- ------------
+07-10 13:33 b069  ████████████ 152k ⛔    █████░  87%    ▚▚▚▚▚·······
          SA_1·  █████░░░░░░░  59k ✅    DoD-Review Sessionstand S134
          SA_2·  ████░░░░░░░░  45k ✅    STANDING-Marker im Handoff-Wächter…
          SA_3·  ██████░░░░░░  69k ✅    BA-Stratagems aus YAML entfernen
          SA_4·  ███░░░░░░░░░  39k ✅    Wahapedia-Lookup Rapid Reanimation
          SA_5·  █████████░░░ 108k ✅    Wahapedia-Live-Abgleich Necron-Str…
          SA_6·  ████████████ 149k ⚠️   §6.2 statisches Modell + Overwatch…
-         SA_7·  ████████████ 206k ⛔    Planning-Entwurf für nächste Sessi…
+         SA_7·  ████████████ 207k ⛔    Planning-Entwurf für nächste Sessi…
          SA_8·  █████░░░░░░░  63k ✅    Verify S134 UI-Befunde gegen aktue…
          SA_9·  █████████░░░ 116k ✅    B5-Fix, B1-Recherche, totes Feld
 ----------------- ---------------------- -------------- ------------
@@ -542,3 +546,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S131 (2026-07-09)** GO-UI-Design-System entschieden (GO-Karte, 4 Zustände, 3 Orte, Vollrückgängig-Standard); Klassifikation 95 GOs + UI-Inventar 17 Muster als Referenz; Roadmap 6 Pakete S132-S134+; Scroll-Bug Setup->Spielstart gefixt (verifiziert)
 - **S132 (2026-07-10)** GO-UI Paket 1+2: go_card.py-Baustein + Stratagems-Liste auf GO-Karten, Re-Roll-Angebot Advance/Charge, Start-Game-Button, Doku-Nachzug §6.3; Stakeholder-Review NO-GO mit 5 Befunden (S132_defects.md), K1/K4 als Hintergrund-Agenten neu gestartet, K2-Design entschieden, K3 nach S133
 - **S133 (2026-07-10)** GO-Karten-Anatomie neu (Container, Use/Undo, Akkordeon in Karte), Desperate-Breakout-Gating, K2-Bewegungs-State-Modell + Re-Roll-Kompaktkarte, Reaktiv-Box→GO-Karte, K3-Conditions, Profilkarten-Fixes; mypy 75→63; §6.2-Sichtbarkeits-Invariante
+- **S135 (2026-07-10)** Aufgabe 1: S134-Entscheidungen B2/B4/B7/B9/B10 per Stakeholder-Regel aufgelöst, B10 in CLAUDE.md eingearbeitet; bewusster Stopp nach Aufgabe 1 (Nutzungslimit), Paket 4a freigegeben offen

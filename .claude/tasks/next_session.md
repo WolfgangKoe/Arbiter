@@ -20,27 +20,26 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S134 Welle 1, 2026-07-10)
+## Aktueller Stand (nach S135, 2026-07-10)
 
-S134 Welle 1 (Review GO, 1644 passed / 99,11 % / mypy 63): (1) **Boarding-Actions-
-Bereinigung** — Rapid Reanimation, Shield-Piercer Projectors, Flensing Capacitors,
-`resurrection_protocols_character` aus `necrons/stratagems.yaml` entfernt (Live-Wahapedia:
-BA-only; der Rapid-Reanimation-Fehlmatch „no Advance roll open" verschwand mit —
-Merkposten: `phase: any`+`event: after_roll` fehlmatcht JEDEN after_roll-Anker, Events
-müssen wurfspezifisch sein). (2) **§6.2 statisches Modell:** reaktiv = on-trigger aktiv
-(Stakeholder-Definition, S134-Review Befund 2 — z. B. Auswahl einer in-melee-Unit) ⇒ nur
-inline; proaktiv ⇒ nur Tab-Liste; Overwatch-Reaktivbox mit ↺ Undo. **Bestätigter MAJOR:**
-14 `phase_reactive`-GOs (u. a. Core-RP Resurrection Protocols) bis Paket 4 nirgends
-aktivierbar — Schuld-Tabelle `design_system.md` §6.2, UI-Checkliste vom Stakeholder
-bestätigt. (3) B5 First-Player-Block (UI-verifiziert 5/5, Ort: `gameActionsArea.py`
-`_render_setup`, NICHT setupScreen), `reactive_declined` restlos entfernt. (4) STANDING-
-Eingangskanal `docs/handoff/Stakeholder_Beobachtungen.md` (NIE löschen); Beobachtungen
-B1–B10 mit Vorgehen in `backlog.md` §2; Entscheidungsfragen in `S134_offene_punkte.md`.
+S135 nach Aufgabe 1 **bewusst gestoppt** (Nutzungslimit ~10 %). Erledigt: Plan S135
+erstellt + freigegeben (`docs/handoff/S135_planning.md`, STATUS: ANSWERED); alle offenen
+S134-Entscheidungen per Stakeholder-Regel („Empfehlungen gelten, außer Kommentar ändert
+sie") aufgelöst — `S134_offene_punkte.md` STATUS: ANSWERED mit Entscheidungsblöcken:
+B2 = Option C (A jetzt, Wizard-Zielbild mit B4-Datenkarte), Faction-Ability-Wahl
+unabhängig; B4-Refinement P1 App-Design-System + Wahapedia-IA, P2 nur 9E-Datasheet-
+Spalten, P3 Wargear-Chip ja; B7 P1 = Option B Mini-Header (via B9-Kommentar „kein
+Stepper"), P2 = Design-System-Baustein; B7/B9 als EIN Konzept-Handoff bündeln;
+B10 beide CLAUDE.md-Formulierungen eingearbeitet. Backlog §2 nachgezogen. Doku-/
+Acceptance-Gate 18 passed; keine `src/`-Änderungen (Vollsuite daher nicht nötig).
 
-Frühere Sessions (S60–S133): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S134): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S135)
+### ▶ Nächster Schritt (S135 — Plan ist freigegeben, Shortcut direkt starten)
 
+0. **Erster Schritt: Aufgabe 2 aus `docs/handoff/S135_planning.md`** (Paket 4a
+   Hit-/Wound-Anker, Executor + Sonnet, ~30k) — Aufgabe 1 (Entscheidungen) ist bereits
+   erledigt, siehe Stand oben.
 1. **Paket 4 (TOP-PRIO — löst die 14 nicht aktivierbaren reaktiven GOs auf).** Split
    (aus S134-Plan v3, Briefs ≤ M): **4a** Hit-+Wound-Anker (`_common.py`, Kompaktkarte am
    Wurfbereich; M); **4b** Save-+Damage-Anker + Ablösung der 3
@@ -60,9 +59,8 @@ Frühere Sessions (S60–S133): Verlauf in `docs/metrics/session_archive.md` (Se
    dem Stakeholder die genaue Ansage („App neu laden → Setup-Phase → einen
    Command-Protocol-Slot ändern → springt der Screen noch? Ja/Nein") → je Befund gezielter
    Fix + Regressionstest. KEIN Fix vor dem Browser-Befund.
-4. **Offene Entscheidungen (Diskussion):** `S134_offene_punkte.md` — B2/B4/B6/B7/B9 mit
-   Optionen+Empfehlung; B10-CLAUDE.md-Vorschläge (Kommentar-Konvention +
-   Artefakt-Landkarten-Zeile STANDING-Kanal) — beide freigabepflichtig.
+4. ~~Offene Entscheidungen (Diskussion)~~ — **ERLEDIGT S135 Aufgabe 1**, s. Stand oben
+   (`S134_offene_punkte.md` STATUS: ANSWERED).
 
 **Prozess (S134 freigegeben):** Vollsuite bei parallelen Wellen nur EINMAL zentral am
 Wellen-Ende, nicht je Executor → `operating_model.md` Event 3 (Vollsuite-Disziplin).

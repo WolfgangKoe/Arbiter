@@ -174,6 +174,8 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     erstellen (Sonnet, read-only), Redundanz-Befunde B5/B7 einarbeiten, Konzept-Handoff mit
     Grundannahmen-Block → Stakeholder-Entscheid → eigener Plan. (Hinweis: der frühere Punkt 3
     „Start-Game-Button-Position" wurde in S133 aus der Beobachtungsdatei entfernt/erledigt.)
+    **Entschieden S135:** Struktur = Option C (Option A jetzt, Wizard-Zielbild erst mit B4-
+    Datenkarte); Faction-Ability-Wahl (B6) läuft unabhängig vom B2-Konzept (`S134_offene_punkte.md`).
   - **B4-Rest — profileCard als Datenkarte (Setup):** Doppel-Zoll + Profilwert-Reihenfolge in
     S133 gefixt; offen: tabellarische Waffenanzeige + „schöne Datenkarte" nur mit der echten
     Roster-Auswahl (Screenshots `Bildschirmfoto vom 2026-07-09 20-53-48.png` = Ist,
@@ -181,6 +183,9 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     den Armybuilder vor. Vorgehen: profileCard als definierten Baustein in `design_system.md`
     spezifizieren (Refinement mit Stakeholder: Spalten, Waffen-Tabelle, Abgrenzung zur
     unitCard), danach eigener Plan.
+    **Entschieden S135:** App-Design-System mit Wahapedia-Informationsarchitektur, nur
+    9E-Datasheet-Spalten (keine berechneten Werte), Wargear-/Relic als Chip; nur Setup-
+    Screen, In-Game-Anzeige bleibt wie jetzt (Stakeholder-Kommentar, `S134_offene_punkte.md`).
   - ✅ **B5 — First-Player-Block Redundanz — ERLEDIGT (S134, UI-verifiziert 5/5):**
     Überschrift „Roll-Off for First Player", Buttons nur Armee-Name, „Currently
     selected"-Zeile entfernt. Fundort war `gameActionsArea.py::_render_setup` (NICHT
@@ -196,6 +201,9 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     unit available") sind zu schwach sichtbar. Vorgehen: Bereich identifizieren + entfernen,
     Hinweis-Stil als design_system-Konvention stärken; mit B8/B9 als ein Paket
     „Phasen-UI entrümpeln" schneiden.
+    **Entschieden S135:** Kopfbereich → Mini-Header (nur Phasenname, Option B, solange kein
+    B9-Stepper existiert); Hinweis-Konvention → eigener Design-System-Baustein (Option B);
+    B7+B9 als EIN Konzept-Handoff (`S134_offene_punkte.md`).
   - **B8 — Redundanter Statusbereich in jeder Phase (Screenshot `…21-36-36.png`):** in jeder
     Phase redundant → entfernen, Battle-Log-Eintrag genügt. Vorgehen: XS-Entfernung +
     Render-Test; Teil des B7/B9-Pakets.
@@ -204,11 +212,16 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     (B7/B8) verschwinden. Vorgehen: „Subphasen-Stepper"-Baustein als design_system-Erweiterung
     entwerfen (Refinement, Layout-Entscheid beim Stakeholder), dann eigener Plan; die
     B7/B8-Entfernungen schaffen den Platz dafür.
+    **Entschieden:** Zwischenlösung C (statischer Hinweistext, kein Zustand), Zielbild
+    vertikale Checkliste statt horizontaler Chips (Stakeholder-Kommentar); B7+B9 laufen
+    als EIN Konzept-Handoff (S135, `S134_offene_punkte.md`).
   - **B10 — Kommentar-Hygiene im Code:** viele Erklär-Kommentare im Code; Soll: Erklärung in
     der Spec, Code selbsterklärend (Clean Code), höchstens ein Verweis-Kommentar auf die
     zuständige Spec. Vorgehen: (a) Konvention im CLAUDE.md-Clean-Code-Abschnitt schärfen
     (freigabepflichtig), (b) danach als Ratchet-Praxis bei jeder Modul-Berührung Kommentare
     in die zuständige Spec verschieben — kein Big-Bang-Durchgang.
+    **Entschieden S135:** (a) erledigt — Konvention in `CLAUDE.md` §Clean Code eingetragen;
+    (b) läuft als Ratchet-Praxis weiter (`S134_offene_punkte.md`).
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
