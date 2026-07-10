@@ -27,12 +27,12 @@ nächsten Rerun einen veralteten Anzeigewert — für den Scroll-Test irrelevant
 **Stufe 1 — OHNE Patch (nur der B6-Stand aus dieser Session):**
 App neu laden → Setup-Phase → einen Command-Protocol-Slot ändern
 (einen der sechs Zuweisungs-Dropdowns, NICHT das „Read directive"-Dropdown)
-→ **springt der Screen? Ja/Nein** notieren.
+→ **springt der Screen? Ja/Nein** notieren. - Ja. der Screen springt.
 
 **Stufe 2 — MIT Patch (Koordinator wendet `S135_B1_probe.patch` an, App neu laden):**
 gleicher Test: Setup-Phase → einen Command-Protocol-Slot ändern
-→ **springt der Screen? Ja/Nein** notieren.
-Danach Patch zurücknehmen (`git apply -R`).
+→ **springt der Screen? Ja/Nein** notieren. 
+Danach Patch zurücknehmen (`git apply -R`). - Wie wende ich den Patch an?
 
 ## Interpretationstabelle
 

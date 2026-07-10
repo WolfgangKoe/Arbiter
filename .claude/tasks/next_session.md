@@ -39,10 +39,20 @@ Frühere Sessions (S60–S134): Verlauf in `docs/metrics/session_archive.md` (Se
 
 ### ▶ Nächster Schritt (S136)
 
-1. **B1 Scroll-Sprung — Stufe-1-Befund abfragen** („Setup-Phase → Slot ändern →
-   springt der Screen? Ja/Nein"); je Befund Patch `S135_B1_probe.patch` anwenden
-   (Stufe 2, Ansage + Interpretationstabelle in `S135_B1_probe.md`) → gezielter Fix
-   + Regressionstest. KEIN Fix vor dem Browser-Befund.
+1. **B1 Scroll-Sprung — Stufe 2 läuft:** Stufe 1 = **JA, springt** (auch auf B6-Layout).
+   Probe-Patch ist im Working Tree ANGEWENDET (uncommitted; zurücknehmen:
+   `git apply -R docs/handoff/S135_B1_probe.patch`). Stufe-2-Befund beim Stakeholder
+   abfragen → Interpretationstabelle in `S135_B1_probe.md` → gezielter Fix +
+   Regressionstest. KEIN Fix vor dem Befund.
+1b. **4c-Nachbesserung (Stakeholder-Befund, UI noch nicht passend):** Attacken-Re-Roll
+   (a) unverständlich platziert — warum in der Kachel des ausgewählten Modells?;
+   (b) erscheint auch bei FESTEM Attackenwert der Waffe (sinnlos — nur bei
+   variablen/Würfel-Attacken zeigen); (c) Command Re-Roll fehlt in der Attackensequenz
+   (Hit/Wound/Save) generell noch (R-CMD-12 weiter 4/9). Evtl. Beleg-Screenshot
+   `…2026-07-10 21-17-14.png` (Inhalt ungeprüft, deshalb behalten).
+1c. **Retro-Maßnahmen S135 (Stakeholder-GO) umsetzen:** pytest-`run_in_background`-
+   Sperre als Hook prüfen; Executor-Selbst-Stopp auf ~100k; Koordinator-Wind-down
+   ab ~120k einleiten.
 2. **Welle 2 (aus S134/S135 verschoben, Kollision durch Paket-4-Abschluss aufgehoben):**
    Task 7 Dakka (`S133_plan.md`); Task 8 `before_battle` in `PHASES` + ArmySetup-Liste
    (GO-Zählung nach BA-Bereinigung neu verifizieren); B8 redundanter Statusbereich raus
