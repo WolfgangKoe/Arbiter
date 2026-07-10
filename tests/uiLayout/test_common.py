@@ -794,14 +794,17 @@ def test_use_action_spends_cp_and_marks_used(monkeypatch) -> None:
     assert "wh40k_9e.shared.stratagem.fire_overwatch" in session["used_stratagem_ids"]["Necrons"]
 
 
-def test_already_used_this_phase_shows_locked_card(monkeypatch) -> None:
-    """No Pass button (design_system.md §6.1: "passen = [Use] nicht drücken") —
-    this migration removes the old Pass-button/decline-suppression mechanic.
-    The CP-safety guarantee it protected (never spendable twice in one phase)
-    now lives in the state mapping instead: a stratagem already used this
-    phase renders "locked", not "ready", for every later occurrence."""
+def test_used_this_phase_offers_undo_within_window(monkeypatch) -> None:
+    """S134 task 2b: while this phase's activation window is still open
+    (`stratagem_undo_visible`), a spent reactive GO renders "used" with the
+    full-rollback Undo wired — pressing it restores CP and clears the usage
+    marker, the same canonical `undo_stratagem` path the central list uses.
+    The CP-safety guarantee the old "locked" mapping protected still holds:
+    in the "used" state the one action slot is Undo, not Use, so the
+    stratagem can never be spent twice in one phase."""
     session = _reactive_box_session(
-        used_stratagem_ids={"Necrons": {"wh40k_9e.shared.stratagem.fire_overwatch"}}
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {"wh40k_9e.shared.stratagem.fire_overwatch"}},
     )
     captured = _install_reactive_box_session(monkeypatch, session)
 
@@ -813,8 +816,15 @@ def test_already_used_this_phase_shows_locked_card(monkeypatch) -> None:
         context_caption="irrelevant",
     )
 
-    assert captured[0]["state"] == "locked"
-    assert captured[0]["locked_reason"] == "used"
+    assert captured[0]["state"] == "used"
+    assert captured[0]["locked_reason"] is None
+
+    captured[0]["on_undo"]()
+
+    assert session["cp"]["Necrons"] == 5
+    assert (
+        "wh40k_9e.shared.stratagem.fire_overwatch" not in session["used_stratagem_ids"]["Necrons"]
+    )
 
 
 def test_cp_insufficient_shows_locked_card_with_cp_reason(monkeypatch) -> None:

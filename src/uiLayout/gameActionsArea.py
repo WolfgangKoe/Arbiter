@@ -239,11 +239,11 @@ def _render_setup() -> None:
     st.divider()
 
     # ── PlayerArea: first-player selection + Start Game ───────────────
-    st.markdown("**First Player**")
+    st.markdown("**Roll-Off for First Player**")
     c1, c2 = st.columns(2)
     with c1:
         if st.button(
-            f"{slot_a} goes first",
+            slot_a,
             key="setup_first_p1",
             type="primary" if st.session_state.first_player == slot_a else "secondary",
             use_container_width=True,
@@ -254,7 +254,7 @@ def _render_setup() -> None:
             st.rerun()
     with c2:
         if st.button(
-            f"{slot_b} goes first",
+            slot_b,
             key="setup_first_p2",
             type="primary" if st.session_state.first_player == slot_b else "secondary",
             use_container_width=True,
@@ -263,7 +263,6 @@ def _render_setup() -> None:
                 swap_players()
             st.session_state.active = st.session_state.first_player
             st.rerun()
-    st.caption(f"Currently selected: **{st.session_state.first_player}** goes first.")
 
     st.divider()
     if st.button(

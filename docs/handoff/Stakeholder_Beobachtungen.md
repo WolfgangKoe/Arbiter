@@ -1,30 +1,27 @@
-STATUS: NEEDS-DECISION
+STATUS: STANDING
 
-DIESE DATEI ENTHÄLT BEOBACHTUNGEN VOM STAKEHOLDER! NICHT OHNE GENEHMIGUNG LÖSCHEN!!! 
-Werden einzelne Punkte mit DONE markiert, können sie gelöscht werden und alle Screenshots, die darin referenziert werden, sofern sie nicht in anderen Punkte referenziert werden.
+# Stakeholder-Beobachtungen — stehender Eingangskanal
 
-1. Wenn ich im Setup-Screen bin und dort die Command Protocols einstelle, "springt" der Bildschirm so, dass das erste Protokoll oben bündig ist. Das sollte bitte entfallen.
+**Diese Datei wird NIE gelöscht, auch nicht wenn sie leer ist.**
 
-2. Den Spielvorbereitungsscreen müssen wir überarbeiten. 
+Regeln:
 
-4. An sich finde ich es gut, wenn die Profilkarte beim Setup-Screen gezeigt wird. Dann kann man in Ruhe jede Einheit durchgehen, wenn man möchte. ABER: Schön ist anders! (s. Bildschirmfoto vom 2026-07-09 20-53-48)
-- Beim Bewegungswert stehen zwei """", Da soll nur einmal """ stehen. 
-- Die Reihenfolge der Profilwerte folgt nicht der Standardanzeige. 
-- Die Waffenanzeige ist keine schöne tabellarische Ansicht.
-- ...
-=> In Bildschirmfoto vom 2026-07-09 20-58-07 habe ich dir ein Screenshot von Wahapedia eingefügt. Natürlich solll das NICHT so übernommen werden, sondern nur, was im Roster wirklich ausgewählt wurde! Ich stelle mir hier eine schöne Datenkarte vor. Auf diese Weise bereiten wir dann den Armybuilder vor. 
+- **Zweck:** Eingangskanal des Stakeholders. Er schreibt hier Beobachtungen als
+  Bulletpoints (keine Nummerierung nötig), gern mit Screenshot-Verweis — Screenshots
+  liegen daneben in `docs/handoff/`.
+- **Lifecycle je Beobachtung:** Bei Session-Start liest der Planner diese Datei. Jede
+  neue Beobachtung wird mit **explizitem Vorgehen** nach `docs/goals/backlog.md`
+  (oder direkt in den Session-Plan) überführt und **danach aus dieser Datei
+  entfernt** — die Datei selbst bleibt bestehen.
+- **Screenshots:** bleiben in `docs/handoff/`, bis das zugehörige Finding DONE ist —
+  erst dann löschen.
 
-5. Bildschirmfoto vom 2026-07-09 21-23-28 zeigt eine Redundanz. 
-- Die Überschrift "First Player" einfach in Roll-Off for First Player umbenennen. Du kannst das sprachliche etwas glätten.
-- Im Button muss nur der Armee-Name vom Roster stehen. "goes first" kann also entfallen.
-- "Currently selected: Necrons 1500pts - Silent King goes first." kann generell entfallen.
+## Beobachtungen (Eingang)
 
-6. Wenn beim Spielsetup eine faction-ability wie command protocols, canticals oder ähnliches gewählt werden muss, dann sollte dies auch auf die Player-Ebenen rechts und links gesetzt werden. Das sollte gehen. (s. Bildschirmfoto vom 2026-07-09 21-27-05)
+_(aktuell leer — neue Beobachtungen bitte hier als Bulletpoints eintragen)_
 
-7. Der rot markierte Bereich in Bildschirmfoto vom 2026-07-09 21-29-43 ist redundant. Dafür sind die wichtigen Angaben darunter "z.B. select unit" oder "No PSYCHER unit available" sind sehr schwach zu sehen.
+## Zuletzt überführt
 
-8. Der rot markierte Bereich in Bildschirmfoto vom 2026-07-09 21-36-36 ist redundant in jeder Phase. Bitte entfernen. ES reicht wenn es im Battle log erscheint. 
-
-9. Irgendwie fehlt in jeder Phase eine explizite Angabe der Unterphasenschritte. Z.B. in der Bewegungsphase, dass erst alle Einheiten auf dem Feld bewegt werden und dann die Reserven reingeholt werden können. Die in den vorigen Punkten genannten Texte sind doppelt und dreifach im Frontend zu sehen. Die Subpahsen-Phasen sind komplett unsichtbar. 
-
-10. Im Code sehe ich viele Kommentare. Das gefällt mir nicht so gut. Dies sollte an sich alles im Spec stehen. Der Code selbst sollte im Sinne von Clean Code Prinzipien selbsterklärend sein. Und dann vielleicht ein Kommentar, der auf die richtige Spec zeigt. 
+- S134: alle Beobachtungen vom 2026-07-09 (B1–B10) → `docs/goals/backlog.md` §2,
+  Block **„Stakeholder-Beobachtungen S131"** (je Punkt mit explizitem Vorgehen);
+  Entscheidungs-/Diskussionspunkte dazu in `docs/handoff/S134_offene_punkte.md`.

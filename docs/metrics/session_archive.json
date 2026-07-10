@@ -3290,8 +3290,8 @@
   "86c3e13b-c99c-4bf9-9ca6-5f2e5df5263b": {
     "started_at": "2026-07-09T23:56:21.580Z",
     "task": "start session, bitte App starten",
-    "peak_context": 160284,
-    "subagent_share": 87.84396463476267,
+    "peak_context": 163493,
+    "subagent_share": 86.67358752995011,
     "by_tier": {
       "Opus": 1779577,
       "Sonnet": 87278608,
@@ -3354,6 +3354,83 @@
         "tier": "Haiku",
         "peak_context": 79016,
         "started_at": "2026-07-09T23:56:21.580Z"
+      }
+    ]
+  },
+  "b0698466-9c04-4bf0-b26f-d51920a648ec": {
+    "started_at": "2026-07-10T11:33:40.876Z",
+    "task": "start session",
+    "peak_context": 149396,
+    "subagent_share": 87.29014142975642,
+    "by_tier": {
+      "Opus": 1718834,
+      "Sonnet": 27365870,
+      "Haiku": 198378,
+      "Fable": 21283444
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review Sessionstand S134",
+        "tier": "Opus",
+        "peak_context": 58551,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "STANDING-Marker im Handoff-Wächter ergänzen",
+        "tier": "Sonnet",
+        "peak_context": 45004,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "BA-Stratagems aus YAML entfernen",
+        "tier": "Sonnet",
+        "peak_context": 69449,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia-Lookup Rapid Reanimation",
+        "tier": "Haiku",
+        "peak_context": 38826,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Wahapedia-Live-Abgleich Necron-Stratagems",
+        "tier": "Sonnet",
+        "peak_context": 107844,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "§6.2 statisches Modell + Overwatch-Undo",
+        "tier": "Sonnet",
+        "peak_context": 149333,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf für nächste Session",
+        "tier": "Sonnet",
+        "peak_context": 206027,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Verify S134 UI-Befunde gegen aktuellen Code-Stand",
+        "tier": "Sonnet",
+        "peak_context": 63160,
+        "started_at": "2026-07-10T11:33:40.876Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B5-Fix, B1-Recherche, totes Feld",
+        "tier": "Sonnet",
+        "peak_context": 115883,
+        "started_at": "2026-07-10T11:33:40.876Z"
       }
     ]
   }

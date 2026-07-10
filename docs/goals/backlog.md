@@ -128,9 +128,15 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
   - 🟢 **Paket 3b (S134):** `before_battle`-Liste im ArmySetup (macht die 13 bisher nie
     matchenden GOs erstmals sichtbar — löst den S131-Kandidaten „`before_battle` sichtbar
     machen" unten ab).
-  - 🟢 **Paket 4 (S133):** Inline-Anker Attackenabfolge (5 Wurfbereiche: Treffer/
-    Verwundung/Rüstung/Rettung/Schadenszuweisung) + restliche Command-Re-Roll-Wurf-Arten —
-    löst den Rest der Stakeholder-Auflage S130 ein.
+  - ✅ **§6.2 statisches Modell (S134):** reaktiv (on-trigger, Stakeholder-Definition
+    S134-Review) ⇒ nur inline; proaktiv ⇒ nur zentrale Liste; Overwatch-Reaktivbox mit
+    ↺ Undo; Desperate-Breakout-Doppler behoben. **Bestätigter MAJOR:** 14
+    `phase_reactive`-GOs bis Paket 4 nirgends aktivierbar (Schuld-Tabelle
+    `design_system.md` §6.2) — deshalb Paket 4 = S135 Top-Prio.
+  - 🟢 **Paket 4 (S135, TOP-PRIO; Split 4a/4b/4c s. `next_session.md`):** Inline-Anker
+    Attackenabfolge (5 Wurfbereiche: Treffer/Verwundung/Rüstung/Rettung/
+    Schadenszuweisung) + restliche Command-Re-Roll-Wurf-Arten — löst den Rest der
+    Stakeholder-Auflage S130 ein und baut die §6.2-Schuld-Tabelle ab.
   - 🟢 **Paket 5 (S134+):** Wortlaut-/Sprach-Bereinigung (Englisch durchgehend, Use/Undo/
     Confirm-Familie), eine CP-Anzeige, ein Stepper-Baustein.
   - 🟢 **Paket 6 (S134+, eigenes Konzept-Inkrement):** Einheiten-Auswahl in die
@@ -147,12 +153,62 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
   7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — löst über Paket 3
   (S133, s. o.) mit der neuen ArmySetup-Liste; danach §6e-Modifier-Engine für die ~56
   teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
-- 🔲 **Spielvorbereitungs-Screen überarbeiten (Stakeholder-Beobachtung 2, S131 — Refinement
-  nötig):** Stakeholder-Beobachtung aus `docs/handoff/Stakeholder_Beobachtungen.md` Punkt 2
-  („Den Spielvorbereitungsscreen müssen wir überarbeiten"). Noch kein Konzept — braucht
-  eigenes Refinement, bevor daraus ein Plan wird. Punkt 1 derselben Datei (Scroll-Bug
-  Setup→Spielstart) läuft separat als S131-Aufgabe (s. `planning_s131.md` Aufgabe 5); Punkt 3
-  (Start-Game-Button-Position) ist noch unbehandelt — ggf. Teil dieses Refinements.
+- 🔲 **„Alt. Fire"-Chip unerklärt (S132-Befund 5, überführt S134):** `src/uiLayout/dice_html.py:70`
+  rendert `special_die_html("Alt. Fire")` ohne Erklärtext (anders als „Extra Hits" mit
+  „unmod. 6 = +2 Hits"). Vorgehen: Regel-Wortlaut „Alternating Fire" gegen `docs/work/`
+  verifizieren (Haiku-Lookup), dann Kurzerklärung analog Extra-Hits ergänzen. Effort XS.
+- 🔲 **Stakeholder-Beobachtungen S131 (verlustfrei hierher überführt S134;
+  `docs/handoff/Stakeholder_Beobachtungen.md` besteht als STANDING-Eingangskanal weiter —
+  nie löschen; referenzierte Screenshots verbleiben in `docs/handoff/`, Löschung erst wenn
+  der jeweilige Punkt DONE ist):**
+  - 🔲 **B1 — Scroll-Sprung bei Command-Protocol-Wahl im Setup (Befund S134, Fix offen):**
+    Render-Ort ist `gameActionsArea.py::_render_round_choice_assignment` (sechs
+    `st.selectbox`, on_change schreibt alle sechs Widget-Keys neu). Zwei unverifizierte
+    Hypothesen: H1 Fokus-Autoscroll über den Rerun, H2 DOM-Remount durch den
+    Sechsfach-Key-Rewrite. `e3d7753`-Muster passt NICHT (Scroll-nach-oben statt
+    Positions-Erhalt) → kein spekulativer Fix. Vorgehen (S135, Stakeholder: „Prüfe deine
+    Hypothesen"): Probe-Variante ohne Key-Rewrite bauen, dann EXAKTE Browser-Test-Ansage
+    an den Stakeholder (wann testen, was klicken, was beobachten), erst nach Befund
+    gezielter Fix + Regressionstest.
+  - **B2 — Spielvorbereitungsscreen überarbeiten:** noch kein Konzept. Vorgehen: Screen-Inventar
+    erstellen (Sonnet, read-only), Redundanz-Befunde B5/B7 einarbeiten, Konzept-Handoff mit
+    Grundannahmen-Block → Stakeholder-Entscheid → eigener Plan. (Hinweis: der frühere Punkt 3
+    „Start-Game-Button-Position" wurde in S133 aus der Beobachtungsdatei entfernt/erledigt.)
+  - **B4-Rest — profileCard als Datenkarte (Setup):** Doppel-Zoll + Profilwert-Reihenfolge in
+    S133 gefixt; offen: tabellarische Waffenanzeige + „schöne Datenkarte" nur mit der echten
+    Roster-Auswahl (Screenshots `Bildschirmfoto vom 2026-07-09 20-53-48.png` = Ist,
+    `…20-58-07.png` = Wahapedia-Anmutung als Inspiration, ausdrücklich NICHT 1:1). Bereitet
+    den Armybuilder vor. Vorgehen: profileCard als definierten Baustein in `design_system.md`
+    spezifizieren (Refinement mit Stakeholder: Spalten, Waffen-Tabelle, Abgrenzung zur
+    unitCard), danach eigener Plan.
+  - ✅ **B5 — First-Player-Block Redundanz — ERLEDIGT (S134, UI-verifiziert 5/5):**
+    Überschrift „Roll-Off for First Player", Buttons nur Armee-Name, „Currently
+    selected"-Zeile entfernt. Fundort war `gameActionsArea.py::_render_setup` (NICHT
+    `setupScreen.py`); Tests: `tests/uiLayout/test_first_player_block.py`. Screenshot
+    `…21-23-28.png` kann gelöscht werden (Punkt DONE).
+  - **B6 — Faction-Ability-Wahl auf Player-Ebene (Screenshot `…21-27-05.png`):** Muss beim
+    Setup eine faction-ability gewählt werden (Command Protocols, Canticles o. ä.), soll die
+    Wahl in den Spieler-Spalten links/rechts erscheinen. Vorgehen: heutigen Render-Ort
+    bestimmen, Verlagerung in die first/second-Spalten als Kurz-Mockup zeigen (Freigabe),
+    dann S-Fix + Render-Test.
+  - **B7 — Redundanter Kopfbereich + schwache Hinweise (Screenshot `…21-29-43.png`):** rot
+    markierter Bereich ist redundant; wichtige Hinweise darunter („Select unit", „No PSYKER
+    unit available") sind zu schwach sichtbar. Vorgehen: Bereich identifizieren + entfernen,
+    Hinweis-Stil als design_system-Konvention stärken; mit B8/B9 als ein Paket
+    „Phasen-UI entrümpeln" schneiden.
+  - **B8 — Redundanter Statusbereich in jeder Phase (Screenshot `…21-36-36.png`):** in jeder
+    Phase redundant → entfernen, Battle-Log-Eintrag genügt. Vorgehen: XS-Entfernung +
+    Render-Test; Teil des B7/B9-Pakets.
+  - **B9 — Subphasen-Schritte unsichtbar:** je Phase die Unterschritte explizit anzeigen
+    (z. B. Movement: erst alle Feldbewegungen, dann Reinforcements), während redundante Texte
+    (B7/B8) verschwinden. Vorgehen: „Subphasen-Stepper"-Baustein als design_system-Erweiterung
+    entwerfen (Refinement, Layout-Entscheid beim Stakeholder), dann eigener Plan; die
+    B7/B8-Entfernungen schaffen den Platz dafür.
+  - **B10 — Kommentar-Hygiene im Code:** viele Erklär-Kommentare im Code; Soll: Erklärung in
+    der Spec, Code selbsterklärend (Clean Code), höchstens ein Verweis-Kommentar auf die
+    zuständige Spec. Vorgehen: (a) Konvention im CLAUDE.md-Clean-Code-Abschnitt schärfen
+    (freigabepflichtig), (b) danach als Ratchet-Praxis bei jeder Modul-Berührung Kommentare
+    in die zuständige Spec verschieben — kein Big-Bang-Durchgang.
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
@@ -279,6 +335,13 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🔲 **Boarding-Actions-Stratagems laden (Stakeholder-Entscheid S122, → ziel7 Stufe C):**
   NANOSCARAB VIRUS + MINDSHACKLE SCARABS in `necrons/stratagems.yaml` aufnehmen, sobald die
   Hatchway-Abhängigkeit geklärt ist (Entscheid: JA, laden — nicht dauerhaft ausschließen).
+  **S134-Nachtrag (✅ Bereinigung erledigt):** Rapid Reanimation, Shield-Piercer Projectors,
+  Flensing Capacitors + `resurrection_protocols_character` sind laut Live-Wahapedia ebenfalls
+  BA-only und wurden S134 aus dem YAML **entfernt** (Stakeholder-Entscheid) — sie kommen wie
+  die zwei obigen erst mit ziel7 Stufe C zurück. Nebenbefund gesichert: `phase: any` +
+  `event: after_roll` fehlmatcht jeden Advance-/after_roll-Anker (Rapid-Reanimation-Karte
+  erschien als „Advance-Re-Roll" mit „no Advance roll open") — Events künftig wurfspezifisch
+  wählen (Merkposten für Paket 4 / Stufe C).
 - 🔲 **Variable CP-Kosten in der UI anzeigen (Stakeholder-Entscheid S122):** 5 Necron-Stratagems
   haben variable Kosten (z. B. „3/1 CP"); YAML trägt bewusst das Minimum, `rule_text` erklärt.
   UI soll die Variabilität zeigen (z. B. „1 CP (3 CP für TITANIC)") — es wird mit titanischen

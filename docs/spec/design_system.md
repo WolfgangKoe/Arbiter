@@ -185,27 +185,67 @@ Aktivierungsfenster offen ist — der Schiedsrichter-Moment kommt erst am Phasen
 Rundenende, nicht bei jedem Klick (App ist Erinnerer/Entscheidungshelfer, würfelt selbst
 nicht — Regel bleibt unverändert gegenüber dem Bestand).
 
-### 6.2 Orte-Zuordnung (aus der GO-Klassifikation, Achse b)
+### 6.2 Orte-Zuordnung — statisches Modell (Stakeholder-Entscheid S134)
+
+**Sichtbarkeits-Invariante (statisch, ersetzt die dynamische S133-Formulierung):**
+GOs sind **statisch** in reaktiv und proaktiv unterteilt — die Zuordnung ist eine
+Eigenschaft der GO-Klasse aus dem YAML, kein situatives Ein-/Ausblenden:
+
+- `timing: phase_reactive` = **reaktiv**: die GO wird **on-trigger aktiv** — ein
+  Spielereignis öffnet ihr Fenster (z. B. die Auswahl einer Einheit, die „in melee"
+  ist ⇒ Desperate Breakout; eine gegnerische Charge-Deklaration; ein gefallener
+  Wurf). Der Render-Ort folgt dem Trigger: Karte erscheint **NUR** inline am
+  Trigger-Ort (Kompaktform), niemals in der zentralen Stratagems-Liste
+  (Stakeholder-Definition, S134-Review Befund 2).
+- sonst = **proaktiv**: der Spieler initiiert die GO selbst, ohne auslösendes
+  Spielereignis ⇒ Karte erscheint **NUR** in der zentralen Stratagems-Liste
+  (Vollform), niemals inline.
+
+Nie beides, kein dynamischer Wechsel zwischen den Orten. Durchgesetzt an zwei Stellen:
+`stratagem_visibility()` (versteckt `phase_reactive` ohne `reactive_trigger_active`)
+und explizit in `_render_stratagem_column()` (`gameProtocoll.py`), damit der
+Listen-Kontrakt nicht am Default-Argument hängt.
 
 | Klassifikation (Achse b) | Ort | Form |
 |---|---|---|
 | spielweit (12 GOs, `before_battle`) | Liste im ArmySetup, vor „Start Game" | Vollform |
-| phasenweit/proaktiv (~22) | zentrale Stratagems-Liste (Spielerseite) | Vollform |
-| bei_ereignis (~45) | ruhend: zentrale Liste; bei aktivem Auslöser: **nur** Inline-Anker | Voll bzw. Kompakt |
-| vor_wurf / nach_wurf (11) | Inline-Anker direkt an der Wurf-Eingabe | Kompakt |
+| phasenweit/proaktiv | zentrale Stratagems-Liste (Spielerseite) | Vollform |
+| reaktiv (`timing: phase_reactive`, bei_ereignis) | **nur** Inline-Anker am Trigger-Ort | Kompakt |
+| vor_wurf / nach_wurf (reaktiv) | Inline-Anker direkt an der Wurf-Eingabe | Kompakt |
 
-Die zentrale Liste ist der **Planungs-Überblick** („was habe ich diese Phase?"), der
-Inline-Anker die **Erinnerung am Ort des Geschehens** — beide rendern dieselbe Karte aus
-derselben Buchhaltung (`spend_stratagem`-Pipeline), nichts wird doppelt gebucht.
-
-**Sichtbarkeits-Invariante (Stakeholder-Entscheid S133):** Eine GO-Karte ist zu jedem
-Zeitpunkt genau **einmal** sichtbar — entweder inline im Einheiten-/Wurf-Kontext **oder**
-in der zentralen Liste, nie an beiden Orten zugleich; auch nie mehrfach (z. B. pro Unit),
-wenn ein Anker genügt. Wird der Inline-Anker aktiv, verschwindet die Karte aus der
-zentralen Liste (und umgekehrt). Damit ist
-auch der `before_battle`-Sichtbarkeitsfix (13 GOs matchen `PHASES` heute nie) konzeptionell
-gelöst: eigener Ort statt Sonderphase. Achse (b) und die vollständige 95-GO-Tabelle:
+Die zentrale Liste ist der **Planungs-Überblick** über die proaktiven Optionen, der
+Inline-Anker die **Erinnerung am Ort des Geschehens** für die reaktiven — beide rendern
+dieselbe Karte aus derselben Buchhaltung (`spend_stratagem`-Pipeline), nichts wird
+doppelt gebucht. Der `before_battle`-Sichtbarkeitsfix bleibt konzeptionell gelöst:
+eigener Ort statt Sonderphase. Achse (b) und die vollständige GO-Tabelle:
 [`../reference/go_klassifikation.md`](../reference/go_klassifikation.md).
+
+**Paket-4-Schuld (Anker folgen S134/S135):** Der Stakeholder hat die Übergangs-Ausnahme
+abgelehnt — reaktive GOs sind ab S134 komplett aus der zentralen Liste, auch wenn ihr
+Inline-Anker noch fehlt. Bis Paket 4 die Anker liefert, sind folgende `phase_reactive`-GOs
+vorübergehend nirgends aktivierbar (grep-Stand S134; vorhandene Anker-Fenster:
+movement/charge/fight × `on_declaration`, `on_destroy` nur bei TRANSPORT-Tod,
+`after_roll` via Advance-/Charge-/Psychic-/Damage-Anker):
+
+| GO | (phase, event) | fehlender Anker |
+|---|---|---|
+| Desperate Breakout (Shared) | movement, — | Use-Anker an der in-melee-Unit (nur die Auflösungskarte nach Use existiert, `movementPhase.py`) |
+| Aetheric Interception (Necrons) | movement, on_set_up | kein `on_set_up`-Fenster |
+| Reanimation Prioritisation (Necrons) | shooting, on_target | kein `on_target`-Fenster |
+| Whirling Onslaught (Necrons) | any, on_target | kein `on_target`-Fenster |
+| Quantum Deflection (Necrons) | any, on_target | kein `on_target`-Fenster |
+| Shadows of Drazak (Necrons) | any, on_target | kein `on_target`-Fenster |
+| Tough as Squig-Hide (Orks) | any, on_target | kein `on_target`-Fenster |
+| Resurrection Protocols (Necrons) | any, on_destroy | `on_destroy`-Fenster öffnet nur bei TRANSPORT-Tod, nicht beim eigentlichen Trigger |
+| Curse of the Phaeron (Necrons) | any, on_destroy | dito |
+| Revenge of the Doomstalker (Necrons) | any, on_destroy | dito |
+| Canoptek Overdrive (Necrons) | fight, on_destroy | dito |
+| Murderous Demise (Necrons) | fight, on_destroy | dito |
+| Careen! (Orks) | any, on_destroy | dito |
+| Orks is Never Beaten (Orks) | fight, on_destroy | dito |
+
+Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll, Cut Them Down,
+Emergency Disembarkation, Fire Overwatch, Counter-Offensive, Efficient Disintegration.
 
 ### 6.3 Tisch-Wurf-Eingabe-Baustein
 

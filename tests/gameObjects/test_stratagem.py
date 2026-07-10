@@ -655,6 +655,31 @@ class TestIsCoreStratagem:
             assert is_core_stratagem(s.id) is expected, s.id
 
 
+class TestBoardingActionsOnlyStratagemsExcluded:
+    """S134: four Necron stratagems are Boarding Actions supplement-only per
+    wahapedia 9ed and were mistakenly loaded as regular stratagems. They must
+    not appear in the regular load_stratagems("necrons") result. The 1 CP
+    INFANTRY NOBLE/CRYPTEK Resurrection Protocols variant is a real core
+    stratagem and must remain.
+    """
+
+    _EXCLUDED_IDS = [
+        "wh40k_9e.necrons.stratagem.rapid_reanimation",
+        "wh40k_9e.necrons.stratagem.shield_piercer_projectors",
+        "wh40k_9e.necrons.stratagem.flensing_capacitors",
+        "wh40k_9e.necrons.stratagem.resurrection_protocols_character",
+    ]
+
+    def test_boarding_actions_only_stratagems_not_loaded(self) -> None:
+        ids = {s.id for s in load_stratagems("necrons")}
+        for excluded_id in self._EXCLUDED_IDS:
+            assert excluded_id not in ids, f"{excluded_id} is Boarding Actions only"
+
+    def test_infantry_resurrection_protocols_variant_still_loaded(self) -> None:
+        ids = {s.id for s in load_stratagems("necrons")}
+        assert "wh40k_9e.necrons.stratagem.resurrection_protocols" in ids
+
+
 _DISRUPTION_FIELDS_ID = "wh40k_9e.necrons.stratagem.disruption_fields"
 
 

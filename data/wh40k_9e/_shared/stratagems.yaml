@@ -45,6 +45,11 @@ stratagems:
     player: active
     conditions: []
     once_per_phase: true
+    # S134 static model (design_system.md §6.2): reactive => renders ONLY inline
+    # (movementPhase resolution card); previously the central list showed it in
+    # parallel (S134 "Doppler"). No `event` yet: the inline USE anchor (in-melee
+    # unit not yet moved) is Paket-4 debt, delivered S134/S135.
+    timing: phase_reactive
     effect:
       type: move
       handler: fall_back_through_models

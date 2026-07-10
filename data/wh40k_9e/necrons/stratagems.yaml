@@ -11,11 +11,15 @@
 # player: "active" | "inactive" | "both"
 # cp_cost: minimum CP cost; variable costs are explained in rule_text.
 #
-# EXCLUDED: Boarding Actions supplement stratagems (NANOSCARAB VIRUS,
-#   MINDSHACKLE SCARABS) — require Hatchway mechanics from that supplement.
-# Total: 60 stratagems (38 Core + 6 Dynastic + 8 Cult of the Cryptek + 8 Annihilation Legion)
-#   — Resurrection Protocols has two independent rule variants (1 CP INFANTRY NOBLE/CRYPTEK,
-#   2 CP CHARACTER), both modelled as separate entries (S123-Vollabgleich).
+# EXCLUDED: Boarding Actions only stratagems — laut wahapedia 9ed (S134-Abgleich)
+#   nur im Boarding-Actions-Spezialmodus verfügbar, nicht regulär:
+#   NANOSCARAB VIRUS, MINDSHACKLE SCARABS, RAPID REANIMATION,
+#   SHIELD-PIERCER PROJECTORS, FLENSING CAPACITORS,
+#   RESURRECTION PROTOCOLS (CHARACTER, 2 CP variant).
+#   NANOSCARAB VIRUS/MINDSHACKLE SCARABS require Hatchway mechanics from that supplement.
+# Total: 56 stratagems (35 Core + 6 Dynastic + 8 Cult of the Cryptek + 8 Annihilation Legion)
+#   — Resurrection Protocols' regular-game variant is the 1 CP INFANTRY NOBLE/CRYPTEK
+#   entry only; the 2 CP CHARACTER variant is Boarding Actions only (see EXCLUDED above).
 
 stratagems:
 
@@ -314,32 +318,6 @@ stratagems:
       type: mortal_wounds
     rule_text: "Use this Stratagem in your Shooting phase, when a DOOM SCYTHE model from your army is selected to shoot. After you select the target unit for that model's heavy death ray, select one enemy unit within 3\" of that target (you can select the target itself if you wish); that enemy unit can either brace or duck for cover. If that unit braces, and it is not a VEHICLE or a MONSTER unit, it suffers D3 mortal wounds. If that unit ducks for cover, then until the end of the turn, subtract 1 from the Attacks characteristic of models in that unit, and that unit cannot fire Overwatch or Set to Defend."
 
-  - id: wh40k_9e.necrons.stratagem.shield_piercer_projectors
-    name_en: Shield-Piercer Projectors
-    cp_cost: 1
-    phase: shooting
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    effect:
-      type: restriction
-      stat: invuln_save
-    rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS model from your army shoots with a ranged weapon. Until the end of the phase, each time that model makes an attack with that weapon, invulnerable saving throws cannot be taken against that attack."
-
-  - id: wh40k_9e.necrons.stratagem.flensing_capacitors
-    name_en: Flensing Capacitors
-    cp_cost: 1
-    phase: shooting
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    effect:
-      type: auto_wound
-      modifier: 5
-    rule_text: "Use this Stratagem in your Shooting phase, when a NECRONS unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a gauss weapon, an unmodified successful hit roll of 5+ automatically wounds the target."
-
   # ── Core — Fight Phase ─────────────────────────────────────────────────────
 
   - id: wh40k_9e.necrons.stratagem.storm_of_flensing_blades
@@ -463,21 +441,6 @@ stratagems:
       amount: "D3"
     rule_text: "Use this Stratagem in any phase, when a NECRONS INFANTRY NOBLE or NECRONS INFANTRY CRYPTEK model from your army is destroyed. You can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when that model is destroyed. If you do, then on a 4+, set that model back up on the battlefield as close as possible to where they were destroyed and more than 1\" away from any enemy models, with D3 wounds remaining. This Stratagem cannot be used to set the same model back up more than once per battle."
 
-  - id: wh40k_9e.necrons.stratagem.resurrection_protocols_character
-    name_en: Resurrection Protocols
-    cp_cost: 2
-    phase: any  # triggers on destroy — can happen in any phase
-    stage: end   # roll at end of phase
-    player: both  # your model can be destroyed in either player's turn
-    conditions: [CHARACTER]
-    once_per_phase: false
-    timing: phase_reactive
-    event: on_destroy
-    effect:
-      type: reanimate
-      amount: "D3"
-    rule_text: "Use this Stratagem in any phase, when a NECRONS CHARACTER model from your army is destroyed. You can choose to roll one D6 at the end of the phase instead of using any rules that are triggered when that model is destroyed. If you do so, then on a 4+, set that model back up on the battlefield as close as possible to where they were destroyed and more than 1\" away from any enemy models, with D3 wounds remaining. This Stratagem cannot be used to set the same model back up more than once per battle."
-
   - id: wh40k_9e.necrons.stratagem.quantum_deflection
     name_en: Quantum Deflection
     cp_cost: 1
@@ -537,22 +500,6 @@ stratagems:
       type: free_attack
       stat: shooting
     rule_text: "Use this Stratagem in any phase, when a <DYNASTY> CHARACTER unit from your army is destroyed by an enemy unit. Select one friendly <DYNASTY> CANOPTEK DOOMSTALKER model from your army. At the end of the phase, that CANOPTEK DOOMSTALKER model can shoot as if it were your Shooting phase, but it can only target that enemy unit (and only if that enemy unit is an eligible target for that attack). Until the end of the battle, each time that CANOPTEK DOOMSTALKER model makes an attack that targets that enemy unit, add 1 to that attack's hit roll."
-
-  - id: wh40k_9e.necrons.stratagem.rapid_reanimation
-    name_en: Rapid Reanimation
-    cp_cost: 1  # variable: 1CP with CRYPTEK/Resurrection Orb on field, 2CP otherwise
-    phase: any  # triggered when RP is enacted — can happen in any phase
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: false
-    timing: phase_reactive
-    event: after_roll  # after reanimation protocols roll
-    effect:
-      type: buff_roll
-      stat: rp
-      modifier: 1
-    rule_text: "Use this Stratagem when a unit from your army has its reanimation protocols enacted. Until the end of the phase, add 1 to all reanimation protocols rolls made for that unit. If you have a CRYPTEK model or a CHARACTER model equipped with a Resurrection Orb on the battlefield, this Stratagem costs 1CP; otherwise, it costs 2CP."
 
   # ── Dynastic Stratagems ────────────────────────────────────────────────────
 

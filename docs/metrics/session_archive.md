@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 13:31 CEST
+Stand: 2026-07-10 16:02 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 01:56 86c3  ████████████ 160k ⛔    █████░  88%    ▚▚··········
+07-10 13:33 b069  ████████████ 149k ⚠️   █████░  87%    ▚▚▚▚▚·······
+         SA_1·  █████░░░░░░░  59k ✅    DoD-Review Sessionstand S134
+         SA_2·  ████░░░░░░░░  45k ✅    STANDING-Marker im Handoff-Wächter…
+         SA_3·  ██████░░░░░░  69k ✅    BA-Stratagems aus YAML entfernen
+         SA_4·  ███░░░░░░░░░  39k ✅    Wahapedia-Lookup Rapid Reanimation
+         SA_5·  █████████░░░ 108k ✅    Wahapedia-Live-Abgleich Necron-Str…
+         SA_6·  ████████████ 149k ⚠️   §6.2 statisches Modell + Overwatch…
+         SA_7·  ████████████ 206k ⛔    Planning-Entwurf für nächste Sessi…
+         SA_8·  █████░░░░░░░  63k ✅    Verify S134 UI-Befunde gegen aktue…
+         SA_9·  █████████░░░ 116k ✅    B5-Fix, B1-Recherche, totes Feld
+----------------- ---------------------- -------------- ------------
+07-10 01:56 86c3  ████████████ 163k ⛔    █████░  87%    ▚▚··········
          SA_1·  █████░░░░░░░  60k ✅    S133 DoD-Review (Reviewer)
          SA_2·  █████████░░░ 110k ✅    S133-Planungsentwurf erstellen
          SA_3·  █████░░░░░░░  57k ✅    T1: K1/K4-Handoffs konsumieren

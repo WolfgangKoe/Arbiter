@@ -52,6 +52,7 @@ from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
     reactive_stratagems_for,
+    stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
 )
@@ -532,21 +533,24 @@ def _reactive_go_state(
     """Map `stratagem_visibility()`'s clickable/greyed to a GO-card state, for
     reactive GO boxes only.
 
-    Mirrors gameProtocoll.py's ``_go_state_and_reason()`` / movementPhase.py's
-    ``_advance_reroll_state()`` shape (clickable → ready) but — unlike either —
-    never maps "greyed" to "used": a reactive box's render is entirely gated
-    by the CALLER's own pending-window marker (e.g. `pending_fall_back`),
-    which the Use action clears (see `_reactive_use_callback`) to take over
-    the removed Pass button's window-closing role (design_system.md §6.1: no
-    Pass control). Once that marker is gone the box never renders again this
-    phase, so a "used" state with Undo offered would never get a chance to
-    redisplay — the reactive box offered no Undo before this migration and,
-    for that structural reason, still doesn't; "greyed" becomes "locked"
-    instead, same as an unspendable central-list card.
+    Mirrors gameProtocoll.py's ``_go_state_and_reason()`` exactly (S134 task 2b
+    closed the divergence): "greyed" with this phase's activation window still
+    open (`stratagem_undo_visible`) maps to "used", so the card offers the
+    full-rollback ``↺ Undo`` (§6.1) instead of dead-ending in "locked". This
+    only ever displays for callers whose window marker survives the Use — e.g.
+    Fire Overwatch, whose box is gated by `selected_targets`, not by an
+    `on_resolved`-cleared marker. Callers that DO clear their own pending
+    marker on Use (e.g. Cut Them Down via `pending_fall_back`) never re-render
+    the box afterwards, so the "used" branch simply never shows there — the
+    mapping is still correct, the caller's window just closed. With the
+    undo window closed, "greyed" falls through to "locked", reason "used"
+    for a once_per_battle stratagem spent earlier, else "CP insufficient".
     """
     if vis == "clickable":
         return "ready", None
-    reason = "used" if (strat.id in used_ids or strat.id in used_battle_ids) else "CP insufficient"
+    if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
+        return "used", None
+    reason = "used" if strat.id in used_battle_ids else "CP insufficient"
     return "locked", reason
 
 
@@ -594,6 +598,19 @@ def _reactive_use_callback(
             on_resolved()
 
     return _use
+
+
+def _reactive_undo_callback(strat: Stratagem, faction: str) -> Callable[[], None]:
+    """Factory for a reactive GO card's on_undo callback (same closure-capture
+    rationale as `_reactive_use_callback`). Routes through the canonical
+    `undo_stratagem` full rollback — CP, both usage sets and any registered
+    modifier revert — exactly like the central list's undo (gameProtocoll.py).
+    Caller-side `on_spent`/`on_resolved` effects are NOT re-wound here: a card
+    still rendering in the "used" state implies the caller's own window marker
+    was never cleared by Use (see `_reactive_go_state`), so there is nothing
+    of theirs to restore.
+    """
+    return lambda: undo_stratagem(strat, faction)
 
 
 def render_reactive_stratagem_box(
@@ -676,6 +693,7 @@ def render_reactive_stratagem_box(
             on_use=_reactive_use_callback(
                 strat, faction, unit_key_for_modifier, on_spent, on_resolved
             ),
+            on_undo=_reactive_undo_callback(strat, faction),
         )
 
 

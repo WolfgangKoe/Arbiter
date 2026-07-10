@@ -44,11 +44,16 @@ Murderers = proaktiv/phasenweit/Re-Roll — gleicher Effekt, andere Achsen a+b.
 Adeptus Custodes hat keine `stratagems.yaml` (nur `faction_abilities.yaml`/Ka'tahs, separat
 kategorisiert in `docs/spec/faction_abilities.md`) — daher hier nicht enthalten.
 
+\* Desperate Breakout: S131 als proaktiv eingestuft; der S134-Entscheid (statisches
+§6.2-Modell, Doppler-Fix inline + Liste) reklassifiziert es als reaktiv
+(`timing: phase_reactive` in `_shared/stratagems.yaml`) — den Use-Anker an der
+in-melee-Unit liefert Paket 4 (S134/S135, s. `design_system.md` §6.2).
+
 | Name | Fraktion | CP | (a) Wann | (b) Moment | (c) Effekt | Phase |
 |---|---|---|---|---|---|---|
 | Command Re-Roll | Shared | 1 | reaktiv | nach_wurf | Re-Roll | move+psyc+shoo+char+figh |
 | Cut Them Down | Shared | 1 | reaktiv | bei_ereignis | Direkter Schaden | movement |
-| Desperate Breakout | Shared | 2 | proaktiv | phasenweit | Zusatz-Aktion | movement |
+| Desperate Breakout | Shared | 2 | reaktiv\* | bei_ereignis | Zusatz-Aktion | movement |
 | Emergency Disembarkation | Shared | 1 | reaktiv | bei_ereignis | Zusatz-Aktion | any |
 | Fire Overwatch | Shared | 1 | reaktiv | bei_ereignis | Zusatz-Aktion | charge |
 | Counter-Offensive | Shared | 2 | reaktiv | bei_ereignis | Zusatz-Aktion | fight |

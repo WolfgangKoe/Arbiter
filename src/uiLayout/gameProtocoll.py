@@ -293,6 +293,15 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
 
     visible = []
     for s in stratagems:
+        if s.timing == "phase_reactive":
+            # Static §6.2 model (S134 stakeholder decision): a reactive GO
+            # renders ONLY at its inline trigger anchor, never in this central
+            # list — even while its anchor is still missing (Paket-4 debt,
+            # design_system.md §6.2). Generic YAML-field check, no id/name
+            # strings (INV-4b). `stratagem_visibility()` would also hide these
+            # (reactive_trigger_active defaults False); this explicit skip
+            # makes the list's contract independent of that default.
+            continue
         if not stratagem_usable_by_player(s.player, is_active):
             continue
         met = _conditions_met(s.conditions, unit_for_check)

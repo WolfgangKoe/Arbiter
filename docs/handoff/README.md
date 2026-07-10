@@ -20,9 +20,10 @@ Jede Handoff-Datei deklariert in ihrer **ersten Zeile** einen Status:
 | `STATUS: NEEDS-DECISION` | Subagent braucht eine Stakeholder-Entscheidung | Koordinator legt vor → Stakeholder antwortet |
 | `STATUS: ANSWERED` | Stakeholder hat geantwortet (Antwort steht in der Datei) | Koordinator weckt den Subagenten per `SendMessage` |
 | `STATUS: IN-PROGRESS` | Subagent arbeitet noch / mehrteilig — nur **während** eines Laufs; vor Lauf-Ende auf einen der drei anderen Marker setzen (der Wächter akzeptiert nur diese) | — |
+| `STATUS: STANDING` | Dauerhafter Eingangskanal (z. B. Stakeholder-Beobachtungen) — Datei wird **nie gelöscht**, auch nicht leer; Inhalt wird bei Bedarf in Backlog/Spec überführt, die Datei selbst bleibt (S134-Stakeholder-Entscheid) | wer den Inhalt überführt, leert die Datei — löscht sie nicht |
 
 **Wächter (S120):** `tests/docs/test_handoff_hygiene.py` bricht den Build, wenn Zeile 1 nicht mit
-`STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE` beginnt — oder wenn ein `DONE`-Handoff liegen bleibt.
+`STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE`/`STANDING` beginnt — oder wenn ein `DONE`-Handoff liegen bleibt.
 `DONE` ist damit ein **Durchgangszustand** (Setzen + Löschen im selben Schritt), kein Ablagezustand —
 der Wächter erzwingt das absichtlich, statt einen Bug zu markieren.
 

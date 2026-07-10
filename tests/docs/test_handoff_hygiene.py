@@ -14,7 +14,14 @@ from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[2]
 _HANDOFF_DIR = _ROOT / "docs" / "handoff"
 
-_VALID_MARKERS = ("NEEDS-DECISION", "ANSWERED", "DONE")
+_VALID_MARKERS = (
+    "NEEDS-DECISION",
+    "ANSWERED",
+    "DONE",
+    # STANDING: dauerhafte Datei (Eingangskanal), Inhalt wird ueberfuehrt,
+    # die Datei selbst bleibt bestehen (S134-Stakeholder-Entscheid).
+    "STANDING",
+)
 
 
 def _handoff_files() -> list[Path]:

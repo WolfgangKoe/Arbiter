@@ -378,3 +378,92 @@ def test_render_stratagem_column_undo_action_routes_through_undo_stratagem(
     captured[0]["on_undo"]()
 
     assert undo_calls == [(strat, "Necrons")]
+
+
+# ---------------------------------------------------------------------------
+# §6.2 static model (S134 stakeholder decision): timing="phase_reactive" GOs
+# render ONLY at their inline trigger anchor — never in the central list.
+# ---------------------------------------------------------------------------
+
+
+def test_render_stratagem_column_hides_phase_reactive_stratagems(monkeypatch) -> None:
+    """A GO with timing="phase_reactive" never appears in the central
+    Stratagems list, regardless of phase/CP/usage — generic YAML-field
+    contract (no id/name check), the proactive sibling still renders."""
+    from dataclasses import replace
+
+    proactive = _make_stratagem(id_="pro.strat", name_en="Proactive GO")
+    reactive = replace(
+        _make_stratagem(id_="rea.strat", name_en="Reactive GO"), timing="phase_reactive"
+    )
+    session = FakeSessionState(
+        cp={"Necrons": 5},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [proactive, reactive])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Necrons", True)
+
+    names = [c["name"] for c in captured]
+    assert "Proactive GO" in names
+    assert "Reactive GO" not in names
+
+
+def test_desperate_breakout_appears_only_inline_not_in_central_list(monkeypatch) -> None:
+    """S134 Doppler root fix: the real shared-data Desperate Breakout carries
+    timing="phase_reactive" (data regression guard), so the central list never
+    shows it — even for an eligible in-melee unit that pre-S134 rendered it
+    "ready" — while movementPhase's inline resolution card still renders it.
+    The stratagem is matched by effect shape, not by name (INV-4b pattern)."""
+    from gameObjects.loader import load_stratagems as real_load
+
+    stratagems = real_load("necrons")  # shared pool included
+    db = [
+        s
+        for s in stratagems
+        if s.effect is not None
+        and s.effect.type == "move"
+        and s.effect.handler == "fall_back_through_models"
+    ]
+    assert len(db) == 1
+    assert db[0].timing == "phase_reactive"
+
+    movement_idx = next(i for i, p in enumerate(gp.PHASES) if p[1] == "movement")
+    unit = SimpleNamespace(id="boyz", name_en="Boyz Mob", has_keyword=lambda kw: True)
+    session = FakeSessionState(
+        cp={"Orks": 10},
+        phase_idx=movement_idx,
+        round=1,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=("Orks", "boyz"),
+        p1_units={"boyz": {"movement_chosen": False, "in_melee": True}},
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: stratagems)
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+    monkeypatch.setattr(gp, "units_list_for", lambda player: [unit])
+    monkeypatch.setattr(gp, "units_key_for", lambda player: "p1_units")
+
+    central: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: central.append(kwargs))
+    gp._render_stratagem_column("Orks", True)
+    assert all(c["name"] != db[0].name_en for c in central)
+
+    import gameMechanic.movementPhase as mp
+
+    inline: list[dict] = []
+    monkeypatch.setattr(mp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(mp, "load_stratagems", lambda faction_dir: stratagems)
+    monkeypatch.setattr(mp, "faction_dir_for", lambda player: "necrons")
+    monkeypatch.setattr(mp, "render_go_card", lambda **kwargs: inline.append(kwargs))
+    mp._render_desperate_breakout("boyz", unit, "Orks", {"models": 10}, {"round": 1})
+    assert [c["name"] for c in inline] == [db[0].name_en]
