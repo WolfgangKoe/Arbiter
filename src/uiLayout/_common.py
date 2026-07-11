@@ -28,6 +28,7 @@ from gameMechanic.attack_math import (  # noqa: F401
     _compute_attacks,
     _detect_weapon_special,
     _group_melee_budget,
+    _is_variable_attacks,
     _parse_strength,
     _rapid_fire_input_cap,
     _restriction_label,
@@ -770,8 +771,13 @@ def render_inline_command_reroll(
     *,
     reopen_key: str,
     on_reroll: Callable[[], None],
+    label_context: str = "",
 ) -> None:
     """Render the inline ``↻ <name> (N CP)`` offer next to a just-made roll.
+
+    ``label_context`` (e.g. a weapon name) is appended to the button label
+    so that neighbouring offers stay distinguishable when several rolls sit
+    close together (S136 4c-a Option B).
 
     Call this at the exact spot a phase handler shows a roll result that is
     still "the last roll" — i.e. before any later roll/step has superseded
@@ -805,8 +811,9 @@ def render_inline_command_reroll(
         vis = stratagem_visibility(strat, cp, phase, used_ids, True, reactive_trigger_active=True)
         if vis != "clickable":
             continue
+        context_suffix = f" — {label_context}" if label_context else ""
         if st.button(
-            f"{SYM_RESET} {strat.name_en} ({strat.cp_cost} CP)",
+            f"{SYM_RESET} {strat.name_en} ({strat.cp_cost} CP){context_suffix}",
             key=f"cmd_reroll_{faction}_{phase}_{strat.id}_{reopen_key}",
         ):
             spend_stratagem(strat, faction)
@@ -1818,6 +1825,16 @@ def _render_resolution_tab(
         st.markdown("**HIT** &nbsp; AUTO-HIT", unsafe_allow_html=True)
     else:
         _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
+        # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the hit
+        # roll — attacker pays, analog Advance/Charge (Familie 2, kein
+        # Wertfeld — die App erfasst diesen Wurf nicht separat).
+        render_inline_command_reroll(
+            atk_faction,
+            phase_key,
+            reopen_key=f"{tab_key}_hit",
+            on_reroll=lambda: None,
+            label_context="Hit roll",
+        )
 
     # Hit-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): the defender's own
     # reactive GOs that debuff THIS attack's hit roll (e.g. Shadows of Drazak)
@@ -1851,6 +1868,15 @@ def _render_resolution_tab(
         on_six_ap=on_six_ap,
         on_six_label=on_six_label,
     )
+    # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
+    # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.
+    render_inline_command_reroll(
+        atk_faction,
+        phase_key,
+        reopen_key=f"{tab_key}_wound",
+        on_reroll=lambda: None,
+        label_context="Wound roll",
+    )
 
     # Wound-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): same trigger as
     # above, filtered to the wound-roll debuff (e.g. Whirling Onslaught).
@@ -1870,6 +1896,16 @@ def _render_resolution_tab(
 
     # SAVE BLOCK
     _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
+    # Command Re-Roll (R-CMD-12, S136 Stufe 2): the defender made the saving
+    # throw — defender pays, unlike the Hit-/Wound-Anker above (attacker's
+    # dice). Same Familie-2 pattern (no locked value to reopen).
+    render_inline_command_reroll(
+        def_faction,
+        phase_key,
+        reopen_key=f"{tab_key}_save",
+        on_reroll=lambda: None,
+        label_context="Saving throw",
+    )
 
     # Save-Anker (design_system.md §6.2/§6.3, S135 Paket 4b): the defender's own
     # reactive GOs that grant/improve an invulnerable save for THIS attack (e.g.
@@ -2386,6 +2422,7 @@ def render_group_assignment(
 
     for i, (def_faction, def_uid) in enumerate(tgts):
         def_unit, _ = lookup(def_faction, def_uid)
+        attack_reroll_offers: list[tuple[str, str]] = []
         with st.container(border=True):
             st.markdown(f"**→ {def_unit.name_en}**")
             c_t, c_sv, c_inv = st.columns(3)
@@ -2444,10 +2481,14 @@ def render_group_assignment(
                     # lock before "Group done" — the number_input stays
                     # directly editable, so on_reroll is a no-op; the call only
                     # owns the CP/usage bookkeeping (attacker pays — it is the
-                    # attacker's own dice).
-                    render_inline_command_reroll(
-                        atk_faction, "fight", reopen_key=atk_key, on_reroll=lambda: None
-                    )
+                    # attacker's own dice). Only offered for dice-based Attacks
+                    # (S136 Befund 4c-b): a fixed value has no roll to re-roll.
+                    # Rendered AFTER the target tile (S136 4c-a Option B): the
+                    # roll belongs to the attacker, not to the target whose
+                    # stats the bordered tile shows — collected here, emitted
+                    # below the `with` block.
+                    if _is_variable_attacks(profile.attacks, profile.effect):
+                        attack_reroll_offers.append((weapon.name_en, atk_key))
                     entries.append(
                         {
                             "def_faction": def_faction,
@@ -2534,6 +2575,15 @@ def render_group_assignment(
                         }
                     )
                     models_assigned += eff_models
+
+        for offer_weapon_name, offer_key in attack_reroll_offers:
+            render_inline_command_reroll(
+                atk_faction,
+                "fight",
+                reopen_key=offer_key,
+                on_reroll=lambda: None,
+                label_context=offer_weapon_name,
+            )
 
     if use_melee:
         header_ph.markdown(

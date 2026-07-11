@@ -183,9 +183,11 @@ die Arbeit" ist delegiert.
 Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Token-Nullsumme.
 
 - **Vorab-Schätzung:** Jeder Plan nennt eine grobe Token-Schätzung pro Aufgabe.
-- **Kontext-Korridor < 150k.** Bei **~90 % (~135k)** die Session **geordnet beenden**
-  (`next_session.md` + Commit) und **frisch starten** — nicht in die teure >150k-Zone laufen.
-  Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
+- **Kontext-Korridor < 150k, zweistufig (S135-Retro-GO, präzisiert S136).** Ab **~120k**
+  leitet der Koordinator ein **geordnetes Wind-down** ein (laufende Aufgabe abschließen,
+  nichts Neues mehr beginnen). Bei **~90 % (~135k)** spätestens die Session **geordnet
+  beenden** (`next_session.md` + Commit) und **frisch starten** — nicht in die teure
+  >150k-Zone laufen. Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
   Kontextstand **automatisch pro Turn** an und eskaliert ab ≥135k ⚠️⛔ Stopp —
   kein manuelles Rechnen nötig. Er liest die letzte `usage`-tragende
   Transcript-Zeile (`~/.claude/projects/<projekt>/<id>.jsonl`), parst sie **als ganzes
@@ -314,6 +316,11 @@ find .venv -name "*.js" | xargs grep -l "<Komponentenname>" | head -3
 | Buttons allgemein | `button[data-testid="stBaseButton-{kind}"]` (nicht `baseButton-{kind}`) |
 | Container `border=True` | `.e1rw0b1u3` (Emotion-Klasse — prüfen bei Streamlit-Update!) |
 | Selectbox | `.stSelectbox [data-baseweb="select"] > div` |
+
+`section[data-testid="stMain"]` ist der Scroll-Container der App (nicht `window`) —
+Scroll-Sprünge entstehen durch Chrome Scroll-Anchoring bei Layout-Shifts oberhalb des
+sichtbaren Bereichs → Fix: `overflow-anchor: none` auf `stMain` (B1-Fix S136, Beleg
+`docs/handoff/S136_B1_probe.md`).
 
 ---
 

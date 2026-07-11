@@ -65,6 +65,17 @@
             "statusMessage": "Freigabe-Gate prüfen"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/wolfgang/Dokumente/Arbiter && .venv/bin/python3 tools/hook_pytest_foreground.py",
+            "timeout": 10,
+            "statusMessage": "pytest-Foreground-Gate prüfen"
+          }
+        ]
       }
     ],
     "PostToolUse": [

@@ -6,6 +6,8 @@ coverage gate (src/uiLayout/* is omitted from measurement).
 
 from __future__ import annotations
 
+from typing import Any
+
 from gameObjects.weapon import WeaponProfile
 
 
@@ -92,6 +94,31 @@ def _total_attacks_int(
         return models_alive * int(s)
     except ValueError:
         return None
+
+
+def _is_variable_attacks(attacks_str: str, effect: dict[str, Any] | None = None) -> bool:
+    """True when the Attacks characteristic is rolled at the table (e.g. D6, 2D3).
+
+    Mirrors ``_total_attacks_int``'s int()-success/failure split without needing
+    model counts: fixed integers, the "Melee"/"None"/""/"*" placeholders, "/"-
+    tiered strings and ``extra_attacks`` effects all resolve to a concrete
+    number and are not dice rolls. Command Re-Roll's own rule text covers only
+    "the dice to determine the number of attacks made by a weapon"
+    (rules_appendix.txt: COMMAND RE-ROLL) — fixed Attacks values have no dice
+    result to re-roll.
+    """
+    if effect and effect.get("type") == "extra_attacks":
+        return False
+    s = str(attacks_str).strip()
+    if s in ("Melee", "None", "", "*"):
+        return False
+    if "/" in s:
+        return False
+    try:
+        int(s)
+    except ValueError:
+        return True
+    return False
 
 
 def _rapid_fire_input_cap(weapon_type: str, base_cap: int) -> int:

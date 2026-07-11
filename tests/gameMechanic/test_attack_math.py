@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.attack_math import (  # noqa: E402
     _compute_attacks,
+    _is_variable_attacks,
     _rapid_fire_input_cap,
     _total_attacks_int,
 )
@@ -129,6 +130,52 @@ class TestRapidFireInputCap:
 
     def test_melee_weapon_type_unchanged(self) -> None:
         assert _rapid_fire_input_cap("Melee", 4) == 4
+
+
+# ---------------------------------------------------------------------------
+# _is_variable_attacks — S136 Befund 4c-b: Command Re-Roll only covers "the
+# dice to determine the number of attacks" (rules_appendix.txt COMMAND
+# RE-ROLL) — a fixed Attacks characteristic has no roll to offer a re-roll on.
+# ---------------------------------------------------------------------------
+
+
+class TestIsVariableAttacks:
+    def test_d6_is_variable(self) -> None:
+        assert _is_variable_attacks("D6") is True
+
+    def test_d3_is_variable(self) -> None:
+        assert _is_variable_attacks("D3") is True
+
+    def test_2d6_is_variable(self) -> None:
+        assert _is_variable_attacks("2D6") is True
+
+    def test_fixed_int_string_is_not_variable(self) -> None:
+        assert _is_variable_attacks("1") is False
+
+    def test_fixed_multi_digit_is_not_variable(self) -> None:
+        assert _is_variable_attacks("4") is False
+
+    def test_melee_placeholder_is_not_variable(self) -> None:
+        assert _is_variable_attacks("Melee") is False
+
+    def test_none_placeholder_is_not_variable(self) -> None:
+        assert _is_variable_attacks("None") is False
+
+    def test_empty_string_is_not_variable(self) -> None:
+        assert _is_variable_attacks("") is False
+
+    def test_star_placeholder_is_not_variable(self) -> None:
+        assert _is_variable_attacks("*") is False
+
+    def test_slash_tiered_is_not_variable(self) -> None:
+        assert _is_variable_attacks("2/4") is False
+
+    def test_extra_attacks_effect_is_not_variable_even_if_dice_string(self) -> None:
+        # extra_attacks resolves via a formula, not the printed attacks string
+        assert _is_variable_attacks("D6", {"type": "extra_attacks", "amount": 1}) is False
+
+    def test_whitespace_around_dice_notation_is_stripped(self) -> None:
+        assert _is_variable_attacks(" D6 ") is True
 
 
 # ---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-10 21:31 CEST
+Stand: 2026-07-11 09:59 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 16:04 54b0  ████████████ 196k ⛔    █████░  84%    ▚···········
+07-10 21:31 e914  ██████████░░ 127k ⚠️   █████░  89%    ▚▚▚·········
+         SA_1·  █████████░░░ 113k ✅    Planning-Entwurf S136 erstellen
+         SA_2·  ███████████░ 139k ⚠️   S136-Abschluss: Artefakte + Commit
+         SA_3·  █████░░░░░░░  61k ✅    Retro-Maßnahmen Hook + Schwellen
+         SA_4·  █████████░░░ 115k ✅    B1-Probe per Playwright ausführen
+         SA_5·  ██████████░░ 130k ⚠️   4c a+b Re-Roll-UI nachbessern
+         SA_6·  ████████░░░░ 105k ✅    4c(c) Command-Re-Roll Investigation
+         SA_7·  ██████░░░░░░  70k ✅    Handoff bereinigen + B6-Sync
+         SA_8·  ████████████ 170k ⛔    4c(c) Stufe 2: Hit/Wound/Save-Rero…
+         SA_9·  ████░░░░░░░░  50k ✅    S136 DoD-Review durchführen
+         SA_10·  ██████░░░░░░  75k ✅    B1 Scroll-Sprung H1-Probe
+----------------- ---------------------- -------------- ------------
+07-10 16:04 54b0  ████████████ 197k ⛔    █████░  83%    ▚···········
          SA_1·  ██████░░░░░░  77k ✅    B6 Kurz-Mockup erstellen
          SA_2·  ████████████ 177k ⛔    Paket 4c: Attacken-Fenster + Rest
          SA_3·  ████████████ 205k ⛔    Paket 4b: Save-/Damage-Anker
@@ -553,3 +565,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S132 (2026-07-10)** GO-UI Paket 1+2: go_card.py-Baustein + Stratagems-Liste auf GO-Karten, Re-Roll-Angebot Advance/Charge, Start-Game-Button, Doku-Nachzug §6.3; Stakeholder-Review NO-GO mit 5 Befunden (S132_defects.md), K1/K4 als Hintergrund-Agenten neu gestartet, K2-Design entschieden, K3 nach S133
 - **S133 (2026-07-10)** GO-Karten-Anatomie neu (Container, Use/Undo, Akkordeon in Karte), Desperate-Breakout-Gating, K2-Bewegungs-State-Modell + Re-Roll-Kompaktkarte, Reaktiv-Box→GO-Karte, K3-Conditions, Profilkarten-Fixes; mypy 75→63; §6.2-Sichtbarkeits-Invariante
 - **S135 (2026-07-10)** S134-Entscheidungen aufgelöst (B10 in CLAUDE.md); Paket 4 komplett (4a/4b/4c: Hit/Wound/Save-Anker, Reroll-Ablösung, Attacken-Re-Roll, 3 Schuld-GOs aktivierbar, Folge-Split empfohlen); B6 nebeneinander + Read-directive (verifiziert); B1-Probe-Patch + Ansage; Review GO; 1673 passed / 99,12 %
+- **S136 (2026-07-11)** B1 scroll fix verified, command re-roll 9/9, retro measures

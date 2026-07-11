@@ -149,14 +149,24 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
 - **Test-Budget je Brief:** während der Entwicklung nur gezielte Tests
   (`pytest <datei> -q --no-cov`), genau **eine** Vollsuite am Ende des Briefs.
   Die Vollsuite läuft **immer im Vordergrund** — konkret: im selben Tool-Call auf das
-  Suite-Ende warten (Timeout großzügig setzen), `run_in_background` für pytest ist
-  VERBOTEN; Endbericht in derselben Antwort wie das Suite-Ende (S121/S130-Befund:
-  vorzeitige Rückkehr kostete ein ~171k-Resume; S131: Executor legte sich trotz
-  Klausel mit wartendem Hintergrund-pytest schlafen → Resume nötig).
-- **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~150k
-  Eigenverbrauch, gibt er den Zwischenstand zurück (geänderte Dateien + offene
-  Schritte) statt weiterzuarbeiten. Prüfintervall: nach jedem ~20. Tool-Call den
-  Eigenverbrauch schätzen; ab ~120k nur noch abschließen, nichts Neues beginnen.
+  Suite-Ende warten, **`Bash`-Parameter `timeout: 600000` explizit setzen** (Grund:
+  der 2-Minuten-Default killt die Vollsuite mitten im Lauf, S136-Retro-Befund),
+  `run_in_background` für pytest ist VERBOTEN; Endbericht in derselben Antwort wie das
+  Suite-Ende (S121/S130-Befund: vorzeitige Rückkehr kostete ein ~171k-Resume; S131:
+  Executor legte sich trotz Klausel mit wartendem Hintergrund-pytest schlafen → Resume
+  nötig).
+- **Playwright-UI-Verifikation (Standard-Werkzeug seit S136):** Playwright 1.60 +
+  Chromium stehen im venv bereit — funktionale UI-Verifikation (Scroll-Position,
+  Layout-Shift-Messung, Klick-Abläufe, Konsolen-Snippets wie in `S136_B1_probe.md`
+  vorgeführt) ist damit automatisierbar und für Executor-Briefs das Standard-Werkzeug,
+  sobald ein Befund reines Beobachten im Browser braucht. **Ersetzt NICHT** die
+  Design-Sichtprüfung des Stakeholders (Layout-/Wortlaut-/Ästhetik-Urteil bleibt
+  manuell) — deckt nur messbares/funktionales Verhalten ab.
+- **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~100k
+  Eigenverbrauch (verschärft S135-Retro, vormals ~150k), gibt er den Zwischenstand
+  zurück (geänderte Dateien + offene Schritte) statt weiterzuarbeiten. Prüfintervall:
+  nach jedem ~20. Tool-Call den Eigenverbrauch schätzen; ab ~80k nur noch abschließen,
+  nichts Neues beginnen.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

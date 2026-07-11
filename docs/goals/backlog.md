@@ -145,13 +145,12 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     GameActionArea ziehen (Heroische-Intervention-Muster verallgemeinern), Zielauswahl
     entschlacken.
   - 🔲 **Danach:** manuelle UI-Verifikation (S130-Checkliste + neues Design), Stakeholder.
-- 🟢 **Command Re-Roll auf alle 9 Wurf-Arten ausweiten (Stakeholder-AUFLAGE, S130):** Heute
-  inline verdrahtet nur für Damage/Psychic/Deny (R-CMD-12; Stand S135: 4/9 — Attacken-Feld
-  Nahkampf neu, Damage/Psychic/Deny als GO-Karte migriert). Stakeholder wörtlich: Man kann
-  die GO auch bei den übrigen Würfen „in irgendeiner Form anzeigen — bei Charge- und Advance-
-  Würfen recht gut integrierbar; bei der Attackenfolge müssen wir uns überlegen, wie. Aber bitte
-  nicht außen vor lassen!" Umsetzung läuft über die Design-System-Roadmap oben: Advance/Charge
-  in Paket 2 (S132), Attackenfolge in Paket 4 (S133).
+- ✅ **Command Re-Roll auf alle 9 Wurf-Arten ausweiten — ERLEDIGT (S136, R-CMD-12 9/9):**
+  Stakeholder-AUFLAGE (S130) eingelöst: alle 9 regelerlaubten Wurf-Arten sind jetzt
+  inline verdrahtet — Damage/Psychic/Deny als GO-Karte (S135 Paket 4b), Anzahl-Attacken
+  (S135 Paket 4c), Advance/Charge (S132/S133), Hit-/Wound-/Save-Wurf in
+  `_render_resolution_tab` (S136, pragmatischer Familie-2-Ansatz laut Stakeholder-Entscheid
+  `S136_4cc_befund.md`). Details + Testnamen: [../spec/acceptance/rules.md](../spec/acceptance/rules.md) R-CMD-12.
 - 🟢 **Fraktions-Stratagems `before_battle` sichtbar machen (S131-Kandidat):** 6 Necron- +
   7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — löst über Paket 3
   (S133, s. o.) mit der neuen ArmySetup-Liste; danach §6e-Modifier-Engine für die ~56
@@ -164,15 +163,13 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
   `docs/handoff/Stakeholder_Beobachtungen.md` besteht als STANDING-Eingangskanal weiter —
   nie löschen; referenzierte Screenshots verbleiben in `docs/handoff/`, Löschung erst wenn
   der jeweilige Punkt DONE ist):**
-  - 🔲 **B1 — Scroll-Sprung bei Command-Protocol-Wahl im Setup (Befund S134, Fix offen):**
-    Render-Ort ist `gameActionsArea.py::_render_round_choice_assignment` (sechs
-    `st.selectbox`, on_change schreibt alle sechs Widget-Keys neu). Zwei unverifizierte
-    Hypothesen: H1 Fokus-Autoscroll über den Rerun, H2 DOM-Remount durch den
-    Sechsfach-Key-Rewrite. `e3d7753`-Muster passt NICHT (Scroll-nach-oben statt
-    Positions-Erhalt) → kein spekulativer Fix. Vorgehen (S135, Stakeholder: „Prüfe deine
-    Hypothesen"): Probe-Variante ohne Key-Rewrite bauen, dann EXAKTE Browser-Test-Ansage
-    an den Stakeholder (wann testen, was klicken, was beobachten), erst nach Befund
-    gezielter Fix + Regressionstest.
+  - ✅ **B1 — Scroll-Sprung bei Command-Protocol-Wahl im Setup — ERLEDIGT (S136,
+    Stakeholder-bestätigt):** Ursache Layout-Shift + Chrome Scroll-Anchoring (H1
+    Fokus-Autoscroll und H2 Sechsfach-Key-Rewrite beide widerlegt, Playwright-Befund
+    `docs/handoff/S136_B1_probe.md`: `activeElement` = `<body>`, Layout-Shift bis 0.92 auf
+    `stLayoutWrapper`). Fix: `overflow-anchor: none` auf `section[data-testid="stMain"]`
+    (`gameHeader.py` `CSS_THEME`) — Playwright-verifiziert Scroll-Delta 0/0/0 (vorher
+    +2348). Verankert in `CLAUDE.md` §Streamlit CSS.
   - **B2 — Spielvorbereitungsscreen überarbeiten:** noch kein Konzept. Vorgehen: Screen-Inventar
     erstellen (Sonnet, read-only), Redundanz-Befunde B5/B7 einarbeiten, Konzept-Handoff mit
     Grundannahmen-Block → Stakeholder-Entscheid → eigener Plan. (Hinweis: der frühere Punkt 3
@@ -194,11 +191,11 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     selected"-Zeile entfernt. Fundort war `gameActionsArea.py::_render_setup` (NICHT
     `setupScreen.py`); Tests: `tests/uiLayout/test_first_player_block.py`. Screenshot
     `…21-23-28.png` kann gelöscht werden (Punkt DONE).
-  - **B6 — Faction-Ability-Wahl auf Player-Ebene (Screenshot `…21-27-05.png`):** Muss beim
-    Setup eine faction-ability gewählt werden (Command Protocols, Canticles o. ä.), soll die
-    Wahl in den Spieler-Spalten links/rechts erscheinen. Vorgehen: heutigen Render-Ort
-    bestimmen, Verlagerung in die first/second-Spalten als Kurz-Mockup zeigen (Freigabe),
-    dann S-Fix + Render-Test.
+  - ✅ **B6 — Faction-Ability-Wahl auf Player-Ebene — ERLEDIGT (S135, Commit `9993771`,
+    stakeholder-verifiziert):** Wahl (Command Protocols, Canticles o. ä.) erscheint jetzt in
+    den first/second-Spalten: Setup-Blöcke nebeneinander, „Read directive"-Dropdown
+    (geteilter Helper mit `armyCard`, INV-4b 18→17), Trennlinie. Screenshot `…21-27-05.png`
+    bereits gelöscht (`283d38e`).
   - **B7 — Redundanter Kopfbereich + schwache Hinweise (Screenshot `…21-29-43.png`):** rot
     markierter Bereich ist redundant; wichtige Hinweise darunter („Select unit", „No PSYKER
     unit available") sind zu schwach sichtbar. Vorgehen: Bereich identifizieren + entfernen,
@@ -225,6 +222,10 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     in die zuständige Spec verschieben — kein Big-Bang-Durchgang.
     **Entschieden S135:** (a) erledigt — Konvention in `CLAUDE.md` §Clean Code eingetragen;
     (b) läuft als Ratchet-Praxis weiter (`S134_offene_punkte.md`).
+  - 🔲 **B11 — Rest-Wahrnehmung nach B1-Fix (Stakeholder-Beobachtung S136):** Beim
+    Slot-Wechsel geschieht optisch noch ein kurzer Sprung/Zucken, aber das Fenster bleibt
+    an derselben Stelle (kein Scroll-Delta mehr, Playwright-Beleg B1). Beobachten, ggf.
+    Dropdown-Höhen stabilisieren (optionaler zweiter Schritt aus `S136_B1_probe.md`).
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 

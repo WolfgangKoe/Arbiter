@@ -35,6 +35,11 @@ CSS_THEME = """
 [data-testid="stHeader"] { background: var(--arb-surface); border-bottom: 1px solid var(--arb-border); }
 section[data-testid="stMain"] > div { background-color: var(--arb-bg); }
 
+/* B1: Scroll-Anchoring im Haupt-Scroll-Container deaktivieren — Chrome zog
+   die Scroll-Position beim Rerun-Layout-Shift ans Seitenende
+   (→ docs/handoff/S136_B1_probe.md, Playwright-Befund S136). */
+section[data-testid="stMain"] { overflow-anchor: none; }
+
 /* Typography */
 .stApp, .stMarkdown, .stMarkdown p,
 h1, h2, h3, h4, h5, h6 { color: var(--arb-text) !important; }

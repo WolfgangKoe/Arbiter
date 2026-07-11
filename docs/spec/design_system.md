@@ -226,7 +226,8 @@ Liste, auch wenn ihr Inline-Anker noch fehlt. Nach Paket 4a–4c sind folgende
 `phase_reactive`-GOs weiterhin nirgends aktivierbar (grep-Stand S135 Paket 4c; vorhandene
 Anker-Fenster: movement/charge/fight × `on_declaration`, `on_destroy` nur bei
 TRANSPORT-Tod, Hit-/Wound-/Save-Anker × `on_target` (effect_type-gescoped), `after_roll`
-via Advance-/Charge-/Psychic-/Damage-/Anzahl-Attacken-Anker):
+via Advance-/Charge-/Psychic-/Damage-/Anzahl-Attacken-/Hit-/Wound-/Save-Anker (S136
+Stufe 2)):
 
 | GO | (phase, event) | fehlender Anker |
 |---|---|---|
@@ -243,7 +244,9 @@ via Advance-/Charge-/Psychic-/Damage-/Anzahl-Attacken-Anker):
 | Orks is Never Beaten (Orks) | fight, on_destroy | dito |
 
 Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll (inkl. Anzahl-Attacken-Fenster,
-Paket 4c), Cut Them Down, Emergency Disembarkation, Fire Overwatch, Counter-Offensive,
+Paket 4c, sowie Hit-/Wound-/Save-Fenster, S136 Stufe 2 — alle 9 regelerlaubten Wurf-Arten
+von R-CMD-12 jetzt erreichbar, keine offene GO-Fensterfrage mehr für Command Re-Roll
+insgesamt), Cut Them Down, Emergency Disembarkation, Fire Overwatch, Counter-Offensive,
 Efficient Disintegration, Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught
 (Wound-Anker, Paket 4a), Quantum Deflection (Save-Anker, Paket 4b).
 

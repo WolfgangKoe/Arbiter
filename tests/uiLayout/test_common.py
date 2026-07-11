@@ -1387,6 +1387,18 @@ def test_command_reroll_visible_and_clickable_spends_cp(monkeypatch) -> None:
     assert rerun_calls == [1]
 
 
+def test_command_reroll_label_context_appended_to_button_label(monkeypatch) -> None:
+    """S136 4c-a Option B: with several nearby offers, each button names its roll."""
+    session = _reactive_box_session()
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: None, label_context="Choppa"
+    )
+
+    assert any(label.endswith(" — Choppa") for label, _ in button_calls)
+
+
 def test_command_reroll_hidden_when_cp_zero(monkeypatch) -> None:
     session = _reactive_box_session(cp={"Necrons": 0})
     button_calls, _ = _reroll_widgets(monkeypatch, session)
@@ -1518,8 +1530,64 @@ def test_render_group_assignment_offers_command_reroll_on_attack_count(monkeypat
     assert call.args[0] == "Orks"  # the attacker rolled the dice — attacker pays
     assert call.args[1] == "fight"
     assert call.kwargs["reopen_key"] == "decl_a_g1_atk1_u_def_Choppa"
+    assert call.kwargs["label_context"] == "Choppa"  # button names its weapon (4c-a)
     assert callable(call.kwargs["on_reroll"])
     call.kwargs["on_reroll"]()  # no-op — must not raise
+
+
+def test_render_group_assignment_reroll_offer_outside_target_tile(monkeypatch) -> None:
+    """S136 4c-a Option B: the offer renders below the bordered target tile, not inside it."""
+    unit, _ = _melee_group_fixture()
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    tile_depth = {"n": 0}
+
+    class _TileCM:
+        def __enter__(self):  # type: ignore[no-untyped-def]
+            tile_depth["n"] += 1
+            return self
+
+        def __exit__(self, *exc):  # type: ignore[no-untyped-def]
+            tile_depth["n"] -= 1
+            return False
+
+    monkeypatch.setattr(common.st, "container", lambda *a, **kw: _TileCM())
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 3)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    depth_at_offer: list[int] = []
+    monkeypatch.setattr(
+        common,
+        "render_inline_command_reroll",
+        lambda *a, **kw: depth_at_offer.append(tile_depth["n"]),
+    )
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    assert depth_at_offer == [0]  # rendered once, at container depth 0 (outside the tile)
+
+
+def test_render_group_assignment_no_offer_when_attacks_fixed(monkeypatch) -> None:
+    """S136 Befund 4c-b: a fixed Attacks value has no dice roll to re-roll."""
+    unit, group = _melee_group_fixture()
+    group.weapons[0].profiles[0].attacks = "1"
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 3)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    spy.assert_not_called()
 
 
 def test_render_group_assignment_no_offer_when_not_melee(monkeypatch) -> None:
@@ -1647,3 +1715,104 @@ def test_damage_block_no_offer_before_damage_applied(monkeypatch) -> None:
     common._render_damage_block(unit, "Necrons", "u1", profile, "Orks", "Boyz", "shooting", "tab1")
 
     spy.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# S136 Stufe 2 — Hit-/Wound-/Save-Anker: _render_resolution_tab() offers
+# render_inline_command_reroll directly under each dice block (Familie 2,
+# analog Advance/Charge/Attacken-Anzahl — kein Wertfeld, da die App diese
+# Würfe nirgends separat erfasst). R-CMD-12: schließt die letzten 3 der 9
+# reaktiven Command-Re-Roll-Fenster (Hit, Wound, Save).
+# ---------------------------------------------------------------------------
+
+
+def _resolution_tab_entry_and_units():  # type: ignore[no-untyped-def]
+    """Real melee Choppa attack (Orks Boyz -> Necrons Warriors). def_unit is a
+    plain SimpleNamespace (only the attributes _render_resolution_tab actually
+    reads) — combat resolve functions, ability_engine and the loader run for
+    real against empty per-attack state, exactly as in production when no
+    buffs/directives are active.
+
+    Unlike _melee_group_fixture() (built for render_group_assignment, which
+    reads weapons from model_groups), _render_resolution_tab reads the
+    attacker's top-level Unit.weapons — so the weapon must be attached there
+    too, or weapon lookup fails silently (st.error + early return, no HIT/
+    WOUND/SAVE blocks rendered at all)."""
+    unit, _ = _melee_group_fixture()
+    unit.weapons = list(unit.model_groups[0].weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors")
+    return entry, unit, def_unit
+
+
+def _install_resolution_tab_fixture(monkeypatch, def_unit):  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", lambda *a, **kw: None)
+    monkeypatch.setattr(common, "_render_damage_block", lambda *a, **kw: None)
+
+
+def test_render_resolution_tab_offers_command_reroll_on_hit_roll(monkeypatch) -> None:
+    """Hit-Anker: attacker (Orks) rolled the hit — attacker pays. Clicking it
+    spends CP from the ATTACKER's pool and marks the phase-shared usage set,
+    which then suppresses the Wound offer below (same faction+phase pool —
+    R-CMD-12 'once per phase' is a single pool, not per-anchor)."""
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    _install_resolution_tab_fixture(monkeypatch, def_unit)
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    hit_key = f"cmd_reroll_Orks_fight_{_COMMAND_REROLL_ID}_tab1_hit"
+    button_calls, _ = _reroll_widgets(monkeypatch, session, clicked_key=hit_key)
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert any(key == hit_key for _, key in button_calls)
+    assert session["cp"]["Orks"] == 4  # attacker pays — 5 - 1 CP
+    assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Orks"]
+    # Wound offer shares the same (Orks, fight) pool — already used, so it must
+    # not even reach st.button (visibility gate filters it out beforehand).
+    orks_fight_offers = [key for _, key in button_calls if key and "cmd_reroll_Orks_fight" in key]
+    assert orks_fight_offers == [hit_key]
+
+
+def test_render_resolution_tab_offers_command_reroll_on_wound_roll(monkeypatch) -> None:
+    """Wound-Anker: attacker (Orks) rolled the wound — attacker pays, same as
+    Hit. Verified independently (nothing clicked yet) so the offer's own
+    faction/phase/key are checked without the Hit anchor having consumed the
+    shared pool first."""
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    _install_resolution_tab_fixture(monkeypatch, def_unit)
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    wound_key = f"cmd_reroll_Orks_fight_{_COMMAND_REROLL_ID}_tab1_wound"
+    button_calls, _ = _reroll_widgets(monkeypatch, session, clicked_key=None)
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert any(key == wound_key for _, key in button_calls)
+    assert session["cp"]["Orks"] == 5  # not clicked — Pull, not Push, costs nothing
+    assert session["used_stratagem_ids"] == {}
+
+
+def test_render_resolution_tab_offers_command_reroll_on_save_roll(monkeypatch) -> None:
+    """Save-Anker: the DEFENDER (Necrons) made the saving throw — defender
+    pays, unlike Hit/Wound above. Clicking it spends CP from Necrons' pool
+    only, leaving the attacker's (Orks) CP and usage untouched — the two
+    factions' pools are independent."""
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    _install_resolution_tab_fixture(monkeypatch, def_unit)
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    save_key = f"cmd_reroll_Necrons_fight_{_COMMAND_REROLL_ID}_tab1_save"
+    button_calls, _ = _reroll_widgets(monkeypatch, session, clicked_key=save_key)
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert any(key == save_key for _, key in button_calls)
+    assert session["cp"]["Necrons"] == 4  # defender pays — 5 - 1 CP
+    assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Necrons"]
+    assert session["cp"]["Orks"] == 5  # attacker's pool untouched
+    assert "Orks" not in session["used_stratagem_ids"]

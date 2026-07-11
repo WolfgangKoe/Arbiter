@@ -3437,8 +3437,8 @@
   "54b0c4dc-56c5-4be7-9769-0af689ea2113": {
     "started_at": "2026-07-10T14:04:06.724Z",
     "task": "start session",
-    "peak_context": 196454,
-    "subagent_share": 83.51700881515295,
+    "peak_context": 196932,
+    "subagent_share": 83.2430710578551,
     "by_tier": {
       "Sonnet": 90974957,
       "Fable": 8266529,
@@ -3500,6 +3500,89 @@
         "tier": "Sonnet",
         "peak_context": 119548,
         "started_at": "2026-07-10T14:04:06.724Z"
+      }
+    ]
+  },
+  "e914c95e-2c0c-4d31-9ae7-bcee5d4c533b": {
+    "started_at": "2026-07-10T19:31:56.735Z",
+    "task": "start session",
+    "peak_context": 127110,
+    "subagent_share": 88.64987322955554,
+    "by_tier": {
+      "Sonnet": 47600298,
+      "Fable": 14719300,
+      "Opus": 863757
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S136 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 113411,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S136-Abschluss: Artefakte + Commit",
+        "tier": "Sonnet",
+        "peak_context": 139432,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen Hook + Schwellen",
+        "tier": "Sonnet",
+        "peak_context": 61438,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B1-Probe per Playwright ausführen",
+        "tier": "Sonnet",
+        "peak_context": 115363,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "4c a+b Re-Roll-UI nachbessern",
+        "tier": "Sonnet",
+        "peak_context": 130130,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "4c(c) Command-Re-Roll Investigation",
+        "tier": "Sonnet",
+        "peak_context": 105363,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Handoff bereinigen + B6-Sync",
+        "tier": "Sonnet",
+        "peak_context": 69633,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "4c(c) Stufe 2: Hit/Wound/Save-Reroll",
+        "tier": "Sonnet",
+        "peak_context": 170405,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S136 DoD-Review durchführen",
+        "tier": "Opus",
+        "peak_context": 49799,
+        "started_at": "2026-07-10T19:31:56.735Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B1 Scroll-Sprung H1-Probe",
+        "tier": "Sonnet",
+        "peak_context": 74955,
+        "started_at": "2026-07-10T19:31:56.735Z"
       }
     ]
   }
