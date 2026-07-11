@@ -156,6 +156,19 @@ def _keyword_chip(kw: str, highlighted: bool) -> str:
     return chip(kw, fg, bg, border)
 
 
+def _fold_faction_keyword(text: str) -> str:
+    """Case- and plural-fold a faction/keyword string for comparison.
+
+    WH40k keyword grammar is not consistent across factions: Necron units
+    carry the plural "NECRONS" (matching the faction name "Necrons"), but Ork
+    units carry the singular "ORK" against the faction name "Orks" (Wahapedia
+    data, verified S138). Stripping a single trailing "S" after upper-casing
+    folds both onto the same key without hardcoding either faction's string.
+    """
+    folded = text.strip().upper()
+    return folded[:-1] if folded.endswith("S") else folded
+
+
 def _keywords_html(unit: Unit) -> str:
     """Render keyword chips, excluding the main faction keyword.
 
@@ -163,7 +176,8 @@ def _keywords_html(unit: Unit) -> str:
     each matching chip is highlighted; otherwise no chip is highlighted.
     """
     required: list[str] = st.session_state.get("highlight_keywords", [])
-    visible_kws = [kw for kw in unit.keywords if kw != unit.faction]
+    faction_key = _fold_faction_keyword(unit.faction)
+    visible_kws = [kw for kw in unit.keywords if _fold_faction_keyword(kw) != faction_key]
 
     if required:
         unit_kws = set(unit.keywords)

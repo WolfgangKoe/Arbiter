@@ -26,7 +26,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.attack_squig
@@ -38,7 +38,7 @@ weapons:
         strength: 4
         ap: -1
         damage: 1
-        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon."
         is_melee: true
         max_attacks: 2
         effect:
@@ -54,7 +54,7 @@ weapons:
         strength: "+2"
         ap: -1
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.power_klaw
@@ -66,7 +66,7 @@ weapons:
         strength: User×2
         ap: -3
         damage: 2
-        abilities: "Each time an attack is made with this weapon, subtract"
+        abilities: "Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll."
         is_melee: true
         effect:
           type: debuff_roll
@@ -108,7 +108,7 @@ weapons:
         strength: "+3"
         ap: -3
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.dakkagun
@@ -122,7 +122,7 @@ weapons:
         strength: 5
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.killsaw
@@ -134,7 +134,7 @@ weapons:
         strength: User×2
         ap: -4
         damage: D3
-        abilities: "Each time an attack is made with this weapon, subtract"
+        abilities: "Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll. Each time the bearer fights, if it is equipped with 2 killsaws, it makes 1 additional attack with this weapon."
         is_melee: true
         effect:
           type: debuff_roll
@@ -150,7 +150,7 @@ weapons:
         strength: User
         ap: -1
         damage: 1
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
         effect:
           type: extra_attacks
@@ -165,7 +165,7 @@ weapons:
         strength: 8
         ap: -3
         damage: D6
-        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        abilities: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon."
         is_melee: false
         effect:
           type: multi
@@ -184,7 +184,7 @@ weapons:
         strength: 8
         ap: -3
         damage: D6
-        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        abilities: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon."
         is_melee: false
         effect:
           type: multi
@@ -235,7 +235,7 @@ weapons:
         strength: "*"
         ap: -5
         damage: D6
-        abilities: Blast . Each time this weapon is selected to shoot with
+        abilities: "Blast. Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage."
         is_melee: false
         effect:
           type: complex
@@ -250,7 +250,7 @@ weapons:
         strength: "+3"
         ap: -1
         damage: D3
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.eyez_of_mork
@@ -262,7 +262,7 @@ weapons:
         strength: 6
         ap: -3
         damage: D3
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.urty_syringe
@@ -274,7 +274,7 @@ weapons:
         strength: 2
         ap: 0
         damage: 1
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon. Each time an attack is made with this weapon, unless the target is a VEHICLE or TITANIC unit, that attack always wounds on an unmodified wound roll of 2+."
         is_melee: true
         effect:
           type: extra_attacks
@@ -291,7 +291,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.beast_snagga_klaw
@@ -303,7 +303,7 @@ weapons:
         strength: "+4"
         ap: -3
         damage: 2
-        abilities: "Each time an attack is made with this weapon, subtract"
+        abilities: "Each time an attack is made with this weapon, subtract 1 from that attack’s hit roll."
         is_melee: true
         effect:
           type: debuff_roll
@@ -319,7 +319,7 @@ weapons:
         strength: User
         ap: -2
         damage: 2
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
         effect:
           type: extra_attacks
@@ -346,7 +346,7 @@ weapons:
         strength: 7
         ap: -3
         damage: 3
-        abilities: "Each time the bearer fights, it makes 3 additional atta"
+        abilities: "Each time the bearer fights, it makes 3 additional attacks with this weapon and no more than 3 attacks can be made with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 3 mortal wounds on the target and the attack sequence ends."
         is_melee: true
         max_attacks: 3
         effect:
@@ -364,7 +364,7 @@ weapons:
         strength: 5
         ap: -1
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.gorks_klaw
@@ -376,7 +376,7 @@ weapons:
         strength: User×2
         ap: -4
         damage: 4
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.blitz_missiles
@@ -400,7 +400,7 @@ weapons:
         strength: "+2"
         ap: -3
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.twin_boomstikk
@@ -412,7 +412,7 @@ weapons:
         strength: 5
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.snagga_klaw
@@ -424,7 +424,7 @@ weapons:
         strength: "+2"
         ap: -2
         damage: 2
-        abilities: "Each time an attack is made with this weapon, you can r"
+        abilities: "Each time an attack is made with this weapon, you can re-roll the wound roll."
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.power_stabba
@@ -436,7 +436,7 @@ weapons:
         strength: User
         ap: -2
         damage: 1
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.grot_blasta
@@ -448,7 +448,7 @@ weapons:
         strength: 3
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.power_snappa
@@ -460,7 +460,7 @@ weapons:
         strength: "+2"
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.burna
@@ -472,7 +472,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: "Each time an attack is made with this weapon, that atta"
+        abilities: "Each time an attack is made with this weapon, that attack automatically hits the target."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.shokka_pistol
@@ -484,7 +484,7 @@ weapons:
         strength: 6
         ap: -1
         damage: 1
-        abilities: Blast . Each time an attack made with this weapon is al
+        abilities: "Blast. Each time an attack made with this weapon is allocated to a VEHICLE model, that attack has a Damage characteristic of D3."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.breacha_ram
@@ -496,7 +496,7 @@ weapons:
         strength: "+2"
         ap: -2
         damage: 2
-        abilities: "Each time an attack is made with this weapon, the targe"
+        abilities: "Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack."
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.pair_of_rokkit_pistols
@@ -508,7 +508,7 @@ weapons:
         strength: 7
         ap: -2
         damage: D3
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.tankhammer
@@ -520,7 +520,7 @@ weapons:
         strength: User
         ap: "-"
         damage: "-"
-        abilities: "Each time the bearer fights, it can only make 1 attack"
+        abilities: "Each time the bearer fights, it can only make 1 attack with this weapon. If that attack hits, the target unit suffers D6 mortal wounds and the bearer is destroyed."
         is_melee: true
         effect:
           type: buff_stat
@@ -537,7 +537,7 @@ weapons:
         strength: 6
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.grabba_stikk
@@ -549,7 +549,7 @@ weapons:
         strength: "+1"
         ap: 0
         damage: 1
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
         effect:
           type: extra_attacks
@@ -564,7 +564,7 @@ weapons:
         strength: "+2"
         ap: -1
         damage: 1
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.waaagh_banner
@@ -576,7 +576,7 @@ weapons:
         strength: "+2"
         ap: 0
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.kopta_rokkits
@@ -600,7 +600,7 @@ weapons:
         strength: "+1"
         ap: -1
         damage: 1
-        abilities: "Each time an attack is made with this weapon, make 3 hi"
+        abilities: "Each time an attack is made with this weapon, make 3 hit rolls instead of 1."
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.saddlegit_weapons_shooting
@@ -612,7 +612,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.stikka_shooting
@@ -624,7 +624,7 @@ weapons:
         strength: User
         ap: -2
         damage: 2
-        abilities: Each time an attack made with this weapon targets a uni
+        abilities: "Each time an attack made with this weapon targets a unit within half range, that attack has a Strength characteristic of +1."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.saddlegit_weapons_melee
@@ -636,7 +636,7 @@ weapons:
         strength: 3
         ap: -1
         damage: 1
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.squighog_jaws
@@ -648,7 +648,7 @@ weapons:
         strength: 6
         ap: -1
         damage: 2
-        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon."
         is_melee: true
         max_attacks: 2
         effect:
@@ -664,7 +664,7 @@ weapons:
         strength: "+1"
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.smasha_squig_jaws
@@ -676,7 +676,7 @@ weapons:
         strength: 6
         ap: -1
         damage: 2
-        abilities: "Each time the bearer fights, it makes 2 additional atta"
+        abilities: "Each time the bearer fights, it makes 2 additional attacks with this weapon and no more than 2 attacks can be made with this weapon."
         is_melee: true
         max_attacks: 2
         effect:
@@ -694,7 +694,7 @@ weapons:
         strength: 5
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.burna_bottles
@@ -706,7 +706,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: "Blast . Each time an attack is made with this weapon, t"
+        abilities: "Blast. Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.burna_exhaust
@@ -718,7 +718,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: "Each time an attack is made with this weapon, that atta"
+        abilities: "Each time an attack is made with this weapon, that attack automatically hits the target."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.rivet_kannon
@@ -732,7 +732,7 @@ weapons:
         strength: 7
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.rokkit_kannon
@@ -758,7 +758,7 @@ weapons:
         strength: 5
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.wing_missiles
@@ -770,7 +770,7 @@ weapons:
         strength: 8
         ap: -2
         damage: 3
-        abilities: Each time an attack is made with this weapon that targe
+        abilities: "Each time an attack is made with this weapon that targets a VEHICLE unit, add 1 to that attack’s hit roll."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.nose_drill
@@ -782,7 +782,7 @@ weapons:
         strength: "+2"
         ap: -2
         damage: D3
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.kustom_shokk_rifle
@@ -794,7 +794,7 @@ weapons:
         strength: 8
         ap: -3
         damage: D6
-        abilities: If any unmodified hit rolls of 1 are made for attacks w
+        abilities: "If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer’s unit suffers 1 mortal wound after shooting with this weapon. Each time an attack is made with this weapon, an unmodified wound roll of 6 inflicts 1 mortal wound on the target in addition to any normal damage."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.saw_blades
@@ -806,7 +806,7 @@ weapons:
         strength: "+2"
         ap: -2
         damage: 2
-        abilities: 
+        abilities:
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.heavy_squig_launcha
@@ -818,7 +818,7 @@ weapons:
         strength: 5
         ap: -2
         damage: 2
-        abilities: Indirect Fire . Blast . This weapon can target units th
+        abilities: "Indirect Fire. Blast. This weapon can target units that are not visible to the bearer."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.sawn_off_shotgun
@@ -830,7 +830,7 @@ weapons:
         strength: 4
         ap: 0
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.squig_launcha
@@ -842,7 +842,7 @@ weapons:
         strength: 5
         ap: -2
         damage: 2
-        abilities: Indirect Fire . Blast . This weapon can target units th
+        abilities: "Indirect Fire. Blast. This weapon can target units that are not visible to the bearer."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.killkannon
@@ -866,7 +866,7 @@ weapons:
         strength: 5
         ap: 0
         damage: 1
-        abilities: Indirect Fire . Blast . This weapon can target units th
+        abilities: "Indirect Fire. Blast. This weapon can target units that are not visible to the bearer."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.zzap_gun
@@ -878,7 +878,7 @@ weapons:
         strength: "*"
         ap: -3
         damage: 3
-        abilities: "Each time this weapon is selected to shoot with, roll 2"
+        abilities: "Each time this weapon is selected to shoot with, roll 2D6 to determine the Strength of all its attacks: on an 11+, each successful hit inflicts D3 mortal wounds on the target in addition to any normal damage, and the bearer suffers 1 mortal wound."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.deff_rolla
@@ -890,7 +890,7 @@ weapons:
         strength: "+1"
         ap: -2
         damage: 2
-        abilities: "Each time an attack is made with this weapon, treat the"
+        abilities: "Each time an attack is made with this weapon, treat the bearer as having a Weapon Skill characteristic of 2+."
         is_melee: true
 
   - id: wh40k_9e.orks.weapon.grabbin_klaw
@@ -902,7 +902,7 @@ weapons:
         strength: User
         ap: -3
         damage: 2
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon."
         is_melee: true
         max_attacks: 1
         effect:
@@ -918,7 +918,7 @@ weapons:
         strength: "+2"
         ap: -1
         damage: 2
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon and no more than 1 attack can be made with this weapon."
         is_melee: true
         max_attacks: 1
         effect:
@@ -934,7 +934,7 @@ weapons:
         strength: 5
         ap: -1
         damage: 1
-        abilities: "Each time an attack is made with this weapon, that atta"
+        abilities: "Each time an attack is made with this weapon, that attack automatically hits the target."
         is_melee: false
         effect:
           type: auto_hit
@@ -948,7 +948,7 @@ weapons:
         strength: User×2
         ap: -3
         damage: 3
-        abilities: "Each time the bearer fights, it makes 1 additional atta"
+        abilities: "Each time the bearer fights, it makes 1 additional attack with this weapon."
         is_melee: true
         effect:
           type: extra_attacks
@@ -963,7 +963,7 @@ weapons:
         strength: 6
         ap: -1
         damage: 2
-        abilities: Indirect Fire . Blast . This weapon can target units th
+        abilities: "Indirect Fire. Blast. This weapon can target units that are not visible to the bearer."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.stikka_kannon
@@ -975,7 +975,7 @@ weapons:
         strength: 8
         ap: -2
         damage: 3
-        abilities: "Each time the bearer makes an attack with this weapon,"
+        abilities: "Each time the bearer makes an attack with this weapon, if that attack targets a MONSTER or VEHICLE unit, you can re-roll the hit roll."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.wurrtower
@@ -987,7 +987,7 @@ weapons:
         strength: 9
         ap: -3
         damage: D6
-        abilities: "Each time this weapon is selected to shoot with, if the"
+        abilities: "Each time this weapon is selected to shoot with, if the bearer successfully manifested any psychic powers this turn, change this weapon’s Type to Assault D3. Each time an attack is made with this weapon, that attack automatically hits the target."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.butcha_boyz
@@ -999,7 +999,7 @@ weapons:
         strength: 5
         ap: -1
         damage: 1
-        abilities: "Each time the bearer fights, it makes 4 additional atta"
+        abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon."
         is_melee: true
         max_attacks: 4
         effect:
@@ -1015,7 +1015,7 @@ weapons:
         strength: "+1"
         ap: -2
         damage: 3
-        abilities: "Each time the bearer fights, it makes 4 additional atta"
+        abilities: "Each time the bearer fights, it makes 4 additional attacks with this weapon and no more than 4 attacks can be made with this weapon."
         is_melee: true
         max_attacks: 4
         effect:
@@ -1033,7 +1033,7 @@ weapons:
         strength: 6
         ap: -1
         damage: 1
-        abilities: 
+        abilities:
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.skorcha_missile_racks
@@ -1045,7 +1045,7 @@ weapons:
         strength: 6
         ap: -2
         damage: 1
-        abilities: "Blast . Each time an attack is made with this weapon, t"
+        abilities: "Blast. Each time an attack is made with this weapon, the target does not receive the benefits of cover against that attack."
         is_melee: false
 
   - id: wh40k_9e.orks.weapon.smasha_gun
@@ -1093,5 +1093,5 @@ weapons:
         strength: 10
         ap: -3
         damage: D6
-        abilities: Blast . If any unmodified hit rolls of 1 are made for a
+        abilities: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon."
         is_melee: false

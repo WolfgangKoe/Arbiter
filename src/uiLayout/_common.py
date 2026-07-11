@@ -1747,14 +1747,11 @@ def _render_resolution_tab(
         )
     if fall_back_hit_mod:
         # D2 (shoot_after_fall_back): −1 Hit when shooting after Fall Back (9E canonical).
-        # Label is data-driven from YAML via get_short_label_for_effect_type — no hardcoded
-        # faction string (Generic-src rule). Falls back to generic round-choice label.
-        fall_back_label = get_short_label_for_effect_type(
-            atk_faction, "shoot_after_fall_back"
-        ) or _round_choice_short_label(atk_faction)
+        # Label kept generic ("−1 to Hit", same text as the weapon-penalty badge above)
+        # so the badge stays compact — S137-Entscheid.
         final_atk_mods.append(
             {
-                "label": f"{fall_back_label} (Fall Back)",
+                "label": "−1 to Hit",
                 "value": fall_back_hit_mod,
                 "roll_type": "hit",
                 "source": "round_choice",

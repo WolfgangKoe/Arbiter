@@ -48,6 +48,10 @@ PHASES: list[tuple[str, str]] = [
     ("Morale", "morale"),
 ]
 
+# The battle ends once the fifth battle round has ended — no round 6 begins.
+# → docs/work/wahapedia_core_rules/core_rules.txt:2337
+MAX_BATTLE_ROUNDS = 5
+
 _ROSTER_DIR = Path(__file__).parent.parent.parent / "data" / "rosters"
 
 CP_BY_GAME_SIZE: dict[str, int] = {
@@ -420,6 +424,7 @@ def init_state(
     # cleared by the phase screen's first render (app.py).
     st.session_state["_scroll_to_top"] = True
     st.session_state.round = 1
+    st.session_state.battle_over = False
     st.session_state.phase_idx = 0
     st.session_state.first_player = p1_name
     st.session_state.second_player = p2_name
@@ -494,7 +499,11 @@ def init_state(
     for _pname in (p1_name, p2_name):
         st.session_state[round_choice_state_key(_pname, "directive_pending")] = False
     # {player_name: {"ability_id": str, "round_activated": int}}
+    # round_activated = round in which the CURRENT stage began (advanced on stage change)
     st.session_state.activated_abilities = {}
+    # {player_name: set[ability_id]} — once-per-battle ledger; never cleared on
+    # ability expiry, only on game reset ("once per battle" outlives the active buff)
+    st.session_state.used_once_per_battle_abilities = {}
     st.session_state.psi_attempts_this_phase = 0
     st.session_state.fight_current_player = None  # str | None
     st.session_state.attack_declaration = {"active": False, "entries": []}
@@ -608,7 +617,16 @@ def _reset_turn_state() -> None:
     from gameObjects.loader import load_faction_abilities  # noqa: PLC0415
 
     activated = st.session_state.get("activated_abilities", {})
+    expired_players = []
     for player, entry in activated.items():
+        # Stages are anchored to the OWNER's Command phase: they advance/end only when
+        # this player's own turn begins — never on the opponent's turn switch.
+        # → docs/work/wahapedia_orks/faction_overview.txt: stage 1 "lasts until the
+        # start of your next Command phase", stage 2 "until the start of your
+        # subsequent Command phase. After this point, the Waaagh! ... is no longer
+        # active, and has no further effect."
+        if player != new_active:
+            continue
         ability_id = entry.get("ability_id")
         round_activated = entry.get("round_activated", current_round)
         if ability_id and round_activated < current_round:
@@ -619,8 +637,29 @@ def _reset_turn_state() -> None:
             abilities = load_faction_abilities(fdir)
             ability = next((a for a in abilities if a.id == ability_id), None)
             if ability and ability.next_stage_id:
-                activated[player] = {**entry, "ability_id": ability.next_stage_id}
+                activated[player] = {
+                    **entry,
+                    "ability_id": ability.next_stage_id,
+                    "round_activated": current_round,
+                }
+            elif ability:
+                expired_players.append(player)
+    for player in expired_players:
+        del activated[player]
     st.session_state.activated_abilities = activated
+
+
+def mark_once_per_battle_used(player: str, ability_id: str) -> None:
+    """Record a once-per-battle ability as spent for this player (battle-scoped)."""
+    used = st.session_state.get("used_once_per_battle_abilities", {})
+    used.setdefault(player, set()).add(ability_id)
+    st.session_state.used_once_per_battle_abilities = used
+
+
+def is_once_per_battle_used(player: str, ability_id: str) -> bool:
+    """True if this player already spent the given once-per-battle ability."""
+    used = st.session_state.get("used_once_per_battle_abilities", {})
+    return ability_id in used.get(player, set())
 
 
 def _reset_round_choice_state() -> None:
@@ -664,6 +703,13 @@ def next_phase() -> None:
         _reset_phase_state()
     elif idx >= num - 1:  # Morale done → switch player
         new_active = second if st.session_state.active == first else first
+        if new_active == first and st.session_state.round >= MAX_BATTLE_ROUNDS:
+            # The transition that would begin round 6 never happens: the battle
+            # ends instead (→ docs/work/wahapedia_core_rules/core_rules.txt:2337).
+            st.session_state.battle_over = True
+            st.session_state.selected_unit = None
+            st.session_state.selected_targets = []
+            return
         st.session_state.active = new_active
         if new_active == first:  # both players have acted → a new battle round begins
             st.session_state.round += 1
@@ -680,3 +726,23 @@ def next_phase() -> None:
     st.session_state.psi_result = None
     st.session_state.psychic_denies_used = {}
     st.session_state.psi_attempts_this_phase = 0
+
+
+def is_battle_over() -> bool:
+    """True once the fifth battle round has ended (no round 6 begins).
+
+    → docs/work/wahapedia_core_rules/core_rules.txt:2337
+    """
+    return bool(st.session_state.get("battle_over", False))
+
+
+def prev_phase() -> None:
+    """Step one phase back; leaving the battle-over end state reopens the battle.
+
+    Clearing ``battle_over`` here keeps the end state correctable: a player who
+    pressed → too early can navigate back, fix the entry, and end the battle again.
+    """
+    st.session_state.battle_over = False
+    st.session_state.phase_idx = st.session_state.phase_idx - 1
+    st.session_state.selected_unit = None
+    st.session_state.selected_targets = []

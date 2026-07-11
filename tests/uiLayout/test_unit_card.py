@@ -71,6 +71,30 @@ def test_no_keywords_returns_empty() -> None:
     assert html == ""
 
 
+def test_ork_faction_keyword_filtered_despite_case_and_plural_mismatch() -> None:
+    """S138 root cause: real Ork data carries the singular uppercase keyword
+    "ORK" while unit.faction is "Orks" (Title Case, plural) — the naive
+    ``kw != unit.faction`` check never matched, leaking the faction keyword
+    into the card. Case+plural folding must filter it out."""
+    unit = _make_unit(["ORK", "BAD MOONS", "INFANTRY", "MOB", "CORE", "BOYZ"], faction="Orks")
+    _st_mock.session_state = {}
+    html = _keywords_html(unit)
+    assert ">ORK<" not in html
+    assert ">BAD MOONS<" in html
+    assert ">CORE<" in html
+    assert ">BOYZ<" in html
+
+
+def test_necron_faction_keyword_still_filtered_after_folding() -> None:
+    """Regression guard: the fold must not break the previously-working case
+    (NECRONS keyword vs. Necrons faction, exact plural match already)."""
+    unit = _make_unit(["NECRONS", "NEPHREKH", "INFANTRY", "CORE"], faction="Necrons")
+    _st_mock.session_state = {}
+    html = _keywords_html(unit)
+    assert ">NECRONS<" not in html
+    assert ">NEPHREKH<" in html
+
+
 # ---------------------------------------------------------------------------
 # Keyword highlighting — all-or-nothing
 # ---------------------------------------------------------------------------

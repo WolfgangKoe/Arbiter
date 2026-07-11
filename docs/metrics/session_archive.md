@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-11 12:55 CEST
+Stand: 2026-07-11 15:26 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-11 10:04 8553  ████████████ 173k ⛔    ████░░  67%    ▚▚▚▚▚▚▚▚····
+07-11 12:58 3d6e  ███████████░ 141k ⚠️   █████░  89%    ▚▚▚█········
+         SA_1·  ████░░░░░░░░  53k ✅    Spielende-Bug Root-Cause-Probe
+         SA_2·  ████████████ 231k ⛔    YAML-Trunkierung + Scraper-Fix
+         SA_3·  ███████░░░░░  89k ✅    unitCard-Keyword-Leck fixen
+         SA_4·  ████░░░░░░░░  46k ✅    Nihilakh-Protokoll-Regel nachschla…
+         SA_5·  ████████████ 146k ⚠️   XS-Fixes + B12-Antworten sichern
+         SA_6·  █████████░░░ 115k ✅    S138-Abschluss schreiben + committ…
+         SA_7·  ████████░░░░  96k ✅    Spielende-Fix umsetzen
+         SA_8·  ███████████░ 131k ⚠️   S138-Planungsentwurf erstellen
+         SA_9·  ███████░░░░░  88k ✅    WAAAGH-Endstand-Bugfix
+         SA_10·  ███████░░░░░  94k ✅    S138-Review (DoD, GO/NO-GO)
+----------------- ---------------------- -------------- ------------
+07-11 10:04 8553  ████████████ 178k ⛔    ████░░  65%    ▚▚▚▚▚▚▚▚····
          SA_1·  ███████░░░░░  83k ✅    P2-2 chargephase Testlücke schließ…
          SA_2·  ███████░░░░░  87k ✅    Stikkbomb Inline-Reroll untersuchen
          SA_3·  █████████░░░ 108k ✅    Attack-UI-Bugs untersuchen
@@ -577,3 +589,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S135 (2026-07-10)** S134-Entscheidungen aufgelöst (B10 in CLAUDE.md); Paket 4 komplett (4a/4b/4c: Hit/Wound/Save-Anker, Reroll-Ablösung, Attacken-Re-Roll, 3 Schuld-GOs aktivierbar, Folge-Split empfohlen); B6 nebeneinander + Read-directive (verifiziert); B1-Probe-Patch + Ansage; Review GO; 1673 passed / 99,12 %
 - **S136 (2026-07-11)** B1 scroll fix verified, command re-roll 9/9, retro measures
 - **S137 (2026-07-11)** Beobachtungs-Welle: unitCard-Badges+CAST, Stikkbomb-Fernkampf-Reroll-Fix (45 Waffen), Wound/Save+Power-klaw-Fixes, Chargephase-Tests, B12-Konzept, YAML-Trunkierungs-Scan (44), markdownlint-Trial
+- **S138 (2026-07-11)** WAAAGH owner-anchor+once-per-battle ledger, battle end after round 5, unitCard keyword leak, YAML truncation 47 entries, badge value doubling fix

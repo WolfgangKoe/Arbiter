@@ -18,8 +18,10 @@ from gameMechanic.game_state import (  # noqa: E402
     active_round_choice_buff_labels,
     compute_roster_total_pts,
     init_state,
+    is_battle_over,
     list_available_rosters,
     next_phase,
+    prev_phase,
     short_round_choice_label,
     subfaction_value_for,
     swap_players,
@@ -132,6 +134,60 @@ def test_next_phase_increments_round_after_orks_morale() -> None:
     next_phase()
     assert session["active"] == "Necrons"
     assert session["round"] == 2
+
+
+def test_next_phase_round_four_morale_still_starts_round_five() -> None:
+    """Rounds 1-4 are unaffected by the battle-end guard: round 4 → round 5 normally."""
+    session = _phase_session(phase_idx=7, active="Orks", round_num=4)
+    next_phase()
+    assert session["round"] == 5
+    assert session["active"] == "Necrons"
+    assert not session.get("battle_over")
+
+
+def test_next_phase_round_five_first_player_morale_still_switches_player() -> None:
+    """Round 5, first player's Morale done: the second player still gets a full turn."""
+    session = _phase_session(phase_idx=7, active="Necrons", round_num=5)
+    next_phase()
+    assert session["active"] == "Orks"
+    assert session["phase_idx"] == 1
+    assert session["round"] == 5
+    assert not session.get("battle_over")
+
+
+def test_next_phase_after_round_five_second_player_morale_sets_battle_over() -> None:
+    """The battle ends once the fifth battle round has ended (core_rules.txt:2337):
+    the transition that would begin round 6 sets battle_over instead of incrementing."""
+    session = _phase_session(phase_idx=7, active="Orks", round_num=5)
+    next_phase()
+    assert session["battle_over"] is True
+    assert session["round"] == 5
+    assert session["active"] == "Orks"
+    assert session["phase_idx"] == 7
+
+
+def test_prev_phase_clears_battle_over() -> None:
+    """Navigating back out of the end state reopens the battle (no dead-end state)."""
+    session = _phase_session(phase_idx=7, active="Orks", round_num=5)
+    session["battle_over"] = True
+    prev_phase()
+    assert session["battle_over"] is False
+    assert session["phase_idx"] == 6
+    assert session["selected_unit"] is None
+    assert session["selected_targets"] == []
+
+
+def test_is_battle_over_reads_state_flag() -> None:
+    session = _phase_session(phase_idx=7, active="Orks", round_num=5)
+    assert is_battle_over() is False  # key absent → not over
+    session["battle_over"] = True
+    assert is_battle_over() is True
+
+
+def test_init_state_sets_battle_over_false() -> None:
+    session = _make_session()
+    init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")
+    assert session["battle_over"] is False
 
 
 def test_next_phase_does_not_award_cp_on_player_switch() -> None:
@@ -902,18 +958,25 @@ class TestResetTurnState:
         _gs._reset_turn_state()
         assert s["p1_units"]["u1"]["active_buffs"] == [{"ability_id": "mwbd"}]
 
-    def test_stage1_upgrades_to_stage2_on_new_round(self) -> None:
-        # Ability with next_stage_id activated in round 1; now round 2 → ability_id advances
+    def test_stage1_upgrades_to_stage2_at_owner_command_phase(self) -> None:
+        """Stage 1 advances to stage 2 exactly when the OWNER's next turn begins.
+
+        Anchor correction (S138): the transition fires only when the owner becomes the
+        active player (start of their Command phase), not on any round increment —
+        and round_activated advances with the stage so the stage-2 clock starts fresh.
+        """
         s = _turn_state_session(
             activated={
                 "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
             },
             round_num=2,
+            active="Orks",
         )
         _gs._reset_turn_state()
         assert (
             s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage2"
         )
+        assert s["activated_abilities"]["Orks"]["round_activated"] == 2
 
     def test_stage1_stays_in_same_round(self) -> None:
         s = _turn_state_session(
@@ -921,24 +984,121 @@ class TestResetTurnState:
                 "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
             },
             round_num=1,
+            active="Orks",
         )
         _gs._reset_turn_state()
         assert (
             s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage1"
         )
 
-    def test_stage2_unchanged_no_next_stage(self) -> None:
-        # Stage 2 has no next_stage_id → ability_id must not change
+    def test_stage1_not_advanced_on_opponents_turn(self) -> None:
+        """A second-player owner keeps stage 1 while the opponent opens the new round;
+        the stage transition waits for the owner's own Command phase."""
         s = _turn_state_session(
             activated={
-                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 1}
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage1", "round_activated": 1}
             },
-            round_num=3,
+            round_num=2,
+            active="Necrons",
+        )
+        _gs._reset_turn_state()
+        assert (
+            s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage1"
+        )
+
+    def test_staged_ability_stage2_survives_opponents_turn(self) -> None:
+        """Stage 2 lasts the owner's ENTIRE round — including the opponent's turn.
+
+        Regression (S138 stakeholder observation 1): the first expiry fix removed the
+        entry on every turn switch once round_activated < round, so the owner lost the
+        stage-2 buff as soon as the second player's turn began. Rule anchor: stage 2
+        "lasts until the start of your subsequent Command phase"
+        (docs/work/wahapedia_orks/faction_overview.txt).
+        """
+        s = _turn_state_session(
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 2}
+            },
+            round_num=2,
+            active="Necrons",
         )
         _gs._reset_turn_state()
         assert (
             s["activated_abilities"]["Orks"]["ability_id"] == "wh40k_9e.orks.faction.waaagh_stage2"
         )
+
+    def test_staged_ability_without_next_stage_expires_at_owner_command_phase(self) -> None:
+        """Stage 2 (no next_stage_id) ends exactly at the start of the owner's next
+        Command phase — the entry is removed then, not on a mere round increment.
+
+        Anchor correction (S138): the earlier version of this test froze the wrong
+        anchor (any round change). Rule: "After this point, the Waaagh! ... is no
+        longer active, and has no further effect."
+        (docs/work/wahapedia_orks/faction_overview.txt)
+        """
+        s = _turn_state_session(
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 2}
+            },
+            round_num=3,
+            active="Orks",
+        )
+        _gs._reset_turn_state()
+        assert "Orks" not in s["activated_abilities"]
+
+    def test_staged_ability_expiry_does_not_affect_other_players_active_abilities(self) -> None:
+        """A different player's still-active ability entry survives when this player's
+        staged ability expires."""
+        s = _turn_state_session(
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 2},
+                "Necrons": {
+                    "ability_id": "wh40k_9e.necrons.faction.some_ability",
+                    "round_activated": 3,
+                },
+            },
+            round_num=3,
+            active="Orks",
+        )
+        _gs._reset_turn_state()
+        assert "Orks" not in s["activated_abilities"]
+        assert (
+            s["activated_abilities"]["Necrons"]["ability_id"]
+            == "wh40k_9e.necrons.faction.some_ability"
+        )
+
+    def test_once_per_battle_ledger_survives_staged_ability_expiry(self) -> None:
+        """Expiring a staged ability must NOT clear the once-per-battle ledger.
+
+        Regression (S138 stakeholder observation 2): removing the activated entry made
+        the ability callable again in round 3 — "once per battle" (Wahapedia
+        faction_overview.txt) is tracked independently of the active status.
+        """
+        s = _turn_state_session(
+            activated={
+                "Orks": {"ability_id": "wh40k_9e.orks.faction.waaagh_stage2", "round_activated": 2}
+            },
+            round_num=3,
+            active="Orks",
+        )
+        s["used_once_per_battle_abilities"] = {"Orks": {"wh40k_9e.orks.faction.waaagh_stage1"}}
+        _gs._reset_turn_state()
+        assert "Orks" not in s["activated_abilities"]
+        assert _gs.is_once_per_battle_used("Orks", "wh40k_9e.orks.faction.waaagh_stage1")
+
+
+class TestOncePerBattleLedger:
+    def test_mark_once_per_battle_used_records_per_player(self) -> None:
+        s = _make_session()
+        _gs.mark_once_per_battle_used("Orks", "some.ability")
+        assert _gs.is_once_per_battle_used("Orks", "some.ability")
+        assert s["used_once_per_battle_abilities"] == {"Orks": {"some.ability"}}
+
+    def test_is_once_per_battle_used_false_for_other_player_or_ability(self) -> None:
+        _make_session()
+        _gs.mark_once_per_battle_used("Orks", "some.ability")
+        assert not _gs.is_once_per_battle_used("Necrons", "some.ability")
+        assert not _gs.is_once_per_battle_used("Orks", "other.ability")
 
 
 # ---------------------------------------------------------------------------
@@ -1602,6 +1762,9 @@ def test_reset_turn_state_keyerror_on_faction_dir_for_continues() -> None:
     s = _make_session(
         round=2,
         phase_idx=1,
+        # GhostArmy must be the incoming active player — since the S138 owner-anchor
+        # fix, non-active players are skipped before faction_dir_for is reached.
+        active="GhostArmy",
         p1_units={"u1": unit},
         p2_units={"u2": _full_unit_state()},
         p1_faction_dir="necrons",

@@ -14,7 +14,6 @@ from __future__ import annotations
 import streamlit as st
 
 from gameMechanic.ability_engine import (
-    build_aura_range_hint_text,
     check_conditions,
     execute_effect,
     get_active_heal_bonus,
@@ -24,6 +23,8 @@ from gameMechanic.game_state import (
     PHASES,
     faction_dir_for,
     faction_display_name_for,
+    is_once_per_battle_used,
+    mark_once_per_battle_used,
     round_choice_state_key,
     short_round_choice_label,
     subfaction_badge_for,
@@ -204,18 +205,6 @@ def _get_extra_round_choice_id(round_choices: list, faction: str) -> str | None:
     return extras[0] if len(extras) == 1 else None
 
 
-def _render_aura_range_hint(faction: str) -> None:
-    """Render the table-only aura-range hint when an ``aura_range_bonus`` directive is active.
-
-    Data-driven via ``build_aura_range_hint_text`` (effect type + YAML ``affects`` list) —
-    no faction/ability literals here. Silently renders nothing when no such directive is
-    active. Hint type ``info`` per design_system.md §3 (neutral table reminder, Class B).
-    """
-    hint = build_aura_range_hint_text(faction)
-    if hint:
-        st.info(hint)
-
-
 def _render_extra_round_choice(
     round_choice, faction: str, faction_dir: str, current_round: int
 ) -> None:
@@ -239,7 +228,6 @@ def _render_extra_round_choice(
         badge_text = f"{short_name.upper()} — {subfaction_label.upper()} BONUS (BOTH)"
         st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
         render_round_choice_directives(round_choice)
-        _render_aura_range_hint(faction)
         return
 
     if extra_directive:
@@ -249,7 +237,6 @@ def _render_extra_round_choice(
             round_choice.primary if extra_directive == "primary" else round_choice.secondary
         )
         st.caption(f"↳ {chosen_text}")
-        _render_aura_range_hint(faction)
         # "Change extra directive" button intentionally removed: the extra directive is
         # chosen at the start of each battle round (Wahapedia Z. 579) and locked for
         # the whole round. The only valid reset path is _reset_round_choice_state().
@@ -342,7 +329,6 @@ def _render_round_choice_ui(faction: str) -> None:
                 st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
                 chosen_text = p.primary if active_directive == "primary" else p.secondary
                 st.caption(f"↳ {chosen_text}")
-                _render_aura_range_hint(faction)
     elif not is_active or phase_key != "command":
         st.caption("— none selected —")
     else:
@@ -434,6 +420,10 @@ def _render_once_per_battle_ability_ui(
             st.caption(f"↳ {current_ability.active_text}")
         return
 
+    if is_once_per_battle_used(faction, once_ability.id):
+        st.caption(f"— {ability_name} already called this battle —")
+        return
+
     if not is_active or phase_key != "command":
         st.caption(f"— {ability_name} not called —")
         return
@@ -455,6 +445,7 @@ def _render_once_per_battle_ability_ui(
                 "round_activated": current_round,
             }
             st.session_state.activated_abilities = activated
+            mark_once_per_battle_used(faction, once_ability.id)
             log_action(current_round, "command", faction, f"{ability_name} called")
             st.rerun()
     else:

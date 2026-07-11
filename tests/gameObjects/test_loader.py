@@ -12,6 +12,7 @@ from gameObjects.loader import (
     _apply_persistent_effect,
     _apply_relic,
     _apply_wargear,
+    _resolve_keyword_placeholders,
     _resolve_model_groups,
     load_army,
     load_deny_wargear_names,
@@ -37,6 +38,45 @@ from gameObjects.loader import (
 def test_load_necron_army_returns_all_catalog_units() -> None:
     units, _ = load_army("necrons")
     assert len(units) >= 51
+
+
+# ---------------------------------------------------------------------------
+# Keyword placeholder resolution — S138 Bug 1: Wahapedia's "<CLAN>" /
+# "<DYNASTY>" tokens must never reach the UI literally (CLAUDE.md
+# "No Placeholders — Ever").
+# ---------------------------------------------------------------------------
+
+
+def test_resolve_keyword_placeholders_drops_token_when_subfaction_unknown() -> None:
+    assert _resolve_keyword_placeholders(["ORK", "<CLAN>", "BOYZ"], None) == ["ORK", "BOYZ"]
+
+
+def test_resolve_keyword_placeholders_substitutes_when_subfaction_known() -> None:
+    assert _resolve_keyword_placeholders(["ORK", "<CLAN>", "BOYZ"], "Bad Moons") == [
+        "ORK",
+        "BAD MOONS",
+        "BOYZ",
+    ]
+
+
+def test_resolve_keyword_placeholders_leaves_non_placeholder_keywords_untouched() -> None:
+    assert _resolve_keyword_placeholders(["ORK", "BOYZ"], None) == ["ORK", "BOYZ"]
+
+
+def test_load_army_orks_has_no_literal_placeholder_keywords() -> None:
+    """Integration guard: units.yaml carries 47 literal "<CLAN>" entries —
+    load_army must never surface an unresolved "<...>" keyword token."""
+    units, _ = load_army("orks")
+    assert units
+    for unit in units:
+        assert not any(kw.startswith("<") and kw.endswith(">") for kw in unit.keywords)
+
+
+def test_load_army_necrons_has_no_literal_placeholder_keywords() -> None:
+    units, _ = load_army("necrons")
+    assert units
+    for unit in units:
+        assert not any(kw.startswith("<") and kw.endswith(">") for kw in unit.keywords)
 
 
 def test_overlord_loaded_from_catalog() -> None:

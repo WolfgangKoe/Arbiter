@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
+import re
 from pathlib import Path
 from typing import Any
 
@@ -292,6 +293,33 @@ def _wargear_option_from_dict(d: dict[str, Any]) -> WargearOption:
     )
 
 
+# Wahapedia leaves a subfaction placeholder in unit keyword lists — e.g.
+# "<CLAN>" (Orks), "<DYNASTY>" (Necrons) — for whichever subfaction concept the
+# faction declares (see load_subfaction_meta). Generic: any "<...>" token,
+# not tied to one faction's vocabulary.
+_PLACEHOLDER_KEYWORD = re.compile(r"^<[^<>]+>$")
+
+
+def _resolve_keyword_placeholders(keywords: list[str], subfaction: str | None) -> list[str]:
+    """Replace "<...>" subfaction placeholders with the resolved subfaction.
+
+    Dropped (not left in the list) when no subfaction is known yet, so the
+    literal placeholder token never reaches the UI (CLAUDE.md "No
+    Placeholders — Ever"). Catalog loads (units.yaml) carry no per-unit
+    subfaction today — that is decided by the roster — so this currently
+    always drops the placeholder; it upgrades automatically once a caller
+    passes a resolved subfaction.
+    """
+    resolved: list[str] = []
+    for kw in keywords:
+        if _PLACEHOLDER_KEYWORD.match(kw):
+            if subfaction:
+                resolved.append(subfaction.upper())
+            continue
+        resolved.append(kw)
+    return resolved
+
+
 def _damage_bracket_from_dict(d: dict[str, Any]) -> DamageBracket:
     return DamageBracket(
         wounds_min=int(d["wounds_min"]),
@@ -326,15 +354,16 @@ def _unit_from_dict(
         weapons.append(_CCW)
 
     brackets_raw = d.get("damage_bracket", [])
+    subfaction = d.get("subfaction")
     return Unit(
         weapon_restrictions=weapon_restrictions,
         id=d["id"],
         name_en=d["name_en"],
         name_de=d["name_de"],
         faction=d.get("faction", ""),
-        subfaction=d.get("subfaction"),
+        subfaction=subfaction,
         battlefield_role=d.get("battlefield_role", []),
-        keywords=d.get("keywords", []),
+        keywords=_resolve_keyword_placeholders(d.get("keywords", []), subfaction),
         wounds=int(d["wounds"]),
         models_min=int(d["models_min"]),
         models_max=int(d["models_max"]),

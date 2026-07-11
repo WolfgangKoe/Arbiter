@@ -283,7 +283,13 @@ def _aligned_modifier_row_html(
         slots.append(miss_die_html())
     sign = "+" if value > 0 else ("-" if value < 0 else "")
     chip_color = badge_color if badge_color is not None else right_color
-    badge = _badge_chip(f"{label} {sign}{abs(value)}", chip_color)
+    # A label that already leads with its signed value (e.g. "−1 to Hit") keeps
+    # the badge as-is — appending the value again would double it to
+    # "−1 to Hit -1" (same doubling bug documented at save_ap_modifier_row_html).
+    value_token = f"{sign}{abs(value)}"
+    label_leads_with_value = label.replace("−", "-").startswith(value_token)
+    badge_text = label if label_leads_with_value else f"{label} {value_token}"
+    badge = _badge_chip(badge_text, chip_color)
     content = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
     return grid_row_html(badge, content)
 

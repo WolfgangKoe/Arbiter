@@ -127,6 +127,22 @@ def test_long_badge_does_not_overflow() -> None:
     assert "max-width:" in html
 
 
+def test_badge_with_leading_value_label_is_not_doubled() -> None:
+    # S138: a label that already leads with its signed value ("−1 to Hit",
+    # weapon hit penalty / Fall-Back debuff) must render the badge text exactly
+    # once — the generic value append would double it to "−1 to Hit -1"
+    # (same doubling bug documented at save_ap_modifier_row_html).
+    html = modifier_die_pair_html(3, 4, "−1 to Hit", -1, _DEBUFF_RED, base_threshold=3)
+    assert "−1 to Hit</span>" in html
+    assert "−1 to Hit -1" not in html
+
+
+def test_badge_without_leading_value_still_appends_value() -> None:
+    # Name-only labels (AP/Cover convention) keep the appended signed value.
+    html = modifier_die_pair_html(3, 4, "Dense Cover", -1, _DEBUFF_RED, base_threshold=3)
+    assert "Dense Cover -1" in html
+
+
 def test_color_hint_overrides_value_sign() -> None:
     # Quantum Shield from the defender's view: value is negative, but it benefits
     # the defender → explicit color_hint='buff' must win over the sign. Plan 022 Step 3.

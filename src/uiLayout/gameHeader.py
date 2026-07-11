@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from constants.symbols import SYM_RESET
-from gameMechanic.game_state import PHASES, next_phase, reset_game
+from gameMechanic.game_state import PHASES, is_battle_over, next_phase, prev_phase, reset_game
 from uiLayout._common import reset_group_declaration_state
 
 CSS_THEME = """
@@ -281,6 +281,27 @@ def _phase_badges_html(phase_idx: int) -> str:
     return html
 
 
+def battle_result_html(first: str, second: str) -> str:
+    """End-of-battle result strip: the player with the most VP wins, equal VP is a draw.
+
+    → docs/work/wahapedia_core_rules/core_rules.txt:2339
+    """
+    vp_first = st.session_state.vp[first]
+    vp_second = st.session_state.vp[second]
+    if vp_first > vp_second:
+        result = f"Winner: {html.escape(first)}"
+    elif vp_second > vp_first:
+        result = f"Winner: {html.escape(second)}"
+    else:
+        result = "Draw"
+    return (
+        f'<div style="text-align:center;background:#2e2618;border:2px solid #d4a017;'
+        f"border-radius:2px;padding:6px 16px;font-size:0.95rem;font-weight:700;"
+        f'color:#fbbf24;letter-spacing:0.1em;text-transform:uppercase;">'
+        f"Battle Over — {result} ({vp_first} : {vp_second} VP)</div>"
+    )
+
+
 def render_game_header() -> None:
     first = st.session_state.get("first_player", "Player 1")
     second = st.session_state.get("second_player", "Player 2")
@@ -317,6 +338,11 @@ def render_game_header() -> None:
 
     # ── Zeile 4: Navigationsbuttons (nur im Kampf) ────────────────────────────
     if phase_key != "setup":
+        battle_over = is_battle_over()
+        if battle_over:
+            _, result_c, _ = st.columns([2, 3, 2])
+            with result_c:
+                st.markdown(battle_result_html(first, second), unsafe_allow_html=True)
         _, prev_c, rst_c, next_c, _ = st.columns([2, 1, 1, 1, 2])
         with prev_c:
             if st.button(
@@ -326,9 +352,7 @@ def render_game_header() -> None:
                 use_container_width=True,
                 disabled=phase_idx <= 1,
             ):
-                st.session_state.phase_idx = phase_idx - 1
-                st.session_state.selected_unit = None
-                st.session_state.selected_targets = []
+                prev_phase()
                 reset_group_declaration_state()
                 st.rerun()
         with rst_c:
@@ -336,6 +360,8 @@ def render_game_header() -> None:
                 reset_game()
                 st.rerun()
         with next_c:
-            if st.button("→", key="next_phase", type="primary", use_container_width=True):
+            if not battle_over and st.button(
+                "→", key="next_phase", type="primary", use_container_width=True
+            ):
                 next_phase()
                 st.rerun()

@@ -13,7 +13,7 @@
 - **Handoff-Marker-Pflicht (S131):** jeder Brief, der nach `docs/handoff/` schreibt, nennt den STATUS-Marker für Zeile 1 (S137: Haiku-Agent vergaß ihn trotz Brief → im Brief als ERSTE Schreibaktion vorgeben).
 - **Grundannahmen-Block (S131):** Konzept-Dokumente starten mit bestätigungspflichtigen Grundannahmen (App würfelt NICHT — Tischwürfe!) → `agent_scopes.md`.
 - **Executor-Klausel:** Dateiänderungen nur über Edit/Write, Bash nur lesend/git/pytest (S123); Selbstprüfliste enthält `python tools/mypy_gate.py` (S128).
-- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (Stand S137: 62 — diese Session nicht gesenkt, S138 fällig).
+- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (Stand S138: 62 — zwei Sessions überfällig, S139 P1-Pflicht).
 - **Vollsuite-Timeout (S136):** Bash-`timeout: 600000` explizit setzen. Playwright = Standard für funktionale UI-Befunde.
 - **Session-Limit-Abbrüche (S137):** Bricht ein Subagent mit „session limit" ab, NICHT neu starten — per `SendMessage` resumen (Kontext intakt, hat 6/6 funktioniert). Freigabe-Gate re-armt sich beim Neustart → Koordinator re-armt nur bei dokumentierter Chat-Freigabe.
 - **markdownlint-Trial (S137–S139):** `.markdownlint.jsonc` + `npm run lint:md` (cli2 v0.14, Node-18-Pin). IDE-Diagnosen erreichen den Koordinator nach Edits. Nach S139: Stakeholder entscheidet behalten/entfernen.
@@ -23,48 +23,44 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S137, 2026-07-11)
+## Aktueller Stand (nach S138, 2026-07-11)
 
-S137 (Review **GO**, `S137_review.md`): Beobachtungs-Welle komplett, alle Fixes vom
-Stakeholder UI-verifiziert — unitCard-Badge-Trennung + CAST (`unitCard.py`, 8 Tests);
-**Stikkbomb-Fix:** Inline-Attacken-Reroll war nur im Nahkampf-Zweig verdrahtet (alle 45
-Würfel-Attacken-Waffen sind Fernkampf → Feature griff nirgends), Fernkampf-Zweig + Phase-
-Key-Fix fight/shooting (`_common.py`, 4 Tests); Wound→Save-Doppel-Trenner + Power-klaw-
-Doppelbadge raus; Chargephase-Testlücke zu. **B12-Konzept** liegt vor
-(`S137_B12_konzept.md`, 18 Render-Stellen, Teil-Briefs a/b/c) — **Stakeholder-Kommentare
-in der Datei, S138 ZUERST lesen**. YAML-Trunkierungs-Scan: 55-Zeichen-Limit, 44 Einträge
-(`S137_yaml_trunkierung_scan.md`) → Backlog §2 WICHTIG. Backlog B12/B13/B14 neu;
-markdownlint-Trial eingerichtet. Vollsuite 1708 passed / 99,12 %, mypy 62.
+S138 (Review **GO**, Auflage erfüllt: Powerklaw-Badge-Fix + finale Vollsuite 1735 passed /
+99,14 %): **WAAAGH-Endstand gefixt** — Stufen-Anker = Command-Phase des Besitzers
+(`_reset_turn_state`), Once-per-Battle-Ledger `used_once_per_battle_abilities` +
+armyCard-Gate; **Spielende fix nach Runde 5** (`MAX_BATTLE_ROUNDS`, `battle_over`,
+`prev_phase()` hebt auf, Endstand-Anzeige in gameHeader); **unitCard-Keyword-Leck**
+gefixt (`_resolve_keyword_placeholders` generisch + `_fold_faction_keyword`, Subfaction-
+Wiring bleibt offen); **YAML-Trunkierung:** 47 Einträge (Ork 42/Necron 5) vervollständigt,
+Wächter `test_data_quality.py`; **Badge-Wert-Doppelung** generisch gefixt (Power klaw,
+Killsaw, Beast-Snagga-Klaw, Fall-Back). B12-Entscheidungen in `S137_B12_konzept.md`
+gesichert (ANSWERED). Alles Stakeholder-UI-verifiziert. mypy 62 — **NICHT gesenkt, 2
+Sessions überfällig.**
 
-Frühere Sessions (S60–S136): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S137): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S138)
+### ▶ Nächster Schritt (S139)
 
-1. **B12 umsetzen:** Stakeholder-Kommentare in `S137_B12_konzept.md` lesen →
-   Teil-Briefs B12a→b→c (Auslöser-Tracking; Undo nur am Auslöse-Anker; Inline nie
-   Undo; Once-per-Phase erzwungen). Der offene „S136-Rest: Verhalten" hängt daran.
-2. **Neue Beobachtungen triagieren** (`Stakeholder_Beobachtungen.md`, 9 Einträge vom
-   11.07., je Screenshot daneben): leere Ork-Badge; Cut-them-down-Karte über BEIDE
-   Spielerflächen (laut Design verboten); Keyword-Badges-Farbe + Fraktions-Keyword
-   „Ork" darf nicht in unitCard (Fehler unitCard vs. YAML prüfen); Rand-Design
-   Spieler 2 vertikal spiegeln + auf GOs übertragen (zu grell); GO-Keywords in YAML
-   systematisch nachpflegen (Subagent); 2026-07-09-Screenshots 21-29-43/21-36-36 noch
-   ungeplant (= B8/B4-Welle-2-Bezug prüfen); HI-UI-Konzept auf andere Phasen
-   ausrollen — wo eingeplant?; Conquering-Tyrant-Hinweis in gameActionsArea
-   (kann weg, steht in armyCard); **WAAAGH-End-State endet nie (Regelverstoß?
-   gegen Wahapedia prüfen!)**.
-3. **YAML-Vervollständigung (WICHTIG, Stakeholder):** Scraper prüfen (war angeblich
-   schon gegen Trunkierung gefixt — alter Stand?), 55-Zeichen-Limit beheben,
-   44 Einträge re-scrapen, Vollsuite. → Backlog §2.
-4. **Kleinigkeit (Entscheid S137):** Debuff-Badge-Label kürzen auf exakt „-1 to Hit"
-   (Badge kleiner).
-5. **P3 aus S137 verschoben:** 4c-Folge-Split scopen (Paket 7/8, `design_system.md`
-   §6.2) → B7/B9-Konzept + B2 Option A → Welle 2 (Task 7 Dakka `S133_plan.md`, Task 8
-   `before_battle`, B8, B4-Sofortteil).
-6. **Kleinschulden (unverändert aus S136):** Smoke-Test `hook_pytest_foreground.py`;
-   `design_system.md` §6.3 präzisieren; mypy 62→runter; `_common.py`-Refactor (Backlog
-   §4); S130-GO-Verifikation; 037 Docker-Smoke; Deny-Caption blockiert; Direction-
-   Entscheide vertagt (Backlog §5).
+1. **B12 umsetzen (Teil-Briefs ≤ M):** Entscheidungen in `S137_B12_konzept.md`
+   (ANSWERED) — a) Auslöser-Tracking, b) Undo nur am Auslöse-Anker (Inline bekommt
+   Undo, 4a revidiert), c) Once-per-Phase erzwungen (Wound/Save „used" nach Hit-Einsatz).
+2. **mypy-Ratchet senken (P1-Pflicht):** Baseline 62 seit S137 unverändert — S139 muss
+   sie senken, sonst droht Review-NO-GO.
+3. **Dynastie↔Protokoll-Kopplung (neuer Befund):** „beide Direktiven" gilt laut
+   `faction_overview.txt:908-936` für ALLE 6 Dynastien; YAML-Feld `linked_protocol`
+   fehlt → Konzept + Datenmodell-Ergänzung.
+4. **Cut-Them-Down-Bug:** GO-Karte erscheint über beide Spielerflächen (laut Design
+   verboten) — GO-Card/UI-Layout prüfen.
+5. **Toter Code entfernen (Retro-Maßnahme 2, XS):** `build_aura_range_hint_text` +
+   Tests, `acceptance/rules.md`-Referenz nachziehen.
+6. **Rand-Design-Konzept** (heller Streifen links, beim 2. Spieler spiegeln, auf GOs
+   übertragen); **GO-Keyword-Nachpflege** in YAML (systematisch, Subagent); **Rest
+   unverändert (S137/S138):** 4c-Folge-Split (Paket 7/8) → B7/B9-Konzept + B2 Option A;
+   Fold-Heuristik+Subfaction-Wiring (Retro-Maßnahme 3); Totalvernichtungs-Spielende;
+   Kleinschulden (Smoke-Test `hook_pytest_foreground.py`, `design_system.md` §6.3,
+   `_common.py`-Refactor, S130-GO-Verifikation, 037 Docker-Smoke, Deny-Caption,
+   Direction-Entscheide, B4/B8-Welle-2-Screenshots + HI-UI-Ausrollung). Details →
+   `backlog.md`.
 
 **Prozess:** Vollsuite bei parallelen Wellen nur EINMAL zentral am Wellen-Ende
 (`operating_model.md` Event 3).

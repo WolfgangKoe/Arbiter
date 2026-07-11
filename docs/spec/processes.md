@@ -74,16 +74,29 @@ Phase.
 flowchart TD
     A[Spieler klickt →] --> B[next_phase aufgerufen]
     B --> C{letzte Phase\nder Runde? morale}
-    C -- ja --> D[Spielerwechsel\n_reset_turn_state\nneue Runde ggf. +1]
+    C -- ja --> G{Runde 5 beendet?\nzweiter Spieler, morale}
+    G -- ja --> H[battle_over = True\nkeine Runde 6, Zustand bleibt\nRunde 5 / morale]
+    G -- nein --> D[Spielerwechsel\n_reset_turn_state\nneue Runde ggf. +1]
     C -- nein --> E[phase_idx + 1]
     D --> F[selected_unit/-targets\nzurückgesetzt, st.rerun]
     E --> F
+    H --> F
 ```
 
 **Hinweis:** Kein hartes Sperren — ein Phasensprung ist immer möglich
 (bewusste Entscheidung des Spielers). Der Turn-Flag-Reset (`advanced`,
 `retreated`, `charged`, `shot`, `fought`, …) läuft in `_reset_turn_state`,
 nur beim Spielerwechsel nach der Moralphase.
+
+**Spielende (fix nach Runde 5):** Der Übergang, der Runde 6 einläuten würde
+(Moralphase des zweiten Spielers in Runde 5 abgeschlossen), setzt stattdessen
+`battle_over` (`game_state.MAX_BATTLE_ROUNDS = 5`,
+→ `docs/work/wahapedia_core_rules/core_rules.txt:2337`). Der Header ersetzt
+dann den „→"-Pfeil durch die Endstand-Anzeige (`gameHeader.battle_result_html`):
+Sieger = meiste VP, Gleichstand = Draw (Z. 2339). „←" (`game_state.prev_phase`)
+bleibt bedienbar und hebt `battle_over` wieder auf — der Endzustand ist keine
+Sackgasse, Fehleingaben bleiben korrigierbar. Der „army destroyed"-Teil der
+Spielende-Regel ist bewusst nicht abgebildet (eigener Backlog-Punkt).
 
 ---
 

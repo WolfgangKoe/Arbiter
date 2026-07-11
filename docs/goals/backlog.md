@@ -259,15 +259,27 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - ✅ **CP-Doppelvergabe-Fix — ERLEDIGT (Plan 018 Task 18.1, S128):** `cp_grants`-Set aus
   `(round, faction)`-Paaren ersetzt `cp_granted_this_phase`-Flag; übersteht ←/→-Phasennavigation.
 - 🟢 `collect_modifiers_for_phase()` (→ Plan 018 Task 18.4, noch offen)
-- 🔲 **Scraper-Trunkierung `abilities` (S137-Scan):** `tools/wahapedia_scraper.py` kappt
-  Textfelder bei 55 Zeichen — 44 Einträge betroffen (Orks 38, Necrons 6; je 1×
-  `faction_abilities.yaml`, Rest `weapons.yaml`). Sichtbar z. B. Power klaw
-  (`gameActionsArea.py:94`). Vorgehen: Scraper-Limit fixen, betroffene Fraktionen
-  re-scrapen, Vollsuite; Detail-Liste `docs/handoff/S137_yaml_trunkierung_scan.md`
-  (Scan jederzeit regenerierbar). **WICHTIG (Stakeholder S137): zeitnah vervollständigen —
-  die YAML sind Grundlage der Logik.** Laut Stakeholder war der Scraper bereits einmal so
-  gefixt, dass nicht trunkiert wird → prüfen, ob ein alter Scraper-Stand vorliegt, und
-  sicherstellen, dass er die vollständigen Texte holt.
+- ✅ **Scraper-Trunkierung `abilities` — Daten-Anteil ERLEDIGT (S138):** 47 Einträge
+  (Ork 42, Necron 5) in `faction_abilities.yaml`/`weapons.yaml` vervollständigt; neuer
+  netzunabhängiger Wächter `tests/gameObjects/test_data_quality.py` verhindert Rückfall.
+  Scraper-Fix-Anteil (Commit `4dcc560`) geprüft — Ursache war Datenstand von vor dem Fix.
+- 🔲 **Totalvernichtungs-Spielende (S138-Befund, Stakeholder: eigener Punkt):** Der
+  „army destroyed"-Teil von R-ROUND-07 (`docs/spec/acceptance/rules.md`) ist bewusst
+  NICHT implementiert — Sieg durch vollständige Vernichtung der gegnerischen Armee vor
+  Ende Runde 5 fehlt als eigener Spielende-Pfad. Eigener kleiner Plan.
+- 🔲 **Tote Produktionsfunktion `build_aura_range_hint_text` entfernen (S138-Retro-
+  Maßnahme 2, XS):** Einziger Produktions-Konsument (`armyCard._render_aura_range_hint`)
+  wurde in S138 entfernt (Conquering-Tyrant-Aura-Hinweis raus); Funktion in
+  `ability_engine.py:324` + ihre Tests (`test_ability_engine.py`) werden nur noch von
+  Tests referenziert. Mit Tests gemeinsam entfernen, `acceptance/rules.md`-Eintrag
+  nachziehen (Code-Referenz wird sonst stale).
+- 🔲 **Fold-Heuristik nur Hauptfraktion + Subfaction-Wiring Roster→Unit (S138-Retro-
+  Maßnahme 3, zusammen schneiden):** `unitCard.py:_fold_faction_keyword` filtert aktuell
+  nur das Hauptfraktions-Keyword (Trailing-„S"-Fold); Subfraktions-Keywords werden nicht
+  gefoldet, weil der Loader den `<DYNASTY>`/`<CLAN>`-Platzhalter mangels Roster→Unit-
+  Wiring aktuell droppt. Sobald echte Subfraktions-Keywords in die Unit-Listen kommen
+  (Klan-Chip statt Drop), muss die Fold-Filterung erneut geprüft werden — beide Teile in
+  einem Aufwasch planen.
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente

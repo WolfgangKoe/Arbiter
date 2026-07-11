@@ -1,10 +1,35 @@
-STATUS: NEEDS-DECISION
+STATUS: ANSWERED
 
 # S137/B12 — Konzept: GO-Zustand „used" mit Auslöser-Tracking
 
 Lifecycle: Konzept-Handoff für S138. Nach Stakeholder-Entscheid (Fragen unten beantworten,
 Marker auf ANSWERED) wird hieraus der Umsetzungsplan; nach Umsetzung Marker DONE und Datei
 löschen. KEIN Code in dieser Session geändert.
+
+---
+
+## S138-Entscheidungen (Stakeholder)
+
+Antworten aus `S138_planning.md` §3 (Fragen 1–3) — verbindlich für die B12-Umsetzung in
+S139. Wortlaut dort, hier nur die Entscheidungen:
+
+1. **Grundannahme 4a REVIDIERT** (widerspricht §2.3 unten): Ein Tischwurf ist zwar nicht
+   rückgängig zu machen — aber „Undo" dient hier der Korrektur von Tippfehlern (die App
+   ist nicht führend, der Tisch führt; ein Klick ohne tatsächlichen Wurf muss korrigierbar
+   sein). Der Inline-Command-Re-Roll bekommt daher **doch** ein Undo an der Einsatzstelle
+   — Verhalten überall konsistent, unabhängig von Karte vs. Inline-Darstellung.
+2. **F3/Scope bestätigt:** Fenster-konsumierende GOs (Cut Them Down, Emergency
+   Disembarkation) bekommen dasselbe Anker-Verhalten wie alle anderen GOs — Teil des
+   B12-**Kerns**, nicht Folge-Task. Karten verschwinden nach Einsatz nicht mehr, sondern
+   zeigen „Used", solange das Phasenfenster offen ist (widerspricht §2.4 „Sonderfall
+   unverändert" unten).
+3. **F1-Granularität bestätigt, unter Vorbehalt:** Anker pro Spieler UND GO-ID (§2.1) soll
+   „Gegner darf nicht blockiert werden" erfüllen — Stakeholder hat das nicht selbst im
+   Code geprüft. **Testpflicht S139:** Regressionstest, der genau das absichert (Spieler A
+   nutzt GO ⇒ Spieler B kann dieselbe GO in derselben Phase unabhängig weiter nutzen).
+
+Betroffene Stellen unten sind mit Verweis auf diesen Block annotiert (nicht neu
+geschrieben — Stand S137 bleibt als Referenz sichtbar).
 
 ---
 
@@ -23,8 +48,10 @@ widersprechen — dann ändert sich das Design.
    GO in der Phase angeboten würde, ist der Einsatz unterbunden und der Button zeigt
    „Used" (deaktiviert).
 4. **Scope-Erweiterung S137 (verbindlich):**
-   a) Beim **Inline-Angebot** des Command-Re-Rolls (Attacken-Sequenz, Charge-Roll) gibt
-      es **gar kein Undo** — ein Re-Roll ist nicht ungeschehen zu machen (so vereinbart).
+   a) ~~Beim **Inline-Angebot** des Command-Re-Rolls (Attacken-Sequenz, Charge-Roll) gibt
+      es **gar kein Undo** — ein Re-Roll ist nicht ungeschehen zu machen (so vereinbart).~~
+      **REVIDIERT S138** — s. „S138-Entscheidungen" oben, Punkt 1: Inline bekommt doch
+      Undo an der Einsatzstelle (Tippfehler-Korrektur, App nicht führend).
    b) Once-per-Phase wird **erzwungen und sichtbar gemacht**: Command-Re-Roll beim
       Hit-Roll genutzt ⇒ Wound- und Save-Roll-Bereich zeigen „Used" (kein erneutes
       Angebot). Entsprechend in allen anderen Phasen.
@@ -149,6 +176,10 @@ gespeicherte anchor_id zu dieser Render-Stelle gehört, sonst **verwendet-anders
 
 ### 2.3 Inline-Anker: „Used" statt verschwinden — und NIE Undo
 
+**REVIDIERT S138** — s. „S138-Entscheidungen" oben, Punkt 1: der Grundsatz „NIE Undo"
+gilt nicht mehr. Inline bekommt Undo an der Einsatzstelle wie Karten-Anker (§2.4). Der
+Text unten (Stand S137) bleibt als Referenz stehen — S139 setzt die Korrektur um.
+
 Scope-Erweiterung (Grundannahme 4) umgesetzt in `render_inline_command_reroll`:
 
 - **Kein Undo, nirgends** — auch nicht am Auslöser-Anker. Ein Re-Roll ist am Tisch
@@ -175,9 +206,13 @@ Nutzungs-Sets bereinigt, registrierte Modifier entfernt, Effekt zurückgenommen 
 kehren automatisch zu „bereit" zurück. Undo erscheint ausschließlich am
 Auslöser-Anker; das Fenster schließt wie bisher mit dem Phasenwechsel.
 
-Sonderfall unverändert: Anker, deren Fenster-Marker bei Use konsumiert wird (Cut Them
+Sonderfall ~~unverändert: Anker, deren Fenster-Marker bei Use konsumiert wird (Cut Them
 Down, Emergency Disembarkation), verschwinden nach Use ganz — dort gibt es weiterhin
-keinen Undo-Ort (bestehendes, dokumentiertes Verhalten; siehe Entscheidungsfrage F3).
+keinen Undo-Ort (bestehendes, dokumentiertes Verhalten; siehe Entscheidungsfrage F3).~~
+**REVIDIERT S138** — s. „S138-Entscheidungen" oben, Punkt 2: Cut Them Down und Emergency
+Disembarkation bekommen dasselbe Anker-Verhalten wie alle anderen GOs (Teil des
+B12-Kerns, kein Folge-Task). Karten verschwinden nicht mehr, sondern zeigen „Used",
+solange das Phasenfenster offen ist.
 
 ### 2.5 Phasen-Reset
 
@@ -222,6 +257,9 @@ Jeder Brief enthält seine Spec-Nachzüge und die manuelle UI-Prüfliste im selb
 
 ### Brief B12c — Inline-Angebote: „Used" sichtbar, kein Undo
 
+**Titel überholt (S138):** Inline bekommt doch Undo an der Einsatzstelle (s.
+„S138-Entscheidungen" oben, Punkt 1) — Brief-Scope wächst entsprechend, Details in S139.
+
 - Dateien: `src/uiLayout/_common.py` (render_inline_command_reroll: Zustands-Logik als
   reine, testbare Funktion herausziehen [angeboten/used/versteckt]; „Used"-Button
   disabled rendern; anchor_id = reopen_key bei Use mitgeben),
@@ -253,6 +291,9 @@ strengere, verwechslungsfreie Lesart.
 
 Antwort: Es soll auf jeden Fall an jedem Wurfort gezeigt werden, unabhängig von der Einheit. Aber an dem Ort, wo es eingesetzt wurde, soll eben "Undo" stehen und überall sonst "used". Wichtig wäre nur (und da kommt die Einheitvielleicht zum tragen), dass der Gegner die Option auch in der Phase einsetzen können soll. Es wäre fatal, wenn ich den Command-Reroll einsetze und dann ist es für den Gegner blockiert. Das darf nicht geschehen, aber sobald der Gegner diese Option eingesetzt hat, ist es bei ihm dasselbe Verhalten. Gibt es hier noch fachliche Klärungsfragen? Bitte vor der Umsetzung stellen.
 
+**S138-Klärung:** Granularität pro Spieler+GO-ID (§2.1) bestätigt den Gegner-Schutz —
+s. „S138-Entscheidungen" oben, Punkt 3 (unter Vorbehalt, Testpflicht S139).
+
 **F2 — „used on ⟨Einheit⟩" als Header-Suffix bei „verwendet-anderswo"?**
 Kleiner Zusatznutzen: Der Spieler sieht sofort, WO die GO hinging (und wo das Undo zu
 finden ist). Kostet eine Zusatzangabe im Anker-Datensatz (unit_key), die B12a ohnehin
@@ -267,6 +308,9 @@ Undo. Das ist heute so dokumentiert und kein Teil des gemeldeten Problems.
 **Default: unverändert lassen (out of scope für B12).**
 
 Antwort: Hmm, diese GOS kommen nicht so häufig zur Anwendung, weshalb eine unsaubere Logik nicht auffallen dürfte. Das fände ich aber nicht schön. Die Anwendung von GOs ist an sich für alle gleich! Ich kann jede GO nur einmal pro Phase pro Spieler anwenden. Und theoretisch gibt es pro Phase mehrere Möglichkeiten, an denen die GO eingesetzt werden kann. Dann braucht es da ein Anker mit demselben Verhalten wir unter F1 entschieden.
+
+**S138-Bestätigung:** Scope-Erweiterung angenommen — s. „S138-Entscheidungen" oben,
+Punkt 2.
 
 **F4 — Re-Roll-KARTEN (Damage/Manifest/Deny): Undo behalten?**
 Die Scope-Erweiterung streicht Undo nur bei den INLINE-Angeboten. Die drei

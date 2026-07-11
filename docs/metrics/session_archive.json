@@ -3589,8 +3589,8 @@
   "855349e1-b625-4628-9b54-292b29760ca0": {
     "started_at": "2026-07-11T08:04:34.554Z",
     "task": "Ich habe in S137_plan ein paar Antworten eingefügt. Ansonsten kannst du das die CLI von Markdown ins Projekt ziehen und…",
-    "peak_context": 172603,
-    "subagent_share": 66.70388935300812,
+    "peak_context": 178320,
+    "subagent_share": 65.18412677985093,
     "by_tier": {
       "Sonnet": 10652819,
       "Fable": 19065592,
@@ -3653,6 +3653,90 @@
         "tier": "Sonnet",
         "peak_context": 115211,
         "started_at": "2026-07-11T08:04:34.554Z"
+      }
+    ]
+  },
+  "3d6ebb92-f92a-4d46-9bf7-9d5fd1c41c2c": {
+    "started_at": "2026-07-11T10:58:07.089Z",
+    "task": "start session",
+    "peak_context": 140713,
+    "subagent_share": 88.79886930286945,
+    "by_tier": {
+      "Sonnet": 49815977,
+      "Haiku": 1461687,
+      "Fable": 18868053,
+      "Opus": 3877246
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Spielende-Bug Root-Cause-Probe",
+        "tier": "Sonnet",
+        "peak_context": 52806,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "YAML-Trunkierung + Scraper-Fix",
+        "tier": "Sonnet",
+        "peak_context": 231356,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "unitCard-Keyword-Leck fixen",
+        "tier": "Sonnet",
+        "peak_context": 89457,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Nihilakh-Protokoll-Regel nachschlagen",
+        "tier": "Haiku",
+        "peak_context": 46409,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "XS-Fixes + B12-Antworten sichern",
+        "tier": "Sonnet",
+        "peak_context": 145940,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S138-Abschluss schreiben + committen",
+        "tier": "Sonnet",
+        "peak_context": 114601,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Spielende-Fix umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 95737,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S138-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 131346,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "WAAAGH-Endstand-Bugfix",
+        "tier": "Sonnet",
+        "peak_context": 87521,
+        "started_at": "2026-07-11T10:58:07.089Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S138-Review (DoD, GO/NO-GO)",
+        "tier": "Opus",
+        "peak_context": 93512,
+        "started_at": "2026-07-11T10:58:07.089Z"
       }
     ]
   }

@@ -184,6 +184,23 @@ Modifier). Reine Funktion, direkt getestet (`TestAttritionThreshold`,
 **YAML-Schema:** In `faction_abilities.yaml` als `ability_type: activated` + `trigger.phase: command`  
 Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelliert (waaagh_stage1, waaagh_stage2).
 
+**Stufen-Anker + Stufen-Ende:** Stufenwechsel und Ende sind an den **Start der Command-Phase
+des Besitzers** geankert — nicht an Zug- oder Rundenwechsel (`game_state.py:_reset_turn_state()`:
+nur wenn der Besitzer der neue aktive Spieler ist UND `round_activated < round`; beim Stufenwechsel
+wird `round_activated` fortgeschrieben). Stufe 2 hält also die komplette Runde inkl. gegnerischem
+Zug. Erreicht der Eintrag dabei eine Stage ohne `next_stage_id` (z.B. `waaagh_stage2`), erlischt
+die Ability generisch — der Eintrag wird aus `activated_abilities[player]` entfernt.
+Regelbeleg: `docs/work/wahapedia_orks/faction_overview.txt` — Stage 1 „lasts until the start of
+your next Command phase", Stage 2 „until the start of your subsequent Command phase. After this
+point, the Waaagh! ... is no longer active, and has no further effect." Gilt für jede gestufte
+Ability ohne Folgestufe, nicht nur WAAAGH!.
+
+**Once per battle:** unabhängig vom Aktiv-Status im Ledger
+`used_once_per_battle_abilities: {player: set[ability_id]}` getrackt
+(`game_state.py: mark_once_per_battle_used() / is_once_per_battle_used()`, gesetzt beim
+Aktivieren in `armyCard._render_once_per_battle_ability_ui()`). Das Stufen-Expiry leert den
+Ledger NICHT — sonst wäre die Fähigkeit nach Ablauf erneut aufrufbar (S138-Befund).
+
 **Session-State:** `waaagh_state: {player_name: {stage, round_activated}}`  
 **UI:** `armyCard._render_waaagh_ui()` — generisch über `command_activated`-Filter auf `faction_abilities`
 
@@ -191,6 +208,9 @@ Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelli
 - `test_waaagh_activation_sets_stage_1()`
 - `test_waaagh_stage2_transition_on_new_round()`
 - `test_waaagh_once_per_battle()`
+- `test_staged_ability_without_next_stage_expires_at_owner_command_phase()` (generisch, `test_game_state.py`)
+- `test_staged_ability_stage2_survives_opponents_turn()` (`test_game_state.py`)
+- `test_once_per_battle_ledger_survives_staged_ability_expiry()` (`test_game_state.py`)
 - `test_tau_montka_active_rounds_1_to_3()`
 - `test_tau_kauyon_active_rounds_3_to_5()`
 

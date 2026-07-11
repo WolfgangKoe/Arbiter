@@ -1010,11 +1010,11 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-ROUND-07
 - **klasse**: A
-- **status**: offen
-- **getestet**: nein
+- **status**: implementiert
+- **getestet**: ja — test_next_phase_after_round_five_second_player_morale_sets_battle_over
 - **quelle**: core_rules.txt — "The battle ends when all of the models in one player's army have been destroyed, or once the fifth battle round has ended (whichever comes first)."
-- **code**: —
-- **regel**: Das Spiel endet nach 5 Battle Rounds oder wenn alle Modelle einer Armee vernichtet sind. Die App zeigt keine automatische Spielende-Erkennung und keinen „Spiel beendet"-Zustand.
+- **code**: game_state.py:next_phase
+- **regel**: Nach Abschluss der 5. Battle Round (Moralphase des zweiten Spielers beendet) setzt `next_phase` `battle_over` statt Runde 6 zu beginnen (`MAX_BATTLE_ROUNDS = 5`); der Header ersetzt „→" durch die Endstand-Anzeige (Sieger = meiste VP, Gleichstand = Draw, `gameHeader.battle_result_html`), „←" (`prev_phase`) hebt `battle_over` zur Korrektur wieder auf. Der „army destroyed"-Anteil der Regel ist bewusst NICHT implementiert (eigener Backlog-Punkt).
 
 ### R-ROUND-08
 - **klasse**: B

@@ -252,7 +252,7 @@ weapons:
         strength: "5"
         ap: "0"
         damage: "1"
-        abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+        abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
         effect:
           type: extra_hits
@@ -475,7 +475,7 @@ weapons:
         strength: "6"
         ap: "0"
         damage: "1"
-        abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+        abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
         effect:
           type: extra_hits
@@ -492,7 +492,7 @@ weapons:
         strength: "7"
         ap: "0"
         damage: "1"
-        abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+        abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
         effect:
           type: extra_hits
@@ -976,7 +976,7 @@ weapons:
         strength: "5"
         ap: "0"
         damage: "1"
-        abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+        abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
         effect:
           type: extra_hits
@@ -1235,7 +1235,7 @@ weapons:
         strength: "7"
         ap: "0"
         damage: "1"
-        abilities: "Each unmodified hit roll of 6 scores 2 additional hits."
+        abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
         effect:
           type: extra_hits

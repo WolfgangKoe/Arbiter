@@ -84,6 +84,14 @@ Der Koordinator liest diese Tabelle, wählt den passenden Aufgabentyp, und kopie
 
 ---
 
+## Standardsatz für UI-Executor-Briefs (Retromaßnahme S138 — PFLICHT)
+
+Jeder Executor-Brief, der neue UI-Bezeichner/Namen einführt (CSS-Klassen, Funktions-/
+Variablennamen, Badge-/Label-Text in `src/`), enthält den Satz: „Namenswahl vorab gegen
+INV-4b-Vokabular prüfen (`tests/architecture/test_generic_src_vocab.py`), Fraktions-Wörter
+wie ‚banner' vermeiden." Grund: verhindert nachträgliche Vokabular-Schulden statt sie erst
+beim Architektur-Gate zu entdecken.
+
 ## Subagent-Brief — Pflichtfelder
 
 Jeder Koordinator-Brief an einen Subagenten enthält diese Felder (keine Felder auslassen):
