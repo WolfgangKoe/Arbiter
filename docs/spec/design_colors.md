@@ -66,6 +66,7 @@ Datenbindung: Faktion deklariert `subfaction_field`/`subfaction_label` in
 | IN MELEE | `#e07050` orange | gebunden |
 | CHARGED / FOUGHT | `#b070d8` / `#c080e8` violett | Nahkampf-Aktivierung |
 | SHOT | `#40a0b8` cyan | Fernkampf-Aktivierung |
+| CAST | `#93c5fd` auf `#1e3a8a` (Blau-Familie `--arb-blue`, analog SHOT) | Psi-Aktivierung (S137-Entscheid) |
 | RESERVE | `#ff9060` lachs | temporärer Sonderzustand (wie HEROIC INT.) |
 | HEROIC INT. | `#ff9060` | Sonderaktion |
 

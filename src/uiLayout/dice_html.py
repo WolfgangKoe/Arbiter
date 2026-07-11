@@ -68,8 +68,9 @@ def _render_dice_roll_block(
             badges.append(special_die_html("Extra Hits", "unmod. 6 = +2 Hits"))
         if weapon_special.get("alternating_fire"):
             badges.append(special_die_html("Alt. Fire", "First attacks if within half range"))
-        if weapon_special.get("hit_roll_penalty"):
-            badges.append(special_die_html("−1 to Hit"))
+        # hit_roll_penalty gets NO badge here: it already renders as a
+        # modifier row inside the dice grid (_common.py final_atk_mods) —
+        # a second badge showed the same −1 twice (S137 Bug B).
         if badges:
             st.markdown(
                 f'<div style="margin-top:4px;">{"".join(badges)}</div>',

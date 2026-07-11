@@ -6,18 +6,21 @@ Covers:
   4g.6 — target_in_friendly_melee() helper
   R-CHARGE-09 — hi_eligible_units filter (CHARACTER + not in melee + not intervened)
   R-CHARGE-10 — hi_already_performed once-per-phase guard
+  S137/P2-2 — _active_charge wires render_inline_command_reroll (charge roll)
 """
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import MagicMock
 
 _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.chargephase as cp  # noqa: E402
 import gameMechanic.game_state as _gs  # noqa: E402
 import gameMechanic.shootingPhase as _sp  # noqa: E402
 import gameMechanic.unit_mutations as _mut  # noqa: E402
@@ -366,3 +369,110 @@ class TestHiAlreadyPerformed:
 
     def test_returns_false_when_turn_flags_absent(self) -> None:
         assert hi_already_performed({}) is False
+
+
+# ---------------------------------------------------------------------------
+# S137/P2-2 — _active_charge wires render_inline_command_reroll.
+#
+# `_active_charge` (chargephase.py) calls render_inline_command_reroll right
+# after the charge-roll caption and before the Successful/Failed decision
+# (S136-Review-Befund: this call site was untested). Advance/Charge are the
+# only wurf-GOs that keep the bespoke inline offer instead of the
+# render_reactive_stratagem_box GO card (design_system.md §6.3 exception) —
+# the charge roll value itself is never captured by the app, so `on_reroll`
+# is a no-op (nothing to reopen).
+#
+# These tests spy on render_inline_command_reroll rather than simulating full
+# widget interaction — its own visibility/spend contract is covered
+# end-to-end with real stratagem data in tests/uiLayout/test_common.py. Here
+# the contract under test is: WHEN _active_charge calls it
+# (faction/phase/reopen_key), and that its on_reroll callback is a harmless
+# no-op.
+# ---------------------------------------------------------------------------
+
+
+def _quiet_charge_widgets(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(cp.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(cp.st, "caption", lambda *a, **kw: None)
+    monkeypatch.setattr(cp.st, "info", lambda *a, **kw: None)
+    monkeypatch.setattr(cp.st, "warning", lambda *a, **kw: None)
+    monkeypatch.setattr(cp.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(cp.st, "button", lambda *a, **kw: False)
+
+
+def _charge_unit_state(**overrides):  # type: ignore[no-untyped-def]
+    unit_state = {
+        "turn_flags": {},
+        "in_melee": False,
+    }
+    unit_state.update(overrides)
+    return unit_state
+
+
+def _game_state():  # type: ignore[no-untyped-def]
+    return {"round": 2, "first_player": "Necrons", "second_player": "Orks"}
+
+
+class TestActiveChargeCommandReroll:
+    def test_offers_command_reroll_with_correct_args(self, monkeypatch) -> None:
+        _quiet_charge_widgets(monkeypatch)
+        cp.st.session_state = _S(selected_targets=[("Orks", BOYZ)])
+        tgt_unit = SimpleNamespace(name_en="Boyz")
+        monkeypatch.setattr(cp, "lookup", lambda faction, uid: (tgt_unit, {}))
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_inline_command_reroll", spy)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._active_charge("Necrons", WARRIORS, unit, _charge_unit_state(), _game_state())
+
+        spy.assert_called_once()
+        call = spy.call_args
+        assert call.args[0] == "Necrons"
+        assert call.args[1] == "charge"
+        assert call.kwargs["reopen_key"] == WARRIORS
+        assert callable(call.kwargs["on_reroll"])
+        call.kwargs["on_reroll"]()  # no-op — must not raise
+
+    def test_reopen_key_follows_the_charging_unit(self, monkeypatch) -> None:
+        """reopen_key is the charging unit's state key — a second charger gets
+        its own offer, not the first charger's."""
+        _quiet_charge_widgets(monkeypatch)
+        cp.st.session_state = _S(selected_targets=[("Orks", BOYZ)])
+        tgt_unit = SimpleNamespace(name_en="Boyz")
+        monkeypatch.setattr(cp, "lookup", lambda faction, uid: (tgt_unit, {}))
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_inline_command_reroll", spy)
+        unit = SimpleNamespace(name_en="Overlord")
+
+        cp._active_charge("Necrons", OVERLORD, unit, _charge_unit_state(), _game_state())
+
+        spy.assert_called_once()
+        assert spy.call_args.kwargs["reopen_key"] == OVERLORD
+
+    def test_no_offer_without_targets(self, monkeypatch) -> None:
+        """No targets selected yet — the roll has not happened, nothing to re-roll."""
+        _quiet_charge_widgets(monkeypatch)
+        cp.st.session_state = _S(selected_targets=[])
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_inline_command_reroll", spy)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._active_charge("Necrons", WARRIORS, unit, _charge_unit_state(), _game_state())
+
+        spy.assert_not_called()
+
+    def test_no_offer_when_already_in_melee(self, monkeypatch) -> None:
+        """Already-in-melee units cannot charge at all — the roll caption and
+        the re-roll offer are both unreachable."""
+        _quiet_charge_widgets(monkeypatch)
+        monkeypatch.setattr(cp, "render_melee_engagements", lambda *a, **kw: None)
+        cp.st.session_state = _S(selected_targets=[("Orks", BOYZ)])
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_inline_command_reroll", spy)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._active_charge(
+            "Necrons", WARRIORS, unit, _charge_unit_state(in_melee=True), _game_state()
+        )
+
+        spy.assert_not_called()

@@ -1892,9 +1892,8 @@ def _render_resolution_tab(
         effect_stat="wound",
     )
 
-    st.markdown("---")
-
-    # SAVE BLOCK
+    # SAVE BLOCK — its own block_divider_html() is the single WOUND/SAVE
+    # separator (S137 Bug A: a second st.markdown("---") here doubled it).
     _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the defender made the saving
     # throw — defender pays, unlike the Hit-/Wound-Anker above (attacker's
@@ -2419,6 +2418,9 @@ def render_group_assignment(
     entries: list[dict] = []  # type: ignore[type-arg]
     models_assigned = 0
     attacks_assigned = 0
+    # Command Re-Roll is phase-keyed (usage + stratagem window): melee and
+    # pistols-in-melee run in the Fight phase, plain ranged in Shooting.
+    reroll_phase = "fight" if (use_melee or in_melee) else "shooting"
 
     for i, (def_faction, def_uid) in enumerate(tgts):
         def_unit, _ = lookup(def_faction, def_uid)
@@ -2544,6 +2546,16 @@ def render_group_assignment(
                         key=models_key,
                     )
                     eff_models = int(models_val)
+                    # Anzahl-Attacken-Anker, Fernkampf (design_system.md §6.2/
+                    # §6.3, S137): every dice-based Attacks weapon in the data
+                    # is ranged, but only the melee branch above offered the
+                    # re-roll. The rolled value is never typed in here (the
+                    # player assigns models; the count shows as e.g. "1×D6"),
+                    # so — like the Hit roll — the offer is anchor-only:
+                    # on_reroll stays a no-op, the call owns just the CP/usage
+                    # bookkeeping. No model assigned → no roll to re-roll.
+                    if eff_models > 0 and _is_variable_attacks(profile.attacks, profile.effect):
+                        attack_reroll_offers.append((weapon.name_en, models_key))
                     displayed_count = _compute_attacks(
                         profile.attacks,
                         eff_models,
@@ -2579,7 +2591,7 @@ def render_group_assignment(
         for offer_weapon_name, offer_key in attack_reroll_offers:
             render_inline_command_reroll(
                 atk_faction,
-                "fight",
+                reroll_phase,
                 reopen_key=offer_key,
                 on_reroll=lambda: None,
                 label_context=offer_weapon_name,

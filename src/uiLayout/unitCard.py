@@ -19,6 +19,8 @@ Design principles (see docs/spec/ui_layout.md §4):
   assigns targets to the selected model group when the group flow is active.
 """
 
+from collections.abc import Sequence
+
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND, SYM_EXPAND_ALT
@@ -41,7 +43,8 @@ from uiLayout._common import (
 from uiLayout.badges import badge, chip
 
 # design_colors.md §0: MOVED = blau (vormals Buff-Blau), Buff = grün (vormals
-# MOVED-Grün), RESERVE = HEROIC-INT.-Farbe (temporäre Sonderzustände).
+# MOVED-Grün), RESERVE = HEROIC-INT.-Farbe (temporäre Sonderzustände). CAST =
+# --arb-blue-Familie analog SHOT (S137-Entscheid, design_colors.md §2).
 # Keine Fraktions-Badges hier — Army-Abilities zeigt die armyCard (Buff-Grün).
 _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "MOVED": ("#60a5fa", "#0a1020"),
@@ -52,6 +55,7 @@ _BADGE_COLORS: dict[str, tuple[str, str]] = {
     "CHARGED": ("#b070d8", "#1a0a2a"),
     "FOUGHT": ("#c080e8", "#200a30"),
     "SHOT": ("#40a0b8", "#081418"),
+    "CAST": ("#93c5fd", "#1e3a8a"),
     "RESERVE": ("#ff9060", "#2a1208"),
     "DESTROYED": ("#c04040", "#1e1010"),
     "HEROIC INT.": ("#ff9060", "#2a1208"),
@@ -86,8 +90,17 @@ _MOVEMENT_BADGE: dict[str, str] = {
 }
 
 
-def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
-    parts: list[str] = []
+def _state_badges_html(
+    state: dict,  # type: ignore[type-arg]
+    extra_buff_badges: Sequence[str] = (),
+) -> str:
+    """Combine the state group with the buff/debuff group.
+
+    ``extra_buff_badges`` lets the caller add pre-rendered buff badges
+    (army ability, protocol) to the buff group. The two groups are joined
+    with a ``<br>`` only when both are non-empty (S137 decision).
+    """
+    state_parts: list[str] = []
     flags = state.get("turn_flags", {})
     mc = state.get("movement_choice")
 
@@ -102,24 +115,35 @@ def _state_badges_html(state: dict) -> str:  # type: ignore[type-arg]
         movement_slot = None
 
     if movement_slot:
-        parts.append(_badge(movement_slot))
+        state_parts.append(_badge(movement_slot))
 
     if flags.get("shot"):
-        parts.append(_badge("SHOT"))
+        state_parts.append(_badge("SHOT"))
+
+    if flags.get("cast"):
+        state_parts.append(_badge("CAST"))
 
     if state.get("in_melee") and movement_slot != "CHARGED":
-        parts.append(_badge("IN MELEE"))
+        state_parts.append(_badge("IN MELEE"))
 
     if flags.get("heroic_intervened"):
-        parts.append(_badge("HEROIC INT."))
+        state_parts.append(_badge("HEROIC INT."))
 
     if state.get("in_reserve"):
-        parts.append(_badge("RESERVE"))
+        state_parts.append(_badge("RESERVE"))
 
-    for buf in state.get("active_buffs", []):
-        parts.append(_badge(buf.get("badge_label", "BUFF"), variant="buff"))
+    buff_parts: list[str] = [
+        _badge(buf.get("badge_label", "BUFF"), variant="buff")
+        for buf in state.get("active_buffs", [])
+    ]
+    buff_parts.extend(extra_buff_badges)
 
-    return "".join(parts)
+    state_html = "".join(state_parts)
+    buff_html = "".join(buff_parts)
+
+    if state_html and buff_html:
+        return state_html + "<br>" + buff_html
+    return state_html + buff_html
 
 
 def _keyword_chip(kw: str, highlighted: bool) -> str:
@@ -324,14 +348,17 @@ def render_unit_card(
         # ── State badges + Keywords ────────────────────────────────
         # Relics show no badge of their own — only their effects (buff/debuff).
         if phase_key != "setup":
-            badges = _state_badges_html(state)
             from gameMechanic.ability_engine import ability_badge_label  # noqa: PLC0415
 
+            extra_buffs: list[str] = []
             ability_lbl = ability_badge_label(faction, unit)
             if ability_lbl:
-                badges += _badge(ability_lbl, variant="buff")
-            for proto_lbl in active_round_choice_buff_labels(faction):
-                badges += _badge(proto_lbl, variant="buff")
+                extra_buffs.append(_badge(ability_lbl, variant="buff"))
+            extra_buffs.extend(
+                _badge(proto_lbl, variant="buff")
+                for proto_lbl in active_round_choice_buff_labels(faction)
+            )
+            badges = _state_badges_html(state, extra_buffs)
             kws = _keywords_html(unit)
             if badges and kws:
                 st.markdown(badges + "<br>" + kws, unsafe_allow_html=True)

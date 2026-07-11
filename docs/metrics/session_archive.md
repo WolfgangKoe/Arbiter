@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-11 09:59 CEST
+Stand: 2026-07-11 12:55 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-10 21:31 e914  ██████████░░ 127k ⚠️   █████░  89%    ▚▚▚·········
+07-11 10:04 8553  ████████████ 173k ⛔    ████░░  67%    ▚▚▚▚▚▚▚▚····
+         SA_1·  ███████░░░░░  83k ✅    P2-2 chargephase Testlücke schließ…
+         SA_2·  ███████░░░░░  87k ✅    Stikkbomb Inline-Reroll untersuchen
+         SA_3·  █████████░░░ 108k ✅    Attack-UI-Bugs untersuchen
+         SA_4·  ██████░░░░░░  75k ✅    P2-1 unitCard Badges fixen
+         SA_5·  ████░░░░░░░░  47k ✅    YAML abilities Trunkierungs-Scan
+         SA_6·  ███████░░░░░  91k ✅    B12 Konzept GO-used-Zustand
+         SA_7·  ██████░░░░░░  74k ✅    S137 DoD-Review (Reviewer)
+         SA_8·  █████████░░░ 115k ✅    S137 Planning-Entwurf erstellen
+----------------- ---------------------- -------------- ------------
+07-10 21:31 e914  ███████████░ 134k ⚠️   █████░  89%    ▚▚▚·········
          SA_1·  █████████░░░ 113k ✅    Planning-Entwurf S136 erstellen
-         SA_2·  ███████████░ 139k ⚠️   S136-Abschluss: Artefakte + Commit
+         SA_2·  ████████████ 166k ⛔    S136-Abschluss: Artefakte + Commit
          SA_3·  █████░░░░░░░  61k ✅    Retro-Maßnahmen Hook + Schwellen
          SA_4·  █████████░░░ 115k ✅    B1-Probe per Playwright ausführen
          SA_5·  ██████████░░ 130k ⚠️   4c a+b Re-Roll-UI nachbessern
@@ -566,3 +576,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S133 (2026-07-10)** GO-Karten-Anatomie neu (Container, Use/Undo, Akkordeon in Karte), Desperate-Breakout-Gating, K2-Bewegungs-State-Modell + Re-Roll-Kompaktkarte, Reaktiv-Box→GO-Karte, K3-Conditions, Profilkarten-Fixes; mypy 75→63; §6.2-Sichtbarkeits-Invariante
 - **S135 (2026-07-10)** S134-Entscheidungen aufgelöst (B10 in CLAUDE.md); Paket 4 komplett (4a/4b/4c: Hit/Wound/Save-Anker, Reroll-Ablösung, Attacken-Re-Roll, 3 Schuld-GOs aktivierbar, Folge-Split empfohlen); B6 nebeneinander + Read-directive (verifiziert); B1-Probe-Patch + Ansage; Review GO; 1673 passed / 99,12 %
 - **S136 (2026-07-11)** B1 scroll fix verified, command re-roll 9/9, retro measures
+- **S137 (2026-07-11)** Beobachtungs-Welle: unitCard-Badges+CAST, Stikkbomb-Fernkampf-Reroll-Fix (45 Waffen), Wound/Save+Power-klaw-Fixes, Chargephase-Tests, B12-Konzept, YAML-Trunkierungs-Scan (44), markdownlint-Trial

@@ -125,6 +125,7 @@ def _state(
     charged: bool = False,
     shot: bool = False,
     fought: bool = False,
+    cast: bool = False,
     in_melee: bool = False,
     in_reserve: bool = False,
     mwbd: bool = False,
@@ -137,6 +138,7 @@ def _state(
             "charged": charged,
             "shot": shot,
             "fought": fought,
+            "cast": cast,
         },
         "in_melee": in_melee,
         "in_reserve": in_reserve,
@@ -161,6 +163,78 @@ def test_state_badges_mwbd_shown() -> None:
 def test_state_badges_empty_state_returns_empty() -> None:
     html = _state_badges_html(_state())
     assert html == ""
+
+
+# ---------------------------------------------------------------------------
+# State/buff group separator — <br> only when BOTH groups are non-empty (S137)
+# ---------------------------------------------------------------------------
+
+
+def test_separator_between_state_and_buff_groups() -> None:
+    html = _state_badges_html(_state(movement_choice="moved", mwbd=True))
+    assert "MOVED" in html
+    assert "MWBD" in html
+    assert html.count("<br>") == 1
+    # State group comes first, buff group after the separator
+    assert html.index("MOVED") < html.index("<br>") < html.index("MWBD")
+
+
+def test_no_separator_when_only_state_group() -> None:
+    html = _state_badges_html(_state(movement_choice="moved", shot=True))
+    assert "<br>" not in html
+
+
+def test_no_separator_when_only_buff_group() -> None:
+    html = _state_badges_html(_state(mwbd=True))
+    assert "<br>" not in html
+
+
+def test_caller_buff_badge_without_active_buffs_gets_separator() -> None:
+    """Army-ability/protocol badges passed by the caller are buff badges:
+    they belong behind the separator even when active_buffs is empty."""
+    from uiLayout.unitCard import _badge
+
+    html = _state_badges_html(
+        _state(movement_choice="moved"),
+        extra_buff_badges=[_badge("ARMY ABILITY", variant="buff")],
+    )
+    assert html.count("<br>") == 1
+    assert html.index("MOVED") < html.index("<br>") < html.index("ARMY ABILITY")
+
+
+def test_caller_buff_badge_without_state_group_has_no_separator() -> None:
+    from uiLayout.unitCard import _badge
+
+    html = _state_badges_html(
+        _state(),
+        extra_buff_badges=[_badge("ARMY ABILITY", variant="buff")],
+    )
+    assert "ARMY ABILITY" in html
+    assert "<br>" not in html
+
+
+# ---------------------------------------------------------------------------
+# CAST badge — turn_flags["cast"] (psychicPhase Smite) renders in the state
+# group with the --arb-blue family colours (S137 decision, design_colors.md §2)
+# ---------------------------------------------------------------------------
+
+
+def test_cast_flag_renders_cast_badge_with_blue_family_colors() -> None:
+    html = _state_badges_html(_state(cast=True))
+    assert "CAST" in html
+    assert "#93c5fd" in html
+    assert "#1e3a8a" in html
+
+
+def test_cast_badge_belongs_to_state_group() -> None:
+    html = _state_badges_html(_state(cast=True, mwbd=True))
+    # CAST is a state badge → it stands before the group separator
+    assert html.index("CAST") < html.index("<br>") < html.index("MWBD")
+
+
+def test_no_cast_badge_without_cast_flag() -> None:
+    html = _state_badges_html(_state(shot=True))
+    assert "CAST" not in html
 
 
 # ---------------------------------------------------------------------------

@@ -226,6 +226,21 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     Slot-Wechsel geschieht optisch noch ein kurzer Sprung/Zucken, aber das Fenster bleibt
     an derselben Stelle (kein Scroll-Delta mehr, Playwright-Beleg B1). Beobachten, ggf.
     Dropdown-Höhen stabilisieren (optionaler zweiter Schritt aus `S136_B1_probe.md`).
+  - 🔲 **B12 — GO-„used"-Zustand mit Auslöser-Tracking (Stakeholder-Entscheid S137):**
+    Undo-Button nur bei der Einheit, bei der die GO angewendet wurde; an allen anderen
+    Angebotsstellen der Phase Einsatz unterbinden, Button-Text „Used". Inline-Angebote
+    (Attacken-/Charge-Sequenz) zeigen NIE Undo; Once-per-Phase wird erzwungen (nach
+    Hit-Einsatz zeigen Wound/Save „used"). Größerer Eingriff: Konzept
+    `docs/handoff/S137_B12_konzept.md` (S137), Umsetzung als Teil-Briefs ≤ M danach.
+  - 🔲 **B13 — GO-Karte: Keyword-Badges (Stakeholder-Beobachtung S137):** GO-Karten zeigen
+    keine Schlüsselwort-Chips (nur Name/CP/Regeltext). Neues Feature, eigener kleiner Plan;
+    erweitert den GO-Card-Baustein (`design_system.md` §6). Keine Eil-Priorität
+    (Stakeholder-Entscheid S137: „ins Backlog").
+  - 🔲 **B14 — Badge-Kontrast-Pass (Stakeholder-Beobachtung S137):** Badges schwer
+    erkennbar, v. a. STATIONARY (`--arb-muted` `#6b5f44`) zu dunkel. Vorschlag: heller
+    Khaki `#9c8f6a`; prüfen, ob weitere gedämpfte Badges mit angehoben werden müssen.
+    Farbschema-Entscheidung liegt beim Stakeholder → Hex-Vorschläge vorlegen, dann
+    mechanischer Edit `design_colors.md` + `unitCard.py` (Stakeholder S137: „ins Backlog").
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
@@ -244,6 +259,15 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - ✅ **CP-Doppelvergabe-Fix — ERLEDIGT (Plan 018 Task 18.1, S128):** `cp_grants`-Set aus
   `(round, faction)`-Paaren ersetzt `cp_granted_this_phase`-Flag; übersteht ←/→-Phasennavigation.
 - 🟢 `collect_modifiers_for_phase()` (→ Plan 018 Task 18.4, noch offen)
+- 🔲 **Scraper-Trunkierung `abilities` (S137-Scan):** `tools/wahapedia_scraper.py` kappt
+  Textfelder bei 55 Zeichen — 44 Einträge betroffen (Orks 38, Necrons 6; je 1×
+  `faction_abilities.yaml`, Rest `weapons.yaml`). Sichtbar z. B. Power klaw
+  (`gameActionsArea.py:94`). Vorgehen: Scraper-Limit fixen, betroffene Fraktionen
+  re-scrapen, Vollsuite; Detail-Liste `docs/handoff/S137_yaml_trunkierung_scan.md`
+  (Scan jederzeit regenerierbar). **WICHTIG (Stakeholder S137): zeitnah vervollständigen —
+  die YAML sind Grundlage der Logik.** Laut Stakeholder war der Scraper bereits einmal so
+  gefixt, dass nicht trunkiert wird → prüfen, ob ein alter Scraper-Stand vorliegt, und
+  sicherstellen, dass er die vollständigen Texte holt.
 - 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
   Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
 - 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente

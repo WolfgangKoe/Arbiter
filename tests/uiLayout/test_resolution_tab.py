@@ -282,3 +282,41 @@ def test_strength_stratagem_not_scoped_to_other_unit_shows_no_buff_border(
         f"Expected no buff colour {_BUFF_COLOR_HEX} in WOUND block for an attacker the "
         f"stratagem was NOT activated for, but found it in:\n{combined_html}"
     )
+
+
+# ---------------------------------------------------------------------------
+# S137 Bug B — hit_roll_penalty must render exactly ONCE (modifier row only)
+# ---------------------------------------------------------------------------
+
+
+def test_hit_roll_penalty_renders_once_no_duplicate_badge(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Regression (S137 Bug B, Power klaw): the weapon's −1-to-Hit shows once.
+
+    The penalty reaches the HIT block twice from the same YAML effect field:
+    as a '−1 to Hit' entry in the modifier stack (assembled in
+    _render_resolution_tab via _detect_weapon_special) AND — before the fix —
+    as an extra special_die_html badge inside _render_dice_roll_block keyed
+    off the same weapon_special['hit_roll_penalty'] flag. The badge branch is
+    removed; the label must appear exactly once in the HTML output.
+    """
+    captured = _collect_markdown(monkeypatch)
+
+    penalty = {"label": "−1 to Hit", "value": -1, "roll_type": "hit", "source": "weapon"}
+    hit_block = {"base": 2, "stack": [penalty], "modified": 3}
+    weapon_special = {
+        "auto_hit": False,
+        "extra_hits": False,
+        "alternating_fire": False,
+        "hit_roll_penalty": True,
+        "has_mortal_wounds": False,
+    }
+
+    _render_dice_roll_block("HIT", "WS", hit_block, weapon_special)
+
+    combined_html = "\n".join(captured)
+    count = combined_html.count("−1 to Hit")
+    assert count == 1, (
+        f"Expected the '−1 to Hit' label exactly once (modifier row in the dice "
+        f"grid); a second occurrence means the duplicate special_die_html badge "
+        f"is back. Got {count} occurrence(s)."
+    )

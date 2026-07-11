@@ -1591,7 +1591,7 @@ def test_render_group_assignment_no_offer_when_attacks_fixed(monkeypatch) -> Non
 
 
 def test_render_group_assignment_no_offer_when_not_melee(monkeypatch) -> None:
-    """Ranged group assignment has no per-weapon Attacks field — nothing to react to."""
+    """S137: ranged fixed Attacks — like melee, no dice roll means no offer."""
     unit, group = _melee_group_fixture()
     ranged_profile = WeaponProfile(
         weapon_type="Rapid Fire 1",
@@ -1618,6 +1618,101 @@ def test_render_group_assignment_no_offer_when_not_melee(monkeypatch) -> None:
     common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
 
     spy.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# S137 — Stikkbomb-Befund: every dice-based Attacks weapon in the data is
+# ranged, but only the melee branch offered the Command Re-Roll. The ranged
+# branch now collects the same anchor-only offer (no value field — the player
+# assigns models, the rolled count is never typed in), phase-keyed to
+# "shooting" (plain ranged) vs. "fight" (melee / pistols-in-melee).
+# ---------------------------------------------------------------------------
+
+
+def _ranged_group_fixture(attacks: str = "D6"):  # type: ignore[no-untyped-def]
+    unit, group = _melee_group_fixture()
+    ranged_profile = WeaponProfile(
+        weapon_type=f"Grenade {attacks}",
+        range_inches=8,
+        attacks=attacks,
+        strength=3,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    group.weapons = [Weapon(id="w2", name_en="Stikkbombz", profiles=[ranged_profile])]
+    return unit, group
+
+
+def _patch_ranged_widgets(monkeypatch, models_val: int):  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: models_val)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(common, "render_inline_command_reroll", spy)
+    return spy
+
+
+def test_render_group_assignment_ranged_dice_attacks_offers_command_reroll(monkeypatch) -> None:
+    """S137 regression: Stikkbombz (Grenade, Attacks D6) must get the offer."""
+    unit, _ = _ranged_group_fixture(attacks="D6")
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    spy = _patch_ranged_widgets(monkeypatch, models_val=1)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    spy.assert_called_once()
+    call = spy.call_args
+    assert call.args[0] == "Orks"  # the attacker rolled the dice — attacker pays
+    assert call.args[1] == "shooting"  # plain ranged = Shooting phase, not "fight"
+    assert call.kwargs["reopen_key"] == "decl_m_g1_atk1_u_def_Stikkbombz"
+    assert call.kwargs["label_context"] == "Stikkbombz"
+    call.kwargs["on_reroll"]()  # anchor-only no-op — must not raise
+
+
+def test_render_group_assignment_ranged_no_offer_without_assigned_models(monkeypatch) -> None:
+    """No thrower assigned (grenades default to 0) → no roll happened to re-roll."""
+    unit, _ = _ranged_group_fixture(attacks="D6")
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    spy = _patch_ranged_widgets(monkeypatch, models_val=0)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    spy.assert_not_called()
+
+
+def test_render_group_assignment_ranged_fixed_attacks_no_offer_despite_models(monkeypatch) -> None:
+    """Fixed ranged Attacks with models assigned still has no dice roll to re-roll."""
+    unit, group = _ranged_group_fixture(attacks="D6")
+    group.weapons[0].profiles[0].attacks = "2"
+    group.weapons[0].profiles[0].weapon_type = "Assault 2"
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    spy = _patch_ranged_widgets(monkeypatch, models_val=3)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    spy.assert_not_called()
+
+
+def test_render_group_assignment_ranged_in_melee_offer_uses_fight_phase(monkeypatch) -> None:
+    """Pistols fired while in melee happen in the Fight phase — offer keyed accordingly."""
+    unit, group = _ranged_group_fixture(attacks="D3")
+    group.weapons[0].profiles[0].weapon_type = "Pistol D3"
+    atk_state = {"group_models": {"g1": 5}}
+    common.st.session_state = _group_assignment_session()
+    spy = _patch_ranged_widgets(monkeypatch, models_val=2)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False, in_melee=True)
+
+    spy.assert_called_once()
+    assert spy.call_args.args[1] == "fight"
 
 
 # ---------------------------------------------------------------------------
@@ -1816,3 +1911,49 @@ def test_render_resolution_tab_offers_command_reroll_on_save_roll(monkeypatch) -
     assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Necrons"]
     assert session["cp"]["Orks"] == 5  # attacker's pool untouched
     assert "Orks" not in session["used_stratagem_ids"]
+
+
+# ---------------------------------------------------------------------------
+# S137 Bug A — exactly ONE divider between WOUND and SAVE (no stray "---")
+# ---------------------------------------------------------------------------
+
+
+def test_render_resolution_tab_no_extra_divider_before_save_block(monkeypatch) -> None:
+    """Regression (S137 Bug A): the WOUND→SAVE seam renders ONE divider.
+
+    _render_dice_save_block already opens with block_divider_html(); the old
+    standalone st.markdown("---") right before it (a 6d-v2 leftover from
+    before block_divider_html existed) stacked a second <hr> on top, showing
+    as a blank band between the blocks. Expected: no raw "---" call anywhere
+    before the SAVE title (the one after SAVE separates the DAMAGE block and
+    is legitimate), and exactly two block dividers total (WOUND, SAVE).
+
+    Both _common's and dice_html's markdown calls are captured: the two
+    modules can hold DIFFERENT streamlit mocks in a full test run (each test
+    file installs its own sys.modules['streamlit'] mock, but already-imported
+    modules keep the one they were imported under)."""
+    import uiLayout.dice_html as dice_html_mod  # noqa: PLC0415
+    from uiLayout.dice_compose import block_divider_html  # noqa: PLC0415
+
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    _install_resolution_tab_fixture(monkeypatch, def_unit)
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    _reroll_widgets(monkeypatch, session, clicked_key=None)
+
+    captured: list[str] = []
+    monkeypatch.setattr(common.st, "markdown", lambda html, **_kw: captured.append(str(html)))
+    monkeypatch.setattr(
+        dice_html_mod.st, "markdown", lambda html, **_kw: captured.append(str(html))
+    )
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    save_idx = next(i for i, html in enumerate(captured) if html.startswith("**SAVE**"))
+    assert (
+        "---" not in captured[:save_idx]
+    ), "stray st.markdown('---') before the SAVE block is back"
+    combined = "\n".join(captured)
+    divider_count = combined.count(block_divider_html())
+    assert (
+        divider_count == 2
+    ), f"Expected exactly 2 block dividers (WOUND, SAVE), got {divider_count}"

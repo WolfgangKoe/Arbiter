@@ -17,6 +17,9 @@ data/log/
 # Coverage / test artifacts
 .coverage
 
+# markdownlint trial (S137, 3 Sessions) — CLI lokal, Abhängigkeiten nicht einchecken
+node_modules/
+
 # Claude Code tooling artifacts — not project source state
 .agents/
 .claude/skills/

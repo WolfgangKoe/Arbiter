@@ -3506,10 +3506,10 @@
   "e914c95e-2c0c-4d31-9ae7-bcee5d4c533b": {
     "started_at": "2026-07-10T19:31:56.735Z",
     "task": "start session",
-    "peak_context": 127110,
-    "subagent_share": 88.64987322955554,
+    "peak_context": 133509,
+    "subagent_share": 89.42659574262193,
     "by_tier": {
-      "Sonnet": 47600298,
+      "Sonnet": 55112041,
       "Fable": 14719300,
       "Opus": 863757
     },
@@ -3525,7 +3525,7 @@
         "agent_type": "general-purpose",
         "description": "S136-Abschluss: Artefakte + Commit",
         "tier": "Sonnet",
-        "peak_context": 139432,
+        "peak_context": 166366,
         "started_at": "2026-07-10T19:31:56.735Z"
       },
       {
@@ -3583,6 +3583,76 @@
         "tier": "Sonnet",
         "peak_context": 74955,
         "started_at": "2026-07-10T19:31:56.735Z"
+      }
+    ]
+  },
+  "855349e1-b625-4628-9b54-292b29760ca0": {
+    "started_at": "2026-07-11T08:04:34.554Z",
+    "task": "Ich habe in S137_plan ein paar Antworten eingefügt. Ansonsten kannst du das die CLI von Markdown ins Projekt ziehen und…",
+    "peak_context": 172603,
+    "subagent_share": 66.70388935300812,
+    "by_tier": {
+      "Sonnet": 10652819,
+      "Fable": 19065592,
+      "Haiku": 776915,
+      "Opus": 138103
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "P2-2 chargephase Testlücke schließen",
+        "tier": "Sonnet",
+        "peak_context": 82603,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stikkbomb Inline-Reroll untersuchen",
+        "tier": "Sonnet",
+        "peak_context": 86933,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Attack-UI-Bugs untersuchen",
+        "tier": "Sonnet",
+        "peak_context": 108369,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "P2-1 unitCard Badges fixen",
+        "tier": "Sonnet",
+        "peak_context": 74544,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "YAML abilities Trunkierungs-Scan",
+        "tier": "Haiku",
+        "peak_context": 46683,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B12 Konzept GO-used-Zustand",
+        "tier": "Sonnet",
+        "peak_context": 90727,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S137 DoD-Review (Reviewer)",
+        "tier": "Opus",
+        "peak_context": 73627,
+        "started_at": "2026-07-11T08:04:34.554Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S137 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 115211,
+        "started_at": "2026-07-11T08:04:34.554Z"
       }
     ]
   }
