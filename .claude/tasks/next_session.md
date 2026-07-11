@@ -23,44 +23,50 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S138, 2026-07-11)
+## Aktueller Stand (nach S139, 2026-07-12)
 
-S138 (Review **GO**, Auflage erfüllt: Powerklaw-Badge-Fix + finale Vollsuite 1735 passed /
-99,14 %): **WAAAGH-Endstand gefixt** — Stufen-Anker = Command-Phase des Besitzers
-(`_reset_turn_state`), Once-per-Battle-Ledger `used_once_per_battle_abilities` +
-armyCard-Gate; **Spielende fix nach Runde 5** (`MAX_BATTLE_ROUNDS`, `battle_over`,
-`prev_phase()` hebt auf, Endstand-Anzeige in gameHeader); **unitCard-Keyword-Leck**
-gefixt (`_resolve_keyword_placeholders` generisch + `_fold_faction_keyword`, Subfaction-
-Wiring bleibt offen); **YAML-Trunkierung:** 47 Einträge (Ork 42/Necron 5) vervollständigt,
-Wächter `test_data_quality.py`; **Badge-Wert-Doppelung** generisch gefixt (Power klaw,
-Killsaw, Beast-Snagga-Klaw, Fall-Back). B12-Entscheidungen in `S137_B12_konzept.md`
-gesichert (ANSWERED). Alles Stakeholder-UI-verifiziert. mypy 62 — **NICHT gesenkt, 2
-Sessions überfällig.**
+S139 (Review **GO**, 0 Auflagen; Vollsuite 1755 passed / 99,14 %, mypy **62 → 54**):
+**B12 komplett** — 5. GO-Karten-Zustand `used_elsewhere` + Auslöser-Buchhaltung
+(`stratagem_use_anchors`), drei Karten-Mapper + Inline-Reroll auf Anker verdrahtet
+(„Undo" nur am Auslöse-Anker, sonst gedimmt „Used"); Cut Them Down + Emergency
+Disembarkation rendern dauerhaft (S138-Änderung). **Cut-Them-Down-Layout-Bug** gefixt
+(Root Cause vorbestehend `b5c774b` — Box außerhalb der Spalten). Toter Code
+`build_aura_range_hint_text` entfernt; INV-4b-Fehlalarm behoben; Doku §6.1/§6.3/§6.4
+nachgezogen. Stakeholder-UI-verifiziert (Advance-Reroll, Cut Them Down, Layout beide
+Rollen); Emergency Disembarkation mangels TRANSPORT-Roster nicht prüfbar (gleicher
+Code-Pfad, unit-getestet).
 
-Frühere Sessions (S60–S137): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S138): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S139)
+### ▶ Nächster Schritt (S140)
 
-1. **B12 umsetzen (Teil-Briefs ≤ M):** Entscheidungen in `S137_B12_konzept.md`
-   (ANSWERED) — a) Auslöser-Tracking, b) Undo nur am Auslöse-Anker (Inline bekommt
-   Undo, 4a revidiert), c) Once-per-Phase erzwungen (Wound/Save „used" nach Hit-Einsatz).
-2. **mypy-Ratchet senken (P1-Pflicht):** Baseline 62 seit S137 unverändert — S139 muss
-   sie senken, sonst droht Review-NO-GO.
-3. **Dynastie↔Protokoll-Kopplung (neuer Befund):** „beide Direktiven" gilt laut
-   `faction_overview.txt:908-936` für ALLE 6 Dynastien; YAML-Feld `linked_protocol`
-   fehlt → Konzept + Datenmodell-Ergänzung.
-4. **Cut-Them-Down-Bug:** GO-Karte erscheint über beide Spielerflächen (laut Design
-   verboten) — GO-Card/UI-Layout prüfen.
-5. **Toter Code entfernen (Retro-Maßnahme 2, XS):** `build_aura_range_hint_text` +
-   Tests, `acceptance/rules.md`-Referenz nachziehen.
-6. **Rand-Design-Konzept** (heller Streifen links, beim 2. Spieler spiegeln, auf GOs
+1. **Dynastie↔Protokoll-Kopplung umsetzen (freigegeben, Effort S–M):** Konzept
+   `S139_dynastie_protokoll_konzept.md` (ANSWERED) — Befund bestätigt = alter
+   S96/S97-Backlog-Punkt: Feld `subfaction_affinity` existiert bereits (permanenter
+   Zweig wertet aus), nur der Round-Zweig `_active_directive_effects` in
+   `ability_engine.py` und `armyCard._render_directive_buttons` prüfen es nicht. Kein
+   neues YAML-Feld nötig;
+   Bedingungszweig + analoger UI-Zweig + Regressionstests je Dynastie. Nach Commit
+   Konzept-Marker → DONE + löschen.
+2. **mypy-Ratchet weiter senken:** Baseline 54 (S139: 62→54). Nächster größter Posten
+   laut E2-Befund: `src/uiLayout/gameActionsArea.py` (generische dict/set-Argumente,
+   `SessionStateProxy`-Mismatch).
+3. **Dokumentierte Ratchet-Schulden aus S139 (kein Blocker):** (a) B12b-Header-Suffix
+   „used on ⟨Einheit⟩" noch nicht verdrahtet (Mapper geben `None` als Grund; in §6.1
+   vermerkt) — XS-Folge-Task; (b) Stil-Nit `undo_stratagem` in-place-Mutation → bei
+   nächster Modul-Berührung mitziehen; (c) R-PROTO-02 `status: offen` (Aura-Tischhinweis
+   entfernt, neuer Mechanismus offen).
+4. **Rand-Design-Konzept** (heller Streifen links, beim 2. Spieler spiegeln, auf GOs
    übertragen); **GO-Keyword-Nachpflege** in YAML (systematisch, Subagent); **Rest
    unverändert (S137/S138):** 4c-Folge-Split (Paket 7/8) → B7/B9-Konzept + B2 Option A;
    Fold-Heuristik+Subfaction-Wiring (Retro-Maßnahme 3); Totalvernichtungs-Spielende;
-   Kleinschulden (Smoke-Test `hook_pytest_foreground.py`, `design_system.md` §6.3,
-   `_common.py`-Refactor, S130-GO-Verifikation, 037 Docker-Smoke, Deny-Caption,
-   Direction-Entscheide, B4/B8-Welle-2-Screenshots + HI-UI-Ausrollung). Details →
-   `backlog.md`.
+   Kleinschulden (Smoke-Test `hook_pytest_foreground.py`, `_common.py`-Refactor,
+   S130-GO-Verifikation, 037 Docker-Smoke, Deny-Caption, Direction-Entscheide,
+   B4/B8-Welle-2-Screenshots + HI-UI-Ausrollung). Details → `backlog.md`.
+
+**Retro-Leitlinie S139 (Stakeholder):** Kommentare/Docstrings im Code reduzieren — der
+Code trägt sich selbst (deckt sich mit CLAUDE.md-Kommentar-Konvention). Kein
+INV-4b-Scanner-Umbau; bei Fehlalarm auf Alltagswörter umformulieren.
 
 **Prozess:** Vollsuite bei parallelen Wellen nur EINMAL zentral am Wellen-Ende
 (`operating_model.md` Event 3).

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-11 15:26 CEST
+Stand: 2026-07-12 01:58 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,13 +9,25 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-11 12:58 3d6e  ███████████░ 141k ⚠️   █████░  89%    ▚▚▚█········
+07-11 15:28 a4be  ███████████░ 136k ⚠️   █████░  86%    ███·········
+         SA_1·  █████████░░░ 106k ✅    S139 Planning-Entwurf erstellen
+         SA_2·  ███████████░ 135k ⚠️   B12a: 5. Zustand + Auslöser-Buchha…
+         SA_3·  ██████░░░░░░  73k ✅    Cut-Them-Down-Layout-Bug fixen
+         SA_4·  ███░░░░░░░░░  33k ✅    INV-4b: 'never' in go_card.py umfo…
+         SA_5·  ████░░░░░░░░  56k ✅    mypy-Ratchet game_log.py senken
+         SA_6·  ████░░░░░░░░  49k ✅    Toten Code build_aura_range_hint_t…
+         SA_7·  ███████████░ 137k ⚠️   B12c: Inline-Undo an Einsatzstelle
+         SA_8·  ██████░░░░░░  81k ✅    Konzept Dynastie↔Protokoll-Kopplung
+         SA_9·  ██████░░░░░░  70k ✅    DoD-Review S139-Abschluss
+         SA_10·  ████████████ 202k ⛔    B12b: Karten-Anker in Mapper verdr…
+----------------- ---------------------- -------------- ------------
+07-11 12:58 3d6e  ███████████░ 143k ⚠️   █████░  89%    ▚▚▚█········
          SA_1·  ████░░░░░░░░  53k ✅    Spielende-Bug Root-Cause-Probe
          SA_2·  ████████████ 231k ⛔    YAML-Trunkierung + Scraper-Fix
          SA_3·  ███████░░░░░  89k ✅    unitCard-Keyword-Leck fixen
          SA_4·  ████░░░░░░░░  46k ✅    Nihilakh-Protokoll-Regel nachschla…
          SA_5·  ████████████ 146k ⚠️   XS-Fixes + B12-Antworten sichern
-         SA_6·  █████████░░░ 115k ✅    S138-Abschluss schreiben + committ…
+         SA_6·  ██████████░░ 126k ⚠️   S138-Abschluss schreiben + committ…
          SA_7·  ████████░░░░  96k ✅    Spielende-Fix umsetzen
          SA_8·  ███████████░ 131k ⚠️   S138-Planungsentwurf erstellen
          SA_9·  ███████░░░░░  88k ✅    WAAAGH-Endstand-Bugfix
@@ -590,3 +602,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S136 (2026-07-11)** B1 scroll fix verified, command re-roll 9/9, retro measures
 - **S137 (2026-07-11)** Beobachtungs-Welle: unitCard-Badges+CAST, Stikkbomb-Fernkampf-Reroll-Fix (45 Waffen), Wound/Save+Power-klaw-Fixes, Chargephase-Tests, B12-Konzept, YAML-Trunkierungs-Scan (44), markdownlint-Trial
 - **S138 (2026-07-11)** WAAAGH owner-anchor+once-per-battle ledger, battle end after round 5, unitCard keyword leak, YAML truncation 47 entries, badge value doubling fix
+- **S139 (2026-07-12)** B12 komplett (used_elsewhere-Zustand + Anker-Buchhaltung, Karten- & Inline-Mapper), Cut-Them-Down-Layout-Fix, mypy 62->54, toter Code entfernt

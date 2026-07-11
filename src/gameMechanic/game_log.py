@@ -25,39 +25,64 @@ import json
 import os
 import shutil
 from datetime import datetime
+from typing import Any, TypedDict, cast
+
+
+class EventEntry(TypedDict):
+    type: str
+    unit: str
+    action: str
+
+
+class PhaseEntry(TypedDict):
+    phase: str
+    active: str
+    events: list[EventEntry]
+
+
+class RoundEntry(TypedDict):
+    round: int
+    phases: list[PhaseEntry]
+
+
+class LogData(TypedDict):
+    game_id: str
+    players: dict[str, str]
+    rounds: list[RoundEntry]
+
 
 _LOG_FILE = os.path.join("data", "log", "game_log.json")
 _ARCHIVE_DIR = os.path.join("data", "log", "archive")
 
 
-def _read_log() -> dict:
+def _read_log() -> LogData:
     if os.path.exists(_LOG_FILE):
         with open(_LOG_FILE) as f:
             try:
                 data = json.load(f)
                 if isinstance(data, dict) and "rounds" in data:
-                    return data
+                    return cast(LogData, data)
             except json.JSONDecodeError:
                 pass
     return {"game_id": datetime.now().isoformat(), "players": {}, "rounds": []}
 
 
-def _write_log(data: dict) -> None:
+def _write_log(data: LogData) -> None:
     os.makedirs("data/log", exist_ok=True)
     with open(_LOG_FILE, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def _find_or_create_phase(data: dict, round_num: int, phase: str, active: str) -> dict:
+def _find_or_create_phase(data: LogData, round_num: int, phase: str, active: str) -> PhaseEntry:
     for r in data["rounds"]:
         if r["round"] == round_num:
             for p in r["phases"]:
                 if p["phase"] == phase and p["active"] == active:
                     return p
-            new_phase: dict = {"phase": phase, "active": active, "events": []}
+            new_phase: PhaseEntry = {"phase": phase, "active": active, "events": []}
             r["phases"].append(new_phase)
             return new_phase
-    new_round: dict = {
+    new_round: RoundEntry = {
         "round": round_num,
         "phases": [{"phase": phase, "active": active, "events": []}],
     }
@@ -95,11 +120,11 @@ def clear_game_log() -> None:
     _write_log({"game_id": datetime.now().isoformat(), "players": {}, "rounds": []})
 
 
-def list_archived_logs() -> list[dict]:
+def list_archived_logs() -> list[dict[str, Any]]:
     """Return metadata for each archived log, newest first."""
     if not os.path.exists(_ARCHIVE_DIR):
         return []
-    results = []
+    results: list[dict[str, Any]] = []
     for fname in sorted(os.listdir(_ARCHIVE_DIR), reverse=True):
         if not fname.endswith(".json"):
             continue

@@ -493,7 +493,7 @@ def _reroll_strat():
 def test_advance_reroll_state_locked_when_in_melee():
     from gameMechanic.movementPhase import _advance_reroll_state
 
-    state, reason = _advance_reroll_state(_reroll_strat(), True, "advanced", 3, set(), set())
+    state, reason = _advance_reroll_state(_reroll_strat(), True, "advanced", 3, set(), set(), True)
     assert state == "locked"
     assert reason == "unit is in melee"
 
@@ -501,11 +501,11 @@ def test_advance_reroll_state_locked_when_in_melee():
 def test_advance_reroll_state_locked_when_no_advance_roll_open():
     from gameMechanic.movementPhase import _advance_reroll_state
 
-    state, reason = _advance_reroll_state(_reroll_strat(), False, "none", 3, set(), set())
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "none", 3, set(), set(), True)
     assert state == "locked"
     assert reason == "no Advance roll open"
 
-    state, reason = _advance_reroll_state(_reroll_strat(), False, "moved", 3, set(), set())
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "moved", 3, set(), set(), True)
     assert state == "locked"
     assert reason == "no Advance roll open"
 
@@ -513,18 +513,33 @@ def test_advance_reroll_state_locked_when_no_advance_roll_open():
 def test_advance_reroll_state_ready_when_advanced_and_cp_available():
     from gameMechanic.movementPhase import _advance_reroll_state
 
-    state, reason = _advance_reroll_state(_reroll_strat(), False, "advanced", 3, set(), set())
+    state, reason = _advance_reroll_state(_reroll_strat(), False, "advanced", 3, set(), set(), True)
     assert state == "ready"
     assert reason is None
 
 
-def test_advance_reroll_state_used_after_spend_while_window_open():
+def test_advance_reroll_state_used_at_own_anchor_while_window_open():
+    """S139 B12b: this unit's own card is the anchor `spend_stratagem` recorded
+    for this (faction, GO) this phase → "used" with Undo offered."""
     from gameMechanic.movementPhase import _advance_reroll_state
 
     strat = _reroll_strat()
     used_ids = {strat.id}
-    state, reason = _advance_reroll_state(strat, False, "advanced", 3, used_ids, set())
+    state, reason = _advance_reroll_state(strat, False, "advanced", 3, used_ids, set(), True)
     assert state == "used"
+    assert reason is None
+
+
+def test_advance_reroll_state_used_elsewhere_when_spent_on_a_different_unit():
+    """S139 B12b regression target: the Advance re-roll spent on unit A must
+    render unit B's own card as "used_elsewhere" (disabled "Used", no Undo) —
+    not another "used" branch offering a second Undo for the same spend."""
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    strat = _reroll_strat()
+    used_ids = {strat.id}
+    state, reason = _advance_reroll_state(strat, False, "advanced", 3, used_ids, set(), False)
+    assert state == "used_elsewhere"
     assert reason is None
 
 
@@ -532,6 +547,6 @@ def test_advance_reroll_state_locked_cp_insufficient_when_not_used():
     from gameMechanic.movementPhase import _advance_reroll_state
 
     strat = _reroll_strat()
-    state, reason = _advance_reroll_state(strat, False, "advanced", 0, set(), set())
+    state, reason = _advance_reroll_state(strat, False, "advanced", 0, set(), set(), True)
     assert state == "locked"
     assert reason == "CP insufficient"

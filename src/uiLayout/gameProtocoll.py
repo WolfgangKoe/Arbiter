@@ -34,10 +34,22 @@ from gameObjects.stratagem import (
     stratagem_usable_by_player,
     stratagem_visibility,
 )
-from uiLayout._common import render_go_card, spend_stratagem, undo_stratagem
+from uiLayout._common import (
+    render_go_card,
+    spend_stratagem,
+    stratagem_used_here,
+    undo_stratagem,
+)
 from uiLayout.go_card import GoCardState
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
+
+# This render spot's own stable anchor (S139 B12b, design_system.md §6.1) — the
+# central Stratagems list is a single render location per (player, GO), unlike
+# the reactive boxes/Advance-reroll card which render once per unit/occurrence,
+# so one constant suffices (storage is already scoped per (faction, GO id) —
+# see `spend_stratagem`'s `anchor_id` docstring).
+_CENTRAL_LIST_ANCHOR_ID = "central_list"
 
 
 def _load_game_log() -> list[dict]:  # type: ignore[type-arg]
@@ -197,7 +209,11 @@ def _selected_unit_state_for(player: str) -> dict | None:  # type: ignore[type-a
 
 
 def _go_state_and_reason(
-    strat: Stratagem, vis: str, used_ids: set[str], used_battle_ids: set[str]
+    strat: Stratagem,
+    vis: str,
+    used_ids: set[str],
+    used_battle_ids: set[str],
+    used_here: bool,
 ) -> tuple[GoCardState, str | None]:
     """Map (`stratagem_visibility`, undo window) to a GO-card state + locked reason.
 
@@ -206,14 +222,20 @@ def _go_state_and_reason(
     filtered the stratagem out as "hidden" before this runs, so "dormant" never
     appears in the central list (only 1a's isolated card demo shows that state).
     "greyed" splits into two GO states depending on whether THIS phase's
-    activation window is still open (`stratagem_undo_visible`): open → "used"
-    (Undo offered), closed → "locked" (reason "used" for a once_per_battle
-    stratagem spent in an earlier phase, else "CP insufficient").
+    activation window is still open (`stratagem_undo_visible`): open →
+    "used" (Undo offered) if `used_here` — this render spot's own anchor
+    (`_CENTRAL_LIST_ANCHOR_ID`) is the one recorded for this (player, GO) this
+    phase — else "used_elsewhere" (disabled "Used", no Undo; S139 B12b,
+    design_system.md §6.1 5th state); closed → "locked" (reason "used" for a
+    once_per_battle stratagem spent in an earlier phase, else "CP
+    insufficient"). `used_here` is computed by the caller via
+    `stratagem_used_here` so this stays a pure, Streamlit-free decision
+    function, mirroring `_reactive_go_state`/`_advance_reroll_state`.
     """
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return "used", None
+        return ("used", None) if used_here else ("used_elsewhere", None)
     reason = "used" if strat.id in used_battle_ids else "CP insufficient"
     return "locked", reason
 
@@ -229,7 +251,9 @@ def _use_callback(strat: Stratagem, player: str) -> Callable[[], None]:
     default-arg workaround avoids that but defeats mypy's type inference for
     the lambda in strict mode — this factory gets both right.
     """
-    return lambda: spend_stratagem(strat, player, _selected_state_key_for(player))
+    return lambda: spend_stratagem(
+        strat, player, _selected_state_key_for(player), anchor_id=_CENTRAL_LIST_ANCHOR_ID
+    )
 
 
 def _undo_callback(strat: Stratagem, player: str) -> Callable[[], None]:
@@ -311,7 +335,10 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
         if is_core != in_core_section:
             st.caption("**Core**" if is_core else f"**{player}**")
             in_core_section = is_core
-        state, locked_reason = _go_state_and_reason(strat, vis, used_ids, used_battle_ids)
+        used_here = stratagem_used_here(player, strat.id, _CENTRAL_LIST_ANCHOR_ID)
+        state, locked_reason = _go_state_and_reason(
+            strat, vis, used_ids, used_battle_ids, used_here
+        )
         if state == "ready":
             # Keyword conditions (stratagem_conditions_met) already passed above — this
             # is the per-unit-state gate (S133-D Befund 4) keywords cannot

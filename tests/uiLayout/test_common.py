@@ -550,10 +550,10 @@ def test_rapid_fire_caption_rounds_down_half_range() -> None:
 def test_conquering_tyrant_primary_aura_range_bonus_data_feeds_hint() -> None:
     """R-PROTO-02: the aura_range_bonus effect carries the data the table hint needs.
 
-    Structural check of the ``affects`` list the hint builder reads. The actual display
-    behaviour (text content, visibility only for an active aura_range_bonus directive) is
-    covered by the Streamlit-free ability_engine tests
-    (``test_build_aura_range_hint_text_*``) — this test just guards the YAML contract.
+    Structural check of the ``affects`` list the (now removed) hint builder used to read;
+    the production consumer (``armyCard._render_aura_range_hint``) was removed in S138, and
+    the dead hint-builder function + its tests were removed in S139 (Retro-Maßnahme 2).
+    This test just guards the YAML contract, which other R-PROTO-02 checks still rely on.
     """
     from pathlib import Path
 
@@ -669,6 +669,96 @@ def test_spend_stratagem_registers_active_modifier_with_unit_key() -> None:
     assert mods[0]["unit_key"] == "unit#1"
     assert mods[0]["effect"]["roll_type"] == "wound"
     assert mods[0]["expires_at_phase"] == "charge"  # phase_end → current phase
+
+
+# ---------------------------------------------------------------------------
+# S139 B12a — use-anchor bookkeeping: spend_stratagem(anchor_id=...),
+# undo_stratagem(), stratagem_use_anchor(), stratagem_used_here()
+# ---------------------------------------------------------------------------
+
+
+def test_spend_stratagem_without_anchor_id_records_no_anchor() -> None:
+    """Callers that omit anchor_id (e.g. the inline Command Re-Roll offer, still
+    B12c scope) must stay a no-op on the anchor bookkeeping — only the three
+    Karten-anchor callers (central list, reactive box, Advance-reroll card) pass
+    one (S139 B12b)."""
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons")
+    assert session.get("stratagem_use_anchors", {}) == {}
+
+
+def test_spend_stratagem_with_anchor_id_records_anchor_and_unit_key() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", "unit#1", anchor_id="anchor_x")
+    assert session["stratagem_use_anchors"]["Necrons"]["strat.a"] == {
+        "anchor_id": "anchor_x",
+        "unit_key": "unit#1",
+    }
+
+
+def test_spend_stratagem_with_anchor_id_and_no_unit_key() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", anchor_id="anchor_x")
+    assert session["stratagem_use_anchors"]["Necrons"]["strat.a"]["unit_key"] is None
+
+
+def test_stratagem_use_anchor_returns_none_when_never_spent() -> None:
+    _spend_session()
+    assert common.stratagem_use_anchor("Necrons", "strat.never") is None
+
+
+def test_stratagem_use_anchor_returns_recorded_tuple() -> None:
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", "unit#1", anchor_id="anchor_x")
+    assert common.stratagem_use_anchor("Necrons", "strat.a") == ("anchor_x", "unit#1")
+
+
+def test_stratagem_used_here_true_for_matching_anchor() -> None:
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", anchor_id="anchor_x")
+    assert common.stratagem_used_here("Necrons", "strat.a", "anchor_x") is True
+
+
+def test_stratagem_used_here_false_for_different_anchor() -> None:
+    """Regression guard for the reported bug (S137): using the GO at one anchor
+    must not make a DIFFERENT anchor claim "used here" too."""
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", anchor_id="anchor_x")
+    assert common.stratagem_used_here("Necrons", "strat.a", "anchor_y") is False
+
+
+def test_stratagem_used_here_false_when_never_spent() -> None:
+    _spend_session()
+    assert common.stratagem_used_here("Necrons", "strat.never", "anchor_x") is False
+
+
+def test_stratagem_used_here_scoped_per_player_not_globally() -> None:
+    """S138-Testpflicht (F1): Player A spending a GO must never block/blend
+    into Player B's use of the SAME GO id — the anchor bookkeeping is keyed
+    per faction, so B's query for their own anchor is unaffected by A's spend."""
+    session = _spend_session()
+    session["cp"]["Orks"] = 5
+    common.spend_stratagem(_strat(sid="strat.shared"), "Necrons", anchor_id="necron_anchor")
+    common.spend_stratagem(_strat(sid="strat.shared"), "Orks", anchor_id="ork_anchor")
+    assert common.stratagem_used_here("Necrons", "strat.shared", "necron_anchor") is True
+    assert common.stratagem_used_here("Orks", "strat.shared", "necron_anchor") is False
+    assert common.stratagem_used_here("Orks", "strat.shared", "ork_anchor") is True
+
+
+def test_undo_stratagem_removes_recorded_anchor() -> None:
+    session = _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", anchor_id="anchor_x")
+    common.undo_stratagem(_strat(sid="strat.a"), "Necrons")
+    assert "strat.a" not in session["stratagem_use_anchors"].get("Necrons", {})
+    assert common.stratagem_use_anchor("Necrons", "strat.a") is None
+
+
+def test_undo_stratagem_without_prior_anchor_is_a_noop() -> None:
+    """undo_stratagem must tolerate a stratagem that was spent with no
+    anchor_id (or never spent at all) — nothing to pop, no KeyError."""
+    session = _spend_session()
+    common.undo_stratagem(_strat(sid="strat.never_spent"), "Necrons")
+    assert session["cp"]["Necrons"] == 6  # refunded once (cp_cost=1 default)
 
 
 # ---------------------------------------------------------------------------
@@ -877,17 +967,23 @@ def test_use_action_spends_cp_and_marks_used(monkeypatch) -> None:
     assert "wh40k_9e.shared.stratagem.fire_overwatch" in session["used_stratagem_ids"]["Necrons"]
 
 
-def test_used_this_phase_offers_undo_within_window(monkeypatch) -> None:
-    """S134 task 2b: while this phase's activation window is still open
-    (`stratagem_undo_visible`), a spent reactive GO renders "used" with the
-    full-rollback Undo wired — pressing it restores CP and clears the usage
-    marker, the same canonical `undo_stratagem` path the central list uses.
-    The CP-safety guarantee the old "locked" mapping protected still holds:
-    in the "used" state the one action slot is Undo, not Use, so the
+def test_used_at_this_anchor_offers_undo_within_window(monkeypatch) -> None:
+    """S134 task 2b + S139 B12b: while this phase's activation window is still
+    open (`stratagem_undo_visible`) AND the spend was recorded at THIS box's own
+    anchor (`reactive:{event}:{decline_key}`), the reactive GO renders "used"
+    with the full-rollback Undo wired — pressing it restores CP and clears the
+    usage marker, the same canonical `undo_stratagem` path the central list
+    uses. The CP-safety guarantee the old "locked" mapping protected still
+    holds: in the "used" state the one action slot is Undo, not Use, so the
     stratagem can never be spent twice in one phase."""
+    fo = "wh40k_9e.shared.stratagem.fire_overwatch"
     session = _reactive_box_session(
         cp={"Necrons": 4},
-        used_stratagem_ids={"Necrons": {"wh40k_9e.shared.stratagem.fire_overwatch"}},
+        used_stratagem_ids={"Necrons": {fo}},
+        # Spend recorded at this exact box's anchor → used_here.
+        stratagem_use_anchors={
+            "Necrons": {fo: {"anchor_id": "reactive:on_declaration:target-uid-2", "unit_key": None}}
+        },
     )
     captured = _install_reactive_box_session(monkeypatch, session)
 
@@ -905,9 +1001,89 @@ def test_used_this_phase_offers_undo_within_window(monkeypatch) -> None:
     captured[0]["on_undo"]()
 
     assert session["cp"]["Necrons"] == 5
-    assert (
-        "wh40k_9e.shared.stratagem.fire_overwatch" not in session["used_stratagem_ids"]["Necrons"]
+    assert fo not in session["used_stratagem_ids"]["Necrons"]
+
+
+def test_used_at_other_anchor_maps_to_used_elsewhere(monkeypatch) -> None:
+    """S139 B12b: the same GO spent this phase, window still open, but recorded
+    at a DIFFERENT anchor (a different charge target) — this box shows
+    "used_elsewhere": a disabled "Used" with no Undo, since undoing only makes
+    sense at the target that actually triggered the spend."""
+    fo = "wh40k_9e.shared.stratagem.fire_overwatch"
+    session = _reactive_box_session(
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {fo}},
+        stratagem_use_anchors={
+            "Necrons": {fo: {"anchor_id": "reactive:on_declaration:target-uid-1", "unit_key": None}}
+        },
     )
+    captured = _install_reactive_box_session(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-2",  # a DIFFERENT target than the recorded anchor
+        context_caption="irrelevant",
+    )
+
+    assert captured[0]["state"] == "used_elsewhere"
+    assert captured[0]["locked_reason"] is None
+
+
+def test_use_records_this_boxs_anchor_for_the_here_split(monkeypatch) -> None:
+    """S139 B12b wiring: the reactive box's Use routes through spend_stratagem
+    with anchor_id = `reactive:{event}:{decline_key}`, so a later render of the
+    SAME box sees "used here" while any other anchor sees "used_elsewhere"."""
+    session = _reactive_box_session()
+    captured = _install_reactive_box_session(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-7",
+        context_caption="irrelevant",
+    )
+    captured[0]["on_use"]()
+
+    fo = "wh40k_9e.shared.stratagem.fire_overwatch"
+    assert session["stratagem_use_anchors"]["Necrons"][fo]["anchor_id"] == (
+        "reactive:on_declaration:target-uid-7"
+    )
+
+
+def test_one_players_use_does_not_block_the_opponents_same_go(monkeypatch) -> None:
+    """S138 F1 testpflicht / concept §F1: player A using a reactive GO must NOT
+    block player B from the same GO in the same phase. The anchor bookkeeping is
+    scoped per (faction, GO id), so B's box stays "ready" while A's shows
+    "used" — the regression the stakeholder explicitly demanded be guarded."""
+    fo = "wh40k_9e.shared.stratagem.fire_overwatch"
+    # A (Necrons) already spent Fire Overwatch this phase at its own anchor; B
+    # (Orks) has spent nothing. Both are the inactive/defending player in their
+    # own render (active is a third value here so neither is the charger).
+    session = _reactive_box_session(
+        active="Tau",
+        cp={"Necrons": 4, "Orks": 4},
+        used_stratagem_ids={"Necrons": {fo}},
+        stratagem_use_anchors={
+            "Necrons": {fo: {"anchor_id": "reactive:on_declaration:t1", "unit_key": None}}
+        },
+    )
+    captured = _install_reactive_box_session(monkeypatch, session)
+
+    common.render_reactive_stratagem_box(
+        "Necrons", phase="charge", event="on_declaration", decline_key="t1", context_caption="x"
+    )
+    common.render_reactive_stratagem_box(
+        "Orks", phase="charge", event="on_declaration", decline_key="t1", context_caption="x"
+    )
+
+    by_key = {c["key"]: c for c in captured}
+    necron_card = by_key[f"reactive_Necrons_on_declaration_{fo}_t1"]
+    ork_card = by_key[f"reactive_Orks_on_declaration_{fo}_t1"]
+    assert necron_card["state"] == "used"
+    assert ork_card["state"] == "ready"
 
 
 def test_cp_insufficient_shows_locked_card_with_cp_reason(monkeypatch) -> None:
@@ -1345,10 +1521,15 @@ def test_render_player_column_calls_emergency_disembarkation_check(monkeypatch) 
 
 # ---------------------------------------------------------------------------
 # S130 — render_inline_command_reroll(): non-blocking Command Re-Roll offer
-# (Option c — Pull, not Push): unlike render_reactive_stratagem_box's Use/Pass
-# dialog, this is a single button with NO greyed-out state — it is fully
-# absent once CP is short or already spent this phase, real _shared stratagem
-# data (command_re_roll, event=after_roll) end-to-end via _reactive_box_session.
+# (Option c — Pull, not Push): while CP is short, the offer stays fully
+# absent — not merely disabled — same as before. Once spent this phase,
+# though, it now stays visible (S139 B12c, S138-revised concept: the old
+# "gar kein Undo" rule for inline offers was revised): the anchor
+# (phase, reopen_key) that actually triggered the spend shows "↺ Undo <name>",
+# every OTHER anchor of the same (player, GO) this phase shows a disabled
+# "<name> — Used" — the same used/used_elsewhere split the card mappers use,
+# via `_inline_reroll_state`. Real _shared stratagem data (command_re_roll,
+# event=after_roll) end-to-end via _reactive_box_session.
 # ---------------------------------------------------------------------------
 
 _COMMAND_REROLL_ID = "wh40k_9e.shared.stratagem.command_re_roll"
@@ -1383,6 +1564,13 @@ def test_command_reroll_visible_and_clickable_spends_cp(monkeypatch) -> None:
     assert any("Command Re-Roll" in label for label, _ in button_calls)
     assert session["cp"]["Necrons"] == 4  # 5 - 1 CP
     assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Necrons"]
+    # S139 B12c: Use records THIS render spot's own anchor, so a later render
+    # at reopen_key="t1" (this same spot) can tell "used here" from another
+    # reopen_key's "used elsewhere".
+    assert session["stratagem_use_anchors"]["Necrons"][_COMMAND_REROLL_ID] == {
+        "anchor_id": "inline:charge:t1",
+        "unit_key": None,
+    }
     assert reopened == [1]
     assert rerun_calls == [1]
 
@@ -1410,15 +1598,103 @@ def test_command_reroll_hidden_when_cp_zero(monkeypatch) -> None:
     assert button_calls == []
 
 
-def test_command_reroll_hidden_after_already_used_this_phase(monkeypatch) -> None:
-    session = _reactive_box_session(used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}})
-    button_calls, _ = _reroll_widgets(monkeypatch, session)
+def test_command_reroll_used_here_offers_undo_and_rolls_back(monkeypatch) -> None:
+    """S139 B12c: spent AT this exact anchor (phase="charge", reopen_key="t1")
+    → the button switches to "↺ Undo <name>" instead of vanishing; pressing it
+    routes through the canonical undo_stratagem rollback (CP + usage restored),
+    same as the card anchors."""
+    session = _reactive_box_session(
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}},
+        stratagem_use_anchors={
+            "Necrons": {_COMMAND_REROLL_ID: {"anchor_id": "inline:charge:t1", "unit_key": None}}
+        },
+    )
+    key = f"cmd_reroll_Necrons_charge_{_COMMAND_REROLL_ID}_t1"
+    button_calls, rerun_calls = _reroll_widgets(monkeypatch, session, clicked_key=key)
 
     common.render_inline_command_reroll(
         "Necrons", "charge", reopen_key="t1", on_reroll=lambda: None
     )
 
-    assert button_calls == []
+    assert any("Undo" in label and "Command Re-Roll" in label for label, _ in button_calls)
+    assert session["cp"]["Necrons"] == 5  # restored
+    assert _COMMAND_REROLL_ID not in session["used_stratagem_ids"]["Necrons"]
+    assert rerun_calls == [1]
+
+
+def test_command_reroll_undo_clears_anchor_so_next_render_is_ready_again(monkeypatch) -> None:
+    """After Undo, a fresh render of the SAME anchor must fall back to "ready"
+    (a plain, clickable offer) — not get stuck in any used state."""
+    session = _reactive_box_session(
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}},
+        stratagem_use_anchors={
+            "Necrons": {_COMMAND_REROLL_ID: {"anchor_id": "inline:charge:t1", "unit_key": None}}
+        },
+    )
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+    common.undo_stratagem(_strat(sid=_COMMAND_REROLL_ID, cp_cost=1), "Necrons")
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="t1", on_reroll=lambda: None
+    )
+
+    assert any(
+        "Command Re-Roll" in label and "Undo" not in label and "Used" not in label
+        for label, _ in button_calls
+    )
+
+
+def test_command_reroll_used_elsewhere_shows_disabled_used(monkeypatch) -> None:
+    """S139 B12c: the SAME GO spent this phase at a DIFFERENT inline anchor
+    (e.g. the Hit-roll offer) — THIS anchor (e.g. the Wound-roll offer) shows
+    a disabled "<name> — Used", no Undo. Even if the (disabled) widget somehow
+    reports a click, nothing must be spent/undone — the used_elsewhere branch
+    never calls spend_stratagem or undo_stratagem."""
+    session = _reactive_box_session(
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}},
+        stratagem_use_anchors={
+            "Necrons": {_COMMAND_REROLL_ID: {"anchor_id": "inline:charge:hit_t1", "unit_key": None}}
+        },
+    )
+    key = f"cmd_reroll_Necrons_charge_{_COMMAND_REROLL_ID}_wound_t1"
+    button_calls, rerun_calls = _reroll_widgets(monkeypatch, session, clicked_key=key)
+
+    common.render_inline_command_reroll(
+        "Necrons", "charge", reopen_key="wound_t1", on_reroll=lambda: None
+    )
+
+    assert any(
+        "Command Re-Roll" in label and "Used" in label and "Undo" not in label
+        for label, _ in button_calls
+    )
+    assert session["cp"]["Necrons"] == 4  # untouched
+    assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Necrons"]  # still used
+    assert rerun_calls == []  # no spend/undo path taken
+
+
+def test_command_reroll_cross_player_use_does_not_block_opponent(monkeypatch) -> None:
+    """S138-Testpflicht (F1): Player A spending Command Re-Roll at their own
+    inline anchor must not block Player B's independent use of the SAME GO —
+    both sides pay their own CP, `player: both` in the shared stratagem data."""
+    session = _reactive_box_session(
+        cp={"Necrons": 4, "Orks": 5},
+        used_stratagem_ids={"Necrons": {_COMMAND_REROLL_ID}},
+        stratagem_use_anchors={
+            "Necrons": {_COMMAND_REROLL_ID: {"anchor_id": "inline:charge:t1", "unit_key": None}}
+        },
+    )
+    button_calls, _ = _reroll_widgets(monkeypatch, session)
+
+    common.render_inline_command_reroll("Orks", "charge", reopen_key="t1", on_reroll=lambda: None)
+
+    # Orks see a plain, clickable "ready" offer — not "Used", not hidden.
+    assert any(
+        "Command Re-Roll" in label and "Undo" not in label and "Used" not in label
+        for label, _ in button_calls
+    )
 
 
 def test_command_reroll_hidden_in_phase_without_after_roll_stratagem(monkeypatch) -> None:
@@ -1856,12 +2132,17 @@ def _install_resolution_tab_fixture(monkeypatch, def_unit):  # type: ignore[no-u
 def test_render_resolution_tab_offers_command_reroll_on_hit_roll(monkeypatch) -> None:
     """Hit-Anker: attacker (Orks) rolled the hit — attacker pays. Clicking it
     spends CP from the ATTACKER's pool and marks the phase-shared usage set,
-    which then suppresses the Wound offer below (same faction+phase pool —
-    R-CMD-12 'once per phase' is a single pool, not per-anchor)."""
+    which the Wound offer below shares (same faction+phase pool — R-CMD-12
+    'once per phase' is a single pool, not per-anchor). S139 B12c (S138
+    Grundannahme 4b, "Once-per-Phase wird erzwungen und sichtbar gemacht"):
+    the Wound offer must still reach st.button — as a disabled "Used" at its
+    OWN anchor, since the spend was recorded at the Hit anchor — not vanish
+    the way it did before this change."""
     entry, unit, def_unit = _resolution_tab_entry_and_units()
     _install_resolution_tab_fixture(monkeypatch, def_unit)
     session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
     hit_key = f"cmd_reroll_Orks_fight_{_COMMAND_REROLL_ID}_tab1_hit"
+    wound_key = f"cmd_reroll_Orks_fight_{_COMMAND_REROLL_ID}_tab1_wound"
     button_calls, _ = _reroll_widgets(monkeypatch, session, clicked_key=hit_key)
 
     common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
@@ -1869,10 +2150,12 @@ def test_render_resolution_tab_offers_command_reroll_on_hit_roll(monkeypatch) ->
     assert any(key == hit_key for _, key in button_calls)
     assert session["cp"]["Orks"] == 4  # attacker pays — 5 - 1 CP
     assert _COMMAND_REROLL_ID in session["used_stratagem_ids"]["Orks"]
-    # Wound offer shares the same (Orks, fight) pool — already used, so it must
-    # not even reach st.button (visibility gate filters it out beforehand).
-    orks_fight_offers = [key for _, key in button_calls if key and "cmd_reroll_Orks_fight" in key]
-    assert orks_fight_offers == [hit_key]
+    # Wound offer shares the same (Orks, fight) pool — already used, at a
+    # DIFFERENT anchor (the Hit anchor) — shows up disabled as "Used", not Undo.
+    wound_labels = [label for label, key in button_calls if key == wound_key]
+    assert len(wound_labels) == 1
+    assert "Used" in wound_labels[0]
+    assert "Undo" not in wound_labels[0]
 
 
 def test_render_resolution_tab_offers_command_reroll_on_wound_roll(monkeypatch) -> None:

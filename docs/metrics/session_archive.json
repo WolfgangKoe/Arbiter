@@ -3659,10 +3659,10 @@
   "3d6ebb92-f92a-4d46-9bf7-9d5fd1c41c2c": {
     "started_at": "2026-07-11T10:58:07.089Z",
     "task": "start session",
-    "peak_context": 140713,
-    "subagent_share": 88.79886930286945,
+    "peak_context": 142541,
+    "subagent_share": 88.83539084023417,
     "by_tier": {
-      "Sonnet": 49815977,
+      "Sonnet": 52370807,
       "Haiku": 1461687,
       "Fable": 18868053,
       "Opus": 3877246
@@ -3707,7 +3707,7 @@
         "agent_type": "general-purpose",
         "description": "S138-Abschluss schreiben + committen",
         "tier": "Sonnet",
-        "peak_context": 114601,
+        "peak_context": 125524,
         "started_at": "2026-07-11T10:58:07.089Z"
       },
       {
@@ -3737,6 +3737,90 @@
         "tier": "Opus",
         "peak_context": 93512,
         "started_at": "2026-07-11T10:58:07.089Z"
+      }
+    ]
+  },
+  "a4bed672-5185-4317-93ef-81976811a39b": {
+    "started_at": "2026-07-11T13:28:21.370Z",
+    "task": "start session",
+    "peak_context": 135679,
+    "subagent_share": 85.91957225171745,
+    "by_tier": {
+      "Sonnet": 49146326,
+      "Haiku": 671033,
+      "Opus": 13549999,
+      "Fable": 450120
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S139 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 106260,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B12a: 5. Zustand + Auslöser-Buchhaltung",
+        "tier": "Sonnet",
+        "peak_context": 135090,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Cut-Them-Down-Layout-Bug fixen",
+        "tier": "Sonnet",
+        "peak_context": 73396,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "INV-4b: 'never' in go_card.py umformulieren",
+        "tier": "Haiku",
+        "peak_context": 33250,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "mypy-Ratchet game_log.py senken",
+        "tier": "Sonnet",
+        "peak_context": 55683,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Toten Code build_aura_range_hint_text entfernen",
+        "tier": "Sonnet",
+        "peak_context": 48657,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B12c: Inline-Undo an Einsatzstelle",
+        "tier": "Sonnet",
+        "peak_context": 137222,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Konzept Dynastie↔Protokoll-Kopplung",
+        "tier": "Sonnet",
+        "peak_context": 81111,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S139-Abschluss",
+        "tier": "Opus",
+        "peak_context": 70412,
+        "started_at": "2026-07-11T13:28:21.370Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B12b: Karten-Anker in Mapper verdrahten",
+        "tier": "Sonnet",
+        "peak_context": 202330,
+        "started_at": "2026-07-11T13:28:21.370Z"
       }
     ]
   }

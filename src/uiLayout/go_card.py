@@ -3,7 +3,7 @@
 Before this module, GOs (Stratagems + comparable optional rules) existed in three
 divergent bespoke render shapes (reactive box, inline offer, tab expander — S130
 finding). ``design_system.md`` §6.1 replaces all three with **one** card, rendered
-in a full or compact form, in one of four states. This module builds that card's
+in a full or compact form, in one of five states. This module builds that card's
 header content (name/CP/target-unit line + keyword-chip row) as plain HTML, plus
 the scoped ``<style>`` block that colours the card's *real* Streamlit container
 border per state.
@@ -18,14 +18,14 @@ to colour that one container's border, and renders the real widgets (button,
 accordion, any expanded content) *inside the same container* — S133-D Befund 2:
 the K1 version drew its own border as an HTML ``<div>`` around only the header
 text, so the button (next column) and the rule-text accordion (rendered as a
-separate top-level element after both columns closed) were never structurally
+separate top-level element after both columns closed) were not structurally
 inside that border — nothing grouped them in the DOM, only the header line
-happened to sit inside a bordered-looking box. This module never emits a
+happened to sit inside a bordered-looking box. This module does not emit a
 clickable element.
 
 Colours follow the fixed §6.5 decision (no new tokens): "ready"/"used" = Gold-
-Primary border (``--arb-accent``), "dormant"/"locked" = dimmed Secondary
-(``--arb-muted``). Hex values are the same constants ``design_colors.md`` §1
+Primary border (``--arb-accent``), "dormant"/"used_elsewhere"/"locked" = dimmed
+Secondary (``--arb-muted``). Hex values are the same constants ``design_colors.md`` §1
 defines — mirrored here literally, same convention as the STATIONARY/ADVANCED
 colour maps in ``_common.py``/``unitCard.py`` (CSS custom properties are not
 reachable from a plain HTML string built outside the page's injected ``<style>``
@@ -48,7 +48,7 @@ from uiLayout.badges import chip
 # bundle: ``"st-key-" + e.trim().replace(/[^a-zA-Z0-9_-]/g, "-")``) — the CSS
 # selector below must transform ``container_key`` the exact same way Streamlit
 # transforms it when stamping the class onto the DOM node, or the override
-# silently never matches.
+# silently does not match.
 _KEY_SANITIZE_RE = re.compile(r"[^a-zA-Z0-9_-]")
 
 
@@ -56,15 +56,28 @@ def _sanitize_key(key: str) -> str:
     return _KEY_SANITIZE_RE.sub("-", key.strip())
 
 
-GoCardState = Literal["dormant", "ready", "used", "locked"]
-"""The GO card's four states (design_system.md §6.1).
+GoCardState = Literal["dormant", "ready", "used", "used_elsewhere", "locked"]
+"""The GO card's five states (design_system.md §6.1, 5th state added S139 B12a).
 
-dormant — trigger not (yet) met: visible, dimmed, action disabled.
-ready   — trigger met, CP sufficient: highlighted, action enabled ("Use").
-used    — Use was pressed, the activation window is still open: action becomes
-          "Undo" (full rollback — CP and effect/value both revert).
-locked  — CP missing / a precondition disappeared: dimmed, reason suffixed onto
-          the header.
+dormant        — trigger not (yet) met: visible, dimmed, action disabled.
+ready          — trigger met, CP sufficient: highlighted, action enabled ("Use").
+used           — Use was pressed AT THIS render spot (this card's own anchor_id
+                 matches the recorded use-anchor, see
+                 ``uiLayout._common.spend_stratagem``/``stratagem_used_here``),
+                 the activation window is still open: action becomes "Undo"
+                 (full rollback — CP and effect/value both revert).
+used_elsewhere — the same (player, GO) was already spent THIS phase, but at a
+                 DIFFERENT anchor (S137/S139 B12 concept §2.1/§2.2 — "jeder
+                 Anker zeigt Undo nur dort, wo tatsächlich eingesetzt wurde,
+                 sonst Used"): visible, dimmed like "locked" (no new colour
+                 token), action shows a disabled "Used" label — not "Undo",
+                 since undoing only makes sense at the spot that actually
+                 triggered the spend. Applies identically to every render
+                 shape (card or inline) and every GO, including window-
+                 consuming ones (Cut Them Down, Emergency Disembarkation) —
+                 no per-GO-name special case.
+locked         — CP missing / a precondition disappeared: dimmed, reason
+                 suffixed onto the header.
 """
 
 # design_colors.md §1 — mirrored literally (see module docstring for why).
@@ -74,12 +87,13 @@ _SURFACE = "#1c1a14"  # --arb-surface (card background)
 _BORDER = "#2e2618"  # --arb-border (chip border)
 _TEXT = "#e7e5e4"  # --arb-text (name)
 
-_DIMMED_STATES: frozenset[str] = frozenset({"dormant", "locked"})
+_DIMMED_STATES: frozenset[str] = frozenset({"dormant", "used_elsewhere", "locked"})
 
 _STATE_BORDER: dict[GoCardState, str] = {
     "dormant": _MUTED,
     "ready": _ACCENT,
     "used": _ACCENT,
+    "used_elsewhere": _MUTED,
     "locked": _MUTED,
 }
 
@@ -87,19 +101,23 @@ _STATE_BORDER: dict[GoCardState, str] = {
 def action_slot_text(state: GoCardState) -> str:
     """The one action-slot's label for a given state (design_system.md §6.4).
 
-    One vocabulary family, not four: plain ``Use`` for every state except
-    "used", which shows the full-rollback ``↺ Undo`` instead — CP cost is not
-    repeated on the button because it already stands in the card header (S133-D
-    Befund 1: §6.1's mockups always showed a bare ``[Use]``; §6.4 had drifted to
-    a ``Use (N CP)``/``Undo (+N CP)`` family, a spec-internal contradiction the
-    stakeholder resolved in §6.1's favour — §6.4 was corrected in the same
-    change). The one caller that renders a label — the real button in
-    ``uiLayout._common.render_go_card`` — draws it from here (``go_card_html``
-    itself stays label-free; S132 Befund 1: a static HTML echo of this same
-    label duplicated the action slot next to the real button).
+    One vocabulary family, not five: plain ``Use`` for every state except
+    "used" (full-rollback ``↺ Undo``) and "used_elsewhere" (plain ``Used`` —
+    no undo affordance at a spot that did not trigger the spend, S139 B12a) —
+    CP cost is not repeated on the button because it already stands in the
+    card header (S133-D Befund 1: §6.1's mockups always showed a bare
+    ``[Use]``; §6.4 had drifted to a ``Use (N CP)``/``Undo (+N CP)`` family, a
+    spec-internal contradiction the stakeholder resolved in §6.1's favour —
+    §6.4 was corrected in the same change). The one caller that renders a
+    label — the real button in ``uiLayout._common.render_go_card`` — draws it
+    from here (``go_card_html`` itself stays label-free; S132 Befund 1: a
+    static HTML echo of this same label duplicated the action slot next to
+    the real button).
     """
     if state == "used":
         return f"{SYM_RESET} Undo"
+    if state == "used_elsewhere":
+        return "Used"
     return "Use"
 
 
@@ -138,9 +156,9 @@ def go_card_html(
     """Render one GO card's header content: name/CP/target line + keyword chips.
 
     name/cp_cost   — the GO's display name and CP cost (0 = free); shown
-                     exactly once, on this header line — never repeated on the
+                     exactly once, on this header line — not repeated on the
                      action button (see :func:`action_slot_text`).
-    state          — one of the four states (module docstring); the border
+    state          — one of the five states (module docstring); the border
                      colour itself is applied by the caller via
                      :func:`go_card_container_style` on the surrounding
                      ``st.container``, not by this function.

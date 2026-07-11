@@ -894,6 +894,20 @@ class TestResetPhaseState:
         _gs._reset_phase_state()
         assert s["used_stratagem_battle_ids"] == {"Necrons": {"opb.strat_x"}}
 
+    def test_resets_stratagem_use_anchors(self) -> None:
+        """S139 B12a — the GO use-anchor bookkeeping (design_system.md §6.1 5th
+        card state) is exactly as phase-scoped as used_stratagem_ids: it must
+        clear in lockstep on every phase change, or a stale anchor would keep
+        showing "verwendet-hier"/"verwendet-anderswo" into the next phase.
+        """
+        s = _reset_phase_session(
+            stratagem_use_anchors={
+                "Necrons": {"strat_a": {"anchor_id": "unit#1", "unit_key": "unit#1"}}
+            }
+        )
+        _gs._reset_phase_state()
+        assert s["stratagem_use_anchors"] == {}
+
     def test_removes_expired_phase_modifiers(self) -> None:
         # phase_idx=1 → current_phase="command"; modifier for "command" should be removed
         s = _reset_phase_session()

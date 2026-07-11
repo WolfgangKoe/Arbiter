@@ -321,28 +321,6 @@ def get_active_protocol_effects(player: str, types: set[str]) -> list[dict]:  # 
     return [e for e in _active_directive_effects(player) if e.get("type") in types]
 
 
-def build_aura_range_hint_text(player: str) -> str | None:
-    """Table-only hint for an active ``aura_range_bonus`` directive (Class B).
-
-    Generic — driven entirely by the effect dict from YAML (``value``/``max``/``affects``),
-    no faction or ability-name literals in ``src/``. The App tracks no distances, so this
-    is a pure table reminder. Returns ``None`` when no such directive is active, so callers
-    can skip rendering. Aggregates round-assigned AND always-active 6th/dynasty directives.
-    """
-    effects = get_active_protocol_effects(player, {"aura_range_bonus"})
-    if not effects:
-        return None
-    effect = effects[0]
-    value = effect.get("value")
-    max_range = effect.get("max")
-    affects = effect.get("affects", [])
-    names = ", ".join(affects) if affects else "this unit's aura abilities"
-    return (
-        f'Aura range +{value}" (max {max_range}"): {names}. '
-        "Table-only — no distance tracking in the app."
-    )
-
-
 def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     """Return Reanimation Protocol modifiers from the active round-choice directive.
 

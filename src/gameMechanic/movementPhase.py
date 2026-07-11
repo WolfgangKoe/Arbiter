@@ -41,6 +41,7 @@ from uiLayout._common import (
     render_reactive_stratagem_box,
     render_unit_selectbox,
     spend_stratagem,
+    stratagem_used_here,
     undo_stratagem,
 )
 from uiLayout.go_card import GoCardState
@@ -70,12 +71,12 @@ class MovementPhaseHandler:
             render_player_column(first, state, active_content=_active_movement)
             if first == state["active"]:
                 _render_reinforcements_step(first)
+            _render_pending_cut_them_down(first)
         with col2:
             render_player_column(second, state, active_content=_active_movement)
             if second == state["active"]:
                 _render_reinforcements_step(second)
-
-        _render_pending_cut_them_down(first, second)
+            _render_pending_cut_them_down(second)
 
 
 # ---------------------------------------------------------------------------
@@ -171,9 +172,11 @@ def _render_movement_buttons(
                 # Opens the Cut Them Down reactive window (core_rules.txt Z. 773-778) —
                 # "before any models in that unit are moved"; this app has no separate
                 # movement-execution step, so the window opens immediately on
-                # declaration and stays open until the enemy uses it (GO card Use →
-                # on_resolved clears the marker, no Pass control per design_system.md
-                # §6.1) or the phase ends (_reset_phase_state clears the marker too).
+                # declaration and stays open until the phase ends
+                # (_reset_phase_state clears the marker). Since S139 B12b a Use no
+                # longer clears the marker (window-consuming GOs get the same anchor
+                # treatment as every other GO — the card keeps rendering "used"/
+                # "used_elsewhere"), no Pass control per design_system.md §6.1.
                 st.session_state.pending_fall_back = {"faction": faction, "uid": uid}
             log_action(st.session_state.round, "movement", unit.name_en, f"movement: {value}")
             st.rerun()
@@ -219,14 +222,23 @@ def _advance_reroll_state(
     cp: int,
     used_ids: set[str],
     used_battle_ids: set[str],
+    used_here: bool,
 ) -> tuple[GoCardState, str | None]:
     """Map the Advance re-roll's own preconditions to a GO-card state + reason.
 
     Mirrors gameProtocoll.py's ``_go_state_and_reason`` shape (clickable →
-    ready, greyed+undo-window-open → used, else locked) but with the three
-    movement-specific locked reasons the stakeholder named (S133 K2 item 1):
-    in melee, no Advance roll open, CP short/already used — checked in that
-    priority order.
+    ready, greyed+undo-window-open → used/used_elsewhere, else locked) but
+    with the three movement-specific locked reasons the stakeholder named
+    (S133 K2 item 1): in melee, no Advance roll open, CP short/already used —
+    checked in that priority order.
+
+    `used_here` — this card's own anchor (`f"movement_reroll:{uid}"`, one per
+    selected unit) matches whatever anchor `spend_stratagem` recorded for this
+    (faction, GO) this phase (S139 B12b — the reported bug this brief closes:
+    Advance-reroll used on unit A must show "used_elsewhere" on unit B's own
+    card, not another Undo). The real caller computes it via
+    `stratagem_used_here`, same as the other two mappers; this stays a pure,
+    Streamlit-free decision function.
     """
     if in_melee:
         return "locked", "unit is in melee"
@@ -238,7 +250,7 @@ def _advance_reroll_state(
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return "used", None
+        return ("used", None) if used_here else ("used_elsewhere", None)
     return "locked", "CP insufficient"
 
 
@@ -271,8 +283,13 @@ def _render_advance_reroll_card(
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
             continue
+        # This card's own anchor — one per selected unit (S139 B12b): using
+        # the Advance re-roll on unit A must not leave unit B's own card
+        # offering an Undo it never triggered.
+        anchor_id = f"movement_reroll:{uid}"
+        used_here = stratagem_used_here(faction, strat.id, anchor_id)
         card_state, reason = _advance_reroll_state(
-            strat, in_melee, current, cp, used_ids, used_battle_ids
+            strat, in_melee, current, cp, used_ids, used_battle_ids, used_here
         )
         render_go_card(
             key=f"movement_reroll_{faction}_{uid}_{strat.id}",
@@ -283,12 +300,12 @@ def _render_advance_reroll_card(
             rule_text=strat.rule_text,
             locked_reason=reason,
             target_name=unit.name_en,
-            on_use=_spend_callback(strat, faction),
+            on_use=_spend_callback(strat, faction, anchor_id),
             on_undo=_undo_callback(strat, faction),
         )
 
 
-def _spend_callback(strat: Stratagem, faction: str) -> Callable[[], None]:
+def _spend_callback(strat: Stratagem, faction: str, anchor_id: str) -> Callable[[], None]:
     """Factory for the re-roll card's on_use callback.
 
     Same pattern (and reason) as gameProtocoll.py's `_use_callback`: a bare
@@ -296,7 +313,7 @@ def _spend_callback(strat: Stratagem, faction: str) -> Callable[[], None]:
     the `lambda s=strat:` default-arg workaround defeats mypy's lambda type
     inference — the factory closure gets both right.
     """
-    return lambda: spend_stratagem(strat, faction)
+    return lambda: spend_stratagem(strat, faction, anchor_id=anchor_id)
 
 
 def _undo_callback(strat: Stratagem, faction: str) -> Callable[[], None]:
@@ -342,6 +359,18 @@ def _render_desperate_breakout(
     usage bookkeeping via the canonical ``undo_stratagem``, plus clearing the
     pending flag) while the resolution window is still open — no roll has been
     applied yet at that point, so nothing else needs to unwind.
+
+    Exempt from the S139 B12b anchor mapper (unlike the Advance-reroll card
+    and the reactive boxes): this resolution card only ever renders for the
+    ONE unit whose ``desperate_breakout_pending`` flag is set, and that flag
+    is only ever set right after the central list's Use spent this exact GO
+    (`_apply_stratagem_effect` → `activate_desperate_breakout`) — so "used
+    here" is always true by construction, never "used elsewhere" (S137
+    concept doc §1.1 row 3). The underlying spend itself still carries
+    `_CENTRAL_LIST_ANCHOR_ID` (gameProtocoll.py), so the central list's OWN
+    card correctly shows "used" (with Undo) for as long as this resolution
+    card is also open — both are legitimate Undo surfaces for the same,
+    single spend location.
 
     Class C (Hybrid, R-MOVE-14): the App applies the destroyed-model count the
     player reports and the resulting Fall Back (leaves melee; locks
@@ -565,21 +594,33 @@ def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: i
     st.rerun()
 
 
-def _clear_pending_fall_back() -> None:
-    st.session_state.pending_fall_back = None
+def _render_pending_cut_them_down(faction: str) -> None:
+    """Render the Cut Them Down box in the ENEMY-of-the-retreating-unit's own column.
 
+    `player: inactive` in the YAML means the box belongs to the OTHER
+    faction — Cut Them Down punishes the enemy's Fall Back, not your own.
+    Called once per column, from inside that column's own `with colN:` block
+    (this handler's `render_active`) — never once outside both columns —
+    so the card is bound to `faction` the same way every other player-facing
+    element is (CLAUDE.md Seitenleisten-Constraint: layout never bound to
+    `active`; mirrors `_render_pending_emergency_disembarkation`'s per-column
+    call pattern). A stale S139 pre-fix version called this once with both
+    factions and rendered the resulting single card outside `st.columns()`
+    entirely — full-width, belonging to neither column (S139 E7 bugfix).
+    When `faction` IS the retreating side, this column renders nothing; the
+    other column's call picks it up instead.
 
-def _render_pending_cut_them_down(first: str, second: str) -> None:
-    """Render the Cut Them Down box for the enemy of a unit that just Fell Back.
-
-    `player: inactive` in the YAML means the box is for the OTHER faction —
-    Cut Them Down punishes the enemy's Fall Back, not your own.
+    The marker is no longer cleared on Use (S139 B12b, S137/S138 concept §F3):
+    window-consuming GOs get the same anchor treatment as every other GO — the
+    box keeps rendering ("used" at its own anchor, "used_elsewhere" anywhere
+    else) instead of vanishing the instant it is spent. `_reset_phase_state()`
+    (game_state.py) still clears `pending_fall_back` at the phase boundary, so
+    the window does not outlive the phase either way.
     """
     marker = st.session_state.get("pending_fall_back")
-    if not marker:
+    if not marker or marker["faction"] == faction:
         return
     retreat_faction = marker["faction"]
-    enemy_faction = second if retreat_faction == first else first
     try:
         unit, _ = lookup(retreat_faction, marker["uid"])
     except KeyError:
@@ -588,12 +629,11 @@ def _render_pending_cut_them_down(first: str, second: str) -> None:
 
     st.divider()
     render_reactive_stratagem_box(
-        enemy_faction,
+        faction,
         phase="movement",
         event="on_declaration",
         decline_key=marker["uid"],
         context_caption=f"{unit.name_en} ({retreat_faction}) is Falling Back.",
-        on_resolved=_clear_pending_fall_back,
     )
 
 

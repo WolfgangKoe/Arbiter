@@ -5,7 +5,20 @@ declares Retreat (core_rules.txt Z. 773-778 — this app has no separate
 movement-execution step, so "before any models are moved" collapses to
 "immediately on declaration"), and consumed by `_render_pending_cut_them_down`,
 which renders the reactive box in the ENEMY's column (`player: inactive` in
-the shared stratagems.yaml) and clears the marker once resolved.
+the shared stratagems.yaml). As of S139 B12b the marker is NOT cleared on Use
+(no `on_resolved` callback): window-consuming GOs get the same anchor treatment
+as every other GO — the box keeps rendering ("used" at its own anchor,
+"used_elsewhere" anywhere else) instead of vanishing the instant it is spent.
+`_reset_phase_state()` clears `pending_fall_back` at the phase boundary, so the
+window still never outlives the phase.
+
+S139 E7: `_render_pending_cut_them_down` takes a single `faction` (the column
+it is being rendered from) instead of `(first, second)` — a pre-existing
+layout bug had `render_active` call it once, outside `st.columns()`, so the
+box spanned/sat below both player columns instead of living in the affected
+player's own column. Now called once per column, from inside that column's
+`with colN:` block; it renders nothing when `faction` is the retreating side
+itself (see `test_no_render_in_retreating_players_own_column`).
 """
 
 from __future__ import annotations
@@ -94,7 +107,7 @@ def test_no_marker_renders_nothing(monkeypatch) -> None:
     spy = MagicMock()
     monkeypatch.setattr(mp, "render_reactive_stratagem_box", spy)
 
-    mp._render_pending_cut_them_down("Necrons", "Orks")
+    mp._render_pending_cut_them_down("Orks")
 
     spy.assert_not_called()
 
@@ -108,7 +121,7 @@ def test_marker_renders_box_for_enemy_of_retreating_faction(monkeypatch) -> None
     spy = MagicMock()
     monkeypatch.setattr(mp, "render_reactive_stratagem_box", spy)
 
-    mp._render_pending_cut_them_down("Necrons", "Orks")
+    mp._render_pending_cut_them_down("Orks")
 
     spy.assert_called_once()
     call_kwargs = spy.call_args
@@ -118,8 +131,28 @@ def test_marker_renders_box_for_enemy_of_retreating_faction(monkeypatch) -> None
     assert call_kwargs.kwargs["decline_key"] == "u1"
 
 
-def test_on_resolved_clears_the_marker(monkeypatch) -> None:
-    """The callback passed to render_reactive_stratagem_box clears pending_fall_back."""
+def test_no_render_in_retreating_players_own_column(monkeypatch) -> None:
+    """S139 E7 layout fix: called from the RETREATING player's own column, this
+    must render nothing — the card belongs only in the enemy's column, never
+    in both (regression for the pre-fix full-width/outside-columns bug)."""
+    session = FakeSessionState(pending_fall_back={"faction": "Necrons", "uid": "u1"})
+    mp.st.session_state = session
+    warriors = SimpleNamespace(name_en="Necron Warriors")
+    monkeypatch.setattr(mp, "lookup", lambda faction, uid: (warriors, {}))
+    spy = MagicMock()
+    monkeypatch.setattr(mp, "render_reactive_stratagem_box", spy)
+
+    mp._render_pending_cut_them_down("Necrons")
+
+    spy.assert_not_called()
+
+
+def test_use_does_not_clear_marker_box_keeps_rendering(monkeypatch) -> None:
+    """S139 B12b: the box no longer passes an `on_resolved` callback, so a Use
+    does NOT clear `pending_fall_back` — the card stays visible ("used" at its
+    own anchor, "used_elsewhere" elsewhere) for the rest of the phase, exactly
+    like every non-window-consuming GO (S137/S138 concept §F3). The marker is
+    cleared only at the phase boundary (`_reset_phase_state`)."""
     session = FakeSessionState(pending_fall_back={"faction": "Necrons", "uid": "u1"})
     mp.st.session_state = session
     warriors = SimpleNamespace(name_en="Necron Warriors")
@@ -128,14 +161,14 @@ def test_on_resolved_clears_the_marker(monkeypatch) -> None:
     captured = {}
 
     def _fake_render(*args, **kwargs):  # type: ignore[no-untyped-def]
-        captured["on_resolved"] = kwargs["on_resolved"]
+        captured["kwargs"] = kwargs
 
     monkeypatch.setattr(mp, "render_reactive_stratagem_box", _fake_render)
 
-    mp._render_pending_cut_them_down("Necrons", "Orks")
-    captured["on_resolved"]()
+    mp._render_pending_cut_them_down("Orks")
 
-    assert session.pending_fall_back is None
+    assert "on_resolved" not in captured["kwargs"]
+    assert session.pending_fall_back == {"faction": "Necrons", "uid": "u1"}
 
 
 def test_marker_for_unknown_unit_clears_itself(monkeypatch) -> None:
@@ -150,7 +183,7 @@ def test_marker_for_unknown_unit_clears_itself(monkeypatch) -> None:
     spy = MagicMock()
     monkeypatch.setattr(mp, "render_reactive_stratagem_box", spy)
 
-    mp._render_pending_cut_them_down("Necrons", "Orks")
+    mp._render_pending_cut_them_down("Orks")
 
     assert session.pending_fall_back is None
     spy.assert_not_called()

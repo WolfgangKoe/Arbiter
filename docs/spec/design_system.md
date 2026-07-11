@@ -171,16 +171,49 @@ Voll- oder Kompaktform gerendert:
 - Kein Pass-Button (passen = `[Use]` nicht drücken), keine CP-Gesamtanzeige auf der Karte
   (die steht nur im GameHeader, s. §6.4).
 
-Vier Zustände ersetzen das bisherige plötzliche Auftauchen der reaktiven Box:
+Fünf Zustände ersetzen das bisherige plötzliche Auftauchen der reaktiven Box
+(5. Zustand „verwendet-anderswo" ergänzt S139 B12a — Auslöser-Tracking, s.
+`docs/handoff/S137_B12_konzept.md` §2.1/§2.2, Stakeholder-Entscheid F-A in
+`docs/handoff/S139_planning.md`):
 
 | Zustand | Wann | Darstellung |
 |---|---|---|
 | ruhend | Trigger (noch) nicht erfüllt | sichtbar, gedimmt, `[Use]` disabled |
 | bereit | Trigger erfüllt, CP reichen | hervorgehoben (Gold-Primary, s. §6.5), `[Use]` aktiv |
-| verwendet | Use gedrückt, Fenster noch offen | `[↺ Undo (+N CP)]` statt `[Use]` |
+| verwendet-hier | Use HIER (an diesem Anker) gedrückt, Fenster noch offen | `[↺ Undo]` statt `[Use]` |
+| verwendet-anderswo | dieselbe GO (Spieler + GO-ID) diese Phase an EINEM ANDEREN Anker benutzt | gedimmt wie „gesperrt", Button zeigt deaktiviertes **„Used"** (kein Undo dort); Header-Suffix „used on ⟨Einheit⟩", falls eine Einheit bekannt (**Ratchet-Schuld S139 B12b:** Suffix noch nicht verdrahtet — die drei Zustands-Mapper geben für „verwendet-anderswo" heute `None` als Grund zurück, keine Regression, nur eine offene Verfeinerung, s. Selbstprüf-Notiz unten) |
 | gesperrt | CP fehlen / Voraussetzung weg | gedimmt, Grund als Suffix im Header |
 
-Undo ist überall **Vollrückgängig** (CP zurück, Effekt/Wert zurück), solange das
+Gilt **einheitlich für jeden Anker** — Karte oder Inline, gleich an welcher Render-Stelle,
+inklusive fenster-konsumierender GOs (Cut Them Down, Emergency Disembarkation): „Undo"
+erscheint ausschließlich dort, wo tatsächlich eingesetzt wurde, überall sonst „Used".
+Granularität pro Spieler UND GO-ID (nicht pro Einheit) — ein Spieler, der eine GO einsetzt,
+blockiert damit nicht den Gegner; der Gegner sieht dieselbe GO unabhängig weiter als
+„bereit", bis ER sie einsetzt.
+
+**Anker-Schema (S139 B12b/c, konkrete `anchor_id`-Werte je Baustein):** zentrale
+Stratagems-Liste (`gameProtocoll.py`) verwendet die Konstante `"central_list"` (ein
+Spieler+GO hat dort genau EINE Render-Stelle, unabhängig von der gerade selektierten
+Einheit); reaktive GO-Boxen (`_common.py:render_reactive_stratagem_box`) bilden
+`f"reactive:{event}:{decline_key}"` intern aus ihren vorhandenen Parametern (keine
+Aufrufer-Änderung nötig, s. Konzept §2.1); die Advance-Reroll-Karte
+(`movementPhase.py:_render_advance_reroll_card`) verwendet `f"movement_reroll:{uid}"`
+(ein Anker pro Einheit); das Inline-Command-Re-Roll-Angebot
+(`_common.py:render_inline_command_reroll`) bildet `f"inline:{phase}:{reopen_key}"`
+intern aus seinen vorhandenen Parametern (`reopen_key` existierte schon an allen 5
+Aufrufstellen — keine Aufrufer-Änderung nötig, s. Konzept §2.1/B12c). Die vier
+Zustands-Mapper (`_go_state_and_reason`, `_reactive_go_state`,
+`_advance_reroll_state`, `_inline_reroll_state`) bleiben Streamlit-frei, pure Funktionen:
+sie nehmen ein vom Aufrufer bereits berechnetes `used_here: bool`
+(`stratagem_used_here(faction, id, anchor_id)`) entgegen, statt selbst auf
+`st.session_state` zuzugreifen — gleiches Muster wie die bestehenden `used_ids`/
+`used_battle_ids`-Sets. Desperate Breakout ist von diesem Mapper ausgenommen (bleibt
+hart „used" — s. `movementPhase.py:_render_desperate_breakout` Docstring): die
+Auflösungskarte rendert konstruktionsbedingt nur an der einen Einheit, deren
+Pending-Flag gesetzt ist, das Flag wird nur durch genau den einen Einsatz über die
+zentrale Liste gesetzt — „verwendet-anderswo" kann dort nicht auftreten.
+
+Undo ist am Auslöser-Anker **Vollrückgängig** (CP zurück, Effekt/Wert zurück), solange das
 Aktivierungsfenster offen ist — der Schiedsrichter-Moment kommt erst am Phasen-/Zug-/
 Rundenende, nicht bei jedem Klick (App ist Erinnerer/Entscheidungshelfer, würfelt selbst
 nicht — Regel bleibt unverändert gegenüber dem Bestand).
@@ -292,9 +325,18 @@ GO-Karten (Kompaktform). Gilt für: Morale-Test, Manifest/Deny, Damage-Block —
 Attackenabfolge bekommt so je einen Anker bei Treffer / Verwundung / Rüstung / Rettung /
 Schadenszuweisung.
 
-**Gegenbeispiel — Advance/Charge:** Diese Wurf-Arten haben KEINE Werterfassung; statt
-Tisch-Wurf-Baustein bietet die App nur (a) den Zustand (Advanced/Charged oder nicht) und
-(b) ein Inline-Command-Re-Roll-Angebot (Button, 1 CP, ohne Wertfeld).
+**Gegenbeispiel — Advance/Charge (und jeder andere reine Button-Anker ohne Wertfeld,
+z. B. Hit-/Wound-/Save-/Anzahl-Attacken-Re-Roll in der Attackenabfolge):** Diese
+Wurf-Arten haben KEINE Werterfassung; statt Tisch-Wurf-Baustein bietet die App nur
+(a) den Zustand (Advanced/Charged oder nicht) und (b) ein Inline-Command-Re-Roll-
+Angebot (Button, 1 CP, ohne Wertfeld). Dieser Button folgt seit S139 B12c derselben
+Fünf-Zustands-Logik wie jede GO-Karte (§6.1): CP-Mangel bleibt weiterhin komplett
+unsichtbar (Pull-not-Push — nichts anbieten, das nie klickbar war), aber sobald das
+Angebot diese Phase (an IRGENDEINEM seiner Anker, z. B. Hit- **oder** Wound-Reroll)
+eingesetzt wurde, bleibt der Button sichtbar: am Anker, der tatsächlich gedrückt
+wurde, zeigt er `[↺ Undo]`, an jedem anderen Anker derselben GO/Phase ein
+deaktiviertes `Used` — vorher verschwand er dort ersatzlos, ohne Hinweis, dass die GO
+schon verbraucht war.
 
 Beispiel — Command Re-Roll beim Deny (aktiver Spieler, Psychic Phase):
 
@@ -312,14 +354,17 @@ Roadmap-Pakete, s. `../goals/backlog.md` §2).
 
 - **Sprache:** durchgehend Englisch (Ist-Befund: `moralePhase.py` komplett Deutsch,
   Subgruppen-Selector gemischt → Bereinigung als Roadmap-Paket, s. §6.6).
-- **Aktions-Vokabular — eine Familie statt vier:** `Use` · `↺ Undo` ·
+- **Aktions-Vokabular — eine Familie statt vier:** `Use` · `↺ Undo` · deaktiviertes
+  `Used` (verwendet-anderswo, s. §6.1 — kein Undo dort) ·
   `Confirm ⟨Aktion⟩` / `Cancel` · Toggle-Auswahl mit `✓`-Präfix (wie Heroische
   Intervention). CP-Kosten stehen bereits im Karten-Header (§6.1) — der Button
   wiederholt sie nicht (S133-D Befund 1: diese Zeile hatte zuvor `Use (N CP)` /
   `↺ Undo (+N CP)` verlangt, ein spec-interner Widerspruch zu den §6.1-Mockups,
   die durchgehend das nackte `[Use]` zeigen — Stakeholder-Entscheid löst ihn
   zugunsten §6.1). „Reset", „Undo deny", „Rückgängig" u. Ä. entfallen zugunsten
-  dieser Familie.
+  dieser Familie — gilt identisch für Karten- und Inline-Anker (S139 B12c: der
+  Inline-Button trägt Name/CP zusätzlich im Label, da er keinen separaten
+  Karten-Header hat, s. §6.3).
 - **Eine** CP-Anzeige (GameHeader) — keine zweite Doppel-Caption auf der GO-Karte oder im
   Tab.
 - **Ein** Stepper-Baustein (`wound_adjustment_buttons` bleibt kanonisch; der Zweitbau in

@@ -129,14 +129,26 @@ def _make_stratagem(
 
 def test_go_state_and_reason_clickable_maps_to_ready() -> None:
     strat = _make_stratagem()
-    assert gp._go_state_and_reason(strat, "clickable", set(), set()) == ("ready", None)
+    assert gp._go_state_and_reason(strat, "clickable", set(), set(), True) == ("ready", None)
 
 
-def test_go_state_and_reason_greyed_with_open_undo_window_maps_to_used() -> None:
-    """A stratagem used THIS phase (still discard-able) becomes "used", not
-    "locked" — the Undo button must stay offered."""
+def test_go_state_and_reason_greyed_used_here_maps_to_used() -> None:
+    """A stratagem used THIS phase AT THIS anchor (used_here=True, still
+    discard-able) becomes "used", not "locked" — the Undo button must stay
+    offered at the anchor that triggered the spend (S139 B12b)."""
     strat = _make_stratagem(id_="s1")
-    assert gp._go_state_and_reason(strat, "greyed", {"s1"}, set()) == ("used", None)
+    assert gp._go_state_and_reason(strat, "greyed", {"s1"}, set(), True) == ("used", None)
+
+
+def test_go_state_and_reason_greyed_used_elsewhere_maps_to_used_elsewhere() -> None:
+    """Same open undo window, but the spend was recorded at a DIFFERENT anchor
+    (used_here=False) → "used_elsewhere": a disabled "Used" label, no Undo at a
+    spot that never triggered the spend (S139 B12b, design_system.md §6.1)."""
+    strat = _make_stratagem(id_="s1")
+    assert gp._go_state_and_reason(strat, "greyed", {"s1"}, set(), False) == (
+        "used_elsewhere",
+        None,
+    )
 
 
 def test_go_state_and_reason_once_per_battle_spent_earlier_maps_to_locked_used() -> None:
@@ -144,12 +156,12 @@ def test_go_state_and_reason_once_per_battle_spent_earlier_maps_to_locked_used()
     undo window is closed (id not in used_ids), so it must render "locked"
     with reason "used" — not "used" (no Undo) and not the generic CP reason."""
     strat = _make_stratagem(id_="s1", once_per_battle=True)
-    assert gp._go_state_and_reason(strat, "greyed", set(), {"s1"}) == ("locked", "used")
+    assert gp._go_state_and_reason(strat, "greyed", set(), {"s1"}, False) == ("locked", "used")
 
 
 def test_go_state_and_reason_cp_insufficient_maps_to_locked_with_cp_reason() -> None:
     strat = _make_stratagem(id_="s1")
-    assert gp._go_state_and_reason(strat, "greyed", set(), set()) == (
+    assert gp._go_state_and_reason(strat, "greyed", set(), set(), False) == (
         "locked",
         "CP insufficient",
     )
@@ -219,7 +231,9 @@ def test_effect_gate_met_true_when_not_moved_and_in_engagement_range() -> None:
 def test_render_stratagem_column_maps_visibility_to_go_card_state(monkeypatch) -> None:
     """Regression: the central list must hand render_go_card the MAPPED
     ready/used/locked GO state (via _go_state_and_reason), not the raw
-    clickable/greyed string stratagem_visibility() returns."""
+    clickable/greyed string stratagem_visibility() returns. The spent GO was
+    used here (its anchor is the central list), so it maps to "used" (S139
+    B12b: `stratagem_used_here` returns True for the central-list anchor)."""
     ready_strat = _make_stratagem(id_="ready.strat", name_en="Ready GO", cp_cost=1)
     used_strat = _make_stratagem(id_="used.strat", name_en="Used GO", cp_cost=2)
 
@@ -233,6 +247,8 @@ def test_render_stratagem_column_maps_visibility_to_go_card_state(monkeypatch) -
     monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
     monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [ready_strat, used_strat])
     monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+    # The one spent GO was used at the central-list anchor → used_here True.
+    monkeypatch.setattr(gp, "stratagem_used_here", lambda faction, sid, anchor: sid == "used.strat")
 
     captured: list[dict] = []
     monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
@@ -244,6 +260,34 @@ def test_render_stratagem_column_maps_visibility_to_go_card_state(monkeypatch) -
     assert by_name["Ready GO"]["locked_reason"] is None
     assert by_name["Used GO"]["state"] == "used"
     assert by_name["Used GO"]["locked_reason"] is None
+
+
+def test_render_stratagem_column_maps_spend_at_other_anchor_to_used_elsewhere(monkeypatch) -> None:
+    """S139 B12b: a GO still in this phase's open undo window but whose recorded
+    anchor is NOT the central list (`stratagem_used_here` False) maps to
+    "used_elsewhere" — a disabled "Used", no Undo offered where the spend was
+    not triggered."""
+    used_strat = _make_stratagem(id_="used.strat", name_en="Used GO", cp_cost=2)
+
+    session = FakeSessionState(
+        cp={"Necrons": 1},
+        phase_idx=0,
+        used_stratagem_ids={"Necrons": {"used.strat"}},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [used_strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+    monkeypatch.setattr(gp, "stratagem_used_here", lambda faction, sid, anchor: False)
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Necrons", True)
+
+    assert captured[0]["state"] == "used_elsewhere"
+    assert captured[0]["locked_reason"] is None
 
 
 def test_render_stratagem_column_locks_gated_stratagem_for_ineligible_unit(monkeypatch) -> None:
@@ -343,12 +387,16 @@ def test_render_stratagem_column_use_action_routes_through_spend_stratagem(
     captured: list[dict] = []
     monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
     spend_calls: list[tuple] = []
-    monkeypatch.setattr(gp, "spend_stratagem", lambda *args: spend_calls.append(args))
+    monkeypatch.setattr(
+        gp, "spend_stratagem", lambda *args, **kwargs: spend_calls.append((args, kwargs))
+    )
 
     gp._render_stratagem_column("Necrons", True)
     captured[0]["on_use"]()
 
-    assert spend_calls == [(strat, "Necrons", None)]
+    # S139 B12b: the central list's own anchor is passed so a spend here can be
+    # told apart from the same GO spent at any other anchor this phase.
+    assert spend_calls == [((strat, "Necrons", None), {"anchor_id": "central_list"})]
 
 
 def test_render_stratagem_column_undo_action_routes_through_undo_stratagem(

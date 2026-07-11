@@ -430,12 +430,29 @@ def render_player_column(
 # calls it too (Plan 015 Step 2).
 
 
-def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None) -> None:
+def spend_stratagem(
+    strat: Stratagem,
+    faction: str,
+    unit_key: str | None = None,
+    *,
+    anchor_id: str | None = None,
+) -> None:
     """Deduct CP, mark the stratagem used (phase + battle-scoped), register its modifier.
 
     The one canonical spend path: CP accounting, once-per-battle/phase tracking,
     and `active_modifiers` registration must never drift apart between the central
     Stratagems-tab list and contextual reactive boxes.
+
+    anchor_id — optional, the render spot's own existing key (e.g. a reactive
+    box's `decline_key`, an inline offer's `reopen_key`, a card's unit uid) —
+    recorded so later renders of the SAME (faction, GO) this phase can tell
+    "used here" (this exact anchor_id, → GoCardState "used") from "used
+    elsewhere" (any other anchor_id, → "used_elsewhere") — S139 B12a,
+    foundation for the B12b/c state mappers. Passed by all four anchor
+    callers today: gameProtocoll.py's central list, this module's
+    `render_reactive_stratagem_box` and `render_inline_command_reroll`, and
+    movementPhase.py's Advance-reroll card (S139 B12b/c). See
+    `stratagem_used_here`.
     """
     adjust_cp(faction, -strat.cp_cost)
 
@@ -444,6 +461,15 @@ def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None)
     used_ids.add(strat.id)
     used_ids_by_player[faction] = used_ids
     st.session_state.used_stratagem_ids = used_ids_by_player
+
+    if anchor_id is not None:
+        anchors_by_player: dict[str, dict[str, dict[str, str | None]]] = st.session_state.get(
+            "stratagem_use_anchors", {}
+        )
+        anchors = anchors_by_player.get(faction, {})
+        anchors[strat.id] = {"anchor_id": anchor_id, "unit_key": unit_key}
+        anchors_by_player[faction] = anchors
+        st.session_state.stratagem_use_anchors = anchors_by_player
 
     if strat.once_per_battle:
         used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
@@ -483,11 +509,13 @@ def spend_stratagem(strat: Stratagem, faction: str, unit_key: str | None = None)
 def undo_stratagem(strat: Stratagem, faction: str) -> None:
     """Full rollback of `spend_stratagem` while the activation window is still open.
 
-    CP restored, both usage sets cleared, and any `active_modifiers` entry this
-    stratagem registered removed — the exact counterpart `spend_stratagem`'s
-    docstring names. Lives next to it so any future Undo affordance (today only
-    the central Stratagems-list GO card, gameProtocoll.py, offers one) shares
-    this bookkeeping instead of re-deriving it.
+    CP restored, both usage sets cleared, any recorded use-anchor discarded
+    (S139 B12a — every "used_elsewhere" render of this GO reverts to "ready"
+    once the anchor is gone), and any `active_modifiers` entry this stratagem
+    registered removed — the exact counterpart `spend_stratagem`'s docstring
+    names. Lives next to it so any future Undo affordance (today only the
+    central Stratagems-list GO card, gameProtocoll.py, offers one) shares this
+    bookkeeping instead of re-deriving it.
     """
     adjust_cp(faction, strat.cp_cost)
 
@@ -496,6 +524,11 @@ def undo_stratagem(strat: Stratagem, faction: str) -> None:
     used_ids.discard(strat.id)
     used_ids_by_player[faction] = used_ids
     st.session_state.used_stratagem_ids = used_ids_by_player
+
+    anchors_by_player: dict[str, dict[str, dict[str, str | None]]] = st.session_state.get(
+        "stratagem_use_anchors", {}
+    )
+    anchors_by_player.get(faction, {}).pop(strat.id, None)
 
     if strat.once_per_battle:
         used_battle_ids_by_faction: dict[str, set[str]] = st.session_state.get(
@@ -509,6 +542,47 @@ def undo_stratagem(strat: Stratagem, faction: str) -> None:
     st.session_state.active_modifiers = [
         m for m in st.session_state.get("active_modifiers", []) if m.get("source") != strat.name_en
     ]
+
+
+def stratagem_use_anchor(faction: str, stratagem_id: str) -> tuple[str, str | None] | None:
+    """Return `(anchor_id, unit_key)` recorded by `spend_stratagem` for this
+    player's current-phase spend of `stratagem_id`, or None if it was never
+    spent this phase (or the spend was undone).
+
+    `unit_key` mirrors whatever `unit_key` `spend_stratagem` received — may be
+    None for GOs with no unit-scoped effect. Query-only; never written to
+    directly (S139 B12a — foundation for the B12b/c state mappers, see
+    `stratagem_used_here`).
+    """
+    anchors = st.session_state.get("stratagem_use_anchors", {}).get(faction, {})
+    record = anchors.get(stratagem_id)
+    if record is None:
+        return None
+    return record["anchor_id"], record.get("unit_key")
+
+
+def stratagem_used_here(faction: str, stratagem_id: str, anchor_id: str) -> bool:
+    """True iff `faction` spent `stratagem_id` THIS phase at exactly `anchor_id`.
+
+    The building block the three GO-card state mappers (`_go_state_and_reason`
+    in gameProtocoll.py, `_reactive_go_state` here, `_advance_reroll_state` in
+    movementPhase.py) use to split the old single "used" branch into
+    GoCardState "used" (True here — this render spot triggered the spend, show
+    Undo) vs "used_elsewhere" (False — some OTHER anchor triggered it, show a
+    disabled "Used"): once `stratagem_undo_visible()` says the phase-window is
+    still open, whichever render spot calls this with its OWN existing key
+    (decline_key/reopen_key/unit uid — see `spend_stratagem`'s `anchor_id`
+    docstring) gets the "used"/"here" answer, every other spot gets False.
+    Called by each caller's own render function (not the pure mapper itself,
+    which stays Streamlit-free and takes the resulting bool as a plain
+    `used_here` parameter — same style as the existing `used_ids`/
+    `used_battle_ids` sets) — gameProtocoll.py's `_render_stratagem_column`,
+    this module's `render_reactive_stratagem_box` and
+    `render_inline_command_reroll`, movementPhase.py's
+    `_render_advance_reroll_card` (S139 B12b/c).
+    """
+    record = stratagem_use_anchor(faction, stratagem_id)
+    return record is not None and record[0] == anchor_id
 
 
 def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> None:
@@ -556,28 +630,37 @@ def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> No
 
 
 def _reactive_go_state(
-    strat: Stratagem, vis: str, used_ids: set[str], used_battle_ids: set[str]
+    strat: Stratagem,
+    vis: str,
+    used_ids: set[str],
+    used_battle_ids: set[str],
+    used_here: bool,
 ) -> tuple[GoCardState, str | None]:
     """Map `stratagem_visibility()`'s clickable/greyed to a GO-card state, for
     reactive GO boxes only.
 
     Mirrors gameProtocoll.py's ``_go_state_and_reason()`` exactly (S134 task 2b
     closed the divergence): "greyed" with this phase's activation window still
-    open (`stratagem_undo_visible`) maps to "used", so the card offers the
-    full-rollback ``↺ Undo`` (§6.1) instead of dead-ending in "locked". This
-    only ever displays for callers whose window marker survives the Use — e.g.
-    Fire Overwatch, whose box is gated by `selected_targets`, not by an
-    `on_resolved`-cleared marker. Callers that DO clear their own pending
-    marker on Use (e.g. Cut Them Down via `pending_fall_back`) never re-render
-    the box afterwards, so the "used" branch simply never shows there — the
-    mapping is still correct, the caller's window just closed. With the
-    undo window closed, "greyed" falls through to "locked", reason "used"
-    for a once_per_battle stratagem spent earlier, else "CP insufficient".
+    open (`stratagem_undo_visible`) splits into "used" (Undo offered) vs
+    "used_elsewhere" (disabled "Used", no Undo) depending on `used_here` —
+    whether THIS render spot's own anchor_id is the one `spend_stratagem`
+    recorded for this (faction, GO) this phase (S139 B12b, design_system.md
+    §6.1 5th state; caller computes `used_here` via `stratagem_used_here` so
+    this mapper itself stays a pure, Streamlit-free decision function — same
+    style as the plain `used_ids`/`used_battle_ids` sets it already takes).
+    Cut Them Down / Emergency Disembarkation (window-consuming GOs, S138
+    scope) are covered by this same split without any special case: their
+    callers no longer clear the pending marker on Use (see
+    `_render_pending_emergency_disembarkation`), so the box keeps rendering
+    — "used" at its own anchor, "used_elsewhere" everywhere else this phase
+    — instead of vanishing the instant it is spent. With the undo window
+    closed, "greyed" falls through to "locked", reason "used" for a
+    once_per_battle stratagem spent earlier, else "CP insufficient".
     """
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return "used", None
+        return ("used", None) if used_here else ("used_elsewhere", None)
     reason = "used" if strat.id in used_battle_ids else "CP insufficient"
     return "locked", reason
 
@@ -604,6 +687,7 @@ def _reactive_use_callback(
     unit_key_for_modifier: str | None,
     on_spent: Callable[[Stratagem], None] | None,
     on_resolved: Callable[[], None] | None,
+    anchor_id: str,
 ) -> Callable[[], None]:
     """Factory for a reactive GO card's on_use callback (see gameProtocoll's
     `_use_callback` for why a factory, not an inline loop-body lambda, is
@@ -616,10 +700,15 @@ def _reactive_use_callback(
     effect, e.g. Counter-Offensive reassigning `fight_current_player`) and
     `on_resolved` (clearing the caller's own pending-window marker) — now
     Use-only, since §6.1 leaves no Pass action to also trigger them.
+
+    `anchor_id` — this render spot's own key (`render_reactive_stratagem_box`
+    builds it from `event`/`decline_key`), recorded via `spend_stratagem` so
+    `_reactive_go_state` can later tell "used here" from "used elsewhere"
+    (S139 B12b).
     """
 
     def _use() -> None:
-        spend_stratagem(strat, faction, unit_key_for_modifier)
+        spend_stratagem(strat, faction, unit_key_for_modifier, anchor_id=anchor_id)
         if on_spent is not None:
             on_spent(strat)
         if on_resolved is not None:
@@ -720,6 +809,10 @@ def render_reactive_stratagem_box(
     cp = st.session_state.get("cp", {}).get(faction, 0)
     used_ids = st.session_state.get("used_stratagem_ids", {}).get(faction, set())
     used_battle_ids = st.session_state.get("used_stratagem_battle_ids", {}).get(faction, set())
+    # This render spot's own stable anchor (S139 B12b, design_system.md §6.1):
+    # built from the two params every caller already passes (event/decline_key,
+    # concept doc §2.1) — no caller of this function needs to change.
+    anchor_id = f"reactive:{event}:{decline_key}"
 
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
@@ -737,7 +830,8 @@ def render_reactive_stratagem_box(
         if vis == "hidden":
             continue
 
-        state, locked_reason = _reactive_go_state(strat, vis, used_ids, used_battle_ids)
+        used_here = stratagem_used_here(faction, strat.id, anchor_id)
+        state, locked_reason = _reactive_go_state(strat, vis, used_ids, used_battle_ids, used_here)
         render_go_card(
             key=f"reactive_{faction}_{event}_{strat.id}_{decline_key}",
             name=strat.name_en,
@@ -748,7 +842,7 @@ def render_reactive_stratagem_box(
             locked_reason=locked_reason,
             expanded_content=_context_caption_renderer(context_caption),
             on_use=_reactive_use_callback(
-                strat, faction, unit_key_for_modifier, on_spent, on_resolved
+                strat, faction, unit_key_for_modifier, on_spent, on_resolved, anchor_id
             ),
             on_undo=_reactive_undo_callback(strat, faction),
         )
@@ -763,6 +857,35 @@ def render_reactive_stratagem_box(
 # result, not a bordered card — Ignoring it costs nothing and the flow keeps
 # moving. Data-driven via the stratagem's own (phase, event="after_roll")
 # window — no stratagem-name string check.
+
+
+def _inline_reroll_state(
+    strat: Stratagem,
+    vis: str,
+    used_ids: set[str],
+    used_here: bool,
+) -> GoCardState | None:
+    """Map `stratagem_visibility()`'s clickable/greyed to a GO state for the
+    inline Command Re-Roll offer, or None for "stay hidden".
+
+    S139 B12c (docs/handoff/S137_B12_konzept.md §2.1/§2.2, Stakeholder-Lesart
+    F-A in S139_planning.md): every anchor — card or inline — shows Undo only
+    where it was actually spent, "Used" everywhere else. Pull-not-Push stays
+    true for the one case that still has nothing to show: `vis == "greyed"`
+    with `strat.id` NOT in `used_ids` means CP is short, not that this GO was
+    used — that case remains fully absent (no disabled button either), same
+    as before this change. `vis == "greyed"` WITH `strat.id in used_ids` means
+    this (player, GO) was spent somewhere this phase — that now surfaces
+    "used" (this exact anchor triggered the spend, offer Undo) vs.
+    "used_elsewhere" (a different anchor did, disabled "Used", no Undo),
+    exactly the split the three card mappers (`_go_state_and_reason`,
+    `_reactive_go_state`, `_advance_reroll_state`) already make.
+    """
+    if vis == "clickable":
+        return "ready"
+    if vis == "greyed" and strat.id in used_ids:
+        return "used" if used_here else "used_elsewhere"
+    return None
 
 
 def render_inline_command_reroll(
@@ -783,14 +906,26 @@ def render_inline_command_reroll(
     still "the last roll" — i.e. before any later roll/step has superseded
     it. Unlike render_reactive_stratagem_box (a GO card that shows a "locked"
     state when CP is short), this Pull-not-Push offer is fully absent — not
-    merely disabled — once CP is short or the stratagem was already spent
-    this phase: a non-blocking hint has no reason to clutter the screen with
-    something the player cannot act on.
+    merely disabled — while CP is short: a non-blocking hint has no reason to
+    clutter the screen with something the player cannot act on. Once spent
+    this phase, though, it now stays visible (S139 B12c, S138-revised
+    concept §2.1: the old "gar kein Undo" rule for inline offers was
+    revised — a re-roll offer IS correctable like any other GO, "Undo" is a
+    mis-click fix, not "un-rolling the dice"): the exact anchor that
+    triggered the spend (this render spot's own `(phase, reopen_key)`) shows
+    ``↺ Undo``, every other anchor of the same (player, GO) this phase shows
+    a disabled ``Used`` — same "used"/"used_elsewhere" split
+    `render_reactive_stratagem_box` and the card mappers use, via
+    `_inline_reroll_state`.
 
     `on_reroll` owns the domain-specific reopening (e.g. popping an "applied"
     flag so the caller's own input widgets return to editable) — this
     function only owns the CP/usage bookkeeping, so callers with a locked
-    value and callers with a still-editable value can share it.
+    value and callers with a still-editable value can share it. Only fires on
+    Use, not on Undo — every current caller passes a no-op (`lambda: None`,
+    Familie 2: none of the 5 inline anchors capture a value there is anything
+    to reopen for), and Undo's own full rollback (`undo_stratagem`) already
+    reverts everything `spend_stratagem` did.
     """
     try:
         stratagems = load_stratagems(faction_dir_for(faction))
@@ -804,21 +939,37 @@ def render_inline_command_reroll(
     is_active = faction == st.session_state.get("active")
     cp = st.session_state.get("cp", {}).get(faction, 0)
     used_ids = st.session_state.get("used_stratagem_ids", {}).get(faction, set())
+    # This render spot's own stable anchor (S139 B12c, design_system.md §6.1
+    # Anker-Schema): built from the two params every caller already passes
+    # (phase/reopen_key) — none of the 5 call sites need to change.
+    anchor_id = f"inline:{phase}:{reopen_key}"
 
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
             continue
         vis = stratagem_visibility(strat, cp, phase, used_ids, True, reactive_trigger_active=True)
-        if vis != "clickable":
+        used_here = stratagem_used_here(faction, strat.id, anchor_id)
+        state = _inline_reroll_state(strat, vis, used_ids, used_here)
+        if state is None:
             continue
+
         context_suffix = f" — {label_context}" if label_context else ""
-        if st.button(
-            f"{SYM_RESET} {strat.name_en} ({strat.cp_cost} CP){context_suffix}",
-            key=f"cmd_reroll_{faction}_{phase}_{strat.id}_{reopen_key}",
-        ):
-            spend_stratagem(strat, faction)
-            on_reroll()
-            st.rerun()
+        widget_key = f"cmd_reroll_{faction}_{phase}_{strat.id}_{reopen_key}"
+
+        if state == "ready":
+            if st.button(
+                f"{SYM_RESET} {strat.name_en} ({strat.cp_cost} CP){context_suffix}",
+                key=widget_key,
+            ):
+                spend_stratagem(strat, faction, anchor_id=anchor_id)
+                on_reroll()
+                st.rerun()
+        elif state == "used":
+            if st.button(f"{SYM_RESET} Undo {strat.name_en}{context_suffix}", key=widget_key):
+                undo_stratagem(strat, faction)
+                st.rerun()
+        else:  # used_elsewhere — disabled, no Undo: a different anchor spent it
+            st.button(f"{strat.name_en}{context_suffix} — Used", key=widget_key, disabled=True)
 
 
 # ---------------------------------------------------------------------------
@@ -909,8 +1060,8 @@ def render_go_card(
     re-opens it.
 
     on_use/on_undo — invoked when the button is pressed in the "ready"/"used"
-    state respectively; not called for "dormant"/"locked" (button rendered
-    disabled, so this never fires for them regardless).
+    state respectively; not called for "dormant"/"used_elsewhere"/"locked"
+    (button rendered disabled, so this never fires for them regardless).
 
     target_name — shown on the header line (S133-D Befund 3): which unit this
     GO is bound to, so using it never happens against an unnoticed selection.
@@ -946,7 +1097,7 @@ def render_go_card(
             st.button(
                 action_slot_text(state),
                 key=f"go_card_action_{key}",
-                disabled=state in ("dormant", "locked"),
+                disabled=state in ("dormant", "used_elsewhere", "locked"),
                 on_click=_resolve_go_card_action,
                 args=(accordion_key, bool(rule_text), state, on_use, on_undo),
             )
@@ -957,10 +1108,6 @@ def render_go_card(
 
         if expanded_content is not None:
             expanded_content()
-
-
-def _clear_pending_transport_destroyed() -> None:
-    st.session_state.pending_transport_destroyed = None
 
 
 def _maybe_flag_transport_destroyed(
@@ -990,6 +1137,13 @@ def _render_pending_emergency_disembarkation(faction: str) -> None:
     stratagem — the real gate is ownership: only the player whose TRANSPORT was
     just destroyed may use it, so this checks `faction` against the marker
     directly rather than routing through the active/inactive split.
+
+    The marker is no longer cleared on Use (S139 B12b, S137/S138 concept §F3):
+    window-consuming GOs get the same anchor treatment as every other GO — the
+    box keeps rendering ("used" at its own anchor, "used_elsewhere" anywhere
+    else) instead of vanishing the instant it is spent. `_reset_phase_state()`
+    (game_state.py) still clears `pending_transport_destroyed` at the phase
+    boundary, so the window does not outlive the phase either way.
     """
     marker = st.session_state.get("pending_transport_destroyed")
     if not marker or marker.get("faction") != faction:
@@ -1005,7 +1159,6 @@ def _render_pending_emergency_disembarkation(faction: str) -> None:
         event="on_destroy",
         decline_key=marker["uid"],
         context_caption=f"{unit.name_en} (TRANSPORT) was destroyed.",
-        on_resolved=_clear_pending_transport_destroyed,
     )
 
 

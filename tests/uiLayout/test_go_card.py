@@ -40,6 +40,12 @@ def test_action_slot_text_is_undo_for_used() -> None:
     assert action_slot_text("used") == "↺ Undo"
 
 
+def test_action_slot_text_is_used_for_used_elsewhere() -> None:
+    # S139 B12a — the 5th state never offers Undo, only the disabled label.
+    assert action_slot_text("used_elsewhere") == "Used"
+    assert "↺" not in action_slot_text("used_elsewhere")
+
+
 def test_action_slot_text_never_echoes_cp_cost() -> None:
     # CP already stands in the card header — the button must never repeat it.
     assert "CP" not in action_slot_text("ready")
@@ -73,6 +79,13 @@ def test_go_card_container_style_used_stays_accent_bordered() -> None:
 
 def test_go_card_container_style_locked_is_dimmed_muted_border() -> None:
     css = go_card_container_style("box_1", "locked")
+    assert "border-color:#6b5f44" in css
+    assert "opacity:0.55" in css
+
+
+def test_go_card_container_style_used_elsewhere_is_dimmed_muted_border() -> None:
+    # S139 B12a — "used_elsewhere" dims like "locked" (§6.5: no new colour token).
+    css = go_card_container_style("box_1", "used_elsewhere")
     assert "border-color:#6b5f44" in css
     assert "opacity:0.55" in css
 

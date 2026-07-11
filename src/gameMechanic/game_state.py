@@ -445,6 +445,10 @@ def init_state(
     # phase-scoped and battle-scoped usage never leak across players.
     st.session_state.used_stratagem_ids = {}  # dict[str, set[str]]
     st.session_state.used_stratagem_battle_ids = {}  # dict[str, set[str]]
+    # Where (not just whether) a GO was spent this phase — dict[faction][stratagem_id]
+    # -> {"anchor_id": str, "unit_key": str | None}; phase-scoped like
+    # used_stratagem_ids (S139 B12a, design_system.md §6.1 5th GO-card state).
+    st.session_state.stratagem_use_anchors = {}  # dict[str, dict[str, dict[str, str | None]]]
     st.session_state.active_modifiers = []  # list[dict]
     st.session_state.command_ability_state = {}
     # Round-choice state is keyed per faction_dir (set on demand in armyCard)
@@ -568,6 +572,12 @@ def _reset_phase_state() -> None:
     # Cleared for BOTH player slots on every phase change (behavior unchanged;
     # structure is per-player since S121 Task 2).
     st.session_state.used_stratagem_ids = {}
+    # Use-anchor bookkeeping is exactly as phase-scoped as used_stratagem_ids
+    # (the Undo window it drives never outlives the phase either) — cleared
+    # here in lockstep, never left to leak into the next phase (S139 B12a).
+    # used_stratagem_battle_ids is intentionally NOT touched here (once-per-
+    # battle persists for the whole game, only reset_game() clears it).
+    st.session_state.stratagem_use_anchors = {}
     st.session_state.fight_current_player = None
     st.session_state.attack_declaration = {"active": False, "entries": []}
     st.session_state.selected_model_group = None
