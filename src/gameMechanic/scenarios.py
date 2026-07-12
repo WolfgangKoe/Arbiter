@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import MutableMapping
 from pathlib import Path
 from typing import Any
 
@@ -23,7 +24,7 @@ def get_scenario_data(name: str) -> dict[str, Any] | None:
     return json.loads(path.read_text())  # type: ignore[no-any-return]
 
 
-def apply_scenario(data: dict[str, Any], state: dict[str, Any]) -> None:
+def apply_scenario(data: dict[str, Any], state: MutableMapping[str, Any]) -> None:
     """Patch a state dict with scenario data. Pure function — safe for tests."""
     for key in ("round", "phase_idx"):
         if key in data:

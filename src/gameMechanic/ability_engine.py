@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import MutableMapping
+from typing import Any
+
 import streamlit as st
 
 from gameMechanic.game_state import (
@@ -42,7 +45,7 @@ def check_trigger(ability: Ability, phase: str, timing: str, active_player: str)
     return True
 
 
-def check_conditions(ability: Ability, unit: Unit, unit_state: dict) -> bool:  # type: ignore[type-arg]
+def check_conditions(ability: Ability, unit: Unit, unit_state: MutableMapping[str, Any]) -> bool:
     for cond in ability.conditions:
         if cond.unit_not_destroyed and unit_state.get("destroyed", False):
             return False
@@ -343,7 +346,7 @@ def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
 def get_after_attack_revive_ability(
     faction: str,
     unit: Unit,
-    unit_state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
 ) -> Ability | None:
     """The unit's revive-after-enemy-attack ability, or None (data-driven).
 
@@ -527,7 +530,7 @@ def get_activated_command_abilities(unit_id: str, faction_dir: str) -> list[Abil
 
 
 def get_triggered_abilities(
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
     phase: str,
     timing: str,
 ) -> list[tuple[Ability, list[str]]]:
@@ -540,7 +543,7 @@ def get_triggered_abilities(
     all_abilities.extend(load_subfaction_abilities(faction_dir))
 
     units_key = units_key_for(active)
-    units_state: dict = state.get(units_key, {})  # type: ignore[type-arg]
+    units_state: MutableMapping[str, Any] = state.get(units_key, {})
 
     units, _ = load_army(faction_dir)
     unit_by_id = {u.id: u for u in units}

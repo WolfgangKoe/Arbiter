@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping
+from typing import Any
+
 import streamlit as st
 
 from gameMechanic.game_log import log_action
@@ -9,7 +12,7 @@ from gameMechanic.game_state import units_key_for
 from gameObjects.unit import ModelGroup, Unit
 
 
-def unit_max_hp(unit: Unit, state: dict) -> int:  # type: ignore[type-arg]
+def unit_max_hp(unit: Unit, state: MutableMapping[str, Any]) -> int:
     """Maximum HP for the unit's currently-surviving models.
 
     Per-group-wounds units (e.g. Szarekh 16 + Menhirs 7) sum each group's
@@ -53,7 +56,7 @@ def adjust_cp(faction: str, delta: int) -> None:
 
 
 def apply_buff_to_unit(
-    unit_state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
     ability_id: str,
     badge_label: str,
     effect_type: str,
@@ -70,7 +73,7 @@ def apply_buff_to_unit(
     buffs.append({"ability_id": ability_id, "badge_label": badge_label, "effect_type": effect_type})
 
 
-def _recompute_from_group_wounds(state: dict, unit: Unit) -> None:  # type: ignore[type-arg]
+def _recompute_from_group_wounds(state: MutableMapping[str, Any], unit: Unit) -> None:
     """Recompute group_models / models / current_wounds / destroyed from group_wounds."""
     gw: dict[str, int] = state["group_wounds"]
     gm: dict[str, int] = state["group_models"]
@@ -84,7 +87,7 @@ def _recompute_from_group_wounds(state: dict, unit: Unit) -> None:  # type: igno
     state["destroyed"] = state["current_wounds"] <= 0
 
 
-def _front_group_hp(state: dict, unit: Unit) -> int:  # type: ignore[type-arg]
+def _front_group_hp(state: MutableMapping[str, Any], unit: Unit) -> int:
     """Remaining HP on the front model of the lowest-priority surviving group."""
     gw: dict[str, int] = state["group_wounds"]
     for group in sorted(unit.model_groups, key=lambda g: g.priority):
@@ -97,7 +100,7 @@ def _front_group_hp(state: dict, unit: Unit) -> int:  # type: ignore[type-arg]
     return 0
 
 
-def _apply_group_wound_damage(state: dict, dmg: int, unit: Unit) -> None:  # type: ignore[type-arg]
+def _apply_group_wound_damage(state: MutableMapping[str, Any], dmg: int, unit: Unit) -> None:
     """Reduce per-group HP pools in priority order (lowest priority = dies first)."""
     gw: dict[str, int] = state["group_wounds"]
     for group in sorted(unit.model_groups, key=lambda g: g.priority):
@@ -140,7 +143,7 @@ def get_locked_group(uid: str, faction: str, unit: Unit) -> str | None:
     return None
 
 
-def _group_front_hp(state: dict, unit: Unit, group_id: str) -> int:  # type: ignore[type-arg]
+def _group_front_hp(state: MutableMapping[str, Any], unit: Unit, group_id: str) -> int:
     """Remaining HP on the front (partly wounded) model of one specific group."""
     remaining = state["group_wounds"].get(group_id, 0)
     if remaining <= 0:
@@ -154,7 +157,7 @@ def _group_front_hp(state: dict, unit: Unit, group_id: str) -> int:  # type: ign
 
 
 def _apply_directed_group_damage(
-    state: dict, dmg: int, unit: Unit, group_id: str  # type: ignore[type-arg]
+    state: MutableMapping[str, Any], dmg: int, unit: Unit, group_id: str
 ) -> None:
     """Reduce only the chosen group's HP pool (defender's directed allocation)."""
     gw: dict[str, int] = state["group_wounds"]
@@ -242,7 +245,7 @@ def _restore_group_models(
             return
 
 
-def _heal_group_wounds(state: dict, hp: int, unit: Unit) -> None:  # type: ignore[type-arg]
+def _heal_group_wounds(state: MutableMapping[str, Any], hp: int, unit: Unit) -> None:
     """Refill per-group HP pools, lowest priority first (the group that died first)."""
     gw: dict[str, int] = state["group_wounds"]
     for group in sorted(unit.model_groups, key=lambda g: g.priority):
@@ -355,7 +358,7 @@ def leave_melee_pair(
             enemy_state["in_melee"] = False
 
 
-def _remove_whole_models(state: dict, unit: Unit, count: int) -> None:  # type: ignore[type-arg]
+def _remove_whole_models(state: MutableMapping[str, Any], unit: Unit, count: int) -> None:
     """Remove `count` whole models from `state` — shared by every "model destroyed
     directly, no save, no wound-by-wound damage roll" path (Morale flee, Desperate
     Breakout casualties). Handles both the group_wounds pool (mixed-wound units)
