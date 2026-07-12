@@ -14,9 +14,9 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_CHECK, SYM_EXPAND_ALT, SYM_SWORDS
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
-from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import unit_keys_for, units_key_for, units_list_for
+from gameMechanic.unitMutations import perform_heroic_intervention, set_charged
 from gameObjects.unit import Unit
 from uiLayout._common import (
     lookup,
@@ -89,7 +89,7 @@ def _active_charge(
     """Render charge action for the active player's selected unit."""
     flags = unit_state.get("turn_flags", {})
     if flags.get("advanced"):
-        from gameMechanic.ability_engine import charge_after_advance_allowed  # noqa: PLC0415
+        from gameMechanic.abilityEngine import charge_after_advance_allowed  # noqa: PLC0415
 
         if not charge_after_advance_allowed(faction, unit):
             st.warning("Advanced this turn — cannot charge.")

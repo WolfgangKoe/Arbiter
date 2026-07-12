@@ -8,14 +8,14 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_CHECK
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     faction_dir_for,
     unit_id_from_state_key,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import confirm_morale_auto_pass, flee_models
+from gameMechanic.unitMutations import confirm_morale_auto_pass, flee_models
 from gameObjects.ability import Ability
 from gameObjects.loader import get_abilities_for_unit
 from gameObjects.unit import Unit

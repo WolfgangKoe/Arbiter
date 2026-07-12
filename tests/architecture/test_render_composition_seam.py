@@ -4,19 +4,19 @@ Background — the recurring 'render edge had untested business logic → crash'
 Badge-composition bugs and the Heroic-Intervention duplicate-key crash both hid in
 render helpers that were bundled with Streamlit render functions and therefore excluded
 from coverage measurement.  The fix was to separate the pure building blocks
-(SVG faces, threshold headers, modifier rows, grid rows) into ``dice_compose.py`` —
+(SVG faces, threshold headers, modifier rows, grid rows) into ``diceCompose.py`` —
 measured at 100% — while only the three ``st.markdown`` wrapper functions remain in
-the omitted ``dice_html.py``.
+the omitted ``diceHtml.py``.
 
 This guard locks in that seam with two assertions:
 
-1. ``src/uiLayout/dice_compose.py`` imports no ``streamlit`` in any form (AST-checked).
+1. ``src/uiLayout/diceCompose.py`` imports no ``streamlit`` in any form (AST-checked).
    It is the pure composition layer; any accidental ``import streamlit`` or
    ``from streamlit import …`` would make it untestable without a Streamlit runtime.
 
-2. ``src/uiLayout/dice_compose.py`` is NOT present in the ``[tool.coverage.run] omit``
+2. ``src/uiLayout/diceCompose.py`` is NOT present in the ``[tool.coverage.run] omit``
    list in ``pyproject.toml``, and the list does NOT contain a bare ``src/uiLayout/*``
-   wildcard.  A future blanket glob that re-swallows ``dice_compose.py`` into the omit
+   wildcard.  A future blanket glob that re-swallows ``diceCompose.py`` into the omit
    set would silently remove the coverage safety net — this test fails it instead.
 
 Status: holds today (0 violations). See docs/spec/architecture_invariants.md (INV-6).
@@ -30,17 +30,17 @@ from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[2]
 _SRC = _ROOT / "src"
 _PYPROJECT = _ROOT / "pyproject.toml"
-_COMPOSE_MODULE = _SRC / "uiLayout" / "dice_compose.py"
-_COMPOSE_REL = "src/uiLayout/dice_compose.py"
+_COMPOSE_MODULE = _SRC / "uiLayout" / "diceCompose.py"
+_COMPOSE_REL = "src/uiLayout/diceCompose.py"
 
 
 # ---------------------------------------------------------------------------
-# Assertion 1 — dice_compose.py is Streamlit-free
+# Assertion 1 — diceCompose.py is Streamlit-free
 # ---------------------------------------------------------------------------
 
 
 def test_dice_compose_has_no_streamlit_import() -> None:
-    """dice_compose.py must never import streamlit in any form.
+    """diceCompose.py must never import streamlit in any form.
 
     This is the pure-composition contract: all SVG/HTML building blocks must be
     importable and testable without a Streamlit runtime.  Any ``import streamlit``
@@ -71,12 +71,12 @@ def test_dice_compose_has_no_streamlit_import() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Assertion 2 — dice_compose.py is NOT in the coverage omit list
+# Assertion 2 — diceCompose.py is NOT in the coverage omit list
 # ---------------------------------------------------------------------------
 
 
 def test_dice_compose_is_coverage_measured() -> None:
-    """dice_compose.py must remain in the coverage-measured set.
+    """diceCompose.py must remain in the coverage-measured set.
 
     The module must NOT appear in ``[tool.coverage.run] omit`` in pyproject.toml,
     and the omit list must NOT contain a bare ``src/uiLayout/*`` wildcard that
@@ -96,5 +96,5 @@ def test_dice_compose_is_coverage_measured() -> None:
     assert "src/uiLayout/*" not in omit, (
         "pyproject.toml [tool.coverage.run] omit must NOT contain the bare "
         "'src/uiLayout/*' wildcard (INV-6). "
-        "uiLayout files must be enumerated explicitly so dice_compose.py stays measured."
+        "uiLayout files must be enumerated explicitly so diceCompose.py stays measured."
     )

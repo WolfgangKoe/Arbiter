@@ -18,13 +18,14 @@ from pathlib import Path
 import streamlit as st
 
 from constants.symbols import SYM_SWORDS
-from gameMechanic.game_state import (
+from gameMechanic.gameState import (
     PHASES,
     faction_dir_for,
     unit_id_from_state_key,
     units_key_for,
     units_list_for,
 )
+from gameMechanic.stratagemEngine import _effect_gate_met
 from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
@@ -41,7 +42,7 @@ from uiLayout._common import (
     stratagem_used_here,
     undo_stratagem,
 )
-from uiLayout.go_card import GoCardState
+from uiLayout.goCard import GoCardState
 
 _LOG_PATH = Path(__file__).parent.parent.parent / "data" / "log" / "game_log.json"
 
@@ -56,7 +57,7 @@ _CENTRAL_LIST_ANCHOR_ID = "central_list"
 def _load_game_log() -> list[dict]:  # type: ignore[type-arg]
     """Load log entries as a flat list compatible with the battle-log renderer.
 
-    Converts the nested {rounds → phases → events} format from game_log.py
+    Converts the nested {rounds → phases → events} format from gameLog.py
     into flat dicts: {round, phase, unit, action}.
     """
     if not _LOG_PATH.exists():
@@ -142,39 +143,8 @@ def _selected_unit_for(player: str):
     return None
 
 
-def _effect_gate_met(
-    strat: Stratagem, unit_state: dict | None  # type: ignore[type-arg]
-) -> tuple[bool, str | None]:
-    """Generic unit-state gate for GOs whose effect requires a specific movement state.
-
-    Dispatches on `effect.type`/`effect.handler` — the same shape-based dispatch
-    `uiLayout._common._apply_stratagem_effect` already uses — rather than a
-    stratagem id/name check (INV-4b: no faction- or GO-name string literals in
-    src/). `conditions` (keyword-based) is orthogonal and stays in
-    `stratagem_conditions_met`; this covers a requirement keywords cannot
-    express: the selected unit's own turn state.
-
-    Today the only effect shape this recognises is `type="move",
-    handler="fall_back_through_models"` (Desperate Breakout, S133-D Befund 4):
-    rules_appendix.txt 2618-2625 — "Select one unit from your army that has
-    not been selected to move this phase and which is in Engagement Range with
-    at least one enemy unit." `movement_chosen` is the same flag
-    `set_movement_status()` sets for every movement declaration; `in_melee` is
-    the same field every other "Engagement Range" check in this codebase reads
-    (see e.g. movementPhase.py's Retreat-only-in-melee gating). Any other
-    effect shape (or no effect) is always gate-met — those GOs have no
-    per-unit state requirement beyond `conditions`.
-    """
-    effect = strat.effect
-    if effect is None or effect.type != "move" or effect.handler != "fall_back_through_models":
-        return True, None
-    if unit_state is None:
-        return False, "select an eligible unit"
-    if unit_state.get("movement_chosen"):
-        return False, "unit already moved this phase"
-    if not unit_state.get("in_melee"):
-        return False, "unit not in Engagement Range"
-    return True, None
+# _effect_gate_met moved to gameMechanic.stratagemEngine (S142 Aufgabe 1, Option
+# B — consolidated stratagem-effect dispatch); imported below.
 
 
 def _selected_state_key_for(player: str) -> str | None:
@@ -256,10 +226,22 @@ def _use_callback(strat: Stratagem, player: str) -> Callable[[], None]:
     resolve to the LAST stratagem once actually invoked. A `lambda strat=strat:`
     default-arg workaround avoids that but defeats mypy's type inference for
     the lambda in strict mode — this factory gets both right.
+
+    Guards against `unit_key is None` for a unit-scoped effect (S142 Aufgabe 2,
+    Befund 5): `_effect_gate_met` should already keep such a card off "ready"
+    until a unit is selected, but this is the last line of defence at the
+    actual spend site — without it, a click here would still deduct CP and
+    mark the GO used via `spend_stratagem` while `unit_key is None` silently
+    skips `_apply_stratagem_effect`, spending the Stratagem for no game effect.
     """
-    return lambda: spend_stratagem(
-        strat, player, _selected_state_key_for(player), anchor_id=_CENTRAL_LIST_ANCHOR_ID
-    )
+
+    def _use() -> None:
+        unit_key = _selected_state_key_for(player)
+        if strat.effect is not None and unit_key is None:
+            return
+        spend_stratagem(strat, player, unit_key, anchor_id=_CENTRAL_LIST_ANCHOR_ID)
+
+    return _use
 
 
 def _undo_callback(strat: Stratagem, player: str) -> Callable[[], None]:

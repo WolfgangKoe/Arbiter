@@ -90,10 +90,10 @@ nur beim Spielerwechsel nach der Moralphase.
 
 **Spielende (fix nach Runde 5):** Der Übergang, der Runde 6 einläuten würde
 (Moralphase des zweiten Spielers in Runde 5 abgeschlossen), setzt stattdessen
-`battle_over` (`game_state.MAX_BATTLE_ROUNDS = 5`,
+`battle_over` (`gameState.MAX_BATTLE_ROUNDS = 5`,
 → `docs/work/wahapedia_core_rules/core_rules.txt:2337`). Der Header ersetzt
 dann den „→"-Pfeil durch die Endstand-Anzeige (`gameHeader.battle_result_html`):
-Sieger = meiste VP, Gleichstand = Draw (Z. 2339). „←" (`game_state.prev_phase`)
+Sieger = meiste VP, Gleichstand = Draw (Z. 2339). „←" (`gameState.prev_phase`)
 bleibt bedienbar und hebt `battle_over` wieder auf — der Endzustand ist keine
 Sackgasse, Fehleingaben bleiben korrigierbar. Der „army destroyed"-Teil der
 Spielende-Regel ist bewusst nicht abgebildet (eigener Backlog-Punkt).
@@ -295,7 +295,7 @@ Die Funktion selbst sieht nur `int` — kein String-Parsing in `combat.py`.
 
 ## P-09 — PhaseRunner — Dispatch auf render_active (alle Phasen)
 
-`phase_runner.py` ist der einzige Eintrittspunkt für `gameActionsArea.py`.
+`phaseRunner.py` ist der einzige Eintrittspunkt für `gameActionsArea.py`.
 Jede Phase hat genau eine View; es gibt kein Stage-Konzept mehr.
 
 ```mermaid
@@ -310,7 +310,7 @@ flowchart TD
     ADV -- ja --> SWITCH[Spielerwechsel\n_reset_turn_state\nst.rerun]
 ```
 
-**Turn-Flag-Reset** in `_reset_turn_state` (`game_state.py`), beim
+**Turn-Flag-Reset** in `_reset_turn_state` (`gameState.py`), beim
 Spielerwechsel nach der Moralphase — nicht bei jedem Phasenübergang:
 ```python
 def _reset_turn_state() -> None:
@@ -371,7 +371,7 @@ flowchart TD
 **Code-Referenzen:**
 - `src/gameMechanic/movementPhase.py: _active_movement()` — Constraint-Logik
 - `src/gameMechanic/movementPhase.py: _render_reinforcements_step()` — Reserve-Deploy
-- `src/gameMechanic/unit_mutations.py: set_movement_status()` — State-Mutation
+- `src/gameMechanic/unitMutations.py: set_movement_status()` — State-Mutation
 - Tests: `tests/gameMechanic/test_movement_transitions.py`
 
 ---
@@ -394,7 +394,7 @@ flowchart TD
     C --> I
 ```
 
-**State in `game_state`:**
+**State in `gameState`:**
 | Feld | Typ | Bedeutung |
 |---|---|---|
 | `active_protocol_id` | `str \| None` | aktuell gewähltes Protokoll |
@@ -519,8 +519,8 @@ flowchart TD
 **Overwatch:** Im inaktiven Bereich angezeigt: *„Overwatch: only unmodified 6s hit."* — kein eigener Ablauf implementiert (Scope Ziel 4d).
 
 **Code-Referenzen:**
-- `src/gameMechanic/chargephase.py` — Handler, `_active_charge`, `_render_heroic_intervention`
-- `src/gameMechanic/unit_mutations.py: set_charged`, `enter_melee`
+- `src/gameMechanic/chargePhase.py` — Handler, `_active_charge`, `_render_heroic_intervention`
+- `src/gameMechanic/unitMutations.py: set_charged`, `enter_melee`
 - Tests: `tests/gameMechanic/test_charge_phase.py`
 
 ---
@@ -602,5 +602,5 @@ flowchart TD
 
 **Code-Referenzen:**
 - `src/gameMechanic/moralePhase.py` — Handler, `_fail_threshold`, `_render_unit_morale`
-- `src/gameMechanic/unit_mutations.py: flee_models`
+- `src/gameMechanic/unitMutations.py: flee_models`
 - Tests: `tests/gameMechanic/test_morale_phase.py`

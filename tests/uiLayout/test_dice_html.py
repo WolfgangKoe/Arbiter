@@ -1,4 +1,4 @@
-"""Tests for dice_html miss-marker rendering (Finding 9.1).
+"""Tests for diceHtml miss-marker rendering (Finding 9.1).
 
 Misses must read as a die-shaped icon everywhere — never a bare text '×'.
 The miss die draws its cross as two SVG <line> strokes in #c0392b.
@@ -11,8 +11,8 @@ from unittest.mock import MagicMock
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout import dice_html as dice_html_module  # noqa: E402
-from uiLayout.dice_compose import (  # noqa: E402
+from uiLayout import diceHtml as dice_html_module  # noqa: E402
+from uiLayout.diceCompose import (  # noqa: E402
     _modifier_color,
     _modifier_columns,
     always_fail_marker_row_html,
@@ -29,7 +29,7 @@ from uiLayout.dice_compose import (  # noqa: E402
     threshold_header_html,
     value_triggered_die_row_html,
 )
-from uiLayout.dice_html import _capped_modifier_threshold  # noqa: E402
+from uiLayout.diceHtml import _capped_modifier_threshold  # noqa: E402
 
 _BUFF_GREEN = "#4a9a5a"
 _DEBUFF_RED = "#ef4444"
@@ -278,13 +278,13 @@ def test_hit_debuff_badge_is_red() -> None:
 
 
 # ---------------------------------------------------------------------------
-# BACKFILL — dice_compose.py coverage (target ≥ 95%)
+# BACKFILL — diceCompose.py coverage (target ≥ 95%)
 # ---------------------------------------------------------------------------
 
 
 def test_threshold_header_boundary_gap_inserted() -> None:
     """threshold_header_html inserts the boundary-gap span before the threshold value."""
-    # Threshold 4 → gap appears before the '4+' label (lines 51-52 in dice_compose.py).
+    # Threshold 4 → gap appears before the '4+' label (lines 51-52 in diceCompose.py).
     html = threshold_header_html(4)
     # Gap span is 34px wide; the highlighted label (threshold value) gets a border.
     assert "border:1px solid" in html

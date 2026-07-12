@@ -24,14 +24,14 @@ from collections.abc import Sequence
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND, SYM_EXPAND_ALT
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     PHASES,
     TargetSelectionRequest,
     active_round_choice_buff_labels,
     units_key_for,
 )
-from gameMechanic.unit_mutations import apply_buff_to_unit, set_deployment
+from gameMechanic.unitMutations import apply_buff_to_unit, set_deployment
 from gameObjects.unit import Unit
 from uiLayout._common import (
     front_group_hp,
@@ -362,7 +362,7 @@ def render_unit_card(
         # ── State badges + Keywords ────────────────────────────────
         # Relics show no badge of their own — only their effects (buff/debuff).
         if phase_key != "setup":
-            from gameMechanic.ability_engine import ability_badge_label  # noqa: PLC0415
+            from gameMechanic.abilityEngine import ability_badge_label  # noqa: PLC0415
 
             extra_buffs: list[str] = []
             ability_lbl = ability_badge_label(faction, unit)

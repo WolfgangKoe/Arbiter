@@ -4,7 +4,7 @@ Tests the HTML-output path from _render_dice_roll_block through modifier_die_pai
 to verify that a shoot_after_fall_back modifier (value=-1) produces #ef4444 in the
 generated HTML — the same red path already used by Dense Cover −1.
 
-This is an HTML-output test per the Test Mandate: Render-Code (dice_html.py) is excluded
+This is an HTML-output test per the Test Mandate: Render-Code (diceHtml.py) is excluded
 from coverage measurement but must still be tested via HTML output.
 """
 
@@ -17,14 +17,14 @@ from unittest.mock import MagicMock
 sys.modules.setdefault("streamlit", MagicMock())
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout.dice_html import _render_dice_roll_block, _render_dice_wound_block  # noqa: E402
+from uiLayout.diceHtml import _render_dice_roll_block, _render_dice_wound_block  # noqa: E402
 
 _DEBUFF_RED = "#ef4444"
 
 
 def _collect_markdown(monkeypatch) -> list[str]:  # type: ignore[no-untyped-def]
     """Capture all HTML strings passed to st.markdown during the test."""
-    import uiLayout.dice_html as dice_html_mod  # noqa: PLC0415
+    import uiLayout.diceHtml as dice_html_mod  # noqa: PLC0415
 
     captured: list[str] = []
 
@@ -119,7 +119,7 @@ def test_stacked_hit_debuffs_both_reference_base_threshold(monkeypatch) -> None:
     # (red) die at from_clamped=3. The SVG for a red die-3 contains exactly 3 pips at
     # specific positions and uses fill="#ef4444". We use dice_face_svg as the source of
     # truth — its output is deterministic for a given (value, color) pair.
-    from uiLayout.dice_compose import dice_face_svg  # noqa: PLC0415
+    from uiLayout.diceCompose import dice_face_svg  # noqa: PLC0415
 
     red_die_3 = dice_face_svg(3, color=_DEBUFF_RED)
     count_red_3 = combined_html.count(red_die_3)
@@ -167,7 +167,7 @@ def test_stacked_wound_debuffs_both_reference_base_threshold(monkeypatch) -> Non
 
     combined_html = "\n".join(captured)
 
-    from uiLayout.dice_compose import dice_face_svg  # noqa: PLC0415
+    from uiLayout.diceCompose import dice_face_svg  # noqa: PLC0415
 
     red_die_4 = dice_face_svg(4, color=_DEBUFF_RED)
     count_red_4 = combined_html.count(red_die_4)
@@ -220,8 +220,8 @@ def test_strength_stratagem_scoped_to_activating_unit_shows_buff_border(
     monkeypatch,
 ) -> None:  # type: ignore[no-untyped-def]
     """The attacker the stratagem was activated for sees the green buff border on S."""
-    from gameMechanic.ability_engine import stratagem_strength_bonus  # noqa: PLC0415
-    from uiLayout.dice_compose import _BUFF_COLOR_HEX  # noqa: PLC0415
+    from gameMechanic.stratagemEngine import stratagem_strength_bonus  # noqa: PLC0415
+    from uiLayout.diceCompose import _BUFF_COLOR_HEX  # noqa: PLC0415
 
     active_modifiers = [
         {
@@ -254,8 +254,8 @@ def test_strength_stratagem_not_scoped_to_other_unit_shows_no_buff_border(
     monkeypatch,
 ) -> None:  # type: ignore[no-untyped-def]
     """Regression (S122 bug): a different attacker in the same phase gets no S buff."""
-    from gameMechanic.ability_engine import stratagem_strength_bonus  # noqa: PLC0415
-    from uiLayout.dice_compose import _BUFF_COLOR_HEX  # noqa: PLC0415
+    from gameMechanic.stratagemEngine import stratagem_strength_bonus  # noqa: PLC0415
+    from uiLayout.diceCompose import _BUFF_COLOR_HEX  # noqa: PLC0415
 
     active_modifiers = [
         {

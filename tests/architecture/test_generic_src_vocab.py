@@ -8,7 +8,7 @@ seed of faction concept-words. Any such token appearing in a src/ identifier or
 string literal (not docstrings) is a leak.
 
 DEBT LEDGER: ``LEDGER`` below enumerates every faction token in src/ today.
-- LEGIT: I/O label normalisation at the import boundary (rosz_importer).
+- LEGIT: I/O label normalisation at the import boundary (roszImporter).
 - DEBT: faction-specific logic/strings that should move into the YAML data layer
   (tracked in docs/goals/backlog.md). The ledger keeps the build green while
   making the drift measurable and preventing NEW leaks.
@@ -27,13 +27,13 @@ from tests.architecture._vocab import src_vocab_hits
 # rel-path (posix, under src/) -> set of faction tokens permitted in that file.
 LEDGER: dict[str, set[str]] = {
     # --- LEGIT: maps external BattleScribe faction labels to internal slugs ---
-    "gameObjects/rosz_importer.py": {"adeptus", "custodes", "necrons", "ork", "orks"},
+    "gameObjects/roszImporter.py": {"adeptus", "custodes", "necrons", "ork", "orks"},
     # --- LEGIT: Python typing.Protocol (structural type), collides with the seed word ---
-    "gameMechanic/phase_handler.py": {"protocol"},
+    "gameMechanic/phaseHandler.py": {"protocol"},
     # --- LEGIT: get_active_protocol_effects — generic helper for any round_choice faction;
     #     'protocol' here is the round_choice concept (Command Protocols, Ka'tah, …),
     #     not a Necron-specific string. Function name, not a faction decision. ---
-    "gameMechanic/ability_engine.py": {"protocol"},
+    "gameMechanic/abilityEngine.py": {"protocol"},
 }
 
 

@@ -93,11 +93,11 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   ohne diesen Backlog-Punkt zu schließen).
 - 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
   - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
-  - **INV-4 Default-Roster** (`game_state.py`, `loader.py`): ✅ **erledigt S128** — die 2
+  - **INV-4 Default-Roster** (`gameState.py`, `loader.py`): ✅ **erledigt S128** — die 2
     DEBT-Einträge (hardcodierte `"necrons"`-Defaults) sind aufgelöst: `init_state()`s
     `roster_p1`/`roster_p2` sind Pflichtparameter, `loader.py`s `faction_dir`-Default entfernt
     (klarer `ValueError` statt stillem Necron-Fallback). Allowlist 5 → 3 Einträge (nur noch
-    LEGIT-Rest `rosz_importer.py`, nicht 0 — der bleibt dauerhaft). Details:
+    LEGIT-Rest `roszImporter.py`, nicht 0 — der bleibt dauerhaft). Details:
     [architecture_invariants.md](../spec/architecture_invariants.md) INV-4.
   - _(Cluster 3 ✅ Plan 020, Cluster 4/5 ✅ XS-Fix, Cluster 6 ✅ Plan 021/024 — erledigt, aus Backlog entfernt)_
 
@@ -155,7 +155,7 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
   7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — löst über Paket 3
   (S133, s. o.) mit der neuen ArmySetup-Liste; danach §6e-Modifier-Engine für die ~56
   teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
-- 🔲 **„Alt. Fire"-Chip unerklärt (S132-Befund 5, überführt S134):** `src/uiLayout/dice_html.py:70`
+- 🔲 **„Alt. Fire"-Chip unerklärt (S132-Befund 5, überführt S134):** `src/uiLayout/diceHtml.py:70`
   rendert `special_die_html("Alt. Fire")` ohne Erklärtext (anders als „Extra Hits" mit
   „unmod. 6 = +2 Hits"). Vorgehen: Regel-Wortlaut „Alternating Fire" gegen `docs/work/`
   verifizieren (Haiku-Lookup), dann Kurzerklärung analog Extra-Hits ergänzen. Effort XS.
@@ -234,7 +234,7 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     `docs/handoff/S137_B12_konzept.md` (S137), Umsetzung als Teil-Briefs ≤ M danach.
     - ✅ **B12b — Header-Suffix „used on ⟨Einheit⟩" verdrahtet (S141, Commit `cdb55e2f`):**
       Resolver `stratagem_used_elsewhere_unit_name` (`src/uiLayout/_common.py`) + 3
-      Zustands-Mapper + Render-Bedingung in `go_card.py`; 9 neue Tests, Vollsuite 1781
+      Zustands-Mapper + Render-Bedingung in `goCard.py`; 9 neue Tests, Vollsuite 1781
       grün / 99,15 %. **Randfall (bewusst offen, spec-konform):** Advance-Reroll-/Inline-
       Spends übergeben konstruktionsbedingt kein `unit_key` an `spend_stratagem` → Suffix
       bleibt dort leer („falls Einheit bekannt"). Optionaler XS-Folge-Task: uid durch
@@ -283,7 +283,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
 - 🔲 **Tote Produktionsfunktion `build_aura_range_hint_text` entfernen (S138-Retro-
   Maßnahme 2, XS):** Einziger Produktions-Konsument (`armyCard._render_aura_range_hint`)
   wurde in S138 entfernt (Conquering-Tyrant-Aura-Hinweis raus); Funktion in
-  `ability_engine.py:324` + ihre Tests (`test_ability_engine.py`) werden nur noch von
+  `abilityEngine.py:324` + ihre Tests (`test_ability_engine.py`) werden nur noch von
   Tests referenziert. Mit Tests gemeinsam entfernen, `acceptance/rules.md`-Eintrag
   nachziehen (Code-Referenz wird sonst stale).
 - 🔲 **Fold-Heuristik nur Hauptfraktion + Subfaction-Wiring Roster→Unit (S138-Retro-
@@ -300,7 +300,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   nicht nur maschinen-orientiert zählen.
 - ✅ **color_hint-Feld im Modifier-Dict — ERLEDIGT (Plan 022 Step 3, S77):** Optionales
   `color_hint: "buff" | "debuff"` gewinnt gegen die wertbasierte Farbe (`_modifier_color`,
-  `dice_compose.py`), rückwärtskompatibel ohne das Feld. Getestet: `test_color_hint_overrides_value_sign`,
+  `diceCompose.py`), rückwärtskompatibel ohne das Feld. Getestet: `test_color_hint_overrides_value_sign`,
   `test_always_fail_color_hint_buff_is_green` u. a. (`tests/uiLayout/test_dice_html.py`). Eintrag hier
   war stale — Quantum-Shield-Verdrahtung selbst (Konsument) bleibt offen (s. „Quantum Shielding" unten).
 - 🔲 **Invuln-SAVE-Badge-Bereich chaotisch (S78):** Zeigt drei Teile („Inv 4+", „active", „AP/Cover N/A"), die teils keinen Sinn ergeben. Soll: **eine** klare Badge, z. B. „Invuln 4+". Überschneidet sich mit **Plan 017** (SAVE-Block Fähigkeit+AP kombinierte Badge) → dort mitlösen oder eigener kleiner Task.
@@ -379,7 +379,7 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   S139_dynastie_protokoll_konzept, Stakeholder-Entscheid S140):** `subfaction_value_for` liest die
   Subfaction heute auf **Roster-Ebene**; regelseitig trägt jede _Einheit_ den Dynastie-Code. Prüfen,
   ob Einheiten-Ebene nötig ist (Mixed-Dynasty-Roster) und die `subfaction_value_for`-Konsumenten
-  (ability_engine, game_state, armyCard) entsprechend umstellen. Eigenes Konzept vor Umsetzung.
+  (abilityEngine, gameState, armyCard) entsprechend umstellen. Eigenes Konzept vor Umsetzung.
 - 🟢 **Regel-Index für Wahapedia-Texte (context-audit-S91, verarbeitet S118):** additiver
   Stichwort→`datei:zeilenbereich`-Index als `docs/work/rule_index.md` (Format:
   `Lethal Hits → core_rules.txt:1420-1435`) — ~23k Zeilen Regeltext sind nur per `grep`
@@ -422,6 +422,18 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   zuerst), grüne Vollsuite als Baseline, Scope-Entscheid des Stakeholders (Bugs/Tech-Debt/
   UX/Roadmap) einholen; Ergebnis-Pläne in die `docs/audit/plans/`-Queue einsortieren.
   Token-intensiv → eigene Session.
+- 🟢 **Transport-Insassen-Feature (Embark/Disembark) — NIEDRIG (Stakeholder-Entscheid S142:
+  Transporter sind aktuell Randfälle, Fokus liegt auf den Gefechtsoptionen):** Insassen-Zuordnung
+  („Einheit X sitzt in Transport Y") fehlt vollständig. 4 Bausteine: (1) Roster-Schema-Feld
+  `embarked_in` pro Unit-Eintrag; (2) Loader liest das Feld + validiert gegen Transportkapazität
+  (heute nur Freitext in der `ABIL`-Zeile); (3) Game-State-Feld `embarked_units` analog
+  `melee_with` + Embark/Disembark-Mutationen (Movement 3", Destroyed-Fall 3"/6" je Stratagem) —
+  Voraussetzung, damit die Emergency-Disembarkation-GO-Karte zeigen kann, WELCHE Einheiten
+  aussteigen; (4) UI: Embark/Disembark-Buttons in der Movement-Phase + „eingestiegen in
+  ⟨Transport⟩" auf der Unit-Karte. 2 offene Design-Fragen: (a) nur Start-Zustand im Roster-YAML
+  deklarierbar vs. In-Game-Embark/Disembark über die UI (größerer Scope); (b) Kapazität hart
+  durchsetzen (strukturiertes Datenfeld nötig) vs. nur Text-Hinweis (App zeigt, Tisch prüft —
+  Klasse B/C). Aufwand S–M. Quelle: `docs/handoff/S141_ui_befunde_group_b.md` §3–§5 (S141/S142).
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
 
@@ -450,14 +462,14 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../spec/architecture_invariants.md).
 
 - **Generic-src (INV-4 DEBT):** hartcodierte Fraktions-Defaults aus `src/` entfernen —
-  Default-Roster in `game_state.py`, `faction_dir`-Default in `loader.py`, Spielerlabels
+  Default-Roster in `gameState.py`, `faction_dir`-Default in `loader.py`, Spielerlabels
   in `gameHeader.py`/`gameProtocoll.py`, Caption in `setupScreen.py`. Ziel: Allowlist leeren.
 - ✅ **Generic-src Vokabular (INV-4b DEBT, S51; `protocol` erledigt S52) — DEBT komplett
   aufgelöst (S128 Teil 2, Paket 1):** datengetriebenes Gate (`test_generic_src_vocab.py`)
   listet Fraktions-Eigennamen in `src/`. ✅ **S52:** `protocol`/`protocols` faktion-neutral
   als `round_choice` umbenannt (Klasse `RoundChoiceAbility`, Session-Keys `round_choice_*`,
-  Datei `round_choice_ability.py`), Ledger-Einträge entfernt; Reste LEGIT (`typing.Protocol`
-  in `phase_handler`) bzw. zur `reanimation`-Schuld (`reanimationProtocols`). ✅
+  Datei `roundChoiceAbility.py`), Ledger-Einträge entfernt; Reste LEGIT (`typing.Protocol`
+  in `phaseHandler`) bzw. zur `reanimation`-Schuld (`reanimationProtocols`). ✅
   **2026-06-20:** Quick-Wins (Spielerlabels `gameHeader`/`gameProtocoll`, Caption
   `setupScreen`) → generisch; Renames `pending_irongob` → `pending_triggered_relic`,
   `res_orb_*` → `revive_wargear_*` (`irongob` komplett raus; INV-4 Allowlist 10→5, INV-4b
@@ -469,24 +481,24 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   Effekttyp `reanimate` ersetzt (Option B, Konsens-Entscheid
   `docs/handoff/decision_revive_key_s128.md`, seit S128 gelöscht) — Label + Schwelle
   (`success_on`) kommen jetzt aus der Necron-YAML, `src/` kennt nur noch den generischen
-  Effekttyp. Ledger jetzt **nur noch LEGIT** (6 Tokens, 3 Dateien: `rosz_importer.py` +
-  `protocol`-Kollision in `phase_handler.py`/`ability_engine.py`). Die früher hier
+  Effekttyp. Ledger jetzt **nur noch LEGIT** (6 Tokens, 3 Dateien: `roszImporter.py` +
+  `protocol`-Kollision in `phaseHandler.py`/`abilityEngine.py`). Die früher hier
   gelisteten Items `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren bereits
   vor S128 aus `src/` entfernt — dieser Eintrag war insofern Doku-Drift, jetzt korrigiert.
   Details: [architecture_invariants.md](../spec/architecture_invariants.md) INV-4b.
 - 🟡 **mypy-Bestand modulweise abbauen** (Baseline **28**, Stand 2026-07-12 S141;
-  Folgearbeit zu Plan 038): `gameMechanic/game_state.py` (−34, Paket 2), `gameObjects/`
-  komplett (−18, Paket 3), `gameMechanic/phase_runner.py` (−7, Root Cause: `phase_name`
+  Folgearbeit zu Plan 038): `gameMechanic/gameState.py` (−34, Paket 2), `gameObjects/`
+  komplett (−18, Paket 3), `gameMechanic/phaseRunner.py` (−7, Root Cause: `phase_name`
   in den sieben Phase-Handlern war als Instanzattribut statt `ClassVar[str]` annotiert —
   Protocol-Mismatch gegen `PhaseHandler.phase_name: ClassVar[str]`) sowie **S141: `state`-
-  Contract-Fix `dict` → `MutableMapping[str, Any]`** in `ability_engine.py`/
-  `unit_mutations.py`/`scenarios.py` (Commit `42af867`, Baseline blieb bei 48) und in
-  `phase_handler.py`/`phase_runner.py` + den 7 `*Phase.py`-Dateien + `_common.py` (Commit
+  Contract-Fix `dict` → `MutableMapping[str, Any]`** in `abilityEngine.py`/
+  `unitMutations.py`/`scenarios.py` (Commit `42af867`, Baseline blieb bei 48) und in
+  `phaseHandler.py`/`phaseRunner.py` + den 7 `*Phase.py`-Dateien + `_common.py` (Commit
   `292b3ad`, Baseline **48 → 28**) sind erledigt. Verbleibend (Stand S141, 28 Fehler):
   **`uiLayout/` zuletzt** (17 Fehler, manuelle Render-Verifikation nötig —
   `armyCard.py`/`gameProtocoll.py`/`unitCard.py`/`armyList.py`/`detachmentCard.py`) plus
   ein Rest von 11 Fehlern in `gameMechanic/` außerhalb des `state`-Contracts
-  (`ability_engine.py`/`attack_math.py` `type-arg`, `moralePhase.py`/`unit_mutations.py`
+  (`abilityEngine.py`/`attackMath.py` `type-arg`, `moralePhase.py`/`unitMutations.py`
   `no-any-return`/`arg-type` — kein `state: dict`-Fall mehr, andere Fehlerklassen). Pro
   Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
   s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
@@ -497,22 +509,22 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   (2218 Zeilen) in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei
   werden. Verwandt mit der Layer-Kopplung oben (gleicher Render-Hub).
 - **Test-Mock-Fragilität (S51 entdeckt):** Mehrere `src`-Module lesen das globale
-  `st.session_state` und rufen einander auf (`unit_mutations.set_movement_status` →
-  `game_state.units_key_for`; `ability_engine` → `game_state`/`unit_mutations`). Tests mocken
+  `st.session_state` und rufen einander auf (`unitMutations.set_movement_status` →
+  `gameState.units_key_for`; `abilityEngine` → `gameState`/`unitMutations`). Tests mocken
   `streamlit` **pro Datei**; wer ein Modul zuerst importiert, bindet dessen `st`. Reihenfolge-
   abhängig → leicht zerbrechlich (S51: ein neuer Test als erster Importer brach 15 Movement-Tests).
-  Workaround: Akzeptanztest importiert `game_state` lazy. Saubere Lösung: **eine geteilte
+  Workaround: Akzeptanztest importiert `gameState` lazy. Saubere Lösung: **eine geteilte
   `streamlit`-Fixture** (conftest) + Tests auf `module.st` statt lokalem `_st_mock` umstellen.
   Tieferliegend ein Smell: viel globaler `session_state`-Zugriff quer durch die Logik-Module.
-- 🔲 **DRY ±1-Cap-Helper (S110-Retro-M1):** Hit- und Wound-Block in `dice_html.py` teilen
+- 🔲 **DRY ±1-Cap-Helper (S110-Retro-M1):** Hit- und Wound-Block in `diceHtml.py` teilen
   identische ±1-Cap-Logik (`_render_dice_roll_block` + `_render_dice_wound_block`) → gemeinsamen
   Helper extrahieren. Kleiner Refactor, kein Verhaltenswechsel; Tests müssen weiter grün bleiben.
 - 🔲 **Test-Schuld conftest-Mock-Hack (S110-Retro-M2):** `tests/gameMechanic/conftest.py`
   re-pointet st-Mocks global über `sys.modules` (reihenfolge-abhängiger Quick-Fix aus S110
   Isolations-Fix) → mittelfristig durch eine **session-scoped Streamlit-Mock-Fixture** ersetzen,
   die alle `gameMechanic`-Tests einheitlich nutzen (analog zur sauberen Lösung aus Test-Mock-Fragilität oben).
-- ✅ **Coverage-Schuld: game_state + ability_engine (S110-Retro-M3) — ERLEDIGT (S111):**
-  `game_state.py` 100 % (+17 Tests) + `ability_engine.py` 100 % (+9 Tests). Coverage-Gate
+- ✅ **Coverage-Schuld: gameState + abilityEngine (S110-Retro-M3) — ERLEDIGT (S111):**
+  `gameState.py` 100 % (+17 Tests) + `abilityEngine.py` 100 % (+9 Tests). Coverage-Gate
   auf **99 %** angehoben (`pyproject.toml fail_under = 99`). Toter Reroll-Code entfernt.
 - 🔲 **Prozess: Executor-Auftrags-Checkliste härten (S110-Retro-M4):** Executor-Brief muss
   echtes `ruff`/pre-commit **VOR** dem „grün"-Claim verlangen (nicht nur pytest). Außerdem:
@@ -527,14 +539,14 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 `docs/spec/architecture.md` ist teils veraltet (Gesamtbild stimmt, Details nicht):
 
 - **session_state-Schema** (architecture.md): nennt `unit_state` ohne `group_models`/`group_wounds`
-  (per-Gruppe-Wunden, real in `game_state.py`); Armee ohne `dynasty`/`protocol_order` (real vorhanden);
-  „Owned by `gameMechanic/state.py`" → Datei heißt `game_state.py`.
+  (per-Gruppe-Wunden, real in `gameState.py`); Armee ohne `dynasty`/`protocol_order` (real vorhanden);
+  „Owned by `gameMechanic/state.py`" → Datei heißt `gameState.py`.
 - **Colour System** (architecture.md §Colour): beschreibt `COLOR_*`-Aliase „als CSS in app.py" —
   das **Live-Theme** sind aber `--arb-*`-Variablen in `gameHeader.py`. Kanonisch ist
   [../spec/design_colors.md](../spec/design_colors.md); die `COLOR_*` (Tailwind-Extrakte in
   `constants/colors.py`) existieren noch, treiben das Theme aber nicht.
 - **uiLayout „No game logic in this layer"** (architecture.md): widerlegt durch `_common.py`
-  (Attack-Mathe wurde gerade deshalb nach `attack_math.py` ausgelagert) → siehe Layer-Kopplung (§4).
+  (Attack-Mathe wurde gerade deshalb nach `attackMath.py` ausgelagert) → siehe Layer-Kopplung (§4).
 - **Refactoring Plan / Open Design Questions** (architecture.md): historisch, alle Phasen erledigt,
   viele Fragen beantwortet (Stratagems implementiert, CP-Werte bekannt) → als Historie kennzeichnen.
 
@@ -571,7 +583,7 @@ Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung fre
 
 Kernbefund (S114): 4 divergente Badge-Implementierungen. Vollständig umgesetzt:
 - `docs/spec/design_system.md` angelegt (§0–§5), Farben bleiben in `design_colors.md` (Commit `143d848`, S116).
-- Schritt 1: `badges.py` (`badge()`/`chip()`) + `symbols.py` (8 Konstanten), 4 Call-Sites konsolidiert; Invuln-Block (`dice_html.py`) bewusst gestrichen statt umgestellt (`143d848`).
+- Schritt 1: `badges.py` (`badge()`/`chip()`) + `symbols.py` (8 Konstanten), 4 Call-Sites konsolidiert; Invuln-Block (`diceHtml.py`) bewusst gestrichen statt umgestellt (`143d848`).
 - Schritt 2: Glyph-/Chip-Rollout auf die restlichen 10 Produktivdateien (`3915f8c` S117, `29f4f81` S118) — Ratchet-Rest auf Null (Details: `design_system.md` §5).
 - Stakeholder hat den Wertesatz + Hinweis-Konvention S120 (2026-07-03) final bestätigt; Handoff-Dateien (`design-system-proposal.md`, `design-system-consensus.md`) gemäß Lifecycle gelöscht.
 
@@ -605,7 +617,7 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
   (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
   - **Ziel7-Cluster: P18** (aus Ziel6 ausgelagert S114; P17 erledigt S115):
     - **P17 — erledigt (S115):** Mechanik steht+getestet — Pre-Apply-Zielauswahl (`_render_subgroup_selector`,
-      `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unit_mutations.py`); Vor-Auswahl+Lock
+      `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unitMutations.py`); Vor-Auswahl+Lock
       akzeptiert, ±-Zähler verworfen. Details: `docs/goals/archive/ziel6.md` P17.
     - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
       einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
@@ -649,7 +661,7 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
       zufällig gleichwertig solange die Toughness-Schwelle nicht kippt), jetzt `strength` (echter
       Stat-Modifier vor der Wound-Tabelle). Totes `effect: {type: buff_stat, ...}`-Feld entfernt
       (bei Stratagems nirgends konsumiert, nur `Ability.effect` wird gelesen — per grep bestätigt).
-      Neue reine Funktion `stratagem_strength_bonus()` (`src/gameMechanic/ability_engine.py`)
+      Neue reine Funktion `stratagem_strength_bonus()` (`src/gameMechanic/abilityEngine.py`)
       summiert `roll_type=="strength"`-Einträge aus `active_modifiers`; als dritte Quelle in
       `str_bonus` (`src/uiLayout/_common.py`, vor `wound_threshold()`) verdrahtet, analog
       `buff_stat_bonus()`/`get_active_round_choice_strength_if_charged()`. Kein Doppel-Konsum:
@@ -661,7 +673,7 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
     - ✅ **F3 — Natürliche 1 in der Würfel-UI — ERLEDIGT (S122, 2026-07-04):**
       (a) `resolve_save()` (`combat.py`) floort den effektiven Save jetzt analog zu Hit/Wound
       auf 2 (`max(2, …)`) — „Eff. 1+" wird weder gewertet noch angezeigt; (b) `dice_row_html()`
-      (`dice_compose.py`) zeichnet den Wert-1-Würfel bei Schwelle ≤ 1 als ✕-Miss innerhalb des
+      (`diceCompose.py`) zeichnet den Wert-1-Würfel bei Schwelle ≤ 1 als ✕-Miss innerhalb des
       Erfolgsrahmens. Spec: `docs/spec/dice_display.md` §1 Randfall; Tests:
       `test_dice_row_natural_one_always_shows_miss_marker_even_in_success_frame`,
       `test_save_floored_at_2_armour_path`, `test_save_floored_at_2_invuln_path`.

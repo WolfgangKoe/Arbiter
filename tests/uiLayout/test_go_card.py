@@ -1,7 +1,7 @@
 """HTML-output tests for the GO card builder (design_system.md §6).
 
-go_card.py is pure composition — no Streamlit — so it is asserted directly at
-the HTML level, same seam as test_badges.py / dice_compose.py (INV-6). Covers
+goCard.py is pure composition — no Streamlit — so it is asserted directly at
+the HTML level, same seam as test_badges.py / diceCompose.py (INV-6). Covers
 all four states, full vs. compact form, keyword chips, target-unit display,
 CP display, and the per-state container border style (S133-D Befund 2: the
 card's border is now a real Streamlit container the caller colours via a
@@ -13,10 +13,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from uiLayout.go_card import (  # noqa: E402
+from uiLayout.goCard import (  # noqa: E402
     action_slot_text,
     go_card_container_style,
     go_card_html,
+    reactive_box_target_label,
 )
 
 # ---------------------------------------------------------------------------
@@ -161,6 +162,22 @@ def test_go_card_shows_target_unit_name_when_given() -> None:
 def test_go_card_omits_target_span_when_not_given() -> None:
     html = go_card_html("Fire Overwatch", 1, "ready")
     assert "→" not in html
+
+
+# ---------------------------------------------------------------------------
+# reactive_box_target_label() — S142 A3 (Sofortlinderung, S141 Befund 3):
+# reactive boxes always show the owning player, unit name when unit-scoped.
+# ---------------------------------------------------------------------------
+
+
+def test_reactive_box_target_label_combines_unit_and_player_when_unit_given() -> None:
+    label = reactive_box_target_label("Boyz Mob", "Orks")
+    assert label == "Boyz Mob · Orks"
+
+
+def test_reactive_box_target_label_is_player_only_when_no_unit() -> None:
+    label = reactive_box_target_label(None, "Necrons")
+    assert label == "Necrons"
 
 
 # ---------------------------------------------------------------------------

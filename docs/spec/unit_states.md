@@ -234,7 +234,7 @@ pro Gruppe im State:
 
 ```python
 unit_state["group_models"]: dict[str, int]
-# Init: {group.id: group.count} aus den aufgelösten model_groups (game_state.py)
+# Init: {group.id: group.count} aus den aufgelösten model_groups (gameState.py)
 # Einheiten ohne YAML-model_groups erhalten im Loader eine synthetische Gruppe
 # {"models": count} — damit sind alle Einheiten über denselben Gruppen-Flow deklarierbar.
 ```
@@ -242,7 +242,7 @@ unit_state["group_models"]: dict[str, int]
 **Invarianten:**
 
 - `unit_state["models"]` = Summe aller `group_models`-Werte (abgeleitet, bleibt kompatibel)
-- Modellverluste: `apply_damage()` → `_apply_group_losses()` (`unit_mutations.py`) reduziert
+- Modellverluste: `apply_damage()` → `_apply_group_losses()` (`unitMutations.py`) reduziert
   Gruppen nach `priority` aufsteigend — `priority: 1` stirbt zuerst (Standardmodelle vor
   Sondermodellen wie Boss Nob)
 - `group_models` ist **persistent** — kein Reset bei Zugwechsel (wie `models`/`current_wounds`)
@@ -288,7 +288,7 @@ Nicht zurückgesetzt (persistent):
 | Badge-HTML-Rendering | `src/uiLayout/_common.py: state_badges_html()` |
 | Badge-HTML (unitCard) | `src/uiLayout/unitCard.py: _state_badges_html()` |
 | SHOT/FOUGHT setzen | `src/uiLayout/_common.py: render_attack_form()` |
-| Melee auto-clear | `src/gameMechanic/unit_mutations.py: apply_damage()` |
+| Melee auto-clear | `src/gameMechanic/unitMutations.py: apply_damage()` |
 | Bewegungs-Buttons + Rückzug-Fix | `src/gameMechanic/movementPhase.py: _active_movement()` |
 | Deployment aus Reserve | `src/gameMechanic/movementPhase.py: _render_reinforcements_step()` |
 | Tests (Badges) | `tests/uiLayout/test_common.py` |

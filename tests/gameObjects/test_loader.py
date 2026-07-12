@@ -104,7 +104,7 @@ def test_silent_king_melee_weapons_respect_per_weapon_attack_cap() -> None:
     # class: their melee attacks are hard-capped (4 / 3), independent of Szarekh's
     # bracketed Attacks characteristic (H2). Without max_attacks the cap collapses
     # to unit.attacks + N and the declaration would over-allocate.
-    from gameMechanic.attack_math import _total_attacks_int
+    from gameMechanic.attackMath import _total_attacks_int
 
     catalog = load_weapon_catalog("necrons")
     scythe = catalog["wh40k_9e.necrons.weapon.scythe_of_dust"]

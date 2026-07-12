@@ -184,11 +184,11 @@ class TestRenderAttackResolutionSharedEntry:
         assert sp.render_attack_resolution is fp.render_attack_resolution
 
     def test_no_separate_overwatch_resolution_path(self):
-        """Kein eigenes render_*overwatch* existiert in chargephase oder _common.
+        """Kein eigenes render_*overwatch* existiert in chargePhase oder _common.
 
         Overwatch läuft regelkonform als Shooting (core_rules.txt §Overwatch).
         """
-        import gameMechanic.chargephase as cp
+        import gameMechanic.chargePhase as cp
 
         # Es darf keine eigenständige Overwatch-Auflösungsfunktion geben
         assert not hasattr(cp, "render_attack_resolution")

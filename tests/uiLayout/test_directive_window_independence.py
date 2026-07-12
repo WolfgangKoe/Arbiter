@@ -20,7 +20,7 @@ sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import uiLayout.armyCard as _army  # noqa: E402
-from gameMechanic.game_state import round_choice_state_key  # noqa: E402
+from gameMechanic.gameState import round_choice_state_key  # noqa: E402
 from uiLayout.armyCard import _directive_window_open  # noqa: E402
 
 

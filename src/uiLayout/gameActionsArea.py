@@ -12,7 +12,7 @@ Internal layout (see docs/spec/ui_layout.md §7):
   │   gameProtocoll tabs  [Stratagems | Battle Log]         │
   └────────────────────────────────────────────────────────┘
 
-All game phases (command → morale) are delegated to phase_runner.
+All game phases (command → morale) are delegated to phaseRunner.
 The setup phase is handled locally (it is not a game phase proper).
 """
 
@@ -23,8 +23,8 @@ from typing import Any, cast
 import streamlit as st
 
 from constants.symbols import SYM_EXPAND, SYM_SWORDS
-from gameMechanic.game_state import PHASES, faction_dir_for, next_phase, swap_players
-from gameMechanic.unit_mutations import adjust_secondary_vp, adjust_vp
+from gameMechanic.gameState import PHASES, faction_dir_for, next_phase, swap_players
+from gameMechanic.unitMutations import adjust_secondary_vp, adjust_vp
 from gameObjects.loader import (
     get_abilities_for_unit,
     load_round_choice_abilities,
@@ -409,8 +409,8 @@ def render_game_actions_area() -> None:
     if rule:
         st.info(rule)
 
-    # PlayerAreas: phase-specific actions delegated to phase_runner
-    from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
+    # PlayerAreas: phase-specific actions delegated to phaseRunner
+    from gameMechanic.phaseRunner import render_current_phase  # noqa: PLC0415
 
     render_current_phase(cast(dict[str, Any], st.session_state))
 

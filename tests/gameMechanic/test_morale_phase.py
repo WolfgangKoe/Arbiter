@@ -16,7 +16,7 @@ from gameMechanic.moralePhase import (
     attrition_modifier_abilities,
     morale_test_required,
 )
-from gameMechanic.unit_mutations import flee_models
+from gameMechanic.unitMutations import flee_models
 from gameObjects.loader import load_unit_abilities
 
 # ---------------------------------------------------------------------------
@@ -85,8 +85,8 @@ class TestFleeModels:
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 3, unit)
@@ -97,8 +97,8 @@ class TestFleeModels:
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)
@@ -108,8 +108,8 @@ class TestFleeModels:
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 1, unit)
@@ -119,8 +119,8 @@ class TestFleeModels:
         unit_state = _make_state(models=3)
         unit = _make_unit(wounds=1, models_max=3)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 3, unit)
@@ -131,8 +131,8 @@ class TestFleeModels:
         unit_state = _make_state(models=10)
         unit = _make_unit(wounds=1, models_max=10)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)
@@ -143,8 +143,8 @@ class TestFleeModels:
         unit_state = _make_state(models=5, wounds_per_model=3)
         unit = _make_unit(wounds=3, models_max=5)
         with (
-            patch("gameMechanic.unit_mutations.st") as mock_st,
-            patch("gameMechanic.game_state.st", mock_st),
+            patch("gameMechanic.unitMutations.st") as mock_st,
+            patch("gameMechanic.gameState.st", mock_st),
         ):
             mock_st.session_state = _necron_session(unit_state)
             flee_models("u1", "Necrons", 2, unit)

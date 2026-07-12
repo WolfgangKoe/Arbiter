@@ -1,4 +1,4 @@
-"""Tests for gameMechanic/ability_engine.py."""
+"""Tests for gameMechanic/abilityEngine.py."""
 
 import sys
 from pathlib import Path
@@ -10,8 +10,8 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.ability_engine as _eng  # noqa: E402
-from gameMechanic.ability_engine import (  # noqa: E402
+import gameMechanic.abilityEngine as _eng  # noqa: E402
+from gameMechanic.abilityEngine import (  # noqa: E402
     _unit_matches_target,
     ability_badge_label,
     ability_invuln_save,
@@ -34,7 +34,6 @@ from gameMechanic.ability_engine import (  # noqa: E402
     get_short_label_for_effect_type,
     get_triggered_abilities,
     revive_dice_count,
-    stratagem_strength_bonus,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -255,7 +254,7 @@ def test_execute_effect_heal_heals_unit() -> None:
         p1_units={"test.unit": {"current_wounds": 4, "models": 2, "destroyed": False}},
     )
     _eng.heal_unit.__module__  # ensure imported
-    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+    import gameMechanic.unitMutations as _mut  # noqa: PLC0415
 
     _mut.st.session_state = session
     _st_mock.session_state = session
@@ -293,7 +292,7 @@ def test_execute_effect_heal_heals_unit() -> None:
 
 def test_execute_effect_heal_adds_active_directive_bonus() -> None:
     """Undying Legions D1/primary (+1 wound per Living Metal use) lifts the heal amount."""
-    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+    import gameMechanic.unitMutations as _mut  # noqa: PLC0415
 
     session = _S(
         first_player="Necrons",
@@ -316,7 +315,7 @@ def test_execute_effect_heal_adds_active_directive_bonus() -> None:
 
 def test_execute_effect_heal_no_revive_caps_at_living_models() -> None:
     """revive=False must not push wounds beyond current_models × wounds."""
-    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+    import gameMechanic.unitMutations as _mut  # noqa: PLC0415
 
     # 1 model dead, 2 remaining at full HP: cannot be healed further
     session = _S(
@@ -628,7 +627,7 @@ def test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_whe
     # 9E Directive 2: eligible to shoot after Fall Back with −1 Hit. Class A.
     # units_key_for("Necrons") == "p1_units" because first_player == "Necrons".
     # Migration note: movement_choice is "retreated" (the value the app sets in
-    # movementPhase.py / unit_mutations.py) — the earlier "fall_back" value was
+    # movementPhase.py / unitMutations.py) — the earlier "fall_back" value was
     # app-foreign and never matched actual session state (bug root cause).
     session = _protocol_session("wh40k_9e.necrons.faction.protocol_conquering_tyrant", "secondary")
     session["p1_units"] = {"uid-overlord": {"movement_choice": "retreated"}}
@@ -1134,76 +1133,9 @@ def test_buff_stat_bonus_generic_strength() -> None:
     assert buff_stat_bonus("Orks", unit, "toughness") == 0
 
 
-# ---------------------------------------------------------------------------
-# S122 F1: stratagem_strength_bonus (Disruption Fields — real Strength modifier,
-# not a Wound-roll bonus)
-# ---------------------------------------------------------------------------
-
-
-_ATK_UID = "wh40k_9e.necrons.unit.warriors"
-
-
-def _strength_modifier_entry(
-    value: int = 1,
-    target: str = "attacker",
-    roll_type: str = "strength",
-    unit_key: str | None = _ATK_UID,
-) -> dict:
-    return {
-        "unit_key": unit_key,
-        "source": "Disruption Fields",
-        "effect": {"roll_type": roll_type, "value": value, "target": target, "phase": "fight"},
-        "expires_at_phase": "fight",
-        "expires_at_round": None,
-    }
-
-
-def test_stratagem_strength_bonus_empty_list_is_zero() -> None:
-    assert stratagem_strength_bonus([], _ATK_UID) == 0
-
-
-def test_stratagem_strength_bonus_matching_entry() -> None:
-    mods = [_strength_modifier_entry(value=1, target="attacker")]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 1
-
-
-def test_stratagem_strength_bonus_target_any_counts() -> None:
-    mods = [_strength_modifier_entry(value=2, target="any")]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 2
-
-
-def test_stratagem_strength_bonus_ignores_wrong_roll_type() -> None:
-    mods = [_strength_modifier_entry(roll_type="wound")]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
-
-
-def test_stratagem_strength_bonus_ignores_wrong_target() -> None:
-    mods = [_strength_modifier_entry(target="defender")]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
-
-
-def test_stratagem_strength_bonus_sums_multiple_entries() -> None:
-    mods = [
-        _strength_modifier_entry(value=1),
-        _strength_modifier_entry(value=1),
-    ]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 2
-
-
-def test_stratagem_strength_bonus_scoped_to_activating_unit_only() -> None:
-    """Regression (S122 bug): a Strength stratagem activated for one unit (e.g.
-    Disruption Fields declared for the Necron Warriors squad) must not buff a
-    different attacker's Strength roll in the same phase.
-    """
-    mods = [_strength_modifier_entry(value=1, unit_key="wh40k_9e.necrons.unit.warriors#1")]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
-    assert stratagem_strength_bonus(mods, "wh40k_9e.necrons.unit.warriors#1") == 1
-
-
-def test_stratagem_strength_bonus_legacy_none_unit_key_not_applied_globally() -> None:
-    """Pre-fix entries with unit_key=None must no longer buff every attacker."""
-    mods = [_strength_modifier_entry(value=1, unit_key=None)]
-    assert stratagem_strength_bonus(mods, _ATK_UID) == 0
+# stratagem_strength_bonus tests moved to
+# tests/gameMechanic/test_stratagem_engine.py (S142 Aufgabe 1, Option B — the
+# function itself moved to gameMechanic.stratagemEngine).
 
 
 # ---------------------------------------------------------------------------
@@ -1330,7 +1262,7 @@ def test_execute_effect_heal_keyerror_in_heal_bonus_is_silenced() -> None:
 
     The heal still applies with the base amount; no exception escapes.
     """
-    import gameMechanic.unit_mutations as _mut  # noqa: PLC0415
+    import gameMechanic.unitMutations as _mut  # noqa: PLC0415
 
     # Session has a round-choice active but NO faction_dir keys, so faction_dir_for
     # raises KeyError inside get_active_heal_bonus → the except branch (Z.71-72) fires.

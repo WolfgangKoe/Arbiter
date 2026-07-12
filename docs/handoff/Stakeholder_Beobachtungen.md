@@ -18,7 +18,6 @@ Regeln:
 
 ## Beobachtungen (Eingang)
 
-- Die Karte von "Cut them down" erstreckt sich auf beiden Spielerflächen. Das sollte aber nur auf einer Seite sein (s. Bildschirmfoto vom 2026-07-11 11-46-32). Könntest du bitte mal GO-Card oder das UI-Layout generell prüfen. Es sind doch laut Vereinbarung nur zwei Möglichkeiten der Anzeige und der Anker. Das hier sollte eigentlich "verboten" sein. An anderen Stellen hatte es doch funktinoiert. → S139-Planungsgegenstand.
 - Die Badges für die Schlüsselwörter in der unitCard können dieselbe Farbe haben wir z.B. "Stationary". Man erkennt es einfach nicht. (Farbteil = Backlog **B14**; der Fraktions-Keyword-Teil derselben Beobachtung ist erledigt, s. u. „Zuletzt überführt".)
 - Ich finde das Design des Rahmens der unitCard sehr schön. Ein heller Streifen auf der linken Seite, ansonsten ist der Rest des Randes dunkler (s. Bildschirmfoto vom 2026-07-11 11-54-31). Ist es möglich dieses "Design des Randes" beim zweiten Spieler vertikal zu spiegeln? Also dass der helle gelbe Rand rechts statt links ist? Und könnte man dieses Prinzip auf die Gos übertragen. Die sind zwar so grundsätzlich gut, aber ich empfinde es als zu grell. → S139-Planungsgegenstand (Rand-Design-Konzept).
 - Außerdem stelle ich immer wieder fest, dass die GO-Karten keine Schlüsselwörter zeigen, obwohl der Regeltext welche vorgibt. Bitte einplanen, dass ein Subagent diese Schlüsselwörter systematisch in der YAML-Struktur nachpflegt. → S139-Planungsgegenstand (GO-Keyword-Nachpflege in YAML).
@@ -27,6 +26,8 @@ Regeln:
 
 ## Zuletzt überführt
 
+- S139: „Cut them down" erstreckt sich auf beiden Spielerflächen → gefixt in
+  Commit 0a747b1 (S139).
 - S138: leere Ork-Badge in der unitCard (Powerklaw-/Fall-Back-Badge-Fix) → S138 erledigt.
 - S138: Fraktions-Keyword „Ork" in der unitCard (Loader-Platzhalter-Fold-Fix) → S138 erledigt.
 - S138: „Unfall" Conquering-Tyrant-Hinweis in gameActionsArea → S138 erledigt (Aura-Hinweis entfernt).

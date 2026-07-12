@@ -4,7 +4,7 @@ Prüft, dass alle Stratagems in den YAML-Dateien für Necrons, Orks und
 Adeptus Custodes nur erlaubte Werte in den Feldern `phase`, `stage` und
 `player` tragen.
 
-Erlaubte Werte (aus gameObjects/stratagem.py + game_state.py):
+Erlaubte Werte (aus gameObjects/stratagem.py + gameState.py):
   phase:  "command" | "movement" | "psychic" | "shooting" | "charge" |
           "fight" | "morale" | "before_battle" | "any" | list[str] (Kombination)
   stage:  "start" | "active" | "end"
@@ -35,7 +35,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 from gameObjects.loader import load_stratagems  # noqa: E402
 
 # ---------------------------------------------------------------------------
-# Erlaubte Werte (kanonisch — aus game_state.PHASES + stratagem.py Literals)
+# Erlaubte Werte (kanonisch — aus gameState.PHASES + stratagem.py Literals)
 # ---------------------------------------------------------------------------
 
 VALID_PHASES = frozenset(

@@ -24,7 +24,7 @@ from constants.symbols import (
     SYM_RESET,
     SYM_SWORDS,
 )
-from gameMechanic.attack_math import (  # noqa: F401
+from gameMechanic.attackMath import (  # noqa: F401
     _compute_attacks,
     _detect_weapon_special,
     _group_melee_budget,
@@ -34,22 +34,22 @@ from gameMechanic.attack_math import (  # noqa: F401
     _restriction_label,
     _total_attacks_int,
 )
-from gameMechanic.game_state import (
+from gameMechanic.gameState import (
     PHASES,
     active_round_choice_buff_labels,
     faction_dir_for,
+    faction_display_name_for,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import (
-    activate_desperate_breakout,
-    activate_morale_auto_pass,
+from gameMechanic.stratagemEngine import _apply_stratagem_effect
+from gameMechanic.unitMutations import (
     adjust_cp,
     apply_damage,
     heal_unit,
 )
 from gameObjects.loader import load_stratagems
-from gameObjects.round_choice_ability import RoundChoiceAbility
+from gameObjects.roundChoiceAbility import RoundChoiceAbility
 from gameObjects.stratagem import (
     Stratagem,
     reactive_stratagems_for,
@@ -61,7 +61,7 @@ from gameObjects.stratagem import (
 from gameObjects.unit import ModelGroup, Unit
 from gameObjects.weapon import Weapon, WeaponProfile
 from uiLayout.badges import badge
-from uiLayout.dice_compose import (  # noqa: F401
+from uiLayout.diceCompose import (  # noqa: F401
     block_divider_html,
     dice_face_svg,
     dice_row_html,
@@ -71,16 +71,17 @@ from uiLayout.dice_compose import (  # noqa: F401
     special_die_html,
     threshold_header_html,
 )
-from uiLayout.dice_html import (  # noqa: F401
+from uiLayout.diceHtml import (  # noqa: F401
     _render_dice_roll_block,
     _render_dice_save_block,
     _render_dice_wound_block,
 )
-from uiLayout.go_card import (
+from uiLayout.goCard import (
     GoCardState,
     action_slot_text,
     go_card_container_style,
     go_card_html,
+    reactive_box_target_label,
 )
 
 # ---------------------------------------------------------------------------
@@ -226,7 +227,7 @@ def lookup(faction: str, uid: str) -> tuple[Unit, dict]:  # type: ignore[type-ar
 
     uid may be a bare unit ID or a deduplicated state key ('unit.id#N').
     """
-    from gameMechanic.game_state import unit_id_from_state_key
+    from gameMechanic.gameState import unit_id_from_state_key
 
     unit_id = unit_id_from_state_key(uid)
     units = units_list_for(faction)
@@ -315,7 +316,7 @@ def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
 
 def render_melee_engagements(faction: str, uid: str, unit_state: MutableMapping[str, Any]) -> None:
     """Show the list of enemy units this unit is engaged with, each with a Break button."""
-    from gameMechanic.unit_mutations import leave_melee_pair
+    from gameMechanic.unitMutations import leave_melee_pair
 
     melee_with: list[list[str]] = unit_state.get("melee_with", [])
     if not unit_state.get("in_melee") or not melee_with:
@@ -614,48 +615,8 @@ def stratagem_used_elsewhere_unit_name(faction: str, stratagem_id: str) -> str |
     return unit.name_en
 
 
-def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> None:
-    """Dispatch a stratagem's machine-readable ``effect`` to the unit it targets.
-
-    Data-driven on ``effect.type`` (mirrors the Ability effect-dispatch pattern in
-    gameMechanic/ability_engine.py) — new effect types are added here as new
-    branches, never via a stratagem-name check. Handles: ``auto_pass_morale``
-    (Insane Bravery), ``move`` with ``handler: fall_back_through_models``
-    (Desperate Breakout, Plan 016 S130), and ``invuln_save`` (Quantum
-    Deflection, S135 Paket 4b) — the latter registers an ``active_modifiers``
-    entry with ``roll_type: "invuln_save"`` so the Save block's invuln
-    computation (``_stratagem_invuln_save``) picks it up the same way
-    ``ability_invuln_save`` already reads faction-ability-granted invulns;
-    ``undo_stratagem``'s generic ``source``-name cleanup removes it again
-    unchanged. No-ops for any other effect type (e.g. attack-sequence
-    stratagems, which use `.modifier` instead) — silently ignored here on
-    purpose, same as an unmatched unit_key.
-    """
-    effect = strat.effect
-    if effect is None:  # caller already checked; narrows the type for mypy
-        return
-    if effect.type == "auto_pass_morale":
-        activate_morale_auto_pass(unit_key, faction)
-    elif effect.type == "move" and effect.handler == "fall_back_through_models":
-        activate_desperate_breakout(unit_key, faction)
-    elif effect.type == "invuln_save" and effect.modifier is not None:
-        current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
-        active_mods = st.session_state.get("active_modifiers", [])
-        active_mods.append(
-            {
-                "unit_key": unit_key,
-                "source": strat.name_en,
-                "effect": {
-                    "roll_type": "invuln_save",
-                    "value": effect.modifier,
-                    "target": "defender",
-                    "phase": current_phase,
-                },
-                "expires_at_phase": current_phase,
-                "expires_at_round": None,
-            }
-        )
-        st.session_state.active_modifiers = active_mods
+# _apply_stratagem_effect moved to gameMechanic.stratagemEngine (S142 Aufgabe 1,
+# Option B — consolidated stratagem-effect dispatch); imported below.
 
 
 def _reactive_go_state(
@@ -873,6 +834,15 @@ def render_reactive_stratagem_box(
             used_here,
             stratagem_used_elsewhere_unit_name(faction, strat.id),
         )
+        # S142 A3 (Sofortlinderung, docs/handoff/S141_ui_befunde_group_a.md Befund 3):
+        # this box renders outside the two-player-column layout at some call sites, so
+        # target_name is the only cue left for which unit/player it belongs to — the
+        # structural fix (rendering per column) is a separate plan.
+        unit_name = (
+            unit_for_conditions.name_en
+            if strat.effect is not None and unit_for_conditions
+            else None
+        )
         render_go_card(
             key=f"reactive_{faction}_{event}_{strat.id}_{decline_key}",
             name=strat.name_en,
@@ -881,6 +851,7 @@ def render_reactive_stratagem_box(
             rule_text=strat.rule_text,
             compact=True,
             locked_reason=locked_reason,
+            target_name=reactive_box_target_label(unit_name, faction_display_name_for(faction)),
             expanded_content=_context_caption_renderer(context_caption),
             on_use=_reactive_use_callback(
                 strat, faction, unit_key_for_modifier, on_spent, on_resolved, anchor_id
@@ -1017,7 +988,7 @@ def render_inline_command_reroll(
 # GO card — canonical Use/Undo + accordion wrapper (design_system.md §6, Plan 016 S132 1a)
 # ---------------------------------------------------------------------------
 #
-# Thin Streamlit shell around uiLayout.go_card.go_card_html(): renders the pure
+# Thin Streamlit shell around uiLayout.goCard.go_card_html(): renders the pure
 # HTML card body, then the one real action widget (Use/Undo) and the optional
 # rule-text accordion. Callers own the state (dormant/ready/used/locked) and
 # the on_use/on_undo bookkeeping (typically spend_stratagem / its undo
@@ -1183,7 +1154,7 @@ def _render_pending_emergency_disembarkation(faction: str) -> None:
     window-consuming GOs get the same anchor treatment as every other GO — the
     box keeps rendering ("used" at its own anchor, "used_elsewhere" anywhere
     else) instead of vanishing the instant it is spent. `_reset_phase_state()`
-    (game_state.py) still clears `pending_transport_destroyed` at the phase
+    (gameState.py) still clears `pending_transport_destroyed` at the phase
     boundary, so the window does not outlive the phase either way.
     """
     marker = st.session_state.get("pending_transport_destroyed")
@@ -1256,7 +1227,7 @@ def render_round_choice_directives(round_choice: RoundChoiceAbility, *, bold: bo
 
 
 def _round_choice_source_label(player: str) -> str:
-    from gameMechanic.game_state import (  # noqa: PLC0415
+    from gameMechanic.gameState import (  # noqa: PLC0415
         faction_dir_for,
         round_choice_state_key,
     )
@@ -1278,7 +1249,7 @@ def _round_choice_source_label(player: str) -> str:
 def _round_choice_short_label(player: str) -> str:
     """Short protocol name for compact dice badges — drops the 'Protocol of the '
     qualifier and the directive suffix, matching the unitCard directive badge."""
-    from gameMechanic.game_state import (  # noqa: PLC0415
+    from gameMechanic.gameState import (  # noqa: PLC0415
         faction_dir_for,
         round_choice_state_key,
         short_round_choice_label,
@@ -1311,7 +1282,7 @@ def _collect_atk_modifiers(
     stratagem use, and the caller only ever renders one attacker's tabs at a
     time.
     """
-    from gameMechanic.ability_engine import get_active_round_choice_modifier  # noqa: PLC0415
+    from gameMechanic.abilityEngine import get_active_round_choice_modifier  # noqa: PLC0415
 
     mods: list[dict] = []  # type: ignore[type-arg]
     try:
@@ -1438,8 +1409,8 @@ def _rp_directive_hints(def_faction: str) -> list[str]:
     Pure: reads session state via the engine, returns display text. The label is
     data-driven from the directive's YAML name — no faction literals.
     """
-    from gameMechanic.ability_engine import get_active_rp_modifiers  # noqa: PLC0415
-    from gameMechanic.game_state import faction_dir_for  # noqa: PLC0415
+    from gameMechanic.abilityEngine import get_active_rp_modifiers  # noqa: PLC0415
+    from gameMechanic.gameState import faction_dir_for  # noqa: PLC0415
 
     try:
         faction_dir_for(def_faction)  # validate player slot; raises if unknown
@@ -1464,11 +1435,11 @@ def _render_rp_block(
     trigger event ``after_enemy_attack`` — e.g. Necron Reanimation Protocols);
     src/ knows only the generic effect shape.
     """
-    from gameMechanic.ability_engine import (  # noqa: PLC0415
+    from gameMechanic.abilityEngine import (  # noqa: PLC0415
         get_after_attack_revive_ability,
         revive_dice_count,
     )
-    from gameMechanic.unit_mutations import heal_unit  # noqa: PLC0415
+    from gameMechanic.unitMutations import heal_unit  # noqa: PLC0415
 
     if models_lost <= 0:
         return
@@ -1569,9 +1540,9 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
 ) -> None:
     """Render damage input, apply button, post-apply summary, and RP block."""
     from gameMechanic.combat import apply_damage_attacks  # noqa: PLC0415
-    from gameMechanic.game_log import log_action  # noqa: PLC0415
-    from gameMechanic.game_state import units_key_for  # noqa: PLC0415
-    from gameMechanic.unit_mutations import (  # noqa: PLC0415
+    from gameMechanic.gameLog import log_action  # noqa: PLC0415
+    from gameMechanic.gameState import units_key_for  # noqa: PLC0415
+    from gameMechanic.unitMutations import (  # noqa: PLC0415
         apply_damage,
         get_locked_group,
         select_damage_target_group,
@@ -1840,14 +1811,14 @@ def _render_resolution_tab(
         profiles = weapon.profiles
     profile = profiles[min(profile_idx, len(profiles) - 1)]
 
-    from gameMechanic.ability_engine import (  # noqa: PLC0415
+    from gameMechanic.abilityEngine import (  # noqa: PLC0415
         ability_invuln_save,
         buff_stat_bonus,
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
-        stratagem_strength_bonus,
     )
+    from gameMechanic.stratagemEngine import stratagem_strength_bonus  # noqa: PLC0415
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
     # Disruption Fields (and similar stratagems): +1 S from an active_modifiers
@@ -1900,13 +1871,13 @@ def _render_resolution_tab(
     # Also resolve shoot_after_fall_back (Conquering Tyrant D2) here so its −1 Hit
     # modifier is folded in before resolve_attack_modifiers runs.
     if is_shooting:
-        from gameMechanic.ability_engine import (  # noqa: PLC0415
+        from gameMechanic.abilityEngine import (  # noqa: PLC0415
             get_active_round_choice_ignores_cover_half_range,
             get_active_round_choice_light_cover_if_stationary,
             get_active_round_choice_shoot_after_fall_back,
             get_short_label_for_effect_type,
         )
-        from uiLayout.dice_compose import light_cover_label  # noqa: PLC0415
+        from uiLayout.diceCompose import light_cover_label  # noqa: PLC0415
 
         auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
         fall_back_hit_mod = get_active_round_choice_shoot_after_fall_back(atk_faction, atk_uid)
@@ -2390,7 +2361,7 @@ def render_group_cards(
     summary with an Edit button; the resolution starts once at least one group has
     declared attacks.
     """
-    from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
+    from gameMechanic.abilityEngine import buff_stat_bonus  # noqa: PLC0415
 
     atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
     group_models: dict[str, int] = atk_state.get("group_models", {})
@@ -2537,7 +2508,7 @@ def render_group_assignment(
         st.caption(f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.")
         return
 
-    from gameMechanic.ability_engine import buff_stat_bonus  # noqa: PLC0415
+    from gameMechanic.abilityEngine import buff_stat_bonus  # noqa: PLC0415
 
     atk_bonus = buff_stat_bonus(atk_faction, atk_unit, "attacks")
     grp_weapons = _group_phase_weapons(group, use_melee, in_melee)
@@ -2675,7 +2646,7 @@ def render_group_assignment(
                     # by a weapon" — this field is where that value is entered
                     # (a dice-based Attacks characteristic, e.g. D3/D6, gets
                     # typed in here after being rolled at the table). Like
-                    # Advance/Charge (chargephase.py), there is no "applied"
+                    # Advance/Charge (chargePhase.py), there is no "applied"
                     # lock before "Group done" — the number_input stays
                     # directly editable, so on_reroll is a no-op; the call only
                     # owns the CP/usage bookkeeping (attacker pays — it is the

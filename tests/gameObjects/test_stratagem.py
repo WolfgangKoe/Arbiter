@@ -450,7 +450,7 @@ class TestOncePerBattleEnforcement:
 
 
 class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
-    """P19 regression: `used_stratagem_battle_ids` (game_state.py) is a dict
+    """P19 regression: `used_stratagem_battle_ids` (gameState.py) is a dict
     keyed by spending faction, not a single global set shared by both players.
     gameProtocoll.py slices it per player (`used_battle_ids_by_faction.get(
     spending_faction, set())`) before calling stratagem_visibility() — this
@@ -493,7 +493,7 @@ class TestBattleScopedStratagemUsedByOnePlayerDoesNotBlockOther:
 
 class TestPhaseScopedStratagemUsedByOnePlayerDoesNotBlockOther:
     """S121 Task 2 regression (analog to P19, phase scale): `used_stratagem_ids`
-    (game_state.py) is a dict keyed by player slot, not a single global set.
+    (gameState.py) is a dict keyed by player slot, not a single global set.
     gameProtocoll.py slices it per column (`used_ids_by_player.get(player,
     set())`) before calling stratagem_visibility() — one player's use of a
     stratagem this phase must not grey out the identical stratagem ID in the

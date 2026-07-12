@@ -12,7 +12,7 @@ One entry point, three bounded modules:
 
 | Module | Responsibility |
 |--------|---------------|
-| `uiLayout/` | How things look. Streamlit render functions + shared render hub (`_common.py`). Pure HTML/SVG building blocks in `dice_compose.py` (Streamlit-free, coverage-measured — INV-6). |
+| `uiLayout/` | How things look. Streamlit render functions + shared render hub (`_common.py`). Pure HTML/SVG building blocks in `diceCompose.py` (Streamlit-free, coverage-measured — INV-6). |
 | `gameObjects/` | What things are. Pure Python dataclasses + YAML loader. **No Streamlit** (enforced). |
 | `gameMechanic/` | What things do. Phase logic, state transitions — **and** phase render (`*Phase.py`). |
 
@@ -50,8 +50,8 @@ src/
     loader.py                      ← YAML loader: reads faction data, resolves weapon references
 
   gameMechanic/
-    phase_handler.py               ← PhaseHandler Protocol (ABC für alle Phasen)
-    phase_runner.py                ← Zentraler Dispatcher: PHASE_REGISTRY, start→active→end-Loop,
+    phaseHandler.py               ← PhaseHandler Protocol (ABC für alle Phasen)
+    phaseRunner.py                ← Zentraler Dispatcher: PHASE_REGISTRY, start→active→end-Loop,
                                       Ability-Hook-Aufrufe an Übergängen
     combat.py                      ← AttackSequence: Modifier, AttackParams, AttackResult,
                                       resolve_attack_sequence, build_attack_display, s_vs_t_table
@@ -59,11 +59,11 @@ src/
     movementPhase.py               ← MovementPhaseHandler (PhaseHandler)
     psychicPhase.py                ← PsychicPhaseHandler (PhaseHandler)
     shootingPhase.py               ← ShootingPhaseHandler (PhaseHandler)
-    chargephase.py                 ← ChargePhaseHandler (PhaseHandler)
+    chargePhase.py                 ← ChargePhaseHandler (PhaseHandler)
     fightPhase.py                  ← FightPhaseHandler (PhaseHandler)
     moralePhase.py                 ← MoralePhaseHandler (PhaseHandler)
-    ability_engine.py              ← check_trigger, check_conditions, get_triggered_abilities
-    game_log.py                    ← Log writes (append-only within turn), immutability enforcement
+    abilityEngine.py              ← check_trigger, check_conditions, get_triggered_abilities
+    gameLog.py                    ← Log writes (append-only within turn), immutability enforcement
 
 data/
   wh40k_9e/
@@ -99,7 +99,7 @@ data/
 ### app.py
 
 - `st.set_page_config()`
-- Call `gameMechanic/game_state.py: init_state()` on first load
+- Call `gameMechanic/gameState.py: init_state()` on first load
 - Assemble the three-column layout: `gameHeader` | `col_first` | `col_center` | `col_second`
 - No game logic. No direct YAML access. Pure wiring.
 
@@ -142,7 +142,7 @@ eine Render-View.
 
 #### PhaseRunner
 
-`phase_runner.py` hält die `PHASE_REGISTRY` und ist der einzige Aufrufer von `gameActionsArea.py`:
+`phaseRunner.py` hält die `PHASE_REGISTRY` und ist der einzige Aufrufer von `gameActionsArea.py`:
 
 ```python
 def render_current_phase(state: dict) -> None:
@@ -150,7 +150,7 @@ def render_current_phase(state: dict) -> None:
     handler.render_active(state)
 ```
 
-Phasenübergänge laufen ausschließlich über `game_state.next_phase()` — der
+Phasenübergänge laufen ausschließlich über `gameState.next_phase()` — der
 "→ Weiter"-Button (`gameHeader.py`) ruft `next_phase()` direkt auf. Bei jedem
 Aufruf setzt `next_phase()` unbedingt `selected_unit`/`selected_targets`/
 `psi_result`/`psychic_denies_used` zurück; der Reset der `turn_flags`
@@ -170,7 +170,7 @@ Kernprinzipien (nicht verhandelbar):
 
 Details: siehe `docs/spec/processes.md P-08`.
 
-`game_log.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
+`gameLog.py` appends log entries and enforces immutability: entries for completed turns cannot be modified.
 
 ---
 
@@ -359,7 +359,7 @@ Owned by `gameMechanic/state.py`. All other modules access state via helper func
     "selected_target": tuple[str, str] | None,  # (faction, unit_id)
 
     # Protocol
-    "game_log":       list[dict],    # append-only log entries; see game_log.py
+    "game_log":       list[dict],    # append-only log entries; see gameLog.py
     "turns_frozen":   list[int],     # round numbers whose logs are immutable
 }
 ```

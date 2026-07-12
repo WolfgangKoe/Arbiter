@@ -376,7 +376,7 @@ where it drives game actions). Deployment selectbox remains on the unitCard as b
 ### Phase transitions
 
 There are no phase sub-stages. The → arrow advances directly to the next phase
-via `game_state.next_phase()` (see [processes.md P-03](processes.md)): automatic
+via `gameState.next_phase()` (see [processes.md P-03](processes.md)): automatic
 start-of-phase effects fire via `timing: phase_start` triggers, per-phase state
 is reset in `_reset_phase_state()`, and each phase renders a single view
 (`render_active`). Reactive mechanics (e.g. Reanimation Protocols) are handled

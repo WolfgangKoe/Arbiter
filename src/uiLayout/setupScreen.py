@@ -9,8 +9,8 @@ from pathlib import Path
 import streamlit as st
 
 from constants.symbols import SYM_CROSS
-from gameMechanic.game_log import list_archived_logs
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import list_archived_logs
+from gameMechanic.gameState import (
     CP_BY_GAME_SIZE,
     PHASES,
     PTS_LIMIT_BY_GAME_SIZE,
@@ -18,7 +18,7 @@ from gameMechanic.game_state import (
     init_state,
     list_available_rosters,
 )
-from gameObjects.rosz_importer import import_roster, parse_ros_bytes, parse_rosz_bytes
+from gameObjects.roszImporter import import_roster, parse_ros_bytes, parse_rosz_bytes
 
 _GAME_SIZES = list(CP_BY_GAME_SIZE.keys())
 _BATTLE_PHASE_NAMES = [name for name, _ in PHASES[1:]]

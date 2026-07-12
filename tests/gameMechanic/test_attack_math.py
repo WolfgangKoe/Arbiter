@@ -1,4 +1,4 @@
-"""Tests for attack_math.py — pure attack-count helpers.
+"""Tests for attackMath.py — pure attack-count helpers.
 
 Covers R-COMBAT-17: Rapid-Fire weapon attack doubling within half range.
 
@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.attack_math import (  # noqa: E402
+from gameMechanic.attackMath import (  # noqa: E402
     _compute_attacks,
     _is_variable_attacks,
     _rapid_fire_input_cap,
@@ -182,7 +182,7 @@ class TestIsVariableAttacks:
 # _restriction_label — lines 41-46
 # ---------------------------------------------------------------------------
 
-from gameMechanic.attack_math import _restriction_label  # noqa: E402
+from gameMechanic.attackMath import _restriction_label  # noqa: E402
 
 
 class TestRestrictionLabel:
@@ -230,7 +230,7 @@ class TestTotalAttacksIntSlashBranch:
 # _detect_weapon_special — lines 105-108, 136
 # ---------------------------------------------------------------------------
 
-from gameMechanic.attack_math import _detect_weapon_special  # noqa: E402
+from gameMechanic.attackMath import _detect_weapon_special  # noqa: E402
 from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 
 
@@ -327,7 +327,7 @@ class TestDetectWeaponSpecial:
 # _group_melee_budget — line 136 (skips weapons without melee profile / non-extra-attacks)
 # ---------------------------------------------------------------------------
 
-from gameMechanic.attack_math import _group_melee_budget  # noqa: E402
+from gameMechanic.attackMath import _group_melee_budget  # noqa: E402
 
 
 def _melee_weapon_with_extra_attacks(amount: int) -> Weapon:

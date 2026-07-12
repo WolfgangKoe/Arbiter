@@ -4,9 +4,9 @@ Pins AC-SUBFACTION-01..05 from docs/spec/acceptance/index.md. The badge is
 always rendered — a chosen value, a visible 'No <Label>' placeholder, or a
 visible 'No Subfaction' error; never empty.
 
-NOTE on imports: this module deliberately imports ``game_state`` *lazily* (inside
+NOTE on imports: this module deliberately imports ``gameState`` *lazily* (inside
 the tests), not at module top. The tests in tests/gameMechanic/ install per-file
-mocks for ``streamlit`` and rely on ``game_state``/``unit_mutations`` sharing the
+mocks for ``streamlit`` and rely on ``gameState``/``unitMutations`` sharing the
 mock that the first importer binds. Since tests/acceptance/ is collected first, a
 top-level import here would make this module that first importer and split the
 binding, breaking those tests. Deferring the import lets the gameMechanic modules
@@ -39,7 +39,7 @@ class _S(dict):
 
 
 def _gs():
-    import gameMechanic.game_state as gs  # noqa: PLC0415
+    import gameMechanic.gameState as gs  # noqa: PLC0415
 
     return gs
 

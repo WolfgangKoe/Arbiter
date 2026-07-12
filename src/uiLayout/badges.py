@@ -2,14 +2,14 @@
 
 Before this module four call sites (``_common._badge``, ``unitCard._badge``,
 ``armyCard._keyword_badge``/``_active_ability_badge``, and the inline Invuln
-fragments in ``dice_html``) each hand-rolled the same ``<span>`` with slightly
+fragments in ``diceHtml``) each hand-rolled the same ``<span>`` with slightly
 different radius/padding/font-size. They had already drifted (see the comment in
 ``_common.py`` about MOVED/Buff swapping). This module fixes the *geometry* in one
 place; colours stay at the call site (they come from the semantic tables in
 ``design_colors.md`` / ``design_system.md``).
 
 Pure composition, Streamlit-free and coverage-measured (INV-6, same seam as
-``dice_compose.py``). Two size classes, per the S115 consensus:
+``diceCompose.py``). Two size classes, per the S115 consensus:
 
 * ``badge``  — status / buff / debuff / faction / ability: 2px · 1px 6px · 10px · 600
 * ``chip``   — keyword / secondary note:                    2px · 1px 5px ·  9px · 400

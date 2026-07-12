@@ -10,7 +10,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_state as _gs  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
 from gameObjects.loader import load_unit_catalog  # noqa: E402
 from gameObjects.unit import TriggeredEffect  # noqa: E402
 
@@ -110,7 +110,7 @@ class TestUnitGetTriggeredEffect:
 
 
 # ---------------------------------------------------------------------------
-# game_state — phase reset clears relic state
+# gameState — phase reset clears relic state
 # ---------------------------------------------------------------------------
 
 

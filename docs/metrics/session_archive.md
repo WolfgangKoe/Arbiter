@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 18:00 CEST
+Stand: 2026-07-12 19:16 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 11:18 dedb  ████████████ 169k ⛔    █████░  77%    ▚▚▚▚········
+07-12 18:02 e7b9  ███████████░ 138k ⚠️   █████░  86%    ▚▚▚·········
+         SA_1·  █████░░░░░░░  64k ✅    5 rote Tests anpassen
+         SA_2·  ███████░░░░░  92k ✅    FixD-Detail-Plan erstellen
+         SA_3·  ████████░░░░ 100k ✅    Rename snake_case zu camelCase
+         SA_4·  ████████░░░░ 101k ✅    FixD-Sofortlinderung target_name
+         SA_5·  ████████████ 171k ⛔    Stratagem-Dispatch konsolidieren
+         SA_6·  ███░░░░░░░░░  37k ✅    Locate render_attack_resolution st…
+         SA_7·  ████████████ 150k ⛔    Planning-Entwurf S142 erstellen
+         SA_8·  █████░░░░░░░  66k ✅    Backlog-Überführung und Doku-Hygie…
+         SA_9·  ███████░░░░░  89k ✅    FixC Insane Bravery umsetzen
+----------------- ---------------------- -------------- ------------
+07-12 11:18 dedb  ████████████ 170k ⛔    █████░  76%    ▚▚▚▚········
          SA_1·  ██████████░░ 131k ⚠️   Investigator 1: GO-Karten-Renderin…
          SA_2·  ███░░░░░░░░░  32k ✅    Locate stratagem helper signatures
          SA_3·  ███████████░ 133k ⚠️   Executor 3: B12b-Header-Suffix

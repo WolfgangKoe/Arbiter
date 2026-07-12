@@ -14,7 +14,7 @@ from pathlib import Path
 # Add src/ to path so gameObjects can be imported
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from gameObjects.rosz_importer import (  # noqa: E402
+from gameObjects.roszImporter import (  # noqa: E402
     import_roster,
     parse_ros_bytes,
     parse_rosz_bytes,

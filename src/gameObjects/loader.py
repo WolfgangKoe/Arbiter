@@ -12,7 +12,7 @@ import yaml
 
 from gameObjects.ability import Ability, Condition, Effect, ExtraUses, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
-from gameObjects.round_choice_ability import RoundChoiceAbility
+from gameObjects.roundChoiceAbility import RoundChoiceAbility
 from gameObjects.stratagem import Stratagem, StratagemModifier
 from gameObjects.unit import (
     DamageBracket,

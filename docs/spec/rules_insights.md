@@ -7,7 +7,7 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
 
 - **Necron Command Protocols — Direktiv-Wahl ist runden-scoped:** Haupt- wie Extra-Direktive
   werden **jede Runde** neu gewählt (`faction_overview.txt` Z. 568/579: „at the start of each
-  battle round"). Sie bleiben NICHT einmal fix. App-Implementierung: `game_state.py`
+  battle round"). Sie bleiben NICHT einmal fix. App-Implementierung: `gameState.py`
   `_reset_round_choice_state()` (~Z. 583) öffnet das Fenster pro Runde. Einzige Ausnahme: **Voice
   of the Triarch** (Silent King) schaltet das *aktive Protokoll* um — ändert aber nicht die
   pro-Runde-Direktiv-Wahl.
@@ -35,7 +35,7 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   „korrigieren" — Engine + Tests hängen am vereinfachten Modell.
 - **Eternal Guardian D1 — Stationär-Bedingung (Plan 025 Step 4):** D1 gilt 9E-wörtlich „each
   time an attack is made against this unit" (jede Phase). Implementiert: Bedingung ist
-  `state["movement_choice"] == "stationary"` (gesetzt in `unit_mutations.py`). **Variante C:**
+  `state["movement_choice"] == "stationary"` (gesetzt in `unitMutations.py`). **Variante C:**
   Checkbox vorgehakt + disabled nur im Shooting-SAVE-Block (A1-Entscheidung: pragmatisch, deckt
   90 %). Light Cover wird **NICHT** zusätzlich in `_collect_def_save_modifiers` gesammelt — das
   würde Doppel-+1 erzeugen. Die Checkbox-Mechanik setzt den +1 genau einmal. Engine-Fn:

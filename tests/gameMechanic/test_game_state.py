@@ -1,4 +1,4 @@
-"""Tests for game_state.py: next_phase, phase transitions, round increments."""
+"""Tests for gameState.py: next_phase, phase transitions, round increments."""
 
 import sys
 from pathlib import Path
@@ -10,9 +10,9 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_state as _gs  # noqa: E402
-import gameMechanic.unit_mutations as _mut  # noqa: E402
-from gameMechanic.game_state import (  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.gameState import (  # noqa: E402
     CP_BY_GAME_SIZE,
     _make_unit_state_dict,
     active_round_choice_buff_labels,
@@ -107,7 +107,7 @@ def test_next_phase_setup_to_command_opens_directive_window_round_1() -> None:
     not only from round 2 on. init_state() sets directive_pending=False; the
     Setup→Command transition must flip it True for both slots.
     """
-    from gameMechanic.game_state import round_choice_state_key
+    from gameMechanic.gameState import round_choice_state_key
 
     session = _phase_session(phase_idx=0, active="Necrons")
     next_phase()
@@ -777,10 +777,10 @@ class TestLoadRosterFor:
         """A roster that omits faction_dir must fail loudly, not silently load Necrons.
 
         Regression for INV-4 cleanup (S128): the "necrons" fallback default was removed
-        from game_state.py/loader.py — callers that hit a roster with no faction_dir and
+        from gameState.py/loader.py — callers that hit a roster with no faction_dir and
         no explicit fallback must get a clear error instead of a wrong faction.
         """
-        import gameMechanic.game_state as gs_mod
+        import gameMechanic.gameState as gs_mod
 
         roster = tmp_path / "no_faction_dir.yaml"
         roster.write_text("display_name: Broken\nunits: []\n")
@@ -1225,7 +1225,7 @@ class TestResetGame:
         s = _make_session(round=3, phase_idx=4)
         s["extra_key"] = "value"
 
-        with patch("gameMechanic.game_log.archive_and_reset_log"):
+        with patch("gameMechanic.gameLog.archive_and_reset_log"):
             _gs.reset_game()
 
         assert len(s) == 0
@@ -1347,7 +1347,7 @@ class TestVictoryPointMutations:
 class TestTargetSelectionRequest:
     def test_pending_target_request_no_state_conflict(self) -> None:
         """Only one pending_target_request slot exists; second request overwrites first."""
-        from gameMechanic.game_state import TargetSelectionRequest
+        from gameMechanic.gameState import TargetSelectionRequest
 
         ptr1 = TargetSelectionRequest(
             ability_id="mwbd_01",
@@ -1376,7 +1376,7 @@ class TestTargetSelectionRequest:
 
     def test_target_selection_request_fields_with_defaults(self) -> None:
         """TargetSelectionRequest has all required fields; effect_type defaults to empty string."""
-        from gameMechanic.game_state import TargetSelectionRequest
+        from gameMechanic.gameState import TargetSelectionRequest
 
         ptr = TargetSelectionRequest(
             ability_id="test_ability",
@@ -1394,7 +1394,7 @@ class TestTargetSelectionRequest:
 
     def test_target_selection_request_revive_vs_buff_distinction(self) -> None:
         """effect_type distinguishes buff abilities (non-empty) from revive/wargear (empty)."""
-        from gameMechanic.game_state import TargetSelectionRequest
+        from gameMechanic.gameState import TargetSelectionRequest
 
         buff_ptr = TargetSelectionRequest(
             ability_id="mwbd",
@@ -1504,7 +1504,7 @@ def test_mixed_wound_unit_group_wounds_unchanged() -> None:
 class TestComputeRosterTotalPtsErrorBranches:
     def test_points_yaml_missing_returns_zero(self, tmp_path, monkeypatch) -> None:
         """Line 119: pts_path.exists() is False → return 0 immediately."""
-        import gameMechanic.game_state as gs_mod
+        import gameMechanic.gameState as gs_mod
 
         # Build a minimal roster file that has a valid faction_dir
         roster = tmp_path / "test_roster.yaml"
@@ -1521,7 +1521,7 @@ class TestComputeRosterTotalPtsErrorBranches:
 
     def test_unit_not_in_points_yaml_skipped(self, tmp_path, monkeypatch) -> None:
         """Line 129: cost_entry is None → continue; missing unit does not crash."""
-        import gameMechanic.game_state as gs_mod
+        import gameMechanic.gameState as gs_mod
 
         roster = tmp_path / "test_roster.yaml"
         roster.write_text(
@@ -1549,7 +1549,7 @@ class TestComputeRosterTotalPtsErrorBranches:
 
 def test_faction_display_name_for_returns_player_on_key_error() -> None:
     """Line 181-182: KeyError in faction_dir_for → fall back to str(player)."""
-    from gameMechanic.game_state import faction_display_name_for
+    from gameMechanic.gameState import faction_display_name_for
 
     # Session missing p1_faction_dir and p2_faction_dir → faction_dir_for raises KeyError
     _make_session()
@@ -1560,7 +1560,7 @@ def test_faction_display_name_for_returns_player_on_key_error() -> None:
 
 def test_faction_display_name_for_fallback_on_missing_faction_dir() -> None:
     """Line 181-182: player without a faction dir key → KeyError branch returns player name."""
-    from gameMechanic.game_state import faction_display_name_for
+    from gameMechanic.gameState import faction_display_name_for
 
     # Deliberately omit p1_faction_dir / p2_faction_dir to trigger KeyError in faction_dir_for
     _make_session(first_player="UnknownArmy", second_player="Orks")
@@ -1576,7 +1576,7 @@ def test_faction_display_name_for_fallback_on_missing_faction_dir() -> None:
 
 def test_subfaction_badge_for_returns_error_badge_on_missing_faction_dir() -> None:
     """Lines 204-205: faction_dir_for raises KeyError → error SubfactionBadge."""
-    from gameMechanic.game_state import SubfactionBadge, subfaction_badge_for
+    from gameMechanic.gameState import SubfactionBadge, subfaction_badge_for
 
     # Session without p1_faction_dir / p2_faction_dir → faction_dir_for raises KeyError
     _make_session(first_player="UnknownArmy", second_player="Orks")
@@ -1586,7 +1586,7 @@ def test_subfaction_badge_for_returns_error_badge_on_missing_faction_dir() -> No
 
 def test_subfaction_badge_for_returns_error_when_faction_has_no_subfaction_field() -> None:
     """Line 208: faction dir exists but meta has no subfaction field → error badge."""
-    from gameMechanic.game_state import SubfactionBadge, subfaction_badge_for
+    from gameMechanic.gameState import SubfactionBadge, subfaction_badge_for
 
     # 'nonexistent_faction' returns (None, 'Subfaction') from load_subfaction_meta
     # → field is falsy → Zeile 208 hit
@@ -1602,7 +1602,7 @@ def test_subfaction_badge_for_returns_error_when_faction_has_no_subfaction_field
 
 def test_subfaction_badge_for_missing_choice_returns_missing_badge() -> None:
     """Lines 211-212: subfaction value not set → 'No <Label>' badge with state 'missing'."""
-    from gameMechanic.game_state import subfaction_badge_for
+    from gameMechanic.gameState import subfaction_badge_for
 
     _make_session(
         first_player="Necrons",
@@ -1618,7 +1618,7 @@ def test_subfaction_badge_for_missing_choice_returns_missing_badge() -> None:
 
 def test_subfaction_badge_for_set_choice_returns_set_badge() -> None:
     """Line 213: subfaction value present → formatted badge with state 'set'."""
-    from gameMechanic.game_state import subfaction_badge_for
+    from gameMechanic.gameState import subfaction_badge_for
 
     _make_session(
         first_player="Necrons",
@@ -1797,7 +1797,7 @@ def test_init_state_round_choice_assignments_populated_from_roster_order(
     tmp_path, monkeypatch
 ) -> None:
     """Line 444: roster with round_choice_order → round_choice_assignments populated."""
-    import gameMechanic.game_state as gs_mod
+    import gameMechanic.gameState as gs_mod
 
     proto_ids = [
         "wh40k_9e.necrons.faction.protocol_eternal_guardian",
@@ -1832,7 +1832,7 @@ def test_init_state_round_choice_assignments_populated_from_roster_order(
 
 def test_init_state_roster_warnings_populated_for_unmatched_units(tmp_path, monkeypatch) -> None:
     """Line 477: unmatched units → st.session_state.roster_warnings is non-empty."""
-    import gameMechanic.game_state as gs_mod
+    import gameMechanic.gameState as gs_mod
 
     # Roster with a unit ID that doesn't exist in the necron catalog
     roster_p1 = tmp_path / "necrons_bad.yaml"
@@ -1906,7 +1906,7 @@ def test_init_state_directive_pending_false_for_both_players() -> None:
     No directive selection window is open at game start. The window opens only
     via _reset_round_choice_state() called at each battle round start.
     """
-    from gameMechanic.game_state import round_choice_state_key
+    from gameMechanic.gameState import round_choice_state_key
 
     s = _make_session()
     init_state(roster_p1="necrons_alpha.yaml", roster_p2="necrons_beta.yaml")

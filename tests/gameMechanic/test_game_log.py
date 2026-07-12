@@ -1,6 +1,6 @@
-"""Tests for game_log.py — log writing, reading, archiving.
+"""Tests for gameLog.py — log writing, reading, archiving.
 
-game_log.py has no Streamlit dependency; all functions are pure I/O.
+gameLog.py has no Streamlit dependency; all functions are pure I/O.
 Tests use monkeypatch to redirect _LOG_FILE and _ARCHIVE_DIR to tmp_path.
 """
 
@@ -12,7 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_log as _gl  # noqa: E402
+import gameMechanic.gameLog as _gl  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helper

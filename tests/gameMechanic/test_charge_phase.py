@@ -20,13 +20,13 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.chargephase as cp  # noqa: E402
-import gameMechanic.game_state as _gs  # noqa: E402
+import gameMechanic.chargePhase as cp  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
 import gameMechanic.shootingPhase as _sp  # noqa: E402
-import gameMechanic.unit_mutations as _mut  # noqa: E402
-from gameMechanic.chargephase import hi_already_performed, hi_eligible_units  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.chargePhase import hi_already_performed, hi_eligible_units  # noqa: E402
 from gameMechanic.shootingPhase import can_shoot, target_in_friendly_melee  # noqa: E402
-from gameMechanic.unit_mutations import enter_melee, leave_melee_pair  # noqa: E402
+from gameMechanic.unitMutations import enter_melee, leave_melee_pair  # noqa: E402
 from gameObjects.unit import Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -374,7 +374,7 @@ class TestHiAlreadyPerformed:
 # ---------------------------------------------------------------------------
 # S137/P2-2 — _active_charge wires render_inline_command_reroll.
 #
-# `_active_charge` (chargephase.py) calls render_inline_command_reroll right
+# `_active_charge` (chargePhase.py) calls render_inline_command_reroll right
 # after the charge-roll caption and before the Successful/Failed decision
 # (S136-Review-Befund: this call site was untested). Advance/Charge are the
 # only wurf-GOs that keep the bespoke inline offer instead of the

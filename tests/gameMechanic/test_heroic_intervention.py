@@ -21,11 +21,11 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_log as _gl  # noqa: E402
-import gameMechanic.game_state as _gs  # noqa: E402
-import gameMechanic.unit_mutations as _mut  # noqa: E402
-from gameMechanic.chargephase import hi_eligible_units  # noqa: E402
-from gameMechanic.unit_mutations import perform_heroic_intervention  # noqa: E402
+import gameMechanic.gameLog as _gl  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.chargePhase import hi_eligible_units  # noqa: E402
+from gameMechanic.unitMutations import perform_heroic_intervention  # noqa: E402
 from gameObjects.unit import Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -206,8 +206,8 @@ class TestPerformHeroicInterventionDuplicateSquads:
 
     def test_log_entry_created(self) -> None:
         self._setup_session()
-        # log_action is imported by name into unit_mutations module, so we must
-        # patch it on the unit_mutations module directly (not on game_log).
+        # log_action is imported by name into unitMutations module, so we must
+        # patch it on the unitMutations module directly (not on game_log).
         calls = []
         original = _mut.log_action  # type: ignore[attr-defined]
 

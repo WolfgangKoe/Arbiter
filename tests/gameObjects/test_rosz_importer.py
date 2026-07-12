@@ -10,7 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameObjects.loader import load_unit_catalog
-from gameObjects.rosz_importer import (
+from gameObjects.roszImporter import (
     _build_name_map,
     _extract_units,
     _match_unit_name,

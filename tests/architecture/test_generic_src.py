@@ -37,11 +37,11 @@ FACTION_PATTERNS: dict[str, re.Pattern[str]] = {
 ALLOWLIST: dict[str, set[str]] = {
     # LEGIT — maps external BattleScribe faction labels to internal slugs.
     # This is I/O normalisation at the import boundary, not game logic.
-    "gameObjects/rosz_importer.py": {"necron", "ork", "custodes"},
+    "gameObjects/roszImporter.py": {"necron", "ork", "custodes"},
     # DEBT — hardcoded default rosters / default faction. Should derive from the
     # selected armies instead. Tracked: docs/goals/backlog.md (generic-src).
     #
-    # Resolved S128: game_state.py's default rosters and loader.py's faction_dir
+    # Resolved S128: gameState.py's default rosters and loader.py's faction_dir
     # default both derived their "necrons" fallback from a hardcoded literal.
     # Both now require faction_dir to come from the roster (or an explicit,
     # faction-neutral caller-supplied fallback) — no more entries here.

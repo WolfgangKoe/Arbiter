@@ -12,14 +12,14 @@ from typing import Any, ClassVar, cast
 import streamlit as st
 
 from constants.symbols import SYM_RESET
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     faction_dir_for,
     unit_keys_for,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import (
+from gameMechanic.unitMutations import (
     reset_movement_to_stationary,
     resolve_desperate_breakout,
     set_deployment,
@@ -45,7 +45,7 @@ from uiLayout._common import (
     stratagem_used_here,
     undo_stratagem,
 )
-from uiLayout.go_card import GoCardState
+from uiLayout.goCard import GoCardState
 
 # Fallbacks when a teleport relic's YAML entry carries no UI texts. Faction
 # flavour (e.g. which keyword the second unit must carry) lives in the relic's
@@ -193,7 +193,7 @@ def _render_movement_buttons(
 def _render_reset_button(faction: str, uid: str, unit: Unit, current: str) -> None:
     """The one Reset button replacing whichever Move/Advance/Retreat button fired.
 
-    Reuses ``unit_mutations.reset_movement_to_stationary`` — itself built on
+    Reuses ``unitMutations.reset_movement_to_stationary`` — itself built on
     the existing ``set_movement_status`` mutation the pre-refactor "Stay
     Stationary" button already called (S133 K2 decision item 3: no new
     movement mutation, just a new entry point into the existing one). Always
@@ -356,7 +356,7 @@ def _desperate_breakout_stratagem(faction: str) -> Stratagem | None:
     """Find the shared stratagem driving Desperate Breakout resolution.
 
     Matched by effect shape (`type="move"`, `handler="fall_back_through_models"`),
-    not by id/name — mirrors `uiLayout._common._apply_stratagem_effect`'s
+    not by id/name — mirrors `gameMechanic.stratagemEngine._apply_stratagem_effect`'s
     dispatch (INV-4b: no faction- or GO-name string checks in src/).
     """
     stratagems = load_stratagems(faction_dir_for(faction))
@@ -646,7 +646,7 @@ def _render_pending_cut_them_down(faction: str) -> None:
     window-consuming GOs get the same anchor treatment as every other GO — the
     box keeps rendering ("used" at its own anchor, "used_elsewhere" anywhere
     else) instead of vanishing the instant it is spent. `_reset_phase_state()`
-    (game_state.py) still clears `pending_fall_back` at the phase boundary, so
+    (gameState.py) still clears `pending_fall_back` at the phase boundary, so
     the window does not outlive the phase either way.
     """
     marker = st.session_state.get("pending_fall_back")

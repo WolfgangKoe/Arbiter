@@ -15,8 +15,8 @@ from unittest.mock import MagicMock
 sys.modules.setdefault("streamlit", MagicMock())
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_log as gl  # noqa: E402
-import gameMechanic.game_state as gs  # noqa: E402
+import gameMechanic.gameLog as gl  # noqa: E402
+import gameMechanic.gameState as gs  # noqa: E402
 import uiLayout.gameProtocoll as gp  # noqa: E402
 from gameObjects.ability import Effect  # noqa: E402
 from gameObjects.stratagem import Stratagem  # noqa: E402
@@ -70,16 +70,16 @@ def test_deployment_snapshot_lists_duplicate_squads(monkeypatch) -> None:
 
 
 def test_reset_game_clears_battle_log_for_next_render(monkeypatch, tmp_path: Path) -> None:
-    """Plan 018 Task 18.2 regression: after the Reset button (game_state.reset_game)
+    """Plan 018 Task 18.2 regression: after the Reset button (gameState.reset_game)
     the Battle Log tab must show no entries from the previous game.
 
-    game_log.py defines its log path as a CWD-relative string (`_LOG_FILE`) while
+    gameLog.py defines its log path as a CWD-relative string (`_LOG_FILE`) while
     gameProtocoll.py defines it independently as a repo-root-anchored `Path`
     (`_LOG_PATH`) — two definitions of "the same" file. This test drives the real
     reset_game() -> archive_and_reset_log() call and reads the log back through
     gameProtocoll._load_game_log(), the function the Battle Log tab actually
     renders from, so a future drift between the two path definitions (or a
-    reintroduced module-level buffer in game_log.py) would fail here even though
+    reintroduced module-level buffer in gameLog.py) would fail here even though
     each module's own unit tests stay green in isolation.
     """
     log_file = tmp_path / "game_log.json"
@@ -178,59 +178,9 @@ def test_go_state_and_reason_cp_insufficient_maps_to_locked_with_cp_reason() -> 
     )
 
 
-# ---------------------------------------------------------------------------
-# _effect_gate_met() — S133-D Befund 4: per-unit-state gate for GOs whose
-# effect requires "not yet moved this phase" + "in Engagement Range"
-# (rules_appendix.txt 2618-2625, Desperate Breakout). Pure, no Streamlit.
-# ---------------------------------------------------------------------------
-
-
-def _make_fall_back_stratagem() -> Stratagem:
-    return _make_stratagem(id_="desperate_breakout", name_en="Desperate Breakout", cp_cost=2)
-
-
-def _with_fall_back_effect(strat: Stratagem) -> Stratagem:
-    from dataclasses import replace
-
-    return replace(strat, effect=Effect(type="move", handler="fall_back_through_models"))
-
-
-def test_effect_gate_met_true_when_stratagem_has_no_effect() -> None:
-    strat = _make_stratagem()
-    assert gp._effect_gate_met(strat, None) == (True, None)
-
-
-def test_effect_gate_met_true_for_unrelated_effect_shape() -> None:
-    from dataclasses import replace
-
-    strat = replace(_make_stratagem(), effect=Effect(type="auto_pass_morale"))
-    assert gp._effect_gate_met(strat, {"movement_chosen": True, "in_melee": False}) == (
-        True,
-        None,
-    )
-
-
-def test_effect_gate_met_false_when_no_unit_selected() -> None:
-    strat = _with_fall_back_effect(_make_fall_back_stratagem())
-    assert gp._effect_gate_met(strat, None) == (False, "select an eligible unit")
-
-
-def test_effect_gate_met_false_when_unit_already_moved_this_phase() -> None:
-    strat = _with_fall_back_effect(_make_fall_back_stratagem())
-    unit_state = {"movement_chosen": True, "in_melee": True}
-    assert gp._effect_gate_met(strat, unit_state) == (False, "unit already moved this phase")
-
-
-def test_effect_gate_met_false_when_unit_not_in_engagement_range() -> None:
-    strat = _with_fall_back_effect(_make_fall_back_stratagem())
-    unit_state = {"movement_chosen": False, "in_melee": False}
-    assert gp._effect_gate_met(strat, unit_state) == (False, "unit not in Engagement Range")
-
-
-def test_effect_gate_met_true_when_not_moved_and_in_engagement_range() -> None:
-    strat = _with_fall_back_effect(_make_fall_back_stratagem())
-    unit_state = {"movement_chosen": False, "in_melee": True}
-    assert gp._effect_gate_met(strat, unit_state) == (True, None)
+# _effect_gate_met() tests moved to tests/gameMechanic/test_stratagem_engine.py
+# (S142 Aufgabe 1, Option B — the function itself moved to
+# gameMechanic.stratagemEngine).
 
 
 # ---------------------------------------------------------------------------
@@ -414,6 +364,45 @@ def test_render_stratagem_column_use_action_routes_through_spend_stratagem(
     # S139 B12b: the central list's own anchor is passed so a spend here can be
     # told apart from the same GO spent at any other anchor this phase.
     assert spend_calls == [((strat, "Necrons", None), {"anchor_id": "central_list"})]
+
+
+def test_render_stratagem_column_use_action_refuses_unit_scoped_effect_without_unit_b12b(
+    monkeypatch,
+) -> None:
+    """S142 Aufgabe 2, Befund 5 regression: a unit-scoped-effect GO (e.g. Insane
+    Bravery, `type=auto_pass_morale`) must not spend CP + mark itself used with
+    no unit selected. `_effect_gate_met` already keeps such a card off "ready"
+    in this situation (see stratagemEngine tests), but this is the last line
+    of defence at the actual click site — clicking must be a no-op, never a
+    call to spend_stratagem, when `unit_key` is None."""
+    from dataclasses import replace
+
+    strat = replace(
+        _make_stratagem(id_="insane_bravery", name_en="Insane Bravery", cp_cost=2),
+        effect=Effect(type="auto_pass_morale"),
+    )
+    session = FakeSessionState(
+        cp={"Necrons": 2},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    spend_calls: list[tuple] = []
+    monkeypatch.setattr(
+        gp, "spend_stratagem", lambda *args, **kwargs: spend_calls.append((args, kwargs))
+    )
+
+    gp._render_stratagem_column("Necrons", True)
+    captured[0]["on_use"]()
+
+    assert spend_calls == []
 
 
 def test_render_stratagem_column_undo_action_routes_through_undo_stratagem(

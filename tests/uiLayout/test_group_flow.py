@@ -542,13 +542,13 @@ def test_front_group_hp_all_dead_returns_safe_default() -> None:
 # ---------------------------------------------------------------------------
 # Plan 014 Teil B — Defender loss allocation: A→B→C state transition
 # These tests exercise apply_damage / select_damage_target_group / get_locked_group
-# from gameMechanic.unit_mutations using the same Nobz fixture pattern as
+# from gameMechanic.unitMutations using the same Nobz fixture pattern as
 # tests/gameMechanic/test_unit_mutations.py (see _nobz_*  helpers there).
 # ---------------------------------------------------------------------------
 
-import gameMechanic.game_state as _gf_gs  # noqa: E402
-import gameMechanic.unit_mutations as _gf_mut  # noqa: E402
-from gameMechanic.unit_mutations import (  # noqa: E402
+import gameMechanic.gameState as _gf_gs  # noqa: E402
+import gameMechanic.unitMutations as _gf_mut  # noqa: E402
+from gameMechanic.unitMutations import (  # noqa: E402
     apply_damage,
     get_locked_group,
     select_damage_target_group,

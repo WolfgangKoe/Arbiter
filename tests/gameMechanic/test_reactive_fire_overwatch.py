@@ -1,4 +1,4 @@
-"""Plan 015 — Fire Overwatch reactive window wiring (chargephase.py).
+"""Plan 015 — Fire Overwatch reactive window wiring (chargePhase.py).
 
 `_inactive_charge` renders in the TARGET's own column for as long as it stays
 in `selected_targets` — exactly the window core_rules.txt Z. 1907-1934/3240
@@ -18,7 +18,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.chargephase as cp  # noqa: E402
+import gameMechanic.chargePhase as cp  # noqa: E402
 
 
 class FakeSessionState(dict):

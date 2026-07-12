@@ -112,7 +112,7 @@ reine Sammlung für den Stakeholder, keine Bewertung/Umsetzung:
 
 ### 6e — subfaction Execute-Logik
 
-- [ ] `gameMechanic/ability_engine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen
+- [ ] `gameMechanic/abilityEngine.py`: `collect_modifiers_for_phase(phase, attacker_unit, weapon, target_unit)` — sammelt alle aktiven Modifier aus allen Quellen
 - [ ] `gameObjects/ability.py`: Ability-Schema um `modifier`-Felder erweitern (analog zu Stratagem in 6c)
 - [ ] `data/wh40k_9e/*/unit_abilities.yaml` + `faction_abilities.yaml`: Modifier-Felder für relevante Fähigkeiten nachtragen (Pilot: Necrons + Orks)
 - [ ] Phase-Handler (Shooting, Fight, Charge): rufen `collect_modifiers_for_phase()` auf und übergeben Ergebnis an Attackensequenz-Renderer
@@ -123,7 +123,7 @@ Abhängig von `collect_modifiers_for_phase` (6e Execute-Logik):
 
 - [ ] `uiLayout/unitCard.py`: `active_modifiers` aus Session-State lesen, Badges für betroffene Einheit rendern
 - [ ] `uiLayout/unitCard.py`: Keyword-Highlighting wenn `active_modifiers` ein Keyword-Condition-Modifier betrifft
-- [ ] `gameMechanic/game_state.py`: `active_modifiers` Datenstruktur definieren: `{unit_key, source, effect, expires_at_phase, expires_at_round}`
+- [ ] `gameMechanic/gameState.py`: `active_modifiers` Datenstruktur definieren: `{unit_key, source, effect, expires_at_phase, expires_at_round}`
 
 ### 6h — Kat1–3 neue Fraktionen (alle blocked-by-YAML)
 
@@ -141,7 +141,7 @@ Abhängig von `collect_modifiers_for_phase` (6e Execute-Logik):
 
 **Kategorie 3 — Auto-Progression (kein Player-Input):**
 
-- [ ] `ability_engine.py`: `get_auto_progression_modifier(faction_dir, phase, round)`
+- [ ] `abilityEngine.py`: `get_auto_progression_modifier(faction_dir, phase, round)`
 - [ ] `armyCard.py`: `_render_auto_progression_badge(faction)` — Info-Badge ohne Button
 - [ ] YAML-Schema `ability_type: auto_progression` + YAML für Space Marines, Death Guard, Chaos SM
 - [ ] `tests/test_auto_progression.py`

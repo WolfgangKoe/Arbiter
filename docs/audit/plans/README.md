@@ -37,6 +37,7 @@ run every verification command, and update your row below when done.
 | 029 | Custodes Rendax Ka'tah Secondary: `strength_if_charged`-Verdrahtung (+1 S nach Charge) | P3 (NIEDRIG) | S | 025 ✅ | REJECTED (S118, Stakeholder) — Custodes-Ausbau wird gesammelt nach dem Faction-Fetcher nachgeholt; keine Plandatei angelegt. Merkposten bleibt: toter `strength_modifier`-Pfad seit 025 Step 6 (vorbestehend, S97-Drift). |
 | [032](032-necron-stratagem-semantics.md) | Necron-Stratagem-Semantik: Restarbeit aus dem S123-Vollabgleich (Schema-Erweiterungen, Daten-Nacharbeit, Klasse-B-Hinweise) | P2 (MITTEL) | L | — | TODO |
 | [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040 ✅; NICHT parallel zu 015/026 | TODO |
+| [S142-FixD](S142_fixD_resolution_tabs.md) | FixD Cross-Player-Area-Leak: Resolution-Tabs strukturell in die Spieler-Spalten (S141 Befund 3, Stakeholder-Entscheid Wurzelbehandlung; `target_name`-Sofortlinderung läuft separat) | P1 (HOCH) | L (3 Teil-Briefe: M+M+S, je ≤ M) | NICHT parallel zu 041/015/026 (gleiche Dateien `_common.py`/`fightPhase.py`); Brief 2 zusätzlich hinter Mockup-Gate | WARTET AUF FREIGABE |
 
 **Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).

@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from constants.symbols import SYM_RESET
-from gameMechanic.game_state import PHASES, is_battle_over, next_phase, prev_phase, reset_game
+from gameMechanic.gameState import PHASES, is_battle_over, next_phase, prev_phase, reset_game
 from uiLayout._common import reset_group_declaration_state
 
 CSS_THEME = """

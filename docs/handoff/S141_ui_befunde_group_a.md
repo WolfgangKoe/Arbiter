@@ -128,12 +128,15 @@ verpufft lautlos. Der B12b-Suffix bleibt aus demselben Grund leer
 (`stratagem_used_elsewhere_unit_name` liest denselben `unit_key`, der hier nie gesetzt
 wurde) — die Vermutung im Auftrag trifft zu.
 
-**Fix-Ort:** `src/uiLayout/gameProtocoll.py::_effect_gate_met` (Zeilen 145-177) — Gate um
+**Fix-Ort (S142 aktualisiert):** `_effect_gate_met` wohnt seit S142 Aufgabe 1 (Option B,
+Stratagem-Dispatch-Konsolidierung) in `src/gameMechanic/stratagemEngine.py` (reiner Umzug,
+`src/uiLayout/gameProtocoll.py` importiert die Funktion nur noch) — Gate um
 `effect.type == "auto_pass_morale"` (und generisch: jeden unit-scoped Effekt-Typ ohne
 eigene Bedingungs-Keywords) erweitern, der `unit_for_check`/`unit_state_for_check`
 verlangt, bevor der State auf "ready" steht; alternativ/ergänzend
-`_use_callback` (Zeilen 249-262) so härten, dass ein `unit_key=None` beim Klick den
-Klick verweigert statt CP+Verbrauch ohne Effekt zu buchen.
+`_use_callback` (weiterhin `src/uiLayout/gameProtocoll.py`, Zeilen ~249-262) so härten,
+dass ein `unit_key=None` beim Klick den Klick verweigert statt CP+Verbrauch ohne Effekt
+zu buchen.
 
 **Aufwand:** S.
 

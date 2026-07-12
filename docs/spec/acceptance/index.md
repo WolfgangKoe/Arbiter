@@ -7,7 +7,7 @@
 
 ## Bereich: Subfaction- & Faktion-Badge (Finding #1)
 
-Quelle: `gameMechanic/game_state.subfaction_badge_for` /
+Quelle: `gameMechanic/gameState.subfaction_badge_for` /
 `faction_display_name_for`; Farben: `docs/spec/design_colors.md` §2a.
 Grundregel: Das Subfaction-Badge wird **immer** gerendert — nie unsichtbar.
 

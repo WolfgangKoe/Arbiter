@@ -38,8 +38,8 @@ vertagt — Fix-Orte in `docs/handoff/S141_ui_befunde_group_a.md`.
 S140 (Review **GO**, 0 Auflagen; Vollsuite 1772 passed / 99,14 %, mypy **54 → 48**):
 **Dynastie↔Protokoll-Kopplung komplett** — Round-Zweig wertet `subfaction_affinity`
 jetzt aus: Gate `has_round` auf `bool(active_id)` gelockert + Affinitäts-Check in
-`_active_directive_effects` (`ability_engine.py`) und `active_round_choice_buff_labels`
-(`game_state.py`, Unit-Card-Badges); UI-Zweig in `armyCard._render_round_choice_ui`
+`_active_directive_effects` (`abilityEngine.py`) und `active_round_choice_buff_labels`
+(`gameState.py`, Unit-Card-Badges); UI-Zweig in `armyCard._render_round_choice_ui`
 rendert bei Treffer sofort „… BONUS (BOTH)"-Badge statt Primary/Secondary-Buttons.
 Regressionstests je 6 Dynastien in beiden Schichten; Regelzuordnung vom Reviewer gegen
 Wahapedia bestätigt. Stakeholder-UI-verifiziert: positiv. Zusätzlich
@@ -54,7 +54,7 @@ Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Se
 **Strategisches Thema (Stakeholder S141) — Gefechtsoptionen-Architektur:** GOs/Stratagems
 funktionieren ähnlich wie Abilities, laufen aber vermutlich NICHT über die ability-Engine.
 S142-Planning soll die Ist-Architektur erheben (`stratagem.py`, `gameProtocoll.py`,
-`ability_engine.py`) und eine Empfehlung mit Trade-offs geben: über die ability-Engine
+`abilityEngine.py`) und eine Empfehlung mit Trade-offs geben: über die ability-Engine
 vereinheitlichen ODER gesonderte Funktion (auch wenn das etwas Code dupliziert)? Hängt eng
 mit FixC/FixD zusammen — beide sitzen in der GO/Stratagem-Verdrahtung; ggf. Fixes im Licht
 der Architektur-Entscheidung planen.
@@ -77,7 +77,7 @@ der Architektur-Entscheidung planen.
 1. **Insassen-Feature (Emergency-Disembark Teil B):** kein Konzept „Einheit sitzt in
    Transport" (Roster-YAML/State/UI) — eigenes Planning; Design-Fragen (Start-Zustand vs.
    In-Game-UI; Kapazität hart vs. Hinweis) in `docs/handoff/S141_ui_befunde_group_b.md`.
-2. **Verwandter `on_declaration`-Befund (analog FixA):** `chargephase.py:170`/
+2. **Verwandter `on_declaration`-Befund (analog FixA):** `chargePhase.py:170`/
    `fightPhase.py:460` reichen kein `unit_for_conditions` durch → `efficient_disintegration`
    evtl. betroffen; „unit selected to shoot"-Anker fehlt in `shootingPhase.py`. → `backlog.md`.
 3. **Roster-Test-Lücke:** kein Test lädt alle `data/rosters/` durch (`test_loader.py:1259`

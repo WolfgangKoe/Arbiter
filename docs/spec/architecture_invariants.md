@@ -22,7 +22,7 @@ Architektur-Gesamtbild: [architecture.md](architecture.md) · Prozess-Specs: [pr
 | INV-4 | `src/` ist fraktions-generisch (keine Fraktions-**Namen** im Code) | `test_generic_src.py` | ✅ (Allowlist = nur noch LEGIT-Rest, DEBT S128 aufgelöst) |
 | INV-4b | `src/` enthält kein Fraktions-**Vokabular** (datengetrieben aus YAML) | `test_generic_src_vocab.py` | ✅ (Ledger = nur noch LEGIT, DEBT S128 Teil 2 aufgelöst) |
 | INV-5 | Doku-Gesundheit: Spec ↔ Tests ↔ Stand laufen nicht auseinander | `tests/docs/`, `tests/acceptance/` | ✅ |
-| INV-6 | Reine HTML/SVG-Komposition liegt in `dice_compose.py` — Streamlit-frei und Coverage-gemessen | `test_render_composition_seam.py` | ✅ 0 Verstöße |
+| INV-6 | Reine HTML/SVG-Komposition liegt in `diceCompose.py` — Streamlit-frei und Coverage-gemessen | `test_render_composition_seam.py` | ✅ 0 Verstöße |
 
 So misst du selbst: `pytest tests/architecture/ tests/docs/ tests/acceptance/ --no-cov -q`
 
@@ -47,7 +47,7 @@ Vokabular-/Allowlist-Zahlen sollen **sinken** (Ratchet), AC-IDs **wachsen**.
 | Datei | Grund |
 |---|---|
 | `gameObjects/loader.py` | **Lese-Entry-Point** für alle Armee-/Katalogdaten |
-| `gameObjects/rosz_importer.py` | `.rosz`→YAML-Konverter: **schreibt** nur das konvertierte Roster (`yaml.dump`); gelesen wird weiter über `load_unit_catalog` |
+| `gameObjects/roszImporter.py` | `.rosz`→YAML-Konverter: **schreibt** nur das konvertierte Roster (`yaml.dump`); gelesen wird weiter über `load_unit_catalog` |
 
 Neue YAML-Zugriffe in anderen Dateien lassen den Wächter scheitern → `YAML_ALLOWED` mit Begründung ergänzen oder über den Loader leiten.
 
@@ -59,7 +59,7 @@ Die Allowlist in `test_generic_src.py` hält den Build grün **und** macht den D
 Zwei Klassen:
 
 **LEGIT (dauerhaft):**
-- `gameObjects/rosz_importer.py` — mappt externe BattleScribe-Fraktionslabels auf interne Slugs (I/O-Normalisierung an der Import-Grenze, keine Spiellogik).
+- `gameObjects/roszImporter.py` — mappt externe BattleScribe-Fraktionslabels auf interne Slugs (I/O-Normalisierung an der Import-Grenze, keine Spiellogik).
 
 **DEBT:** keine offenen Einträge mehr — beide verbliebenen DEBT-Zeilen sind S128 aufgelöst
 (siehe unten). Allowlist ist jetzt reiner LEGIT-Rest (3 Tokens, 1 Datei).
@@ -68,7 +68,7 @@ Zwei Klassen:
   (`"Necrons"`/`"Orks"` → `"Player 1/2"`) und `setupScreen.py` Caption (fraktions-neutral) —
   aus Allowlist entfernt (10 → 5 Einträge).
 
-  _Erledigt 2026-07-06 (S128):_ `gameMechanic/game_state.py` — hartcodierte Default-Roster
+  _Erledigt 2026-07-06 (S128):_ `gameMechanic/gameState.py` — hartcodierte Default-Roster
   (`necrons_alpha.yaml`/`necrons_beta.yaml`) entfernt: `init_state()`s `roster_p1`/`roster_p2`
   sind jetzt Pflichtparameter (einziger Prod-Aufrufer `setupScreen.py` übergab ohnehin immer
   explizite Werte). `_load_roster_for`s `fallback_faction` kommt jetzt faktions-neutral (`""`)
@@ -79,7 +79,7 @@ Zwei Klassen:
   `load_roster_metadata()` `None` (generisch, kein Fraktions-Rateversuch) und `load_roster()`
   wirft einen `ValueError` (jede der 7 Roster-YAMLs im Repo deklariert `faction_dir` bereits
   explizit — der Pfad war totes Gewicht). Allowlist 5 → 3 Einträge (nur noch der LEGIT-Rest
-  `rosz_importer.py`).
+  `roszImporter.py`).
 
 Ziel erreicht: Allowlist enthält nur noch den dauerhaften LEGIT-Eintrag.
 
@@ -115,10 +115,10 @@ so ein Token in einem `src/`-Bezeichner oder String auf → Leck.
   - Frühere Einträge `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren
     bereits vor S128 aus `src/` entfernt — dieser Absatz war insofern Doku-Drift
     (in früheren Sessions nicht nachgezogen), jetzt korrigiert.
-- LEGIT (verbleibender Rest, 6 Tokens / 3 Dateien): `gameObjects/rosz_importer.py`
+- LEGIT (verbleibender Rest, 6 Tokens / 3 Dateien): `gameObjects/roszImporter.py`
   (Fraktionslabel-Normalisierung, 5 Tokens) + `protocol` in
-  `gameMechanic/phase_handler.py` (`typing.Protocol`) und
-  `gameMechanic/ability_engine.py` (generischer Round-Choice-Helfername) — je
+  `gameMechanic/phaseHandler.py` (`typing.Protocol`) und
+  `gameMechanic/abilityEngine.py` (generischer Round-Choice-Helfername) — je
   eine Kollision mit dem Seed-Wort, kein Fraktions-Leck.
 
 ---
@@ -138,21 +138,21 @@ mit dem Nutzer statt stiller Drift (genau der Fehler hinter Finding 9.2).
 
 ---
 
-## INV-6 — Render/Composition-Seam (dice_compose.py)
+## INV-6 — Render/Composition-Seam (diceCompose.py)
 
 **Regel:** Alle reinen HTML/SVG-Bausteine für die Angriffs-UI (SVG-Würfelgesichter,
-Schwellenwert-Header, Modifier-Zeilen, Grid-Zeilen) leben in `src/uiLayout/dice_compose.py`.
+Schwellenwert-Header, Modifier-Zeilen, Grid-Zeilen) leben in `src/uiLayout/diceCompose.py`.
 Dieses Modul importiert kein Streamlit und ist vollständig durch Unit-Tests abgedeckt.
-Nur die drei `st.markdown`-Wrapper-Funktionen verbleiben im ausgenommenen `dice_html.py`.
+Nur die drei `st.markdown`-Wrapper-Funktionen verbleiben im ausgenommenen `diceHtml.py`.
 
 **Motivation:** Render-Logik, die in Streamlit-Render-Funktionen versteckt war, wurde nicht
 von der Coverage erfasst und hat wiederholt zu schwer auffindbaren Bugs geführt (Heroic-
-Intervention Duplicate-Key-Crash, Badge-Kompositions-Fehler in `dice_html.py`). Die Seam
+Intervention Duplicate-Key-Crash, Badge-Kompositions-Fehler in `diceHtml.py`). Die Seam
 stellt sicher, dass Kompositions-Logik immer messbar bleibt.
 
 **Wächter:** `tests/architecture/test_render_composition_seam.py`
-- Assert 1: `dice_compose.py` enthält kein `import streamlit` (AST-geprüft).
-- Assert 2: `dice_compose.py` steht nicht in `[tool.coverage.run] omit`; kein
+- Assert 1: `diceCompose.py` enthält kein `import streamlit` (AST-geprüft).
+- Assert 2: `diceCompose.py` steht nicht in `[tool.coverage.run] omit`; kein
   `src/uiLayout/*`-Wildcard, der das Modul stillschweigend verschlucken würde.
 
 **Coverage-Ratchet:** `fail_under` von 90 auf 92 angehoben (2026-06-21) — lockert die
@@ -173,10 +173,10 @@ darf nicht langsamer werden). CI-Step in `.github/workflows/deploy.yml`
 („Type check (ratchet gate)") ruft es blocking auf.
 
 **Baseline:** 82 Fehler (gemessen 2026-07-06, S128 Teil 2; vorher 134, Plan 038).
-Abbau: **−34** `gameMechanic/game_state.py` (Paket 2 — Inline-Annotationen an
+Abbau: **−34** `gameMechanic/gameState.py` (Paket 2 — Inline-Annotationen an
 `st.session_state.*` auf typisierte Zwischenvariablen/`cast` umgestellt) + **−18**
-`gameObjects/` komplett (Paket 3 — `rosz_importer.py`/`loader.py`/
-`round_choice_ability.py`/`weapon.py`/`ability.py`) = **−52** gesamt, reine
+`gameObjects/` komplett (Paket 3 — `roszImporter.py`/`loader.py`/
+`roundChoiceAbility.py`/`weapon.py`/`ability.py`) = **−52** gesamt, reine
 Typannotationen ohne Verhaltensänderung (Vollsuite grün, 1496 passed).
 
 **Ratchet-Logik (beidseitig, INV-4b-Muster):**

@@ -1,4 +1,4 @@
-"""Tests for phase_runner.py — PHASE_REGISTRY and render_current_phase.
+"""Tests for phaseRunner.py — PHASE_REGISTRY and render_current_phase.
 
 Tests verify that:
 - All seven game phases are registered with their correct handler.
@@ -15,8 +15,8 @@ _st_mock = MagicMock()
 sys.modules.setdefault("streamlit", _st_mock)
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.phase_runner as _pr  # noqa: E402
-from gameMechanic.phase_runner import PHASE_REGISTRY  # noqa: E402
+import gameMechanic.phaseRunner as _pr  # noqa: E402
+from gameMechanic.phaseRunner import PHASE_REGISTRY  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # PHASE_REGISTRY

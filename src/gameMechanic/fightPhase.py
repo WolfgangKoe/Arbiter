@@ -14,14 +14,14 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND_ALT, SYM_SWORDS
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     unit_id_from_state_key,
     unit_keys_for,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
+from gameMechanic.unitMutations import apply_mortal_wounds, heal_unit
 from gameObjects.stratagem import Stratagem
 from gameObjects.unit import Unit
 from uiLayout._common import (

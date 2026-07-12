@@ -11,11 +11,12 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.ability_engine as _eng  # noqa: E402
-import gameMechanic.game_state as _gs  # noqa: E402
-import gameMechanic.unit_mutations as _um  # noqa: E402
+import gameMechanic.abilityEngine as _eng  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import gameMechanic.stratagemEngine as _se  # noqa: E402
+import gameMechanic.unitMutations as _um  # noqa: E402
 import uiLayout._common as common  # noqa: E402
-from gameMechanic.ability_engine import (  # noqa: E402
+from gameMechanic.abilityEngine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
 from gameObjects.ability import Effect  # noqa: E402
@@ -331,9 +332,7 @@ def test_cast_not_shown_when_false() -> None:
 def test_lookup_raises_keyerror_for_unknown_unit(monkeypatch) -> None:
     fake_units = [SimpleNamespace(id="known.unit")]
     monkeypatch.setattr(common, "units_list_for", lambda faction: fake_units)
-    monkeypatch.setattr(
-        "gameMechanic.game_state.unit_id_from_state_key", lambda uid: "missing.unit"
-    )
+    monkeypatch.setattr("gameMechanic.gameState.unit_id_from_state_key", lambda uid: "missing.unit")
     with pytest.raises(KeyError, match="out of sync"):
         common.lookup("Necrons", "missing.unit")
 
@@ -360,7 +359,7 @@ def _eg_session(*, stationary: bool) -> _SS:
     """Session with Eternal Guardian primary active; unit movement set accordingly.
 
     Binds the session onto every module's ``st`` reference — not just the local mock —
-    because ability_engine, game_state, and _common each hold their own imported ``st``
+    because abilityEngine, gameState, and _common each hold their own imported ``st``
     object captured at import time (see test_round_choice_player_keyed._install).
     """
     session = _SS(
@@ -815,6 +814,7 @@ def _effect_spend_session(unit_key: str = "unit#1") -> _SS:  # type: ignore[no-u
     )
     common.st.session_state = session
     _gs.st.session_state = session
+    _se.st.session_state = session
     _um.st.session_state = session
     return session
 
@@ -929,7 +929,7 @@ def _reactive_box_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
 
 
 def _install_reactive_box_session(monkeypatch, session):  # type: ignore[no-untyped-def]
-    """Point common/game_state/unit_mutations at the SAME session_state (see
+    """Point common/gameState/unitMutations at the SAME session_state (see
     module docstring on why all three must share one object) and spy on
     `render_go_card` — the same pattern test_game_protocoll.py uses for the
     central Stratagems list (S133 Task 6: the reactive box now builds on the
@@ -1202,14 +1202,14 @@ def test_use_action_invokes_on_spent_and_on_resolved(monkeypatch) -> None:
 # ---------------------------------------------------------------------------
 
 
-def _unit_with_keywords(*keywords: str):  # type: ignore[no-untyped-def]
-    return SimpleNamespace(has_keyword=lambda kw: kw in keywords)
+def _unit_with_keywords(*keywords: str, name_en: str = "Test Unit"):  # type: ignore[no-untyped-def]
+    return SimpleNamespace(has_keyword=lambda kw: kw in keywords, name_en=name_en)
 
 
 def test_shadows_of_drazak_shown_at_hit_anchor_for_matching_unit(monkeypatch) -> None:
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    flayed_ones = _unit_with_keywords("FLAYED ONES")
+    flayed_ones = _unit_with_keywords("FLAYED ONES", name_en="Flayed Ones")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1230,7 +1230,7 @@ def test_shadows_of_drazak_absent_at_wound_anchor(monkeypatch) -> None:
     though both share the same (phase, event) window."""
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    flayed_ones = _unit_with_keywords("FLAYED ONES")
+    flayed_ones = _unit_with_keywords("FLAYED ONES", name_en="Flayed Ones")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1290,7 +1290,7 @@ def test_shadows_of_drazak_hidden_without_any_unit_passed(monkeypatch) -> None:
 def test_whirling_onslaught_shown_at_wound_anchor_for_matching_unit(monkeypatch) -> None:
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    destroyer = _unit_with_keywords("DESTROYER CULT")
+    destroyer = _unit_with_keywords("DESTROYER CULT", name_en="Destroyers")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1309,7 +1309,7 @@ def test_whirling_onslaught_shown_at_wound_anchor_for_matching_unit(monkeypatch)
 def test_whirling_onslaught_absent_at_hit_anchor(monkeypatch) -> None:
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    destroyer = _unit_with_keywords("DESTROYER CULT")
+    destroyer = _unit_with_keywords("DESTROYER CULT", name_en="Destroyers")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1333,7 +1333,7 @@ def test_shadows_of_drazak_use_registers_defender_scoped_hit_modifier(monkeypatc
     scoping (above) then reads back out."""
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    flayed_ones = _unit_with_keywords("FLAYED ONES")
+    flayed_ones = _unit_with_keywords("FLAYED ONES", name_en="Flayed Ones")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1371,7 +1371,7 @@ def test_shadows_of_drazak_use_registers_defender_scoped_hit_modifier(monkeypatc
 def test_quantum_deflection_shown_at_save_anchor_for_matching_unit(monkeypatch) -> None:
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+    shielded = _unit_with_keywords("QUANTUM SHIELDING", name_en="Canoptek Wraiths")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1408,7 +1408,7 @@ def test_quantum_deflection_absent_at_hit_anchor(monkeypatch) -> None:
     """The effect_type filter keeps the invuln-save GO off the debuff_roll anchors."""
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+    shielded = _unit_with_keywords("QUANTUM SHIELDING", name_en="Canoptek Wraiths")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1430,7 +1430,7 @@ def test_quantum_deflection_use_registers_defender_scoped_invuln_modifier(monkey
     (below) then reads back out for the Save block's effective-invuln calc."""
     session = _reactive_box_session()
     captured = _install_reactive_box_session(monkeypatch, session)
-    shielded = _unit_with_keywords("QUANTUM SHIELDING")
+    shielded = _unit_with_keywords("QUANTUM SHIELDING", name_en="Canoptek Wraiths")
 
     common.render_reactive_stratagem_box(
         "Necrons",
@@ -1483,7 +1483,7 @@ def test_spend_stratagem_invuln_save_without_modifier_value_is_noop() -> None:
 
 # ---------------------------------------------------------------------------
 # S135 Paket 4b — _stratagem_invuln_save(): read-back side for the Save block
-# (mirrors ability_engine.ability_invuln_save's "lowest value wins" semantics
+# (mirrors abilityEngine.ability_invuln_save's "lowest value wins" semantics
 # but reads active_modifiers instead of activated faction abilities)
 # ---------------------------------------------------------------------------
 
@@ -2191,7 +2191,7 @@ def test_damage_block_no_offer_before_damage_applied(monkeypatch) -> None:
 def _resolution_tab_entry_and_units():  # type: ignore[no-untyped-def]
     """Real melee Choppa attack (Orks Boyz -> Necrons Warriors). def_unit is a
     plain SimpleNamespace (only the attributes _render_resolution_tab actually
-    reads) — combat resolve functions, ability_engine and the loader run for
+    reads) — combat resolve functions, abilityEngine and the loader run for
     real against empty per-attack state, exactly as in production when no
     buffs/directives are active.
 
@@ -2302,12 +2302,12 @@ def test_render_resolution_tab_no_extra_divider_before_save_block(monkeypatch) -
     before the SAVE title (the one after SAVE separates the DAMAGE block and
     is legitimate), and exactly two block dividers total (WOUND, SAVE).
 
-    Both _common's and dice_html's markdown calls are captured: the two
+    Both _common's and diceHtml's markdown calls are captured: the two
     modules can hold DIFFERENT streamlit mocks in a full test run (each test
     file installs its own sys.modules['streamlit'] mock, but already-imported
     modules keep the one they were imported under)."""
-    import uiLayout.dice_html as dice_html_mod  # noqa: PLC0415
-    from uiLayout.dice_compose import block_divider_html  # noqa: PLC0415
+    import uiLayout.diceHtml as dice_html_mod  # noqa: PLC0415
+    from uiLayout.diceCompose import block_divider_html  # noqa: PLC0415
 
     entry, unit, def_unit = _resolution_tab_entry_and_units()
     _install_resolution_tab_fixture(monkeypatch, def_unit)

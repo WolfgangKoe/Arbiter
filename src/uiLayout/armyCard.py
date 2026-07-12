@@ -13,13 +13,13 @@ from __future__ import annotations
 
 import streamlit as st
 
-from gameMechanic.ability_engine import (
+from gameMechanic.abilityEngine import (
     check_conditions,
     execute_effect,
     get_active_heal_bonus,
 )
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     PHASES,
     faction_dir_for,
     faction_display_name_for,

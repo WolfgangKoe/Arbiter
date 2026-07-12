@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from gameMechanic.game_state import (
+from gameMechanic.gameState import (
     faction_dir_for,
     unit_keys_for,
     units_key_for,

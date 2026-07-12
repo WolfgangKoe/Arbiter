@@ -40,7 +40,7 @@ sie zu duplizieren (Artefakt-Landkarte: genau ein kanonischer Ort je Frage).
 ### 1.1 Badge / Chip — EIN Builder (`src/uiLayout/badges.py`)
 
 Vor S115 bauten vier Call-Sites (`_common._badge`, `unitCard._badge`,
-`armyCard._keyword_badge`/`_active_ability_badge`, Invuln-Fragmente in `dice_html`)
+`armyCard._keyword_badge`/`_active_ability_badge`, Invuln-Fragmente in `diceHtml`)
 denselben `<span>` mit leicht abweichenden Maßen von Hand nach — sie waren bereits
 gedriftet. Jetzt liefert `badges.py` die Geometrie zentral; **Farben bleiben am
 Call-Site** (sie stammen aus den semantischen Tabellen in `design_colors.md`).
@@ -50,7 +50,7 @@ Call-Site** (sie stammen aus den semantischen Tabellen in `design_colors.md`).
 | `badge(text, fg, bg, *, margin_right)` | Status / Buff / Debuff / Faction / Army-Ability | `_common._badge`, `unitCard._badge`, `armyCard._keyword_badge` + `_active_ability_badge` |
 | `chip(text, fg, bg, border, *, margin_right)` | Keyword-Chip / sekundärer Hinweis | `unitCard._keyword_chip`, `gameActionsArea._display_unit_datasheet` (seit S117/S118) |
 
-Der Invuln-Block (`dice_html.py`, `_render_dice_save_block`) wurde in S116 bewusst
+Der Invuln-Block (`diceHtml.py`, `_render_dice_save_block`) wurde in S116 bewusst
 **gestrichen**, nicht auf die Bausteine umgestellt (Commit `143d848`: „Invuln cleanup:
 drop active badge + AP/Cover N/A chip from SAVE block"): „active"-Badge und
 „AP/Cover N/A"-Hinweis entfielen ersatzlos; übrig bleibt nur die `Inv N+`-Zeile als
@@ -59,7 +59,7 @@ eingefärbter `<span>` (Buff-Grün bei ability-basiertem Invuln) — kein
 ist damit durch Streichung erledigt. *(Korrigiert S120, 2026-07-03 — die frühere
 Formulierung „baut das Label aus diesen Bausteinen" beschrieb einen nie gebauten Stand.)*
 
-**Nicht Teil des gemeinsamen Builders (bewusst):** `dice_compose._badge_chip` — das
+**Nicht Teil des gemeinsamen Builders (bewusst):** `diceCompose._badge_chip` — das
 Dice-Modifier-Label hat eine eigene Sonder-Geometrie (feste Spaltenbreite +
 Ellipsis-Truncation), es ist kein Status-Badge. Bleibt eigenständig.
 
@@ -71,7 +71,7 @@ kein Handlungsbedarf, nur hier dokumentiert.
 
 ### 1.3 Dice-Grid / Block-Divider
 
-`dice_compose.py` (`grid_row_html`, `block_divider_html`, …) ist der bereits etablierte,
+`diceCompose.py` (`grid_row_html`, `block_divider_html`, …) ist der bereits etablierte,
 Streamlit-freie, Coverage-gemessene Kompositions-Layer (INV-6). `badges.py` folgt exakt
 demselben Seam: pure HTML-Builder, kein Streamlit, Coverage-gemessen.
 
@@ -134,13 +134,13 @@ Neue Badges/Chips werden direkt gegen `badges.py` gebaut, statt eine fünfte Kop
 erzeugen (Ratchet-Prinzip, analog Rule-Catalog-Gate).
 
 **Schritt 2 (S117/S118) abgeschlossen:** Rollout auf die restlichen 10 Produktivdateien
-(`_common.py`, `chargephase.py`, `moralePhase.py`, `shootingPhase.py`, `fightPhase.py`,
+(`_common.py`, `chargePhase.py`, `moralePhase.py`, `shootingPhase.py`, `fightPhase.py`,
 `commandPhase.py`, `psychicPhase.py`, `gameActionsArea.py`, `gameHeader.py`,
 `setupScreen.py`) — alle `▶ ◀ ▷ ✓ ✕ ＋ ⚔ ↺`-Literale in Code-Ausdrücken auf die
 `symbols.py`-Konstanten gezogen, dazu die Keyword-Chip-Stelle in
 `gameActionsArea._display_unit_datasheet` auf `chip()` migriert. Bewusste Ausnahmen bleiben
 Literal, kein Ratchet-Anspruch: `gameHeader._phase_badges_html` (eigene dritte
-Geometrie-Klasse, kein Badge im Sinne von §1.1), `dice_compose._badge_chip` (S115 bereits
+Geometrie-Klasse, kein Badge im Sinne von §1.1), `diceCompose._badge_chip` (S115 bereits
 eigenständig), der `←`-Pfeil (keine Konstante in §4 vorgesehen) sowie das `⬇`-Download-Icon
 in `setupScreen.py` (kein Semantik-Match in §4). Der Ratchet-Rest ist damit auf Null —
 neue Literale, die künftig hinzukommen, werden wieder gegen diesen Stand geprüft.
@@ -304,7 +304,7 @@ separates Problem ist — kein Ereignis-Fenster fehlt dort, nur die Verdrahtung)
   Stratagems in `go_klassifikation.md` §2 sind) — der bestehende `on_destroy`-Hook feuert nur
   beim TRANSPORT-Tod (Emergency Disembarkation); eine generische Version muss an jede
   Stelle, an der ein Modell/eine Einheit über alle Phasen hinweg als zerstört gilt
-  (`unit_mutations.py`, `combat.py`, Morale-Verluste), nicht nur an einen einzelnen
+  (`unitMutations.py`, `combat.py`, Morale-Verluste), nicht nur an einen einzelnen
   Aufruf.
 
 **Empfehlung: eigener Folge-Split, in zwei Pakete statt einem.** Begründung: die drei

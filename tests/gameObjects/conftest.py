@@ -3,7 +3,7 @@
 The loader module keeps module-level caches that persist across test
 functions. Without cleanup, tests that populate those caches (e.g. the
 loader cache-hit tests) leak state into unrelated tests that assume a
-clean loader — this causes ~50 ability_engine failures when tests run
+clean loader — this causes ~50 abilityEngine failures when tests run
 as a subset (cache-pollution). The autouse fixture below clears all 8
 caches before every test in this package, keeping each test fully isolated.
 """

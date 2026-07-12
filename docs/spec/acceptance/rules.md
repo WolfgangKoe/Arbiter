@@ -101,7 +101,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_ability_invuln_save_picks_best_of_multiple
 - **quelle**: core_rules.txt — "Invulnerable Saves" — "If a model has more than one invulnerable save, it can only use one of them"
-- **code**: ability_engine.py:ability_invuln_save
+- **code**: abilityEngine.py:ability_invuln_save
 - **regel**: Hat ein Modell mehrere Invulnerable Saves, wird nur der beste verwendet (kleinster Zahlenwert). Die „bester von mehreren"-Auswahl liegt in `ability_invuln_save` (`min(...)` über alle aktiven Invuln-Effekte), NICHT in `resolve_save` (nimmt einen Einzelwert).
 
 ### R-COMBAT-10
@@ -117,7 +117,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_apply_damage_multiwound_caps_damage_to_front_model
 - **quelle**: core_rules.txt — "5. Inflict Damage — excess damage inflicted by that attack is lost"
-- **code**: unit_mutations.py:apply_damage
+- **code**: unitMutations.py:apply_damage
 - **regel**: Überzähliger Schaden, der ein Einzelmodell überschreitet (non-mortal), verfällt und hat keinen Effekt auf andere Modelle.
 
 ### R-COMBAT-12
@@ -133,7 +133,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_user_keyword / test_plus_one / test_times_two
 - **quelle**: core_rules.txt — "Weapon Strength … 'User' … modifier '+1' … 'x2'"
-- **code**: attack_math.py:_parse_strength / combat.py:resolve_weapon_strength
+- **code**: attackMath.py:_parse_strength / combat.py:resolve_weapon_strength
 - **regel**: Waffenstärke wird aus der Notation aufgelöst: fester Wert, "User" (= Trägerstärke), "+N", "×N", "-N".
 
 ### R-COMBAT-14
@@ -141,7 +141,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_apply_damage_attacks_wounds_on_front
 - **quelle**: core_rules.txt — "3. Allocate Attack — if a model … has already lost any wounds … must be allocated to that model"
-- **code**: unit_mutations.py:apply_damage
+- **code**: unitMutations.py:apply_damage
 - **regel**: Angegriffene Modelle mit bereits verlorenen Wunden müssen zuerst weitere Angriffe zugeteilt bekommen (Front-Modell-Prinzip).
 
 ### R-COMBAT-15
@@ -149,7 +149,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_apply_damage_mortal_wounds_kill_multiple_1wound_models / test_apply_damage_mortal_wound_bypasses_spillover_cap
 - **quelle**: core_rules.txt — "Mortal Wounds" (Advanced Rules)
-- **code**: unit_mutations.py:apply_damage
+- **code**: unitMutations.py:apply_damage
 - **regel**: Mortal Wounds: kein Verwundungs- oder Rettungswurf; jede Mortal Wound = 1 Schadenspunkt. Überzähliger Schaden durch Mortal Wounds verfällt NICHT, sondern geht auf das nächste Modell über.
 
 ### R-COMBAT-16
@@ -166,7 +166,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **getestet**: ja — test_rapid_fire_caption_shown_for_rapid_fire_weapon
 - **quelle**: core_rules.txt — "RAPID FIRE … double the number of attacks … if its target is within half the weapon's range"
 - **code**: _common.py:_rapid_fire_caption
-- **regel**: Rapid-Fire-Waffe: Angriffszahl wird verdoppelt, wenn das Ziel innerhalb der halben Reichweite ist. App-Anteil: zeigt nur einen Hinweis-Caption (`[RAPID FIRE · ½ = …"]`); die Verdopplung selbst rechnet die App NICHT — das ist Tisch-Anteil. (S69-Befund: war fälschlich Klasse A „App rechnet" mit `code: attack_math` — `_compute_attacks` ist range-agnostisch und verdoppelt nicht. Auf Klasse C korrigiert.)
+- **regel**: Rapid-Fire-Waffe: Angriffszahl wird verdoppelt, wenn das Ziel innerhalb der halben Reichweite ist. App-Anteil: zeigt nur einen Hinweis-Caption (`[RAPID FIRE · ½ = …"]`); die Verdopplung selbst rechnet die App NICHT — das ist Tisch-Anteil. (S69-Befund: war fälschlich Klasse A „App rechnet" mit `code: attackMath` — `_compute_attacks` ist range-agnostisch und verdoppelt nicht. Auf Klasse C korrigiert.)
 
 ### R-COMBAT-18
 - **klasse**: A
@@ -229,7 +229,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: offen
 - **getestet**: nein
 - **quelle**: core_rules.txt — "Automatically hit … no hit roll is made"
-- **code**: — (erkannt in attack_math.py:_detect_weapon_special "auto_hit", aber in der Berechnungslogik **nicht erzwungen** → Teil-Implementierung)
+- **code**: — (erkannt in attackMath.py:_detect_weapon_special "auto_hit", aber in der Berechnungslogik **nicht erzwungen** → Teil-Implementierung)
 - **regel**: Automatischer Treffer (z. B. Tesla, Auto-hit-Fähigkeiten): Kein Trefferwurf; jeder Angriff gilt als Treffer.
 
 ### R-COMBAT-26
@@ -313,7 +313,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_setup_goes_to_command
 - **quelle**: core_rules.txt — "COMMAND PHASE … Both players muster strategic resources"
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Die Command Phase ist die erste Phase jedes Spielerzugs; sie folgt unmittelbar auf das Setup und wird bei jedem Phasenwechsel über `next_phase` korrekt eingeleitet.
 
 ### R-CMD-02
@@ -337,7 +337,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_combat_patrol_starts_at_3_cp
 - **quelle**: core_rules.txt — Battle-forged CP-Bonus / Spielgröße: Combat Patrol 3 · Incursion 6 · Strike Force 12 · Onslaught 18
-- **code**: game_state.py:init_state
+- **code**: gameState.py:init_state
 - **regel**: Der CP-Startvorrat richtet sich nach der Spielgröße (`CP_BY_GAME_SIZE`: 3/6/12/18). (Schuld: kein Test prüft die vier Stufen.)
 
 ### R-CMD-05
@@ -353,7 +353,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_resets_used_stratagem_ids
 - **quelle**: core_rules.txt — "once per phase" / "once per battle" Stratagem-Restriktionen
-- **code**: game_state.py:_reset_phase_state
+- **code**: gameState.py:_reset_phase_state
 - **regel**: Die Menge der in dieser Phase genutzten Stratagems (`used_stratagem_ids`) wird bei jedem Phasenwechsel geleert, sodass Einmal-pro-Phase-Stratagems regelkonform zurückgesetzt werden.
 
 ### R-CMD-07
@@ -385,7 +385,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_adds_buff_to_empty_active_buffs / test_buff_records_correct_effect_type
 - **quelle**: core_rules.txt — "Some abilities found on datasheets … are used in your Command phase"
-- **code**: unit_mutations.py:apply_buff_to_unit (Schreibstelle: uiLayout/unitCard.py)
+- **code**: unitMutations.py:apply_buff_to_unit (Schreibstelle: uiLayout/unitCard.py)
 - **regel**: Aktivierte Command-Phase-Fähigkeiten vom Typ `buff_roll`/`reroll_hit_1` werden pro ausgewählter Einheit gerendert und ihr Effekt als `active_buffs` im Einheitenzustand eingetragen. `apply_buff_to_unit` ist idempotent für dieselbe ability_id.
 
 ### R-CMD-11
@@ -401,8 +401,8 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_command_re_roll_has_phase_reactive_timing / test_command_reroll_visible_and_clickable_spends_cp / test_damage_block_offers_command_reroll_after_apply / test_manifest_reroll_offered_when_failed / test_deny_reroll_offered_when_deny_roll_was_made / test_render_group_assignment_offers_command_reroll_on_attack_count / test_render_group_assignment_no_offer_when_not_melee / test_advance_reroll_state_ready_when_advanced_and_cp_available / test_advance_reroll_state_used_at_own_anchor_while_window_open / test_render_resolution_tab_offers_command_reroll_on_hit_roll / test_render_resolution_tab_offers_command_reroll_on_wound_roll / test_render_resolution_tab_offers_command_reroll_on_save_roll
 - **quelle**: core_rules.txt Z. 3124-3130 — "COMMAND RE-ROLL … Use this Stratagem after you have made a hit roll, a wound roll, a damage roll, a saving throw, an Advance roll, a charge roll, a Psychic test, a Deny the Witch test or you have rolled the dice to determine the number of attacks made by a weapon … 1 CP"
-- **code**: uiLayout/_common.py:render_reactive_stratagem_box (canonical GO card, `effect_type="reroll"`) — aufgerufen von uiLayout/_common.py:_render_damage_block (Damage-Wurf, nach Apply gesperrt) und gameMechanic/psychicPhase.py:_render_psi_result / _render_undo_deny_button (Psychic Test/Manifest, Deny the Witch, S135 Paket 4b). uiLayout/_common.py:render_inline_command_reroll (Pull-statt-Push, kein Lock-Zustand) für Felder ohne "applied"-Sperre: gameMechanic/chargephase.py:114 (Charge-Wurf), movementPhase.py:_advance_reroll_state/_render_advance_reroll_card (Advance-Wurf, eigene Variante direkt auf `render_go_card`, S133 K2), uiLayout/_common.py:render_group_assignment (Anzahl-Attacken, `decl_a_*`-Feld, S135 Paket 4c) und uiLayout/_common.py:_render_resolution_tab (Hit-/Wound-/Save-Wurf, S136 Stufe 2, je ein Aufruf direkt unter dem jeweiligen Dice-Block)
-- **regel**: Command Re-Roll (1 CP, Core-Stratagem, `player: both`) — sichtbar nur solange CP≥1, in dieser Phase noch nicht verwendet, und der Wurf noch "der letzte" ist. Alle **9 regelerlaubten Wurf-Arten sind verdrahtet**: Damage-Wurf, Psychic Test/Manifest und Deny the Witch (alle drei seit S135 Paket 4b als GO-Karte — `render_reactive_stratagem_box`, Reopen via `on_resolved`); Anzahl-Attacken (S135 Paket 4c — `render_group_assignment`, melee "‹Weapon› — Attacks"-Feld, `on_reroll` ist ein No-op, da das Feld vor "Group done" nie gesperrt ist); Advance-Wurf (S133 K2, `render_go_card` direkt statt des generischen Helpers, aber gleiches Prinzip) und Charge-Wurf (S130 Plan 015 Option c) — beide speichern keinen numerischen Wurfwert (nur `movement_choice`/`in_melee`-Flags), `on_reroll` ist entsprechend ein echter No-op, nichts Gesperrtes zum Wiedereröffnen (bewusste §6.3-Ausnahme); und seit S136 Stufe 2 Hit-, Wound- und Save-Wurf in `_render_resolution_tab` — dieselbe Familie-2-Ausnahme greift hier ebenfalls, da die App diese Würfe grundsätzlich nur als Schwellenwert-Referenz zeigt (kein eigener erfasster Zahlenwert), also strukturell keinen "applied"-Zustand zum Wiedereröffnen hat. Zahler: Hit-/Wound-Anker zahlt der Angreifer (eigener Wurf), Save-Anker zahlt der Verteidiger (eigene Rettung) — alle drei teilen sich mit dem Anzahl-Attacken-Anker denselben `used_stratagem_ids[faction]`-Pool (einmal pro Phase, nicht pro Anker). Kleine verbleibende Testlücke (keine Schuld i. S. des Ledgers, da der Mechanismus selbst generisch getestet ist): die Charge-Aufrufstelle selbst (chargephase.py:114) hat keinen dedizierten Test, nur die generische `render_inline_command_reroll`-Suite deckt den Mechanismus ab.
+- **code**: uiLayout/_common.py:render_reactive_stratagem_box (canonical GO card, `effect_type="reroll"`) — aufgerufen von uiLayout/_common.py:_render_damage_block (Damage-Wurf, nach Apply gesperrt) und gameMechanic/psychicPhase.py:_render_psi_result / _render_undo_deny_button (Psychic Test/Manifest, Deny the Witch, S135 Paket 4b). uiLayout/_common.py:render_inline_command_reroll (Pull-statt-Push, kein Lock-Zustand) für Felder ohne "applied"-Sperre: gameMechanic/chargePhase.py:114 (Charge-Wurf), movementPhase.py:_advance_reroll_state/_render_advance_reroll_card (Advance-Wurf, eigene Variante direkt auf `render_go_card`, S133 K2), uiLayout/_common.py:render_group_assignment (Anzahl-Attacken, `decl_a_*`-Feld, S135 Paket 4c) und uiLayout/_common.py:_render_resolution_tab (Hit-/Wound-/Save-Wurf, S136 Stufe 2, je ein Aufruf direkt unter dem jeweiligen Dice-Block)
+- **regel**: Command Re-Roll (1 CP, Core-Stratagem, `player: both`) — sichtbar nur solange CP≥1, in dieser Phase noch nicht verwendet, und der Wurf noch "der letzte" ist. Alle **9 regelerlaubten Wurf-Arten sind verdrahtet**: Damage-Wurf, Psychic Test/Manifest und Deny the Witch (alle drei seit S135 Paket 4b als GO-Karte — `render_reactive_stratagem_box`, Reopen via `on_resolved`); Anzahl-Attacken (S135 Paket 4c — `render_group_assignment`, melee "‹Weapon› — Attacks"-Feld, `on_reroll` ist ein No-op, da das Feld vor "Group done" nie gesperrt ist); Advance-Wurf (S133 K2, `render_go_card` direkt statt des generischen Helpers, aber gleiches Prinzip) und Charge-Wurf (S130 Plan 015 Option c) — beide speichern keinen numerischen Wurfwert (nur `movement_choice`/`in_melee`-Flags), `on_reroll` ist entsprechend ein echter No-op, nichts Gesperrtes zum Wiedereröffnen (bewusste §6.3-Ausnahme); und seit S136 Stufe 2 Hit-, Wound- und Save-Wurf in `_render_resolution_tab` — dieselbe Familie-2-Ausnahme greift hier ebenfalls, da die App diese Würfe grundsätzlich nur als Schwellenwert-Referenz zeigt (kein eigener erfasster Zahlenwert), also strukturell keinen "applied"-Zustand zum Wiedereröffnen hat. Zahler: Hit-/Wound-Anker zahlt der Angreifer (eigener Wurf), Save-Anker zahlt der Verteidiger (eigene Rettung) — alle drei teilen sich mit dem Anzahl-Attacken-Anker denselben `used_stratagem_ids[faction]`-Pool (einmal pro Phase, nicht pro Anker). Kleine verbleibende Testlücke (keine Schuld i. S. des Ledgers, da der Mechanismus selbst generisch getestet ist): die Charge-Aufrufstelle selbst (chargePhase.py:114) hat keinen dedizierten Test, nur die generische `render_inline_command_reroll`-Suite deckt den Mechanismus ab.
 
 ### R-CMD-13
 - **klasse**: B
@@ -417,7 +417,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_advances_index_within_turn
 - **quelle**: core_rules.txt — "Once you and your opponent have resolved all of these rules … progress to your Movement phase"
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Nach Abschluss der Command Phase (Phasenwechsel-Bestätigung) wechselt der Zustand in die Movement Phase; der Phasenindex wird innerhalb des Zugs korrekt fortgeschrieben.
 
 ---
@@ -461,7 +461,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_set_movement_status_advanced_sets_turn_flag / test_advanced_cannot_shoot
 - **quelle**: core_rules.txt — "Advance: Models move up to M\"+D6\". … Units that Advance cannot shoot or charge this turn."
-- **code**: unit_mutations.py:set_movement_status
+- **code**: unitMutations.py:set_movement_status
 - **regel**: Bei einem Advance wird ein D6 zum M-Wert addiert (Maximaldistanz M+D6 Zoll, am Tisch gemessen); die App setzt das `advanced`-Flag, das Schießen und Laden in dieser Runde erzwingt-sperrt (App-Anteil).
 
 ### R-MOVE-06
@@ -469,7 +469,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_scenario_1_stationary_no_action
 - **quelle**: core_rules.txt — "Remain Stationary: Models cannot move this phase. Any units … not selected to move … are assumed to have Remained Stationary"
-- **code**: unit_mutations.py:set_movement_status
+- **code**: unitMutations.py:set_movement_status
 - **regel**: Eine Einheit, die Remain Stationary wählt, setzt keine Bewegungs-Flags (`advanced`/`retreated` bleiben false) und gilt als unbewegte Einheit dieser Phase; nicht ausgewählte Einheiten gelten ebenfalls als unbewegt.
 
 ### R-MOVE-07
@@ -485,7 +485,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_retreated_cannot_shoot / test_retreated_blocks_cast
 - **quelle**: core_rules.txt — "A unit cannot declare a charge in the same turn that it Fell Back. … cannot shoot or attempt to manifest a psychic power … unless it is TITANIC."
-- **code**: unit_mutations.py:set_movement_status
+- **code**: unitMutations.py:set_movement_status
 - **regel**: Fall Back setzt das `retreated`-Flag, das Schießen, Psykraft-Wirken und Laden in dieser Runde erzwingt-sperrt (App-Anteil). Die TITANIC-Ausnahme (darf trotz Fall Back schießen/Psykräfte wirken) ist noch nicht abgebildet.
 
 ### R-MOVE-09
@@ -533,7 +533,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_apply_desperate_breakout_casualties_removes_models / test_apply_desperate_breakout_casualties_zero_is_noop / test_resolve_desperate_breakout_sets_retreated_and_clears_pending / test_resolve_desperate_breakout_destroyed_unit_skips_fall_back / test_spend_stratagem_desperate_breakout_activates_pending_flag_for_unit
 - **quelle**: rules_appendix.txt — "Desperate Breakout … roll to see if any models in that unit are destroyed … any roll-off, test or other roll is then triggered and resolved … the unit the Stratagem was used on will still be unable to do anything else this turn." / stratagems.yaml rule_text — "Roll one D6 for each model in that unit; for each result of 1, one model … is destroyed. Assuming that unit was not destroyed, it can now attempt to Fall Back, and … its models can be moved across enemy models as if they were not there."
-- **code**: unit_mutations.py:apply_desperate_breakout_casualties / unit_mutations.py:resolve_desperate_breakout / movementPhase.py:_render_desperate_breakout
+- **code**: unitMutations.py:apply_desperate_breakout_casualties / unitMutations.py:resolve_desperate_breakout / movementPhase.py:_render_desperate_breakout
 - **regel**: Desperate Breakout (Core-Stratagem, 2 CP, `effect.type: move`, `handler: fall_back_through_models`) markiert beim Aktivieren die ausgewählte Einheit als `desperate_breakout_pending`; die Movement-Phase-UI fragt daraufhin die vom Spieler gewürfelte Verlustzahl ab (1 Modell pro gewürfelter 1) und entfernt sie App-seitig (Klasse A). Überlebt die Einheit, setzt die App sie automatisch auf `retreated` (verlässt Nahkampf, sperrt Schießen/Laden/Psi-Kräfte wie ein normales Fall Back, öffnet das Cut-Them-Down-Reaktionsfenster). Ob die Einheit ihre Fall-Back-Bewegung tatsächlich außerhalb jeder gegnerischen Engagement Range beenden kann (inkl. „Bewegung durch Modelle hindurch"), bleibt Tisch-Anteil (Klasse C, wie der normale Fall Back R-MOVE-07/08).
 
 ---
@@ -545,7 +545,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_resets_charge_phase_step
 - **quelle**: core_rules.txt — "The Charge phase is split into two steps. First you charge with your units. Then your opponent performs Heroic Interventions."
-- **code**: chargephase.py:ChargePhaseHandler.render_active
+- **code**: chargePhase.py:ChargePhaseHandler.render_active
 - **regel**: Die Charge Phase besteht aus genau zwei Schritten: (1) Charges der aktiven Seite, (2) Heroic Interventions der inaktiven Seite. Die App führt die Schritte über den Zustand `charge_phase_step` (1→2); beim Phasenwechsel wird er auf 1 zurückgesetzt.
 
 ### R-CHARGE-02
@@ -553,7 +553,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_charge_after_advance_requires_core_or_character
 - **quelle**: core_rules.txt — "An eligible unit is one that is within 12\" of any enemy units at the start of the Charge phase. Units that have Advanced … Fell Back … or … within Engagement Range … are not eligible units."
-- **code**: chargephase.py:_active_charge / ability_engine.py:charge_after_advance_allowed
+- **code**: chargePhase.py:_active_charge / abilityEngine.py:charge_after_advance_allowed
 - **regel**: Charge-Berechtigung: Hybrid — die App erzwingt die Sperren für Advanced (außer faktionsseitige Advance-&-Charge-Ausnahme), Fall Back und bereits in Engagement Range stehende Einheiten (App-Anteil); ob eine Einheit innerhalb 12" eines Feindes steht, ist Tisch-Anteil.
 
 ### R-CHARGE-03
@@ -585,7 +585,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_set_charged_sets_charged_flag / test_set_charged_enters_melee_for_both_units / test_set_charged_multiple_targets
 - **quelle**: core_rules.txt — "the unit's charge roll must be sufficient that it is able to end that move in unit coherency and within Engagement Range of every unit that was a target of its charge … If this is impossible, the charge fails and no models … move this phase."
-- **code**: chargephase.py:_active_charge / unit_mutations.py:set_charged
+- **code**: chargePhase.py:_active_charge / unitMutations.py:set_charged
 - **regel**: Gültiger Charge: Hybrid — ob der 2D6-Wurf reicht, um in Kohärenz und in Engagement Range jedes Ziels zu enden, ohne nicht-gewählte Feinde zu berühren, ist Tisch-Anteil. Bei bestätigtem Erfolg setzt die App `charged` und registriert die Einheit für alle Ziele im Nahkampf (`set_charged`); bei Fehlschlag bewegt sich nichts (App-Anteil).
 
 ### R-CHARGE-07
@@ -609,7 +609,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_character_not_in_melee_is_eligible / test_non_character_is_ineligible / test_character_in_melee_is_ineligible
 - **quelle**: core_rules.txt — "An eligible CHARACTER unit is one that is not within Engagement Range of any enemy units, but is within 3\" horizontally and 5\" vertically of an enemy unit."
-- **code**: chargephase.py:hi_eligible_units
+- **code**: chargePhase.py:hi_eligible_units
 - **regel**: Heroic Intervention nur für CHARACTER-Einheiten, die nicht im Nahkampf stehen und in 3" horizontal / 5" vertikal eines Feindes sind. Die App erzwingt die CHARACTER- und Nicht-im-Nahkampf-Bedingung (App-Anteil); die 3"/5"-Distanz ist Tisch-Anteil.
 
 ### R-CHARGE-10
@@ -617,7 +617,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_character_already_intervened_is_ineligible / test_returns_true_when_flag_set
 - **quelle**: core_rules.txt — "No unit can perform more than one Heroic Intervention in each enemy Charge phase. A unit can never perform a Heroic Intervention in their own Charge phase."
-- **code**: chargephase.py:hi_already_performed / hi_eligible_units
+- **code**: chargePhase.py:hi_already_performed / hi_eligible_units
 - **regel**: Jede CHARACTER-Einheit darf pro gegnerischer Charge Phase höchstens eine Heroic Intervention durchführen; das Flag `heroic_intervened` sperrt eine zweite. Der Heroic-Intervention-Schritt läuft ausschließlich für die inaktive Seite, nie in der eigenen Charge Phase.
 
 ### R-CHARGE-11
@@ -669,7 +669,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_flee_marks_morale_tested
 - **quelle**: core_rules.txt — "A unit only needs to take one Morale test in each phase."
-- **code**: moralePhase.py:_render_unit_morale / unit_mutations.py:flee_models
+- **code**: moralePhase.py:_render_unit_morale / unitMutations.py:flee_models
 - **regel**: Jede Einheit testet pro Morale Phase höchstens einmal; das Flag `morale_tested` (gesetzt bei bestandenem Test bzw. bei Flucht) blockiert einen erneuten Test in derselben Phase.
 
 ### R-MORALE-04
@@ -685,7 +685,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_flee_reduces_models / test_flee_sets_fled_counter
 - **quelle**: core_rules.txt — "the Morale test is failed, one model flees that unit … You decide which model … flees – that model is removed from play and counts as having been destroyed."
-- **code**: unit_mutations.py:flee_models
+- **code**: unitMutations.py:flee_models
 - **regel**: Bei fehlgeschlagenem Test flieht mindestens ein Modell nach Wahl des Spielers; `flee_models` entfernt die Modelle, reduziert Wunden/Modelle entsprechend und führt den Flucht-Zähler (`fled_models_this_turn`).
 
 ### R-MORALE-06
@@ -709,7 +709,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_flee_all_models_marks_destroyed
 - **quelle**: core_rules.txt — "those models … count as having been destroyed, but they never trigger any rules that are used when a model is destroyed."
-- **code**: unit_mutations.py:flee_models
+- **code**: unitMutations.py:flee_models
 - **regel**: Durch Flucht entfernte Modelle gelten als zerstört (markieren die Einheit als `destroyed`, wenn alle fliehen), lösen aber keine „bei Zerstörung"-Effekte aus — `flee_models` ist ein vom Kampfschaden getrennter Pfad.
 
 ### R-MORALE-09
@@ -717,7 +717,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_activate_morale_auto_pass_sets_flag / test_confirm_morale_auto_pass_marks_tested_and_clears_flag / test_spend_stratagem_auto_pass_morale_activates_flag_for_unit / test_spend_stratagem_auto_pass_morale_noop_without_unit_key
 - **quelle**: core_rules.txt — "INSANE BRAVERY … Use this Stratagem before you take a Morale test … That test is automatically passed … once per battle."
-- **code**: unit_mutations.py:activate_morale_auto_pass / unit_mutations.py:confirm_morale_auto_pass / _common.py:spend_stratagem (effect dispatch) / moralePhase.py:_render_unit_morale
+- **code**: unitMutations.py:activate_morale_auto_pass / unitMutations.py:confirm_morale_auto_pass / _common.py:spend_stratagem (effect dispatch) / moralePhase.py:_render_unit_morale
 - **regel**: Insane Bravery (Core-Stratagem, 2 CP, `effect.type: auto_pass_morale`) markiert beim Aktivieren (im Stratagems-Tab, für die ausgewählte Einheit) einen `morale_auto_pass`-Flag auf dieser Einheit; die Morale-Phase-UI zeigt daraufhin für genau diese Einheit einen automatisch bestandenen Test (kein W6, kein Modell flieht) statt der normalen Test-Buttons. Das einmal-pro-Schlacht-Limit läuft über die bestehende `once_per_battle`-CP-Buchhaltung des Stratagems selbst.
 
 ### R-MORALE-10
@@ -965,7 +965,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_setup_goes_to_command
 - **quelle**: core_rules.txt — "Warhammer 40,000 is played in a series of battle rounds. In each battle round, both players have a turn."
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Das Spiel besteht aus einer Folge von Battle Rounds. In jeder Battle Round hat jeder Spieler genau einen Turn.
 
 ### R-ROUND-02
@@ -973,7 +973,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_switches_active_player_after_necrons_morale
 - **quelle**: core_rules.txt — "The same player always takes the first turn in each battle round – the mission you are playing will tell you which player this is."
-- **code**: game_state.py:init_state
+- **code**: gameState.py:init_state
 - **regel**: Immer derselbe Spieler hat den ersten Turn jeder Battle Round. `first_player` wird bei Spielstart gesetzt und bleibt unveränderlich (Layout-Seitenleiste ist ebenfalls fest gebunden).
 
 ### R-ROUND-03
@@ -981,7 +981,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_advances_index_within_turn
 - **quelle**: core_rules.txt — "Each turn consists of a series of phases, which must be resolved in the following order: 1. COMMAND PHASE … 7. MORALE PHASE"
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Innerhalb eines Turns sind die Phasen fix geordnet: Command → Movement → Psychic → Shooting → Charge → Fight → Morale. Die App erzwingt diese Reihenfolge über `phase_idx` (nur Vorwärts-Schritt). Für Command als ersten Schritt siehe auch R-CMD-01.
 
 ### R-ROUND-04
@@ -989,7 +989,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_switches_active_player_after_necrons_morale
 - **quelle**: core_rules.txt — "Once a player's turn has ended, their opponent then starts their turn."
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Nach Abschluss der Morale Phase wechselt `active` zum anderen Spieler; dessen Turn beginnt (phase_idx zurück auf 1 = Command Phase).
 
 ### R-ROUND-05
@@ -997,7 +997,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_increments_round_after_orks_morale
 - **quelle**: core_rules.txt — "Once both players have completed a turn, the battle round has been completed and the next one begins"
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Nachdem der zweite Spieler seine Morale Phase abgeschlossen hat, ist die Battle Round vollständig; `round` wird um 1 erhöht und der erste Spieler beginnt seinen Turn der neuen Runde.
 
 ### R-ROUND-06
@@ -1005,7 +1005,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_init_state_sets_round_to_one
 - **quelle**: core_rules.txt — "The first battle round begins."
-- **code**: game_state.py:init_state
+- **code**: gameState.py:init_state
 - **regel**: Bei Spielstart wird der Rundenzähler auf 1 gesetzt (`st.session_state.round = 1`). Der erste Turn gehört dem `first_player`.
 
 ### R-ROUND-07
@@ -1013,7 +1013,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_next_phase_after_round_five_second_player_morale_sets_battle_over
 - **quelle**: core_rules.txt — "The battle ends when all of the models in one player's army have been destroyed, or once the fifth battle round has ended (whichever comes first)."
-- **code**: game_state.py:next_phase
+- **code**: gameState.py:next_phase
 - **regel**: Nach Abschluss der 5. Battle Round (Moralphase des zweiten Spielers beendet) setzt `next_phase` `battle_over` statt Runde 6 zu beginnen (`MAX_BATTLE_ROUNDS = 5`); der Header ersetzt „→" durch die Endstand-Anzeige (Sieger = meiste VP, Gleichstand = Draw, `gameHeader.battle_result_html`), „←" (`prev_phase`) hebt `battle_over` zur Korrektur wieder auf. Der „army destroyed"-Anteil der Regel ist bewusst NICHT implementiert (eigener Backlog-Punkt).
 
 ### R-ROUND-08
@@ -1055,7 +1055,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_in_reserve_cannot_shoot / test_in_reserve_cannot_fight / test_in_reserve_takes_priority
 - **quelle**: core_rules.txt — "abilities that allow [a unit] to be set up in a location other than the battlefield"; "Reinforcement units … always count as having moved this turn."
-- **code**: unit_mutations.py:set_deployment
+- **code**: unitMutations.py:set_deployment
 - **regel**: Einheiten können als Reserve aufgestellt werden (`deployment = "reserve"`, `in_reserve = True`); die App sperrt dann Schießen, Kämpfen und Angreifen (App-Anteil). Mindestabstand 9", Aufstellungszone und früheste Runde sind Tisch-Anteil.
 
 ### R-DEPLOY-03
@@ -1121,7 +1121,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_adjust_vp_adds_delta_to_faction_score / test_adjust_vp_floors_at_zero
 - **quelle**: core_rules.txt — "the player with the most victory points is the victor (in the case of a tie, the battle is a draw)."
-- **code**: unit_mutations.py:adjust_vp
+- **code**: unitMutations.py:adjust_vp
 - **regel**: Siegpunkte werden je Fraktion verfolgt (`st.session_state.vp`); `adjust_vp` erhöht/senkt den Stand und kappt bei 0. Den automatischen Sieger-Check (meiste VP, Gleichstand = Unentschieden) macht die App nicht.
 
 ### R-SCORE-02
@@ -1185,7 +1185,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_adjust_secondary_vp_adds_within_slot / test_adjust_secondary_vp_caps_at_fifteen / test_adjust_secondary_vp_floors_at_zero
 - **quelle**: core_rules.txt — Matched-Play secondary objectives (manueller VP-Tracker)
-- **code**: unit_mutations.py:adjust_secondary_vp
+- **code**: unitMutations.py:adjust_secondary_vp
 - **regel**: Sekundärziele: Die App führt bis zu 3 benannte Sekundärziel-Slots je Spieler mit manuellem VP-Tracker; `adjust_secondary_vp` kappt jeden Slot auf [0, 15] (App-Anteil). Die tatsächliche Erfüllung ist Tisch-Anteil.
 
 ### R-SCORE-10
@@ -1193,7 +1193,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_adjust_vp_adds_delta_to_faction_score
 - **quelle**: core_rules.txt — "the player with the most victory points is the victor"; App-Konfiguration vp_phase / vp_from_round
-- **code**: unit_mutations.py:adjust_vp
+- **code**: unitMutations.py:adjust_vp
 - **regel**: Primär-VP werden über +5/+1/-1/-5-Schaltflächen manuell angepasst (Kernlogik `adjust_vp`, getestet); die VP-Anzeige ist auf eine Phase (`vp_phase`) und früheste Runde (`vp_from_round`) konfigurierbar — das Gating liegt im Render-Code (manuell verifiziert, Coverage-ausgeschlossen).
 
 ### R-SCORE-11
@@ -1229,7 +1229,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_eternal_guardian_d1_light_cover_true_when_stationary / test_eternal_guardian_d1_light_cover_false_when_moved / test_protocol_modifier_eternal_guardian_primary_no_generic_save_key / test_light_cover_if_stationary_eternal_guardian_primary_when_stationary / test_light_cover_if_stationary_eternal_guardian_primary_when_moved / test_light_cover_if_stationary_false_when_directive_inactive
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 585–599 — "Directive 1: Each time an attack is made against this unit, if it did not make a Normal Move, Advance or Fall Back this battle round, this unit receives the benefit of Light Cover."
-- **code**: ability_engine.py:get_active_round_choice_light_cover_if_stationary
+- **code**: abilityEngine.py:get_active_round_choice_light_cover_if_stationary
 - **regel**: Eternal Guardian Direktive 1 (Klasse A): App gewährt Light Cover automatisch, wenn das Protocol aktiv ist UND die Verteidiger-Einheit sich in dieser Runde nicht bewegt hat (`movement_choice == "stationary"`). Variante C: bestehende Light-Cover-Checkbox wird programmatisch vorgehakt und gesperrt; der +1-Save-Modifier fließt einmalig über die Checkbox-Mechanik — kein zweiter Collector-Eintrag. Gilt in jeder Phase (any); UI-Anzeige aktuell nur im Shooting-SAVE-Block (A1-Entscheidung Step 4).
 
 ### R-PROTO-02
@@ -1237,7 +1237,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: offen
 - **getestet**: nein
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 700–711 — "Directive 1: Add 3\" to the range of this unit's aura abilities (to a maximum of 12\") and increase the range of the following abilities this unit has by 3\" (to a maximum of 12\"): Lord's Will; My Will Be Done; Rites of Reanimation."
-- **code**: kein Code — der Tisch-Hinweis-Renderer (`armyCard._render_aura_range_hint`) wurde in S138 entfernt, die zugehörige (dadurch tote) Hilfsfunktion `ability_engine.py:build_aura_range_hint_text` + ihre Tests in S139 (Retro-Maßnahme 2). `faction_abilities.yaml:protocol_conquering_tyrant.directives.primary` (enforcement: table, affects-Liste) trägt die Daten weiterhin, wird aber von keiner UI mehr gelesen.
+- **code**: kein Code — der Tisch-Hinweis-Renderer (`armyCard._render_aura_range_hint`) wurde in S138 entfernt, die zugehörige (dadurch tote) Hilfsfunktion `abilityEngine.py:build_aura_range_hint_text` + ihre Tests in S139 (Retro-Maßnahme 2). `faction_abilities.yaml:protocol_conquering_tyrant.directives.primary` (enforcement: table, affects-Liste) trägt die Daten weiterhin, wird aber von keiner UI mehr gelesen.
 - **regel**: Conquering Tyrant Direktive 1 (Klasse B): +3" Aura-Reichweite (max 12"). Kein App-Effekt (keine Distanzmessung implementiert). App zeigt aktuell KEINEN Tisch-Hinweis mehr — muss am Tisch selbst nachgehalten werden, bis ein neuer Hinweis-Mechanismus entschieden ist.
 
 ### R-PROTO-03
@@ -1245,7 +1245,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_conquering_tyrant_secondary_shoot_after_fall_back_returns_minus_one_when_fell_back / test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_not_fell_back / test_conquering_tyrant_secondary_shoot_after_fall_back_zero_when_inactive / test_conquering_tyrant_secondary_not_a_generic_numeric_modifier
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 712–721 — "Directive 2: This unit is eligible to shoot in a turn in which it Fell Back, but if it does, then until the end of the turn, each time a model in this unit makes a ranged attack, subtract 1 from that attack's hit roll."
-- **code**: ability_engine.py:get_active_round_choice_shoot_after_fall_back / uiLayout/_common.py:_render_resolution_tab
+- **code**: abilityEngine.py:get_active_round_choice_shoot_after_fall_back / uiLayout/_common.py:_render_resolution_tab
 - **regel**: Conquering Tyrant Direktive 2 (Klasse A): Einheit darf nach Fall Back schießen; wenn sie es tut, −1 auf alle Treffer-Würfe (Fernkampf). Engine liest `movement_choice == "fall_back"` der angreifenden Einheit; Modifier wird als Eintrag in `final_atk_mods` (HIT, roll_type="hit", value=-1) in `_render_resolution_tab` injiziert. Nur in der Shooting-Phase aktiv.
 
 ---
@@ -1257,5 +1257,5 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **status**: implementiert
 - **getestet**: ja — test_rp_restores_models_after_damage / test_rp_reduces_lost_models_this_turn / test_rp_dice_count_equals_models_lost_times_wounds
 - **quelle**: wahapedia_necrons/faction_overview.txt Z. 501–520 — "Each time an enemy unit shoots or fights, after it makes its attacks, if any models in this unit were destroyed as a result of those attacks but this unit was not destroyed, this unit's reanimation protocols are enacted and those destroyed models begin to reassemble. Each time a unit's reanimation protocols are enacted, make Reanimation Protocol rolls for that unit by rolling a number of D6 equal to the combined Wounds characteristics of all the reassembling models. Each Reanimation Protocol roll of 5+ is put into a pool."
-- **code**: ability_engine.py:get_after_attack_revive_ability / unit_mutations.py:heal_unit
+- **code**: abilityEngine.py:get_after_attack_revive_ability / unitMutations.py:heal_unit
 - **regel**: Reanimation Protocols (Klasse C, Hybrid): App-Anteil — Nach gegnerischen Angriffen (Shooting/Fight-Phase) werden zerstörte Modelle wiederbelebt, wenn die Einheit selbst nicht zerstört wurde. Die App berechnet die Würfelanzahl (D6 = Summe der Wounds aller zerstörten Modelle, aus `effect.amount: D6_per_wound` in `faction_abilities.yaml`). Die Erfolgsschwelle ist fest auf 5+ verdrahtet (`effect.success_on: 5`). Die App speichert die Anzahl der erfolgreichen Würfel (5+) über `models_back`-Eingabe und wendet die Heilung via `heal_unit` an; dabei wird `lost_models_this_turn` entsprechend reduziert (9E-Regel: rückgebrachte Modelle zählen nicht zum Moraltest). Tisch-Anteil — Spieler würfelt die D6 am Tisch und zählt die 5+ manuell; Positionierung des wiederbekehrten Modells (muss in Engagement Range bestimmter Feinde stehen, etc.) erfolgt am Tisch. Datengetrieben über S128 Option B: Trigger (YAML `reanimationProtocols`-Bedingung) und Parameter (`success_on`, `D6_per_wound`) aus der Faction-Abilities-Definition, nicht hardcoded in `src/`.

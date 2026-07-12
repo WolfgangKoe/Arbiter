@@ -1,7 +1,7 @@
 # Dice Display Spec
 
-> Kanonisches Dokument für die Würfelanzeige in `src/uiLayout/dice_html.py`.
-> Änderungen an `dice_html.py` müssen hier reflektiert und durch Tests in
+> Kanonisches Dokument für die Würfelanzeige in `src/uiLayout/diceHtml.py`.
+> Änderungen an `diceHtml.py` müssen hier reflektiert und durch Tests in
 > `tests/uiLayout/test_dice_html.py` abgedeckt sein.
 > Letzte Aktualisierung: 2026-06-20 (Refinement-Session)
 
@@ -35,7 +35,7 @@ minimal 2 (`max(2, …)`), sodass „Eff. 1+" weder angezeigt noch gewertet wird
 
 Konkretes Soll-Bild im SAVE-Block (Stakeholder-Entscheid S122, Variante A):
 
-- **Eff.-Zeile floort auch in der Anzeige bei 2+** (`dice_html.py`,
+- **Eff.-Zeile floort auch in der Anzeige bei 2+** (`diceHtml.py`,
   `_render_dice_save_block`): Label nie „Eff. 1+", Rahmen 2–6; die Farbe folgt
   der normalen Schwellen-Konvention (§7 / `_THRESHOLD_COLOR`) und ist bei der
   gefloorten 2 damit **grün** — orange kodiert Schwellen-Schwere, nie
@@ -61,7 +61,7 @@ Konkretes Soll-Bild im SAVE-Block (Stakeholder-Entscheid S122, Variante A):
 
 ## 2. Richtungskonvention
 
-> **Korrektur zum früheren Code:** `dice_html.py:200` hatte `rightward = value < 0`
+> **Korrektur zum früheren Code:** `diceHtml.py:200` hatte `rightward = value < 0`
 > — Richtung war invertiert. Korrekt: `rightward = value > 0`.
 > Gefixt in Plan 022 (2026-06-20). Bei Regressionen: `test_buff_arrow_points_right`
 > und `test_debuff_arrow_points_left` schlagen fehl.
@@ -148,7 +148,7 @@ Quantum Shield ist kontextabhängig:
 | Angreifer | Eigene Würfe 1–3 scheitern → Nachteil | `"debuff"` | Rot `#ef4444` |
 
 Steuerung: optionales `color_hint: "buff" | "debuff"` im Modifier-Dict
-(aus `ability_engine.py`). Wenn nicht gesetzt: wertbasierte Farbe (Vorzeichen).
+(aus `abilityEngine.py`). Wenn nicht gesetzt: wertbasierte Farbe (Vorzeichen).
 
 ---
 
@@ -184,7 +184,7 @@ Beide Werte sind in `docs/spec/design_colors.md §3` (Effekt-Badges) verankert.
 
 ## 8. Test-Anforderungen (PFLICHT)
 
-Jede Änderung an `dice_html.py` braucht einen entsprechenden Test in
+Jede Änderung an `diceHtml.py` braucht einen entsprechenden Test in
 `tests/uiLayout/test_dice_html.py`. Neue Fälle erweitern die Tabelle.
 
 | Test | Was wird geprüft | Plan |

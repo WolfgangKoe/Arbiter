@@ -3875,8 +3875,8 @@
   "dedbab76-448d-4334-b6ef-c30432fa5c10": {
     "started_at": "2026-07-12T09:18:05.592Z",
     "task": "start session",
-    "peak_context": 168924,
-    "subagent_share": 76.90357690306764,
+    "peak_context": 170323,
+    "subagent_share": 76.08433340676757,
     "by_tier": {
       "Sonnet": 41512475,
       "Haiku": 109111,
@@ -3974,6 +3974,82 @@
         "tier": "Sonnet",
         "peak_context": 74721,
         "started_at": "2026-07-12T09:18:05.592Z"
+      }
+    ]
+  },
+  "e7b945c1-caa4-47d3-8c45-1f444ca94ce5": {
+    "started_at": "2026-07-12T16:02:52.940Z",
+    "task": "start session",
+    "peak_context": 137615,
+    "subagent_share": 85.50593933882247,
+    "by_tier": {
+      "Sonnet": 39190306,
+      "Fable": 12393820,
+      "Haiku": 240545
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "5 rote Tests anpassen",
+        "tier": "Sonnet",
+        "peak_context": 64309,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "FixD-Detail-Plan erstellen",
+        "tier": "Sonnet",
+        "peak_context": 92253,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Rename snake_case zu camelCase",
+        "tier": "Sonnet",
+        "peak_context": 99645,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "FixD-Sofortlinderung target_name",
+        "tier": "Sonnet",
+        "peak_context": 101031,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stratagem-Dispatch konsolidieren",
+        "tier": "Sonnet",
+        "peak_context": 171318,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Locate render_attack_resolution structure in _common.py",
+        "tier": "Sonnet",
+        "peak_context": 36963,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S142 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 150257,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Überführung und Doku-Hygiene",
+        "tier": "Haiku",
+        "peak_context": 65725,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "FixC Insane Bravery umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 88572,
+        "started_at": "2026-07-12T16:02:52.940Z"
       }
     ]
   }

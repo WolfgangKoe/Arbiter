@@ -18,8 +18,8 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.unit_mutations as _mut  # noqa: E402
-from gameMechanic.unit_mutations import (  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.unitMutations import (  # noqa: E402
     reset_movement_to_stationary,
     set_movement_status,
 )
@@ -189,7 +189,7 @@ def test_scenario_12_reserve_round1_not_blocked_by_movement_constraints():
 
 def test_scenario_13_deploy_from_reserve_sets_moved():
     """Szenario 13: Deploy from reserve sets movement_choice='moved' (not 'advanced')."""
-    from gameMechanic.unit_mutations import set_deployment
+    from gameMechanic.unitMutations import set_deployment
 
     unit = _unit()
     unit["in_reserve"] = True
@@ -290,12 +290,12 @@ def test_regression_retreated_then_stationary_call_still_blocks_move():
 
 
 def _veil_session(**units) -> _S:
-    """Session wired to the streamlit mocks that movementPhase + game_state use.
+    """Session wired to the streamlit mocks that movementPhase + gameState use.
 
-    movementPhase and game_state bind their own `import streamlit as st`; the
+    movementPhase and gameState bind their own `import streamlit as st`; the
     teleport helpers read session_state through both, so set it on each.
     """
-    import gameMechanic.game_state as gs
+    import gameMechanic.gameState as gs
     import gameMechanic.movementPhase as mp
 
     s = _S(first_player="Necrons", **units)

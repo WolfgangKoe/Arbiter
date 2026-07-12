@@ -9,7 +9,7 @@ the scoped ``<style>`` block that colours the card's *real* Streamlit container
 border per state.
 
 Pure composition, Streamlit-free and coverage-measured (INV-6, same seam as
-``dice_compose.py`` / ``badges.py``) — the interactive Use/Undo button, the
+``diceCompose.py`` / ``badges.py``) — the interactive Use/Undo button, the
 rule-text accordion and the bordered container itself are the caller's job: a
 thin Streamlit wrapper (``uiLayout._common.render_go_card``) places
 ``go_card_html()`` inside a keyed ``st.container(border=True, key=...)`` via
@@ -206,3 +206,17 @@ def go_card_html(
         chips_html = "".join(chip(kw, _MUTED, _SURFACE, _BORDER) for kw in keywords)
         parts.append(f'<div style="margin-top:4px;">{chips_html}</div>')
     return "".join(parts)
+
+
+def reactive_box_target_label(unit_name: str | None, player_display_name: str) -> str:
+    """Compose the `target_name` value for a reactive GO box (S142 A3 Sofortlinderung).
+
+    docs/handoff/S141_ui_befunde_group_a.md Befund 3: `render_reactive_stratagem_box`
+    never passed anything into `render_go_card`'s `target_name` slot, so a reactive
+    box gave no visual clue which unit/player it belonged to — worst when the caller
+    renders it outside the two-player-column layout (structural fix deferred to its
+    own plan). This composes an interim label that is always non-empty: the owning
+    player's display name alone, with the unit name prefixed when the GO is
+    unit-scoped (a unit was resolved for the trigger).
+    """
+    return f"{unit_name} · {player_display_name}" if unit_name else player_display_name

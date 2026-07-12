@@ -9,7 +9,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_state as _gs  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
 from gameMechanic.commandPhase import (  # noqa: E402
     _wargear_once_per_battle,
     _wargear_state_key,

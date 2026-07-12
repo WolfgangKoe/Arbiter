@@ -530,7 +530,7 @@ def init_state(
     else:
         st.session_state.roster_warnings = {}
 
-    from gameMechanic.game_log import set_log_players  # noqa: PLC0415
+    from gameMechanic.gameLog import set_log_players  # noqa: PLC0415
 
     set_log_players(p1_name, p2_name)
 
@@ -551,7 +551,7 @@ def swap_players() -> None:
 
 
 def reset_game() -> None:
-    from gameMechanic.game_log import archive_and_reset_log  # noqa: PLC0415
+    from gameMechanic.gameLog import archive_and_reset_log  # noqa: PLC0415
 
     archive_and_reset_log()
     for k in list(st.session_state.keys()):

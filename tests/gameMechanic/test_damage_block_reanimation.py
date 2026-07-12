@@ -2,13 +2,13 @@
 
 Getestete Produktiv-Funktionen:
   - apply_damage_attacks   (src/gameMechanic/combat.py:264)
-  - apply_damage           (src/gameMechanic/unit_mutations.py:166)
-  - heal_unit              (src/gameMechanic/unit_mutations.py:259)
-  - get_active_rp_modifiers (src/gameMechanic/ability_engine.py:324)
+  - apply_damage           (src/gameMechanic/unitMutations.py:166)
+  - heal_unit              (src/gameMechanic/unitMutations.py:259)
+  - get_active_rp_modifiers (src/gameMechanic/abilityEngine.py:324)
 
 RP-Spielregel (Wahapedia core_rules + Necron-YAML):
   - Gate ist datengetrieben (S128 Option B): _render_rp_block fragt
-    get_after_attack_revive_ability (ability_engine) — die YAML-Fähigkeit
+    get_after_attack_revive_ability (abilityEngine) — die YAML-Fähigkeit
     (effect.type reanimate, conditions.has_rules reanimationProtocols)
     entscheidet, welche Einheiten triggern.
   - Würfelanzahl = models_lost × unit.wounds (amount: D6_per_wound aus YAML).
@@ -17,7 +17,7 @@ RP-Spielregel (Wahapedia core_rules + Necron-YAML):
   - Rückkehrende Modelle reduzieren lost_models_this_turn (9E: zählen nicht als
     gefallen für Moraltest).
   - rp_reroll-Flag aus dem aktiven Protokoll wird von get_active_rp_modifiers
-    geliefert (ability_engine.py:324).
+    geliefert (abilityEngine.py:324).
 """
 
 from __future__ import annotations
@@ -33,10 +33,10 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_state as _gs  # noqa: E402
-import gameMechanic.unit_mutations as _mut  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
 from gameMechanic.combat import apply_damage_attacks  # noqa: E402
-from gameMechanic.unit_mutations import apply_damage, heal_unit  # noqa: E402
+from gameMechanic.unitMutations import apply_damage, heal_unit  # noqa: E402
 from gameObjects.unit import Unit  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -213,7 +213,7 @@ class TestApplyDamageAttacks:
 
 
 class TestApplyDamageModelTracking:
-    """apply_damage (unit_mutations.py:166) trägt Modell-Verluste korrekt nach:
+    """apply_damage (unitMutations.py:166) trägt Modell-Verluste korrekt nach:
     lost_models_this_turn wird inkrementiert.
     """
 
@@ -300,7 +300,7 @@ class TestApplyDamageModelTracking:
 
 
 class TestHealUnitReanimationProtocols:
-    """heal_unit (unit_mutations.py:259) modelliert den RP-Apply-Schritt.
+    """heal_unit (unitMutations.py:259) modelliert den RP-Apply-Schritt.
 
     In _render_rp_block (_common.py:590):
         heal_unit(def_uid, def_faction, models_back * def_unit.wounds, def_unit)
@@ -396,8 +396,8 @@ class TestHealUnitReanimationProtocols:
 
     def test_rp_dice_count_equals_models_lost_times_wounds(self):
         """RP-Würfelanzahl: models_lost × unit.wounds — die Formel kommt jetzt
-        aus revive_dice_count (ability_engine, amount: D6_per_wound aus YAML)."""
-        from gameMechanic.ability_engine import revive_dice_count
+        aus revive_dice_count (abilityEngine, amount: D6_per_wound aus YAML)."""
+        from gameMechanic.abilityEngine import revive_dice_count
 
         assert revive_dice_count("D6_per_wound", 4, 2) == 8  # 4 × 2 = 8 Würfel
 
@@ -448,28 +448,28 @@ class TestHealUnitReanimationProtocols:
 
 
 class TestGetActiveRpModifiers:
-    """get_active_rp_modifiers (ability_engine.py:324) gibt rp_reroll zurück wenn
+    """get_active_rp_modifiers (abilityEngine.py:324) gibt rp_reroll zurück wenn
     ein entsprechendes Protokoll aktiv ist, sonst leeres dict.
     """
 
     def test_no_active_directive_returns_empty(self):
         """Ohne aktives Protokoll-Direktiv → leeres dict (kein rp_reroll)."""
-        import gameMechanic.ability_engine as _eng
+        import gameMechanic.abilityEngine as _eng
 
         # Session ohne round_choice-Assignments
         _eng.st.session_state = _S(
             first_player="Necrons",
             second_player="Orks",
         )
-        from gameMechanic.ability_engine import get_active_rp_modifiers
+        from gameMechanic.abilityEngine import get_active_rp_modifiers
 
         result = get_active_rp_modifiers("Necrons")
         assert result == {}
 
     def test_rp_reroll_flag_returned_when_protocol_effect_active(self):
         """Mit aktivem rp_reroll-Protokoll-Effekt → {'rp_reroll': True}."""
-        import gameMechanic.ability_engine as _eng
-        from gameMechanic.ability_engine import get_active_rp_modifiers
+        import gameMechanic.abilityEngine as _eng
+        from gameMechanic.abilityEngine import get_active_rp_modifiers
 
         # Patch get_active_protocol_effects direkt, um YAML-Abhängigkeit zu vermeiden
         with patch.object(
@@ -482,8 +482,8 @@ class TestGetActiveRpModifiers:
 
     def test_rp_reroll_not_set_when_no_matching_effect(self):
         """Ohne rp_reroll-Effekt im Protokoll → leeres dict."""
-        import gameMechanic.ability_engine as _eng
-        from gameMechanic.ability_engine import get_active_rp_modifiers
+        import gameMechanic.abilityEngine as _eng
+        from gameMechanic.abilityEngine import get_active_rp_modifiers
 
         with patch.object(
             _eng,

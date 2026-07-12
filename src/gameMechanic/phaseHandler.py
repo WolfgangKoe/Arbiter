@@ -10,8 +10,8 @@ class PhaseHandler(Protocol):
     """Common interface for all game phase handlers.
 
     Each handler manages one phase of the 40k turn sequence.
-    The phase_runner renders exactly one view per phase via render_active();
-    phase transitions are driven by game_state.next_phase() (Next-Phase button).
+    The phaseRunner renders exactly one view per phase via render_active();
+    phase transitions are driven by gameState.next_phase() (Next-Phase button).
     """
 
     phase_name: ClassVar[str]

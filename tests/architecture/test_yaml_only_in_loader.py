@@ -20,7 +20,7 @@ YAML_ALLOWED: dict[str, str] = {
     "gameObjects/loader.py": "loader: reads all game data",
     # .rosz -> roster YAML converter: only *writes* the converted roster via
     # yaml.dump; reading the catalog still goes through loader.load_unit_catalog.
-    "gameObjects/rosz_importer.py": "rosz importer: writes converted rosters",
+    "gameObjects/roszImporter.py": "rosz importer: writes converted rosters",
 }
 
 

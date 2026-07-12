@@ -297,7 +297,7 @@ Diese Regel ist der Hauptzweck der Tests: Ein fehlschlagender Test ist eine Nach
 
 ### Warum Render-Code aus der Messung ausgeschlossen ist
 
-Streamlit-Render-Funktionen (in `uiLayout/` und den `*Phase.py`-Dateien) sind technisch testbar. Sie werden aber aus der Coverage-Messung ausgeschlossen, weil Button-Order-Mocks bei jeder UI-Änderung brechen — hoher Aufwand, niedriger Informationsgewinn. Ihre Business-Logik (State-Mutationen, Berechnungen) ist in den direkt getesteten Modulen (`combat.py`, `unit_mutations.py`, `game_state.py` etc.) abgedeckt. Render-Code wird **manuell verifiziert** — wenn UI geändert wird, explizit nennen was zu prüfen ist; nie behaupten ein UI-Feature sei fertig ohne manuelle Prüfung.
+Streamlit-Render-Funktionen (in `uiLayout/` und den `*Phase.py`-Dateien) sind technisch testbar. Sie werden aber aus der Coverage-Messung ausgeschlossen, weil Button-Order-Mocks bei jeder UI-Änderung brechen — hoher Aufwand, niedriger Informationsgewinn. Ihre Business-Logik (State-Mutationen, Berechnungen) ist in den direkt getesteten Modulen (`combat.py`, `unitMutations.py`, `gameState.py` etc.) abgedeckt. Render-Code wird **manuell verifiziert** — wenn UI geändert wird, explizit nennen was zu prüfen ist; nie behaupten ein UI-Feature sei fertig ohne manuelle Prüfung.
 
 ---
 

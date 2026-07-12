@@ -5,14 +5,14 @@ from typing import Any
 
 import streamlit as st
 
-from gameMechanic.game_state import (
+from gameMechanic.gameState import (
     faction_dir_for,
     round_choice_state_key,
     short_round_choice_label,
     subfaction_value_for,
     units_key_for,
 )
-from gameMechanic.unit_mutations import heal_unit
+from gameMechanic.unitMutations import heal_unit
 from gameObjects.ability import Ability
 from gameObjects.loader import (
     load_army,
@@ -24,7 +24,7 @@ from gameObjects.loader import (
 from gameObjects.unit import Unit
 
 # ---------------------------------------------------------------------------
-# Timing constants — used by ability triggers and phase_runner hooks
+# Timing constants — used by ability triggers and phaseRunner hooks
 # ---------------------------------------------------------------------------
 
 TIMING_PHASE_START = "phase_start"
@@ -56,7 +56,7 @@ def check_conditions(ability: Ability, unit: Unit, unit_state: MutableMapping[st
             if not any(kw.upper() in unit_kw_upper for kw in cond.has_keywords):
                 return False
         if cond.needs_healing:
-            from gameMechanic.unit_mutations import unit_max_hp  # noqa: PLC0415
+            from gameMechanic.unitMutations import unit_max_hp  # noqa: PLC0415
 
             if unit_state.get("current_wounds", 0) >= unit_max_hp(unit, unit_state):
                 return False
@@ -102,7 +102,7 @@ def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  #
     directive is stored under the ``extra_directive`` key. When the player's
     subfaction matches the ability's ``subfaction_affinity``, BOTH directives
     apply simultaneously (dynasty bonus) — mirrors the display logic in
-    ``armyCard._render_extra_round_choice`` / ``game_state``.
+    ``armyCard._render_extra_round_choice`` / ``gameState``.
 
     Each returned dict carries ``_source_id`` so callers can identify which
     round-choice ability the effect originates from (used by badge label resolution).
@@ -441,28 +441,8 @@ def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
     return total
 
 
-def stratagem_strength_bonus(active_modifiers: list[dict], unit_key: str | None) -> int:
-    """Total Strength-characteristic bonus from active stratagem modifiers (e.g. Disruption Fields).
-
-    Mirrors buff_stat_bonus's role but reads from the generic active_modifiers list
-    (StratagemModifier entries via gameProtocoll.py) instead of faction ability effects.
-
-    Scoped to `unit_key` (the attacker's state key): a modifier only counts if it was
-    activated for this exact unit. Entries without a matching unit_key (including the
-    legacy `unit_key: None`) are ignored — otherwise a stratagem activated for one unit
-    (e.g. Disruption Fields on unit X) would buff every attacker's Strength.
-    """
-    total = 0
-    for m in active_modifiers:
-        if m.get("unit_key") != unit_key:
-            continue
-        eff = m.get("effect", {})
-        if eff.get("roll_type") == "strength" and eff.get("target", "attacker") in (
-            "attacker",
-            "any",
-        ):
-            total += int(eff.get("value", 0))
-    return total
+# stratagem_strength_bonus moved to gameMechanic.stratagemEngine (S142 Aufgabe
+# 1, Option B — consolidated stratagem-effect dispatch).
 
 
 def ability_invuln_save(faction: str, unit: Unit) -> int | None:

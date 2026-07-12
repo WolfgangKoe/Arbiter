@@ -11,8 +11,8 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_EXPAND_ALT
-from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
-from gameMechanic.game_state import units_key_for
+from gameMechanic.abilityEngine import get_active_round_choice_shoot_after_fall_back
+from gameMechanic.gameState import units_key_for
 from gameObjects.unit import Unit
 from uiLayout._common import (
     group_flow_attacker,

@@ -90,7 +90,7 @@ UI: „… BONUS (BOTH)"-Badge ohne Wahlzwang, S140).
 
 Die aktive `round_choice`-Direktive liefert ihren Effekt **nicht** mehr direkt an
 die Konsumenten; alle lesen über drei kanonische Abfrage-Funktionen in
-`ability_engine.py` (nie direkt aus `session_state`):
+`abilityEngine.py` (nie direkt aus `session_state`):
 
 | Funktion | Rückgabe | deckt ab |
 |----------|----------|----------|
@@ -189,7 +189,7 @@ Modifier). Reine Funktion, direkt getestet (`TestAttritionThreshold`,
 Stages werden in `faction_abilities.yaml` als separate Ability-Einträge modelliert (waaagh_stage1, waaagh_stage2).
 
 **Stufen-Anker + Stufen-Ende:** Stufenwechsel und Ende sind an den **Start der Command-Phase
-des Besitzers** geankert — nicht an Zug- oder Rundenwechsel (`game_state.py:_reset_turn_state()`:
+des Besitzers** geankert — nicht an Zug- oder Rundenwechsel (`gameState.py:_reset_turn_state()`:
 nur wenn der Besitzer der neue aktive Spieler ist UND `round_activated < round`; beim Stufenwechsel
 wird `round_activated` fortgeschrieben). Stufe 2 hält also die komplette Runde inkl. gegnerischem
 Zug. Erreicht der Eintrag dabei eine Stage ohne `next_stage_id` (z.B. `waaagh_stage2`), erlischt
@@ -201,7 +201,7 @@ Ability ohne Folgestufe, nicht nur WAAAGH!.
 
 **Once per battle:** unabhängig vom Aktiv-Status im Ledger
 `used_once_per_battle_abilities: {player: set[ability_id]}` getrackt
-(`game_state.py: mark_once_per_battle_used() / is_once_per_battle_used()`, gesetzt beim
+(`gameState.py: mark_once_per_battle_used() / is_once_per_battle_used()`, gesetzt beim
 Aktivieren in `armyCard._render_once_per_battle_ability_ui()`). Das Stufen-Expiry leert den
 Ledger NICHT — sonst wäre die Fähigkeit nach Ablauf erneut aufrufbar (S138-Befund).
 
@@ -359,4 +359,4 @@ tests/
     test_<ability>_badge_label()                 — Badge-Text korrekt
 ```
 
-Coverage-Ziel: 80% auf allen `ability_engine.py`-Funktionen.
+Coverage-Ziel: 80% auf allen `abilityEngine.py`-Funktionen.

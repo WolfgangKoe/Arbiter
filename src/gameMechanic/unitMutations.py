@@ -7,8 +7,8 @@ from typing import Any
 
 import streamlit as st
 
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import units_key_for
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import units_key_for
 from gameObjects.unit import ModelGroup, Unit
 
 

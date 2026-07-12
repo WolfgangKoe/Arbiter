@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
+from gameMechanic.abilityEngine import get_active_round_choice_shoot_after_fall_back
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack
 from gameMechanic.shootingPhase import can_shoot
 
@@ -110,10 +110,10 @@ class TestCanShootD2FallBackExemption:
         # Verifies that get_active_round_choice_shoot_after_fall_back returns −1
         # when movement_choice == "retreated" and D2 is active — the value that
         # _common.py folds into the hit modifier row (9E canonical −1 Hit).
-        # Patches both ability_engine.st and game_state.st so the dict-based
+        # Patches both abilityEngine.st and gameState.st so the dict-based
         # session state reaches all layers without a live Streamlit runtime.
-        import gameMechanic.ability_engine as _eng
-        import gameMechanic.game_state as _gs
+        import gameMechanic.abilityEngine as _eng
+        import gameMechanic.gameState as _gs
 
         session = {
             "first_player": "Necrons",

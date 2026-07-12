@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from uiLayout.dice_compose import (
+from uiLayout.diceCompose import (
     _BUFF_COLOR_HEX,
     _THRESHOLD_COLOR,
     _modifier_color,

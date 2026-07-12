@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from gameMechanic.game_state import PHASES
+from gameMechanic.gameState import PHASES
 from gameObjects.unit import Unit
 from uiLayout.unitCard import render_unit_card
 

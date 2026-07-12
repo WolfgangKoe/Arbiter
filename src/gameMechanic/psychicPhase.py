@@ -12,9 +12,9 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import units_key_for, units_list_for
-from gameMechanic.unit_mutations import apply_damage
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import units_key_for, units_list_for
+from gameMechanic.unitMutations import apply_damage
 from gameObjects.unit import Unit
 from uiLayout._common import lookup, render_reactive_stratagem_box
 

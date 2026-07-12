@@ -211,7 +211,7 @@ def import_roster(
         if faction_dir is None:
             raise ValueError(
                 "Unknown faction in BattleScribe roster. "
-                "Add the catalogue name to _FACTION_CATALOGUE_MAP in rosz_importer.py."
+                "Add the catalogue name to _FACTION_CATALOGUE_MAP in roszImporter.py."
             )
 
     from gameObjects.loader import load_weapon_catalog  # noqa: PLC0415

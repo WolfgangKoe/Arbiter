@@ -34,7 +34,7 @@ omit = [
     "src/uiLayout/armyCard.py",
     "src/uiLayout/armyList.py",
     "src/uiLayout/detachmentCard.py",
-    "src/uiLayout/dice_html.py",
+    "src/uiLayout/diceHtml.py",
     "src/uiLayout/gameActionsArea.py",
     "src/uiLayout/gameHeader.py",
     "src/uiLayout/gameProtocoll.py",
@@ -43,7 +43,7 @@ omit = [
     "src/app.py",
     "src/constants/*",
     "src/gameMechanic/commandPhase.py",
-    "src/gameMechanic/chargephase.py",
+    "src/gameMechanic/chargePhase.py",
     "src/gameMechanic/fightPhase.py",
     "src/gameMechanic/moralePhase.py",
     "src/gameMechanic/movementPhase.py",
@@ -53,7 +53,7 @@ omit = [
 
 [tool.coverage.report]
 # Ratchet: locks in the current measured level so coverage can only go up, never
-# silently sink. Raised from 90 → 92 to lock in gains from the dice_compose.py
+# silently sink. Raised from 90 → 92 to lock in gains from the diceCompose.py
 # seam (INV-6): pure composition logic now lives in a measured module. Raise this
 # further as more logic is pulled out of the omitted render modules
 # (uiLayout/*, *Phase.py) into tested helpers.

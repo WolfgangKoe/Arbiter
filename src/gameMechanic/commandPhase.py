@@ -6,17 +6,17 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
-from gameMechanic.ability_engine import get_activated_command_abilities, get_triggered_abilities
-from gameMechanic.game_log import log_action
-from gameMechanic.game_state import (
+from gameMechanic.abilityEngine import get_activated_command_abilities, get_triggered_abilities
+from gameMechanic.gameLog import log_action
+from gameMechanic.gameState import (
     TargetSelectionRequest,
     faction_dir_for,
     unit_id_from_state_key,
     units_key_for,
     units_list_for,
 )
-from gameMechanic.phase_handler import PhaseHandler  # noqa: F401 — used for type checking
-from gameMechanic.unit_mutations import adjust_cp
+from gameMechanic.phaseHandler import PhaseHandler  # noqa: F401 — used for type checking
+from gameMechanic.unitMutations import adjust_cp
 from gameObjects.ability import Ability
 from gameObjects.loader import activated_wargear_ids, load_unit_abilities, load_wargear_catalog
 from gameObjects.unit import Unit

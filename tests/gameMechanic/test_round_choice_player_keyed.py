@@ -15,15 +15,15 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.ability_engine as _eng  # noqa: E402
-import gameMechanic.game_state as _gs  # noqa: E402
-from gameMechanic.ability_engine import (  # noqa: E402
+import gameMechanic.abilityEngine as _eng  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+from gameMechanic.abilityEngine import (  # noqa: E402
     get_active_round_choice_ap_on_wound_6,
     get_active_round_choice_ignores_cover_half_range,
     get_active_round_choice_light_cover_if_stationary,
     get_active_round_choice_modifier,
 )
-from gameMechanic.game_state import (  # noqa: E402
+from gameMechanic.gameState import (  # noqa: E402
     _reset_round_choice_state,
     round_choice_state_key,
 )
@@ -33,7 +33,7 @@ def _install(session: "_S") -> None:
     """Bind the session onto the actual ``st`` the engine modules hold.
 
     The streamlit mock is a shared module object; assigning to a file-local mock
-    would not reach engine/game_state (see backlog §4 mock fragility).
+    would not reach engine/gameState (see backlog §4 mock fragility).
     """
     _eng.st.session_state = session
     _gs.st.session_state = session

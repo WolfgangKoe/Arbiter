@@ -1,4 +1,4 @@
-"""Tests for unit_mutations.py: apply_damage, heal_unit, enter_melee, leave_melee,
+"""Tests for unitMutations.py: apply_damage, heal_unit, enter_melee, leave_melee,
 set_charged, set_movement_status."""
 
 import sys
@@ -11,10 +11,10 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.game_state as _gs  # noqa: E402
-import gameMechanic.unit_mutations as _mut  # noqa: E402
-from gameMechanic.game_state import next_phase  # noqa: E402
-from gameMechanic.unit_mutations import (  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.gameState import next_phase  # noqa: E402
+from gameMechanic.unitMutations import (  # noqa: E402
     apply_buff_to_unit,
     apply_damage,
     enter_melee,
@@ -879,7 +879,7 @@ def test_heal_restores_menhirs_first() -> None:
 
 def test_unit_max_hp_group_wounds_vs_uniform() -> None:
     """H3: per-group-wounds max HP is the pool sum, not unit.wounds * models."""
-    from gameMechanic.unit_mutations import unit_max_hp
+    from gameMechanic.unitMutations import unit_max_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1111,7 +1111,7 @@ def test_apply_damage_group_wounds_without_directed_caps_to_front_model() -> Non
 
 def test_front_group_hp_returns_zero_when_all_groups_empty() -> None:
     """_front_group_hp returns 0 when no group has remaining HP."""
-    from gameMechanic.unit_mutations import _front_group_hp
+    from gameMechanic.unitMutations import _front_group_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1121,7 +1121,7 @@ def test_front_group_hp_returns_zero_when_all_groups_empty() -> None:
 
 def test_front_group_hp_returns_full_wval_when_model_intact() -> None:
     """_front_group_hp returns wval when the front model is not partially wounded."""
-    from gameMechanic.unit_mutations import _front_group_hp
+    from gameMechanic.unitMutations import _front_group_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1132,7 +1132,7 @@ def test_front_group_hp_returns_full_wval_when_model_intact() -> None:
 
 def test_front_group_hp_returns_partial_when_model_partly_wounded() -> None:
     """_front_group_hp returns the remaining partial HP of a partly wounded model."""
-    from gameMechanic.unit_mutations import _front_group_hp
+    from gameMechanic.unitMutations import _front_group_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1148,7 +1148,7 @@ def test_front_group_hp_returns_partial_when_model_partly_wounded() -> None:
 
 def test_group_front_hp_returns_zero_when_pool_empty() -> None:
     """_group_front_hp returns 0 when the group's HP pool is 0."""
-    from gameMechanic.unit_mutations import _group_front_hp
+    from gameMechanic.unitMutations import _group_front_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1158,7 +1158,7 @@ def test_group_front_hp_returns_zero_when_pool_empty() -> None:
 
 def test_group_front_hp_returns_zero_for_unknown_group_id() -> None:
     """_group_front_hp returns 0 for a group_id not in unit.model_groups."""
-    from gameMechanic.unit_mutations import _group_front_hp
+    from gameMechanic.unitMutations import _group_front_hp
 
     sk = _silent_king()
     state = _gs._unit_state(sk, 3)
@@ -1222,7 +1222,7 @@ def test_apply_damage_regular_destroyed_leaves_melee() -> None:
 
 def test_restore_group_models_skips_already_full_group() -> None:
     """Healing a fully-intact group leaves it at its maximum count."""
-    from gameMechanic.unit_mutations import _restore_group_models
+    from gameMechanic.unitMutations import _restore_group_models
 
     groups = [
         ModelGroup(id="ork_boy", name_en="Ork Boy", count=9, weapons=[], priority=1),
