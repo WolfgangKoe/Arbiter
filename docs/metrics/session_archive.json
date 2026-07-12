@@ -3980,11 +3980,11 @@
   "e7b945c1-caa4-47d3-8c45-1f444ca94ce5": {
     "started_at": "2026-07-12T16:02:52.940Z",
     "task": "start session",
-    "peak_context": 137615,
-    "subagent_share": 85.50593933882247,
+    "peak_context": 145383,
+    "subagent_share": 83.46234522290777,
     "by_tier": {
       "Sonnet": 39190306,
-      "Fable": 12393820,
+      "Fable": 12823946,
       "Haiku": 240545
     },
     "subagents": [
@@ -4014,6 +4014,13 @@
         "description": "FixD-Sofortlinderung target_name",
         "tier": "Sonnet",
         "peak_context": 101031,
+        "started_at": "2026-07-12T16:02:52.940Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "next_session.md Übergabe schreiben",
+        "tier": "<synthetic>",
+        "peak_context": 40252,
         "started_at": "2026-07-12T16:02:52.940Z"
       },
       {

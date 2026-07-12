@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 19:16 CEST
+Stand: 2026-07-12 20:51 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,16 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 18:02 e7b9  ███████████░ 138k ⚠️   █████░  86%    ▚▚▚·········
+07-12 18:02 e7b9  ████████████ 145k ⚠️   █████░  83%    ▚▚▚·········
          SA_1·  █████░░░░░░░  64k ✅    5 rote Tests anpassen
          SA_2·  ███████░░░░░  92k ✅    FixD-Detail-Plan erstellen
          SA_3·  ████████░░░░ 100k ✅    Rename snake_case zu camelCase
          SA_4·  ████████░░░░ 101k ✅    FixD-Sofortlinderung target_name
-         SA_5·  ████████████ 171k ⛔    Stratagem-Dispatch konsolidieren
-         SA_6·  ███░░░░░░░░░  37k ✅    Locate render_attack_resolution st…
-         SA_7·  ████████████ 150k ⛔    Planning-Entwurf S142 erstellen
-         SA_8·  █████░░░░░░░  66k ✅    Backlog-Überführung und Doku-Hygie…
-         SA_9·  ███████░░░░░  89k ✅    FixC Insane Bravery umsetzen
+         SA_5·  ███░░░░░░░░░  40k ✅    next_session.md Übergabe schreiben
+         SA_6·  ████████████ 171k ⛔    Stratagem-Dispatch konsolidieren
+         SA_7·  ███░░░░░░░░░  37k ✅    Locate render_attack_resolution st…
+         SA_8·  ████████████ 150k ⛔    Planning-Entwurf S142 erstellen
+         SA_9·  █████░░░░░░░  66k ✅    Backlog-Überführung und Doku-Hygie…
+         SA_10·  ███████░░░░░  89k ✅    FixC Insane Bravery umsetzen
 ----------------- ---------------------- -------------- ------------
 07-12 11:18 dedb  ████████████ 170k ⛔    █████░  76%    ▚▚▚▚········
          SA_1·  ██████████░░ 131k ⚠️   Investigator 1: GO-Karten-Renderin…

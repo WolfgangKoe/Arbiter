@@ -24,7 +24,25 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S141, 2026-07-12)
+## Aktueller Stand (nach S142, 2026-07-12)
+
+S142 (Commit `1621117`, Branch `feature/016-protocol-rp-effects`): (1) **Rename-Welle:**
+13 src/-Module snake_case→camelCase inkl. Imports/pyproject/Wächter/lebender Doku.
+(2) **Option B umgesetzt:** neues Modul `src/gameMechanic/stratagemEngine.py` konsolidiert
+`_apply_stratagem_effect`, `_effect_gate_met`, `stratagem_strength_bonus`. (3) **FixC
+(Insane Bravery):** Formentabelle `_UNIT_SCOPED_EFFECT_TYPES` im Gate + `unit_key=None`-
+Härtung in `gameProtocoll._use_callback`; 3 B12b-Regressionstests. (4) **FixD-
+Sofortlinderung:** Reaktiv-GO-Box zeigt Ziel „Einheit · Spieler" (Helper
+`reactive_box_target_label` in `goCard.py`); 5 Alt-Tests mit Freigabe angepasst
+(`name_en` an Attrappen). (5) **FixD-Detail-Plan** liegt in
+`docs/audit/plans/S142_fixD_resolution_tabs.md` — **WARTET AUF FREIGABE** (3 Teil-Briefe,
+Mockup-Gate vor Brief 2). (6) Insassen-Feature runterpriorisiert → `backlog.md` §2;
+`S141_ui_befunde_group_b.md` gemäß Lifecycle gelöscht. (7) Doku-Hygiene
+Stakeholder_Beobachtungen erledigt. Vollsuite **1788 passed / 99,12 %**, Wächter grün.
+Planning: `docs/handoff/S142_planning.md` Revision 3, ANSWERED. **Review + Retro S142
+stehen noch aus** (fielen dem Kontext-Korridor zum Opfer → S143 Punkt 1).
+
+## Stand nach S141 (2026-07-12)
 
 S141: mypy-Baseline **48 → 28** (`state`-Contract-Fix, Commits `42af867`/`292b3ad`);
 Ork-Transport-Roster `orks_transport.yaml` (`cbaeeb2`); B12b-Suffix verdrahtet (`cdb55e2`);
@@ -49,48 +67,36 @@ Stakeholder-Entscheid S140: erfassen, nicht umsetzen).
 
 Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S142)
+### ▶ Nächste Schritte (S143, Reihenfolge)
 
-**Strategisches Thema (Stakeholder S141) — Gefechtsoptionen-Architektur:** GOs/Stratagems
-funktionieren ähnlich wie Abilities, laufen aber vermutlich NICHT über die ability-Engine.
-S142-Planning soll die Ist-Architektur erheben (`stratagem.py`, `gameProtocoll.py`,
-`abilityEngine.py`) und eine Empfehlung mit Trade-offs geben: über die ability-Engine
-vereinheitlichen ODER gesonderte Funktion (auch wenn das etwas Code dupliziert)? Hängt eng
-mit FixC/FixD zusammen — beide sitzen in der GO/Stratagem-Verdrahtung; ggf. Fixes im Licht
-der Architektur-Entscheidung planen.
+1. **Review + Retro S142 nachholen** (fiel dem Kontext-Korridor zum Opfer).
+2. **mypy-Ratchet gameMechanic-Rest** (11 Fehler, Baseline 28 → senken; Plan-Aufgabe 8).
+3. **abilityEngine-Refactor-Recherche** (read-only, Design-Vorschlag; Plan-Aufgabe 5 —
+   Konsolidierung via `stratagemEngine.py` ist jetzt da).
+4. **mypy-Ratchet uiLayout** (17 Fehler; Aufgabe 9).
+5. **Roster-Loader-Test auf Glob** (Aufgabe 10; `backlog.md` §4d).
+6. **FixD-Plan-Freigabe beim Stakeholder einholen**
+   (`docs/audit/plans/S142_fixD_resolution_tabs.md`).
 
-**Priorität — S141-Verifikations-Bugs, diagnostiziert & freigegeben, wegen Korridor vertagt
-(Fix-Orte in `docs/handoff/S141_ui_befunde_group_a.md`):**
+**Offene manuelle UI-Verifikation (Stakeholder):** B12b-Punkte (3) + Insane Bravery:
+ohne gewählte Einheit „locked: select an eligible unit" statt „ready", mit Einheit
+Klick → Morale-Auto-Pass; Reaktiv-Box-Ziel-Label an Hit-/Wound-/Save-Ankern (z. B.
+Whirling Onslaught beim Verteidiger); Klan-Affinität Ork-Transport-Roster.
 
-1. **FixC — Insane Bravery erzwingt kein Ziel:** `_effect_gate_met()` (`gameProtocoll.py`
-   Z.145-177) kennt nur die Desperate-Breakout-Gate-Form, nicht `auto_pass_morale` →
-   „Use" geht mit `unit_key=None` durch, CP gebucht, Effekt verpufft lautlos. Fix +
-   `_use_callback` (Z.249-262). Aufwand S.
-2. **FixD — Cross-Player-Area-Leak (Whirling Onslaught über beide Spalten):**
-   `render_attack_resolution()` in `fightPhase.py` (Z.558-573) + `shootingPhase.py`
-   (Z.187) außerhalb der Zwei-Spalten-Struktur (Muster wie S139-E7, nie nachgezogen);
-   sekundär `target_name` in `_common.py::render_reactive_stratagem_box` (Z.876-889).
-   Stakeholder-Auftrag: Audit ALLER `*Phase.py` auf dasselbe Muster. Aufwand M.
-
-**Vertagte Befunde (S141-Verifikation):**
-
-1. **Insassen-Feature (Emergency-Disembark Teil B):** kein Konzept „Einheit sitzt in
-   Transport" (Roster-YAML/State/UI) — eigenes Planning; Design-Fragen (Start-Zustand vs.
-   In-Game-UI; Kapazität hart vs. Hinweis) in `docs/handoff/S141_ui_befunde_group_b.md`.
-2. **Verwandter `on_declaration`-Befund (analog FixA):** `chargePhase.py:170`/
-   `fightPhase.py:460` reichen kein `unit_for_conditions` durch → `efficient_disintegration`
-   evtl. betroffen; „unit selected to shoot"-Anker fehlt in `shootingPhase.py`. → `backlog.md`.
-3. **Roster-Test-Lücke:** kein Test lädt alle `data/rosters/` durch (`test_loader.py:1259`
-   fest 2 Roster). → `backlog.md` §4d.
-
-**Manuelle UI-Verifikation:** FixA (Emergency-Disembark) + FixB (Movement-Abdunkeln)
-S141 stakeholder-verifiziert ✅. Offen: B12b-Suffix, Klan-Affinität am Ork-Transport-Roster
-(`backlog.md` §3).
+**Erkenntnisse/Retro-Kandidaten S142:** (a) Session-Limit brach alle 4 Subagenten ab —
+Resume per SendMessage mit git-status-Zwischenstand funktionierte gut. (b) A3-Executor
+überzog XS-Budget massiv (~102k statt ~10k) — Budget-Durchsetzung in Briefs prüfen.
+(c) Haiku-Brief setzte DONE-Marker ohne Lifecycle-Löschung → Hygiene-Test rot;
+Brief-Vorlage: „DONE = Datei löschen". (d) Wellen-Commit statt Rename-Slice, weil
+verschränkte Edits in denselben Dateien — Rename-Aufträge künftig VOR Parallel-Arbeit
+committen.
 
 **Ratchet/Rest unverändert:** mypy-Baseline 28 weiter Richtung 0 (`uiLayout/` 17 +
-`gameMechanic/` 11, `backlog.md` §4); Stil-Nit `undo_stratagem` in-place; R-PROTO-02 offen;
-Rand-Design-Konzept; GO-Keyword-Nachpflege (zurückgestellt bis B13, Schema-Befund);
-4c-Folge-Split, Fold-Heuristik, Totalvernichtungs-Spielende, Kleinschulden → `backlog.md`.
+`gameMechanic/` 11, `backlog.md` §4); `on_declaration`-Befund (`chargePhase.py`/
+`fightPhase.py` ohne `unit_for_conditions`) → `backlog.md`; Stil-Nit `undo_stratagem`
+in-place; R-PROTO-02 offen; Rand-Design-Konzept; GO-Keyword-Nachpflege (zurückgestellt
+bis B13, Schema-Befund); 4c-Folge-Split, Fold-Heuristik, Totalvernichtungs-Spielende,
+Kleinschulden → `backlog.md`.
 
 **Prozess:** Vollsuite bei parallelen Wellen nur EINMAL zentral am Wellen-Ende
 (`operating_model.md` Event 3).
