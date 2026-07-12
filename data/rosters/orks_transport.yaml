@@ -1,0 +1,15 @@
+display_name: Orks — Transport-Test (Evil Sunz)
+faction_dir: orks
+clan: evil_sunz
+# Test-Roster: deckt Emergency Disembarkation (TRANSPORT-Unit) und Klan-Affinität
+# mit einem noch unbenutzten Klan ab (S141-1). Gunwagon-Kapazität von 12 <CLAN>
+# INFANTRY-Modellen (docs/work/wahapedia_orks/units_all.txt) passt für Boyz (10).
+units:
+- id: wh40k_9e.orks.unit.warboss
+  models: 1
+- id: wh40k_9e.orks.unit.gunwagon
+  models: 1
+- id: wh40k_9e.orks.unit.boyz
+  models: 10
+- id: wh40k_9e.orks.unit.gretchin
+  models: 10
