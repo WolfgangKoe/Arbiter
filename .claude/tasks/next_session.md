@@ -63,16 +63,19 @@ Frühere Sessions (S60–S142): `docs/metrics/session_archive.md`.
    (`S143_on_target_anker_konzept.md`) — nicht parallel zu mypy-uiLayout (Datei-Überschneidung).
 6. **mypy-Ratchet uiLayout** (17 Fehler).
 
-**Offene manuelle UI-Verifikation (Stakeholder):**
+**Manuelle UI-Verifikation — Stand nach Stakeholder-Rückmeldung (2026-07-12 spät):**
 
-- Bugfix Wound-Cap: S2 vs T5 + Whirling Onslaught → WOUND-Block zeigt „Eff. 6+" (nicht 7+),
-  die 6 als Erfolgswürfel; Hit-Gegenprobe (Skill 6+ mit −1 → „Eff. 6+"); Saves dürfen
-  weiterhin 7+/„unmöglich" zeigen (kein 6-Autoerfolg).
-- Bugfix Morale-Selektion: inaktiver Spieler kann in der Morale-Phase eigene Einheit
-  anklicken → Insane Bravery „ready" → Klick = Auto-Pass + CP-Abzug + „used"; zusätzlich
-  tisch-aufgelöstes Stratagem (z. B. Dynastic Heirlooms) OHNE Einheit: Klick muss CP
-  abziehen + „used" markieren (vorher stiller No-Op).
-- Weiter offen: B12b-Punkte (3) + Klan-Affinität am Ork-Transport-Roster.
+- ✅ Wound-Cap bestätigt („Eff. 6+", 6 als Erfolg). ✅ Morale-Selektion bestätigt.
+- 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit → CP-Abzug + „used"): laut
+  Stakeholder erst im Roster-Builder prüfbar (Relic-Vergabe) — offen halten.
+- 🔲 B12b-Punkte (3) weiter offen.
+- ⚠️ **Klan-Affinität NICHT prüfbar — Befund:** `orks_transport.yaml` trägt „Evil Sunz"
+  nur im `display_name`; kein `klan`-Schlüssel im Roster, kein `subfaction_affinity` in
+  `data/wh40k_9e/orks/` (nur Necron-Roster haben `dynasty:`). S144 klären: Ork-Klan-Daten
+  nachziehen (analog Dynastie-Kopplung S140) oder Verifikationspunkt streichen.
+- Whirling-Onslaught-Position vom Stakeholder erneut bestätigt: Box soll am
+  Ziel-Zuweisungs-Screen erscheinen („✓ Skorpekh Destroyers"-Toggle) — deckt sich exakt
+  mit dem freigegebenen on_target-Konzept Option A (S144 Schritt 5, war nicht Teil S143).
 
 **Erkenntnisse/Retro-Kandidaten S143:** (a) Budget-Selbstwahrnehmung der Executor
 unzuverlässig — W1-A verbrauchte ~99k (Budget 30k) und meldete „unter Selbst-Stopp",
