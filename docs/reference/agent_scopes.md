@@ -170,14 +170,19 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   sobald ein Befund reines Beobachten im Browser braucht. **Ersetzt NICHT** die
   Design-Sichtprüfung des Stakeholders (Layout-/Wortlaut-/Ästhetik-Urteil bleibt
   manuell) — deckt nur messbares/funktionales Verhalten ab.
-- **Selbst-Stopp-Klausel in jedem Brief:** überschreitet der Subagent ~100k
-  Eigenverbrauch (verschärft S135-Retro, vormals ~150k), gibt er den Zwischenstand
-  zurück (geänderte Dateien + offene Schritte) statt weiterzuarbeiten. Prüfintervall:
-  nach jedem ~20. Tool-Call den Eigenverbrauch schätzen; ab ~80k nur noch abschließen,
-  nichts Neues beginnen.
+- **Selbst-Stopp-Klausel in jedem Brief:** jeder Brief nennt explizit sein Token-Budget
+  und eine harte Stopp-Schwelle (ca. 1,5× des Budgets). Überschreitet der Subagent
+  diese Schwelle, **bricht er sofort ab und gibt Zwischenstand zurück** (geänderte Dateien +
+  offene Schritte) statt weiterzuarbeiten. Prüfintervall: nach jedem ~20. Tool-Call den
+  Eigenverbrauch schätzen; ab 80 % des Budgets nur noch abschließen, nichts Neues beginnen.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
+
+- **Handoff-Lifecycle: STATUS: DONE = Datei löschen:** `STATUS: DONE` in einer Handoff-Datei
+  bedeutet, dass der Subagent diese Datei **im selben Commit-Schritt löschen muss**, in dem
+  er DONE setzt. Nicht „markiert, wird später gelöscht". Der Brief muss dies explizit anweisen.
+  Grund: S142-Hygiene-Test — verwaiste DONE-Dateien ohne Löschen lassen die Doku-Gate rot.
 
 ---
 

@@ -602,11 +602,9 @@ S118-M2: `tests/gameMechanic/conftest.py` hat jetzt die session-scoped Fixture
 `_canonical_streamlit_mock`; die per-File-Mocks vor dem ersten src-Import sind noch dezentral).
 Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
 
-- 🔲 **Kein Test lädt alle Roster durch (S141-Befund):** `tests/gameObjects/test_loader.py:1259`
-  lädt nur `necrons_alpha` + `orks_test` fest verdrahtet — neue Roster in `data/rosters/`
-  (z. B. `orks_transport.yaml`, S141) werden von keinem Test automatisch mitgeprüft. Test-
-  Lücken-Kandidat: Loader-Test auf ein Verzeichnis-Glob über `data/rosters/*.yaml` umstellen,
-  damit ein kaputtes neues Roster den Loader-Gate bricht statt unbemerkt zu bleiben.
+- ✅ **Kein Test lädt alle Roster durch (S141-Befund):** erledigt S143 — Loader-Test auf
+  `pytest.mark.parametrize` über `sorted(_ROSTER_DIR.glob("*.yaml"))` umgestellt
+  (`tests/gameObjects/test_loader.py`), alle 8 Roster werden automatisch mitgeprüft.
 
 ---
 
@@ -661,7 +659,7 @@ Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
       zufällig gleichwertig solange die Toughness-Schwelle nicht kippt), jetzt `strength` (echter
       Stat-Modifier vor der Wound-Tabelle). Totes `effect: {type: buff_stat, ...}`-Feld entfernt
       (bei Stratagems nirgends konsumiert, nur `Ability.effect` wird gelesen — per grep bestätigt).
-      Neue reine Funktion `stratagem_strength_bonus()` (`src/gameMechanic/abilityEngine.py`)
+      Neue reine Funktion `stratagem_strength_bonus()` (`src/gameMechanic/stratagemEngine.py`)
       summiert `roll_type=="strength"`-Einträge aus `active_modifiers`; als dritte Quelle in
       `str_bonus` (`src/uiLayout/_common.py`, vor `wound_threshold()`) verdrahtet, analog
       `buff_stat_bonus()`/`get_active_round_choice_strength_if_charged()`. Kein Doppel-Konsum:

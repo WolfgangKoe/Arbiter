@@ -77,6 +77,30 @@ def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> No
 _UNIT_SCOPED_EFFECT_TYPES = frozenset({"auto_pass_morale", "invuln_save"})
 
 
+def is_unit_scoped_effect(strat: Stratagem) -> bool:
+    """Whether `strat`'s effect requires a specific selected unit to apply.
+
+    Single source of truth for "does this GO need a unit selected before it
+    can do anything" — same effect-shape dispatch `_effect_gate_met` and
+    `_apply_stratagem_effect` use, exposed as its own predicate (S142-Review
+    Befund 1+3) because three call sites in `uiLayout.gameProtocoll` need this
+    exact question and previously answered it with the broader (and wrong)
+    `strat.effect is not None`: a stratagem CAN carry a non-None `effect` that
+    is not unit-scoped at all (e.g. `grant_relic`/`grant_warlord_trait`/
+    `auto_wound`/`grant_keyword` — effects that apply to the whole army or are
+    resolved entirely at the table). Gating those on "a unit is selected"
+    left their GO card showing "ready" while a click silently did nothing
+    (`_apply_stratagem_effect`'s dispatch has no branch for them, so `unit_key`
+    is simply unused) — no CP spent, no "used" mark, looks broken.
+    """
+    effect = strat.effect
+    if effect is None:
+        return False
+    if effect.type == "move" and effect.handler == "fall_back_through_models":
+        return True
+    return effect.type in _UNIT_SCOPED_EFFECT_TYPES
+
+
 def _effect_gate_met(
     strat: Stratagem, unit_state: dict | None  # type: ignore[type-arg]
 ) -> tuple[bool, str | None]:
@@ -113,9 +137,10 @@ def _effect_gate_met(
     Any other effect shape (or no effect) is always gate-met — those GOs have
     no per-unit state requirement beyond `conditions`.
     """
-    effect = strat.effect
-    if effect is None:
+    if not is_unit_scoped_effect(strat):
         return True, None
+    effect = strat.effect
+    assert effect is not None  # is_unit_scoped_effect(strat) already narrowed this
     if effect.type == "move" and effect.handler == "fall_back_through_models":
         if unit_state is None:
             return False, "select an eligible unit"
@@ -124,10 +149,8 @@ def _effect_gate_met(
         if not unit_state.get("in_melee"):
             return False, "unit not in Engagement Range"
         return True, None
-    if effect.type in _UNIT_SCOPED_EFFECT_TYPES:
-        if unit_state is None:
-            return False, "select an eligible unit"
-        return True, None
+    if unit_state is None:
+        return False, "select an eligible unit"
     return True, None
 
 

@@ -279,3 +279,34 @@ def test_target_phases_keep_the_existing_attack_phases() -> None:
     from uiLayout.unitCard import _TARGET_PHASES
 
     assert {"shooting", "charge", "fight"} <= _TARGET_PHASES
+
+
+# ---------------------------------------------------------------------------
+# _self_select_eligible — Bugfix A regression (S143): the inactive player must
+# be able to self-select their own unit in the Morale phase (e.g. to pick the
+# unit an Insane Bravery `player: both` stratagem applies to). Before the fix
+# the inactive player's own-unit cards fell through to the target-selector
+# branch, which only offers a button in `_TARGET_PHASES` — Morale is not one
+# of those, so no button (and no `selected_unit`) was ever offered.
+# ---------------------------------------------------------------------------
+
+
+def test_inactive_player_can_self_select_in_morale_phase() -> None:
+    from uiLayout.unitCard import _self_select_eligible
+
+    assert _self_select_eligible("morale", is_active=False) is True
+
+
+def test_active_player_can_always_self_select() -> None:
+    from uiLayout.unitCard import _self_select_eligible
+
+    assert _self_select_eligible("shooting", is_active=True) is True
+    assert _self_select_eligible("morale", is_active=True) is True
+
+
+def test_inactive_player_still_cannot_self_select_in_turn_based_phases() -> None:
+    from uiLayout.unitCard import _self_select_eligible
+
+    assert _self_select_eligible("shooting", is_active=False) is False
+    assert _self_select_eligible("charge", is_active=False) is False
+    assert _self_select_eligible("fight", is_active=False) is False

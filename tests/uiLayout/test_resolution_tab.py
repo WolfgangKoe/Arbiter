@@ -320,3 +320,48 @@ def test_hit_roll_penalty_renders_once_no_duplicate_badge(monkeypatch) -> None: 
         f"grid); a second occurrence means the duplicate special_die_html badge "
         f"is back. Got {count} occurrence(s)."
     )
+
+
+# ---------------------------------------------------------------------------
+# S142 Bugfix C — natural 6 always wounds: WOUND block "Eff." row must clamp
+# at 6+, never show 7+ (core_rules.txt "Wound Roll" — unmodified 6 always
+# succeeds). Reported case: S2 vs T5 with the Whirling Onslaught −1 wound debuff.
+# ---------------------------------------------------------------------------
+
+
+def test_wound_eff_row_clamps_at_six_natural_six_still_success(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Regression: S2 vs T5 (base 6+) with a −1 wound debuff must show 'Eff. 6+',
+    never 'Eff. 7+', and the natural-6 die in that row renders as a success die.
+    """
+    from uiLayout.diceCompose import _THRESHOLD_COLOR, dice_face_svg  # noqa: PLC0415
+
+    captured = _collect_markdown(monkeypatch)
+
+    debuff = {
+        "label": "Whirling Onslaught",
+        "value": -1,
+        "roll_type": "wound",
+        "source": "stratagem",
+    }
+    _render_dice_wound_block(
+        strength=2,
+        toughness=5,
+        wound_stack=[debuff],
+        strength_buff=0,
+        on_six_ap=0,
+        modified=6,  # value resolve_attack_modifiers now returns (capped at 6)
+    )
+
+    combined_html = "\n".join(captured)
+    assert (
+        "Eff. 6+" in combined_html
+    ), f"Expected 'Eff. 6+' (natural 6 always wounds), got:\n{combined_html[:600]}"
+    assert "Eff. 7+" not in combined_html, (
+        f"'Eff. 7+' must never appear — an unmodified 6 always wounds.\n" f"{combined_html[:600]}"
+    )
+    # The Eff.-row die for value 6 must render as a normal success die (frame
+    # colour), not the all-miss ×-row used for a genuinely impossible 7+.
+    success_die_6 = dice_face_svg(6, color=_THRESHOLD_COLOR[6])
+    assert (
+        success_die_6 in combined_html
+    ), f"Expected natural-6 success die in the Eff. row, got:\n{combined_html[:600]}"

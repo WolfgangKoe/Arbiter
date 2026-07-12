@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 20:51 CEST
+Stand: 2026-07-12 22:00 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,23 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 18:02 e7b9  ████████████ 145k ⚠️   █████░  83%    ▚▚▚·········
+07-12 21:20 b358  ███████████░ 140k ⚠️   █████░  78%    █·········▒▒
+         SA_1·  █████░░░░░░░  61k ✅    W1-G on_target-Anker-Konzept
+         SA_2·  ██░░░░░░░░░░  26k ✅    Stratagem-Existenz-Lookup 9E
+         SA_3·  █████████░░░ 118k ✅    Planner S143 Planning-Entwurf
+         SA_4·  ███████░░░░░  84k ✅    DoD-Review S142 nachholen
+         SA_5·  ████░░░░░░░░  47k ✅    Fundort Eff.-Schwellenberechnung H…
+         SA_6·  ███░░░░░░░░░  35k ✅    W1-E Briefvorlage härten
+         SA_7·  ██████░░░░░░  77k ✅    W1-F Stratagem-Kodex-Abgleich
+         SA_8·  ████░░░░░░░░  52k ✅    W1-D Roster-Loader-Glob-Test
+         SA_9·  █░░░░░░░░░░░  16k ✅    Read dice_row_html rendering logic
+         SA_10·  ████████░░░░  98k ✅    W1-A Bugfix C Wound-Cap
+         SA_11·  ██░░░░░░░░░░  31k ✅    Regel-Lookup unmodified 6
+         SA_12·  ███████░░░░░  92k ✅    W1-B Bugfix A + Review-Auflage
+         SA_13·  ████░░░░░░░░  46k ✅    Grep dice block callers and modifi…
+         SA_14·  █████░░░░░░░  64k ✅    W1-C abilityEngine-Recherche
+----------------- ---------------------- -------------- ------------
+07-12 18:02 e7b9  ████████████ 146k ⚠️   █████░  83%    ▚▚▚·········
          SA_1·  █████░░░░░░░  64k ✅    5 rote Tests anpassen
          SA_2·  ███████░░░░░  92k ✅    FixD-Detail-Plan erstellen
          SA_3·  ████████░░░░ 100k ✅    Rename snake_case zu camelCase
@@ -638,3 +654,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S138 (2026-07-11)** WAAAGH owner-anchor+once-per-battle ledger, battle end after round 5, unitCard keyword leak, YAML truncation 47 entries, badge value doubling fix
 - **S139 (2026-07-12)** B12 komplett (used_elsewhere-Zustand + Anker-Buchhaltung, Karten- & Inline-Mapper), Cut-Them-Down-Layout-Fix, mypy 62->54, toter Code entfernt
 - **S140 (2026-07-12)** Dynastie-Protokoll-Affinität im Round-Zweig (Engine+UI+Badges, Tests je 6 Dynastien, Review GO), mypy 54→48 (gameActionsArea typisiert)
+- **S143 (2026-07-12)** Review+Retro S142 nachgeholt (GO m. Auflagen, P1 gefixt); Welle 1: Wound/Hit-Natural-6-Cap, Morale-Selektion inaktiver Spieler, is_unit_scoped_effect-Prädikat, Roster-Glob-Test, Briefvorlage gehärtet; 3 Konzepte ANSWERED (abilityEngine A+B, Kodex-Filter Necrons 16, on_target Option A); FixD freigegeben; 1808 passed / 99,12%

@@ -21,13 +21,14 @@ from uiLayout.diceCompose import (
 
 
 def _capped_modifier_threshold(base: int, modifier_total: int) -> int:
-    """Threshold after the 9E hit/wound modifier cap: at most ±1 from base, floor 2+.
+    """Threshold after the 9E hit/wound modifier cap: at most ±1 from base, range [2, 6].
 
     ``modifier_total`` may be a single modifier value or an uncapped sum; a positive
     modifier lowers the threshold, a negative one raises it — never by more than one
-    step from ``base``, and never below 2+.
+    step from ``base``. An unmodified 6 always succeeds and an unmodified 1 always
+    fails (core_rules.txt "Hit Roll"/"Wound Roll"), so the result never leaves [2, 6].
     """
-    return max(2, max(base - 1, min(base + 1, base - modifier_total)))
+    return min(6, max(2, max(base - 1, min(base + 1, base - modifier_total))))
 
 
 def _render_dice_roll_block(
@@ -58,7 +59,7 @@ def _render_dice_roll_block(
         parts.append(
             grid_row_html(
                 f'<span style="color:#f8fafc;font-weight:600;">Eff. {modified}+</span>',
-                threshold_header_html(min(modified, 7)) + dice_row_html(min(modified, 7)),
+                threshold_header_html(modified) + dice_row_html(modified),
             )
         )
         st.markdown("".join(parts), unsafe_allow_html=True)
@@ -85,17 +86,22 @@ def _render_dice_wound_block(
     strength_buff: int = 0,
     on_six_ap: int = 0,
     on_six_label: str = "",
+    modified: int | None = None,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue.
 
     on_six_ap > 0 adds a value-triggered row showing ``[AP-N]`` in the 6 column
     (Hungry Void D1: unmodified wound roll of 6 improves AP). on_six_label is the
-    data-driven directive name shown in the badge column.
+    data-driven directive name shown in the badge column. ``modified`` should be
+    the effective threshold already resolved by combat.resolve_attack_modifiers
+    (single source of truth for the 9E cap); when omitted, it is derived locally
+    from wound_stack for callers that only have the stack.
     """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
     base = wound_threshold(strength, toughness)
-    modified = _capped_modifier_threshold(base, sum(e["value"] for e in wound_stack))
+    if modified is None:
+        modified = _capped_modifier_threshold(base, sum(e["value"] for e in wound_stack))
     rel = ">" if strength > toughness else ("=" if strength == toughness else "<")
     # D5: S/T comparison clearly highlighted; NO "→ N+" — the result is the
     # boxed threshold in the header row below.
@@ -145,7 +151,7 @@ def _render_dice_wound_block(
         parts.append(
             grid_row_html(
                 f'<span style="color:#f8fafc;font-weight:600;">Eff. {modified}+</span>',
-                threshold_header_html(min(modified, 7)) + dice_row_html(min(modified, 7)),
+                threshold_header_html(modified) + dice_row_html(modified),
             )
         )
         st.markdown("".join(parts), unsafe_allow_html=True)

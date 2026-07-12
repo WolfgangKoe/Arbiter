@@ -2030,6 +2030,7 @@ def _render_resolution_tab(
         strength_buff=str_bonus,
         on_six_ap=on_six_ap,
         on_six_label=on_six_label,
+        modified=atk_result["wound"]["modified"],
     )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
     # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.

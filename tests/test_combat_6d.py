@@ -109,6 +109,35 @@ def test_wound_modifier_applies():
     assert result["wound"]["modified"] == 4
 
 
+def test_wound_capped_at_6_natural_six_always_wounds():
+    """Regression (S142 Bugfix C): an unmodified 6 always wounds (core_rules.txt
+    "Wound Roll"), so a −1 debuff on a 6+ base (S2 vs T5) must stay at 6+, not 7+.
+    """
+    mods = [
+        {"label": "Whirling Onslaught", "value": -1, "roll_type": "wound", "source": "stratagem"}
+    ]
+    result = resolve_attack_modifiers(3, 2, 5, "Rapid Fire", False, mods, False)
+    assert result["wound"]["base"] == 6
+    assert result["wound"]["modified"] == 6
+
+
+def test_hit_capped_at_6_natural_six_always_hits():
+    """Same rule for the hit roll (core_rules.txt "Hit Roll"): a −1 debuff on a
+    6+ base skill must stay at 6+, not 7+."""
+    mods = [{"label": "Debuff", "value": -1, "roll_type": "hit", "source": "stratagem"}]
+    result = resolve_attack_modifiers(6, 4, 4, "Rapid Fire", False, mods, False)
+    assert result["hit"]["modified"] == 6
+
+
+def test_wound_floor_at_2_natural_one_always_fails():
+    """Gegenrichtung: a +1 buff on an already-2+ base (S >= 2xT) must stay at 2+,
+    never better — an unmodified 1 always fails (core_rules.txt "Wound Roll")."""
+    mods = [{"label": "Buff", "value": 1, "roll_type": "wound", "source": "protocol"}]
+    result = resolve_attack_modifiers(3, 8, 4, "Rapid Fire", False, mods, False)
+    assert result["wound"]["base"] == 2
+    assert result["wound"]["modified"] == 2
+
+
 def test_hit_and_wound_mods_independent():
     mods = [
         {"label": "Proto Hit", "value": 1, "roll_type": "hit", "source": "protocol"},

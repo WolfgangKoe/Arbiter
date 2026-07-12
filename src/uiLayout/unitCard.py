@@ -69,6 +69,27 @@ _DEBUFF_COLOR: tuple[str, str] = ("#ef4444", "#1e0808")
 # selected_targets stays empty — the damage button can never appear (S129 fix).
 _TARGET_PHASES: frozenset[str] = frozenset({"shooting", "charge", "fight", "psychic"})
 
+# Phases that resolve for BOTH players regardless of whose turn it is — the
+# Morale phase alternates between both players (data/wh40k_9e/_shared/
+# stratagems.yaml insane_bravery comment; core_rules.txt:2094), so a player's
+# own-unit self-select button (needed e.g. to pick the unit an
+# `player: both` stratagem like Insane Bravery applies to) must not be gated
+# on `is_active` there the way it correctly is in the turn-based phases.
+_BOTH_PLAYERS_SELF_SELECT_PHASES: frozenset[str] = frozenset({"morale"})
+
+
+def _self_select_eligible(phase_key: str, is_active: bool) -> bool:
+    """Whether this faction's own-unit cards get the plain self-select button.
+
+    Root cause (Bugfix A, S143): the inactive player's own units fell through
+    to the `else` branch below, which only offers a button in `_TARGET_PHASES`
+    — the Morale phase is not one of those, so the inactive player's units
+    rendered as plain, unclickable text and `selected_unit` could never be set
+    for them, permanently locking any unit-scoped effect gate (e.g. Insane
+    Bravery's `_effect_gate_met`) at "select an eligible unit".
+    """
+    return is_active or phase_key in _BOTH_PLAYERS_SELF_SELECT_PHASES
+
 
 def _badge(text: str, variant: str = "") -> str:
     if text in _BADGE_COLORS:
@@ -254,7 +275,7 @@ def render_unit_card(
                 st.session_state.selected_unit = None if is_sel else (faction, uid)
                 st.rerun()
 
-        elif is_active:
+        elif _self_select_eligible(phase_key, is_active):
             _ptr: TargetSelectionRequest | None = (
                 st.session_state.get("pending_target_request") if phase_key == "command" else None
             )

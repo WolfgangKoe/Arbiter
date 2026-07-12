@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 20:51 CEST
+Stand: 2026-07-12 22:00 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,31 +14,31 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 18:02 e7b9  ████████████ 145k ↑    █████░  83% ↑  ▚▚▚·········
+07-12 21:20 b358  ███████████░ 140k ↓    █████░  78% ↓  █·········▒▒
+07-12 18:02 e7b9  ████████████ 146k ↑    █████░  83% ↑  ▚▚▚·········
 07-12 18:02 8ee0  ███░░░░░░░░░  39k ↓    ░░░░░░   0% ↓  ▓▓▓▓▓▓▓▓▓▓▓▓
 07-12 11:18 dedb  ████████████ 170k ↑    █████░  76% ↑  ▚▚▚▚········
 07-12 02:03 76ce  █████████░░░ 119k ↓    ████░░  72% ↓  ▚▚▚█········
 07-11 15:28 a4be  ████████████ 150k ↑    █████░  82% ↓  ███·········
-07-11 12:58 3d6e  ███████████░ 143k ↓    █████░  89% ↑  ▚▚▚█········
 ```
 
 ## Jüngste Session
 
-**2026-07-12 18:02 · e7b945c1**
+**2026-07-12 21:20 · b358187a**
 
-- **Aufgabe:** start session
-- **Modelle:** Haupt Fable · Subagent Fable, Haiku, Sonnet
-- **Tokens gesamt:** 62,608,829 (Haupt 10,354,032 · Subagent 52,254,797, Anteil 83 %)
-- **Peak-Kontext:** ████████████ 145k / 150k
-- **cache_read:** 57,660,162 · **Output:** 390,473
+- **Aufgabe:** Was auf dir liegt (manuelle UI-Verifikation): Insane Bravery ohne gewählte Einheit muss „locked" zeigen, mit Einheit lö…
+- **Modelle:** Haupt Fable · Subagent Haiku, Opus, Sonnet
+- **Tokens gesamt:** 35,480,741 (Haupt 7,809,191 · Subagent 27,671,550, Anteil 78 %)
+- **Peak-Kontext:** ███████████░ 140k / 150k
+- **cache_read:** 32,557,436 · **Output:** 433,821
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ Peak-Kontext 145k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
-- ✅ 83% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 39,430,851 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ⚠️ Peak-Kontext 140k nahe am 150k-Korridor (>90 %) — geordnet beenden und frisch starten.
+- ✅ 78% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 23,893,050 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,25 +47,29 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: 5 rote Tests anpa… █████░░░░░░░  64k    ✅
-2   general-purpose: FixD-Detail-Plan … ███████░░░░░  92k    ✅
-3   general-purpose: Rename snake_case… ████████░░░░ 100k    ✅
-4   general-purpose: FixD-Sofortlinder… ████████░░░░ 101k    ✅
-5   general-purpose: next_session.md Ü… ███░░░░░░░░░  40k    ✅
-6   general-purpose: Stratagem-Dispatc… ████████████ 171k    ⛔
-7   Explore: Locate render_attack_reso… ███░░░░░░░░░  37k    ✅
-8   general-purpose: Planning-Entwurf … ████████████ 150k    ⛔
-9   general-purpose: Backlog-Überführu… █████░░░░░░░  66k    ✅
-10  general-purpose: FixC Insane Brave… ███████░░░░░  89k    ✅
+1   general-purpose: W1-G on_target-An… █████░░░░░░░  61k    ✅
+2   general-purpose: Stratagem-Existen… ██░░░░░░░░░░  26k    ✅
+3   general-purpose: Planner S143 Plan… █████████░░░ 118k    ✅
+4   general-purpose: DoD-Review S142 n… ███████░░░░░  84k    ✅
+5   general-purpose: Fundort Eff.-Schw… ████░░░░░░░░  47k    ✅
+6   general-purpose: W1-E Briefvorlage… ███░░░░░░░░░  35k    ✅
+7   general-purpose: W1-F Stratagem-Ko… ██████░░░░░░  77k    ✅
+8   general-purpose: W1-D Roster-Loade… ████░░░░░░░░  52k    ✅
+9   Explore: Read dice_row_html render… █░░░░░░░░░░░  16k    ✅
+10  general-purpose: W1-A Bugfix C Wou… ████████░░░░  98k    ✅
+11  general-purpose: Regel-Lookup unmo… ██░░░░░░░░░░  31k    ✅
+12  general-purpose: W1-B Bugfix A + R… ███████░░░░░  92k    ✅
+13  Explore: Grep dice block callers a… ████░░░░░░░░  46k    ✅
+14  general-purpose: W1-C abilityEngin… █████░░░░░░░  64k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  7,168
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  4,551,026
-cache_read     ▕████████████████████████▏   92%  57,660,162
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  390,473
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  4,207
+cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  2,485,277
+cache_read     ▕████████████████████████▏   92%  32,557,436
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  433,821
 ```
 
 **Legende & Zielwerte:**
@@ -82,10 +86,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   92%  57,660,162
-Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏    7%  4,551,026
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  7,168
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  390,473
+Warm (System/Memory/History)  ▕████████████████████▏   92%  32,557,436
+Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏    7%  2,485,277
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  4,207
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  433,821
 ```
 
 **Legende (Slide-Kategorien):**
@@ -101,5 +105,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 112 Sessions: 3,436,612,077 Token (36,709 Antworten).
+Σ über 112 Sessions: 3,458,557,690 Token (37,122 Antworten).
 

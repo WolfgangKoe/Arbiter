@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameMechanic.stratagemEngine import (  # noqa: E402
     _effect_gate_met,
+    is_unit_scoped_effect,
     stratagem_strength_bonus,
 )
 from gameObjects.ability import Effect  # noqa: E402
@@ -125,6 +126,45 @@ def test_effect_gate_met_true_when_not_moved_and_in_engagement_range() -> None:
     strat = _with_fall_back_effect(_make_fall_back_stratagem())
     unit_state = {"movement_chosen": False, "in_melee": True}
     assert _effect_gate_met(strat, unit_state) == (True, None)
+
+
+# ---------------------------------------------------------------------------
+# is_unit_scoped_effect() — S142-Review Befund 1+3: single shared predicate for
+# "does this GO's effect require a specific selected unit". Must agree exactly
+# with _effect_gate_met's dispatch table (auto_pass_morale, invuln_save,
+# move+fall_back_through_models) and exclude non-unit-scoped effect-carrying
+# stratagems (e.g. grant_relic) that used to be over-generalized under the
+# broader `strat.effect is not None` check at the gameProtocoll call sites.
+# ---------------------------------------------------------------------------
+
+
+def test_is_unit_scoped_effect_false_when_no_effect() -> None:
+    strat = _make_stratagem()
+    assert is_unit_scoped_effect(strat) is False
+
+
+def test_is_unit_scoped_effect_true_for_auto_pass_morale() -> None:
+    strat = replace(_make_stratagem(), effect=Effect(type="auto_pass_morale"))
+    assert is_unit_scoped_effect(strat) is True
+
+
+def test_is_unit_scoped_effect_true_for_invuln_save() -> None:
+    strat = replace(_make_stratagem(), effect=Effect(type="invuln_save", modifier=1))
+    assert is_unit_scoped_effect(strat) is True
+
+
+def test_is_unit_scoped_effect_true_for_fall_back_through_models() -> None:
+    strat = _with_fall_back_effect(_make_fall_back_stratagem())
+    assert is_unit_scoped_effect(strat) is True
+
+
+def test_is_unit_scoped_effect_false_for_non_unit_scoped_effect_type() -> None:
+    """Gegenfall: an effect-carrying but non-unit-scoped stratagem (e.g.
+    grant_relic — applies army-wide / resolved at the table) is NOT
+    unit-scoped. This is the exact over-generalization the S142-Review found:
+    `strat.effect is not None` alone would wrongly return True here."""
+    strat = replace(_make_stratagem(), effect=Effect(type="grant_relic"))
+    assert is_unit_scoped_effect(strat) is False
 
 
 # ---------------------------------------------------------------------------

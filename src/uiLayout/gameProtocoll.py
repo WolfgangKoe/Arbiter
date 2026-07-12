@@ -25,7 +25,7 @@ from gameMechanic.gameState import (
     units_key_for,
     units_list_for,
 )
-from gameMechanic.stratagemEngine import _effect_gate_met
+from gameMechanic.stratagemEngine import _effect_gate_met, is_unit_scoped_effect
 from gameObjects.loader import load_stratagems
 from gameObjects.stratagem import (
     Stratagem,
@@ -233,11 +233,17 @@ def _use_callback(strat: Stratagem, player: str) -> Callable[[], None]:
     actual spend site — without it, a click here would still deduct CP and
     mark the GO used via `spend_stratagem` while `unit_key is None` silently
     skips `_apply_stratagem_effect`, spending the Stratagem for no game effect.
+
+    Uses `is_unit_scoped_effect` (S142-Review Befund 1+3), not the broader
+    `strat.effect is not None` — a non-unit-scoped, effect-carrying GO (e.g.
+    `grant_relic`) has no unit-selection requirement at all, so gating its
+    click on `unit_key` made the card show "ready" while every click silently
+    did nothing (no CP spent, no "used" mark).
     """
 
     def _use() -> None:
         unit_key = _selected_state_key_for(player)
-        if strat.effect is not None and unit_key is None:
+        if is_unit_scoped_effect(strat) and unit_key is None:
             return
         spend_stratagem(strat, player, unit_key, anchor_id=_CENTRAL_LIST_ANCHOR_ID)
 
@@ -341,7 +347,7 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             if not gate_met:
                 state, locked_reason = "locked", gate_reason
         target_name = (
-            unit_for_check.name_en if strat.effect is not None and unit_for_check else None
+            unit_for_check.name_en if is_unit_scoped_effect(strat) and unit_for_check else None
         )
         render_go_card(
             key=f"{player}_{strat.id}_{phase_idx}_{i}",

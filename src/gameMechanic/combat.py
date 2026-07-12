@@ -204,12 +204,16 @@ def resolve_attack_modifiers(
         "hit": {
             "base": hit_base,
             "stack": hit_stack,
-            "modified": max(2, hit_base - hit_net),
+            # An unmodified 6 always hits and an unmodified 1 always fails
+            # (core_rules.txt "Hit Roll"), so the effective threshold never
+            # leaves the [2, 6] range regardless of the net modifier.
+            "modified": min(6, max(2, hit_base - hit_net)),
         },
         "wound": {
             "base": wound_base,
             "stack": wound_stack,
-            "modified": max(2, wound_base - wound_net),
+            # Same rule for the wound roll (core_rules.txt "Wound Roll").
+            "modified": min(6, max(2, wound_base - wound_net)),
         },
     }
 

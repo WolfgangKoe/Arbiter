@@ -3,6 +3,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 # Ensure src/ is on the path so gameObjects can be imported
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
@@ -1252,19 +1254,20 @@ def test_load_roster_unit_without_yaml_groups_gets_synthetic_group() -> None:
     assert len(synth.weapons) > 0
 
 
-def test_all_roster_units_have_at_least_one_model_group() -> None:
+@pytest.mark.parametrize(
+    "roster_path",
+    sorted(_ROSTER_DIR.glob("*.yaml")),
+    ids=lambda p: p.name,
+)
+def test_all_roster_units_have_at_least_one_model_group(roster_path: Path) -> None:
     """Every unit in a loaded roster must have at least one model group (Plan 013)."""
-    from pathlib import Path
-
-    for roster_name in ("necrons_alpha.yaml", "orks_test.yaml"):
-        roster_path = Path(__file__).parent.parent.parent / "data" / "rosters" / roster_name
-        faction = roster_name.split("_")[0]
-        catalog = load_unit_catalog(faction)
-        matched, _ = load_roster(roster_path, catalog)
-        for unit, _ in matched:
-            assert (
-                len(unit.model_groups) >= 1
-            ), f"{unit.id} in {roster_name} has no model groups after loading"
+    faction = roster_path.stem.split("_")[0]
+    catalog = load_unit_catalog(faction)
+    matched, _ = load_roster(roster_path, catalog)
+    for unit, _ in matched:
+        assert (
+            len(unit.model_groups) >= 1
+        ), f"{unit.id} in {roster_path.name} has no model groups after loading"
 
 
 def test_round_choice_abilities_are_cached() -> None:

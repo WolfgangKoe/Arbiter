@@ -405,6 +405,48 @@ def test_render_stratagem_column_use_action_refuses_unit_scoped_effect_without_u
     assert spend_calls == []
 
 
+def test_render_stratagem_column_use_action_spends_non_unit_scoped_effect_without_unit(
+    monkeypatch,
+) -> None:
+    """Gegenfall zu B12b (S142-Review Befund 1+3): a stratagem with a non-None,
+    non-unit-scoped `effect` (e.g. `grant_relic` — applies to the whole army /
+    is resolved at the table, not to a single selected unit) must still spend
+    normally with no unit selected. Before the fix the `_use_callback` guard
+    used the broader `strat.effect is not None`, which also matched this GO
+    and made the click silently no-op (no CP deducted, no "used" mark) even
+    though the card correctly showed "ready"."""
+    from dataclasses import replace
+
+    strat = replace(
+        _make_stratagem(id_="dynastic_heirlooms", name_en="Dynastic Heirlooms", cp_cost=1),
+        effect=Effect(type="grant_relic"),
+    )
+    session = FakeSessionState(
+        cp={"Necrons": 1},
+        phase_idx=0,
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        selected_unit=None,
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    spend_calls: list[tuple] = []
+    monkeypatch.setattr(
+        gp, "spend_stratagem", lambda *args, **kwargs: spend_calls.append((args, kwargs))
+    )
+
+    gp._render_stratagem_column("Necrons", True)
+    assert captured[0]["state"] == "ready"
+    assert captured[0]["target_name"] is None
+    captured[0]["on_use"]()
+
+    assert spend_calls == [((strat, "Necrons", None), {"anchor_id": "central_list"})]
+
+
 def test_render_stratagem_column_undo_action_routes_through_undo_stratagem(
     monkeypatch,
 ) -> None:
