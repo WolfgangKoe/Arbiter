@@ -1200,6 +1200,7 @@ def _render_pending_emergency_disembarkation(faction: str) -> None:
         event="on_destroy",
         decline_key=marker["uid"],
         context_caption=f"{unit.name_en} (TRANSPORT) was destroyed.",
+        unit_for_conditions=unit,
     )
 
 

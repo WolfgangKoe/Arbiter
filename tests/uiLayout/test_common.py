@@ -1567,6 +1567,30 @@ def test_pending_transport_destroyed_for_own_faction_renders_box(monkeypatch) ->
     assert "Ghost Ark" in call.kwargs["context_caption"]
 
 
+def test_pending_transport_destroyed_box_visible_through_real_conditions_gate(
+    monkeypatch,
+) -> None:
+    """Regression (S141 Group B): render_reactive_stratagem_box was called
+    without unit_for_conditions, so stratagem_conditions_met(["TRANSPORT"], None)
+    was always False and stratagem_visibility() returned "hidden" before any
+    phase/CP check ran — Emergency Disembarkation never appeared, even for a
+    genuinely destroyed TRANSPORT. This exercises the real (unmocked)
+    render_reactive_stratagem_box -> stratagem_visibility path instead of
+    spying it away, so the missing unit_for_conditions wiring is caught."""
+    session = _reactive_box_session(
+        pending_transport_destroyed={"faction": "Necrons", "uid": "ghost_ark#1"},
+        phase_idx=4,  # "shooting"
+    )
+    captured = _install_reactive_box_session(monkeypatch, session)
+    ghost_ark = _unit_with_keywords("TRANSPORT")
+    ghost_ark.name_en = "Ghost Ark"
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (ghost_ark, {}))
+
+    common._render_pending_emergency_disembarkation("Necrons")
+
+    assert any(c["name"] == "Emergency Disembarkation" for c in captured)
+
+
 def test_render_player_column_calls_emergency_disembarkation_check(monkeypatch) -> None:
     """Wiring check: render_player_column must consult the pending marker for
     EVERY faction column, regardless of active/inactive role (charge, movement,
