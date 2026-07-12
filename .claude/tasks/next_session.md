@@ -51,6 +51,14 @@ Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Se
 
 ### ▶ Nächster Schritt (S142)
 
+**Strategisches Thema (Stakeholder S141) — Gefechtsoptionen-Architektur:** GOs/Stratagems
+funktionieren ähnlich wie Abilities, laufen aber vermutlich NICHT über die ability-Engine.
+S142-Planning soll die Ist-Architektur erheben (`stratagem.py`, `gameProtocoll.py`,
+`ability_engine.py`) und eine Empfehlung mit Trade-offs geben: über die ability-Engine
+vereinheitlichen ODER gesonderte Funktion (auch wenn das etwas Code dupliziert)? Hängt eng
+mit FixC/FixD zusammen — beide sitzen in der GO/Stratagem-Verdrahtung; ggf. Fixes im Licht
+der Architektur-Entscheidung planen.
+
 **Priorität — S141-Verifikations-Bugs, diagnostiziert & freigegeben, wegen Korridor vertagt
 (Fix-Orte in `docs/handoff/S141_ui_befunde_group_a.md`):**
 
@@ -75,8 +83,9 @@ Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Se
 3. **Roster-Test-Lücke:** kein Test lädt alle `data/rosters/` durch (`test_loader.py:1259`
    fest 2 Roster). → `backlog.md` §4d.
 
-**Offene manuelle UI-Verifikation:** Emergency-Disembark-Sichtbarkeit (FixA),
-Movement-Abdunkeln (FixB), B12b-Suffix, Klan-Affinität am Ork-Transport-Roster (`backlog.md` §3).
+**Manuelle UI-Verifikation:** FixA (Emergency-Disembark) + FixB (Movement-Abdunkeln)
+S141 stakeholder-verifiziert ✅. Offen: B12b-Suffix, Klan-Affinität am Ork-Transport-Roster
+(`backlog.md` §3).
 
 **Ratchet/Rest unverändert:** mypy-Baseline 28 weiter Richtung 0 (`uiLayout/` 17 +
 `gameMechanic/` 11, `backlog.md` §4); Stil-Nit `undo_stratagem` in-place; R-PROTO-02 offen;

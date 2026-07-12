@@ -248,8 +248,7 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     Stratagem-YAML-Dateien (0 Treffer `_shared`/`necrons`/`orks`) und fehlt auch auf der
     `Stratagem`-Dataclass (`src/gameObjects/stratagem.py`); die Aufgabe ist Schema-
     Erweiterung **plus** Datenpflege, kein reiner YAML-Task. Stakeholder-Entscheid S141:
-    zurückstellen, bis B13 selbst geplant wird (dann Schema+Loader+Daten in einem Aufwasch;
-    Details `docs/handoff/S141_planning.md` Aufgabe 4).
+    zurückstellen, bis B13 selbst geplant wird (dann Schema+Loader+Daten in einem Aufwasch).
   - 🔲 **B14 — Badge-Kontrast-Pass (Stakeholder-Beobachtung S137):** Badges schwer
     erkennbar, v. a. STATIONARY (`--arb-muted` `#6b5f44`) zu dunkel. Vorschlag: heller
     Khaki `#9c8f6a`; prüfen, ob weitere gedämpfte Badges mit angehoben werden müssen.

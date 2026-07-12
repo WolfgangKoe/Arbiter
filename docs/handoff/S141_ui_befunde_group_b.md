@@ -1,4 +1,4 @@
-STATUS: ANSWERED (S141 — Teil A=FixA; Teil B Insassen → S142-Backlog, dann löschen)
+STATUS: ANSWERED (S141 — Teil A=FixA erledigt; Teil B Insassen-Feature → S142-Planning; behalten)
 
 # S141 — Befund Gruppe B: Emergency Disembarkation erscheint nicht (Gunwagon)
 

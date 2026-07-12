@@ -3875,13 +3875,13 @@
   "dedbab76-448d-4334-b6ef-c30432fa5c10": {
     "started_at": "2026-07-12T09:18:05.592Z",
     "task": "start session",
-    "peak_context": 151077,
-    "subagent_share": 80.1386271849993,
+    "peak_context": 168924,
+    "subagent_share": 76.90357690306764,
     "by_tier": {
       "Sonnet": 41512475,
       "Haiku": 109111,
       "Fable": 17555452,
-      "Opus": 452676
+      "Opus": 1983237
     },
     "subagents": [
       {
@@ -3931,6 +3931,13 @@
         "description": "Fix B: Movement-Timing + Abdunkeln",
         "tier": "Sonnet",
         "peak_context": 66746,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: S141 DoD-Review",
+        "tier": "Opus",
+        "peak_context": 59138,
         "started_at": "2026-07-12T09:18:05.592Z"
       },
       {

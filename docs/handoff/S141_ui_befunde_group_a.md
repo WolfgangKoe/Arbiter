@@ -1,4 +1,4 @@
-STATUS: ANSWERED (S141 — Befunde 1/2/3/5 → Fixes B–D; am Session-Ende löschen)
+STATUS: ANSWERED (S141 — Befund 1/2=FixB erledigt; 3=FixD, 5=FixC → S142; behalten bis erledigt)
 
 # S141 UI-Befunde Gruppe A — Root-Cause-Analyse (read-only Investigation)
 

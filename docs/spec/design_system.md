@@ -181,7 +181,7 @@ Fünf Zustände ersetzen das bisherige plötzliche Auftauchen der reaktiven Box
 | ruhend | Trigger (noch) nicht erfüllt | sichtbar, gedimmt, `[Use]` disabled |
 | bereit | Trigger erfüllt, CP reichen | hervorgehoben (Gold-Primary, s. §6.5), `[Use]` aktiv |
 | verwendet-hier | Use HIER (an diesem Anker) gedrückt, Fenster noch offen | `[↺ Undo]` statt `[Use]` |
-| verwendet-anderswo | dieselbe GO (Spieler + GO-ID) diese Phase an EINEM ANDEREN Anker benutzt | gedimmt wie „gesperrt", Button zeigt deaktiviertes **„Used"** (kein Undo dort); Header-Suffix „used on ⟨Einheit⟩", falls eine Einheit bekannt (**Ratchet-Schuld S139 B12b:** Suffix noch nicht verdrahtet — die drei Zustands-Mapper geben für „verwendet-anderswo" heute `None` als Grund zurück, keine Regression, nur eine offene Verfeinerung, s. Selbstprüf-Notiz unten) |
+| verwendet-anderswo | dieselbe GO (Spieler + GO-ID) diese Phase an EINEM ANDEREN Anker benutzt | gedimmt wie „gesperrt", Button zeigt deaktiviertes **„Used"** (kein Undo dort); Header-Suffix „used on ⟨Einheit⟩", falls eine Einheit bekannt (**verdrahtet S141, Commit `cdb55e2`;** Randfall Advance-Reroll/Inline-Spends ohne `unit_key` zeigen spec-konform keinen Suffix) |
 | gesperrt | CP fehlen / Voraussetzung weg | gedimmt, Grund als Suffix im Header |
 
 Gilt **einheitlich für jeden Anker** — Karte oder Inline, gleich an welcher Render-Stelle,
