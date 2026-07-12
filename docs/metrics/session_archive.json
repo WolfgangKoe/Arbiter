@@ -3875,8 +3875,8 @@
   "dedbab76-448d-4334-b6ef-c30432fa5c10": {
     "started_at": "2026-07-12T09:18:05.592Z",
     "task": "start session",
-    "peak_context": 147367,
-    "subagent_share": 81.4582242300624,
+    "peak_context": 151077,
+    "subagent_share": 80.1386271849993,
     "by_tier": {
       "Sonnet": 41512475,
       "Haiku": 109111,

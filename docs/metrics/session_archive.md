@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 17:44 CEST
+Stand: 2026-07-12 17:45 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,7 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 11:18 dedb  ████████████ 147k ⚠️   █████░  81%    ▚▚▚▚········
+07-12 11:18 dedb  ████████████ 151k ⛔    █████░  80%    ▚▚▚▚········
          SA_1·  ██████████░░ 131k ⚠️   Investigator 1: GO-Karten-Renderin…
          SA_2·  ███░░░░░░░░░  32k ✅    Locate stratagem helper signatures
          SA_3·  ███████████░ 133k ⚠️   Executor 3: B12b-Header-Suffix
