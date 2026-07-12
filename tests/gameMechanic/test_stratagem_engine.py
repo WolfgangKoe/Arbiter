@@ -19,6 +19,7 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from gameMechanic.abilityEngine import _sum_effect_value  # noqa: E402
 from gameMechanic.stratagemEngine import (  # noqa: E402
     _effect_gate_met,
     is_unit_scoped_effect,
@@ -237,3 +238,11 @@ def test_stratagem_strength_bonus_legacy_none_unit_key_not_applied_globally() ->
     """Pre-fix entries with unit_key=None must no longer buff every attacker."""
     mods = [_strength_modifier_entry(value=1, unit_key=None)]
     assert stratagem_strength_bonus(mods, _ATK_UID) == 0
+
+
+def test_sum_effect_value_type_key_override_matches_roll_type() -> None:
+    """stratagem_strength_bonus (S144 Option B) is the one call site that reads
+    a 'roll_type' key instead of the shared helper's default 'type' — pin the
+    type_key override directly against _sum_effect_value."""
+    effects = [{"roll_type": "strength", "value": 3}, {"roll_type": "wound", "value": 99}]
+    assert _sum_effect_value(effects, "strength", type_key="roll_type") == 3

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import MutableMapping
+from collections.abc import Callable, Iterable, MutableMapping
 from typing import Any
 
 import streamlit as st
@@ -21,6 +21,7 @@ from gameObjects.loader import (
     load_subfaction_abilities,
     load_unit_abilities,
 )
+from gameObjects.roundChoiceAbility import RoundChoiceAbility
 from gameObjects.unit import Unit
 
 # ---------------------------------------------------------------------------
@@ -86,7 +87,7 @@ _MODIFIER_RESULT_KEY = {
 }
 
 
-def _tagged_effect(effect: dict, source_id: str) -> dict:  # type: ignore[type-arg]
+def _tagged_effect(effect: dict[str, Any], source_id: str) -> dict[str, Any]:
     """Return a shallow copy of *effect* annotated with its source ability id.
 
     The loader caches effect dicts and shares them across callers, so we must
@@ -95,7 +96,9 @@ def _tagged_effect(effect: dict, source_id: str) -> dict:  # type: ignore[type-a
     return {**effect, "_source_id": source_id}
 
 
-def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  # type: ignore[type-arg]
+def _extra_directive_effects(
+    player: str, round_choices: list[RoundChoiceAbility]
+) -> list[dict[str, Any]]:
     """Effect dict(s) of the player's always-active 6th round-choice ability.
 
     The 6th ability is the single one not assigned to any battle round. Its
@@ -128,7 +131,7 @@ def _extra_directive_effects(player: str, round_choices: list) -> list[dict]:  #
     return []
 
 
-def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-arg]
+def _active_directive_effects(player: str) -> list[dict[str, Any]]:
     """All effect dicts active for the player from round-choice directives.
 
     Aggregates the round-assigned protocol's chosen directive AND the always-active
@@ -153,7 +156,7 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     if not round_choices:
         return []
 
-    effects: list[dict] = []  # type: ignore[type-arg]
+    effects: list[dict[str, Any]] = []
     if has_round:
         active = next((p for p in round_choices if p.id == active_id), None)
         if active:
@@ -168,7 +171,7 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     return [e for e in effects if e]
 
 
-def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: ignore[type-arg]
+def _directive_phase_excluded(effect: dict[str, Any], use_melee: bool) -> bool:
     """True if the directive's phase does not apply in the given melee/ranged context."""
     effect_phase = effect.get("phase", "any")
     if effect_phase == "shooting" and use_melee:
@@ -176,6 +179,46 @@ def _directive_phase_excluded(effect: dict, use_melee: bool) -> bool:  # type: i
     if effect_phase == "melee" and not use_melee:
         return True
     return False
+
+
+def _sum_effect_value(
+    effects: Iterable[dict[str, Any]],
+    effect_type: str,
+    *,
+    type_key: str = "type",
+    value_key: str = "value",
+    missing_value: int | None = 0,
+    predicate: Callable[[dict[str, Any]], bool] | None = None,
+    combine: Callable[[int, int], int] = lambda total, value: total + value,
+) -> int | None:
+    """Fold ``value_key`` across effect dicts whose ``type_key`` equals *effect_type*.
+
+    Shared accumulate step behind the "filter effects by type [+ predicate],
+    fold value_key via combine" pattern repeated across
+    ``get_active_round_choice_strength_if_charged``,
+    ``get_active_round_choice_ap_on_wound_6``, ``get_active_heal_bonus``,
+    ``buff_stat_bonus``, ``ability_invuln_save`` (this module) and
+    ``stratagemEngine.stratagem_strength_bonus``.
+
+    *combine* seeds from the first match rather than a fixed 0 baseline, so
+    ``combine=min`` (``ability_invuln_save``) isn't skewed low by a spurious
+    zero. Returns ``None`` when nothing matched. *missing_value* is the
+    fallback for effects missing (or holding an explicit ``None``) at
+    ``value_key`` — pass ``None`` (as ``ability_invuln_save`` does) to skip
+    such effects instead of counting them as 0.
+    """
+    total: int | None = None
+    for effect in effects:
+        if effect.get(type_key) != effect_type:
+            continue
+        if predicate is not None and not predicate(effect):
+            continue
+        raw = effect.get(value_key, missing_value)
+        if raw is None:
+            continue
+        value = int(raw)
+        total = value if total is None else combine(total, value)
+    return total
 
 
 def get_active_round_choice_modifier(player: str, phase: str, use_melee: bool) -> dict[str, int]:
@@ -216,11 +259,13 @@ def get_active_round_choice_strength_if_charged(
     charged = turn_flags.get("charged") or turn_flags.get("was_charged")
     if not (charged or turn_flags.get("heroic_intervened")):
         return 0
-    return sum(
-        effect.get("value", 0)
-        for effect in _active_directive_effects(player)
-        if effect.get("type") == "strength_if_charged"
-        and not _directive_phase_excluded(effect, use_melee)
+    return (
+        _sum_effect_value(
+            _active_directive_effects(player),
+            "strength_if_charged",
+            predicate=lambda effect: not _directive_phase_excluded(effect, use_melee),
+        )
+        or 0
     )
 
 
@@ -232,11 +277,13 @@ def get_active_round_choice_ap_on_wound_6(player: str, use_melee: bool) -> int:
     display row only. Returns the AP magnitude (e.g. 1) or 0 when no such directive
     is active or the phase does not match. Sums across every active directive.
     """
-    return sum(
-        effect.get("value", 0)
-        for effect in _active_directive_effects(player)
-        if effect.get("type") == "ap_on_unmod_wound_6"
-        and not _directive_phase_excluded(effect, use_melee)
+    return (
+        _sum_effect_value(
+            _active_directive_effects(player),
+            "ap_on_unmod_wound_6",
+            predicate=lambda effect: not _directive_phase_excluded(effect, use_melee),
+        )
+        or 0
     )
 
 
@@ -266,7 +313,7 @@ def get_active_round_choice_light_cover_if_stationary(def_player: str, def_uid: 
     """
     if not _active_directive_has_type(def_player, "light_cover_if_stationary"):
         return False
-    state = st.session_state.get(units_key_for(def_player), {}).get(def_uid, {})
+    state: dict[str, Any] = st.session_state.get(units_key_for(def_player), {}).get(def_uid, {})
     return state.get("movement_choice") == "stationary"
 
 
@@ -315,7 +362,7 @@ def get_short_label_for_effect_type(player: str, effect_type: str) -> str | None
     return None
 
 
-def get_active_protocol_effects(player: str, types: set[str]) -> list[dict]:  # type: ignore[type-arg]
+def get_active_protocol_effects(player: str, types: set[str]) -> list[dict[str, Any]]:
     """Raw effect dicts of the active directive(s) whose type is in *types*.
 
     Includes the dynasty protocol's BOTH directives when the subfaction affinity
@@ -394,18 +441,18 @@ def get_active_heal_bonus(player: str, unit: Unit) -> int:
     does not match. Sums across every active directive (round-assigned plus the
     always-active 6th / dynasty protocol).
     """
-    bonus = 0
-    for effect in _active_directive_effects(player):
-        if effect.get("type") != "heal_bonus":
-            continue
-        target_rule = effect.get("target_rule")
-        if target_rule and target_rule not in unit.rules:
-            continue
-        bonus += int(effect.get("value", 0))
-    return bonus
+    return (
+        _sum_effect_value(
+            _active_directive_effects(player),
+            "heal_bonus",
+            predicate=lambda effect: not effect.get("target_rule")
+            or effect.get("target_rule") in unit.rules,
+        )
+        or 0
+    )
 
 
-def _unit_matches_target(unit: Unit, effect: dict) -> bool:
+def _unit_matches_target(unit: Unit, effect: dict[str, Any]) -> bool:
     """True if unit satisfies the effect's target_keywords / target_keywords_any constraints."""
     required = effect.get("target_keywords", [])
     any_of = effect.get("target_keywords_any", [])
@@ -416,7 +463,7 @@ def _unit_matches_target(unit: Unit, effect: dict) -> bool:
     return True
 
 
-def _active_effects_for_faction(faction: str) -> list[dict]:
+def _active_effects_for_faction(faction: str) -> list[dict[str, Any]]:
     """Raw sub-effect dicts from the faction's currently activated ability, if any."""
     entry = st.session_state.get("activated_abilities", {}).get(faction)
     if not entry:
@@ -433,12 +480,15 @@ def _active_effects_for_faction(faction: str) -> list[dict]:
 
 def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
     """Total modifier for a stat from all active faction abilities matching this unit."""
-    total = 0
-    for eff in _active_effects_for_faction(faction):
-        if eff.get("type") == "buff_stat" and eff.get("stat") == stat:
-            if _unit_matches_target(unit, eff):
-                total += int(eff.get("modifier", 0))
-    return total
+    return (
+        _sum_effect_value(
+            _active_effects_for_faction(faction),
+            "buff_stat",
+            value_key="modifier",
+            predicate=lambda eff: eff.get("stat") == stat and _unit_matches_target(unit, eff),
+        )
+        or 0
+    )
 
 
 # stratagem_strength_bonus moved to gameMechanic.stratagemEngine (S142 Aufgabe
@@ -447,13 +497,14 @@ def buff_stat_bonus(faction: str, unit: Unit, stat: str) -> int:
 
 def ability_invuln_save(faction: str, unit: Unit) -> int | None:
     """Best invuln save granted by active faction abilities for this unit, or None."""
-    best: int | None = None
-    for eff in _active_effects_for_faction(faction):
-        if eff.get("type") == "invuln_save" and _unit_matches_target(unit, eff):
-            val = eff.get("modifier")
-            if val is not None:
-                best = int(val) if best is None else min(best, int(val))
-    return best
+    return _sum_effect_value(
+        _active_effects_for_faction(faction),
+        "invuln_save",
+        value_key="modifier",
+        missing_value=None,
+        predicate=lambda eff: _unit_matches_target(unit, eff),
+        combine=min,
+    )
 
 
 def ability_badge_label(faction: str, unit: Unit) -> str | None:

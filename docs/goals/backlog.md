@@ -451,9 +451,11 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 - [ ] **B12b (S141):** Charge-Phase Fire Overwatch zeigt den Suffix korrekt
 - [ ] **B12b (S141):** Movement Advance-Reroll zeigt **keinen** Suffix (kein `unit_key`
   übergeben — spec-konformer Randfall, s. Backlog §2 B12b)
-- [ ] **Ziel7 Stufe C-Vorbereitung (S141, Commit `cbaeeb2`):** Emergency Disembarkation +
-  Klan-Affinität am neuen Ork-Transport-Roster (`data/rosters/orks_transport.yaml`, Evil
-  Sunz, Gunwagon TRANSPORT) real prüfen — war zuvor mangels TRANSPORT-Roster blockiert
+- [ ] **Ziel7 Stufe C-Vorbereitung (S141, Commit `cbaeeb2`):** Emergency Disembarkation am
+  neuen Ork-Transport-Roster (`data/rosters/orks_transport.yaml`, Evil Sunz, Gunwagon
+  TRANSPORT) real prüfen — war zuvor mangels TRANSPORT-Roster blockiert. (Klan-Affinität
+  existiert regelseitig nicht, S143-Stakeholder-Klärung, Commit `3602ddb` — als
+  Verifikationspunkt gestrichen; neuer Scope Klan-/Dynastie-Fähigkeiten s. `ziel7.md` Stufe C.)
 
 ---
 
@@ -486,7 +488,7 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   gelisteten Items `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren bereits
   vor S128 aus `src/` entfernt — dieser Eintrag war insofern Doku-Drift, jetzt korrigiert.
   Details: [architecture_invariants.md](../spec/architecture_invariants.md) INV-4b.
-- 🟡 **mypy-Bestand modulweise abbauen** (Baseline **28**, Stand 2026-07-12 S141;
+- 🟡 **mypy-Bestand modulweise abbauen** (Baseline **24**, Stand 2026-07-12 S144;
   Folgearbeit zu Plan 038): `gameMechanic/gameState.py` (−34, Paket 2), `gameObjects/`
   komplett (−18, Paket 3), `gameMechanic/phaseRunner.py` (−7, Root Cause: `phase_name`
   in den sieben Phase-Handlern war als Instanzattribut statt `ClassVar[str]` annotiert —
@@ -494,11 +496,14 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   Contract-Fix `dict` → `MutableMapping[str, Any]`** in `abilityEngine.py`/
   `unitMutations.py`/`scenarios.py` (Commit `42af867`, Baseline blieb bei 48) und in
   `phaseHandler.py`/`phaseRunner.py` + den 7 `*Phase.py`-Dateien + `_common.py` (Commit
-  `292b3ad`, Baseline **48 → 28**) sind erledigt. Verbleibend (Stand S141, 28 Fehler):
+  `292b3ad`, Baseline **48 → 28**) sind erledigt. **S144: gameMechanic-`type-arg`-Abbau**
+  (Option A+B aus dem S143-Refactor-Konzept, Baseline **28 → 24**, Helfer
+  `_sum_effect_value` mit 6 Call-Sites)
+  ist erledigt. Verbleibend (Stand S144, 24 Fehler):
   **`uiLayout/` zuletzt** (17 Fehler, manuelle Render-Verifikation nötig —
   `armyCard.py`/`gameProtocoll.py`/`unitCard.py`/`armyList.py`/`detachmentCard.py`) plus
-  ein Rest von 11 Fehlern in `gameMechanic/` außerhalb des `state`-Contracts
-  (`abilityEngine.py`/`attackMath.py` `type-arg`, `moralePhase.py`/`unitMutations.py`
+  ein Rest von 7 Fehlern in `gameMechanic/` außerhalb des `state`-Contracts
+  (`attackMath.py` `type-arg`, `moralePhase.py`/`unitMutations.py`
   `no-any-return`/`arg-type` — kein `state: dict`-Fall mehr, andere Fehlerklassen). Pro
   Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
   s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
@@ -519,6 +524,20 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 - 🔲 **DRY ±1-Cap-Helper (S110-Retro-M1):** Hit- und Wound-Block in `diceHtml.py` teilen
   identische ±1-Cap-Logik (`_render_dice_roll_block` + `_render_dice_wound_block`) → gemeinsamen
   Helper extrahieren. Kleiner Refactor, kein Verhaltenswechsel; Tests müssen weiter grün bleiben.
+- 🔲 **DRY [2,6]-Cap-Quelle (S144-Review Befund 2):** Der 9E-Cap (Hit/Wound: unmod. 6 immer
+  Erfolg, unmod. 1 immer Fehlschlag) existiert doppelt — `combat.resolve_attack_modifiers`
+  (`src/gameMechanic/combat.py:207,213`) und `diceHtml._capped_modifier_threshold`
+  (`src/uiLayout/diceHtml.py:31`). Aktuell konsistent gefixt, aber Sync-Risiko: künftige
+  Änderungen könnten nur an einer Stelle landen. Kein akuter Bug, niedrige Priorität.
+  Langfristig `_capped_modifier_threshold` als dünnen Wrapper um die combat-Cap-Logik führen
+  oder die Zwischen-Modifier-Zeilen ebenfalls aus `atk_result` speisen (eine Cap-Quelle).
+- 🔲 **DRY Directive-Aktiv-Logik (S143-Refactor-Befund Punkt 4, Entscheid S144):**
+  `gameState.active_round_choice_buff_labels` (`src/gameMechanic/gameState.py:242-283`, UI-Labels)
+  dupliziert einen Teil der „welches Directive ist aktiv"-Logik aus
+  `abilityEngine._active_directive_effects` (Rechen-Seite) — Wiederverwendung scheitert am
+  Import-Zyklus (`abilityEngine` importiert bereits aus `gameState`). Sync-Risiko analog
+  Cap-DRY: Regeländerung an einer Stelle ⇒ Anzeige ≠ Rechnung. Saubere Lösung braucht ein
+  drittes, tieferliegendes Modul für die geteilte Logik. Kein akuter Bug, niedrige Priorität.
 - 🔲 **Test-Schuld conftest-Mock-Hack (S110-Retro-M2):** `tests/gameMechanic/conftest.py`
   re-pointet st-Mocks global über `sys.modules` (reihenfolge-abhängiger Quick-Fix aus S110
   Isolations-Fix) → mittelfristig durch eine **session-scoped Streamlit-Mock-Fixture** ersetzen,

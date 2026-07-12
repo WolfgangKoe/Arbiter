@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 22:00 CEST
+Stand: 2026-07-12 23:28 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 21:20 b358  ███████████░ 140k ⚠️   █████░  78%    █·········▒▒
+07-12 22:23 0149  ████████████ 170k ⛔    ████░░  63%    ▚▚█·········
+         SA_1·  ███████████░ 142k ⚠️   Planner: Session-Planungsentwurf e…
+         SA_2·  ██████░░░░░░  70k ✅    Executor: Doku-Maßnahmen 1+2+4
+         SA_3·  █████████░░░ 110k ✅    Executor: mypy-Ratchet gameMechani…
+         SA_4·  ██████░░░░░░  75k ✅    Reviewer: DoD-Review S143 nachholen
+         SA_5·  █████████░░░ 114k ✅    Recherche: Klan-/Dynastie-Konzept
+         SA_6·  █████████░░░ 106k ✅    Executor: Stratagem-Datenpflege Ne…
+         SA_7·  █████░░░░░░░  62k ✅    Reviewer: DoD-Review S144
+----------------- ---------------------- -------------- ------------
+07-12 21:20 b358  ████████████ 152k ⛔    ████░░  71%    █·········▒▒
          SA_1·  █████░░░░░░░  61k ✅    W1-G on_target-Anker-Konzept
          SA_2·  ██░░░░░░░░░░  26k ✅    Stratagem-Existenz-Lookup 9E
          SA_3·  █████████░░░ 118k ✅    Planner S143 Planning-Entwurf
@@ -655,3 +664,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S139 (2026-07-12)** B12 komplett (used_elsewhere-Zustand + Anker-Buchhaltung, Karten- & Inline-Mapper), Cut-Them-Down-Layout-Fix, mypy 62->54, toter Code entfernt
 - **S140 (2026-07-12)** Dynastie-Protokoll-Affinität im Round-Zweig (Engine+UI+Badges, Tests je 6 Dynastien, Review GO), mypy 54→48 (gameActionsArea typisiert)
 - **S143 (2026-07-12)** Review+Retro S142 nachgeholt (GO m. Auflagen, P1 gefixt); Welle 1: Wound/Hit-Natural-6-Cap, Morale-Selektion inaktiver Spieler, is_unit_scoped_effect-Prädikat, Roster-Glob-Test, Briefvorlage gehärtet; 3 Konzepte ANSWERED (abilityEngine A+B, Kodex-Filter Necrons 16, on_target Option A); FixD freigegeben; 1808 passed / 99,12%
+- **S144 (2026-07-12)** Review/Retro S143 nachgeholt (GO m.A.); Stratagem-Datenpflege Necrons 56→40 + Orks 28→17 (Supplement/Vigilus raus); mypy 28→24 (_sum_effect_value-Helfer, Option A+B); Klan-/Dynastie-Konzept erstellt (Daten existieren, 5/13 falsch, Engine-Lücke); Review-Budget-Regel in CLAUDE.md; Aufgaben on_target+FixD → S145

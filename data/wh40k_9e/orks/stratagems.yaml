@@ -11,10 +11,15 @@
 #
 # EXCLUDED: Boarding Actions supplement stratagems, Speed Mob supplement,
 #   Warzone Octarius Blood Axes supplement — incomplete rule texts on source page.
-# INCLUDED: Core Ork stratagems, Klan-specific stratagems,
-#   Specialist Detachment stratagems (Blitz Brigade, Dread Waaagh!, Kult of Speed, Stompa Mob)
+# EXCLUDED: Vigilus Defiant Specialist Detachment stratagems (S143/S144-Kodex-Abgleich,
+#   Stakeholder-Entscheid S144): Quelle ist das Kampagnenbuch Imperium Nihilus:
+#   Vigilus Defiant, nicht Codex: Orks.
+#   Removed: BLITZ BRIGADE, DREAD WAAAGH!, KULT OF SPEED, STOMPA MOB (setup, 4);
+#   OPENING SALVO, KRUSH 'EM, HOLD ON, BOYZ!, KUSTOM AMMO, TURBO-BOOSTAS,
+#   STOMP, STOMP, STOMP!, STOMPA-PORTA (detachment rules, 7).
+# INCLUDED: Core Ork stratagems (incl. Requisitions), Klan-specific stratagems.
 #
-# Total: 23 stratagems (8 Core + 7 Klan + 4 Specialist Detachment setup + 4 Specialist Detachment rules)
+# Total: 17 stratagems (2 Requisitions + 8 Core + 7 Klan)
 
 stratagems:
 
@@ -45,60 +50,6 @@ stratagems:
     effect:
       type: grant_relic
     rule_text: "Use this Stratagem before the battle, when you are mustering your army, if your WARLORD has the ORKS keyword. Select one ORKS CHARACTER model from your army and give them one Relic (this must be a Relic they can have). Each Relic in your army must be unique, and you cannot use this Stratagem to give a model two Relics. You can only use this Stratagem once, unless you are playing a Strike Force battle (twice) or an Onslaught battle (three times)."
-
-  # ── Specialist Detachment Setup — Before Battle ───────────────────────────
-
-  - id: wh40k_9e.orks.stratagem.blitz_brigade
-    name_en: Blitz Brigade
-    cp_cost: 1
-    phase: before_battle
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    detachment: blitz_brigade
-    effect:
-      type: grant_keyword
-    rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Blitz Brigade Specialist Detachment. WARBOSSES, BATTLEWAGONS, GUNWAGONS and BONEBREAKA units in that Detachment gain the BLITZ BRIGADE keyword."
-
-  - id: wh40k_9e.orks.stratagem.dread_waaagh
-    name_en: "Dread Waaagh!"
-    cp_cost: 1
-    phase: before_battle
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    detachment: dread_waaagh
-    effect:
-      type: grant_keyword
-    rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Dread Waaagh! Specialist Detachment. BIG MEKS, GORKANAUTS, MORKANAUTS, DEFF DREADS and KILLA KANS in that Detachment gain the DREAD WAAAGH! keyword."
-
-  - id: wh40k_9e.orks.stratagem.kult_of_speed
-    name_en: Kult of Speed
-    cp_cost: 1
-    phase: before_battle
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    detachment: kult_of_speed
-    effect:
-      type: grant_keyword
-    rule_text: "Use this Stratagem before the battle. Pick an ORK Detachment from your army to be a Kult of Speed Specialist Detachment. SPEED FREEKS in that Detachment gain the KULT OF SPEED keyword."
-
-  - id: wh40k_9e.orks.stratagem.stompa_mob
-    name_en: Stompa Mob
-    cp_cost: 1
-    phase: before_battle
-    stage: active
-    player: active
-    conditions: []
-    once_per_phase: true
-    detachment: stompa_mob
-    effect:
-      type: grant_keyword
-    rule_text: "Use this Stratagem before the battle. Pick an ORK Super-heavy Detachment from your army to be a Stompa Mob Specialist Detachment. STOMPA units in that Detachment gain the STOMPA MOB keyword."
 
   # ── Core — Any Phase ──────────────────────────────────────────────────────
 
@@ -330,99 +281,3 @@ stratagems:
       stat: deny_psychic
     rule_text: "Use this Stratagem during your opponent's Psychic phase. Select one SNAKEBITES unit from your army. Until the end of the phase, that unit can attempt to deny one psychic power as if it were a PSYKER (if that unit already has the PSYKER keyword, it can attempt to deny one additional psychic power instead)."
 
-  # ── Specialist Detachment Rules ────────────────────────────────────────────
-
-  - id: wh40k_9e.orks.stratagem.opening_salvo
-    name_en: Opening Salvo
-    cp_cost: 1
-    phase: shooting
-    stage: active
-    player: active
-    conditions: [BLITZ BRIGADE, GUNWAGON]
-    once_per_phase: true
-    detachment: blitz_brigade
-    effect:
-      type: buff_stat
-      stat: range
-    rule_text: "Use this Stratagem in your Shooting phase of the first battle round, when a BLITZ BRIGADE GUNWAGON from your army is selected to shoot. Until the end of that phase, double the Range characteristic of that model's weapons."
-
-  - id: wh40k_9e.orks.stratagem.krush_em
-    name_en: "Krush 'Em"
-    cp_cost: 1
-    phase: fight
-    stage: active
-    player: active
-    conditions: [BLITZ BRIGADE, BONEBREAKA]
-    once_per_phase: true
-    detachment: blitz_brigade
-    effect:
-      type: buff_roll
-      stat: ability
-    rule_text: "Use this Stratagem in the Fight phase, when a BLITZ BRIGADE BONEBREAKA from your army is chosen to fight. Roll three D6 for the Bonebreaka Ram ability and choose the highest result."
-
-  - id: wh40k_9e.orks.stratagem.hold_on_boyz
-    name_en: "Hold On, Boyz!"
-    cp_cost: 2
-    phase: movement
-    stage: active
-    player: active
-    conditions: [BLITZ BRIGADE, BATTLEWAGON]
-    once_per_phase: true
-    detachment: blitz_brigade
-    effect:
-      type: move
-      target: embarked_unit
-    rule_text: "Use this Stratagem during your Movement phase, before you move a <CLAN> BLITZ BRIGADE BATTLEWAGON from your army. Pick a friendly <CLAN> INFANTRY unit wholly within 3\" of that model and remove it from the battlefield. After that BATTLEWAGON has moved, set the <CLAN> INFANTRY unit up on the battlefield wholly within 3\" of that BATTLEWAGON, and more than 3\" from any enemy models."
-
-  - id: wh40k_9e.orks.stratagem.kustom_ammo
-    name_en: "Kustom Ammo"
-    cp_cost: 2
-    phase: shooting
-    stage: active
-    player: active
-    conditions: [DREAD WAAAGH!]
-    once_per_phase: true
-    detachment: dread_waaagh
-    effect:
-      type: free_attack
-    rule_text: "Use this Stratagem in your Shooting phase. Pick a DREAD WAAAGH! unit from your army. That unit can shoot twice this Shooting phase with all of its ranged weapons (but must target the same unit both times)."
-
-  - id: wh40k_9e.orks.stratagem.turbo_boostas
-    name_en: "Turbo-Boostas"
-    cp_cost: 2
-    phase: movement
-    stage: start
-    player: active
-    conditions: [KULT OF SPEED]
-    once_per_phase: true
-    detachment: kult_of_speed
-    effect:
-      type: move
-      stat: advance_double
-    rule_text: "Use this Stratagem at the start of your Movement phase. Pick a KULT OF SPEED unit from your army. If that unit Advances this phase, double that unit's Move characteristic instead of rolling a dice."
-
-  - id: wh40k_9e.orks.stratagem.stomp_stomp_stomp
-    name_en: "Stomp, Stomp, Stomp!"
-    cp_cost: 1
-    phase: fight
-    stage: start
-    player: active
-    conditions: [STOMPA MOB]
-    once_per_phase: true
-    detachment: stompa_mob
-    effect:
-      type: mortal_wounds
-    rule_text: "Use this Stratagem at the start of the Fight phase. Pick a STOMPA MOB unit from your army that is within 1\" of any enemy units. Roll a D6 for each enemy model within 3\" of that unit; on a 6+ that model's unit suffers 1 mortal wound."
-
-  - id: wh40k_9e.orks.stratagem.stompa_porta
-    name_en: "Stompa-Porta"
-    cp_cost: 4
-    phase: before_battle
-    stage: active
-    player: active
-    conditions: [STOMPA MOB]
-    once_per_phase: true
-    detachment: stompa_mob
-    effect:
-      type: deep_strike
-    rule_text: "Use this Stratagem during deployment. Set up a STOMPA MOB unit on a tellyporta pad instead of placing it on the battlefield. Units on a tellyporta pad can teleport into battle at the end of any of your Movement phases — set them up anywhere on the battlefield that is more than 9\" from any enemy models."

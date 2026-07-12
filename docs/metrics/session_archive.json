@@ -4063,8 +4063,8 @@
   "b358187a-87d6-4b35-907b-1de633f8032e": {
     "started_at": "2026-07-12T19:20:39.325Z",
     "task": "Was auf dir liegt (manuelle UI-Verifikation): Insane Bravery ohne gewählte Einheit muss „locked\" zeigen, mit Einheit lö…",
-    "peak_context": 140138,
-    "subagent_share": 77.99033847686552,
+    "peak_context": 152433,
+    "subagent_share": 71.45423138997835,
     "by_tier": {
       "Sonnet": 19922128,
       "Haiku": 3970922,
@@ -4168,6 +4168,68 @@
         "tier": "Sonnet",
         "peak_context": 64162,
         "started_at": "2026-07-12T19:20:39.325Z"
+      }
+    ]
+  },
+  "01498047-d732-44d6-8362-06bc5cbcff66": {
+    "started_at": "2026-07-12T20:23:43.292Z",
+    "task": "starte nächste Session",
+    "peak_context": 170278,
+    "subagent_share": 62.868420205461796,
+    "by_tier": {
+      "Sonnet": 22476024,
+      "Fable": 5606026,
+      "Opus": 3203299
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: Session-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 142484,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Doku-Maßnahmen 1+2+4",
+        "tier": "Sonnet",
+        "peak_context": 70109,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: mypy-Ratchet gameMechanic A+B",
+        "tier": "Sonnet",
+        "peak_context": 110459,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S143 nachholen",
+        "tier": "Opus",
+        "peak_context": 75071,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Recherche: Klan-/Dynastie-Konzept",
+        "tier": "Sonnet",
+        "peak_context": 114478,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Stratagem-Datenpflege Necrons+Orks",
+        "tier": "Sonnet",
+        "peak_context": 106419,
+        "started_at": "2026-07-12T20:23:43.292Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S144",
+        "tier": "Opus",
+        "peak_context": 62049,
+        "started_at": "2026-07-12T20:23:43.292Z"
       }
     ]
   }

@@ -86,9 +86,15 @@ Fraktionen, Stufe B als „zweite Anwendung des Musters" schärft den Delta-Proz
 
 **S141-Vorarbeit:** neues Roster `data/rosters/orks_transport.yaml` (Evil Sunz, Gunwagon
 TRANSPORT, Warboss, 10 Boyz, 10 Gretchin, 330 Pkt., Commit `cbaeeb2`) entblockt die manuelle
-Verifikation von Emergency Disembarkation + Klan-Affinität an einem echten Ork-Roster mit
-TRANSPORT-Unit — zuvor scheiterte das mangels geeignetem Roster (S139-Befund). Manuelle
-UI-Verifikation dazu noch offen (s. `docs/goals/backlog.md` §3).
+Verifikation von Emergency Disembarkation an einem echten Ork-Roster mit TRANSPORT-Unit —
+zuvor scheiterte das mangels geeignetem Roster (S139-Befund). Manuelle UI-Verifikation dazu
+noch offen (s. `docs/goals/backlog.md` §3).
+
+**Klan-Affinität existiert regelseitig nicht (S143-Stakeholder-Klärung, Commit `3602ddb`) —
+als Verifikationspunkt gestrichen.** Stattdessen offener Scope: **Klan-Fähigkeiten (Ork
+Kulturs) + Dynastie-Fähigkeiten (Necron Dynastic Codes)** (Datenlage: kein `klan`-Schlüssel
+in Rosters, kein Fähigkeits-Block in `data/wh40k_9e/orks/`). Konzept dafür entsteht in S144;
+Umsetzung als eigener Plan ab S145.
 
 ### UX-/UI-Pass vor Ziel8 — Kandidatenliste (Entscheidungsvorlage, keine Priorisierung)
 

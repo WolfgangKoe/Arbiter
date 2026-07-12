@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import gameMechanic.abilityEngine as _eng  # noqa: E402
 from gameMechanic.abilityEngine import (  # noqa: E402
+    _sum_effect_value,
     _unit_matches_target,
     ability_badge_label,
     ability_invuln_save,
@@ -1250,6 +1251,86 @@ def test_ability_invuln_save_skips_non_matching_unit(monkeypatch: pytest.MonkeyP
     )
     unit = _make_unit(rules=[], keywords=["NECRON"])
     assert ability_invuln_save("Necrons", unit) is None
+
+
+# ---------------------------------------------------------------------------
+# _sum_effect_value — shared accumulate helper (S144 Plan Aufgabe 5, Option B).
+# One test per call-site shape it replaced: get_active_round_choice_strength_
+# if_charged / get_active_round_choice_ap_on_wound_6 (phase-predicate sum),
+# get_active_heal_bonus (target_rule predicate), buff_stat_bonus
+# (value_key="modifier" + stat/unit predicate), ability_invuln_save
+# (combine=min, missing_value=None). stratagemEngine.stratagem_strength_bonus
+# (type_key="roll_type" override) is covered in test_stratagem_engine.py.
+# ---------------------------------------------------------------------------
+
+
+def test_sum_effect_value_sums_matching_type_with_predicate() -> None:
+    """Mirrors strength_if_charged/ap_on_wound_6: default value_key, predicate filters."""
+    effects = [
+        {"type": "strength_if_charged", "value": 1, "phase": "melee"},
+        {"type": "strength_if_charged", "value": 2, "phase": "shooting"},
+        {"type": "other", "value": 99},
+    ]
+    assert (
+        _sum_effect_value(
+            effects, "strength_if_charged", predicate=lambda e: e.get("phase") != "shooting"
+        )
+        == 1
+    )
+
+
+def test_sum_effect_value_returns_none_when_nothing_matches() -> None:
+    assert _sum_effect_value([{"type": "other", "value": 5}], "heal_bonus") is None
+
+
+def test_sum_effect_value_missing_key_defaults_to_zero_and_is_counted() -> None:
+    """Default missing_value=0: an effect without the value_key still contributes (as 0)."""
+    effects = [{"type": "heal_bonus"}, {"type": "heal_bonus", "value": 3}]
+    assert _sum_effect_value(effects, "heal_bonus") == 3
+
+
+def test_sum_effect_value_heal_bonus_target_rule_predicate() -> None:
+    effects = [
+        {"type": "heal_bonus", "value": 1, "target_rule": "livingMetal"},
+        {"type": "heal_bonus", "value": 5, "target_rule": "otherRule"},
+    ]
+    assert (
+        _sum_effect_value(
+            effects, "heal_bonus", predicate=lambda e: e.get("target_rule") in ("livingMetal",)
+        )
+        == 1
+    )
+
+
+def test_sum_effect_value_custom_value_key_for_buff_stat() -> None:
+    """Mirrors buff_stat_bonus: value_key='modifier' instead of the 'value' default."""
+    effects = [
+        {"type": "buff_stat", "stat": "attacks", "modifier": 1},
+        {"type": "buff_stat", "stat": "strength", "modifier": 9},
+    ]
+    assert (
+        _sum_effect_value(
+            effects,
+            "buff_stat",
+            value_key="modifier",
+            predicate=lambda e: e.get("stat") == "attacks",
+        )
+        == 1
+    )
+
+
+def test_sum_effect_value_missing_value_none_skips_effect() -> None:
+    """Mirrors ability_invuln_save: missing_value=None drops effects without a modifier
+    instead of counting them as 0 — a spurious 0 would win every min() comparison."""
+    effects = [{"type": "invuln_save"}, {"type": "invuln_save", "modifier": 4}]
+    assert _sum_effect_value(effects, "invuln_save", value_key="modifier", missing_value=None) == 4
+
+
+def test_sum_effect_value_combine_min_seeds_from_first_match_not_zero() -> None:
+    """combine=min must seed from the first matching value, not a 0 baseline —
+    otherwise min(0, 5) would always report 0 even though no effect grants it."""
+    effects = [{"type": "invuln_save", "modifier": 5}]
+    assert _sum_effect_value(effects, "invuln_save", value_key="modifier", combine=min) == 5
 
 
 # ---------------------------------------------------------------------------

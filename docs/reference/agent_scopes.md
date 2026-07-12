@@ -183,6 +183,14 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
   bedeutet, dass der Subagent diese Datei **im selben Commit-Schritt löschen muss**, in dem
   er DONE setzt. Nicht „markiert, wird später gelöscht". Der Brief muss dies explizit anweisen.
   Grund: S142-Hygiene-Test — verwaiste DONE-Dateien ohne Löschen lassen die Doku-Gate rot.
+  **Verschärfung (S144-Retro-M2):** Der Koordinator darf in Briefen niemals „DONE setzen,
+  Datei nicht löschen" anweisen — genau das produzierte in S144 ein Review-NO-GO.
+  Erkenntnisse VOR dem DONE in die dauerhaften Artefakte überführen, dann DONE + löschen.
+- **Bestandsaufnahme-Pflicht (S144-Retro-M1):** Recherche-/Planner-Briefs müssen vor jeder
+  „X fehlt"-Aussage den Ist-Bestand prüfen — `ls`/`grep` über `data/wh40k_9e/<fraktion>/`
+  (alle YAML-Dateien, nicht nur die naheliegende) UND `docs/work/`. Grund: S144 — die
+  Prämisse „Klan-/Dynastie-Rohtexte fehlen" war falsch; `subfaction_abilities.yaml`
+  existierte samt Engine-Anbindung, nur fehlerhaft/wirkungslos.
 
 ---
 

@@ -12,8 +12,11 @@ unchanged, only the import path of each function moved.
 
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
+from gameMechanic.abilityEngine import _sum_effect_value
 from gameMechanic.gameState import PHASES
 from gameMechanic.unitMutations import activate_desperate_breakout, activate_morale_auto_pass
 from gameObjects.stratagem import Stratagem
@@ -154,7 +157,7 @@ def _effect_gate_met(
     return True, None
 
 
-def stratagem_strength_bonus(active_modifiers: list[dict], unit_key: str | None) -> int:
+def stratagem_strength_bonus(active_modifiers: list[dict[str, Any]], unit_key: str | None) -> int:
     """Total Strength-characteristic bonus from active stratagem modifiers (e.g. Disruption Fields).
 
     Mirrors abilityEngine.buff_stat_bonus's role but reads from the generic active_modifiers
@@ -165,14 +168,13 @@ def stratagem_strength_bonus(active_modifiers: list[dict], unit_key: str | None)
     legacy `unit_key: None`) are ignored — otherwise a stratagem activated for one unit
     (e.g. Disruption Fields on unit X) would buff every attacker's Strength.
     """
-    total = 0
-    for m in active_modifiers:
-        if m.get("unit_key") != unit_key:
-            continue
-        eff = m.get("effect", {})
-        if eff.get("roll_type") == "strength" and eff.get("target", "attacker") in (
-            "attacker",
-            "any",
-        ):
-            total += int(eff.get("value", 0))
-    return total
+    effects = [m.get("effect", {}) for m in active_modifiers if m.get("unit_key") == unit_key]
+    return (
+        _sum_effect_value(
+            effects,
+            "strength",
+            type_key="roll_type",
+            predicate=lambda eff: eff.get("target", "attacker") in ("attacker", "any"),
+        )
+        or 0
+    )

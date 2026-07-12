@@ -187,7 +187,10 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
   leitet der Koordinator ein **geordnetes Wind-down** ein (laufende Aufgabe abschließen,
   nichts Neues mehr beginnen). Bei **~90 % (~135k)** spätestens die Session **geordnet
   beenden** (`next_session.md` + Commit) und **frisch starten** — nicht in die teure
-  >150k-Zone laufen. Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
+  >150k-Zone laufen. Das Review/Retro-Budget (~45k) zählt zur laufenden Session mit: **ab
+  ~100k Kontext keine neue Aufgabe mehr beginnen, solange Review/Retro der Session noch
+  aussteht** (S142+S143 mussten Review zweimal nachholen, S144-Retro-Beschluss).
+  Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
   Kontextstand **automatisch pro Turn** an und eskaliert ab ≥135k ⚠️⛔ Stopp —
   kein manuelles Rechnen nötig. Er liest die letzte `usage`-tragende
   Transcript-Zeile (`~/.claude/projects/<projekt>/<id>.jsonl`), parst sie **als ganzes
