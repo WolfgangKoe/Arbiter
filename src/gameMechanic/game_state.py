@@ -259,10 +259,13 @@ def active_round_choice_buff_labels(player: str) -> list[str]:
     by_id = {p.id: p for p in round_choices}
 
     active_id = st.session_state.get(round_choice_state_key(player, "active"))
-    if active_id and st.session_state.get(round_choice_state_key(player, "directive")):
+    if active_id:
         p = by_id.get(active_id)
         if p:
-            labels.append(short_round_choice_label(p.name_en))
+            subfaction = subfaction_value_for(player)
+            affinity_bonus = bool(subfaction and subfaction == p.subfaction_affinity)
+            if affinity_bonus or st.session_state.get(round_choice_state_key(player, "directive")):
+                labels.append(short_round_choice_label(p.name_en))
 
     # 6th (always-active) ability: the single one not assigned to any round.
     assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})

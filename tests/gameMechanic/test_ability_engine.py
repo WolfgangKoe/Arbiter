@@ -452,7 +452,9 @@ def test_get_triggered_abilities_living_metal_excludes_full_health_units() -> No
 # ---------------------------------------------------------------------------
 
 
-def _protocol_session(protocol_id: str | None, directive: str | None) -> _S:
+def _protocol_session(
+    protocol_id: str | None, directive: str | None, *, subfaction: str | None = None
+) -> _S:
     # Round-choice runtime state is keyed by the player slot ("Necrons"), not the
     # faction directory — see round_choice_state_key (mirror-match safe).
     session = _S(
@@ -462,6 +464,8 @@ def _protocol_session(protocol_id: str | None, directive: str | None) -> _S:
     )
     session["round_choice_active_Necrons"] = protocol_id
     session["round_choice_directive_Necrons"] = directive
+    if subfaction:
+        session["p1_subfaction"] = subfaction
     _st_mock.session_state = session
     return session
 
@@ -819,6 +823,76 @@ def test_dynasty_affinity_other_subfaction_inert() -> None:
         "wh40k_9e.necrons.faction.protocol_undying_legions", subfaction="nihilakh"
     )
     assert get_active_rp_modifiers("Necrons") == {}
+
+
+# ---------------------------------------------------------------------------
+# S140: dynasty affinity in the ROUND-ASSIGNED protocol slot (not just the 6th).
+# has_round now gates on active_id alone (not active_id AND directive) so the
+# affinity check is reachable without a manual directive pick. One case per
+# official dynasty (S139 concept table), plus non-affinity/non-regression cases.
+# ---------------------------------------------------------------------------
+
+
+def test_round_dynasty_affinity_nihilakh_eternal_guardian_both_directives() -> None:
+    _protocol_session(
+        "wh40k_9e.necrons.faction.protocol_eternal_guardian", None, subfaction="nihilakh"
+    )
+    types = {"light_cover_if_stationary", "hold_steady_or_set_to_defend"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_novokh_hungry_void_both_directives() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", None, subfaction="novokh")
+    types = {"ap_on_unmod_wound_6", "strength_if_charged"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_sautekh_conquering_tyrant_both_directives() -> None:
+    _protocol_session(
+        "wh40k_9e.necrons.faction.protocol_conquering_tyrant", None, subfaction="sautekh"
+    )
+    types = {"aura_range_bonus", "shoot_after_fall_back"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_nephrekh_sudden_storm_both_directives() -> None:
+    _protocol_session("wh40k_9e.necrons.faction.protocol_sudden_storm", None, subfaction="nephrekh")
+    types = {"move_bonus", "shoot_during_action"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_szarekhan_undying_legions_both_directives() -> None:
+    _protocol_session(
+        "wh40k_9e.necrons.faction.protocol_undying_legions", None, subfaction="szarekhan"
+    )
+    types = {"heal_bonus", "rp_reroll"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_mephrit_vengeful_stars_both_directives() -> None:
+    _protocol_session(
+        "wh40k_9e.necrons.faction.protocol_vengeful_stars", None, subfaction="mephrit"
+    )
+    types = {"ap_on_unmod_wound_6", "ignore_cover_half_range"}
+    assert {e["type"] for e in get_active_protocol_effects("Necrons", types)} == types
+
+
+def test_round_dynasty_affinity_other_subfaction_inert_no_directive() -> None:
+    # Non-matching subfaction, no manual directive -> round slot contributes nothing.
+    _protocol_session("wh40k_9e.necrons.faction.protocol_hungry_void", None, subfaction="sautekh")
+    types = {"ap_on_unmod_wound_6", "strength_if_charged"}
+    assert get_active_protocol_effects("Necrons", types) == []
+
+
+def test_round_no_affinity_manual_directive_still_picks_one_effect() -> None:
+    # Non-regression (case c): no affinity, directive explicitly chosen -> unchanged
+    # single-directive behaviour survives the has_round gate loosening.
+    _protocol_session(
+        "wh40k_9e.necrons.faction.protocol_hungry_void", "primary", subfaction="sautekh"
+    )
+    types = {"ap_on_unmod_wound_6", "strength_if_charged"}
+    effects = get_active_protocol_effects("Necrons", types)
+    assert {e["type"] for e in effects} == {"ap_on_unmod_wound_6"}
 
 
 # ---------------------------------------------------------------------------

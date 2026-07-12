@@ -141,7 +141,7 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     active_id: str | None = st.session_state.get(round_choice_state_key(player, "active"))
     directive: str | None = st.session_state.get(round_choice_state_key(player, "directive"))
     assignments = st.session_state.get("round_choice_assignments", {}).get(player, {})
-    has_round = bool(active_id and directive)
+    has_round = bool(active_id)
     has_extra_setup = len({*assignments.values()}) >= 5
     if not has_round and not has_extra_setup:
         return []
@@ -154,8 +154,13 @@ def _active_directive_effects(player: str) -> list[dict]:  # type: ignore[type-a
     if has_round:
         active = next((p for p in round_choices if p.id == active_id), None)
         if active:
-            raw = active.primary_effect if directive == "primary" else active.secondary_effect
-            effects.append(_tagged_effect(raw, active.id))
+            subfaction = subfaction_value_for(player)
+            if subfaction and subfaction == active.subfaction_affinity:
+                effects.append(_tagged_effect(active.primary_effect, active.id))
+                effects.append(_tagged_effect(active.secondary_effect, active.id))
+            elif directive:
+                raw = active.primary_effect if directive == "primary" else active.secondary_effect
+                effects.append(_tagged_effect(raw, active.id))
     effects.extend(_extra_directive_effects(player, round_choices))
     return [e for e in effects if e]
 

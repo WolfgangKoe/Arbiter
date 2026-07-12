@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 01:58 CEST
+Stand: 2026-07-12 11:15 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-11 15:28 a4be  ███████████░ 136k ⚠️   █████░  86%    ███·········
+07-12 02:03 76ce  █████████░░░ 117k ✅    ████░░  75%    ▚▚▚█········
+         SA_1·  ██████░░░░░░  81k ✅    S140 Welle 1 Engine-Fix
+         SA_2·  ████████░░░░ 102k ✅    S140 Planning-Entwurf erstellen
+         SA_3·  ██████░░░░░░  70k ✅    S140 Welle 3 mypy-Ratchet
+         SA_4·  ███████░░░░░  88k ✅    S140 Welle 2 UI+Doku
+         SA_5·  ██████░░░░░░  75k ✅    S140 DoD-Review (Reviewer)
+----------------- ---------------------- -------------- ------------
+07-11 15:28 a4be  ████████████ 150k ⚠️   █████░  82%    ███·········
          SA_1·  █████████░░░ 106k ✅    S139 Planning-Entwurf erstellen
          SA_2·  ███████████░ 135k ⚠️   B12a: 5. Zustand + Auslöser-Buchha…
          SA_3·  ██████░░░░░░  73k ✅    Cut-Them-Down-Layout-Bug fixen
@@ -603,3 +610,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S137 (2026-07-11)** Beobachtungs-Welle: unitCard-Badges+CAST, Stikkbomb-Fernkampf-Reroll-Fix (45 Waffen), Wound/Save+Power-klaw-Fixes, Chargephase-Tests, B12-Konzept, YAML-Trunkierungs-Scan (44), markdownlint-Trial
 - **S138 (2026-07-11)** WAAAGH owner-anchor+once-per-battle ledger, battle end after round 5, unitCard keyword leak, YAML truncation 47 entries, badge value doubling fix
 - **S139 (2026-07-12)** B12 komplett (used_elsewhere-Zustand + Anker-Buchhaltung, Karten- & Inline-Mapper), Cut-Them-Down-Layout-Fix, mypy 62->54, toter Code entfernt
+- **S140 (2026-07-12)** Dynastie-Protokoll-Affinität im Round-Zweig (Engine+UI+Badges, Tests je 6 Dynastien, Review GO), mypy 54→48 (gameActionsArea typisiert)

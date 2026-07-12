@@ -18,6 +18,8 @@ The setup phase is handled locally (it is not a game phase proper).
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 import streamlit as st
 
 from constants.symbols import SYM_EXPAND, SYM_SWORDS
@@ -107,7 +109,12 @@ def _display_unit_datasheet(faction: str, uid: str) -> None:
             st.caption(f"**{ab.name_en}:** {ab.rule_text}")
 
 
-def _round_choice_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # type: ignore[type-arg]
+RoundChoiceSlot = int | str
+
+
+def _round_choice_slots_after_swap(
+    slots: dict[RoundChoiceSlot, str], slot: RoundChoiceSlot, new_val: str
+) -> dict[RoundChoiceSlot, str]:
     """Return a new slot→ability map after putting new_val in slot.
 
     The map is a bijection (each ability in exactly one slot). Assigning an
@@ -121,13 +128,13 @@ def _round_choice_slots_after_swap(slots: dict, slot, new_val: str) -> dict:  # 
         return result
     for other, pid in list(result.items()):
         if other != slot and pid == new_val:
-            result[other] = old_val
+            result[other] = cast(str, old_val)
             break
     result[slot] = new_val
     return result
 
 
-def _swap_round_choice_slot(faction: str, slot) -> None:  # type: ignore[no-untyped-def]
+def _swap_round_choice_slot(faction: str, slot: RoundChoiceSlot) -> None:
     """on_change callback: swap abilities between slots, keeping the map a bijection."""
     slots_key = f"proto_slots_{faction}"
     widget_key = f"proto_slot_{faction}_{slot}"
@@ -172,8 +179,8 @@ def _render_round_choice_assignment(faction: str) -> None:
     slots_key = f"proto_slots_{faction}"
     if slots_key not in st.session_state:
         faction_assignments = st.session_state.get("round_choice_assignments", {}).get(faction, {})
-        slots: dict = {}
-        used: set = set()
+        slots: dict[RoundChoiceSlot, str] = {}
+        used: set[str] = set()
         for r in range(1, 6):
             pid = faction_assignments.get(r)
             if pid in by_id and pid not in used:
@@ -192,7 +199,7 @@ def _render_round_choice_assignment(faction: str) -> None:
 
     slots = st.session_state[slots_key]
 
-    def _slot_selectbox(slot, label: str) -> None:  # type: ignore[no-untyped-def]
+    def _slot_selectbox(slot: RoundChoiceSlot, label: str) -> None:
         if slot not in slots:
             return
         widget_key = f"proto_slot_{faction}_{slot}"
@@ -315,8 +322,8 @@ def _render_setup() -> None:
 
 def _render_secondary_vp_section(faction: str, player_key: str) -> None:
     """Render per-objective secondary VP trackers for one player."""
-    secondaries: dict = st.session_state.get("secondaries") or {}
-    secondary_vp: dict = st.session_state.get("secondary_vp") or {}
+    secondaries: dict[str, list[str]] = st.session_state.get("secondaries") or {}
+    secondary_vp: dict[str, list[int]] = st.session_state.get("secondary_vp") or {}
     obj_names: list[str] = secondaries.get(player_key, [])
     vp_vals: list[int] = secondary_vp.get(player_key, [0, 0, 0])
 
@@ -405,7 +412,7 @@ def render_game_actions_area() -> None:
     # PlayerAreas: phase-specific actions delegated to phase_runner
     from gameMechanic.phase_runner import render_current_phase  # noqa: PLC0415
 
-    render_current_phase(st.session_state)
+    render_current_phase(cast(dict[str, Any], st.session_state))
 
     # VP scoring at the bottom — scoring happens at the end of a phase
     _render_vp_scoring()

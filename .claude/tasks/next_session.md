@@ -10,7 +10,8 @@
 - **Doku-Gate:** Decke 120 Zeilen (Test rot darüber); beim Reißen tief auf ≤ 70 kürzen (Erledigtes → `backlog.md`/`session_archive.md`).
 - **Freigabe vor Umsetzung; kein Memory/Skill(datei-ändernd) ohne Freigabe; Subagenten = stehende Freigabe (ADR-0005); rote vorher-grüne Tests = STOP + fragen.** → `CLAUDE.md`.
 - **Auftragsgrößen-Gate (S130):** kein Executor-Brief > Effort M; Test-Budget (EINE Vollsuite zentral am Wellen-Ende, `run_in_background` für pytest VERBOTEN) + Selbst-Stopp in jedem Brief → `agent_scopes.md`.
-- **Handoff-Marker-Pflicht (S131):** jeder Brief, der nach `docs/handoff/` schreibt, nennt den STATUS-Marker für Zeile 1 (S137: Haiku-Agent vergaß ihn trotz Brief → im Brief als ERSTE Schreibaktion vorgeben).
+- **Handoff-Marker-Pflicht (S131):** jeder Brief, der nach `docs/handoff/` schreibt, nennt den STATUS-Marker für Zeile 1 (S137: Haiku-Agent vergaß ihn trotz Brief → im Brief als ERSTE Schreibaktion vorgeben). Format exakt `STATUS: <WERT>` als nackte erste Zeile — **kein** HTML-Kommentar `<!-- … -->`, der reißt den Hygiene-Test (S140-Maßnahme 1).
+- **Planner-Schreibrecht (S140-Maßnahme 2):** Planner als general-purpose-Subagent beauftragen (nicht Plan-Agent-Typ) — der legt den Entwurf selbst nach `docs/handoff/` ab, statt ihn durchs Koordinator-Fenster zu schleusen.
 - **Grundannahmen-Block (S131):** Konzept-Dokumente starten mit bestätigungspflichtigen Grundannahmen (App würfelt NICHT — Tischwürfe!) → `agent_scopes.md`.
 - **Executor-Klausel:** Dateiänderungen nur über Edit/Write, Bash nur lesend/git/pytest (S123); Selbstprüfliste enthält `python tools/mypy_gate.py` (S128).
 - **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (Stand S138: 62 — zwei Sessions überfällig, S139 P1-Pflicht).
@@ -23,38 +24,38 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S139, 2026-07-12)
+## Aktueller Stand (nach S140, 2026-07-12)
 
-S139 (Review **GO**, 0 Auflagen; Vollsuite 1755 passed / 99,14 %, mypy **62 → 54**):
-**B12 komplett** — 5. GO-Karten-Zustand `used_elsewhere` + Auslöser-Buchhaltung
-(`stratagem_use_anchors`), drei Karten-Mapper + Inline-Reroll auf Anker verdrahtet
-(„Undo" nur am Auslöse-Anker, sonst gedimmt „Used"); Cut Them Down + Emergency
-Disembarkation rendern dauerhaft (S138-Änderung). **Cut-Them-Down-Layout-Bug** gefixt
-(Root Cause vorbestehend `b5c774b` — Box außerhalb der Spalten). Toter Code
-`build_aura_range_hint_text` entfernt; INV-4b-Fehlalarm behoben; Doku §6.1/§6.3/§6.4
-nachgezogen. Stakeholder-UI-verifiziert (Advance-Reroll, Cut Them Down, Layout beide
-Rollen); Emergency Disembarkation mangels TRANSPORT-Roster nicht prüfbar (gleicher
-Code-Pfad, unit-getestet).
+S140 (Review **GO**, 0 Auflagen; Vollsuite 1772 passed / 99,14 %, mypy **54 → 48**):
+**Dynastie↔Protokoll-Kopplung komplett** — Round-Zweig wertet `subfaction_affinity`
+jetzt aus: Gate `has_round` auf `bool(active_id)` gelockert + Affinitäts-Check in
+`_active_directive_effects` (`ability_engine.py`) und `active_round_choice_buff_labels`
+(`game_state.py`, Unit-Card-Badges); UI-Zweig in `armyCard._render_round_choice_ui`
+rendert bei Treffer sofort „… BONUS (BOTH)"-Badge statt Primary/Secondary-Buttons.
+Regressionstests je 6 Dynastien in beiden Schichten; Regelzuordnung vom Reviewer gegen
+Wahapedia bestätigt. Stakeholder-UI-verifiziert: positiv. Zusätzlich
+`gameActionsArea.py` voll typisiert (0 neue `type: ignore`). Backlog: Affinitäts-Punkt
+✅, NEU 🔲 „Dynastie-Code je Einheit statt Roster-Ebene" (Konzept-Frage 2,
+Stakeholder-Entscheid S140: erfassen, nicht umsetzen).
 
-Frühere Sessions (S60–S138): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S140)
+### ▶ Nächster Schritt (S141)
 
-1. **Dynastie↔Protokoll-Kopplung umsetzen (freigegeben, Effort S–M):** Konzept
-   `S139_dynastie_protokoll_konzept.md` (ANSWERED) — Befund bestätigt = alter
-   S96/S97-Backlog-Punkt: Feld `subfaction_affinity` existiert bereits (permanenter
-   Zweig wertet aus), nur der Round-Zweig `_active_directive_effects` in
-   `ability_engine.py` und `armyCard._render_directive_buttons` prüfen es nicht. Kein
-   neues YAML-Feld nötig;
-   Bedingungszweig + analoger UI-Zweig + Regressionstests je Dynastie. Nach Commit
-   Konzept-Marker → DONE + löschen.
-2. **mypy-Ratchet weiter senken:** Baseline 54 (S139: 62→54). Nächster größter Posten
-   laut E2-Befund: `src/uiLayout/gameActionsArea.py` (generische dict/set-Argumente,
-   `SessionStateProxy`-Mismatch).
-3. **Dokumentierte Ratchet-Schulden aus S139 (kein Blocker):** (a) B12b-Header-Suffix
-   „used on ⟨Einheit⟩" noch nicht verdrahtet (Mapper geben `None` als Grund; in §6.1
-   vermerkt) — XS-Folge-Task; (b) Stil-Nit `undo_stratagem` in-place-Mutation → bei
-   nächster Modul-Berührung mitziehen; (c) R-PROTO-02 `status: offen` (Aura-Tischhinweis
+1. **Roster mit Subfactions anlegen (Stakeholder-Auftrag S140):** Necron- **und**
+   Ork-Roster in `data/rosters/` mit gesetzten Subfactions (verschiedene Dynastien/
+   Klans), damit Affinitäts-UI und Subfaction-Features real prüfbar sind (S139:
+   Emergency Disembarkation scheiterte schon an fehlendem TRANSPORT-Roster — breit
+   denken: Subfactions + Transport abdecken).
+2. **mypy `state: dict`-Contract-Fix (Retro-Maßnahme 3, eigener geplanter Schritt):**
+   `phase_handler.py`/`phase_runner.py` + 7 Phase-Dateien wiederholen
+   `state: dict  # type: ignore[type-arg]` — Fix auf `MutableMapping[str, Any]`
+   (SessionStateProxy-kompatibel) senkt mehrere Posten zugleich. Baseline 48; weitere
+   Top-Posten: `armyCard.py` 6, `shootingPhase.py` 5, `movementPhase.py` 5; dazu alter
+   `# type: ignore[type-arg]` in `ability_engine.py:141` (Review-Hinweis S140).
+3. **Dokumentierte Ratchet-Schulden (unverändert aus S139):** (a) B12b-Header-Suffix
+   „used on ⟨Einheit⟩" — XS-Folge-Task; (b) Stil-Nit `undo_stratagem` in-place-Mutation
+   → bei nächster Modul-Berührung; (c) R-PROTO-02 `status: offen` (Aura-Tischhinweis
    entfernt, neuer Mechanismus offen).
 4. **Rand-Design-Konzept** (heller Streifen links, beim 2. Spieler spiegeln, auf GOs
    übertragen); **GO-Keyword-Nachpflege** in YAML (systematisch, Subagent); **Rest
@@ -64,9 +65,9 @@ Frühere Sessions (S60–S138): Verlauf in `docs/metrics/session_archive.md` (Se
    S130-GO-Verifikation, 037 Docker-Smoke, Deny-Caption, Direction-Entscheide,
    B4/B8-Welle-2-Screenshots + HI-UI-Ausrollung). Details → `backlog.md`.
 
-**Retro-Leitlinie S139 (Stakeholder):** Kommentare/Docstrings im Code reduzieren — der
-Code trägt sich selbst (deckt sich mit CLAUDE.md-Kommentar-Konvention). Kein
-INV-4b-Scanner-Umbau; bei Fehlalarm auf Alltagswörter umformulieren.
+**Retro S140 (freigegeben 1–3):** Marker-Format in Regel oben präzisiert (M1);
+Planner-Schreibrecht-Regel ergänzt (M2); `state: dict`-Contract-Fix als S141-Punkt 2
+eingeplant (M3). Retro-Leitlinie S139 (Kommentare reduzieren) bleibt in Kraft.
 
 **Prozess:** Vollsuite bei parallelen Wellen nur EINMAL zentral am Wellen-Ende
 (`operating_model.md` Event 3).

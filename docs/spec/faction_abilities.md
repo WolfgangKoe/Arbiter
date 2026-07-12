@@ -33,7 +33,11 @@ Fraktionsfähigkeiten in WH40k 9E fallen in **6 Kategorien**. Jede hat ein eigen
 
 **Mechanik:** In der Befehlsphase wählt der Spieler eine Fähigkeit aus einer begrenzten Liste. Jede Option ist nur einmal pro Partie verwendbar. Die Wahl kann eine oder zwei Stances/Direktiven haben.
 
-**Subfaction-Affinität:** Jede `round_choice`-Option kann ein `subfaction_affinity`-Feld haben. Wenn die aktive Subfaction des Spielers mit dieser Affinität übereinstimmt, aktivieren sich **beide** Direktiven gleichzeitig (statt einer). UI-Implementierung noch ausstehend.
+**Subfaction-Affinität:** Jede `round_choice`-Option kann ein `subfaction_affinity`-Feld haben.
+Wenn die aktive Subfaction des Spielers mit dieser Affinität übereinstimmt, aktivieren sich
+**beide** Direktiven gleichzeitig (statt einer) — beim permanenten 6. Protokoll wie beim
+rundenzugewiesenen (Engine: `_active_directive_effects`/`_extra_directive_effects`;
+UI: „… BONUS (BOTH)"-Badge ohne Wahlzwang, S140).
 
 **Fraktionen:**
 
@@ -305,7 +309,7 @@ Ledger NICHT — sonst wäre die Fähigkeit nach Ablauf erneut aufrufbar (S138-B
 - `_ETERNAL_GUARDIAN_ID` Hardcoding → generische `auto_round_1`-Suche
 - `commandPhase.py`: `"eternal_guardian"` Hardcoding → `auto_round_1`-Suche
 - `round_choice_label` im YAML → dynamische Überschrift statt "Command Protocols" Hardcoding
-- `subfaction_affinity` Feld in `CommandProtocol` + Loader (UI noch ausstehend)
+- `subfaction_affinity` Feld in `CommandProtocol` + Loader (UI erledigt S140)
 - Custodes Ka'tahs: `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml` ✅
 - Necron `faction_abilities.yaml` aufgeräumt: 5 Fehlplatzierte entfernt
 - Necron `unit_abilities.yaml`: quantum_shielding, phase_shifter, wraith_form, dimensional_translocation
@@ -321,7 +325,8 @@ Ledger NICHT — sonst wäre die Fähigkeit nach Ablauf erneut aufrufbar (S138-B
 - Subfaction-Affinitäten korrigiert: Necrons 4 Werte, Custodes 2 Werte + rendax-ID (Batch 1)
 
 ### Phase 3 (nächste Priorität)
-1. **subfaction_affinity UI**: Wenn aktive Subfaction == `subfaction_affinity`, beide Direktiven aktiv
+1. ✅ **subfaction_affinity UI** (S140): aktive Subfaction == `subfaction_affinity` →
+   beide Direktiven aktiv, Round- wie 6.-Protokoll-Zweig
 2. **AdMech Canticles YAML** (`data/wh40k_9e/adeptus_mechanicus/faction_abilities.yaml`)
    - `secondary` bereits optional (Loader gibt leeres dict zurück)
 3. **Tests für Custodes und AdMech** schreiben

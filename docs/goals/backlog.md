@@ -353,16 +353,20 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
   statt nur ausgeblendet). Anzeige-/UX-Thema (verwandt mit der Eligibility-Anzeige der Schussphase und
   dem Silent-King-Ziel-pro-Waffe-Finding). Eigener Plan.
-- 🔲 **Dynastie-Affinität „beide Direktiven" greift nicht beim rundenzugewiesenen Protokoll (S96-UI-Befund, S97 vom Stakeholder erneut bestätigt — als Bug zu führen, nicht nur Notiz):**
-  Regel (`faction_overview.txt` Z. 862–871): wird das Affinitäts-Protokoll *aktiv* (egal ob 6./permanent
-  oder einer Runde zugeteilt) und hat die ganze Armee den Dynastie-Code, gelten **beide** Direktiven statt
-  einer. Aktuell greift das nur für das **6. (permanent aktive)** Protokoll (`_extra_directive_effects` in
-  [ability_engine.py](../../src/gameMechanic/ability_engine.py)); im **Round-Zweig** von `_active_directive_effects`
-  ([ability_engine.py:139-144](../../src/gameMechanic/ability_engine.py#L139)) wird nur die *eine* gewählte
-  Direktive angehängt, und die UI ([armyCard.py](../../src/uiLayout/armyCard.py) `_render_directive_buttons`)
-  verlangt weiter eine manuelle Primary/Secondary-Wahl. Soll: bei Affinität auch im Round-Zweig **beide**
-  automatisch aktivieren + UI analog zum Extra-Protokoll-Pfad (kein Wahlzwang, „beide aktiv"-Anzeige).
-  Engine + UI + Regressionstest. Verwandt mit Plan 016 (Dynastiebonus-Anzeige).
+- ✅ **Dynastie-Affinität „beide Direktiven" beim rundenzugewiesenen Protokoll — ERLEDIGT (S140,
+  S96-UI-Befund, S97 bestätigt):** Regel (`faction_overview.txt` Z. 862–871): wird das
+  Affinitäts-Protokoll _aktiv_ (egal ob 6./permanent oder einer Runde zugeteilt) und hat die ganze
+  Armee den Dynastie-Code, gelten **beide** Direktiven statt einer. S140: Round-Zweig von
+  `_active_directive_effects` + `active_round_choice_buff_labels` werten `subfaction_affinity` aus
+  (Gate `has_round` auf `bool(active_id)` gelockert); UI `_render_round_choice_ui` zeigt bei
+  Affinität das „… BONUS (BOTH)"-Badge ohne Wahlzwang (analog Extra-Protokoll-Pfad,
+  `_render_directive_buttons` unverändert). Regressionstests je Dynastie in
+  `test_ability_engine.py` / `test_game_state.py`. Konzept `S139_dynastie_protokoll_konzept.md` → DONE.
+- 🔲 **Dynastie-Code je Einheit statt Roster-Ebene (Konzept-Frage 2 aus
+  S139_dynastie_protokoll_konzept, Stakeholder-Entscheid S140):** `subfaction_value_for` liest die
+  Subfaction heute auf **Roster-Ebene**; regelseitig trägt jede _Einheit_ den Dynastie-Code. Prüfen,
+  ob Einheiten-Ebene nötig ist (Mixed-Dynasty-Roster) und die `subfaction_value_for`-Konsumenten
+  (ability_engine, game_state, armyCard) entsprechend umstellen. Eigenes Konzept vor Umsetzung.
 - 🟢 **Regel-Index für Wahapedia-Texte (context-audit-S91, verarbeitet S118):** additiver
   Stichwort→`datei:zeilenbereich`-Index als `docs/work/rule_index.md` (Format:
   `Lethal Hits → core_rules.txt:1420-1435`) — ~23k Zeilen Regeltext sind nur per `grep`

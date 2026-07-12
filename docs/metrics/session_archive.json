@@ -3743,8 +3743,8 @@
   "a4bed672-5185-4317-93ef-81976811a39b": {
     "started_at": "2026-07-11T13:28:21.370Z",
     "task": "start session",
-    "peak_context": 135679,
-    "subagent_share": 85.91957225171745,
+    "peak_context": 149557,
+    "subagent_share": 82.22110422410933,
     "by_tier": {
       "Sonnet": 49146326,
       "Haiku": 671033,
@@ -3821,6 +3821,54 @@
         "tier": "Sonnet",
         "peak_context": 202330,
         "started_at": "2026-07-11T13:28:21.370Z"
+      }
+    ]
+  },
+  "76ce5f18-7084-438e-955b-beb1a03f385b": {
+    "started_at": "2026-07-12T00:03:21.303Z",
+    "task": "start sessino",
+    "peak_context": 116553,
+    "subagent_share": 75.08174553799411,
+    "by_tier": {
+      "Sonnet": 12009165,
+      "Fable": 3782764,
+      "Opus": 1886080
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S140 Welle 1 Engine-Fix",
+        "tier": "Sonnet",
+        "peak_context": 81140,
+        "started_at": "2026-07-12T00:03:21.303Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "S140 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 102084,
+        "started_at": "2026-07-12T00:03:21.303Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S140 Welle 3 mypy-Ratchet",
+        "tier": "Sonnet",
+        "peak_context": 70200,
+        "started_at": "2026-07-12T00:03:21.303Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S140 Welle 2 UI+Doku",
+        "tier": "Sonnet",
+        "peak_context": 87814,
+        "started_at": "2026-07-12T00:03:21.303Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S140 DoD-Review (Reviewer)",
+        "tier": "Opus",
+        "peak_context": 75366,
+        "started_at": "2026-07-12T00:03:21.303Z"
       }
     ]
   }

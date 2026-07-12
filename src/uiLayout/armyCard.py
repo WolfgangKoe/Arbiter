@@ -314,7 +314,14 @@ def _render_round_choice_ui(faction: str) -> None:
     if active_id:
         p = next((p for p in round_choices if p.id == active_id), None)
         if p:
-            if not active_directive:
+            subfaction = subfaction_value_for(faction)
+            if subfaction and subfaction == p.subfaction_affinity:
+                _, subfaction_label = load_subfaction_meta(faction_dir)
+                short_name = short_round_choice_label(p.name_en)
+                badge_text = f"{short_name.upper()} — {subfaction_label.upper()} BONUS (BOTH)"
+                st.markdown(_active_ability_badge(badge_text), unsafe_allow_html=True)
+                render_round_choice_directives(p)
+            elif not active_directive:
                 st.caption(f"**{p.name_en}** — active this round")
                 if _directive_window_open(faction, "directive"):
                     # Choosing the MAIN directive closes only this window

@@ -551,6 +551,104 @@ class TestRoundChoiceBuffLabels:
         assert active_round_choice_buff_labels("Orks") == []
 
 
+class TestRoundChoiceBuffLabelsDynastyAffinity:
+    """S140: dynasty affinity in the ROUND-ASSIGNED slot shows the badge label
+    without a manual directive pick — mirrors the already-correct 6th-ability
+    branch (TestActiveRoundChoiceBuffLabels6thAbility). One case per official
+    dynasty (S139 concept table), plus non-affinity/non-regression cases.
+    """
+
+    def test_nihilakh_eternal_guardian_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="nihilakh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_eternal_guardian",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Eternal Guardian"]
+
+    def test_novokh_hungry_void_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="novokh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_hungry_void",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Hungry Void"]
+
+    def test_sautekh_conquering_tyrant_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="sautekh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_conquering_tyrant",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Conquering Tyrant"]
+
+    def test_nephrekh_sudden_storm_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="nephrekh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_sudden_storm",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Sudden Storm"]
+
+    def test_szarekhan_undying_legions_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="szarekhan",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_undying_legions",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Undying Legions"]
+
+    def test_mephrit_vengeful_stars_label_without_directive(self) -> None:
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="mephrit",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_vengeful_stars",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Vengeful Stars"]
+
+    def test_other_subfaction_no_directive_yields_no_label(self) -> None:
+        """Case (b): mismatched subfaction, no directive -> round slot stays silent."""
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="sautekh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_hungry_void",
+            round_choice_directive_Necrons=None,
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == []
+
+    def test_no_affinity_manual_directive_still_yields_label(self) -> None:
+        """Case (c): non-regression — no affinity, directive chosen -> unchanged."""
+        _make_session(
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_subfaction="sautekh",
+            round_choice_active_Necrons="wh40k_9e.necrons.faction.protocol_hungry_void",
+            round_choice_directive_Necrons="primary",
+            round_choice_assignments={},
+        )
+        assert active_round_choice_buff_labels("Necrons") == ["Hungry Void"]
+
+
 # ---------------------------------------------------------------------------
 # _make_unit_state_dict — duplicate-ID disambiguation
 # ---------------------------------------------------------------------------
