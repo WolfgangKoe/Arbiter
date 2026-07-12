@@ -235,8 +235,14 @@ def _advance_reroll_state(
     Mirrors gameProtocoll.py's ``_go_state_and_reason`` shape (clickable →
     ready, greyed+undo-window-open → used/used_elsewhere, else locked) but
     with the three movement-specific locked reasons the stakeholder named
-    (S133 K2 item 1): in melee, no Advance roll open, CP short/already used —
-    checked in that priority order.
+    (S133 K2 item 1): in melee, no Advance roll open, CP short/already used.
+    Priority order (revised S141 Befund 1+2): in_melee first, THEN the global
+    used/used_elsewhere check, THEN "no Advance roll open", THEN CP. The
+    global spend check must run before the movement_choice gate — a GO
+    already spent on another unit is "used_elsewhere" regardless of whether
+    THIS unit has advanced yet; checking movement_choice first (the original
+    order) made an already-spent GO wrongly report "locked: no Advance roll
+    open" until the viewer picked Advance on this exact unit.
 
     `used_here` — this card's own anchor (`f"movement_reroll:{uid}"`, one per
     selected unit) matches whatever anchor `spend_stratagem` recorded for this
@@ -254,6 +260,14 @@ def _advance_reroll_state(
     """
     if in_melee:
         return "locked", "unit is in melee"
+    # Global spend check first (S141 Befund 1+2): whether this GO was already
+    # used this phase — anywhere, on any unit — is independent of THIS unit's
+    # own movement_choice. Checking it before the "no Advance roll open" gate
+    # below ensures a freshly selected unit shows "used_elsewhere" instead of
+    # a misleading "locked: no Advance roll open" for a GO another unit
+    # already spent.
+    if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
+        return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
     if movement_choice != "advanced":
         return "locked", "no Advance roll open"
     vis = stratagem_visibility(
@@ -261,8 +275,6 @@ def _advance_reroll_state(
     )
     if vis == "clickable":
         return "ready", None
-    if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
     return "locked", "CP insufficient"
 
 

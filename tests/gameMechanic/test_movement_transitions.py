@@ -557,6 +557,22 @@ def test_advance_reroll_state_used_elsewhere_carries_resolved_unit_name():
     assert reason == "Boyz Mob"
 
 
+def test_advance_reroll_state_used_elsewhere_before_advance_chosen():
+    """S141 Fix B regression: a GO already spent on another unit must show
+    "used_elsewhere" for a freshly selected unit whose OWN movement_choice is
+    still "none" (Advance not yet picked) — not "locked: no Advance roll
+    open". Root cause was `_advance_reroll_state` checking movement_choice
+    before the global used/used_elsewhere state; this pins the corrected
+    priority (used-check before the movement_choice gate)."""
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    strat = _reroll_strat()
+    used_ids = {strat.id}
+    state, reason = _advance_reroll_state(strat, False, "none", 3, used_ids, set(), False)
+    assert state == "used_elsewhere"
+    assert reason is None
+
+
 def test_advance_reroll_state_locked_cp_insufficient_when_not_used():
     from gameMechanic.movementPhase import _advance_reroll_state
 
