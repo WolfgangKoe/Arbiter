@@ -69,10 +69,12 @@ Frühere Sessions (S60–S142): `docs/metrics/session_archive.md`.
 - 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit → CP-Abzug + „used"): laut
   Stakeholder erst im Roster-Builder prüfbar (Relic-Vergabe) — offen halten.
 - 🔲 B12b-Punkte (3) weiter offen.
-- ⚠️ **Klan-Affinität NICHT prüfbar — Befund:** `orks_transport.yaml` trägt „Evil Sunz"
-  nur im `display_name`; kein `klan`-Schlüssel im Roster, kein `subfaction_affinity` in
-  `data/wh40k_9e/orks/` (nur Necron-Roster haben `dynasty:`). S144 klären: Ork-Klan-Daten
-  nachziehen (analog Dynastie-Kopplung S140) oder Verifikationspunkt streichen.
+- ✂️ **Klan-Affinität als Verifikationspunkt GESTRICHEN (Stakeholder-Klärung):** Es gibt
+  keine Klan-Affinität zu Call da WAAAGH. Stattdessen fehlen **Klan-Fähigkeiten (Ork-
+  Kulturs)** als Feature — analog stehen **Dynastie-Fähigkeiten (Necron Dynastic Codes)**
+  noch aus. Beides Teil von **Ziel 7** → S144-Planner nimmt es als Planungsgegenstand auf
+  (gegen `ziel7.md`/`backlog.md` verorten; Datenlage: kein `klan`-Schlüssel in Rosters,
+  kein Fähigkeits-Block in `data/wh40k_9e/orks/`).
 - Whirling-Onslaught-Position vom Stakeholder erneut bestätigt: Box soll am
   Ziel-Zuweisungs-Screen erscheinen („✓ Skorpekh Destroyers"-Toggle) — deckt sich exakt
   mit dem freigegebenen on_target-Konzept Option A (S144 Schritt 5, war nicht Teil S143).
