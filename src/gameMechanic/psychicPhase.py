@@ -6,7 +6,8 @@ Scope: Smite only. Blessing-flow (friendly target) follows in a later goal.
 
 from __future__ import annotations
 
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import Any, ClassVar
 
 import streamlit as st
 
@@ -23,7 +24,7 @@ class PsychicPhaseHandler:
 
     phase_name: ClassVar[str] = "psychic"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
@@ -93,7 +94,7 @@ def deny_succeeds(manifest_roll: int, deny_roll: int) -> bool:
     return deny_roll > manifest_roll
 
 
-def cast_eligibility(unit_state: dict) -> tuple[bool, str | None]:  # type: ignore[type-arg]
+def cast_eligibility(unit_state: MutableMapping[str, Any]) -> tuple[bool, str | None]:
     """Return (eligible, reason) — None reason means eligible to manifest."""
     flags = unit_state.get("turn_flags", {})
     if flags.get("retreated"):
@@ -199,7 +200,7 @@ def _render_manifest_reroll(faction: str, uid: str) -> None:
     )
 
 
-def _render_psychic_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_psychic_column(faction: str, state: MutableMapping[str, Any]) -> None:
     is_active = faction == state["active"]
     indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
@@ -210,7 +211,7 @@ def _render_psychic_column(faction: str, state: dict) -> None:  # type: ignore[t
         _render_deny_column(faction, state)
 
 
-def _render_active_psychic(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_active_psychic(faction: str, state: MutableMapping[str, Any]) -> None:
     units = units_list_for(faction)
 
     if not has_psyker(units):
@@ -238,9 +239,7 @@ def _render_active_psychic(faction: str, state: dict) -> None:  # type: ignore[t
     _render_smite_flow(faction, uid, unit, state)
 
 
-def _render_smite_flow(
-    faction: str, uid: str, unit: Unit, state: dict  # type: ignore[type-arg]
-) -> None:
+def _render_smite_flow(faction: str, uid: str, unit: Unit, state: MutableMapping[str, Any]) -> None:
     psi = st.session_state.get("psi_result")
 
     if psi is not None and psi.get("faction") == faction and psi.get("uid") == uid:
@@ -299,7 +298,7 @@ def _render_psi_result(
     uid: str,
     unit: Unit,
     psi: dict,  # type: ignore[type-arg]
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
 ) -> None:
     roll: int = psi["roll"]
     manifested: bool = psi["manifested"]
@@ -422,7 +421,7 @@ def _render_psi_result(
 # ---------------------------------------------------------------------------
 
 
-def _render_deny_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_deny_column(faction: str, state: MutableMapping[str, Any]) -> None:
     units = units_list_for(faction)
 
     if not can_deny(units):

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import Any, ClassVar
 
 import streamlit as st
 
@@ -26,7 +27,7 @@ _ATTRITION_EFFECT_TYPE = "attrition_modifier"
 _ATTRITION_BASE_THRESHOLD = 1
 
 
-def morale_test_required(unit, unit_state: dict) -> bool:  # type: ignore[type-arg]
+def morale_test_required(unit: Unit, unit_state: MutableMapping[str, Any]) -> bool:
     """Return True when a unit must take a Morale test this phase (App-enforced filter).
 
     Implements the R-MORALE-02 filter:
@@ -72,7 +73,7 @@ def attrition_condition(ability: Ability) -> tuple[str | None, bool]:
 
 def _attrition_threshold(
     unit: Unit,
-    unit_state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
     ability_mods: list[int],
 ) -> int:
     """Highest (unmodified) D6 result at which a model flees a Combat Attrition test.
@@ -96,7 +97,7 @@ class MoralePhaseHandler:
 
     phase_name: ClassVar[str] = "morale"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
         unit_map = {
@@ -123,8 +124,8 @@ class MoralePhaseHandler:
 def _render_faction_morale(
     faction: str,
     units: dict[str, Unit],
-    unit_states: dict,  # type: ignore[type-arg]
-    state: dict,  # type: ignore[type-arg]
+    unit_states: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     st.markdown(f"**{faction}**")
     any_test = False
@@ -145,8 +146,8 @@ def _render_unit_morale(
     faction: str,
     uid: str,
     unit: Unit,
-    unit_state: dict,  # type: ignore[type-arg]
-    state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     st.markdown(f"**{unit.name_en}**")
     lost = unit_state["lost_models_this_turn"]
@@ -230,7 +231,7 @@ def _render_attrition_hint(
     faction: str,
     uid: str,
     unit: Unit,
-    unit_state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
 ) -> None:
     """Display-only Combat Attrition hint — the D6 rolls stay on the table.
 

@@ -6,6 +6,9 @@ render_current_phase(state) is the single entry point called by gameActionsArea.
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping
+from typing import Any
+
 import streamlit as st
 
 from gameMechanic.phase_handler import PhaseHandler
@@ -22,7 +25,7 @@ PHASE_REGISTRY: dict[str, PhaseHandler] = {}
 # ---------------------------------------------------------------------------
 
 
-def render_current_phase(state: dict) -> None:  # type: ignore[type-arg]
+def render_current_phase(state: MutableMapping[str, Any]) -> None:
     """Look up the handler for the current phase and render it."""
     from gameMechanic.game_state import PHASES  # noqa: PLC0415
 

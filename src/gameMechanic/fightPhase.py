@@ -8,7 +8,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import Any, ClassVar
 
 import streamlit as st
 
@@ -22,6 +23,7 @@ from gameMechanic.game_state import (
 )
 from gameMechanic.unit_mutations import apply_mortal_wounds, heal_unit
 from gameObjects.stratagem import Stratagem
+from gameObjects.unit import Unit
 from uiLayout._common import (
     _maybe_flag_transport_destroyed,
     _render_pending_emergency_disembarkation,
@@ -37,12 +39,12 @@ from uiLayout._common import (
 )
 
 
-def _is_target_engaged(atk_state: dict, def_faction: str, def_uid: str) -> bool:  # type: ignore[type-arg]
+def _is_target_engaged(atk_state: MutableMapping[str, Any], def_faction: str, def_uid: str) -> bool:
     """Return True if def_faction/def_uid is in the attacker's melee_with list."""
     return [def_faction, def_uid] in atk_state.get("melee_with", [])
 
 
-def can_fight(unit_state: dict) -> bool:  # type: ignore[type-arg]
+def can_fight(unit_state: MutableMapping[str, Any]) -> bool:
     """Return True if the unit is generally eligible to fight this turn.
 
     9E: a unit is eligible if it is in melee or if it charged this turn.
@@ -64,7 +66,7 @@ def _any_charged_remain(first: str, second: str) -> bool:
     return False
 
 
-def can_fight_now(unit_state: dict, first: str, second: str) -> bool:  # type: ignore[type-arg]
+def can_fight_now(unit_state: MutableMapping[str, Any], first: str, second: str) -> bool:
     """Return True if this unit may fight right now (considering CHARGED priority).
 
     Non-charged units must wait until all charged units from both sides have fought.
@@ -161,7 +163,7 @@ def _dice_max(dice_str: str) -> int:
         return 3
 
 
-def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
+def _render_mortal_after_melee(state: MutableMapping[str, Any]) -> None:
     """Render the post-fight mortal wound trigger UI (data-driven via triggered_effects).
 
     Step 'initial': target selection + Failed / Continue buttons.
@@ -323,7 +325,7 @@ def _render_mortal_after_melee(state: dict) -> None:  # type: ignore[type-arg]
                 st.rerun()
 
 
-def _maybe_render_mortal_undo(state: dict) -> None:  # type: ignore[type-arg]
+def _maybe_render_mortal_undo(state: MutableMapping[str, Any]) -> None:
     """Show undo section after mortal wounds were applied (until turn end)."""
     undo = st.session_state.get("pending_mortal_undo")
     if not undo:
@@ -369,7 +371,7 @@ class FightPhaseHandler:
 
     phase_name: ClassVar[str] = "fight"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
         active_player: str = st.session_state.active
@@ -412,7 +414,7 @@ class FightPhaseHandler:
 
 def _render_fight_column(
     faction: str,
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
     fight_player: str,
     first: str,
     second: str,
@@ -489,9 +491,9 @@ def _render_fight_column(
 def _active_fight(
     faction: str,
     uid: str,
-    unit,  # type: ignore[type-arg]
-    unit_state: dict,  # type: ignore[type-arg]
-    state: dict,  # type: ignore[type-arg]
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
     first: str,
     second: str,
 ) -> None:
@@ -516,7 +518,7 @@ def _active_fight(
 
 
 def _inactive_target_stats(
-    faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
+    faction: str, uid: str, unit: Unit, unit_state: MutableMapping[str, Any]
 ) -> None:
     """Show target defensive stats (T / Sv / ++) in the fight column."""
     inv_display = f"{unit.invuln_save}+" if unit.invuln_save else "—"
@@ -554,7 +556,7 @@ def _render_melee_pairs() -> None:
 
 
 def _render_display(
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
     fight_player: str,
     first: str,
     second: str,

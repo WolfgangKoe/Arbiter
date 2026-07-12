@@ -6,8 +6,8 @@ Ziel 4:  Full turn_flags tracking, advance-roll, reserve deployment.
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import ClassVar
+from collections.abc import Callable, MutableMapping
+from typing import Any, ClassVar, cast
 
 import streamlit as st
 
@@ -62,7 +62,7 @@ class MovementPhaseHandler:
 
     phase_name: ClassVar[str] = "movement"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
@@ -85,7 +85,11 @@ class MovementPhaseHandler:
 
 
 def _active_movement(
-    faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
+    faction: str,
+    uid: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     """Render movement type buttons for the active player's selected unit."""
     if unit_state.get("in_reserve"):
@@ -142,7 +146,7 @@ _COMMITTED_LABEL: dict[str, str] = {
 
 
 def _render_movement_buttons(
-    faction: str, uid: str, unit: Unit, unit_state: dict, in_melee: bool  # type: ignore[type-arg]
+    faction: str, uid: str, unit: Unit, unit_state: MutableMapping[str, Any], in_melee: bool
 ) -> None:
     """Render the Move/Advance/Retreat buttons, or the Reset button once one fired.
 
@@ -255,7 +259,7 @@ def _advance_reroll_state(
 
 
 def _render_advance_reroll_card(
-    faction: str, uid: str, unit: Unit, unit_state: dict, in_melee: bool  # type: ignore[type-arg]
+    faction: str, uid: str, unit: Unit, unit_state: MutableMapping[str, Any], in_melee: bool
 ) -> None:
     """Always-visible GO card for the Advance-roll Command Re-Roll (S133 K2 item 1).
 
@@ -343,8 +347,8 @@ def _render_desperate_breakout(
     uid: str,
     unit: Unit,
     faction: str,
-    unit_state: dict,  # type: ignore[type-arg]
-    state: dict,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     """Resolve a pending Desperate Breakout: casualty roll, then Fall Back.
 
@@ -435,10 +439,10 @@ def _render_desperate_breakout(
 
 def _render_teleport_effect(
     uid: str,
-    unit,  # type: ignore[type-arg]
+    unit: Unit,
     faction: str,
-    state: dict,  # type: ignore[type-arg]
-    unit_state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
+    unit_state: MutableMapping[str, Any],
     te: TriggeredEffect,
 ) -> None:
     """Render a once-per-battle teleport relic UI.
@@ -447,7 +451,8 @@ def _render_teleport_effect(
     Step 2: Optional CORE unit selector + Confirm/Cancel.
     On confirm: mark bearer + optional CORE unit as moved; lock movement; mark relic used.
     """
-    relic_id = unit.relic_id
+    # Only called with a teleport TriggeredEffect, which exists solely on relic bearers.
+    relic_id = cast(str, unit.relic_id)
     display_name = unit.relic_name or relic_id
     relic_entry = load_relic_catalog(faction_dir_for(faction)).get(relic_id) or {}
 
@@ -502,7 +507,7 @@ def _render_teleport_effect(
     all_keys = unit_keys_for(faction)
 
     # Build (state_key, unit) pairs for CORE candidates — exclude bearer, destroyed, reserve
-    core_candidates: list[tuple[str, object]] = []  # type: ignore[type-arg]
+    core_candidates: list[tuple[str, Unit]] = []
     for state_key, cu in zip(all_keys, all_units):
         if cu.id == unit.id:
             continue
@@ -575,7 +580,7 @@ def _lock_teleport_movement(state_key: str, faction: str) -> None:
     u_state["in_melee"] = False
 
 
-def _undo_teleport(relic_id: str, faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _undo_teleport(relic_id: str, faction: str, state: MutableMapping[str, Any]) -> None:
     """Undo a confirmed teleport ability (only available within the same turn)."""
     used = dict(st.session_state.get("relic_triggered_used", {}))
     used.pop(relic_id, None)

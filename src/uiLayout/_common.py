@@ -9,7 +9,7 @@ Handlers import from here — never from gameActionsArea — to avoid circular i
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, MutableMapping
 from typing import Any, cast
 
 import streamlit as st
@@ -313,7 +313,7 @@ def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
 # ---------------------------------------------------------------------------
 
 
-def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None:  # type: ignore[type-arg]
+def render_melee_engagements(faction: str, uid: str, unit_state: MutableMapping[str, Any]) -> None:
     """Show the list of enemy units this unit is engaged with, each with a Break button."""
     from gameMechanic.unit_mutations import leave_melee_pair
 
@@ -348,10 +348,12 @@ def render_melee_engagements(faction: str, uid: str, unit_state: dict) -> None: 
 
 def render_player_column(
     faction: str,
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
     *,
-    active_content: Callable[[str, str, Unit, dict, dict], None],  # type: ignore[type-arg]
-    inactive_content: Callable[[str, str, Unit, dict], None] | None = None,  # type: ignore[type-arg]
+    active_content: Callable[
+        [str, str, Unit, MutableMapping[str, Any], MutableMapping[str, Any]], None
+    ],
+    inactive_content: Callable[[str, str, Unit, MutableMapping[str, Any]], None] | None = None,
     no_target_caption: str = "—",
     inactive_override: Callable[[], None] | None = None,
     show_wound_buttons: bool = True,
@@ -2185,7 +2187,9 @@ def _in_friendly_melee(atk_faction: str, def_faction: str, def_uid: str) -> bool
     return any(fac == atk_faction for fac, _ in def_state.get("melee_with", []))
 
 
-def _single_eligible_group(atk_unit: Unit, atk_state: dict, use_melee: bool, in_melee: bool):  # type: ignore[no-untyped-def, type-arg]
+def _single_eligible_group(
+    atk_unit: Unit, atk_state: MutableMapping[str, Any], use_melee: bool, in_melee: bool
+) -> ModelGroup | None:
     """Return the sole undeclared, alive, weapon-capable group — or None.
 
     Mirrors the auto-select condition in render_group_cards so that
@@ -2268,7 +2272,9 @@ def toggle_group_target(def_faction: str, def_uid: str) -> bool:
     return True
 
 
-def _group_effective_attacks(atk_unit: Unit, group, atk_state: dict) -> int:  # type: ignore[no-untyped-def, type-arg]
+def _group_effective_attacks(
+    atk_unit: Unit, group: ModelGroup, atk_state: MutableMapping[str, Any]
+) -> int:
     """Attacks per model for a group (before WAAAGH bonus).
 
     A group with its own ``attacks`` stat is fixed (e.g. Triarchal Menhirs A2).
@@ -2333,7 +2339,7 @@ def render_group_cards(
     atk_faction: str,
     atk_uid: str,
     atk_unit: Unit,
-    atk_state: dict,  # type: ignore[type-arg]
+    atk_state: MutableMapping[str, Any],
     use_melee: bool,
     phase_key: str,
     in_melee: bool = False,

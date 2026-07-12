@@ -8,7 +8,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import Any, ClassVar
 
 import streamlit as st
 
@@ -16,6 +17,7 @@ from constants.symbols import SYM_CHECK, SYM_EXPAND_ALT, SYM_SWORDS
 from gameMechanic.game_log import log_action
 from gameMechanic.game_state import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unit_mutations import perform_heroic_intervention, set_charged
+from gameObjects.unit import Unit
 from uiLayout._common import (
     lookup,
     render_inline_command_reroll,
@@ -30,7 +32,7 @@ class ChargePhaseHandler:
 
     phase_name: ClassVar[str] = "charge"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
         active: str = state["active"]
@@ -78,7 +80,11 @@ class ChargePhaseHandler:
 
 
 def _active_charge(
-    faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
+    faction: str,
+    uid: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     """Render charge action for the active player's selected unit."""
     flags = unit_state.get("turn_flags", {})
@@ -146,7 +152,7 @@ def _active_charge(
 
 
 def _inactive_charge(
-    faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
+    faction: str, uid: str, unit: Unit, unit_state: MutableMapping[str, Any]
 ) -> None:
     """Inactive player target view for Charge Phase.
 
@@ -176,7 +182,7 @@ def _inactive_charge(
 # ---------------------------------------------------------------------------
 
 
-def hi_already_performed(unit_state: dict) -> bool:  # type: ignore[type-arg]
+def hi_already_performed(unit_state: MutableMapping[str, Any]) -> bool:
     """Return True when the unit has already performed a Heroic Intervention this phase.
 
     Implements the once-per-enemy-Charge-Phase guard from R-CHARGE-10.
@@ -185,7 +191,7 @@ def hi_already_performed(unit_state: dict) -> bool:  # type: ignore[type-arg]
 
 
 def hi_eligible_units(
-    all_units: list, unit_keys: list[str], units_data: dict  # type: ignore[type-arg]
+    all_units: list, unit_keys: list[str], units_data: MutableMapping[str, Any]  # type: ignore[type-arg]
 ) -> list[tuple]:  # type: ignore[type-arg]
     """Return (Unit, state_key) pairs eligible for Heroic Intervention.
 
@@ -209,7 +215,7 @@ def hi_eligible_units(
     ]
 
 
-def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_hi_phase(inactive: str, active: str, state: MutableMapping[str, Any]) -> None:
     """Step 2: Heroic Intervention window for the inactive player."""
     st.markdown(f"### {SYM_SWORDS} Heroic Intervention")
     st.info(
@@ -245,7 +251,7 @@ def _render_hi_phase(inactive: str, active: str, state: dict) -> None:  # type: 
 def _render_hi_target_selection(
     pending: tuple,  # type: ignore[type-arg]
     active: str,
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
 ) -> None:
     """Show enemy unit selector for the intervening CHARACTER unit."""
     hi_faction, hi_key = pending

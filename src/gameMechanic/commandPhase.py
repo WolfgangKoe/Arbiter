@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import MutableMapping
 from typing import Any, ClassVar
 
 import streamlit as st
@@ -26,7 +27,7 @@ from uiLayout._common import (
 )
 
 
-def resolve_command_start(state: dict) -> list[tuple[Ability, list[str]]]:  # type: ignore[type-arg]
+def resolve_command_start(state: MutableMapping[str, Any]) -> list[tuple[Ability, list[str]]]:
     return get_triggered_abilities(state, "command", "phase_start")
 
 
@@ -86,7 +87,7 @@ def can_gain_command_point(game_mode: str) -> bool:
 
 def _render_faction_actions(
     faction: str,
-    state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
 ) -> None:
     st.divider()
     game_mode: str = st.session_state.get("game_mode", "matched")
@@ -140,8 +141,8 @@ def resolve_gain_cp_roll(
 def _render_buff_roll_ability(
     ability: Ability,
     faction: str,
-    state: dict,  # type: ignore[type-arg]
-    units_state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
+    units_state: MutableMapping[str, Any],
     unit_by_id: dict,  # type: ignore[type-arg]
 ) -> None:
     """Render activate / status UI for any buff_roll command-phase ability.
@@ -165,7 +166,7 @@ def _render_buff_roll_ability(
     if active_since_round is not None and state["round"] > active_since_round:
         for t in targets:
             if t in units_state:
-                bufs: list[dict] = units_state[t].get("active_buffs", [])
+                bufs: list[dict[str, Any]] = units_state[t].get("active_buffs", [])
                 units_state[t]["active_buffs"] = [
                     b for b in bufs if b.get("ability_id") != ability_id
                 ]
@@ -222,7 +223,7 @@ def _render_buff_roll_ability(
 # ---------------------------------------------------------------------------
 
 
-def _render_gain_cp_roll(unit, faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_gain_cp_roll(unit: Unit, faction: str, state: MutableMapping[str, Any]) -> None:
     from gameObjects.unit import TriggeredEffect  # local import avoids circular dep
 
     te: TriggeredEffect | None = unit.get_triggered_effect("phase_start", "command", "gain_cp_roll")
@@ -287,8 +288,8 @@ def _wargear_state_key(bearer_uid: str, wargear_id: str) -> str:
 
 def _render_activated_wargear(
     faction: str,
-    state: dict,  # type: ignore[type-arg]
-    units_state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
+    units_state: MutableMapping[str, Any],
     unit_by_id: dict,  # type: ignore[type-arg]
     bearer: Any,
     wargear: dict,  # type: ignore[type-arg]
@@ -365,8 +366,8 @@ def _render_activated_wargear(
 def _render_unit_command_abilities(
     selected_state_key: str,
     faction: str,
-    state: dict,  # type: ignore[type-arg]
-    units_state: dict,  # type: ignore[type-arg]
+    state: MutableMapping[str, Any],
+    units_state: MutableMapping[str, Any],
     unit_by_id: dict,  # type: ignore[type-arg]
 ) -> None:
     """Render all activated command-phase abilities for the currently selected unit."""
@@ -425,7 +426,7 @@ class CommandPhaseHandler:
 
     phase_name: ClassVar[str] = "command"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
@@ -436,7 +437,7 @@ class CommandPhaseHandler:
             _render_command_column(second, state)
 
 
-def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[type-arg]
+def _render_command_column(faction: str, state: MutableMapping[str, Any]) -> None:
     is_active = faction == state["active"]
     indicator = SYM_EXPAND if is_active else SYM_COLLAPSE
     st.markdown(f"**{indicator} {faction}**")
@@ -458,7 +459,7 @@ def _render_command_column(faction: str, state: dict) -> None:  # type: ignore[t
 
     unit_by_id = {u.id: u for u in units_list_for(faction)}
     units_key = units_key_for(faction)
-    units_state: dict = state[units_key]  # type: ignore[type-arg]
+    units_state: MutableMapping[str, Any] = state[units_key]
 
     _render_faction_actions(faction, state)
 

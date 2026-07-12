@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, Protocol
+from collections.abc import MutableMapping
+from typing import Any, ClassVar, Protocol
 
 
 class PhaseHandler(Protocol):
@@ -15,6 +16,6 @@ class PhaseHandler(Protocol):
 
     phase_name: ClassVar[str]
 
-    def render_active(self, state: dict) -> None:
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         """Render main phase UI — two player columns + display area."""
         ...

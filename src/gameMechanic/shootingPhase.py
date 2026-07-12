@@ -5,13 +5,15 @@ Ziel 3c: can_shoot(), full AttackSequence via combat.py.
 
 from __future__ import annotations
 
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import Any, ClassVar
 
 import streamlit as st
 
 from constants.symbols import SYM_EXPAND_ALT
 from gameMechanic.ability_engine import get_active_round_choice_shoot_after_fall_back
 from gameMechanic.game_state import units_key_for
+from gameObjects.unit import Unit
 from uiLayout._common import (
     group_flow_attacker,
     render_attack_resolution,
@@ -22,8 +24,8 @@ from uiLayout._common import (
 
 
 def can_shoot(
-    unit_state: dict,
-    unit=None,  # type: ignore[type-arg]
+    unit_state: MutableMapping[str, Any],
+    unit: Unit | None = None,
     faction: str | None = None,
     uid: str | None = None,
 ) -> bool:
@@ -72,7 +74,7 @@ class ShootingPhaseHandler:
 
     phase_name: ClassVar[str] = "shooting"
 
-    def render_active(self, state: dict) -> None:  # type: ignore[type-arg]
+    def render_active(self, state: MutableMapping[str, Any]) -> None:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
@@ -130,7 +132,11 @@ class ShootingPhaseHandler:
 
 
 def _active_shooting(
-    faction: str, uid: str, unit, unit_state: dict, state: dict  # type: ignore[type-arg]
+    faction: str,
+    uid: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+    state: MutableMapping[str, Any],
 ) -> None:
     """Show shooting eligibility and ranged weapon list for the selected unit."""
     flags = unit_state.get("turn_flags", {})
@@ -164,7 +170,7 @@ def _active_shooting(
 
 
 def _inactive_target_stats(
-    faction: str, uid: str, unit, unit_state: dict  # type: ignore[type-arg]
+    faction: str, uid: str, unit: Unit, unit_state: MutableMapping[str, Any]
 ) -> None:
     """Show target defensive stats (T / Sv / ++) in the inactive column."""
     inv_display = f"{unit.invuln_save}+" if unit.invuln_save else "—"
@@ -174,7 +180,7 @@ def _inactive_target_stats(
     cols[2].metric("++", inv_display)
 
 
-def _render_display(state: dict) -> bool:  # type: ignore[type-arg]
+def _render_display(state: MutableMapping[str, Any]) -> bool:
     """Render attack form if applicable. Returns True when the form is shown."""
     decl = st.session_state.get("attack_declaration", {})
     if decl.get("active") and decl.get("phase_key") == "shooting":
