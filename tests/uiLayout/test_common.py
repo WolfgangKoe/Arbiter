@@ -761,6 +761,42 @@ def test_undo_stratagem_without_prior_anchor_is_a_noop() -> None:
     assert session["cp"]["Necrons"] == 6  # refunded once (cp_cost=1 default)
 
 
+def test_used_elsewhere_unit_name_resolves_recorded_units_display_name(monkeypatch) -> None:
+    """S141 B12b: the helper behind the "used on ⟨Einheit⟩" header suffix reads
+    the unit_key spend_stratagem recorded and resolves it to the display name."""
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", "warrior#1", anchor_id="anchor_x")
+    warriors = SimpleNamespace(name_en="Necron Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (warriors, {}))
+    assert common.stratagem_used_elsewhere_unit_name("Necrons", "strat.a") == "Necron Warriors"
+
+
+def test_used_elsewhere_unit_name_none_when_never_spent() -> None:
+    _spend_session()
+    assert common.stratagem_used_elsewhere_unit_name("Necrons", "strat.never") is None
+
+
+def test_used_elsewhere_unit_name_none_when_spent_without_unit_key() -> None:
+    """A GO spent with no unit target (e.g. the inline Command Re-Roll) knows
+    no unit — the spec shows the suffix only "falls eine Einheit bekannt"."""
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", anchor_id="anchor_x")
+    assert common.stratagem_used_elsewhere_unit_name("Necrons", "strat.a") is None
+
+
+def test_used_elsewhere_unit_name_none_when_recorded_key_unresolvable(monkeypatch) -> None:
+    """A stale unit_key (catalog out of sync) must degrade to "no suffix",
+    never crash the render path."""
+    _spend_session()
+    common.spend_stratagem(_strat(sid="strat.a"), "Necrons", "gone#1", anchor_id="anchor_x")
+
+    def _raise(faction: str, uid: str):  # type: ignore[no-untyped-def]
+        raise KeyError(uid)
+
+    monkeypatch.setattr(common, "lookup", _raise)
+    assert common.stratagem_used_elsewhere_unit_name("Necrons", "strat.a") is None
+
+
 # ---------------------------------------------------------------------------
 # S130 — spend_stratagem() effect dispatch: Insane Bravery / Desperate Breakout
 # ---------------------------------------------------------------------------
@@ -1029,6 +1065,37 @@ def test_used_at_other_anchor_maps_to_used_elsewhere(monkeypatch) -> None:
 
     assert captured[0]["state"] == "used_elsewhere"
     assert captured[0]["locked_reason"] is None
+
+
+def test_used_at_other_anchor_hands_unit_name_to_card_as_reason(monkeypatch) -> None:
+    """S141 B12b wiring: when the spend at the OTHER anchor recorded a unit_key,
+    the reactive box resolves it (stratagem_used_elsewhere_unit_name) and hands
+    the display name to render_go_card as locked_reason — the card then renders
+    the §6.1 header suffix "used on ⟨Einheit⟩"."""
+    fo = "wh40k_9e.shared.stratagem.fire_overwatch"
+    session = _reactive_box_session(
+        cp={"Necrons": 4},
+        used_stratagem_ids={"Necrons": {fo}},
+        stratagem_use_anchors={
+            "Necrons": {
+                fo: {"anchor_id": "reactive:on_declaration:target-uid-1", "unit_key": "warrior#1"}
+            }
+        },
+    )
+    captured = _install_reactive_box_session(monkeypatch, session)
+    warriors = SimpleNamespace(name_en="Necron Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (warriors, {}))
+
+    common.render_reactive_stratagem_box(
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="target-uid-2",  # a DIFFERENT target than the recorded anchor
+        context_caption="irrelevant",
+    )
+
+    assert captured[0]["state"] == "used_elsewhere"
+    assert captured[0]["locked_reason"] == "Necron Warriors"
 
 
 def test_use_records_this_boxs_anchor_for_the_here_split(monkeypatch) -> None:

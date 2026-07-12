@@ -587,6 +587,33 @@ def stratagem_used_here(faction: str, stratagem_id: str, anchor_id: str) -> bool
     return record is not None and record[0] == anchor_id
 
 
+def stratagem_used_elsewhere_unit_name(faction: str, stratagem_id: str) -> str | None:
+    """Resolve the display name of the unit `faction` used `stratagem_id` on this phase.
+
+    The shared building block behind the "used_elsewhere" header suffix
+    "used on ⟨Einheit⟩" (design_system.md §6.1, S141 B12b): reads the
+    `unit_key` that `spend_stratagem` recorded alongside the use-anchor and
+    resolves it to the unit's display name via `lookup`. Returns None when the
+    GO was never spent this phase, was spent without a unit target (e.g. the
+    inline Command Re-Roll and the Advance-reroll card pass no `unit_key`),
+    or the recorded key no longer resolves — the spec shows the suffix only
+    "falls eine Einheit bekannt". Callers (the three render functions, not the
+    pure state mappers) pass the result into their mapper's
+    `used_elsewhere_unit` parameter — same division of labour as `used_here`.
+    """
+    record = stratagem_use_anchor(faction, stratagem_id)
+    if record is None:
+        return None
+    unit_key = record[1]
+    if unit_key is None:
+        return None
+    try:
+        unit, _ = lookup(faction, unit_key)
+    except KeyError:
+        return None
+    return unit.name_en
+
+
 def _apply_stratagem_effect(strat: Stratagem, faction: str, unit_key: str) -> None:
     """Dispatch a stratagem's machine-readable ``effect`` to the unit it targets.
 
@@ -637,6 +664,7 @@ def _reactive_go_state(
     used_ids: set[str],
     used_battle_ids: set[str],
     used_here: bool,
+    used_elsewhere_unit: str | None = None,
 ) -> tuple[GoCardState, str | None]:
     """Map `stratagem_visibility()`'s clickable/greyed to a GO-card state, for
     reactive GO boxes only.
@@ -650,6 +678,10 @@ def _reactive_go_state(
     §6.1 5th state; caller computes `used_here` via `stratagem_used_here` so
     this mapper itself stays a pure, Streamlit-free decision function — same
     style as the plain `used_ids`/`used_battle_ids` sets it already takes).
+    `used_elsewhere_unit` — the display name of the unit the GO was used on
+    (caller resolves it via `stratagem_used_elsewhere_unit_name`, None when no
+    unit is known); returned as the "used_elsewhere" reason so the card can
+    show the §6.1 suffix "used on ⟨Einheit⟩" (S141 B12b).
     Cut Them Down / Emergency Disembarkation (window-consuming GOs, S138
     scope) are covered by this same split without any special case: their
     callers no longer clear the pending marker on Use (see
@@ -662,7 +694,7 @@ def _reactive_go_state(
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return ("used", None) if used_here else ("used_elsewhere", None)
+        return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
     reason = "used" if strat.id in used_battle_ids else "CP insufficient"
     return "locked", reason
 
@@ -833,7 +865,14 @@ def render_reactive_stratagem_box(
             continue
 
         used_here = stratagem_used_here(faction, strat.id, anchor_id)
-        state, locked_reason = _reactive_go_state(strat, vis, used_ids, used_battle_ids, used_here)
+        state, locked_reason = _reactive_go_state(
+            strat,
+            vis,
+            used_ids,
+            used_battle_ids,
+            used_here,
+            stratagem_used_elsewhere_unit_name(faction, strat.id),
+        )
         render_go_card(
             key=f"reactive_{faction}_{event}_{strat.id}_{decline_key}",
             name=strat.name_en,

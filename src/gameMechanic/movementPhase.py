@@ -41,6 +41,7 @@ from uiLayout._common import (
     render_reactive_stratagem_box,
     render_unit_selectbox,
     spend_stratagem,
+    stratagem_used_elsewhere_unit_name,
     stratagem_used_here,
     undo_stratagem,
 )
@@ -227,6 +228,7 @@ def _advance_reroll_state(
     used_ids: set[str],
     used_battle_ids: set[str],
     used_here: bool,
+    used_elsewhere_unit: str | None = None,
 ) -> tuple[GoCardState, str | None]:
     """Map the Advance re-roll's own preconditions to a GO-card state + reason.
 
@@ -243,6 +245,12 @@ def _advance_reroll_state(
     card, not another Undo). The real caller computes it via
     `stratagem_used_here`, same as the other two mappers; this stays a pure,
     Streamlit-free decision function.
+
+    `used_elsewhere_unit` — the display name of the unit the GO was used on
+    (caller resolves it via `stratagem_used_elsewhere_unit_name`, None when no
+    unit is known — this card's own spend records no `unit_key`, so today the
+    name only resolves when another anchor spent with one); returned as the
+    "used_elsewhere" reason for the §6.1 suffix "used on ⟨Einheit⟩" (S141 B12b).
     """
     if in_melee:
         return "locked", "unit is in melee"
@@ -254,7 +262,7 @@ def _advance_reroll_state(
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return ("used", None) if used_here else ("used_elsewhere", None)
+        return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
     return "locked", "CP insufficient"
 
 
@@ -293,7 +301,14 @@ def _render_advance_reroll_card(
         anchor_id = f"movement_reroll:{uid}"
         used_here = stratagem_used_here(faction, strat.id, anchor_id)
         card_state, reason = _advance_reroll_state(
-            strat, in_melee, current, cp, used_ids, used_battle_ids, used_here
+            strat,
+            in_melee,
+            current,
+            cp,
+            used_ids,
+            used_battle_ids,
+            used_here,
+            stratagem_used_elsewhere_unit_name(faction, strat.id),
         )
         render_go_card(
             key=f"movement_reroll_{faction}_{uid}_{strat.id}",

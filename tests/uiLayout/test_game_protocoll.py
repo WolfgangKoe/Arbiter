@@ -151,6 +151,17 @@ def test_go_state_and_reason_greyed_used_elsewhere_maps_to_used_elsewhere() -> N
     )
 
 
+def test_go_state_and_reason_used_elsewhere_carries_resolved_unit_name() -> None:
+    """S141 B12b: the caller-resolved unit name rides along as the
+    "used_elsewhere" reason, so the card can render the §6.1 header suffix
+    "used on ⟨Einheit⟩"."""
+    strat = _make_stratagem(id_="s1")
+    assert gp._go_state_and_reason(strat, "greyed", {"s1"}, set(), False, "Necron Warriors") == (
+        "used_elsewhere",
+        "Necron Warriors",
+    )
+
+
 def test_go_state_and_reason_once_per_battle_spent_earlier_maps_to_locked_used() -> None:
     """A once_per_battle stratagem spent in a previous phase: the phase-scoped
     undo window is closed (id not in used_ids), so it must render "locked"
@@ -280,6 +291,12 @@ def test_render_stratagem_column_maps_spend_at_other_anchor_to_used_elsewhere(mo
     monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [used_strat])
     monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
     monkeypatch.setattr(gp, "stratagem_used_here", lambda faction, sid, anchor: False)
+    # S141 B12b wiring: the column resolves the spend's unit via
+    # stratagem_used_elsewhere_unit_name and hands the name to the card as the
+    # "used_elsewhere" reason → header suffix "used on ⟨Einheit⟩".
+    monkeypatch.setattr(
+        gp, "stratagem_used_elsewhere_unit_name", lambda faction, sid: "Necron Warriors"
+    )
 
     captured: list[dict] = []
     monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
@@ -287,7 +304,7 @@ def test_render_stratagem_column_maps_spend_at_other_anchor_to_used_elsewhere(mo
     gp._render_stratagem_column("Necrons", True)
 
     assert captured[0]["state"] == "used_elsewhere"
-    assert captured[0]["locked_reason"] is None
+    assert captured[0]["locked_reason"] == "Necron Warriors"
 
 
 def test_render_stratagem_column_locks_gated_stratagem_for_ineligible_unit(monkeypatch) -> None:

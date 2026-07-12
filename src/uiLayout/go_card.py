@@ -169,8 +169,15 @@ def go_card_html(
     compact        — full form (default) shows the chip row; compact form omits
                      it for use as an inline anchor next to a table-roll entry
                      or an in-flow trigger.
-    locked_reason  — "locked" only: appended to the header as the required
+    locked_reason  — "locked": appended to the header verbatim as the required
                      suffix explaining why the card is unavailable (§6.1).
+                     "used_elsewhere": carries the RAW unit name the GO was
+                     used on (resolved by the caller via
+                     ``uiLayout._common.stratagem_used_elsewhere_unit_name``,
+                     None when no unit is known — then no suffix renders);
+                     this module wraps it in the §6.1 wording
+                     "used on ⟨Einheit⟩" so the three state mappers stay
+                     format-free (S141 B12b). Ignored in all other states.
     target_name    — the unit this GO would act on, if any (S133-D Befund 3):
                      appended to the header so the player can see WHICH unit is
                      bound before pressing Use — GOs whose effect is unit-scoped
@@ -189,6 +196,10 @@ def go_card_html(
         header_html += f' <span style="color:{_MUTED};">→ {target_name}</span>'
     if state == "locked" and locked_reason:
         header_html += f' <span style="color:{_MUTED};font-style:italic;"> — {locked_reason}</span>'
+    elif state == "used_elsewhere" and locked_reason:
+        header_html += (
+            f' <span style="color:{_MUTED};font-style:italic;"> — used on {locked_reason}</span>'
+        )
 
     parts = [f"<div>{header_html}</div>"]
     if not compact and keywords:

@@ -37,6 +37,7 @@ from gameObjects.stratagem import (
 from uiLayout._common import (
     render_go_card,
     spend_stratagem,
+    stratagem_used_elsewhere_unit_name,
     stratagem_used_here,
     undo_stratagem,
 )
@@ -214,6 +215,7 @@ def _go_state_and_reason(
     used_ids: set[str],
     used_battle_ids: set[str],
     used_here: bool,
+    used_elsewhere_unit: str | None = None,
 ) -> tuple[GoCardState, str | None]:
     """Map (`stratagem_visibility`, undo window) to a GO-card state + locked reason.
 
@@ -231,11 +233,15 @@ def _go_state_and_reason(
     insufficient"). `used_here` is computed by the caller via
     `stratagem_used_here` so this stays a pure, Streamlit-free decision
     function, mirroring `_reactive_go_state`/`_advance_reroll_state`.
+    `used_elsewhere_unit` — the display name of the unit the GO was used on
+    (caller resolves it via `stratagem_used_elsewhere_unit_name`, None when no
+    unit is known); returned as the "used_elsewhere" reason so the card can
+    show the §6.1 suffix "used on ⟨Einheit⟩" (S141 B12b).
     """
     if vis == "clickable":
         return "ready", None
     if stratagem_undo_visible(strat.id, used_ids, used_battle_ids):
-        return ("used", None) if used_here else ("used_elsewhere", None)
+        return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
     reason = "used" if strat.id in used_battle_ids else "CP insufficient"
     return "locked", reason
 
@@ -337,7 +343,12 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             in_core_section = is_core
         used_here = stratagem_used_here(player, strat.id, _CENTRAL_LIST_ANCHOR_ID)
         state, locked_reason = _go_state_and_reason(
-            strat, vis, used_ids, used_battle_ids, used_here
+            strat,
+            vis,
+            used_ids,
+            used_battle_ids,
+            used_here,
+            stratagem_used_elsewhere_unit_name(player, strat.id),
         )
         if state == "ready":
             # Keyword conditions (stratagem_conditions_met) already passed above — this

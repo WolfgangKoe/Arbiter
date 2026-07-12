@@ -543,6 +543,20 @@ def test_advance_reroll_state_used_elsewhere_when_spent_on_a_different_unit():
     assert reason is None
 
 
+def test_advance_reroll_state_used_elsewhere_carries_resolved_unit_name():
+    """S141 B12b: the caller-resolved unit name rides along as the
+    "used_elsewhere" reason → header suffix "used on ⟨Einheit⟩" on the card."""
+    from gameMechanic.movementPhase import _advance_reroll_state
+
+    strat = _reroll_strat()
+    used_ids = {strat.id}
+    state, reason = _advance_reroll_state(
+        strat, False, "advanced", 3, used_ids, set(), False, "Boyz Mob"
+    )
+    assert state == "used_elsewhere"
+    assert reason == "Boyz Mob"
+
+
 def test_advance_reroll_state_locked_cp_insufficient_when_not_used():
     from gameMechanic.movementPhase import _advance_reroll_state
 

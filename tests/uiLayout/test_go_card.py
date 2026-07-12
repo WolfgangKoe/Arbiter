@@ -128,10 +128,29 @@ def test_go_card_locked_without_reason_omits_suffix_span() -> None:
     assert "font-style:italic" not in html
 
 
-def test_go_card_reason_only_applies_to_locked_state() -> None:
-    # locked_reason is a no-op outside "locked" — other states never show it.
-    html = go_card_html("Fire Overwatch", 1, "ready", locked_reason="should not appear")
-    assert "should not appear" not in html
+def test_go_card_reason_ignored_outside_locked_and_used_elsewhere() -> None:
+    # locked_reason renders only in "locked" (verbatim) and "used_elsewhere"
+    # ("used on ⟨Einheit⟩", S141 B12b) — every other state never shows it.
+    # (Deliberate contract change S141: pre-B12b this suffix was locked-only.)
+    for state in ("ready", "dormant", "used"):
+        html = go_card_html("Fire Overwatch", 1, state, locked_reason="should not appear")
+        assert "should not appear" not in html
+
+
+def test_go_card_used_elsewhere_appends_used_on_unit_suffix() -> None:
+    """S141 B12b (design_system.md §6.1 5th state): a card whose GO was spent
+    at ANOTHER anchor this phase shows the header suffix "used on ⟨Einheit⟩"
+    when the spend recorded a unit — locked_reason carries the raw unit name,
+    go_card_html owns the wording."""
+    html = go_card_html("Command Re-Roll", 1, "used_elsewhere", locked_reason="Boyz Mob")
+    assert "used on Boyz Mob" in html
+
+
+def test_go_card_used_elsewhere_without_unit_omits_suffix() -> None:
+    # Spec: suffix only "falls eine Einheit bekannt" — no name, no suffix span.
+    html = go_card_html("Command Re-Roll", 1, "used_elsewhere")
+    assert "used on" not in html
+    assert "font-style:italic" not in html
 
 
 def test_go_card_shows_target_unit_name_when_given() -> None:
