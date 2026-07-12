@@ -84,6 +84,12 @@ Delta-Abgleich gegen `docs/work/wahapedia_orks/` nötig. **Reihenfolge nach Stak
 erst nach Abschluss Stufe B** — die allgemeine Logik (Stufe A) gilt bereits für beide
 Fraktionen, Stufe B als „zweite Anwendung des Musters" schärft den Delta-Prozess für Stufe C.
 
+**S141-Vorarbeit:** neues Roster `data/rosters/orks_transport.yaml` (Evil Sunz, Gunwagon
+TRANSPORT, Warboss, 10 Boyz, 10 Gretchin, 330 Pkt., Commit `cbaeeb2`) entblockt die manuelle
+Verifikation von Emergency Disembarkation + Klan-Affinität an einem echten Ork-Roster mit
+TRANSPORT-Unit — zuvor scheiterte das mangels geeignetem Roster (S139-Befund). Manuelle
+UI-Verifikation dazu noch offen (s. `docs/goals/backlog.md` §3).
+
 ### UX-/UI-Pass vor Ziel8 — Kandidatenliste (Entscheidungsvorlage, keine Priorisierung)
 
 Beobachtungen aus dem Render-Code (`gameProtocoll.py`), gesammelt während der Stufe-A-Planung —

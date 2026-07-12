@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 11:15 CEST
+Stand: 2026-07-12 17:44 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,21 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 02:03 76ce  █████████░░░ 117k ✅    ████░░  75%    ▚▚▚█········
+07-12 11:18 dedb  ████████████ 147k ⚠️   █████░  81%    ▚▚▚▚········
+         SA_1·  ██████████░░ 131k ⚠️   Investigator 1: GO-Karten-Renderin…
+         SA_2·  ███░░░░░░░░░  32k ✅    Locate stratagem helper signatures
+         SA_3·  ███████████░ 133k ⚠️   Executor 3: B12b-Header-Suffix
+         SA_4·  ████████░░░░  96k ✅    Investigator 2: Emergency Disembar…
+         SA_5·  ████████░░░░ 104k ✅    Planner: Session-Plan erstellen
+         SA_6·  ████████░░░░  96k ✅    Executor 2a: mypy state-Contract-F…
+         SA_7·  █████░░░░░░░  67k ✅    Fix B: Movement-Timing + Abdunkeln
+         SA_8·  ██████░░░░░░  79k ✅    Executor 1: Ork-Roster mit Transpo…
+         SA_9·  ███████████░ 138k ⚠️   Executor 2b: mypy Protocol+Phase-D…
+         SA_10·  █████████░░░ 108k ✅    Executor: Artefakt-Nachzug S141
+         SA_11·  █░░░░░░░░░░░  11k ✅    Check helper function signatures
+         SA_12·  ██████░░░░░░  75k ✅    Fix A: Emergency-Disembark sichtbar
+----------------- ---------------------- -------------- ------------
+07-12 02:03 76ce  █████████░░░ 119k ✅    ████░░  72%    ▚▚▚█········
          SA_1·  ██████░░░░░░  81k ✅    S140 Welle 1 Engine-Fix
          SA_2·  ████████░░░░ 102k ✅    S140 Planning-Entwurf erstellen
          SA_3·  ██████░░░░░░  70k ✅    S140 Welle 3 mypy-Ratchet

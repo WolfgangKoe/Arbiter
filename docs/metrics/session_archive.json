@@ -3827,8 +3827,8 @@
   "76ce5f18-7084-438e-955b-beb1a03f385b": {
     "started_at": "2026-07-12T00:03:21.303Z",
     "task": "start sessino",
-    "peak_context": 116553,
-    "subagent_share": 75.08174553799411,
+    "peak_context": 118538,
+    "subagent_share": 72.17874269740783,
     "by_tier": {
       "Sonnet": 12009165,
       "Fable": 3782764,
@@ -3869,6 +3869,104 @@
         "tier": "Opus",
         "peak_context": 75366,
         "started_at": "2026-07-12T00:03:21.303Z"
+      }
+    ]
+  },
+  "dedbab76-448d-4334-b6ef-c30432fa5c10": {
+    "started_at": "2026-07-12T09:18:05.592Z",
+    "task": "start session",
+    "peak_context": 147367,
+    "subagent_share": 81.4582242300624,
+    "by_tier": {
+      "Sonnet": 41512475,
+      "Haiku": 109111,
+      "Fable": 17555452,
+      "Opus": 452676
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Investigator 1: GO-Karten-Rendering-Befunde",
+        "tier": "Sonnet",
+        "peak_context": 131211,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Locate stratagem helper signatures",
+        "tier": "Haiku",
+        "peak_context": 31888,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 3: B12b-Header-Suffix",
+        "tier": "Sonnet",
+        "peak_context": 132791,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Investigator 2: Emergency Disembark + Transport",
+        "tier": "Sonnet",
+        "peak_context": 96436,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: Session-Plan erstellen",
+        "tier": "Sonnet",
+        "peak_context": 104433,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 2a: mypy state-Contract-Fix",
+        "tier": "Sonnet",
+        "peak_context": 95692,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Fix B: Movement-Timing + Abdunkeln",
+        "tier": "Sonnet",
+        "peak_context": 66746,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 1: Ork-Roster mit Transport",
+        "tier": "Sonnet",
+        "peak_context": 78912,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 2b: mypy Protocol+Phase-Dateien",
+        "tier": "Sonnet",
+        "peak_context": 137730,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Artefakt-Nachzug S141",
+        "tier": "Sonnet",
+        "peak_context": 107989,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Check helper function signatures",
+        "tier": "Sonnet",
+        "peak_context": 11045,
+        "started_at": "2026-07-12T09:18:05.592Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Fix A: Emergency-Disembark sichtbar",
+        "tier": "Sonnet",
+        "peak_context": 74721,
+        "started_at": "2026-07-12T09:18:05.592Z"
       }
     ]
   }

@@ -14,7 +14,7 @@
 - **Planner-Schreibrecht (S140-Maßnahme 2):** Planner als general-purpose-Subagent beauftragen (nicht Plan-Agent-Typ) — der legt den Entwurf selbst nach `docs/handoff/` ab, statt ihn durchs Koordinator-Fenster zu schleusen.
 - **Grundannahmen-Block (S131):** Konzept-Dokumente starten mit bestätigungspflichtigen Grundannahmen (App würfelt NICHT — Tischwürfe!) → `agent_scopes.md`.
 - **Executor-Klausel:** Dateiänderungen nur über Edit/Write, Bash nur lesend/git/pytest (S123); Selbstprüfliste enthält `python tools/mypy_gate.py` (S128).
-- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (Stand S138: 62 — zwei Sessions überfällig, S139 P1-Pflicht).
+- **mypy Zero-Error-Ratchet:** Baseline sinkt jede Session Richtung 0 (Stand S138: 62 — zwei Sessions überfällig, S139 P1-Pflicht; **S141: 48 → 28**, `state`-Contract-Fix erledigt, Rest 17 `uiLayout/` + 11 `gameMechanic/`-Restfehler anderer Klasse, s. `backlog.md` §4).
 - **Vollsuite-Timeout (S136):** Bash-`timeout: 600000` explizit setzen. Playwright = Standard für funktionale UI-Befunde.
 - **Session-Limit-Abbrüche (S137):** Bricht ein Subagent mit „session limit" ab, NICHT neu starten — per `SendMessage` resumen (Kontext intakt, hat 6/6 funktioniert). Freigabe-Gate re-armt sich beim Neustart → Koordinator re-armt nur bei dokumentierter Chat-Freigabe.
 - **markdownlint-Trial (S137–S139):** `.markdownlint.jsonc` + `npm run lint:md` (cli2 v0.14, Node-18-Pin). IDE-Diagnosen erreichen den Koordinator nach Edits. Nach S139: Stakeholder entscheidet behalten/entfernen.
@@ -24,7 +24,16 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S140, 2026-07-12)
+## Aktueller Stand (nach S141, 2026-07-12)
+
+S141: mypy-Baseline **48 → 28** (`state`-Contract-Fix, Commits `42af867`/`292b3ad`);
+Ork-Transport-Roster `orks_transport.yaml` (`cbaeeb2`); B12b-Suffix verdrahtet (`cdb55e2`);
+zwei UI-Verifikations-Bugfixes: Emergency-Disembark-Sichtbarkeit (`f36f1e7`),
+Movement-Timing/Abdunkeln (`7fc8b16`). Vollsuite **1783 / 99,15 %**. Zwei weitere gemeldete
+Bugs (Insane-Bravery-Ziel, Cross-Player-Leak) diagnostiziert, wegen Korridor nach S142
+vertagt — Fix-Orte in `docs/handoff/S141_ui_befunde_group_a.md`.
+
+## Stand nach S140 (2026-07-12)
 
 S140 (Review **GO**, 0 Auflagen; Vollsuite 1772 passed / 99,14 %, mypy **54 → 48**):
 **Dynastie↔Protokoll-Kopplung komplett** — Round-Zweig wertet `subfaction_affinity`
@@ -40,34 +49,39 @@ Stakeholder-Entscheid S140: erfassen, nicht umsetzen).
 
 Frühere Sessions (S60–S139): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S141)
+### ▶ Nächster Schritt (S142)
 
-1. **Roster mit Subfactions anlegen (Stakeholder-Auftrag S140):** Necron- **und**
-   Ork-Roster in `data/rosters/` mit gesetzten Subfactions (verschiedene Dynastien/
-   Klans), damit Affinitäts-UI und Subfaction-Features real prüfbar sind (S139:
-   Emergency Disembarkation scheiterte schon an fehlendem TRANSPORT-Roster — breit
-   denken: Subfactions + Transport abdecken).
-2. **mypy `state: dict`-Contract-Fix (Retro-Maßnahme 3, eigener geplanter Schritt):**
-   `phase_handler.py`/`phase_runner.py` + 7 Phase-Dateien wiederholen
-   `state: dict  # type: ignore[type-arg]` — Fix auf `MutableMapping[str, Any]`
-   (SessionStateProxy-kompatibel) senkt mehrere Posten zugleich. Baseline 48; weitere
-   Top-Posten: `armyCard.py` 6, `shootingPhase.py` 5, `movementPhase.py` 5; dazu alter
-   `# type: ignore[type-arg]` in `ability_engine.py:141` (Review-Hinweis S140).
-3. **Dokumentierte Ratchet-Schulden (unverändert aus S139):** (a) B12b-Header-Suffix
-   „used on ⟨Einheit⟩" — XS-Folge-Task; (b) Stil-Nit `undo_stratagem` in-place-Mutation
-   → bei nächster Modul-Berührung; (c) R-PROTO-02 `status: offen` (Aura-Tischhinweis
-   entfernt, neuer Mechanismus offen).
-4. **Rand-Design-Konzept** (heller Streifen links, beim 2. Spieler spiegeln, auf GOs
-   übertragen); **GO-Keyword-Nachpflege** in YAML (systematisch, Subagent); **Rest
-   unverändert (S137/S138):** 4c-Folge-Split (Paket 7/8) → B7/B9-Konzept + B2 Option A;
-   Fold-Heuristik+Subfaction-Wiring (Retro-Maßnahme 3); Totalvernichtungs-Spielende;
-   Kleinschulden (Smoke-Test `hook_pytest_foreground.py`, `_common.py`-Refactor,
-   S130-GO-Verifikation, 037 Docker-Smoke, Deny-Caption, Direction-Entscheide,
-   B4/B8-Welle-2-Screenshots + HI-UI-Ausrollung). Details → `backlog.md`.
+**Priorität — S141-Verifikations-Bugs, diagnostiziert & freigegeben, wegen Korridor vertagt
+(Fix-Orte in `docs/handoff/S141_ui_befunde_group_a.md`):**
 
-**Retro S140 (freigegeben 1–3):** Marker-Format in Regel oben präzisiert (M1);
-Planner-Schreibrecht-Regel ergänzt (M2); `state: dict`-Contract-Fix als S141-Punkt 2
-eingeplant (M3). Retro-Leitlinie S139 (Kommentare reduzieren) bleibt in Kraft.
+1. **FixC — Insane Bravery erzwingt kein Ziel:** `_effect_gate_met()` (`gameProtocoll.py`
+   Z.145-177) kennt nur die Desperate-Breakout-Gate-Form, nicht `auto_pass_morale` →
+   „Use" geht mit `unit_key=None` durch, CP gebucht, Effekt verpufft lautlos. Fix +
+   `_use_callback` (Z.249-262). Aufwand S.
+2. **FixD — Cross-Player-Area-Leak (Whirling Onslaught über beide Spalten):**
+   `render_attack_resolution()` in `fightPhase.py` (Z.558-573) + `shootingPhase.py`
+   (Z.187) außerhalb der Zwei-Spalten-Struktur (Muster wie S139-E7, nie nachgezogen);
+   sekundär `target_name` in `_common.py::render_reactive_stratagem_box` (Z.876-889).
+   Stakeholder-Auftrag: Audit ALLER `*Phase.py` auf dasselbe Muster. Aufwand M.
+
+**Vertagte Befunde (S141-Verifikation):**
+
+1. **Insassen-Feature (Emergency-Disembark Teil B):** kein Konzept „Einheit sitzt in
+   Transport" (Roster-YAML/State/UI) — eigenes Planning; Design-Fragen (Start-Zustand vs.
+   In-Game-UI; Kapazität hart vs. Hinweis) in `docs/handoff/S141_ui_befunde_group_b.md`.
+2. **Verwandter `on_declaration`-Befund (analog FixA):** `chargephase.py:170`/
+   `fightPhase.py:460` reichen kein `unit_for_conditions` durch → `efficient_disintegration`
+   evtl. betroffen; „unit selected to shoot"-Anker fehlt in `shootingPhase.py`. → `backlog.md`.
+3. **Roster-Test-Lücke:** kein Test lädt alle `data/rosters/` durch (`test_loader.py:1259`
+   fest 2 Roster). → `backlog.md` §4d.
+
+**Offene manuelle UI-Verifikation:** Emergency-Disembark-Sichtbarkeit (FixA),
+Movement-Abdunkeln (FixB), B12b-Suffix, Klan-Affinität am Ork-Transport-Roster (`backlog.md` §3).
+
+**Ratchet/Rest unverändert:** mypy-Baseline 28 weiter Richtung 0 (`uiLayout/` 17 +
+`gameMechanic/` 11, `backlog.md` §4); Stil-Nit `undo_stratagem` in-place; R-PROTO-02 offen;
+Rand-Design-Konzept; GO-Keyword-Nachpflege (zurückgestellt bis B13, Schema-Befund);
+4c-Folge-Split, Fold-Heuristik, Totalvernichtungs-Spielende, Kleinschulden → `backlog.md`.
 
 **Prozess:** Vollsuite bei parallelen Wellen nur EINMAL zentral am Wellen-Ende
 (`operating_model.md` Event 3).

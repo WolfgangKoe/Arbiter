@@ -232,10 +232,24 @@ Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README
     (Attacken-/Charge-Sequenz) zeigen NIE Undo; Once-per-Phase wird erzwungen (nach
     Hit-Einsatz zeigen Wound/Save „used"). Größerer Eingriff: Konzept
     `docs/handoff/S137_B12_konzept.md` (S137), Umsetzung als Teil-Briefs ≤ M danach.
+    - ✅ **B12b — Header-Suffix „used on ⟨Einheit⟩" verdrahtet (S141, Commit `cdb55e2f`):**
+      Resolver `stratagem_used_elsewhere_unit_name` (`src/uiLayout/_common.py`) + 3
+      Zustands-Mapper + Render-Bedingung in `go_card.py`; 9 neue Tests, Vollsuite 1781
+      grün / 99,15 %. **Randfall (bewusst offen, spec-konform):** Advance-Reroll-/Inline-
+      Spends übergeben konstruktionsbedingt kein `unit_key` an `spend_stratagem` → Suffix
+      bleibt dort leer („falls Einheit bekannt"). Optionaler XS-Folge-Task: uid durch
+      `spend_stratagem` durchreichen, falls das je gewünscht wird. **Manuelle UI-Verifikation
+      steht noch aus** (s. §3).
   - 🔲 **B13 — GO-Karte: Keyword-Badges (Stakeholder-Beobachtung S137):** GO-Karten zeigen
     keine Schlüsselwort-Chips (nur Name/CP/Regeltext). Neues Feature, eigener kleiner Plan;
     erweitert den GO-Card-Baustein (`design_system.md` §6). Keine Eil-Priorität
-    (Stakeholder-Entscheid S137: „ins Backlog").
+    (Stakeholder-Entscheid S137: „ins Backlog"). **S141-Nachtrag:** Vorziehen der Daten-
+    Nachpflege geprüft und zurückgestellt — `keywords:` existiert in **keiner** der 3
+    Stratagem-YAML-Dateien (0 Treffer `_shared`/`necrons`/`orks`) und fehlt auch auf der
+    `Stratagem`-Dataclass (`src/gameObjects/stratagem.py`); die Aufgabe ist Schema-
+    Erweiterung **plus** Datenpflege, kein reiner YAML-Task. Stakeholder-Entscheid S141:
+    zurückstellen, bis B13 selbst geplant wird (dann Schema+Loader+Daten in einem Aufwasch;
+    Details `docs/handoff/S141_planning.md` Aufgabe 4).
   - 🔲 **B14 — Badge-Kontrast-Pass (Stakeholder-Beobachtung S137):** Badges schwer
     erkennbar, v. a. STATIONARY (`--arb-muted` `#6b5f44`) zu dunkel. Vorschlag: heller
     Khaki `#9c8f6a`; prüfen, ob weitere gedämpfte Badges mit angehoben werden müssen.
@@ -421,6 +435,14 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 - [ ] Veil aus Nahkampf: kein „IN MELEE" danach; Undo stellt wieder her
 - [ ] Skorpekh-Roster: 2× Threshers + 1× Reap-Blade getrennt
 - [ ] S48 H1–H7 (Big Mek Wargear, Silent King Waffen, Living Metal, MWBD 2×, Badge-Farben, RP)
+- [ ] **B12b (S141, Commit `cdb55e2f`):** zentrale Stratagems-Liste — GO auf Einheit
+  einsetzen → Karte zeigt an allen anderen Angebotsstellen „Used" + „used on ⟨Einheit⟩"
+- [ ] **B12b (S141):** Charge-Phase Fire Overwatch zeigt den Suffix korrekt
+- [ ] **B12b (S141):** Movement Advance-Reroll zeigt **keinen** Suffix (kein `unit_key`
+  übergeben — spec-konformer Randfall, s. Backlog §2 B12b)
+- [ ] **Ziel7 Stufe C-Vorbereitung (S141, Commit `cbaeeb2`):** Emergency Disembarkation +
+  Klan-Affinität am neuen Ork-Transport-Roster (`data/rosters/orks_transport.yaml`, Evil
+  Sunz, Gunwagon TRANSPORT) real prüfen — war zuvor mangels TRANSPORT-Roster blockiert
 
 ---
 
@@ -453,14 +475,21 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
   gelisteten Items `orb`/`overlord`/`phaeron`/`dakka`/`klaw`/`tesla`/`arkana` waren bereits
   vor S128 aus `src/` entfernt — dieser Eintrag war insofern Doku-Drift, jetzt korrigiert.
   Details: [architecture_invariants.md](../spec/architecture_invariants.md) INV-4b.
-- 🟡 **mypy-Bestand modulweise abbauen** (Baseline jetzt 75, Stand 2026-07-07 S129 Task 3;
+- 🟡 **mypy-Bestand modulweise abbauen** (Baseline **28**, Stand 2026-07-12 S141;
   Folgearbeit zu Plan 038): `gameMechanic/game_state.py` (−34, Paket 2), `gameObjects/`
-  komplett (−18, Paket 3) und `gameMechanic/phase_runner.py` (−7, Root Cause: `phase_name`
+  komplett (−18, Paket 3), `gameMechanic/phase_runner.py` (−7, Root Cause: `phase_name`
   in den sieben Phase-Handlern war als Instanzattribut statt `ClassVar[str]` annotiert —
-  Protocol-Mismatch gegen `PhaseHandler.phase_name: ClassVar[str]`) sind erledigt. Verbleibend:
-  Rest von `gameMechanic/` (übrige Dateien außer `game_state.py`/`phase_runner.py`), dann
-  `uiLayout/` zuletzt (manuelle Render-Verifikation nötig). Pro Schritt Baseline in
-  `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
+  Protocol-Mismatch gegen `PhaseHandler.phase_name: ClassVar[str]`) sowie **S141: `state`-
+  Contract-Fix `dict` → `MutableMapping[str, Any]`** in `ability_engine.py`/
+  `unit_mutations.py`/`scenarios.py` (Commit `42af867`, Baseline blieb bei 48) und in
+  `phase_handler.py`/`phase_runner.py` + den 7 `*Phase.py`-Dateien + `_common.py` (Commit
+  `292b3ad`, Baseline **48 → 28**) sind erledigt. Verbleibend (Stand S141, 28 Fehler):
+  **`uiLayout/` zuletzt** (17 Fehler, manuelle Render-Verifikation nötig —
+  `armyCard.py`/`gameProtocoll.py`/`unitCard.py`/`armyList.py`/`detachmentCard.py`) plus
+  ein Rest von 11 Fehlern in `gameMechanic/` außerhalb des `state`-Contracts
+  (`ability_engine.py`/`attack_math.py` `type-arg`, `moralePhase.py`/`unit_mutations.py`
+  `no-any-return`/`arg-type` — kein `state: dict`-Fall mehr, andere Fehlerklassen). Pro
+  Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
   s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
 - **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
   Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
@@ -561,6 +590,12 @@ Modul-Level-`sys.modules["streamlit"]`-Mocks in 11 Testdateien konsolidieren (Fo
 S118-M2: `tests/gameMechanic/conftest.py` hat jetzt die session-scoped Fixture
 `_canonical_streamlit_mock`; die per-File-Mocks vor dem ersten src-Import sind noch dezentral).
 Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
+
+- 🔲 **Kein Test lädt alle Roster durch (S141-Befund):** `tests/gameObjects/test_loader.py:1259`
+  lädt nur `necrons_alpha` + `orks_test` fest verdrahtet — neue Roster in `data/rosters/`
+  (z. B. `orks_transport.yaml`, S141) werden von keinem Test automatisch mitgeprüft. Test-
+  Lücken-Kandidat: Loader-Test auf ein Verzeichnis-Glob über `data/rosters/*.yaml` umstellen,
+  damit ein kaputtes neues Roster den Loader-Gate bricht statt unbemerkt zu bleiben.
 
 ---
 
