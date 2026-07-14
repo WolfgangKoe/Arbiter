@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-12 23:28 CEST
+Stand: 2026-07-14 19:42 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-12 22:23 0149  ████████████ 170k ⛔    ████░░  63%    ▚▚█·········
+07-14 18:43 2574  ██████████░░ 119k ✅    ███░░░  55%    ············
+         SA_1·  ████████░░░░  94k ✅    Prioritäten-Konsolidierung umsetzen
+         SA_2·  ██████░░░░░░  73k ✅    Stufe-B-Verifikationsanleitung sch…
+----------------- ---------------------- -------------- ------------
+07-14 18:43 a845  █████████░░░ 107k ✅    ████░░  66%    ▚▚▚▚▚▚▚▚▚▚··
+         SA_1·  ████████████ 173k ⛔    Planning-Entwurf S145 erstellen
+----------------- ---------------------- -------------- ------------
+07-12 22:23 0149  ████████████ 174k ⛔    ████░░  61%    ▚▚█·········
          SA_1·  ███████████░ 142k ⚠️   Planner: Session-Planungsentwurf e…
          SA_2·  ██████░░░░░░  70k ✅    Executor: Doku-Maßnahmen 1+2+4
          SA_3·  █████████░░░ 110k ✅    Executor: mypy-Ratchet gameMechani…

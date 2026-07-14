@@ -4174,8 +4174,8 @@
   "01498047-d732-44d6-8362-06bc5cbcff66": {
     "started_at": "2026-07-12T20:23:43.292Z",
     "task": "starte nächste Session",
-    "peak_context": 170278,
-    "subagent_share": 62.868420205461796,
+    "peak_context": 173698,
+    "subagent_share": 60.759565922267186,
     "by_tier": {
       "Sonnet": 22476024,
       "Fable": 5606026,
@@ -4230,6 +4230,50 @@
         "tier": "Opus",
         "peak_context": 62049,
         "started_at": "2026-07-12T20:23:43.292Z"
+      }
+    ]
+  },
+  "257436e2-c47d-4bb7-9869-8239be539cca": {
+    "started_at": "2026-07-14T16:43:40.389Z",
+    "task": "Bevor wir weiter machen, müssen wir die branches gegeneinander auflösen. Neben dev und main haben wir noch einen dritte…",
+    "peak_context": 118991,
+    "subagent_share": 55.233138486866096,
+    "by_tier": {
+      "Sonnet": 5830979
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Prioritäten-Konsolidierung umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 93813,
+        "started_at": "2026-07-14T16:43:40.389Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stufe-B-Verifikationsanleitung schreiben",
+        "tier": "Sonnet",
+        "peak_context": 72944,
+        "started_at": "2026-07-14T16:43:40.389Z"
+      }
+    ]
+  },
+  "a845b506-2f87-4a48-b52f-25892793d3cc": {
+    "started_at": "2026-07-14T16:43:40.341Z",
+    "task": "Bevor wir weiter machen, müssen wir die branches gegeneinander auflösen. Neben dev und main haben wir noch einen dritte…",
+    "peak_context": 107005,
+    "subagent_share": 66.23311893232136,
+    "by_tier": {
+      "Sonnet": 1567949,
+      "Fable": 6540730
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S145 erstellen",
+        "tier": "Sonnet",
+        "peak_context": 172806,
+        "started_at": "2026-07-14T16:43:40.341Z"
       }
     ]
   }

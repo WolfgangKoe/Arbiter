@@ -39,7 +39,8 @@ run every verification command, and update your row below when done.
 | [041](041-render-orchestrierung-extrahieren-spike.md) | Render-Orchestrierung extrahieren (INV-6-Muster), Stufe 1: Mortal-Wounds, Psychic-Sequenz, Teleport-Gate | P2 (MITTEL) | L | 034 ✅, 040 ✅; NICHT parallel zu 015/026 | TODO |
 | [S142-FixD](S142_fixD_resolution_tabs.md) | FixD Cross-Player-Area-Leak: Resolution-Tabs strukturell in die Spieler-Spalten (S141 Befund 3, Stakeholder-Entscheid Wurzelbehandlung; `target_name`-Sofortlinderung läuft separat) | P1 (HOCH) | L (3 Teil-Briefe: M+M+S, je ≤ M) | NICHT parallel zu 041/015/026 (gleiche Dateien `_common.py`/`fightPhase.py`); Brief 2 zusätzlich hinter Mockup-Gate | FREIGEGEBEN (S144) — Brief 1 als S145-Aufgabe |
 
-**Empfohlene Reihenfolge (akt. S123 — 016 und 025 als erledigt verifiziert, siehe Archiv): 018 → 015 → 026 → 017.**
+Gesamt-Priorität/Reihenfolge → [docs/goals/backlog.md](../../goals/backlog.md) §Prioritätenliste
+(kanonisch, S145). Diese README führt nur den **Status je Plan** (Tabelle oben).
 025 rückt vor 016/017 (S95-Befund: Direktiven nicht-kanonisch, Stakeholder-Entscheid b).
 016 Group A / Conquering-Tyrant-P-Morale wurde durch 025 obsolet; der verbleibende Rest
 (RP-Hint + Dynastiebonus) ist bereits implementiert und UI-verifiziert (S89/S93) — siehe Archiv unten.
@@ -74,8 +75,8 @@ run every verification command, and update your row below when done.
 - **041 zwingend NACH 034 (✅) + 040 und NICHT parallel zu 015/026**: extrahiert aus
   `fightPhase.py`/`psychicPhase.py`/`movementPhase.py`; Stufe 2+ (weitere
   `_common.py`-Cluster) erst nach Review von Stufe 1 planen.
-- **Empfohlene Reihenfolge der Rest-Pläne**: 041 (038/039/040 ✅). Verzahnung
-  mit der Alt-Queue: 041 erst nach 015/026.
+- **Rest-Pläne:** 041 offen (038/039/040 ✅). Verzahnung mit der Alt-Queue: 041 erst nach
+  015/026 (Reihenfolge/Priorität → `docs/goals/backlog.md` §Prioritätenliste).
 
 **Bewusst NICHT geplant (Feature-Queue):**
 - **P16 (Sv>6+-Randfall)**: bereits implementiert in `dice_html.py:98-106,

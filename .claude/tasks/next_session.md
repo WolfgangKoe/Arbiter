@@ -27,58 +27,57 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S144, 2026-07-12)
+## Aktueller Stand (nach S145, 2026-07-14)
 
-S144: (1) **Review+Retro S143 nachgeholt** (GO m. Auflagen); alle 4 Maßnahmen umgesetzt:
-Klan-Affinität-Doku-Drift geschlossen (`ziel7.md`/`backlog.md`), Cap-DRY-Backlogschuld,
-Worktree-Prune, **Review-Budget-Regel** in `CLAUDE.md`. (2) **Stratagem-Datenpflege:**
-Necrons 56→40 (16 White-Dwarf: Cult of the Cryptek + Annihilation Legion), Orks 28→17
-(**11** Vigilus statt geplanter 8 — Abgleichliste hatte sich verzählt, 3 Folge-Stratagems
-wären sonst verwaist; Executor-Selbst-Stopp hat das gefangen). (3) **mypy 28→24:**
-abilityEngine/stratagemEngine Option A+B, Helfer `_sum_effect_value` (6 Call-Sites,
-`combine=min` für `ability_invuln_save` mit Seed-aus-erstem-Treffer), 8 Regressionstests;
-Punkt-4-Befund als Backlog §4 „DRY Directive-Aktiv-Logik". (4) **Klan-/Dynastie-Konzept**
-(`docs/handoff/S144_klan_dynastie_konzept.md`, NEEDS-DECISION): Prämisse „Rohtexte fehlen"
-war falsch — `subfaction_abilities.yaml` existiert seit ~S100 samt Engine-Anbindung, ABER
-5/13 Einträge inhaltlich falsch (Nihilakh/Sautekh/Mephrit/Nephrekh/Novokh/Snakebites) und
-Engine macht alle 13 wirkungslos (kein Subfraktions-Filter, 4 tote Handler, kein UI-Konsument)
-→ eher Bugfix+Engine-Lücke als neues Feature. (5) **S144-Review: GO nach Auflage**
-(DONE-Handoffs sofort löschen); Vollsuite **1816 passed / 99,12 %**, Architektur-Gate 8/8,
-mypy 24 == Baseline. Handoff bereinigt (S141/S142/S143-Altdateien + 2 Screenshots weg).
-Aufgaben on_target-Anker + FixD Brief 1 per Review-Budget-Regel **nach S145 verschoben**.
+S145: Planungs-/Konsolidierungs-Session (kein Code). (1) **Branches konsolidiert:** nur noch
+`dev` + `main`, `dev` gepusht (`942e1ba`). (2) **Alle 6 Klan-/Dynastie-Fragen aus
+`S144_klan_dynastie_konzept.md` entschieden** (`S145_planning.md`, Stakeholder-Entscheide
+2026-07-14): Frage 1 (Nihilakh) faktisch geklärt gegen `faction_overview.txt`; Frage 2
+(Reihenfolge Daten vs. Engine) zweistufig K1→K2 entschieden; **Frage 3: Option B**
+(`ability_type: subfaction_passive`, neuer Typ statt `triggered`-Reparatur) — K2-Scope zusätzlich
+erweitert um YAML-Aufräumen (totes `source`-Feld u. ä., per grep im K2-Brief zu verifizieren),
+UI-Sichtbarkeit der passiven Effekte (Nephrekh 6+-Invuln, Nihilakh AP-1→0 als Badge/Hinweis),
+Doppel-Direktiven-Klausel muss für alle 6 Dynastien-Protokolle funktionieren; **Option C**
+(abilityEngine als Paket aufdröseln) **zurückgestellt** mit Schwellwert (~800 Zeilen
+`abilityEngine.py` oder DRY-Schuld-Angang `backlog.md §4`) — K2-Neucode kommt von Anfang an in
+ein eigenes Modul `gameMechanic/subfactionPassives.py`; NEU als paralleles Planungspaket
+aufgenommen: „abilityEngine-Refactor-Vorplanung" (analog FixD-Vorplanung, nur Planung/Handoff,
+kein Code, jederzeit parallel startbar). Frage 4 (Klasse-C-Fälle) nach Bestandsmuster gelöst,
+Frage 5 (Spec-Nachzug) wird Pflichtteil von K2. (3) **Prioritäten konsolidiert:** vier
+driftende Prio-Quellen zusammengeführt — kanonischer Ort der Gesamt-Reihenfolge ist jetzt
+**`docs/goals/backlog.md` §Prioritätenliste** (10 Ränge + Refactor-Vorplanung parallel);
+`docs/audit/plans/README.md` führt nur noch Status je Plan; stale Tag `[PRIO-NÄCHSTE]` bei
+Backlog-Eintrag #2b entfernt (Text blieb, Rang 10).
 
-Frühere Sessions (S60–S143): `docs/metrics/session_archive.md`.
+Frühere Sessions (S60–S144): `docs/metrics/session_archive.md`.
 
-### ▶ Nächster Schritt (S145, Reihenfolge)
+### ▶ Nächster Schritt (S146)
 
-1. **Klan-/Dynastie-Konzept entscheiden:** 6 Entscheidungsfragen + 7 Grundannahmen aus
-   `S144_klan_dynastie_konzept.md` in den Planning-Entwurf aufnehmen (Stakeholder-Entscheid,
-   danach Umsetzungsplan als eigene Briefs).
-2. **on_target-Anker Option A** (`S143_on_target_anker_konzept.md`, freigegeben S143):
-   `render_reactive_stratagem_box` in `render_group_assignment` (`_common.py:~2506`),
-   Verschwinde-Regel bei Ziel-Toggle. Kollisionsfrei mit FixD.
-3. **FixD Brief 1** (Plan freigegeben S144, `docs/audit/plans/S142_fixD_resolution_tabs.md`):
-   Compute/Render-Trennung in `_common.py` — README-Status auf FREIGEGEBEN setzen.
-4. **Vigilus-Warlord-Traits entfernen** (Entscheid S144): 5 Einträge in
-   `data/wh40k_9e/orks/warlord_traits.yaml` (Keywords BLITZ BRIGADE, DREAD WAAAGH!,
-   KULT OF SPEED, STOMPA MOB ×2), analog Stratagem-Muster inkl. grep-Absicherung.
-5. **mypy-Ratchet uiLayout** (17 Fehler) — erst nach FixD Brief 1–3 (Datei-Überschneidung
-   `_common.py`).
+Reihenfolge/Priorität nur noch in `docs/goals/backlog.md` §Prioritätenliste — hier nur der
+unmittelbar nächste Schritt:
+
+1. **Vigilus-Warlord-Traits entfernen** (Rang 3) ∥ **on_target-Anker Option A** (Rang 2,
+   `S143_on_target_anker_konzept.md`) — dateidisjunkt, parallelisierbar.
+2. Danach: **Klan/Dynastie Brief K1** (Wortlaut-Fixes, Rang 6) ∥ **FixD Brief 1** (Rang 4,
+   `docs/audit/plans/S142_fixD_resolution_tabs.md`).
+3. **Stufe-B-Verifikation** (Rang 8) läuft stakeholderseitig laufend, Anleitung in
+   `docs/handoff/S145_stufeB_verifikation.md`.
 
 **Manuelle UI-Verifikation (offen):**
-- 🔲 Ziel 7 Stufe B: Necron-Roster-Verifikation (`ziel7.md:76`).
+
+- 🔲 Ziel 7 Stufe B: Necron-Roster-Verifikation (`ziel7.md:76`) — s. Punkt 3 oben.
 - 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — erst im Roster-Builder prüfbar.
 - 🔲 B12b-Punkte (3) weiter offen.
 
-**Offene Handoff-Marker:** `S144_klan_dynastie_konzept.md` NEEDS-DECISION;
-`S141_ui_befunde_group_a.md` bleibt bis FixC+FixD; `S144_planning.md`/`S144_review*.md`
-ANSWERED → nach S145-Start-Sichtung per Lifecycle löschen.
+**Offene Handoff-Marker:** `S144_klan_dynastie_konzept.md` → ANSWERED (S145-Entscheid, s.o.);
+`S145_planning.md` → ANSWERED; `S141_ui_befunde_group_a.md` bleibt bis FixC+FixD;
+`S144_planning.md`/`S144_review.md`/`S144_review_s143.md` gelöscht (S145, Lifecycle erfüllt).
 
-**Erkenntnisse S144:** (a) Retro-M1 Bestandsaufnahme-Pflicht + M2 DONE-sofort-löschen in
-`agent_scopes.md` verankert. (b) rotate_history-Marker-Drift behoben durch Angleichung der
-Überschrift hier auf Singular („Nächster Schritt") — Tool läuft wieder; Erkenntnis (d) aus
-S143 damit erledigt. (c) Parallel-Executoren brauchen getrennte `COVERAGE_FILE` — hat in
-S144 kollisionsfrei funktioniert (4 Agenten gleichzeitig).
+**Erkenntnisse S144 (unverändert gültig):** (a) Retro-M1 Bestandsaufnahme-Pflicht + M2
+DONE-sofort-löschen in `agent_scopes.md` verankert. (b) rotate_history-Marker-Drift behoben
+durch Angleichung der Überschrift hier auf Singular („Nächster Schritt") — Tool läuft wieder.
+(c) Parallel-Executoren brauchen getrennte `COVERAGE_FILE` — kollisionsfrei getestet
+(4 Agenten gleichzeitig).
 
 **Ratchet/Rest unverändert:** `on_declaration`-Befund (`chargePhase.py`/`fightPhase.py`);
 Stil-Nit `undo_stratagem` in-place; R-PROTO-02; Rand-Design-Konzept; GO-Keyword-Nachpflege

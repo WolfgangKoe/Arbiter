@@ -11,6 +11,32 @@ Letzter Abgleich: 2026-06-30 (S112 — Coverage-Schuld M3 erledigt (100 %), §5 
 
 ---
 
+## Prioritätenliste (Stand 2026-07-14, S145)
+
+**Kanonischer Ort der Gesamt-Reihenfolge** (Konsens-Entscheid `docs/handoff/S145_planning.md`
+§6.2/6.3, Stakeholder-Freigabe 2026-07-14). Details je Paket stehen in den verlinkten Quellen —
+hier nur Rang, Paket, Kurzbegründung, Parallelisierbarkeit.
+
+| Rang | Arbeitspaket | Begründung | Parallel? |
+|---|---|---|---|
+| 1 | Klan/Dynastie-Entscheid (Frage 3 + Prioritätenliste) | blockiert Rang 6–7; Konsens-Entscheid gehört an den Session-Anfang | — |
+| 2 | on_target-Anker Option A | S143 freigegeben, kleiner bestätigter UX-Fix | ⛔ nicht mit Rang 4/5 (gleiche Datei `_common.py`) |
+| 3 | Vigilus-Warlord-Traits entfernen | S144 entschieden, Datenqualitäts-Schuld | ✅ mit Rang 2 (disjunkt) |
+| 4 | FixD Brief 1 (Compute/Render-Trennung) | einziger P1-Plan; entblockt Brief 2+3 und mypy-uiLayout | ⛔ nach Rang 2 (gleiche Datei); ✅ mit Rang 6 |
+| 5 | FixD Brief 2 + 3 | Brief 2 hinter Mockup-Gate, Brief 3 = Spec-Nachzug | ⛔ sequenziell nach Brief 1 |
+| 6 | Klan/Dynastie Brief K1 (Wortlaut-Bugfix) | 5 fachlich falsche Einträge, data-only, Quelle lokal belegt | ✅ mit Rang 4/5 (disjunkt) |
+| 7 | Klan/Dynastie K2+ (Engine-Filter, `subfaction_passive`, Badge, Spec-Nachzug) | macht 13 Einträge erstmals wirksam; L → vor Vergabe in ≤ M-Briefs splitten | teils, Detailschnitt im Umsetzungsplan |
+| 8 | Stufe-B-Rest: Necron-Roster-UI-Verifikation | hält das ziel7-Stufengate ehrlich; reine Stakeholder-Bildschirmzeit | ✅ jederzeit |
+| 9 | mypy-Ratchet uiLayout (17) | Dateiüberschneidung `_common.py` mit FixD | ⛔ erst nach Rang 5 |
+| 10 | #2b Direktiv-Lock-Rest (ab Bewegungsphase sperren) | eingereiht (S145-Votum), kein akuter Blocker mehr | nach Einreihung |
+| ∥ | **abilityEngine-Refactor-Vorplanung** (Planungspaket, kein Code) | analog FixD-Vorplanung; Split-Trigger erst ab ~800 Zeilen `abilityEngine.py` oder DRY-Schuld-Angang (`§4` unten) — Details `S145_planning.md` §Option C | ✅ parallel zu allem, jederzeit startbar |
+
+Detailquellen: `docs/handoff/S145_planning.md` §6.2/6.3 (Herleitung + Begründungstiefe),
+`docs/audit/plans/README.md` (Status je Plan), `.claude/tasks/next_session.md` (nächster Schritt,
+1–3 Punkte).
+
+---
+
 ## 0. Aktuelle Findings (S51 — Badge / Protokoll / Würfel)
 
 Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
@@ -28,7 +54,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
   Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
   Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
   Prism als echter Wargear-Choice — eigenständiger Task).
-- 🔴 **[PRIO-NÄCHSTE] #2b Direktiv-Lock** (Phase 2, S52 Root-Cause): **Setup-Leck erledigt 2026-06-20.**
+- 🔲 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause; Priorität: siehe Prioritätenliste Rang 10):
+  **Setup-Leck erledigt 2026-06-20.**
   Bug (Nutzer-Screenshots): Protokoll-Direktiven-Buttons + WAAAGH-Status erschienen im Setup
   und wurden durch den First-Player-Toggle (`active` gesetzt) sogar wählbar; der Auto-Block
   `if not active_id` schrieb `round_choice_active_*` schon im Setup. **Fix:** reiner Helfer
@@ -105,7 +132,8 @@ Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../sp
 
 ## 1. Aktive Implementierungs-Pläne (Executor-Queue)
 
-Plan-Status & Reihenfolge → [docs/audit/plans/README.md](../audit/plans/README.md) (kanonisch)
+Plan-Status → [docs/audit/plans/README.md](../audit/plans/README.md) (kanonisch für Status je
+Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
 
 ---
 
