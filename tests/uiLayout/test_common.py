@@ -1287,23 +1287,9 @@ def test_shadows_of_drazak_hidden_without_any_unit_passed(monkeypatch) -> None:
     assert all(c["name"] != "Shadows of Drazak" for c in captured)
 
 
-def test_whirling_onslaught_shown_at_wound_anchor_for_matching_unit(monkeypatch) -> None:
-    session = _reactive_box_session()
-    captured = _install_reactive_box_session(monkeypatch, session)
-    destroyer = _unit_with_keywords("DESTROYER CULT", name_en="Destroyers")
-
-    common.render_reactive_stratagem_box(
-        "Necrons",
-        phase="shooting",
-        event="on_target",
-        decline_key="tab-1",
-        context_caption="irrelevant",
-        unit_for_conditions=destroyer,
-        effect_type="debuff_roll",
-        effect_stat="wound",
-    )
-
-    assert any(c["name"] == "Whirling Onslaught" for c in captured)
+# test_whirling_onslaught_shown_at_wound_anchor_for_matching_unit wurde in S146
+# (Fix 2) entfernt: der Wound-Anker-Aufruf existiert nicht mehr, on_target-GOs
+# rendern nur noch am Deklarations-Anker (test_declaration_anchor_* unten).
 
 
 def test_whirling_onslaught_absent_at_hit_anchor(monkeypatch) -> None:
@@ -2331,3 +2317,103 @@ def test_render_resolution_tab_no_extra_divider_before_save_block(monkeypatch) -
     assert (
         divider_count == 2
     ), f"Expected exactly 2 block dividers (WOUND, SAVE), got {divider_count}"
+
+
+# ---------------------------------------------------------------------------
+# S146 1a — Declaration-time on_target anchor (S143 concept, Option A +
+# S146 Fix 2): render_group_assignment renders render_reactive_stratagem_box
+# per assigned target, so a "selected as the target of an attack" reactive GO
+# (Whirling Onslaught, real Necrons data) is clickable the moment the target
+# is designated. Since Fix 2 this is the ONLY render spot for wound-roll
+# on_target GOs (the Wound-Anker call in _render_resolution_tab was removed);
+# used_here/used_elsewhere bookkeeping prevents a double CP spend across the
+# per-target tiles of this anchor.
+# ---------------------------------------------------------------------------
+
+
+def _declaration_anchor_setup(monkeypatch, targets=None):  # type: ignore[no-untyped-def]
+    """Fight-phase session: Orks group g1 has designated Necron Destroyers."""
+    targets = targets or [("Necrons", "u_def")]
+    unit, _ = _melee_group_fixture()  # Orks attacker, group "g1"
+    atk_state = {"group_models": {"g1": 5}, "melee_with": list(targets)}
+    session = _reactive_box_session(
+        phase_idx=6,  # fight — Whirling Onslaught is phase "any"
+        selected_unit=("Orks", "atk1"),
+        selected_model_group="g1",
+        group_targets={"g1": list(targets)},
+        group_decl={},
+    )
+    captured = _install_reactive_box_session(monkeypatch, session)
+    destroyers = SimpleNamespace(
+        name_en="Skorpekh Destroyers",
+        toughness=5,
+        save=3,
+        invuln_save=None,
+        has_keyword=lambda kw: kw == "DESTROYER CULT",
+    )
+    monkeypatch.setattr(
+        common,
+        "lookup",
+        lambda faction, uid: (unit, atk_state) if uid == "atk1" else (destroyers, {}),
+    )
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 3)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    monkeypatch.setattr(common, "render_inline_command_reroll", MagicMock())
+    return unit, atk_state, session, captured, destroyers
+
+
+def test_declaration_anchor_shows_whirling_onslaught_when_target_assigned(monkeypatch) -> None:
+    unit, atk_state, _, captured, _ = _declaration_anchor_setup(monkeypatch)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    card = next(c for c in captured if c["name"] == "Whirling Onslaught")
+    assert card["state"] == "ready"
+    # Per-(gid, target) decline_key keeps multi-target keys collision-free
+    assert "decl_target_g1_atk1_u_def" in card["key"]
+
+
+def test_declaration_anchor_card_disappears_when_target_toggled_off(monkeypatch) -> None:
+    """Pflichtteil (S143 Konzept, Option A): the card must vanish on the very
+    next rerun after toggle_group_target removes the target again — the anchor
+    re-reads group_targets each run, no ghost anchor for an unassigned target."""
+    unit, atk_state, session, captured, _ = _declaration_anchor_setup(monkeypatch)
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+    assert any(c["name"] == "Whirling Onslaught" for c in captured)
+
+    assert common.toggle_group_target("Necrons", "u_def") is True  # real toggle path
+    assert session["group_targets"]["g1"] == []
+
+    captured.clear()
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+    assert captured == []
+
+
+def test_declaration_anchor_use_locks_other_target_tile_against_double_spend(
+    monkeypatch,
+) -> None:
+    """With two assigned targets the same GO renders once per target tile — two
+    anchors. One spend must lock both: the triggering tile shows "used" (Undo),
+    the other tile "used_elsewhere" (disabled), and CP is charged exactly once
+    (seit Fix 2 der einzige Mehrfach-Anker-Fall, der Wound-Anker entfiel)."""
+    unit, atk_state, session, captured, _ = _declaration_anchor_setup(
+        monkeypatch, targets=[("Necrons", "u_def"), ("Necrons", "u_def2")]
+    )
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+    cards = [c for c in captured if c["name"] == "Whirling Onslaught"]
+    assert len(cards) == 2  # one card per target tile
+    next(c for c in cards if "u_def2" not in c["key"])["on_use"]()
+    assert session["cp"]["Necrons"] == 4  # 5 - 1 CP, spent once
+
+    captured.clear()
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+    by_key = {c["key"]: c for c in captured if c["name"] == "Whirling Onslaught"}
+    first_tile = next(c for k, c in by_key.items() if "u_def2" not in k)
+    second_tile = next(c for k, c in by_key.items() if "u_def2" in k)
+    assert first_tile["state"] == "used"  # Undo offered only where it was spent
+    assert second_tile["state"] == "used_elsewhere"  # disabled "Used", no Undo
+    assert session["cp"]["Necrons"] == 4  # still exactly one spend

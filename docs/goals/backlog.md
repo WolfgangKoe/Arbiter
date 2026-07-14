@@ -20,13 +20,13 @@ hier nur Rang, Paket, Kurzbegründung, Parallelisierbarkeit.
 | Rang | Arbeitspaket | Begründung | Parallel? |
 |---|---|---|---|
 | 1 | Klan/Dynastie-Entscheid (Frage 3 + Prioritätenliste) | blockiert Rang 6–7; Konsens-Entscheid gehört an den Session-Anfang | — |
-| 2 | on_target-Anker Option A | S143 freigegeben, kleiner bestätigter UX-Fix | ⛔ nicht mit Rang 4/5 (gleiche Datei `_common.py`) |
-| 3 | Vigilus-Warlord-Traits entfernen | S144 entschieden, Datenqualitäts-Schuld | ✅ mit Rang 2 (disjunkt) |
+| 2 | ~~on_target-Anker Option A~~ — **erledigt S146** (UI-Prüfung Stakeholder offen) | S143 freigegeben, kleiner bestätigter UX-Fix | ⛔ nicht mit Rang 4/5 (gleiche Datei `_common.py`) |
+| 3 | ~~Vigilus-Warlord-Traits entfernen~~ — **erledigt S146** | S144 entschieden, Datenqualitäts-Schuld | ✅ mit Rang 2 (disjunkt) |
 | 4 | FixD Brief 1 (Compute/Render-Trennung) | einziger P1-Plan; entblockt Brief 2+3 und mypy-uiLayout | ⛔ nach Rang 2 (gleiche Datei); ✅ mit Rang 6 |
 | 5 | FixD Brief 2 + 3 | Brief 2 hinter Mockup-Gate, Brief 3 = Spec-Nachzug | ⛔ sequenziell nach Brief 1 |
 | 6 | Klan/Dynastie Brief K1 (Wortlaut-Bugfix) | 5 fachlich falsche Einträge, data-only, Quelle lokal belegt | ✅ mit Rang 4/5 (disjunkt) |
 | 7 | Klan/Dynastie K2+ (Engine-Filter, `subfaction_passive`, Badge, Spec-Nachzug) | macht 13 Einträge erstmals wirksam; L → vor Vergabe in ≤ M-Briefs splitten | teils, Detailschnitt im Umsetzungsplan |
-| 8 | Stufe-B-Rest: Necron-Roster-UI-Verifikation | hält das ziel7-Stufengate ehrlich; reine Stakeholder-Bildschirmzeit | ✅ jederzeit |
+| 8 | ~~Stufe-B-Rest: Necron-Roster-UI-Verifikation~~ — **erledigt S146** (alle 7 Schritte bestanden, `ziel7.md` Z. 76) | hält das ziel7-Stufengate ehrlich; reine Stakeholder-Bildschirmzeit | ✅ jederzeit |
 | 9 | mypy-Ratchet uiLayout (17) | Dateiüberschneidung `_common.py` mit FixD | ⛔ erst nach Rang 5 |
 | 10 | #2b Direktiv-Lock-Rest (ab Bewegungsphase sperren) | eingereiht (S145-Votum), kein akuter Blocker mehr | nach Einreihung |
 | ∥ | **abilityEngine-Refactor-Vorplanung** (Planungspaket, kein Code) | analog FixD-Vorplanung; Split-Trigger erst ab ~800 Zeilen `abilityEngine.py` oder DRY-Schuld-Angang (`§4` unten) — Details `S145_planning.md` §Option C | ✅ parallel zu allem, jederzeit startbar |
@@ -462,6 +462,37 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   deklarierbar vs. In-Game-Embark/Disembark über die UI (größerer Scope); (b) Kapazität hart
   durchsetzen (strukturiertes Datenfeld nötig) vs. nur Text-Hinweis (App zeigt, Tisch prüft —
   Klasse B/C). Aufwand S–M. Quelle: `docs/handoff/S141_ui_befunde_group_b.md` §3–§5 (S141/S142).
+- 🔲 **Roster-Builder-Anforderung — `before_battle`-Stratagems auswählbar machen
+  (Stakeholder-Verifikation S146):** `before_battle`-Stratagems (z. B. „Hand of the Phaeron")
+  sind im laufenden Spiel nicht nutzbar — beim Bau des künftigen Roster-Builders
+  berücksichtigen: dort müssen `before_battle`-Stratagems auswählbar/abhandelbar sein.
+- 🔲 **UX-Nit XS/S — Silent-King-Zusatzattacken-Default (Stakeholder-Verifikation S146):**
+  Eingabe der zusätzlichen Attacken (Staff of Stars 4 / Scythe of Dust 3) soll wie bei
+  anderen Einheiten üblich per Default auf dem Maximum vorbelegt sein; aktuell startet der
+  Wert niedriger, was beim Spielen nervt.
+- 🔲 **Bug (Effort S, bestätigt per Code-Analyse S146) — MWBD-Ability bei zwei gleichen
+  Einheiten gekoppelt:** `_render_buff_roll_ability` (`src/gameMechanic/commandPhase.py:141-155`)
+  trackt State nur über die Typ-`ability.id`; der Instanz-Key (`overlord` vs. `overlord#1`)
+  geht beim Aufruf (Z. 379-380) verloren, Widget-Key Z. 196 ebenfalls nicht instanz-eindeutig.
+  Betrifft generisch alle `buff_roll`/`reroll_hit_1`-Unit-Abilities bei ≥2 gleichen Einheiten.
+  Fix-Muster existiert bereits für Wargear (Plan 020, `_wargear_state_key(bearer_uid,
+  wargear_id)`, Test `test_two_orb_bearers_render_distinct_button_keys`) — analog nachziehen +
+  Regressionstest (Testlücke: `_render_buff_roll_ability` ist komplett ungetestet).
+  Silent-King-2×-MWBD (PHAERON `extra_uses`) bleibt von so einem Fix unberührt.
+- 🔲 **Bug — aktive GO-Effekte ohne Badge am Wirkort (Stakeholder-Verifikation S146,
+  2 Befunde):** (a) Auto-Wound-GOs „Techno-Oracular Targeting" (kein Wound-Wurf,
+  automatischer Wound) und „Disintegration Capacitors" (Gauss, unmodifizierte 6 beim
+  Hit → Auto-Wound) zeigen keinen Badge/Hinweis am Wound-Block; (b) „Relentless
+  Onslaught" (Rapid Fire, 6 beim Hit → Zusatztreffer) und „Solar Pulse" (Ziel verliert
+  Cover) ohne Badge am Hit- bzw. Save-Block. Verwandt mit S146-Fix 1
+  (`stratagem_strength_labels`): Effekte, die nicht als Stärke-Modifikator laufen, haben
+  keine Namens-Chips an ihren Wirkorten — Chip-Mechanik generisch auf weitere
+  Effekt-Typen ausdehnen. Für S147 einplanen.
+- 🔲 **B1 aus S146-Review (Major) — Deklarations-Anker filtert nicht auf Wound-Effekte:**
+  Ziel-Kachel zeigt ALLE on_target-GOs; „Shadows of Drazak" (Hit) und „Quantum
+  Deflection" (Save) rendern doppelt (Ziel-Kachel + Hit-/Save-Anker). Design-Entscheid
+  S147-Anfang: Filter auf `effect_stat="wound"` setzen ODER Hit-/Save-Anker analog Wound
+  abschaffen (+ Spec/Tests, Negativ-Tests B2 ergänzen). `docs/handoff/S146_review.md`.
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
 
@@ -472,7 +503,8 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 - [ ] WAAAGH Boss-Nob: 4 Attacken auf Power Klaw, Wound-Block S 11
 - [ ] Cover Option B: Dense im HIT-, Light/Heavy im SAVE-Block, je Tab
 - [ ] Veil aus Nahkampf: kein „IN MELEE" danach; Undo stellt wieder her
-- [ ] Skorpekh-Roster: 2× Threshers + 1× Reap-Blade getrennt
+- [x] Skorpekh-Roster: 2× Threshers + 1× Reap-Blade getrennt (S146 verifiziert,
+  Stakeholder-Verifikation 2026-07-14)
 - [ ] S48 H1–H7 (Big Mek Wargear, Silent King Waffen, Living Metal, MWBD 2×, Badge-Farben, RP)
 - [ ] **B12b (S141, Commit `cdb55e2f`):** zentrale Stratagems-Liste — GO auf Einheit
   einsetzen → Karte zeigt an allen anderen Angebotsstellen „Used" + „used on ⟨Einheit⟩"

@@ -73,7 +73,8 @@ generisch mitgeladen — **kein Necron-spezifischer Code nötig**, nur Daten-/Re
   Felder sind OR-Bedingungen, die das aktuelle AND-only-Schema nicht abbilden kann (z. B.
   `extermination_protocols`, `efficient_disintegration`, `whirling_onslaught`,
   `resurrection_protocols`) — offene Modellierung → Plan 032.
-- [ ] Manuelle UI-Verifikation mit echtem Necron-Roster nach dem Delta-Fix.
+- [x] Manuelle UI-Verifikation mit echtem Necron-Roster nach dem Delta-Fix. (S146,
+  Stakeholder-Verifikation 2026-07-14, alle 7 Prüfschritte bestanden)
 
 Effort-Einschätzung: S–M je nach Delta-Größe (unbekannt bis Review erfolgt ist).
 

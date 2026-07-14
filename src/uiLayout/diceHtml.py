@@ -79,6 +79,21 @@ def _render_dice_roll_block(
             )
 
 
+def _strength_source_badge_html(label: str) -> str:
+    """Inline chip naming a Strength-modifier source (e.g. "Disruption Fields").
+
+    Buff green (design_colors.md §0 via _BUFF_COLOR_HEX) — same chip shape as
+    special_die_html's weapon badges, but buff-coloured: it explains a bonus
+    the attacker benefits from, not a weapon rule (S146 Fix 1).
+    """
+    return (
+        f'<span style="background:#111827;border:1px solid {_BUFF_COLOR_HEX};'
+        f"border-radius:4px;padding:2px 6px;font-size:11px;"
+        f'color:{_BUFF_COLOR_HEX};margin-left:6px;vertical-align:middle;">'
+        f"{label}</span>"
+    )
+
+
 def _render_dice_wound_block(
     strength: int,
     toughness: int,
@@ -87,6 +102,7 @@ def _render_dice_wound_block(
     on_six_ap: int = 0,
     on_six_label: str = "",
     modified: int | None = None,
+    strength_buff_labels: list[str] | None = None,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue.
 
@@ -96,6 +112,10 @@ def _render_dice_wound_block(
     the effective threshold already resolved by combat.resolve_attack_modifiers
     (single source of truth for the 9E cap); when omitted, it is derived locally
     from wound_stack for callers that only have the stack.
+    ``strength_buff_labels`` — data-driven source names for an active
+    strength_buff (e.g. ["Disruption Fields"]); rendered as green chips next to
+    the S-vs-T comparison so the player sees WHERE the raised S comes from
+    (S146 Fix 1). Ignored while strength_buff is 0.
     """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
@@ -113,11 +133,16 @@ def _render_dice_wound_block(
         )
     else:
         s_style = hl
+    badges = (
+        "".join(_strength_source_badge_html(label) for label in strength_buff_labels)
+        if strength_buff > 0 and strength_buff_labels
+        else ""
+    )
     st.markdown(block_divider_html(), unsafe_allow_html=True)
     st.markdown(
         f"**WOUND** &nbsp; <span {s_style}>S {strength}</span> "
         f'<span style="font-size:1.05rem;font-weight:700;color:#e7e5e4;">{rel}</span> '
-        f"<span {hl}>T {toughness}</span>",
+        f"<span {hl}>T {toughness}</span>{badges}",
         unsafe_allow_html=True,
     )
     st.markdown(

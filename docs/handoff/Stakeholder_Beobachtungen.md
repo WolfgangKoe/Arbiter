@@ -26,6 +26,14 @@ Regeln:
 
 ## Zuletzt überführt
 
+- S146 (2026-07-14): Stufe-B manuelle UI-Verifikation bestanden (alle 7 Prüfschritte) →
+  `docs/goals/ziel7.md` Checkbox abgehakt.
+  - Roster-Builder-Anforderung (`before_battle`-Stratagems auswählbar machen) →
+    `docs/goals/backlog.md` §2.
+  - UX-Nit Silent-King-Zusatzattacken-Default (Vorbelegung auf Maximum) →
+    `docs/goals/backlog.md` §2.
+  - Bug: MWBD-Ability bei zwei gleichen Einheiten gekoppelt (`_render_buff_roll_ability`) →
+    `docs/goals/backlog.md` §2.
 - S139: „Cut them down" erstreckt sich auf beiden Spielerflächen → gefixt in
   Commit 0a747b1 (S139).
 - S138: leere Ork-Badge in der unitCard (Powerklaw-/Fall-Back-Badge-Fix) → S138 erledigt.

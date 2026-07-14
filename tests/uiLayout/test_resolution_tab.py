@@ -285,6 +285,90 @@ def test_strength_stratagem_not_scoped_to_other_unit_shows_no_buff_border(
 
 
 # ---------------------------------------------------------------------------
+# S146 Fix 1 — strength_buff_labels: the S-vs-T comparison names the SOURCE of
+# a raised S (e.g. "Disruption Fields") as a green chip, data-driven from the
+# active_modifiers entry (stratagem_strength_labels) — no hardcoded names.
+# ---------------------------------------------------------------------------
+
+
+def test_strength_buff_label_badge_names_source_in_wound_header(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """End-to-end display path: active_modifiers entry → labels → green chip."""
+    from gameMechanic.stratagemEngine import (  # noqa: PLC0415
+        stratagem_strength_bonus,
+        stratagem_strength_labels,
+    )
+    from uiLayout.diceCompose import _BUFF_COLOR_HEX  # noqa: PLC0415
+
+    active_modifiers = [
+        {
+            "unit_key": "wh40k_9e.necrons.unit.lychguard",
+            "source": "Disruption Fields",
+            "effect": {"roll_type": "strength", "value": 1, "target": "attacker", "phase": "fight"},
+            "expires_at_phase": "fight",
+            "expires_at_round": None,
+        }
+    ]
+    str_bonus = stratagem_strength_bonus(active_modifiers, "wh40k_9e.necrons.unit.lychguard")
+    labels = stratagem_strength_labels(active_modifiers, "wh40k_9e.necrons.unit.lychguard")
+    assert labels == ["Disruption Fields"]
+
+    captured = _collect_markdown(monkeypatch)
+    _render_dice_wound_block(
+        strength=7 + str_bonus,
+        toughness=5,
+        wound_stack=[],
+        strength_buff=str_bonus,
+        on_six_ap=0,
+        strength_buff_labels=labels,
+    )
+    combined_html = "\n".join(captured)
+    wound_header = next(html for html in captured if "WOUND" in html)
+    assert "Disruption Fields" in wound_header, (
+        f"Expected the source name 'Disruption Fields' as a chip in the WOUND "
+        f"header line, got:\n{combined_html[:600]}"
+    )
+    # Chip is buff-green (design_colors.md §0), not a new colour decision
+    assert f"border: 1px solid {_BUFF_COLOR_HEX}".replace(" ", "") in wound_header.replace(
+        " ", ""
+    ), f"Expected a {_BUFF_COLOR_HEX}-bordered chip, got:\n{wound_header}"
+
+
+def test_strength_buff_label_badge_absent_without_buff(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Labels without an actual buff (strength_buff=0) render NO chip — the
+    badge only explains a bonus that is really folded into S."""
+    captured = _collect_markdown(monkeypatch)
+    _render_dice_wound_block(
+        strength=4,
+        toughness=4,
+        wound_stack=[],
+        strength_buff=0,
+        on_six_ap=0,
+        strength_buff_labels=["Disruption Fields"],
+    )
+    combined_html = "\n".join(captured)
+    assert "Disruption Fields" not in combined_html
+
+
+def test_strength_buff_without_labels_renders_border_only(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """A buffed S with no label source (e.g. ability buffs, which carry no
+    per-stat source name) keeps the pre-Fix-1 rendering: green border, no chip."""
+    from uiLayout.diceCompose import _BUFF_COLOR_HEX  # noqa: PLC0415
+
+    captured = _collect_markdown(monkeypatch)
+    _render_dice_wound_block(
+        strength=5,
+        toughness=4,
+        wound_stack=[],
+        strength_buff=1,
+        on_six_ap=0,
+        strength_buff_labels=[],
+    )
+    combined_html = "\n".join(captured)
+    assert _BUFF_COLOR_HEX in combined_html  # border highlight still there
+    assert "padding:2px 6px" not in combined_html  # no chip markup
+
+
+# ---------------------------------------------------------------------------
 # S137 Bug B — hit_roll_penalty must render exactly ONCE (modifier row only)
 # ---------------------------------------------------------------------------
 

@@ -1,5 +1,11 @@
 # game_system: wh40k_9e, faction: Orks
 # Source: Wahapedia 2026-06-03
+#
+# EXCLUDED: Vigilus Defiant Specialist Detachment warlord traits (S146-Kodex-Abgleich,
+#   Präzedenzfall S144/stratagems.yaml): Quelle ist das Kampagnenbuch Imperium Nihilus:
+#   Vigilus Defiant, nicht Codex: Orks.
+#   Removed: Back-Seat Driver (BLITZ BRIGADE), Dread Mek (DREAD WAAAGH!),
+#   Quick, Ladz! (KULT OF SPEED), Gork's One, Mork's One (STOMPA MOB).
 
 # ── Generic Orks Traits ───────────────────────────────────────────────────
 
@@ -103,49 +109,3 @@
     where it was destroyed, and not within Engagement Range of any enemy models,
     with D3 wounds remaining.
 
-# ── Specialist Detachment Warlord Traits ──────────────────────────────────
-
-- id: wh40k_9e.orks.warlord_trait.blitz_brigade.back_seat_driver
-  name_en: Back-Seat Driver
-  category: blitz_brigade
-  applies_to:
-    keywords: [CHARACTER, BLITZ BRIGADE]
-  text_en: >
-    While this WARLORD is embarked within a BLITZ BRIGADE TRANSPORT, add 1\" to
-    that model's Move characteristic. In addition, that TRANSPORT gains the 'Ere
-    We Go ability while this WARLORD is embarked within it.
-
-- id: wh40k_9e.orks.warlord_trait.dread_waaagh.dread_mek
-  name_en: Dread Mek
-  category: dread_waaagh
-  applies_to:
-    keywords: [BIG MEK, DREAD WAAAGH!]
-  text_en: >
-    Each time this WARLORD uses their Mekaniak ability to repair a DREAD WAAAGH!
-    unit, add 1 to the number of wounds regained.
-
-- id: wh40k_9e.orks.warlord_trait.kult_of_speed.quick_ladz
-  name_en: "Quick, Ladz!"
-  category: kult_of_speed
-  applies_to:
-    keywords: [CHARACTER, KULT OF SPEED]
-  text_en: >
-    Friendly KULT OF SPEED units within 12\" of this WARLORD automatically pass
-    Morale tests if they Advanced this turn.
-
-- id: wh40k_9e.orks.warlord_trait.stompa_mob.gorks_one
-  name_en: "Gork's One"
-  category: stompa_mob
-  applies_to:
-    keywords: [STOMPA MOB]
-  text_en: >
-    Add 1 to hit rolls and wound rolls for attacks made by this WARLORD in the
-    Fight phase.
-
-- id: wh40k_9e.orks.warlord_trait.stompa_mob.morks_one
-  name_en: "Mork's One"
-  category: stompa_mob
-  applies_to:
-    keywords: [STOMPA MOB]
-  text_en: >
-    Add 1 to wound rolls for attacks made by this WARLORD in the Shooting phase.

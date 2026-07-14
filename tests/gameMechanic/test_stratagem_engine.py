@@ -24,6 +24,7 @@ from gameMechanic.stratagemEngine import (  # noqa: E402
     _effect_gate_met,
     is_unit_scoped_effect,
     stratagem_strength_bonus,
+    stratagem_strength_labels,
 )
 from gameObjects.ability import Effect  # noqa: E402
 from gameObjects.stratagem import Stratagem  # noqa: E402
@@ -232,6 +233,36 @@ def test_stratagem_strength_bonus_scoped_to_activating_unit_only() -> None:
     mods = [_strength_modifier_entry(value=1, unit_key="wh40k_9e.necrons.unit.warriors#1")]
     assert stratagem_strength_bonus(mods, _ATK_UID) == 0
     assert stratagem_strength_bonus(mods, "wh40k_9e.necrons.unit.warriors#1") == 1
+
+
+# ---------------------------------------------------------------------------
+# S146 Fix 1: stratagem_strength_labels — data-driven source names for the
+# WOUND-block badge (same scoping as stratagem_strength_bonus, returns the
+# `source` field spend_stratagem records, e.g. "Disruption Fields")
+# ---------------------------------------------------------------------------
+
+
+def test_stratagem_strength_labels_empty_list() -> None:
+    assert stratagem_strength_labels([], _ATK_UID) == []
+
+
+def test_stratagem_strength_labels_returns_source_of_matching_entry() -> None:
+    mods = [_strength_modifier_entry(value=1, target="attacker")]
+    assert stratagem_strength_labels(mods, _ATK_UID) == ["Disruption Fields"]
+
+
+def test_stratagem_strength_labels_ignores_wrong_roll_type_target_and_unit() -> None:
+    mods = [
+        _strength_modifier_entry(roll_type="wound"),
+        _strength_modifier_entry(target="defender"),
+        _strength_modifier_entry(unit_key="someone#else"),
+    ]
+    assert stratagem_strength_labels(mods, _ATK_UID) == []
+
+
+def test_stratagem_strength_labels_deduplicates_same_source() -> None:
+    mods = [_strength_modifier_entry(value=1), _strength_modifier_entry(value=1)]
+    assert stratagem_strength_labels(mods, _ATK_UID) == ["Disruption Fields"]
 
 
 def test_stratagem_strength_bonus_legacy_none_unit_key_not_applied_globally() -> None:

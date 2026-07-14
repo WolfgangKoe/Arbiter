@@ -4236,24 +4236,24 @@
   "257436e2-c47d-4bb7-9869-8239be539cca": {
     "started_at": "2026-07-14T16:43:40.389Z",
     "task": "Bevor wir weiter machen, müssen wir die branches gegeneinander auflösen. Neben dev und main haben wir noch einen dritte…",
-    "peak_context": 118991,
-    "subagent_share": 55.233138486866096,
+    "peak_context": 125731,
+    "subagent_share": 56.73249707547835,
     "by_tier": {
-      "Sonnet": 5830979
+      "Sonnet": 8467134
     },
     "subagents": [
       {
         "agent_type": "general-purpose",
         "description": "Prioritäten-Konsolidierung umsetzen",
         "tier": "Sonnet",
-        "peak_context": 93813,
+        "peak_context": 95116,
         "started_at": "2026-07-14T16:43:40.389Z"
       },
       {
         "agent_type": "general-purpose",
         "description": "Stufe-B-Verifikationsanleitung schreiben",
         "tier": "Sonnet",
-        "peak_context": 72944,
+        "peak_context": 97453,
         "started_at": "2026-07-14T16:43:40.389Z"
       }
     ]
@@ -4274,6 +4274,69 @@
         "tier": "Sonnet",
         "peak_context": 172806,
         "started_at": "2026-07-14T16:43:40.341Z"
+      }
+    ]
+  },
+  "9c2d7f6b-996e-4371-b39c-3649cb2462ba": {
+    "started_at": "2026-07-14T17:48:26.444Z",
+    "task": "start session und start App, damit ich die UI Verifikation der letzten Session durchführen kann.",
+    "peak_context": 131219,
+    "subagent_share": 82.25972445666451,
+    "by_tier": {
+      "Haiku": 381508,
+      "Sonnet": 18026257,
+      "Fable": 13041382,
+      "Opus": 1674127
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Nihilakh-Klärung Lookup",
+        "tier": "Haiku",
+        "peak_context": 50008,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S146-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 153328,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 1a: on_target-Anker",
+        "tier": "Sonnet",
+        "peak_context": 175691,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S146-Review (DoD) durchführen",
+        "tier": "Opus",
+        "peak_context": 66135,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "MWBD-Verknüpfung Overlords prüfen",
+        "tier": "Sonnet",
+        "peak_context": 53459,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 1b: Vigilus-Traits raus",
+        "tier": "Sonnet",
+        "peak_context": 61515,
+        "started_at": "2026-07-14T17:48:26.444Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Stufe-B-Lifecycle ausführen",
+        "tier": "Sonnet",
+        "peak_context": 72675,
+        "started_at": "2026-07-14T17:48:26.444Z"
       }
     ]
   }

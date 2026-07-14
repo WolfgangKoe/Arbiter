@@ -1818,20 +1818,34 @@ def _render_resolution_tab(
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
     )
-    from gameMechanic.stratagemEngine import stratagem_strength_bonus  # noqa: PLC0415
+    from gameMechanic.stratagemEngine import (  # noqa: PLC0415
+        stratagem_strength_bonus,
+        stratagem_strength_labels,
+    )
 
     str_bonus = buff_stat_bonus(atk_faction, atk_unit, "strength")
     # Disruption Fields (and similar stratagems): +1 S from an active_modifiers
     # entry with roll_type=="strength", folded in the same way as the faction-
     # ability buff above so the WOUND block highlights the raised S in blue.
     str_bonus += stratagem_strength_bonus(st.session_state.get("active_modifiers", []), atk_uid)
+    # S146 Fix 1: name the source(s) of a raised S next to the S-vs-T comparison
+    # — labels come from the active_modifiers entries themselves (stratagem
+    # name_en recorded by spend_stratagem), no hardcoded effect names.
+    str_labels = stratagem_strength_labels(st.session_state.get("active_modifiers", []), atk_uid)
     # Hungry Void D2: +1 S in melee if the attacker charged, was charged, or did a
     # Heroic Intervention. Folded into str_bonus so the WOUND block highlights the
     # raised S in blue exactly like a WAAAGH! strength buff.
     try:
-        str_bonus += get_active_round_choice_strength_if_charged(
+        str_if_charged = get_active_round_choice_strength_if_charged(
             atk_faction, atk_state.get("turn_flags", {}), use_melee
         )
+        str_bonus += str_if_charged
+        if str_if_charged:
+            charged_label = get_short_label_for_effect_type(
+                atk_faction, "strength_if_charged"
+            ) or _round_choice_short_label(atk_faction)
+            if charged_label:
+                str_labels.append(charged_label)
         on_six_ap = get_active_round_choice_ap_on_wound_6(atk_faction, use_melee)
         on_six_label = (
             get_short_label_for_effect_type(atk_faction, "ap_on_unmod_wound_6")
@@ -2031,6 +2045,7 @@ def _render_resolution_tab(
         on_six_ap=on_six_ap,
         on_six_label=on_six_label,
         modified=atk_result["wound"]["modified"],
+        strength_buff_labels=str_labels,
     )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
     # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.
@@ -2042,19 +2057,10 @@ def _render_resolution_tab(
         label_context="Wound roll",
     )
 
-    # Wound-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): same trigger as
-    # above, filtered to the wound-roll debuff (e.g. Whirling Onslaught).
-    render_reactive_stratagem_box(
-        def_faction,
-        phase_key,
-        "on_target",
-        decline_key=tab_key,
-        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
-        unit_key_for_modifier=def_uid,
-        unit_for_conditions=def_unit,
-        effect_type="debuff_roll",
-        effect_stat="wound",
-    )
+    # Kein Wound-Anker mehr für on_target-GOs (S146 Fix 2, Stakeholder-Entscheid):
+    # wound-roll on_target GOs (e.g. Whirling Onslaught) render solely at the
+    # declaration-time anchor in render_group_assignment — once spent there, the
+    # registered debuff already shows as a modifier row in the wound stack above.
 
     # SAVE BLOCK — its own block_divider_html() is the single WOUND/SAVE
     # separator (S137 Bug A: a second st.markdown("---") here doubled it).
@@ -2508,6 +2514,15 @@ def render_group_assignment(
     if not tgts:
         st.caption(f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.")
         return
+    # Declaration-time on_target anchor (S143 concept Option A + S146 Fix 2):
+    # a target only stays in `tgts` while it is present in `group_targets[gid]`,
+    # so toggling it off via toggle_group_target makes the box vanish on the very
+    # next Rerun — no extra bookkeeping needed here, this loop already re-reads
+    # group_targets fresh every run (line above). This is the ONLY render spot
+    # for wound-roll on_target GOs (the old Wound-Anker call was removed, S146
+    # Fix 2); with several targets the same GO renders once per target tile —
+    # `stratagem_used_here`/`used_elsewhere` prevents a double spend across tiles.
+    phase_key = PHASES[st.session_state.get("phase_idx", 0)][1]
 
     from gameMechanic.abilityEngine import buff_stat_bonus  # noqa: PLC0415
 
@@ -2599,6 +2614,16 @@ def render_group_assignment(
             c_t.metric("T", def_unit.toughness)
             c_sv.metric("Sv", f"{def_unit.save}+")
             c_inv.metric("++", f"{def_unit.invuln_save}+" if def_unit.invuln_save else "—")
+
+            render_reactive_stratagem_box(
+                def_faction,
+                phase_key,
+                "on_target",
+                decline_key=f"decl_target_{gid}_{atk_uid}_{def_uid}",
+                context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
+                unit_key_for_modifier=def_uid,
+                unit_for_conditions=def_unit,
+            )
 
             if use_melee:
                 for weapon in grp_weapons:

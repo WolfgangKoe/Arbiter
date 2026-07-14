@@ -27,57 +27,51 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S145, 2026-07-14)
+## Aktueller Stand (nach S146, 2026-07-14)
 
-S145: Planungs-/Konsolidierungs-Session (kein Code). (1) **Branches konsolidiert:** nur noch
-`dev` + `main`, `dev` gepusht (`942e1ba`). (2) **Alle 6 Klan-/Dynastie-Fragen aus
-`S144_klan_dynastie_konzept.md` entschieden** (`S145_planning.md`, Stakeholder-Entscheide
-2026-07-14): Frage 1 (Nihilakh) faktisch geklärt gegen `faction_overview.txt`; Frage 2
-(Reihenfolge Daten vs. Engine) zweistufig K1→K2 entschieden; **Frage 3: Option B**
-(`ability_type: subfaction_passive`, neuer Typ statt `triggered`-Reparatur) — K2-Scope zusätzlich
-erweitert um YAML-Aufräumen (totes `source`-Feld u. ä., per grep im K2-Brief zu verifizieren),
-UI-Sichtbarkeit der passiven Effekte (Nephrekh 6+-Invuln, Nihilakh AP-1→0 als Badge/Hinweis),
-Doppel-Direktiven-Klausel muss für alle 6 Dynastien-Protokolle funktionieren; **Option C**
-(abilityEngine als Paket aufdröseln) **zurückgestellt** mit Schwellwert (~800 Zeilen
-`abilityEngine.py` oder DRY-Schuld-Angang `backlog.md §4`) — K2-Neucode kommt von Anfang an in
-ein eigenes Modul `gameMechanic/subfactionPassives.py`; NEU als paralleles Planungspaket
-aufgenommen: „abilityEngine-Refactor-Vorplanung" (analog FixD-Vorplanung, nur Planung/Handoff,
-kein Code, jederzeit parallel startbar). Frage 4 (Klasse-C-Fälle) nach Bestandsmuster gelöst,
-Frage 5 (Spec-Nachzug) wird Pflichtteil von K2. (3) **Prioritäten konsolidiert:** vier
-driftende Prio-Quellen zusammengeführt — kanonischer Ort der Gesamt-Reihenfolge ist jetzt
-**`docs/goals/backlog.md` §Prioritätenliste** (10 Ränge + Refactor-Vorplanung parallel);
-`docs/audit/plans/README.md` führt nur noch Status je Plan; stale Tag `[PRIO-NÄCHSTE]` bei
-Backlog-Eintrag #2b entfernt (Text blieb, Rang 10).
+S146: (1) **Welle 1 umgesetzt:** 1a on_target-Anker Option A (`_common.py`: reaktive GOs an
+der Ziel-Kachel) + zwei Folgefixes nach Stakeholder-Live-Verifikation: Wound-Anker zeigt
+keine on_target-Karten mehr (Ziel-Kachel = einziger Ort), neue Stärke-Modifikator-Namens-
+Chips am S-vs-T-Vergleich (`stratagem_strength_labels` in `stratagemEngine.py` +
+`diceHtml.py`; Grenze dokumentiert: `buff_stat_bonus`-Fraktions-Buffs ohne Namens-Chip).
+1b: 5 Vigilus-Warlord-Traits entfernt (referenzfrei belegt). Alles manuell verifiziert.
+(2) **Ziel 7 Stufe B ABGESCHLOSSEN:** alle 7 Prüfschritte bestanden (`ziel7.md` Z. 76 ✅);
+3 Verifikations-Befunde + 2 Badge-Bugs + Review-B1 nach `backlog.md` §2 überführt.
+(3) **Nihilakh geklärt:** K1 schließt Nihilakh EIN — YAML-Eintrag ist 8E-Altbestand
+(`S146_planning.md` Entscheid 3). (4) Review: **GO mit Auflage B1**. Vollsuite 1825 passed,
+Coverage 99,12 %, mypy-Baseline 24, Architektur-/Doku-Gate grün.
 
-Frühere Sessions (S60–S144): `docs/metrics/session_archive.md`.
+Frühere Sessions (S60–S145): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S146)
+### ▶ Nächster Schritt (S147)
 
 Reihenfolge/Priorität nur noch in `docs/goals/backlog.md` §Prioritätenliste — hier nur der
 unmittelbar nächste Schritt:
 
-1. **Vigilus-Warlord-Traits entfernen** (Rang 3) ∥ **on_target-Anker Option A** (Rang 2,
-   `S143_on_target_anker_konzept.md`) — dateidisjunkt, parallelisierbar.
-2. Danach: **Klan/Dynastie Brief K1** (Wortlaut-Fixes, Rang 6) ∥ **FixD Brief 1** (Rang 4,
-   `docs/audit/plans/S142_fixD_resolution_tabs.md`).
-3. **Stufe-B-Verifikation** (Rang 8) läuft stakeholderseitig laufend, Anleitung in
-   `docs/handoff/S145_stufeB_verifikation.md`.
+1. **B1-Design-Entscheid an den Session-Anfang** (Review-Auflage, backlog §2): Deklarations-
+   Anker auf `effect_stat="wound"` filtern ODER Hit-/Save-Anker analog Wound abschaffen —
+   danach Umsetzung inkl. Negativ-Tests (B2).
+2. **Welle 2 (S146 freigegeben, nur am Headroom-Gate gescheitert):** Klan/Dynastie Brief K1
+   inkl. Nihilakh (Rang 6) ∥ FixD Brief 1 (Rang 4, `docs/audit/plans/S142_fixD_resolution_tabs.md`).
+3. Dahinter: **MWBD-Instanz-Fix** (Effort S) + **GO-Effekt-Badge-Lücke** (4 GOs) — beide
+   `backlog.md` §2, Stakeholder-priorisiert für S147.
 
 **Manuelle UI-Verifikation (offen):**
 
-- 🔲 Ziel 7 Stufe B: Necron-Roster-Verifikation (`ziel7.md:76`) — s. Punkt 3 oben.
 - 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — erst im Roster-Builder prüfbar.
 - 🔲 B12b-Punkte (3) weiter offen.
 
-**Offene Handoff-Marker:** `S144_klan_dynastie_konzept.md` → ANSWERED (S145-Entscheid, s.o.);
-`S145_planning.md` → ANSWERED; `S141_ui_befunde_group_a.md` bleibt bis FixC+FixD;
-`S144_planning.md`/`S144_review.md`/`S144_review_s143.md` gelöscht (S145, Lifecycle erfüllt).
+**Offene Handoff-Marker:** `S146_planning.md` → ANSWERED (in S147 nach Überführung löschen);
+`S141_ui_befunde_group_a.md` bleibt bis FixC+FixD; gelöscht S146 (Lifecycle erfüllt):
+`S145_planning.md`/`S145_stufeB_verifikation.md`/`S143_on_target_anker_konzept.md`/
+`S146_review.md` (Befunde in `backlog.md` §2 + Erkenntnisse überführt).
 
-**Erkenntnisse S144 (unverändert gültig):** (a) Retro-M1 Bestandsaufnahme-Pflicht + M2
-DONE-sofort-löschen in `agent_scopes.md` verankert. (b) rotate_history-Marker-Drift behoben
-durch Angleichung der Überschrift hier auf Singular („Nächster Schritt") — Tool läuft wieder.
-(c) Parallel-Executoren brauchen getrennte `COVERAGE_FILE` — kollisionsfrei getestet
-(4 Agenten gleichzeitig).
+**Erkenntnisse S146:** (a) Session-Limit-Abbruch eines Executors → SendMessage-Resume
+funktionierte nahtlos (S137-Regel bewährt). (b) Selbst-Stopp-Budget wurde im Resume
+überzogen (Auflage 60k, real ~177k) — Klausel „Budget gilt auch nach Resume" für
+`agent_scopes.md` vorgeschlagen, **Stakeholder-Freigabe offen** (Retro-M4). (c) Review-Nit
+B4 (zwei lange Warum-Kommentare `_common.py`) offen. (d) Parallel-Executoren brauchen
+getrennte `COVERAGE_FILE` (S144, erneut bewährt).
 
 **Ratchet/Rest unverändert:** `on_declaration`-Befund (`chargePhase.py`/`fightPhase.py`);
 Stil-Nit `undo_stratagem` in-place; R-PROTO-02; Rand-Design-Konzept; GO-Keyword-Nachpflege

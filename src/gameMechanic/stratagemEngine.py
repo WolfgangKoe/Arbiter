@@ -178,3 +178,29 @@ def stratagem_strength_bonus(active_modifiers: list[dict[str, Any]], unit_key: s
         )
         or 0
     )
+
+
+def stratagem_strength_labels(
+    active_modifiers: list[dict[str, Any]], unit_key: str | None
+) -> list[str]:
+    """Source names of the Strength modifiers `stratagem_strength_bonus` counts.
+
+    Same scoping (unit_key match, roll_type "strength", target attacker/any) as
+    the bonus itself, but returns the `source` field each `spend_stratagem`
+    entry carries (the stratagem's own name_en, e.g. "Disruption Fields") so the
+    WOUND block can badge WHERE a raised S comes from — data-driven, no
+    hardcoded effect names (S146 Fix 1). Deduplicated, insertion order kept.
+    """
+    labels: list[str] = []
+    for m in active_modifiers:
+        if m.get("unit_key") != unit_key:
+            continue
+        eff = m.get("effect", {})
+        if eff.get("roll_type") != "strength":
+            continue
+        if eff.get("target", "attacker") not in ("attacker", "any"):
+            continue
+        source = m.get("source")
+        if source and source not in labels:
+            labels.append(source)
+    return labels

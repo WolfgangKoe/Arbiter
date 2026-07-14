@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-14 19:42 CEST
+Stand: 2026-07-14 20:48 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-14 18:43 2574  ██████████░░ 119k ✅    ███░░░  55%    ············
-         SA_1·  ████████░░░░  94k ✅    Prioritäten-Konsolidierung umsetzen
-         SA_2·  ██████░░░░░░  73k ✅    Stufe-B-Verifikationsanleitung sch…
+07-14 19:48 9c2d  ██████████░░ 131k ⚠️   █████░  82%    ▚▚▚▚▚█······
+         SA_1·  ████░░░░░░░░  50k ✅    Nihilakh-Klärung Lookup
+         SA_2·  ████████████ 153k ⛔    S146-Planungsentwurf erstellen
+         SA_3·  ████████████ 176k ⛔    Executor 1a: on_target-Anker
+         SA_4·  █████░░░░░░░  66k ✅    S146-Review (DoD) durchführen
+         SA_5·  ████░░░░░░░░  53k ✅    MWBD-Verknüpfung Overlords prüfen
+         SA_6·  █████░░░░░░░  62k ✅    Executor 1b: Vigilus-Traits raus
+         SA_7·  ██████░░░░░░  73k ✅    Stufe-B-Lifecycle ausführen
+----------------- ---------------------- -------------- ------------
+07-14 18:43 2574  ██████████░░ 126k ⚠️   ███░░░  57%    ············
+         SA_1·  ████████░░░░  95k ✅    Prioritäten-Konsolidierung umsetzen
+         SA_2·  ████████░░░░  97k ✅    Stufe-B-Verifikationsanleitung sch…
 ----------------- ---------------------- -------------- ------------
 07-14 18:43 a845  █████████░░░ 107k ✅    ████░░  66%    ▚▚▚▚▚▚▚▚▚▚··
          SA_1·  ████████████ 173k ⛔    Planning-Entwurf S145 erstellen
@@ -672,3 +681,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S140 (2026-07-12)** Dynastie-Protokoll-Affinität im Round-Zweig (Engine+UI+Badges, Tests je 6 Dynastien, Review GO), mypy 54→48 (gameActionsArea typisiert)
 - **S143 (2026-07-12)** Review+Retro S142 nachgeholt (GO m. Auflagen, P1 gefixt); Welle 1: Wound/Hit-Natural-6-Cap, Morale-Selektion inaktiver Spieler, is_unit_scoped_effect-Prädikat, Roster-Glob-Test, Briefvorlage gehärtet; 3 Konzepte ANSWERED (abilityEngine A+B, Kodex-Filter Necrons 16, on_target Option A); FixD freigegeben; 1808 passed / 99,12%
 - **S144 (2026-07-12)** Review/Retro S143 nachgeholt (GO m.A.); Stratagem-Datenpflege Necrons 56→40 + Orks 28→17 (Supplement/Vigilus raus); mypy 28→24 (_sum_effect_value-Helfer, Option A+B); Klan-/Dynastie-Konzept erstellt (Daten existieren, 5/13 falsch, Engine-Lücke); Review-Budget-Regel in CLAUDE.md; Aufgaben on_target+FixD → S145
+- **S146 (2026-07-14)** Welle 1: on_target-Anker Option A + Folgefixes (Wound-Anker bereinigt, Stärke-Chips), Vigilus-Traits entfernt; Ziel 7 Stufe B abgeschlossen (7/7 bestanden, 3 Befunde + 2 Badge-Bugs überführt); Nihilakh geklärt (K1 inkl.); Review GO mit Auflage B1

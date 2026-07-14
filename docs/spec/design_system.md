@@ -281,7 +281,9 @@ Paket 4c, sowie Hit-/Wound-/Save-Fenster, S136 Stufe 2 — alle 9 regelerlaubten
 von R-CMD-12 jetzt erreichbar, keine offene GO-Fensterfrage mehr für Command Re-Roll
 insgesamt), Cut Them Down, Emergency Disembarkation, Fire Overwatch, Counter-Offensive,
 Efficient Disintegration, Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught
-(Wound-Anker, Paket 4a), Quantum Deflection (Save-Anker, Paket 4b).
+(Deklarations-Anker an der Ziel-Kachel in `render_group_assignment`, S146 Fix 2 —
+der frühere Wound-Anker-Aufruf wurde entfernt, on_target-Wound-GOs erscheinen nur
+noch bei der Ziel-Zuweisung), Quantum Deflection (Save-Anker, Paket 4b).
 
 **Bewertung fehlender Ereignis-Fenster (Paket 4c, nur Doku — kein Bau):** drei
 Fenster fehlen komplett bzw. sind zu eng gescopt, betreffen zusammen 10 der 11 oben
