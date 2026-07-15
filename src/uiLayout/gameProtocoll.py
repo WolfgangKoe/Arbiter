@@ -284,10 +284,6 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
     )
     used_battle_ids = used_battle_ids_by_faction.get(player, set())
 
-    role = "active" if is_active else "inactive"
-    st.caption(f"**{player}** ({role}) · CP: **{cp.get(player, 0)}**")
-    st.divider()
-
     try:
         stratagems = load_stratagems(faction_dir_for(player))
     except Exception:
@@ -347,7 +343,9 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             if not gate_met:
                 state, locked_reason = "locked", gate_reason
         target_name = (
-            unit_for_check.name_en if is_unit_scoped_effect(strat) and unit_for_check else None
+            unit_for_check.name_en
+            if state != "used_elsewhere" and is_unit_scoped_effect(strat) and unit_for_check
+            else None
         )
         render_go_card(
             key=f"{player}_{strat.id}_{phase_idx}_{i}",

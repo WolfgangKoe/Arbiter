@@ -255,7 +255,7 @@ stratagems:
     phase: shooting
     stage: active
     player: active
-    conditions: []
+    conditions: [GAUSS]
     once_per_phase: true
     effect:
       type: auto_wound
@@ -268,7 +268,7 @@ stratagems:
     phase: shooting
     stage: active
     player: active
-    conditions: []
+    conditions: [TESLA]
     once_per_phase: true
     effect:
       type: mortal_wounds

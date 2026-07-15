@@ -243,9 +243,25 @@ Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
     **Entschieden S135:** Kopfbereich → Mini-Header (nur Phasenname, Option B, solange kein
     B9-Stepper existiert); Hinweis-Konvention → eigener Design-System-Baustein (Option B);
     B7+B9 als EIN Konzept-Handoff (`S134_offene_punkte.md`).
-  - **B8 — Redundanter Statusbereich in jeder Phase (Screenshot `…21-36-36.png`):** in jeder
-    Phase redundant → entfernen, Battle-Log-Eintrag genügt. Vorgehen: XS-Entfernung +
-    Render-Test; Teil des B7/B9-Pakets.
+    **S149-Befund (Selbst-Stopp):** Der rote Bereich ist die faktions-Zeile
+    (`**▶/◀ {faction}**`) — dupliziert in `_common.py::render_player_column`
+    (gemeinsam für movement/shooting/charge) UND separat in `psychicPhase.py`,
+    `fightPhase.py`, `commandPhase.py` (DRY-Lücke, je eigene Kopie). Die
+    Mini-Header-Umstellung betrifft zusätzlich `PHASE_RULES`
+    (`_common.py`/`gameActionsArea.py`, aktuell Titel + Fließtext → soll nur
+    Phasenname) und der neue Hinweis-Baustein müsste in mindestens 6
+    Produktivdateien verdrahtet werden — über der Selbst-Stopp-Schwelle
+    (~4 Dateien) aus dem Auftrag. B8 wurde isoliert umgesetzt (unten); B7 bleibt
+    offen für einen eigenen, kleiner geschnittenen Folge-Auftrag (z. B. B7a:
+    Faktions-Zeile entfernen + `PHASE_RULES`→Mini-Header; B7b: Hinweis-Baustein
+    einführen + verdrahten). Screenshot `…21-29-43.png` bleibt bis dahin liegen.
+  - ✅ **B8 — Redundanter Statusbereich in jeder Phase — ERLEDIGT (S149):** Zeile
+    „**{player}** ({role}) · CP: **{cp}**" + Divider in
+    `gameProtocoll.py::_render_stratagem_column` entfernt. Verifiziert vor dem
+    Löschen: CP wird bereits permanent im App-Header gezeigt
+    (`gameHeader.py::_score_group`, aufgerufen von `render_game_header()` in
+    `app.py`, first/second_player-Spalten) — keine einzige-Quelle-Regression.
+    Screenshot `…21-36-36.png` gelöscht.
   - **B9 — Subphasen-Schritte unsichtbar:** je Phase die Unterschritte explizit anzeigen
     (z. B. Movement: erst alle Feldbewegungen, dann Reinforcements), während redundante Texte
     (B7/B8) verschwinden. Vorgehen: „Subphasen-Stepper"-Baustein als design_system-Erweiterung
@@ -281,13 +297,22 @@ Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
       übergibt ebenfalls kein `unit_key` — Backlog-Formulierung „zeigt den Suffix korrekt" war
       irreführend, gemeint war nur der „Used"-Zustand selbst). Optionaler XS-Folge-Task: uid
       durch `spend_stratagem` durchreichen, falls das je gewünscht wird.
-    - 🔴 **BUG (S148, Stakeholder-verifiziert, Prüfblock 5 Insane Bravery, hohe Priorität):**
-      In der zentralen Stratagems-Liste zeigt „used on ⟨Einheit⟩" die aktuell **gewählte**
-      Einheit statt der Einheit, auf die die GO tatsächlich angewendet wurde — Wechsel der
-      Armeeliste-Selektion ändert den angezeigten Namen, obwohl der GO-Zustand an
-      Spieler+Phase+GO hängt, nicht an der Auswahl. Vermutlich liest der Render-Code die
-      Selektion statt dem gespeicherten `unit_key`. Fundort: `src/uiLayout/gameProtocoll.py`/
-      `_common.py`. **Vor FixD Brief 1 fixen** (beide berühren `_common.py`).
+    - 🔲 **BUG — offen — Fix in `gameProtocoll.py` umgesetzt (S149), UI-Verifikation durch
+      Stakeholder FEHLGESCHLAGEN:** In der zentralen Stratagems-Liste zeigte „used on
+      ⟨Einheit⟩" im Zustand `used_elsewhere` zusätzlich ein live an die Sidebar-Auswahl
+      gebundenes `target_name`-Badge neben dem korrekt fixierten `locked_reason`-Namen.
+      Fix: `gameProtocoll.py` berechnet `target_name` jetzt nur noch, wenn `state !=
+      "used_elsewhere"`. Regressionstest
+      `test_render_stratagem_column_used_elsewhere_omits_live_target_name`
+      (`tests/uiLayout/test_game_protocoll.py`) bleibt bestehen (sichert das Verhalten der
+      zentralen Liste ab) — der Stakeholder konnte den gemeldeten Bug am Tisch aber NICHT
+      als behoben bestätigen. **Hypothese (Details:
+      `docs/handoff/S149_review.md` Befund 2):** ein weiterer Render-Pfad — Inline-Anker
+      (z. B. `render_reactive_stratagem_box`, `movementPhase.py:333/461`) — zeigt das Badge
+      ebenfalls und ist vom Fix nicht abgedeckt; alternativ falsches Badge im Blick
+      (`locked_reason` statt `target_name`) oder Zustands-Scope-Missverständnis (`ready`/
+      `locked`-Vorschau). **S150:** Repro beim Stakeholder erfragen (welche Phase/Liste,
+      welcher GO), dann alle Render-Pfade des Badges per grep aufzählen und fixen.
     - 🟢 **Feature-Wunsch (S148, Stakeholder):** „used on ⟨Einheit⟩"-Suffix auf **alle**
       reaktiven GOs ausweiten (aktuell nur die zentrale Liste betroffen) — eigener Task,
       nach dem BUG oben.
@@ -308,6 +333,13 @@ Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
 
 Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
 
+- 🔲 **GO-Konsistenz: nicht erfüllte Bedingungen grauen GOs aus statt sie auszublenden
+  (Stakeholder-Wunsch S149, anlässlich GAUSS/TESLA-Gates):** Durchgehend für **alle** GOs —
+  `stratagem_visibility()` soll bei Keyword-/Bedingungs-Nichterfüllung statt `"hidden"`
+  einen sichtbaren-aber-gesperrten Zustand (`dormant`/`locked`) zurückgeben. Passt laut
+  Review (`docs/handoff/S149_review.md` Befund 3) kollisionsfrei zum bestehenden GO-State-
+  Modell ready/locked/used — diese Zustände rendern den Button bereits deaktiviert/
+  ausgegraut (`_common.py:1134`).
 - 🟢 **Psychic-Ledger schrumpfen (S62):** Smite-Manifest-Logik (`R-PSYCHIC-11/16/17/18/22`) lebt
   im Render-Code (`_render_smite_flow`/`_render_psi_result`/`_render_deny_column`) → policy-
   ungetestet. Reine Funktionen extrahieren (Schwelle `roll≥wc`, Warp-Charge-Eskalation, Perils-
@@ -535,6 +567,14 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   wegen nötiger Modell-Auswahl-UI (wie viele Modelle kommen zurück). Quelle:
   `docs/handoff/S147_go_audit_stratagems.md` Lücken-Tabelle „Reanimation Prioritisation /
   Resurrection Protocols" + Fixing-Plan-Punkt 7.
+- 🔲 **auto_wound-Effekt prüft keine Gauss-/Tesla-Waffenbedingung (S147-Audit-Restlücke,
+  bewusst nicht in Brief 6/S149 mitgefixt):** Brief 6 (S149) hat nur die **Bedingungs**-Lücke
+  geschlossen (WER darf das Stratagem nutzen, `conditions: [GAUSS]`/`[TESLA]` auf der
+  Einheit). Die tiefere Lücke bleibt offen: der `auto_wound`-Effekt selbst (Techno-Oracular
+  Targeting, Disintegration Capacitors) prüft nicht, ob der konkrete Angriff tatsächlich mit
+  einer Gauss-/Tesla-Waffe geführt wurde. Quelle: `docs/handoff/S147_go_audit_stratagems.md`
+  Zeile 41 (Lücken-Tabelle) + Fixing-Plan Punkt 5; vgl. Vermerk in
+  `docs/handoff/S147_go_audit_necron_abilities.md` §2. Auch Plan 032 Punkt 5 verweist hierauf.
 - 🔲 **Roster-/Daten-Konsistenz-Recherche (S148-UI-Befund, Prüfblock 2):** Stakeholder hat das
   Test-Roster als fehlerhaft befunden — Annihilation Barge war als MWBD-Ziel wählbar, ist laut
   Stakeholder aber **nicht** CORE. Aufgabe: CORE-Keyword-Abgleich `necrons/units.yaml` vs.
@@ -567,8 +607,12 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 - [x] **S147 MWBD-Fix — verifiziert (S148):** beide Overlords nacheinander auswählen/
   aktivieren → unabhängige Activate-Buttons + Ziel-Auswahl, keine gegenseitige Sperre
   (gleiches Roster; Roster-CORE-Inkonsistenz als eigene Recherche in §2 aufgenommen)
-- [ ] **B12b (S141, Commit `cdb55e2f`) — BUG gefunden (S148):** zentrale Stratagems-Liste
-  zeigt „used on ⟨Einheit⟩" für die aktuell gewählte statt der angewendeten Einheit — s. §2 BUG
+- [ ] **B12b (S141, Commit `cdb55e2f`) — offen, UI-Verifikation FEHLGESCHLAGEN (S149):**
+  zentrale Stratagems-Liste zeigte „used on ⟨Einheit⟩" für die aktuell gewählte statt der
+  angewendeten Einheit — Codefix s. §2 (umgesetzt, aber Stakeholder konnte den Bug am Tisch
+  NICHT als behoben bestätigen; Hypothese weiterer Render-Pfad, s. §2 und
+  `docs/handoff/S149_review.md`). S150: Repro erfragen, alle Render-Pfade des Badges per
+  grep aufzählen und fixen.
 - [x] **B12b (S141) — verifiziert (S148):** Charge-Phase Fire Overwatch — Suffix bleibt leer
   (kein `unit_key` übergeben, spec-konformer Randfall wie Movement Advance-Reroll); Verhalten
   „in_melee"-Ausblendung + Fernkampf-Bedingung ebenfalls PASS

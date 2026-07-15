@@ -838,3 +838,53 @@ class TestFireOverwatchHasWeaponConditions:
         )
         assert match is not None
         assert match.weapon_conditions == ["RANGED"]
+
+
+# ---------------------------------------------------------------------------
+# S149 Brief 6 — GAUSS/TESLA keyword gates on Disintegration Capacitors /
+# Malevolent Arcing (previously conditions: [] — usable by any NECRONS unit,
+# even ones with no gauss/tesla weapon at all). The gate rides on the
+# `derived_keywords` mechanism (S148 Brief 1/4): a unit carrying a
+# `grantsKeyword: GAUSS`/`TESLA` weapon gets that keyword merged into
+# `unit.keywords`, so the existing `conditions`/`stratagem_conditions_met`
+# path (no new mechanism needed) already closes the gap once the YAML names
+# the keyword.
+# ---------------------------------------------------------------------------
+
+
+class TestGaussTeslaStratagemKeywordGates:
+    def test_disintegration_capacitors_requires_gauss_keyword(self) -> None:
+        stratagems = load_stratagems("necrons")
+        match = next(
+            (
+                s
+                for s in stratagems
+                if s.id == "wh40k_9e.necrons.stratagem.disintegration_capacitors"
+            ),
+            None,
+        )
+        assert match is not None
+        assert match.conditions == ["GAUSS"]
+
+    def test_malevolent_arcing_requires_tesla_keyword(self) -> None:
+        stratagems = load_stratagems("necrons")
+        match = next(
+            (s for s in stratagems if s.id == "wh40k_9e.necrons.stratagem.malevolent_arcing"),
+            None,
+        )
+        assert match is not None
+        assert match.conditions == ["TESLA"]
+
+    def test_gauss_condition_met_by_unit_with_gauss_weapon(self) -> None:
+        from gameObjects.loader import load_army
+
+        units, _ = load_army("necrons")
+        warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+        assert stratagem_conditions_met(["GAUSS"], warriors) is True
+
+    def test_gauss_condition_not_met_by_unit_without_gauss_weapon(self) -> None:
+        from gameObjects.loader import load_army
+
+        units, _ = load_army("necrons")
+        overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+        assert stratagem_conditions_met(["GAUSS"], overlord) is False

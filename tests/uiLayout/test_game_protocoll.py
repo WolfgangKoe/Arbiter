@@ -257,6 +257,50 @@ def test_render_stratagem_column_maps_spend_at_other_anchor_to_used_elsewhere(mo
     assert captured[0]["locked_reason"] == "Necron Warriors"
 
 
+def test_render_stratagem_column_used_elsewhere_omits_live_target_name(monkeypatch) -> None:
+    """S149 Bug "used on ⟨Einheit⟩": a card in state `used_elsewhere` must NOT
+    also carry a live `target_name` computed from the currently-selected unit
+    — `goCard.py` already renders the correct historical name via
+    `locked_reason` for this state; a second, live-bound `target_name` badge
+    next to it showed whichever unit happens to be selected right now, not
+    the unit the GO was actually used on (root cause: `gameProtocoll.py` used
+    to compute `target_name` unconditionally, ignoring `state`)."""
+    from dataclasses import replace
+
+    strat = replace(
+        _make_stratagem(id_="db", name_en="Desperate Breakout", cp_cost=2),
+        effect=Effect(type="move", handler="fall_back_through_models"),
+    )
+    unit = SimpleNamespace(id="boyz", name_en="Boyz Mob")
+    session = FakeSessionState(
+        cp={"Orks": 2},
+        phase_idx=0,
+        used_stratagem_ids={"Orks": {"db"}},
+        used_stratagem_battle_ids={},
+        selected_unit=("Orks", "boyz"),
+        p1_units={"boyz": {"movement_chosen": False, "in_melee": True}},
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "orks")
+    monkeypatch.setattr(gp, "units_list_for", lambda player: [unit])
+    monkeypatch.setattr(gp, "units_key_for", lambda player: "p1_units")
+    monkeypatch.setattr(gp, "stratagem_used_here", lambda faction, sid, anchor: False)
+    monkeypatch.setattr(
+        gp, "stratagem_used_elsewhere_unit_name", lambda faction, sid: "Other Boyz Mob"
+    )
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Orks", True)
+
+    card = captured[0]
+    assert card["state"] == "used_elsewhere"
+    assert card["locked_reason"] == "Other Boyz Mob"
+    assert card["target_name"] is None
+
+
 def test_render_stratagem_column_locks_gated_stratagem_for_ineligible_unit(monkeypatch) -> None:
     """S133-D Befund 4: a stratagem gated on unit state (not yet moved + in
     Engagement Range) must render "locked" with the gate reason when the

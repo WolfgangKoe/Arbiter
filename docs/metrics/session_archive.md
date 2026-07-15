@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-15 19:08 CEST
+Stand: 2026-07-15 21:56 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-15 17:44 ac36  ████████████ 153k ⛔    █████░  89%    ▚█··········
+07-15 19:12 9dd1  █████████░░░ 106k ✅    █████░  86%    █··········▒
+         SA_1·  ██████░░░░░░  72k ✅    Reviewer S149 (DoD-Review)
+         SA_2·  ███████████░ 137k ⚠️   Executor Welle 1+2+3
+         SA_3·  ██████░░░░░░  79k ✅    Roster-Recherche (Aufgabe 7)
+         SA_4·  ████████████ 144k ⚠️   Planner: Session-Planning-Entwurf
+         SA_5·  ██████░░░░░░  78k ✅    Handoff-Triage (Aufgabe 9)
+         SA_6·  █████████░░░ 116k ✅    Executor B7+B8 Phasen-UI
+----------------- ---------------------- -------------- ------------
+07-15 19:12 628e  ████████████ 156k ⛔    ███░░░  44%    ············
+         SA_1·  ████████████ 167k ⛔    Abschluss-Executor S149
+----------------- ---------------------- -------------- ------------
+07-15 17:44 ac36  ████████████ 154k ⛔    █████░  88%    ▚█··········
          SA_1·  ███████████░ 138k ⚠️   Brief 7: camelCase-Migrationsplan
          SA_2·  █████████░░░ 115k ✅    Brief 1: Apply-Button-Bug
          SA_3·  ███░░░░░░░░░  36k ✅    Find Unit dataclass and keyword-ch…
@@ -708,3 +719,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S146 (2026-07-14)** Welle 1: on_target-Anker Option A + Folgefixes (Wound-Anker bereinigt, Stärke-Chips), Vigilus-Traits entfernt; Ziel 7 Stufe B abgeschlossen (7/7 bestanden, 3 Befunde + 2 Badge-Bugs überführt); Nihilakh geklärt (K1 inkl.); Review GO mit Auflage B1
 - **S147 (2026-07-15)** GO-Audit (3 Kataloge: 5 CP-Fresser-Stratagems, Apply-Button-Bug, grantsKeyword-Entscheid), MWBD-Instanz-Fix, B1 Ziel-Kachel einziger Ort, Verifikations-Roster, Handoff bereinigt (S145 migriert), Review GO mit Auflagen
 - **S148 (2026-07-15)** Welle 1: Apply-Button-Gate, CP-Fresser-Modifier, Fire-Overwatch-Bedingungen, grantsKeyword generisch, camelCase-Plan; UI-Verifikation B1/MWBD mit 6 Befunden; Briefe 5/6, K1, FixD nach S149
+- **S149 (2026-07-15)** used-on-Fix (Verif. fehlgeschlagen, REOPEN), GAUSS/TESLA-Gates, Brief 5 geschlossen, B8 entfernt, B7-Split, Handoff bereinigt, M6/M7 Prozessregeln

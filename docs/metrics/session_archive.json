@@ -4420,8 +4420,8 @@
   "ac36a79b-7649-45b6-a0f0-42d7fdf3558c": {
     "started_at": "2026-07-15T15:44:51.179Z",
     "task": "start session, die UI-Verifikation bitte als Datei in Handoff ablegen und parallel die App starten.",
-    "peak_context": 152971,
-    "subagent_share": 88.97676653451431,
+    "peak_context": 154106,
+    "subagent_share": 88.47232255733329,
     "by_tier": {
       "Sonnet": 62653964,
       "Fable": 7286847,
@@ -4504,6 +4504,80 @@
         "tier": "Opus",
         "peak_context": 66950,
         "started_at": "2026-07-15T15:44:51.179Z"
+      }
+    ]
+  },
+  "9dd15bf3-545f-4989-bf41-d0dab560ef36": {
+    "started_at": "2026-07-15T17:12:39.371Z",
+    "task": "start session",
+    "peak_context": 106346,
+    "subagent_share": 86.25657975388371,
+    "by_tier": {
+      "Opus": 2012833,
+      "Sonnet": 29029459,
+      "Fable": 1152137,
+      "Haiku": 2395360
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer S149 (DoD-Review)",
+        "tier": "Opus",
+        "peak_context": 72291,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor Welle 1+2+3",
+        "tier": "Sonnet",
+        "peak_context": 136987,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Roster-Recherche (Aufgabe 7)",
+        "tier": "Haiku",
+        "peak_context": 78677,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: Session-Planning-Entwurf",
+        "tier": "Sonnet",
+        "peak_context": 144254,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Handoff-Triage (Aufgabe 9)",
+        "tier": "Haiku",
+        "peak_context": 78122,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B7+B8 Phasen-UI",
+        "tier": "Sonnet",
+        "peak_context": 115857,
+        "started_at": "2026-07-15T17:12:39.371Z"
+      }
+    ]
+  },
+  "628e9b3e-f00f-4570-a320-7f082d35eddd": {
+    "started_at": "2026-07-15T17:12:39.371Z",
+    "task": "start session",
+    "peak_context": 156185,
+    "subagent_share": 44.425747274697905,
+    "by_tier": {
+      "Sonnet": 7439469
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Executor S149",
+        "tier": "Sonnet",
+        "peak_context": 167151,
+        "started_at": "2026-07-15T17:12:39.371Z"
       }
     ]
   }

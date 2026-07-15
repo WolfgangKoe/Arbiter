@@ -24,81 +24,64 @@
 - **Koordinator-Pflicht (S148, Stakeholder-Entscheid F4):** Der Koordinator überwacht den
   Kontextstand aktiv und beendet die Session rechtzeitig (Wind-down-Schwellen); Verschiebungen
   meldet er mit Begründung.
+- **Brief-Pflichten NEU (S149-Retro M6/M7, `operating_model.md`):** Planner belegt Schema-/
+  Vorbild-Behauptungen per grep/Quellzeile; Executor zählt bei UI-Bugfixes VOR dem Fix alle
+  Render-Pfade des Elements per grep auf.
 
 ## Was ist Arbiter?
-Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py` (Port 8501; **venv:** `source .venv/bin/activate`). Branch `feature/016` (Arbeit), `main` (nur PR). App bei Session-Start nur per curl prüfen, bei Bedarf selbst neu starten.
+Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py` (Port 8501; **venv:** `source .venv/bin/activate`). Branch `dev` (Arbeit), `main` (nur PR). App bei Session-Start nur per curl prüfen, bei Bedarf selbst neu starten.
 
 ---
 
-## Aktueller Stand (nach S148, 2026-07-15)
+## Aktueller Stand (nach S149, 2026-07-15)
 
-S148 Welle 1 umgesetzt: **Brief 1** Apply-Button-Gate (`is_effect_executable`,
-Handler-Dict `abilityEngine`); **Brief 2** modifier-Blöcke (Judgement of the Triarch,
-Showin' Off, Unbridled Carnage); **Brief 3** Fire-Overwatch (`weapon_conditions: [RANGED]`,
-generisches `weapon_conditions_met`, Engagement-Range-Gate in `_inactive_charge`, 9+1
-Fixtures nachgezogen, R-CHARGE-08 Klasse C); **Brief 4** `grantsKeyword` generisch
-(21+1 Fundstellen, `derived_keywords` + `unit.keywords`); **Brief 7** camelCase-
-Migrationsplan (`loader_contract.md` §8, 107+3 Felder) + Reanimation-Entscheid im Backlog.
-Welle 2 (Briefe 5+6, K1, FixD Brief 1) auf S149 verschoben (Review-Budget-Regel ~100k).
-Manuelle UI-Verifikation durchgeführt: **B1 PASS**, **MWBD PASS**, **Advance-Reroll PASS**,
-**Fire-Overwatch-Verhalten PASS** (inkl. `in_melee`-Ausblendung + Fernkampf-Bedingung);
-6 Befunde dabei aufgedeckt (Flayed-Ones-Roster 1 Modell, Quantum-Shielding-Anzeige-Bug,
-Roster-CORE-Inkonsistenz, „used on"-Bug in der zentralen Liste, Feature-Wunsch „used on"
-für alle reaktiven GOs, `model_groups`-Union-Ungenauigkeit) — Details + Priorisierung s. u.
-Zusätzlich: Code-Minifix (Overwatch-Hinweistext entfernt, Regeltext der GO-Karte übernimmt
-das) + Roster-Fix (Flayed Ones auf 10 Modelle). Vollsuite lief vor Abschluss grün (1851
-passed, 99,14 %); gezielte Nachläufe (`test_charge_phase.py`, `test_common.py`,
-`tests/docs/`, `tests/acceptance/`) grün, mypy-Baseline unverändert bei 24.
+S149 (Details in `session_archive.md`): used-on-Fix umgesetzt, aber UI-Verifikation
+FEHLGESCHLAGEN → REOPEN (Schritt 1); GAUSS/TESLA-`conditions` + 4 Tests ✓ bestätigt;
+Brief 5 geschlossen (Keyword kommt von der Waffe via `grantsKeyword`, normale Badge genügt);
+B8 entfernt ✓ bestätigt, B7 → Split B7a/B7b; Handoff bereinigt (4 Dateien + B8-Screenshot
+gelöscht); Boss-Nob-Kombi-Swap-Lücke gefunden. Review GO-mit-Auflagen (alle umgesetzt),
+Retro M6/M7 verankert, M5 nicht freigegeben. Vollsuite **1856 passed / 99,14 %**, mypy 24.
+Abschluss-Executor brach am Session-Limit in M8 ab — Rest vom Koordinator abgeschlossen,
+Backlog-Archiv (M8) → Schritt 2.
 
-Frühere Sessions (S60–S147): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S149): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S149)
+### ▶ Nächster Schritt (S150)
 
-Reihenfolge/Priorität nur noch in `docs/goals/backlog.md` §Prioritätenliste — hier nur der
-unmittelbar nächste Schritt, priorisiert:
-
-1. **BUG zentrale Stratagems-Liste „used on ⟨Einheit⟩"** (Stakeholder-verifiziert, Prüfblock 5
-   Insane Bravery): Suffix zeigt die aktuell **gewählte** Einheit statt der Einheit, auf die die
-   GO angewendet wurde. Vermutlich liest der Render-Code die Selektion statt dem gespeicherten
-   `unit_key`. Fundort: `src/uiLayout/gameProtocoll.py`/`_common.py`. **VOR FixD koordinieren**
-   (beide berühren `_common.py`).
-2. **Briefe 5+6** (fertig spezifiziert im gelöschten S148-Plan, Kurzspezifikation hier
-   gesichert): Brief 5 = `derived_keywords`-Badges in `armyCard.py` analog `wargear_keywords`-
-   Anzeige (manuelle UI-Verifikation Pflicht). Brief 6 = `has_keywords: [GAUSS]` bei
-   Disintegration Capacitors (`necrons/stratagems.yaml:249-263`) + `has_keywords: [TESLA]` bei
-   Malevolent Arcing (`necrons/stratagems.yaml:265-275`) eintragen + Regressionstest.
-3. **Quantum-Shielding-Anzeige Annihilation Barge:** unmod. Wound 1–3 misslingt immer — wird
-   aktuell nicht als Debuff in der Wound-Zeile (3× ✕) noch als Buff im Save-Block angezeigt.
-   Regeltext VORHER gegen `docs/work/wahapedia_necrons` verifizieren.
-4. **K1** inkl. Pflicht, den bereits getroffenen Nihilakh-Entscheid aus
-   `docs/handoff/S144_klan_dynastie_konzept.md` endlich kanonisch zu notieren (Stakeholder-Rüge
-   F1: nicht erneut fragen).
-5. **FixD Brief 1** (nach Punkt 1, gleiche Datei `_common.py`).
-6. **Roster-/Daten-Konsistenz-Recherche** (Haiku-Task): CORE-Keyword-Abgleich `units.yaml` vs.
-   `docs/work/wahapedia_necrons` (Annihilation Barge ist laut Stakeholder NICHT CORE, war aber
-   als MWBD-Ziel wählbar; Flayed Ones mitprüfen) + Ork Boss Nob Waffen (wirklich nur Stikkbomb?).
+1. **used-on-Bug REOPEN (Top-Priorität):** Fix traf nur die zentrale Liste; Review-Hypothese:
+   weiterer Render-Pfad (Inline-Anker) zeigt weiter die Sidebar-Auswahl. ZUERST Repro beim
+   Stakeholder erfragen (welche Phase/Liste, welcher GO), dann ALLE Render-Pfade des Badges
+   per grep aufzählen (M7-Pflicht) und fixen. Stand: `backlog.md` §2 + B12b.
+2. **M8 Backlog verschlanken (Stakeholder-Auftrag S149, wörtlich: „Alles was fertig ist, kann
+   ins Archiv"):** `docs/goals/backlog_archive.md` anlegen (Kopf: KEIN zweiter Backlog, nur
+   Erledigtes/Verworfenes mit Session), alle ~58 Erledigt-Marker aus `backlog.md`
+   dorthin verschieben, Verweis am Backlog-Kopf; keinen offenen Eintrag verlieren.
+3. **7b Boss Nob:** zweite Swap-Gruppe `kombi_rokkit`/`kombi_skorcha` als EIGENE ODER-Gruppe
+   (1 Waffe ersetzt Slugga+Choppa) in `orks/units.yaml`; vorher Existenz in `weapons.yaml` prüfen.
+4. **Quantum Shielding (Aufgabe 4):** neuer Effect-Typ „unmod. Wound 1–3 misslingt immer" +
+   Engine-Gate im Wound-Resolve + `diceCompose.always_fail_marker_row_html` als Producer
+   verdrahten; danach Snakebites-Folge-Task (gleicher Effect-Typ + S8+-Ausnahme, Backlog).
+5. **K1 gekürzt (Aufgabe 5):** nur Nihilakh + Mephrit; Nihilakh-Entscheid (S145) kanonisch
+   nach `ziel7.md` Stufe C, danach `S144_klan_dynastie_konzept.md` DONE+löschen;
+   Novokh/Sautekh/Nephrekh explizit → K2+ (Backlog nachziehen).
+6. **FixD Brief 1** (`_common.py`, Spez. war `S142_fixD_resolution_tabs.md` §4); dann **B7a/B7b**;
+   dann **GO-Ausgrauen-Konsistenz** (neuer Backlog-Eintrag S149).
 
 **Manuelle UI-Verifikation (offen):**
 
 - 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — erst im Roster-Builder prüfbar.
 - 🔲 B12b-Rest (Movement-Advance-Reroll-Randfall — spec-konform, kein Bug).
 
-**Offene Handoff-Marker:** `S147_planning.md` + 3 `S147_go_audit_*.md` bleiben ANSWERED
-(Briefe 5/6 offen); `S141_ui_befunde_group_a.md` bleibt bis FixC+FixD;
-`S144_klan_dynastie_konzept.md` bleibt bis K1/K2; `S148_review.md` neu offen (Reviewer lief
-parallel zu diesem Abschluss) — für S149 prüfen/überführen.
+**Offene Handoff-Marker:** `S147_go_audit_ork_abilities.md` + `S147_go_audit_stratagems.md`
+(ANSWERED — Ork-Restpunkte prüfen, auto_wound-Lücke ist in Backlog überführt; bei nächster
+Konsumierung DONE+löschen); `S141_ui_befunde_group_a.md` bis FixC+FixD;
+`S144_klan_dynastie_konzept.md` bis K1.
 
-**Erkenntnisse S148:** (a) `grantsKeyword` generisch entschieden (F3, gilt auch für künftige
-Ork-Fälle). (b) Reanimation-Konsistenz-Entscheid in `backlog.md` §2 notiert (F2 — Stratagem-
-`reanimate` künftig wie Ability-Variante mitgezählt). (c) STOP-Regel griff bei Brief 3 (9
-Fixtures wegen Fire-Overwatch-Bedingungsänderung nachgezogen, Option 1 gewählt). (d)
-Session-Limit-Resume per `SendMessage` funktionierte (S137-Regel bestätigt). (e)
-`model_groups`-Union-Ungenauigkeit wird von `grantsKeyword` geerbt (Backlog §4).
-
-**Ratchet/Rest unverändert:** `on_declaration`-Befund (`chargePhase.py`/`fightPhase.py`);
-Stil-Nit `undo_stratagem` in-place; R-PROTO-02; Rand-Design-Konzept; GO-Keyword-Nachpflege
-(bis B13); 4c-Folge-Split; Fold-Heuristik; Totalvernichtungs-Spielende; Kleinschulden →
-`backlog.md`. Custodes hat noch keine Stratagem-Daten (W1-F-Befund).
+**Erkenntnisse S149:** (a) Zwei falsche Planner-Prämissen (`has_keywords`-Schema,
+`wargear_keywords`-Vorbild) → M6-Pflicht. (b) Executor-Fehlbuchung „✅ ERLEDIGT" trotz
+ausstehender UI-Verifikation (S116–S118-Muster; M5 nicht freigegeben — Muster beobachten).
+(c) STOP-Regeln griffen 2× korrekt (Test-Schutz Aufgabe 1, Scope B7). (d) Screenshots künftig
+mit Dateinamen in Befund-Dateien verankern (Triage-Nit).
 
 ---
 

@@ -157,6 +157,10 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 
    **Maßnahme 3 (Planner-Dateiliste, S113):** Der Planner belegt **jede Datei in der Plan-Dateiliste per grep** (wo die betroffene Logik real liegt) — keine geratenen Pfade.
 
+   **Maßnahme 4 (Planner-Schema-Beleg, S149):** Schema-/Vorbild-Behauptungen im Brief (Feldnamen, „analog X") müssen per grep/Quellzeile belegt sein, nicht nur behauptet — S149 legte zweimal eine falsche Prämisse vor (Feld `has_keywords` existierte nicht; ein angenommener `_common.py`-Konflikt bestätigte sich nicht).
+
+   **Maßnahme 5 (Executor-Render-Pfade, S149):** Bei UI-Bugfixes zählt der Executor vor dem Fix alle Render-Pfade des betroffenen Elements per grep auf und nennt sie im Bericht — S149s used-on-Fix traf nur einen von mehreren Anzeige-Orten, die Stakeholder-Verifikation scheiterte deshalb.
+
    **„Subagent-grün" ≠ „verdrahtet":** Der Orchestrator-Review prüft Wiring + Architektur-Heimat, nicht nur die Testfarbe (S70-Lehre).
 
 4. <a id="ev4"></a>**DoD-Review (Definition of Done)**

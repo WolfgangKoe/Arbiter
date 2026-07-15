@@ -21,11 +21,16 @@ Regeln:
 - Die Badges für die Schlüsselwörter in der unitCard können dieselbe Farbe haben wir z.B. "Stationary". Man erkennt es einfach nicht. (Farbteil = Backlog **B14**; der Fraktions-Keyword-Teil derselben Beobachtung ist erledigt, s. u. „Zuletzt überführt".)
 - Ich finde das Design des Rahmens der unitCard sehr schön. Ein heller Streifen auf der linken Seite, ansonsten ist der Rest des Randes dunkler (s. Bildschirmfoto vom 2026-07-11 11-54-31). Ist es möglich dieses "Design des Randes" beim zweiten Spieler vertikal zu spiegeln? Also dass der helle gelbe Rand rechts statt links ist? Und könnte man dieses Prinzip auf die Gos übertragen. Die sind zwar so grundsätzlich gut, aber ich empfinde es als zu grell. → S139-Planungsgegenstand (Rand-Design-Konzept).
 - Außerdem stelle ich immer wieder fest, dass die GO-Karten keine Schlüsselwörter zeigen, obwohl der Regeltext welche vorgibt. Bitte einplanen, dass ein Subagent diese Schlüsselwörter systematisch in der YAML-Struktur nachpflegt. → S139-Planungsgegenstand (GO-Keyword-Nachpflege in YAML).
-- Die Beobachtungen aus Bildschirmfoto vom 2026-07-09 21-29-43 und Bildschirmfoto vom 2026-07-09 21-36-36 scheinen noch nicht für die Umsetzung geplant zu sein. → Backlog B7/B8 (`docs/goals/backlog.md` §2).
+- Die Beobachtung aus Bildschirmfoto vom 2026-07-09 21-29-43 (redundanter Kopfbereich)
+  ist noch offen — Selbst-Stopp S149, Umfang > 4 Dateien. → Backlog B7
+  (`docs/goals/backlog.md` §2).
 - Ist schon irgendwo eingeplant, dass wir das UI-Konzept der heroischen Intervention (s. Bildschirmfoto vom 2026-07-11 12-03-17) ausarbeiten, um es in allen anderen Phase auszurollen? → Backlog GO-UI-Design-System Paket 6 (`docs/goals/backlog.md` §2).
 
 ## Zuletzt überführt
 
+- S149 (2026-07-15): Beobachtung Bildschirmfoto vom 2026-07-09 21-36-36 (redundanter
+  Statusbereich Stratagems-Tab) → Backlog **B8 ERLEDIGT**, Screenshot gelöscht. Die
+  zugehörige Beobachtung 21-29-43 (B7) bleibt offen (Selbst-Stopp, s. o.).
 - S146 (2026-07-14): Stufe-B manuelle UI-Verifikation bestanden (alle 7 Prüfschritte) →
   `docs/goals/ziel7.md` Checkbox abgehakt.
   - Roster-Builder-Anforderung (`before_battle`-Stratagems auswählbar machen) →
