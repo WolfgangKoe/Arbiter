@@ -4280,8 +4280,8 @@
   "9c2d7f6b-996e-4371-b39c-3649cb2462ba": {
     "started_at": "2026-07-14T17:48:26.444Z",
     "task": "start session und start App, damit ich die UI Verifikation der letzten Session durchführen kann.",
-    "peak_context": 131219,
-    "subagent_share": 82.25972445666451,
+    "peak_context": 132761,
+    "subagent_share": 80.92453890093203,
     "by_tier": {
       "Haiku": 381508,
       "Sonnet": 18026257,
@@ -4337,6 +4337,83 @@
         "tier": "Sonnet",
         "peak_context": 72675,
         "started_at": "2026-07-14T17:48:26.444Z"
+      }
+    ]
+  },
+  "df5b3643-0ede-487f-add0-3d8edcd1653b": {
+    "started_at": "2026-07-14T18:50:28.794Z",
+    "task": "start next session. Folgende Punkte möchte ich im Blick auf die letzte Session ergänzen. ICh gebe die Retromaßnahmen fr…",
+    "peak_context": 167793,
+    "subagent_share": 78.19153170556422,
+    "by_tier": {
+      "Opus": 3730066,
+      "Sonnet": 40635332,
+      "Haiku": 761755,
+      "Fable": 516887
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S147-DoD-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 103307,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "MWBD-Instanz-Fix umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 85785,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "GO-Audit A: Stratagems",
+        "tier": "Sonnet",
+        "peak_context": 131023,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Roster für B1-Verifikation ergänzen",
+        "tier": "Haiku",
+        "peak_context": 36379,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Handoff-Bereinigung + Retro-M4",
+        "tier": "Sonnet",
+        "peak_context": 131704,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "GO-Audit B2: Ork-Abilities",
+        "tier": "Sonnet",
+        "peak_context": 149593,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S147-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 167757,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "GO-Audit B1: Necron-Abilities",
+        "tier": "Sonnet",
+        "peak_context": 142535,
+        "started_at": "2026-07-14T18:50:28.794Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B1-Umsetzung Ziel-Kachel",
+        "tier": "Sonnet",
+        "peak_context": 112596,
+        "started_at": "2026-07-14T18:50:28.794Z"
       }
     ]
   }

@@ -27,51 +27,52 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S146, 2026-07-14)
+## Aktueller Stand (nach S147, 2026-07-15)
 
-S146: (1) **Welle 1 umgesetzt:** 1a on_target-Anker Option A (`_common.py`: reaktive GOs an
-der Ziel-Kachel) + zwei Folgefixes nach Stakeholder-Live-Verifikation: Wound-Anker zeigt
-keine on_target-Karten mehr (Ziel-Kachel = einziger Ort), neue Stärke-Modifikator-Namens-
-Chips am S-vs-T-Vergleich (`stratagem_strength_labels` in `stratagemEngine.py` +
-`diceHtml.py`; Grenze dokumentiert: `buff_stat_bonus`-Fraktions-Buffs ohne Namens-Chip).
-1b: 5 Vigilus-Warlord-Traits entfernt (referenzfrei belegt). Alles manuell verifiziert.
-(2) **Ziel 7 Stufe B ABGESCHLOSSEN:** alle 7 Prüfschritte bestanden (`ziel7.md` Z. 76 ✅);
-3 Verifikations-Befunde + 2 Badge-Bugs + Review-B1 nach `backlog.md` §2 überführt.
-(3) **Nihilakh geklärt:** K1 schließt Nihilakh EIN — YAML-Eintrag ist 8E-Altbestand
-(`S146_planning.md` Entscheid 3). (4) Review: **GO mit Auflage B1**. Vollsuite 1825 passed,
-Coverage 99,12 %, mypy-Baseline 24, Architektur-/Doku-Gate grün.
+S147: (1) **GO-Audit abgeschlossen** — 3 Kataloge `docs/handoff/S147_go_audit_*.md` mit
+Fixing-Plänen ≤ M + snake_case-Inventaren (Kernbefunde: 5 CP-Fresser-Stratagems ohne
+`modifier:`-Block, Apply-Button-Bug ~15 Necron-Abilities, 7 `activated`-Abilities ohne
+Renderer, Speedwaaagh ohne Engine-Konsument, Fire Overwatch ohne Waffentyp-/Range-Check).
+(2) **Entscheide** (`S147_planning.md`): `grantsKeyword` (camelCase) als Waffen-Keyword-
+Konvention inkl. unitCard-Anzeige; camelCase-Migration als Inventar+Plan; B1 = Ziel-Kachel
+einziger Ort. (3) **Code:** MWBD-Instanz-Fix (`_buff_ability_state_key`) + B1-Umsetzung
+(Hit-/Save-Anker entfernt, Negativ-Tests B2, `design_system.md` §6.2/6.3) + Roster
+`necrons_b1_verification.yaml` (Flayed Ones, Annihilation Barge, 2× Overlord). (4) Handoff
+bereinigt (S145 migriert+gelöscht, S146 gelöscht, Retro-M4 in `agent_scopes.md`).
+(5) Review: **GO mit Auflagen** (A-1 manuelle UI-Verifikation offen, B-1 behoben).
+Vollsuite 1831 passed, Coverage 99,12 %, mypy 24, Architektur-/Doku-Gate grün.
 
-Frühere Sessions (S60–S145): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S146): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S147)
+### ▶ Nächster Schritt (S148)
 
 Reihenfolge/Priorität nur noch in `docs/goals/backlog.md` §Prioritätenliste — hier nur der
 unmittelbar nächste Schritt:
 
-1. **B1-Design-Entscheid an den Session-Anfang** (Review-Auflage, backlog §2): Deklarations-
-   Anker auf `effect_stat="wound"` filtern ODER Hit-/Save-Anker analog Wound abschaffen —
-   danach Umsetzung inkl. Negativ-Tests (B2).
-2. **Welle 2 (S146 freigegeben, nur am Headroom-Gate gescheitert):** Klan/Dynastie Brief K1
-   inkl. Nihilakh (Rang 6) ∥ FixD Brief 1 (Rang 4, `docs/audit/plans/S142_fixD_resolution_tabs.md`).
-3. Dahinter: **MWBD-Instanz-Fix** (Effort S) + **GO-Effekt-Badge-Lücke** (4 GOs) — beide
-   `backlog.md` §2, Stakeholder-priorisiert für S147.
+1. **Audit-Fixing-Pläne umsetzen** (3 Kataloge in `docs/handoff/`, Häppchen ≤ M; prioritär:
+   Apply-Button-Bug, CP-Fresser-Stratagems, `grantsKeyword`-Konvention + unitCard-Anzeige,
+   Fire-Overwatch-Bedingungen) + **camelCase-Migrationstask** (Inventare in den Katalogen).
+2. **Welle 2 (S147 freigegeben, am Review-Budget-Gate auf S148 verschoben):** Klan/Dynastie
+   Brief K1 inkl. Nihilakh ∥ FixD Brief 1 (`docs/audit/plans/S142_fixD_resolution_tabs.md`;
+   FixD erst NACH ggf. weiterer `_common.py`-Arbeit koordinieren).
 
 **Manuelle UI-Verifikation (offen):**
 
+- 🔲 **S147 B1 + MWBD** (backlog §3, Roster `necrons_b1_verification.yaml`) — Stakeholder
+  nach S147-Retro angekündigt.
 - 🔲 Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — erst im Roster-Builder prüfbar.
 - 🔲 B12b-Punkte (3) weiter offen.
 
-**Offene Handoff-Marker:** `S146_planning.md` → ANSWERED (in S147 nach Überführung löschen);
-`S141_ui_befunde_group_a.md` bleibt bis FixC+FixD; gelöscht S146 (Lifecycle erfüllt):
-`S145_planning.md`/`S145_stufeB_verifikation.md`/`S143_on_target_anker_konzept.md`/
-`S146_review.md` (Befunde in `backlog.md` §2 + Erkenntnisse überführt).
+**Offene Handoff-Marker:** `S147_planning.md` + 3 `S147_go_audit_*.md` = ANSWERED, behalten
+bis S148-Umsetzung; `S147_review.md` nach Überführung gelöscht (S147);
+`S141_ui_befunde_group_a.md` bleibt bis FixC+FixD; `S144_klan_dynastie_konzept.md` bleibt bis K2.
 
-**Erkenntnisse S146:** (a) Session-Limit-Abbruch eines Executors → SendMessage-Resume
-funktionierte nahtlos (S137-Regel bewährt). (b) Selbst-Stopp-Budget wurde im Resume
-überzogen (Auflage 60k, real ~177k) — Klausel „Budget gilt auch nach Resume" für
-`agent_scopes.md` vorgeschlagen, **Stakeholder-Freigabe offen** (Retro-M4). (c) Review-Nit
-B4 (zwei lange Warum-Kommentare `_common.py`) offen. (d) Parallel-Executoren brauchen
-getrennte `COVERAGE_FILE` (S144, erneut bewährt).
+**Erkenntnisse S147:** (a) Befund-Kataloge, die liegen bleiben = ANSWERED — DONE nur bei
+Löschung im selben Schritt (Hygiene-Gate fing falsches DONE-Briefing des Koordinators; die
+generelle Marker-Regel-Präzisierung in `agent_scopes.md` wurde als Retro-M2 NICHT freigegeben,
+ebenso Rückgabe-Deckel M3). (b) Review-B-2: `effect_stat`-kwarg nach B1 ohne Aufrufer —
+generische Infrastruktur, kein Handlungszwang. (c) Haiku für Roster-/Datenarbeit bewährt
+(2 Aufträge, 68k). (d) Review-Nit B4 (zwei lange Warum-Kommentare `_common.py`) weiter offen.
 
 **Ratchet/Rest unverändert:** `on_declaration`-Befund (`chargePhase.py`/`fightPhase.py`);
 Stil-Nit `undo_stratagem` in-place; R-PROTO-02; Rand-Design-Konzept; GO-Keyword-Nachpflege

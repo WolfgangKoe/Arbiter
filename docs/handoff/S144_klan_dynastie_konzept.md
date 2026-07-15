@@ -1,6 +1,7 @@
 STATUS: ANSWERED
 
-**Entschieden in `docs/handoff/S145_planning.md` (Stakeholder-Entscheide 2026-07-14):**
+**Entschieden 2026-07-14 (Stakeholder-Entscheide S145; Herleitung migriert nach
+`docs/goals/backlog.md` §4, Session-Entscheide-Protokoll: `docs/handoff/S147_planning.md`):**
 Frage 3 (Datenschema) = Option B (`ability_type: subfaction_passive`); Nihilakh-Wortlaut lokal
 geklärt gegen `docs/work/wahapedia_necrons/faction_overview.txt:908–936`; Klasse-C-Fälle nach
 Bestandsmuster gelöst (kein neues Konzept nötig).

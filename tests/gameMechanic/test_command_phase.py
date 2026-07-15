@@ -374,6 +374,125 @@ class TestActivatedWargear:
 
 
 # ---------------------------------------------------------------------------
+# _render_buff_roll_ability — per-instance state scoping (S147 MWBD fix)
+# ---------------------------------------------------------------------------
+
+
+class TestBuffRollAbilityInstanceScoping:
+    """Two units with the SAME buff_roll ability (e.g. two Overlords each with
+    My Will Be Done) must not share activation/target state. Analogous to the
+    wargear bug fixed by _wargear_state_key (Plan 020)."""
+
+    def _mwbd_ability(self):  # type: ignore[no-untyped-def]
+        from gameObjects.ability import Ability, Effect, Trigger
+
+        return Ability(
+            id="wh40k_9e.necrons.faction.mwbd",
+            name_en="My Will Be Done",
+            source="faction",
+            rule_text="...",
+            trigger=Trigger(timing="phase_start", phase="command"),
+            conditions=[],
+            effect=Effect(type="buff_roll"),
+            ability_type="activated",
+        )
+
+    def test_state_key_differs_per_bearer_instance(self) -> None:
+        from gameMechanic.commandPhase import _buff_ability_state_key
+
+        ability_id = "wh40k_9e.necrons.faction.mwbd"
+        first = _buff_ability_state_key("wh40k_9e.necrons.unit.overlord", ability_id)
+        second = _buff_ability_state_key("wh40k_9e.necrons.unit.overlord#1", ability_id)
+        assert first != second
+
+    def test_two_identical_bearers_get_distinct_activate_button_keys(self) -> None:
+        """Regression: rendering the same ability for two identical bearers must
+        produce two DISTINCT Streamlit button keys. Before the fix, both bearers
+        used the bare ability.id as the widget key, so the second button
+        silently collided with the first."""
+        from gameMechanic.commandPhase import _render_buff_roll_ability
+
+        ability = self._mwbd_ability()
+        captured: list[str] = []
+
+        def _record_button(*args: object, **kwargs: object) -> bool:
+            captured.append(str(kwargs.get("key", "")))
+            return False
+
+        session = _S(command_ability_state={}, pending_target_request=None)
+        _st_mock.session_state = session
+        orig_button = _st_mock.button
+        _st_mock.button = _record_button
+        try:
+            _render_buff_roll_ability(
+                ability,
+                "Necrons",
+                {"round": 1},
+                {},
+                {},
+                bearer_uid="wh40k_9e.necrons.unit.overlord",
+            )
+            _render_buff_roll_ability(
+                ability,
+                "Necrons",
+                {"round": 1},
+                {},
+                {},
+                bearer_uid="wh40k_9e.necrons.unit.overlord#1",
+            )
+        finally:
+            _st_mock.button = orig_button
+
+        assert len(captured) == 2
+        assert captured[0] != captured[1]
+        assert all(k.startswith("cmd_activate_") for k in captured)
+
+    def test_first_bearer_activation_does_not_block_second_identical_bearer(self) -> None:
+        """Regression for the reported bug: with a shared (non-instance-scoped)
+        state key, activating My Will Be Done on the first Overlord makes the
+        second (identical) Overlord read uses >= max_uses and never gets its
+        own Activate button. Simulate the pre-fix state shape (keyed by the
+        bare ability.id, as the old buggy code wrote it) and assert the second
+        bearer still renders an Activate button under the fixed, instance-
+        scoped lookup."""
+        from gameMechanic.commandPhase import _render_buff_roll_ability
+
+        ability = self._mwbd_ability()
+        session = _S(
+            command_ability_state={
+                ability.id: {
+                    "targets": ["wh40k_9e.necrons.unit.warriors#1"],
+                    "active_since_round": 1,
+                }
+            },
+            pending_target_request=None,
+        )
+        _st_mock.session_state = session
+
+        captured: list[str] = []
+
+        def _record_button(*args: object, **kwargs: object) -> bool:
+            captured.append(str(kwargs.get("key", "")))
+            return False
+
+        orig_button = _st_mock.button
+        _st_mock.button = _record_button
+        try:
+            _render_buff_roll_ability(
+                ability,
+                "Necrons",
+                {"round": 1},
+                {},
+                {},
+                bearer_uid="wh40k_9e.necrons.unit.overlord#1",
+            )
+        finally:
+            _st_mock.button = orig_button
+
+        assert any(k.startswith("cmd_activate_") for k in captured)
+
+
+# ---------------------------------------------------------------------------
 # unit_has_command_ability — army-wide command-phase ability detection helper
 # ---------------------------------------------------------------------------
 

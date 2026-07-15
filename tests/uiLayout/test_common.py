@@ -2331,8 +2331,16 @@ def test_render_resolution_tab_no_extra_divider_before_save_block(monkeypatch) -
 # ---------------------------------------------------------------------------
 
 
-def _declaration_anchor_setup(monkeypatch, targets=None):  # type: ignore[no-untyped-def]
-    """Fight-phase session: Orks group g1 has designated Necron Destroyers."""
+def _declaration_anchor_setup(  # type: ignore[no-untyped-def]
+    monkeypatch, targets=None, keyword="DESTROYER CULT"
+):
+    """Fight-phase session: Orks group g1 has designated a Necron defender.
+
+    `keyword` gates which conditions-scoped on_target GO the defender matches
+    (default DESTROYER CULT → Whirling Onslaught, the original S146 case;
+    B1-Umsetzung S147 reuses this for FLAYED ONES → Shadows of Drazak and
+    QUANTUM SHIELDING → Quantum Deflection, now that the Hit-/Save-Anker were
+    retired and those two GOs render here too)."""
     targets = targets or [("Necrons", "u_def")]
     unit, _ = _melee_group_fixture()  # Orks attacker, group "g1"
     atk_state = {"group_models": {"g1": 5}, "melee_with": list(targets)}
@@ -2349,7 +2357,7 @@ def _declaration_anchor_setup(monkeypatch, targets=None):  # type: ignore[no-unt
         toughness=5,
         save=3,
         invuln_save=None,
-        has_keyword=lambda kw: kw == "DESTROYER CULT",
+        has_keyword=lambda kw: kw == keyword,
     )
     monkeypatch.setattr(
         common,
@@ -2417,3 +2425,76 @@ def test_declaration_anchor_use_locks_other_target_tile_against_double_spend(
     assert first_tile["state"] == "used"  # Undo offered only where it was spent
     assert second_tile["state"] == "used_elsewhere"  # disabled "Used", no Undo
     assert session["cp"]["Necrons"] == 4  # still exactly one spend
+
+
+# ---------------------------------------------------------------------------
+# B1 aus S146-Review (Major) — S147 Stakeholder-Entscheid: the Hit-/Save-Anker
+# in _render_resolution_tab are retired (same "single place" treatment S146
+# Fix 2 already gave the Wound-Anker). Shadows of Drazak (hit debuff) and
+# Quantum Deflection (invuln save) now render ONLY at the declaration-time
+# target tile (render_group_assignment) — never again at their old dedicated
+# anchors inside the resolution tab. Positive coverage lives alongside the
+# Whirling Onslaught declaration-anchor tests above (same fixture, different
+# keyword); negative coverage (B2) proves the retired anchors no longer emit
+# a card for either GO even when the defender matches their condition.
+# ---------------------------------------------------------------------------
+
+
+def test_declaration_anchor_shows_shadows_of_drazak_when_target_assigned(
+    monkeypatch,
+) -> None:
+    unit, atk_state, _, captured, _ = _declaration_anchor_setup(monkeypatch, keyword="FLAYED ONES")
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    card = next(c for c in captured if c["name"] == "Shadows of Drazak")
+    assert card["state"] == "ready"
+
+
+def test_declaration_anchor_shows_quantum_deflection_when_target_assigned(
+    monkeypatch,
+) -> None:
+    unit, atk_state, _, captured, _ = _declaration_anchor_setup(
+        monkeypatch, keyword="QUANTUM SHIELDING"
+    )
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=True)
+
+    card = next(c for c in captured if c["name"] == "Quantum Deflection")
+    assert card["state"] == "ready"
+
+
+def test_render_resolution_tab_hit_anchor_omits_on_target_go(monkeypatch) -> None:
+    """Negativ-Test B2: Shadows of Drazak used to render a SECOND time at the
+    old Hit-Anker inside _render_resolution_tab (backlog B1 doubled card) —
+    that render_reactive_stratagem_box call was removed in S147, so no card
+    for it may appear from this tab at all anymore, even though the defender
+    still matches its FLAYED ONES condition."""
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    def_unit.has_keyword = lambda kw: kw == "FLAYED ONES"
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    captured = _install_reactive_box_session(monkeypatch, session)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    monkeypatch.setattr(common, "_render_damage_block", lambda *a, **kw: None)
+    _reroll_widgets(monkeypatch, session, clicked_key=None)
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert all(c["name"] != "Shadows of Drazak" for c in captured)
+
+
+def test_render_resolution_tab_save_anchor_omits_on_target_go(monkeypatch) -> None:
+    """Negativ-Test B2: Quantum Deflection used to render a SECOND time at the
+    old Save-Anker inside _render_resolution_tab — same retirement as the Hit-
+    Anker above, checked against the invuln-save GO instead."""
+    entry, unit, def_unit = _resolution_tab_entry_and_units()
+    def_unit.has_keyword = lambda kw: kw == "QUANTUM SHIELDING"
+    session = _reactive_box_session(cp={"Necrons": 5, "Orks": 5})
+    captured = _install_reactive_box_session(monkeypatch, session)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    monkeypatch.setattr(common, "_render_damage_block", lambda *a, **kw: None)
+    _reroll_widgets(monkeypatch, session, clicked_key=None)
+
+    common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert all(c["name"] != "Quantum Deflection" for c in captured)

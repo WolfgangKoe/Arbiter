@@ -258,9 +258,11 @@ die Übergangs-Ausnahme abgelehnt — reaktive GOs sind ab S134 komplett aus der
 Liste, auch wenn ihr Inline-Anker noch fehlt. Nach Paket 4a–4c sind folgende
 `phase_reactive`-GOs weiterhin nirgends aktivierbar (grep-Stand S135 Paket 4c; vorhandene
 Anker-Fenster: movement/charge/fight × `on_declaration`, `on_destroy` nur bei
-TRANSPORT-Tod, Hit-/Wound-/Save-Anker × `on_target` (effect_type-gescoped), `after_roll`
+TRANSPORT-Tod, Deklarations-Anker (Ziel-Kachel) × `on_target` — seit S146 Fix 2 (Wound)
+und S147/B1 (Hit, Save) der EINZIGE Ort für alle on_target-GOs, die dedizierten Hit-/
+Wound-/Save-Anker in `_render_resolution_tab` wurden abgeschafft —, `after_roll`
 via Advance-/Charge-/Psychic-/Damage-/Anzahl-Attacken-/Hit-/Wound-/Save-Anker (S136
-Stufe 2)):
+Stufe 2, unverändert — das sind die Command-Re-Roll-Fenster, nicht die on_target-GO-Karten)):
 
 | GO | (phase, event) | fehlender Anker |
 |---|---|---|
@@ -280,10 +282,11 @@ Mit Anker erreichbar (kein Handlungsbedarf): Command Re-Roll (inkl. Anzahl-Attac
 Paket 4c, sowie Hit-/Wound-/Save-Fenster, S136 Stufe 2 — alle 9 regelerlaubten Wurf-Arten
 von R-CMD-12 jetzt erreichbar, keine offene GO-Fensterfrage mehr für Command Re-Roll
 insgesamt), Cut Them Down, Emergency Disembarkation, Fire Overwatch, Counter-Offensive,
-Efficient Disintegration, Shadows of Drazak (Hit-Anker, Paket 4a), Whirling Onslaught
-(Deklarations-Anker an der Ziel-Kachel in `render_group_assignment`, S146 Fix 2 —
-der frühere Wound-Anker-Aufruf wurde entfernt, on_target-Wound-GOs erscheinen nur
-noch bei der Ziel-Zuweisung), Quantum Deflection (Save-Anker, Paket 4b).
+Efficient Disintegration, Shadows of Drazak, Whirling Onslaught, Quantum Deflection
+(alle drei: Deklarations-Anker an der Ziel-Kachel in `render_group_assignment`, S146
+Fix 2 + S147/B1 — die früheren dedizierten Wound- (S146), Hit- und Save-Anker (S147)
+in `_render_resolution_tab` wurden abgeschafft, alle on_target-GOs erscheinen nur noch
+einmal, bei der Ziel-Zuweisung).
 
 **Bewertung fehlender Ereignis-Fenster (Paket 4c, nur Doku — kein Bau):** drei
 Fenster fehlen komplett bzw. sind zu eng gescopt, betreffen zusammen 10 der 11 oben

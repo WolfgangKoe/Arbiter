@@ -138,12 +138,24 @@ def resolve_gain_cp_roll(
 # ---------------------------------------------------------------------------
 
 
+def _buff_ability_state_key(bearer_uid: str, ability_id: str) -> str:
+    """Per-bearer-instance state key for a buff_roll/reroll_hit_1 command ability.
+
+    Two units of the same type (same ``ability.id`` — e.g. two Overlords each
+    with My Will Be Done) must not share activation/target state. Including the
+    bearer's per-instance uid keeps each bearer's activation independent.
+    Mirrors ``_wargear_state_key`` (Plan 020).
+    """
+    return f"cmd_buff_{bearer_uid}_{ability_id}"
+
+
 def _render_buff_roll_ability(
     ability: Ability,
     faction: str,
     state: MutableMapping[str, Any],
     units_state: MutableMapping[str, Any],
     unit_by_id: dict,  # type: ignore[type-arg]
+    bearer_uid: str = "",
 ) -> None:
     """Render activate / status UI for any buff_roll command-phase ability.
 
@@ -151,7 +163,7 @@ def _render_buff_roll_ability(
     (data-driven via the ability's ``extra_uses``). Uses are tracked as a list
     of target unit keys; max uses = 1 + the owner's data-driven keyword bonus.
     """
-    ability_id = ability.id
+    ability_id = _buff_ability_state_key(bearer_uid, ability.id)
     cmd_state: dict = st.session_state.get("command_ability_state", {})  # type: ignore[type-arg]
     this_state: dict = cmd_state.get(ability_id, {})  # type: ignore[type-arg]
 
@@ -377,7 +389,14 @@ def _render_unit_command_abilities(
 
     for ability in abilities:
         if ability.effect.type in ("buff_roll", "reroll_hit_1"):
-            _render_buff_roll_ability(ability, faction, state, units_state, unit_by_id)
+            _render_buff_roll_ability(
+                ability,
+                faction,
+                state,
+                units_state,
+                unit_by_id,
+                bearer_uid=selected_state_key,
+            )
 
     unit = unit_by_id.get(unit_id)
     activated_ids = activated_wargear_ids(faction_dir)

@@ -175,6 +175,9 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   diese Schwelle, **bricht er sofort ab und gibt Zwischenstand zurück** (geänderte Dateien +
   offene Schritte) statt weiterzuarbeiten. Prüfintervall: nach jedem ~20. Tool-Call den
   Eigenverbrauch schätzen; ab 80 % des Budgets nur noch abschließen, nichts Neues beginnen.
+  **Gilt auch nach einem `SendMessage`-Resume weiter** (Retro-M4, S146: Auflage 60k Token,
+  real ~177k verbraucht — Budget/Schwelle bleiben über den Resume hinweg scharf, keine
+  Rücksetzung durch den Kontext-Neustart).
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

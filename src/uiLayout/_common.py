@@ -769,11 +769,14 @@ def render_reactive_stratagem_box(
 
     effect_type/effect_stat — narrow `candidates` beyond (phase, event) to
     stratagems whose machine-readable `effect` matches (e.g.
-    effect_type="debuff_roll", effect_stat="hit" for the Hit-roll anchor vs.
-    effect_stat="wound" for the Wound-roll anchor, S135 Paket 4a) — several
-    `on_target` reactive GOs can share one (phase, event) window but belong at
-    different anchors depending on which roll they modify. None (default)
-    keeps every (phase, event) match, as before.
+    effect_type="debuff_roll", effect_stat="hit"). Introduced for the old
+    Hit-/Wound-/Save-Anker split (S135 Paket 4a/4b); those per-roll anchors
+    were retired in favour of a single declaration-time on_target anchor
+    (S146 Fix 2 + B1 aus S146-Review, S147) — all reactive on_target GOs now
+    render once, at the target-assignment tile, unfiltered. The filter kwargs
+    remain generic infrastructure for any future non-on_target caller that
+    needs to split one (phase, event) window across several anchors. None
+    (default) keeps every (phase, event) match, as before.
 
     on_spent(stratagem) — invoked after a successful spend, for stratagem-specific
     side effects beyond CP/usage bookkeeping (e.g. Counter-Offensive reassigning
@@ -2013,22 +2016,12 @@ def _render_resolution_tab(
             label_context="Hit roll",
         )
 
-    # Hit-Anker (design_system.md §6.2/§6.3, S135 Paket 4a): the defender's own
-    # reactive GOs that debuff THIS attack's hit roll (e.g. Shadows of Drazak)
-    # — trigger is "unit selected as target of an attack" (event="on_target"),
-    # scoped to effect_type/effect_stat so a wound-roll GO sharing the same
-    # (phase, event) window does not also show up here.
-    render_reactive_stratagem_box(
-        def_faction,
-        phase_key,
-        "on_target",
-        decline_key=tab_key,
-        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
-        unit_key_for_modifier=def_uid,
-        unit_for_conditions=def_unit,
-        effect_type="debuff_roll",
-        effect_stat="hit",
-    )
+    # Kein Hit-Anker mehr für on_target-GOs (B1 aus S146-Review, S147
+    # Stakeholder-Entscheid): the defender's reactive GOs that debuff THIS
+    # attack's hit roll (e.g. Shadows of Drazak) render solely at the
+    # declaration-time anchor in render_group_assignment (target tile) —
+    # the same "single place" resolution S146 Fix 2 already applied to the
+    # Wound-Anker. Rendering it here too doubled the card (backlog B1).
 
     # Dense Cover checkbox: Shooting phase only, affects hit roll → in the HIT block
     if is_shooting:
@@ -2076,23 +2069,12 @@ def _render_resolution_tab(
         label_context="Saving throw",
     )
 
-    # Save-Anker (design_system.md §6.2/§6.3, S135 Paket 4b): the defender's own
-    # reactive GOs that grant/improve an invulnerable save for THIS attack (e.g.
-    # Quantum Deflection) — same on_target trigger as the Hit-/Wound-Anker above,
-    # scoped to effect_type="invuln_save" so it never shares those anchors, and
-    # so Tough as Squig-Hide (effect_type="restriction", a wound-roll auto-fail
-    # threshold rather than a roll modifier — not implemented via the modifier
-    # stack, S135 Paket 4b scope note) correctly stays off this anchor too.
-    render_reactive_stratagem_box(
-        def_faction,
-        phase_key,
-        "on_target",
-        decline_key=tab_key,
-        context_caption=f"{def_unit.name_en} was selected as the target of an attack.",
-        unit_key_for_modifier=def_uid,
-        unit_for_conditions=def_unit,
-        effect_type="invuln_save",
-    )
+    # Kein Save-Anker mehr für on_target-GOs (B1 aus S146-Review, S147
+    # Stakeholder-Entscheid): the defender's reactive GOs that grant/improve
+    # an invulnerable save for THIS attack (e.g. Quantum Deflection) render
+    # solely at the declaration-time anchor in render_group_assignment
+    # (target tile) — same single-place resolution as the Hit-/Wound-Anker
+    # above (S146 Fix 2 pattern extended to Hit/Save, backlog B1).
 
     # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
     # Imports were already resolved at the top of this block (above resolve_save).

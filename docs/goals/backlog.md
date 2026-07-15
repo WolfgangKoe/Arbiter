@@ -11,11 +11,23 @@ Letzter Abgleich: 2026-06-30 (S112 — Coverage-Schuld M3 erledigt (100 %), §5 
 
 ---
 
-## Prioritätenliste (Stand 2026-07-14, S145)
+## Prioritätenliste (Stand 2026-07-14, S145; migriert S147)
 
-**Kanonischer Ort der Gesamt-Reihenfolge** (Konsens-Entscheid `docs/handoff/S145_planning.md`
-§6.2/6.3, Stakeholder-Freigabe 2026-07-14). Details je Paket stehen in den verlinkten Quellen —
-hier nur Rang, Paket, Kurzbegründung, Parallelisierbarkeit.
+**Kanonischer Ort der Gesamt-Reihenfolge** (Konsens-Entscheid, Stakeholder-Freigabe
+2026-07-14). Details je Paket stehen in den verlinkten Quellen — hier nur Rang, Paket,
+Kurzbegründung, Parallelisierbarkeit.
+
+**Herleitung (S145, kurz):** Vier Prioritätsquellen drifteten auseinander — die
+next_session.md-Liste (S144, frisch), das Inline-Tag `[PRIO-NÄCHSTE]` hier (S52-Altlast,
+widersprach der next_session-Liste), `plans/README.md`s „Empfohlene Reihenfolge" (veraltet,
+nannte FixD nicht trotz P1-Status) und `ziel7.md`s fachliche Stufen-Reihenfolge (Spannung,
+kein Widerspruch: offene Stufe-B-Checkbox ist reine Verifikation, blockiert Stufe-C-
+Datenpflege nicht). Konsolidierung: diese Tabelle ist seither die alleinige Quelle der
+Session-Priorität; `next_session.md` führt nur noch den nächsten Schritt, `plans/README.md`
+nur noch Status je Plan, `ziel7.md` behält die fachlichen Stufen-Gates (Ziel-Logik, keine
+Session-Priorität), Inline-Prio-Tags entfallen. Parallel-Kriterium: Dateidisjunktheit
+(Rang 2∥3, Rang 4∥6, Rang 8 jederzeit); der `_common.py`-Konflikt erzwingt die Serie
+2 → 4 → 5 → 9.
 
 | Rang | Arbeitspaket | Begründung | Parallel? |
 |---|---|---|---|
@@ -29,11 +41,10 @@ hier nur Rang, Paket, Kurzbegründung, Parallelisierbarkeit.
 | 8 | ~~Stufe-B-Rest: Necron-Roster-UI-Verifikation~~ — **erledigt S146** (alle 7 Schritte bestanden, `ziel7.md` Z. 76) | hält das ziel7-Stufengate ehrlich; reine Stakeholder-Bildschirmzeit | ✅ jederzeit |
 | 9 | mypy-Ratchet uiLayout (17) | Dateiüberschneidung `_common.py` mit FixD | ⛔ erst nach Rang 5 |
 | 10 | #2b Direktiv-Lock-Rest (ab Bewegungsphase sperren) | eingereiht (S145-Votum), kein akuter Blocker mehr | nach Einreihung |
-| ∥ | **abilityEngine-Refactor-Vorplanung** (Planungspaket, kein Code) | analog FixD-Vorplanung; Split-Trigger erst ab ~800 Zeilen `abilityEngine.py` oder DRY-Schuld-Angang (`§4` unten) — Details `S145_planning.md` §Option C | ✅ parallel zu allem, jederzeit startbar |
+| ∥ | **abilityEngine-Refactor-Vorplanung** (Planungspaket, kein Code) | analog FixD-Vorplanung; Split-Trigger erst ab ~800 Zeilen `abilityEngine.py` oder DRY-Schuld-Angang — Details `§4` unten (abilityEngine-Vorplanung) | ✅ parallel zu allem, jederzeit startbar |
 
-Detailquellen: `docs/handoff/S145_planning.md` §6.2/6.3 (Herleitung + Begründungstiefe),
-`docs/audit/plans/README.md` (Status je Plan), `.claude/tasks/next_session.md` (nächster Schritt,
-1–3 Punkte).
+Detailquellen: `§4` unten (abilityEngine-Vorplanung), `docs/audit/plans/README.md`
+(Status je Plan), `.claude/tasks/next_session.md` (nächster Schritt, 1–3 Punkte).
 
 ---
 
@@ -470,15 +481,11 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Eingabe der zusätzlichen Attacken (Staff of Stars 4 / Scythe of Dust 3) soll wie bei
   anderen Einheiten üblich per Default auf dem Maximum vorbelegt sein; aktuell startet der
   Wert niedriger, was beim Spielen nervt.
-- 🔲 **Bug (Effort S, bestätigt per Code-Analyse S146) — MWBD-Ability bei zwei gleichen
-  Einheiten gekoppelt:** `_render_buff_roll_ability` (`src/gameMechanic/commandPhase.py:141-155`)
-  trackt State nur über die Typ-`ability.id`; der Instanz-Key (`overlord` vs. `overlord#1`)
-  geht beim Aufruf (Z. 379-380) verloren, Widget-Key Z. 196 ebenfalls nicht instanz-eindeutig.
-  Betrifft generisch alle `buff_roll`/`reroll_hit_1`-Unit-Abilities bei ≥2 gleichen Einheiten.
-  Fix-Muster existiert bereits für Wargear (Plan 020, `_wargear_state_key(bearer_uid,
-  wargear_id)`, Test `test_two_orb_bearers_render_distinct_button_keys`) — analog nachziehen +
-  Regressionstest (Testlücke: `_render_buff_roll_ability` ist komplett ungetestet).
-  Silent-King-2×-MWBD (PHAERON `extra_uses`) bleibt von so einem Fix unberührt.
+- ✅ **Bug — MWBD-Ability bei zwei gleichen Einheiten gekoppelt — ERLEDIGT (S147):**
+  `_buff_ability_state_key(bearer_uid, ability_id)` analog Wargear-Muster; State-/Widget-Keys
+  + `TargetSelectionRequest.ability_id` instanz-eindeutig; 3 Regressionstests
+  (`TestBuffRollAbilityInstanceScoping`). Manuelle UI-Verifikation offen (§3, Roster
+  `necrons_b1_verification.yaml` mit 2× Overlord).
 - 🔲 **Bug — aktive GO-Effekte ohne Badge am Wirkort (Stakeholder-Verifikation S146,
   2 Befunde):** (a) Auto-Wound-GOs „Techno-Oracular Targeting" (kein Wound-Wurf,
   automatischer Wound) und „Disintegration Capacitors" (Gauss, unmodifizierte 6 beim
@@ -487,12 +494,13 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Cover) ohne Badge am Hit- bzw. Save-Block. Verwandt mit S146-Fix 1
   (`stratagem_strength_labels`): Effekte, die nicht als Stärke-Modifikator laufen, haben
   keine Namens-Chips an ihren Wirkorten — Chip-Mechanik generisch auf weitere
-  Effekt-Typen ausdehnen. Für S147 einplanen.
-- 🔲 **B1 aus S146-Review (Major) — Deklarations-Anker filtert nicht auf Wound-Effekte:**
-  Ziel-Kachel zeigt ALLE on_target-GOs; „Shadows of Drazak" (Hit) und „Quantum
-  Deflection" (Save) rendern doppelt (Ziel-Kachel + Hit-/Save-Anker). Design-Entscheid
-  S147-Anfang: Filter auf `effect_stat="wound"` setzen ODER Hit-/Save-Anker analog Wound
-  abschaffen (+ Spec/Tests, Negativ-Tests B2 ergänzen). `docs/handoff/S146_review.md`.
+  Effekt-Typen ausdehnen. **S147: NICHT als Punktfix — geht als Teilmenge im GO-Audit auf**
+  (`docs/handoff/S147_go_audit_stratagems.md`, alle 4 GOs im Befundkatalog); Umsetzung über
+  die Audit-Fixing-Pläne in S148.
+- ✅ **B1 aus S146-Review — Doppel-Rendering on_target-GOs — ERLEDIGT (S147):**
+  Stakeholder-Entscheid: Ziel-Kachel einziger Ort; Hit-/Save-Anker für on_target-GOs
+  entfernt (`_common.py`), 2 Positiv- + 2 Negativ-Tests (B2), `design_system.md` §6.2/6.3
+  nachgezogen. Manuelle UI-Verifikation offen (§3, Roster `necrons_b1_verification.yaml`).
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
 
@@ -506,6 +514,12 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
 - [x] Skorpekh-Roster: 2× Threshers + 1× Reap-Blade getrennt (S146 verifiziert,
   Stakeholder-Verifikation 2026-07-14)
 - [ ] S48 H1–H7 (Big Mek Wargear, Silent King Waffen, Living Metal, MWBD 2×, Badge-Farben, RP)
+  — für MWBD 2× jetzt Roster `necrons_b1_verification.yaml` (2× Overlord) nutzbar
+- [ ] **S147 B1-Fix:** Ziel = Flayed Ones → „Shadows of Drazak" NUR an Ziel-Kachel, nicht im
+  HIT-Block; Ziel = Annihilation Barge → „Quantum Deflection" NUR an Ziel-Kachel, nicht im
+  SAVE-Block (Roster `necrons_b1_verification.yaml`)
+- [ ] **S147 MWBD-Fix:** beide Overlords nacheinander auswählen/aktivieren → unabhängige
+  Activate-Buttons + Ziel-Auswahl, keine gegenseitige Sperre (gleiches Roster)
 - [ ] **B12b (S141, Commit `cdb55e2f`):** zentrale Stratagems-Liste — GO auf Einheit
   einsetzen → Karte zeigt an allen anderen Angebotsstellen „Used" + „used on ⟨Einheit⟩"
 - [ ] **B12b (S141):** Charge-Phase Fire Overwatch zeigt den Suffix korrekt
@@ -573,6 +587,27 @@ Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../s
 - 🔲 **`_common.py` refactoren (Stakeholder-Auftrag S132):** `src/uiLayout/_common.py`
   (2218 Zeilen) in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei
   werden. Verwandt mit der Layer-Kopplung oben (gleicher Render-Hub).
+- 🔲 **abilityEngine-Refactor-Vorplanung (Planungspaket, kein Code; S145-Rückfrage,
+  Konsent-Entscheid — migriert aus `S145_planning.md` §Option C, S147):**
+  Stakeholder-Rückfrage, `abilityEngine.py` (594 Z., 29 Funktionen) analog
+  `stratagemEngine.py` nach Aktivierungsmodus (passiv/aktiv/triggered) als Paket
+  `abilityEngine/` aufzudröseln. Kritische Bewertung: der Modus-Schnitt trägt die reale
+  Struktur nicht — der dominante Block (~52 %) ist round_choice-/Direktiv-Logik, weder
+  klar „passiv" noch „triggered"; die natürlichen Nähte sind **Direktiven/Protokolle |
+  Unit-Buffs+Revive | Queries+Dispatch**. 594 Zeilen sind (noch) kein Kohäsionsproblem —
+  das reale Problem ist Duplikation, dafür existiert bereits die gezieltere Schuld „DRY
+  Directive-Aktiv-Logik" (s. u.). Architektur-Gate unkritisch (Layer-Import-Test prüft
+  nur Schicht-Grenzen, ein Paket innerhalb `gameMechanic/` bliebe compliant;
+  `mypy_gate.py` zählt Gesamtfehler, keine Modulpfade). Orthogonal zum YAML-Schema-
+  Entscheid (Klan/Dynastie Frage 3, Option B, K2). **Entscheid (Konsent S145):
+  zurückgestellt, mit Schwellwert statt „nie".** Jetzt: K2 legt die neue Subfraktions-
+  Passiv-Logik von Anfang an in ein **eigenes Modul** (`gameMechanic/subfactionPassives.py`)
+  statt in `abilityEngine.py` — erfüllt das Trennungs-Anliegen für den Neuzugang, ohne
+  Bestand anzufassen; `abilityEngine.py` wächst durch K2 nicht. Split-Trigger: überschreitet
+  `abilityEngine.py` dennoch ~800 Zeilen ODER wird die DRY-Schuld angegangen, dann
+  Paket-Split als eigener Refactor-Brief — Schnitt entlang der realen Nähte, NICHT
+  passiv/aktiv/triggered. Effort S, ~15–20k Token, re-exportierendes `__init__.py` als
+  Kompatibilitätsschicht; nicht parallel zu Briefs mit `abilityEngine`-Importänderungen.
 - **Test-Mock-Fragilität (S51 entdeckt):** Mehrere `src`-Module lesen das globale
   `st.session_state` und rufen einander auf (`unitMutations.set_movement_status` →
   `gameState.units_key_for`; `abilityEngine` → `gameState`/`unitMutations`). Tests mocken
