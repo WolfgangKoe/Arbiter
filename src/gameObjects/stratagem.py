@@ -17,6 +17,7 @@ from typing import Literal
 
 from gameObjects.ability import Effect
 from gameObjects.unit import Unit
+from gameObjects.weapon import Weapon
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,7 @@ class Stratagem:
     ]  # data schema only — no visibility filter; timing lives in rule_text
     player: Literal["active", "inactive", "both"]  # who may use it
     conditions: list[str] = field(default_factory=list)  # keyword conditions
+    weapon_conditions: list[str] = field(default_factory=list)  # weapon-shape keyword conditions
     rule_text: str = ""
     once_per_phase: bool = True
     once_per_battle: bool = (
@@ -101,6 +103,24 @@ def stratagem_conditions_met(conditions: list[str], unit: Unit | None = None) ->
     if unit is None:
         return False
     return all(unit.has_keyword(kw) for kw in conditions)
+
+
+def weapon_conditions_met(weapon: Weapon, conditions: list[str]) -> bool:
+    """Return True if a stratagem's weapon-shape conditions are satisfied by `weapon`.
+
+    Mirrors `stratagem_conditions_met` but checks the weapon itself instead of
+    a unit's keywords — keyword-driven, no faction-specific strings. The only
+    vocabulary understood so far is derived from `WeaponProfile.is_melee`:
+    "RANGED" is true when at least one profile is non-melee, "MELEE" when at
+    least one profile is melee (dual-profile weapons can satisfy both). A
+    caller checking whether a unit as a whole qualifies (e.g. "has at least
+    one ranged weapon") aggregates with
+    `any(weapon_conditions_met(w, conditions) for w in unit.weapons)`.
+    """
+    if not conditions:
+        return True
+    weapon_keywords = {"MELEE" if p.is_melee else "RANGED" for p in weapon.profiles}
+    return all(kw in weapon_keywords for kw in conditions)
 
 
 def stratagem_usable_by_player(player_field: str, is_this_player_active: bool) -> bool:

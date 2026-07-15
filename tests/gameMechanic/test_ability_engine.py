@@ -34,6 +34,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_after_attack_revive_ability,
     get_short_label_for_effect_type,
     get_triggered_abilities,
+    is_effect_executable,
     revive_dice_count,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -369,6 +370,54 @@ def test_execute_effect_unknown_type_returns_false() -> None:
     unit = _make_unit(rules=[])
     result = execute_effect(ability, "test.unit", "Necrons", unit)
     assert result is False
+
+
+# ---------------------------------------------------------------------------
+# is_effect_executable — single source of truth for the armyCard Apply-button
+# gate (S148 Brief 1: the button must not appear, and no state/log must be
+# written, for effect types execute_effect() cannot actually apply).
+# ---------------------------------------------------------------------------
+
+
+def test_is_effect_executable_true_for_heal() -> None:
+    assert is_effect_executable("heal") is True
+
+
+def test_is_effect_executable_false_for_unwired_triggered_effect_types() -> None:
+    # Sample of real Necron triggered-ability effect types with no execute_effect
+    # dispatch branch (S147 audit, e.g. Royal Warden buff_stat, United in
+    # Destruction reroll_wound_1, Translocation Protocols teleport).
+    for effect_type in ("buff_stat", "reroll_wound_1", "reroll_hit", "fight_last", "teleport"):
+        assert is_effect_executable(effect_type) is False
+
+
+def test_is_effect_executable_matches_execute_effect_dispatch() -> None:
+    # No second hardcoded set: whatever execute_effect() actually applies (a real
+    # state change) must be exactly what is_effect_executable() reports as executable.
+    import gameMechanic.unitMutations as _mut  # noqa: PLC0415
+
+    session = _S(
+        first_player="Necrons",
+        p1_units={"test.unit": {"current_wounds": 4, "models": 2, "destroyed": False}},
+    )
+    _mut.st.session_state = session
+    _st_mock.session_state = session
+    unit = _make_unit(rules=["livingMetal"])
+    heal_ability = _living_metal_ability()
+    assert is_effect_executable(heal_ability.effect.type) is True
+    assert execute_effect(heal_ability, "test.unit", "Necrons", unit) is True
+
+    unknown_ability = Ability(
+        id="test",
+        name_en="T",
+        source="faction_rule",
+        rule_text="",
+        trigger=Trigger(timing="phase_start", phase="command"),
+        conditions=[],
+        effect=Effect(type="buff_stat", target="self"),
+    )
+    assert is_effect_executable(unknown_ability.effect.type) is False
+    assert execute_effect(unknown_ability, "test.unit", "Necrons", unit) is False
 
 
 # ---------------------------------------------------------------------------

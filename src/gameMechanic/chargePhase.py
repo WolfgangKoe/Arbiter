@@ -160,8 +160,12 @@ def _inactive_charge(
     3240): the enemy has declared `unit` a charge target but the charge roll has not
     been made yet (rendered as long as `unit` stays in `selected_targets` — the
     Charge Successful/Failed buttons clear that list once the roll is resolved).
+
+    A unit already in Engagement Range cannot fire Overwatch at all
+    (rules_appendix.txt Z. 2319-2323) — the GO box is not offered in that case.
     """
-    st.caption("Overwatch: only unmodified 6s hit.")
+    if unit_state.get("in_melee"):
+        return
     charger = st.session_state.get("selected_unit")
     charger_name = ""
     if charger:
@@ -174,6 +178,7 @@ def _inactive_charge(
         decline_key=uid,
         context_caption=f"{unit.name_en} was declared a charge target"
         + (f" by {charger_name}." if charger_name else "."),
+        unit_for_conditions=unit,
     )
 
 

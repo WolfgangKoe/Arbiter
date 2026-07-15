@@ -271,14 +271,26 @@ Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
     (Attacken-/Charge-Sequenz) zeigen NIE Undo; Once-per-Phase wird erzwungen (nach
     Hit-Einsatz zeigen Wound/Save „used"). Größerer Eingriff: Konzept
     `docs/handoff/S137_B12_konzept.md` (S137), Umsetzung als Teil-Briefs ≤ M danach.
-    - ✅ **B12b — Header-Suffix „used on ⟨Einheit⟩" verdrahtet (S141, Commit `cdb55e2f`):**
+    - ✅ **B12b — Header-Suffix „used on ⟨Einheit⟩" verdrahtet (S141, Commit `cdb55e2f`);
+      manuelle UI-Verifikation ABGESCHLOSSEN (S148, `docs/handoff/S148_ui_verifikation.md`):**
       Resolver `stratagem_used_elsewhere_unit_name` (`src/uiLayout/_common.py`) + 3
       Zustands-Mapper + Render-Bedingung in `goCard.py`; 9 neue Tests, Vollsuite 1781
-      grün / 99,15 %. **Randfall (bewusst offen, spec-konform):** Advance-Reroll-/Inline-
-      Spends übergeben konstruktionsbedingt kein `unit_key` an `spend_stratagem` → Suffix
-      bleibt dort leer („falls Einheit bekannt"). Optionaler XS-Folge-Task: uid durch
-      `spend_stratagem` durchreichen, falls das je gewünscht wird. **Manuelle UI-Verifikation
-      steht noch aus** (s. §3).
+      grün / 99,15 %. **Randfall (bewusst offen, spec-konform, S148 verifiziert PASS):**
+      Advance-Reroll-/Inline-Spends übergeben konstruktionsbedingt kein `unit_key` an
+      `spend_stratagem` → Suffix bleibt dort leer, ebenso Fire Overwatch (Charge-Phase-Anker
+      übergibt ebenfalls kein `unit_key` — Backlog-Formulierung „zeigt den Suffix korrekt" war
+      irreführend, gemeint war nur der „Used"-Zustand selbst). Optionaler XS-Folge-Task: uid
+      durch `spend_stratagem` durchreichen, falls das je gewünscht wird.
+    - 🔴 **BUG (S148, Stakeholder-verifiziert, Prüfblock 5 Insane Bravery, hohe Priorität):**
+      In der zentralen Stratagems-Liste zeigt „used on ⟨Einheit⟩" die aktuell **gewählte**
+      Einheit statt der Einheit, auf die die GO tatsächlich angewendet wurde — Wechsel der
+      Armeeliste-Selektion ändert den angezeigten Namen, obwohl der GO-Zustand an
+      Spieler+Phase+GO hängt, nicht an der Auswahl. Vermutlich liest der Render-Code die
+      Selektion statt dem gespeicherten `unit_key`. Fundort: `src/uiLayout/gameProtocoll.py`/
+      `_common.py`. **Vor FixD Brief 1 fixen** (beide berühren `_common.py`).
+    - 🟢 **Feature-Wunsch (S148, Stakeholder):** „used on ⟨Einheit⟩"-Suffix auf **alle**
+      reaktiven GOs ausweiten (aktuell nur die zentrale Liste betroffen) — eigener Task,
+      nach dem BUG oben.
   - 🔲 **B13 — GO-Karte: Keyword-Badges (Stakeholder-Beobachtung S137):** GO-Karten zeigen
     keine Schlüsselwort-Chips (nur Name/CP/Regeltext). Neues Feature, eigener kleiner Plan;
     erweitert den GO-Card-Baustein (`design_system.md` §6). Keine Eil-Priorität
@@ -400,6 +412,10 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Eigener Mechanik-Typ „Invuln auf festen Wert setzen" (vs. der bestehenden additiven Modifier-Logik).
   Überschneidet sich mit dem SAVE-/Invuln-Badge-Bereich (Plan 017, „Invuln-Badge chaotisch"). Regel
   zuerst gegen `docs/work/wahapedia_necrons/` prüfen. Eigener Plan oder Teil von Plan 017.
+  **S148-UI-Befund (Annihilation Barge, `docs/handoff/S148_ui_verifikation.md` Prüfblock 1):**
+  unmod. Wound 1–3 misslingt bei Quantum-Shielding-Einheiten immer — wird aktuell **nicht**
+  als Debuff in der Wound-Zeile (3× ✕) noch als Buff im Save-Block angezeigt. Regeltext
+  vorher gegen `docs/work/wahapedia_necrons` verifizieren, dann in diesen Plan aufnehmen.
 - 🔲 **Waffen-Block: Rapid-Fire-Count + Range anzeigen (Refinement-Skizze IMG_4038, S94 gesichert):** Im
   Waffen-Auswahl-Block der Schussphase je Waffe die **Anzahl Attacken inkl. Rapid Fire** sowie die
   **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
@@ -501,6 +517,35 @@ Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next
   Stakeholder-Entscheid: Ziel-Kachel einziger Ort; Hit-/Save-Anker für on_target-GOs
   entfernt (`_common.py`), 2 Positiv- + 2 Negativ-Tests (B2), `design_system.md` §6.2/6.3
   nachgezogen. Manuelle UI-Verifikation offen (§3, Roster `necrons_b1_verification.yaml`).
+- 🔲 **camelCase-Umbenennung (S148 Brief 7 hat nur die Grundlage gelegt, kein Code/YAML
+  geändert):** Migrationsplan + vollständige Mapping-Tabelle (107 Felder + 3 aufgelöste
+  Kollisionen `modifier`/`target`/`target_keyword`) liegen fertig unter
+  [../spec/loader_contract.md](../spec/loader_contract.md) §8. Die eigentliche Umbenennung in
+  YAML + Loader-Code ist S149+-Scope, in Teil-Briefs ≤ Effort M zu schneiden — Reihenfolge-
+  Empfehlung aus dem Plan: (1) Stratagems `modifier`/`target`-Kollision zuerst (höchstes
+  Risiko bei naivem Rename), (2) restliche Stratagem-Felder, (3) Necron-Ability-Scope
+  (6 Dateien), (4) Ork-Ability-Scope (5 Dateien) inkl. `target_keyword`-Bereinigung +
+  Custodes-Zusatzfund (`adeptus_custodes/faction_abilities.yaml:96`, beim Verifizieren
+  mitgefunden, außerhalb der 3 S147-Audits).
+- 🔲 **Reanimation-Konsistenz — ENTSCHIEDEN (S148, kein Sonderfall mehr):** Stakeholder-
+  Entscheid: Stratagem-`reanimate` (Reanimation Prioritisation, Resurrection Protocols —
+  `necrons/stratagems.yaml:291-303,438-451`) wird künftig **genauso** mitgezählt wie die
+  Ability-Variante (Reanimation Protocols, `abilityEngine.py:413`/`armyCard.py:109`) — keine
+  Sonderbehandlung der Stratagem-Variante. Umsetzung als eigenes S149+-Ticket, Effort M/L
+  wegen nötiger Modell-Auswahl-UI (wie viele Modelle kommen zurück). Quelle:
+  `docs/handoff/S147_go_audit_stratagems.md` Lücken-Tabelle „Reanimation Prioritisation /
+  Resurrection Protocols" + Fixing-Plan-Punkt 7.
+- 🔲 **Roster-/Daten-Konsistenz-Recherche (S148-UI-Befund, Prüfblock 2):** Stakeholder hat das
+  Test-Roster als fehlerhaft befunden — Annihilation Barge war als MWBD-Ziel wählbar, ist laut
+  Stakeholder aber **nicht** CORE. Aufgabe: CORE-Keyword-Abgleich `necrons/units.yaml` vs.
+  `docs/work/wahapedia_necrons` (Annihilation Barge + Flayed Ones mitprüfen) **und** Ork Boss
+  Nob Waffen (Stakeholder-Zweifel: „wirklich nur Stikkbomb?"). Haiku-Task (reiner Datenabgleich).
+- 🔲 **`model_groups`-Union-Ungenauigkeit (S148-Folge, geerbt von `grantsKeyword`):** Der neue
+  generische `derived_keywords`-Ableitungsmechanismus (Brief 4) bildet die Vereinigung über
+  alle `model_groups` einer Einheit statt pro Gruppe zu differenzieren — bei gemischter
+  Bewaffnung (z. B. nicht jedes Modell trägt die Gauss-Waffe) zeigt die Einheit das Keyword
+  ggf. zu breit. Bestehende Ungenauigkeit, keine Regression; bei nächster `model_groups`-
+  Arbeit mitprüfen, ob eine gruppenscharfe Ableitung nötig wird.
 
 ## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
 
@@ -515,16 +560,20 @@ Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/ta
   Stakeholder-Verifikation 2026-07-14)
 - [ ] S48 H1–H7 (Big Mek Wargear, Silent King Waffen, Living Metal, MWBD 2×, Badge-Farben, RP)
   — für MWBD 2× jetzt Roster `necrons_b1_verification.yaml` (2× Overlord) nutzbar
-- [ ] **S147 B1-Fix:** Ziel = Flayed Ones → „Shadows of Drazak" NUR an Ziel-Kachel, nicht im
-  HIT-Block; Ziel = Annihilation Barge → „Quantum Deflection" NUR an Ziel-Kachel, nicht im
-  SAVE-Block (Roster `necrons_b1_verification.yaml`)
-- [ ] **S147 MWBD-Fix:** beide Overlords nacheinander auswählen/aktivieren → unabhängige
-  Activate-Buttons + Ziel-Auswahl, keine gegenseitige Sperre (gleiches Roster)
-- [ ] **B12b (S141, Commit `cdb55e2f`):** zentrale Stratagems-Liste — GO auf Einheit
-  einsetzen → Karte zeigt an allen anderen Angebotsstellen „Used" + „used on ⟨Einheit⟩"
-- [ ] **B12b (S141):** Charge-Phase Fire Overwatch zeigt den Suffix korrekt
-- [ ] **B12b (S141):** Movement Advance-Reroll zeigt **keinen** Suffix (kein `unit_key`
-  übergeben — spec-konformer Randfall, s. Backlog §2 B12b)
+- [x] **S147 B1-Fix — verifiziert (S148):** Ziel = Flayed Ones → „Shadows of Drazak" NUR an
+  Ziel-Kachel, nicht im HIT-Block; Ziel = Annihilation Barge → „Quantum Deflection" NUR an
+  Ziel-Kachel, nicht im SAVE-Block (Roster `necrons_b1_verification.yaml`, Flayed Ones dabei
+  auf 10 Modelle korrigiert — 1 Modell war unbrauchbar; Quantum-Shielding-Anzeige-Bug s. o.)
+- [x] **S147 MWBD-Fix — verifiziert (S148):** beide Overlords nacheinander auswählen/
+  aktivieren → unabhängige Activate-Buttons + Ziel-Auswahl, keine gegenseitige Sperre
+  (gleiches Roster; Roster-CORE-Inkonsistenz als eigene Recherche in §2 aufgenommen)
+- [ ] **B12b (S141, Commit `cdb55e2f`) — BUG gefunden (S148):** zentrale Stratagems-Liste
+  zeigt „used on ⟨Einheit⟩" für die aktuell gewählte statt der angewendeten Einheit — s. §2 BUG
+- [x] **B12b (S141) — verifiziert (S148):** Charge-Phase Fire Overwatch — Suffix bleibt leer
+  (kein `unit_key` übergeben, spec-konformer Randfall wie Movement Advance-Reroll); Verhalten
+  „in_melee"-Ausblendung + Fernkampf-Bedingung ebenfalls PASS
+- [x] **B12b (S141) — verifiziert (S148):** Movement Advance-Reroll zeigt **keinen** Suffix
+  (kein `unit_key` übergeben — spec-konformer Randfall, s. Backlog §2 B12b)
 - [ ] **Ziel7 Stufe C-Vorbereitung (S141, Commit `cbaeeb2`):** Emergency Disembarkation am
   neuen Ork-Transport-Roster (`data/rosters/orks_transport.yaml`, Evil Sunz, Gunwagon
   TRANSPORT) real prüfen — war zuvor mangels TRANSPORT-Roster blockiert. (Klan-Affinität

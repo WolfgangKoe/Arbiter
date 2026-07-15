@@ -43,6 +43,18 @@ class Weapon:
 `"*"` in `attacks` bedeutet: verwende `unit.attacks` (A-Charakteristik). Auflösung geschieht
 **vor** `resolve_attack_sequence()` (wie bisher bei `"User"`).
 
+### `grantsKeyword` (S148 Brief 4 — bewusster camelCase-Ausnahmefall)
+
+`WeaponProfile` trägt ein optionales `grants_keyword: str | None` (YAML: `grantsKeyword`,
+z. B. `GAUSS`/`TESLA` auf 21 Necron-Waffenprofilen in `weapons.yaml` + der Voltaic-Staff-
+Ausnahme in `relics.yaml`). Generischer Loader-Mechanismus (`_apply_weapon_granted_keywords`,
+`src/gameObjects/loader.py`): jede Waffe mit `grantsKeyword: X` im Loadout gibt der Einheit
+Keyword X — unabhängig vom konkreten X, kein Fraktionsstring in `src/`. Landet in **zwei**
+Sets: `unit.keywords` (funktional — das ist dieselbe Menge, die `has_keywords`-Bedingungen in
+`abilityEngine.py`/`stratagem.py` bereits ungeändert lesen) und `unit.derived_keywords`
+(Anzeige, analog `wargear_keywords`). Ist das erste bewusst camelCase benannte YAML-Feld in
+diesem Bereich — Einordnung in die Migrationsgrundlage: Abschnitt 8.
+
 ---
 
 ## 2. Roster-Format
@@ -419,3 +431,210 @@ Dieser Loader-Vertrag ist die Grundlage für den Army Builder (Ziel 5d):
 - Roster-Validierung (Schritt 2 oben) ist damit auch die Validierung des Army Builders
 
 Der Loader selbst kennt keinen Army-Builder-Kontext — er nimmt ein Roster und gibt ein `Army`-Objekt zurück. Ob das Roster vom Builder, vom Import oder manuell erstellt wurde, ist irrelevant.
+
+---
+
+## 8. camelCase-Migration (Grundlage, S148 Brief 7)
+
+<!-- Reine Migrationsgrundlage — kein Code-/YAML-Change. Quellen: S147-Audits
+     `docs/handoff/S147_go_audit_stratagems.md` §3, `S147_go_audit_necron_abilities.md` §5,
+     `S147_go_audit_ork_abilities.md` (snake_case-Inventar). Die eigentliche Feld-Umbenennung
+     ist ein eigener S149+-Task (s. `docs/goals/backlog.md` §2), nicht Teil dieses Abschnitts. -->
+
+Alle drei GO-Audit-Kataloge aus S147 haben unabhängig voneinander bestätigt: die Effect-/
+Ability-/Stratagem-YAMLs sind **durchgängig snake_case**. `grantsKeyword` (S148 Brief 4,
+`weapons.yaml`/`relics.yaml`) ist das **erste real existierende camelCase-Feld** in diesem
+Bereich — ein bewusster, vom Stakeholder freigegebener Bruch mit der sonst einheitlichen
+Konvention. Bevor ein automatisiertes Such-&-Ersetzen auf camelCase umstellt, müssen drei
+Namenskollisionen aufgelöst werden — ein naives Rename würde die Mehrdeutigkeit sonst 1:1
+ins neue Schema übertragen.
+
+### 8.1 Kollisionsauflösung
+
+**(a) `modifier` — überladenster Einzelbefund.** Der Key `modifier` wird für zwei völlig
+verschiedene Dinge verwendet, ausschließlich in `stratagems.yaml` (`_shared`/`necrons`/`orks`,
+20 Fundstellen: 13 Necrons + 7 Orks; Verifikation `grep -n "modifier:" data/wh40k_9e/{necrons,orks,_shared}/stratagems.yaml`
+bestätigt 13 int-Leaf- und 7 Block-Vorkommen):
+
+- **int-Leaf unter `effect:`** (z. B. `effect.modifier: 6` bei Disintegration Capacitors) —
+  ein einzelner Zahlenwert, Teil des Effekt-Payloads. → **`effectModifierValue`**
+  (Audit-Vorschlag übernommen).
+- **eigener Mapping-Block auf Top-Level** (`modifier: {roll_type, value, target, expires_at,
+  source_label}`, das `StratagemModifier`-Schema, das über `spend_stratagem` in
+  `active_modifiers` landet). → **`attackModifier`** (Audit-Vorschlag übernommen).
+
+  In `unit_abilities.yaml`/`faction_abilities.yaml`/`subfaction_abilities.yaml`/`wargear.yaml`
+  (Necron-Ability-Scope, 22 Fundstellen) kommt `modifier` **nur** als int-Leaf unter `effect:`
+  vor — der Top-Level-Block existiert dort nicht (Abilities nutzen `active_modifiers`/
+  `StratagemModifier` nicht). Dort gilt daher einheitlich `effectModifierValue`, ohne
+  Block-Gegenstück.
+
+**(b) `target` — Rollenkollision, nur in `stratagems.yaml`.** `effect.target` (10
+Fundstellen) beschreibt **wen** der Effekt grob betrifft (Werte u. a. `selected_unit`,
+`self`, `friendly_core_aura`, `enemy`, aber auch `attacker`/`defender`, verifiziert per
+`grep -n "target:" data/wh40k_9e/{necrons,orks,_shared}/stratagems.yaml`); `modifier.target`
+(dieselbe Fundstellenzahl, da 1:1 mit dem `modifier`-Block) beschreibt ausschließlich die
+Rolle in der Roll-Pipeline (`_collect_atk_modifiers`, nur `attacker`/`defender`). Da (a) den
+Top-Level-Block bereits auf `attackModifier` umbenennt, ist `attackModifier.target` durch den
+Elternpfad bereits eindeutig — eine reine Struktur-Trennung reicht dafür. Damit die beiden
+Felder aber auch **flach** (bare key, z. B. bei generischen Lookup-Helfern oder
+Dokumentations-Greps) nie verwechselt werden, wird zusätzlich `effect.target` auf
+**`effectTarget`** umbenannt. Ergebnis nach Migration: `effectTarget` (Effekt-Empfänger,
+mehrwertig) vs. `attackModifier.target` (Roll-Pipeline-Rolle, nur `attacker`/`defender`) —
+strukturell UND namentlich getrennt.
+
+  Im Necron-Ability-Scope kommt `target` (69 Fundstellen) ausschließlich unter `effect:` vor
+  (kein Top-Level-`modifier`-Block, s. (a)) — dort ist `target` kein Kollisionsfall, sondern
+  einheitlich `effectTarget` wie oben.
+
+**(c) `target_keyword` (Singular) vs. `target_keywords` (Plural) — Inkonsistenz, unabhängig
+von camelCase.** Mehrheitsform ist Plural (`target_keywords`, u. a. 7× Necron-Ability-Scope,
+weitere Treffer `necrons/faction_abilities.yaml`, `orks/faction_abilities.yaml`). Singular
+kommt **zweimal** vor — verifiziert per `grep -rn "target_keyword:" data/wh40k_9e/`:
+`orks/unit_abilities.yaml:622` (`target_keyword: [VEHICLE, MONSTER]`, Beast Snagga) **und**
+zusätzlich `adeptus_custodes/faction_abilities.yaml:96` (nicht Teil der 3 S147-Audits, beim
+Verifizieren dieses Briefs mitgefunden — reine Bestandsaufnahme, kein Custodes-Scope-Wechsel).
+Beide Singular-Stellen tragen bereits eine **Liste** als Wert — der Feldname ist der einzige
+Fehler, kein Schemafehler. Auflösung: künftig einheitlich `targetKeywords` (Plural-Form,
+camelCase), Singular-Stellen bekommen bei der eigentlichen Migration denselben Key.
+
+### 8.2 Vollständige Mapping-Tabelle
+
+Union aller Feldnamen aus den 3 Inventaren (Stratagems `_shared`+`necrons`+`orks`,
+Necron-Ability-Scope 6 Dateien, Ork-Ability-Scope 5 Dateien), ohne die drei oben aufgelösten
+Kollisionsfelder (separat behandelt) und ohne `id` (Dotted-Namespace-Identifier, kein
+Feldname i. e. S., kein Rename-Kandidat — 64/91/… Fundstellen, konsistent in allen 3 Audits
+als Ausnahme markiert). **107 verbleibende Felder**, mechanische snake_case→camelCase-Regel
+(erstes Wort klein, jedes weitere Wort groß, Unterstriche entfernt):
+
+| alt (snake_case) | neu (camelCase) |
+|---|---|
+| `abilities` | `abilities` |
+| `abilities_en` | `abilitiesEn` |
+| `ability_en` | `abilityEn` |
+| `ability_id` | `abilityId` |
+| `ability_type` | `abilityType` |
+| `active_text` | `activeText` |
+| `affects` | `affects` |
+| `amount` | `amount` |
+| `any_of` | `anyOf` |
+| `aoe_radius_inches` | `aoeRadiusInches` |
+| `applies_to` | `appliesTo` |
+| `applies_when` | `appliesWhen` |
+| `arkana` | `arkana` |
+| `badge_label` | `badgeLabel` |
+| `bonus` | `bonus` |
+| `bonus_amount` | `bonusAmount` |
+| `bonus_vs_character` | `bonusVsCharacter` |
+| `category` | `category` |
+| `condition` | `condition` |
+| `condition_prompt` | `conditionPrompt` |
+| `conditions` | `conditions` |
+| `cost_pts` | `costPts` |
+| `cover_type` | `coverType` |
+| `cp_cost` | `cpCost` |
+| `damage` | `damage` |
+| `detachment` | `detachment` |
+| `did_not_move` | `didNotMove` |
+| `directives` | `directives` |
+| `effect` | `effect` |
+| `effects` | `effects` |
+| `enforcement` | `enforcement` |
+| `event` | `event` |
+| `except_strength_ge` | `exceptStrengthGe` |
+| `expires_at` | `expiresAt` |
+| `extra_uses` | `extraUses` |
+| `faction` | `faction` |
+| `grants_ability` | `grantsAbility` |
+| `handler` | `handler` |
+| `hit_modifier` | `hitModifier` |
+| `invuln_save` | `invulnSave` |
+| `is_relic` | `isRelic` |
+| `keyword` | `keyword` |
+| `keywords` | `keywords` |
+| `klan_keyword` | `klanKeyword` |
+| `max` | `max` |
+| `min_distance_from_enemy` | `minDistanceFromEnemy` |
+| `min_range_from_enemy` | `minRangeFromEnemy` |
+| `modifies_ability` | `modifiesAbility` |
+| `mortal_dice` | `mortalDice` |
+| `name_en` | `nameEn` |
+| `nearby_friendly_above_half` | `nearbyFriendlyAboveHalf` |
+| `needs_healing` | `needsHealing` |
+| `once_per_battle` | `oncePerBattle` |
+| `once_per_phase` | `oncePerPhase` |
+| `persistent_effects` | `persistentEffects` |
+| `phase` | `phase` |
+| `player` | `player` |
+| `power_delta` | `powerDelta` |
+| `power_list` | `powerList` |
+| `powers_per_turn` | `powersPerTurn` |
+| `primary` | `primary` |
+| `profiles` | `profiles` |
+| `prompt_text` | `promptText` |
+| `range_inches` | `rangeInches` |
+| `ranged_only` | `rangedOnly` |
+| `remove` | `remove` |
+| `replaces` | `replaces` |
+| `reroll` | `reroll` |
+| `restriction` | `restriction` |
+| `revive` | `revive` |
+| `roll` | `roll` |
+| `roll_threshold` | `rollThreshold` |
+| `roll_type` | `rollType` |
+| `round_choice_label` | `roundChoiceLabel` |
+| `rule_text` | `ruleText` |
+| `secondary` | `secondary` |
+| `selector_label` | `selectorLabel` |
+| `set_damage_to` | `setDamageTo` |
+| `shared_ref` | `sharedRef` |
+| `source` | `source` |
+| `source_label` | `sourceLabel` |
+| `stage` | `stage` |
+| `stat` | `stat` |
+| `strength` | `strength` |
+| `subfaction_affinity` | `subfactionAffinity` |
+| `subfaction_field` | `subfactionField` |
+| `subfaction_label` | `subfactionLabel` |
+| `subfactions` | `subfactions` |
+| `success_on` | `successOn` |
+| `target_keywords` | `targetKeywords` |
+| `target_keywords_any` | `targetKeywordsAny` |
+| `target_rule` | `targetRule` |
+| `text_de` | `textDe` |
+| `threshold` | `threshold` |
+| `timing` | `timing` |
+| `trigger` | `trigger` |
+| `triggered_effects` | `triggeredEffects` |
+| `type` | `type` |
+| `unit_id` | `unitId` |
+| `unit_not_destroyed` | `unitNotDestroyed` |
+| `value` | `value` |
+| `waaagh_called_this_turn` | `waaaghCalledThisTurn` |
+| `weapon` | `weapon` |
+| `weapon_type` | `weaponType` |
+| `weapon_types` | `weaponTypes` |
+| `within_inches` | `withinInches` |
+| `wounds` | `wounds` |
+
+Die drei Kollisionsfelder aus 8.1 ergänzen die Tabelle:
+
+| alt (snake_case) | neu (camelCase) | Kontext |
+|---|---|---|
+| `effect.modifier` (int-Leaf) | `effectModifierValue` | Stratagems + Abilities |
+| `modifier` (Top-Level-Block) | `attackModifier` | nur Stratagems |
+| `effect.target` | `effectTarget` | Stratagems + Abilities |
+| `modifier.target` | `attackModifier.target` (unverändert, durch Elternpfad disambiguiert) | nur Stratagems |
+| `target_keyword` (Singular) | `targetKeywords` (vereinheitlicht mit Plural) | Ork-Ability-Scope + Custodes (Zusatzfund) |
+
+`grantsKeyword` selbst braucht keine Migration — es ist bereits camelCase (S148 Brief 4).
+
+### 8.3 Nicht Teil dieses Abschnitts
+
+Die eigentliche Feld-Umbenennung in YAML + Loader-Code ist **kein** S148-Scope (Aufwand
+größer als Effort M — drei Dateien-Cluster, Kollisionsauflösung zuerst nötig). Sie ist als
+eigener, in Teil-Briefs ≤ M geschnittener Task für S149+ vorgesehen, s.
+`docs/goals/backlog.md` §2. Ein sinnvoller Schnitt entlang der Cluster: (1) Stratagems
+`modifier`/`target`-Kollision zuerst (höchstes Risiko bei naivem Rename), (2) restliche
+Stratagem-Felder, (3) Necron-Ability-Scope (6 Dateien), (4) Ork-Ability-Scope (5 Dateien)
+inklusive `target_keyword`-Bereinigung und Custodes-Zusatzfund.

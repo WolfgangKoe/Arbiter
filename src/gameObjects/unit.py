@@ -120,6 +120,7 @@ class Unit:
     rules: list[str] = field(default_factory=list)
     wargear_ids: list[str] = field(default_factory=list)
     wargear_keywords: list[str] = field(default_factory=list)
+    derived_keywords: list[str] = field(default_factory=list)  # from weapon grantsKeyword
     weapon_restrictions: dict[str, str] = field(default_factory=dict)
     relic_id: str | None = None
     relic_name: str | None = None

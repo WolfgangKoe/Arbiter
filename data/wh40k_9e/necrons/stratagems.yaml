@@ -354,6 +354,12 @@ stratagems:
       stat: hit
       modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, when a TRIARCH unit is selected to shoot, or in the Fight phase, when a TRIARCH unit is selected to fight. Until the end of the phase, each time a model in that unit makes an attack, add 1 to that attack's hit roll."
+    modifier:
+      roll_type: hit
+      value: 1
+      target: attacker
+      expires_at: phase_end
+      source_label: "Judgement of the Triarch"
 
   - id: wh40k_9e.necrons.stratagem.eternal_protectors
     name_en: Eternal Protectors

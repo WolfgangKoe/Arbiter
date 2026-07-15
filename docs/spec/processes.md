@@ -516,7 +516,13 @@ flowchart TD
 
 **Eligibility Heroic Intervention:** Einheit ist CHARACTER, nicht destroyed, nicht bereits in_melee, `heroic_intervened` noch nicht gesetzt.
 
-**Overwatch:** Im inaktiven Bereich angezeigt: *„Overwatch: only unmodified 6s hit."* — kein eigener Ablauf implementiert (Scope Ziel 4d).
+**Overwatch:** Der Hinweis „nur unmodifizierte 6 trifft" steht im Regeltext der
+Fire-Overwatch-GO-Karte (der frühere separate Caption-Hinweis wurde in S148 entfernt) — kein
+eigener Ablauf implementiert (Scope Ziel 4d). Die Fire-Overwatch-GO-Box (`_inactive_charge`)
+wird nur angeboten, wenn (a) die Ziel-Einheit nicht selbst in Engagement Range steht
+(`in_melee`, rules_appendix.txt „A unit cannot fire Overwatch if there are any enemy units
+within Engagement Range of it") und (b) sie mindestens eine Fernkampfwaffe trägt
+(`weapon_conditions: [RANGED]` am Stratagem, generisch geprüft via `weapon_conditions_met`, S148).
 
 **Code-Referenzen:**
 - `src/gameMechanic/chargePhase.py` — Handler, `_active_charge`, `_render_heroic_intervention`

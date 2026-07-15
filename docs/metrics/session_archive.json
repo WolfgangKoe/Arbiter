@@ -4343,8 +4343,8 @@
   "df5b3643-0ede-487f-add0-3d8edcd1653b": {
     "started_at": "2026-07-14T18:50:28.794Z",
     "task": "start next session. Folgende Punkte möchte ich im Blick auf die letzte Session ergänzen. ICh gebe die Retromaßnahmen fr…",
-    "peak_context": 167793,
-    "subagent_share": 78.19153170556422,
+    "peak_context": 168510,
+    "subagent_share": 77.73802108881264,
     "by_tier": {
       "Opus": 3730066,
       "Sonnet": 40635332,
@@ -4414,6 +4414,96 @@
         "tier": "Sonnet",
         "peak_context": 112596,
         "started_at": "2026-07-14T18:50:28.794Z"
+      }
+    ]
+  },
+  "ac36a79b-7649-45b6-a0f0-42d7fdf3558c": {
+    "started_at": "2026-07-15T15:44:51.179Z",
+    "task": "start session, die UI-Verifikation bitte als Datei in Handoff ablegen und parallel die App starten.",
+    "peak_context": 152971,
+    "subagent_share": 88.97676653451431,
+    "by_tier": {
+      "Sonnet": 62653964,
+      "Fable": 7286847,
+      "Opus": 2776908
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 7: camelCase-Migrationsplan",
+        "tier": "Sonnet",
+        "peak_context": 138100,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 1: Apply-Button-Bug",
+        "tier": "Sonnet",
+        "peak_context": 115413,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Find Unit dataclass and keyword-check call sites",
+        "tier": "Sonnet",
+        "peak_context": 35739,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "UI-Verifikations-Leitfaden erstellen",
+        "tier": "Sonnet",
+        "peak_context": 145141,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 3: Fire-Overwatch-Bedingungen",
+        "tier": "Sonnet",
+        "peak_context": 138505,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S148 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 181097,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S148 Abschluss-Paket ausführen",
+        "tier": "Sonnet",
+        "peak_context": 163405,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 2: CP-Fresser-Stratagems",
+        "tier": "Sonnet",
+        "peak_context": 91463,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "Poll research subagent for keyword-check findings",
+        "tier": "Sonnet",
+        "peak_context": 12274,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 4: grantsKeyword-Loader",
+        "tier": "Sonnet",
+        "peak_context": 160142,
+        "started_at": "2026-07-15T15:44:51.179Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S148 Review (DoD)",
+        "tier": "Opus",
+        "peak_context": 66950,
+        "started_at": "2026-07-15T15:44:51.179Z"
       }
     ]
   }

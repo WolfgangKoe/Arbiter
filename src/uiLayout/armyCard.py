@@ -17,6 +17,7 @@ from gameMechanic.abilityEngine import (
     check_conditions,
     execute_effect,
     get_active_heal_bonus,
+    is_effect_executable,
 )
 from gameMechanic.gameLog import log_action
 from gameMechanic.gameState import (
@@ -118,6 +119,10 @@ def _render_triggered_abilities(
         ]
         if not eligible:
             st.caption(f"{ability.name_en} — no units eligible")
+            continue
+
+        if not is_effect_executable(ability.effect.type):
+            st.caption(f"{ability.name_en} — no automatic effect, resolve at the table")
             continue
 
         if ability.effect.type == "heal":

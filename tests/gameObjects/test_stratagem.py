@@ -16,7 +16,9 @@ from gameObjects.stratagem import (  # noqa: E402
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
+    weapon_conditions_met,
 )
+from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -774,3 +776,65 @@ class TestShadowsOfDrazakHasModifierBlock:
         assert strat.modifier.roll_type == "hit"
         assert strat.modifier.value == -1
         assert strat.modifier.target == "defender"
+
+
+# ---------------------------------------------------------------------------
+# S148 Brief 3 — weapon_conditions_met() weapon-shape gate (Fire Overwatch)
+# ---------------------------------------------------------------------------
+
+
+def _weapon(*profiles: WeaponProfile) -> Weapon:
+    return Weapon(id="test.weapon", name_en="Test Weapon", profiles=list(profiles))
+
+
+def _ranged_profile() -> WeaponProfile:
+    return WeaponProfile(
+        weapon_type="Rapid Fire",
+        range_inches=24,
+        attacks="1",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+
+
+def _melee_profile() -> WeaponProfile:
+    return WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="3",
+        strength=4,
+        ap=-1,
+        damage="1",
+        is_melee=True,
+    )
+
+
+class TestWeaponConditionsMet:
+    def test_no_conditions_true_for_any_weapon(self) -> None:
+        assert weapon_conditions_met(_weapon(_melee_profile()), []) is True
+
+    def test_ranged_weapon_satisfies_ranged_condition(self) -> None:
+        assert weapon_conditions_met(_weapon(_ranged_profile()), ["RANGED"]) is True
+
+    def test_melee_weapon_does_not_satisfy_ranged_condition(self) -> None:
+        assert weapon_conditions_met(_weapon(_melee_profile()), ["RANGED"]) is False
+
+    def test_melee_weapon_satisfies_melee_condition(self) -> None:
+        assert weapon_conditions_met(_weapon(_melee_profile()), ["MELEE"]) is True
+
+    def test_dual_profile_weapon_satisfies_both(self) -> None:
+        weapon = _weapon(_ranged_profile(), _melee_profile())
+        assert weapon_conditions_met(weapon, ["RANGED"]) is True
+        assert weapon_conditions_met(weapon, ["MELEE"]) is True
+
+
+class TestFireOverwatchHasWeaponConditions:
+    def test_fire_overwatch_requires_ranged_weapon(self) -> None:
+        stratagems = load_stratagems("necrons")
+        match = next(
+            (s for s in stratagems if s.id == "wh40k_9e.shared.stratagem.fire_overwatch"), None
+        )
+        assert match is not None
+        assert match.weapon_conditions == ["RANGED"]

@@ -66,16 +66,35 @@ def check_conditions(ability: Ability, unit: Unit, unit_state: MutableMapping[st
     return True
 
 
+def _execute_heal(ability: Ability, uid: str, faction: str, unit: Unit) -> bool:
+    hp = int(ability.effect.amount or 1)
+    try:
+        hp += get_active_heal_bonus(faction, unit)
+    except KeyError:
+        pass  # no faction-dir in session (e.g. minimal test state) -> no bonus
+    return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
+
+
+# Single source of truth for "which effect.type does execute_effect actually apply".
+# is_effect_executable() and execute_effect() both read this dict — a new dispatch
+# branch here is automatically reflected in is_effect_executable(), no second set
+# to keep in sync (armyCard.py must not maintain its own copy of this list).
+_EFFECT_HANDLERS: dict[str, Callable[[Ability, str, str, Unit], bool]] = {
+    "heal": _execute_heal,
+}
+
+
+def is_effect_executable(effect_type: str) -> bool:
+    """True if ``execute_effect`` has a dispatch handler for this effect type."""
+    return effect_type in _EFFECT_HANDLERS
+
+
 def execute_effect(ability: Ability, uid: str, faction: str, unit: Unit) -> bool:
     """Apply ability effect to a unit. Returns True if state actually changed."""
-    if ability.effect.type == "heal":
-        hp = int(ability.effect.amount or 1)
-        try:
-            hp += get_active_heal_bonus(faction, unit)
-        except KeyError:
-            pass  # no faction-dir in session (e.g. minimal test state) -> no bonus
-        return heal_unit(uid, faction, hp, unit, revive=ability.effect.revive)
-    return False
+    handler = _EFFECT_HANDLERS.get(ability.effect.type)
+    if handler is None:
+        return False
+    return handler(ability, uid, faction, unit)
 
 
 # Numeric directive effect types -> the key they contribute in the modifier dict.

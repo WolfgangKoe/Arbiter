@@ -476,3 +476,51 @@ class TestActiveChargeCommandReroll:
         )
 
         spy.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# S148 Brief 3 — _inactive_charge: Engagement-Range gate (rules_appendix.txt
+# Z. 2319-2323: "A unit cannot fire Overwatch if there are any enemy units
+# within Engagement Range of it") + weapon_conditions wiring (Fire Overwatch
+# needs a ranged weapon — checked against the reacting unit itself, not the
+# charging unit).
+# ---------------------------------------------------------------------------
+
+
+class TestInactiveChargeOverwatchGate:
+    def test_no_go_box_when_already_in_engagement_range(self, monkeypatch) -> None:
+        _quiet_charge_widgets(monkeypatch)
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_reactive_stratagem_box", spy)
+        cp.st.session_state = _S(selected_unit=None)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._inactive_charge("Necrons", WARRIORS, unit, _charge_unit_state(in_melee=True))
+
+        spy.assert_not_called()
+
+    def test_go_box_offered_when_not_in_melee(self, monkeypatch) -> None:
+        _quiet_charge_widgets(monkeypatch)
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_reactive_stratagem_box", spy)
+        cp.st.session_state = _S(selected_unit=None)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._inactive_charge("Necrons", WARRIORS, unit, _charge_unit_state(in_melee=False))
+
+        spy.assert_called_once()
+
+    def test_go_box_passes_reacting_unit_for_weapon_conditions(self, monkeypatch) -> None:
+        """The reacting unit itself (not the charger) is passed as
+        `unit_for_conditions` — that is whose weapons Fire Overwatch's
+        `weapon_conditions: [RANGED]` gate is checked against."""
+        _quiet_charge_widgets(monkeypatch)
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_reactive_stratagem_box", spy)
+        cp.st.session_state = _S(selected_unit=None)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._inactive_charge("Necrons", WARRIORS, unit, _charge_unit_state(in_melee=False))
+
+        spy.assert_called_once()
+        assert spy.call_args.kwargs["unit_for_conditions"] is unit

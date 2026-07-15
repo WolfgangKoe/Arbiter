@@ -594,15 +594,15 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **getestet**: nein
 - **quelle**: core_rules.txt — "each of those units can fire Overwatch before the charge roll is made … an unmodified hit roll of 6 is always required for a successful hit roll, irrespective of … Ballistic Skill or any hit roll modifiers"
 - **code**: —
-- **regel**: Overwatch wird nach Charge-Deklaration, aber vor dem Charge Roll ausgelöst; Treffer nur auf unmodifizierter 6, unabhängig von BS und Modifikatoren. Die App zeigt bisher nur einen Hinweis, erzwingt nichts. (Siehe auch R-COMBAT-23.)
+- **regel**: Overwatch wird nach Charge-Deklaration, aber vor dem Charge Roll ausgelöst; Treffer nur auf unmodifizierter 6, unabhängig von BS und Modifikatoren. Die App zeigt den Hinweis nur noch im Regeltext der Fire-Overwatch-GO-Karte (separater Caption-Hinweis in S148 entfernt), erzwingt nichts. (Siehe auch R-COMBAT-23.)
 
 ### R-CHARGE-08
-- **klasse**: A
-- **status**: offen
-- **getestet**: nein
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_no_go_box_when_already_in_engagement_range / test_go_box_offered_when_not_in_melee
 - **quelle**: core_rules.txt — "A unit cannot fire Overwatch if there are any enemy units within Engagement Range of it."
-- **code**: —
-- **regel**: Eine Einheit in Engagement Range eines Feindes darf keinen Overwatch feuern, auch wenn sie Ziel eines Charges ist. (Bedingung von R-CHARGE-07; Overwatch insgesamt noch nicht implementiert.)
+- **code**: chargePhase.py:_inactive_charge
+- **regel**: Eine Einheit in Engagement Range eines Feindes darf keinen Overwatch feuern, auch wenn sie Ziel eines Charges ist. Hybrid — die App unterdrückt die Fire-Overwatch-GO-Box, wenn die Ziel-Einheit laut App-Zustand im Nahkampf steht (`in_melee`, App-Anteil, S148); Engagement Range ohne registrierten Nahkampf (z. B. nach eigener Bewegung auf <1") bleibt Tisch-Anteil. Zusätzlich verlangt die GO-Box mindestens eine Fernkampfwaffe (`weapon_conditions: [RANGED]`, Teilaspekt von R-CHARGE-07 „resolved like a normal shooting attack").
 
 ### R-CHARGE-09
 - **klasse**: C

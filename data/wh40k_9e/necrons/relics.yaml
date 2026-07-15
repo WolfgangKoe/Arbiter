@@ -45,6 +45,7 @@
       additional hits.
 
       '
+    grantsKeyword: TESLA
   - mode: Melee
     range_inches: 0
     weapon_type: Melee

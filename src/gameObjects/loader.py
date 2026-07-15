@@ -84,7 +84,47 @@ def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
         is_melee=d.get("is_melee", False),
         effect=d.get("effect"),
         max_attacks=d.get("max_attacks"),
+        grants_keyword=d.get("grantsKeyword"),
     )
+
+
+def _weapon_granted_keywords(weapons: list[Weapon]) -> list[str]:
+    """Return the ordered, deduped set of keywords granted by weapon profiles.
+
+    Generic: a profile with `grantsKeyword: X` (YAML) grants keyword X to the
+    bearing unit, independent of X's value — no faction string here.
+    """
+    granted: list[str] = []
+    for weapon in weapons:
+        for profile in weapon.profiles:
+            kw = profile.grants_keyword
+            if kw and kw not in granted:
+                granted.append(kw)
+    return granted
+
+
+def _apply_weapon_granted_keywords(unit: Unit) -> Unit:
+    """Merge keywords granted by unit.weapons into unit.keywords/derived_keywords.
+
+    Recomputed from the current weapons list each time it is called (after base
+    catalog load, after roster wargear swaps, after a relic is applied) so it
+    stays correct regardless of which of those three sites last changed
+    unit.weapons — → docs/spec/loader_contract.md §camelCase (grantsKeyword).
+    """
+    granted = _weapon_granted_keywords(unit.weapons)
+    new_keywords = list(unit.keywords)
+    new_derived = list(unit.derived_keywords)
+    changed = False
+    for kw in granted:
+        if kw not in new_keywords:
+            new_keywords.append(kw)
+            changed = True
+        if kw not in new_derived:
+            new_derived.append(kw)
+            changed = True
+    if not changed:
+        return unit
+    return dataclasses.replace(unit, keywords=new_keywords, derived_keywords=new_derived)
 
 
 def _weapon_from_dict(d: dict[str, Any]) -> Weapon:
@@ -355,7 +395,7 @@ def _unit_from_dict(
 
     brackets_raw = d.get("damage_bracket", [])
     subfaction = d.get("subfaction")
-    return Unit(
+    unit = Unit(
         weapon_restrictions=weapon_restrictions,
         id=d["id"],
         name_en=d["name_en"],
@@ -385,6 +425,7 @@ def _unit_from_dict(
         rules=d.get("rules", []),
         model_group_specs=_parse_model_group_specs(d.get("model_groups", [])),
     )
+    return _apply_weapon_granted_keywords(unit)
 
 
 def _condition_from_dict(d: dict[str, Any]) -> Condition:
@@ -664,6 +705,7 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                     stage=s.get("stage", "active"),
                     player=s.get("player", "active"),
                     conditions=s.get("conditions") or [],
+                    weapon_conditions=s.get("weapon_conditions") or [],
                     rule_text=s.get("rule_text", ""),
                     once_per_phase=s.get("once_per_phase", True),
                     once_per_battle=s.get("once_per_battle", False),
@@ -735,6 +777,7 @@ def _relic_weapon_from_entry(entry: dict[str, Any]) -> Weapon:
                 damage=str(pd["damage"]),
                 is_melee=is_melee,
                 abilities=pd.get("abilities", pd.get("abilities_en", "")),
+                grants_keyword=pd.get("grantsKeyword"),
             )
         )
     return Weapon(
@@ -792,7 +835,7 @@ def _apply_relic(
     for eff in entry.get("persistent_effects", []):
         unit = _apply_persistent_effect(unit, eff)
 
-    return unit
+    return _apply_weapon_granted_keywords(unit)
 
 
 def _parse_move_inches(move_str: str) -> int:
@@ -1056,6 +1099,7 @@ def _apply_wargear(
         weapons=weapons,
         wargear_ids=list(unit.wargear_ids) + wargear_ids,
     )
+    unit = _apply_weapon_granted_keywords(unit)
 
     if wargear_catalog:
         granted: list[str] = []

@@ -16,6 +16,7 @@ class WeaponProfile:
     name_en: str = ""  # only set for dual-profile weapons (e.g. "Shooting", "Melee")
     effect: dict[str, Any] | None = None
     max_attacks: int | None = None
+    grants_keyword: str | None = None  # YAML: grantsKeyword — docs/spec/loader_contract.md §1
 
 
 @dataclass

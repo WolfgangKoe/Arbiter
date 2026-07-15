@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-15 17:43 CEST
+Stand: 2026-07-15 19:08 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,20 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-14 20:50 df5b  ████████████ 168k ⛔    █████░  78%    █···········
+07-15 17:44 ac36  ████████████ 153k ⛔    █████░  89%    ▚█··········
+         SA_1·  ███████████░ 138k ⚠️   Brief 7: camelCase-Migrationsplan
+         SA_2·  █████████░░░ 115k ✅    Brief 1: Apply-Button-Bug
+         SA_3·  ███░░░░░░░░░  36k ✅    Find Unit dataclass and keyword-ch…
+         SA_4·  ████████████ 145k ⚠️   UI-Verifikations-Leitfaden erstell…
+         SA_5·  ███████████░ 139k ⚠️   Brief 3: Fire-Overwatch-Bedingungen
+         SA_6·  ████████████ 181k ⛔    S148 Planning-Entwurf erstellen
+         SA_7·  ████████████ 163k ⛔    S148 Abschluss-Paket ausführen
+         SA_8·  ███████░░░░░  91k ✅    Brief 2: CP-Fresser-Stratagems
+         SA_9·  █░░░░░░░░░░░  12k ✅    Poll research subagent for keyword…
+         SA_10·  ████████████ 160k ⛔    Brief 4: grantsKeyword-Loader
+         SA_11·  █████░░░░░░░  67k ✅    S148 Review (DoD)
+----------------- ---------------------- -------------- ------------
+07-14 20:50 df5b  ████████████ 169k ⛔    █████░  78%    █···········
          SA_1·  ████████░░░░ 103k ✅    S147-DoD-Review (Opus)
          SA_2·  ███████░░░░░  86k ✅    MWBD-Instanz-Fix umsetzen
          SA_3·  ██████████░░ 131k ⚠️   GO-Audit A: Stratagems
@@ -694,3 +707,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S144 (2026-07-12)** Review/Retro S143 nachgeholt (GO m.A.); Stratagem-Datenpflege Necrons 56→40 + Orks 28→17 (Supplement/Vigilus raus); mypy 28→24 (_sum_effect_value-Helfer, Option A+B); Klan-/Dynastie-Konzept erstellt (Daten existieren, 5/13 falsch, Engine-Lücke); Review-Budget-Regel in CLAUDE.md; Aufgaben on_target+FixD → S145
 - **S146 (2026-07-14)** Welle 1: on_target-Anker Option A + Folgefixes (Wound-Anker bereinigt, Stärke-Chips), Vigilus-Traits entfernt; Ziel 7 Stufe B abgeschlossen (7/7 bestanden, 3 Befunde + 2 Badge-Bugs überführt); Nihilakh geklärt (K1 inkl.); Review GO mit Auflage B1
 - **S147 (2026-07-15)** GO-Audit (3 Kataloge: 5 CP-Fresser-Stratagems, Apply-Button-Bug, grantsKeyword-Entscheid), MWBD-Instanz-Fix, B1 Ziel-Kachel einziger Ort, Verifikations-Roster, Handoff bereinigt (S145 migriert), Review GO mit Auflagen
+- **S148 (2026-07-15)** Welle 1: Apply-Button-Gate, CP-Fresser-Modifier, Fire-Overwatch-Bedingungen, grantsKeyword generisch, camelCase-Plan; UI-Verifikation B1/MWBD mit 6 Befunden; Briefe 5/6, K1, FixD nach S149

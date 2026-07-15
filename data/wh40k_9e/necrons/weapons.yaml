@@ -139,6 +139,7 @@ weapons:
         damage: "2"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.voltaic_staff
     name_en: Voltaic Staff
@@ -218,6 +219,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.gauss_reaper
     name_en: Gauss Reaper
@@ -230,6 +232,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.gauss_blaster
     name_en: Gauss Blaster
@@ -242,6 +245,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.tesla_carbine
     name_en: Tesla Carbine
@@ -254,6 +258,7 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        grantsKeyword: TESLA
         effect:
           type: extra_hits
           trigger_value: 6
@@ -429,6 +434,7 @@ weapons:
         damage: "D3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.particle_shredder
     name_en: Particle Shredder
@@ -465,6 +471,7 @@ weapons:
         damage: "D3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.tesla_cannon
     name_en: Tesla Cannon
@@ -477,6 +484,7 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        grantsKeyword: TESLA
         effect:
           type: extra_hits
           trigger_value: 6
@@ -494,6 +502,7 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        grantsKeyword: TESLA
         effect:
           type: extra_hits
           trigger_value: 6
@@ -523,6 +532,7 @@ weapons:
         damage: "3D3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.enmitic_exterminator
     name_en: Enmitic Exterminator
@@ -966,6 +976,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.twin_tesla_carbine
     name_en: Twin Tesla Carbine
@@ -978,6 +989,7 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        grantsKeyword: TESLA
         effect:
           type: extra_hits
           trigger_value: 6
@@ -1040,6 +1052,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   # ── Doomsday Ark ──────────────────────────────────────────────────────────
 
@@ -1080,6 +1093,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   # ── Doom Scythe ───────────────────────────────────────────────────────────
 
@@ -1237,6 +1251,7 @@ weapons:
         damage: "1"
         abilities: "Each time an attack is made with this weapon, an unmodified hit roll of 6 scores 2 additional hits."
         is_melee: false
+        grantsKeyword: TESLA
         effect:
           type: extra_hits
           trigger_value: 6
@@ -1268,6 +1283,7 @@ weapons:
         damage: "1"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.particle_whip
     name_en: Particle Whip
@@ -1464,6 +1480,7 @@ weapons:
         damage: "D6+4"
         abilities: "Blast (to the extent that this weapon's single shot counts as macro-weapon)."
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.gauss_extrapolator
     name_en: Gauss Extrapolator
@@ -1476,6 +1493,7 @@ weapons:
         damage: "3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.sentry_gauss_cannon
     name_en: Sentry Gauss Cannon
@@ -1488,6 +1506,7 @@ weapons:
         damage: "3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.massive_reaper_talons
     name_en: Massive Reaper Talons
@@ -1548,6 +1567,7 @@ weapons:
         damage: "D6+3"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS
 
   - id: wh40k_9e.necrons.weapon.twin_gauss_extrapolator
     name_en: Twin Gauss Extrapolator
@@ -1560,3 +1580,4 @@ weapons:
         damage: "2"
         abilities: ""
         is_melee: false
+        grantsKeyword: GAUSS

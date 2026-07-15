@@ -20,6 +20,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
 from gameObjects.ability import Effect  # noqa: E402
+from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.unit import ModelGroup, Unit  # noqa: E402
 from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 from uiLayout._common import (  # noqa: E402
@@ -945,6 +946,28 @@ def _install_reactive_box_session(monkeypatch, session):  # type: ignore[no-unty
     return captured
 
 
+def _overwatch_unit(name_en: str = "Necron Warriors"):  # type: ignore[no-untyped-def]
+    """Mirrors the reacting unit `_inactive_charge` passes as unit_for_conditions:
+    Fire Overwatch's `weapon_conditions: [RANGED]` gate (S148 Brief 3) needs at
+    least one ranged weapon on the charge target's own weapon list."""
+    gun = Weapon(
+        id="test.ranged_weapon",
+        name_en="Test Gun",
+        profiles=[
+            WeaponProfile(
+                weapon_type="Rapid Fire",
+                range_inches=24,
+                attacks="1",
+                strength=4,
+                ap=0,
+                damage="1",
+                is_melee=False,
+            )
+        ],
+    )
+    return SimpleNamespace(has_keyword=lambda kw: False, name_en=name_en, weapons=[gun])
+
+
 def test_fire_overwatch_box_shown_when_window_open_for_defender(monkeypatch) -> None:
     """Real shared-data end-to-end check: Fire Overwatch (player=inactive) surfaces
     in the target's own column while the Charge reactive window is open."""
@@ -957,6 +980,7 @@ def test_fire_overwatch_box_shown_when_window_open_for_defender(monkeypatch) -> 
         event="on_declaration",
         decline_key="target-uid-1",
         context_caption="Warriors were declared a charge target.",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert any(c["name"] == "Fire Overwatch" for c in captured)
@@ -979,6 +1003,7 @@ def test_fire_overwatch_box_hidden_for_active_player_column(monkeypatch) -> None
         event="on_declaration",
         decline_key="target-uid-1",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert all(c["name"] != "Fire Overwatch" for c in captured)
@@ -996,6 +1021,7 @@ def test_use_action_spends_cp_and_marks_used(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-1",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
     captured[0]["on_use"]()
 
@@ -1029,6 +1055,7 @@ def test_used_at_this_anchor_offers_undo_within_window(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-2",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert captured[0]["state"] == "used"
@@ -1061,6 +1088,7 @@ def test_used_at_other_anchor_maps_to_used_elsewhere(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-2",  # a DIFFERENT target than the recorded anchor
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert captured[0]["state"] == "used_elsewhere"
@@ -1092,6 +1120,7 @@ def test_used_at_other_anchor_hands_unit_name_to_card_as_reason(monkeypatch) -> 
         event="on_declaration",
         decline_key="target-uid-2",  # a DIFFERENT target than the recorded anchor
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert captured[0]["state"] == "used_elsewhere"
@@ -1111,6 +1140,7 @@ def test_use_records_this_boxs_anchor_for_the_here_split(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-7",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
     captured[0]["on_use"]()
 
@@ -1140,10 +1170,20 @@ def test_one_players_use_does_not_block_the_opponents_same_go(monkeypatch) -> No
     captured = _install_reactive_box_session(monkeypatch, session)
 
     common.render_reactive_stratagem_box(
-        "Necrons", phase="charge", event="on_declaration", decline_key="t1", context_caption="x"
+        "Necrons",
+        phase="charge",
+        event="on_declaration",
+        decline_key="t1",
+        context_caption="x",
+        unit_for_conditions=_overwatch_unit(),
     )
     common.render_reactive_stratagem_box(
-        "Orks", phase="charge", event="on_declaration", decline_key="t1", context_caption="x"
+        "Orks",
+        phase="charge",
+        event="on_declaration",
+        decline_key="t1",
+        context_caption="x",
+        unit_for_conditions=_overwatch_unit(name_en="Boyz"),
     )
 
     by_key = {c["key"]: c for c in captured}
@@ -1163,6 +1203,7 @@ def test_cp_insufficient_shows_locked_card_with_cp_reason(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-1",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
     )
 
     assert captured[0]["state"] == "locked"
@@ -1184,6 +1225,7 @@ def test_use_action_invokes_on_spent_and_on_resolved(monkeypatch) -> None:
         event="on_declaration",
         decline_key="target-uid-1",
         context_caption="irrelevant",
+        unit_for_conditions=_overwatch_unit(),
         on_spent=lambda strat: spent_calls.append(strat.id),
         on_resolved=lambda: resolved_calls.append(1),
     )
@@ -2498,3 +2540,52 @@ def test_render_resolution_tab_save_anchor_omits_on_target_go(monkeypatch) -> No
     common._render_resolution_tab(entry, "Orks", unit, {}, True, "fight", "tab1")
 
     assert all(c["name"] != "Quantum Deflection" for c in captured)
+
+
+# ---------------------------------------------------------------------------
+# S148 Brief 2 — CP-Fresser-Stratagems: modifier: block added to 3 buff_roll
+# stratagems that were spending CP without ever applying their hit bonus.
+# ---------------------------------------------------------------------------
+
+
+def _stratagem_by_id(faction: str, strat_id: str):  # type: ignore[no-untyped-def]
+    stratagems = load_stratagems(faction)
+    return next(s for s in stratagems if s.id == strat_id)
+
+
+def test_judgement_of_the_triarch_registers_hit_modifier_after_spend() -> None:
+    strat = _stratagem_by_id("necrons", "wh40k_9e.necrons.stratagem.judgement_of_the_triarch")
+    session = _spend_session()
+    common.spend_stratagem(strat, "Necrons", "unit#1")
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "unit#1"
+    assert mods[0]["effect"]["roll_type"] == "hit"
+    assert mods[0]["effect"]["value"] == 1
+    assert mods[0]["effect"]["target"] == "attacker"
+
+
+def test_showin_off_registers_hit_modifier_after_spend() -> None:
+    strat = _stratagem_by_id("orks", "wh40k_9e.orks.stratagem.showin_off")
+    session = _spend_session()
+    session["cp"]["Orks"] = 5
+    common.spend_stratagem(strat, "Orks", "unit#1")
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "unit#1"
+    assert mods[0]["effect"]["roll_type"] == "hit"
+    assert mods[0]["effect"]["value"] == 1
+    assert mods[0]["effect"]["target"] == "attacker"
+
+
+def test_unbridled_carnage_registers_hit_modifier_after_spend() -> None:
+    strat = _stratagem_by_id("orks", "wh40k_9e.orks.stratagem.unbridled_carnage")
+    session = _spend_session()
+    session["cp"]["Orks"] = 5
+    common.spend_stratagem(strat, "Orks", "unit#1")
+    mods = session["active_modifiers"]
+    assert len(mods) == 1
+    assert mods[0]["unit_key"] == "unit#1"
+    assert mods[0]["effect"]["roll_type"] == "hit"
+    assert mods[0]["effect"]["value"] == 1
+    assert mods[0]["effect"]["target"] == "attacker"

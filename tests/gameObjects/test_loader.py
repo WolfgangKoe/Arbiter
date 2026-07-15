@@ -680,6 +680,37 @@ def test_apply_wargear_canoptek_cloak_sets_move_and_keyword() -> None:
     assert "FLY" in modified.wargear_keywords
 
 
+# ---------------------------------------------------------------------------
+# grantsKeyword: generic weapon-grants-unit-keyword derivation (S148 Brief 4)
+# ---------------------------------------------------------------------------
+
+
+def test_unit_with_gauss_weapon_gets_gauss_keyword() -> None:
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert warriors.has_keyword("GAUSS")
+    assert "GAUSS" in warriors.derived_keywords
+
+
+def test_apply_relic_voltaic_staff_grants_tesla_keyword_despite_missing_substring() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    relic_catalog = load_relic_catalog("necrons")
+
+    result = _apply_relic(overlord, "wh40k_9e.necrons.relic.voltaikstab", relic_catalog)
+
+    assert result.has_keyword("TESLA")
+    assert "TESLA" in result.derived_keywords
+
+
+def test_unit_without_gauss_or_tesla_weapon_keywords_unchanged() -> None:
+    units, _ = load_army("necrons")
+    overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
+    assert not overlord.has_keyword("GAUSS")
+    assert not overlord.has_keyword("TESLA")
+    assert overlord.derived_keywords == []
+
+
 def test_apply_wargear_shadowloom_sets_invuln() -> None:
     units, _ = load_army("necrons")
     overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")

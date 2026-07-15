@@ -194,6 +194,12 @@ stratagems:
       stat: hit
       modifier: 1
     rule_text: "Use this Stratagem in your Shooting phase, when a BAD MOONS CORE or BAD MOONS CHARACTER unit from your army is selected to shoot. Until the end of the phase, each time a model in that unit makes an attack with a Dakka weapon, an unmodified hit roll of 6 scores 1 additional hit."
+    modifier:
+      roll_type: hit
+      value: 1
+      target: attacker
+      expires_at: phase_end
+      source_label: "Showin' Off"
 
   - id: wh40k_9e.orks.stratagem.ded_sneaky
     name_en: "Ded Sneaky"
@@ -267,6 +273,12 @@ stratagems:
       stat: hit
       modifier: 1
     rule_text: "Use this Stratagem at the start of the Fight phase. Select one GOFF CORE or GOFF CHARACTER unit from your army that has the No Mukkin' About Clan Kultur. Until the end of the phase, each time a model in that unit makes an attack, it scores an additional hit on an unmodified hit roll of 5+ instead of 6."
+    modifier:
+      roll_type: hit
+      value: 1
+      target: attacker
+      expires_at: phase_end
+      source_label: "Unbridled Carnage"
 
   - id: wh40k_9e.orks.stratagem.mystic_chanting
     name_en: "Mystic Chanting"

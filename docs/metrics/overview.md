@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-15 17:43 CEST
+Stand: 2026-07-15 19:08 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,31 +14,31 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-14 20:50 df5b  ████████████ 168k ↑    █████░  78% ↓  █···········
+07-15 17:44 ac36  ████████████ 153k ↓    █████░  89% ↑  ▚█··········
+07-14 20:50 df5b  ████████████ 169k ↑    █████░  78% ↓  █···········
 07-14 19:48 9c2d  ███████████░ 133k ↑    █████░  81% ↑  ▚▚▚▚▚█······
 07-14 18:43 2574  ██████████░░ 126k ↑    ███░░░  57% ↓  ············
 07-14 18:43 a845  █████████░░░ 107k ↓    ████░░  66% ↑  ▚▚▚▚▚▚▚▚▚▚··
 07-12 22:23 0149  ████████████ 174k ↑    ████░░  61% ↑  ▚▚█·········
-07-12 21:20 9271  ████████████ 154k ↑    ░░░░░░   0% ↓  ▓▓▓▓▓▓▓▓▓▓▓▓
 ```
 
 ## Jüngste Session
 
-**2026-07-14 20:50 · df5b3643**
+**2026-07-15 17:44 · ac36a79b**
 
-- **Aufgabe:** start next session. Folgende Punkte möchte ich im Blick auf die letzte Session ergänzen. ICh gebe die Retromaßnahmen fr…
-- **Modelle:** Haupt Fable · Subagent Fable, Haiku, Opus, Sonnet
-- **Tokens gesamt:** 58,374,659 (Haupt 12,730,619 · Subagent 45,644,040, Anteil 78 %)
-- **Peak-Kontext:** ████████████ 168k / 150k
-- **cache_read:** 53,702,691 · **Output:** 493,274
+- **Aufgabe:** start session, die UI-Verifikation bitte als Datei in Handoff ablegen und parallel die App starten.
+- **Modelle:** Haupt Fable · Subagent Fable, Opus, Sonnet
+- **Tokens gesamt:** 81,726,637 (Haupt 9,008,918 · Subagent 72,717,719, Anteil 89 %)
+- **Peak-Kontext:** ████████████ 153k / 150k
+- **cache_read:** 76,722,690 · **Output:** 467,180
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ⚠️ 15 von 117 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
-- ✅ 78% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 41,397,087 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ⚠️ 3 von 92 Antworten lagen über dem 150k-Korridor — Session früher schneiden.
+- ✅ 89% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
+- ✅ 62,653,964 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -47,24 +47,26 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 ```text
 #   Agent / Aufgabe                     Peak-Kontext / 150k  Status
 --- ----------------------------------- -------------------- ------
-1   general-purpose: S147-DoD-Review (… ████████░░░░ 103k    ✅
-2   general-purpose: MWBD-Instanz-Fix … ███████░░░░░  86k    ✅
-3   general-purpose: GO-Audit A: Strat… ██████████░░ 131k    ⚠️
-4   general-purpose: Roster für B1-Ver… ███░░░░░░░░░  36k    ✅
-5   general-purpose: Handoff-Bereinigu… ███████████░ 132k    ⚠️
-6   general-purpose: GO-Audit B2: Ork-… ████████████ 150k    ⚠️
-7   general-purpose: S147-Planning-Ent… ████████████ 168k    ⛔
-8   general-purpose: GO-Audit B1: Necr… ███████████░ 143k    ⚠️
-9   general-purpose: B1-Umsetzung Ziel… █████████░░░ 113k    ✅
+1   general-purpose: Brief 7: camelCas… ███████████░ 138k    ⚠️
+2   general-purpose: Brief 1: Apply-Bu… █████████░░░ 115k    ✅
+3   Explore: Find Unit dataclass and k… ███░░░░░░░░░  36k    ✅
+4   general-purpose: UI-Verifikations-… ████████████ 145k    ⚠️
+5   general-purpose: Brief 3: Fire-Ove… ███████████░ 139k    ⚠️
+6   general-purpose: S148 Planning-Ent… ████████████ 181k    ⛔
+7   general-purpose: S148 Abschluss-Pa… ████████████ 163k    ⛔
+8   general-purpose: Brief 2: CP-Fress… ███████░░░░░  91k    ✅
+9   Explore: Poll research subagent fo… █░░░░░░░░░░░  12k    ✅
+10  general-purpose: Brief 4: grantsKe… ████████████ 160k    ⛔
+11  general-purpose: S148 Review (DoD)  █████░░░░░░░  67k    ✅
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  1,466
-cache_creation ▕██░░░░░░░░░░░░░░░░░░░░░░▏    7%  4,177,228
-cache_read     ▕████████████████████████▏   92%  53,702,691
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  493,274
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  24,591
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    6%  4,512,176
+cache_read     ▕████████████████████████▏   94%  76,722,690
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  467,180
 ```
 
 **Legende & Zielwerte:**
@@ -81,10 +83,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   92%  53,702,691
-Neu gecacht (Tool-Ausgaben)   ▕██░░░░░░░░░░░░░░░░░░▏    7%  4,177,228
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  1,466
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  493,274
+Warm (System/Memory/History)  ▕████████████████████▏   94%  76,722,690
+Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    6%  4,512,176
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  24,591
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  467,180
 ```
 
 **Legende (Slide-Kategorien):**
@@ -100,5 +102,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 111 Sessions: 3,289,819,780 Token (37,362 Antworten).
+Σ über 112 Sessions: 3,371,886,965 Token (38,195 Antworten).
 

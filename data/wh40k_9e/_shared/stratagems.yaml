@@ -77,6 +77,7 @@ stratagems:
     stage: active
     player: inactive
     conditions: []
+    weapon_conditions: [RANGED]
     once_per_phase: true
     timing: phase_reactive
     event: on_declaration  # after charge is declared, before charge roll

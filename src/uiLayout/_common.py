@@ -57,6 +57,7 @@ from gameObjects.stratagem import (
     stratagem_undo_visible,
     stratagem_usable_by_player,
     stratagem_visibility,
+    weapon_conditions_met,
 )
 from gameObjects.unit import ModelGroup, Unit
 from gameObjects.weapon import Weapon, WeaponProfile
@@ -725,6 +726,21 @@ def _reactive_undo_callback(strat: Stratagem, faction: str) -> Callable[[], None
     return lambda: undo_stratagem(strat, faction)
 
 
+def _weapon_conditions_met_for_unit(conditions: list[str], unit: Unit | None) -> bool:
+    """Return True if `unit` carries at least one weapon satisfying `conditions`.
+
+    No-op (True) when a stratagem has no `weapon_conditions`. Fail-safe when
+    `conditions` is set but no unit was passed — mirrors `stratagem_conditions_met`'s
+    "hidden without an explicit unit" behaviour (Fire Overwatch needs the
+    reacting unit's own weapon list, not an army-wide fallback).
+    """
+    if not conditions:
+        return True
+    if unit is None:
+        return False
+    return any(weapon_conditions_met(w, conditions) for w in unit.weapons)
+
+
 def render_reactive_stratagem_box(
     faction: str,
     phase: str,
@@ -758,14 +774,15 @@ def render_reactive_stratagem_box(
     a stable per-occurrence widget key (e.g. the charged target's uid) so two
     concurrent occurrences of the same stratagem never collide.
 
-    unit_for_conditions — the unit `strat.conditions` (keyword gate) must be
-    checked against, e.g. the targeted defender for an `on_target` anchor.
-    Defaults to None, which only stays correct for callers whose reactive
-    stratagems carry no keyword conditions (Fire Overwatch, Cut Them Down,
-    Counter-Offensive — all `conditions: []` today); a future keyword-gated
-    reactive GO with no `unit_for_conditions` passed is hidden rather than
-    shown for every unit (fail-safe, mirrors gameProtocoll.py's central-list
-    gate via the same `stratagem_conditions_met`).
+    unit_for_conditions — the unit `strat.conditions` (keyword gate) and
+    `strat.weapon_conditions` (weapon-shape gate, e.g. Fire Overwatch needing
+    a ranged weapon) must be checked against, e.g. the targeted defender for
+    an `on_target` anchor, or the reacting unit itself for a charge-target
+    reactive box. Defaults to None, which only stays correct for callers
+    whose reactive stratagems carry no keyword/weapon conditions; a future
+    gated reactive GO with no `unit_for_conditions` passed is hidden rather
+    than shown for every unit (fail-safe, mirrors gameProtocoll.py's
+    central-list gate via the same `stratagem_conditions_met`).
 
     effect_type/effect_stat — narrow `candidates` beyond (phase, event) to
     stratagems whose machine-readable `effect` matches (e.g.
@@ -815,7 +832,9 @@ def render_reactive_stratagem_box(
     for strat in candidates:
         if not stratagem_usable_by_player(strat.player, is_active):
             continue
-        met = stratagem_conditions_met(strat.conditions, unit_for_conditions)
+        met = stratagem_conditions_met(
+            strat.conditions, unit_for_conditions
+        ) and _weapon_conditions_met_for_unit(strat.weapon_conditions, unit_for_conditions)
         vis = stratagem_visibility(
             strat,
             cp,
