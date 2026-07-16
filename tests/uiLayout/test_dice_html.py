@@ -417,9 +417,9 @@ def test_special_die_html_with_content() -> None:
 
 
 def test_special_die_html_alternating_fire_has_explanation() -> None:
-    """special_die_html with Alt. Fire content renders explanation."""
-    html = special_die_html("Alt. Fire", "First attacks if within half range")
-    assert "Alt. Fire: First attacks if within half range" in html
+    """special_die_html with Alt. Fire content renders explanation (condition = effect)."""
+    html = special_die_html("Alt. Fire", "≤ half range = first attacks value")
+    assert "Alt. Fire: ≤ half range = first attacks value" in html
 
 
 def test_reroll_marker_row_places_glyph_in_correct_slot() -> None:

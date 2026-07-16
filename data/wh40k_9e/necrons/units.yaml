@@ -496,6 +496,8 @@ units:
   battlefield_role:
   - Heavy Support
   keywords:
+  - NECRONS
+  - <DYNASTY>
   - VEHICLE
   - CORE
   - QUANTUM SHIELDING
