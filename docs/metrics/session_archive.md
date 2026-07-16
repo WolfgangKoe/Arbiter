@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-16 18:02 CEST
+Stand: 2026-07-16 19:39 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,20 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-16 09:35 de37  ███████████░ 138k ⚠️   █████░  86%    ▚▚··········
+07-16 18:03 471e  ████████████ 146k ⚠️   █████░  85%    █···········
+         SA_1·  ████████████ 157k ⛔    Offene UI-Verifikationen sammeln
+         SA_2·  ████████████ 243k ⛔    B-099b Backlog-Format-Umbau
+         SA_3·  ██████░░░░░░  69k ✅    S152-Review + S151-Nachholung (DoD)
+         SA_4·  █████████░░░ 117k ✅    S152 Planning-Entwurf erstellen
+         SA_5·  ██████████░░ 122k ⚠️   B-099a Backlog Stale-Löschung
+         SA_6·  ███░░░░░░░░░  40k ✅    markdownlint-Trial entfernen
+         SA_7·  █████░░░░░░░  62k ✅    Typ-Farben-Vorschlag ableiten
+         SA_8·  ███████░░░░░  90k ✅    S152-Abschluss + Commit
+         SA_9·  ████████░░░░  97k ✅    B-098 Boss Nob Waffenprofile
+         SA_10·  ████████████ 164k ⛔    Beobachtungen-Transfer + Backlog-P…
+         SA_11·  ███████░░░░░  88k ✅    B-002 K1-Wortlaut-Fix
+----------------- ---------------------- -------------- ------------
+07-16 09:35 de37  ███████████░ 139k ⚠️   █████░  85%    ▚▚··········
          SA_1·  ███████░░░░░  86k ✅    S151-Abschluss: B-099 + Briefing
          SA_2·  ████████████ 148k ⚠️   S151-A Backlog-Inventar erstellen
          SA_3·  ████████████ 219k ⛔    S151-C briefing.md und Regel-Konso…
@@ -740,3 +753,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S149 (2026-07-15)** used-on-Fix (Verif. fehlgeschlagen, REOPEN), GAUSS/TESLA-Gates, Brief 5 geschlossen, B8 entfernt, B7-Split, Handoff bereinigt, M6/M7 Prozessregeln
 - **S150 (2026-07-16)** M8-Archiv, K1 kanonisiert, FixD Brief 1, used-on-Fix (used-Zustand), Review GO-mit-Auflagen umgesetzt
 - **S151 (2026-07-16)** Backlog-Restrukturierung: ID-Liste B-001-B-099, Details-/Archiv-Datei, index.md aufgeloest, briefing.md (ex next_session.md), 5 Waechter-Tests; Review/Retro uebersprungen (Stakeholder)
+- **S152 (2026-07-16)** B-099 Feinschliff komplett, K1-Fix, Boss-Nob-Kombiwaffen, Beobachtungen überführt, markdownlint entfernt, Review S151+S152 GO

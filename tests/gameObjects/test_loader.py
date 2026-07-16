@@ -836,6 +836,58 @@ def test_dread_klaw_extra_attacks_additive() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Boss Nob combi-weapons (B-098 Teil 1): kombi-rokkit/kombi-skorcha dual profiles
+# ---------------------------------------------------------------------------
+
+
+def test_kombi_rokkit_has_rokkit_and_shoota_profiles() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.kombi_rokkit"]
+    assert [p.name_en for p in weapon.profiles] == ["Rokkit", "Shoota"]
+
+    rokkit, shoota = weapon.profiles
+    assert rokkit.weapon_type == "Heavy D3"
+    assert rokkit.range_inches == 24
+    assert rokkit.attacks == "D3"
+    assert rokkit.strength == 8
+    assert rokkit.ap == -2
+    assert rokkit.damage == "3"
+    assert not rokkit.is_melee
+
+    assert shoota.weapon_type == "Dakka"
+    assert shoota.range_inches == 18
+    assert shoota.attacks == "3/2"
+    assert shoota.strength == 4
+    assert shoota.ap == 0
+    assert shoota.damage == "1"
+    assert shoota.effect is not None
+    assert shoota.effect["type"] == "alternating_fire"
+
+
+def test_kombi_skorcha_has_skorcha_and_shoota_profiles() -> None:
+    catalog = load_weapon_catalog("orks")
+    weapon = catalog["wh40k_9e.orks.weapon.kombi_skorcha"]
+    assert [p.name_en for p in weapon.profiles] == ["Skorcha", "Shoota"]
+
+    skorcha, shoota = weapon.profiles
+    assert skorcha.weapon_type == "Assault D6"
+    assert skorcha.range_inches == 12
+    assert skorcha.attacks == "D6"
+    assert skorcha.strength == 5
+    assert skorcha.ap == -1
+    assert skorcha.damage == "1"
+    assert skorcha.effect is not None
+    assert skorcha.effect["type"] == "auto_hit"
+
+    assert shoota.weapon_type == "Dakka"
+    assert shoota.range_inches == 18
+    assert shoota.attacks == "3/2"
+    assert shoota.strength == 4
+    assert shoota.ap == 0
+    assert shoota.damage == "1"
+
+
+# ---------------------------------------------------------------------------
 # model_groups: parsed from units.yaml into unit.model_group_specs
 # ---------------------------------------------------------------------------
 
@@ -1451,6 +1503,36 @@ def test_szarekhan_code_is_uncanny_artificers_not_both_directives() -> None:
     ids = {a.id for a in abilities}
     assert any("uncanny_artificers" in i for i in ids)
     assert not any("loyal_to_the_triarch" in i for i in ids)
+
+
+def test_nihilakh_code_is_aggressively_territorial_not_acquisitive_grasp() -> None:
+    """K1-Fix (ziel7.md): Nihilakh's Dynastic Code is Aggressively Territorial —
+    Objective Secured + AP-(-1)-to-0 in own deployment zone — not the previous
+    (wrong) 'Acquisitive Grasp' no-Fall-Back rule."""
+    abilities = load_subfaction_abilities("necrons")
+    ids = {a.id for a in abilities}
+    assert any("aggressively_territorial" in i for i in ids)
+    assert not any("acquisitive_grasp" in i for i in ids)
+
+    nihilakh = next(a for a in abilities if "nihilakh" in a.id)
+    assert nihilakh.name_en == "Aggressively Territorial"
+    assert "Objective Secured" in nihilakh.rule_text
+    assert "Armour Penetration characteristic of 0 instead" in nihilakh.rule_text
+
+
+def test_mephrit_code_is_solar_fury_not_talent_for_annihilation() -> None:
+    """K1-Fix (ziel7.md): Mephrit's Dynastic Code is Solar Fury — +3" range on
+    ranged weapons (excluding Pistols) plus the AP+1 at half-range clause — not
+    the previous (wrong) 'Talent for Annihilation' name missing the range bonus."""
+    abilities = load_subfaction_abilities("necrons")
+    ids = {a.id for a in abilities}
+    assert any("solar_fury" in i for i in ids)
+    assert not any("talent_for_annihilation" in i for i in ids)
+
+    mephrit = next(a for a in abilities if "mephrit" in a.id)
+    assert mephrit.name_en == "Solar Fury"
+    assert 'Add 3" to the Range characteristic' in mephrit.rule_text
+    assert "improved by 1" in mephrit.rule_text
 
 
 # ---------------------------------------------------------------------------

@@ -1095,3 +1095,53 @@ weapons:
         damage: D6
         abilities: "Blast. If any unmodified hit rolls of 1 are made for attacks with this weapon, the bearer suffers 1 mortal wound after shooting with this weapon."
         is_melee: false
+
+  - id: wh40k_9e.orks.weapon.kombi_rokkit
+    name_en: Kombi-rokkit
+    profiles:
+      - name_en: Rokkit
+        weapon_type: Heavy D3
+        range_inches: 24
+        attacks: D3
+        strength: 8
+        ap: -2
+        damage: 3
+        abilities: "Blast. Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
+        is_melee: false
+      - name_en: Shoota
+        weapon_type: Dakka
+        effect:
+          type: alternating_fire
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
+        is_melee: false
+
+  - id: wh40k_9e.orks.weapon.kombi_skorcha
+    name_en: Kombi-skorcha
+    profiles:
+      - name_en: Skorcha
+        weapon_type: Assault D6
+        range_inches: 12
+        attacks: D6
+        strength: 5
+        ap: -1
+        damage: 1
+        abilities: "Each time an attack is made with this weapon profile, that attack automatically hits the target. Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
+        is_melee: false
+        effect:
+          type: auto_hit
+      - name_en: Shoota
+        weapon_type: Dakka
+        effect:
+          type: alternating_fire
+        range_inches: 18
+        attacks: 3/2
+        strength: 4
+        ap: 0
+        damage: 1
+        abilities: "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
+        is_melee: false

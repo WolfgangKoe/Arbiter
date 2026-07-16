@@ -70,7 +70,9 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   „nichts da".
 
 **Konventionen:**
-- `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k).
+- `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k). Identische Buckets nutzt seit
+  S152 auch die Effort-Spalte in `docs/goals/backlog.md` (Token-Schätzung statt
+  Zeit-Kategorie, B-099b) — keine zweite, abweichende Konvention einführen.
 - `Modus`: `Gate` = Freigabe vor Umsetzung erforderlich; `Konsent` = kein Widerspruch
   reicht; `Konsens` = aktive Zustimmung aller Beteiligten.
 - `NEEDS-DECISION` im Ausgabe-Template markieren, wenn eine Stakeholder-Entscheidung

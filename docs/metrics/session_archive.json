@@ -4661,8 +4661,8 @@
   "de3709f9-ba27-4b61-b7b9-58438705e74d": {
     "started_at": "2026-07-16T07:35:57.513Z",
     "task": "start Session Hier meine Gedanken zur Backlog-Restrukturierung und next Session Backlog-Restrukturierung: - Einleitungs…",
-    "peak_context": 138317,
-    "subagent_share": 86.03451132111701,
+    "peak_context": 139007,
+    "subagent_share": 84.80430184715175,
     "by_tier": {
       "Sonnet": 34958054,
       "Fable": 6318782
@@ -4702,6 +4702,95 @@
         "tier": "Sonnet",
         "peak_context": 228479,
         "started_at": "2026-07-16T07:35:57.513Z"
+      }
+    ]
+  },
+  "471eb78b-5bc1-4a63-88cb-147c9f58d6b8": {
+    "started_at": "2026-07-16T16:03:33.055Z",
+    "task": "start session",
+    "peak_context": 145622,
+    "subagent_share": 85.23314012328925,
+    "by_tier": {
+      "Sonnet": 53093145,
+      "Opus": 2404626
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Offene UI-Verifikationen sammeln",
+        "tier": "Sonnet",
+        "peak_context": 157440,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-099b Backlog-Format-Umbau",
+        "tier": "Sonnet",
+        "peak_context": 242830,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S152-Review + S151-Nachholung (DoD)",
+        "tier": "Opus",
+        "peak_context": 69037,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S152 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 117106,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-099a Backlog Stale-Löschung",
+        "tier": "Sonnet",
+        "peak_context": 121724,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "markdownlint-Trial entfernen",
+        "tier": "Sonnet",
+        "peak_context": 40477,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Typ-Farben-Vorschlag ableiten",
+        "tier": "Sonnet",
+        "peak_context": 61927,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S152-Abschluss + Commit",
+        "tier": "Sonnet",
+        "peak_context": 89874,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-098 Boss Nob Waffenprofile",
+        "tier": "Sonnet",
+        "peak_context": 96691,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Beobachtungen-Transfer + Backlog-Pflege",
+        "tier": "Sonnet",
+        "peak_context": 164476,
+        "started_at": "2026-07-16T16:03:33.055Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-002 K1-Wortlaut-Fix",
+        "tier": "Sonnet",
+        "peak_context": 88449,
+        "started_at": "2026-07-16T16:03:33.055Z"
       }
     ]
   }

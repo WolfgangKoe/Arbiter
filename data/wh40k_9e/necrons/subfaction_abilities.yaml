@@ -22,11 +22,11 @@ subfactions:
   - id: mephrit
     name_en: Mephrit
     abilities:
-      - id: necrons.dynasty.mephrit.talent_for_annihilation
-        name_en: Talent for Annihilation
+      - id: necrons.dynasty.mephrit.solar_fury
+        name_en: Solar Fury
         ability_type: triggered
         source: dynastic_code
-        rule_text: "Each time a model in this unit makes a ranged attack that targets an enemy unit within half of the attacking weapon's maximum range, improve the AP characteristic of that attack by 1."
+        rule_text: "Add 3\" to the Range characteristic of ranged weapons (excluding Pistols) that models with this code are equipped with. Each time a model with this code makes a ranged attack that targets a unit within half range, the Armour Penetration characteristic of that attack is improved by 1."
         trigger:
           timing: persistent
           phase: shooting
@@ -34,29 +34,40 @@ subfactions:
           player: active
         conditions: []
         effect:
-          type: buff_ap
-          target: self
-          modifier: 1
+          type: multi
+          effects:
+            - type: range_bonus
+              target: self
+              value: 3
+              excludes_keyword: PISTOL
+            - type: buff_ap
+              target: self
+              modifier: 1
+              condition: target_within_half_range
 
   - id: nihilakh
     name_en: Nihilakh
     abilities:
-      - id: necrons.dynasty.nihilakh.acquisitive_grasp
-        name_en: Acquisitive Grasp
+      - id: necrons.dynasty.nihilakh.aggressively_territorial
+        name_en: Aggressively Territorial
         ability_type: triggered
         source: dynastic_code
-        rule_text: "While this unit is within range of an objective marker that you control, models in this unit cannot Fall Back."
+        rule_text: "Units with this code have the Objective Secured ability. If a model in such a unit already has this ability, that model counts as one additional model when determining control of an objective marker. Each time an attack with an Armour Penetration characteristic of -1 is allocated to a model with this code, if that model's unit is wholly within its controller's deployment zone, that attack has an Armour Penetration characteristic of 0 instead."
         trigger:
           timing: persistent
           phase: any
           stage: active
           player: either
-        conditions:
-          - has_rules: [nihilakhAcquisitiveGrasp]
+        conditions: []
         effect:
-          type: restriction
-          target: self
-          handler: nihilakhFallBack
+          type: multi
+          effects:
+            - type: objective_secured
+              target: self
+            - type: ap_override_if_neg1
+              target: self
+              to: 0
+              condition: wholly_within_own_deployment_zone
 
   - id: novokh
     name_en: Novokh

@@ -9,6 +9,10 @@
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py`
 (Port 8501; **venv:** `source .venv/bin/activate`). Branch `dev` (Arbeit), `main` (nur PR).
 
+**Die App muss dauerhaft laufen** (Stakeholder-Anweisung S152): bei Session-Start prüfen
+(`curl -s -o /dev/null -w "%{http_code}" http://localhost:8501` → 200) und andernfalls im
+Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nicht beenden.
+
 ---
 
 ## Session-Routine — nur Verweise
@@ -20,42 +24,53 @@ Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src
 
 ---
 
-## Aktueller Stand (nach S151, 2026-07-16)
+## Aktueller Stand (nach S152, 2026-07-16)
 
-S151: Backlog-Restrukturierung komplett — `backlog.md` = eine ID-Prioritätsliste (B-001–B-099,
-Ziel oben, Legende unten), Details in `backlog_details.md`, 46 Einträge + Ziel-Historie archiviert,
-`index.md` aufgelöst; `next_session.md` → `briefing.md` (Regelblock in operating_model/agent_scopes
-konsolidiert); 5 neue Wächter (`tests/docs/test_backlog_structure.py`). Vollsuite 1870 passed /
-99,14 %, mypy 24. **Review + Retro S151 ÜBERSPRUNGEN (Stakeholder-Entscheid).**
+S152: B-099 Feinschliff komplett (Typ farbig+fett, Blocker-Angaben, Effort→Token, Details-
+Template, B-092–B-097 gelöscht); B-002 (Nihilakh/Mephrit-Wortlaute) erledigt+archiviert;
+B-098 Teil 1 (Boss-Nob-Kombiwaffen `orks/weapons.yaml`, Teil 2 braucht Engine-Erweiterung);
+markdownlint-Trial entfernt (Entscheid: raus); Stakeholder-Beobachtungen überführt (B-100,
+B-101). UI-Verifikationsrunde durch Stakeholder: **B-008 + B-074 positiv → archiviert**;
+**B-009 + B-087 Nacharbeit → auf ToDo zurückgesetzt, Neuvorlage S153** (B-009: Test-Rosters
+nicht benannt; B-087: Regelkonformitäts-Zweifel Trigger-Timing + UI-Inkonsistenz, verwandt
+B-031). Review S151 (Nachholung) + S152 beide GO (`docs/handoff/S152_review.md`). Retro-
+Maßnahmen: M1+M2 für S153 vorgemerkt (unten), M3 verworfen, M4 sofort umgesetzt (B-003-Detail:
+neue deklarative `effect`-Subtypen aus B-002 brauchen Engine-Handler). Vollsuite **1874
+passed / 99,14 %**, Architektur-Gate 8 passed, Docs/Akzeptanz-Gate 23 passed.
 
-Frühere Sessions (S60–S150): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S151): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S151-Fortsetzung / S152)
+### ▶ Nächster Schritt (S153)
 
-Priorität = `docs/goals/backlog.md` (einzige Quelle). **B-099 zuerst** (Backlog-Feinschliff:
-Stale-Kandidaten B-092–B-097 löschen, Spalten-/Effort-Format, Details-Template), danach die
-bisherigen ID-Referenzen behalten:
+Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-- **B-001** FixD Brief 2 + 3 (Compute/Render-Folge)
-- **B-002** K1-Daten-Fix (Nihilakh/Mephrit-Wortlaute)
-- **B-026 / B-028** used-on-Generalkonzept (Suffix auf alle reaktiven GOs)
-- **B-056** Quantum Shielding (fester Invuln 4+ + Anzeige-Bug)
-- **B-098** Boss Nob 7b (Kombi-Waffenprofile `orks/weapons.yaml`)
+- **(a) UI-Nacharbeiten aus S152:** B-009 (zwei geeignete Rosters für PSI-Flow-Test benennen,
+  dann Neuvorlage), B-087 (Fire-Overwatch/Counter-Offensive-Trigger-Timing gegen
+  `docs/work/wahapedia_core_rules/` verifizieren, danach Neuvorlage; UI-Ausgrauen-Fix mit
+  B-031 zusammen denken).
+- **(b) B-056** Scope (b): Quantum Shielding Anzeige-Bug + neuer Mechanik-Typ „fester Invuln"
+  fürs Stratagem.
+- **(c) B-028** used-on-Suffix-Ausweitung auf alle reaktiven GOs (fest eingeplant).
+- **(d) Ex-XS-Items, nicht blockiert (Stakeholder-Auftrag: einplanen + erledigen):** B-008 [erledigt,
+  s.o.] — verbleibend: B-019, B-025, B-027, B-036, B-039, B-053, B-060, B-061, B-068, B-072,
+  B-074 [erledigt, s.o.] — verbleibend: B-079, B-082.
+- **(e) B-098 Teil 2** (Kombi-Waffen-Engine-Erweiterung: `weapon_swap` + Kombi-Mechanik).
+- **(f) Retro-Maßnahmen umsetzen:** **M1** Planner-Briefs müssen Item-Mengen bei Format-
+  Umbauten zählen (grep/wc), nicht schätzen → `docs/reference/agent_scopes.md`-Ergänzung.
+  **M2** Werkzeug-Klausel präzisieren — script-gestützte Massen-Edits zulässig bei Offenlegung
+  und grünem Gate-Beleg (B-099b-Vorfall als akzeptierter Präzedenzfall referenzieren).
 
-**Offene Handoff-Marker:** `S151_backlog_inventar.md` (ANSWERED — nach
-Stakeholder-Kenntnisnahme löschen); `S147_go_audit_ork_abilities.md` +
-`S147_go_audit_stratagems.md` (ANSWERED); `S141_ui_befunde_group_a.md` (ANSWERED, behalten
-bis FixC + FixD Brief 2/3); `S150_usedon_renderpaths.md` (ANSWERED, behalten bis
-used-on-Generalkonzept).
+**Offene Handoff-Marker:** `S147_go_audit_ork_abilities.md` + `S147_go_audit_stratagems.md`
+(ANSWERED); `S141_ui_befunde_group_a.md` (ANSWERED, behalten bis FixC + FixD Brief 2/3);
+`S150_usedon_renderpaths.md` (ANSWERED, behalten bis used-on-Generalkonzept);
+`S152_review.md` (ANSWERED, DoD+Retro-Beleg); `S152_offene_ui_verifikationen.md` (ANSWERED,
+Nacharbeiten B-009/B-087 offen, s.o.).
 
 **Offene manuelle UI-Verifikation:**
 
 - Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — blockiert bis Roster-Builder (B-067).
 - B12b-Rest (Movement-Advance-Reroll-Randfall) — B-027, spec-konform, kein Bug.
-
-**Offene Stakeholder-Entscheidung:** markdownlint-Trial (S137–S139, `.markdownlint.jsonc` +
-`npm run lint:md`) — behalten oder entfernen? Kein Backlog-Eintrag; ohne Governance-Zielort,
-bleibt hier bis zur Entscheidung.
+- B-009 / B-087 — Nacharbeit + Neuvorlage S153 (s. oben).
 
 ---
 

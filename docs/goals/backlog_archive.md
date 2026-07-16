@@ -409,3 +409,31 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
 | Ziel 5i — Abschluss: Offene Punkte | ✅ fertig (2026-06-03, archiviert) |
 | Ziel 5j — FW Necrons + Ork Datenqualität | ✅ fertig (2026-06-03, archiviert) |
 | Ziel 6 — UI-Overhaul, ArmyCard, Attackensequenz | ✅ erreicht (S119, 2026-07-03) |
+
+---
+
+## Aus der ID-indizierten Liste (migriert ab S152)
+
+- ✅ **B-002 — Klan/Dynastie K1 Wortlaut-Fix Nihilakh+Mephrit — ERLEDIGT (S152):**
+  `data/wh40k_9e/necrons/subfaction_abilities.yaml` — die 2 fachlich falschen Einträge
+  (Nihilakh + Mephrit) sind korrigiert; Entscheid war bereits S150 kanonisiert
+  (`docs/goals/ziel7.md` §K1 Stufe C), reiner Daten-Fix ohne Code-Abhängigkeit. Commit folgt
+  am Session-Ende.
+- ✅ **B-099 — Backlog-Feinschliff (Stakeholder-Auflagen S151) — ERLEDIGT (S151/S152):**
+  Fünf Stakeholder-Auflagen eingelöst — (1) sechs Stale-Verdachtskandidaten ersatzlos aus
+  Liste+Details gelöscht (B-099a, S151); (2) Beschreibungsspalte trägt Typ farbig+fett per
+  `<span style>` nach `<br>`, Blocker bei Status `Blocked` als dritte `<br>`-Zeile; (3)
+  ID-Spalte verbreitert (non-breaking-space-Padding), ID bleibt einzeilig; (4) Effort auf
+  Token-Schätzung umgestellt (~5k/~15k/~35k/~70k+ statt XS/S/M/L), Ist-Verbrauch bleibt in
+  `docs/metrics/overview.md`; (5) Details-Template neu geordnet (Typ/Status/Tier/Effort/
+  Detail-Beschreibung/Abhängigkeiten/Belege/Benötigte Regeln-Scopes/Herkunft) mit
+  bidirektionalen Backlinks (B-099b, S152). Format s. `backlog.md` Legende +
+  `backlog_details.md` Feldschema; Wächter `tests/docs/test_backlog_structure.py`.
+- ✅ **B-008 — on_target-Anker Option A UI-Prüfung — ERLEDIGT (S152):** Stakeholder-UI-
+  Verifikation positiv („Passt alles"). Ziel-Kachel (`render_group_assignment` in
+  `src/uiLayout/_common.py`) ist der einzige Ort für `on_target`-GOs, keine Dopplung in
+  Hit-/Wound-/Save-Tabs. Code seit S146/S147, Prüfung S152 abgeschlossen.
+- ✅ **B-074 — Ziel7 Stufe C Vorbereitung Emergency Disembarkation — ERLEDIGT (S152):**
+  Stakeholder-UI-Verifikation am Ork-Transport-Roster (`data/rosters/orks_transport.yaml`)
+  positiv — Emergency-Disembarkation-Box erscheint zuverlässig beim TRANSPORT-Tod, richtige
+  Spieler-Spalte, korrekte CP-Buchung.
