@@ -437,3 +437,19 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   Stakeholder-UI-Verifikation am Ork-Transport-Roster (`data/rosters/orks_transport.yaml`)
   positiv — Emergency-Disembarkation-Box erscheint zuverlässig beim TRANSPORT-Tod, richtige
   Spieler-Spalte, korrekte CP-Buchung.
+- ✅ **B-039 — Tote Produktionsfunktion `build_aura_range_hint_text` entfernen —
+  ERLEDIGT (bereits S139 entfernt, stale seit dem; archiviert S154 auf
+  Stakeholder-Entscheid):** Einziger Produktions-Konsument
+  (`armyCard._render_aura_range_hint`, Conquering-Tyrant-Aura-Hinweis) wurde bereits S138/S139
+  entfernt — der Backlog-Eintrag blieb als Leiche stehen, 0 Treffer für den Funktionsnamen
+  in `src/`/`tests/`.
+- ✅ **B-061 — Backlog-§0-Hygiene — ERLEDIGT (strukturell durch B-007-Restrukturierung
+  erledigt; archiviert S154 auf Stakeholder-Entscheid):** §0 als Abschnitt existiert seit der
+  ID-indizierten Restrukturierung (B-007, S151) nicht mehr — der Auftrag „erledigte
+  ✅-Einträge aus §0 auslagern" ist durch die neue Struktur strukturell hinfällig.
+- ✅ **B-082 — Executor-Auftrags-Checkliste härten — ERLEDIGT (bereits erfüllt durch
+  `agent_scopes.md`-Selbstprüf-Checkliste + Selbst-Stopp-Klausel, Commit `1861d9d`;
+  archiviert S154 auf Stakeholder-Entscheid):** Die geforderten Härtungen — `ruff`/
+  pre-commit vor „grün"-Claim, Token-/Zeit-Budget-Cap gegen Rabbit-Holes — sind in
+  `docs/reference/agent_scopes.md` bereits verankert (§„Selbstprüf-Checkliste (Pflicht vor
+  Rückgabe)" + „Selbst-Stopp-Klausel in jedem Brief").

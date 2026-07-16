@@ -827,28 +827,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.324–327 (S138-Befund).
 
-## B-039 — Tote Produktionsfunktion build aura range hint text entfernen
-
-[↩ Zeile in backlog.md](backlog.md#b-039)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/abilityEngine.py:324` (`build_aura_range_hint_text`), `tests/*/test_ability_engine.py`. Mit Tests gemeinsam entfernen, `acceptance/rules.md`-Eintrag nachziehen (Code-Referenz wird sonst stale). Effort XS.
-
-**Abhängigkeiten:** Einziger Produktions-Konsument (`armyCard._render_aura_range_hint`) wurde S138 entfernt (Conquering-Tyrant-Aura-Hinweis raus) — Funktion wird nur noch von Tests referenziert.
-
-**Belege:** `docs/spec/acceptance/rules.md` (Code-Referenz nachziehen).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.328–333 (S138-Retro-Maßnahme 2).
-
 ## B-040 — Fold Heuristik und Subfaction Wiring Roster zu Unit
 
 [↩ Zeile in backlog.md](backlog.md#b-040)
@@ -1311,28 +1289,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.413–416 (context-audit-S91, verarbeitet S118).
 
-## B-061 — Backlog Paragraph 0 Hygiene
-
-[↩ Zeile in backlog.md](backlog.md#b-061)
-
-**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `backlog.md` (durch diese Migration bereits obsolet). §0-Überschrift „S51" datieren; erledigte ✅-Einträge inline nach `session_archive.md`-Historie auslagern statt stehen lassen. Durch die Backlog-Restrukturierung (B-007, dieser Auftrag) strukturell überholt — §0 als Abschnitt existiert in der Neufassung nicht mehr.
-
-**Abhängigkeiten:** **Überlappt inhaltlich mit B-007 (Backlog-Restrukturierung) — bei Umsetzung zusammenlegen.** Mit der S151-Migration effektiv erledigt (§0 existiert in der Neufassung nicht mehr).
-
-**Belege:** —
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.417–418 (context-audit-S91, verarbeitet S118).
-
 ## B-062 — Audit Plaene bereinigen
 
 [↩ Zeile in backlog.md](backlog.md#b-062)
@@ -1750,28 +1706,6 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** §4 Alt-`backlog.md` Z.632–638 (S143-Refactor-Befund Punkt 4, Entscheid S144).
-
-## B-082 — Executor Auftrags Checkliste haerten
-
-[↩ Zeile in backlog.md](backlog.md#b-082)
-
-**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
-
-**Status:** ToDo
-
-**Tier:** Planner
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `docs/reference/agent_scopes.md`. Executor-Brief muss echtes `ruff`/pre-commit **VOR** dem „grün"-Claim verlangen (nicht nur pytest). Außerdem: Token-/Zeit-Budget-Cap im Auftrag gegen Rabbit-Holes; Schätzung + harter Stop-Punkt obligatorisch.
-
-**Abhängigkeiten:** Bei nächster Scope-Pflege einarbeiten.
-
-**Belege:** Lehre aus S110-Lauf 2b (161k Token/66 min ohne Cap).
-
-**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` (Executor-Brief-Checkliste).
-
-**Herkunft:** §4 Alt-`backlog.md` Z.643–647 (S110-Retro-M4).
 
 ## B-083 — architecture md Doku Session
 

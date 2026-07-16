@@ -24,55 +24,53 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S153, 2026-07-16)
+## Aktueller Stand (nach S154, 2026-07-16)
 
-S153 (Kurz-Session, Wind-down bei ~115k Kontext): Backlog-Feinschliff-Nachträge auf
-Stakeholder-Zuruf — ID-Spalte einzeilig (nbsp-verbreiterter Tabellenkopf; Link-Syntax wegen
-`test_backlog_structure`-Regex unangetastet), Effort-/Assignee-Spalten per `<br>` verschmälert
-(91 Zeilen), Typ-Feld in `backlog_details.md` gefärbt (91×, Farben = Tabellen-Legende,
-Zusatz-Anmerkungen B-089/090/091 ungefärbt; Template-Hinweis ergänzt). Docs+Acceptance-Gate
-23 passed; Stakeholder hat die Struktur abgenommen. Umsetzung als offengelegter M2-Skript-Edit
-(API-Session-Limit blockierte Subagent-Starts, Reset 20 Uhr; Marker-Selbst-Setzung vom
-Klassifizierer design-konform verweigert, s. `tools/freigabe_gate.py`). **NICHT begonnen:**
-das Arbeitspaket (a)–(f) unten — der Planner-Entwurf scheiterte am Session-Limit.
-**Review/Retro der Kurz-Session steht aus** (Reviewer ebenfalls limit-blockiert) → S154.
+S154 (parallelisierte Session, 9 Subagenten in 2 Wellen): Review/Retro S153 nachgeholt
+(**GO**). Erledigt + committet: B-019/B-072 (`e7fa4ca`), B-068 (`30da597`; korrekte Werte
+Staff 3 / Scythe 4, Backlog nannte sie vertauscht), B-039/061/082 archiviert. B-009:
+Testpaar `orks.yaml` vs `necrons_test.yaml` benannt. B-087: Counter-Offensive-Timing-Bug
+gefixt (`_enemy_has_fought`), **UNKOMMITTIERT** bis E1-Entscheid (2 Alt-Tests ersetzt =
+Verhaltensbruch). B-053: `gretchin_mob` = 8E-Relikt ohne Referenzen, Lösch-Empfehlung (E3).
+B-025: strukturell (CLS≈0.29), kein Quick-Fix, bleibt offen (E4). **B-036: Stakeholder-
+Entscheid „archivieren" liegt vor, Umsetzung scheiterte 2× an API 529 → S155 Punkt (0).**
+Gates: Vollsuite 1878 passed / 99,14 %; Architektur+Doku+Acceptance 31 passed.
+Alle offenen Entscheide inkl. Erläuterungen: `docs/handoff/S154_offene_entscheide.md`
+(NEEDS-DECISION). Prozess-Lernpunkt (Stakeholder-Rüge): Entscheide SOFORT in die Mailbox,
+nicht nur in den Chat → Retro-Kandidat S155.
 
-Frühere Sessions (S60–S152): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S153): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S154 — Arbeitspaket aus S153 unverändert übernommen)
+### ▶ Nächster Schritt (S155)
 
-Priorität = `docs/goals/backlog.md` (einzige Quelle).
+Priorität = `docs/goals/backlog.md` (einzige Quelle) + `docs/handoff/S154_offene_entscheide.md`.
 
-- **(0) Session-Start S154:** Planner-Entwurf für dieses Paket neu starten (S153-Versuch am
-  API-Limit gescheitert, kein Entwurf entstanden) + Review/Retro-Nachholung S153 einplanen.
+- **(0) E1-Entscheid abholen** (`S154_offene_entscheide.md`): Falls GO → `fightPhase.py` +
+  `test_fight_turn_advance.py` committen (`Fix Counter-Offensive trigger to require enemy
+  unit fought`); falls NO → revert. Danach Retro-Reste R1–R3 + E3 (gretchin_mob löschen)
+  + E4 (B-025 umformulieren) gemäß Antworten umsetzen.
+- **(a) S154-Restpaket (klein):** M1+M2 (`agent_scopes.md`, EIN Brief), B-060
+  (CLAUDE.md-Token-Details → operating_model.md Event 6; Stakeholder-freigegeben S154),
+  B-027 (unit_key durch spend_stratagem), B-079 (diceHtml DRY-Helper).
+- **(b) Engine-Aufgaben (je ~35k, einzeln an M-Obergrenze):** B-056 Quantum Shielding,
+  B-028 used-on-Generalisierung (zuerst reaktive Non-Stratagem-GOs ZÄHLEN), B-098 Teil 2
+  Kombi-Waffen. Parallelität: B-056∥B-098 möglich (disjunkt); B-028 NICHT parallel zu
+  B-056 (beide `_common.py`).
 
-- **(a) UI-Nacharbeiten aus S152:** B-009 (zwei geeignete Rosters für PSI-Flow-Test benennen,
-  dann Neuvorlage), B-087 (Fire-Overwatch/Counter-Offensive-Trigger-Timing gegen
-  `docs/work/wahapedia_core_rules/` verifizieren, danach Neuvorlage; UI-Ausgrauen-Fix mit
-  B-031 zusammen denken).
-- **(b) B-056** Scope (b): Quantum Shielding Anzeige-Bug + neuer Mechanik-Typ „fester Invuln"
-  fürs Stratagem.
-- **(c) B-028** used-on-Suffix-Ausweitung auf alle reaktiven GOs (fest eingeplant).
-- **(d) Ex-XS-Items, nicht blockiert (Stakeholder-Auftrag: einplanen + erledigen):** B-008 [erledigt,
-  s.o.] — verbleibend: B-019, B-025, B-027, B-036, B-039, B-053, B-060, B-061, B-068, B-072,
-  B-074 [erledigt, s.o.] — verbleibend: B-079, B-082.
-- **(e) B-098 Teil 2** (Kombi-Waffen-Engine-Erweiterung: `weapon_swap` + Kombi-Mechanik).
-- **(f) Retro-Maßnahmen umsetzen:** **M1** Planner-Briefs müssen Item-Mengen bei Format-
-  Umbauten zählen (grep/wc), nicht schätzen → `docs/reference/agent_scopes.md`-Ergänzung.
-  **M2** Werkzeug-Klausel präzisieren — script-gestützte Massen-Edits zulässig bei Offenlegung
-  und grünem Gate-Beleg (B-099b-Vorfall als akzeptierter Präzedenzfall referenzieren).
-
-**Offene Handoff-Marker:** `S147_go_audit_ork_abilities.md` + `S147_go_audit_stratagems.md`
-(ANSWERED); `S141_ui_befunde_group_a.md` (ANSWERED, behalten bis FixC + FixD Brief 2/3);
-`S150_usedon_renderpaths.md` (ANSWERED, behalten bis used-on-Generalkonzept);
-`S152_review.md` (ANSWERED, DoD+Retro-Beleg); `S152_offene_ui_verifikationen.md` (ANSWERED,
-Nacharbeiten B-009/B-087 offen, s.o.).
+**Offene Handoff-Marker:** `S154_offene_entscheide.md` (**NEEDS-DECISION**, E1–E4);
+`S154_planning.md` (ANSWERED, behalten bis Restpaket umgesetzt); `S147_go_audit_ork_abilities.md`
+und `S147_go_audit_stratagems.md` (ANSWERED); `S141_ui_befunde_group_a.md` (ANSWERED, behalten
+bis FixC + FixD Brief 2/3); `S150_usedon_renderpaths.md` (ANSWERED, behalten bis used-on-
+Generalkonzept); `S152_review.md` (ANSWERED, DoD+Retro-Beleg); `S152_offene_ui_verifikationen.md`
+(ANSWERED, B-009/B-087 in S154 nachgearbeitet → nach E1-Umsetzung löschbar).
 
 **Offene manuelle UI-Verifikation:**
 
 - Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — blockiert bis Roster-Builder (B-067).
 - B12b-Rest (Movement-Advance-Reroll-Randfall) — B-027, spec-konform, kein Bug.
-- B-009 / B-087 — Nacharbeit + Neuvorlage S154 (s. oben).
+- **Neu S154:** Counter-Offensive-Box erst nach gegnerischem Fight (E1); Silent-King-
+  Attacken-Defaults 3/4; PSI-Flow mit `orks.yaml` vs `necrons_test.yaml` (Anleitung in
+  `S154_offene_entscheide.md`).
 
 ---
 

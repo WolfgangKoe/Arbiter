@@ -4797,8 +4797,8 @@
   "decf492d-5665-418f-b592-70fb09784833": {
     "started_at": "2026-07-16T17:40:43.980Z",
     "task": "start session. Ein paar kleine Nachträge zum Backlog-Feinschliff. Die ID Spalte ist immer noch zu klein. Dagegen ist di…",
-    "peak_context": 122753,
-    "subagent_share": 7.2625794812718345,
+    "peak_context": 128766,
+    "subagent_share": 6.073753487876844,
     "by_tier": {
       "Sonnet": 475160
     },
@@ -4809,6 +4809,96 @@
         "tier": "Sonnet",
         "peak_context": 78312,
         "started_at": "2026-07-16T17:40:43.980Z"
+      }
+    ]
+  },
+  "a6af1597-a175-41ab-a5e7-8b132fdbad9a": {
+    "started_at": "2026-07-16T18:22:35.765Z",
+    "task": "start session",
+    "peak_context": 153057,
+    "subagent_share": 68.60787013334622,
+    "by_tier": {
+      "Sonnet": 17230643,
+      "Haiku": 4548658,
+      "Opus": 1582146
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor: Backlog-Archivierung B-039/061/082",
+        "tier": "Sonnet",
+        "peak_context": 57479,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-019: Alt-Fire-Chip erklären",
+        "tier": "Haiku",
+        "peak_context": 57434,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-025: Slot-Wechsel-Zucken untersuchen",
+        "tier": "Sonnet",
+        "peak_context": 56034,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-009: PSI-Flow-Rosters benennen",
+        "tier": "Sonnet",
+        "peak_context": 51531,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: S154-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 116401,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-087: Overwatch/Counter-Offensive-Timing",
+        "tier": "Sonnet",
+        "peak_context": 72344,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-072: Keyword/Waffen-Datenabgleich",
+        "tier": "Haiku",
+        "peak_context": 36653,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-053: Gretchin-Regeltext prüfen",
+        "tier": "Haiku",
+        "peak_context": 38551,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-068: Silent-King-Attacken-Default",
+        "tier": "Sonnet",
+        "peak_context": 69616,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Reviewer: DoD-Review S153",
+        "tier": "Opus",
+        "peak_context": 51381,
+        "started_at": "2026-07-16T18:22:35.765Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-036: Battle-Log-Reset-Bug",
+        "tier": "Sonnet",
+        "peak_context": 73958,
+        "started_at": "2026-07-16T18:22:35.765Z"
       }
     ]
   }

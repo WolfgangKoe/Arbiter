@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-16 20:17 CEST
+Stand: 2026-07-16 21:04 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,20 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-16 19:40 decf  ██████████░░ 123k ⚠️   ░░░░░░   7%    ············
+07-16 20:22 a6af  ████████████ 153k ⛔    ████░░  69%    █·········▒▒
+         SA_1·  █████░░░░░░░  57k ✅    Executor: Backlog-Archivierung B-0…
+         SA_2·  █████░░░░░░░  57k ✅    Executor B-019: Alt-Fire-Chip erkl…
+         SA_3·  ████░░░░░░░░  56k ✅    Executor B-025: Slot-Wechsel-Zucke…
+         SA_4·  ████░░░░░░░░  52k ✅    Executor B-009: PSI-Flow-Rosters b…
+         SA_5·  █████████░░░ 116k ✅    Planner: S154-Entwurf erstellen
+         SA_6·  ██████░░░░░░  72k ✅    Executor B-087: Overwatch/Counter-…
+         SA_7·  ███░░░░░░░░░  37k ✅    Executor B-072: Keyword/Waffen-Dat…
+         SA_8·  ███░░░░░░░░░  39k ✅    Executor B-053: Gretchin-Regeltext…
+         SA_9·  ██████░░░░░░  70k ✅    Executor B-068: Silent-King-Attack…
+         SA_10·  ████░░░░░░░░  51k ✅    Reviewer: DoD-Review S153
+         SA_11·  ██████░░░░░░  74k ✅    Executor B-036: Battle-Log-Reset-B…
+----------------- ---------------------- -------------- ------------
+07-16 19:40 decf  ██████████░░ 129k ⚠️   ░░░░░░   6%    ············
          SA_1·  ██████░░░░░░  78k ✅    Planner: S153-Planungsentwurf erst…
 ----------------- ---------------------- -------------- ------------
 07-16 18:03 471e  ████████████ 149k ⚠️   █████░  86%    ············
@@ -758,3 +771,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S151 (2026-07-16)** Backlog-Restrukturierung: ID-Liste B-001-B-099, Details-/Archiv-Datei, index.md aufgeloest, briefing.md (ex next_session.md), 5 Waechter-Tests; Review/Retro uebersprungen (Stakeholder)
 - **S152 (2026-07-16)** B-099 Feinschliff komplett, K1-Fix, Boss-Nob-Kombiwaffen, Beobachtungen überführt, markdownlint entfernt, Review S151+S152 GO
 - **S153 (2026-07-16)** Backlog-Feinschliff-Nachträge: ID-Spalte einzeilig, Effort/Assignee schmaler, Typ-Farben in Details; Gates grün; Arbeitspaket (a)-(f) nach S154 verschoben
+- **S154 (2026-07-16)** Review/Retro S153 nachgeholt (GO); 2 parallele Executor-Wellen: B-019/B-072/B-068/B-009 erledigt, B-036/039/061/082 archiviert, B-087 Counter-Offensive-Fix (unkommittiert, E1), B-053-Löschbefund; Gates grün 99,14%; Rest M1/M2/B-060/B-027/B-079 nach S155
