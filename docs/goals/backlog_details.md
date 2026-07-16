@@ -12,8 +12,8 @@ Jedes Item trägt genau diese neun Felder, in dieser Reihenfolge, mit einer Leer
 zwischen den Feldern (Sichtbarkeit, S152-Auflage 5):
 
 - **Typ:** `Schuldabbau` | `Fachlichkeit (Ziel 7)` | `Prozess/Doku` — identisch mit dem
-  gefärbten Typ-Tag in der Beschreibungsspalte von `backlog.md` (Farb-Zuordnung dort in der
-  Legende).
+  gefärbten Typ-Tag in der Beschreibungsspalte von `backlog.md`, inklusive desselben
+  Farb-Spans (Farb-Zuordnung in der Legende dort).
 - **Status:** identisch mit der Status-Spalte in `backlog.md` (Werte aus `_VALID_STATUSES`).
 - **Tier:** Rolle + Modell-Tier (Haiku-Default bei reinem Lookup, Sonnet sonst, Opus nur mit
   Begründung).
@@ -37,7 +37,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-001)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** Blocked
 
@@ -59,7 +59,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-003)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -81,7 +81,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-004)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** Blocked
 
@@ -103,7 +103,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-005)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -125,7 +125,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-006)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** Blocked
 
@@ -147,7 +147,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-007)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** In Progress
 
@@ -169,7 +169,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-009)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -193,7 +193,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-010)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -215,7 +215,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-011)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -237,7 +237,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-012)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -259,7 +259,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-013)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -281,7 +281,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-014)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -303,7 +303,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-015)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -325,7 +325,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-016)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -347,7 +347,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-017)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -369,7 +369,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-018)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -391,7 +391,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-019)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -413,7 +413,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-020)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -435,7 +435,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-021)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -457,7 +457,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-022)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -479,7 +479,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-023)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -501,7 +501,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-024)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** In Progress
 
@@ -523,7 +523,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-025)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -545,7 +545,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-026)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -567,7 +567,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-027)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -589,7 +589,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-028)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -611,7 +611,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-029)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -633,7 +633,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-030)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -655,7 +655,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-031)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -677,7 +677,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-032)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -699,7 +699,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-033)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -721,7 +721,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-034)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -743,7 +743,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-035)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -765,7 +765,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-036)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -787,7 +787,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-037)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -809,7 +809,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-038)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -831,7 +831,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-039)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -853,7 +853,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-040)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -875,7 +875,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-041)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -897,7 +897,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-042)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -919,7 +919,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-043)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -941,7 +941,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-044)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -963,7 +963,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-045)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -985,7 +985,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-046)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1007,7 +1007,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-047)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1029,7 +1029,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-048)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1051,7 +1051,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-049)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1073,7 +1073,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-050)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1095,7 +1095,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-051)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1117,7 +1117,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-052)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1139,7 +1139,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-053)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1161,7 +1161,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-054)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1183,7 +1183,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-055)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1205,7 +1205,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-056)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1227,7 +1227,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-057)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1249,7 +1249,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-058)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1271,7 +1271,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-059)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1293,7 +1293,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-060)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1315,7 +1315,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-061)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1337,7 +1337,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-062)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1359,7 +1359,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-063)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** Blocked
 
@@ -1381,7 +1381,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-064)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1403,7 +1403,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-065)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1425,7 +1425,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-066)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1447,7 +1447,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-067)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1469,7 +1469,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-068)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1491,7 +1491,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-069)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1513,7 +1513,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-070)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1535,7 +1535,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-071)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1557,7 +1557,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-072)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1579,7 +1579,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-073)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1601,7 +1601,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-075)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1623,7 +1623,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-076)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1645,7 +1645,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-077)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1667,7 +1667,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-078)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1689,7 +1689,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-079)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1711,7 +1711,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-080)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1733,7 +1733,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-081)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1755,7 +1755,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-082)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** ToDo
 
@@ -1777,7 +1777,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-083)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** Blocked
 
@@ -1799,7 +1799,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-084)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1821,7 +1821,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-085)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** Blocked
 
@@ -1843,7 +1843,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-086)
 
-**Typ:** Schuldabbau
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
 **Status:** ToDo
 
@@ -1865,7 +1865,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-087)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1889,7 +1889,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-088)
 
-**Typ:** Prozess/Doku
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
 
 **Status:** Blocked
 
@@ -1911,7 +1911,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-089)
 
-**Typ:** Fachlichkeit (Ziel 7) — *tatsächlich Ziel 8, kein Ziel-7-Scope; Typ-Enum kennt keine eigene „geplantes Ziel"-Kategorie, daher hier eingeordnet.*
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> — *tatsächlich Ziel 8, kein Ziel-7-Scope; Typ-Enum kennt keine eigene „geplantes Ziel"-Kategorie, daher hier eingeordnet.*
 
 **Status:** ToDo
 
@@ -1933,7 +1933,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-090)
 
-**Typ:** Fachlichkeit (Ziel 7) — *tatsächlich Ziel 9, kein Ziel-7-Scope; s. Anmerkung bei B-089.*
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> — *tatsächlich Ziel 9, kein Ziel-7-Scope; s. Anmerkung bei B-089.*
 
 **Status:** ToDo
 
@@ -1955,7 +1955,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-091)
 
-**Typ:** Fachlichkeit (Ziel 7) — *eigenständiger Design-Block, kein Ziel-7-Scope; s. Anmerkung bei B-089.*
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> — *eigenständiger Design-Block, kein Ziel-7-Scope; s. Anmerkung bei B-089.*
 
 **Status:** ToDo
 
@@ -1977,7 +1977,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-098)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -1999,7 +1999,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-100)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 
@@ -2021,7 +2021,7 @@ am Anfang der Beschreibungsspalte.
 
 [↩ Zeile in backlog.md](backlog.md#b-101)
 
-**Typ:** Fachlichkeit (Ziel 7)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
 **Status:** ToDo
 

@@ -4708,10 +4708,10 @@
   "471eb78b-5bc1-4a63-88cb-147c9f58d6b8": {
     "started_at": "2026-07-16T16:03:33.055Z",
     "task": "start session",
-    "peak_context": 145622,
-    "subagent_share": 85.23314012328925,
+    "peak_context": 149460,
+    "subagent_share": 86.36969105467543,
     "by_tier": {
-      "Sonnet": 53093145,
+      "Sonnet": 60427165,
       "Opus": 2404626
     },
     "subagents": [
@@ -4768,7 +4768,7 @@
         "agent_type": "general-purpose",
         "description": "S152-Abschluss + Commit",
         "tier": "Sonnet",
-        "peak_context": 89874,
+        "peak_context": 129453,
         "started_at": "2026-07-16T16:03:33.055Z"
       },
       {
@@ -4791,6 +4791,24 @@
         "tier": "Sonnet",
         "peak_context": 88449,
         "started_at": "2026-07-16T16:03:33.055Z"
+      }
+    ]
+  },
+  "decf492d-5665-418f-b592-70fb09784833": {
+    "started_at": "2026-07-16T17:40:43.980Z",
+    "task": "start session. Ein paar kleine Nachträge zum Backlog-Feinschliff. Die ID Spalte ist immer noch zu klein. Dagegen ist di…",
+    "peak_context": 122753,
+    "subagent_share": 7.2625794812718345,
+    "by_tier": {
+      "Sonnet": 475160
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner: S153-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 78312,
+        "started_at": "2026-07-16T17:40:43.980Z"
       }
     ]
   }

@@ -24,25 +24,27 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S152, 2026-07-16)
+## Aktueller Stand (nach S153, 2026-07-16)
 
-S152: B-099 Feinschliff komplett (Typ farbig+fett, Blocker-Angaben, Effort→Token, Details-
-Template, B-092–B-097 gelöscht); B-002 (Nihilakh/Mephrit-Wortlaute) erledigt+archiviert;
-B-098 Teil 1 (Boss-Nob-Kombiwaffen `orks/weapons.yaml`, Teil 2 braucht Engine-Erweiterung);
-markdownlint-Trial entfernt (Entscheid: raus); Stakeholder-Beobachtungen überführt (B-100,
-B-101). UI-Verifikationsrunde durch Stakeholder: **B-008 + B-074 positiv → archiviert**;
-**B-009 + B-087 Nacharbeit → auf ToDo zurückgesetzt, Neuvorlage S153** (B-009: Test-Rosters
-nicht benannt; B-087: Regelkonformitäts-Zweifel Trigger-Timing + UI-Inkonsistenz, verwandt
-B-031). Review S151 (Nachholung) + S152 beide GO (`docs/handoff/S152_review.md`). Retro-
-Maßnahmen: M1+M2 für S153 vorgemerkt (unten), M3 verworfen, M4 sofort umgesetzt (B-003-Detail:
-neue deklarative `effect`-Subtypen aus B-002 brauchen Engine-Handler). Vollsuite **1874
-passed / 99,14 %**, Architektur-Gate 8 passed, Docs/Akzeptanz-Gate 23 passed.
+S153 (Kurz-Session, Wind-down bei ~115k Kontext): Backlog-Feinschliff-Nachträge auf
+Stakeholder-Zuruf — ID-Spalte einzeilig (nbsp-verbreiterter Tabellenkopf; Link-Syntax wegen
+`test_backlog_structure`-Regex unangetastet), Effort-/Assignee-Spalten per `<br>` verschmälert
+(91 Zeilen), Typ-Feld in `backlog_details.md` gefärbt (91×, Farben = Tabellen-Legende,
+Zusatz-Anmerkungen B-089/090/091 ungefärbt; Template-Hinweis ergänzt). Docs+Acceptance-Gate
+23 passed; Stakeholder hat die Struktur abgenommen. Umsetzung als offengelegter M2-Skript-Edit
+(API-Session-Limit blockierte Subagent-Starts, Reset 20 Uhr; Marker-Selbst-Setzung vom
+Klassifizierer design-konform verweigert, s. `tools/freigabe_gate.py`). **NICHT begonnen:**
+das Arbeitspaket (a)–(f) unten — der Planner-Entwurf scheiterte am Session-Limit.
+**Review/Retro der Kurz-Session steht aus** (Reviewer ebenfalls limit-blockiert) → S154.
 
-Frühere Sessions (S60–S151): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S152): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S153)
+### ▶ Nächster Schritt (S154 — Arbeitspaket aus S153 unverändert übernommen)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
+
+- **(0) Session-Start S154:** Planner-Entwurf für dieses Paket neu starten (S153-Versuch am
+  API-Limit gescheitert, kein Entwurf entstanden) + Review/Retro-Nachholung S153 einplanen.
 
 - **(a) UI-Nacharbeiten aus S152:** B-009 (zwei geeignete Rosters für PSI-Flow-Test benennen,
   dann Neuvorlage), B-087 (Fire-Overwatch/Counter-Offensive-Trigger-Timing gegen
@@ -70,7 +72,7 @@ Nacharbeiten B-009/B-087 offen, s.o.).
 
 - Spend-Guard (tisch-aufgelöstes Stratagem ohne Einheit) — blockiert bis Roster-Builder (B-067).
 - B12b-Rest (Movement-Advance-Reroll-Randfall) — B-027, spec-konform, kein Bug.
-- B-009 / B-087 — Nacharbeit + Neuvorlage S153 (s. oben).
+- B-009 / B-087 — Nacharbeit + Neuvorlage S154 (s. oben).
 
 ---
 
