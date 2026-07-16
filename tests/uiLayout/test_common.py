@@ -2589,3 +2589,268 @@ def test_unbridled_carnage_registers_hit_modifier_after_spend() -> None:
     assert mods[0]["effect"]["roll_type"] == "hit"
     assert mods[0]["effect"]["value"] == 1
     assert mods[0]["effect"]["target"] == "attacker"
+
+
+# ---------------------------------------------------------------------------
+# S142-FixD Brief 1 — compute_resolution_context(): pure resolution math
+# extracted from _render_resolution_tab (docs/audit/plans/
+# S142_fixD_resolution_tabs.md §4). Covers the three tricky areas the plan
+# calls out: S-Bonus-Faltung, Cover-Flag-Ableitung, Bracket-/Gruppen-Overrides.
+# ---------------------------------------------------------------------------
+
+
+def _resolution_context_session(**extra: object) -> _SS:
+    """Fresh session bound onto every module's own ``st`` reference.
+
+    Same reason as `_eg_session`: abilityEngine, gameState, and _common each
+    hold their own imported ``st`` object captured at import time, so a plain
+    ``common.st.session_state = ...`` is not enough when a module was already
+    imported (and its `st` bound) by an earlier test file in the same run.
+    """
+    session = _SS(**extra)
+    _st_mock.session_state = session
+    _eng.st.session_state = session
+    _gs.st.session_state = session
+    common.st.session_state = session
+    return session
+
+
+def _bare_def_unit() -> SimpleNamespace:
+    return SimpleNamespace(toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors")
+
+
+def test_compute_resolution_context_returns_none_when_no_weapon_available(monkeypatch) -> None:
+    """Mirrors the previous inline 'Weapon not found' early exit: an attacker
+    with no phase-matching weapon at all yields no filtered candidates, so the
+    fallback-to-first-weapon logic has nothing to fall back to."""
+    unit, _ = _melee_group_fixture()
+    unit.weapons = []
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    _resolution_context_session()
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is None
+
+
+def test_compute_resolution_context_folds_strength_bonus_after_times_n(monkeypatch) -> None:
+    """S-Bonus-Faltung: a ×N weapon must give (User×N) + bonus, not (User+bonus)×N
+    — the WOUND block would otherwise show the wrong S (S147/S146 Fix 1 intent)."""
+    profile = WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="D6",
+        strength="×2",
+        ap=0,
+        damage="1",
+        is_melee=True,
+    )
+    weapon = Weapon(id="w_klaw", name_en="Power Klaw", profiles=[profile])
+    unit, _ = _melee_group_fixture()  # strength=4
+    unit.weapons = [weapon]
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Power Klaw",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    session = _resolution_context_session()
+    session["active_modifiers"] = [
+        {
+            "unit_key": "atk1",
+            "source": "Test Stratagem",
+            "effect": {"roll_type": "strength", "value": 1, "target": "attacker"},
+        }
+    ]
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.strength == 9  # (4×2) + 1, not (4+1)×2
+
+
+def test_compute_resolution_context_dense_cover_checkbox_adds_hit_penalty(monkeypatch) -> None:
+    """Cover-Flag-Ableitung: the Dense Cover checkbox (read before it renders,
+    Variante C) must fold a −1 Hit modifier into atk_result for shooting."""
+    profile = WeaponProfile(
+        weapon_type="Rapid Fire 1",
+        range_inches=24,
+        attacks="2",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    weapon = Weapon(id="w_bolter", name_en="Bolter", profiles=[profile])
+    unit, _ = _melee_group_fixture()
+    unit.weapons = [weapon]
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Bolter",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    session = _resolution_context_session()
+    session["dense_cover_tab1"] = True
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, False, "shooting", "tab1")
+
+    assert ctx is not None
+    assert "Dense Cover" in [m["label"] for m in ctx.atk_result["hit"]["stack"]]
+
+
+def test_compute_resolution_context_light_cover_checkbox_adds_save_bonus(monkeypatch) -> None:
+    """Cover-Flag-Ableitung: the Light Cover checkbox folds a +1 Save modifier."""
+    profile = WeaponProfile(
+        weapon_type="Rapid Fire 1",
+        range_inches=24,
+        attacks="2",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    weapon = Weapon(id="w_bolter", name_en="Bolter", profiles=[profile])
+    unit, _ = _melee_group_fixture()
+    unit.weapons = [weapon]
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Bolter",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    session = _resolution_context_session()
+    session["light_cover_tab1"] = True
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, False, "shooting", "tab1")
+
+    assert ctx is not None
+    assert "Light Cover" in [m["label"] for m in ctx.save_result["stack"]]
+
+
+def test_compute_resolution_context_eternal_guardian_d1_grants_light_cover_without_checkbox(
+    monkeypatch,
+) -> None:
+    """Cover-Flag-Ableitung: Eternal Guardian D1 auto-grants Light Cover to a
+    stationary defender even when the checkbox itself was never ticked —
+    auto_light_cover must be folded into save_result on the same rerun."""
+    profile = WeaponProfile(
+        weapon_type="Rapid Fire 1",
+        range_inches=24,
+        attacks="2",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+    )
+    weapon = Weapon(id="w_bolter", name_en="Bolter", profiles=[profile])
+    unit, _ = _melee_group_fixture()
+    unit.weapons = [weapon]
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "test.unit",
+        "atk_uid": "atk1",
+        "weapon_name": "Bolter",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    _eg_session(stationary=True)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, False, "shooting", "tab1")
+
+    assert ctx is not None
+    assert ctx.auto_light_cover is True
+    assert "Light Cover" in [m["label"] for m in ctx.save_result["stack"]]
+
+
+def test_compute_resolution_context_heavy_cover_suppressed_when_defender_charged(
+    monkeypatch,
+) -> None:
+    """Cover-Flag-Ableitung: Heavy Cover never applies to a charged defender
+    (9E: a charging unit forfeits cover), even if the checkbox is ticked."""
+    unit, _ = _melee_group_fixture()
+    unit.weapons = list(unit.model_groups[0].weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    def_state = {"turn_flags": {"charged": True}}
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), def_state))
+    session = _resolution_context_session()
+    session["heavy_cover_tab1"] = True
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert "Heavy Cover" not in [m["label"] for m in ctx.save_result["stack"]]
+
+
+def test_compute_resolution_context_heavy_cover_applies_when_defender_not_charged(
+    monkeypatch,
+) -> None:
+    """Complement of the suppression test above: an un-charged defender with
+    the checkbox ticked does get the +1 Save."""
+    unit, _ = _melee_group_fixture()
+    unit.weapons = list(unit.model_groups[0].weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    def_state = {"turn_flags": {"charged": False}}
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), def_state))
+    session = _resolution_context_session()
+    session["heavy_cover_tab1"] = True
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert "Heavy Cover" in [m["label"] for m in ctx.save_result["stack"]]
+
+
+def test_compute_resolution_context_per_group_ws_override_wins_over_bracket(monkeypatch) -> None:
+    """Bracket-/Gruppen-Overrides: a per-group WS override (e.g. Boss Nob WS 2+)
+    must win over the unit's live bracket WS when computing the HIT threshold."""
+    unit, _ = _melee_group_fixture()  # ws="3+" at the unit level
+    unit.weapons = list(unit.model_groups[0].weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+        "atk_ws": "2+",
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    _resolution_context_session()
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.atk_result["hit"]["base"] == 2

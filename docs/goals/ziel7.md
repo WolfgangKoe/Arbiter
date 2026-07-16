@@ -97,6 +97,154 @@ Kulturs) + Dynastie-Fähigkeiten (Necron Dynastic Codes)** (Datenlage: kein `kla
 in Rosters, kein Fähigkeits-Block in `data/wh40k_9e/orks/`). Konzept dafür entsteht in S144;
 Umsetzung als eigener Plan ab S145.
 
+### K1 — Klan/Dynastie-Konzept kanonisiert (S150, Entscheid S145)
+
+Konzept ursprünglich aus S144 (`docs/handoff/S144_klan_dynastie_konzept.md`, nach
+Kanonisierung hierher S150 gelöscht — Lifecycle-Regel). Stakeholder-Entscheide S145
+(Herleitung migriert nach `docs/goals/backlog.md` §4; Session-Historie S145/S147 in
+`docs/metrics/session_archive.md`).
+
+**Kern-Befund — Daten existieren, sind aber wirkungslos:** `data/wh40k_9e/orks/subfaction_abilities.yaml`
+und `data/wh40k_9e/necrons/subfaction_abilities.yaml` bestehen bereits seit 2026-06-03 (alle 7
+Klans/6 Dynastien, `rule_text`, `ability_type: triggered`, generisch geladen über
+`load_subfaction_abilities()`, `src/gameObjects/loader.py:646`) und werden sogar bereits in
+`abilityEngine.get_triggered_abilities()` (`src/gameMechanic/abilityEngine.py:582–609`)
+eingelesen — aber **keiner der 13 Einträge wird aktuell im Spiel wirksam**, aus vier
+unabhängigen Lücken (alle in `abilityEngine.py`):
+
+1. **Kein Subfraktions-Filter** — `check_conditions()` prüft nicht, ob die Fähigkeit zur
+   gewählten Klan-/Dynastie-Wahl des Rosters (`roster.clan`/`roster.dynasty`) gehört; sie
+   würde für **jede** Einheit der Fraktion gelten.
+2. **Kein passender Abfrage-Pfad** — `get_triggered_abilities()`s einziger Aufrufer
+   (`commandPhase.py:31`) fragt fest `phase="command", timing="phase_start"` ab; die
+   Subfraktions-Einträge haben `timing: persistent, phase: any/shooting/fight/movement` —
+   matcht nie.
+3. **4 Necron-Effekte zeigen auf einen nicht existierenden Handler** — `effect.type: complex`
+   mit `handler: novokhSavageHunters`/`sautekh_advance`/`uncannyArtificersMortal`/
+   `uncannyArtificersReroll`; das `.handler`-Dispatch-Muster existiert im gesamten `src/`-Baum
+   nur für `fall_back_through_models` (`stratagemEngine.py`).
+4. **Kein UI-Konsument** — keine Datei unter `src/uiLayout/` rendert `load_subfaction_abilities`
+   oder `klan_keyword` irgendwo.
+
+Diese Engine-/UI-Verdrahtung erklärt die S143-Stakeholder-Beobachtung „Klan-Fähigkeiten fehlen
+als Feature" — die Daten sind formal vorhanden, wirken aber nicht.
+
+**Wortlaut-Delta gegen Wahapedia 9E** (Quelle: WebFetch S144 2026-07-12, Necron-Nihilakh/Sautekh
+zusätzlich per WebSearch gegengeprüft; Nihilakh + Mephrit S150 zusätzlich gegen die lokale
+Primärquelle `docs/work/wahapedia_necrons/faction_overview.txt` verifiziert):
+
+*Ork Klan Kulturs (7) — 1 Delta:*
+
+| Klan | Ist (`subfaction_abilities.yaml`) | Delta |
+|---|---|---|
+| Bad Moons, Blood Axes, Deathskulls, Evil Sunz, Freebooterz | — | keins |
+| Goffs | Strength-Klausel enger an „Pile-in/Consolidate" gebunden statt „Angriff generell" | gering, kein Fehler |
+| **Snakebites** | „Wound 1–3 scheitert immer" — **ohne die S8+-Ausnahme** | **Fehler: Ausnahmeklausel fehlt** |
+
+*Necron Dynastic Codes (6) — 5 von 6 weichen ab:*
+
+| Dynastie | Wahapedia-Soll (Kurzfassung) | Ist (`subfaction_abilities.yaml`) | Delta |
+|---|---|---|---|
+| Szarekhan | Uncanny Artificers — bereits korrekt (früher korrigiert) | identisch | keins |
+| Novokh | Awakened by Murder: +1 Charge-Wurf; bei Charge/Charged/HI **AP+1** im Nahkampf | „Savage Hunters", +1 Charge-Wurf, aber **+1 Hit-Wurf statt AP+1** | **Fehler: falscher Effekt-Typ** |
+| Nephrekh | Translocation Beams: 6+ Invuln **zusätzlich** Advance→Translokation (kein Advance-Wurf, +6" Move, Schießverbot bis Rundenende, ignoriert Modelle/Terrain) | **nur** 6+ Invuln — Translokations-Mechanik fehlt komplett | **Fehler: Kernmechanik fehlt** |
+| Sautekh | Relentless Advance: Morale-Reroll; Rapid-Fire-Waffen verdoppeln Attacken ≤18" | „Relentless Expansionists" — +3" Advance-Wurf, Assault-Waffen bei Advance „stationär" | **Fehler: komplett andere Fähigkeit** |
+| **Nihilakh** | Aggressively Territorial — s. Entscheidung unten | „Acquisitive Grasp" — kein Fall Back in Objective-Reichweite | **Fehler: komplett andere Fähigkeit** |
+| **Mephrit** | Solar Fury — s. Entscheidung unten | „Talent for Annihilation" — nur AP+1-Halbreichweite-Zeile, Range-Bonus fehlt, falscher Name | **Fehler: Name + Range-Bonus fehlt** |
+
+Nebenbefund: Die „beide Direktiven bei reinem Dynastie-Heer"-Klausel (im 9E-Original bei
+**allen 6** Codes vorhanden) ist inhaltlich bereits über `subfaction_affinity`/`round_choice`
+abgedeckt (an „aktiv gewählte Dynastie" geknüpft statt wortwörtlich „jede Einheit trägt den
+Code" — nur bei Mehrdynastie-Rosters relevant, kein Fix für Standard-Mono-Dynastie-Rosters
+nötig).
+
+**Doku-Drift-Nebenbefund (noch offen, kein Teil dieses Schritts):** `docs/spec/faction_abilities.md`
+Kategorie 6 („Passive/Persistent") behauptet „Größtenteils abgedeckt durch `triggered`-Abilities
+in `faction_abilities.yaml`" — das ist veraltet: Klan-Kulturs/Dynastic Codes liegen in
+`subfaction_abilities.yaml` (anderer Datei-Scope) und sind laut obigem Kern-Befund nicht
+wirksam. Spec-Nachzug empfohlen, sobald K2+ umgesetzt ist.
+
+**Entscheide (Stakeholder S145):**
+
+- **Frage 3 (Datenschema) = Option B:** neuer `ability_type: subfaction_passive` (statt den
+  bestehenden `triggered`-Typ nur zu reparieren) — trennt „reaktive, event-getriggerte
+  Fähigkeit" von „dauerhaft aktiver Passiv-Bonus, gebunden an eine feste Listenwahl" und deckt
+  sich mit der in `docs/spec/faction_abilities.md` bereits vordefinierten, aber leeren
+  **Kategorie 6**. Migration der 13 Bestandseinträge `triggered` → `subfaction_passive` ist
+  Teil von K2+ (reiner Feldwert-Change, keine Struktur-Änderung).
+- **Nihilakh-Sekundärklausel — geklärt:** Primärquelle
+  `docs/work/wahapedia_necrons/faction_overview.txt:917` bestätigt die WebFetch-Fassung aus
+  S144: „Each time an attack with an Armour Penetration characteristic of -1 is allocated to
+  a model with this code, if that model's unit is wholly within its controller's deployment
+  zone, that attack has an Armour Penetration characteristic of 0 instead." — **nicht** die
+  Hit-Reroll-1-Fassung aus der WebSearch-Zweitquelle. Aggressively Territorial = Objective
+  Secured (+1 Modell-Zählung wenn bereits vorhanden) **plus** diese AP-(-1)→AP-0-Klausel im
+  eigenen Deployment Zone.
+- **Mephrit zur Kontrolle ebenfalls primärquellen-verifiziert:**
+  `faction_overview.txt:849–852` bestätigt Solar Fury wortgleich zum S144-Vergleich (+3" Range
+  auf Fernkampfwaffen außer Pistols; unmod. Wound auf halbe Reichweite → AP+1).
+- **Klasse-C-Fälle:** nach Bestandsmuster gelöst, kein neues Konzept nötig — Blood Axes
+  (Light-Cover-Distanz), Nephrekh-Translokationsbewegung, Sautekh-RF-Reichweite bleiben
+  Tisch-Hinweis (Klasse C, analog bestehendem `ignore_cover_half_range`-Muster) statt auf ein
+  generisches Distanz-Tracking zurückgestellt zu werden.
+- **Reihenfolge:** Wortlaut-Korrektur zuerst (kleiner, unabhängiger Bugfix), Engine-/UI-
+  Verdrahtung danach — Ergebnis dieser Reihenfolge ist der K1/K2+-Split unten.
+- **Modul-Ort für die neue Passiv-Logik:** eigenes Modul `gameMechanic/subfactionPassives.py`
+  statt Erweiterung von `abilityEngine.py` (Konsent-Entscheid S145, Details
+  `docs/goals/backlog.md` §4 „abilityEngine-Refactor-Vorplanung").
+
+**Abgrenzung zu `subfaction_affinity`/Command Protocols (wichtig für K2+, additiv nicht
+alternativ):** Klan-Kultur/Dynastic Code (dieses Konzept) und `round_choice`-Command-Protocols
+sind zwei unabhängige, gleichzeitig aktive Mechaniken — kein Ersatz füreinander:
+
+| | `subfaction_affinity` (bestehend, `round_choice`) | Klan-Kultur/Dynastic Code (dieses Konzept) |
+|---|---|---|
+| Datei | `faction_abilities.yaml` | `subfaction_abilities.yaml` |
+| Aktivierung | Spielerwahl pro Runde (1 von 6 Protokollen) | Immer aktiv, sobald das Roster die Klan-/Dynastie-Wahl trägt — kein Aktivierungsschritt |
+| Reichweite | Nur solange das Protokoll aktiv ist (rundenbegrenzt) | Permanent ab Listenerstellung, ganze Partie |
+| Session-State | `active_protocol_id`/`active_directive`/`round_choice_assignments` | Keiner nötig — reiner Ableitungswert aus `roster.clan`/`roster.dynasty` |
+| Engine-Funktion | `get_active_round_choice_modifier()` (bereits gebaut) | `get_active_subfaction_passives()` — Gegenstand von K2+ |
+
+Beispiel: Ein Necron-Roster mit `dynasty: sautekh` hat den Sautekh-Dynastic-Code **permanent**
+aktiv **und** kann in der Command-Phase weiterhin jedes der 6 Command Protocols wählen — nur
+bei Wahl des Sautekh-zugeordneten Protokolls schaltet zusätzlich die Affinitäts-Bonus-Regel
+(„beide Direktiven") frei. `subfaction_value_for(player)` (`gameMechanic/gameState.py:180`) ist
+in beiden Fällen dieselbe Quelle und direkt wiederverwendbar für den neuen K2+-Filter.
+
+**Scope-Split — K1 (dieser Schritt, Backlog-Prioritätenliste Rang 6) vs. K2+ (Rang 7):**
+
+- **K1 = nur Nihilakh + Mephrit Wortlaut-Korrektur** in
+  `data/wh40k_9e/necrons/subfaction_abilities.yaml` (data-only, kein Engine-/UI-Code) —
+  Nihilakh: „Acquisitive Grasp" → „Aggressively Territorial" (Objective Secured + AP-(-1)→0-
+  Klausel); Mephrit: „Talent for Annihilation" → „Solar Fury" (Name + fehlenden 3"-Range-
+  Bonus ergänzen). Beide Wortlaute oben mit Zeilenbeleg zitiert.
+- **K2+ (eigener Plan, vor Vergabe in ≤M-Briefs splitten):**
+  - Wortlaut-Korrektur **Novokh, Sautekh, Nephrekh** (3 verbleibende Necron-Deltas) + **Ork
+    Snakebites** (S8+-Ausnahme ergänzen) — beide data-only, aber bewusst nicht in K1, da der
+    Stakeholder den Sofort-Scope auf Nihilakh+Mephrit begrenzt hat (S150).
+  - Migration aller 13 Einträge `ability_type: triggered` → `subfaction_passive` (Option B).
+  - Engine: `Condition.subfaction_id: str | None` (`gameObjects/ability.py`) +
+    `check_conditions()`-Prüfung gegen `subfaction_value_for(player)`
+    (`gameMechanic/gameState.py:180`, bereits vorhanden/wiederverwendbar) + neue Funktion
+    `get_active_subfaction_passives(faction_dir, player)` in
+    `gameMechanic/subfactionPassives.py` (permanent, kein Timing-Bezug, analog
+    `get_active_round_choice_modifier`).
+  - 4 neue Effekttypen für die toten `complex`-Handler: `ap_on_charge_or_charged` (Novokh),
+    `rapid_fire_double_within_range` + `morale_reroll` (Sautekh),
+    `advance_replace_with_translocate` (Nephrekh).
+  - UI: `uiLayout/armyCard.py` generische `_render_subfaction_passive_badge()` (Info-Badge,
+    kein Aktivierungsbutton, analog Kategorie-3-Muster); optional Unit-Ebene-Badge in
+    `unitCard.py`.
+  - `docs/spec/faction_abilities.md` Kategorie-6-Doku-Drift nachziehen (s. o.).
+  - Aufwandsschätzung (S144-Grobschätzung, noch gültig): Orks S über alle Teilbereiche (kein
+    `complex`-Rückstand); Necrons S/M/S/M (Daten/Engine/UI/Tests, 4 neue Effekttypen sind der
+    größte Einzelposten); Engine-Grundgerüst S (einmalig, deckt beide Fraktionen ab). Gesamt
+    grob S–M über beide Fraktionen.
+  - Klassen-Einordnung A/B/C je Fähigkeit (nach `docs/spec/acceptance/rules.md`-Systematik):
+    fast alle Zahlen-Modifikatoren = **Klasse A**; Blood Axes/Nephrekh-Translokationsbewegung/
+    Sautekh-RF-Reichweite = **Klasse C** (Tisch-Anteil); Nihilakh/Mephrit sind nach der
+    Wortlaut-Klärung oben jetzt vollständig A-tauglich (keine offene Klassifikation mehr).
+
 ### UX-/UI-Pass vor Ziel8 — Kandidatenliste (Entscheidungsvorlage, keine Priorisierung)
 
 Beobachtungen aus dem Render-Code (`gameProtocoll.py`), gesammelt während der Stufe-A-Planung —

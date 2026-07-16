@@ -27,45 +27,52 @@
 - **Brief-Pflichten NEU (S149-Retro M6/M7, `operating_model.md`):** Planner belegt Schema-/
   Vorbild-Behauptungen per grep/Quellzeile; Executor zählt bei UI-Bugfixes VOR dem Fix alle
   Render-Pfade des Elements per grep auf.
+- **Brief-Session-Nummer (S150-Retro M3):** Jeder Executor-/Planner-Brief nennt die aktuelle
+  Session-Nummer; Statusvermerke nutzen genau diese (Anlass: Fehlbuchung „ERLEDIGT (S145)"
+  in S150) → `agent_scopes.md`.
+- **UI-Bug-Recherche vollständig (S150-Retro M4):** Recherche-Briefs zu UI-Bugs zählen ALLE
+  Datenfelder des gerenderten Elements auf, nicht nur den vermuteten State (Anlass:
+  `target_name` übersehen) → `agent_scopes.md`.
 
 ## Was ist Arbiter?
 Digitaler Spielbegleiter WH40k 9E, Streamlit (Python). Start: `streamlit run src/app.py` (Port 8501; **venv:** `source .venv/bin/activate`). Branch `dev` (Arbeit), `main` (nur PR). App bei Session-Start nur per curl prüfen, bei Bedarf selbst neu starten.
 
 ---
 
-## Aktueller Stand (nach S149, 2026-07-15)
+## Aktueller Stand (nach S150, 2026-07-16)
 
-S149 (Details in `session_archive.md`): used-on-Fix umgesetzt, aber UI-Verifikation
-FEHLGESCHLAGEN → REOPEN (Schritt 1); GAUSS/TESLA-`conditions` + 4 Tests ✓ bestätigt;
-Brief 5 geschlossen (Keyword kommt von der Waffe via `grantsKeyword`, normale Badge genügt);
-B8 entfernt ✓ bestätigt, B7 → Split B7a/B7b; Handoff bereinigt (4 Dateien + B8-Screenshot
-gelöscht); Boss-Nob-Kombi-Swap-Lücke gefunden. Review GO-mit-Auflagen (alle umgesetzt),
-Retro M6/M7 verankert, M5 nicht freigegeben. Vollsuite **1856 passed / 99,14 %**, mypy 24.
-Abschluss-Executor brach am Session-Limit in M8 ab — Rest vom Koordinator abgeschlossen,
-Backlog-Archiv (M8) → Schritt 2.
+S150 (Details in `session_archive.md`): M8-Backlog-Archiv angelegt (`backlog_archive.md`,
+21 Einträge; kein offener 🔲-Eintrag verloren, 53→53 vor legitimem Kategorie-6-Neuzugang);
+K1 kanonisiert nach `ziel7.md` §K1, `S144_klan_dynastie_konzept.md` gelöscht (**Daten-Fix
+OFFEN → Rang 6**); FixD Brief 1 erledigt (`compute_resolution_context` + Attacker-/
+Defender-Block-Split, 8 Tests, kein Layout-Change); used-on-Fix: `used`-Zustand las
+`target_name` live aus der Sidebar statt aus dem gespeicherten Anker — gefixt +
+Regressionstest; **beide manuellen UI-Verifikationen (used-on-Badge, FixD-Pixelidentität)
+vom Stakeholder BESTÄTIGT**. Backlog Rang 11 neu (Restrukturierung). Review
+GO-mit-Auflagen — alle 4 Auflagen umgesetzt (S150). Vollsuite **1865 passed / 99,14 %**,
+mypy 24.
 
-Frühere Sessions (S60–S149): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S150): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S150)
+### ▶ Nächster Schritt (S151) — Stakeholder-Priorisierung S150
 
-1. **used-on-Bug REOPEN (Top-Priorität):** Fix traf nur die zentrale Liste; Review-Hypothese:
-   weiterer Render-Pfad (Inline-Anker) zeigt weiter die Sidebar-Auswahl. ZUERST Repro beim
-   Stakeholder erfragen (welche Phase/Liste, welcher GO), dann ALLE Render-Pfade des Badges
-   per grep aufzählen (M7-Pflicht) und fixen. Stand: `backlog.md` §2 + B12b.
-2. **M8 Backlog verschlanken (Stakeholder-Auftrag S149, wörtlich: „Alles was fertig ist, kann
-   ins Archiv"):** `docs/goals/backlog_archive.md` anlegen (Kopf: KEIN zweiter Backlog, nur
-   Erledigtes/Verworfenes mit Session), alle ~58 Erledigt-Marker aus `backlog.md`
-   dorthin verschieben, Verweis am Backlog-Kopf; keinen offenen Eintrag verlieren.
-3. **7b Boss Nob:** zweite Swap-Gruppe `kombi_rokkit`/`kombi_skorcha` als EIGENE ODER-Gruppe
-   (1 Waffe ersetzt Slugga+Choppa) in `orks/units.yaml`; vorher Existenz in `weapons.yaml` prüfen.
-4. **Quantum Shielding (Aufgabe 4):** neuer Effect-Typ „unmod. Wound 1–3 misslingt immer" +
-   Engine-Gate im Wound-Resolve + `diceCompose.always_fail_marker_row_html` als Producer
-   verdrahten; danach Snakebites-Folge-Task (gleicher Effect-Typ + S8+-Ausnahme, Backlog).
-5. **K1 gekürzt (Aufgabe 5):** nur Nihilakh + Mephrit; Nihilakh-Entscheid (S145) kanonisch
-   nach `ziel7.md` Stufe C, danach `S144_klan_dynastie_konzept.md` DONE+löschen;
-   Novokh/Sautekh/Nephrekh explizit → K2+ (Backlog nachziehen).
-6. **FixD Brief 1** (`_common.py`, Spez. war `S142_fixD_resolution_tabs.md` §4); dann **B7a/B7b**;
-   dann **GO-Ausgrauen-Konsistenz** (neuer Backlog-Eintrag S149).
+1. **Backlog-Restrukturierung VORGEZOGEN (Top-Priorität, Rang 11):** Planner-Brief mit
+   Stakeholder-Anforderungen: (a) schlanke Index-Liste, Details in separate Datei(en);
+   (b) Rangliste bekommt **Status-Spalte** (ToDo / In Progress / Review / UI-Verifikation /
+   Done, …); (c) Abhängigkeiten klarer darstellen — „Parallel?"-Spalte erfüllt die Funktion,
+   aber die Zeichen sind kaum hilfreich; (d) §4c mit archivieren. Strukturvorschlag →
+   Stakeholder-Freigabe → Umsetzung.
+2. **NEUE Routine-Regel (Stakeholder S150):** Backlog-Bereinigung an jedem Session-Ende
+   oder -Start (Done-Items → `backlog_archive.md`) — in den Regeln-Block aufnehmen.
+3. **Klärung in S151 (Stakeholder S150):** Funktion von `next_session.md` bestimmen — ggf.
+   umbenennen oder als Zwischenspeicher fürs Kontextfenster-Limit nutzen; UND festlegen,
+   welche Dateien/Regeln je Session-Aufgabe in den Kontext geladen werden müssen.
+4. **used-on-Generalkonzept-Planner:** Suffix auf alle reaktiven GOs ausweiten (Feature-
+   Wunsch S148, `backlog.md` §2 🟢); Notizen: `docs/handoff/S150_usedon_renderpaths.md`
+   (bleibt ANSWERED bis Konsumierung → dann DONE+löschen).
+5. **K1-Daten-Fix** (Nihilakh/Mephrit-Wortlaute, Rang 6); **Boss Nob 7b** (Kombi-
+   Waffenprofile fehlen in `orks/weapons.yaml` — zweigeteilt: erst Profile, dann
+   ODER-Gruppe); **Quantum-Shielding-Zuschnitt** (Mini-Konzept, dann Briefs ≤ M).
 
 **Manuelle UI-Verifikation (offen):**
 
@@ -73,15 +80,14 @@ Frühere Sessions (S60–S149): Verlauf in `docs/metrics/session_archive.md` (Se
 - 🔲 B12b-Rest (Movement-Advance-Reroll-Randfall — spec-konform, kein Bug).
 
 **Offene Handoff-Marker:** `S147_go_audit_ork_abilities.md` + `S147_go_audit_stratagems.md`
-(ANSWERED — Ork-Restpunkte prüfen, auto_wound-Lücke ist in Backlog überführt; bei nächster
-Konsumierung DONE+löschen); `S141_ui_befunde_group_a.md` bis FixC+FixD;
-`S144_klan_dynastie_konzept.md` bis K1.
+(ANSWERED — behalten bis Fixing-Plan; bei Konsumierung DONE+löschen);
+`S141_ui_befunde_group_a.md` (ANSWERED — behalten bis FixC + FixD Brief 2+3);
+`S150_usedon_renderpaths.md` (ANSWERED, NEU — behalten bis used-on-Generalkonzept S151).
 
-**Erkenntnisse S149:** (a) Zwei falsche Planner-Prämissen (`has_keywords`-Schema,
-`wargear_keywords`-Vorbild) → M6-Pflicht. (b) Executor-Fehlbuchung „✅ ERLEDIGT" trotz
-ausstehender UI-Verifikation (S116–S118-Muster; M5 nicht freigegeben — Muster beobachten).
-(c) STOP-Regeln griffen 2× korrekt (Test-Schutz Aufgabe 1, Scope B7). (d) Screenshots künftig
-mit Dateinamen in Befund-Dateien verankern (Triage-Nit).
+**Erkenntnisse S150:** (a) Haiku-Recherche zu UI-Bugs war unvollständig (`target_name`
+übersehen) → M4-Regel. (b) Executor-Fehlbuchung „ERLEDIGT (S145)" in S150 → M3-Regel
+(Brief nennt Session-Nummer). (c) Reviewer-Session-Limit per SendMessage-Resume
+überbrückt — S137-Regel bewährt.
 
 ---
 

@@ -113,6 +113,13 @@ denselben Waffe×Ziel-Eintrag zeigen.
   `src/gameMechanic/shootingPhase.py`, `src/gameMechanic/gameState.py`
   (Reset-Pfade für den neuen Selector-Key; camelCase-Name beachten).
 - **Voraussetzung:** Mockup-Freigabe (s. §3) liegt vor.
+- **DAMAGE-Block-Abweichung aus Brief 1 (S150, bewusst):** Brief 1 ließ den
+  DAMAGE-Block AUSSERHALB von `_render_attacker_blocks`/`_render_defender_blocks`
+  (separater `_render_damage_block`-Aufruf am Ende von `_render_resolution_tab`),
+  um die Vor-Brief-2-Render-Reihenfolge (nach SAVE/FNP) pixelidentisch zu halten
+  (Kommentar in `_common.py` mit Spec-Verweis). Brief 2 bindet die
+  Angreifer-Spalte daher als ZWEI Aufrufe: `_render_attacker_blocks(ctx)` +
+  `_render_damage_block(…)` — der DAMAGE-Block ist NICHT Teil der Block-Funktion.
 - `st.tabs` durch session-state-getragenen Entry-Selector ersetzen
   (Key z. B. `resolution_entry_idx`, gescoped auf `seq`); Reset in
   `_empty_attack_declaration`-Konsumenten + `reset_group_declaration_state` +

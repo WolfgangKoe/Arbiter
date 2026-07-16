@@ -326,13 +326,20 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             st.caption("**Core**" if is_core else f"**{player}**")
             in_core_section = is_core
         used_here = stratagem_used_here(player, strat.id, _CENTRAL_LIST_ANCHOR_ID)
+        # Resolved once, reused for both the "used_elsewhere" header suffix
+        # (via locked_reason below) AND "used"'s target_name (S150-REOPEN):
+        # `stratagem_used_elsewhere_unit_name` reads whatever unit_key
+        # `spend_stratagem` recorded in this phase's anchor for (player,
+        # strat.id) — the SAME single record regardless of which anchor
+        # spent it, despite the "elsewhere"-sounding name (see its docstring).
+        recorded_target_name = stratagem_used_elsewhere_unit_name(player, strat.id)
         state, locked_reason = _go_state_and_reason(
             strat,
             vis,
             used_ids,
             used_battle_ids,
             used_here,
-            stratagem_used_elsewhere_unit_name(player, strat.id),
+            recorded_target_name,
         )
         if state == "ready":
             # Keyword conditions (stratagem_conditions_met) already passed above — this
@@ -342,11 +349,22 @@ def _render_stratagem_column(player: str, is_active: bool) -> None:
             gate_met, gate_reason = _effect_gate_met(strat, unit_state_for_check)
             if not gate_met:
                 state, locked_reason = "locked", gate_reason
-        target_name = (
-            unit_for_check.name_en
-            if state != "used_elsewhere" and is_unit_scoped_effect(strat) and unit_for_check
-            else None
-        )
+        # S150-REOPEN root cause: "used" (this exact anchor triggered the
+        # spend) still built target_name from `unit_for_check` — the LIVE
+        # sidebar selection, re-read on every render — instead of the unit
+        # the spend actually recorded. Switching the sidebar selection after
+        # using a stratagem (e.g. Insane Bravery in the Morale phase) then
+        # silently relabelled the already-used card to whatever unit was
+        # newly selected. "used" now shows the recorded unit, same as
+        # "used_elsewhere"'s header suffix; only the still-open "ready"/
+        # "locked"/"dormant" states preview the live selection (there is no
+        # recorded target yet to show).
+        target_name = None
+        if is_unit_scoped_effect(strat) and state != "used_elsewhere":
+            if state == "used":
+                target_name = recorded_target_name
+            elif unit_for_check:
+                target_name = unit_for_check.name_en
         render_go_card(
             key=f"{player}_{strat.id}_{phase_idx}_{i}",
             name=strat.name_en,

@@ -301,6 +301,50 @@ def test_render_stratagem_column_used_elsewhere_omits_live_target_name(monkeypat
     assert card["target_name"] is None
 
 
+def test_render_stratagem_column_used_here_shows_recorded_target_not_live_selection(
+    monkeypatch,
+) -> None:
+    """S150-REOPEN (stakeholder repro: Insane Bravery in the Morale phase).
+
+    A card in state `used` (THIS render spot's own anchor triggered the
+    spend) must show the unit `spend_stratagem` actually recorded the use
+    against — not whichever unit happens to be selected in the sidebar
+    right now. Root cause: `target_name` was built from `unit_for_check`
+    (the live selection, re-read on every render) for every state except
+    `used_elsewhere` — so switching the sidebar selection AFTER using a
+    stratagem silently relabelled the already-used card to the newly
+    selected unit."""
+    strat = _make_stratagem(id_="ib", name_en="Insane Bravery", cp_cost=2, once_per_battle=True)
+    unit_b = SimpleNamespace(id="unit_b", name_en="Unit B")
+    session = FakeSessionState(
+        cp={"Necrons": 2},
+        phase_idx=0,
+        used_stratagem_ids={"Necrons": {"ib"}},
+        used_stratagem_battle_ids={"Necrons": {"ib"}},
+        # Recorded use was against Unit A, but the sidebar now has Unit B
+        # selected — exactly the drift the stakeholder observed.
+        selected_unit=("Necrons", "unit_b"),
+        p1_units={"unit_b": {"movement_chosen": False, "in_melee": False}},
+    )
+    monkeypatch.setattr(gp, "st", MagicMock(session_state=session))
+    monkeypatch.setattr(gp, "load_stratagems", lambda faction_dir: [strat])
+    monkeypatch.setattr(gp, "faction_dir_for", lambda player: "necrons")
+    monkeypatch.setattr(gp, "units_list_for", lambda player: [unit_b])
+    monkeypatch.setattr(gp, "units_key_for", lambda player: "p1_units")
+    monkeypatch.setattr(gp, "stratagem_used_here", lambda faction, sid, anchor: True)
+    monkeypatch.setattr(gp, "is_unit_scoped_effect", lambda s: True)
+    monkeypatch.setattr(gp, "stratagem_used_elsewhere_unit_name", lambda faction, sid: "Unit A")
+
+    captured: list[dict] = []
+    monkeypatch.setattr(gp, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    gp._render_stratagem_column("Necrons", True)
+
+    card = captured[0]
+    assert card["state"] == "used"
+    assert card["target_name"] == "Unit A"
+
+
 def test_render_stratagem_column_locks_gated_stratagem_for_ineligible_unit(monkeypatch) -> None:
     """S133-D Befund 4: a stratagem gated on unit state (not yet moved + in
     Engagement Range) must render "locked" with the gate reason when the

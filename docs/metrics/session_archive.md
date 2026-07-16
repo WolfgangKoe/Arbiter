@@ -1,13 +1,24 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-15 21:56 CEST
+Stand: 2026-07-16 09:31 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
 
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
+----------------- ---------------------- -------------- ------------
+07-15 21:58 ad76  ██████████░░ 122k ⚠️   ██████  92%    ▚··········▒
+         SA_1·  ████████████ 215k ⛔    FixD Brief 1 Compute/Render-Trennu…
+         SA_2·  ████████░░░░  94k ✅    S150 DoD-Review
+         SA_3·  ███░░░░░░░░░  35k ✅    Restrukturierungs-Auftrag verankern
+         SA_4·  ████████████ 164k ⛔    S150 Abschluss durchführen
+         SA_5·  █████████░░░ 110k ✅    S150-Planungsentwurf erstellen
+         SA_6·  ██████░░░░░░  73k ✅    used-on Render-Pfade auflisten
+         SA_7·  ███████████░ 138k ⚠️   K1 Klan/Dynastie kanonisieren
+         SA_8·  ████████████ 172k ⛔    M8 Backlog-Archiv anlegen
+         SA_9·  █████████░░░ 113k ✅    used-on-Fix Insane Bravery
 ----------------- ---------------------- -------------- ------------
 07-15 19:12 9dd1  █████████░░░ 106k ✅    █████░  86%    █··········▒
          SA_1·  ██████░░░░░░  72k ✅    Reviewer S149 (DoD-Review)
@@ -17,7 +28,7 @@ Session           Peak-Kontext           Subagent       Modell-Mix
          SA_5·  ██████░░░░░░  78k ✅    Handoff-Triage (Aufgabe 9)
          SA_6·  █████████░░░ 116k ✅    Executor B7+B8 Phasen-UI
 ----------------- ---------------------- -------------- ------------
-07-15 19:12 628e  ████████████ 156k ⛔    ███░░░  44%    ············
+07-15 19:12 628e  ████████████ 164k ⛔    ███░░░  42%    ············
          SA_1·  ████████████ 167k ⛔    Abschluss-Executor S149
 ----------------- ---------------------- -------------- ------------
 07-15 17:44 ac36  ████████████ 154k ⛔    █████░  88%    ▚█··········
@@ -720,3 +731,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S147 (2026-07-15)** GO-Audit (3 Kataloge: 5 CP-Fresser-Stratagems, Apply-Button-Bug, grantsKeyword-Entscheid), MWBD-Instanz-Fix, B1 Ziel-Kachel einziger Ort, Verifikations-Roster, Handoff bereinigt (S145 migriert), Review GO mit Auflagen
 - **S148 (2026-07-15)** Welle 1: Apply-Button-Gate, CP-Fresser-Modifier, Fire-Overwatch-Bedingungen, grantsKeyword generisch, camelCase-Plan; UI-Verifikation B1/MWBD mit 6 Befunden; Briefe 5/6, K1, FixD nach S149
 - **S149 (2026-07-15)** used-on-Fix (Verif. fehlgeschlagen, REOPEN), GAUSS/TESLA-Gates, Brief 5 geschlossen, B8 entfernt, B7-Split, Handoff bereinigt, M6/M7 Prozessregeln
+- **S150 (2026-07-16)** M8-Archiv, K1 kanonisiert, FixD Brief 1, used-on-Fix (used-Zustand), Review GO-mit-Auflagen umgesetzt

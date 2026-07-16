@@ -4566,8 +4566,8 @@
   "628e9b3e-f00f-4570-a320-7f082d35eddd": {
     "started_at": "2026-07-15T17:12:39.371Z",
     "task": "start session",
-    "peak_context": 156185,
-    "subagent_share": 44.425747274697905,
+    "peak_context": 163599,
+    "subagent_share": 42.355704339953384,
     "by_tier": {
       "Sonnet": 7439469
     },
@@ -4578,6 +4578,83 @@
         "tier": "Sonnet",
         "peak_context": 167151,
         "started_at": "2026-07-15T17:12:39.371Z"
+      }
+    ]
+  },
+  "ad76aa89-0cf2-49bc-afbc-8829655ed39a": {
+    "started_at": "2026-07-15T19:58:17.686Z",
+    "task": "start session",
+    "peak_context": 121961,
+    "subagent_share": 91.83983872503855,
+    "by_tier": {
+      "Sonnet": 55960971,
+      "Opus": 1679221,
+      "Fable": 7443154,
+      "Haiku": 6169466
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "FixD Brief 1 Compute/Render-Trennung",
+        "tier": "Sonnet",
+        "peak_context": 215413,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S150 DoD-Review",
+        "tier": "Opus",
+        "peak_context": 94148,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Restrukturierungs-Auftrag verankern",
+        "tier": "Haiku",
+        "peak_context": 35153,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S150 Abschluss durchführen",
+        "tier": "Sonnet",
+        "peak_context": 164062,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S150-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 109705,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "used-on Render-Pfade auflisten",
+        "tier": "Haiku",
+        "peak_context": 73491,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "K1 Klan/Dynastie kanonisieren",
+        "tier": "Sonnet",
+        "peak_context": 137758,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "M8 Backlog-Archiv anlegen",
+        "tier": "Sonnet",
+        "peak_context": 172376,
+        "started_at": "2026-07-15T19:58:17.686Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "used-on-Fix Insane Bravery",
+        "tier": "Sonnet",
+        "peak_context": 112929,
+        "started_at": "2026-07-15T19:58:17.686Z"
       }
     ]
   }

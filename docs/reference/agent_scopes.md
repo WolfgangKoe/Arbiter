@@ -194,6 +194,12 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
   (alle YAML-Dateien, nicht nur die naheliegende) UND `docs/work/`. Grund: S144 — die
   Prämisse „Klan-/Dynastie-Rohtexte fehlen" war falsch; `subfaction_abilities.yaml`
   existierte samt Engine-Anbindung, nur fehlerhaft/wirkungslos.
+- **Brief-Session-Nummer (S150-Retro-M3):** Jeder Executor-/Planner-Brief nennt die aktuelle
+  Session-Nummer; Statusvermerke des Subagenten nutzen genau diese — keine andere erfinden.
+  Anlass: Fehlbuchung „ERLEDIGT (S145)" in S150.
+- **UI-Bug-Recherche vollständig (S150-Retro-M4):** Recherche-Briefs zu UI-Bugs zählen ALLE
+  Datenfelder des gerenderten Elements auf (nicht nur den vermuteten State). Anlass: S150 —
+  `target_name` wurde übersehen, nur `locked_reason` betrachtet.
 
 ---
 

@@ -10,6 +10,7 @@ Handlers import from here — never from gameActionsArea — to avoid circular i
 from __future__ import annotations
 
 from collections.abc import Callable, MutableMapping
+from dataclasses import dataclass
 from typing import Any, cast
 
 import streamlit as st
@@ -1779,16 +1780,63 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
 # ---------------------------------------------------------------------------
 
 
-def _render_resolution_tab(
-    entry: dict,  # type: ignore[type-arg]
+@dataclass
+class ResolutionContext:
+    """Pure computation result for one weapon×target resolution entry.
+
+    Everything the attacker/defender render blocks need for one tab, computed
+    once per Streamlit rerun so both halves consume the same numbers instead
+    of recomputing (and potentially diverging). → docs/audit/plans/
+    S142_fixD_resolution_tabs.md §4 Brief 1.
+    """
+
+    atk_faction: str
+    atk_unit: Unit
+    def_faction: str
+    def_unit: Unit
+    def_uid: str
+    def_state: dict[str, Any]
+    phase_key: str
+    tab_key: str
+    cover_key: str
+    is_shooting: bool
+    is_fight: bool
+    weapon: Weapon
+    profile: WeaponProfile
+    skill_label: str
+    atk_count: str
+    weapon_special: dict[str, Any]
+    strength: int
+    str_bonus: int
+    str_labels: list[str]
+    on_six_ap: int
+    on_six_label: str
+    atk_result: dict[str, Any]
+    ap: int
+    save_result: dict[str, Any]
+    invuln_from_ability: bool
+    fnp_value: int | None
+    auto_light_cover: bool
+
+
+def compute_resolution_context(
+    entry: dict[str, Any],
     atk_faction: str,
     atk_unit: Unit,
-    atk_state: dict,  # type: ignore[type-arg]
+    atk_state: dict[str, Any],
     use_melee: bool,
     phase_key: str,
     tab_key: str,
-) -> None:
-    """Render one resolution tab: Hit + Wound table + Save + Cover + Damage."""
+) -> ResolutionContext | None:
+    """Resolve weapon/profile, modifier stacks, and roll results for one entry.
+
+    Reads session_state (cover checkboxes, active modifiers) but performs no
+    st.markdown/st.checkbox rendering itself — `_render_attacker_blocks` and
+    `_render_defender_blocks` consume the returned context. Returns None when
+    the declared weapon can no longer be resolved (mirrors the previous
+    inline "Weapon not found" early exit). → docs/audit/plans/
+    S142_fixD_resolution_tabs.md §4 Brief 1.
+    """
     from gameMechanic.combat import (  # noqa: PLC0415
         resolve_attack_modifiers,
         resolve_fnp,
@@ -1826,8 +1874,7 @@ def _render_resolution_tab(
 
     weapon = next((w for w in weapons if w.name_en == weapon_name), weapons[0] if weapons else None)
     if weapon is None:
-        st.error("Weapon not found.")
-        return
+        return None
     profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
     if not profiles:
         profiles = weapon.profiles
@@ -1908,12 +1955,9 @@ def _render_resolution_tab(
     # modifier is folded in before resolve_attack_modifiers runs.
     if is_shooting:
         from gameMechanic.abilityEngine import (  # noqa: PLC0415
-            get_active_round_choice_ignores_cover_half_range,
             get_active_round_choice_light_cover_if_stationary,
             get_active_round_choice_shoot_after_fall_back,
-            get_short_label_for_effect_type,
         )
-        from uiLayout.diceCompose import light_cover_label  # noqa: PLC0415
 
         auto_light_cover = get_active_round_choice_light_cover_if_stationary(def_faction, def_uid)
         fall_back_hit_mod = get_active_round_choice_shoot_after_fall_back(atk_faction, atk_uid)
@@ -2000,7 +2044,6 @@ def _render_resolution_tab(
     )
     fnp_value = resolve_fnp(def_unit.fnp, profile.ignores_fnp)
 
-    # Header
     atk_override = entry.get("atk_override")
     atk_count = (
         str(atk_override)
@@ -2009,28 +2052,67 @@ def _render_resolution_tab(
             profile.attacks, models_count, grp_attacks, profile.effect, profile.max_attacks
         )
     )
+
+    return ResolutionContext(
+        atk_faction=atk_faction,
+        atk_unit=atk_unit,
+        def_faction=def_faction,
+        def_unit=def_unit,
+        def_uid=def_uid,
+        def_state=def_state,
+        phase_key=phase_key,
+        tab_key=tab_key,
+        cover_key=cover_key,
+        is_shooting=is_shooting,
+        is_fight=is_fight,
+        weapon=weapon,
+        profile=profile,
+        skill_label=skill_label,
+        atk_count=atk_count,
+        weapon_special=weapon_special,
+        strength=strength,
+        str_bonus=str_bonus,
+        str_labels=str_labels,
+        on_six_ap=on_six_ap,
+        on_six_label=on_six_label,
+        atk_result=atk_result,
+        ap=ap,
+        save_result=save_result,
+        invuln_from_ability=invuln_from_ability,
+        fnp_value=fnp_value,
+        auto_light_cover=auto_light_cover,
+    )
+
+
+def _render_attacker_blocks(ctx: ResolutionContext) -> None:
+    """Attacker-owned resolution UI: header, HIT block, Dense Cover, WOUND block.
+
+    → docs/audit/plans/S142_fixD_resolution_tabs.md §4 Brief 1 (grouping only —
+    still rendered sequentially in the same tab as `_render_defender_blocks`;
+    Brief 2 moves each into its own st.columns()).
+    """
     # D5: no redundant weapon profile line — S/T, AP, Sv and damage all appear
     # in their blocks below. Only the attack count is needed up front.
     st.markdown(
-        f"**{atk_unit.name_en}** → **{def_unit.name_en}**  \n"
-        f"_{weapon.name_en}_ — "
-        f'<span style="font-size:1.05rem;font-weight:700;color:#fbbf24;">{atk_count}</span>'
+        f"**{ctx.atk_unit.name_en}** → **{ctx.def_unit.name_en}**  \n"
+        f"_{ctx.weapon.name_en}_ — "
+        f'<span style="font-size:1.05rem;font-weight:700;color:#fbbf24;">{ctx.atk_count}</span>'
         " Attacks",
         unsafe_allow_html=True,
     )
 
     # HIT BLOCK
-    if weapon_special["auto_hit"]:
+    if ctx.weapon_special["auto_hit"]:
         st.markdown("**HIT** &nbsp; AUTO-HIT", unsafe_allow_html=True)
     else:
-        _render_dice_roll_block("HIT", skill_label, atk_result["hit"], weapon_special)
+        _render_dice_roll_block("HIT", ctx.skill_label, ctx.atk_result["hit"], ctx.weapon_special)
         # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the hit
         # roll — attacker pays, analog Advance/Charge (Familie 2, kein
         # Wertfeld — die App erfasst diesen Wurf nicht separat).
         render_inline_command_reroll(
-            atk_faction,
-            phase_key,
-            reopen_key=f"{tab_key}_hit",
+            ctx.atk_faction,
+            ctx.phase_key,
+            reopen_key=f"{ctx.tab_key}_hit",
             on_reroll=lambda: None,
             label_context="Hit roll",
         )
@@ -2043,28 +2125,28 @@ def _render_resolution_tab(
     # Wound-Anker. Rendering it here too doubled the card (backlog B1).
 
     # Dense Cover checkbox: Shooting phase only, affects hit roll → in the HIT block
-    if is_shooting:
-        st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{cover_key}")
+    if ctx.is_shooting:
+        st.checkbox("Dense Cover (−1 Hit)", key=f"dense_cover_{ctx.cover_key}")
 
     st.markdown("")
 
     # WOUND BLOCK
     _render_dice_wound_block(
-        strength,
-        def_unit.toughness,
-        atk_result["wound"]["stack"],
-        strength_buff=str_bonus,
-        on_six_ap=on_six_ap,
-        on_six_label=on_six_label,
-        modified=atk_result["wound"]["modified"],
-        strength_buff_labels=str_labels,
+        ctx.strength,
+        ctx.def_unit.toughness,
+        ctx.atk_result["wound"]["stack"],
+        strength_buff=ctx.str_bonus,
+        on_six_ap=ctx.on_six_ap,
+        on_six_label=ctx.on_six_label,
+        modified=ctx.atk_result["wound"]["modified"],
+        strength_buff_labels=ctx.str_labels,
     )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
     # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.
     render_inline_command_reroll(
-        atk_faction,
-        phase_key,
-        reopen_key=f"{tab_key}_wound",
+        ctx.atk_faction,
+        ctx.phase_key,
+        reopen_key=f"{ctx.tab_key}_wound",
         on_reroll=lambda: None,
         label_context="Wound roll",
     )
@@ -2074,16 +2156,29 @@ def _render_resolution_tab(
     # declaration-time anchor in render_group_assignment — once spent there, the
     # registered debuff already shows as a modifier row in the wound stack above.
 
+
+def _render_defender_blocks(ctx: ResolutionContext) -> None:
+    """Defender-owned resolution UI: SAVE block, Light/Heavy Cover, FNP.
+
+    → docs/audit/plans/S142_fixD_resolution_tabs.md §4 Brief 1 (grouping only,
+    see `_render_attacker_blocks`).
+    """
+    from gameMechanic.abilityEngine import (  # noqa: PLC0415
+        get_active_round_choice_ignores_cover_half_range,
+        get_short_label_for_effect_type,
+    )
+    from uiLayout.diceCompose import light_cover_label  # noqa: PLC0415
+
     # SAVE BLOCK — its own block_divider_html() is the single WOUND/SAVE
     # separator (S137 Bug A: a second st.markdown("---") here doubled it).
-    _render_dice_save_block(save_result, ap, ability_invuln=invuln_from_ability)
+    _render_dice_save_block(ctx.save_result, ctx.ap, ability_invuln=ctx.invuln_from_ability)
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the defender made the saving
     # throw — defender pays, unlike the Hit-/Wound-Anker above (attacker's
     # dice). Same Familie-2 pattern (no locked value to reopen).
     render_inline_command_reroll(
-        def_faction,
-        phase_key,
-        reopen_key=f"{tab_key}_save",
+        ctx.def_faction,
+        ctx.phase_key,
+        reopen_key=f"{ctx.tab_key}_save",
         on_reroll=lambda: None,
         label_context="Saving throw",
     )
@@ -2096,54 +2191,77 @@ def _render_resolution_tab(
     # above (S146 Fix 2 pattern extended to Hit/Save, backlog B1).
 
     # Cover checkboxes for save modifiers (phase-bound) → in the SAVE block
-    # Imports were already resolved at the top of this block (above resolve_save).
-    if is_shooting:
+    if ctx.is_shooting:
         short = (
-            get_short_label_for_effect_type(atk_faction, "ignore_cover_half_range")
-            or _round_choice_short_label(atk_faction)
-            if get_active_round_choice_ignores_cover_half_range(atk_faction)
+            get_short_label_for_effect_type(ctx.atk_faction, "ignore_cover_half_range")
+            or _round_choice_short_label(ctx.atk_faction)
+            if get_active_round_choice_ignores_cover_half_range(ctx.atk_faction)
             else None
         )
-        if auto_light_cover:
+        if ctx.auto_light_cover:
             # Badge label is data-driven from YAML (e.g. "Eternal Guardian"); always non-empty
             # for any correctly wired directive. Empty string silently omits the badge.
             # Buff-Badges are green per design_colors.md §3 — :green-badge not :blue-badge.
             # No session_state write here: light_cover was already folded in above; a
             # redundant write would trigger Streamlit's "widget value set via Session State"
             # warning alongside the disabled checkbox.
-            d1_label = get_short_label_for_effect_type(def_faction, "light_cover_if_stationary")
+            d1_label = get_short_label_for_effect_type(ctx.def_faction, "light_cover_if_stationary")
             st.checkbox(
                 light_cover_label(short) + (f"  :green-badge[{d1_label}]" if d1_label else ""),
-                key=f"light_cover_{cover_key}",
+                key=f"light_cover_{ctx.cover_key}",
                 value=True,
                 disabled=True,
             )
         else:
-            st.checkbox(light_cover_label(short), key=f"light_cover_{cover_key}")
-    if is_fight:
-        def_charged = def_state.get("turn_flags", {}).get("charged", False)
+            st.checkbox(light_cover_label(short), key=f"light_cover_{ctx.cover_key}")
+    if ctx.is_fight:
+        def_charged = ctx.def_state.get("turn_flags", {}).get("charged", False)
         if not def_charged:
-            st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{cover_key}")
+            st.checkbox("Heavy Cover (+1 Save vs Melee)", key=f"heavy_cover_{ctx.cover_key}")
 
-    if def_unit.fnp is not None:
+    if ctx.def_unit.fnp is not None:
         st.markdown("")
-        if fnp_value is None:
-            st.markdown(f"~~**FNP**~~ ~~{def_unit.fnp}+~~ _(ignored)_")
+        if ctx.fnp_value is None:
+            st.markdown(f"~~**FNP**~~ ~~{ctx.def_unit.fnp}+~~ _(ignored)_")
         else:
-            st.markdown(f"**FNP** &nbsp; [ {fnp_value}+ ]", unsafe_allow_html=True)
+            st.markdown(f"**FNP** &nbsp; [ {ctx.fnp_value}+ ]", unsafe_allow_html=True)
+
+
+def _render_resolution_tab(
+    entry: dict,  # type: ignore[type-arg]
+    atk_faction: str,
+    atk_unit: Unit,
+    atk_state: dict,  # type: ignore[type-arg]
+    use_melee: bool,
+    phase_key: str,
+    tab_key: str,
+) -> None:
+    """Render one resolution tab: Hit + Wound table + Save + Cover + Damage."""
+    ctx = compute_resolution_context(
+        entry, atk_faction, atk_unit, atk_state, use_melee, phase_key, tab_key
+    )
+    if ctx is None:
+        st.error("Weapon not found.")
+        return
+
+    _render_attacker_blocks(ctx)
+    _render_defender_blocks(ctx)
 
     st.markdown("---")
 
-    # DAMAGE BLOCK
+    # DAMAGE BLOCK — attacker-owned (§3 Soll-Struktur), but called last to keep
+    # the pre-Brief-2 visual order (after SAVE/FNP) pixel-identical; Brief 2
+    # relocates it into the attacker column via st.columns, not by reordering
+    # this call. → docs/audit/plans/S142_fixD_resolution_tabs.md §4 Brief 1.
     _render_damage_block(
-        def_unit,
-        def_faction,
-        def_uid,
-        profile,
-        atk_faction,
-        atk_unit.name_en,
-        phase_key,
-        tab_key,
+        ctx.def_unit,
+        ctx.def_faction,
+        ctx.def_uid,
+        ctx.profile,
+        ctx.atk_faction,
+        ctx.atk_unit.name_en,
+        ctx.phase_key,
+        ctx.tab_key,
     )
 
 
