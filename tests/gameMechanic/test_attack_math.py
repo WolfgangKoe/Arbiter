@@ -405,3 +405,29 @@ class TestGroupMeleeBudget:
         )
         w = Weapon(id="w4", name_en="Capped", profiles=[profile])
         assert _group_melee_budget([w], alive=3, eff_attacks=2) == 6 + 6  # base 6 + 3×2
+
+
+# ---------------------------------------------------------------------------
+# _has_independent_attack_budget — B-068: capped extra_attacks weapons
+# (e.g. Silent King's Staff of Stars / Scythe of Dust) default to their max
+# instead of 0, since _group_melee_budget already reserves their cap.
+# ---------------------------------------------------------------------------
+
+from gameMechanic.attackMath import _has_independent_attack_budget  # noqa: E402
+
+
+class TestHasIndependentAttackBudget:
+    def test_capped_extra_attacks_weapon_has_own_budget(self) -> None:
+        effect = {"type": "extra_attacks", "amount": 3}
+        assert _has_independent_attack_budget(effect, max_attacks=3) is True
+
+    def test_extra_attacks_without_cap_shares_pool(self) -> None:
+        effect = {"type": "extra_attacks", "amount": 1}
+        assert _has_independent_attack_budget(effect, max_attacks=None) is False
+
+    def test_plain_weapon_shares_pool(self) -> None:
+        assert _has_independent_attack_budget(None, max_attacks=None) is False
+
+    def test_non_extra_attacks_effect_with_cap_shares_pool(self) -> None:
+        effect = {"type": "something_else"}
+        assert _has_independent_attack_budget(effect, max_attacks=3) is False

@@ -29,6 +29,7 @@ from gameMechanic.attackMath import (  # noqa: F401
     _compute_attacks,
     _detect_weapon_special,
     _group_melee_budget,
+    _has_independent_attack_budget,
     _is_variable_attacks,
     _parse_strength,
     _rapid_fire_input_cap,
@@ -2772,7 +2773,10 @@ def render_group_assignment(
                     atk_key = f"decl_a_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
                     if atk_key not in st.session_state:
                         is_first = i == 0 and weapon is grp_weapons[0]
-                        st.session_state[atk_key] = rule_max if is_first else 0
+                        own_budget = _has_independent_attack_budget(
+                            profile.effect, profile.max_attacks
+                        )
+                        st.session_state[atk_key] = rule_max if (is_first or own_budget) else 0
                     # Remaining budget caps this counter — overbooking impossible
                     budget_left = group_budget - (total_assigned - _val(atk_key))
                     weapon_max = max(0, min(rule_max, budget_left))

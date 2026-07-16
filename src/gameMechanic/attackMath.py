@@ -121,6 +121,19 @@ def _is_variable_attacks(attacks_str: str, effect: dict[str, Any] | None = None)
     return False
 
 
+def _has_independent_attack_budget(effect: dict[str, Any] | None, max_attacks: int | None) -> bool:
+    """True when a weapon's attack count does not share the group's attack pool.
+
+    ``extra_attacks`` weapons with a ``max_attacks`` cap (e.g. Staff of Stars,
+    Scythe of Dust) add their own bonus on top of the group's base attacks —
+    ``_group_melee_budget`` already reserves room for every such weapon at its
+    cap (S150 Befund: number_input defaulted to 0 for these). Since there is
+    no reason to ever declare fewer than the maximum with such a weapon, its
+    counter should default to that maximum rather than to 0.
+    """
+    return bool(effect) and effect.get("type") == "extra_attacks" and bool(max_attacks)
+
+
 def _rapid_fire_input_cap(weapon_type: str, base_cap: int) -> int:
     """Return the max value for the ranged group-assignment "models" field.
 
