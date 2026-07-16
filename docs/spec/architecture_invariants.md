@@ -129,7 +129,7 @@ Vierte messbare Schranke neben Coverage und Architektur. Durchgesetzt von:
 
 - `tests/acceptance/` — jede Akzeptanz-ID (`AC-…`) in `docs/spec/acceptance/index.md`
   ist von genau einem Test angepinnt und umgekehrt (fachliche Schranke, Finding #4).
-- `tests/docs/` — messbare Doku-Gesundheit: `next_session.md` unter Zeilenbudget,
+- `tests/docs/` — messbare Doku-Gesundheit: `briefing.md` unter Zeilenbudget,
   Kern-Specs existieren, jede Invariante (`INV-N`) hat einen referenzierenden Wächter
   (Quer-Korrelation Doku ↔ Tests).
 

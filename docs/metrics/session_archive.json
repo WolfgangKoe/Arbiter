@@ -4584,12 +4584,12 @@
   "ad76aa89-0cf2-49bc-afbc-8829655ed39a": {
     "started_at": "2026-07-15T19:58:17.686Z",
     "task": "start session",
-    "peak_context": 121961,
-    "subagent_share": 91.83983872503855,
+    "peak_context": 126806,
+    "subagent_share": 90.9740508055355,
     "by_tier": {
       "Sonnet": 55960971,
       "Opus": 1679221,
-      "Fable": 7443154,
+      "Fable": 10174735,
       "Haiku": 6169466
     },
     "subagents": [
@@ -4618,7 +4618,7 @@
         "agent_type": "general-purpose",
         "description": "S150 Abschluss durchführen",
         "tier": "Sonnet",
-        "peak_context": 164062,
+        "peak_context": 173059,
         "started_at": "2026-07-15T19:58:17.686Z"
       },
       {
@@ -4655,6 +4655,53 @@
         "tier": "Sonnet",
         "peak_context": 112929,
         "started_at": "2026-07-15T19:58:17.686Z"
+      }
+    ]
+  },
+  "de3709f9-ba27-4b61-b7b9-58438705e74d": {
+    "started_at": "2026-07-16T07:35:57.513Z",
+    "task": "start Session Hier meine Gedanken zur Backlog-Restrukturierung und next Session Backlog-Restrukturierung: - Einleitungs…",
+    "peak_context": 138317,
+    "subagent_share": 86.03451132111701,
+    "by_tier": {
+      "Sonnet": 34958054,
+      "Fable": 6318782
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S151-Abschluss: B-099 + Briefing",
+        "tier": "Sonnet",
+        "peak_context": 85824,
+        "started_at": "2026-07-16T07:35:57.513Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S151-A Backlog-Inventar erstellen",
+        "tier": "Sonnet",
+        "peak_context": 147603,
+        "started_at": "2026-07-16T07:35:57.513Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S151-C briefing.md und Regel-Konsolidierung",
+        "tier": "Sonnet",
+        "peak_context": 219409,
+        "started_at": "2026-07-16T07:35:57.513Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S151-D Wächter-Tests Backlog-Struktur",
+        "tier": "Sonnet",
+        "peak_context": 63503,
+        "started_at": "2026-07-16T07:35:57.513Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S151-B Backlog-Restrukturierung umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 228479,
+        "started_at": "2026-07-16T07:35:57.513Z"
       }
     ]
   }

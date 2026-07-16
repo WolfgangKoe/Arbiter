@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-16 09:31 CEST
+Stand: 2026-07-16 18:02 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,11 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-15 21:58 ad76  ██████████░░ 122k ⚠️   ██████  92%    ▚··········▒
+07-16 09:35 de37  ███████████░ 138k ⚠️   █████░  86%    ▚▚··········
+         SA_1·  ███████░░░░░  86k ✅    S151-Abschluss: B-099 + Briefing
+         SA_2·  ████████████ 148k ⚠️   S151-A Backlog-Inventar erstellen
+         SA_3·  ████████████ 219k ⛔    S151-C briefing.md und Regel-Konso…
+         SA_4·  █████░░░░░░░  64k ✅    S151-D Wächter-Tests Backlog-Struk…
+         SA_5·  ████████████ 228k ⛔    S151-B Backlog-Restrukturierung um…
+----------------- ---------------------- -------------- ------------
+07-15 21:58 ad76  ██████████░░ 127k ⚠️   █████░  91%    ▚▚·········▒
          SA_1·  ████████████ 215k ⛔    FixD Brief 1 Compute/Render-Trennu…
          SA_2·  ████████░░░░  94k ✅    S150 DoD-Review
          SA_3·  ███░░░░░░░░░  35k ✅    Restrukturierungs-Auftrag verankern
-         SA_4·  ████████████ 164k ⛔    S150 Abschluss durchführen
+         SA_4·  ████████████ 173k ⛔    S150 Abschluss durchführen
          SA_5·  █████████░░░ 110k ✅    S150-Planungsentwurf erstellen
          SA_6·  ██████░░░░░░  73k ✅    used-on Render-Pfade auflisten
          SA_7·  ███████████░ 138k ⚠️   K1 Klan/Dynastie kanonisieren
@@ -732,3 +739,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S148 (2026-07-15)** Welle 1: Apply-Button-Gate, CP-Fresser-Modifier, Fire-Overwatch-Bedingungen, grantsKeyword generisch, camelCase-Plan; UI-Verifikation B1/MWBD mit 6 Befunden; Briefe 5/6, K1, FixD nach S149
 - **S149 (2026-07-15)** used-on-Fix (Verif. fehlgeschlagen, REOPEN), GAUSS/TESLA-Gates, Brief 5 geschlossen, B8 entfernt, B7-Split, Handoff bereinigt, M6/M7 Prozessregeln
 - **S150 (2026-07-16)** M8-Archiv, K1 kanonisiert, FixD Brief 1, used-on-Fix (used-Zustand), Review GO-mit-Auflagen umgesetzt
+- **S151 (2026-07-16)** Backlog-Restrukturierung: ID-Liste B-001-B-099, Details-/Archiv-Datei, index.md aufgeloest, briefing.md (ex next_session.md), 5 Waechter-Tests; Review/Retro uebersprungen (Stakeholder)

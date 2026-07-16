@@ -3,7 +3,7 @@
 
 Die fehleranfällige Handarbeit am Session-Ende — den verdichteten Stand als
 Einzeiler in ``docs/metrics/session_archive.md`` einhängen *und* den alten
-„Aktueller Stand"-Block in ``next_session.md`` zurücksetzen, damit der Startprompt
+„Aktueller Stand"-Block in ``briefing.md`` zurücksetzen, damit der Startprompt
 nicht über das 120-Zeilen-Doku-Gate wächst (S68-Befund) — wird hier mechanisch
 erledigt. Das *Verdichten* selbst bleibt Urteil (Argument ``--summary``); das Tool
 fasst nur die zwei klar abgegrenzten Bereiche an und bricht ab, wenn ein Marker
@@ -23,7 +23,7 @@ Aufruf am Session-Ende (Beispiel Abschluss von S69)::
         --summary "Vier S67-Nutzerwünsche umgesetzt …"
 
 Danach den ausführlichen neuen Stand von Hand in den frisch zurückgesetzten Block
-in ``next_session.md`` schreiben.
+in ``briefing.md`` schreiben.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SESSION_ARCHIVE_MD = REPO_ROOT / "docs" / "metrics" / "session_archive.md"
-NEXT_SESSION = REPO_ROOT / ".claude" / "tasks" / "next_session.md"
+BRIEFING = REPO_ROOT / ".claude" / "tasks" / "briefing.md"
 
 STAND_HEADER_PREFIX = "## Aktueller Stand"
 NEXT_STEP_MARKER = "### ▶ Nächster Schritt"
@@ -50,14 +50,14 @@ def append_history_line(archive_text: str, session: int, date: str, summary: str
     return f"{archive_text.rstrip()}\n{line}\n"
 
 
-def reset_stand_block(next_session_text: str, session: int, date: str) -> str:
+def reset_stand_block(briefing_text: str, session: int, date: str) -> str:
     """Ersetze den ``## Aktueller Stand``-Block durch einen frischen Rumpf.
 
     Erhält den im alten Block geparsten Bereich-Start der „Frühere Sessions"-Zeile
     und setzt deren Ende auf ``session - 1`` (der gerade archivierten Session). Lässt
     alles ab ``### ▶ Nächster Schritt`` unangetastet.
     """
-    lines = next_session_text.splitlines()
+    lines = briefing_text.splitlines()
     start = _find_line(lines, lambda ln: ln.startswith(STAND_HEADER_PREFIX))
     end = _find_line(lines, lambda ln: ln.startswith(NEXT_STEP_MARKER))
     if start is None:
@@ -110,19 +110,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     archive_text = SESSION_ARCHIVE_MD.read_text(encoding="utf-8")
-    next_text = NEXT_SESSION.read_text(encoding="utf-8")
+    briefing_text = BRIEFING.read_text(encoding="utf-8")
 
     SESSION_ARCHIVE_MD.write_text(
         append_history_line(archive_text, args.session, args.date, args.summary),
         encoding="utf-8",
     )
-    NEXT_SESSION.write_text(
-        reset_stand_block(next_text, args.session, args.date),
+    BRIEFING.write_text(
+        reset_stand_block(briefing_text, args.session, args.date),
         encoding="utf-8",
     )
     print(f"✓ session_archive.md: S{args.session}-Zeile angehängt.")
     print(
-        f"✓ next_session.md: Stand-Block auf nach-S{args.session} zurückgesetzt"
+        f"✓ briefing.md: Stand-Block auf nach-S{args.session} zurückgesetzt"
         " — neuen Stand jetzt von Hand eintragen."
     )
     return 0

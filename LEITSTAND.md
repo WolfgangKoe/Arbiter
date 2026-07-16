@@ -16,7 +16,7 @@ Die eine Tür für den Stakeholder. Hier ist der Rahmen sichtbar; alle Inhalte l
 
 ## 2 · Aktueller Stand
 
-→ [.claude/tasks/next_session.md](.claude/tasks/next_session.md)
+→ [.claude/tasks/briefing.md](.claude/tasks/briefing.md)
 
 Dort steht: was zuletzt getan wurde, was als nächstes ansteht, offene Fragen. Wird am Session-Ende aktualisiert.
 

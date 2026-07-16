@@ -54,7 +54,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
 | **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich; **Fable nur bei Prämissen-/Architektur-Urteil** mit expliziter Begründung (ADR-0008) | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
-| **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil) | Ja — als Subagent | Liest `next_session.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
+| **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil), Subagent-Typ `general-purpose` (S140 — braucht Schreibrecht für den Entwurf) | Ja — als Subagent | Liest `briefing.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
 | **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 99 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
 
 ### Tiering-Faustregel
@@ -89,7 +89,7 @@ expliziter Begründung im Auftrag** (O2-MUST, s. o.), sonst gilt die Untergrenze
 |---|---|---|---|---|
 | **Recherche / Regel-Lookup** | Haiku (Lookup) · Sonnet (Synthese) | **Read** | Planning · Sprint | Wahapedia-Texte, Codebase-Mapping, Web-Fetch (z. B. Slides), Rule-Conformance-Catalog befüllen |
 | **Reviewer / Auditor** | **Opus** (Urteil) | **Read** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
-| **Planner** | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `next_session.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
+| **Planner** | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `briefing.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
 | **Kontextkuratierung / Beobachter** | Haiku · Sonnet | **Read** | laufend · Review | Kontext-/Wissens-Lücken melden, Token-Sinks aufspüren, Regel-Index-Pflege vorschlagen |
 | **Refinement-Extraktor** | Sonnet | Read + Write (`docs/inbox/`) | Refinement | Fotos aus `Fotos/` lesen, Idee als strukturierten Text in die Inbox extrahieren |
 | **Artefaktpflege** | Sonnet | Read + begrenzt Write | Abschluss | Doku/Backlog/Metrics konsistent halten, Drift melden (Schreibzugriff freigabepflichtig) |
@@ -134,12 +134,12 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 **🔧 = Hook-vollzogen:** Events, die als Konditionalprogramm formulierbar sind, feuert die Harness (`.claude/settings.json` + `tools/*.py`) statt sie der Erinnerung des Orchestrators zu überlassen. Siehe [ADR-0003](decisions/0003-events-als-hooks-vollzogen.md).
 
 1. <a id="ev1"></a>**Planning (Session-Start)** — zwei Varianten:
-   - **Default ("start next session"):** [next_session.md](../../.claude/tasks/next_session.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Koordinator sofort loslegen. **Auslagerung (ADR-0007):** Den Planning-Entwurf erstellt ein **Planner-Subagent** (liest next_session + Ziel + Backlog + Index) und legt ihn als Datei ab; der Koordinator legt ihn dem Stakeholder zur Freigabe vor, ohne die Quellen selbst zu lesen.
+   - **Default ("start next session"):** [briefing.md](../../.claude/tasks/briefing.md) + aktive Zieldatei + [backlog.md](../goals/backlog.md) lesen → **Planning vorlegen**: Prioritäten-Vorschlag (gegen Backlog), grobe Token-Schätzung je Aufgabe, Entscheidungsmodus je Task. Erst nach Freigabe (Event 2) starten. So kann der Stakeholder einmal entscheiden und der Koordinator sofort loslegen. **Auslagerung (ADR-0007):** Den Planning-Entwurf erstellt ein **Planner-Subagent** (liest briefing + Ziel + Backlog + Index) und legt ihn als Datei ab; der Koordinator legt ihn dem Stakeholder zur Freigabe vor, ohne die Quellen selbst zu lesen.
 
      Reihenfolge-Pflicht: Aufgaben mit `Modus: Konsens` (Stakeholder-Entscheidung blockiert
      Umsetzung) stehen im Plan VOR rein mechanischen Tasks — nicht in der Wind-down-Zone
      (~135k), wo Headroom fehlt. Details: `docs/reference/agent_scopes.md` → Pflichtschritte.
-   - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `next_session.md` starten.
+   - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `briefing.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
    Orchestrator legt vor: Plan + betroffene Dateien + grobe Token-Schätzung + Modus-Label (Gate / Konsent / Konsens). Stakeholder gibt explizit frei. Erst danach Implementierung. **Harter Vollzug:** `tools/freigabe_gate.py` blockiert Edit/Write/NotebookEdit, bis der Stakeholder physisch freigibt (`touch .claude/.freigabe`); SessionStart entfernt den Marker → jede Session neu scharf. **Marker-Kontinuität (S118):** Wurde die Freigabe in der laufenden Session dokumentiert erteilt (Chat-Wortlaut) und der Marker nur durch einen Session-Neustart (z. B. Limit-Reset) entfernt, darf der Koordinator ihn re-setzen — erteilte Freigabe überlebt den Neustart; eine *neue* Freigabe ersetzt das nicht.
@@ -169,7 +169,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
 5. <a id="ev5"></a>**Review → Retro → Abschluss (Session-Ende)**
    Drei Schritte in dieser Reihenfolge:
    - **Review** 🔧 — den technischen DoD-Review (Event 4) erstellt ein **Reviewer-Subagent** (Opus, ADR-0007) im eigenen Fenster und liefert ihn als Datei; der Koordinator reicht ihn durch (Herkunft nennen). **Plus** Ergebnis-Zusammenfassung mit **Sessionstand-Einschätzung**: Kontext-Auslastung in % (von 150 k) + klare Aussage „was ist noch machbar — substanziell vs. nur Abschluss". Dazu eine knappe **Ziel-Fortschritt-Zeile** — „Ziel-Fortschritt: ja / teils / nein, woran sichtbar" (Soll-Ist gegen das aktive Ziel, **ohne** Token-Zielzahl): koppelt den Output an den Ziel-Fortschritt, nicht an die Token-Menge. Den **Token-Report beim Test-Start** via `python tools/token_report.py --write` erzeugen und Peak-Kontext / Korridor **direkt im Chat teilen**, nicht nur in [overview.md](../metrics/overview.md). **Harter Vollzug:** `tools/test_report_reminder.py` (PostToolUse auf pytest) injiziert diese Teil-Pflicht nach jedem Testlauf.
-   - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `next_session.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
+   - **Retro** (fester, nicht überspringbarer Teil) — was lief gut, wo war Reibung, welche Wurzel, was sollte sich ändern; für den Stakeholder nachvollziehbar. **Vorab ankündigen**, sobald sich der Kontext-Korridor (~135 k) nähert, damit der Stakeholder weiß, wann dieser Schritt kommt. Soll-Ist (beendete Session inkl. Effizienz gegen die nächste erwartete Aufgabe) → Learning in `briefing.md`. Folgt eine Prämissen-Schärfung → ADR anlegen.
 
      **Vorausschauender Fragenkatalog (Review + Retro schauen auch nach VORN):** Neben dem Rückblick prüft der Orchestrator jede Session-Ende-Retro diese Fragen — und beantwortet sie für den Stakeholder nachvollziehbar (nicht nur rhetorisch):
      - **Qualität** — Was würde die Qualität (Code, Regeltreue, Tests, Doku) konkret heben?
@@ -180,15 +180,15 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      - **Doku/Backlog** — Lässt sich Doku/Backlog besser strukturieren, damit nichts driftet?
      - **Skalierung** — Wie werden wir besser / skalieren die Umsetzung? **Leitprinzip: vorausschauend, kleine Experimente, KEIN großer Umbau.**
      - **Kontext-Versorgung** — Wie stellen wir sicher, dass Claude jederzeit die nötigen Infos/Hinweise hat (z. B. Haiku-/Sonnet-Beobachter-Subagent, der Lücken meldet)?
-     - **Priorität** — Ist die nächste geplante Aufgabe (in `next_session.md`) noch die richtige Priorität — gegen `backlog.md` geprüft?
+     - **Priorität** — Ist die nächste geplante Aufgabe (in `briefing.md`) noch die richtige Priorität — gegen `backlog.md` geprüft?
      - **Engpass** — Welche Schuld-/Ledger-Position blockiert aktuell am meisten?
 
      Antworten, die eine Änderung auslösen, münden in den **Maßnahmen-Entscheid** (nächster Schritt).
-   - **Maßnahmen-Entscheid (Konsent-Gate)** — Review und Retro bleiben getrennte Schritte, laufen aber in einem Durchgang. Die Retro endet mit einer **nummerierten, entscheidbaren Maßnahmen-Liste** (jede Maßnahme: Was · Wirkung · Ablageort — `next_session.md`/Backlog §2/ADR). Der Stakeholder **wählt/gibt frei**, was übernommen wird. Erst die freigegebenen Maßnahmen schreibt der Abschluss in die Artefakte — so startet die nächste Session schnell und ohne Drift.
-   - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([next_session.md](../../.claude/tasks/next_session.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**. **History-Rotation:** den verdichteten Stand mit `python tools/rotate_history.py --session <N> --summary "…"` als Einzeiler nach `docs/metrics/session_archive.md` einhängen und den Stand-Block in `next_session.md` zurücksetzen (hält den Startprompt unter dem 120-Zeilen-Gate; das Verdichten bleibt Urteil).
+   - **Maßnahmen-Entscheid (Konsent-Gate)** — Review und Retro bleiben getrennte Schritte, laufen aber in einem Durchgang. Die Retro endet mit einer **nummerierten, entscheidbaren Maßnahmen-Liste** (jede Maßnahme: Was · Wirkung · Ablageort — `briefing.md`/Backlog §2/ADR). Der Stakeholder **wählt/gibt frei**, was übernommen wird. Erst die freigegebenen Maßnahmen schreibt der Abschluss in die Artefakte — so startet die nächste Session schnell und ohne Drift.
+   - **Abschluss (Aufräumen)** — Artefakte aktualisieren ([briefing.md](../../.claude/tasks/briefing.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`), **committen**, **Clear**. **History-Rotation:** den verdichteten Stand mit `python tools/rotate_history.py --session <N> --summary "…"` als Einzeiler nach `docs/metrics/session_archive.md` einhängen und den Stand-Block in `briefing.md` zurücksetzen (hält den Startprompt unter dem 120-Zeilen-Gate; das Verdichten bleibt Urteil).
    Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
-   **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `next_session.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
+   **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `briefing.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
 6. <a id="ev6"></a>**Kontext-Korridor-Event (~135 k Token)** 🔧
    Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen. **Harter Vollzug:** `tools/session_context.py` (UserPromptSubmit) eskaliert gestuft — ≥120 k Warnung + Retro-Vorankündigung, ≥135 k laute Stopp-Direktive. Das Review/Retro-Budget zählt zur laufenden Session mit — Schwellen dazu sind in `CLAUDE.md` (Token-Disziplin & Arbeitsweise) kanonisch, hier nicht dupliziert.
@@ -279,7 +279,7 @@ Gate-Wächter (pytest · Arch-Gate · Coverage · Debt)
 
 ```mermaid
 graph TD
-    SS[1 · Planning<br/>next_session + Ziel lesen]
+    SS[1 · Planning<br/>briefing + Ziel lesen]
     PF[2 · Plan-Freigabe<br/>Plan + Dateien + Token-Schätzung]
     SP[3 · Sprint<br/>Implementierung]
     DOD[4 · DoD-Review<br/>7-Punkte-Check]

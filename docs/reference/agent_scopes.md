@@ -25,7 +25,7 @@ Schnellnavigation für den Koordinator: zu einer Aufgabe genau die nötigen Date
 | **Army-Sidebar / UnitCard-UI** | `src/uiLayout/armyList.py`, `src/uiLayout/unitCard.py`, `src/uiLayout/armyCard.py`, `src/uiLayout/detachmentCard.py` | `src/uiLayout/_common.py`, `docs/spec/ui_layout.md` |
 | **Spielkopf / VP / CP / Log** | `src/uiLayout/gameHeader.py`, `src/uiLayout/gameProtocoll.py`, `src/gameMechanic/gameLog.py`, `src/gameMechanic/gameState.py` | `src/app.py` |
 | **Regel-Recherche** (9E-Kernregeln, Fraktionsregeln, Gotchas) | `docs/work/wahapedia_core_rules/core_rules.txt`, `docs/work/wahapedia_core_rules/rules_appendix.txt`, `docs/work/schlachtrunde.md` | `docs/work/wahapedia_necrons/`, `docs/work/wahapedia_orks/`, `docs/work/wahapedia_adeptus_custodes/`, `docs/spec/rules_insights.md` |
-| **Doku / Backlog pflegen** (next_session, Ziele, Backlog) | `.claude/tasks/next_session.md`, `docs/goals/backlog.md`, `LEITSTAND.md` | `docs/goals/index.md`, `docs/goals/ziel*.md`, `docs/audit/plans/` |
+| **Doku / Backlog pflegen** (briefing, Ziele, Backlog) | `.claude/tasks/briefing.md`, `docs/goals/backlog.md`, `LEITSTAND.md` | `docs/goals/ziel*.md`, `docs/audit/plans/` |
 | **Reporting / Token-Tooling** (`token_report.py`, `session_context.py`, Schwellen) | `tools/token_report.py`, `tools/session_context.py`, `docs/metrics/overview.md`, `tests/tools/test_token_report.py` | `docs/metrics/session_archive.json`, `docs/metrics/session_archive.md` |
 
 ---
@@ -49,7 +49,7 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 
 **Pflichtschritte (Planner):**
 - **Vor dem Einplanen:** offene vs. erledigte Steps gegen `git log --oneline` +
-  `.claude/tasks/next_session.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
+  `.claude/tasks/briefing.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
 - **Checkbox-Vollständigkeit:** alle Unterabschnitte der aktiven Zieldatei durchgehen —
   jede Checkbox auf `stale` (Check gesetzt, aber Code nicht committet) vs. `wirklich offen`
   prüfen. Beleg: `git log --oneline | grep -i <stichwort>` oder `grep -rn <symbol> src/`.
@@ -64,7 +64,7 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   gegen den **aktuellen Implementierungsstand** prüfbar sind; Punkte, die offene Pläne
   voraussetzen, explizit als „blockiert durch <Plan>" kennzeichnen. Grund: S121 — Punkte 3+4
   der Stufe-A-Checkliste setzten die noch fehlende Reaktiv-UI (Plan 015) voraus.
-- **Teil-Status statt binär:** Backlog-/`next_session.md`-Einträge für teil-implementierte
+- **Teil-Status statt binär:** Backlog-/`briefing.md`-Einträge für teil-implementierte
   Mechaniken beschreiben „Mechanik X steht+getestet; offen = Variante Y" statt nur
   offen/erledigt. Grund: S115 — die P17-Lock-Mechanik stand, der Eintrag las aber wie
   „nichts da".
@@ -120,6 +120,8 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
   macht niemals `git commit`, `git add` oder andere Verdrahtung der Git-History.
+- **Werkzeug-Klausel (S123):** Dateiänderungen ausschließlich über Edit/Write; Bash nur
+  lesend bzw. für `git`/`pytest` — kein `sed`/`echo >`/sonstige Bash-Textmutation.
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war
@@ -132,6 +134,7 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
       Anzeige-Code kann lokal neu rechnen (S122-Befund: Eff.-Zeile ignorierte resolve_save-Floor)
 - [ ] Heimat: neuer Code sitzt im richtigen Modul
 - [ ] Gates: pytest grün, Coverage-Floor ≥ 99 % gehalten, keine vorher-grünen Tests rot
+- [ ] mypy: `python tools/mypy_gate.py` ausgeführt, Fehlerzahl nicht gestiegen (S128)
 - [ ] Generic-src: keine Fraktions-Strings/-Checks in src/
 - [ ] Format: `pre-commit run --files <geänderte Dateien>` ausgeführt und sauber (nicht nur `ruff check`)
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
@@ -200,6 +203,10 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
 - **UI-Bug-Recherche vollständig (S150-Retro-M4):** Recherche-Briefs zu UI-Bugs zählen ALLE
   Datenfelder des gerenderten Elements auf (nicht nur den vermuteten State). Anlass: S150 —
   `target_name` wurde übersehen, nur `locked_reason` betrachtet.
+- **Session-Limit-Abbrüche (S137):** Bricht ein Subagent wegen Session-/Kontextlimit ab, wird
+  er NICHT neu gestartet — der Koordinator weckt ihn per `SendMessage` mit intaktem Kontext.
+  Das Freigabe-Gate re-armt dabei nur, wenn die Freigabe in der laufenden Session bereits
+  dokumentiert erteilt wurde (Marker-Kontinuität, `operating_model.md` Event 2).
 
 ---
 

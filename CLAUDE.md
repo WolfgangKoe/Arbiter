@@ -35,7 +35,7 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | **Wer entscheidet was? (Rollen, Model-Tier, Events, Modi)** | `docs/governance/operating_model.md` |
 | **Warum fiel eine Konsens-Entscheidung so? (ADR)** | `docs/governance/decisions/` |
 | **Rohe Ideen → gemeinsames Verständnis (Refinement)** | `Fotos/` → `docs/inbox/` |
-| Was mache ich als Nächstes? (aktueller Stand) | `.claude/tasks/next_session.md` |
+| Koordinator-Briefing + Kontext-Zwischenspeicher (aktueller Stand) | `.claude/tasks/briefing.md` |
 | Was ist insgesamt offen? (zentraler Backlog) | `docs/goals/backlog.md` |
 | Detailplan eines Features (Executor) | `docs/audit/plans/` (+ `README.md` = Queue/Status) |
 | Architektur-Gesamtbild | `docs/spec/architecture.md` |
@@ -44,7 +44,7 @@ Einstiegstür für den Stakeholder ist der **Leitstand** (`LEITSTAND.md`) — er
 | Nicht-offensichtliche Regelerkenntnisse (Implementierungs-Gotchas) | `docs/spec/rules_insights.md` |
 | Farbschema (verbindlich) | `docs/spec/design_colors.md` |
 | UI-Design-System (GO-Karte, Bausteine, Wortlaut) | `docs/spec/design_system.md` |
-| Ziel-Übersicht + Historie/Changelog | `docs/goals/index.md` · `docs/metrics/session_archive.md` |
+| Ziel-Übersicht + Backlog-Historie | `docs/goals/backlog.md` (aktives Ziel + Liste) · `docs/goals/backlog_archive.md` + `docs/goals/archive/` (Historie) |
 | **Stakeholder-Beobachtungen (stehender Eingang)** | `docs/handoff/Stakeholder_Beobachtungen.md` |
 
 Regel: keine zweite „Stand"- oder „Backlog"-Datei anlegen. Verteilte Notizen gehören in
@@ -111,15 +111,17 @@ Begründung: [ADR-0005](docs/governance/decisions/0005-stehende-subagent-freigab
 - **Falle:** „Necron-Check entfernen" ≠ „für alle Fraktionen öffnen" — nur der *Ort* des Aufrufs ändert sich, nicht die Logik
 
 ### Session-Workflow
-1. **Session-Start:** `.claude/tasks/next_session.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
+1. **Session-Start:** `.claude/tasks/briefing.md` lesen → `docs/goals/<aktives_ziel>.md` lesen
    → **Checkbox-Sync: jeden Haken gegen `git log --oneline` verifizieren** — stale Checks
    (gesetzt, aber Code fehlt) sofort melden, bevor der Plan aufgebaut wird.
 2. **Plan zeigen** → Freigabe einholen → Implementieren
-3. **Session-Ende:** `.claude/tasks/next_session.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
+3. **Session-Ende:** `.claude/tasks/briefing.md` aktualisieren (Stand, nächster Schritt, offene Fragen)
 4. `docs/goals/<aktives_ziel>.md` Checkboxen abhaken — **nur wenn Code committet**; stale Checks
    explizit öffnen und in den nächsten Schritt übernehmen, nicht still stehen lassen.
+5. **Backlog-Bereinigung** an jedem Session-Start oder -Ende: erledigte Items inkl.
+   Details-Abschnitt → `docs/goals/backlog_archive.md` (Stakeholder-Entscheid S150/S151).
 
-**Kritisch beim Update:** `.claude/tasks/next_session.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
+**Kritisch beim Update:** `.claude/tasks/briefing.md` ZUERST lesen, dann ergänzen — niemals blind überschreiben. Erkenntnisse aus früheren Sessions dürfen nicht verloren gehen. Keine zweite Datei anlegen (nicht im Root, nicht in `docs/`).
 
 ### Ganzheitlicher Review-Schritt — Definition of Done
 
@@ -147,14 +149,14 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 **Session starten — Plan vorlegen** (Default):
 > start next session
 
-→ **Planner-Subagent beauftragen** (liest `next_session.md` + Zieldatei + `backlog.md` + Index laut
+→ **Planner-Subagent beauftragen** (liest `briefing.md` + Zieldatei + `backlog.md` + Index laut
 `agent_scopes.md`, legt Planning-Entwurf als Datei ab); Koordinator legt den Entwurf dem Stakeholder
 vor. **Auf Freigabe warten**, dann Executor-Subagent starten.
 
 **Session starten — direkt los** (Plan ist schon freigegeben, Shortcut):
 > Beginne mit der nächsten Session. Der Plan ist freigegeben.
 
-→ Koordinator liest `next_session.md` (Pfade/Marker), beauftragt direkt den ersten Executor-Subagent —
+→ Koordinator liest `briefing.md` (Pfade/Marker), beauftragt direkt den ersten Executor-Subagent —
 kein erneuter Plan nötig.  
 Ausnahme: Wenn der Nutzer zusätzlich ein konkretes Thema oder einen Bug nennt, hat dieses Vorrang
 **als Planungsgegenstand** — der Planning-Schritt (Planner-Entwurf vorlegen → explizite Freigabe →
@@ -168,7 +170,7 @@ Empfehlung" zu einer NEEDS-DECISION-Datei) beantwortet nur die Entscheidungsfrag
 → **Review** via Reviewer-Subagent (Opus, DoD + Sessionstand; Befund als Datei, Koordinator reicht
 wortgleich durch) → **Retro** (getrennter Schritt, Koordinator moderiert) endet mit einer
 **nummerierten, entscheidbaren Maßnahmen-Liste**; der Stakeholder wählt/gibt frei → **Abschluss**
-schreibt nur das Freigegebene in die Artefakte: `next_session.md` aktualisieren (Stand, nächster
+schreibt nur das Freigegebene in die Artefakte: `briefing.md` aktualisieren (Stand, nächster
 Schritt, neue Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
 **Freigabe-Gate bleibt:** Plan + Dateiliste zeigen, auf explizite Freigabe warten — nur das "wer tut
 die Arbeit" ist delegiert.
@@ -186,7 +188,7 @@ Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Tok
 - **Kontext-Korridor < 150k, zweistufig (S135-Retro-GO, präzisiert S136).** Ab **~120k**
   leitet der Koordinator ein **geordnetes Wind-down** ein (laufende Aufgabe abschließen,
   nichts Neues mehr beginnen). Bei **~90 % (~135k)** spätestens die Session **geordnet
-  beenden** (`next_session.md` + Commit) und **frisch starten** — nicht in die teure
+  beenden** (`briefing.md` + Commit) und **frisch starten** — nicht in die teure
   >150k-Zone laufen. Das Review/Retro-Budget (~45k) zählt zur laufenden Session mit: **ab
   ~100k Kontext keine neue Aufgabe mehr beginnen, solange Review/Retro der Session noch
   aussteht** (S142+S143 mussten Review zweimal nachholen, S144-Retro-Beschluss).

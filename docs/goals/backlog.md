@@ -1,792 +1,162 @@
 # Backlog — zentraler Index
 
-> **Ein Ort für „was ist offen".** Dieser Index führt die bisher verstreuten Quellen
-> zusammen (Executor-Pläne, offene Tasks, manuelle Verifikation, Architektur-Schulden).
-> **Details bleiben in den verlinkten Artefakten** — hier wird nicht dupliziert, nur verwiesen.
->
-> Pflege: Wird ein Punkt erledigt, hier abhaken **und** in der Detailquelle. Neue Arbeit
-> entweder als Plan in [../audit/plans/](../audit/plans/) oder als Task-Zeile hier.
+Arbiter ist ein digitaler Spielbegleiter für WH40k 9. Edition (Streamlit): er führt zwei Spieler
+durch eine Partie — Phasen anzeigen, Einheitenstatus verwalten, Würfe berechnen.
 
-Letzter Abgleich: 2026-06-30 (S112 — Coverage-Schuld M3 erledigt (100 %), §5 Ziel7 neu definiert, Ziel6 6e/6f/6h Kat1–3 nach Ziel7 ausgelagert)
+**Aktives Ziel:** [Ziel 7 — Gefechtsoptionen + subfaction-Mechanik](ziel7.md) (🟨 aktiv, §0 Stufe A
+erledigt S121, Rest offen). Bündelt (a) `collect_modifiers_for_phase`-Execute-Logik (§6e), (b) 6f
+Ability-Badges, (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
 
-Erledigte/verworfene Einträge wandern nach [backlog_archive.md](backlog_archive.md) — dort
-nur Historie, offene Arbeit bleibt ausschließlich hier (S150).
+**Geplant:** [Ziel 8 — Crusade-Erweiterung](ziel8.md) (⬜ noch nicht begonnen) ·
+[Ziel 9 — Wahapedia Faction Fetcher](ziel9.md) (⬜ noch nicht begonnen, Richtungsentscheid B-088 offen).
 
----
+Detailplanungen erledigter Ziele (1A–6): [archive/](archive/). Ausführliche Item-Begründungen:
+[backlog_details.md](backlog_details.md). Erledigtes/Verworfenes: [backlog_archive.md](backlog_archive.md).
 
-## Prioritätenliste (Stand 2026-07-14, S145; migriert S147)
-
-**Kanonischer Ort der Gesamt-Reihenfolge** (Konsens-Entscheid, Stakeholder-Freigabe
-2026-07-14). Details je Paket stehen in den verlinkten Quellen — hier nur Rang, Paket,
-Kurzbegründung, Parallelisierbarkeit.
-
-**Herleitung (S145, kurz):** Vier Prioritätsquellen drifteten auseinander — die
-next_session.md-Liste (S144, frisch), das Inline-Tag `[PRIO-NÄCHSTE]` hier (S52-Altlast,
-widersprach der next_session-Liste), `plans/README.md`s „Empfohlene Reihenfolge" (veraltet,
-nannte FixD nicht trotz P1-Status) und `ziel7.md`s fachliche Stufen-Reihenfolge (Spannung,
-kein Widerspruch: offene Stufe-B-Checkbox ist reine Verifikation, blockiert Stufe-C-
-Datenpflege nicht). Konsolidierung: diese Tabelle ist seither die alleinige Quelle der
-Session-Priorität; `next_session.md` führt nur noch den nächsten Schritt, `plans/README.md`
-nur noch Status je Plan, `ziel7.md` behält die fachlichen Stufen-Gates (Ziel-Logik, keine
-Session-Priorität), Inline-Prio-Tags entfallen. Parallel-Kriterium: Dateidisjunktheit
-(Rang 2∥3, Rang 4∥6, Rang 8 jederzeit); der `_common.py`-Konflikt erzwingt die Serie
-2 → 4 → 5 → 9.
-
-| Rang | Arbeitspaket | Begründung | Parallel? |
-|---|---|---|---|
-| 1 | ~~Klan/Dynastie-Entscheid (Frage 3 + Prioritätenliste)~~ — **erledigt — kanonisiert S150, `ziel7.md` Stufe C §K1** | blockiert Rang 6–7; Konsens-Entscheid gehört an den Session-Anfang | — |
-| 2 | ~~on_target-Anker Option A~~ — **erledigt S146** (UI-Prüfung Stakeholder offen) | S143 freigegeben, kleiner bestätigter UX-Fix | ⛔ nicht mit Rang 4/5 (gleiche Datei `_common.py`) |
-| 3 | ~~Vigilus-Warlord-Traits entfernen~~ — **erledigt S146** | S144 entschieden, Datenqualitäts-Schuld | ✅ mit Rang 2 (disjunkt) |
-| 4 | ~~FixD Brief 1 (Compute/Render-Trennung)~~ — **erledigt S150** (`plans/README.md`) | einziger P1-Plan; entblockt Brief 2+3 und mypy-uiLayout | ⛔ nach Rang 2 (gleiche Datei); ✅ mit Rang 6 |
-| 5 | FixD Brief 2 + 3 | Brief 2 hinter Mockup-Gate, Brief 3 = Spec-Nachzug | ⛔ sequenziell nach Brief 1 |
-| 6 | Klan/Dynastie Brief K1 (Wortlaut-Bugfix, Scope S150 auf **Nihilakh + Mephrit** begrenzt) — **OFFEN: Entscheid kanonisiert S150 (`ziel7.md` §K1), Daten-Fix ausstehend** (`subfaction_abilities.yaml` unverändert) | 2 fachlich falsche Einträge, data-only, Quelle lokal belegt (`ziel7.md` Stufe C §K1) | ✅ mit Rang 4/5 (disjunkt) |
-| 7 | Klan/Dynastie K2+ (Wortlaut-Fix **Novokh/Sautekh/Nephrekh** + **Ork Snakebites**, Engine-Filter, `subfaction_passive`-Migration, 4 neue Effekttypen, Badge, Spec-Nachzug `faction_abilities.md` Kategorie 6) | macht 13 Einträge erstmals wirksam; L → vor Vergabe in ≤ M-Briefs splitten; Details `ziel7.md` Stufe C §K1 | teils, Detailschnitt im Umsetzungsplan |
-| 8 | ~~Stufe-B-Rest: Necron-Roster-UI-Verifikation~~ — **erledigt S146** (alle 7 Schritte bestanden, `ziel7.md` Z. 76) | hält das ziel7-Stufengate ehrlich; reine Stakeholder-Bildschirmzeit | ✅ jederzeit |
-| 9 | mypy-Ratchet uiLayout (17) | Dateiüberschneidung `_common.py` mit FixD | ⛔ erst nach Rang 5 |
-| 10 | #2b Direktiv-Lock-Rest (ab Bewegungsphase sperren) | eingereiht (S145-Votum), kein akuter Blocker mehr | nach Einreihung |
-| ∥ | **abilityEngine-Refactor-Vorplanung** (Planungspaket, kein Code) | analog FixD-Vorplanung; Split-Trigger erst ab ~800 Zeilen `abilityEngine.py` oder DRY-Schuld-Angang — Details `§4` unten (abilityEngine-Vorplanung) | ✅ parallel zu allem, jederzeit startbar |
-| 11 | **Backlog-Restrukturierung** (Stakeholder-Auftrag S150) | `backlog.md` bekommt eine schlanke Liste am Kopf, die zugleich als Index dient; ausführliche Herleitungen/Detailtexte werden in separate Datei(en) ausgelagert (z. B. `docs/goals/backlog_details.md`). Kein Eintrag darf verloren gehen. Dabei mit archivieren: Abschnitt 4c (Design-System, erledigt S116–S118, ohne ✅-Glyphen — glyph-basierte Archiv-Scans übersehen ihn). Vorgehen: Planner-Brief in S151 (Strukturvorschlag → Stakeholder-Freigabe → Umsetzung). | — |
-
-Detailquellen: `§4` unten (abilityEngine-Vorplanung), `docs/audit/plans/README.md`
-(Status je Plan), `.claude/tasks/next_session.md` (nächster Schritt, 1–3 Punkte).
+**Pflege-Regel:** Bereinigung an jedem Session-Start/-Ende — erledigte Items MIT ihrem
+Details-Abschnitt aus `backlog_details.md` nach `backlog_archive.md` verschieben, hier die
+Tabellenzeile löschen. Letzter Abgleich: **2026-07-16 (S151)**.
 
 ---
 
-## 0. Aktuelle Findings (S51 — Badge / Protokoll / Würfel)
+## Die Liste
 
-Aus manueller UI-Verifikation. Vorgehen phasenweise, je Finding eigener Plan +
-Freigabe. Akzeptanzkriterien (testbar) unter [../spec/acceptance/index.md](../spec/acceptance/index.md).
+Einzige Prioritätsquelle — sortiert nach Stakeholder-Priorität (Inventar-Reihenfolge S151).
+B-092…B-097 (Klärungsfälle) stehen am Ende.
 
-- 🟡 **#PSI Generische Flow-/Reset-Struktur für die Psychic Phase** (S64 Befund, S65 Code
-  fertig — **committed** cc75490/1d8b8ba; offen nur noch manuelle UI-Checks): Code + Tests grün
-  (Stand jetzt ≥1109 Tests, 93 %; die Zahlen „900/88 %" waren der S65-Stand).
-  Reine Helfer `refund_deny`/`cleared_deny` in `psychicPhase.py`; einheitlicher
-  `_reset_active_power()` refundiert das Deny-Budget der inaktiven Fraktion (fixt: denied +
-  reset = permanent verbranntes Budget); symmetrisches „Undo deny"-Button (`_render_undo_deny_button`);
-  „Skip Deny" verbraucht kein Budget; `deny_faction`-Feld in `psi_result`. +8 Tests
-  (`TestRefundDeny`/`TestClearedDeny`). Token-Gauge-Hook ist live. **Noch offen:** manuelle UI-Checks (a) „Undo deny"
-  nach erfolgreichem Deny; (b) aktiv-Reset → nächste Power denybar; (c) Skip Deny = kein
-  Budgetverbrauch; (d) Undo nach fehlgeschlagenem Deny — dann gemeinsamer Commit mit
-  Token-Gauge-Hook. Verwandt: `can_deny` via `rules` statt `wargear_ids`+`handler` (Gloom
-  Prism als echter Wargear-Choice — eigenständiger Task).
-- 🔲 **#2b Direktiv-Lock** (Phase 2, S52 Root-Cause; Priorität: siehe Prioritätenliste Rang 10):
-  **Setup-Leck erledigt 2026-06-20.**
-  Bug (Nutzer-Screenshots): Protokoll-Direktiven-Buttons + WAAAGH-Status erschienen im Setup
-  und wurden durch den First-Player-Toggle (`active` gesetzt) sogar wählbar; der Auto-Block
-  `if not active_id` schrieb `round_choice_active_*` schon im Setup. **Fix:** reiner Helfer
-  `_ability_section_visible(phase_key)` (`!= "setup"`) + früher `return` in
-  `armyCard._render_round_choice_ui` **und** `_render_once_per_battle_ability_ui`;
-  Regressionstest `test_ability_sections_hidden_in_setup_only`. Render-Code → manuelle
-  Verifikation steht (s. u.). **Offen (Rest #2b, nächste größere Aufgabe):** Direktive ab Bewegungsphase sperren.
-- 🟡 **#2 Protokoll-Buff-Audit** (Phase 3): **Engine-Wiring erledigt (Plan 024,
-  S86/S87)** — alle 12 Direktiv-Effekte sind jetzt engine-seitig verdrahtet
-  (vorher 3/12); offen bleibt nur noch die **Anzeige** (Badge/Block) je Direktive.
-  Spalte „Engine" = liefert die Funktion den Effekt; Spalte „Anzeige" = Render-Code
-  (Plan 016/017-Gebiet, manuelle Verifikation):
-
-  | Protokoll · Direktive | Effekt | Engine | Anzeige |
-  |---|---|---|---|
-  | Eternal Guardian · P | **9E-D1:** `light_cover_if_stationary` (**Klasse A**, nur Shooting-Block; Variante C = Checkbox vorgehakt+disabled bei stationär) | ✅ `get_active_round_choice_light_cover_if_stationary` (Plan 025 Step 4) | ✅ Variante C im SAVE-Block (Plan 025 Step 4) — ✅ in Würfeln sichtbar (Bug 1 Render-Reihenfolge + Bug 2 blau→grün gefixt, S103) |
-  | Eternal Guardian · S | **9E-D2:** Hold Steady (Overwatch 5+) / Set to Defend (+1 Hit next Fight) — **eigener Plan, abhängig Plan 015 Overwatch** | ✅ YAML-Übergang `hold_steady_or_set_to_defend` + TODO-Kommentar (Step 4) | 🔲 D2-Plan (nach Plan 015) |
-  | Hungry Void · P | **9E-D1:** unmod. Wound-6 → AP +1 (**melee**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (S97/Plan 025 Step 2) |
-  | Hungry Void · S | **9E-D2:** +1 S bei Charge/was-charged/HI (**melee**, `strength_if_charged`, Klasse A) | ✅ (`get_active_round_choice_strength_if_charged`) | ✅ S blau im WOUND-Block (wie WAAAGH; Plan 025 Step 2) |
-  | Conquering Tyrant · P | **9E-D1:** +3" Aura-Reichweite (`aura_range_bonus`, **Klasse B**, `enforcement: table`) | n/a (Tisch) | ✅ Tisch-Hinweis (umgesetzt S116, nachgezogen S127) |
-  | Conquering Tyrant · S | **9E-D2:** nach Fall Back schießen, −1 Hit (**ranged**, `shoot_after_fall_back`, **Klasse A**) | ✅ `get_active_round_choice_shoot_after_fall_back` (Plan 025 Step 5) | ✅ −1-Hit-Modifier im HIT-Block Shooting (Plan 025 Step 5) |
-  | Sudden Storm · P | move_bonus +1 | ✅ | 🔲 Bewegungs-Badge |
-  | Sudden Storm · S | advance_and_charge | ✅ (`charge_after_advance_allowed`) | 🔲 Charge-Phase |
-  | Undying Legions · P | rp_reroll (one die) | ✅ (`get_active_rp_modifiers`) | ✅ RP-Block-Hint (S89; UI-verifiziert S93) |
-  | Undying Legions · S | **heal_bonus** Living Metal +1 (war fälschlich `rp_bonus` „model returned" — S89-Datenfix) | ✅ (`get_active_heal_bonus`) | ✅ Caption (S89; UI-verifiziert S93) |
-  | Vengeful Stars · P | **9E-D1:** unmod. Wound-6 → AP +1 (**ranged**, `ap_on_unmod_wound_6`, Klasse B) | n/a (Tisch) | ✅ `[AP-1]`-Zeile im WOUND-Block (Plan 025 Step 3) |
-  | Vengeful Stars · S | **9E-D2:** kein Light Cover ≤ halbe Reichweite (**ranged**, `ignore_cover_half_range`, Klasse B/Hybrid) | ✅ (`get_active_round_choice_ignores_cover_half_range` → Hinweis) | ✅ grüne Badge an Light-Cover-Checkbox (Plan 025 Step 3) |
-
-  Buff-Badge grün (`design_colors.md` §3), nur bei betroffenen Einheiten + im
-  Phasen-Block (wie MWBD). Anzeige-Rest überschneidet sich mit Plan 016/017.
-  **S93-Engine-Befund:** alle Direktiv-Reads lasen bisher nur die runden-zugewiesene Direktive; das **6. (immer-aktive)
-  Protokoll** (`extra_directive`) + der **Dynastie-Affinitäts-Fall** (beide Direktiven) wurden ignoriert — kosmetisch, nicht
-  wirksam. Gefixt: `_active_directive_effects` aggregiert beide Quellen (alle 5 Reads). Damit ist auch der **Dynastiebonus
-  (6e Bug 3) erstmals wirksam** verdrahtet. Offen bleibt nur Eternal Guardian **S** SAVE-Hinweis (Plan 016 Group A).
-  **S97-Befund (Nutzer-Screenshots + Scoping) — die Tabelle ist zu optimistisch:**
-  - **Reroll-of-1-Save-Hinweis fehlt in der UI** (Eternal Guardian S, Z. „🔲 SAVE-Hinweis"): Soll laut
-    Plan 024 = Reroll-Hinweis im SAVE-Block (⟳-Caption wie RP, `_rp_directive_hints`-Muster). Screenshot
-    S97 zeigt den SAVE-Block **ohne** diesen Hinweis. Bestätigter Anzeige-Bug, nicht nur „offen".
-  - **„Engine ✅" ist irreführend für `strength_modifier`/`ap_bonus`:** Die Engine-Fn liefert den Wert,
-    aber **kein UI-Konsument liest ihn** (`_collect_atk_modifiers`/`_collect_def_save_modifiers` fragen
-    nur `hit`/`wound`/`save` ab, nicht `strength`/`ap`). Hungry-S/Vengeful-S wirken im Kampf **gar nicht**.
-    **S98:** Hungry-S ist behoben — Plan 025 Step 2 faltet den bedingten +1-S in `str_bonus`
-    (eigener `strength_if_charged`-Pfad, **nicht** der tote `strength`-Modifier). **S98+ (Step 3):
-    der tote `ap_bonus`-Pfad ist entfernt — Vengeful-S ist jetzt 9E-D2 `ignore_cover_half_range`
-    (Klasse B/Hybrid, Hinweis an der Light-Cover-Checkbox), Vengeful-P ist 9E-D1 `ap_on_unmod_wound_6`.**
-  - **Wurzel-Lösung (Design-Korrektur S98):** Kein generischer Caption-Block mehr — Direktiv-Effekte
-    werden ins **Dice-UI** integriert (S blau wie WAAAGH; trigger-bedingt als Würfelzeile mit Symbol,
-    `value_triggered_die_row_html`). **Anzeige ist ab S97 Pflichtteil jedes 025-Steps.** Reine
-    B-Tisch-Hinweise ohne Würfel-Mechanik (Sudden Storm S) bleiben gesondert offen.
-- 🔲 **#3/#4 Würfelanzeige** (Phase 4): Pfeilrichtung/-länge der Modifier-Zeile +
-  Badge-Breite (ragt in Würfel „1"). **Badge-Wert bleibt** (`AP-1`/`AP-2`, Stakeholder-
-  Entscheid 2026-06-21 — Gewohnheit + Konsistenz zu anderen Profilwerten; Pfeil ist
-  bewusst redundant). Labels nur **kürzen** (truncate/ellipsis), nicht den Wert entfernen.
-  Soll-Bild als AC in `docs/spec/dice_display.md` festgelegt → Plan 022, dann per AC
-  einrasten (Lehre aus Finding 9.2 — nie still ändern).
-- 🔲 **#INV-4b Cluster-Entscheidungen (Refinement 2026-06-20):** Konsensentscheidungen für INV-4b Vokabular-Schulden:
-  - **Cluster 1 — `dakka`/`klaw`/`tesla`**: YAML-gesteuert via `weapon_special`-Schema → Teil von Plan 022 oder eigenständig.
-  - _(INV-4 Default-Roster erledigt S128 — Details `backlog_archive.md`; Cluster 3 ✅
-    Plan 020, Cluster 4/5 ✅ XS-Fix, Cluster 6 ✅ Plan 021/024 — erledigt, aus Backlog
-    entfernt)_
-
----
-
-## 1. Aktive Implementierungs-Pläne (Executor-Queue)
-
-Plan-Status → [docs/audit/plans/README.md](../audit/plans/README.md) (kanonisch für Status je
-Plan; Gesamt-Reihenfolge/Priorität nur in der Prioritätenliste oben)
-
----
-
-## 2. Offene Tasks (kleiner als ein Plan)
-
-- ✅ **GO-UI-Design-System — ENTSCHIEDEN (S131, 2026-07-09, Retro-Maßnahme 5 aus S130
-  eingelöst):** GO-Karte (4 Zustände ruhend/bereit/verwendet/gesperrt, Voll-/Kompaktform,
-  Akkordeon-Fix), Orte-Zuordnung über die GO-Klassifikation, Tisch-Wurf-Eingabe-Baustein
-  inkl. Command-Re-Roll-Muster, Wortlaut-Konventionen (eine Vokabel-Familie Use/Undo/
-  Confirm) — verbindliche Spec: [../spec/design_system.md](../spec/design_system.md) §6.
-  Klassifikations-Referenz (95 GOs, 3 Achsen):
-  [../reference/go_klassifikation.md](../reference/go_klassifikation.md). Umsetzung läuft
-  als 6-Pakete-Roadmap, **jedes Paket geht einzeln durchs Freigabe-Gate**:
-  - 🟢 **Paket 1 (S132):** GO-Karten-Baustein (4 Zustände, Voll/Kompakt, Akkordeon-Fix) +
-    zentrale Stratagem-Liste auf den Baustein umstellen.
-  - 🟢 **Paket 2 (S132):** Command Re-Roll für Advance/Charge (ohne Wurf-Eingabe-Baustein) —
-    löst die Stakeholder-Auflage S130 (s. u.) ein.
-  - ✅ **Paket 3a (S133):** Reaktive Boxen → GO-Karte migriert (Fire Overwatch/Cut Them
-    Down/Counter-Offensive als Kompaktkarte, Pass-Button entfällt per §6.1).
-  - 🟢 **Paket 3b (S134):** `before_battle`-Liste im ArmySetup (macht die 13 bisher nie
-    matchenden GOs erstmals sichtbar — löst den S131-Kandidaten „`before_battle` sichtbar
-    machen" unten ab).
-  - ✅ **§6.2 statisches Modell (S134):** reaktiv (on-trigger, Stakeholder-Definition
-    S134-Review) ⇒ nur inline; proaktiv ⇒ nur zentrale Liste; Overwatch-Reaktivbox mit
-    ↺ Undo; Desperate-Breakout-Doppler behoben. **Bestätigter MAJOR:** 14
-    `phase_reactive`-GOs bis Paket 4 nirgends aktivierbar (Schuld-Tabelle
-    `design_system.md` §6.2) — deshalb Paket 4 = S135 Top-Prio.
-  - ✅ **Paket 4 (ERLEDIGT S135, Commits `d66755e`/`0aa7dc6`/`96e7997`):** Inline-Anker
-    Hit/Wound/Save + Damage/Psychic/Deny-Reroll-Ablösung + Attacken-Feld-Re-Roll —
-    3 Schuld-GOs aktivierbar. Rest: 10 GOs an 3 fehlenden Ereignis-Fenstern →
-    Folge-Split lt. 4c-Bewertung (`design_system.md` §6.2): generisches `on_destroy`
-    (7 GOs) und `on_set_up`+`on_target` — Paket-Nummern bei Einplanung NEU vergeben
-    (Kollision mit Paket 5/6 unten vermeiden).
-  - 🟢 **Paket 5 (S134+):** Wortlaut-/Sprach-Bereinigung (Englisch durchgehend, Use/Undo/
-    Confirm-Familie), eine CP-Anzeige, ein Stepper-Baustein.
-  - 🟢 **Paket 6 (S134+, eigenes Konzept-Inkrement):** Einheiten-Auswahl in die
-    GameActionArea ziehen (Heroische-Intervention-Muster verallgemeinern), Zielauswahl
-    entschlacken.
-  - 🔲 **Danach:** manuelle UI-Verifikation (S130-Checkliste + neues Design), Stakeholder.
-- 🟢 **Fraktions-Stratagems `before_battle` sichtbar machen (S131-Kandidat):** 6 Necron- +
-  7 Ork-Stratagems matchen nie (`PHASES` kennt kein `before_battle`) — löst über Paket 3
-  (S133, s. o.) mit der neuen ArmySetup-Liste; danach §6e-Modifier-Engine für die ~56
-  teilintegrierten proaktiven Stratagems (s. Ziel7 §6e).
-- 🔲 **„Alt. Fire"-Chip unerklärt (S132-Befund 5, überführt S134):** `src/uiLayout/diceHtml.py:70`
-  rendert `special_die_html("Alt. Fire")` ohne Erklärtext (anders als „Extra Hits" mit
-  „unmod. 6 = +2 Hits"). Vorgehen: Regel-Wortlaut „Alternating Fire" gegen `docs/work/`
-  verifizieren (Haiku-Lookup), dann Kurzerklärung analog Extra-Hits ergänzen. Effort XS.
-- 🔲 **Stakeholder-Beobachtungen S131 (verlustfrei hierher überführt S134;
-  `docs/handoff/Stakeholder_Beobachtungen.md` besteht als STANDING-Eingangskanal weiter —
-  nie löschen; referenzierte Screenshots verbleiben in `docs/handoff/`, Löschung erst wenn
-  der jeweilige Punkt DONE ist):**
-  - _(B1 — Scroll-Sprung bei Command-Protocol-Wahl im Setup — ERLEDIGT S136,
-    Details `backlog_archive.md`)_
-  - **B2 — Spielvorbereitungsscreen überarbeiten:** noch kein Konzept. Vorgehen: Screen-Inventar
-    erstellen (Sonnet, read-only), Redundanz-Befunde B5/B7 einarbeiten, Konzept-Handoff mit
-    Grundannahmen-Block → Stakeholder-Entscheid → eigener Plan. (Hinweis: der frühere Punkt 3
-    „Start-Game-Button-Position" wurde in S133 aus der Beobachtungsdatei entfernt/erledigt.)
-    **Entschieden S135:** Struktur = Option C (Option A jetzt, Wizard-Zielbild erst mit B4-
-    Datenkarte); Faction-Ability-Wahl (B6) läuft unabhängig vom B2-Konzept (`S134_offene_punkte.md`).
-  - **B4-Rest — profileCard als Datenkarte (Setup):** Doppel-Zoll + Profilwert-Reihenfolge in
-    S133 gefixt; offen: tabellarische Waffenanzeige + „schöne Datenkarte" nur mit der echten
-    Roster-Auswahl (Screenshots `Bildschirmfoto vom 2026-07-09 20-53-48.png` = Ist,
-    `…20-58-07.png` = Wahapedia-Anmutung als Inspiration, ausdrücklich NICHT 1:1). Bereitet
-    den Armybuilder vor. Vorgehen: profileCard als definierten Baustein in `design_system.md`
-    spezifizieren (Refinement mit Stakeholder: Spalten, Waffen-Tabelle, Abgrenzung zur
-    unitCard), danach eigener Plan.
-    **Entschieden S135:** App-Design-System mit Wahapedia-Informationsarchitektur, nur
-    9E-Datasheet-Spalten (keine berechneten Werte), Wargear-/Relic als Chip; nur Setup-
-    Screen, In-Game-Anzeige bleibt wie jetzt (Stakeholder-Kommentar, `S134_offene_punkte.md`).
-  - _(B5 — First-Player-Block Redundanz — ERLEDIGT S134, Details `backlog_archive.md`)_
-  - _(B6 — Faction-Ability-Wahl auf Player-Ebene — ERLEDIGT S135, Details
-    `backlog_archive.md`)_
-  - **B7 — Redundanter Kopfbereich + schwache Hinweise (Screenshot `…21-29-43.png`):** rot
-    markierter Bereich ist redundant; wichtige Hinweise darunter („Select unit", „No PSYKER
-    unit available") sind zu schwach sichtbar. Vorgehen: Bereich identifizieren + entfernen,
-    Hinweis-Stil als design_system-Konvention stärken; mit B8/B9 als ein Paket
-    „Phasen-UI entrümpeln" schneiden.
-    **Entschieden S135:** Kopfbereich → Mini-Header (nur Phasenname, Option B, solange kein
-    B9-Stepper existiert); Hinweis-Konvention → eigener Design-System-Baustein (Option B);
-    B7+B9 als EIN Konzept-Handoff (`S134_offene_punkte.md`).
-    **S149-Befund (Selbst-Stopp):** Der rote Bereich ist die faktions-Zeile
-    (`**▶/◀ {faction}**`) — dupliziert in `_common.py::render_player_column`
-    (gemeinsam für movement/shooting/charge) UND separat in `psychicPhase.py`,
-    `fightPhase.py`, `commandPhase.py` (DRY-Lücke, je eigene Kopie). Die
-    Mini-Header-Umstellung betrifft zusätzlich `PHASE_RULES`
-    (`_common.py`/`gameActionsArea.py`, aktuell Titel + Fließtext → soll nur
-    Phasenname) und der neue Hinweis-Baustein müsste in mindestens 6
-    Produktivdateien verdrahtet werden — über der Selbst-Stopp-Schwelle
-    (~4 Dateien) aus dem Auftrag. B8 wurde isoliert umgesetzt (unten); B7 bleibt
-    offen für einen eigenen, kleiner geschnittenen Folge-Auftrag (z. B. B7a:
-    Faktions-Zeile entfernen + `PHASE_RULES`→Mini-Header; B7b: Hinweis-Baustein
-    einführen + verdrahten). Screenshot `…21-29-43.png` bleibt bis dahin liegen.
-  - _(B8 — Redundanter Statusbereich in jeder Phase — ERLEDIGT S149, Details
-    `backlog_archive.md`)_
-  - **B9 — Subphasen-Schritte unsichtbar:** je Phase die Unterschritte explizit anzeigen
-    (z. B. Movement: erst alle Feldbewegungen, dann Reinforcements), während redundante Texte
-    (B7/B8) verschwinden. Vorgehen: „Subphasen-Stepper"-Baustein als design_system-Erweiterung
-    entwerfen (Refinement, Layout-Entscheid beim Stakeholder), dann eigener Plan; die
-    B7/B8-Entfernungen schaffen den Platz dafür.
-    **Entschieden:** Zwischenlösung C (statischer Hinweistext, kein Zustand), Zielbild
-    vertikale Checkliste statt horizontaler Chips (Stakeholder-Kommentar); B7+B9 laufen
-    als EIN Konzept-Handoff (S135, `S134_offene_punkte.md`).
-  - **B10 — Kommentar-Hygiene im Code:** viele Erklär-Kommentare im Code; Soll: Erklärung in
-    der Spec, Code selbsterklärend (Clean Code), höchstens ein Verweis-Kommentar auf die
-    zuständige Spec. Vorgehen: (a) Konvention im CLAUDE.md-Clean-Code-Abschnitt schärfen
-    (freigabepflichtig), (b) danach als Ratchet-Praxis bei jeder Modul-Berührung Kommentare
-    in die zuständige Spec verschieben — kein Big-Bang-Durchgang.
-    **Entschieden S135:** (a) erledigt — Konvention in `CLAUDE.md` §Clean Code eingetragen;
-    (b) läuft als Ratchet-Praxis weiter (`S134_offene_punkte.md`).
-  - 🔲 **B11 — Rest-Wahrnehmung nach B1-Fix (Stakeholder-Beobachtung S136):** Beim
-    Slot-Wechsel geschieht optisch noch ein kurzer Sprung/Zucken, aber das Fenster bleibt
-    an derselben Stelle (kein Scroll-Delta mehr, Playwright-Beleg B1). Beobachten, ggf.
-    Dropdown-Höhen stabilisieren (optionaler zweiter Schritt aus `S136_B1_probe.md`).
-  - 🔲 **B12 — GO-„used"-Zustand mit Auslöser-Tracking (Stakeholder-Entscheid S137):**
-    Undo-Button nur bei der Einheit, bei der die GO angewendet wurde; an allen anderen
-    Angebotsstellen der Phase Einsatz unterbinden, Button-Text „Used". Inline-Angebote
-    (Attacken-/Charge-Sequenz) zeigen NIE Undo; Once-per-Phase wird erzwungen (nach
-    Hit-Einsatz zeigen Wound/Save „used"). Größerer Eingriff: Konzept
-    `docs/handoff/S137_B12_konzept.md` (S137), Umsetzung als Teil-Briefs ≤ M danach.
-    - ✅ **B12b — Header-Suffix „used on ⟨Einheit⟩" verdrahtet (S141, Commit `cdb55e2f`);
-      manuelle UI-Verifikation ABGESCHLOSSEN (S148, `docs/handoff/S148_ui_verifikation.md`):**
-      Resolver `stratagem_used_elsewhere_unit_name` (`src/uiLayout/_common.py`) + 3
-      Zustands-Mapper + Render-Bedingung in `goCard.py`; 9 neue Tests, Vollsuite 1781
-      grün / 99,15 %. **Randfall (bewusst offen, spec-konform, S148 verifiziert PASS):**
-      Advance-Reroll-/Inline-Spends übergeben konstruktionsbedingt kein `unit_key` an
-      `spend_stratagem` → Suffix bleibt dort leer, ebenso Fire Overwatch (Charge-Phase-Anker
-      übergibt ebenfalls kein `unit_key` — Backlog-Formulierung „zeigt den Suffix korrekt" war
-      irreführend, gemeint war nur der „Used"-Zustand selbst). Optionaler XS-Folge-Task: uid
-      durch `spend_stratagem` durchreichen, falls das je gewünscht wird.
-    - ✅ **BUG — erledigt S150 (Insane-Bravery-Repro Moralphase, UI-verifiziert):**
-      Root Cause: Der Zustand `used` las `target_name` weiterhin **live** aus
-      `unit_for_check` (Sidebar-Auswahl, bei jedem Rerun neu gelesen) statt aus dem
-      gespeicherten Anker (`stratagem_used_elsewhere_unit_name`) — ein Wechsel der
-      Sidebar-Auswahl NACH dem Einsatz beschriftete die bereits verwendete Karte still
-      um. Der S149-Fix hatte nur `used_elsewhere` abgedeckt. Fix S150 in
-      `gameProtocoll.py::_render_stratagem_column`: `state == "used"` zeigt jetzt den
-      aufgezeichneten Namen (`recorded_target_name`); nur `ready`/`locked`/`dormant`
-      zeigen weiter die Live-Vorschau. Regressionstest
-      `test_render_stratagem_column_used_here_shows_recorded_target_not_live_selection`
-      (`tests/uiLayout/test_game_protocoll.py`); der S149-Test
-      `test_render_stratagem_column_used_elsewhere_omits_live_target_name` bleibt
-      bestehen. UI-Verifikation vom Stakeholder BESTÄTIGT (S150). Render-Pfad-Notizen
-      für das Generalkonzept: `docs/handoff/S150_usedon_renderpaths.md`.
-    - 🟢 **Feature-Wunsch (S148, Stakeholder):** „used on ⟨Einheit⟩"-Suffix auf **alle**
-      reaktiven GOs ausweiten (aktuell nur die zentrale Liste betroffen) — eigener Task,
-      nach dem BUG oben.
-  - 🔲 **B13 — GO-Karte: Keyword-Badges (Stakeholder-Beobachtung S137):** GO-Karten zeigen
-    keine Schlüsselwort-Chips (nur Name/CP/Regeltext). Neues Feature, eigener kleiner Plan;
-    erweitert den GO-Card-Baustein (`design_system.md` §6). Keine Eil-Priorität
-    (Stakeholder-Entscheid S137: „ins Backlog"). **S141-Nachtrag:** Vorziehen der Daten-
-    Nachpflege geprüft und zurückgestellt — `keywords:` existiert in **keiner** der 3
-    Stratagem-YAML-Dateien (0 Treffer `_shared`/`necrons`/`orks`) und fehlt auch auf der
-    `Stratagem`-Dataclass (`src/gameObjects/stratagem.py`); die Aufgabe ist Schema-
-    Erweiterung **plus** Datenpflege, kein reiner YAML-Task. Stakeholder-Entscheid S141:
-    zurückstellen, bis B13 selbst geplant wird (dann Schema+Loader+Daten in einem Aufwasch).
-  - 🔲 **B14 — Badge-Kontrast-Pass (Stakeholder-Beobachtung S137):** Badges schwer
-    erkennbar, v. a. STATIONARY (`--arb-muted` `#6b5f44`) zu dunkel. Vorschlag: heller
-    Khaki `#9c8f6a`; prüfen, ob weitere gedämpfte Badges mit angehoben werden müssen.
-    Farbschema-Entscheidung liegt beim Stakeholder → Hex-Vorschläge vorlegen, dann
-    mechanischer Edit `design_colors.md` + `unitCard.py` (Stakeholder S137: „ins Backlog").
-
-Quelle + Details: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md) „Offene Tasks".
-
-- 🔲 **GO-Konsistenz: nicht erfüllte Bedingungen grauen GOs aus statt sie auszublenden
-  (Stakeholder-Wunsch S149, anlässlich GAUSS/TESLA-Gates):** Durchgehend für **alle** GOs —
-  `stratagem_visibility()` soll bei Keyword-/Bedingungs-Nichterfüllung statt `"hidden"`
-  einen sichtbaren-aber-gesperrten Zustand (`dormant`/`locked`) zurückgeben. Passt laut
-  Review (`docs/handoff/S149_review.md` Befund 3) kollisionsfrei zum bestehenden GO-State-
-  Modell ready/locked/used — diese Zustände rendern den Button bereits deaktiviert/
-  ausgegraut (`_common.py:1134`).
-- 🟢 **Psychic-Ledger schrumpfen (S62):** Smite-Manifest-Logik (`R-PSYCHIC-11/16/17/18/22`) lebt
-  im Render-Code (`_render_smite_flow`/`_render_psi_result`/`_render_deny_column`) → policy-
-  ungetestet. Reine Funktionen extrahieren (Schwelle `roll≥wc`, Warp-Charge-Eskalation, Perils-
-  Schaden, Deny-once) + Tests → Ledger 15→10.
-- 🟢 **Psychic-Lücken (S62, aus Regel-Katalog):** `R-PSYCHIC-23` (Perils zerstört Psyker ⇒ Power
-  schlägt fehl; App revidiert `manifested` nicht) und `R-PSYCHIC-24` (Perils-Splash D3 an Einheiten
-  in 6") sind `offen` — beide brauchen einen Unit-Destroyed-Check nach Perils-Schaden.
-- 🟡 GO-Buttons kontextuell in gameActionArea (aktiver + inaktiver Spieler) statt Liste
-- 🟡 Necron Command Phase: Regelkasten immer ganz oben (alle Phasen prüfen)
-- 🟡 SAVE-Block: Fähigkeit + AP als eine Badge (`Enslaved AP-1`) — YAML-Erweiterung (→ Plan 017)
-- 🟢 Gretchin Cowardly: −1 Attrition ohne RUNTHERD in 6" (→ Plan 018)
-- 🟢 Battle-Log: nach Reset keine alten Einträge (→ Plan 018)
-- 🟢 `collect_modifiers_for_phase()` (→ Plan 018 Task 18.4, noch offen)
-- 🔲 **Totalvernichtungs-Spielende (S138-Befund, Stakeholder: eigener Punkt):** Der
-  „army destroyed"-Teil von R-ROUND-07 (`docs/spec/acceptance/rules.md`) ist bewusst
-  NICHT implementiert — Sieg durch vollständige Vernichtung der gegnerischen Armee vor
-  Ende Runde 5 fehlt als eigener Spielende-Pfad. Eigener kleiner Plan.
-- 🔲 **Tote Produktionsfunktion `build_aura_range_hint_text` entfernen (S138-Retro-
-  Maßnahme 2, XS):** Einziger Produktions-Konsument (`armyCard._render_aura_range_hint`)
-  wurde in S138 entfernt (Conquering-Tyrant-Aura-Hinweis raus); Funktion in
-  `abilityEngine.py:324` + ihre Tests (`test_ability_engine.py`) werden nur noch von
-  Tests referenziert. Mit Tests gemeinsam entfernen, `acceptance/rules.md`-Eintrag
-  nachziehen (Code-Referenz wird sonst stale).
-- 🔲 **Fold-Heuristik nur Hauptfraktion + Subfaction-Wiring Roster→Unit (S138-Retro-
-  Maßnahme 3, zusammen schneiden):** `unitCard.py:_fold_faction_keyword` filtert aktuell
-  nur das Hauptfraktions-Keyword (Trailing-„S"-Fold); Subfraktions-Keywords werden nicht
-  gefoldet, weil der Loader den `<DYNASTY>`/`<CLAN>`-Platzhalter mangels Roster→Unit-
-  Wiring aktuell droppt. Sobald echte Subfraktions-Keywords in die Unit-Listen kommen
-  (Klan-Chip statt Drop), muss die Fold-Filterung erneut geprüft werden — beide Teile in
-  einem Aufwasch planen.
-- 🟢 **Operating-Model Phase C:** Refinement automatisieren — Sonnet-Subagent liest neue
-  Bilder aus `Fotos/`, extrahiert die Idee als Text nach `docs/inbox/` (Format dort dokumentiert).
-- 🟢 **Gates/Reports leser-orientiert prüfen (→ ADR-0002):** Debt-Scoreboard, Rule-Catalog-Prozente
-  u. a. dahingehend durchsehen, ob sie dem Stakeholder *seine* Fragen verständlich beantworten —
-  nicht nur maschinen-orientiert zählen.
-- 🔲 **Invuln-SAVE-Badge-Bereich chaotisch (S78):** Zeigt drei Teile („Inv 4+", „active", „AP/Cover N/A"), die teils keinen Sinn ergeben. Soll: **eine** klare Badge, z. B. „Invuln 4+". Überschneidet sich mit **Plan 017** (SAVE-Block Fähigkeit+AP kombinierte Badge) → dort mitlösen oder eigener kleiner Task.
-- 🔲 **Dice-Display Modifier-Geometrie (Befund B/C, S78):** HIT/WOUND-**Debuff** spreizt nicht mit der Magnitude — `modifier_die_pair_html` zeigt immer `from-1 → from` (−1/−2/−3 sehen identisch aus), Spec §3.1 will den farbigen Würfel mit der Magnitude nach rechts wandern lassen. Zusätzlich verletzt HIT-**Buff** die Slot-1-Invariante (grauer Würfel rutscht auf Spalte 1, §3.3 will min. 2). SAVE-Geometrie ist korrekt. **Eigener Plan** (`modifier_die_pair_html` getestet → Regressionsfläche; eigenes Test-Netz). Die Pfeil-**Zahl** (Befund A) ist bereits umgesetzt (S78).
-- 🔲 **Silent-King-Zielaufteilung Fernkampf (S79-UI-Befund; Regel S80 GEKLÄRT):** Ein Modell mit **zwei** Fernkampfwaffen (Silent King: Sceptre of Eternal Glory / Staff of Stars) kann aktuell nur **eine** Feind-Einheit als Ziel wählen — **regelwidrig**. Core Rules: „If a model has more than one ranged weapon, it can split the weapons between different enemy units." Alle Attacken **einer** Waffe gehen auf dieselbe Einheit. → UI auf **Ziel-pro-Waffe** umbauen + alle Ziele vor dem ersten Wurf deklarieren; Staff-of-Stars-Sperre ≤8 W beachten; Regressionstest. Detail: `docs/inbox/finding-silent-king-target-split.md`. Eigener Plan.
-- 🔲 **Off-Scale-/„7+"-Save-Grenze (S79-UI-Befund):** Sv 7+ (z. B. Gretchin) bzw. durch AP jenseits 6 verschlechterte Saves brauchen einen „7-Augen"-Würfel **plus** Erfolgsgrenze `|`. Soll lt. Stakeholder: Kopfzeile `[6] | [✕]`; Cover-Randfall `[6] 1→[7]`; AP-Fall `[6] ←4 [✕]` (konsequente Fortschreibung der D5-Spec). → `docs/spec/dice_display.md` ergänzen, **alle** Fälle mit Tests. Verwandt mit Befund B/C.
-- 🔲 **AP-/SAVE-Modifier-Magnitude-Position (S79-UI-Befund):** Die Magnitude-Zahl (`-N`/`←N`) gehört in die **Erfolgsgrenz-Spalte** unter `|` (Screenshot AP-2: „-2" unter die Grenze; Basis-AP: erwartetes `-`/Marker in Spalte Würfel „6"). → Spec prüfen, für **alle** Fälle (Buff/Debuff, HIT/WOUND/SAVE) Tests hinterlegen. Eng verwandt mit Befund B/C-Geometrie.
-- 🔲 **Lethal Hits (R-CMB-XX, Refinement 2026-06-20):** Unmod. Treffer-6 = kein Wundwurf, Schaden direkt mit Overflow (wie Mortal Wounds). Nicht implementiert. Eigener Plan nach Plan 014.
-- 🔲 **Deadly Demise (R-CMB-YY, Refinement 2026-06-20):** Modell zerstört → Mortal Wounds auf Einheiten in X". YAML-Daten vorhanden, Handler fehlt. Eigener Plan.
-- 🔲 **Voice of the Triarch (R-CMD-XX, Refinement 2026-06-20):** Silent King — `voiceOfTheTriarch`-Handler fehlt (YAML-Basis fertig: `alter_command_protocol`). → Plan 016 oder eigener kleiner Plan.
-- 🔲 **Failsafe/Arkana-Aktivator-UI fehlt (S88-Befund, eigener kleiner Plan):** `activated`-Einträge
-  aus `faction_abilities.yaml` mit `once_per_battle: false` werden bei `round_choice`-Fraktionen
-  (Necrons/Custodes) **nirgends** als Aktivator gerendert. Ursache: `armyCard._render_once_per_battle_ability_ui`
-  ([armyCard.py:356-364](../../src/uiLayout/armyCard.py#L356-L364)) `return`-t früh, wenn die Fraktion
-  `round_choice`-Fähigkeiten hat, **und** surface-t nur eine `once_per_battle: true`-Fähigkeit; die
-  commandPhase-Pfade (`get_activated_command_abilities`/`activated_wargear_ids`) lesen nur
-  `unit_abilities.yaml` + `wargear.yaml`, **nie** `faction_abilities.yaml`. Folge: Failsafe Overcharger
-  ist engine-dispatchbar (`buff_stat_bonus`, unit-getestet) **aber nie aktivierbar**. Kein
-  Regressions-Bug (Picker war Plan-024-Scope-Out), aber generische Lücke für künftige aktivierbare
-  Fraktionsfähigkeiten. Fix: generischen Aktivator für `activated`-`faction_abilities` (unabhängig von
-  `once_per_battle`/`round_choice`) + CANOPTEK-Target-Picker (9"). Lehre: **Engine-Test-grün ≠ UI-verdrahtet**
-  (vgl. INV-4b-Memory) — Step 5 hätte einen „grep-belege-den-Konsumenten"-Schritt gebraucht.
-- 🟢 **`condition_prompt`/`applies_when` als First-Class-Felder in der Effect-Dataclass +
-  Loader (S128-Folge, Plan 018 Task 18.3):** Aktuell reiten beide Felder als Roh-Dict in der
-  `effects`-Subliste mit, weil `Ability`/`Effect` keine eigenen Felder dafür haben (s.
-  Kommentar in `orks/unit_abilities.yaml` beim Gretchin-Cowardly-Eintrag). Sauberere
-  Modellierung, sobald ein zweiter Konsument auftaucht.
-- 🟢 **Daten-Altlast `gretchin_mob` (S128-Fund, `orks/unit_abilities.yaml`):** `rule_text`
-  klingt nach einer 8E-Formulierung („must take a Morale test if it suffers any
-  casualties") — gegen `docs/work/wahapedia_orks/` prüfen, ob die 9E-Bedingung abweicht
-  (9E: Morale Test nur bei Verlusten UND unter Half-strength, sonst optional?), ggf.
-  korrigieren.
-- 🔲 **Custodes Rendax Ka'tah Secondary — toter `strength_modifier`-Pfad (Plan 025 Step 6):** In
-  `data/wh40k_9e/adeptus_custodes/faction_abilities.yaml`, Protokoll `type: rendax_kath` (oder
-  ähnlich), `secondary`-Effekt `type: strength_modifier` mit Zielwert `+1 S nach Charge` — der
-  `strength_modifier`-Typ wurde bei Plan 025 Step 6 aus der Engine entfernt (war toter Pfad, vorher
-  nie konsumiert). Braucht eigene `strength_if_charged`-Verdrahtung analog Hungry Void D2 (auch
-  Charge-bedingt; S97-S98-Befund). YAML → `type: strength_if_charged, value: 1, phase: melee`; Engine-Fn
-  existiert bereits; nur Konsum + Test.
-
-- 🔲 **Army-List-UX „weniger Scrollen" (Refinement-Skizze IMG_4051, S94 gesichert):** Übergeordnetes
-  UX-Ziel, abgehandelte Einheiten weniger im Weg zu haben. Drei Bausteine: (a) abgehandelte Unit-Card
-  automatisch ans **Ende** der Armeeliste schieben; (b) nach **Phasenwechsel** den Fokus auf die nächste
-  relevante Unit-Card setzen; (c) optionales manuelles **Umsortieren/Switch** von Cards. Offene technische
-  Frage aus der Skizze: ist Reorder/Auto-Scroll in Streamlit überhaupt sauber umsetzbar? → eigener Plan,
-  zuerst Streamlit-Machbarkeit klären.
-- 🔲 **Quantum Shielding (Refinement-Skizze IMG_4041, S94 gesichert):** Setzt den Rettungswurf (Invuln)
-  auf einen **festen Wert (4+)** — keine additive Modifikation, kein Modifier-Pfeil in der Würfelanzeige.
-  Eigener Mechanik-Typ „Invuln auf festen Wert setzen" (vs. der bestehenden additiven Modifier-Logik).
-  Überschneidet sich mit dem SAVE-/Invuln-Badge-Bereich (Plan 017, „Invuln-Badge chaotisch"). Regel
-  zuerst gegen `docs/work/wahapedia_necrons/` prüfen. Eigener Plan oder Teil von Plan 017.
-  **S148-UI-Befund (Annihilation Barge, `docs/handoff/S148_ui_verifikation.md` Prüfblock 1):**
-  unmod. Wound 1–3 misslingt bei Quantum-Shielding-Einheiten immer — wird aktuell **nicht**
-  als Debuff in der Wound-Zeile (3× ✕) noch als Buff im Save-Block angezeigt. Regeltext
-  vorher gegen `docs/work/wahapedia_necrons` verifizieren, dann in diesen Plan aufnehmen.
-- 🔲 **Waffen-Block: Rapid-Fire-Count + Range anzeigen (Refinement-Skizze IMG_4038, S94 gesichert):** Im
-  Waffen-Auswahl-Block der Schussphase je Waffe die **Anzahl Attacken inkl. Rapid Fire** sowie die
-  **Reichweite** anzeigen; eligible vs. nicht-eligible Waffen visuell absetzen (durchgestrichen/ausgegraut
-  statt nur ausgeblendet). Anzeige-/UX-Thema (verwandt mit der Eligibility-Anzeige der Schussphase und
-  dem Silent-King-Ziel-pro-Waffe-Finding). Eigener Plan.
-- 🔲 **Dynastie-Code je Einheit statt Roster-Ebene (Konzept-Frage 2 aus
-  S139_dynastie_protokoll_konzept, Stakeholder-Entscheid S140):** `subfaction_value_for` liest die
-  Subfaction heute auf **Roster-Ebene**; regelseitig trägt jede _Einheit_ den Dynastie-Code. Prüfen,
-  ob Einheiten-Ebene nötig ist (Mixed-Dynasty-Roster) und die `subfaction_value_for`-Konsumenten
-  (abilityEngine, gameState, armyCard) entsprechend umstellen. Eigenes Konzept vor Umsetzung.
-- 🟢 **Regel-Index für Wahapedia-Texte (context-audit-S91, verarbeitet S118):** additiver
-  Stichwort→`datei:zeilenbereich`-Index als `docs/work/rule_index.md` (Format:
-  `Lethal Hits → core_rules.txt:1420-1435`) — ~23k Zeilen Regeltext sind nur per `grep`
-  durchsuchbar; kein Wortlaut berührt, beschleunigt Haiku-Lookups.
-- 🟢 **CLAUDE.md Token-Disziplin entschlacken (context-audit-S91, verarbeitet S118):**
-  `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem
-  Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagern; in CLAUDE.md nur
-  2-Zeilen-Verweis. Freigabepflichtig (CLAUDE.md-Änderung).
-- 🟢 **Backlog-§0-Hygiene (context-audit-S91, verarbeitet S118):** §0-Überschrift „S51" datieren;
-  erledigte ✅-Einträge inline nach `session_archive.md`-Historie auslagern statt hier stehen lassen.
-- 🔲 **Sudden Storm S — B-Hinweis anzeigen (`shoot_during_action`, S96):** Plan 025 Step 1 hat die Direktive
-  datenseitig auf 9E-D2 korrigiert (Typ `shoot_during_action`, kein Engine-Effekt). Der Tisch-Hinweis hat
-  noch **keine** sichtbare Anzeige. **S97: wird vom generischen Direktiv-Hinweisblock (Plan 025 Step 2b,
-  `enforcement: table`) mit abgedeckt** — nicht mehr separat nachzuziehen.
+| ID | Status | Beschreibung | Abhängigkeiten | Effort | Assignee |
+|---|---|---|---|---|---|
+| [B-099](backlog_details.md#b-099--backlog-feinschliff-stakeholder-auflagen-s151) | ToDo | Backlog-Feinschliff (Stakeholder-Auflagen S151): Stale-Kandidaten B-092–B-097 löschen, Beschreibungs-/Spalten-/Effort-Format, Details-Template-Überarbeitung. | — | S | Executor |
+| [B-001](backlog_details.md#b-001--fixd-brief-2-und-3-compute-render-folge) | Blocked | FixD Brief 2+3 (Compute/Render-Trennung `_common.py`) — Brief 2 hinter Mockup-Gate, Brief 3 Spec-Nachzug; entblockt mypy-uiLayout. | nach Rang 4 (erledigt); sequenziell Brief 2→3 | M | Executor |
+| [B-002](backlog_details.md#b-002--klan-dynastie-brief-k1-wortlaut-bugfix-nihilakh-und-mephrit) | ToDo | Klan/Dynastie K1 — Wortlaut-Fix Nihilakh+Mephrit in `subfaction_abilities.yaml`; Entscheid bereits kanonisiert (S150). | Daten-Fix, kein Code-Blocker | S | Executor |
+| [B-098](backlog_details.md#b-098--boss-nob-7b-kombi-waffenprofile) | ToDo | Boss Nob 7b — Kombi-Waffenprofile fehlen in `orks/weapons.yaml`; zweigeteilt: erst Profile ergänzen, dann ODER-Gruppe. | Daten-Fix, kein Code-Blocker | S | Executor |
+| [B-003](backlog_details.md#b-003--klan-dynastie-k2-plus-novokh-sautekh-nephrekh-und-ork-snakebites) | ToDo | Klan/Dynastie K2+ — Novokh/Sautekh/Nephrekh + Ork Snakebites, Engine-Filter, 4 neue Effekttypen; macht 13 Einträge erstmals wirksam. | macht 13 Backlog-Einträge wirksam | L — vor Vergabe splitten | Planner→Executor |
+| [B-004](backlog_details.md#b-004--mypy-ratchet-uilayout) | Blocked | mypy-Ratchet `uiLayout/` — letzte 17 Fehler (armyCard/gameProtocoll/unitCard/armyList/detachmentCard). | Dateiüberschneidung `_common.py` mit B-001 | M | Executor |
+| [B-005](backlog_details.md#b-005--direktiv-lock-rest-ab-bewegungsphase-sperren) | ToDo | Direktiv-Lock-Rest — Protokoll-Direktiven ab der Bewegungsphase sperren (Setup-Leck bereits gefixt). | kein akuter Blocker | S | Executor |
+| [B-006](backlog_details.md#b-006--abilityengine-refactor-vorplanung) | Blocked | abilityEngine-Refactor-Vorplanung — Planungspaket, kein Code; Split-Trigger erst ab ~800 Zeilen oder DRY-Angang. | orthogonal zu B-003 (K2 nutzt eigenes Modul) | S (~15–20k Token) | Planner |
+| [B-007](backlog_details.md#b-007--backlog-restrukturierung) | In Progress | Backlog-Restrukturierung — dieser Auftrag selbst; schließt mit dem S151-Migrations-Handoff. | kein Eintrag darf verloren gehen | M | Planner→Stakeholder→Executor |
+| [B-008](backlog_details.md#b-008--on-target-anker-option-a-ui-pruefung) | UI-Verifikation | on_target-Anker Option A — Code seit S146 fertig, nur die Stakeholder-UI-Prüfung steht noch aus. | Code erledigt (Rang 2) | XS | Stakeholder |
+| [B-009](backlog_details.md#b-009--psi-flow-reset-ui-checks) | UI-Verifikation | PSI Flow/Reset — 4 manuelle UI-Checks (Undo-Deny, aktiv-Reset, Skip-Deny-Budget, Undo nach Fail-Deny); Code+Tests grün seit S65. | gemeinsamer Commit mit Token-Gauge-Hook geplant | S | Stakeholder |
+| [B-010](backlog_details.md#b-010--protokoll-buff-audit-anzeige-rest) | Blocked | Protokoll-Buff-Audit — Anzeige-Rest (Eternal Guardian S SAVE-Hinweis hängt an Plan 015 Overwatch). | Engine-Seite komplett verdrahtet (Plan 024) | S | Executor |
+| [B-011](backlog_details.md#b-011--wuerfelanzeige-pfeilrichtung-und-badge-breite) | ToDo | Würfelanzeige — Pfeilrichtung/-länge + Badge-Breite; Soll-Bild zuerst als AC in `dice_display.md` fixieren. | Soll-Bild → Plan 022 | S | Executor |
+| [B-012](backlog_details.md#b-012--inv-4b-cluster-1-dakka-klaw-tesla-yaml-schema) | ToDo | INV-4b Cluster 1 — `dakka`/`klaw`/`tesla` als YAML-`weapon_special`-Schema statt Fraktions-Eigennamen in `src/`. | Cluster 3–6 bereits erledigt | S | Executor |
+| [B-013](backlog_details.md#b-013--go-ui-paket-3b-before-battle-liste-armysetup) | ToDo | GO-UI Paket 3b — `before_battle`-Liste im ArmySetup macht 13 GOs erstmals sichtbar. | Teil der GO-UI-Roadmap (Entscheid S131) | M | Executor |
+| [B-014](backlog_details.md#b-014--go-ui-folge-pakete-fuer-10-rest-gos) | ToDo | GO-UI Folge-Pakete für 10 Rest-GOs — generisches `on_destroy` (7 GOs) + `on_set_up`/`on_target`. | nach Paket 4 (erledigt); Paket-Nummern neu vergeben | M | Planner→Executor |
+| [B-015](backlog_details.md#b-015--go-ui-paket-5-wortlaut-und-sprach-bereinigung) | ToDo | GO-UI Paket 5 — Wortlaut-/Sprachbereinigung (Englisch, Use/Undo/Confirm), eine CP-Anzeige, ein Stepper-Baustein. | Teil der Roadmap | M | Executor |
+| [B-016](backlog_details.md#b-016--go-ui-paket-6-einheiten-auswahl-und-zielauswahl) | ToDo | GO-UI Paket 6 — Einheiten-Auswahl in die GameActionArea ziehen, Zielauswahl entschlacken. | eigenes Konzept-Inkrement | M | Design-Crew→Executor |
+| [B-017](backlog_details.md#b-017--go-ui-danach-manuelle-ui-gesamt-verifikation) | Blocked | GO-UI „Danach" — manuelle UI-Gesamt-Verifikation nach Abschluss aller Pakete. | erst nach B-013…B-016 | S | Stakeholder |
+| [B-018](backlog_details.md#b-018--fraktions-stratagems-before-battle-sichtbar-machen) | Blocked | Fraktions-Stratagems `before_battle` sichtbar machen — 6 Necron + 7 Ork, löst über B-013. | löst über B-013 | S | Executor |
+| [B-019](backlog_details.md#b-019--alt-fire-chip-unerklaert) | ToDo | „Alt. Fire"-Chip unerklärt — Regel-Wortlaut prüfen (Haiku), dann Kurzerklärung ergänzen. | reiner Lookup + Ergänzung | XS | Executor (Haiku-Lookup) |
+| [B-020](backlog_details.md#b-020--b2-spielvorbereitungsscreen-ueberarbeiten-konzept) | ToDo | B2 — Spielvorbereitungsscreen überarbeiten (Konzept); Struktur = Option C bereits entschieden. | Redundanz-Befunde B-021/B-022 einarbeiten | M | Design-Crew |
+| [B-021](backlog_details.md#b-021--b4-rest-profilecard-als-datenkarte-setup) | ToDo | B4-Rest — profileCard als Datenkarte im Setup-Screen; App-Design-System + Wahapedia-IA entschieden. | nur Setup-Screen | M | Design-Crew→Executor |
+| [B-022](backlog_details.md#b-022--b7-redundanter-kopfbereich-und-schwache-hinweise) | Blocked | B7 — Redundanter Kopfbereich + schwache Hinweise; Selbst-Stopp S149 (>4 Dateien). | betrifft `_common.py`, 3 `*Phase.py`, `PHASE_RULES` | M — vor Vergabe splitten | Planner→Executor |
+| [B-023](backlog_details.md#b-023--b9-subphasen-schritte-unsichtbar-stepper-baustein) | ToDo | B9 — Subphasen-Schritte unsichtbar (Stepper-Baustein); läuft als ein Konzept-Handoff mit B-022. | 1 Konzept-Handoff mit B-022 | M | Design-Crew→Executor |
+| [B-024](backlog_details.md#b-024--b10-kommentar-hygiene-ratchet-praxis) | In Progress | B10 — Kommentar-Hygiene als laufende Ratchet-Praxis bei jeder Modul-Berührung. | Konvention in CLAUDE.md verankert | — (laufend) | Executor (bei Modul-Berührung) |
+| [B-025](backlog_details.md#b-025--b11-rest-wahrnehmung-nach-b1-fix) | ToDo | B11 — Rest-Wahrnehmung nach dem B1-Fix (kurzer Sprung/Zucken beim Slot-Wechsel). | B1 selbst gefixt | XS | Executor |
+| [B-026](backlog_details.md#b-026--b12-go-used-zustand-gesamtkonzept) | ToDo | B12 — GO-„used"-Zustand Gesamtkonzept (Once-per-Phase-Erzwingung phasenübergreifend). | B12b (Header-Suffix) bereits erledigt | M — Teil-Briefs ≤M | Executor |
+| [B-027](backlog_details.md#b-027--b12-optionaler-xs-task-unit-key-durch-spend-stratagem) | ToDo | B12 optional (Vermerk: optional) — `unit_key`/uid durch `spend_stratagem` durchreichen (Advance-Reroll/Overwatch-Randfall). | spec-konformer Randfall, kein Bug | XS | Executor |
+| [B-028](backlog_details.md#b-028--b12-feature-wunsch-used-on-suffix-auf-alle-gos) | ToDo | B12 Feature-Wunsch — „used on ⟨Einheit⟩"-Suffix auf alle reaktiven GOs ausweiten. | nach dem BUG-Fix (erledigt) | M | Executor |
+| [B-029](backlog_details.md#b-029--b13-go-karte-keyword-badges) | ToDo | B13 — GO-Karte: Keyword-Badges; Schema-Erweiterung + Datenpflege in einem Aufwasch. | keine Eil-Prio (Stakeholder) | M | Executor |
+| [B-030](backlog_details.md#b-030--b14-badge-kontrast-pass-stationary-khaki) | Blocked | B14 — Badge-Kontrast-Pass (STATIONARY-Khaki zu dunkel); Hex-Vorschläge zuerst dem Stakeholder vorlegen. | Farbentscheid beim Stakeholder | XS | Stakeholder→Executor |
+| [B-031](backlog_details.md#b-031--go-konsistenz-bedingungen-ausgrauen-statt-ausblenden) | ToDo | GO-Konsistenz — nicht erfüllte Bedingungen ausgrauen statt ausblenden (alle GOs). | passt zum bestehenden State-Modell | M | Executor |
+| [B-032](backlog_details.md#b-032--psychic-ledger-schrumpfen) | ToDo | Psychic-Ledger schrumpfen — Smite-Manifest-Logik aus Render-Code extrahieren, Ledger 15→10. | — | M | Executor |
+| [B-033](backlog_details.md#b-033--psychic-luecken-r-psychic-23-und-24) | ToDo | Psychic-Lücken R-PSYCHIC-23/24 — Unit-Destroyed-Check nach Perils-Schaden fehlt. | beide brauchen denselben Check | M | Executor |
+| [B-034](backlog_details.md#b-034--save-block-faehigkeit-und-ap-als-eine-badge) | ToDo | SAVE-Block — Fähigkeit + AP als eine Badge (`Enslaved AP-1`). | → Plan 017 | S | Executor |
+| [B-035](backlog_details.md#b-035--gretchin-cowardly-attrition-ohne-runtherd) | ToDo | Gretchin Cowardly — −1 Attrition ohne RUNTHERD in 6". | → Plan 018 | S | Executor |
+| [B-036](backlog_details.md#b-036--battle-log-nach-reset-alte-eintraege) | ToDo | Battle-Log — nach Reset keine alten Einträge mehr. | → Plan 018 | XS | Executor |
+| [B-037](backlog_details.md#b-037--collect-modifiers-for-phase) | ToDo | `collect_modifiers_for_phase()` — Teil von Plan 018 Task 18.4 und ziel7.md §6e. | → Plan 018 Task 18.4 | M | Executor |
+| [B-038](backlog_details.md#b-038--totalvernichtungs-spielende-r-round-07) | ToDo | Totalvernichtungs-Spielende (R-ROUND-07) — Sieg durch Armee-Vernichtung fehlt als Spielende-Pfad. | eigener kleiner Plan | M | Executor |
+| [B-039](backlog_details.md#b-039--tote-produktionsfunktion-build-aura-range-hint-text-entfernen) | ToDo | Tote Produktionsfunktion `build_aura_range_hint_text` entfernen — mit Tests gemeinsam. | mit Tests gemeinsam entfernen | XS | Executor |
+| [B-040](backlog_details.md#b-040--fold-heuristik-und-subfaction-wiring-roster-zu-unit) | Blocked | Fold-Heuristik nur Hauptfraktion + Subfaction-Wiring Roster→Unit — wartet auf echte Subfraktions-Keywords. | wartet auf B-002/B-003 | S | Executor |
+| [B-041](backlog_details.md#b-041--operating-model-phase-c-refinement-automatisieren) | ToDo | Operating-Model Phase C — Refinement automatisieren (Sonnet liest `Fotos/` → `docs/inbox/`). | — | M | Executor |
+| [B-042](backlog_details.md#b-042--gates-und-reports-leser-orientiert-pruefen) | ToDo | Gates/Reports leser-orientiert prüfen (→ ADR-0002). | — | S | Executor |
+| [B-043](backlog_details.md#b-043--invuln-save-badge-bereich-chaotisch) | ToDo | Invuln-SAVE-Badge-Bereich chaotisch — drei Teile zu einer klaren Badge zusammenfassen. | überschneidet Plan 017 | S | Executor |
+| [B-044](backlog_details.md#b-044--dice-display-modifier-geometrie) | ToDo | Dice-Display Modifier-Geometrie — Debuff-Spreizung + Slot-1-Invariante fehlen. | eigener Plan | M | Executor |
+| [B-045](backlog_details.md#b-045--silent-king-zielaufteilung-fernkampf) | ToDo | Silent-King-Zielaufteilung Fernkampf — zwei Fernkampfwaffen brauchen Ziel-pro-Waffe (regelwidrig aktuell). | Regel bereits geklärt (S80) | M | Executor |
+| [B-046](backlog_details.md#b-046--off-scale-sieben-plus-save-grenze) | ToDo | Off-Scale-/„7+"-Save-Grenze — 7-Augen-Würfel + Erfolgsgrenze in der Dice-Spec ergänzen. | verwandt B-044 | S | Executor |
+| [B-047](backlog_details.md#b-047--ap-und-save-modifier-magnitude-position) | ToDo | AP-/SAVE-Modifier-Magnitude-Position — Zahl gehört unter die Erfolgsgrenz-Spalte. | eng verwandt B-044 | S | Executor |
+| [B-048](backlog_details.md#b-048--lethal-hits) | ToDo | Lethal Hits (R-CMB-XX) — unmod. Treffer-6 = direkter Schaden ohne Wundwurf. | eigener Plan nach Plan 014 | M | Executor |
+| [B-049](backlog_details.md#b-049--deadly-demise) | ToDo | Deadly Demise (R-CMB-YY) — YAML-Daten vorhanden, Handler fehlt. | eigener Plan | M | Executor |
+| [B-050](backlog_details.md#b-050--voice-of-the-triarch) | ToDo | Voice of the Triarch (R-CMD-XX, Silent King) — Handler fehlt, YAML-Basis fertig. | → Plan 016 oder eigener Plan | S | Executor |
+| [B-051](backlog_details.md#b-051--failsafe-arkana-aktivator-ui-fehlt) | ToDo | Failsafe/Arkana-Aktivator-UI fehlt — `activated`-Fraktionsfähigkeiten bei `round_choice`-Fraktionen nie aktivierbar. | generischer Aktivator + CANOPTEK-Picker | M | Executor |
+| [B-052](backlog_details.md#b-052--condition-prompt-applies-when-first-class-felder) | ToDo | `condition_prompt`/`applies_when` als First-Class-Felder statt Roh-Dict. | erst wenn 2. Konsument auftaucht | S | Executor |
+| [B-053](backlog_details.md#b-053--daten-altlast-gretchin-mob) | ToDo | Daten-Altlast `gretchin_mob` — 8E-Formulierung gegen 9E-Regel prüfen. | — | XS | Executor (Haiku-Lookup) |
+| [B-054](backlog_details.md#b-054--custodes-rendax-kath-secondary-toter-pfad) | ToDo | Custodes Rendax Ka'tah Secondary — toter `strength_modifier`-Pfad auf `strength_if_charged` umstellen. | Engine-Fn existiert bereits | S | Executor |
+| [B-055](backlog_details.md#b-055--army-list-ux-weniger-scrollen) | ToDo | Army-List-UX „weniger Scrollen" — Auto-Ende, Fokus, Umsortieren; Streamlit-Machbarkeit zuerst klären. | eigener Plan | M — Machbarkeit zuerst klären | Executor |
+| [B-056](backlog_details.md#b-056--quantum-shielding-fester-invuln-wert) | ToDo | Quantum Shielding — fester Invuln-Wert 4+ statt additivem Modifier + S148-Anzeige-Bug. | überschneidet Plan 017 | M | Executor |
+| [B-057](backlog_details.md#b-057--waffen-block-rapid-fire-count-und-range-anzeigen) | ToDo | Waffen-Block — Rapid-Fire-Count + Reichweite je Waffe anzeigen. | eigener Plan | S | Executor |
+| [B-058](backlog_details.md#b-058--dynastie-code-je-einheit-statt-roster-ebene) | ToDo | Dynastie-Code je Einheit statt Roster-Ebene (Mixed-Dynasty) — eigenes Konzept zuerst. | betrifft `subfaction_value_for`-Konsumenten | M — Konzept zuerst | Planner→Executor |
+| [B-059](backlog_details.md#b-059--regel-index-fuer-wahapedia-texte) | ToDo | Regel-Index für Wahapedia-Texte — beschleunigt künftige Haiku-Lookups. | — | S | Executor |
+| [B-060](backlog_details.md#b-060--claude-md-token-disziplin-entschlacken) | ToDo | CLAUDE.md Token-Disziplin entschlacken — Details nach `operating_model.md` verlagern. | CLAUDE.md-Änderung | XS — freigabepflichtig | Stakeholder→Executor |
+| [B-061](backlog_details.md#b-061--backlog-paragraph-0-hygiene) | ToDo | Backlog-§0-Hygiene — durch die Restrukturierung (B-007) strukturell bereits erledigt. | überlappt B-007, bei Umsetzung zusammenlegen | XS | Executor |
+| [B-062](backlog_details.md#b-062--audit-plaene-bereinigen) | ToDo | Audit-Pläne bereinigen (`docs/audit/plans/` + README-Queue), Tier Sonnet. | — | M | Executor |
+| [B-063](backlog_details.md#b-063--boarding-actions-stratagems-laden) | Blocked | Boarding-Actions-Stratagems laden (NANOSCARAB VIRUS + MINDSHACKLE SCARABS). | → ziel7 Stufe C, hängt an B-003 | S | Executor |
+| [B-064](backlog_details.md#b-064--variable-cp-kosten-in-der-ui-anzeigen) | ToDo | Variable CP-Kosten in der UI anzeigen (5 Necron-Stratagems). | UI-Design für Stratagem-Karte nötig | S | Design-Crew→Executor |
+| [B-065](backlog_details.md#b-065--improve-session-vorbereiten) | ToDo | `/improve`-Session vorbereiten — bereinigte Plan-Queue + grüne Vollsuite als Baseline. | B-062 zuerst | S (Vorbereitung) | Stakeholder→Executor |
+| [B-066](backlog_details.md#b-066--transport-insassen-feature-embark-disembark) | ToDo | Transport-Insassen-Feature (Embark/Disembark) (Vermerk: NIEDRIG) — 4 Bausteine, 2 offene Design-Fragen. | Voraussetzung für Emergency-Disembarkation-Anzeige | S–M | Planner→Executor |
+| [B-067](backlog_details.md#b-067--roster-builder-anforderung-before-battle-stratagems) | ToDo | Roster-Builder-Anforderung — `before_battle`-Stratagems müssen dort auswählbar sein. | beim Bau des Roster-Builders berücksichtigen | — | Planner |
+| [B-068](backlog_details.md#b-068--ux-nit-silent-king-zusatzattacken-default) | ToDo | UX-Nit — Silent-King-Zusatzattacken-Default auf Maximum vorbelegen. | — | XS/S | Executor |
+| [B-069](backlog_details.md#b-069--camelcase-umbenennung) | ToDo | camelCase-Umbenennung — 4 Teil-Briefs laut Mapping-Tabelle in `loader_contract.md` §8. | Reihenfolge: Stratagem-Kollision → Rest-Felder → Necron → Ork | 4 Teil-Briefs ≤M | Executor |
+| [B-070](backlog_details.md#b-070--reanimation-konsistenz-umsetzung) | ToDo | Reanimation-Konsistenz — Stratagem-Variante wie Ability-Variante zählen (Entscheid gefallen). | Entscheid bereits gefallen (S148) | M/L (Modell-Auswahl-UI) | Executor |
+| [B-071](backlog_details.md#b-071--auto-wound-prueft-keine-gauss-tesla-bedingung) | ToDo | `auto_wound` prüft keine Gauss-/Tesla-Waffenbedingung — tiefere Lücke als der S149-Bedingungsfix. | Bedingungs-Lücke bereits gefixt | S | Executor |
+| [B-072](backlog_details.md#b-072--roster-daten-konsistenz-recherche) | ToDo | Roster-/Daten-Konsistenz-Recherche — CORE-Keyword Annihilation Barge/Flayed Ones, Ork Boss Nob Waffen. | reiner Datenabgleich | XS | Executor (Haiku) |
+| [B-073](backlog_details.md#b-073--model-groups-union-ungenauigkeit) | ToDo | `model_groups`-Union-Ungenauigkeit — `grantsKeyword` zu breit bei gemischter Bewaffnung. | keine Regression, bei nächster `model_groups`-Arbeit mitprüfen | S | Executor |
+| [B-074](backlog_details.md#b-074--ziel7-stufe-c-vorbereitung-emergency-disembarkation) | UI-Verifikation | Ziel7 Stufe C-Vorbereitung — Emergency Disembarkation am Ork-Transport-Roster real prüfen. | jetzt möglich (`orks_transport.yaml`) | XS | Stakeholder |
+| [B-075](backlog_details.md#b-075--mypy-rest-gamemechanic) | ToDo | mypy-Rest `gameMechanic/` außerhalb des `state`-Contracts (7 Fehler). | eigenständig von B-004 | S | Executor |
+| [B-076](backlog_details.md#b-076--layer-kopplung-gamemechanic-importiert-uilayout) | ToDo | Layer-Kopplung — `gameMechanic/*Phase.py` importiert `uiLayout._common`; bewusst noch nicht erzwungen. | Aufräum-Pfad: Phasen-Render nach `uiLayout/` | L | Planner |
+| [B-077](backlog_details.md#b-077--common-py-refactoren) | ToDo | `_common.py` refactoren (2218 Zeilen) — Attackensequenz als eigene Datei. | gleicher Render-Hub wie B-076 | L — vor Vergabe splitten | Planner→Executor |
+| [B-078](backlog_details.md#b-078--test-mock-fragilitaet-und-conftest-mock-hack) | ToDo | Test-Mock-Fragilität + conftest-Mock-Hack — geteilte `streamlit`-Fixture statt Modul-Mocks. | S110-Retro M1+M2, gemeinsame Lösung | M | Executor |
+| [B-079](backlog_details.md#b-079--dry-plus-minus-eins-cap-helper) | ToDo | DRY ±1-Cap-Helper (`diceHtml.py` Hit-/Wound-Block). | S110-Retro M1 | XS | Executor |
+| [B-080](backlog_details.md#b-080--dry-zwei-sechs-cap-quelle) | ToDo | DRY [2,6]-Cap-Quelle (`combat.py` vs. `diceHtml.py`) — Sync-Risiko, kein akuter Bug. | S144-Review Befund 2 | S | Executor |
+| [B-081](backlog_details.md#b-081--dry-directive-aktiv-logik) | ToDo | DRY Directive-Aktiv-Logik (`gameState.py` vs. `abilityEngine.py`) — braucht drittes Modul. | S143-Refactor-Befund Punkt 4 | S | Executor |
+| [B-082](backlog_details.md#b-082--executor-auftrags-checkliste-haerten) | ToDo | Executor-Auftrags-Checkliste härten — `ruff` vor „grün"-Claim + Token-/Zeit-Cap. | betrifft `agent_scopes.md` | XS | Planner |
+| [B-083](backlog_details.md#b-083--architecture-md-doku-session) | Blocked | `architecture.md` Doku-Session — 4 Drift-Befunde + `auto_round_1`-Altlast bereinigen. | freigabepflichtig | S | Stakeholder→Executor |
+| [B-084](backlog_details.md#b-084--mortal-wounds-text-match-erkennung) | ToDo | Mortal-Wounds-Text-Match-Erkennung — strukturiertes YAML-Feld statt Text-Match. | kein akuter Block | S | Executor |
+| [B-085](backlog_details.md#b-085--faction-abilities-md-kategorie-6-veraltet) | Blocked | `faction_abilities.md` Kategorie 6 veraltet — Spec-Nachzug nach K2+ (B-003). | nach B-003 | XS | Executor |
+| [B-086](backlog_details.md#b-086--test-schuld-klein-tautologie-tests) | ToDo | §4d Test-Schuld — 2 Tautologie-Tests schärfen + Mock-Konsolidierung (11 Testdateien). | kein Blocker, verwandt B-078 | S | Executor |
+| [B-087](backlog_details.md#b-087--f4-stufe-a-verifikationspunkte-3-und-4) | Blocked | F4 — Stufe-A-Verifikationspunkte 3+4 (Fire Overwatch/Counter-Offensive) — braucht Plan 015. | Plan 015 Priorität P2 | XS (reine Prüfung) | Stakeholder |
+| [B-088](backlog_details.md#b-088--richtungsentscheid-ziel9-fetcher-vorziehen) | Blocked | Richtungsentscheid ziel9-Fetcher vorziehen? — Stakeholder-Entscheidung steht aus. | Audit S124, verschoben S129 | — (Entscheidung) | Stakeholder |
+| [B-089](backlog_details.md#b-089--ziel-8-crusade-erweiterung) | ToDo | Ziel 8 — Crusade-Erweiterung (geplant, noch nicht begonnen). | — | L — bei Aufnahme splitten | Planner |
+| [B-090](backlog_details.md#b-090--ziel-9-wahapedia-faction-fetcher) | ToDo | Ziel 9 — Wahapedia Faction Fetcher (geplant, noch nicht begonnen). | Richtungsentscheid B-088 offen | L — bei Aufnahme splitten | Planner |
+| [B-091](backlog_details.md#b-091--design-block-ui-theme) | ToDo | Design-Block — UI-Theme (Farbpalette, Badge-Optik, Einheitenkarten-Layout). | 3 Teilpunkte, bündeln oder einzeln vergeben | M | Design-Crew |
+| [B-092](backlog_details.md#b-092--go-ui-paket-1-go-karten-baustein-stale-glyph-verdacht) | Blocked | GO-UI Paket 1 — GO-Karten-Baustein; Glyph-Stand widerspricht Paket 3a, Stale-Verdacht. | Klärung vor Zuweisung | — | Planner |
+| [B-093](backlog_details.md#b-093--go-ui-paket-2-command-re-roll-stale-glyph-verdacht) | Blocked | GO-UI Paket 2 — Command-Re-Roll; `git log` deutet auf Erledigung hin, Stale-Verdacht. | Klärung vor Zuweisung | — | Planner |
+| [B-094](backlog_details.md#b-094--go-buttons-kontextuell-in-gameactionarea) | Blocked | GO-Buttons kontextuell in gameActionArea statt Liste — evtl. durch GO-UI-Roadmap überholt. | Klärung vor Zuweisung | — | Planner |
+| [B-095](backlog_details.md#b-095--necron-command-phase-regelkasten-immer-oben) | Blocked | Necron Command Phase — Regelkasten immer ganz oben (alle Phasen prüfen). | Klärung vor Zuweisung | — | Planner |
+| [B-096](backlog_details.md#b-096--bug-aktive-go-effekte-ohne-badge-am-wirkort) | Blocked | Bug — aktive GO-Effekte ohne Badge am Wirkort (4 GOs) — Abdeckung durch S148-Fixes unklar. | Klärung vor Zuweisung | — | Planner |
+| [B-097](backlog_details.md#b-097--command-protocol-direktiven-nicht-regelkonform-s95-befund) | Blocked | Command-Protocol-Direktiven nicht regelkonform (S95) — Plan 025 ist archiviert, Glyph wirkt stale. | Klärung vor Zuweisung | — | Planner |
 
 ---
 
-- 🔲 **Audit-Pläne bereinigen (Stakeholder-Auftrag S122, für S123+):** Subagent-Durchgang über
-  `docs/audit/plans/` + README-Queue — erledigte/überholte Pläne archivieren bzw. Status
-  korrigieren; jeden Plan gegen Code + `git log` verifizieren, nicht nur Statuszeilen lesen
-  (Anlass: Plan-015-Step-1-Befund S122 — Plan-Inhalte waren durch den Ziel7-Track längst
-  abgedeckt). Tier: Sonnet (Abgleich mit Bewertung, kein reiner Lookup).
-- 🔲 **Boarding-Actions-Stratagems laden (Stakeholder-Entscheid S122, → ziel7 Stufe C):**
-  NANOSCARAB VIRUS + MINDSHACKLE SCARABS in `necrons/stratagems.yaml` aufnehmen, sobald die
-  Hatchway-Abhängigkeit geklärt ist (Entscheid: JA, laden — nicht dauerhaft ausschließen).
-  **S134-Nachtrag (✅ Bereinigung erledigt):** Rapid Reanimation, Shield-Piercer Projectors,
-  Flensing Capacitors + `resurrection_protocols_character` sind laut Live-Wahapedia ebenfalls
-  BA-only und wurden S134 aus dem YAML **entfernt** (Stakeholder-Entscheid) — sie kommen wie
-  die zwei obigen erst mit ziel7 Stufe C zurück. Nebenbefund gesichert: `phase: any` +
-  `event: after_roll` fehlmatcht jeden Advance-/after_roll-Anker (Rapid-Reanimation-Karte
-  erschien als „Advance-Re-Roll" mit „no Advance roll open") — Events künftig wurfspezifisch
-  wählen (Merkposten für Paket 4 / Stufe C).
-- 🔲 **Variable CP-Kosten in der UI anzeigen (Stakeholder-Entscheid S122):** 5 Necron-Stratagems
-  haben variable Kosten (z. B. „3/1 CP"); YAML trägt bewusst das Minimum, `rule_text` erklärt.
-  UI soll die Variabilität zeigen (z. B. „1 CP (3 CP für TITANIC)") — es wird mit titanischen
-  Einheiten gespielt. UI-Design für Stratagem-Karte nötig.
-- 🔲 **/improve-Session vorbereiten (Stakeholder-Auftrag S122, für S123+):** Eigene Session für
-  den `/improve`-Skill (read-only Codebase-Audit → priorisierte, in sich geschlossene
-  Umsetzungspläne für Executor-Subagenten). Vorbereitung: bereinigte Plan-Queue (Task oben
-  zuerst), grüne Vollsuite als Baseline, Scope-Entscheid des Stakeholders (Bugs/Tech-Debt/
-  UX/Roadmap) einholen; Ergebnis-Pläne in die `docs/audit/plans/`-Queue einsortieren.
-  Token-intensiv → eigene Session.
-- 🟢 **Transport-Insassen-Feature (Embark/Disembark) — NIEDRIG (Stakeholder-Entscheid S142:
-  Transporter sind aktuell Randfälle, Fokus liegt auf den Gefechtsoptionen):** Insassen-Zuordnung
-  („Einheit X sitzt in Transport Y") fehlt vollständig. 4 Bausteine: (1) Roster-Schema-Feld
-  `embarked_in` pro Unit-Eintrag; (2) Loader liest das Feld + validiert gegen Transportkapazität
-  (heute nur Freitext in der `ABIL`-Zeile); (3) Game-State-Feld `embarked_units` analog
-  `melee_with` + Embark/Disembark-Mutationen (Movement 3", Destroyed-Fall 3"/6" je Stratagem) —
-  Voraussetzung, damit die Emergency-Disembarkation-GO-Karte zeigen kann, WELCHE Einheiten
-  aussteigen; (4) UI: Embark/Disembark-Buttons in der Movement-Phase + „eingestiegen in
-  ⟨Transport⟩" auf der Unit-Karte. 2 offene Design-Fragen: (a) nur Start-Zustand im Roster-YAML
-  deklarierbar vs. In-Game-Embark/Disembark über die UI (größerer Scope); (b) Kapazität hart
-  durchsetzen (strukturiertes Datenfeld nötig) vs. nur Text-Hinweis (App zeigt, Tisch prüft —
-  Klasse B/C). Aufwand S–M. Quelle: `docs/handoff/S141_ui_befunde_group_b.md` §3–§5 (S141/S142).
-- 🔲 **Roster-Builder-Anforderung — `before_battle`-Stratagems auswählbar machen
-  (Stakeholder-Verifikation S146):** `before_battle`-Stratagems (z. B. „Hand of the Phaeron")
-  sind im laufenden Spiel nicht nutzbar — beim Bau des künftigen Roster-Builders
-  berücksichtigen: dort müssen `before_battle`-Stratagems auswählbar/abhandelbar sein.
-- 🔲 **UX-Nit XS/S — Silent-King-Zusatzattacken-Default (Stakeholder-Verifikation S146):**
-  Eingabe der zusätzlichen Attacken (Staff of Stars 4 / Scythe of Dust 3) soll wie bei
-  anderen Einheiten üblich per Default auf dem Maximum vorbelegt sein; aktuell startet der
-  Wert niedriger, was beim Spielen nervt.
-- 🔲 **Bug — aktive GO-Effekte ohne Badge am Wirkort (Stakeholder-Verifikation S146,
-  2 Befunde):** (a) Auto-Wound-GOs „Techno-Oracular Targeting" (kein Wound-Wurf,
-  automatischer Wound) und „Disintegration Capacitors" (Gauss, unmodifizierte 6 beim
-  Hit → Auto-Wound) zeigen keinen Badge/Hinweis am Wound-Block; (b) „Relentless
-  Onslaught" (Rapid Fire, 6 beim Hit → Zusatztreffer) und „Solar Pulse" (Ziel verliert
-  Cover) ohne Badge am Hit- bzw. Save-Block. Verwandt mit S146-Fix 1
-  (`stratagem_strength_labels`): Effekte, die nicht als Stärke-Modifikator laufen, haben
-  keine Namens-Chips an ihren Wirkorten — Chip-Mechanik generisch auf weitere
-  Effekt-Typen ausdehnen. **S147: NICHT als Punktfix — geht als Teilmenge im GO-Audit auf**
-  (`docs/handoff/S147_go_audit_stratagems.md`, alle 4 GOs im Befundkatalog); Umsetzung über
-  die Audit-Fixing-Pläne in S148.
-- 🔲 **camelCase-Umbenennung (S148 Brief 7 hat nur die Grundlage gelegt, kein Code/YAML
-  geändert):** Migrationsplan + vollständige Mapping-Tabelle (107 Felder + 3 aufgelöste
-  Kollisionen `modifier`/`target`/`target_keyword`) liegen fertig unter
-  [../spec/loader_contract.md](../spec/loader_contract.md) §8. Die eigentliche Umbenennung in
-  YAML + Loader-Code ist S149+-Scope, in Teil-Briefs ≤ Effort M zu schneiden — Reihenfolge-
-  Empfehlung aus dem Plan: (1) Stratagems `modifier`/`target`-Kollision zuerst (höchstes
-  Risiko bei naivem Rename), (2) restliche Stratagem-Felder, (3) Necron-Ability-Scope
-  (6 Dateien), (4) Ork-Ability-Scope (5 Dateien) inkl. `target_keyword`-Bereinigung +
-  Custodes-Zusatzfund (`adeptus_custodes/faction_abilities.yaml:96`, beim Verifizieren
-  mitgefunden, außerhalb der 3 S147-Audits).
-- 🔲 **Reanimation-Konsistenz — ENTSCHIEDEN (S148, kein Sonderfall mehr):** Stakeholder-
-  Entscheid: Stratagem-`reanimate` (Reanimation Prioritisation, Resurrection Protocols —
-  `necrons/stratagems.yaml:291-303,438-451`) wird künftig **genauso** mitgezählt wie die
-  Ability-Variante (Reanimation Protocols, `abilityEngine.py:413`/`armyCard.py:109`) — keine
-  Sonderbehandlung der Stratagem-Variante. Umsetzung als eigenes S149+-Ticket, Effort M/L
-  wegen nötiger Modell-Auswahl-UI (wie viele Modelle kommen zurück). Quelle:
-  `docs/handoff/S147_go_audit_stratagems.md` Lücken-Tabelle „Reanimation Prioritisation /
-  Resurrection Protocols" + Fixing-Plan-Punkt 7.
-- 🔲 **auto_wound-Effekt prüft keine Gauss-/Tesla-Waffenbedingung (S147-Audit-Restlücke,
-  bewusst nicht in Brief 6/S149 mitgefixt):** Brief 6 (S149) hat nur die **Bedingungs**-Lücke
-  geschlossen (WER darf das Stratagem nutzen, `conditions: [GAUSS]`/`[TESLA]` auf der
-  Einheit). Die tiefere Lücke bleibt offen: der `auto_wound`-Effekt selbst (Techno-Oracular
-  Targeting, Disintegration Capacitors) prüft nicht, ob der konkrete Angriff tatsächlich mit
-  einer Gauss-/Tesla-Waffe geführt wurde. Quelle: `docs/handoff/S147_go_audit_stratagems.md`
-  Zeile 41 (Lücken-Tabelle) + Fixing-Plan Punkt 5; vgl. Vermerk in
-  `docs/handoff/S147_go_audit_necron_abilities.md` §2. Auch Plan 032 Punkt 5 verweist hierauf.
-- 🔲 **Roster-/Daten-Konsistenz-Recherche (S148-UI-Befund, Prüfblock 2):** Stakeholder hat das
-  Test-Roster als fehlerhaft befunden — Annihilation Barge war als MWBD-Ziel wählbar, ist laut
-  Stakeholder aber **nicht** CORE. Aufgabe: CORE-Keyword-Abgleich `necrons/units.yaml` vs.
-  `docs/work/wahapedia_necrons` (Annihilation Barge + Flayed Ones mitprüfen) **und** Ork Boss
-  Nob Waffen (Stakeholder-Zweifel: „wirklich nur Stikkbomb?"). Haiku-Task (reiner Datenabgleich).
-- 🔲 **`model_groups`-Union-Ungenauigkeit (S148-Folge, geerbt von `grantsKeyword`):** Der neue
-  generische `derived_keywords`-Ableitungsmechanismus (Brief 4) bildet die Vereinigung über
-  alle `model_groups` einer Einheit statt pro Gruppe zu differenzieren — bei gemischter
-  Bewaffnung (z. B. nicht jedes Modell trägt die Gauss-Waffe) zeigt die Einheit das Keyword
-  ggf. zu breit. Bestehende Ungenauigkeit, keine Regression; bei nächster `model_groups`-
-  Arbeit mitprüfen, ob eine gruppenscharfe Ableitung nötig wird.
+## Legende
 
-## 3. Offene manuelle UI-Verifikation (PFLICHT vor „fertig")
+**Status:**
 
-Render-Code ist von der Coverage ausgenommen → muss manuell geprüft werden.
-Vollständige Checkliste: [../../.claude/tasks/next_session.md](../../.claude/tasks/next_session.md)
-(„Manuelle UI-Verifikation" + S48 H1–H7).
+- `ToDo` — bereit, wartet auf Einplanung.
+- `In Progress` — läuft aktuell.
+- `Review` — Umsetzung fertig, wartet auf Review/Freigabe.
+- `UI-Verifikation` — Code+Tests grün, manuelle Stakeholder-Prüfung des Render-Codes steht aus
+  (Render-Code ist von der Coverage ausgenommen, s. `CLAUDE.md`).
+- `Blocked` — wartet auf eine Abhängigkeit, einen Stakeholder-Entscheid oder eine Klärung.
+- `Done` erscheint hier **nie** — erledigte Items wandern sofort samt Detail-Abschnitt ins Archiv
+  (s. Pflege-Regel oben).
 
-- [x] WAAAGH Boss-Nob: 4 Attacken auf Power Klaw, Wound-Block S 11
-- [x] Cover Option B: Dense im HIT-, Light/Heavy im SAVE-Block, je Tab
-- [x] Veil aus Nahkampf: kein „IN MELEE" danach; Undo stellt wieder her
-- [x] Skorpekh-Roster: 2× Threshers + 1× Reap-Blade getrennt (S146 verifiziert,
-  Stakeholder-Verifikation 2026-07-14)
-- [x] S48 H1–H7 (Big Mek Wargear, Silent King Waffen, Living Metal, MWBD 2×, Badge-Farben, RP)
-  — für MWBD 2× jetzt Roster `necrons_b1_verification.yaml` (2× Overlord) nutzbar
-- [x] **S147 B1-Fix — verifiziert (S148):** Ziel = Flayed Ones → „Shadows of Drazak" NUR an
-  Ziel-Kachel, nicht im HIT-Block; Ziel = Annihilation Barge → „Quantum Deflection" NUR an
-  Ziel-Kachel, nicht im SAVE-Block (Roster `necrons_b1_verification.yaml`, Flayed Ones dabei
-  auf 10 Modelle korrigiert — 1 Modell war unbrauchbar; Quantum-Shielding-Anzeige-Bug s. o.)
-- [x] **S147 MWBD-Fix — verifiziert (S148):** beide Overlords nacheinander auswählen/
-  aktivieren → unabhängige Activate-Buttons + Ziel-Auswahl, keine gegenseitige Sperre
-  (gleiches Roster; Roster-CORE-Inkonsistenz als eigene Recherche in §2 aufgenommen)
-- [x] **B12b (S141, Commit `cdb55e2f`) — verifiziert S150:** zentrale Stratagems-Liste
-  zeigte „used on ⟨Einheit⟩" für die aktuell gewählte statt der angewendeten Einheit —
-  Root Cause war der `used`-Zustand (las `target_name` live statt aus dem gespeicherten
-  Anker), Fix + Regressionstest s. §2; UI-Verifikation vom Stakeholder BESTÄTIGT (S150).
-- [x] **B12b (S141) — verifiziert (S148):** Charge-Phase Fire Overwatch — Suffix bleibt leer
-  (kein `unit_key` übergeben, spec-konformer Randfall wie Movement Advance-Reroll); Verhalten
-  „in_melee"-Ausblendung + Fernkampf-Bedingung ebenfalls PASS
-- [x] **B12b (S141) — verifiziert (S148):** Movement Advance-Reroll zeigt **keinen** Suffix
-  (kein `unit_key` übergeben — spec-konformer Randfall, s. Backlog §2 B12b)
-- [ ] **Ziel7 Stufe C-Vorbereitung (S141, Commit `cbaeeb2`):** Emergency Disembarkation am
-  neuen Ork-Transport-Roster (`data/rosters/orks_transport.yaml`, Evil Sunz, Gunwagon
-  TRANSPORT) real prüfen — war zuvor mangels TRANSPORT-Roster blockiert. (Klan-Affinität
-  existiert regelseitig nicht, S143-Stakeholder-Klärung, Commit `3602ddb` — als
-  Verifikationspunkt gestrichen; neuer Scope Klan-/Dynastie-Fähigkeiten s. `ziel7.md` Stufe C.)
+**Effort:** `XS` < 1h · `S` ≤ halber Tag · `M` ≤ 1 Tag · `L` > 1 Tag — **L wird vor Vergabe in
+≤ M-Briefs gesplittet** (S130-Auflage, s. `feedback_executor_briefs_max_m` im Memory).
 
----
+**Assignee-Rollen:** `Stakeholder` (Entscheidung/manuelle UI-Prüfung) · `Planner` (Konzept/Split
+vor Vergabe) · `Executor` (Umsetzung, Default-Tier Sonnet; reine Lookups per Auftrag explizit auf
+Haiku) · `Design-Crew` (UI/UX-Konzept vor Umsetzung). Pfeile (`A→B`) zeigen die Reihenfolge.
 
-## 4. Architektur-Schulden
+**Abhängigkeiten-Notation:** Freitext, der auf blockierende IDs, Dateien oder externe
+Entscheidungen verweist — für die volle Begründung immer den Link in der ID-Spalte öffnen
+(`backlog_details.md`, Feld „Abhängigkeiten (Begründung)").
 
-Messbar über das Architektur-Gate → [../spec/architecture_invariants.md](../spec/architecture_invariants.md).
+**Neues Item aufnehmen:** nächste freie `B-NNN`-ID vergeben, Zeile hier einfügen (Position =
+Stakeholder-Priorität), vollen Kontext in `backlog_details.md` unter `## B-NNN — Titel` anlegen
+(Feldschema dort dokumentiert).
 
-- _(Generic-src (INV-4 DEBT) — komplett aufgelöst: Spielerlabels/Caption 2026-06-20,
-  Default-Roster `gameState.py` + `faction_dir`-Default `loader.py` S128; Allowlist =
-  nur noch LEGIT-Rest `roszImporter.py`. Details `backlog_archive.md` +
-  [architecture_invariants.md](../spec/architecture_invariants.md) INV-4. Stale-Eintrag
-  korrigiert S150.)_
-- _(Generic-src Vokabular (INV-4b DEBT) — DEBT komplett aufgelöst S128, Details
-  `backlog_archive.md`)_
-- 🟡 **mypy-Bestand modulweise abbauen** (Baseline **24**, Stand 2026-07-12 S144;
-  Folgearbeit zu Plan 038): `gameMechanic/gameState.py` (−34, Paket 2), `gameObjects/`
-  komplett (−18, Paket 3), `gameMechanic/phaseRunner.py` (−7, Root Cause: `phase_name`
-  in den sieben Phase-Handlern war als Instanzattribut statt `ClassVar[str]` annotiert —
-  Protocol-Mismatch gegen `PhaseHandler.phase_name: ClassVar[str]`) sowie **S141: `state`-
-  Contract-Fix `dict` → `MutableMapping[str, Any]`** in `abilityEngine.py`/
-  `unitMutations.py`/`scenarios.py` (Commit `42af867`, Baseline blieb bei 48) und in
-  `phaseHandler.py`/`phaseRunner.py` + den 7 `*Phase.py`-Dateien + `_common.py` (Commit
-  `292b3ad`, Baseline **48 → 28**) sind erledigt. **S144: gameMechanic-`type-arg`-Abbau**
-  (Option A+B aus dem S143-Refactor-Konzept, Baseline **28 → 24**, Helfer
-  `_sum_effect_value` mit 6 Call-Sites)
-  ist erledigt. Verbleibend (Stand S144, 24 Fehler):
-  **`uiLayout/` zuletzt** (17 Fehler, manuelle Render-Verifikation nötig —
-  `armyCard.py`/`gameProtocoll.py`/`unitCard.py`/`armyList.py`/`detachmentCard.py`) plus
-  ein Rest von 7 Fehlern in `gameMechanic/` außerhalb des `state`-Contracts
-  (`attackMath.py` `type-arg`, `moralePhase.py`/`unitMutations.py`
-  `no-any-return`/`arg-type` — kein `state: dict`-Fall mehr, andere Fehlerklassen). Pro
-  Schritt Baseline in `tools/mypy_gate.py` im selben Commit senken (Ratchet-Regel,
-  s. [architecture_invariants.md](../spec/architecture_invariants.md) Typ-Ratchet).
-- **Layer-Kopplung:** `gameMechanic/*Phase.py` importiert `uiLayout._common` (Render-Hub).
-  Aufräum-Pfad: Phasen-Render nach `uiLayout/` ziehen (vgl. Audit-Plan 008). Bewusst (noch)
-  nicht als Wächter erzwungen.
-- 🔲 **`_common.py` refactoren (Stakeholder-Auftrag S132):** `src/uiLayout/_common.py`
-  (2218 Zeilen) in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei
-  werden. Verwandt mit der Layer-Kopplung oben (gleicher Render-Hub).
-- 🔲 **abilityEngine-Refactor-Vorplanung (Planungspaket, kein Code; S145-Rückfrage,
-  Konsent-Entscheid — migriert aus `S145_planning.md` §Option C, S147):**
-  Stakeholder-Rückfrage, `abilityEngine.py` (594 Z., 29 Funktionen) analog
-  `stratagemEngine.py` nach Aktivierungsmodus (passiv/aktiv/triggered) als Paket
-  `abilityEngine/` aufzudröseln. Kritische Bewertung: der Modus-Schnitt trägt die reale
-  Struktur nicht — der dominante Block (~52 %) ist round_choice-/Direktiv-Logik, weder
-  klar „passiv" noch „triggered"; die natürlichen Nähte sind **Direktiven/Protokolle |
-  Unit-Buffs+Revive | Queries+Dispatch**. 594 Zeilen sind (noch) kein Kohäsionsproblem —
-  das reale Problem ist Duplikation, dafür existiert bereits die gezieltere Schuld „DRY
-  Directive-Aktiv-Logik" (s. u.). Architektur-Gate unkritisch (Layer-Import-Test prüft
-  nur Schicht-Grenzen, ein Paket innerhalb `gameMechanic/` bliebe compliant;
-  `mypy_gate.py` zählt Gesamtfehler, keine Modulpfade). Orthogonal zum YAML-Schema-
-  Entscheid (Klan/Dynastie Frage 3, Option B, K2). **Entscheid (Konsent S145):
-  zurückgestellt, mit Schwellwert statt „nie".** Jetzt: K2 legt die neue Subfraktions-
-  Passiv-Logik von Anfang an in ein **eigenes Modul** (`gameMechanic/subfactionPassives.py`)
-  statt in `abilityEngine.py` — erfüllt das Trennungs-Anliegen für den Neuzugang, ohne
-  Bestand anzufassen; `abilityEngine.py` wächst durch K2 nicht. Split-Trigger: überschreitet
-  `abilityEngine.py` dennoch ~800 Zeilen ODER wird die DRY-Schuld angegangen, dann
-  Paket-Split als eigener Refactor-Brief — Schnitt entlang der realen Nähte, NICHT
-  passiv/aktiv/triggered. Effort S, ~15–20k Token, re-exportierendes `__init__.py` als
-  Kompatibilitätsschicht; nicht parallel zu Briefs mit `abilityEngine`-Importänderungen.
-- **Test-Mock-Fragilität (S51 entdeckt):** Mehrere `src`-Module lesen das globale
-  `st.session_state` und rufen einander auf (`unitMutations.set_movement_status` →
-  `gameState.units_key_for`; `abilityEngine` → `gameState`/`unitMutations`). Tests mocken
-  `streamlit` **pro Datei**; wer ein Modul zuerst importiert, bindet dessen `st`. Reihenfolge-
-  abhängig → leicht zerbrechlich (S51: ein neuer Test als erster Importer brach 15 Movement-Tests).
-  Workaround: Akzeptanztest importiert `gameState` lazy. Saubere Lösung: **eine geteilte
-  `streamlit`-Fixture** (conftest) + Tests auf `module.st` statt lokalem `_st_mock` umstellen.
-  Tieferliegend ein Smell: viel globaler `session_state`-Zugriff quer durch die Logik-Module.
-- 🔲 **DRY ±1-Cap-Helper (S110-Retro-M1):** Hit- und Wound-Block in `diceHtml.py` teilen
-  identische ±1-Cap-Logik (`_render_dice_roll_block` + `_render_dice_wound_block`) → gemeinsamen
-  Helper extrahieren. Kleiner Refactor, kein Verhaltenswechsel; Tests müssen weiter grün bleiben.
-- 🔲 **DRY [2,6]-Cap-Quelle (S144-Review Befund 2):** Der 9E-Cap (Hit/Wound: unmod. 6 immer
-  Erfolg, unmod. 1 immer Fehlschlag) existiert doppelt — `combat.resolve_attack_modifiers`
-  (`src/gameMechanic/combat.py:207,213`) und `diceHtml._capped_modifier_threshold`
-  (`src/uiLayout/diceHtml.py:31`). Aktuell konsistent gefixt, aber Sync-Risiko: künftige
-  Änderungen könnten nur an einer Stelle landen. Kein akuter Bug, niedrige Priorität.
-  Langfristig `_capped_modifier_threshold` als dünnen Wrapper um die combat-Cap-Logik führen
-  oder die Zwischen-Modifier-Zeilen ebenfalls aus `atk_result` speisen (eine Cap-Quelle).
-- 🔲 **DRY Directive-Aktiv-Logik (S143-Refactor-Befund Punkt 4, Entscheid S144):**
-  `gameState.active_round_choice_buff_labels` (`src/gameMechanic/gameState.py:242-283`, UI-Labels)
-  dupliziert einen Teil der „welches Directive ist aktiv"-Logik aus
-  `abilityEngine._active_directive_effects` (Rechen-Seite) — Wiederverwendung scheitert am
-  Import-Zyklus (`abilityEngine` importiert bereits aus `gameState`). Sync-Risiko analog
-  Cap-DRY: Regeländerung an einer Stelle ⇒ Anzeige ≠ Rechnung. Saubere Lösung braucht ein
-  drittes, tieferliegendes Modul für die geteilte Logik. Kein akuter Bug, niedrige Priorität.
-- 🔲 **Test-Schuld conftest-Mock-Hack (S110-Retro-M2):** `tests/gameMechanic/conftest.py`
-  re-pointet st-Mocks global über `sys.modules` (reihenfolge-abhängiger Quick-Fix aus S110
-  Isolations-Fix) → mittelfristig durch eine **session-scoped Streamlit-Mock-Fixture** ersetzen,
-  die alle `gameMechanic`-Tests einheitlich nutzen (analog zur sauberen Lösung aus Test-Mock-Fragilität oben).
-- 🔲 **Prozess: Executor-Auftrags-Checkliste härten (S110-Retro-M4):** Executor-Brief muss
-  echtes `ruff`/pre-commit **VOR** dem „grün"-Claim verlangen (nicht nur pytest). Außerdem:
-  Token-/Zeit-Budget-Cap im Auftrag gegen Rabbit-Holes (Lehre aus S110-Lauf 2b: 161k/66 min);
-  Schätzung + harter Stop-Punkt obligatorisch. Betrifft `docs/reference/agent_scopes.md`
-  (Executor-Brief-Checkliste, Z. 91–93 ff.) → bei nächster Scope-Pflege einarbeiten.
-
----
-
-## 4b. Doku-Drift-Befunde (Abgleich 2026-06-15) — zur Klärung, nicht still ändern
-
-`docs/spec/architecture.md` ist teils veraltet (Gesamtbild stimmt, Details nicht):
-
-- **session_state-Schema** (architecture.md): nennt `unit_state` ohne `group_models`/`group_wounds`
-  (per-Gruppe-Wunden, real in `gameState.py`); Armee ohne `dynasty`/`protocol_order` (real vorhanden);
-  „Owned by `gameMechanic/state.py`" → Datei heißt `gameState.py`.
-- **Colour System** (architecture.md §Colour): beschreibt `COLOR_*`-Aliase „als CSS in app.py" —
-  das **Live-Theme** sind aber `--arb-*`-Variablen in `gameHeader.py`. Kanonisch ist
-  [../spec/design_colors.md](../spec/design_colors.md); die `COLOR_*` (Tailwind-Extrakte in
-  `constants/colors.py`) existieren noch, treiben das Theme aber nicht.
-- **uiLayout „No game logic in this layer"** (architecture.md): widerlegt durch `_common.py`
-  (Attack-Mathe wurde gerade deshalb nach `attackMath.py` ausgelagert) → siehe Layer-Kopplung (§4).
-- **Refactoring Plan / Open Design Questions** (architecture.md): historisch, alle Phasen erledigt,
-  viele Fragen beantwortet (Stratagems implementiert, CP-Werte bekannt) → als Historie kennzeichnen.
-
-Vorschlag: architecture.md in einer eigenen kleinen Doku-Session aktualisieren (Schema +
-Colour-Verweis auf design_colors.md + Historien-Markierung). **Vor Änderung freigeben.**
-
-- **`faction_abilities.md` Z. 42/197 — entferntes `auto_round_1` (S88-Befund):** Tabelle Z. 42
-  („Runde 1: Eternal Guardian auto-aktiv (`auto_round_1: true`)") + Phase-2-Liste Z. 197
-  referenzieren noch das `auto_round_1`-Flag, das in 6e Bug 1 aus YAML/Dataclass/UI/commandPhase
-  **entfernt** wurde (Regeln erlauben freie Verteilung der Protokolle auf Runden 1–5). Reine
-  Doku-Altlast → bei der `architecture.md`-Doku-Session mitbereinigen. **Vor Änderung freigeben.**
-
-- **Mortal Wounds Text-Match-Erkennung:** `_detect_weapon_special` nutzt `"mortal wound" in abilities.lower()` — kein strukturiertes YAML-Feld. Technische Schuld, kein akuter Block.
-- 🔲 **`faction_abilities.md` Kategorie 6 „Passive/Persistent" veraltet (S144-Fund, migriert
-  S150):** behauptet „Größtenteils abgedeckt durch `triggered`-Abilities in
-  `faction_abilities.yaml`" — das ist falsch: Klan-Kulturs/Dynastic Codes liegen in
-  `subfaction_abilities.yaml` (anderer Datei-Scope) und sind laut `ziel7.md` Stufe C §K1
-  Kern-Befund aktuell nicht wirksam. Spec-Nachzug empfohlen, sobald K2+ (s. Prioritätenliste
-  Rang 7) umgesetzt ist.
-- 🔴 **Command-Protocol-Direktiven nicht regelkonform (S95-Befund, Plan 016 Group A blockiert;
-  Plan 025 Step 4 = D1 bereit → Mailbox-Plan `docs/handoff/plan-025-step4.md` Teil A vom
-  **Executor-Subagent** umsetzen lassen, nicht im Koordinator-Fenster):**
-  Die in `data/wh40k_9e/necrons/faction_abilities.yaml` modellierten Direktiv-Effekte weichen
-  von den echten 9E-Protokollen ab (`docs/work/wahapedia_necrons/faction_overview.txt` Z. 583 ff.):
-  | Protokoll · Direktive | YAML-Modell | Wahapedia 9E (kanonisch) |
-  |---|---|---|
-  | Eternal Guardian · P | „+1 to all saving throws" | D1: Light Cover, wenn nicht bewegt |
-  | Eternal Guardian · S | „Re-roll saving throws of 1" (`reroll_save_1`) | D2: Hold Steady / Set to Defend bei gegner. Charge |
-  | Conquering Tyrant · P | „+1 Leadership" | D1: +3" Aura-Reichweite |
-  | Conquering Tyrant · S | „Re-roll hit & wound of 1 (Melee)" (`reroll_hit_wound_1`) | D2: nach Fall Back schießen (−1 Hit) |
-  **Entscheid gefallen (S95): Variante (b)** — auf echte 9E-Regeln umstellen.
-  → **[Plan 025](../audit/plans/archive/025-protocol-9e-conformance.md)** (heruntergebrochen, je
-  Protokoll ein Step). Vollständige Regelprüfung aller 6 Protokolle dort. Nuance: **Sudden
-  Storm P** (+1" Move) ist bereits konform, **Undying Legions** substanziell konform (nur P/S
-  vs. D1/D2 vertauscht); die anderen vier sind erfunden. 025 rückt **vor 016/017** — Plan 016
-  Group A + Conquering-Tyrant-P-Morale werden dadurch obsolet (Effekte verschwinden), 016
-  behält nur RP-Hint + Dynastiebonus.
-
-## 4c. Design-System — ERLEDIGT (S116–S118; Doku-Abgleich S120, 2026-07-03)
-
-Kernbefund (S114): 4 divergente Badge-Implementierungen. Vollständig umgesetzt:
-- `docs/spec/design_system.md` angelegt (§0–§5), Farben bleiben in `design_colors.md` (Commit `143d848`, S116).
-- Schritt 1: `badges.py` (`badge()`/`chip()`) + `symbols.py` (8 Konstanten), 4 Call-Sites konsolidiert; Invuln-Block (`diceHtml.py`) bewusst gestrichen statt umgestellt (`143d848`).
-- Schritt 2: Glyph-/Chip-Rollout auf die restlichen 10 Produktivdateien (`3915f8c` S117, `29f4f81` S118) — Ratchet-Rest auf Null (Details: `design_system.md` §5).
-- Stakeholder hat den Wertesatz + Hinweis-Konvention S120 (2026-07-03) final bestätigt; Handoff-Dateien (`design-system-proposal.md`, `design-system-consensus.md`) gemäß Lifecycle gelöscht.
-
----
-
-## 4d. Test-Schuld (klein)
-
-Zwei Tautologie-Tests in `tests/gameMechanic/test_damage_block_reanimation.py` bei Gelegenheit schärfen (Quelle: DoD-Review S114; Handoff gelöscht S120):
-- Z.394–401: rechnet `4*2==8` selbst nach — kein echter System-Under-Test-Nachweis.
-- Z.403–417: prüft nur Fixtures statt RP-Gate-Logik.
-
-Kein Blocker; schärfen wenn ohnehin in der Datei.
-
-Modul-Level-`sys.modules["streamlit"]`-Mocks in 11 Testdateien konsolidieren (Follow-up aus
-S118-M2: `tests/gameMechanic/conftest.py` hat jetzt die session-scoped Fixture
-`_canonical_streamlit_mock`; die per-File-Mocks vor dem ersten src-Import sind noch dezentral).
-Kein Blocker; bei nächster Test-Infra-Arbeit mitnehmen.
-
----
-
-## 5. Größere geplante Ziele
-
-- [ziel7.md](ziel7.md) — **Gefechtsoptionen + subfaction-Mechanik** (definiert 2026-06-30):
-  Bündelt (a) `collect_modifiers_for_phase` Execute-Logik (§6e), (b) 6f Ability-Badges,
-  (c) 6h Kat1–3 neue Fraktionen (AdMech, Tyranids, T'au, Space Marines …).
-  - **Ziel7-Cluster: P18** (aus Ziel6 ausgelagert S114; P17 erledigt S115):
-    - **P17 — erledigt (S115):** Mechanik steht+getestet — Pre-Apply-Zielauswahl (`_render_subgroup_selector`,
-      `_common.py`) + Wounded-Lock (`apply_damage`/`get_locked_group`, `unitMutations.py`); Vor-Auswahl+Lock
-      akzeptiert, ±-Zähler verworfen. Details: `docs/goals/archive/ziel6.md` P17.
-    - **P18 — erledigt (bereits S43, `e6fcdb3` Plan 013; Checkbox war stale-offen, verifiziert S117):**
-      einheitlicher Deklarations-Flow (`render_group_cards`/`render_group_assignment`, synthetische
-      Einzelgruppe für Einheiten ohne `model_groups`) + `melee_with`-Ziel-Anzeige. Getestet: `test_group_flow.py`.
-    - **P19 — once_per_battle pro Spieler — ERLEDIGT (2026-07-03, Commit `1f9d82b`):** eingesetzte
-      once_per_battle-Gefechtsoption blockte zuvor BEIDE Spieler (Bug — 9E: Einschränkung gilt
-      je Spieler) + UI zeigte nicht, welcher Spieler sie eingesetzt hat. Vollsuite 1405 passed /
-      99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S113-Punkt 3.
-    - **P20 — Rapid Fire halbe Reichweite — ERLEDIGT (2026-07-03, Commit `dfebd27`):** Attackenzahl
-      ist jetzt angebbar, wenn Modelle Ziele innerhalb halber Reichweite wählen; gecappt auf die
-      Attackenzahl bei voller Reichweite (z. B. 10 bei 10 Warriors mit Gauss Flayer). Vollsuite
-      1405 passed / 99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S116-Punkt 4.
-    - **P21 — BUG: Stratagem-Undo überlebt Phasenwechsel — ERLEDIGT (2026-07-03, Commit `dde16f3`):**
-      ↺-Undo-Button wurde nach Phasenwechsel/im nächsten Zug noch angeboten — jetzt nur im selben
-      Phasenfenster verfügbar. Widersprach dem S113-Blocker-B1-Codebefund („laut Code NICHT
-      angeboten") — Live-Verhalten vs. Code-Analyse abgeglichen, Root Cause gefixt. Vollsuite
-      1405 passed / 99,11 %, UI-Verifikation vom Stakeholder bestätigt. Quelle: `ui-pass-S118.md` S113-Punkt 5.
-
-    **Neue offene Befunde (S119-Live-Test + Code-Analyse) — Stufe A erledigt (S120/S121):**
-    - ✅ **Stratagem-Doppelanzeige — ERLEDIGT (Task 1, Commit `8c124c3`):** Zwei-Spalten-Split
-      (`first_player`/`second_player`) + `stratagem_usable_by_player()`, je Spieler eigene Liste
-      (kein `_shared`-Konkat mehr).
-    - ✅ **Stratagem-Attributions-Bug — ERLEDIGT (Task 1, Commit `8c124c3`):** Die Spalte selbst ist
-      der spending player — keine Ableitung aus `s.player` mehr nötig.
-    - ✅ **`used_stratagem_ids` (phase-scoped) global statt per Spieler-Slot — ERLEDIGT (Task 2,
-      Commit `396fdec`):** Dict-Form pro Spieler, analog `cp`/`used_stratagem_battle_ids`.
-    - Umsetzung: `docs/handoff/plan-ziel7-restruktur.md` Stufe A Task 0 (`f9279fe`, YAML-Drift
-      Counter-Offensive/Insane Bravery → `both`), Task 1 (`8c124c3`), Task 2 (`396fdec`). Handoff-
-      Datei nach Abschluss gelöscht (S121), Struktur+Kandidatenliste in `docs/goals/ziel7.md` §0
-      überführt (kein Informationsverlust).
-    - **Manuelle UI-Verifikation S121:** Punkte 1, 2, 5–7 der Checkliste bestätigt; Punkte 3+4
-      (Fire Overwatch/Counter-Offensive, `timing: phase_reactive`) NICHT prüfbar — brauchen die
-      reaktive Stratagem-UI aus Plan 015 (`docs/audit/plans/015-contextual-reactive-stratagems.md`,
-      TODO) → s. F4 unten.
-
-    **Neue Findings (S121-UI-Verifikation):** F1–F3 erledigt (S121/S122), Details
-    `backlog_archive.md`; einzig F4 bleibt offen:
-    - 🟡 **F4 — Stufe-A-Verifikationspunkte 3+4 setzen Plan 015 voraus** (s. o.): Plan 015
-      (Priorität P2, `docs/audit/plans/README.md`) schaltet damit auch die Reaktiv-UI-Prüfung für
-      Fire Overwatch/Counter-Offensive frei — als Kandidat für die nächste Session vormerken.
-- [ziel8.md](ziel8.md) — Crusade-Erweiterung (geplant)
-- [ziel9.md](ziel9.md) — Wahapedia Faction Fetcher (geplant)
-- 🟡 **Richtungsentscheid offen (Audit S124, aus next_session.md verschoben S129):** ziel9-Fetcher
-  vorziehen? Eigene Deployment-Phase bauen oder ADR „bleibt am Tisch"? Mission-Scoring (eine
-  Mission end-to-end)? — noch nicht entschieden, Stakeholder-Input nötig.
-- [index.md](index.md) — Ziel-Gesamtübersicht
-
----
-
-## Wo was steht (Artefakt-Verweise)
-
-| Frage | Artefakt |
-|---|---|
-| Was mache ich als Nächstes? | [next_session.md](../../.claude/tasks/next_session.md) |
-| Was ist insgesamt offen? | **dieser Index** |
-| Detailplan eines Features? | [../audit/plans/](../audit/plans/) |
-| Architektur-Bild + Invarianten? | [../spec/architecture.md](../spec/architecture.md) · [../spec/architecture_invariants.md](../spec/architecture_invariants.md) |
-| Ziel-Historie / Changelog? | [session_archive.md](../metrics/session_archive.md) „Session-Historie" |
+**Bereinigen:** Item erledigt/verworfen → Detail-Abschnitt aus `backlog_details.md` **inklusive**
+Fakten/Links/Commits nach `backlog_archive.md` verschieben (Format der bestehenden Einträge
+folgen), Zeile hier löschen. Nie nur die Zeile löschen ohne den Detail-Abschnitt nachzuziehen —
+sonst geht die Begründung verloren.
