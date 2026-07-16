@@ -1,6 +1,8 @@
 # S154 — Offene Entscheide (Stakeholder-Mailbox)
 
-STATUS: NEEDS-DECISION
+STATUS: ANSWERED (S154-Ende: E1 = neuer Befund → S155-Untersuchung; E2: R1+R2 ja, R3
+verworfen — Regel gilt, wird aber nicht verregelt, kein Formal-Review wenn nichts fertig;
+E3: Löschen freigegeben; E4: Vorschlag übernommen)
 
 Lifecycle: Nach Beantwortung Marker auf ANSWERED; Datei behalten, bis alle Punkte in
 S155 umgesetzt bzw. archiviert sind, dann löschen.
@@ -41,6 +43,18 @@ Revert von `fightPhase.py` + Testdatei, B-087 zurück in den Backlog mit Befund.
 **Empfehlung: (a)** — Regelbeleg ist eindeutig, Ist-Verhalten war spielentscheidend falsch
 (bot das Stratagem dem falschen Spieler zum falschen Zeitpunkt an).
 
+Antwort: Aktuell kann ich die Counter-Offensive gar nicht sehen. Es ist komplett kaputt.
+
+**Koordinator-Vermerk (S154-Ende):** Kein Commit. Fix konserviert in
+`git stash` („B-087 Counter-Offensive fix – E1"); Arbeitsbaum zurück auf altem Verhalten.
+S155-Auftrag: Befund untersuchen — Hypothese A: Der Stakeholder testete mit dem neuen Code
+(die laufende App nutzt den Arbeitsbaum), und die Box erscheint regelkonform erst, nachdem
+eine GEGNERISCHE Einheit gefochten hat — vorher erschien sie (fälschlich) sofort; „nicht
+sichtbar" könnte das korrekte neue Verhalten in einer Situation ohne gegnerischen Fight
+sein. Hypothese B: echter Bug im Fix (z. B. Flag-Reset pro Runde, Fraktionszuordnung).
+Erst reproduzieren (Playwright/manuell mit beiden Seiten fechten lassen), dann entscheiden:
+Stash anwenden + nachbessern oder verwerfen.
+
 ---
 
 ## E2 — Retro S153: Maßnahmen R1–R3
@@ -64,6 +78,8 @@ script-gestützten Edit aus und ließ Review/Retro nach S154 nachholen.
   praktiziert, steht aber nirgends als Regel). Umsetzung S155 (Wind-down).
   **Optionen:** ja / nein.
 
+R1 und R2 fein. Keine Regel ohne Ausnahme. D.h. nicht, dass wir die Ausnahme verregeln müssen. Wir halten uns an die Regel. Ich möchte aber keine Token um der Regel willen verschwenden, wenn in der Session nichts fertig geworden ist.
+
 ---
 
 ## E3 — B-053: `gretchin_mob` komplett löschen (Umsetzung S155)
@@ -82,6 +98,8 @@ der Definitionsdatei **0 Treffer** — toter Dateneintrag, Löschung bricht nich
 **Optionen:** (a) Löschen (Empfehlung; Umsetzung S155 inkl. Vollsuite-Beleg).
 (b) Behalten und nur Text anpassen — nicht empfohlen, da die Fähigkeit in 9E schlicht
 nicht existiert.
+
+Dann löschen
 
 ---
 

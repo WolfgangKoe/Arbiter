@@ -45,10 +45,14 @@ Frühere Sessions (S60–S153): Verlauf in `docs/metrics/session_archive.md` (Se
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle) + `docs/handoff/S154_offene_entscheide.md`.
 
-- **(0) E1-Entscheid abholen** (`S154_offene_entscheide.md`): Falls GO → `fightPhase.py` +
-  `test_fight_turn_advance.py` committen (`Fix Counter-Offensive trigger to require enemy
-  unit fought`); falls NO → revert. Danach Retro-Reste R1–R3 + E3 (gretchin_mob löschen)
-  + E4 (B-025 umformulieren) gemäß Antworten umsetzen.
+- **(0) Entscheide sind da** (`S154_offene_entscheide.md`, ANSWERED): **E1 = neuer Befund
+  „Counter-Offensive gar nicht sichtbar"** — Fix liegt in `git stash` (stash@{0},
+  „B-087 Counter-Offensive fix – E1"); zuerst reproduzieren (Hypothesen A/B im
+  Koordinator-Vermerk der Datei), dann Stash anwenden+nachbessern oder verwerfen.
+  Außerdem: B-036-Archivierung nachholen (2× API-529 gescheitert), E3 `gretchin_mob`
+  löschen (freigegeben), E4 B-025 umformulieren, R3 VERWORFEN (nicht verregeln; kein
+  Formal-Review, wenn in einer Session nichts fertig wurde — Token nicht um der Regel
+  willen verschwenden). Kurzes S154-Review als Teil von Punkt 0 (viel wurde fertig).
 - **(a) S154-Restpaket (klein):** M1+M2 (`agent_scopes.md`, EIN Brief), B-060
   (CLAUDE.md-Token-Details → operating_model.md Event 6; Stakeholder-freigegeben S154),
   B-027 (unit_key durch spend_stratagem), B-079 (diceHtml DRY-Helper).
