@@ -151,24 +151,40 @@ def test_non_charged_waits_while_charged_pending(monkeypatch) -> None:  # type: 
 
 
 # ---------------------------------------------------------------------------
-# Plan 015 — Counter-Offensive: _any_unit_fought() + _apply_counter_offensive()
+# Plan 015 — Counter-Offensive: _enemy_has_fought() + _apply_counter_offensive()
+# B-087: renamed from _any_unit_fought() — the gate must check the OPPONENT's
+# fought units, not "either side", or the box wrongly offers Counter-Offensive
+# right after the reacting player's OWN unit fought (core_rules.txt Z. 3256-3259
+# requires "after an enemy unit has fought").
 # ---------------------------------------------------------------------------
 
 
-def test_any_unit_fought_false_before_any_fight_this_phase(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_enemy_has_fought_false_before_any_fight_this_phase(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     a_state = _unit_state(fought=False)
     b_state = _unit_state(fought=False)
     _setup(monkeypatch, a_state=a_state, b_state=b_state, current="A", selected=None)
 
-    assert fp._any_unit_fought("A", "B") is False
+    assert fp._enemy_has_fought("A", "A", "B") is False
 
 
-def test_any_unit_fought_true_after_one_side_fought(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_enemy_has_fought_false_when_only_own_side_fought(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Regression B-087: A's own unit fought, B's has not — A has no enemy-fought
+    trigger yet, so Counter-Offensive must NOT be offered to A."""
     a_state = _unit_state(fought=True)
     b_state = _unit_state(fought=False)
     _setup(monkeypatch, a_state=a_state, b_state=b_state, current="B", selected=None)
 
-    assert fp._any_unit_fought("A", "B") is True
+    assert fp._enemy_has_fought("A", "A", "B") is False
+
+
+def test_enemy_has_fought_true_when_opponent_fought(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """B's unit fought — from A's perspective the enemy has fought, so
+    Counter-Offensive becomes available to A."""
+    a_state = _unit_state(fought=False)
+    b_state = _unit_state(fought=True)
+    _setup(monkeypatch, a_state=a_state, b_state=b_state, current="A", selected=None)
+
+    assert fp._enemy_has_fought("A", "A", "B") is True
 
 
 def test_apply_counter_offensive_reassigns_fight_current_player_and_clears_selection(

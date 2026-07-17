@@ -87,18 +87,20 @@ def _has_eligible_units(player: str, first: str, second: str) -> bool:
     return False
 
 
-def _any_unit_fought(first: str, second: str) -> bool:
-    """Return True if any unit (either side) has already fought this Fight Phase.
+def _enemy_has_fought(faction: str, first: str, second: str) -> bool:
+    """Return True if a unit belonging to `faction`'s OPPONENT has fought this phase.
 
-    Counter-Offensive's rule_text gates on "after an enemy unit has fought in
-    this turn" — without this check the reactive box would also appear before
-    the very first activation, when `fight_current_player` is merely the
-    phase-opening priority pick, not a post-fight handoff.
+    Counter-Offensive's rule_text gates on "after an ENEMY unit has fought in
+    this turn" (core_rules.txt Z. 3256-3259 / rules_appendix.txt Z. 2570-2573)
+    — from `faction`'s point of view that means the other side's units, not
+    `faction`'s own prior fights. B-087: the previous implementation checked
+    "any unit fought" (either side), which offered the box to a player right
+    after THEIR OWN unit fought — before the enemy had fought at all.
     """
-    for player in (first, second):
-        for s in st.session_state[units_key_for(player)].values():
-            if s.get("turn_flags", {}).get("fought"):
-                return True
+    enemy = second if faction == first else first
+    for s in st.session_state[units_key_for(enemy)].values():
+        if s.get("turn_flags", {}).get("fought"):
+            return True
     return False
 
 
@@ -452,7 +454,9 @@ def _render_fight_column(
                 render_group_assignment(atk_faction, atk_uid, atk_unit, atk_state, use_melee=True)
                 return
 
-        if _any_unit_fought(first, second) and _has_eligible_units(faction, first, second):
+        if _enemy_has_fought(faction, first, second) and _has_eligible_units(
+            faction, first, second
+        ):
 
             def _on_counter_offensive_spent(_strat: Stratagem, _faction: str = faction) -> None:
                 _apply_counter_offensive(_faction)
@@ -484,6 +488,13 @@ def _render_fight_column(
                 wound_adjustment_buttons(faction, uid, unit)
         elif st.session_state.get("selected_unit"):
             st.caption(f"← Designate a target ({SYM_EXPAND_ALT}) from your army list.")
+        elif not _enemy_has_fought(faction, first, second) and _has_eligible_units(
+            faction, first, second
+        ):
+            # B-087/E1: explains why Counter-Offensive isn't shown yet — the
+            # Stratagem's own trigger ("after an enemy unit has fought", core_rules.txt
+            # Z. 3256-3259) is not met, not a bug. Dezenter Hinweis statt stiller Leere.
+            st.caption("Counter-Offensive becomes available once an enemy unit has fought.")
         else:
             st.caption("Waiting — opponent selects a unit to fight.")
 
