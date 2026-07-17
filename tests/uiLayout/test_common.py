@@ -2996,6 +2996,130 @@ def test_compute_resolution_context_per_group_ws_override_wins_over_bracket(monk
 
 
 # ---------------------------------------------------------------------------
+# B-105 follow-up (S161) — compute_resolution_context(): invuln_source_label
+# names the GO (stratagem or faction ability) that actually stands behind the
+# effective invuln save, so the SAVE block can render "Inv N+ [Name]".
+# ---------------------------------------------------------------------------
+
+
+def test_compute_resolution_context_stratagem_invuln_carries_stratagem_source_label(
+    monkeypatch,
+) -> None:
+    """Only a stratagem invuln is active (no faction ability) — the label must
+    be the stratagem's own name from active_modifiers[].source."""
+    unit, group = _melee_group_fixture()
+    unit.weapons = list(group.weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    monkeypatch.setattr(_eng, "ability_invuln_save", lambda faction, unit: None)
+    session = _resolution_context_session()
+    session["active_modifiers"] = [
+        {
+            "unit_key": "u_def",
+            "source": "Quantum Deflection",
+            "effect": {"roll_type": "invuln_save", "value": 4, "target": "defender"},
+        }
+    ]
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.invuln_from_ability is True
+    assert ctx.invuln_source_label == "Quantum Deflection"
+
+
+def test_compute_resolution_context_ability_invuln_carries_badge_label(monkeypatch) -> None:
+    """Only a faction-ability invuln is active (no stratagem) — the label must
+    come from ability_badge_label(), not a hardcoded string."""
+    unit, group = _melee_group_fixture()
+    unit.weapons = list(group.weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    monkeypatch.setattr(_eng, "ability_invuln_save", lambda faction, unit: 5)
+    monkeypatch.setattr(_eng, "ability_badge_label", lambda faction, unit: "Veil of Darkness")
+    _resolution_context_session()
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.invuln_from_ability is True
+    assert ctx.invuln_source_label == "Veil of Darkness"
+
+
+def test_compute_resolution_context_invuln_winner_label_picks_lower_stratagem_value(
+    monkeypatch,
+) -> None:
+    """Both sources are active with different values — the strictly lower
+    (winning, per the existing min(...) logic) stratagem value must carry its
+    own label, not the ability's."""
+    unit, group = _melee_group_fixture()
+    unit.weapons = list(group.weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    monkeypatch.setattr(_eng, "ability_invuln_save", lambda faction, unit: 5)
+    monkeypatch.setattr(_eng, "ability_badge_label", lambda faction, unit: "Veil of Darkness")
+    session = _resolution_context_session()
+    session["active_modifiers"] = [
+        {
+            "unit_key": "u_def",
+            "source": "Quantum Deflection",
+            "effect": {"roll_type": "invuln_save", "value": 4, "target": "defender"},
+        }
+    ]
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.invuln_from_ability is True
+    assert ctx.invuln_source_label == "Quantum Deflection"
+
+
+def test_compute_resolution_context_no_invuln_source_keeps_label_none(monkeypatch) -> None:
+    """No bonus invuln at all (native save wins, byte-identical to the
+    pre-B-105 behaviour) — invuln_source_label stays None, no chip rendered."""
+    unit, group = _melee_group_fixture()
+    unit.weapons = list(group.weapons)
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Choppa",
+        "profile_idx": 0,
+        "models_count": 5,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    monkeypatch.setattr(_eng, "ability_invuln_save", lambda faction, unit: None)
+    _resolution_context_session()
+
+    ctx = common.compute_resolution_context(entry, "Orks", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.invuln_from_ability is False
+    assert ctx.invuln_source_label is None
+
+
+# ---------------------------------------------------------------------------
 # B-028a — spend_ability()/undo_ability() + reactive-ability anchor bookkeeping
 # ---------------------------------------------------------------------------
 

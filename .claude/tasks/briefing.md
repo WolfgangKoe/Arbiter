@@ -21,46 +21,47 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 - **Rollen/Model-Tier/Events:** `docs/governance/operating_model.md`
 - **Scopes + Brief-Pflichten je Aufgabentyp:** `docs/reference/agent_scopes.md`
 - **Einstieg für den Stakeholder:** `LEITSTAND.md`
+- **Retro-Maßnahmen-Entscheid am Session-Start:** docs/governance/operating_model.md Event 1 (§ev1)
 
 ---
 
-## Aktueller Stand (nach S160, 2026-07-17)
+## Aktueller Stand (nach S161, 2026-07-17)
 
-**B-104 DONE:** Auto-fail-/Reroll-Marker als echtes Würfel-SVG gemäß `design_system.md`
-§4.2/§4.3 — `dice_face_svg`/`miss_die_html` mit additivem `miss_color`-Parameter (Default
-bytegleich, per Snapshot-Regressionstests gepinnt), `always_fail_marker_row_html` nutzt
-`miss_die_html(color=_modifier_color(…))`; Reroll-↺ ebenfalls SVG (`_reroll_die_svg`, noch
-ohne Producer — wartet auf B-113). Stakeholder visuell bestätigt; Review S160: **GO**
-(Vollsuite 1975 passed, Coverage 99,13 %, Arch 8, Doku 23, mypy 25 = Baseline). **B-028b
-UI-Verifikation komplett** (Testfälle 1–3 positiv, Testfall 3 mit Canoptek Spyder/Gloom
-Prism) — offener Rest: `gloom_prism`-Migration auf die B-028a-Infrastruktur. Daraus neue
-Beobachtung als **B-119** überführt (Deny-Quellen-Anzeige: gameActionsArea nennt beim
-Wargear-Deny keine Einheit/Quelle — beim Silent King via GO-Karte eindeutig, beim Spyder
-nicht). Retro-Maßnahmen S159 verankert: Hintergrund-Monitor-Verbot (Retro-M1, S160) +
-Testfall-Voraussetzungs-Pflicht (Retro-M2, S160) in `agent_scopes.md`. Backlog umsortiert
-(B-109/B-105 direkt hinter B-028b). Stakeholder-Wunsch „Badge am Quantum-Deflection-
-Rettungswurf" = exakt **B-105** (bereits als nächster Task nach B-109 eingeplant).
+**Review S161: GO** (Vollsuite 1990 passed, Coverage 99,13 %, Arch 8 grün). Fünf Plan-Tasks
++ ein Wiring-Folge-Task, Welle 1 (T1/T2/T4/T5) parallel mit disjunkten Dateien:
+- **Retro-M1 (T1) DONE:** neuer Handoff-Marker `AWAITING-VERIFICATION` für „wartet auf
+  Stakeholder-Sichtprüfung" — definiert in `docs/handoff/README.md`, Wächter
+  `tests/docs/test_handoff_hygiene.py` (in `_VALID_MARKERS`, NICHT `_STALE_MARKERS`),
+  Brief-Pflicht in `agent_scopes.md`. `NEEDS-DECISION` bleibt echten Entscheidungen vorbehalten.
+- **B-109 (T2) → UI-Verifikation:** Auto-Fail-Badge-Label verpflichtend aus YAML, Fallback
+  `"Auto-fail"` entfernt, Loader-Guard (`loader.py`) wirft laut bei fehlendem Label.
+- **B-105 (T3) + Wiring → UI-Verifikation:** generischer `go_source_chip`; Stärke-Chip
+  rewired (Tooltip, **vom Stakeholder sichtbestätigt**); Invuln-Quellenname jetzt real
+  durchgereicht (`_stratagem_invuln_best` in `src/uiLayout/_common.py`, Tiebreak: Gleichstand
+  → Fähigkeitslabel). **Planungslücke-Erkenntnis:** „deckt Wunsch X" ≠ „Wunsch sichtbar
+  geliefert" — B-105 brauchte den nachgeschobenen `_common.py`-Wiring-Task, damit „Inv N+
+  [Quantum Deflection]" überhaupt im Spiel erscheint.
+- **B-119 (T4):** im Backlog hinter B-028b einsortiert (teilt Deny-/GO-Infrastruktur).
+- **Prozess (T5):** Retro-Entscheid = Input, nicht Planungsgegenstand — verankert in
+  `operating_model.md` Event 1 (§ev1). Retro S161 = **M3** (nichts weiter verankern).
 
-Frühere Sessions (S60–S159): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Aus S160 offen geblieben: `gloom_prism`-Migration auf die B-028a-Infrastruktur (B-028b-Rest).
 
-### ▶ Nächster Schritt (S161)
+Frühere Sessions (S60–S160): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+
+### ▶ Nächster Schritt (S162)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-1. **Retro-Maßnahmen-Kandidaten S160 entscheiden** (Stakeholder kündigte Entscheid zum
-   Session-Start an — Planner berücksichtigt das Ergebnis direkt im Plan): [M1] neuer
-   Handoff-Marker `AWAITING-VERIFICATION` für „wartet auf Stakeholder-Sichtprüfung"
-   (+ Hygiene-Test nachziehen) — `NEEDS-DECISION` bleibt echten Entscheidungsfragen
-   vorbehalten (Anlass: Stakeholder-Verwirrung S160, „was soll ich hier entscheiden?");
-   [M2] Berechtigungsregel für Handoff-Lifecycle-Löschungen (Koordinator wurde 2× vom
-   Berechtigungs-Classifier blockiert, Lifecycle „DONE = löschen" braucht den Umweg über
-   Subagenten); [M3] Lösch-Belege in Doku-Briefs per `ls`, nicht `git status` (untracked
-   Dateien hinterlassen nach `rm` keine Git-Spur — Fehlbericht „existierten nicht" in S160).
-2. **B-109** (Brief: `S159_planning.md` Task 3) → **B-105** (Task 4; deckt den
-   Quantum-Deflection-Badge-Wunsch).
-3. **B-119 priorisieren** (neu am Listenende, ohne Prio).
+1. **Zwei offene `AWAITING-VERIFICATION`-Handoffs** warten auf Stakeholder-Sichtprüfung im
+   Spiel: `docs/handoff/S161_B105_ui_verifikation.md` (Invuln-Chip-Teil noch offen — Strength
+   bereits bestätigt) und `docs/handoff/S161_B105wiring_ui_verifikation.md`
+   („Inv N+ [Quantum Deflection]" am Rettungswurf). Nach Bestätigung: B-105/B-109 auf DONE,
+   Handoffs gemäß Lifecycle löschen.
+2. Nächste Backlog-Priorität nach B-028b/B-119 laut `docs/goals/backlog.md`.
 
-**Offene Handoff-Marker:** `S159_planning.md` (bleibt Brief-Quelle für Task 3–4).
+**Offene Handoff-Marker:** `S161_B105_ui_verifikation.md`, `S161_B105wiring_ui_verifikation.md`
+(beide `AWAITING-VERIFICATION`), `S161_planning.md`, `S161_review.md`.
 
 ---
 

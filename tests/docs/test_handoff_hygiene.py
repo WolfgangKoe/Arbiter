@@ -25,6 +25,10 @@ _VALID_MARKERS = (
     # STANDING: dauerhafte Datei (Eingangskanal), Inhalt wird ueberfuehrt,
     # die Datei selbst bleibt bestehen (S134-Stakeholder-Entscheid).
     "STANDING",
+    # AWAITING-VERIFICATION: wartet auf manuelle Stakeholder-Sichtpruefung eines
+    # UI-Effekts (DoD Punkt 6) — keine Entscheidungsfrage, ersetzt die bisherige
+    # Fehlnutzung von NEEDS-DECISION dafuer (Retro-M1, S160/S161).
+    "AWAITING-VERIFICATION",
 )
 
 
@@ -66,3 +70,11 @@ def test_no_done_or_answered_handoff_lingers() -> None:
         "loeschen, Erkenntnisse vorher in Backlog/Spec ueberfuehren "
         f"(DoD Punkt 7, S156-Retro Massnahme 7): {stale}"
     )
+
+
+def test_awaiting_verification_is_a_valid_marker() -> None:
+    assert "AWAITING-VERIFICATION" in _VALID_MARKERS
+
+
+def test_awaiting_verification_is_not_treated_as_stale() -> None:
+    assert "AWAITING-VERIFICATION" not in _STALE_MARKERS

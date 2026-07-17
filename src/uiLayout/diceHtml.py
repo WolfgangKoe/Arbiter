@@ -11,6 +11,7 @@ from uiLayout.diceCompose import (
     always_fail_marker_row_html,
     block_divider_html,
     dice_row_html,
+    go_source_chip,
     grid_row_html,
     modifier_die_pair_html,
     save_ap_modifier_row_html,
@@ -80,21 +81,6 @@ def _render_dice_roll_block(
             )
 
 
-def _strength_source_badge_html(label: str) -> str:
-    """Inline chip naming a Strength-modifier source (e.g. "Disruption Fields").
-
-    Buff green (design_colors.md §0 via _BUFF_COLOR_HEX) — same chip shape as
-    special_die_html's weapon badges, but buff-coloured: it explains a bonus
-    the attacker benefits from, not a weapon rule (S146 Fix 1).
-    """
-    return (
-        f'<span style="background:#111827;border:1px solid {_BUFF_COLOR_HEX};'
-        f"border-radius:4px;padding:2px 6px;font-size:11px;"
-        f'color:{_BUFF_COLOR_HEX};margin-left:6px;vertical-align:middle;">'
-        f"{label}</span>"
-    )
-
-
 def _render_dice_wound_block(
     strength: int,
     toughness: int,
@@ -144,7 +130,7 @@ def _render_dice_wound_block(
     else:
         s_style = hl
     badges = (
-        "".join(_strength_source_badge_html(label) for label in strength_buff_labels)
+        "".join(go_source_chip(label, _BUFF_COLOR_HEX) for label in strength_buff_labels)
         if strength_buff > 0 and strength_buff_labels
         else ""
     )
@@ -203,8 +189,20 @@ def _render_dice_wound_block(
         st.markdown("".join(parts), unsafe_allow_html=True)
 
 
-def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -> None:  # type: ignore[type-arg]
-    """SAVE block: table-aligned rows (label | content) for armour, modifiers, eff, invuln."""
+def _render_dice_save_block(
+    save: dict,  # type: ignore[type-arg]
+    ap: int,
+    ability_invuln: bool = False,
+    invuln_source_label: str | None = None,
+) -> None:
+    """SAVE block: table-aligned rows (label | content) for armour, modifiers, eff, invuln.
+
+    ``invuln_source_label`` — the GO (ability/stratagem) name granting the
+    invuln save (e.g. "Quantum Deflection"), read from the data layer by the
+    caller; rendered as a go_source_chip next to the Inv N+ badge (B-105).
+    None (default) keeps every existing caller byte-identical — no chip, bare
+    "Inv N+" as before.
+    """
     armour = save["armour"]
     armour_eff = save["armour_eff"]
     invuln = save["invuln"]
@@ -253,6 +251,8 @@ def _render_dice_save_block(save: dict, ap: int, ability_invuln: bool = False) -
             _BUFF_COLOR_HEX if ability_invuln else _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
         )
         inv_label = f'<span style="color:{inv_color};font-weight:600;">Inv {invuln}+</span>'
+        if invuln_source_label:
+            inv_label += go_source_chip(invuln_source_label, inv_color)
         inv_row = grid_row_html(
             inv_label,
             threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),

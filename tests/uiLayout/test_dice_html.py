@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
+
 sys.modules["streamlit"] = MagicMock()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
@@ -19,6 +21,7 @@ from uiLayout.diceCompose import (  # noqa: E402
     block_divider_html,
     dice_face_svg,
     dice_row_html,
+    go_source_chip,
     light_cover_label,
     miss_die_html,
     modifier_die_pair_html,
@@ -188,7 +191,7 @@ def test_reroll_marker_correct_slot() -> None:
 def test_always_fail_marks_correct_slots() -> None:
     # Quantum Shield (attacker view): slots 1–3 always fail → three die-shaped
     # miss markers (S160/B-104-Re-Fix: SVG, not the '✕' text glyph) in red.
-    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff")
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff", label="Quantum Shielding")
     assert html.count("<svg") == 3
     assert "✕" not in html
     assert _DEBUFF_RED in html
@@ -196,14 +199,15 @@ def test_always_fail_marks_correct_slots() -> None:
 
 def test_always_fail_color_hint_buff_is_green() -> None:
     # Defender's perspective: the same auto-fail is a benefit → green (§5.1).
-    html = always_fail_marker_row_html([1, 2, 3], color_hint="buff")
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="buff", label="Quantum Shielding")
     assert _BUFF_GREEN in html
 
 
-def test_always_fail_label_defaults_to_generic_text() -> None:
-    # No ability label supplied → generic fallback badge text.
-    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff")
-    assert "Auto-fail" in html
+def test_always_fail_requires_caller_supplied_label() -> None:
+    # B-109: no generic "Auto-fail" fallback — a blank label is a caller bug,
+    # rejected loudly instead of rendering silently with placeholder text.
+    with pytest.raises(ValueError, match="non-empty label"):
+        always_fail_marker_row_html([1, 2, 3], color_hint="debuff", label="")
 
 
 def test_always_fail_label_uses_ability_name() -> None:
@@ -217,7 +221,7 @@ def test_always_fail_marker_renders_as_die_chip_not_bare_span() -> None:
     # S160 (B-104-Re-Fix): the auto-fail marker is now the real miss-die SVG
     # (dice_face_svg family, design_system.md §4.2/§4.3) — neither the bare
     # `<span>✕</span>` text glyph nor the earlier text-chip box.
-    html = always_fail_marker_row_html([1], color_hint="debuff")
+    html = always_fail_marker_row_html([1], color_hint="debuff", label="Quantum Shielding")
     assert f'<span style="color:{_DEBUFF_RED};font-weight:bold;">✕</span>' not in html
     assert "<svg" in html
     assert f'stroke="{_DEBUFF_RED}" stroke-width="1.5"' in html
@@ -532,7 +536,9 @@ def test_always_fail_marker_row_no_base_threshold() -> None:
     """_marker_row_html without base_threshold (0) renders without boundary gap."""
     # base_threshold=0 means the condition `2 <= base_threshold <= 6` is False → no gap.
     # S160: marker is the SVG miss-die, so the assertion counts <svg, not '✕'.
-    html = always_fail_marker_row_html([1, 2], base_threshold=0, color_hint="debuff")
+    html = always_fail_marker_row_html(
+        [1, 2], base_threshold=0, color_hint="debuff", label="Quantum Shielding"
+    )
     assert html.count("<svg") == 2
 
 
@@ -627,3 +633,72 @@ def test_capped_threshold_never_drops_below_two() -> None:
     """Even a capped buff cannot produce a threshold below 2+ (a 1 always fails)."""
     assert _capped_modifier_threshold(2, 1) == 2
     assert _capped_modifier_threshold(2, 5) == 2
+
+
+# --- B-105: generic go_source_chip (replaces diceHtml._strength_source_badge_html) ---
+
+
+def test_go_source_chip_carries_label_color_and_tooltip() -> None:
+    """go_source_chip renders the GO name in the given colour with a title
+    tooltip (same wrap-safeguard as _badge_chip, B-111 Variante C)."""
+    html = go_source_chip("Disruption Fields", _BUFF_GREEN)
+    assert "Disruption Fields" in html
+    assert _BUFF_GREEN in html
+    assert 'title="Disruption Fields"' in html
+
+
+def test_go_source_chip_debuff_color() -> None:
+    """A debuff-perspective GO source (e.g. Quantum Shielding) renders in the
+    debuff-red palette — the caller decides the colour, go_source_chip has no
+    hard-coded buff-only colour (B-105 generalization)."""
+    html = go_source_chip("Quantum Shielding", _DEBUFF_RED)
+    assert _DEBUFF_RED in html
+
+
+def test_render_dice_wound_block_strength_buff_label_uses_go_source_chip() -> None:
+    """Regression (B-105 rewire, 'keine Verhaltensänderung'): the WOUND
+    block's Strength-buff source name still renders as a buff-green chip
+    after _strength_source_badge_html was generalized into go_source_chip —
+    same visual output through the shared building block.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    dice_html_module._render_dice_wound_block(
+        strength=5,
+        toughness=4,
+        wound_stack=[],
+        strength_buff=1,
+        strength_buff_labels=["Disruption Fields"],
+    )
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Disruption Fields" in html
+    assert _BUFF_GREEN in html
+
+
+def test_render_dice_save_block_invuln_without_label_has_no_chip() -> None:
+    """Backward compatibility: omitting invuln_source_label (every existing
+    caller today) keeps the bare 'Inv N+' badge — no title-tooltip chip
+    appended.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    save = {"armour": 3, "armour_eff": 3, "invuln": 4, "stack": []}
+    dice_html_module._render_dice_save_block(save, ap=0)
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Inv 4+" in html
+    assert "title=" not in html
+
+
+def test_render_dice_save_block_invuln_shows_go_source_label() -> None:
+    """Regression (B-105 — Stakeholder wish 'Badge am Quantum-Deflection-
+    Rettungswurf'): when the caller supplies invuln_source_label, the Invuln
+    row names the GO source next to 'Inv N+' — proves the chip carries a
+    data-driven name from the caller, not a hardcoded one.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    save = {"armour": 3, "armour_eff": 3, "invuln": 4, "stack": []}
+    dice_html_module._render_dice_save_block(
+        save, ap=0, ability_invuln=True, invuln_source_label="Quantum Deflection"
+    )
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Inv 4+" in html
+    assert "Quantum Deflection" in html
+    assert 'title="Quantum Deflection"' in html

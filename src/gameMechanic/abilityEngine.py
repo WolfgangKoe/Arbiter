@@ -569,7 +569,9 @@ def unit_wound_auto_fail_label(faction: str, unit: Unit) -> str | None:
 
     Read from ``badge_label`` (falling back to ``name_en``) — no hardcoded
     faction text here (B-103: the UI badge must show e.g. "Quantum Shielding",
-    not a generic "Auto-fail" placeholder).
+    not a generic "Auto-fail" placeholder). ``loader.load_unit_abilities``
+    rejects any ``wound_auto_fail`` ability with neither field set (B-109), so
+    when an ability is found here the returned label is always non-empty.
     """
     ability = _wound_auto_fail_ability(faction, unit)
     if ability is None:

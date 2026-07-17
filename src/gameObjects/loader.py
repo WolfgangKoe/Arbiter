@@ -671,6 +671,25 @@ def load_subfaction_meta(faction_dir: str) -> tuple[str | None, str]:
     return field, label
 
 
+def _require_wound_auto_fail_label(ability: Ability, faction_dir: str) -> None:
+    """Reject a ``wound_auto_fail`` ability that has no renderable badge label.
+
+    The auto-fail badge (dice_display.md §5/§10.2) must show the triggering
+    ability's own name — diceCompose.always_fail_marker_row_html (B-109) no
+    longer has a generic "Auto-fail" fallback, so a missing ``badge_label``
+    *and* blank ``name_en`` would leave the badge with nothing to render.
+    Failing loudly at load time (naming faction + ability id) beats a silent
+    fallback discovered only in the UI.
+    """
+    if ability.badge_label or ability.name_en:
+        return
+    raise ValueError(
+        f"Ability '{ability.id}' (faction '{faction_dir}') has effect.type "
+        "'wound_auto_fail' but neither badge_label nor name_en is set — the "
+        "auto-fail badge needs a label to render (B-109)."
+    )
+
+
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
     """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
     if faction_dir in _UNIT_ABILITIES_CACHE:
@@ -681,6 +700,9 @@ def load_unit_abilities(faction_dir: str) -> list[Ability]:
         return _UNIT_ABILITIES_CACHE[faction_dir]
     data = load_yaml(path)
     result = [_ability_from_dict(a) for a in data.get("abilities", [])]
+    for ability in result:
+        if ability.effect.type == "wound_auto_fail":
+            _require_wound_auto_fail_label(ability, faction_dir)
     _UNIT_ABILITIES_CACHE[faction_dir] = result
     return result
 

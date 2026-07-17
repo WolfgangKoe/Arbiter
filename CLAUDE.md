@@ -172,8 +172,14 @@ wortgleich durch) → **Retro** (getrennter Schritt, Koordinator moderiert) ende
 **nummerierten, entscheidbaren Maßnahmen-Liste**; der Stakeholder wählt/gibt frei → **Abschluss**
 schreibt nur das Freigegebene in die Artefakte: `briefing.md` aktualisieren (Stand, nächster
 Schritt, neue Erkenntnisse) + `docs/goals/<aktives_ziel>.md` Checkboxen abhaken + Commit erstellen.
-**Freigabe-Gate bleibt:** Plan + Dateiliste zeigen, auf explizite Freigabe warten — nur das "wer tut
-die Arbeit" ist delegiert.
+**Commit-Schritt stehend freigegeben (Schärfung S161):** Der Dreiklang Review → Retro → Commit ist
+stehend freigegeben — der Koordinator fragt für den finalen Commit **nicht erneut** nach
+expliziter Freigabe. Retro-Ergebnisse und Verifikations-Bedarfe legt er in `docs/handoff/` ab; der
+Stakeholder sichtet sie, ergänzt ggf. und gibt sie dem nächsten Planner mit. **Abgrenzung, die
+bestehen bleibt:** Das Freigabe-Gate für Code-/Datei-Änderungen WÄHREND der Session (Plan +
+Dateiliste zeigen, auf explizite Freigabe warten vor Umsetzung) ist davon unberührt — nur der
+Abschluss-Commit ist stehend freigegeben, nicht die Umsetzung. Kanonisch:
+`docs/governance/operating_model.md` Event 5.
 
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen

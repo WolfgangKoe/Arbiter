@@ -203,6 +203,27 @@ def _modifier_color(entry: dict) -> str:  # type: ignore[type-arg]
     return _BUFF_COLOR_HEX if entry.get("value", 0) > 0 else _DEBUFF_COLOR_HEX
 
 
+def go_source_chip(label: str, color: str) -> str:
+    """Inline chip naming the GO (ability/stratagem) source of a modifier.
+
+    Generalizes what used to be diceHtml._strength_source_badge_html
+    (S146 Fix 1, buff-only): any GO-driven perspective — buff or debuff — can
+    name its source next to the value it modifies (B-105), e.g. a Strength
+    buff ("Disruption Fields") or an invulnerable save ("Quantum
+    Deflection"). Colour is passed in by the caller (typically via
+    _modifier_color/color_hint) rather than hard-coded, so debuff sources
+    render in the debuff palette too. Carries the same title-tooltip
+    safeguard as _badge_chip (B-111 Variante C) — the label is short here in
+    practice, but a long GO name still reveals itself on hover.
+    """
+    return (
+        f'<span style="background:#111827;border:1px solid {color};'
+        f"border-radius:4px;padding:2px 6px;font-size:11px;"
+        f'color:{color};margin-left:6px;vertical-align:middle;" '
+        f'title="{label}">{label}</span>'
+    )
+
+
 def grid_row_html(label_html: str, content: str) -> str:
     """One row of the D5 grid: fixed badge column on the left, content right.
 
@@ -445,7 +466,8 @@ def always_fail_marker_row_html(
     slots: list[int],
     base_threshold: int = 0,
     color_hint: str | None = None,
-    label: str | None = None,
+    *,
+    label: str,
 ) -> str:
     """✕ marker below each always-failing slot (dice_display.md §5 / §10.2).
 
@@ -455,11 +477,20 @@ def always_fail_marker_row_html(
     perspective (S160/B-104-Re-Fix). color_hint sets that perspective: the
     defender sees a buff (green, the attacker's low rolls fail), the rolling
     attacker a debuff (red). ``label`` names the triggering ability (e.g.
-    "Quantum Shielding"), read from YAML by the caller; falls back to the
-    generic "Auto-fail" when no ability label is available (B-103).
+    "Quantum Shielding"), read from YAML by the caller
+    (abilityEngine.unit_wound_auto_fail_label) — keyword-only and mandatory,
+    no generic "Auto-fail" fallback (B-109): loader.py now rejects any
+    ``wound_auto_fail`` effect that has no renderable label, so a caller
+    reaching this function always has a real one.
     """
+    if not label:
+        raise ValueError(
+            "always_fail_marker_row_html requires a non-empty label — the "
+            "caller must supply the triggering ability's own name (B-109), "
+            "there is no generic 'Auto-fail' fallback."
+        )
     color = _modifier_color({"color_hint": color_hint, "value": -1})
-    badge = _badge_chip(label or "Auto-fail", color)
+    badge = _badge_chip(label, color)
     marker = miss_die_html(color=color)
     return _marker_row_html(badge, marker, set(slots), base_threshold)
 

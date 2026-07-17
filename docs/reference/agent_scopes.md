@@ -179,7 +179,8 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   — präzise, inkl. Ausgangs-State der beteiligten Einheiten (`charged`/`in-melee`/
   `heroic-intervened` explizit nennen). Nur durchführbare Testfälle, ein Testfall pro
   Punkt, keine Sammelpunkte. Grund: der Stakeholder soll offene UI-Prüfungen unabhängig
-  von der laufenden Session-Arbeit nachholen können.
+  von der laufenden Session-Arbeit nachholen können. Marker: **`STATUS: AWAITING-VERIFICATION`**
+  (nicht `NEEDS-DECISION` — eine Sichtprüfung ist keine Entscheidungsfrage; Retro-M1, S160/S161).
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war
@@ -198,8 +199,8 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
       NIE direkt im Chat mit dem Stakeholder kommuniziert
 - [ ] Handoff-Marker: jede nach docs/handoff/ geschriebene Datei hat Zeile 1
-      `STATUS: NEEDS-DECISION|ANSWERED|DONE` — der Koordinator nennt den Marker im Brief
-      (S131: zwei rote Doku-Gates nur durch fehlende Marker)
+      `STATUS: NEEDS-DECISION|ANSWERED|DONE|AWAITING-VERIFICATION` — der Koordinator nennt
+      den Marker im Brief (S131: zwei rote Doku-Gates nur durch fehlende Marker)
 ```
 
 ## Grundannahmen-Block in Konzept-Aufträgen (Retromaßnahme S131 — PFLICHT)

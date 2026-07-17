@@ -22,13 +22,17 @@ Jede Handoff-Datei deklariert in ihrer **ersten Zeile** einen Status:
 | `STATUS: ANSWERED` | Stakeholder hat geantwortet (Antwort steht in der Datei) | Koordinator weckt den Subagenten per `SendMessage` **oder** überführt die Antwort direkt in Backlog/Spec — dann **im selben Abschluss löschen** (kein „behalten bis X" mehr, S156-Retro Maßnahme 7) |
 | `STATUS: IN-PROGRESS` | Subagent arbeitet noch / mehrteilig — nur **während** eines Laufs; vor Lauf-Ende auf einen der drei anderen Marker setzen (der Wächter akzeptiert nur diese) | — |
 | `STATUS: STANDING` | Dauerhafter Eingangskanal (z. B. Stakeholder-Beobachtungen) — Datei wird **nie gelöscht**, auch nicht leer; Inhalt wird bei Bedarf in Backlog/Spec überführt, die Datei selbst bleibt (S134-Stakeholder-Entscheid) | wer den Inhalt überführt, leert die Datei — löscht sie nicht |
+| `STATUS: AWAITING-VERIFICATION` | Ergebnis fertig, aber Render-Code ist nicht von der Coverage erfasst (`CLAUDE.md`) → wartet auf die manuelle Stakeholder-Sichtprüfung des UI-Effekts (DoD Punkt 6). Keine Entscheidungsfrage — ersetzt die bisherige Fehlnutzung von `NEEDS-DECISION` für reine Sichtprüfungen (Retro-M1, S160/S161). | Stakeholder führt den in der Datei genannten Klickpfad aus, trägt Ergebnis ein → Koordinator setzt `ANSWERED` (bei Nacharbeit) oder direkt `DONE` (bei reiner Bestätigung) und löscht im selben Abschluss (bestehende ANSWERED/DONE-Konvention) |
 
 **Wächter (S120, verschärft S156-Retro Maßnahme 7):** `tests/docs/test_handoff_hygiene.py`
 bricht den Build, wenn Zeile 1 nicht mit `STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE`/
-`STANDING`/`NEEDS-APPROVAL` beginnt — oder wenn ein `DONE`- **oder** `ANSWERED`-Handoff liegen bleibt.
-`DONE` und `ANSWERED` sind damit beide **Durchgangszustände** (Setzen + Löschen im selben
-Abschluss), kein Ablagezustand mehr — der Wächter erzwingt das absichtlich, statt einen Bug
-zu markieren.
+`STANDING`/`NEEDS-APPROVAL`/`AWAITING-VERIFICATION` beginnt — oder wenn ein `DONE`- **oder**
+`ANSWERED`-Handoff liegen bleibt. `DONE` und `ANSWERED` sind damit beide **Durchgangszustände**
+(Setzen + Löschen im selben Abschluss), kein Ablagezustand mehr — der Wächter erzwingt das
+absichtlich, statt einen Bug zu markieren. `AWAITING-VERIFICATION` ist dagegen **nicht**
+stale-pflichtig wie `DONE`/`ANSWERED` — er darf über Sessions hinweg liegen bleiben, weil er auf
+den Stakeholder wartet (analog `NEEDS-DECISION`); wer den Folgemarker (`ANSWERED`/`DONE`) setzt,
+löscht im selben Schritt.
 
 ## Mailbox-Round-Trip (Ablauf)
 

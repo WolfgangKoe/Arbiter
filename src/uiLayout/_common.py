@@ -1663,6 +1663,32 @@ def _collect_def_save_modifiers(
     return mods
 
 
+def _stratagem_invuln_best(def_uid: str) -> tuple[int, str] | None:
+    """Best invuln save value + granting stratagem name for this unit, or None.
+
+    Single scan shared by `_stratagem_invuln_save` (value only) and the
+    invuln-source-label wiring (B-105 follow-up, S161): the ``source`` field
+    is the stratagem's own name recorded by `spend_stratagem`/
+    `_apply_stratagem_effect` — no hardcoded stratagem strings here. "Lowest
+    value wins"; a tie keeps whichever entry is encountered first in
+    `active_modifiers` order.
+    """
+    best: tuple[int, str] | None = None
+    for m in st.session_state.get("active_modifiers", []):
+        if m.get("unit_key") != def_uid:
+            continue
+        eff = m.get("effect", {})
+        if eff.get("roll_type") != "invuln_save":
+            continue
+        val = eff.get("value")
+        if val is None:
+            continue
+        val = int(val)
+        if best is None or val < best[0]:
+            best = (val, m.get("source", "Stratagem"))
+    return best
+
+
 def _stratagem_invuln_save(def_uid: str) -> int | None:
     """Best invuln save granted by an active stratagem for this unit, or None.
 
@@ -1673,17 +1699,8 @@ def _stratagem_invuln_save(def_uid: str) -> int | None:
     a distinct lookup rather than folding into `ability_invuln_save` (S135
     Paket 4b, Quantum Deflection Save-anchor).
     """
-    best: int | None = None
-    for m in st.session_state.get("active_modifiers", []):
-        if m.get("unit_key") != def_uid:
-            continue
-        eff = m.get("effect", {})
-        if eff.get("roll_type") != "invuln_save":
-            continue
-        val = eff.get("value")
-        if val is not None:
-            best = int(val) if best is None else min(best, int(val))
-    return best
+    best = _stratagem_invuln_best(def_uid)
+    return best[0] if best is not None else None
 
 
 # ---------------------------------------------------------------------------
@@ -2094,6 +2111,7 @@ class ResolutionContext:
     ap: int
     save_result: dict[str, Any]
     invuln_from_ability: bool
+    invuln_source_label: str | None
     fnp_value: int | None
     auto_light_cover: bool
     auto_fail_label: str | None
@@ -2162,6 +2180,7 @@ def compute_resolution_context(
     profile = profiles[min(profile_idx, len(profiles) - 1)]
 
     from gameMechanic.abilityEngine import (  # noqa: PLC0415
+        ability_badge_label,
         ability_invuln_save,
         buff_stat_bonus,
         get_active_round_choice_ap_on_wound_6,
@@ -2320,7 +2339,8 @@ def compute_resolution_context(
     )
     auto_fail_label = unit_wound_auto_fail_label(def_faction, def_unit)
     ability_inv = ability_invuln_save(def_faction, def_unit)
-    strat_inv = _stratagem_invuln_save(def_uid)
+    strat_best = _stratagem_invuln_best(def_uid)
+    strat_inv = strat_best[0] if strat_best is not None else None
     bonus_inv = (
         min(v for v in (ability_inv, strat_inv) if v is not None)
         if ability_inv is not None or strat_inv is not None
@@ -2330,9 +2350,18 @@ def compute_resolution_context(
     if bonus_inv is not None and (native_inv is None or bonus_inv < native_inv):
         effective_invuln: int | None = bonus_inv
         invuln_from_ability = True
+        # Name of the GO that actually stands behind bonus_inv (B-105 follow-up,
+        # S161): stratagem wins the label only if it is strictly better than
+        # the ability invuln — a tie keeps the ability label, mirroring this
+        # branch's own name (`invuln_from_ability`).
+        if strat_inv is not None and (ability_inv is None or strat_inv < ability_inv):
+            invuln_source_label: str | None = strat_best[1] if strat_best is not None else None
+        else:
+            invuln_source_label = ability_badge_label(def_faction, def_unit)
     else:
         effective_invuln = native_inv
         invuln_from_ability = False
+        invuln_source_label = None
 
     save_result = resolve_save(
         base_save=def_unit.save,
@@ -2377,6 +2406,7 @@ def compute_resolution_context(
         ap=ap,
         save_result=save_result,
         invuln_from_ability=invuln_from_ability,
+        invuln_source_label=invuln_source_label,
         fnp_value=fnp_value,
         auto_light_cover=auto_light_cover,
         auto_fail_label=auto_fail_label,
@@ -2472,7 +2502,12 @@ def _render_defender_blocks(ctx: ResolutionContext) -> None:
 
     # SAVE BLOCK — its own block_divider_html() is the single WOUND/SAVE
     # separator (S137 Bug A: a second st.markdown("---") here doubled it).
-    _render_dice_save_block(ctx.save_result, ctx.ap, ability_invuln=ctx.invuln_from_ability)
+    _render_dice_save_block(
+        ctx.save_result,
+        ctx.ap,
+        ability_invuln=ctx.invuln_from_ability,
+        invuln_source_label=ctx.invuln_source_label,
+    )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the defender made the saving
     # throw — defender pays, unlike the Hit-/Wound-Anker above (attacker's
     # dice). Same Familie-2 pattern (no locked value to reopen).

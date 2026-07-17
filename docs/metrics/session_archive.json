@@ -5248,8 +5248,8 @@
   "ffc7c981-63a9-47db-8a52-44ca05ca69ad": {
     "started_at": "2026-07-17T16:44:21.967Z",
     "task": "start session",
-    "peak_context": 154950,
-    "subagent_share": 69.41850241170425,
+    "peak_context": 158972,
+    "subagent_share": 66.9813487240687,
     "by_tier": {
       "Haiku": 8338203,
       "Sonnet": 11902005,
@@ -5290,6 +5290,89 @@
         "tier": "Haiku",
         "peak_context": 67689,
         "started_at": "2026-07-17T16:44:21.967Z"
+      }
+    ]
+  },
+  "04abb172-a06c-414d-8045-ce2c1dbef82e": {
+    "started_at": "2026-07-17T17:45:05.121Z",
+    "task": "start session wir übernehmen M1 aus der Retro.",
+    "peak_context": 137112,
+    "subagent_share": 75.84909917839646,
+    "by_tier": {
+      "Sonnet": 26874094,
+      "Opus": 1669313,
+      "Haiku": 432098
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss-Dreiklang stehend verankern",
+        "tier": "Sonnet",
+        "peak_context": 50047,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Wiring: Invuln-Quellenname in _common.py",
+        "tier": "Sonnet",
+        "peak_context": 84073,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review S161 gegen DoD",
+        "tier": "Opus",
+        "peak_context": 68550,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1: AWAITING-VERIFICATION Marker",
+        "tier": "Sonnet",
+        "peak_context": 52073,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Status B-109/B-105 fixen",
+        "tier": "Haiku",
+        "peak_context": 44020,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 3: B-105 go_source_chip",
+        "tier": "Sonnet",
+        "peak_context": 120388,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 4: B-119 priorisieren",
+        "tier": "Sonnet",
+        "peak_context": 47940,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 5: Retro-Entscheid-Regel verankern",
+        "tier": "Sonnet",
+        "peak_context": 51480,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 2: B-109 Auto-Fail-Label aus YAML",
+        "tier": "Sonnet",
+        "peak_context": 101419,
+        "started_at": "2026-07-17T17:45:05.121Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S161 (Retro-M1)",
+        "tier": "Sonnet",
+        "peak_context": 140056,
+        "started_at": "2026-07-17T17:45:05.121Z"
       }
     ]
   }

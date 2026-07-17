@@ -145,6 +145,13 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      Zeitnot oder Session-Abbruch), wird dessen Nachholung automatisch zu **Punkt 0** der
      nächsten Planning-Session — vor jeder neuen Umsetzung, solange voller Kontext-Headroom
      besteht.
+
+     **Retro-Maßnahmen-Entscheid = Input, nicht Planungsgegenstand (Anlass S161):** Kündigt der
+     Stakeholder zu Session-Start einen Entscheid zu Retro-Maßnahmen-Kandidaten der Vorsession an
+     (übernommen/verworfen), fließt dieser Entscheid als Input in die normale Session-Planung ein
+     — er ersetzt sie nicht. Nicht genannte Maßnahmen gelten als verworfen, keine Rückfrage nötig.
+     Der Planner plant weiterhin die volle Session entlang der Backlog-Prioritäten; übernommene
+     Maßnahmen reiht er als regulären Task in diesen Plan ein.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `briefing.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
@@ -192,6 +199,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      Antworten, die eine Änderung auslösen, münden in den **Maßnahmen-Entscheid** (nächster Schritt).
    - **Maßnahmen-Entscheid (Konsent-Gate)** — Review und Retro bleiben getrennte Schritte, laufen aber in einem Durchgang. Die Retro endet mit einer **nummerierten, entscheidbaren Maßnahmen-Liste** (jede Maßnahme: Was · Wirkung · Ablageort — `briefing.md`/Backlog §2/ADR). Der Stakeholder **wählt/gibt frei**, was übernommen wird. Erst die freigegebenen Maßnahmen schreibt der Abschluss in die Artefakte — so startet die nächste Session schnell und ohne Drift.
    - **Abschluss (Aufräumen)** — feste Reihenfolge: (1) **Handoff-Löschung** — alle Handoffs löschen, deren Lifecycle-Bedingung erfüllt ist (direkt nach Review-GO, vor dem Commit; S156-Retro Maßnahme 2); (2) Artefakte aktualisieren ([briefing.md](../../.claude/tasks/briefing.md) + [backlog.md](../goals/backlog.md) + ggf. `ziel*.md`) — **Testzahlen im Briefing stammen ausschließlich aus dem unmittelbar vorausgehenden Abschluss-Vollsuite-Lauf; liegt kein aktueller Lauf vor, nur „Gates grün (Datum)" eintragen** (S156-Retro Maßnahme 1); (3) **committen**; (4) **Clear**. **History-Rotation:** den verdichteten Stand mit `python tools/rotate_history.py --session <N> --summary "…"` als Einzeiler nach `docs/metrics/session_archive.md` einhängen und den Stand-Block in `briefing.md` zurücksetzen (hält den Startprompt unter dem 120-Zeilen-Gate; das Verdichten bleibt Urteil).
+   **Commit-Schritt stehend freigegeben (Schärfung S161):** Der Dreiklang Review → Retro → Commit ist stehend freigegeben — der Koordinator schließt die Session generell damit ab und fragt für den finalen Commit-Schritt (3) **nicht erneut** nach expliziter Freigabe. Retro-Ergebnisse und Verifikations-Bedarfe legt er in [docs/handoff/](../handoff/) ab; der Stakeholder sichtet sie, ergänzt ggf. und gibt sie dem nächsten Planner mit. **Abgrenzung:** Das Freigabe-Gate für Code-/Datei-Änderungen WÄHREND der Session (Event 2) bleibt davon vollständig unberührt — nur der Abschluss-Commit ist stehend freigegeben, nicht die Umsetzung.
    Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
    **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `briefing.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).

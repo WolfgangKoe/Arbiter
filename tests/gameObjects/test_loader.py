@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from pathlib import Path
 
+from gameObjects.ability import Ability, Condition, Effect, Trigger
 from gameObjects.loader import (
     _apply_persistent_effect,
     _apply_relic,
@@ -1820,6 +1821,61 @@ def test_load_unit_abilities_missing_file_returns_empty() -> None:
     result = load_unit_abilities("eldar")
     assert result == []
     assert "eldar" in _UNIT_ABILITIES_CACHE
+
+
+# ---------------------------------------------------------------------------
+# B-109: wound_auto_fail abilities must carry a renderable badge label — no
+# silent "Auto-fail" fallback in diceCompose.always_fail_marker_row_html.
+# The loader rejects any such ability with neither badge_label nor name_en.
+# ---------------------------------------------------------------------------
+
+
+def _make_wound_auto_fail_ability(name_en: str = "", badge_label: str | None = None) -> Ability:
+    return Ability(
+        id="test.ability.wound_auto_fail.no_label",
+        name_en=name_en,
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="persistent", phase="any", player="either"),
+        conditions=[Condition(has_rules=["testRule"])],
+        effect=Effect(type="wound_auto_fail", modifier=3),
+        badge_label=badge_label,
+    )
+
+
+def test_require_wound_auto_fail_label_rejects_ability_without_any_label() -> None:
+    """Neither badge_label nor a non-blank name_en → clear ValueError (B-109)."""
+    from gameObjects.loader import _require_wound_auto_fail_label
+
+    ability = _make_wound_auto_fail_ability(name_en="", badge_label=None)
+    with pytest.raises(ValueError, match="necrons") as excinfo:
+        _require_wound_auto_fail_label(ability, "necrons")
+    assert ability.id in str(excinfo.value)
+    assert "wound_auto_fail" in str(excinfo.value)
+
+
+def test_require_wound_auto_fail_label_accepts_badge_label() -> None:
+    from gameObjects.loader import _require_wound_auto_fail_label
+
+    ability = _make_wound_auto_fail_ability(name_en="", badge_label="Quantum Shielding")
+    _require_wound_auto_fail_label(ability, "necrons")  # must not raise
+
+
+def test_require_wound_auto_fail_label_accepts_name_en_fallback() -> None:
+    from gameObjects.loader import _require_wound_auto_fail_label
+
+    ability = _make_wound_auto_fail_ability(name_en="Some Ability", badge_label=None)
+    _require_wound_auto_fail_label(ability, "necrons")  # must not raise
+
+
+def test_load_unit_abilities_still_loads_quantum_shielding_with_its_badge_label() -> None:
+    """Regression: the real necrons wound_auto_fail effect keeps loading and
+    keeps its badge_label after the B-109 guard was added."""
+    abilities = load_unit_abilities("necrons")
+    quantum_shielding = next(
+        a for a in abilities if a.effect.type == "wound_auto_fail" and a.badge_label
+    )
+    assert quantum_shielding.badge_label == "Quantum Shielding"
 
 
 # ---------------------------------------------------------------------------

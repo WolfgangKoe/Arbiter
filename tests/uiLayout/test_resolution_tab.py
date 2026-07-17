@@ -478,6 +478,7 @@ def test_wound_block_shows_three_auto_fail_crosses_for_quantum_shielding(
         wound_stack=[],
         modified=4,
         auto_fail_max=3,
+        auto_fail_label="Quantum Shielding",
     )
 
     combined_html = "\n".join(captured)
@@ -489,7 +490,9 @@ def test_wound_block_shows_three_auto_fail_crosses_for_quantum_shielding(
         f"Auto-fail markers no longer use the '✕' text glyph — expected none, "
         f"got:\n{combined_html[:600]}"
     )
-    expected_row = always_fail_marker_row_html([1, 2, 3], base_threshold=4, color_hint="debuff")
+    expected_row = always_fail_marker_row_html(
+        [1, 2, 3], base_threshold=4, color_hint="debuff", label="Quantum Shielding"
+    )
     assert expected_row.count("<svg") == 3, (
         f"Expected exactly three SVG auto-fail markers (unmod. wound 1-3 "
         f"always fail), got:\n{expected_row[:600]}"

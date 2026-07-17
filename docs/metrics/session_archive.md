@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 19:42 CEST
+Stand: 2026-07-17 21:29 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 18:44 ffc7  ████████████ 155k ⛔    ████░░  69%    ·······▒▒▒▒▒
+07-17 19:45 04ab  ███████████░ 137k ⚠️   █████░  76%    █···········
+         SA_1·  ████░░░░░░░░  50k ✅    Abschluss-Dreiklang stehend verank…
+         SA_2·  ███████░░░░░  84k ✅    Wiring: Invuln-Quellenname in _com…
+         SA_3·  █████░░░░░░░  69k ✅    Review S161 gegen DoD
+         SA_4·  ████░░░░░░░░  52k ✅    Task 1: AWAITING-VERIFICATION Mark…
+         SA_5·  ████░░░░░░░░  44k ✅    Backlog-Status B-109/B-105 fixen
+         SA_6·  ██████████░░ 120k ⚠️   Task 3: B-105 go_source_chip
+         SA_7·  ████░░░░░░░░  48k ✅    Task 4: B-119 priorisieren
+         SA_8·  ████░░░░░░░░  51k ✅    Task 5: Retro-Entscheid-Regel vera…
+         SA_9·  ████████░░░░ 101k ✅    Task 2: B-109 Auto-Fail-Label aus …
+         SA_10·  ███████████░ 140k ⚠️   Planning-Entwurf S161 (Retro-M1)
+----------------- ---------------------- -------------- ------------
+07-17 18:44 ffc7  ████████████ 159k ⛔    ████░░  67%    ·······▒▒▒▒▒
          SA_1·  █████████░░░ 113k ✅    S160 Backlog-Abschluss + Handoff-H…
          SA_2·  ████████░░░░  99k ✅    S160 Planning-Entwurf erstellen
          SA_3·  ███████████░ 142k ⚠️   B-104 Würfel-SVG Re-Fix
@@ -835,3 +847,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S158 (2026-07-17)** B-028-Zuschnitt (7 Tasks) + B-028a-Infrastruktur, Design-Konsens B-104/105/111, B-104+B-111 umgesetzt, Retro-Maßnahmen 1-6
 - **S159 (2026-07-17)** Dice symbol catalog approved into design_system §4; Noctilith deny first B-028a callsite; mypy baseline 25
 - **S160 (2026-07-17)** B-104 dice SVG re-fix DONE (Stakeholder bestätigt), B-028b Verifikation komplett (TF 1-3), B-119 neu (Deny-Quellen-Anzeige), Retro-Klauseln M1/M2 in agent_scopes, Review GO
+- **S161 (2026-07-17)** Retro-M1 AWAITING-VERIFICATION marker, B-109 auto-fail label from YAML, B-105 go_source_chip + invuln source wiring, B-119 prioritized, retro-decision-as-input rule anchored
