@@ -502,6 +502,15 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   senken (nicht die Baseline dauerhaft oben zu halten). DoD-Review GO
   (`docs/handoff/S159_review.md`, Auffälligkeit-Abschnitt).
 
+## Aus der ID-indizierten Liste (migriert S160)
+
+- ✅ **B-104 — Würfelergebnis-Symbole folgen nicht dem Design System — ERLEDIGT (S160):**
+  Re-Fix als echtes Würfel-SVG gemäß `docs/spec/design_system.md` §4.2/§4.3: `dice_face_svg`/
+  `miss_die_html` bekommen einen optionalen Farbparameter (`miss_color`), `_marker_row_html`-
+  Auto-fail-Zweig rendert die SVG-Miss-Variante mit Perspektivfarbe statt Text-✕; Auto-fail +
+  Reroll auf SVG umgestellt. Betroffene Dateien: `src/uiLayout/diceCompose.py`, `tests/uiLayout/
+  test_dice_html.py`. Stakeholder visuell bestätigt (S160). DoD-Review GO.
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

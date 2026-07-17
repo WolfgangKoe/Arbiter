@@ -24,41 +24,43 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S159, 2026-07-17)
+## Aktueller Stand (nach S160, 2026-07-17)
 
-Würfelsymbol-Katalog freigegeben + `design_system.md` §4.1–§4.4 übernommen (Ratchet: erst
-Katalog-Zeile, dann Code) — §4.2 Würfelflächen-Katalog, §4.3 Effekt-Symbol-Katalog (ersetzt
-altes §4.1), §4.4 Wurf-Block-Pattern inkl. 6 dokumentierten Vereinheitlichungs-Lücken
-(SAVE/Invuln/DAMAGE, B-114…B-118). B-104 auf S158 negativ verifiziert (Text-Chip statt echtem
-SVG) → neuer Zuschnitt gegen den Katalog, Executor-Brief `S159_planning.md` Task 2. B-028b:
-erste B-028a-Callsite (`noctilith_beacons`, Necron-Silent-King), additiv nicht gatend,
-`can_deny()` um Ability-Quellen erweitert; UI-Testfall 1+2 positiv, Testfall 3 (Regression)
-offen — β-Roster (`data/rosters/necrons_beta.yaml`) um Canoptek Spyder/Gloom Prism ergänzt,
-Loader-Test jetzt 6 Einheiten (Stakeholder-Freigabe), Prüfung selbst steht noch aus. B-112:
-mypy-Baseline 24→25 angehoben (Drift stale seit vor S158) — die 25 realen Fehler bleiben
-sichtbare Schuld, Ratchet-Ziel weiterhin senken statt Baseline halten. Gates (Abschluss):
-Doku/Acceptance 23 passed, Arch 8. Review S159: GO (kein inhaltlicher Blocker).
+**B-104 DONE:** Auto-fail-/Reroll-Marker als echtes Würfel-SVG gemäß `design_system.md`
+§4.2/§4.3 — `dice_face_svg`/`miss_die_html` mit additivem `miss_color`-Parameter (Default
+bytegleich, per Snapshot-Regressionstests gepinnt), `always_fail_marker_row_html` nutzt
+`miss_die_html(color=_modifier_color(…))`; Reroll-↺ ebenfalls SVG (`_reroll_die_svg`, noch
+ohne Producer — wartet auf B-113). Stakeholder visuell bestätigt; Review S160: **GO**
+(Vollsuite 1975 passed, Coverage 99,13 %, Arch 8, Doku 23, mypy 25 = Baseline). **B-028b
+UI-Verifikation komplett** (Testfälle 1–3 positiv, Testfall 3 mit Canoptek Spyder/Gloom
+Prism) — offener Rest: `gloom_prism`-Migration auf die B-028a-Infrastruktur. Daraus neue
+Beobachtung als **B-119** überführt (Deny-Quellen-Anzeige: gameActionsArea nennt beim
+Wargear-Deny keine Einheit/Quelle — beim Silent King via GO-Karte eindeutig, beim Spyder
+nicht). Retro-Maßnahmen S159 verankert: Hintergrund-Monitor-Verbot (Retro-M1, S160) +
+Testfall-Voraussetzungs-Pflicht (Retro-M2, S160) in `agent_scopes.md`. Backlog umsortiert
+(B-109/B-105 direkt hinter B-028b). Stakeholder-Wunsch „Badge am Quantum-Deflection-
+Rettungswurf" = exakt **B-105** (bereits als nächster Task nach B-109 eingeplant).
 
-Dice-Cluster B-104→B-109→B-105 (Task 2–4 aus `S159_planning.md`) nach S160 verschoben
-(Token-Korridor) — Briefs liegen fertig vor, direkt gegen `design_system.md` §4 beauftragbar.
+Frühere Sessions (S60–S159): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-Frühere Sessions (S60–S158): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
-
-### ▶ Nächster Schritt (S160)
+### ▶ Nächster Schritt (S161)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-1. **Retro-Maßnahmen-Kandidaten entscheiden:** [M1] Subagent-Briefs: Verbot, auf
-   Hintergrund-Monitore zu warten — Gates im Vordergrund abschließen (2× Nachstoß nötig in
-   S159); [M2] Testfall-Voraussetzungen (Roster-Bestand) beim Task-Zuschnitt prüfen
-   (Testfall-3-Blocker B-028b).
-2. **Dice-Cluster:** B-104 (Task 2) → B-109 (Task 3) → B-105 (Task 4), Briefs in
-   `S159_planning.md`.
-3. **B-028b Testfall 3 Befund** (Stakeholder, β-Roster jetzt bereit).
+1. **Retro-Maßnahmen-Kandidaten S160 entscheiden** (Stakeholder kündigte Entscheid zum
+   Session-Start an — Planner berücksichtigt das Ergebnis direkt im Plan): [M1] neuer
+   Handoff-Marker `AWAITING-VERIFICATION` für „wartet auf Stakeholder-Sichtprüfung"
+   (+ Hygiene-Test nachziehen) — `NEEDS-DECISION` bleibt echten Entscheidungsfragen
+   vorbehalten (Anlass: Stakeholder-Verwirrung S160, „was soll ich hier entscheiden?");
+   [M2] Berechtigungsregel für Handoff-Lifecycle-Löschungen (Koordinator wurde 2× vom
+   Berechtigungs-Classifier blockiert, Lifecycle „DONE = löschen" braucht den Umweg über
+   Subagenten); [M3] Lösch-Belege in Doku-Briefs per `ls`, nicht `git status` (untracked
+   Dateien hinterlassen nach `rm` keine Git-Spur — Fehlbericht „existierten nicht" in S160).
+2. **B-109** (Brief: `S159_planning.md` Task 3) → **B-105** (Task 4; deckt den
+   Quantum-Deflection-Badge-Wunsch).
+3. **B-119 priorisieren** (neu am Listenende, ohne Prio).
 
-**Offene Handoff-Marker:** `S158_B104_ui_verifikation.md` (neuer Zuschnitt, B-104 negativ),
-`S159_B028b_ui_verifikation.md` (Testfall 3 offen), `S159_planning.md` (bleibt als
-Brief-Quelle für Task 2–4).
+**Offene Handoff-Marker:** `S159_planning.md` (bleibt Brief-Quelle für Task 3–4).
 
 ---
 

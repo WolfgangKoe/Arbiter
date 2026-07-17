@@ -74,6 +74,13 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   gegen den **aktuellen Implementierungsstand** prüfbar sind; Punkte, die offene Pläne
   voraussetzen, explizit als „blockiert durch <Plan>" kennzeichnen. Grund: S121 — Punkte 3+4
   der Stufe-A-Checkliste setzten die noch fehlende Reaktiv-UI (Plan 015) voraus.
+- **Testfall-Voraussetzungen beim Task-Zuschnitt prüfen (Retro-M2, S160):** Vor dem
+  Einplanen einer manuellen UI-Verifikation den benötigten Daten-/Roster-Bestand per
+  `ls`/`grep` verifizieren (z. B. `grep -rn "<einheit>" data/rosters/`). Fehlt eine
+  Voraussetzung, wird sie als eigener Vorbereitungs-Task eingeplant oder der Testfall als
+  „blockiert durch <Voraussetzung>" gekennzeichnet — nie ein nicht durchführbarer Testfall
+  ausgeliefert. Anlass: S159 — B-028b Testfall 3 setzte einen Canoptek Spyder voraus, den
+  kein Roster enthielt.
 - **Teil-Status statt binär:** Backlog-/`briefing.md`-Einträge für teil-implementierte
   Mechaniken beschreiben „Mechanik X steht+getestet; offen = Variante Y" statt nur
   offen/erledigt. Grund: S115 — die P17-Lock-Mechanik stand, der Eintrag las aber wie
@@ -221,6 +228,13 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   Suite-Ende (S121/S130-Befund: vorzeitige Rückkehr kostete ein ~171k-Resume; S131:
   Executor legte sich trotz Klausel mit wartendem Hintergrund-pytest schlafen → Resume
   nötig).
+- **Hintergrund-Monitore verboten (Retro-M1, S160):** Subagent-Briefs dürfen keine
+  Arbeitsschritte enthalten, die auf Hintergrund-Monitore oder Hintergrund-Prozesse
+  warten (`run_in_background`, Monitor-Wakeups) — sämtliche Gate-Belege (pytest, mypy,
+  pre-commit, Playwright) entstehen im Vordergrund, der Endbericht kommt in derselben
+  Antwort wie der letzte Gate-Beleg. Gilt zusätzlich zur Vollsuite-Vordergrund-Pflicht
+  oben. Anlass: S159 — 2× Nachstoß nötig, weil Executoren auf Hintergrund-Monitore
+  warteten.
 - **Playwright-UI-Verifikation (Standard-Werkzeug seit S136):** Playwright 1.60 +
   Chromium stehen im venv bereit — funktionale UI-Verifikation (Scroll-Position,
   Layout-Shift-Messung, Klick-Abläufe, Konsolen-Snippets wie in `S136_B1_probe.md`

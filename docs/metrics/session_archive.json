@@ -5179,10 +5179,10 @@
   "1e7402bb-22b3-4c60-bf1d-4a5bc3051527": {
     "started_at": "2026-07-17T13:58:50.587Z",
     "task": "go",
-    "peak_context": 157008,
-    "subagent_share": 72.20501799720437,
+    "peak_context": 159539,
+    "subagent_share": 74.34220852387968,
     "by_tier": {
-      "Sonnet": 23856377,
+      "Sonnet": 31025613,
       "Opus": 935144,
       "Haiku": 5315427
     },
@@ -5219,7 +5219,7 @@
         "agent_type": "general-purpose",
         "description": "S159-Abschluss: Artefakte nachziehen",
         "tier": "Sonnet",
-        "peak_context": 96723,
+        "peak_context": 136305,
         "started_at": "2026-07-17T13:58:50.587Z"
       },
       {
@@ -5242,6 +5242,54 @@
         "tier": "Haiku",
         "peak_context": 71313,
         "started_at": "2026-07-17T13:58:50.587Z"
+      }
+    ]
+  },
+  "ffc7c981-63a9-47db-8a52-44ca05ca69ad": {
+    "started_at": "2026-07-17T16:44:21.967Z",
+    "task": "start session",
+    "peak_context": 154950,
+    "subagent_share": 69.41850241170425,
+    "by_tier": {
+      "Haiku": 8338203,
+      "Sonnet": 11902005,
+      "Opus": 999220
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S160 Backlog-Abschluss + Handoff-Hygiene",
+        "tier": "Haiku",
+        "peak_context": 113128,
+        "started_at": "2026-07-17T16:44:21.967Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S160 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 99225,
+        "started_at": "2026-07-17T16:44:21.967Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-104 Würfel-SVG Re-Fix",
+        "tier": "Sonnet",
+        "peak_context": 141683,
+        "started_at": "2026-07-17T16:44:21.967Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S160 DoD-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 55921,
+        "started_at": "2026-07-17T16:44:21.967Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "M1/M2-Klauseln + Backlog-Reorder",
+        "tier": "Haiku",
+        "peak_context": 67689,
+        "started_at": "2026-07-17T16:44:21.967Z"
       }
     ]
   }

@@ -186,9 +186,11 @@ def test_reroll_marker_correct_slot() -> None:
 
 
 def test_always_fail_marks_correct_slots() -> None:
-    # Quantum Shield (attacker view): slots 1–3 always fail → three ✕ markers in red.
+    # Quantum Shield (attacker view): slots 1–3 always fail → three die-shaped
+    # miss markers (S160/B-104-Re-Fix: SVG, not the '✕' text glyph) in red.
     html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff")
-    assert html.count("✕") == 3
+    assert html.count("<svg") == 3
+    assert "✕" not in html
     assert _DEBUFF_RED in html
 
 
@@ -212,31 +214,35 @@ def test_always_fail_label_uses_ability_name() -> None:
 
 
 def test_always_fail_marker_renders_as_die_chip_not_bare_span() -> None:
-    # B-104 (Variante A): the ✕ marker reuses the die-shaped _triggered_die_chip_html
-    # box (30x30, bordered, rounded) instead of a bare `<span>✕</span>` text glyph.
+    # S160 (B-104-Re-Fix): the auto-fail marker is now the real miss-die SVG
+    # (dice_face_svg family, design_system.md §4.2/§4.3) — neither the bare
+    # `<span>✕</span>` text glyph nor the earlier text-chip box.
     html = always_fail_marker_row_html([1], color_hint="debuff")
     assert f'<span style="color:{_DEBUFF_RED};font-weight:bold;">✕</span>' not in html
-    assert "width:30px;height:30px" in html
+    assert "<svg" in html
+    assert f'stroke="{_DEBUFF_RED}" stroke-width="1.5"' in html
 
 
 def test_badge_chip_title_carries_full_label_alongside_truncation() -> None:
     # B-111 Variante C: "Quantum Shielding" is long enough to be visually clipped
     # by the badge column's ellipsis, but the full text must survive as a hover
     # tooltip via the `title` attribute — truncation stays, nothing is lost.
+    # S160: the marker itself is now the SVG miss-die (stroke, not CSS border).
     html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff", label="Quantum Shielding")
     assert 'title="Quantum Shielding"' in html
     assert "text-overflow:ellipsis" in html
     assert ">Quantum Shielding<" in html
-    assert f"border:1.5px solid {_DEBUFF_RED}" in html
-    assert "✕" in html
+    assert f'stroke="{_DEBUFF_RED}" stroke-width="1.5"' in html
+    assert "<svg" in html
 
 
 def test_reroll_marker_renders_as_die_chip_not_bare_span() -> None:
-    # Same shared _marker_row_html helper: the ↺ reroll marker gets the identical
-    # die-chip treatment (Variante A reuses the chip for every marker glyph).
+    # S160/B-104-Re-Fix: design_system.md §4.3 assigns Reroll to the SVG-Würfel-
+    # fläche family too (not the text-chip family) — same shared _marker_row_html
+    # helper, same 32x32 die box, reroll-orange border via the SVG stroke.
     html = reroll_marker_row_html([1])
-    assert "width:30px;height:30px" in html
-    assert "border:1.5px solid #f59e0b" in html
+    assert "<svg" in html
+    assert 'stroke="#f59e0b" stroke-width="1.5"' in html
 
 
 def test_modifier_columns_clamp_to_grid() -> None:
@@ -417,6 +423,59 @@ def test_block_divider_html_renders_hr() -> None:
     assert "border-top:1px solid" in html
 
 
+def test_dice_face_svg_miss_default_output_byte_identical_to_pre_s160() -> None:
+    """Regression (S160/B-104-Re-Fix): dice_face_svg(miss=True) without miss_color
+    renders byte-identical HTML to the pre-refactor hard-coded #374151/#c0392b
+    miss face — existing callers (dice_row_html, _aligned_modifier_row_html with
+    left_miss=True) must not change visually.
+    """
+    assert dice_face_svg(1, miss=True) == (
+        '<svg width="32" height="32" viewBox="0 0 32 32" '
+        'style="display:inline-block;vertical-align:middle;margin:1px;">'
+        '<rect x="1" y="1" width="30" height="30" rx="4" ry="4" '
+        'fill="#111827" stroke="#374151" stroke-width="1.5"/>'
+        '<line x1="9" y1="9" x2="23" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
+        '<line x1="23" y1="9" x2="9" y2="23" stroke="#c0392b" stroke-width="2.5"/></svg>'
+    )
+    assert dice_face_svg(3, miss=True) == (
+        '<svg width="32" height="32" viewBox="0 0 32 32" '
+        'style="display:inline-block;vertical-align:middle;margin:1px;">'
+        '<rect x="1" y="1" width="30" height="30" rx="4" ry="4" '
+        'fill="#111827" stroke="#374151" stroke-width="1.5"/>'
+        '<circle cx="9" cy="9" r="2" fill="#374151"/>'
+        '<circle cx="16" cy="16" r="2" fill="#374151"/>'
+        '<circle cx="23" cy="23" r="2" fill="#374151"/></svg>'
+    )
+
+
+def test_miss_die_html_default_output_byte_identical_to_pre_s160() -> None:
+    """Regression (S160/B-104-Re-Fix): miss_die_html() without a color argument
+    renders byte-identical HTML to the pre-refactor version."""
+    assert miss_die_html() == (
+        '<svg width="32" height="32" viewBox="0 0 32 32" '
+        'style="display:inline-block;vertical-align:middle;margin:1px;">'
+        '<rect x="1" y="1" width="30" height="30" rx="4" ry="4" '
+        'fill="#111827" stroke="#374151" stroke-width="1.5"/>'
+        '<line x1="9" y1="9" x2="23" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
+        '<line x1="23" y1="9" x2="9" y2="23" stroke="#c0392b" stroke-width="2.5"/></svg>'
+    )
+
+
+def test_dice_face_svg_miss_color_overrides_border_and_cross() -> None:
+    """miss_color parametrizes both the border and the cross stroke (S160)."""
+    html = dice_face_svg(1, miss=True, miss_color=_BUFF_GREEN)
+    assert f'stroke="{_BUFF_GREEN}" stroke-width="1.5"' in html
+    assert f'stroke="{_BUFF_GREEN}" stroke-width="2.5"' in html
+    assert "#374151" not in html
+    assert "#c0392b" not in html
+
+
+def test_miss_die_html_color_param_forwards_to_dice_face_svg() -> None:
+    """miss_die_html(color=...) forwards to dice_face_svg's miss_color parameter."""
+    html = miss_die_html(color=_DEBUFF_RED)
+    assert f'stroke="{_DEBUFF_RED}" stroke-width="1.5"' in html
+
+
 def test_dice_face_svg_value_1_normal_not_miss() -> None:
     """dice_face_svg(1) without miss=True renders normal pips, not a cross."""
     html = dice_face_svg(1)
@@ -472,8 +531,9 @@ def test_reroll_marker_row_places_glyph_in_correct_slot() -> None:
 def test_always_fail_marker_row_no_base_threshold() -> None:
     """_marker_row_html without base_threshold (0) renders without boundary gap."""
     # base_threshold=0 means the condition `2 <= base_threshold <= 6` is False → no gap.
+    # S160: marker is the SVG miss-die, so the assertion counts <svg, not '✕'.
     html = always_fail_marker_row_html([1, 2], base_threshold=0, color_hint="debuff")
-    assert html.count("✕") == 2
+    assert html.count("<svg") == 2
 
 
 def test_reroll_marker_row_with_base_threshold_boundary_gap() -> None:

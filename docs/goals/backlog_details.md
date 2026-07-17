@@ -614,7 +614,7 @@ am Anfang der Beschreibungsspalte.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** UI-Verifikation (Testfall 1+2 positiv, Testfall 3 offen — β-Roster jetzt mit Spyder/Gloom Prism)
+**Status:** UI-Verifikation (Testfälle 1–3 positiv, S160, Testfall 3 mit Canoptek Spyder/Gloom Prism)
 
 **Tier:** Executor
 
@@ -622,7 +622,7 @@ am Anfang der Beschreibungsspalte.
 
 **Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur gerendert — additiv, nicht gatend (erscheint neben dem bestehenden Deny-the-Witch-Wurf-UI, blockiert dieses aber nicht; PSYKER-/Wargear-Pfade unverändert). `can_deny()` generisch um Ability-Quellen erweitert (bisher nur Wargear `gloom_prism`, jetzt auch `noctilith_beacons` über `find_unit_ability_by_effect`). `gloom_prism`-Migration bleibt offener Rest — weiterhin im bestehenden Wargear-Gate.
 
-**UI-Verifikation (S159, `docs/handoff/S159_B028b_ui_verifikation.md`):** Testfall 1 (Karte erscheint im Deny-Column) — positiv. Testfall 2 (Use/Undo-Zyklus, Vollrückgängig-Garantie) — positiv. Testfall 3 (Regression bestehender Deny-Pfade ohne Szarekh) — **offen**: β-Roster (`data/rosters/necrons_beta.yaml`) wurde in S159 um Canoptek Spyder (`gloom_prism`) ergänzt, Loader-Test auf 6 Einheiten angepasst; die eigentliche Regressionsprüfung in der laufenden App steht noch aus (Stakeholder).
+**UI-Verifikation (S160, `docs/handoff/S160_B104_ui_verifikation.md` — B-028b-Teil):** Testfall 1 (Karte erscheint im Deny-Column) — positiv. Testfall 2 (Use/Undo-Zyklus, Vollrückgängig-Garantie) — positiv. Testfall 3 (Regression bestehender Deny-Pfade ohne Szarekh, mit Canoptek Spyder/Gloom Prism) — positiv.
 
 **Abhängigkeiten:** Nach B-028a (reines Plumbing muss erst vorhanden sein). Unabhängig von c1–c5.
 
@@ -1978,28 +1978,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt); Scope-Erweiterung (Regel-Klärung + UX-Dauersichtbarkeit) S156-Stakeholder-Kommentar.
 
-## B-104 — Wuerfelergebnis Symbole folgen nicht dem Design System
-
-[↩ Zeile in backlog.md](backlog.md#b-104)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~20–25k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (`dice_face_svg`, `miss_die_html`, `_marker_row_html`, `always_fail_marker_row_html`, ggf. `reroll_marker_row_html`), `tests/uiLayout/test_dice_html.py`. **Neuer Zuschnitt S159** nach Stakeholder-Ablehnung der S158-Umsetzung (Testfall 1 negativ, `docs/handoff/S158_B104_ui_verifikation.md`): das gemeinte Symbol ist die echte Würfelfläche (`dice_face_svg`/`miss_die_html`), nicht der bisherige Text-Chip (`_triggered_die_chip_html`). Würfelsymbol-Katalog dazu in S159 freigegeben und in `docs/spec/design_system.md` §4.2 (Würfelflächen-Katalog)/§4.3 (Effekt-Symbol-Katalog) übernommen — Re-Fix zieht diesen Katalog nach: `dice_face_svg`/`miss_die_html` bekommen einen optionalen Farbparameter (Default = heutiger fester Wert, bestehende Aufrufer bleiben optisch unverändert), `_marker_row_html`-Auto-fail-Zweig rendert die SVG-Miss-Variante mit Perspektivfarbe statt Text-✕. Executor-Brief liegt vollständig vor: `docs/handoff/S159_planning.md` Task 2.
-
-**Abhängigkeiten:** Design-Katalog bereits freigegeben (S159) — kein weiterer Design-Crew-Schritt nötig, direkt Executor-Umsetzung.
-
-**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund b); `docs/handoff/S158_B104_ui_verifikation.md` (Testfall 1, Ablehnungsgrund); `docs/handoff/S159_planning.md` Task 2 (Executor-Brief).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation); Zuschnitt-Korrektur S159 nach negativer Testfall-1-Prüfung.
-
 ## B-105 — Wound Wurf zeigt keine Referenz auf GO Quantum Deflection
 
 [↩ Zeile in backlog.md](backlog.md#b-105)
@@ -2284,3 +2262,25 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.3/§4.4).
+
+## B-119 — Deny Quellen Anzeige gameActionsArea
+
+[↩ Zeile in backlog.md](backlog.md#b-119)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** S: ~10k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/gameActionsArea.py` (`_render_deny_column`). Bei einem Deny-the-Witch-Wurf zeigt die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle — der Spieler kann nicht sehen, welche Einheit mit welchem Wargear (oder GO-Karte) den Deny durchführt. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar, kein zusätzlicher Text nötig. **(b) Canoptek Spyder Gloom Prism (Wargear-Pfad, kein GO-Card):** keine Sichtbarkeit der ausführenden Einheit — braucht einen Hinweistext ähnlich `_render_resolution_tab`s „Resolving against ⟨Unit⟩" oder eine Chipline in der Deny-Spalte.
+
+**Abhängigkeiten:** Hinter B-028b (Noctilith-Sichtbarkeit ist bereits über GO-Karte gelöst); `gloom_prism`-Migration bleibt auf dem bestehenden Wargear-Pfad, braucht also zusätzliche UI-Kennzeichnung.
+
+**Belege:** Stakeholder-Kommentar S160 zu B-028b Testfall 3 (`docs/handoff/S160_B104_ui_verifikation.md`, B-028b-Testfall-Notiz).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Beobachtung S160 (B-028b UI-Verifikation Testfall 3, Gloom-Prism-Regression).

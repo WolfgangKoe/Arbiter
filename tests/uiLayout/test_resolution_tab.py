@@ -481,15 +481,23 @@ def test_wound_block_shows_three_auto_fail_crosses_for_quantum_shielding(
     )
 
     combined_html = "\n".join(captured)
-    assert combined_html.count("✕") == 3, (
-        f"Expected exactly three ✕ auto-fail markers (unmod. wound 1-3 always "
-        f"fail), got:\n{combined_html[:600]}"
+    # S160/B-104-Re-Fix: the auto-fail marker is now the real miss-die SVG
+    # (design_system.md §4.2/§4.3), not a '✕' text glyph — assert its absence,
+    # and count the SVG markers on the row built by the same shared function
+    # the production call-site uses (checked verbatim further below).
+    assert combined_html.count("✕") == 0, (
+        f"Auto-fail markers no longer use the '✕' text glyph — expected none, "
+        f"got:\n{combined_html[:600]}"
+    )
+    expected_row = always_fail_marker_row_html([1, 2, 3], base_threshold=4, color_hint="debuff")
+    assert expected_row.count("<svg") == 3, (
+        f"Expected exactly three SVG auto-fail markers (unmod. wound 1-3 "
+        f"always fail), got:\n{expected_row[:600]}"
     )
     assert _DEBUFF_RED in combined_html, (
         f"Auto-fail markers must render debuff-red from the attacker's own "
         f"perspective (their rolls fail), got:\n{combined_html[:600]}"
     )
-    expected_row = always_fail_marker_row_html([1, 2, 3], base_threshold=4, color_hint="debuff")
     assert expected_row in combined_html, (
         f"Expected the exact always_fail_marker_row_html([1,2,3], ...) row — "
         f"markers must come from the shared building block, not a local "

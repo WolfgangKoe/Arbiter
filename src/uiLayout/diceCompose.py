@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from constants.symbols import SYM_CROSS, SYM_RESET
+from constants.symbols import SYM_RESET
 
 
 def light_cover_label(directive_short_label: str | None = None) -> str:
@@ -88,18 +88,32 @@ def threshold_header_html(threshold: int) -> str:
     return f'<div style="display:flex;align-items:center;margin:0 0 1px 0;">{"".join(parts)}</div>'
 
 
-def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: int = 32) -> str:
-    """SVG for a single d6 face with pip pattern. Value 1 always shows × (always-miss marker)."""
+def dice_face_svg(
+    value: int,
+    color: str = "#6b7280",
+    miss: bool = False,
+    size: int = 32,
+    miss_color: str | None = None,
+) -> str:
+    """SVG for a single d6 face with pip pattern. Value 1 always shows × (always-miss marker).
+
+    miss_color overrides the miss face's hard-coded border/cross colour (#374151/
+    #c0392b) with a perspective colour (buff-green/debuff-red, design_system.md
+    §4.2) — used by the auto-fail marker (S160/B-104-Re-Fix). Default (None) keeps
+    every existing caller byte-identical.
+    """
     pips = _PIP_POSITIONS.get(max(1, min(6, value)), [])
     bg = "#111827" if miss else "#1e293b"
-    border = "#374151" if miss else color
+    miss_border = miss_color if miss_color is not None else "#374151"
+    miss_cross = miss_color if miss_color is not None else "#c0392b"
+    border = miss_border if miss else color
     if miss and value == 1:
         pip_html = (
-            '<line x1="9" y1="9" x2="23" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
-            '<line x1="23" y1="9" x2="9" y2="23" stroke="#c0392b" stroke-width="2.5"/>'
+            f'<line x1="9" y1="9" x2="23" y2="23" stroke="{miss_cross}" stroke-width="2.5"/>'
+            f'<line x1="23" y1="9" x2="9" y2="23" stroke="{miss_cross}" stroke-width="2.5"/>'
         )
     else:
-        pip_color = "#374151" if miss else color
+        pip_color = miss_border if miss else color
         pip_html = "".join(f'<circle cx="{x}" cy="{y}" r="2" fill="{pip_color}"/>' for x, y in pips)
     return (
         f'<svg width="{size}" height="{size}" viewBox="0 0 32 32" '
@@ -110,14 +124,16 @@ def dice_face_svg(value: int, color: str = "#6b7280", miss: bool = False, size: 
     )
 
 
-def miss_die_html(size: int = 32) -> str:
+def miss_die_html(size: int = 32, color: str | None = None) -> str:
     """Die-shaped always-miss marker (×).
 
     The same icon as the value-1 die (left of 2); also used as the general miss
     icon right of the 6 when a threshold is pushed above 6 (AP / heavy penalty),
-    so misses read as dice everywhere instead of a bare text ×.
+    so misses read as dice everywhere instead of a bare text ×. color overrides
+    the border/cross with a perspective colour (see dice_face_svg's miss_color);
+    default (None) keeps every existing caller byte-identical.
     """
-    return dice_face_svg(1, miss=True, size=size)
+    return dice_face_svg(1, miss=True, size=size, miss_color=color)
 
 
 def dice_row_html(threshold: int) -> str:
@@ -374,23 +390,38 @@ def special_die_html(label: str, content: str = "") -> str:
 
 
 _REROLL_GLYPH = SYM_RESET  # app-wide reset/redo glyph (gameHeader, _common, gameProtocoll)
-_AUTO_FAIL_GLYPH = SYM_CROSS  # below-slot annotation; distinct from the die-shaped miss icon
+_REROLL_COLOR = "#f59e0b"  # established reroll orange (design_system.md §4.3)
+
+
+def _reroll_die_svg(size: int = 32, color: str = _REROLL_COLOR) -> str:
+    """Die-shaped ↺ marker (design_system.md §4.3): same box geometry as
+    dice_face_svg (32x32, rx=4, 1.5px border), glyph centered instead of pips/cross.
+    """
+    return (
+        f'<svg width="{size}" height="{size}" viewBox="0 0 32 32" '
+        f'style="display:inline-block;vertical-align:middle;margin:1px;">'
+        f'<rect x="1" y="1" width="30" height="30" rx="4" ry="4" '
+        f'fill="#1e293b" stroke="{color}" stroke-width="1.5"/>'
+        f'<text x="16" y="21" font-size="16" font-weight="700" fill="{color}" '
+        f'text-anchor="middle">{_REROLL_GLYPH}</text></svg>'
+    )
 
 
 def _marker_row_html(
-    label_html: str, glyph: str, marker_slots: set[int], base_threshold: int, color: str
+    label_html: str, marker_html: str, marker_slots: set[int], base_threshold: int
 ) -> str:
-    """Sub-row aligned to the 1..6 grid with *glyph* under each marker slot.
+    """Sub-row aligned to the 1..6 grid with *marker_html* under each marker slot.
 
-    Shared layout for the reroll (↺) and always-fail (✕) annotations: the glyph
-    sits in the same die-sized column as the value it refers to, so it lines up
-    under the dice rows above (dice_display.md §10.1 / §10.2).
+    Shared layout for the reroll (↺) and always-fail (✕) annotations: the marker
+    (a die-shaped SVG, design_system.md §4.2/§4.3) sits in the same die-sized
+    column as the value it refers to, so it lines up under the dice rows above
+    (dice_display.md §10.1 / §10.2).
     """
     slots: list[str] = []
     for v in range(1, 7):
         if 2 <= base_threshold <= 6 and v == base_threshold:
             slots.append(_boundary_gap_html(with_line=False))
-        inner = _triggered_die_chip_html(glyph, color) if v in marker_slots else ""
+        inner = marker_html if v in marker_slots else ""
         slots.append(_modifier_slot_html(inner))
     content = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
     return grid_row_html(label_html, content)
@@ -399,11 +430,15 @@ def _marker_row_html(
 def reroll_marker_row_html(slots: list[int], base_threshold: int = 0) -> str:
     """↺ marker below each re-rolled slot (dice_display.md §10.1).
 
-    Display building block — not yet wired into a roll block; a producer that
-    feeds reroll data (e.g. reroll_hit_1) into the dice block consumes it later.
+    Renders the same die-shaped SVG box as dice_face_svg (design_system.md
+    §4.3): reroll is its own SVG-Würfelfläche variant, fixed reroll-orange —
+    not the auto-fail miss face (glyph differs: ↺ vs ×). Display building
+    block — not yet wired into a roll block; a producer that feeds reroll data
+    (e.g. reroll_hit_1) into the dice block consumes it later (B-113).
     """
-    badge = _badge_chip("Reroll", "#f59e0b")
-    return _marker_row_html(badge, _REROLL_GLYPH, set(slots), base_threshold, "#f59e0b")
+    badge = _badge_chip("Reroll", _REROLL_COLOR)
+    marker = _reroll_die_svg()
+    return _marker_row_html(badge, marker, set(slots), base_threshold)
 
 
 def always_fail_marker_row_html(
@@ -414,16 +449,19 @@ def always_fail_marker_row_html(
 ) -> str:
     """✕ marker below each always-failing slot (dice_display.md §5 / §10.2).
 
-    color_hint sets the perspective colour: the defender sees a buff (green, the
-    attacker's low rolls fail), the rolling attacker a debuff (red). Display
-    building block — wired once a producer (e.g. Quantum Shield) supplies the slots.
-    ``label`` names the triggering ability (e.g. "Quantum Shielding"), read from
-    YAML by the caller; falls back to the generic "Auto-fail" when no ability
-    label is available (B-103).
+    Reuses the real miss-die SVG (dice_face_svg via miss_die_html,
+    design_system.md §4.2/§4.3) instead of a text chip — the auto-fail slot now
+    looks identical to a rolled miss, only the border/cross colour carries the
+    perspective (S160/B-104-Re-Fix). color_hint sets that perspective: the
+    defender sees a buff (green, the attacker's low rolls fail), the rolling
+    attacker a debuff (red). ``label`` names the triggering ability (e.g.
+    "Quantum Shielding"), read from YAML by the caller; falls back to the
+    generic "Auto-fail" when no ability label is available (B-103).
     """
     color = _modifier_color({"color_hint": color_hint, "value": -1})
     badge = _badge_chip(label or "Auto-fail", color)
-    return _marker_row_html(badge, _AUTO_FAIL_GLYPH, set(slots), base_threshold, color)
+    marker = miss_die_html(color=color)
+    return _marker_row_html(badge, marker, set(slots), base_threshold)
 
 
 def _triggered_die_chip_html(content: str, color: str) -> str:

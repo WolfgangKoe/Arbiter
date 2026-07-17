@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 18:14 CEST
+Stand: 2026-07-17 19:42 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,12 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 15:58 1e74  ████████████ 157k ⛔    ████░░  72%    ··········▒▒
+07-17 18:44 ffc7  ████████████ 155k ⛔    ████░░  69%    ·······▒▒▒▒▒
+         SA_1·  █████████░░░ 113k ✅    S160 Backlog-Abschluss + Handoff-H…
+         SA_2·  ████████░░░░  99k ✅    S160 Planning-Entwurf erstellen
+         SA_3·  ███████████░ 142k ⚠️   B-104 Würfel-SVG Re-Fix
+         SA_4·  ████░░░░░░░░  56k ✅    S160 DoD-Review (Opus)
+         SA_5·  █████░░░░░░░  68k ✅    M1/M2-Klauseln + Backlog-Reorder
+----------------- ---------------------- -------------- ------------
+07-17 15:58 1e74  ████████████ 160k ⛔    ████░░  74%    ··········▒▒
          SA_1·  ████████████ 161k ⛔    Task 6: B-028b Noctilith Beacons
          SA_2·  █████░░░░░░░  60k ✅    S159-Review (DoD, GO/NO-GO)
          SA_3·  ███████████░ 143k ⚠️   Task 1: Würfelsymbol-Katalog
          SA_4·  ████░░░░░░░░  51k ✅    Task 5: mypy-Baseline B-112
-         SA_5·  ████████░░░░  97k ✅    S159-Abschluss: Artefakte nachzieh…
+         SA_5·  ███████████░ 136k ⚠️   S159-Abschluss: Artefakte nachzieh…
          SA_6·  ███████████░ 142k ⚠️   S159-Planungsentwurf erstellen
          SA_7·  █████░░░░░░░  59k ✅    Haiku-Scan: fehlende Würfel-Effekte
          SA_8·  ██████░░░░░░  71k ✅    Katalog-Tabellen mergen + §4 übern…
@@ -827,3 +834,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S157 (2026-07-17)** Retro-Massnahmen verankert, B-028 Option-B-Entscheid, B-098-Rest + B-103 fertig (1915/99.12%), Items B-106-B-111
 - **S158 (2026-07-17)** B-028-Zuschnitt (7 Tasks) + B-028a-Infrastruktur, Design-Konsens B-104/105/111, B-104+B-111 umgesetzt, Retro-Maßnahmen 1-6
 - **S159 (2026-07-17)** Dice symbol catalog approved into design_system §4; Noctilith deny first B-028a callsite; mypy baseline 25
+- **S160 (2026-07-17)** B-104 dice SVG re-fix DONE (Stakeholder bestätigt), B-028b Verifikation komplett (TF 1-3), B-119 neu (Deny-Quellen-Anzeige), Retro-Klauseln M1/M2 in agent_scopes, Review GO
