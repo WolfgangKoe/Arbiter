@@ -577,6 +577,25 @@ def unit_wound_auto_fail_label(faction: str, unit: Unit) -> str | None:
     return ability.badge_label or ability.name_en
 
 
+def find_unit_ability_by_effect(faction_dir: str, unit_id: str, effect_type: str) -> Ability | None:
+    """Return *unit_id*'s own unit_ability with ``effect.type == effect_type``, or None.
+
+    Ownership match (``ability.unit_id == unit_id``), unlike
+    ``_wound_auto_fail_ability``'s conditions/keyword match — reactive
+    unit-owned abilities such as Noctilith Beacons (deny_psychic) carry no
+    ``has_rules``/``has_keywords`` condition of their own (an empty
+    ``conditions: []`` matches unconditionally), so ownership is the only
+    thing that scopes the ability to the right unit. ``faction_dir`` is the
+    raw data-directory name (e.g. "necrons"), matching ``load_unit_abilities``'s
+    own parameter — callers that only have a unit id (not a player identity,
+    e.g. ``psychicPhase.can_deny()``) derive it via ``unit_id.split(".")[1]``.
+    """
+    for ability in load_unit_abilities(faction_dir):
+        if ability.unit_id == unit_id and ability.effect.type == effect_type:
+            return ability
+    return None
+
+
 def ability_badge_label(faction: str, unit: Unit) -> str | None:
     """Badge label from the active faction ability if this unit benefits, else None.
 

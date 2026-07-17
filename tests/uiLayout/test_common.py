@@ -3195,6 +3195,34 @@ def test_spend_ability_heal_dispatch_runs_through_new_path(monkeypatch) -> None:
 
 
 # ---------------------------------------------------------------------------
+# B-028b — Noctilith Beacons (real necrons/unit_abilities.yaml data): the
+# first productive callsite of the B-028a infrastructure (deny_psychic has no
+# _EFFECT_HANDLERS dispatch — spend_ability's usage/anchor bookkeeping is the
+# whole contract here). Full-undo guarantee (design_system.md §6.1).
+# ---------------------------------------------------------------------------
+
+
+def test_spend_undo_ability_noctilith_beacons_real_data_round_trip() -> None:
+    session = _ability_session()
+    ability = next(
+        a
+        for a in _eng.load_unit_abilities("necrons")
+        if a.id == "wh40k_9e.necrons.unit.the_silent_king.noctilith_beacons"
+    )
+    assert ability.effect.type == "deny_psychic"
+    uid = "wh40k_9e.necrons.unit.the_silent_king"
+
+    common.spend_ability(ability, "Necrons", uid, anchor_id="deny_ability_szarekh")
+    assert ability.id in session["used_ability_ids"]["Necrons"]
+    assert common.ability_use_anchor("Necrons", ability.id) == ("deny_ability_szarekh", uid)
+    assert common.ability_used_here("Necrons", ability.id, "deny_ability_szarekh") is True
+
+    common.undo_ability(ability, "Necrons")
+    assert ability.id not in session["used_ability_ids"].get("Necrons", set())
+    assert common.ability_use_anchor("Necrons", ability.id) is None
+
+
+# ---------------------------------------------------------------------------
 # B-028a — render_reactive_ability_box(): state/target_name/on_use/on_undo wiring
 # ---------------------------------------------------------------------------
 

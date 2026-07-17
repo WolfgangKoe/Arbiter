@@ -45,3 +45,5 @@ Befund: Die Skorpekh Destroyers bzw. die Destroyers im Allgemeinen sollten so ei
 **S158-Nachtrag:** Der Skorpekh/Destroyer-Lord-Befund ist als Backlog-Item
 [B-113](../goals/backlog.md#b-113) überführt (Retro-Maßnahme 6); Testfall 1 (Sichtprüfung
 des Würfelsymbols) bleibt hier offen.
+
+Antwort: Hatten wir schon diskutiert. Du musst ohnehin neue Roster anlegen oder bestehenden ergänzen (skorpekh Lord & Canoptek spyder).

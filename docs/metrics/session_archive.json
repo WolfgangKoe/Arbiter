@@ -5110,11 +5110,11 @@
   "73bdc555-2e9e-4904-a460-38548f1905ce": {
     "started_at": "2026-07-17T11:27:16.612Z",
     "task": "start session",
-    "peak_context": 156946,
-    "subagent_share": 87.89664834211739,
+    "peak_context": 160180,
+    "subagent_share": 87.5107184265039,
     "by_tier": {
       "Opus": 935931,
-      "Sonnet": 58542093,
+      "Sonnet": 61785202,
       "Haiku": 8203980
     },
     "subagents": [
@@ -5129,7 +5129,7 @@
         "agent_type": "general-purpose",
         "description": "S158-Abschluss-Arbeiten ausführen",
         "tier": "Sonnet",
-        "peak_context": 134737,
+        "peak_context": 145776,
         "started_at": "2026-07-17T11:27:16.612Z"
       },
       {
@@ -5173,6 +5173,75 @@
         "tier": "Sonnet",
         "peak_context": 97940,
         "started_at": "2026-07-17T11:27:16.612Z"
+      }
+    ]
+  },
+  "1e7402bb-22b3-4c60-bf1d-4a5bc3051527": {
+    "started_at": "2026-07-17T13:58:50.587Z",
+    "task": "go",
+    "peak_context": 157008,
+    "subagent_share": 72.20501799720437,
+    "by_tier": {
+      "Sonnet": 23856377,
+      "Opus": 935144,
+      "Haiku": 5315427
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 6: B-028b Noctilith Beacons",
+        "tier": "Sonnet",
+        "peak_context": 161276,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S159-Review (DoD, GO/NO-GO)",
+        "tier": "Opus",
+        "peak_context": 59778,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1: Würfelsymbol-Katalog",
+        "tier": "Sonnet",
+        "peak_context": 142685,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 5: mypy-Baseline B-112",
+        "tier": "Haiku",
+        "peak_context": 50580,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S159-Abschluss: Artefakte nachziehen",
+        "tier": "Sonnet",
+        "peak_context": 96723,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S159-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 142408,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Haiku-Scan: fehlende Würfel-Effekte",
+        "tier": "Haiku",
+        "peak_context": 58796,
+        "started_at": "2026-07-17T13:58:50.587Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Katalog-Tabellen mergen + §4 übernehmen",
+        "tier": "Haiku",
+        "peak_context": 71313,
+        "started_at": "2026-07-17T13:58:50.587Z"
       }
     ]
   }

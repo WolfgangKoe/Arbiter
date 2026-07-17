@@ -102,6 +102,38 @@ class TestCanDeny:
         units = [_Unit(keywords=["Infantry"]), _Unit(keywords=["PSYKER"])]
         assert can_deny(units) is True
 
+    def test_can_deny_via_unit_owned_ability(self):
+        # B-028b: Szarekh is not a PSYKER and carries no deny wargear — his
+        # deny capability comes solely from the Noctilith Beacons unit_ability
+        # (real necrons/unit_abilities.yaml entry, effect.type=deny_psychic).
+        units = [
+            _Unit(
+                id="wh40k_9e.necrons.unit.the_silent_king",
+                keywords=["CHARACTER", "NECRONS"],
+                rules=[],
+            )
+        ]
+        assert can_deny(units) is True
+
+    def test_can_deny_false_for_unit_without_matching_ability(self):
+        # Same faction dir, but this unit owns no deny_psychic unit_ability —
+        # must not leak in via any other necrons unit's ability entry.
+        units = [
+            _Unit(
+                id="wh40k_9e.necrons.unit.warriors",
+                keywords=["CORE", "NECRONS"],
+                rules=[],
+            )
+        ]
+        assert can_deny(units) is False
+
+    def test_can_deny_mixed_army_one_ability_owner(self):
+        units = [
+            _Unit(id="wh40k_9e.necrons.unit.warriors", keywords=["CORE"]),
+            _Unit(id="wh40k_9e.necrons.unit.the_silent_king", keywords=["CHARACTER"]),
+        ]
+        assert can_deny(units) is True
+
 
 # ---------------------------------------------------------------------------
 # initial_deny_state — #PSI regression (S129): opponent without any deny
@@ -134,6 +166,12 @@ class TestInitialDenyState:
 
     def test_empty_opponent_army_resolves_unopposed(self):
         assert initial_deny_state([]) is False
+
+    def test_ability_owner_opponent_leaves_power_awaiting_a_deny_attempt(self):
+        # B-028b: Szarekh's Noctilith Beacons unit_ability must open the same
+        # "awaiting a deny attempt" window as PSYKER/deny-wargear sources.
+        opponent_units = [_Unit(id="wh40k_9e.necrons.unit.the_silent_king", keywords=["CHARACTER"])]
+        assert initial_deny_state(opponent_units) is None
 
 
 # ---------------------------------------------------------------------------

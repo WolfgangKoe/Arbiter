@@ -21,6 +21,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     check_conditions,
     check_trigger,
     execute_effect,
+    find_unit_ability_by_effect,
     get_activated_command_abilities,
     get_active_heal_bonus,
     get_active_protocol_effects,
@@ -1470,6 +1471,74 @@ def test_unit_wound_auto_fail_label_annihilation_barge_real_data() -> None:
     units, _ = load_army("necrons")
     barge = next(u for u in units if u.id == "wh40k_9e.necrons.unit.annihilation_barge")
     assert unit_wound_auto_fail_label("Necrons", barge) == "Quantum Shielding"
+
+
+# ---------------------------------------------------------------------------
+# find_unit_ability_by_effect — B-028b: ownership lookup for unit-owned
+# reactive abilities with an empty conditions list (e.g. Noctilith Beacons'
+# deny_psychic), which _wound_auto_fail_ability's has_rules match cannot
+# scope on its own.
+# ---------------------------------------------------------------------------
+
+
+def test_find_unit_ability_by_effect_matches_owning_unit(monkeypatch: pytest.MonkeyPatch) -> None:
+    deny_ability = Ability(
+        id="test.unit.hero.deny_ability",
+        name_en="Test Deny Ability",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="phase_reactive", phase="psychic", player="inactive"),
+        conditions=[],
+        effect=Effect(type="deny_psychic", target="self"),
+        unit_id="test.unit.hero",
+    )
+    monkeypatch.setattr(_eng, "load_unit_abilities", lambda faction_dir: [deny_ability])
+    found = find_unit_ability_by_effect("necrons", "test.unit.hero", "deny_psychic")
+    assert found is deny_ability
+
+
+def test_find_unit_ability_by_effect_none_for_other_unit(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Empty conditions must not leak the ability onto a different unit_id —
+    ownership (unit_id), not conditions, is the scoping mechanism here."""
+    deny_ability = Ability(
+        id="test.unit.hero.deny_ability",
+        name_en="Test Deny Ability",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="phase_reactive", phase="psychic", player="inactive"),
+        conditions=[],
+        effect=Effect(type="deny_psychic", target="self"),
+        unit_id="test.unit.hero",
+    )
+    monkeypatch.setattr(_eng, "load_unit_abilities", lambda faction_dir: [deny_ability])
+    assert find_unit_ability_by_effect("necrons", "test.unit.other", "deny_psychic") is None
+
+
+def test_find_unit_ability_by_effect_none_for_other_effect_type(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    heal_ability = Ability(
+        id="test.unit.hero.heal_ability",
+        name_en="Test Heal Ability",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="phase_start", phase="any", player="either"),
+        conditions=[],
+        effect=Effect(type="heal", amount="1"),
+        unit_id="test.unit.hero",
+    )
+    monkeypatch.setattr(_eng, "load_unit_abilities", lambda faction_dir: [heal_ability])
+    assert find_unit_ability_by_effect("necrons", "test.unit.hero", "deny_psychic") is None
+
+
+def test_find_unit_ability_by_effect_noctilith_beacons_real_data() -> None:
+    """B-028b acceptance: the real unit_abilities.yaml entry for Szarekh's
+    Noctilith Beacons must resolve via ownership, not just effect type."""
+    found = find_unit_ability_by_effect(
+        "necrons", "wh40k_9e.necrons.unit.the_silent_king", "deny_psychic"
+    )
+    assert found is not None
+    assert found.id == "wh40k_9e.necrons.unit.the_silent_king.noctilith_beacons"
 
 
 # ---------------------------------------------------------------------------

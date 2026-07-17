@@ -117,9 +117,15 @@ echtem Fehlerzustand (Perils, Daten-/Konfigurationsfehler) → `error`; reine Be
 es wird nur über `st.warning()` gerendert, nie als eigenes HTML-Badge; **kein
 `--arb-warning`-Token** (S115-Entscheidung).
 
-## 4. Symbol-Konstanten (`src/constants/symbols.py`, S115)
+## 4. Symbol- & Würfel-Design-System (§4.1 S115, §4.2/§4.3 neu S159/B-104)
 
-Ein kanonischer Ort je Glyph — projektweit konsistent tauschbar, keine Fraktionslogik.
+Ein kanonischer Ort je Glyph/Würfelfläche — projektweit konsistent tauschbar, keine
+Fraktionslogik. Drei Unterabschnitte, auf Augenhöhe mit §6 (Gefechtsoptionen-UI):
+§4.1 Glyph-Konstanten (Einzelzeichen, kein Würfel-Slot-Kontext), §4.2 Würfelflächen-
+Katalog (echte Würfel-SVGs), §4.3 Effekt-Symbol-Katalog (Symbole, die in einem
+Würfel-Slot erscheinen — teils SVG-Würfel, teils bewusst Text-Chip).
+
+### 4.1 Glyph-Konstanten (`src/constants/symbols.py`, S115)
 
 | Konstante | Glyph | Bedeutung |
 |---|---|---|
@@ -132,24 +138,84 @@ Ein kanonischer Ort je Glyph — projektweit konsistent tauschbar, keine Fraktio
 | `SYM_SWORDS` | ⚔ | Kampf / Kampfhandlung (ohne Variation-Selector — `⚔️` VS16 wurde S115 angeglichen) |
 | `SYM_RESET` | ↺ | Reset / Rückgängig / Reroll |
 
-### 4.1 Würfel-Slot-Marker-Chip (`diceCompose._triggered_die_chip_html`, S158/B-104)
+### 4.2 Würfelflächen-Katalog (`diceCompose.dice_face_svg`-Familie, S159/B-104)
 
-Kanonischer Baustein für **jede kurze Inhalts-Anzeige innerhalb eines Würfel-Slots**
-(30×30px, umrandetes Kästchen, `border-radius:4px`, Farbe aus `_modifier_color`/
-`color_hint` — Buff-Grün/Debuff-Rot, `design_colors.md` §0, kein neues Token). Ersetzt
-den früheren nackten `<span>{glyph}</span>`-Text — Glyphen lesen sich jetzt wie ein
-echtes Würfelsymbol, konsistent mit den Miss-Dice im Grid selbst (§1.3). Jede
-Anzeige-Stelle, die diesen Chip nutzt, ist unten als eigene Zeile geführt (vollständig,
-kein impliziter Fall):
+Kanonische Zeichenroutine für „das ist eine echte Würfelfläche": `dice_face_svg(value,
+color, miss, size)` — 32×32 SVG (`viewBox="0 0 32 32"`), abgerundetes Rechteck
+(`rx=4 ry=4`), Rahmen 1.5px. Jede Zeile unten ist eine Variante **derselben** Funktion —
+kein zweiter Bau-Ort für „sieht aus wie ein Würfel".
 
-| Effect | Würfelsymbol | Bedeutung |
-|---|---|---|
-| AP-Modifier (`value_triggered_die_row_html`) | z. B. `AP-1` | Direktiv-/Fähigkeits-Effekt, der bei einem bestimmten unmodifizierten Wurfergebnis einen zusätzlichen Wert-Modifikator auslöst (Chip zeigt den Kurztext, z. B. Hungry Void D1 bei einer 6) |
-| reroll (`reroll_marker_row_html`) | ↺ | Effekt, bei dem ein Würfelergebnis in den markierten Slots wiederholt wird |
-| auto-fail/miss (`always_fail_marker_row_html`) | ✕ | Effekt, bei dem ein Wurf in den markierten Slots automatisch scheitert, unabhängig vom gewürfelten Wert (Badge-Label nennt die auslösende Fähigkeit, z. B. „Quantum Shielding") |
+| Würfelfläche | Geometrie | Farblogik | Konsument |
+|---|---|---|---|
+| Erfolgs-Würfel (Pip-Muster 1–6) | 32×32 SVG, `rx=4`, Rahmen 1.5px = `color`-Parameter, Pips als `<circle r="2">` an festen Positionen (`_PIP_POSITIONS`) | Rahmen-/Pip-Farbe = Schwellen-Skala (`_THRESHOLD_COLOR`: grün 2+/3+, amber 4+, orange 5+/6+) oder Modifier-Perspektivfarbe (Buff-Grün/Debuff-Rot), s. `design_colors.md` §0/§4b — kein neues Token | `dice_row_html` (Erfolgsrahmen), `_aligned_modifier_row_html` (linker/rechter Vergleichswürfel) |
+| Miss-Würfel (echter Fehlschlag, Wert 1) | gleiche 32×32-Box, Kreuz = zwei diagonale `<line>` volle Fläche statt Pips | Heute hart `#374151` (Rahmen) / `#c0392b` (Kreuz). **Task-2-Entscheid:** optionaler Farbparameter, Default = exakt dieser Ist-Wert — kein bestehender Aufrufer ändert sich optisch | `dice_row_html` (Wert 1, immer Miss), `miss_die_html()` |
+| Off-Scale-Miss-Marker (Schwelle > 6, z. B. Sv 6+ mit AP-4) | identisch Miss-Würfel — reine Zweitverwendung, kein eigener Stil | identisch Miss-Würfel | `dice_row_html` (threshold>6-Zweig), `_aligned_modifier_row_html` (`right_off_scale=True`) |
+| Modifier-Paar-Miss (linker Würfel = natürliche 1, S122/F3) | identisch Miss-Würfel, in der linken statt rechten Spalte | identisch Miss-Würfel | `_aligned_modifier_row_html(left_miss=True)`, `save_modifier_die_pair_html` |
 
-Neuer Fall künftig: erst neue Zeile hier ergänzen, dann Code anpassen — kein Chip ohne
-Tabellen-Eintrag (Ratchet-Prinzip, analog §5).
+### 4.3 Effekt-Symbol-Katalog (Würfel-Slot-Marker, S159/B-104, ersetzt bisheriges §4.1)
+
+Symbole in einem Würfel-Slot (die Spalte unter/neben der Würfelreihe, die einen bestimmten Wert markiert) folgen zwei verschiedenen Familien: zwei erscheinen als echte Würfelflächen-SVGs (§4.2-Familie, gleiche 32×32-Box-Geometrie), eine ist bewusst ein Text-Chip (weil das Dargestellte keine reale Würfelfläche im Spiel ist). Die folgenden Vorgriff-Zeilen dokumentieren Effekt-Typen, die heute noch nicht oder nur unvollständig gerendert werden — jede Zeile entscheidet explizit Familie und Rendering-Stand, damit „noch kein Producer" nicht mit „kein Katalog-Eintrag" verwechselt wird (Ratchet: Zeile existiert, Code folgt erst mit dem Producer).
+
+| Effekt | Symbol | Familie | Geometrie | Farblogik | Konsument / Status |
+|---|---|---|---|---|---|
+| Auto-fail/miss | ✕ | SVG-Würfelfläche | dieselbe Miss-Würfel-SVG wie §4.2 Zeile 2 (Kreuz statt Pips) — einziger Unterschied: Rahmen-/Kreuzfarbe parametrisiert statt hart | `_modifier_color({"color_hint": ...})` → Buff-Grün (Verteidiger-Perspektive) oder Debuff-Rot (Angreifer-Perspektive), `design_colors.md` §0/§4b — kein neues Token | `always_fail_marker_row_html` → `_marker_row_html` (produktiv verdrahtet, Quantum Shielding) |
+| Reroll | ↺ | SVG-Würfelfläche | gleiche 32×32-Box (Rahmen 1.5px, `rx=4`), Inhalt statt Kreuz/Pip = zentriertes ↺-Glyph (`SYM_RESET`) | fix Reroll-Orange `#f59e0b` (bereits etablierte Reroll-Farbe, kein neues Token) | `reroll_marker_row_html` → `_marker_row_html` (Stand S158/S159: noch nicht produktiv verdrahtet — wartet auf Skorpekh/Destroyer-Lord-Producer, B-113) |
+| AP-Modifier-Trigger | z. B. `AP-1` | Text-Chip | 30×30px Box, `border-radius:4px`, `border` = Farbparameter, `bg:#1e293b`, Text 9px/700 zentriert (`_triggered_die_chip_html`) | Aufrufer-Parameter (aktuell immer Buff-Grün, Baustein selbst ist farbneutral) | `value_triggered_die_row_html` (Direktiv-Effekt bei unmodifiziertem Wurfergebnis, z. B. Hungry Void D1 bei einer 6) |
+| Tesla-Extra-Hits (`extra_hits_on_unmodified_6`, generisch +N Treffer) | +N | Text-Chip | identisch AP-Trigger-Chip (30×30, `border-radius:4px`, Text zentriert), Inhalt `+N` statt `AP-N`, in der auslösenden Spalte (meist 6) | Buff-Grün (Angreifer-Vorteil), analog `value_triggered_die_row_html` | **TEILWEISE** — heute nur externer Badge außerhalb des Grids (`special_die_html`, diceHtml.py:70, „Extra Hits: unmod. 6 = +2 Hits"), kein In-Slot-Chip. Vorgriff empfiehlt Migration auf `value_triggered_die_row_html("Extra Hits", 6, "+2", buff-grün)` — vereinheitlicht mit dem AP-Trigger-Muster (s. §4.4-Lücke) |
+| Extra-Wound-on-6 (Custodes) | +1 | Text-Chip | wie Tesla-Zeile — nur im WOUND- statt HIT-Block, Inhalt `+1` | wie Tesla-Zeile | **KEIN Rendering heute** — reiner Vorgriff, kein Producer verdrahtet |
+| Auto-Hit (Flamer u. ä.) | — | Text-Chip | wie `special_die_html` (bestehender Waffenregel-Badge: `border:1px solid`, `border-radius:4px`, `padding:2px 6px`, 11px Text); **kein Slot-Marker** innerhalb der Würfelreihe — der gesamte HIT-Grid entfällt (kein Wurf, keine Schwelle) | Buff-Grün (kein Fehlschlag mehr möglich — reiner Vorteil), NICHT das fixe Reroll-Orange von `special_die_html` heute — bewusster Farb-Unterschied, weil dies kein Waffenregel-Hinweis, sondern ein Wurf-Ersatz ist | **KEIN Rendering heute** — Vorgriff; künftiger Konsument ersetzt `threshold_header_html`+`dice_row_html` komplett in `_render_dice_roll_block`, wenn `auto_hit` gesetzt ist |
+| Auto-Wound (Necron-Stratagems) | — | Text-Chip | wie Auto-Hit-Zeile — WOUND-Block statt HIT-Block | wie Auto-Hit-Zeile | **KEIN Rendering heute** — Vorgriff |
+| Zusätzlicher Trefferwurf (ein Erfolg löst einen echten Zusatzwurf aus, keine feste Zahl) | ＋ | SVG-Würfelfläche | neue Anker-Position rechts von Spalte 6 (gleiche Position wie der Off-Scale-Miss-Marker, §4.2 Zeile 3), gleiche 32×32-Box, Inhalt = `SYM_ADD` („＋") zentriert statt Pips/Kreuz — signalisiert „hier wird ein Würfel angehängt" | Buff-Grün (Angreifer-Vorteil) | **KEIN Rendering heute, kein Producer bekannt** — reiner Vorgriff für einen künftigen Effekt-Typ; falls ein solcher Effekt datengetrieben auftaucht, referenziert er diese Zeile statt eine neue zu erfinden |
+| Plasma-Overcharge / Selbstverwundung (`mortal_wounds_self`) | — | Text-Chip | bis der DAMAGE-Block entworfen ist: Debuff-Rot Text-Chip analog `_strength_source_badge_html`, Inhalt z. B. „Overcharge: D3 MW self" | Debuff-Rot (Nachteil für den Träger selbst, unabhängig vom Ziel) | **KEIN Rendering heute** — Vorgriff, **blockiert durch die DAMAGE-Block-Entscheidung** (§4.4); kein eigenständiger Bau vor diesem Entscheid |
+
+**Abgrenzung — keine Würfel trotz Namens/Kontext (dokumentarisch, kein Rename in diesem
+Task):**
+
+- `special_die_html` (diceCompose.py) — trotz Namen **kein** Würfel: reiner Label-Chip
+  für Waffenregeln (Tesla, Alt. Fire, Extra Hits), fix Reroll-Orange umrandet, aber ohne
+  Würfelfläche. Nicht Teil dieser Kataloge.
+- `_strength_source_badge_html` (diceHtml.py) — trotz Nähe zum S-vs-T-Vergleich **kein**
+  Würfel: Inline-Chip, der die GO-Quelle eines Strength-Buffs benennt (S146 Fix 1).
+  B-105-Kandidat für Generalisierung zu `go_source_chip`, bleibt aber immer Text-Chip.
+
+**Ratchet-Prinzip (gilt für §4.2 und §4.3 gemeinsam):** Neuer Fall künftig — erst die
+passende Zeile hier ergänzen (§4.2 für eine echte neue Würfelfläche, §4.3 für ein neues
+Slot-Symbol inkl. Entscheidung SVG- vs. Text-Chip-Familie), dann Code anpassen. Kein
+Symbol ohne Tabellen-Eintrag. Vorgriff-Zeilen (Effekt-Typ ohne Producer) bleiben stehen,
+bis ein Producer sie befüllt — sie werden nicht gelöscht, nur weil noch kein Code sie
+konsumiert.
+
+### 4.4 Wurf-Block-Pattern (S159 Fassung 2)
+
+Nicht nur die Symbole *in* einem Würfel-Slot sind katalogisiert (§4.2/§4.3) — auch der
+Aufbau des Wurf-Blocks selbst (HIT/WOUND/SAVE/DAMAGE) folgt einem kanonischen Muster,
+damit ein Spieler jeden Block gleich liest, unabhängig davon, wofür gewürfelt wird.
+
+**Kanonischer Aufbau (Soll, einheitlich für HIT/WOUND/SAVE/DAMAGE):**
+
+```
+├─ Titel + Vergleichswert (WS/BS N+, S vs T, Sv N+, …)
+├─ Threshold-Header + Dice-Row (Basis-Schwelle)
+├─ Marker-Zeilen (optional): Auto-fail (✕) / Reroll (↺) / Value-Trigger (+N) — alle
+│  über denselben Slot-Mechanismus wie §4.3
+├─ Modifier-Zeilen (je Modifier: Vergleichs-Würfelpaar + eigene Eff.-Zeile, verschachtelt)
+├─ Eff.-Zeile (finale Schwelle nach allen Modifiers)
+└─ Quellen-Chips (optional): GO-/Ability-Herkunft eines Buffs/Debuffs (Text-Chip-Familie)
+```
+
+HIT und WOUND folgen diesem Muster weitgehend (WOUND vollständiger: Marker-Zeilen sind
+dort bereits verdrahtet, s. §4.3). SAVE und DAMAGE weichen ab — die Abweichungen sind
+**Vereinheitlichungs-Lücken**, hier benannt, aber **nicht in S159 umgesetzt**:
+Backlog-Kandidaten für einen eigenen Folge-Task (Muster wie die Pakete 4c/5/6 in §6.2).
+
+| Lücke | Ist-Zustand | Soll-Zustand | Status |
+|---|---|---|---|
+| SAVE-Modifier flach statt verschachtelt | AP + Cover je eine flache Zeile, nur eine finale Eff.-Zeile am Ende (`_render_dice_save_block`, diceHtml.py:225–246) | Jeder SAVE-Modifier bekommt wie bei HIT/WOUND seine eigene Eff.-Zeile (verschachtelt), damit AP+Cover-Kombinationen den Zwischenschritt zeigen statt eines Sprungs | Backlog-Kandidat |
+| Invuln als Separat-Sektion | Invuln rendert außerhalb des Save-Block-Patterns, ohne Marker-Zeilen-Hooks (diceHtml.py:250–260) | Invuln folgt demselben Wurf-Block-Pattern (Threshold-Header/Dice-Row/Marker-Zeilen), bleibt aber als eigene Sektion sichtbar — Invuln ist regelkonform ein anderer Save-Typ, keine Verschmelzung mit dem Armour-Path | Backlog-Kandidat |
+| Keine Marker-Zeilen im SAVE-Block | SAVE hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll) | SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren | Backlog-Kandidat |
+| HIT-Block ohne Marker-Zeilen | `_render_dice_roll_block` ruft `always_fail_marker_row_html`/`reroll_marker_row_html` nicht auf, obwohl HIT-Rerolls existieren (Skorpekh, B-113) | HIT-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND, sobald ein HIT-seitiger Producer (B-113) sie befüllt | Backlog-Kandidat, an B-113 gekoppelt |
+| Fehlender DAMAGE-Block | Kein `_render_dice_damage_block()`; Mortal Wounds/Overcharge sind reine Text-Labels ohne Würfel-Grid | Neuer DAMAGE-Block folgt demselben Pattern (Titel/Dice-Row bei echtem Schadenswurf, Marker-/Quellen-Chip-Zeilen immer) — offene Entwurfsfrage: zeigt er ein Grid, wenn nur D3/D6 ohne Erfolgsschwelle gewürfelt wird? | Backlog-Kandidat, eigener Entwurfsschritt nötig (kein Trivial-Fix) |
+| Tesla-Extra-Hits als externer Badge statt In-Slot-Chip | `special_die_html`-Badge außerhalb des Grids statt `value_triggered_die_row_html` in Spalte 6 (s. §4.3-Vorgriff-Zeile) | Migration auf das AP-Trigger-Muster, damit „Erfolg bei 6 löst Zusatzwert aus" gleich aussieht, egal ob AP-Bonus oder Zusatz-Treffer | Backlog-Kandidat |
 
 ## 5. Migrations-Hinweis (Ratchet, kein Big-Bang)
 

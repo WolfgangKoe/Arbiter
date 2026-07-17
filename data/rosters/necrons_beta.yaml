@@ -13,3 +13,6 @@ units:
     models: 3
   - id: wh40k_9e.necrons.unit.lokhust_destroyers
     models: 3
+  - id: wh40k_9e.necrons.unit.canoptek_spyder
+    models: 1
+    wargear: [wh40k_9e.necrons.wargear.gloom_prism]

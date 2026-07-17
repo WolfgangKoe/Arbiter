@@ -394,7 +394,7 @@ def test_load_roster_beta_resolves_all_units() -> None:
     catalog = load_unit_catalog("necrons")
     matched, unmatched = load_roster(_ROSTER_DIR / "necrons_beta.yaml", catalog)
     assert unmatched == []
-    assert len(matched) == 5
+    assert len(matched) == 6
 
 
 def test_load_roster_unmatched_id_reported() -> None:

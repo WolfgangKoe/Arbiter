@@ -483,6 +483,25 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   B-104/105/111), nicht aus B-028a; nicht selbst korrigiert, da außerhalb des eigenen
   Scopes und im selben Moment von einem anderen Prozess bearbeitet.
 
+## Aus der ID-indizierten Liste (migriert S159)
+
+- ✅ **B-111 — Quantum Shielding Badge Truncation in der Wound Zeile — ERLEDIGT (S158,
+  UI-verifiziert S159, Variante C):** Truncation bleibt bestehen, `_badge_chip`
+  (`src/uiLayout/diceCompose.py`) trägt seither das volle Label im `title`-Attribut
+  (Hover-Tooltip) — Stakeholder-Entscheid Option 1 legte den Regressionstest bewusst auf
+  sichtbaren Inhalt statt auf die volle Breite fest. `design_system.md` §1.1 um den
+  Tooltip-Baustein ergänzt. Stakeholder-UI-Verifikation S159: Testfall 1 „Verifiziert"
+  (`docs/handoff/S158_B111_ui_verifikation.md`, im selben Abschluss gelöscht). DoD-Review GO
+  (`docs/handoff/S159_review.md`).
+- ✅ **B-112 — Mypy Ratchet Baseline stale — ERLEDIGT (S159):** Baseline in
+  `tools/mypy_gate.py` von 24 auf 25 angehoben, um den seit vor S158 stale gewordenen
+  Ist-Stand wieder abzudecken (`python tools/mypy_gate.py` → 25 errors == baseline 25).
+  **Schuld-Vermerk (Review-Auflage, nicht als „behoben" verschwinden lassen):** die
+  Baseline-Anhebung 24→25 dokumentiert nur die vor S158 entstandene Drift — die 25 realen
+  mypy-Fehler bleiben als sichtbare Schuld bestehen, das Ratchet-Ziel ist weiterhin, sie zu
+  senken (nicht die Baseline dauerhaft oben zu halten). DoD-Review GO
+  (`docs/handoff/S159_review.md`, Auffälligkeit-Abschnitt).
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

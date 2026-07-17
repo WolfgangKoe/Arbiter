@@ -24,41 +24,41 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S158, 2026-07-17)
+## Aktueller Stand (nach S159, 2026-07-17)
 
-B-028-Zuschnitt freigegeben+verbucht (7 Teil-Tasks B-028b…c5); **B-028a fertig+archiviert**:
-additive Reactive-Ability-Infrastruktur `reactive_abilities_for`/`ability_visibility`/
-`spend_ability`/`undo_ability`/`render_reactive_ability_box`, State-Schlüssel
-`used_ability_ids`/`ability_use_anchors`, 0 Produktiv-Callsites (Callsite folgt B-028b).
-Design-Konsens: B-104 = Variante A (fertig, `_triggered_die_chip_html` in `_marker_row_html`,
-`design_system.md` §4.1), B-105 = Variante A (offen, Design-Crew-Datei `S158_design_crew.md`
-liegt), B-111 = Variante C (fertig, Truncation bleibt + `title`-Tooltip, Regressionstest per
-Stakeholder-Entscheid Option 1 auf sichtbaren Inhalt präzisiert). Roster
-`necrons_b1_verification.yaml` → `necrons_quantum_shielding.yaml` umbenannt (Stakeholder-
-Entscheidung, alle 4 Archiv-Referenzen nachgezogen). Gates (Abschluss): Vollsuite
-**1962 passed / 99,13 %**; Arch 8, Doku/Acceptance 23. mypy-Baseline stale (Baseline 24, real
-25 auf HEAD `9a62f13`) → Backlog-Item B-112. Review S158: NO-GO→GO nach Blocker-Klärung
-(Roster-Umbenennung war beabsichtigt, kein Datenverlust). Retro S158: Maßnahmen 1–6
-übernommen — 1–4 in `docs/reference/agent_scopes.md` verankert (Git-Werkzeug-Verbot,
-Parallel-Executor-Regel, Lösch-Whitelist-Pflicht, Core+UI+Test-Split-Default), 5–6 als
-Backlog-Items B-112 (mypy-Baseline) und B-113 (Skorpekh/Destroyer-Lord-Reroll).
+Würfelsymbol-Katalog freigegeben + `design_system.md` §4.1–§4.4 übernommen (Ratchet: erst
+Katalog-Zeile, dann Code) — §4.2 Würfelflächen-Katalog, §4.3 Effekt-Symbol-Katalog (ersetzt
+altes §4.1), §4.4 Wurf-Block-Pattern inkl. 6 dokumentierten Vereinheitlichungs-Lücken
+(SAVE/Invuln/DAMAGE, B-114…B-118). B-104 auf S158 negativ verifiziert (Text-Chip statt echtem
+SVG) → neuer Zuschnitt gegen den Katalog, Executor-Brief `S159_planning.md` Task 2. B-028b:
+erste B-028a-Callsite (`noctilith_beacons`, Necron-Silent-King), additiv nicht gatend,
+`can_deny()` um Ability-Quellen erweitert; UI-Testfall 1+2 positiv, Testfall 3 (Regression)
+offen — β-Roster (`data/rosters/necrons_beta.yaml`) um Canoptek Spyder/Gloom Prism ergänzt,
+Loader-Test jetzt 6 Einheiten (Stakeholder-Freigabe), Prüfung selbst steht noch aus. B-112:
+mypy-Baseline 24→25 angehoben (Drift stale seit vor S158) — die 25 realen Fehler bleiben
+sichtbare Schuld, Ratchet-Ziel weiterhin senken statt Baseline halten. Gates (Abschluss):
+Doku/Acceptance 23 passed, Arch 8. Review S159: GO (kein inhaltlicher Blocker).
 
-Frühere Sessions (S60–S157): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Dice-Cluster B-104→B-109→B-105 (Task 2–4 aus `S159_planning.md`) nach S160 verschoben
+(Token-Korridor) — Briefs liegen fertig vor, direkt gegen `design_system.md` §4 beauftragbar.
 
-### ▶ Nächster Schritt (S159)
+Frühere Sessions (S60–S158): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+
+### ▶ Nächster Schritt (S160)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-- **B-028b** (Deny-Psychic-Konsolidierung, erste Callsite über B-028a-Infrastruktur).
-- **B-109** (Auto-Fail-Fallback entfernen, verpflichtendes `badge_label` aus YAML).
-- **B-105** (`go_source_chip`-Variante A umsetzen, Design-Crew-Datei liegt bereits vor).
-- **B-112** (mypy-Ratchet-Baseline korrigieren).
+1. **Retro-Maßnahmen-Kandidaten entscheiden:** [M1] Subagent-Briefs: Verbot, auf
+   Hintergrund-Monitore zu warten — Gates im Vordergrund abschließen (2× Nachstoß nötig in
+   S159); [M2] Testfall-Voraussetzungen (Roster-Bestand) beim Task-Zuschnitt prüfen
+   (Testfall-3-Blocker B-028b).
+2. **Dice-Cluster:** B-104 (Task 2) → B-109 (Task 3) → B-105 (Task 4), Briefs in
+   `S159_planning.md`.
+3. **B-028b Testfall 3 Befund** (Stakeholder, β-Roster jetzt bereit).
 
-**Offene UI-Verifikationen:** B-104 (Testfall 1 — Würfelsymbol-Sichtprüfung offen), B-111,
-zusätzlich B-098/B-103 aus S157.
-
-**Offene Handoff-Marker:** `S158_design_crew.md` (B-105 offen), `S158_B104_ui_verifikation.md`
-(Testfall 1 offen; Skorpekh-Befund → B-113), `S158_B111_ui_verifikation.md` (offen).
+**Offene Handoff-Marker:** `S158_B104_ui_verifikation.md` (neuer Zuschnitt, B-104 negativ),
+`S159_B028b_ui_verifikation.md` (Testfall 3 offen), `S159_planning.md` (bleibt als
+Brief-Quelle für Task 2–4).
 
 ---
 

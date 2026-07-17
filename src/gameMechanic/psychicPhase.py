@@ -12,11 +12,12 @@ from typing import Any, ClassVar
 import streamlit as st
 
 from constants.symbols import SYM_COLLAPSE, SYM_EXPAND
+from gameMechanic.abilityEngine import find_unit_ability_by_effect
 from gameMechanic.gameLog import log_action
-from gameMechanic.gameState import units_key_for, units_list_for
+from gameMechanic.gameState import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unitMutations import apply_damage
 from gameObjects.unit import Unit
-from uiLayout._common import lookup, render_reactive_stratagem_box
+from uiLayout._common import lookup, render_reactive_ability_box, render_reactive_stratagem_box
 
 
 class PsychicPhaseHandler:
@@ -49,6 +50,9 @@ def has_psyker(units: list[Unit]) -> bool:
 
 
 def can_deny(units: list[Unit]) -> bool:
+    """R-PSYCHIC-16: a PSYKER, deny wargear (e.g. Gloom Prism) or a unit-owned
+    ``deny_psychic`` ability (e.g. Szarekh's Noctilith Beacons — B-028b) may
+    attempt to deny a psychic power."""
     from gameObjects.loader import load_deny_wargear_names  # noqa: PLC0415
 
     deny_names: set[str] = set()
@@ -59,7 +63,16 @@ def can_deny(units: list[Unit]) -> bool:
                 deny_names.update(load_deny_wargear_names(parts[1]))
             except Exception:
                 pass
-    return any(u.has_keyword("PSYKER") or any(r in deny_names for r in u.rules) for u in units)
+
+    def _unit_can_deny(u: Unit) -> bool:
+        if u.has_keyword("PSYKER") or any(r in deny_names for r in u.rules):
+            return True
+        parts = u.id.split(".")
+        if len(parts) < 2:
+            return False
+        return find_unit_ability_by_effect(parts[1], u.id, "deny_psychic") is not None
+
+    return any(_unit_can_deny(u) for u in units)
 
 
 def initial_deny_state(opponent_units: list[Unit]) -> bool | None:
@@ -421,6 +434,38 @@ def _render_psi_result(
 # ---------------------------------------------------------------------------
 
 
+def _render_deny_ability_cards(faction: str) -> None:
+    """Reactive GO card(s) for unit-owned Deny the Witch sources (B-028b).
+
+    First productive callsite of the B-028a reactive-ability infrastructure
+    (``render_reactive_ability_box``). PSYKER and deny-wargear sources keep
+    the roll UI below unconditional, exactly as before — this only surfaces
+    a card for ability-based sources (unit_ability with ``effect.type ==
+    "deny_psychic"``, e.g. Szarekh's Noctilith Beacons), so they get the same
+    Use/Undo bookkeeping as any other reactive GO. Additive: declining or
+    ignoring the card does not block the roll UI, which stays gated solely by
+    ``can_deny()`` as before — no existing deny path changes behaviour.
+    """
+    units = units_list_for(faction)
+    uids = unit_keys_for(faction)
+    for uid, unit in zip(uids, units):
+        parts = unit.id.split(".")
+        if len(parts) < 2:
+            continue
+        ability = find_unit_ability_by_effect(parts[1], unit.id, "deny_psychic")
+        if ability is None:
+            continue
+        render_reactive_ability_box(
+            faction,
+            "psychic",
+            "opponent_psychic_phase",
+            [ability],
+            decline_key=f"deny_ability_{uid}",
+            context_caption=f"{unit.name_en} may attempt to deny as if it were a PSYKER.",
+            unit_key=uid,
+        )
+
+
 def _render_deny_column(faction: str, state: MutableMapping[str, Any]) -> None:
     units = units_list_for(faction)
 
@@ -458,6 +503,7 @@ def _render_deny_column(faction: str, state: MutableMapping[str, Any]) -> None:
         return
     if not can_attempt_deny(psi, faction, denies_used):
         return
+    _render_deny_ability_cards(faction)
     manifest_roll: int = psi["roll"]
     st.markdown(f"**Deny the Witch: 2D6 > {manifest_roll}**")
     deny_roll = st.number_input(

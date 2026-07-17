@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 15:45 CEST
+Stand: 2026-07-17 18:14 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,19 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 13:27 73bd  ████████████ 157k ⛔    █████░  88%    ··········▒▒
+07-17 15:58 1e74  ████████████ 157k ⛔    ████░░  72%    ··········▒▒
+         SA_1·  ████████████ 161k ⛔    Task 6: B-028b Noctilith Beacons
+         SA_2·  █████░░░░░░░  60k ✅    S159-Review (DoD, GO/NO-GO)
+         SA_3·  ███████████░ 143k ⚠️   Task 1: Würfelsymbol-Katalog
+         SA_4·  ████░░░░░░░░  51k ✅    Task 5: mypy-Baseline B-112
+         SA_5·  ████████░░░░  97k ✅    S159-Abschluss: Artefakte nachzieh…
+         SA_6·  ███████████░ 142k ⚠️   S159-Planungsentwurf erstellen
+         SA_7·  █████░░░░░░░  59k ✅    Haiku-Scan: fehlende Würfel-Effekte
+         SA_8·  ██████░░░░░░  71k ✅    Katalog-Tabellen mergen + §4 übern…
+----------------- ---------------------- -------------- ------------
+07-17 13:27 73bd  ████████████ 160k ⛔    █████░  88%    ···········▒
          SA_1·  ████░░░░░░░░  48k ✅    S158-Abschluss-Review (DoD)
-         SA_2·  ███████████░ 135k ⚠️   S158-Abschluss-Arbeiten ausführen
+         SA_2·  ████████████ 146k ⚠️   S158-Abschluss-Arbeiten ausführen
          SA_3·  █████████░░░ 115k ✅    Backlog-Umbau B-028a–c5
          SA_4·  ████████░░░░ 101k ✅    S158 Planning-Entwurf erstellen
          SA_5·  ██████████░░ 119k ✅    Design-Crew B-104/105/111
@@ -816,3 +826,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S156 (2026-07-17)** Review S155 GO; B-056 QS fertig+verifiziert (3 UI-Folge-Items); B-098 teilfertig; Handoff-Grossreinigung; Retro-Massnahmen 1-9 offen
 - **S157 (2026-07-17)** Retro-Massnahmen verankert, B-028 Option-B-Entscheid, B-098-Rest + B-103 fertig (1915/99.12%), Items B-106-B-111
 - **S158 (2026-07-17)** B-028-Zuschnitt (7 Tasks) + B-028a-Infrastruktur, Design-Konsens B-104/105/111, B-104+B-111 umgesetzt, Retro-Maßnahmen 1-6
+- **S159 (2026-07-17)** Dice symbol catalog approved into design_system §4; Noctilith deny first B-028a callsite; mypy baseline 25

@@ -614,17 +614,19 @@ am Anfang der Beschreibungsspalte.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** ToDo
+**Status:** UI-Verifikation (Testfall 1+2 positiv, Testfall 3 offen — β-Roster jetzt mit Spyder/Gloom Prism)
 
 **Tier:** Executor
 
 **Effort:** ~20k (M)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur rendern statt über bestehenden Wargear-Gate. Gleichzeitig `can_deny()` generisch um Ability-Quellen erweitern (heute nur Wargear `gloom_prism`, braucht auch `noctilith_beacons`). `gloom_prism`-Migration optional — bleibt vorerst im bestehenden Wargear-Gate für diese Session. Kleinste, am besten abgegrenzte zweite Gruppe.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur gerendert — additiv, nicht gatend (erscheint neben dem bestehenden Deny-the-Witch-Wurf-UI, blockiert dieses aber nicht; PSYKER-/Wargear-Pfade unverändert). `can_deny()` generisch um Ability-Quellen erweitert (bisher nur Wargear `gloom_prism`, jetzt auch `noctilith_beacons` über `find_unit_ability_by_effect`). `gloom_prism`-Migration bleibt offener Rest — weiterhin im bestehenden Wargear-Gate.
+
+**UI-Verifikation (S159, `docs/handoff/S159_B028b_ui_verifikation.md`):** Testfall 1 (Karte erscheint im Deny-Column) — positiv. Testfall 2 (Use/Undo-Zyklus, Vollrückgängig-Garantie) — positiv. Testfall 3 (Regression bestehender Deny-Pfade ohne Szarekh) — **offen**: β-Roster (`data/rosters/necrons_beta.yaml`) wurde in S159 um Canoptek Spyder (`gloom_prism`) ergänzt, Loader-Test auf 6 Einheiten angepasst; die eigentliche Regressionsprüfung in der laufenden App steht noch aus (Stakeholder).
 
 **Abhängigkeiten:** Nach B-028a (reines Plumbing muss erst vorhanden sein). Unabhängig von c1–c5.
 
-**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57).
+**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57); `docs/handoff/S159_B028b_ui_verifikation.md` (Testfälle 1–3); `docs/handoff/S159_review.md` DoD-Punkt 6.
 
 **Benötigte Regeln-Scopes:** —
 
@@ -1984,19 +1986,19 @@ am Anfang der Beschreibungsspalte.
 
 **Status:** ToDo
 
-**Tier:** Design-Crew
+**Tier:** Executor
 
-**Effort:** ~15k
+**Effort:** ~20–25k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Die Debuff-Symbole bei Würfelergebnissen (z. B. Quantum-Shielding-Auto-fail) rendern aktuell als nacktes „x" statt als Würfelsymbol mit einem ✕ darin. Entweder das Design-System um diesen Baustein ergänzen (bevorzugt, da wiederverwendbar) oder — falls Umsetzung vor der Design-Entscheidung nötig ist — das Backlog-Item exakt auf den betroffenen Design-System-Abschnitt referenzieren, statt eine Ad-hoc-Optik zu bauen (Stakeholder-Auflage „Kein Design ohne Schema"). **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (`dice_face_svg`, `miss_die_html`, `_marker_row_html`, `always_fail_marker_row_html`, ggf. `reroll_marker_row_html`), `tests/uiLayout/test_dice_html.py`. **Neuer Zuschnitt S159** nach Stakeholder-Ablehnung der S158-Umsetzung (Testfall 1 negativ, `docs/handoff/S158_B104_ui_verifikation.md`): das gemeinte Symbol ist die echte Würfelfläche (`dice_face_svg`/`miss_die_html`), nicht der bisherige Text-Chip (`_triggered_die_chip_html`). Würfelsymbol-Katalog dazu in S159 freigegeben und in `docs/spec/design_system.md` §4.2 (Würfelflächen-Katalog)/§4.3 (Effekt-Symbol-Katalog) übernommen — Re-Fix zieht diesen Katalog nach: `dice_face_svg`/`miss_die_html` bekommen einen optionalen Farbparameter (Default = heutiger fester Wert, bestehende Aufrufer bleiben optisch unverändert), `_marker_row_html`-Auto-fail-Zweig rendert die SVG-Miss-Variante mit Perspektivfarbe statt Text-✕. Executor-Brief liegt vollständig vor: `docs/handoff/S159_planning.md` Task 2.
 
-**Abhängigkeiten:** Design-Entscheidung zuerst (Design-Crew), danach mechanischer Umsetzungs-Schritt.
+**Abhängigkeiten:** Design-Katalog bereits freigegeben (S159) — kein weiterer Design-Crew-Schritt nötig, direkt Executor-Umsetzung.
 
-**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund b).
+**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund b); `docs/handoff/S158_B104_ui_verifikation.md` (Testfall 1, Ablehnungsgrund); `docs/handoff/S159_planning.md` Task 2 (Executor-Brief).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
+**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation); Zuschnitt-Korrektur S159 nach negativer Testfall-1-Prüfung.
 
 ## B-105 — Wound Wurf zeigt keine Referenz auf GO Quantum Deflection
 
@@ -2143,54 +2145,6 @@ Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zu
 
 **Herkunft:** Executor-Nebenfund während B-098-Rest S157.
 
-## B-111 — Quantum Shielding Badge Truncation in der Wound Zeile
-
-[↩ Zeile in backlog.md](backlog.md#b-111)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Design-Crew
-
-**Effort:** XS–S
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (Wound-Zeilen-Badge-Rendering), zugehöriges CSS. Stakeholder-Screenshot (S157-Chat, kein Dateipfad): das neue Quantum-Shielding-Badge in der Wound-Zeile (B-103-Ergebnis, Label jetzt korrekt „Quantum Shielding" statt „Auto-fail") wird abgeschnitten dargestellt („Quantum Sh…") — der B-103-Label-Fix verfehlt dadurch seinen eigentlichen Zweck, da das volle Keyword weiterhin nicht lesbar ist. Nötig: volle Label-Breite oder Zeilenumbruch für das Badge. **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
-
-**Abhängigkeiten:** Direkte Folge von B-103 (Label-Inhalt korrekt, Darstellung bricht ihn ab); ggf. gemeinsam mit B-104/B-105 einplanbar (alle drei betreffen Würfelblock-/Badge-Optik im selben Bereich).
-
-**Belege:** `docs/handoff/Stakeholder_Beobachtungen.md` „Zuletzt überführt" (S157-Eintrag, Rückverweis).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-Beobachtung S157 (Screenshot im S157-Chat).
-
-## B-112 — Mypy Ratchet Baseline stale
-
-[↩ Zeile in backlog.md](backlog.md#b-112)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** XS
-
-**Detail-Beschreibung:** Die mypy-Ratchet-Baseline steht auf 24, der reale Fehlerstand auf
-HEAD `9a62f13` liegt bei 25 (per Worktree-Probe in S158 verifiziert) — die Baseline ist vor
-S158 stale geworden und deckt den Ist-Stand nicht mehr ab. Entweder die Baseline auf den
-korrekten Ist-Wert korrigieren (`tools/mypy_gate.py`) oder den zusätzlichen Fehler fixen,
-damit Baseline und Ist-Stand wieder übereinstimmen.
-
-**Abhängigkeiten:** keine.
-
-**Belege:** Worktree-Probe S158 (mypy-Lauf gegen HEAD `9a62f13`).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Review-Retro S158, Maßnahme 5.
-
 ## B-113 — Skorpekh Destroyer und Destroyer Lord Reroll Faehigkeiten nicht verdrahtet
 
 [↩ Zeile in backlog.md](backlog.md#b-113)
@@ -2212,10 +2166,121 @@ getestet werden. Aufgabe: Regel-Recherche (Wahapedia Necrons) für beide Fähigk
 YAML-Verdrahtung (Skorpekh Destroyer) bzw. Roster-Ergänzung + Verdrahtung (Destroyer Lord).
 
 **Abhängigkeiten:** keine; hängt fachlich mit dem `reroll_marker_row_html`-Baustein
-(`docs/spec/design_system.md` §4.1) zusammen, der auf einen echten Producer wartet.
+(`docs/spec/design_system.md` §4.3) zusammen, der auf einen echten Producer wartet — inkl.
+Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Belege:** `docs/handoff/S158_B104_ui_verifikation.md` Testfall 2 (Stakeholder-Befund).
 
 **Benötigte Regeln-Scopes:** `docs/work/wahapedia_necrons/`.
 
 **Herkunft:** Review-Retro S158, Maßnahme 6.
+
+## B-114 — SAVE Modifier verschachtelt statt flach
+
+[↩ Zeile in backlog.md](backlog.md#b-114)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py` (`_render_dice_save_block`, ~Zeile 225–246). Ist-Zustand: AP + Cover rendern je eine flache Zeile, nur eine finale Eff.-Zeile am Ende des Blocks — der Zwischenschritt bei AP+Cover-Kombinationen bleibt unsichtbar (Sprung statt Nachvollziehbarkeit). Soll: jeder SAVE-Modifier bekommt wie bereits bei HIT/WOUND seine eigene Eff.-Zeile (verschachtelt), damit sich die schrittweise Verschiebung der Erfolgsgrenze nachvollziehen lässt.
+
+**Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; keine Code-Abhängigkeit zu B-115/B-116, aber gleicher Funktions-/Datei-Bereich (`_render_dice_save_block`) — sinnvoll gebündelt beauftragen.
+
+**Belege:** `docs/spec/design_system.md` §4.4 (Wurf-Block-Pattern, Tabellenzeile „SAVE-Modifier flach statt verschachtelt").
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.4).
+
+## B-115 — Invuln Sektion folgt Wurf Block Pattern
+
+[↩ Zeile in backlog.md](backlog.md#b-115)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py` (Invuln-Rendering, ~Zeile 250–260). Ist-Zustand: Invuln rendert komplett außerhalb des Save-Block-Patterns, ohne Threshold-Header/Dice-Row/Marker-Zeilen-Hooks. Soll: Invuln folgt demselben Wurf-Block-Pattern wie SAVE (Threshold-Header/Dice-Row/Marker-Zeilen), bleibt aber als eigene Sektion sichtbar — Invuln ist regelkonform ein anderer Save-Typ, keine Verschmelzung mit dem Armour-Path.
+
+**Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; verwandt B-114 (gleicher Save-Block-Bereich), verwandt B-116 (Marker-Zeilen-Hooks).
+
+**Belege:** `docs/spec/design_system.md` §4.4 (Wurf-Block-Pattern, Tabellenzeile „Invuln als Separat-Sektion").
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.4).
+
+## B-116 — Marker Zeilen Hooks im SAVE Block
+
+[↩ Zeile in backlog.md](backlog.md#b-116)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`/`src/uiLayout/diceCompose.py` (Marker-Zeilen-Bausteine `always_fail_marker_row_html`/`reroll_marker_row_html`, bislang nur im WOUND-Block verdrahtet). Ist-Zustand: der SAVE-Block hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll). Soll: SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren.
+
+**Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; sinnvoll nach B-114/B-115 (gleicher Save-Block-Bereich), da diese die Grundstruktur erst verschachteln.
+
+**Belege:** `docs/spec/design_system.md` §4.4 (Wurf-Block-Pattern, Tabellenzeile „Keine Marker-Zeilen im SAVE-Block").
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.4).
+
+## B-117 — DAMAGE Block Entwurf
+
+[↩ Zeile in backlog.md](backlog.md#b-117)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Design-Crew
+
+**Effort:** ~15–20k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py` (neuer `_render_dice_damage_block()`), `docs/spec/design_system.md`. Ist-Zustand: es gibt keinen DAMAGE-Block — Mortal Wounds/Overcharge sind reine Text-Labels ohne Würfel-Grid. Soll: neuer DAMAGE-Block folgt demselben Wurf-Block-Pattern (Titel/Dice-Row bei echtem Schadenswurf, Marker-/Quellen-Chip-Zeilen immer). **Kein Trivial-Fix** — eigener Design-Schritt nötig, offene Entwurfsfrage bereits im Katalog benannt: zeigt der Block ein Grid, wenn nur D3/D6 ohne Erfolgsschwelle gewürfelt wird? Design-Crew-Schritt zuerst (Design-System-Baustein/Entwurfsentscheidung), danach Umsetzung.
+
+**Abhängigkeiten:** Blockiert den Plasma-Overcharge-/Selbstverwundung-Vorgriff in §4.3 (`mortal_wounds_self`) — dieser wartet explizit auf die DAMAGE-Block-Entscheidung.
+
+**Belege:** `docs/spec/design_system.md` §4.3 (Vorgriff-Zeile „Plasma-Overcharge / Selbstverwundung") + §4.4 (Wurf-Block-Pattern, Tabellenzeile „Fehlender DAMAGE-Block").
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.4).
+
+## B-118 — Tesla Extra Hits Migration auf Value Trigger Muster
+
+[↩ Zeile in backlog.md](backlog.md#b-118)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~10–15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (`special_die_html`, `value_triggered_die_row_html`). Ist-Zustand: Tesla-Extra-Hits (`extra_hits_on_unmodified_6`) rendern heute nur als externer Badge außerhalb des Würfel-Grids (`special_die_html`, „Extra Hits: unmod. 6 = +2 Hits"), kein In-Slot-Chip. Soll: Migration auf `value_triggered_die_row_html("Extra Hits", 6, "+2", buff-grün)` in der auslösenden Spalte (6) — vereinheitlicht mit dem bereits bestehenden AP-Trigger-Muster (z. B. Hungry Void D1 bei einer 6).
+
+**Abhängigkeiten:** Keine Code-Abhängigkeit; nutzt den bereits existierenden `value_triggered_die_row_html`-Baustein (kein neuer Bau nötig).
+
+**Belege:** `docs/spec/design_system.md` §4.3 (Effekt-Symbol-Katalog, Tabellenzeile „Tesla-Extra-Hits") + §4.4 (Wurf-Block-Pattern, Tabellenzeile „Tesla-Extra-Hits als externer Badge statt In-Slot-Chip").
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.3/§4.4).
