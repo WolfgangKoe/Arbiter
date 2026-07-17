@@ -253,10 +253,11 @@ def _advance_reroll_state(
     Streamlit-free decision function.
 
     `used_elsewhere_unit` — the display name of the unit the GO was used on
-    (caller resolves it via `stratagem_used_elsewhere_unit_name`, None when no
-    unit is known — this card's own spend records no `unit_key`, so today the
-    name only resolves when another anchor spent with one); returned as the
-    "used_elsewhere" reason for the §6.1 suffix "used on ⟨Einheit⟩" (S141 B12b).
+    (caller resolves it via `stratagem_used_elsewhere_unit_name`); returned as
+    the "used_elsewhere" reason for the §6.1 suffix "used on ⟨Einheit⟩"
+    (S141 B12b). This card's own spend now also records its `unit_key`
+    (`_spend_callback`'s `uid` argument, S155 B-027), so the suffix resolves
+    for this anchor too, not just when another anchor happened to spend with one.
     """
     if in_melee:
         return "locked", "unit is in melee"
@@ -331,20 +332,29 @@ def _render_advance_reroll_card(
             rule_text=strat.rule_text,
             locked_reason=reason,
             target_name=unit.name_en,
-            on_use=_spend_callback(strat, faction, anchor_id),
+            on_use=_spend_callback(strat, faction, uid, anchor_id),
             on_undo=_undo_callback(strat, faction),
         )
 
 
-def _spend_callback(strat: Stratagem, faction: str, anchor_id: str) -> Callable[[], None]:
+def _spend_callback(
+    strat: Stratagem, faction: str, unit_key: str, anchor_id: str
+) -> Callable[[], None]:
     """Factory for the re-roll card's on_use callback.
 
     Same pattern (and reason) as gameProtocoll.py's `_use_callback`: a bare
     lambda in the loop body would capture the loop variable by reference, and
     the `lambda s=strat:` default-arg workaround defeats mypy's lambda type
     inference — the factory closure gets both right.
+
+    `unit_key` — the selected unit's uid (S155 B-027): this card is rendered
+    once per selected unit (see the `anchor_id` construction above), so the
+    unit the re-roll was used on is always known — unlike the shared central
+    list, there is no ambiguity to fall back to `None` for. Recorded via
+    `spend_stratagem` so `stratagem_used_elsewhere_unit_name` can resolve the
+    "used on ⟨Einheit⟩" suffix for this anchor too.
     """
-    return lambda: spend_stratagem(strat, faction, anchor_id=anchor_id)
+    return lambda: spend_stratagem(strat, faction, unit_key, anchor_id=anchor_id)
 
 
 def _undo_callback(strat: Stratagem, faction: str) -> Callable[[], None]:

@@ -580,3 +580,24 @@ def test_advance_reroll_state_locked_cp_insufficient_when_not_used():
     state, reason = _advance_reroll_state(strat, False, "advanced", 0, set(), set(), True)
     assert state == "locked"
     assert reason == "CP insufficient"
+
+
+def test_advance_reroll_spend_callback_passes_unit_key(monkeypatch):
+    """S155 B-027: the Advance-reroll card's own spend must record the
+    selected unit's uid as `unit_key` so `spend_stratagem` can resolve the
+    "used on ⟨Einheit⟩" suffix for this anchor too — before this fix the
+    call never passed a `unit_key`, so the suffix stayed empty whenever this
+    card's own anchor was the one that spent (spec-conform edge case per
+    S148 verification, not a crash — this is the optional follow-up B-027)."""
+    import gameMechanic.movementPhase as mp
+
+    spy = MagicMock()
+    monkeypatch.setattr(mp, "spend_stratagem", spy)
+    strat = _reroll_strat()
+
+    callback = mp._spend_callback(strat, "Necrons", "warrior#1", "movement_reroll:warrior#1")
+    callback()
+
+    spy.assert_called_once_with(
+        strat, "Necrons", "warrior#1", anchor_id="movement_reroll:warrior#1"
+    )

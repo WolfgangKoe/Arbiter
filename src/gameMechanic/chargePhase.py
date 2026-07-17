@@ -178,6 +178,7 @@ def _inactive_charge(
         decline_key=uid,
         context_caption=f"{unit.name_en} was declared a charge target"
         + (f" by {charger_name}." if charger_name else "."),
+        unit_key_for_modifier=uid,
         unit_for_conditions=unit,
     )
 

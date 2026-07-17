@@ -524,3 +524,20 @@ class TestInactiveChargeOverwatchGate:
 
         spy.assert_called_once()
         assert spy.call_args.kwargs["unit_for_conditions"] is unit
+
+    def test_go_box_passes_reacting_unit_uid_as_unit_key_for_modifier(self, monkeypatch) -> None:
+        """S155 B-027: Fire Overwatch must record the reacting unit's uid via
+        `unit_key_for_modifier` so `spend_stratagem` can resolve the "used on
+        ⟨Einheit⟩" suffix — before this fix the kwarg was never passed and the
+        suffix stayed empty for this reactive window (spec-conform edge case,
+        not a crash)."""
+        _quiet_charge_widgets(monkeypatch)
+        spy = MagicMock()
+        monkeypatch.setattr(cp, "render_reactive_stratagem_box", spy)
+        cp.st.session_state = _S(selected_unit=None)
+        unit = SimpleNamespace(name_en="Necron Warriors")
+
+        cp._inactive_charge("Necrons", WARRIORS, unit, _charge_unit_state(in_melee=False))
+
+        spy.assert_called_once()
+        assert spy.call_args.kwargs["unit_key_for_modifier"] == WARRIORS
