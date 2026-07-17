@@ -4966,8 +4966,8 @@
   "0dfe44e2-58df-4111-ae02-cf900ac26e86": {
     "started_at": "2026-07-17T06:26:43.242Z",
     "task": "start session. Bitte standardvorgehensweise einhalten laut operating model. Sobald die Token-Schwellen erreicht sind gl…",
-    "peak_context": 150442,
-    "subagent_share": 89.74391396008905,
+    "peak_context": 154798,
+    "subagent_share": 88.82035994411783,
     "by_tier": {
       "Opus": 3031715,
       "Sonnet": 76857724
@@ -5014,6 +5014,96 @@
         "tier": "Opus",
         "peak_context": 53100,
         "started_at": "2026-07-17T06:26:43.242Z"
+      }
+    ]
+  },
+  "63426237-45a7-438a-8cc0-05b36e1452ba": {
+    "started_at": "2026-07-17T08:38:29.635Z",
+    "task": "Plan ist kommentiert und freigegeben.",
+    "peak_context": 156178,
+    "subagent_share": 86.71905988207655,
+    "by_tier": {
+      "Haiku": 5401886,
+      "Sonnet": 54838268,
+      "Opus": 1249304
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "B-028-Entscheid verankern",
+        "tier": "Haiku",
+        "peak_context": 53103,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 0a: Prozess-Verankerung",
+        "tier": "Sonnet",
+        "peak_context": 65366,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S157-Abschluss-Artefakte",
+        "tier": "Sonnet",
+        "peak_context": 168939,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S157-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 147380,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-098-Rest Kombi-Waffen",
+        "tier": "Sonnet",
+        "peak_context": 174541,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-028 Scope-Dokument",
+        "tier": "Sonnet",
+        "peak_context": 114563,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Marker-Fix NEEDS-APPROVAL",
+        "tier": "Haiku",
+        "peak_context": 29048,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor 0b: Backlog + Handoffs",
+        "tier": "Sonnet",
+        "peak_context": 163110,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Executor B-103 Label-Fix",
+        "tier": "Sonnet",
+        "peak_context": 100132,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Items B-109/B-110 anlegen",
+        "tier": "Haiku",
+        "peak_context": 81235,
+        "started_at": "2026-07-17T08:38:29.635Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S157-Abschluss-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 69244,
+        "started_at": "2026-07-17T08:38:29.635Z"
       }
     ]
   }

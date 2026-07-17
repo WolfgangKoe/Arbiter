@@ -24,39 +24,35 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S156, 2026-07-17)
+## Aktueller Stand (nach S157, 2026-07-17)
 
-S155-Review nachgeholt (R3-Regel): GO, `docs/handoff/S156_review.md`. S156-Abschluss-Review:
-GO (`docs/handoff/S156_close_review.md`). B-056 Quantum Shielding fertig **und**
-Stakeholder-UI-verifiziert (3 UI-Folge-Items B-103/104/105 gesichert) → archiviert. B-098
-Teil 2 teilfertig: Berechnung+Loader-Guard+Daten stehen, Verdrahtung `combat.py` +
-Profil-Auswahl-UI `_common.py` offen (R-COMBAT-35 `offen`). B-028 → per Stakeholder-Entscheid
-auf Scope-Dokument (Option A) reduziert, Umsetzung S157 (11 reaktive Non-Stratagem-GOs ohne
-GO-Card-Renderer). Handoff-Großreinigung durchgeführt (8 Dateien gesichert→gelöscht).
-Gates (Abschluss-Vollsuite S156): **1903 passed / 99,11 %**; Arch+Doku+Acceptance 31 passed.
+S157-Review: GO (Befund gesichert→gelöscht, neue Abschluss-Regel). Geliefert: Retro-Maßnahmen
+S155/S156 verankert (0a/0b); B-028-Scope-Dokument + Stakeholder-Entscheid **Option B** (Zuschnitt =
+Planner-Auftrag S158; Auflagen: sessiongroße Tasks, App je Task lauffähig, `reanimation_protocols`
+ist factionAbility — Klassifikation klären); **B-098-Rest fertig** (R-COMBAT-35 implementiert,
+Kombi-Checkbox-UI, Nebenfund ranged `p.name` gefixt, melee = B-110); **B-103 fertig**
+(`badge_label` aus YAML). Neue Items B-106–B-111. Retro S157: Maßnahmen 1, 2, 4 übernommen
+(1+4 in `agent_scopes.md` verankert), 3 gestrichen. Gates (Abschluss-Vollsuite, Reviewer-Lauf):
+**1915 passed / 99,12 %**; Arch 8, docs+acceptance 23, Ledger 0.
 
-Frühere Sessions (S60–S155): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S156): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S157)
+### ▶ Nächster Schritt (S158)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-- **(0) Retro-Maßnahmen-Entscheid** (`docs/handoff/S156_retro_s155.md`, NEEDS-DECISION,
-  Maßnahmen 1–9) — Stakeholder wählt/gibt frei, danach übernommene Maßnahmen verankern.
-- **(a) B-098-Rest:** −1-Hit-Malus-Verdrahtung in `combat.py` + Profil-Auswahl-UI in
-  `_common.py` (R-COMBAT-35).
-- **(b) B-028-Scope-Dokument** (Option A, kein Code) — Ist-Zustand der 11 Fähigkeiten,
-  Aufwand neu schätzen.
+- **(0) B-028-Zuschnitt** (Planner) — sessiongroße Tasks, App je Task lauffähig,
+  RP-Klassifikation klären (Stakeholder-Auflagen aus S157-Entscheid Option B).
+- **(a) B-109 Auto-fail-Fallback entfernen** (Stakeholder-Auftrag) — hartcodierten
+  „Auto-fail"-Fallback in `always_fail_marker_row_html` durch verpflichtendes
+  `badge_label`/Loader-Guard ersetzen.
+- **(b) B-104/B-105/B-111** — Design-Crew-Schritt zuerst (Design-System-Baustein), dann
+  Umsetzung.
 
-**Offene Handoff-Marker:** `S156_planning.md` (ANSWERED), `S156_review.md` (ANSWERED),
-`S156_close_review.md` (ANSWERED) — alle drei behalten bis S157-Start, dann löschbar;
-`S156_retro_s155.md` (**NEEDS-DECISION**, Maßnahmen 1–9).
+**Offene UI-Verifikationen:** Kombi-Checkboxen (B-098) + Quantum-Shielding-Badge (B-103;
+Badge erscheint, aber Truncation-Befund B-111).
 
-**Offene UI-Verifikationen:** keine offene Sammeldatei mehr — nächste Verifikationen erst
-wieder mit dem neuen Template (Retro-Maßnahme 5) übergeben. Inhaltlich noch offen:
-Counter-Offensive-Regelklärung + Dauersichtbarkeit (B-102), Silent-King-Fernkampf-Default
-(B-068), PSI-Flow (B-009, Voraussetzungen zuerst klären); Spend-Guard weiter blockiert bis
-Roster-Builder (B-067).
+**Offene Handoff-Marker:** keine.
 
 ---
 

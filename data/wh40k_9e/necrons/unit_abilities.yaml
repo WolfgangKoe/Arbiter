@@ -921,6 +921,7 @@ abilities:
 
   - id: wh40k_9e.necrons.unit.quantum_shielding_wound_deny
     name_en: Quantum Shielding (Wound Auto-fail)
+    badge_label: Quantum Shielding
     ability_type: triggered
     source: unit_ability
     rule_text: "This model has a 5+ invulnerable save. In addition, each time an attack is allocated to this model, if the unmodified wound roll for that attack was 1, 2, or 3, the attack fails and the attack sequence ends."

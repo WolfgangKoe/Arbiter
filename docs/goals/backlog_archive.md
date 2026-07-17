@@ -432,6 +432,25 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   Keyword), B-104 (Würfelsymbol-Design-System-Abweichung), B-105 (fehlende GO-Referenz
   „Quantum Deflection" am Wound-Wurf). DoD-Review GO (`docs/handoff/S156_close_review.md`).
 
+## Aus der ID-indizierten Liste (migriert S157)
+
+- ✅ **B-098 — Boss Nob 7b Kombi-Waffenprofile, Teil 2 — ERLEDIGT (S157):** Rest-Scope
+  (−1-Hit-Malus-Verdrahtung in `src/gameMechanic/combat.py` + Profil-Auswahl-UI in
+  `src/uiLayout/_common.py`, Checkbox statt Selectbox bei `combi`-geflaggten Profilen)
+  geliefert. `docs/spec/acceptance/rules.md` R-COMBAT-35 von `status: offen` auf
+  `status: implementiert` gehoben, 5 Tests referenziert. Nebenfund: latenter
+  `p.name`-Bug im Ranged-Profil-Zweig (`_common.py`) auf `p.name_en` korrigiert; das
+  Melee-Pendant desselben Bugs ist latent (kein aktueller Crash-Pfad) und als eigenes
+  Item B-110 dokumentiert. DoD-Review GO (`docs/handoff/S157_review.md`).
+- ✅ **B-103 — Wound-Debuff-Label zeigt Keyword statt „Auto-fail" — ERLEDIGT (S157):**
+  Label kommt jetzt generisch aus `badge_label` in `unit_abilities.yaml`
+  (`quantum_shielding_wound_deny` trägt `badge_label: Quantum Shielding`) statt dem
+  hartcodierten Fallback-Textbaustein „Auto-fail"; HTML-Output-Test verifiziert das
+  Keyword in der gerenderten Wound-Zeile. Härtung des Fallback-Pfads (verpflichtendes
+  YAML-Feld + Loader-Guard) bewusst als eigenes Folge-Item B-109 ausgelagert. Ein
+  UI-Folgebefund derselben Session (Badge-Truncation in der Wound-Zeile) wurde als
+  eigenes Item B-111 gesichert. DoD-Review GO (`docs/handoff/S157_review.md`).
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

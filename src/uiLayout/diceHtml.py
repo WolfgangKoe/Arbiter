@@ -105,6 +105,7 @@ def _render_dice_wound_block(
     modified: int | None = None,
     strength_buff_labels: list[str] | None = None,
     auto_fail_max: int | None = None,
+    auto_fail_label: str | None = None,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue.
 
@@ -122,6 +123,9 @@ def _render_dice_wound_block(
     (e.g. Necron Quantum Shielding: unmodified 1-3 always fail). Rendered as a
     debuff-red ✕ row from the attacker's perspective (dice_display.md §5.1/§10.2)
     — values come straight from the engine, never recomputed here (S122-Lehre).
+    ``auto_fail_label`` — the triggering ability's own badge text (e.g. "Quantum
+    Shielding"), read from YAML by abilityEngine.unit_wound_auto_fail_label; no
+    hardcoded faction string here (B-103).
     """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
@@ -159,7 +163,10 @@ def _render_dice_wound_block(
         # Attacker's own perspective: their low rolls fail → debuff-red (§5.1).
         st.markdown(
             always_fail_marker_row_html(
-                list(range(1, auto_fail_max + 1)), base_threshold=base, color_hint="debuff"
+                list(range(1, auto_fail_max + 1)),
+                base_threshold=base,
+                color_hint="debuff",
+                label=auto_fail_label,
             ),
             unsafe_allow_html=True,
         )

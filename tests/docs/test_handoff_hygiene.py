@@ -1,10 +1,11 @@
 """Handoff hygiene gate (INV-5): docs/handoff stays a small, current mailbox.
 
-Every handoff file declares its lifecycle status in line 1, and DONE files
-must not linger: insights get merged into backlog/spec, then the file is
-deleted (DoD Punkt 7). Guards against the S116-S118 drift where finished
-handoffs accumulated and triggered a redundant follow-up session (S120).
-Convention: docs/handoff/README.md.
+Every handoff file declares its lifecycle status in line 1, and DONE/ANSWERED
+files must not linger: insights get merged into backlog/spec, then the file
+is deleted in the same Abschluss (DoD Punkt 7; S156-Retro Maßnahme 7 widened
+the guard from DONE-only to both transit markers). Guards against the
+S116-S118 drift where finished handoffs accumulated and triggered a
+redundant follow-up session (S120). Convention: docs/handoff/README.md.
 """
 
 from __future__ import annotations
@@ -15,6 +16,9 @@ _ROOT = Path(__file__).resolve().parents[2]
 _HANDOFF_DIR = _ROOT / "docs" / "handoff"
 
 _VALID_MARKERS = (
+    # NEEDS-APPROVAL: Planning-Datei der laufenden Session (Plan vorgelegt/freigegeben);
+    # wird beim Session-Abschluss auf ANSWERED gesetzt und geloescht (S157).
+    "NEEDS-APPROVAL",
     "NEEDS-DECISION",
     "ANSWERED",
     "DONE",
@@ -47,13 +51,18 @@ def test_every_handoff_file_declares_a_valid_status_marker() -> None:
     )
 
 
-def test_no_done_handoff_lingers() -> None:
-    done = [
+_STALE_MARKERS = ("DONE", "ANSWERED")
+
+
+def test_no_done_or_answered_handoff_lingers() -> None:
+    stale = [
         path.name
         for path in _handoff_files()
-        if _first_line(path).startswith("STATUS:") and "DONE" in _first_line(path)
+        if _first_line(path).startswith("STATUS:")
+        and any(marker in _first_line(path) for marker in _STALE_MARKERS)
     ]
-    assert not done, (
-        "DONE-Handoffs gemaess Lifecycle loeschen, Erkenntnisse vorher in "
-        f"Backlog/Spec ueberfuehren — DoD Punkt 7: {done}"
+    assert not stale, (
+        "DONE-/ANSWERED-Handoffs sind Durchgangszustaende — im selben Abschluss "
+        "loeschen, Erkenntnisse vorher in Backlog/Spec ueberfuehren "
+        f"(DoD Punkt 7, S156-Retro Massnahme 7): {stale}"
     )

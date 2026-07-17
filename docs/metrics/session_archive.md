@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 10:17 CEST
+Stand: 2026-07-17 13:24 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,20 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 08:26 0dfe  ████████████ 150k ⛔    █████░  90%    ············
+07-17 10:38 6342  ████████████ 156k ⛔    █████░  87%    ···········▒
+         SA_1·  ████░░░░░░░░  53k ✅    B-028-Entscheid verankern
+         SA_2·  █████░░░░░░░  65k ✅    Executor 0a: Prozess-Verankerung
+         SA_3·  ████████████ 169k ⛔    S157-Abschluss-Artefakte
+         SA_4·  ████████████ 147k ⚠️   S157-Planning-Entwurf erstellen
+         SA_5·  ████████████ 175k ⛔    Executor B-098-Rest Kombi-Waffen
+         SA_6·  █████████░░░ 115k ✅    Executor B-028 Scope-Dokument
+         SA_7·  ██░░░░░░░░░░  29k ✅    Marker-Fix NEEDS-APPROVAL
+         SA_8·  ████████████ 163k ⛔    Executor 0b: Backlog + Handoffs
+         SA_9·  ████████░░░░ 100k ✅    Executor B-103 Label-Fix
+         SA_10·  ██████░░░░░░  81k ✅    Backlog-Items B-109/B-110 anlegen
+         SA_11·  ██████░░░░░░  69k ✅    S157-Abschluss-Review (Opus)
+----------------- ---------------------- -------------- ------------
+07-17 08:26 0dfe  ████████████ 155k ⛔    █████░  89%    ············
          SA_1·  █████░░░░░░░  66k ✅    S156-DoD-Review (Opus-Reviewer)
          SA_2·  ██████████░░ 129k ⚠️   B-098 Kombi-Waffen umsetzen
          SA_3·  ███████████░ 135k ⚠️   S156-Planning-Entwurf erstellen
@@ -791,3 +804,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S154 (2026-07-16)** Review/Retro S153 nachgeholt (GO); 2 parallele Executor-Wellen: B-019/B-072/B-068/B-009 erledigt, B-036/039/061/082 archiviert, B-087 Counter-Offensive-Fix (unkommittiert, E1), B-053-Löschbefund; Gates grün 99,14%; Rest M1/M2/B-060/B-027/B-079 nach S155
 - **S155 (2026-07-17)** Punkt 0 + Restpaket komplett: E1 Hypothese A (Counter-Offensive-Fix + Hinweis committet), B-027, E3 gretchin_mob, B-036/053/060/079/087 archiviert, B-025 umformuliert, M1+M2+R3 + neue Ablaufregeln (Planner-Prio, UI-Verifikations-Handoff) verankert, B-102 neu; Gates 1880 passed/99,14 %; B-056/B-098/B-028 + S155-Review -> S156
 - **S156 (2026-07-17)** Review S155 GO; B-056 QS fertig+verifiziert (3 UI-Folge-Items); B-098 teilfertig; Handoff-Grossreinigung; Retro-Massnahmen 1-9 offen
+- **S157 (2026-07-17)** Retro-Massnahmen verankert, B-028 Option-B-Entscheid, B-098-Rest + B-103 fertig (1915/99.12%), Items B-106-B-111

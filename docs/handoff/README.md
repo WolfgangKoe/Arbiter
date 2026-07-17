@@ -17,15 +17,18 @@ Jede Handoff-Datei deklariert in ihrer **ersten Zeile** einen Status:
 | Marker | Bedeutung | Wer handelt als Nächstes |
 |---|---|---|
 | `STATUS: DONE` | Ergebnis fertig → Erkenntnisse in Backlog/Spec überführen, **Datei löschen** (DoD Punkt 7) | wer den Marker setzt, löscht im selben Schritt |
+| `STATUS: NEEDS-APPROVAL` | Planungs-Entwurf der laufenden Session — vom Stakeholder freizugeben/freigegeben; bleibt bis zum Session-Abschluss, dann ANSWERED setzen und im selben Abschluss löschen (Inhalt vorher in briefing/backlog überführt) | Koordinator legt vor → Stakeholder freigeben → Abschluss löscht |
 | `STATUS: NEEDS-DECISION` | Subagent braucht eine Stakeholder-Entscheidung | Koordinator legt vor → Stakeholder antwortet |
-| `STATUS: ANSWERED` | Stakeholder hat geantwortet (Antwort steht in der Datei) | Koordinator weckt den Subagenten per `SendMessage` |
+| `STATUS: ANSWERED` | Stakeholder hat geantwortet (Antwort steht in der Datei) | Koordinator weckt den Subagenten per `SendMessage` **oder** überführt die Antwort direkt in Backlog/Spec — dann **im selben Abschluss löschen** (kein „behalten bis X" mehr, S156-Retro Maßnahme 7) |
 | `STATUS: IN-PROGRESS` | Subagent arbeitet noch / mehrteilig — nur **während** eines Laufs; vor Lauf-Ende auf einen der drei anderen Marker setzen (der Wächter akzeptiert nur diese) | — |
 | `STATUS: STANDING` | Dauerhafter Eingangskanal (z. B. Stakeholder-Beobachtungen) — Datei wird **nie gelöscht**, auch nicht leer; Inhalt wird bei Bedarf in Backlog/Spec überführt, die Datei selbst bleibt (S134-Stakeholder-Entscheid) | wer den Inhalt überführt, leert die Datei — löscht sie nicht |
 
-**Wächter (S120):** `tests/docs/test_handoff_hygiene.py` bricht den Build, wenn Zeile 1 nicht mit
-`STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE`/`STANDING` beginnt — oder wenn ein `DONE`-Handoff liegen bleibt.
-`DONE` ist damit ein **Durchgangszustand** (Setzen + Löschen im selben Schritt), kein Ablagezustand —
-der Wächter erzwingt das absichtlich, statt einen Bug zu markieren.
+**Wächter (S120, verschärft S156-Retro Maßnahme 7):** `tests/docs/test_handoff_hygiene.py`
+bricht den Build, wenn Zeile 1 nicht mit `STATUS:` + `NEEDS-DECISION`/`ANSWERED`/`DONE`/
+`STANDING`/`NEEDS-APPROVAL` beginnt — oder wenn ein `DONE`- **oder** `ANSWERED`-Handoff liegen bleibt.
+`DONE` und `ANSWERED` sind damit beide **Durchgangszustände** (Setzen + Löschen im selben
+Abschluss), kein Ablagezustand mehr — der Wächter erzwingt das absichtlich, statt einen Bug
+zu markieren.
 
 ## Mailbox-Round-Trip (Ablauf)
 

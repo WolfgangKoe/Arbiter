@@ -48,9 +48,13 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   `WeaponProfile.combi: bool`-Feld statt Wiederverwendung von `effect` (das trägt pro Profil
   schon den eigenen Mechanik-Typ, z. B. `alternating_fire`/`auto_hit` auf dem Shoota/Skorcha-Teil
   desselben Kombi-Waffen-Datensatzes — inkompatibel mit einem zweiten Tag im selben Dict).
-  `_combi_hit_penalty()` (attackMath.py) ist reine Berechnung, testbar ohne Streamlit; die
-  Anwendung in der echten Angriffsauflösung (Profil-Auswahl-UI + Hit-Modifier-Weitergabe an
-  `combat.py`) ist noch offen (R-COMBAT-35).
+  `_combi_hit_penalty()` (attackMath.py) ist reine Berechnung, testbar ohne Streamlit.
+  **S157 (R-COMBAT-35) erledigt:** die Profil-Auswahl (Checkbox je Profil statt Radio, sobald
+  `any(p.combi for p in profiles)`, `render_group_assignment`/`_common.py`) trägt das Ergebnis
+  als `combi_hit_mod` auf dem Deklarations-Entry; `compute_resolution_context` (`_common.py`)
+  reicht es als benannten Hit-Modifier-Eintrag (`"Combi (both profiles)"`) in denselben Stack,
+  den `resolve_attack_modifiers` (`combat.py`) für Dense Cover/Fall-Back/Heavy-advanced schon
+  bedient — kein Sonderpfad in `combat.py` selbst nötig.
 - **`weapon_swaps` mit überlappender `replaces`-Liste — Exklusivität nur bei `scope: group`:**
   Der Loader (`_check_exclusive_swaps`, `loader.py`) verweigert zwei **group**-Swaps derselben
   Modellgruppe, wenn beide dieselbe Basis-Waffe ersetzen (z. B. Boss Nob: 2-Waffen-Kombo vs.

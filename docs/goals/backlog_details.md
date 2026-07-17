@@ -127,21 +127,21 @@ am Anfang der Beschreibungsspalte.
 
 **Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
 
-**Status:** Blocked
+**Status:** ToDo
 
 **Tier:** Planner
 
 **Effort:** ~15–20k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/abilityEngine.py` (594 Zeilen, 29 Funktionen). Analog zu `stratagemEngine.py` wurde erwogen, `abilityEngine.py` nach Aktivierungsmodus (passiv/aktiv/triggered) in ein Paket zu zerlegen. Kritische Bewertung: der Modus-Schnitt trägt die reale Struktur nicht — der dominante Block (~52 %) ist Direktiv-/Protokoll-Logik, weder klar „passiv" noch „triggered"; die natürlichen Nähte sind **Direktiven/Protokolle | Unit-Buffs+Revive | Queries+Dispatch**. 594 Zeilen sind (noch) kein Kohäsionsproblem — das reale Problem ist Duplikation (s. B-081 DRY Directive-Aktiv-Logik). **Konsent-Entscheid (S145): zurückgestellt, mit Schwellwert statt „nie".** Split-Trigger: `abilityEngine.py` überschreitet ~800 Zeilen ODER die DRY-Schuld wird angegangen → dann eigener Refactor-Brief, Schnitt entlang der realen Nähte (nicht passiv/aktiv/triggered). Effort S, ~15–20k Token, re-exportierendes `__init__.py` als Kompatibilitätsschicht; nicht parallel zu Briefs mit `abilityEngine`-Importänderungen.
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/abilityEngine.py` (639 Zeilen, S157 gemessen — vorher 594, 29 Funktionen). Analog zu `stratagemEngine.py` wurde erwogen, `abilityEngine.py` nach Aktivierungsmodus (passiv/aktiv/triggered) in ein Paket zu zerlegen. Kritische Bewertung: der Modus-Schnitt trägt die reale Struktur nicht — der dominante Block (~52 %) ist Direktiv-/Protokoll-Logik, weder klar „passiv" noch „triggered"; die natürlichen Nähte sind **Direktiven/Protokolle | Unit-Buffs+Revive | Queries+Dispatch**. Das reale Problem ist Duplikation (s. B-081 DRY Directive-Aktiv-Logik). **Ursprünglicher Konsent-Entscheid (S145): zurückgestellt, mit Schwellwert statt „nie" — Split-Trigger `abilityEngine.py` > ~800 Zeilen ODER DRY-Schuld wird angegangen.** **Aufgehoben (S157-Planning, Stakeholder-Retro-Ergänzung 3):** der Stakeholder will das Item unabhängig vom Schwellwert jetzt angehen („viel herumbasteln", Wunsch nach brauchbarer Architektur mit Blick auf das aktuelle Ziel) — bewusster Override der S145-Entscheidung, keine gesonderte Rückfrage nötig (Freigabe liegt in der Retro-Antwort vor). Umsetzung wartet auf das Ergebnis von B-107 (Design-Patterns-Discovery), das den konkreten Zuschnitt liefert. Effort S, ~15–20k Token, re-exportierendes `__init__.py` als Kompatibilitätsschicht; nicht parallel zu Briefs mit `abilityEngine`-Importänderungen.
 
-**Abhängigkeiten:** Orthogonal zur Klan/Dynastie-Arbeit — K2 (B-003) legt seine neue Logik bereits in ein eigenes Modul (`gameMechanic/subfactionPassives.py`), `abilityEngine.py` wächst dadurch nicht.
+**Abhängigkeiten:** Orthogonal zur Klan/Dynastie-Arbeit — K2 (B-003) legt seine neue Logik bereits in ein eigenes Modul (`gameMechanic/subfactionPassives.py`), `abilityEngine.py` wächst dadurch nicht. Zuschnitt (Schnitt entlang der realen Nähte) wartet auf B-107-Discovery-Ergebnis.
 
-**Belege:** `S145_planning.md` §Option C (migriert S147).
+**Belege:** `S145_planning.md` §Option C (migriert S147); `docs/handoff/S157_planning.md` (Vorab-Rechercheergebnis, Ist-Zeilenzahl); `docs/handoff/S156_retro_s155.md` (Retro-Ergänzung 3, Stakeholder-Override).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** Prio-Rang ∥ (S145-Prioritätenliste, jederzeit parallel startbar); §4 Alt-`backlog.md` Z.593–613.
+**Herkunft:** Prio-Rang ∥ (S145-Prioritätenliste, jederzeit parallel startbar); §4 Alt-`backlog.md` Z.593–613; Schwellwert aufgehoben + hochgezogen S157 (Stakeholder-Retro-Ergänzung 3).
 
 ## B-007 — Backlog Restrukturierung
 
@@ -595,6 +595,169 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** §2 Alt-`backlog.md` Z.284–286 (Stakeholder-Wunsch S148); Renderpfad-Kartierung S150; Scope-Befund + Stakeholder-Entscheid S156.
+
+### Ergebnis — Scope-Dokument Option A (S157)
+
+**Korrektur zum Plan:** `docs/handoff/S157_planning.md` nennt die dritte Datenquellen-Kette als
+`src/uiLayout/movementPhase.py:325` — diese Datei existiert nicht unter `uiLayout/`. Der tatsächliche
+Pfad ist `src/gameMechanic/movementPhase.py:326` (`_render_advance_reroll_card`, Aufruf von
+`render_go_card`). Verifiziert per `find`/`grep`, kein Blocker, nur Pfad-Korrektur für die Belege
+unten.
+
+#### Grundannahmen (zur Bestätigung vor Option B)
+
+1. **Timing-Vertrag ist strukturell ähnlich, aber nicht identisch.** Beide Modelle kennen
+   `phase_reactive`, aber bei `Stratagem` liegen `timing`/`phase`/`event`/`player` als flache
+   Felder (`gameObjects/stratagem.py:66-67`), bei `Ability` liegen dieselben Informationen
+   verschachtelt in `Trigger` (`gameObjects/ability.py:8-15`: `trigger.timing`, `trigger.phase`,
+   `trigger.event`, `trigger.player`). Ein generischer Filter (analog `reactive_stratagems_for()`)
+   braucht entweder eine zweite, Ability-spezifische Funktion oder eine Adapter-Schicht — kein
+   Ein-Zeilen-Wiederverwenden.
+2. **Abilities sind CP-frei, Karten dürfen das nicht falsch darstellen.** `Ability` hat kein
+   `cp_cost`-Feld. `render_go_card()` selbst ist bereits generisch (Name, `cp_cost`, `state`,
+   Callbacks — kennt weder `Stratagem` noch `Ability`), kann also mit `cp_cost=0` fest aufgerufen
+   werden. Das CP-Gate in `stratagem_visibility()` entfällt für Abilities ersatzlos (nicht
+   nachbilden).
+3. **Usage-/Anchor-Bookkeeping existiert für Abilities nicht und wird nicht „mitbenutzt".**
+   `spend_stratagem()`/`undo_stratagem()` (`_common.py:439-551`) sind auf den Typ `Stratagem`
+   getippt und lesen `strat.cp_cost`, `strat.once_per_battle`, `strat.modifier` — Felder, die
+   `Ability` nicht hat. Empfehlung (kein Fait accompli, zur Bestätigung): **eigene, schlanke
+   `spend_ability()`/`undo_ability()`** mit eigenen Session-State-Schlüsseln
+   (`used_ability_ids`/`ability_use_anchors`), keine Wiederverwendung der Stratagem-Schlüssel und
+   kein Umbau von `spend_stratagem()` auf einen gemeinsamen Protocol-Typ — zweite Wiederholung
+   eines kleinen Musters unterschreitet die projekteigene DRY-Schwelle „ab der dritten
+   Wiederholung" (CLAUDE.md „Clean Code").
+4. **Reanimation Protocols bleibt bewusst außerhalb des GO-Card-Umbaus.** Von den 11 GOs hat
+   `reanimation_protocols` (`faction_abilities.yaml`) bereits eine funktionierende, aber
+   card-fremde UI (`_render_rp_block`, `_common.py:1448-1508`: Markdown-Zusammenfassung +
+   `number_input` + zwei Buttons, gespeist über `get_after_attack_revive_ability()` +
+   `revive_dice_count()`). Annahme: Option B migriert **nur die übrigen 10** GOs auf
+   `render_go_card`; `reanimation_protocols` bleibt bei seiner bestehenden UI, weil eine Migration
+   hier reine Form-Änderung ohne Fachlichkeitsgewinn wäre (die Dice-Count-Eingabe passt nicht in
+   das Use/Undo-Schema einer GO-Karte ohne Funktionsverlust).
+5. **Effekt-Ausführung ist Teil von Option B, nicht nur das Rendering.** Von den verbleibenden 10
+   Effekt-Typen ist heute **keiner** über `abilityEngine._EFFECT_HANDLERS` ausführbar (einziger
+   Dispatch-Eintrag ist `"heal"`, `abilityEngine.py:82-84`) und für `deny_psychic`, `mortal_wounds`,
+   `reroll_rp`, `free_attack`, `mark_target`, `buff_roll` existiert **keine** Ausführungslogik
+   außerhalb der beiden bereits erwähnten Sonderpfade (s. Ist-Zustand-Tabelle). Annahme: Option B
+   umfasst sowohl Kartenanzeige **als auch** die fachliche Umsetzung der Effekte — eine
+   Rendering-only-Variante (Karte erscheint, Effekt bleibt manuelle Tischnotiz) wäre ein deutlich
+   kleinerer, alternativer Zuschnitt und müsste explizit gewählt werden.
+6. **Neue Ereignis-Auslöser haben keine generischen Hooks.** `model_destroyed`,
+   `enemy_falls_back`, `enemy_melee_attack`, `after_unit_fights`, `after_unit_shoots`,
+   `friendly_unit_destroys_enemy` (die sechs `event`-Werte der 10 GOs, s. Tabelle) existieren im
+   App-Code an keiner Stelle als automatisch erkannte Ereignisse. Annahme: wie bei den bestehenden
+   reaktiven Stratagem-Boxen bestätigt der Spieler das Eintreten manuell (ein Button/Trigger an der
+   passenden Phasen-Stelle), keine automatische Ereigniserkennung.
+
+#### Ist-Zustand je der 11 GOs (verifiziert gegen YAML + `grep -rn` über `src/`)
+
+| ID (gekürzt) | Datei | `trigger.phase` / `event` | `effect.type` | Heute im UI? |
+|---|---|---|---|---|
+| `the_silent_king.noctilith_beacons` | `necrons/unit_abilities.yaml:349` | psychic / `opponent_psychic_phase` | `deny_psychic` | **Nein** — `can_deny()` (`psychicPhase.py:51-62`) prüft nur PSYKER-Keyword + `load_deny_wargear_names()` (nur `wargear.yaml`); diese unit-eigene Ability wird nicht erfasst, selbst wenn Szarekh kein PSYKER ist. |
+| `the_silent_king.vengeance_of_the_enchained` | `necrons/unit_abilities.yaml:385` | any / `model_destroyed` | `mortal_wounds` | **Nein.** Kein Dispatch, keine Karte. |
+| `warriors.their_number_is_legion` | `necrons/unit_abilities.yaml:408` | shooting+fight / `reanimation_roll` | `reroll_rp` | **Nein** — RP läuft im Code als aggregierte Würfelzahl (`_render_rp_block`, kein Einzelwurf), ein „Reroll von Einsen" ist mit dieser Datenrepräsentation gar nicht abbildbar (Class-B-Kandidat, s. Aufwandsschätzung). |
+| `canoptek_plasmacyte.infused_madness` | `necrons/unit_abilities.yaml:488` | any / `model_destroyed` | `mortal_wounds` | **Nein.** |
+| `hexmark_destroyer.inescapable_death` | `necrons/unit_abilities.yaml:510` | movement / `enemy_falls_back` | `free_attack` | **Nein** — bräuchte eine vollständige Attacke-Sequenz mitten in der Movement-Phase des Gegners. |
+| `gauss_pylon.arc_fields` | `necrons/unit_abilities.yaml:763` | fight / `enemy_melee_attack` | `mortal_wounds` | **Nein.** |
+| `seraptek_heavy_construct.wrath_of_the_seraptek` | `necrons/unit_abilities.yaml:784` | fight / `after_unit_fights` | `mortal_wounds` | **Nein.** |
+| `triarch_stalker.targeting_relay` | `necrons/unit_abilities.yaml:884` | shooting / `after_unit_shoots` | `mark_target` | **Nein** — bräuchte zustandsbehaftetes „Ziel markiert" über Einheiten-/Phasengrenzen hinweg. |
+| `reanimation_protocols` (Faction) | `necrons/faction_abilities.yaml:28` | shooting+fight / `after_enemy_attack` | `reanimate` | **Teilweise** — Effekt vollständig implementiert und im Spiel aktiv genutzt (`get_after_attack_revive_ability()`, `_render_rp_block`), aber **nicht** als GO-Card, sondern eigene Custom-UI (s. Grundannahme 4). Kein „Nachbau", nur Konsolidierung. |
+| `gloom_prism` (Wargear) | `necrons/wargear.yaml:78` | psychic / **kein `event`-Feld** | `deny_psychic` | **Teilweise** — `can_deny()` erfasst diesen Wargear-Effekt generisch über `load_deny_wargear_names()`, aber wieder nicht als eigene GO-Card mit Use/Undo, sondern als reines Ja/Nein-Gate im bestehenden Deny-Flow. Auffällig: als einzige der 11 Abilities fehlt hier das `event`-Feld im Trigger — kleine Schema-Inkonsistenz gegenüber den übrigen 10 (Beleg für Grundannahme 1: das Ability-Trigger-Schema ist weniger streng befüllt als das Stratagem-Pendant). |
+| `klan.freebooterz.competitive_streak` | `orks/subfaction_abilities.yaml:132` | any / `friendly_unit_destroys_enemy` | `buff_roll` | **Nein** — `buff_roll` als String kommt zwar in `commandPhase.py:391`/`gameState.py:37` vor, das ist aber eine andere (round-choice-basierte) Ability, kein Bezug zu `competitive_streak`. |
+
+**Konsolidierter Befund:** von 11 GOs haben 2 (`reanimation_protocols`, `gloom_prism`) bereits einen
+funktionierenden, aber card-fremden Teil-Pfad; 9 haben **keinerlei** UI- oder Ausführungs-Spur im
+Code. Die S156-Aussage „nirgends über einen Reactive-GO-Card-Pfad gerendert" ist für alle 11 korrekt
+(kein einziges nutzt `render_go_card`), verdeckt aber, dass 2 der 11 fachlich bereits vollständig
+funktionieren — nur eben nicht im GO-Card-Format.
+
+#### Renderer-Konzept
+
+**`render_go_card()` selbst ist bereits generisch** (`_common.py:1052`, Parameter: `key, name,
+cp_cost, state, keywords, rule_text, compact, locked_reason, target_name, expanded_content, on_use,
+on_undo` — keine Stratagem-/Ability-Typbindung). Der fehlende Teil ist die Schicht **davor**: die
+drei bestehenden Aufrufer (`_render_stratagems` in `gameProtocoll.py:336-379`,
+`render_reactive_stratagem_box` in `_common.py:750-884`, `_render_advance_reroll_card` in
+`gameMechanic/movementPhase.py:282-337`) berechnen `state`/`locked_reason`/`target_name` alle aus
+Stratagem-spezifischen Helfern (`stratagem_visibility`, `stratagem_conditions_met`,
+`_weapon_conditions_met_for_unit`, `stratagem_used_here`, `stratagem_used_elsewhere_unit_name`).
+
+Vorgeschlagene Signatur eines neuen `render_reactive_ability_box()` (Name in Anlehnung an
+`render_reactive_stratagem_box`, wohnt ebenfalls in `_common.py`):
+
+```python
+def render_reactive_ability_box(
+    faction: str,
+    phase: str,
+    event: str,
+    *,
+    unit_for_conditions: Unit | None,
+    decline_key: str,
+    on_resolved: Callable[[], None] | None = None,
+) -> None:
+```
+
+Bewusst **kein** `effect_type`/`effect_stat`-Filterpaar wie beim Stratagem-Original (dort dient es
+dazu, aus einer gemeinsamen Kandidatenliste die eine passende Stratagem-Instanz für genau diesen
+Call-Site herauszufiltern) — bei nur 11 GOs über vier verschiedene Loader kann der Aufrufer die
+passende Ability direkt per `id` oder `unit_id` referenzieren, ein generischer Typ-Filter lohnt sich
+hier noch nicht (YAGNI, gegebenenfalls in einer zweiten Iteration nachziehen, falls die Anzahl
+wächst).
+
+**Was wiederverwendbar ist:**
+- `render_go_card()` — vollständig, unverändert.
+- Das **Muster** der drei Aufrufer (Kandidaten sammeln → Sichtbarkeit prüfen → State/Reason
+  mappen → `render_go_card` aufrufen) — als Vorlage, nicht als Code (andere Feldnamen, andere
+  Loader).
+- `go_card_container_style()`/`go_card_html()` (CSS/HTML-Bausteine unter `render_go_card`) —
+  vollständig, kennen nur `GoCardState`, keine Quelltyp-Bindung.
+
+**Was neu gebaut werden muss:**
+- `reactive_abilities_for(abilities, phase, event)` — Pendant zu `reactive_stratagems_for()`
+  (`gameObjects/stratagem.py:198-218`), liest aber `ability.trigger.timing/.phase/.event` statt
+  der flachen Stratagem-Felder. Gehört fachlich neben `Ability` (z. B. `gameObjects/ability.py`
+  oder ein neues `gameObjects/abilityVisibility.py`, analog zur Trennung `stratagem.py` vs.
+  `_common.py`).
+- Eine Ability-Sichtbarkeits-Funktion (kein CP-Zweig, sonst analog `stratagem_visibility()`):
+  conditions_met (bereits vorhanden: `check_conditions()`, `abilityEngine.py:49-66`) + reactive-
+  Gate + noch-nicht-benutzt-Gate.
+- `spend_ability()`/`undo_ability()` mit eigenen Session-State-Schlüsseln (Grundannahme 3).
+- Vier Loader-Aufrufe statt einem (`load_unit_abilities`, `load_faction_abilities`,
+  `load_wargear_abilities`, `load_subfaction_abilities`) — der Aufrufer muss wissen, aus welcher
+  YAML-Quelle seine jeweilige Ability stammt (keine kombinierte „alle Abilities einer Faction"-
+  Funktion existiert bisher).
+- Sechs Effekt-Ausführungen (`deny_psychic` als eigenständiger — nicht nur Wargear-Gate — Pfad,
+  `mortal_wounds` ×4 GOs, `reroll_rp`, `free_attack`, `mark_target`, `buff_roll`) — jede mit eigener
+  Fachlogik, drei davon (`free_attack`, `mark_target`, `reroll_rp`) mit nicht-trivialer
+  Zustandshaltung über Phasen-/Einheitengrenzen hinweg.
+- 9 neue Call-Sites (die 9 GOs ohne bestehenden Teil-Pfad) in `movementPhase.py`, `fightPhase.py`,
+  `psychicPhase.py`, ggf. `shootingPhase.py` — analog zu den sechs bestehenden Stratagem-Call-Sites,
+  aber in anderen/zusätzlichen Phasen-Dateien.
+
+#### Aufwandsschätzung Option B (neu)
+
+Die bisherige Backlog-Schätzung (~35k, Zeile „Effort" oben) war für „Suffix auf bestehende Boxen
+ausweiten" kalkuliert — nach diesem Scope-Befund ist der tatsächliche Umfang „Ability-seitige
+Reactive-GO-Infrastruktur komplett neu bauen + 6 bislang nirgends implementierte Effekt-Typen
+fachlich umsetzen". Das sprengt den M-Rahmen (Executor-Brief-Obergrenze) deutlich — **Split-Vorschlag
+in drei Schritte**, jeder für sich innerhalb M:
+
+| Teil | Inhalt | Schätzung |
+|---|---|---|
+| **B-028a — Infrastruktur** | `reactive_abilities_for()`, Ability-Sichtbarkeitsfunktion, `spend_ability()`/`undo_ability()` + Session-State-Schlüssel, `render_reactive_ability_box()`. Kein neuer Effekt, nur Plumbing — als Testfall kann ein bereits existierender Dispatch (`heal`) durch den neuen Pfad laufen. | ~30k |
+| **B-028b — Die beiden Teil-Pfade konsolidieren** | `reanimation_protocols` bewusst NICHT migrieren (Grundannahme 4); `gloom_prism`/`noctilith_beacons` `deny_psychic` vereinheitlichen — `noctilith_beacons` als erste komplett neue Karte über B-028a rendern, `can_deny()` generisch um Ability-Quellen (nicht nur Wargear) erweitern. Kleinster, am besten abgegrenzter zweiter Schritt. | ~20k |
+| **B-028c — Die 8 „mortal_wounds/reroll_rp/free_attack/mark_target/buff_roll"-GOs** | Fachlich heterogenste Gruppe — vier `mortal_wounds`-GOs vermutlich gemeinsam lösbar (ein Effekt-Handler, vier Call-Sites), `reroll_rp`/`free_attack`/`mark_target`/`buff_roll` sind vier verschiedene, jeweils nicht-triviale Mechaniken. **Muss vor Beauftragung noch einmal in der Planung selbst unterteilt werden** (mind. 2 Executor-Briefs) — hier nur als Sammelposten geschätzt, keine belastbare Einzelzahl. | ~50k+ (grobe Sammelschätzung, vor Beauftragung erneut aufteilen) |
+
+**Gesamt (grob):** ~100k+ für volle Option B — mehr als das Doppelte der ursprünglichen ~35k-Schätzung
+und deutlich über der Session-typischen Wind-down-Grenze (~120–135k) in einem Stück. Empfehlung:
+B-028a und B-028b sind reif für eine Beauftragung (S158), B-028c braucht einen eigenen
+Planungsdurchgang, sobald B-028a steht (Sichtbarkeits-/Spend-Infrastruktur muss zuerst existieren,
+damit sich die acht heterogenen Effekte sauber daran andocken lassen).
+
+Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und darauf achten, dass die kleineren Tasks in einer Session umsetzbar sind und die App funktioniert. Ich war mir beim Lesen nicht sicher, ob reanimation_protocols nicht fälschlicherweise als GO interpretiert wird. Das ist eine factionAbility, auf die ggf. eine GO oder eine andere GO wirken kann.
+
+**Übernahme des Entscheids (S157):** Option B freigegeben. Auflagen für den Zuschnitt: (a) sessiongroße Tasks (je ≤ M-Effort), (b) die App ist nach jedem Task lauffähig — kein Zwischenzustand mit toter UI. (c) Klassifikations-Klärung vorab: `reanimation_protocols` ist eine **factionAbility**, auf die GOs wirken können — kein GO; der Zuschnitt prüft die 11er-Liste auf diese Fehlklassifikation und nimmt RP ggf. heraus (deckt sich mit der Grundannahme oben, dass die RP-UI nicht migriert wird). Der Zuschnitt (Verfeinerung von B-028a/b/c in Backlog-Items) ist ein **Planner-Auftrag S158**.
 
 ## B-029 — B13 GO Karte Keyword Badges
 
@@ -1510,15 +1673,15 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~70k+ — vor Vergabe splitten
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (2218 Zeilen). `_common.py` in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei werden.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (3046 Zeilen, S157 gemessen (`wc -l`) — vorher 2218, +828/+37 %; die Datei trägt inzwischen auch die Kombi-Waffen-/Auto-Fail-Anzeige aus S156). `_common.py` in logische Teile zerlegen; die Attackensequenz sollte eine eigene Datei werden. Priorität S157 hochgezogen (Stakeholder-Retro-Ergänzung 3, „viel herumbasteln", brauchbare Architektur mit Blick auf das aktuelle Ziel). Umsetzung wartet auf das Ergebnis von B-107 (Design-Patterns-Discovery), das den konkreten Zuschnitt liefert.
 
-**Abhängigkeiten:** Effort L — **vor Vergabe splitten**; gleicher Render-Hub wie B-076.
+**Abhängigkeiten:** Effort L — **vor Vergabe splitten**; gleicher Render-Hub wie B-076; Zuschnitt wartet auf B-107-Discovery-Ergebnis.
 
-**Belege:** —
+**Belege:** `docs/handoff/S157_planning.md` (Vorab-Rechercheergebnis, Ist-Zeilenzahl-Beleg `wc -l`).
 
 **Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` (Split-Zuschnitt vor Vergabe).
 
-**Herkunft:** §4 Alt-`backlog.md` Z.590–592 (Stakeholder-Auftrag S132).
+**Herkunft:** §4 Alt-`backlog.md` Z.590–592 (Stakeholder-Auftrag S132); Priorität hochgezogen + Zeilenzahl korrigiert S157 (Stakeholder-Retro-Ergänzung 3).
 
 ## B-078 — Test Mock Fragilitaet und conftest Mock Hack
 
@@ -1762,28 +1925,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** `index.md` Z.46, Z.52–56.
 
-## B-098 — Boss Nob 7b Kombi Waffenprofile
-
-[↩ Zeile in backlog.md](backlog.md#b-098)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~35k
-
-**Detail-Beschreibung:** Betroffene Dateien: `data/wh40k_9e/orks/weapons.yaml`, `data/wh40k_9e/orks/units.yaml`, `src/gameObjects/weapon.py`, `src/gameObjects/loader.py`, `src/gameMechanic/attackMath.py`. Teil 1 (Kombi-Waffenprofile in `weapons.yaml` + Tests) ist erledigt (S152). Teil 2 — **S156 erledigt:** `combi`-Feld auf `WeaponProfile`, Loader-Exklusivitäts-Guard (`_check_exclusive_swaps`/`_exclusive_swap_clusters` — verträgt zwei sich gegenseitig ausschließende `weapon_swaps`-Gruppen auf derselben Modellgruppe), `_combi_hit_penalty()` in `attackMath.py` (die generische −1-Hit-Berechnung bei „beide Profile gewählt"), Boss-Nob-Swap (`nob_kombi`, `pick: 1`, `replaces: [slugga, choppa]`, `options: [kombi_rokkit, kombi_skorcha]`, NICHT für Warbike-Nobs) + zugehörige YAML-Daten. **S156 offen (R-COMBAT-35 `status: offen`):** die Verdrahtung des berechneten −1-Malus in `src/gameMechanic/combat.py` fehlt noch, ebenso die Profil-Auswahl-UI in `src/uiLayout/_common.py` (Spieler muss ein Profil ODER beide Profile wählen können, bevor der Malus wirksam wird) — bewusst getrennt von B-056 gehalten, um Dateikollision zu vermeiden (S156-Planner-Entscheid).
-
-**Abhängigkeiten:** Teil 1 war reiner Daten-Fix (erledigt); Teil 2a (Loader/Berechnung/Daten) ist S156 erledigt; Teil 2b (Verdrahtung `combat.py` + UI `_common.py`) ist der Rest-Scope für S157.
-
-**Belege:** `docs/work/wahapedia_orks/` (Kombi-Waffenprofile gegen Wahapedia geprüft, S152); `docs/spec/acceptance/rules.md` R-COMBAT-35/36/37 (S156); `docs/handoff/S156_close_review.md` (DoD-Review, GO).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** `next_session.md` (S150, Punkt 5) / Stakeholder-Verifikation S146-Umfeld; als Waisen-Item ohne Backlog-ID im S151-C-Umbau gefunden (`docs/handoff/S151_briefing_umbau.md`), nachgetragen S151; Teil 2 S152-Planner-Befund; Teil 2a-Umsetzung S156.
-
 ## B-100 — unitCard GO Rand-Design fuer Spieler 2 spiegeln
 
 [↩ Zeile in backlog.md](backlog.md#b-100)
@@ -1854,28 +1995,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt); Scope-Erweiterung (Regel-Klärung + UX-Dauersichtbarkeit) S156-Stakeholder-Kommentar.
 
-## B-103 — Wound Debuff Label zeigt Auto Fail statt Keyword
-
-[↩ Zeile in backlog.md](backlog.md#b-103)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5–15k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py` (Wound-Zeilen-Debuff-Anzeige, B-056-Folgecode). Stakeholder-Befund bei der Quantum-Shielding-UI-Verifikation (S156): der Debuff im Verwundungswurf wird korrekt ausgelöst (3× ✕ gegen QS-Fahrzeuge), zeigt aber als Label „Auto-fail" statt des Keywords „Quantum Shielding". Label soll generisch aus der Ability gespeist werden (kein neuer Fraktions-String in `src/`), damit andere Auto-Fail-Effekte künftig ihr eigenes Keyword zeigen statt eines generischen Textbausteins.
-
-**Abhängigkeiten:** Aufsetzend auf B-056 (Quantum Shielding, S156 fertig + verifiziert).
-
-**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund a).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
-
 ## B-104 — Wuerfelergebnis Symbole folgen nicht dem Design System
 
 [↩ Zeile in backlog.md](backlog.md#b-104)
@@ -1888,7 +2007,7 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~15k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Die Debuff-Symbole bei Würfelergebnissen (z. B. Quantum-Shielding-Auto-fail) rendern aktuell als nacktes „x" statt als Würfelsymbol mit einem ✕ darin. Entweder das Design-System um diesen Baustein ergänzen (bevorzugt, da wiederverwendbar) oder — falls Umsetzung vor der Design-Entscheidung nötig ist — das Backlog-Item exakt auf den betroffenen Design-System-Abschnitt referenzieren, statt eine Ad-hoc-Optik zu bauen (Stakeholder-Auflage „Kein Design ohne Schema").
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Die Debuff-Symbole bei Würfelergebnissen (z. B. Quantum-Shielding-Auto-fail) rendern aktuell als nacktes „x" statt als Würfelsymbol mit einem ✕ darin. Entweder das Design-System um diesen Baustein ergänzen (bevorzugt, da wiederverwendbar) oder — falls Umsetzung vor der Design-Entscheidung nötig ist — das Backlog-Item exakt auf den betroffenen Design-System-Abschnitt referenzieren, statt eine Ad-hoc-Optik zu bauen (Stakeholder-Auflage „Kein Design ohne Schema"). **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
 
 **Abhängigkeiten:** Design-Entscheidung zuerst (Design-Crew), danach mechanischer Umsetzungs-Schritt.
 
@@ -1910,7 +2029,7 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~15k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Beim Verwundungswurf gegen ein Ziel mit dem Stratagem „Quantum Deflection" zeigt die App nur ein grünes „4+" ohne Bezug zur auslösenden GO — Stakeholder kann nicht erkennen, welches GO den Wert erzeugt. Es fehlt ein generisches Konzept im Design-System für GO-Referenzen an Würfelblöcken (nicht nur für Quantum Deflection — betrifft grundsätzlich jeden Würfelwert, der aus einem aktiven GO stammt).
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Beim Verwundungswurf gegen ein Ziel mit dem Stratagem „Quantum Deflection" zeigt die App nur ein grünes „4+" ohne Bezug zur auslösenden GO — Stakeholder kann nicht erkennen, welches GO den Wert erzeugt. Es fehlt ein generisches Konzept im Design-System für GO-Referenzen an Würfelblöcken (nicht nur für Quantum Deflection — betrifft grundsätzlich jeden Würfelwert, der aus einem aktiven GO stammt). **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
 
 **Abhängigkeiten:** Design-Konzept zuerst (Design-Crew); danach Umsetzung, ggf. gemeinsam mit B-104 (beide betreffen Würfelblock-Optik im selben Bereich).
 
@@ -1919,3 +2038,148 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
+
+## B-106 — Session Overview Umbau sessionReport
+
+[↩ Zeile in backlog.md](backlog.md#b-106)
+
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~35k
+
+**Detail-Beschreibung:** Betroffene Dateien: `docs/metrics/overview.md` (wird zu `docs/metrics/sessionReport.md`, camelCase), `docs/metrics/session_archive.md`/`.json` (→ camelCase, z. B. `sessionArchive.md`/`.json`), `docs/metrics/subagent_archive.json` (→ camelCase-Pendant), `tools/token_report.py`, `tools/rotate_history.py`, `.claude/tasks/briefing.md` (alle Pfad-Verweise auf die umbenannten Dateien nachziehen). Anforderung wörtlich aus Stakeholder-Retro-Ergänzung 1 übernommen: Σ-Gesamtzeile bleibt unverändert (z. B. „Σ über N Sessions: X Token (Y Antworten)"); neu: ein vertikales Balkendiagramm zeigt Token relativ pro Modell **auf Gesamttoken-Basis** (nicht auf Kontextfenster-Basis), mit dem Absolutwert darunter; die bisherige Kontextfenster-Liste bleibt unverändert bestehen; in der letzten Spalte werden die konkreten Subagenten-Aufgaben vollständig ausgeschrieben statt gekürzt — falls dafür ein Zeilenumbruch nötig ist, muss die neue Zeile innerhalb derselben Spalte bleiben (kein Spaltenumbau). Effort ~35k, kein Kleinstitem: `tools/token_report.py` hat 1181 Zeilen mit >10 Render-Funktionen, ein neues aggregiertes Balkendiagramm + Spaltenumbau berührt mehrere davon. **Dateiname entschieden (S157-Planning-Korrektur, Offene Frage 1):** `sessionReport.md` (camelCase) — zusätzlich werden die übrigen Dateien in `docs/metrics/` mit auf camelCase umbenannt, inklusive Nachziehen aller Verweise. **Einplanung: S159 (Stakeholder-Entscheid S156-Retro-Ergänzung 1)** — nicht S157/S158.
+
+**Abhängigkeiten:** Keine — reines Format-/Datei-Umbau-Item; Terminierung liegt fest auf S159, Position in der Liste bewusst bei den anderen unpriorisierten Prozess-Items (Nähe zu B-091), damit die Terminierung trotzdem sichtbar bleibt.
+
+**Belege:** `docs/handoff/S156_retro_s155.md` (Retro-Ergänzung 1, wörtlicher Stakeholder-Text); `docs/handoff/S157_planning.md` (Arbeitspaket E1, Offene Frage 1 mit Stakeholder-Antwort camelCase/`sessionReport.md`).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Retro-Ergänzung 1 (`S156_retro_s155.md`), Namensentscheid S157-Planning.
+
+## B-107 — Design Patterns Discovery Attackensequenz und abilityEngine
+
+[↩ Zeile in backlog.md](backlog.md#b-107)
+
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
+
+**Status:** ToDo
+
+**Tier:** Planner
+
+**Effort:** ~15–20k
+
+**Detail-Beschreibung:** Betroffene Dateien (lesend, kein Code): `src/uiLayout/_common.py` (Attackensequenz), `src/gameMechanic/abilityEngine.py` (eine zweite Stelle). Design-Patterns-Discovery — an zwei Beispielen konkrete Vorschläge erarbeiten, wie der jeweilige Abschnitt lesbarer/objektorientierter geschrieben werden kann (reine Analyse, kein Code). Ergebnis fließt als Eingabe in den B-077/B-006-Zuschnitt ein. **Reihenfolge bewusst VOR dem Refactoring** — vorsichtige Annäherung an die großen Dateien, statt direkt in die Umsetzung zu springen (Stakeholder-Entscheid S157-Planning; Korrektur der ursprünglichen Planner-Reihenfolge, die B-107 hinter B-078 einsortiert hatte).
+
+**Abhängigkeiten:** Koppelt an B-077/B-006 (liefert deren Zuschnitt), läuft aber als eigener, vom Zeitdruck der Refactor-Umsetzung getrennter Planner-Auftrag (Zurückgestellt-Vermerk S157: „damit die Analyse nicht unter Zeitdruck der laufenden Welle leidet").
+
+**Belege:** `docs/handoff/S157_planning.md` (Arbeitspaket E4); `docs/handoff/S156_retro_s155.md` (Retro-Ergänzung 4).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Retro-Ergänzung 4 (`S156_retro_s155.md`), Planungs-Korrektur (Reihenfolge vor dem Refactoring) S157.
+
+## B-108 — Epics Struktur fuer Fachlichkeits Items
+
+[↩ Zeile in backlog.md](backlog.md#b-108)
+
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~20–25k
+
+**Detail-Beschreibung:** Betroffene Dateien: `docs/goals/ziel7.md` (zwei neue Epic-Abschnitte), `docs/reference/agent_scopes.md` (Ratchet-Vermerk). Ziel 7 bekommt mindestens zwei Epics: **GOs** (Gefechtsoptionen-Feature-Fläche, `EPIC-Z7-GO`) und **Subfaction-Effects** (Klan-Kulturs/Dynastic Codes, `EPIC-Z7-SUBFACTION`). Template:
+
+```
+## Epic: <Name>
+
+**Epic-ID:** EPIC-Z7-<Kürzel>
+**Status:** 🟨 aktiv / ⬜ geplant / ✅ fertig
+**Umfasst (Backlog-IDs):** B-xxx, B-yyy, …
+**Zusammenfassung:** 2–4 Sätze — was bündelt dieses Epic fachlich, warum gehört es zusammen.
+**Abgrenzung:** was NICHT dazugehört (Nachbar-Epics/Einzelitems).
+**Referenzen:** Specs/Regel-Belege, die für alle Items im Epic gelten.
+```
+
+Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zuordnen (grep auf „Ziel 7" + inhaltliche Sichtung). Bewusst **kein** rückwirkendes Nachtragen einer Epic-Spalte in jeder `backlog.md`-Zeile — Ratchet-Praxis (analog B-024): neue Items tragen ihre Epic-Zugehörigkeit ab sofort, bestehende Zeilen werden bei nächster inhaltlicher Berührung nachgezogen; Ratchet-Beschluss kurz in `agent_scopes.md` vermerken. **Stakeholder-Korrektur S157-Planning:** zusätzlich (a) bidirektionale Indizierung — von Ziel 7/Epic schnell zu den zugehörigen Backlog-Items und umgekehrt von jedem Item zurück zum Epic (nicht nur die grobe Zuordnung); (b) prüfen/anlegen eines kleinen Generator-Scripts, das neue Backlog-Items/Epics aus dem Template erzeugt (nur die Beschreibung wird manuell verfasst, der Rest — ID, Status-Default, Anker, Rückverweis — automatisch generiert) — als Teil-Scope dieses Items oder, falls zu groß, als explizit vermerkte Folge-Idee im selben Abschnitt.
+
+**Abhängigkeiten:** Baut nicht auf B-107 auf, aber beide sind S157-neu — gemeinsamer Block hält den Diff lesbar. Nur Typ „Fachlichkeit" braucht laut Stakeholder eine Epic-Struktur, die übrigen Typen (Schuldabbau, Prozess/Doku) nicht.
+
+**Belege:** `docs/handoff/S157_planning.md` (Arbeitspaket E2, Offene Frage 2 mit Stakeholder-Antwort); `docs/handoff/S156_retro_s155.md` (Retro-Ergänzung 2).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Retro-Ergänzung 2 (`S156_retro_s155.md`), Konsent-Modus (Template kann bei Umsetzung noch geschärft werden).
+
+## B-109 — Auto Fail Badge Label verpflichtend aus YAML
+
+[↩ Zeile in backlog.md](backlog.md#b-109)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Sonnet
+
+**Effort:** ~10–15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (`always_fail_marker_row_html`, ~Zeile 286), `src/gameMechanic/abilityEngine.py` (`unit_wound_auto_fail_label`, ~Zeile 1254). Aktuell zeigt `always_fail_marker_row_html` ein hartcodiertes Fallback-Label: `label or "Auto-fail"`. Das bedeutet, wenn ein Auto-Fail-Effekt kein `badge_label` hat, wird "Auto-fail" angezeigt — jener generische Text, der bei B-103-Umsetzung vermieden werden sollte. Ziel: jeder Auto-Fail-Effekt bezieht sein Badge-Label verpflichtend aus der YAML-Daten über `unit_wound_auto_fail_label()` (liest `badge_label or name_en`). Der Fallback-String "Auto-fail" wird entfernt, und ein Loader-Guard wird geprüft/eingeführt: fehlt bei einem `wound_auto_fail`-Effekt sowohl `badge_label` als auch `name_en`, wird ein Fehler geworfen (statt still zu fallbacken). Das stellt sicher, dass alle Auto-Fail-Effekte eindeutig benannt sind.
+
+**Abhängigkeiten:** Aufsetzend auf B-103 (Umsetzung der Wound-Debuff-Label-Generalisierung, S156 erledigt).
+
+**Belege:** `docs/handoff/S156_retro_s155.md` (Retro-Antwort zu B-103: „nach oben ziehen, dann ist das Feature sauber"); S157-Planning-Auftrag (Einplanung S158).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Auftrag S157 (Leitstand), Folge von B-103-Umsetzung S156.
+
+## B-110 — Latenter pname Bug im Melee Profil Zweig
+
+[↩ Zeile in backlog.md](backlog.md#b-110)
+
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
+
+**Status:** ToDo
+
+**Tier:** Sonnet
+
+**Effort:** XS
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (~Zeile 2772, per `grep p.name` verifizierbar). Der Melee-Zweig der Profil-Auswahl-Logik referenziert `p.name` — ein Attribut, das auf dem `WeaponProfile`-Objekt nicht existiert. Das korrekte Attribut heißt `name_en`. Der Pfad ist aktuell ein „toter Code": es gibt in der bestehenden Datenbasis keine Melee-Waffe mit zwei oder mehr Profilen, daher wird dieser Code niemals ausgeführt. Bei Einführung einer Melee-Waffe mit ≥2 Profilen würde das Programm mit `AttributeError` abstürzen. Der Ranged-Profil-Zweig wurde bereits in S157 (B-098-Rest) korrigiert (`p.name_en` statt `p.name`). Dieser Bug muss aus Konsistenzgründen auch im Melee-Zweig gefixt werden, obwohl er aktuell latent ist.
+
+**Abhängigkeiten:** Executor-Nebenfund während der B-098-Rest-Umsetzung (S157); eigenständig, kein Blocker vorhanden.
+
+**Belege:** Code-Vergleich Ranged- vs. Melee-Zweig in `src/uiLayout/_common.py` (~Zeile 2750–2800).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Executor-Nebenfund während B-098-Rest S157.
+
+## B-111 — Quantum Shielding Badge Truncation in der Wound Zeile
+
+[↩ Zeile in backlog.md](backlog.md#b-111)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Design-Crew
+
+**Effort:** XS–S
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (Wound-Zeilen-Badge-Rendering), zugehöriges CSS. Stakeholder-Screenshot (S157-Chat, kein Dateipfad): das neue Quantum-Shielding-Badge in der Wound-Zeile (B-103-Ergebnis, Label jetzt korrekt „Quantum Shielding" statt „Auto-fail") wird abgeschnitten dargestellt („Quantum Sh…") — der B-103-Label-Fix verfehlt dadurch seinen eigentlichen Zweck, da das volle Keyword weiterhin nicht lesbar ist. Nötig: volle Label-Breite oder Zeilenumbruch für das Badge. **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
+
+**Abhängigkeiten:** Direkte Folge von B-103 (Label-Inhalt korrekt, Darstellung bricht ihn ab); ggf. gemeinsam mit B-104/B-105 einplanbar (alle drei betreffen Würfelblock-/Badge-Optik im selben Bereich).
+
+**Belege:** `docs/handoff/Stakeholder_Beobachtungen.md` „Zuletzt überführt" (S157-Eintrag, Rückverweis).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-Beobachtung S157 (Screenshot im S157-Chat).

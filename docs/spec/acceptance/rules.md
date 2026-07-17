@@ -306,11 +306,11 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-COMBAT-35
 - **klasse**: A
-- **status**: offen
-- **getestet**: ja (Berechnungs-Anteil) — test_both_combi_profiles_selected_incur_minus_one_to_hit / test_single_combi_profile_selected_has_no_penalty
+- **status**: implementiert
+- **getestet**: ja — test_both_combi_profiles_selected_incur_minus_one_to_hit / test_single_combi_profile_selected_has_no_penalty / test_both_combi_profiles_selected_worsens_hit_threshold_by_one / test_single_combi_profile_selected_has_no_hit_penalty / test_combi_checkbox_ui_renders_both_profiles_and_applies_penalty
 - **quelle**: wahapedia_orks/faction_overview.txt (Kombi-rokkit/Kombi-skorcha Profiltext) — "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack's hit roll."
-- **code**: attackMath.py:_combi_hit_penalty
-- **regel**: Kombi-Waffe (Profil mit `combi: true`, z. B. Kombi-rokkit/Kombi-skorcha): Vor der Zielwahl ein Profil ODER beide wählen; bei beiden −1 auf alle Trefferwürfe beider Profile in dieser Phase. B-098 Teil 2 (S156): Berechnung + `weapon_swaps`-Anbindung (Boss Nob) stehen; die Profil-Auswahl-UI und die Anwendung des Malus in der Angriffsauflösung (`_common.py`/`combat.py`) fehlen noch — offene Folgeaufgabe.
+- **code**: attackMath.py:_combi_hit_penalty · _common.py:render_group_assignment (Checkbox-Profilauswahl) · _common.py:compute_resolution_context (Hit-Modifier-Weitergabe) · combat.py:resolve_attack_modifiers (Auflösung)
+- **regel**: Kombi-Waffe (Profil mit `combi: true`, z. B. Kombi-rokkit/Kombi-skorcha): Vor der Zielwahl ein Profil ODER beide wählen (Checkbox je Profil in `render_group_assignment`, sobald `any(p.combi for p in profiles)`); bei beiden −1 auf alle Trefferwürfe beider Profile in dieser Phase. B-098 Teil 2 (S156): Berechnung + `weapon_swaps`-Anbindung (Boss Nob). S157: Profil-Auswahl-UI + Verdrahtung des Malus als benannter Hit-Modifier (`"Combi (both profiles)"`) in denselben Stack, den `resolve_attack_modifiers` bedient — abgeschlossen.
 
 ### R-COMBAT-36
 - **klasse**: A

@@ -408,16 +408,22 @@ def reroll_marker_row_html(slots: list[int], base_threshold: int = 0) -> str:
 
 
 def always_fail_marker_row_html(
-    slots: list[int], base_threshold: int = 0, color_hint: str | None = None
+    slots: list[int],
+    base_threshold: int = 0,
+    color_hint: str | None = None,
+    label: str | None = None,
 ) -> str:
     """✕ marker below each always-failing slot (dice_display.md §5 / §10.2).
 
     color_hint sets the perspective colour: the defender sees a buff (green, the
     attacker's low rolls fail), the rolling attacker a debuff (red). Display
     building block — wired once a producer (e.g. Quantum Shield) supplies the slots.
+    ``label`` names the triggering ability (e.g. "Quantum Shielding"), read from
+    YAML by the caller; falls back to the generic "Auto-fail" when no ability
+    label is available (B-103).
     """
     color = _modifier_color({"color_hint": color_hint, "value": -1})
-    badge = _badge_chip("Auto-fail", color)
+    badge = _badge_chip(label or "Auto-fail", color)
     return _marker_row_html(badge, _AUTO_FAIL_GLYPH, set(slots), base_threshold, color)
 
 

@@ -526,8 +526,8 @@ def ability_invuln_save(faction: str, unit: Unit) -> int | None:
     )
 
 
-def unit_wound_auto_fail_max(faction: str, unit: Unit) -> int | None:
-    """Highest unmodified wound roll that always fails against *unit*, or None.
+def _wound_auto_fail_ability(faction: str, unit: Unit) -> Ability | None:
+    """Ability granting the highest ``wound_auto_fail`` threshold for *unit*, or None.
 
     Reads persistent unit abilities (``unit_abilities.yaml``) whose effect type is
     ``wound_auto_fail`` and whose ``has_rules`` condition matches one of *unit*'s
@@ -535,11 +535,11 @@ def unit_wound_auto_fail_max(faction: str, unit: Unit) -> int | None:
     1-3 always fails, irrespective of any abilities that the weapon or the
     attacker may have" (docs/work/wahapedia_necrons/units_all.txt:112). Generic
     dispatch on ``effect.type`` (INV-4b: no faction string here, the rule tag
-    lives in YAML). ``effect.modifier`` carries the top of the auto-fail range
-    (3 for Quantum Shielding). Combined via max in the unlikely case more than
-    one such ability applies to the same unit.
+    lives in YAML). Combined via max in the unlikely case more than one such
+    ability applies to the same unit.
     """
-    best: int | None = None
+    best: Ability | None = None
+    best_value = -1
     for ability in load_unit_abilities(faction_dir_for(faction)):
         if ability.effect.type != "wound_auto_fail":
             continue
@@ -548,8 +548,33 @@ def unit_wound_auto_fail_max(faction: str, unit: Unit) -> int | None:
         value = ability.effect.modifier
         if value is None:
             continue
-        best = value if best is None else max(best, value)
+        if value > best_value:
+            best_value = value
+            best = ability
     return best
+
+
+def unit_wound_auto_fail_max(faction: str, unit: Unit) -> int | None:
+    """Highest unmodified wound roll that always fails against *unit*, or None.
+
+    ``effect.modifier`` carries the top of the auto-fail range (3 for Quantum
+    Shielding). → ``_wound_auto_fail_ability`` for the matching-ability lookup.
+    """
+    ability = _wound_auto_fail_ability(faction, unit)
+    return ability.effect.modifier if ability else None
+
+
+def unit_wound_auto_fail_label(faction: str, unit: Unit) -> str | None:
+    """Badge label for the active ``wound_auto_fail`` ability, or None.
+
+    Read from ``badge_label`` (falling back to ``name_en``) — no hardcoded
+    faction text here (B-103: the UI badge must show e.g. "Quantum Shielding",
+    not a generic "Auto-fail" placeholder).
+    """
+    ability = _wound_auto_fail_ability(faction, unit)
+    if ability is None:
+        return None
+    return ability.badge_label or ability.name_en
 
 
 def ability_badge_label(faction: str, unit: Unit) -> str | None:

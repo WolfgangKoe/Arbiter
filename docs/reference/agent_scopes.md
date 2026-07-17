@@ -78,6 +78,12 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   Mechaniken beschreiben „Mechanik X steht+getestet; offen = Variante Y" statt nur
   offen/erledigt. Grund: S115 — die P17-Lock-Mechanik stand, der Eintrag las aber wie
   „nichts da".
+- **Scope-Discovery vor Schätzung bei unbekanntem Ist-Zustand (S157):** Trägt ein Item einen
+  unbekannten/unklaren Ist-Zustand (z. B. „Suffix auf alle X ausweiten" ohne geprüften
+  Bestand), erst eine Scope-Discovery durchführen (Ist-Zustand der betroffenen Stellen
+  ermitteln), danach die Aufwandsschätzung abgeben — nicht umgekehrt. Anlass: B-028 —
+  Schätzung ~35k (auf Basis der alten Beschreibung) wich real auf 100k+ ab, weil der Scope
+  erst nach der Schätzung ermittelt wurde.
 
 **Konventionen:**
 - `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k). Identische Buckets nutzt seit
@@ -93,6 +99,12 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 ## So nutzt der Koordinator das
 
 Der Koordinator liest diese Tabelle, wählt den passenden Aufgabentyp, und kopiert die **Pflicht-Lesen**-Spalte direkt als `erlaubte Quellen` in den Subagent-Brief. Der Subagent liest ausschließlich diese Dateien — kein freies Repo-Wandern. Dateien aus der **Optional**-Spalte werden nur dann hinzugefügt, wenn der Koordinator sie für den konkreten Auftrag als notwendig einschätzt. Damit bleibt der Subagent-Kontext schlank und der Koordinator behält die Übersicht.
+
+**Fertigmeldungen vollständig (S157 — PFLICHT):** Meldet der Koordinator dem Stakeholder ein
+fertiggestelltes Feature/Item, nennt er im selben Zug die noch offenen Geschwister-Items
+derselben Verifikation/desselben Features — nie das fertige Teilstück isoliert vermelden.
+Anlass: S157 — B-103 wurde fertig gemeldet, ohne auf die noch offenen B-104/B-105 aus
+derselben Quantum-Shielding-UI-Verifikation hinzuweisen.
 
 ---
 
@@ -140,11 +152,16 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   Gate-Beleg vorliegt (`pytest --tb=short` + Architektur-/Doku-Gate). Akzeptierter
   Präzedenzfall: B-099b (S153) — offengelegter Skript-Edit + grüner Gate-Beleg, im Review
   bestätigt.
-- **UI-Verifikations-Pflicht (S155):** Offene manuelle UI-Verifikationen (CLAUDE.md-DoD-
-  Punkt 6) liefert der Executor IMMER als eigene Handoff-Datei in `docs/handoff/` mit den
-  exakten Prüfschritten — nie nur im Chat oder nur als Zeile in `briefing.md`. Grund: der
-  Stakeholder soll offene UI-Prüfungen unabhängig von der laufenden Session-Arbeit
-  nachholen können.
+- **UI-Verifikations-Pflicht (S155, Template S156-Retro Maßnahme 5):** Offene manuelle
+  UI-Verifikationen (CLAUDE.md-DoD-Punkt 6) liefert der Executor IMMER als eigene
+  Handoff-Datei in `docs/handoff/` mit den exakten Prüfschritten — nie nur im Chat oder
+  nur als Zeile in `briefing.md`. Jede Verifikation nennt genau drei Felder: (a)
+  **Voraussetzungen** — welches Roster, wie wird der Zustand in der App erreicht; (b)
+  **Klickpfad** — präziser Schritt-für-Schritt-Weg bis zum Prüfzustand; (c) **Erwartung**
+  — präzise, inkl. Ausgangs-State der beteiligten Einheiten (`charged`/`in-melee`/
+  `heroic-intervened` explizit nennen). Nur durchführbare Testfälle, ein Testfall pro
+  Punkt, keine Sammelpunkte. Grund: der Stakeholder soll offene UI-Prüfungen unabhängig
+  von der laufenden Session-Arbeit nachholen können.
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war

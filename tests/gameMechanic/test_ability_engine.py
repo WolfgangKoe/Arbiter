@@ -36,6 +36,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_triggered_abilities,
     is_effect_executable,
     revive_dice_count,
+    unit_wound_auto_fail_label,
     unit_wound_auto_fail_max,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
@@ -1309,7 +1310,7 @@ def test_ability_invuln_save_skips_non_matching_unit(monkeypatch: pytest.MonkeyP
 # ---------------------------------------------------------------------------
 
 
-def _wound_auto_fail_ability(rule: str, max_roll: int) -> Ability:
+def _wound_auto_fail_ability(rule: str, max_roll: int, badge_label: str | None = None) -> Ability:
     return Ability(
         id=f"test.ability.wound_auto_fail.{rule}.{max_roll}",
         name_en="Test Wound Auto-fail",
@@ -1318,6 +1319,7 @@ def _wound_auto_fail_ability(rule: str, max_roll: int) -> Ability:
         trigger=Trigger(timing="persistent", phase="any", player="either"),
         conditions=[Condition(has_rules=[rule])],
         effect=Effect(type="wound_auto_fail", modifier=max_roll),
+        badge_label=badge_label,
     )
 
 
@@ -1406,6 +1408,68 @@ def test_unit_wound_auto_fail_max_none_for_unit_without_quantum_shielding() -> N
     units, _ = load_army("necrons")
     warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
     assert unit_wound_auto_fail_max("Necrons", warriors) is None
+
+
+# ---------------------------------------------------------------------------
+# unit_wound_auto_fail_label — B-103: the wound-block badge must show the
+# triggering ability's own name (e.g. "Quantum Shielding"), read from YAML,
+# instead of a hardcoded "Auto-fail" placeholder.
+# ---------------------------------------------------------------------------
+
+
+def test_unit_wound_auto_fail_label_uses_badge_label(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [
+            _wound_auto_fail_ability("quantumShielding", 3, badge_label="Quantum Shielding")
+        ],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["quantumShielding"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_label("Necrons", unit) == "Quantum Shielding"
+
+
+def test_unit_wound_auto_fail_label_falls_back_to_name_en(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """No badge_label set → fall back to the ability's name_en, never a fixed string."""
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [_wound_auto_fail_ability("quantumShielding", 3)],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["quantumShielding"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_label("Necrons", unit) == "Test Wound Auto-fail"
+
+
+def test_unit_wound_auto_fail_label_none_without_matching_rule(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [
+            _wound_auto_fail_ability("quantumShielding", 3, badge_label="Quantum Shielding")
+        ],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["livingMetal"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_label("Necrons", unit) is None
+
+
+def test_unit_wound_auto_fail_label_annihilation_barge_real_data() -> None:
+    """B-103 regression: real unit_abilities.yaml entry must expose the
+    'Quantum Shielding' badge_label — the S156 stakeholder-visible bug showed
+    the generic 'Auto-fail' text instead."""
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    barge = next(u for u in units if u.id == "wh40k_9e.necrons.unit.annihilation_barge")
+    assert unit_wound_auto_fail_label("Necrons", barge) == "Quantum Shielding"
 
 
 # ---------------------------------------------------------------------------

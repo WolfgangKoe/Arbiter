@@ -198,6 +198,19 @@ def test_always_fail_color_hint_buff_is_green() -> None:
     assert _BUFF_GREEN in html
 
 
+def test_always_fail_label_defaults_to_generic_text() -> None:
+    # No ability label supplied → generic fallback badge text.
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff")
+    assert "Auto-fail" in html
+
+
+def test_always_fail_label_uses_ability_name() -> None:
+    # B-103: badge shows the triggering ability's own name, not a generic text.
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff", label="Quantum Shielding")
+    assert "Quantum Shielding" in html
+    assert "Auto-fail" not in html
+
+
 def test_modifier_columns_clamp_to_grid() -> None:
     # AP-3 on Sv 4+: from 3 (last old-fail) to 6 (best roll now fails) — 3 columns.
     assert _modifier_columns(3, 6) == (3, 6)

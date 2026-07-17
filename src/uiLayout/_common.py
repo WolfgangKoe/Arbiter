@@ -26,6 +26,7 @@ from constants.symbols import (
     SYM_SWORDS,
 )
 from gameMechanic.attackMath import (  # noqa: F401
+    _combi_hit_penalty,
     _compute_attacks,
     _detect_weapon_special,
     _group_melee_budget,
@@ -1818,6 +1819,7 @@ class ResolutionContext:
     invuln_from_ability: bool
     fnp_value: int | None
     auto_light_cover: bool
+    auto_fail_label: str | None
 
 
 def compute_resolution_context(
@@ -1851,6 +1853,7 @@ def compute_resolution_context(
     weapon_name = entry["weapon_name"]
     profile_idx = entry["profile_idx"]
     models_count = entry["models_count"]
+    combi_hit_mod = entry.get("combi_hit_mod", 0)
     # Per-group stat overrides carried from the declaration (Boss Nob etc.);
     # fall back to the unit-level stats for homogeneous groups.
     grp_strength = entry.get("atk_strength", atk_unit.strength)
@@ -1887,6 +1890,7 @@ def compute_resolution_context(
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
+        unit_wound_auto_fail_label,
         unit_wound_auto_fail_max,
     )
     from gameMechanic.stratagemEngine import (  # noqa: PLC0415
@@ -1993,6 +1997,19 @@ def compute_resolution_context(
         final_atk_mods.append(
             {"label": "−1 to Hit", "value": -1, "roll_type": "hit", "source": "weapon"}
         )
+    if combi_hit_mod:
+        # R-COMBAT-35: both combi profiles selected at declaration time
+        # (render_group_assignment) — _combi_hit_penalty()'s result was
+        # recorded on the entry as combi_hit_mod, fed here into the same
+        # hit-modifier stack resolve_attack_modifiers (combat.py) evaluates.
+        final_atk_mods.append(
+            {
+                "label": "Combi (both profiles)",
+                "value": combi_hit_mod,
+                "roll_type": "hit",
+                "source": "weapon",
+            }
+        )
     if fall_back_hit_mod:
         # D2 (shoot_after_fall_back): −1 Hit when shooting after Fall Back (9E canonical).
         # Label kept generic ("−1 to Hit", same text as the weapon-penalty badge above)
@@ -2024,6 +2041,7 @@ def compute_resolution_context(
         use_melee=use_melee,
         wound_auto_fail_max=unit_wound_auto_fail_max(def_faction, def_unit),
     )
+    auto_fail_label = unit_wound_auto_fail_label(def_faction, def_unit)
     ability_inv = ability_invuln_save(def_faction, def_unit)
     strat_inv = _stratagem_invuln_save(def_uid)
     bonus_inv = (
@@ -2084,6 +2102,7 @@ def compute_resolution_context(
         invuln_from_ability=invuln_from_ability,
         fnp_value=fnp_value,
         auto_light_cover=auto_light_cover,
+        auto_fail_label=auto_fail_label,
     )
 
 
@@ -2144,6 +2163,7 @@ def _render_attacker_blocks(ctx: ResolutionContext) -> None:
         modified=ctx.atk_result["wound"]["modified"],
         strength_buff_labels=ctx.str_labels,
         auto_fail_max=ctx.atk_result["wound"].get("auto_fail_max"),
+        auto_fail_label=ctx.auto_fail_label,
     )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
     # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.
@@ -2831,19 +2851,40 @@ def render_group_assignment(
                     profiles = [p for p in weapon.profiles if p.is_melee == use_melee]
                     if not profiles:
                         profiles = list(weapon.profiles)
-                    if len(profiles) > 1:
-                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
-                        p_key = f"decl_p_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    p_key = f"decl_p_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
+                    if any(p.combi for p in profiles):
+                        # Kombi-weapon (e.g. Kombi-rokkit): select one profile OR
+                        # both before resolving — selecting both applies −1 to hit
+                        # on every attack made with the weapon this phase
+                        # (R-COMBAT-35, wahapedia_orks combi-weapon profile text:
+                        # "select one or both of the profiles below to make
+                        # attacks with").
+                        p_names = [p.name_en or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+                        cols = st.columns(len(p_names))
+                        selected = [
+                            (j, profiles[j])
+                            for j, (col, name) in enumerate(zip(cols, p_names))
+                            if col.checkbox(name, value=(j == 0), key=f"{p_key}_{j}")
+                        ]
+                        if not selected:
+                            selected = [(0, profiles[0])]
+                    elif len(profiles) > 1:
+                        p_names = [p.name_en or f"Profile {j + 1}" for j, p in enumerate(profiles)]
                         sel_p = st.radio(
                             f"Profile — {weapon.name_en}",
                             p_names,
                             key=p_key,
                             horizontal=True,
                         )
-                        profile_idx = p_names.index(sel_p)
+                        sel_idx = p_names.index(sel_p)
+                        selected = [(sel_idx, profiles[sel_idx])]
                     else:
-                        profile_idx = 0
-                    profile = profiles[profile_idx]
+                        selected = [(0, profiles[0])]
+
+                    combi_hit_mod = _combi_hit_penalty([p for _, p in selected])
+                    if combi_hit_mod:
+                        st.caption(f"Both profiles selected — {combi_hit_mod:+d} to Hit this phase")
+
                     cap = weapon_caps.get(weapon.name_en, alive)
                     base_cap = base_weapon_caps.get(weapon.name_en, alive)
                     models_key = f"decl_m_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
@@ -2865,46 +2906,59 @@ def render_group_assignment(
                         key=models_key,
                     )
                     eff_models = int(models_val)
-                    # Anzahl-Attacken-Anker, Fernkampf (design_system.md §6.2/
-                    # §6.3, S137): every dice-based Attacks weapon in the data
-                    # is ranged, but only the melee branch above offered the
-                    # re-roll. The rolled value is never typed in here (the
-                    # player assigns models; the count shows as e.g. "1×D6"),
-                    # so — like the Hit roll — the offer is anchor-only:
-                    # on_reroll stays a no-op, the call owns just the CP/usage
-                    # bookkeeping. No model assigned → no roll to re-roll.
-                    if eff_models > 0 and _is_variable_attacks(profile.attacks, profile.effect):
+                    multi_profile = len(selected) > 1
+                    any_variable = False
+                    for profile_idx, profile in selected:
+                        # Anzahl-Attacken-Anker, Fernkampf (design_system.md §6.2/
+                        # §6.3, S137): every dice-based Attacks weapon in the data
+                        # is ranged, but only the melee branch above offered the
+                        # re-roll. The rolled value is never typed in here (the
+                        # player assigns models; the count shows as e.g. "1×D6"),
+                        # so — like the Hit roll — the offer is anchor-only:
+                        # on_reroll stays a no-op, the call owns just the CP/usage
+                        # bookkeeping. No model assigned → no roll to re-roll.
+                        if eff_models > 0 and _is_variable_attacks(profile.attacks, profile.effect):
+                            any_variable = True
+                        displayed_count = _compute_attacks(
+                            profile.attacks,
+                            eff_models,
+                            cast(int, atk_unit.attacks),
+                            profile.effect,
+                            profile.max_attacks,
+                        )
+                        rf_caption = _rapid_fire_caption(profile.weapon_type, profile.range_inches)
+                        if rf_caption:
+                            st.caption(rf_caption)
+                        label = (
+                            f"{weapon.name_en} — {profile.name_en}"
+                            if multi_profile
+                            else weapon.name_en
+                        )
+                        st.markdown(
+                            f"**{label}** → "
+                            f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
+                            f"{displayed_count}</span> Attacks",
+                            unsafe_allow_html=True,
+                        )
+                        entries.append(
+                            {
+                                "def_faction": def_faction,
+                                "def_uid": def_uid,
+                                "weapon_name": weapon.name_en,
+                                "profile_idx": profile_idx,
+                                "models_count": eff_models,
+                                "atk_attacks": grp_attacks,
+                                "atk_strength": grp_strength,
+                                "atk_ws": grp_ws,
+                                "atk_bs": grp_bs,
+                                "atk_uid": atk_uid,
+                                "combi_hit_mod": combi_hit_mod,
+                            }
+                        )
+                    # Shared across selected profiles — one physical group of models
+                    # fires the weapon, regardless of how many profiles it uses.
+                    if any_variable:
                         attack_reroll_offers.append((weapon.name_en, models_key))
-                    displayed_count = _compute_attacks(
-                        profile.attacks,
-                        eff_models,
-                        cast(int, atk_unit.attacks),
-                        profile.effect,
-                        profile.max_attacks,
-                    )
-                    rf_caption = _rapid_fire_caption(profile.weapon_type, profile.range_inches)
-                    if rf_caption:
-                        st.caption(rf_caption)
-                    st.markdown(
-                        f"**{weapon.name_en}** → "
-                        f'<span style="font-size:1.1rem;font-weight:700;color:#fbbf24;">'
-                        f"{displayed_count}</span> Attacks",
-                        unsafe_allow_html=True,
-                    )
-                    entries.append(
-                        {
-                            "def_faction": def_faction,
-                            "def_uid": def_uid,
-                            "weapon_name": weapon.name_en,
-                            "profile_idx": profile_idx,
-                            "models_count": eff_models,
-                            "atk_attacks": grp_attacks,
-                            "atk_strength": grp_strength,
-                            "atk_ws": grp_ws,
-                            "atk_bs": grp_bs,
-                            "atk_uid": atk_uid,
-                        }
-                    )
                     models_assigned += eff_models
 
         for offer_weapon_name, offer_key in attack_reroll_offers:

@@ -2111,6 +2111,134 @@ def test_render_group_assignment_ranged_in_melee_offer_uses_fight_phase(monkeypa
 
 
 # ---------------------------------------------------------------------------
+# R-COMBAT-35 (S157) — combi-weapon profile checkbox UI: any(p.combi for p in
+# profiles) swaps the single-select radio for one checkbox per profile so the
+# player may fire one profile OR both. Firing both records combi_hit_mod=-1 on
+# every generated entry; compute_resolution_context later surfaces this as a
+# named "Combi (both profiles)" hit modifier fed into resolve_attack_modifiers
+# (combat.py) — covered separately in tests/gameMechanic/test_combat.py.
+# ---------------------------------------------------------------------------
+
+
+def _combi_group_fixture():  # type: ignore[no-untyped-def]
+    rokkit = WeaponProfile(
+        weapon_type="Heavy D3",
+        range_inches=24,
+        attacks="D3",
+        strength=8,
+        ap=-2,
+        damage="3",
+        is_melee=False,
+        name_en="Rokkit",
+        combi=True,
+    )
+    shoota = WeaponProfile(
+        weapon_type="Dakka",
+        range_inches=18,
+        attacks="3/2",
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+        name_en="Shoota",
+        combi=True,
+    )
+    weapon = Weapon(id="w1", name_en="Kombi-rokkit", profiles=[rokkit, shoota])
+    group = ModelGroup(id="g1", name_en="Boss Nob", count=1, weapons=[weapon], priority=1)
+    unit = Unit(
+        id="test.unit.bossnob",
+        name_en="Boss Nob",
+        name_de="Boss Nob",
+        faction="Orks",
+        subfaction=None,
+        battlefield_role=["HQ"],
+        keywords=["ORKS", "INFANTRY"],
+        wounds=1,
+        models_min=1,
+        models_max=1,
+        power_level=1,
+        move='6"',
+        bs="5+",
+        ws="3+",
+        strength=5,
+        toughness=5,
+        attacks=4,
+        save=6,
+        invuln_save=None,
+        leadership=8,
+        oc=1,
+        fnp=None,
+        model_groups=[group],
+    )
+    return unit, group
+
+
+class _CheckboxCol:
+    """Fake st.columns() cell — supports the two widget calls this test exercises."""
+
+    def __init__(self, responses: dict) -> None:  # type: ignore[type-arg]
+        self._responses = responses
+
+    def checkbox(self, label, value=False, key=""):  # type: ignore[no-untyped-def]
+        return self._responses.get(key, value)
+
+    def metric(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return None
+
+
+def _patch_combi_widgets(monkeypatch, checkbox_responses: dict):  # type: ignore[no-untyped-def, type-arg]
+    captured_markdown: list[str] = []
+    monkeypatch.setattr(common.st, "markdown", lambda html, **kw: captured_markdown.append(html))
+    monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+    monkeypatch.setattr(
+        common.st,
+        "columns",
+        lambda n: tuple(_CheckboxCol(checkbox_responses) for _ in range(n)),
+    )
+    monkeypatch.setattr(common.st, "number_input", lambda *a, **kw: 1)
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: True)
+    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, name_en="Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (def_unit, {}))
+    monkeypatch.setattr(common, "render_inline_command_reroll", lambda *a, **kw: None)
+    return captured_markdown
+
+
+def test_combi_checkbox_ui_renders_both_profiles_and_applies_penalty(monkeypatch) -> None:
+    """Both Kombi-rokkit profiles checked → two entries, each combi_hit_mod=-1,
+    and both profile names appear in the rendered HTML (HTML-Output-Test per
+    Test-Mandat — render_group_assignment is coverage-excluded uiLayout code)."""
+    unit, _ = _combi_group_fixture()
+    atk_state = {"group_models": {"g1": 1}}
+    common.st.session_state = _group_assignment_session()
+    p_key = "decl_p_g1_atk1_u_def_Kombi-rokkit"
+    markdown_html = _patch_combi_widgets(monkeypatch, {f"{p_key}_0": True, f"{p_key}_1": True})
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    entries = common.st.session_state.group_decl["g1"]
+    assert len(entries) == 2
+    assert all(e["combi_hit_mod"] == -1 for e in entries)
+    combined = "\n".join(markdown_html)
+    assert "Rokkit" in combined
+    assert "Shoota" in combined
+
+
+def test_combi_checkbox_ui_single_profile_selected_has_no_penalty(monkeypatch) -> None:
+    """Only the Rokkit profile checked → one entry, no combi malus."""
+    unit, _ = _combi_group_fixture()
+    atk_state = {"group_models": {"g1": 1}}
+    common.st.session_state = _group_assignment_session()
+    p_key = "decl_p_g1_atk1_u_def_Kombi-rokkit"
+    _patch_combi_widgets(monkeypatch, {f"{p_key}_0": True, f"{p_key}_1": False})
+
+    common.render_group_assignment("Orks", "atk1", unit, atk_state, use_melee=False)
+
+    entries = common.st.session_state.group_decl["g1"]
+    assert len(entries) == 1
+    assert entries[0]["combi_hit_mod"] == 0
+
+
+# ---------------------------------------------------------------------------
 # S130/S135 Paket 4b — _render_damage_block(): Command Re-Roll wired at the
 # post-Apply lock (Hit/Wound/Save have no separately captured roll in this
 # app — see session report; the collapsed "damage applied" result is the one

@@ -509,3 +509,37 @@ def test_wound_block_no_auto_fail_markers_without_quantum_shielding(
 
     combined_html = "\n".join(captured)
     assert "✕" not in combined_html
+
+
+# ---------------------------------------------------------------------------
+# B-103 / S156-Befund — the auto-fail badge must show the triggering ability's
+# own name ("Quantum Shielding"), not the generic placeholder "Auto-fail".
+# Intentional behaviour break vs. the badge text asserted implicitly by the
+# S148 test above (that test passes no auto_fail_label, so it keeps exercising
+# the generic fallback and stays green — only this test's expectation changes).
+# ---------------------------------------------------------------------------
+
+
+def test_wound_block_auto_fail_badge_shows_ability_name(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """B-103 regression: badge reads 'Quantum Shielding', never 'Auto-fail'."""
+    captured = _collect_markdown(monkeypatch)
+
+    _render_dice_wound_block(
+        strength=6,
+        toughness=6,
+        wound_stack=[],
+        modified=4,
+        auto_fail_max=3,
+        auto_fail_label="Quantum Shielding",
+    )
+
+    combined_html = "\n".join(captured)
+    assert (
+        "Quantum Shielding" in combined_html
+    ), f"Expected the ability-supplied label in the badge, got:\n{combined_html[:600]}"
+    assert "Auto-fail" not in combined_html, (
+        f"Generic 'Auto-fail' placeholder must not appear once an ability label "
+        f"is supplied, got:\n{combined_html[:600]}"
+    )

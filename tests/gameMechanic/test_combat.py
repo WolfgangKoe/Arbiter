@@ -11,6 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from gameMechanic.attackMath import _combi_hit_penalty
 from gameMechanic.combat import (
     AttackParams,
     DefendParams,
@@ -21,6 +22,7 @@ from gameMechanic.combat import (
     resolve_weapon_strength,
     wound_threshold,
 )
+from gameObjects.weapon import WeaponProfile
 
 # ---------------------------------------------------------------------------
 # parse_dice
@@ -653,3 +655,67 @@ class TestWoundAutoFailFloor:
         )
         assert result["wound"]["modified"] == 3
         assert result["wound"]["auto_fail_max"] is None
+
+
+# ---------------------------------------------------------------------------
+# R-COMBAT-35 — combi-weapon wiring: _combi_hit_penalty()'s result (attackMath.py)
+# feeds into resolve_attack_modifiers' hit-modifier stack exactly like any other
+# named −1 to Hit source (e.g. Dense Cover, Heavy-advanced). → wahapedia_orks
+# combi-weapon profile text: "If you select both, then each time an attack is
+# made with this weapon this phase, subtract 1 from that attack's hit roll."
+# ---------------------------------------------------------------------------
+
+
+def _combi_profile(name_en: str, attacks: str) -> WeaponProfile:
+    return WeaponProfile(
+        weapon_type="Heavy",
+        range_inches=24,
+        attacks=attacks,
+        strength=4,
+        ap=0,
+        damage="1",
+        is_melee=False,
+        name_en=name_en,
+        combi=True,
+    )
+
+
+class TestCombiHitPenaltyWiring:
+    def test_both_combi_profiles_selected_worsens_hit_threshold_by_one(self) -> None:
+        rokkit = _combi_profile("Rokkit", "D3")
+        shoota = _combi_profile("Shoota", "3/2")
+        penalty = _combi_hit_penalty([rokkit, shoota])
+        modifiers = [{"label": "Combi (both profiles)", "value": penalty, "roll_type": "hit"}]
+
+        result = resolve_attack_modifiers(
+            skill=4,
+            strength=4,
+            toughness=4,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=modifiers,
+            use_melee=False,
+        )
+
+        assert result["hit"]["modified"] == 5  # 4+ worsened to 5+ by the −1
+
+    def test_single_combi_profile_selected_has_no_hit_penalty(self) -> None:
+        rokkit = _combi_profile("Rokkit", "D3")
+        penalty = _combi_hit_penalty([rokkit])
+        modifiers = (
+            [{"label": "Combi (both profiles)", "value": penalty, "roll_type": "hit"}]
+            if penalty
+            else []
+        )
+
+        result = resolve_attack_modifiers(
+            skill=4,
+            strength=4,
+            toughness=4,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=modifiers,
+            use_melee=False,
+        )
+
+        assert result["hit"]["modified"] == 4  # unchanged — no combi penalty applied
