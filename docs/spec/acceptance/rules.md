@@ -304,6 +304,30 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **code**: —
 - **regel**: Mortal Wounds als Zusatzschaden: Werden immer angewandt, auch wenn der normale Waffenschaden durch den Rettungswurf geblockt wurde.
 
+### R-COMBAT-35
+- **klasse**: A
+- **status**: offen
+- **getestet**: ja (Berechnungs-Anteil) — test_both_combi_profiles_selected_incur_minus_one_to_hit / test_single_combi_profile_selected_has_no_penalty
+- **quelle**: wahapedia_orks/faction_overview.txt (Kombi-rokkit/Kombi-skorcha Profiltext) — "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack's hit roll."
+- **code**: attackMath.py:_combi_hit_penalty
+- **regel**: Kombi-Waffe (Profil mit `combi: true`, z. B. Kombi-rokkit/Kombi-skorcha): Vor der Zielwahl ein Profil ODER beide wählen; bei beiden −1 auf alle Trefferwürfe beider Profile in dieser Phase. B-098 Teil 2 (S156): Berechnung + `weapon_swaps`-Anbindung (Boss Nob) stehen; die Profil-Auswahl-UI und die Anwendung des Malus in der Angriffsauflösung (`_common.py`/`combat.py`) fehlen noch — offene Folgeaufgabe.
+
+### R-COMBAT-36
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_fixed_4_plus_invuln_beats_ap_reduced_armour_save / test_quantum_deflection_use_registers_defender_scoped_invuln_modifier
+- **quelle**: wahapedia_necrons/stratagems.txt:100 — Quantum Deflection: "Until the end of the phase, models in that unit have a 4+ invulnerable save."
+- **code**: stratagemEngine.py:_apply_stratagem_effect / combat.py:resolve_save
+- **regel**: Quantum Deflection (Stratagem) gewährt einen FESTEN 4+ Invuln (kein additiver Modifier) — `resolve_save` vergleicht ihn als Schwellenwert gegen Rüstung/nativen Invuln (best-of, `min`), nie additiv verrechnet. B-056 (S156).
+
+### R-COMBAT-37
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_wound_buff_cannot_lower_threshold_past_auto_fail_floor / test_unit_wound_auto_fail_max_annihilation_barge_real_data / test_wound_block_shows_three_auto_fail_crosses_for_quantum_shielding
+- **quelle**: wahapedia_necrons/units_all.txt:112 — Quantum Shielding (Fahrzeug-Fähigkeit): "each time an attack is made against this model, an unmodified wound roll of 1-3 always fails, irrespective of any abilities that the weapon or the attacker may have."
+- **code**: abilityEngine.py:unit_wound_auto_fail_max / combat.py:resolve_attack_modifiers
+- **regel**: Quantum Shielding (Einheiten-Fähigkeit, getrennt vom gleichnamigen Stratagem): unmodifizierter Verwundungswurf 1-3 schlägt immer fehl — der Verwundungswurf-Floor wird auf `auto_fail_max + 1` angehoben, kein Wund-Buff kann darunter senken (der Check greift auf den UNMODIFIZIERTEN Wurf). Anzeige: WOUND-Block zeigt 3× ✕ (Angreifer-Perspektive, Debuff-Rot).
+
 ---
 
 ## Bereich: Command Phase

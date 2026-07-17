@@ -45,11 +45,11 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~35k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (gleiche Datei wie Rang 2/9, daher Serie). Teil der FixD-Serie (Compute/Render-Trennung in `_common.py`). Brief 1 (Rang 4) ist S150 erledigt und entblockt Brief 2+3 sowie den mypy-uiLayout-Abbau (B-004). Brief 2 wartet auf ein Mockup, Brief 3 zieht nur die zugehörige Spec nach.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (gleiche Datei wie Rang 2/9, daher Serie). Teil der FixD-Serie (Compute/Render-Trennung in `_common.py`). Brief 1 (Rang 4) ist S150 erledigt und entblockt Brief 2+3 sowie den mypy-uiLayout-Abbau (B-004). Brief 2 wartet auf ein Mockup, Brief 3 zieht nur die zugehörige Spec nach. **S141-Root-Cause-Audit-Befund 3 (weiterhin offen, `docs/handoff/S141_ui_befunde_group_a.md` gelöscht S156 — Inhalt hier übernommen):** Cross-Player-Area-Leak — `render_attack_resolution()` wird in Fight-Phase (`src/gameMechanic/fightPhase.py::_render_display`, Aufruf `render_attack_resolution("fight")`) und Shooting-Phase (`src/gameMechanic/shootingPhase.py`, Aufruf `render_attack_resolution("shooting")`) jeweils **außerhalb** der Zwei-Spieler-Spalten (`st.columns(2)`) gerendert — die komplette Zwei-Spieler-Spalten-Ansicht wird während der Attacken-Auflösung durch ein volles-Breite-Panel ersetzt, das Angreifer- und Verteidiger-Daten kombiniert. Reaktive GO-Boxen (z. B. Whirling Onslaught) in diesem Panel sind dadurch nicht eindeutig einer Spielerspalte zugeordnet. Die kleine Soforthilfe (`target_name` an `render_go_card` in `render_reactive_stratagem_box`, `_common.py`) ist bereits umgesetzt (verifiziert `_common.py:878`, `reactive_box_target_label(...)`) — die strukturelle Frage bleibt offen: Resolution-Tab bewusst als geteilte Ansicht beibehalten (dann nur weitere visuelle Kennzeichnung nachrüsten) ODER strukturell in die verteidigende Spalte verlegen (größerer Umbau). Scope-Entscheidung mit Stakeholder nötig, bevor Umsetzung beginnt — passt zeitlich am ehesten in den FixD-Brief-2/3-Rahmen dieses Items, da beide dieselbe Compute/Render-Grenze in `_common.py` berühren.
 
-**Abhängigkeiten:** Brief 2 hinter einem Mockup-Gate; Brief 3 ist reiner Spec-Nachzug; beide sequenziell nach Brief 1 (Dateikonflikt `_common.py`).
+**Abhängigkeiten:** Brief 2 hinter einem Mockup-Gate; Brief 3 ist reiner Spec-Nachzug; beide sequenziell nach Brief 1 (Dateikonflikt `_common.py`); S141-Befund 3 braucht vorab eine Scope-Entscheidung (geteilte Ansicht vs. Spalten-Umbau).
 
-**Belege:** `docs/audit/plans/README.md` (Plan-Status), Prioritätenliste-Herleitung in Alt-`backlog.md` Z.23–33.
+**Belege:** `docs/audit/plans/README.md` (Plan-Status), Prioritätenliste-Herleitung in Alt-`backlog.md` Z.23–33; S141-Root-Cause-Audit Befund 3 (Datei gelöscht S156, Inhalt hier archiviert).
 
 **Benötigte Regeln-Scopes:** —
 
@@ -69,7 +69,7 @@ am Anfang der Beschreibungsspalte.
 
 **Detail-Beschreibung:** Betroffene Dateien: `subfaction_abilities.yaml` (Necron+Ork), Engine-Filter (Modul analog `subfactionPassives.py`). Wortlaut-Fix für Novokh/Sautekh/Nephrekh (Necron-Dynastien) + Ork Snakebites, dazu Engine-Filter, `subfaction_passive`-Migration, 4 neue Effekttypen, ein Badge, und der Spec-Nachzug in `faction_abilities.md` Kategorie 6. Größter offener Klan/Dynastie-Block.
 
-**Abhängigkeiten:** Macht 13 Backlog-Einträge erstmals wirksam; Effort L — **vor Vergabe in ≤ M-Briefs splitten** (S130-Auflage). **S152-Review-Befund (Retro-Maßnahme M4):** B-002 (K1-Wortlaut-Fix) hat bereits neue deklarative `effect`-Subtypen in die YAML-Daten eingeführt (`multi`, `range_bonus`, `buff_ap`, `objective_secured`, `ap_override_if_neg1`, s. `data/wh40k_9e/necrons/subfaction_abilities.yaml` Nihilakh/Mephrit) — diese Subtypen haben noch **keinen Engine-Handler**, sind also aktuell wirkungslos. B-003 (K2+) muss diese Handler mit aufnehmen, nicht nur die 4 dort genannten neuen Effekttypen isoliert betrachten.
+**Abhängigkeiten:** Macht 13 Backlog-Einträge erstmals wirksam; Effort L — **vor Vergabe in ≤ M-Briefs splitten** (S130-Auflage). **S152-Review-Befund (Retro-Maßnahme M4):** B-002 (K1-Wortlaut-Fix) hat bereits neue deklarative `effect`-Subtypen in die YAML-Daten eingeführt (`multi`, `range_bonus`, `buff_ap`, `objective_secured`, `ap_override_if_neg1`, s. `data/wh40k_9e/necrons/subfaction_abilities.yaml` Nihilakh/Mephrit) — diese Subtypen haben noch **keinen Engine-Handler**, sind also aktuell wirkungslos. B-003 (K2+) muss diese Handler mit aufnehmen, nicht nur die 4 dort genannten neuen Effekttypen isoliert betrachten. **S147-Ork-Ability-Audit (`docs/handoff/S147_go_audit_ork_abilities.md`, gelöscht S156, git-historisch unter Commit `690b112` erreichbar):** weitere YAML→Engine-Lücken derselben Art bei Ork-Fähigkeiten gefunden — Speedwaaagh! Stage1 (`assault_after_advance`/`dakka_hits`/`buff_ap`, `faction_abilities.yaml:117-125`), Evil-Sunz-Kultur-Boni (`assault_after_advance`/`buff_stat`(move)/`buff_roll`(advance_roll), `subfaction_abilities.yaml:124`), alle 7 Klan-Kulturen (`cover_save`/`fallback_shoot_or_charge`/`reroll_one`/`mortal_wound_negate`/`objective_secured`/`wound_roll_fail_threshold`/`buff_roll`/`extra_hit_on_6` — keiner hat einen Konsumenten), Ghazghkulls „The Great Waaagh!" (struktureller Bug: `activate_faction_ability` hat 0 Engine-Treffer, sein zweiter Effekt wird nie ausgelöst, da `_render_once_per_battle_ability_ui` immer nur die erste once-per-battle-Fähigkeit einer Fraktion nimmt), Mob Rule/Ramshackle (Klasse B, aber ohne Hinweistext im jeweiligen Phase-Screen), sowie eine generische Grundmechanik-Lücke „Assault-Waffe darf nach Advance feuern" (`shootingPhase.py::can_shoot` blockt pauschal, ohne Assault-Ausnahme — `rules_appendix.txt:2347-2354`) als Root Cause für mehrere der obigen Lücken. Zusätzlich ein reiner Datenbug: 4 Ork-Waffen + 1 Relic nutzen einen abweichenden Auto-Hit-Textbaustein, den `_detect_weapon_special` nicht erkennt (Fix: Text normalisieren + `effect.type == "auto_hit"` zusätzlich als Quelle lesen). Audit enthält einen fertigen Fixing-Plan (7 Schritte, je ≤ Effort M) — bei Aufnahme von B-003 gegenprüfen, was davon bereits durch neuere Sessions erledigt ist, bevor der Rest eingeplant wird.
 
 **Belege:** `docs/goals/ziel7.md` Stufe C §K1; `docs/spec/faction_abilities.md` Kategorie 6 (Spec-Nachzug nötig, s. B-085).
 
@@ -181,9 +181,11 @@ am Anfang der Beschreibungsspalte.
 
 **S152-Befund (Nacharbeit):** Stakeholder konnte die 4 Checks nicht durchführen — es fehlten zwei konkret benannte, tatsächlich verfügbare Rosters mit Psychic-Phase-Fähigkeit (Necron-Seite braucht einen Psi-fähigen Charakter, Gegenseite muss deny-fähig sein). Vor Neuvorlage S153: zwei geeignete Rosters aus `data/rosters/` benennen (oder ergänzen, falls keins existiert) und in den Prüfschritten explizit auflisten, damit die Voraussetzung real erfüllbar ist.
 
-**Abhängigkeiten:** Code + Tests grün seit S65 (+8 Tests, `TestRefundDeny`/`TestClearedDeny`); gemeinsamer Commit mit dem Token-Gauge-Hook geplant; Nacharbeit + Neuvorlage S153 (Roster-Benennung).
+**S154-Testpaar-Vorschlag (`docs/handoff/S154_offene_entscheide.md`, gelöscht S156 — Inhalt hier übernommen):** Testpaar `orks.yaml` (Weirdboy castet) vs. `necrons_test.yaml` (Canoptek Spyder mit Gloom Prism denyt über den Wargear-Pfad). Anleitung: Weirdboy selektieren → Manifest-Roll (z. B. 8) → Deny-Karte erscheint in der Necron-Spalte → Deny-Roll → bei Durchkommen Smite-Schaden + Log prüfen; Perils separat mit Roll 2/12 testen. Dieser Vorschlag ist noch nicht gegen das S156-Retro-Maßnahme-5-Template (Voraussetzungen/präzise Schritte/präzise Erwartung inkl. Ausgangs-State) geschärft — vor der nächsten Vorlage an den Stakeholder in diesem Format aufbereiten.
 
-**Belege:** Commits `cc75490`/`1d8b8ba`; `docs/handoff/S152_offene_ui_verifikationen.md` (S152-Befund).
+**Abhängigkeiten:** Code + Tests grün seit S65 (+8 Tests, `TestRefundDeny`/`TestClearedDeny`); gemeinsamer Commit mit dem Token-Gauge-Hook geplant; Nacharbeit + Neuvorlage nach Maßnahme-5-Template (S156-Retro).
+
+**Belege:** Commits `cc75490`/`1d8b8ba`; `docs/handoff/S152_offene_ui_verifikationen.md` (S152-Befund); S154-Testpaar-Vorschlag (Datei gelöscht S156, Inhalt hier archiviert).
 
 **Benötigte Regeln-Scopes:** —
 
@@ -575,15 +577,24 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~35k
 
-**Detail-Beschreibung:** „used on ⟨Einheit⟩"-Suffix soll auf **alle** reaktiven GOs ausgeweitet werden (aktuell nur die zentrale Stratagems-Liste betroffen).
+**Detail-Beschreibung:** „used on ⟨Einheit⟩"-Suffix soll auf **alle** reaktiven GOs ausgeweitet werden (aktuell nur die zentrale Stratagems-Liste betroffen). **S150-Renderpfad-Kartierung** (`docs/handoff/S150_usedon_renderpaths.md`, gelöscht S156 — Inhalt hier verlustfrei übernommen): alle drei bestehenden Render-Pfade (zentrale Stratagem-Liste `gameProtocoll.py:350`, Advance-Reroll-Karte `movementPhase.py:325`, reaktive Stratagem-Boxen `_common.py:868` mit sechs Aufrufern in `fightPhase.py`/`chargePhase.py`/`movementPhase.py`/`psychicPhase.py`(×2)/`_common.py`) teilen exakt dieselbe Datenquellen-Kette `render_go_card(locked_reason=...) ← _go_state_and_reason()/_reactive_go_state()/_advance_reroll_state() ← stratagem_used_elsewhere_unit_name(faction, strat.id) ← stratagem_use_anchor() ← session_state["stratagem_use_anchors"]`, geschrieben von `spend_stratagem()` — keine separaten Code-Pfade, nur eine Datenquelle mit drei Call-Sites. **S156-Planner-Befund (Vorab-Zählung, M1-Pflicht):** `render_reactive_stratagem_box` ist laut Code (lädt nur `stratagems.yaml`) ausschließlich auf Stratagems zugeschnitten. Es gibt **11 reaktive Non-Stratagem-GOs** (`timing: phase_reactive`), die aktuell **nirgends** über einen Reactive-GO-Card-Pfad gerendert werden — `grep -rn "phase_reactive" src/` findet nur zwei Konsumenten, beide ausschließlich für Stratagems. Die 11 IDs (aus `docs/handoff/S156_planning.md`, Datei gelöscht S156 nach ANSWERED):
 
-**Abhängigkeiten:** Nach dem BUG-Fix (Archiv A-019, Insane-Bravery-Repro Moralphase). Fest für S153 eingeplant (Stakeholder-Entscheid S152).
+| Datei | Anzahl | IDs |
+|---|---|---|
+| `data/wh40k_9e/necrons/unit_abilities.yaml` | 8 | `the_silent_king.noctilith_beacons`, `the_silent_king.vengeance_of_the_enchained`, `warriors.their_number_is_legion`, `canoptek_plasmacyte.infused_madness`, `hexmark_destroyer.inescapable_death`, `gauss_pylon.arc_fields`, `seraptek_heavy_construct.wrath_of_the_seraptek`, `triarch_stalker.targeting_relay` |
+| `data/wh40k_9e/necrons/faction_abilities.yaml` | 1 | `reanimation_protocols` |
+| `data/wh40k_9e/necrons/wargear.yaml` | 1 | `gloom_prism` |
+| `data/wh40k_9e/orks/subfaction_abilities.yaml` | 1 | `klan.freebooterz.competitive_streak` |
 
-**Belege:** —
+**Konsequenz:** B-028 ist damit nicht nur „Suffix auf bestehende Boxen ausweiten", sondern setzt voraus, dass diese 11 Fähigkeiten überhaupt erst als reaktive GO-Card gerendert werden — eine größere Vorstufe als der Backlog-Eintrag ursprünglich suggerierte. **Stakeholder-Entscheid S156:** Option A — S156/S157 liefert zunächst nur ein Scope-/Konzeptdokument (Ist-Zustand der 11 Fähigkeiten dokumentieren, Aufwand neu schätzen), direkte Umsetzung folgt als eigener, danach geplanter Schritt (S157).
+
+**Abhängigkeiten:** Nach dem BUG-Fix (Archiv A-019, Insane-Bravery-Repro Moralphase). Scope-Dokument (Option A) für S157 geplant (Stakeholder-Entscheid S156).
+
+**Belege:** `docs/handoff/S156_planning.md` (Vorab-Zählung, Tabelle oben — Datei gelöscht nach Übernahme).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** §2 Alt-`backlog.md` Z.284–286 (Stakeholder-Wunsch S148).
+**Herkunft:** §2 Alt-`backlog.md` Z.284–286 (Stakeholder-Wunsch S148); Renderpfad-Kartierung S150; Scope-Befund + Stakeholder-Entscheid S156.
 
 ## B-029 — B13 GO Karte Keyword Badges
 
@@ -751,11 +762,11 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~35k
 
-**Detail-Beschreibung:** `collect_modifiers_for_phase()` — Plan-018-Task 18.4, noch offen.
+**Detail-Beschreibung:** `collect_modifiers_for_phase()` — Plan-018-Task 18.4, noch offen. **S147-Stratagem-Audit (`docs/handoff/S147_go_audit_stratagems.md`, gelöscht S156, git-historisch unter Commit `690b112` erreichbar):** mehrere konkrete YAML→Engine-Lücken in genau dieser Modifier-Pipeline gefunden, vor Umsetzung gegenprüfen, was bereits durch neuere Sessions erledigt ist: (a) 5 Stratagems ohne den nötigen `modifier:`-Block, obwohl ihr `effect.type` (`buff_roll`/`buff_stat`) bei anderen Einträgen bereits über `active_modifiers` verrechnet wird — Judgement of the Triarch, Eternal Protectors, Blood Rites (Necrons), Showin' Off, Unbridled Carnage (Orks); (b) `StratagemModifier.roll_type: damage` wird registriert (Hit 'Em Harder), aber von keinem Konsumenten gelesen — totes Engine-Feature, ebenso `fnp`/`charge` (0 YAML-Nutzung UND 0 Code-Konsum); (c) Wreckaz wendet seinen Wound-Bonus auf jeden Angriff an statt nur gegen `VEHICLE`-Ziele (fehlendes generisches „Ziel hat Keyword X"-Feld in `modifier:`); (d) Hand of the Phaeron (`grant_keyword`) hat gar keinen Dispatch-Zweig in `stratagemEngine._apply_stratagem_effect` — der bestehende `loader._apply_persistent_effect`-Pfad ist nur aus `persistent_effects` (Relics/Wargear) erreichbar, nie aus `stratagems.yaml`. Audit enthält einen fertigen Fixing-Plan (7 Schritte) inkl. der `target`/`modifier`-Feldnamen-Kollision als camelCase-Migrationsbefund.
 
 **Abhängigkeiten:** Laut §5 zusätzlich Teil von `ziel7.md` §6e (Modifier-Engine für proaktive Stratagems).
 
-**Belege:** → Plan 018 Task 18.4; `docs/goals/ziel7.md` §6e.
+**Belege:** → Plan 018 Task 18.4; `docs/goals/ziel7.md` §6e; S147-Stratagem-Audit (Datei gelöscht S156, Inhalt hier archiviert).
 
 **Benötigte Regeln-Scopes:** —
 
@@ -1113,28 +1124,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.384–389 (Refinement-Skizze IMG_4051, S94 gesichert).
 
-## B-056 — Quantum Shielding fester Invuln Wert
-
-[↩ Zeile in backlog.md](backlog.md#b-056)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~35k
-
-**Detail-Beschreibung:** Setzt den Rettungswurf (Invuln) auf einen **festen Wert (4+)** — keine additive Modifikation, kein Modifier-Pfeil in der Würfelanzeige. Eigener Mechanik-Typ „Invuln auf festen Wert setzen" (vs. der bestehenden additiven Modifier-Logik) nötig. **S148-UI-Befund (Annihilation Barge):** unmod. Wound 1–3 misslingt bei Quantum-Shielding-Einheiten immer — wird aktuell **nicht** als Debuff in der Wound-Zeile (3× ✕) noch als Buff im Save-Block angezeigt. Regeltext vorher gegen `docs/work/wahapedia_necrons` verifizieren. S152-Planner-Befund: zwei gleichnamige Mechaniken liegen vor - das Stratagem "Quantum Shielding" gibt einen temporären festen 4+ Invuln, die Fahrzeug-Fähigkeit "Quantum Shielding" gibt einen dauerhaften 5+ Invuln + unmod. Wound 1-3 auto-fail. Stakeholder-Entscheid S152 = Scope (b): den Anzeige-Bug der Fähigkeit fixen UND einen neuen Mechanik-Typ "Invuln auf festen Wert" für das Stratagem einführen; geplant für S153.
-
-**Abhängigkeiten:** Überschneidet sich mit dem SAVE-/Invuln-Badge-Bereich (Plan 017 / B-043).
-
-**Belege:** `docs/handoff/S148_ui_verifikation.md` Prüfblock 1; `docs/work/wahapedia_necrons/`.
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.390–398 (Refinement-Skizze IMG_4041, S94 gesichert; S148-UI-Befund).
-
 ## B-057 — Waffen Block Rapid Fire Count und Range anzeigen
 
 [↩ Zeile in backlog.md](backlog.md#b-057)
@@ -1345,15 +1334,15 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~5–15k
 
-**Detail-Beschreibung:** Eingabe der zusätzlichen Attacken (Staff of Stars 4 / Scythe of Dust 3) soll wie bei anderen Einheiten üblich per Default auf dem Maximum vorbelegt sein; aktuell startet der Wert niedriger, was beim Spielen nervt.
+**Detail-Beschreibung:** Eingabe der zusätzlichen Attacken (Staff of Stars 4 / Scythe of Dust 3) soll wie bei anderen Einheiten üblich per Default auf dem Maximum vorbelegt sein; aktuell startet der Wert niedriger, was beim Spielen nervt. **S154-Verifikation:** Backlog-Zahlen waren vertauscht — regelkonform laut YAML + Wahapedia (`units_all.txt:236–237`): Staff of Stars max **3**, Scythe of Dust max **4**; die Nahkampf-Vorbelegung mit diesen Werten ist **korrekt**. **S156-Stakeholder-Befund (neu, Fernkampf):** In der Fernkampfphase wird das Attackenmaximum **nicht** vorbelegt. Bei den Menhirs passt es, aber bei „Sceptre of Eternal Glory" und „Staff of Stars" müsste jeweils eine **1** vorbelegt sein — Grund: hier werden Modelle bestimmt (Zielzuweisung pro Modell), und alle Fernkampfattacken eines Modells müssen gegen dasselbe Ziel gerichtet werden (ein Modell kann nicht mit zwei Fernkampfwaffen auf zwei Ziele gleichzeitig feuern, solange die Ziel-pro-Waffe-Aufteilung aus B-045 nicht umgesetzt ist). Der Nahkampf-Teil bleibt unverändert korrekt.
 
-**Abhängigkeiten:** —
+**Abhängigkeiten:** Querverweis B-045 (Silent-King-Zielaufteilung Fernkampf — löst das strukturelle Problem, dem der Fernkampf-Default hier nur symptomatisch begegnet).
 
-**Belege:** —
+**Belege:** `docs/handoff/S154_offene_entscheide.md` (Nahkampf-Verifikation); `docs/handoff/S155_ui_verifikationen.md` Punkt 4 (S156-Stakeholder-Kommentar, Fernkampf-Befund).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** §2 Alt-`backlog.md` Z.467–470 (Stakeholder-Verifikation S146).
+**Herkunft:** §2 Alt-`backlog.md` Z.467–470 (Stakeholder-Verifikation S146); Nahkampf-Verifikation S154; Fernkampf-Befund S156.
 
 ## B-069 — camelCase Umbenennung
 
@@ -1785,15 +1774,15 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~35k
 
-**Detail-Beschreibung:** Betroffene Dateien: `data/wh40k_9e/orks/weapons.yaml`, `data/wh40k_9e/orks/units.yaml`. Teil 1 (Kombi-Waffenprofile in `weapons.yaml` + Tests) ist erledigt (S152). Teil 2 ist offen — S152-Planner-Befund: (a) `units.yaml` Boss-Nob braucht einen neuen `weapon_swap` (pick 1: `kombi_rokkit`/`kombi_skorcha`, replaces `slugga`+`choppa`; NICHT für Warbike-Nobs); (b) die Kombi-Mechanik "eines oder beide Profile, bei beiden -1 to hit" ist mit dem aktuellen `WeaponProfile`-Schema nicht generisch abbildbar -> Engine-Erweiterung nötig.
+**Detail-Beschreibung:** Betroffene Dateien: `data/wh40k_9e/orks/weapons.yaml`, `data/wh40k_9e/orks/units.yaml`, `src/gameObjects/weapon.py`, `src/gameObjects/loader.py`, `src/gameMechanic/attackMath.py`. Teil 1 (Kombi-Waffenprofile in `weapons.yaml` + Tests) ist erledigt (S152). Teil 2 — **S156 erledigt:** `combi`-Feld auf `WeaponProfile`, Loader-Exklusivitäts-Guard (`_check_exclusive_swaps`/`_exclusive_swap_clusters` — verträgt zwei sich gegenseitig ausschließende `weapon_swaps`-Gruppen auf derselben Modellgruppe), `_combi_hit_penalty()` in `attackMath.py` (die generische −1-Hit-Berechnung bei „beide Profile gewählt"), Boss-Nob-Swap (`nob_kombi`, `pick: 1`, `replaces: [slugga, choppa]`, `options: [kombi_rokkit, kombi_skorcha]`, NICHT für Warbike-Nobs) + zugehörige YAML-Daten. **S156 offen (R-COMBAT-35 `status: offen`):** die Verdrahtung des berechneten −1-Malus in `src/gameMechanic/combat.py` fehlt noch, ebenso die Profil-Auswahl-UI in `src/uiLayout/_common.py` (Spieler muss ein Profil ODER beide Profile wählen können, bevor der Malus wirksam wird) — bewusst getrennt von B-056 gehalten, um Dateikollision zu vermeiden (S156-Planner-Entscheid).
 
-**Abhängigkeiten:** Teil 1 war reiner Daten-Fix (erledigt); Teil 2 ist kein reiner Daten-Fix mehr, sondern braucht eine Engine-Erweiterung für die ODER-Gruppen-Mechanik.
+**Abhängigkeiten:** Teil 1 war reiner Daten-Fix (erledigt); Teil 2a (Loader/Berechnung/Daten) ist S156 erledigt; Teil 2b (Verdrahtung `combat.py` + UI `_common.py`) ist der Rest-Scope für S157.
 
-**Belege:** `docs/work/wahapedia_orks/` (Kombi-Waffenprofile gegen Wahapedia geprüft, S152).
+**Belege:** `docs/work/wahapedia_orks/` (Kombi-Waffenprofile gegen Wahapedia geprüft, S152); `docs/spec/acceptance/rules.md` R-COMBAT-35/36/37 (S156); `docs/handoff/S156_close_review.md` (DoD-Review, GO).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** `next_session.md` (S150, Punkt 5) / Stakeholder-Verifikation S146-Umfeld; als Waisen-Item ohne Backlog-ID im S151-C-Umbau gefunden (`docs/handoff/S151_briefing_umbau.md`), nachgetragen S151; Teil 2 S152-Planner-Befund.
+**Herkunft:** `next_session.md` (S150, Punkt 5) / Stakeholder-Verifikation S146-Umfeld; als Waisen-Item ohne Backlog-ID im S151-C-Umbau gefunden (`docs/handoff/S151_briefing_umbau.md`), nachgetragen S151; Teil 2 S152-Planner-Befund; Teil 2a-Umsetzung S156.
 
 ## B-100 — unitCard GO Rand-Design fuer Spieler 2 spiegeln
 
@@ -1849,14 +1838,84 @@ am Anfang der Beschreibungsspalte.
 
 **Tier:** Executor
 
-**Effort:** ~M (15–35k, nach Lösungsansatz)
+**Effort:** ~35k (Regel-/Ablaufklärung + UX-Fix; ggf. höher, da Regelklärung vorab nötig)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/fightPhase.py` (`_advance_fight_turn_if_needed`), `src/uiLayout/_common.py` (Counter-Offensive-Box-Render). In einfachen 1-gegen-1-Kampfsequenzen kippt `_advance_fight_turn_if_needed` den `fight_current_player` sofort auf die berechtigte Seite zurück, sobald eine Seite fertig ist (Spieler A → Spieler B → Spieler A). Dies führt dazu, dass `is_my_turn` True wird und die reaktive Counter-Offensive-Box (die an `is_my_turn == False` gebunden ist) gar nicht rendert. Das Phänomen ist nur dann sichtbar, wenn die Alternierung nicht sofort zurückspringt — etwa im Group-Assignment-Flow mit mehreren Gruppen, wo zwischen den Alternierungsschritten UI-Render stattfindet. **S155-Zusatzbefund:** Regelkonformität selbst ist korrekt (Counter-Offensive triggert tatsächlich erst NACH gegnerischem Fight), Hinweistext zur Verfügbarkeit wurde ergänzt (S155, Commit ab36b80). Hypothesis A (Triggermechanik OK) ist bestätigt — das Problem ist ein Timing-Issue bei der Box-Sichtbarkeit. **Zu klären:** Soll die Box in diesen Sequenzen anders angeboten werden (z. B. eigener Moment vor dem Rücksprung, oder über B-031 ausgrauen statt ausblenden)?
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/fightPhase.py` (`_advance_fight_turn_if_needed`), `src/uiLayout/_common.py` (Counter-Offensive-Box-Render). In einfachen 1-gegen-1-Kampfsequenzen kippt `_advance_fight_turn_if_needed` den `fight_current_player` sofort auf die berechtigte Seite zurück, sobald eine Seite fertig ist (Spieler A → Spieler B → Spieler A). Dies führt dazu, dass `is_my_turn` True wird und die reaktive Counter-Offensive-Box (die an `is_my_turn == False` gebunden ist) gar nicht rendert. Das Phänomen ist nur dann sichtbar, wenn die Alternierung nicht sofort zurückspringt — etwa im Group-Assignment-Flow mit mehreren Gruppen, wo zwischen den Alternierungsschritten UI-Render stattfindet. **S155-Zusatzbefund:** Regelkonformität selbst ist korrekt (Counter-Offensive triggert tatsächlich erst NACH gegnerischem Fight), Hinweistext zur Verfügbarkeit wurde ergänzt (S155, Commit ab36b80). Hypothesis A (Triggermechanik OK) ist bestätigt — das Problem ist ein Timing-Issue bei der Box-Sichtbarkeit.
 
-**Abhängigkeiten:** Abhängig von Architektur-Entscheid (Render-Moment vs. State-Change). Kann mit B-031 (GO-Konsistenz ausgrauen statt ausblenden) gelöst werden, falls dieser Ansatz verfolgt wird.
+**S156-Stakeholder-Auftrag (erweitert den Scope über das reine Timing-Issue hinaus):**
+(a) **Regel-/Ablaufklärung als eigener Auftrag:** Wortlaut „after an enemy unit has fought" vs. beobachtetes Verhalten und die Alternierungs-Logik sauber gegen `docs/work/wahapedia_core_rules/core_rules.txt` klären, Abweichungen dokumentieren. Stakeholder-Interpretation (zu verifizieren): GO = „Unterbrechung" der Kampfreihenfolge — Beispiel: der aktive Spieler greift mit 3 Einheiten erfolgreich an und ist danach mit 5 gegnerischen Einheiten in Nahkampfreichweite; laut Grundregeln kämpfen zuerst alle erfolgreich angreifenden Einheiten, bevor der inaktive Spieler an der Reihe ist — Counter-Offensive erlaubt dem inaktiven Spieler, diese Reihenfolge zu unterbrechen und bereits **nach dem ersten** Fight der aktiven Seite eine eigene Einheit fechten zu lassen (nicht erst wenn ohnehin regulär gewechselt würde). Zu klären: wo weicht die App-Logik von diesem Verständnis ab, und wie muss die Alternierung entsprechend implementiert werden.
+(b) **UX-Anforderung:** die GO-Karte muss **immer sichtbar** sein, auch wenn die Bedingung nicht erfüllt ist — Regeltext muss lesbar bleiben (Bedingungen ausgrauen statt ausblenden, Querverweis B-031), statt komplett zu verschwinden.
 
-**Belege:** S155 E1-Befund, `docs/audit/plans/015-contextual-reactive-stratagems.md` (Counter-Offensive), Commit ab36b80 (Regel-Verifikation + Hinweistext).
+**Abhängigkeiten:** Regel-/Ablaufklärung (a) muss vor der Implementierung stehen — abhängig vom Ergebnis kann sich der Architektur-Ansatz (Render-Moment vs. State-Change) ändern. UX-Teil (b) kann mit B-031 (GO-Konsistenz ausgrauen statt ausblenden) gemeinsam gelöst werden.
+
+**Belege:** S155 E1-Befund, `docs/audit/plans/015-contextual-reactive-stratagems.md` (Counter-Offensive), Commit ab36b80 (Regel-Verifikation + Hinweistext); `docs/handoff/S155_ui_verifikationen.md` Punkt 1 (S156-Stakeholder-Kommentar mit Regel-Interpretation, Beispiel-Sequenz).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt).
+**Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt); Scope-Erweiterung (Regel-Klärung + UX-Dauersichtbarkeit) S156-Stakeholder-Kommentar.
+
+## B-103 — Wound Debuff Label zeigt Auto Fail statt Keyword
+
+[↩ Zeile in backlog.md](backlog.md#b-103)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~5–15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py` (Wound-Zeilen-Debuff-Anzeige, B-056-Folgecode). Stakeholder-Befund bei der Quantum-Shielding-UI-Verifikation (S156): der Debuff im Verwundungswurf wird korrekt ausgelöst (3× ✕ gegen QS-Fahrzeuge), zeigt aber als Label „Auto-fail" statt des Keywords „Quantum Shielding". Label soll generisch aus der Ability gespeist werden (kein neuer Fraktions-String in `src/`), damit andere Auto-Fail-Effekte künftig ihr eigenes Keyword zeigen statt eines generischen Textbausteins.
+
+**Abhängigkeiten:** Aufsetzend auf B-056 (Quantum Shielding, S156 fertig + verifiziert).
+
+**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund a).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
+
+## B-104 — Wuerfelergebnis Symbole folgen nicht dem Design System
+
+[↩ Zeile in backlog.md](backlog.md#b-104)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Design-Crew
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Die Debuff-Symbole bei Würfelergebnissen (z. B. Quantum-Shielding-Auto-fail) rendern aktuell als nacktes „x" statt als Würfelsymbol mit einem ✕ darin. Entweder das Design-System um diesen Baustein ergänzen (bevorzugt, da wiederverwendbar) oder — falls Umsetzung vor der Design-Entscheidung nötig ist — das Backlog-Item exakt auf den betroffenen Design-System-Abschnitt referenzieren, statt eine Ad-hoc-Optik zu bauen (Stakeholder-Auflage „Kein Design ohne Schema").
+
+**Abhängigkeiten:** Design-Entscheidung zuerst (Design-Crew), danach mechanischer Umsetzungs-Schritt.
+
+**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund b).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
+
+## B-105 — Wound Wurf zeigt keine Referenz auf GO Quantum Deflection
+
+[↩ Zeile in backlog.md](backlog.md#b-105)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Design-Crew
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Beim Verwundungswurf gegen ein Ziel mit dem Stratagem „Quantum Deflection" zeigt die App nur ein grünes „4+" ohne Bezug zur auslösenden GO — Stakeholder kann nicht erkennen, welches GO den Wert erzeugt. Es fehlt ein generisches Konzept im Design-System für GO-Referenzen an Würfelblöcken (nicht nur für Quantum Deflection — betrifft grundsätzlich jeden Würfelwert, der aus einem aktiven GO stammt).
+
+**Abhängigkeiten:** Design-Konzept zuerst (Design-Crew); danach Umsetzung, ggf. gemeinsam mit B-104 (beide betreffen Würfelblock-Optik im selben Bereich).
+
+**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund c).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).

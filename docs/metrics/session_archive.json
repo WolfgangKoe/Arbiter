@@ -4905,8 +4905,8 @@
   "d5f8d64e-a676-4b93-b050-530689bff0e7": {
     "started_at": "2026-07-17T05:51:25.947Z",
     "task": "start session",
-    "peak_context": 123926,
-    "subagent_share": 77.84046302868259,
+    "peak_context": 127661,
+    "subagent_share": 76.16691397098609,
     "by_tier": {
       "Sonnet": 20440333,
       "Haiku": 6747875
@@ -4960,6 +4960,60 @@
         "tier": "Sonnet",
         "peak_context": 91521,
         "started_at": "2026-07-17T05:51:25.947Z"
+      }
+    ]
+  },
+  "0dfe44e2-58df-4111-ae02-cf900ac26e86": {
+    "started_at": "2026-07-17T06:26:43.242Z",
+    "task": "start session. Bitte standardvorgehensweise einhalten laut operating model. Sobald die Token-Schwellen erreicht sind gl…",
+    "peak_context": 150442,
+    "subagent_share": 89.74391396008905,
+    "by_tier": {
+      "Opus": 3031715,
+      "Sonnet": 76857724
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S156-DoD-Review (Opus-Reviewer)",
+        "tier": "Opus",
+        "peak_context": 66164,
+        "started_at": "2026-07-17T06:26:43.242Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-098 Kombi-Waffen umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 128752,
+        "started_at": "2026-07-17T06:26:43.242Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S156-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 135171,
+        "started_at": "2026-07-17T06:26:43.242Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-056 Quantum Shielding umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 261149,
+        "started_at": "2026-07-17T06:26:43.242Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S156-Abschluss: Artefakte + Handoff-Bereinigung",
+        "tier": "Sonnet",
+        "peak_context": 222209,
+        "started_at": "2026-07-17T06:26:43.242Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S155-DoD-Review (Opus-Reviewer)",
+        "tier": "Opus",
+        "peak_context": 53100,
+        "started_at": "2026-07-17T06:26:43.242Z"
       }
     ]
   }

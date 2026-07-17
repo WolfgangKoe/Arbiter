@@ -24,42 +24,39 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S155, 2026-07-17)
+## Aktueller Stand (nach S156, 2026-07-17)
 
-S155: Punkt 0 + Restpaket (a) komplett, 5 Commits (`ab36b80`…`ee6eb15`). E1 = Hypothese A
-(Counter-Offensive regelkonform, core_rules.txt:3256) — Fix + UI-Hinweis committet, Stash
-gedroppt. B-027 erledigt; `gretchin_mob` gelöscht; B-036/053/060/079/087 archiviert (B-079
-war stale seit S118); B-025 umformuliert; M1+M2+R3 + neue Ablaufregeln verankert (Planner-
-Prio-Sortierung, UI-Verifikationen immer als Handoff); **B-102 neu** (Box-Erreichbarkeit,
-E1-Zusatzbefund). Gates: 1880 passed / 99,14 %; Arch+Doku+Acceptance 31 passed.
-**S155-Review/Retro steht aus → Punkt 0 in S156 (R3-Regel, operating_model Event 1).**
+S155-Review nachgeholt (R3-Regel): GO, `docs/handoff/S156_review.md`. S156-Abschluss-Review:
+GO (`docs/handoff/S156_close_review.md`). B-056 Quantum Shielding fertig **und**
+Stakeholder-UI-verifiziert (3 UI-Folge-Items B-103/104/105 gesichert) → archiviert. B-098
+Teil 2 teilfertig: Berechnung+Loader-Guard+Daten stehen, Verdrahtung `combat.py` +
+Profil-Auswahl-UI `_common.py` offen (R-COMBAT-35 `offen`). B-028 → per Stakeholder-Entscheid
+auf Scope-Dokument (Option A) reduziert, Umsetzung S157 (11 reaktive Non-Stratagem-GOs ohne
+GO-Card-Renderer). Handoff-Großreinigung durchgeführt (8 Dateien gesichert→gelöscht).
+Gates (Abschluss-Vollsuite S156): **1903 passed / 99,11 %**; Arch+Doku+Acceptance 31 passed.
 
-Frühere Sessions (S60–S154): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S155): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S156)
+### ▶ Nächster Schritt (S157)
 
-Priorität = `docs/goals/backlog.md` (einzige Quelle, S156-Items stehen oben).
+Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-- **(0) S155-Review/Retro nachholen** (R3-Regel) — viel wurde fertig, Formal-Review lohnt.
-  Außerdem: Ergebnis der Stakeholder-UI-Verifikationen einsammeln
-  (`docs/handoff/S155_ui_verifikationen.md`, NEEDS-DECISION).
-- **(a) Engine-Welle (je ~35k, einzeln an M-Obergrenze):** B-056 Quantum Shielding ∥
-  B-098 Teil 2 Kombi-Waffen (disjunkt, aus S155 verschoben — Budget-Punkt 4 des
-  freigegebenen S155-Plans). Danach B-028 used-on-Generalisierung (zuerst reaktive
-  Non-Stratagem-GOs ZÄHLEN; NICHT parallel zu B-056, beide `_common.py`).
+- **(0) Retro-Maßnahmen-Entscheid** (`docs/handoff/S156_retro_s155.md`, NEEDS-DECISION,
+  Maßnahmen 1–9) — Stakeholder wählt/gibt frei, danach übernommene Maßnahmen verankern.
+- **(a) B-098-Rest:** −1-Hit-Malus-Verdrahtung in `combat.py` + Profil-Auswahl-UI in
+  `_common.py` (R-COMBAT-35).
+- **(b) B-028-Scope-Dokument** (Option A, kein Code) — Ist-Zustand der 11 Fähigkeiten,
+  Aufwand neu schätzen.
 
-**Offene Handoff-Marker:** `S155_ui_verifikationen.md` (**NEEDS-DECISION**, 4 Prüfblöcke);
-`S155_planning.md` (ANSWERED, behalten bis B-056/B-098/B-028 umgesetzt);
-`S154_offene_entscheide.md` (ANSWERED, behalten bis PSI-Flow-Verifikation erledigt);
-`S154_planning.md` (ANSWERED, Restpaket in S155 umgesetzt → löschbar nach S155-Review);
-`S147_go_audit_ork_abilities.md` und `S147_go_audit_stratagems.md` (ANSWERED);
-`S141_ui_befunde_group_a.md` (ANSWERED, behalten bis FixC + FixD Brief 2/3);
-`S150_usedon_renderpaths.md` (ANSWERED, behalten bis B-028); `S152_review.md` (ANSWERED).
+**Offene Handoff-Marker:** `S156_planning.md` (ANSWERED), `S156_review.md` (ANSWERED),
+`S156_close_review.md` (ANSWERED) — alle drei behalten bis S157-Start, dann löschbar;
+`S156_retro_s155.md` (**NEEDS-DECISION**, Maßnahmen 1–9).
 
-**Offene manuelle UI-Verifikation:** vollständig in `docs/handoff/S155_ui_verifikationen.md`
-(neue Ablaufregel: immer dort, nie nur hier) — Counter-Offensive-Hinweis, used-on-Suffix
-Advance-Reroll + Overwatch, Silent-King-Defaults, PSI-Flow; Spend-Guard weiter blockiert
-bis Roster-Builder (B-067).
+**Offene UI-Verifikationen:** keine offene Sammeldatei mehr — nächste Verifikationen erst
+wieder mit dem neuen Template (Retro-Maßnahme 5) übergeben. Inhaltlich noch offen:
+Counter-Offensive-Regelklärung + Dauersichtbarkeit (B-102), Silent-King-Fernkampf-Default
+(B-068), PSI-Flow (B-009, Voraussetzungen zuerst klären); Spend-Guard weiter blockiert bis
+Roster-Builder (B-067).
 
 ---
 

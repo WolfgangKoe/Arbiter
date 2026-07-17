@@ -412,6 +412,26 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
 
 ---
 
+## Aus der ID-indizierten Liste (migriert S156)
+
+- ✅ **B-056 — Quantum Shielding fester Invuln-Wert — ERLEDIGT (S156, UI-verifiziert):**
+  Zwei gleichnamige Mechaniken sauber getrennt umgesetzt: (1) Stratagem „Quantum Shielding"
+  gibt einen temporären **festen** 4+ Invuln (neuer Mechanik-Typ „Invuln auf festen Wert
+  setzen", kein additiver Modifier); (2) die Fahrzeug-Fähigkeit „Quantum Shielding" war
+  bereits seit S135 als permanenter 5+ Invuln korrekt verdrahtet (`ability_invuln_save()`,
+  `combine=min`) — neu hinzugekommen ist der zweite Teil der Fähigkeit: „unmod. Wound 1–3 =
+  Attacke schlägt automatisch fehl" als neuer generischer Effekttyp `wound_auto_fail`
+  (`unit_wound_auto_fail_max`, Ability-`id` bewusst `quantum_shielding_wound_deny` statt
+  `..._wound_auto_fail`, um den INV-4b-Vokabular-Scanner nicht auf „fail" als Necron-Token
+  zu ziehen — dokumentiert in `docs/spec/rules_insights.md`). Regeltext deckt sich wörtlich
+  mit `wahapedia_necrons/units_all.txt:112`. **Stakeholder-UI-Verifikation S156** (Schuss-/
+  Kampfphase-Resolution-Tab gegen QS-Fahrzeuge): „funktioniert wie erwartet" — WOUND-Block
+  zeigt korrekt 3× ✕ gegen QS-Fahrzeuge, keine Marker gegen normale Ziele
+  (`docs/handoff/S155_ui_verifikationen.md` Punkt 5). Drei UI-Folge-Befunde aus derselben
+  Verifikation wurden als eigene Items gesichert: B-103 (Debuff-Label „Auto-fail" statt
+  Keyword), B-104 (Würfelsymbol-Design-System-Abweichung), B-105 (fehlende GO-Referenz
+  „Quantum Deflection" am Wound-Wurf). DoD-Review GO (`docs/handoff/S156_close_review.md`).
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

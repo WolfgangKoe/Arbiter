@@ -41,3 +41,35 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   würde Doppel-+1 erzeugen. Die Checkbox-Mechanik setzt den +1 genau einmal. Engine-Fn:
   `get_active_round_choice_light_cover_if_stationary(def_player, def_uid)`. Fallback-Label im
   Badge kommt aus YAML via `get_short_label_for_effect_type` — kein Fraktions-String im Code.
+- **Kombi-Waffen (B-098 Teil 2, S156):** „Select one or both profiles" ist ein Wahlrecht
+  **vor** der Zielwahl, nicht ein permanenter Waffenmalus wie Power Klaw/Killsaw
+  (`hit_roll_penalty`). Der −1-Malus gilt nur, wenn **beide** Profile in derselben Phase
+  gefeuert werden, und trifft **beide** Profile gleichermaßen — deshalb ein neues
+  `WeaponProfile.combi: bool`-Feld statt Wiederverwendung von `effect` (das trägt pro Profil
+  schon den eigenen Mechanik-Typ, z. B. `alternating_fire`/`auto_hit` auf dem Shoota/Skorcha-Teil
+  desselben Kombi-Waffen-Datensatzes — inkompatibel mit einem zweiten Tag im selben Dict).
+  `_combi_hit_penalty()` (attackMath.py) ist reine Berechnung, testbar ohne Streamlit; die
+  Anwendung in der echten Angriffsauflösung (Profil-Auswahl-UI + Hit-Modifier-Weitergabe an
+  `combat.py`) ist noch offen (R-COMBAT-35).
+- **`weapon_swaps` mit überlappender `replaces`-Liste — Exklusivität nur bei `scope: group`:**
+  Der Loader (`_check_exclusive_swaps`, `loader.py`) verweigert zwei **group**-Swaps derselben
+  Modellgruppe, wenn beide dieselbe Basis-Waffe ersetzen (z. B. Boss Nob: 2-Waffen-Kombo vs.
+  Kombi-Waffe, beide ersetzen slugga+choppa) — ein Roster darf nur eine wählen. **Keine**
+  Prüfung bei `scope: per_model`: dort splitten mehrere Swaps unterschiedliche Modell-Untermengen
+  derselben Gruppe (z. B. Ork Boyz: shoota_swap + per-10-Spezialwaffen-Swap ersetzen beide
+  slugga+choppa, aber auf disjunkten Modellen) — das ist beabsichtigt, keine Kollision.
+- **Quantum Shielding — zwei gleichnamige, unabhängige Mechaniken (B-056, S156):** Das
+  Stratagem „Quantum Deflection" (temporärer FESTER 4+ Invuln) und die Fahrzeug-Fähigkeit
+  „Quantum Shielding" (dauerhaft 5+ Invuln + unmod. Wound 1-3 auto-fail) sind trotz gleicher
+  Wortwahl **verschiedene** Mechaniken auf verschiedenen Trägern (Stratagem vs. Unit-Ability) —
+  nicht zusammenlegen. Die Wound-Auto-fail-Regel wird generisch als Floor abgebildet:
+  `resolve_attack_modifiers(..., wound_auto_fail_max=N)` hebt den Verwundungswurf-Floor von 2
+  auf `N+1`, weil der Check gegen den UNMODIFIZIERTEN Wurf greift — kein Wund-Buff kann darunter
+  senken (`combat.py`). **INV-4b-Falle:** ein neuer `unit_abilities.yaml`-Ability-`id` mit dem
+  Wort „fail" (z. B. `..._wound_auto_fail`) macht „fail" zu einem necron-exklusiven Token in
+  `tests/architecture/_vocab.py`'s Datenbank-Scan — und flaggt dann JEDES generische Vorkommen
+  von „fail" quer durch `src/` (fightPhase.py, moralePhase.py, chargePhase.py, …), auch in
+  Dateien, die mit Necrons nichts zu tun haben. Fix: den `id`-Suffix auf bereits erlaubte
+  Stopwords beschränken (`quantum_shielding_wound_deny` statt `..._wound_auto_fail`) — `effect.type`
+  selbst ist unkritisch (nicht unter einem NAME_KEYS-Feld gescannt), nur `id`/`keywords`/
+  `faction`/`subfaction`/… sind es.
