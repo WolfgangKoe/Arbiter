@@ -239,6 +239,7 @@ def _make_profile(
     is_melee: bool = False,
     effect: dict | None = None,
     max_attacks: int | None = None,
+    combi: bool = False,
 ) -> WeaponProfile:
     return WeaponProfile(
         weapon_type="Melee" if is_melee else "Rapid Fire",
@@ -251,6 +252,7 @@ def _make_profile(
         abilities=abilities,
         effect=effect,
         max_attacks=max_attacks,
+        combi=combi,
     )
 
 
@@ -431,3 +433,38 @@ class TestHasIndependentAttackBudget:
     def test_non_extra_attacks_effect_with_cap_shares_pool(self) -> None:
         effect = {"type": "something_else"}
         assert _has_independent_attack_budget(effect, max_attacks=3) is False
+
+
+# ---------------------------------------------------------------------------
+# _combi_hit_penalty — B-098 Teil 2: kombi-weapon "one or both profiles" malus
+# ---------------------------------------------------------------------------
+
+from gameMechanic.attackMath import _combi_hit_penalty  # noqa: E402
+
+
+class TestCombiHitPenalty:
+    def test_single_combi_profile_selected_has_no_penalty(self) -> None:
+        """Firing only the kombi-rokkit's Rokkit profile carries no malus."""
+        rokkit = _make_profile(combi=True)
+        assert _combi_hit_penalty([rokkit]) == 0
+
+    def test_both_combi_profiles_selected_incur_minus_one_to_hit(self) -> None:
+        """Firing both profiles of a kombi-weapon this phase applies -1 to hit."""
+        rokkit = _make_profile(combi=True)
+        shoota = _make_profile(combi=True)
+        assert _combi_hit_penalty([rokkit, shoota]) == -1
+
+    def test_non_combi_dual_profile_weapon_has_no_penalty(self) -> None:
+        """Ordinary dual-profile weapons (e.g. melee/ranged) never carry the malus."""
+        melee = _make_profile(is_melee=True, combi=False)
+        ranged = _make_profile(is_melee=False, combi=False)
+        assert _combi_hit_penalty([melee, ranged]) == 0
+
+    def test_mixed_combi_and_non_combi_profiles_has_no_penalty(self) -> None:
+        """The malus only fires when every selected profile is combi-flagged."""
+        combi_profile = _make_profile(combi=True)
+        plain_profile = _make_profile(combi=False)
+        assert _combi_hit_penalty([combi_profile, plain_profile]) == 0
+
+    def test_empty_selection_has_no_penalty(self) -> None:
+        assert _combi_hit_penalty([]) == 0

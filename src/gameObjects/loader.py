@@ -85,6 +85,7 @@ def _weapon_profile_from_dict(d: dict[str, Any]) -> WeaponProfile:
         effect=d.get("effect"),
         max_attacks=d.get("max_attacks"),
         grants_keyword=d.get("grantsKeyword"),
+        combi=d.get("combi", False),
     )
 
 
@@ -210,6 +211,46 @@ def _swap_weapons(base: list[str], replaces: list[str], picks: list[str]) -> lis
     return [r for r in base if r not in replaces] + list(picks)
 
 
+def _exclusive_swap_clusters(swaps: list[WeaponSwapSpec]) -> list[set[str]]:
+    """Cluster group-scope swap ids whose ``replaces`` lists share a weapon ref.
+
+    Two ``scope: group`` swaps that replace the same base weapon(s) are
+    alternative loadouts for the whole group — a roster may pick at most one
+    (e.g. Boss Nob's two-weapon combo vs. its kombi-weapon option, both
+    replacing slugga+choppa). ``per_model`` swaps are excluded: those split
+    *different* models within the same group into sub-loadouts, so sharing a
+    ``replaces`` entry across them is expected, not a conflict (e.g. Ork Boyz'
+    shoota swap and its per-10 special-weapon swap both replace slugga+choppa
+    on disjoint model subsets).
+    """
+    clusters: list[dict[str, set[str]]] = []
+    for swap in swaps:
+        if swap.scope != "group" or not swap.replaces:
+            continue
+        overlapping = [c for c in clusters if c["replaces"] & set(swap.replaces)]
+        merged_ids = {swap.id}
+        merged_replaces = set(swap.replaces)
+        for c in overlapping:
+            merged_ids |= c["ids"]
+            merged_replaces |= c["replaces"]
+            clusters.remove(c)
+        clusters.append({"ids": merged_ids, "replaces": merged_replaces})
+    return [c["ids"] for c in clusters if len(c["ids"]) > 1]
+
+
+def _check_exclusive_swaps(
+    group_id: str, swaps: list[WeaponSwapSpec], chosen_swaps: dict[str, Any]
+) -> None:
+    """Raise if a roster picked more than one mutually exclusive swap at once."""
+    for cluster in _exclusive_swap_clusters(swaps):
+        chosen_in_cluster = sorted(sid for sid in cluster if chosen_swaps.get(sid))
+        if len(chosen_in_cluster) > 1:
+            raise ValueError(
+                f"Model group {group_id!r}: swaps {chosen_in_cluster} are mutually "
+                "exclusive (overlapping replaces) — a roster may pick only one."
+            )
+
+
 def _short_ref(ref: str) -> str:
     return ref.split(".")[-1]
 
@@ -260,6 +301,7 @@ def _resolve_model_groups(
 
         loadout = (group_loadouts or {}).get(spec.id, {})
         chosen_swaps: dict[str, Any] = loadout.get("swaps", {})
+        _check_exclusive_swaps(spec.id, spec.weapon_swaps, chosen_swaps)
 
         base_refs = list(spec.base_weapon_refs)
         remaining = count

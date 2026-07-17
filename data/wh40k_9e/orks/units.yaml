@@ -562,6 +562,16 @@ units:
               - wh40k_9e.orks.weapon.power_klaw
               - wh40k_9e.orks.weapon.power_stabba
               - wh40k_9e.orks.weapon.slugga
+          # The Boss Nob's slugga and choppa can be replaced with one of the following
+          - id: nob_kombi
+            scope: group
+            pick: 1
+            replaces:
+              - wh40k_9e.orks.weapon.slugga
+              - wh40k_9e.orks.weapon.choppa
+            options:
+              - wh40k_9e.orks.weapon.kombi_rokkit
+              - wh40k_9e.orks.weapon.kombi_skorcha
         priority: 2
     wargear_options: []
 

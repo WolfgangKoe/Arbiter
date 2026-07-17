@@ -1108,6 +1108,7 @@ weapons:
         damage: 3
         abilities: "Blast. Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
         is_melee: false
+        combi: true
       - name_en: Shoota
         weapon_type: Dakka
         effect:
@@ -1119,6 +1120,7 @@ weapons:
         damage: 1
         abilities: "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
         is_melee: false
+        combi: true
 
   - id: wh40k_9e.orks.weapon.kombi_skorcha
     name_en: Kombi-skorcha
@@ -1134,6 +1136,7 @@ weapons:
         is_melee: false
         effect:
           type: auto_hit
+        combi: true
       - name_en: Shoota
         weapon_type: Dakka
         effect:
@@ -1145,3 +1148,4 @@ weapons:
         damage: 1
         abilities: "Before selecting targets, select one or both of the profiles below to make attacks with. If you select both, then each time an attack is made with this weapon this phase, subtract 1 from that attack’s hit roll."
         is_melee: false
+        combi: true

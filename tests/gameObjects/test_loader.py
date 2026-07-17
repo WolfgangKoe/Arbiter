@@ -862,6 +862,8 @@ def test_kombi_rokkit_has_rokkit_and_shoota_profiles() -> None:
     assert shoota.damage == "1"
     assert shoota.effect is not None
     assert shoota.effect["type"] == "alternating_fire"
+    assert rokkit.combi is True
+    assert shoota.combi is True
 
 
 def test_kombi_skorcha_has_skorcha_and_shoota_profiles() -> None:
@@ -885,6 +887,8 @@ def test_kombi_skorcha_has_skorcha_and_shoota_profiles() -> None:
     assert shoota.strength == 4
     assert shoota.ap == 0
     assert shoota.damage == "1"
+    assert skorcha.combi is True
+    assert shoota.combi is True
 
 
 # ---------------------------------------------------------------------------
@@ -921,6 +925,65 @@ def test_boyz_boss_nob_spec_has_pick_two_swap() -> None:
     assert "wh40k_9e.orks.weapon.big_choppa" in swap.options
     assert "wh40k_9e.orks.weapon.slugga" in swap.replaces
     assert "wh40k_9e.orks.weapon.choppa" in swap.replaces
+
+
+def test_boyz_boss_nob_spec_has_kombi_swap() -> None:
+    """B-098 Teil 2: Boss Nob may take a kombi-weapon instead of two melee options."""
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    boss = next(s for s in boyz.model_group_specs if s.id == "boss_nob")
+    swap = next(s for s in boss.weapon_swaps if s.id == "nob_kombi")
+    assert swap.scope == "group"
+    assert swap.pick == 1
+    assert swap.options == [
+        "wh40k_9e.orks.weapon.kombi_rokkit",
+        "wh40k_9e.orks.weapon.kombi_skorcha",
+    ]
+    assert "wh40k_9e.orks.weapon.slugga" in swap.replaces
+    assert "wh40k_9e.orks.weapon.choppa" in swap.replaces
+
+
+def test_warbike_boss_nob_spec_has_no_kombi_swap() -> None:
+    """The Warbike Nob (separate datasheet option) never gets the Boyz kombi swap."""
+    units, _ = load_army("orks")
+    warbikers = next(u for u in units if u.id == "wh40k_9e.orks.unit.warbikers")
+    boss = next(s for s in warbikers.model_group_specs if s.id == "boss_nob_warbike")
+    assert all(s.id != "nob_kombi" for s in boss.weapon_swaps)
+
+
+def test_boss_nob_kombi_and_two_weapon_swaps_are_mutually_exclusive() -> None:
+    """Picking both the two-weapon combo AND a kombi-weapon in the same roster is invalid."""
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    loadouts = {
+        "boss_nob": {
+            "swaps": {
+                "nob_weapons": {
+                    "weapons": ["wh40k_9e.orks.weapon.power_klaw", "wh40k_9e.orks.weapon.choppa"]
+                },
+                "nob_kombi": {"weapons": ["wh40k_9e.orks.weapon.kombi_rokkit"]},
+            }
+        }
+    }
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        _resolve_model_groups(boyz.model_group_specs, 10, loadouts, catalog)
+
+
+def test_boss_nob_kombi_swap_alone_resolves_to_kombi_weapon() -> None:
+    """Choosing only the kombi swap replaces slugga+choppa with the kombi weapon."""
+    units, _ = load_army("orks")
+    boyz = next(u for u in units if u.id == "wh40k_9e.orks.unit.boyz")
+    catalog = load_weapon_catalog("orks")
+    loadouts = {
+        "boss_nob": {"swaps": {"nob_kombi": {"weapons": ["wh40k_9e.orks.weapon.kombi_rokkit"]}}}
+    }
+    groups = _resolve_model_groups(boyz.model_group_specs, 10, loadouts, catalog)
+    boss = next(g for g in groups if g.id == "boss_nob")
+    weapon_ids = {w.id for w in boss.weapons}
+    assert "wh40k_9e.orks.weapon.kombi_rokkit" in weapon_ids
+    assert "wh40k_9e.orks.weapon.slugga" not in weapon_ids
+    assert "wh40k_9e.orks.weapon.choppa" not in weapon_ids
 
 
 def test_boyz_ork_boy_spec_has_shoota_and_per_10_swaps() -> None:

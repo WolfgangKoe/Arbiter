@@ -17,6 +17,7 @@ class WeaponProfile:
     effect: dict[str, Any] | None = None
     max_attacks: int | None = None
     grants_keyword: str | None = None  # YAML: grantsKeyword — docs/spec/loader_contract.md §1
+    combi: bool = False  # select-one-or-all group — docs/spec/rules_insights.md
 
 
 @dataclass

@@ -176,6 +176,24 @@ def _detect_weapon_special(profile: WeaponProfile) -> dict:  # type: ignore[type
     }
 
 
+def _combi_hit_penalty(selected_profiles: list[WeaponProfile]) -> int:
+    """Hit-roll modifier when a combi-weapon's profiles are all fired together.
+
+    A combi-weapon (e.g. kombi-rokkit) lets the bearer select one or both of
+    its profiles before choosing targets; firing both applies -1 to hit on
+    every attack made with the weapon that phase (faction_overview.txt
+    KOMBI-WEAPONS; per-profile ability text: "If you select both, then each
+    time an attack is made with this weapon this phase, subtract 1 from that
+    attack's hit roll"). Firing a single profile — combi or not — has no
+    penalty; non-combi multi-profile weapons (e.g. melee/ranged dual-mode) are
+    never fired from more than one profile at once, so this only fires for
+    ``combi``-flagged profiles.
+    """
+    if len(selected_profiles) > 1 and all(p.combi for p in selected_profiles):
+        return -1
+    return 0
+
+
 def _group_melee_budget(grp_weapons: list, alive: int, eff_attacks: int) -> int:  # type: ignore[type-arg]
     """Total melee attacks of a group: base attacks + extra-attack weapon bonuses.
 
