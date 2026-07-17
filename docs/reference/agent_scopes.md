@@ -55,6 +55,16 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   prüfen. Beleg: `git log --oneline | grep -i <stichwort>` oder `grep -rn <symbol> src/`.
   Keine Checkbox als „erledigt" markieren ohne Code-Beleg; keine als „offen" einplanen
   ohne Verifikation, dass sie nicht bereits committet ist.
+- **Item-Mengen zählen statt schätzen (M1, S155):** Bei Format-Umbauten (z. B. „Suffix auf
+  alle X ausweiten", Spalten-/Schema-Änderungen über mehrere Vorkommen) die betroffene
+  Menge per `grep -c`/`wc -l` **zählen**, nicht schätzen — Zahl + Befehl im Plan nennen.
+  Grund: B-028-Planung (S154) zeigte, dass geschätzte Mengen den echten Scope verfehlen
+  können (10 Call-Sites real vs. angenommene „paar Stellen").
+- **Backlog-Prio nach Session-Fokus (S155):** Bei jedem Planning die offenen Zeilen in
+  `docs/goals/backlog.md` so umsortieren, dass die Items der aktuell geplanten Session
+  ganz oben in Bearbeitungsreihenfolge stehen. Betrifft nur die Reihenfolge offener Items —
+  die Archivierung erledigter Items bleibt die bestehende Regel (CLAUDE.md Session-Workflow
+  Punkt 5), hier nicht dupliziert.
 - **Entscheidungs-Timing:** Tasks mit Modus `Konsens` (aktive Stakeholder-Entscheidung nötig)
   immer **früh im Plan** platzieren — nicht ans Ende, nicht in Aufgaben verpacken, die erst
   nach > 90 k Token erreicht werden. Faustregel: jede `NEEDS-DECISION`-abhängige Aufgabe
@@ -122,8 +132,19 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
   macht niemals `git commit`, `git add` oder andere Verdrahtung der Git-History.
-- **Werkzeug-Klausel (S123):** Dateiänderungen ausschließlich über Edit/Write; Bash nur
-  lesend bzw. für `git`/`pytest` — kein `sed`/`echo >`/sonstige Bash-Textmutation.
+- **Werkzeug-Klausel (S123, präzisiert M2/S155):** Dateiänderungen ausschließlich über
+  Edit/Write; Bash nur lesend bzw. für `git`/`pytest` — kein `sed`/`echo >`/sonstige
+  Bash-Textmutation. **Ausnahme:** script-gestützte Massen-Edits (z. B. ein kurzes Python-/
+  Skript-Programm für viele gleichförmige Stellen) sind zulässig, wenn (1) der Subagent das
+  Werkzeug im Bericht offenlegt (welches Skript, welcher Aufruf) UND (2) danach ein grüner
+  Gate-Beleg vorliegt (`pytest --tb=short` + Architektur-/Doku-Gate). Akzeptierter
+  Präzedenzfall: B-099b (S153) — offengelegter Skript-Edit + grüner Gate-Beleg, im Review
+  bestätigt.
+- **UI-Verifikations-Pflicht (S155):** Offene manuelle UI-Verifikationen (CLAUDE.md-DoD-
+  Punkt 6) liefert der Executor IMMER als eigene Handoff-Datei in `docs/handoff/` mit den
+  exakten Prüfschritten — nie nur im Chat oder nur als Zeile in `briefing.md`. Grund: der
+  Stakeholder soll offene UI-Prüfungen unabhängig von der laufenden Session-Arbeit
+  nachholen können.
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war

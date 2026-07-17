@@ -182,59 +182,16 @@ die Arbeit" ist delegiert.
 
 ### Token-Disziplin & Arbeitsweise (PFLICHT)
 
-Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Token-Nullsumme.
+Kontext-Korridor: **< 150k**, zweistufig — ab **~120k** geordnetes Wind-down (nichts Neues
+mehr beginnen), spätestens bei **~90 % (~135k)** die Session geordnet beenden
+(`briefing.md` + Commit) und frisch starten. Ziel: insgesamt effektives Arbeiten bei
+effizientem Tokenverbrauch — nicht Token-Nullsumme.
 
-- **Vorab-Schätzung:** Jeder Plan nennt eine grobe Token-Schätzung pro Aufgabe.
-- **Kontext-Korridor < 150k, zweistufig (S135-Retro-GO, präzisiert S136).** Ab **~120k**
-  leitet der Koordinator ein **geordnetes Wind-down** ein (laufende Aufgabe abschließen,
-  nichts Neues mehr beginnen). Bei **~90 % (~135k)** spätestens die Session **geordnet
-  beenden** (`briefing.md` + Commit) und **frisch starten** — nicht in die teure
-  >150k-Zone laufen. Das Review/Retro-Budget (~45k) zählt zur laufenden Session mit: **ab
-  ~100k Kontext keine neue Aufgabe mehr beginnen, solange Review/Retro der Session noch
-  aussteht** (S142+S143 mussten Review zweimal nachholen, S144-Retro-Beschluss).
-  Messen: Der UserPromptSubmit-Hook `tools/session_context.py` zeigt den Live-
-  Kontextstand **automatisch pro Turn** an und eskaliert ab ≥135k ⚠️⛔ Stopp —
-  kein manuelles Rechnen nötig. Er liest die letzte `usage`-tragende
-  Transcript-Zeile (`~/.claude/projects/<projekt>/<id>.jsonl`), parst sie **als ganzes
-  JSON** und summiert `input_tokens + cache_creation_input_tokens +
-  cache_read_input_tokens`. Wichtig: **nicht** mit `grep -o '"usage":{[^}]*}'` rechnen —
-  das `usage`-Objekt verschachtelt Sub-Objekte (`server_tool_use`, `cache_creation`),
-  der Regex trunkiert und liefert falsche Zahlen (S65-Befund). Peak-Kontext, Subagent-
-  Anteil und Verlauf stehen zusätzlich in `docs/metrics/overview.md` (der pytest-Hook
-  schreibt sie bei jedem Lauf) — dort prompt-frei nachlesen.
-- **Tasks klein schneiden**, sodass *eine* Aufgabe sicher unter dem Korridor bleibt.
-- **Subagent-Muster für Fleißarbeit:** mechanische, eindeutige Arbeit (viel Lesen,
-  Entwürfe nach festgelegtem Format) an einen **Subagenten mit `model: sonnet`** geben —
-  läuft im **isolierten Kontext**, hält das Opus-Hauptfenster schlank. Opus reviewt +
-  finalisiert. Design/Mehrdeutiges bleibt bei Opus in der Hauptsession. **Jeder Auftrag
-  enthält eine Selbstprüf-Checkliste** (u. a. Verdrahtung per `grep` belegen) — „Subagent-
-  grün" ≠ „verdrahtet"; Details: `docs/governance/operating_model.md` Event 3 (Sprint).
-- **Skill-/Claude-Inhalte über die API NUR per Subagent ziehen (PFLICHT):** Skill-Definitionen
-  oder andere Inhalte über die Claude-/Skill-API **nie direkt im Opus-Hauptfenster** laden —
-  immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt. Direktes
-  Laden kostete einmalig **~300k Token** und flutete den Kontext (S69-Befund, ADR-0004).
-- **Tiering (MUST, O2):** Reine Lookups (gebundene Regelsuche, formatfixe Extraktion, ja/nein
-  gegen expliziten Text) laufen als **Default mit `model: haiku`**. Eine Abweichung **nach oben**
-  (Sonnet/Opus) braucht eine **explizite Begründung im Auftrag** — sonst Haiku. Tier im Chat
-  transparent nennen. Je geschlossener das Konditionalprogramm → desto niedriger das Tier.
-  Grund: ohne harten Default wird das Tiering ignoriert (S103). Vollständige Rollen-/Tier-/Modus-
-  Regeln: `docs/governance/operating_model.md`.
-- **Messung getrennt ausweisen:** Subagent-Verbrauch separat (Agent-`usage` bzw.
-  `isSidechain` im Transcript). Subagent-Transcripts liegen in **eigener** Datei →
-  `tools/token_report.py` führt beide Quellen zusammen (`--write` → `docs/metrics/overview.md`).
-- **Subagenten = stehende Freigabe (PROAKTIV):** keine Einzel-Freigabe nötig — bei Fleißarbeit
-  selbst einen Subagenten vorschlagen + starten (s. „Was NIEMALS ohne Freigabe"). Freigabe-Pflicht
-  bleibt nur für **datei-/einstellungsändernde** Arbeit (Code/Memory/Skill) — auch via Subagent
-  ([ADR-0005](docs/governance/decisions/0005-stehende-subagent-freigabe.md),
-  [ADR-0006](docs/governance/decisions/0006-subagent-grossausgaben-als-datei.md)).
-- **Dünner Koordinator (ADR-0007):** Detail-Planung + finales Review laufen als Subagenten; der
-  Koordinator routet, hält Gates, liest nur **Pfade/Marker** — nicht volle Ergebnisse. Subagent↔
-  Stakeholder asynchron über **Mailbox-Datei** (`docs/handoff/`, Marker `NEEDS-DECISION`/`ANSWERED`/
-  `DONE`), Resumption per `SendMessage` (intakter Kontext). Scoping je Aufgabe über den Index
-  `docs/reference/agent_scopes.md`. Verfassung: `docs/governance/operating_model.md` (ADR-0007, seit S102 verbindlich).
-- **Kanal-Regel:** Inhaltliche Subagenten (Planner/Executor/Reviewer) kommunizieren mit dem
-  Stakeholder NIE direkt im Chat, sondern über die Mailbox-Datei (`docs/handoff/`, Marker
-  `NEEDS-DECISION`/`ANSWERED`/`DONE`) via Koordinator (operating_model.md, ADR-0007).
+Volle Details (Messmethode/Hook, Regex-Fallstrick, Subagent-Fleißarbeit-Muster,
+Skill-Fetch-Regel) sind kanonisch in `docs/governance/operating_model.md` Event 6 —
+hier nicht dupliziert (B-060/S155-Verlagerung). Tiering-, Subagent-Freigabe- und
+Kanal-Regeln stehen an ihrem eigenen kanonischen Ort in `operating_model.md` (Rollen &
+Model-Tier, Event 3, Eskalation).
 
 ---
 

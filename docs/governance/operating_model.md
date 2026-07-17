@@ -139,6 +139,12 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      Reihenfolge-Pflicht: Aufgaben mit `Modus: Konsens` (Stakeholder-Entscheidung blockiert
      Umsetzung) stehen im Plan VOR rein mechanischen Tasks — nicht in der Wind-down-Zone
      (~135k), wo Headroom fehlt. Details: `docs/reference/agent_scopes.md` → Pflichtschritte.
+
+     **Ausstehendes Review/Retro = Punkt 0 (S144 beschlossen, S154 praktiziert, S155
+     verankert):** Fehlt aus der Vorsession ein Review/Retro (z. B. wegen API-Limit,
+     Zeitnot oder Session-Abbruch), wird dessen Nachholung automatisch zu **Punkt 0** der
+     nächsten Planning-Session — vor jeder neuen Umsetzung, solange voller Kontext-Headroom
+     besteht.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `briefing.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
@@ -191,7 +197,42 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    **Stakeholder-gerichtete Artefakte sind für den Leser:** Leitstand, Reports und dem Stakeholder vorgelegte Gate-Ausgaben müssen *seine* Fragen beantworten und für ihn verständlich sein (Tabellen als Grundlage, Diagramme wo sinnvoll). Rein agenten-interne Kommunikation muss das nicht. **Bedarf erfragen statt raten:** vor dem (Um-)Bau solcher Artefakte den Stakeholder nach seinem konkreten Bedarf fragen. **Soll-Ist im Retro:** beendete Session (inkl. Effizienz) gegen die nächste erwartete Aufgabe vergleichen → Learning in `briefing.md`. Siehe [ADR-0002](decisions/0002-stakeholder-artefakte-und-retro.md).
 
 6. <a id="ev6"></a>**Kontext-Korridor-Event (~135 k Token)** 🔧
-   Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen. **Harter Vollzug:** `tools/session_context.py` (UserPromptSubmit) eskaliert gestuft — ≥120 k Warnung + Retro-Vorankündigung, ≥135 k laute Stopp-Direktive. Das Review/Retro-Budget zählt zur laufenden Session mit — Schwellen dazu sind in `CLAUDE.md` (Token-Disziplin & Arbeitsweise) kanonisch, hier nicht dupliziert.
+   Uns-eigenes Event, ausgelöst durch Kontextgröße statt Zeit. Erzwungenes Wind-down: Session ordentlich beenden (Handoff + Commit), danach frisch starten. Nicht in die teure > 150 k-Zone laufen.
+
+   Ziel: insgesamt effektives Arbeiten bei effizientem Tokenverbrauch — nicht Token-Nullsumme.
+   **Kanonische Schwellen (S135-Retro-GO, präzisiert S136, hierher verlagert B-060/S155):**
+   Korridor **< 150k**, zweistufig. Ab **~120k** leitet der Koordinator ein **geordnetes
+   Wind-down** ein (laufende Aufgabe abschließen, nichts Neues mehr beginnen). Bei **~90 %
+   (~135k)** spätestens die Session **geordnet beenden** (`briefing.md` + Commit) und
+   **frisch starten**. Das Review/Retro-Budget (~45k) zählt zur laufenden Session mit: **ab
+   ~100k Kontext keine neue Aufgabe mehr beginnen, solange Review/Retro der Session noch
+   aussteht** (S142+S143 mussten Review zweimal nachholen, S144-Retro-Beschluss).
+
+   **Messen — Harter Vollzug:** `tools/session_context.py` (UserPromptSubmit) zeigt den
+   Live-Kontextstand **automatisch pro Turn** an und eskaliert gestuft — ≥120 k Warnung +
+   Retro-Vorankündigung, ≥135 k laute Stopp-Direktive — kein manuelles Rechnen nötig. Er
+   liest die letzte `usage`-tragende Transcript-Zeile (`~/.claude/projects/<projekt>/<id>.jsonl`),
+   parst sie **als ganzes JSON** und summiert `input_tokens + cache_creation_input_tokens +
+   cache_read_input_tokens`. Wichtig: **nicht** mit `grep -o '"usage":{[^}]*}'` rechnen — das
+   `usage`-Objekt verschachtelt Sub-Objekte (`server_tool_use`, `cache_creation`), der Regex
+   trunkiert und liefert falsche Zahlen (S65-Befund). Peak-Kontext, Subagent-Anteil und
+   Verlauf stehen zusätzlich in `docs/metrics/overview.md` (der pytest-Hook schreibt sie bei
+   jedem Lauf) — dort prompt-frei nachlesen. **Messung getrennt ausweisen:** Subagent-
+   Verbrauch separat (Agent-`usage` bzw. `isSidechain` im Transcript) — Subagent-Transcripts
+   liegen in **eigener** Datei, `tools/token_report.py` führt beide Quellen zusammen
+   (`--write` → `docs/metrics/overview.md`).
+
+   **Vorbeugend statt nur reaktiv:** Jeder Plan nennt eine grobe Token-Schätzung pro Aufgabe
+   und schneidet Tasks so klein, dass *eine* Aufgabe sicher unter dem Korridor bleibt.
+   Mechanische, eindeutige Fleißarbeit (viel Lesen, Entwürfe nach festgelegtem Format) geht
+   an einen Subagenten mit `model: sonnet` im isolierten Kontext (hält das Hauptfenster
+   schlank) — Opus/Fable reviewt + finalisiert, Design/Mehrdeutiges bleibt in der
+   Hauptsession; jeder Auftrag trägt eine Selbstprüf-Checkliste (Details Event 3).
+   **Skill-/Claude-Inhalte über die API nie direkt im Hauptfenster laden (PFLICHT)** —
+   immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt;
+   direktes Laden kostete einmalig ~300 k Token und flutete den Kontext (S69-Befund,
+   ADR-0004). Tiering-, Subagent-Freigabe- und Kanal-Regeln sind an ihrem eigenen Ort
+   kanonisch (Rollen & Model-Tier, Event 3, Eskalation) — hier nicht erneut dupliziert.
 
 7. <a id="ev7"></a>**Refinement-Event**
    Ideen aus [Fotos/](../../Fotos/) → [docs/inbox/](../inbox/) → gemeinsames Verständnis mit Stakeholder → akzeptierte Ideen in [backlog.md](../goals/backlog.md). Siehe [docs/inbox/README.md](../inbox/README.md).
