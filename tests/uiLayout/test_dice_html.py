@@ -702,3 +702,54 @@ def test_render_dice_save_block_invuln_shows_go_source_label() -> None:
     assert "Inv 4+" in html
     assert "Quantum Deflection" in html
     assert 'title="Quantum Deflection"' in html
+
+
+def test_render_dice_save_block_invuln_follows_wound_block_header_pattern() -> None:
+    """Regression (B-115 — Stakeholder rejection of the wrapped 'Inv / 4+'
+    stack, see docs/handoff 2026-07-17 screenshot): the Invuln section must
+    follow the same split as _render_dice_wound_block — a title call carrying
+    'Inv N+' + the go_source_chip ABOVE a separate, full-width dice-row call
+    with an empty left label (grid_row_html("", ...)), never both squeezed
+    into one grid_row_html's left label column.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    save = {"armour": 3, "armour_eff": 3, "invuln": 4, "stack": []}
+    dice_html_module._render_dice_save_block(
+        save, ap=0, ability_invuln=True, invuln_source_label="Quantum Deflection"
+    )
+    calls = [str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list]
+    title_calls = [c for c in calls if "Inv 4+" in c]
+    assert len(title_calls) == 1, "Inv N+ must appear in exactly one (title) call"
+    title_html = title_calls[0]
+    assert "Quantum Deflection" in title_html
+    # The title call is a bare span + chip — no dice-grid row wrapper.
+    assert '<div style="display:flex;align-items:center;margin:2px 0;">' not in title_html
+
+    dice_calls = [
+        c
+        for c in calls
+        if '<div style="display:flex;align-items:center;margin:2px 0;">' in c and "Inv 4+" not in c
+    ]
+    assert dice_calls, "expected a separate full-width dice-row call for the invuln threshold"
+    invuln_dice_call = dice_calls[-1]
+    assert "Quantum Deflection" not in invuln_dice_call
+    # Empty left label column, exactly like the WOUND block's dice row.
+    assert dice_html_module.dice_row_html(4) in invuln_dice_call
+    assert dice_html_module.threshold_header_html(4) in invuln_dice_call
+
+
+def test_render_dice_save_block_invuln_no_bonus_has_no_chip_and_bare_threshold() -> None:
+    """No-bonus-invuln case (unchanged behaviour, only layout moved): without
+    invuln_source_label there is no chip anywhere, and the bare 'Inv N+' still
+    sits in its own title call above the dice row.
+    """
+    dice_html_module.st.markdown.reset_mock()
+    save = {"armour": 3, "armour_eff": 3, "invuln": 5, "stack": []}
+    dice_html_module._render_dice_save_block(save, ap=0)
+    calls = [str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list]
+    html = "".join(calls)
+    assert "Inv 5+" in html
+    assert "title=" not in html
+    title_calls = [c for c in calls if "Inv 5+" in c]
+    assert len(title_calls) == 1
+    assert '<div style="display:flex;align-items:center;margin:2px 0;">' not in title_calls[0]

@@ -1006,28 +1006,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.343–345 (→ ADR-0002).
 
-## B-043 — Invuln SAVE Badge Bereich chaotisch
-
-[↩ Zeile in backlog.md](backlog.md#b-043)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~15k
-
-**Detail-Beschreibung:** Betroffene Dateien: SAVE-Block-Render. Zeigt drei Teile („Inv 4+", „active", „AP/Cover N/A"), die teils keinen Sinn ergeben. Soll: **eine** klare Badge, z. B. „Invuln 4+" — dort mitlösen oder eigener kleiner Task.
-
-**Abhängigkeiten:** Überschneidet sich mit Plan 017 (SAVE-Block Fähigkeit+AP kombinierte Badge, B-034).
-
-**Belege:** —
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.346 (S78).
-
 ## B-044 — Dice Display Modifier Geometrie
 
 [↩ Zeile in backlog.md](backlog.md#b-044)
@@ -1978,28 +1956,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt); Scope-Erweiterung (Regel-Klärung + UX-Dauersichtbarkeit) S156-Stakeholder-Kommentar.
 
-## B-105 — Wound Wurf zeigt keine Referenz auf GO Quantum Deflection
-
-[↩ Zeile in backlog.md](backlog.md#b-105)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Design-Crew
-
-**Effort:** ~15k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`/`src/uiLayout/diceHtml.py`, `docs/spec/design_system.md`. Beim Verwundungswurf gegen ein Ziel mit dem Stratagem „Quantum Deflection" zeigt die App nur ein grünes „4+" ohne Bezug zur auslösenden GO — Stakeholder kann nicht erkennen, welches GO den Wert erzeugt. Es fehlt ein generisches Konzept im Design-System für GO-Referenzen an Würfelblöcken (nicht nur für Quantum Deflection — betrifft grundsätzlich jeden Würfelwert, der aus einem aktiven GO stammt). **Einplanung S158** (Stakeholder-Entscheid S157-Retro Maßnahme 2) — Design-Crew-Schritt zuerst (Design-System-Baustein), dann Umsetzung.
-
-**Abhängigkeiten:** Design-Konzept zuerst (Design-Crew); danach Umsetzung, ggf. gemeinsam mit B-104 (beide betreffen Würfelblock-Optik im selben Bereich).
-
-**Belege:** `docs/handoff/S155_ui_verifikationen.md` Punkt 5 (Stakeholder-Befund); `docs/handoff/S156_close_review.md` DoD-Punkt 6 (UI-Folge-Befund c).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-UI-Verifikation S156 (Quantum-Shielding-Verifikation).
-
 ## B-106 — Session Overview Umbau sessionReport
 
 [↩ Zeile in backlog.md](backlog.md#b-106)
@@ -2079,28 +2035,6 @@ Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zu
 
 **Herkunft:** Stakeholder-Retro-Ergänzung 2 (`S156_retro_s155.md`), Konsent-Modus (Template kann bei Umsetzung noch geschärft werden).
 
-## B-109 — Auto Fail Badge Label verpflichtend aus YAML
-
-[↩ Zeile in backlog.md](backlog.md#b-109)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Sonnet
-
-**Effort:** ~10–15k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceCompose.py` (`always_fail_marker_row_html`, ~Zeile 444), `src/gameMechanic/abilityEngine.py` (`unit_wound_auto_fail_label`, ~Zeile 567). Aktuell zeigt `always_fail_marker_row_html` ein hartcodiertes Fallback-Label: `label or "Auto-fail"`. Das bedeutet, wenn ein Auto-Fail-Effekt kein `badge_label` hat, wird "Auto-fail" angezeigt — jener generische Text, der bei B-103-Umsetzung vermieden werden sollte. Ziel: jeder Auto-Fail-Effekt bezieht sein Badge-Label verpflichtend aus der YAML-Daten über `unit_wound_auto_fail_label()` (liest `badge_label or name_en`). Der Fallback-String "Auto-fail" wird entfernt, und ein Loader-Guard wird geprüft/eingeführt: fehlt bei einem `wound_auto_fail`-Effekt sowohl `badge_label` als auch `name_en`, wird ein Fehler geworfen (statt still zu fallbacken). Das stellt sicher, dass alle Auto-Fail-Effekte eindeutig benannt sind.
-
-**Abhängigkeiten:** Aufsetzend auf B-103 (Umsetzung der Wound-Debuff-Label-Generalisierung, S156 erledigt).
-
-**Belege:** `docs/handoff/S156_retro_s155.md` (Retro-Antwort zu B-103: „nach oben ziehen, dann ist das Feature sauber"); S157-Planning-Auftrag (Einplanung S158).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-Auftrag S157 (Leitstand), Folge von B-103-Umsetzung S156.
-
 ## B-110 — Latenter pname Bug im Melee Profil Zweig
 
 [↩ Zeile in backlog.md](backlog.md#b-110)
@@ -2170,28 +2104,6 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 **Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; keine Code-Abhängigkeit zu B-115/B-116, aber gleicher Funktions-/Datei-Bereich (`_render_dice_save_block`) — sinnvoll gebündelt beauftragen.
 
 **Belege:** `docs/spec/design_system.md` §4.4 (Wurf-Block-Pattern, Tabellenzeile „SAVE-Modifier flach statt verschachtelt").
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.4).
-
-## B-115 — Invuln Sektion folgt Wurf Block Pattern
-
-[↩ Zeile in backlog.md](backlog.md#b-115)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~15k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py` (Invuln-Rendering, ~Zeile 250–260). Ist-Zustand: Invuln rendert komplett außerhalb des Save-Block-Patterns, ohne Threshold-Header/Dice-Row/Marker-Zeilen-Hooks. Soll: Invuln folgt demselben Wurf-Block-Pattern wie SAVE (Threshold-Header/Dice-Row/Marker-Zeilen), bleibt aber als eigene Sektion sichtbar — Invuln ist regelkonform ein anderer Save-Typ, keine Verschmelzung mit dem Armour-Path.
-
-**Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; verwandt B-114 (gleicher Save-Block-Bereich), verwandt B-116 (Marker-Zeilen-Hooks).
-
-**Belege:** `docs/spec/design_system.md` §4.4 (Wurf-Block-Pattern, Tabellenzeile „Invuln als Separat-Sektion").
 
 **Benötigte Regeln-Scopes:** —
 
@@ -2275,7 +2187,7 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Effort:** S: ~10k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/gameActionsArea.py` (`_render_deny_column`). Bei einem Deny-the-Witch-Wurf zeigt die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle — der Spieler kann nicht sehen, welche Einheit mit welchem Wargear (oder GO-Karte) den Deny durchführt. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar, kein zusätzlicher Text nötig. **(b) Canoptek Spyder Gloom Prism (Wargear-Pfad, kein GO-Card):** keine Sichtbarkeit der ausführenden Einheit — braucht einen Hinweistext ähnlich `_render_resolution_tab`s „Resolving against ⟨Unit⟩" oder eine Chipline in der Deny-Spalte.
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/psychicPhase.py::_render_deny_column` (S162-Korrektur — vorherige Referenz `src/uiLayout/gameActionsArea.py (_render_deny_column)` war falsch, per `grep -rn "def _render_deny_column" src/` verifiziert: die Funktion liegt in `psychicPhase.py:469`, `gameActionsArea.py` enthält keinen Deny-Code). Bei einem Deny-the-Witch-Wurf zeigt die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle — der Spieler kann nicht sehen, welche Einheit mit welchem Wargear (oder GO-Karte) den Deny durchführt. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar, kein zusätzlicher Text nötig. **(b) Canoptek Spyder Gloom Prism (Wargear-Pfad, kein GO-Card):** keine Sichtbarkeit der ausführenden Einheit — braucht einen Hinweistext ähnlich `_render_resolution_tab`s „Resolving against ⟨Unit⟩" oder eine Chipline in der Deny-Spalte.
 
 **Abhängigkeiten:** Hinter B-028b (Noctilith-Sichtbarkeit ist bereits über GO-Karte gelöst); `gloom_prism`-Migration bleibt auf dem bestehenden Wargear-Pfad, braucht also zusätzliche UI-Kennzeichnung.
 

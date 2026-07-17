@@ -511,6 +511,81 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   Reroll auf SVG umgestellt. Betroffene Dateien: `src/uiLayout/diceCompose.py`, `tests/uiLayout/
   test_dice_html.py`. Stakeholder visuell bestätigt (S160). DoD-Review GO.
 
+## Aus der ID-indizierten Liste (migriert S162)
+
+- ✅ **B-105 — Wound-Wurf zeigt keine Referenz auf GO „Quantum Deflection" — ERLEDIGT (S162
+  DONE — Strength-Chip + Invuln-Funktion vom Stakeholder bestätigt; Invuln-Layout-Kritik an
+  B-115 übergeben):** Generischer GO-Quellen-Chip `go_source_chip(label, color)`
+  (`src/uiLayout/diceCompose.py`) rewired den bestehenden Strength-Buff-Chip in
+  `_render_dice_wound_block` (S161) und liefert seit dem S161-Folge-Task auch das
+  Invuln-Save-Label: `_stratagem_invuln_best()` + `compute_resolution_context()`
+  (`src/uiLayout/_common.py`) ermitteln Wert **und** Quellenname (Stratagem-`source` bzw.
+  `ability_badge_label()`), durchgereicht an `_render_dice_save_block` als
+  `invuln_source_label`. Stakeholder-UI-Verifikation S161 (`S161_B105_ui_verifikation.md`):
+  Strength-Chip „sieht gut aus" — bestätigt. Folge-Verifikation
+  (`S161_B105wiring_ui_verifikation.md`): Punkt 1 (Stratagem-Name erscheint neben `Inv N+`)
+  bestätigt; Punkt 2 (Fähigkeits-Invuln-Label-Fall) mangels passendem Testroster nicht
+  verifiziert — bleibt offen für eine kombinierte Verifikationsrunde mit B-115. Die
+  Layout-Kritik am Invuln-Block (kein horizontal zentriertes, konsistentes Layout, Umbruch bei
+  langen GO-Namen) ist keine neue B-105-Anforderung, sondern die bereits in
+  `design_system.md` §4.4 katalogisierte Lücke — Kritik wörtlich nach B-115 übertragen
+  (`backlog_details.md`). Belege: `docs/handoff/S155_ui_verifikationen.md` Punkt 5,
+  `docs/handoff/S156_close_review.md` DoD-Punkt 6c, Commit `2a05447` (S161-Abschluss).
+  Herkunft: Stakeholder-UI-Verifikation S156.
+- ✅ **B-109 — Auto-Fail-Badge-Label verpflichtend aus YAML — ERLEDIGT (S162 DONE —
+  Loader-Guard + Label-aus-YAML, unit-getestet; für aktuelle Datenlage visuell nicht
+  unterscheidbar, keine UI-Prüfung nötig):** `always_fail_marker_row_html`s hartcodierter
+  Fallback `label or "Auto-fail"` entfernt; jeder `wound_auto_fail`-Effekt bezieht sein
+  Badge-Label jetzt verpflichtend über `unit_wound_auto_fail_label()`
+  (`src/gameMechanic/abilityEngine.py`, liest `badge_label or name_en`) aus der YAML. Neuer
+  Loader-Guard lehnt `wound_auto_fail`-Effekte ohne `badge_label` UND `name_en` ab, statt
+  still zu fallbacken. Regressionstest
+  `test_load_unit_abilities_still_loads_quantum_shielding_with_its_badge_label`
+  (`tests/gameObjects/test_loader.py:1846-1878`) bestätigt: der einzige existierende Effekt
+  (`quantum_shielding_wound_deny`, `data/wh40k_9e/necrons/unit_abilities.yaml:922`) hatte
+  bereits vorher `badge_label: Quantum Shielding` gesetzt — der Fallback-Pfad wurde nie
+  ausgelöst, die Änderung ist für die aktuelle Datenlage visuell nicht unterscheidbar. Reine
+  Loader-Absicherung, kein Render-Pfad betroffen → keine manuelle UI-Prüfung nötig, kein
+  eigenes AWAITING-VERIFICATION-Handoff angelegt. Commit `2a05447` (S161-Abschluss). Herkunft:
+  Stakeholder-Auftrag S157 (Leitstand), Folge von B-103-Umsetzung S156.
+- ✅ **B-043 — Invuln-SAVE-Badge-Bereich chaotisch — S162 überholt** (beschriebener Zustand —
+  „Inv 4+"/„active"/„AP-Cover N/A" als drei separate Teile — existiert im Code nicht mehr;
+  durch die S115-Invuln-Neufassung bereits gelöst, Rest-Layout-Anspruch durch B-115
+  abgedeckt): Die ursprüngliche Beschreibung (Herkunft §2 Alt-`backlog.md` Z.346, S78) stammte
+  aus einem älteren Code-Zustand vor der S115-Invuln-Neufassung. Code-Prüfung S162:
+  `_render_dice_save_block` (`src/uiLayout/diceHtml.py:248-260`) zeigt heute nur noch
+  `Inv N+` (+ optionaler `go_source_chip` seit S161) — kein „active"-Text, kein
+  „AP/Cover N/A" mehr vorhanden. Die verbleibende, aktuelle Layout-Kritik am Invuln-Block ist
+  bereits vollständig in B-115 (Wurf-Block-Pattern-Übertragung) erfasst — kein separates
+  Nachfolge-Item nötig. Die Abhängigkeit „überschneidet Plan 017" bleibt für B-034 relevant,
+  nicht für einen eigenen Nachfolger von B-043.
+- ✅ **B-115 — Invuln-Sektion folgt Wurf-Block-Pattern — S162 DONE — Invuln-Block auf
+  WOUND-Block-Muster umgestellt (Titel-Zeile `Inv N+` + Quellen-Chip oberhalb, Würfelreihe
+  vollbreit); beide Label-Fälle (Stratagem Quantum Deflection 4+, Fähigkeit WAAAGH! S1 5+) vom
+  Stakeholder sichtbestätigt (S162_B115_ui_verifikation.md); Tests:
+  test_render_dice_save_block_invuln_follows_wound_block_header_pattern +
+  _no_bonus_has_no_chip_and_bare_threshold:** Betroffene Datei: `src/uiLayout/diceHtml.py`,
+  Invuln-Zweig in `_render_dice_save_block` (ehem. Z. 248–260). Statt einem einzigen
+  `grid_row_html(inv_label, ...)`-Aufruf jetzt zwei `st.markdown`-Calls — erst die Titel-Zeile
+  (`Inv N+` + optionaler `go_source_chip`), dann `grid_row_html("", threshold_header_html(...) +
+  dice_row_html(...))` — 1:1 das Muster von `_render_dice_wound_block`. Verhalten unverändert:
+  kein Bonus-Invuln aktiv → kein Chip, Threshold wie bisher; `invuln_source_label`-Wiring aus
+  S161 (B-105-Folge) unangetastet. Stakeholder-Vorgabe (S161/S162, wörtliches Zitat): „Ich würde
+  die Angabe des Inv. Saves oberhalb der Würfel-Reihe anzeigen, wie es bei den anderen Abschnitt
+  (HIt, Wound,..) ist. Dann hat die Badge links neben den Würfeln Platz, sollte trunced sein und
+  dann ist alles konsistent." Manuelle Verifikation deckte beide Quellen-Pfade ab: Fall (a)
+  Stratagem-Invuln (Roster `necrons_quantum_shielding.yaml`, Annihilation Barge, Stratagem
+  „Quantum Deflection" 4+) und Fall (b) Fähigkeits-Invuln (Roster `orks.yaml`, Boyz unter
+  Waaagh!-Fähigkeit „WAAAGH! S1" 5+, offener Punkt aus B-105wiring Checkpunkt 2) — beide vom
+  Stakeholder mit „Sieht gut so aus." bestätigt. Vollsuite grün (1991 passed, Coverage 99.13 %),
+  Architektur-Gate unverändert, keine Fraktions-Strings/-Checks ergänzt (INV-4b geprüft). Belege:
+  `docs/spec/design_system.md` §4.4; `docs/handoff/S161_B105wiring_ui_verifikation.md` Zeile 61
+  (Layout-Kritik + Screenshot `Bildschirmfoto vom 2026-07-17 21-26-55.png`, beide gelöscht);
+  `docs/handoff/S162_planning.md` Punkt 3; `docs/handoff/S162_B115_ui_verifikation.md`
+  (Verifikationsprotokoll, gelöscht nach DONE). Herkunft: Würfelsymbol-Katalog-Freigabe S159
+  (`design_system.md` §4.4); Layout-Kritik übernommen aus Stakeholder-UI-Verifikation S161/S162
+  (B-105wiring-Folge).
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

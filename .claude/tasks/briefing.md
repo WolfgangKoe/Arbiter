@@ -25,43 +25,44 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S161, 2026-07-17)
+## Aktueller Stand (nach S162, 2026-07-17)
 
-**Review S161: GO** (Vollsuite 1990 passed, Coverage 99,13 %, Arch 8 grün). Fünf Plan-Tasks
-+ ein Wiring-Folge-Task, Welle 1 (T1/T2/T4/T5) parallel mit disjunkten Dateien:
-- **Retro-M1 (T1) DONE:** neuer Handoff-Marker `AWAITING-VERIFICATION` für „wartet auf
-  Stakeholder-Sichtprüfung" — definiert in `docs/handoff/README.md`, Wächter
-  `tests/docs/test_handoff_hygiene.py` (in `_VALID_MARKERS`, NICHT `_STALE_MARKERS`),
-  Brief-Pflicht in `agent_scopes.md`. `NEEDS-DECISION` bleibt echten Entscheidungen vorbehalten.
-- **B-109 (T2) → UI-Verifikation:** Auto-Fail-Badge-Label verpflichtend aus YAML, Fallback
-  `"Auto-fail"` entfernt, Loader-Guard (`loader.py`) wirft laut bei fehlendem Label.
-- **B-105 (T3) + Wiring → UI-Verifikation:** generischer `go_source_chip`; Stärke-Chip
-  rewired (Tooltip, **vom Stakeholder sichtbestätigt**); Invuln-Quellenname jetzt real
-  durchgereicht (`_stratagem_invuln_best` in `src/uiLayout/_common.py`, Tiebreak: Gleichstand
-  → Fähigkeitslabel). **Planungslücke-Erkenntnis:** „deckt Wunsch X" ≠ „Wunsch sichtbar
-  geliefert" — B-105 brauchte den nachgeschobenen `_common.py`-Wiring-Task, damit „Inv N+
-  [Quantum Deflection]" überhaupt im Spiel erscheint.
-- **B-119 (T4):** im Backlog hinter B-028b einsortiert (teilt Deny-/GO-Infrastruktur).
-- **Prozess (T5):** Retro-Entscheid = Input, nicht Planungsgegenstand — verankert in
-  `operating_model.md` Event 1 (§ev1). Retro S161 = **M3** (nichts weiter verankern).
+**Review S162: GO** (Vollsuite 1992 passed, Coverage 99,13 %, Arch 8 grün, Docs+Acceptance
+25 grün). Zwei parallele Sonnet-Executoren (disjunkte Dateien) + DONE-Hygiene + Opus-Review:
+
+- **B-115 DONE (Kern der Session):** Invuln-Zweig von `_render_dice_save_block`
+  (`src/uiLayout/diceHtml.py`) auf das WOUND-Block-Muster umgestellt — Titel-Zeile
+  `Inv N+` + `go_source_chip` OBERHALB, Würfelreihe vollbreit/zentriert. BEIDE Label-Fälle
+  sichtbestätigt („Sieht gut so aus"): Stratagem „Quantum Deflection" 4+ und Fähigkeit
+  „WAAAGH! S1" 5+ (damit auch der aus S161 offene Fähigkeits-Label-Fall geschlossen).
+  2 neue HTML-Struktur-Tests.
+- **B-105 + B-109 DONE, B-043 überholt — alle drei archiviert;** die S161-Layout-Kritik
+  war kein neues Item, sondern deckte sich wörtlich mit `design_system.md` §4.4 (→ B-115).
+- **Drift-Korrektur:** B-119-Referenz ist real
+  `src/gameMechanic/psychicPhase.py::_render_deny_column` (nicht `gameActionsArea.py`).
+- **Retro S162:** M1' = mypy in S163 aktiv reduzieren; M2 = Vollsuite-Klausel für
+  Parallel-Executoren in `agent_scopes.md` verankert (belastbare Vollsuite beim Koordinator
+  auf dem kombinierten Endstand, Executor-Suiten nur Selbstprüfung); M3 = stale
+  Planning-Handoffs gelöscht. M4 (Archiv-Kosmetik „1991→1992") bewusst NICHT beauftragt.
+
+**⚠ Bekannte Schuld:** mypy-Gate rot (26 Fehler vs. Baseline 25) — pre-existing seit S161
+(Stash-Probe, Review-S162 Befund 1), CI auf dev seit S161 rot; NICHT durch S162 verursacht.
 
 Aus S160 offen geblieben: `gloom_prism`-Migration auf die B-028a-Infrastruktur (B-028b-Rest).
 
-Frühere Sessions (S60–S160): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S161): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S162)
+### ▶ Nächster Schritt (S163)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-1. **Zwei offene `AWAITING-VERIFICATION`-Handoffs** warten auf Stakeholder-Sichtprüfung im
-   Spiel: `docs/handoff/S161_B105_ui_verifikation.md` (Invuln-Chip-Teil noch offen — Strength
-   bereits bestätigt) und `docs/handoff/S161_B105wiring_ui_verifikation.md`
-   („Inv N+ [Quantum Deflection]" am Rettungswurf). Nach Bestätigung: B-105/B-109 auf DONE,
-   Handoffs gemäß Lifecycle löschen.
-2. Nächste Backlog-Priorität nach B-028b/B-119 laut `docs/goals/backlog.md`.
+1. **mypy-Drift zuerst (Retro-M1', Stakeholder-Entscheid S162):** Fehlerzahl aktiv
+   reduzieren (Stand 26, Baseline 25) — nicht nur Baseline anheben.
+2. **B-028b-Rest:** `gloom_prism`-Migration auf B-028a-Infrastruktur (~20k; Roster-Bestand
+   verifiziert: `necrons_beta.yaml`, `necrons_test.yaml`).
+3. **B-119:** Deny-Quellen-Anzeige, Fall b (Canoptek Spyder/Gloom Prism) — Referenz s. o.
 
-**Offene Handoff-Marker:** `S161_B105_ui_verifikation.md`, `S161_B105wiring_ui_verifikation.md`
-(beide `AWAITING-VERIFICATION`), `S161_planning.md`, `S161_review.md`.
+**Offene Handoff-Marker:** nur `Stakeholder_Beobachtungen.md` (STANDING) — Ordner sauber.
 
 ---
 

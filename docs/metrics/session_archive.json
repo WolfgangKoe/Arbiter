@@ -5296,8 +5296,8 @@
   "04abb172-a06c-414d-8045-ce2c1dbef82e": {
     "started_at": "2026-07-17T17:45:05.121Z",
     "task": "start session wir übernehmen M1 aus der Retro.",
-    "peak_context": 137112,
-    "subagent_share": 75.84909917839646,
+    "peak_context": 139728,
+    "subagent_share": 74.48305228413497,
     "by_tier": {
       "Sonnet": 26874094,
       "Opus": 1669313,
@@ -5373,6 +5373,53 @@
         "tier": "Sonnet",
         "peak_context": 140056,
         "started_at": "2026-07-17T17:45:05.121Z"
+      }
+    ]
+  },
+  "80965a58-cfb5-4ba3-81b4-56d336cf39ec": {
+    "started_at": "2026-07-17T19:32:43.820Z",
+    "task": "Fable ist wieder aktiv?",
+    "peak_context": 138018,
+    "subagent_share": 80.79413798582628,
+    "by_tier": {
+      "Sonnet": 26811992,
+      "Opus": 1499683
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S162 Doku-/Backlog-Hygiene",
+        "tier": "Sonnet",
+        "peak_context": 137643,
+        "started_at": "2026-07-17T19:32:43.820Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-115 DONE-Hygiene",
+        "tier": "Sonnet",
+        "peak_context": 117574,
+        "started_at": "2026-07-17T19:32:43.820Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S162 B-115 Invuln-Layout",
+        "tier": "Sonnet",
+        "peak_context": 103183,
+        "started_at": "2026-07-17T19:32:43.820Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S162 Review (DoD)",
+        "tier": "Opus",
+        "peak_context": 63712,
+        "started_at": "2026-07-17T19:32:43.820Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S162 Planning-Entwurf",
+        "tier": "Sonnet",
+        "peak_context": 133704,
+        "started_at": "2026-07-17T19:32:43.820Z"
       }
     ]
   }

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 21:29 CEST
+Stand: 2026-07-17 22:14 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 19:45 04ab  ███████████░ 137k ⚠️   █████░  76%    █···········
+07-17 21:32 8096  ███████████░ 138k ⚠️   █████░  81%    █···········
+         SA_1·  ███████████░ 138k ⚠️   S162 Doku-/Backlog-Hygiene
+         SA_2·  █████████░░░ 118k ✅    B-115 DONE-Hygiene
+         SA_3·  ████████░░░░ 103k ✅    S162 B-115 Invuln-Layout
+         SA_4·  █████░░░░░░░  64k ✅    S162 Review (DoD)
+         SA_5·  ███████████░ 134k ⚠️   S162 Planning-Entwurf
+----------------- ---------------------- -------------- ------------
+07-17 19:45 04ab  ███████████░ 140k ⚠️   ████░░  74%    █···········
          SA_1·  ████░░░░░░░░  50k ✅    Abschluss-Dreiklang stehend verank…
          SA_2·  ███████░░░░░  84k ✅    Wiring: Invuln-Quellenname in _com…
          SA_3·  █████░░░░░░░  69k ✅    Review S161 gegen DoD
@@ -848,3 +855,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S159 (2026-07-17)** Dice symbol catalog approved into design_system §4; Noctilith deny first B-028a callsite; mypy baseline 25
 - **S160 (2026-07-17)** B-104 dice SVG re-fix DONE (Stakeholder bestätigt), B-028b Verifikation komplett (TF 1-3), B-119 neu (Deny-Quellen-Anzeige), Retro-Klauseln M1/M2 in agent_scopes, Review GO
 - **S161 (2026-07-17)** Retro-M1 AWAITING-VERIFICATION marker, B-109 auto-fail label from YAML, B-105 go_source_chip + invuln source wiring, B-119 prioritized, retro-decision-as-input rule anchored
+- **S162 (2026-07-17)** B-115 Invuln-Block auf WOUND-Muster (sichtbestätigt beide Label-Fälle); B-105/B-109 DONE, B-043 überholt; B-119-Referenz korrigiert; Vollsuite-Klausel Parallel-Executoren

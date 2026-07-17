@@ -256,7 +256,12 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   oben) — sonst Worktree-Isolation verwenden. Vollsuite-Ergebnisse paralleler Läufe sind
   nur für den eigenen Scope belastbar, nicht als globaler Grün-Beleg zu werten. Anlass:
   ein bewegtes Ziel (parallel laufender Executor änderte Dateien während der Vollsuite)
-  erzeugte 5 Schein-Failures.
+  erzeugte 5 Schein-Failures. **Ergänzung (Retro-M2, S162):** die belastbare Vollsuite
+  läuft nach Abschluss ALLER parallelen Executoren beim **Koordinator** auf dem
+  kombinierten Endstand — Executor-Vollsuiten in Parallel-Setups dienen nur der
+  Selbstprüfung; Nicht-Scope-Failures melden Executoren als Befund, statt sie zu fixen.
+  Anlass: S162 — Executor-Vollsuite meldete 1 Schein-Failure (bewegtes Ziel durch den
+  parallelen Doku-Executor), der kombinierte Endstand war grün.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

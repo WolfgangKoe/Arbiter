@@ -245,7 +245,8 @@ def _render_dice_save_block(
 
     st.markdown("".join(rows), unsafe_allow_html=True)
 
-    # Invuln save block (separate section)
+    # Invuln save block (separate section) — title row above, dice row full-width
+    # below, same split as _render_dice_wound_block (design_system.md §4.4).
     if invuln is not None:
         inv_color = (
             _BUFF_COLOR_HEX if ability_invuln else _THRESHOLD_COLOR.get(min(6, invuln), "#f97316")
@@ -253,8 +254,10 @@ def _render_dice_save_block(
         inv_label = f'<span style="color:{inv_color};font-weight:600;">Inv {invuln}+</span>'
         if invuln_source_label:
             inv_label += go_source_chip(invuln_source_label, inv_color)
-        inv_row = grid_row_html(
-            inv_label,
-            threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7)),
+        st.markdown(inv_label, unsafe_allow_html=True)
+        st.markdown(
+            grid_row_html(
+                "", threshold_header_html(min(invuln, 7)) + dice_row_html(min(invuln, 7))
+            ),
+            unsafe_allow_html=True,
         )
-        st.markdown(inv_row, unsafe_allow_html=True)
