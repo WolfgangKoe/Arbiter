@@ -26,19 +26,13 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ## Aktueller Stand (nach S155, 2026-07-17)
 
-S155 (parallelisierte Session, 1 Planner + 5 Executor + 1 Fixup): Punkt 0 + Restpaket (a)
-komplett erledigt und committet. **E1 = Hypothese A bestätigt** (`_enemy_has_fought` korrekt,
-Regelbeleg core_rules.txt:3256 — Trigger ist explizit gegnerischer Fight); Stash angewendet,
-UI-Hinweis „Counter-Offensive becomes available…" ergänzt, committet, Stash gedroppt.
-B-027 (unit_key: Advance-Reroll + Overwatch), E3 `gretchin_mob` gelöscht, B-036/B-053/
-B-060/B-079/B-087 archiviert (B-079 war stale — Helper existierte seit S118, `29f4f81c`),
-B-025 umformuliert (Skeleton/Fragment, CLS≈0.29). Governance: M1+M2+R3 verankert, B-060
-(CLAUDE.md-Token-Details → operating_model Event 6, 63→12 Zeilen), **neue Stakeholder-
-Ablaufregeln S155:** Planner sortiert Session-Items an Backlog-Spitze (`agent_scopes.md`),
-UI-Verifikationen IMMER als Handoff-Datei (`agent_scopes.md` Executor-Pflichten).
-**Neu: B-102** (Counter-Offensive-Box selten erreichbar — Alternierungslogik, E1-Zusatzbefund).
-Gates: Vollsuite 1880 passed / 99,14 %; Architektur+Doku+Acceptance 31 passed.
-**S155-Review/Retro steht aus → Punkt 0 der Folgesession (R3-Regel, operating_model Event 1).**
+S155: Punkt 0 + Restpaket (a) komplett, 5 Commits (`ab36b80`…`ee6eb15`). E1 = Hypothese A
+(Counter-Offensive regelkonform, core_rules.txt:3256) — Fix + UI-Hinweis committet, Stash
+gedroppt. B-027 erledigt; `gretchin_mob` gelöscht; B-036/053/060/079/087 archiviert (B-079
+war stale seit S118); B-025 umformuliert; M1+M2+R3 + neue Ablaufregeln verankert (Planner-
+Prio-Sortierung, UI-Verifikationen immer als Handoff); **B-102 neu** (Box-Erreichbarkeit,
+E1-Zusatzbefund). Gates: 1880 passed / 99,14 %; Arch+Doku+Acceptance 31 passed.
+**S155-Review/Retro steht aus → Punkt 0 in S156 (R3-Regel, operating_model Event 1).**
 
 Frühere Sessions (S60–S154): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 

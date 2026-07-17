@@ -4905,11 +4905,11 @@
   "d5f8d64e-a676-4b93-b050-530689bff0e7": {
     "started_at": "2026-07-17T05:51:25.947Z",
     "task": "start session",
-    "peak_context": 115713,
-    "subagent_share": 79.90733616777042,
+    "peak_context": 123926,
+    "subagent_share": 77.84046302868259,
     "by_tier": {
       "Sonnet": 20440333,
-      "Haiku": 6000951
+      "Haiku": 6747875
     },
     "subagents": [
       {
@@ -4937,7 +4937,7 @@
         "agent_type": "general-purpose",
         "description": "Backlog-Nachzug nach Commits",
         "tier": "Haiku",
-        "peak_context": 104739,
+        "peak_context": 109744,
         "started_at": "2026-07-17T05:51:25.947Z"
       },
       {
