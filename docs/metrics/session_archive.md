@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-16 21:04 CEST
+Stand: 2026-07-17 08:22 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-16 20:22 a6af  ████████████ 153k ⛔    ████░░  69%    █·········▒▒
+07-17 07:51 d5f8  █████████░░░ 116k ✅    █████░  80%    ·········▒▒▒
+         SA_1·  ███████░░░░░  86k ✅    S155 Planning-Entwurf erstellen
+         SA_2·  ███████████░ 136k ⚠️   Governance-Doku M1+M2, B-060, Abla…
+         SA_3·  █████████░░░ 106k ✅    Backlog-Pflege und E3
+         SA_4·  ████████░░░░ 105k ✅    Backlog-Nachzug nach Commits
+         SA_5·  ██████░░░░░░  76k ✅    B-027 unit_key durch spend_stratag…
+         SA_6·  ████░░░░░░░░  45k ✅    B-079 DRY-Helper diceHtml
+         SA_7·  ███████░░░░░  92k ✅    E1 Counter-Offensive reproduzieren
+----------------- ---------------------- -------------- ------------
+07-16 20:22 a6af  ████████████ 173k ⛔    ████░░  61%    █·········▒▒
          SA_1·  █████░░░░░░░  57k ✅    Executor: Backlog-Archivierung B-0…
          SA_2·  █████░░░░░░░  57k ✅    Executor B-019: Alt-Fire-Chip erkl…
          SA_3·  ████░░░░░░░░  56k ✅    Executor B-025: Slot-Wechsel-Zucke…

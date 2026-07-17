@@ -412,6 +412,14 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
 
 ---
 
+## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
+
+- ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.
+- ✅ **B-027 — B12 optionaler XS Task unit key durch spend stratagem — ERLEDIGT (S155):** `unit_key`/uid wird jetzt durch `spend_stratagem` bei Advance-Reroll und Fire Overwatch durchgereicht, damit der „used on ⟨Einheit⟩"-Suffix korrekt gesetzt wird. Commit `316240f`; UI-Verifikation offen → docs/handoff/S155_ui_verifikationen.md Punkt 2+3.
+- ✅ **B-087 — F4 Stufe A Verifikationspunkte 3+4 — ERLEDIGT (S155, Fix committet):** Counter-Offensive/Fire-Overwatch Regel-Konformität verifiziert — Box erscheint korrekt erst NACH gegnerischem Fight (Trigger-Timing regelkonform), Hinweistext zur Verfügbarkeit ergänzt. Hypothesis A bestätigt (Triggermechanik korrekt, kein Code-Fix nötig). UI-Konsistenz-Punkt (Box ausgrauen statt ausblenden) wird mit B-031 gelöst. Commit `ab36b80`; UI-Verifikation offen → docs/handoff/S155_ui_verifikationen.md Punkt 1.
+
+---
+
 ## Aus der ID-indizierten Liste (migriert ab S152)
 
 - ✅ **B-002 — Klan/Dynastie K1 Wortlaut-Fix Nihilakh+Mephrit — ERLEDIGT (S152):**

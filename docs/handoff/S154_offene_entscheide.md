@@ -1,8 +1,8 @@
-# S154 — Offene Entscheide (Stakeholder-Mailbox)
-
 STATUS: ANSWERED (S154-Ende: E1 = neuer Befund → S155-Untersuchung; E2: R1+R2 ja, R3
 verworfen — Regel gilt, wird aber nicht verregelt, kein Formal-Review wenn nichts fertig;
 E3: Löschen freigegeben; E4: Vorschlag übernommen)
+
+# S154 — Offene Entscheide (Stakeholder-Mailbox)
 
 Lifecycle: Nach Beantwortung Marker auf ANSWERED; Datei behalten, bis alle Punkte in
 S155 umgesetzt bzw. archiviert sind, dann löschen.

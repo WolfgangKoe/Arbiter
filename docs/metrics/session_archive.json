@@ -4815,8 +4815,8 @@
   "a6af1597-a175-41ab-a5e7-8b132fdbad9a": {
     "started_at": "2026-07-16T18:22:35.765Z",
     "task": "start session",
-    "peak_context": 153057,
-    "subagent_share": 68.60787013334622,
+    "peak_context": 172923,
+    "subagent_share": 60.9278539182438,
     "by_tier": {
       "Sonnet": 17230643,
       "Haiku": 4548658,
@@ -4899,6 +4899,67 @@
         "tier": "Sonnet",
         "peak_context": 73958,
         "started_at": "2026-07-16T18:22:35.765Z"
+      }
+    ]
+  },
+  "d5f8d64e-a676-4b93-b050-530689bff0e7": {
+    "started_at": "2026-07-17T05:51:25.947Z",
+    "task": "start session",
+    "peak_context": 115713,
+    "subagent_share": 79.90733616777042,
+    "by_tier": {
+      "Sonnet": 20440333,
+      "Haiku": 6000951
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S155 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 85803,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Governance-Doku M1+M2, B-060, Ablaufregeln",
+        "tier": "Sonnet",
+        "peak_context": 136261,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Pflege und E3",
+        "tier": "Sonnet",
+        "peak_context": 106426,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Nachzug nach Commits",
+        "tier": "Haiku",
+        "peak_context": 104739,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-027 unit_key durch spend_stratagem",
+        "tier": "Sonnet",
+        "peak_context": 75963,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-079 DRY-Helper diceHtml",
+        "tier": "Sonnet",
+        "peak_context": 44574,
+        "started_at": "2026-07-17T05:51:25.947Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "E1 Counter-Offensive reproduzieren",
+        "tier": "Sonnet",
+        "peak_context": 91521,
+        "started_at": "2026-07-17T05:51:25.947Z"
       }
     ]
   }

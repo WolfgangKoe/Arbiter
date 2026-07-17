@@ -563,28 +563,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.254–259 (Stakeholder-Entscheid S137).
 
-## B-027 — B12 optionaler XS Task unit key durch spend stratagem
-
-[↩ Zeile in backlog.md](backlog.md#b-027)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `spend_stratagem`-Aufrufer (Advance-Reroll, Fire Overwatch). Advance-Reroll-/Inline-Spends übergeben konstruktionsbedingt kein `unit_key` an `spend_stratagem` → der „used on ⟨Einheit⟩"-Suffix bleibt dort leer, ebenso bei Fire Overwatch (Charge-Phase-Anker). S148 als PASS verifiziert (spec-konformer Randfall). Optionaler Folge-Task: `unit_key`/uid durchreichen.
-
-**Abhängigkeiten:** Spec-konformer Randfall, kein Bug — rein optional „falls je gewünscht".
-
-**Belege:** —
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.267–269 (B12-Unterpunkt).
-
 ## B-028 — B12 Feature Wunsch used on Suffix auf alle GOs
 
 [↩ Zeile in backlog.md](backlog.md#b-028)
@@ -1223,28 +1201,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.409–412 (context-audit-S91, verarbeitet S118).
 
-## B-060 — CLAUDE md Token Disziplin entschlacken
-
-[↩ Zeile in backlog.md](backlog.md#b-060)
-
-**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
-
-**Status:** ToDo
-
-**Tier:** Stakeholder → Executor
-
-**Effort:** ~5k — freigabepflichtig
-
-**Detail-Beschreibung:** Betroffene Dateien: `CLAUDE.md`. `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagern; in CLAUDE.md nur 2-Zeilen-Verweis.
-
-**Abhängigkeiten:** Freigabepflichtig (CLAUDE.md-Änderung).
-
-**Belege:** `docs/governance/operating_model.md` Event 6.
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.413–416 (context-audit-S91, verarbeitet S118).
-
 ## B-062 — Audit Plaene bereinigen
 
 [↩ Zeile in backlog.md](backlog.md#b-062)
@@ -1729,30 +1685,6 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §4d Alt-`backlog.md` Z.712–723 (DoD-Review S114, Follow-up S118-M2).
 
-## B-087 — F4 Stufe A Verifikationspunkte 3 und 4
-
-[↩ Zeile in backlog.md](backlog.md#b-087)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~15k
-
-**Detail-Beschreibung:** Punkte 3+4 der Ziel7-Stufe-A-Checkliste (Fire Overwatch/Counter-Offensive, `timing: phase_reactive`) waren früher nicht prüfbar (fehlende reaktive Stratagem-UI). Plan 015 hat die Kontext-Boxen seither verdrahtet (`src/gameMechanic/chargePhase.py` `_inactive_charge`, `src/gameMechanic/fightPhase.py` `_apply_counter_offensive`) — **Plan-015-Blocker entfällt, S152-Prüfung durchgeführt.**
-
-**S152-Befund (Nacharbeit):** (1) **Regelkonformitäts-Zweifel Trigger-Timing:** Stakeholder bezweifelt, dass Counter-Offensive korrekt erst NACH einer gegnerischen Fight-Aktion triggert, statt vorher/gleichzeitig — gegen `docs/work/wahapedia_core_rules/` (Stratagem-Wortlaut Counter-Offensive) sowie Fire-Overwatch-Wortlaut (Frage: unterbricht es die Reihenfolge chargender Einheiten korrekt?) verifizieren, dann `_apply_counter_offensive`/`_inactive_charge` gegebenenfalls korrigieren. (2) **UI-Inkonsistenz:** Die Karte erscheint/verschwindet abrupt statt ausgegraut zu warten, bis der Trigger sie freischaltet — **deckt sich mit B-031** (GO-Konsistenz: nicht erfüllte Bedingungen ausgrauen statt ausblenden); bei Umsetzung von B-031 diesen Fall als konkreten Beleg mitnehmen bzw. B-087 als Teilfall von B-031 lösen. Layout-Freigabe (Bordered Container, Use/Pass, Regeltext-Expander) selbst wurde nicht negativ bewertet.
-
-**Abhängigkeiten:** Nacharbeit + Neuvorlage S153 (Regel-Recherche zuerst, dann Korrektur + Re-Test); UI-Teil verwandt/ggf. gemeinsam mit B-031.
-
-**Belege:** `docs/audit/plans/015-contextual-reactive-stratagems.md` (Priorität P2), `docs/audit/plans/README.md`, `docs/handoff/S152_offene_ui_verifikationen.md` (S152-Befund).
-
-**Benötigte Regeln-Scopes:** `docs/work/wahapedia_core_rules/` (Counter-Offensive/Fire-Overwatch-Trigger-Timing).
-
-**Herkunft:** §5 Alt-`backlog.md` Z.770–774 (S121-UI-Verifikation Findings); Nacharbeit S152.
-
 ## B-088 — Richtungsentscheid Ziel9 Fetcher vorziehen
 
 [↩ Zeile in backlog.md](backlog.md#b-088)
@@ -1906,3 +1838,25 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Stakeholder-Beobachtung, überführt S152.
+
+## B-102 — Counter Offensive Box selten erreichbar
+
+[↩ Zeile in backlog.md](backlog.md#b-102)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~M (15–35k, nach Lösungsansatz)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/fightPhase.py` (`_advance_fight_turn_if_needed`), `src/uiLayout/_common.py` (Counter-Offensive-Box-Render). In einfachen 1-gegen-1-Kampfsequenzen kippt `_advance_fight_turn_if_needed` den `fight_current_player` sofort auf die berechtigte Seite zurück, sobald eine Seite fertig ist (Spieler A → Spieler B → Spieler A). Dies führt dazu, dass `is_my_turn` True wird und die reaktive Counter-Offensive-Box (die an `is_my_turn == False` gebunden ist) gar nicht rendert. Das Phänomen ist nur dann sichtbar, wenn die Alternierung nicht sofort zurückspringt — etwa im Group-Assignment-Flow mit mehreren Gruppen, wo zwischen den Alternierungsschritten UI-Render stattfindet. **S155-Zusatzbefund:** Regelkonformität selbst ist korrekt (Counter-Offensive triggert tatsächlich erst NACH gegnerischem Fight), Hinweistext zur Verfügbarkeit wurde ergänzt (S155, Commit ab36b80). Hypothesis A (Triggermechanik OK) ist bestätigt — das Problem ist ein Timing-Issue bei der Box-Sichtbarkeit. **Zu klären:** Soll die Box in diesen Sequenzen anders angeboten werden (z. B. eigener Moment vor dem Rücksprung, oder über B-031 ausgrauen statt ausblenden)?
+
+**Abhängigkeiten:** Abhängig von Architektur-Entscheid (Render-Moment vs. State-Change). Kann mit B-031 (GO-Konsistenz ausgrauen statt ausblenden) gelöst werden, falls dieser Ansatz verfolgt wird.
+
+**Belege:** S155 E1-Befund, `docs/audit/plans/015-contextual-reactive-stratagems.md` (Counter-Offensive), Commit ab36b80 (Regel-Verifikation + Hinweistext).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** E1-Zusatzbefund S155 (Counter-Offensive-Verifikation, Hypothesis A bestätigt).
