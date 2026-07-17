@@ -36,6 +36,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_triggered_abilities,
     is_effect_executable,
     revive_dice_count,
+    unit_wound_auto_fail_max,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -1300,6 +1301,111 @@ def test_ability_invuln_save_skips_non_matching_unit(monkeypatch: pytest.MonkeyP
     )
     unit = _make_unit(rules=[], keywords=["NECRON"])
     assert ability_invuln_save("Necrons", unit) is None
+
+
+# ---------------------------------------------------------------------------
+# unit_wound_auto_fail_max — B-056: Quantum Shielding's "unmodified wound roll
+# of 1-3 always fails" clause (docs/work/wahapedia_necrons/units_all.txt:112).
+# ---------------------------------------------------------------------------
+
+
+def _wound_auto_fail_ability(rule: str, max_roll: int) -> Ability:
+    return Ability(
+        id=f"test.ability.wound_auto_fail.{rule}.{max_roll}",
+        name_en="Test Wound Auto-fail",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="persistent", phase="any", player="either"),
+        conditions=[Condition(has_rules=[rule])],
+        effect=Effect(type="wound_auto_fail", modifier=max_roll),
+    )
+
+
+def test_unit_wound_auto_fail_max_returns_modifier_for_matching_rule(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [_wound_auto_fail_ability("quantumShielding", 3)],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["quantumShielding"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_max("Necrons", unit) == 3
+
+
+def test_unit_wound_auto_fail_max_none_without_matching_rule(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A unit without the intrinsic rule tag is unaffected (e.g. plain Warriors)."""
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [_wound_auto_fail_ability("quantumShielding", 3)],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["livingMetal"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_max("Necrons", unit) is None
+
+
+def test_unit_wound_auto_fail_max_ignores_other_effect_types(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An invuln_save-effect ability with the same has_rules must not leak in here."""
+    invuln_ability = Ability(
+        id="test.ability.invuln",
+        name_en="Test Invuln",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="persistent", phase="any", player="either"),
+        conditions=[Condition(has_rules=["quantumShielding"])],
+        effect=Effect(type="invuln_save", modifier=5),
+    )
+    monkeypatch.setattr(_eng, "load_unit_abilities", lambda faction_dir: [invuln_ability])
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["quantumShielding"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_max("Necrons", unit) is None
+
+
+def test_unit_wound_auto_fail_max_picks_highest_of_multiple(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        _eng,
+        "load_unit_abilities",
+        lambda faction_dir: [
+            _wound_auto_fail_ability("quantumShielding", 3),
+            _wound_auto_fail_ability("quantumShielding", 2),
+        ],
+    )
+    monkeypatch.setattr(_eng, "faction_dir_for", lambda faction: "necrons")
+    unit = _make_unit(rules=["quantumShielding"], keywords=["VEHICLE"])
+    assert unit_wound_auto_fail_max("Necrons", unit) == 3
+
+
+# ---------------------------------------------------------------------------
+# unit_wound_auto_fail_max — S148 regression: real YAML, Annihilation Barge.
+# ---------------------------------------------------------------------------
+
+
+def test_unit_wound_auto_fail_max_annihilation_barge_real_data() -> None:
+    """S148-Befund: Annihilation Barge's Quantum Shielding must auto-fail
+    unmodified wound rolls of 1-3 — regression against the real
+    unit_abilities.yaml entry (not just a synthetic Ability)."""
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    barge = next(u for u in units if u.id == "wh40k_9e.necrons.unit.annihilation_barge")
+    assert unit_wound_auto_fail_max("Necrons", barge) == 3
+
+
+def test_unit_wound_auto_fail_max_none_for_unit_without_quantum_shielding() -> None:
+    """Control: a non-vehicle unit (Warriors) without the rule tag is unaffected."""
+    session = _S(first_player="Necrons", p1_faction_dir="necrons", p2_faction_dir="necrons")
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    warriors = next(u for u in units if u.id == "wh40k_9e.necrons.unit.warriors")
+    assert unit_wound_auto_fail_max("Necrons", warriors) is None
 
 
 # ---------------------------------------------------------------------------

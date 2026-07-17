@@ -449,3 +449,63 @@ def test_wound_eff_row_clamps_at_six_natural_six_still_success(monkeypatch) -> N
     assert (
         success_die_6 in combined_html
     ), f"Expected natural-6 success die in the Eff. row, got:\n{combined_html[:600]}"
+
+
+# ---------------------------------------------------------------------------
+# B-056 / S148-Befund — Quantum Shielding auto-fail marker in the WOUND block.
+# Annihilation Barge (and other Quantum Shielding vehicles): unmodified wound
+# rolls of 1-3 always fail. combat.resolve_attack_modifiers now returns
+# wound["auto_fail_max"]; _render_dice_wound_block must render it as three
+# debuff-red ✕ markers (attacker's own perspective, dice_display.md §5.1/§10.2)
+# — the value comes straight from the engine, never recomputed here.
+# ---------------------------------------------------------------------------
+
+
+def test_wound_block_shows_three_auto_fail_crosses_for_quantum_shielding(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """S148 regression: Annihilation Barge-shaped defender (auto_fail_max=3)."""
+    from uiLayout.diceCompose import always_fail_marker_row_html  # noqa: PLC0415
+
+    captured = _collect_markdown(monkeypatch)
+
+    _render_dice_wound_block(
+        strength=6,
+        toughness=6,
+        wound_stack=[],
+        modified=4,
+        auto_fail_max=3,
+    )
+
+    combined_html = "\n".join(captured)
+    assert combined_html.count("✕") == 3, (
+        f"Expected exactly three ✕ auto-fail markers (unmod. wound 1-3 always "
+        f"fail), got:\n{combined_html[:600]}"
+    )
+    assert _DEBUFF_RED in combined_html, (
+        f"Auto-fail markers must render debuff-red from the attacker's own "
+        f"perspective (their rolls fail), got:\n{combined_html[:600]}"
+    )
+    expected_row = always_fail_marker_row_html([1, 2, 3], base_threshold=4, color_hint="debuff")
+    assert expected_row in combined_html, (
+        f"Expected the exact always_fail_marker_row_html([1,2,3], ...) row — "
+        f"markers must come from the shared building block, not a local "
+        f"re-implementation.\nGot:\n{combined_html[:800]}"
+    )
+
+
+def test_wound_block_no_auto_fail_markers_without_quantum_shielding(
+    monkeypatch,
+) -> None:  # type: ignore[no-untyped-def]
+    """Control: auto_fail_max=None (default) renders no ✕ markers at all."""
+    captured = _collect_markdown(monkeypatch)
+
+    _render_dice_wound_block(
+        strength=6,
+        toughness=6,
+        wound_stack=[],
+        modified=4,
+    )
+
+    combined_html = "\n".join(captured)
+    assert "✕" not in combined_html

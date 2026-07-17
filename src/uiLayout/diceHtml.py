@@ -8,6 +8,7 @@ from uiLayout.diceCompose import (
     _BUFF_COLOR_HEX,
     _THRESHOLD_COLOR,
     _modifier_color,
+    always_fail_marker_row_html,
     block_divider_html,
     dice_row_html,
     grid_row_html,
@@ -103,6 +104,7 @@ def _render_dice_wound_block(
     on_six_label: str = "",
     modified: int | None = None,
     strength_buff_labels: list[str] | None = None,
+    auto_fail_max: int | None = None,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue.
 
@@ -116,6 +118,10 @@ def _render_dice_wound_block(
     strength_buff (e.g. ["Disruption Fields"]); rendered as green chips next to
     the S-vs-T comparison so the player sees WHERE the raised S comes from
     (S146 Fix 1). Ignored while strength_buff is 0.
+    ``auto_fail_max`` — combat.resolve_attack_modifiers's ``wound.auto_fail_max``
+    (e.g. Necron Quantum Shielding: unmodified 1-3 always fail). Rendered as a
+    debuff-red ✕ row from the attacker's perspective (dice_display.md §5.1/§10.2)
+    — values come straight from the engine, never recomputed here (S122-Lehre).
     """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
@@ -149,6 +155,14 @@ def _render_dice_wound_block(
         grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
+    if auto_fail_max:
+        # Attacker's own perspective: their low rolls fail → debuff-red (§5.1).
+        st.markdown(
+            always_fail_marker_row_html(
+                list(range(1, auto_fail_max + 1)), base_threshold=base, color_hint="debuff"
+            ),
+            unsafe_allow_html=True,
+        )
     if on_six_ap > 0:
         # Hungry Void D1 (class B): on an unmodified wound roll of 6, AP improves.
         # Applied at the table — shown as [AP-N] in the 6 column. Benefits the

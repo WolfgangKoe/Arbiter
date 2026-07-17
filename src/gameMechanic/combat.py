@@ -169,16 +169,24 @@ def resolve_attack_modifiers(
     advanced: bool,
     modifiers: list[dict],  # type: ignore[type-arg]
     use_melee: bool,
+    wound_auto_fail_max: int | None = None,
 ) -> dict:  # type: ignore[type-arg]
     """Compute hit/wound thresholds with full modifier stack.
 
     Each entry in *modifiers*: {"label": str, "value": int, "roll_type": "hit"|"wound", "source": str}
+    *wound_auto_fail_max* — the defender's ``unit_wound_auto_fail_max`` (e.g. Necron
+    Quantum Shielding: unmodified wound rolls of 1-3 always fail). Since the auto-fail
+    is checked against the UNMODIFIED die, no wound buff can lower the effective
+    threshold below one past this value — the wound floor becomes
+    ``wound_auto_fail_max + 1`` instead of the normal 2.
     Returns:
         {
             "hit":   {"base": int, "stack": list[dict], "modified": int},
-            "wound": {"base": int, "stack": list[dict], "modified": int},
+            "wound": {"base": int, "stack": list[dict], "modified": int,
+                      "auto_fail_max": int | None},
         }
-    Net modifier is capped at ±1 per 9E rules. Threshold minimum is 2+.
+    Net modifier is capped at ±1 per 9E rules. Threshold minimum is 2+ (or higher
+    when *wound_auto_fail_max* floors it).
     """
     hit_stack: list[dict] = []  # type: ignore[type-arg]
     wound_stack: list[dict] = []  # type: ignore[type-arg]
@@ -199,6 +207,7 @@ def resolve_attack_modifiers(
 
     hit_base = skill
     wound_base = wound_threshold(strength, toughness)
+    wound_floor = 2 if wound_auto_fail_max is None else max(2, wound_auto_fail_max + 1)
 
     return {
         "hit": {
@@ -212,8 +221,10 @@ def resolve_attack_modifiers(
         "wound": {
             "base": wound_base,
             "stack": wound_stack,
-            # Same rule for the wound roll (core_rules.txt "Wound Roll").
-            "modified": min(6, max(2, wound_base - wound_net)),
+            # Same rule for the wound roll (core_rules.txt "Wound Roll"), floored
+            # at wound_auto_fail_max + 1 when the defender auto-fails low rolls.
+            "modified": min(6, max(wound_floor, wound_base - wound_net)),
+            "auto_fail_max": wound_auto_fail_max,
         },
     }
 

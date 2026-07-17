@@ -2238,7 +2238,9 @@ def _resolution_tab_entry_and_units():  # type: ignore[no-untyped-def]
         "profile_idx": 0,
         "models_count": 5,
     }
-    def_unit = SimpleNamespace(toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors")
+    def_unit = SimpleNamespace(
+        toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors", rules=[]
+    )
     return entry, unit, def_unit
 
 
@@ -2607,7 +2609,14 @@ def _resolution_context_session(**extra: object) -> _SS:
     ``common.st.session_state = ...`` is not enough when a module was already
     imported (and its `st` bound) by an earlier test file in the same run.
     """
-    session = _SS(**extra)
+    base = dict(
+        first_player="Necrons",
+        second_player="Orks",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+    )
+    base.update(extra)
+    session = _SS(**base)
     _st_mock.session_state = session
     _eng.st.session_state = session
     _gs.st.session_state = session
@@ -2616,7 +2625,9 @@ def _resolution_context_session(**extra: object) -> _SS:
 
 
 def _bare_def_unit() -> SimpleNamespace:
-    return SimpleNamespace(toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors")
+    return SimpleNamespace(
+        toughness=4, save=6, invuln_save=None, fnp=None, name_en="Warriors", rules=[]
+    )
 
 
 def test_compute_resolution_context_returns_none_when_no_weapon_available(monkeypatch) -> None:

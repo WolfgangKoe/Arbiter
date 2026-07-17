@@ -919,6 +919,23 @@ abilities:
       target: self
       modifier: 5
 
+  - id: wh40k_9e.necrons.unit.quantum_shielding_wound_deny
+    name_en: Quantum Shielding (Wound Auto-fail)
+    ability_type: triggered
+    source: unit_ability
+    rule_text: "This model has a 5+ invulnerable save. In addition, each time an attack is allocated to this model, if the unmodified wound roll for that attack was 1, 2, or 3, the attack fails and the attack sequence ends."
+    trigger:
+      timing: persistent
+      phase: any
+      stage: active
+      player: either
+    conditions:
+      - has_rules: [quantumShielding]
+    effect:
+      type: wound_auto_fail
+      target: self
+      modifier: 3  # unmodified wound rolls 1..3 always fail
+
   - id: wh40k_9e.necrons.unit.phase_shifter
     name_en: Phase Shifter
     ability_type: triggered

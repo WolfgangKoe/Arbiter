@@ -16,6 +16,7 @@ from gameMechanic.combat import (
     DefendParams,
     parse_dice,
     resolve_attack,
+    resolve_attack_modifiers,
     resolve_save,
     resolve_weapon_strength,
     wound_threshold,
@@ -546,3 +547,109 @@ class TestResolveSaveWithCcwFallbackWeapon:
         )
         assert result["effective"] == 5
         assert result["using_invuln"] is False
+
+
+# ---------------------------------------------------------------------------
+# B-056 — Quantum Deflection: fixed 4+ invuln, not an additive modifier.
+#
+# resolve_save() already treats invuln_save as a fixed threshold (compared,
+# never added, to armour) — this is the "fester Invuln-Wert"-Pfad the
+# stratagem needs. This test locks in that behaviour with the Quantum
+# Deflection stratagem's own numbers (4+, Annihilation Barge-shaped defender:
+# Sv 3+, native invuln 5+) so a future change back to additive stacking fails
+# loudly. → docs/work/wahapedia_necrons/stratagems.txt:100.
+# ---------------------------------------------------------------------------
+
+
+class TestQuantumDeflectionFixedInvuln:
+    def test_fixed_4_plus_invuln_beats_ap_reduced_armour_save(self) -> None:
+        # Sv 3+ armour, AP-3 weapon → armour_modified = 3 + 3 = 6+ (near-unusable).
+        # Quantum Deflection's fixed 4+ invuln (not "+N" additive) is used instead.
+        result = resolve_save(base_save=3, invuln_save=4, ap=-3, save_modifiers=[])
+        assert result["using_invuln"] is True
+        assert result["effective"] == 4
+
+    def test_fixed_4_plus_invuln_loses_to_better_native_invuln(self) -> None:
+        # A model's OWN better invuln (e.g. 3+) always wins over the stratagem's
+        # fixed 4+ — 9E: "must use the best invulnerable save it has" — the
+        # caller passes min(native, stratagem) into resolve_save (S135 pattern).
+        best_invuln = min(3, 4)
+        result = resolve_save(base_save=3, invuln_save=best_invuln, ap=-3, save_modifiers=[])
+        assert result["invuln"] == 3
+        assert result["effective"] == 3
+
+
+# ---------------------------------------------------------------------------
+# B-056 — Quantum Shielding: unmodified wound roll of 1-3 always fails.
+#
+# resolve_attack_modifiers's wound_auto_fail_max floors the effective wound
+# threshold at (wound_auto_fail_max + 1) — no wound buff can lower it further,
+# because the auto-fail is checked against the UNMODIFIED die, not the
+# buffed threshold. → docs/work/wahapedia_necrons/units_all.txt:112
+# (Annihilation Barge / S148-Befund).
+# ---------------------------------------------------------------------------
+
+
+class TestWoundAutoFailFloor:
+    def test_floors_wound_threshold_at_one_above_auto_fail_max(self) -> None:
+        # S6 vs T6 -> wound_base=4+; no modifiers; auto_fail_max=3 -> floor=4 (no change).
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=6,
+            toughness=6,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=[],
+            use_melee=False,
+            wound_auto_fail_max=3,
+        )
+        assert result["wound"]["modified"] == 4
+        assert result["wound"]["auto_fail_max"] == 3
+
+    def test_wound_buff_cannot_lower_threshold_past_auto_fail_floor(self) -> None:
+        # S8 vs T6 -> wound_base=3+ (S > T). A +1 Wound buff would normally lower
+        # this to 2+, but Quantum Shielding's auto-fail (1-3) floors it at 4+
+        # regardless — the buff is fully negated for this defender.
+        buff = {"label": "Buff", "value": 1, "roll_type": "wound", "source": "test"}
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=8,
+            toughness=6,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=[buff],
+            use_melee=False,
+            wound_auto_fail_max=3,
+        )
+        assert result["wound"]["modified"] == 4
+
+    def test_worse_than_floor_threshold_is_unaffected(self) -> None:
+        # S3 vs T6 -> wound_base=6+, already worse than the floor(4) -> unchanged.
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=3,
+            toughness=6,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=[],
+            use_melee=False,
+            wound_auto_fail_max=3,
+        )
+        assert result["wound"]["modified"] == 6
+
+    def test_no_auto_fail_max_keeps_normal_floor_of_two(self) -> None:
+        # Default (no Quantum Shielding defender): normal 9E floor (2+) applies,
+        # unaffected by the new parameter — this run's buff lowers the S4-vs-T4
+        # base (4+) by 1 to 3+, well above the floor.
+        buff = {"label": "Buff", "value": 1, "roll_type": "wound", "source": "test"}
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=4,
+            toughness=4,
+            weapon_type="Heavy",
+            advanced=False,
+            modifiers=[buff],
+            use_melee=False,
+        )
+        assert result["wound"]["modified"] == 3
+        assert result["wound"]["auto_fail_max"] is None

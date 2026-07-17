@@ -1887,6 +1887,7 @@ def compute_resolution_context(
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
+        unit_wound_auto_fail_max,
     )
     from gameMechanic.stratagemEngine import (  # noqa: PLC0415
         stratagem_strength_bonus,
@@ -2021,6 +2022,7 @@ def compute_resolution_context(
         advanced=advanced,
         modifiers=final_atk_mods,
         use_melee=use_melee,
+        wound_auto_fail_max=unit_wound_auto_fail_max(def_faction, def_unit),
     )
     ability_inv = ability_invuln_save(def_faction, def_unit)
     strat_inv = _stratagem_invuln_save(def_uid)
@@ -2141,6 +2143,7 @@ def _render_attacker_blocks(ctx: ResolutionContext) -> None:
         on_six_label=ctx.on_six_label,
         modified=ctx.atk_result["wound"]["modified"],
         strength_buff_labels=ctx.str_labels,
+        auto_fail_max=ctx.atk_result["wound"].get("auto_fail_max"),
     )
     # Command Re-Roll (R-CMD-12, S136 Stufe 2): the attacker made the wound
     # roll — attacker pays, same Familie-2 pattern as the Hit-Anker above.
