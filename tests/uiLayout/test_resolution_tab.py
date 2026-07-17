@@ -398,11 +398,14 @@ def test_hit_roll_penalty_renders_once_no_duplicate_badge(monkeypatch) -> None: 
     _render_dice_roll_block("HIT", "WS", hit_block, weapon_special)
 
     combined_html = "\n".join(captured)
-    count = combined_html.count("−1 to Hit")
+    # → Entscheid S158, Option 1: title-Attribut trägt Label doppelt, sichtbarer
+    # Inhalt zählt (B-111 Variante C macht `_badge_chip` einheitlich `title="{label}"`,
+    # was den rohen Substring-Count auf 2 hebt, ohne dass ein zweites Badge existiert).
+    count = combined_html.count("−1 to Hit<")
     assert count == 1, (
-        f"Expected the '−1 to Hit' label exactly once (modifier row in the dice "
-        f"grid); a second occurrence means the duplicate special_die_html badge "
-        f"is back. Got {count} occurrence(s)."
+        f"Expected the '−1 to Hit' label exactly once as visible content (modifier "
+        f"row in the dice grid); a second occurrence means the duplicate "
+        f"special_die_html badge is back. Got {count} occurrence(s)."
     )
 
 

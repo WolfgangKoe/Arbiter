@@ -315,7 +315,7 @@ The `gameProtocoll` panel (Section 8) is rendered **below** this area as a separ
 │  Combined view of all effects (including passive auras).               │
 │  Modifier chain → final result. Phase rules text + attack summary.     │
 │  Setup: unit datasheet when a unit is selected.                        │
-│  VP scoring phase: +5 / −5 buttons for both players.                  │
+│  VP scoring phase: +5 / −5 buttons for both players.                   │
 ├────────────────────────────────────────────────────────────────────────┤
 │  firstPlayerArea (50%)        │  secondPlayerArea (50%)                │
 │  ──────────────────────────────────────────────────────────────────────│

@@ -5,7 +5,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from gameObjects.ability import Ability, Condition, Effect, Trigger
+from gameObjects.ability import (
+    Ability,
+    Condition,
+    Effect,
+    Trigger,
+    ability_undo_visible,
+    ability_usable_by_player,
+    ability_visibility,
+    reactive_abilities_for,
+)
 from gameObjects.loader import (
     load_army,
     load_faction_abilities,
@@ -217,3 +226,148 @@ def test_reanimation_protocols_yaml_declares_ui_config() -> None:
     assert rp.conditions[0].unit_not_destroyed is True
     assert rp.effect.amount == "D6_per_wound"
     assert rp.effect.success_on == 5  # success threshold (5+)
+
+
+# ---------------------------------------------------------------------------
+# B-028a — reactive_abilities_for() / ability_visibility() / ability_undo_visible()
+# ---------------------------------------------------------------------------
+
+
+def _ability(
+    aid: str = "test.ability",
+    phase: str | list[str] = "shooting",
+    timing: str | None = "phase_reactive",
+    event: str | None = "model_destroyed",
+    player: str = "either",
+    conditions: list[Condition] | None = None,
+) -> Ability:
+    return Ability(
+        id=aid,
+        name_en="Test Ability",
+        source="unit_ability",
+        rule_text="Test rule text.",
+        trigger=Trigger(timing=timing, phase=phase, player=player, event=event),
+        conditions=conditions or [],
+        effect=Effect(type="mortal_wounds", target="self"),
+    )
+
+
+class TestReactiveAbilitiesFor:
+    def test_matches_ability_with_matching_phase_and_event(self) -> None:
+        ability = _ability(phase="fight", event="after_unit_fights")
+        assert reactive_abilities_for([ability], "fight", "after_unit_fights") == [ability]
+
+    def test_excludes_non_reactive_ability(self) -> None:
+        ability = _ability(timing="phase_start", phase="fight", event="after_unit_fights")
+        assert reactive_abilities_for([ability], "fight", "after_unit_fights") == []
+
+    def test_excludes_wrong_event(self) -> None:
+        ability = _ability(phase="fight", event="on_destroy")
+        assert reactive_abilities_for([ability], "fight", "after_unit_fights") == []
+
+    def test_excludes_wrong_phase_single(self) -> None:
+        ability = _ability(phase="fight", event="model_destroyed")
+        assert reactive_abilities_for([ability], "shooting", "model_destroyed") == []
+
+    def test_excludes_wrong_phase_list(self) -> None:
+        ability = _ability(phase=["shooting", "fight"], event="reanimation_roll")
+        assert reactive_abilities_for([ability], "movement", "reanimation_roll") == []
+
+    def test_includes_phase_any_regardless_of_current_phase(self) -> None:
+        ability = _ability(phase="any", event="model_destroyed")
+        assert reactive_abilities_for([ability], "morale", "model_destroyed") == [ability]
+
+    def test_includes_matching_phase_within_list(self) -> None:
+        ability = _ability(phase=["shooting", "fight"], event="reanimation_roll")
+        assert reactive_abilities_for([ability], "fight", "reanimation_roll") == [ability]
+
+    def test_real_necron_reactive_unit_abilities_match_their_documented_trigger(self) -> None:
+        """The 8 reactive Necron unit abilities each surface at their own (phase, event)."""
+        abilities = load_unit_abilities("necrons")
+        cases = [
+            (
+                "wh40k_9e.necrons.unit.the_silent_king.noctilith_beacons",
+                "psychic",
+                "opponent_psychic_phase",
+            ),
+            (
+                "wh40k_9e.necrons.unit.the_silent_king.vengeance_of_the_enchained",
+                "any",
+                "model_destroyed",
+            ),
+            ("wh40k_9e.necrons.unit.canoptek_plasmacyte.infused_madness", "any", "model_destroyed"),
+        ]
+        for aid, phase, event in cases:
+            matched = reactive_abilities_for(abilities, phase, event)
+            assert any(a.id == aid for a in matched), f"{aid} did not match ({phase}, {event})"
+
+
+class TestAbilityUsableByPlayer:
+    def test_either_is_always_usable(self) -> None:
+        assert ability_usable_by_player("either", True) is True
+        assert ability_usable_by_player("either", False) is True
+
+    def test_active_only_usable_by_active_player(self) -> None:
+        assert ability_usable_by_player("active", True) is True
+        assert ability_usable_by_player("active", False) is False
+
+    def test_inactive_only_usable_by_inactive_player(self) -> None:
+        assert ability_usable_by_player("inactive", True) is False
+        assert ability_usable_by_player("inactive", False) is True
+
+
+class TestAbilityVisibility:
+    def test_hidden_when_conditions_not_met(self) -> None:
+        ability = _ability()
+        assert ability_visibility(ability, "shooting", set(), conditions_met=False) == "hidden"
+
+    def test_hidden_when_phase_reactive_by_default(self) -> None:
+        ability = _ability(phase="fight", event="after_unit_fights")
+        assert ability_visibility(ability, "fight", set(), conditions_met=True) == "hidden"
+
+    def test_clickable_when_reactive_trigger_active(self) -> None:
+        ability = _ability(phase="fight", event="after_unit_fights")
+        assert (
+            ability_visibility(
+                ability, "fight", set(), conditions_met=True, reactive_trigger_active=True
+            )
+            == "clickable"
+        )
+
+    def test_hidden_when_wrong_phase(self) -> None:
+        ability = _ability(phase="fight", event="after_unit_fights")
+        assert (
+            ability_visibility(
+                ability, "shooting", set(), conditions_met=True, reactive_trigger_active=True
+            )
+            == "hidden"
+        )
+
+    def test_greyed_when_already_used_this_phase(self) -> None:
+        ability = _ability(aid="test.ability", phase="fight", event="after_unit_fights")
+        assert (
+            ability_visibility(
+                ability,
+                "fight",
+                {"test.ability"},
+                conditions_met=True,
+                reactive_trigger_active=True,
+            )
+            == "greyed"
+        )
+
+    def test_no_cp_gate_unlike_stratagem_visibility(self) -> None:
+        """Ability has no cp_cost field — ability_visibility() takes no cp_available
+        parameter at all (S157 scope doc Grundannahme 2), unlike stratagem_visibility()."""
+        import inspect
+
+        params = inspect.signature(ability_visibility).parameters
+        assert "cp_available" not in params
+
+
+class TestAbilityUndoVisible:
+    def test_true_while_used_this_phase(self) -> None:
+        assert ability_undo_visible("test.ability", {"test.ability"}) is True
+
+    def test_false_when_not_used(self) -> None:
+        assert ability_undo_visible("test.ability", set()) is False

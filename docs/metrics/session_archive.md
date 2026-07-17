@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 13:24 CEST
+Stand: 2026-07-17 15:45 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 10:38 6342  ████████████ 156k ⛔    █████░  87%    ···········▒
+07-17 13:27 73bd  ████████████ 157k ⛔    █████░  88%    ··········▒▒
+         SA_1·  ████░░░░░░░░  48k ✅    S158-Abschluss-Review (DoD)
+         SA_2·  ███████████░ 135k ⚠️   S158-Abschluss-Arbeiten ausführen
+         SA_3·  █████████░░░ 115k ✅    Backlog-Umbau B-028a–c5
+         SA_4·  ████████░░░░ 101k ✅    S158 Planning-Entwurf erstellen
+         SA_5·  ██████████░░ 119k ✅    Design-Crew B-104/105/111
+         SA_6·  ████████████ 271k ⛔    B-028a Reactive-Ability-Infrastruk…
+         SA_7·  ███████░░░░░  89k ✅    B-111 Badge-Tooltip Variante C
+         SA_8·  ████████░░░░  98k ✅    B-104 Würfelsymbol Variante A
+----------------- ---------------------- -------------- ------------
+07-17 10:38 6342  ████████████ 160k ⛔    █████░  85%    ···········▒
          SA_1·  ████░░░░░░░░  53k ✅    B-028-Entscheid verankern
          SA_2·  █████░░░░░░░  65k ✅    Executor 0a: Prozess-Verankerung
          SA_3·  ████████████ 169k ⛔    S157-Abschluss-Artefakte
@@ -805,3 +815,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S155 (2026-07-17)** Punkt 0 + Restpaket komplett: E1 Hypothese A (Counter-Offensive-Fix + Hinweis committet), B-027, E3 gretchin_mob, B-036/053/060/079/087 archiviert, B-025 umformuliert, M1+M2+R3 + neue Ablaufregeln (Planner-Prio, UI-Verifikations-Handoff) verankert, B-102 neu; Gates 1880 passed/99,14 %; B-056/B-098/B-028 + S155-Review -> S156
 - **S156 (2026-07-17)** Review S155 GO; B-056 QS fertig+verifiziert (3 UI-Folge-Items); B-098 teilfertig; Handoff-Grossreinigung; Retro-Massnahmen 1-9 offen
 - **S157 (2026-07-17)** Retro-Massnahmen verankert, B-028 Option-B-Entscheid, B-098-Rest + B-103 fertig (1915/99.12%), Items B-106-B-111
+- **S158 (2026-07-17)** B-028-Zuschnitt (7 Tasks) + B-028a-Infrastruktur, Design-Konsens B-104/105/111, B-104+B-111 umgesetzt, Retro-Maßnahmen 1-6

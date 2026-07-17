@@ -5020,8 +5020,8 @@
   "63426237-45a7-438a-8cc0-05b36e1452ba": {
     "started_at": "2026-07-17T08:38:29.635Z",
     "task": "Plan ist kommentiert und freigegeben.",
-    "peak_context": 156178,
-    "subagent_share": 86.71905988207655,
+    "peak_context": 159996,
+    "subagent_share": 85.00352375820356,
     "by_tier": {
       "Haiku": 5401886,
       "Sonnet": 54838268,
@@ -5104,6 +5104,75 @@
         "tier": "Opus",
         "peak_context": 69244,
         "started_at": "2026-07-17T08:38:29.635Z"
+      }
+    ]
+  },
+  "73bdc555-2e9e-4904-a460-38548f1905ce": {
+    "started_at": "2026-07-17T11:27:16.612Z",
+    "task": "start session",
+    "peak_context": 156946,
+    "subagent_share": 87.89664834211739,
+    "by_tier": {
+      "Opus": 935931,
+      "Sonnet": 58542093,
+      "Haiku": 8203980
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S158-Abschluss-Review (DoD)",
+        "tier": "Opus",
+        "peak_context": 48433,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S158-Abschluss-Arbeiten ausführen",
+        "tier": "Sonnet",
+        "peak_context": 134737,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Backlog-Umbau B-028a–c5",
+        "tier": "Haiku",
+        "peak_context": 115380,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S158 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 100741,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Design-Crew B-104/105/111",
+        "tier": "Sonnet",
+        "peak_context": 119372,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-028a Reactive-Ability-Infrastruktur",
+        "tier": "Sonnet",
+        "peak_context": 271191,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-111 Badge-Tooltip Variante C",
+        "tier": "Sonnet",
+        "peak_context": 88699,
+        "started_at": "2026-07-17T11:27:16.612Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-104 Würfelsymbol Variante A",
+        "tier": "Sonnet",
+        "peak_context": 97940,
+        "started_at": "2026-07-17T11:27:16.612Z"
       }
     ]
   }

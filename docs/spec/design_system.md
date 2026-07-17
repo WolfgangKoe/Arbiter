@@ -63,6 +63,13 @@ Formulierung „baut das Label aus diesen Bausteinen" beschrieb einen nie gebaut
 Dice-Modifier-Label hat eine eigene Sonder-Geometrie (feste Spaltenbreite +
 Ellipsis-Truncation), es ist kein Status-Badge. Bleibt eigenständig.
 
+**Tooltip-Konvention für lange Labels (S158/B-111, Variante C):** Die
+Ellipsis-Truncation bleibt für alle Aufrufer bestehen (kein Wrap-Modus, keine
+Verbreiterung der Spalte). `_badge_chip` trägt zusätzlich das volle,
+ungekürzte Label im `title`-Attribut des `<span>` — bei Hover zeigt der Browser
+den vollständigen Text (z.B. „Quantum Shielding" statt „Quantum Sh…"). Gilt für
+jeden Aufrufer von `_badge_chip` einheitlich, keine Sonderfälle je Label-Länge.
+
 ### 1.2 Card / Panel
 
 `st.container(border=True)` — Streamlit liefert den Rahmen einheitlich über den
@@ -124,6 +131,25 @@ Ein kanonischer Ort je Glyph — projektweit konsistent tauschbar, keine Fraktio
 | `SYM_ADD` | ＋ | hinzufügen / zuweisen |
 | `SYM_SWORDS` | ⚔ | Kampf / Kampfhandlung (ohne Variation-Selector — `⚔️` VS16 wurde S115 angeglichen) |
 | `SYM_RESET` | ↺ | Reset / Rückgängig / Reroll |
+
+### 4.1 Würfel-Slot-Marker-Chip (`diceCompose._triggered_die_chip_html`, S158/B-104)
+
+Kanonischer Baustein für **jede kurze Inhalts-Anzeige innerhalb eines Würfel-Slots**
+(30×30px, umrandetes Kästchen, `border-radius:4px`, Farbe aus `_modifier_color`/
+`color_hint` — Buff-Grün/Debuff-Rot, `design_colors.md` §0, kein neues Token). Ersetzt
+den früheren nackten `<span>{glyph}</span>`-Text — Glyphen lesen sich jetzt wie ein
+echtes Würfelsymbol, konsistent mit den Miss-Dice im Grid selbst (§1.3). Jede
+Anzeige-Stelle, die diesen Chip nutzt, ist unten als eigene Zeile geführt (vollständig,
+kein impliziter Fall):
+
+| Effect | Würfelsymbol | Bedeutung |
+|---|---|---|
+| AP-Modifier (`value_triggered_die_row_html`) | z. B. `AP-1` | Direktiv-/Fähigkeits-Effekt, der bei einem bestimmten unmodifizierten Wurfergebnis einen zusätzlichen Wert-Modifikator auslöst (Chip zeigt den Kurztext, z. B. Hungry Void D1 bei einer 6) |
+| reroll (`reroll_marker_row_html`) | ↺ | Effekt, bei dem ein Würfelergebnis in den markierten Slots wiederholt wird |
+| auto-fail/miss (`always_fail_marker_row_html`) | ✕ | Effekt, bei dem ein Wurf in den markierten Slots automatisch scheitert, unabhängig vom gewürfelten Wert (Badge-Label nennt die auslösende Fähigkeit, z. B. „Quantum Shielding") |
+
+Neuer Fall künftig: erst neue Zeile hier ergänzen, dann Code anpassen — kein Chip ohne
+Tabellen-Eintrag (Ratchet-Prinzip, analog §5).
 
 ## 5. Migrations-Hinweis (Ratchet, kein Big-Bang)
 

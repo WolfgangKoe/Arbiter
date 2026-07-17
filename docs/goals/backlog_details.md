@@ -565,9 +565,52 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.254–259 (Stakeholder-Entscheid S137).
 
-## B-028 — B12 Feature Wunsch used on Suffix auf alle GOs
+### Zuschnitt S158 (freigegeben)
 
-[↩ Zeile in backlog.md](backlog.md#b-028)
+**Entscheid S158:** Freigabe des B-028-Zuschnitts in 7 neue Backlog-Zeilen (B-028a, B-028b, B-028c1–c5) nach dem Planner-Vorschlag aus `docs/handoff/S158_planning.md`.
+
+**Grundlage: 11 Fähigkeiten aus vier YAML-Quellen, heute nirgends über GO-Card-Pfad:**
+
+| Datei | Anzahl | IDs |
+|---|---|---|
+| `data/wh40k_9e/necrons/unit_abilities.yaml` | 8 | `the_silent_king.noctilith_beacons`, `the_silent_king.vengeance_of_the_enchained`, `warriors.their_number_is_legion`, `canoptek_plasmacyte.infused_madness`, `hexmark_destroyer.inescapable_death`, `gauss_pylon.arc_fields`, `seraptek_heavy_construct.wrath_of_the_seraptek`, `triarch_stalker.targeting_relay` |
+| `data/wh40k_9e/necrons/faction_abilities.yaml` | 1 | `reanimation_protocols` (factionAbility, bleibt außerhalb GO-Card) |
+| `data/wh40k_9e/necrons/wargear.yaml` | 1 | `gloom_prism` |
+| `data/wh40k_9e/orks/subfaction_abilities.yaml` | 1 | `klan.freebooterz.competitive_streak` |
+
+**Ist-Zustand je GO (verifiziert gegen YAML + grep über src/):**
+
+| ID | `effect.type` | Heute im UI? |
+|---|---|---|
+| `noctilith_beacons` | `deny_psychic` | **Nein** — `can_deny()` prüft nur PSYKER-Keyword + Wargear, nicht unit-eigene Abilities |
+| `vengeance_of_the_enchained` | `mortal_wounds` | **Nein** — kein Dispatch, keine Karte |
+| `their_number_is_legion` (reroll_rp) | `reroll_rp` | **Nein** — RP als aggregierte Würfelzahl, „Reroll von Einsen" nicht direkt abbildbar (Class-B) |
+| `infused_madness` | `mortal_wounds` | **Nein** |
+| `inescapable_death` (free_attack) | `free_attack` | **Nein** — braucht volle Attacke-Sequenz mitten in Movement-Phase |
+| `arc_fields` | `mortal_wounds` | **Nein** |
+| `wrath_of_the_seraptek` | `mortal_wounds` | **Nein** |
+| `targeting_relay` (mark_target) | `mark_target` | **Nein** — braucht zustandsbehaftetes „Ziel markiert" über Phasengrenzen |
+| `reanimation_protocols` | `reanimate` | **Teilweise** — existiert als Custom-UI (`_render_rp_block`), nicht als GO-Card |
+| `gloom_prism` | `deny_psychic` | **Teilweise** — existiert als Wargear-Gate, nicht als GO-Card mit Use/Undo |
+| `competitive_streak` | `buff_roll` | **Nein** — `buff_roll` in Code eine andere (round-choice) Mechanik, kein Bezug |
+
+**Zuschnitt 7-Task-Tabelle:**
+
+| Task | Inhalt | Effort | App lauffähig danach? |
+|---|---|---|---|
+| **B-028a** | Infrastruktur (s. Tabelle oben) — additiv, keine Pflicht-Callsite geändert | ~30k (M) | Ja — reines Plumbing, bestehende UI unverändert |
+| **B-028b** | `noctilith_beacons` (deny_psychic) über B-028a rendern + `can_deny()` um Ability-Quellen erweitern; `gloom_prism` bleibt vorerst im bestehenden Wargear-Gate (kleinste, am besten abgegrenzte erste Karte) | ~20k (M) | Ja — eine zusätzliche Karte, Rest unverändert |
+| **B-028c1** | 4× `mortal_wounds`-GOs (`vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`) — ein gemeinsamer Effekt-Handler + 4 Call-Sites | ~20–25k (M) | Ja — vier neue Karten, ein Handler |
+| **B-028c2** | `reroll_rp` (`their_number_is_legion`) — **Warnung:** RP-Datenmodell ist aggregierte Würfelzahl, kein Einzelwurf; „Reroll von Einsen" ist damit nicht direkt abbildbar. Braucht eigenes Mini-Konzept VOR Umsetzung (Class-B-Kandidat) | ~15–20k (S/M) | Nur wenn Konzept vorab klärt, dass die Karte ohne Funktionsbruch der RP-UI koexistiert |
+| **B-028c3** | `free_attack` (`inescapable_death`) — volle Attacke-Sequenz mitten in gegnerischer Movement-Phase; komplexeste Einzelmechanik der Liste | ~20–25k (M) | Ja, aber höchstes Restrisiko — Scope-Check vor Beauftragung empfohlen |
+| **B-028c4** | `mark_target` (`targeting_relay`) — zustandsbehaftetes „Ziel markiert" über Phasen-/Einheitengrenzen, neuer State-Schlüssel nötig | ~15–20k (S/M) | Ja |
+| **B-028c5** | `buff_roll` (`competitive_streak`) — **Namenskollision:** `buff_roll` als String existiert bereits in `commandPhase.py`/`gameState.py` für eine andere (round-choice-basierte) Mechanik; braucht eigenen Ability-Pfad + Namensklärung gegen INV-4b-Vokabular | ~15k (S) | Ja |
+
+**Revidierte Gesamtschätzung:** ~135–155k statt der ursprünglich genannten ~100k+ (Grund: granulare Aufschlüsselung der c-Gruppe ergibt ~85–105k statt ~50k+; a+b+c1 = ~70–75k, c2–c5 = ~65–75k). Deutlich über eine Session hinaus, aber genau dafür ist der Sessionschnitt gedacht (7 unabhängig freigebbare Teil-Tasks statt ein Monolith). **Für S158 vorgesehen (bei Freigabe):** B-028a, danach B-028b. B-028c1–c5 werden als neue Backlog-Zeilen ergänzt, aber nicht vor S159 beauftragt.
+
+## B-028b — Deny Psychic Konsolidierung
+
+[↩ Zeile in backlog.md](backlog.md#b-028b)
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
@@ -575,189 +618,127 @@ am Anfang der Beschreibungsspalte.
 
 **Tier:** Executor
 
-**Effort:** ~35k
+**Effort:** ~20k (M)
 
-**Detail-Beschreibung:** „used on ⟨Einheit⟩"-Suffix soll auf **alle** reaktiven GOs ausgeweitet werden (aktuell nur die zentrale Stratagems-Liste betroffen). **S150-Renderpfad-Kartierung** (`docs/handoff/S150_usedon_renderpaths.md`, gelöscht S156 — Inhalt hier verlustfrei übernommen): alle drei bestehenden Render-Pfade (zentrale Stratagem-Liste `gameProtocoll.py:350`, Advance-Reroll-Karte `movementPhase.py:325`, reaktive Stratagem-Boxen `_common.py:868` mit sechs Aufrufern in `fightPhase.py`/`chargePhase.py`/`movementPhase.py`/`psychicPhase.py`(×2)/`_common.py`) teilen exakt dieselbe Datenquellen-Kette `render_go_card(locked_reason=...) ← _go_state_and_reason()/_reactive_go_state()/_advance_reroll_state() ← stratagem_used_elsewhere_unit_name(faction, strat.id) ← stratagem_use_anchor() ← session_state["stratagem_use_anchors"]`, geschrieben von `spend_stratagem()` — keine separaten Code-Pfade, nur eine Datenquelle mit drei Call-Sites. **S156-Planner-Befund (Vorab-Zählung, M1-Pflicht):** `render_reactive_stratagem_box` ist laut Code (lädt nur `stratagems.yaml`) ausschließlich auf Stratagems zugeschnitten. Es gibt **11 reaktive Non-Stratagem-GOs** (`timing: phase_reactive`), die aktuell **nirgends** über einen Reactive-GO-Card-Pfad gerendert werden — `grep -rn "phase_reactive" src/` findet nur zwei Konsumenten, beide ausschließlich für Stratagems. Die 11 IDs (aus `docs/handoff/S156_planning.md`, Datei gelöscht S156 nach ANSWERED):
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur rendern statt über bestehenden Wargear-Gate. Gleichzeitig `can_deny()` generisch um Ability-Quellen erweitern (heute nur Wargear `gloom_prism`, braucht auch `noctilith_beacons`). `gloom_prism`-Migration optional — bleibt vorerst im bestehenden Wargear-Gate für diese Session. Kleinste, am besten abgegrenzte zweite Gruppe.
 
-| Datei | Anzahl | IDs |
-|---|---|---|
-| `data/wh40k_9e/necrons/unit_abilities.yaml` | 8 | `the_silent_king.noctilith_beacons`, `the_silent_king.vengeance_of_the_enchained`, `warriors.their_number_is_legion`, `canoptek_plasmacyte.infused_madness`, `hexmark_destroyer.inescapable_death`, `gauss_pylon.arc_fields`, `seraptek_heavy_construct.wrath_of_the_seraptek`, `triarch_stalker.targeting_relay` |
-| `data/wh40k_9e/necrons/faction_abilities.yaml` | 1 | `reanimation_protocols` |
-| `data/wh40k_9e/necrons/wargear.yaml` | 1 | `gloom_prism` |
-| `data/wh40k_9e/orks/subfaction_abilities.yaml` | 1 | `klan.freebooterz.competitive_streak` |
+**Abhängigkeiten:** Nach B-028a (reines Plumbing muss erst vorhanden sein). Unabhängig von c1–c5.
 
-**Konsequenz:** B-028 ist damit nicht nur „Suffix auf bestehende Boxen ausweiten", sondern setzt voraus, dass diese 11 Fähigkeiten überhaupt erst als reaktive GO-Card gerendert werden — eine größere Vorstufe als der Backlog-Eintrag ursprünglich suggerierte. **Stakeholder-Entscheid S156:** Option A — S156/S157 liefert zunächst nur ein Scope-/Konzeptdokument (Ist-Zustand der 11 Fähigkeiten dokumentieren, Aufwand neu schätzen), direkte Umsetzung folgt als eigener, danach geplanter Schritt (S157).
-
-**Abhängigkeiten:** Nach dem BUG-Fix (Archiv A-019, Insane-Bravery-Repro Moralphase). Scope-Dokument (Option A) für S157 geplant (Stakeholder-Entscheid S156).
-
-**Belege:** `docs/handoff/S156_planning.md` (Vorab-Zählung, Tabelle oben — Datei gelöscht nach Übernahme).
+**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** §2 Alt-`backlog.md` Z.284–286 (Stakeholder-Wunsch S148); Renderpfad-Kartierung S150; Scope-Befund + Stakeholder-Entscheid S156.
+**Herkunft:** B-028-Zuschnitt S158, Teil der „deny_psychic"-Konsolidierung (zwei bestehende Teil-Pfade werden über B-028a vereinheitlicht).
 
-### Ergebnis — Scope-Dokument Option A (S157)
+## B-028c1 — Vier mortal wounds GOs
 
-**Korrektur zum Plan:** `docs/handoff/S157_planning.md` nennt die dritte Datenquellen-Kette als
-`src/uiLayout/movementPhase.py:325` — diese Datei existiert nicht unter `uiLayout/`. Der tatsächliche
-Pfad ist `src/gameMechanic/movementPhase.py:326` (`_render_advance_reroll_card`, Aufruf von
-`render_go_card`). Verifiziert per `find`/`grep`, kein Blocker, nur Pfad-Korrektur für die Belege
-unten.
+[↩ Zeile in backlog.md](backlog.md#b-028c1)
 
-#### Grundannahmen (zur Bestätigung vor Option B)
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-1. **Timing-Vertrag ist strukturell ähnlich, aber nicht identisch.** Beide Modelle kennen
-   `phase_reactive`, aber bei `Stratagem` liegen `timing`/`phase`/`event`/`player` als flache
-   Felder (`gameObjects/stratagem.py:66-67`), bei `Ability` liegen dieselben Informationen
-   verschachtelt in `Trigger` (`gameObjects/ability.py:8-15`: `trigger.timing`, `trigger.phase`,
-   `trigger.event`, `trigger.player`). Ein generischer Filter (analog `reactive_stratagems_for()`)
-   braucht entweder eine zweite, Ability-spezifische Funktion oder eine Adapter-Schicht — kein
-   Ein-Zeilen-Wiederverwenden.
-2. **Abilities sind CP-frei, Karten dürfen das nicht falsch darstellen.** `Ability` hat kein
-   `cp_cost`-Feld. `render_go_card()` selbst ist bereits generisch (Name, `cp_cost`, `state`,
-   Callbacks — kennt weder `Stratagem` noch `Ability`), kann also mit `cp_cost=0` fest aufgerufen
-   werden. Das CP-Gate in `stratagem_visibility()` entfällt für Abilities ersatzlos (nicht
-   nachbilden).
-3. **Usage-/Anchor-Bookkeeping existiert für Abilities nicht und wird nicht „mitbenutzt".**
-   `spend_stratagem()`/`undo_stratagem()` (`_common.py:439-551`) sind auf den Typ `Stratagem`
-   getippt und lesen `strat.cp_cost`, `strat.once_per_battle`, `strat.modifier` — Felder, die
-   `Ability` nicht hat. Empfehlung (kein Fait accompli, zur Bestätigung): **eigene, schlanke
-   `spend_ability()`/`undo_ability()`** mit eigenen Session-State-Schlüsseln
-   (`used_ability_ids`/`ability_use_anchors`), keine Wiederverwendung der Stratagem-Schlüssel und
-   kein Umbau von `spend_stratagem()` auf einen gemeinsamen Protocol-Typ — zweite Wiederholung
-   eines kleinen Musters unterschreitet die projekteigene DRY-Schwelle „ab der dritten
-   Wiederholung" (CLAUDE.md „Clean Code").
-4. **Reanimation Protocols bleibt bewusst außerhalb des GO-Card-Umbaus.** Von den 11 GOs hat
-   `reanimation_protocols` (`faction_abilities.yaml`) bereits eine funktionierende, aber
-   card-fremde UI (`_render_rp_block`, `_common.py:1448-1508`: Markdown-Zusammenfassung +
-   `number_input` + zwei Buttons, gespeist über `get_after_attack_revive_ability()` +
-   `revive_dice_count()`). Annahme: Option B migriert **nur die übrigen 10** GOs auf
-   `render_go_card`; `reanimation_protocols` bleibt bei seiner bestehenden UI, weil eine Migration
-   hier reine Form-Änderung ohne Fachlichkeitsgewinn wäre (die Dice-Count-Eingabe passt nicht in
-   das Use/Undo-Schema einer GO-Karte ohne Funktionsverlust).
-5. **Effekt-Ausführung ist Teil von Option B, nicht nur das Rendering.** Von den verbleibenden 10
-   Effekt-Typen ist heute **keiner** über `abilityEngine._EFFECT_HANDLERS` ausführbar (einziger
-   Dispatch-Eintrag ist `"heal"`, `abilityEngine.py:82-84`) und für `deny_psychic`, `mortal_wounds`,
-   `reroll_rp`, `free_attack`, `mark_target`, `buff_roll` existiert **keine** Ausführungslogik
-   außerhalb der beiden bereits erwähnten Sonderpfade (s. Ist-Zustand-Tabelle). Annahme: Option B
-   umfasst sowohl Kartenanzeige **als auch** die fachliche Umsetzung der Effekte — eine
-   Rendering-only-Variante (Karte erscheint, Effekt bleibt manuelle Tischnotiz) wäre ein deutlich
-   kleinerer, alternativer Zuschnitt und müsste explizit gewählt werden.
-6. **Neue Ereignis-Auslöser haben keine generischen Hooks.** `model_destroyed`,
-   `enemy_falls_back`, `enemy_melee_attack`, `after_unit_fights`, `after_unit_shoots`,
-   `friendly_unit_destroys_enemy` (die sechs `event`-Werte der 10 GOs, s. Tabelle) existieren im
-   App-Code an keiner Stelle als automatisch erkannte Ereignisse. Annahme: wie bei den bestehenden
-   reaktiven Stratagem-Boxen bestätigt der Spieler das Eintreten manuell (ein Button/Trigger an der
-   passenden Phasen-Stelle), keine automatische Ereigniserkennung.
+**Status:** ToDo
 
-#### Ist-Zustand je der 11 GOs (verifiziert gegen YAML + `grep -rn` über `src/`)
+**Tier:** Executor
 
-| ID (gekürzt) | Datei | `trigger.phase` / `event` | `effect.type` | Heute im UI? |
-|---|---|---|---|---|
-| `the_silent_king.noctilith_beacons` | `necrons/unit_abilities.yaml:349` | psychic / `opponent_psychic_phase` | `deny_psychic` | **Nein** — `can_deny()` (`psychicPhase.py:51-62`) prüft nur PSYKER-Keyword + `load_deny_wargear_names()` (nur `wargear.yaml`); diese unit-eigene Ability wird nicht erfasst, selbst wenn Szarekh kein PSYKER ist. |
-| `the_silent_king.vengeance_of_the_enchained` | `necrons/unit_abilities.yaml:385` | any / `model_destroyed` | `mortal_wounds` | **Nein.** Kein Dispatch, keine Karte. |
-| `warriors.their_number_is_legion` | `necrons/unit_abilities.yaml:408` | shooting+fight / `reanimation_roll` | `reroll_rp` | **Nein** — RP läuft im Code als aggregierte Würfelzahl (`_render_rp_block`, kein Einzelwurf), ein „Reroll von Einsen" ist mit dieser Datenrepräsentation gar nicht abbildbar (Class-B-Kandidat, s. Aufwandsschätzung). |
-| `canoptek_plasmacyte.infused_madness` | `necrons/unit_abilities.yaml:488` | any / `model_destroyed` | `mortal_wounds` | **Nein.** |
-| `hexmark_destroyer.inescapable_death` | `necrons/unit_abilities.yaml:510` | movement / `enemy_falls_back` | `free_attack` | **Nein** — bräuchte eine vollständige Attacke-Sequenz mitten in der Movement-Phase des Gegners. |
-| `gauss_pylon.arc_fields` | `necrons/unit_abilities.yaml:763` | fight / `enemy_melee_attack` | `mortal_wounds` | **Nein.** |
-| `seraptek_heavy_construct.wrath_of_the_seraptek` | `necrons/unit_abilities.yaml:784` | fight / `after_unit_fights` | `mortal_wounds` | **Nein.** |
-| `triarch_stalker.targeting_relay` | `necrons/unit_abilities.yaml:884` | shooting / `after_unit_shoots` | `mark_target` | **Nein** — bräuchte zustandsbehaftetes „Ziel markiert" über Einheiten-/Phasengrenzen hinweg. |
-| `reanimation_protocols` (Faction) | `necrons/faction_abilities.yaml:28` | shooting+fight / `after_enemy_attack` | `reanimate` | **Teilweise** — Effekt vollständig implementiert und im Spiel aktiv genutzt (`get_after_attack_revive_ability()`, `_render_rp_block`), aber **nicht** als GO-Card, sondern eigene Custom-UI (s. Grundannahme 4). Kein „Nachbau", nur Konsolidierung. |
-| `gloom_prism` (Wargear) | `necrons/wargear.yaml:78` | psychic / **kein `event`-Feld** | `deny_psychic` | **Teilweise** — `can_deny()` erfasst diesen Wargear-Effekt generisch über `load_deny_wargear_names()`, aber wieder nicht als eigene GO-Card mit Use/Undo, sondern als reines Ja/Nein-Gate im bestehenden Deny-Flow. Auffällig: als einzige der 11 Abilities fehlt hier das `event`-Feld im Trigger — kleine Schema-Inkonsistenz gegenüber den übrigen 10 (Beleg für Grundannahme 1: das Ability-Trigger-Schema ist weniger streng befüllt als das Stratagem-Pendant). |
-| `klan.freebooterz.competitive_streak` | `orks/subfaction_abilities.yaml:132` | any / `friendly_unit_destroys_enemy` | `buff_roll` | **Nein** — `buff_roll` als String kommt zwar in `commandPhase.py:391`/`gameState.py:37` vor, das ist aber eine andere (round-choice-basierte) Ability, kein Bezug zu `competitive_streak`. |
+**Effort:** ~20–25k (M)
 
-**Konsolidierter Befund:** von 11 GOs haben 2 (`reanimation_protocols`, `gloom_prism`) bereits einen
-funktionierenden, aber card-fremden Teil-Pfad; 9 haben **keinerlei** UI- oder Ausführungs-Spur im
-Code. Die S156-Aussage „nirgends über einen Reactive-GO-Card-Pfad gerendert" ist für alle 11 korrekt
-(kein einziges nutzt `render_go_card`), verdeckt aber, dass 2 der 11 fachlich bereits vollständig
-funktionieren — nur eben nicht im GO-Card-Format.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (Call-Sites), `src/gameMechanic/abilityEngine.py` (Effekt-Handler), `data/wh40k_9e/necrons/unit_abilities.yaml` (4 Einträge). Vier reaktive GOs mit `mortal_wounds`-Effekt implementieren: `vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`. Ein gemeinsamer Effekt-Handler (Dispatch `abilityEngine.py`, ähnlich den bestehenden Stratagem-Handlern), vier separate Call-Sites (bewegungsphasen-/Kampfphasen-Auslöser je nach GO). Basis für c2–c5 (alle brauchen B-028a+B-028b und jede einen eigenen Effekt-Handler).
 
-#### Renderer-Konzept
+**Abhängigkeiten:** Nach B-028b (Sichtbarkeits-Infrastruktur muss vorhanden sein). Basis für c2–c5 (fachlich unabhängig, aber alle brauchen die a/b-Grundlagen).
 
-**`render_go_card()` selbst ist bereits generisch** (`_common.py:1052`, Parameter: `key, name,
-cp_cost, state, keywords, rule_text, compact, locked_reason, target_name, expanded_content, on_use,
-on_undo` — keine Stratagem-/Ability-Typbindung). Der fehlende Teil ist die Schicht **davor**: die
-drei bestehenden Aufrufer (`_render_stratagems` in `gameProtocoll.py:336-379`,
-`render_reactive_stratagem_box` in `_common.py:750-884`, `_render_advance_reroll_card` in
-`gameMechanic/movementPhase.py:282-337`) berechnen `state`/`locked_reason`/`target_name` alle aus
-Stratagem-spezifischen Helfern (`stratagem_visibility`, `stratagem_conditions_met`,
-`_weapon_conditions_met_for_unit`, `stratagem_used_here`, `stratagem_used_elsewhere_unit_name`).
+**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c1 Z.53).
 
-Vorgeschlagene Signatur eines neuen `render_reactive_ability_box()` (Name in Anlehnung an
-`render_reactive_stratagem_box`, wohnt ebenfalls in `_common.py`):
+**Benötigte Regeln-Scopes:** —
 
-```python
-def render_reactive_ability_box(
-    faction: str,
-    phase: str,
-    event: str,
-    *,
-    unit_for_conditions: Unit | None,
-    decline_key: str,
-    on_resolved: Callable[[], None] | None = None,
-) -> None:
-```
+**Herkunft:** B-028-Zuschnitt S158, erste der heterogenen c-Mechaniken.
 
-Bewusst **kein** `effect_type`/`effect_stat`-Filterpaar wie beim Stratagem-Original (dort dient es
-dazu, aus einer gemeinsamen Kandidatenliste die eine passende Stratagem-Instanz für genau diesen
-Call-Site herauszufiltern) — bei nur 11 GOs über vier verschiedene Loader kann der Aufrufer die
-passende Ability direkt per `id` oder `unit_id` referenzieren, ein generischer Typ-Filter lohnt sich
-hier noch nicht (YAGNI, gegebenenfalls in einer zweiten Iteration nachziehen, falls die Anzahl
-wächst).
+## B-028c2 — reroll rp
 
-**Was wiederverwendbar ist:**
-- `render_go_card()` — vollständig, unverändert.
-- Das **Muster** der drei Aufrufer (Kandidaten sammeln → Sichtbarkeit prüfen → State/Reason
-  mappen → `render_go_card` aufrufen) — als Vorlage, nicht als Code (andere Feldnamen, andere
-  Loader).
-- `go_card_container_style()`/`go_card_html()` (CSS/HTML-Bausteine unter `render_go_card`) —
-  vollständig, kennen nur `GoCardState`, keine Quelltyp-Bindung.
+[↩ Zeile in backlog.md](backlog.md#b-028c2)
 
-**Was neu gebaut werden muss:**
-- `reactive_abilities_for(abilities, phase, event)` — Pendant zu `reactive_stratagems_for()`
-  (`gameObjects/stratagem.py:198-218`), liest aber `ability.trigger.timing/.phase/.event` statt
-  der flachen Stratagem-Felder. Gehört fachlich neben `Ability` (z. B. `gameObjects/ability.py`
-  oder ein neues `gameObjects/abilityVisibility.py`, analog zur Trennung `stratagem.py` vs.
-  `_common.py`).
-- Eine Ability-Sichtbarkeits-Funktion (kein CP-Zweig, sonst analog `stratagem_visibility()`):
-  conditions_met (bereits vorhanden: `check_conditions()`, `abilityEngine.py:49-66`) + reactive-
-  Gate + noch-nicht-benutzt-Gate.
-- `spend_ability()`/`undo_ability()` mit eigenen Session-State-Schlüsseln (Grundannahme 3).
-- Vier Loader-Aufrufe statt einem (`load_unit_abilities`, `load_faction_abilities`,
-  `load_wargear_abilities`, `load_subfaction_abilities`) — der Aufrufer muss wissen, aus welcher
-  YAML-Quelle seine jeweilige Ability stammt (keine kombinierte „alle Abilities einer Faction"-
-  Funktion existiert bisher).
-- Sechs Effekt-Ausführungen (`deny_psychic` als eigenständiger — nicht nur Wargear-Gate — Pfad,
-  `mortal_wounds` ×4 GOs, `reroll_rp`, `free_attack`, `mark_target`, `buff_roll`) — jede mit eigener
-  Fachlogik, drei davon (`free_attack`, `mark_target`, `reroll_rp`) mit nicht-trivialer
-  Zustandshaltung über Phasen-/Einheitengrenzen hinweg.
-- 9 neue Call-Sites (die 9 GOs ohne bestehenden Teil-Pfad) in `movementPhase.py`, `fightPhase.py`,
-  `psychicPhase.py`, ggf. `shootingPhase.py` — analog zu den sechs bestehenden Stratagem-Call-Sites,
-  aber in anderen/zusätzlichen Phasen-Dateien.
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-#### Aufwandsschätzung Option B (neu)
+**Status:** ToDo
 
-Die bisherige Backlog-Schätzung (~35k, Zeile „Effort" oben) war für „Suffix auf bestehende Boxen
-ausweiten" kalkuliert — nach diesem Scope-Befund ist der tatsächliche Umfang „Ability-seitige
-Reactive-GO-Infrastruktur komplett neu bauen + 6 bislang nirgends implementierte Effekt-Typen
-fachlich umsetzen". Das sprengt den M-Rahmen (Executor-Brief-Obergrenze) deutlich — **Split-Vorschlag
-in drei Schritte**, jeder für sich innerhalb M:
+**Tier:** Executor
 
-| Teil | Inhalt | Schätzung |
-|---|---|---|
-| **B-028a — Infrastruktur** | `reactive_abilities_for()`, Ability-Sichtbarkeitsfunktion, `spend_ability()`/`undo_ability()` + Session-State-Schlüssel, `render_reactive_ability_box()`. Kein neuer Effekt, nur Plumbing — als Testfall kann ein bereits existierender Dispatch (`heal`) durch den neuen Pfad laufen. | ~30k |
-| **B-028b — Die beiden Teil-Pfade konsolidieren** | `reanimation_protocols` bewusst NICHT migrieren (Grundannahme 4); `gloom_prism`/`noctilith_beacons` `deny_psychic` vereinheitlichen — `noctilith_beacons` als erste komplett neue Karte über B-028a rendern, `can_deny()` generisch um Ability-Quellen (nicht nur Wargear) erweitern. Kleinster, am besten abgegrenzter zweiter Schritt. | ~20k |
-| **B-028c — Die 8 „mortal_wounds/reroll_rp/free_attack/mark_target/buff_roll"-GOs** | Fachlich heterogenste Gruppe — vier `mortal_wounds`-GOs vermutlich gemeinsam lösbar (ein Effekt-Handler, vier Call-Sites), `reroll_rp`/`free_attack`/`mark_target`/`buff_roll` sind vier verschiedene, jeweils nicht-triviale Mechaniken. **Muss vor Beauftragung noch einmal in der Planung selbst unterteilt werden** (mind. 2 Executor-Briefs) — hier nur als Sammelposten geschätzt, keine belastbare Einzelzahl. | ~50k+ (grobe Sammelschätzung, vor Beauftragung erneut aufteilen) |
+**Effort:** ~15–20k (S/M)
 
-**Gesamt (grob):** ~100k+ für volle Option B — mehr als das Doppelte der ursprünglichen ~35k-Schätzung
-und deutlich über der Session-typischen Wind-down-Grenze (~120–135k) in einem Stück. Empfehlung:
-B-028a und B-028b sind reif für eine Beauftragung (S158), B-028c braucht einen eigenen
-Planungsdurchgang, sobald B-028a steht (Sichtbarkeits-/Spend-Infrastruktur muss zuerst existieren,
-damit sich die acht heterogenen Effekte sauber daran andocken lassen).
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/abilityEngine.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`their_number_is_legion`). **Warnung:** Reanimation-Protokoll-Datenmodell ist aggregierte Würfelzahl (`_render_rp_block` liest `revive_dice_count()`, einen Skalar, nicht einen einzelnen Wurf pro Modell). „Reroll von Einsen" ist damit nicht direkt abbildbar (Class-B-Kandidat — Datenmodell-Frage, nicht Implementierungslücke). **Vorab Scope-Entscheidung nötig:** entweder Mini-Konzept entwickeln (z. B. Reroll-Widget separat von der RP-UI-Aggregation) oder Task verschieben. Nur mit vorab geklärtem Konzept lauffähig.
 
-Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und darauf achten, dass die kleineren Tasks in einer Session umsetzbar sind und die App funktioniert. Ich war mir beim Lesen nicht sicher, ob reanimation_protocols nicht fälschlicherweise als GO interpretiert wird. Das ist eine factionAbility, auf die ggf. eine GO oder eine andere GO wirken kann.
+**Abhängigkeiten:** Nach B-028c1 (Sichtbarkeits-Infrastruktur). Parallel zu c3–c5 möglich, wenn Konzept vorab klärt.
 
-**Übernahme des Entscheids (S157):** Option B freigegeben. Auflagen für den Zuschnitt: (a) sessiongroße Tasks (je ≤ M-Effort), (b) die App ist nach jedem Task lauffähig — kein Zwischenzustand mit toter UI. (c) Klassifikations-Klärung vorab: `reanimation_protocols` ist eine **factionAbility**, auf die GOs wirken können — kein GO; der Zuschnitt prüft die 11er-Liste auf diese Fehlklassifikation und nimmt RP ggf. heraus (deckt sich mit der Grundannahme oben, dass die RP-UI nicht migriert wird). Der Zuschnitt (Verfeinerung von B-028a/b/c in Backlog-Items) ist ein **Planner-Auftrag S158**.
+**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c2 Z.54).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** B-028-Zuschnitt S158, Class-B-Kandidat mit Datenmodell-Abhängigkeit.
+
+## B-028c3 — free attack
+
+[↩ Zeile in backlog.md](backlog.md#b-028c3)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~20–25k (M)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/fightPhase.py`, `src/gameMechanic/movementPhase.py`, `src/uiLayout/_common.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`inescapable_death`). Komplexeste Einzelmechanik der Liste: volle Attacke-Sequenz mitten in gegnerischer Movement-Phase auslösen (nicht nur Hinweistext, sondern kompletter Angriff mit Würfeln, Hits, Schaden). Höchstes Restrisiko — Scope-Check vor Beauftragung empfohlen (kann strukturelle Phasen-Grenzen tangieren).
+
+**Abhängigkeiten:** Nach B-028c1. Parallel zu c2/c4/c5 möglich.
+
+**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c3 Z.55).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** B-028-Zuschnitt S158, komplexeste Einzelmechanik mit höchstem Restrisiko.
+
+## B-028c4 — mark target
+
+[↩ Zeile in backlog.md](backlog.md#b-028c4)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15–20k (S/M)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/uiLayout/_common.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`targeting_relay`). Zustandsbehaftetes „Ziel markiert" über Phasen- und Einheitengrenzen hinweg: neue Session-State-Schlüssel für den Markierungs-Status, Dispatcher für Markierungs-Logik, Call-Site im Shooting-Phase-Handler.
+
+**Abhängigkeiten:** Nach B-028c1. Parallel zu c2/c3/c5 möglich.
+
+**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c4 Z.56).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** B-028-Zuschnitt S158, zustandsbehaftete Mechanik mit State-Management.
+
+## B-028c5 — buff roll
+
+[↩ Zeile in backlog.md](backlog.md#b-028c5)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k (S)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/gameMechanic/commandPhase.py`, `data/wh40k_9e/orks/subfaction_abilities.yaml` (`competitive_streak`). **Namenskollision:** `buff_roll` als String-Literal existiert bereits in `commandPhase.py:391` und `gameState.py:37` für eine andere (round-choice-basierte) Mechanik. Diese GO-Ability braucht einen eigenen, distinkten Ability-Pfad + Klärung gegen INV-4b-Vokabular-Scanner (Literal-Flagging).
+
+**Abhängigkeiten:** Nach B-028c1. Parallel zu c2/c3/c4 möglich.
+
+**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c5 Z.57).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** B-028-Zuschnitt S158, Namenskollision gegen bestehende round-choice-Logik.
 
 ## B-029 — B13 GO Karte Keyword Badges
 
@@ -2183,3 +2164,58 @@ Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zu
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Stakeholder-Beobachtung S157 (Screenshot im S157-Chat).
+
+## B-112 — Mypy Ratchet Baseline stale
+
+[↩ Zeile in backlog.md](backlog.md#b-112)
+
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** XS
+
+**Detail-Beschreibung:** Die mypy-Ratchet-Baseline steht auf 24, der reale Fehlerstand auf
+HEAD `9a62f13` liegt bei 25 (per Worktree-Probe in S158 verifiziert) — die Baseline ist vor
+S158 stale geworden und deckt den Ist-Stand nicht mehr ab. Entweder die Baseline auf den
+korrekten Ist-Wert korrigieren (`tools/mypy_gate.py`) oder den zusätzlichen Fehler fixen,
+damit Baseline und Ist-Stand wieder übereinstimmen.
+
+**Abhängigkeiten:** keine.
+
+**Belege:** Worktree-Probe S158 (mypy-Lauf gegen HEAD `9a62f13`).
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** Review-Retro S158, Maßnahme 5.
+
+## B-113 — Skorpekh Destroyer und Destroyer Lord Reroll Faehigkeiten nicht verdrahtet
+
+[↩ Zeile in backlog.md](backlog.md#b-113)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** S
+
+**Detail-Beschreibung:** Stakeholder-Testbefund S158 (`docs/handoff/S158_B104_ui_verifikation.md`,
+Testfall 2): Skorpekh Destroyers sollten laut Regel eine Reroll-Fähigkeit beim Trefferwurf
+haben, ist aber im Roster/in der YAML nicht verdrahtet (Stakeholder hat es am Skorpekh-Roster
+getestet und bestätigt, dass nichts erscheint). Destroyer Lord erlaubt laut Regel dieselbe
+Art Reroll beim Verwundungswurf — fehlt aber komplett im Roster, kann also noch nicht
+getestet werden. Aufgabe: Regel-Recherche (Wahapedia Necrons) für beide Fähigkeiten, dann
+YAML-Verdrahtung (Skorpekh Destroyer) bzw. Roster-Ergänzung + Verdrahtung (Destroyer Lord).
+
+**Abhängigkeiten:** keine; hängt fachlich mit dem `reroll_marker_row_html`-Baustein
+(`docs/spec/design_system.md` §4.1) zusammen, der auf einen echten Producer wartet.
+
+**Belege:** `docs/handoff/S158_B104_ui_verifikation.md` Testfall 2 (Stakeholder-Befund).
+
+**Benötigte Regeln-Scopes:** `docs/work/wahapedia_necrons/`.
+
+**Herkunft:** Review-Retro S158, Maßnahme 6.

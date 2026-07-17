@@ -211,6 +211,34 @@ def test_always_fail_label_uses_ability_name() -> None:
     assert "Auto-fail" not in html
 
 
+def test_always_fail_marker_renders_as_die_chip_not_bare_span() -> None:
+    # B-104 (Variante A): the ✕ marker reuses the die-shaped _triggered_die_chip_html
+    # box (30x30, bordered, rounded) instead of a bare `<span>✕</span>` text glyph.
+    html = always_fail_marker_row_html([1], color_hint="debuff")
+    assert f'<span style="color:{_DEBUFF_RED};font-weight:bold;">✕</span>' not in html
+    assert "width:30px;height:30px" in html
+
+
+def test_badge_chip_title_carries_full_label_alongside_truncation() -> None:
+    # B-111 Variante C: "Quantum Shielding" is long enough to be visually clipped
+    # by the badge column's ellipsis, but the full text must survive as a hover
+    # tooltip via the `title` attribute — truncation stays, nothing is lost.
+    html = always_fail_marker_row_html([1, 2, 3], color_hint="debuff", label="Quantum Shielding")
+    assert 'title="Quantum Shielding"' in html
+    assert "text-overflow:ellipsis" in html
+    assert ">Quantum Shielding<" in html
+    assert f"border:1.5px solid {_DEBUFF_RED}" in html
+    assert "✕" in html
+
+
+def test_reroll_marker_renders_as_die_chip_not_bare_span() -> None:
+    # Same shared _marker_row_html helper: the ↺ reroll marker gets the identical
+    # die-chip treatment (Variante A reuses the chip for every marker glyph).
+    html = reroll_marker_row_html([1])
+    assert "width:30px;height:30px" in html
+    assert "border:1.5px solid #f59e0b" in html
+
+
 def test_modifier_columns_clamp_to_grid() -> None:
     # AP-3 on Sv 4+: from 3 (last old-fail) to 6 (best roll now fails) — 3 columns.
     assert _modifier_columns(3, 6) == (3, 6)

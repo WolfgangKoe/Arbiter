@@ -116,6 +116,14 @@ INV-4b-Vokabular prüfen (`tests/architecture/test_generic_src_vocab.py`), Frakt
 wie ‚banner' vermeiden." Grund: verhindert nachträgliche Vokabular-Schulden statt sie erst
 beim Architektur-Gate zu entdecken.
 
+## Standardsatz für Doku-/Aufräum-Briefs (Retromaßnahme M3, S158 — PFLICHT)
+
+Jeder Executor-Brief, der Doku-/Handoff-Aufräumarbeit beauftragt, enthält den Satz:
+„Lösch-Whitelist PFLICHT — du darfst ausschließlich die in diesem Brief namentlich
+genannten Dateien löschen; jede andere Löschung ist Abbruch + Rückfrage." Anlass S158:
+ein Doku-Agent löschte unbeauftragt eine NEEDS-DECISION-Datei und regenerierte
+Metrics-Dateien, die nicht Teil des Auftrags waren.
+
 ## Subagent-Brief — Pflichtfelder
 
 Jeder Koordinator-Brief an einen Subagenten enthält diese Felder (keine Felder auslassen):
@@ -151,7 +159,10 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   Werkzeug im Bericht offenlegt (welches Skript, welcher Aufruf) UND (2) danach ein grüner
   Gate-Beleg vorliegt (`pytest --tb=short` + Architektur-/Doku-Gate). Akzeptierter
   Präzedenzfall: B-099b (S153) — offengelegter Skript-Edit + grüner Gate-Beleg, im Review
-  bestätigt.
+  bestätigt. **Verboten (Retro-M1, S158):** repo-weite/History-verändernde Git-Kommandos
+  (`git stash`, `git reset`, `git checkout` auf fremde Pfade) — Anlass: eine `git stash`-Probe
+  eines Executors setzte die uncommitteten Änderungen eines parallel laufenden Executors
+  zurück.
 - **UI-Verifikations-Pflicht (S155, Template S156-Retro Maßnahme 5):** Offene manuelle
   UI-Verifikationen (CLAUDE.md-DoD-Punkt 6) liefert der Executor IMMER als eigene
   Handoff-Datei in `docs/handoff/` mit den exakten Prüfschritten — nie nur im Chat oder
@@ -197,6 +208,10 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
 - **Kein Executor-Brief über Effort M.** L-Aufgaben MÜSSEN vor Vergabe in 2–3 in sich
   abgeschlossene Teil-Briefs ≤ M geschnitten werden (ein Schritt = ein Brief, jeweils
   eigenständig grün). Der Koordinator prüft das VOR jedem `Agent`-Aufruf.
+- **Core-Logik+UI+Test-Mix als Default-Splitkriterium (Retro-M4, S158):** Aufgaben, die
+  Core-Logik, UI und Tests gemeinsam anfassen, werden standardmäßig in 2 Briefs geschnitten
+  — Anlass: ein Executor verbrauchte ~272k Token bei 45k Stopp-Schwelle (Selbst-Stopp griff
+  erneut nicht, gleiches Muster wie S146).
 - **Test-Budget je Brief:** während der Entwicklung nur gezielte Tests
   (`pytest <datei> -q --no-cov`), genau **eine** Vollsuite am Ende des Briefs.
   Die Vollsuite läuft **immer im Vordergrund** — konkret: im selben Tool-Call auf das
@@ -221,6 +236,12 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   **Gilt auch nach einem `SendMessage`-Resume weiter** (Retro-M4, S146: Auflage 60k Token,
   real ~177k verbraucht — Budget/Schwelle bleiben über den Resume hinweg scharf, keine
   Rücksetzung durch den Kontext-Neustart).
+- **Parallele Code-Executor im selben Working Tree (Retro-M2, S158):** nur bei nachweislich
+  disjunkten Dateien UND striktem Verbot repo-weiter Git-Operationen (s. Werkzeug-Klausel
+  oben) — sonst Worktree-Isolation verwenden. Vollsuite-Ergebnisse paralleler Läufe sind
+  nur für den eigenen Scope belastbar, nicht als globaler Grün-Beleg zu werten. Anlass:
+  ein bewegtes Ziel (parallel laufender Executor änderte Dateien während der Vollsuite)
+  erzeugte 5 Schein-Failures.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

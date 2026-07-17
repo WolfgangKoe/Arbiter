@@ -1,8 +1,6 @@
-display_name: Necrons — B1 Verification
+display_name: Necrons — Quantum Shielding
 faction_dir: necrons
 dynasty: nihilakh
-# B1 Verification: Flayed Ones (Shadows of Drazak stratagem) + Annihilation Barge (Quantum Deflection)
-# MWBD instance fix: two identical Overlords must be independently activatable (My Will Be Done buff_roll)
 units:
   - id: wh40k_9e.necrons.unit.overlord
     models: 1

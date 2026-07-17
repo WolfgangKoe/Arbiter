@@ -160,11 +160,14 @@ def _badge_chip(label: str, color: str) -> str:
     # Long labels (e.g. "Power Klaw") are clipped with an ellipsis instead of
     # spilling into dice slot 1. Single-line truncation needs the canonical trio:
     # a bounded width + overflow:hidden + text-overflow:ellipsis (white-space:nowrap).
+    # title carries the full label so a hover reveals what the truncation hid
+    # (B-111 Variante C — docs/spec/design_system.md §1.1).
     return (
         f'<span style="font-size:11px;color:{color};background:#111827;'
         f"border:1px solid {color};border-radius:3px;padding:1px 5px;"
         f"display:inline-block;max-width:{_BADGE_COL_W - 8}px;overflow:hidden;"
-        f'text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;">{label}</span>'
+        f'text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;" '
+        f'title="{label}">{label}</span>'
     )
 
 
@@ -387,11 +390,7 @@ def _marker_row_html(
     for v in range(1, 7):
         if 2 <= base_threshold <= 6 and v == base_threshold:
             slots.append(_boundary_gap_html(with_line=False))
-        inner = (
-            f'<span style="color:{color};font-weight:bold;">{glyph}</span>'
-            if v in marker_slots
-            else ""
-        )
+        inner = _triggered_die_chip_html(glyph, color) if v in marker_slots else ""
         slots.append(_modifier_slot_html(inner))
     content = f'<div style="display:flex;align-items:center;">{"".join(slots)}</div>'
     return grid_row_html(label_html, content)

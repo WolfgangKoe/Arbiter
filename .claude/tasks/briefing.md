@@ -24,35 +24,41 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S157, 2026-07-17)
+## Aktueller Stand (nach S158, 2026-07-17)
 
-S157-Review: GO (Befund gesichert→gelöscht, neue Abschluss-Regel). Geliefert: Retro-Maßnahmen
-S155/S156 verankert (0a/0b); B-028-Scope-Dokument + Stakeholder-Entscheid **Option B** (Zuschnitt =
-Planner-Auftrag S158; Auflagen: sessiongroße Tasks, App je Task lauffähig, `reanimation_protocols`
-ist factionAbility — Klassifikation klären); **B-098-Rest fertig** (R-COMBAT-35 implementiert,
-Kombi-Checkbox-UI, Nebenfund ranged `p.name` gefixt, melee = B-110); **B-103 fertig**
-(`badge_label` aus YAML). Neue Items B-106–B-111. Retro S157: Maßnahmen 1, 2, 4 übernommen
-(1+4 in `agent_scopes.md` verankert), 3 gestrichen. Gates (Abschluss-Vollsuite, Reviewer-Lauf):
-**1915 passed / 99,12 %**; Arch 8, docs+acceptance 23, Ledger 0.
+B-028-Zuschnitt freigegeben+verbucht (7 Teil-Tasks B-028b…c5); **B-028a fertig+archiviert**:
+additive Reactive-Ability-Infrastruktur `reactive_abilities_for`/`ability_visibility`/
+`spend_ability`/`undo_ability`/`render_reactive_ability_box`, State-Schlüssel
+`used_ability_ids`/`ability_use_anchors`, 0 Produktiv-Callsites (Callsite folgt B-028b).
+Design-Konsens: B-104 = Variante A (fertig, `_triggered_die_chip_html` in `_marker_row_html`,
+`design_system.md` §4.1), B-105 = Variante A (offen, Design-Crew-Datei `S158_design_crew.md`
+liegt), B-111 = Variante C (fertig, Truncation bleibt + `title`-Tooltip, Regressionstest per
+Stakeholder-Entscheid Option 1 auf sichtbaren Inhalt präzisiert). Roster
+`necrons_b1_verification.yaml` → `necrons_quantum_shielding.yaml` umbenannt (Stakeholder-
+Entscheidung, alle 4 Archiv-Referenzen nachgezogen). Gates (Abschluss): Vollsuite
+**1962 passed / 99,13 %**; Arch 8, Doku/Acceptance 23. mypy-Baseline stale (Baseline 24, real
+25 auf HEAD `9a62f13`) → Backlog-Item B-112. Review S158: NO-GO→GO nach Blocker-Klärung
+(Roster-Umbenennung war beabsichtigt, kein Datenverlust). Retro S158: Maßnahmen 1–6
+übernommen — 1–4 in `docs/reference/agent_scopes.md` verankert (Git-Werkzeug-Verbot,
+Parallel-Executor-Regel, Lösch-Whitelist-Pflicht, Core+UI+Test-Split-Default), 5–6 als
+Backlog-Items B-112 (mypy-Baseline) und B-113 (Skorpekh/Destroyer-Lord-Reroll).
 
-Frühere Sessions (S60–S156): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S157): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S158)
+### ▶ Nächster Schritt (S159)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-- **(0) B-028-Zuschnitt** (Planner) — sessiongroße Tasks, App je Task lauffähig,
-  RP-Klassifikation klären (Stakeholder-Auflagen aus S157-Entscheid Option B).
-- **(a) B-109 Auto-fail-Fallback entfernen** (Stakeholder-Auftrag) — hartcodierten
-  „Auto-fail"-Fallback in `always_fail_marker_row_html` durch verpflichtendes
-  `badge_label`/Loader-Guard ersetzen.
-- **(b) B-104/B-105/B-111** — Design-Crew-Schritt zuerst (Design-System-Baustein), dann
-  Umsetzung.
+- **B-028b** (Deny-Psychic-Konsolidierung, erste Callsite über B-028a-Infrastruktur).
+- **B-109** (Auto-Fail-Fallback entfernen, verpflichtendes `badge_label` aus YAML).
+- **B-105** (`go_source_chip`-Variante A umsetzen, Design-Crew-Datei liegt bereits vor).
+- **B-112** (mypy-Ratchet-Baseline korrigieren).
 
-**Offene UI-Verifikationen:** Kombi-Checkboxen (B-098) + Quantum-Shielding-Badge (B-103;
-Badge erscheint, aber Truncation-Befund B-111).
+**Offene UI-Verifikationen:** B-104 (Testfall 1 — Würfelsymbol-Sichtprüfung offen), B-111,
+zusätzlich B-098/B-103 aus S157.
 
-**Offene Handoff-Marker:** keine.
+**Offene Handoff-Marker:** `S158_design_crew.md` (B-105 offen), `S158_B104_ui_verifikation.md`
+(Testfall 1 offen; Skorpekh-Befund → B-113), `S158_B111_ui_verifikation.md` (offen).
 
 ---
 

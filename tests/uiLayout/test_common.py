@@ -19,7 +19,7 @@ import uiLayout._common as common  # noqa: E402
 from gameMechanic.abilityEngine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
-from gameObjects.ability import Effect  # noqa: E402
+from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.unit import ModelGroup, Unit  # noqa: E402
 from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
@@ -2993,3 +2993,396 @@ def test_compute_resolution_context_per_group_ws_override_wins_over_bracket(monk
 
     assert ctx is not None
     assert ctx.atk_result["hit"]["base"] == 2
+
+
+# ---------------------------------------------------------------------------
+# B-028a — spend_ability()/undo_ability() + reactive-ability anchor bookkeeping
+# ---------------------------------------------------------------------------
+
+
+def _reactive_ability(
+    aid: str = "test.ability",
+    name: str = "Test Reactive Ability",
+    phase: str | list[str] = "fight",
+    event: str | None = "model_destroyed",
+    player: str = "either",
+    conditions: list | None = None,  # type: ignore[type-arg]
+    effect: Effect | None = None,
+) -> Ability:
+    return Ability(
+        id=aid,
+        name_en=name,
+        source="unit_ability",
+        rule_text="Test rule text.",
+        trigger=Trigger(timing="phase_reactive", phase=phase, player=player, event=event),
+        conditions=conditions or [],
+        effect=effect or Effect(type="mortal_wounds", target="self"),
+    )
+
+
+def _ability_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
+    session = _SS(used_ability_ids={}, ability_use_anchors={}, **extra)
+    common.st.session_state = session
+    return session
+
+
+def test_spend_ability_marks_used_this_phase() -> None:
+    session = _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons")
+    assert "ability.a" in session["used_ability_ids"]["Necrons"]
+
+
+def test_spend_ability_without_anchor_id_records_no_anchor() -> None:
+    session = _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons")
+    assert session.get("ability_use_anchors", {}) == {}
+
+
+def test_spend_ability_with_anchor_id_records_anchor_and_unit_key() -> None:
+    session = _ability_session()
+    common.spend_ability(
+        _reactive_ability(aid="ability.a"), "Necrons", "unit#1", anchor_id="anchor_x"
+    )
+    assert session["ability_use_anchors"]["Necrons"]["ability.a"] == {
+        "anchor_id": "anchor_x",
+        "unit_key": "unit#1",
+    }
+
+
+def test_spend_ability_with_anchor_id_and_no_unit_key() -> None:
+    session = _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", anchor_id="anchor_x")
+    assert session["ability_use_anchors"]["Necrons"]["ability.a"]["unit_key"] is None
+
+
+def test_spend_ability_unresolved_unit_key_is_a_noop_for_effect_dispatch(monkeypatch) -> None:
+    """An unresolvable unit_key must not crash spend_ability — the usage/anchor
+    bookkeeping still happens, the effect dispatch is silently skipped (mirrors
+    `_apply_stratagem_effect`'s "no-op for an unmatched unit_key" contract)."""
+    session = _ability_session()
+
+    def _raise(faction: str, uid: str):  # type: ignore[no-untyped-def]
+        raise KeyError(uid)
+
+    monkeypatch.setattr(common, "lookup", _raise)
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", "gone#1")
+    assert "ability.a" in session["used_ability_ids"]["Necrons"]
+
+
+def test_ability_use_anchor_returns_none_when_never_spent() -> None:
+    _ability_session()
+    assert common.ability_use_anchor("Necrons", "ability.never") is None
+
+
+def test_ability_use_anchor_returns_recorded_tuple() -> None:
+    _ability_session()
+    common.spend_ability(
+        _reactive_ability(aid="ability.a"), "Necrons", "unit#1", anchor_id="anchor_x"
+    )
+    assert common.ability_use_anchor("Necrons", "ability.a") == ("anchor_x", "unit#1")
+
+
+def test_ability_used_here_true_for_matching_anchor() -> None:
+    _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", anchor_id="anchor_x")
+    assert common.ability_used_here("Necrons", "ability.a", "anchor_x") is True
+
+
+def test_ability_used_here_false_for_different_anchor() -> None:
+    _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", anchor_id="anchor_x")
+    assert common.ability_used_here("Necrons", "ability.a", "anchor_y") is False
+
+
+def test_ability_used_here_scoped_per_player_not_globally() -> None:
+    _ability_session()
+    common.spend_ability(
+        _reactive_ability(aid="ability.shared"), "Necrons", anchor_id="necron_anchor"
+    )
+    common.spend_ability(_reactive_ability(aid="ability.shared"), "Orks", anchor_id="ork_anchor")
+    assert common.ability_used_here("Necrons", "ability.shared", "necron_anchor") is True
+    assert common.ability_used_here("Orks", "ability.shared", "necron_anchor") is False
+    assert common.ability_used_here("Orks", "ability.shared", "ork_anchor") is True
+
+
+def test_undo_ability_removes_used_mark_and_anchor() -> None:
+    session = _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", anchor_id="anchor_x")
+    common.undo_ability(_reactive_ability(aid="ability.a"), "Necrons")
+    assert "ability.a" not in session["used_ability_ids"].get("Necrons", set())
+    assert common.ability_use_anchor("Necrons", "ability.a") is None
+
+
+def test_undo_ability_without_prior_spend_is_a_noop() -> None:
+    _ability_session()
+    common.undo_ability(_reactive_ability(aid="ability.never_spent"), "Necrons")  # no crash
+
+
+def test_ability_used_elsewhere_unit_name_resolves_recorded_units_display_name(monkeypatch) -> None:
+    _ability_session()
+    common.spend_ability(
+        _reactive_ability(aid="ability.a"), "Necrons", "warrior#1", anchor_id="anchor_x"
+    )
+    warriors = SimpleNamespace(name_en="Necron Warriors")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (warriors, {}))
+    assert common.ability_used_elsewhere_unit_name("Necrons", "ability.a") == "Necron Warriors"
+
+
+def test_ability_used_elsewhere_unit_name_none_when_never_spent() -> None:
+    _ability_session()
+    assert common.ability_used_elsewhere_unit_name("Necrons", "ability.never") is None
+
+
+def test_ability_used_elsewhere_unit_name_none_when_spent_without_unit_key() -> None:
+    _ability_session()
+    common.spend_ability(_reactive_ability(aid="ability.a"), "Necrons", anchor_id="anchor_x")
+    assert common.ability_used_elsewhere_unit_name("Necrons", "ability.a") is None
+
+
+def test_ability_used_elsewhere_unit_name_none_when_recorded_key_unresolvable(monkeypatch) -> None:
+    _ability_session()
+    common.spend_ability(
+        _reactive_ability(aid="ability.a"), "Necrons", "gone#1", anchor_id="anchor_x"
+    )
+
+    def _raise(faction: str, uid: str):  # type: ignore[no-untyped-def]
+        raise KeyError(uid)
+
+    monkeypatch.setattr(common, "lookup", _raise)
+    assert common.ability_used_elsewhere_unit_name("Necrons", "ability.a") is None
+
+
+# ---------------------------------------------------------------------------
+# B-028a acceptance test: an EXISTING dispatch (heal) running through the NEW
+# spend_ability() path — the Durchstich the backlog item asks for.
+# ---------------------------------------------------------------------------
+
+
+def test_spend_ability_heal_dispatch_runs_through_new_path(monkeypatch) -> None:
+    session = _SS(
+        first_player="Necrons",
+        used_ability_ids={},
+        ability_use_anchors={},
+        p1_units={
+            "unit#1": {
+                "current_wounds": 3,
+                "models": 1,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+            }
+        },
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _um.st.session_state = session
+    _eng.st.session_state = session
+
+    unit = SimpleNamespace(id="unit", wounds=6, models_max=3)  # "unit#1" strips to "unit"
+    monkeypatch.setattr(common, "units_list_for", lambda faction: [unit])
+
+    heal_ability = _reactive_ability(
+        aid="test.reactive_heal",
+        name="Test Reactive Heal",
+        phase="any",
+        event="model_destroyed",
+        effect=Effect(type="heal", target="self", amount="2"),
+    )
+
+    common.spend_ability(heal_ability, "Necrons", "unit#1")
+
+    assert session["p1_units"]["unit#1"]["current_wounds"] == 5  # 3 + 2 healed
+    assert "test.reactive_heal" in session["used_ability_ids"]["Necrons"]
+
+
+# ---------------------------------------------------------------------------
+# B-028a — render_reactive_ability_box(): state/target_name/on_use/on_undo wiring
+# ---------------------------------------------------------------------------
+
+
+def _reactive_ability_box_session(**extra) -> _SS:  # type: ignore[no-untyped-def]
+    base = dict(
+        active="Necrons",
+        used_ability_ids={},
+        ability_use_anchors={},
+    )
+    base.update(extra)
+    return _SS(**base)
+
+
+def _install_reactive_ability_session(monkeypatch, session):  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(common.st, "session_state", session)
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+    return captured
+
+
+def test_reactive_ability_box_shown_when_window_open_and_conditions_empty(monkeypatch) -> None:
+    """No unit_key given, no conditions declared -> still renders "ready" (mirrors
+    stratagem_conditions_met: an empty conditions list needs no unit)."""
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability()
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="Unit was destroyed.",
+    )
+
+    assert len(captured) == 1
+    assert captured[0]["name"] == "Test Reactive Ability"
+    assert captured[0]["cp_cost"] == 0
+    assert captured[0]["state"] == "ready"
+
+
+def test_reactive_ability_box_hidden_for_wrong_event(monkeypatch) -> None:
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(event="after_unit_fights")
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert captured == []
+
+
+def test_reactive_ability_box_hidden_when_conditions_not_met_without_unit(monkeypatch) -> None:
+    """A non-empty conditions list with no unit_key given stays hidden (fail-safe,
+    mirrors the Stratagem version's "hidden without an explicit unit")."""
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(conditions=[Condition(has_rules=["someRule"])])
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert captured == []
+
+
+def test_reactive_ability_box_target_name_shows_unit(monkeypatch) -> None:
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    unit = SimpleNamespace(name_en="Canoptek Plasmacyte")
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (unit, {}))
+    ability = _reactive_ability()
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+        unit_key="unit#1",
+    )
+
+    assert "Canoptek Plasmacyte" in captured[0]["target_name"]
+
+
+def test_reactive_ability_box_use_action_spends_and_marks_used(monkeypatch) -> None:
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(aid="ability.a")
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+    captured[0]["on_use"]()
+
+    assert "ability.a" in session["used_ability_ids"]["Necrons"]
+
+
+def test_reactive_ability_box_used_at_this_anchor_offers_undo(monkeypatch) -> None:
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(aid="ability.a")
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+    captured[0]["on_use"]()
+    captured.clear()
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert captured[0]["state"] == "used"
+    captured[0]["on_undo"]()
+    assert "ability.a" not in session["used_ability_ids"].get("Necrons", set())
+
+
+def test_reactive_ability_box_used_elsewhere_at_different_anchor(monkeypatch) -> None:
+    session = _reactive_ability_box_session()
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(aid="ability.a")
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+    captured[0]["on_use"]()
+    captured.clear()
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-DIFFERENT",
+        context_caption="irrelevant",
+    )
+
+    assert captured[0]["state"] == "used_elsewhere"
+
+
+def test_reactive_ability_box_active_player_gate(monkeypatch) -> None:
+    """trigger.player="active" only surfaces for the currently active faction."""
+    session = _reactive_ability_box_session(active="Orks")
+    captured = _install_reactive_ability_session(monkeypatch, session)
+    ability = _reactive_ability(player="active")
+
+    common.render_reactive_ability_box(
+        "Necrons",
+        phase="fight",
+        event="model_destroyed",
+        abilities=[ability],
+        decline_key="unit-uid-1",
+        context_caption="irrelevant",
+    )
+
+    assert captured == []

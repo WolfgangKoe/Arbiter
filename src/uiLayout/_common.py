@@ -25,6 +25,7 @@ from constants.symbols import (
     SYM_RESET,
     SYM_SWORDS,
 )
+from gameMechanic.abilityEngine import check_conditions, execute_effect
 from gameMechanic.attackMath import (  # noqa: F401
     _combi_hit_penalty,
     _compute_attacks,
@@ -50,6 +51,12 @@ from gameMechanic.unitMutations import (
     adjust_cp,
     apply_damage,
     heal_unit,
+)
+from gameObjects.ability import (
+    Ability,
+    ability_usable_by_player,
+    ability_visibility,
+    reactive_abilities_for,
 )
 from gameObjects.loader import load_stratagems
 from gameObjects.roundChoiceAbility import RoundChoiceAbility
@@ -617,6 +624,276 @@ def stratagem_used_elsewhere_unit_name(faction: str, stratagem_id: str) -> str |
     except KeyError:
         return None
     return unit.name_en
+
+
+# ---------------------------------------------------------------------------
+# Reactive abilities — Ability-side counterpart of spend_stratagem/undo_stratagem
+# (B-028a, docs/handoff/S157_planning.md Grundannahme 3)
+# ---------------------------------------------------------------------------
+#
+# `Ability` has no `cp_cost`, `once_per_battle` or `modifier` fields at this
+# infrastructure layer, and is typed differently from `Stratagem` — a shared
+# Protocol type across both would be a bigger refactor than this second small
+# copy costs (2nd repetition, below the project's "3rd repetition" DRY
+# threshold). Own session-state keys (`used_ability_ids`/`ability_use_anchors`)
+# — never the Stratagem keys, and `spend_stratagem`/`undo_stratagem` are left
+# untouched.
+
+
+def spend_ability(
+    ability: Ability,
+    faction: str,
+    unit_key: str | None = None,
+    *,
+    anchor_id: str | None = None,
+) -> None:
+    """Mark a reactive Ability used (phase-scoped) and dispatch its effect.
+
+    Bookkeeping-only counterpart of `spend_stratagem`: no CP deduction, no
+    once_per_battle set, no `active_modifiers` registration — none of those
+    concepts exist for `Ability` at this layer (see module comment above).
+    `anchor_id` — this render spot's own key, recorded so later renders of the
+    SAME (faction, ability) this phase can tell "used here" from "used
+    elsewhere", exactly like `stratagem_use_anchor`/`stratagem_used_here`.
+
+    When `unit_key` resolves to a real unit, dispatches
+    `abilityEngine.execute_effect` — the same dispatch table
+    `_execute_heal`/etc. use, so an ability wired through this path behaves
+    identically to one applied via any other existing call site (the B-028a
+    acceptance test: an existing `heal` dispatch running through this new
+    path). An unresolved `unit_key` is a silent no-op for the effect dispatch
+    (the usage/anchor bookkeeping above still happens) — mirrors
+    `_apply_stratagem_effect`'s "no-op for an unmatched unit_key" contract.
+    """
+    used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_ability_ids", {})
+    used_ids = used_ids_by_player.get(faction, set())
+    used_ids.add(ability.id)
+    used_ids_by_player[faction] = used_ids
+    st.session_state.used_ability_ids = used_ids_by_player
+
+    if anchor_id is not None:
+        anchors_by_player: dict[str, dict[str, dict[str, str | None]]] = st.session_state.get(
+            "ability_use_anchors", {}
+        )
+        anchors = anchors_by_player.get(faction, {})
+        anchors[ability.id] = {"anchor_id": anchor_id, "unit_key": unit_key}
+        anchors_by_player[faction] = anchors
+        st.session_state.ability_use_anchors = anchors_by_player
+
+    if unit_key is not None:
+        try:
+            unit, _ = lookup(faction, unit_key)
+        except KeyError:
+            unit = None
+        if unit is not None:
+            execute_effect(ability, unit_key, faction, unit)
+
+
+def undo_ability(ability: Ability, faction: str) -> None:
+    """Rollback of `spend_ability`'s bookkeeping while the activation window is open.
+
+    Clears the phase-used mark and the recorded use-anchor — the Ability-side
+    equivalent of `undo_stratagem`'s bookkeeping revert. Does NOT attempt to
+    reverse whatever `execute_effect` already applied (e.g. un-heal wounds):
+    `undo_stratagem` has the same limitation for its own dispatched effects
+    (e.g. it never un-registers `activate_morale_auto_pass`) — reversing an
+    already-applied domain effect generically is out of scope here, same
+    precedent.
+    """
+    used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_ability_ids", {})
+    used_ids = used_ids_by_player.get(faction, set())
+    used_ids.discard(ability.id)
+    used_ids_by_player[faction] = used_ids
+    st.session_state.used_ability_ids = used_ids_by_player
+
+    anchors_by_player: dict[str, dict[str, dict[str, str | None]]] = st.session_state.get(
+        "ability_use_anchors", {}
+    )
+    anchors_by_player.get(faction, {}).pop(ability.id, None)
+
+
+def ability_use_anchor(faction: str, ability_id: str) -> tuple[str, str | None] | None:
+    """Return `(anchor_id, unit_key)` recorded by `spend_ability` for this
+    player's current-phase spend of `ability_id`, or None if it was never
+    spent this phase (or the spend was undone). Mirrors `stratagem_use_anchor`.
+    """
+    anchors = st.session_state.get("ability_use_anchors", {}).get(faction, {})
+    record = anchors.get(ability_id)
+    if record is None:
+        return None
+    return record["anchor_id"], record.get("unit_key")
+
+
+def ability_used_here(faction: str, ability_id: str, anchor_id: str) -> bool:
+    """True iff `faction` spent `ability_id` THIS phase at exactly `anchor_id`.
+
+    Mirrors `stratagem_used_here` — the building block `_reactive_ability_state`
+    uses to split "used" (this render spot triggered the spend, offer Undo)
+    from "used_elsewhere" (some other anchor did, disabled "Used").
+    """
+    record = ability_use_anchor(faction, ability_id)
+    return record is not None and record[0] == anchor_id
+
+
+def ability_used_elsewhere_unit_name(faction: str, ability_id: str) -> str | None:
+    """Resolve the display name of the unit `faction` used `ability_id` on this phase.
+
+    Mirrors `stratagem_used_elsewhere_unit_name` — feeds the same "used on
+    ⟨Einheit⟩" header suffix (design_system.md §6.1) for reactive Ability cards.
+    Returns None when the ability was never spent this phase, was spent
+    without a unit target, or the recorded key no longer resolves.
+    """
+    record = ability_use_anchor(faction, ability_id)
+    if record is None:
+        return None
+    unit_key = record[1]
+    if unit_key is None:
+        return None
+    try:
+        unit, _ = lookup(faction, unit_key)
+    except KeyError:
+        return None
+    return unit.name_en
+
+
+def _reactive_ability_state(
+    vis: str,
+    used_here: bool,
+    used_elsewhere_unit: str | None = None,
+) -> tuple[GoCardState, str | None]:
+    """Map `ability_visibility()`'s clickable/greyed to a GO-card state.
+
+    Simpler than `_reactive_go_state`: `ability_visibility()` only ever returns
+    "greyed" when the ability id is already in `used_this_phase` (no CP/
+    once_per_battle gate at this layer, see its docstring) — so "greyed" and
+    "used somewhere this phase" are equivalent today, and there is no "locked"
+    branch to fall through to (unlike Stratagem's CP-insufficient case). Still
+    goes through `ability_undo_visible` rather than inlining the membership
+    check, so a future battle-scoped Ability only needs that one function
+    extended, not every caller of this mapper.
+    """
+    if vis == "clickable":
+        return "ready", None
+    return ("used", None) if used_here else ("used_elsewhere", used_elsewhere_unit)
+
+
+def _reactive_ability_use_callback(
+    ability: Ability,
+    faction: str,
+    unit_key: str | None,
+    on_resolved: Callable[[], None] | None,
+    anchor_id: str,
+) -> Callable[[], None]:
+    """Factory for a reactive Ability card's on_use callback.
+
+    Mirrors `_reactive_use_callback` (factory, not an inline loop-body lambda,
+    so it closes over `ability`/`faction` by value). `on_resolved` clears the
+    caller's own pending-window marker, same role as the Stratagem version.
+    """
+
+    def _use() -> None:
+        spend_ability(ability, faction, unit_key, anchor_id=anchor_id)
+        if on_resolved is not None:
+            on_resolved()
+
+    return _use
+
+
+def _reactive_ability_undo_callback(ability: Ability, faction: str) -> Callable[[], None]:
+    """Factory for a reactive Ability card's on_undo callback. Mirrors
+    `_reactive_undo_callback`, routing through `undo_ability`."""
+    return lambda: undo_ability(ability, faction)
+
+
+def render_reactive_ability_box(
+    faction: str,
+    phase: str,
+    event: str,
+    abilities: list[Ability],
+    *,
+    decline_key: str,
+    context_caption: str,
+    unit_key: str | None = None,
+    on_resolved: Callable[[], None] | None = None,
+) -> None:
+    """Render reactive GO card(s) for `faction`'s Abilities while a (phase, event)
+    window is open. Ability-side counterpart of `render_reactive_stratagem_box`
+    (B-028a — pure plumbing, no call site wired yet; the first caller lands in
+    B-028b).
+
+    Unlike the Stratagem version, this function does not load its own
+    candidate pool: there is no single "all abilities for a faction" loader —
+    the 10 migration-candidate GOs (S157 scope doc) come from four different
+    YAML sources (`unit_abilities`/`faction_abilities`/`wargear`/
+    `subfaction_abilities`) — so the caller passes the already-loaded
+    `abilities` list from whichever source its specific GO lives in, and this
+    function only applies the (phase, event) + visibility filtering
+    (`reactive_abilities_for`/`ability_visibility`) on top, same shape as
+    `render_reactive_stratagem_box` after its own `load_stratagems` call.
+
+    `unit_key` — the unit this box's conditions are checked against
+    (`abilityEngine.check_conditions`) AND the effect target passed to
+    `spend_ability`. A single param (unlike the Stratagem version's separate
+    `unit_for_conditions`/`unit_key_for_modifier`) because every Ability
+    conditions gate needs the full `(Unit, unit_state)` pair `check_conditions`
+    takes, not just keywords — so there is nothing left to split. An ability
+    with an EMPTY `conditions` list evaluates as met even with no unit (mirrors
+    `stratagem_conditions_met`'s exact contract: a unit is only required once
+    the ability actually declares conditions) — a non-empty `conditions` list
+    with no `unit_key` given stays hidden (fail-safe, same as the Stratagem
+    version's "hidden without an explicit unit").
+
+    context_caption/on_resolved — same role as in `render_reactive_stratagem_box`.
+    """
+    is_active = faction == st.session_state.get("active")
+
+    candidates = reactive_abilities_for(abilities, phase, event)
+    if not candidates:
+        return
+
+    unit: Unit | None = None
+    unit_state: MutableMapping[str, Any] = {}
+    if unit_key is not None:
+        try:
+            unit, unit_state = lookup(faction, unit_key)
+        except KeyError:
+            unit = None
+
+    used_ids = st.session_state.get("used_ability_ids", {}).get(faction, set())
+    anchor_id = f"reactive_ability:{event}:{decline_key}"
+
+    for ability in candidates:
+        if not ability_usable_by_player(ability.trigger.player, is_active):
+            continue
+        met = not ability.conditions or (
+            unit is not None and check_conditions(ability, unit, unit_state)
+        )
+        vis = ability_visibility(ability, phase, used_ids, met, reactive_trigger_active=True)
+        if vis == "hidden":
+            continue
+
+        used_here = ability_used_here(faction, ability.id, anchor_id)
+        state, locked_reason = _reactive_ability_state(
+            vis,
+            used_here,
+            ability_used_elsewhere_unit_name(faction, ability.id),
+        )
+        unit_name = unit.name_en if unit else None
+        render_go_card(
+            key=f"reactive_ability_{faction}_{event}_{ability.id}_{decline_key}",
+            name=ability.name_en,
+            cp_cost=0,
+            state=state,
+            rule_text=ability.rule_text,
+            compact=True,
+            locked_reason=locked_reason,
+            target_name=reactive_box_target_label(unit_name, faction_display_name_for(faction)),
+            expanded_content=_context_caption_renderer(context_caption),
+            on_use=_reactive_ability_use_callback(
+                ability, faction, unit_key, on_resolved, anchor_id
+            ),
+            on_undo=_reactive_ability_undo_callback(ability, faction),
+        )
 
 
 # _apply_stratagem_effect moved to gameMechanic.stratagemEngine (S142 Aufgabe 1,
