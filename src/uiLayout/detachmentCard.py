@@ -15,10 +15,14 @@ def _is_handled(state: dict, phase_key: str) -> bool:  # type: ignore[type-arg]
     if phase_key not in _HANDLED_PHASES:
         return False
     if phase_key == "movement":
-        return state.get("movement_chosen", False)
-    return state.get("turn_flags", {}).get(
-        {"shooting": "shot", "psychic": "cast", "charge": "charged", "fight": "fought"}[phase_key],
-        False,
+        return bool(state.get("movement_chosen", False))
+    return bool(
+        state.get("turn_flags", {}).get(
+            {"shooting": "shot", "psychic": "cast", "charge": "charged", "fight": "fought"}[
+                phase_key
+            ],
+            False,
+        )
     )
 
 

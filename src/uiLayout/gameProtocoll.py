@@ -14,6 +14,7 @@ import json
 from collections.abc import Callable
 from itertools import groupby
 from pathlib import Path
+from typing import Any, cast
 
 import streamlit as st
 
@@ -35,6 +36,7 @@ from gameObjects.stratagem import (
     stratagem_usable_by_player,
     stratagem_visibility,
 )
+from gameObjects.unit import Unit
 from uiLayout._common import (
     render_go_card,
     spend_stratagem,
@@ -91,8 +93,8 @@ def _unit_name_map(faction: str) -> dict[str, str]:
     return {u.id: u.name_en for u in units_list_for(faction)}
 
 
-def _state_for(faction: str) -> dict:  # type: ignore[type-arg]
-    return st.session_state[units_key_for(faction)]
+def _state_for(faction: str) -> dict[str, Any]:
+    return cast("dict[str, Any]", st.session_state[units_key_for(faction)])
 
 
 def _render_battle_log() -> None:
@@ -128,9 +130,9 @@ def _render_battle_log() -> None:
             st.caption(f"  {name}: {status}")
 
 
-def _selected_unit_for(player: str):
+def _selected_unit_for(player: str) -> Unit | None:
     """Return the selected unit object if it belongs to `player`, else None."""
-    sel = st.session_state.get("selected_unit")
+    sel: tuple[str, str] | None = st.session_state.get("selected_unit")
     if sel is None:
         return None
     sel_faction, sel_state_key = sel
@@ -155,7 +157,7 @@ def _selected_state_key_for(player: str) -> str | None:
     resolution entries use for atk_uid, so a stratagem modifier can be scoped to
     exactly the unit that was selected when the stratagem was activated.
     """
-    sel = st.session_state.get("selected_unit")
+    sel: tuple[str, str] | None = st.session_state.get("selected_unit")
     if sel is None:
         return None
     sel_faction, sel_state_key = sel

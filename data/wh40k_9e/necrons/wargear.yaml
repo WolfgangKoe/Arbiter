@@ -79,18 +79,6 @@
   name_en: Gloom Prism
   ability_en: In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power
     as if it were a PSYKER.
-  ability_type: triggered
-  rule_text: In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power
-    as if it were a PSYKER.
-  trigger:
-    timing: phase_reactive
-    phase: psychic
-    stage: active
-    player: inactive
-  conditions: []
-  effect:
-    type: deny_psychic
-    target: self
 - id: wh40k_9e.necrons.wargear.nebuloscope
   name_en: Nebuloscope
   ability_en: Each time the bearer makes a ranged attack, the target does not receive the benefits of

@@ -23,7 +23,7 @@ def unit_max_hp(unit: Unit, state: MutableMapping[str, Any]) -> int:
     if state.get("group_wounds"):
         gm = state.get("group_models", {})
         return sum(gm.get(g.id, 0) * unit.group_wound_value(g) for g in unit.model_groups)
-    return unit.wounds * state.get("models", 0)
+    return unit.wounds * int(state.get("models", 0))
 
 
 def _apply_group_losses(
@@ -273,7 +273,7 @@ def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) 
             state["lost_models_this_turn"] = max(
                 0, state.get("lost_models_this_turn", 0) - models_back
             )
-        return state["current_wounds"] > old_wounds
+        return bool(state["current_wounds"] > old_wounds)
 
     max_hp = unit.wounds * (unit.models_max if revive else state["models"])
     old_wounds = state["current_wounds"]
@@ -292,7 +292,7 @@ def heal_unit(uid: str, faction: str, hp: int, unit: Unit, revive: bool = True) 
         state["lost_models_this_turn"] = max(0, state.get("lost_models_this_turn", 0) - models_back)
         if state.get("group_models") and unit.model_groups:
             _restore_group_models(state["group_models"], models_back, unit.model_groups)
-    return state["current_wounds"] > old_wounds
+    return bool(state["current_wounds"] > old_wounds)
 
 
 def set_deployment(uid: str, faction: str, deployment: str) -> None:

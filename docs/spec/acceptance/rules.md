@@ -895,10 +895,10 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 ### R-PSYCHIC-14
 - **klasse**: A
 - **status**: implementiert
-- **getestet**: ja — test_can_deny_via_psyker_keyword / test_can_deny_via_gloom_prism
+- **getestet**: ja — test_can_deny_via_psyker_keyword / test_can_deny_via_gloom_prism / test_can_deny_via_unit_owned_ability
 - **quelle**: core_rules.txt — "The opposing player can then select one of their PSYKER units … and attempt to deny that power"
 - **code**: psychicPhase.py:can_deny
-- **regel**: Deny the Witch kann von einer feindlichen PSYKER-Einheit oder einer Einheit mit Deny-Wargear (z. B. Gloom Prism) versucht werden.
+- **regel**: Deny the Witch kann von einer feindlichen PSYKER-Einheit oder einer Einheit mit `deny_psychic`-Ability (z. B. Noctilith Beacons, Gloom Prism) versucht werden.
 
 ### R-PSYCHIC-15
 - **klasse**: A

@@ -881,6 +881,25 @@ abilities:
       amount: "D3"
       revive: false
 
+  - id: wh40k_9e.necrons.unit.canoptek_spyder.gloom_prism
+    name_en: Gloom Prism
+    badge_label: GLOOM
+    ability_type: triggered
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.canoptek_spyder
+    rule_text: "In your opponent's Psychic phase, the bearer's unit can attempt to deny one psychic power as if it were a PSYKER."
+    trigger:
+      timing: phase_reactive
+      phase: psychic
+      stage: active
+      player: inactive
+      event: opponent_psychic_phase
+    conditions:
+      - has_rules: [gloom_prism]
+    effect:
+      type: deny_psychic
+      target: self
+
   - id: wh40k_9e.necrons.unit.triarch_stalker.targeting_relay
     name_en: Targeting Relay
     ability_type: triggered

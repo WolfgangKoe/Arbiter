@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 22:14 CEST
+Stand: 2026-07-17 23:41 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 21:32 8096  ███████████░ 138k ⚠️   █████░  81%    █···········
+07-17 22:16 d275  ████████░░░░ 106k ✅    █████░  90%    █···········
+         SA_1·  ██████░░░░░░  79k ✅    DoD-Review S163 (Opus)
+         SA_2·  █████████░░░ 118k ✅    T1: mypy-Drift reduzieren
+         SA_3·  ██████░░░░░░  71k ✅    Abschluss S163: Artefakte + Commit
+         SA_4·  ███████░░░░░  89k ✅    Planning-Entwurf S163 erstellen
+         SA_5·  ████░░░░░░░░  49k ✅    Feedback vollständige Planung vera…
+         SA_6·  ████████████ 175k ⛔    T2: gloom_prism-Migration B-028b
+----------------- ---------------------- -------------- ------------
+07-17 21:32 8096  ███████████░ 143k ⚠️   █████░  79%    █···········
          SA_1·  ███████████░ 138k ⚠️   S162 Doku-/Backlog-Hygiene
          SA_2·  █████████░░░ 118k ✅    B-115 DONE-Hygiene
          SA_3·  ████████░░░░ 103k ✅    S162 B-115 Invuln-Layout
@@ -856,3 +864,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S160 (2026-07-17)** B-104 dice SVG re-fix DONE (Stakeholder bestätigt), B-028b Verifikation komplett (TF 1-3), B-119 neu (Deny-Quellen-Anzeige), Retro-Klauseln M1/M2 in agent_scopes, Review GO
 - **S161 (2026-07-17)** Retro-M1 AWAITING-VERIFICATION marker, B-109 auto-fail label from YAML, B-105 go_source_chip + invuln source wiring, B-119 prioritized, retro-decision-as-input rule anchored
 - **S162 (2026-07-17)** B-115 Invuln-Block auf WOUND-Muster (sichtbestätigt beide Label-Fälle); B-105/B-109 DONE, B-043 überholt; B-119-Referenz korrigiert; Vollsuite-Klausel Parallel-Executoren
+- **S163 (2026-07-17)** mypy 26->0 (Baseline 0), gloom_prism auf Ability-Infrastruktur (B-028b, B-119 Fall b via D-1=A), Planungs-Vollständigkeits-Klausel verankert; Review GO

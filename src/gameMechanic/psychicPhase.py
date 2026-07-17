@@ -50,22 +50,16 @@ def has_psyker(units: list[Unit]) -> bool:
 
 
 def can_deny(units: list[Unit]) -> bool:
-    """R-PSYCHIC-16: a PSYKER, deny wargear (e.g. Gloom Prism) or a unit-owned
-    ``deny_psychic`` ability (e.g. Szarekh's Noctilith Beacons — B-028b) may
-    attempt to deny a psychic power."""
-    from gameObjects.loader import load_deny_wargear_names  # noqa: PLC0415
-
-    deny_names: set[str] = set()
-    for u in units:
-        parts = u.id.split(".")
-        if len(parts) >= 2:
-            try:
-                deny_names.update(load_deny_wargear_names(parts[1]))
-            except Exception:
-                pass
+    """R-PSYCHIC-16: a PSYKER or a unit-owned ``deny_psychic`` ability (e.g.
+    Szarekh's Noctilith Beacons or the Canoptek Spyder's Gloom Prism) may
+    attempt to deny a psychic power. Gloom Prism migrated off the old
+    wargear-name gate (``load_deny_wargear_names``) onto this same
+    ``find_unit_ability_by_effect`` ability path in S163 (B-028b-Rest) —
+    both deny_psychic sources now render via ``_render_deny_ability_cards``
+    below instead of one being roll-UI-only."""
 
     def _unit_can_deny(u: Unit) -> bool:
-        if u.has_keyword("PSYKER") or any(r in deny_names for r in u.rules):
+        if u.has_keyword("PSYKER"):
             return True
         parts = u.id.split(".")
         if len(parts) < 2:

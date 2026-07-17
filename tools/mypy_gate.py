@@ -30,7 +30,7 @@ import sys
 # Ratchet: only ever lower this number, never raise it. Lowering it (because
 # the measured count shrank) must happen in the same commit as the code
 # change that caused the shrink.
-BASELINE = 25
+BASELINE = 0
 
 _COUNT_RE = re.compile(r"Found (\d+) errors? in \d+ files?")
 _SUCCESS_RE = re.compile(r"Success: no issues found")

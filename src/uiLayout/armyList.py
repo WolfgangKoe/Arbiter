@@ -1,5 +1,7 @@
 """armyList — Full sidebar: army card + detachment cards."""
 
+from typing import Any, cast
+
 import streamlit as st
 
 from gameMechanic.gameState import (
@@ -8,13 +10,14 @@ from gameMechanic.gameState import (
     units_key_for,
     units_list_for,
 )
+from gameObjects.ability import Ability
 from gameObjects.loader import load_faction_abilities
 from gameObjects.unit import Unit
 from uiLayout.armyCard import render_army_card
 from uiLayout.detachmentCard import render_detachment_card
 
 
-def _faction_abilities_for(faction: str) -> list:
+def _faction_abilities_for(faction: str) -> list[Ability]:
     faction_dir = faction_dir_for(faction)
     try:
         return load_faction_abilities(faction_dir)
@@ -26,8 +29,8 @@ def _units_for(faction: str) -> list[Unit]:
     return units_list_for(faction)
 
 
-def _states_for(faction: str) -> dict:  # type: ignore[type-arg]
-    return st.session_state[units_key_for(faction)]
+def _states_for(faction: str) -> dict[str, Any]:
+    return cast("dict[str, Any]", st.session_state[units_key_for(faction)])
 
 
 def render_army_list(faction: str) -> None:

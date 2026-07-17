@@ -25,44 +25,49 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S162, 2026-07-17)
+## Aktueller Stand (nach S163, 2026-07-17)
 
-**Review S162: GO** (Vollsuite 1992 passed, Coverage 99,13 %, Arch 8 grün, Docs+Acceptance
-25 grün). Zwei parallele Sonnet-Executoren (disjunkte Dateien) + DONE-Hygiene + Opus-Review:
+**Review S163: GO** (1995 passed, Coverage 99,13 %, Arch 8 grün, Docs+Acceptance 25 grün,
+mypy 0 == Baseline 0 — CI-Blocker behoben). Zwei Aufgaben, sequenziell/parallel per Plan:
 
-- **B-115 DONE (Kern der Session):** Invuln-Zweig von `_render_dice_save_block`
-  (`src/uiLayout/diceHtml.py`) auf das WOUND-Block-Muster umgestellt — Titel-Zeile
-  `Inv N+` + `go_source_chip` OBERHALB, Würfelreihe vollbreit/zentriert. BEIDE Label-Fälle
-  sichtbestätigt („Sieht gut so aus"): Stratagem „Quantum Deflection" 4+ und Fähigkeit
-  „WAAAGH! S1" 5+ (damit auch der aus S161 offene Fähigkeits-Label-Fall geschlossen).
-  2 neue HTML-Struktur-Tests.
-- **B-105 + B-109 DONE, B-043 überholt — alle drei archiviert;** die S161-Layout-Kritik
-  war kein neues Item, sondern deckte sich wörtlich mit `design_system.md` §4.4 (→ B-115).
-- **Drift-Korrektur:** B-119-Referenz ist real
-  `src/gameMechanic/psychicPhase.py::_render_deny_column` (nicht `gameActionsArea.py`).
-- **Retro S162:** M1' = mypy in S163 aktiv reduzieren; M2 = Vollsuite-Klausel für
-  Parallel-Executoren in `agent_scopes.md` verankert (belastbare Vollsuite beim Koordinator
-  auf dem kombinierten Endstand, Executor-Suiten nur Selbstprüfung); M3 = stale
-  Planning-Handoffs gelöscht. M4 (Archiv-Kosmetik „1991→1992") bewusst NICHT beauftragt.
+- **T1 DONE — mypy-Drift-Rückbau (Retro-M1', Stakeholder-Entscheid S162):** 26 → 0, reine
+  Typ-Fixes (`dict[str, Any]`/`int()`/`bool(...)`-Annotationen, keine Verhaltensänderung) in
+  9 `src/`-Dateien (`attackMath.py`, `unitMutations.py`, `moralePhase.py`, `diceHtml.py`,
+  `unitCard.py`, `gameProtocoll.py`, `armyCard.py`, `detachmentCard.py`, `armyList.py`);
+  `tools/mypy_gate.py` `BASELINE` 25 → 0 im selben Commit nachgezogen (Ratchet-Regel erfüllt).
+- **T2 DONE — B-028b-Rest: gloom_prism auf B-028a-Ability-Infrastruktur migriert:** neue
+  `deny_psychic`-Ability für den Canoptek Spyder in `unit_abilities.yaml`, `wargear.yaml` auf
+  Katalog-only reduziert, `can_deny()` ohne den alten Wargear-Namens-Gate; rendert jetzt wie
+  Noctilith Beacons über `_render_deny_ability_cards` eine reaktive GO-Karte. 4
+  neue/angepasste Tests, `processes.md` P-12 + `acceptance/rules.md` R-PSYCHIC-14
+  nachgezogen. **B-119 Fall b via D-1 = Variante A mitgelöst** (einheitlicher Rendering-Pfad
+  löst die geforderte Quellen-Sichtbarkeit, kein separater Chip nötig) — B-028b und B-119
+  beide auf „UI-Verifikation" gesetzt. Handoff `S163_B028b_ui_verifikation.md`
+  (AWAITING-VERIFICATION) wartet auf Stakeholder-Sichtprüfung — NICHT anfassen bis geprüft.
+- **Review-Befunde (nachrangig, GO-unkritisch):** 1) `conditions: [has_rules: [gloom_prism]]`
+  an der neuen Ability ist aktuell inert (kein Aufrufer wertet Conditions aus). 2)
+  Ownership-Match statt Rule-Match verengt den Mechanismus (kein aktueller Verhaltensbruch).
+  3) `load_deny_wargear_names` in `loader.py` ist jetzt toter Produktionscode (nur Tests
+  referenzieren ihn). → Retro M1/M2.
+- **mypy-Schuld getilgt:** die S162-Zeile „⚠ Bekannte Schuld: mypy-Gate rot" ist obsolet —
+  Baseline steht auf 0, CI auf dev wieder grün.
+- **S163-Rüge behoben:** Planner-Pflichtschritt „Vollständige Session-Planung" in
+  `agent_scopes.md` + Briefing-Vermerk verankert.
 
-**⚠ Bekannte Schuld:** mypy-Gate rot (26 Fehler vs. Baseline 25) — pre-existing seit S161
-(Stash-Probe, Review-S162 Befund 1), CI auf dev seit S161 rot; NICHT durch S162 verursacht.
+Frühere Sessions (S60–S162): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-Aus S160 offen geblieben: `gloom_prism`-Migration auf die B-028a-Infrastruktur (B-028b-Rest).
-
-Frühere Sessions (S60–S161): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
-
-### ▶ Nächster Schritt (S163)
+### ▶ Nächster Schritt (S164)
 
 Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
-1. **mypy-Drift zuerst (Retro-M1', Stakeholder-Entscheid S162):** Fehlerzahl aktiv
-   reduzieren (Stand 26, Baseline 25) — nicht nur Baseline anheben.
-2. **B-028b-Rest:** `gloom_prism`-Migration auf B-028a-Infrastruktur (~20k; Roster-Bestand
-   verifiziert: `necrons_beta.yaml`, `necrons_test.yaml`).
-3. **B-119:** Deny-Quellen-Anzeige, Fall b (Canoptek Spyder/Gloom Prism) — Referenz s. o.
+1. **Stakeholder-Sichtprüfung** `docs/handoff/S163_B028b_ui_verifikation.md` (Canoptek
+   Spyder Deny-Karte im echten Spielverlauf) — danach B-028b/B-119 archivieren.
+2. **Retro-Entscheid** `docs/handoff/S163_RETRO.md` (M1–M3 zur Freigabe, M4 nur Kenntnisnahme).
+3. Nächstes offenes Backlog-Item gemäß `docs/goals/backlog.md`.
 
-**Offene Handoff-Marker:** nur `Stakeholder_Beobachtungen.md` (STANDING) — Ordner sauber.
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING) ·
+`S163_B028b_ui_verifikation.md` (AWAITING-VERIFICATION) ·
+`S163_RETRO.md` (NEEDS-DECISION).
 
 ---
 

@@ -945,7 +945,13 @@ def _apply_persistent_effect(unit: Unit, effect: dict) -> Unit:  # type: ignore[
 def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
     """Return short names of wargear items with deny_psychic effect for a faction.
 
-    Short name = last segment of the wargear ID (e.g. 'gloom_prism').
+    Short name = last segment of the wargear ID. As of S163 (B-028b-Rest),
+    necrons' Gloom Prism migrated its ``deny_psychic`` effect onto a
+    unit-owned ability in ``unit_abilities.yaml`` (see
+    ``psychicPhase.py::can_deny``/``find_unit_ability_by_effect``) — no
+    faction currently has a wargear item this function would match. Kept as
+    generic, faction-agnostic infra (tested below) for any future faction
+    that needs a deny source without a unit_ability entry.
     """
     if faction_dir in _DENY_WARGEAR_CACHE:
         return _DENY_WARGEAR_CACHE[faction_dir]

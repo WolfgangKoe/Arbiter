@@ -463,24 +463,32 @@ psi_result: dict | None = {
 | Funktion | Signatur | Zweck |
 |---|---|---|
 | `has_psyker` | `(units) → bool` | Prüft PSYKER-Keyword |
-| `can_deny` | `(units) → bool` | PSYKER-Keyword ODER `"gloom_prism"` in `unit.rules` |
+| `can_deny` | `(units) → bool` | PSYKER-Keyword ODER unit-eigene `deny_psychic`-Ability (`find_unit_ability_by_effect`, z. B. Noctilith Beacons, Gloom Prism) |
 | `initial_deny_state` | `(opponent_units) → bool \| None` | `False` wenn `can_deny(opponent_units)` nein (kein Deny-Versuch möglich, S129-Fix), sonst `None` (wartet auf Deny-Versuch) |
 | `smite_targets` | `(selected_targets, caster_faction) → list` | Smite-Ziele = gewählte Einheiten fremder Fraktion; Klick-Auswahl via Unit-Cards des inaktiven Spielers (`_TARGET_PHASES` in `unitCard.py` muss `"psychic"` enthalten, S129-Fix) |
 | `is_perils` | `(roll) → bool` | `roll in (2, 12)` |
 | `smite_damage_die` | `(roll) → str` | `"W6"` bei ≥ 11, sonst `"W3"` |
 | `deny_succeeds` | `(manifest, deny) → bool` | `deny > manifest` (strikt größer) |
 
-**Bannversuch — Canoptek Spyder (Gloom Prism):**
-- Kein PSYKER-Keyword — Bannfähigkeit via `"gloom_prism"` in `unit.rules`
-- Direkt über `can_deny()`-Check, nicht über Ability Engine (kein Effect-Typ `"deny_psychic"`)
-- Vollständige Ability-Engine-Abstraktion: Ziel 4i
+**Bannversuch — Canoptek Spyder (Gloom Prism), S163 B-028b-Rest:**
+- Kein PSYKER-Keyword — Bannfähigkeit via unit-eigene `deny_psychic`-Ability
+  (`data/wh40k_9e/necrons/unit_abilities.yaml`, `unit_id: canoptek_spyder`,
+  `conditions: [has_rules: [gloom_prism]]`), Ownership-Lookup über
+  `find_unit_ability_by_effect` — identisches Muster wie Szarekhs Noctilith
+  Beacons (B-028b). Rendert additiv eine reaktive GO-Karte in
+  `_render_deny_ability_cards` (löst B-119 Fall b: Deny-Quelle sichtbar).
+- Der alte Wargear-Namens-Gate (`load_deny_wargear_names`, Match gegen
+  `unit.rules`) ist seit dieser Migration für keine Fraktion mehr aktiv
+  (kein `wargear.yaml`-Eintrag trägt noch einen `deny_psychic`-Effekt) —
+  Funktion bleibt als generische, faktions-neutrale Fallback-Infra bestehen
+  (dokumentierte Rückwärtskompatibilität, nicht entfernt).
 
 **Scope (Ziel 4f):** Nur Smite (WC 5). Blessing-Flow (befreundetes Ziel) folgt später.
 
 **Code-Referenzen:**
 - `src/gameMechanic/psychicPhase.py` — Handler + alle Hilfsfunktionen
-- `data/wh40k_9e/orks/army.yaml` — Weirdboy + Wurrboy (PSYKER-Einheiten)
-- `data/wh40k_9e/necrons/army.yaml` — Canoptek Spyder (`rules: [gloom_prism]`)
+- `data/wh40k_9e/orks/units.yaml` — Weirdboy + Wurrboy (PSYKER-Einheiten)
+- `data/wh40k_9e/necrons/unit_abilities.yaml` — Canoptek Spyder Gloom Prism (`deny_psychic`)
 - Tests: `tests/gameMechanic/test_psychic_phase.py`
 
 ---

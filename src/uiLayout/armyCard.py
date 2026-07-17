@@ -11,6 +11,8 @@ Design (see docs/spec/ui_layout.md §3):
 
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
 from gameMechanic.abilityEngine import (
@@ -38,6 +40,7 @@ from gameObjects.loader import (
     load_round_choice_label,
     load_subfaction_meta,
 )
+from gameObjects.roundChoiceAbility import RoundChoiceAbility
 from gameObjects.unit import Unit
 from uiLayout._common import render_round_choice_directives
 from uiLayout.badges import badge
@@ -73,7 +76,8 @@ def _active_ability_badge(text: str) -> str:
 
 
 def _current_phase_key() -> str:
-    return PHASES[st.session_state.phase_idx][1]
+    phase_idx: int = st.session_state.phase_idx
+    return PHASES[phase_idx][1]
 
 
 def _ability_section_visible(phase_key: str) -> bool:
@@ -171,7 +175,9 @@ def _directive_window_open(faction: str, kind: str) -> bool:
     return bool(pending) and chosen is None
 
 
-def _render_directive_buttons(round_choice, faction: str, round_num: int) -> None:
+def _render_directive_buttons(
+    round_choice: RoundChoiceAbility, faction: str, round_num: int
+) -> None:
     """Show Primary / Secondary directive selection buttons for the main directive.
 
     Sets only the main ``directive`` key. The selection window is gated by the caller
@@ -197,7 +203,7 @@ def _render_directive_buttons(round_choice, faction: str, round_num: int) -> Non
         st.rerun()
 
 
-def _get_extra_round_choice_id(round_choices: list, faction: str) -> str | None:
+def _get_extra_round_choice_id(round_choices: list[RoundChoiceAbility], faction: str) -> str | None:
     """Return the ID of the 6th (always-active) ability — the one not assigned to any round.
 
     Returns None when not all 5 round slots are filled (extra can't be determined yet).
@@ -211,7 +217,7 @@ def _get_extra_round_choice_id(round_choices: list, faction: str) -> str | None:
 
 
 def _render_extra_round_choice(
-    round_choice, faction: str, faction_dir: str, current_round: int
+    round_choice: RoundChoiceAbility, faction: str, faction_dir: str, current_round: int
 ) -> None:
     """Render the always-active 6th ability with its own directive selection.
 
@@ -299,7 +305,7 @@ def _render_round_choice_ui(faction: str) -> None:
     directive_key = round_choice_state_key(faction, "directive")
     used_key = round_choice_state_key(faction, "used_ids")
     active_id = st.session_state.get(active_key)
-    used_ids: list = st.session_state.get(used_key, [])
+    used_ids: list[str] = st.session_state.get(used_key, [])
     current_round = st.session_state.get("round", 1)
 
     st.divider()
@@ -415,7 +421,7 @@ def _render_once_per_battle_ability_ui(
         return
     current_round = st.session_state.get("round", 1)
     is_active = faction == st.session_state.get("active")
-    activated: dict = st.session_state.get("activated_abilities", {})
+    activated: dict[str, dict[str, Any]] = st.session_state.get("activated_abilities", {})
     entry = activated.get(faction)
 
     ability_name = once_ability.name_en.split("—")[0].strip()

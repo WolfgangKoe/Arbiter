@@ -39,7 +39,7 @@ def morale_test_required(unit: Unit, unit_state: MutableMapping[str, Any]) -> bo
         return False
     if unit_state.get("destroyed"):
         return False
-    return unit_state.get("lost_models_this_turn", 0) > 0
+    return bool(unit_state.get("lost_models_this_turn", 0) > 0)
 
 
 def _fail_threshold(leadership: int, lost: int) -> int:
@@ -175,6 +175,10 @@ def _render_unit_morale(
         return
 
     ld = unit.leadership
+    # unit.leadership is None only for buildings/fortifications (single-model
+    # units) — morale_test_required's models_max == 1 filter keeps those from
+    # ever reaching this render function, so ld is always a real Ld here.
+    assert ld is not None
     threshold = _fail_threshold(ld, lost)
 
     st.caption(f"Ld {ld} | Verluste diese Runde: {lost}")

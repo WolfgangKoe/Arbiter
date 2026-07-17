@@ -147,6 +147,11 @@ def _render_dice_wound_block(
     )
     if auto_fail_max:
         # Attacker's own perspective: their low rolls fail → debuff-red (§5.1).
+        # auto_fail_max and auto_fail_label come from the same ability lookup
+        # (abilityEngine.unit_wound_auto_fail_max / _label) — whenever the
+        # former is truthy, the latter is guaranteed non-None (B-109 loader
+        # validation rejects labelless wound_auto_fail abilities).
+        assert auto_fail_label is not None
         st.markdown(
             always_fail_marker_row_html(
                 list(range(1, auto_fail_max + 1)),

@@ -5379,8 +5379,8 @@
   "80965a58-cfb5-4ba3-81b4-56d336cf39ec": {
     "started_at": "2026-07-17T19:32:43.820Z",
     "task": "Fable ist wieder aktiv?",
-    "peak_context": 138018,
-    "subagent_share": 80.79413798582628,
+    "peak_context": 142709,
+    "subagent_share": 78.55776749536277,
     "by_tier": {
       "Sonnet": 26811992,
       "Opus": 1499683
@@ -5420,6 +5420,60 @@
         "tier": "Sonnet",
         "peak_context": 133704,
         "started_at": "2026-07-17T19:32:43.820Z"
+      }
+    ]
+  },
+  "d27554b4-b90f-4323-98f2-e5b721d747a4": {
+    "started_at": "2026-07-17T20:16:15.852Z",
+    "task": "start session",
+    "peak_context": 105643,
+    "subagent_share": 89.6896970097159,
+    "by_tier": {
+      "Opus": 4407665,
+      "Sonnet": 38188374
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "DoD-Review S163 (Opus)",
+        "tier": "Opus",
+        "peak_context": 78709,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1: mypy-Drift reduzieren",
+        "tier": "Sonnet",
+        "peak_context": 117760,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss S163: Artefakte + Commit",
+        "tier": "Sonnet",
+        "peak_context": 70596,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Planning-Entwurf S163 erstellen",
+        "tier": "Opus",
+        "peak_context": 88865,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Feedback vollständige Planung verankern",
+        "tier": "Sonnet",
+        "peak_context": 49339,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2: gloom_prism-Migration B-028b",
+        "tier": "Sonnet",
+        "peak_context": 175395,
+        "started_at": "2026-07-17T20:16:15.852Z"
       }
     ]
   }

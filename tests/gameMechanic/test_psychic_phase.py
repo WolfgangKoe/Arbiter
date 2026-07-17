@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+from gameMechanic.abilityEngine import find_unit_ability_by_effect
 from gameMechanic.psychicPhase import (
     can_attempt_deny,
     can_deny,
@@ -81,12 +82,30 @@ class TestCanDeny:
         assert can_deny(units) is True
 
     def test_can_deny_via_gloom_prism(self):
-        # Canoptek Spyder has no PSYKER keyword — deny comes from gloom_prism wargear rule
+        # Canoptek Spyder has no PSYKER keyword — deny comes from the Gloom
+        # Prism unit_ability (S163 migration off the old wargear-name gate,
+        # B-028b-Rest — real necrons/unit_abilities.yaml entry, ownership by
+        # unit_id, same as Noctilith Beacons).
         units = [
             _Unit(
                 id="wh40k_9e.necrons.unit.canoptek_spyder",
                 keywords=["VEHICLE", "CANOPTEK"],
                 rules=["gloom_prism"],
+            )
+        ]
+        assert can_deny(units) is True
+
+    def test_can_deny_via_gloom_prism_ability_without_wargear_rules_tag(self):
+        # S163 regression: can_deny no longer depends on "gloom_prism" being
+        # present in unit.rules at all — the deny_psychic ability is found
+        # purely via unit_id ownership (find_unit_ability_by_effect), exactly
+        # like Noctilith Beacons. Proves the old load_deny_wargear_names path
+        # is no longer load-bearing for this unit.
+        units = [
+            _Unit(
+                id="wh40k_9e.necrons.unit.canoptek_spyder",
+                keywords=["VEHICLE", "CANOPTEK"],
+                rules=[],
             )
         ]
         assert can_deny(units) is True
@@ -136,6 +155,34 @@ class TestCanDeny:
 
 
 # ---------------------------------------------------------------------------
+# Gloom Prism migration (S163, B-028b-Rest) — real necrons/unit_abilities.yaml
+# data. Mirrors test_ability_engine.py's Noctilith-Beacons real-data test:
+# the resolvable ability + owning unit identity together are what
+# _render_deny_ability_cards needs to render the "Canoptek Spyder may attempt
+# to deny…" card — this is the Quellen-Anzeige data B-119 Fall b asked for.
+# ---------------------------------------------------------------------------
+
+
+class TestGloomPrismAbilityMigration:
+    def test_find_unit_ability_by_effect_gloom_prism_real_data(self):
+        found = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.canoptek_spyder", "deny_psychic"
+        )
+        assert found is not None
+        assert found.id == "wh40k_9e.necrons.unit.canoptek_spyder.gloom_prism"
+        assert found.name_en == "Gloom Prism"
+        assert found.effect.type == "deny_psychic"
+
+    def test_find_unit_ability_by_effect_gloom_prism_none_for_other_unit(self):
+        # Ownership scoping: must not leak onto another necrons unit that has
+        # no Gloom Prism ability of its own.
+        found = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.warriors", "deny_psychic"
+        )
+        assert found is None
+
+
+# ---------------------------------------------------------------------------
 # initial_deny_state — #PSI regression (S129): opponent without any deny
 # capability must never leave the power stuck in the "awaiting a deny
 # attempt" (None) limbo — it resolves unopposed instead.
@@ -154,7 +201,10 @@ class TestInitialDenyState:
         opponent_units = [_Unit(keywords=["PSYKER"])]
         assert initial_deny_state(opponent_units) is None
 
-    def test_deny_wargear_opponent_leaves_power_awaiting_a_deny_attempt(self):
+    def test_gloom_prism_opponent_leaves_power_awaiting_a_deny_attempt(self):
+        # S163: gloom_prism resolves via the deny_psychic unit_ability now,
+        # not the old wargear-name gate (renamed from
+        # test_deny_wargear_opponent_leaves_power_awaiting_a_deny_attempt).
         opponent_units = [
             _Unit(
                 id="wh40k_9e.necrons.unit.canoptek_spyder",

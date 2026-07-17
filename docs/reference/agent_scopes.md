@@ -48,6 +48,12 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
 ```
 
 **Pflichtschritte (Planner):**
+- **Vollständige Session-Planung (S163-Rüge):** Der Plan deckt die GESAMTE Session ab —
+  von Session-Start bis Commit. Neben den Implementierungs-Tasks enthält die Plan-Tabelle
+  eigene Zeilen für: manuelle UI-Verifikation (mit konkreten Prüf-Punkten), Artefakt-Nachzug
+  (Backlog/Briefing/Specs/Handoff) und den Abschluss-Dreiklang Review→Retro→Commit inkl.
+  Token-Schätzung für diesen Overhead. Ein Plan, der nur Feature-Tasks listet, ist
+  unvollständig.
 - **Vor dem Einplanen:** offene vs. erledigte Steps gegen `git log --oneline` +
   `.claude/tasks/briefing.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
 - **Checkbox-Vollständigkeit:** alle Unterabschnitte der aktiven Zieldatei durchgehen —

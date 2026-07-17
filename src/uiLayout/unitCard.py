@@ -20,6 +20,7 @@ Design principles (see docs/spec/ui_layout.md §4):
 """
 
 from collections.abc import Sequence
+from typing import Any
 
 import streamlit as st
 
@@ -303,8 +304,10 @@ def render_unit_card(
                             apply_buff_to_unit(
                                 unit_state, _ptr.ability_id, _ptr.badge_label, _ptr.effect_type
                             )
-                            cmd_state: dict = st.session_state.get("command_ability_state", {})
-                            entry: dict = cmd_state.get(_ptr.ability_id) or {}
+                            cmd_state: dict[str, Any] = st.session_state.get(
+                                "command_ability_state", {}
+                            )
+                            entry: dict[str, Any] = cmd_state.get(_ptr.ability_id) or {}
                             targets: list[str] = list(
                                 entry.get("targets")
                                 or ([entry["target_uid"]] if entry.get("target_uid") else [])
@@ -327,9 +330,11 @@ def render_unit_card(
                         else:
                             # Wargear/revive ability → store target uid per wargear
                             # (keyed by request id so multiple bearers never collide)
-                            targets = st.session_state.get("revive_wargear_target_uid") or {}
-                            targets[_ptr.ability_id] = uid
-                            st.session_state.revive_wargear_target_uid = targets
+                            wargear_targets: dict[str, str] = (
+                                st.session_state.get("revive_wargear_target_uid") or {}
+                            )
+                            wargear_targets[_ptr.ability_id] = uid
+                            st.session_state.revive_wargear_target_uid = wargear_targets
                         st.session_state.pending_target_request = None
                         st.rerun()
 

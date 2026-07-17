@@ -614,19 +614,23 @@ am Anfang der Beschreibungsspalte.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** UI-Verifikation (Testfälle 1–3 positiv, S160, Testfall 3 mit Canoptek Spyder/Gloom Prism)
+**Status:** UI-Verifikation (Testfälle 1–3 positiv, S160, Testfall 3 mit Canoptek Spyder/Gloom Prism; `gloom_prism`-Migration selbst am 2026-07-17/S163 umgesetzt, wartet auf UI-Sichtprüfung — Marker `AWAITING-VERIFICATION` in `docs/handoff/S163_B028b_ui_verifikation.md`)
 
 **Tier:** Executor
 
 **Effort:** ~20k (M)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur gerendert — additiv, nicht gatend (erscheint neben dem bestehenden Deny-the-Witch-Wurf-UI, blockiert dieses aber nicht; PSYKER-/Wargear-Pfade unverändert). `can_deny()` generisch um Ability-Quellen erweitert (bisher nur Wargear `gloom_prism`, jetzt auch `noctilith_beacons` über `find_unit_ability_by_effect`). `gloom_prism`-Migration bleibt offener Rest — weiterhin im bestehenden Wargear-Gate.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`, `data/wh40k_9e/necrons/wargear.yaml`, `src/gameObjects/loader.py`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur gerendert — additiv, nicht gatend (erscheint neben dem bestehenden Deny-the-Witch-Wurf-UI, blockiert dieses aber nicht; PSYKER-Pfad unverändert). `can_deny()` generisch um Ability-Quellen erweitert (S160: nur Wargear `gloom_prism` + `noctilith_beacons` über `find_unit_ability_by_effect`).
+
+**S163-Nachtrag (gloom_prism-Rest, B-028b-Rest):** `gloom_prism` vom alten Wargear-Namens-Gate (`load_deny_wargear_names`, Match gegen `unit.rules`) auf einen echten `unit_ability`-Eintrag migriert — `wh40k_9e.necrons.unit.canoptek_spyder.gloom_prism` in `unit_abilities.yaml`, `conditions: [has_rules: [gloom_prism]]` (Muster wie die bereits bestehende `fabricator_claw_array`-Ability derselben Einheit, nicht wie Noctilith's bedingungslose Ownership — Gloom Prism ist laut Wahapedia optionales Wargear). `wargear.yaml`-Eintrag auf reine Katalog-Beschreibung reduziert (kein `effect`-Block mehr, analog `fabricator_claw_array`). `can_deny()` in `psychicPhase.py` dadurch vereinfacht: nur noch PSYKER-Keyword ODER `find_unit_ability_by_effect` — der Wargear-Namens-Pfad ist jetzt für keine Fraktion mehr aktiv, `load_deny_wargear_names` bleibt als dokumentierte, generische Fallback-Infra in `loader.py` bestehen (nicht entfernt — Tests/Cache in `test_loader.py`/`conftest.py` nicht angefasst, bewusste Scope-Entscheidung statt größerer Umbau). Neue reaktive GO-Karte für Canoptek Spyder löst B-119 Fall b mit (D-1, Variante A, Stakeholder-Freigabe S163).
 
 **UI-Verifikation (S160, `docs/handoff/S160_B104_ui_verifikation.md` — B-028b-Teil):** Testfall 1 (Karte erscheint im Deny-Column) — positiv. Testfall 2 (Use/Undo-Zyklus, Vollrückgängig-Garantie) — positiv. Testfall 3 (Regression bestehender Deny-Pfade ohne Szarekh, mit Canoptek Spyder/Gloom Prism) — positiv.
 
+**UI-Verifikation ausstehend (S163, gloom_prism-Karte):** `docs/handoff/S163_B028b_ui_verifikation.md` — Karte „Gloom Prism" muss additiv in der Deny-Spalte für Canoptek Spyder erscheinen, Roll-UI unverändert.
+
 **Abhängigkeiten:** Nach B-028a (reines Plumbing muss erst vorhanden sein). Unabhängig von c1–c5.
 
-**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57); `docs/handoff/S159_B028b_ui_verifikation.md` (Testfälle 1–3); `docs/handoff/S159_review.md` DoD-Punkt 6.
+**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57); `docs/handoff/S159_B028b_ui_verifikation.md` (Testfälle 1–3); `docs/handoff/S159_review.md` DoD-Punkt 6; `docs/handoff/S163_PLANNING.md` (T2 + D-1).
 
 **Benötigte Regeln-Scopes:** —
 
@@ -2181,17 +2185,17 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** ToDo
+**Status:** UI-Verifikation (fachlich gelöst via B-028b, S163 — wartet auf dieselbe UI-Sichtprüfung wie B-028b, danach Archivierung)
 
 **Tier:** Executor
 
 **Effort:** S: ~10k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/psychicPhase.py::_render_deny_column` (S162-Korrektur — vorherige Referenz `src/uiLayout/gameActionsArea.py (_render_deny_column)` war falsch, per `grep -rn "def _render_deny_column" src/` verifiziert: die Funktion liegt in `psychicPhase.py:469`, `gameActionsArea.py` enthält keinen Deny-Code). Bei einem Deny-the-Witch-Wurf zeigt die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle — der Spieler kann nicht sehen, welche Einheit mit welchem Wargear (oder GO-Karte) den Deny durchführt. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar, kein zusätzlicher Text nötig. **(b) Canoptek Spyder Gloom Prism (Wargear-Pfad, kein GO-Card):** keine Sichtbarkeit der ausführenden Einheit — braucht einen Hinweistext ähnlich `_render_resolution_tab`s „Resolving against ⟨Unit⟩" oder eine Chipline in der Deny-Spalte.
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/psychicPhase.py::_render_deny_column` (S162-Korrektur — vorherige Referenz `src/uiLayout/gameActionsArea.py (_render_deny_column)` war falsch, per `grep -rn "def _render_deny_column" src/` verifiziert: die Funktion liegt in `psychicPhase.py:469`, `gameActionsArea.py` enthält keinen Deny-Code). Bei einem Deny-the-Witch-Wurf zeigte die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar — gelöst seit S160. **(b) Canoptek Spyder Gloom Prism:** war auf dem Wargear-Pfad ohne GO-Karte, seit S163 (B-028b-Rest) ebenfalls über eine reaktive GO-Karte gerendert (`_render_deny_ability_cards`, identisches Muster wie Fall a) — die ausführende Einheit ist damit sichtbar, **ohne** zusätzlichen Chip/Hinweistext (D-1 Entscheidung Variante A, Stakeholder-Freigabe S163: „ein einheitlicher Rendering-Pfad für alle Deny-Quellen ist DRY und deckt sich mit dem Noctilith-Muster" — ein separater Chip hätte doppelt gerendert). Regressionstests: `tests/gameMechanic/test_psychic_phase.py::TestGloomPrismAbilityMigration` (Ability-Daten, die die Karte speist) + `test_can_deny_via_gloom_prism_ability_without_wargear_rules_tag` (Migration vollständig, kein Wargear-Namens-Pfad mehr nötig).
 
-**Abhängigkeiten:** Hinter B-028b (Noctilith-Sichtbarkeit ist bereits über GO-Karte gelöst); `gloom_prism`-Migration bleibt auf dem bestehenden Wargear-Pfad, braucht also zusätzliche UI-Kennzeichnung.
+**Abhängigkeiten:** Hinter B-028b (Noctilith-Sichtbarkeit war bereits über GO-Karte gelöst); `gloom_prism`-Migration (S163) löst Fall b jetzt über denselben Pfad.
 
-**Belege:** Stakeholder-Kommentar S160 zu B-028b Testfall 3 (`docs/handoff/S160_B104_ui_verifikation.md`, B-028b-Testfall-Notiz).
+**Belege:** Stakeholder-Kommentar S160 zu B-028b Testfall 3 (`docs/handoff/S160_B104_ui_verifikation.md`, B-028b-Testfall-Notiz); `docs/handoff/S163_PLANNING.md` D-1 (Entscheidung Variante A); `docs/handoff/S163_B028b_ui_verifikation.md` (gemeinsame UI-Sichtprüfung mit B-028b).
 
 **Benötigte Regeln-Scopes:** —
 

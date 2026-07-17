@@ -52,7 +52,7 @@ def _compute_attacks(
     attacks_str: str,
     models_count: int,
     unit_attacks: int,
-    effect: dict | None = None,
+    effect: dict[str, Any] | None = None,
     max_attacks: int | None = None,
 ) -> str:
     """Return display string for total attack count."""
@@ -76,7 +76,7 @@ def _total_attacks_int(
     attacks_str: str,
     models_alive: int,
     unit_attacks: int,
-    effect: dict | None = None,
+    effect: dict[str, Any] | None = None,
     max_attacks: int | None = None,
 ) -> int | None:
     """Return total attack count as int, or None if dice-based (cannot pre-split)."""
@@ -131,7 +131,9 @@ def _has_independent_attack_budget(effect: dict[str, Any] | None, max_attacks: i
     no reason to ever declare fewer than the maximum with such a weapon, its
     counter should default to that maximum rather than to 0.
     """
-    return bool(effect) and effect.get("type") == "extra_attacks" and bool(max_attacks)
+    if not effect:
+        return False
+    return effect.get("type") == "extra_attacks" and bool(max_attacks)
 
 
 def _rapid_fire_input_cap(weapon_type: str, base_cap: int) -> int:
