@@ -2200,3 +2200,77 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Stakeholder-Beobachtung S160 (B-028b UI-Verifikation Testfall 3, Gloom-Prism-Regression).
+
+---
+
+## B-120 — Conditions Auswertung in find unit ability by effect inert
+
+[↩ Zeile in backlog.md](backlog.md#b-120)
+
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** S: ~15k
+
+**Detail-Beschreibung:** `find_unit_ability_by_effect` (`src/gameMechanic/abilityEngine.py:582`)
+matched ausschließlich `ability.unit_id == unit_id and ability.effect.type == effect_type` —
+`ability.conditions` (Feld auf `Ability`, `src/gameObjects/ability.py:20`) wird nicht geprüft,
+anders als `_wound_auto_fail_ability`, die `cond.has_rules`/`cond.has_keywords` gegen
+`unit.rules` matched (`abilityEngine.py:53`). Die im Zuge der B-028b-Migration (S163) neu
+angelegte Canoptek-Spyder-Ability `wh40k_9e.necrons.unit.canoptek_spyder.gloom_prism`
+(`data/wh40k_9e/necrons/unit_abilities.yaml:884`) trägt `conditions: [has_rules: [gloom_prism]]`
+(Zeile 898) — dieses Feld hat aktuell keine Wirkung, die Ownership-Prüfung matcht
+unconditional. Kein akuter Verhaltensbruch, weil der Spyder das Gloom-Prism-Wargear im
+aktuellen Datenbestand immer trägt (kein optionaler Fall in den Rosters), aber sobald ein
+Roster den Spyder ohne Gloom Prism listen könnte, würde die Deny-Karte trotzdem rendern.
+Lösung: entweder `find_unit_ability_by_effect` um eine `conditions`-Auswertung erweitern
+(analog `_wound_auto_fail_ability`) oder die Ability optional modellieren, sodass sie nur bei
+tatsächlich getragenem Wargear erscheint.
+
+**Abhängigkeiten:** Keine — eigenständige Korrektur an `abilityEngine.py`.
+
+**Belege:** Review-Befund 1+2, S163-Review (dokumentiert in `.claude/tasks/briefing.md` „Review-
+Befunde (nachrangig, GO-unkritisch)"); `docs/handoff/S163_RETRO.md` Maßnahme M1.
+
+**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Fraktions-/Protokoll-/
+Direktiv-Effekt".
+
+**Herkunft:** Review-Befund S163 / Retro M1.
+
+---
+
+## B-121 — load deny wargear names toter Produktionscode
+
+[↩ Zeile in backlog.md](backlog.md#b-121)
+
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** XS: ~5k
+
+**Detail-Beschreibung:** `load_deny_wargear_names` (`src/gameObjects/loader.py:945`) lädt
+Wargear-Kurznamen mit `effect.type == "deny_psychic"` für eine Fraktion. Bis S163 war das der
+einzige Pfad, über den `psychicPhase.py::can_deny` Gloom-Prism-Wargear erkannte; seit der
+B-028b-Migration (S163, Docstring der Funktion selbst dokumentiert das) läuft `gloom_prism`
+über die unit-owned Ability + `find_unit_ability_by_effect` (siehe B-120), und kein
+`src/`-Aufrufer ruft `load_deny_wargear_names` mehr auf — verifiziert per
+`grep -rln load_deny_wargear_names src/ tests/`: Treffer nur in `loader.py` (Definition) und
+zwei Testdateien (`tests/gameObjects/test_loader.py`, Erwähnung in einem Kommentar in
+`tests/gameMechanic/test_psychic_phase.py`). Die Funktion ist damit toter Produktionscode.
+Entweder entfernen (inkl. der zugehörigen Tests) oder einen ersten echten Nutzer benennen, für
+den sie als generische Infra vorgehalten wird.
+
+**Abhängigkeiten:** Keine — reine Aufräumarbeit, keine andere Mechanik hängt daran.
+
+**Belege:** Review-Befund 3, S163-Review; `docs/handoff/S163_RETRO.md` Maßnahme M2.
+
+**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Loader / YAML-Schema
+ändern".
+
+**Herkunft:** Review-Befund S163 / Retro M2.

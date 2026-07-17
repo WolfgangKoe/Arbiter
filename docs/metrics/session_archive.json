@@ -5426,11 +5426,11 @@
   "d27554b4-b90f-4323-98f2-e5b721d747a4": {
     "started_at": "2026-07-17T20:16:15.852Z",
     "task": "start session",
-    "peak_context": 105643,
-    "subagent_share": 89.6896970097159,
+    "peak_context": 112261,
+    "subagent_share": 89.04042934977412,
     "by_tier": {
       "Opus": 4407665,
-      "Sonnet": 38188374
+      "Sonnet": 41670320
     },
     "subagents": [
       {
@@ -5451,7 +5451,7 @@
         "agent_type": "general-purpose",
         "description": "Abschluss S163: Artefakte + Commit",
         "tier": "Sonnet",
-        "peak_context": 70596,
+        "peak_context": 79002,
         "started_at": "2026-07-17T20:16:15.852Z"
       },
       {
@@ -5459,6 +5459,13 @@
         "description": "Planning-Entwurf S163 erstellen",
         "tier": "Opus",
         "peak_context": 88865,
+        "started_at": "2026-07-17T20:16:15.852Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen M1–M3 umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 90702,
         "started_at": "2026-07-17T20:16:15.852Z"
       },
       {

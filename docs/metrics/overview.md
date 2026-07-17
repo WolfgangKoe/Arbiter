@@ -1,7 +1,7 @@
 # Token-Report — Effizienz statt Menge
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 23:41 CEST
+Stand: 2026-07-17 23:49 CEST
 
 Beantwortet: *wurden die Token gut ausgegeben, werden wir besser oder schlechter?*
 Korridor: **150k** Kontext-Token je Antwort (CLAUDE.md). Token-Maß = input + cache_creation + cache_read + output.
@@ -14,7 +14,7 @@ Modell-Mix (Subagenten): `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 22:16 d275  ████████░░░░ 106k ↓    █████░  90% ↑  █···········
+07-17 22:16 d275  █████████░░░ 112k ↓    █████░  90% ↑  █···········
 07-17 21:32 8096  ███████████░ 143k ↑    █████░  79% ↑  █···········
 07-17 19:45 04ab  ███████████░ 140k ↓    ████░░  74% ↑  █···········
 07-17 18:44 ffc7  ████████████ 159k ↓    ████░░  67% ↓  ·······▒▒▒▒▒
@@ -28,17 +28,17 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 
 - **Aufgabe:** start session
 - **Modelle:** Haupt Fable · Subagent Opus, Sonnet
-- **Tokens gesamt:** 47,492,678 (Haupt 4,896,639 · Subagent 42,596,039, Anteil 90 %)
-- **Peak-Kontext:** ████████░░░░ 106k / 150k
-- **cache_read:** 44,825,937 · **Output:** 270,933
+- **Tokens gesamt:** 54,308,186 (Haupt 5,671,524 · Subagent 48,636,662, Anteil 90 %)
+- **Peak-Kontext:** █████████░░░ 112k / 150k
+- **cache_read:** 51,333,751 · **Output:** 310,163
 
 ## (Retro-)Hinweise
 
 _Auto-generiert zur jüngsten Session._
 
-- ✅ Peak-Kontext 106k blieb im 150k-Korridor.
+- ✅ Peak-Kontext 112k blieb im 150k-Korridor.
 - ✅ 90% der Token liefen über Subagenten — das Hauptfenster blieb schlank.
-- ✅ 38,188,374 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
+- ✅ 44,228,997 Token auf günstigeren Tiers (Sonnet/Haiku) — gutes Tiering.
 
 ## 150k-Korridor für Subagenten
 
@@ -49,19 +49,20 @@ _Peak-Kontext je Subagent der letzten Session (selbe Metrik wie Haupt-Peak)._
 --- ----------------------------------- -------------------- ------
 1   general-purpose: DoD-Review S163 (… ██████░░░░░░  79k    ✅
 2   general-purpose: T1: mypy-Drift re… █████████░░░ 118k    ✅
-3   general-purpose: Abschluss S163: A… ██████░░░░░░  71k    ✅
+3   general-purpose: Abschluss S163: A… ██████░░░░░░  79k    ✅
 4   general-purpose: Planning-Entwurf … ███████░░░░░  89k    ✅
-5   general-purpose: Feedback vollstän… ████░░░░░░░░  49k    ✅
-6   general-purpose: T2: gloom_prism-M… ████████████ 175k    ⛔
+5   general-purpose: Retro-Maßnahmen M… █████████░░░ 108k    ✅
+6   general-purpose: Feedback vollstän… ████░░░░░░░░  49k    ✅
+7   general-purpose: T2: gloom_prism-M… ████████████ 175k    ⛔
 ```
 
 ## Zusammensetzung der Antworten
 
 ```text
-input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  1,136
-cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  2,394,672
-cache_read     ▕████████████████████████▏   94%  44,825,937
-output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  270,933
+input          ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    0%  1,300
+cache_creation ▕█░░░░░░░░░░░░░░░░░░░░░░░▏    5%  2,662,972
+cache_read     ▕████████████████████████▏   95%  51,333,751
+output         ▕░░░░░░░░░░░░░░░░░░░░░░░░▏    1%  310,163
 ```
 
 **Legende & Zielwerte:**
@@ -78,10 +79,10 @@ output         ▕░░░░░░░░░░░░░░░░░░░░�
 _Approximation: exakte Per-Quelle-Aufschlüsselung ist im Transcript nicht verfügbar. Orientiert an Wegner 2026 / context-engineering-slides.md._
 
 ```text
-Warm (System/Memory/History)  ▕████████████████████▏   94%  44,825,937
-Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    5%  2,394,672
-Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  1,136
-Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  270,933
+Warm (System/Memory/History)  ▕████████████████████▏   95%  51,333,751
+Neu gecacht (Tool-Ausgaben)   ▕█░░░░░░░░░░░░░░░░░░░▏    5%  2,662,972
+Ungecacht (neue Inhalte)      ▕░░░░░░░░░░░░░░░░░░░░▏    0%  1,300
+Generiert (Output)            ▕░░░░░░░░░░░░░░░░░░░░▏    1%  310,163
 ```
 
 **Legende (Slide-Kategorien):**
@@ -97,5 +98,5 @@ Generiert (Output)            ▕░░░░░░░░░░░░░░░�
 
 ---
 
-Σ über 125 Sessions: 3,948,071,919 Token (45,407 Antworten).
+Σ über 125 Sessions: 3,954,887,427 Token (45,489 Antworten).
 

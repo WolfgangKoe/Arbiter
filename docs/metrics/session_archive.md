@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-17 23:41 CEST
+Stand: 2026-07-17 23:49 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,13 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 22:16 d275  ████████░░░░ 106k ✅    █████░  90%    █···········
+07-17 22:16 d275  █████████░░░ 112k ✅    █████░  89%    █···········
          SA_1·  ██████░░░░░░  79k ✅    DoD-Review S163 (Opus)
          SA_2·  █████████░░░ 118k ✅    T1: mypy-Drift reduzieren
-         SA_3·  ██████░░░░░░  71k ✅    Abschluss S163: Artefakte + Commit
+         SA_3·  ██████░░░░░░  79k ✅    Abschluss S163: Artefakte + Commit
          SA_4·  ███████░░░░░  89k ✅    Planning-Entwurf S163 erstellen
-         SA_5·  ████░░░░░░░░  49k ✅    Feedback vollständige Planung vera…
-         SA_6·  ████████████ 175k ⛔    T2: gloom_prism-Migration B-028b
+         SA_5·  ███████░░░░░  91k ✅    Retro-Maßnahmen M1–M3 umsetzen
+         SA_6·  ████░░░░░░░░  49k ✅    Feedback vollständige Planung vera…
+         SA_7·  ████████████ 175k ⛔    T2: gloom_prism-Migration B-028b
 ----------------- ---------------------- -------------- ------------
 07-17 21:32 8096  ███████████░ 143k ⚠️   █████░  79%    █···········
          SA_1·  ███████████░ 138k ⚠️   S162 Doku-/Backlog-Hygiene

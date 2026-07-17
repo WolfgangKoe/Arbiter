@@ -62,12 +62,16 @@ Priorität = `docs/goals/backlog.md` (einzige Quelle).
 
 1. **Stakeholder-Sichtprüfung** `docs/handoff/S163_B028b_ui_verifikation.md` (Canoptek
    Spyder Deny-Karte im echten Spielverlauf) — danach B-028b/B-119 archivieren.
-2. **Retro-Entscheid** `docs/handoff/S163_RETRO.md` (M1–M3 zur Freigabe, M4 nur Kenntnisnahme).
-3. Nächstes offenes Backlog-Item gemäß `docs/goals/backlog.md`.
+2. Nächstes offenes Backlog-Item gemäß `docs/goals/backlog.md`.
+
+**S163-Retro abgeschlossen (Nachklapp-Session):** M1 → B-120, M2 → B-121 (Backlog), M3 →
+`agent_scopes.md` verankert, M4 war bereits erledigt, M5 vom Stakeholder direkt in der
+Mailbox entschieden (Option a — GO/NO-GO-Urteil bleibt im Dateikörper, Review-Datei nach
+Durchreichen löschen, keine Allowlist-/README-Änderung nötig). `S163_RETRO.md` auf `DONE`
+gesetzt und gelöscht.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING) ·
-`S163_B028b_ui_verifikation.md` (AWAITING-VERIFICATION) ·
-`S163_RETRO.md` (NEEDS-DECISION).
+`S163_B028b_ui_verifikation.md` (AWAITING-VERIFICATION).
 
 ---
 

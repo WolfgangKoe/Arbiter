@@ -242,6 +242,10 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   Antwort wie der letzte Gate-Beleg. Gilt zusätzlich zur Vollsuite-Vordergrund-Pflicht
   oben. Anlass: S159 — 2× Nachstoß nötig, weil Executoren auf Hintergrund-Monitore
   warteten.
+- **Selbstprüf-Suite im Vordergrund (S163-Retro-M3):** Executoren führen ihre
+  Selbstprüf-Vollsuite im Vordergrund aus und beenden ihren Turn nie, während ein
+  eigener Hintergrund-Task läuft — Abschlussbericht erst nach vorliegendem Ergebnis.
+  Anlass: T1-Executor S163 benötigte zwei Weckrufe.
 - **Playwright-UI-Verifikation (Standard-Werkzeug seit S136):** Playwright 1.60 +
   Chromium stehen im venv bereit — funktionale UI-Verifikation (Scroll-Position,
   Layout-Shift-Messung, Klick-Abläufe, Konsolen-Snippets wie in `S136_B1_probe.md`
