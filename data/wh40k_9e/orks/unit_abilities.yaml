@@ -257,23 +257,6 @@ abilities:
 
   # ── Troops ─────────────────────────────────────────────────────────────────
 
-  - id: wh40k_9e.orks.unit.gretchin.gretchin_mob
-    name_en: Gretchin Mob
-    ability_type: triggered
-    source: unit_ability
-    unit_id: wh40k_9e.orks.unit.gretchin
-    rule_text: "Unless accompanied by a RUNTHERD, this unit must take a Morale test if it suffers any casualties. However, Gretchin units do not have the Objective Secured ability."
-    trigger:
-      timing: persistent
-      phase: morale
-      stage: active
-      player: active
-    conditions:
-      - has_keywords: [GRETCHIN]
-    effect:
-      type: special_morale
-      target: self
-
   - id: wh40k_9e.orks.unit.gretchin.cowardly
     name_en: Cowardly
     ability_type: triggered

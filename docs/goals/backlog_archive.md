@@ -453,3 +453,21 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   pre-commit vor „grün"-Claim, Token-/Zeit-Budget-Cap gegen Rabbit-Holes — sind in
   `docs/reference/agent_scopes.md` bereits verankert (§„Selbstprüf-Checkliste (Pflicht vor
   Rückgabe)" + „Selbst-Stopp-Klausel in jedem Brief").
+- ✅ **B-036 — Battle Log nach Reset alte Einträge — ARCHIVIERT (S155, Duplikat des
+  S129-Fixes, Stakeholder-Entscheid S154):** Bug „nach Reset zeigt das Battle-Log noch alte
+  Einträge" war bereits durch den S129-Fix behoben; die Backlog-Zeile blieb als Duplikat
+  stehen (ursprünglich Teil von Plan 018). Umsetzung scheiterte 2× an API-529 (reine
+  Ausführungspanne), in S155 nachgeholt.
+- ✅ **B-053 — Daten-Altlast `gretchin_mob` — gelöscht in S155, 8E-Relikt ohne
+  Referenzen:** Eintrag `wh40k_9e.orks.unit.gretchin.gretchin_mob` in
+  `data/wh40k_9e/orks/unit_abilities.yaml` war ein 8E-Relikt („must take a Morale test if it
+  suffers any casualties" ohne 9E-Bedingung) mit 0 Referenzen außerhalb der eigenen
+  Definition (grep über `data/`, `src/`, `tests/`, `docs/`) — die 9E-Mechanik wird bereits
+  durch die benachbarte `cowardly`-Ability abgedeckt. Ersatzlos gelöscht;
+  `pytest tests/gameObjects/ --no-cov -q` grün (321 passed) danach.
+- ✅ **B-079 — DRY ±1-Cap-Helper (`diceHtml.py`) — stale, bereits erledigt in S118
+  (`29f4f81c`), festgestellt S155:** Der geforderte gemeinsame Helper existiert bereits als
+  `_capped_modifier_threshold` in `src/uiLayout/diceHtml.py` (3 Aufrufstellen: Hit-Block,
+  Wound-Block) samt Tests in `tests/uiLayout/test_dice_html.py`
+  (`test_capped_modifier_threshold_*`) seit Commit `29f4f81c` („Close S118: … dice cap DRY
+  helper"). Backlog-Eintrag blieb als Leiche stehen — nichts mehr zu tun.

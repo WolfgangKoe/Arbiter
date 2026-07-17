@@ -519,7 +519,7 @@ am Anfang der Beschreibungsspalte.
 
 **Herkunft:** §2 Alt-`backlog.md` Z.243–249 (Stakeholder-Beobachtungen S131).
 
-## B-025 — B11 Rest Wahrnehmung nach B1 Fix
+## B-025 — Strukturelle Verbesserung Skeleton Platzhalter Fixe Hoehe oder Fragment Isolierung
 
 [↩ Zeile in backlog.md](backlog.md#b-025)
 
@@ -531,15 +531,15 @@ am Anfang der Beschreibungsspalte.
 
 **Effort:** ~5k
 
-**Detail-Beschreibung:** Beim Slot-Wechsel geschieht optisch noch ein kurzer Sprung/Zucken, aber das Fenster bleibt an derselben Stelle (kein Scroll-Delta mehr). Beobachten, ggf. Dropdown-Höhen stabilisieren.
+**Detail-Beschreibung:** Strukturelle Verbesserung: Skeleton-Platzhalter mit fixer Höhe oder Streamlit-Fragment-Isolierung. Playwright-Probe (S154) reproduziert das Zucken beim Slot-Wechsel — 7 Layout-Shift-Events, CLS≈0.29; der B1-Scroll-Fix wirkt weiter (kein Scroll-Delta mehr). Ursache ist strukturell: Streamlit rendert den Einheiten-Datenblock inkrementell, jedes Element löst einen Reflow aus — eine feste `min-height` je Einheit wäre falsch dimensioniert. Priorität niedrig (rein kosmetisch).
 
 **Abhängigkeiten:** B1 selbst ist gefixt (Archiv A-014); dies ist der optionale 2. Schritt aus der B1-Probe.
 
-**Belege:** `docs/handoff/S136_B1_probe.md` (Playwright-Beleg B1).
+**Belege:** `docs/handoff/S136_B1_probe.md` (Playwright-Beleg B1); `docs/handoff/S154_offene_entscheide.md` E4 (CLS-Befund + Umformulierungs-Vorschlag).
 
 **Benötigte Regeln-Scopes:** —
 
-**Herkunft:** §2 Alt-`backlog.md` Z.250–253 (Stakeholder-Beobachtung S136).
+**Herkunft:** §2 Alt-`backlog.md` Z.250–253 (Stakeholder-Beobachtung S136); umformuliert S155 (E4, Stakeholder-Vorschlag S154).
 
 ## B-026 — B12 GO used Zustand Gesamtkonzept
 
@@ -760,28 +760,6 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** §2 Alt-`backlog.md` Z.321.
-
-## B-036 — Battle Log nach Reset alte Eintraege
-
-[↩ Zeile in backlog.md](backlog.md#b-036)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Bug — nach Reset zeigt das Battle-Log noch alte Einträge. Teil von Plan 018.
-
-**Abhängigkeiten:** —
-
-**Belege:** → Plan 018.
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.322.
 
 ## B-037 — collect modifiers for phase
 
@@ -1112,28 +1090,6 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** §2 Alt-`backlog.md` Z.366–370 (S128-Folge, Plan 018 Task 18.3).
-
-## B-053 — Daten Altlast gretchin mob
-
-[↩ Zeile in backlog.md](backlog.md#b-053)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor (Haiku-Lookup)
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `orks/unit_abilities.yaml`. `rule_text` klingt nach einer 8E-Formulierung („must take a Morale test if it suffers any casualties") — gegen `docs/work/wahapedia_orks/` prüfen, ob die 9E-Bedingung abweicht (9E: Morale Test nur bei Verlusten UND unter Half-strength, sonst optional?), ggf. korrigieren.
-
-**Abhängigkeiten:** —
-
-**Belege:** `docs/work/wahapedia_orks/`.
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.371–375 (S128-Fund).
 
 ## B-054 — Custodes Rendax Kath Secondary toter Pfad
 
@@ -1640,28 +1596,6 @@ am Anfang der Beschreibungsspalte.
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** §4 Alt-`backlog.md` Z.614–621, Z.639–642 (S51 entdeckt; S110-Retro M1+M2).
-
-## B-079 — DRY Plus Minus Eins Cap Helper
-
-[↩ Zeile in backlog.md](backlog.md#b-079)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py` (`_render_dice_roll_block`, `_render_dice_wound_block`). Hit- und Wound-Block teilen identische ±1-Cap-Logik → gemeinsamen Helper extrahieren; Tests müssen weiter grün bleiben.
-
-**Abhängigkeiten:** Kleiner Refactor, kein Verhaltenswechsel.
-
-**Belege:** —
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §4 Alt-`backlog.md` Z.622–624 (S110-Retro-M1).
 
 ## B-080 — DRY Zwei Sechs Cap Quelle
 
