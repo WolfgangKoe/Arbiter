@@ -328,6 +328,30 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **code**: abilityEngine.py:unit_wound_auto_fail_max / combat.py:resolve_attack_modifiers
 - **regel**: Quantum Shielding (Einheiten-Fähigkeit, getrennt vom gleichnamigen Stratagem): unmodifizierter Verwundungswurf 1-3 schlägt immer fehl — der Verwundungswurf-Floor wird auf `auto_fail_max + 1` angehoben, kein Wund-Buff kann darunter senken (der Check greift auf den UNMODIFIZIERTEN Wurf). Anzeige: WOUND-Block zeigt 3× ✕ (Angreifer-Perspektive, Debuff-Rot).
 
+### R-COMBAT-38
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_find_unit_ability_by_effect_real_data / test_mortal_wounds_target_real_data / test_check_conditions_passes_for_the_silent_king / test_vengeance_flow_triggers_and_rolls_amount / test_vengeance_flow_below_threshold_inflicts_nothing / test_vengeance_of_the_enchained_flow_trigger_resolve_apply / test_mortal_wounds_on_destroy_card_shown_once_unit_destroyed / test_mortal_wounds_on_destroy_card_hidden_while_unit_alive / test_mortal_wounds_on_destroy_card_hidden_for_unit_without_the_ability
+- **quelle**: wahapedia_necrons/units_all.txt:238/689 — Vengeance of the Enchained (The Silent King): "When Szarekh is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 2D6" suffers D6 mortal wounds." Wortlaut stimmt mit `data/wh40k_9e/necrons/unit_abilities.yaml:vengeance_of_the_enchained` überein (geprüft B-028c1 T1).
+- **code**: `uiLayout/_common.py:_render_mortal_wounds_on_destroy_card` (Call-Site, per-unit in `render_player_column` UND `fightPhase.py:_render_fight_column` — Nachbesserung nach Live-Verifikationsbefund, fightPhase hat eine eigene, nicht auf `render_player_column` aufbauende Spaltenfunktion), `abilityEngine.py:resolve_mortal_wounds_effect` / `mortal_wounds_target`, `unitMutations.py:apply_mortal_wounds`. Bekannte offene Lücke: `psychicPhase.py` (Smite/Perils-Mortal-Wounds) läuft über keinen der beiden Call-Sites, analog zur dokumentierten Lücke bei `_maybe_flag_transport_destroyed`.
+- **regel**: `effect.type: mortal_wounds` jetzt an einen Call-Site angeschlossen (B-028c1 T2, S164): reaktive additive GO-Karte (Use/Undo, B-028b-Muster) erscheint pro Einheit, sobald `unit_state.destroyed` gesetzt UND die Einheit eine eigene `mortal_wounds`-Ability trägt (`find_unit_ability_by_effect`); Use löst `resolve_mortal_wounds_effect` (D6-Gate 4+, D6-Schadenswurf); bei Erfolg wählt der Nutzer ein Ziel (Spatial-Auflösung "units within 2D6" ist Tisch-/UI-Sache, Klasse-A-App-Anteil bleibt der Wurf) und wendet die Mortal Wounds über `apply_mortal_wounds` an. **Datenbug gefunden+behoben (S164 T2):** `conditions: [has_rules: [vengeanceOfTheEnchained]]` gate war nie erfüllbar — das Rules-Tag in `units.yaml` hängt fälschlich an `tesseract_vault`, nicht an `the_silent_king`; auf `conditions: []` korrigiert (Ownership via `unit_id` ist bereits der volle Gate, mirrors die Schwester-Ability `noctilith_beacons` auf derselben Einheit). `tesseract_vault`s eigener Datensatz blieb unangetastet (außerhalb dieses Tasks). UI-Verifikation aussteht: `docs/handoff/S164_B028c1_ui_verifikation.md`.
+
+### R-COMBAT-39
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: **Regelkonformitäts-Befund (B-028c1 T1):** `unit_abilities.yaml:infused_madness` (unit_id `canoptek_plasmacyte`) behauptet "Each time this model is destroyed, roll one D6: on a 4+, the closest enemy unit within 6" suffers 1 mortal wound." Die tatsächliche Wahapedia-Fähigkeit gleichen Namens für Canoptek Plasmacyte (wahapedia_necrons/units_all.txt:386) lautet: "Once per turn, at the start of either your Charge phase or the Fight phase, you can select one friendly <DYNASTY> ... unit within 3" of this model. If you do, roll one D6: on a 1, one model in that unit is destroyed. Regardless of the result, until the end of the turn, add 1 to the Strength and Attacks characteristics of models in that unit." — ein komplett anderer Mechanismus (aktivierte Buff/Risiko-Fähigkeit, kein `mortal_wounds`, kein `model_destroyed`-Trigger). Die YAML-Definition ist mit hoher Wahrscheinlichkeit fehlerhaft/verwechselt und muss vor Umsetzung korrigiert werden.
+- **code**: —
+- **regel**: Kernlogik-Handler ist generisch nutzbar (Test-Fixture `test_infused_madness_shape_*` deckt nur die *Form* ab, nicht die YAML-Korrektheit dieser konkreten Karte). **Blocker für T2**: YAML-Eintrag `infused_madness` vor Call-Site-Wiring gegen Wahapedia korrigieren oder die Karte aus dem B-028c1-Scope nehmen.
+
+### R-COMBAT-40
+- **klasse**: A
+- **status**: offen
+- **getestet**: nein
+- **quelle**: **Regelkonformitäts-Befund (B-028c1 T1):** `unit_abilities.yaml:arc_fields` (unit_id `gauss_pylon`) und `unit_abilities.yaml:wrath_of_the_seraptek` (unit_id `seraptek_heavy_construct`) sind unter diesen Namen NICHT in `docs/work/wahapedia_necrons/units_all.txt` auffindbar. Beide Einheiten führen dort stattdessen eine Fähigkeit namens "Explodes" (Gauss Pylon: 5+, 6", D6 mortal wounds; Seraptek: 5+, 2D6", D6 mortal wounds an alle Einheiten im Radius) — andere Schwelle/Reichweite/Zielmenge als die YAML-Karten. Beide Einheiten stammen laut `docs/goals/archive/ziel5.md` (Ziel 5j) aus dem "Imperial Armour Compendium 9E" mit explizitem Vermerk "vor Turnierbetrieb gegen aktuelles Wahapedia/MFM prüfen" — die lokale Wahapedia-Quelle deckt diesen FW/Legends-Wortlaut nicht ab, ein Abgleich ist mit den lokal vorliegenden Dokumenten nicht möglich.
+- **code**: —
+- **regel**: Kernlogik-Handler ist generisch nutzbar (Test-Fixtures `test_arc_fields_shape_*` / `test_wrath_of_the_seraptek_shape_d3_amount` decken nur die *Form* ab). **Offene Entscheidung für T2/Stakeholder**: entweder IA-Compendium-Quelle als gültig akzeptieren (Risiko dokumentiert, s.o.) oder auf die im lokalen Wahapedia-Scrape belegte "Explodes"-Fähigkeit (5+, D6 mortal wounds, Zielradius wie im Scrape) umschreiben.
+
 ---
 
 ## Bereich: Command Phase

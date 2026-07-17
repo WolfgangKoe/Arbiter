@@ -25,53 +25,43 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S163, 2026-07-17)
+## Aktueller Stand (nach S164, 2026-07-18)
 
-**Review S163: GO** (1995 passed, Coverage 99,13 %, Arch 8 grün, Docs+Acceptance 25 grün,
-mypy 0 == Baseline 0 — CI-Blocker behoben). Zwei Aufgaben, sequenziell/parallel per Plan:
+**Review S164: NO-GO → minimal-GO-Auflagen umgesetzt** (2015 passed, Coverage 99,14 %,
+Arch 8 grün, mypy 0, black/ruff sauber). Vier Tasks, parallelisiert per Stakeholder-Anweisung:
 
-- **T1 DONE — mypy-Drift-Rückbau (Retro-M1', Stakeholder-Entscheid S162):** 26 → 0, reine
-  Typ-Fixes (`dict[str, Any]`/`int()`/`bool(...)`-Annotationen, keine Verhaltensänderung) in
-  9 `src/`-Dateien (`attackMath.py`, `unitMutations.py`, `moralePhase.py`, `diceHtml.py`,
-  `unitCard.py`, `gameProtocoll.py`, `armyCard.py`, `detachmentCard.py`, `armyList.py`);
-  `tools/mypy_gate.py` `BASELINE` 25 → 0 im selben Commit nachgezogen (Ratchet-Regel erfüllt).
-- **T2 DONE — B-028b-Rest: gloom_prism auf B-028a-Ability-Infrastruktur migriert:** neue
-  `deny_psychic`-Ability für den Canoptek Spyder in `unit_abilities.yaml`, `wargear.yaml` auf
-  Katalog-only reduziert, `can_deny()` ohne den alten Wargear-Namens-Gate; rendert jetzt wie
-  Noctilith Beacons über `_render_deny_ability_cards` eine reaktive GO-Karte. 4
-  neue/angepasste Tests, `processes.md` P-12 + `acceptance/rules.md` R-PSYCHIC-14
-  nachgezogen. **B-119 Fall b via D-1 = Variante A mitgelöst** (einheitlicher Rendering-Pfad
-  löst die geforderte Quellen-Sichtbarkeit, kein separater Chip nötig) — B-028b und B-119
-  beide auf „UI-Verifikation" gesetzt. Handoff `S163_B028b_ui_verifikation.md`
-  (AWAITING-VERIFICATION) wartet auf Stakeholder-Sichtprüfung — NICHT anfassen bis geprüft.
-- **Review-Befunde (nachrangig, GO-unkritisch):** 1) `conditions: [has_rules: [gloom_prism]]`
-  an der neuen Ability ist aktuell inert (kein Aufrufer wertet Conditions aus). 2)
-  Ownership-Match statt Rule-Match verengt den Mechanismus (kein aktueller Verhaltensbruch).
-  3) `load_deny_wargear_names` in `loader.py` ist jetzt toter Produktionscode (nur Tests
-  referenzieren ihn). → Retro M1/M2.
-- **mypy-Schuld getilgt:** die S162-Zeile „⚠ Bekannte Schuld: mypy-Gate rot" ist obsolet —
-  Baseline steht auf 0, CI auf dev wieder grün.
-- **S163-Rüge behoben:** Planner-Pflichtschritt „Vollständige Session-Planung" in
-  `agent_scopes.md` + Briefing-Vermerk verankert.
+- **T0 DONE — B-028b/B-119 archiviert** nach positiver UI-Verifikation (S163-Handoff gelöscht,
+  Archiv-Gruppe „Aus der ID-indizierten Liste (migriert S164)" in `backlog_archive.md`).
+- **T1 DONE — B-028c1 Kernlogik:** generischer `mortal_wounds`-Handler in `abilityEngine.py`
+  (`resolve_mortal_wounds_effect`/`mortal_wounds_target`), `Effect` um
+  `roll_threshold`/`roll_type` erweitert, Loader-Parsing, 11 Tests, R-COMBAT-38–40.
+- **T2 REDUZIERT + UI DEFEKT:** Regelkonformitäts-Befund aus T1 → NEEDS-DECISION-Entscheid:
+  nur `vengeance_of_the_enchained` verdrahtet (`_render_mortal_wounds_on_destroy_card` in
+  `_common.py` + `fightPhase.py`; YAML-Datenbug unerfüllbare `conditions` behoben).
+  Stakeholder-Verifikation 3× negativ — **Review-Befund 1 (GO-kritisch): Karte hat keinen
+  verlässlichen Sichtbarkeits-Pfad** (Anker hängt an Selektion, zerstörte Einheiten sind über
+  `unitCard.py:232` nicht selektierbar). Ehrlich re-scoped statt als verifiziert eingecheckt;
+  bekannte Zusatz-Lücke: psychicPhase-Spalte nicht verdrahtet.
+- **F1/F2-Entscheid (Mailbox):** `infused_madness` nur YAML-Datenkorrektur (echte Fähigkeit =
+  aktivierter Buff mit Risiko-Roll; Verdrahtung = eigenes Mini-Feature ~15–20k);
+  `arc_fields`/`wrath_of_the_seraptek` zurückgestellt bis externe Wortlaut-Verifikation
+  (IA-Compendium, lokal nicht belegt, in keinem Roster).
+- **Retro-Lehren (Entscheid offen, `S164_RETRO.md`):** Executor-Budget-Sprengung (T2 ~311k vs.
+  ~20k — Live-Verifikations-Schleife + Session-Limit-Abbruch), Formatter-Pflichtschritt fehlte,
+  isolierter Render-Test bewies Erreichbarkeit nicht.
 
-Frühere Sessions (S60–S162): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S163): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S164)
+### ▶ Nächster Schritt (S165)
 
-Priorität = `docs/goals/backlog.md` (einzige Quelle).
-
-1. **Stakeholder-Sichtprüfung** `docs/handoff/S163_B028b_ui_verifikation.md` (Canoptek
-   Spyder Deny-Karte im echten Spielverlauf) — danach B-028b/B-119 archivieren.
-2. Nächstes offenes Backlog-Item gemäß `docs/goals/backlog.md`.
-
-**S163-Retro abgeschlossen (Nachklapp-Session):** M1 → B-120, M2 → B-121 (Backlog), M3 →
-`agent_scopes.md` verankert, M4 war bereits erledigt, M5 vom Stakeholder direkt in der
-Mailbox entschieden (Option a — GO/NO-GO-Urteil bleibt im Dateikörper, Review-Datei nach
-Durchreichen löschen, keine Allowlist-/README-Änderung nötig). `S163_RETRO.md` auf `DONE`
-gesetzt und gelöscht.
+1. Retro-Maßnahmen-Entscheid `docs/handoff/S164_RETRO.md` sichten.
+2. **Vengeance-Sichtbarkeits-Bug (Top-Priorität)** — Lead in
+   `docs/goals/backlog_details.md` B-028c1 (Selektions-Anker/`unitCard.py:232`).
+3. Weiteres laut `docs/goals/backlog.md`.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING) ·
-`S163_B028b_ui_verifikation.md` (AWAITING-VERIFICATION).
+`S164_B028c1_ui_verifikation.md` (AWAITING-VERIFICATION, Ergebnis negativ — s. Zeile 2) ·
+`S164_RETRO.md` (NEEDS-DECISION).
 
 ---
 

@@ -36,6 +36,8 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_short_label_for_effect_type,
     get_triggered_abilities,
     is_effect_executable,
+    mortal_wounds_target,
+    resolve_mortal_wounds_effect,
     revive_dice_count,
     unit_wound_auto_fail_label,
     unit_wound_auto_fail_max,
@@ -1865,3 +1867,201 @@ def test_revive_dice_count_default_one_die_per_model() -> None:
     """Unbekannte/fehlende Formel → ein Würfel pro gefallenem Modell."""
     assert revive_dice_count(None, 4, 2) == 4
     assert revive_dice_count("other_formula", 5, 3) == 5
+
+
+# ── mortal_wounds effect handler (B-028c1 T1) ───────────────────────────────
+#
+# Synthetic Ability fixtures mirror the four unit_abilities.yaml shapes
+# (vengeance_of_the_enchained, infused_madness, arc_fields, wrath_of_the_seraptek)
+# rather than loading real necron YAML — the generic dispatch logic under test
+# does not depend on which unit/faction owns the ability, only on the effect's
+# target/amount/roll_threshold/roll_type fields.
+
+
+def _mortal_wounds_ability(
+    *,
+    target: str,
+    amount: str | int,
+    roll_threshold: int | None,
+    roll_type: str | None = None,
+) -> Ability:
+    return Ability(
+        id="test.unit.mortal_wounds_ability",
+        name_en="Test Mortal Wounds Ability",
+        source="unit_ability",
+        rule_text="Test rule text.",
+        trigger=Trigger(
+            timing="phase_reactive", phase="any", player="either", event="model_destroyed"
+        ),
+        conditions=[],
+        effect=Effect(
+            type="mortal_wounds",
+            target=target,
+            amount=str(amount),
+            roll_threshold=roll_threshold,
+            roll_type=roll_type,
+        ),
+    )
+
+
+class TestMortalWoundsTarget:
+    def test_returns_known_target_unchanged(self) -> None:
+        ability = _mortal_wounds_ability(target="units_within_2d6", amount="D6", roll_threshold=4)
+        assert mortal_wounds_target(ability) == "units_within_2d6"
+
+    def test_raises_for_unknown_target(self) -> None:
+        ability = _mortal_wounds_ability(target="bogus_target", amount=1, roll_threshold=4)
+        with pytest.raises(ValueError):
+            mortal_wounds_target(ability)
+
+
+class TestResolveMortalWoundsEffect:
+    def test_vengeance_of_the_enchained_shape_triggers_and_rolls_amount(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """units_within_2d6, D6 amount, roll_threshold 4: gate roll 4+ then a D6 amount roll."""
+        ability = _mortal_wounds_ability(target="units_within_2d6", amount="D6", roll_threshold=4)
+        rolls = iter([4, 5])  # gate roll (4 >= 4 -> triggered), amount roll (D6 -> 5)
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
+        assert resolve_mortal_wounds_effect(ability) == 5
+
+    def test_vengeance_of_the_enchained_shape_below_threshold_inflicts_nothing(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        ability = _mortal_wounds_ability(target="units_within_2d6", amount="D6", roll_threshold=4)
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: 3)  # gate roll 3 < 4
+        assert resolve_mortal_wounds_effect(ability) == 0
+
+    def test_infused_madness_shape_fixed_amount_one(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """closest_enemy_within_6, fixed amount 1, roll_threshold 4."""
+        ability = _mortal_wounds_ability(
+            target="closest_enemy_within_6", amount=1, roll_threshold=4
+        )
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: 5 if s == "D6" else int(s))
+        assert resolve_mortal_wounds_effect(ability) == 1
+
+    def test_infused_madness_shape_threshold_exact_boundary_triggers(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Boundary check: gate roll == threshold still triggers ('4+' means >= 4)."""
+        ability = _mortal_wounds_ability(
+            target="closest_enemy_within_6", amount=1, roll_threshold=4
+        )
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: 4 if s == "D6" else int(s))
+        assert resolve_mortal_wounds_effect(ability) == 1
+
+    def test_arc_fields_shape_uses_externally_supplied_trigger_not_a_gate_roll(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """roll_type=unmodified_hit_1: no internal D6 gate roll, caller decides the trigger."""
+        ability = _mortal_wounds_ability(
+            target="attacker", amount=1, roll_threshold=1, roll_type="unmodified_hit_1"
+        )
+        calls: list[str] = []
+
+        def fake_parse_dice(s: str) -> int:
+            calls.append(s)
+            return 1
+
+        monkeypatch.setattr(_eng, "parse_dice", fake_parse_dice)
+        assert resolve_mortal_wounds_effect(ability, trigger_met=True) == 1
+        assert calls == ["1"]  # only the amount roll happened, no D6 gate roll
+
+    def test_arc_fields_shape_untriggered_returns_zero_without_rolling_amount(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        ability = _mortal_wounds_ability(
+            target="attacker", amount=1, roll_threshold=1, roll_type="unmodified_hit_1"
+        )
+        monkeypatch.setattr(
+            _eng, "parse_dice", lambda s: pytest.fail("should not roll when untriggered")
+        )
+        assert resolve_mortal_wounds_effect(ability, trigger_met=False) == 0
+
+    def test_arc_fields_shape_defaults_trigger_met_to_false(self) -> None:
+        """Caller omitting trigger_met is treated as 'not triggered' (safe default)."""
+        ability = _mortal_wounds_ability(
+            target="attacker", amount=1, roll_threshold=1, roll_type="unmodified_hit_1"
+        )
+        assert resolve_mortal_wounds_effect(ability) == 0
+
+    def test_wrath_of_the_seraptek_shape_d3_amount(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """enemy_units_within_1, D3 amount, roll_threshold 4."""
+        ability = _mortal_wounds_ability(
+            target="enemy_units_within_1", amount="D3", roll_threshold=4
+        )
+        rolls = iter([6, 2])  # gate roll 6 -> triggered, amount roll D3 -> 2
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
+        assert resolve_mortal_wounds_effect(ability) == 2
+
+    def test_missing_roll_threshold_defaults_to_always_trigger(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Defensive: malformed YAML without roll_threshold falls back to 0, so any D6
+        result (always >= 0) triggers — documents the fallback rather than a silent no-op.
+        """
+        ability = _mortal_wounds_ability(
+            target="units_within_2d6", amount="D6", roll_threshold=None
+        )
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: 1)
+        assert resolve_mortal_wounds_effect(ability) == 1
+
+
+# ── vengeance_of_the_enchained real-data wiring (B-028c1 T2) ───────────────
+#
+# Unlike the synthetic fixtures above (T1, effect-shape only), these load the
+# actual necrons/unit_abilities.yaml entry — the call-site (_common.py's
+# _render_vengeance_ability_card) resolves this real ability, not a fixture.
+
+
+class TestVengeanceOfTheEnchainedRealData:
+    def test_find_unit_ability_by_effect_real_data(self) -> None:
+        ability = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+        )
+        assert ability is not None
+        assert ability.id == "wh40k_9e.necrons.unit.the_silent_king.vengeance_of_the_enchained"
+        assert ability.effect.type == "mortal_wounds"
+        assert ability.trigger.event == "model_destroyed"
+
+    def test_mortal_wounds_target_real_data(self) -> None:
+        ability = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+        )
+        assert ability is not None
+        assert mortal_wounds_target(ability) == "units_within_2d6"
+
+    def test_check_conditions_passes_for_the_silent_king(self) -> None:
+        """Ownership (unit_id) is the ability's only gate (empty `conditions`,
+        matching the sibling noctilith_beacons ability on the same unit) — a
+        `has_rules` condition here was a data bug (S164 T2 finding): the
+        referenced rules-tag in units.yaml is not on The Silent King at all,
+        it is misattached to tesseract_vault elsewhere in the same file."""
+        army, *_ = load_army("necrons")
+        silent_king = next(u for u in army if u.id == "wh40k_9e.necrons.unit.the_silent_king")
+        ability = find_unit_ability_by_effect("necrons", silent_king.id, "mortal_wounds")
+        assert ability is not None
+        assert ability.conditions == []
+        assert check_conditions(ability, silent_king, {"destroyed": True})
+
+    def test_vengeance_flow_triggers_and_rolls_amount(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Trigger → resolve, against the real YAML shape (D6 gate 4+, D6 amount)."""
+        ability = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+        )
+        assert ability is not None
+        rolls = iter([4, 6])  # gate roll 4 (>=4 -> triggered), amount roll D6 -> 6
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
+        assert resolve_mortal_wounds_effect(ability) == 6
+
+    def test_vengeance_flow_below_threshold_inflicts_nothing(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        ability = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+        )
+        assert ability is not None
+        monkeypatch.setattr(_eng, "parse_dice", lambda s: 3)  # gate roll 3 < 4
+        assert resolve_mortal_wounds_effect(ability) == 0

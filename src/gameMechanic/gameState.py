@@ -464,6 +464,13 @@ def init_state(
     st.session_state.pending_triggered_relic = None  # dict | None
     st.session_state.veil_awaiting_confirm = False
     st.session_state.veil_core_target_uid = None  # str | None
+    # A destroy-triggered `mortal_wounds` unit_ability (B-028c1 T2):
+    # {"faction", "uid", "ability_id", "wounds"} once Use is clicked, cleared once
+    # the rolled wounds are applied to a chosen target. Not cleared by
+    # _reset_phase_state() — the ability's own "used" bookkeeping never resets
+    # either (used_ability_ids has no phase-clear), so clearing this on a phase
+    # change would strand an already-rolled wound count with no way to apply it.
+    st.session_state.pending_mortal_wounds_ability = None  # dict | None
 
     # Unit lists for stat/name lookups (indexed by player slot, not faction)
     st.session_state.p1_units_list = [u for u, _ in p1_matched]

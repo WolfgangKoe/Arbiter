@@ -118,6 +118,41 @@ flowchart TD
 **Aktueller Stand:** Wundbuttons erscheinen direkt bei selektierter Einheit.
 `active_effect`-Mechanismus wird in Ziel 3 vollständig ausgebaut.
 
+**Modell-Vernichtungs-Ability — Vengeance of the Enchained (B-028c1 T2, S164):**
+- Reaktive additive GO-Karte (Use/Undo, identisches Muster wie P-12s
+  "Bannversuch"-Abschnitt) für eine unit-eigene `mortal_wounds`-Ability, sobald
+  `unit_state.destroyed` gesetzt ist — Ownership-Lookup über
+  `find_unit_ability_by_effect(faction_dir, unit.id, "mortal_wounds")`.
+- Gerendert in `render_player_column` (`_render_mortal_wounds_on_destroy_card`), pro
+  Einheit sowohl in der aktiven Auswahl- als auch der Ziel-Spalte — nicht an
+  einem einzelnen Phasen-Choke-Point, weil `trigger.phase: any` /
+  `trigger.player: either` die Auslösung in jeder Phase, auf beiden Seiten
+  erlaubt (das Original, Szarekhs Tod, geschieht typischerweise als Ziel im
+  Schuss-/Nahkampf des Gegners).
+- Use → `abilityEngine.resolve_mortal_wounds_effect` (D6-Gate 4+, D6-Betrag,
+  YAML-generisch). Bei Erfolg zweiter Schritt unterhalb der Karte:
+  Zielauswahl (`render_unit_selectbox`, Label aus `mortal_wounds_target`) über
+  alle lebenden Einheiten beider Armeen, dann `unitMutations.apply_mortal_wounds`
+  auf das gewählte Ziel. Räumliche Auflösung ("units within 2D6\"") ist
+  Nutzer-/Tisch-Sache — die App hat kein Positionsmodell.
+- Session-State `pending_mortal_wounds_ability` (Zwischenspeicher zwischen Wurf und
+  Ziel-Anwendung) wird NICHT bei Phasenwechsel zurückgesetzt — die
+  Karten-Nutzungs-Buchführung (`used_ability_ids`) kennt ohnehin keinen
+  Phasen-Reset, ein Phasen-Reset hier würde einen bereits gewürfelten,
+  aber noch nicht angewendeten Wert verwaisen lassen.
+- Code: `src/uiLayout/_common.py:_render_mortal_wounds_on_destroy_card`,
+  `data/wh40k_9e/necrons/unit_abilities.yaml` (`vengeance_of_the_enchained`).
+- **Nachbesserung (Live-Verifikation S164):** `fightPhase.py` rendert seine Spalten
+  über eine eigene duplizierte Funktion (`_render_fight_column`), NICHT über
+  `render_player_column` — die Karte war für eine Zerstörung im Nahkampf (der
+  wahrscheinlichste Fall für ein Titanic/Monster) zunächst nicht sichtbar.
+  Nachgezogen: derselbe Aufruf zusätzlich in `_render_fight_column`, beide
+  Spalten. **Bekannte offene Lücke** (analog zu `_maybe_flag_transport_destroyed`s
+  dokumentierter Smite/Perils-Lücke): `psychicPhase.py` hat ebenfalls eine eigene
+  Spaltenstruktur und wendet Mortal Wounds (Smite/Perils) direkt über
+  `apply_damage` an, ohne über einen der beiden Call-Sites zu laufen — stirbt
+  eine Einheit durch Smite/Perils, erscheint die Karte nicht.
+
 ---
 
 ## P-05 — CommandPhase — Living Metal Heilung

@@ -20,7 +20,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_active_round_choice_light_cover_if_stationary,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
-from gameObjects.loader import load_stratagems  # noqa: E402
+from gameObjects.loader import load_stratagems, load_unit_catalog  # noqa: E402
 from gameObjects.unit import ModelGroup, Unit  # noqa: E402
 from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 from uiLayout._common import (  # noqa: E402
@@ -3536,5 +3536,92 @@ def test_reactive_ability_box_active_player_gate(monkeypatch) -> None:
         decline_key="unit-uid-1",
         context_caption="irrelevant",
     )
+
+    assert captured == []
+
+
+# ---------------------------------------------------------------------------
+# _render_mortal_wounds_on_destroy_card (B-028c1 T2, S164) — the real Vengeance
+# of the Enchained call-site. Uses the real "necrons" catalog + real ability
+# data (not a synthetic fixture) so this doubles as a regression test for the
+# S164 data bug (conditions gate that could never be satisfied — see
+# unit_abilities.yaml comment on vengeance_of_the_enchained).
+# ---------------------------------------------------------------------------
+
+SILENT_KING = "wh40k_9e.necrons.unit.the_silent_king"
+
+
+def _silent_king_session(*, destroyed: bool) -> _SS:  # type: ignore[no-untyped-def]
+    unit = load_unit_catalog("necrons")[SILENT_KING]
+    session = _SS(
+        first_player="Necrons",
+        second_player="Orks",
+        active="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+        p1_units_list=[unit],
+        p1_unit_keys=[SILENT_KING],
+        p2_units_list=[],
+        p2_unit_keys=[],
+        p1_units={SILENT_KING: {"destroyed": destroyed, "in_reserve": False}},
+        p2_units={},
+        phase_idx=4,  # shooting
+        used_ability_ids={},
+        ability_use_anchors={},
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _eng.st.session_state = session
+    return session, unit
+
+
+def test_mortal_wounds_on_destroy_card_shown_once_unit_destroyed(monkeypatch) -> None:
+    session, unit = _silent_king_session(destroyed=True)
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    common._render_mortal_wounds_on_destroy_card("Necrons", SILENT_KING, unit)
+
+    assert len(captured) == 1
+    assert captured[0]["name"] == "Vengeance of the Enchained"
+    assert captured[0]["state"] == "ready"
+
+
+def test_mortal_wounds_on_destroy_card_hidden_while_unit_alive(monkeypatch) -> None:
+    session, unit = _silent_king_session(destroyed=False)
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    common._render_mortal_wounds_on_destroy_card("Necrons", SILENT_KING, unit)
+
+    assert captured == []
+
+
+def test_mortal_wounds_on_destroy_card_hidden_for_unit_without_the_ability(monkeypatch) -> None:
+    """Ownership scoping (find_unit_ability_by_effect): a destroyed necrons unit
+    with no mortal_wounds ability of its own must not show the card."""
+    warriors_id = "wh40k_9e.necrons.unit.warriors"
+    warriors = load_unit_catalog("necrons")[warriors_id]
+    session = _SS(
+        first_player="Necrons",
+        second_player="Orks",
+        active="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+        p1_units_list=[warriors],
+        p1_unit_keys=[warriors_id],
+        p2_units_list=[],
+        p2_unit_keys=[],
+        p1_units={warriors_id: {"destroyed": True, "in_reserve": False}},
+        p2_units={},
+        phase_idx=4,
+        used_ability_ids={},
+        ability_use_anchors={},
+    )
+    common.st.session_state = session
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    common._render_mortal_wounds_on_destroy_card("Necrons", warriors_id, warriors)
 
     assert captured == []

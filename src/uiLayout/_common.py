@@ -25,7 +25,13 @@ from constants.symbols import (
     SYM_RESET,
     SYM_SWORDS,
 )
-from gameMechanic.abilityEngine import check_conditions, execute_effect
+from gameMechanic.abilityEngine import (
+    check_conditions,
+    execute_effect,
+    find_unit_ability_by_effect,
+    mortal_wounds_target,
+    resolve_mortal_wounds_effect,
+)
 from gameMechanic.attackMath import (  # noqa: F401
     _combi_hit_penalty,
     _compute_attacks,
@@ -43,6 +49,7 @@ from gameMechanic.gameState import (
     active_round_choice_buff_labels,
     faction_dir_for,
     faction_display_name_for,
+    unit_keys_for,
     units_key_for,
     units_list_for,
 )
@@ -50,6 +57,7 @@ from gameMechanic.stratagemEngine import _apply_stratagem_effect
 from gameMechanic.unitMutations import (
     adjust_cp,
     apply_damage,
+    apply_mortal_wounds,
     heal_unit,
 )
 from gameObjects.ability import (
@@ -354,6 +362,102 @@ def render_melee_engagements(faction: str, uid: str, unit_state: MutableMapping[
 
 
 # ---------------------------------------------------------------------------
+# Reactive `mortal_wounds` unit_ability once destroyed (B-028c1 T2)
+# ---------------------------------------------------------------------------
+
+
+def _render_mortal_wounds_on_destroy_card(faction: str, uid: str, unit: Unit) -> None:
+    """Reactive GO card for a unit's own ``mortal_wounds`` ability once it is
+    destroyed (``event: model_destroyed``, e.g. Vengeance of the Enchained on
+    The Silent King). Same additive Use/Undo shape as
+    ``psychicPhase._render_deny_ability_cards`` (B-028b): declining/ignoring
+    the card changes nothing else. Called per-unit from ``render_player_column``
+    (both the active-selected-unit and inactive-target branches) rather than
+    from one phase-specific choke point — ``trigger.phase: any`` /
+    ``trigger.player: either`` means the destroying damage can land in any
+    phase, on either side's turn.
+
+    Spatial resolution ("units within 2D6\\"") is a user target pick, not a
+    positional check — this app has no battlefield model (see
+    ``abilityEngine.mortal_wounds_target``'s docstring). The roll happens once,
+    on Use (``on_resolved``); the target-selection + apply step below the card
+    is a second, separate step so the user can pick after seeing how many
+    wounds were actually rolled.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+    ability = find_unit_ability_by_effect(faction_dir, unit.id, "mortal_wounds")
+    if ability is None:
+        return
+    _, unit_state = lookup(faction, uid)
+    if not unit_state.get("destroyed"):
+        return
+
+    def _on_resolved() -> None:
+        st.session_state.pending_mortal_wounds_ability = {
+            "faction": faction,
+            "uid": uid,
+            "ability_id": ability.id,
+            "wounds": resolve_mortal_wounds_effect(ability),
+        }
+
+    current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+    render_reactive_ability_box(
+        faction,
+        current_phase,
+        "model_destroyed",
+        [ability],
+        decline_key=f"mortal_wounds_on_destroy_{uid}",
+        context_caption=ability.rule_text,
+        unit_key=uid,
+        on_resolved=_on_resolved,
+    )
+
+    pending = st.session_state.get("pending_mortal_wounds_ability")
+    if not pending or pending.get("uid") != uid or pending.get("ability_id") != ability.id:
+        return
+
+    wounds = pending["wounds"]
+    if wounds <= 0:
+        st.caption(f"{ability.name_en}: roll failed — no mortal wounds inflicted.")
+        return
+
+    target_label = mortal_wounds_target(ability).replace("_", " ")
+    candidates = []
+    for player in (st.session_state["first_player"], st.session_state["second_player"]):
+        player_states = st.session_state.get(units_key_for(player), {})
+        for key, u in zip(unit_keys_for(player), units_list_for(player)):
+            if player == faction and key == uid:
+                continue
+            u_state = player_states.get(key, {})
+            if u_state.get("destroyed") or u_state.get("in_reserve"):
+                continue
+            candidates.append({"uid": f"{player}::{key}", "name": u.name_en})
+
+    selected = render_unit_selectbox(
+        f"{ability.name_en} — target ({target_label}) for {wounds} mortal wounds:",
+        candidates,
+        f"mortal_wounds_target_{uid}",
+        none_label="— Select target unit —",
+    )
+    if st.button(
+        f"Apply {wounds} mortal wounds",
+        key=f"mortal_wounds_apply_{uid}",
+        type="primary",
+        disabled=selected is None,
+        use_container_width=True,
+    ):
+        assert selected is not None
+        tgt_player, tgt_uid = selected.split("::", 1)
+        tgt_unit, _ = lookup(tgt_player, tgt_uid)
+        apply_mortal_wounds(tgt_uid, tgt_player, wounds, tgt_unit)
+        st.session_state.pending_mortal_wounds_ability = None
+        st.rerun()
+
+
+# ---------------------------------------------------------------------------
 # Standard player-column renderer (shared by all handlers)
 # ---------------------------------------------------------------------------
 
@@ -403,6 +507,7 @@ def render_player_column(
             if badges:
                 st.markdown(badges, unsafe_allow_html=True)
             active_content(faction, uid, unit, unit_state, state)
+            _render_mortal_wounds_on_destroy_card(faction, uid, unit)
         else:
             st.caption("← Select a unit from your army list.")
 
@@ -422,6 +527,7 @@ def render_player_column(
                     st.markdown(badges, unsafe_allow_html=True)
                 if inactive_content is not None:
                     inactive_content(faction, uid, unit, unit_state)
+                _render_mortal_wounds_on_destroy_card(faction, uid, unit)
                 if show_wound_buttons:
                     st.divider()
                     wound_adjustment_buttons(faction, uid, unit)

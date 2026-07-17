@@ -395,8 +395,13 @@ abilities:
       stage: active
       player: either
       event: model_destroyed
-    conditions:
-      - has_rules: [vengeanceOfTheEnchained]
+    # Ownership (unit_id above) is already the full gate — mirrors the sibling
+    # noctilith_beacons ability on this same unit (conditions: []). The
+    # `has_rules: [vengeanceOfTheEnchained]` this replaced was a data bug: that
+    # rules-tag in units.yaml is not on The Silent King at all — it is
+    # misattached to tesseract_vault elsewhere in the same file (found S164
+    # T2; tesseract_vault's own data left untouched, out of this task's scope).
+    conditions: []
     effect:
       type: mortal_wounds
       target: units_within_2d6
@@ -485,25 +490,35 @@ abilities:
       target: self
       value: 5
 
+  # Corrected S164 (R-COMBAT-39 finding): the previous entry here described a
+  # `mortal_wounds`/`model_destroyed` effect that does not match Wahapedia at
+  # all — the real Infused Madness is a once-per-turn ACTIVATED ability (player
+  # chooses to use it at the start of Charge or Fight phase, picks a friendly
+  # target unit within 3"), not a reactive death effect. Left deliberately
+  # UNWIRED (informational data only, no call-site) — a real implementation
+  # needs a new effect category the engine does not have yet (target-unit
+  # selection distinct from the ability owner + a combined "always-buff,
+  # risk-a-model-loss" resolution); no existing effect handler fits. Estimated
+  # ~15-20k (own mini-mechanic, comparable to the c2/c5 backlog line-items) —
+  # not undertaken this session, see docs/goals/backlog_details.md B-028c1.
   - id: wh40k_9e.necrons.unit.canoptek_plasmacyte.infused_madness
     name_en: Infused Madness
     ability_type: triggered
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.canoptek_plasmacyte
-    rule_text: "Each time this model is destroyed, roll one D6: on a 4+, the closest enemy unit within 6\" suffers 1 mortal wound."
+    rule_text: "Once per turn, at the start of either your Charge phase or the Fight phase, you can select one friendly <DYNASTY> DESTROYER CULT unit within 3\" of this model. If you do, roll one D6: on a 1, one model in that unit is destroyed. Regardless of the result, until the end of the turn, add 1 to the Strength and Attacks characteristics of models in that unit. Each unit can only be selected for this ability once per turn."
     trigger:
-      timing: phase_reactive
-      phase: any
-      stage: active
-      player: either
-      event: model_destroyed
-    conditions:
-      - has_rules: [infusedMadness]
+      timing: phase_start
+      phase: [charge, fight]
+      stage: start
+      player: active
+    conditions: []
     effect:
-      type: mortal_wounds
-      target: closest_enemy_within_6
-      amount: 1
-      roll_threshold: 4
+      type: buff_and_model_loss_risk
+      target: friendly_destroyer_cult_unit_within_3
+      stat: strength_and_attacks
+      modifier: 1
+      roll_threshold: 1
 
   # ── Hexmark Destroyer ─────────────────────────────────────────────────────
 

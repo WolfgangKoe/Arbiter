@@ -510,6 +510,8 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             handler=d["effect"].get("handler"),
             revive=d["effect"].get("revive", True),
             effects=d["effect"].get("effects"),
+            roll_threshold=d["effect"].get("roll_threshold"),
+            roll_type=d["effect"].get("roll_type"),
         ),
         unit_id=d.get("unit_id"),
         wargear_id=d.get("wargear_id"),

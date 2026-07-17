@@ -15,13 +15,8 @@ Detailplanungen erledigter Ziele (1A–6): [archive/](archive/). Ausführliche I
 
 **Pflege-Regel:** Bereinigung an jedem Session-Start/-Ende — erledigte Items MIT ihrem
 Details-Abschnitt aus `backlog_details.md` nach `backlog_archive.md` verschieben, hier die
-Tabellenzeile löschen. Letzter Abgleich: **2026-07-17 (S162, B-105/B-109 archiviert —
-Strength-Chip/Invuln-Funktion bzw. Auto-Fail-Label beide stakeholder-bestätigt; B-043 als
-überholt archiviert (Zustand existiert seit S115-Invuln-Neufassung nicht mehr im Code);
-B-119-Datei-Referenz korrigiert (`psychicPhase.py::_render_deny_column` statt
-`gameActionsArea.py`); B-115 nach oben priorisiert (frischer Stakeholder-Beschwerdefall,
-Layout-Kritik aus B-105wiring übernommen); B-115 danach umgesetzt und archiviert —
-Invuln-Block auf WOUND-Block-Muster umgestellt, beide Label-Fälle stakeholder-bestätigt)**.
+Tabellenzeile löschen. Letzter Abgleich: **2026-07-18 (S164, B-028b/B-119 nach positiver
+UI-Verifikation archiviert)**.
 
 ---
 
@@ -31,9 +26,7 @@ Einzige Prioritätsquelle — sortiert nach Stakeholder-Priorität (Inventar-Rei
 
 | ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Status | Beschreibung | Abhängigkeiten | Effort | Assignee |
 |---|---|---|---|---|---|
-| [B-028b](backlog_details.md#b-028b--deny-psychic-konsolidierung)     | UI-Verifikation | <a id="b-028b"></a>`gloom_prism`-Rest migriert (S163): Canoptek Spyder rendert jetzt ebenfalls über die B-028a-Ability-Infrastruktur (`find_unit_ability_by_effect` + `_render_deny_ability_cards`), identisches Muster wie `noctilith_beacons`. Alter Wargear-Namens-Gate (`load_deny_wargear_names`) für keine Fraktion mehr aktiv, als generische Fallback-Infra dokumentiert belassen. Löst B-119 Fall b mit (D-1 Entscheidung Variante A, Stakeholder-Freigabe S163) — kein separater Chip. Wartet auf manuelle UI-Sichtprüfung (`docs/handoff/S163_B028b_ui_verifikation.md`).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028a; kleinste, homogenste zweite Gruppe | M: ~20k | Executor |
-| [B-119](backlog_details.md#b-119--deny-quellen-anzeige-gameactionsarea)     | UI-Verifikation | <a id="b-119"></a>Deny-Quellen-Anzeige beim Deny-the-Witch-Wurf — Fall a (Silent King/Noctilith) seit B-028b (S160) über eigene GO-Karte gelöst; Fall b (Canoptek Spyder/Gloom Prism) jetzt ebenfalls über dieselbe GO-Karte gelöst (S163 gloom_prism-Migration, D-1 Entscheidung Variante A) — kein separater Quellen-Chip nötig. Teilt sich die UI-Sichtprüfung mit B-028b, danach Archivierung als „gelöst via B-028b".<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | Stakeholder-Kommentar S160, direkter Sub-Befund aus B-028b Testfall-3-Verifikation — teilt dieselbe Deny-/GO-Quellen-Infrastruktur | S: ~10k | Executor |
-| [B-028c1](backlog_details.md#b-028c1--vier-mortal-wounds-gos)     | ToDo | <a id="b-028c1"></a>4× `mortal_wounds`-GOs (`vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`) — ein gemeinsamer Effekt-Handler + 4 Call-Sites.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028b; Basis für c2–c5 | M: ~20–25k | Executor |
+| [B-028c1](backlog_details.md#b-028c1--vier-mortal-wounds-gos)     | In Arbeit — Vengeance verdrahtet, UI defekt (S164-Review #1) | <a id="b-028c1"></a>1 von 4 Call-Sites verdrahtet (arc_fields/wrath zurückgestellt, infused_madness nur Datenkorrektur).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028b; Basis für c2–c5 | M: ~20–25k | Executor |
 | [B-028c2](backlog_details.md#b-028c2--reroll-rp)     | ToDo | <a id="b-028c2"></a>`reroll_rp` (`their_number_is_legion`) — RP-Datenmodell ist aggregierte Würfelzahl; „Reroll von Einsen" braucht eigenes Mini-Konzept vorab (Class-B-Kandidat).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c3–c5 möglich); Scope-Check empfohlen | S/M: ~15–20k | Executor |
 | [B-028c3](backlog_details.md#b-028c3--free-attack)     | ToDo | <a id="b-028c3"></a>`free_attack` (`inescapable_death`) — volle Attacke-Sequenz mitten in gegnerischer Movement-Phase; komplexeste Einzelmechanik.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c4/c5); höchstes Restrisiko | M: ~20–25k | Executor |
 | [B-028c4](backlog_details.md#b-028c4--mark-target)     | ToDo | <a id="b-028c4"></a>`mark_target` (`targeting_relay`) — zustandsbehaftetes „Ziel markiert" über Phasen-/Einheitengrenzen, neuer State-Schlüssel.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c3/c5) | S/M: ~15–20k | Executor |

@@ -608,47 +608,40 @@ am Anfang der Beschreibungsspalte.
 
 **Revidierte Gesamtschätzung:** ~135–155k statt der ursprünglich genannten ~100k+ (Grund: granulare Aufschlüsselung der c-Gruppe ergibt ~85–105k statt ~50k+; a+b+c1 = ~70–75k, c2–c5 = ~65–75k). Deutlich über eine Session hinaus, aber genau dafür ist der Sessionschnitt gedacht (7 unabhängig freigebbare Teil-Tasks statt ein Monolith). **Für S158 vorgesehen (bei Freigabe):** B-028a, danach B-028b. B-028c1–c5 werden als neue Backlog-Zeilen ergänzt, aber nicht vor S159 beauftragt.
 
-## B-028b — Deny Psychic Konsolidierung
-
-[↩ Zeile in backlog.md](backlog.md#b-028b)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** UI-Verifikation (Testfälle 1–3 positiv, S160, Testfall 3 mit Canoptek Spyder/Gloom Prism; `gloom_prism`-Migration selbst am 2026-07-17/S163 umgesetzt, wartet auf UI-Sichtprüfung — Marker `AWAITING-VERIFICATION` in `docs/handoff/S163_B028b_ui_verifikation.md`)
-
-**Tier:** Executor
-
-**Effort:** ~20k (M)
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py`, `src/gameMechanic/psychicPhase.py`, `data/wh40k_9e/necrons/unit_abilities.yaml`, `data/wh40k_9e/necrons/wargear.yaml`, `src/gameObjects/loader.py`. Erste komplette GO-Card-Migration: `noctilith_beacons` (`the_silent_king`, `deny_psychic`-Effekt) als erste unit-eigene Ability über B-028a-Infrastruktur gerendert — additiv, nicht gatend (erscheint neben dem bestehenden Deny-the-Witch-Wurf-UI, blockiert dieses aber nicht; PSYKER-Pfad unverändert). `can_deny()` generisch um Ability-Quellen erweitert (S160: nur Wargear `gloom_prism` + `noctilith_beacons` über `find_unit_ability_by_effect`).
-
-**S163-Nachtrag (gloom_prism-Rest, B-028b-Rest):** `gloom_prism` vom alten Wargear-Namens-Gate (`load_deny_wargear_names`, Match gegen `unit.rules`) auf einen echten `unit_ability`-Eintrag migriert — `wh40k_9e.necrons.unit.canoptek_spyder.gloom_prism` in `unit_abilities.yaml`, `conditions: [has_rules: [gloom_prism]]` (Muster wie die bereits bestehende `fabricator_claw_array`-Ability derselben Einheit, nicht wie Noctilith's bedingungslose Ownership — Gloom Prism ist laut Wahapedia optionales Wargear). `wargear.yaml`-Eintrag auf reine Katalog-Beschreibung reduziert (kein `effect`-Block mehr, analog `fabricator_claw_array`). `can_deny()` in `psychicPhase.py` dadurch vereinfacht: nur noch PSYKER-Keyword ODER `find_unit_ability_by_effect` — der Wargear-Namens-Pfad ist jetzt für keine Fraktion mehr aktiv, `load_deny_wargear_names` bleibt als dokumentierte, generische Fallback-Infra in `loader.py` bestehen (nicht entfernt — Tests/Cache in `test_loader.py`/`conftest.py` nicht angefasst, bewusste Scope-Entscheidung statt größerer Umbau). Neue reaktive GO-Karte für Canoptek Spyder löst B-119 Fall b mit (D-1, Variante A, Stakeholder-Freigabe S163).
-
-**UI-Verifikation (S160, `docs/handoff/S160_B104_ui_verifikation.md` — B-028b-Teil):** Testfall 1 (Karte erscheint im Deny-Column) — positiv. Testfall 2 (Use/Undo-Zyklus, Vollrückgängig-Garantie) — positiv. Testfall 3 (Regression bestehender Deny-Pfade ohne Szarekh, mit Canoptek Spyder/Gloom Prism) — positiv.
-
-**UI-Verifikation ausstehend (S163, gloom_prism-Karte):** `docs/handoff/S163_B028b_ui_verifikation.md` — Karte „Gloom Prism" muss additiv in der Deny-Spalte für Canoptek Spyder erscheinen, Roll-UI unverändert.
-
-**Abhängigkeiten:** Nach B-028a (reines Plumbing muss erst vorhanden sein). Unabhängig von c1–c5.
-
-**Belege:** `docs/handoff/S158_planning.md` (Aufgabe Z.17, Tabelle Z.49–57); `docs/handoff/S159_B028b_ui_verifikation.md` (Testfälle 1–3); `docs/handoff/S159_review.md` DoD-Punkt 6; `docs/handoff/S163_PLANNING.md` (T2 + D-1).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** B-028-Zuschnitt S158, Teil der „deny_psychic"-Konsolidierung (zwei bestehende Teil-Pfade werden über B-028a vereinheitlicht).
-
 ## B-028c1 — Vier mortal wounds GOs
 
 [↩ Zeile in backlog.md](backlog.md#b-028c1)
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** ToDo
+**Status:** In Arbeit — Vengeance verdrahtet, UI defekt (S164-Review #1); restliche 3 GOs bleiben `ToDo`, siehe unten
 
 **Tier:** Executor
 
 **Effort:** ~20–25k (M)
 
 **Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (Call-Sites), `src/gameMechanic/abilityEngine.py` (Effekt-Handler), `data/wh40k_9e/necrons/unit_abilities.yaml` (4 Einträge). Vier reaktive GOs mit `mortal_wounds`-Effekt implementieren: `vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`. Ein gemeinsamer Effekt-Handler (Dispatch `abilityEngine.py`, ähnlich den bestehenden Stratagem-Handlern), vier separate Call-Sites (bewegungsphasen-/Kampfphasen-Auslöser je nach GO). Basis für c2–c5 (alle brauchen B-028a+B-028b und jede einen eigenen Effekt-Handler).
+
+**T1 (Kernlogik) erledigt (Session S164):** `abilityEngine.py:resolve_mortal_wounds_effect` (Signatur `(ability: Ability, *, trigger_met: bool | None = None) -> int`) + `abilityEngine.py:mortal_wounds_target` (validiertes Ziel-Label). `Effect`-Dataclass (`gameObjects/ability.py`) + Loader (`gameObjects/loader.py:_ability_from_dict`) um `roll_threshold`/`roll_type` erweitert. 11 neue Tests in `tests/gameMechanic/test_ability_engine.py` (Klassen `TestMortalWoundsTarget`/`TestResolveMortalWoundsEffect`, synthetische Fixtures je Karten-Form, nicht auf echte YAML-Daten angewiesen). **Kein Call-Site, keine UI** — das bleibt T2.
+
+**Regelkonformitäts-Befund (DoD Punkt 1) + Stakeholder-Entscheid:** Gegen `docs/work/wahapedia_necrons/` geprüft — nur `vengeance_of_the_enchained` stimmt wortgleich. `arc_fields`/`wrath_of_the_seraptek` bleiben laut Stakeholder-Entscheid (`docs/handoff/S164_NEEDS_DECISION_mortal_wounds_datenlage.md`, Empfehlung a) **zurückgestellt** — nicht Teil dieser Session. `infused_madness` (canoptek_plasmacyte): Empfehlung a angenommen, YAML-Korrektur + Aufwandsschätzung fürs Verdrahten separat dokumentiert (s. Session-Abschnitt unten). Details + Quellenzitate weiterhin: `docs/spec/acceptance/rules.md` R-COMBAT-38 bis R-COMBAT-40.
+
+**T2 (Call-Site) erledigt — nur `vengeance_of_the_enchained` (Session S164):** Reaktive additive GO-Karte nach dem B-028b-Muster (`_render_deny_ability_cards`), neue Funktion `uiLayout/_common.py:_render_mortal_wounds_on_destroy_card`, aufgerufen pro Einheit in `render_player_column` (aktive UND Ziel-Spalte — `trigger.phase: any`/`trigger.player: either`, kein einzelner Phasen-Choke-Point). Gate: `find_unit_ability_by_effect(faction_dir, unit.id, "mortal_wounds")` + `unit_state.destroyed`. Use → `resolve_mortal_wounds_effect` (D6-Gate 4+, D6-Betrag) → bei Erfolg Zielauswahl (`render_unit_selectbox`, Ziel-Label aus `mortal_wounds_target`) → `apply_mortal_wounds` auf das gewählte Ziel. Neuer Session-State-Schlüssel `pending_mortal_wounds_ability` (Init in `gameState.py`, NICHT in `_reset_phase_state` — würde einen bereits gewürfelten, noch nicht angewendeten Wert verwaisen lassen, da `used_ability_ids` selbst nie phasen-zurückgesetzt wird). **Datenbug gefunden+behoben:** `conditions: [has_rules: [vengeanceOfTheEnchained]]` war nie erfüllbar (Rules-Tag in `units.yaml` hängt an `tesseract_vault`, nicht an `the_silent_king`) — auf `conditions: []` korrigiert (mirrors Schwester-Ability `noctilith_beacons`, ownership via `unit_id` ist bereits der volle Gate). 9 neue Tests (`test_ability_engine.py:TestVengeanceOfTheEnchainedRealData` [5], `test_unit_mutations.py:test_vengeance_of_the_enchained_flow_trigger_resolve_apply`, `test_common.py:test_mortal_wounds_on_destroy_card_*` [3] — letztere isoliert die Gate-Logik der Karte, ohne echtes Streamlit, und bewies live während der Verifikation, dass die Verdrahtung selbst korrekt ist).
+
+**Live-Verifikations-Befund + Nachbesserung (noch in Session S164):** Erste Stakeholder-Prüfung meldete "keine Karte erscheint". Ursache: `fightPhase.py` rendert seine Spalten über eine **eigene** duplizierte Funktion (`_render_fight_column`), die nicht durch `render_player_column` läuft — die Karte war für eine Zerstörung im Nahkampf (der wahrscheinlichste Fall für den Silent King) nie verdrahtet. Nachgezogen: Aufruf zusätzlich in `fightPhase.py:_render_fight_column` (beide Spalten, analog zum `_common.py`-Muster). **Bekannte, bewusst offene Lücke (nicht behoben, Präzedenzfall `_maybe_flag_transport_destroyed`s dokumentierte Smite/Perils-Lücke):** `psychicPhase.py` hat ebenfalls eine eigene Spaltenstruktur und wendet Mortal Wounds (Smite/Perils) direkt über `apply_damage` an, ohne über `render_player_column`/`_render_fight_column` zu laufen — stirbt die Einheit durch Smite/Perils, erscheint die Karte nicht. Geschätzter Aufwand: klein (ein weiterer Call-Site, gleiches Muster). Erneute UI-Verifikation aussteht: `docs/handoff/S164_B028c1_ui_verifikation.md`.
+
+**S164-Review-Befund 1 (NO-GO, 3. Verifikationsrunde weiterhin negativ):** Stakeholder meldet
+(`docs/handoff/S164_B028c1_ui_verifikation.md` Z.135), die Karte erscheine weiterhin nicht — auch
+bei bestätigt zerstörter Einheit. **Untersuchungs-Lead für S165:** Der Sichtbarkeits-Anker der
+Karte hängt daran, dass die zerstörte Einheit im Moment des Renderns entweder
+`st.session_state.selected_unit` oder in `selected_targets` ist (`_common.py:502/510/519/530`).
+`unitCard.py:232` macht eine zerstörte Einheit aber sofort unselektierbar/nicht-zielbar (Karte
+returned mit „~~Name~~ *DESTROYED*", ohne Auswahl-/Ziel-Button) — ob eine *vor* dem Tod gesetzte
+Auswahl/Zielung den Tod überlebt, ist nicht garantiert. Nächster Schritt: Sichtbarkeits-Anker vom
+„Einheit-ist-selektiert"-Zustand entkoppeln (z. B. Karte an den zerstörten-Einheiten-Eintrag selbst
+hängen, oder Auswahl/Zielung beim Tod bewusst halten statt implizit zu verlieren) — Fix = S165.
+
+**Rest offen (Entscheid S164):** (a) `arc_fields` (Gauss Pylon) + `wrath_of_the_seraptek` (Seraptek Heavy Construct) bleiben zurückgestellt — nicht verdrahten, bis der Wortlaut extern gegen aktuelles Wahapedia/IA verifiziert ist (Quelle lokal nicht vorhanden); beide Einheiten stehen in keinem Roster, daher kein Spielwert-Verlust durch das Zurückstellen. (b) `infused_madness` (Canoptek Plasmacyte): YAML in S164 auf den belegten Wahapedia-Mechanismus korrigiert (kein `mortal_wounds`-Effekt mehr — `effect.type: buff_and_model_loss_risk`). Verdrahtung ist ein eigenes Mini-Feature (neue Effekt-Kategorie „aktivierter Buff mit Risiko-Roll auf fremde Ziel-Einheit": S+1/A+1, D6-auf-1-Modellverlust), Aufwand ~15–20k — bei Bedarf als eigenes Backlog-Item ziehen.
 
 **Abhängigkeiten:** Nach B-028b (Sichtbarkeits-Infrastruktur muss vorhanden sein). Basis für c2–c5 (fachlich unabhängig, aber alle brauchen die a/b-Grundlagen).
 
@@ -2178,30 +2171,6 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.3/§4.4).
-
-## B-119 — Deny Quellen Anzeige gameActionsArea
-
-[↩ Zeile in backlog.md](backlog.md#b-119)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** UI-Verifikation (fachlich gelöst via B-028b, S163 — wartet auf dieselbe UI-Sichtprüfung wie B-028b, danach Archivierung)
-
-**Tier:** Executor
-
-**Effort:** S: ~10k
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/psychicPhase.py::_render_deny_column` (S162-Korrektur — vorherige Referenz `src/uiLayout/gameActionsArea.py (_render_deny_column)` war falsch, per `grep -rn "def _render_deny_column" src/` verifiziert: die Funktion liegt in `psychicPhase.py:469`, `gameActionsArea.py` enthält keinen Deny-Code). Bei einem Deny-the-Witch-Wurf zeigte die gameActionsArea-Spalte nur den Roll-Input ohne Angabe der Deny-Quelle. Zwei Fälle: **(a) Silent King Noctilith Beacons (GO-Karte, B-028b):** eindeutig über die GO-Karte sichtbar — gelöst seit S160. **(b) Canoptek Spyder Gloom Prism:** war auf dem Wargear-Pfad ohne GO-Karte, seit S163 (B-028b-Rest) ebenfalls über eine reaktive GO-Karte gerendert (`_render_deny_ability_cards`, identisches Muster wie Fall a) — die ausführende Einheit ist damit sichtbar, **ohne** zusätzlichen Chip/Hinweistext (D-1 Entscheidung Variante A, Stakeholder-Freigabe S163: „ein einheitlicher Rendering-Pfad für alle Deny-Quellen ist DRY und deckt sich mit dem Noctilith-Muster" — ein separater Chip hätte doppelt gerendert). Regressionstests: `tests/gameMechanic/test_psychic_phase.py::TestGloomPrismAbilityMigration` (Ability-Daten, die die Karte speist) + `test_can_deny_via_gloom_prism_ability_without_wargear_rules_tag` (Migration vollständig, kein Wargear-Namens-Pfad mehr nötig).
-
-**Abhängigkeiten:** Hinter B-028b (Noctilith-Sichtbarkeit war bereits über GO-Karte gelöst); `gloom_prism`-Migration (S163) löst Fall b jetzt über denselben Pfad.
-
-**Belege:** Stakeholder-Kommentar S160 zu B-028b Testfall 3 (`docs/handoff/S160_B104_ui_verifikation.md`, B-028b-Testfall-Notiz); `docs/handoff/S163_PLANNING.md` D-1 (Entscheidung Variante A); `docs/handoff/S163_B028b_ui_verifikation.md` (gemeinsame UI-Sichtprüfung mit B-028b).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-Beobachtung S160 (B-028b UI-Verifikation Testfall 3, Gloom-Prism-Regression).
-
----
 
 ## B-120 — Conditions Auswertung in find unit ability by effect inert
 

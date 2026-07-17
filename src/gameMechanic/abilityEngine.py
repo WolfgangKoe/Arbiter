@@ -5,6 +5,7 @@ from typing import Any
 
 import streamlit as st
 
+from gameMechanic.combat import parse_dice
 from gameMechanic.gameState import (
     faction_dir_for,
     round_choice_state_key,
@@ -596,6 +597,67 @@ def find_unit_ability_by_effect(faction_dir: str, unit_id: str, effect_type: str
         if ability.unit_id == unit_id and ability.effect.type == effect_type:
             return ability
     return None
+
+
+# Known ``target`` labels for a ``mortal_wounds`` unit_ability effect (B-028c1).
+# Spatial resolution ("which units are within 2D6\"") is left to the caller/UI —
+# this app has no positional battlefield model, so the target stays a data-driven
+# label rather than a set of resolved unit ids. Kept as a single generic set here
+# (not per-caller re-enumerated) so a YAML typo fails loudly via mortal_wounds_target().
+_MORTAL_WOUNDS_TARGETS = frozenset(
+    {
+        "self",
+        "attacker",
+        "closest_enemy_within_6",
+        "units_within_2d6",
+        "enemy_units_within_1",
+    }
+)
+
+
+def mortal_wounds_target(ability: Ability) -> str:
+    """Validated ``target`` label of a ``mortal_wounds`` ability effect.
+
+    Raises ``ValueError`` for a target outside ``_MORTAL_WOUNDS_TARGETS`` so an
+    unrecognised/typo'd YAML value fails loudly instead of silently resolving
+    to no targets. Callers (T2 call-sites) map the returned label to the actual
+    unit(s) it applies to — that resolution is UI/game-state work, not this
+    module's concern.
+    """
+    target = ability.effect.target
+    if target not in _MORTAL_WOUNDS_TARGETS:
+        raise ValueError(f"Unknown mortal_wounds target: {target!r}")
+    return target
+
+
+def resolve_mortal_wounds_effect(ability: Ability, *, trigger_met: bool | None = None) -> int:
+    """Roll (or accept an externally-resolved) trigger and return mortal wounds inflicted.
+
+    Generic dispatch for ``effect.type: mortal_wounds`` (B-028c1) — reads the
+    YAML-declared ``roll_threshold``/``roll_type``/``amount`` fields, no
+    faction-specific logic. Two trigger sources, selected by ``effect.roll_type``:
+
+    - unset (e.g. Vengeance of the Enchained, Infused Madness, Wrath of the
+      Seraptek): this function rolls one D6 itself via ``combat.parse_dice`` and
+      compares it against ``effect.roll_threshold`` ("on a 4+").
+    - ``"unmodified_hit_1"`` (e.g. Arc Fields): the trigger already happened at
+      the table during an attack's hit roll — this app resolves combat by
+      count, not individual dice faces (Class B, same reasoning as
+      ``get_active_round_choice_ap_on_wound_6``), so the caller passes the
+      already-known result via *trigger_met* instead of a fresh roll.
+
+    Returns the number of mortal wounds inflicted (0 if untriggered).
+    ``effect.amount`` ("1", "D3", "D6") is parsed via ``combat.parse_dice``.
+    """
+    effect = ability.effect
+    if effect.roll_type:
+        triggered = bool(trigger_met)
+    else:
+        threshold = effect.roll_threshold or 0
+        triggered = parse_dice("D6") >= threshold
+    if not triggered:
+        return 0
+    return parse_dice(effect.amount or "1")
 
 
 def ability_badge_label(faction: str, unit: Unit) -> str | None:

@@ -282,7 +282,16 @@ class TestReactiveAbilitiesFor:
         assert reactive_abilities_for([ability], "fight", "reanimation_roll") == [ability]
 
     def test_real_necron_reactive_unit_abilities_match_their_documented_trigger(self) -> None:
-        """The 8 reactive Necron unit abilities each surface at their own (phase, event)."""
+        """The reactive Necron unit abilities each surface at their own (phase, event).
+
+        `infused_madness` (canoptek_plasmacyte) was removed from this list in S164:
+        the entry it used to describe (`phase_reactive`/`model_destroyed`) was a data
+        bug — the real Infused Madness is a `phase_start` player-ACTIVATED ability
+        (once per turn, at the start of Charge or Fight), not a reactive death
+        trigger, so it never belonged in `reactive_abilities_for`'s matching set
+        (R-COMBAT-39). Corrected to its real shape in unit_abilities.yaml; left
+        unwired (no effect handler for its buff+model-loss-risk mechanic yet).
+        """
         abilities = load_unit_abilities("necrons")
         cases = [
             (
@@ -295,7 +304,6 @@ class TestReactiveAbilitiesFor:
                 "any",
                 "model_destroyed",
             ),
-            ("wh40k_9e.necrons.unit.canoptek_plasmacyte.infused_madness", "any", "model_destroyed"),
         ]
         for aid, phase, event in cases:
             matched = reactive_abilities_for(abilities, phase, event)

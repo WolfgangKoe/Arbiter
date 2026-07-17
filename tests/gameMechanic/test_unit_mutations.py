@@ -11,8 +11,13 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.abilityEngine as _eng  # noqa: E402
 import gameMechanic.gameState as _gs  # noqa: E402
 import gameMechanic.unitMutations as _mut  # noqa: E402
+from gameMechanic.abilityEngine import (  # noqa: E402
+    find_unit_ability_by_effect,
+    resolve_mortal_wounds_effect,
+)
 from gameMechanic.gameState import next_phase  # noqa: E402
 from gameMechanic.unitMutations import (  # noqa: E402
     apply_buff_to_unit,
@@ -1303,6 +1308,41 @@ def test_apply_mortal_wounds_delegates_to_apply_damage_mortal() -> None:
     )
     _mut.apply_mortal_wounds(WARRIORS, "Necrons", 3, _warriors())
     state = session["p1_units"][WARRIORS]
+    assert state["current_wounds"] == 7
+    assert state["models"] == 7
+
+
+def test_vengeance_of_the_enchained_flow_trigger_resolve_apply(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """B-028c1 T2: Trigger (Silent King destroyed) -> resolve (roll) -> apply
+    (mortal wounds land on the user-chosen target) end to end, using the real
+    YAML ability + the real `apply_mortal_wounds` state mutation — no
+    Streamlit involved, mirrors `_render_vengeance_ability_card`'s own call
+    chain in src/uiLayout/_common.py.
+    """
+    _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+            }
+        }
+    )
+    ability = find_unit_ability_by_effect(
+        "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+    )
+    assert ability is not None
+
+    rolls = iter([4, 3])  # gate roll 4 (>=4 -> triggered), amount roll D6 -> 3
+    monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
+    wounds = resolve_mortal_wounds_effect(ability)
+    assert wounds == 3
+
+    _mut.apply_mortal_wounds(WARRIORS, "Necrons", wounds, _warriors())
+    state = _mut.st.session_state["p1_units"][WARRIORS]
     assert state["current_wounds"] == 7
     assert state["models"] == 7
 

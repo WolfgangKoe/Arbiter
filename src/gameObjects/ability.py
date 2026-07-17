@@ -38,6 +38,8 @@ class Effect:
     handler: str | None = None
     revive: bool = True  # False = cap heal to current living models, no resurrection
     effects: list[dict[str, Any]] | None = None  # sub-effects for multi-type effects
+    roll_threshold: int | None = None  # e.g. mortal_wounds: "on a 4+" gate roll
+    roll_type: str | None = None  # → docs/spec/processes.md P-04
 
 
 @dataclass

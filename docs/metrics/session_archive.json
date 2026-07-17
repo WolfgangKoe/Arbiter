@@ -5426,11 +5426,11 @@
   "d27554b4-b90f-4323-98f2-e5b721d747a4": {
     "started_at": "2026-07-17T20:16:15.852Z",
     "task": "start session",
-    "peak_context": 112261,
-    "subagent_share": 89.04042934977412,
+    "peak_context": 115747,
+    "subagent_share": 88.83424514993129,
     "by_tier": {
       "Opus": 4407665,
-      "Sonnet": 41670320
+      "Sonnet": 45325162
     },
     "subagents": [
       {
@@ -5465,7 +5465,7 @@
         "agent_type": "general-purpose",
         "description": "Retro-Maßnahmen M1–M3 umsetzen",
         "tier": "Sonnet",
-        "peak_context": 90702,
+        "peak_context": 110831,
         "started_at": "2026-07-17T20:16:15.852Z"
       },
       {
@@ -5481,6 +5481,67 @@
         "tier": "Sonnet",
         "peak_context": 175395,
         "started_at": "2026-07-17T20:16:15.852Z"
+      }
+    ]
+  },
+  "b9822b92-dfaa-40b0-b6dd-57a41386d491": {
+    "started_at": "2026-07-17T21:54:05.167Z",
+    "task": "Freigabe, AUfgaben Parallelisieren.",
+    "peak_context": 105243,
+    "subagent_share": 95.67843706233738,
+    "by_tier": {
+      "Sonnet": 95109074,
+      "Opus": 3464583
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S164 Abschluss: Lint-Fix + Re-Scope",
+        "tier": "Sonnet",
+        "peak_context": 95817,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2+T3 Vengeance Call-Site wiring",
+        "tier": "<synthetic>",
+        "peak_context": 308460,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 mortal_wounds-Handler Kernlogik",
+        "tier": "Sonnet",
+        "peak_context": 150516,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S164 DoD-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 95215,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Mailbox-Lifecycle S164 abräumen",
+        "tier": "Sonnet",
+        "peak_context": 46561,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T0 Housekeeping B-028b/B-119",
+        "tier": "Sonnet",
+        "peak_context": 70932,
+        "started_at": "2026-07-17T21:54:05.167Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S164-Planungsentwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 113161,
+        "started_at": "2026-07-17T21:54:05.167Z"
       }
     ]
   }
