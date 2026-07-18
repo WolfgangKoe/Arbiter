@@ -644,6 +644,32 @@ Vollständige Detailplanungen je Ziel: [archive/](archive/) (Ziel 1A–6, erledi
   Herkunft: Stakeholder-Beobachtung S160 (B-028b UI-Verifikation Testfall 3,
   Gloom-Prism-Regression).
 
+## Aus der ID-indizierten Liste (migriert S166)
+
+- ✅ **B-122 — Menhir-Lebenspunkte verifizieren — ERLEDIGT (S166, extern verifiziert + positive
+  UI-Sichtprüfung):** `data/wh40k_9e/necrons/units.yaml:1106` trug `wounds: 7` je Menhir-Modell
+  (Silent King, 2 Menhirs → 14 Wunden gesamt + Szarekh 16 = 30 gesamt). Stakeholder-Angabe (S165):
+  5 Wunden je Menhir → 10 gesamt (26 gesamt inkl. Szarekh 16). Der lokale Wahapedia-Dump
+  (`docs/work/wahapedia_necrons/units_all.txt`) enthält nur Szarekhs eigene Statszeile
+  (`W:9-16`), keine separate Menhir-Profilzeile — bestätigte Scraper-Lücke. Extern verifiziert
+  (WebSearch/WebFetch, drei unabhängige Quellen — Wahapedia
+  `wahapedia.ru/wh40k9ed/factions/necrons/The-Silent-King`,
+  `40k.app/factions/necrons/units/the-silent-king`,
+  `twinnedminiatures.blogspot.com/p/9th-edition-necrons-silent-king.html` — konvergieren auf
+  Wounds=5 je Triarchal Menhir; andere abgeleitete Stat-Werte der Fetches widersprachen sich
+  untereinander und wurden verworfen, nur der übereinstimmende Wounds-Wert übernommen).
+  `units.yaml:1106` auf `wounds: 5` korrigiert (nur der Wounds-Wert, `ws`/`bs`/`attacks`
+  unverändert gelassen — außerhalb des B-122-Scopes). Erklärkommentar in Zeile 1099 (W7→W5)
+  mitgezogen. Ein direkt betroffener Test
+  (`tests/uiLayout/test_group_flow.py::test_front_group_hp_menhirs_then_szarekh`) pinnte den
+  alten Wert (14/7/9-Fixture-Zahlen) und wurde auf die neuen Werte (10/5/7) nachgezogen —
+  erwarteter Rot→Grün-Fix, kein Verhaltensbruch. Kein Code-Pfad hängt an der Zahl (reine
+  Datenkorrektur). Manuelle Stakeholder-UI-Sichtprüfung S166 bestätigt positiv — dieser
+  Stakeholder-Befund selbst legte den Grundstein für B-123 (Root Cause). Belege:
+  Stakeholder-Entscheid S165 (Explodes-Einordnung); `docs/handoff/S166_B122_VERIFIKATION.md`
+  (gelöscht nach Abschluss, Inhalt hier archiviert). Herkunft: Stakeholder-Ergänzung im
+  S165-Explodes-Entscheid.
+
 ## Aus der ID-indizierten Liste (weitere Einträge; migriert S155)
 
 - ✅ **B-060 — CLAUDE.md Token-Disziplin entschlacken — ERLEDIGT (S155):** `session_context.py`-Implementierungsdetails (Transcript-Pfad, Regex-Fallstrick S65) aus dem Token-Disziplin-Abschnitt nach `operating_model.md` Event 6 verlagert; in CLAUDE.md nur 2-Zeilen-Verweis. Commit `6ca8ef8`.

@@ -503,15 +503,15 @@ def test_front_group_hp_menhirs_then_szarekh() -> None:
     sk, _ = _silent_king_groups()
     # Full: front model is a Triarchal Menhir (priority 1)
     assert common.front_group_hp(
-        sk, {"group_wounds": {"triarchal_menhirs": 14, "szarekh": 16}}
+        sk, {"group_wounds": {"triarchal_menhirs": 10, "szarekh": 16}}
     ) == (
-        7,
-        7,
+        5,
+        5,
     )
     # Partly wounded menhir
-    assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 9, "szarekh": 16}}) == (
+    assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 7, "szarekh": 16}}) == (
         2,
-        7,
+        5,
     )
     # Menhirs dead → Szarekh becomes the front model
     assert common.front_group_hp(sk, {"group_wounds": {"triarchal_menhirs": 0, "szarekh": 10}}) == (

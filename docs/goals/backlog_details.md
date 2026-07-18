@@ -23,13 +23,23 @@ zwischen den Feldern (Sichtbarkeit, S152-Auflage 5):
   (verlustfrei kondensiert — Fakten, Links, Entscheide, betroffene Dateien, Code-Referenzen).
 - **Abhängigkeiten:** Was blockiert/parallelisiert dieses Item und warum.
 - **Belege:** Links auf Handoffs/Screenshots/Specs — verweist, dupliziert nicht.
-- **Benötigte Regeln-Scopes:** Verweis auf `operating_model.md`/`agent_scopes.md`, nur wenn
-  bekannt.
+- **Benötigte Regeln-Scopes:** PFLICHT konkret befüllt bei Items mit Regel-/UI-Bezug — kein
+  „—" (DoR-Kriterium a, S165-Retro-M1): Design-System-§ (`docs/spec/design_system.md`),
+  `operating_model.md`-Abschnitt oder Wahapedia-Quelle konkret benennen. „—" bleibt nur für
+  Items ohne Regel-/UI-Bezug zulässig. Zusätzlich (DoR-Kriterium b+c): Akzeptanzkriterien
+  werden von einem Subagenten aus den lokalen Regelquellen (`docs/work/wahapedia_*/`,
+  `docs/spec/`) erstellt und dem Item beigelegt; Refinement-Fragen werden dokumentiert —
+  Anforderung richtig verstanden? AK korrekt + vollständig? Stakeholder-Entscheid nötig?
+  Ganzheitlich betrachtet (Code ↔ App ↔ Regeln ↔ Architektur)? Ratchet: bestehende aktive
+  Items werden erst beim nächsten Anfassen nachgezogen, kein Big-Bang-Durchgang.
+  DoR-Definition kanonisch: `docs/governance/operating_model.md` Event 1; Planner-Pflicht:
+  `docs/reference/agent_scopes.md`.
 - **Herkunft:** Session/Anlass/Foto-Referenz, aus der das Item entstand.
 
-Unbekannte Felder tragen `—` (kein Platzhaltertext). Jede `## B-NNN`-Überschrift trägt direkt
-darunter `[↩ Zeile in backlog.md](backlog.md#b-nnn)` — Ziel-Anker sitzt dort als `<a id="b-nnn">`
-am Anfang der Beschreibungsspalte.
+Unbekannte Felder tragen `—` (kein Platzhaltertext) — Ausnahme: „Benötigte Regeln-Scopes" bei
+Items mit Regel-/UI-Bezug (s. Feldschema oben, DoR-Kriterium a). Jede `## B-NNN`-Überschrift
+trägt direkt darunter `[↩ Zeile in backlog.md](backlog.md#b-nnn)` — Ziel-Anker sitzt dort als
+`<a id="b-nnn">` am Anfang der Beschreibungsspalte.
 
 ---
 
@@ -614,11 +624,26 @@ am Anfang der Beschreibungsspalte.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** Blocked — nächster Schritt S166: Mockup „Pflicht-Trigger-Kachel" zur Stakeholder-Abnahme, danach Umsetzung
+**Status:** Blocked — nächster Schritt S167: Mockup V3 (7 Korrekturwünsche aus §g) zur Stakeholder-Abnahme, danach Umsetzung
 
 **Tier:** Design-Crew→Executor
 
 **Effort:** ~20–25k (M) — nach Mockup neu schätzen (Scope gewachsen: `auto_explode`-GO + Datennacherfassung beider Fraktionen)
+
+**S166-Mockup-Iteration:** Mockup V1 (frei entworfene Komponenten) vom Stakeholder abgelehnt —
+orientierte sich nur grob an den bestehenden UI-Bausteinen. Mockup V2
+(`docs/handoff/S166_MOCKUP_EXPLODES_V2.html`) übernahm ausschließlich Bestandskomponenten
+(Tisch-Wurf-Baustein §6.3 für den Explodes-Gate-Wurf, Standard-GO-Karte §6.1 für
+`auto_explode`, Heroic-Intervention-Panel für die Ziel-Auswahl) und wurde vom Stakeholder
+positiv bewertet („passt deutlich besser"), mit 7 Korrekturwünschen für V3
+(`docs/handoff/S166_MOCKUP_EXPLODES.md` §g): (1) gewählte Ziel-Einheit in der armyList nach
+oben ziehen statt eigener Healthbar im Mockup; (2) „D6 Mortal Wounds" als Spaltenkopf über den
+Zahlenfeldern statt je Feld; (3) Hinweistext „Tap a unit to toggle…" entfällt; (4) statt
+exaktem Würfelwurf zwei Buttons „Explodes!" / Gegenteil; (5) Resolved-Hinweisblock (blau) aus
+dem Auswahl-Kasten herauslösen, Auswahlliste selbst ohne Card-Ansicht (schlicht wie Heroic
+Intervention); (6) „DESTROYED" behält seine bisherige Farbe in der unitCard; (7) `auto_explode`-
+GO lädt ihren Namen aus der YAML statt eines Platzhalters. Status bleibt Blocked bis V3-Abnahme;
+nächster Schritt V3-Mockup S167.
 
 **Re-Scope S165 (Fable-Direktanalyse, Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst)):** B-028c1 hieß ursprünglich „4× `mortal_wounds`-GOs" und war als optionale Gefechtsoption geplant/umgesetzt. Fachlicher Befund: `vengeance_of_the_enchained` (Wahapedia `wahapedia_necrons/units_all.txt:238`: „On a 4+ **it explodes**…") gehört zur Standard-Familie **Explodes** (Fahrzeuge; C'tan als „Reality Unravels") — ein **Pflicht-Trigger** bei Zerstörung, keine GO (Würfeln ist Pflicht, kein Verwenden/Nicht-Verwenden-Entscheid). Die GO-Karte kann einen Pflicht-Trigger strukturell nicht abbilden.
 
@@ -2297,37 +2322,6 @@ den sie als generische Infra vorgehalten wird.
 
 ---
 
-## B-122 — Menhir-Lebenspunkte verifizieren
-
-[↩ Zeile in backlog.md](backlog.md#b-122)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** S: ~15k
-
-**Detail-Beschreibung:** `data/wh40k_9e/necrons/units.yaml:1106` trägt `wounds: 7` je Menhir-Modell
-(Silent King, 4 Menhirs → 30 Wunden gesamt). Stakeholder-Angabe (S165): 5 Wunden je Menhir → 26
-gesamt, Szarekh selbst 16 (bestätigt via Wahapedia `W:9-16`-Notation). Der lokale
-Wahapedia-Dump (`docs/work/wahapedia_necrons/`) enthält keine Menhir-Profilzeile — Scraper-Lücke,
-nicht nur ein Erfassungsfehler. Vorgehen: extern verifizieren (offizielles Datasheet/aktuelle
-Wahapedia-Seite) bzw. `tools/wahapedia_scraper.py` so nachbessern, dass die Menhir-Zeile mit
-erfasst wird, danach `units.yaml` korrigieren.
-
-**Abhängigkeiten:** Keine — reine Datenkorrektur, kein Code-Pfad hängt an der Zahl.
-
-**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst).
-
-**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Neue Fraktion oder Einheit
-als YAML" (Wahapedia-Recherche zuerst).
-
-**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid.
-
----
-
 ## B-123 — Schadenszuweisungs-Bug Mehrmodell-Einheiten
 
 [↩ Zeile in backlog.md](backlog.md#b-123)
@@ -2338,7 +2332,8 @@ als YAML" (Wahapedia-Recherche zuerst).
 
 **Tier:** Executor
 
-**Effort:** M: ~35k
+**Effort:** M: ~35k (S166-Nachdiagnose: S ≈ 100–120k — unter neuer Richtung für S167 neu zu
+bestätigen)
 
 **Detail-Beschreibung:** Die „Frontmodell"-Schadenszuweisungslogik scheint zu verhindern, dass
 überschüssiger normaler Schaden über das Frontmodell hinaus weitere Modelle derselben Einheit
@@ -2350,11 +2345,35 @@ innerhalb derselben Attacke über das getötete Modell hinaus), aber **mehrere**
 müssen nacheinander weitere Modelle töten können — die genaue Abgrenzung vor dem Fix in
 `docs/work/wahapedia_core_rules/` verifizieren, nicht aus dem Gedächtnis.
 
+**S166-Root-Cause (verifiziert, Nachdiagnose):** `_render_damage_block`
+(`src/uiLayout/_common.py:2050–2065`) erzwingt für Mehrgruppen-Einheiten mit >1 lebenden
+Gruppen immer eine Subgruppen-Wahl (`_render_subgroup_selector`, Radio-Default = niedrigste
+Priorität) und setzt `damage_active_group_id`; `apply_damage`
+(`src/gameMechanic/unitMutations.py:169–195`) nimmt dadurch den directed-Zweig, dessen
+`_apply_directed_group_damage` (`unitMutations.py:163–169`) jeden Schaden über den Restpool der
+gewählten Gruppe hinaus verwirft — unabhängig von `resolved`. Der spillover-fähige `else`-Zweig
+(`_apply_group_wound_damage`) ist über die UI praktisch unerreichbar. Repro: 26 Schaden auf
+vollen Silent King → nur Menhirs (10 HP) sterben, Szarekh 16/16 unberührt. Testlücke: kein Test
+für directed + resolved + Schaden > Gruppen-Restpool.
+
+**Stakeholder-Richtung (S166, verbindlich für die S167-Planung):** KEIN pauschaler Spillover für
+normalen Schaden. Die bewusste Subgruppen-Zuweisungslogik (wie bei Einheiten mit mehreren
+verschiedenen Modellen, z. B. Boyz/Nob) soll beibehalten und vereinheitlicht werden — zu klären
+ist, warum sie beim Silent King nicht greift (vermutlich Aufräumen/richtige Funktionswahl; „die
+Funktion ist ja vorhanden"). Regel-Check nötig: die Menhire sollten von Anfang an für den
+initialen Schaden gelockt sein (Szarekh kann nicht als erstes gewählt werden). Dieselbe Funktion
+soll auch für Einheiten mit identischen Modellen gelten (dort triviale Zuweisung).
+
+**Test-Auflage für den S167-Brief:** Testmatrix directed×resolved×locked×mortal inkl. Grenzfall
+Schaden > Gruppen-Restpool.
+
 **Abhängigkeiten:** Keine bekannte — betrifft die Schadenszuweisung in `combat.py`/
 `unitMutations.py`, unabhängig vom Explodes-Re-Scope (B-028c1).
 
-**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst).
+**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht,
+Inhalt hier inline erfasst); `docs/handoff/S166_B123_DIAGNOSE.md` +
+`docs/handoff/S166_B123_NACHDIAGNOSE.md` (gelöscht nach Abschluss, Root Cause hier überführt).
 
 **Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Combat-/Schadens-Mechanik".
 
-**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid.
+**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid; Root-Cause-Verifikation S166.

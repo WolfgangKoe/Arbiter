@@ -97,11 +97,20 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   ermitteln), danach die Aufwandsschätzung abgeben — nicht umgekehrt. Anlass: B-028 —
   Schätzung ~35k (auf Basis der alten Beschreibung) wich real auf 100k+ ab, weil der Scope
   erst nach der Schätzung ermittelt wurde.
+- **Definition of Ready (DoR) vor Freigabe-Reife (S165-Retro-M1):** Kein Umsetzungs-Task
+  erhält Freigabe-Reife, dessen Backlog-Item die DoR nicht erfüllt — (a) „Benötigte
+  Regeln-Scopes" in `docs/goals/backlog_details.md` konkret befüllt (kein „—" bei Items mit
+  Regel-/UI-Bezug), (b) Akzeptanzkriterien aus den lokalen Regelquellen beigelegt, (c)
+  Refinement-Fragen dokumentiert. DoR-Definition kanonisch: `docs/governance/operating_model.md`
+  Event 1; Feldschema: `docs/goals/backlog_details.md`.
 
 **Konventionen:**
-- `Effort`: XS (<5k Token), S (5–15k), M (15–40k), L (>40k). Identische Buckets nutzt seit
-  S152 auch die Effort-Spalte in `docs/goals/backlog.md` (Token-Schätzung statt
-  Zeit-Kategorie, B-099b) — keine zweite, abweichende Konvention einführen.
+- `Effort` (Subagent-Gesamt-Tokens, kalibriert S165-Retro-M2 — Ist-Werte S165: Task 0 XS
+  ~5k geschätzt → ~50k tatsächlich, Task 1b M ~20–25k geschätzt → ~190k tatsächlich):
+  XS ≈50k, S ≈100–120k, M ≈190k+, L weiterhin >M — vor Vergabe in ≤M-Teil-Briefs splitten
+  (S130-Auflage). Identische Buckets nutzt seit S152 auch die Effort-Spalte in
+  `docs/goals/backlog.md` (B-099b) — keine zweite, abweichende Konvention einführen; die
+  Legende dort trägt dieselbe Skala.
 - `Modus`: `Gate` = Freigabe vor Umsetzung erforderlich; `Konsent` = kein Widerspruch
   reicht; `Konsens` = aktive Zustimmung aller Beteiligten.
 - `NEEDS-DECISION` im Ausgabe-Template markieren, wenn eine Stakeholder-Entscheidung
@@ -209,6 +218,10 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   Punkt, keine Sammelpunkte. Grund: der Stakeholder soll offene UI-Prüfungen unabhängig
   von der laufenden Session-Arbeit nachholen können. Marker: **`STATUS: AWAITING-VERIFICATION`**
   (nicht `NEEDS-DECISION` — eine Sichtprüfung ist keine Entscheidungsfrage; Retro-M1, S160/S161).
+  **Zusätzlich drei Pflicht-Checkpunkte je Verifikation (S165-Retro-M3, ergänzt den
+  Reviewer-Ratchet um die Stakeholder-Perspektive):** (1) „Ist die Interaktion regelkonform
+  (optional vs. Pflicht)?", (2) „Komponente + Anker laut design_system.md-§?", (3)
+  „Wortlaut-Familie korrekt?".
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war

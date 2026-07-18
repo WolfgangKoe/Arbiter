@@ -1096,14 +1096,14 @@ units:
   - livingMetal
   - noctilithBeacons
   - triarchsWill
-  # 3-model unit (Wahapedia 9E): Szarekh (bracketed W16) + 2 Triarchal Menhirs (W7).
+  # 3-model unit (Wahapedia 9E): Szarekh (bracketed W16) + 2 Triarchal Menhirs (W5).
   # The Menhirs must take wounds first (priority 1) — Codex "Triarchal Menhir" rule.
   model_groups:
   - id: triarchal_menhirs
     name_en: Triarchal Menhirs
     count: 2
     priority: 1
-    stats: {wounds: 7, ws: "5+", bs: "3+", attacks: 2}
+    stats: {wounds: 5, ws: "5+", bs: "3+", attacks: 2}
     weapons:
     - ref: wh40k_9e.necrons.weapon.annihilator_beam
   - id: szarekh

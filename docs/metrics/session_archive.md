@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 10:57 CEST
+Stand: 2026-07-18 20:04 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,20 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-18 09:08 be5c  ████████████ 158k ⛔    █████░  84%    ············
+07-18 12:29 cd6c  █████████░░░ 117k ✅    ████░░  72%    █···········
+         SA_1·  █████░░░░░░░  58k ✅    S166 DoD-Review (Opus)
+         SA_2·  ███████░░░░░  87k ✅    Explodes-Mockup V2 bauen
+         SA_3·  ███████░░░░░  86k ✅    B-123 Nachdiagnose UI-Pfad
+         SA_4·  ███████████░ 131k ⚠️   S166 Abschluss + Commit
+----------------- ---------------------- -------------- ------------
+07-18 11:00 b53c  █████████░░░ 109k ✅    █████░  85%    ············
+         SA_1·  ███████░░░░░  81k ✅    Retro-Maßnahmen S165 verankern
+         SA_2·  █████████░░░ 109k ✅    B-122 Menhir-Wunden verifizieren
+         SA_3·  ████████░░░░ 104k ✅    B-123 Spillover-Diagnose
+         SA_4·  ██████████░░ 126k ⚠️   S166-Planning-Entwurf erstellen
+         SA_5·  ███████████░ 138k ⚠️   Explodes-Mockup + Screenshot-Disco…
+----------------- ---------------------- -------------- ------------
+07-18 09:08 be5c  ████████████ 162k ⛔    █████░  82%    ············
          SA_1·  █████████░░░ 115k ✅    Task 1a: Vengeance-Sichtbarkeits-D…
          SA_2·  █████░░░░░░░  62k ✅    S165-Abschluss-Review (Opus)
          SA_3·  ███░░░░░░░░░  34k ✅    Review-Befunde 1+2 bereinigen
@@ -887,3 +900,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S163 (2026-07-17)** mypy 26->0 (Baseline 0), gloom_prism auf Ability-Infrastruktur (B-028b, B-119 Fall b via D-1=A), Planungs-Vollständigkeits-Klausel verankert; Review GO
 - **S164 (2026-07-18)** mortal_wounds-Handler (T1) + Vengeance-Verdrahtung (UI defekt, re-scoped); B-028b/B-119 archiviert; infused_madness YAML-Korrektur; arc_fields/wrath zurückgestellt
 - **S165 (2026-07-18)** Vengeance visibility fix (selection-independent scan, 5 phases), UI-verification negative -> explodes re-scope (mandatory trigger, not GO), design-system governance ratchet, DoR measure proposed
+- **S166 (2026-07-18)** B-122 menhir wounds fix; B-123 root cause verified (directed-group damage discards spillover, UI forces branch) + stakeholder direction; explodes mockup V2 accepted with 7 corrections for V3; retro measures 1-3 pending

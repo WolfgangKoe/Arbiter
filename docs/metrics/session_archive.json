@@ -5548,8 +5548,8 @@
   "be5c7ef6-c2d9-47ad-8f8d-45e5e3d572f9": {
     "started_at": "2026-07-18T07:08:39.535Z",
     "task": "start session",
-    "peak_context": 158033,
-    "subagent_share": 83.9101971105387,
+    "peak_context": 162184,
+    "subagent_share": 81.70140584095897,
     "by_tier": {
       "Sonnet": 42591280,
       "Opus": 1324796,
@@ -5611,6 +5611,92 @@
         "tier": "Sonnet",
         "peak_context": 150914,
         "started_at": "2026-07-18T07:08:39.535Z"
+      }
+    ]
+  },
+  "b53cd170-39ea-4b1a-9cd2-9e115cea2ba2": {
+    "started_at": "2026-07-18T09:00:57.020Z",
+    "task": "Fang bitte mal an. Dann sehen wir wie weit wir kommen.",
+    "peak_context": 109037,
+    "subagent_share": 84.61375480873808,
+    "by_tier": {
+      "Sonnet": 21737013
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen S165 verankern",
+        "tier": "Sonnet",
+        "peak_context": 81284,
+        "started_at": "2026-07-18T09:00:57.020Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-122 Menhir-Wunden verifizieren",
+        "tier": "Sonnet",
+        "peak_context": 108825,
+        "started_at": "2026-07-18T09:00:57.020Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-123 Spillover-Diagnose",
+        "tier": "Sonnet",
+        "peak_context": 103829,
+        "started_at": "2026-07-18T09:00:57.020Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S166-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 125994,
+        "started_at": "2026-07-18T09:00:57.020Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Explodes-Mockup + Screenshot-Discovery",
+        "tier": "Sonnet",
+        "peak_context": 137802,
+        "started_at": "2026-07-18T09:00:57.020Z"
+      }
+    ]
+  },
+  "cd6ce717-da97-41c2-b206-e857e427acdf": {
+    "started_at": "2026-07-18T10:29:28.540Z",
+    "task": "Task 4 fertig — B-123 Diagnose: Mischfall, Entscheidung nötig Befund: Es gibt zwei Schadens-Pfade in apply_damage() (un…",
+    "peak_context": 116838,
+    "subagent_share": 72.02566279015919,
+    "by_tier": {
+      "Opus": 898684,
+      "Sonnet": 9024172
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S166 DoD-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 57804,
+        "started_at": "2026-07-18T10:29:28.540Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Explodes-Mockup V2 bauen",
+        "tier": "Sonnet",
+        "peak_context": 87047,
+        "started_at": "2026-07-18T10:29:28.540Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-123 Nachdiagnose UI-Pfad",
+        "tier": "Sonnet",
+        "peak_context": 85663,
+        "started_at": "2026-07-18T10:29:28.540Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S166 Abschluss + Commit",
+        "tier": "Sonnet",
+        "peak_context": 131260,
+        "started_at": "2026-07-18T10:29:28.540Z"
       }
     ]
   }

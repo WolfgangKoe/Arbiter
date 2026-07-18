@@ -25,40 +25,39 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S165, 2026-07-18)
+## Aktueller Stand (nach S166, 2026-07-18)
 
-**Review S165: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, mypy 0). Alle 4 S164-Retro-
-Maßnahmen umgesetzt + in `agent_scopes.md` verankert. B-028c1: Sichtbarkeits-Bug behoben
-(Diagnose 1a: Group-Flow-Früh-Return `fightPhase.py` + `inactive_override`-Zwilling; Fix 1b:
-selektionsunabhängiger Scan `render_mortal_wounds_cards_for_destroyed` in 5 Phasen inkl.
-psychicPhase, 4 alte Call-Sites entfernt, Erreichbarkeits-Tests mit Stash-Beweis). UI-
-Verifikation Runde 1 dennoch **negativ** → Fable-Direktanalyse: fachliche Fehlklassifikation —
-Vengeance ist die Standard-Familie **Explodes** (Pflicht-Trigger, KEINE GO; Wahapedia wörtlich
-„it explodes", im YAML-rule_text verloren); dazu Design-System-Verstoß (Vollbreiten-Anker statt
-Trigger-Ort §6.2) und Engine-Selbstwurf gegen „App würfelt nicht" (§6.3). Stakeholder folgt
-den Empfehlungen: B-028c1 re-scoped auf „Explodes-Familie" (Blocked bis Mockup-Abnahme),
-Governance-Ratchet in `agent_scopes.md` (UI-Briefs zitieren design_system-§, fachliche
-Einordnung mit Wahapedia-Zitat, Mockup-Gate, Reviewer-Punkt Design-Konformität). Neue Items
-B-122 (Menhir-LP 5 vs. 7, Scraper-Lücke) + B-123 (Schadens-Spillover Mehrmodell-Einheiten).
+**Review S166: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, Doku/Akzeptanz 25/25). Retro-
+Maßnahmen 1–3 in `docs/handoff/S166_RETRO.md` zur Entscheidung im S167-Planning (Diagnose-
+Ratchet „UI-Erreichbarkeit des Beweispfads", Grenzfall-Test-Auflage B-123-Brief, dritte
+Maßnahme s. Retro-Datei). B-122 (Menhir-Lebenspunkte) erledigt: extern verifiziert (3
+Wahapedia-9E-Quellen, Wounds 7→5 je Menhir), UI-Sichtprüfung positiv — nach
+`docs/goals/backlog_archive.md` archiviert. B-123 (Schadens-Spillover): Root Cause verifiziert
+— `_render_damage_block` erzwingt bei Mehrgruppen-Einheiten immer eine Subgruppen-Wahl,
+`apply_damage` nimmt dadurch den directed-Zweig, der Schaden über den Restpool der gewählten
+Gruppe hinaus verwirft (Repro: 26 Schaden auf vollen Silent King → nur Menhirs sterben, Szarekh
+unberührt). Stakeholder-Richtung: kein pauschaler Spillover, bestehende Subgruppen-
+Zuweisungslogik vereinheitlichen (auch für identische Modelle), Menhir-Lock für Erstschaden
+prüfen — Details in `docs/goals/backlog_details.md` B-123. Explodes-Mockup (B-028c1): V1
+abgelehnt, V2 (`docs/handoff/S166_MOCKUP_EXPLODES_V2.html`, reine Bestandskomponenten) vom
+Stakeholder positiv bewertet, 7 Korrekturwünsche für V3 in `docs/handoff/S166_MOCKUP_EXPLODES.md`
+§g.
 
-Frühere Sessions (S60–S164): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S165): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S166)
+### ▶ Nächster Schritt (S167)
 
-1. **Mockup „Pflicht-Trigger-Kachel" (Explodes)** zur Stakeholder-Abnahme — erster Schritt vor
-   jedem Code (Mockup-Gate). Danach Explodes-Paket: Schema (`effect.type: explode`,
-   `mandatory`-Achse), Komponente + Anker, Tisch-Wurf-Baustein, `auto_explode`-GO (CP-Kosten,
-   3 CP TITANIC), Datennacherfassung beider Fraktionen — Details B-028c1 in
-   `docs/goals/backlog_details.md`.
-2. Neue Items B-122 (Menhir-LP) + B-123 (Schadens-Spillover) einplanen.
-3. Weiteres laut `docs/goals/backlog.md`.
+1. **Retro-Maßnahmen-Entscheid** (`docs/handoff/S166_RETRO.md`) — Stakeholder wählt/verwirft.
+2. **Explodes-Mockup V3** mit den 7 Korrekturen aus `docs/handoff/S166_MOCKUP_EXPLODES.md` §g
+   erstellen → Abnahme → dann B-028c1-Umsetzung planen (Schema, Komponente+Anker,
+   Tisch-Wurf-Baustein, `auto_explode`-GO, Datennacherfassung).
+3. **B-123-Umsetzung** nach Stakeholder-Richtung (inkl. Regel-Check Menhir-Lock +
+   Boyz/Nob-Vergleich, Test-Auflage Grenzfall-Matrix directed×resolved×locked×mortal).
+4. Weiteres laut `docs/goals/backlog.md`.
 
-**Offen:** Memory-Ergänzung `feedback_test_mandate` — Freigabe noch ausstehend.
-
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING) ·
-`S165_RETRO.md` (NEEDS-DECISION, Sichtung Start S166 — enthält DoR-Maßnahme,
-Budget-Kalibrierung, Verifikations-Vorlage, Memory-Entscheid) — alle übrigen
-S164/S165-Marker überführt und gelöscht.
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S166_REVIEW.md`,
+`S166_RETRO.md`, `S166_MOCKUP_EXPLODES.md` (+ `_V2.html` + 6 Screenshots, für V3 gebraucht)
+NEEDS-DECISION — Stakeholder-Sichtung im S167-Planning.
 
 ---
 

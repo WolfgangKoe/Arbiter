@@ -152,6 +152,17 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      — er ersetzt sie nicht. Nicht genannte Maßnahmen gelten als verworfen, keine Rückfrage nötig.
      Der Planner plant weiterhin die volle Session entlang der Backlog-Prioritäten; übernommene
      Maßnahmen reiht er als regulären Task in diesen Plan ein.
+
+     **Definition of Ready (DoR) vor Freigabe-Reife (S165-Retro-M1):** Kein Umsetzungs-Task
+     erhält Freigabe-Reife (Event 2), dessen Backlog-Item nicht (a) ein konkret befülltes
+     Feld „Benötigte Regeln-Scopes" trägt (Design-System-§, `operating_model.md`-Abschnitt
+     oder Wahapedia-Quelle — kein „—" bei Regel-/UI-Bezug; Feldschema
+     `docs/goals/backlog_details.md`), (b) Akzeptanzkriterien beigelegt hat, die ein
+     Subagent aus den lokalen Regelquellen erstellt hat, und (c) dokumentierte
+     Refinement-Fragen trägt (Anforderung richtig verstanden? AK korrekt + vollständig?
+     Stakeholder-Entscheid nötig? Ganzheitlich Code ↔ App ↔ Regeln ↔ Architektur betrachtet?).
+     Ratchet: bestehende aktive Items werden erst beim nächsten Anfassen nachgezogen, kein
+     Big-Bang-Durchgang. Planner-Pflicht kanonisch: `docs/reference/agent_scopes.md`.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `briefing.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧
