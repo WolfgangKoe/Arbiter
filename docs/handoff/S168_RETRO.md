@@ -30,6 +30,11 @@ als verworfen (operating_model.md §ev1).
   der App-Check der Session ist dadurch entfallen, das `rm` gelang erst im zweiten Anlauf.
 - **Token-Schätzung T3:** ~100k geschätzt, ~160k tatsächlich (Render-Test-Fixture-Aufwand
   unterschätzt); T2 lag mit 177k/190k im Rahmen.
+- **§7 ohne Schema ausgeliefert (Koordinator-Fehler, Nachtrag):** §7 wurde als reine Prosa
+  abgegeben und vom Stakeholder abgelehnt („Es SOLL AUSSEHEN WIE … damit ist ein Bild
+  gemeint") — obwohl §1 die ASCII-Schema-Praxis vorlebt UND der Stakeholder das Fehlen von
+  Schemata in derselben Session (T3-V) kritisiert hatte. Der T4-Brief enthielt keine
+  Schema-Pflicht. Direkter Beleg für Maßnahme 1; Korrekturrunde noch in S168 gestartet.
 
 ## Maßnahmen (nummeriert, entscheidbar)
 

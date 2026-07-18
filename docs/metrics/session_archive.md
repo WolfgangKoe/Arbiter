@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 22:15 CEST
+Stand: 2026-07-18 22:25 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,14 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-18 20:59 6cfc  ████████░░░░  97k ✅    █████░  90%    █···········
+07-18 20:59 6cfc  ██████████░░ 124k ⚠️   █████░  84%    █···········
          SA_1·  █████████░░░ 108k ✅    T4: §7-Spec-Überführung Explodes
-         SA_2·  ████████████ 159k ⛔    T3: B-123 UI + Render-Test
-         SA_3·  █████████░░░ 111k ✅    S168-Planning-Entwurf (Opus)
-         SA_4·  █████░░░░░░░  65k ✅    T5: S168 DoD-Review (Opus)
-         SA_5·  ████████████ 175k ⛔    T2: B-123 Core-Fix + Tests
-         SA_6·  ████░░░░░░░░  44k ✅    T1: B-123 Regel-Lookup
-         SA_7·  ████████░░░░  99k ✅    T5b: S168 Abschluss-Hygiene
+         SA_2·  ████████░░░░  99k ✅    §7-Rework mit ASCII-Schemata
+         SA_3·  ████████████ 159k ⛔    T3: B-123 UI + Render-Test
+         SA_4·  █████████░░░ 111k ✅    S168-Planning-Entwurf (Opus)
+         SA_5·  █████░░░░░░░  65k ✅    T5: S168 DoD-Review (Opus)
+         SA_6·  ████████████ 175k ⛔    T2: B-123 Core-Fix + Tests
+         SA_7·  ████░░░░░░░░  44k ✅    T1: B-123 Regel-Lookup
+         SA_8·  ████████░░░░ 105k ✅    T5b: S168 Abschluss-Hygiene
 ----------------- ---------------------- -------------- ------------
 07-18 20:08 00eb  ███████████░ 140k ⚠️   ████░░  64%    ██··········
          SA_1·  ██████░░░░░░  69k ✅    Planner-Tier Opus verankern

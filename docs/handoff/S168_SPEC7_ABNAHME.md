@@ -9,6 +9,85 @@ Lebensdauer: bis Stakeholder-Entscheidung. Bei Abnahme: diese Datei löschen, Mo
 Bei Ablehnung/Korrektur: §7 wird entsprechend überarbeitet, diese Datei bleibt bis zur
 nächsten Runde stehen.
 
+## Korrekturrunde 2 (S168) — §7 jetzt Schema-first
+
+**Runde-1-Feedback (beantwortet durch Korrekturrunde 2):** Ablehnungsgrund war, dass §7
+nur Prosa war — erwartet wird eine grafische Darstellung im Stil von
+`design_system.md` §1 (Box-Zeichnung wie das Three-Column-Layout/gameHeader/armyCard-
+Beispiel, das der Stakeholder unten in seiner Rückmeldung eingefügt hat). §7
+(`docs/spec/design_system.md`, Anker `## 7. Pflicht-Trigger-Kachel — Explodes-Familie`)
+ist jetzt komplett überarbeitet: **jede** Layout-Aussage (7.1–7.5) hat ein eigenes
+ASCII-Schema, Prosa steht nur noch als kurze Anmerkung darunter. Fachlich unverändert —
+gleicher Inhalt wie Runde 1, nur die Darstellungsform hat gewechselt. Zusätzlich hat
+§1.4 (Subgruppen-Selector/Damage-Block) jetzt ebenfalls ein Schema (separater Anlass,
+T3-V-Kritik „keine schematische Darstellung", gleiche Session).
+
+Die drei wichtigsten Schemata direkt hier, damit die Entscheidung ohne Datei-Wechsel
+möglich ist (Volltext mit allen 6 Schemata: §7 in `design_system.md`):
+
+**Die Kachel selbst (§7.4) — GO-Karten-Bauform ohne `[Use]`/CP, zwei Buttons:**
+
+```
+┌──────────────────────────────────────────────┐
+│ Vengeance of the Enchained                    │  ← Titel, KEIN CP-Suffix, KEIN [Use]
+│ Explodes on 4+                                │  ← Schwellen-Caption
+│ ──────────────────────────────────────────── │
+│  [ Explodes! ]        [ Does not explode ]    │  ← zwei Buttons statt Zahlenfeld
+└──────────────────────────────────────────────┘
+```
+
+**Ziel-Auswahl-Panel (§7.2) — „D6 Mortal Wounds" ÜBER der Zahlenfeld-Spalte (Auflage 3):**
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ Vengeance of the Enchained — select affected units              │
+│ ℹ On a 4+ it explodes, each unit within 2D6" suffers D6 MW       │
+├───────────────────────────────────────────┬────────────────────┤
+│  (Label-Spalte, variable Breite)          │  D6 MORTAL WOUNDS  │ ← Spaltenkopf steht
+├───────────────────────────────────────────┼────────────────────┤   HIER, direkt über
+│  Necrons                                  │                    │   der Zahlenfeld-
+│   [✓ Necron Warriors]                     │  [ 3 ] [−] [+]     │   Spalte — nicht
+│   [  Immortals      ]                     │                    │   über der ganzen
+│  Orks                                     │                    │   Liste (V3-Fehler)
+│   [✓ Boyz           ]                     │  [ 2 ] [−] [+]     │
+│   [  Gretchin       ]                     │                    │
+│   [  Warbikers      ]                     │                    │
+├───────────────────────────────────────────┴────────────────────┤
+│  [Confirm all]     [Reset]                                      │
+└────────────────────────────────────────────────────────────────┘
+```
+
+**Platzierung (§7.5) — Kontext-Schema left/center/right, Sidebars sichtbar getrennt,
+Hinweiskasten (§7.3) unter der GO-Karte, beide Ausgänge, EIN Kasten:**
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              gameHeader                                      │
+├──────────────────────┬───────────────────────────────┬───────────────────────┤
+│  left                │  center                       │  right                │
+│  armyList             │  gameActionsArea               │  armyList             │
+│  (first_player)       │                                 │  (second_player)     │
+│                       │  ┌──────────────────────────┐  │                       │
+│                       │  │ unitCard: The Silent King │  │                       │
+│                       │  │           DESTROYED       │  │                       │
+│                       │  ├──────────────────────────┤  │                       │
+│                       │  │ Kachel-Gruppe (§7.1)       │  │                       │
+│                       │  │  Necrons-Gr. │ Orks-Gr.    │  │                       │
+│                       │  │  NEBENEINANDER, BEIDE      │  │                       │
+│                       │  │  innerhalb DIESER Kachel   │  │                       │
+│                       │  ├──────────────────────────┤  │                       │
+│                       │  │ ℹ info-Hinweiskasten       │  │                       │
+│                       │  │  (unter GO-Karte, EIN      │  │                       │
+│                       │  │   Kasten, beide Ausgänge)  │  │                       │
+│                       │  └──────────────────────────┘  │                       │
+│  unangetastet          │                                 │  unangetastet         │
+└──────────────────────┴───────────────────────────────┴───────────────────────┘
+```
+
+**Entscheidungsfrage (erneut):** §7 jetzt abnehmen? Bei Abnahme werden die
+Mockup-Dateien gelöscht und B-028c1-Code für S169 freigegeben. Bei weiterem
+Korrekturwunsch bitte konkret benennen (Abschnitt/Schema), analog zu V1→V2→V3.
+
 ## Zusammenfassung §7
 
 `docs/spec/design_system.md` §7 (neu) überführt Mockup V3 in verbindliche Spec — **keine

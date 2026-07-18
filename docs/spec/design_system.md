@@ -89,6 +89,28 @@ Verteidiger-Baustein im DAMAGE-Block einer Resolution-Tab für Einheiten mit meh
 Modell-Gruppen (`unit.model_groups`, z. B. Ork Nobz, Silent King). Drei Zustände, EIN
 Radio + EIN `dmg_col.warning(...)`, keine Sonderform je Zustand:
 
+```
+┌──────────────────────────────────────────────┐
+│ DAMAGE                                        │
+│ Nobz — model_groups: [Boss Nob, Nobz]         │
+│ ──────────────────────────────────────────── │
+│  A — frei wählbar (kein Modell angeschlagen): │
+│   ○ Boss Nob         ○ Nobz     ← EIN Radio   │
+│                                                │
+│  B — gesperrt (Warnhinweis statt Radio):      │
+│   ⚠ ► Angeschlagenes Modell … muss zuerst      │
+│       abgehandelt werden.        ← warning    │
+│                                                │
+│  C — nur eine Gruppe übrig:                   │
+│   (Selector entfällt — Schaden trifft die      │
+│    verbleibende Gruppe direkt)                │
+└──────────────────────────────────────────────┘
+```
+
+Genau ein Zustand ist zu jedem Zeitpunkt aktiv (nie Radio + Warnhinweis gleichzeitig,
+nie beide Warnhinweis-Zweige zugleich); welcher Zustand aktiv ist, entscheidet
+ausschließlich `get_locked_group()` (s. u.), die UI liest nur das Ergebnis.
+
 - **A — frei wählbar:** kein Modell angeschlagen, keine Zuteilungspflicht
   (`get_locked_group()` → `None`) → Radio über alle aktiven Gruppen, Default = niedrigste
   Priorität.
@@ -507,14 +529,16 @@ als Mehr-Session-Roadmap (6 Pakete, S132–S134+) — Details, Reihenfolge und F
 Freigabe-Gate; diese Spec (§6.1–§6.5) ist dabei der Maßstab, gegen den jeder Auftrag
 geprüft wird.
 
-## 7. Pflicht-Trigger-Kachel — Explodes-Familie (Entwurf S168, B-028c1)
+## 7. Pflicht-Trigger-Kachel — Explodes-Familie (Entwurf S168, B-028c1, Korrekturrunde 2)
 
 > **ENTWURF — wartet auf Stakeholder-Abnahme.** Dieser Abschnitt überführt Mockup V3
 > (`docs/handoff/S167_MOCKUP_EXPLODES_V3.html`) inkl. der drei S167-Auflagen aus der
 > §h-Antwort in `docs/handoff/S166_MOCKUP_EXPLODES.md`. Abnahme-Entscheidung:
 > `docs/handoff/S168_SPEC7_ABNAHME.md`. Bei Ablehnung/Korrektur wird dieser Abschnitt
 > erneut überarbeitet, bevor B-028c1 in Code geht (Spec-first-Gate, `agent_scopes.md`
-> Punkt c).
+> Punkt c). **Korrekturrunde 2 (S168):** fachlich unverändert gegenüber Runde 1 — nur
+> die Darstellungsform wechselt auf Schema-first (ASCII-Boxen im Stil von §1), weil
+> reine Prosa für eine UI-Komponente nicht auf einen Blick verständlich war.
 
 Fachliche Einordnung (S165-Re-Scope, unverändert): Explodes ist ein **Pflicht-Ereignis**
 beim Tod des Modells — kein Verwenden/Nicht-Verwenden-Entscheid, kein `[Use]`, keine CP.
@@ -530,70 +554,134 @@ unitCard (`src/uiLayout/unitCard.py`).
 Am Eintrag der zerstörten Einheit erscheint eine Folge von Bausteinen (kein neuer
 Container-Typ, jeder Baustein für sich bereits Bestand):
 
-1. **Wurf-Baustein** (§7.4-Abwandlung von §6.3): Titel/Regelname der Fähigkeit +
-   Schwellen-Caption, darunter zwei Buttons „Explodes!" (filled) / „Does not explode"
-   (outline) statt Zahlenfeld.
-2. **`auto_explode`-GO-Karte**, falls das Ziel eine passende Stratagem-Fähigkeit hat:
-   Standard-GO-Karte §6.1 direkt neben/unter dem Wurf-Baustein, gleicher Anker. `[Use]`
-   ersetzt den Wurf automatisch (Erfolg ohne Würfeln, regelkonform zum Stratagem-Text).
-   Titel = `name_en` aus der YAML (z. B. „Curse of the Phaeron",
-   `necrons/stratagems.yaml`), **nicht** der technische `effect.type: auto_explode`.
-3. **Ziel-Auswahl-Panel** bei Erfolg (Wurf oder Stratagem) — s. 7.2.
-4. **EIN Hinweiskasten unter der GO-Karte** (Auflage 1, s. 7.3) mit dem Klartext-Ergebnis.
+```
+┌──────────────────────────────────────────────┐
+│ ① Wurf-Baustein (§7.4)                        │  Titel + Schwellen-Caption,
+│    [ Explodes! ]    [ Does not explode ]      │  zwei Buttons statt Zahlenfeld
+├──────────────────────────────────────────────┤
+│ ② auto_explode-GO-Karte (§6.1, falls vorhanden)│  Standard-GO-Karte, Titel =
+│    Curse of the Phaeron · 3 CP        [Use]   │  name_en aus der YAML
+├──────────────────────────────────────────────┤
+│ ③ Ziel-Auswahl-Panel (§7.2, nur bei Erfolg)    │
+├──────────────────────────────────────────────┤
+│ ④ EIN Hinweiskasten, info/blau (§7.3)          │
+└──────────────────────────────────────────────┘
+     ↑ Anker: INLINE am Eintrag der zerstörten Einheit (center-Spalte, §7.5)
+```
 
-Anker-Regel: genauso wie jede reaktive Karte (§6.2) — inline am Trigger-Ort, NICHT
+**Anker-Regel:** genauso wie jede reaktive Karte (§6.2) — inline am Trigger-Ort, NICHT
 Vollbreite, NICHT in der zentralen Stratagems-Liste (die `auto_explode`-GO ist zwar eine
 echte GO, ihr Fenster öffnet aber nur reaktiv beim `on_destroy`-Trigger, s. §6.2-Debt-
-Tabelle „generisches `on_destroy`").
+Tabelle „generisches `on_destroy`"). Bausteine ①–④ sind alle Bestand — kein neuer
+Container-Typ, ③ entfällt bei Fehlschlag (dann folgt ④ direkt auf ① oder ②).
 
 ### 7.2 Ziel-Auswahl-Panel
 
 Reiner Toggle-Zeilen-Stil wie die bestehende Heroic-Intervention-Auswahl
 (`chargePhase.py:_render_heroic_intervention`) — **keine Card-Ansicht** für die
-Auswahlliste selbst: Gruppenüberschrift je Fraktion, darunter Toggle-Buttons
-(`✓`-Präfix bei Auswahl, §6.4-Wortlaut), je ausgewählter Einheit ein Zahlenfeld für den
-zugewiesenen Schaden.
+Auswahlliste selbst:
 
-**Auflage 3 (wörtlich):** „D6 Mortal Wounds" (bzw. der jeweilige Schadensausdruck aus der
-YAML, z. B. `D3`) steht als **eine** Spaltenüberschrift **direkt über der Zahlenfeld-
-Spalte** — nicht über der gesamten Liste (V3-Fehler: Header stand über dem ganzen Panel,
-aber die Zahlenfelder erscheinen nur inline neben ausgewählten Zeilen und richten sich
-dadurch nicht darunter aus). Damit die Überschrift tatsächlich über den Feldern steht,
-braucht die Zeile ein festes Zwei-Spalten-Layout (Label-Spalte + fest breite
-Zahlenfeld-Spalte), keine variable Flex-Breite wie im Mockup.
+```
+┌────────────────────────────────────────────────────────────────┐
+│ Vengeance of the Enchained — select affected units              │
+│ ℹ On a 4+ it explodes, each unit within 2D6" suffers D6 MW       │
+├───────────────────────────────────────────┬────────────────────┤
+│  (Label-Spalte, variable Breite)          │  D6 MORTAL WOUNDS  │ ← Spaltenkopf steht
+├───────────────────────────────────────────┼────────────────────┤   HIER, direkt über
+│  Necrons                                  │                    │   der Zahlenfeld-
+│   [✓ Necron Warriors]                     │  [ 3 ] [−] [+]     │   Spalte — nicht
+│   [  Immortals      ]                     │                    │   über der ganzen
+│  Orks                                     │                    │   Liste (V3-Fehler)
+│   [✓ Boyz           ]                     │  [ 2 ] [−] [+]     │
+│   [  Gretchin       ]                     │                    │
+│   [  Warbikers      ]                     │                    │
+├───────────────────────────────────────────┴────────────────────┤
+│  [Confirm all]     [Reset]                                      │
+└────────────────────────────────────────────────────────────────┘
+```
 
-Ausgewählte Einheit springt in der zugehörigen armyList-Sidebar (first_player/second_player,
-s. 7.5) an die erste Position und zeigt den sinkenden LP-Balken direkt in der unitCard
-(Bestandskomponente) — keine zusätzliche Vorschau-/Mini-Karte im Panel. Footer:
-„Confirm all" / „Reset" (§6.4-Wortlaut, analog Abschluss der Attackensequenz).
+**Auflage 3, wörtlich umgesetzt:** die Zeile braucht ein festes Zwei-Spalten-Layout
+(Label-Spalte + fest breite Zahlenfeld-Spalte, keine variable Flex-Breite wie im Mockup)
+— nur so steht „D6 Mortal Wounds" tatsächlich über den Feldern, auch wenn nur einzelne
+Zeilen ein Feld zeigen (Zahlenfeld erscheint nur bei ausgewählten Einheiten, `✓`-Präfix
+§6.4-Wortlaut). Ausgewählte Einheit springt in der zugehörigen armyList-Sidebar
+(first_player/second_player, s. 7.5) an die erste Position und zeigt den sinkenden
+LP-Balken direkt in der unitCard (Bestandskomponente) — keine zusätzliche Vorschau-/
+Mini-Karte im Panel. Footer: „Confirm all" / „Reset" (§6.4-Wortlaut, analog Abschluss
+der Attackensequenz).
 
 ### 7.3 EIN Hinweiskasten (Auflage 1)
 
+```
+┌──────────────────────────────────────────────┐
+│ Curse of the Phaeron · 3 CP           [Use]   │  ← auto_explode-GO-Karte (§6.1 / ②)
+│ [CORE] [NECRONS]                              │
+│ ▸ Rule text …                                 │
+└──────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│ ℹ info · Resolved                             │  ← EIN Kasten, --arb-blue, §3-Typ
+│ The Silent King explodes. Every unit within    │     „info", KEIN eigener
+│ 2D6" suffers D6 mortal wounds.                 │     „Resolved"-Zustand
+└──────────────────────────────────────────────┘
+   — oder, bei Fehlschlag, an derselben Stelle statt des Erfolgstexts:
+┌──────────────────────────────────────────────┐
+│ ℹ info · Resolved                             │
+│ The Silent King does not explode.              │
+└──────────────────────────────────────────────┘
+```
+
 Genau **ein** Hinweiskasten, **unter** der GO-Karte (nicht innerhalb des Ziel-Auswahl-
-Panels) — er deckt beide Ausgänge ab: Erfolg („⟨Einheit⟩ explodes. Every unit within
-⟨Reichweite⟩ suffers ⟨Schadensausdruck⟩ mortal wounds.") und Fehlschlag
-(„⟨Einheit⟩ does not explode."). Farbe **Blau**, aber als das, was er ist: ein
-**Hinweis** (`info`-Typ, Hinweis-Konvention §3), derselbe `--arb-blue`-Token wie der
-bestehende Phasen-Regelkasten (`design_colors.md` Zeile 40) — **kein eigener
-„Resolved"-Zustand** und kein neues Token. Der Kasten erscheint, sobald der Wurf/die GO
-aufgelöst ist, und bleibt stehen (kein stilles Verschwinden, Grundannahme S166 §a.4) —
-er ist aber semantisch ein Hinweistext zum Ausgang, keine dritte Zustandsklasse neben
-`info`/`warning`/`success`/`error`.
+Panels) — er deckt beide Ausgänge ab, nie beide gleichzeitig. Farbe **Blau**, aber als
+das, was er ist: ein **Hinweis** (`info`-Typ, Hinweis-Konvention §3), derselbe
+`--arb-blue`-Token wie der bestehende Phasen-Regelkasten (`design_colors.md` Zeile 40) —
+kein neues Token. Der Kasten erscheint, sobald der Wurf/die GO aufgelöst ist, und bleibt
+stehen (kein stilles Verschwinden, Grundannahme S166 §a.4) — er ist aber semantisch ein
+Hinweistext zum Ausgang, keine dritte Zustandsklasse neben `info`/`warning`/`success`/
+`error`.
 
 ### 7.4 Bewusste Abweichung von §6.3 — Zwei-Button-Wurf statt Zahlenfeld
 
+```
+┌──────────────────────────────────────────────┐
+│ Vengeance of the Enchained                    │  ← Titel, KEIN CP-Suffix, KEIN [Use]
+│ Explodes on 4+                                │  ← Schwellen-Caption
+│ ──────────────────────────────────────────── │
+│  [ Explodes! ]        [ Does not explode ]    │  ← zwei Buttons statt Zahlenfeld
+└──────────────────────────────────────────────┘
+```
+
 §6.3 sieht für jeden Tischwurf ein Zahlenfeld vor. Für das Explodes-Gate weicht §7 davon
-ab: zwei Buttons „Explodes!" / „Does not explode" statt Werterfassung. Begründung: der
-Explodes-Wurf hat für die App keinen eigenständigen Zahlenwert-Zweck — es zählt nur, ob
-die (aus der YAML bekannte) Schwelle erreicht wurde, nicht der genaue Würfelwert selbst
-(anders als z. B. beim Deny-Wurf, dessen Wert weiterverrechnet wird). Ein Zahlenfeld plus
-Schwellenvergleich wäre hier Mehraufwand ohne Informationsgewinn; der binäre Ausgang ist
-die einzige regelrelevante Information. Explizit auf Stakeholder-Wunsch entschieden
-(`S166_MOCKUP_EXPLODES.md` §g Korrektur 4, Wortlaut „Does not explode" bestätigt) und hier
-dokumentiert statt stillschweigend eingeführt — **kein Präzedenzfall** für andere
-Tischwürfe mit tatsächlichem Zahlenwert; §6.3 bleibt dort unverändert Standard.
+ab: zwei Buttons statt Werterfassung, weil der Explodes-Wurf für die App keinen
+eigenständigen Zahlenwert-Zweck hat — es zählt nur, ob die (aus der YAML bekannte)
+Schwelle erreicht wurde, nicht der genaue Würfelwert (anders als z. B. beim Deny-Wurf,
+dessen Wert weiterverrechnet wird). Explizit auf Stakeholder-Wunsch entschieden
+(`S166_MOCKUP_EXPLODES.md` §g Korrektur 4, Wortlaut „Does not explode" bestätigt) —
+**kein Präzedenzfall** für andere Tischwürfe mit echtem Zahlenwert; §6.3 bleibt dort
+unverändert Standard.
 
 ### 7.5 Layout-Invariante — armyList getrennt von Auswahl/Effekt-Ausführung (Auflage 2)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              gameHeader                                      │
+├──────────────────────┬───────────────────────────────┬───────────────────────┤
+│  left                │  center                       │  right                │
+│  armyList             │  gameActionsArea               │  armyList             │
+│  (first_player)       │                                 │  (second_player)     │
+│                       │                                 │                       │
+│  ┌────────────────┐   │  ┌──────────────────────────┐  │  ┌─────────────────┐  │
+│  │  unitCard       │   │  │ unitCard: The Silent King │  │  │  unitCard       │  │
+│  │  …              │   │  │           DESTROYED       │  │  │  …              │  │
+│  └────────────────┘   │  ├──────────────────────────┤  │  └─────────────────┘  │
+│                       │  │ Kachel-Gruppe (§7.1)       │  │                       │
+│                       │  │  Necrons-Gruppe │ Orks-Gr. │  │                       │
+│                       │  │  NEBENEINANDER, BEIDE      │  │                       │
+│                       │  │  innerhalb DIESER Kachel   │  │                       │
+│                       │  └──────────────────────────┘  │                       │
+│  unangetastet,         │                                 │  unangetastet,        │
+│  first_player fest      │                                 │  second_player fest  │
+└──────────────────────┴───────────────────────────────┴───────────────────────┘
+```
 
 `src/app.py` teilt die Ansicht in drei Spalten: `left` = `render_army_list(first_player)`,
 `center` = `render_game_actions_area()` (+ `render_game_protocoll()`), `right` =
@@ -602,15 +690,15 @@ Tischwürfe mit tatsächlichem Zahlenwert; §6.3 bleibt dort unverändert Standa
 Bindung bleibt durch §7 **unangetastet**.
 
 Die Pflicht-Trigger-Kachel-Gruppe (7.1) inklusive Ziel-Auswahl-Panel (7.2) und
-Hinweiskasten (7.3) rendert **ausschließlich in der `center`-Spalte**, genau wie jede
-andere reaktive Karte (§6.2) — nie innerhalb einer der beiden armyList-Sidebars. Das
-Mockup V3 stellte Necrons/Orks-Inhalte optisch in zwei nebeneinanderliegenden Spalten
-dar, die wie „armyList + Ausführung in derselben Spalte" wirkten; das bildet die reale
-App-Struktur nicht ab. In der App gibt es für diesen Ablauf keine „Necron-Spalte" und
-keine „Ork-Spalte" — das Ziel-Auswahl-Panel (7.2) zeigt beide Fraktionsgruppen
+Hinweiskasten (7.3) rendert **ausschließlich in der `center`-Spalte**, nie innerhalb
+einer der beiden armyList-Sidebars. Mockup V3 stellte Necrons/Orks-Inhalte optisch in
+zwei nebeneinanderliegenden Seiten-Spalten dar, die wie „armyList + Ausführung in
+derselben Spalte" wirkten; das bildet die reale App-Struktur nicht ab — es gibt keine
+„Necron-Spalte" und keine „Ork-Spalte" auf App-Ebene. Beide Fraktionsgruppen erscheinen
 nebeneinander **innerhalb derselben `center`-Kachel** (Gruppenüberschrift je Fraktion,
-s. 7.2), während die beiden armyList-Sidebars unverändert links/rechts weiterlaufen und
-nur reaktiv auf Auswahl/Schaden reagieren (LP-Balken, Sortierung an die Spitze).
+s. 7.2, oberes Schema), während die armyList-Sidebars unverändert links/rechts
+weiterlaufen und nur reaktiv auf Auswahl/Schaden reagieren (LP-Balken, Sortierung an
+die Spitze).
 
 ### 7.6 Wortlaut & Farbe — keine neuen Tokens
 

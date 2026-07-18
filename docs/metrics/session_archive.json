@@ -5750,10 +5750,10 @@
   "6cfc9b70-e0f5-4e02-b0b7-ddab19dca2d6": {
     "started_at": "2026-07-18T18:59:33.943Z",
     "task": "start Session. Wir übernehmen keine der Retromaßnahmen aus der letzten Session. Opus soll den Plan für diese Session du…",
-    "peak_context": 96679,
-    "subagent_share": 90.20410390068633,
+    "peak_context": 124142,
+    "subagent_share": 84.36830800799248,
     "by_tier": {
-      "Sonnet": 32297910,
+      "Sonnet": 34302262,
       "Opus": 3248098,
       "Haiku": 878429
     },
@@ -5763,6 +5763,13 @@
         "description": "T4: §7-Spec-Überführung Explodes",
         "tier": "Sonnet",
         "peak_context": 107947,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "§7-Rework mit ASCII-Schemata",
+        "tier": "Sonnet",
+        "peak_context": 98811,
         "started_at": "2026-07-18T18:59:33.943Z"
       },
       {
@@ -5804,7 +5811,7 @@
         "agent_type": "general-purpose",
         "description": "T5b: S168 Abschluss-Hygiene",
         "tier": "Sonnet",
-        "peak_context": 99081,
+        "peak_context": 105311,
         "started_at": "2026-07-18T18:59:33.943Z"
       }
     ]
