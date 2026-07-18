@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>S167 — Explodes-Mockup V3 (7 Korrekturen auf V2)</title>
+<style>
+  :root {
+    --arb-bg: #0f0e0c;
+    --arb-surface: #1c1a14;
+    --arb-surface-2: #17150f;
+    --arb-border: #2e2618;
+    --arb-accent: #d4a017;
+    --arb-accent-lt: #fbbf24;
+    --arb-muted: #6b5f44;
+    --arb-text: #e7e5e4;
+    --arb-destroyed: #c04040;
+    --arb-green-text: #6ee7b7;
+    --arb-blue: #1e3a8a;
+    --arb-blue-text: #93c5fd;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--arb-bg);
+    color: var(--arb-text);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, "DejaVu Sans Mono", monospace;
+    padding: 24px;
+    line-height: 1.45;
+  }
+
+  h1 { font-size: 1.15rem; margin: 0 0 4px 0; }
+
+  .page-header {
+    max-width: 1180px;
+    margin: 0 auto 20px auto;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--arb-border);
+  }
+  .page-header p {
+    color: var(--arb-muted);
+    font-size: 0.82rem;
+    max-width: 900px;
+  }
+  .page-header ol {
+    color: var(--arb-muted);
+    font-size: 0.78rem;
+    max-width: 900px;
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+  }
+  .page-header ol li { margin-bottom: 2px; }
+
+  .top-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: inherit;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+    border: 1px solid var(--arb-accent);
+    background: transparent;
+    color: var(--arb-accent);
+    transition: opacity .15s ease;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn.filled {
+    background: var(--arb-accent);
+    color: #1a1608;
+    font-weight: 700;
+    border-color: var(--arb-accent);
+  }
+  .btn.small { padding: 5px 10px; font-size: 0.75rem; border-radius: 6px; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn.reset-top { border-color: var(--arb-muted); color: var(--arb-muted); }
+
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+  .column-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--arb-muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--arb-border);
+  }
+
+  .src-tag {
+    font-size: 0.68rem;
+    color: var(--arb-muted);
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  /* ── unitCard (bestehende Komponente, src/uiLayout/unitCard.py) ── */
+  .unit-card {
+    border: 1px solid var(--arb-border);
+    border-radius: 10px;
+    background: var(--arb-surface);
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .unit-card .name-row { font-size: 0.92rem; }
+  .unit-card.destroyed .name-row .strike {
+    text-decoration: line-through;
+    color: var(--arb-text);
+  }
+  .unit-card.destroyed .name-row .status {
+    color: var(--arb-destroyed);
+    font-style: italic;
+    margin-left: 6px;
+  }
+  .unit-card.top-of-list { border-color: var(--arb-accent); }
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--arb-border);
+    overflow: hidden;
+    margin: 8px 0 3px 0;
+  }
+  .progress-fill { height: 100%; background: var(--arb-accent); transition: width .25s ease; }
+  .hp-caption { font-size: 0.72rem; color: var(--arb-muted); margin-bottom: 0; }
+  .applied-note { font-size: 0.68rem; color: var(--arb-green-text); margin-top: 3px; }
+
+  .army-list { margin-bottom: 6px; }
+
+  /* ── modifizierte Tisch-Wurf-Kachel (Zwei-Button-Variante, S167 Korrektur 4) ── */
+  .roll-block {
+    border: 1px solid var(--arb-border);
+    border-radius: 10px;
+    background: var(--arb-surface);
+    padding: 14px 16px;
+    margin-top: 10px;
+  }
+  .roll-block .roll-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+  .roll-block .roll-caption { font-size: 0.75rem; color: var(--arb-muted); margin-bottom: 12px; }
+  .explode-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .explode-buttons .btn { flex: 1; min-width: 150px; text-align: center; }
+
+  /* ── GO-Karte §6.1 ── */
+  .go-card {
+    border: 1px solid var(--arb-accent);
+    border-radius: 10px;
+    background: var(--arb-surface);
+    padding: 14px 16px;
+    margin-top: 10px;
+  }
+  .go-card.locked { border-color: var(--arb-border); opacity: 0.55; }
+  .go-card.used { border-color: var(--arb-accent); }
+  .go-header { display: flex; align-items: center; justify-content: space-between; }
+  .go-header .go-title { font-weight: 700; font-size: 0.88rem; }
+  .go-header .go-title .go-suffix { color: var(--arb-muted); font-weight: 400; font-size: 0.78rem; }
+  .go-owner { color: var(--arb-muted); font-size: 0.78rem; margin-top: 2px; }
+  .accordion { margin-top: 10px; border-top: 1px solid var(--arb-border); padding-top: 8px; }
+  .accordion summary { cursor: pointer; font-size: 0.78rem; color: var(--arb-accent-lt); list-style: none; }
+  .accordion summary::-webkit-details-marker { display: none; }
+  .accordion summary:before { content: "▸ "; }
+  .accordion[open] summary:before { content: "▾ "; }
+  .accordion .rule-text { font-size: 0.78rem; color: var(--arb-muted); margin-top: 6px; line-height: 1.5; }
+  .go-context-caption { font-size: 0.72rem; color: var(--arb-muted); margin-top: 8px; }
+
+  /* ── Resolved-Hinweiskasten — bewusst BLAU (S167 Korrektur 5), separat von der Auswahl-Kachel ── */
+  .outcome-box {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    background: var(--arb-blue);
+    color: var(--arb-blue-text);
+  }
+  .outcome-box .tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .hidden { display: none !important; }
+
+  /* ── Ziel-Auswahl-Panel — Heroic-Intervention-Stil, KEINE Card-Ansicht (S167 Korrektur 5) ── */
+  .panel {
+    border: 1px solid var(--arb-border);
+    border-radius: 10px;
+    background: var(--arb-surface);
+    padding: 16px 18px;
+    margin-top: 4px;
+  }
+  .panel-title { font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+  .info-box {
+    background: var(--arb-blue);
+    color: var(--arb-blue-text);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    margin-bottom: 14px;
+  }
+  .mw-column-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+  }
+  .mw-column-label {
+    width: 176px;
+    text-align: left;
+    font-size: 0.65rem;
+    color: var(--arb-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .unit-group-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--arb-muted);
+    margin: 14px 0 8px 0;
+  }
+  .unit-row-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .toggle-btn {
+    font-family: inherit;
+    border: 1px solid var(--arb-accent);
+    background: transparent;
+    color: var(--arb-accent-lt);
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    min-width: 160px;
+    text-align: left;
+  }
+  .toggle-btn.selected { background: var(--arb-accent); color: #1a1608; font-weight: 700; }
+  .toggle-btn.applied { opacity: 0.55; cursor: default; }
+  .number-field {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--arb-border);
+    border-radius: 8px;
+    background: var(--arb-surface-2);
+    overflow: hidden;
+    max-width: 176px;
+  }
+  .number-field input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--arb-text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 9px 12px;
+    outline: none;
+    width: 100%;
+  }
+  .number-field .step-btn {
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--arb-border);
+    color: var(--arb-muted);
+    width: 34px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  .number-field .step-btn:hover { color: var(--arb-accent-lt); }
+  .number-field.disabled { opacity: 0.4; pointer-events: none; }
+
+  .panel-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--arb-border);
+  }
+
+  .placeholder-note {
+    color: var(--arb-muted);
+    font-size: 0.8rem;
+    font-style: italic;
+    padding: 10px 4px 20px 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>S167 — B-028c1 · Explodes-Ablauf, Mockup V3</h1>
+  <p>
+    V3 = V2 + die 7 Korrekturwünsche aus <code>docs/handoff/S166_MOCKUP_EXPLODES.md §g</code>.
+    Kein Neuentwurf, keine neuen Komponentenfamilien — nur Bestandskomponenten, jetzt enger
+    an den referenzierten Screenshots. Details je Korrektur: §h in derselben Datei.
+  </p>
+  <ol>
+    <li>1 — Ausgewählte Einheit springt in der armyList nach oben, keine doppelte Healthbar mehr</li>
+    <li>2 — „D6 Mortal Wounds" als ein Spaltenname über allen Zahlenfeldern</li>
+    <li>3 — Caption „Tap a unit to toggle …" entfernt</li>
+    <li>4 — Zwei Buttons „Explodes!" / „Does not explode" statt Wurf-Zahlenfeld</li>
+    <li>5 — Resolved-Kasten separat, blau, Klartext-Satz; Auswahlliste ohne Card-Ansicht</li>
+    <li>6 — „DESTROYED" bleibt in der bisherigen Farbe (unverändert)</li>
+    <li>7 — GO-Titel lädt den echten YAML-Namen „Curse of the Phaeron" statt „auto_explode"</li>
+  </ol>
+  <div class="top-controls">
+    <button class="btn reset-top" onclick="resetAll()">↺ Reset scenario (beide Ausgänge durchspielbar)</button>
+    <span style="color:var(--arb-muted); font-size:0.78rem;">
+      Linke Spalte: Necrons (Besitzer) · Rechte Spalte: Orks (andere Spalte, Ziel-Auswahl nach Erfolg)
+    </span>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ══════════════════════ LINKE SPALTE — NECRONS (BESITZER) ══════════════════════ -->
+  <div>
+    <div class="column-header">Necrons — Besitzer-Spalte</div>
+
+    <div class="army-list" id="necronsFixed">
+      <div class="unit-card destroyed">
+        <div class="name-row">
+          <span class="strike">The Silent King</span><span class="status">DESTROYED</span>
+        </div>
+      </div>
+    </div>
+    <div class="src-tag">Baustein: unitCard, DESTROYED-Zustand (src/uiLayout/unitCard.py:233) — Wortfarbe unverändert (Korrektur 6)</div>
+
+    <!-- Schritt 1: Explodes-Gate — zwei Buttons statt Wurf-Zahlenfeld (Korrektur 4) -->
+    <div class="roll-block" id="rollBlock">
+      <div class="roll-title">Vengeance of the Enchained</div>
+      <div class="roll-caption">Explodes on 4+ — am Tisch würfeln, dann Ergebnis eintragen:</div>
+      <div class="explode-buttons">
+        <button class="btn filled" id="explodeBtn" onclick="resolveExplode('roll')">Explodes!</button>
+        <button class="btn" id="noExplodeBtn" onclick="resolveNoExplode()">Does not explode</button>
+      </div>
+    </div>
+    <div class="src-tag">Baustein: modifizierte Tisch-Wurf-Eingabe §6.3 — Zwei-Button-Variante statt Zahlenfeld (S167 Korrektur 4, Wortlaut „Does not explode" Stakeholder-bestätigt)</div>
+
+    <!-- auto_explode GO-Karte — Titel jetzt aus YAML (Korrektur 7) -->
+    <div class="go-card" id="goCard">
+      <div class="go-header">
+        <div class="go-title">Curse of the Phaeron · 3 CP <span class="go-suffix" id="goSuffix"></span></div>
+        <button class="btn small filled" id="goUseBtn" onclick="useStratagem()">Use</button>
+      </div>
+      <div class="go-owner">Necrons</div>
+      <details class="accordion">
+        <summary>Rule text</summary>
+        <div class="rule-text">
+          Use this Stratagem in any phase, when a NECRONS VEHICLE model from your army is
+          destroyed. Do not roll to see if that model explodes: it does so automatically.
+          If that model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it
+          costs 1 CP.
+        </div>
+      </details>
+      <div class="go-context-caption">The Silent King was just destroyed.</div>
+    </div>
+    <div class="src-tag">Baustein: GO-Karte §6.1 · Titel = <code>name_en</code> aus <code>stratagems.yaml:474</code> „Curse of the Phaeron", nicht mehr der technische <code>effect.type: auto_explode</code> (S167 Korrektur 7) — CP 3, da TITANIC</div>
+
+    <!-- Ausgang: Fehlschlag ODER Erfolg — EIN Kasten, blau, separat von der Auswahl-Kachel -->
+    <div class="outcome-box hidden" id="outcomeBox">
+      <span class="tag" id="outcomeTag"></span>
+      <span id="outcomeText"></span>
+    </div>
+    <div class="src-tag hidden" id="outcomeSrcTag">Baustein: Hinweis-Konvention §3, Farbe bewusst BLAU statt warning/success (S167 Korrektur 5, Stakeholder-Vorgabe) — wiederverwendet aus dem bestehenden Info-Box-Blau (<code>--arb-blue</code>), kein neues Farb-Token; Kasten steht separat unterhalb, NICHT in der Auswahl-Kachel der Orks-Spalte</div>
+
+    <div class="army-list" id="necronsAlive"></div>
+    <div class="src-tag">Baustein: unitCard, Modell-/LP-Balken (src/uiLayout/unitCard.py:242-246) — wird eine Necron-Einheit in der Ziel-Auswahl (rechte Spalte) gewählt, springt ihre Karte hier nach oben und die Balken sinken live; keine zusätzliche Vorschau-Karte mehr (S167 Korrektur 1)</div>
+  </div>
+
+  <!-- ══════════════════════ RECHTE SPALTE — ORKS / ZIEL-AUSWAHL ══════════════════════ -->
+  <div>
+    <div class="column-header">Orks — andere Spalte (Ziel-Auswahl erscheint hier nach Erfolg)</div>
+
+    <div class="army-list" id="orksAlive"></div>
+    <div class="src-tag">Baustein: unitCard, Modell-/LP-Balken (src/uiLayout/unitCard.py:242-246) — reagiert auf Auswahl in der Ziel-Auswahl-Kachel unten (S167 Korrektur 1)</div>
+
+    <div class="placeholder-note" id="waitingNote">
+      Wartet auf den Explodes-Wurf in der linken Spalte …
+    </div>
+
+    <div class="panel hidden" id="selectionPanel">
+      <div class="panel-title">Vengeance of the Enchained — select affected units</div>
+      <div class="info-box">
+        On a 4+ it explodes, and each unit within 2D6" suffers D6 mortal wounds.
+      </div>
+
+      <div class="mw-column-header"><span class="mw-column-label">D6 Mortal Wounds</span></div>
+
+      <div class="unit-group-label">Necrons</div>
+      <div id="groupNecrons"></div>
+
+      <div class="unit-group-label">Orks</div>
+      <div id="groupOrks"></div>
+
+      <div class="panel-footer">
+        <button class="btn filled" onclick="confirmAllUnits()">Confirm all</button>
+        <button class="btn" onclick="resetSelection()">Reset</button>
+      </div>
+    </div>
+    <div class="src-tag hidden" id="panelSrcTag">
+      Baustein: Heroic-Intervention-Panel · Vorbild Screenshot „11-51-51"/„12-01-39" — reine
+      Toggle-Zeilen, KEINE Card-Ansicht (S167 Korrektur 5); Caption „Tap a unit to toggle …"
+      entfernt (Korrektur 3); Spalten-Label „D6 Mortal Wounds" statt Pro-Zeile-Label (Korrektur 2)
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── Einheiten-Daten (Mockup-Werte, keine echte Regelsimulation) ──
+  const UNITS = {
+    necron_warriors: { label: "Necron Warriors", side: "necrons", max: 10, alive: 8 },
+    immortals:       { label: "Immortals",       side: "necrons", max: 5,  alive: 5 },
+    boyz:             { label: "Boyz",            side: "orks",    max: 20, alive: 14 },
+    gretchin:         { label: "Gretchin",        side: "orks",    max: 10, alive: 10 },
+    warbikers:        { label: "Warbikers",       side: "orks",    max: 6,  alive: 4 },
+  };
+
+  const ORIGINAL_ORDER = {
+    necrons: ["necron_warriors", "immortals"],
+    orks: ["boyz", "gretchin", "warbikers"],
+  };
+
+  const EXPLODING_UNIT = "The Silent King";
+  const EXPLOSION_RANGE = '2D6"';
+  const MORTAL_WOUNDS_EXPR = "D6";
+
+  const state = {
+    resolved: null,       // null | "fail" | "success"
+    method: null,         // null | "roll" | "stratagem"
+    selections: {},        // unitId -> { selected: bool, wounds: number, applied: bool }
+    armyOrder: { necrons: [...ORIGINAL_ORDER.necrons], orks: [...ORIGINAL_ORDER.orks] },
+  };
+
+  for (const id in UNITS) {
+    state.selections[id] = { selected: false, wounds: 0, applied: false };
+  }
+
+  function resolveExplode(method) {
+    if (state.resolved) return;
+    state.method = method;
+    state.resolved = "success";
+    showOutcome("explodes", `${EXPLODING_UNIT} explodes. Every unit within ${EXPLOSION_RANGE} suffers ${MORTAL_WOUNDS_EXPR} mortal wounds.`);
+    lockRollStep(method === "stratagem" ? "used here" : "resolved — no longer needed");
+    showSelectionPanel();
+  }
+
+  function resolveNoExplode() {
+    if (state.resolved) return;
+    state.method = "roll";
+    state.resolved = "fail";
+    showOutcome("does not explode", `${EXPLODING_UNIT} does not explode.`);
+    lockRollStep("resolved — does not explode");
+  }
+
+  function useStratagem() {
+    if (state.resolved) return;
+    document.getElementById("goCard").classList.add("used");
+    document.getElementById("goSuffix").textContent = "— used here";
+    const btn = document.getElementById("goUseBtn");
+    btn.textContent = "↺ Undo";
+    btn.onclick = undoStratagem;
+    document.getElementById("explodeBtn").disabled = true;
+    document.getElementById("noExplodeBtn").disabled = true;
+    resolveExplode("stratagem");
+  }
+
+  function undoStratagem() {
+    state.method = null;
+    state.resolved = null;
+    const goCard = document.getElementById("goCard");
+    goCard.classList.remove("used", "locked");
+    document.getElementById("goSuffix").textContent = "";
+    const btn = document.getElementById("goUseBtn");
+    btn.textContent = "Use";
+    btn.disabled = false;
+    btn.onclick = useStratagem;
+    document.getElementById("explodeBtn").disabled = false;
+    document.getElementById("noExplodeBtn").disabled = false;
+    clearOutcome();
+  }
+
+  function showOutcome(tag, text) {
+    document.getElementById("outcomeTag").textContent = "Resolved · " + tag;
+    document.getElementById("outcomeText").textContent = text;
+    document.getElementById("outcomeBox").classList.remove("hidden");
+    document.getElementById("outcomeSrcTag").classList.remove("hidden");
+  }
+
+  function lockRollStep(reasonSuffix) {
+    document.getElementById("explodeBtn").disabled = true;
+    document.getElementById("noExplodeBtn").disabled = true;
+    if (state.method !== "stratagem") {
+      const card = document.getElementById("goCard");
+      card.classList.add("locked");
+      document.getElementById("goSuffix").textContent = "— " + reasonSuffix;
+      document.getElementById("goUseBtn").disabled = true;
+    }
+  }
+
+  function clearOutcome() {
+    state.resolved = null;
+    document.getElementById("outcomeBox").classList.add("hidden");
+    document.getElementById("outcomeSrcTag").classList.add("hidden");
+    hideSelectionPanel();
+  }
+
+  function showSelectionPanel() {
+    document.getElementById("waitingNote").classList.add("hidden");
+    document.getElementById("selectionPanel").classList.remove("hidden");
+    document.getElementById("panelSrcTag").classList.remove("hidden");
+  }
+
+  function hideSelectionPanel() {
+    document.getElementById("waitingNote").classList.remove("hidden");
+    document.getElementById("selectionPanel").classList.add("hidden");
+    document.getElementById("panelSrcTag").classList.add("hidden");
+  }
+
+  // ── Auswahl-Kachel: reine Toggle-Zeilen, KEINE Card-Ansicht (Korrektur 5) ──
+  function renderUnitGroups() {
+    const groups = { necrons: document.getElementById("groupNecrons"), orks: document.getElementById("groupOrks") };
+    for (const g in groups) groups[g].innerHTML = "";
+
+    for (const id in UNITS) {
+      const u = UNITS[id];
+      const sel = state.selections[id];
+      const row = document.createElement("div");
+      row.className = "unit-row-main";
+
+      const btn = document.createElement("button");
+      btn.className = "toggle-btn" + (sel.selected ? " selected" : "") + (sel.applied ? " applied" : "");
+      btn.textContent = (sel.selected ? "✓ " : "") + u.label;
+      btn.disabled = sel.applied;
+      btn.onclick = () => toggleUnit(id);
+      row.appendChild(btn);
+
+      if (sel.selected) {
+        const field = document.createElement("div");
+        field.className = "number-field" + (sel.applied ? " disabled" : "");
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.max = "6";
+        input.value = sel.wounds;
+        input.oninput = () => setWounds(id, parseInt(input.value || "0", 10));
+        const minus = document.createElement("button");
+        minus.className = "step-btn";
+        minus.textContent = "−";
+        minus.onclick = () => setWounds(id, sel.wounds - 1);
+        const plus = document.createElement("button");
+        plus.className = "step-btn";
+        plus.textContent = "+";
+        plus.onclick = () => setWounds(id, sel.wounds + 1);
+        field.appendChild(input);
+        field.appendChild(minus);
+        field.appendChild(plus);
+        row.appendChild(field);
+      }
+
+      groups[u.side].appendChild(row);
+    }
+  }
+
+  function toggleUnit(id) {
+    if (state.selections[id].applied) return;
+    const sel = state.selections[id];
+    sel.selected = !sel.selected;
+    if (!sel.selected) sel.wounds = 0;
+    if (sel.selected) moveToTopOfArmyList(id);
+    renderUnitGroups();
+    renderArmyList("necrons");
+    renderArmyList("orks");
+  }
+
+  function setWounds(id, value) {
+    const u = UNITS[id];
+    const clamped = Math.max(0, Math.min(6, Math.min(u.alive, value)));
+    state.selections[id].wounds = isNaN(clamped) ? 0 : clamped;
+    renderUnitGroups();
+    renderArmyList(u.side);
+  }
+
+  function confirmAllUnits() {
+    for (const id in state.selections) {
+      if (state.selections[id].selected) state.selections[id].applied = true;
+    }
+    renderUnitGroups();
+    renderArmyList("necrons");
+    renderArmyList("orks");
+  }
+
+  function resetSelection() {
+    for (const id in state.selections) {
+      state.selections[id] = { selected: false, wounds: 0, applied: false };
+    }
+    state.armyOrder = { necrons: [...ORIGINAL_ORDER.necrons], orks: [...ORIGINAL_ORDER.orks] };
+    renderUnitGroups();
+    renderArmyList("necrons");
+    renderArmyList("orks");
+  }
+
+  // ── armyList-Reorder (Korrektur 1): Auswahl zieht die unitCard nach oben ──
+  function moveToTopOfArmyList(id) {
+    const side = UNITS[id].side;
+    const order = state.armyOrder[side];
+    const idx = order.indexOf(id);
+    if (idx > 0) {
+      order.splice(idx, 1);
+      order.unshift(id);
+    }
+  }
+
+  function renderArmyList(side) {
+    const container = document.getElementById(side === "necrons" ? "necronsAlive" : "orksAlive");
+    container.innerHTML = "";
+    state.armyOrder[side].forEach((id, i) => {
+      const u = UNITS[id];
+      const sel = state.selections[id];
+      const remaining = sel.selected ? Math.max(0, u.alive - sel.wounds) : u.alive;
+      const card = document.createElement("div");
+      card.className = "unit-card" + (i === 0 && sel.selected ? " top-of-list" : "");
+      card.innerHTML = `
+        <div class="name-row">${u.label}</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${(remaining / u.max) * 100}%"></div></div>
+        <div class="hp-caption">⬡ ${remaining}/${u.max}</div>
+        ${sel.applied ? '<div class="applied-note">✓ mortal wounds applied</div>' : ""}
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function resetAll() {
+    document.getElementById("explodeBtn").disabled = false;
+    document.getElementById("noExplodeBtn").disabled = false;
+
+    const goCard = document.getElementById("goCard");
+    goCard.classList.remove("locked", "used");
+    document.getElementById("goSuffix").textContent = "";
+    const goBtn = document.getElementById("goUseBtn");
+    goBtn.textContent = "Use";
+    goBtn.disabled = false;
+    goBtn.onclick = useStratagem;
+
+    state.resolved = null;
+    state.method = null;
+    clearOutcome();
+    resetSelection();
+  }
+
+  renderUnitGroups();
+  renderArmyList("necrons");
+  renderArmyList("orks");
+</script>
+
+</body>
+</html>

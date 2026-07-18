@@ -5663,11 +5663,11 @@
   "cd6ce717-da97-41c2-b206-e857e427acdf": {
     "started_at": "2026-07-18T10:29:28.540Z",
     "task": "Task 4 fertig — B-123 Diagnose: Mischfall, Entscheidung nötig Befund: Es gibt zwei Schadens-Pfade in apply_damage() (un…",
-    "peak_context": 116838,
-    "subagent_share": 72.02566279015919,
+    "peak_context": 121576,
+    "subagent_share": 72.6734630120199,
     "by_tier": {
       "Opus": 898684,
-      "Sonnet": 9024172
+      "Sonnet": 10648638
     },
     "subagents": [
       {
@@ -5695,8 +5695,55 @@
         "agent_type": "general-purpose",
         "description": "S166 Abschluss + Commit",
         "tier": "Sonnet",
-        "peak_context": 131260,
+        "peak_context": 138503,
         "started_at": "2026-07-18T10:29:28.540Z"
+      }
+    ]
+  },
+  "00ebf28c-ce4d-4ba7-a917-6fa2721db173": {
+    "started_at": "2026-07-18T18:08:08.352Z",
+    "task": "start session. Wir übernehmen Maßnahme 3 aus der Retro. So langsam müssen wir dahin kommen, dass wir UI-Komponenten ver…",
+    "peak_context": 138044,
+    "subagent_share": 66.6716321041354,
+    "by_tier": {
+      "Sonnet": 11744192,
+      "Opus": 2224511
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Planner-Tier Opus verankern",
+        "tier": "Sonnet",
+        "peak_context": 69002,
+        "started_at": "2026-07-18T18:08:08.352Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S167 DoD-Review durchführen",
+        "tier": "Opus",
+        "peak_context": 80610,
+        "started_at": "2026-07-18T18:08:08.352Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Governance-Edits + B-124 anlegen",
+        "tier": "Sonnet",
+        "peak_context": 92352,
+        "started_at": "2026-07-18T18:08:08.352Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Explodes-Mockup V3 bauen",
+        "tier": "Sonnet",
+        "peak_context": 99260,
+        "started_at": "2026-07-18T18:08:08.352Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S167-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 139448,
+        "started_at": "2026-07-18T18:08:08.352Z"
       }
     ]
   }

@@ -25,39 +25,39 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S166, 2026-07-18)
+## Aktueller Stand (nach S167, 2026-07-18)
 
-**Review S166: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, Doku/Akzeptanz 25/25). Retro-
-Maßnahmen 1–3 in `docs/handoff/S166_RETRO.md` zur Entscheidung im S167-Planning (Diagnose-
-Ratchet „UI-Erreichbarkeit des Beweispfads", Grenzfall-Test-Auflage B-123-Brief, dritte
-Maßnahme s. Retro-Datei). B-122 (Menhir-Lebenspunkte) erledigt: extern verifiziert (3
-Wahapedia-9E-Quellen, Wounds 7→5 je Menhir), UI-Sichtprüfung positiv — nach
-`docs/goals/backlog_archive.md` archiviert. B-123 (Schadens-Spillover): Root Cause verifiziert
-— `_render_damage_block` erzwingt bei Mehrgruppen-Einheiten immer eine Subgruppen-Wahl,
-`apply_damage` nimmt dadurch den directed-Zweig, der Schaden über den Restpool der gewählten
-Gruppe hinaus verwirft (Repro: 26 Schaden auf vollen Silent King → nur Menhirs sterben, Szarekh
-unberührt). Stakeholder-Richtung: kein pauschaler Spillover, bestehende Subgruppen-
-Zuweisungslogik vereinheitlichen (auch für identische Modelle), Menhir-Lock für Erstschaden
-prüfen — Details in `docs/goals/backlog_details.md` B-123. Explodes-Mockup (B-028c1): V1
-abgelehnt, V2 (`docs/handoff/S166_MOCKUP_EXPLODES_V2.html`, reine Bestandskomponenten) vom
-Stakeholder positiv bewertet, 7 Korrekturwünsche für V3 in `docs/handoff/S166_MOCKUP_EXPLODES.md`
-§g.
+**Review S167: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, Doku/Akzeptanz 25/25).
+Governance-Session (kein `src/`-Code): **Spec-first-Gate** — jede neue ODER geänderte
+UI-Bauform durchläuft erst Spec-Änderung (Mockup + `design_system.md`-Update) zur Abnahme,
+dann Code (`agent_scopes.md` Punkt c) — plus Screenshot-Konvention (e), Diagnose-Ratchet
+(„kein Bug" nur mit echtem Klickpfad-Repro) und **B-124** Design-System-Ratchet (bei jeder
+UI-Berührung Bauform in `design_system.md` §1 nachtragen; Ist: ~9 dokumentierte Bauformen
+vs. 48 Render-Funktionen). **Planner-Tier: ADR-0009** — durchgängig Opus + Lesedisziplin;
+Sonnet-Ausarbeitung nur bei Schreib-Artefakten >~300 Zeilen (Anlass: S167-Planner lief
+regelwidrig auf Sonnet, Drift gegen ADR-0008). **Explodes-Mockup V3 abgenommen** mit 3
+verbindlichen Auflagen (kanonisch in `backlog_details.md` B-028c1 + §h-Antwort in
+`S166_MOCKUP_EXPLODES.md`): ein Hinweiskasten unter der GO-Karte (Blau = Hinweis, kein
+„Resolved"-Status), armyList nicht in der Spalte der Auswahlliste, „D6 Mortal Wounds" über
+den Schadens-Zahlenfeldern. B-123 unangetastet (Budget-Check laut Plan).
 
-Frühere Sessions (S60–S165): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S166): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S167)
+### ▶ Nächster Schritt (S168)
 
-1. **Retro-Maßnahmen-Entscheid** (`docs/handoff/S166_RETRO.md`) — Stakeholder wählt/verwirft.
-2. **Explodes-Mockup V3** mit den 7 Korrekturen aus `docs/handoff/S166_MOCKUP_EXPLODES.md` §g
-   erstellen → Abnahme → dann B-028c1-Umsetzung planen (Schema, Komponente+Anker,
-   Tisch-Wurf-Baustein, `auto_explode`-GO, Datennacherfassung).
-3. **B-123-Umsetzung** nach Stakeholder-Richtung (inkl. Regel-Check Menhir-Lock +
-   Boyz/Nob-Vergleich, Test-Auflage Grenzfall-Matrix directed×resolved×locked×mortal).
+1. **Retro-Maßnahmen-Entscheid** (`docs/handoff/S167_RETRO.md`) — Tier-Abgleich beim
+   Subagent-Start, Abschluss-Reihenfolge-Klausel.
+2. **B-123-Umsetzung** (erster Task, frischer Kontext; Stakeholder-Richtung + Grenzfall-
+   Testmatrix-Auflage in `backlog_details.md` B-123; Regel-Check Menhir-Lock +
+   Boyz/Nob-Vergleich).
+3. **§7-Spec-Überführung** Pflicht-Trigger-Kachel nach `design_system.md` inkl. der 3
+   V3-Auflagen (Spec-first-Gate!) → danach B-028c1-Umsetzung planen.
 4. Weiteres laut `docs/goals/backlog.md`.
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S166_REVIEW.md`,
-`S166_RETRO.md`, `S166_MOCKUP_EXPLODES.md` (+ `_V2.html` + 6 Screenshots, für V3 gebraucht)
-NEEDS-DECISION — Stakeholder-Sichtung im S167-Planning.
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
+`S166_MOCKUP_EXPLODES.md` (+ `S167_MOCKUP_EXPLODES_V3.html` + `_V2.html` + Screenshots,
+für die §7-Überführung gebraucht), `S167_REVIEW.md`, `S167_RETRO.md` NEEDS-DECISION —
+Sichtung im S168-Planning.
 
 ---
 

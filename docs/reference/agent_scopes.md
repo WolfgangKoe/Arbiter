@@ -103,6 +103,13 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   Regel-/UI-Bezug), (b) Akzeptanzkriterien aus den lokalen Regelquellen beigelegt, (c)
   Refinement-Fragen dokumentiert. DoR-Definition kanonisch: `docs/governance/operating_model.md`
   Event 1; Feldschema: `docs/goals/backlog_details.md`.
+- **Tier + Lesedisziplin (S167, [ADR-0009](../governance/decisions/0009-planner-tier-auf-opus.md)):**
+  Der Planner läuft als Default durchgehend auf **Opus** (kein Sonnet-Vorlauf) — Auflage:
+  briefing.md + aktive Zieldatei + `backlog.md` + Index **gezielt** nach Scope-Zeile lesen,
+  keine Volltext-Lektüre. Ausnahme: Bei großen Schreib-Artefakten (> ~300 Zeilen, z. B.
+  Migrations-/Split-Dokumente) darf die Ausarbeitung nach fertigem Opus-Konzept an Sonnet
+  delegiert werden. Tier-Regel kanonisch: `docs/governance/operating_model.md`
+  Abschnitt „Rollen & Model-Tier", hier nicht dupliziert.
 
 **Konventionen:**
 - `Effort` (Subagent-Gesamt-Tokens, kalibriert S165-Retro-M2 — Ist-Werte S165: Task 0 XS
@@ -158,12 +165,19 @@ optional?" bzw. „ist das die richtige Bauform?".
   → STOP + NEEDS-DECISION mit Komponenten-Vorschlag, nie Ad-hoc-Bauform.
 - **(b) Ability-Brief-Pflicht:** Jeder Ability-Brief MUSS die fachliche Einordnung
   (optional/GO vs. Pflicht-Trigger vs. passiv) mit wörtlichem Wahapedia-Zitat belegen.
-- **(c) Mockup-Gate:** Neue UI-Bauformen durchlaufen erst ein Mockup zur
-  Stakeholder-Abnahme, dann Code — kein Design ohne Schema. Abgenommene Mockups wandern
-  in die zuständige Spec (`design_system.md`).
+- **(c) Spec-first-Gate (erweitert S167):** Jede **neue oder geänderte** UI-Bauform
+  durchläuft erst eine Spec-Änderung (Mockup + `design_system.md`-Update) zur
+  Stakeholder-Abnahme, dann Code — kein Design ohne Schema, keine Komponenten-Änderung ohne
+  vorherigen Spec-Abgleich. Abgenommene Mockups/Änderungen wandern in die zuständige Spec.
 - **(d) Reviewer-Checkliste:** Jede Review-Checkliste (Subagent- wie Selbstprüfung)
   bekommt den expliziten Punkt „Design-System-Konformität (Komponente, Anker, Wortlaut)
   geprüft" — s. Ergänzung in der Selbstprüf-Checkliste unten.
+- **(e) Screenshot-Konvention (Retromaßnahme S166 — PFLICHT):** UI-Mockup-Briefs
+  referenzieren zusätzlich zu den `design_system.md`-§-Zitaten konkrete App-Screenshots
+  (Stakeholder-Vorlage oder selbst mit Playwright erstellt) als verbindliche
+  Bauform-Referenz. Text-/§-Verweise allein reichen nicht. Anlass S166: Mockup V1 (nur
+  §-Zitate) wich von der Ist-UI ab und wurde abgelehnt; Mockup V2 (mit Screenshot-Referenzen
+  auf Psi-Flow/Heroic-Intervention) „passt deutlich besser".
 
 ## Subagent-Brief — Pflichtfelder
 
@@ -222,6 +236,14 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
   Reviewer-Ratchet um die Stakeholder-Perspektive):** (1) „Ist die Interaktion regelkonform
   (optional vs. Pflicht)?", (2) „Komponente + Anker laut design_system.md-§?", (3)
   „Wortlaut-Familie korrekt?".
+- **Diagnose-Ratchet „UI-Erreichbarkeit des Beweispfads" (Retromaßnahme S166 — PFLICHT):**
+  Eine „kein Bug / bereits regelkonform"-Schlussfolgerung ist nur zulässig, wenn die Repro
+  den echten Klickpfad nachstellt — d. h. den Session-State so aufbaut, wie die UI ihn
+  erzeugt (inkl. Selector-Defaults), nicht nur bestehende Unit-Tests zitiert. Anlass S166:
+  die B-123-Erstdiagnose zog „kein Bug" aus einem UI-unerreichbaren Testpfad (Tests ohne
+  `damage_active_group_id` simulierten einen Zustand, den die echte UI für
+  Mehrgruppen-Einheiten praktisch nie erzeugt) — erst der Stakeholder-Praxistest deckte den
+  echten Bug auf.
 - **Plan-Status-Pflicht:** Landet ein Executor den Fix zu einem `docs/audit/plans/`-Plan,
   setzt er dessen Status in `docs/audit/plans/README.md` **im selben Commit** auf erledigt —
   kein separater Nachtrag. Grund: stale `TODO`-Einträge (S115: Plan 031 galt als offen, war
@@ -248,6 +270,8 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
       den Marker im Brief (S131: zwei rote Doku-Gates nur durch fehlende Marker)
 - [ ] Design-System-Konformität (Komponente, Anker, Wortlaut) geprüft (Retro S165 — B-028c1
       Vollbreiten-Kachel + falsche GO-Karte für einen Pflicht-Trigger)
+- [ ] Berührte UI-Bauform in `design_system.md` §1 registriert? (falls fehlend: Ist-Zustand
+      im selben Change knapp nachtragen — B-124-Ratchet)
 ```
 
 ## Grundannahmen-Block in Konzept-Aufträgen (Retromaßnahme S131 — PFLICHT)

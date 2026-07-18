@@ -531,6 +531,46 @@ trägt direkt darunter `[↩ Zeile in backlog.md](backlog.md#b-nnn)` — Ziel-An
 
 **Herkunft:** §2 Alt-`backlog.md` Z.243–249 (Stakeholder-Beobachtungen S131).
 
+## B-124 — Design-System-Ratchet bei UI-Beruehrung
+
+[↩ Zeile in backlog.md](backlog.md#b-124)
+
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
+
+**Status:** In Progress
+
+**Tier:** Executor (bei jeder Modul-Berührung)
+
+**Effort:** — (laufend, kein fixer Umfang)
+
+**Detail-Beschreibung:** Ist-Analyse S167: `design_system.md` §1 „Komponenten-Inventar"
+dokumentiert aktuell nur 3 Bausteine (Badge/Chip, Card/Panel, Dice-Grid) + §4
+Symbol-/Würfel-Katalog (3 Unterabschnitte) + §6 GO-Karte/Tisch-Wurf-Baustein (2 Bausteine) —
+zusammen ~9 dokumentierte Bauformen. Demgegenüber zählt
+`grep -rn "^def render_\|^def _render_" src/uiLayout/*.py` 48 Render-Funktionen über 10
+Dateien (`_common.py` allein 21, `armyCard.py` 6, `gameActionsArea.py` 5,
+`gameProtocoll.py`/`setupScreen.py` je 4 …). Der Großteil der UI-Fläche ist damit
+undokumentiert/ad-hoc — deckt sich mit der Stakeholder-Beobachtung „Design-System ist noch
+nicht wirklich gut" (Ablehnung Explodes-Mockup V1, S166). Statt eines Big-Bang-Inventars
+(alle 48 Funktionen auf einmal klassifizieren — hätte die S167-Session gesprengt, analog
+zur S157-Lehre „Scope-Discovery vor Schätzung") läuft dies als Ratchet: bei jeder
+Modul-Berührung in `src/uiLayout/` oder dem Render-Teil einer `*Phase.py`-Datei prüft der
+Executor, ob die berührte Bauform in `design_system.md` §1 registriert ist — wenn nein,
+Ist-Zustand knapp nachtragen (nicht neu erfinden) im selben Change. Verankert als
+Selbstprüf-Checklistenpunkt in `agent_scopes.md` („Berührte UI-Bauform in
+`design_system.md` §1 registriert?").
+
+**Abhängigkeiten:** Analoges Muster zu B-024 (Kommentar-Hygiene-Ratchet); dauerhafte
+Ratchet-Praxis ohne Enddatum.
+
+**Belege:** `docs/reference/agent_scopes.md` Selbstprüf-Checkliste; `docs/spec/design_system.md`
+§1; Ist-Zahlen (~9 vs. 48) per `grep -rn "^def render_\|^def _render_" src/uiLayout/*.py`.
+
+**Benötigte Regeln-Scopes:** —
+
+**Herkunft:** S167-Planning Punkt 2iii (`docs/handoff/S167_PLANNING.md`), Stakeholder-Freigabe
+S167.
+
 ## B-025 — Strukturelle Verbesserung Skeleton Platzhalter Fixe Hoehe oder Fragment Isolierung
 
 [↩ Zeile in backlog.md](backlog.md#b-025)
@@ -654,6 +694,16 @@ nächster Schritt V3-Mockup S167.
 4. Alle Explodes-Träger beider Fraktionen wortgetreu aus Wahapedia nacherfassen: Necrons — Command Barge/Triarch Stalker/Spyders/Reanimator (6 → 3"/6" → 1/D3 MW), C'tan (4+ → 6" → D3), Silent King/Tesseract Vault (4+ → 2D6" → D6); Ork-Kandidaten separat prüfen. Korrektur des verkürzten Vengeance-`rule_text` in `unit_abilities.yaml:391` (fehlendes „it explodes").
 
 **Erster Schritt S166:** Mockup „Pflicht-Trigger-Kachel" zur Stakeholder-Abnahme (Mockup-Gate, `agent_scopes.md`); danach das Umsetzungspaket (Punkte 1+2+4) + separates GO-Item für `auto_explode` (Punkt 3).
+
+**V3-Abnahme S167 (mit 3 Auflagen — PFLICHT für §7-Spec + Umsetzung):** Mockup V3
+(`docs/handoff/S167_MOCKUP_EXPLODES_V3.html`, Änderungsprotokoll `S166_MOCKUP_EXPLODES.md` §h)
+vom Stakeholder als arbeitsfähig abgenommen („damit sollten wir arbeiten können"), mit drei
+verbindlichen Auflagen aus der §h-Antwort: (1) nur **ein** Hinweiskasten, **unter der GO-Karte**;
+Blau bleibt Hinweis-Semantik — kein eigener „Resolved"-Zustand; (2) die armyList liegt in der App
+**nicht** in derselben Spalte wie Auswahlliste/Effekt-Ausführung (Seitenleisten-Layout bleibt);
+(3) „D6 Mortal Wounds" steht **über den Schadens-Zahlenfeldern**. Nächster Schritt (Spec-first-Gate,
+`agent_scopes.md` Punkt c): §7-Überführung nach `design_system.md` inkl. dieser Auflagen, erst
+danach Code.
 
 **Was aus dem S165-Stand bleibt (kein Revert):** Der selektionsunabhängige Scan
 (`render_mortal_wounds_cards_for_destroyed`, s. Vorgeschichte unten) + die Erreichbarkeits-Tests

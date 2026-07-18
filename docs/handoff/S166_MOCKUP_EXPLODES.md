@@ -187,3 +187,67 @@ Antwort: Dieses Mockup passt deutlich besser. Folgende Korrekturwünsche:
 Ich hoffe, dass ich an alles gedacht habe. Hast du alles verstanden? Im Zweifelsfall bitte nachfragen, ich möchte nicht, dass du etwas implementierst, was wir am ende wieder mühsam umbauen müssen.
 
 Koordinator-Vorschlag zu Korrekturwunsch 4: Gegenteil-Button-Wortlaut „Does not explode" (konsistent mit Grundannahme 4) — im S167-Planning bestätigen.
+
+## §h — V3 (S167)
+
+`docs/handoff/S167_MOCKUP_EXPLODES_V3.html` (im Browser öffnen, interaktiv). V3 = V2 + die 7
+Korrekturwünsche aus §g, kein Neuentwurf. Wortlaut-Entscheidung Korrektur 4 vom Stakeholder
+bestätigt: Gegenteil-Button heißt **„Does not explode"** (konsistent mit Grundannahme 4 —
+auch „does not explode" ist ein sichtbarer, markierter Endzustand).
+
+Je Korrektur:
+
+1. **Umgesetzt.** Neue `.army-list`-Container in beiden Spalten (`necronsAlive`/`orksAlive`)
+   zeigen die Bestandskomponente unitCard (Modell-/LP-Balken, `unitCard.py:242-246`). Wird
+   eine Einheit in der Ziel-Auswahl-Kachel gewählt (`toggleUnit` → `moveToTopOfArmyList`),
+   springt ihre Karte an die Spitze der eigenen armyList-Liste und die Balken sinken live
+   über `setWounds`/`renderArmyList`. Die separate Vorschau-Karte aus V2 (`mini-unit-card`)
+   ist entfernt.
+2. **Umgesetzt.** `.mw-column-header` mit dem Text „D6 Mortal Wounds" steht einmal oberhalb
+   beider Einheitsgruppen (Necrons/Orks) in der Ziel-Auswahl-Kachel; das Pro-Zeile-Label
+   „MORTAL WOUNDS (D6)" aus V2 ist entfernt.
+3. **Umgesetzt.** Die Caption „Tap a unit to toggle; confirm when ready." ist ersatzlos
+   entfernt (Panel beginnt direkt mit der Info-Box).
+4. **Umgesetzt.** Das Tisch-Wurf-Zahlenfeld ist durch zwei Buttons ersetzt: „Explodes!"
+   (gefüllt, Primary) und „Does not explode" (outline) — `resolveExplode('roll')` /
+   `resolveNoExplode()`. Bewusste Abweichung vom generischen Tisch-Wurf-Baustein §6.3 (kein
+   Zahlenfeld mehr für diesen Fall) — Grund: expliziter Korrekturwunsch, dokumentiert statt
+   still eingeführt.
+5. **Umgesetzt.** Der Resolved-Kasten (`#outcomeBox`) steht separat unterhalb von Wurf-Buttons
+   und GO-Karte, NICHT innerhalb der Ziel-Auswahl-Kachel. Klartext-Satz aus der Vorlage:
+   „The Silent King explodes. Every unit within 2D6" suffers D6 mortal wounds." (Fehlschlag:
+   „The Silent King does not explode."). Farbe ist durchgehend BLAU (`--arb-blue`/
+   `--arb-blue-text`) — bewusste Abweichung von der warning/success-Konvention §3, auf
+   ausdrücklichen Stakeholder-Wunsch; kein neues Farb-Token, derselbe Blauton wie die
+   bestehende Info-Box (dort als „Info, Phasen-Regelkasten" dokumentiert,
+   `design_colors.md` Zeile 40 — hier zusätzlich für den Resolved-Zustand verwendet, als
+   Abweichung von der Token-Bedeutung festgehalten statt stillschweigend). Die Ziel-Auswahl-
+   Kachel selbst nutzt weiterhin reine Toggle-Zeilen ohne Card-Ansicht (Heroic-Intervention-
+   Stil, unverändert aus V2 — V2 hatte hier bereits keine Card-Ansicht für die
+   Auswahlliste selbst, nur die jetzt entfernte Mini-Karte kam zusätzlich hinzu).
+6. **Bestätigt, keine Änderung nötig.** `unitCard.py:61` definiert `"DESTROYED": ("#c04040",
+   "#1e1010")`; V2 verwendete bereits `--arb-destroyed: #c04040` für das Wort „DESTROYED" in
+   der unitCard — das ist exakt der App-Wert, keine Abweichung vorhanden, daher unverändert
+   übernommen.
+7. **Umgesetzt.** GO-Kartentitel lautet jetzt „Curse of the Phaeron" (`name_en` aus
+   `data/wh40k_9e/necrons/stratagems.yaml:474`) statt des technischen `effect.type:
+   auto_explode`. Der interne Effekt-Typ steht nur noch als Quellenangabe im Baustein-
+   Kommentar unter der Karte, nicht mehr sichtbar im UI.
+
+**Keine offenen Verständnisfragen** — alle 7 Korrekturen ließen sich eindeutig aus dem
+Stakeholder-Text ableiten; einzige vorab benannte Entscheidung (Wortlaut Korrektur 4) war
+bereits vor Baubeginn bestätigt (siehe Koordinator-Vorschlag oben).
+
+**Risiko für die Abnahme:** Die Blau-Entscheidung (Korrektur 5) überschreibt die bisherige
+Token-Bedeutung „Info" mit einer zweiten Bedeutung „Resolved" — falls das bei einem
+späteren echten Info-Kasten UND Resolved-Kasten auf derselben Ansicht optisch
+verwechselbar wird, braucht `design_colors.md` ggf. doch ein eigenes Resolved-Token; für
+den aktuellen Explodes-Flow tritt dieser Fall nicht auf (Info-Box und Resolved-Box stehen
+nie gleichzeitig sichtbar nebeneinander). Kein Blocker, nur zur Kenntnis für die
+Spec-Überführung.
+
+Antwort: Wenn die blaue Farbe ein Problem bei "Resolved" ist, dann sollte es an dieser Stelle auch nicht als solcher laufen. Denn hier ist es ist ein Hinweis! 
+Es braucht auch nur einen HInweiskasten. Das hatte ich schon beim letzten Mal gesagt und zwar unter der GO-Karte.
+Im Mockup sieht es so aus, als ob die armylist in derselben Spalte ist wie die Auswahlliste bzw. die Ausführung der Effekte. In der App soll es nicht so sein.
+Der Text "D6 Mortal Wounds" befindet sich nicht oberhalb der number-Felder, in denen die Höhe des Schadens gewählt wird. Ich hoffe dir ist das aufgefallen. 
+Ansonsten sollten wir mit diesem Mockup arbeiten können.

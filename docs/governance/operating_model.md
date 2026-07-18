@@ -75,6 +75,19 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 > sieht in der Token-/Modell-Übersicht praktisch nie Haiku; ohne harten Default wird das Tiering
 > ignoriert und Geld verschenkt. Das Tier ist im Chat transparent zu nennen.
 
+> **MUST (Planner-Tier, S167, [ADR-0009](decisions/0009-planner-tier-auf-opus.md)):** Der
+> Planner-Subagent läuft als **Default durchgehend auf Opus** — ein Lesedurchgang, Konzept
+> und Plan aus einer Hand (kein Sonnet-Vorlauf). Auflage: **gezielt lesen, keine
+> Volltext-Lektüre** — briefing.md + aktive Zieldatei + `backlog.md` + Index gezielt nach
+> Scope-Zeile, nicht komplette Dateien am Stück. **Ausnahme:** Bei großen Schreib-Artefakten
+> (> ~300 Zeilen, z. B. Migrations-/Split-Dokumente) darf die Ausarbeitung nach fertigem
+> Opus-Konzept an Sonnet delegiert werden — dort lohnt die Trennung Konzept/Ausarbeitung,
+> weil der Sonnet-Anteil überwiegend Schreibarbeit ist. Grund: S166 zeigte Planner-Befunde,
+> die „fleißig, aber nicht ganzheitlich" ausfielen (B-123-Fehldiagnose, Mockup-V1-Ablehnung);
+> der Tokenverbrauch der Planner-Arbeit entsteht überwiegend beim Lesen, nicht beim
+> Schreiben — ein Team-Split (Opus konzipiert, Sonnet schreibt den Plan) würde diese Lektüre
+> doppelt kosten, ohne die Ganzheitlichkeits-Lücke zu schließen.
+
 ---
 
 ## Spezialisierte Subagenten (Roster) {#roster}

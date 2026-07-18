@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 20:04 CEST
+Stand: 2026-07-18 20:57 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,11 +9,18 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-18 12:29 cd6c  █████████░░░ 117k ✅    ████░░  72%    █···········
+07-18 20:08 00eb  ███████████░ 138k ⚠️   ████░░  67%    ██··········
+         SA_1·  ██████░░░░░░  69k ✅    Planner-Tier Opus verankern
+         SA_2·  ██████░░░░░░  81k ✅    S167 DoD-Review durchführen
+         SA_3·  ███████░░░░░  92k ✅    Governance-Edits + B-124 anlegen
+         SA_4·  ████████░░░░  99k ✅    Explodes-Mockup V3 bauen
+         SA_5·  ███████████░ 139k ⚠️   S167-Planning-Entwurf erstellen
+----------------- ---------------------- -------------- ------------
+07-18 12:29 cd6c  ██████████░░ 122k ⚠️   ████░░  73%    █···········
          SA_1·  █████░░░░░░░  58k ✅    S166 DoD-Review (Opus)
          SA_2·  ███████░░░░░  87k ✅    Explodes-Mockup V2 bauen
          SA_3·  ███████░░░░░  86k ✅    B-123 Nachdiagnose UI-Pfad
-         SA_4·  ███████████░ 131k ⚠️   S166 Abschluss + Commit
+         SA_4·  ███████████░ 139k ⚠️   S166 Abschluss + Commit
 ----------------- ---------------------- -------------- ------------
 07-18 11:00 b53c  █████████░░░ 109k ✅    █████░  85%    ············
          SA_1·  ███████░░░░░  81k ✅    Retro-Maßnahmen S165 verankern
@@ -901,3 +908,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S164 (2026-07-18)** mortal_wounds-Handler (T1) + Vengeance-Verdrahtung (UI defekt, re-scoped); B-028b/B-119 archiviert; infused_madness YAML-Korrektur; arc_fields/wrath zurückgestellt
 - **S165 (2026-07-18)** Vengeance visibility fix (selection-independent scan, 5 phases), UI-verification negative -> explodes re-scope (mandatory trigger, not GO), design-system governance ratchet, DoR measure proposed
 - **S166 (2026-07-18)** B-122 menhir wounds fix; B-123 root cause verified (directed-group damage discards spillover, UI forces branch) + stakeholder direction; explodes mockup V2 accepted with 7 corrections for V3; retro measures 1-3 pending
+- **S167 (2026-07-18)** Spec-first-UI-Governance + Screenshot-Konvention + B-124-Ratchet, Planner-Tier Opus (ADR-0009), Explodes-Mockup V3 abgenommen (3 Auflagen), B-123 -> S168
