@@ -682,3 +682,130 @@ def test_regressionstest_nobz_killsaw_group_destroyed() -> None:
     assert state["group_models"]["nob_killsaw"] == 0  # all Kill Saw models destroyed
     assert state["group_wounds"]["nob_slugga"] == 6  # Slugga group untouched
     assert state["group_models"]["nob_slugga"] == 2  # both Sluggas alive
+
+
+# ---------------------------------------------------------------------------
+# S168 T3 (B-123) — _render_damage_block(): the forced-allocation lock
+# (get_locked_group's has_per_group_wounds branch, added in T2) consumed through
+# the actual render entry point, not just the state helpers exercised above.
+# S166 identified exactly this kind of path as UI-unreachable when only the
+# isolated state functions are tested — this drives _render_damage_block()
+# itself with a realistic session_state fixture (real Silent King catalog
+# unit, real apply_damage/get_locked_group/select_damage_target_group).
+# ---------------------------------------------------------------------------
+
+
+class _DmgColStub:
+    """Stand-in for the half-width st.columns() block _render_damage_block writes
+    to — supports the widget calls the group_wounds branch makes on it."""
+
+    def __init__(self, damage_in: int = 0, apply_clicked: bool = False):  # type: ignore[no-untyped-def]
+        self.damage_in = damage_in
+        self.apply_clicked = apply_clicked
+        self.radio_calls: list = []  # type: ignore[type-arg]
+        self.warning_calls: list = []  # type: ignore[type-arg]
+
+    def number_input(self, label, *a, **kw):  # type: ignore[no-untyped-def]
+        return self.damage_in if label.startswith("Total damage") else 0
+
+    def caption(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return None
+
+    def button(self, *a, **kw):  # type: ignore[no-untyped-def]
+        return self.apply_clicked
+
+    def radio(self, label, *a, options=None, **kw):  # type: ignore[no-untyped-def]
+        self.radio_calls.append(options)
+        return options[0] if options else None
+
+    def warning(self, msg, *a, **kw):  # type: ignore[no-untyped-def]
+        self.warning_calls.append(msg)
+
+
+def _sk_state(menhir_w: int, szarekh_w: int, active: str | None = None) -> dict:
+    """Silent King unit-state from per-group HP pools (Menhirs 5 LP/model × 2,
+    Szarekh 16 LP/model × 1) — same pattern as _gf_nobz_state above."""
+    gw = {"triarchal_menhirs": menhir_w, "szarekh": szarekh_w}
+    gm = {
+        "triarchal_menhirs": min(2, -(-menhir_w // 5)) if menhir_w > 0 else 0,
+        "szarekh": 1 if szarekh_w > 0 else 0,
+    }
+    return {
+        "group_wounds": gw,
+        "group_models": gm,
+        "current_wounds": sum(gw.values()),
+        "models": sum(gm.values()),
+        "destroyed": sum(gw.values()) <= 0,
+        "melee_with": [],
+        "lost_models_this_turn": 0,
+        "damage_active_group_id": active,
+    }
+
+
+def _sk_make_session(state: dict, uid: str) -> _GfSession:
+    s = _GfSession(first_player="Necrons", second_player="Orks", p1_units={uid: state}, round=1)
+    common.st.session_state = s
+    _gf_mut.st.session_state = s
+    _gf_gs.st.session_state = s
+    return s
+
+
+def test_damage_block_locks_front_group_from_full_health(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Lock-Default + Nicht-Wählbarkeit: a fresh (full-health) Silent King never
+    offers Szarekh via the radio — get_locked_group's forced-allocation branch
+    (T2) short-circuits _render_subgroup_selector before the radio renders."""
+    sk, _ = _silent_king_groups()
+    state = _sk_state(10, 16)
+    _sk_make_session(state, sk.id)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (sk, state))
+    col = _DmgColStub()
+    monkeypatch.setattr(common.st, "columns", lambda n: (col, MagicMock()))
+    profile = SimpleNamespace(damage="3", abilities="", effect=None, is_melee=False)
+
+    common._render_damage_block(sk, "Necrons", sk.id, profile, "Orks", "Boyz", "shooting", "tab_sk")
+
+    assert col.radio_calls == []  # the radio that would let the user pick Szarekh never renders
+    assert any("Triarchal Menhirs" in w for w in col.warning_calls)
+    assert all("Szarekh" not in w for w in col.warning_calls)
+
+
+def test_damage_block_apply_26_damage_destroys_fresh_silent_king(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Repro (B-123/S166 root cause, closed by T2's spillover fix): 26 damage on a
+    full-health Silent King (10 Menhir HP + 16 Szarekh HP) fully destroys the unit
+    through the actual Apply-button render path, not just the state helper."""
+    import gameMechanic.gameLog as _gf_log
+
+    monkeypatch.setattr(_gf_log, "log_action", lambda *a, **kw: None)
+    sk, _ = _silent_king_groups()
+    state = _sk_state(10, 16)
+    _sk_make_session(state, sk.id)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (sk, state))
+    col = _DmgColStub(damage_in=26, apply_clicked=True)
+    monkeypatch.setattr(common.st, "columns", lambda n: (col, MagicMock()))
+    profile = SimpleNamespace(damage="3", abilities="", effect=None, is_melee=False)
+
+    common._render_damage_block(sk, "Necrons", sk.id, profile, "Orks", "Boyz", "shooting", "tab_sk")
+
+    assert state["group_wounds"] == {"triarchal_menhirs": 0, "szarekh": 0}
+    assert state["destroyed"] is True
+
+
+def test_damage_block_frees_szarekh_once_menhirs_destroyed(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Freigabe nach Zerstörung: once the Menhir group is wiped, Szarekh is the
+    sole active group — no lock, no radio, and damage now actually reaches it."""
+    import gameMechanic.gameLog as _gf_log
+
+    monkeypatch.setattr(_gf_log, "log_action", lambda *a, **kw: None)
+    sk, _ = _silent_king_groups()
+    state = _sk_state(0, 16)
+    _sk_make_session(state, sk.id)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (sk, state))
+    col = _DmgColStub(damage_in=5, apply_clicked=True)
+    monkeypatch.setattr(common.st, "columns", lambda n: (col, MagicMock()))
+    profile = SimpleNamespace(damage="3", abilities="", effect=None, is_melee=False)
+
+    common._render_damage_block(sk, "Necrons", sk.id, profile, "Orks", "Boyz", "shooting", "tab_sk")
+
+    assert col.radio_calls == []  # single active group — nothing left to choose
+    assert col.warning_calls == []  # not locked — Szarekh is simply the only target
+    assert state["group_wounds"]["szarekh"] == 11

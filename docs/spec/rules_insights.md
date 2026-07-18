@@ -77,3 +77,19 @@ Merkliste der Fallen. Quelle bei Zweifel immer `docs/work/wahapedia_*/` — nie 
   Stopwords beschränken (`quantum_shielding_wound_deny` statt `..._wound_auto_fail`) — `effect.type`
   selbst ist unkritisch (nicht unter einem NAME_KEYS-Feld gescannt), nur `id`/`keywords`/
   `faction`/`subfaction`/… sind es.
+- **Triarchal Menhir „muss zuerst getroffen werden" — generisch über Wund-Heterogenität
+  erkannt, nicht über einen Sonderfall (B-123, S168):** Die Codex-Regel „while this unit
+  contains any Triarchal Menhirs models, … that attack must be allocated to one of those
+  models" ist eine reine Silent-King-Spezialregel — im gesamten YAML-Bestand hat **nur** der
+  Silent King Modellgruppen mit unterschiedlichen Pro-Modell-Wundwerten (Szarekh 16 vs.
+  Menhirs 5; jede andere Mehrgruppen-Einheit wie Boyz/Boss Nob oder Nobz-Wargear-Varianten hat
+  in allen Gruppen denselben Wundwert). `unit.has_per_group_wounds()` (Unit.wounds pro Gruppe
+  verschieden) ist deshalb der generische, datengetriebene Ersatz für einen harten Silent-King-
+  Check: Hat eine Einheit heterogene Gruppen-Wundwerte, ist die Gruppe mit der niedrigsten
+  `model_groups`-Priorität unter den noch lebenden Gruppen von Anfang an Pflichtziel
+  (`get_locked_group` in `unitMutations.py`) — nicht erst, wenn ihr Frontmodell schon
+  angeschlagen ist. Homogene Mehrgruppen-Einheiten behalten die freie Verteidiger-Erstwahl
+  (core_rules.txt: „can be to any model in the unit"). **Falle:** würde man stattdessen
+  `model_groups`-Priorität IMMER als Zwangsreihenfolge durchsetzen (unabhängig von
+  Wund-Heterogenität), verletzt das die generische Freiwahl-Regel für Einheiten wie Ork
+  Boyz/Boss Nob.

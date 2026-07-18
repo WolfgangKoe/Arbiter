@@ -15,8 +15,8 @@ Detailplanungen erledigter Ziele (1A–6): [archive/](archive/). Ausführliche I
 
 **Pflege-Regel:** Bereinigung an jedem Session-Start/-Ende — erledigte Items MIT ihrem
 Details-Abschnitt aus `backlog_details.md` nach `backlog_archive.md` verschieben, hier die
-Tabellenzeile löschen. Letzter Abgleich: **2026-07-18 (S166, B-122 nach externer Verifikation +
-positiver UI-Sichtprüfung archiviert)**.
+Tabellenzeile löschen. Letzter Abgleich: **2026-07-18 (S168, B-123 nach Core-Fix (T2) + UI-Nachzug
+(T3) + Stakeholder-Verifikation archiviert)**.
 
 ---
 
@@ -122,7 +122,6 @@ Einzige Prioritätsquelle — sortiert nach Stakeholder-Priorität (Inventar-Rei
 | [B-118](backlog_details.md#b-118--tesla-extra-hits-migration-auf-value-trigger-muster)     | ToDo | <a id="b-118"></a>Tesla-Extra-Hits-Migration auf Value-Trigger-Muster — `special_die_html`-Badge außerhalb des Grids ersetzen durch `value_triggered_die_row_html("Extra Hits", 6, "+2", buff-grün)` in Spalte 6, vereinheitlicht mit dem AP-Trigger-Muster.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | design_system.md §4.3-Vorgriff-Zeile + §4.4 (S159) | ~10–15k | Executor |
 | [B-120](backlog_details.md#b-120--conditions-auswertung-in-find-unit-ability-by-effect-inert)     | ToDo | <a id="b-120"></a>Conditions-Auswertung in `find_unit_ability_by_effect` (`abilityEngine.py:582`) ist inert — die Funktion matched nur `unit_id` + `effect.type`, prüft `ability.conditions` nicht (anders als `_wound_auto_fail_ability`). Die neue Canoptek-Spyder-Ability (`conditions: [has_rules: [gloom_prism]]`, S163 B-028b-Rest) hat dadurch aktuell keine Wirkung — Ownership matcht unconditional. Kein akuter Verhaltensbruch (Spyder trägt das Wargear immer), aber optionales Wargear kann so nicht korrekt modelliert werden.<br><span style="color:#c2410c">**Schuldabbau**</span> | Review-Befund S163/Retro M1 | S: ~15k | Executor |
 | [B-121](backlog_details.md#b-121--load-deny-wargear-names-toter-produktionscode)     | ToDo | <a id="b-121"></a>`load_deny_wargear_names` (`src/gameObjects/loader.py:945`) ist seit der B-028b-Migration (S163) toter Produktionscode — nur `tests/gameObjects/test_loader.py` referenziert die Funktion noch, kein `src/`-Aufrufer übrig. Entfernen oder ersten echten Nutzer benennen.<br><span style="color:#c2410c">**Schuldabbau**</span> | Review-Befund S163/Retro M2 | XS: ~5k | Executor |
-| [B-123](backlog_details.md#b-123--schadenszuweisungs-bug-mehrmodell-einheiten)     | ToDo | <a id="b-123"></a>Schadenszuweisungs-Bug Mehrmodell-Einheiten — die „Frontmodell"-Logik scheint zu verhindern, dass überschüssiger normaler Schaden über das Frontmodell hinaus weitere Modelle tötet; eine Attacke muss eine Einheit vollständig zerstören können. Beobachtet am Silent King (S165). Reproduktion + Regelabgleich nötig (9E-Spillover-Regeln: Schaden verfällt je Modell, aber mehrere Attacken müssen nacheinander Modelle töten können — genaue Regel vor dem Fix verifizieren).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | Stakeholder-Ergänzung im S165-Explodes-Entscheid | M: ~35k | Executor |
 
 ---
 

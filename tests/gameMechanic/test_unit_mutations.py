@@ -1079,6 +1079,141 @@ def test_single_group_unit_no_interactive_ui_needed() -> None:
 
 
 # ---------------------------------------------------------------------------
+# B-123 — directed x resolved x locked x mortal matrix + S166 regression
+#
+# Root cause (S166): _apply_directed_group_damage discarded any damage beyond
+# the chosen group's own pool instead of spilling to the next group, and
+# get_locked_group only locked a PARTIALLY wounded front model — so a
+# full-health Silent King let the UI direct damage straight to Szarekh,
+# skipping the Codex "Triarchal Menhir" rule (Menhirs must be allocated first
+# while any remain). Fixed generically via unit.has_per_group_wounds() — the
+# Silent King is the only unit in the data with heterogeneous per-group
+# wounds (Szarekh 16 vs. Menhirs 7), so the forced front-lock cannot fire for
+# homogeneous multi-group units like Ork Boyz/Nobz, preserving their K3 free
+# first-choice.
+# ---------------------------------------------------------------------------
+
+
+def test_get_locked_group_forces_front_group_before_any_wound_on_hetero_unit() -> None:
+    """Per-group wound values differ (Szarekh 16 vs. Menhirs 7) — the Codex
+    'Triarchal Menhir' rule forces allocation onto the front (lowest-priority)
+    group from full health, not only once a model is already wounded."""
+    sk = _silent_king()
+    _sk_session()
+    assert get_locked_group(SILENT_KING, "Necrons", sk) == "triarchal_menhirs"
+
+
+def test_get_locked_group_none_for_homogeneous_group_at_full_health() -> None:
+    """K3 — a homogeneous multi-group unit (every group has the same
+    per-model wounds) has no forced front lock at full health."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3})
+    _nobz_session(state)
+    assert get_locked_group(NOBZ, "Orks", _nobz_unit()) is None
+
+
+def test_apply_damage_szarekh_cannot_be_chosen_before_menhirs_die() -> None:
+    """Directing damage at Szarekh while Menhirs are alive must raise — this
+    is the exact S166/B-123 root cause (UI could pick Szarekh at full health)."""
+    _sk_session()
+    select_damage_target_group(SILENT_KING, "Necrons", "szarekh")
+    with pytest.raises(ValueError):
+        apply_damage(SILENT_KING, "Necrons", 5, _silent_king(), resolved=True)
+
+
+def test_get_locked_group_none_once_only_one_group_alive() -> None:
+    """Once Menhirs are gone, only Szarekh remains — trivial single-group
+    allocation, no lock needed regardless of has_per_group_wounds."""
+    session = _sk_session()
+    apply_damage(SILENT_KING, "Necrons", 14, _silent_king(), resolved=True)  # kills both Menhirs
+    assert session["p1_units"][SILENT_KING]["group_wounds"]["triarchal_menhirs"] == 0
+    assert get_locked_group(SILENT_KING, "Necrons", _silent_king()) is None
+
+
+def test_apply_damage_directed_resolved_regression_s166_26_damage() -> None:
+    """S166 regression: 26 damage on a full Silent King (30 HP total) used to
+    destroy only the Menhirs (14 HP) and leave Szarekh untouched at 16/16 —
+    the directed branch discarded everything beyond the chosen group's pool."""
+    session = _sk_session()
+    select_damage_target_group(SILENT_KING, "Necrons", "triarchal_menhirs")
+    apply_damage(SILENT_KING, "Necrons", 26, _silent_king(), resolved=True)
+    state = session["p1_units"][SILENT_KING]
+    assert state["group_wounds"]["triarchal_menhirs"] == 0
+    assert state["group_wounds"]["szarekh"] == 4  # 30 - 26, Szarekh now took damage
+    assert state["destroyed"] is False
+
+
+def test_apply_damage_directed_resolved_grenzfall_destroys_unit_outright() -> None:
+    """Grenzfall: directed damage covering the WHOLE unit's pool (30) destroys
+    it outright — the unit is fully destructible via a single directed apply,
+    not capped at the first chosen group."""
+    session = _sk_session()
+    select_damage_target_group(SILENT_KING, "Necrons", "triarchal_menhirs")
+    apply_damage(SILENT_KING, "Necrons", 30, _silent_king(), resolved=True)
+    state = session["p1_units"][SILENT_KING]
+    assert state["destroyed"] is True
+    assert state["models"] == 0
+
+
+def test_apply_damage_directed_not_resolved_overflow_still_lost_within_one_attack() -> None:
+    """K1 — a SINGLE attack's excess is still lost, not spilled: resolved=False
+    caps damage to the front model's HP before the directed branch runs, so a
+    5-damage single hit on an intact 7-HP Menhir front model kills it without
+    touching Szarekh at all."""
+    session = _sk_session()
+    select_damage_target_group(SILENT_KING, "Necrons", "triarchal_menhirs")
+    apply_damage(SILENT_KING, "Necrons", 100, _silent_king(), resolved=False)
+    state = session["p1_units"][SILENT_KING]
+    assert state["group_wounds"]["triarchal_menhirs"] == 7  # only the front Menhir model died
+    assert state["group_wounds"]["szarekh"] == 16  # untouched — single-attack excess is lost
+
+
+def test_directed_resolved_overflow_spills_for_homogeneous_groups_too() -> None:
+    """The overflow fix is not limited to forced-allocation units — a
+    homogeneous multi-group unit's freely-chosen group also spills once its
+    own pool is exhausted (resolved=True total covering multiple attacks)."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 9, _nobz_unit(), resolved=True)
+    assert state["group_wounds"]["nob_klaw"] == 0
+    assert state["group_wounds"]["nob_saw"] == 3  # 9 - 6 overflow lands here (next priority)
+    assert state["group_wounds"]["nob_slugga"] == 3  # untouched
+
+
+def test_directed_resolved_overflow_from_locked_group_continues_spill() -> None:
+    """directed x resolved x locked x normal: a wounded-but-alive front model
+    still binds the defender's choice (K2 Zugzwang), but once resolved damage
+    exceeds even that model's whole group pool, the remainder keeps killing
+    further groups instead of vanishing."""
+    state = _nobz_state({"nob_klaw": 1, "nob_saw": 6, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 4, _nobz_unit(), resolved=True)
+    assert state["group_wounds"]["nob_klaw"] == 0
+    assert state["group_wounds"]["nob_saw"] == 3  # 4 - 1 overflow
+    assert state["group_wounds"]["nob_slugga"] == 3  # untouched
+
+
+def test_directed_mortal_resolved_ignores_active_and_lock() -> None:
+    """directed x resolved x locked x mortal: mortal=True bypasses both the
+    directed active group and any front lock, regardless of resolved — mortal
+    wounds always use the plain priority spill (K4/K5)."""
+    state = _nobz_state({"nob_klaw": 1, "nob_saw": 6, "nob_slugga": 3}, active="nob_klaw")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 4, _nobz_unit(), mortal=True, resolved=True)
+    assert state["current_wounds"] == 1 + 6 + 3 - 4
+
+
+def test_get_locked_group_free_choice_of_any_homogeneous_group_at_full_health() -> None:
+    """K3 — homogeneous multi-group unit: the defender may freely choose ANY
+    undamaged group first, even one that is not the lowest priority (e.g.
+    picking nob_slugga, priority 3, before touching nob_klaw, priority 1)."""
+    state = _nobz_state({"nob_klaw": 6, "nob_saw": 6, "nob_slugga": 3}, active="nob_slugga")
+    _nobz_session(state)
+    apply_damage(NOBZ, "Orks", 3, _nobz_unit(), mortal=False)
+    assert state["group_wounds"]["nob_slugga"] == 0  # freely chosen group takes the hit
+    assert state["group_wounds"]["nob_klaw"] == 6  # untouched, despite lower priority
+
+
+# ---------------------------------------------------------------------------
 # adjust_cp — line 52
 # ---------------------------------------------------------------------------
 

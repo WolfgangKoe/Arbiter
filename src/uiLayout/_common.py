@@ -1952,11 +1952,22 @@ def _render_subgroup_selector(
         locked = next((g for g in active_groups if g.id == locked_gid), None)
         if locked is not None:
             wval = def_unit.group_wound_value(locked)
-            front = gw.get(locked_gid, 0) % wval or wval
-            dmg_col.warning(
-                f"► Angeschlagenes Modell in **{locked.name_en}** (noch {front} LP) "
-                "muss zuerst abgehandelt werden."
-            )
+            pool = gw.get(locked_gid, 0)
+            if pool % wval != 0:
+                # Zustand B — a model in this group already stands partly wounded.
+                dmg_col.warning(
+                    f"► Angeschlagenes Modell in **{locked.name_en}** (noch "
+                    f"{pool % wval} LP) muss zuerst abgehandelt werden."
+                )
+            else:
+                # Forced-allocation lock from full health (unit.has_per_group_wounds(),
+                # e.g. Silent King) — no model is wounded yet, but 9E/codex still
+                # requires this group to be destroyed before the other group can
+                # take damage (get_locked_group docstring).
+                dmg_col.warning(
+                    f"► **{locked.name_en}** muss laut Regel zuerst vollständig "
+                    "zerstört werden, bevor andere Gruppen Schaden nehmen."
+                )
         return locked_gid
 
     ids = [g.id for g in active_groups]

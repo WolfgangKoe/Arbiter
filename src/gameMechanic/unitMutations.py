@@ -126,12 +126,25 @@ def select_damage_target_group(uid: str, faction: str, group_id: str) -> None:
 
 
 def get_locked_group(uid: str, faction: str, unit: Unit) -> str | None:
-    """Return the group whose front model is wounded-but-alive, else None.
+    """Return the group that MUST receive the next damage allocation, else None.
 
-    A group is locked when its HP pool is not an integer multiple of the
-    per-model wounds (group_wounds[gid] % wval != 0) — a single model stands
-    partly damaged and 9E forces all further wounds onto it until it dies. At
-    most one group can be locked at a time.
+    Two 9E constraints combine — whichever currently applies:
+    - Wounded-but-alive front model: a group's HP pool is not an integer
+      multiple of its per-model wounds (group_wounds[gid] % wval != 0) — a
+      single model stands partly damaged and 9E forces all further wounds
+      onto it until it dies (core_rules.txt: "must allocate ... to that model").
+    - Forced-allocation unit: model groups with DIFFERENT per-model wound
+      values (unit.has_per_group_wounds(), e.g. Szarekh 16 + Triarchal
+      Menhirs 5 — Codex "Triarchal Menhir": "each time an attack successfully
+      wounds this unit, that attack must be allocated to one of those
+      [Menhir] models") lock the lowest-priority group with any wounds
+      remaining from the very first point of damage — not only once it is
+      already partly wounded.
+    Homogeneous multi-group units (every group shares the same per-model
+    wounds, e.g. Ork Boyz + Boss Nob) get neither lock at full health — the
+    defender freely chooses among undamaged groups (core_rules.txt free
+    first-choice: "can be to any model in the unit") until the first rule
+    above locks one. At most one group can be locked at a time.
     """
     key = units_key_for(faction)
     state = st.session_state[key][uid]
@@ -140,6 +153,10 @@ def get_locked_group(uid: str, faction: str, unit: Unit) -> str | None:
         pool = gw.get(group.id, 0)
         if pool > 0 and pool % unit.group_wound_value(group) != 0:
             return group.id
+    if unit.has_per_group_wounds():
+        alive = [g for g in unit.model_groups if gw.get(g.id, 0) > 0]
+        if len(alive) > 1:
+            return min(alive, key=lambda g: g.priority).id
     return None
 
 
@@ -159,11 +176,27 @@ def _group_front_hp(state: MutableMapping[str, Any], unit: Unit, group_id: str) 
 def _apply_directed_group_damage(
     state: MutableMapping[str, Any], dmg: int, unit: Unit, group_id: str
 ) -> None:
-    """Reduce only the chosen group's HP pool (defender's directed allocation)."""
+    """Deplete the defender's chosen group first; overflow spills to the next
+    group(s) in priority order — it is not lost.
+
+    9E allocates a volley's attacks one at a time: once the targeted model
+    dies, remaining attacks keep landing on the unit (core_rules.txt: "must
+    allocate further attacks to this model until either it is destroyed, or
+    all the attacks have been ... resolved"). A single attack's own excess on
+    its own target is lost (K1) — but that cap is enforced by the caller
+    before this function ever sees more damage than the chosen group can
+    absorb (see apply_damage's `not resolved` branch), so any overflow
+    reaching here is always cross-attack spillover, never intra-attack.
+    """
     gw: dict[str, int] = state["group_wounds"]
     pool = gw.get(group_id, 0)
-    gw[group_id] = max(0, pool - dmg)
-    _recompute_from_group_wounds(state, unit)
+    applied = min(dmg, pool)
+    gw[group_id] = pool - applied
+    overflow = dmg - applied
+    if overflow > 0:
+        _apply_group_wound_damage(state, overflow, unit)
+    else:
+        _recompute_from_group_wounds(state, unit)
 
 
 def apply_damage(

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 20:57 CEST
+Stand: 2026-07-18 22:15 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-18 20:08 00eb  ███████████░ 138k ⚠️   ████░░  67%    ██··········
+07-18 20:59 6cfc  ████████░░░░  97k ✅    █████░  90%    █···········
+         SA_1·  █████████░░░ 108k ✅    T4: §7-Spec-Überführung Explodes
+         SA_2·  ████████████ 159k ⛔    T3: B-123 UI + Render-Test
+         SA_3·  █████████░░░ 111k ✅    S168-Planning-Entwurf (Opus)
+         SA_4·  █████░░░░░░░  65k ✅    T5: S168 DoD-Review (Opus)
+         SA_5·  ████████████ 175k ⛔    T2: B-123 Core-Fix + Tests
+         SA_6·  ████░░░░░░░░  44k ✅    T1: B-123 Regel-Lookup
+         SA_7·  ████████░░░░  99k ✅    T5b: S168 Abschluss-Hygiene
+----------------- ---------------------- -------------- ------------
+07-18 20:08 00eb  ███████████░ 140k ⚠️   ████░░  64%    ██··········
          SA_1·  ██████░░░░░░  69k ✅    Planner-Tier Opus verankern
          SA_2·  ██████░░░░░░  81k ✅    S167 DoD-Review durchführen
          SA_3·  ███████░░░░░  92k ✅    Governance-Edits + B-124 anlegen
@@ -909,3 +918,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S165 (2026-07-18)** Vengeance visibility fix (selection-independent scan, 5 phases), UI-verification negative -> explodes re-scope (mandatory trigger, not GO), design-system governance ratchet, DoR measure proposed
 - **S166 (2026-07-18)** B-122 menhir wounds fix; B-123 root cause verified (directed-group damage discards spillover, UI forces branch) + stakeholder direction; explodes mockup V2 accepted with 7 corrections for V3; retro measures 1-3 pending
 - **S167 (2026-07-18)** Spec-first-UI-Governance + Screenshot-Konvention + B-124-Ratchet, Planner-Tier Opus (ADR-0009), Explodes-Mockup V3 abgenommen (3 Auflagen), B-123 -> S168
+- **S168 (2026-07-18)** B-123 komplett (Core-Spillover+Menhir-Lock+UI, verifiziert), §7-Explodes-Entwurf, Review GO

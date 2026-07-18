@@ -938,3 +938,39 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
 
 **Übernahme des Entscheids (S157):** Option B freigegeben. Auflagen für den Zuschnitt: (a) sessiongroße Tasks (je ≤ M-Effort), (b) die App ist nach jedem Task lauffähig — kein Zwischenzustand mit toter UI. (c) Klassifikations-Klärung vorab: `reanimation_protocols` ist eine **factionAbility**, auf die GOs wirken können — kein GO; der Zuschnitt prüft die 11er-Liste auf diese Fehlklassifikation und nimmt RP ggf. heraus (deckt sich mit der Grundannahme oben, dass die RP-UI nicht migriert wird). Der Zuschnitt (Verfeinerung von B-028a/b/c in Backlog-Items) ist ein **Planner-Auftrag S158**.
 
+## Aus der ID-indizierten Liste (migriert S168)
+
+- ✅ **B-123 — Schadenszuweisungs-Bug Mehrmodell-Einheiten — ERLEDIGT (S168, Core-Fix T2 +
+  UI-Nachzug T3, Stakeholder-verifiziert):** Root Cause (S166-Nachdiagnose):
+  `_render_damage_block` erzwang für Mehrgruppen-Einheiten mit >1 lebenden Gruppen immer eine
+  Subgruppen-Wahl, wodurch `_apply_directed_group_damage` jeden Schaden über den Restpool der
+  gewählten Gruppe hinaus verwarf — der spillover-fähige `_apply_group_wound_damage`-Zweig war
+  über die UI praktisch unerreichbar (Repro: 26 Schaden auf den vollen Silent King → nur die
+  Menhirs (10 HP) sterben, Szarekh 16/16 unberührt). **T2 (Core, S168,
+  `src/gameMechanic/unitMutations.py`):** `_apply_directed_group_damage` verwirft Überschuss
+  nicht mehr — nach Depletion der gewählten Gruppe läuft der Rest generisch über
+  `_apply_group_wound_damage` (Prioritäts-Spill) weiter; `get_locked_group` generalisiert um
+  einen Zwangs-Lock von Anfang an für Einheiten mit `unit.has_per_group_wounds()` (Gruppen mit
+  unterschiedlichen Pro-Modell-Wundwerten — im gesamten YAML-Bestand ausschließlich der Silent
+  King) — Szarekh kann nicht mehr vor den Menhirs gewählt werden (`apply_damage` wirft
+  `ValueError` bei Verstoß); homogene Mehrgruppen-Einheiten (z. B. Ork Boyz/Boss Nob) bleiben
+  unverändert bei freier Verteidiger-Erstwahl, generisch aus `model_groups`-Daten abgeleitet.
+  14 neue Tests (`tests/gameMechanic/test_unit_mutations.py`, Matrix
+  directed×resolved×locked×mortal, S166-Regressionstest
+  `test_apply_damage_directed_resolved_regression_s166_26_damage`, Grenzfall-Vollzerstörung,
+  K1-Einzelattacken-Cap, K3-Freiwahl-Gegenbeispiel). Vollsuite nach T2: 2028 passed, Coverage
+  99,18 %, Architektur-Gate 8/8 grün. **T3 (UI, S168, `src/uiLayout/_common.py`
+  `_render_subgroup_selector`/`_render_damage_block`):** bildet den neuen Zwangs-Lock ab — für
+  gelockte Einheiten (Silent King) kein wählbarer Radio-Button mehr für die geschützte Gruppe,
+  stattdessen ein Warnhinweis, der die Pflichtgruppe (Triarchal Menhirs) nennt; nach Depletion
+  der Pflichtgruppe verhält sich der Block wie bei einer Einheit mit nur einer aktiven Gruppe.
+  **Stakeholder-Verifikation S168** (`docs/handoff/S168_B123_ui_verifikation.md`, gelöscht nach
+  Abschluss): Checkpunkt 1 (Regelkonformität Menhir-Lock) bestätigt — „Das Verhalten ist im
+  Vergleich zu vorher nun regelkonform." Kritik aus Checkpunkt 2 (Design-System-Spec-Qualität)
+  und Checkpunkt 3 (Warnhinweis-Wortlaut/Apply-Damage-Uneinheitlichkeit) wurde NICHT hier
+  begraben, sondern als Backlog-Substanz bei B-124 verankert (`backlog_details.md` B-124,
+  Herkunft „T3-V S168"). Belege: `docs/handoff/S166_B123_DIAGNOSE.md`/`_NACHDIAGNOSE.md`
+  (gelöscht nach Abschluss, Root Cause hier archiviert); Stakeholder-Entscheid S165
+  (Explodes-Einordnung). Herkunft: Stakeholder-Ergänzung im S165-Explodes-Entscheid;
+  Root-Cause-Verifikation S166; Core-Fix + UI-Nachzug + Verifikation S168.
+

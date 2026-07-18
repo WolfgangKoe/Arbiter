@@ -5703,8 +5703,8 @@
   "00ebf28c-ce4d-4ba7-a917-6fa2721db173": {
     "started_at": "2026-07-18T18:08:08.352Z",
     "task": "start session. Wir übernehmen Maßnahme 3 aus der Retro. So langsam müssen wir dahin kommen, dass wir UI-Komponenten ver…",
-    "peak_context": 138044,
-    "subagent_share": 66.6716321041354,
+    "peak_context": 140374,
+    "subagent_share": 63.68829885342667,
     "by_tier": {
       "Sonnet": 11744192,
       "Opus": 2224511
@@ -5744,6 +5744,68 @@
         "tier": "Sonnet",
         "peak_context": 139448,
         "started_at": "2026-07-18T18:08:08.352Z"
+      }
+    ]
+  },
+  "6cfc9b70-e0f5-4e02-b0b7-ddab19dca2d6": {
+    "started_at": "2026-07-18T18:59:33.943Z",
+    "task": "start Session. Wir übernehmen keine der Retromaßnahmen aus der letzten Session. Opus soll den Plan für diese Session du…",
+    "peak_context": 96679,
+    "subagent_share": 90.20410390068633,
+    "by_tier": {
+      "Sonnet": 32297910,
+      "Opus": 3248098,
+      "Haiku": 878429
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T4: §7-Spec-Überführung Explodes",
+        "tier": "Sonnet",
+        "peak_context": 107947,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3: B-123 UI + Render-Test",
+        "tier": "Sonnet",
+        "peak_context": 158543,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S168-Planning-Entwurf (Opus)",
+        "tier": "Opus",
+        "peak_context": 111478,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T5: S168 DoD-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 64881,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2: B-123 Core-Fix + Tests",
+        "tier": "Sonnet",
+        "peak_context": 175204,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1: B-123 Regel-Lookup",
+        "tier": "Haiku",
+        "peak_context": 43758,
+        "started_at": "2026-07-18T18:59:33.943Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T5b: S168 Abschluss-Hygiene",
+        "tier": "Sonnet",
+        "peak_context": 99081,
+        "started_at": "2026-07-18T18:59:33.943Z"
       }
     ]
   }

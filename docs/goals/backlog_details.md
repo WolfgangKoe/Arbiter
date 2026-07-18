@@ -560,16 +560,34 @@ Ist-Zustand knapp nachtragen (nicht neu erfinden) im selben Change. Verankert al
 Selbstprüf-Checklistenpunkt in `agent_scopes.md` („Berührte UI-Bauform in
 `design_system.md` §1 registriert?").
 
+**Stakeholder-Kritik (T3-V S168, `docs/handoff/S168_B123_ui_verifikation.md`, gelöscht nach
+Abschluss):** anlässlich der B-123-UI-Verifikation (Silent-King-Subgruppen-Lock) zwei konkrete
+Befunde, die das obige Ratchet-Muster („fehlende Bauform knapp nachtragen") allein nicht löst —
+beide gehören hierher, nicht als eigenes Item, weil sie dieselbe Wurzel treffen (Spec-Qualität
+§1/§4 + Bauform-Uneinheitlichkeit):
+- (a) **Warnhinweis-Text im Subgruppen-Selector kürzen** — der neue „muss laut Regel zuerst
+  vollständig zerstört werden…"-Hinweis ist laut Stakeholder-Zitat „wahnsinnig übertrieben"; Ziel:
+  ein Imperativ-Satz statt Regel-Paraphrase (Vorbild: bestehender „Angeschlagenes Modell … muss
+  zuerst abgehandelt werden."-Hinweis, ► Präfix, kurzer Ton).
+- (b) **Apply-Damage-Bereich vereinheitlichen** — Stakeholder-Zitat: „der 'Apply-Damage'-Bereich
+  ist immer noch nicht wirklich einheitlich. Fürs erste haben wir hier einen Randfall behandelt
+  und man hat ein Regelkonformes Verhalten. Aber geil ist anders." Betrifft dieselbe
+  Detail-Beschreibung oben (§1 „keine schematische Darstellung der UI" — Stakeholder-Zitat:
+  „Ich finde unser Design-System und unsere specs ungenügend.") — die fehlende schematische
+  Bauform-Darstellung in §1.4 ist Teil desselben Befunds, nicht nur die 48-vs-9-Zählung.
+
 **Abhängigkeiten:** Analoges Muster zu B-024 (Kommentar-Hygiene-Ratchet); dauerhafte
 Ratchet-Praxis ohne Enddatum.
 
 **Belege:** `docs/reference/agent_scopes.md` Selbstprüf-Checkliste; `docs/spec/design_system.md`
-§1; Ist-Zahlen (~9 vs. 48) per `grep -rn "^def render_\|^def _render_" src/uiLayout/*.py`.
+§1; Ist-Zahlen (~9 vs. 48) per `grep -rn "^def render_\|^def _render_" src/uiLayout/*.py`;
+Stakeholder-Zitate T3-V S168 (`docs/handoff/S168_B123_ui_verifikation.md`, gelöscht nach
+Abschluss, Belege hier archiviert).
 
 **Benötigte Regeln-Scopes:** —
 
 **Herkunft:** S167-Planning Punkt 2iii (`docs/handoff/S167_PLANNING.md`), Stakeholder-Freigabe
-S167.
+S167; Kritik-Ergänzung T3-V S168.
 
 ## B-025 — Strukturelle Verbesserung Skeleton Platzhalter Fixe Hoehe oder Fragment Isolierung
 
@@ -664,7 +682,8 @@ S167.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** Blocked — nächster Schritt S167: Mockup V3 (7 Korrekturwünsche aus §g) zur Stakeholder-Abnahme, danach Umsetzung
+**Status:** Blocked — §7-Entwurf liegt vor (S168, `design_system.md` §7), wartet auf Abnahme
+(`docs/handoff/S168_SPEC7_ABNAHME.md`), danach Umsetzung
 
 **Tier:** Design-Crew→Executor
 
@@ -2369,61 +2388,3 @@ den sie als generische Infra vorgehalten wird.
 ändern".
 
 **Herkunft:** Review-Befund S163 / Retro M2.
-
----
-
-## B-123 — Schadenszuweisungs-Bug Mehrmodell-Einheiten
-
-[↩ Zeile in backlog.md](backlog.md#b-123)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** M: ~35k (S166-Nachdiagnose: S ≈ 100–120k — unter neuer Richtung für S167 neu zu
-bestätigen)
-
-**Detail-Beschreibung:** Die „Frontmodell"-Schadenszuweisungslogik scheint zu verhindern, dass
-überschüssiger normaler Schaden über das Frontmodell hinaus weitere Modelle derselben Einheit
-tötet — beobachtet am Silent King (S165, Mehrmodell-Einheit mit Menhirs). Eine einzelne Attacke
-muss eine Einheit vollständig zerstören können, wenn genug Schaden zugewiesen wird. Vor dem Fix
-Reproduktion (Testfall mit Mehrmodell-Einheit + Schaden > erstes Modell) und Regelabgleich gegen
-die 9E-Spillover-Regeln nötig: Schaden **einer** Attacke verfällt am Modell (kein Übertrag
-innerhalb derselben Attacke über das getötete Modell hinaus), aber **mehrere** Attacken/Wunden
-müssen nacheinander weitere Modelle töten können — die genaue Abgrenzung vor dem Fix in
-`docs/work/wahapedia_core_rules/` verifizieren, nicht aus dem Gedächtnis.
-
-**S166-Root-Cause (verifiziert, Nachdiagnose):** `_render_damage_block`
-(`src/uiLayout/_common.py:2050–2065`) erzwingt für Mehrgruppen-Einheiten mit >1 lebenden
-Gruppen immer eine Subgruppen-Wahl (`_render_subgroup_selector`, Radio-Default = niedrigste
-Priorität) und setzt `damage_active_group_id`; `apply_damage`
-(`src/gameMechanic/unitMutations.py:169–195`) nimmt dadurch den directed-Zweig, dessen
-`_apply_directed_group_damage` (`unitMutations.py:163–169`) jeden Schaden über den Restpool der
-gewählten Gruppe hinaus verwirft — unabhängig von `resolved`. Der spillover-fähige `else`-Zweig
-(`_apply_group_wound_damage`) ist über die UI praktisch unerreichbar. Repro: 26 Schaden auf
-vollen Silent King → nur Menhirs (10 HP) sterben, Szarekh 16/16 unberührt. Testlücke: kein Test
-für directed + resolved + Schaden > Gruppen-Restpool.
-
-**Stakeholder-Richtung (S166, verbindlich für die S167-Planung):** KEIN pauschaler Spillover für
-normalen Schaden. Die bewusste Subgruppen-Zuweisungslogik (wie bei Einheiten mit mehreren
-verschiedenen Modellen, z. B. Boyz/Nob) soll beibehalten und vereinheitlicht werden — zu klären
-ist, warum sie beim Silent King nicht greift (vermutlich Aufräumen/richtige Funktionswahl; „die
-Funktion ist ja vorhanden"). Regel-Check nötig: die Menhire sollten von Anfang an für den
-initialen Schaden gelockt sein (Szarekh kann nicht als erstes gewählt werden). Dieselbe Funktion
-soll auch für Einheiten mit identischen Modellen gelten (dort triviale Zuweisung).
-
-**Test-Auflage für den S167-Brief:** Testmatrix directed×resolved×locked×mortal inkl. Grenzfall
-Schaden > Gruppen-Restpool.
-
-**Abhängigkeiten:** Keine bekannte — betrifft die Schadenszuweisung in `combat.py`/
-`unitMutations.py`, unabhängig vom Explodes-Re-Scope (B-028c1).
-
-**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht,
-Inhalt hier inline erfasst); `docs/handoff/S166_B123_DIAGNOSE.md` +
-`docs/handoff/S166_B123_NACHDIAGNOSE.md` (gelöscht nach Abschluss, Root Cause hier überführt).
-
-**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Combat-/Schadens-Mechanik".
-
-**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid; Root-Cause-Verifikation S166.

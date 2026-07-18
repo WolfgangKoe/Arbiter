@@ -25,39 +25,45 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S167, 2026-07-18)
+## Aktueller Stand (nach S168, 2026-07-18)
 
-**Review S167: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, Doku/Akzeptanz 25/25).
-Governance-Session (kein `src/`-Code): **Spec-first-Gate** — jede neue ODER geänderte
-UI-Bauform durchläuft erst Spec-Änderung (Mockup + `design_system.md`-Update) zur Abnahme,
-dann Code (`agent_scopes.md` Punkt c) — plus Screenshot-Konvention (e), Diagnose-Ratchet
-(„kein Bug" nur mit echtem Klickpfad-Repro) und **B-124** Design-System-Ratchet (bei jeder
-UI-Berührung Bauform in `design_system.md` §1 nachtragen; Ist: ~9 dokumentierte Bauformen
-vs. 48 Render-Funktionen). **Planner-Tier: ADR-0009** — durchgängig Opus + Lesedisziplin;
-Sonnet-Ausarbeitung nur bei Schreib-Artefakten >~300 Zeilen (Anlass: S167-Planner lief
-regelwidrig auf Sonnet, Drift gegen ADR-0008). **Explodes-Mockup V3 abgenommen** mit 3
-verbindlichen Auflagen (kanonisch in `backlog_details.md` B-028c1 + §h-Antwort in
-`S166_MOCKUP_EXPLODES.md`): ein Hinweiskasten unter der GO-Karte (Blau = Hinweis, kein
-„Resolved"-Status), armyList nicht in der Spalte der Auswahlliste, „D6 Mortal Wounds" über
-den Schadens-Zahlenfeldern. B-123 unangetastet (Budget-Check laut Plan).
+**B-123 komplett** (Core-Fix T2 + UI-Nachzug T3, Stakeholder-verifiziert, archiviert): Root
+Cause war ein per UI erzwungener directed-Zweig, der Schaden über den Restpool der gewählten
+Gruppe hinaus verwarf (S166-Nachdiagnose). T2 (`src/gameMechanic/unitMutations.py`) lässt
+Überschuss jetzt generisch über `_apply_group_wound_damage` spillen und generalisiert
+`get_locked_group` um einen Zwangs-Lock für Einheiten mit `unit.has_per_group_wounds()` (im
+YAML-Bestand nur der Silent King — Szarekh kann nicht mehr vor den Menhirs gewählt werden).
+T3 (`src/uiLayout/_common.py`) bildet den Zwangs-Lock in `_render_subgroup_selector`/
+`_render_damage_block` ab. Stakeholder-Verifikation S168 bestätigt Regelkonformität, äußert
+aber deutliche Kritik an Design-System-Spec-Qualität (§1 keine schematische Bauform-Darstellung)
+und am Warnhinweis-Wortlaut/Apply-Damage-Uneinheitlichkeit — beides bei **B-124** verankert
+(`backlog_details.md`, Herkunft „T3-V S168"), nicht verloren. Details/Belege:
+`docs/goals/backlog_archive.md` Abschnitt „migriert S168".
 
-Frühere Sessions (S60–S166): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+**§7-Explodes-Entwurf steht:** Pflicht-Trigger-Kachel-Spec für `design_system.md` liegt vor
+(`docs/handoff/S168_SPEC7_ABNAHME.md`, NEEDS-DECISION) — Abnahme durch Stakeholder steht noch
+aus, danach erst B-028c1-Code planen.
 
-### ▶ Nächster Schritt (S168)
+**Review S168: GO** (Pflicht-Korrektur aus diesem Abschluss eingelöst: B-123-Stale-Status in
+`backlog_details.md` korrigiert + archiviert). Retro-Maßnahmen liegen als Entscheidungsvorlage
+in `docs/handoff/S168_RETRO.md` (NEEDS-DECISION), noch nicht übernommen.
 
-1. **Retro-Maßnahmen-Entscheid** (`docs/handoff/S167_RETRO.md`) — Tier-Abgleich beim
-   Subagent-Start, Abschluss-Reihenfolge-Klausel.
-2. **B-123-Umsetzung** (erster Task, frischer Kontext; Stakeholder-Richtung + Grenzfall-
-   Testmatrix-Auflage in `backlog_details.md` B-123; Regel-Check Menhir-Lock +
-   Boyz/Nob-Vergleich).
-3. **§7-Spec-Überführung** Pflicht-Trigger-Kachel nach `design_system.md` inkl. der 3
-   V3-Auflagen (Spec-first-Gate!) → danach B-028c1-Umsetzung planen.
-4. Weiteres laut `docs/goals/backlog.md`.
+Frühere Sessions (S60–S167): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
-`S166_MOCKUP_EXPLODES.md` (+ `S167_MOCKUP_EXPLODES_V3.html` + `_V2.html` + Screenshots,
-für die §7-Überführung gebraucht), `S167_REVIEW.md`, `S167_RETRO.md` NEEDS-DECISION —
-Sichtung im S168-Planning.
+### ▶ Nächster Schritt (S169)
+
+1. **Retro-Entscheid** (`docs/handoff/S168_RETRO.md`) — Maßnahmen-Liste sichten, auswählen,
+   übernehmen.
+2. **§7-Abnahme-Entscheid** (`docs/handoff/S168_SPEC7_ABNAHME.md`) — bei Abnahme
+   B-028c1-Code planen (L-Effort → vorher splitten: Schema+Daten / Kachel-UI /
+   auto_explode-GO als eigene Teil-Briefs) + Mockup-Dateien (`S166_MOCKUP_EXPLODES.md`,
+   `S167_MOCKUP_EXPLODES_V3.html`, `_V2.html`, zugehörige Screenshots) löschen.
+3. Weiteres laut `docs/goals/backlog.md`.
+
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S168_SPEC7_ABNAHME.md`,
+`S168_REVIEW.md`, `S168_RETRO.md` je NEEDS-DECISION — Sichtung/Entscheid im S169-Planning.
+Mockup-Dateien S166/S167 (`S166_MOCKUP_EXPLODES.md` + `S167_MOCKUP_EXPLODES_V3.html` + `_V2.html`
++ Screenshots) bleiben liegen bis zur §7-Abnahme.
 
 ---
 
