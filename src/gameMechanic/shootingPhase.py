@@ -19,6 +19,7 @@ from uiLayout._common import (
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
+    render_mortal_wounds_cards_for_destroyed,
     render_player_column,
 )
 
@@ -83,6 +84,7 @@ class ShootingPhaseHandler:
             return
 
         st.divider()
+        render_mortal_wounds_cards_for_destroyed(first, second)
 
         # Model-group flow: the defender column shows the group attack assignment
         group_override = None

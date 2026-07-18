@@ -25,43 +25,40 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S164, 2026-07-18)
+## Aktueller Stand (nach S165, 2026-07-18)
 
-**Review S164: NO-GO → minimal-GO-Auflagen umgesetzt** (2015 passed, Coverage 99,14 %,
-Arch 8 grün, mypy 0, black/ruff sauber). Vier Tasks, parallelisiert per Stakeholder-Anweisung:
+**Review S165: GO** (2018 passed, Coverage 99,14 %, Arch 8/8, mypy 0). Alle 4 S164-Retro-
+Maßnahmen umgesetzt + in `agent_scopes.md` verankert. B-028c1: Sichtbarkeits-Bug behoben
+(Diagnose 1a: Group-Flow-Früh-Return `fightPhase.py` + `inactive_override`-Zwilling; Fix 1b:
+selektionsunabhängiger Scan `render_mortal_wounds_cards_for_destroyed` in 5 Phasen inkl.
+psychicPhase, 4 alte Call-Sites entfernt, Erreichbarkeits-Tests mit Stash-Beweis). UI-
+Verifikation Runde 1 dennoch **negativ** → Fable-Direktanalyse: fachliche Fehlklassifikation —
+Vengeance ist die Standard-Familie **Explodes** (Pflicht-Trigger, KEINE GO; Wahapedia wörtlich
+„it explodes", im YAML-rule_text verloren); dazu Design-System-Verstoß (Vollbreiten-Anker statt
+Trigger-Ort §6.2) und Engine-Selbstwurf gegen „App würfelt nicht" (§6.3). Stakeholder folgt
+den Empfehlungen: B-028c1 re-scoped auf „Explodes-Familie" (Blocked bis Mockup-Abnahme),
+Governance-Ratchet in `agent_scopes.md` (UI-Briefs zitieren design_system-§, fachliche
+Einordnung mit Wahapedia-Zitat, Mockup-Gate, Reviewer-Punkt Design-Konformität). Neue Items
+B-122 (Menhir-LP 5 vs. 7, Scraper-Lücke) + B-123 (Schadens-Spillover Mehrmodell-Einheiten).
 
-- **T0 DONE — B-028b/B-119 archiviert** nach positiver UI-Verifikation (S163-Handoff gelöscht,
-  Archiv-Gruppe „Aus der ID-indizierten Liste (migriert S164)" in `backlog_archive.md`).
-- **T1 DONE — B-028c1 Kernlogik:** generischer `mortal_wounds`-Handler in `abilityEngine.py`
-  (`resolve_mortal_wounds_effect`/`mortal_wounds_target`), `Effect` um
-  `roll_threshold`/`roll_type` erweitert, Loader-Parsing, 11 Tests, R-COMBAT-38–40.
-- **T2 REDUZIERT + UI DEFEKT:** Regelkonformitäts-Befund aus T1 → NEEDS-DECISION-Entscheid:
-  nur `vengeance_of_the_enchained` verdrahtet (`_render_mortal_wounds_on_destroy_card` in
-  `_common.py` + `fightPhase.py`; YAML-Datenbug unerfüllbare `conditions` behoben).
-  Stakeholder-Verifikation 3× negativ — **Review-Befund 1 (GO-kritisch): Karte hat keinen
-  verlässlichen Sichtbarkeits-Pfad** (Anker hängt an Selektion, zerstörte Einheiten sind über
-  `unitCard.py:232` nicht selektierbar). Ehrlich re-scoped statt als verifiziert eingecheckt;
-  bekannte Zusatz-Lücke: psychicPhase-Spalte nicht verdrahtet.
-- **F1/F2-Entscheid (Mailbox):** `infused_madness` nur YAML-Datenkorrektur (echte Fähigkeit =
-  aktivierter Buff mit Risiko-Roll; Verdrahtung = eigenes Mini-Feature ~15–20k);
-  `arc_fields`/`wrath_of_the_seraptek` zurückgestellt bis externe Wortlaut-Verifikation
-  (IA-Compendium, lokal nicht belegt, in keinem Roster).
-- **Retro-Lehren (Entscheid offen, `S164_RETRO.md`):** Executor-Budget-Sprengung (T2 ~311k vs.
-  ~20k — Live-Verifikations-Schleife + Session-Limit-Abbruch), Formatter-Pflichtschritt fehlte,
-  isolierter Render-Test bewies Erreichbarkeit nicht.
+Frühere Sessions (S60–S164): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-Frühere Sessions (S60–S163): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+### ▶ Nächster Schritt (S166)
 
-### ▶ Nächster Schritt (S165)
-
-1. Retro-Maßnahmen-Entscheid `docs/handoff/S164_RETRO.md` sichten.
-2. **Vengeance-Sichtbarkeits-Bug (Top-Priorität)** — Lead in
-   `docs/goals/backlog_details.md` B-028c1 (Selektions-Anker/`unitCard.py:232`).
+1. **Mockup „Pflicht-Trigger-Kachel" (Explodes)** zur Stakeholder-Abnahme — erster Schritt vor
+   jedem Code (Mockup-Gate). Danach Explodes-Paket: Schema (`effect.type: explode`,
+   `mandatory`-Achse), Komponente + Anker, Tisch-Wurf-Baustein, `auto_explode`-GO (CP-Kosten,
+   3 CP TITANIC), Datennacherfassung beider Fraktionen — Details B-028c1 in
+   `docs/goals/backlog_details.md`.
+2. Neue Items B-122 (Menhir-LP) + B-123 (Schadens-Spillover) einplanen.
 3. Weiteres laut `docs/goals/backlog.md`.
 
+**Offen:** Memory-Ergänzung `feedback_test_mandate` — Freigabe noch ausstehend.
+
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING) ·
-`S164_B028c1_ui_verifikation.md` (AWAITING-VERIFICATION, Ergebnis negativ — s. Zeile 2) ·
-`S164_RETRO.md` (NEEDS-DECISION).
+`S165_RETRO.md` (NEEDS-DECISION, Sichtung Start S166 — enthält DoR-Maßnahme,
+Budget-Kalibrierung, Verifikations-Vorlage, Memory-Entscheid) — alle übrigen
+S164/S165-Marker überführt und gelöscht.
 
 ---
 

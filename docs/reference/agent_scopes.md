@@ -137,6 +137,25 @@ genannten Dateien löschen; jede andere Löschung ist Abbruch + Rückfrage." Anl
 ein Doku-Agent löschte unbeauftragt eine NEEDS-DECISION-Datei und regenerierte
 Metrics-Dateien, die nicht Teil des Auftrags waren.
 
+## Standardsatz für UI-/Ability-Briefs (Retromaßnahme S165 — PFLICHT)
+
+Anlass: S165 B-028c1 — fünf Sessions Ping-Pong (Vollbreiten-Kachel, Design-System-Bruch)
+plus fachliche Fehlklassifikation (GO-Karte für eine Pflicht-Trigger-Ability, die
+„Explodes"-Familie); keine Verifikationsrunde stellte die Grundfrage „ist das überhaupt
+optional?" bzw. „ist das die richtige Bauform?".
+
+- **(a) UI-Brief-Pflicht:** Jeder UI-verdrahtende Brief MUSS Komponente + Anker mit
+  §-Verweis auf `docs/spec/design_system.md` benennen. Passt keine bestehende Komponente
+  → STOP + NEEDS-DECISION mit Komponenten-Vorschlag, nie Ad-hoc-Bauform.
+- **(b) Ability-Brief-Pflicht:** Jeder Ability-Brief MUSS die fachliche Einordnung
+  (optional/GO vs. Pflicht-Trigger vs. passiv) mit wörtlichem Wahapedia-Zitat belegen.
+- **(c) Mockup-Gate:** Neue UI-Bauformen durchlaufen erst ein Mockup zur
+  Stakeholder-Abnahme, dann Code — kein Design ohne Schema. Abgenommene Mockups wandern
+  in die zuständige Spec (`design_system.md`).
+- **(d) Reviewer-Checkliste:** Jede Review-Checkliste (Subagent- wie Selbstprüfung)
+  bekommt den expliziten Punkt „Design-System-Konformität (Komponente, Anker, Wortlaut)
+  geprüft" — s. Ergänzung in der Selbstprüf-Checkliste unten.
+
 ## Subagent-Brief — Pflichtfelder
 
 Jeder Koordinator-Brief an einen Subagenten enthält diese Felder (keine Felder auslassen):
@@ -161,6 +180,9 @@ Kein Volltext-Dump. Pfade + Marker zurückgeben, keine langen Inhalte.
 Vollsuite/Langläufer im VORDERGRUND abwarten — Endbericht in DERSELBEN Antwort
 wie das Suite-Ende, nie vorher zurückkehren (S121: zwei Leerläufe durch
 vorzeitige Rückkehr bei Hintergrund-pytest).
+5. `pre-commit run --files <geänderte Dateien>` laufen lassen + Ergebnis (sauber/Diff) im
+   Bericht nennen (Retro-M3, S164 — DoD-Punkt 5 stand im Brief, wurde aber nicht ausgeführt:
+   5× E501 + black-Diff blieben unentdeckt bis zum Review).
 
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
@@ -197,6 +219,10 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Anzeige-Pfad (bei Fixes mit sichtbarem UI-Effekt): Beleg umfasst den *angezeigten*
       Wert (HTML-Output-Test des Render-Pfads), nicht nur die Berechnungsfunktion —
       Anzeige-Code kann lokal neu rechnen (S122-Befund: Eff.-Zeile ignorierte resolve_save-Floor)
+      — bei neuen Render-Verdrahtungen zusätzlich ein Test, der den Render-**Einstiegspfad**
+      (die Spaltenfunktion selbst, inkl. ihrer Gate-Bedingung) mit einem realistischen
+      `session_state`-Fixture durchläuft, nicht nur die isolierte Render-Funktion direkt
+      aufruft (S164-Lehre)
 - [ ] Heimat: neuer Code sitzt im richtigen Modul
 - [ ] Gates: pytest grün, Coverage-Floor ≥ 99 % gehalten, keine vorher-grünen Tests rot
 - [ ] mypy: `python tools/mypy_gate.py` ausgeführt, Fehlerzahl nicht gestiegen (S128)
@@ -207,6 +233,8 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Handoff-Marker: jede nach docs/handoff/ geschriebene Datei hat Zeile 1
       `STATUS: NEEDS-DECISION|ANSWERED|DONE|AWAITING-VERIFICATION` — der Koordinator nennt
       den Marker im Brief (S131: zwei rote Doku-Gates nur durch fehlende Marker)
+- [ ] Design-System-Konformität (Komponente, Anker, Wortlaut) geprüft (Retro S165 — B-028c1
+      Vollbreiten-Kachel + falsche GO-Karte für einen Pflicht-Trigger)
 ```
 
 ## Grundannahmen-Block in Konzept-Aufträgen (Retromaßnahme S131 — PFLICHT)
@@ -275,6 +303,13 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
+
+- **Budget-Profil für UI-Verdrahtungs-Tasks (Retro-M2, S164):** UI-Verdrahtungs-Briefs und
+  die zugehörige Live-UI-Verifikation werden als **getrennte** Aufträge vergeben.
+  Verifikations-Rückmeldungen sind auf **max. 2 Runden** gedeckelt — danach geht der Befund
+  als Handoff an den Koordinator zurück statt einer dritten Nachbesserungsrunde im selben
+  Executor-Kontext. Anlass: S164 — ein T2-Executor verbrauchte ~311k Token gegen ~20k
+  Budget durch eine Live-Verifikations-Schleife mit 3 Runden + Session-Limit-Abbruch/Resume.
 
 - **Handoff-Lifecycle: STATUS: DONE = Datei löschen:** `STATUS: DONE` in einer Handoff-Datei
   bedeutet, dass der Subagent diese Datei **im selben Commit-Schritt löschen muss**, in dem

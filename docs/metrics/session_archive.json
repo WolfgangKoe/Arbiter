@@ -5487,8 +5487,8 @@
   "b9822b92-dfaa-40b0-b6dd-57a41386d491": {
     "started_at": "2026-07-17T21:54:05.167Z",
     "task": "Freigabe, AUfgaben Parallelisieren.",
-    "peak_context": 105243,
-    "subagent_share": 95.67843706233738,
+    "peak_context": 110278,
+    "subagent_share": 94.67822464619708,
     "by_tier": {
       "Sonnet": 95109074,
       "Opus": 3464583
@@ -5542,6 +5542,75 @@
         "tier": "Sonnet",
         "peak_context": 113161,
         "started_at": "2026-07-17T21:54:05.167Z"
+      }
+    ]
+  },
+  "be5c7ef6-c2d9-47ad-8f8d-45e5e3d572f9": {
+    "started_at": "2026-07-18T07:08:39.535Z",
+    "task": "start session",
+    "peak_context": 158033,
+    "subagent_share": 83.9101971105387,
+    "by_tier": {
+      "Sonnet": 42591280,
+      "Opus": 1324796,
+      "Haiku": 1037973
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1a: Vengeance-Sichtbarkeits-Diagnose",
+        "tier": "Sonnet",
+        "peak_context": 114760,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S165-Abschluss-Review (Opus)",
+        "tier": "Opus",
+        "peak_context": 62426,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review-Befunde 1+2 bereinigen",
+        "tier": "Haiku",
+        "peak_context": 34284,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1b: Vengeance-Fix Variante B",
+        "tier": "Sonnet",
+        "peak_context": 188319,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 1c: Verifikations-Handoff anlegen",
+        "tier": "Haiku",
+        "peak_context": 26644,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S165-Artefakt-Überführung (Batch)",
+        "tier": "Sonnet",
+        "peak_context": 119330,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Task 0: Retro-Maßnahmen verankern",
+        "tier": "Sonnet",
+        "peak_context": 49908,
+        "started_at": "2026-07-18T07:08:39.535Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S165-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 150914,
+        "started_at": "2026-07-18T07:08:39.535Z"
       }
     ]
   }

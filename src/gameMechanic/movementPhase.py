@@ -37,6 +37,7 @@ from gameObjects.unit import TriggeredEffect, Unit
 from uiLayout._common import (
     lookup,
     render_go_card,
+    render_mortal_wounds_cards_for_destroyed,
     render_player_column,
     render_reactive_stratagem_box,
     render_unit_selectbox,
@@ -67,6 +68,7 @@ class MovementPhaseHandler:
         first: str = state["first_player"]
         second: str = state["second_player"]
 
+        render_mortal_wounds_cards_for_destroyed(first, second)
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(first, state, active_content=_active_movement)

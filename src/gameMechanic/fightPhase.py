@@ -26,13 +26,13 @@ from gameObjects.stratagem import Stratagem
 from gameObjects.unit import Unit
 from uiLayout._common import (
     _maybe_flag_transport_destroyed,
-    _render_mortal_wounds_on_destroy_card,
     _render_pending_emergency_disembarkation,
     group_flow_attacker,
     lookup,
     render_attack_resolution,
     render_group_assignment,
     render_group_cards,
+    render_mortal_wounds_cards_for_destroyed,
     render_reactive_stratagem_box,
     render_unit_selectbox,
     state_badges_html,
@@ -384,6 +384,7 @@ class FightPhaseHandler:
             return
 
         _maybe_render_mortal_undo(state)
+        render_mortal_wounds_cards_for_destroyed(first, second)
 
         # Priority goes to the inactive (non-active) player.
         # Rerun: the left army column already rendered without a fight player.
@@ -438,7 +439,6 @@ def _render_fight_column(
             if badges:
                 st.markdown(badges, unsafe_allow_html=True)
             _active_fight(faction, uid, unit, unit_state, state, first, second)
-            _render_mortal_wounds_on_destroy_card(faction, uid, unit)
         else:
             st.caption("← Select a unit from your army list to fight.")
     else:
@@ -486,7 +486,6 @@ def _render_fight_column(
                 if badges:
                     st.markdown(badges, unsafe_allow_html=True)
                 _inactive_target_stats(faction, uid, unit, unit_state)
-                _render_mortal_wounds_on_destroy_card(faction, uid, unit)
                 st.divider()
                 wound_adjustment_buttons(faction, uid, unit)
         elif st.session_state.get("selected_unit"):

@@ -457,6 +457,26 @@ def _render_mortal_wounds_on_destroy_card(faction: str, uid: str, unit: Unit) ->
         st.rerun()
 
 
+def render_mortal_wounds_cards_for_destroyed(first: str, second: str) -> None:
+    """Scan both factions' full unit lists for a destroyed ``mortal_wounds`` GO
+    card, independent of unit selection/target designation (B-028c1 S165).
+
+    ``_render_mortal_wounds_on_destroy_card`` used to be called only from the
+    selection-driven branches of ``render_player_column``/``_render_fight_column``
+    — reached solely when the unit in question happened to be the selected unit
+    or a designated target. A model-group early return (e.g. fightPhase.py's
+    group-flow branch, or shootingPhase.py's ``inactive_override``) can replace
+    an entire column before those branches run at all, hiding the card even
+    though the unit ``destroyed`` state is unaffected. Calling this once per
+    phase, before any column/selection branching, makes the card reachable
+    regardless of what is currently selected. The card's own gates (destroyed,
+    ability ownership) are the only filters — no logic is duplicated here.
+    """
+    for faction in (first, second):
+        for uid, unit in zip(unit_keys_for(faction), units_list_for(faction)):
+            _render_mortal_wounds_on_destroy_card(faction, uid, unit)
+
+
 # ---------------------------------------------------------------------------
 # Standard player-column renderer (shared by all handlers)
 # ---------------------------------------------------------------------------
@@ -507,7 +527,6 @@ def render_player_column(
             if badges:
                 st.markdown(badges, unsafe_allow_html=True)
             active_content(faction, uid, unit, unit_state, state)
-            _render_mortal_wounds_on_destroy_card(faction, uid, unit)
         else:
             st.caption("← Select a unit from your army list.")
 
@@ -527,7 +546,6 @@ def render_player_column(
                     st.markdown(badges, unsafe_allow_html=True)
                 if inactive_content is not None:
                     inactive_content(faction, uid, unit, unit_state)
-                _render_mortal_wounds_on_destroy_card(faction, uid, unit)
                 if show_wound_buttons:
                     st.divider()
                     wound_adjustment_buttons(faction, uid, unit)

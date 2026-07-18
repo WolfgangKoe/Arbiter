@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 01:46 CEST
+Stand: 2026-07-18 10:57 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-17 23:54 b982  ████████░░░░ 105k ✅    ██████  96%    ············
+07-18 09:08 be5c  ████████████ 158k ⛔    █████░  84%    ············
+         SA_1·  █████████░░░ 115k ✅    Task 1a: Vengeance-Sichtbarkeits-D…
+         SA_2·  █████░░░░░░░  62k ✅    S165-Abschluss-Review (Opus)
+         SA_3·  ███░░░░░░░░░  34k ✅    Review-Befunde 1+2 bereinigen
+         SA_4·  ████████████ 188k ⛔    Task 1b: Vengeance-Fix Variante B
+         SA_5·  ██░░░░░░░░░░  27k ✅    Task 1c: Verifikations-Handoff anl…
+         SA_6·  ██████████░░ 119k ✅    S165-Artefakt-Überführung (Batch)
+         SA_7·  ████░░░░░░░░  50k ✅    Task 0: Retro-Maßnahmen verankern
+         SA_8·  ████████████ 151k ⛔    S165-Planning-Entwurf erstellen
+----------------- ---------------------- -------------- ------------
+07-17 23:54 b982  █████████░░░ 110k ✅    ██████  95%    ············
          SA_1·  ████████░░░░  96k ✅    S164 Abschluss: Lint-Fix + Re-Scope
          SA_2·  ████████████ 308k ⛔    T2+T3 Vengeance Call-Site wiring
          SA_3·  ████████████ 151k ⛔    T1 mortal_wounds-Handler Kernlogik
@@ -876,3 +886,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S162 (2026-07-17)** B-115 Invuln-Block auf WOUND-Muster (sichtbestätigt beide Label-Fälle); B-105/B-109 DONE, B-043 überholt; B-119-Referenz korrigiert; Vollsuite-Klausel Parallel-Executoren
 - **S163 (2026-07-17)** mypy 26->0 (Baseline 0), gloom_prism auf Ability-Infrastruktur (B-028b, B-119 Fall b via D-1=A), Planungs-Vollständigkeits-Klausel verankert; Review GO
 - **S164 (2026-07-18)** mortal_wounds-Handler (T1) + Vengeance-Verdrahtung (UI defekt, re-scoped); B-028b/B-119 archiviert; infused_madness YAML-Korrektur; arc_fields/wrath zurückgestellt
+- **S165 (2026-07-18)** Vengeance visibility fix (selection-independent scan, 5 phases), UI-verification negative -> explodes re-scope (mandatory trigger, not GO), design-system governance ratchet, DoR measure proposed

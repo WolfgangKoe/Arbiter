@@ -22,6 +22,7 @@ from uiLayout._common import (
     lookup,
     render_inline_command_reroll,
     render_melee_engagements,
+    render_mortal_wounds_cards_for_destroyed,
     render_player_column,
     render_reactive_stratagem_box,
 )
@@ -40,6 +41,7 @@ class ChargePhaseHandler:
         step: int = st.session_state.get("charge_phase_step", 1)
 
         if step == 1:
+            render_mortal_wounds_cards_for_destroyed(first, second)
             col1, col2 = st.columns(2)
             with col1:
                 render_player_column(

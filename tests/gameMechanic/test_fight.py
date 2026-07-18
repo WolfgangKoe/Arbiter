@@ -10,9 +10,13 @@ from unittest.mock import MagicMock
 sys.modules.setdefault("streamlit", MagicMock())
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
+import gameMechanic.abilityEngine as _eng  # noqa: E402
 import gameMechanic.fightPhase as fp  # noqa: E402
+import gameMechanic.gameState as _gs  # noqa: E402
+import uiLayout._common as common  # noqa: E402
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack  # noqa: E402
 from gameMechanic.fightPhase import _dice_max, _is_target_engaged, can_fight  # noqa: E402
+from gameObjects.loader import load_roster, load_unit_catalog  # noqa: E402
 
 
 class FakeSessionState(dict):
@@ -224,3 +228,105 @@ class TestRenderMeleePairsDuplicateSquad:
 
         assert any("Necron Warriors" in c and "Boyz" in c for c in markdown_calls)
         assert not any("#1" in c for c in markdown_calls)
+
+
+# ---------------------------------------------------------------------------
+# B-028c1 S165 — mortal_wounds-on-destroy card reachability through the real
+# phase entry point (FightPhaseHandler.render_active), not just the isolated
+# card function. Diagnosed in S165 Task 1a: fightPhase.py's group-flow early
+# return (the non-fighting column renders render_group_assignment(...) and
+# returns) used to bypass the card's old per-column call site entirely before
+# it was ever reached. The fix moves the card scan
+# (render_mortal_wounds_cards_for_destroyed) to render_active, before any
+# column/selection branching, so it fires regardless of what is selected.
+# ---------------------------------------------------------------------------
+
+SILENT_KING = "wh40k_9e.necrons.unit.the_silent_king"
+
+
+def _silent_king_with_resolved_groups():  # type: ignore[no-untyped-def]
+    """Load Silent King via load_roster() (not load_unit_catalog() alone) — only
+    load_roster() resolves model_group_specs into the runtime model_groups field
+    (loader.py:1232-1237). A catalog-only Unit has model_groups == [], which
+    would make group_flow_attacker() always return None — a test artifact that
+    would silently hide this regression rather than reproduce it (S165 Task 1a
+    testing pitfall)."""
+    repo_root = Path(__file__).parent.parent.parent
+    catalog = load_unit_catalog("necrons")
+    matched, unmatched = load_roster(
+        repo_root / "data/rosters/necrons_1500pts_silent_king.yaml", catalog
+    )
+    assert not unmatched, unmatched
+    return next(u for u, _n in matched if u.id == SILENT_KING)
+
+
+class TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn:
+    def test_render_active_shows_card_despite_group_flow_early_return(self, monkeypatch) -> None:
+        """Diagnosis Scenario B, reproduced end-to-end: the active fight side has
+        a still fight-eligible model_groups attacker (Silent King) selected; the
+        opposing side has its OWN destroyed Silent King (a mirror-match instance,
+        the only unit in this data set with a `model_destroyed`-triggered
+        mortal_wounds ability) sitting in selected_targets. Before the fix, the
+        opposing column's group-flow branch returned before ever reaching the
+        card check — the card never appeared. It must now appear regardless,
+        because the scan runs once in render_active before either column."""
+        silent_king = _silent_king_with_resolved_groups()
+        assert silent_king.model_groups, "fixture must resolve model_groups via load_roster()"
+
+        session = FakeSessionState(
+            first_player="Necrons",
+            second_player="NecronsMirror",
+            active="Necrons",
+            fight_current_player="Necrons",
+            selected_unit=("Necrons", SILENT_KING),
+            selected_targets=[("NecronsMirror", SILENT_KING)],
+            selected_model_group=None,
+            group_targets={},
+            pending_transport_destroyed=None,
+            pending_mortal_undo=None,
+            pending_triggered_relic=None,
+            attack_declaration={},
+            phase_idx=6,  # fight
+            round=3,
+            used_ability_ids={},
+            ability_use_anchors={},
+            pending_mortal_wounds_ability=None,
+            p1_faction_dir="necrons",
+            p2_faction_dir="necrons",
+            p1_units_list=[silent_king],
+            p1_unit_keys=[SILENT_KING],
+            p2_units_list=[silent_king],
+            p2_unit_keys=[SILENT_KING],
+            p1_units={
+                SILENT_KING: {
+                    "destroyed": False,
+                    "in_reserve": False,
+                    "in_melee": True,
+                    "turn_flags": {"charged": True, "fought": False},
+                }
+            },
+            p2_units={SILENT_KING: {"destroyed": True, "in_reserve": False, "turn_flags": {}}},
+        )
+        fp.st.session_state = session
+        common.st.session_state = session
+        _gs.st.session_state = session
+        _eng.st.session_state = session
+
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+        # Short-circuit the heavyweight group-declaration UI on both sides — it
+        # is not the subject under test (covered elsewhere) and would otherwise
+        # require simulating full widget interaction with a mocked streamlit.
+        monkeypatch.setattr(fp, "render_group_cards", lambda *a, **k: None)
+        monkeypatch.setattr(fp, "render_group_assignment", lambda *a, **k: None)
+        monkeypatch.setattr(fp.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+        # A prior test in this module (TestRenderMeleePairsDuplicateSquad) leaves
+        # a strict lambda on the shared fp.st mock's `markdown` attribute that
+        # rejects kwargs — reset it here to a permissive no-op for this test.
+        monkeypatch.setattr(fp.st, "markdown", lambda *a, **kw: None)
+
+        fp.FightPhaseHandler().render_active(
+            {"first_player": "Necrons", "second_player": "NecronsMirror", "round": 3}
+        )
+
+        assert any(k.get("name") == "Vengeance of the Enchained" for k in captured)

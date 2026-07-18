@@ -3625,3 +3625,50 @@ def test_mortal_wounds_on_destroy_card_hidden_for_unit_without_the_ability(monke
     common._render_mortal_wounds_on_destroy_card("Necrons", warriors_id, warriors)
 
     assert captured == []
+
+
+# ---------------------------------------------------------------------------
+# render_mortal_wounds_cards_for_destroyed (B-028c1 S165) — the selection-
+# independent scan that replaced the 4 removed per-column call sites in
+# render_player_column/_render_fight_column. Its own contract: visit every
+# unit of both factions and delegate to the (already-gated) per-unit card
+# check — no selection/target dependency, no gate logic duplicated here.
+# ---------------------------------------------------------------------------
+
+
+def test_render_mortal_wounds_cards_for_destroyed_scans_both_factions(monkeypatch) -> None:
+    unit_a = SimpleNamespace(id="u1", name_en="Unit A")
+    unit_b = SimpleNamespace(id="u2", name_en="Unit B")
+    monkeypatch.setattr(
+        common, "unit_keys_for", lambda player: ["u1"] if player == "Necrons" else ["u2"]
+    )
+    monkeypatch.setattr(
+        common, "units_list_for", lambda player: [unit_a] if player == "Necrons" else [unit_b]
+    )
+    seen: list[tuple[str, str]] = []
+    monkeypatch.setattr(
+        common,
+        "_render_mortal_wounds_on_destroy_card",
+        lambda faction, uid, unit: seen.append((faction, uid)),
+    )
+
+    common.render_mortal_wounds_cards_for_destroyed("Necrons", "Orks")
+
+    assert seen == [("Necrons", "u1"), ("Orks", "u2")]
+
+
+def test_render_mortal_wounds_cards_for_destroyed_shows_card_independent_of_selection(
+    monkeypatch,
+) -> None:
+    """Regression for the actual bug: the scan must reach a destroyed unit's
+    card even when it is NEITHER the selected_unit NOR a designated target —
+    the state the 4 removed call sites required."""
+    session, unit = _silent_king_session(destroyed=True)
+    session.selected_unit = None
+    session.selected_targets = []
+    captured: list[dict] = []  # type: ignore[type-arg]
+    monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+    common.render_mortal_wounds_cards_for_destroyed("Necrons", "Orks")
+
+    assert any(k["name"] == "Vengeance of the Enchained" for k in captured)

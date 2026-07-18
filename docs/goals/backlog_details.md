@@ -608,19 +608,44 @@ am Anfang der Beschreibungsspalte.
 
 **Revidierte Gesamtschätzung:** ~135–155k statt der ursprünglich genannten ~100k+ (Grund: granulare Aufschlüsselung der c-Gruppe ergibt ~85–105k statt ~50k+; a+b+c1 = ~70–75k, c2–c5 = ~65–75k). Deutlich über eine Session hinaus, aber genau dafür ist der Sessionschnitt gedacht (7 unabhängig freigebbare Teil-Tasks statt ein Monolith). **Für S158 vorgesehen (bei Freigabe):** B-028a, danach B-028b. B-028c1–c5 werden als neue Backlog-Zeilen ergänzt, aber nicht vor S159 beauftragt.
 
-## B-028c1 — Vier mortal wounds GOs
+## B-028c1 — Explodes-Familie (Destruction-Trigger)
 
 [↩ Zeile in backlog.md](backlog.md#b-028c1)
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** In Arbeit — Vengeance verdrahtet, UI defekt (S164-Review #1); restliche 3 GOs bleiben `ToDo`, siehe unten
+**Status:** Blocked — nächster Schritt S166: Mockup „Pflicht-Trigger-Kachel" zur Stakeholder-Abnahme, danach Umsetzung
 
-**Tier:** Executor
+**Tier:** Design-Crew→Executor
 
-**Effort:** ~20–25k (M)
+**Effort:** ~20–25k (M) — nach Mockup neu schätzen (Scope gewachsen: `auto_explode`-GO + Datennacherfassung beider Fraktionen)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (Call-Sites), `src/gameMechanic/abilityEngine.py` (Effekt-Handler), `data/wh40k_9e/necrons/unit_abilities.yaml` (4 Einträge). Vier reaktive GOs mit `mortal_wounds`-Effekt implementieren: `vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`. Ein gemeinsamer Effekt-Handler (Dispatch `abilityEngine.py`, ähnlich den bestehenden Stratagem-Handlern), vier separate Call-Sites (bewegungsphasen-/Kampfphasen-Auslöser je nach GO). Basis für c2–c5 (alle brauchen B-028a+B-028b und jede einen eigenen Effekt-Handler).
+**Re-Scope S165 (Fable-Direktanalyse, Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst)):** B-028c1 hieß ursprünglich „4× `mortal_wounds`-GOs" und war als optionale Gefechtsoption geplant/umgesetzt. Fachlicher Befund: `vengeance_of_the_enchained` (Wahapedia `wahapedia_necrons/units_all.txt:238`: „On a 4+ **it explodes**…") gehört zur Standard-Familie **Explodes** (Fahrzeuge; C'tan als „Reality Unravels") — ein **Pflicht-Trigger** bei Zerstörung, keine GO (Würfeln ist Pflicht, kein Verwenden/Nicht-Verwenden-Entscheid). Die GO-Karte kann einen Pflicht-Trigger strukturell nicht abbilden.
+
+**Neuer Scope (Stakeholder-Entscheid, „Ergebnis"-Abschnitt der NEEDS-DECISION-Datei):**
+1. Schema-Erweiterung: `effect.type: explode` mit `roll_threshold`/`radius`/`damage` aus YAML, neue Schema-Achse `mandatory: true|false` für triggered abilities.
+2. Neue Design-System-Komponente „Pflicht-Trigger-Kachel" (§7 `design_system.md`): Anker = Eintrag der zerstörten Einheit (§6.2-konform, NICHT Vollbreite); Tisch-Wurf-Baustein (§6.3) statt Engine-Selbstwurf — Rückbau des D6-Würfelns in `resolve_mortal_wounds_effect` (Verstoß gegen „Die App würfelt nicht", §6.3). Soll-Ablauf: Einheit zerstört → Pflicht-Kachel am Eintrag (kein [Use]) → Tisch-Wurf-Eingabe „Explodes roll (D6)" gegen Schwelle aus YAML → bei Erfolg Multi-Select betroffener Einheiten beider Armeen (Reichweite misst der Tisch) → Schadens-Eintrag je Einheit (Tischwurf) → anwenden; explizite Erledigung auch bei Nicht-Explodieren (Button „does not explode"), kein stilles Verschwinden.
+3. **Zusätzlich eigene GO** für das `auto_explode`-Stratagem (`necrons/stratagems.yaml:485`, „Do not roll to see if that model explodes: it does so automatically") mit CP-Kosten (1 CP, 3 CP bei TITANIC) — dockt an die Explode-Mechanik an, ist selbst aber eine echte Gefechtsoption.
+4. Alle Explodes-Träger beider Fraktionen wortgetreu aus Wahapedia nacherfassen: Necrons — Command Barge/Triarch Stalker/Spyders/Reanimator (6 → 3"/6" → 1/D3 MW), C'tan (4+ → 6" → D3), Silent King/Tesseract Vault (4+ → 2D6" → D6); Ork-Kandidaten separat prüfen. Korrektur des verkürzten Vengeance-`rule_text` in `unit_abilities.yaml:391` (fehlendes „it explodes").
+
+**Erster Schritt S166:** Mockup „Pflicht-Trigger-Kachel" zur Stakeholder-Abnahme (Mockup-Gate, `agent_scopes.md`); danach das Umsetzungspaket (Punkte 1+2+4) + separates GO-Item für `auto_explode` (Punkt 3).
+
+**Was aus dem S165-Stand bleibt (kein Revert):** Der selektionsunabhängige Scan
+(`render_mortal_wounds_cards_for_destroyed`, s. Vorgeschichte unten) + die Erreichbarkeits-Tests
+sind für einen Pflicht-Trigger genau die richtige Infrastruktur — ein Pflicht-Trigger darf erst
+recht nicht an Selektions-Ästen hängen. Ersetzt wird: die gerenderte Komponente (GO-Karte →
+Pflicht-Trigger-Kachel), der Anker (Vollbreite → Einheiten-Eintrag), die Würfel-Logik
+(Engine-Wurf → Tisch-Wurf-Eingabe).
+
+**UI-Verifikation Runde 1 (S165) — negativ, Ursache Fehlklassifikation:** Stakeholder-Befund
+(Screenshot 2026-07-18 10-20-01): Karte rendert als Vollbreiten-Kachel oberhalb der
+Zwei-Spalten-Aufteilung (§6.2-Verstoß: reaktive Karten NUR inline am Trigger-Ort) UND zeigt einen
+[Use]-Button für einen Pflicht-Trigger (fachlich falsch). Ursache: Der Backlog-Zuschnitt selbst
+benannte die Familie falsch („GOs" statt Pflicht-Trigger); kein Brief prüfte die fachliche
+Einordnung oder zitierte `design_system.md` für die Platzierung — Governance-Ratchet dagegen jetzt
+in `agent_scopes.md` verankert.
+
+**Vorgeschichte (S164–S165, vor dem Re-Scope) — Detail-Beschreibung ursprünglicher Zuschnitt:** Betroffene Dateien: `src/uiLayout/_common.py` (Call-Sites), `src/gameMechanic/abilityEngine.py` (Effekt-Handler), `data/wh40k_9e/necrons/unit_abilities.yaml` (4 Einträge). Ursprünglich als vier reaktive GOs mit `mortal_wounds`-Effekt geplant: `vengeance_of_the_enchained`, `infused_madness`, `arc_fields`, `wrath_of_the_seraptek`. Ein gemeinsamer Effekt-Handler (Dispatch `abilityEngine.py`, ähnlich den bestehenden Stratagem-Handlern), vier separate Call-Sites (bewegungsphasen-/Kampfphasen-Auslöser je nach GO).
 
 **T1 (Kernlogik) erledigt (Session S164):** `abilityEngine.py:resolve_mortal_wounds_effect` (Signatur `(ability: Ability, *, trigger_met: bool | None = None) -> int`) + `abilityEngine.py:mortal_wounds_target` (validiertes Ziel-Label). `Effect`-Dataclass (`gameObjects/ability.py`) + Loader (`gameObjects/loader.py:_ability_from_dict`) um `roll_threshold`/`roll_type` erweitert. 11 neue Tests in `tests/gameMechanic/test_ability_engine.py` (Klassen `TestMortalWoundsTarget`/`TestResolveMortalWoundsEffect`, synthetische Fixtures je Karten-Form, nicht auf echte YAML-Daten angewiesen). **Kein Call-Site, keine UI** — das bleibt T2.
 
@@ -640,6 +665,32 @@ returned mit „~~Name~~ *DESTROYED*", ohne Auswahl-/Ziel-Button) — ob eine *v
 Auswahl/Zielung den Tod überlebt, ist nicht garantiert. Nächster Schritt: Sichtbarkeits-Anker vom
 „Einheit-ist-selektiert"-Zustand entkoppeln (z. B. Karte an den zerstörten-Einheiten-Eintrag selbst
 hängen, oder Auswahl/Zielung beim Tod bewusst halten statt implizit zu verlieren) — Fix = S165.
+
+**S165 T1a (Diagnose) + T1b (Fix, Variante B — strukturell):** Ursache des S164-Review-Befunds 1
+gefunden: `fightPhase.py`s Group-Flow-Zweig (Z. 447–457, damals) — hat die aktive Kampfseite eine
+noch kampffähige `model_groups`-Einheit (z. B. Silent King) selektiert, rendert die Gegenspalte
+`render_group_assignment(...)` und **returned**, bevor der Karten-Check je erreicht wird. Kein
+Selektions-/State-Bug (der State selbst — `destroyed` — war immer korrekt), sondern ein
+struktureller Früh-Return, der den Karten-Aufruf umgeht. Struktureller Zwilling gefunden:
+`shootingPhase.py` setzt für denselben Fall `inactive_override`, das in `render_player_column`
+(`_common.py`) den ganzen Ziel-Zweig ersetzt — dieselbe Klasse Bug, nur anders benannt.
+**Fix (Variante B):** neue Funktion `uiLayout/_common.py:render_mortal_wounds_cards_for_destroyed(first, second)`
+— iteriert alle Einheiten beider Fraktionen und ruft für jede die (unveränderte) `_render_mortal_wounds_on_destroy_card`
+auf; deren interne Gates (`destroyed`, Ability-Ownership) bleiben die einzigen Filter, keine
+Logik-Duplikation. Aufgerufen **einmal pro Phase-Renderer, vor der Zwei-Spalten-Aufteilung** —
+selektionsunabhängig, kann also von keinem Spalten-/Gruppen-Früh-Return mehr umgangen werden:
+`fightPhase.py` (bei `_maybe_render_mortal_undo`), `shootingPhase.py`, `chargePhase.py` (Step 1),
+`movementPhase.py`, `psychicPhase.py` (schließt die zuvor dokumentierte psychicPhase-Lücke —
+Smite/Perils-Tod zeigt die Karte jetzt ebenfalls). Die 4 alten Call-Sites (`_common.py:510,530`,
+`fightPhase.py:441,489`) entfernt — sonst doppeltes Rendern mit identischem Widget-Key
+(`StreamlitDuplicateElementKey`). Neue Tests: `tests/uiLayout/test_common.py` (Scan-Funktion
+isoliert + mit echten Silent-King-Daten), `tests/gameMechanic/test_fight.py`
+(`TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn` — Kern-Regressionstest reproduziert
+exakt das Diagnose-Szenario End-zu-Ende über `FightPhaseHandler.render_active`, mit echtem
+`load_roster()`-Aufbau, nicht `load_unit_catalog()` allein, da `model_groups` erst dort aufgelöst
+wird). Verifiziert per Vorher/Nachher-Diff (`git stash`): mit dem alten Code bleibt die Karte in
+diesem Szenario nachweislich unsichtbar, mit dem Fix erscheint sie. **UI-Verifikation durch den
+Stakeholder steht noch aus** (Status bleibt `In Arbeit`, nicht `Erledigt`).
 
 **Rest offen (Entscheid S164):** (a) `arc_fields` (Gauss Pylon) + `wrath_of_the_seraptek` (Seraptek Heavy Construct) bleiben zurückgestellt — nicht verdrahten, bis der Wortlaut extern gegen aktuelles Wahapedia/IA verifiziert ist (Quelle lokal nicht vorhanden); beide Einheiten stehen in keinem Roster, daher kein Spielwert-Verlust durch das Zurückstellen. (b) `infused_madness` (Canoptek Plasmacyte): YAML in S164 auf den belegten Wahapedia-Mechanismus korrigiert (kein `mortal_wounds`-Effekt mehr — `effect.type: buff_and_model_loss_risk`). Verdrahtung ist ein eigenes Mini-Feature (neue Effekt-Kategorie „aktivierter Buff mit Risiko-Roll auf fremde Ziel-Einheit": S+1/A+1, D6-auf-1-Modellverlust), Aufwand ~15–20k — bei Bedarf als eigenes Backlog-Item ziehen.
 
@@ -2243,3 +2294,67 @@ den sie als generische Infra vorgehalten wird.
 ändern".
 
 **Herkunft:** Review-Befund S163 / Retro M2.
+
+---
+
+## B-122 — Menhir-Lebenspunkte verifizieren
+
+[↩ Zeile in backlog.md](backlog.md#b-122)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** S: ~15k
+
+**Detail-Beschreibung:** `data/wh40k_9e/necrons/units.yaml:1106` trägt `wounds: 7` je Menhir-Modell
+(Silent King, 4 Menhirs → 30 Wunden gesamt). Stakeholder-Angabe (S165): 5 Wunden je Menhir → 26
+gesamt, Szarekh selbst 16 (bestätigt via Wahapedia `W:9-16`-Notation). Der lokale
+Wahapedia-Dump (`docs/work/wahapedia_necrons/`) enthält keine Menhir-Profilzeile — Scraper-Lücke,
+nicht nur ein Erfassungsfehler. Vorgehen: extern verifizieren (offizielles Datasheet/aktuelle
+Wahapedia-Seite) bzw. `tools/wahapedia_scraper.py` so nachbessern, dass die Menhir-Zeile mit
+erfasst wird, danach `units.yaml` korrigieren.
+
+**Abhängigkeiten:** Keine — reine Datenkorrektur, kein Code-Pfad hängt an der Zahl.
+
+**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst).
+
+**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Neue Fraktion oder Einheit
+als YAML" (Wahapedia-Recherche zuerst).
+
+**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid.
+
+---
+
+## B-123 — Schadenszuweisungs-Bug Mehrmodell-Einheiten
+
+[↩ Zeile in backlog.md](backlog.md#b-123)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** M: ~35k
+
+**Detail-Beschreibung:** Die „Frontmodell"-Schadenszuweisungslogik scheint zu verhindern, dass
+überschüssiger normaler Schaden über das Frontmodell hinaus weitere Modelle derselben Einheit
+tötet — beobachtet am Silent King (S165, Mehrmodell-Einheit mit Menhirs). Eine einzelne Attacke
+muss eine Einheit vollständig zerstören können, wenn genug Schaden zugewiesen wird. Vor dem Fix
+Reproduktion (Testfall mit Mehrmodell-Einheit + Schaden > erstes Modell) und Regelabgleich gegen
+die 9E-Spillover-Regeln nötig: Schaden **einer** Attacke verfällt am Modell (kein Übertrag
+innerhalb derselben Attacke über das getötete Modell hinaus), aber **mehrere** Attacken/Wunden
+müssen nacheinander weitere Modelle töten können — die genaue Abgrenzung vor dem Fix in
+`docs/work/wahapedia_core_rules/` verifizieren, nicht aus dem Gedächtnis.
+
+**Abhängigkeiten:** Keine bekannte — betrifft die Schadenszuweisung in `combat.py`/
+`unitMutations.py`, unabhängig vom Explodes-Re-Scope (B-028c1).
+
+**Belege:** Stakeholder-Entscheid S165 (Explodes-Einordnung; Handoff nach Lifecycle gelöscht, Inhalt hier inline erfasst).
+
+**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Combat-/Schadens-Mechanik".
+
+**Herkunft:** Stakeholder-Ergänzung im S165-Explodes-Entscheid.

@@ -17,7 +17,12 @@ from gameMechanic.gameLog import log_action
 from gameMechanic.gameState import unit_keys_for, units_key_for, units_list_for
 from gameMechanic.unitMutations import apply_damage
 from gameObjects.unit import Unit
-from uiLayout._common import lookup, render_reactive_ability_box, render_reactive_stratagem_box
+from uiLayout._common import (
+    lookup,
+    render_mortal_wounds_cards_for_destroyed,
+    render_reactive_ability_box,
+    render_reactive_stratagem_box,
+)
 
 
 class PsychicPhaseHandler:
@@ -33,6 +38,7 @@ class PsychicPhaseHandler:
         if "psychic_denies_used" not in st.session_state:
             st.session_state.psychic_denies_used = {}
 
+        render_mortal_wounds_cards_for_destroyed(first, second)
         col1, col2 = st.columns(2)
         with col1:
             _render_psychic_column(first, state)
