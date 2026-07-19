@@ -5819,8 +5819,8 @@
   "067a868c-02ce-474d-a186-8b162f2926ce": {
     "started_at": "2026-07-18T20:58:30.260Z",
     "task": "Ich habe einige Kommentare ins Planning-Dokument geschrieben. Ich gebe den PLan soweit frei. Sorge dafür, dass die Suba…",
-    "peak_context": 127655,
-    "subagent_share": 94.81892033722742,
+    "peak_context": 132761,
+    "subagent_share": 94.21899026083553,
     "by_tier": {
       "Sonnet": 131788638,
       "Opus": 5033562,
@@ -5875,6 +5875,82 @@
         "tier": "Sonnet",
         "peak_context": 323933,
         "started_at": "2026-07-18T20:58:30.260Z"
+      }
+    ]
+  },
+  "363638c4-d654-4041-b6a5-845e426b2397": {
+    "started_at": "2026-07-19T11:44:47.953Z",
+    "task": "start session. Ich habe alle Artefakte im Handoff kommentiert.",
+    "peak_context": 177045,
+    "subagent_share": 83.5476659143808,
+    "by_tier": {
+      "Opus": 3052679,
+      "Sonnet": 49263719,
+      "Haiku": 8948229
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T8 Review S170 (Opus)",
+        "tier": "Opus",
+        "peak_context": 54871,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S170-Planning erstellen (Planner)",
+        "tier": "Opus",
+        "peak_context": 98950,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4-bc Menhir-Hinweis + Resets",
+        "tier": "Sonnet",
+        "peak_context": 119052,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3 Screenshot-Diagramm-Migration",
+        "tier": "Sonnet",
+        "peak_context": 78210,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T6 Verifikations-Handoff schreiben",
+        "tier": "Haiku",
+        "peak_context": 27629,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4-aef Layout+Lifecycle+Position",
+        "tier": "Sonnet",
+        "peak_context": 242521,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2 Spec-first-Vorlage Explodes",
+        "tier": "Sonnet",
+        "peak_context": 120826,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 Retro-Doku agent_scopes",
+        "tier": "Haiku",
+        "peak_context": 41465,
+        "started_at": "2026-07-19T11:44:47.953Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T7 Artefakt-Nachzug S170",
+        "tier": "Haiku",
+        "peak_context": 90209,
+        "started_at": "2026-07-19T11:44:47.953Z"
       }
     ]
   }

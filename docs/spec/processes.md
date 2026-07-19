@@ -742,31 +742,39 @@ Bei `[Use]` entfällt der Binär-Wurf-Baustein (Baustein ①): die Explosion gil
 
 ```mermaid
 flowchart TD
-    A[Modell/Einheit destroyed\neffect.type = explode gesetzt] --> B[Pflicht-Trigger-Kachel\nerscheint INLINE am Eintrag\nder betroffenen Einheit]
+    A[Modell/Einheit destroyed\neffect.type = explode gesetzt] --> B[Pflicht-Trigger-Kachel\nerscheint INLINE in der playerArea\ndes kontrollierenden Spielers]
     B --> C{auto_explode-GO verfügbar\nUND Use gedrückt?}
     C -- ja --> D[Explodes gilt automatisch\nkein Tischwurf nötig]
     C -- nein --> E[Binär-Wurf-Baustein:\nExplodes! / Does not explode]
     E --> F{Explodes! gedrückt?}
     F -- nein --> G[Info-Hinweiskasten:\n'unitName' does not explode.]
     F -- ja --> H[Info-Hinweiskasten:\n'unitName' explodes. Every unit\nwithin RADIUS suffers DAMAGE MW.]
+    G -- Reset auf Wurf-Karte --> E
+    H -- Reset auf Wurf-Karte --> E
     D --> H
     H --> I[Multi-Unit-Ziel-Auswahl-Panel\nbeide Armeen, Toggle je Einheit]
-    I --> J[Spieler wählt betroffene Einheiten\nträgt Tischwurf-Schaden je Einheit ein]
-    J --> K[Confirm all → apply_damage je Einheit\nLP-Balken sinkt live in unitCard]
-    K --> L[Log-Eintrag schreiben]
-    G --> L
+    I --> J["Werteingabe je Einheit → SOFORT\napply_damage (Direkt-Apply, Folgesession)"]
+    J --> K[Confirm all → Panel schließt\nZuweisungen bereits angewendet]
+    K --> P[Phasenwechsel]
+    G --> P
+    P --> L[Kachel-Gruppe verschwindet vollständig\nEreignis nur noch im gameLog]
 ```
 
 Schritt-für-Schritt (Baustein-Referenzen aus `design_system.md`):
 
-1. **Einheit zerstört** → Pflicht-Trigger-Kachel (§1.5) erscheint inline am Eintrag der
-   betroffenen Einheit, `center`-Spalte (§1.9) — nicht in der Sidebar der besitzenden Armee.
+1. **Einheit zerstört** → Pflicht-Trigger-Kachel (§1.5) erscheint inline in der `playerArea`
+   des kontrollierenden Spielers (§1.9.1) — nicht über die volle `gameActionsArea`-Breite,
+   nicht in der Sidebar der besitzenden Armee.
 2. **Falls `auto_explode` verfügbar:** GO-Karte (§6.1) direkt an derselben Kachel — `[Use]`
    ersetzt den Tischwurf, die Explosion gilt automatisch (Stratagem-Text „Do not roll").
 3. **Sonst: Binär-Wurf-Baustein** (§1.6) — Titel = Einheitenname aus der YAML, Caption
    „Explodes on {roll_threshold}+", Buttons „Explodes!" / „Does not explode" (kein
    Zahlenfeld — die App braucht nur das Erreichen/Verfehlen der YAML-Schwelle, nicht den
-   genauen Würfelwert).
+   genauen Würfelwert). **Nach Klick auf eines der beiden Labels** (S170) ersetzt ein
+   `↺ Reset`-Button (§1.6-Reset-Zustand) die beiden Labels — Klick darauf nimmt die
+   Wurf-Entscheidung zurück, die Kachel kehrt zum Zustand „offen" (Schritt 3) zurück. War
+   bereits das Multi-Unit-Panel offen (Erfolgs-Zweig, Schritt 5), verwirft Reset auch dessen
+   noch nicht bestätigten Zustand.
 4. **Info-Hinweiskasten** (§1.8, `info`-Typ, `--arb-blue`) zeigt den Ausgang:
    - Erfolg: „⟨unitName⟩ explodes. Every unit within ⟨radius⟩ suffers ⟨damage⟩ mortal
      wounds."
@@ -777,29 +785,108 @@ Schritt-für-Schritt (Baustein-Referenzen aus `design_system.md`):
    Roster), Zahlenfeld-Spalte „⟨Schadenswürfel⟩ Mortal Wounds" erscheint bei ausgewählten
    Einheiten. Reichweite (`radius`) misst der Tisch — die App hat kein Positionsmodell und
    zählt nicht nach, welche Einheiten tatsächlich innerhalb liegen.
-6. **Confirm all** wendet den eingetragenen Schaden je ausgewählter Einheit an
-   (`apply_damage`, mortal), der LP-Balken sinkt live in der unitCard (Bestandskomponente,
-   §1.7). **Reset** verwirft die Auswahl ohne Anwendung.
+6. **Werteingabe je Einheit → SOFORT angewendet** (Direkt-Apply, §1.7, **Umsetzung
+   Folgesession**): `apply_damage` (mortal) je Einheit direkt bei Werteingabe, nicht
+   gesammelt. LP-Balken sinkt live in der unitCard (Bestandskomponente), auch bis zur
+   Zerstörung; die Einheit springt in ihrer armyList-Sidebar an Position 1 (§1.9.1/§1.7,
+   bereits spezifiziert). „Confirm all" bucht dadurch nichts mehr selbst — es schließt das
+   Panel ab (Info-Kasten bleibt stehen). „Reset" macht alle Zuweisungen der aktuellen
+   Auswahl-Runde rückgängig, Panel bleibt offen.
+7. **Phasenwechsel** (`gameState.next_phase()`, jeder Ausgang — Erfolg, Fehlschlag, `auto_explode`
+   genutzt) → die gesamte Kachel-Gruppe (①–④) verschwindet vollständig (§1.5-Lebensdauer,
+   S170, Stakeholder-Befund). Das Ereignis bleibt danach nur noch im Spiel-Protokoll
+   (`gameProtocoll`/gameLog) nachvollziehbar — kein Dauerzustand über Phasen-/Rundengrenzen
+   hinweg.
+8. **Korrektur nach Confirm** (§1.7, **Umsetzung Folgesession**): nach „Confirm all" kann der
+   Spieler in denselben Panel-Zustand direkt VOR der Bestätigung zurückkehren, um
+   Fehlzuweisungen zu korrigieren, solange die Phase noch nicht gewechselt hat (Schritt 7
+   beendet dieses Korrektur-Fenster). Konkreter Anker/Button: Folgesession.
 
-### Screenshot-Referenzen (Bauform-Vorbild, `agent_scopes.md` §e — PFLICHT)
+### Bauform-Vorbild (S170 — von Screenshots migriert, `agent_scopes.md` §e)
 
-Verbindliche Bauform-Referenz aus der bestehenden App (Stakeholder-Vorgabe S166 §g/§h,
-abgenommen als `design_system.md` §7 und diese Spec P-16), bis B-028c1 b2 committet ist:
+Bis B-028c1 b2 committet ist, bleibt die bestehende App der verbindliche Bauform-Beleg
+(Stakeholder-Vorgabe S166 §g/§h, abgenommen als `design_system.md` §7 und diese Spec P-16).
+Die früheren Screenshot-Dateien in `docs/handoff/` sind entfernt (S170-Regel: Specs
+referenzieren keine wachsenden Handoff-Dateien) — die folgenden Diagramme übertragen die
+Vorbild-Zustände direkt hierher, korrigierbar durch den Stakeholder. Wo ein generisches
+Schema in `design_system.md` §1.6/§1.7 denselben Zustand bereits deckungsgleich zeigt, folgt
+nur ein Verweis statt Duplikat.
 
-| Screenshot | Zeigt | Vorbild für |
-|---|---|---|
-| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-51-02.png` | Psi-Flow: Smite / Attempt Manifest | Binär-Wurf-Baustein-Anker-Platzierung (Schritt 3) — dieselbe Mechanik wie ein Tischwurf-Gate |
-| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-54-10.png` | Psi-Flow: Command-Re-Roll-Karte neben dem Wurf | `auto_explode`-GO-Platzierung direkt am Wurf-Anker (Schritt 2) |
-| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-51-51.png` | Heroic-Intervention-Panel (Toggle-Zeilen, keine Card-Ansicht) | Multi-Unit-Ziel-Auswahl-Panel-Grundlayout (Schritt 5) |
-| `docs/handoff/Bildschirmfoto vom 2026-07-18 12-01-39.png` | Heroic-Intervention-Panel, zweite Ansicht | Multi-Unit-Ziel-Auswahl-Panel-Grundlayout (Schritt 5) |
-| `docs/handoff/Bildschirmfoto vom 2026-07-18 12-07-09.png` | Zahlenfeld neben einer ausgewählten Einheit | Schadens-Zahlenfeld-Spalte bei ausgewählten Einheiten (Schritt 5) |
+**Binär-Wurf-Anker (Vorbild: Psi-Flow Smite-Wurf-Karte)** — deckungsgleich mit dem
+generischen Schema `design_system.md` §1.6 (Titel/Caption/Trennlinie/Aktion-Zeile); im
+Vorbild noch als Zahlenfeld + Einzel-Button statt der beiden Explodes-Labels:
+
+```
+┌──────────────────────────────────────────────┐
+│ Smite — Warp Charge 6                         │  ← Titel
+│ 2D6 ROLL                                      │  ← Caption
+│ [   7   ]                          [-] [+]    │  ← Zahlenfeld (Vorbild-Detail, bei
+│ [           Attempt Manifest             ]    │    Explodes: zwei Labels statt Feld, §1.6)
+└──────────────────────────────────────────────┘
+```
+
+**`auto_explode`-GO-Anker (Vorbild: Command-Re-Roll-Karte neben dem Wurfergebnis)** — zeigt
+die Stapel-Reihenfolge Ergebnis-Hinweis → GO-Karte (§6.1) → Folge-Interaktion; bei Explodes
+entfällt der Ergebnis-Hinweis vor der GO-Karte (kein Tischwurf gelaufen, s. Schritt 2), die
+GO-Karte selbst folgt exakt `design_system.md` §6.1:
+
+```
+Weirdboy
+┌────────────────────────────────────────────────┐
+│ ℹ Roll 7 — Manifested! No deny possible.        │  ← Vorbild-Kontext (eigener Wurf davor);
+│   (W3 mortal wounds)                            │    bei Explodes entfällt dieser Kasten
+├────────────────────────────────────────────────┤
+│ Command Re-Roll · 1 CP →               [ Use ]  │  ← GO-Karte (§6.1), inline am Anker
+│ Orks                                            │
+│  ▸ Rule text                                    │
+└────────────────────────────────────────────────┘
+A Psychic test manifest roll was just made.
+[ MORTAL WOUNDS Zahlenfeld ]  [Apply 1 mortal wounds …]  [Reset (skip Smite)]
+                                ↑ Vorbild für Folge-Interaktion — bei Explodes ersetzt durch
+                                  das Multi-Unit-Panel (§1.7), kein Einzelfeld
+```
+
+**Multi-Unit-Panel-Vorbild (Heroic Intervention, zwei Screenshot-Ansichten)** — Ursprung von
+§1.7, dort bereits zum Zwei-Gruppen-Layout weiterentwickelt (P-16 zeigt beide Armeen
+nebeneinander; das Vorbild zeigt nur eine Liste):
+
+```
+Ansicht 1 — Panel offen, Info-Hinweis + Einzel-Button je Zeile:
+┌────────────────────────────────────────────────┐
+│ ✕  Heroic Intervention                          │
+│ ℹ [Regel-Hinweistext]                           │
+│ ──────────────────────────────────────────────  │
+│  Weirdboy                        [ Intervene ]  │
+│  Big Mek in Mega Armour          [ Intervene ]  │
+│  Warboss in Mega Armour          [ Intervene ]  │
+└────────────────────────────────────────────────┘
+
+Ansicht 2 — erweiterte Liste + Footer:
+┌────────────────────────────────────────────────┐
+│ Overlord — select enemy units to engage:        │
+│ Tap a unit to toggle; confirm when ready.        │
+│  [ Weirdboy ]  [ Big Mek… ]  [ Warboss… ]        │
+│  [ Boyz ]  [ Gretchin ]  [ Warbikers ]           │
+│ ──────────────────────────────────────────────  │
+│ [ Confirm Intervention ]        [ Cancel ]       │
+└────────────────────────────────────────────────┘
+```
+
+Footer-Wortlaut im Vorbild „Confirm Intervention"/„Cancel" — P-16 übernimmt das **nicht**
+1:1, sondern „Confirm all"/„Reset" (§6.4-Wortlaut-Familie, s. Wortlaut-Abschnitt unten).
+Zahlenfeld-Spalte bei ausgewählter Einheit (fünfter Screenshot, `[ 0 ]  [−] [+]` ohne
+sichtbares Label) ist deckungsgleich mit der Spaltenkopf-Regel in `design_system.md` §1.7
+(Label kommt aus dem Spaltenkopf, nicht aus der Zeile selbst) — kein eigenes Diagramm nötig.
 
 ### Wortlaut (Wortlaut-Budget `design_system.md` §3.1 gilt)
 
 - Buttons: „Explodes!" / „Does not explode" (kein Präzedenzfall für andere Tischwürfe mit
   echtem Zahlenwert, S166-Entscheid — `design_system.md` §6.3 bleibt dort Standard).
+- Wurf-Karte nach Entscheidung (S170): `↺ Reset` (§1.6-Reset-Zustand, `SYM_RESET`) — nimmt
+  die Wurf-Entscheidung zurück, kein neues Wort neben der bestehenden Familie.
 - Panel-Footer: „Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog Abschluss der
-  Attackensequenz).
+  Attackensequenz) — derselbe Wortlaut „Reset" wie auf der Wurf-Karte, aber mit anderem
+  Wirkungsbereich (§1.6 = Wurf-Entscheidung, §1.7 = Schadens-Zuweisungen der Auswahl-Runde).
 - Hinweiskasten: genau **ein** Satz je Ausgang (s. Schritt 4) — keine Regel-Paraphrase,
   keine zusätzliche Begründung im UI-Text.
 - `DESTROYED` bleibt in der bestehenden unitCard-Farbe (`#c04040`,

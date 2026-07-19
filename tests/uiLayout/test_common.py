@@ -2239,6 +2239,49 @@ def test_combi_checkbox_ui_single_profile_selected_has_no_penalty(monkeypatch) -
 
 
 # ---------------------------------------------------------------------------
+# _render_subgroup_selector — Zustand B lock warning (S169 b2 stakeholder
+# ask): the full-health forced-allocation hint ("► <Gruppe> zuerst
+# vollständig zerstören.", e.g. Silent King's Triarchal Menhirs) is removed
+# as redundant — the radio choice is already forced onto the locked group.
+# The Zustand-B-mit-Teilschaden hint ("zuerst erledigen (N LP)") is a
+# DIFFERENT warning and must stay untouched.
+# ---------------------------------------------------------------------------
+
+
+def test_subgroup_selector_locked_from_full_health_shows_no_warning(monkeypatch) -> None:
+    """Silent King-style lock (unit.has_per_group_wounds(), no model wounded
+    yet): pool is an exact multiple of the group's per-model wounds — the
+    removed hint used to fire here. Now: no dmg_col.warning call at all."""
+    group = ModelGroup(id="menhirs", name_en="Triarchal Menhirs", count=3, weapons=[], priority=1)
+    def_unit = SimpleNamespace(group_wound_value=lambda g: 7)
+    def_state = {"group_wounds": {"menhirs": 7}}
+    dmg_col = MagicMock()
+
+    gid = common._render_subgroup_selector(def_unit, def_state, [group], "menhirs", dmg_col, "tab1")
+
+    assert gid == "menhirs"
+    dmg_col.warning.assert_not_called()
+
+
+def test_subgroup_selector_locked_with_partial_wound_still_warns(monkeypatch) -> None:
+    """Regression: Zustand B with an already-wounded model in the locked
+    group keeps its own, DIFFERENT warning ("zuerst erledigen") — only the
+    full-health hint was removed."""
+    group = ModelGroup(id="menhirs", name_en="Triarchal Menhirs", count=3, weapons=[], priority=1)
+    def_unit = SimpleNamespace(group_wound_value=lambda g: 7)
+    def_state = {"group_wounds": {"menhirs": 10}}  # 10 % 7 = 3 LP partial wound
+    dmg_col = MagicMock()
+
+    gid = common._render_subgroup_selector(def_unit, def_state, [group], "menhirs", dmg_col, "tab1")
+
+    assert gid == "menhirs"
+    dmg_col.warning.assert_called_once()
+    warned_text = dmg_col.warning.call_args.args[0]
+    assert "zuerst erledigen" in warned_text
+    assert "zuerst vollständig zerstören" not in warned_text
+
+
+# ---------------------------------------------------------------------------
 # S130/S135 Paket 4b — _render_damage_block(): Command Re-Roll wired at the
 # post-Apply lock (Hit/Wound/Save have no separately captured roll in this
 # app — see session report; the collapsed "damage applied" result is the one
@@ -3884,6 +3927,10 @@ class TestRenderExplodeTilesForDestroyed:
             "_render_explode_tile",
             lambda faction, uid, unit: seen.append((faction, uid)),
         )
+        # S170 Nacharbeit a: the top-level playerArea split now calls
+        # st.columns(2) itself (§1.9.1) — needs a fake, real MagicMock()
+        # cannot be unpacked into two column objects.
+        monkeypatch.setattr(common.st, "columns", _fake_columns())
 
         common.render_explode_tiles_for_destroyed("Necrons", "Orks")
 
@@ -3921,6 +3968,7 @@ class TestExplodeRollButtons:
             "applied": False,
         }
         reruns: list = []  # type: ignore[type-arg]
+        logged: list = []  # type: ignore[type-arg]
         monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
         monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
         monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
@@ -3930,11 +3978,17 @@ class TestExplodeRollButtons:
             "columns",
             _fake_columns(pressed={f"explode_yes_Necrons_{SILENT_KING}"}),
         )
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a: logged.append(a))
 
         common._render_explode_roll("Necrons", SILENT_KING, unit, ability, entry)
 
         assert entry["exploded"] is True
         assert reruns == [1]
+        # S170 Nacharbeit e: the decision itself is now logged for BOTH
+        # outcomes (previously only "does not explode" logged here, leaving
+        # a successful roll with no gameLog trace until — or unless —
+        # "Confirm all" was later pressed).
+        assert logged and logged[0][3] == "The Silent King explodes"
 
     def test_does_not_explode_button_resolves_false_and_logs(self, monkeypatch) -> None:
         _, unit = _silent_king_session(destroyed=True)
@@ -3984,7 +4038,16 @@ class TestExplodeOutcomeInfoBox:
 
         assert info_calls == ["The Silent King does not explode."]
 
-    def test_successful_roll_shows_info_and_target_panel(self, monkeypatch) -> None:
+    def test_successful_roll_shows_info_and_never_calls_target_panel_here(
+        self, monkeypatch
+    ) -> None:
+        """S170 Nacharbeit a: the Multi-Unit target panel (④) no longer
+        renders from inside _render_explode_outcome — it moved to its own
+        full-width call in render_explode_tiles_for_destroyed, outside the
+        playerArea half-column this function renders in (§1.9.1). This test
+        used to assert the OLD embedded-panel behavior; adjusted per the
+        S170 stakeholder-abgenommene layout change (was:
+        test_successful_roll_shows_info_and_target_panel)."""
         _, unit = _silent_king_session(destroyed=True)
         ability = _explode_ability()
         entry = {
@@ -3997,6 +4060,7 @@ class TestExplodeOutcomeInfoBox:
         info_calls: list = []  # type: ignore[type-arg]
         panel_calls: list = []  # type: ignore[type-arg]
         monkeypatch.setattr(common.st, "info", lambda *a, **kw: info_calls.append(a[0]))
+        monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
         monkeypatch.setattr(
             common, "_render_explode_target_panel", lambda *a: panel_calls.append(a)
         )
@@ -4006,9 +4070,13 @@ class TestExplodeOutcomeInfoBox:
         assert info_calls == [
             'The Silent King explodes. Every unit within 2D6" suffers D6 mortal wounds.'
         ]
-        assert len(panel_calls) == 1
+        assert panel_calls == []
 
-    def test_applied_success_hides_target_panel(self, monkeypatch) -> None:
+    def test_applied_success_still_never_calls_target_panel_here(self, monkeypatch) -> None:
+        """Non-goal guardrail retained from the pre-S170 shape (was:
+        test_applied_success_hides_target_panel) — now trivially true for
+        BOTH applied states since the panel moved out entirely, but kept as
+        a regression tripwire in case a future edit re-nests it here."""
         _, unit = _silent_king_session(destroyed=True)
         ability = _explode_ability()
         entry = {
@@ -4027,6 +4095,139 @@ class TestExplodeOutcomeInfoBox:
         common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
 
         assert panel_calls == []
+
+
+# ---------------------------------------------------------------------------
+# _render_explode_outcome "Reset" button (B-028c1 b2 Nacharbeit c, S169/S170
+# stakeholder ask): a way back from EITHER roll outcome to the binary-roll
+# starting state (§1.6). Distinct from the target panel's own "Reset"
+# (§1.7, TestExplodeTargetPanel below), which only clears an in-progress,
+# not-yet-confirmed target selection without touching the roll decision.
+# Explicitly NOT built: a reset once damage has already been applied via
+# "Confirm all" — that is the deferred b2 Nacharbeit d.
+# ---------------------------------------------------------------------------
+
+
+class TestExplodeOutcomeResetButton:
+    @staticmethod
+    def _button_stub(pressed_key):  # type: ignore[no-untyped-def]
+        return lambda *a, key=None, **kw: key == pressed_key
+
+    def test_failed_roll_reset_returns_to_unresolved_state(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": False,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st, "button", self._button_stub(f"explode_reset_roll_{state_key}")
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["exploded"] is None
+        assert reruns == [1]
+
+    def test_successful_roll_reset_also_clears_in_progress_selection(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": ["Necrons::warriors"],
+            "damage": {"Necrons::warriors": 5},
+            "applied": False,
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        monkeypatch.setattr(common, "_render_explode_target_panel", lambda *a: None)
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st, "button", self._button_stub(f"explode_reset_roll_{state_key}")
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["exploded"] is None
+        assert entry["selected"] == []
+        assert entry["damage"] == {}
+        assert reruns == [1]
+
+    def test_reset_button_absent_once_damage_applied(self, monkeypatch) -> None:
+        """Non-goal guardrail: once Confirm all has applied damage, no Reset
+        appears here — undoing applied damage is the deferred Nacharbeit d."""
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": True,
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        button_keys: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: button_keys.append(key) or False,
+        )
+        monkeypatch.setattr(common, "_render_explode_target_panel", lambda *a: None)
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert button_keys == []
+
+    def test_reset_round_trips_through_the_real_render_entry_point(self, monkeypatch) -> None:
+        """HTML-Output-Test through the real entry point (S164-Lehre: not just
+        the isolated function) — a Reset click on a failed-roll tile resets
+        the session state, and the NEXT render pass (Streamlit's own
+        st.rerun() semantics simulated here as a second call) shows the
+        binary-roll bauform (§1.6 threshold caption) again."""
+        session, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        session.explode_tiles = {
+            state_key: {
+                "ability_id": ability.id,
+                "exploded": False,
+                "selected": [],
+                "damage": {},
+                "applied": False,
+            }
+        }
+        _quiet_explode_widgets(monkeypatch)
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        monkeypatch.setattr(
+            common.st, "button", self._button_stub(f"explode_reset_roll_{state_key}")
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert session.explode_tiles[state_key]["exploded"] is None
+
+        # Simulated next render pass: a fresh Streamlit rerun reports no
+        # press for a widget the user didn't just click.
+        monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+        captions: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common.st,
+            "caption",
+            lambda *a, **kw: captions.append(a[0]) if a else None,
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert "Explodes on 4+" in captions
 
 
 class TestExplodeTargetPanel:
@@ -4102,7 +4303,12 @@ class TestExplodeTargetPanel:
         # no-op zero mortal wound.
         assert applied == [(warriors_id, "Necrons", 3)]
         assert entry["applied"] is True
-        assert logged and logged[0][3] == "The Silent King explodes"
+        # S170 Nacharbeit e: Confirm now logs its OWN distinct message
+        # (which targets actually took damage) — separate from the roll-
+        # decision log ("X explodes"), which _render_explode_roll writes at
+        # decision time instead (was: logged[0][3] == "The Silent King
+        # explodes", duplicating the decision-time wording here).
+        assert logged and logged[0][3] == "explode damage confirmed — Necron Warriors (3)"
 
     def test_reset_clears_selection_without_applying(self, monkeypatch) -> None:
         session, warriors_id, boyz_id = self._session_with_two_targets()
@@ -4208,3 +4414,269 @@ class TestExplodeTileContainerStyling:
         common._render_explode_tile("Necrons", SILENT_KING, unit)
 
         assert style_calls == []
+
+
+# ---------------------------------------------------------------------------
+# S170 Nacharbeit a/e/f (B-028c1 T4-aef) — playerArea-Constrain, Phasenwechsel-
+# Lifecycle, Reset-Button-Position. design_system.md §1.9.1/§1.5/§1.8,
+# processes.md P-16 Schritt 1/7.
+# ---------------------------------------------------------------------------
+
+
+class _TrackingCol:
+    """Column stand-in that pushes/pops its label onto a shared stack while
+    active as a ``with`` context — lets a test observe WHICH playerArea
+    half-column (or "none", i.e. full width) is active when a given
+    ``st.markdown``/``st.info``/... call happens, without the render code
+    itself needing to know it is being tested."""
+
+    def __init__(self, label: str, stack: list[str]):
+        self.label = label
+        self._stack = stack
+
+    def __enter__(self):  # type: ignore[no-untyped-def]
+        self._stack.append(self.label)
+        return self
+
+    def __exit__(self, *exc_info):  # type: ignore[no-untyped-def]
+        self._stack.pop()
+        return False
+
+    def button(self, *args, key=None, **kwargs):  # type: ignore[no-untyped-def]
+        return False
+
+    def number_input(self, *args, key=None, **kwargs):  # type: ignore[no-untyped-def]
+        return 0
+
+    def markdown(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+        return None
+
+    def caption(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+        return None
+
+
+def _tracking_columns(stack: list[str]):  # type: ignore[no-untyped-def]
+    """``st.columns`` fake: the outermost 2-column call (no column active
+    yet) is the playerArea split ("first"/"second"); any nested 2-column
+    call (e.g. _render_explode_roll's own Yes/No buttons) inherits the
+    currently active label instead of minting a new one."""
+
+    def _columns(spec):  # type: ignore[no-untyped-def]
+        count = len(spec) if isinstance(spec, list) else spec
+        if count == 2 and not stack:
+            return (_TrackingCol("first", stack), _TrackingCol("second", stack))
+        label = stack[-1] if stack else "none"
+        return tuple(_TrackingCol(label, stack) for _ in range(count))
+
+    return _columns
+
+
+class TestExplodeTilesPlayerAreaLayout:
+    def test_roll_widget_renders_inside_controlling_players_half_column(self, monkeypatch) -> None:
+        """Regression for S170 Nacharbeit a (design_system.md §1.9.1): the
+        Binär-Wurf-Baustein (①) of a unit destroyed on the Necrons
+        (first_player) side must render inside the FIRST half-column of the
+        top-level playerArea split — not full width across
+        gameActionsArea (the pre-S170 regression)."""
+        _silent_king_session(destroyed=True)
+        stack: list[str] = []
+        events: list[tuple[str, str]] = []
+        monkeypatch.setattr(common.st, "columns", _tracking_columns(stack))
+        monkeypatch.setattr(
+            common.st,
+            "markdown",
+            lambda *a, **kw: events.append((stack[-1] if stack else "none", a[0])) if a else None,
+        )
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        king_events = [e for e in events if "Silent King" in e[1]]
+        assert king_events, "the roll widget must render at least one markdown call"
+        assert all(label == "first" for label, _ in king_events)
+
+    def test_target_panel_renders_full_width_outside_either_half_column(self, monkeypatch) -> None:
+        """Regression for S170 Nacharbeit a: the Multi-Unit target panel (④)
+        stays the documented exception (§1.9.1/§7.1) — it must render
+        OUTSIDE both playerArea half-columns (stack empty), never nested
+        inside the exploding unit's own half."""
+        session, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        session.explode_tiles = {
+            state_key: {
+                "ability_id": ability.id,
+                "exploded": True,
+                "selected": [],
+                "damage": {},
+                "applied": False,
+            }
+        }
+        stack: list[str] = []
+        panel_stack_snapshots: list[list[str]] = []
+        monkeypatch.setattr(common.st, "columns", _tracking_columns(stack))
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        # Real (unpatched) st.button on the shared MagicMock is truthy —
+        # would look like the outcome's own Reset got clicked and clear
+        # entry["exploded"] before _render_explode_tile ever checks whether
+        # the panel is still pending. Pin it to "not pressed".
+        monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common,
+            "_render_explode_target_panel",
+            lambda *a: panel_stack_snapshots.append(list(stack)),
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert panel_stack_snapshots == [[]]
+
+    def test_second_player_unit_renders_in_the_second_half_column(self, monkeypatch) -> None:
+        """first_player/second_player, never `active` (CLAUDE.md domain
+        constraint): a destroyed Orks (second_player) unit's tile must land
+        in the SECOND half-column, regardless of which side is currently
+        active."""
+        silent_king = load_unit_catalog("necrons")[SILENT_KING]
+        boyz_id = "wh40k_9e.orks.unit.boyz"
+        boyz = load_unit_catalog("orks")[boyz_id]
+        synthetic_ability = Ability(
+            id="test.unit.synthetic_explode",
+            name_en="Synthetic Explode",
+            source="unit_ability",
+            rule_text="Test rule text.",
+            trigger=Trigger(
+                timing="phase_reactive", phase="any", player="either", event="model_destroyed"
+            ),
+            conditions=[],
+            effect=Effect(type="explode", target="units_within_radius", roll_threshold=4),
+        )
+        session = _SS(
+            first_player="Necrons",
+            second_player="Orks",
+            active="Orks",  # deliberately NOT first_player — layout must ignore this
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_units_list=[silent_king],
+            p1_unit_keys=[SILENT_KING],
+            p2_units_list=[boyz],
+            p2_unit_keys=[boyz_id],
+            p1_units={SILENT_KING: {"destroyed": False, "in_reserve": False}},
+            p2_units={boyz_id: {"destroyed": True, "in_reserve": False}},
+            phase_idx=4,
+        )
+        common.st.session_state = session
+        _gs.st.session_state = session
+        monkeypatch.setattr(
+            common,
+            "find_unit_ability_by_effect",
+            lambda faction_dir, uid, effect_type: (
+                synthetic_ability if faction_dir == "orks" else None
+            ),
+        )
+        stack: list[str] = []
+        events: list[tuple[str, str]] = []
+        monkeypatch.setattr(common.st, "columns", _tracking_columns(stack))
+        monkeypatch.setattr(
+            common.st,
+            "markdown",
+            lambda *a, **kw: events.append((stack[-1] if stack else "none", a[0])) if a else None,
+        )
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        boyz_events = [e for e in events if boyz.name_en in e[1]]
+        assert boyz_events, "the Boyz roll widget must render at least one markdown call"
+        assert all(label == "second" for label, _ in boyz_events)
+
+
+class TestExplodeOutcomeResetButtonPosition:
+    """S170 Nacharbeit f (Stakeholder-Befund UI-Verifikation S170): the
+    Reset button must render directly below the blue info box on BOTH
+    outcomes. Before this fix, the success branch rendered the target panel
+    BETWEEN the info box and the Reset button — several widgets below the
+    box instead of directly beneath it."""
+
+    def test_reset_button_directly_follows_the_info_box_on_success(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        order: list[str] = []
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: order.append("info"))
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: (order.append("reset"), False)[1],
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert order == ["info", "reset"]
+
+    def test_reset_button_directly_follows_the_info_box_on_failure(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": False,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        order: list[str] = []
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: order.append("info"))
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: (order.append("reset"), False)[1],
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert order == ["info", "reset"]
+
+
+class TestExplodeTileLifecycle:
+    def test_tile_does_not_reappear_after_being_cleared_for_a_new_phase(self, monkeypatch) -> None:
+        """S170 Nacharbeit e (design_system.md §1.5/§1.8 Lebensdauer,
+        processes.md P-16 Schritt 7): gameState._reset_phase_state() wipes
+        session_state.explode_tiles on every phase change — without a
+        separate battle-scoped "already triggered" marker
+        (explode_triggered_units), the still-``destroyed`` unit would spawn
+        a brand new, unresolved tile again on the very next phase instead of
+        staying gone for good."""
+        session, unit = _silent_king_session(destroyed=True)
+        _quiet_explode_widgets(monkeypatch)
+        rendered: list[str] = []
+        monkeypatch.setattr(
+            common.st,
+            "markdown",
+            lambda *a, **kw: rendered.append(a[0]) if a else None,
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+        assert any("The Silent King" in c for c in rendered if isinstance(c, str))
+
+        # Simulates the phase-change cleanup gameState._reset_phase_state()
+        # performs (S170 Nacharbeit e) — explode_tiles is wiped, but the
+        # unit is still (and forever) destroyed.
+        session.explode_tiles = {}
+        rendered.clear()
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert not any("The Silent King" in c for c in rendered if isinstance(c, str))

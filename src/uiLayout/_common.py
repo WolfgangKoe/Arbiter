@@ -509,11 +509,31 @@ def _explode_target_candidates(
 
 
 def _log_explode_outcome(unit_name: str, *, exploded: bool) -> None:
+    """Logs the roll DECISION itself (§1.6) — both outcomes, at the moment
+    the player clicks "Explodes!"/"Does not explode", not at Confirm (S170
+    Nacharbeit e: the decision and the damage-confirm are two separate
+    gameLog-worthy events, see _log_explode_damage_confirmed)."""
     from gameMechanic.gameLog import log_action  # noqa: PLC0415
 
     phase = PHASES[st.session_state.get("phase_idx", 0)][1]
     action = f"{unit_name} explodes" if exploded else f"{unit_name} does not explode"
     log_action(st.session_state.get("round", 0), phase, unit_name, action)
+
+
+def _log_explode_damage_confirmed(unit_name: str, summary: str) -> None:
+    """Logs the Multi-Unit-Panel (§1.7) "Confirm all" step — distinct from
+    the roll-decision log (_log_explode_outcome) so the gameLog keeps both
+    events readable once the Pflicht-Trigger-Kachel itself is gone after the
+    phase change (P-16 Schritt 7, S170 Nacharbeit e)."""
+    from gameMechanic.gameLog import log_action  # noqa: PLC0415
+
+    phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+    log_action(
+        st.session_state.get("round", 0),
+        phase,
+        unit_name,
+        f"explode damage confirmed — {summary}",
+    )
 
 
 def _render_explode_roll(
@@ -534,6 +554,7 @@ def _render_explode_roll(
         use_container_width=True,
     ):
         entry["exploded"] = resolve_explode_effect(ability, exploded=True)
+        _log_explode_outcome(unit.name_en, exploded=True)
         st.rerun()
     if col_no.button(
         "Does not explode",
@@ -603,14 +624,17 @@ def _render_explode_target_panel(
         disabled=not entry["selected"],
         use_container_width=True,
     ):
+        applied_names: list[str] = []
         for target_key in list(entry["selected"]):
             tgt_player, tgt_uid = target_key.split("::", 1)
             count = int(entry["damage"].get(target_key, 0))
             if count > 0:
                 tgt_unit, _ = lookup(tgt_player, tgt_uid)
                 apply_mortal_wounds(tgt_uid, tgt_player, count, tgt_unit)
+                applied_names.append(f"{tgt_unit.name_en} ({count})")
         entry["applied"] = True
-        _log_explode_outcome(unit.name_en, exploded=True)
+        summary = ", ".join(applied_names) if applied_names else "no targets"
+        _log_explode_damage_confirmed(unit.name_en, summary)
         st.rerun()
     if footer_reset.button("Reset", key=f"explode_reset_{state_key}", use_container_width=True):
         entry["selected"] = []
@@ -621,22 +645,56 @@ def _render_explode_target_panel(
 def _render_explode_outcome(
     faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
 ) -> None:
-    """Info-Hinweiskasten (§1.8) + on success (not yet applied), the target
-    panel (§1.7)."""
+    """Info-Hinweiskasten (§1.8) for the resolved roll, plus its own "Reset"
+    button directly below the info box for BOTH outcomes (S170 Nacharbeit f
+    — Reset used to render below the target panel on the success branch,
+    moved up here to sit right under the blue box on both branches alike).
+
+    The Multi-Unit target panel (§1.7, Baustein ④) no longer renders here —
+    S170 Nacharbeit a moved it out to its own full-width call, outside this
+    function's playerArea half-column (§1.9.1); see
+    ``render_explode_tiles_for_destroyed``, which renders the panel
+    separately once the half-column pass (this function) is done.
+
+    A "Reset" button on both outcomes (S169 b2 stakeholder ask) undoes the
+    roll decision itself, taking the tile back to the binary-roll starting
+    state (§1.6) — distinct from the target panel's own "Reset" (§1.7),
+    which only discards an in-progress, not-yet-confirmed target selection.
+    Once damage has been applied (``entry["applied"]``) this reset no
+    longer appears — undoing already-applied damage is the deferred b2
+    Nacharbeit d, not built here.
+    """
+    state_key = f"{faction}::{uid}"
     if entry["exploded"]:
         st.info(
             f'{unit.name_en} explodes. Every unit within {ability.effect.radius}" '
             f"suffers {ability.effect.damage} mortal wounds."
         )
-        if not entry["applied"]:
-            _render_explode_target_panel(faction, uid, unit, ability, entry)
+        if not entry["applied"] and st.button(
+            "Reset",
+            key=f"explode_reset_roll_{state_key}",
+            use_container_width=True,
+        ):
+            entry["exploded"] = None
+            entry["selected"] = []
+            entry["damage"] = {}
+            st.rerun()
     else:
         # Explicit terminal state (P-16 Schritt 4) — a failed roll never
         # silently removes the tile, this info box is the whole outcome.
         st.info(f"{unit.name_en} does not explode.")
+        if st.button(
+            "Reset",
+            key=f"explode_reset_roll_{state_key}",
+            use_container_width=True,
+        ):
+            entry["exploded"] = None
+            st.rerun()
 
 
-def _render_explode_tile(faction: str, uid: str, unit: Unit) -> None:
+def _render_explode_tile(
+    faction: str, uid: str, unit: Unit
+) -> tuple[str, str, Unit, Ability, dict[str, Any]] | None:
     """Mandatory Explodes trigger tile (design_system.md §1.5-§1.8) for a
     destroyed unit's own ``effect.type: explode`` ability (Explodes-Familie,
     ``mandatory: true`` — no Use/Undo GO card, see processes.md P-16). Sibling
@@ -645,24 +703,49 @@ def _render_explode_tile(faction: str, uid: str, unit: Unit) -> None:
     type (e.g. Arc Fields) — this function only ever matches
     ``effect.type: explode``.
 
+    Renders Bausteine ①/③ only (the binary-roll widget or its resolved
+    info+Reset outcome) — the caller places this inside the controlling
+    player's ``playerArea`` half-column (design_system.md §1.9.1, S170). If
+    the Multi-Unit target panel (Baustein ④) still needs to render for this
+    unit (exploded, not yet applied), the ``(faction, uid, unit, ability,
+    entry)`` tuple is returned so the caller can render it separately,
+    full-width, outside any half-column — see
+    ``render_explode_tiles_for_destroyed``.
+
     Both the D6 gate roll and the per-target mortal-wound count are entered
     by the player from a physical table roll ("Die App würfelt nicht") —
     ``resolve_explode_effect`` performs no dice roll of its own.
+
+    A destroyed unit's tile is only ever created ONCE per battle
+    (``explode_triggered_units``, battle-scoped, never cleared by a phase
+    change): ``explode_tiles`` itself IS phase-scoped and gets wiped by
+    ``gameState._reset_phase_state()`` on every ``next_phase()`` (§1.5
+    Lebensdauer, S170) — without this separate battle-scoped marker, the
+    still-``destroyed`` unit would spawn a brand new, unresolved tile again
+    on the very next phase instead of staying gone for good.
     """
     try:
         faction_dir = faction_dir_for(faction)
     except KeyError:
-        return
+        return None
     ability = find_unit_ability_by_effect(faction_dir, unit.id, "explode")
     if ability is None:
-        return
+        return None
     _, unit_state = lookup(faction, uid)
     if not unit_state.get("destroyed"):
-        return
+        return None
 
-    store: dict[str, dict[str, Any]] = st.session_state.get("explode_tiles", {})
     state_key = f"{faction}::{uid}"
+    store: dict[str, dict[str, Any]] = st.session_state.get("explode_tiles", {})
     if state_key not in store:
+        triggered: set[str] = st.session_state.get("explode_triggered_units", set())
+        if state_key in triggered:
+            # Already surfaced (and resolved-or-not) in an earlier phase —
+            # the Pflicht-Trigger fires exactly once; afterwards the event
+            # lives only in the gameLog (P-16 Schritt 7).
+            return None
+        triggered.add(state_key)
+        st.session_state.explode_triggered_units = triggered
         store[state_key] = {
             "ability_id": ability.id,
             "exploded": None,
@@ -684,6 +767,10 @@ def _render_explode_tile(faction: str, uid: str, unit: Unit) -> None:
         else:
             _render_explode_outcome(faction, uid, unit, ability, entry)
 
+    if entry["exploded"] and not entry["applied"]:
+        return faction, uid, unit, ability, entry
+    return None
+
 
 def render_explode_tiles_for_destroyed(first: str, second: str) -> None:
     """Scan both factions' full unit lists for a destroyed ``explode``-typed
@@ -693,10 +780,33 @@ def render_explode_tiles_for_destroyed(first: str, second: str) -> None:
     a destroyed explode-carrier is reached regardless of what is currently
     selected (same S164 fightPhase lesson that scan already fixed for
     mortal_wounds: a duplicated column structure must not hide the tile).
+
+    Layout (design_system.md §1.9.1, S170 Nacharbeit a): Bausteine ①/③ (the
+    roll widget / resolved outcome, ``_render_explode_tile``) render inside
+    the destroyed unit's own controlling player's ``playerArea`` half-column
+    — ``first_player`` left, ``second_player`` right, never bound to
+    ``active`` (CLAUDE.md domain constraint: sidebars/halves are fixed to
+    the player slots). The Multi-Unit target panel (Baustein ④, §1.7) is the
+    sole exception (§7.1) and renders afterwards, full-width, outside either
+    half-column — exactly as before (S169-abgenommen, "unverändert").
     """
-    for faction in (first, second):
-        for uid, unit in zip(unit_keys_for(faction), units_list_for(faction)):
-            _render_explode_tile(faction, uid, unit)
+    pending: list[tuple[str, str, Unit, Ability, dict[str, Any]]] = []
+    col1, col2 = st.columns(2)
+    with col1:
+        for uid, unit in zip(unit_keys_for(first), units_list_for(first)):
+            result = _render_explode_tile(first, uid, unit)
+            if result is not None:
+                pending.append(result)
+    with col2:
+        for uid, unit in zip(unit_keys_for(second), units_list_for(second)):
+            result = _render_explode_tile(second, uid, unit)
+            if result is not None:
+                pending.append(result)
+
+    for pending_faction, pending_uid, pending_unit, pending_ability, pending_entry in pending:
+        _render_explode_target_panel(
+            pending_faction, pending_uid, pending_unit, pending_ability, pending_entry
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -2180,12 +2290,12 @@ def _render_subgroup_selector(
                 # Wortlaut-Budget (design_system.md §3.1, B-124(a)-Ratchet): ein
                 # kurzer Satz, keine Regelbegründung im UI-Text.
                 dmg_col.warning(f"► **{locked.name_en}** zuerst erledigen ({pool % wval} LP).")
-            else:
-                # Forced-allocation lock from full health (unit.has_per_group_wounds(),
-                # e.g. Silent King) — no model is wounded yet, but 9E/codex still
-                # requires this group to be destroyed before the other group can
-                # take damage (get_locked_group docstring). Wortlaut-Budget s. o.
-                dmg_col.warning(f"► **{locked.name_en}** zuerst vollständig zerstören.")
+            # else: forced-allocation lock from full health (unit.has_per_group_wounds(),
+            # e.g. Silent King) — no model is wounded yet, but 9E/codex still
+            # requires this group to be destroyed before the other group can
+            # take damage (get_locked_group docstring). The radio choice above
+            # is already forced onto this group, so no separate warning is
+            # shown here (S169 b2 stakeholder ask: hint dropped as redundant).
         return locked_gid
 
     ids = [g.id for g in active_groups]

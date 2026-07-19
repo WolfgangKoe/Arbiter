@@ -160,6 +160,13 @@ Anker-Regel identisch zu jeder reaktiven GO-Karte (§6.2): inline am Trigger-Ort
 Vollbreite, NICHT in der zentralen Stratagems-Liste. Konkrete Anwendung: Explodes-Familie,
 [`processes.md` P-16](processes.md#p-16--explodes--pflicht-trigger-bei-zerstörung).
 
+**Lebensdauer (S170, Stakeholder-Befund):** Die Kachel-Gruppe (①–④, §7.1) ist an die Phase
+gebunden, in der der Pflicht-Trigger ausgelöst wurde — sie verschwindet **vollständig beim
+Phasenwechsel** (`gameState.next_phase()`), unabhängig vom Ausgang (Erfolg/Misserfolg/kein
+CP-Automatismus genutzt). Kein Dauerzustand über Phasen-/Rundengrenzen hinweg. Danach ist das
+Ereignis nur noch im Spiel-Protokoll (`gameProtocoll`/gameLog) nachvollziehbar. Konkrete
+Anwendung: `processes.md` P-16.
+
 ### 1.6 Binär-Wurf-Baustein — zwei Buttons statt Zahlenfeld (generische Bauform, S169)
 
 Bewusste Alternative zum Tisch-Wurf-Eingabe-Baustein (§6.3, Zahlenfeld): für Tischwürfe, bei
@@ -177,6 +184,40 @@ Würfelwert (anders als z. B. beim Deny-Wurf, dessen Wert weiterverrechnet wird)
 
 Kein Präzedenzfall für andere Tischwürfe mit echtem Zahlenwert — §6.3 bleibt dort Standard
 (S166-Entscheid). Konkreter Wortlaut + Anwendung: `processes.md` P-16.
+
+**Reset-Zustand (S170, Stakeholder-Befund):** Zwei Zustände statt einem — „offen" (beide
+Buttons aktiv, noch keine Entscheidung) und „entschieden" (nach Klick auf **eines** der
+beiden Labels, Erfolg ODER Fehlschlag gleichermaßen). Im Zustand „entschieden" ersetzt ein
+`↺ Reset`-Button (§4.1 `SYM_RESET`) die beiden Erfolgs-/Fehlschlags-Buttons; Klick darauf
+kehrt zum Zustand „offen" zurück (Entscheidung verworfen). Gilt identisch für beide Ausgänge
+— kein Sonderfall je Richtung. **Präzisierung (S170-Stakeholder-Entscheid, Lesart A):**
+VOR „Confirm all" verwirft der Reset auch eine begonnene, unbestätigte Ziel-Auswahl im
+Multi-Unit-Panel (④). NACH „Confirm all" führt ein Reset unterhalb des Info-Kastens (③)
+zurück ins Multi-Unit-Panel — mit allen bisherigen Zuweisungen sichtbar und nachbearbeitbar
+(Teil der Nacharbeit d „Korrektur nach Confirm", §1.7 — Umsetzung Folgesession).
+
+```
+┌──────────────────────────────────────────────┐
+│ [Titel]                                       │  ← Zustand „offen"
+│ [Schwellen-Caption]                           │
+│ ──────────────────────────────────────────── │
+│  [ Erfolgs-Label ]      [ Fehlschlags-Label ] │
+└──────────────────────────────────────────────┘
+                    │  Klick auf EINES der beiden Labels
+                    ▼
+┌──────────────────────────────────────────────┐
+│ [Titel]                                       │  ← Zustand „entschieden"
+│ [Schwellen-Caption]                           │
+│ ──────────────────────────────────────────── │
+│                 ↺ Reset                       │
+└──────────────────────────────────────────────┘
+                    │  Klick auf Reset
+                    ▼
+              zurück zu Zustand „offen"
+```
+
+Konkrete Anwendung inkl. Wechselwirkung mit dem Multi-Unit-Panel (§1.7, falls bereits aktiv):
+`processes.md` P-16.
 
 ### 1.7 Multi-Unit-Ziel-Auswahl-Panel — beide Armeen (generische Bauform, S169)
 
@@ -205,6 +246,36 @@ den sinkenden LP-Balken direkt in der unitCard (Bestandskomponente) — keine zu
 Vorschau-/Mini-Karte im Panel. Footer: „Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog
 Abschluss der Attackensequenz). Konkrete Anwendung: `processes.md` P-16.
 
+**Direkt-Apply statt Sammel-Buchung (S170-Präzisierung, Umsetzung Folgesession — S169-Befund:
+Schaden wurde bisher gesammelt und erst bei „Confirm all" für alle Einheiten gleichzeitig
+gebucht, spec-widrig):** Der Schaden wird **je Einheit sofort bei Werteingabe** angewendet
+(`apply_damage`, mortal) — nicht gesammelt und erst am Ende gebucht. Der LP-Balken sinkt live,
+auch bis zur Zerstörung der Einheit (`unit_state.destroyed` greift wie bei jeder anderen
+Schadensquelle); der Sidebar-Sprung an die erste Position (s. o.) passiert im selben Moment.
+„Confirm all" bucht dadurch **nichts mehr selbst** — es schließt das Panel ab (Panel
+verschwindet, Info-Kasten §1.8 bleibt stehen). „Reset" macht alle bereits direkt angewendeten
+Zuweisungen der aktuellen Auswahl-Runde rückgängig (LP zurück auf den Stand vor dem Panel) und
+hält das Panel für eine neue Auswahl offen.
+
+```
+Zuweisung je Einheit (SOFORT, nicht erst bei Confirm all):
+  [✓ Einheit X]   [ n ]  ──►  apply_damage(X, n) sofort
+                               LP-Balken live + Sidebar-Sprung an Position 1
+
+Footer:
+  [Confirm all]  ──►  schließt Panel ab (keine erneute Schadensbuchung —
+                       die Zuweisungen sind bereits angewendet)
+  [Reset]        ──►  macht ALLE bisherigen Zuweisungen der Runde rückgängig,
+                       Panel bleibt offen für neue Auswahl
+```
+
+**Korrektur nach Confirm (Umsetzung Folgesession, hier nur Zielverhalten spezifiziert):** nach
+„Confirm all" kann der Spieler in denselben Panel-Zustand direkt VOR der Bestätigung
+zurückkehren, um Fehlzuweisungen zu korrigieren (z. B. falscher Würfelwert eingetragen) — ohne
+das gesamte Explodes-Ereignis neu durchlaufen zu müssen. Der konkrete Anker/Button dafür wird
+in der Folgesession festgelegt; diese Spec bindet nur das Verhalten: gleicher Panel-Zustand,
+gleiche Auswahl, wie unmittelbar vor „Confirm all".
+
 ### 1.8 Info-Hinweiskasten — Wiederverwendung für Ergebnis-Ausgänge (generische Bauform, S169)
 
 Kein neuer Zustand neben `info`/`warning`/`success`/`error` (§3): ein Ergebnis-Hinweis
@@ -220,6 +291,11 @@ Ausgänge ab (nie beide gleichzeitig sichtbar); Wortlaut-Budget gilt (§3.1).
 │  Ausgang — Wortlaut-Budget §3.1]              │
 └──────────────────────────────────────────────┘
 ```
+
+**Lebensdauer (S170):** identisch zur Kachel-Gruppe, an die dieser Kasten gehört (§1.5) —
+verschwindet beim Phasenwechsel zusammen mit der Kachel, kein Dauerzustand über die Runde
+hinaus. Kein stilles Verschwinden VOR dem Phasenwechsel (§1.5 bleibt maßgeblich: „does not
+explode" ist ein expliziter, sichtbar markierter Endzustand, keine kommentarlose Löschung).
 
 ### 1.9 Layout-Invariante — Effekt-Ausführung in `center`, Sidebars unveränderlich (S169)
 
@@ -245,6 +321,37 @@ reaktiv auf Auswahl/Schaden (LP-Balken, Sortierung an die Spitze, §1.7).
 Mehrere Gruppen (z. B. beide Fraktionen im Multi-Unit-Panel, §1.7) erscheinen nebeneinander
 **innerhalb derselben `center`-Kachel**, nie in eigenen Seiten-Spalten — es gibt keine
 armee-eigene Spalte auf App-Ebene (Mockup-V3-Fehler, korrigiert S168/S169).
+
+#### 1.9.1 playerArea-Beschränkung für Bausteine ①③ (S170, Stakeholder-Befund S169)
+
+`gameActionsArea` (die `center`-Spalte) gliedert sich intern kanonisch weiter in
+`gameActionDisplayArea` (oben, volle `center`-Breite) und darunter `firstPlayerArea` /
+`secondPlayerArea` (50/50-Split, [`ui_layout.md` §7](ui_layout.md#7-gameactionsarea) —
+hier nicht dupliziert, nur referenziert). Binär-Wurf-Baustein (§1.6) und Info-Hinweiskasten
+(§1.8) einer Pflicht-Trigger-Kachel-Gruppe (Baustein ① und ③, §7.1) rendern **ausschließlich
+in der `playerArea` des Spielers, dessen Einheit den Pflicht-Trigger auslöst** (`first_player`
+oder `second_player`, nie an `active` gebunden — Domänen-Constraint `CLAUDE.md`) — **nicht**
+über die volle `gameActionsArea`-Breite (S169-Ist-Befund: Kachel + Info-Kasten erstreckten
+sich über die gesamte `gameActionsArea`, war als Regression gemeldet).
+
+Ausnahme, unverändert: das Multi-Unit-Ziel-Auswahl-Panel (§1.7, Baustein ④) zeigt bewusst
+beide Armeen nebeneinander und spannt deshalb weiterhin die volle `gameActionsArea`-Breite
+(vom Stakeholder als korrekt abgenommen, S169).
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                gameActionDisplayArea (volle center-Breite)                │
+├──────────────────────────────────┬──────────────────────────────────────┤
+│  firstPlayerArea                  │  secondPlayerArea                     │
+│  ┌──────────────────────────────┐ │                                      │
+│  │ ① Binär-Wurf-Baustein (§1.6) │ │  ← nur hier, wenn first_player die   │
+│  │ ③ Info-Hinweiskasten (§1.8)  │ │    explodierende Einheit kontrolliert│
+│  └──────────────────────────────┘ │                                      │
+├──────────────────────────────────┴──────────────────────────────────────┤
+│  ④ Multi-Unit-Ziel-Auswahl-Panel — volle Breite, beide Armeen (Ausnahme, │
+│    unverändert — s. o.)                                                   │
+└───────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 2. Geometrie-Tokens (verbindlich, S115)
 
@@ -703,6 +810,15 @@ Vollbreite, NICHT in der zentralen Stratagems-Liste. Bausteine ①–④ sind al
 direkt auf ① oder ②). Reihenfolge und konkrete Belegung (welcher Baustein bei welchem
 Ereignis, welche Zahlenwerte) bestimmt die jeweilige Prozess-Spec — für Explodes:
 `processes.md` P-16.
+
+**Breiten-Regel (S170, §1.9.1):** Bausteine ①③ (Binär-Wurf + Info-Hinweiskasten) rendern nur
+innerhalb der `playerArea` des kontrollierenden Spielers, nicht über die volle
+`gameActionsArea`-Breite; Baustein ④ (Multi-Unit-Panel) ist die einzige Ausnahme und spannt
+bewusst die volle Breite (beide Armeen nebeneinander). Details + ASCII-Schema: §1.9.1.
+
+**Lebensdauer (S170, §1.5/§1.8):** die gesamte Kachel-Gruppe verschwindet beim
+Phasenwechsel, unabhängig vom Ausgang — kein Dauerzustand über die Runde hinaus, Ereignis
+danach nur noch im gameLog.
 
 ### 7.2 Wortlaut & Farbe (abstrakt)
 

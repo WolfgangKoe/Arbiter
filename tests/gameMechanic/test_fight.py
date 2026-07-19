@@ -359,7 +359,16 @@ class TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn:
         # require simulating full widget interaction with a mocked streamlit.
         monkeypatch.setattr(fp, "render_group_cards", lambda *a, **k: None)
         monkeypatch.setattr(fp, "render_group_assignment", lambda *a, **k: None)
-        monkeypatch.setattr(fp.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+        columns_stub = lambda n: tuple(MagicMock() for _ in range(n))  # noqa: E731
+        monkeypatch.setattr(fp.st, "columns", columns_stub)
+        # S170 Nacharbeit a (design_system.md §1.9.1): render_explode_tiles_
+        # for_destroyed now calls st.columns(2) itself (playerArea split) —
+        # that call runs against uiLayout._common's OWN `st` binding, which
+        # is only reliably the same object as fp.st within a single test
+        # file's isolated run (see gameMechanic/conftest.py docstring on
+        # per-file streamlit-mock binding order); patch it explicitly too
+        # rather than depend on that ordering across the full suite.
+        monkeypatch.setattr(common.st, "columns", columns_stub)
         # A prior test in this module (TestRenderMeleePairsDuplicateSquad) leaves
         # a strict lambda on the shared fp.st mock's `markdown` attribute that
         # rejects kwargs — reset it here to a permissive no-op for this test.
@@ -444,7 +453,14 @@ class TestExplodeTileReachableThroughGroupFlowEarlyReturn:
         # the subject under test (covered elsewhere).
         monkeypatch.setattr(fp, "render_group_cards", lambda *a, **k: None)
         monkeypatch.setattr(fp, "render_group_assignment", lambda *a, **k: None)
-        monkeypatch.setattr(fp.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+        columns_stub = lambda n: tuple(MagicMock() for _ in range(n))  # noqa: E731
+        monkeypatch.setattr(fp.st, "columns", columns_stub)
+        # S170 Nacharbeit a: the playerArea split (render_explode_tiles_for_
+        # destroyed's OWN st.columns(2) call, §1.9.1) still runs even though
+        # _render_explode_tile itself is mocked out above — see the
+        # comment on the sibling test in this module for why common.st must
+        # be patched explicitly too.
+        monkeypatch.setattr(common.st, "columns", columns_stub)
         monkeypatch.setattr(fp.st, "markdown", lambda *a, **kw: None)
 
         fp.FightPhaseHandler().render_active(

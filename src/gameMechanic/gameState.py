@@ -600,6 +600,15 @@ def _reset_phase_state() -> None:
     # marker from the previous phase must not leak a GO box into the next one.
     st.session_state.pending_fall_back = None
     st.session_state.pending_transport_destroyed = None
+    # Pflicht-Trigger-Kachel-Gruppe (Explodes, design_system.md §1.5/§1.8
+    # Lebensdauer, S170): the whole tile group is bound to the phase that
+    # triggered it and disappears completely on every phase change,
+    # regardless of outcome — afterwards the event lives only in the
+    # gameLog. ``explode_triggered_units`` (uiLayout._common) is a SEPARATE,
+    # battle-scoped marker that is deliberately NOT cleared here — it stops
+    # an already-surfaced tile from spawning again on the next phase just
+    # because the unit is still ``destroyed``.
+    st.session_state.explode_tiles = {}
     current_phase = PHASES[st.session_state.get("phase_idx", 0)][1]
     current_round = st.session_state.get("round", 1)
     st.session_state.active_modifiers = [

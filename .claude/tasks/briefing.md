@@ -25,45 +25,31 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S169, 2026-07-19)
+## Aktueller Stand (nach S170, 2026-07-19)
 
-**Spec-Struktur-Korrektur (Stakeholder-Entscheid S169):** `design_system.md` definiert nur
-noch GENERISCHE Bausteine — neu §1.5–1.9 (Pflicht-Trigger-Kachel, Binär-Wurf, Multi-Unit-
-Ziel-Panel, Info-Hinweiskasten, Layout-Invariante; je mit Pflicht-ASCII-Schema, Retro-M1 in
-`agent_scopes.md` verankert), §3.1 Wortlaut-Budget (M2), generisches §7. Feature-Spezifisches
-in `processes.md`: **P-16 Explodes** (inkl. 5 Referenz-Screenshots) + P-08-Ergänzung (aus
-§4.4 migriert — Stakeholder sagte „§6", T2 interpretierte §4.4; Bestätigung offen, s. Retro).
+**S170 committet:** Explodes-Kachel-Nacharbeiten b/c/a/e/f umgesetzt (Menhir-Hinweis weg,
+Wurf-Karten-Resets, playerArea-Spaltensplit ①③/④ voll breit, Phasenwechsel räumt Kachel +
+Log-Einträge, Reset unter Info-Kasten); Spec-first-Abnahme komplett (design_system §1.5–1.9.1,
+P-16; Reset-Semantik = Lesart A in §1.6); P-16-Screenshots → In-Spec-Diagramme (5 PNGs weg);
+Retro-M1/M2 verankert, M3-Allowlist eingetragen. Review S170: GO nach Marker-Korrektur.
+Gates: 2080 passed, Coverage 99,18 %, Arch 8/8, Doku 25, mypy 0.
+**B-028c1 bleibt In Progress:** offen d (Direkt-Apply + Nach-Confirm-Reset ins Panel, Lesart A)
++ ↺-Glyph-Minorfix, b3 `auto_explode`-GO, UI-Verifikation Testfälle 4–7.
+**Token-Lehre:** T2 ~121k/60k, T4-aef ~244k/120k — je ×2 über ×1,5-Budget (→ Retro-M1 ×2,5).
 
-**B-028c1 b1+b2 GEBAUT (In Progress, nicht abgehakt):** b1 = `effect.type: explode`
-(`roll_threshold`/`radius`/`damage`) + `mandatory`-Achse, `resolve_explode_effect` ohne
-Engine-Selbstwurf, 5 Träger Wahapedia-belegt (Silent King, Triarch Stalker, Annihilation
-Barge, Night Scythe, Gunwagon; Spyder bewusst ausgelassen — Mehrmodell, eigenes Konzept
-nötig). b2 = Pflicht-Trigger-Kachel in allen 5 `*Phase.py` (center, selektionsunabhängig),
-Binär-Wurf, Ziel-Panel beider Armeen, B-124(a)-Warnhinweis gekürzt. Gates: 2066 passed,
-Coverage 99,18 %, Arch 8/8, Nenner 159/Ledger 0. **UI-Verifikation offen**
-(`S169_b2_ui_verifikation.md`). b3 (`auto_explode`-GO) → S170.
+Frühere Sessions (S60–S169): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-**Handoff aufgeräumt:** 12 Dateien gelöscht; Review-NO-GO wegen 3 verwaister Referenzen
-noch in S169 per Pflicht-Korrektur ausgeräumt (Lehre → Retro-Maßnahme 1: Referenz-Grep vor
-Löschung für ALLE Dateitypen). **Retro-M3 (Bash-Allowlist) wartet auf Stakeholder**
-(`S169_M3_ALLOWLIST.md`) — Classifier blockiert Claude-seitige Permission-Änderungen.
+### ▶ Nächster Schritt (S171)
 
-Frühere Sessions (S60–S168): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
-
-### ▶ Nächster Schritt (S170)
-
-1. **Retro-Entscheid** (`docs/handoff/S169_RETRO.md`) — 3 Maßnahmen + 2 offene
-   Stakeholder-Punkte (b2-UI-Verifikation, §6-vs-§4.4-Bestätigung).
-2. **b2-UI-Verifikation einlösen** (`S169_b2_ui_verifikation.md`) — bei GO B-028c1
-   b1+b2 abhaken; danach **b3 `auto_explode`-GO** (~M, eigener Brief).
-3. **M3-Allowlist** (`S169_M3_ALLOWLIST.md`) — Stakeholder trägt selbst ein.
-4. Weiteres laut `docs/goals/backlog.md` (B-124(b) Apply-Damage; Spyder-Explodes-Konzept).
+1. **Retro-Entscheid** (`S170_RETRO.md` NEEDS-DECISION): 3 Maßnahmen (×2,5-Faktor, Marker-Sofortwechsel, ↺-Glyph).
+2. **UI-Verifikation einlösen** (`S170_b2bc_ui_verifikation.md` Testfälle 4–7 + `S169_b2_ui_verifikation.md`) → B-028c1-Teilhaken wenn grün.
+3. **T4-d + T5/b3** (~M je Item): Direkt-Apply + Nach-Confirm-Reset ins Panel (Lesart A, §1.6/§1.7) inkl. ↺-Glyph; `auto_explode`-GO (Annihilation Barge als Träger vorhanden, kein Roster-Prep nötig).
+4. **Backlog**: B-122 „Careen!" (Ork-GO vor Explodes-Wurf); Spyder-Konzept; weitere Prio laut `backlog.md`.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
-`S169_RETRO.md` + `S169_M3_ALLOWLIST.md` (NEEDS-DECISION);
-`S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION); `S169_REVIEW.md` (NEEDS-DECISION —
-NO-GO-Befund per Pflicht-Korrektur noch in S169 ausgeräumt, nur noch Sichtung);
-`S169_PLANNING.md` (nach Sichtung löschen).
+`S170_RETRO.md` (NEEDS-DECISION);
+`S170_b2bc_ui_verifikation.md` + `S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION — letztere bleibt bis a–d verifiziert);
+`S170_PLANNING.md` (nach S171-Sichtung löschen).
 
 ---
 

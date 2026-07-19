@@ -153,6 +153,8 @@ genannten Dateien löschen; jede andere Löschung ist Abbruch + Rückfrage." Anl
 ein Doku-Agent löschte unbeauftragt eine NEEDS-DECISION-Datei und regenerierte
 Metrics-Dateien, die nicht Teil des Auftrags waren.
 
+**(Retromaßnahme S169-M1 — PFLICHT):** Vor JEDER Whitelist-Löschung Pflicht-Grep **je Datei** (Voll- UND Kurzname, z. B. `21-29-43` als Kurzform von `Bildschirmfoto vom 2026-07-09 21-29-43.png`) über `docs/` UND `src/`; Treffer in aktiven Artefakten ⇒ Referenz erst umbiegen, dann löschen — gilt für ALLE Dateitypen (Screenshots, Mockups, Marker, Handoff-Dateien), nicht nur Screenshots.
+
 ## Standardsatz für UI-/Ability-Briefs (Retromaßnahme S165 — PFLICHT)
 
 Anlass: S165 B-028c1 — fünf Sessions Ping-Pong (Vollbreiten-Kachel, Design-System-Bruch)
@@ -342,6 +344,8 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
+
+- **Token-Schätzfaktor (Retromaßnahme S169-M2):** Executor-Token-Schätzungen werden ab sofort **×1,5** als Budget angesetzt; Selbst-Stopp-Schwelle = 2× der ursprünglichen Schätzung; bei prognostiziertem Realverbrauch **> 250k** wird der Brief VOR Vergabe gesplittet. Anlass: S168/S169 — Schätzungen wiederholt Faktor ~1,5–1,7 zu niedrig (T3 ~288k/180k, T4 ~325k/190k).
 
 - **Budget-Profil für UI-Verdrahtungs-Tasks (Retro-M2, S164):** UI-Verdrahtungs-Briefs und
   die zugehörige Live-UI-Verifikation werden als **getrennte** Aufträge vergeben.

@@ -753,7 +753,11 @@ def _sk_make_session(state: dict, uid: str) -> _GfSession:
 def test_damage_block_locks_front_group_from_full_health(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """Lock-Default + Nicht-Wählbarkeit: a fresh (full-health) Silent King never
     offers Szarekh via the radio — get_locked_group's forced-allocation branch
-    (T2) short-circuits _render_subgroup_selector before the radio renders."""
+    (T2) short-circuits _render_subgroup_selector before the radio renders.
+    S169 b2 stakeholder ask: the full-health lock hint itself was dropped as
+    redundant (the radio is already forced onto the locked group without it) —
+    no warning fires here at all, see test_subgroup_selector_locked_from_full_
+    health_shows_no_warning in test_common.py for the direct regression."""
     sk, _ = _silent_king_groups()
     state = _sk_state(10, 16)
     _sk_make_session(state, sk.id)
@@ -765,8 +769,7 @@ def test_damage_block_locks_front_group_from_full_health(monkeypatch) -> None:  
     common._render_damage_block(sk, "Necrons", sk.id, profile, "Orks", "Boyz", "shooting", "tab_sk")
 
     assert col.radio_calls == []  # the radio that would let the user pick Szarekh never renders
-    assert any("Triarchal Menhirs" in w for w in col.warning_calls)
-    assert all("Szarekh" not in w for w in col.warning_calls)
+    assert col.warning_calls == []  # full-health lock hint removed (S169 b2)
 
 
 def test_damage_block_apply_26_damage_destroys_fresh_silent_king(monkeypatch) -> None:  # type: ignore[no-untyped-def]

@@ -1006,6 +1006,35 @@ class TestResetPhaseState:
         _gs._reset_phase_state()
         assert s["stratagem_use_anchors"] == {}
 
+    def test_clears_explode_tiles(self) -> None:
+        """S170 Nacharbeit e (design_system.md §1.5/§1.8 Lebensdauer,
+        processes.md P-16 Schritt 7): the Pflicht-Trigger-Kachel-Gruppe is
+        bound to the phase that triggered it and disappears completely on
+        every phase change — regardless of outcome (explodes / does not
+        explode / confirmed / still undecided)."""
+        s = _reset_phase_session(
+            explode_tiles={
+                "Necrons::silent_king": {
+                    "ability_id": "a",
+                    "exploded": True,
+                    "selected": [],
+                    "damage": {},
+                    "applied": False,
+                }
+            }
+        )
+        _gs._reset_phase_state()
+        assert s["explode_tiles"] == {}
+
+    def test_does_not_reset_explode_triggered_units(self) -> None:
+        """Regression guard: explode_triggered_units (uiLayout._common) is
+        battle-scoped, not phase-scoped — it must survive _reset_phase_state()
+        or an already-surfaced-and-cleared tile would spawn again on the very
+        next phase for a unit that is still ``destroyed`` (S170 Nacharbeit e)."""
+        s = _reset_phase_session(explode_triggered_units={"Necrons::silent_king"})
+        _gs._reset_phase_state()
+        assert s["explode_triggered_units"] == {"Necrons::silent_king"}
+
     def test_removes_expired_phase_modifiers(self) -> None:
         # phase_idx=1 → current_phase="command"; modifier for "command" should be removed
         s = _reset_phase_session()

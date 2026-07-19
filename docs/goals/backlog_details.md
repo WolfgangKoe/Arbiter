@@ -2389,3 +2389,25 @@ den sie als generische Infra vorgehalten wird.
 ändern".
 
 **Herkunft:** Review-Befund S163 / Retro M2.
+
+## B-122 — Ork-GO „Careen!"
+
+[↩ Zeile in backlog.md](backlog.md#b-122)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~5–15k (Datenabgleich + Test)
+
+**Detail-Beschreibung:** Ork-Stratagem „Careen!" muss vor dem automatischen Explodes-Wurf beim Gunwagon von Hand aufgerufen werden (kein auto-explode wie andere Explodes-Träger). Recherche: Wahapedia Ork-Codex für Regeltext; Modellierung: analog zu anderen Stratagemen, aber Bedingungs-Flag oder Ablauf-Korrektur nötig, um es nur VOR Explodes-Wurf zuzulassen, nicht danach.
+
+**Abhängigkeiten:** Wartet auf Explodes-Infrastruktur (B-028c1 b1+b2); parallel zu B-028c3-c5 möglich.
+
+**Belege:** S170-Planning §2.
+
+**Benötigte Regeln-Scopes:** Wahapedia Ork-Codex (Careen! Regeltext); `docs/spec/processes.md` P-16 (Explodes-Ablauf).
+
+**Herkunft:** S170-Planning Stakeholder-Kommentar (2026-07-19).

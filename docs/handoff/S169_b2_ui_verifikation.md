@@ -66,13 +66,18 @@ Kachel im echten UI so erscheint wie spezifiziert.
 1. **Interaktion regelkonform?** Zwei physische Tischwürfe (Explodes-Gate +
    Schaden), App würfelt selbst nichts, Reichweite wird nicht nachgezählt
    (P-16 Fachliche Einordnung, Wahapedia-Zitat).
+   Antwort: Die grundsätzliche Mechanik funktioniert, sowohl mit "explodes" und "does not explode".
 2. **Komponente + Anker gemäß §-Verweis?** §1.5 (Kachel-Shell)/§1.6
    (Binär-Wurf)/§1.7 (Multi-Unit-Panel)/§1.8 (Info-Kasten)/§1.9
    (center-Spalte, Sidebars unangetastet) — kein Vollbreite-Layout, keine
    GO-Karte für den Pflicht-Trigger selbst.
+   Antwort: Die Anker sind an der richtigen Stelle. Allerdings erstreckt sich die Binärwurf-Kachel und der Hinweis des Infokastens über die gesamte gameActionArea, obwohl sich das nur in der playerArea des Spielers erstrecken sollte, dessen Einheit explodiert. Die GO-Karte wurde nicht angezeigt. Das Multi-Unit-Panel war korrekt.
 3. **Wortlaut-Familie eingehalten?** „Explodes!"/„Does not explode",
    „Confirm all"/„Reset", genau ein Satz je Info-Ausgang (§3.1).
+   Antwort: Ja auch hier wurde alles eingehalten und die Buttons funktionieren wie erwartet.
 
 
 Ergänzungen:
-Den Hinweis-Block  mit "► Triarchal Menhirs zuerst vollständig zerstören." bitte entfernen. Den braucht es nicht!
+- Den Hinweis-Block  mit "► Triarchal Menhirs zuerst vollständig zerstören." bitte entfernen. Den braucht es nicht!
+- Es fehlen mehrere Reset-Buttons. Bei der Karte mit dem Wurf der Explosion selbst (sowohll bei Erfolg als auch Misserfolg) und auch nachdem man den verteilten Schaden mit Confirm bestätigt hat.
+- Ein Verhalten ist ebenfalls noch nicht wie erwartet. Wird im Multi-Unit-Panel eine Einheit gewählt, wird nicht die entsprechende unitCard der betroffenen Einheit in der linken bzw. rechten Armylist ganz nach oben sortiert. Die Schadenspunkte auf die gewählte Einheit wird es durch "confirm" und dann für alle Einheiten gleichzeitig durchgeführt. Die Anforderungen war, dass dies beim zuweisen des Schadens direkt geschieht (selbst wenn die Einheit dadurch zerstört wird). Durch "Reset" sollte das entsprechend Rrückgängig gemacht werden können. Nach erfolgter Bestätigung durch "Confirm" sollte man einfach wieder in diesen Bildschirm mit demselben state zurückkehren können, bevor direktbevor bestätigt wurde. Es soll möglich sein, Zuweisungen korrigieren zu können, falls etwas falsch gelaufen ist. 

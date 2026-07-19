@@ -1,6 +1,8 @@
 {
   "permissions": {
-    "allow": [
+    "allow": [      
+      "Bash(rm docs/handoff/*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)",
       "Bash(pytest *)",
       "Bash(python -m pytest *)",
       "Bash(python -m coverage *)",
