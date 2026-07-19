@@ -1,4 +1,4 @@
-STATUS: AWAITING-VERIFICATION
+STATUS: AWAITING-VERIFICATION (S171 — a/b/c/e verifiziert; letzter offener Punkt d ist umgesetzt (Code), Verifikation → `S171_d_ui_verifikation.md`; Datei löschen, sobald d grün)
 
 # S169 b2 — Explodes Pflicht-Trigger-Kachel — manuelle UI-Verifikation
 

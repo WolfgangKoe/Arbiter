@@ -25,31 +25,29 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S170, 2026-07-19)
+## Aktueller Stand (nach S171, 2026-07-19)
 
-**S170 committet:** Explodes-Kachel-Nacharbeiten b/c/a/e/f umgesetzt (Menhir-Hinweis weg,
-Wurf-Karten-Resets, playerArea-Spaltensplit ①③/④ voll breit, Phasenwechsel räumt Kachel +
-Log-Einträge, Reset unter Info-Kasten); Spec-first-Abnahme komplett (design_system §1.5–1.9.1,
-P-16; Reset-Semantik = Lesart A in §1.6); P-16-Screenshots → In-Spec-Diagramme (5 PNGs weg);
-Retro-M1/M2 verankert, M3-Allowlist eingetragen. Review S170: GO nach Marker-Korrektur.
-Gates: 2080 passed, Coverage 99,18 %, Arch 8/8, Doku 25, mypy 0.
-**B-028c1 bleibt In Progress:** offen d (Direkt-Apply + Nach-Confirm-Reset ins Panel, Lesart A)
-+ ↺-Glyph-Minorfix, b3 `auto_explode`-GO, UI-Verifikation Testfälle 4–7.
-**Token-Lehre:** T2 ~121k/60k, T4-aef ~244k/120k — je ×2 über ×1,5-Budget (→ Retro-M1 ×2,5).
+**S171 committet:** Retro-Entscheid alle 3 Maßnahmen (M1 ×2,5 + M2 Marker-Sofort → `agent_scopes.md`,
+M3 ↺-Glyph); Verifikation Testfälle 4–7 positiv → a/b/c/e/f verifiziert; Royal-Warden-Frage geklärt
+(kein Bug — D6 MW pro Einheit); **Nacharbeit d komplett umgesetzt** (d1 State: Direkt-Apply +
+Undo-Snapshots `unitMutations.py:578–650`; d2 Render: Nach-Confirm-Reset Lesart A, Sort-to-top
+`gameState.py:318–352`, ↺-Glyph auf allen 4 Reset-Buttons; 22 neue Tests, 2 Alt-Tests begründet an
+§1.6/§1.7 angepasst). Review: NO-GO→GO nach Marker-Korrektur (ANSWERED-Fehlgriff → Retro-M1 S171).
+Gates: 2101 passed, 99,19 %, Arch 8/8, Doku 25, mypy 0.
+**B-028c1 bleibt In Progress:** d-UI-Verifikation ausstehend (`S171_d_ui_verifikation.md`), b3 offen.
+**Token-Lehre (S171):** ×2,5-Faktor kalibriert — d1 ~148k, d2 ~166k bei je 180k-Budget, kein Riss.
 
-Frühere Sessions (S60–S169): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S170): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S171)
+### ▶ Nächster Schritt (S172)
 
-1. **Retro-Entscheid** (`S170_RETRO.md` NEEDS-DECISION): 3 Maßnahmen (×2,5-Faktor, Marker-Sofortwechsel, ↺-Glyph).
-2. **UI-Verifikation einlösen** (`S170_b2bc_ui_verifikation.md` Testfälle 4–7 + `S169_b2_ui_verifikation.md`) → B-028c1-Teilhaken wenn grün.
-3. **T4-d + T5/b3** (~M je Item): Direkt-Apply + Nach-Confirm-Reset ins Panel (Lesart A, §1.6/§1.7) inkl. ↺-Glyph; `auto_explode`-GO (Annihilation Barge als Träger vorhanden, kein Roster-Prep nötig).
-4. **Backlog**: B-122 „Careen!" (Ork-GO vor Explodes-Wurf); Spyder-Konzept; weitere Prio laut `backlog.md`.
+1. **Retro-Entscheid** (`S171_RETRO.md` NEEDS-DECISION): M2-Schärfung (ANSWERED nur bei Löschung im selben Abschluss) + PLANNING-Lifecycle kodifizieren.
+2. **d-Verifikation auswerten** (`S171_d_ui_verifikation.md`, 6 Testfälle) → bei Grün: 3 Verifikationsdateien löschen + B-028c1-Teilhaken d.
+3. **T6/b3 `auto_explode`-GO** (~M, Annihilation Barge im Roster) + **B-122 „Careen!"** (XS–S); danach Spyder-Konzept / `backlog.md`.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
-`S170_RETRO.md` (NEEDS-DECISION);
-`S170_b2bc_ui_verifikation.md` + `S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION — letztere bleibt bis a–d verifiziert);
-`S170_PLANNING.md` (nach S171-Sichtung löschen).
+`S171_RETRO.md` (NEEDS-DECISION); `S171_d_ui_verifikation.md` (AWAITING-VERIFICATION);
+`S170_b2bc_ui_verifikation.md` + `S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION bis d grün, dann DELETE).
 
 ---
 

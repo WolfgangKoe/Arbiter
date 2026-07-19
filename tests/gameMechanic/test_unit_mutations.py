@@ -1489,6 +1489,241 @@ def test_vengeance_of_the_enchained_flow_trigger_resolve_apply(
 
 
 # ---------------------------------------------------------------------------
+# Direct-Apply undo — snapshot_unit_state / restore_unit_state /
+# apply_explode_target_damage / undo_explode_target_damage /
+# undo_all_explode_damage (S171, → docs/spec/design_system.md §1.6/§1.7)
+# ---------------------------------------------------------------------------
+
+
+def _explode_entry() -> dict:  # type: ignore[type-arg]
+    return {"selected": [], "damage": {}, "applied": False, "snapshots": {}}
+
+
+def test_apply_explode_target_damage_then_undo_restores_original_hp() -> None:
+    """Direct-Apply round trip (§1.7): applying mortal wounds and then
+    undoing that single target leaves current_wounds/models exactly where
+    they started."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        }
+    )
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 3)
+    state = session["p1_units"][WARRIORS]
+    assert state["current_wounds"] == 7
+    assert state["models"] == 7
+    assert f"Necrons::{WARRIORS}" in entry["snapshots"]
+
+    _mut.undo_explode_target_damage(entry, WARRIORS, "Necrons")
+    state = session["p1_units"][WARRIORS]
+    assert state["current_wounds"] == 10
+    assert state["models"] == 10
+    assert entry["snapshots"] == {}
+
+
+def test_apply_explode_target_damage_reapply_uses_original_baseline() -> None:
+    """Correcting an already-entered count (e.g. a typo) must not stack on
+    top of the previous apply — every call restores the pre-round snapshot
+    first, then reapplies the FULL new count from that clean baseline."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        }
+    )
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 3)
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 7)
+    state = session["p1_units"][WARRIORS]
+    # 10 - 7, NOT 10 - 3 - 7 — a naive delta-apply would land on 0.
+    assert state["current_wounds"] == 3
+    assert state["models"] == 3
+
+    _mut.undo_explode_target_damage(entry, WARRIORS, "Necrons")
+    assert session["p1_units"][WARRIORS]["current_wounds"] == 10
+
+
+def test_apply_explode_target_damage_destroys_and_undo_revives() -> None:
+    """A lethal Direct-Apply count sets destroyed=True exactly like any other
+    damage source (apply_damage); undoing it fully revives the unit —
+    destroyed flag, HP and model count all restored."""
+    session = _make_session(p1_units={OVERLORD: _unit()})  # current_wounds=5, models=1
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, OVERLORD, "Necrons", _overlord(), 5)
+    state = session["p1_units"][OVERLORD]
+    assert state["destroyed"] is True
+    assert state["current_wounds"] == 0
+    assert state["models"] == 0
+
+    _mut.undo_explode_target_damage(entry, OVERLORD, "Necrons")
+    state = session["p1_units"][OVERLORD]
+    assert state["destroyed"] is False
+    assert state["current_wounds"] == 5
+    assert state["models"] == 1
+
+
+def test_undo_all_explode_damage_restores_every_touched_target() -> None:
+    """Panel-level Reset (§1.7 footer / §1.6 pre-Confirm Lesart A): every
+    target touched this round is restored, and the snapshot map is cleared
+    so the panel is ready for a fresh selection."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        },
+        p2_units={
+            BOYZ: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        },
+    )
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 4)
+    _mut.apply_explode_target_damage(entry, BOYZ, "Orks", _warriors(), 6)
+    assert session["p1_units"][WARRIORS]["current_wounds"] == 6
+    assert session["p2_units"][BOYZ]["current_wounds"] == 4
+
+    _mut.undo_all_explode_damage(entry)
+
+    assert session["p1_units"][WARRIORS]["current_wounds"] == 10
+    assert session["p2_units"][BOYZ]["current_wounds"] == 10
+    assert entry["snapshots"] == {}
+
+
+def test_undo_explode_target_damage_leaves_other_targets_untouched() -> None:
+    """Deselecting one target (row toggle-off) must undo only that target —
+    a second, still-selected target's applied damage stays in place."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        },
+        p2_units={
+            BOYZ: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        },
+    )
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 4)
+    _mut.apply_explode_target_damage(entry, BOYZ, "Orks", _warriors(), 6)
+
+    _mut.undo_explode_target_damage(entry, WARRIORS, "Necrons")
+
+    assert session["p1_units"][WARRIORS]["current_wounds"] == 10
+    assert session["p2_units"][BOYZ]["current_wounds"] == 4
+    assert list(entry["snapshots"]) == [f"Orks::{BOYZ}"]
+
+
+def test_undo_explode_target_damage_restores_melee_on_both_sides() -> None:
+    """A Direct-Apply mortal-wound kill on an engaged unit dissolves melee via
+    apply_damage's leave_melee call (both sides' melee_with lists are
+    mutated). undo_explode_target_damage's restore must not leave the enemy
+    side stale — enter_melee re-establishes both directions from the
+    snapshot's own melee_with list."""
+    session = _two_unit_session()
+    _mut.enter_melee(OVERLORD, "Necrons", BOYZ, "Orks")
+    assert session["p1_units"][OVERLORD]["in_melee"] is True
+    assert session["p2_units"][BOYZ]["in_melee"] is True
+
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, OVERLORD, "Necrons", _overlord(), 5)
+    assert session["p1_units"][OVERLORD]["destroyed"] is True
+    # apply_damage's leave_melee dissolved the engagement on both sides.
+    assert session["p2_units"][BOYZ]["melee_with"] == []
+    assert session["p2_units"][BOYZ]["in_melee"] is False
+
+    _mut.undo_explode_target_damage(entry, OVERLORD, "Necrons")
+
+    assert session["p1_units"][OVERLORD]["destroyed"] is False
+    assert session["p1_units"][OVERLORD]["in_melee"] is True
+    assert [session["second_player"], BOYZ] in session["p1_units"][OVERLORD]["melee_with"]
+    # Restored symmetrically — the enemy side must see the engagement again too.
+    assert session["p2_units"][BOYZ]["in_melee"] is True
+    assert ["Necrons", OVERLORD] in session["p2_units"][BOYZ]["melee_with"]
+
+
+# ---------------------------------------------------------------------------
+# reopen_explode_target_panel — post-Confirm correction (S171,
+# → docs/spec/design_system.md §1.6 Lesart A / §1.7 "Korrektur nach Confirm")
+# ---------------------------------------------------------------------------
+
+
+def test_reopen_explode_target_panel_flips_applied_to_false() -> None:
+    """Reopening the panel after Confirm must reconstruct the exact
+    pre-Confirm panel state: selections, entered counts and the Direct-Apply
+    snapshot baseline all stay untouched — only "applied" flips back."""
+    entry = _explode_entry()
+    entry["applied"] = True
+    entry["selected"] = ["Necrons::warriors"]
+    entry["damage"] = {"Necrons::warriors": 3}
+    entry["snapshots"] = {"Necrons::warriors": {"current_wounds": 10}}
+
+    _mut.reopen_explode_target_panel(entry)
+
+    assert entry["applied"] is False
+    assert entry["selected"] == ["Necrons::warriors"]
+    assert entry["damage"] == {"Necrons::warriors": 3}
+    assert entry["snapshots"] == {"Necrons::warriors": {"current_wounds": 10}}
+
+
+def test_reopen_explode_target_panel_does_not_undo_live_damage() -> None:
+    """The mortal wounds Direct-Apply already landed on the target — reopening
+    the panel is a pure UI-state return, not an undo. A fresh
+    apply_explode_target_damage() call or the panel's own Reset is what
+    corrects the live HP, same as any other in-panel correction."""
+    session = _make_session(
+        p1_units={
+            WARRIORS: {
+                "current_wounds": 10,
+                "models": 10,
+                "destroyed": False,
+                "lost_models_this_turn": 0,
+                "melee_with": [],
+            }
+        }
+    )
+    entry = _explode_entry()
+    _mut.apply_explode_target_damage(entry, WARRIORS, "Necrons", _warriors(), 3)
+    entry["applied"] = True
+
+    _mut.reopen_explode_target_panel(entry)
+
+    assert session["p1_units"][WARRIORS]["current_wounds"] == 7
+    assert entry["applied"] is False
+
+
+# ---------------------------------------------------------------------------
 # reset_turn_flags — lines 441-444
 # ---------------------------------------------------------------------------
 

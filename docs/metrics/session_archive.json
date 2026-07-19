@@ -5881,8 +5881,8 @@
   "363638c4-d654-4041-b6a5-845e426b2397": {
     "started_at": "2026-07-19T11:44:47.953Z",
     "task": "start session. Ich habe alle Artefakte im Handoff kommentiert.",
-    "peak_context": 177045,
-    "subagent_share": 83.5476659143808,
+    "peak_context": 181711,
+    "subagent_share": 82.32685226534132,
     "by_tier": {
       "Opus": 3052679,
       "Sonnet": 49263719,
@@ -5951,6 +5951,68 @@
         "tier": "Haiku",
         "peak_context": 90209,
         "started_at": "2026-07-19T11:44:47.953Z"
+      }
+    ]
+  },
+  "4f3aa7b3-6a41-4e8f-958b-8030886681ca": {
+    "started_at": "2026-07-19T14:41:23.442Z",
+    "task": "start session, wir übernehmen alle drei Retromaßnahmen.",
+    "peak_context": 120340,
+    "subagent_share": 84.41700962871889,
+    "by_tier": {
+      "Opus": 3085205,
+      "Haiku": 2022149,
+      "Sonnet": 31565188
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S171-Review (DoD + Sessionstand)",
+        "tier": "Opus",
+        "peak_context": 70381,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S171-Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 74122,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4: Verifikationsdatei S171_d anlegen",
+        "tier": "Haiku",
+        "peak_context": 33991,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3-d1: Direkt-Apply + Undo",
+        "tier": "Sonnet",
+        "peak_context": 156438,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2: Teilhaken + Handoff-Cleanup",
+        "tier": "Haiku",
+        "peak_context": 38567,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3-d2: Render-Teil d-Umsetzung",
+        "tier": "Sonnet",
+        "peak_context": 163425,
+        "started_at": "2026-07-19T14:41:23.442Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1: Retro-M1/M2 verankern",
+        "tier": "Haiku",
+        "peak_context": 37393,
+        "started_at": "2026-07-19T14:41:23.442Z"
       }
     ]
   }

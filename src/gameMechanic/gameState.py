@@ -310,6 +310,41 @@ def unit_id_from_state_key(state_key: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# armyList sort-to-top — Multi-Unit-Ziel-Auswahl-Panel target pinning
+# design_system.md §1.7 ("Ausgewählte Einheit springt … an die erste Position")
+# ---------------------------------------------------------------------------
+
+
+def pinned_explode_target_keys(faction: str) -> set[str]:
+    """State-derived unit keys currently selected as an explode Direct-Apply
+    target (design_system.md §1.7) that belong to `faction`. Scans every
+    explode_tiles entry's ``selected`` list (either army may appear there)
+    and returns just the unprefixed keys for `faction`, matching
+    unit_keys_for()'s own key format."""
+    prefix = f"{faction}::"
+    pinned: set[str] = set()
+    for entry in st.session_state.get("explode_tiles", {}).values():
+        for target_key in entry.get("selected", []):
+            if target_key.startswith(prefix):
+                pinned.add(target_key[len(prefix) :])
+    return pinned
+
+
+def sort_units_pinned_first(
+    units: list[Unit], keys: list[str], pinned_keys: set[str]
+) -> tuple[list[Unit], list[str]]:
+    """Stable-reorder a player's unit/key lists so any key in `pinned_keys`
+    sorts to the front — keeps a live explode-damage target's shrinking HP
+    bar visible in its sidebar without scrolling (§1.7). Relative order is
+    preserved within both the pinned and the non-pinned group (Python's
+    sort is stable), so applying this on top of an existing sort (e.g.
+    detachmentCard's turn-flag sort) only ever promotes pinned entries —
+    it never reorders anything else."""
+    pairs = sorted(zip(units, keys), key=lambda pair: pair[1] not in pinned_keys)
+    return [pair[0] for pair in pairs], [pair[1] for pair in pairs]
+
+
+# ---------------------------------------------------------------------------
 # Session state helpers
 # ---------------------------------------------------------------------------
 

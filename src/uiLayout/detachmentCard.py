@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from gameMechanic.gameState import PHASES
+from gameMechanic.gameState import PHASES, pinned_explode_target_keys, sort_units_pinned_first
 from gameObjects.unit import Unit
 from uiLayout.unitCard import render_unit_card
 
@@ -39,5 +39,13 @@ def render_detachment_card(
         zip(units, keys),
         key=lambda p: _is_handled(states.get(p[1], {}), phase_key),
     )
-    for unit, state_key in pairs:
+    sorted_units = [p[0] for p in pairs]
+    sorted_keys = [p[1] for p in pairs]
+    # Sort-to-top (design_system.md §1.7): a unit currently checked in the
+    # explode Multi-Unit-Ziel-Auswahl-Panel always wins the top slot,
+    # regardless of the turn-flag sort above.
+    pinned_keys = pinned_explode_target_keys(faction)
+    if pinned_keys:
+        sorted_units, sorted_keys = sort_units_pinned_first(sorted_units, sorted_keys, pinned_keys)
+    for unit, state_key in zip(sorted_units, sorted_keys):
         render_unit_card(unit, states[state_key], faction, state_key=state_key)

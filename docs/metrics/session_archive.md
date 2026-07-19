@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-19 16:33 CEST
+Stand: 2026-07-19 18:50 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-19 13:44 3636  ████████████ 177k ⛔    █████░  84%    ··········▒▒
+07-19 16:41 4f3a  ██████████░░ 120k ⚠️   █████░  84%    █··········▒
+         SA_1·  ██████░░░░░░  70k ✅    S171-Review (DoD + Sessionstand)
+         SA_2·  ██████░░░░░░  74k ✅    S171-Planning-Entwurf erstellen
+         SA_3·  ███░░░░░░░░░  34k ✅    T4: Verifikationsdatei S171_d anle…
+         SA_4·  ████████████ 156k ⛔    T3-d1: Direkt-Apply + Undo
+         SA_5·  ███░░░░░░░░░  39k ✅    T2: Teilhaken + Handoff-Cleanup
+         SA_6·  ████████████ 163k ⛔    T3-d2: Render-Teil d-Umsetzung
+         SA_7·  ███░░░░░░░░░  37k ✅    T1: Retro-M1/M2 verankern
+----------------- ---------------------- -------------- ------------
+07-19 13:44 3636  ████████████ 182k ⛔    █████░  82%    ··········▒▒
          SA_1·  ████░░░░░░░░  55k ✅    T8 Review S170 (Opus)
          SA_2·  ████████░░░░  99k ✅    S170-Planning erstellen (Planner)
          SA_3·  ██████████░░ 119k ✅    T4-bc Menhir-Hinweis + Resets
@@ -942,3 +951,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S168 (2026-07-18)** B-123 komplett (Core-Spillover+Menhir-Lock+UI, verifiziert), §7-Explodes-Entwurf, Review GO
 - **S169 (2026-07-19)** Spec-Umbau design_system generisch (§1.5-1.9/§7/§3.1) + processes P-16; B-028c1 b1+b2 gebaut (explode-Schema, Engine ohne Selbstwurf, Pflicht-Trigger-Kachel); Handoff-Aufräumen 12 Dateien; Review NO-GO→GO nach Referenz-Korrektur
 - **S170 (2026-07-19)** Explode-UI-Nacharbeiten b/c/a/e/f (playerArea-Split, Phasen-Lifecycle, Resets), Spec-first-Abnahme + Lesart A, P-16 Screenshot->Diagramm-Migration, Retro-M1/M2 verankert, M3-Allowlist; Review GO nach Marker-Fix; 2080 Tests, Cov 99,18%
+- **S171 (2026-07-19)** d-Umsetzung komplett (Direkt-Apply+Undo, Nach-Confirm-Reset Lesart A, Sort-to-top, ↺-Glyph), Retro-M1/M2 verankert, Verifikation 4-7 positiv, Royal-Warden geklärt

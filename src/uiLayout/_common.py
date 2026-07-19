@@ -58,8 +58,12 @@ from gameMechanic.stratagemEngine import _apply_stratagem_effect
 from gameMechanic.unitMutations import (
     adjust_cp,
     apply_damage,
+    apply_explode_target_damage,
     apply_mortal_wounds,
     heal_unit,
+    reopen_explode_target_panel,
+    undo_all_explode_damage,
+    undo_explode_target_damage,
 )
 from gameObjects.ability import (
     Ability,
@@ -570,10 +574,15 @@ def _render_explode_target_panel(
     faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
 ) -> None:
     """Multi-Unit-Ziel-Auswahl-Panel (§1.7) — both armies, toggle rows, a
-    Mortal-Wounds field per selected unit. Confirm all applies
-    ``unitMutations.apply_mortal_wounds`` per selected unit; Reset only
-    discards the in-progress selection — the explode roll itself is never
-    undone (the app never rolled it, "Die App würfelt nicht").
+    Mortal-Wounds field per selected unit. Direct-Apply (§1.7 S170): each
+    entered value is applied immediately via
+    ``unitMutations.apply_explode_target_damage`` (HP drops live, up to
+    destruction) — "Confirm all" no longer books anything itself, it only
+    closes the panel; "Reset" (footer, or a row deselect) rolls the
+    already-applied assignment(s) back via ``undo_explode_target_damage`` /
+    ``undo_all_explode_damage``, using the per-target snapshot those
+    functions maintain in ``entry["snapshots"]``. The explode roll itself is
+    never undone here (the app never rolled it, "Die App würfelt nicht").
     """
     state_key = f"{faction}::{uid}"
     candidates = _explode_target_candidates(faction, uid)
@@ -603,17 +612,22 @@ def _render_explode_target_panel(
                     if selected:
                         entry["selected"].remove(target_key)
                         entry["damage"].pop(target_key, None)
+                        undo_explode_target_damage(entry, key, player)
                     else:
                         entry["selected"].append(target_key)
                     st.rerun()
                 if selected:
-                    entry["damage"][target_key] = row[1].number_input(
+                    new_count = row[1].number_input(
                         field_header,
                         min_value=0,
                         step=1,
                         key=f"explode_dmg_{state_key}_{target_key}",
                         label_visibility="collapsed",
                     )
+                    if new_count != entry["damage"].get(target_key, 0):
+                        tgt_unit, _ = lookup(player, key)
+                        apply_explode_target_damage(entry, key, player, tgt_unit, new_count)
+                        entry["damage"][target_key] = new_count
 
     st.divider()
     footer_confirm, footer_reset = st.columns(2)
@@ -624,19 +638,24 @@ def _render_explode_target_panel(
         disabled=not entry["selected"],
         use_container_width=True,
     ):
+        # Direct-Apply (§1.7 S170): damage already landed while the player
+        # typed it — Confirm only closes the panel and logs which targets
+        # actually took damage, it books nothing itself.
         applied_names: list[str] = []
-        for target_key in list(entry["selected"]):
-            tgt_player, tgt_uid = target_key.split("::", 1)
+        for target_key in entry["selected"]:
             count = int(entry["damage"].get(target_key, 0))
             if count > 0:
+                tgt_player, tgt_uid = target_key.split("::", 1)
                 tgt_unit, _ = lookup(tgt_player, tgt_uid)
-                apply_mortal_wounds(tgt_uid, tgt_player, count, tgt_unit)
                 applied_names.append(f"{tgt_unit.name_en} ({count})")
         entry["applied"] = True
         summary = ", ".join(applied_names) if applied_names else "no targets"
         _log_explode_damage_confirmed(unit.name_en, summary)
         st.rerun()
-    if footer_reset.button("Reset", key=f"explode_reset_{state_key}", use_container_width=True):
+    if footer_reset.button(
+        f"{SYM_RESET} Reset", key=f"explode_reset_{state_key}", use_container_width=True
+    ):
+        undo_all_explode_damage(entry)
         entry["selected"] = []
         entry["damage"] = {}
         st.rerun()
@@ -645,10 +664,12 @@ def _render_explode_target_panel(
 def _render_explode_outcome(
     faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
 ) -> None:
-    """Info-Hinweiskasten (§1.8) for the resolved roll, plus its own "Reset"
-    button directly below the info box for BOTH outcomes (S170 Nacharbeit f
-    — Reset used to render below the target panel on the success branch,
-    moved up here to sit right under the blue box on both branches alike).
+    """Info-Hinweiskasten (§1.8) for the resolved roll, plus its own
+    "↺ Reset" button directly below the info box for BOTH outcomes (S170
+    Nacharbeit f — Reset used to render below the target panel on the
+    success branch, moved up here to sit right under the blue box on both
+    branches alike). Every Reset-flavored button in this function carries
+    the canonical ``SYM_RESET`` glyph (§4.1, Retro-M3 S171).
 
     The Multi-Unit target panel (§1.7, Baustein ④) no longer renders here —
     S170 Nacharbeit a moved it out to its own full-width call, outside this
@@ -656,13 +677,22 @@ def _render_explode_outcome(
     ``render_explode_tiles_for_destroyed``, which renders the panel
     separately once the half-column pass (this function) is done.
 
-    A "Reset" button on both outcomes (S169 b2 stakeholder ask) undoes the
+    A "↺ Reset" button on both outcomes (S169 b2 stakeholder ask) undoes the
     roll decision itself, taking the tile back to the binary-roll starting
-    state (§1.6) — distinct from the target panel's own "Reset" (§1.7),
+    state (§1.6) — distinct from the target panel's own "↺ Reset" (§1.7),
     which only discards an in-progress, not-yet-confirmed target selection.
-    Once damage has been applied (``entry["applied"]``) this reset no
-    longer appears — undoing already-applied damage is the deferred b2
-    Nacharbeit d, not built here.
+    Since S170 Direct-Apply (§1.7), a target may already carry applied
+    mortal-wound damage by the time the roll decision itself is reset here —
+    ``undo_all_explode_damage`` rolls that back too, so discarding the
+    decision always returns every touched unit to its pre-round HP,
+    ``entry["applied"]`` restore included. Once "Confirm all" has run
+    (``entry["applied"]``) this reset no longer appears — instead a second,
+    distinct "↺ Reset" button (S171, design_system.md §1.6 Lesart A / §1.7
+    "Korrektur nach Confirm") returns the player to exactly the panel state
+    just before Confirm via ``reopen_explode_target_panel`` (flips
+    ``applied`` back to False only — the already-applied damage itself is
+    NOT undone, correcting it is the reopened panel's own job, same as any
+    other in-panel correction).
     """
     state_key = f"{faction}::{uid}"
     if entry["exploded"]:
@@ -670,11 +700,20 @@ def _render_explode_outcome(
             f'{unit.name_en} explodes. Every unit within {ability.effect.radius}" '
             f"suffers {ability.effect.damage} mortal wounds."
         )
-        if not entry["applied"] and st.button(
-            "Reset",
+        if entry["applied"]:
+            if st.button(
+                f"{SYM_RESET} Reset",
+                key=f"explode_reopen_{state_key}",
+                use_container_width=True,
+            ):
+                reopen_explode_target_panel(entry)
+                st.rerun()
+        elif st.button(
+            f"{SYM_RESET} Reset",
             key=f"explode_reset_roll_{state_key}",
             use_container_width=True,
         ):
+            undo_all_explode_damage(entry)
             entry["exploded"] = None
             entry["selected"] = []
             entry["damage"] = {}
@@ -684,7 +723,7 @@ def _render_explode_outcome(
         # silently removes the tile, this info box is the whole outcome.
         st.info(f"{unit.name_en} does not explode.")
         if st.button(
-            "Reset",
+            f"{SYM_RESET} Reset",
             key=f"explode_reset_roll_{state_key}",
             use_container_width=True,
         ):
@@ -752,6 +791,14 @@ def _render_explode_tile(
             "selected": [],
             "damage": {},
             "applied": False,
+            # Direct-Apply undo baseline (S170, → design_system.md §1.6/§1.7):
+            # target_key -> pre-round unitMutations.snapshot_unit_state()
+            # dict, populated lazily by apply_explode_target_damage. Survives
+            # "Confirm all" on purpose — reopen_explode_target_panel (S171,
+            # "Korrektur nach Confirm") relies on it staying alive past
+            # Confirm; wiped only when explode_tiles itself is wiped on
+            # phase change.
+            "snapshots": {},
         }
     st.session_state.explode_tiles = store
     entry = store[state_key]

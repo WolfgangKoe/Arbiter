@@ -118,6 +118,10 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   (S130-Auflage). Identische Buckets nutzt seit S152 auch die Effort-Spalte in
   `docs/goals/backlog.md` (B-099b) — keine zweite, abweichende Konvention einführen; die
   Legende dort trägt dieselbe Skala.
+- `Effort: test-/mock-lastige UI-Briefs (S170-Retro-M1):** Executor-Briefs, die gemeinsam
+  Render-Code und Test-Mocks anfassen, werden mit Faktor **×2,5** (statt ×1,5) kalkuliert
+  oder vor Vergabe in ≤M-Teil-Briefs gesplittet. Ist-Werte S170: T2 ~121k/60k-Budget,
+  T4-aef ~244k/120k-Budget; Faktor ×1,5 reichte nicht aus.
 - `Modus`: `Gate` = Freigabe vor Umsetzung erforderlich; `Konsent` = kein Widerspruch
   reicht; `Konsens` = aktive Zustimmung aller Beteiligten.
 - `NEEDS-DECISION` im Ausgabe-Template markieren, wenn eine Stakeholder-Entscheidung
@@ -361,6 +365,10 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
   **Verschärfung (S144-Retro-M2):** Der Koordinator darf in Briefen niemals „DONE setzen,
   Datei nicht löschen" anweisen — genau das produzierte in S144 ein Review-NO-GO.
   Erkenntnisse VOR dem DONE in die dauerhaften Artefakte überführen, dann DONE + löschen.
+- **Marker-Wechsel sofort (S170-Retro-M2):** Wertet der Koordinator eine kommentierte
+  NEEDS-DECISION- oder AWAITING-VERIFICATION-Datei aus, setzt er den Marker im **selben Zug**
+  (→ ANSWERED bzw. Datei löschen) — nicht erst am Session-Ende. Grund: S170 — Review-NO-GO
+  wegen stale `NEEDS-DECISION`-Marker in abgenommener `S170_SPEC_ABNAHME.md`.
 - **Bestandsaufnahme-Pflicht (S144-Retro-M1):** Recherche-/Planner-Briefs müssen vor jeder
   „X fehlt"-Aussage den Ist-Bestand prüfen — `ls`/`grep` über `data/wh40k_9e/<fraktion>/`
   (alle YAML-Dateien, nicht nur die naheliegende) UND `docs/work/`. Grund: S144 — die

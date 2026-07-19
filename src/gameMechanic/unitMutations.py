@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from collections.abc import MutableMapping
 from typing import Any
 
@@ -566,6 +567,93 @@ def set_charged(uid: str, faction: str, target_uid: str, target_faction: str) ->
 def apply_mortal_wounds(uid: str, faction: str, count: int, unit: Unit) -> None:
     """Apply mortal wounds — no armour save, no front-model cap."""
     apply_damage(uid, faction, count, unit, mortal=True)
+
+
+# ---------------------------------------------------------------------------
+# Direct-Apply undo — explode Multi-Unit-Ziel-Auswahl-Panel
+# → docs/spec/design_system.md §1.6 (Lesart A) / §1.7
+# ---------------------------------------------------------------------------
+
+
+def snapshot_unit_state(uid: str, faction: str) -> dict[str, Any]:
+    """Deep copy of a unit's live state dict — the pre-round baseline a
+    Direct-Apply undo restores back to."""
+    key = units_key_for(faction)
+    return copy.deepcopy(dict(st.session_state[key][uid]))
+
+
+def restore_unit_state(uid: str, faction: str, snapshot: MutableMapping[str, Any]) -> None:
+    """Replace a unit's live state with a deep copy of `snapshot` (see
+    ``snapshot_unit_state``) and re-establish any melee engagement the
+    snapshot remembers. ``apply_damage`` calls ``leave_melee`` when mortal
+    wounds destroy an engaged unit, which also strips this unit from the
+    *enemy* side's own ``melee_with`` list — a plain dict-replace here would
+    leave that enemy side stale; ``enter_melee`` is idempotent and restores
+    both sides symmetrically.
+    """
+    key = units_key_for(faction)
+    st.session_state[key][uid] = copy.deepcopy(dict(snapshot))
+    for enemy_faction, enemy_uid in st.session_state[key][uid].get("melee_with", []):
+        enter_melee(uid, faction, enemy_uid, enemy_faction)
+
+
+def apply_explode_target_damage(
+    entry: MutableMapping[str, Any],
+    uid: str,
+    faction: str,
+    unit: Unit,
+    count: int,
+) -> None:
+    """Direct-Apply for the explode Multi-Unit-Ziel-Auswahl-Panel: always
+    restores the target to its pre-round snapshot first (creating the
+    snapshot on first touch), then reapplies the FULL requested mortal-wound
+    count from that clean baseline. Idempotent regardless of whether `count`
+    grew, shrank, or is entered for the first time — no delta-tracking.
+    """
+    snapshots: dict[str, dict[str, Any]] = entry.setdefault("snapshots", {})
+    target_key = f"{faction}::{uid}"
+    if target_key in snapshots:
+        restore_unit_state(uid, faction, snapshots[target_key])
+    else:
+        snapshots[target_key] = snapshot_unit_state(uid, faction)
+    if count > 0:
+        apply_mortal_wounds(uid, faction, count, unit)
+
+
+def undo_explode_target_damage(entry: MutableMapping[str, Any], uid: str, faction: str) -> None:
+    """Undo a single target's direct-applied damage (panel row deselect) —
+    restores the pre-round snapshot and forgets it, since the assignment is
+    fully retracted."""
+    snapshots: dict[str, dict[str, Any]] = entry.get("snapshots", {})
+    target_key = f"{faction}::{uid}"
+    snapshot = snapshots.pop(target_key, None)
+    if snapshot is not None:
+        restore_unit_state(uid, faction, snapshot)
+
+
+def undo_all_explode_damage(entry: MutableMapping[str, Any]) -> None:
+    """Undo every direct-applied assignment of the current round (panel
+    footer Reset, and the roll-decision Reset before Confirm all — Lesart A).
+    Restores each touched target to its pre-round snapshot and clears the
+    snapshot map."""
+    snapshots: dict[str, dict[str, Any]] = entry.get("snapshots", {})
+    for target_key, snapshot in snapshots.items():
+        target_faction, target_uid = target_key.split("::", 1)
+        restore_unit_state(target_uid, target_faction, snapshot)
+    entry["snapshots"] = {}
+
+
+def reopen_explode_target_panel(entry: MutableMapping[str, Any]) -> None:
+    """Post-Confirm correction (design_system.md §1.6 Lesart A / §1.7
+    "Korrektur nach Confirm"): returns the tile to exactly the panel state
+    it was in immediately before "Confirm all" — the roll decision, the
+    selected targets, their entered counts and the Direct-Apply snapshots
+    all stay untouched; only ``applied`` flips back to False so the
+    Multi-Unit-Ziel-Auswahl-Panel renders again. The already-applied mortal
+    wounds are NOT undone here — a fresh ``apply_explode_target_damage``
+    call (re-typing a value) or the panel's own Reset (``undo_all_explode_damage``)
+    is what corrects them, exactly like any other in-panel correction."""
+    entry["applied"] = False
 
 
 def perform_heroic_intervention(

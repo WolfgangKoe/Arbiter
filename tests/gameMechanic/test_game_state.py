@@ -1026,6 +1026,29 @@ class TestResetPhaseState:
         _gs._reset_phase_state()
         assert s["explode_tiles"] == {}
 
+    def test_clears_explode_tiles_including_direct_apply_snapshots(self) -> None:
+        """S171 (design_system.md §1.6/§1.7): the Direct-Apply undo baseline
+        (entry["snapshots"], unitMutations.snapshot_unit_state output) lives
+        nested inside explode_tiles — no separate top-level session_state key
+        was introduced, so the existing whole-dict wipe on phase change
+        (test_clears_explode_tiles above) already covers it. This test makes
+        that explicit: a snapshot present at phase-change time must not
+        survive into the next phase."""
+        s = _reset_phase_session(
+            explode_tiles={
+                "Necrons::silent_king": {
+                    "ability_id": "a",
+                    "exploded": True,
+                    "selected": ["Necrons::warriors"],
+                    "damage": {"Necrons::warriors": 3},
+                    "applied": False,
+                    "snapshots": {"Necrons::warriors": {"current_wounds": 10, "models": 10}},
+                }
+            }
+        )
+        _gs._reset_phase_state()
+        assert s["explode_tiles"] == {}
+
     def test_does_not_reset_explode_triggered_units(self) -> None:
         """Regression guard: explode_triggered_units (uiLayout._common) is
         battle-scoped, not phase-scoped — it must survive _reset_phase_state()
@@ -1944,3 +1967,59 @@ def test_init_state_directive_pending_false_for_both_players() -> None:
     p2 = s["second_player"]
     assert s[round_choice_state_key(p1, "directive_pending")] is False
     assert s[round_choice_state_key(p2, "directive_pending")] is False
+
+
+# ---------------------------------------------------------------------------
+# pinned_explode_target_keys / sort_units_pinned_first — armyList sort-to-top
+# (S171, → docs/spec/design_system.md §1.7 "Ausgewählte Einheit springt …
+# an die erste Position")
+# ---------------------------------------------------------------------------
+
+
+class TestPinnedExplodeTargetKeys:
+    def test_returns_unprefixed_keys_selected_for_the_given_faction(self) -> None:
+        _make_session(
+            explode_tiles={
+                "Necrons::silent_king": {
+                    "selected": ["Necrons::warriors", "Orks::boyz"],
+                }
+            }
+        )
+        assert _gs.pinned_explode_target_keys("Necrons") == {"warriors"}
+        assert _gs.pinned_explode_target_keys("Orks") == {"boyz"}
+
+    def test_collects_across_multiple_explode_tile_entries(self) -> None:
+        _make_session(
+            explode_tiles={
+                "Necrons::a": {"selected": ["Necrons::warriors"]},
+                "Necrons::b": {"selected": ["Necrons::immortals"]},
+            }
+        )
+        assert _gs.pinned_explode_target_keys("Necrons") == {"warriors", "immortals"}
+
+    def test_empty_when_no_explode_tiles_present(self) -> None:
+        _make_session()
+        assert _gs.pinned_explode_target_keys("Necrons") == set()
+
+
+class TestSortUnitsPinnedFirst:
+    def test_pinned_unit_moves_to_front(self) -> None:
+        units, keys = _gs.sort_units_pinned_first(["A", "B", "C"], ["a", "b", "c"], {"c"})
+        assert keys == ["c", "a", "b"]
+        assert units == ["C", "A", "B"]
+
+    def test_no_pinned_keys_keeps_original_order(self) -> None:
+        units, keys = _gs.sort_units_pinned_first(["A", "B", "C"], ["a", "b", "c"], set())
+        assert keys == ["a", "b", "c"]
+        assert units == ["A", "B", "C"]
+
+    def test_relative_order_preserved_within_pinned_and_rest(self) -> None:
+        """Multiple pinned keys keep their own relative order at the front;
+        the untouched rest keeps its own relative order behind them —
+        applying this on top of an already-sorted list must never shuffle
+        anything beyond promoting the pinned entries."""
+        units, keys = _gs.sort_units_pinned_first(
+            ["A", "B", "C", "D"], ["a", "b", "c", "d"], {"b", "d"}
+        )
+        assert keys == ["b", "d", "a", "c"]
+        assert units == ["B", "D", "A", "C"]

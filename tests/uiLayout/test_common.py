@@ -4162,11 +4162,51 @@ class TestExplodeOutcomeResetButton:
         assert entry["damage"] == {}
         assert reruns == [1]
 
-    def test_reset_button_absent_once_damage_applied(self, monkeypatch) -> None:
-        """Non-goal guardrail: once Confirm all has applied damage, no Reset
-        appears here — undoing applied damage is the deferred Nacharbeit d."""
+    def test_successful_roll_reset_undoes_direct_applied_damage(self, monkeypatch) -> None:
+        """S171 Direct-Apply (§1.7): by the time the roll-decision Reset is
+        clicked, a target may already carry applied mortal-wound damage
+        (Confirm all not yet clicked) — this Reset must roll that back too
+        via undo_all_explode_damage, not just clear the selection lists."""
         _, unit = _silent_king_session(destroyed=True)
         ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": ["Necrons::warriors"],
+            "damage": {"Necrons::warriors": 5},
+            "applied": False,
+            "snapshots": {"Necrons::warriors": {"current_wounds": 10}},
+        }
+        undone: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "undo_all_explode_damage", lambda e: undone.append(e))
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        monkeypatch.setattr(common, "_render_explode_target_panel", lambda *a: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st, "button", self._button_stub(f"explode_reset_roll_{state_key}")
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert undone == [entry]
+        assert entry["exploded"] is None
+
+    def test_applied_state_renders_reopen_button_not_the_pre_confirm_reset(
+        self, monkeypatch
+    ) -> None:
+        """S171 (design_system.md §1.6 Lesart A / §1.7 "Korrektur nach
+        Confirm"): once Confirm all has applied damage, the pre-Confirm
+        roll-decision Reset (explode_reset_roll_...) no longer applies — the
+        tile instead offers a dedicated reopen-panel Reset
+        (explode_reopen_...), which returns to the panel without undoing the
+        already-applied damage. Was: test_reset_button_absent_once_damage_applied,
+        which fixed the OLD "nothing renders once applied" behavior; adjusted
+        per S171 brief (intentional behavior break, not a silent test
+        rewrite)."""
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
         entry = {
             "ability_id": ability.id,
             "exploded": True,
@@ -4185,7 +4225,89 @@ class TestExplodeOutcomeResetButton:
 
         common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
 
-        assert button_keys == []
+        assert button_keys == [f"explode_reopen_{state_key}"]
+
+    def test_applied_success_reset_button_reopens_panel_without_undoing_damage(
+        self, monkeypatch
+    ) -> None:
+        """Clicking the post-Confirm reopen button calls
+        reopen_explode_target_panel (flips "applied" back to False only,
+        leaves the already-applied mortal wounds and every selection/
+        snapshot untouched) and reruns so the tile re-enters the pending
+        state on the next pass."""
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        state_key = f"Necrons::{SILENT_KING}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": ["Necrons::warriors"],
+            "damage": {"Necrons::warriors": 3},
+            "applied": True,
+            "snapshots": {"Necrons::warriors": {"current_wounds": 10}},
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        reopened: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common, "reopen_explode_target_panel", lambda e: reopened.append(dict(e))
+        )
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: key == f"explode_reopen_{state_key}",
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert reopened and reopened[0]["selected"] == ["Necrons::warriors"]
+        assert reruns == [1]
+
+    def test_all_explode_outcome_reset_buttons_use_the_canonical_reset_glyph(
+        self, monkeypatch
+    ) -> None:
+        """Retro-M3 (design_system.md §4.1 SYM_RESET): every Reset-flavored
+        button _render_explode_outcome can show — the failed-roll Reset, the
+        pre-Confirm success Reset, and the post-Confirm reopen button —
+        renders the identical "{SYM_RESET} Reset" label, not a bare "Reset"
+        text."""
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        labels: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, **kw: (labels.append(a[0]), False)[1] if a else False,
+        )
+
+        for entry in (
+            {
+                "ability_id": ability.id,
+                "exploded": False,
+                "selected": [],
+                "damage": {},
+                "applied": False,
+            },
+            {
+                "ability_id": ability.id,
+                "exploded": True,
+                "selected": [],
+                "damage": {},
+                "applied": False,
+            },
+            {
+                "ability_id": ability.id,
+                "exploded": True,
+                "selected": [],
+                "damage": {},
+                "applied": True,
+            },
+        ):
+            common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert labels == [f"{common.SYM_RESET} Reset"] * 3
 
     def test_reset_round_trips_through_the_real_render_entry_point(self, monkeypatch) -> None:
         """HTML-Output-Test through the real entry point (S164-Lehre: not just
@@ -4260,6 +4382,13 @@ class TestExplodeTargetPanel:
         return session, warriors_id, boyz_id
 
     def test_confirm_all_applies_mortal_wounds_per_selected_target(self, monkeypatch) -> None:
+        """S171 Direct-Apply (design_system.md §1.7, S170-Präzisierung): the
+        old assertion fixed damage landing from the Confirm-button handler
+        via apply_mortal_wounds — that is exactly the Confirm-time-apply
+        behavior §1.7 replaces (damage now lands per row, while typed, via
+        unitMutations.apply_explode_target_damage; Confirm only logs the
+        already-applied summary). Adjusted per S171 brief: intentional
+        behavior break, not a silent test rewrite."""
         session, warriors_id, boyz_id = self._session_with_two_targets()
         ability = _explode_ability()
         unit = session.p1_units_list[0]
@@ -4272,13 +4401,14 @@ class TestExplodeTargetPanel:
             "selected": [target_key_w, target_key_b],
             "damage": {},
             "applied": False,
+            "snapshots": {},
         }
         applied: list = []  # type: ignore[type-arg]
         logged: list = []  # type: ignore[type-arg]
         monkeypatch.setattr(
             common,
-            "apply_mortal_wounds",
-            lambda uid, faction, count, u: applied.append((uid, faction, count)),
+            "apply_explode_target_damage",
+            lambda entry, uid, faction, u, count: applied.append((uid, faction, count)),
         )
         monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a: logged.append(a))
         monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
@@ -4299,9 +4429,10 @@ class TestExplodeTargetPanel:
 
         common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
 
-        # boyz entered 0 (forgot the table value) — skipped, not applied with a
-        # no-op zero mortal wound.
+        # boyz entered 0 — matches the untouched default, so no Direct-Apply
+        # call ever fires for it (nothing to log as a no-op zero either).
         assert applied == [(warriors_id, "Necrons", 3)]
+        assert entry["damage"][target_key_w] == 3
         assert entry["applied"] is True
         # S170 Nacharbeit e: Confirm now logs its OWN distinct message
         # (which targets actually took damage) — separate from the roll-
@@ -4372,6 +4503,138 @@ class TestExplodeTargetPanel:
 
         assert entry["selected"] == [target_key_w]
         assert reruns == [1]
+
+    def test_deselect_undoes_previously_applied_damage(self, monkeypatch) -> None:
+        """S171 Direct-Apply (§1.7): toggling an already-damaged target OFF
+        must retract the assignment immediately (undo_explode_target_damage),
+        not just hide the number field — otherwise the unit stays hurt with
+        no visible sign an assignment exists."""
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {target_key_w: 5},
+            "applied": False,
+            "snapshots": {target_key_w: {"current_wounds": 10}},
+        }
+        undone: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "undo_explode_target_damage",
+            lambda entry, uid, faction: undone.append((uid, faction)),
+        )
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_tgt_{state_key}_{target_key_w}"}),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert undone == [(warriors_id, "Necrons")]
+        assert entry["selected"] == []
+        assert target_key_w not in entry["damage"]
+
+    def test_confirm_all_leaves_snapshots_intact_for_post_confirm_correction(
+        self, monkeypatch
+    ) -> None:
+        """The snapshot baseline must survive Confirm — d2 (Korrektur nach
+        Confirm, design_system.md §1.6 "Korrektur nach Confirm") needs it to
+        return the player to the pre-Confirm panel state. Confirm only sets
+        entry["applied"]; it must never clear entry["snapshots"]."""
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        snapshots = {target_key_w: {"current_wounds": 10}}
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {target_key_w: 3},
+            "applied": False,
+            "snapshots": snapshots,
+        }
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a: None)
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(
+                pressed={f"explode_confirm_{state_key}"},
+                number_inputs={f"explode_dmg_{state_key}_{target_key_w}": 3},
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["applied"] is True
+        assert entry["snapshots"] == snapshots
+
+    def test_footer_reset_uses_the_canonical_reset_glyph(self, monkeypatch) -> None:
+        """Retro-M3 (design_system.md §4.1 SYM_RESET): the target panel's own
+        footer "Reset" button must carry the same glyph as every other
+        Reset-flavored button in the explode context."""
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        labels: list = []  # type: ignore[type-arg]
+
+        class _LabelCol:
+            def __enter__(self):  # type: ignore[no-untyped-def]
+                return self
+
+            def __exit__(self, *exc_info):  # type: ignore[no-untyped-def]
+                return False
+
+            def button(self, *args, key=None, **kwargs):  # type: ignore[no-untyped-def]
+                if args:
+                    labels.append(args[0])
+                return False
+
+            def number_input(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return 0
+
+            def markdown(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+            def caption(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            lambda spec: tuple(
+                _LabelCol() for _ in range(spec if isinstance(spec, int) else len(spec))
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert f"{common.SYM_RESET} Reset" in labels
 
 
 class TestExplodeTileContainerStyling:

@@ -1,4 +1,4 @@
-STATUS: AWAITING-VERIFICATION
+STATUS: AWAITING-VERIFICATION (S171 — Testfälle 1–7 positiv ausgewertet; Rest-Punkt „Reset nach Confirm" = Nacharbeit d → `S171_d_ui_verifikation.md`; Datei löschen, sobald d grün)
 
 # S170 T4-bc — Explodes: Menhir-Hinweis entfernt + Wurf-Karten-Reset — manuelle UI-Verifikation
 
@@ -86,7 +86,7 @@ positiv.
 Umgesetzt nach deiner Spec-Abnahme: (a) playerArea-Layout, (e) Phasenwechsel-Lifecycle,
 (f) Reset-Position. Voraussetzung je Testfall wie oben (Silent King zerstören).
 
-Ein Reset-Button passt eben noch nicht. 
+positiv.
 
 ### Testfall 4 — (a) Kachel nur in der Spieler-Hälfte
 **Klickpfad:** Silent King zerstören, Kachel beobachten.
@@ -108,8 +108,10 @@ positiv.
 **Erwartung:** Kachel-Gruppe komplett weg und kommt in Folgephasen nicht wieder; Ereignis
 steht im Protokoll („… explodes" / „… does not explode" / „explode damage confirmed — …").
 
-
+positiv. Mich hat nur gewundert, dass der Royal Warden mit 4 LP durch die Explosion zerstört wurde. Ist das ein Bug? 
 
 ### Testfall 7 — (f) Reset-Position
 **Klickpfad:** „Explodes!" klicken, Panel offen lassen.
 **Erwartung:** Reset-Button direkt unter dem blauen Info-Kasten (nicht unter dem Panel).
+
+positiv. Die Reset-Position ist nun korrekt. Nur der Reset-Buttton nach Confirm all ist noch nicht da, mit dem ich in den Multi-unit-panel zurück komme.
