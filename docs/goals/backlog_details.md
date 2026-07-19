@@ -682,20 +682,21 @@ S167; Kritik-Ergänzung T3-V S168.
 
 **Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
 
-**Status:** Blocked — §7-Entwurf liegt vor (S168, `design_system.md` §7), wartet auf Abnahme
-(`docs/handoff/S168_SPEC7_ABNAHME.md`), danach Umsetzung
+**Status:** In Progress — §7 faktisch abgenommen (Stakeholder-Korrektur S169); Spec-Umbau
+S169: generische Bausteine `design_system.md` §1.5–1.9 + generisches §7, Feature-Spec
+`processes.md` P-16. Umsetzung b1 (Schema+Daten+Engine) + b2 (Kachel-UI) in S169; b3
+(`auto_explode`-GO) folgt S170
 
 **Tier:** Design-Crew→Executor
 
 **Effort:** ~20–25k (M) — nach Mockup neu schätzen (Scope gewachsen: `auto_explode`-GO + Datennacherfassung beider Fraktionen)
 
 **S166-Mockup-Iteration:** Mockup V1 (frei entworfene Komponenten) vom Stakeholder abgelehnt —
-orientierte sich nur grob an den bestehenden UI-Bausteinen. Mockup V2
-(`docs/handoff/S166_MOCKUP_EXPLODES_V2.html`) übernahm ausschließlich Bestandskomponenten
+orientierte sich nur grob an den bestehenden UI-Bausteinen. Mockup V2 übernahm ausschließlich Bestandskomponenten
 (Tisch-Wurf-Baustein §6.3 für den Explodes-Gate-Wurf, Standard-GO-Karte §6.1 für
 `auto_explode`, Heroic-Intervention-Panel für die Ziel-Auswahl) und wurde vom Stakeholder
 positiv bewertet („passt deutlich besser"), mit 7 Korrekturwünschen für V3
-(`docs/handoff/S166_MOCKUP_EXPLODES.md` §g): (1) gewählte Ziel-Einheit in der armyList nach
+(per `design_system.md` §7): (1) gewählte Ziel-Einheit in der armyList nach
 oben ziehen statt eigener Healthbar im Mockup; (2) „D6 Mortal Wounds" als Spaltenkopf über den
 Zahlenfeldern statt je Feld; (3) Hinweistext „Tap a unit to toggle…" entfällt; (4) statt
 exaktem Würfelwurf zwei Buttons „Explodes!" / Gegenteil; (5) Resolved-Hinweisblock (blau) aus
@@ -715,7 +716,7 @@ nächster Schritt V3-Mockup S167.
 **Erster Schritt S166:** Mockup „Pflicht-Trigger-Kachel" zur Stakeholder-Abnahme (Mockup-Gate, `agent_scopes.md`); danach das Umsetzungspaket (Punkte 1+2+4) + separates GO-Item für `auto_explode` (Punkt 3).
 
 **V3-Abnahme S167 (mit 3 Auflagen — PFLICHT für §7-Spec + Umsetzung):** Mockup V3
-(`docs/handoff/S167_MOCKUP_EXPLODES_V3.html`, Änderungsprotokoll `S166_MOCKUP_EXPLODES.md` §h)
+(abgenommen per `design_system.md` §7 und `processes.md` P-16)
 vom Stakeholder als arbeitsfähig abgenommen („damit sollten wir arbeiten können"), mit drei
 verbindlichen Auflagen aus der §h-Antwort: (1) nur **ein** Hinweiskasten, **unter der GO-Karte**;
 Blau bleibt Hinweis-Semantik — kein eigener „Resolved"-Zustand; (2) die armyList liegt in der App

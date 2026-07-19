@@ -581,6 +581,30 @@ abilities:
       target: self
       modifier: -1
 
+  # ── Dedicated Transport — Gunwagon (B-028c1 b1) ───────────────────────────
+  # Single-model transport (units.yaml models_min: 1 / models_max: 1) — "model
+  # destroyed" == "unit destroyed", same as the necrons single-model carriers.
+
+  - id: wh40k_9e.orks.unit.gunwagon.explodes
+    name_en: Explodes
+    ability_type: triggered
+    mandatory: true  # Pflicht-Trigger (Explodes-Familie) — kein Use/Undo-GO, B-028c1 b1
+    source: unit_ability
+    unit_id: wh40k_9e.orks.unit.gunwagon
+    rule_text: "When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D6 mortal wounds."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions: []
+    effect:
+      type: explode
+      roll_threshold: 6
+      radius: "6"
+      damage: "D6"
+
   # ── Generic ───────────────────────────────────────────────────────────────
 
   - id: wh40k_9e.orks.unit.beast_snagga

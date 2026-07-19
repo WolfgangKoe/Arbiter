@@ -386,9 +386,10 @@ abilities:
     name_en: Vengeance of the Enchained
     badge_label: VENG
     ability_type: triggered
+    mandatory: true  # Pflicht-Trigger (Explodes-Familie) — kein Use/Undo-GO, B-028c1 b1
     source: unit_ability
     unit_id: wh40k_9e.necrons.unit.the_silent_king
-    rule_text: "When Szarekh is destroyed, roll one D6 before removing it from play. On a 4+, each unit within 2D6\" suffers D6 mortal wounds."
+    rule_text: "When Szarekh is destroyed, roll one D6 before removing it from play. On a 4+ it explodes, and each unit within 2D6\" suffers D6 mortal wounds."
     trigger:
       timing: phase_reactive
       phase: any
@@ -402,11 +403,16 @@ abilities:
     # misattached to tesseract_vault elsewhere in the same file (found S164
     # T2; tesseract_vault's own data left untouched, out of this task's scope).
     conditions: []
+    # Re-scope S165/B-028c1 b1: this is the Explodes family, not a generic
+    # mortal_wounds reactive GO — migrated from effect.type: mortal_wounds to
+    # effect.type: explode (roll_threshold/radius/damage, no `target`/`amount`
+    # — spatial resolution + the mortal-wound count are both table-rolled and
+    # entered directly per affected unit in the b2 UI, not computed here).
     effect:
-      type: mortal_wounds
-      target: units_within_2d6
-      amount: "D6"
+      type: explode
       roll_threshold: 4
+      radius: "2D6"
+      damage: "D6"
 
   # ── Troops ────────────────────────────────────────────────────────────────
 
@@ -915,6 +921,21 @@ abilities:
       type: deny_psychic
       target: self
 
+  # Canoptek Spyder also carries Explodes (wahapedia_necrons/units_all.txt:324:
+  # "Each time a model in this unit is destroyed, roll one D6 before removing
+  # it from play. On a 6 it explodes, and each unit within 3\" suffers 1
+  # mortal wound.") — deliberately NOT added as a data entry here. Unlike
+  # every other B-028c1 b1 Explodes carrier (all models_min == models_max ==
+  # 1, so "model destroyed" == "unit destroyed"), Canoptek Spyder is a 1-3
+  # model unit (units.yaml models_min: 1 / models_max: 3) and the rule
+  # triggers per DYING MODEL, not per unit wipe. This app's unit_state only
+  # tracks a whole-unit `destroyed` boolean (see gameState.py) — no per-model
+  # casualty tracking exists yet — so wiring this the same way as the
+  # single-model carriers would silently undercount explosions (once per
+  # squad wipe instead of once per model lost). Left unwired, same rationale
+  # as `canoptek_plasmacyte.infused_madness` above: needs a per-model-loss
+  # hook the engine does not have, out of this task's scope.
+
   - id: wh40k_9e.necrons.unit.triarch_stalker.targeting_relay
     name_en: Targeting Relay
     ability_type: triggered
@@ -933,6 +954,71 @@ abilities:
       type: mark_target
       target: enemy_hit
       handler: targetingRelay
+
+  - id: wh40k_9e.necrons.unit.triarch_stalker.explodes
+    name_en: Explodes
+    ability_type: triggered
+    mandatory: true  # Pflicht-Trigger (Explodes-Familie) — kein Use/Undo-GO, B-028c1 b1
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.triarch_stalker
+    rule_text: "When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D3 mortal wounds."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions: []
+    effect:
+      type: explode
+      roll_threshold: 6
+      radius: "6"
+      damage: "D3"
+
+  # ── Vehicles — Explodes (B-028c1 b1) ─────────────────────────────────────────
+  # Single-model vehicles/transports (models_min == models_max == 1, so "model
+  # destroyed" == "unit destroyed" — the existing unit_state.destroyed flag
+  # applies cleanly, unlike Canoptek Spyder above).
+
+  - id: wh40k_9e.necrons.unit.annihilation_barge.explodes
+    name_en: Explodes
+    ability_type: triggered
+    mandatory: true
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.annihilation_barge
+    rule_text: "When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3\" suffers 1 mortal wound."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions: []
+    effect:
+      type: explode
+      roll_threshold: 6
+      radius: "3"
+      damage: "1"
+
+  - id: wh40k_9e.necrons.unit.night_scythe.explodes
+    name_en: Explodes
+    ability_type: triggered
+    mandatory: true
+    source: unit_ability
+    unit_id: wh40k_9e.necrons.unit.night_scythe
+    rule_text: "When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D3 mortal wounds."
+    trigger:
+      timing: phase_reactive
+      phase: any
+      stage: active
+      player: either
+      event: model_destroyed
+    conditions: []
+    effect:
+      type: explode
+      roll_threshold: 6
+      radius: "6"
+      damage: "D3"
 
   # ── Keyword-based abilities (moved from faction_abilities.yaml) ────────────
 

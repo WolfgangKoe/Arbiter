@@ -40,6 +40,8 @@ class Effect:
     effects: list[dict[str, Any]] | None = None  # sub-effects for multi-type effects
     roll_threshold: int | None = None  # e.g. mortal_wounds: "on a 4+" gate roll
     roll_type: str | None = None  # → docs/spec/processes.md P-04
+    radius: str | None = None  # explode: inches, e.g. "3", "2D6" (Tisch misst — App zeigt nur an)
+    damage: str | None = None  # explode: mortal-wound dice notation, e.g. "1", "D3", "D6"
 
 
 @dataclass
@@ -65,6 +67,8 @@ class Ability:
     unit_id: str | None = None
     wargear_id: str | None = None
     ability_type: str = "triggered"  # "triggered" | "activated"
+    mandatory: bool = False  # True = Pflicht-Trigger (Explodes-Familie): kein Use/Undo-GO,
+    # die App würfelt nicht selbst — B-028c1 b1
     badge_label: str | None = None
     active_text: str | None = None
     next_stage_id: str | None = None

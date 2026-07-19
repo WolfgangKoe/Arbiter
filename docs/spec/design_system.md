@@ -11,6 +11,16 @@
 > umgesetzt (S115), keine inhaltliche Änderung nötig. Die Handoff-Datei wurde danach
 > gelöscht (Lebensdauer laut Datei-Kopf: bis Stakeholder-Entscheidung).
 >
+> **S169-Nachtrag (Struktur-Umbau, entschieden 2026-07-18):** §7 (S168-Entwurf) vermischte
+> generische UI-Bausteine mit dem Explodes-Feature-Ablauf (Schwelle, Radius, Schadenswürfel,
+> betroffene Einheiten) — Stakeholder-Befund. Die generischen Bausteine sind jetzt einzeln in
+> §1.5–1.9 registriert, §7 beschreibt nur noch die abstrakte Zusammensetzung; der Explodes-
+> Ablauf steht in [`processes.md` P-16](processes.md#p-16--explodes--pflicht-trigger-bei-zerstörung).
+> Gleiche Trennung angewendet auf §4.4: das generische Wurf-Block-Muster bleibt hier, die
+> konkrete Anwendung auf HIT/WOUND/SAVE/DAMAGE (Vereinheitlichungs-Lücken) steht jetzt in
+> [`processes.md` P-08](processes.md#p-08--attacksequence--auflösungsreihenfolge-shooting--fight).
+> Zusätzlich §3.1 (Wortlaut-Budget) neu — Retro-Maßnahme M2/B-124(a).
+>
 > **S131-Nachtrag (entschieden 2026-07-09):** §6 ergänzt — die GO-Karte (Gefechtsoptionen-
 > UI), der Tisch-Wurf-Eingabe-Baustein und die Wortlaut-Konventionen sind jetzt
 > verbindlicher Standard für jeden weiteren UI-Auftrag an Gefechtsoptionen. Quelle:
@@ -129,6 +139,113 @@ Die Sperrentscheidung selbst lebt ausschließlich in `get_locked_group()`
 Regel-Logik. Registriert als B-124-Ratchet-Eintrag (berührte Bauform bei jeder Modul-Berührung
 hier nachziehen, kein Big-Bang).
 
+### 1.5 Pflicht-Trigger-Kachel (generische Bauform, S169)
+
+Gleiche Bauform wie die GO-Karte (§6.1: `st.container(border=True)`, Header-Zeile +
+Rule-Text-Akkordeon) — aber **ohne** Aktions-Slot: kein `[Use]`, keine CP-Anzeige. Für
+Pflicht-Ereignisse, die beim Eintreten eines Spielzustands automatisch fällig werden (kein
+Verwenden/Nicht-Verwenden-Entscheid).
+
+```
+┌──────────────────────────────────────────────┐
+│ [Titel aus YAML]                              │  ← KEIN CP-Suffix, KEIN [Use]
+│ [Kontext-/Schwellen-Caption]                  │
+│ ──────────────────────────────────────────── │
+│  (nachfolgender Baustein, kontextabhängig:    │
+│   §1.6 Binär-Wurf / §1.7 Ziel-Auswahl / …)    │
+└──────────────────────────────────────────────┘
+```
+
+Anker-Regel identisch zu jeder reaktiven GO-Karte (§6.2): inline am Trigger-Ort, NICHT
+Vollbreite, NICHT in der zentralen Stratagems-Liste. Konkrete Anwendung: Explodes-Familie,
+[`processes.md` P-16](processes.md#p-16--explodes--pflicht-trigger-bei-zerstörung).
+
+### 1.6 Binär-Wurf-Baustein — zwei Buttons statt Zahlenfeld (generische Bauform, S169)
+
+Bewusste Alternative zum Tisch-Wurf-Eingabe-Baustein (§6.3, Zahlenfeld): für Tischwürfe, bei
+denen für die App nur das Erreichen/Verfehlen einer YAML-Schwelle zählt, nicht der genaue
+Würfelwert (anders als z. B. beim Deny-Wurf, dessen Wert weiterverrechnet wird).
+
+```
+┌──────────────────────────────────────────────┐
+│ [Titel]                                       │  ← KEIN CP-Suffix, KEIN [Use]
+│ [Schwellen-Caption, z. B. "… on N+"]          │
+│ ──────────────────────────────────────────── │
+│  [ Erfolgs-Label ]      [ Fehlschlags-Label ] │
+└──────────────────────────────────────────────┘
+```
+
+Kein Präzedenzfall für andere Tischwürfe mit echtem Zahlenwert — §6.3 bleibt dort Standard
+(S166-Entscheid). Konkreter Wortlaut + Anwendung: `processes.md` P-16.
+
+### 1.7 Multi-Unit-Ziel-Auswahl-Panel — beide Armeen (generische Bauform, S169)
+
+Reiner Toggle-Zeilen-Stil wie die bestehende Heroic-Intervention-Auswahl
+(`chargePhase.py:_render_heroic_intervention`) — **keine Card-Ansicht**. Zeigt Einheiten
+beider Armeen gruppiert nebeneinander, mit festem Zwei-Spalten-Layout je Gruppe (Label-Spalte
++ fest breite Zahlenfeld-Spalte), damit ein Spaltenkopf zuverlässig über der Zahlenfeld-
+Spalte steht, auch wenn nur einzelne Zeilen ein Feld zeigen (Zahlenfeld erscheint nur bei
+ausgewählten Einheiten, `✓`-Präfix §6.4-Wortlaut).
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│ [Titel] ℹ [Kontext-Hinweis]                                                 │
+├────────────────────────┬──────────────────────┬────────────────────┬──────┤
+│ Gruppe A (var. Breite) │ [Feld-Spaltenkopf]   │ Gruppe B (var.)     │[Kopf]│
+├────────────────────────┼──────────────────────┼────────────────────┼──────┤
+│  [✓ Einheit 1]         │ [ n ] [−] [+]        │  [  Einheit 3]      │      │
+│  [  Einheit 2]         │                      │  [✓ Einheit 4]      │[n][−][+]│
+├────────────────────────┴──────────────────────┴────────────────────┴──────┤
+│  [Confirm all]     [Reset]                                                 │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+Ausgewählte Einheit springt in ihrer armyList-Sidebar (§1.9) an die erste Position und zeigt
+den sinkenden LP-Balken direkt in der unitCard (Bestandskomponente) — keine zusätzliche
+Vorschau-/Mini-Karte im Panel. Footer: „Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog
+Abschluss der Attackensequenz). Konkrete Anwendung: `processes.md` P-16.
+
+### 1.8 Info-Hinweiskasten — Wiederverwendung für Ergebnis-Ausgänge (generische Bauform, S169)
+
+Kein neuer Zustand neben `info`/`warning`/`success`/`error` (§3): ein Ergebnis-Hinweis
+(„X trifft ein" / „X tritt nicht ein") ist semantisch weiterhin ein neutraler Hinweis-/
+Regel-Text → Typ `info`, derselbe `--arb-blue`-Token wie der bestehende Phasen-Regelkasten
+(`design_colors.md` Zeile 40) — kein neues Token. Genau **ein** Kasten deckt beide möglichen
+Ausgänge ab (nie beide gleichzeitig sichtbar); Wortlaut-Budget gilt (§3.1).
+
+```
+┌──────────────────────────────────────────────┐
+│ ℹ info                                        │
+│ [Ein-Satz-Ergebnistext, austauschbar je       │
+│  Ausgang — Wortlaut-Budget §3.1]              │
+└──────────────────────────────────────────────┘
+```
+
+### 1.9 Layout-Invariante — Effekt-Ausführung in `center`, Sidebars unveränderlich (S169)
+
+`src/app.py` teilt die Ansicht in drei Spalten: `left` = `render_army_list(first_player)`,
+`center` = `render_game_actions_area()` (+ `render_game_protocoll()`), `right` =
+`render_army_list(second_player)`. Jede Pflicht-Trigger-/Effekt-Ausführungs-Bauform
+(§1.5–1.8) rendert **ausschließlich in der `center`-Spalte**, nie innerhalb einer der beiden
+armyList-Sidebars — die Sidebars sind fest an `first_player`/`second_player` gebunden, nie an
+`active` (Domänen-Constraint, `CLAUDE.md`), und bleiben unangetastet: sie reagieren nur
+reaktiv auf Auswahl/Schaden (LP-Balken, Sortierung an die Spitze, §1.7).
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                              gameHeader                                   │
+├───────────────────────┬───────────────────────────────────┬───────────────┤
+│  left                 │  center                           │  right        │
+│  armyList             │  gameActionsArea                  │  armyList     │
+│  (first_player)       │  (Effekt-Ausführung rendert HIER) │ (second_player)│
+│  unangetastet         │                                   │  unangetastet │
+└───────────────────────┴───────────────────────────────────┴───────────────┘
+```
+
+Mehrere Gruppen (z. B. beide Fraktionen im Multi-Unit-Panel, §1.7) erscheinen nebeneinander
+**innerhalb derselben `center`-Kachel**, nie in eigenen Seiten-Spalten — es gibt keine
+armee-eigene Spalte auf App-Ebene (Mockup-V3-Fehler, korrigiert S168/S169).
+
 ## 2. Geometrie-Tokens (verbindlich, S115)
 
 Zwei Größenklassen. Werte aus dem jeweils häufigsten IST-Wert abgeleitet
@@ -164,13 +281,30 @@ echtem Fehlerzustand (Perils, Daten-/Konfigurationsfehler) → `error`; reine Be
 es wird nur über `st.warning()` gerendert, nie als eigenes HTML-Badge; **kein
 `--arb-warning`-Token** (S115-Entscheidung).
 
+### 3.1 Wortlaut-Budget (Ratchet, S169 — Retro-Maßnahme M2, erledigt zugleich B-124(a))
+
+Hinweis-/Warntexte im UI: **maximal ein kurzer Imperativ- oder Aussagesatz.** Keine
+Regel-Paraphrase im UI — die Regelbegründung („warum gilt das") gehört in die zuständige
+Spec (`docs/spec/rules_insights.md` für Implementierungs-Gotchas, `docs/spec/acceptance/rules.md`
+für den Akzeptanz-Katalog), nicht in den Hinweis-/Warntext selbst. Der UI-Text sagt nur, WAS
+der Spieler jetzt tun muss oder was gerade gilt — nicht WARUM. Gilt für alle vier Typen aus
+der Tabelle oben, nicht nur `warning`.
+
+Bestehende Texte, die das Budget überschreiten, werden **nicht** in einem Big-Bang-Durchgang
+gekürzt, sondern als Ratchet bei der nächsten Modul-Berührung (analog §1.1/§4.3-Ratchet-
+Prinzip). Bekannter Kandidat: der Sperr-Warnhinweis im Subgruppen-Selektor (§1.4 Zustand B,
+`_common.py`) — zwei mehrsatzige Zweige mit eingebauter Regelbegründung; Kürzung bei
+nächster Berührung des Bausteins (B-124(a), Code-Kürzung selbst ist ein separater Auftrag).
+
 ## 4. Symbol- & Würfel-Design-System (§4.1 S115, §4.2/§4.3 neu S159/B-104)
 
 Ein kanonischer Ort je Glyph/Würfelfläche — projektweit konsistent tauschbar, keine
-Fraktionslogik. Drei Unterabschnitte, auf Augenhöhe mit §6 (Gefechtsoptionen-UI):
+Fraktionslogik. Vier Unterabschnitte, auf Augenhöhe mit §6 (Gefechtsoptionen-UI):
 §4.1 Glyph-Konstanten (Einzelzeichen, kein Würfel-Slot-Kontext), §4.2 Würfelflächen-
 Katalog (echte Würfel-SVGs), §4.3 Effekt-Symbol-Katalog (Symbole, die in einem
-Würfel-Slot erscheinen — teils SVG-Würfel, teils bewusst Text-Chip).
+Würfel-Slot erscheinen — teils SVG-Würfel, teils bewusst Text-Chip), §4.4 Wurf-Block-
+Pattern (kanonischer Aufbau eines ganzen Wurf-Blocks, generisch — die konkrete
+Anwendung auf HIT/WOUND/SAVE/DAMAGE steht seit S169 in `processes.md` P-08).
 
 ### 4.1 Glyph-Konstanten (`src/constants/symbols.py`, S115)
 
@@ -232,13 +366,13 @@ Symbol ohne Tabellen-Eintrag. Vorgriff-Zeilen (Effekt-Typ ohne Producer) bleiben
 bis ein Producer sie befüllt — sie werden nicht gelöscht, nur weil noch kein Code sie
 konsumiert.
 
-### 4.4 Wurf-Block-Pattern (S159 Fassung 2)
+### 4.4 Wurf-Block-Pattern — kanonischer Aufbau (S159 Fassung 2, Split S169)
 
 Nicht nur die Symbole *in* einem Würfel-Slot sind katalogisiert (§4.2/§4.3) — auch der
-Aufbau des Wurf-Blocks selbst (HIT/WOUND/SAVE/DAMAGE) folgt einem kanonischen Muster,
-damit ein Spieler jeden Block gleich liest, unabhängig davon, wofür gewürfelt wird.
-
-**Kanonischer Aufbau (Soll, einheitlich für HIT/WOUND/SAVE/DAMAGE):**
+Aufbau eines Wurf-Blocks selbst folgt einem kanonischen Muster, damit ein Spieler jeden
+Block gleich liest, unabhängig davon, wofür gewürfelt wird. Das Muster selbst ist
+generisch (jeder künftige Wurf-Block-Konsument richtet sich danach, nicht nur die
+Attackenabfolge):
 
 ```
 ├─ Titel + Vergleichswert (WS/BS N+, S vs T, Sv N+, …)
@@ -250,19 +384,11 @@ damit ein Spieler jeden Block gleich liest, unabhängig davon, wofür gewürfelt
 └─ Quellen-Chips (optional): GO-/Ability-Herkunft eines Buffs/Debuffs (Text-Chip-Familie)
 ```
 
-HIT und WOUND folgen diesem Muster weitgehend (WOUND vollständiger: Marker-Zeilen sind
-dort bereits verdrahtet, s. §4.3). SAVE und DAMAGE weichen ab — die Abweichungen sind
-**Vereinheitlichungs-Lücken**, hier benannt, aber **nicht in S159 umgesetzt**:
-Backlog-Kandidaten für einen eigenen Folge-Task (Muster wie die Pakete 4c/5/6 in §6.2).
-
-| Lücke | Ist-Zustand | Soll-Zustand | Status |
-|---|---|---|---|
-| SAVE-Modifier flach statt verschachtelt | AP + Cover je eine flache Zeile, nur eine finale Eff.-Zeile am Ende (`_render_dice_save_block`, diceHtml.py:225–246) | Jeder SAVE-Modifier bekommt wie bei HIT/WOUND seine eigene Eff.-Zeile (verschachtelt), damit AP+Cover-Kombinationen den Zwischenschritt zeigen statt eines Sprungs | Backlog-Kandidat |
-| Invuln als Separat-Sektion | Invuln rendert außerhalb des Save-Block-Patterns, ohne Marker-Zeilen-Hooks (diceHtml.py:250–260) | Invuln folgt demselben Wurf-Block-Pattern (Threshold-Header/Dice-Row/Marker-Zeilen), bleibt aber als eigene Sektion sichtbar — Invuln ist regelkonform ein anderer Save-Typ, keine Verschmelzung mit dem Armour-Path | Backlog-Kandidat |
-| Keine Marker-Zeilen im SAVE-Block | SAVE hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll) | SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren | Backlog-Kandidat |
-| HIT-Block ohne Marker-Zeilen | `_render_dice_roll_block` ruft `always_fail_marker_row_html`/`reroll_marker_row_html` nicht auf, obwohl HIT-Rerolls existieren (Skorpekh, B-113) | HIT-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND, sobald ein HIT-seitiger Producer (B-113) sie befüllt | Backlog-Kandidat, an B-113 gekoppelt |
-| Fehlender DAMAGE-Block | Kein `_render_dice_damage_block()`; Mortal Wounds/Overcharge sind reine Text-Labels ohne Würfel-Grid | Neuer DAMAGE-Block folgt demselben Pattern (Titel/Dice-Row bei echtem Schadenswurf, Marker-/Quellen-Chip-Zeilen immer) — offene Entwurfsfrage: zeigt er ein Grid, wenn nur D3/D6 ohne Erfolgsschwelle gewürfelt wird? | Backlog-Kandidat, eigener Entwurfsschritt nötig (kein Trivial-Fix) |
-| Tesla-Extra-Hits als externer Badge statt In-Slot-Chip | `special_die_html`-Badge außerhalb des Grids statt `value_triggered_die_row_html` in Spalte 6 (s. §4.3-Vorgriff-Zeile) | Migration auf das AP-Trigger-Muster, damit „Erfolg bei 6 löst Zusatzwert aus" gleich aussieht, egal ob AP-Bonus oder Zusatz-Treffer | Backlog-Kandidat |
+**S169-Struktur-Umbau:** die konkrete Anwendung dieses Musters auf HIT/WOUND/SAVE/DAMAGE
+(Ist-Zustand, Vereinheitlichungs-Lücken-Tabelle mit Code-Zeilen) ist Feature-/Prozess-
+spezifisch für die Attackenabfolge und steht jetzt in
+[`processes.md` P-08, Abschnitt „Wurf-Block-Rendering"](processes.md#p-08--attacksequence--auflösungsreihenfolge-shooting--fight)
+— hier verblieb nur das abstrakte Muster.
 
 ## 5. Migrations-Hinweis (Ratchet, kein Big-Bang)
 
@@ -529,190 +655,61 @@ als Mehr-Session-Roadmap (6 Pakete, S132–S134+) — Details, Reihenfolge und F
 Freigabe-Gate; diese Spec (§6.1–§6.5) ist dabei der Maßstab, gegen den jeder Auftrag
 geprüft wird.
 
-## 7. Pflicht-Trigger-Kachel — Explodes-Familie (Entwurf S168, B-028c1, Korrekturrunde 2)
+## 7. Pflicht-Trigger-Kachel-Familie — generische Bauform (S169, ersetzt Explodes-Entwurf S168)
 
-> **ENTWURF — wartet auf Stakeholder-Abnahme.** Dieser Abschnitt überführt Mockup V3
-> (`docs/handoff/S167_MOCKUP_EXPLODES_V3.html`) inkl. der drei S167-Auflagen aus der
-> §h-Antwort in `docs/handoff/S166_MOCKUP_EXPLODES.md`. Abnahme-Entscheidung:
-> `docs/handoff/S168_SPEC7_ABNAHME.md`. Bei Ablehnung/Korrektur wird dieser Abschnitt
-> erneut überarbeitet, bevor B-028c1 in Code geht (Spec-first-Gate, `agent_scopes.md`
-> Punkt c). **Korrekturrunde 2 (S168):** fachlich unverändert gegenüber Runde 1 — nur
-> die Darstellungsform wechselt auf Schema-first (ASCII-Boxen im Stil von §1), weil
-> reine Prosa für eine UI-Komponente nicht auf einen Blick verständlich war.
+> **Struktur-Korrektur S169 (Stakeholder-Befund):** der S168-Entwurf dieses Abschnitts
+> vermischte generische UI-Bausteine mit dem Explodes-Feature-Ablauf (Schwelle, Radius,
+> Schadenswürfel, betroffene Einheiten, konkreter Wortlaut). Das widerspricht der
+> Artefakt-Landkarte: „UI-Design-System" definiert *welche Kachel, welcher Button in
+> welcher Farbe* — generisch; Feature-/Prozess-Spezifisches gehört in die Prozess-Spec.
+> Die generischen Bausteine sind jetzt einzeln in §1.5–1.9 registriert (mit ASCII-Schema,
+> M1-Pflicht); dieser Abschnitt beschreibt nur noch, wie sie sich zu **einer**
+> Kachel-Gruppe zusammensetzen — abstrakt, ohne einen einzigen Explodes-Zahlenwert. Der
+> konkrete Feature-Ablauf (Explodes: Schwelle, Radius, Mortal-Wounds-Würfel, betroffene
+> Einheiten, Screenshot-Referenzen, Wortlaut) steht in
+> [`processes.md` P-16](processes.md#p-16--explodes--pflicht-trigger-bei-zerstörung).
+> Inhaltlich **nichts verworfen** — nur verschoben/generalisiert (S168-Fassung war bereits
+> vom Stakeholder korrigiert und damit maßgeblich für beide Zielorte).
 
-Fachliche Einordnung (S165-Re-Scope, unverändert): Explodes ist ein **Pflicht-Ereignis**
-beim Tod des Modells — kein Verwenden/Nicht-Verwenden-Entscheid, kein `[Use]`, keine CP.
-Die GO-Karte (§6.1) ist deshalb die falsche Komponente für den Trigger selbst; §7 baut
-aber **ausschließlich aus Bestandskomponenten** — keine neue Bauform, kein neues
-Farb-Token. Betroffene Bausteine: GO-Karten-Bauform ohne Aktions-Slot (§6.1), der
-Tisch-Wurf-Baustein (§6.3, hier bewusst abgewandelt — s. 7.4), die Hinweis-Konvention
-(§3), der Heroic-Intervention-Toggle-Stil (bestehender Code, `chargePhase.py`) und die
-unitCard (`src/uiLayout/unitCard.py`).
+Fachliche Einordnung (abstrakt): ein Pflicht-Trigger ist ein **Pflicht-Ereignis** bei
+einem Spielzustands-Wechsel (z. B. Modell-Tod) — kein Verwenden/Nicht-Verwenden-Entscheid,
+kein `[Use]`, keine CP. Die GO-Karte (§6.1) ist deshalb die falsche Komponente für den
+Trigger selbst — diese Familie baut **ausschließlich aus Bestandskomponenten**: keine neue
+Bauform, kein neues Farb-Token.
 
-### 7.1 Aufbau der Kachel-Gruppe
+### 7.1 Aufbau der Kachel-Gruppe (abstrakt)
 
-Am Eintrag der zerstörten Einheit erscheint eine Folge von Bausteinen (kein neuer
+Am Eintrag der betroffenen Einheit erscheint eine Folge von Bausteinen (kein neuer
 Container-Typ, jeder Baustein für sich bereits Bestand):
 
 ```
 ┌──────────────────────────────────────────────┐
-│ ① Wurf-Baustein (§7.4)                        │  Titel + Schwellen-Caption,
-│    [ Explodes! ]    [ Does not explode ]      │  zwei Buttons statt Zahlenfeld
+│ ① Binär-Wurf-Baustein (§1.6)                  │
 ├──────────────────────────────────────────────┤
-│ ② auto_explode-GO-Karte (§6.1, falls vorhanden)│  Standard-GO-Karte, Titel =
-│    Curse of the Phaeron · 3 CP        [Use]   │  name_en aus der YAML
+│ ② optionale GO-Karte (§6.1, falls die Regel   │
+│    einen CP-Automatismus anbietet)            │
 ├──────────────────────────────────────────────┤
-│ ③ Ziel-Auswahl-Panel (§7.2, nur bei Erfolg)    │
+│ ③ EIN Info-Hinweiskasten (§1.8)               │
 ├──────────────────────────────────────────────┤
-│ ④ EIN Hinweiskasten, info/blau (§7.3)          │
+│ ④ Multi-Unit-Ziel-Auswahl-Panel (§1.7, nur    │
+│    bei Erfolg)                                │
 └──────────────────────────────────────────────┘
-     ↑ Anker: INLINE am Eintrag der zerstörten Einheit (center-Spalte, §7.5)
+     ↑ Anker: INLINE am Trigger-Ort (center-Spalte, §1.9)
 ```
 
-**Anker-Regel:** genauso wie jede reaktive Karte (§6.2) — inline am Trigger-Ort, NICHT
-Vollbreite, NICHT in der zentralen Stratagems-Liste (die `auto_explode`-GO ist zwar eine
-echte GO, ihr Fenster öffnet aber nur reaktiv beim `on_destroy`-Trigger, s. §6.2-Debt-
-Tabelle „generisches `on_destroy`"). Bausteine ①–④ sind alle Bestand — kein neuer
-Container-Typ, ③ entfällt bei Fehlschlag (dann folgt ④ direkt auf ① oder ②).
+**Anker-Regel:** genauso wie jede reaktive GO-Karte (§6.2) — inline am Trigger-Ort, NICHT
+Vollbreite, NICHT in der zentralen Stratagems-Liste. Bausteine ①–④ sind alle Bestand
+(§1.5–1.8 + §6.1) — kein neuer Container-Typ, ③ entfällt bei Fehlschlag (dann folgt ④
+direkt auf ① oder ②). Reihenfolge und konkrete Belegung (welcher Baustein bei welchem
+Ereignis, welche Zahlenwerte) bestimmt die jeweilige Prozess-Spec — für Explodes:
+`processes.md` P-16.
 
-### 7.2 Ziel-Auswahl-Panel
+### 7.2 Wortlaut & Farbe (abstrakt)
 
-Reiner Toggle-Zeilen-Stil wie die bestehende Heroic-Intervention-Auswahl
-(`chargePhase.py:_render_heroic_intervention`) — **keine Card-Ansicht** für die
-Auswahlliste selbst:
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│ Vengeance of the Enchained — select affected units              │
-│ ℹ On a 4+ it explodes, each unit within 2D6" suffers D6 MW       │
-├───────────────────────────────────────────┬────────────────────┤
-│  (Label-Spalte, variable Breite)          │  D6 MORTAL WOUNDS  │ ← Spaltenkopf steht
-├───────────────────────────────────────────┼────────────────────┤   HIER, direkt über
-│  Necrons                                  │                    │   der Zahlenfeld-
-│   [✓ Necron Warriors]                     │  [ 3 ] [−] [+]     │   Spalte — nicht
-│   [  Immortals      ]                     │                    │   über der ganzen
-│  Orks                                     │                    │   Liste (V3-Fehler)
-│   [✓ Boyz           ]                     │  [ 2 ] [−] [+]     │
-│   [  Gretchin       ]                     │                    │
-│   [  Warbikers      ]                     │                    │
-├───────────────────────────────────────────┴────────────────────┤
-│  [Confirm all]     [Reset]                                      │
-└────────────────────────────────────────────────────────────────┘
-```
-
-**Auflage 3, wörtlich umgesetzt:** die Zeile braucht ein festes Zwei-Spalten-Layout
-(Label-Spalte + fest breite Zahlenfeld-Spalte, keine variable Flex-Breite wie im Mockup)
-— nur so steht „D6 Mortal Wounds" tatsächlich über den Feldern, auch wenn nur einzelne
-Zeilen ein Feld zeigen (Zahlenfeld erscheint nur bei ausgewählten Einheiten, `✓`-Präfix
-§6.4-Wortlaut). Ausgewählte Einheit springt in der zugehörigen armyList-Sidebar
-(first_player/second_player, s. 7.5) an die erste Position und zeigt den sinkenden
-LP-Balken direkt in der unitCard (Bestandskomponente) — keine zusätzliche Vorschau-/
-Mini-Karte im Panel. Footer: „Confirm all" / „Reset" (§6.4-Wortlaut, analog Abschluss
-der Attackensequenz).
-
-### 7.3 EIN Hinweiskasten (Auflage 1)
-
-```
-┌──────────────────────────────────────────────┐
-│ Curse of the Phaeron · 3 CP           [Use]   │  ← auto_explode-GO-Karte (§6.1 / ②)
-│ [CORE] [NECRONS]                              │
-│ ▸ Rule text …                                 │
-└──────────────────────────────────────────────┘
-┌──────────────────────────────────────────────┐
-│ ℹ info · Resolved                             │  ← EIN Kasten, --arb-blue, §3-Typ
-│ The Silent King explodes. Every unit within    │     „info", KEIN eigener
-│ 2D6" suffers D6 mortal wounds.                 │     „Resolved"-Zustand
-└──────────────────────────────────────────────┘
-   — oder, bei Fehlschlag, an derselben Stelle statt des Erfolgstexts:
-┌──────────────────────────────────────────────┐
-│ ℹ info · Resolved                             │
-│ The Silent King does not explode.              │
-└──────────────────────────────────────────────┘
-```
-
-Genau **ein** Hinweiskasten, **unter** der GO-Karte (nicht innerhalb des Ziel-Auswahl-
-Panels) — er deckt beide Ausgänge ab, nie beide gleichzeitig. Farbe **Blau**, aber als
-das, was er ist: ein **Hinweis** (`info`-Typ, Hinweis-Konvention §3), derselbe
-`--arb-blue`-Token wie der bestehende Phasen-Regelkasten (`design_colors.md` Zeile 40) —
-kein neues Token. Der Kasten erscheint, sobald der Wurf/die GO aufgelöst ist, und bleibt
-stehen (kein stilles Verschwinden, Grundannahme S166 §a.4) — er ist aber semantisch ein
-Hinweistext zum Ausgang, keine dritte Zustandsklasse neben `info`/`warning`/`success`/
-`error`.
-
-### 7.4 Bewusste Abweichung von §6.3 — Zwei-Button-Wurf statt Zahlenfeld
-
-```
-┌──────────────────────────────────────────────┐
-│ Vengeance of the Enchained                    │  ← Titel, KEIN CP-Suffix, KEIN [Use]
-│ Explodes on 4+                                │  ← Schwellen-Caption
-│ ──────────────────────────────────────────── │
-│  [ Explodes! ]        [ Does not explode ]    │  ← zwei Buttons statt Zahlenfeld
-└──────────────────────────────────────────────┘
-```
-
-§6.3 sieht für jeden Tischwurf ein Zahlenfeld vor. Für das Explodes-Gate weicht §7 davon
-ab: zwei Buttons statt Werterfassung, weil der Explodes-Wurf für die App keinen
-eigenständigen Zahlenwert-Zweck hat — es zählt nur, ob die (aus der YAML bekannte)
-Schwelle erreicht wurde, nicht der genaue Würfelwert (anders als z. B. beim Deny-Wurf,
-dessen Wert weiterverrechnet wird). Explizit auf Stakeholder-Wunsch entschieden
-(`S166_MOCKUP_EXPLODES.md` §g Korrektur 4, Wortlaut „Does not explode" bestätigt) —
-**kein Präzedenzfall** für andere Tischwürfe mit echtem Zahlenwert; §6.3 bleibt dort
-unverändert Standard.
-
-### 7.5 Layout-Invariante — armyList getrennt von Auswahl/Effekt-Ausführung (Auflage 2)
-
-```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                              gameHeader                                      │
-├──────────────────────┬───────────────────────────────┬───────────────────────┤
-│  left                │  center                       │  right                │
-│  armyList             │  gameActionsArea               │  armyList             │
-│  (first_player)       │                                 │  (second_player)     │
-│                       │                                 │                       │
-│  ┌────────────────┐   │  ┌──────────────────────────┐  │  ┌─────────────────┐  │
-│  │  unitCard       │   │  │ unitCard: The Silent King │  │  │  unitCard       │  │
-│  │  …              │   │  │           DESTROYED       │  │  │  …              │  │
-│  └────────────────┘   │  ├──────────────────────────┤  │  └─────────────────┘  │
-│                       │  │ Kachel-Gruppe (§7.1)       │  │                       │
-│                       │  │  Necrons-Gruppe │ Orks-Gr. │  │                       │
-│                       │  │  NEBENEINANDER, BEIDE      │  │                       │
-│                       │  │  innerhalb DIESER Kachel   │  │                       │
-│                       │  └──────────────────────────┘  │                       │
-│  unangetastet,         │                                 │  unangetastet,        │
-│  first_player fest      │                                 │  second_player fest  │
-└──────────────────────┴───────────────────────────────┴───────────────────────┘
-```
-
-`src/app.py` teilt die Ansicht in drei Spalten: `left` = `render_army_list(first_player)`,
-`center` = `render_game_actions_area()` (+ `render_game_protocoll()`), `right` =
-`render_army_list(second_player)`. Die Seitenleisten sind fest an `first_player`/
-`second_player` gebunden, nie an `active` (Domänen-Constraint, `CLAUDE.md`) — diese
-Bindung bleibt durch §7 **unangetastet**.
-
-Die Pflicht-Trigger-Kachel-Gruppe (7.1) inklusive Ziel-Auswahl-Panel (7.2) und
-Hinweiskasten (7.3) rendert **ausschließlich in der `center`-Spalte**, nie innerhalb
-einer der beiden armyList-Sidebars. Mockup V3 stellte Necrons/Orks-Inhalte optisch in
-zwei nebeneinanderliegenden Seiten-Spalten dar, die wie „armyList + Ausführung in
-derselben Spalte" wirkten; das bildet die reale App-Struktur nicht ab — es gibt keine
-„Necron-Spalte" und keine „Ork-Spalte" auf App-Ebene. Beide Fraktionsgruppen erscheinen
-nebeneinander **innerhalb derselben `center`-Kachel** (Gruppenüberschrift je Fraktion,
-s. 7.2, oberes Schema), während die armyList-Sidebars unverändert links/rechts
-weiterlaufen und nur reaktiv auf Auswahl/Schaden reagieren (LP-Balken, Sortierung an
-die Spitze).
-
-### 7.6 Wortlaut & Farbe — keine neuen Tokens
-
-- „Explodes!" / „Does not explode" (7.4), „Confirm all" / „Reset" (§6.4) — sonst gilt
-  §6.4 unverändert (Englisch, `Use`/`↺ Undo`/`Used`-Familie für die `auto_explode`-GO).
-- `DESTROYED` bleibt in der bestehenden unitCard-Farbe (`#c04040`,
-  `src/uiLayout/unitCard.py:61`) — keine Änderung, kein neues Token.
-- Blau = `--arb-blue`/`--arb-blue-text` (Hinweis-Konvention §3, `design_colors.md`
-  Zeile 40) — wiederverwendet, nicht neu vergeben (s. 7.3).
-
-### 7.7 Umsetzung
-
-Nach Abnahme dieses Abschnitts (s. `docs/handoff/S168_SPEC7_ABNAHME.md`): Rückbau des
-Engine-Selbstwurfs in `abilityEngine.resolve_mortal_wounds_effect` (Verstoß gegen „Die
-App würfelt nicht"), Schema-Erweiterung `effect.type: explode` + `mandatory`-Achse,
-`auto_explode`-GO-Anbindung, Wahapedia-Nacherfassung aller Explodes-Träger — Details und
-Reihenfolge: `docs/goals/backlog_details.md` B-028c1.
+Keine neuen Farb-Token für diese Familie — Zuordnung innerhalb des bestehenden Schemas
+(`design_colors.md`), identisch zur GO-Karte (§6.5): Gold-Primary für aktiv bedienbare
+Bausteine, `--arb-blue` für den Info-Hinweiskasten (§1.8, Hinweis-Konvention §3),
+Standard-Wortlaut-Familie (§6.4: `Use`/`↺ Undo`/`Used`, `Confirm ⟨Aktion⟩`/`Cancel`,
+`✓`-Präfix-Toggle). Wortlaut-Budget gilt (§3.1: maximal ein kurzer Satz je Hinweis, keine
+Regel-Paraphrase im UI). Feature-spezifische Button-Beschriftungen (z. B. „Explodes!"/
+„Does not explode") stehen in der jeweiligen Prozess-Spec, nicht hier.

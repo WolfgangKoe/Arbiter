@@ -512,10 +512,13 @@ def _ability_from_dict(d: dict[str, Any]) -> Ability:
             effects=d["effect"].get("effects"),
             roll_threshold=d["effect"].get("roll_threshold"),
             roll_type=d["effect"].get("roll_type"),
+            radius=d["effect"].get("radius"),
+            damage=d["effect"].get("damage"),
         ),
         unit_id=d.get("unit_id"),
         wargear_id=d.get("wargear_id"),
         ability_type=d.get("ability_type", "triggered"),
+        mandatory=d.get("mandatory", False),
         badge_label=d.get("badge_label"),
         active_text=d.get("active_text"),
         next_stage_id=d.get("next_stage_id"),
@@ -692,6 +695,34 @@ def _require_wound_auto_fail_label(ability: Ability, faction_dir: str) -> None:
     )
 
 
+def _require_explode_effect_shape(ability: Ability, faction_dir: str) -> None:
+    """Reject an ``explode`` ability missing any of its required YAML fields.
+
+    ``effect.type: explode`` (Explodes-Familie / Pflicht-Trigger, B-028c1 b1)
+    is meaningless without all three: ``roll_threshold`` (the D6 gate, e.g.
+    "on a 4+"), ``radius`` (inches, Tisch-gemessen — App zeigt nur an) and
+    ``damage`` (the mortal-wound dice notation). A YAML entry missing one of
+    these would silently render an incomplete Pflicht-Trigger-Kachel in b2 —
+    failing loudly at load time (mirrors ``_require_wound_auto_fail_label``,
+    B-109) beats discovering the gap only in the UI.
+    """
+    missing = [
+        field
+        for field, value in (
+            ("roll_threshold", ability.effect.roll_threshold),
+            ("radius", ability.effect.radius),
+            ("damage", ability.effect.damage),
+        )
+        if value is None
+    ]
+    if not missing:
+        return
+    raise ValueError(
+        f"Ability '{ability.id}' (faction '{faction_dir}') has effect.type "
+        f"'explode' but is missing required field(s) {missing} (B-028c1 b1)."
+    )
+
+
 def load_unit_abilities(faction_dir: str) -> list[Ability]:
     """Load unit-specific abilities from data/wh40k_9e/<faction_dir>/unit_abilities.yaml."""
     if faction_dir in _UNIT_ABILITIES_CACHE:
@@ -705,6 +736,8 @@ def load_unit_abilities(faction_dir: str) -> list[Ability]:
     for ability in result:
         if ability.effect.type == "wound_auto_fail":
             _require_wound_auto_fail_label(ability, faction_dir)
+        if ability.effect.type == "explode":
+            _require_explode_effect_shape(ability, faction_dir)
     _UNIT_ABILITIES_CACHE[faction_dir] = result
     return result
 

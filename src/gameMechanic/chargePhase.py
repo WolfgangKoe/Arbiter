@@ -20,6 +20,7 @@ from gameMechanic.unitMutations import perform_heroic_intervention, set_charged
 from gameObjects.unit import Unit
 from uiLayout._common import (
     lookup,
+    render_explode_tiles_for_destroyed,
     render_inline_command_reroll,
     render_melee_engagements,
     render_mortal_wounds_cards_for_destroyed,
@@ -42,6 +43,7 @@ class ChargePhaseHandler:
 
         if step == 1:
             render_mortal_wounds_cards_for_destroyed(first, second)
+            render_explode_tiles_for_destroyed(first, second)
             col1, col2 = st.columns(2)
             with col1:
                 render_player_column(

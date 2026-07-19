@@ -3546,6 +3546,16 @@ def test_reactive_ability_box_active_player_gate(monkeypatch) -> None:
 # data (not a synthetic fixture) so this doubles as a regression test for the
 # S164 data bug (conditions gate that could never be satisfied — see
 # unit_abilities.yaml comment on vengeance_of_the_enchained).
+#
+# B-028c1 b1 (S169): Vengeance of the Enchained migrated from
+# effect.type: mortal_wounds to effect.type: explode (Explodes-Familie,
+# Pflicht-Trigger, `mandatory: true`) — this old Use/Undo GO-card bauform was
+# recognised as the WRONG shape for a mandatory trigger (S165 re-scope) and
+# is retired here, replaced by the Pflicht-Trigger-Kachel in b2. Its
+# find_unit_ability_by_effect(..., "mortal_wounds") lookup therefore no
+# longer matches Silent King — the two "shown" tests below now assert the
+# card stays hidden (documenting the retirement), the "hidden" tests are
+# unaffected and still pass unchanged.
 # ---------------------------------------------------------------------------
 
 SILENT_KING = "wh40k_9e.necrons.unit.the_silent_king"
@@ -3575,16 +3585,19 @@ def _silent_king_session(*, destroyed: bool) -> _SS:  # type: ignore[no-untyped-
     return session, unit
 
 
-def test_mortal_wounds_on_destroy_card_shown_once_unit_destroyed(monkeypatch) -> None:
+def test_mortal_wounds_on_destroy_card_hidden_for_silent_king_now_explode_typed(
+    monkeypatch,
+) -> None:
+    """B-028c1 b1: Vengeance of the Enchained is now effect.type: explode, not
+    mortal_wounds — this old Use/Undo bauform no longer finds an ability to
+    render for Silent King (retired in favour of b2's Pflicht-Trigger-Kachel)."""
     session, unit = _silent_king_session(destroyed=True)
     captured: list[dict] = []  # type: ignore[type-arg]
     monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
 
     common._render_mortal_wounds_on_destroy_card("Necrons", SILENT_KING, unit)
 
-    assert len(captured) == 1
-    assert captured[0]["name"] == "Vengeance of the Enchained"
-    assert captured[0]["state"] == "ready"
+    assert captured == []
 
 
 def test_mortal_wounds_on_destroy_card_hidden_while_unit_alive(monkeypatch) -> None:
@@ -3657,18 +3670,541 @@ def test_render_mortal_wounds_cards_for_destroyed_scans_both_factions(monkeypatc
     assert seen == [("Necrons", "u1"), ("Orks", "u2")]
 
 
-def test_render_mortal_wounds_cards_for_destroyed_shows_card_independent_of_selection(
+def test_render_mortal_wounds_cards_for_destroyed_reaches_destroyed_unit_independent_of_selection(
     monkeypatch,
 ) -> None:
     """Regression for the actual bug: the scan must reach a destroyed unit's
-    card even when it is NEITHER the selected_unit NOR a designated target —
-    the state the 4 removed call sites required."""
+    per-unit check even when it is NEITHER the selected_unit NOR a designated
+    target — the state the 4 removed call sites required. Uses a synthetic
+    mortal_wounds ability (monkeypatched) rather than the real Silent King
+    data: since B-028c1 b1, Silent King's ability is effect.type: explode,
+    so it can no longer exercise this mortal_wounds card path (see the class
+    docstring above) — the scan-reaches-every-unit behaviour itself is
+    independent of which real unit happens to carry a mortal_wounds ability.
+    """
     session, unit = _silent_king_session(destroyed=True)
     session.selected_unit = None
     session.selected_targets = []
+    synthetic_ability = Ability(
+        id="test.unit.synthetic_mortal_wounds",
+        name_en="Synthetic Mortal Wounds",
+        source="unit_ability",
+        rule_text="Test rule text.",
+        trigger=Trigger(
+            timing="phase_reactive", phase="any", player="either", event="model_destroyed"
+        ),
+        conditions=[],
+        effect=Effect(
+            type="mortal_wounds", target="units_within_2d6", amount="D6", roll_threshold=4
+        ),
+    )
+    monkeypatch.setattr(
+        common,
+        "find_unit_ability_by_effect",
+        lambda faction_dir, uid, effect_type: synthetic_ability,
+    )
     captured: list[dict] = []  # type: ignore[type-arg]
     monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
 
     common.render_mortal_wounds_cards_for_destroyed("Necrons", "Orks")
 
-    assert any(k["name"] == "Vengeance of the Enchained" for k in captured)
+    assert any(k["name"] == "Synthetic Mortal Wounds" for k in captured)
+
+
+# ---------------------------------------------------------------------------
+# Mandatory Explodes trigger — Pflicht-Trigger-Kachel-Familie (B-028c1 b2)
+# design_system.md §1.5-§1.8, processes.md P-16. Reuses _silent_king_session()
+# (real Silent King unit + the real Vengeance of the Enchained ability, now
+# effect.type: explode since b1) — same production-data rationale as the
+# retired mortal_wounds card tests above: this doubles as a regression test
+# that b1's data migration is actually wired to something visible in b2.
+# ---------------------------------------------------------------------------
+
+
+class _FakeCol:
+    """Minimal Streamlit column stand-in: controllable .button()/.number_input()
+    by widget key, no-op .markdown()/.caption(). A bare MagicMock().button()
+    is truthy by default, which would make every button in a row look
+    "pressed" at once — this fake only reports a press for keys explicitly
+    listed as pressed, matching how a real Streamlit rerun only reports True
+    for the one widget the user actually clicked.
+    """
+
+    def __init__(self, pressed, number_inputs):
+        self._pressed = pressed
+        self._number_inputs = number_inputs
+
+    def button(self, *args, key=None, **kwargs):
+        return key in self._pressed
+
+    def number_input(self, *args, key=None, **kwargs):
+        return self._number_inputs.get(key, 0)
+
+    def markdown(self, *args, **kwargs):
+        return None
+
+    def caption(self, *args, **kwargs):
+        return None
+
+    def __enter__(self):  # type: ignore[no-untyped-def]
+        return self
+
+    def __exit__(self, *exc_info):  # type: ignore[no-untyped-def]
+        return False
+
+
+def _fake_columns(pressed=None, number_inputs=None):  # type: ignore[no-untyped-def]
+    pressed = pressed or set()
+    number_inputs = number_inputs or {}
+
+    def _columns(spec):  # type: ignore[no-untyped-def]
+        count = len(spec) if isinstance(spec, list) else spec
+        return tuple(_FakeCol(pressed, number_inputs) for _ in range(count))
+
+    return _columns
+
+
+def _quiet_explode_widgets(monkeypatch, *, pressed=None, number_inputs=None) -> None:  # type: ignore[no-untyped-def]
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+    monkeypatch.setattr(common.st, "rerun", lambda: None)
+    monkeypatch.setattr(common.st, "columns", _fake_columns(pressed, number_inputs))
+    monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a, **kw: None)
+
+
+def _explode_ability() -> Ability:
+    """Silent King's real Vengeance of the Enchained ability (b1 data:
+    effect.type: explode, roll_threshold=4, radius='2D6', damage='D6')."""
+    unit = load_unit_catalog("necrons")[SILENT_KING]
+    ability = common.find_unit_ability_by_effect("necrons", unit.id, "explode")
+    assert ability is not None, "b1 data must carry effect.type: explode for Silent King"
+    return ability
+
+
+class TestExplodeTargetCandidates:
+    def test_excludes_self_destroyed_and_in_reserve(self) -> None:
+        silent_king = load_unit_catalog("necrons")[SILENT_KING]
+        warriors_id = "wh40k_9e.necrons.unit.warriors"
+        warriors = load_unit_catalog("necrons")[warriors_id]
+        boyz_id = "wh40k_9e.orks.unit.boyz"
+        boyz = load_unit_catalog("orks")[boyz_id]
+        gretchin_id = "wh40k_9e.orks.unit.gretchin"
+        gretchin = load_unit_catalog("orks")[gretchin_id]
+        session = _SS(
+            first_player="Necrons",
+            second_player="Orks",
+            p1_units_list=[silent_king, warriors],
+            p1_unit_keys=[SILENT_KING, warriors_id],
+            p2_units_list=[boyz, gretchin],
+            p2_unit_keys=[boyz_id, gretchin_id],
+            p1_units={
+                SILENT_KING: {"destroyed": True, "in_reserve": False},
+                warriors_id: {"destroyed": False, "in_reserve": False},
+            },
+            p2_units={
+                boyz_id: {"destroyed": False, "in_reserve": False},
+                gretchin_id: {"destroyed": False, "in_reserve": True},
+            },
+        )
+        # Both must be set (not just common.st): uiLayout._common's own `st`
+        # reference goes stale relative to gameMechanic.gameState's session-
+        # canonicalized one once tests/gameMechanic/ and tests/uiLayout/ run
+        # in the same pytest session (tests/gameMechanic/conftest.py's
+        # canonicalization loop only rebinds "gameMechanic."/"gameObjects."
+        # modules, not "uiLayout.") — units_key_for/unit_keys_for/
+        # units_list_for read _gs.st.session_state, not common.st.session_state.
+        # Same reason _silent_king_session() above always sets both.
+        common.st.session_state = session
+        _gs.st.session_state = session
+
+        candidates = common._explode_target_candidates("Necrons", SILENT_KING)
+
+        assert candidates == [
+            ("Necrons", warriors_id, warriors.name_en),
+            ("Orks", boyz_id, boyz.name_en),
+        ]
+
+
+class TestExplodeTileGating:
+    def test_hidden_while_unit_alive(self, monkeypatch) -> None:
+        session, unit = _silent_king_session(destroyed=False)
+        captured: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common.st, "container", lambda *a, **kw: captured.append(1) or MagicMock()
+        )
+
+        common._render_explode_tile("Necrons", SILENT_KING, unit)
+
+        assert captured == []
+
+    def test_hidden_for_unit_without_explode_ability(self, monkeypatch) -> None:
+        warriors_id = "wh40k_9e.necrons.unit.warriors"
+        warriors = load_unit_catalog("necrons")[warriors_id]
+        session = _SS(
+            first_player="Necrons",
+            second_player="Orks",
+            active="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_units_list=[warriors],
+            p1_unit_keys=[warriors_id],
+            p2_units_list=[],
+            p2_unit_keys=[],
+            p1_units={warriors_id: {"destroyed": True, "in_reserve": False}},
+            p2_units={},
+            phase_idx=4,
+        )
+        common.st.session_state = session
+        captured: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common.st, "container", lambda *a, **kw: captured.append(1) or MagicMock()
+        )
+
+        common._render_explode_tile("Necrons", warriors_id, warriors)
+
+        assert captured == []
+
+
+class TestRenderExplodeTilesForDestroyed:
+    def test_scans_both_factions(self, monkeypatch) -> None:
+        unit_a = SimpleNamespace(id="u1", name_en="Unit A")
+        unit_b = SimpleNamespace(id="u2", name_en="Unit B")
+        monkeypatch.setattr(
+            common, "unit_keys_for", lambda player: ["u1"] if player == "Necrons" else ["u2"]
+        )
+        monkeypatch.setattr(
+            common,
+            "units_list_for",
+            lambda player: [unit_a] if player == "Necrons" else [unit_b],
+        )
+        seen: list[tuple[str, str]] = []
+        monkeypatch.setattr(
+            common,
+            "_render_explode_tile",
+            lambda faction, uid, unit: seen.append((faction, uid)),
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert seen == [("Necrons", "u1"), ("Orks", "u2")]
+
+    def test_real_silent_king_reaches_the_binary_roll_tile(self, monkeypatch) -> None:
+        """S164-Lehre: render through the real entry point + a realistic
+        session_state (not just the isolated _render_explode_tile call) —
+        Silent King's REAL data (b1) now carries effect.type: explode, so
+        this doubles as a regression test that the b1 migration is actually
+        wired to something visible in b2."""
+        _silent_king_session(destroyed=True)
+        _quiet_explode_widgets(monkeypatch)
+        rendered: list[str] = []
+        monkeypatch.setattr(
+            common.st,
+            "markdown",
+            lambda *a, **kw: rendered.append(a[0]) if a else None,
+        )
+
+        common.render_explode_tiles_for_destroyed("Necrons", "Orks")
+
+        assert any("The Silent King" in c for c in rendered if isinstance(c, str))
+
+
+class TestExplodeRollButtons:
+    def test_explodes_button_resolves_true_and_reruns(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": None,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_yes_Necrons_{SILENT_KING}"}),
+        )
+
+        common._render_explode_roll("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["exploded"] is True
+        assert reruns == [1]
+
+    def test_does_not_explode_button_resolves_false_and_logs(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": None,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        logged: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_no_Necrons_{SILENT_KING}"}),
+        )
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a: logged.append(a))
+
+        common._render_explode_roll("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["exploded"] is False
+        assert logged and logged[0][3] == "The Silent King does not explode"
+
+
+class TestExplodeOutcomeInfoBox:
+    def test_failed_roll_shows_explicit_info_not_silent_removal(self, monkeypatch) -> None:
+        """Regression for P-16 Schritt 4: a failed roll must never silently
+        remove the tile — the info box is the visible, explicit end state."""
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": False,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        info_calls: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: info_calls.append(a[0]))
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert info_calls == ["The Silent King does not explode."]
+
+    def test_successful_roll_shows_info_and_target_panel(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        info_calls: list = []  # type: ignore[type-arg]
+        panel_calls: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: info_calls.append(a[0]))
+        monkeypatch.setattr(
+            common, "_render_explode_target_panel", lambda *a: panel_calls.append(a)
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert info_calls == [
+            'The Silent King explodes. Every unit within 2D6" suffers D6 mortal wounds.'
+        ]
+        assert len(panel_calls) == 1
+
+    def test_applied_success_hides_target_panel(self, monkeypatch) -> None:
+        _, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": True,
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        panel_calls: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common, "_render_explode_target_panel", lambda *a: panel_calls.append(a)
+        )
+
+        common._render_explode_outcome("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert panel_calls == []
+
+
+class TestExplodeTargetPanel:
+    @staticmethod
+    def _session_with_two_targets():  # type: ignore[no-untyped-def]
+        silent_king = load_unit_catalog("necrons")[SILENT_KING]
+        warriors_id = "wh40k_9e.necrons.unit.warriors"
+        warriors = load_unit_catalog("necrons")[warriors_id]
+        boyz_id = "wh40k_9e.orks.unit.boyz"
+        boyz = load_unit_catalog("orks")[boyz_id]
+        session = _SS(
+            first_player="Necrons",
+            second_player="Orks",
+            active="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_units_list=[silent_king, warriors],
+            p1_unit_keys=[SILENT_KING, warriors_id],
+            p2_units_list=[boyz],
+            p2_unit_keys=[boyz_id],
+            p1_units={
+                SILENT_KING: {"destroyed": True, "in_reserve": False},
+                warriors_id: {"destroyed": False, "in_reserve": False},
+            },
+            p2_units={boyz_id: {"destroyed": False, "in_reserve": False}},
+            phase_idx=4,
+        )
+        common.st.session_state = session
+        _gs.st.session_state = session
+        return session, warriors_id, boyz_id
+
+    def test_confirm_all_applies_mortal_wounds_per_selected_target(self, monkeypatch) -> None:
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        target_key_b = f"Orks::{boyz_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w, target_key_b],
+            "damage": {},
+            "applied": False,
+        }
+        applied: list = []  # type: ignore[type-arg]
+        logged: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "apply_mortal_wounds",
+            lambda uid, faction, count, u: applied.append((uid, faction, count)),
+        )
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a: logged.append(a))
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(
+                pressed={f"explode_confirm_{state_key}"},
+                number_inputs={
+                    f"explode_dmg_{state_key}_{target_key_w}": 3,
+                    f"explode_dmg_{state_key}_{target_key_b}": 0,
+                },
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        # boyz entered 0 (forgot the table value) — skipped, not applied with a
+        # no-op zero mortal wound.
+        assert applied == [(warriors_id, "Necrons", 3)]
+        assert entry["applied"] is True
+        assert logged and logged[0][3] == "The Silent King explodes"
+
+    def test_reset_clears_selection_without_applying(self, monkeypatch) -> None:
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {target_key_w: 5},
+            "applied": False,
+        }
+        applied: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "apply_mortal_wounds", lambda *a: applied.append(a))
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(
+                pressed={f"explode_reset_{state_key}"},
+                number_inputs={f"explode_dmg_{state_key}_{target_key_w}": 5},
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert applied == []
+        assert entry["selected"] == []
+        assert entry["damage"] == {}
+
+    def test_toggle_button_adds_target_to_selection(self, monkeypatch) -> None:
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+        }
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_tgt_{state_key}_{target_key_w}"}),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["selected"] == [target_key_w]
+        assert reruns == [1]
+
+
+class TestExplodeTileContainerStyling:
+    def test_unresolved_tile_gets_ready_gold_style(self, monkeypatch) -> None:
+        _silent_king_session(destroyed=True)
+        style_calls: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "go_card_container_style",
+            lambda key, state: (style_calls.append((key, state)), "<style></style>")[1],
+        )
+        _quiet_explode_widgets(monkeypatch)
+
+        common._render_explode_tile(
+            "Necrons", SILENT_KING, load_unit_catalog("necrons")[SILENT_KING]
+        )
+
+        assert style_calls and style_calls[0][1] == "ready"
+
+    def test_fully_applied_tile_skips_ready_style(self, monkeypatch) -> None:
+        session, unit = _silent_king_session(destroyed=True)
+        ability = _explode_ability()
+        session.explode_tiles = {
+            f"Necrons::{SILENT_KING}": {
+                "ability_id": ability.id,
+                "exploded": True,
+                "selected": [],
+                "damage": {},
+                "applied": True,
+            }
+        }
+        style_calls: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "go_card_container_style",
+            lambda key, state: (style_calls.append((key, state)), "<style></style>")[1],
+        )
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+
+        common._render_explode_tile("Necrons", SILENT_KING, unit)
+
+        assert style_calls == []

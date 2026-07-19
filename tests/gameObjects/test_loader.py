@@ -1879,6 +1879,156 @@ def test_load_unit_abilities_still_loads_quantum_shielding_with_its_badge_label(
 
 
 # ---------------------------------------------------------------------------
+# B-028c1 b1: explode abilities must carry roll_threshold/radius/damage — no
+# silent Pflicht-Trigger-Kachel with a missing field in b2.
+# ---------------------------------------------------------------------------
+
+
+def _make_explode_ability(
+    roll_threshold: int | None = 4, radius: str | None = "6", damage: str | None = "D3"
+) -> Ability:
+    return Ability(
+        id="test.ability.explode.incomplete",
+        name_en="Test Explodes",
+        source="unit_ability",
+        rule_text="test",
+        trigger=Trigger(timing="phase_reactive", phase="any", player="either"),
+        conditions=[],
+        effect=Effect(type="explode", roll_threshold=roll_threshold, radius=radius, damage=damage),
+        mandatory=True,
+    )
+
+
+def test_require_explode_effect_shape_rejects_missing_roll_threshold() -> None:
+    from gameObjects.loader import _require_explode_effect_shape
+
+    ability = _make_explode_ability(roll_threshold=None)
+    with pytest.raises(ValueError, match="necrons") as excinfo:
+        _require_explode_effect_shape(ability, "necrons")
+    assert "roll_threshold" in str(excinfo.value)
+    assert ability.id in str(excinfo.value)
+
+
+def test_require_explode_effect_shape_rejects_missing_radius() -> None:
+    from gameObjects.loader import _require_explode_effect_shape
+
+    ability = _make_explode_ability(radius=None)
+    with pytest.raises(ValueError, match="radius"):
+        _require_explode_effect_shape(ability, "necrons")
+
+
+def test_require_explode_effect_shape_rejects_missing_damage() -> None:
+    from gameObjects.loader import _require_explode_effect_shape
+
+    ability = _make_explode_ability(damage=None)
+    with pytest.raises(ValueError, match="damage"):
+        _require_explode_effect_shape(ability, "necrons")
+
+
+def test_require_explode_effect_shape_accepts_complete_ability() -> None:
+    from gameObjects.loader import _require_explode_effect_shape
+
+    ability = _make_explode_ability()
+    _require_explode_effect_shape(ability, "necrons")  # must not raise
+
+
+def test_load_unit_abilities_rejects_incomplete_explode_ability(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """End-to-end: load_unit_abilities calls the guard for effect.type explode,
+    same wiring pattern as the wound_auto_fail guard above."""
+    import gameObjects.loader as loader_mod
+
+    incomplete = {
+        "id": "test.ability.explode.incomplete",
+        "name_en": "Test Explodes",
+        "source": "unit_ability",
+        "rule_text": "test",
+        "trigger": {"timing": "phase_reactive", "phase": "any", "player": "either"},
+        "effect": {"type": "explode", "roll_threshold": 4},  # radius/damage missing
+    }
+    monkeypatch.setattr(loader_mod, "load_yaml", lambda path: {"abilities": [incomplete]})
+    monkeypatch.setattr(loader_mod.Path, "exists", lambda self: True)
+    loader_mod._UNIT_ABILITIES_CACHE.pop("test_faction_explode", None)
+    with pytest.raises(ValueError, match="explode"):
+        load_unit_abilities("test_faction_explode")
+
+
+# ---------------------------------------------------------------------------
+# B-028c1 b1: real-data Explodes carriers (roster units, single-model — see
+# unit_abilities.yaml comment on why Canoptek Spyder was left unwired).
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "faction_dir,unit_id,threshold,radius,damage",
+    [
+        (
+            "necrons",
+            "wh40k_9e.necrons.unit.the_silent_king",
+            4,
+            "2D6",
+            "D6",
+        ),
+        (
+            "necrons",
+            "wh40k_9e.necrons.unit.triarch_stalker",
+            6,
+            "6",
+            "D3",
+        ),
+        (
+            "necrons",
+            "wh40k_9e.necrons.unit.annihilation_barge",
+            6,
+            "3",
+            "1",
+        ),
+        (
+            "necrons",
+            "wh40k_9e.necrons.unit.night_scythe",
+            6,
+            "6",
+            "D3",
+        ),
+        (
+            "orks",
+            "wh40k_9e.orks.unit.gunwagon",
+            6,
+            "6",
+            "D6",
+        ),
+    ],
+)
+def test_real_data_explode_carriers_have_correct_wahapedia_values(
+    faction_dir: str, unit_id: str, threshold: int, radius: str, damage: str
+) -> None:
+    abilities = load_unit_abilities(faction_dir)
+    matches = [a for a in abilities if a.unit_id == unit_id and a.effect.type == "explode"]
+    assert len(matches) == 1
+    ability = matches[0]
+    assert ability.mandatory is True
+    assert ability.trigger.event == "model_destroyed"
+    assert ability.effect.roll_threshold == threshold
+    assert ability.effect.radius == radius
+    assert ability.effect.damage == damage
+
+
+def test_canoptek_spyder_has_no_explode_ability_yet() -> None:
+    """Documented gap (unit_abilities.yaml comment): Canoptek Spyder is a 1-3
+    model unit whose Explodes fires per dying model, which this app's
+    unit-level `destroyed` flag cannot represent yet — left unwired rather
+    than wired incorrectly (B-028c1 b1)."""
+    abilities = load_unit_abilities("necrons")
+    matches = [
+        a
+        for a in abilities
+        if a.unit_id == "wh40k_9e.necrons.unit.canoptek_spyder" and a.effect.type == "explode"
+    ]
+    assert matches == []
+
+
+# ---------------------------------------------------------------------------
 # Coverage: load_subfaction_abilities missing file (lines 580-581)
 # ---------------------------------------------------------------------------
 

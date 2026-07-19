@@ -25,45 +25,45 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S168, 2026-07-18)
+## Aktueller Stand (nach S169, 2026-07-19)
 
-**B-123 komplett** (Core-Fix T2 + UI-Nachzug T3, Stakeholder-verifiziert, archiviert): Root
-Cause war ein per UI erzwungener directed-Zweig, der Schaden über den Restpool der gewählten
-Gruppe hinaus verwarf (S166-Nachdiagnose). T2 (`src/gameMechanic/unitMutations.py`) lässt
-Überschuss jetzt generisch über `_apply_group_wound_damage` spillen und generalisiert
-`get_locked_group` um einen Zwangs-Lock für Einheiten mit `unit.has_per_group_wounds()` (im
-YAML-Bestand nur der Silent King — Szarekh kann nicht mehr vor den Menhirs gewählt werden).
-T3 (`src/uiLayout/_common.py`) bildet den Zwangs-Lock in `_render_subgroup_selector`/
-`_render_damage_block` ab. Stakeholder-Verifikation S168 bestätigt Regelkonformität, äußert
-aber deutliche Kritik an Design-System-Spec-Qualität (§1 keine schematische Bauform-Darstellung)
-und am Warnhinweis-Wortlaut/Apply-Damage-Uneinheitlichkeit — beides bei **B-124** verankert
-(`backlog_details.md`, Herkunft „T3-V S168"), nicht verloren. Details/Belege:
-`docs/goals/backlog_archive.md` Abschnitt „migriert S168".
+**Spec-Struktur-Korrektur (Stakeholder-Entscheid S169):** `design_system.md` definiert nur
+noch GENERISCHE Bausteine — neu §1.5–1.9 (Pflicht-Trigger-Kachel, Binär-Wurf, Multi-Unit-
+Ziel-Panel, Info-Hinweiskasten, Layout-Invariante; je mit Pflicht-ASCII-Schema, Retro-M1 in
+`agent_scopes.md` verankert), §3.1 Wortlaut-Budget (M2), generisches §7. Feature-Spezifisches
+in `processes.md`: **P-16 Explodes** (inkl. 5 Referenz-Screenshots) + P-08-Ergänzung (aus
+§4.4 migriert — Stakeholder sagte „§6", T2 interpretierte §4.4; Bestätigung offen, s. Retro).
 
-**§7-Explodes-Entwurf steht:** Pflicht-Trigger-Kachel-Spec für `design_system.md` liegt vor
-(`docs/handoff/S168_SPEC7_ABNAHME.md`, NEEDS-DECISION) — Abnahme durch Stakeholder steht noch
-aus, danach erst B-028c1-Code planen.
+**B-028c1 b1+b2 GEBAUT (In Progress, nicht abgehakt):** b1 = `effect.type: explode`
+(`roll_threshold`/`radius`/`damage`) + `mandatory`-Achse, `resolve_explode_effect` ohne
+Engine-Selbstwurf, 5 Träger Wahapedia-belegt (Silent King, Triarch Stalker, Annihilation
+Barge, Night Scythe, Gunwagon; Spyder bewusst ausgelassen — Mehrmodell, eigenes Konzept
+nötig). b2 = Pflicht-Trigger-Kachel in allen 5 `*Phase.py` (center, selektionsunabhängig),
+Binär-Wurf, Ziel-Panel beider Armeen, B-124(a)-Warnhinweis gekürzt. Gates: 2066 passed,
+Coverage 99,18 %, Arch 8/8, Nenner 159/Ledger 0. **UI-Verifikation offen**
+(`S169_b2_ui_verifikation.md`). b3 (`auto_explode`-GO) → S170.
 
-**Review S168: GO** (Pflicht-Korrektur aus diesem Abschluss eingelöst: B-123-Stale-Status in
-`backlog_details.md` korrigiert + archiviert). Retro-Maßnahmen liegen als Entscheidungsvorlage
-in `docs/handoff/S168_RETRO.md` (NEEDS-DECISION), noch nicht übernommen.
+**Handoff aufgeräumt:** 12 Dateien gelöscht; Review-NO-GO wegen 3 verwaister Referenzen
+noch in S169 per Pflicht-Korrektur ausgeräumt (Lehre → Retro-Maßnahme 1: Referenz-Grep vor
+Löschung für ALLE Dateitypen). **Retro-M3 (Bash-Allowlist) wartet auf Stakeholder**
+(`S169_M3_ALLOWLIST.md`) — Classifier blockiert Claude-seitige Permission-Änderungen.
 
-Frühere Sessions (S60–S167): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S168): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S169)
+### ▶ Nächster Schritt (S170)
 
-1. **Retro-Entscheid** (`docs/handoff/S168_RETRO.md`) — Maßnahmen-Liste sichten, auswählen,
-   übernehmen.
-2. **§7-Abnahme-Entscheid** (`docs/handoff/S168_SPEC7_ABNAHME.md`) — bei Abnahme
-   B-028c1-Code planen (L-Effort → vorher splitten: Schema+Daten / Kachel-UI /
-   auto_explode-GO als eigene Teil-Briefs) + Mockup-Dateien (`S166_MOCKUP_EXPLODES.md`,
-   `S167_MOCKUP_EXPLODES_V3.html`, `_V2.html`, zugehörige Screenshots) löschen.
-3. Weiteres laut `docs/goals/backlog.md`.
+1. **Retro-Entscheid** (`docs/handoff/S169_RETRO.md`) — 3 Maßnahmen + 2 offene
+   Stakeholder-Punkte (b2-UI-Verifikation, §6-vs-§4.4-Bestätigung).
+2. **b2-UI-Verifikation einlösen** (`S169_b2_ui_verifikation.md`) — bei GO B-028c1
+   b1+b2 abhaken; danach **b3 `auto_explode`-GO** (~M, eigener Brief).
+3. **M3-Allowlist** (`S169_M3_ALLOWLIST.md`) — Stakeholder trägt selbst ein.
+4. Weiteres laut `docs/goals/backlog.md` (B-124(b) Apply-Damage; Spyder-Explodes-Konzept).
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S168_SPEC7_ABNAHME.md`,
-`S168_REVIEW.md`, `S168_RETRO.md` je NEEDS-DECISION — Sichtung/Entscheid im S169-Planning.
-Mockup-Dateien S166/S167 (`S166_MOCKUP_EXPLODES.md` + `S167_MOCKUP_EXPLODES_V3.html` + `_V2.html`
-+ Screenshots) bleiben liegen bis zur §7-Abnahme.
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
+`S169_RETRO.md` + `S169_M3_ALLOWLIST.md` (NEEDS-DECISION);
+`S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION); `S169_REVIEW.md` (NEEDS-DECISION —
+NO-GO-Befund per Pflicht-Korrektur noch in S169 ausgeräumt, nur noch Sichtung);
+`S169_PLANNING.md` (nach Sichtung löschen).
 
 ---
 

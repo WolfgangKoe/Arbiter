@@ -17,6 +17,7 @@ from gameObjects.unit import Unit
 from uiLayout._common import (
     group_flow_attacker,
     render_attack_resolution,
+    render_explode_tiles_for_destroyed,
     render_group_assignment,
     render_group_cards,
     render_mortal_wounds_cards_for_destroyed,
@@ -85,6 +86,7 @@ class ShootingPhaseHandler:
 
         st.divider()
         render_mortal_wounds_cards_for_destroyed(first, second)
+        render_explode_tiles_for_destroyed(first, second)
 
         # Model-group flow: the defender column shows the group attack assignment
         group_override = None

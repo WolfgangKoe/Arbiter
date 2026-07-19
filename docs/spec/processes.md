@@ -24,6 +24,7 @@
 | P-13 | Angriffsphase — vollständiger Ablauf             | charge             |
 | P-14 | Nahkampfphase — vollständiger Ablauf             | fight              |
 | P-15 | Moralphase — vollständiger Ablauf                | morale             |
+| P-16 | Explodes / Pflicht-Trigger bei Zerstörung        | alle (on_destroy)  |
 
 ---
 
@@ -152,6 +153,10 @@ flowchart TD
   Spaltenstruktur und wendet Mortal Wounds (Smite/Perils) direkt über
   `apply_damage` an, ohne über einen der beiden Call-Sites zu laufen — stirbt
   eine Einheit durch Smite/Perils, erscheint die Karte nicht.
+- **Wird abgelöst (B-028c1 Re-Scope, S165/S169):** Dieser GO-Karten-basierte Ablauf ist die
+  fachlich falsche Bauform (Explodes ist ein Pflicht-Trigger, keine GO, s. P-16) und wird
+  durch die Pflicht-Trigger-Kachel-Familie ersetzt, sobald B-028c1 b1–b3 committet sind.
+  Bis dahin bleibt dieser Abschnitt der Ist-Stand.
 
 ---
 
@@ -325,6 +330,25 @@ flowchart TD
 
 **`"User"`-Auflösung** findet **vor** `resolve_attack_sequence()` statt (in `shootingPhase` / `fightPhase`).
 Die Funktion selbst sieht nur `int` — kein String-Parsing in `combat.py`.
+
+### Wurf-Block-Rendering — Anwendung des kanonischen Musters (S169-Split aus `design_system.md` §4.4)
+
+Das generische Wurf-Block-Pattern (Titel/Threshold-Header/Marker-Zeilen/Modifier-Zeilen/
+Eff.-Zeile/Quellen-Chips) steht in [`design_system.md` §4.4](design_system.md#44-wurf-block-pattern--kanonischer-aufbau-s159-fassung-2-split-s169).
+HIT und WOUND folgen diesem Muster weitgehend (WOUND vollständiger: Marker-Zeilen sind dort
+bereits verdrahtet, s. `design_system.md` §4.3). SAVE und DAMAGE weichen ab — die
+Abweichungen sind **Vereinheitlichungs-Lücken**, hier benannt, aber **nicht umgesetzt**:
+Backlog-Kandidaten für einen eigenen Folge-Task (Muster wie die Pakete 4c/5/6 in
+`design_system.md` §6.2).
+
+| Lücke | Ist-Zustand | Soll-Zustand | Status |
+|---|---|---|---|
+| SAVE-Modifier flach statt verschachtelt | AP + Cover je eine flache Zeile, nur eine finale Eff.-Zeile am Ende (`_render_dice_save_block`, diceHtml.py:225–246) | Jeder SAVE-Modifier bekommt wie bei HIT/WOUND seine eigene Eff.-Zeile (verschachtelt), damit AP+Cover-Kombinationen den Zwischenschritt zeigen statt eines Sprungs | Backlog-Kandidat |
+| Invuln als Separat-Sektion | Invuln rendert außerhalb des Save-Block-Patterns, ohne Marker-Zeilen-Hooks (diceHtml.py:250–260) | Invuln folgt demselben Wurf-Block-Pattern (Threshold-Header/Dice-Row/Marker-Zeilen), bleibt aber als eigene Sektion sichtbar — Invuln ist regelkonform ein anderer Save-Typ, keine Verschmelzung mit dem Armour-Path | Backlog-Kandidat |
+| Keine Marker-Zeilen im SAVE-Block | SAVE hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll) | SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren | Backlog-Kandidat |
+| HIT-Block ohne Marker-Zeilen | `_render_dice_roll_block` ruft `always_fail_marker_row_html`/`reroll_marker_row_html` nicht auf, obwohl HIT-Rerolls existieren (Skorpekh, B-113) | HIT-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND, sobald ein HIT-seitiger Producer (B-113) sie befüllt | Backlog-Kandidat, an B-113 gekoppelt |
+| Fehlender DAMAGE-Block | Kein `_render_dice_damage_block()`; Mortal Wounds/Overcharge sind reine Text-Labels ohne Würfel-Grid | Neuer DAMAGE-Block folgt demselben Pattern (Titel/Dice-Row bei echtem Schadenswurf, Marker-/Quellen-Chip-Zeilen immer) — offene Entwurfsfrage: zeigt er ein Grid, wenn nur D3/D6 ohne Erfolgsschwelle gewürfelt wird? | Backlog-Kandidat, eigener Entwurfsschritt nötig (kein Trivial-Fix) |
+| Tesla-Extra-Hits als externer Badge statt In-Slot-Chip | `special_die_html`-Badge außerhalb des Grids statt `value_triggered_die_row_html` in Spalte 6 (s. `design_system.md` §4.3-Vorgriff-Zeile) | Migration auf das AP-Trigger-Muster, damit „Erfolg bei 6 löst Zusatzwert aus" gleich aussieht, egal ob AP-Bonus oder Zusatz-Treffer | Backlog-Kandidat |
 
 ---
 
@@ -653,3 +677,142 @@ flowchart TD
 - `src/gameMechanic/moralePhase.py` — Handler, `_fail_threshold`, `_render_unit_morale`
 - `src/gameMechanic/unitMutations.py: flee_models`
 - Tests: `tests/gameMechanic/test_morale_phase.py`
+
+
+---
+
+## P-16 — Explodes / Pflicht-Trigger bei Zerstörung
+
+Gilt phasenübergreifend, Trigger = `on_destroy` (alle Phasen, jede Einheit mit
+`effect.type: explode`). Feature-Ablauf-Anteil des S169-Struktur-Umbaus (Stakeholder-Befund: `design_system.md` §7
+mischte generische Bausteine mit diesem Feature-Ablauf). Die Bausteine selbst sind generisch
+in `design_system.md` §1.5–1.9 registriert; dieser Abschnitt beschreibt nur noch die
+**konkrete** Explodes-Anwendung — Werte, betroffene Einheiten, Ablauf, Wortlaut.
+
+### Fachliche Einordnung (wörtliches Wahapedia-Zitat)
+
+**Generische Regel „Explodes"** (`docs/work/wahapedia_core_rules/rules_appendix.txt:1253-1262`):
+
+> „When destroyed, some models have an ability that gives them a chance to explode (or
+> crash and burn, or lash out with death throes etc.) and inflict mortal wounds on nearby
+> units. If a model has such an ability and is destroyed, then it is always the player
+> controlling that model who rolls to see if it explodes (or similar), and it is always
+> this player who rolls to see if nearby units suffer damage, and if they do, how much
+> damage is inflicted."
+
+**Beide Würfe** (Explodes-Gate UND Schaden) liegen fachlich beim kontrollierenden Spieler —
+die App ist Erinnerer/Eingabe-Helfer, würfelt selbst nicht (Grundsatz „Die App würfelt
+nicht", `design_system.md` §6.3, hier durch den Regeltext selbst belegt). Explodes ist ein
+**Pflicht-Ereignis** beim Tod des Modells — kein Verwenden/Nicht-Verwenden-Entscheid, kein
+`[Use]`, keine CP (Ausnahme: der separate `auto_explode`-CP-Automatismus, s. u.).
+
+### Explodes-Träger (Wahapedia-Beleg, `docs/work/wahapedia_necrons/units_all.txt`)
+
+| Einheit | Schwelle | Radius | Schaden | Quelle |
+|---|---|---|---|---|
+| The Silent King (Vengeance of the Enchained) | 4+ | 2D6" | D6 mortal wounds | Z. 689 |
+| Canoptek Spyder | 6 | 3" oder 6" (Variante) | 1 mortal wound oder D3 mortal wounds (Variante) | Z. 416, Z. 560 |
+| C'tan (Reality Unravels) | 4+ | 6" | D3 mortal wounds | Z. 400, Z. 654, Z. 665, Z. 678 |
+
+Schwelle/Radius/Schaden kommen aus der YAML (`effect.type: explode`, Achsen
+`roll_threshold`/`radius`/`damage`, s. B-028c1 b1) — kein Fraktions-Hardcode in `src/`.
+**Nicht im aktuellen Scope:** Ghost Ark „Wrecked" (Z. 752) — abweichende Variante mit einem
+dritten Ausgang („wrecked" statt reinem Explodes), kein reiner Explodes-Fall.
+
+**Datenbug (B-028c1 Punkt 4):** `data/wh40k_9e/necrons/unit_abilities.yaml:391` trägt aktuell
+`"On a 4+, each unit within 2D6\" suffers D6 mortal wounds."` — das Wort „it explodes" fehlt
+gegenüber dem Wahapedia-Original. Korrektur ist Teil des Umsetzungspakets b1.
+
+### `auto_explode`-Gefechtsoption (echte GO, kein Pflicht-Trigger)
+
+**Quelle** (`docs/work/wahapedia_necrons/stratagems.txt:79`):
+
+> „Use this Stratagem in any phase, when a NECRONS VEHICLE model from your army is
+> destroyed. Do not roll to see if that model explodes: it does so automatically. If that
+> model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it costs 1 CP."
+
+Einzige Stelle im Explodes-Komplex mit echtem Verwenden/Nicht-Verwenden-Entscheid + CP-Kosten
+→ eigene GO (Standard-GO-Karte, `design_system.md` §6.1), Titel = `name_en` aus der YAML
+(z. B. „Curse of the Phaeron"), CP-Anzeige im Header (1 CP / 3 CP bei TITANIC). Anker
+reaktiv (`timing: phase_reactive`, `on_destroy`) direkt an der Kachel-Gruppe (Baustein ②,
+`design_system.md` §7.1) — nicht in der zentralen Stratagems-Liste (§6.2-Orte-Zuordnung).
+Bei `[Use]` entfällt der Binär-Wurf-Baustein (Baustein ①): die Explosion gilt automatisch.
+
+### Ablauf
+
+```mermaid
+flowchart TD
+    A[Modell/Einheit destroyed\neffect.type = explode gesetzt] --> B[Pflicht-Trigger-Kachel\nerscheint INLINE am Eintrag\nder betroffenen Einheit]
+    B --> C{auto_explode-GO verfügbar\nUND Use gedrückt?}
+    C -- ja --> D[Explodes gilt automatisch\nkein Tischwurf nötig]
+    C -- nein --> E[Binär-Wurf-Baustein:\nExplodes! / Does not explode]
+    E --> F{Explodes! gedrückt?}
+    F -- nein --> G[Info-Hinweiskasten:\n'unitName' does not explode.]
+    F -- ja --> H[Info-Hinweiskasten:\n'unitName' explodes. Every unit\nwithin RADIUS suffers DAMAGE MW.]
+    D --> H
+    H --> I[Multi-Unit-Ziel-Auswahl-Panel\nbeide Armeen, Toggle je Einheit]
+    I --> J[Spieler wählt betroffene Einheiten\nträgt Tischwurf-Schaden je Einheit ein]
+    J --> K[Confirm all → apply_damage je Einheit\nLP-Balken sinkt live in unitCard]
+    K --> L[Log-Eintrag schreiben]
+    G --> L
+```
+
+Schritt-für-Schritt (Baustein-Referenzen aus `design_system.md`):
+
+1. **Einheit zerstört** → Pflicht-Trigger-Kachel (§1.5) erscheint inline am Eintrag der
+   betroffenen Einheit, `center`-Spalte (§1.9) — nicht in der Sidebar der besitzenden Armee.
+2. **Falls `auto_explode` verfügbar:** GO-Karte (§6.1) direkt an derselben Kachel — `[Use]`
+   ersetzt den Tischwurf, die Explosion gilt automatisch (Stratagem-Text „Do not roll").
+3. **Sonst: Binär-Wurf-Baustein** (§1.6) — Titel = Einheitenname aus der YAML, Caption
+   „Explodes on {roll_threshold}+", Buttons „Explodes!" / „Does not explode" (kein
+   Zahlenfeld — die App braucht nur das Erreichen/Verfehlen der YAML-Schwelle, nicht den
+   genauen Würfelwert).
+4. **Info-Hinweiskasten** (§1.8, `info`-Typ, `--arb-blue`) zeigt den Ausgang:
+   - Erfolg: „⟨unitName⟩ explodes. Every unit within ⟨radius⟩ suffers ⟨damage⟩ mortal
+     wounds."
+   - Fehlschlag: „⟨unitName⟩ does not explode." — expliziter, sichtbar markierter
+     Endzustand, kein stilles Verschwinden der Kachel.
+5. **Bei Erfolg: Multi-Unit-Ziel-Auswahl-Panel** (§1.7) — Toggle-Zeilen beider Armeen
+   nebeneinander (Necrons/Orks-Gruppen als Beispiel, generisch für beide Fraktionen im
+   Roster), Zahlenfeld-Spalte „⟨Schadenswürfel⟩ Mortal Wounds" erscheint bei ausgewählten
+   Einheiten. Reichweite (`radius`) misst der Tisch — die App hat kein Positionsmodell und
+   zählt nicht nach, welche Einheiten tatsächlich innerhalb liegen.
+6. **Confirm all** wendet den eingetragenen Schaden je ausgewählter Einheit an
+   (`apply_damage`, mortal), der LP-Balken sinkt live in der unitCard (Bestandskomponente,
+   §1.7). **Reset** verwirft die Auswahl ohne Anwendung.
+
+### Screenshot-Referenzen (Bauform-Vorbild, `agent_scopes.md` §e — PFLICHT)
+
+Verbindliche Bauform-Referenz aus der bestehenden App (Stakeholder-Vorgabe S166 §g/§h,
+abgenommen als `design_system.md` §7 und diese Spec P-16), bis B-028c1 b2 committet ist:
+
+| Screenshot | Zeigt | Vorbild für |
+|---|---|---|
+| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-51-02.png` | Psi-Flow: Smite / Attempt Manifest | Binär-Wurf-Baustein-Anker-Platzierung (Schritt 3) — dieselbe Mechanik wie ein Tischwurf-Gate |
+| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-54-10.png` | Psi-Flow: Command-Re-Roll-Karte neben dem Wurf | `auto_explode`-GO-Platzierung direkt am Wurf-Anker (Schritt 2) |
+| `docs/handoff/Bildschirmfoto vom 2026-07-18 11-51-51.png` | Heroic-Intervention-Panel (Toggle-Zeilen, keine Card-Ansicht) | Multi-Unit-Ziel-Auswahl-Panel-Grundlayout (Schritt 5) |
+| `docs/handoff/Bildschirmfoto vom 2026-07-18 12-01-39.png` | Heroic-Intervention-Panel, zweite Ansicht | Multi-Unit-Ziel-Auswahl-Panel-Grundlayout (Schritt 5) |
+| `docs/handoff/Bildschirmfoto vom 2026-07-18 12-07-09.png` | Zahlenfeld neben einer ausgewählten Einheit | Schadens-Zahlenfeld-Spalte bei ausgewählten Einheiten (Schritt 5) |
+
+### Wortlaut (Wortlaut-Budget `design_system.md` §3.1 gilt)
+
+- Buttons: „Explodes!" / „Does not explode" (kein Präzedenzfall für andere Tischwürfe mit
+  echtem Zahlenwert, S166-Entscheid — `design_system.md` §6.3 bleibt dort Standard).
+- Panel-Footer: „Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog Abschluss der
+  Attackensequenz).
+- Hinweiskasten: genau **ein** Satz je Ausgang (s. Schritt 4) — keine Regel-Paraphrase,
+  keine zusätzliche Begründung im UI-Text.
+- `DESTROYED` bleibt in der bestehenden unitCard-Farbe (`#c04040`,
+  `src/uiLayout/unitCard.py:61`) — keine Änderung, kein neues Token.
+
+### Code-Referenzen (Ist-Stand — wird durch B-028c1 b1–b3 abgelöst, s. P-04)
+
+- `src/uiLayout/_common.py:_render_mortal_wounds_on_destroy_card` — heutige (falsche
+  Bauform, GO-Karte statt Pflicht-Trigger-Kachel) Implementierung für Vengeance of the
+  Enchained; wird abgelöst.
+- `src/gameMechanic/abilityEngine.py:resolve_mortal_wounds_effect` — heutiger
+  Engine-Selbstwurf (Verstoß „Die App würfelt nicht"); Rückbau Teil von b1.
+- `data/wh40k_9e/necrons/unit_abilities.yaml` (`vengeance_of_the_enchained`) — Datenbug
+  s. o., Korrektur Teil von b1.
+- `data/wh40k_9e/necrons/stratagems.yaml:474` (`auto_explode`, Curse of the Phaeron).
+- Backlog: `docs/goals/backlog_details.md` B-028c1 (Teil-Briefs b1/b2/b3, Details/Reihenfolge).

@@ -30,6 +30,7 @@ from uiLayout._common import (
     group_flow_attacker,
     lookup,
     render_attack_resolution,
+    render_explode_tiles_for_destroyed,
     render_group_assignment,
     render_group_cards,
     render_mortal_wounds_cards_for_destroyed,
@@ -385,6 +386,7 @@ class FightPhaseHandler:
 
         _maybe_render_mortal_undo(state)
         render_mortal_wounds_cards_for_destroyed(first, second)
+        render_explode_tiles_for_destroyed(first, second)
 
         # Priority goes to the inactive (non-active) player.
         # Rerun: the left army column already rendered without a fight player.

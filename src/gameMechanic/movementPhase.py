@@ -36,6 +36,7 @@ from gameObjects.stratagem import (
 from gameObjects.unit import TriggeredEffect, Unit
 from uiLayout._common import (
     lookup,
+    render_explode_tiles_for_destroyed,
     render_go_card,
     render_mortal_wounds_cards_for_destroyed,
     render_player_column,
@@ -69,6 +70,7 @@ class MovementPhaseHandler:
         second: str = state["second_player"]
 
         render_mortal_wounds_cards_for_destroyed(first, second)
+        render_explode_tiles_for_destroyed(first, second)
         col1, col2 = st.columns(2)
         with col1:
             render_player_column(first, state, active_content=_active_movement)

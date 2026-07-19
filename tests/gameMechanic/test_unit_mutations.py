@@ -11,12 +11,11 @@ _st_mock = MagicMock()
 sys.modules["streamlit"] = _st_mock
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-import gameMechanic.abilityEngine as _eng  # noqa: E402
 import gameMechanic.gameState as _gs  # noqa: E402
 import gameMechanic.unitMutations as _mut  # noqa: E402
 from gameMechanic.abilityEngine import (  # noqa: E402
     find_unit_ability_by_effect,
-    resolve_mortal_wounds_effect,
+    resolve_explode_effect,
 )
 from gameMechanic.gameState import next_phase  # noqa: E402
 from gameMechanic.unitMutations import (  # noqa: E402
@@ -1450,11 +1449,19 @@ def test_apply_mortal_wounds_delegates_to_apply_damage_mortal() -> None:
 def test_vengeance_of_the_enchained_flow_trigger_resolve_apply(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """B-028c1 T2: Trigger (Silent King destroyed) -> resolve (roll) -> apply
-    (mortal wounds land on the user-chosen target) end to end, using the real
-    YAML ability + the real `apply_mortal_wounds` state mutation — no
-    Streamlit involved, mirrors `_render_vengeance_ability_card`'s own call
-    chain in src/uiLayout/_common.py.
+    """B-028c1 b1 (S169): Trigger (Silent King destroyed) -> resolve (gate) ->
+    apply (mortal wounds land on the user-chosen target) end to end, using the
+    real YAML ability + the real `apply_mortal_wounds` state mutation — no
+    Streamlit involved.
+
+    Superseded resolve_mortal_wounds_effect(ability) self-roll with
+    resolve_explode_effect(ability, exploded=...): Vengeance of the Enchained
+    migrated from effect.type: mortal_wounds to effect.type: explode
+    (Explodes-Familie, Pflicht-Trigger) — the engine no longer rolls the D6
+    gate itself ("App würfelt nicht"); the gate outcome and the mortal-wound
+    count are both entered by the caller from a physical table roll. `wounds
+    = 3` here stands in for that table-rolled per-target entry (b2's UI
+    concern, not this function's).
     """
     _make_session(
         p1_units={
@@ -1467,15 +1474,14 @@ def test_vengeance_of_the_enchained_flow_trigger_resolve_apply(
         }
     )
     ability = find_unit_ability_by_effect(
-        "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+        "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
     )
     assert ability is not None
 
-    rolls = iter([4, 3])  # gate roll 4 (>=4 -> triggered), amount roll D6 -> 3
-    monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
-    wounds = resolve_mortal_wounds_effect(ability)
-    assert wounds == 3
+    exploded = resolve_explode_effect(ability, exploded=True)
+    assert exploded is True
 
+    wounds = 3  # table-rolled damage entry (b2 UI concern), not engine-computed
     _mut.apply_mortal_wounds(WARRIORS, "Necrons", wounds, _warriors())
     state = _mut.st.session_state["p1_units"][WARRIORS]
     assert state["current_wounds"] == 7

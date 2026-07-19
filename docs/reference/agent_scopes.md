@@ -271,7 +271,9 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Design-System-Konformität (Komponente, Anker, Wortlaut) geprüft (Retro S165 — B-028c1
       Vollbreiten-Kachel + falsche GO-Karte für einen Pflicht-Trigger)
 - [ ] Berührte UI-Bauform in `design_system.md` §1 registriert? (falls fehlend: Ist-Zustand
-      im selben Change knapp nachtragen — B-124-Ratchet)
+      im selben Change knapp nachtragen — B-124-Ratchet). Jede §1-Registrierung enthält
+      PFLICHT ein schematisches Mini-Schema (ASCII/Markdown) der Bauform, nicht nur Prosa
+      (Retromaßnahme S168-M1 — Stakeholder-Ablehnung von Prosa-only-§7)
 ```
 
 ## Grundannahmen-Block in Konzept-Aufträgen (Retromaßnahme S131 — PFLICHT)

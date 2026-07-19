@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-18 22:25 CEST
+Stand: 2026-07-19 13:32 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-18 20:59 6cfc  ██████████░░ 124k ⚠️   █████░  84%    █···········
+07-18 22:58 067a  ██████████░░ 128k ⚠️   ██████  95%    ············
+         SA_1·  ████████████ 219k ⛔    T2: Spec-Umbau design_system/proce…
+         SA_2·  ████████████ 286k ⛔    T3: b1 Explode-Schema+Engine
+         SA_3·  ███████████░ 139k ⚠️   S169-Planning-Entwurf erstellen
+         SA_4·  ██░░░░░░░░░░  29k ✅    T6: Handoff-Aufräumen Whitelist
+         SA_5·  ███░░░░░░░░░  36k ✅    Review-Pflicht-Korrekturen (3 Refs)
+         SA_6·  ██████░░░░░░  74k ✅    S169-Abschluss-Review (DoD)
+         SA_7·  ████████████ 324k ⛔    T4: b2 Pflicht-Trigger-Kachel-UI
+----------------- ---------------------- -------------- ------------
+07-18 20:59 6cfc  ██████████░░ 126k ⚠️   █████░  83%    █···········
          SA_1·  █████████░░░ 108k ✅    T4: §7-Spec-Überführung Explodes
          SA_2·  ████████░░░░  99k ✅    §7-Rework mit ASCII-Schemata
          SA_3·  ████████████ 159k ⛔    T3: B-123 UI + Render-Test
@@ -920,3 +929,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S166 (2026-07-18)** B-122 menhir wounds fix; B-123 root cause verified (directed-group damage discards spillover, UI forces branch) + stakeholder direction; explodes mockup V2 accepted with 7 corrections for V3; retro measures 1-3 pending
 - **S167 (2026-07-18)** Spec-first-UI-Governance + Screenshot-Konvention + B-124-Ratchet, Planner-Tier Opus (ADR-0009), Explodes-Mockup V3 abgenommen (3 Auflagen), B-123 -> S168
 - **S168 (2026-07-18)** B-123 komplett (Core-Spillover+Menhir-Lock+UI, verifiziert), §7-Explodes-Entwurf, Review GO
+- **S169 (2026-07-19)** Spec-Umbau design_system generisch (§1.5-1.9/§7/§3.1) + processes P-16; B-028c1 b1+b2 gebaut (explode-Schema, Engine ohne Selbstwurf, Pflicht-Trigger-Kachel); Handoff-Aufräumen 12 Dateien; Review NO-GO→GO nach Referenz-Korrektur

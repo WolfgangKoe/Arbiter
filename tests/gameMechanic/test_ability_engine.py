@@ -37,6 +37,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_triggered_abilities,
     is_effect_executable,
     mortal_wounds_target,
+    resolve_explode_effect,
     resolve_mortal_wounds_effect,
     revive_dice_count,
     unit_wound_auto_fail_label,
@@ -2007,29 +2008,89 @@ class TestResolveMortalWoundsEffect:
         assert resolve_mortal_wounds_effect(ability) == 1
 
 
-# ── vengeance_of_the_enchained real-data wiring (B-028c1 T2) ───────────────
+# ── explode effect handler (B-028c1 b1) ─────────────────────────────────────
 #
-# Unlike the synthetic fixtures above (T1, effect-shape only), these load the
-# actual necrons/unit_abilities.yaml entry — the call-site (_common.py's
-# _render_vengeance_ability_card) resolves this real ability, not a fixture.
+# Engine rollback: unlike resolve_mortal_wounds_effect, resolve_explode_effect
+# never calls parse_dice/random — both the gate roll and the per-target
+# mortal-wound amount are rolled at the table and entered by the player
+# ("App würfelt nicht"). Synthetic fixture mirrors the real explode shape
+# (roll_threshold/radius/damage, no target/amount).
+
+
+def _explode_ability(*, mandatory: bool = True) -> Ability:
+    return Ability(
+        id="test.unit.explode_ability",
+        name_en="Test Explodes Ability",
+        source="unit_ability",
+        rule_text="Test rule text.",
+        trigger=Trigger(
+            timing="phase_reactive", phase="any", player="either", event="model_destroyed"
+        ),
+        conditions=[],
+        effect=Effect(type="explode", roll_threshold=4, radius="2D6", damage="D6"),
+        mandatory=mandatory,
+    )
+
+
+class TestResolveExplodeEffect:
+    def test_exploded_true_returns_true_without_rolling(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        ability = _explode_ability()
+        monkeypatch.setattr(
+            _eng, "parse_dice", lambda s: pytest.fail("explode path must never roll dice")
+        )
+        assert resolve_explode_effect(ability, exploded=True) is True
+
+    def test_exploded_false_returns_false_without_rolling(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        ability = _explode_ability()
+        monkeypatch.setattr(
+            _eng, "parse_dice", lambda s: pytest.fail("explode path must never roll dice")
+        )
+        assert resolve_explode_effect(ability, exploded=False) is False
+
+    def test_raises_for_non_explode_ability(self) -> None:
+        """Wiring guard: calling this on a mortal_wounds-type ability fails loudly
+        instead of silently misapplying the gate."""
+        ability = _mortal_wounds_ability(target="attacker", amount=1, roll_threshold=1)
+        with pytest.raises(ValueError, match="explode"):
+            resolve_explode_effect(ability, exploded=True)
+
+
+# ── vengeance_of_the_enchained real-data wiring (B-028c1 b1) ───────────────
+#
+# Unlike the synthetic fixtures above (effect-shape only), these load the
+# actual necrons/unit_abilities.yaml entry. As of B-028c1 b1 (S169) this
+# ability's effect.type migrated from mortal_wounds to explode (Explodes
+# family, Pflicht-Trigger, `mandatory: true`) — see the YAML comment on
+# vengeance_of_the_enchained for the re-scope rationale (S165). The old
+# find_unit_ability_by_effect(..., "mortal_wounds") lookup this ability used
+# to satisfy therefore now returns None; that lookup path stays covered by
+# the Arc Fields / Wrath of the Seraptek shape tests above (still
+# mortal_wounds-typed, unaffected by this migration).
 
 
 class TestVengeanceOfTheEnchainedRealData:
     def test_find_unit_ability_by_effect_real_data(self) -> None:
         ability = find_unit_ability_by_effect(
-            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
         )
         assert ability is not None
         assert ability.id == "wh40k_9e.necrons.unit.the_silent_king.vengeance_of_the_enchained"
-        assert ability.effect.type == "mortal_wounds"
+        assert ability.effect.type == "explode"
         assert ability.trigger.event == "model_destroyed"
+        assert ability.mandatory is True
 
-    def test_mortal_wounds_target_real_data(self) -> None:
+    def test_explode_fields_real_data(self) -> None:
         ability = find_unit_ability_by_effect(
-            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
         )
         assert ability is not None
-        assert mortal_wounds_target(ability) == "units_within_2d6"
+        assert ability.effect.roll_threshold == 4
+        assert ability.effect.radius == "2D6"
+        assert ability.effect.damage == "D6"
 
     def test_check_conditions_passes_for_the_silent_king(self) -> None:
         """Ownership (unit_id) is the ability's only gate (empty `conditions`,
@@ -2039,29 +2100,32 @@ class TestVengeanceOfTheEnchainedRealData:
         it is misattached to tesseract_vault elsewhere in the same file."""
         army, *_ = load_army("necrons")
         silent_king = next(u for u in army if u.id == "wh40k_9e.necrons.unit.the_silent_king")
-        ability = find_unit_ability_by_effect("necrons", silent_king.id, "mortal_wounds")
+        ability = find_unit_ability_by_effect("necrons", silent_king.id, "explode")
         assert ability is not None
         assert ability.conditions == []
         assert check_conditions(ability, silent_king, {"destroyed": True})
 
-    def test_vengeance_flow_triggers_and_rolls_amount(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
-        """Trigger → resolve, against the real YAML shape (D6 gate 4+, D6 amount)."""
+    def test_vengeance_flow_explode_gate_applies(self) -> None:
+        """Real YAML shape (D6 gate 4+, radius 2D6", damage D6) — the gate outcome
+        is supplied externally (table roll), never rolled by resolve_explode_effect."""
         ability = find_unit_ability_by_effect(
-            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
         )
         assert ability is not None
-        rolls = iter([4, 6])  # gate roll 4 (>=4 -> triggered), amount roll D6 -> 6
-        monkeypatch.setattr(_eng, "parse_dice", lambda s: next(rolls))
-        assert resolve_mortal_wounds_effect(ability) == 6
+        assert resolve_explode_effect(ability, exploded=True) is True
 
-    def test_vengeance_flow_below_threshold_inflicts_nothing(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_vengeance_flow_does_not_explode(self) -> None:
         ability = find_unit_ability_by_effect(
-            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "mortal_wounds"
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
         )
         assert ability is not None
-        monkeypatch.setattr(_eng, "parse_dice", lambda s: 3)  # gate roll 3 < 4
-        assert resolve_mortal_wounds_effect(ability) == 0
+        assert resolve_explode_effect(ability, exploded=False) is False
+
+    def test_rule_text_includes_it_explodes(self) -> None:
+        """Regression for the Wahapedia wording gap noted in backlog_details.md
+        B-028c1: the previous rule_text dropped "it explodes" from the quote."""
+        ability = find_unit_ability_by_effect(
+            "necrons", "wh40k_9e.necrons.unit.the_silent_king", "explode"
+        )
+        assert ability is not None
+        assert "it explodes" in ability.rule_text

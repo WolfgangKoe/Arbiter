@@ -56,6 +56,40 @@ def test_ability_type_activated() -> None:
     assert ability.ability_type == "activated"
 
 
+def test_ability_mandatory_defaults_false() -> None:
+    """Pflicht-Trigger-Achse (B-028c1 b1): opt-in, defaults False for every
+    existing ability shape that never sets it."""
+    ability = Ability(
+        id="test.not_mandatory",
+        name_en="Not Mandatory",
+        source="unit_ability",
+        rule_text="Does something.",
+        trigger=Trigger(timing="phase_start", phase="command"),
+        conditions=[],
+        effect=Effect(type="heal", target="self", amount="1"),
+    )
+    assert ability.mandatory is False
+
+
+def test_effect_explode_fields() -> None:
+    """explode schema (B-028c1 b1): roll_threshold/radius/damage, no
+    target/amount — the Explodes-Familie's spatial resolution + mortal-wound
+    count are both table-rolled, never computed by this app."""
+    effect = Effect(type="explode", roll_threshold=4, radius="2D6", damage="D6")
+    assert effect.roll_threshold == 4
+    assert effect.radius == "2D6"
+    assert effect.damage == "D6"
+    assert effect.target is None
+    assert effect.amount is None
+
+
+def test_effect_radius_and_damage_default_none() -> None:
+    """Every non-explode effect shape leaves the new fields unset."""
+    effect = Effect(type="heal", target="self", amount="1")
+    assert effect.radius is None
+    assert effect.damage is None
+
+
 def test_condition_defaults() -> None:
     cond = Condition()
     assert cond.has_rules is None

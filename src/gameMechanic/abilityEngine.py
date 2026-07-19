@@ -660,6 +660,38 @@ def resolve_mortal_wounds_effect(ability: Ability, *, trigger_met: bool | None =
     return parse_dice(effect.amount or "1")
 
 
+def resolve_explode_effect(ability: Ability, *, exploded: bool) -> bool:
+    """Apply an already-resolved Explodes-family destruction trigger.
+
+    Generic dispatch for ``effect.type: explode`` (Explodes-Familie /
+    Pflicht-Trigger, B-028c1 b1) — deliberately contains **no** dice roll of
+    any kind ("App würfelt nicht", §6.3/§7 ``design_system.md``): both the
+    D6 gate roll ("on a 4+ it explodes") and the per-target mortal-wound
+    amount happen physically at the table. ``exploded`` carries the gate
+    outcome the player already rolled and entered (mockup V3 Auflage 4 —
+    two buttons "Explodes!" / "Does not explode", per → `docs/spec/processes.md` §P-16,
+    rather than the exact D6 face). The mortal-wound
+    COUNT per affected unit is entered directly per target by the caller
+    (``unitMutations.apply_mortal_wounds``) — this function never parses
+    ``effect.damage`` via ``combat.parse_dice`` the way
+    ``resolve_mortal_wounds_effect`` parses ``effect.amount``, because that
+    would mean the app rolling the damage itself instead of the player.
+
+    Raises ``ValueError`` if called on a non-``explode`` ability (wiring
+    bug — fail loudly rather than silently no-op on the wrong ability).
+    Returns ``exploded`` unchanged; kept as a named function (rather than
+    inlining ``if exploded:`` at each call-site) so every b2 call-site shares
+    one seam and the type-check guard, matching this module's existing thin
+    dispatch style (e.g. ``mortal_wounds_target``).
+    """
+    if ability.effect.type != "explode":
+        raise ValueError(
+            f"resolve_explode_effect called on ability {ability.id!r} with "
+            f"effect.type {ability.effect.type!r}, expected 'explode'."
+        )
+    return exploded
+
+
 def ability_badge_label(faction: str, unit: Unit) -> str | None:
     """Badge label from the active faction ability if this unit benefits, else None.
 

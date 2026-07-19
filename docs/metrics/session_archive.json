@@ -5750,8 +5750,8 @@
   "6cfc9b70-e0f5-4e02-b0b7-ddab19dca2d6": {
     "started_at": "2026-07-18T18:59:33.943Z",
     "task": "start Session. Wir übernehmen keine der Retromaßnahmen aus der letzten Session. Opus soll den Plan für diese Session du…",
-    "peak_context": 124142,
-    "subagent_share": 84.36830800799248,
+    "peak_context": 126255,
+    "subagent_share": 83.21166032393243,
     "by_tier": {
       "Sonnet": 34302262,
       "Opus": 3248098,
@@ -5813,6 +5813,68 @@
         "tier": "Sonnet",
         "peak_context": 105311,
         "started_at": "2026-07-18T18:59:33.943Z"
+      }
+    ]
+  },
+  "067a868c-02ce-474d-a186-8b162f2926ce": {
+    "started_at": "2026-07-18T20:58:30.260Z",
+    "task": "Ich habe einige Kommentare ins Planning-Dokument geschrieben. Ich gebe den PLan soweit frei. Sorge dafür, dass die Suba…",
+    "peak_context": 127655,
+    "subagent_share": 94.81892033722742,
+    "by_tier": {
+      "Sonnet": 131788638,
+      "Opus": 5033562,
+      "Haiku": 1123720
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T2: Spec-Umbau design_system/processes",
+        "tier": "Sonnet",
+        "peak_context": 219334,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3: b1 Explode-Schema+Engine",
+        "tier": "Sonnet",
+        "peak_context": 286499,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S169-Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 138782,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T6: Handoff-Aufräumen Whitelist",
+        "tier": "Haiku",
+        "peak_context": 29236,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review-Pflicht-Korrekturen (3 Refs)",
+        "tier": "Haiku",
+        "peak_context": 35675,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S169-Abschluss-Review (DoD)",
+        "tier": "Opus",
+        "peak_context": 74232,
+        "started_at": "2026-07-18T20:58:30.260Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4: b2 Pflicht-Trigger-Kachel-UI",
+        "tier": "Sonnet",
+        "peak_context": 323933,
+        "started_at": "2026-07-18T20:58:30.260Z"
       }
     ]
   }

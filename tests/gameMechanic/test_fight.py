@@ -16,6 +16,7 @@ import gameMechanic.gameState as _gs  # noqa: E402
 import uiLayout._common as common  # noqa: E402
 from gameMechanic.combat import AttackParams, DefendParams, resolve_attack  # noqa: E402
 from gameMechanic.fightPhase import _dice_max, _is_target_engaged, can_fight  # noqa: E402
+from gameObjects.ability import Ability, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_roster, load_unit_catalog  # noqa: E402
 
 
@@ -264,12 +265,21 @@ class TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn:
     def test_render_active_shows_card_despite_group_flow_early_return(self, monkeypatch) -> None:
         """Diagnosis Scenario B, reproduced end-to-end: the active fight side has
         a still fight-eligible model_groups attacker (Silent King) selected; the
-        opposing side has its OWN destroyed Silent King (a mirror-match instance,
-        the only unit in this data set with a `model_destroyed`-triggered
-        mortal_wounds ability) sitting in selected_targets. Before the fix, the
-        opposing column's group-flow branch returned before ever reaching the
-        card check — the card never appeared. It must now appear regardless,
-        because the scan runs once in render_active before either column."""
+        opposing side has its OWN destroyed Silent King (a mirror-match instance)
+        sitting in selected_targets. Before the fix, the opposing column's
+        group-flow branch returned before ever reaching the card check — the
+        card never appeared. It must now appear regardless, because the scan
+        runs once in render_active before either column.
+
+        B-028c1 b1 (S169): Silent King's real ability (Vengeance of the
+        Enchained) migrated from effect.type: mortal_wounds to
+        effect.type: explode — it can no longer exercise this mortal_wounds
+        card path (see test_common.py's class docstring on the same
+        migration). The group-flow-early-return reachability behaviour under
+        test here is independent of which ability/unit carries a
+        mortal_wounds effect, so `find_unit_ability_by_effect` is
+        monkeypatched to a synthetic mortal_wounds ability instead.
+        """
         silent_king = _silent_king_with_resolved_groups()
         assert silent_king.model_groups, "fixture must resolve model_groups via load_roster()"
 
@@ -312,6 +322,36 @@ class TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn:
         _gs.st.session_state = session
         _eng.st.session_state = session
 
+        synthetic_ability = Ability(
+            id="test.unit.synthetic_mortal_wounds",
+            name_en="Vengeance of the Enchained",
+            source="unit_ability",
+            rule_text="Test rule text.",
+            trigger=Trigger(
+                timing="phase_reactive", phase="any", player="either", event="model_destroyed"
+            ),
+            conditions=[],
+            effect=Effect(
+                type="mortal_wounds", target="units_within_2d6", amount="D6", roll_threshold=4
+            ),
+        )
+        # effect_type-aware (B-028c1 b2 regression, S169): render_active now also
+        # calls render_explode_tiles_for_destroyed (looking up effect_type
+        # "explode") right next to render_mortal_wounds_cards_for_destroyed
+        # (effect_type "mortal_wounds") — an effect_type-blind stub here would
+        # hand the explode call site this synthetic mortal_wounds ability too,
+        # and resolve_explode_effect's own type guard would then raise. Only
+        # answering for "mortal_wounds" (this test's actual subject) keeps that
+        # scope correct — the explode lookup falls through to None, exactly
+        # like the real find_unit_ability_by_effect for a unit without an
+        # explode ability.
+        monkeypatch.setattr(
+            common,
+            "find_unit_ability_by_effect",
+            lambda faction_dir, uid, effect_type: (
+                synthetic_ability if effect_type == "mortal_wounds" else None
+            ),
+        )
         captured: list[dict] = []  # type: ignore[type-arg]
         monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
         # Short-circuit the heavyweight group-declaration UI on both sides — it
@@ -330,3 +370,85 @@ class TestMortalWoundsCardReachableThroughGroupFlowEarlyReturn:
         )
 
         assert any(k.get("name") == "Vengeance of the Enchained" for k in captured)
+
+
+# ---------------------------------------------------------------------------
+# Same S164/S165 reachability regression, now for the Pflicht-Trigger-Kachel
+# (B-028c1 b2, design_system.md §1.5-§1.8, processes.md P-16). Unlike the
+# class above, no synthetic ability substitution is needed here: b1 already
+# migrated Silent King's real Vengeance of the Enchained ability to
+# effect.type: explode, so this exercises the real production data end to
+# end through the real phase entry point.
+# ---------------------------------------------------------------------------
+
+
+class TestExplodeTileReachableThroughGroupFlowEarlyReturn:
+    def test_render_active_shows_explode_tile_despite_group_flow_early_return(
+        self, monkeypatch
+    ) -> None:
+        silent_king = _silent_king_with_resolved_groups()
+        assert silent_king.model_groups, "fixture must resolve model_groups via load_roster()"
+
+        session = FakeSessionState(
+            first_player="Necrons",
+            second_player="NecronsMirror",
+            active="Necrons",
+            fight_current_player="Necrons",
+            selected_unit=("Necrons", SILENT_KING),
+            selected_targets=[("NecronsMirror", SILENT_KING)],
+            selected_model_group=None,
+            group_targets={},
+            pending_transport_destroyed=None,
+            pending_mortal_undo=None,
+            pending_triggered_relic=None,
+            attack_declaration={},
+            phase_idx=6,  # fight
+            round=3,
+            used_ability_ids={},
+            ability_use_anchors={},
+            pending_mortal_wounds_ability=None,
+            explode_tiles={},
+            p1_faction_dir="necrons",
+            p2_faction_dir="necrons",
+            p1_units_list=[silent_king],
+            p1_unit_keys=[SILENT_KING],
+            p2_units_list=[silent_king],
+            p2_unit_keys=[SILENT_KING],
+            p1_units={
+                SILENT_KING: {
+                    "destroyed": False,
+                    "in_reserve": False,
+                    "in_melee": True,
+                    "turn_flags": {"charged": True, "fought": False},
+                }
+            },
+            p2_units={SILENT_KING: {"destroyed": True, "in_reserve": False, "turn_flags": {}}},
+        )
+        fp.st.session_state = session
+        common.st.session_state = session
+        _gs.st.session_state = session
+        _eng.st.session_state = session
+
+        # fp.st and common.st are the SAME shared streamlit mock (module-level
+        # sys.modules.setdefault) — spying on the tile renderer itself sidesteps
+        # fighting over st.markdown patch ordering between the two modules, and
+        # asserts the thing this regression is actually about: is the tile
+        # reached at all, not what it prints.
+        seen: list[tuple[str, str]] = []
+        monkeypatch.setattr(
+            common,
+            "_render_explode_tile",
+            lambda faction, uid, unit: seen.append((faction, uid)),
+        )
+        # Short-circuit the heavyweight group-declaration UI on both sides — not
+        # the subject under test (covered elsewhere).
+        monkeypatch.setattr(fp, "render_group_cards", lambda *a, **k: None)
+        monkeypatch.setattr(fp, "render_group_assignment", lambda *a, **k: None)
+        monkeypatch.setattr(fp.st, "columns", lambda n: tuple(MagicMock() for _ in range(n)))
+        monkeypatch.setattr(fp.st, "markdown", lambda *a, **kw: None)
+
+        fp.FightPhaseHandler().render_active(
+            {"first_player": "Necrons", "second_player": "NecronsMirror", "round": 3}
+        )
+
+        assert ("NecronsMirror", SILENT_KING) in seen
