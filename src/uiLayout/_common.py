@@ -75,6 +75,7 @@ from gameObjects.loader import load_stratagems
 from gameObjects.roundChoiceAbility import RoundChoiceAbility
 from gameObjects.stratagem import (
     Stratagem,
+    effective_cp_cost,
     reactive_stratagems_for,
     stratagem_conditions_met,
     stratagem_undo_visible,
@@ -570,6 +571,105 @@ def _render_explode_roll(
         st.rerun()
 
 
+def _find_auto_explode_stratagem(faction_dir: str, unit: Unit) -> Stratagem | None:
+    """Locate the reactive ``on_destroy`` stratagem offering the
+    ``auto_explode`` CP-automatism for `unit` (design_system.md §7.1
+    Baustein ②, processes.md P-16 "auto_explode-Gefechtsoption" — e.g. Curse
+    of the Phaeron for a NECRONS VEHICLE). Data-driven dispatch on
+    ``effect.type``/``timing``/``event`` plus the stratagem's own keyword
+    ``conditions`` checked against `unit` (``stratagem_conditions_met``) — no
+    faction- or stratagem-name check, so any faction's ``stratagems.yaml``
+    can carry an equivalent entry.
+    """
+    for strat in load_stratagems(faction_dir):
+        if strat.effect is None or strat.effect.type != "auto_explode":
+            continue
+        if strat.timing != "phase_reactive" or strat.event != "on_destroy":
+            continue
+        if not stratagem_conditions_met(strat.conditions, unit):
+            continue
+        return strat
+    return None
+
+
+def _auto_explode_use_callback(
+    strat: Stratagem,
+    faction: str,
+    uid: str,
+    unit: Unit,
+    ability: Ability,
+    entry: dict[str, Any],
+    cost: int,
+) -> Callable[[], None]:
+    """Use callback for the ``auto_explode`` GO card (Baustein ②, S172 B-028c1
+    b3): spends CP at the (possibly TITANIC-overridden) `cost`, then resolves
+    the tile's roll gate as successful without ever asking for a table roll —
+    "Do not roll to see if that model explodes: it does so automatically" is
+    the stratagem's own rule text. Shares `resolve_explode_effect`'s type-check
+    guard with the manual "Explodes!" button (`_render_explode_roll`), so both
+    paths funnel through one dispatch. Records `entry["auto_explode_spend"]`
+    so a later roll-decision Reset (`_render_explode_outcome`) can refund
+    exactly this `cost` via `undo_stratagem` — the CP-Automatismus is itself
+    part of the roll decision it replaces, so undoing that decision must
+    undo the CP spend with it.
+    """
+
+    def _use() -> None:
+        anchor_id = f"auto_explode_{faction}_{uid}"
+        spend_stratagem(strat, faction, uid, anchor_id=anchor_id, cp_cost_override=cost)
+        entry["auto_explode_spend"] = {"stratagem_id": strat.id, "cp_cost": cost}
+        entry["exploded"] = resolve_explode_effect(ability, exploded=True)
+        _log_explode_outcome(unit.name_en, exploded=True)
+
+    return _use
+
+
+def _render_auto_explode_go(
+    faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
+) -> None:
+    """Baustein ② (design_system.md §7.1) — the optional ``auto_explode``
+    Gefechtsoption rendered right beside Baustein ① (`_render_explode_roll`)
+    while the tile is still unresolved. The only step in the whole
+    Explodes-Familie with a genuine Verwenden/Nicht-Verwenden decision and CP
+    cost (processes.md P-16) — every other block in the family is a
+    Pflicht-Trigger with no ``[Use]``. Renders nothing once the roll is
+    already resolved, or when the destroyed unit's faction carries no
+    matching stratagem (e.g. no VEHICLE-conditioned ``auto_explode`` GO in
+    its pool) — same "silently absent, never a placeholder" contract every
+    other reactive GO card in this module follows.
+    """
+    if entry["exploded"] is not None:
+        return
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+    strat = _find_auto_explode_stratagem(faction_dir, unit)
+    if strat is None:
+        return
+
+    cost = effective_cp_cost(strat, unit)
+    cp_available = st.session_state.get("cp", {}).get(faction, 0)
+    state: GoCardState
+    locked_reason: str | None
+    if cp_available >= cost:
+        state, locked_reason = "ready", None
+    else:
+        state, locked_reason = "locked", "CP insufficient"
+
+    render_go_card(
+        key=f"auto_explode_{faction}_{uid}",
+        name=strat.name_en,
+        cp_cost=cost,
+        state=state,
+        rule_text=strat.rule_text,
+        compact=True,
+        locked_reason=locked_reason,
+        target_name=unit.name_en,
+        on_use=_auto_explode_use_callback(strat, faction, uid, unit, ability, entry, cost),
+    )
+
+
 def _render_explode_target_panel(
     faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
 ) -> None:
@@ -613,8 +713,11 @@ def _render_explode_target_panel(
                         entry["selected"].remove(target_key)
                         entry["damage"].pop(target_key, None)
                         undo_explode_target_damage(entry, key, player)
+                        if entry.get("last_touched") == target_key:
+                            entry["last_touched"] = None
                     else:
                         entry["selected"].append(target_key)
+                        entry["last_touched"] = target_key
                     st.rerun()
                 if selected:
                     new_count = row[1].number_input(
@@ -628,6 +731,8 @@ def _render_explode_target_panel(
                         tgt_unit, _ = lookup(player, key)
                         apply_explode_target_damage(entry, key, player, tgt_unit, new_count)
                         entry["damage"][target_key] = new_count
+                        entry["last_touched"] = target_key
+                        st.rerun()
 
     st.divider()
     footer_confirm, footer_reset = st.columns(2)
@@ -658,7 +763,29 @@ def _render_explode_target_panel(
         undo_all_explode_damage(entry)
         entry["selected"] = []
         entry["damage"] = {}
+        entry["last_touched"] = None
         st.rerun()
+
+
+def _refund_auto_explode_spend(faction: str, unit: Unit, entry: dict[str, Any]) -> None:
+    """Refund the CP an ``auto_explode`` Use spent (Baustein ②, B-028c1 b3)
+    when the roll-decision Reset (below) takes the tile back to its
+    unresolved starting state — the CP-Automatismus IS the decision being
+    undone, so the CP it cost must not silently stay spent. No-op when the
+    tile was instead resolved via a manual table roll
+    (``entry["auto_explode_spend"]`` is None, the default).
+    """
+    spend = entry.get("auto_explode_spend")
+    if spend is None:
+        return
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+    strat = _find_auto_explode_stratagem(faction_dir, unit)
+    if strat is not None and strat.id == spend["stratagem_id"]:
+        undo_stratagem(strat, faction, cp_cost_override=spend["cp_cost"])
+    entry["auto_explode_spend"] = None
 
 
 def _render_explode_outcome(
@@ -714,13 +841,17 @@ def _render_explode_outcome(
             use_container_width=True,
         ):
             undo_all_explode_damage(entry)
+            _refund_auto_explode_spend(faction, unit, entry)
             entry["exploded"] = None
             entry["selected"] = []
             entry["damage"] = {}
+            entry["last_touched"] = None
             st.rerun()
     else:
         # Explicit terminal state (P-16 Schritt 4) — a failed roll never
         # silently removes the tile, this info box is the whole outcome.
+        # (auto_explode always resolves to exploded=True, so this branch
+        # never carries an auto_explode_spend to refund.)
         st.info(f"{unit.name_en} does not explode.")
         if st.button(
             f"{SYM_RESET} Reset",
@@ -791,6 +922,9 @@ def _render_explode_tile(
             "selected": [],
             "damage": {},
             "applied": False,
+            # Sort-to-top pin, single target_key or None.
+            # → docs/spec/design_system.md §1.7
+            "last_touched": None,
             # Direct-Apply undo baseline (S170, → design_system.md §1.6/§1.7):
             # target_key -> pre-round unitMutations.snapshot_unit_state()
             # dict, populated lazily by apply_explode_target_damage. Survives
@@ -799,6 +933,12 @@ def _render_explode_tile(
             # Confirm; wiped only when explode_tiles itself is wiped on
             # phase change.
             "snapshots": {},
+            # Set by _auto_explode_use_callback (Baustein ②, B-028c1 b3) to
+            # {"stratagem_id", "cp_cost"} when the CP-Automatismus (rather
+            # than a table roll) resolved this tile — lets the roll-decision
+            # Reset below refund exactly that CP. None while unresolved or
+            # resolved via a manual "Explodes!"/"Does not explode" roll.
+            "auto_explode_spend": None,
         }
     st.session_state.explode_tiles = store
     entry = store[state_key]
@@ -813,6 +953,8 @@ def _render_explode_tile(
             _render_explode_roll(faction, uid, unit, ability, entry)
         else:
             _render_explode_outcome(faction, uid, unit, ability, entry)
+
+    _render_auto_explode_go(faction, uid, unit, ability, entry)
 
     if entry["exploded"] and not entry["applied"]:
         return faction, uid, unit, ability, entry
@@ -953,6 +1095,7 @@ def spend_stratagem(
     unit_key: str | None = None,
     *,
     anchor_id: str | None = None,
+    cp_cost_override: int | None = None,
 ) -> None:
     """Deduct CP, mark the stratagem used (phase + battle-scoped), register its modifier.
 
@@ -970,8 +1113,14 @@ def spend_stratagem(
     `render_reactive_stratagem_box` and `render_inline_command_reroll`, and
     movementPhase.py's Advance-reroll card (S139 B12b/c). See
     `stratagem_used_here`.
+
+    cp_cost_override — the actual CP amount to deduct, when it differs from
+    the flat `strat.cp_cost` (e.g. `gameObjects.stratagem.effective_cp_cost`
+    for a TITANIC-conditioned variable-CP GO, B-028c1 b3). None (default)
+    keeps deducting `strat.cp_cost` unchanged, so every existing caller is
+    unaffected.
     """
-    adjust_cp(faction, -strat.cp_cost)
+    adjust_cp(faction, -(cp_cost_override if cp_cost_override is not None else strat.cp_cost))
 
     used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
     used_ids = used_ids_by_player.get(faction, set())
@@ -1023,7 +1172,7 @@ def spend_stratagem(
         _apply_stratagem_effect(strat, faction, unit_key)
 
 
-def undo_stratagem(strat: Stratagem, faction: str) -> None:
+def undo_stratagem(strat: Stratagem, faction: str, *, cp_cost_override: int | None = None) -> None:
     """Full rollback of `spend_stratagem` while the activation window is still open.
 
     CP restored, both usage sets cleared, any recorded use-anchor discarded
@@ -1033,8 +1182,12 @@ def undo_stratagem(strat: Stratagem, faction: str) -> None:
     names. Lives next to it so any future Undo affordance (today only the
     central Stratagems-list GO card, gameProtocoll.py, offers one) shares this
     bookkeeping instead of re-deriving it.
+
+    cp_cost_override — the CP amount to refund, mirroring the same-named
+    `spend_stratagem` parameter (variable-CP GOs, B-028c1 b3): the caller
+    passes back exactly the amount that was actually deducted on spend.
     """
-    adjust_cp(faction, strat.cp_cost)
+    adjust_cp(faction, cp_cost_override if cp_cost_override is not None else strat.cp_cost)
 
     used_ids_by_player: dict[str, set[str]] = st.session_state.get("used_stratagem_ids", {})
     used_ids = used_ids_by_player.get(faction, set())

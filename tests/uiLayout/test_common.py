@@ -21,6 +21,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_stratagems, load_unit_catalog  # noqa: E402
+from gameObjects.stratagem import Stratagem  # noqa: E402
 from gameObjects.unit import ModelGroup, Unit  # noqa: E402
 from gameObjects.weapon import Weapon, WeaponProfile  # noqa: E402
 from uiLayout._common import (  # noqa: E402
@@ -3825,6 +3826,61 @@ def _explode_ability() -> Ability:
     return ability
 
 
+# ---------------------------------------------------------------------------
+# auto_explode GO (Baustein ②, B-028c1 b3, S172) — Curse of the Phaeron.
+# Annihilation Barge (VEHICLE, not TITANIC — 1 CP) and The Silent King
+# (VEHICLE + TITANIC — 3 CP) are the two real Necron units exercising the
+# CpOverride staffelung, both already used elsewhere in this test module.
+# ---------------------------------------------------------------------------
+
+ANNIHILATION_BARGE = "wh40k_9e.necrons.unit.annihilation_barge"
+
+
+def _annihilation_barge_session(*, destroyed: bool, cp: int = 5) -> tuple[_SS, Unit]:
+    unit = load_unit_catalog("necrons")[ANNIHILATION_BARGE]
+    session = _SS(
+        first_player="Necrons",
+        second_player="Orks",
+        active="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="orks",
+        p1_units_list=[unit],
+        p1_unit_keys=[ANNIHILATION_BARGE],
+        p2_units_list=[],
+        p2_unit_keys=[],
+        p1_units={ANNIHILATION_BARGE: {"destroyed": destroyed, "in_reserve": False}},
+        p2_units={},
+        phase_idx=4,  # shooting
+        cp={"Necrons": cp},
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        stratagem_use_anchors={},
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _eng.st.session_state = session
+    _se.st.session_state = session
+    return session, unit
+
+
+def _annihilation_barge_ability() -> Ability:
+    """Annihilation Barge's own real Explodes ability (mandatory trigger,
+    roll_threshold=6, radius='3', damage='1' — Wahapedia units_all.txt:511)."""
+    unit = load_unit_catalog("necrons")[ANNIHILATION_BARGE]
+    ability = common.find_unit_ability_by_effect("necrons", unit.id, "explode")
+    assert ability is not None, "Annihilation Barge must carry effect.type: explode"
+    return ability
+
+
+def _curse_of_the_phaeron() -> Stratagem:
+    strat = next(
+        s
+        for s in load_stratagems("necrons")
+        if s.id == "wh40k_9e.necrons.stratagem.curse_of_the_phaeron"
+    )
+    return strat
+
+
 class TestExplodeTargetCandidates:
     def test_excludes_self_destroyed_and_in_reserve(self) -> None:
         silent_king = load_unit_catalog("necrons")[SILENT_KING]
@@ -4544,6 +4600,169 @@ class TestExplodeTargetPanel:
         assert entry["selected"] == []
         assert target_key_w not in entry["damage"]
 
+    def test_number_input_change_reruns_so_sidebar_hp_bar_updates_immediately(
+        self, monkeypatch
+    ) -> None:
+        """Bug 1 (S171-d UI-Verifikation): Direct-Apply drops the target's HP
+        immediately via unitMutations.apply_explode_target_damage, but the
+        sidebar armyList renders BEFORE the center column (src/app.py) — so
+        without its own st.rerun() the new HP only shows a whole interaction
+        later than every other mutating branch in this function (toggle
+        ~618, Confirm ~654, Reset ~661), all of which already rerun."""
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {},
+            "applied": False,
+            "snapshots": {},
+        }
+        applied: list = []  # type: ignore[type-arg]
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "apply_explode_target_damage",
+            lambda entry, uid, faction, u, count: applied.append((uid, faction, count)),
+        )
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(
+                pressed=set(),
+                number_inputs={f"explode_dmg_{state_key}_{target_key_w}": 3},
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert applied == [(warriors_id, "Necrons", 3)]
+        assert entry["damage"][target_key_w] == 3
+        assert reruns == [1]
+
+    def test_toggling_second_target_pins_it_and_unpins_the_first(self, monkeypatch) -> None:
+        """S172 Bug 2 (sort-to-top pinned EVERY checked target, not just the
+        last one touched): checking a second target in the same tile must
+        move the pin to it — the first stays selected but is no longer the
+        pin."""
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        target_key_b = f"Orks::{boyz_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {},
+            "applied": False,
+            "snapshots": {},
+            "last_touched": target_key_w,
+        }
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_tgt_{state_key}_{target_key_b}"}),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["selected"] == [target_key_w, target_key_b]
+        assert entry["last_touched"] == target_key_b
+
+    def test_changing_value_of_previously_selected_target_repins_it(self, monkeypatch) -> None:
+        """S172 Bug 2: after the pin moved to a second target, editing the
+        FIRST target's mortal-wounds field (still checked) must move the pin
+        back onto it."""
+        session, warriors_id, boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        target_key_b = f"Orks::{boyz_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w, target_key_b],
+            "damage": {target_key_w: 2, target_key_b: 1},
+            "applied": False,
+            "snapshots": {},
+            "last_touched": target_key_b,
+        }
+        applied: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "apply_explode_target_damage",
+            lambda entry, uid, faction, u, count: applied.append((uid, faction, count)),
+        )
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(
+                pressed=set(),
+                number_inputs={
+                    f"explode_dmg_{state_key}_{target_key_w}": 5,
+                    f"explode_dmg_{state_key}_{target_key_b}": 1,
+                },
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert applied == [(warriors_id, "Necrons", 5)]
+        assert entry["last_touched"] == target_key_w
+
+    def test_toggling_off_the_pinned_target_clears_the_pin(self, monkeypatch) -> None:
+        """S172 Bug 2: unchecking the currently pinned target must clear the
+        pin outright — a deselected target must never keep sorting itself
+        to the top of the armyList sidebar."""
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        state_key = f"Necrons::{SILENT_KING}"
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {target_key_w: 5},
+            "applied": False,
+            "snapshots": {target_key_w: {"current_wounds": 10}},
+            "last_touched": target_key_w,
+        }
+        monkeypatch.setattr(common, "undo_explode_target_damage", lambda entry, uid, faction: None)
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            _fake_columns(pressed={f"explode_tgt_{state_key}_{target_key_w}"}),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert entry["selected"] == []
+        assert entry["last_touched"] is None
+
     def test_confirm_all_leaves_snapshots_intact_for_post_confirm_correction(
         self, monkeypatch
     ) -> None:
@@ -4943,3 +5162,215 @@ class TestExplodeTileLifecycle:
         common.render_explode_tiles_for_destroyed("Necrons", "Orks")
 
         assert not any("The Silent King" in c for c in rendered if isinstance(c, str))
+
+
+# ---------------------------------------------------------------------------
+# _render_auto_explode_go (Baustein ②, B-028c1 b3, S172) — the auto_explode
+# GO card offered alongside Baustein ① (_render_explode_roll) while a tile
+# is unresolved. Curse of the Phaeron: 1 CP for Annihilation Barge (VEHICLE,
+# not TITANIC), 3 CP for The Silent King (VEHICLE + TITANIC).
+# ---------------------------------------------------------------------------
+
+
+class TestAutoExplodeGoVisibility:
+    def test_hidden_when_roll_already_resolved(self, monkeypatch) -> None:
+        _, unit = _annihilation_barge_session(destroyed=True)
+        ability = _annihilation_barge_ability()
+        entry = {"exploded": True, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_auto_explode_go("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+
+        assert captured == []
+
+    def test_hidden_when_no_matching_stratagem_for_unit(self, monkeypatch) -> None:
+        """Warriors carry no VEHICLE keyword — Curse of the Phaeron's
+        `conditions: [VEHICLE]` gate must not match them."""
+        warriors_id = "wh40k_9e.necrons.unit.warriors"
+        warriors = load_unit_catalog("necrons")[warriors_id]
+        session = _SS(
+            first_player="Necrons",
+            second_player="Orks",
+            active="Necrons",
+            p1_faction_dir="necrons",
+            p2_faction_dir="orks",
+            p1_units_list=[warriors],
+            p1_unit_keys=[warriors_id],
+            p2_units_list=[],
+            p2_unit_keys=[],
+            p1_units={warriors_id: {"destroyed": True, "in_reserve": False}},
+            p2_units={},
+            phase_idx=4,
+            cp={"Necrons": 5},
+        )
+        common.st.session_state = session
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_auto_explode_go(
+            "Necrons", warriors_id, warriors, _annihilation_barge_ability(), entry
+        )
+
+        assert captured == []
+
+    def test_shown_ready_with_base_cost_for_non_titanic_vehicle(self, monkeypatch) -> None:
+        _, unit = _annihilation_barge_session(destroyed=True, cp=5)
+        ability = _annihilation_barge_ability()
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_auto_explode_go("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+
+        assert len(captured) == 1
+        card = captured[0]
+        assert card["name"] == "Curse of the Phaeron"
+        assert card["cp_cost"] == 1
+        assert card["state"] == "ready"
+        assert card["locked_reason"] is None
+        assert card["target_name"] == "Annihilation Barge"
+
+    def test_shown_ready_with_titanic_override_cost(self, monkeypatch) -> None:
+        session, unit = _silent_king_session(destroyed=True)
+        session.cp = {"Necrons": 5}
+        ability = _explode_ability()
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_auto_explode_go("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert len(captured) == 1
+        assert captured[0]["cp_cost"] == 3
+        assert captured[0]["state"] == "ready"
+
+    def test_locked_when_cp_insufficient(self, monkeypatch) -> None:
+        _, unit = _annihilation_barge_session(destroyed=True, cp=0)
+        ability = _annihilation_barge_ability()
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_auto_explode_go("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+
+        assert len(captured) == 1
+        assert captured[0]["state"] == "locked"
+        assert captured[0]["locked_reason"] == "CP insufficient"
+
+
+class TestAutoExplodeGoUseCallback:
+    def test_use_spends_cp_and_resolves_exploded_true_without_a_roll(self, monkeypatch) -> None:
+        session, unit = _annihilation_barge_session(destroyed=True, cp=5)
+        ability = _annihilation_barge_ability()
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        logged: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a, **kw: logged.append(a))
+
+        common._render_auto_explode_go("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+        captured[0]["on_use"]()
+
+        assert session.cp["Necrons"] == 4
+        assert entry["exploded"] is True
+        assert entry["auto_explode_spend"] == {
+            "stratagem_id": "wh40k_9e.necrons.stratagem.curse_of_the_phaeron",
+            "cp_cost": 1,
+        }
+        assert logged and logged[0][3] == "Annihilation Barge explodes"
+
+    def test_use_spends_titanic_override_cost(self, monkeypatch) -> None:
+        session, unit = _silent_king_session(destroyed=True)
+        session.cp = {"Necrons": 5}
+        ability = _explode_ability()
+        entry = {"exploded": None, "auto_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a, **kw: None)
+
+        common._render_auto_explode_go("Necrons", SILENT_KING, unit, ability, entry)
+        captured[0]["on_use"]()
+
+        assert session.cp["Necrons"] == 2
+        assert entry["auto_explode_spend"]["cp_cost"] == 3
+
+
+class TestAutoExplodeGoResetRefundsCp:
+    def test_reset_after_auto_explode_refunds_cp_and_clears_marker(self, monkeypatch) -> None:
+        session, unit = _annihilation_barge_session(destroyed=True, cp=4)
+        ability = _annihilation_barge_ability()
+        state_key = f"Necrons::{ANNIHILATION_BARGE}"
+        strat = _curse_of_the_phaeron()
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+            "auto_explode_spend": {"stratagem_id": strat.id, "cp_cost": 1},
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        reruns: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common.st, "rerun", lambda: reruns.append(1))
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: key == f"explode_reset_roll_{state_key}",
+        )
+
+        common._render_explode_outcome("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+
+        assert session.cp["Necrons"] == 5, "the 1 CP spent on auto_explode must be refunded"
+        assert entry["exploded"] is None
+        assert entry["auto_explode_spend"] is None
+        assert reruns == [1]
+
+    def test_reset_without_auto_explode_spend_does_not_touch_cp(self, monkeypatch) -> None:
+        """Regression guard: a manually-rolled (not auto_explode) success must
+        not attempt any refund — auto_explode_spend stays None throughout."""
+        session, unit = _annihilation_barge_session(destroyed=True, cp=4)
+        ability = _annihilation_barge_ability()
+        state_key = f"Necrons::{ANNIHILATION_BARGE}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [],
+            "damage": {},
+            "applied": False,
+            "auto_explode_spend": None,
+        }
+        monkeypatch.setattr(common.st, "info", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "button",
+            lambda *a, key=None, **kw: key == f"explode_reset_roll_{state_key}",
+        )
+
+        common._render_explode_outcome("Necrons", ANNIHILATION_BARGE, unit, ability, entry)
+
+        assert session.cp["Necrons"] == 4
+        assert entry["auto_explode_spend"] is None
+
+
+class TestExplodeTileWiresInAutoExplodeGo:
+    def test_render_explode_tile_calls_auto_explode_go(self, monkeypatch) -> None:
+        """Wiring regression: _render_explode_tile must reach Baustein ② for
+        every render, not just Baustein ①/③ — a future refactor that drops
+        the call would silently retire the auto_explode GO."""
+        _annihilation_barge_session(destroyed=True, cp=5)
+        _quiet_explode_widgets(monkeypatch)
+        seen: list[tuple] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "_render_auto_explode_go",
+            lambda faction, uid, unit, ability, entry: seen.append((faction, uid)),
+        )
+
+        common._render_explode_tile(
+            "Necrons", ANNIHILATION_BARGE, load_unit_catalog("necrons")[ANNIHILATION_BARGE]
+        )
+
+        assert seen == [("Necrons", ANNIHILATION_BARGE)]

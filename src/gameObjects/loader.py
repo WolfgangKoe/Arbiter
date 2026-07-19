@@ -13,7 +13,7 @@ import yaml
 from gameObjects.ability import Ability, Condition, Effect, ExtraUses, Trigger
 from gameObjects.detachment import DetachmentType, SlotConstraint
 from gameObjects.roundChoiceAbility import RoundChoiceAbility
-from gameObjects.stratagem import Stratagem, StratagemModifier
+from gameObjects.stratagem import CpOverride, Stratagem, StratagemModifier
 from gameObjects.unit import (
     DamageBracket,
     ModelGroup,
@@ -813,6 +813,10 @@ def load_stratagems(faction_dir: str) -> list[Stratagem]:
                     effect=effect,
                     detachment=s.get("detachment"),
                     modifier=modifier,
+                    cp_overrides=[
+                        CpOverride(has_keyword=o["has_keyword"], cp_cost=int(o["cp_cost"]))
+                        for o in s.get("cp_overrides", [])
+                    ],
                 )
             )
     _STRATAGEM_CACHE[faction_dir] = results

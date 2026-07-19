@@ -1971,18 +1971,27 @@ def test_init_state_directive_pending_false_for_both_players() -> None:
 
 # ---------------------------------------------------------------------------
 # pinned_explode_target_keys / sort_units_pinned_first — armyList sort-to-top
-# (S171, → docs/spec/design_system.md §1.7 "Ausgewählte Einheit springt …
-# an die erste Position")
+# (S171/S172, → docs/spec/design_system.md §1.7 "zuletzt bearbeitete Einheit
+# … springt … an die erste Position")
 # ---------------------------------------------------------------------------
 
 
 class TestPinnedExplodeTargetKeys:
-    def test_returns_unprefixed_keys_selected_for_the_given_faction(self) -> None:
+    def test_returns_unprefixed_last_touched_key_for_the_given_faction(self) -> None:
+        """Only the tile's ``last_touched`` key counts as pinned — a merely
+        ``selected`` (but not last-touched) target is NOT pinned (S172 Bug 2:
+        sort-to-top used to pin every checked target, not just the last one
+        touched)."""
         _make_session(
             explode_tiles={
                 "Necrons::silent_king": {
                     "selected": ["Necrons::warriors", "Orks::boyz"],
-                }
+                    "last_touched": "Necrons::warriors",
+                },
+                "Necrons::other": {
+                    "selected": ["Orks::boyz"],
+                    "last_touched": "Orks::boyz",
+                },
             }
         )
         assert _gs.pinned_explode_target_keys("Necrons") == {"warriors"}
@@ -1991,8 +2000,14 @@ class TestPinnedExplodeTargetKeys:
     def test_collects_across_multiple_explode_tile_entries(self) -> None:
         _make_session(
             explode_tiles={
-                "Necrons::a": {"selected": ["Necrons::warriors"]},
-                "Necrons::b": {"selected": ["Necrons::immortals"]},
+                "Necrons::a": {
+                    "selected": ["Necrons::warriors"],
+                    "last_touched": "Necrons::warriors",
+                },
+                "Necrons::b": {
+                    "selected": ["Necrons::immortals"],
+                    "last_touched": "Necrons::immortals",
+                },
             }
         )
         assert _gs.pinned_explode_target_keys("Necrons") == {"warriors", "immortals"}
@@ -2000,6 +2015,38 @@ class TestPinnedExplodeTargetKeys:
     def test_empty_when_no_explode_tiles_present(self) -> None:
         _make_session()
         assert _gs.pinned_explode_target_keys("Necrons") == set()
+
+    def test_selected_without_last_touched_is_not_pinned(self) -> None:
+        """A tile whose ``last_touched`` is None (e.g. after the pinned
+        target was toggled off) contributes no pin at all, even though
+        other targets remain in ``selected``."""
+        _make_session(
+            explode_tiles={
+                "Necrons::silent_king": {
+                    "selected": ["Necrons::warriors"],
+                    "last_touched": None,
+                }
+            }
+        )
+        assert _gs.pinned_explode_target_keys("Necrons") == set()
+
+    def test_two_open_tiles_each_pin_their_own_last_touched_target(self) -> None:
+        """S172 Bug 2 regression (d): with two Explodes tiles open at once,
+        each keeps exactly its own pin independently of the other — touching
+        a target in tile B must never affect tile A's pin."""
+        _make_session(
+            explode_tiles={
+                "Necrons::silent_king": {
+                    "selected": ["Necrons::warriors", "Necrons::immortals"],
+                    "last_touched": "Necrons::warriors",
+                },
+                "Necrons::other_carrier": {
+                    "selected": ["Necrons::immortals"],
+                    "last_touched": "Necrons::immortals",
+                },
+            }
+        )
+        assert _gs.pinned_explode_target_keys("Necrons") == {"warriors", "immortals"}
 
 
 class TestSortUnitsPinnedFirst:

@@ -47,6 +47,20 @@ class StratagemModifier:
 
 
 @dataclass(frozen=True)
+class CpOverride:
+    """CP cost override for a stratagem whose cost changes with a keyword the
+    target unit carries (e.g. "this Stratagem costs 3CP if that model has the
+    TITANIC keyword; otherwise it costs 1CP" — Curse of the Phaeron). Mirrors
+    ``gameObjects.ability.ExtraUses``'s ``has_keyword`` pattern so variable CP
+    stays data-driven (YAML) rather than a hardcoded number in ``src/`` —
+    see ``effective_cp_cost``.
+    """
+
+    has_keyword: str
+    cp_cost: int
+
+
+@dataclass(frozen=True)
 class Stratagem:
     id: str
     name_en: str
@@ -68,6 +82,22 @@ class Stratagem:
     effect: Effect | None = None  # machine-readable effect (mirrors Ability.effect vocabulary)
     detachment: str | None = None  # detachment type required, e.g. "cult_of_the_cryptek"
     modifier: StratagemModifier | None = None  # attack-sequence modifier stack (6d)
+    cp_overrides: list[CpOverride] = field(default_factory=list)  # variable CP, see CpOverride
+
+
+def effective_cp_cost(stratagem: Stratagem, unit: Unit | None) -> int:
+    """``stratagem.cp_cost``, overridden by the first ``cp_overrides`` entry
+    whose ``has_keyword`` the given unit carries (e.g. Curse of the Phaeron:
+    1 CP normally, 3 CP for a TITANIC model — B-028c1 b3). Falls back to the
+    flat ``cp_cost`` when no unit is given or no override keyword matches, so
+    every existing caller that never passes ``cp_overrides`` data keeps its
+    unchanged fixed cost.
+    """
+    if unit is not None:
+        for override in stratagem.cp_overrides:
+            if unit.has_keyword(override.has_keyword):
+                return override.cp_cost
+    return stratagem.cp_cost
 
 
 # ── GO visibility helper ──────────────────────────────────────────────────────

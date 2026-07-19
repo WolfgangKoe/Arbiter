@@ -25,29 +25,33 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S171, 2026-07-19)
+## Aktueller Stand (nach S172, 2026-07-19)
 
-**S171 committet:** Retro-Entscheid alle 3 Maßnahmen (M1 ×2,5 + M2 Marker-Sofort → `agent_scopes.md`,
-M3 ↺-Glyph); Verifikation Testfälle 4–7 positiv → a/b/c/e/f verifiziert; Royal-Warden-Frage geklärt
-(kein Bug — D6 MW pro Einheit); **Nacharbeit d komplett umgesetzt** (d1 State: Direkt-Apply +
-Undo-Snapshots `unitMutations.py:578–650`; d2 Render: Nach-Confirm-Reset Lesart A, Sort-to-top
-`gameState.py:318–352`, ↺-Glyph auf allen 4 Reset-Buttons; 22 neue Tests, 2 Alt-Tests begründet an
-§1.6/§1.7 angepasst). Review: NO-GO→GO nach Marker-Korrektur (ANSWERED-Fehlgriff → Retro-M1 S171).
-Gates: 2101 passed, 99,19 %, Arch 8/8, Doku 25, mypy 0.
-**B-028c1 bleibt In Progress:** d-UI-Verifikation ausstehend (`S171_d_ui_verifikation.md`), b3 offen.
-**Token-Lehre (S171):** ×2,5-Faktor kalibriert — d1 ~148k, d2 ~166k bei je 180k-Budget, kein Riss.
+**S172 committet:** S171-Retro verankert (M2-Schärfung + PLANNING-Lifecycle → `agent_scopes.md`);
+**d-Repair** (Bug 1: `st.rerun()` im `number_input`-Zweig `_common.py`; Bug 2: `last_touched`-Pin
+in `pinned_explode_target_keys`, §1.7 neu); **b3 `auto_explode`-GO „Curse of the Phaeron"**
+(generisches `cp_overrides`-Schema, GO-Karte Baustein ②, 15 Tests, R-COMBAT-45).
+Stakeholder-Live-Verifikation Testfälle 1–3 positiv → **B-028c1 Done + archiviert**.
+B-125 (Nach-Confirm-Reset setzt Wunden zurück, Lesart-A-Verstoß) + B-126 (MW-Cap fehlt) neu;
+B-122 um Platzierungsvorgabe ergänzt; R-COMBAT-41–44-Drift gefixt. Review: **GO im ersten
+Anlauf**. Gates: 2123 passed, 99,20 %, Arch 8/8, Doku 25.
+**Token-Lehre (S172):** zwei Budget-Risse (Recherche+Schema+UI-Brief 292k vs. 190k;
+Haiku-Archivierung 138k vs. 40k) und 2× verlorener Hintergrund-pytest → Retro-Maßnahmen 1–3
+in `S172_RETRO.md`.
 
-Frühere Sessions (S60–S170): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S171): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S172)
+### ▶ Nächster Schritt (S173)
 
-1. **Retro-Entscheid** (`S171_RETRO.md` NEEDS-DECISION): M2-Schärfung (ANSWERED nur bei Löschung im selben Abschluss) + PLANNING-Lifecycle kodifizieren.
-2. **d-Verifikation auswerten** (`S171_d_ui_verifikation.md`, 6 Testfälle) → bei Grün: 3 Verifikationsdateien löschen + B-028c1-Teilhaken d.
-3. **T6/b3 `auto_explode`-GO** (~M, Annihilation Barge im Roster) + **B-122 „Careen!"** (XS–S); danach Spyder-Konzept / `backlog.md`.
+1. **Retro-Entscheid** (`S172_RETRO.md` NEEDS-DECISION): Vollsuite-synchron-Baustein,
+   Recherche-Budget-Aufschlag, Archivierungs-Brief-Typ.
+2. **B-125 + B-126** (Explodes-Panel: Nach-Confirm-Reset-Wunden + MW-Cap; je S, ~40–60k) —
+   gleicher Code-Bereich, ggf. ein gemeinsamer Brief ≤ M.
+3. **B-122 „Careen!"** (XS–S; GO-Karte an Baustein ② wie Curse of the Phaeron, Vorgabe in
+   Backlog-Zeile); danach B-028c2 (`reroll_rp`) / Spyder-Konzept laut `backlog.md`.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
-`S171_RETRO.md` (NEEDS-DECISION); `S171_d_ui_verifikation.md` (AWAITING-VERIFICATION);
-`S170_b2bc_ui_verifikation.md` + `S169_b2_ui_verifikation.md` (AWAITING-VERIFICATION bis d grün, dann DELETE).
+`S172_RETRO.md` (NEEDS-DECISION).
 
 ---
 

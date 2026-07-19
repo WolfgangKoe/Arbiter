@@ -241,10 +241,14 @@ ausgewählten Einheiten, `✓`-Präfix §6.4-Wortlaut).
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Ausgewählte Einheit springt in ihrer armyList-Sidebar (§1.9) an die erste Position und zeigt
-den sinkenden LP-Balken direkt in der unitCard (Bestandskomponente) — keine zusätzliche
-Vorschau-/Mini-Karte im Panel. Footer: „Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog
-Abschluss der Attackensequenz). Konkrete Anwendung: `processes.md` P-16.
+Die **zuletzt bearbeitete** Einheit (zuletzt angehakt ODER zuletzt geänderter Mortal-Wounds-Wert)
+springt in ihrer armyList-Sidebar (§1.9) an die erste Position. Eine zuvor bearbeitete Einheit
+kehrt an ihre Standardposition zurück, sobald eine andere Einheit bearbeitet wird — auch wenn
+sie weiterhin angehakt bleibt. Bei mehreren gleichzeitig offenen Explodes-Kacheln gilt das pro
+Kachel unabhängig (je Kachel eine gepinnte Einheit möglich). Der sinkende LP-Balken zeigt direkt
+in der unitCard (Bestandskomponente) — keine zusätzliche Vorschau-/Mini-Karte im Panel. Footer:
+„Confirm all" / „Reset" (§6.4-Wortlaut-Familie, analog Abschluss der Attackensequenz). Konkrete
+Anwendung: `processes.md` P-16.
 
 **Direkt-Apply statt Sammel-Buchung (S170-Präzisierung, Umsetzung Folgesession — S169-Befund:
 Schaden wurde bisher gesammelt und erst bei „Confirm all" für alle Einheiten gleichzeitig

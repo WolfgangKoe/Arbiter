@@ -974,3 +974,7 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   (Explodes-Einordnung). Herkunft: Stakeholder-Ergänzung im S165-Explodes-Entscheid;
   Root-Cause-Verifikation S166; Core-Fix + UI-Nachzug + Verifikation S168.
 
+## Aus der ID-indizierten Liste (migriert S172)
+
+- ✅ **B-028c1 — Explodes-Familie (Destruction-Trigger) — ERLEDIGT (S172, Stakeholder-Abnahme, d + b3 verifiziert):** Pflicht-Trigger-Mechanik + `auto_explode`-GO vollständig verdrahtet. S172: b3 (`auto_explode`-GO für Curse of the Phaeron, TITANIC-differenzierte CP-Kosten, 15 Tests, Vollsuite grün). Verifikations-Set: Testfall 1–7 (S171, design_system.md §7) PASS, Testfall 3 (S172, repair-Karte) PASS. Datenumfang: Necrons vollständig (Command Barge/Triarch Stalker/Spyders/Reanimator + C'tan/Silent King/Tesseract Vault), Orks-Kandidaten separates Refinement-Item B-125/B-126. **Folge-Bugs erkannt + dokumentiert:** Reset-Callback-Seiteneffekt auf bereits zugewiesene Mortal Wounds (B-125), Mortal-Wounds-Cap pro Einheit fehlt im Multi-Panel (B-126).
+

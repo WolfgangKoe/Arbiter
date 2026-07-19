@@ -316,17 +316,19 @@ def unit_id_from_state_key(state_key: str) -> str:
 
 
 def pinned_explode_target_keys(faction: str) -> set[str]:
-    """State-derived unit keys currently selected as an explode Direct-Apply
-    target (design_system.md §1.7) that belong to `faction`. Scans every
-    explode_tiles entry's ``selected`` list (either army may appear there)
-    and returns just the unprefixed keys for `faction`, matching
-    unit_keys_for()'s own key format."""
+    """State-derived unit keys currently pinned as the most-recently-touched
+    explode Direct-Apply target (design_system.md §1.7) that belong to
+    `faction`. Scans every explode_tiles entry's ``last_touched`` (either
+    army may appear there) and returns the unprefixed keys for `faction`,
+    matching unit_keys_for()'s own key format. Each tile pins at most one
+    key — a previously touched target returns to its standard position once
+    a different target is touched, even while it stays selected."""
     prefix = f"{faction}::"
     pinned: set[str] = set()
     for entry in st.session_state.get("explode_tiles", {}).values():
-        for target_key in entry.get("selected", []):
-            if target_key.startswith(prefix):
-                pinned.add(target_key[len(prefix) :])
+        target_key = entry.get("last_touched")
+        if target_key and target_key.startswith(prefix):
+            pinned.add(target_key[len(prefix) :])
     return pinned
 
 

@@ -354,7 +354,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-COMBAT-41
 - **klasse**: A
-- **status**: implementiert (Schema + Daten + Engine; UI-Anzeige folgt in B-028c1 b2)
+- **status**: implementiert (Schema + Daten + Engine + UI)
 - **getestet**: ja — test_real_data_explode_carriers_have_correct_wahapedia_values
 - **quelle**: wahapedia_necrons/units_all.txt:416 — Triarch Stalker: "Explodes: When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D3 mortal wounds." Einheit steht im Roster `data/rosters/zarekhan_sol_kampf_2.yaml`.
 - **code**: `data/wh40k_9e/necrons/unit_abilities.yaml:triarch_stalker.explodes` · `gameMechanic/abilityEngine.py:resolve_explode_effect`
@@ -362,7 +362,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-COMBAT-42
 - **klasse**: A
-- **status**: implementiert (Schema + Daten + Engine; UI-Anzeige folgt in B-028c1 b2)
+- **status**: implementiert (Schema + Daten + Engine + UI)
 - **getestet**: ja — test_real_data_explode_carriers_have_correct_wahapedia_values
 - **quelle**: wahapedia_necrons/units_all.txt:511 — Annihilation Barge: "Explodes: When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 3\" suffers 1 mortal wound." Einheit steht im Roster `data/rosters/necrons_quantum_shielding.yaml`.
 - **code**: `data/wh40k_9e/necrons/unit_abilities.yaml:annihilation_barge.explodes` · `gameMechanic/abilityEngine.py:resolve_explode_effect`
@@ -370,7 +370,7 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-COMBAT-43
 - **klasse**: A
-- **status**: implementiert (Schema + Daten + Engine; UI-Anzeige folgt in B-028c1 b2)
+- **status**: implementiert (Schema + Daten + Engine + UI)
 - **getestet**: ja — test_real_data_explode_carriers_have_correct_wahapedia_values
 - **quelle**: wahapedia_necrons/units_all.txt:597 — Night Scythe: "Explodes: When this model is destroyed, roll one D6 before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D3 mortal wounds." Einheit steht im Roster `data/rosters/zarekhan_sol_kampf_2.yaml`.
 - **code**: `data/wh40k_9e/necrons/unit_abilities.yaml:night_scythe.explodes` · `gameMechanic/abilityEngine.py:resolve_explode_effect`
@@ -378,11 +378,19 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 
 ### R-COMBAT-44
 - **klasse**: A
-- **status**: implementiert (Schema + Daten + Engine; UI-Anzeige folgt in B-028c1 b2)
+- **status**: implementiert (Schema + Daten + Engine + UI)
 - **getestet**: ja — test_real_data_explode_carriers_have_correct_wahapedia_values
 - **quelle**: wahapedia_orks/units_all.txt:979 — Gunwagon: "Explodes: When this transport is destroyed, roll one D6 before any embarked models disembark and before removing it from play. On a 6 it explodes, and each unit within 6\" suffers D6 mortal wounds." Einheit steht im Roster `data/rosters/orks_transport.yaml`.
 - **code**: `data/wh40k_9e/orks/unit_abilities.yaml:gunwagon.explodes` · `gameMechanic/abilityEngine.py:resolve_explode_effect`
 - **regel**: `effect.type: explode`, `roll_threshold: 6`, `radius: "6"`, `damage: "D6"`, `mandatory: true`. Einzelmodell-Transport, gleiche Begründung wie R-COMBAT-41. **Offener Datenpunkt (nicht dieser Task):** Canoptek Spyder (necrons, im Roster `necrons_test.yaml`/`necrons_beta.yaml`) trägt ebenfalls Explodes (wahapedia_necrons/units_all.txt:324), ist aber bewusst NICHT als eigene Ability-Karte erfasst — 1-3-Modell-Einheit, Regel triggert pro sterbendem Modell, dieses App-Datenmodell kennt nur einen Einheits-weiten `destroyed`-Flag (kein Pro-Modell-Verlust-Tracking). Dokumentiert in `data/wh40k_9e/necrons/unit_abilities.yaml` (Kommentar bei `canoptek_spyder`) und mit `test_canoptek_spyder_has_no_explode_ability_yet` regressionsgesichert.
+
+### R-COMBAT-45
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_load_stratagems_curse_of_the_phaeron_carries_titanic_cp_override / test_real_curse_of_the_phaeron_titanic_and_non_titanic / test_matching_override_keyword_replaces_flat_cost / test_non_matching_unit_keeps_flat_cost / test_no_unit_falls_back_to_flat_cp_cost / test_hidden_when_roll_already_resolved / test_hidden_when_no_matching_stratagem_for_unit / test_shown_ready_with_base_cost_for_non_titanic_vehicle / test_shown_ready_with_titanic_override_cost / test_locked_when_cp_insufficient / test_use_spends_cp_and_resolves_exploded_true_without_a_roll / test_use_spends_titanic_override_cost / test_reset_after_auto_explode_refunds_cp_and_clears_marker / test_reset_without_auto_explode_spend_does_not_touch_cp / test_render_explode_tile_calls_auto_explode_go
+- **quelle**: wahapedia_necrons/stratagems.txt:79 — Curse of the Phaeron: "Use this Stratagem in any phase, when a NECRONS VEHICLE model from your army is destroyed. Do not roll to see if that model explodes: it does so automatically. If that model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it costs 1CP."
+- **code**: `data/wh40k_9e/necrons/stratagems.yaml:curse_of_the_phaeron` (`effect.type: auto_explode`, `cp_overrides: [{has_keyword: TITANIC, cp_cost: 3}]`) · `gameObjects/stratagem.py:CpOverride`/`effective_cp_cost` · `gameObjects/loader.py:load_stratagems` (parses `cp_overrides`) · `uiLayout/_common.py:_render_auto_explode_go`/`_find_auto_explode_stratagem`/`_auto_explode_use_callback`/`_refund_auto_explode_spend` · `uiLayout/_common.py:spend_stratagem`/`undo_stratagem` (`cp_cost_override` param, B-028c1 b3).
+- **regel**: Einzige echte Gefechtsoption (Verwenden/Nicht-Verwenden-Entscheid + CP-Kosten) im ganzen Explodes-Komplex — jeder andere Baustein der Familie ist Pflicht-Trigger (design_system.md §7.1 Baustein ②, processes.md P-16). Rendert nur solange die Pflicht-Trigger-Kachel noch unresolved ist (`entry["exploded"] is None`) und die zerstörte Einheit die Stratagem-`conditions` erfüllt (hier `VEHICLE`) — datengetrieben über `stratagem_conditions_met`, kein Fraktions-Hardcode. `[Use]` überspringt den Tischwurf vollständig: `entry["exploded"]` wird direkt auf `True` gesetzt (`resolve_explode_effect(ability, exploded=True)`, dieselbe Weiche wie der manuelle "Explodes!"-Button), CP-Abzug über `effective_cp_cost` (1 CP Basis, 3 CP falls die Einheit `TITANIC` trägt — Annihilation Barge vs. The Silent King als reale Necron-Belegstücke). Die Kachel-eigene Wurf-Reset-Taste (§1.6) erstattet einen per `auto_explode` gezahlten CP-Betrag vollständig zurück (`_refund_auto_explode_spend`), da der CP-Automatismus selbst Teil der rückgängig gemachten Entscheidung ist.
 
 ---
 

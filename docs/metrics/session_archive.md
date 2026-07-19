@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-19 18:50 CEST
+Stand: 2026-07-19 23:15 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-19 16:41 4f3a  ██████████░░ 120k ⚠️   █████░  84%    █··········▒
+07-19 21:36 e1cb  ██████████░░ 125k ⚠️   █████░  91%    ··········▒▒
+         SA_1·  █████████░░░ 109k ✅    d-Repair Bug 2: Sort-to-top-Semant…
+         SA_2·  ███████░░░░░  86k ✅    S172-Abschluss-Review gegen DoD
+         SA_3·  ███████████░ 140k ⚠️   S172-Planning-Entwurf erstellen
+         SA_4·  ████████████ 289k ⛔    T6/b3 auto_explode-GO umsetzen
+         SA_5·  ███░░░░░░░░░  43k ✅    Retro-Maßnahmen in agent_scopes ve…
+         SA_6·  ███████████░ 136k ⚠️   Artefakt-Pflege Session-Abschluss …
+         SA_7·  █████░░░░░░░  66k ✅    d-Repair Bug 1: Direkt-Apply-Rerun
+----------------- ---------------------- -------------- ------------
+07-19 16:41 4f3a  ██████████░░ 122k ⚠️   █████░  84%    █··········▒
          SA_1·  ██████░░░░░░  70k ✅    S171-Review (DoD + Sessionstand)
          SA_2·  ██████░░░░░░  74k ✅    S171-Planning-Entwurf erstellen
          SA_3·  ███░░░░░░░░░  34k ✅    T4: Verifikationsdatei S171_d anle…
@@ -952,3 +961,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S169 (2026-07-19)** Spec-Umbau design_system generisch (§1.5-1.9/§7/§3.1) + processes P-16; B-028c1 b1+b2 gebaut (explode-Schema, Engine ohne Selbstwurf, Pflicht-Trigger-Kachel); Handoff-Aufräumen 12 Dateien; Review NO-GO→GO nach Referenz-Korrektur
 - **S170 (2026-07-19)** Explode-UI-Nacharbeiten b/c/a/e/f (playerArea-Split, Phasen-Lifecycle, Resets), Spec-first-Abnahme + Lesart A, P-16 Screenshot->Diagramm-Migration, Retro-M1/M2 verankert, M3-Allowlist; Review GO nach Marker-Fix; 2080 Tests, Cov 99,18%
 - **S171 (2026-07-19)** d-Umsetzung komplett (Direkt-Apply+Undo, Nach-Confirm-Reset Lesart A, Sort-to-top, ↺-Glyph), Retro-M1/M2 verankert, Verifikation 4-7 positiv, Royal-Warden geklärt
+- **S172 (2026-07-19)** d-Repair (Direkt-Apply-Rerun, last_touched-Pin, §1.7) + b3 auto_explode-GO Curse of the Phaeron (cp_overrides-Schema, 15 Tests, R-COMBAT-45); Live-Verifikation 1-3 positiv, B-028c1 Done+archiviert; B-125/B-126 neu; Retro-M1/M2 S171 verankert; Review GO im ersten Anlauf (2123 passed, 99,20%)

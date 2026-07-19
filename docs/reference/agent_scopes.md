@@ -365,10 +365,18 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
   **Verschärfung (S144-Retro-M2):** Der Koordinator darf in Briefen niemals „DONE setzen,
   Datei nicht löschen" anweisen — genau das produzierte in S144 ein Review-NO-GO.
   Erkenntnisse VOR dem DONE in die dauerhaften Artefakte überführen, dann DONE + löschen.
-- **Marker-Wechsel sofort (S170-Retro-M2):** Wertet der Koordinator eine kommentierte
-  NEEDS-DECISION- oder AWAITING-VERIFICATION-Datei aus, setzt er den Marker im **selben Zug**
-  (→ ANSWERED bzw. Datei löschen) — nicht erst am Session-Ende. Grund: S170 — Review-NO-GO
-  wegen stale `NEEDS-DECISION`-Marker in abgenommener `S170_SPEC_ABNAHME.md`.
+- **Marker-Wechsel sofort (S170-Retro-M2, geschärft S171-M1):** Wertet der Koordinator eine
+  kommentierte NEEDS-DECISION- oder AWAITING-VERIFICATION-Datei aus, setzt er den Marker im
+  **selben Zug** — aber nur zu `ANSWERED`/`DONE`, wenn die Datei im selben Abschluss gelöscht
+  wird. Bleibt ein Teilpunkt offen, setzt er `AWAITING-VERIFICATION` mit Auswertungsnotiz in
+  Zeile 1 (kein voreiliges ANSWERED/DONE). Grund: S170 — Review-NO-GO wegen stale
+  `NEEDS-DECISION`-Marker; S171 — ANSWERED bei Teil-Auswertung (Punkt d unverifiziert)
+  verletzte den Hygiene-Wächter → Vollsuite rot.
+- **PLANNING-Datei-Lifecycle (S171-Retro-M2):** `S<N>_PLANNING.md`-Dateien werden nach
+  Umsetzung + Review im **selben Abschluss** gelöscht — nicht bis zur Folgesession liegen
+  lassen. Grund: der Plan ist ein Arbeitsgerüst (Koordinator + Stakeholder + Executors);
+  finale Entscheide und Sessionstand gehören in `briefing.md`/`backlog.md`. Stale
+  Planning-Dateien erzeugen Unklarheit und Duplikate.
 - **Bestandsaufnahme-Pflicht (S144-Retro-M1):** Recherche-/Planner-Briefs müssen vor jeder
   „X fehlt"-Aussage den Ist-Bestand prüfen — `ls`/`grep` über `data/wh40k_9e/<fraktion>/`
   (alle YAML-Dateien, nicht nur die naheliegende) UND `docs/work/`. Grund: S144 — die

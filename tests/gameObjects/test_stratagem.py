@@ -9,7 +9,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from gameObjects.loader import load_stratagems  # noqa: E402
 from gameObjects.stratagem import (  # noqa: E402
+    CpOverride,
     Stratagem,
+    effective_cp_cost,
     is_core_stratagem,
     reactive_stratagems_for,
     stratagem_conditions_met,
@@ -888,3 +890,67 @@ class TestGaussTeslaStratagemKeywordGates:
         units, _ = load_army("necrons")
         overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
         assert stratagem_conditions_met(["GAUSS"], overlord) is False
+
+
+# ---------------------------------------------------------------------------
+# B-028c1 b3 — effective_cp_cost(): data-driven variable CP (Curse of the
+# Phaeron, "1 CP normally, 3 CP for TITANIC models")
+# ---------------------------------------------------------------------------
+
+_CURSE_OF_THE_PHAERON_ID = "wh40k_9e.necrons.stratagem.curse_of_the_phaeron"
+
+
+class TestEffectiveCpCost:
+    def test_no_overrides_returns_flat_cp_cost(self) -> None:
+        strat = _strat(cp_cost=2)
+        assert effective_cp_cost(strat, _KeywordUnit("VEHICLE")) == 2
+
+    def test_no_unit_falls_back_to_flat_cp_cost(self) -> None:
+        strat = Stratagem(
+            id="test.variable",
+            name_en="Variable GO",
+            cp_cost=1,
+            phase="any",
+            stage="active",
+            player="both",
+            cp_overrides=[CpOverride(has_keyword="TITANIC", cp_cost=3)],
+        )
+        assert effective_cp_cost(strat, None) == 1
+
+    def test_matching_override_keyword_replaces_flat_cost(self) -> None:
+        strat = Stratagem(
+            id="test.variable",
+            name_en="Variable GO",
+            cp_cost=1,
+            phase="any",
+            stage="active",
+            player="both",
+            cp_overrides=[CpOverride(has_keyword="TITANIC", cp_cost=3)],
+        )
+        assert effective_cp_cost(strat, _KeywordUnit("VEHICLE", "TITANIC")) == 3
+
+    def test_non_matching_unit_keeps_flat_cost(self) -> None:
+        strat = Stratagem(
+            id="test.variable",
+            name_en="Variable GO",
+            cp_cost=1,
+            phase="any",
+            stage="active",
+            player="both",
+            cp_overrides=[CpOverride(has_keyword="TITANIC", cp_cost=3)],
+        )
+        assert effective_cp_cost(strat, _KeywordUnit("VEHICLE")) == 1
+
+    def test_real_curse_of_the_phaeron_titanic_and_non_titanic(self) -> None:
+        """Curse of the Phaeron (wahapedia_necrons/stratagems.txt:79): 1 CP
+        normally, 3 CP for a TITANIC model — exercised against the real
+        Necron units it applies to (Annihilation Barge: VEHICLE, not
+        TITANIC; The Silent King: VEHICLE + TITANIC)."""
+        from gameObjects.loader import load_unit_catalog
+
+        strat = next(s for s in load_stratagems("necrons") if s.id == _CURSE_OF_THE_PHAERON_ID)
+        units = load_unit_catalog("necrons")
+        barge = units["wh40k_9e.necrons.unit.annihilation_barge"]
+        silent_king = units["wh40k_9e.necrons.unit.the_silent_king"]
+        assert effective_cp_cost(strat, barge) == 1
+        assert effective_cp_cost(strat, silent_king) == 3

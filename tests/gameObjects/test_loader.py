@@ -576,6 +576,26 @@ def test_load_ork_stratagems_get_stuck_in_ladz_has_conditions() -> None:
     assert strat.conditions == ["BOYZ", "BEAST SNAGGA"]
 
 
+def test_load_stratagems_curse_of_the_phaeron_carries_titanic_cp_override() -> None:
+    """B-028c1 b3: Curse of the Phaeron (necrons/stratagems.yaml) is the
+    auto_explode CP-Automatismus — 1 CP normally, 3 CP for a TITANIC model
+    (wahapedia_necrons/stratagems.txt:79). The loader must parse its
+    `cp_overrides` YAML block into `CpOverride` entries, not just the flat
+    base `cp_cost`."""
+    stratagems = load_stratagems("necrons")
+    strat = next(
+        (s for s in stratagems if s.id == "wh40k_9e.necrons.stratagem.curse_of_the_phaeron"),
+        None,
+    )
+    assert strat is not None, "Curse of the Phaeron not found in loaded necrons stratagems"
+    assert strat.cp_cost == 1
+    assert strat.effect is not None and strat.effect.type == "auto_explode"
+    assert strat.conditions == ["VEHICLE"]
+    assert len(strat.cp_overrides) == 1
+    assert strat.cp_overrides[0].has_keyword == "TITANIC"
+    assert strat.cp_overrides[0].cp_cost == 3
+
+
 # ---------------------------------------------------------------------------
 # 6k: load_wargear_catalog, _apply_persistent_effect, _apply_wargear + wargear_ids
 # ---------------------------------------------------------------------------

@@ -473,7 +473,7 @@ stratagems:
 
   - id: wh40k_9e.necrons.stratagem.curse_of_the_phaeron
     name_en: Curse of the Phaeron
-    cp_cost: 1  # variable: 1CP normally, 3CP for TITANIC models
+    cp_cost: 1  # base cost; TITANIC override below (B-028c1 b3)
     phase: any  # triggers on destroy — can happen in any phase
     stage: active
     player: both  # your vehicle can be destroyed in either player's turn
@@ -483,6 +483,9 @@ stratagems:
     event: on_destroy
     effect:
       type: auto_explode
+    cp_overrides:
+      - has_keyword: TITANIC
+        cp_cost: 3
     rule_text: "Use this Stratagem in any phase, when a NECRONS VEHICLE model from your army is destroyed. Do not roll to see if that model explodes: it does so automatically. If that model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it costs 1CP."
 
   - id: wh40k_9e.necrons.stratagem.shadows_of_drazak

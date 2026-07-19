@@ -5957,8 +5957,8 @@
   "4f3aa7b3-6a41-4e8f-958b-8030886681ca": {
     "started_at": "2026-07-19T14:41:23.442Z",
     "task": "start session, wir übernehmen alle drei Retromaßnahmen.",
-    "peak_context": 120340,
-    "subagent_share": 84.41700962871889,
+    "peak_context": 122082,
+    "subagent_share": 83.71097369087349,
     "by_tier": {
       "Opus": 3085205,
       "Haiku": 2022149,
@@ -6013,6 +6013,68 @@
         "tier": "Haiku",
         "peak_context": 37393,
         "started_at": "2026-07-19T14:41:23.442Z"
+      }
+    ]
+  },
+  "e1cb7899-cbfb-46ec-9a24-d40351524350": {
+    "started_at": "2026-07-19T19:36:23.889Z",
+    "task": "<task-notification> <task-id>a93800562a314ccd7</task-id> <tool-use-id>toolu_01NMgdMcMk1pHcnERB1dKfa4</tool-use-id> <out…",
+    "peak_context": 125211,
+    "subagent_share": 91.35974292851952,
+    "by_tier": {
+      "Sonnet": 59641078,
+      "Opus": 1932468,
+      "Haiku": 12202993
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "d-Repair Bug 2: Sort-to-top-Semantik",
+        "tier": "Sonnet",
+        "peak_context": 108931,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S172-Abschluss-Review gegen DoD",
+        "tier": "Opus",
+        "peak_context": 85892,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S172-Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 140285,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T6/b3 auto_explode-GO umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 288637,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Retro-Maßnahmen in agent_scopes verankern",
+        "tier": "Haiku",
+        "peak_context": 42779,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Artefakt-Pflege Session-Abschluss S172",
+        "tier": "Haiku",
+        "peak_context": 136116,
+        "started_at": "2026-07-19T19:36:23.889Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "d-Repair Bug 1: Direkt-Apply-Rerun",
+        "tier": "Sonnet",
+        "peak_context": 65891,
+        "started_at": "2026-07-19T19:36:23.889Z"
       }
     ]
   }
