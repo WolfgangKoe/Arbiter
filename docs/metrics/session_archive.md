@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-20 21:38 CEST
+Stand: 2026-07-20 22:47 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-20 20:48 f518  ████████████ 168k ⛔    ███░░░  44%    ███·········
+07-20 21:40 813e  ███████████░ 136k ⚠️   █████░  83%    ██··········
+         SA_1·  ████████████ 173k ⛔    S175 Abschluss: Artefakte + Commit
+         SA_2·  ███████████░ 136k ⚠️   B-028c2 reroll_rp umsetzen
+         SA_3·  █████░░░░░░░  63k ✅    S175 Review gegen DoD
+         SA_4·  ████████░░░░ 104k ✅    S175 Planning-Entwurf erstellen
+         SA_5·  █████░░░░░░░  67k ✅    B-121 + B-110 XS-Fixes umsetzen
+----------------- ---------------------- -------------- ------------
+07-20 20:48 f518  ████████████ 174k ⛔    ██░░░░  40%    ███·········
          SA_1·  ████░░░░░░░░  50k ✅    Review S174 Doku-Diffs
          SA_2·  ████░░░░░░░░  50k ✅    T1 Retro M1/M2/M3 überführen
          SA_3·  █████░░░░░░░  61k ✅    B-028c2 reroll_rp Mini-Konzept
@@ -977,3 +984,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S172 (2026-07-19)** d-Repair (Direkt-Apply-Rerun, last_touched-Pin, §1.7) + b3 auto_explode-GO Curse of the Phaeron (cp_overrides-Schema, 15 Tests, R-COMBAT-45); Live-Verifikation 1-3 positiv, B-028c1 Done+archiviert; B-125/B-126 neu; Retro-M1/M2 S171 verankert; Review GO im ersten Anlauf (2123 passed, 99,20%)
 - **S173 (2026-07-20)** Retro-M3 verankert; B-125+B-126 Explodes-Panel-Regressionen (value-Seed + dice_notation_max Cap, verifiziert positiv); B-122 Careen! als generischer pre_explode_stratagem-GO
 - **S174 (2026-07-20)** S173-Retro M1/M2/M3 überführt (agent_scopes/operating_model); B-125/B-126 archiviert (B-122 offen); B-028c2-Konzept Class B freigegeben; S174-Retro 'Fachfortschritt hat Vorrang' verankert
+- **S175 (2026-07-20)** B-028c2 reroll_rp Class-B hint (UI-verified), B-121/B-110 debt fixes, Careen! B-122 verified+archived, F1 §7.1 alignment, retro M1→B-127/M2→agent_scopes

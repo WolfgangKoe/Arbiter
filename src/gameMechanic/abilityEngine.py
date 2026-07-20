@@ -410,6 +410,36 @@ def get_active_rp_modifiers(player: str) -> dict[str, int | bool]:
     return {}
 
 
+def get_unit_rp_reroll_ability(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> Ability | None:
+    """The unit's own Reanimation-Protocol reroll ability, or None (data-driven).
+
+    Generic INV-4b seam: a unit carries a persistent ability declared in its
+    faction's unit_abilities.yaml with ``effect.type: reroll_rp`` (e.g. Necron
+    Their Number is Legion: re-roll unmodified Reanimation Protocol rolls of
+    1). The gating rule key (e.g. ``theirNumberIsLegion``) is a YAML-declared
+    ``has_rules`` condition, checked via ``check_conditions`` — src/ knows only
+    this generic effect shape, never the faction-specific rule name.
+
+    Distinct from ``get_active_rp_modifiers`` (round-choice directive path,
+    e.g. Undying Legions P) — the two are independent sources and can both
+    apply to the same unit at once.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return None
+    for ability in load_unit_abilities(faction_dir):
+        if ability.effect.type != "reroll_rp":
+            continue
+        if check_conditions(ability, unit, unit_state):
+            return ability
+    return None
+
+
 def get_after_attack_revive_ability(
     faction: str,
     unit: Unit,

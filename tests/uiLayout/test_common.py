@@ -5739,3 +5739,115 @@ class TestRenderExplodeTileShowsCareenBesideExplodesRoll:
         assert captured[0]["state"] == "ready"
         state_key = "Orks::" + GUNWAGON
         assert common.st.session_state.explode_tiles[state_key]["exploded"] is None
+
+
+# ---------------------------------------------------------------------------
+# _render_rp_block — Their Number is Legion caption (B-028c2)
+# ---------------------------------------------------------------------------
+
+
+class _RpBlockFakeCol:
+    """Minimal stand-in for a Streamlit column — supports the nested
+    ``columns``/``number_input``/``button`` calls _render_rp_block makes,
+    unlike a bare MagicMock (which is not unpack-iterable for ``c1, c2 = ...``).
+    """
+
+    def columns(self, n: int) -> tuple["_RpBlockFakeCol", ...]:
+        return tuple(_RpBlockFakeCol() for _ in range(n))
+
+    def number_input(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+        return 0
+
+    def button(self, *args, **kwargs) -> bool:  # type: ignore[no-untyped-def]
+        return False
+
+
+def _rp_block_session(def_uid: str) -> _SS:
+    session = _SS(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p2_faction_dir="necrons",
+    )
+    session["p1_units"] = {def_uid: {"destroyed": False}}
+    return session
+
+
+def _warriors_unit_with_rule(extra_rule: str | None) -> Unit:
+    rules = ["reanimationProtocols"]
+    if extra_rule:
+        rules.append(extra_rule)
+    return Unit(
+        id="wh40k_9e.necrons.unit.warriors",
+        name_en="Necron Warriors",
+        name_de="Nekron-Krieger",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["Troops"],
+        keywords=["Necrons", "Core"],
+        wounds=1,
+        models_min=10,
+        models_max=10,
+        power_level=8,
+        move='5"',
+        bs="3+",
+        ws="3+",
+        strength=4,
+        toughness=4,
+        attacks=1,
+        save=4,
+        invuln_save=6,
+        leadership=10,
+        oc=2,
+        fnp=None,
+        rules=rules,
+    )
+
+
+def _render_rp_block_captions(monkeypatch, unit: Unit, tab_key: str) -> list[str]:
+    common.st.session_state = _rp_block_session(unit.id)
+    monkeypatch.setattr(common.st, "columns", lambda n: tuple(_RpBlockFakeCol() for _ in range(n)))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    captions: list[str] = []
+    monkeypatch.setattr(common.st, "caption", lambda text, **kw: captions.append(text))
+
+    common._render_rp_block(unit, "Necrons", unit.id, models_lost=3, tab_key=tab_key)
+    return captions
+
+
+def test_render_rp_block_shows_their_number_is_legion_caption(monkeypatch) -> None:
+    """B-028c2: a Warrior-like unit with theirNumberIsLegion sees the reroll
+    caption in the RP block — the render entry path, not just the isolated
+    finder (S164-Lehre)."""
+    unit = _warriors_unit_with_rule("theirNumberIsLegion")
+
+    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_yes")
+
+    assert any(
+        "Their Number is Legion" in c and "re-roll RP rolls of 1" in c for c in captions
+    ), captions
+
+
+def test_render_rp_block_no_caption_without_their_number_is_legion(monkeypatch) -> None:
+    """A unit without the ability sees the regular RP block but no reroll caption."""
+    unit = _warriors_unit_with_rule(None)
+
+    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_no")
+
+    assert not any("re-roll RP rolls of 1" in c for c in captions), captions
+
+
+def test_render_rp_block_their_number_is_legion_coexists_with_directive_hint(
+    monkeypatch,
+) -> None:
+    """Coexistence regression: the unit-ability caption and the round-choice
+    directive caption (Undying Legions P, rp_reroll) can both render for the
+    same unit — neither call site touches the other's state (B-028c2)."""
+    unit = _warriors_unit_with_rule("theirNumberIsLegion")
+    monkeypatch.setattr(
+        _eng, "get_active_protocol_effects", lambda player, types: [{"type": "rp_reroll"}]
+    )
+
+    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_coexist")
+
+    assert any("re-roll RP rolls of 1" in c for c in captions), captions
+    assert any("re-roll one RP die" in c for c in captions), captions

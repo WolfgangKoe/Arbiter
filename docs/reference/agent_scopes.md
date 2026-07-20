@@ -118,6 +118,10 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   Migrations-/Split-Dokumente) darf die Ausarbeitung nach fertigem Opus-Konzept an Sonnet
   delegiert werden. Tier-Regel kanonisch: `docs/governance/operating_model.md`
   Abschnitt „Rollen & Model-Tier", hier nicht dupliziert.
+- **Konzept-Vorlagen: Datenort verifizieren statt benennen (S175-F1-Lehre):** den realen
+  Datenort/Loader einer Ability (z. B. `unit_abilities.yaml` → `load_unit_abilities` vs.
+  `faction_abilities.yaml` → `load_faction_abilities`) per `grep` verifizieren, nicht aus dem
+  Gedächtnis benennen.
 
 **Konventionen:**
 - `Effort` (Subagent-Gesamt-Tokens, kalibriert S165-Retro-M2 — Ist-Werte S165: Task 0 XS

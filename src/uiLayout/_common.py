@@ -2549,6 +2549,27 @@ def _rp_directive_hints(def_faction: str) -> list[str]:
     return [f"⟳ {_round_choice_source_label(def_faction)}: re-roll one RP die."]
 
 
+def _rp_unit_ability_hints(
+    def_unit: Unit,
+    def_faction: str,
+    unit_state: MutableMapping[str, Any],
+) -> list[str]:
+    """Caption strings for a unit-owned Reanimation-Protocol reroll ability.
+
+    Pure: reads the unit's persistent abilities via the engine, returns display
+    text. Distinct from ``_rp_directive_hints`` (round-choice directive path,
+    e.g. Undying Legions P) — both sources can be active for the same unit at
+    once, so neither call site touches the other's state (Their Number is
+    Legion, B-028c2).
+    """
+    from gameMechanic.abilityEngine import get_unit_rp_reroll_ability  # noqa: PLC0415
+
+    ability = get_unit_rp_reroll_ability(def_faction, def_unit, unit_state)
+    if ability is None:
+        return []
+    return [f"⟳ {ability.name_en}: re-roll RP rolls of 1."]
+
+
 def _render_rp_block(
     def_unit: Unit,
     def_faction: str,
@@ -2591,6 +2612,8 @@ def _render_rp_block(
         f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel**{threshold}"
     )
     for hint in _rp_directive_hints(def_faction):
+        st.caption(hint)
+    for hint in _rp_unit_ability_hints(def_unit, def_faction, unit_state):
         st.caption(hint)
     # Half-width block — keep the RP entry compact
     rp_col, _ = st.columns(2)
@@ -3902,7 +3925,7 @@ def render_group_assignment(
                     if not profiles:
                         profiles = weapon.profiles
                     if len(profiles) > 1:
-                        p_names = [p.name or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+                        p_names = [p.name_en or f"Profile {j + 1}" for j, p in enumerate(profiles)]
                         p_key = f"decl_p_{gid}_{atk_uid}_{def_uid}_{weapon.name_en}"
                         sel_p = st.radio(
                             f"Profile — {weapon.name_en}", p_names, key=p_key, horizontal=True

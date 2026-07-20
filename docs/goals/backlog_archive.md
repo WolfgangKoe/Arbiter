@@ -1010,3 +1010,64 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   Herkunft: Stakeholder-Live-Verifikation S172 (2026-07-19), Folge-Bug zu B-028c1; Fix +
   Verifikation S173.
 
+## Aus der ID-indizierten Liste (migriert S175)
+
+- ✅ **B-028c2 — `reroll_rp` (Their Number is Legion) — ERLEDIGT (S175, UI-verifiziert positiv,
+  `S175_B028c2_verifikation.md`):** Class-B-Hinweis (App erinnert, würfelt/rechnet nicht) für die
+  Necron-Unit-Ability `reroll_rp` — Konzept (`S174_B028c2_konzept.md`, Grundannahmen A1–A4 +
+  Class-B-Empfehlung) vom Stakeholder S174 bestätigt. Neue Funktion
+  `get_unit_rp_reroll_ability()` in `src/gameMechanic/abilityEngine.py` (analog
+  `_wound_auto_fail_ability`-Muster: `load_unit_abilities` + `check_conditions` — nicht
+  `load_faction_abilities` wie im Konzept ungenau benannt, da die Ability in
+  `unit_abilities.yaml` mit `source: unit_ability` liegt, Review-Klarstellung F1); neue
+  Caption-Funktion `_rp_unit_ability_hints()` in `src/uiLayout/_common.py`, eingehängt in die
+  bestehende Hinweis-Schleife von `_render_rp_block` — der Direktiv-Pfad (`_rp_directive_hints`
+  / Undying Legions P) bleibt unverändert, beide Captions können gleichzeitig erscheinen
+  (Koexistenz-Regressionstest). Regelbeleg: `docs/work/wahapedia_necrons/units_all.txt:277`
+  („Re-roll Reanimation Protocol rolls of 1 made for this unit.") + `faction_overview.txt:504`
+  (RP-Pool-Mechanik, begründet das Fehlen von Einzelwürfen im Datenmodell) +
+  `core_rules.txt:495` (Reroll-Timing). 5 neue Tests (`test_ability_engine.py`) + 3 neue Tests
+  (Render-Einstiegspfad, `test_common.py`, S164-Muster: `_render_rp_block` über
+  Session-State-Fixture durchlaufen, nicht nur die isolierte Funktion). Vollsuite 2151 passed,
+  Coverage 99,20 %, Architektur-Gate 8 passed. Stakeholder-Verifikation S175 bestätigt „ich kann
+  alles bestätigen" — plus ein Folge-Wunsch (Kontrast der Hinweis-Captions zu schwach, blauer
+  Hinweis-Block gewünscht), als eigenes Item **B-127** gesichert (kein GO-Blocker). Belege:
+  `docs/handoff/S174_B028c2_konzept.md`, `docs/handoff/S175_B028c2_verifikation.md`,
+  `docs/handoff/S175_REVIEW.md` (DoD GO, Befunde F1–F3). Herkunft: B-028-Zuschnitt S158,
+  Class-B-Kandidat mit Datenmodell-Abhängigkeit; Konzept S174, Umsetzung + Verifikation S175.
+- ✅ **B-121 — `load_deny_wargear_names` toter Produktionscode — ERLEDIGT (S175):** Funktion
+  (`src/gameObjects/loader.py:984`) samt `_DENY_WARGEAR_CACHE` und den zugehörigen
+  conftest-Reset-Fixtures + Loader-Tests vollständig entfernt — seit der B-028b-Migration (S163)
+  lief `gloom_prism` bereits über die unit-owned Ability + `find_unit_ability_by_effect`, kein
+  `src/`-Aufrufer blieb übrig (`grep -rn load_deny_wargear_names src/ tests/` danach: 0 Treffer).
+  Docstring-Erwähnung in `psychicPhase.py` knapp entschärft. Belege: Review-Befund 3,
+  S163-Review; `docs/handoff/S163_RETRO.md` Maßnahme M2; `docs/handoff/S175_REVIEW.md` (DoD-Punkt
+  5, Clean-Code-Bestätigung). Herkunft: Review-Befund S163 / Retro M2; umgesetzt S175 (gebündelt
+  mit B-110, disjunkte Dateien).
+- ✅ **B-110 — Latenter `p.name`-Bug im Melee-Profil-Zweig — ERLEDIGT (S175):**
+  `src/uiLayout/_common.py:3905` (Melee-Zweig der Profil-Auswahl) — `p.name` auf `p.name_en`
+  korrigiert, konsistent zum bereits in S157 (B-098-Rest) gefixten Ranged-Zweig
+  (`:3990`/`:4000`). Pfad war/bleibt UI-unerreichbar (keine Melee-Waffe mit ≥2 Profilen im
+  aktuellen Datenbestand) — Regressionstest auf `WeaponProfile`-Objekt-Ebene
+  (`tests/uiLayout/test_attack_declaration.py`) statt Klickpfad, S166-Diagnose-Ratchet-konform
+  als „UI-unerreichbar" gekennzeichnet. Belege: Code-Vergleich Ranged- vs. Melee-Zweig;
+  `docs/handoff/S175_REVIEW.md` (Befund „B-110 kein Blindfleck", grep-Beleg keine weitere
+  `p.name`-Referenz). Herkunft: Executor-Nebenfund B-098-Rest S157; umgesetzt S175 (gebündelt mit
+  B-121).
+- ✅ **B-122 — Ork-GO „Careen!" — ERLEDIGT (S173 Code, S175 UI-verifiziert + archiviert):**
+  Stratagem vor dem automatischen Explodes-Wurf beim Gunwagon (kein auto-explode) — GO-Karte
+  (Baustein ②) neben der Explodes-Kachel (`_render_pre_explode_stratagem_go`, `_common.py`),
+  2 CP bei WAGON/TITANIC (S172-Vorgabe). Stakeholder-UI-Verifikation S173
+  (`S173_careen_verifikation.md`): „Es ist wie erwartet" — 2 CP gebucht, Regeltext sichtbar,
+  Baustein ① bleibt unabhängig würfelbar, Undo erstattet vollständig. Offene Rückfrage
+  (D6-Umgebungsschaden bei Gunwagon-Explosion) S175 geklärt: das ist Deadly Demise = **B-049**
+  (Handler fehlt, YAML-Daten vorhanden) — außerhalb des Careen!-Scopes, Verifikation gilt ohne
+  diesen Zusatz als abgeschlossen. **F1-Fensterentscheid S175** (Review-Befund S173): GO-Karte
+  bleibt sichtbar, erzwingt nichts, Baustein ① unabhängig würfelbar (P-16 „vor-Wurf-GO") —
+  `design_system.md §7.1`-Zitat von einer ungenauen Paraphrase auf den wörtlichen
+  Orks-Regelwortlaut („That model can make a Normal Move of up to 6\" before resolving the
+  explosion" — `wahapedia_orks/stratagems.txt:28`) korrigiert. Belege: S170-Planning §2
+  (Herkunft); `docs/handoff/S173_careen_verifikation.md`; `docs/spec/design_system.md §7.1`;
+  `docs/spec/processes.md` P-16. Herkunft: S170-Planning Stakeholder-Kommentar (2026-07-19);
+  Code S173, UI-Verifikation + F1-Doku-Nachzug + Archivierung S175.
+

@@ -25,40 +25,39 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S174, 2026-07-20)
+## Aktueller Stand (nach S175, 2026-07-20)
 
-**S174 committet:** **S173-Retro M1/M2/M3 überführt** — M1 als Sichtbarkeits-Schärfung
-(neuer Standardsatz-Block „Test-/Gate-Executor-Briefs" + Quittungspflicht in `agent_scopes.md`,
-KEINE Regel-Dopplung); M2 (Koordinator fährt keine Gate-Vollsuite im Vordergrund) in
-`operating_model.md` §ev6 + `agent_scopes.md` Parallel-Block; M3 (~110k-Marke) in §ev6, ergänzt
-die Korridor-Marken. `S173_RETRO.md` gelöscht. **B-125 + B-126 archiviert** (verlustfrei →
-`backlog_archive.md`; stale Funktionsname → `_render_explode_target_panel()` in beiden Blöcken
-gefixt); `S173_explode_panel_verifikation.md` gelöscht. **B-122 bewusst NICHT archiviert**
-(Careen!-UI-Verifikation offen). **Neue S174-Retro verankert** (`agent_scopes.md` Planner-Pflichten):
-„Fachlicher Fortschritt hat Vorrang" (Stakeholder-Rüge gegen Plan-/Retro-Drift). **B-028c2-Konzept
-freigegeben (Class B)** — Spec in `S174_B028c2_konzept.md`, Umsetzung S175.
-Review S174: **GO**; Gates Doku+Arch **25 passed** (reine Markdown-Edits, Coverage-Suite fachlich
-nicht betroffen). **Token-Lehre S174:** Koordinator lief erneut > 135k (großer `backlog.md`-Read
-+ umfangreiche Subagent-Rückmeldungen); Konsequenz: große Index-Reads künftig delegieren.
+**S175 committet:** **B-028c2 `reroll_rp` umgesetzt** — Class-B-Hinweis (App erinnert,
+würfelt/rechnet nicht) für die Necron-Unit-Ability „Their Number is Legion": neue Funktion
+`get_unit_rp_reroll_ability()` (`abilityEngine.py`, `load_unit_abilities` + `check_conditions`,
+analog `_wound_auto_fail_ability`) + Caption-Funktion `_rp_unit_ability_hints()`
+(`uiLayout/_common.py`), eingehängt in `_render_rp_block` neben dem unveränderten Direktiv-Pfad.
+UI-Verifikation **positiv** bestätigt (`S175_B028c2_verifikation.md`, gelöscht nach Abschluss).
+**B-121 + B-110 Schuldabbau**: toter `load_deny_wargear_names`-Produktionscode (`loader.py`) samt
+Cache + zugehöriger Tests entfernt; latenter `p.name`→`p.name_en`-Bug im Melee-Profil-Zweig
+(`_common.py:3905`) konsistent zum bereits gefixten Ranged-Zweig korrigiert. **B-122 Careen!
+verifiziert + archiviert**: Stakeholder-Befund S173 positiv, F1-Fensterentscheid (GO-Karte
+bleibt sichtbar, erzwingt nichts, P-16 „vor-Wurf-GO") verankert, §7.1-Zitat auf den wörtlichen
+Orks-Regelwortlaut korrigiert; D6-Umgebungsschaden-Rückfrage geklärt (läuft über B-049, außerhalb
+Scope). Alle vier Items (B-028c2, B-121, B-110, B-122) samt Detail-Abschnitten nach
+`backlog_archive.md` verschoben. **Retro-Maßnahmen S174→S175:** M1 (Stakeholder-Wunsch: RP-Hinweise
+als blauer §3-Hinweis-Block statt schwacher `st.caption`) als neues Item **B-127** aufgenommen;
+M2 (Konzept-Vorlagen sollen den realen Datenort/Loader per `grep` verifizieren statt aus dem
+Gedächtnis benennen, S175-F1-Lehre) in `agent_scopes.md` Planner-Pflichten ergänzt.
+Review S175: **GO**; Gates **2151 passed, Coverage 99,20 %, Architektur 8 passed**.
 
-Frühere Sessions (S60–S173): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S174): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-### ▶ Nächster Schritt (S175)
+### ▶ Nächster Schritt (S176)
 
-1. **B-028c2 `reroll_rp` umsetzen** — Konzept freigegeben (Class B), Spec in
-   `S174_B028c2_konzept.md`: zweiter Hinweis-Produzent für Unit-Ability `reroll_rp` in
-   `abilityEngine.py` (analog `get_after_attack_revive_ability`) + Caption in `_render_rp_block`
-   (`_common.py`), Anker design_system §3/§3.1. Tests: mit/ohne `theirNumberIsLegion`, Direktiv-
-   Pfad-Regression. XS–S ~10–15k. **Fachitem mit Code-Wirkung → erster Zug (neue S174-Retro).**
-2. **Careen!-UI-Verifikation** (`S173_careen_verifikation.md`, AWAITING-VERIFICATION) — inkl.
-   Fenster-Entscheid GO-Karte sichtbar VOR vs. AB Wurf (Review-F1). Danach B-122 archivieren.
-3. **Review-Nachzüge S173:** F1 §7.1-Careen!-Zitat an YAML/P-16 angleichen; F2 stale §1.7-Marker
-   (Zeilen 197/253/276) entfernen; F3 überlange Baustein-②-Docstrings verschlanken.
-4. Danach Spyder-Konzept / weitere Ziel-7-Items laut `backlog.md`.
+1. **B-005 Direktiv-Lock-Rest** — sobald DoR (Regel-Scope in `backlog_details.md`) befüllt ist;
+   Protokoll-Direktiven ab der Bewegungsphase sperren, reiner Render-Pfad (`armyCard.py`),
+   erneute manuelle UI-Verifikation nötig.
+2. **B-127** — RP-Hinweise (Direktiv + `reroll_rp`) von `st.caption` auf den blauen
+   §3-Hinweis-Block umstellen (XS, Stakeholder-Wunsch aus der B-028c2-Verifikation).
+3. Weitere Ziel-7-Items laut `backlog.md`-Priorität (z. B. B-028c3/c4/c5, B-113, B-107/B-077/B-006).
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
-`S173_careen_verifikation.md` (AWAITING-VERIFICATION);
-`S174_B028c2_konzept.md` (AWAITING-VERIFICATION, Class B freigegeben → beim Umsetzen in S175 abräumen).
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING).
 
 ---
 

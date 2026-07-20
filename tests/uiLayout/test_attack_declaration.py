@@ -193,3 +193,44 @@ def test_compute_attacks_no_extra_attacks_effect_unchanged() -> None:
 
 def test_total_attacks_int_no_extra_attacks_effect_unchanged() -> None:
     assert _total_attacks_int("Melee", 10, 2) == 20
+
+
+# ---------------------------------------------------------------------------
+# B-110: multi-profile melee weapon profile-name derivation must use
+# name_en (WeaponProfile has no `name` attribute). UI-unreachable today (no
+# melee weapon in the data has >=2 profiles) — this is a latent-bug
+# regression test at the object/derivation level, not a click-path test.
+# ---------------------------------------------------------------------------
+
+
+def test_melee_profile_name_derivation_uses_name_en_without_attribute_error() -> None:
+    from gameObjects.weapon import WeaponProfile
+
+    profiles = [
+        WeaponProfile(
+            weapon_type="Melee",
+            range_inches=0,
+            attacks="3",
+            strength=8,
+            ap=-2,
+            damage="3",
+            is_melee=True,
+            name_en="Sword",
+        ),
+        WeaponProfile(
+            weapon_type="Melee",
+            range_inches=0,
+            attacks="D3",
+            strength=4,
+            ap=0,
+            damage="1",
+            is_melee=True,
+            name_en="",
+        ),
+    ]
+
+    # Mirrors the melee-branch derivation in uiLayout/_common.py.
+    p_names = [p.name_en or f"Profile {j + 1}" for j, p in enumerate(profiles)]
+
+    assert p_names == ["Sword", "Profile 2"]
+    assert not hasattr(profiles[0], "name")

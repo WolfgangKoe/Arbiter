@@ -35,6 +35,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_after_attack_revive_ability,
     get_short_label_for_effect_type,
     get_triggered_abilities,
+    get_unit_rp_reroll_ability,
     is_effect_executable,
     mortal_wounds_target,
     resolve_explode_effect,
@@ -1868,6 +1869,65 @@ def test_revive_dice_count_default_one_die_per_model() -> None:
     """Unbekannte/fehlende Formel → ein Würfel pro gefallenem Modell."""
     assert revive_dice_count(None, 4, 2) == 4
     assert revive_dice_count("other_formula", 5, 3) == 5
+
+
+# ---------------------------------------------------------------------------
+# get_unit_rp_reroll_ability — Their Number is Legion unit-ability gate
+# (B-028c2, Class B: reads unit_abilities.yaml effect.type reroll_rp)
+# ---------------------------------------------------------------------------
+
+
+def test_rp_reroll_ability_found_for_unit_with_their_number_is_legion_rule() -> None:
+    """Warrior-artige Einheit mit theirNumberIsLegion bekommt die YAML-Fähigkeit."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols", "theirNumberIsLegion"])
+    ability = get_unit_rp_reroll_ability("Necrons", unit, {"destroyed": False})
+    assert ability is not None
+    assert ability.effect.type == "reroll_rp"
+    assert ability.name_en == "Their Number is Legion"
+
+
+def test_rp_reroll_ability_none_for_unit_without_rule() -> None:
+    """Einheit ohne theirNumberIsLegion (z. B. reine RP-Einheit) → kein Reroll-Hinweis."""
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols"])
+    assert get_unit_rp_reroll_ability("Necrons", unit, {"destroyed": False}) is None
+
+
+def test_rp_reroll_ability_none_for_faction_without_unit_abilities_yaml() -> None:
+    """Orks deklarieren keine theirNumberIsLegion-Fähigkeit → None (fraktionsblind)."""
+    _revive_session()
+    unit = _make_unit(rules=["theirNumberIsLegion"])
+    assert get_unit_rp_reroll_ability("Orks", unit, {"destroyed": False}) is None
+
+
+def test_rp_reroll_ability_none_for_unknown_player_slot() -> None:
+    """Fehlende faction_dir im Session-State (KeyError) → None statt Crash."""
+    _st_mock.session_state = _S(first_player="Necrons")
+    unit = _make_unit(rules=["theirNumberIsLegion"])
+    assert get_unit_rp_reroll_ability("Necrons", unit, {"destroyed": False}) is None
+
+
+def test_rp_reroll_ability_coexists_with_active_rp_directive() -> None:
+    """Koexistenz-Regression: get_active_rp_modifiers (Direktiv-Pfad) bleibt
+    unberührt, während die Unit-Ability parallel gefunden wird — beide Quellen
+    sind unabhängig (B-028c2)."""
+    from unittest.mock import patch
+
+    _revive_session()
+    unit = _make_unit(rules=["reanimationProtocols", "theirNumberIsLegion"])
+
+    with patch.object(
+        _eng,
+        "get_active_protocol_effects",
+        return_value=[{"type": "rp_reroll"}],
+    ):
+        directive_result = get_active_rp_modifiers("Necrons")
+        ability_result = get_unit_rp_reroll_ability("Necrons", unit, {"destroyed": False})
+
+    assert directive_result == {"rp_reroll": True}
+    assert ability_result is not None
+    assert ability_result.effect.type == "reroll_rp"
 
 
 # ── mortal_wounds effect handler (B-028c1 T1) ───────────────────────────────

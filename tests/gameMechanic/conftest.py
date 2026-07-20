@@ -75,7 +75,6 @@ def _reset(st_mod: MagicMock | None) -> None:
     # Clear loader caches.
     try:
         from gameObjects.loader import (
-            _DENY_WARGEAR_CACHE,
             _FACTION_ABILITIES_CACHE,
             _FACTION_META_CACHE,
             _ROUND_CHOICE_CACHE,
@@ -92,6 +91,5 @@ def _reset(st_mod: MagicMock | None) -> None:
         _UNIT_ABILITIES_CACHE.clear()
         _SUBFACTION_ABILITIES_CACHE.clear()
         _STRATAGEM_CACHE.clear()
-        _DENY_WARGEAR_CACHE.clear()
     except ImportError:
         pass

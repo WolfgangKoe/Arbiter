@@ -35,7 +35,6 @@ _FACTION_META_CACHE: dict[str, dict[str, Any]] = {}
 _UNIT_ABILITIES_CACHE: dict[str, list[Ability]] = {}
 _SUBFACTION_ABILITIES_CACHE: dict[str, list[Ability]] = {}
 _STRATAGEM_CACHE: dict[str, list[Stratagem]] = {}
-_DENY_WARGEAR_CACHE: dict[str, frozenset[str]] = {}
 
 
 class YamlDataError(ValueError):
@@ -979,34 +978,6 @@ def _apply_persistent_effect(unit: Unit, effect: dict) -> Unit:  # type: ignore[
     elif etype == "set_fnp":
         return dataclasses.replace(unit, fnp=int(effect["value"]))
     return unit
-
-
-def load_deny_wargear_names(faction_dir: str) -> frozenset[str]:
-    """Return short names of wargear items with deny_psychic effect for a faction.
-
-    Short name = last segment of the wargear ID. As of S163 (B-028b-Rest),
-    necrons' Gloom Prism migrated its ``deny_psychic`` effect onto a
-    unit-owned ability in ``unit_abilities.yaml`` (see
-    ``psychicPhase.py::can_deny``/``find_unit_ability_by_effect``) — no
-    faction currently has a wargear item this function would match. Kept as
-    generic, faction-agnostic infra (tested below) for any future faction
-    that needs a deny source without a unit_ability entry.
-    """
-    if faction_dir in _DENY_WARGEAR_CACHE:
-        return _DENY_WARGEAR_CACHE[faction_dir]
-    path = _DATA_ROOT / faction_dir / "wargear.yaml"
-    if not path.exists():
-        _DENY_WARGEAR_CACHE[faction_dir] = frozenset()
-        return _DENY_WARGEAR_CACHE[faction_dir]
-    data = load_yaml(path) or []
-    entries = data if isinstance(data, list) else []
-    result = frozenset(
-        e["id"].rsplit(".", 1)[-1]
-        for e in entries
-        if isinstance(e, dict) and e.get("effect", {}).get("type") == "deny_psychic"
-    )
-    _DENY_WARGEAR_CACHE[faction_dir] = result
-    return result
 
 
 def load_wargear_abilities(faction_dir: str) -> list[Ability]:

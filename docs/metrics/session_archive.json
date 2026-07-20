@@ -6121,8 +6121,8 @@
   "f5189ba5-e94c-4d86-80d6-dff3ecc642a5": {
     "started_at": "2026-07-20T18:48:58.925Z",
     "task": "<task-notification> <task-id>a976eaf6222b0f3c4</task-id> <tool-use-id>toolu_01LxQe1eW3kBEM8sE4mrSDMD</tool-use-id> <out…",
-    "peak_context": 167670,
-    "subagent_share": 44.066808793652946,
+    "peak_context": 173780,
+    "subagent_share": 39.69743541583118,
     "by_tier": {
       "Sonnet": 4477901,
       "Opus": 1778129
@@ -6162,6 +6162,53 @@
         "tier": "Sonnet",
         "peak_context": 68605,
         "started_at": "2026-07-20T18:48:58.925Z"
+      }
+    ]
+  },
+  "813e8468-327a-46b0-9ed8-20ac6e29e52c": {
+    "started_at": "2026-07-20T19:40:33.745Z",
+    "task": "start Session. Achte darauf, die Umsetzung der items im Backlog einzuplanen-",
+    "peak_context": 135594,
+    "subagent_share": 82.62030077696437,
+    "by_tier": {
+      "Sonnet": 24196140,
+      "Opus": 5025778
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S175 Abschluss: Artefakte + Commit",
+        "tier": "Sonnet",
+        "peak_context": 172616,
+        "started_at": "2026-07-20T19:40:33.745Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-028c2 reroll_rp umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 136334,
+        "started_at": "2026-07-20T19:40:33.745Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S175 Review gegen DoD",
+        "tier": "Opus",
+        "peak_context": 63025,
+        "started_at": "2026-07-20T19:40:33.745Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "S175 Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 103946,
+        "started_at": "2026-07-20T19:40:33.745Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-121 + B-110 XS-Fixes umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 67367,
+        "started_at": "2026-07-20T19:40:33.745Z"
       }
     ]
   }

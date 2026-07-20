@@ -832,8 +832,9 @@ angeboten, keine neue Bauform:
   … it does so automatically" → Baustein ① wird übersprungen, `exploded` wird direkt
   gesetzt).
 - **„Vor-Wurf-GO"** spendet CP + loggt, bevor der Wurf stattfindet, lässt Baustein ① aber
-  unangetastet und weiterhin manuell bedienbar (z. B. „Careen!": „…before rolling to see
-  if it explodes" — Orks-Regelwortlaut). Beide Spielarten teilen sich denselben Anker
+  unangetastet und weiterhin manuell bedienbar (z. B. „Careen!": „That model can make a
+  Normal Move of up to 6\" before resolving the explosion" — Orks-Regelwortlaut,
+  `stratagems.txt`, P-16 „vor-Wurf-GO"). Beide Spielarten teilen sich denselben Anker
   (inline neben Baustein ①) und dieselbe Use/Undo-Wortlautfamilie (§6.4); der Unterschied
   liegt allein darin, ob der Effekt den Wurf ersetzt oder ihm nur vorausgeht.
 

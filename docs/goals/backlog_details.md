@@ -676,28 +676,6 @@ S167; Kritik-Ergänzung T3-V S168.
 
 **Revidierte Gesamtschätzung:** ~135–155k statt der ursprünglich genannten ~100k+ (Grund: granulare Aufschlüsselung der c-Gruppe ergibt ~85–105k statt ~50k+; a+b+c1 = ~70–75k, c2–c5 = ~65–75k). Deutlich über eine Session hinaus, aber genau dafür ist der Sessionschnitt gedacht (7 unabhängig freigebbare Teil-Tasks statt ein Monolith). **Für S158 vorgesehen (bei Freigabe):** B-028a, danach B-028b. B-028c1–c5 werden als neue Backlog-Zeilen ergänzt, aber nicht vor S159 beauftragt.
 
-## B-028c2 — reroll rp
-
-[↩ Zeile in backlog.md](backlog.md#b-028c2)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~15–20k (S/M)
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/abilityEngine.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`their_number_is_legion`). **Warnung:** Reanimation-Protokoll-Datenmodell ist aggregierte Würfelzahl (`_render_rp_block` liest `revive_dice_count()`, einen Skalar, nicht einen einzelnen Wurf pro Modell). „Reroll von Einsen" ist damit nicht direkt abbildbar (Class-B-Kandidat — Datenmodell-Frage, nicht Implementierungslücke). **Vorab Scope-Entscheidung nötig:** entweder Mini-Konzept entwickeln (z. B. Reroll-Widget separat von der RP-UI-Aggregation) oder Task verschieben. Nur mit vorab geklärtem Konzept lauffähig.
-
-**Abhängigkeiten:** Nach B-028c1 (Sichtbarkeits-Infrastruktur). Parallel zu c3–c5 möglich, wenn Konzept vorab klärt.
-
-**Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c2 Z.54).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** B-028-Zuschnitt S158, Class-B-Kandidat mit Datenmodell-Abhängigkeit.
-
 ## B-028c3 — free attack
 
 [↩ Zeile in backlog.md](backlog.md#b-028c3)
@@ -2057,28 +2035,6 @@ Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zu
 
 **Herkunft:** Stakeholder-Retro-Ergänzung 2 (`S156_retro_s155.md`), Konsent-Modus (Template kann bei Umsetzung noch geschärft werden).
 
-## B-110 — Latenter pname Bug im Melee Profil Zweig
-
-[↩ Zeile in backlog.md](backlog.md#b-110)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Sonnet
-
-**Effort:** XS
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (~Zeile 2772, per `grep p.name` verifizierbar). Der Melee-Zweig der Profil-Auswahl-Logik referenziert `p.name` — ein Attribut, das auf dem `WeaponProfile`-Objekt nicht existiert. Das korrekte Attribut heißt `name_en`. Der Pfad ist aktuell ein „toter Code": es gibt in der bestehenden Datenbasis keine Melee-Waffe mit zwei oder mehr Profilen, daher wird dieser Code niemals ausgeführt. Bei Einführung einer Melee-Waffe mit ≥2 Profilen würde das Programm mit `AttributeError` abstürzen. Der Ranged-Profil-Zweig wurde bereits in S157 (B-098-Rest) korrigiert (`p.name_en` statt `p.name`). Dieser Bug muss aus Konsistenzgründen auch im Melee-Zweig gefixt werden, obwohl er aktuell latent ist.
-
-**Abhängigkeiten:** Executor-Nebenfund während der B-098-Rest-Umsetzung (S157); eigenständig, kein Blocker vorhanden.
-
-**Belege:** Code-Vergleich Ranged- vs. Melee-Zweig in `src/uiLayout/_common.py` (~Zeile 2750–2800).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Executor-Nebenfund während B-098-Rest S157.
-
 ## B-113 — Skorpekh Destroyer und Destroyer Lord Reroll Faehigkeiten nicht verdrahtet
 
 [↩ Zeile in backlog.md](backlog.md#b-113)
@@ -2197,6 +2153,37 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.3/§4.4).
 
+## B-127 — RP Hinweise als blauer Hinweis Block
+
+[↩ Zeile in backlog.md](backlog.md#b-127)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** XS: ~50k
+
+**Detail-Beschreibung:** Betroffene Datei: `src/uiLayout/_common.py` (`_render_rp_block`,
+Hinweis-Schleife um `_rp_directive_hints`/`_rp_unit_ability_hints`, S175 B-028c2). Ist-Zustand:
+die RP-Reroll-Hinweise (Undying-Legions-Direktiv-Pfad + `reroll_rp`-Unit-Ability „Their Number
+is Legion") rendern als schwacher `st.caption`-Text. Stakeholder-Wunsch aus der S175-Verifikation
+(`S175_B028c2_verifikation.md` Zeile 45): „Mir wäre es lieber, wenn die Fähigkeiten
+theirNumberIsLegion und die zweite Direktive von undyingLegions als blauer Hinweis Block
+erschienen. Der Kontrast des aktuellen Hinweises ist sehr schwach." Umstellung auf die
+bestehende §3-Hinweis-Block-Bauform (blauer Kasten, `info`-Konvention) statt `st.caption`.
+Class-B-Display — reine Darstellungsänderung, kein Fachlogik-Wechsel.
+
+**Abhängigkeiten:** —
+
+**Belege:** `docs/handoff/S175_B028c2_verifikation.md` Zeile 45 (Stakeholder-Zitat);
+`docs/spec/design_system.md` §3 (Hinweis-Konvention).
+
+**Benötigte Regeln-Scopes:** `docs/spec/design_system.md` §3 + §3.1 (Wortlaut-Budget).
+
+**Herkunft:** S175-Retro-Maßnahme M1 (Stakeholder-Wunsch aus der B-028c2-UI-Verifikation).
+
 ## B-120 — Conditions Auswertung in find unit ability by effect inert
 
 [↩ Zeile in backlog.md](backlog.md#b-120)
@@ -2236,57 +2223,3 @@ Direktiv-Effekt".
 
 ---
 
-## B-121 — load deny wargear names toter Produktionscode
-
-[↩ Zeile in backlog.md](backlog.md#b-121)
-
-**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** XS: ~5k
-
-**Detail-Beschreibung:** `load_deny_wargear_names` (`src/gameObjects/loader.py:945`) lädt
-Wargear-Kurznamen mit `effect.type == "deny_psychic"` für eine Fraktion. Bis S163 war das der
-einzige Pfad, über den `psychicPhase.py::can_deny` Gloom-Prism-Wargear erkannte; seit der
-B-028b-Migration (S163, Docstring der Funktion selbst dokumentiert das) läuft `gloom_prism`
-über die unit-owned Ability + `find_unit_ability_by_effect` (siehe B-120), und kein
-`src/`-Aufrufer ruft `load_deny_wargear_names` mehr auf — verifiziert per
-`grep -rln load_deny_wargear_names src/ tests/`: Treffer nur in `loader.py` (Definition) und
-zwei Testdateien (`tests/gameObjects/test_loader.py`, Erwähnung in einem Kommentar in
-`tests/gameMechanic/test_psychic_phase.py`). Die Funktion ist damit toter Produktionscode.
-Entweder entfernen (inkl. der zugehörigen Tests) oder einen ersten echten Nutzer benennen, für
-den sie als generische Infra vorgehalten wird.
-
-**Abhängigkeiten:** Keine — reine Aufräumarbeit, keine andere Mechanik hängt daran.
-
-**Belege:** Review-Befund 3, S163-Review; `docs/handoff/S163_RETRO.md` Maßnahme M2.
-
-**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` — Zeile „Loader / YAML-Schema
-ändern".
-
-**Herkunft:** Review-Befund S163 / Retro M2.
-
-## B-122 — Ork-GO „Careen!"
-
-[↩ Zeile in backlog.md](backlog.md#b-122)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~5–15k (Datenabgleich + Test)
-
-**Detail-Beschreibung:** Ork-Stratagem „Careen!" muss vor dem automatischen Explodes-Wurf beim Gunwagon von Hand aufgerufen werden (kein auto-explode wie andere Explodes-Träger). Recherche: Wahapedia Ork-Codex für Regeltext; Modellierung: analog zu anderen Stratagemen, aber Bedingungs-Flag oder Ablauf-Korrektur nötig, um es nur VOR Explodes-Wurf zuzulassen, nicht danach.
-
-**Abhängigkeiten:** Wartet auf Explodes-Infrastruktur (B-028c1 b1+b2); parallel zu B-028c3-c5 möglich.
-
-**Belege:** S170-Planning §2.
-
-**Benötigte Regeln-Scopes:** Wahapedia Ork-Codex (Careen! Regeltext); `docs/spec/processes.md` P-16 (Explodes-Ablauf).
-
-**Herkunft:** S170-Planning Stakeholder-Kommentar (2026-07-19).

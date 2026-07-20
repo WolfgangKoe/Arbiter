@@ -18,7 +18,6 @@ from gameObjects.loader import (
     _resolve_keyword_placeholders,
     _resolve_model_groups,
     load_army,
-    load_deny_wargear_names,
     load_detachment_types,
     load_faction_abilities,
     load_points,
@@ -1459,10 +1458,6 @@ def test_unit_abilities_are_cached() -> None:
     assert load_unit_abilities("necrons") is load_unit_abilities("necrons")
 
 
-def test_deny_wargear_names_are_cached() -> None:
-    assert load_deny_wargear_names("necrons") is load_deny_wargear_names("necrons")
-
-
 def test_duplicate_per_model_entries_merge_into_one_group() -> None:
 
     from gameObjects.unit import ModelGroupSpec, WeaponSwapSpec
@@ -2160,20 +2155,6 @@ def test_apply_persistent_effect_unknown_type_returns_unchanged() -> None:
     overlord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.overlord")
     result = _apply_persistent_effect(overlord, {"type": "unknown_effect_xyz"})
     assert result is overlord
-
-
-# ---------------------------------------------------------------------------
-# Coverage: load_deny_wargear_names — missing file path (lines 816-817)
-# ---------------------------------------------------------------------------
-
-
-def test_load_deny_wargear_names_missing_faction_returns_empty_frozenset() -> None:
-    """Missing wargear.yaml returns frozenset() (lines 816-817)."""
-    from gameObjects.loader import _DENY_WARGEAR_CACHE, load_deny_wargear_names
-
-    result = load_deny_wargear_names("eldar")
-    assert result == frozenset()
-    assert "eldar" in _DENY_WARGEAR_CACHE
 
 
 # ---------------------------------------------------------------------------
