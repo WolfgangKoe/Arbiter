@@ -589,50 +589,6 @@ Abschluss, Belege hier archiviert).
 **Herkunft:** S167-Planning Punkt 2iii (`docs/handoff/S167_PLANNING.md`), Stakeholder-Freigabe
 S167; Kritik-Ergänzung T3-V S168.
 
-## B-125 — Nach-Confirm-Reset der Explodes-Kachel setzt zugewiesene Mortal Wounds zurueck
-
-[↩ Zeile in backlog.md](backlog.md#b-125)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~40–60k (S/M)
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (Reset-Callback). Stakeholder-Live-Verifikation S172: Nach Bestätigung (Confirm-Button) eines Explodes-Würfelwurfs mit anschließend zugewiesenen Mortal Wounds werden diese beim Rücksetzen (Undo, um einen anderen Würfelwert zu versuchen) auf Null zurückgesetzt — Verstoß gegen Lesart A der Spec (`design_system.md` §1.7: Panel kehrt mit Häkchen/Werten zurück, LP bleiben reduziert). Korrekte Lesart: nur die Würfelentscheidung wird zurückgesetzt, zugewiesene Schäden bleiben im State. Root Cause: der Undo-Callback in `_render_explode_damage_input()` call `_reset_explode_input()`, die ihrerseits die komplette `explode_*`-State-Familie zurücksetzt — inklusive bereits angewendeter Mortal Wounds. Fix: Undo-Callback separiert auf nur Würfel+Ziel-Teil (nicht Schadens-Zuweisungen berühren) oder äquivalent statemanagement.
-
-**Abhängigkeiten:** Nach B-028c1 (Explodes-Infrastruktur muss vorhanden sein).
-
-**Belege:** S172 Live-Verifikation (Stakeholder-Beobachtung); `design_system.md` §1.7 (Panel-Semantik, Spec).
-
-**Benötigte Regeln-Scopes:** `design_system.md` §1.7 (Panel-Semantik).
-
-**Herkunft:** Stakeholder-Live-Verifikation S172 (2026-07-19), Folge-Bug zu B-028c1.
-
-## B-126 — Mortal-Wounds-Cap pro Einheit fehlt im Multi-Unit-Panel
-
-[↩ Zeile in backlog.md](backlog.md#b-126)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** ~40–60k (S/M)
-
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (`number_input`-Rendering im Explodes-Schaden-Block). Stakeholder-Live-Verifikation S172: Im Multi-Unit-Panel (mehrere betroffene Einheiten wählen und Schadens-Werte eingeben) fehlt die Pro-Einheit-Obergrenze für Mortal Wounds. Datengetriebenes Cap: Obergrenze aus dem `damage`-Feld des Explodes-Effekts in der YAML — bei „D6" → max. 6 MW pro Einheit, bei „D3" → max. 3, bei Festwert (z. B. „2") → max. genau diese Zahl. Umsetzung: `number_input`-Component in `_render_explode_damage_input()` muss `max_value` Parameter dynamisch aus diesem Datenfeld setzen, fallback auf unbeschränkt bei Fehlen.
-
-**Abhängigkeiten:** Nach B-028c1 (Explodes-Infrastruktur muss vorhanden sein).
-
-**Belege:** S172 Live-Verifikation (Stakeholder-Beobachtung); `design_system.md` §7 + `processes.md` P-16 (Explodes-Spec).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** Stakeholder-Live-Verifikation S172 (2026-07-19), Folge-Bug zu B-028c1.
-
 ## B-025 — Strukturelle Verbesserung Skeleton Platzhalter Fixe Hoehe oder Fragment Isolierung
 
 [↩ Zeile in backlog.md](backlog.md#b-025)

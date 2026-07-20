@@ -54,6 +54,14 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   (Backlog/Briefing/Specs/Handoff) und den Abschluss-Dreiklang Review→Retro→Commit inkl.
   Token-Schätzung für diesen Overhead. Ein Plan, der nur Feature-Tasks listet, ist
   unvollständig.
+- **Fachlicher Fortschritt hat Vorrang (S174-Retro):** Der Planner liefert einen konkret
+  umsetzbaren Plan, der die Session **fachlich voranbringt** — nicht überwiegend Planungs-,
+  Retro- oder sonstige Meta-Arbeit. Faustregel: mindestens ein Backlog-Fachitem mit
+  Code-Wirkung pro Session, sofern das Kontext-Budget es zulässt; eine reine Governance-/
+  Doku-Session nur mit ausdrücklicher Stakeholder-Ansage. Governance-/Retro-Überführung wird
+  klein gehalten und neben die Facharbeit gestellt, nicht an ihre Stelle. Anlass: S174 —
+  Stakeholder-Rüge, dass Sessions zu „nur Planen + Retro-Maßnahmen umsetzen" zu driften drohen,
+  ohne fachlich einen Schritt weiterzukommen.
 - **Vor dem Einplanen:** offene vs. erledigte Steps gegen `git log --oneline` +
   `.claude/tasks/briefing.md` abgleichen — **nichts als offen einplanen, das bereits committet ist.**
 - **Checkbox-Vollständigkeit:** alle Unterabschnitte der aktiven Zieldatei durchgehen —
@@ -184,6 +192,21 @@ optional?" bzw. „ist das die richtige Bauform?".
   Bauform-Referenz. Text-/§-Verweise allein reichen nicht. Anlass S166: Mockup V1 (nur
   §-Zitate) wich von der Ist-UI ab und wurde abgelehnt; Mockup V2 (mit Screenshot-Referenzen
   auf Psi-Flow/Heroic-Intervention) „passt deutlich besser".
+
+## Standardsatz für Test-/Gate-Executor-Briefs (Retromaßnahme S173-M1 — PFLICHT)
+
+Anlass: S173 — der Brief-1-Executor ignorierte die bereits bestehende Vollsuite-Vordergrund-
+Auflage und hängte an einem verlorenen Background-pytest (exakt das S172-Muster); der
+Koordinator musste die Suite selbst ~7 min im Vordergrund fahren. Die Regel existierte, war
+im Brief aber nicht sichtbar und wurde nicht quittiert.
+
+Jeder Executor-Brief, der pytest/Gates ausführt, enthält **wörtlich** den Satz: „Testläufe
+laufen SYNCHRON im Vordergrund — genau eine Vollsuite am Brief-Ende mit `Bash timeout: 600000`;
+`run_in_background` für pytest ist VERBOTEN, keine Hintergrund-Monitore; Endbericht in
+derselben Antwort wie das Suite-Ende." Der Executor **quittiert diesen Satz wörtlich im
+Endbericht** (Zeile „Vollsuite-Auflage bestätigt: synchron/Vordergrund"). Fehlt die Quittung,
+gilt der Brief als unvollständig ausgeführt. **Keine neue Regel** — Sichtbarmachung +
+Quittungspflicht der schon bestehenden Auflage (Z. 302–321).
 
 ## Subagent-Brief — Pflichtfelder
 
@@ -345,6 +368,10 @@ Rückkanal: Stakeholder kommentiert direkt in der Handoff-Datei.
   Selbstprüfung; Nicht-Scope-Failures melden Executoren als Befund, statt sie zu fixen.
   Anlass: S162 — Executor-Vollsuite meldete 1 Schein-Failure (bewegtes Ziel durch den
   parallelen Doku-Executor), der kombinierte Endstand war grün.
+  **Der Koordinator fährt diese kombinierte Vollsuite nie ~7 min blockierend im Vordergrund
+  (S173-Retro-M2): entweder per `SendMessage` synchron vom Executor nachfahren lassen oder
+  Background + Monitor-until-Loop; ein langer Vordergrund-pytest im Koordinator-Kontext ist
+  verboten.**
 
 Anlass: S130 — Plan 015 (L) wurde als Einzelauftrag vergeben → 403k Subagent-Token,
 entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.

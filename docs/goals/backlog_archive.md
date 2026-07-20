@@ -978,3 +978,35 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
 
 - ✅ **B-028c1 — Explodes-Familie (Destruction-Trigger) — ERLEDIGT (S172, Stakeholder-Abnahme, d + b3 verifiziert):** Pflicht-Trigger-Mechanik + `auto_explode`-GO vollständig verdrahtet. S172: b3 (`auto_explode`-GO für Curse of the Phaeron, TITANIC-differenzierte CP-Kosten, 15 Tests, Vollsuite grün). Verifikations-Set: Testfall 1–7 (S171, design_system.md §7) PASS, Testfall 3 (S172, repair-Karte) PASS. Datenumfang: Necrons vollständig (Command Barge/Triarch Stalker/Spyders/Reanimator + C'tan/Silent King/Tesseract Vault), Orks-Kandidaten separates Refinement-Item B-125/B-126. **Folge-Bugs erkannt + dokumentiert:** Reset-Callback-Seiteneffekt auf bereits zugewiesene Mortal Wounds (B-125), Mortal-Wounds-Cap pro Einheit fehlt im Multi-Panel (B-126).
 
+## Aus der ID-indizierten Liste (migriert S174)
+
+- ✅ **B-125 — Nach-Confirm-Reset der Explodes-Kachel setzt zugewiesene Mortal Wounds zurück — ERLEDIGT (S173, stakeholder-verifiziert positiv (`S173_explode_panel_verifikation.md`)):**
+  Stakeholder-Live-Verifikation S172: Nach Bestätigung (Confirm-Button) eines Explodes-Würfelwurfs
+  mit anschließend zugewiesenen Mortal Wounds wurden diese beim Rücksetzen (Undo, um einen anderen
+  Würfelwert zu versuchen) auf Null zurückgesetzt — Verstoß gegen Lesart A der Spec
+  (`design_system.md` §1.7: Panel kehrt mit Häkchen/Werten zurück, LP bleiben reduziert). Korrekte
+  Lesart: nur die Würfelentscheidung wird zurückgesetzt, zugewiesene Schäden bleiben im State. Root
+  Cause: der Reset-Callback in `_render_explode_target_panel()` (`src/uiLayout/_common.py`) setzte
+  die komplette `explode_*`-State-Familie zurück — inklusive bereits angewendeter Mortal Wounds.
+  Fix (S173, Direct-Apply-Umbau): jede eingegebene Menge wird sofort über
+  `apply_explode_target_damage` angewendet (HP sinkt live), „Confirm all" bucht nichts mehr selbst
+  und schließt nur das Panel; „Reset" rollt die bereits angewendete(n) Zuweisung(en) über
+  `undo_explode_target_damage`/`undo_all_explode_damage` anhand der Pro-Ziel-Snapshots in
+  `entry["snapshots"]` zurück — der Explodes-Wurf selbst wird nie rückgängig gemacht. Ein
+  `value=`-Seed aus `entry["damage"]` verhindert zusätzlich, dass Streamlit den Widget-State beim
+  Wiederöffnen auf 0 zurücksetzt. Stakeholder-Live-Verifikation S173 (Testfall 1, angehaktes Ziel +
+  Wert 3 bleiben nach Reopen erhalten, LP bleiben reduziert): **positiv**
+  (`docs/handoff/S173_explode_panel_verifikation.md`, gelöscht nach Abschluss S174). Herkunft:
+  Stakeholder-Live-Verifikation S172 (2026-07-19), Folge-Bug zu B-028c1; Fix + Verifikation S173.
+- ✅ **B-126 — Mortal-Wounds-Cap pro Einheit fehlt im Multi-Unit-Panel — ERLEDIGT (S173,
+  stakeholder-verifiziert positiv (`S173_explode_panel_verifikation.md`)):**
+  Stakeholder-Live-Verifikation S172: Im Multi-Unit-Panel (mehrere betroffene Einheiten wählen und
+  Schadens-Werte eingeben) fehlte die Pro-Einheit-Obergrenze für Mortal Wounds. Fix (S173,
+  datengetrieben): `number_input` in `_render_explode_target_panel()` (`src/uiLayout/_common.py`)
+  setzt `max_value` jetzt über den neuen Helper `dice_notation_max(ability.effect.damage)` — „D6" →
+  max. 6, „D3" → max. 3, Festwert (z. B. „1") → max. exakt N, kein Fraktions-String. Stakeholder-Live-
+  Verifikation S173 (Testfall 2, Gunwagon „D6" auf 6 begrenzt, Vergleich D3-/Festwert-Träger):
+  **positiv** (`docs/handoff/S173_explode_panel_verifikation.md`, gelöscht nach Abschluss S174).
+  Herkunft: Stakeholder-Live-Verifikation S172 (2026-07-19), Folge-Bug zu B-028c1; Fix +
+  Verifikation S173.
+

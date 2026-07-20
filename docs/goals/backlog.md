@@ -15,8 +15,8 @@ Detailplanungen erledigter Ziele (1A–6): [archive/](archive/). Ausführliche I
 
 **Pflege-Regel:** Bereinigung an jedem Session-Start/-Ende — erledigte Items MIT ihrem
 Details-Abschnitt aus `backlog_details.md` nach `backlog_archive.md` verschieben, hier die
-Tabellenzeile löschen. Letzter Abgleich: **2026-07-18 (S168, B-123 nach Core-Fix (T2) + UI-Nachzug
-(T3) + Stakeholder-Verifikation archiviert)**.
+Tabellenzeile löschen. Letzter Abgleich: **2026-07-20 (S174, B-125/B-126 nach
+Stakeholder-Verifikation `S173_explode_panel_verifikation.md` archiviert)**.
 
 ---
 
@@ -27,8 +27,6 @@ Einzige Prioritätsquelle — sortiert nach Stakeholder-Priorität (Inventar-Rei
 | ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Status | Beschreibung | Abhängigkeiten | Effort | Assignee |
 |---|---|---|---|---|---|
 | [B-124](backlog_details.md#b-124--design-system-ratchet-bei-ui-beruehrung)     | In Progress | <a id="b-124"></a>Design-System-Ratchet bei UI-Berührung — bei jeder Berührung von `src/uiLayout/` oder Render-Teilen der `*Phase.py` prüfen, ob die Bauform in `design_system.md` §1 registriert ist; fehlende im selben Change knapp nachtragen.<br><span style="color:#1e3a8a">**Prozess/Doku**</span> | Selbstprüf-Checkliste in `agent_scopes.md` ergänzt | —<br>(laufend, kein<br>fixer Umfang) | Executor<br>(bei<br>Modul-Berührung) |
-| [B-125](backlog_details.md#b-125--nach-confirm-reset-der-explodes-kachel-setzt-zugewiesene-mortal-wounds-zurueck)     | ToDo | <a id="b-125"></a>Nach-Confirm-Reset der Explodes-Kachel setzt auch bereits zugewiesene Mortal Wounds zurück — Verstoß gegen Lesart A (`design_system.md` §1.7: Panel kehrt mit Häkchen/Werten zurück, LP bleiben reduziert). Betroffen: Reset-Callback in `src/uiLayout/_common.py`. Schätzung S: ~40–60k.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | — | S: ~40–60k | Executor |
-| [B-126](backlog_details.md#b-126--mortal-wounds-cap-pro-einheit-fehlt-im-multi-unit-panel)     | ToDo | <a id="b-126"></a>Mortal-Wounds-Cap pro Einheit fehlt im Multi-Unit-Panel — Obergrenze datengetrieben aus dem `damage`-Feld des explode-Effekts: max. 6 bei „D6", max. 3 bei „D3", exakt N bei Festwert (dann `number_input`-Max = N). Betroffen: `src/uiLayout/_common.py` (`number_input`-`max_value`). Schätzung S: ~40–60k.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | — | S: ~40–60k | Executor |
 | [B-028c2](backlog_details.md#b-028c2--reroll-rp)     | ToDo | <a id="b-028c2"></a>`reroll_rp` (`their_number_is_legion`) — RP-Datenmodell ist aggregierte Würfelzahl; „Reroll von Einsen" braucht eigenes Mini-Konzept vorab (Class-B-Kandidat).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c3–c5 möglich); Scope-Check empfohlen | S/M: ~15–20k | Executor |
 | [B-028c3](backlog_details.md#b-028c3--free-attack)     | ToDo | <a id="b-028c3"></a>`free_attack` (`inescapable_death`) — volle Attacke-Sequenz mitten in gegnerischer Movement-Phase; komplexeste Einzelmechanik.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c4/c5); höchstes Restrisiko | M: ~20–25k | Executor |
 | [B-028c4](backlog_details.md#b-028c4--mark-target)     | ToDo | <a id="b-028c4"></a>`mark_target` (`targeting_relay`) — zustandsbehaftetes „Ziel markiert" über Phasen-/Einheitengrenzen, neuer State-Schlüssel.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c3/c5) | S/M: ~15–20k | Executor |

@@ -6081,8 +6081,8 @@
   "bc427e5a-540e-4ee7-a7cc-f6aa41e0b257": {
     "started_at": "2026-07-20T17:44:25.206Z",
     "task": "Fable ist vermutlich nicht mehr erreichbar. Starte Session wir übernehmen Retromaßnahme 3",
-    "peak_context": 149359,
-    "subagent_share": 69.66228157254476,
+    "peak_context": 155406,
+    "subagent_share": 67.32267044811346,
     "by_tier": {
       "Sonnet": 19155773,
       "Opus": 5738625
@@ -6115,6 +6115,53 @@
         "tier": "Opus",
         "peak_context": 65919,
         "started_at": "2026-07-20T17:44:25.206Z"
+      }
+    ]
+  },
+  "f5189ba5-e94c-4d86-80d6-dff3ecc642a5": {
+    "started_at": "2026-07-20T18:48:58.925Z",
+    "task": "<task-notification> <task-id>a976eaf6222b0f3c4</task-id> <tool-use-id>toolu_01LxQe1eW3kBEM8sE4mrSDMD</tool-use-id> <out…",
+    "peak_context": 167670,
+    "subagent_share": 44.066808793652946,
+    "by_tier": {
+      "Sonnet": 4477901,
+      "Opus": 1778129
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Review S174 Doku-Diffs",
+        "tier": "Sonnet",
+        "peak_context": 50102,
+        "started_at": "2026-07-20T18:48:58.925Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 Retro M1/M2/M3 überführen",
+        "tier": "Sonnet",
+        "peak_context": 49908,
+        "started_at": "2026-07-20T18:48:58.925Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "B-028c2 reroll_rp Mini-Konzept",
+        "tier": "Opus",
+        "peak_context": 60645,
+        "started_at": "2026-07-20T18:48:58.925Z"
+      },
+      {
+        "agent_type": "Plan",
+        "description": "Planning-Entwurf S173-Retro-Maßnahmen",
+        "tier": "Opus",
+        "peak_context": 53247,
+        "started_at": "2026-07-20T18:48:58.925Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2 Backlog-Archivierung B-125/B-126",
+        "tier": "Sonnet",
+        "peak_context": 68605,
+        "started_at": "2026-07-20T18:48:58.925Z"
       }
     ]
   }

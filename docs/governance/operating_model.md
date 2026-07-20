@@ -239,6 +239,10 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    **frisch starten**. Das Review/Retro-Budget (~45k) zählt zur laufenden Session mit: **ab
    ~100k Kontext keine neue Aufgabe mehr beginnen, solange Review/Retro der Session noch
    aussteht** (S142+S143 mussten Review zweimal nachholen, S144-Retro-Beschluss).
+   **Ab ~110k keine teuren eigenen Bash-Läufe im Koordinator mehr (S173-Retro-M3):** Vollsuiten
+   und lange `grep`-Läufe werden ab dieser Marke delegiert (Executor via `SendMessage`) oder auf
+   die Folgesession verschoben — der Koordinator hält seinen Kontext für Routing/Abschluss frei.
+   **Ergänzt** die Korridor-Marken (<150k / ~120k / ~135k), ersetzt sie nicht.
 
    **Messen — Harter Vollzug:** `tools/session_context.py` (UserPromptSubmit) zeigt den
    Live-Kontextstand **automatisch pro Turn** an und eskaliert gestuft — ≥120 k Warnung +
@@ -265,6 +269,11 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    direktes Laden kostete einmalig ~300 k Token und flutete den Kontext (S69-Befund,
    ADR-0004). Tiering-, Subagent-Freigabe- und Kanal-Regeln sind an ihrem eigenen Ort
    kanonisch (Rollen & Model-Tier, Event 3, Eskalation) — hier nicht erneut dupliziert.
+   **Koordinator fährt keine Gate-Vollsuiten selbst im Vordergrund (S173-Retro-M2):** Hängt ein
+   Executor an seiner Vollsuite, lässt der Koordinator die Suite entweder per `SendMessage`
+   synchron vom Executor nachfahren **oder** misst sie als Background-Job + Monitor-until-Loop —
+   nie ~7 min blockierend im Koordinator-Vordergrund (S173: teuerster Einzel-Kontext-Posten,
+   Überlauf > 135k).
 
 7. <a id="ev7"></a>**Refinement-Event**
    Ideen aus [Fotos/](../../Fotos/) → [docs/inbox/](../inbox/) → gemeinsames Verständnis mit Stakeholder → akzeptierte Ideen in [backlog.md](../goals/backlog.md). Siehe [docs/inbox/README.md](../inbox/README.md).

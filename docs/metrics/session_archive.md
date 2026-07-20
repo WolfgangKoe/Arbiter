@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-20 20:46 CEST
+Stand: 2026-07-20 21:38 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,14 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-20 19:44 bc42  ████████████ 149k ⚠️   ████░░  70%    ███·········
+07-20 20:48 f518  ████████████ 168k ⛔    ███░░░  44%    ███·········
+         SA_1·  ████░░░░░░░░  50k ✅    Review S174 Doku-Diffs
+         SA_2·  ████░░░░░░░░  50k ✅    T1 Retro M1/M2/M3 überführen
+         SA_3·  █████░░░░░░░  61k ✅    B-028c2 reroll_rp Mini-Konzept
+         SA_4·  ████░░░░░░░░  53k ✅    Planning-Entwurf S173-Retro-Maßnah…
+         SA_5·  █████░░░░░░░  69k ✅    T2 Backlog-Archivierung B-125/B-126
+----------------- ---------------------- -------------- ------------
+07-20 19:44 bc42  ████████████ 155k ⛔    ████░░  67%    ███·········
          SA_1·  ████████████ 166k ⛔    Brief 2: Careen! GO (Option A)
          SA_2·  ████████████ 145k ⚠️   S173 Planning-Entwurf ausarbeiten
          SA_3·  ████████░░░░  94k ✅    Brief 1: B-125 + B-126 fix
@@ -969,3 +976,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S171 (2026-07-19)** d-Umsetzung komplett (Direkt-Apply+Undo, Nach-Confirm-Reset Lesart A, Sort-to-top, ↺-Glyph), Retro-M1/M2 verankert, Verifikation 4-7 positiv, Royal-Warden geklärt
 - **S172 (2026-07-19)** d-Repair (Direkt-Apply-Rerun, last_touched-Pin, §1.7) + b3 auto_explode-GO Curse of the Phaeron (cp_overrides-Schema, 15 Tests, R-COMBAT-45); Live-Verifikation 1-3 positiv, B-028c1 Done+archiviert; B-125/B-126 neu; Retro-M1/M2 S171 verankert; Review GO im ersten Anlauf (2123 passed, 99,20%)
 - **S173 (2026-07-20)** Retro-M3 verankert; B-125+B-126 Explodes-Panel-Regressionen (value-Seed + dice_notation_max Cap, verifiziert positiv); B-122 Careen! als generischer pre_explode_stratagem-GO
+- **S174 (2026-07-20)** S173-Retro M1/M2/M3 überführt (agent_scopes/operating_model); B-125/B-126 archiviert (B-122 offen); B-028c2-Konzept Class B freigegeben; S174-Retro 'Fachfortschritt hat Vorrang' verankert
