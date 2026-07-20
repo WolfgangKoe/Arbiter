@@ -55,7 +55,9 @@ stratagems:
 
   - id: wh40k_9e.orks.stratagem.careen
     name_en: "Careen!"
-    cp_cost: 1  # variable: 1CP normally, 2CP for WAGON or TITANIC
+    cp_cost: 1  # base cost; WAGON/TITANIC override below (cp_overrides schema, mirrors
+    # Curse of the Phaeron, S172) — a generic "vor-Wurf-GO" (design_system.md §7.1,
+    # processes.md P-16): spends CP + logs BEFORE the explode roll, never resolves it.
     phase: any  # triggers on destroy — can happen in any phase
     stage: active
     player: both  # your vehicle can be destroyed in either player's turn
@@ -64,9 +66,13 @@ stratagems:
     timing: phase_reactive
     event: on_destroy
     effect:
-      type: move
-      amount: "6"
-    rule_text: "Use this Stratagem in any phase, when an ORKS VEHICLE model from your army that is not within Engagement Range of any enemy models is destroyed, before rolling to see if it explodes. That model can make a Normal Move of up to 6\" before resolving the explosion. If that VEHICLE has the WAGON or TITANIC keyword, this Stratagem costs 2CP; otherwise it costs 1CP."
+      type: pre_explode_stratagem
+    cp_overrides:
+      - has_keyword: WAGON
+        cp_cost: 2
+      - has_keyword: TITANIC
+        cp_cost: 2
+    rule_text: "Use this Stratagem in any phase, when an ORKS VEHICLE model in your army that is not within Engagement Range of any enemy models is destroyed and explodes. That model can make a Normal Move of up to 6\" before resolving the explosion. If that VEHICLE is a WAGON or TITANIC model, this Stratagem costs 2CP; otherwise, it costs 1CP."
 
   - id: wh40k_9e.orks.stratagem.breakin_heads
     name_en: "Breakin' Heads"

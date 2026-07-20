@@ -4855,6 +4855,127 @@ class TestExplodeTargetPanel:
 
         assert f"{common.SYM_RESET} Reset" in labels
 
+    def test_reopen_after_confirm_seeds_number_input_and_skips_zero_apply(
+        self, monkeypatch
+    ) -> None:
+        """B-125 regression: Streamlit drops a number_input's key-state once
+        it unmounts (Confirm closes the panel), so on the post-Confirm
+        reopen the widget mounts fresh — its ONLY source for an initial
+        rendered value is the value= kwarg the production code passes.
+        Without value= seeded from entry["damage"], a fresh mount reports 0,
+        the `!= entry["damage"].get(...)` check fires, and
+        apply_explode_target_damage(...,0) nulls the already-assigned mortal
+        wounds. This fake mimics a fresh mount (no prior widget state) by
+        returning exactly the value= kwarg, like a real number_input would."""
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {target_key_w: 3},
+            "applied": False,
+            "snapshots": {target_key_w: {"current_wounds": 10}},
+        }
+        applied: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "apply_explode_target_damage",
+            lambda *a: applied.append(a),
+        )
+
+        class _FreshMountCol:
+            def __enter__(self):  # type: ignore[no-untyped-def]
+                return self
+
+            def __exit__(self, *exc_info):  # type: ignore[no-untyped-def]
+                return False
+
+            def button(self, *args, key=None, **kwargs):  # type: ignore[no-untyped-def]
+                return False
+
+            def number_input(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return kwargs.get("value", 0)
+
+            def markdown(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+            def caption(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            lambda spec: tuple(
+                _FreshMountCol() for _ in range(spec if isinstance(spec, int) else len(spec))
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert applied == [], "a freshly-mounted field must not re-apply 0 mortal wounds"
+        assert entry["damage"][target_key_w] == 3
+
+    def test_number_input_max_value_caps_to_ability_damage_dice(self, monkeypatch) -> None:
+        """B-126 regression: the mortal-wounds field must cap to the
+        ability's own damage-dice notation (Silent King: effect.damage =
+        'D6' -> max 6) instead of accepting an unbounded value."""
+        session, warriors_id, _boyz_id = self._session_with_two_targets()
+        ability = _explode_ability()
+        unit = session.p1_units_list[0]
+        target_key_w = f"Necrons::{warriors_id}"
+        entry = {
+            "ability_id": ability.id,
+            "exploded": True,
+            "selected": [target_key_w],
+            "damage": {},
+            "applied": False,
+        }
+        number_input_calls: list = []  # type: ignore[type-arg]
+
+        class _SpyCol:
+            def __enter__(self):  # type: ignore[no-untyped-def]
+                return self
+
+            def __exit__(self, *exc_info):  # type: ignore[no-untyped-def]
+                return False
+
+            def button(self, *args, key=None, **kwargs):  # type: ignore[no-untyped-def]
+                return False
+
+            def number_input(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                number_input_calls.append(kwargs)
+                return kwargs.get("value", 0)
+
+            def markdown(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+            def caption(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+                return None
+
+        monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "caption", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "divider", lambda *a, **kw: None)
+        monkeypatch.setattr(common.st, "rerun", lambda: None)
+        monkeypatch.setattr(
+            common.st,
+            "columns",
+            lambda spec: tuple(
+                _SpyCol() for _ in range(spec if isinstance(spec, int) else len(spec))
+            ),
+        )
+
+        common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
+
+        assert number_input_calls, "number_input must be called for the selected target"
+        assert number_input_calls[0]["max_value"] == 6
+
 
 class TestExplodeTileContainerStyling:
     def test_unresolved_tile_gets_ready_gold_style(self, monkeypatch) -> None:
@@ -5374,3 +5495,247 @@ class TestExplodeTileWiresInAutoExplodeGo:
         )
 
         assert seen == [("Necrons", ANNIHILATION_BARGE)]
+
+
+# ---------------------------------------------------------------------------
+# _render_pre_explode_stratagem_go (Baustein ②, S173 B-122) — the generic
+# "vor-Wurf-GO" that spends CP + logs BEFORE the explode roll without ever
+# resolving it. Careen! (Orks): Gunwagon (VEHICLE + WAGON, 2 CP) and Deff
+# Dreads (VEHICLE, neither WAGON nor TITANIC, 1 CP) exercise the
+# cp_overrides staffelung. Distinct from auto_explode: `exploded` must never
+# change through this GO.
+# ---------------------------------------------------------------------------
+
+GUNWAGON = "wh40k_9e.orks.unit.gunwagon"
+DEFF_DREADS = "wh40k_9e.orks.unit.deff_dreads"
+
+
+def _ork_vehicle_session(unit_id: str, *, destroyed: bool, cp: int = 5) -> tuple[_SS, Unit]:
+    unit = load_unit_catalog("orks")[unit_id]
+    session = _SS(
+        first_player="Orks",
+        second_player="Necrons",
+        active="Orks",
+        p1_faction_dir="orks",
+        p2_faction_dir="necrons",
+        p1_units_list=[unit],
+        p1_unit_keys=[unit_id],
+        p2_units_list=[],
+        p2_unit_keys=[],
+        p1_units={unit_id: {"destroyed": destroyed, "in_reserve": False}},
+        p2_units={},
+        phase_idx=4,  # shooting
+        cp={"Orks": cp},
+        used_stratagem_ids={},
+        used_stratagem_battle_ids={},
+        stratagem_use_anchors={},
+    )
+    common.st.session_state = session
+    _gs.st.session_state = session
+    _eng.st.session_state = session
+    _se.st.session_state = session
+    return session, unit
+
+
+def _careen() -> Stratagem:
+    return next(s for s in load_stratagems("orks") if s.id == "wh40k_9e.orks.stratagem.careen")
+
+
+class TestPreExplodeStratagemGoVisibility:
+    def test_hidden_when_no_matching_stratagem_for_unit(self, monkeypatch) -> None:
+        """Necrons carry no `pre_explode_stratagem`-typed GO (only
+        auto_explode) — the finder must not fall back to a different
+        effect.type."""
+        _, unit = _annihilation_barge_session(destroyed=True)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Necrons", ANNIHILATION_BARGE, unit, entry)
+
+        assert captured == []
+
+    def test_shown_ready_with_base_cost_for_non_wagon_vehicle(self, monkeypatch) -> None:
+        _, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=5)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+
+        assert len(captured) == 1
+        card = captured[0]
+        assert card["name"] == "Careen!"
+        assert card["cp_cost"] == 1
+        assert card["state"] == "ready"
+        assert card["locked_reason"] is None
+        assert card["target_name"] == "Deff Dreads"
+
+    def test_shown_ready_with_wagon_override_cost(self, monkeypatch) -> None:
+        _, unit = _ork_vehicle_session(GUNWAGON, destroyed=True, cp=5)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", GUNWAGON, unit, entry)
+
+        assert len(captured) == 1
+        assert captured[0]["cp_cost"] == 2
+        assert captured[0]["state"] == "ready"
+
+    def test_locked_when_cp_insufficient(self, monkeypatch) -> None:
+        _, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=0)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+
+        assert len(captured) == 1
+        assert captured[0]["state"] == "locked"
+        assert captured[0]["locked_reason"] == "CP insufficient"
+
+    def test_hidden_once_rolled_when_never_used(self, monkeypatch) -> None:
+        """Careen!'s own rule text is 'before rolling to see if it explodes'
+        — once the roll resolved without Careen!, the moment has passed."""
+        _, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=5)
+        entry = {"exploded": True, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+
+        assert captured == []
+
+    def test_shown_used_even_after_roll_resolved_when_spend_outstanding(self, monkeypatch) -> None:
+        """A Use recorded before the roll must keep its Undo reachable even
+        after the roll went on to resolve — Careen! and the roll are two
+        independent decisions."""
+        _, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=4)
+        strat = _careen()
+        entry = {
+            "exploded": True,
+            "pre_explode_spend": {"stratagem_id": strat.id, "cp_cost": 1},
+        }
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+
+        assert len(captured) == 1
+        assert captured[0]["state"] == "used"
+
+
+class TestPreExplodeStratagemGoUseCallback:
+    def test_use_spends_cp_and_leaves_exploded_untouched(self, monkeypatch) -> None:
+        session, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=5)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        logged: list = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a, **kw: logged.append(a))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+        captured[0]["on_use"]()
+
+        assert session.cp["Orks"] == 4
+        assert entry["exploded"] is None, "Careen! must never resolve the explode roll"
+        assert entry["pre_explode_spend"] == {
+            "stratagem_id": "wh40k_9e.orks.stratagem.careen",
+            "cp_cost": 1,
+        }
+        assert logged and logged[0][3] == "Careen! used"
+
+    def test_use_spends_wagon_override_cost(self, monkeypatch) -> None:
+        session, unit = _ork_vehicle_session(GUNWAGON, destroyed=True, cp=5)
+        entry = {"exploded": None, "pre_explode_spend": None}
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+        monkeypatch.setattr("gameMechanic.gameLog.log_action", lambda *a, **kw: None)
+
+        common._render_pre_explode_stratagem_go("Orks", GUNWAGON, unit, entry)
+        captured[0]["on_use"]()
+
+        assert session.cp["Orks"] == 3
+        assert entry["pre_explode_spend"]["cp_cost"] == 2
+
+
+class TestPreExplodeStratagemGoUndoCallback:
+    def test_undo_refunds_cp_and_clears_marker_before_roll(self, monkeypatch) -> None:
+        session, unit = _ork_vehicle_session(DEFF_DREADS, destroyed=True, cp=4)
+        strat = _careen()
+        entry = {
+            "exploded": None,
+            "pre_explode_spend": {"stratagem_id": strat.id, "cp_cost": 1},
+        }
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", DEFF_DREADS, unit, entry)
+        captured[0]["on_undo"]()
+
+        assert session.cp["Orks"] == 5
+        assert entry["pre_explode_spend"] is None
+        assert entry["exploded"] is None
+
+    def test_undo_leaves_exploded_untouched_when_roll_already_resolved(self, monkeypatch) -> None:
+        """The explicit S173 B-122 regression: Undo refunds CP but must never
+        touch `exploded` — distinct from auto_explode's reset, which always
+        clears `exploded` back to None."""
+        session, unit = _ork_vehicle_session(GUNWAGON, destroyed=True, cp=3)
+        strat = _careen()
+        entry = {
+            "exploded": True,
+            "pre_explode_spend": {"stratagem_id": strat.id, "cp_cost": 2},
+        }
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        common._render_pre_explode_stratagem_go("Orks", GUNWAGON, unit, entry)
+        captured[0]["on_undo"]()
+
+        assert session.cp["Orks"] == 5
+        assert entry["pre_explode_spend"] is None
+        assert entry["exploded"] is True, "the explode roll decision must survive Careen!'s Undo"
+
+
+class TestExplodeTileWiresInPreExplodeStratagemGo:
+    def test_render_explode_tile_calls_pre_explode_stratagem_go(self, monkeypatch) -> None:
+        """Wiring regression: _render_explode_tile must reach the
+        pre_explode_stratagem GO for every render, not just Baustein ①/③ /
+        auto_explode — a future refactor that drops the call would silently
+        retire Careen!."""
+        _ork_vehicle_session(GUNWAGON, destroyed=True, cp=5)
+        _quiet_explode_widgets(monkeypatch)
+        seen: list[tuple] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(
+            common,
+            "_render_pre_explode_stratagem_go",
+            lambda faction, uid, unit, entry: seen.append((faction, uid)),
+        )
+
+        common._render_explode_tile("Orks", GUNWAGON, load_unit_catalog("orks")[GUNWAGON])
+
+        assert seen == [("Orks", GUNWAGON)]
+
+
+class TestRenderExplodeTileShowsCareenBesideExplodesRoll:
+    def test_careen_go_card_renders_while_roll_stays_open_for_gunwagon(self, monkeypatch) -> None:
+        """Render-path regression (S173 B-122 UI-Verifikation): for a
+        Careen!-capable Gunwagon, the GO card must render alongside Baustein
+        ① while the roll is still unresolved — Careen! never pre-empts the
+        manual "Explodes!"/"Does not explode" roll."""
+        _ork_vehicle_session(GUNWAGON, destroyed=True, cp=5)
+        _quiet_explode_widgets(monkeypatch)
+        captured: list[dict] = []  # type: ignore[type-arg]
+        monkeypatch.setattr(common, "render_go_card", lambda **kwargs: captured.append(kwargs))
+
+        result = common._render_explode_tile("Orks", GUNWAGON, load_unit_catalog("orks")[GUNWAGON])
+
+        assert result is None, "roll must stay unresolved — Careen! never auto-resolves it"
+        assert len(captured) == 1
+        assert captured[0]["name"] == "Careen!"
+        assert captured[0]["cp_cost"] == 2
+        assert captured[0]["state"] == "ready"
+        state_key = "Orks::" + GUNWAGON
+        assert common.st.session_state.explode_tiles[state_key]["exploded"] is None

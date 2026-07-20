@@ -60,6 +60,7 @@ from gameMechanic.unitMutations import (
     apply_damage,
     apply_explode_target_damage,
     apply_mortal_wounds,
+    dice_notation_max,
     heal_unit,
     reopen_explode_target_panel,
     undo_all_explode_damage,
@@ -629,10 +630,12 @@ def _render_auto_explode_go(
 ) -> None:
     """Baustein ② (design_system.md §7.1) — the optional ``auto_explode``
     Gefechtsoption rendered right beside Baustein ① (`_render_explode_roll`)
-    while the tile is still unresolved. The only step in the whole
-    Explodes-Familie with a genuine Verwenden/Nicht-Verwenden decision and CP
-    cost (processes.md P-16) — every other block in the family is a
-    Pflicht-Trigger with no ``[Use]``. Renders nothing once the roll is
+    while the tile is still unresolved. One of two Explodes-Familie steps
+    with a genuine Verwenden/Nicht-Verwenden decision and CP cost
+    (processes.md P-16) — the sibling is the generic ``pre_explode_stratagem``
+    GO (``_render_pre_explode_stratagem_go``, e.g. Careen!), which spends CP
+    before the roll instead of replacing it; every other block in the family
+    is a Pflicht-Trigger with no ``[Use]``. Renders nothing once the roll is
     already resolved, or when the destroyed unit's faction carries no
     matching stratagem (e.g. no VEHICLE-conditioned ``auto_explode`` GO in
     its pool) — same "silently absent, never a placeholder" contract every
@@ -667,6 +670,142 @@ def _render_auto_explode_go(
         locked_reason=locked_reason,
         target_name=unit.name_en,
         on_use=_auto_explode_use_callback(strat, faction, uid, unit, ability, entry, cost),
+    )
+
+
+def _find_pre_explode_stratagem(faction_dir: str, unit: Unit) -> Stratagem | None:
+    """Locate the reactive ``on_destroy`` stratagem offering a generic
+    ``pre_explode_stratagem`` GO for `unit` (design_system.md §7.1 Baustein ②,
+    processes.md P-16 "vor-Wurf-GO" — e.g. Careen! for an ORKS VEHICLE).
+    Mirrors `_find_auto_explode_stratagem`'s data-driven dispatch on
+    ``effect.type``/``timing``/``event`` plus the stratagem's own keyword
+    ``conditions`` — no faction- or stratagem-name check. A separate finder
+    (rather than reusing the auto_explode one with a parameterised type)
+    because the two GOs have distinct call-site semantics: this one is never
+    wired to `resolve_explode_effect`.
+    """
+    for strat in load_stratagems(faction_dir):
+        if strat.effect is None or strat.effect.type != "pre_explode_stratagem":
+            continue
+        if strat.timing != "phase_reactive" or strat.event != "on_destroy":
+            continue
+        if not stratagem_conditions_met(strat.conditions, unit):
+            continue
+        return strat
+    return None
+
+
+def _log_pre_explode_stratagem_used(unit_name: str, strat_name: str) -> None:
+    """Logs a ``pre_explode_stratagem`` GO's Use (§7.1 Baustein ②, "vor-Wurf-
+    GO") — distinct from `_log_explode_outcome`: this GO never resolves the
+    roll, it only spends CP before it (e.g. Careen!'s table-measured Normal
+    Move, which this app never executes — "Die App würfelt/misst nicht")."""
+    from gameMechanic.gameLog import log_action  # noqa: PLC0415
+
+    phase = PHASES[st.session_state.get("phase_idx", 0)][1]
+    log_action(st.session_state.get("round", 0), phase, unit_name, f"{strat_name} used")
+
+
+def _pre_explode_stratagem_use_callback(
+    strat: Stratagem,
+    faction: str,
+    uid: str,
+    unit: Unit,
+    entry: dict[str, Any],
+    cost: int,
+) -> Callable[[], None]:
+    """Use callback for a ``pre_explode_stratagem`` GO card (Baustein ②):
+    spends CP at the (possibly keyword-overridden) `cost` and records
+    ``entry["pre_explode_spend"]`` for this card's own Undo. Unlike
+    `_auto_explode_use_callback`, this never touches ``entry["exploded"]`` —
+    the roll (Baustein ①) is left completely untouched, only CP and a log
+    entry change (S173 B-122, Careen! ≠ auto_explode).
+    """
+
+    def _use() -> None:
+        anchor_id = f"pre_explode_{faction}_{uid}"
+        spend_stratagem(strat, faction, uid, anchor_id=anchor_id, cp_cost_override=cost)
+        entry["pre_explode_spend"] = {"stratagem_id": strat.id, "cp_cost": cost}
+        _log_pre_explode_stratagem_used(unit.name_en, strat.name_en)
+
+    return _use
+
+
+def _pre_explode_stratagem_undo_callback(
+    strat: Stratagem, faction: str, entry: dict[str, Any]
+) -> Callable[[], None]:
+    """Undo callback for a ``pre_explode_stratagem`` GO card: refunds exactly
+    the CP `_pre_explode_stratagem_use_callback` spent and clears the spend
+    marker. Not tied to the roll-decision Reset (`_render_explode_outcome`)
+    the way `_refund_auto_explode_spend` is — this GO never resolves that
+    roll, so its own Undo button (GoCardState "used" → "↺ Undo",
+    `goCard.action_slot_text`) is the only way to refund it, independent of
+    whatever the roll later decides.
+    """
+
+    def _undo() -> None:
+        spend = entry.get("pre_explode_spend")
+        if spend is not None and spend["stratagem_id"] == strat.id:
+            undo_stratagem(strat, faction, cp_cost_override=spend["cp_cost"])
+        entry["pre_explode_spend"] = None
+
+    return _undo
+
+
+def _render_pre_explode_stratagem_go(
+    faction: str, uid: str, unit: Unit, entry: dict[str, Any]
+) -> None:
+    """Baustein ② (design_system.md §7.1, "vor-Wurf-GO") — an optional GO
+    rendered beside Baustein ① (`_render_explode_roll`) that spends CP and
+    logs BEFORE the explode roll, but never resolves it (e.g. Careen!'s
+    Normal Move, which this app never executes — the table roll/measurement
+    stays entirely the player's own job). No `ability` parameter, unlike
+    `_render_auto_explode_go`: this GO never dispatches
+    `resolve_explode_effect`, so it has no need of one.
+
+    Gate: visible while the roll is still unresolved (``entry["exploded"] is
+    None``) OR while this GO's own spend is still outstanding — so a Use
+    recorded before the roll keeps its Undo reachable even after the player
+    goes on to roll "Explodes!"/"Does not explode" (that roll is a
+    completely separate decision, see `_pre_explode_stratagem_undo_callback`).
+    Once resolved with no outstanding spend, the moment has passed and the
+    card is silently absent — never a placeholder, same contract as
+    `_render_auto_explode_go` and every other reactive GO card here.
+    """
+    spend = entry.get("pre_explode_spend")
+    if entry["exploded"] is not None and spend is None:
+        return
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return
+    strat = _find_pre_explode_stratagem(faction_dir, unit)
+    if strat is None:
+        return
+
+    cost = effective_cp_cost(strat, unit)
+    state: GoCardState
+    locked_reason: str | None
+    if spend is not None and spend["stratagem_id"] == strat.id:
+        state, locked_reason = "used", None
+    else:
+        cp_available = st.session_state.get("cp", {}).get(faction, 0)
+        if cp_available >= cost:
+            state, locked_reason = "ready", None
+        else:
+            state, locked_reason = "locked", "CP insufficient"
+
+    render_go_card(
+        key=f"pre_explode_{faction}_{uid}",
+        name=strat.name_en,
+        cp_cost=cost,
+        state=state,
+        rule_text=strat.rule_text,
+        compact=True,
+        locked_reason=locked_reason,
+        target_name=unit.name_en,
+        on_use=_pre_explode_stratagem_use_callback(strat, faction, uid, unit, entry, cost),
+        on_undo=_pre_explode_stratagem_undo_callback(strat, faction, entry),
     )
 
 
@@ -720,9 +859,16 @@ def _render_explode_target_panel(
                         entry["last_touched"] = target_key
                     st.rerun()
                 if selected:
+                    # value= seeds from entry["damage"] (B-125): Streamlit drops a
+                    # widget's key-state once it unmounts (post-Confirm panel
+                    # close), so a bare key= alone re-renders at 0 on reopen and
+                    # the != check below would apply(0), nulling the assignment.
+                    # max_value caps to the ability's damage-dice notation (B-126).
                     new_count = row[1].number_input(
                         field_header,
                         min_value=0,
+                        max_value=dice_notation_max(ability.effect.damage),
+                        value=entry["damage"].get(target_key, 0),
                         step=1,
                         key=f"explode_dmg_{state_key}_{target_key}",
                         label_visibility="collapsed",
@@ -939,6 +1085,12 @@ def _render_explode_tile(
             # Reset below refund exactly that CP. None while unresolved or
             # resolved via a manual "Explodes!"/"Does not explode" roll.
             "auto_explode_spend": None,
+            # Set by _pre_explode_stratagem_use_callback (Baustein ②, S173
+            # B-122) to {"stratagem_id", "cp_cost"} when a "vor-Wurf-GO"
+            # (e.g. Careen!) was used before the roll — refunded by that
+            # same GO card's own Undo, not by the roll-decision Reset (the
+            # roll it precedes is never touched). None while unused.
+            "pre_explode_spend": None,
         }
     st.session_state.explode_tiles = store
     entry = store[state_key]
@@ -955,6 +1107,7 @@ def _render_explode_tile(
             _render_explode_outcome(faction, uid, unit, ability, entry)
 
     _render_auto_explode_go(faction, uid, unit, ability, entry)
+    _render_pre_explode_stratagem_go(faction, uid, unit, entry)
 
     if entry["exploded"] and not entry["applied"]:
         return faction, uid, unit, ability, entry

@@ -731,12 +731,30 @@ gegenüber dem Wahapedia-Original. Korrektur ist Teil des Umsetzungspakets b1.
 > destroyed. Do not roll to see if that model explodes: it does so automatically. If that
 > model has the TITANIC keyword, this Stratagem costs 3CP; otherwise it costs 1 CP."
 
-Einzige Stelle im Explodes-Komplex mit echtem Verwenden/Nicht-Verwenden-Entscheid + CP-Kosten
+Eine Stelle im Explodes-Komplex mit echtem Verwenden/Nicht-Verwenden-Entscheid + CP-Kosten
 → eigene GO (Standard-GO-Karte, `design_system.md` §6.1), Titel = `name_en` aus der YAML
 (z. B. „Curse of the Phaeron"), CP-Anzeige im Header (1 CP / 3 CP bei TITANIC). Anker
 reaktiv (`timing: phase_reactive`, `on_destroy`) direkt an der Kachel-Gruppe (Baustein ②,
 `design_system.md` §7.1) — nicht in der zentralen Stratagems-Liste (§6.2-Orte-Zuordnung).
 Bei `[Use]` entfällt der Binär-Wurf-Baustein (Baustein ①): die Explosion gilt automatisch.
+
+### `pre_explode_stratagem`-Gefechtsoption (S173, B-122 „Careen!" — "vor-Wurf-GO")
+
+**Quelle** (`docs/work/wahapedia_orks/stratagems.txt:312`):
+
+> „Use this Stratagem in any phase, when an ORKS VEHICLE model in your army that is not
+> within Engagement Range of any enemy models is destroyed and explodes. That model can
+> make a Normal Move of up to 6" before resolving the explosion. If that VEHICLE is a
+> WAGON or TITANIC model, this Stratagem costs 2CP; otherwise, it costs 1CP."
+
+Zweite Spielart von Baustein ②, generischer Effekttyp `pre_explode_stratagem` (faktions-
+neutral — jede Fraktion kann in ihrer `stratagems.yaml` ein Äquivalent tragen), abzugrenzen
+von `auto_explode`: Careen! **ersetzt den Wurf nicht** und erzwingt ihn nicht — der 6"-Move
+ist Tischmaß, das die App nicht ausführt („Die App würfelt/misst nicht"). App-Anteil ist
+ausschließlich die variable CP-Buchung (`cp_overrides`, WAGON/TITANIC → 2 CP, sonst 1 CP)
++ Log-Eintrag. Eigene GO-Karte (§6.1) inline neben Baustein ①, gleicher Anker wie
+`auto_explode`, aber **Baustein ① bleibt sichtbar und weiterhin manuell bedienbar** — `[Use]`
+bucht CP, `↺ Undo` erstattet sie, unabhängig davon ob/wie der Wurf danach ausgeht.
 
 ### Ablauf
 
@@ -902,4 +920,5 @@ sichtbares Label) ist deckungsgleich mit der Spaltenkopf-Regel in `design_system
 - `data/wh40k_9e/necrons/unit_abilities.yaml` (`vengeance_of_the_enchained`) — Datenbug
   s. o., Korrektur Teil von b1.
 - `data/wh40k_9e/necrons/stratagems.yaml:474` (`auto_explode`, Curse of the Phaeron).
+- `data/wh40k_9e/orks/stratagems.yaml` (`pre_explode_stratagem`, Careen!, S173 B-122).
 - Backlog: `docs/goals/backlog_details.md` B-028c1 (Teil-Briefs b1/b2/b3, Details/Reihenfolge).

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-19 23:15 CEST
+Stand: 2026-07-20 20:46 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-19 21:36 e1cb  ██████████░░ 125k ⚠️   █████░  91%    ··········▒▒
+07-20 19:44 bc42  ████████████ 149k ⚠️   ████░░  70%    ███·········
+         SA_1·  ████████████ 166k ⛔    Brief 2: Careen! GO (Option A)
+         SA_2·  ████████████ 145k ⚠️   S173 Planning-Entwurf ausarbeiten
+         SA_3·  ████████░░░░  94k ✅    Brief 1: B-125 + B-126 fix
+         SA_4·  █████░░░░░░░  66k ✅    S173 Abschluss-Review gegen DoD
+----------------- ---------------------- -------------- ------------
+07-19 21:36 e1cb  ██████████░░ 129k ⚠️   █████░  90%    ··········▒▒
          SA_1·  █████████░░░ 109k ✅    d-Repair Bug 2: Sort-to-top-Semant…
          SA_2·  ███████░░░░░  86k ✅    S172-Abschluss-Review gegen DoD
          SA_3·  ███████████░ 140k ⚠️   S172-Planning-Entwurf erstellen
@@ -962,3 +968,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S170 (2026-07-19)** Explode-UI-Nacharbeiten b/c/a/e/f (playerArea-Split, Phasen-Lifecycle, Resets), Spec-first-Abnahme + Lesart A, P-16 Screenshot->Diagramm-Migration, Retro-M1/M2 verankert, M3-Allowlist; Review GO nach Marker-Fix; 2080 Tests, Cov 99,18%
 - **S171 (2026-07-19)** d-Umsetzung komplett (Direkt-Apply+Undo, Nach-Confirm-Reset Lesart A, Sort-to-top, ↺-Glyph), Retro-M1/M2 verankert, Verifikation 4-7 positiv, Royal-Warden geklärt
 - **S172 (2026-07-19)** d-Repair (Direkt-Apply-Rerun, last_touched-Pin, §1.7) + b3 auto_explode-GO Curse of the Phaeron (cp_overrides-Schema, 15 Tests, R-COMBAT-45); Live-Verifikation 1-3 positiv, B-028c1 Done+archiviert; B-125/B-126 neu; Retro-M1/M2 S171 verankert; Review GO im ersten Anlauf (2123 passed, 99,20%)
+- **S173 (2026-07-20)** Retro-M3 verankert; B-125+B-126 Explodes-Panel-Regressionen (value-Seed + dice_notation_max Cap, verifiziert positiv); B-122 Careen! als generischer pre_explode_stratagem-GO

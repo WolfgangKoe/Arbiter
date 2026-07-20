@@ -797,8 +797,9 @@ Container-Typ, jeder Baustein für sich bereits Bestand):
 ┌──────────────────────────────────────────────┐
 │ ① Binär-Wurf-Baustein (§1.6)                  │
 ├──────────────────────────────────────────────┤
-│ ② optionale GO-Karte (§6.1, falls die Regel   │
-│    einen CP-Automatismus anbietet)            │
+│ ② optionale GO-Karte(n) (§6.1, falls die Regel│
+│    einen CP-Automatismus ODER ein "vor-Wurf-  │
+│    GO" anbietet)                              │
 ├──────────────────────────────────────────────┤
 │ ③ EIN Info-Hinweiskasten (§1.8)               │
 ├──────────────────────────────────────────────┤
@@ -823,6 +824,18 @@ bewusst die volle Breite (beide Armeen nebeneinander). Details + ASCII-Schema: �
 **Lebensdauer (S170, §1.5/§1.8):** die gesamte Kachel-Gruppe verschwindet beim
 Phasenwechsel, unabhängig vom Ausgang — kein Dauerzustand über die Runde hinaus, Ereignis
 danach nur noch im gameLog.
+
+**Baustein ② — zwei Spielarten (S173, B-122):** Baustein ② deckt zwei fachlich
+unterschiedliche GO-Karten ab, beide über CP-Automatismen der jeweiligen Fraktion
+angeboten, keine neue Bauform:
+- **CP-Automatismus** ersetzt den Wurf selbst (z. B. „Curse of the Phaeron": „Do not roll
+  … it does so automatically" → Baustein ① wird übersprungen, `exploded` wird direkt
+  gesetzt).
+- **„Vor-Wurf-GO"** spendet CP + loggt, bevor der Wurf stattfindet, lässt Baustein ① aber
+  unangetastet und weiterhin manuell bedienbar (z. B. „Careen!": „…before rolling to see
+  if it explodes" — Orks-Regelwortlaut). Beide Spielarten teilen sich denselben Anker
+  (inline neben Baustein ①) und dieselbe Use/Undo-Wortlautfamilie (§6.4); der Unterschied
+  liegt allein darin, ob der Effekt den Wurf ersetzt oder ihm nur vorausgeht.
 
 ### 7.2 Wortlaut & Farbe (abstrakt)
 

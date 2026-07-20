@@ -597,6 +597,25 @@ def restore_unit_state(uid: str, faction: str, snapshot: MutableMapping[str, Any
         enter_melee(uid, faction, enemy_uid, enemy_faction)
 
 
+def dice_notation_max(notation: str | None) -> int | None:
+    """Highest value a dice-notation string can roll — caps the explode
+    target panel's mortal-wounds ``number_input`` (B-126) against
+    ``ability.effect.damage`` (see gameObjects/ability.py:44: '1', 'D3', 'D6').
+
+    ``"D6"`` -> 6, ``"D3"`` -> 3, a plain integer string -> that integer,
+    anything unset or unrecognised -> ``None`` (no cap: Streamlit renders an
+    unbounded ``number_input`` when ``max_value`` is ``None``).
+    """
+    if notation is None:
+        return None
+    text = notation.strip().upper()
+    if text.startswith("D") and text[1:].isdigit():
+        return int(text[1:])
+    if text.isdigit():
+        return int(text)
+    return None
+
+
 def apply_explode_target_damage(
     entry: MutableMapping[str, Any],
     uid: str,

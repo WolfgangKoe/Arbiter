@@ -1724,6 +1724,28 @@ def test_reopen_explode_target_panel_does_not_undo_live_damage() -> None:
 
 
 # ---------------------------------------------------------------------------
+# dice_notation_max — explode target panel's mortal-wounds cap (B-126,
+# → gameObjects/ability.py:44 effect.damage dice notation)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("notation", "expected"),
+    [
+        ("D6", 6),
+        ("D3", 3),
+        ("1", 1),
+        ("6", 6),
+        (None, None),
+        ("2D6", None),
+        ("", None),
+    ],
+)
+def test_dice_notation_max_resolves_expected_cap(notation, expected) -> None:  # type: ignore[no-untyped-def]
+    assert _mut.dice_notation_max(notation) == expected
+
+
+# ---------------------------------------------------------------------------
 # reset_turn_flags — lines 441-444
 # ---------------------------------------------------------------------------
 

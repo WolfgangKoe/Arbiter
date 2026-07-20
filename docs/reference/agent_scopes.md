@@ -358,6 +358,14 @@ entgegen dem S124-Merkposten. Stakeholder-Auflage: darf nicht wieder vorkommen.
   Executor-Kontext. Anlass: S164 — ein T2-Executor verbrauchte ~311k Token gegen ~20k
   Budget durch eine Live-Verifikations-Schleife mit 3 Runden + Session-Limit-Abbruch/Resume.
 
+- **Budget-Profil für Backlog-Archivierung (Retro-M3, S172):** Archiv-Verschiebungen
+  erledigter Items (Backlog-Zeile + Details-Block → `backlog_archive.md`/`docs/goals/archive/`)
+  werden als **eigener Brief-Typ** mit realistisch **~100k** budgetiert und **nicht** mit
+  übriger Artefakt-Pflege (briefing/Backlog-Sortierung) in einen XS-Brief gebündelt —
+  alternativ übernimmt sie der Koordinator direkt. Anlass: S172 — Artefakt-Pflege-Brief
+  (Haiku) ~138k Ist vs. ~40k Budget, weil eine 133-Zeilen-Archivverschiebung als XS
+  budgetiert war.
+
 - **Handoff-Lifecycle: STATUS: DONE = Datei löschen:** `STATUS: DONE` in einer Handoff-Datei
   bedeutet, dass der Subagent diese Datei **im selben Commit-Schritt löschen muss**, in dem
   er DONE setzt. Nicht „markiert, wird später gelöscht". Der Brief muss dies explizit anweisen.

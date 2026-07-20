@@ -6019,8 +6019,8 @@
   "e1cb7899-cbfb-46ec-9a24-d40351524350": {
     "started_at": "2026-07-19T19:36:23.889Z",
     "task": "<task-notification> <task-id>a93800562a314ccd7</task-id> <tool-use-id>toolu_01NMgdMcMk1pHcnERB1dKfa4</tool-use-id> <out…",
-    "peak_context": 125211,
-    "subagent_share": 91.35974292851952,
+    "peak_context": 129375,
+    "subagent_share": 90.21356072717009,
     "by_tier": {
       "Sonnet": 59641078,
       "Opus": 1932468,
@@ -6075,6 +6075,46 @@
         "tier": "Sonnet",
         "peak_context": 65891,
         "started_at": "2026-07-19T19:36:23.889Z"
+      }
+    ]
+  },
+  "bc427e5a-540e-4ee7-a7cc-f6aa41e0b257": {
+    "started_at": "2026-07-20T17:44:25.206Z",
+    "task": "Fable ist vermutlich nicht mehr erreichbar. Starte Session wir übernehmen Retromaßnahme 3",
+    "peak_context": 149359,
+    "subagent_share": 69.66228157254476,
+    "by_tier": {
+      "Sonnet": 19155773,
+      "Opus": 5738625
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 2: Careen! GO (Option A)",
+        "tier": "Sonnet",
+        "peak_context": 166157,
+        "started_at": "2026-07-20T17:44:25.206Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S173 Planning-Entwurf ausarbeiten",
+        "tier": "Opus",
+        "peak_context": 145224,
+        "started_at": "2026-07-20T17:44:25.206Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Brief 1: B-125 + B-126 fix",
+        "tier": "Sonnet",
+        "peak_context": 94497,
+        "started_at": "2026-07-20T17:44:25.206Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S173 Abschluss-Review gegen DoD",
+        "tier": "Opus",
+        "peak_context": 65919,
+        "started_at": "2026-07-20T17:44:25.206Z"
       }
     ]
   }
