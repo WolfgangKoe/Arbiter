@@ -1071,3 +1071,22 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   `docs/spec/processes.md` P-16. Herkunft: S170-Planning Stakeholder-Kommentar (2026-07-19);
   Code S173, UI-Verifikation + F1-Doku-Nachzug + Archivierung S175.
 
+## Aus der ID-indizierten Liste (migriert S176)
+
+- ✅ **B-127 — RP-Hinweise als blauer §3-Hinweis-Block — ERLEDIGT (S176, UI-verifiziert positiv):**
+  Die beiden RP-Reroll-Hinweise im RP-Block (`_render_rp_block`, `src/uiLayout/_common.py`
+  ~Z.2614-2617) — Undying-Legions-Direktiv-Pfad (`_rp_directive_hints`) + `reroll_rp`-Unit-Ability
+  „Their Number is Legion" (`_rp_unit_ability_hints`, aus B-028c2/S175) — von schwacher
+  `st.caption`- auf die §3-Hinweis-Konvention `st.info` (blauer `--arb-blue`-Kasten) umgestellt;
+  Wortlaut der Hinweise unverändert, reine Class-B-Anzeige-Migration ohne Fachlogik-Wechsel. Die 3
+  bestehenden Tests (`tests/uiLayout/test_common.py`) angepasst: Helper
+  `_render_rp_block_captions`→`_render_rp_block_info_texts`, Monkeypatch-Ziel
+  `common.st.caption`→`common.st.info`, Assertion-Substrings unverändert (kein neuer
+  Regressionstest — reine Anzeige-Migration). `design_system.md` §1 kein Nachtrag (Wechsel bereits
+  über §3 gedeckt, Präzedenz Explode-Panel). Vollsuite 2151 passed, Coverage 99,20 %,
+  Architektur-Gate 8 passed, Clean Code sauber. **UI-Verifikation Stakeholder positiv:** beide
+  Hinweise („Their Number is Legion" + „Undying Legions Direktive 2" / `rp_reroll`) erscheinen als
+  blauer Kasten inkl. gleichzeitiger Koexistenz. Belege: `docs/handoff/S176_B127_verifikation.md`
+  (gelöscht nach Abschluss). Herkunft: S175-Retro-Maßnahme M1 (Stakeholder-Wunsch aus der
+  B-028c2-UI-Verifikation, `S175_B028c2_verifikation.md` Z.45).
+

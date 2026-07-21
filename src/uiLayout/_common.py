@@ -2612,9 +2612,9 @@ def _render_rp_block(
         f"{models_lost} × {def_unit.name_en} gefallen → **{rp_dice} Würfel**{threshold}"
     )
     for hint in _rp_directive_hints(def_faction):
-        st.caption(hint)
+        st.info(hint)
     for hint in _rp_unit_ability_hints(def_unit, def_faction, unit_state):
-        st.caption(hint)
+        st.info(hint)
     # Half-width block — keep the RP entry compact
     rp_col, _ = st.columns(2)
     models_back = rp_col.number_input(

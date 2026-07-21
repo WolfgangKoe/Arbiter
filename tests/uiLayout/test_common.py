@@ -5742,7 +5742,7 @@ class TestRenderExplodeTileShowsCareenBesideExplodesRoll:
 
 
 # ---------------------------------------------------------------------------
-# _render_rp_block — Their Number is Legion caption (B-028c2)
+# _render_rp_block — Their Number is Legion hint (B-028c2, info box since B-127)
 # ---------------------------------------------------------------------------
 
 
@@ -5803,51 +5803,51 @@ def _warriors_unit_with_rule(extra_rule: str | None) -> Unit:
     )
 
 
-def _render_rp_block_captions(monkeypatch, unit: Unit, tab_key: str) -> list[str]:
+def _render_rp_block_info_texts(monkeypatch, unit: Unit, tab_key: str) -> list[str]:
     common.st.session_state = _rp_block_session(unit.id)
     monkeypatch.setattr(common.st, "columns", lambda n: tuple(_RpBlockFakeCol() for _ in range(n)))
     monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
-    captions: list[str] = []
-    monkeypatch.setattr(common.st, "caption", lambda text, **kw: captions.append(text))
+    info_texts: list[str] = []
+    monkeypatch.setattr(common.st, "info", lambda text, **kw: info_texts.append(text))
 
     common._render_rp_block(unit, "Necrons", unit.id, models_lost=3, tab_key=tab_key)
-    return captions
+    return info_texts
 
 
 def test_render_rp_block_shows_their_number_is_legion_caption(monkeypatch) -> None:
     """B-028c2: a Warrior-like unit with theirNumberIsLegion sees the reroll
-    caption in the RP block — the render entry path, not just the isolated
-    finder (S164-Lehre)."""
+    hint in the RP block (info box since B-127) — the render entry path, not
+    just the isolated finder (S164-Lehre)."""
     unit = _warriors_unit_with_rule("theirNumberIsLegion")
 
-    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_yes")
+    info_texts = _render_rp_block_info_texts(monkeypatch, unit, tab_key="tnil_yes")
 
     assert any(
-        "Their Number is Legion" in c and "re-roll RP rolls of 1" in c for c in captions
-    ), captions
+        "Their Number is Legion" in c and "re-roll RP rolls of 1" in c for c in info_texts
+    ), info_texts
 
 
 def test_render_rp_block_no_caption_without_their_number_is_legion(monkeypatch) -> None:
-    """A unit without the ability sees the regular RP block but no reroll caption."""
+    """A unit without the ability sees the regular RP block but no reroll hint."""
     unit = _warriors_unit_with_rule(None)
 
-    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_no")
+    info_texts = _render_rp_block_info_texts(monkeypatch, unit, tab_key="tnil_no")
 
-    assert not any("re-roll RP rolls of 1" in c for c in captions), captions
+    assert not any("re-roll RP rolls of 1" in c for c in info_texts), info_texts
 
 
 def test_render_rp_block_their_number_is_legion_coexists_with_directive_hint(
     monkeypatch,
 ) -> None:
-    """Coexistence regression: the unit-ability caption and the round-choice
-    directive caption (Undying Legions P, rp_reroll) can both render for the
+    """Coexistence regression: the unit-ability hint and the round-choice
+    directive hint (Undying Legions P, rp_reroll) can both render for the
     same unit — neither call site touches the other's state (B-028c2)."""
     unit = _warriors_unit_with_rule("theirNumberIsLegion")
     monkeypatch.setattr(
         _eng, "get_active_protocol_effects", lambda player, types: [{"type": "rp_reroll"}]
     )
 
-    captions = _render_rp_block_captions(monkeypatch, unit, tab_key="tnil_coexist")
+    info_texts = _render_rp_block_info_texts(monkeypatch, unit, tab_key="tnil_coexist")
 
-    assert any("re-roll RP rolls of 1" in c for c in captions), captions
-    assert any("re-roll one RP die" in c for c in captions), captions
+    assert any("re-roll RP rolls of 1" in c for c in info_texts), info_texts
+    assert any("re-roll one RP die" in c for c in info_texts), info_texts

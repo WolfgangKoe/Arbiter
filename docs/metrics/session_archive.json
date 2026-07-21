@@ -6168,10 +6168,10 @@
   "813e8468-327a-46b0-9ed8-20ac6e29e52c": {
     "started_at": "2026-07-20T19:40:33.745Z",
     "task": "start Session. Achte darauf, die Umsetzung der items im Backlog einzuplanen-",
-    "peak_context": 135594,
-    "subagent_share": 82.62030077696437,
+    "peak_context": 137340,
+    "subagent_share": 83.31525323180841,
     "by_tier": {
-      "Sonnet": 24196140,
+      "Sonnet": 27051336,
       "Opus": 5025778
     },
     "subagents": [
@@ -6179,7 +6179,7 @@
         "agent_type": "general-purpose",
         "description": "S175 Abschluss: Artefakte + Commit",
         "tier": "Sonnet",
-        "peak_context": 172616,
+        "peak_context": 182313,
         "started_at": "2026-07-20T19:40:33.745Z"
       },
       {
@@ -6209,6 +6209,46 @@
         "tier": "Sonnet",
         "peak_context": 67367,
         "started_at": "2026-07-20T19:40:33.745Z"
+      }
+    ]
+  },
+  "4c4003c9-c531-4472-bde4-21387b8ded43": {
+    "started_at": "2026-07-21T15:57:16.387Z",
+    "task": "start session",
+    "peak_context": 150054,
+    "subagent_share": 55.94822374091648,
+    "by_tier": {
+      "Sonnet": 10640300,
+      "Opus": 691752
+    },
+    "subagents": [
+      {
+        "agent_type": "Plan",
+        "description": "S176 Planning-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 131640,
+        "started_at": "2026-07-21T15:57:16.387Z"
+      },
+      {
+        "agent_type": "Explore",
+        "description": "B-113 Scope-Discovery Recherche",
+        "tier": "Sonnet",
+        "peak_context": 57862,
+        "started_at": "2026-07-21T15:57:16.387Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Executor B-127 RP-Hinweis Info-Block",
+        "tier": "Sonnet",
+        "peak_context": 67075,
+        "started_at": "2026-07-21T15:57:16.387Z"
+      },
+      {
+        "agent_type": "claude",
+        "description": "Review S176 B-127 gegen DoD",
+        "tier": "Opus",
+        "peak_context": 47136,
+        "started_at": "2026-07-21T15:57:16.387Z"
       }
     ]
   }

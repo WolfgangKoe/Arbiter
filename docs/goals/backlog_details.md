@@ -2153,37 +2153,6 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Herkunft:** Würfelsymbol-Katalog-Freigabe S159 (`design_system.md` §4.3/§4.4).
 
-## B-127 — RP Hinweise als blauer Hinweis Block
-
-[↩ Zeile in backlog.md](backlog.md#b-127)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** XS: ~50k
-
-**Detail-Beschreibung:** Betroffene Datei: `src/uiLayout/_common.py` (`_render_rp_block`,
-Hinweis-Schleife um `_rp_directive_hints`/`_rp_unit_ability_hints`, S175 B-028c2). Ist-Zustand:
-die RP-Reroll-Hinweise (Undying-Legions-Direktiv-Pfad + `reroll_rp`-Unit-Ability „Their Number
-is Legion") rendern als schwacher `st.caption`-Text. Stakeholder-Wunsch aus der S175-Verifikation
-(`S175_B028c2_verifikation.md` Zeile 45): „Mir wäre es lieber, wenn die Fähigkeiten
-theirNumberIsLegion und die zweite Direktive von undyingLegions als blauer Hinweis Block
-erschienen. Der Kontrast des aktuellen Hinweises ist sehr schwach." Umstellung auf die
-bestehende §3-Hinweis-Block-Bauform (blauer Kasten, `info`-Konvention) statt `st.caption`.
-Class-B-Display — reine Darstellungsänderung, kein Fachlogik-Wechsel.
-
-**Abhängigkeiten:** —
-
-**Belege:** `docs/handoff/S175_B028c2_verifikation.md` Zeile 45 (Stakeholder-Zitat);
-`docs/spec/design_system.md` §3 (Hinweis-Konvention).
-
-**Benötigte Regeln-Scopes:** `docs/spec/design_system.md` §3 + §3.1 (Wortlaut-Budget).
-
-**Herkunft:** S175-Retro-Maßnahme M1 (Stakeholder-Wunsch aus der B-028c2-UI-Verifikation).
-
 ## B-120 — Conditions Auswertung in find unit ability by effect inert
 
 [↩ Zeile in backlog.md](backlog.md#b-120)
