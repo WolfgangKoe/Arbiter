@@ -41,8 +41,10 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     resolve_explode_effect,
     resolve_mortal_wounds_effect,
     revive_dice_count,
+    unit_hit_reroll_ones,
     unit_wound_auto_fail_label,
     unit_wound_auto_fail_max,
+    unit_wound_reroll_ones,
 )
 from gameObjects.ability import Ability, Condition, Effect, Trigger  # noqa: E402
 from gameObjects.loader import load_army  # noqa: E402
@@ -1928,6 +1930,182 @@ def test_rp_reroll_ability_coexists_with_active_rp_directive() -> None:
     assert directive_result == {"rp_reroll": True}
     assert ability_result is not None
     assert ability_result.effect.type == "reroll_rp"
+
+
+# ---------------------------------------------------------------------------
+# unit_hit_reroll_ones — Destroyer Cult "Hardwired for Destruction" gate
+# (B-113 Teil A: reads subfaction_abilities.yaml effect.type reroll_hit,
+# modifier==1, target=="self" — full-reroll reroll_hit auras are NOT matched)
+# ---------------------------------------------------------------------------
+
+
+def test_hit_reroll_ones_true_for_unit_with_hardwired_for_destruction_rule() -> None:
+    """Skorpekh-artige Einheit mit hardwiredForDestruction bekommt den Hit-Reroll."""
+    _revive_session()
+    unit = _make_unit(rules=["livingMetal", "hardwiredForDestruction"])
+    assert unit_hit_reroll_ones("Necrons", unit, {"destroyed": False}) is True
+
+
+def test_hit_reroll_ones_false_for_unit_without_rule() -> None:
+    """Einheit ohne hardwiredForDestruction (z. B. Warriors) → kein Hit-Reroll."""
+    _revive_session()
+    unit = _make_unit(rules=["livingMetal", "reanimationProtocols"])
+    assert unit_hit_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_hit_reroll_ones_false_for_faction_without_subfaction_abilities_yaml() -> None:
+    """Orks deklarieren keine Destroyer-Cult-Fähigkeit → False (fraktionsblind)."""
+    _revive_session()
+    unit = _make_unit(rules=["hardwiredForDestruction"])
+    assert unit_hit_reroll_ones("Orks", unit, {"destroyed": False}) is False
+
+
+def test_hit_reroll_ones_false_for_unknown_player_slot() -> None:
+    """Fehlende faction_dir im Session-State (KeyError) → False statt Crash."""
+    _st_mock.session_state = _S(first_player="Necrons")
+    unit = _make_unit(rules=["hardwiredForDestruction"])
+    assert unit_hit_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_hit_reroll_ones_true_for_real_skorpekh_destroyer_unit() -> None:
+    """Integration: die echte Skorpekh-Destroyers-Datasheet trägt hardwiredForDestruction
+    intrinsisch (units.yaml) — die Destroyer-Cult-Subfaction-Ability gated per
+    has_rules darauf. Beweist die End-zu-Ende-Verdrahtung von YAML bis zum
+    generischen Konsumenten (B-113 Teil A)."""
+    _revive_session()
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    assert unit_hit_reroll_ones("Necrons", skorpekh, {"destroyed": False}) is True
+
+
+def test_hit_reroll_ones_ignores_full_reroll_shape_without_modifier(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A ``reroll_hit`` effect without ``modifier == 1`` — the differently-shaped
+    full-reroll aura (e.g. Silent King 'Phaeron of the Stars': "you can re-roll
+    the hit roll", no modifier, target an aura label) — must NOT satisfy
+    unit_hit_reroll_ones. Only the narrow 'reroll a hit roll of 1' shape
+    (modifier==1, target=='self') does, preventing the wrong reroll semantics
+    from being marked in the HIT block."""
+    _revive_session()
+    full_reroll_ability = Ability(
+        id="test.full_reroll_hit",
+        name_en="Full Reroll Hit (test)",
+        source="subfaction_rule",
+        rule_text="test",
+        trigger=Trigger(timing="persistent", phase="any", player="active"),
+        conditions=[Condition(has_rules=["hardwiredForDestruction"])],
+        effect=Effect(type="reroll_hit", target="some_aura"),
+    )
+    monkeypatch.setattr(
+        _eng, "load_subfaction_abilities", lambda faction_dir: [full_reroll_ability]
+    )
+    monkeypatch.setattr(_eng, "load_unit_abilities", lambda faction_dir: [])
+    unit = _make_unit(rules=["hardwiredForDestruction"])
+    assert unit_hit_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+# ---------------------------------------------------------------------------
+# unit_wound_reroll_ones — Destroyer Cult Lord "United in Destruction" AURA
+# (B-113 Teil B: reroll_wound_1 effect, target != "self" — one unit's ability
+# affects OTHER friendly units in the same roster, gated on the aura source
+# being alive and the target unit's own has_keywords condition)
+# ---------------------------------------------------------------------------
+
+_LOKHUST_LORD_ID = "wh40k_9e.necrons.unit.lokhust_lord"
+
+
+def _destroyer_cult_unit() -> Unit:
+    return _make_unit(rules=[], keywords=["DESTROYER CULT"])
+
+
+def test_wound_reroll_ones_true_for_destroyer_cult_unit_when_lord_alive_in_roster() -> None:
+    """Ein Destroyer-Cult-Ziel bekommt den Aura-Reroll, solange der Lokhust Lord
+    lebend im selben Roster steht (kein räumliches Modell in dieser App —
+    Lord-Präsenz genügt, analog rules_appendix.txt "Aura Abilities")."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={_LOKHUST_LORD_ID: {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    unit = _destroyer_cult_unit()
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is True
+
+
+def test_wound_reroll_ones_false_when_lord_not_in_roster() -> None:
+    """Kein Lokhust/Skorpekh Lord im Roster → keine Aura-Quelle → False."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={},
+    )
+    _st_mock.session_state = session
+    unit = _destroyer_cult_unit()
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_wound_reroll_ones_false_when_lord_destroyed() -> None:
+    """Der Lord steht zwar im Roster, ist aber zerstört → keine aktive Aura mehr."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={_LOKHUST_LORD_ID: {"destroyed": True}},
+    )
+    _st_mock.session_state = session
+    unit = _destroyer_cult_unit()
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_wound_reroll_ones_false_for_unit_without_destroyer_cult_keyword() -> None:
+    """Warriors (kein DESTROYER CULT keyword) profitieren nicht von der Aura,
+    selbst wenn ein Lord lebend im Roster steht."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={_LOKHUST_LORD_ID: {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    unit = _make_unit(rules=["reanimationProtocols"], keywords=["NECRONS", "CORE"])
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_wound_reroll_ones_matches_duplicate_roster_key_with_hash_suffix() -> None:
+    """Eine zweite Kopie desselben Lords im Roster trägt den Schlüssel 'id#1'
+    (gameState._make_unit_state_dict) — muss trotzdem als lebende Aura-Quelle
+    erkannt werden (Präfix-Match, nicht exakter Key-Vergleich)."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={f"{_LOKHUST_LORD_ID}#1": {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    unit = _destroyer_cult_unit()
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is True
+
+
+def test_wound_reroll_ones_false_for_faction_without_units_state() -> None:
+    """Fehlender units-Key im Session-State (z. B. leeres p1_units) → False,
+    kein Crash."""
+    session = _S(first_player="Necrons", p1_faction_dir="necrons")
+    _st_mock.session_state = session
+    unit = _destroyer_cult_unit()
+    assert unit_wound_reroll_ones("Necrons", unit, {"destroyed": False}) is False
+
+
+def test_wound_reroll_ones_true_for_real_skorpekh_lord_and_destroyers_roster() -> None:
+    """Integration: die echten Datasheets (Skorpekh Lord 'United in Destruction'
+    + Skorpekh Destroyers, beide DESTROYER CULT) — beweist die End-zu-Ende-
+    Verdrahtung von unit_abilities.yaml bis zum generischen Konsumenten."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={"wh40k_9e.necrons.unit.skorpekh_lord": {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    assert unit_wound_reroll_ones("Necrons", skorpekh, {"destroyed": False}) is True
 
 
 # ── mortal_wounds effect handler (B-028c1 T1) ───────────────────────────────

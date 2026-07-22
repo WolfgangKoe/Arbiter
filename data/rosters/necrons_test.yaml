@@ -25,6 +25,11 @@ units:
           reap_blade_swap:
             - weapons: [wh40k_9e.necrons.weapon.hyperphase_reap_blade]
               count: 2
+  # Aura source for skorpekh_destroyers above (B-113 Teil B): United in
+  # Destruction — "re-roll a wound roll of 1" for friendly DESTROYER CULT
+  # units in range.
+  - id: wh40k_9e.necrons.unit.skorpekh_lord
+    models: 1
   - id: wh40k_9e.necrons.unit.lychguard
     models: 10
     group_loadouts:

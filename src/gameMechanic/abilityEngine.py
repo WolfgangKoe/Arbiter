@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, MutableMapping
+from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from typing import Any
 
 import streamlit as st
@@ -438,6 +438,135 @@ def get_unit_rp_reroll_ability(
         if check_conditions(ability, unit, unit_state):
             return ability
     return None
+
+
+def _hit_reroll_ones_ability(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> Ability | None:
+    """The unit's own "re-roll a hit roll of 1" ability, or None (data-driven).
+
+    Generic INV-4b seam (B-113 Teil A): a unit carries this via a persistent
+    ``reroll_hit`` effect with ``modifier: 1`` and ``target: self`` — e.g.
+    Necron Destroyer Cult "Hardwired for Destruction": "Each time a model in
+    this unit makes an attack, re-roll a hit roll of 1"
+    (data/wh40k_9e/necrons/subfaction_abilities.yaml). The gating rule key
+    (e.g. ``hardwiredForDestruction``) is a YAML-declared ``has_rules``
+    condition, checked via ``check_conditions`` — src/ knows only this
+    generic effect shape, never the faction/unit-specific rule name.
+
+    Checked against both ``load_unit_abilities`` and ``load_subfaction_abilities``
+    since a ``reroll_hit`` ability may live in either file. ``modifier == 1``
+    and ``target == "self"`` distinguish this narrow "re-roll unmodified 1s"
+    reading from the differently-shaped full-reroll ``reroll_hit`` aura (e.g.
+    Phaeron of the Stars: "you can re-roll the hit roll", no ``modifier``,
+    ``target`` an aura label) — that full-reroll shape is not consumed here.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return None
+    candidates = load_unit_abilities(faction_dir) + load_subfaction_abilities(faction_dir)
+    for ability in candidates:
+        effect = ability.effect
+        if effect.type != "reroll_hit" or effect.modifier != 1 or effect.target != "self":
+            continue
+        if check_conditions(ability, unit, unit_state):
+            return ability
+    return None
+
+
+def unit_hit_reroll_ones(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> bool:
+    """True if *unit* re-rolls unmodified hit rolls of 1 (e.g. Hardwired for Destruction).
+
+    → ``_hit_reroll_ones_ability`` for the matching-ability lookup. Consumed by
+    ``combat.resolve_attack_modifiers`` (``hit_reroll_ones`` param) to mark the
+    reroll-eligible slot in the HIT dice block (``reroll_marker_row_html``).
+    """
+    return _hit_reroll_ones_ability(faction, unit, unit_state) is not None
+
+
+def _aura_source_alive(source_unit_id: str, units_state: Mapping[str, Any]) -> bool:
+    """True if *source_unit_id* has a non-destroyed instance in *units_state*.
+
+    Instance keys carry a ``#N`` duplicate suffix for a second+ copy of the same
+    catalog unit in one roster (``gameState._make_unit_state_dict``), so an
+    exact-key match alone would miss "Skorpekh Lord #2" — matched by prefix
+    instead (rules_appendix.txt "Aura Abilities": "A model with an aura ability
+    is always within range of its effect", B-113 Teil B).
+    """
+    for key, state in units_state.items():
+        if (key == source_unit_id or key.startswith(f"{source_unit_id}#")) and not state.get(
+            "destroyed", False
+        ):
+            return True
+    return False
+
+
+def _wound_reroll_ones_aura_ability(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> Ability | None:
+    """The wound-reroll-1 AURA ability affecting *unit* from an allied source, or None.
+
+    Generic INV-4b seam (B-113 Teil B): unlike ``_hit_reroll_ones_ability``
+    (a unit buffs itself, ``target: self``), this is an AURA — one unit (a
+    Lord) carries the persistent ``reroll_wound_1`` effect
+    (``target != "self"``, e.g. Necron Destroyer Cult "United in Destruction":
+    "re-roll a wound roll of 1") and it applies to every OTHER eligible friendly
+    unit in the same roster, gated by the ability's own YAML ``has_keywords``
+    condition (e.g. DESTROYER CULT) checked against *unit* via
+    ``check_conditions`` — src/ never names a keyword or unit id.
+
+    Aura range ("within 6\"") has no spatial model in this app (no battlefield
+    positions are tracked); consistent with ``check_conditions``'s existing
+    no-op ``within_inches`` handling, the aura is treated as active whenever
+    its source unit is alive (``_aura_source_alive``) — matching
+    rules_appendix.txt "Aura Abilities": "A model with an aura ability is
+    always within range of its effect" for the degenerate same-unit case, and
+    left un-enforced for cross-unit range like every other aura target already
+    declared in unit_abilities.yaml (e.g. ``friendly_core_aura_6``).
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return None
+    candidates = [
+        a
+        for a in load_unit_abilities(faction_dir) + load_subfaction_abilities(faction_dir)
+        if a.effect.type == "reroll_wound_1" and a.effect.target != "self"
+    ]
+    if not candidates:
+        return None
+    units_state: Mapping[str, Any] = st.session_state.get(units_key_for(faction), {})
+    for ability in candidates:
+        if ability.unit_id and not _aura_source_alive(ability.unit_id, units_state):
+            continue
+        if check_conditions(ability, unit, unit_state):
+            return ability
+    return None
+
+
+def unit_wound_reroll_ones(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> bool:
+    """True if *unit* re-rolls unmodified wound rolls of 1 via an allied aura
+    (e.g. Necron Destroyer Cult Lord "United in Destruction").
+
+    → ``_wound_reroll_ones_aura_ability`` for the matching-ability lookup.
+    Consumed by ``combat.resolve_attack_modifiers`` (``wound_reroll_ones``
+    param) to mark the reroll-eligible slot in the WOUND dice block
+    (``reroll_marker_row_html``).
+    """
+    return _wound_reroll_ones_aura_ability(faction, unit, unit_state) is not None
 
 
 def get_after_attack_revive_ability(

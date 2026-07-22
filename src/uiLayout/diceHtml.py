@@ -14,6 +14,7 @@ from uiLayout.diceCompose import (
     go_source_chip,
     grid_row_html,
     modifier_die_pair_html,
+    reroll_marker_row_html,
     save_ap_modifier_row_html,
     save_modifier_die_pair_html,
     special_die_html,
@@ -43,11 +44,20 @@ def _render_dice_roll_block(
     base = block["base"]
     stack = block.get("stack", [])
     modified = block.get("modified", base)
+    reroll_slots = block.get("reroll_slots", [])
     st.markdown(f"**{title}** &nbsp; {skill_label} {base}+", unsafe_allow_html=True)
     st.markdown(
         grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
+    if reroll_slots:
+        # Re-roll is checked against the UNMODIFIED die (core_rules.txt
+        # "Re-rolls") — the marker sits under the base row, never the
+        # modifier-shifted "Eff." row below (B-113 Teil A).
+        st.markdown(
+            reroll_marker_row_html(reroll_slots, base_threshold=base),
+            unsafe_allow_html=True,
+        )
     if stack:
         parts = []
         for entry in stack:
@@ -92,6 +102,7 @@ def _render_dice_wound_block(
     strength_buff_labels: list[str] | None = None,
     auto_fail_max: int | None = None,
     auto_fail_label: str | None = None,
+    reroll_slots: list[int] | None = None,
 ) -> None:
     """WOUND block: S vs T header, dice row, modifier pairs in blue.
 
@@ -112,6 +123,11 @@ def _render_dice_wound_block(
     ``auto_fail_label`` — the triggering ability's own badge text (e.g. "Quantum
     Shielding"), read from YAML by abilityEngine.unit_wound_auto_fail_label; no
     hardcoded faction string here (B-103).
+    ``reroll_slots`` — combat.resolve_attack_modifiers's ``wound.reroll_slots``
+    (e.g. Necron Destroyer Cult Lord "United in Destruction" AURA: "re-roll a
+    wound roll of 1" → [1]). Rendered the same way as the HIT block's reroll
+    marker (B-113 Teil A) — under the base row, since the re-roll is checked
+    against the UNMODIFIED die (core_rules.txt "Re-rolls") (B-113 Teil B).
     """
     from gameMechanic.combat import wound_threshold  # noqa: PLC0415
 
@@ -145,6 +161,13 @@ def _render_dice_wound_block(
         grid_row_html("", threshold_header_html(base) + dice_row_html(base)),
         unsafe_allow_html=True,
     )
+    if reroll_slots:
+        # Same placement rule as the HIT block (B-113 Teil A): the marker sits
+        # under the base row, never the modifier-shifted "Eff." row below.
+        st.markdown(
+            reroll_marker_row_html(reroll_slots, base_threshold=base),
+            unsafe_allow_html=True,
+        )
     if auto_fail_max:
         # Attacker's own perspective: their low rolls fail → debuff-red (§5.1).
         # auto_fail_max and auto_fail_label come from the same ability lookup

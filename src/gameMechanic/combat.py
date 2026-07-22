@@ -170,6 +170,8 @@ def resolve_attack_modifiers(
     modifiers: list[dict],  # type: ignore[type-arg]
     use_melee: bool,
     wound_auto_fail_max: int | None = None,
+    hit_reroll_ones: bool = False,
+    wound_reroll_ones: bool = False,
 ) -> dict:  # type: ignore[type-arg]
     """Compute hit/wound thresholds with full modifier stack.
 
@@ -179,11 +181,20 @@ def resolve_attack_modifiers(
     is checked against the UNMODIFIED die, no wound buff can lower the effective
     threshold below one past this value — the wound floor becomes
     ``wound_auto_fail_max + 1`` instead of the normal 2.
+    *hit_reroll_ones* — the attacker's ``abilityEngine.unit_hit_reroll_ones`` (e.g.
+    Necron Destroyer Cult Hardwired for Destruction: "re-roll a hit roll of 1").
+    Re-rolls are checked against the UNMODIFIED die (core_rules.txt "Re-rolls"),
+    so this only ever marks slot 1 — never shifted by hit modifiers (B-113 Teil A).
+    *wound_reroll_ones* — the attacker's ``abilityEngine.unit_wound_reroll_ones``
+    (e.g. Necron Destroyer Cult Lord "United in Destruction" AURA: "re-roll a
+    wound roll of 1"). Same UNMODIFIED-die rule as *hit_reroll_ones* — only ever
+    marks slot 1 in the WOUND block (B-113 Teil B).
     Returns:
         {
-            "hit":   {"base": int, "stack": list[dict], "modified": int},
+            "hit":   {"base": int, "stack": list[dict], "modified": int,
+                      "reroll_slots": list[int]},
             "wound": {"base": int, "stack": list[dict], "modified": int,
-                      "auto_fail_max": int | None},
+                      "auto_fail_max": int | None, "reroll_slots": list[int]},
         }
     Net modifier is capped at ±1 per 9E rules. Threshold minimum is 2+ (or higher
     when *wound_auto_fail_max* floors it).
@@ -217,6 +228,7 @@ def resolve_attack_modifiers(
             # (core_rules.txt "Hit Roll"), so the effective threshold never
             # leaves the [2, 6] range regardless of the net modifier.
             "modified": min(6, max(2, hit_base - hit_net)),
+            "reroll_slots": [1] if hit_reroll_ones else [],
         },
         "wound": {
             "base": wound_base,
@@ -225,6 +237,7 @@ def resolve_attack_modifiers(
             # at wound_auto_fail_max + 1 when the defender auto-fails low rolls.
             "modified": min(6, max(wound_floor, wound_base - wound_net)),
             "auto_fail_max": wound_auto_fail_max,
+            "reroll_slots": [1] if wound_reroll_ones else [],
         },
     }
 

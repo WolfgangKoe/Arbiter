@@ -17,6 +17,7 @@ from uiLayout import diceHtml as dice_html_module  # noqa: E402
 from uiLayout.diceCompose import (  # noqa: E402
     _modifier_color,
     _modifier_columns,
+    _reroll_die_svg,
     always_fail_marker_row_html,
     block_divider_html,
     dice_face_svg,
@@ -753,3 +754,92 @@ def test_render_dice_save_block_invuln_no_bonus_has_no_chip_and_bare_threshold()
     title_calls = [c for c in calls if "Inv 5+" in c]
     assert len(title_calls) == 1
     assert '<div style="display:flex;align-items:center;margin:2px 0;">' not in title_calls[0]
+
+
+# ---------------------------------------------------------------------------
+# _render_dice_roll_block (HIT block) — reroll_slots marker row (B-113 Teil A)
+# ---------------------------------------------------------------------------
+
+
+def test_render_dice_roll_block_shows_reroll_marker_for_hardwired_for_destruction() -> None:
+    """Skorpekh Destroyer end-to-end (Hardwired for Destruction, 'reroll a hit
+    roll of 1'): when the HIT block dict carries reroll_slots=[1] (combat.
+    resolve_attack_modifiers's hit_reroll_ones=True), the rendered HIT block
+    shows the ↺ reroll marker row."""
+    dice_html_module.st.markdown.reset_mock()
+    block = {"base": 3, "stack": [], "modified": 3, "reroll_slots": [1]}
+    dice_html_module._render_dice_roll_block("HIT", "WS", block)
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" in html
+    assert _reroll_die_svg() in html
+
+
+def test_render_dice_roll_block_no_reroll_marker_when_slots_empty() -> None:
+    """Regression: the pre-B-113 default (no reroll_slots key / empty list) —
+    e.g. a Necron Warriors attack without Hardwired for Destruction — renders
+    no reroll marker row at all, byte-identical to before this feature."""
+    dice_html_module.st.markdown.reset_mock()
+    block = {"base": 3, "stack": [], "modified": 3, "reroll_slots": []}
+    dice_html_module._render_dice_roll_block("HIT", "WS", block)
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" not in html
+
+
+def test_render_dice_roll_block_no_reroll_marker_when_key_missing() -> None:
+    """Regression: callers that never set reroll_slots at all (block.get default
+    []) render identically to the empty-list case — no crash, no marker."""
+    dice_html_module.st.markdown.reset_mock()
+    block = {"base": 3, "stack": [], "modified": 3}
+    dice_html_module._render_dice_roll_block("HIT", "WS", block)
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" not in html
+
+
+# ---------------------------------------------------------------------------
+# _render_dice_wound_block — reroll_slots marker row (B-113 Teil B: Destroyer
+# Cult Lord "United in Destruction" AURA, "re-roll a wound roll of 1")
+# ---------------------------------------------------------------------------
+
+
+def test_render_dice_wound_block_shows_reroll_marker_for_united_in_destruction() -> None:
+    """Skorpekh Destroyers within a Lord's aura end-to-end: when the WOUND
+    block dict carries reroll_slots=[1] (combat.resolve_attack_modifiers's
+    wound_reroll_ones=True), the rendered WOUND block shows the ↺ reroll
+    marker row, same building block as the HIT block (B-113 Teil A)."""
+    dice_html_module.st.markdown.reset_mock()
+    dice_html_module._render_dice_wound_block(
+        strength=5,
+        toughness=4,
+        wound_stack=[],
+        reroll_slots=[1],
+    )
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" in html
+    assert _reroll_die_svg() in html
+
+
+def test_render_dice_wound_block_no_reroll_marker_when_slots_empty() -> None:
+    """Regression: no aura source (e.g. no Lord in the roster) → reroll_slots=[]
+    → no reroll marker row, byte-identical to before this feature."""
+    dice_html_module.st.markdown.reset_mock()
+    dice_html_module._render_dice_wound_block(
+        strength=5,
+        toughness=4,
+        wound_stack=[],
+        reroll_slots=[],
+    )
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" not in html
+
+
+def test_render_dice_wound_block_no_reroll_marker_when_param_omitted() -> None:
+    """Regression: every pre-B-113-Teil-B caller that never passes reroll_slots
+    (default None) renders identically — no crash, no marker."""
+    dice_html_module.st.markdown.reset_mock()
+    dice_html_module._render_dice_wound_block(
+        strength=5,
+        toughness=4,
+        wound_stack=[],
+    )
+    html = "".join(str(call.args[0]) for call in dice_html_module.st.markdown.call_args_list)
+    assert "Reroll" not in html

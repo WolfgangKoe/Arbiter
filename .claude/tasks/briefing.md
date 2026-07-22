@@ -25,23 +25,28 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S177, 2026-07-22)
+## Aktueller Stand (nach S178, 2026-07-22)
 
-**S177 committet — reine Governance-/Doku-Session (kein `src/`).** Drei Stakeholder-Punkte + offene S176-Maßnahmen:
-- **Punkt 1 / ADR-0010:** Koordinator-Sitz = **Opus** (Fable nicht verfügbar). ADR-0010 angelegt, löst ADR-0008 Punkt 1 ab (0008 append-only mit Status-Verweis, Rest gültig); 6 Fable-Koordinator-Stellen in `operating_model.md` angeglichen. Planner-Tier/ADR-0009 unberührt.
-- **Punkt 2:** Dauer-Ratchets **B-024 + B-124 aus dem Backlog aufgelöst** → neue Sektion `## Stehende Ratchet-Praktiken` in `operating_model.md` (Leitsatz „Laufende Ratchets sind Regeln, keine Backlog-Items"). Konkrete Rest-Facharbeit (a Warnhinweis kürzen / b Apply-Damage vereinheitlichen) → neues Item **B-128**. Prosa in `design_system.md` (5 Stellen) + `agent_scopes.md` umgebogen; Archiv-Nachzug „in stehende Regel überführt".
-- **Punkt 3:** Neues 10. Feld **„Geltende Prozess-Regeln"** im `backlog_details.md`-Feldschema (Abgrenzung zu „Benötigte Regeln-Scopes" = Spielregeln); Backfill in B-113, B-028c3/c4/c5, B-128; Nachtrag-Ratchet als 3. Punkt der Ratchet-Sektion.
-- **S176-Zusatz:** Planner/Reviewer Tool-Zugriff „Read + Write nur `docs/handoff/`" (`operating_model.md` + `agent_scopes.md`-Klausel — genau in dieser Session erstmals genutzt: der Reviewer schrieb `S177_review.md` selbst); M3a Pfad `src/gameState.py`→`src/gameMechanic/gameState.py` (B-028c4/c5); M3b B-116-Aussage korrigiert (`reroll_marker_row_html` unverdrahtet, 0 Call-Sites → B-113 Erstanwendung); M1 Marker-Liste vervollständigt; M2 Planner-Rangfolge-Klausel (backlog.md-Rangfolge maßgeblich, briefing-Hint nachrangig).
+**S178 committet — B-113 „Reroll-Fähigkeiten verdrahten" (Teil A+B).** Erstanwendung von
+`reroll_marker_row_html`. A: generischer Hit-Reroll-Konsument (`unit_hit_reroll_ones`) + HIT-Marker,
+Skorpekh-Destroyer „Hardwired for Destruction" (`reroll_hit`/self). B: generischer Aura-Wound-Reroll
+(`unit_wound_reroll_ones` + `_aura_source_alive`) + WOUND-Marker, Destroyer-Lord-Aura „United in
+Destruction" (`reroll_wound_1`); Distanz nicht gemessen (konsistent `within_inches`-No-op);
+Roster-Prep Skorpekh Lord in `necrons_test.yaml`. Fraktionsneutral (INV-4b unverändert), Suite
+**2176/99,17 %**, Architektur grün. **UI-Verifikation POSITIV** (`docs/handoff/S178_B113_ui_verifikation.md`).
+Reviewer GO nach DoD-7-Doku-Nachzug. Bereinigt: S177-Alt-Last `S177_review.md` gelöscht (roter Hygiene-Test).
+**Offen S178 → `docs/handoff/S178_retro.md` (NEEDS-DECISION):** 3 UI-Folge-Befunde + Prozessmaßnahmen +
+Backlog-Admin (B-113 archivieren, B-129/130/131 anlegen).
 
-Review S177: **GO** — Vollsuite **2151 passed, Coverage 99,20 %, Architektur grün**; keine toten B-124/B-024-Verweise, keine Widersprüche.
+Frühere Sessions (S60–S177): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
-**Retro-Maßnahmen S177 (zur Sichtung/Entscheid durch Stakeholder, `docs/handoff/S177_retro.md`):** R1 Subagent-Ausfall-Wiederaufnahme, R2 Parallel-Split-Muster, R3 „In Progress/laufend"-Wildwuchs (B-007) prüfen.
+### ▶ Nächster Schritt (S179)
 
-Frühere Sessions (S60–S176): Verlauf in `docs/metrics/session_archive.md`.
-
-### ▶ Nächster Schritt (S178)
-
-1. **B-113 — Reroll-Fähigkeiten verdrahten** (Discovery-Ergebnis S176; DoR jetzt reifer durch neues Prozess-Regel-Feld + M3b-Korrektur): Skorpekh-Destroyer-Hit-Reroll (`reroll_hit`, `subfaction_abilities.yaml:150`) + beide DESTROYER-CULT-Lords (Lokhust + Skorpekh Lord) Wound-Reroll (`reroll_wound_1`, Aura). **Kernbefund:** `reroll_hit`/`reroll_wound_1` engine-seitig unkonsumiert, `reroll_marker_row_html` 0 Call-Sites → Erstanwendung. Split: (a) Skorpekh-Hit + generischer Reroll-Konsument, (b) Lord-Aura. Beide M → je eigener Teil-Brief.
+1. **S178-Abschluss nachziehen** (`docs/handoff/S178_retro.md`, NEEDS-DECISION): B-113 formal
+   archivieren (Detail-Abschnitt → `backlog_archive.md`, Zeile in `backlog.md` löschen);
+   3 UI-Folge-Befunde als **B-129/130/131** aufnehmen (Lord-Hit-Reroll · Reroll-Marker Buff→Grün ·
+   Aura-Reichweiten-Hinweis); Prozess-Entscheide (»start session«-Regel verankern, S177-Hygiene-Miss,
+   UI-Verifikations-Persistenz); je 1 `rules.md`-Katalogzeile für die 2 Reroll-Regeln.
 2. **B-128 — UI-Facharbeit (neu):** (a) Warnhinweis im Subgruppen-Selector kürzen, (b) Apply-Damage-Bereich vereinheitlichen. Scopes: `design_system.md` §1.4/§3.1. Render-Code → manuelle UI-Verifikation.
 3. **B-028c3/c4/c5** (backlog.md Rang folgend) — Regel-Scope („Benötigte Regeln-Scopes") vor Umsetzung befüllen; „Geltende Prozess-Regeln" bereits backgefüllt.
 4. **B-005 Direktiv-Lock-Rest** — nachrangig, DoR-Regel-Scope noch leer.

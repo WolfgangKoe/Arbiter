@@ -224,10 +224,10 @@ Alle D1–D5 in Plan 022 erledigt (2026-06-21). Tabelle als Historie.
 | D4 | `color_hint`-Feld nicht vorhanden | Plan 022 Step 3 | ✅ `_modifier_color()` |
 | D5 | `dakka`/`klaw`/`tesla`-Literals (INV-4b) | Plan 022 Step 5 | ✅ datengetrieben via `effect.type` |
 
-**Verdrahtungs-Hinweis (D3):** `reroll_marker_row_html` / `always_fail_marker_row_html`
-sind getestete Anzeige-Bausteine, aber noch **nicht** in einen Roll-Block verdrahtet —
-sie werden konsumiert, sobald ein Produzent Reroll-/Auto-fail-Slots liefert
-(z. B. Quantum Shield, `reroll_hit_1`).
+**Verdrahtungs-Hinweis (D3):** `reroll_marker_row_html` ist seit B-113 (S178) in HIT- und
+WOUND-Block verdrahtet (Skorpekh-Destroyer Hit-Reroll-1 + Destroyer-Lord Wound-Reroll-1-Aura);
+`always_fail_marker_row_html` ist über Quantum Shielding verdrahtet. Reroll-/Auto-fail-Slots
+werden vom jeweiligen Produzenten (`combat.resolve_attack_modifiers`) geliefert.
 
 | D6 | Pfeil-Magnitude `←N`/`+N→` fehlte (Befund A) | S78 | ✅ GEFIXT (`_arrow_span` + Boundary-Gap-Label) |
 | D7 | HIT/WOUND-Debuff-Geometrie spreizt nicht mit Magnitude (Befund B); Slot-1-Invariante bei HIT-Buff verletzt (Befund C) | — | ⏳ OFFEN → eigener Plan (`modifier_die_pair_html`-Rework, getestet → Regressionsfläche) |

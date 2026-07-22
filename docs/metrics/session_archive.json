@@ -6255,11 +6255,11 @@
   "1c15771b-04db-467c-b151-7f1f30a02e86": {
     "started_at": "2026-07-21T17:23:05.559Z",
     "task": "Starte die nächste Session. Die Planung soll ein Opus übernehmen -> In den Regeln des Operating_Models festhalten. -> P…",
-    "peak_context": 139130,
-    "subagent_share": 81.43910198538649,
+    "peak_context": 151916,
+    "subagent_share": 80.40381995855648,
     "by_tier": {
-      "Sonnet": 21963094,
-      "Opus": 4472225
+      "Sonnet": 23162751,
+      "Opus": 5283503
     },
     "subagents": [
       {
@@ -6308,7 +6308,14 @@
         "agent_type": "general-purpose",
         "description": "T5 Opus-Review DoD + Vollsuite",
         "tier": "Opus",
-        "peak_context": 27861,
+        "peak_context": 48355,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Abschluss S177 briefing+retro+commit",
+        "tier": "Sonnet",
+        "peak_context": 53088,
         "started_at": "2026-07-21T17:23:05.559Z"
       },
       {
@@ -6317,6 +6324,39 @@
         "tier": "Sonnet",
         "peak_context": 68087,
         "started_at": "2026-07-21T17:23:05.559Z"
+      }
+    ]
+  },
+  "dbc68e6a-b497-435b-b429-2b457047a696": {
+    "started_at": "2026-07-22T17:15:47.613Z",
+    "task": "start session. Was steht als nächstes im Backlog. Bereite den konkreten Plan für diese Session vor. Achte bitte darauf,…",
+    "peak_context": 160324,
+    "subagent_share": 74.82076011520678,
+    "by_tier": {
+      "Opus": 1719065,
+      "Sonnet": 31482773
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "S178 Abschluss-Review B-113 A+B",
+        "tier": "Opus",
+        "peak_context": 64571,
+        "started_at": "2026-07-22T17:15:47.613Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-113 Brief A: Reroll-Konsument + Skorpekh Hit",
+        "tier": "Sonnet",
+        "peak_context": 147199,
+        "started_at": "2026-07-22T17:15:47.613Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-113 Brief B: Lord Wound-Reroll-Aura + Roster-Prep",
+        "tier": "Sonnet",
+        "peak_context": 137512,
+        "started_at": "2026-07-22T17:15:47.613Z"
       }
     ]
   }

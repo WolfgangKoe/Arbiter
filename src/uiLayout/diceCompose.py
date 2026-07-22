@@ -453,9 +453,10 @@ def reroll_marker_row_html(slots: list[int], base_threshold: int = 0) -> str:
 
     Renders the same die-shaped SVG box as dice_face_svg (design_system.md
     §4.3): reroll is its own SVG-Würfelfläche variant, fixed reroll-orange —
-    not the auto-fail miss face (glyph differs: ↺ vs ×). Display building
-    block — not yet wired into a roll block; a producer that feeds reroll data
-    (e.g. reroll_hit_1) into the dice block consumes it later (B-113).
+    not the auto-fail miss face (glyph differs: ↺ vs ×). Wired into the HIT
+    block (diceHtml._render_dice_roll_block) via combat.resolve_attack_modifiers's
+    ``hit.reroll_slots`` (B-113 Teil A: e.g. Necron Hardwired for Destruction,
+    "re-roll a hit roll of 1" → slots=[1]).
     """
     badge = _badge_chip("Reroll", _REROLL_COLOR)
     marker = _reroll_die_svg()

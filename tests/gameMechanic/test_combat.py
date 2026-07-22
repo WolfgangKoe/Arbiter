@@ -719,3 +719,128 @@ class TestCombiHitPenaltyWiring:
         )
 
         assert result["hit"]["modified"] == 4  # unchanged — no combi penalty applied
+
+
+# ---------------------------------------------------------------------------
+# B-113 Teil A — hit_reroll_ones: Necron Destroyer Cult "Hardwired for
+# Destruction" ("re-roll a hit roll of 1") marks slot 1 in the HIT dice block,
+# independent of any hit modifier stack (re-rolls check the UNMODIFIED die,
+# core_rules.txt "Re-rolls").
+# ---------------------------------------------------------------------------
+
+
+class TestHitRerollOnes:
+    def test_hit_reroll_ones_false_marks_no_slots(self) -> None:
+        """Regression: the pre-B-113 default (no reroll consumer at all) stays
+        byte-identical — reroll_slots is always present but empty."""
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[],
+            use_melee=True,
+        )
+        assert result["hit"]["reroll_slots"] == []
+
+    def test_hit_reroll_ones_true_marks_slot_one(self) -> None:
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[],
+            use_melee=True,
+            hit_reroll_ones=True,
+        )
+        assert result["hit"]["reroll_slots"] == [1]
+
+    def test_hit_reroll_ones_slot_unaffected_by_hit_modifier_stack(self) -> None:
+        # A −1 Hit modifier shifts the effective threshold (3+ -> 4+), but the
+        # re-roll is checked against the UNMODIFIED die — slot 1 stays slot 1.
+        debuff = {"label": "Dense Cover", "value": -1, "roll_type": "hit", "source": "terrain"}
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[debuff],
+            use_melee=True,
+            hit_reroll_ones=True,
+        )
+        assert result["hit"]["modified"] == 4
+        assert result["hit"]["reroll_slots"] == [1]
+
+
+# ---------------------------------------------------------------------------
+# B-113 Teil B — wound_reroll_ones: Necron Destroyer Cult Lord "United in
+# Destruction" AURA ("re-roll a wound roll of 1") marks slot 1 in the WOUND
+# dice block, independent of any wound modifier stack (re-rolls check the
+# UNMODIFIED die, core_rules.txt "Re-rolls").
+# ---------------------------------------------------------------------------
+
+
+class TestWoundRerollOnes:
+    def test_wound_reroll_ones_false_marks_no_slots(self) -> None:
+        """Regression: the pre-B-113-Teil-B default (no aura consumer at all)
+        stays byte-identical — wound.reroll_slots is always present but empty."""
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[],
+            use_melee=True,
+        )
+        assert result["wound"]["reroll_slots"] == []
+
+    def test_wound_reroll_ones_true_marks_slot_one(self) -> None:
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[],
+            use_melee=True,
+            wound_reroll_ones=True,
+        )
+        assert result["wound"]["reroll_slots"] == [1]
+
+    def test_wound_reroll_ones_slot_unaffected_by_wound_modifier_stack(self) -> None:
+        # A +1 Wound modifier shifts the effective threshold, but the re-roll
+        # is checked against the UNMODIFIED die — slot 1 stays slot 1.
+        buff = {"label": "Test Buff", "value": 1, "roll_type": "wound", "source": "ability"}
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=4,
+            toughness=4,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[buff],
+            use_melee=True,
+            wound_reroll_ones=True,
+        )
+        assert result["wound"]["modified"] == 3  # 4+ improved to 3+ by the +1
+        assert result["wound"]["reroll_slots"] == [1]
+
+    def test_wound_reroll_ones_independent_of_hit_reroll_ones(self) -> None:
+        """The two reroll flags are independent — HIT reroll on, WOUND reroll
+        off (and vice versa) must not leak into each other's block."""
+        result = resolve_attack_modifiers(
+            skill=3,
+            strength=5,
+            toughness=5,
+            weapon_type="Melee",
+            advanced=False,
+            modifiers=[],
+            use_melee=True,
+            hit_reroll_ones=True,
+            wound_reroll_ones=False,
+        )
+        assert result["hit"]["reroll_slots"] == [1]
+        assert result["wound"]["reroll_slots"] == []

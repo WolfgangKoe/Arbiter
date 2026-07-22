@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-22 19:08 CEST
+Stand: 2026-07-22 20:28 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,15 +9,21 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-21 19:23 1c15  ███████████░ 139k ⚠️   █████░  81%    ██··········
+07-22 19:15 dbc6  ████████████ 160k ⛔    ████░░  75%    █···········
+         SA_1·  █████░░░░░░░  65k ✅    S178 Abschluss-Review B-113 A+B
+         SA_2·  ████████████ 147k ⚠️   B-113 Brief A: Reroll-Konsument + …
+         SA_3·  ███████████░ 138k ⚠️   B-113 Brief B: Lord Wound-Reroll-A…
+----------------- ---------------------- -------------- ------------
+07-21 19:23 1c15  ████████████ 152k ⛔    █████░  80%    ██··········
          SA_1·  ████████░░░░ 104k ✅    T2a Ratchet-Regel-Sektion + Prosa
          SA_2·  ███░░░░░░░░░  40k ✅    T4-Rest C/D/E
          SA_3·  ███████████░ 138k ⚠️   Opus-Planer Governance-Session
          SA_4·  ███████░░░░░  90k ✅    T2b Backlog-Chirurgie + B-128
          SA_5·  █████░░░░░░░  63k ✅    T4 S176-Zusatz Doku-Korrekturen
          SA_6·  ████████████ 276k ⛔    T1 Koordinator-Tier Opus + ADR-0010
-         SA_7·  ██░░░░░░░░░░  28k ✅    T5 Opus-Review DoD + Vollsuite
-         SA_8·  █████░░░░░░░  68k ✅    T3 Prozess-Regel-Feld + Backfill
+         SA_7·  ████░░░░░░░░  48k ✅    T5 Opus-Review DoD + Vollsuite
+         SA_8·  ████░░░░░░░░  53k ✅    Abschluss S177 briefing+retro+comm…
+         SA_9·  █████░░░░░░░  68k ✅    T3 Prozess-Regel-Feld + Backfill
 ----------------- ---------------------- -------------- ------------
 07-21 17:57 4c40  ████████████ 158k ⛔    ███░░░  51%    █···········
          SA_1·  ███████████░ 132k ⚠️   S176 Planning-Entwurf erstellen
@@ -1003,3 +1009,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S175 (2026-07-20)** B-028c2 reroll_rp Class-B hint (UI-verified), B-121/B-110 debt fixes, Careen! B-122 verified+archived, F1 §7.1 alignment, retro M1→B-127/M2→agent_scopes
 - **S176 (2026-07-21)** B-127 RP-Hinweise blauer st.info-Block (UI-verified: Their Number is Legion + Undying Legions Direktive 2 + Koexistenz); B-113 Scope-Discovery (Umsetzung S177: beide Lords + Engine-Lücke reroll_hit/reroll_wound_1 unkonsumiert); Retro M1-M4 + 2 Prozess-Doku-Korrekturen (Subagent schreibt Handoff, Orchestrator=Opus) ins Briefing für S177-Planner
 - **S177 (2026-07-22)** Governance session: coordinator tier Opus (ADR-0010), standing ratchet rules (B-024/B-124 dissolved -> B-128), process-rule field, S176 doc fixes
+- **S178 (2026-07-22)** B-113 Reroll-Fähigkeiten verdrahtet (Teil A+B): generischer Hit-/Wound-Reroll-Konsument, reroll_marker_row_html Erstanwendung in HIT+WOUND, Skorpekh-Destroyer + Destroyer-Lord-Aura; UI-Verifikation positiv
