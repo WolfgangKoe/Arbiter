@@ -5,7 +5,9 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 > **Status — verbindlich (ADR-0007, seit S102).** Das Modell nutzt einen **dünnen, persistenten
 > Koordinator**: Detail-**Planung** und finales **Review** wandern in Subagenten; der Koordinator
 > routet, hält die Gates und eskaliert, ohne Quelldateien oder volle Ergebnisse zu lesen.
-> Koordinator-Tier: **Fable präferiert, Opus als Fallback** ([ADR-0008](decisions/0008-fable-als-bevorzugter-koordinator.md), seit S117).
+> Koordinator-Tier: **Opus (Fable derzeit nicht verfügbar, ADR-0010)** — Grundsatz laut
+> [ADR-0008](decisions/0008-fable-als-bevorzugter-koordinator.md) (Fable präferiert, sofern
+> verfügbar) bleibt gültig, siehe [ADR-0010](decisions/0010-koordinator-tier-opus-fable-nicht-verfuegbar.md).
 > Subagent↔Stakeholder läuft asynchron über eine **Mailbox-Datei** ([docs/handoff/README.md](../handoff/README.md));
 > Scoping über den **Index** ([docs/reference/agent_scopes.md](../reference/agent_scopes.md)). Die folgenden
 > Rollen/Events sind entsprechend markiert
@@ -31,6 +33,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 | Event 7 · Refinement | [§ev7](#ev7) | Fotos → Inbox → Backlog |
 | Entscheidungsmodi | [§modes](#modes) | Gate/Konsent/Konsens/Veto |
 | Eskalation & Kommunikationswege | [§escalate](#escalate) | Kanal-Regel, Mailbox |
+| Stehende Ratchet-Praktiken | [§ratchets](#ratchets) | Dauer-Ratchets als Regel, nicht Backlog |
 | Visualisierung | [§viz](#viz) | Diagramme A + B |
 
 ---
@@ -50,10 +53,10 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 
 | Rolle | Tier | Delegierbar? | Kernaufgaben |
 |---|---|---|---|
-| **Koordinator / "Arbiter"** | **Fable** (präferiert, sofern verfügbar) · Opus (Fallback), Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. **MUST (S148, Stakeholder-Entscheid):** Der Koordinator überwacht den Kontextstand aktiv und beendet die Session rechtzeitig (Wind-down-Schwellen, Event 6) — Verschiebungen meldet er mit Begründung. |
+| **Koordinator / "Arbiter"** | **Opus (Fable derzeit nicht verfügbar, ADR-0010)**, Hauptsession — **dünn, persistent** | NICHT delegierbar | Routet Subagenten, hält die menschzugewandten Gates (Plan-Freigabe, Maßnahmen-Entscheid), eskaliert. Liest **bewusst keine** Quelldateien und **keine vollen** Subagent-Ergebnisse — nur Pfade + Marker. Detail-Planung → Planner-Subagent, finales Review → Reviewer-Subagent. Wählt Entscheidungsmodus, pflegt Artefakte über Subagenten. Hier lebt der Sinn. **MUST (ADR-0007):** Detail-Planung, Umsetzung UND finales Review werden IMMER an Subagenten delegiert — keine Direkt-Ausführung, kein Selbst-Review, kein Selbst-Planen. Der Koordinator routet, hält Gates, liest nur Pfade/Marker. **MUST (S148, Stakeholder-Entscheid):** Der Koordinator überwacht den Kontextstand aktiv und beendet die Session rechtzeitig (Wind-down-Schwellen, Event 6) — Verschiebungen meldet er mit Begründung. |
 | **Regel-Recherche / Konformität** | Haiku (reiner Lookup), Sonnet (Synthese) | Ja — durch Orchestrator | Lokale Wahapedia-Texte lesen, Rule-Conformance-Catalog befüllen, Regelabweichungen melden. Ergebnis geht zurück an Orchestrator. |
 | **Executor / Implementer** | Sonnet | Ja — mit FIXIERTEM Plan | Mechanische Implementierung im isolierten Kontext, nach vollständig freigegebenem Plan. Kein eigenes Design. Eskalation bei Scope-Überraschungen. |
-| **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich; **Fable nur bei Prämissen-/Architektur-Urteil** mit expliziter Begründung (ADR-0008) | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
+| **Reviewer** (ADR-0007) | **Opus-Subagent** (Urteil); Sonnet-Befund-Vorlauf möglich; **Fable nur bei Prämissen-/Architektur-Urteil** mit expliziter Begründung (ADR-0008; Fable derzeit nicht verfügbar, ADR-0010) | Ja — als Subagent | Finales Review im eigenen Fenster; Urteil/Befund als Datei (`docs/handoff/`), Eskalation per Mailbox. Der Koordinator reicht das Urteil **wortgleich** durch (nennt Herkunft), urteilt nicht selbst. |
 | **Planner** (ADR-0007) | Opus-Subagent (Prioritäten-Urteil), Subagent-Typ `general-purpose` (S140 — braucht Schreibrecht für den Entwurf) | Ja — als Subagent | Liest `briefing.md` + aktive Zieldatei + `backlog.md` + Index, legt den Planning-Entwurf als Datei ab. Der Koordinator führt damit das Plan-Freigabe-Gate mit dem Stakeholder. |
 | **Gate-Wächter** | kein Agent — Automatik | nicht anwendbar | `pytest`, Architektur-Gate, Coverage ≥ 99 %, Debt-Scoreboard. Entscheiden nicht — sie beschränken. Brechen sie, ist das ein Signal, kein Fehler. |
 
@@ -67,7 +70,7 @@ Dies ist die Verfassung der Zusammenarbeit — die entscheidbaren Prämissen 2 (
 | **Haiku** | Reine Lookups, Klassifikation nach festem Schema, deterministische Extraktion |
 | **Sonnet** | Synthese aus mehreren Quellen, Implementierung nach fixem Plan, Code-Review-Befund erstellen |
 | **Opus** | Offene Zweckprogramme, Architekturentscheidungen, Scope-Klärung mit Stakeholder, Urteil über Subagenten-Befunde |
-| **Fable** | Koordinator-Sitz (persistentes Urteil, nicht delegierbar), Prämissen-/Verfassungsänderungen, Konsens-Entscheidungen mit dem Stakeholder — **nicht** für delegierbare Subagent-Arbeit |
+| **Fable** *(derzeit nicht verfügbar, ADR-0010)* | Koordinator-Sitz (persistentes Urteil, nicht delegierbar), Prämissen-/Verfassungsänderungen, Konsens-Entscheidungen mit dem Stakeholder — **nicht** für delegierbare Subagent-Arbeit. Solange nicht verfügbar, übernimmt Opus diese Rolle (ADR-0010). |
 
 > **MUST (O2, S103):** Reine Lookups / format-fixe Extraktion / ja-nein-gegen-Text laufen als
 > **Default mit `model: haiku`**. Eine Abweichung **nach oben** (Sonnet/Opus) braucht eine
@@ -101,8 +104,8 @@ expliziter Begründung im Auftrag** (O2-MUST, s. o.), sonst gilt die Untergrenze
 | Spezial-Subagent | Tier | Read/Write | Dient Event | Typische Aufgabe |
 |---|---|---|---|---|
 | **Recherche / Regel-Lookup** | Haiku (Lookup) · Sonnet (Synthese) | **Read** | Planning · Sprint | Wahapedia-Texte, Codebase-Mapping, Web-Fetch (z. B. Slides), Rule-Conformance-Catalog befüllen |
-| **Reviewer / Auditor** | **Opus** (Urteil) | **Read** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
-| **Planner** | **Opus** (Prioritäten-Urteil) | **Read** | Planning | `briefing.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
+| **Reviewer / Auditor** | **Opus** (Urteil) | **Read + Write nur `docs/handoff/`** | DoD · Review | Finales Review im eigenen Fenster; `/code-review`, `/improve`, „ist X bereits implementiert?"-Verifikation mit `datei:zeile`-Beleg. Urteil/Befund als Datei, Eskalation per Mailbox |
+| **Planner** | **Opus** (Prioritäten-Urteil) | **Read + Write nur `docs/handoff/`** | Planning | `briefing.md` + Ziel + `backlog.md` + Index lesen, Planning-Entwurf als Datei ablegen; Koordinator gated damit |
 | **Kontextkuratierung / Beobachter** | Haiku · Sonnet | **Read** | laufend · Review | Kontext-/Wissens-Lücken melden, Token-Sinks aufspüren, Regel-Index-Pflege vorschlagen |
 | **Refinement-Extraktor** | Sonnet | Read + Write (`docs/inbox/`) | Refinement | Fotos aus `Fotos/` lesen, Idee als strukturierten Text in die Inbox extrahieren |
 | **Artefaktpflege** | Sonnet | Read + begrenzt Write | Abschluss | Doku/Backlog/Metrics konsistent halten, Drift melden (Schreibzugriff freigabepflichtig) |
@@ -137,6 +140,31 @@ Unabhängig vom Spezial-Typ gelten dieselben Leitplanken (Theorie-Stütze:
 7. **Scope-Pflicht:** Jeder Koordinator-Brief übernimmt die Pflicht-Lesen-Spalte aus
    `docs/reference/agent_scopes.md` als `erlaubte Quellen` — der Subagent liest ausschließlich
    diese, kein freies Repo-Wandern.
+
+---
+
+## Stehende Ratchet-Praktiken {#ratchets}
+
+**Laufende Ratchets sind Regeln, keine Backlog-Items.** Ein Dauer-Ratchet ohne fixen Umfang
+gehört als stehende Praxis hierher, nicht als „In Progress/laufend"-Zeile an die Backlog-Spitze
+(Stakeholder-Entscheid S177).
+
+Aktuell geltende Ratchets, je mit Verweis auf die kanonische Heimat (keine Substanz-Duplikation):
+
+1. **Kommentar-Hygiene** — Erklär-Kommentare bei jeder Modul-Berührung in die zuständige Spec
+   verschieben, kein Big-Bang-Durchgang → kanonisch [CLAUDE.md](../../CLAUDE.md) §Clean Code.
+   (vormals Backlog B-024)
+2. **Design-System-Registrierung** — bei jeder Berührung von `src/uiLayout/` oder Render-Teilen
+   der `*Phase.py` prüfen, ob die berührte Bauform in `design_system.md` §1 registriert ist;
+   fehlende im selben Change knapp nachtragen → kanonisch
+   [agent_scopes.md](../reference/agent_scopes.md)-Selbstprüf-Checkliste +
+   [`design_system.md`](../spec/design_system.md) §1.4/§3.1. (vormals Backlog B-124)
+3. **Prozess-Regel-Feld-Nachtrag** — bei jeder Berührung eines Backlog-Items das Feld
+   „Geltende Prozess-Regeln" nachtragen, falls leer (kein Big-Bang über alle bestehenden Items)
+   → kanonische Heimat: [backlog_details.md](../goals/backlog_details.md) Feldschema
+   (Stakeholder-Entscheid S177 D4/D5).
+
+Liste ist erweiterbar — weitere stehende Ratchets werden hier ergänzt, sobald sie beschlossen sind.
 
 ---
 
@@ -262,7 +290,7 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
    und schneidet Tasks so klein, dass *eine* Aufgabe sicher unter dem Korridor bleibt.
    Mechanische, eindeutige Fleißarbeit (viel Lesen, Entwürfe nach festgelegtem Format) geht
    an einen Subagenten mit `model: sonnet` im isolierten Kontext (hält das Hauptfenster
-   schlank) — Opus/Fable reviewt + finalisiert, Design/Mehrdeutiges bleibt in der
+   schlank) — Opus (Fable derzeit nicht verfügbar, ADR-0010) reviewt + finalisiert, Design/Mehrdeutiges bleibt in der
    Hauptsession; jeder Auftrag trägt eine Selbstprüf-Checkliste (Details Event 3).
    **Skill-/Claude-Inhalte über die API nie direkt im Hauptfenster laden (PFLICHT)** —
    immer einen Subagenten den Fetch machen lassen, der nur das Ergebnis zurückgibt;
@@ -313,7 +341,7 @@ Jeder Agent — auch Subagent — **muss hocheskalieren** bei:
 ```mermaid
 graph TD
     S[Stakeholder<br/>Wolfgang]
-    A[Orchestrator<br/>Arbiter · Fable/Opus]
+    A[Orchestrator<br/>Arbiter · Opus]
     PL[Planner<br/>Opus-Subagent]
     RR[Regel-Recherche<br/>Haiku / Sonnet]
     EX[Executor<br/>Sonnet]
@@ -340,7 +368,7 @@ graph TD
 Stakeholder ←──────────────────────────────────────────┐
     │  Plan-Freigabe / Eskalation                       │
     ▼                                                   │
-Orchestrator (Arbiter · Fable/Opus) ── eskaliert ──────┘
+Orchestrator (Arbiter · Opus) ── eskaliert ──────┘
     │      │        │           │
     ▼      ▼        ▼           ▼
 Planner Executor Regel-      Reviewer

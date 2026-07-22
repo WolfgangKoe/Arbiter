@@ -1090,3 +1090,22 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   (gelöscht nach Abschluss). Herkunft: S175-Retro-Maßnahme M1 (Stakeholder-Wunsch aus der
   B-028c2-UI-Verifikation, `S175_B028c2_verifikation.md` Z.45).
 
+## Aus der ID-indizierten Liste (migriert S177)
+
+- ✅ **B-024 / B-124 — Dauer-Ratchets in stehende Regel überführt (S177):**
+  Beide Backlog-Zeilen waren Prozess-Praktiken ohne festen Umfang (Status dauerhaft „In
+  Progress", Effort „—, laufend") statt konkreter Umsetzungsaufgaben: B-024 (B10
+  Kommentar-Hygiene — Kommentare bei jeder Modul-Berührung in die zuständige Spec verschieben,
+  Konvention in `CLAUDE.md` §Clean Code seit S135 verankert) und B-124 (Design-System-Ratchet —
+  bei jeder Berührung von `src/uiLayout/` oder Render-Teilen der `*Phase.py` prüfen, ob die
+  Bauform in `design_system.md` §1 registriert ist; Selbstprüf-Checkliste in
+  `agent_scopes.md` seit S167 verankert). Beide Backlog-Items aufgelöst — die Dauer-Praxis
+  selbst ist jetzt stehende Regel in `docs/governance/operating_model.md` §Stehende
+  Ratchet-Praktiken (kein Backlog-Item mehr nötig, da kein abschließbarer Umsetzungsumfang).
+  Offener Rest aus B-124 (Stakeholder-Kritik T3-V S168: Warnhinweis-Text im
+  Subgruppen-Selector kürzen + Apply-Damage-Bereich vereinheitlichen) → neues Item **B-128**
+  (konkrete Facharbeit, fixer Scope). Belege: `docs/governance/operating_model.md` §Stehende
+  Ratchet-Praktiken; `docs/goals/backlog_details.md` B-128 (Kritik-Zitate archiviert). Herkunft:
+  B-024 aus §2 Alt-`backlog.md` Z.243–249 (S131); B-124 aus S167-Planning Punkt 2iii
+  (Stakeholder-Freigabe S167, Kritik-Ergänzung T3-V S168); Auflösung S177-Governance-Session.
+

@@ -1,7 +1,9 @@
 # 0008 — Fable als bevorzugter Koordinator
 
 **Datum:** 2026-07-02
-**Status:** angenommen
+**Status:** angenommen — **Teilweise abgelöst durch [ADR-0010](0010-koordinator-tier-opus-fable-nicht-verfuegbar.md)
+(Koordinator-Tier, Fable derzeit nicht verfügbar).** Der Rest dieser ADR (Reviewer-,
+Planner-, Executor-Tiering, Konsens-Punkt 2) bleibt gültig.
 
 ## Kontext
 

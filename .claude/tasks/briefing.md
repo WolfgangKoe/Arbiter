@@ -25,63 +25,26 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S176, 2026-07-21)
+## Aktueller Stand (nach S177, 2026-07-22)
 
-**S176 committet:** **B-127 umgesetzt** — die beiden RP-Reroll-Hinweise im RP-Block
-(`_render_rp_block`, `src/uiLayout/_common.py` ~Z.2614-2617) rendern jetzt als blauer
-`st.info`-Kasten (§3-Hinweis-Konvention) statt schwacher `st.caption`; Wortlaut unverändert, reine
-Class-B-Anzeige-Migration. 3 Tests angepasst (`test_common.py`, Helper
-`_render_rp_block_captions`→`_render_rp_block_info_texts`, Monkeypatch `st.caption`→`st.info`).
-**UI-Verifikation positiv** (Stakeholder): beide Hinweise — „Their Number is Legion" + „Undying
-Legions Direktive 2" (`rp_reroll`) — als blauer Kasten inkl. Koexistenz. B-127 nach
-`backlog_archive.md` verschoben. **B-113 Scope-Discovery** (read-only) durchgeführt, Umsetzung auf
-**S177 verschoben** (Details s. „Nächster Schritt"). Review S176: **GO** (nach Handoff-Aufräumung);
-Gates **2151 passed, Coverage 99,20 %, Architektur 8 passed**.
+**S177 committet — reine Governance-/Doku-Session (kein `src/`).** Drei Stakeholder-Punkte + offene S176-Maßnahmen:
+- **Punkt 1 / ADR-0010:** Koordinator-Sitz = **Opus** (Fable nicht verfügbar). ADR-0010 angelegt, löst ADR-0008 Punkt 1 ab (0008 append-only mit Status-Verweis, Rest gültig); 6 Fable-Koordinator-Stellen in `operating_model.md` angeglichen. Planner-Tier/ADR-0009 unberührt.
+- **Punkt 2:** Dauer-Ratchets **B-024 + B-124 aus dem Backlog aufgelöst** → neue Sektion `## Stehende Ratchet-Praktiken` in `operating_model.md` (Leitsatz „Laufende Ratchets sind Regeln, keine Backlog-Items"). Konkrete Rest-Facharbeit (a Warnhinweis kürzen / b Apply-Damage vereinheitlichen) → neues Item **B-128**. Prosa in `design_system.md` (5 Stellen) + `agent_scopes.md` umgebogen; Archiv-Nachzug „in stehende Regel überführt".
+- **Punkt 3:** Neues 10. Feld **„Geltende Prozess-Regeln"** im `backlog_details.md`-Feldschema (Abgrenzung zu „Benötigte Regeln-Scopes" = Spielregeln); Backfill in B-113, B-028c3/c4/c5, B-128; Nachtrag-Ratchet als 3. Punkt der Ratchet-Sektion.
+- **S176-Zusatz:** Planner/Reviewer Tool-Zugriff „Read + Write nur `docs/handoff/`" (`operating_model.md` + `agent_scopes.md`-Klausel — genau in dieser Session erstmals genutzt: der Reviewer schrieb `S177_review.md` selbst); M3a Pfad `src/gameState.py`→`src/gameMechanic/gameState.py` (B-028c4/c5); M3b B-116-Aussage korrigiert (`reroll_marker_row_html` unverdrahtet, 0 Call-Sites → B-113 Erstanwendung); M1 Marker-Liste vervollständigt; M2 Planner-Rangfolge-Klausel (backlog.md-Rangfolge maßgeblich, briefing-Hint nachrangig).
 
-**Retro-Maßnahmen S176 (alle vier vom Stakeholder übernommen) — Umsetzung durch S177-Planner:**
-- **M1:** Koordinator setzt in Handoffs nur **gültige** Status-Marker
-  (NEEDS-APPROVAL/NEEDS-DECISION/ANSWERED/DONE/STANDING/AWAITING-VERIFICATION) — kein erfundenes
-  „RESOLVED" o. ä. (S176 selbst verursacht).
-- **M2:** Planner liest zuerst die **tatsächliche `backlog.md`-Rangfolge**, das Briefing-
-  „Nächster Schritt"-Hint ist nachrangig (S176: Briefing nannte B-005, echte Priorität war
-  B-124/B-028c/B-113).
-- **M3 (Doku-Drift, für S177-Planner):** (a) `src/gameState.py` → `src/gameMechanic/gameState.py`
-  in den B-028c4/c5-Detail-Einträgen korrigieren; (b) Annahme „reroll bereits im WOUND-Block
-  verdrahtet" (B-113/B-116-Texte) korrigieren — die B-113-Discovery hat sie **widerlegt**
-  (`reroll_hit`/`reroll_wound_1` engine-seitig komplett unkonsumiert, `reroll_marker_row_html`
-  0 Call-Sites → Erstanwendung, nicht Analogiefall).
-- **M4:** „Discovery vor Schätzung" bewährt (B-113 falsche Scope-Annahme gekippt) — Muster
-  beibehalten, keine Doku-Änderung nötig.
+Review S177: **GO** — Vollsuite **2151 passed, Coverage 99,20 %, Architektur grün**; keine toten B-124/B-024-Verweise, keine Widersprüche.
 
-**Zwei Prozess-Doku-Korrekturen vom Stakeholder (S177-Planner setzt sie in die Prozess-Docs um):**
-- (a) **Subagenten schreiben ihre Handoff-Artefakte selbst** (nicht der Koordinator) — S176 mussten
-  Planner/Reviewer/Discovery ihre Ausgaben zurückgeben, weil sie keinen Write-Zugriff auf
-  `docs/handoff/` hatten; `agent_scopes.md` (Scopes/Tool-Zugriff je Rolle) anpassen, sodass
-  Planner/Reviewer nach `docs/handoff/` schreiben dürfen.
-- (b) **Orchestrator-/Koordinator-Tier = Opus** (Fable steht nicht zur Verfügung) — in
-  `docs/governance/operating_model.md` (Rollen & Model-Tier) prüfen/korrigieren, wo Fable als
-  Orchestrator-Tier steht.
+**Retro-Maßnahmen S177 (zur Sichtung/Entscheid durch Stakeholder, `docs/handoff/S177_retro.md`):** R1 Subagent-Ausfall-Wiederaufnahme, R2 Parallel-Split-Muster, R3 „In Progress/laufend"-Wildwuchs (B-007) prüfen.
 
-Frühere Sessions (S60–S175): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+Frühere Sessions (S60–S176): Verlauf in `docs/metrics/session_archive.md`.
 
-### ▶ Nächster Schritt (S177)
+### ▶ Nächster Schritt (S178)
 
-0. **Retro-Maßnahmen S176 umsetzen** (s. o.): M1–M3 + die zwei Prozess-Doku-Korrekturen (a)/(b)
-   in `agent_scopes.md`/`operating_model.md`/`backlog_details.md` einarbeiten.
-1. **B-113 — Reroll-Fähigkeiten verdrahten** (Discovery-Ergebnis, war `S176_B113_discovery.md`):
-   Skorpekh-Destroyer-**Hit-Reroll** (`reroll_hit`, YAML liegt in `subfaction_abilities.yaml:150`,
-   anderer Ladepfad als Unit-Abilities → offene Sub-Recherche) und **beide** DESTROYER-CULT-Lords
-   (**Lokhust Lord** *und* **Skorpekh Lord** — Stakeholder-Entscheid, „Destroyer Lord" = beide;
-   Profil + `united_in_destruction`-Ability existieren bereits in `units.yaml`/`unit_abilities.yaml`,
-   fehlen nur im Roster) mit **Wound-Reroll** (`reroll_wound_1`, Aura, Reichweiten-Bedingung).
-   **Kernbefund:** `reroll_hit`/`reroll_wound_1` werden nirgends im Combat-/Ability-Code konsumiert,
-   `reroll_marker_row_html` (`diceCompose.py:451`) hat 0 Call-Sites → B-113 ist Erstanwendung des
-   ganzen Reroll-auf-Angriffswürfe-Pfads. Split: Teil (a) Skorpekh-Hit inkl. generischem
-   Reroll-Effect-Konsument (Vorlage), dann Teil (b) Lord-Aura. Beide **M** → je eigener Teil-Brief.
-2. **B-028c3/c4/c5** (backlog.md Rang 2–4) — **DoR NICHT erfüllt** (Feld „Benötigte Regeln-Scopes"
-   leer, wie B-005): vor jeder Umsetzung Regel-Scope befüllen; B-028c3 zusätzlich „höchstes
-   Restrisiko / Scope-Check vor Beauftragung".
-3. **B-005 Direktiv-Lock-Rest** — nachrangig, DoR ebenfalls leer.
+1. **B-113 — Reroll-Fähigkeiten verdrahten** (Discovery-Ergebnis S176; DoR jetzt reifer durch neues Prozess-Regel-Feld + M3b-Korrektur): Skorpekh-Destroyer-Hit-Reroll (`reroll_hit`, `subfaction_abilities.yaml:150`) + beide DESTROYER-CULT-Lords (Lokhust + Skorpekh Lord) Wound-Reroll (`reroll_wound_1`, Aura). **Kernbefund:** `reroll_hit`/`reroll_wound_1` engine-seitig unkonsumiert, `reroll_marker_row_html` 0 Call-Sites → Erstanwendung. Split: (a) Skorpekh-Hit + generischer Reroll-Konsument, (b) Lord-Aura. Beide M → je eigener Teil-Brief.
+2. **B-128 — UI-Facharbeit (neu):** (a) Warnhinweis im Subgruppen-Selector kürzen, (b) Apply-Damage-Bereich vereinheitlichen. Scopes: `design_system.md` §1.4/§3.1. Render-Code → manuelle UI-Verifikation.
+3. **B-028c3/c4/c5** (backlog.md Rang folgend) — Regel-Scope („Benötigte Regeln-Scopes") vor Umsetzung befüllen; „Geltende Prozess-Regeln" bereits backgefüllt.
+4. **B-005 Direktiv-Lock-Rest** — nachrangig, DoR-Regel-Scope noch leer.
 
 **Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING).
 

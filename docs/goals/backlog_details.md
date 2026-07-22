@@ -8,7 +8,7 @@
 
 ## Feldschema (Template)
 
-Jedes Item trägt genau diese neun Felder, in dieser Reihenfolge, mit einer Leerzeile
+Jedes Item trägt genau diese zehn Felder, in dieser Reihenfolge, mit einer Leerzeile
 zwischen den Feldern (Sichtbarkeit, S152-Auflage 5):
 
 - **Typ:** `Schuldabbau` | `Fachlichkeit (Ziel 7)` | `Prozess/Doku` — identisch mit dem
@@ -34,6 +34,17 @@ zwischen den Feldern (Sichtbarkeit, S152-Auflage 5):
   Items werden erst beim nächsten Anfassen nachgezogen, kein Big-Bang-Durchgang.
   DoR-Definition kanonisch: `docs/governance/operating_model.md` Event 1; Planner-Pflicht:
   `docs/reference/agent_scopes.md`.
+- **Geltende Prozess-Regeln:** Indiziert die für dieses Item einschlägigen **Prozess**-Regeln
+  (nicht Spielregeln, dazu s. „Benötigte Regeln-Scopes" oben — Abgrenzung: dort *welche
+  Spielregeln* fachlich gelten, hier *wie* gearbeitet wird) als konkrete Verweise: Agent-Tier
+  (→ `operating_model.md` „Rollen & Model-Tier"), ob UI-Regeln gelten (→
+  `docs/spec/design_system.md` + Design-System-Ratchet, `operating_model.md`
+  §Stehende Ratchet-Praktiken), DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done"),
+  Freigabe-Gate (→ `operating_model.md` Event 2), Test-Mandat (→ `CLAUDE.md` §Testing / DoD-3).
+  Nur die je Item zutreffenden Punkte nennen — bei reinem Doku-Item ggf. nur Tier + DoD.
+  Ratchet (Stakeholder-Entscheid S177 D4/D5, kanonisch `operating_model.md`
+  §Stehende Ratchet-Praktiken): Template gilt ab jetzt; bestehende aktive Items werden erst
+  beim nächsten Anfassen nachgezogen, kein Big-Bang-Durchgang.
 - **Herkunft:** Session/Anlass/Foto-Referenz, aus der das Item entstand.
 
 Unbekannte Felder tragen `—` (kein Platzhaltertext) — Ausnahme: „Benötigte Regeln-Scopes" bei
@@ -509,86 +520,6 @@ trägt direkt darunter `[↩ Zeile in backlog.md](backlog.md#b-nnn)` — Ziel-An
 
 **Herkunft:** §2 Alt-`backlog.md` Z.235–242 (Stakeholder-Beobachtungen S131).
 
-## B-024 — B10 Kommentar Hygiene Ratchet Praxis
-
-[↩ Zeile in backlog.md](backlog.md#b-024)
-
-**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
-
-**Status:** In Progress
-
-**Tier:** Executor (bei jeder Modul-Berührung)
-
-**Effort:** — (laufend, kein fixer Umfang)
-
-**Detail-Beschreibung:** Betroffene Dateien: Alle bei Modul-Berührung. Soll: Erklärung in der Spec, Code selbsterklärend (Clean Code), höchstens ein Verweis-Kommentar auf die zuständige Spec. (a) Konvention im CLAUDE.md-Clean-Code-Abschnitt geschärft — erledigt S135. (b) läuft als Ratchet-Praxis weiter: bei jeder Modul-Berührung Kommentare in die zuständige Spec verschieben, kein Big-Bang-Durchgang.
-
-**Abhängigkeiten:** Teil (a) bereits erledigt — Konvention in `CLAUDE.md` verankert; Teil (b) ist eine dauerhafte Ratchet-Praxis ohne Enddatum.
-
-**Belege:** `CLAUDE.md` §Clean Code.
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** §2 Alt-`backlog.md` Z.243–249 (Stakeholder-Beobachtungen S131).
-
-## B-124 — Design-System-Ratchet bei UI-Beruehrung
-
-[↩ Zeile in backlog.md](backlog.md#b-124)
-
-**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
-
-**Status:** In Progress
-
-**Tier:** Executor (bei jeder Modul-Berührung)
-
-**Effort:** — (laufend, kein fixer Umfang)
-
-**Detail-Beschreibung:** Ist-Analyse S167: `design_system.md` §1 „Komponenten-Inventar"
-dokumentiert aktuell nur 3 Bausteine (Badge/Chip, Card/Panel, Dice-Grid) + §4
-Symbol-/Würfel-Katalog (3 Unterabschnitte) + §6 GO-Karte/Tisch-Wurf-Baustein (2 Bausteine) —
-zusammen ~9 dokumentierte Bauformen. Demgegenüber zählt
-`grep -rn "^def render_\|^def _render_" src/uiLayout/*.py` 48 Render-Funktionen über 10
-Dateien (`_common.py` allein 21, `armyCard.py` 6, `gameActionsArea.py` 5,
-`gameProtocoll.py`/`setupScreen.py` je 4 …). Der Großteil der UI-Fläche ist damit
-undokumentiert/ad-hoc — deckt sich mit der Stakeholder-Beobachtung „Design-System ist noch
-nicht wirklich gut" (Ablehnung Explodes-Mockup V1, S166). Statt eines Big-Bang-Inventars
-(alle 48 Funktionen auf einmal klassifizieren — hätte die S167-Session gesprengt, analog
-zur S157-Lehre „Scope-Discovery vor Schätzung") läuft dies als Ratchet: bei jeder
-Modul-Berührung in `src/uiLayout/` oder dem Render-Teil einer `*Phase.py`-Datei prüft der
-Executor, ob die berührte Bauform in `design_system.md` §1 registriert ist — wenn nein,
-Ist-Zustand knapp nachtragen (nicht neu erfinden) im selben Change. Verankert als
-Selbstprüf-Checklistenpunkt in `agent_scopes.md` („Berührte UI-Bauform in
-`design_system.md` §1 registriert?").
-
-**Stakeholder-Kritik (T3-V S168, `docs/handoff/S168_B123_ui_verifikation.md`, gelöscht nach
-Abschluss):** anlässlich der B-123-UI-Verifikation (Silent-King-Subgruppen-Lock) zwei konkrete
-Befunde, die das obige Ratchet-Muster („fehlende Bauform knapp nachtragen") allein nicht löst —
-beide gehören hierher, nicht als eigenes Item, weil sie dieselbe Wurzel treffen (Spec-Qualität
-§1/§4 + Bauform-Uneinheitlichkeit):
-- (a) **Warnhinweis-Text im Subgruppen-Selector kürzen** — der neue „muss laut Regel zuerst
-  vollständig zerstört werden…"-Hinweis ist laut Stakeholder-Zitat „wahnsinnig übertrieben"; Ziel:
-  ein Imperativ-Satz statt Regel-Paraphrase (Vorbild: bestehender „Angeschlagenes Modell … muss
-  zuerst abgehandelt werden."-Hinweis, ► Präfix, kurzer Ton).
-- (b) **Apply-Damage-Bereich vereinheitlichen** — Stakeholder-Zitat: „der 'Apply-Damage'-Bereich
-  ist immer noch nicht wirklich einheitlich. Fürs erste haben wir hier einen Randfall behandelt
-  und man hat ein Regelkonformes Verhalten. Aber geil ist anders." Betrifft dieselbe
-  Detail-Beschreibung oben (§1 „keine schematische Darstellung der UI" — Stakeholder-Zitat:
-  „Ich finde unser Design-System und unsere specs ungenügend.") — die fehlende schematische
-  Bauform-Darstellung in §1.4 ist Teil desselben Befunds, nicht nur die 48-vs-9-Zählung.
-
-**Abhängigkeiten:** Analoges Muster zu B-024 (Kommentar-Hygiene-Ratchet); dauerhafte
-Ratchet-Praxis ohne Enddatum.
-
-**Belege:** `docs/reference/agent_scopes.md` Selbstprüf-Checkliste; `docs/spec/design_system.md`
-§1; Ist-Zahlen (~9 vs. 48) per `grep -rn "^def render_\|^def _render_" src/uiLayout/*.py`;
-Stakeholder-Zitate T3-V S168 (`docs/handoff/S168_B123_ui_verifikation.md`, gelöscht nach
-Abschluss, Belege hier archiviert).
-
-**Benötigte Regeln-Scopes:** —
-
-**Herkunft:** S167-Planning Punkt 2iii (`docs/handoff/S167_PLANNING.md`), Stakeholder-Freigabe
-S167; Kritik-Ergänzung T3-V S168.
-
 ## B-025 — Strukturelle Verbesserung Skeleton Platzhalter Fixe Hoehe oder Fragment Isolierung
 
 [↩ Zeile in backlog.md](backlog.md#b-025)
@@ -696,6 +627,11 @@ S167; Kritik-Ergänzung T3-V S168.
 
 **Benötigte Regeln-Scopes:** —
 
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+UI-Regeln nur falls Anzeige berührt (→ `docs/spec/design_system.md`); DoD/ganzheitliche Sicht
+(→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate (→ `operating_model.md` Event 2);
+Test-Mandat inkl. Regressionstest (→ `CLAUDE.md` §Testing).
+
 **Herkunft:** B-028-Zuschnitt S158, komplexeste Einzelmechanik mit höchstem Restrisiko.
 
 ## B-028c4 — mark target
@@ -710,13 +646,18 @@ S167; Kritik-Ergänzung T3-V S168.
 
 **Effort:** ~15–20k (S/M)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/uiLayout/_common.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`targeting_relay`). Zustandsbehaftetes „Ziel markiert" über Phasen- und Einheitengrenzen hinweg: neue Session-State-Schlüssel für den Markierungs-Status, Dispatcher für Markierungs-Logik, Call-Site im Shooting-Phase-Handler.
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/uiLayout/_common.py`, `data/wh40k_9e/necrons/unit_abilities.yaml` (`targeting_relay`). Zustandsbehaftetes „Ziel markiert" über Phasen- und Einheitengrenzen hinweg: neue Session-State-Schlüssel für den Markierungs-Status, Dispatcher für Markierungs-Logik, Call-Site im Shooting-Phase-Handler.
 
 **Abhängigkeiten:** Nach B-028c1. Parallel zu c2/c3/c5 möglich.
 
 **Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c4 Z.56).
 
 **Benötigte Regeln-Scopes:** —
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate
+(→ `operating_model.md` Event 2); Test-Mandat (→ `CLAUDE.md` §Testing); Architektur-Gate —
+neuer Session-State-Schlüssel, Generic-src/INV beachten (→ `docs/spec/architecture_invariants.md`).
 
 **Herkunft:** B-028-Zuschnitt S158, zustandsbehaftete Mechanik mit State-Management.
 
@@ -732,13 +673,18 @@ S167; Kritik-Ergänzung T3-V S168.
 
 **Effort:** ~15k (S)
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/gameMechanic/commandPhase.py`, `data/wh40k_9e/orks/subfaction_abilities.yaml` (`competitive_streak`). **Namenskollision:** `buff_roll` als String-Literal existiert bereits in `commandPhase.py:391` und `gameState.py:37` für eine andere (round-choice-basierte) Mechanik. Diese GO-Ability braucht einen eigenen, distinkten Ability-Pfad + Klärung gegen INV-4b-Vokabular-Scanner (Literal-Flagging).
+**Detail-Beschreibung:** Betroffene Dateien: `src/gameMechanic/gameState.py`, `src/gameMechanic/abilityEngine.py`, `src/gameMechanic/commandPhase.py`, `data/wh40k_9e/orks/subfaction_abilities.yaml` (`competitive_streak`). **Namenskollision:** `buff_roll` als String-Literal existiert bereits in `commandPhase.py:391` und `gameState.py:37` für eine andere (round-choice-basierte) Mechanik. Diese GO-Ability braucht einen eigenen, distinkten Ability-Pfad + Klärung gegen INV-4b-Vokabular-Scanner (Literal-Flagging).
 
 **Abhängigkeiten:** Nach B-028c1. Parallel zu c2/c3/c4 möglich.
 
 **Belege:** `docs/handoff/S158_planning.md` (Tabelle Z.49–57, Zeile c5 Z.57).
 
 **Benötigte Regeln-Scopes:** —
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate
+(→ `operating_model.md` Event 2); Test-Mandat (→ `CLAUDE.md` §Testing); INV-4b/Architektur-Gate —
+Generic-src, kein Fraktions-String (→ `docs/spec/architecture_invariants.md`).
 
 **Herkunft:** B-028-Zuschnitt S158, Namenskollision gegen bestehende round-choice-Logik.
 
@@ -2063,6 +2009,13 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Benötigte Regeln-Scopes:** `docs/work/wahapedia_necrons/`.
 
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+UI-Regeln JA — HIT-Block-Marker-Zeilen/Würfelanzeige berührt
+(→ `docs/spec/design_system.md` + Design-System-Ratchet, `operating_model.md`
+§Stehende Ratchet-Praktiken); DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done");
+Freigabe-Gate (→ `operating_model.md` Event 2); Test-Mandat 4 Schichten
+(→ `CLAUDE.md` §Testing), Render-Anteil zusätzlich manuelle UI-Verifikation (DoD-6).
+
 **Herkunft:** Review-Retro S158, Maßnahme 6.
 
 ## B-114 — SAVE Modifier verschachtelt statt flach
@@ -2099,7 +2052,7 @@ Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
 
 **Effort:** ~15k
 
-**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`/`src/uiLayout/diceCompose.py` (Marker-Zeilen-Bausteine `always_fail_marker_row_html`/`reroll_marker_row_html`, bislang nur im WOUND-Block verdrahtet). Ist-Zustand: der SAVE-Block hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll). Soll: SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren.
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/diceHtml.py`/`src/uiLayout/diceCompose.py` (Marker-Zeilen-Bausteine `always_fail_marker_row_html`/`reroll_marker_row_html`). Verifiziert: `always_fail_marker_row_html` ist verdrahtet; `reroll_marker_row_html` ist unverdrahtet (0 Call-Sites, nur Definition `src/uiLayout/diceCompose.py:451`) → B-113 ist dessen Erstanwendung. Ist-Zustand: der SAVE-Block hat keine Auto-fail-/Reroll-Anker, obwohl Save-Rerolls regelseitig existieren (z. B. Invuln-Reroll). Soll: SAVE-Block bekommt dieselben Marker-Zeilen-Hooks wie WOUND — Struktur vorbereiten, nicht erst beim ersten Anwendungsfall improvisieren.
 
 **Abhängigkeiten:** Teil der Vereinheitlichungs-Lücken aus dem S159-Wurf-Block-Pattern-Katalog; sinnvoll nach B-114/B-115 (gleicher Save-Block-Bereich), da diese die Grundstruktur erst verschachteln.
 
@@ -2189,6 +2142,56 @@ Befunde (nachrangig, GO-unkritisch)"); `docs/handoff/S163_RETRO.md` Maßnahme M1
 Direktiv-Effekt".
 
 **Herkunft:** Review-Befund S163 / Retro M1.
+
+---
+
+## B-128 — Design-System-Ratchet Rest Warnhinweis und Apply Damage
+
+[↩ Zeile in backlog.md](backlog.md#b-128)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15–20k
+
+**Detail-Beschreibung:** Die zwei konkreten Rest-Aufgaben aus der aufgelösten
+B-124-Ratchet-Zeile (S177: B-024/B-124 als Dauer-Ratchets in stehende Regel überführt,
+`operating_model.md` §Stehende Ratchet-Praktiken — die Ratchet-Praxis selbst braucht damit
+kein Backlog-Item mehr; diese konkrete Facharbeit bleibt aber offen):
+- (a) **Warnhinweis-Text im Subgruppen-Selector kürzen** — der „muss laut Regel zuerst
+  vollständig zerstört werden…"-Hinweis ist laut Stakeholder-Zitat „wahnsinnig übertrieben"
+  (T3-V S168, anlässlich der B-123-UI-Verifikation Silent-King-Subgruppen-Lock); Ziel: ein
+  Imperativ-Satz statt Regel-Paraphrase (Vorbild: bestehender „Angeschlagenes Modell … muss
+  zuerst abgehandelt werden."-Hinweis, ► Präfix, kurzer Ton).
+- (b) **Apply-Damage-Bereich vereinheitlichen** — Stakeholder-Zitat: „der 'Apply-Damage'-Bereich
+  ist immer noch nicht wirklich einheitlich. Fürs erste haben wir hier einen Randfall behandelt
+  und man hat ein Regelkonformes Verhalten. Aber geil ist anders." (T3-V S168). Betrifft dieselbe
+  Wurzel wie (a) — fehlende schematische Bauform-Darstellung in `design_system.md` §1.4
+  (Stakeholder-Zitat: „Ich finde unser Design-System und unsere specs ungenügend.").
+
+**Abhängigkeiten:** — (inhaltlich verwandt: `design_system.md` §1.4 Loss-Allocation-Baustein +
+§3.1 Wortlaut-Budget).
+
+**Belege:** `docs/spec/design_system.md` §1.4 (Loss-Allocation-Baustein) + §3.1
+(Wortlaut-Budget); Stakeholder-Zitate T3-V S168 (`docs/handoff/S168_B123_ui_verifikation.md`,
+Handoff nach Abschluss gelöscht, Zitate hier archiviert).
+
+**Benötigte Regeln-Scopes:** `docs/spec/design_system.md` §1.4 + §3.1.
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+UI-Regeln JA (→ `docs/spec/design_system.md` §1.4/§3.1 + Design-System-Ratchet,
+`operating_model.md` §Stehende Ratchet-Praktiken); DoD/ganzheitliche Sicht
+(→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate (→ `operating_model.md` Event 2);
+Render-Code → manuelle UI-Verifikation (DoD-6); Test-Mandat soweit Logik betroffen
+(→ `CLAUDE.md` §Testing).
+
+**Herkunft:** S177-Governance-Session — Auflösung des B-124-Dauer-Ratchets in stehende Regel
+(`operating_model.md` §Stehende Ratchet-Praktiken) + Ausgründung der offenen Rest-Facharbeit als
+neues Item; ursprünglich B-124 (S167-Planning Punkt 2iii, Stakeholder-Freigabe S167;
+Kritik-Ergänzung T3-V S168).
 
 ---
 

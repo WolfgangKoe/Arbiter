@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-21 19:09 CEST
+Stand: 2026-07-22 19:08 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,17 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-21 17:57 4c40  ████████████ 150k ⛔    ███░░░  56%    █···········
+07-21 19:23 1c15  ███████████░ 139k ⚠️   █████░  81%    ██··········
+         SA_1·  ████████░░░░ 104k ✅    T2a Ratchet-Regel-Sektion + Prosa
+         SA_2·  ███░░░░░░░░░  40k ✅    T4-Rest C/D/E
+         SA_3·  ███████████░ 138k ⚠️   Opus-Planer Governance-Session
+         SA_4·  ███████░░░░░  90k ✅    T2b Backlog-Chirurgie + B-128
+         SA_5·  █████░░░░░░░  63k ✅    T4 S176-Zusatz Doku-Korrekturen
+         SA_6·  ████████████ 276k ⛔    T1 Koordinator-Tier Opus + ADR-0010
+         SA_7·  ██░░░░░░░░░░  28k ✅    T5 Opus-Review DoD + Vollsuite
+         SA_8·  █████░░░░░░░  68k ✅    T3 Prozess-Regel-Feld + Backfill
+----------------- ---------------------- -------------- ------------
+07-21 17:57 4c40  ████████████ 158k ⛔    ███░░░  51%    █···········
          SA_1·  ███████████░ 132k ⚠️   S176 Planning-Entwurf erstellen
          SA_2·  █████░░░░░░░  58k ✅    B-113 Scope-Discovery Recherche
          SA_3·  █████░░░░░░░  67k ✅    Executor B-127 RP-Hinweis Info-Blo…
@@ -992,3 +1002,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S174 (2026-07-20)** S173-Retro M1/M2/M3 überführt (agent_scopes/operating_model); B-125/B-126 archiviert (B-122 offen); B-028c2-Konzept Class B freigegeben; S174-Retro 'Fachfortschritt hat Vorrang' verankert
 - **S175 (2026-07-20)** B-028c2 reroll_rp Class-B hint (UI-verified), B-121/B-110 debt fixes, Careen! B-122 verified+archived, F1 §7.1 alignment, retro M1→B-127/M2→agent_scopes
 - **S176 (2026-07-21)** B-127 RP-Hinweise blauer st.info-Block (UI-verified: Their Number is Legion + Undying Legions Direktive 2 + Koexistenz); B-113 Scope-Discovery (Umsetzung S177: beide Lords + Engine-Lücke reroll_hit/reroll_wound_1 unkonsumiert); Retro M1-M4 + 2 Prozess-Doku-Korrekturen (Subagent schreibt Handoff, Orchestrator=Opus) ins Briefing für S177-Planner
+- **S177 (2026-07-22)** Governance session: coordinator tier Opus (ADR-0010), standing ratchet rules (B-024/B-124 dissolved -> B-128), process-rule field, S176 doc fixes

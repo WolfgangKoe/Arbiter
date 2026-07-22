@@ -6215,8 +6215,8 @@
   "4c4003c9-c531-4472-bde4-21387b8ded43": {
     "started_at": "2026-07-21T15:57:16.387Z",
     "task": "start session",
-    "peak_context": 150054,
-    "subagent_share": 55.94822374091648,
+    "peak_context": 157724,
+    "subagent_share": 50.86345160437949,
     "by_tier": {
       "Sonnet": 10640300,
       "Opus": 691752
@@ -6249,6 +6249,74 @@
         "tier": "Opus",
         "peak_context": 47136,
         "started_at": "2026-07-21T15:57:16.387Z"
+      }
+    ]
+  },
+  "1c15771b-04db-467c-b151-7f1f30a02e86": {
+    "started_at": "2026-07-21T17:23:05.559Z",
+    "task": "Starte die nächste Session. Die Planung soll ein Opus übernehmen -> In den Regeln des Operating_Models festhalten. -> P…",
+    "peak_context": 139130,
+    "subagent_share": 81.43910198538649,
+    "by_tier": {
+      "Sonnet": 21963094,
+      "Opus": 4472225
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T2a Ratchet-Regel-Sektion + Prosa",
+        "tier": "Sonnet",
+        "peak_context": 104360,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4-Rest C/D/E",
+        "tier": "Sonnet",
+        "peak_context": 39951,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Opus-Planer Governance-Session",
+        "tier": "Opus",
+        "peak_context": 137676,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2b Backlog-Chirurgie + B-128",
+        "tier": "Sonnet",
+        "peak_context": 90071,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4 S176-Zusatz Doku-Korrekturen",
+        "tier": "Sonnet",
+        "peak_context": 62950,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 Koordinator-Tier Opus + ADR-0010",
+        "tier": "Sonnet",
+        "peak_context": 276059,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T5 Opus-Review DoD + Vollsuite",
+        "tier": "Opus",
+        "peak_context": 27861,
+        "started_at": "2026-07-21T17:23:05.559Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3 Prozess-Regel-Feld + Backfill",
+        "tier": "Sonnet",
+        "peak_context": 68087,
+        "started_at": "2026-07-21T17:23:05.559Z"
       }
     ]
   }

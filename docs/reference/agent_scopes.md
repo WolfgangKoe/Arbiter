@@ -117,7 +117,9 @@ Planner-Subagenten legen ihre Ausgabe nach diesem Format ab (Plan 028 O7):
   keine Volltext-Lektüre. Ausnahme: Bei großen Schreib-Artefakten (> ~300 Zeilen, z. B.
   Migrations-/Split-Dokumente) darf die Ausarbeitung nach fertigem Opus-Konzept an Sonnet
   delegiert werden. Tier-Regel kanonisch: `docs/governance/operating_model.md`
-  Abschnitt „Rollen & Model-Tier", hier nicht dupliziert.
+  Abschnitt „Rollen & Model-Tier", hier nicht dupliziert. Maßgeblich für die Priorität ist die
+  tatsächliche Rangfolge in `backlog.md`; der „Nächster Schritt"-Hint im `briefing.md` ist
+  nachrangig (S176-Befund: Briefing nannte B-005, echte Priorität war B-124/B-028c/B-113).
 - **Konzept-Vorlagen: Datenort verifizieren statt benennen (S175-F1-Lehre):** den realen
   Datenort/Loader einer Ability (z. B. `unit_abilities.yaml` → `load_unit_abilities` vs.
   `faction_abilities.yaml` → `load_faction_abilities`) per `grep` verifizieren, nicht aus dem
@@ -226,6 +228,12 @@ Jeder Koordinator-Brief an einen Subagenten enthält diese Felder (keine Felder 
 ## Erlaubte Tools
 <z.B. Read, Bash (read-only), Write/Edit (nur mit Freigabe)>
 
+**Planner/Reviewer-Ausnahme (S177-T4):** Planner und Reviewer schreiben ihr
+Ergebnis-Artefakt (Planning-Entwurf bzw. Review-Urteil) selbst nach `docs/handoff/` —
+das Freigabe-Gate nimmt `docs/handoff/` bereits aus, ein Zurückreichen an den
+Koordinator zum Schreiben ist nicht nötig. Gilt nur für das eigene Ausgabe-Artefakt,
+nicht für sonstige Datei-Änderungen.
+
 ## Output- / Rückgabeformat
 Endbericht KNAPP, in fester Reihenfolge:
 1. pytest-Zusammenfassungszeile (falls relevant)
@@ -299,12 +307,13 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 - [ ] Stakeholder-Entscheidungen: NUR über Mailbox docs/handoff/ (NEEDS-DECISION) eskaliert,
       NIE direkt im Chat mit dem Stakeholder kommuniziert
 - [ ] Handoff-Marker: jede nach docs/handoff/ geschriebene Datei hat Zeile 1
-      `STATUS: NEEDS-DECISION|ANSWERED|DONE|AWAITING-VERIFICATION` — der Koordinator nennt
-      den Marker im Brief (S131: zwei rote Doku-Gates nur durch fehlende Marker)
+      `STATUS: NEEDS-APPROVAL|NEEDS-DECISION|ANSWERED|DONE|STANDING|AWAITING-VERIFICATION` — der
+      Koordinator nennt den Marker im Brief (S131: zwei rote Doku-Gates nur durch fehlende Marker)
 - [ ] Design-System-Konformität (Komponente, Anker, Wortlaut) geprüft (Retro S165 — B-028c1
       Vollbreiten-Kachel + falsche GO-Karte für einen Pflicht-Trigger)
 - [ ] Berührte UI-Bauform in `design_system.md` §1 registriert? (falls fehlend: Ist-Zustand
-      im selben Change knapp nachtragen — B-124-Ratchet). Jede §1-Registrierung enthält
+      im selben Change knapp nachtragen — stehende Design-System-Ratchet-Regel,
+      `operating_model.md` §Stehende Ratchet-Praktiken). Jede §1-Registrierung enthält
       PFLICHT ein schematisches Mini-Schema (ASCII/Markdown) der Bauform, nicht nur Prosa
       (Retromaßnahme S168-M1 — Stakeholder-Ablehnung von Prosa-only-§7)
 ```

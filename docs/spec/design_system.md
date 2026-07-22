@@ -19,7 +19,7 @@
 > Gleiche Trennung angewendet auf §4.4: das generische Wurf-Block-Muster bleibt hier, die
 > konkrete Anwendung auf HIT/WOUND/SAVE/DAMAGE (Vereinheitlichungs-Lücken) steht jetzt in
 > [`processes.md` P-08](processes.md#p-08--attacksequence--auflösungsreihenfolge-shooting--fight).
-> Zusätzlich §3.1 (Wortlaut-Budget) neu — Retro-Maßnahme M2/B-124(a).
+> Zusätzlich §3.1 (Wortlaut-Budget) neu — Retro-Maßnahme M2/B-128 (vormals B-124(a)).
 >
 > **S131-Nachtrag (entschieden 2026-07-09):** §6 ergänzt — die GO-Karte (Gefechtsoptionen-
 > UI), der Tisch-Wurf-Eingabe-Baustein und die Wortlaut-Konventionen sind jetzt
@@ -92,7 +92,7 @@ kein Handlungsbedarf, nur hier dokumentiert.
 Streamlit-freie, Coverage-gemessene Kompositions-Layer (INV-6). `badges.py` folgt exakt
 demselben Seam: pure HTML-Builder, kein Streamlit, Coverage-gemessen.
 
-### 1.4 Subgruppen-Selector / Damage-Block (Loss-Allocation, S168/B-124)
+### 1.4 Subgruppen-Selector / Damage-Block (Loss-Allocation, S168/B-128)
 
 `_render_subgroup_selector` + `_render_damage_block` (`src/uiLayout/_common.py`) — der
 Verteidiger-Baustein im DAMAGE-Block einer Resolution-Tab für Einheiten mit mehreren
@@ -136,8 +136,9 @@ ausschließlich `get_locked_group()` (s. u.), die UI liest nur das Ergebnis.
 
 Die Sperrentscheidung selbst lebt ausschließlich in `get_locked_group()`
 (`gameMechanic/unitMutations.py`) — die UI liest nur das Ergebnis, keine Dopplung der
-Regel-Logik. Registriert als B-124-Ratchet-Eintrag (berührte Bauform bei jeder Modul-Berührung
-hier nachziehen, kein Big-Bang).
+Regel-Logik. Registriert nach der stehenden Design-System-Ratchet-Regel (`operating_model.md`
+§Stehende Ratchet-Praktiken; berührte Bauform bei jeder Modul-Berührung hier nachziehen, kein
+Big-Bang).
 
 ### 1.5 Pflicht-Trigger-Kachel (generische Bauform, S169)
 
@@ -392,7 +393,7 @@ echtem Fehlerzustand (Perils, Daten-/Konfigurationsfehler) → `error`; reine Be
 es wird nur über `st.warning()` gerendert, nie als eigenes HTML-Badge; **kein
 `--arb-warning`-Token** (S115-Entscheidung).
 
-### 3.1 Wortlaut-Budget (Ratchet, S169 — Retro-Maßnahme M2, erledigt zugleich B-124(a))
+### 3.1 Wortlaut-Budget (Ratchet, S169 — Retro-Maßnahme M2, erledigt zugleich die Spec-Seite von B-128 (vormals B-124(a)))
 
 Hinweis-/Warntexte im UI: **maximal ein kurzer Imperativ- oder Aussagesatz.** Keine
 Regel-Paraphrase im UI — die Regelbegründung („warum gilt das") gehört in die zuständige
@@ -405,7 +406,7 @@ Bestehende Texte, die das Budget überschreiten, werden **nicht** in einem Big-B
 gekürzt, sondern als Ratchet bei der nächsten Modul-Berührung (analog §1.1/§4.3-Ratchet-
 Prinzip). Bekannter Kandidat: der Sperr-Warnhinweis im Subgruppen-Selektor (§1.4 Zustand B,
 `_common.py`) — zwei mehrsatzige Zweige mit eingebauter Regelbegründung; Kürzung bei
-nächster Berührung des Bausteins (B-124(a), Code-Kürzung selbst ist ein separater Auftrag).
+nächster Berührung des Bausteins (B-128, Code-Kürzung selbst ist ein separater Auftrag).
 
 ## 4. Symbol- & Würfel-Design-System (§4.1 S115, §4.2/§4.3 neu S159/B-104)
 
