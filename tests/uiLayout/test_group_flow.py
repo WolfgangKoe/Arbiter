@@ -706,7 +706,7 @@ class _DmgColStub:
         self.warning_calls: list = []  # type: ignore[type-arg]
 
     def number_input(self, label, *a, **kw):  # type: ignore[no-untyped-def]
-        return self.damage_in if label.startswith("Total damage") else 0
+        return self.damage_in if label.startswith("Damage dealt") else 0
 
     def caption(self, *a, **kw):  # type: ignore[no-untyped-def]
         return None

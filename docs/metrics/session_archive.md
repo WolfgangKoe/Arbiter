@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-23 21:45 CEST
+Stand: 2026-07-23 22:29 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,13 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-23 17:56 33e4  ████████████ 149k ⚠️   ████░░  68%    ██········▒▒
+07-23 21:51 6eae  ██████████░░ 124k ⚠️   █████░  80%    ██··········
+         SA_1·  █████░░░░░░░  62k ✅    Session-Plan B-128 erstellen
+         SA_2·  ███████████░ 134k ⚠️   T2+T3 Verif-Handoff + Artefakt-Nac…
+         SA_3·  ███████░░░░░  93k ✅    T1 B-128(b) DAMAGE-Block umsetzen
+         SA_4·  █████░░░░░░░  58k ✅    Review S182 B-128(b)
+----------------- ---------------------- -------------- ------------
+07-23 17:56 33e4  ████████████ 153k ⛔    ████░░  65%    ██········▒▒
          SA_1·  ██████░░░░░░  79k ✅    T2 B-128b DAMAGE-Block Mockup
          SA_2·  █████████░░░ 107k ✅    S181-Planning-Entwurf erstellen
          SA_3·  █████░░░░░░░  68k ✅    T4 Screenshot-Bereinigung
@@ -1044,3 +1050,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S179 (2026-07-23)** Close S179: B-129 (Skorpekh Lord hardwiredForDestruction) + B-130 (Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis generisch) umgesetzt; Governance B1-B4 (start-session-Regel, ui_verification_log, Backlog, R-COMBAT-46/47); alle 3 UI-Verifikationen positiv (B-131 mit 2 Follow-ups: Kachel-Breite + namentliche Spender-Liste → S180); Review GO, 2182 passed / 99,17 %
 - **S180 (2026-07-23)** B-131 follow-up: named aura donors + half-width hint, UI-verified + archived; retro M4 accepted
 - **S181 (2026-07-23)** B-128(a) Doku-Angleichung (Silent-King bewusst hinweislos), M4 zweiter Aura-Spender, B-128(b) Mockup-Vorschlag, Governance-Retro (Subagent-kein-git, Reversal-Kontext), Fehl-Commit d88abca zurückgenommen
+- **S182 (2026-07-23)** B-128(b) DAMAGE-Block unified (D1 'Damage dealt', D2 'Enter damage taken' sub-header, D3 max_value=models_max); design_system §1.4.1; B-128 fully closed+archived; M4 verified+closed

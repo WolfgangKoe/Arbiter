@@ -2348,12 +2348,20 @@ def test_damage_block_command_reroll_reopens_the_applied_result(monkeypatch) -> 
 class _ColStub:
     """Stand-in for the st.columns() half-width block used by the pre-Apply
     damage fields — supports the widget calls _render_damage_block makes on
-    it (number_input/caption/button), unlike the generic _FakeCtx."""
+    it (number_input/caption/button), unlike the generic _FakeCtx. Records
+    calls so tests can assert on labels/kwargs (B-128(b), S182)."""
 
-    def number_input(self, *a, **kw):  # type: ignore[no-untyped-def]
+    def __init__(self):  # type: ignore[no-untyped-def]
+        self.number_input_calls: list = []  # type: ignore[type-arg]
+        self.captions: list = []  # type: ignore[type-arg]
+
+    def number_input(self, label, *a, **kw):  # type: ignore[no-untyped-def]
+        self.number_input_calls.append((label, kw))
         return 0
 
     def caption(self, *a, **kw):  # type: ignore[no-untyped-def]
+        if a:
+            self.captions.append(a[0])
         return None
 
     def button(self, *a, **kw):  # type: ignore[no-untyped-def]
@@ -2377,6 +2385,32 @@ def test_damage_block_no_offer_before_damage_applied(monkeypatch) -> None:
     common._render_damage_block(unit, "Necrons", "u1", profile, "Orks", "Boyz", "shooting", "tab1")
 
     spy.assert_not_called()
+
+
+def test_damage_block_multi_model_shows_subheader_and_caps_models_lost(monkeypatch) -> None:
+    """B-128(b) (S182): the multi-/single-model path (ii) — driven through the
+    real render entry point, not the isolated helper (S164 lesson) — shows the
+    unified "Enter damage taken" sub-header and caps "Models lost" at the
+    unit's model count (D2/D3 of docs/handoff/S181_B128b_mockup.md §4/§6)."""
+    session = _SS(res_tab1={})
+    common.st.session_state = session
+    monkeypatch.setattr(common, "render_reactive_stratagem_box", MagicMock())
+    unit = SimpleNamespace(wounds=2, models_max=5)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (unit, {"group_wounds": {}}))
+    monkeypatch.setattr(common.st, "markdown", lambda *a, **kw: None)
+    col = _ColStub()
+    monkeypatch.setattr(
+        common.st, "columns", lambda n: tuple([col] + [_ColStub() for _ in range(n - 1)])
+    )
+    monkeypatch.setattr(common.st, "button", lambda *a, **kw: False)
+    profile = SimpleNamespace(damage="1", abilities="", effect=None, is_melee=False)
+
+    common._render_damage_block(unit, "Necrons", "u1", profile, "Orks", "Boyz", "shooting", "tab1")
+
+    assert "Enter damage taken" in col.captions
+    models_lost_calls = [c for c in col.number_input_calls if c[0] == "Models lost"]
+    assert models_lost_calls, "Models lost field must render for a multi-model unit"
+    assert models_lost_calls[0][1]["max_value"] == unit.models_max
 
 
 # ---------------------------------------------------------------------------

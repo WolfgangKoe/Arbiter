@@ -2782,6 +2782,7 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
         # Mixed per-model wounds in one unit (e.g. Szarekh 16 + Menhirs 7): the
         # losses are distributed by group/priority in apply_damage, so the user
         # enters total damage that got through rather than models/front wounds.
+        dmg_col.caption("Enter damage taken")
         gw_total = sum(def_state["group_wounds"].values())
         dmg_col.caption(
             "Per-group HP: "
@@ -2791,7 +2792,7 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
             )
         )
         damage_in = dmg_col.number_input(
-            f"Total damage dealt (0–{gw_total})",
+            f"Damage dealt (0–{gw_total})",
             min_value=0,
             max_value=gw_total,
             step=1,
@@ -2805,11 +2806,13 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
         total = int(damage_in) + int(mortal_wounds)
         models_lost = 0  # recomputed post-apply from group_models delta
     else:
+        dmg_col.caption("Enter damage taken")
         models_lost = 0
         if not is_single_model:
             models_lost = dmg_col.number_input(
                 "Models lost",
                 min_value=0,
+                max_value=def_unit.models_max,
                 step=1,
                 key=f"ml_{tab_key}",
             )

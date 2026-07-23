@@ -147,6 +147,76 @@ Regel-Logik. Registriert nach der stehenden Design-System-Ratchet-Regel (`operat
 §Stehende Ratchet-Praktiken; berührte Bauform bei jeder Modul-Berührung hier nachziehen, kein
 Big-Bang).
 
+#### 1.4.1 Vollständiges DAMAGE-Block-Schema (Vereinheitlichung, S182/B-128(b))
+
+Ergänzt den Subgruppen-Selector (§1.4 oben) um den **gesamten** DAMAGE-Block —
+`_render_damage_block` (`src/uiLayout/_common.py`). Zwei Eingabe-*Pfade* je nach
+Einheitstyp (Begründung §2 in `docs/handoff/S181_B128b_mockup.md`, D4 unten), aber
+EIN gemeinsames Rahmen-Schema: Header → Dmg/HP-Zeile → Subgruppen-Selector (nur
+Gruppen-Wunden) → Sub-Header „Enter damage taken" → typabhängige Zahlenfelder →
+Mortal Wounds → Apply-Button → Post-Apply-Zustand.
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ DAMAGE                                                        │
+│ D{dmg} per failed save · Target: {wounds} HP/model            │
+│ ────────────────────────────────────────────────────────────│
+│ [Subgruppen-Selector — nur group_wounds + >1 aktive Gruppe]   │  §1.4 A/B/C, unverändert
+│ ────────────────────────────────────────────────────────────│
+│ Enter damage taken                                             │  ← Sub-Header, gedämpft (caption)
+│                                                                 │
+│  Pfad (i) Gruppen-Wunden:                                      │
+│   Per-group HP: {Gruppe A} {N} · {Gruppe B} {N}                │  Caption, unverändert
+│   [ Damage dealt (0–{gw_total}) ]                              │  D1: „Total " entfernt
+│                                                                 │
+│  Pfad (ii) Einzel-/Multi-Modell:                               │
+│   [ Models lost (0–{models_max}) ]                             │  D3: Obergrenze ergänzt; nur >1 Modell
+│   [ Wounds on front model (0–{wounds-1}) ]                     │  nur wounds>1, Label unverändert
+│                                                                 │
+│  Beide (falls Waffe MW hat):                                   │
+│   [ Mortal Wounds ]                                            │  unverändert
+│ ────────────────────────────────────────────────────────────│
+│ [⚔ Apply {total} Damage → {target}]                            │  identisch heute
+└──────────────────────────────────────────────────────────────┘
+                          │ Klick Apply
+                          ▼
+┌──────────────────────────────────────────────────────────────┐
+│ ✓ {N} models · {MW} MW · {total} damage applied                │
+│ [⚠ Subgruppe „{Name}" verloren — {Waffen} nicht mehr verfügbar]│  optional
+│ [reaktive GO-Karte: Command Re-Roll — §6.2]                     │
+│ [↺ Reset]                                                       │
+└──────────────────────────────────────────────────────────────┘
+```
+
+Entschiedene Divergenzen (D1–D3, Stakeholder-Abnahme S182,
+`docs/handoff/S181_B128b_mockup.md` §6 — Datei danach gelöscht):
+
+- **D1 — Label-Kürzung:** „Total damage dealt" → „Damage dealt" (Pfad i), näher am
+  Vokabular von „Models lost"/„Wounds on front model" (Pfad ii).
+- **D2 — Sub-Header „Enter damage taken":** neuer, gedämpfter Absatz-Titel (`caption`,
+  nicht fett) direkt vor den Zahlenfeldern, in beiden Pfaden identisch — macht den
+  gemeinsamen Rahmen (Header → Selector → Eingabe → Apply) für den Nutzer sichtbar,
+  statt zwei optisch unverbundene Formulare.
+- **D3 — Obergrenze „Models lost":** `max_value=def_unit.models_max` ergänzt (fehlte
+  zuvor im Code — Nutzer konnte mehr Modelle eintragen als die Einheit hat), analog zu
+  „Wounds on front model (0–{wounds-1})".
+- **D4 — zwei Eingabe-*Konzepte* bleiben bestehen (Architektur-Entscheid, nicht
+  invertierbar):** „Total damage" (Pfad i) und „Models lost + Wounds on front model"
+  (Pfad ii) sind keine zwei Stile derselben Information, sondern kodieren die
+  9E-Regel „Schaden wird pro Modell zugeteilt, Überschuss beim letzten Modell verfällt"
+  (`core_rules.txt` Z. 1682–1706) unterschiedlich: Pfad ii setzt *einen* Wounds-Wert für
+  alle Modelle voraus und multipliziert intern (`apply_damage_attacks`); Pfad i deckt
+  Einheiten mit **gemischten** Wounds-Werten je Untergruppe ab (Silent King: Szarekh W16
+  vs. Menhirs W7), wo ein einzelner „Modelle verloren"-Zähler mehrdeutig wäre (welche
+  Gruppe?). Der Schaden-Verfall am letzten Modell macht die beiden Formen zudem nicht
+  informationsäquivalent — aus „Damage dealt" allein ließe sich die Modellzahl für
+  gemischte Gruppen nicht verlustfrei zurückrechnen. Eine Vereinheitlichung auf ein
+  Konzept würde daher entweder die Regel-Kodierung für homogene Einheiten verlieren
+  (nur noch Gesamtzahl, App rät die Modellverteilung) oder für gemischte Gruppen ein
+  mehrdeutiges Modell-Zähler-Feld erzwingen — beides ein Rückschritt gegenüber dem
+  Ist-Zustand, kein Clean-Code-Gewinn. Bleibt daher zwei Konzepte, vereinheitlicht nur
+  im **Drumherum** (D1–D3, dieser Abschnitt).
+
 ### 1.5 Pflicht-Trigger-Kachel (generische Bauform, S169)
 
 Gleiche Bauform wie die GO-Karte (§6.1: `st.container(border=True)`, Header-Zeile +

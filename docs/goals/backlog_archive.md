@@ -1151,3 +1151,36 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   Herkunft: S178-B-113-Befund 3 (Retro-Maßnahme A3, S179); Nachbesserung + UI-Verifikation S180;
   archiviert S180.
 
+## Aus der ID-indizierten Liste (migriert S182)
+
+- ✅ **B-128 — Design-System-Ratchet-Rest (Warnhinweis + Apply-Damage) — ERLEDIGT (S181/S182):**
+  Zwei Rest-Aufgaben aus der aufgelösten B-124-Ratchet-Zeile (S177: B-024/B-124 als
+  Dauer-Ratchets in stehende Regel überführt, `operating_model.md` §Stehende
+  Ratchet-Praktiken). **(a) Warnhinweis Subgruppen-Selector — erledigt S181 (Commit
+  `4b1615e`):** geprüft, ob der Warnhinweis-Text im Subgruppen-Selector zu kürzen ist —
+  Ergebnis: reine Doku-Angleichung, kein Code-Rest. Der Silent King bleibt **bewusst**
+  hinweislos bei Zwangs-Zuteilung (Triarchal Menhirs vor Szarekh); die S169-Entscheidung,
+  hier keinen Hinweis einzublenden, wurde bestätigt (kein Umkehr-Fall — genau dieser Fall war
+  Anlass für die neue „Entscheidungs-Umkehr-Kontext-Pflicht", `operating_model.md` §ev1). **(b)
+  Apply-Damage-Bereich vereinheitlicht — erledigt S182:** Mockup-Vorschlag (S181, Commit
+  `4b1615e`, `docs/handoff/S181_B128b_mockup.md`) vom Stakeholder angenommen; Code-Umsetzung
+  in `_render_damage_block` (`src/uiLayout/_common.py`) S182: **D1** Label „Total damage
+  dealt" → „Damage dealt" (Pfad Gruppen-Wunden, näher am Vokabular von „Models lost"); **D2**
+  neuer gedämpfter Sub-Header „Enter damage taken" (Caption, nicht fett) vor den Zahlenfeldern
+  in beiden Pfaden — macht den gemeinsamen Rahmen (Header → Selector → Eingabe → Apply)
+  sichtbar; **D3** Obergrenze `max_value=def_unit.models_max` für „Models lost" ergänzt (fehlte
+  zuvor — Nutzer konnte mehr Modelle eintragen als die Einheit hat); **D4 (Architektur-Frage,
+  keine Umsetzung)** die zwei Eingabe-*Konzepte* „Damage dealt" (Gruppen-Wunden) und „Models
+  lost + Wounds on front model" (Einzel-/Multi-Modell) bleiben bestehen — sind laut Regel-Check
+  (`core_rules.txt` Z. 1682–1706, Schaden pro Modell sequenziell zugeteilt) keine zwei Stile
+  derselben Information, sondern kodieren homogene vs. gemischte Wounds-Werte je Untergruppe
+  unterschiedlich (Silent King: Szarekh W16 vs. Triarchal Menhirs W7) — Vereinheitlichung auf
+  ein Konzept wäre ein größerer technischer Umbau und bleibt offene Zukunftsfrage, kein Teil
+  dieses Items. Vollständiges Schema als neuer Spec-Abschnitt registriert:
+  `docs/spec/design_system.md` §1.4.1. UI-Verifikation vorgelegt
+  (`docs/handoff/S182_B128b_verifikation.md`, AWAITING-VERIFICATION). Belege:
+  `docs/spec/design_system.md` §1.4/§1.4.1; Stakeholder-Zitate T3-V S168 (Kritik-Anlass,
+  Handoff nach Abschluss gelöscht). Herkunft: S177-Governance-Session (Ausgründung aus
+  B-024/B-124); ursprünglich B-124 (S167-Planning Punkt 2iii, Freigabe S167,
+  Kritik-Ergänzung T3-V S168); (a) S181, (b) Mockup S181/Code S182.
+
