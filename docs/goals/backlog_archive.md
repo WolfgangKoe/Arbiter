@@ -1109,3 +1109,29 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   B-024 aus §2 Alt-`backlog.md` Z.243–249 (S131); B-124 aus S167-Planning Punkt 2iii
   (Stakeholder-Freigabe S167, Kritik-Ergänzung T3-V S168); Auflösung S177-Governance-Session.
 
+## Aus der ID-indizierten Liste (migriert S179)
+
+- ✅ **B-113 — Skorpekh-Destroyer & Destroyer-Lord Reroll-Fähigkeiten verdrahtet (S178):**
+  Stakeholder-Testbefund S158 (Skorpekh-Destroyer-Hit-Reroll nicht in Roster/YAML verdrahtet;
+  Destroyer Lord mit Wound-Reroll fehlte im Roster). Umgesetzt S178 (Commit `b3616b6`):
+  generischer Hit-Reroll-Consumer (`unit_hit_reroll_ones`) + Skorpekh-Destroyer „Hardwired for
+  Destruction" (self); generischer Aura-Wound-Reroll (`unit_wound_reroll_ones` +
+  `_aura_source_alive`) + Destroyer-Lord-Aura „United in Destruction"; Roster-Prep Skorpekh Lord
+  in `necrons_test.yaml`; Erstanwendung von `reroll_marker_row_html` (HIT- + WOUND-Block-Marker).
+  Fraktionsneutral (INV-4b unverändert), Suite grün. **UI-Verifikation POSITIV** (S178, Befund im
+  UI-Verifikations-Log `docs/spec/ui_verification_log.md`). Akzeptanz-Katalog R-COMBAT-46/47
+  (S179). Resttasks aus der UI-Verifikation als **B-129/B-130/B-131** ausgegründet (S179).
+  Herkunft: S158-Retro-Maßnahme 6; Abschluss S179.
+- ✅ **B-129 — Skorpekh Lord Hit-Reroll-von-1 verdrahten — ERLEDIGT (S179/S180):**
+  Folge-Befund 1 aus S178-B-113-UI-Verifikation: Skorpekh Lord fehlte das Rule-Tag
+  `hardwiredForDestruction` in `units.yaml`, obwohl der generische Consumer seit S178 existiert.
+  Umgesetzt S179 (Brief 5): YAML-Eintrag + Regressionstest (`test_hit_reroll_ones_true_for_real_skorpekh_lord`).
+  **UI-Verifikation POSITIV** (S179/S180, Befund im UI-Verifikations-Log).
+  Herkunft: S178-B-113-Befund 1 (Retro-Maßnahme A1, S179); Verifikation S179/S180; archiviert S180.
+- ✅ **B-130 — Reroll-Marker-Farbe Buff→Grün — ERLEDIGT (S179/S180):**
+  Folge-Befund 2 aus S178-B-113-UI-Verifikation: Reroll-Marker (↺) waren fix Orange statt Buff-Grün.
+  Umgesetzt S179 (Brief 6): `_REROLL_COLOR` → `_BUFF_COLOR_HEX` (`#4a9a5a`) in `diceCompose.py`;
+  Tesla-Chip ausgenommen (bleibt Orange). Test-Assertion + `design_system.md` §4.3 nachgezogen.
+  **UI-Verifikation POSITIV** (S179/S180, Befund im UI-Verifikations-Log).
+  Herkunft: S178-B-113-Befund 2 (Retro-Maßnahme A2, S179); Verifikation S179/S180; archiviert S180.
+

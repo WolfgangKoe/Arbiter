@@ -2954,6 +2954,7 @@ class ResolutionContext:
     fnp_value: int | None
     auto_light_cover: bool
     auto_fail_label: str | None
+    wound_reroll_ones_active: bool
 
 
 def compute_resolution_context(
@@ -3168,6 +3169,10 @@ def compute_resolution_context(
     if heavy_cover:
         final_save_mods.append({"label": "Heavy Cover", "value": 1})
 
+    # Captured once so both the wound-roll stack (below) and the B-131
+    # aura-range hint (_render_wound_reroll_aura_hint) read the same gate
+    # instead of calling the engine twice for one resolution.
+    wound_reroll_ones_active = unit_wound_reroll_ones(atk_faction, atk_unit, atk_state)
     atk_result = resolve_attack_modifiers(
         skill=skill,
         strength=strength,
@@ -3178,7 +3183,7 @@ def compute_resolution_context(
         use_melee=use_melee,
         wound_auto_fail_max=unit_wound_auto_fail_max(def_faction, def_unit),
         hit_reroll_ones=unit_hit_reroll_ones(atk_faction, atk_unit, atk_state),
-        wound_reroll_ones=unit_wound_reroll_ones(atk_faction, atk_unit, atk_state),
+        wound_reroll_ones=wound_reroll_ones_active,
     )
     auto_fail_label = unit_wound_auto_fail_label(def_faction, def_unit)
     ability_inv = ability_invuln_save(def_faction, def_unit)
@@ -3253,7 +3258,42 @@ def compute_resolution_context(
         fnp_value=fnp_value,
         auto_light_cover=auto_light_cover,
         auto_fail_label=auto_fail_label,
+        wound_reroll_ones_active=wound_reroll_ones_active,
     )
+
+
+def _wound_reroll_aura_hints(wound_reroll_active: bool) -> list[str]:
+    """Caption strings for a unit-owned wound-reroll-of-1 AURA (B-131).
+
+    Klasse B: the engine already confirmed the gate (`unit_wound_reroll_ones`
+    — an allied aura source is alive in the roster and this unit's keyword
+    matches its condition); the aura's 6" range itself has no spatial model
+    in this app (rules_appendix.txt "Aura Abilities" — see
+    ``abilityEngine._wound_reroll_ones_aura_ability``) and stays a manual
+    table check, hence the info hint rather than a silent auto-apply.
+
+    Generic (INV-4b): no faction/ability proper noun in the text — the
+    caption names the mechanic, not a specific Necron unit/ability, so no
+    new engine accessor is needed to source a display label.
+    """
+    if not wound_reroll_active:
+        return []
+    return [
+        "Wound re-roll of 1 (aura ability) applies only while this unit is "
+        'within 6" of the ally granting it — check the distance on the table.'
+    ]
+
+
+def _render_wound_reroll_aura_hint(wound_reroll_active: bool) -> None:
+    """Render the B-131 aura-range hint below the WOUND block, if gated True.
+
+    Same `st.info` convention as `_render_rp_block`'s unit-ability hints
+    (design_system.md §3, B-127 precedent) — split into its own tiny render
+    function so it stays unit-testable without the full ResolutionContext
+    rendering chain.
+    """
+    for hint in _wound_reroll_aura_hints(wound_reroll_active):
+        st.info(hint)
 
 
 def _render_attacker_blocks(ctx: ResolutionContext) -> None:
@@ -3325,6 +3365,7 @@ def _render_attacker_blocks(ctx: ResolutionContext) -> None:
         on_reroll=lambda: None,
         label_context="Wound roll",
     )
+    _render_wound_reroll_aura_hint(ctx.wound_reroll_ones_active)
 
     # Kein Wound-Anker mehr für on_target-GOs (S146 Fix 2, Stakeholder-Entscheid):
     # wound-roll on_target GOs (e.g. Whirling Onslaught) render solely at the

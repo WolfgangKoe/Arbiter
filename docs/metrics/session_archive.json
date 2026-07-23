@@ -6330,8 +6330,8 @@
   "dbc68e6a-b497-435b-b429-2b457047a696": {
     "started_at": "2026-07-22T17:15:47.613Z",
     "task": "start session. Was steht als nächstes im Backlog. Bereite den konkreten Plan für diese Session vor. Achte bitte darauf,…",
-    "peak_context": 160324,
-    "subagent_share": 74.82076011520678,
+    "peak_context": 166089,
+    "subagent_share": 72.64888986935148,
     "by_tier": {
       "Opus": 1719065,
       "Sonnet": 31482773
@@ -6357,6 +6357,114 @@
         "tier": "Sonnet",
         "peak_context": 137512,
         "started_at": "2026-07-22T17:15:47.613Z"
+      }
+    ]
+  },
+  "21230ab5-03c3-4abd-85d9-6d1f8039fa02": {
+    "started_at": "2026-07-22T18:41:21.585Z",
+    "task": "Versuche B-131 in diese Session zu erledigen. Du kannst parallelisieren! Du hast die Freigabe. Bei deinen Rückfragen fo…",
+    "peak_context": 223870,
+    "subagent_share": 56.042799154899505,
+    "by_tier": {
+      "Sonnet": 24584231,
+      "Haiku": 744367
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "B1 Prozess 4+5 verankern",
+        "tier": "Sonnet",
+        "peak_context": 67341,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B4 rules.md Akzeptanz-Katalog",
+        "tier": "Haiku",
+        "peak_context": 61533,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S179-Plan-Entwurf erstellen",
+        "tier": "Sonnet",
+        "peak_context": 203796,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B5 B-129 Skorpekh-Lord Hit-Reroll",
+        "tier": "Sonnet",
+        "peak_context": 42804,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B6 B-130 Reroll-Marker Buff-Grün",
+        "tier": "Sonnet",
+        "peak_context": 72668,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B2 UI-Verifikations-Log anlegen",
+        "tier": "Sonnet",
+        "peak_context": 57160,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B3 Backlog-Admin B-113 + neue Items",
+        "tier": "Sonnet",
+        "peak_context": 85630,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B7 B-131 Aura-Reichweiten-Hinweis",
+        "tier": "Sonnet",
+        "peak_context": 130640,
+        "started_at": "2026-07-22T18:41:21.585Z"
+      }
+    ]
+  },
+  "695b8861-aa6c-4ff3-b7f6-053761ad8b05": {
+    "started_at": "2026-07-23T14:34:05.416Z",
+    "task": "<task-notification> <task-id>a6a0a25186de68f40</task-id> <tool-use-id>toolu_01CcxJv56v6KoSWDL1vGAGgv</tool-use-id> <out…",
+    "peak_context": 123614,
+    "subagent_share": 66.10782362193552,
+    "by_tier": {
+      "Opus": 3667452,
+      "Haiku": 8893802
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "A5 Review S179 (DoD)",
+        "tier": "Opus",
+        "peak_context": 65073,
+        "started_at": "2026-07-23T14:34:05.416Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "A3 Handoff-Hygiene",
+        "tier": "Haiku",
+        "peak_context": 50927,
+        "started_at": "2026-07-23T14:34:05.416Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S180-Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 67944,
+        "started_at": "2026-07-23T14:34:05.416Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "A1+A2 Verifikations-Integration",
+        "tier": "Haiku",
+        "peak_context": 114144,
+        "started_at": "2026-07-23T14:34:05.416Z"
       }
     ]
   }

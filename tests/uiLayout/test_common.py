@@ -3164,6 +3164,130 @@ def test_compute_resolution_context_no_invuln_source_keeps_label_none(monkeypatc
 
 
 # ---------------------------------------------------------------------------
+# B-131 — wound_reroll_ones_active on ResolutionContext + the WOUND-block
+# aura-range hint it gates (Klasse B: United in Destruction's 6" range has no
+# spatial model in this app, so the app can only confirm the Lord source is
+# alive in the roster and inform the user to check the table distance).
+# ---------------------------------------------------------------------------
+
+_SKORPEKH_LORD_ID = "wh40k_9e.necrons.unit.skorpekh_lord"
+
+
+def _destroyer_cult_unit_with_weapon() -> Unit:
+    """Synthetic Skorpekh-Destroyers-shaped unit (DESTROYER CULT keyword) with
+    a melee weapon attached, so compute_resolution_context can resolve a
+    profile — mirrors _melee_group_fixture's pattern of setting unit.weapons
+    directly rather than routing through model_groups."""
+    profile = WeaponProfile(
+        weapon_type="Melee",
+        range_inches=0,
+        attacks="3",
+        strength=5,
+        ap=-2,
+        damage="2",
+        is_melee=True,
+    )
+    weapon = Weapon(id="w_thresher", name_en="Hyperphase Threshers", profiles=[profile])
+    return Unit(
+        id="test.unit.skorpekh_destroyers",
+        name_en="Skorpekh Destroyers",
+        name_de="Skorpekh-Vernichter",
+        faction="Necrons",
+        subfaction=None,
+        battlefield_role=["Elites"],
+        keywords=["NECRONS", "DESTROYER CULT"],
+        wounds=3,
+        models_min=3,
+        models_max=6,
+        power_level=4,
+        move='8"',
+        bs="3+",
+        ws="3+",
+        strength=5,
+        toughness=5,
+        attacks=3,
+        save=3,
+        invuln_save=None,
+        leadership=10,
+        oc=2,
+        fnp=None,
+        weapons=[weapon],
+    )
+
+
+def test_compute_resolution_context_wound_reroll_ones_active_true_with_lord_in_roster(
+    monkeypatch,
+) -> None:
+    """B-131 wiring: compute_resolution_context surfaces unit_wound_reroll_ones
+    (already verified end-to-end in test_ability_engine.py) on the returned
+    ctx, so _render_attacker_blocks can gate the aura-range hint on it."""
+    unit = _destroyer_cult_unit_with_weapon()
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Hyperphase Threshers",
+        "profile_idx": 0,
+        "models_count": 3,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    _resolution_context_session(p1_units={_SKORPEKH_LORD_ID: {"destroyed": False}})
+
+    ctx = common.compute_resolution_context(entry, "Necrons", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.wound_reroll_ones_active is True
+
+
+def test_compute_resolution_context_wound_reroll_ones_active_false_without_lord(
+    monkeypatch,
+) -> None:
+    """No Destroyer Lord alive in the roster → no aura source → ctx flag stays
+    False (Gegenprobe of the True case above)."""
+    unit = _destroyer_cult_unit_with_weapon()
+    entry = {
+        "def_faction": "Necrons",
+        "def_uid": "u_def",
+        "atk_uid": "atk1",
+        "weapon_name": "Hyperphase Threshers",
+        "profile_idx": 0,
+        "models_count": 3,
+    }
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (_bare_def_unit(), {}))
+    _resolution_context_session(p1_units={})
+
+    ctx = common.compute_resolution_context(entry, "Necrons", unit, {}, True, "fight", "tab1")
+
+    assert ctx is not None
+    assert ctx.wound_reroll_ones_active is False
+
+
+def test_render_wound_reroll_aura_hint_shows_when_active(monkeypatch) -> None:
+    """The st.info hint appears once compute_resolution_context's gate is True
+    — st.info convention mirrors _render_rp_block's unit-ability hints
+    (design_system.md §3, B-127 precedent)."""
+    info_texts: list[str] = []
+    monkeypatch.setattr(common.st, "info", lambda text, **kw: info_texts.append(text))
+
+    common._render_wound_reroll_aura_hint(True)
+
+    assert any(
+        "Wound re-roll of 1" in c and '6"' in c and "check the distance on the table" in c
+        for c in info_texts
+    ), info_texts
+
+
+def test_render_wound_reroll_aura_hint_absent_when_inactive(monkeypatch) -> None:
+    """No aura source active (gate False) → no hint rendered."""
+    info_texts: list[str] = []
+    monkeypatch.setattr(common.st, "info", lambda text, **kw: info_texts.append(text))
+
+    common._render_wound_reroll_aura_hint(False)
+
+    assert info_texts == []
+
+
+# ---------------------------------------------------------------------------
 # B-028a — spend_ability()/undo_ability() + reactive-ability anchor bookkeeping
 # ---------------------------------------------------------------------------
 

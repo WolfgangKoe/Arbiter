@@ -34,6 +34,13 @@ stale-pflichtig wie `DONE`/`ANSWERED` — er darf über Sessions hinweg liegen b
 den Stakeholder wartet (analog `NEEDS-DECISION`); wer den Folgemarker (`ANSWERED`/`DONE`) setzt,
 löscht im selben Schritt.
 
+**UI-Verifikations-Befunde überleben die Löschung:** Bevor eine `AWAITING-VERIFICATION`-Datei
+(bzw. ihr Folgemarker `ANSWERED`/`DONE`) gelöscht wird, wandert ihr **Befund** (Datum · Roster ·
+Klickpfad/Ergebnis · Quelle) als neuer Abschnitt nach `docs/spec/ui_verification_log.md` — ein
+dauerhaftes, append-only Nachschlagewerk. Die Handoff-Datei selbst folgt weiterhin unverändert
+ihrer normalen Lebenszyklus-Pflicht (Setzen + Löschen im selben Abschluss); nur der Befund wird
+vorher ausgelagert, statt beim Löschen verloren zu gehen (Stakeholder-Entscheid S179, Option (a)).
+
 ## Mailbox-Round-Trip (Ablauf)
 
 1. Subagent stößt auf eine Entscheidungsfrage → schreibt sie hierher, Marker `NEEDS-DECISION`,

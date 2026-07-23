@@ -25,33 +25,31 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S178, 2026-07-22)
+## Aktueller Stand (nach S179, 2026-07-23)
 
-**S178 committet — B-113 „Reroll-Fähigkeiten verdrahten" (Teil A+B).** Erstanwendung von
-`reroll_marker_row_html`. A: generischer Hit-Reroll-Konsument (`unit_hit_reroll_ones`) + HIT-Marker,
-Skorpekh-Destroyer „Hardwired for Destruction" (`reroll_hit`/self). B: generischer Aura-Wound-Reroll
-(`unit_wound_reroll_ones` + `_aura_source_alive`) + WOUND-Marker, Destroyer-Lord-Aura „United in
-Destruction" (`reroll_wound_1`); Distanz nicht gemessen (konsistent `within_inches`-No-op);
-Roster-Prep Skorpekh Lord in `necrons_test.yaml`. Fraktionsneutral (INV-4b unverändert), Suite
-**2176/99,17 %**, Architektur grün. **UI-Verifikation POSITIV** (`docs/handoff/S178_B113_ui_verifikation.md`).
-Reviewer GO nach DoD-7-Doku-Nachzug. Bereinigt: S177-Alt-Last `S177_review.md` gelöscht (roter Hygiene-Test).
-**Offen S178 → `docs/handoff/S178_retro.md` (NEEDS-DECISION):** 3 UI-Folge-Befunde + Prozessmaßnahmen +
-Backlog-Admin (B-113 archivieren, B-129/130/131 anlegen).
+**S179 committet („Close S179"):** B-129 (`hardwiredForDestruction` Skorpekh Lord) + B-130
+(Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis, generisch) — alle drei vom
+Stakeholder UI-verifiziert (positiv); B-129/B-130 archiviert, Log in `ui_verification_log.md`;
+Governance B1–B4; Review GO (2 Minor-Doku-Fixes eingearbeitet); Vollsuite 2182 passed / 99,17 %.
 
-Frühere Sessions (S60–S177): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+**S180 Block A abgeschlossen + committet; Block B/C → frische Session (Sollbruchstelle laut
+Plan, Koordinator-Kontext ~124k; Plan bleibt FREIGEGEBEN, `S180_planning.md`; Tier: Fable):**
+Block B =
+B-131-Nachbesserung (Stakeholder-Befunde aus Verifikation): (a) Hinweis-Kachel auf halbbreite
+Player-Area-Spalte begrenzen (design_system.md §1.9.1), (b) neuer öffentlicher Accessor in
+`abilityEngine.py` (analog `get_unit_rp_reroll_ability`) für lebende Aura-Spender, Hinweistext
+listet Namen aus `unit.name_en` (INV-4b-konform, zerstörte Spender fallen raus). Danach Block C
+(UI-Verif-Handoff `S180_B131b`, Vollsuite, Review, Retro, Commit).
 
-### ▶ Nächster Schritt (S179)
+### ▶ Nächster Schritt
 
-1. **S178-Abschluss nachziehen** (`docs/handoff/S178_retro.md`, NEEDS-DECISION): B-113 formal
-   archivieren (Detail-Abschnitt → `backlog_archive.md`, Zeile in `backlog.md` löschen);
-   3 UI-Folge-Befunde als **B-129/130/131** aufnehmen (Lord-Hit-Reroll · Reroll-Marker Buff→Grün ·
-   Aura-Reichweiten-Hinweis); Prozess-Entscheide (»start session«-Regel verankern, S177-Hygiene-Miss,
-   UI-Verifikations-Persistenz); je 1 `rules.md`-Katalogzeile für die 2 Reroll-Regeln.
-2. **B-128 — UI-Facharbeit (neu):** (a) Warnhinweis im Subgruppen-Selector kürzen, (b) Apply-Damage-Bereich vereinheitlichen. Scopes: `design_system.md` §1.4/§3.1. Render-Code → manuelle UI-Verifikation.
-3. **B-028c3/c4/c5** (backlog.md Rang folgend) — Regel-Scope („Benötigte Regeln-Scopes") vor Umsetzung befüllen; „Geltende Prozess-Regeln" bereits backgefüllt.
-4. **B-005 Direktiv-Lock-Rest** — nachrangig, DoR-Regel-Scope noch leer.
+1. Block B/C laut `S180_planning.md`; B-131 bleibt offen bis Stakeholder-Browser-Verifikation
+   der Nachbesserung.
+2. Danach (Backlog-Rang): B-128 · B-028c3/c4/c5 · B-005.
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING).
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S180_planning.md`
+(NEEDS-APPROVAL — freigegeben, Datei löschen bei S180-Abschluss); `S180_retro.md`
+(NEEDS-DECISION — Stakeholder sichtet am nächsten Session-Start).
 
 ---
 

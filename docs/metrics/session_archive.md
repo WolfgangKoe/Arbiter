@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-22 20:28 CEST
+Stand: 2026-07-23 17:03 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,23 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-22 19:15 dbc6  ████████████ 160k ⛔    ████░░  75%    █···········
+07-23 16:34 695b  ██████████░░ 124k ⚠️   ████░░  66%    ████▒▒▒▒▒▒▒▒
+         SA_1·  █████░░░░░░░  65k ✅    A5 Review S179 (DoD)
+         SA_2·  ████░░░░░░░░  51k ✅    A3 Handoff-Hygiene
+         SA_3·  █████░░░░░░░  68k ✅    S180-Planning-Entwurf erstellen
+         SA_4·  █████████░░░ 114k ✅    A1+A2 Verifikations-Integration
+----------------- ---------------------- -------------- ------------
+07-22 20:41 2123  ████████████ 224k ⛔    ███░░░  56%    ············
+         SA_1·  █████░░░░░░░  67k ✅    B1 Prozess 4+5 verankern
+         SA_2·  █████░░░░░░░  62k ✅    B4 rules.md Akzeptanz-Katalog
+         SA_3·  ████████████ 204k ⛔    S179-Plan-Entwurf erstellen
+         SA_4·  ███░░░░░░░░░  43k ✅    B5 B-129 Skorpekh-Lord Hit-Reroll
+         SA_5·  ██████░░░░░░  73k ✅    B6 B-130 Reroll-Marker Buff-Grün
+         SA_6·  █████░░░░░░░  57k ✅    B2 UI-Verifikations-Log anlegen
+         SA_7·  ███████░░░░░  86k ✅    B3 Backlog-Admin B-113 + neue Items
+         SA_8·  ██████████░░ 131k ⚠️   B7 B-131 Aura-Reichweiten-Hinweis
+----------------- ---------------------- -------------- ------------
+07-22 19:15 dbc6  ████████████ 166k ⛔    ████░░  73%    █···········
          SA_1·  █████░░░░░░░  65k ✅    S178 Abschluss-Review B-113 A+B
          SA_2·  ████████████ 147k ⚠️   B-113 Brief A: Reroll-Konsument + …
          SA_3·  ███████████░ 138k ⚠️   B-113 Brief B: Lord Wound-Reroll-A…
@@ -1010,3 +1026,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S176 (2026-07-21)** B-127 RP-Hinweise blauer st.info-Block (UI-verified: Their Number is Legion + Undying Legions Direktive 2 + Koexistenz); B-113 Scope-Discovery (Umsetzung S177: beide Lords + Engine-Lücke reroll_hit/reroll_wound_1 unkonsumiert); Retro M1-M4 + 2 Prozess-Doku-Korrekturen (Subagent schreibt Handoff, Orchestrator=Opus) ins Briefing für S177-Planner
 - **S177 (2026-07-22)** Governance session: coordinator tier Opus (ADR-0010), standing ratchet rules (B-024/B-124 dissolved -> B-128), process-rule field, S176 doc fixes
 - **S178 (2026-07-22)** B-113 Reroll-Fähigkeiten verdrahtet (Teil A+B): generischer Hit-/Wound-Reroll-Konsument, reroll_marker_row_html Erstanwendung in HIT+WOUND, Skorpekh-Destroyer + Destroyer-Lord-Aura; UI-Verifikation positiv
+- **S179 (2026-07-23)** Close S179: B-129 (Skorpekh Lord hardwiredForDestruction) + B-130 (Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis generisch) umgesetzt; Governance B1-B4 (start-session-Regel, ui_verification_log, Backlog, R-COMBAT-46/47); alle 3 UI-Verifikationen positiv (B-131 mit 2 Follow-ups: Kachel-Breite + namentliche Spender-Liste → S180); Review GO, 2182 passed / 99,17 %

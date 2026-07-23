@@ -1978,6 +1978,17 @@ def test_hit_reroll_ones_true_for_real_skorpekh_destroyer_unit() -> None:
     assert unit_hit_reroll_ones("Necrons", skorpekh, {"destroyed": False}) is True
 
 
+def test_hit_reroll_ones_true_for_real_skorpekh_lord() -> None:
+    """Integration: die echte Skorpekh-Lord-Datasheet trägt hardwiredForDestruction
+    intrinsisch (units.yaml) — die Destroyer-Cult-Subfaction-Ability gated per
+    has_rules darauf. Beweist die End-zu-Ende-Verdrahtung von YAML bis zum
+    generischen Konsumenten (B-129)."""
+    _revive_session()
+    units, _ = load_army("necrons")
+    skorpekh_lord = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_lord")
+    assert unit_hit_reroll_ones("Necrons", skorpekh_lord, {"destroyed": False}) is True
+
+
 def test_hit_reroll_ones_ignores_full_reroll_shape_without_modifier(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

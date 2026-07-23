@@ -1981,43 +1981,6 @@ Mitgliedschaft anhand der `Fachlichkeit (Ziel 7)`-Zeilen in `backlog.md` grob zu
 
 **Herkunft:** Stakeholder-Retro-Ergänzung 2 (`S156_retro_s155.md`), Konsent-Modus (Template kann bei Umsetzung noch geschärft werden).
 
-## B-113 — Skorpekh Destroyer und Destroyer Lord Reroll Faehigkeiten nicht verdrahtet
-
-[↩ Zeile in backlog.md](backlog.md#b-113)
-
-**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
-
-**Status:** ToDo
-
-**Tier:** Executor
-
-**Effort:** S
-
-**Detail-Beschreibung:** Stakeholder-Testbefund S158 (`docs/handoff/S158_B104_ui_verifikation.md`,
-Testfall 2): Skorpekh Destroyers sollten laut Regel eine Reroll-Fähigkeit beim Trefferwurf
-haben, ist aber im Roster/in der YAML nicht verdrahtet (Stakeholder hat es am Skorpekh-Roster
-getestet und bestätigt, dass nichts erscheint). Destroyer Lord erlaubt laut Regel dieselbe
-Art Reroll beim Verwundungswurf — fehlt aber komplett im Roster, kann also noch nicht
-getestet werden. Aufgabe: Regel-Recherche (Wahapedia Necrons) für beide Fähigkeiten, dann
-YAML-Verdrahtung (Skorpekh Destroyer) bzw. Roster-Ergänzung + Verdrahtung (Destroyer Lord).
-
-**Abhängigkeiten:** keine; hängt fachlich mit dem `reroll_marker_row_html`-Baustein
-(`docs/spec/design_system.md` §4.3) zusammen, der auf einen echten Producer wartet — inkl.
-Marker-Zeilen-Hooks im HIT-Block (§4.4-Lücke, B-116-Pendant für SAVE).
-
-**Belege:** `docs/handoff/S158_B104_ui_verifikation.md` Testfall 2 (Stakeholder-Befund).
-
-**Benötigte Regeln-Scopes:** `docs/work/wahapedia_necrons/`.
-
-**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
-UI-Regeln JA — HIT-Block-Marker-Zeilen/Würfelanzeige berührt
-(→ `docs/spec/design_system.md` + Design-System-Ratchet, `operating_model.md`
-§Stehende Ratchet-Praktiken); DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done");
-Freigabe-Gate (→ `operating_model.md` Event 2); Test-Mandat 4 Schichten
-(→ `CLAUDE.md` §Testing), Render-Anteil zusätzlich manuelle UI-Verifikation (DoD-6).
-
-**Herkunft:** Review-Retro S158, Maßnahme 6.
-
 ## B-114 — SAVE Modifier verschachtelt statt flach
 
 [↩ Zeile in backlog.md](backlog.md#b-114)
@@ -2192,6 +2155,61 @@ Render-Code → manuelle UI-Verifikation (DoD-6); Test-Mandat soweit Logik betro
 (`operating_model.md` §Stehende Ratchet-Praktiken) + Ausgründung der offenen Rest-Facharbeit als
 neues Item; ursprünglich B-124 (S167-Planning Punkt 2iii, Stakeholder-Freigabe S167;
 Kritik-Ergänzung T3-V S168).
+
+
+## B-131 — Aura-Reichweiten-Hinweis Destroyer-Cult Klasse B
+
+[↩ Zeile in backlog.md](backlog.md#b-131)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** S (~50k Nachbesserung)
+
+**Detail-Beschreibung:** Folge-Befund aus der S178-B-113-UI-Verifikation (Befund 3): Die App misst
+bewusst keine Distanzen, muss aber informieren — bei Destroyer-Cult-Einheiten ein Hinweis, dass der
+Wound-Reroll-von-1 aus der Destroyer-Lord-Aura („United in Destruction") nur innerhalb von 6" eines
+Destroyer Lords gilt (Tisch-Prüfung). Klasse-B-Hinweis-Muster (`st.info`), Vorbild B-127 RP-Hinweise
+(`_rp_unit_ability_hints`/`_render_rp_block` in `src/uiLayout/_common.py`). Gating über die
+bestehende Engine-Funktion `abilityEngine.unit_wound_reroll_ones` (Hinweis nur zeigen, wenn sie
+`True` liefert — Lord im Roster + Keyword passt; nur die 6"-Distanz bleibt Tisch-Anteil), kein neuer
+Engine-Code. Umgesetzt S179 (Brief 2, Render-Code `_render_wound_reroll_aura_hint`).
+
+**Verifikation (Stakeholder S179/S180):** Positiv — Hinweis erscheint wie beschrieben. **Zwei Follow-ups
+(Teil-Nachbesserung S180):**
+
+**(1) Bug: Hinweis-Kachel-Breite** — st.info-Hinweis erstreckt sich über die ganze gameActionArea
+statt nur die Player-Area-Spalte (soll: `design_system.md` §1.9.1 einhalten, nur halbe Breite).
+
+**(2) Anforderungs-Präzisierung: Spender-Liste namentlich** — Hinweis soll konkrete Aura-Spender
+namentlich listen statt generisch. Zielwortlaut: „Wound re-roll of 1 (aura ability) applies only while
+this unit is within 6\" of [unit1], [unit2] or [unitn]." Spender-Liste soll **live** sein (zerstörte
+Spender fallen raus). **Implementierung:** neuer öffentlicher Accessor in `src/gameMechanic/abilityEngine.py`
+(analog `get_unit_rp_reroll_ability`, entfernte/archivierte Diskussion S179-B131-Kommentar) liefert eine
+Liste der **lebenden** Aura-Spender (IDs aus `unit.name_en`, INV-4b-konform: Strings nur aus YAML,
+keine Fraktions-Literals in `src/`), dann `_render_wound_reroll_aura_hint` formatiert die Namen
+(„[Skorpekh Lord], [Lokhusta Lord]…"). Alten generischen Hinweistext entfernen.
+
+**Abhängigkeiten:** keine Code-Abhängigkeit; verwandt B-127 (RP-Hinweis-Muster) und der bereits
+verdrahteten „United in Destruction"-Aura (B-113 S178).
+
+**Belege:** `docs/work/wahapedia_necrons/` („within 6\" of this model"). Stakeholder-Verifikations-Kommentar S179/S180 in gelöschter Handoff-Datei archiviert.
+(„within 6\" of this model").
+
+**Benötigte Regeln-Scopes:** `docs/work/wahapedia_necrons/` + `docs/spec/design_system.md` §1.9.1/§3
+(st.info-Hinweis-Konvention).
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+UI-Regeln JA — neuer st.info-Hinweis (→ `docs/spec/design_system.md` §3 + Design-System-Ratchet);
+DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate
+(→ `operating_model.md` Event 2); Test-Mandat 4 Schichten HTML-Output wie B-127 (→ `CLAUDE.md`
+§Testing), Render-Anteil zusätzlich manuelle UI-Verifikation (DoD-6).
+
+**Herkunft:** S178-B-113-UI-Verifikation, Folge-Befund 3 (Retro-Maßnahme A3, S179); Stakeholder-Verifikation
+S179/S180 mit 2 Follow-ups (Nachbesserung S180).
 
 ---
 

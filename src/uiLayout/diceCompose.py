@@ -411,7 +411,7 @@ def special_die_html(label: str, content: str = "") -> str:
 
 
 _REROLL_GLYPH = SYM_RESET  # app-wide reset/redo glyph (gameHeader, _common, gameProtocoll)
-_REROLL_COLOR = "#f59e0b"  # established reroll orange (design_system.md §4.3)
+_REROLL_COLOR = _BUFF_COLOR_HEX  # reroll-of-1 is always a buff for the acting unit (B-130)
 
 
 def _reroll_die_svg(size: int = 32, color: str = _REROLL_COLOR) -> str:

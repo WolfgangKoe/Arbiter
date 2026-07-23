@@ -392,6 +392,22 @@ Charge Phase, Morale Phase, Psychic Phase, Battle-Round-Struktur).
 - **code**: `data/wh40k_9e/necrons/stratagems.yaml:curse_of_the_phaeron` (`effect.type: auto_explode`, `cp_overrides: [{has_keyword: TITANIC, cp_cost: 3}]`) · `gameObjects/stratagem.py:CpOverride`/`effective_cp_cost` · `gameObjects/loader.py:load_stratagems` (parses `cp_overrides`) · `uiLayout/_common.py:_render_auto_explode_go`/`_find_auto_explode_stratagem`/`_auto_explode_use_callback`/`_refund_auto_explode_spend` · `uiLayout/_common.py:spend_stratagem`/`undo_stratagem` (`cp_cost_override` param, B-028c1 b3).
 - **regel**: Einzige echte Gefechtsoption (Verwenden/Nicht-Verwenden-Entscheid + CP-Kosten) im ganzen Explodes-Komplex — jeder andere Baustein der Familie ist Pflicht-Trigger (design_system.md §7.1 Baustein ②, processes.md P-16). Rendert nur solange die Pflicht-Trigger-Kachel noch unresolved ist (`entry["exploded"] is None`) und die zerstörte Einheit die Stratagem-`conditions` erfüllt (hier `VEHICLE`) — datengetrieben über `stratagem_conditions_met`, kein Fraktions-Hardcode. `[Use]` überspringt den Tischwurf vollständig: `entry["exploded"]` wird direkt auf `True` gesetzt (`resolve_explode_effect(ability, exploded=True)`, dieselbe Weiche wie der manuelle "Explodes!"-Button), CP-Abzug über `effective_cp_cost` (1 CP Basis, 3 CP falls die Einheit `TITANIC` trägt — Annihilation Barge vs. The Silent King als reale Necron-Belegstücke). Die Kachel-eigene Wurf-Reset-Taste (§1.6) erstattet einen per `auto_explode` gezahlten CP-Betrag vollständig zurück (`_refund_auto_explode_spend`), da der CP-Automatismus selbst Teil der rückgängig gemachten Entscheidung ist.
 
+### R-COMBAT-46
+- **klasse**: A
+- **status**: implementiert
+- **getestet**: ja — test_hit_reroll_ones_true_for_real_skorpekh_destroyer_unit
+- **quelle**: docs/work/wahapedia_necrons/units_all.txt:83/95 — Hardwired for Destruction: "Each time a model in this unit makes an attack, re-roll a hit roll of 1."
+- **code**: abilityEngine.py:unit_hit_reroll_ones
+- **regel**: Destroyer-Cult-Einheiten mit `hardwiredForDestruction` wiederholen einen Trefferwurf von 1.
+
+### R-COMBAT-47
+- **klasse**: C
+- **status**: implementiert
+- **getestet**: ja — test_wound_reroll_ones_true_for_real_skorpekh_lord_and_destroyers_roster
+- **quelle**: docs/work/wahapedia_necrons/units_all.txt:95 — United in Destruction: "Aura: While a friendly <DYNASTY> DESTROYER CULT unit is within 6\" of this model, each time a model in that unit makes an attack, re-roll a wound roll of 1."
+- **code**: abilityEngine.py:unit_wound_reroll_ones
+- **regel**: United in Destruction (Aura): Befreundete Destroyer-Cult-Einheiten innerhalb von 6\" eines Destroyer Lords wiederholen einen Verwundungswurf von 1. App-Anteil: prüft Lord-Präsenz und Keyword; die Distanz-Komponente (6\" physisch am Tisch) ist Tisch-Anteil.
+
 ---
 
 ## Bereich: Command Phase

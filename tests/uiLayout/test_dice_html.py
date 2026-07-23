@@ -244,10 +244,11 @@ def test_badge_chip_title_carries_full_label_alongside_truncation() -> None:
 def test_reroll_marker_renders_as_die_chip_not_bare_span() -> None:
     # S160/B-104-Re-Fix: design_system.md §4.3 assigns Reroll to the SVG-Würfel-
     # fläche family too (not the text-chip family) — same shared _marker_row_html
-    # helper, same 32x32 die box, reroll-orange border via the SVG stroke.
+    # helper, same 32x32 die box. B-130: reroll-of-1 is a buff for the acting
+    # unit, so the SVG stroke is buff-green (not the old reroll-orange).
     html = reroll_marker_row_html([1])
     assert "<svg" in html
-    assert 'stroke="#f59e0b" stroke-width="1.5"' in html
+    assert f'stroke="{_BUFF_GREEN}" stroke-width="1.5"' in html
 
 
 def test_modifier_columns_clamp_to_grid() -> None:

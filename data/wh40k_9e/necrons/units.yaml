@@ -680,6 +680,7 @@ units:
   rules:
   - livingMetal
   - unitedInDestruction
+  - hardwiredForDestruction
   weapons:
   - ref: wh40k_9e.necrons.weapon.enmitic_annihilator
   - ref: wh40k_9e.necrons.weapon.flensing_claw

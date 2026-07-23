@@ -153,6 +153,12 @@ Eine Änderung gilt erst als fertig, wenn alle Punkte erfüllt (oder begründet 
 `agent_scopes.md`, legt Planning-Entwurf als Datei ab); Koordinator legt den Entwurf dem Stakeholder
 vor. **Auf Freigabe warten**, dann Executor-Subagent starten.
 
+**Stehende Regel (S178/S179):** Ohne weitere Präzisierung erzeugt „start session" IMMER denselben
+Plan-Typ — Backlog-Rang-1 wählen · Kernbefund selbst verifizieren · Regel-Scopes je Brief
+setzen/nachtragen · Teil-Briefs + DoD + UI-Verifikations-Roster + Token-Budget + Abschluss-Dreiklang
+· dann Freigabe abwarten. Kanonisch (Details, Reihenfolge-Pflichten): `docs/governance/operating_model.md`
+Event 1.
+
 **Session starten — direkt los** (Plan ist schon freigegeben, Shortcut):
 > Beginne mit der nächsten Session. Der Plan ist freigegeben.
 
@@ -178,8 +184,11 @@ expliziter Freigabe. Retro-Ergebnisse und Verifikations-Bedarfe legt er in `docs
 Stakeholder sichtet sie, ergänzt ggf. und gibt sie dem nächsten Planner mit. **Abgrenzung, die
 bestehen bleibt:** Das Freigabe-Gate für Code-/Datei-Änderungen WÄHREND der Session (Plan +
 Dateiliste zeigen, auf explizite Freigabe warten vor Umsetzung) ist davon unberührt — nur der
-Abschluss-Commit ist stehend freigegeben, nicht die Umsetzung. Kanonisch:
-`docs/governance/operating_model.md` Event 5.
+Abschluss-Commit ist stehend freigegeben, nicht die Umsetzung. **Reihenfolge im Abschluss
+(Schärfung S179 nach S177-Hygiene-Miss):** DONE/ANSWERED-Handoffs werden gelöscht, BEVOR die
+Vollsuite läuft — die Vollsuite ist der LETZTE Schritt vor dem Commit, nie davor (S177: eine
+vorgezogene Vollsuite lief gegen den noch nicht bereinigten Handoff-Bestand und committete einen
+roten Hygiene-Test mit). Kanonisch: `docs/governance/operating_model.md` Event 5.
 
 ### Commit-Punkte
 - Nach jeder abgeschlossenen, in sich sinnvollen Änderung auf Commit hinweisen
