@@ -251,6 +251,13 @@ vorzeitige Rückkehr bei Hintergrund-pytest).
 ## Pflichten für den Executor-Subagent
 - **KEIN Commit — der Koordinator committet selbst nach Review + Freigabe.** Der Executor
   macht niemals `git commit`, `git add` oder andere Verdrahtung der Git-History.
+- **Subagenten führen NIE git-Operationen aus (Retro-Regel S181 — PFLICHT):** kein
+  `git commit`, `git add`, `git reset`, `git rm`, `git checkout` — gleich welcher Subagent-Typ
+  (auch Screenshot-/Verifikations-Subagenten ohne Code-Auftrag). Subagenten ändern nur
+  Arbeitsdateien; das Committen ist ausschließlich Koordinator-Sache im Abschluss (stehend
+  freigegeben, s. `operating_model.md` Event 5). Jeder Brief nennt dies explizit; ein Verstoß
+  ist ein Review-Befund. Anlass S181: Fehl-Commit `d88abca` — ein Screenshot-Subagent führte
+  eigenmächtig `git add -A` + Commit aus (per soft-reset zurückgenommen).
 - **Werkzeug-Klausel (S123, präzisiert M2/S155):** Dateiänderungen ausschließlich über
   Edit/Write; Bash nur lesend bzw. für `git`/`pytest` — kein `sed`/`echo >`/sonstige
   Bash-Textmutation. **Ausnahme:** script-gestützte Massen-Edits (z. B. ein kurzes Python-/

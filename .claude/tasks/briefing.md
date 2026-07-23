@@ -25,31 +25,40 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S180, 2026-07-23)
+## Aktueller Stand (nach S181, 2026-07-23)
 
-**S180 komplett (Block A + B/C):** B-131-Nachbesserung umgesetzt und ABGESCHLOSSEN —
-(a) Aura-Hinweis-Kachel halbbreit (`st.columns(2)`-Linksspalte, `rp_col`-Muster, §1.9.1),
-(b) Accessor `get_wound_reroll_aura_donor_names` in `abilityEngine.py` (lebende Spender),
-`ResolutionContext.wound_reroll_aura_donor_names`, Hinweistext nennt Spender aus `unit.name_en`
-(INV-4b-Scoreboard unverändert 6/16/3). Stakeholder hat noch in S180 im Browser verifiziert
-(Prüfpunkte 1–3 positiv; Mehr-Spender nur unit-getestet → Retro-M4); B-131 archiviert, Log in
-`ui_verification_log.md`. Review GO (2 Minor eingearbeitet: Lokhust-Tippfehler, Loader-Caching
-→ Retro-M5). Retro-Entscheide: Block A M1/M2 abgelehnt, M3 bestätigt; Block C M4 ANGENOMMEN.
-Vollsuite 2187 passed / 99,08 %; Architektur 8/8; Docs+Acceptance 25/25.
+**S181 abgeschlossen.** B-128(a) Doku-Angleichung erledigt — Warnhinweis-Text im
+Subgruppen-Selector geprüft, Ergebnis: Silent-King bleibt bewusst hinweislos (S169-Entscheidung
+bestätigt, kein Code-Rest). Retro-M4 (S180, ANGENOMMEN) umgesetzt: zweiter Aura-Spender
+(`lokhust_lord`) im Test-Roster ergänzt — im Browser noch zu verifizieren
+(`docs/handoff/S181_M4_verifikation.md`, AWAITING-VERIFICATION). B-128(b)
+(Apply-Damage-Bereich vereinheitlichen) Mockup-Vorschlag vorgelegt
+(`docs/handoff/S181_B128b_mockup.md`, NEEDS-DECISION, 4 offene Design-Entscheidungen D1–D4) —
+B-128 bleibt OFFEN bis (b) entschieden. B-028c5 aus Token-Gründen vertagt.
 
-Frühere Sessions (S60–S179): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
+**Governance:** Fehl-Commit `d88abca` (ein Screenshot-Subagent hatte eigenmächtig
+`git add -A` + Commit ausgeführt) per soft-reset zurückgenommen. Zwei Retro-Regeln
+eingepflegt: (1) „Subagenten führen NIE git-Operationen aus" —
+`docs/reference/agent_scopes.md` §Pflichten für den Executor-Subagent; (2)
+„Entscheidungs-Umkehr-Kontext-Pflicht" — `docs/governance/operating_model.md` §ev1 Planning.
+Zwei neue Backlog-Items angelegt: B-132 (Loader-Caching-Prüfung, Retro-M5), B-133
+(technischer Git-Commit-Blockier-Hook für Subagenten, Retro-1-Folge-Item).
+
+Vollsuite: s. unten (nach Testlauf einzutragen).
+
+Frühere Sessions (S60–S180): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-1. **Retro-M4 (Stakeholder-Entscheid noch in S180: ANGENOMMEN):** zweiten Aura-Spender
-   (z. B. Lokhust Lord) in `necrons_test.yaml` aufnehmen (~5k, reine Daten-Änderung), danach
-   Mehr-Spender-Hinweis im Browser verifizieren (bislang nur unit-getestet).
-2. Backlog-Rang (umsortiert S180): B-128 · B-028c3/c4/c5 · B-005.
-3. Retro-Rest sichten: M5 (Loader-Caching-Backlog-Item) noch unentschieden; M6 nur Bestätigung.
+1. **Stakeholder verifiziert im Browser + entscheidet:** (a) M4 Mehr-Spender-Hinweis
+   (`S181_M4_verifikation.md`), (b) B-128(b)-Mockup-Vorschlag (`S181_B128b_mockup.md`,
+   D1–D4).
+2. **B-028c5 nachholen** (in S181 aus Token-Gründen vertagt).
+3. Backlog-Rang neu sortieren (nach M4/B-128(b)-Entscheid, plus B-132/B-133 einordnen).
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S180_retro.md`
-(NEEDS-DECISION — Block A entschieden, Block-C-Maßnahmen sichtet der Stakeholder am
-nächsten Session-Start).
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING);
+`S181_M4_verifikation.md` (AWAITING-VERIFICATION); `S181_B128b_mockup.md`
+(NEEDS-DECISION); 2 behaltene Screenshots (`20-53-48` B-108 offen, `10-20-01` orphaned).
 
 ---
 

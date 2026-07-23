@@ -6471,8 +6471,8 @@
   "fe079215-3cb8-480d-b945-6802a4a19081": {
     "started_at": "2026-07-23T15:16:39.054Z",
     "task": "<task-notification> <task-id>a31d04897596d72d7</task-id> <tool-use-id>toolu_01SMhvXBshLnZaxM8X84PbgD</tool-use-id> <out…",
-    "peak_context": 96792,
-    "subagent_share": 80.85493340439415,
+    "peak_context": 99782,
+    "subagent_share": 79.11961444623769,
     "by_tier": {
       "Sonnet": 11785518,
       "Opus": 1439137,
@@ -6506,6 +6506,68 @@
         "tier": "Haiku",
         "peak_context": 111342,
         "started_at": "2026-07-23T15:16:39.054Z"
+      }
+    ]
+  },
+  "33e40467-99c1-4a79-9f72-8419fb234abf": {
+    "started_at": "2026-07-23T15:56:46.330Z",
+    "task": "start next session",
+    "peak_context": 149101,
+    "subagent_share": 67.52884819566654,
+    "by_tier": {
+      "Sonnet": 13878054,
+      "Opus": 3634100,
+      "Haiku": 2350645
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T2 B-128b DAMAGE-Block Mockup",
+        "tier": "Sonnet",
+        "peak_context": 79390,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S181-Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 107087,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T4 Screenshot-Bereinigung",
+        "tier": "Haiku",
+        "peak_context": 67724,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S181 Review DoD",
+        "tier": "Opus",
+        "peak_context": 47951,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 B-128a Doku + Silent-King-Hinweis",
+        "tier": "Sonnet",
+        "peak_context": 78806,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S181 Abschluss-Artefaktpflege",
+        "tier": "Sonnet",
+        "peak_context": 106366,
+        "started_at": "2026-07-23T15:56:46.330Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T3 M4 zweiter Aura-Spender",
+        "tier": "Haiku",
+        "peak_context": 32368,
+        "started_at": "2026-07-23T15:56:46.330Z"
       }
     ]
   }

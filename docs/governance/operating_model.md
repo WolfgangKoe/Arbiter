@@ -214,6 +214,13 @@ Der Agent "hört zwischen Sessions auf zu existieren" — die Organisation erinn
      Stakeholder-Entscheid nötig? Ganzheitlich Code ↔ App ↔ Regeln ↔ Architektur betrachtet?).
      Ratchet: bestehende aktive Items werden erst beim nächsten Anfassen nachgezogen, kein
      Big-Bang-Durchgang. Planner-Pflicht kanonisch: `docs/reference/agent_scopes.md`.
+
+     **Entscheidungs-Umkehr-Kontext-Pflicht (S181):** Formuliert Planner oder Koordinator eine
+     Entscheidungsfrage, deren eine Option eine FRÜHERE explizite Entscheidung umkehren würde,
+     MUSS die Frage diesen früheren Entscheid (Session + Kurzbegründung) und etwaige
+     bewachende Tests im Kontext nennen — der Stakeholder trifft die Umkehr bewusst, nicht
+     versehentlich. Anlass S181-D3: „Silent-King-Hinweis ergänzen" hätte die bewusste
+     S169-Entfernung unbemerkt umgekehrt; erst die roten S169-Regressionstests fingen es auf.
    - **Shortcut ("der Plan ist freigegeben"):** kein erneuter Plan — direkt mit der ersten Aufgabe aus `briefing.md` starten.
 
 2. <a id="ev2"></a>**Plan-Freigabe (Gate-Event)** 🔧

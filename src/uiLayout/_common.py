@@ -2671,7 +2671,8 @@ def _render_subgroup_selector(
             # requires this group to be destroyed before the other group can
             # take damage (get_locked_group docstring). The radio choice above
             # is already forced onto this group, so no separate warning is
-            # shown here (S169 b2 stakeholder ask: hint dropped as redundant).
+            # shown here (S169 b2 stakeholder ask, reconfirmed S181: hint
+            # dropped as redundant — see design_system.md §1.4).
         return locked_gid
 
     ids = [g.id for g in active_groups]

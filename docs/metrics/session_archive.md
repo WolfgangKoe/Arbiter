@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-23 17:51 CEST
+Stand: 2026-07-23 21:45 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,16 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-23 17:16 fe07  ████████░░░░  97k ✅    █████░  81%    █·····▒▒▒▒▒▒
+07-23 17:56 33e4  ████████████ 149k ⚠️   ████░░  68%    ██········▒▒
+         SA_1·  ██████░░░░░░  79k ✅    T2 B-128b DAMAGE-Block Mockup
+         SA_2·  █████████░░░ 107k ✅    S181-Planning-Entwurf erstellen
+         SA_3·  █████░░░░░░░  68k ✅    T4 Screenshot-Bereinigung
+         SA_4·  ████░░░░░░░░  48k ✅    S181 Review DoD
+         SA_5·  ██████░░░░░░  79k ✅    T1 B-128a Doku + Silent-King-Hinwe…
+         SA_6·  █████████░░░ 106k ✅    S181 Abschluss-Artefaktpflege
+         SA_7·  ███░░░░░░░░░  32k ✅    T3 M4 zweiter Aura-Spender
+----------------- ---------------------- -------------- ------------
+07-23 17:16 fe07  ████████░░░░ 100k ✅    █████░  79%    █·····▒▒▒▒▒▒
          SA_1·  ██████████░░ 121k ⚠️   B-131-Nachbesserung umsetzen
          SA_2·  █████░░░░░░░  60k ✅    Review S180 B-131-Nachbesserung
          SA_3·  ███████░░░░░  85k ✅    B-131-Verifikation integrieren
@@ -1034,3 +1043,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S178 (2026-07-22)** B-113 Reroll-Fähigkeiten verdrahtet (Teil A+B): generischer Hit-/Wound-Reroll-Konsument, reroll_marker_row_html Erstanwendung in HIT+WOUND, Skorpekh-Destroyer + Destroyer-Lord-Aura; UI-Verifikation positiv
 - **S179 (2026-07-23)** Close S179: B-129 (Skorpekh Lord hardwiredForDestruction) + B-130 (Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis generisch) umgesetzt; Governance B1-B4 (start-session-Regel, ui_verification_log, Backlog, R-COMBAT-46/47); alle 3 UI-Verifikationen positiv (B-131 mit 2 Follow-ups: Kachel-Breite + namentliche Spender-Liste → S180); Review GO, 2182 passed / 99,17 %
 - **S180 (2026-07-23)** B-131 follow-up: named aura donors + half-width hint, UI-verified + archived; retro M4 accepted
+- **S181 (2026-07-23)** B-128(a) Doku-Angleichung (Silent-King bewusst hinweislos), M4 zweiter Aura-Spender, B-128(b) Mockup-Vorschlag, Governance-Retro (Subagent-kein-git, Reversal-Kontext), Fehl-Commit d88abca zurückgenommen

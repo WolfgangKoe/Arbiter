@@ -2124,16 +2124,23 @@ Direktiv-Effekt".
 B-124-Ratchet-Zeile (S177: B-024/B-124 als Dauer-Ratchets in stehende Regel überführt,
 `operating_model.md` §Stehende Ratchet-Praktiken — die Ratchet-Praxis selbst braucht damit
 kein Backlog-Item mehr; diese konkrete Facharbeit bleibt aber offen):
-- (a) **Warnhinweis-Text im Subgruppen-Selector kürzen** — der „muss laut Regel zuerst
-  vollständig zerstört werden…"-Hinweis ist laut Stakeholder-Zitat „wahnsinnig übertrieben"
-  (T3-V S168, anlässlich der B-123-UI-Verifikation Silent-King-Subgruppen-Lock); Ziel: ein
-  Imperativ-Satz statt Regel-Paraphrase (Vorbild: bestehender „Angeschlagenes Modell … muss
-  zuerst abgehandelt werden."-Hinweis, ► Präfix, kurzer Ton).
-- (b) **Apply-Damage-Bereich vereinheitlichen** — Stakeholder-Zitat: „der 'Apply-Damage'-Bereich
-  ist immer noch nicht wirklich einheitlich. Fürs erste haben wir hier einen Randfall behandelt
-  und man hat ein Regelkonformes Verhalten. Aber geil ist anders." (T3-V S168). Betrifft dieselbe
-  Wurzel wie (a) — fehlende schematische Bauform-Darstellung in `design_system.md` §1.4
-  (Stakeholder-Zitat: „Ich finde unser Design-System und unsere specs ungenügend.").
+- (a) **erledigt (S181).** Warnhinweis-Text im Subgruppen-Selector geprüft — Ergebnis: reine
+  Doku-Angleichung, kein Code-Rest. Der Silent King bleibt **bewusst** hinweislos; die
+  S169-Entscheidung, den Hinweis dort NICHT einzublenden, wurde bestätigt (kein Umkehr-Fall,
+  s. auch `operating_model.md` §ev1 „Entscheidungs-Umkehr-Kontext-Pflicht (S181)" — genau dieser
+  Fall war der Anlass: ein Vorschlag „Silent-King-Hinweis ergänzen" hätte die S169-Entfernung
+  unbemerkt umgekehrt; die roten S169-Regressionstests fingen es auf).
+- (b) **offen — Mockup vorgelegt (S181).** Apply-Damage-Bereich vereinheitlichen —
+  Stakeholder-Zitat: „der 'Apply-Damage'-Bereich ist immer noch nicht wirklich einheitlich.
+  Fürs erste haben wir hier einen Randfall behandelt und man hat ein Regelkonformes Verhalten.
+  Aber geil ist anders." (T3-V S168). Betrifft dieselbe Wurzel wie (a) — fehlende schematische
+  Bauform-Darstellung in `design_system.md` §1.4 (Stakeholder-Zitat: „Ich finde unser
+  Design-System und unsere specs ungenügend."). Design-Vorschlag liegt vor:
+  `docs/handoff/S181_B128b_mockup.md` (NEEDS-DECISION) — Ist-Analyse, Regel-Check (Divergenz
+  Gruppen-Wunden vs. Einzel-/Multi-Modell ist teilweise regelnotwendig, s. dort §2), Soll-Schema
+  und vier offene Design-Entscheidungen D1–D4 (Label-Kürzung, gemeinsamer Absatz-Titel,
+  Obergrenze „Models lost", Ein-Konzept-Frage). Item bleibt OFFEN bis der Stakeholder
+  entscheidet.
 
 **Abhängigkeiten:** — (inhaltlich verwandt: `design_system.md` §1.4 Loss-Allocation-Baustein +
 §3.1 Wortlaut-Budget).
@@ -2155,5 +2162,82 @@ Render-Code → manuelle UI-Verifikation (DoD-6); Test-Mandat soweit Logik betro
 (`operating_model.md` §Stehende Ratchet-Praktiken) + Ausgründung der offenen Rest-Facharbeit als
 neues Item; ursprünglich B-124 (S167-Planning Punkt 2iii, Stakeholder-Freigabe S167;
 Kritik-Ergänzung T3-V S168).
+
+---
+
+## B-132 — Loader-Caching der Ability-Accessoren pruefen
+
+[↩ Zeile in backlog.md](backlog.md#b-132)
+
+**Typ:** <span style="color:#c2410c">**Schuldabbau**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** `get_wound_reroll_aura_donor_names` und `get_unit_rp_reroll_ability`
+(`abilityEngine.py`) rufen im Render-Hot-Path ungecachtes `load_army` auf — kein akuter
+Regress, aber ein Muster, das sich bereits an anderer Stelle in der Codebasis wiederholt
+(konsistent mit sonstigen `load_army`-Aufrufern). Prüfen: lohnt sich Caching (Loader-Ebene,
+`gameObjects/loader.py`) angesichts der Aufruffrequenz, oder ist der Ist-Zustand unkritisch
+(kleine YAML, seltene Render-Zyklen)? Kein Bugfix — reine Performance-/Architektur-Prüfung mit
+optionaler Umsetzung.
+
+**Abhängigkeiten:** — (betrifft `gameObjects/loader.py` + `abilityEngine.py`).
+
+**Belege:** S180-Review (Minor 2) — Loader-Caching als Beobachtung ohne Regress vermerkt;
+Retro-Maßnahme M5 (S180-Retro, angenommen S181).
+
+**Benötigte Regeln-Scopes:** keine Regel-/UI-Scopes — reine Architektur-/Performance-Frage;
+`docs/spec/architecture.md` (Loader-Layer) als Referenz.
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+DoD/ganzheitliche Sicht (→ `CLAUDE.md` „Definition of Done"); Freigabe-Gate
+(→ `operating_model.md` Event 2); Test-Mandat soweit Verhalten betroffen (→ `CLAUDE.md`
+§Testing) — bei reiner Prüfung ohne Codeänderung entfällt der Testschritt, Ergebnis als
+Befund in `briefing.md`/Backlog dokumentieren.
+
+**Herkunft:** S180-Review Minor 2 / S180-Retro Maßnahme M5, in S181 als Backlog-Item angelegt.
+
+---
+
+## B-133 — git-Commit-Blockier-Hook fuer Subagenten pruefen
+
+[↩ Zeile in backlog.md](backlog.md#b-133)
+
+**Typ:** <span style="color:#1e3a8a">**Prozess/Doku**</span>
+
+**Status:** ToDo
+
+**Tier:** Executor
+
+**Effort:** ~15k
+
+**Detail-Beschreibung:** Prüfen, ob ein Hook `git commit`/`git add -A` aus Subagent-Kontext
+technisch blocken kann — analog zu `tools/freigabe_gate.py`, das Edit/Write bis zur
+physischen Stakeholder-Freigabe blockiert. Anlass: Fehl-Commit `d88abca` in S181 — ein
+Screenshot-Subagent (ohne Code-Auftrag) führte eigenmächtig `git add -A` + Commit aus, wurde
+per soft-reset zurückgenommen. Die neue Doku-Regel (`docs/reference/agent_scopes.md` §Pflichten
+für den Executor-Subagent, S181) verbietet dies bereits textuell; dieses Item prüft, ob sich der
+Verstoß zusätzlich technisch (Hook/Wrapper) verhindern lässt, statt sich allein auf
+Brief-Disziplin zu verlassen.
+
+**Abhängigkeiten:** — (verwandt: `tools/freigabe_gate.py` als Vorbild-Mechanismus).
+
+**Belege:** Fehl-Commit `d88abca` (S181, per soft-reset zurückgenommen);
+`docs/reference/agent_scopes.md` §Pflichten für den Executor-Subagent (Retro-Regel S181).
+
+**Benötigte Regeln-Scopes:** `docs/reference/agent_scopes.md` §Pflichten für den
+Executor-Subagent; `tools/freigabe_gate.py` als technisches Vorbild.
+
+**Geltende Prozess-Regeln:** Tier Executor (→ `operating_model.md` „Rollen & Model-Tier");
+Freigabe-Gate (→ `operating_model.md` Event 2) — dieses Item betrifft die Harness/Hook-Ebene
+selbst, nicht Spielregeln; Test-Mandat gilt trotzdem für den Hook-Code, falls umgesetzt
+(→ `CLAUDE.md` §Testing).
+
+**Herkunft:** S181-Retro Maßnahme 1 (Governance-Regel „Subagenten führen NIE
+git-Operationen aus") — Folge-Item für die technische Durchsetzbarkeit.
 
 

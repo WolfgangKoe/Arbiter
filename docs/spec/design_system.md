@@ -97,7 +97,7 @@ demselben Seam: pure HTML-Builder, kein Streamlit, Coverage-gemessen.
 `_render_subgroup_selector` + `_render_damage_block` (`src/uiLayout/_common.py`) — der
 Verteidiger-Baustein im DAMAGE-Block einer Resolution-Tab für Einheiten mit mehreren
 Modell-Gruppen (`unit.model_groups`, z. B. Ork Nobz, Silent King). Drei Zustände, EIN
-Radio + EIN `dmg_col.warning(...)`, keine Sonderform je Zustand:
+Radio + höchstens EIN `dmg_col.warning(...)`, keine Sonderform je Zustand:
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -107,9 +107,11 @@ Radio + EIN `dmg_col.warning(...)`, keine Sonderform je Zustand:
 │  A — frei wählbar (kein Modell angeschlagen): │
 │   ○ Boss Nob         ○ Nobz     ← EIN Radio   │
 │                                                │
-│  B — gesperrt (Warnhinweis statt Radio):      │
-│   ⚠ ► Angeschlagenes Modell … muss zuerst      │
-│       abgehandelt werden.        ← warning    │
+│  B — gesperrt (Radio entfällt):               │
+│   ⚠ ► **Name** zuerst erledigen (3 LP).        │
+│       ← nur bei bereits verwundetem Modell;   │
+│         Zwangs-Zuteilung ab vollem HP zeigt   │
+│         KEINEN Hinweis (S169, bestätigt S181) │
 │                                                │
 │  C — nur eine Gruppe übrig:                   │
 │   (Selector entfällt — Schaden trifft die      │
@@ -117,20 +119,25 @@ Radio + EIN `dmg_col.warning(...)`, keine Sonderform je Zustand:
 └──────────────────────────────────────────────┘
 ```
 
-Genau ein Zustand ist zu jedem Zeitpunkt aktiv (nie Radio + Warnhinweis gleichzeitig,
-nie beide Warnhinweis-Zweige zugleich); welcher Zustand aktiv ist, entscheidet
-ausschließlich `get_locked_group()` (s. u.), die UI liest nur das Ergebnis.
+Genau ein Zustand ist zu jedem Zeitpunkt aktiv (nie Radio + Warnhinweis gleichzeitig);
+welcher Zustand aktiv ist, entscheidet ausschließlich `get_locked_group()` (s. u.), die
+UI liest nur das Ergebnis.
 
 - **A — frei wählbar:** kein Modell angeschlagen, keine Zuteilungspflicht
   (`get_locked_group()` → `None`) → Radio über alle aktiven Gruppen, Default = niedrigste
   Priorität.
-- **B/gesperrt — Warnhinweis statt Radio:** `get_locked_group()` liefert eine Gruppe →
-  Radio entfällt vollständig, die Gruppe wird direkt übernommen. Der Warnhinweis-Text hat
-  zwei Zweige für zwei Sperrgründe (beide `► …`-Präfix, gleiche Warning-Familie):
-  „Angeschlagenes Modell … muss zuerst abgehandelt werden" (Front-Modell bereits verwundet)
-  vs. „… muss laut Regel zuerst vollständig zerstört werden, bevor andere Gruppen Schaden
-  nehmen" (Zwangs-Zuteilungs-Einheit, `unit.has_per_group_wounds()`, ab vollem HP gesperrt —
-  z. B. Silent King: Triarchal Menhirs vor Szarekh, Codex „Triarchal Menhir").
+- **B/gesperrt — Radio entfällt, Warnhinweis nur bedingt:** `get_locked_group()` liefert
+  eine Gruppe → Radio entfällt vollständig, die Gruppe wird direkt übernommen. Zwei
+  Sperrgründe, nur einer zeigt einen Text:
+  - Front-Modell bereits verwundet (`pool % wval != 0`) → ein Ein-Satz-Imperativ
+    `► **{name}** zuerst erledigen ({LP} LP).` (Wortlaut-Budget §3.1 — kein
+    Regel-Paraphrase im Text).
+  - Zwangs-Zuteilungs-Einheit (`unit.has_per_group_wounds()`, ab vollem HP gesperrt —
+    z. B. Silent King: Triarchal Menhirs vor Szarekh, Codex „Triarchal Menhir") →
+    **kein Hinweis.** Das Radio ist bereits stumm auf diese Gruppe erzwungen; ein
+    eigener Text galt als redundant (S169-Entscheid). In S181/B-128(a) erneut geprüft
+    (Doku-Drift-Meldung) und vom Stakeholder ausdrücklich bestätigt — kein Hinweistext
+    für diesen Zweig, kein Rückfall auf einen Erklärtext.
 - **C — nur eine Gruppe übrig:** Selector entfällt ersatzlos (nichts zum Wählen), Schaden
   trifft die verbleibende Gruppe direkt.
 
@@ -404,9 +411,12 @@ der Tabelle oben, nicht nur `warning`.
 
 Bestehende Texte, die das Budget überschreiten, werden **nicht** in einem Big-Bang-Durchgang
 gekürzt, sondern als Ratchet bei der nächsten Modul-Berührung (analog §1.1/§4.3-Ratchet-
-Prinzip). Bekannter Kandidat: der Sperr-Warnhinweis im Subgruppen-Selektor (§1.4 Zustand B,
-`_common.py`) — zwei mehrsatzige Zweige mit eingebauter Regelbegründung; Kürzung bei
-nächster Berührung des Bausteins (B-128, Code-Kürzung selbst ist ein separater Auftrag).
+Prinzip). Der frühere Kandidat — der Sperr-Warnhinweis im Subgruppen-Selektor (§1.4
+Zustand B, `_common.py`) — ist seit S169 erledigt: der Front-Modell-Zweig ist ein
+Ein-Satz-Imperativ, der Zwangs-Zuteilungs-Zweig zeigt seit S169 gar keinen Text mehr
+(kein Budget-Verstoß möglich, wenn nichts gerendert wird). In S181/B-128(a) gegen einen
+Doku-Drift-Befund geprüft und vom Stakeholder bestätigt — kein offener Ratchet-Kandidat
+mehr für diesen Baustein.
 
 ## 4. Symbol- & Würfel-Design-System (§4.1 S115, §4.2/§4.3 neu S159/B-104)
 

@@ -30,6 +30,10 @@ units:
   # units in range.
   - id: wh40k_9e.necrons.unit.skorpekh_lord
     models: 1
+  # Second aura source (S181 M4): Lokhust Lord carries the same United in
+  # Destruction aura. Enables browser verification of multi-source hint text.
+  - id: wh40k_9e.necrons.unit.lokhust_lord
+    models: 1
   - id: wh40k_9e.necrons.unit.lychguard
     models: 10
     group_loadouts:
