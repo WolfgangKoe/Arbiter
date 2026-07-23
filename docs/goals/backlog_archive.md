@@ -1134,4 +1134,20 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   Tesla-Chip ausgenommen (bleibt Orange). Test-Assertion + `design_system.md` §4.3 nachgezogen.
   **UI-Verifikation POSITIV** (S179/S180, Befund im UI-Verifikations-Log).
   Herkunft: S178-B-113-Befund 2 (Retro-Maßnahme A2, S179); Verifikation S179/S180; archiviert S180.
+- ✅ **B-131 — Aura-Reichweiten-Hinweis Destroyer-Cult (Klasse B) Nachbesserung — ERLEDIGT (S180):**
+  Folge-Befund 3 aus S178-B-113-UI-Verifikation (UI-Verifikation S179 hatte 2 Follow-ups): (1)
+  Hinweis-Kachel-Breite — `st.info` erstreckte sich über volle gameActionArea statt nur
+  Player-Area-Spalte (soll `design_system.md` §1.9.1 einhalten). (2) Anforderungs-Präzisierung —
+  Hinweis sollte konkrete Aura-Spender namentlich listen statt generisch. Umgesetzt S180
+  (Brief 7): (1) `st.info` in halbbreiter `st.columns(2)`-Linksspalte gefasst (`design_system.md`
+  §1.9.1); (2) neuer öffentlicher Accessor in `src/gameMechanic/abilityEngine.py` liefert Liste
+  der **lebenden** Aura-Spender-Einheiten (INV-4b-konform: `unit.name_en` aus YAML), `_render_wound_reroll_aura_hint`
+  formatiert Namen im Hinweis. Code grün, Tests verdrahtet. **UI-Verifikation POSITIV (S180):**
+  Stakeholder-Verifikation S180 verifiziert Prüfpunkte 1–3 (Kachel-Breite, namentlicher Text,
+  Gating bei Zerstörung). Optional-Prüfpunkt (Mehr-Spender) nicht Browser-verifizierbar
+  (necrons_test.yaml enthält nur einen Skorpekh Lord) — als unit-getestet dokumentiert (Tests
+  `test_render_wound_reroll_aura_hint_*` decken Mehrspender-Formatierung ab, Anmerkung zur
+  Testroster-Lücke in `S180_B131b_ui_verifikation.md`). Befund im UI-Verifikations-Log.
+  Herkunft: S178-B-113-Befund 3 (Retro-Maßnahme A3, S179); Nachbesserung + UI-Verifikation S180;
+  archiviert S180.
 

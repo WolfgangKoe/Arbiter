@@ -508,6 +508,22 @@ def _aura_source_alive(source_unit_id: str, units_state: Mapping[str, Any]) -> b
     return False
 
 
+def _wound_reroll_ones_aura_candidates(faction_dir: str) -> list[Ability]:
+    """Unit/subfaction abilities in *faction_dir* shaped as a wound-reroll-1 AURA.
+
+    Shared candidate list for ``_wound_reroll_ones_aura_ability`` (single gate
+    check) and ``get_wound_reroll_aura_donor_names`` (full living-donor list,
+    B-131 follow-up S180) — ``target != "self"`` distinguishes the AURA shape
+    (e.g. Necron Destroyer Cult "United in Destruction") from a unit's own
+    ``reroll_wound_1``.
+    """
+    return [
+        a
+        for a in load_unit_abilities(faction_dir) + load_subfaction_abilities(faction_dir)
+        if a.effect.type == "reroll_wound_1" and a.effect.target != "self"
+    ]
+
+
 def _wound_reroll_ones_aura_ability(
     faction: str,
     unit: Unit,
@@ -537,11 +553,7 @@ def _wound_reroll_ones_aura_ability(
         faction_dir = faction_dir_for(faction)
     except KeyError:
         return None
-    candidates = [
-        a
-        for a in load_unit_abilities(faction_dir) + load_subfaction_abilities(faction_dir)
-        if a.effect.type == "reroll_wound_1" and a.effect.target != "self"
-    ]
+    candidates = _wound_reroll_ones_aura_candidates(faction_dir)
     if not candidates:
         return None
     units_state: Mapping[str, Any] = st.session_state.get(units_key_for(faction), {})
@@ -567,6 +579,44 @@ def unit_wound_reroll_ones(
     (``reroll_marker_row_html``).
     """
     return _wound_reroll_ones_aura_ability(faction, unit, unit_state) is not None
+
+
+def get_wound_reroll_aura_donor_names(
+    faction: str,
+    unit: Unit,
+    unit_state: MutableMapping[str, Any],
+) -> list[str]:
+    """Catalog names of the living units granting *unit* a wound-reroll-1 AURA.
+
+    Analog ``get_unit_rp_reroll_ability``: same candidate gate as
+    ``_wound_reroll_ones_aura_ability`` (``reroll_wound_1`` AURA shape,
+    ``_aura_source_alive`` liveness check, ``check_conditions``), but returns
+    every matching donor's ``Unit.name_en`` instead of the first ability match
+    — B-131 follow-up (S180): a destroyed donor drops out automatically since
+    ``_aura_source_alive`` re-checks the roster on every call. Names come
+    from the faction roster's own YAML ``name_en`` field (INV-4b: no unit
+    proper noun literal in src/). Deduplicated, order preserved.
+    """
+    try:
+        faction_dir = faction_dir_for(faction)
+    except KeyError:
+        return []
+    candidates = _wound_reroll_ones_aura_candidates(faction_dir)
+    if not candidates:
+        return []
+    units_state: Mapping[str, Any] = st.session_state.get(units_key_for(faction), {})
+    units, _ = load_army(faction_dir)
+    unit_by_id = {u.id: u for u in units}
+    names: list[str] = []
+    for ability in candidates:
+        if ability.unit_id and not _aura_source_alive(ability.unit_id, units_state):
+            continue
+        if not check_conditions(ability, unit, unit_state):
+            continue
+        source = unit_by_id.get(ability.unit_id) if ability.unit_id else None
+        if source is not None and source.name_en not in names:
+            names.append(source.name_en)
+    return names
 
 
 def get_after_attack_revive_ability(

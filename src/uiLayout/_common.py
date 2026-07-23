@@ -2955,6 +2955,7 @@ class ResolutionContext:
     auto_light_cover: bool
     auto_fail_label: str | None
     wound_reroll_ones_active: bool
+    wound_reroll_aura_donor_names: list[str]
 
 
 def compute_resolution_context(
@@ -3026,10 +3027,10 @@ def compute_resolution_context(
         get_active_round_choice_ap_on_wound_6,
         get_active_round_choice_strength_if_charged,
         get_short_label_for_effect_type,
+        get_wound_reroll_aura_donor_names,
         unit_hit_reroll_ones,
         unit_wound_auto_fail_label,
         unit_wound_auto_fail_max,
-        unit_wound_reroll_ones,
     )
     from gameMechanic.stratagemEngine import (  # noqa: PLC0415
         stratagem_strength_bonus,
@@ -3170,9 +3171,12 @@ def compute_resolution_context(
         final_save_mods.append({"label": "Heavy Cover", "value": 1})
 
     # Captured once so both the wound-roll stack (below) and the B-131
-    # aura-range hint (_render_wound_reroll_aura_hint) read the same gate
-    # instead of calling the engine twice for one resolution.
-    wound_reroll_ones_active = unit_wound_reroll_ones(atk_faction, atk_unit, atk_state)
+    # aura-range hint (_render_wound_reroll_aura_hint) read the same donor
+    # list instead of calling the engine twice for one resolution.
+    wound_reroll_aura_donor_names = get_wound_reroll_aura_donor_names(
+        atk_faction, atk_unit, atk_state
+    )
+    wound_reroll_ones_active = bool(wound_reroll_aura_donor_names)
     atk_result = resolve_attack_modifiers(
         skill=skill,
         strength=strength,
@@ -3259,41 +3263,54 @@ def compute_resolution_context(
         auto_light_cover=auto_light_cover,
         auto_fail_label=auto_fail_label,
         wound_reroll_ones_active=wound_reroll_ones_active,
+        wound_reroll_aura_donor_names=wound_reroll_aura_donor_names,
     )
 
 
-def _wound_reroll_aura_hints(wound_reroll_active: bool) -> list[str]:
-    """Caption strings for a unit-owned wound-reroll-of-1 AURA (B-131).
+def _join_donor_names(names: list[str]) -> str:
+    """Join donor names as "A", "A or B", "A, B or C" (no Oxford comma)."""
+    if len(names) == 1:
+        return names[0]
+    return f"{', '.join(names[:-1])} or {names[-1]}"
 
-    Klasse B: the engine already confirmed the gate (`unit_wound_reroll_ones`
-    — an allied aura source is alive in the roster and this unit's keyword
-    matches its condition); the aura's 6" range itself has no spatial model
-    in this app (rules_appendix.txt "Aura Abilities" — see
+
+def _wound_reroll_aura_hints(donor_names: list[str]) -> list[str]:
+    """Caption strings for a unit-owned wound-reroll-of-1 AURA (B-131/S180).
+
+    Klasse B: the engine already confirmed the gate (`get_wound_reroll_aura_
+    donor_names` — the returned units are alive in the roster and this
+    unit's keyword matches their condition); the aura's 6" range itself has
+    no spatial model in this app (rules_appendix.txt "Aura Abilities" — see
     ``abilityEngine._wound_reroll_ones_aura_ability``) and stays a manual
     table check, hence the info hint rather than a silent auto-apply.
 
-    Generic (INV-4b): no faction/ability proper noun in the text — the
-    caption names the mechanic, not a specific Necron unit/ability, so no
-    new engine accessor is needed to source a display label.
+    Names the living donor(s) by ``Unit.name_en`` (INV-4b: sourced from the
+    faction roster's own YAML field, never a unit proper noun literal here).
+    A destroyed donor drops out of *donor_names* automatically (computed
+    fresh per resolution by ``compute_resolution_context``).
     """
-    if not wound_reroll_active:
+    if not donor_names:
         return []
     return [
         "Wound re-roll of 1 (aura ability) applies only while this unit is "
-        'within 6" of the ally granting it — check the distance on the table.'
+        f'within 6" of {_join_donor_names(donor_names)}.'
     ]
 
 
-def _render_wound_reroll_aura_hint(wound_reroll_active: bool) -> None:
-    """Render the B-131 aura-range hint below the WOUND block, if gated True.
+def _render_wound_reroll_aura_hint(donor_names: list[str]) -> None:
+    """Render the B-131 aura-range hint below the WOUND block, if any donor is alive.
 
-    Same `st.info` convention as `_render_rp_block`'s unit-ability hints
-    (design_system.md §3, B-127 precedent) — split into its own tiny render
-    function so it stays unit-testable without the full ResolutionContext
-    rendering chain.
+    Half-width — left column of a `st.columns(2)`, same pattern as
+    `_render_rp_block`'s `rp_col` block (design_system.md §1.9.1 Baustein ③
+    Breiten-Regel: this hint belongs to the triggering player's own
+    playerArea column, not the full gameActionArea width, S180 follow-up).
     """
-    for hint in _wound_reroll_aura_hints(wound_reroll_active):
-        st.info(hint)
+    hints = _wound_reroll_aura_hints(donor_names)
+    if not hints:
+        return
+    hint_col, _ = st.columns(2)
+    for hint in hints:
+        hint_col.info(hint)
 
 
 def _render_attacker_blocks(ctx: ResolutionContext) -> None:
@@ -3365,7 +3382,7 @@ def _render_attacker_blocks(ctx: ResolutionContext) -> None:
         on_reroll=lambda: None,
         label_context="Wound roll",
     )
-    _render_wound_reroll_aura_hint(ctx.wound_reroll_ones_active)
+    _render_wound_reroll_aura_hint(ctx.wound_reroll_aura_donor_names)
 
     # Kein Wound-Anker mehr für on_target-GOs (S146 Fix 2, Stakeholder-Entscheid):
     # wound-roll on_target GOs (e.g. Whirling Onslaught) render solely at the

@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-23 17:03 CEST
+Stand: 2026-07-23 17:51 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,9 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-23 16:34 695b  ██████████░░ 124k ⚠️   ████░░  66%    ████▒▒▒▒▒▒▒▒
+07-23 17:16 fe07  ████████░░░░  97k ✅    █████░  81%    █·····▒▒▒▒▒▒
+         SA_1·  ██████████░░ 121k ⚠️   B-131-Nachbesserung umsetzen
+         SA_2·  █████░░░░░░░  60k ✅    Review S180 B-131-Nachbesserung
+         SA_3·  ███████░░░░░  85k ✅    B-131-Verifikation integrieren
+         SA_4·  █████████░░░ 111k ✅    C1: Doku-Handoff + Backlog
+----------------- ---------------------- -------------- ------------
+07-23 16:34 695b  ██████████░░ 128k ⚠️   ████░░  63%    ███▒▒▒▒▒▒▒▒▒
          SA_1·  █████░░░░░░░  65k ✅    A5 Review S179 (DoD)
-         SA_2·  ████░░░░░░░░  51k ✅    A3 Handoff-Hygiene
+         SA_2·  ████░░░░░░░░  55k ✅    A3 Handoff-Hygiene
          SA_3·  █████░░░░░░░  68k ✅    S180-Planning-Entwurf erstellen
          SA_4·  █████████░░░ 114k ✅    A1+A2 Verifikations-Integration
 ----------------- ---------------------- -------------- ------------
@@ -1027,3 +1033,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S177 (2026-07-22)** Governance session: coordinator tier Opus (ADR-0010), standing ratchet rules (B-024/B-124 dissolved -> B-128), process-rule field, S176 doc fixes
 - **S178 (2026-07-22)** B-113 Reroll-Fähigkeiten verdrahtet (Teil A+B): generischer Hit-/Wound-Reroll-Konsument, reroll_marker_row_html Erstanwendung in HIT+WOUND, Skorpekh-Destroyer + Destroyer-Lord-Aura; UI-Verifikation positiv
 - **S179 (2026-07-23)** Close S179: B-129 (Skorpekh Lord hardwiredForDestruction) + B-130 (Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis generisch) umgesetzt; Governance B1-B4 (start-session-Regel, ui_verification_log, Backlog, R-COMBAT-46/47); alle 3 UI-Verifikationen positiv (B-131 mit 2 Follow-ups: Kachel-Breite + namentliche Spender-Liste → S180); Review GO, 2182 passed / 99,17 %
+- **S180 (2026-07-23)** B-131 follow-up: named aura donors + half-width hint, UI-verified + archived; retro M4 accepted

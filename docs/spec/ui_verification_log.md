@@ -75,3 +75,13 @@ Ergebnis: POSITIV MIT 2 FOLLOW-UPS — WOUND-Block zeigt bluen `st.info`-Hinweis
 **Anforderungspräzisierung**: Hinweistext soll konkrete Aura-Spender namentlich listen statt generisch formuliert. Zieltext: „Wound re-roll of 1 (aura ability) applies only while this unit is within 6\" of [unit1], [unit2] or [unitn]." Spender-Liste soll live sein (zerstörte Spender fallen raus). Nachbesserung geplant S180 mit neuem öffentlichen Accessor in `abilityEngine.py`.
 
 Quelle: `docs/handoff/S179_B131_ui_verifikation.md` (gelöscht nach Übernahme)
+
+---
+
+## S180 — B-131 Nachbesserung (Hinweis-Kachel-Breite + namentliche Spender-Liste)
+
+Datum: 2026-07-23 · Roster: necrons_test.yaml
+
+Ergebnis: POSITIV — Beide Follow-ups aus S179 umgesetzt und verifiziert (Prüfpunkte 1–3): (1) Hinweis-Kachel in halbbreiter `st.columns(2)`-Linksspalte statt voller Breite ✓; (2) Spender-Namen namentlich im Hinweis-Text, zerstörte Spender gelöscht ✓; (3) Gegenprobe: zerstörter Spender → Hinweis komplett weg ✓. Optional-Prüfpunkt (Mehr-Spender) nicht Browser-verifizierbar (necrons_test.yaml enthält nur einen Skorpekh Lord) — als unit-getestet dokumentiert (Tests `test_render_wound_reroll_aura_hint_*` decken Mehrspender-Formatierung ab).
+
+Quelle: `docs/handoff/S180_B131b_ui_verifikation.md` (gelöscht nach Übernahme)

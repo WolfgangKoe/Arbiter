@@ -25,31 +25,31 @@ Hintergrund starten (`streamlit run src/app.py --server.headless true`) — nich
 
 ---
 
-## Aktueller Stand (nach S179, 2026-07-23)
+## Aktueller Stand (nach S180, 2026-07-23)
 
-**S179 committet („Close S179"):** B-129 (`hardwiredForDestruction` Skorpekh Lord) + B-130
-(Reroll-Marker Buff-Grün) + B-131 (Aura-Wound-Reroll-Hinweis, generisch) — alle drei vom
-Stakeholder UI-verifiziert (positiv); B-129/B-130 archiviert, Log in `ui_verification_log.md`;
-Governance B1–B4; Review GO (2 Minor-Doku-Fixes eingearbeitet); Vollsuite 2182 passed / 99,17 %.
+**S180 komplett (Block A + B/C):** B-131-Nachbesserung umgesetzt und ABGESCHLOSSEN —
+(a) Aura-Hinweis-Kachel halbbreit (`st.columns(2)`-Linksspalte, `rp_col`-Muster, §1.9.1),
+(b) Accessor `get_wound_reroll_aura_donor_names` in `abilityEngine.py` (lebende Spender),
+`ResolutionContext.wound_reroll_aura_donor_names`, Hinweistext nennt Spender aus `unit.name_en`
+(INV-4b-Scoreboard unverändert 6/16/3). Stakeholder hat noch in S180 im Browser verifiziert
+(Prüfpunkte 1–3 positiv; Mehr-Spender nur unit-getestet → Retro-M4); B-131 archiviert, Log in
+`ui_verification_log.md`. Review GO (2 Minor eingearbeitet: Lokhust-Tippfehler, Loader-Caching
+→ Retro-M5). Retro-Entscheide: Block A M1/M2 abgelehnt, M3 bestätigt; Block C M4 ANGENOMMEN.
+Vollsuite 2187 passed / 99,08 %; Architektur 8/8; Docs+Acceptance 25/25.
 
-**S180 Block A abgeschlossen + committet; Block B/C → frische Session (Sollbruchstelle laut
-Plan, Koordinator-Kontext ~124k; Plan bleibt FREIGEGEBEN, `S180_planning.md`; Tier: Fable):**
-Block B =
-B-131-Nachbesserung (Stakeholder-Befunde aus Verifikation): (a) Hinweis-Kachel auf halbbreite
-Player-Area-Spalte begrenzen (design_system.md §1.9.1), (b) neuer öffentlicher Accessor in
-`abilityEngine.py` (analog `get_unit_rp_reroll_ability`) für lebende Aura-Spender, Hinweistext
-listet Namen aus `unit.name_en` (INV-4b-konform, zerstörte Spender fallen raus). Danach Block C
-(UI-Verif-Handoff `S180_B131b`, Vollsuite, Review, Retro, Commit).
+Frühere Sessions (S60–S179): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
 ### ▶ Nächster Schritt
 
-1. Block B/C laut `S180_planning.md`; B-131 bleibt offen bis Stakeholder-Browser-Verifikation
-   der Nachbesserung.
-2. Danach (Backlog-Rang): B-128 · B-028c3/c4/c5 · B-005.
+1. **Retro-M4 (Stakeholder-Entscheid noch in S180: ANGENOMMEN):** zweiten Aura-Spender
+   (z. B. Lokhust Lord) in `necrons_test.yaml` aufnehmen (~5k, reine Daten-Änderung), danach
+   Mehr-Spender-Hinweis im Browser verifizieren (bislang nur unit-getestet).
+2. Backlog-Rang (umsortiert S180): B-128 · B-028c3/c4/c5 · B-005.
+3. Retro-Rest sichten: M5 (Loader-Caching-Backlog-Item) noch unentschieden; M6 nur Bestätigung.
 
-**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S180_planning.md`
-(NEEDS-APPROVAL — freigegeben, Datei löschen bei S180-Abschluss); `S180_retro.md`
-(NEEDS-DECISION — Stakeholder sichtet am nächsten Session-Start).
+**Offene Handoff-Marker:** `Stakeholder_Beobachtungen.md` (STANDING); `S180_retro.md`
+(NEEDS-DECISION — Block A entschieden, Block-C-Maßnahmen sichtet der Stakeholder am
+nächsten Session-Start).
 
 ---
 

@@ -36,6 +36,7 @@ from gameMechanic.abilityEngine import (  # noqa: E402
     get_short_label_for_effect_type,
     get_triggered_abilities,
     get_unit_rp_reroll_ability,
+    get_wound_reroll_aura_donor_names,
     is_effect_executable,
     mortal_wounds_target,
     resolve_explode_effect,
@@ -2117,6 +2118,73 @@ def test_wound_reroll_ones_true_for_real_skorpekh_lord_and_destroyers_roster() -
     units, _ = load_army("necrons")
     skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
     assert unit_wound_reroll_ones("Necrons", skorpekh, {"destroyed": False}) is True
+
+
+# ---------------------------------------------------------------------------
+# get_wound_reroll_aura_donor_names — named donor list (B-131 follow-up, S180)
+# ---------------------------------------------------------------------------
+
+
+def test_wound_reroll_aura_donor_names_one_name_for_one_living_lord() -> None:
+    """Genau ein lebender Lord im Roster → genau ein Name in der Liste."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={"wh40k_9e.necrons.unit.skorpekh_lord": {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    assert get_wound_reroll_aura_donor_names("Necrons", skorpekh, {"destroyed": False}) == [
+        "Skorpekh Lord"
+    ]
+
+
+def test_wound_reroll_aura_donor_names_both_names_for_two_living_lords() -> None:
+    """Lokhust Lord UND Skorpekh Lord beide lebend im Roster → beide Namen,
+    in der Reihenfolge der YAML-Kandidaten (Lokhust Lord zuerst)."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={
+            "wh40k_9e.necrons.unit.lokhust_lord": {"destroyed": False},
+            "wh40k_9e.necrons.unit.skorpekh_lord": {"destroyed": False},
+        },
+    )
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    assert get_wound_reroll_aura_donor_names("Necrons", skorpekh, {"destroyed": False}) == [
+        "Lokhust Lord",
+        "Skorpekh Lord",
+    ]
+
+
+def test_wound_reroll_aura_donor_names_empty_when_lord_destroyed() -> None:
+    """Der einzige Lord im Roster ist zerstört → keine lebende Spender-Quelle
+    mehr → leere Liste (fällt automatisch raus, Gegenprobe zu B-113 Teil B)."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={"wh40k_9e.necrons.unit.skorpekh_lord": {"destroyed": True}},
+    )
+    _st_mock.session_state = session
+    units, _ = load_army("necrons")
+    skorpekh = next(u for u in units if u.id == "wh40k_9e.necrons.unit.skorpekh_destroyers")
+    assert get_wound_reroll_aura_donor_names("Necrons", skorpekh, {"destroyed": False}) == []
+
+
+def test_wound_reroll_aura_donor_names_empty_for_unit_without_destroyer_cult_keyword() -> None:
+    """Kein DESTROYER-CULT-Keyword auf der Zieleinheit → keine Spender, selbst
+    wenn ein Lord lebend im Roster steht."""
+    session = _S(
+        first_player="Necrons",
+        p1_faction_dir="necrons",
+        p1_units={"wh40k_9e.necrons.unit.skorpekh_lord": {"destroyed": False}},
+    )
+    _st_mock.session_state = session
+    unit = _make_unit(rules=["reanimationProtocols"], keywords=["NECRONS", "CORE"])
+    assert get_wound_reroll_aura_donor_names("Necrons", unit, {"destroyed": False}) == []
 
 
 # ── mortal_wounds effect handler (B-028c1 T1) ───────────────────────────────

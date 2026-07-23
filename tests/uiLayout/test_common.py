@@ -3237,6 +3237,7 @@ def test_compute_resolution_context_wound_reroll_ones_active_true_with_lord_in_r
 
     assert ctx is not None
     assert ctx.wound_reroll_ones_active is True
+    assert ctx.wound_reroll_aura_donor_names == ["Skorpekh Lord"]
 
 
 def test_compute_resolution_context_wound_reroll_ones_active_false_without_lord(
@@ -3260,31 +3261,55 @@ def test_compute_resolution_context_wound_reroll_ones_active_false_without_lord(
 
     assert ctx is not None
     assert ctx.wound_reroll_ones_active is False
+    assert ctx.wound_reroll_aura_donor_names == []
 
 
-def test_render_wound_reroll_aura_hint_shows_when_active(monkeypatch) -> None:
-    """The st.info hint appears once compute_resolution_context's gate is True
-    — st.info convention mirrors _render_rp_block's unit-ability hints
-    (design_system.md §3, B-127 precedent)."""
-    info_texts: list[str] = []
-    monkeypatch.setattr(common.st, "info", lambda text, **kw: info_texts.append(text))
+def test_render_wound_reroll_aura_hint_shows_named_donor_when_active(monkeypatch) -> None:
+    """The st.info hint appears once a living donor name is present — names the
+    donor by ``Unit.name_en`` instead of the old generic 'the ally granting
+    it' text (B-131 follow-up, S180)."""
+    left_col, right_col = MagicMock(), MagicMock()
+    monkeypatch.setattr(common.st, "columns", lambda n: (left_col, right_col))
 
-    common._render_wound_reroll_aura_hint(True)
+    common._render_wound_reroll_aura_hint(["Skorpekh Lord"])
 
-    assert any(
-        "Wound re-roll of 1" in c and '6"' in c and "check the distance on the table" in c
-        for c in info_texts
-    ), info_texts
+    left_col.info.assert_called_once()
+    hint_text = left_col.info.call_args[0][0]
+    assert "Skorpekh Lord" in hint_text
+    assert '6"' in hint_text
 
 
-def test_render_wound_reroll_aura_hint_absent_when_inactive(monkeypatch) -> None:
-    """No aura source active (gate False) → no hint rendered."""
-    info_texts: list[str] = []
-    monkeypatch.setattr(common.st, "info", lambda text, **kw: info_texts.append(text))
+def test_render_wound_reroll_aura_hint_absent_when_no_donor(monkeypatch) -> None:
+    """No living aura donor (empty list) → no hint, no column split rendered."""
+    columns_calls: list[int] = []
+    monkeypatch.setattr(
+        common.st,
+        "columns",
+        lambda n: columns_calls.append(n) or tuple(MagicMock() for _ in range(n)),
+    )
 
-    common._render_wound_reroll_aura_hint(False)
+    common._render_wound_reroll_aura_hint([])
 
-    assert info_texts == []
+    assert columns_calls == []
+
+
+def test_render_wound_reroll_aura_hint_renders_only_in_left_half_column(monkeypatch) -> None:
+    """B-131 Kachel-Breite-Bug fix: the hint must render inside the left cell
+    of a ``st.columns(2)`` split (design_system.md §1.9.1 Baustein ③
+    Breiten-Regel), not via the module-level ``st.info`` spanning the full
+    gameActionsArea width — the right column stays untouched."""
+    left_col, right_col = MagicMock(), MagicMock()
+    monkeypatch.setattr(common.st, "columns", lambda n: (left_col, right_col))
+
+    common._render_wound_reroll_aura_hint(["Lokhust Lord", "Skorpekh Lord"])
+
+    left_col.info.assert_called_once()
+    right_col.info.assert_not_called()
+    hint_text = left_col.info.call_args[0][0]
+    assert "Lokhust Lord" in hint_text
+    assert "Skorpekh Lord" in hint_text
+    assert "Lokhust Lord or Skorpekh Lord" in hint_text
+    assert '6"' in hint_text
 
 
 # ---------------------------------------------------------------------------

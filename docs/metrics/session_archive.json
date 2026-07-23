@@ -6431,11 +6431,11 @@
   "695b8861-aa6c-4ff3-b7f6-053761ad8b05": {
     "started_at": "2026-07-23T14:34:05.416Z",
     "task": "<task-notification> <task-id>a6a0a25186de68f40</task-id> <tool-use-id>toolu_01CcxJv56v6KoSWDL1vGAGgv</tool-use-id> <out…",
-    "peak_context": 123614,
-    "subagent_share": 66.10782362193552,
+    "peak_context": 128223,
+    "subagent_share": 63.33719904903394,
     "by_tier": {
       "Opus": 3667452,
-      "Haiku": 8893802
+      "Haiku": 9003104
     },
     "subagents": [
       {
@@ -6449,7 +6449,7 @@
         "agent_type": "general-purpose",
         "description": "A3 Handoff-Hygiene",
         "tier": "Haiku",
-        "peak_context": 50927,
+        "peak_context": 54649,
         "started_at": "2026-07-23T14:34:05.416Z"
       },
       {
@@ -6465,6 +6465,47 @@
         "tier": "Haiku",
         "peak_context": 114144,
         "started_at": "2026-07-23T14:34:05.416Z"
+      }
+    ]
+  },
+  "fe079215-3cb8-480d-b945-6802a4a19081": {
+    "started_at": "2026-07-23T15:16:39.054Z",
+    "task": "<task-notification> <task-id>a31d04897596d72d7</task-id> <tool-use-id>toolu_01SMhvXBshLnZaxM8X84PbgD</tool-use-id> <out…",
+    "peak_context": 96792,
+    "subagent_share": 80.85493340439415,
+    "by_tier": {
+      "Sonnet": 11785518,
+      "Opus": 1439137,
+      "Haiku": 12481140
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "B-131-Nachbesserung umsetzen",
+        "tier": "Sonnet",
+        "peak_context": 121268,
+        "started_at": "2026-07-23T15:16:39.054Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Review S180 B-131-Nachbesserung",
+        "tier": "Opus",
+        "peak_context": 59973,
+        "started_at": "2026-07-23T15:16:39.054Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "B-131-Verifikation integrieren",
+        "tier": "Haiku",
+        "peak_context": 84855,
+        "started_at": "2026-07-23T15:16:39.054Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "C1: Doku-Handoff + Backlog",
+        "tier": "Haiku",
+        "peak_context": 111342,
+        "started_at": "2026-07-23T15:16:39.054Z"
       }
     ]
   }
