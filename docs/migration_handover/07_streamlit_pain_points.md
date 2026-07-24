@@ -52,7 +52,7 @@ order, reproduces this exact bug class. This was treated as a "Fachlichkeit" bug
 
 **Symptom (hypothesis, not yet measured — S183 Planning §0 Befund 2):** rapid clicks on
 a damage `number_input`'s step arrows (`ml_`/`gwd_`/`wf_`-prefixed widgets,
-`_common.py:2794/2812/2827`) feel sluggish. Each click is hypothesized to trigger a full
+`_common.py`) feel sluggish. Each click is hypothesized to trigger a full
 app rerun — both complete army-list sidebars, the entire actions area, and the protocol
 panel all re-render, even though only one unit's HP number actually changed.
 

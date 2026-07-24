@@ -21,7 +21,7 @@ Full schema per category: `05_data_model.md` §7 and `docs/spec/faction_abilitie
 | # | Category | `ability_type` | State model | Engine entry point |
 |---|---|---|---|---|
 | 1 | Round-choice | `round_choice` | `active_protocol_id`, `active_directive`, `used_protocol_ids` (session, reset every round) | `get_active_round_choice_modifier/rerolls/rp_modifiers` (`abilityEngine.py`) |
-| 2 | One-time/staged | `activated` | `{player: {stage, round_activated}}` + battle-scoped `used_once_per_battle_abilities` ledger | `armyCard._render_once_per_battle_ability_ui` / `_render_waaagh_ui` |
+| 2 | One-time/staged | `activated` | `{player: {stage, round_activated}}` + battle-scoped `used_once_per_battle_abilities` ledger | `armyCard._render_once_per_battle_ability_ui` (generic — handles WAAAGH! too, no faction-specific function) |
 | 3 | Auto-progression | `auto_progression` | none — recomputed from `current_round` every render (by design) | *(not implemented)* — no faction currently in the repo (Necrons/Orks/Adeptus Custodes) uses `auto_progression`; `docs/spec/faction_abilities.md` names `get_auto_progression_modifier(faction_dir, phase, round)` as the planned engine function, but no such function exists in `abilityEngine.py` today. This category exists only as the `_schema/auto_progression.example.yaml` reference doc, written for factions (Space Marines, Death Guard) not yet present in `data/wh40k_9e/`. |
 | 4 | Resource-based | `resource_based` | *(not implemented — no faction using it yet)* | — |
 | 5 | Distribution | `distribution` | *(not implemented — no faction using it yet)* | — |
