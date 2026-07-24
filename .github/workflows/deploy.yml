@@ -48,19 +48,29 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_USERNAME: ${{ secrets.HF_USERNAME }}
         run: |
+          set -o pipefail
+
           if [ "$GITHUB_REF_NAME" = "main" ]; then
             SPACE="arbiter"
           else
             SPACE="arbiter-test"
           fi
+          echo "Target: ${HF_USERNAME}/${SPACE}"
 
           git config --global user.email "ci@arbiter"
           git config --global user.name "Arbiter CI"
 
           git clone "https://${HF_USERNAME}:${HF_TOKEN}@huggingface.co/spaces/${HF_USERNAME}/${SPACE}" hf-space
 
+          # Only runtime files belong in the Space. Excluded paths are removed
+          # explicitly rather than via --delete-excluded, which would also wipe
+          # the clone's own .git directory.
+          rm -rf hf-space/docs hf-space/tests hf-space/tools \
+                 hf-space/.claude hf-space/.vscode hf-space/Fotos
+
           rsync -a --delete \
             --exclude='.git' \
+            --exclude='.gitattributes' \
             --exclude='.venv' \
             --exclude='__pycache__' \
             --exclude='*.pyc' \
@@ -68,13 +78,31 @@ jobs:
             --exclude='hf-space' \
             --exclude='.github' \
             --exclude='.woodpecker.yml' \
+            --exclude='docs' \
+            --exclude='tests' \
+            --exclude='tools' \
+            --exclude='.claude' \
+            --exclude='.vscode' \
+            --exclude='Fotos' \
+            --exclude='.pytest_cache' \
+            --exclude='.mypy_cache' \
+            --exclude='.ruff_cache' \
+            --exclude='htmlcov' \
             . hf-space/
 
           cd hf-space
+
+          # The Space rejects binary files that are not LFS-tracked, and its own
+          # .gitattributes covers ML formats only — no images.
+          LFS_RULE='*.png filter=lfs diff=lfs merge=lfs -text'
+          grep -qxF "$LFS_RULE" .gitattributes 2>/dev/null || echo "$LFS_RULE" >> .gitattributes
+          git lfs install --local
+
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to deploy."
           else
             git commit -m "Deploy from CodeBerg (${GITHUB_SHA::7})"
             git push
+            echo "Push to ${HF_USERNAME}/${SPACE} succeeded."
           fi
