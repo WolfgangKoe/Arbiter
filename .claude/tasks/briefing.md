@@ -48,6 +48,23 @@ bewusster Streamlit-Tradeoff, nur Awareness.
 
 Frühere Sessions (S60–S182): Verlauf in `docs/metrics/session_archive.md` (Session-Historie).
 
+## Zwischensession (2026-07-24, nach S183): Migrations-Handover erstellt
+
+**Stakeholder-Auftrag (außerplanmäßig, KEINE reguläre Session):** Weiterentwicklung pausiert —
+Streamlit stößt an Grenzen, Migration auf andere Technologie wird vorbereitet.
+**Ergebnis:** `docs/migration_handover/` (8 MD-Dateien, framework-agnostisch, Englisch) als
+Haupt-Input für den Rebuild: 00 Index · 01 Scope · 02 Working Features (nur Implementiertes,
+gegen Code+Akzeptanz-Katalog verifiziert) · 03 Design-System (Streamlit-Workarounds markiert) ·
+04 Architektur/Flow (portabel vs. Streamlit-Artefakt) · 05 Datenmodell/Loader-Ist-Stand ·
+06 Domänen-Gotchas · 07 Streamlit-Pain-Points (7 Befunde → 6 Framework-Anforderungen).
+4 Sonnet-Executor parallel + 1 Sonnet-Fact-Checker (~150 Referenzen, ~30 Verhaltens-Stichproben;
+2 Befunde gefixt). Commits: `f185d10` + `27ccd90`.
+**Wichtiger Befund:** `loader_contract.md`/`army_builder.md` beschreiben nie implementierte
+API/Roster-Felder (Army-Dataclass, warlord, arkana, weapon_loadout) — Handover dokumentiert
+Ist-Stand, Abweichungen explizit markiert (05 §3/§6.2/§8).
+**Konsequenz für Planung:** Nächste Session klären, ob S184 (B-135 unten) noch stattfindet
+oder die Migration Vorrang hat — Stakeholder-Entscheid.
+
 ### ▶ Nächster Schritt
 
 1. **T4a/T4b aus S183-Plan (Rang 1, E3-Entscheid steht):** B-135 Performance — erst Messung
