@@ -3955,17 +3955,36 @@ class _FakeCol:
     "pressed" at once — this fake only reports a press for keys explicitly
     listed as pressed, matching how a real Streamlit rerun only reports True
     for the one widget the user actually clicked.
+
+    B-134: production code moved its mutations from inline
+    ``if button/number_input: ...`` bodies into ``on_click``/``on_change``
+    callbacks (real Streamlit invokes those before the script body
+    re-executes). This fake mirrors that invocation so existing tests keep
+    exercising the same behavior — button fires ``on_click`` exactly when
+    "pressed", number_input fires ``on_change`` exactly when the forced
+    value differs from the widget's seeded ``value=`` (matching Streamlit's
+    real "only on actual change" semantics).
     """
 
     def __init__(self, pressed, number_inputs):
         self._pressed = pressed
         self._number_inputs = number_inputs
 
-    def button(self, *args, key=None, **kwargs):
-        return key in self._pressed
+    def button(self, *_args, key=None, on_click=None, **kwargs):
+        is_pressed = key in self._pressed
+        if is_pressed and on_click is not None:
+            on_click(*(kwargs.get("args") or ()), **(kwargs.get("kwargs") or {}))
+        return is_pressed
 
-    def number_input(self, *args, key=None, **kwargs):
-        return self._number_inputs.get(key, 0)
+    def number_input(self, *_args, key=None, value=0, on_change=None, **kwargs):
+        new_value = self._number_inputs.get(key, value)
+        if on_change is not None and new_value != value:
+            # Real Streamlit writes the widget's fresh value to session_state
+            # before invoking on_change (callbacks read it from there, e.g.
+            # _explode_direct_apply_change) — mirror that here.
+            common.st.session_state[key] = new_value
+            on_change(*(kwargs.get("args") or ()), **(kwargs.get("kwargs") or {}))
+        return new_value
 
     def markdown(self, *args, **kwargs):
         return None
@@ -4715,6 +4734,12 @@ class TestExplodeTargetPanel:
         assert entry["damage"] == {}
 
     def test_toggle_button_adds_target_to_selection(self, monkeypatch) -> None:
+        """B-134 (S183): the toggle's mutation moved into an ``on_click``
+        callback (`_explode_toggle_click`) so it runs before the script body
+        re-executes — real Streamlit already reruns after any callback, so
+        the row no longer needs its own explicit ``st.rerun()`` (asserted
+        here as zero reruns; was ``== [1]`` under the old inline-then-rerun
+        timing — intentional behavior break, not a silent rewrite)."""
         session, warriors_id, _boyz_id = self._session_with_two_targets()
         ability = _explode_ability()
         unit = session.p1_units_list[0]
@@ -4741,7 +4766,7 @@ class TestExplodeTargetPanel:
         common._render_explode_target_panel("Necrons", SILENT_KING, unit, ability, entry)
 
         assert entry["selected"] == [target_key_w]
-        assert reruns == [1]
+        assert reruns == []
 
     def test_deselect_undoes_previously_applied_damage(self, monkeypatch) -> None:
         """S171 Direct-Apply (§1.7): toggling an already-damaged target OFF
@@ -4783,15 +4808,18 @@ class TestExplodeTargetPanel:
         assert entry["selected"] == []
         assert target_key_w not in entry["damage"]
 
-    def test_number_input_change_reruns_so_sidebar_hp_bar_updates_immediately(
+    def test_number_input_change_applies_immediately_via_on_change_callback(
         self, monkeypatch
     ) -> None:
-        """Bug 1 (S171-d UI-Verifikation): Direct-Apply drops the target's HP
-        immediately via unitMutations.apply_explode_target_damage, but the
-        sidebar armyList renders BEFORE the center column (src/app.py) — so
-        without its own st.rerun() the new HP only shows a whole interaction
-        later than every other mutating branch in this function (toggle
-        ~618, Confirm ~654, Reset ~661), all of which already rerun."""
+        """Bug 1 (S171-d UI-Verifikation), re-fixed at the root in B-134 (S183):
+        Direct-Apply drops the target's HP immediately via
+        unitMutations.apply_explode_target_damage. S171 had patched the
+        symptom with an extra st.rerun() (sidebar armyList renders BEFORE the
+        center column, src/app.py) — B-134 replaces that with the actual fix,
+        an ``on_change`` callback (`_explode_direct_apply_change`) that runs
+        before the script body re-executes, so no manual rerun is needed at
+        all (asserted here as zero reruns — intentional behavior break from
+        the old ``== [1]``, not a silent rewrite)."""
         session, warriors_id, _boyz_id = self._session_with_two_targets()
         ability = _explode_ability()
         unit = session.p1_units_list[0]
@@ -4829,7 +4857,7 @@ class TestExplodeTargetPanel:
 
         assert applied == [(warriors_id, "Necrons", 3)]
         assert entry["damage"][target_key_w] == 3
-        assert reruns == [1]
+        assert reruns == []
 
     def test_toggling_second_target_pins_it_and_unpins_the_first(self, monkeypatch) -> None:
         """S172 Bug 2 (sort-to-top pinned EVERY checked target, not just the

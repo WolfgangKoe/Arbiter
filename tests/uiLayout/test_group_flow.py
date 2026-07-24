@@ -697,21 +697,31 @@ def test_regressionstest_nobz_killsaw_group_destroyed() -> None:
 
 class _DmgColStub:
     """Stand-in for the half-width st.columns() block _render_damage_block writes
-    to — supports the widget calls the group_wounds branch makes on it."""
+    to — supports the widget calls the group_wounds branch makes on it.
+
+    B-134: the Apply button's mutation lives in an ``on_click`` callback now
+    (real Streamlit invokes it before the script body re-executes, fixing
+    the stale-UnitCard timing bug). This stub mirrors that — ``button``
+    invokes ``on_click(*args)`` exactly when ``apply_clicked`` is True,
+    matching how a real click fires the callback before returning True.
+    """
 
     def __init__(self, damage_in: int = 0, apply_clicked: bool = False):  # type: ignore[no-untyped-def]
         self.damage_in = damage_in
         self.apply_clicked = apply_clicked
         self.radio_calls: list = []  # type: ignore[type-arg]
         self.warning_calls: list = []  # type: ignore[type-arg]
+        self.caption_calls: list = []  # type: ignore[type-arg]
 
     def number_input(self, label, *a, **kw):  # type: ignore[no-untyped-def]
         return self.damage_in if label.startswith("Damage dealt") else 0
 
-    def caption(self, *a, **kw):  # type: ignore[no-untyped-def]
-        return None
+    def caption(self, msg, *a, **kw):  # type: ignore[no-untyped-def]
+        self.caption_calls.append(msg)
 
-    def button(self, *a, **kw):  # type: ignore[no-untyped-def]
+    def button(self, *a, on_click=None, **kw):  # type: ignore[no-untyped-def]
+        if self.apply_clicked and on_click is not None:
+            on_click(*(kw.get("args") or ()), **(kw.get("kwargs") or {}))
         return self.apply_clicked
 
     def radio(self, label, *a, options=None, **kw):  # type: ignore[no-untyped-def]
@@ -770,6 +780,10 @@ def test_damage_block_locks_front_group_from_full_health(monkeypatch) -> None:  
 
     assert col.radio_calls == []  # the radio that would let the user pick Szarekh never renders
     assert col.warning_calls == []  # full-health lock hint removed (S169 b2)
+    # M3 (S182 Retro, S183 nachgezogen): D2 sub-header — design_system.md
+    # §1.4.1 — is common to both DAMAGE-block input paths; the group_wounds
+    # path (this test) must render it too, not just the non-group path.
+    assert "Enter damage taken" in col.caption_calls
 
 
 def test_damage_block_apply_26_damage_destroys_fresh_silent_king(monkeypatch) -> None:  # type: ignore[no-untyped-def]
@@ -812,3 +826,52 @@ def test_damage_block_frees_szarekh_once_menhirs_destroyed(monkeypatch) -> None:
     assert col.radio_calls == []  # single active group — nothing left to choose
     assert col.warning_calls == []  # not locked — Szarekh is simply the only target
     assert state["group_wounds"]["szarekh"] == 11
+
+
+def test_damage_block_apply_mutates_before_render_returns_b134(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """B-134 (S183) — stale UnitCard regression guard: the Apply button's
+    mutation now runs in an `on_click` callback (`_apply_damage_click`),
+    which real Streamlit invokes BEFORE the script body re-executes. That is
+    what fixes the bug: `app.py` renders the left army-list column before
+    the center (which hosts this DAMAGE block) — with the old inline-then-
+    `st.rerun()` code, the left column's UnitCard read the PRE-click state
+    for one whole run before the rerun caught up (S183 Kernbefund,
+    `docs/handoff/Bildschirmfoto vom 2026-07-23 23-44-40.png`).
+
+    This test drives the actual render entry point (`_render_damage_block`,
+    S164/S166 lesson — not just the isolated `apply_damage` helper) and
+    asserts that `front_group_hp` — the exact function the UnitCard reads
+    (`unitCard.py:252` → `_common.py`) — already reflects the post-damage
+    value the instant the button call returns, with no separate rerun
+    needed for a left-rendered-first column to see it.
+    """
+    import gameMechanic.gameLog as _gf_log
+
+    monkeypatch.setattr(_gf_log, "log_action", lambda *a, **kw: None)
+    sk, _ = _silent_king_groups()
+    state = _sk_state(10, 16)
+    _sk_make_session(state, sk.id)
+    monkeypatch.setattr(common, "lookup", lambda faction, uid: (sk, state))
+    # 3 damage (not a multiple of the 5-wound group value) leaves the front
+    # Menhir model partially wounded (2/5) instead of an exact model-kill —
+    # front_group_hp must move off the full-health (5, 5) reading.
+    col = _DmgColStub(damage_in=3, apply_clicked=True)
+    monkeypatch.setattr(common.st, "columns", lambda n: (col, MagicMock()))
+    profile = SimpleNamespace(damage="3", abilities="", effect=None, is_melee=False)
+
+    # A left-rendered-first army-list column would have captured this value
+    # BEFORE the center column (this call) ever runs its button callback.
+    front_before = common.front_group_hp(sk, state)
+    assert front_before == (5, 5)
+
+    common._render_damage_block(sk, "Necrons", sk.id, profile, "Orks", "Boyz", "shooting", "tab_sk")
+
+    # By the time the render call returns, the callback has already fired
+    # synchronously (mirrors real Streamlit's on_click-before-rerun timing)
+    # — a fresh read of the same session_state cell that seeded front_before
+    # must show the mutation, not the stale pre-click value.
+    front_after = common.front_group_hp(sk, state)
+    assert front_after == (2, 5)
+    assert front_after != front_before
+    assert state["group_wounds"]["triarchal_menhirs"] == 7
+    assert state["destroyed"] is False

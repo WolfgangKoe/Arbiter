@@ -2183,4 +2183,27 @@ selbst, nicht Spielregeln; Test-Mandat gilt trotzdem für den Hook-Code, falls u
 **Herkunft:** S181-Retro Maßnahme 1 (Governance-Regel „Subagenten führen NIE
 git-Operationen aus") — Folge-Item für die technische Durchsetzbarkeit.
 
+## B-135 — Performance beim schnellen Damage-Inkrement (Pfeiltasten)
+
+[↩ Zeile in backlog.md](backlog.md#b-135)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** In Progress
+
+**Tier:** Executor + Sonnet
+
+**Effort:** ~90k gesamt (T4a ~30k Messung, T4b ~60k Fix mit B-132-Kopplung)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (Damage-`number_input`: Z. 2794/2812/2827), `src/gameObjects/loader.py` (Render-Hot-Path-Accessoren). **Hypothese (aus S183-Planning §0 Befund 2):** Jeder Pfeil-Klick auf `ml_`/`gwd_`/`wf_`-`number_input` löst einen vollen App-Rerun aus — beide kompletten Armeelisten + Actions-Area + Protokoll werden neu gerendert. Zusätzlich: der Render-Hot-Path ruft ungecachtes `load_army` auf (bekannt aus B-132, S180-Review Minor 2). Kein Deep-Dive dieses Items — nur Mess-/Hypothesen-Item: T4a muss die Rerun-Kosten pro Pfeil-Klick messen (Playwright-Timing) und `load_army`-Aufrufe im Hot-Path zählen (grep + Probe); T4b führt dann die Caching-Lösung (`functools.lru_cache` / `st.cache_data` am Loader-Eingang) um und misst nach. **Kopplung B-132:** Wenn T4a bestätigt, dass Caching lohnt, **schließt T4b beide Items (B-135 + B-132) mit ab** — sonst bleibt B-132 als offenes Einzelitem stehen (s. backlog.md Abhängigkeiten-Notiz).
+
+**Abhängigkeiten:** T2 (B-134-Fix) zuerst; dann T4a (Messung: Rerun-Kosten, `load_army`-Aufrufe), dann T4b (Caching + Nachmessung). Koppelt an B-132 (`load_army`-Caching-Hypothese); bei positiver Messung werden beide geschlossen. Teil des S183-Plans Task-Reihe (T1/T2/T2b/T3 → T4a/T4b → T5 Hygiene → Abschluss-Dreiklang).
+
+**Belege:** S183_PLANNING.md §0 Befund 2 (Hypothese: voller Rerun pro Pfeil + ungecachtes `load_army`), §2 T4a/T4b (Messplan + Fix-Plan mit Caching); S180-Review Minor 2 + Retro-M5 (Loader-Caching erwähnt, aber keine Urgenz — diese Session untersucht es).
+
+**Benötigte Regeln-Scopes:** — (reine Performance/Streamlit-Verhalten, kein Regelfall).
+
+**Geltende Prozess-Regeln:** Tier Executor+Sonnet; Freigabe-Gate; Test-Mandat (Regressionstest für Cache-Verhalten, Nachmessung als Beleg; kein manueller Render-Code betroffen). Keine DoD-6 UI-Verifikation (reine Verhaltens-/Performance-Messung).
+
+**Herkunft:** S183 Stakeholder-Beobachtung aus B-128(b)-Verifikation; S183_PLANNING.md §0 Befund 2, gemeinsame Quelle wie B-134.
 

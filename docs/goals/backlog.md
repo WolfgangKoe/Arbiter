@@ -15,9 +15,9 @@ Detailplanungen erledigter Ziele (1A–6): [archive/](archive/). Ausführliche I
 
 **Pflege-Regel:** Bereinigung an jedem Session-Start/-Ende — erledigte Items MIT ihrem
 Details-Abschnitt aus `backlog_details.md` nach `backlog_archive.md` verschieben, hier die
-Tabellenzeile löschen. Letzter Abgleich: **2026-07-23 (S182, B-128 vollständig erledigt
-(a) S181 + (b) DAMAGE-Block-Vereinheitlichung S182) und archiviert; Rang neu sortiert —
-B-028c3/c4/c5 auf Rang 1–3, B-132/B-133 (S181-neu) direkt hinter B-005 einsortiert)**.
+Tabellenzeile löschen. Letzter Abgleich: **2026-07-24 (S183: B-134/B-135 neu aus
+Stakeholder-Beobachtung S183, Prio-Entscheid E2/E3 — B-134 Rang 1, B-135 Rang 2 vor
+B-028c3–c5, B-132 Notiz ergänzt „wird ggf. von B-135 (S183) mit abgeschlossen")**.
 
 ---
 
@@ -27,11 +27,12 @@ Einzige Prioritätsquelle — sortiert nach Stakeholder-Priorität (Inventar-Rei
 
 | ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Status | Beschreibung | Abhängigkeiten | Effort | Assignee |
 |---|---|---|---|---|---|
+| [B-135](backlog_details.md#b-135--performance-beim-schnellen-damage-inkrement-pfeiltasten)     | ToDo | <a id="b-135"></a>Performance beim schnellen Damage-Inkrement (Pfeiltasten) — Hypothese: voller App-Rerun pro Klick + ungecachtes `load_army` im Render-Hot-Path; Messung (T4a) + Fix-Caching (T4b, ggf. B-132 mit ab) — E3-Entscheid "Fix sofort" steht, Ausführung nach S184 verschoben (S183-Wind-down bei ~120k).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-134 (T2); T4a Messung → T4b Caching; koppelt B-132 | ~90k (T4a ~30k + T4b ~60k) | Executor |
 | [B-028c3](backlog_details.md#b-028c3--free-attack)     | ToDo | <a id="b-028c3"></a>`free_attack` (`inescapable_death`) — volle Attacke-Sequenz mitten in gegnerischer Movement-Phase; komplexeste Einzelmechanik.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c4/c5); höchstes Restrisiko | M: ~20–25k | Executor |
 | [B-028c4](backlog_details.md#b-028c4--mark-target)     | ToDo | <a id="b-028c4"></a>`mark_target` (`targeting_relay`) — zustandsbehaftetes „Ziel markiert" über Phasen-/Einheitengrenzen, neuer State-Schlüssel.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c3/c5) | S/M: ~15–20k | Executor |
 | [B-028c5](backlog_details.md#b-028c5--buff-roll)     | ToDo | <a id="b-028c5"></a>`buff_roll` (`competitive_streak`) — Namenskollision gegen commandPhase-Logik, braucht eigenen Ability-Pfad + INV-4b-Klärung.<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | nach B-028c1 (parallel zu c2/c3/c4) | S: ~15k | Executor |
 | [B-005](backlog_details.md#b-005--direktiv-lock-rest-ab-bewegungsphase-sperren)     | ToDo | <a id="b-005"></a>Direktiv-Lock-Rest — Protokoll-Direktiven ab der Bewegungsphase sperren (Setup-Leck bereits gefixt).<br><span style="color:#166534">**Fachlichkeit (Ziel 7)**</span> | kein akuter Blocker | ~15k | Executor |
-| [B-132](backlog_details.md#b-132--loader-caching-der-ability-accessoren-pruefen)     | ToDo | <a id="b-132"></a>Loader-Caching der Ability-Accessoren prüfen — `get_wound_reroll_aura_donor_names`/`get_unit_rp_reroll_ability` rufen ungecachtes `load_army` im Render-Hot-Path (kein Regress, konsistentes Muster). Prüfen, ob Caching lohnt.<br><span style="color:#c2410c">**Schuldabbau**</span> | S180-Review Minor 2 / Retro-M5 | ~15k | Executor |
+| [B-132](backlog_details.md#b-132--loader-caching-der-ability-accessoren-pruefen)     | ToDo | <a id="b-132"></a>Loader-Caching der Ability-Accessoren prüfen — `get_wound_reroll_aura_donor_names`/`get_unit_rp_reroll_ability` rufen ungecachtes `load_army` im Render-Hot-Path (kein Regress, konsistentes Muster). Prüfen, ob Caching lohnt.<br><span style="color:#c2410c">**Schuldabbau**</span> | S180-Review Minor 2 / Retro-M5; wird ggf. von B-135 (S183) mit abgeschlossen | ~15k | Executor |
 | [B-133](backlog_details.md#b-133--git-commit-blockier-hook-fuer-subagenten-pruefen)     | ToDo | <a id="b-133"></a>Prüfen, ob ein Hook `git commit`/`git add -A` aus Subagent-Kontext technisch blocken kann (analog `freigabe_gate.py` für Edit/Write).<br><span style="color:#1e3a8a">**Prozess/Doku**</span> | S181-Retro-1 / Fehl-Commit `d88abca` | ~15k | Executor |
 | [B-107](backlog_details.md#b-107--design-patterns-discovery-attackensequenz-und-abilityengine)     | ToDo | <a id="b-107"></a>Design-Patterns-Discovery — an zwei Beispielen (Attackensequenz `_common.py` + eine Stelle `abilityEngine.py`) Vorschläge für lesbarere/objektorientiertere Struktur erarbeiten; Ergebnis fließt in den B-077/B-006-Zuschnitt ein. Discovery bewusst VOR dem Refactoring — vorsichtige Annäherung an die großen Dateien (Stakeholder-Entscheid S157-Planning).<br><span style="color:#1e3a8a">**Prozess/Doku**</span> | koppelt an B-077/B-006 (liefert deren Zuschnitt) | ~15–20k | Planner |
 | [B-077](backlog_details.md#b-077--common-py-refactoren)     | ToDo | <a id="b-077"></a>`_common.py` refactoren (3046 Zeilen, S157 gemessen — vorher 2218) — Attackensequenz als eigene Datei.<br><span style="color:#c2410c">**Schuldabbau**</span> | gleicher Render-Hub wie B-076; Zuschnitt wartet auf B-107-Discovery | ~70k+<br>— vor Vergabe<br>splitten | Planner→Executor |

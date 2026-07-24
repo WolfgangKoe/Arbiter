@@ -6574,8 +6574,8 @@
   "6eae1d4b-86b4-4fcc-8b33-7776a899ebd6": {
     "started_at": "2026-07-23T19:51:36.685Z",
     "task": "Start Session",
-    "peak_context": 123855,
-    "subagent_share": 80.46891340501135,
+    "peak_context": 131383,
+    "subagent_share": 75.00773323877405,
     "by_tier": {
       "Opus": 2374489,
       "Sonnet": 12041236
@@ -6608,6 +6608,61 @@
         "tier": "Opus",
         "peak_context": 58045,
         "started_at": "2026-07-23T19:51:36.685Z"
+      }
+    ]
+  },
+  "0b113c5c-2f52-4ef7-a213-b7949eab332b": {
+    "started_at": "2026-07-24T06:26:11.205Z",
+    "task": "start session S183",
+    "peak_context": 148182,
+    "subagent_share": 91.97190328938127,
+    "by_tier": {
+      "Haiku": 1877513,
+      "Sonnet": 113395668,
+      "Opus": 4870590
+    },
+    "subagents": [
+      {
+        "agent_type": "general-purpose",
+        "description": "T1 Backlog-Überführung B-134/B-135",
+        "tier": "Haiku",
+        "peak_context": 75986,
+        "started_at": "2026-07-24T06:26:11.205Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "Playwright UI-Verifikation B-134 Stale-UnitCard-Fix",
+        "tier": "Sonnet",
+        "peak_context": 190055,
+        "started_at": "2026-07-24T06:26:11.205Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2 B-134-Fix + M2/M3 + Verifikation",
+        "tier": "Sonnet",
+        "peak_context": 336658,
+        "started_at": "2026-07-24T06:26:11.205Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "T2-Finisher: Gates + T3-Verifikation",
+        "tier": "Sonnet",
+        "peak_context": 224810,
+        "started_at": "2026-07-24T06:26:11.205Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S183 Review (DoD, Opus)",
+        "tier": "Opus",
+        "peak_context": 66010,
+        "started_at": "2026-07-24T06:26:11.205Z"
+      },
+      {
+        "agent_type": "general-purpose",
+        "description": "S183 Planning-Entwurf erstellen",
+        "tier": "Opus",
+        "peak_context": 114238,
+        "started_at": "2026-07-24T06:26:11.205Z"
       }
     ]
   }

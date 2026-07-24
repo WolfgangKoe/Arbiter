@@ -151,10 +151,11 @@ Big-Bang).
 
 Ergänzt den Subgruppen-Selector (§1.4 oben) um den **gesamten** DAMAGE-Block —
 `_render_damage_block` (`src/uiLayout/_common.py`). Zwei Eingabe-*Pfade* je nach
-Einheitstyp (Begründung §2 in `docs/handoff/S181_B128b_mockup.md`, D4 unten), aber
-EIN gemeinsames Rahmen-Schema: Header → Dmg/HP-Zeile → Subgruppen-Selector (nur
-Gruppen-Wunden) → Sub-Header „Enter damage taken" → typabhängige Zahlenfelder →
-Mortal Wounds → Apply-Button → Post-Apply-Zustand.
+Einheitstyp (Begründung: D4 unten — der S181-Mockup-Entwurf, der diese
+Vereinheitlichung vorschlug, ist mit S182 abgeschlossen und gelöscht, Inhalt hier
+und in D2/D4 vollständig übernommen), aber EIN gemeinsames Rahmen-Schema: Header →
+Dmg/HP-Zeile → Subgruppen-Selector (nur Gruppen-Wunden) → Sub-Header „Enter damage
+taken" → typabhängige Zahlenfelder → Mortal Wounds → Apply-Button → Post-Apply-Zustand.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐

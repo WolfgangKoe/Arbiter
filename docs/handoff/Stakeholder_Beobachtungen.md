@@ -23,7 +23,7 @@ Regeln:
 
 ## Beobachtungen (Eingang)
 
-_(keine offenen Beobachtungen)_
+- Der Screenshot /home/wolfgang/Dokumente/Arbiter/docs/handoff/Bildschirmfoto vom 2026-07-18 10-20-01.png sollte eigentlich schon längst gelöst sein. Brauchen wir den noch?
 
 ## Zuletzt überführt
 

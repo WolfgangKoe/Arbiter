@@ -314,25 +314,37 @@ def render_unit_selectbox(
     return selected
 
 
+def _wound_adjustment_click(faction: str, uid: str, unit: Unit, delta: int) -> None:
+    """on_click callback for one ±wound button.
+
+    Runs before the script body re-executes (Streamlit callback timing), so
+    both army-list columns render the post-mutation state in the same run
+    instead of the pre-click one (B-134 — stale UnitCard). Mutation itself is
+    unchanged, only the timing moved out of the inline button body.
+    """
+    is_mortal = delta == -1
+    if delta < 0:
+        _, unit_state = lookup(faction, uid)
+        was_destroyed = bool(unit_state.get("destroyed"))
+        apply_damage(uid, faction, -delta, unit, mortal=is_mortal)
+        _maybe_flag_transport_destroyed(faction, uid, unit, was_destroyed)
+    else:
+        heal_unit(uid, faction, delta, unit)
+
+
 def wound_adjustment_buttons(faction: str, uid: str, unit: Unit) -> None:
     """Render ±1/2/3 wound-adjustment buttons for a unit."""
     bc = st.columns(6)
     for col, delta, label in zip(bc, [-3, -2, -1, 1, 2, 3], ["−3", "−2", "−1", "+1", "+2", "+3"]):
         with col:
             is_mortal = delta == -1
-            if st.button(
+            st.button(
                 label,
                 key=f"w{delta}_{faction}_{uid}",
                 type="primary" if is_mortal else "secondary",
-            ):
-                if delta < 0:
-                    _, unit_state = lookup(faction, uid)
-                    was_destroyed = bool(unit_state.get("destroyed"))
-                    apply_damage(uid, faction, -delta, unit, mortal=is_mortal)
-                    _maybe_flag_transport_destroyed(faction, uid, unit, was_destroyed)
-                else:
-                    heal_unit(uid, faction, delta, unit)
-                st.rerun()
+                on_click=_wound_adjustment_click,
+                args=(faction, uid, unit, delta),
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -809,6 +821,45 @@ def _render_pre_explode_stratagem_go(
     )
 
 
+def _explode_toggle_click(entry: dict[str, Any], player: str, key: str, target_key: str) -> None:
+    """`on_click` handler for a Multi-Unit-Panel row's select/deselect toggle
+    (B-134). Selecting just extends the local selection list; deselecting
+    also rolls back any already-applied damage via
+    ``undo_explode_target_damage``. Both now run before the script body
+    re-executes, so both army-list columns pick up the post-mutation state
+    in the same run instead of the pre-click one — same mutation as before,
+    only the timing changed.
+    """
+    if target_key in entry["selected"]:
+        entry["selected"].remove(target_key)
+        entry["damage"].pop(target_key, None)
+        undo_explode_target_damage(entry, key, player)
+        if entry.get("last_touched") == target_key:
+            entry["last_touched"] = None
+    else:
+        entry["selected"].append(target_key)
+        entry["last_touched"] = target_key
+
+
+def _explode_direct_apply_change(
+    entry: dict[str, Any], player: str, key: str, target_key: str, widget_key: str
+) -> None:
+    """`on_change` handler for the Multi-Unit-Panel's per-target Mortal-Wounds
+    number_input (B-134, the "der vom Stakeholder erinnerte Mortal-Wounds-
+    Fall" — the Direct-Apply path §1.7 landing damage while the player
+    types). Replaces the former inline ``if new_count != previous: apply +
+    st.rerun()`` — Streamlit already only calls `on_change` when the widget's
+    value actually changed, so the manual comparison is no longer needed,
+    and running before the script body re-executes keeps both army-list
+    columns in sync within the same run.
+    """
+    new_count = st.session_state[widget_key]
+    tgt_unit, _ = lookup(player, key)
+    apply_explode_target_damage(entry, key, player, tgt_unit, new_count)
+    entry["damage"][target_key] = new_count
+    entry["last_touched"] = target_key
+
+
 def _render_explode_target_panel(
     faction: str, uid: str, unit: Unit, ability: Ability, entry: dict[str, Any]
 ) -> None:
@@ -847,38 +898,31 @@ def _render_explode_target_panel(
                 selected = target_key in entry["selected"]
                 row = st.columns([3, 2])
                 prefix = f"{SYM_CHECK} " if selected else ""
-                if row[0].button(f"{prefix}{name}", key=f"explode_tgt_{state_key}_{target_key}"):
-                    if selected:
-                        entry["selected"].remove(target_key)
-                        entry["damage"].pop(target_key, None)
-                        undo_explode_target_damage(entry, key, player)
-                        if entry.get("last_touched") == target_key:
-                            entry["last_touched"] = None
-                    else:
-                        entry["selected"].append(target_key)
-                        entry["last_touched"] = target_key
-                    st.rerun()
+                row[0].button(
+                    f"{prefix}{name}",
+                    key=f"explode_tgt_{state_key}_{target_key}",
+                    on_click=_explode_toggle_click,
+                    args=(entry, player, key, target_key),
+                )
                 if selected:
                     # value= seeds from entry["damage"] (B-125): Streamlit drops a
                     # widget's key-state once it unmounts (post-Confirm panel
                     # close), so a bare key= alone re-renders at 0 on reopen and
-                    # the != check below would apply(0), nulling the assignment.
-                    # max_value caps to the ability's damage-dice notation (B-126).
-                    new_count = row[1].number_input(
+                    # the on_change handler below would apply(0), nulling the
+                    # assignment. max_value caps to the ability's damage-dice
+                    # notation (B-126).
+                    widget_key = f"explode_dmg_{state_key}_{target_key}"
+                    row[1].number_input(
                         field_header,
                         min_value=0,
                         max_value=dice_notation_max(ability.effect.damage),
                         value=entry["damage"].get(target_key, 0),
                         step=1,
-                        key=f"explode_dmg_{state_key}_{target_key}",
+                        key=widget_key,
                         label_visibility="collapsed",
+                        on_change=_explode_direct_apply_change,
+                        args=(entry, player, key, target_key, widget_key),
                     )
-                    if new_count != entry["damage"].get(target_key, 0):
-                        tgt_unit, _ = lookup(player, key)
-                        apply_explode_target_damage(entry, key, player, tgt_unit, new_count)
-                        entry["damage"][target_key] = new_count
-                        entry["last_touched"] = target_key
-                        st.rerun()
 
     st.divider()
     footer_confirm, footer_reset = st.columns(2)
@@ -2687,6 +2731,96 @@ def _render_subgroup_selector(
     )
 
 
+def _apply_damage_click(
+    def_unit: Unit,
+    def_faction: str,
+    def_uid: str,
+    def_state: dict,  # type: ignore[type-arg]
+    is_group_wounds: bool,
+    chosen_gid: str | None,
+    total: int,
+    models_lost: int,
+    mortal_wounds: int,
+    phase_key: str,
+    atk_unit_name: str,
+    res_key: str,
+) -> None:
+    """`on_click` handler for the DAMAGE block's Apply button (B-134).
+
+    Must run as an `on_click` callback, not inline after the button: a
+    callback runs before the script body re-executes, so both army-list
+    columns (`app.py` renders left before center, right after) pick up the
+    post-mutation state in the very same run. The former inline-then-
+    `st.rerun()` pattern left the left column showing the pre-click state for
+    one run (stale UnitCard) and cost an extra full rerun — same mutation,
+    only the timing changed. → docs/handoff/S183 B-134.
+    """
+    from gameMechanic.gameLog import log_action  # noqa: PLC0415
+    from gameMechanic.unitMutations import select_damage_target_group  # noqa: PLC0415
+
+    models_before = def_state.get("models", 0) if is_group_wounds else 0
+    groups_before = dict(def_state.get("group_models", {})) if is_group_wounds else {}
+    if is_group_wounds:
+        # Direct the next apply to the chosen group (Zustand A/B). Single
+        # active group → clear the target so the priority-spill default runs.
+        if chosen_gid is not None:
+            select_damage_target_group(def_uid, def_faction, chosen_gid)
+        else:
+            def_state["damage_active_group_id"] = None
+    was_destroyed_before = bool(def_state.get("destroyed"))
+    if total > 0:
+        apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
+        _maybe_flag_transport_destroyed(def_faction, def_uid, def_unit, was_destroyed_before)
+    wiped_groups: list = []  # type: ignore[type-arg]
+    if is_group_wounds:
+        # Real loss only known after priority-based distribution
+        _, def_state_after = lookup(def_faction, def_uid)
+        models_lost = max(0, models_before - def_state_after.get("models", 0))
+        gm_after = def_state_after.get("group_models", {})
+        wiped_groups = [
+            (g.name_en, ", ".join(w.name_en for w in g.weapons) or g.name_en)
+            for g in def_unit.model_groups
+            if groups_before.get(g.id, 0) > 0 and gm_after.get(g.id, 0) == 0
+        ]
+    wounds_on_front = 0
+    decl = st.session_state.get("attack_declaration", {})
+    atk_uid = decl.get("atk_uid", "")
+    atk_f = decl.get("atk_faction", "")
+    if atk_uid and atk_f:
+        atk_flags = st.session_state[units_key_for(atk_f)].get(atk_uid, {}).get("turn_flags", {})
+        if phase_key == "shooting":
+            atk_flags["shot"] = True
+        elif phase_key == "fight":
+            atk_flags["fought"] = True
+            try:
+                atk_unit, _ = lookup(atk_f, atk_uid)
+                if atk_unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee"):
+                    st.session_state.pending_triggered_relic = {
+                        "uid": atk_uid,
+                        "faction": atk_f,
+                        "step": "initial",
+                        "target_uid": None,
+                        "target_faction": None,
+                        "mortals": 0,
+                    }
+            except (StopIteration, KeyError):
+                pass
+    log_action(
+        st.session_state.round,
+        phase_key,
+        atk_unit_name,
+        f"dealt {total} damage to {def_unit.name_en}",
+    )
+    st.session_state[res_key] = {
+        "applied": True,
+        "models_lost": int(models_lost),
+        "wounds_on_front": int(wounds_on_front),
+        "mortal_wounds": int(mortal_wounds),
+        "total_damage": total,
+        "wiped_groups": wiped_groups,
+    }
+
+
 def _render_damage_block(  # type: ignore[no-untyped-def]
     def_unit: Unit,
     def_faction: str,
@@ -2699,13 +2833,7 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
 ) -> None:
     """Render damage input, apply button, post-apply summary, and RP block."""
     from gameMechanic.combat import apply_damage_attacks  # noqa: PLC0415
-    from gameMechanic.gameLog import log_action  # noqa: PLC0415
-    from gameMechanic.gameState import units_key_for  # noqa: PLC0415
-    from gameMechanic.unitMutations import (  # noqa: PLC0415
-        apply_damage,
-        get_locked_group,
-        select_damage_target_group,
-    )
+    from gameMechanic.unitMutations import get_locked_group  # noqa: PLC0415
 
     res_key = f"res_{tab_key}"
     tab_state = st.session_state.get(res_key, {})
@@ -2847,71 +2975,27 @@ def _render_damage_block(  # type: ignore[no-untyped-def]
     btn_label = (
         f"{SYM_SWORDS} Apply {total} Damage → {def_unit.name_en}" if total > 0 else "Apply Damage"
     )
-    if dmg_col.button(btn_label, key=f"apply_{tab_key}", type="primary", use_container_width=True):
-        models_before = def_state.get("models", 0) if is_group_wounds else 0
-        groups_before = dict(def_state.get("group_models", {})) if is_group_wounds else {}
-        if is_group_wounds:
-            # Direct the next apply to the chosen group (Zustand A/B). Single
-            # active group → clear the target so the priority-spill default runs.
-            if chosen_gid is not None:
-                select_damage_target_group(def_uid, def_faction, chosen_gid)
-            else:
-                def_state["damage_active_group_id"] = None
-        was_destroyed_before = bool(def_state.get("destroyed"))
-        if total > 0:
-            apply_damage(def_uid, def_faction, total, def_unit, resolved=True)
-            _maybe_flag_transport_destroyed(def_faction, def_uid, def_unit, was_destroyed_before)
-        wiped_groups: list = []  # type: ignore[type-arg]
-        if is_group_wounds:
-            # Real loss only known after priority-based distribution
-            _, def_state_after = lookup(def_faction, def_uid)
-            models_lost = max(0, models_before - def_state_after.get("models", 0))
-            gm_after = def_state_after.get("group_models", {})
-            wiped_groups = [
-                (g.name_en, ", ".join(w.name_en for w in g.weapons) or g.name_en)
-                for g in def_unit.model_groups
-                if groups_before.get(g.id, 0) > 0 and gm_after.get(g.id, 0) == 0
-            ]
-        wounds_on_front = 0
-        decl = st.session_state.get("attack_declaration", {})
-        atk_uid = decl.get("atk_uid", "")
-        atk_f = decl.get("atk_faction", "")
-        if atk_uid and atk_f:
-            atk_flags = (
-                st.session_state[units_key_for(atk_f)].get(atk_uid, {}).get("turn_flags", {})
-            )
-            if phase_key == "shooting":
-                atk_flags["shot"] = True
-            elif phase_key == "fight":
-                atk_flags["fought"] = True
-                try:
-                    atk_unit, _ = lookup(atk_f, atk_uid)
-                    if atk_unit.get_triggered_effect("after_fight", "fight", "mortal_after_melee"):
-                        st.session_state.pending_triggered_relic = {
-                            "uid": atk_uid,
-                            "faction": atk_f,
-                            "step": "initial",
-                            "target_uid": None,
-                            "target_faction": None,
-                            "mortals": 0,
-                        }
-                except (StopIteration, KeyError):
-                    pass
-        log_action(
-            st.session_state.round,
+    dmg_col.button(
+        btn_label,
+        key=f"apply_{tab_key}",
+        type="primary",
+        use_container_width=True,
+        on_click=_apply_damage_click,
+        args=(
+            def_unit,
+            def_faction,
+            def_uid,
+            def_state,
+            is_group_wounds,
+            chosen_gid,
+            total,
+            models_lost,
+            mortal_wounds,
             phase_key,
             atk_unit_name,
-            f"dealt {total} damage to {def_unit.name_en}",
-        )
-        st.session_state[res_key] = {
-            "applied": True,
-            "models_lost": int(models_lost),
-            "wounds_on_front": int(wounds_on_front),
-            "mortal_wounds": int(mortal_wounds),
-            "total_damage": total,
-            "wiped_groups": wiped_groups,
-        }
-        st.rerun()
+            res_key,
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------

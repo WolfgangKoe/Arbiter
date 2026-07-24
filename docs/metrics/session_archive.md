@@ -1,7 +1,7 @@
 # Session-Archiv
 
 <!-- Generiert von tools/token_report.py — nicht von Hand pflegen. -->
-Stand: 2026-07-23 22:29 CEST
+Stand: 2026-07-24 13:11 CEST
 
 Jüngste zuerst. Akkumuliert über alle Sessions (dedup je Session-ID).
 Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` sonstige.
@@ -9,7 +9,15 @@ Modell-Mix: `▚` Fable · `█` Opus · `·` Sonnet · `▒` Haiku · `▓` son
 ```text
 Session           Peak-Kontext           Subagent       Modell-Mix  
 ----------------- ---------------------- -------------- ------------
-07-23 21:51 6eae  ██████████░░ 124k ⚠️   █████░  80%    ██··········
+07-24 08:26 0b11  ████████████ 148k ⚠️   ██████  92%    █···········
+         SA_1·  ██████░░░░░░  76k ✅    T1 Backlog-Überführung B-134/B-135
+         SA_2·  ████████████ 190k ⛔    Playwright UI-Verifikation B-134 S…
+         SA_3·  ████████████ 337k ⛔    T2 B-134-Fix + M2/M3 + Verifikation
+         SA_4·  ████████████ 225k ⛔    T2-Finisher: Gates + T3-Verifikati…
+         SA_5·  █████░░░░░░░  66k ✅    S183 Review (DoD, Opus)
+         SA_6·  █████████░░░ 114k ✅    S183 Planning-Entwurf erstellen
+----------------- ---------------------- -------------- ------------
+07-23 21:51 6eae  ███████████░ 131k ⚠️   ████░░  75%    ██··········
          SA_1·  █████░░░░░░░  62k ✅    Session-Plan B-128 erstellen
          SA_2·  ███████████░ 134k ⚠️   T2+T3 Verif-Handoff + Artefakt-Nac…
          SA_3·  ███████░░░░░  93k ✅    T1 B-128(b) DAMAGE-Block umsetzen
@@ -1051,3 +1059,4 @@ Session           Peak-Kontext           Subagent       Modell-Mix
 - **S180 (2026-07-23)** B-131 follow-up: named aura donors + half-width hint, UI-verified + archived; retro M4 accepted
 - **S181 (2026-07-23)** B-128(a) Doku-Angleichung (Silent-King bewusst hinweislos), M4 zweiter Aura-Spender, B-128(b) Mockup-Vorschlag, Governance-Retro (Subagent-kein-git, Reversal-Kontext), Fehl-Commit d88abca zurückgenommen
 - **S182 (2026-07-23)** B-128(b) DAMAGE-Block unified (D1 'Damage dealt', D2 'Enter damage taken' sub-header, D3 max_value=models_max); design_system §1.4.1; B-128 fully closed+archived; M4 verified+closed
+- **S183 (2026-07-24)** B-134 stale UnitCard fixed (3 damage mutations to widget callbacks, st.rerun removed, Playwright-verified same-frame update); retro M2/M3 done; B-134/B-135 backlog transfer; T4 perf deferred to S184

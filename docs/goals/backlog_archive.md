@@ -1184,3 +1184,29 @@ Stakeholder-Entscheidung: Wir gehen Option-B an. Task bitte kleinschneiden und d
   B-024/B-124); ursprünglich B-124 (S167-Planning Punkt 2iii, Freigabe S167,
   Kritik-Ergänzung T3-V S168); (a) S181, (b) Mockup S181/Code S182.
 
+---
+
+## B-134 (erledigt S183) — Stale-UnitCard nach Damage-Apply
+
+[↩ Zeile in backlog.md](backlog.md#b-134)
+
+**Typ:** <span style="color:#166534">**Fachlichkeit (Ziel 7)**</span>
+
+**Status:** In Progress
+
+**Tier:** Executor
+
+**Effort:** ~15–20k (S–M)
+
+**Detail-Beschreibung:** Betroffene Dateien: `src/uiLayout/_common.py` (DAMAGE-Apply: Z. 2862, Multi-Unit-Panel: Z. 876–881), `src/uiLayout/unitCard.py` (Z. 252), `src/app.py` (Render-Reihenfolge: Z. 44–54). **Root Cause:** die Schaden-Mutation läuft **inline mitten im Skript-Durchlauf** statt in einem Widget-Callback. Die `apply_damage(...)`-Funktion wird direkt im Button-`if` aufgerufen, danach folgt `st.rerun()`. Weil die linke Armeeliste (`render_army_list(first_player)`) im selben Skript-Durchlauf **VOR** dem Center-Block (DAMAGE-Bereich) rendert, sieht sie noch den Vor-Mutations-Stand der Unit-HP. Die rechte Armeeliste rendert **nach** dem Center, sieht daher den korrekten Stand. Das neue `st.rerun()` gleicht zwar ab, aber um eine Interaktion verspätet — der UnitCard-Balken zeigt im Screenshot noch 3/3 statt 2/3, während die DAMAGE-Warnung bereits „1 LP" für die nächste Einheit anzeigt (asymmetrisch nach Brettseite). Analog: Multi-Unit-Panel bei Direct-Apply (Z. 876–881, `apply_explode_target_damage`). **Kein Fragment-Isolations-Bug** — verifiziert via `grep -rn st.fragment src/` (0 Treffer) — sondern das kanonische Streamlit-Muster: **Mutation gehört in `on_click`/`on_change`-Callback (läuft VOR dem Skriptkörper), nicht inline**. Präzedenzfall B-125/B-126 (Direct-Apply-Umbau des Explode-Panels) hat Reset/Cap gefixt, aber nicht die Render-Reihenfolge-Wurzel. **Fix-Richtung (nicht Umsetzung):** Mutation in den Widget-Callback verlagern, sodass **beide** Armeelisten im selben Run nach der Mutation rendern — beseitigt die Verspätung und spart einen Rerun (zahlt auf B-135 ein).
+
+**Abhängigkeiten:** T2/T3 des S183-Plans (Reproduktion+Root-Cause-Bestätigung, dann Mutation in on_click/on_change für DAMAGE-Apply **und** Multi-Unit-Panel, Regressionstest für konsistenten State nach Apply, ein Rerun weniger). Part of S183 Task-Reihe; T2 zuerst, dann T3 UI-Verifikation mit Scorer-Destroyer-Szenario.
+
+**Belege:** Screenshot `docs/handoff/Bildschirmfoto vom 2026-07-23 23-44-40.png` (zeigt UnitCard 3/3 vs. DAMAGE-Warnung 1 LP), S183-PLANNING.md §0 Befund 1 (`_common.py:2668` DAMAGE-Block-Warnung, `unitCard.py:252` → `_common.py:3690` HP-Quelle, `app.py:44-54` Render-Reihenfolge).
+
+**Benötigte Regeln-Scopes:** `docs/work/wahapedia_core_rules/core_rules.txt` §Schadenszuteilung (Z. 1682–1706: „Schaden pro Modell, Überschuss verfällt"), `src/gameMechanic/unitMutations.py:129` (Docstring `get_locked_group`-Zwangszuteilung 9E).
+
+**Geltende Prozess-Regeln:** Tier Executor; DoD/ganzheitliche Sicht (Code ↔ Regeln ↔ Architektur, regelkonform B-Klasse State-Treue); Freigabe-Gate; Test-Mandat (Regressionstest State-Konsistenz nach Apply); UI-Verifikation Manual (Render-Code, DoD-6).
+
+**Herkunft:** S183 Stakeholder-Beobachtung aus B-128(b)-Verifikation (2026-07-23); Screenshot als Rückverweis in S183_PLANNING.md §0 Befund 1.
+
