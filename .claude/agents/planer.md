@@ -5,7 +5,6 @@ tools: Read, Write, Edit, Bash
 model: opus
 schreibpfade:
   - domaene/etappen/
-  - domaene/etappen.md
   - domaene/backlog.md
   - domaene/items/
   - handoff/plan.md
