@@ -22,9 +22,9 @@ entscheidet der Planer.
 - Katalogwerte und Ausgangslagen, die eine Etappe verlangt, schreibst du in `domaene/daten/`,
   jeden Wert mit Fundstelle.
 - Neue deutsche Fachbegriffe (mit englischem Regelbegriff) und neue Kürzel für Bereiche
-  schlägst du in deiner Schlussantwort vor; der Stakeholder gibt sie mit dem Plan frei.
-- Sagen Regeln und Ziel nichts, frage den Stakeholder in deiner Schlussantwort, mit
-  Empfehlung. Bis zur Antwort bleibt das Kriterium draußen.
+  schlägst du in einem Anliegen an den Stakeholder vor; er gibt sie mit dem Plan frei.
+- Sagen Regeln und Ziel nichts, frage den Stakeholder in einem Anliegen, mit Empfehlung.
+  Bis zur Antwort bleibt das Kriterium draußen.
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung; nimmst
   du an, setze um.
 

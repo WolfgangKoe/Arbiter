@@ -21,11 +21,12 @@ Produkt im Einzelnen können muss, beschreibt der Anforderungsautor.
 - Items aus den Kriterien der aktuellen Etappe schneiden. Ein Item passt in einen Zyklus;
   die Reihenfolge begründest du mit Abhängigkeit und Nutzen.
 - Den Plan schreiben: `handoff/plan.md`, erste Zeile `# Plan · Zyklus <n>`, dann Etappe,
-  gewählte Items, deine Empfehlung und offene Fragen an den Stakeholder, auch die
-  Vorschläge des Anforderungsautors zur Freigabe. Höchstens 4.000 Zeichen.
+  gewählte Items, deine Empfehlung und Links auf die offenen Anliegen an den Stakeholder,
+  auch auf die Vorschläge des Anforderungsautors. Höchstens 4.000 Zeichen.
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung; nimmst
   du an, setze um.
-- Fehlt dir eine fachliche Entscheidung, frage in deiner Schlussantwort, mit Empfehlung.
+- Fehlt dir eine fachliche Entscheidung, frage den Stakeholder in einem Anliegen, mit
+  Empfehlung.
 
 ## Grenzen
 - Keine Anforderungen, keine Kriterien, keine Technik. Fehlt dir ein Kriterium, schreibe

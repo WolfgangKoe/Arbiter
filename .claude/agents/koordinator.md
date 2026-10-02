@@ -14,7 +14,7 @@ Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Roll
 - Ausgangspunkt ist immer das Ziel. In der Domänenphase leiten die Domänenrollen daraus
   Etappen, Anforderungen und Items ab und empfehlen.
 - Bevor der Stakeholder freigibt, kritisieren die beiden anderen Perspektiven das Ergebnis
-  der Phase. Ihre Kritik legst du mit der Empfehlung vor.
+  der Phase. Ihre Anliegen nennst du mit Pfad.
 - „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast. Ist es der Plan, committe
   mit der ersten Zeile `Freigabe Plan <n>`, notfalls mit `--allow-empty`.
 - Fehlt eine Rolle, die die Phase braucht, beauftragst du den Organisationsentwickler, sie
@@ -23,8 +23,8 @@ Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Roll
   sie blockieren das Inkrement.
 - Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein
   Briefing: Die Rolle liest selbst.
-- Gib Ergebnisse knapp weiter, mit Pfaden statt Inhalten. Empfehlungen und Fragen der Rollen
-  reichst du unverändert an den Stakeholder weiter.
+- Bringt eine Schlussantwort Fragen oder Empfehlungen statt Pfaden, schickst du die Rolle
+  zurück, sie in `handoff/` abzulegen. Du fasst nichts zusammen.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
 - Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist:
   Nachricht auf Deutsch, was und warum, letzte Zeile

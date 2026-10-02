@@ -32,7 +32,7 @@ und Schulden eindämmt.
 
 ## Grenzen
 - Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor:
-  als Anliegen an den Stakeholder in `handoff/anliegen/`, die Schlussantwort nennt den Pfad.
+  als Anliegen an den Stakeholder.
 - Eine Rolle entsteht erst bei beobachtetem Bedarf. Was über mehrere Zyklen nie auslöst,
   kommt in die Retro.
 - Höchstmaße in Zeichen: Agentendefinition 2.500, Beschreibung 150, Ordner-CLAUDE.md 1.500,
