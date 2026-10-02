@@ -47,3 +47,7 @@ zwei Wörter; Etappe 5 hat 517 von 1.000 Zeichen.
 
 **Gegenvorschlag.** „… kostet einen davon, je Spieler höchstens einmal je Phase.“ Wandert der
 Satz mit F11 (b) nach Etappe 3, wandert die Präzisierung mit.
+
+**Stellungnahme.** Angenommen, „you cannot use“ (`:3110`) bindet je Spieler.
+[Etappe 5](../../domaene/etappen/05-schiessen.md) sagt jetzt „je Spieler höchstens einmal je
+Phase“; mit F11 (b) wandert der Satz samt Präzisierung nach Etappe 3.
