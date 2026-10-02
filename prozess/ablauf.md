@@ -21,11 +21,27 @@ Auslöser: Stand „Technikphase“ nach `Freigabe Plan <n>`. Fehlen Rollen, sch
 Organisationsentwickler sie vor.
 1. Testautor: Akzeptanztests je Kriterium der Items, rot.
 2. Kritik: Fachkritiker (trifft der Test das Kriterium?), Architekt (Schnittstelle).
+   Ein bemängelter Test geht nicht in die Umsetzung, bis das Anliegen geklärt ist;
+   widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
+   Rest läuft weiter. Mechanismus: nur Text.
 3. Implementierer: macht die Tests grün; Refactoring nur aus einem Befund.
 4. Reviewer: DoD, `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe.
-5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe.
+5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
+   die abgenommenen Items.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Danach meldet der
    Stand die Prozessphase; eine Freigabe ist nicht nötig.
+
+### DoD (Item fertig)
+1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`.
+   Mechanismus: nur Text.
+2. Prüfmechanismen grün: ruff, toter Code, Komplexität, Kommentaranteil, Spiegel,
+   Glossar ↔ Code, Höchstmaße, Rückverfolgung. Mechanismus: nur Text.
+3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
+4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
+   Mechanismus: Stand (`stand.py`) erkennt das Review.
+
+Kommen Mutationstests oder eine Oberfläche hinzu, gelten auch Mutationsschwelle der
+geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 
 ## Prozessphase
 Auslöser: Review n liegt vor.
