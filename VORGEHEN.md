@@ -13,7 +13,9 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   Sitzung startet als Koordinator; er führt den Rest von Schritt 7 mit den Rollen aus.
   Offen beim Stakeholder: fachlicher Override im Ziel (Empfehlung: erlaubt, protokolliert).
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
-  Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht.
+  Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht. Bei
+  technischer Bewertung (Architektur, Datenbank, SOLID) aktiv anleiten, mit Beispielen aus dem
+  Altbestand. Später Prämisse in `prozess/praemissen/`.
 - **Repo:** github.com/WolfgangKoe/Arbiter (öffentlich, main; der alte Prototyp heißt jetzt
   Arbiter-old). CLI 2.1.287 wie VS Code. Qualität des Koordinators ohne Claude-Code-Systemprompt
   im Betrieb beobachten (E45). Auto-Memory ist aus (E48).
