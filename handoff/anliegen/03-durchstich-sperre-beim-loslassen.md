@@ -1,6 +1,6 @@
 # Durchstich „höchstens um M ziehen“: Sperre beim Loslassen
 
-03 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen, Frage an Stakeholder
+03 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen, vom Stakeholder entschieden
 
 ## Runde 1
 **Befund.** Der empfohlene Durchstich ist technisch der richtige Start: der dünnste Schnitt
@@ -24,6 +24,7 @@ für das Übergehen (Sperre mit Grund, Spieler bestätigen, Protokoll) entsteht 
   mehr; nur der Bildschirmtest mit Touch darf später kommen.
 - (a) als späteres Komfort-Item, wenn der Stakeholder es nach dem Durchstich will.
 
-**Stellungnahme.** Angenommen: (b) mit Kreis als reiner Anzeige; (a) erst als Komfort-Item. Der Altbestand klemmte
-beim Ziehen (`ArbiterMap/docs/spec/domain_rules.md:75`), daher Frage an den Stakeholder mit
-Empfehlung (b). Pointer Events sind Technik. Umsetzung im Item-Schnitt (Schritt 5).
+**Stellungnahme.** Angenommen, vom Stakeholder entschieden (F8): (b), Prüfung beim Loslassen, bei
+Sperre springt das Modell zurück und der Grund steht da; der Kreis ist reine Anzeige; (a) höchstens
+später als Komfort-Item. Pointer Events sind Technik. Weil Aufstellen vorn steht (F3 abgelehnt), gilt
+(b) schon beim Setzen in [Etappe 1](../../domaene/etappen/01-aufstellen.md); der Durchstich wird dort geschnitten.

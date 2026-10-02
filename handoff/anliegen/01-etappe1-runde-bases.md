@@ -1,6 +1,6 @@
 # Etappe 1: Ausgangslage nur mit runden Bases und ohne FLY
 
-01 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+01 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen, vom Stakeholder entschieden
 
 ## Runde 1
 **Befund.** Etappe 1 nennt „Einheiten mit Werten aus dem Katalog“, ohne die Art der Einheiten
@@ -25,6 +25,8 @@ keine Drehung in der Oberfläche. Ovale, Hulls und FLY würden Etappe 1 grob ver
   (`move_inches` → Bezeichner aus dem Glossar).
 - Ovale, Hulls und FLY als eigene, spätere Etappe oder Etappe-2-Kriterium.
 
-**Stellungnahme.** Angenommen, umgesetzt: Etappe 1 und 2 nur runde Bases ohne FLY, Etappe 1
-fest auf 44″ × 60″; Ovale, Hulls und FLY werden Etappe 3, vor Schießen und Charge, damit deren
-Abstände nicht umgebaut werden. Datei: Anforderungsautor, Schreibpfad fehlt (Anliegen 05).
+**Stellungnahme.** Angenommen, umgesetzt, F9 vom Stakeholder entschieden. Er hat F3 abgelehnt:
+Aufstellen kommt vor Bewegen. Darum nur runde Bases ohne FLY in [Etappe 1](../../domaene/etappen/01-aufstellen.md)
+bis 3, 44″ × 60″; die Ausgangslage soll nur noch die festen Armeen nennen, ohne Positionen (Empfehlung
+an den Stakeholder). Ovale, Hulls und FLY: [Etappe 4](../../domaene/etappen/04-jede-baseform.md), vor
+Schießen und Charge. Datei: Anforderungsautor (Anliegen 05).
