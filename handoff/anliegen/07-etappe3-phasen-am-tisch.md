@@ -1,6 +1,6 @@
 # Etappe 3: Phasen am Tisch ändern den Spielstand an der Karte vorbei
 
-07 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+07 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Etappe 3](../../domaene/etappen/03-schlachtrunden.md) lässt Phasen, die Arbiter
@@ -22,3 +22,12 @@ zeigt sie in der Reihenfolge der Grundregeln, die Spieler beenden sie ohne Spiel
 Etappe 3 prüft so Phasenfolge, Zugwechsel, Schlachtrunden und Advance ohne Wegwerfcode; ein
 vollständiges Probespiel am Tisch gibt es ab Etappe 5, das ist der Preis. Gewünscht ist das
 Probespiel früher, dann kommt das Entfernen von Modellen aus Etappe 5 vor, nicht ein Ersatz.
+
+**Stellungnahme.** Angenommen, umgesetzt in [Etappe 3](../../domaene/etappen/03-schlachtrunden.md):
+Eine nicht begleitete Phase ist leer, Arbiter zeigt sie, die Spieler beenden sie ohne
+Spielhandlung. Kein vorläufiges Entfernen oder Versetzen: Die Karte bleibt Spielstand, auch um
+den Preis, dass Etappe 3 noch kein Probespiel ist. Der Grundsatz gilt bis zur letzten Etappe
+(in Etappe 5 sind Charge, Nahkampf, Psychische Phase und Moral leer); damit er das Löschen
+von Etappe 3 überlebt, fasst ihn der Anforderungsautor als Anforderung. Folgefrage: Die Moral
+entfernt Modelle nach Verlusten aus dem Schießen; ob sie mit Etappe 5 kommt, steht als Frage
+in Anliegen 09.

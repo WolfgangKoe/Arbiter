@@ -1,6 +1,6 @@
 # Befehlspunkte ohne Herkunft
 
-08 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+08 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen, Frage an Stakeholder
 
 ## Runde 1
 **Befund.** [Etappe 5](../../domaene/etappen/05-schiessen.md) lässt Command Re-roll
@@ -24,3 +24,11 @@ Armeeaufbau. Mit einem festen Startwert bleibt es ein Zähler mit drei Regeln.
 - Befehlspunkte kommen in die Etappe mit dem ersten Stratagem, dort auch der Bonus je
   Befehlsphase und die Einmal-je-Phase-Regel. F11 (Etappe 3) ist technisch gleich billig wie
   Etappe 5, wenn diese Festlegung mitkommt; ohne sie bleibt Command Re-roll in Etappe 5.
+
+**Stellungnahme.** Angenommen. [Etappe 5](../../domaene/etappen/05-schiessen.md) sagt jetzt:
+Startwert aus der Ausgangslage, Command Re-roll kostet einen Punkt, höchstens einmal je Phase
+(`:3112`). Ob Battle-forged und welcher Startwert, entscheiden die Regeln nicht (Only War: „any
+models“, `:2257`); das ist mit F11 eine Frage in Anliegen 09, Empfehlung Unbound mit
+vereinbartem Startwert (`:3119`), ohne Detachments und ohne Bonus je Befehlsphase. Wird es
+Battle-forged, kommt der Bonus `:681` in die Etappe. Die Rückgewinnungsgrenze `:2476` hat ohne
+Fähigkeiten nichts zu begrenzen; sie kommt mit den Stratagems in Etappe 7.

@@ -1,6 +1,6 @@
 # Etappe 1: Aufstellen ohne Ende, ohne Engagement Range, F8 ohne Ort
 
-06 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+06 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die neue [Etappe 1](../../domaene/etappen/01-aufstellen.md) lässt offen:
@@ -28,3 +28,15 @@ Testautor finden die Entscheidung nicht.
 3. F8 als Satz in Etappe 1. Etappe 1 hat 841 von 1.000 Zeichen; reicht der Platz für 1 bis 3
    nicht, kann der Satz „Modelle werden mit Maus und Touch gesetzt“ entfallen, das sagt das Ziel.
 4. Das Übergehen wird eine Anforderung in `querschnitt`; beide Etappen verweisen darauf.
+
+**Stellungnahme.** Alle vier angenommen, umgesetzt in [Etappe 1](../../domaene/etappen/01-aufstellen.md):
+1. „Aufstellen der Einheit beenden“ prüft die Kohärenz, bei Sperre bleibt die Einheit in
+   Aufstellung; wer fertig ist, wird übersprungen (`core_rules.txt:2322`).
+2. Sperre für ein Modell in Engagement Range eines gegnerischen Modells (`:450`). Damit bleibt
+   von F12 nur das Überdecken eigener Bases (Frage in Anliegen 09).
+3. F8 steht als Satz in Etappe 1: Prüfung beim Loslassen, Rücksprung, Grund. Den Satz zu Maus
+   und Touch habe ich gestrichen, das sagt das Ziel.
+4. Übergehen: Etappe 1 nennt es dort, wo es zuerst nutzbar wird (beide Spieler, je Sperre,
+   Protokoll); [Etappe 2](../../domaene/etappen/02-bewegen.md) verweist nicht mehr auf Etappe 1,
+   nur die Regelfolge `:724` bleibt. Die Anforderung in `querschnitt` schreibt der
+   Anforderungsautor mit den Anforderungen zu Etappe 1; bis dahin trägt das Ziel die Regel.
