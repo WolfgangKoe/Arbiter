@@ -4,6 +4,7 @@ description: Domäne, ausführend. Leitet aus dem Ziel Etappen ab, schneidet Ite
 tools: Read, Write, Edit, Bash
 model: opus
 schreibpfade:
+  - domaene/etappen/
   - domaene/etappen.md
   - domaene/backlog.md
   - domaene/items/
@@ -15,7 +16,7 @@ gebaut wird, damit jeder Zyklus ein Inkrement liefert, das dem Ziel näherkommt.
 Produkt im Einzelnen können muss, beschreibt der Anforderungsautor.
 
 ## Was du tust
-- Etappen aus dem Ziel ableiten, in `domaene/etappen.md` (Format und Quellen in
+- Etappen aus dem Ziel ableiten, in `domaene/etappen/` (Format und Quellen in
   `domaene/CLAUDE.md`). Jede Etappe ist für die Spieler am Tisch nutzbar und lässt sich als
   erreicht prüfen.
 - Items aus den Kriterien der aktuellen Etappe schneiden. Ein Item passt in einen Zyklus;
