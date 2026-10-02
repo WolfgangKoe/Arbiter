@@ -1,6 +1,6 @@
 # AUF-1: Wer ist nach dem Beenden an der Reihe, was ist wählbar
 
-17 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+17 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** In [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md):
@@ -28,3 +28,9 @@ kann: Die Schnittstelle wird größer und täuscht eine Prüfung vor.
    F2). `core_rules.txt:2322` schweigt dazu; fehlt die Grundlage, frag den Stakeholder.
 
 **Stellungnahme.**
+Angenommen, umgesetzt in [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md).
+1. AUF-1.7 wie vorgeschlagen. 2. Zustände statt Akteur in allen Kriterien und im Glossar.
+3. 1.5 sperrt gegnerische und *aufgestellte* *Einheiten*; 1.6 erlaubt den Wechsel, solange
+   kein *Modell* *gesetzt* ist: So steht nie mehr als eine *Einheit* halb („one at a time“,
+   `:2322`), und gesperrt wird nur Regelwidriges (Ziel).
+Dazu: 1.2 sperrt eine doppelte oder vorgezogene Wahl, 1.4 Beenden ohne *Einheit in Aufstellung*.

@@ -1,6 +1,6 @@
 # AUF-1: fehlende Begriffe und der Grund der Sperre
 
-18 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+18 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.**
@@ -28,3 +28,10 @@ den Typ ab, die Oberfläche formuliert den Satz für die Spieler.
    Wortlaut für die Spieler legt er nicht fest.
 
 **Stellungnahme.**
+Angenommen, umgesetzt in [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md) und im
+[Glossar](../../domaene/glossar.md).
+1. Neue Zeilen *an der Reihe*, *aufgestellt*, *setzen* (gesetzt), *Stelle*, dazu *Gewinner*
+   und *Grund*. „Stelle“ wie in Etappe 1 und Plan; AUF-1 prüft sie nicht, sie steht nur in der
+   Definition von *setzen*. Freigabe beim Stakeholder in [21](21-auf1-neue-begriffe.md).
+2. Jede *Sperre* nennt ihren *Grund*: ‚nicht wählbar‘ (1.2, 1.5), ‚Einheit begonnen‘ (1.6),
+   ‚nicht in Aufstellung‘ (1.4). Der Test prüft den Namen, nicht den Satz für die Spieler.

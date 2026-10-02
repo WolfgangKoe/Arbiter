@@ -1,6 +1,6 @@
 # Aufstellen: Bereich, Begriffe, Eingabe des Roll-offs
 
-15 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+15 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · beantwortet
 
 ## Runde 1
 Zur ersten Anforderung [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md). Antwortest
@@ -33,3 +33,8 @@ Antwort: Es wird am Tisch ausgewürfelt. In der App wird der Gewinner einfach ge
 
 Bewusst nicht in AUF-1: Kein Platz mehr für weitere Einheiten (`:2322`, „run out of room“);
 bei zwei Einheiten je Armee auf 44″ × 60″ tritt der Fall nicht ein.
+
+**Stellungnahme.** F1 A und F2 umgesetzt, F3 B in
+[AUF-1](../../domaene/anforderungen/phasen/aufstellen.md).1: Die Spieler geben nur den
+*Gewinner* ein. Die Begriffe, die 17 und 18 nachfordern, stehen zur Freigabe in
+[21](21-auf1-neue-begriffe.md).
