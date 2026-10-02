@@ -31,15 +31,17 @@ dann die Messung.
    außer Schreiben im eigenen Pfad und der Schlussantwort. Beim Koordinator entscheidet der
    Stakeholder: freigeben, kürzen, neuer Chat.
 
+Antwort: Du kannst die Html Datei aus dem Unterordner hierin kopieren ohne es komplett neu zu bauen. Es enthält auch eine Liste mit den Backlog items. Ich bin mir nicht sicher, ob und wie wir dieses hier einbringen könnten. Wäre aktuell aber nicht so relevant. Die Hooks sind von diesem Projekt ebenfalls nützlich. Ich bin mir aber nicht sicher, ob die in dem Ordner enthalten sind, sonst gehe ich nochmal suchen.
+
 **F1 · Welche Grenze?** A: 120.000 Token (ArbiterMap R-10). B: 100.000. C: ein Anteil am
 Fenster. Empfehlung A: dort an zehn Sitzungen bestätigt; absolut, also gleich bei 200.000
 und 1 Mio. Fenster.
 
-Antwort: .
+Antwort: Wie in der Html schon festgelegt. 120k Windown 150k oberste Grenze. Vielleicht passen wir es noch ein wenig an, wenn es so weiter geht wie hier. Wir sind nämlich bei 59k und es liefen 9 Subagenten. 
 
 **F2 · Wo liegt das Plugin?** A: eigenes Repo neben beiden. B: in `Arbiter_Structure/`.
 Empfehlung A: Es gehört keinem Produkt.
 
-Antwort: .
+Antwort: B, es gehört mir, darf aber von Subagenten aus der Prozess-Sicht bearbeitet werden. 
 
 **Stellungnahme.**
