@@ -10,9 +10,9 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   Root-CLAUDE.md im Gespräch entwerfen.**
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
   Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht.
-- **Vor dem ersten Lauf im neuen Repo:** Git-Identität im Repo setzen (global keine) · CLI im PATH
-  ist 2.1.170, VS Code bringt 2.1.287 mit → eine Version festlegen · offen: Qualität des
-  Koordinators ohne Claude-Code-Systemprompt im Betrieb beobachten (E45).
+- **Repo:** `git init` erledigt (main, Identität im Repo, Altordner in `.gitignore`); CLI auf
+  2.1.287 wie VS Code. Offen: GitHub-Remote (Name „Arbiter“ ist durch den alten Prototyp belegt) ·
+  Qualität des Koordinators ohne Claude-Code-Systemprompt im Betrieb beobachten (E45).
 - **Altbestand nur lesen:** `Arbiter/`, `ArbiterMap/` (Migrationsquelle, E8).
 
 ## Ziele
