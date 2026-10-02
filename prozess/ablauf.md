@@ -1,21 +1,20 @@
 # Ablauf
 
 ## Domänenphase
-1. Planer: Etappen aus dem Ziel. Auslöser: Stand „Keine Etappe“.
-2. Architekt: Kritik an den Etappen, als Anliegen an den Planer.
-3. Stakeholder: Freigabe der Etappen im Chat, nur wenn Schritt 1 sie neu abgeleitet hat.
-4. Anforderungsautor: Anforderungen zur aktuellen Etappe, Begriffe ins Glossar.
-5. Planer: Items und `handoff/plan.md`.
-6. Kritik am Ergebnis: Architekt (Technik) an Anforderungen und Items, Organisationsentwickler
-   (Prozess) an Format, Größe und Schnitt. Der Besitzer nimmt im Anliegen Stellung.
-7. Freigabe: Der Stakeholder schreibt „.“ in den Chat, der Koordinator committet
-   `Freigabe Plan <n>`. Danach meldet der Stand die Technikphase.
+Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/stand.py`.
+1. Planer: Etappen aus dem Ziel; nur die aktuelle ausformuliert. Auslöser: keine Etappe.
+2. Architekt: Kritik an der aktuellen Etappe und der Reihenfolge, als Anliegen.
+3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
+4. Anforderungsautor: die erste Anforderung zur Etappe, Begriffe ins Glossar. Eine genügt.
+5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind:
+   eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen.
+6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
+7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 
-Gleichzeitig laufen nur Rollen, die ausschließlich Anliegen schreiben (Schritt 6), sonst
-meldet die Schreibgrenze fremde Änderungen als Verstoß.
-
-Mechanismus: Schritt 1 und 7 Stand-Hook (`prozess/pruefungen/stand.py`); Reihenfolge 2–6
-und Gleichzeitigkeit nur Text, der Koordinator beauftragt danach.
+Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage. Budget je Phase in
+Rollenläufen (Domäne 8, Technik 10, Prozess 5, `rollenzaehler.py`); darüber entscheidet der
+Stakeholder: freigeben, kürzen oder verlängern. Gleichzeitig laufen nur Rollen, die
+ausschließlich Anliegen schreiben.
 
 ## Technikphase
 Auslöser: Stand „Technikphase“ nach `Freigabe Plan <n>`. Fehlen Rollen, schlägt der

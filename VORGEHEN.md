@@ -8,7 +8,8 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
 - **Stand:** Minimalgerüst steht, Zyklus 1 in der Domänenphase: Etappen abgeleitet und
   kritisiert (`domaene/etappen/`), Rollen Planer, Anforderungsautor, Architekt eingesetzt.
   Auswertung der ersten Koordinator-Sitzung → E52–E54. **Nächste Aufgabe (neue
-  Koordinator-Sitzung):** `pytest prozess/pruefungen` ist absichtlich rot (Höchstmaße, E53):
+  Koordinator-Sitzung):** Der Stand nennt „Etappe 1 wartet auf Kritik und Freigabe“ (E55).
+  `pytest prozess/pruefungen` ist absichtlich rot (Höchstmaße, E53):
   Planer kürzt die Etappen 02–07 auf je eine Zeile und schreibt Anliegen 09 im Frageformat
   neu (E53); Organisationsentwickler setzt E53-Text und E54 um (Skill `anliegen-schreiben`,
   Inhalte aus VORGEHEN.md nach `prozess/`). Danach beantwortet der Stakeholder 09.
@@ -258,6 +259,12 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   Chat. VORGEHEN.md lesen die Rollen nicht mehr; was sie brauchen, wandert nach `prozess/`.
   Anlass: Kontext des Koordinators rund 145.000 Token; Domänenphase bis dahin rund 1,5 Mio.
   neue Eingabe-Token und 14 Mio. aus dem Cache, ohne Produktcode.
+- **E55** Der Stand nennt den nächsten Schritt aus einer festen Folge von Artefakten
+  (`stand.py`); Etappen werden mit dem Commit `Freigabe Etappe <n>` freigegeben. Der Trigger
+  für die Technik ist früh: Die erste fertige Anforderung genügt für einen Plan mit einem Item
+  (höchstens drei). Budget je Phase in Rollenläufen (Domäne 8, Technik 10, Prozess 5,
+  `rollenzaehler.py`); darüber entscheidet der Stakeholder. Anlass: Nichts zwang die
+  Domänenphase zu ihrem Ergebnis.
 
 ## Kontextlandkarte
 
