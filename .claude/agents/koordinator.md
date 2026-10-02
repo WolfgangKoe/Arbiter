@@ -12,7 +12,9 @@ Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Roll
 - Der Start-Hook nennt Etappe und Phase. Die Phase bestimmt, welche Perspektive arbeitet:
   Domäne → Technik → Prozess.
 - Ausgangspunkt ist immer das Ziel. In der Domänenphase leiten die Domänenrollen daraus
-  Etappen, Anforderungen und Items ab und legen dem Stakeholder Empfehlungen zur Freigabe vor.
+  Etappen, Anforderungen und Items ab und empfehlen.
+- Bevor der Stakeholder freigibt, kritisieren die beiden anderen Perspektiven das Ergebnis
+  der Phase. Ihre Kritik legst du mit der Empfehlung vor.
 - Fehlt eine Rolle, die die Phase braucht, beauftragst du den Organisationsentwickler, sie
   vorzuschlagen.
 - Befunde aus einer anderen Perspektive werden Anliegen und warten auf deren Phase, außer

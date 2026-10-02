@@ -10,8 +10,11 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   Hooks in `prozess/pruefungen/` (Stand mit Etappe, Schreibgrenze, Bash-Positivliste, je mit
   Scheiter-Tests). Der Rest von Schritt 7 entsteht entlang des Produkts (E51). **Nächste
   Aufgabe:** Eine neue Sitzung startet als Koordinator, sieht „Keine Etappe“ und lässt den
-  Organisationsentwickler die Domänenrollen vorschlagen (Planer, Anforderungsautor,
-  Fachkritiker); danach leitet der Planer Etappen aus dem Ziel ab und empfiehlt.
+  Organisationsentwickler die Rollen der Domänenphase vorschlagen: Planer und
+  Anforderungsautor (Domäne, ausführend), Architekt (Technik; kritisiert die Etappen, arbeitet
+  in der Technikphase). Danach leitet der Planer Etappen aus dem Ziel ab, der Architekt
+  kritisiert, dann Freigabe. Fachkritiker, Testautor, Implementierer, Reviewer folgen mit
+  der Technikphase.
   Offenes Anliegen: `handoff/anliegen/cspell-markdown-abschalten.md` (wartet auf die
   Prozessphase).
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
