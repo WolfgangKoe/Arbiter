@@ -1,7 +1,8 @@
 """Hook `SessionStart`: leitet Etappe und Stand des Zyklus ab, eine Zeile. Kein Briefing.
 
 Die aktuelle Etappe ist die erste Überschrift `## Etappe …` in `domaene/etappen.md`.
-Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`.
+Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`. Plan n gilt erst als
+abgeschlossen, wenn eine Betreffzeile `Freigabe Plan <n>` lautet.
 """
 
 from __future__ import annotations
@@ -38,11 +39,20 @@ def zyklus(datei: Path) -> int | None:
     return int(treffer.group(1)) if treffer else None
 
 
-def phase(handoff: Path) -> str:
+def freigegeben(wurzel: Path, nummer: int) -> bool:
+    betreffzeilen = subprocess.run(
+        ["git", "log", "--format=%s"], cwd=wurzel, capture_output=True, text=True, check=False
+    ).stdout.splitlines()
+    return f"Freigabe Plan {nummer}" in betreffzeilen
+
+
+def phase(handoff: Path, wurzel: Path) -> str:
     nummern = [zyklus(handoff / name) for name, _, _ in ABFOLGE]
     if nummern[0] is None:
         return "Noch kein Zyklus begonnen → Domänenphase, Plan 1"
     aktuell = nummern[0]
+    if not freigegeben(wurzel, aktuell):
+        return f"Zyklus {aktuell}: Plan {aktuell} wartet auf Kritik und Freigabe → Domänenphase"
     for (_, artefakt, zustaendige_phase), nummer in zip(ABFOLGE[1:], nummern[1:], strict=True):
         if nummer != aktuell:
             return f"Zyklus {aktuell}: {artefakt} {aktuell} fehlt → {zustaendige_phase}"
@@ -65,7 +75,7 @@ def stand(wurzel: Path) -> str:
     handoff = wurzel / "handoff"
     teile = [
         etappe(wurzel),
-        phase(handoff),
+        phase(handoff, wurzel),
         f"{offene_anliegen(handoff)} offene Anliegen",
         f"{uncommittet(wurzel)} uncommittete Dateien",
     ]

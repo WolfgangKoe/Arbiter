@@ -1,6 +1,18 @@
+import subprocess
+
 import pytest
 
 from stand import etappe, phase
+
+
+def freigeben(wurzel, *nummern):
+    subprocess.run(["git", "init", "-q"], cwd=wurzel, check=True)
+    for nummer in nummern:
+        subprocess.run(
+            ["git", "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
+             "--allow-empty", "-m", f"Freigabe Plan {nummer}"],
+            cwd=wurzel, check=True,
+        )
 
 
 def handoff_mit(tmp_path, **zyklen):
@@ -27,7 +39,24 @@ def handoff_mit(tmp_path, **zyklen):
     ],
 )
 def test_phase_folgt_aus_den_zyklusnummern(tmp_path, zyklen, erwartet):
-    assert phase(handoff_mit(tmp_path, **zyklen)) == erwartet
+    if zyklen:
+        freigeben(tmp_path, zyklen["plan"])
+    else:
+        subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    assert phase(handoff_mit(tmp_path, **zyklen), tmp_path) == erwartet
+
+
+def test_ohne_freigabe_bleibt_es_die_domaenenphase(tmp_path):
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    assert (
+        phase(handoff_mit(tmp_path, plan=1), tmp_path)
+        == "Zyklus 1: Plan 1 wartet auf Kritik und Freigabe → Domänenphase"
+    )
+
+
+def test_freigabe_von_plan_12_zaehlt_nicht_fuer_plan_1(tmp_path):
+    freigeben(tmp_path, 12)
+    assert phase(handoff_mit(tmp_path, plan=1), tmp_path).endswith("→ Domänenphase")
 
 
 def test_etappe_ist_die_erste_etappen_ueberschrift(tmp_path):

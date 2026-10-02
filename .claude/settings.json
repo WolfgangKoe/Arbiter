@@ -69,6 +69,7 @@
       {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/bash_positivliste.py\"", "timeout": 10}]}
     ],
     "SubagentStart": [
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/rollenkontext.py\"", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]}
     ],
     "SubagentStop": [
