@@ -59,12 +59,17 @@ def test_freigabe_von_plan_12_zaehlt_nicht_fuer_plan_1(tmp_path):
     assert phase(handoff_mit(tmp_path, plan=1), tmp_path).endswith("→ Domänenphase")
 
 
-def test_etappe_ist_die_erste_etappen_ueberschrift(tmp_path):
-    (tmp_path / "domaene").mkdir()
-    (tmp_path / "domaene" / "etappen.md").write_text(
-        "# Etappen\n\n## Etappe 2 · Nahkampf\nText\n\n## Etappe 3 · Fernkampf\n"
-    )
+def test_etappe_ist_die_ueberschrift_der_ersten_datei_nach_namen(tmp_path):
+    ordner = tmp_path / "domaene" / "etappen"
+    ordner.mkdir(parents=True)
+    (ordner / "03-fernkampf.md").write_text("# Etappe 3 · Fernkampf\n")
+    (ordner / "02-nahkampf.md").write_text("Vorspann\n# Etappe 2 · Nahkampf\nText\n")
     assert etappe(tmp_path) == "Etappe 2 · Nahkampf"
+
+
+def test_leerer_etappenordner_ergibt_keine_etappe(tmp_path):
+    (tmp_path / "domaene" / "etappen").mkdir(parents=True)
+    assert etappe(tmp_path) == "Keine Etappe → aus dem Ziel ableiten"
 
 
 def test_ohne_etappe_leitet_die_domaene_sie_aus_dem_ziel_ab(tmp_path):

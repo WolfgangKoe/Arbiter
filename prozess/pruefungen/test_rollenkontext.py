@@ -23,7 +23,7 @@ def wurzel(tmp_path):
 
 
 def test_planer_bekommt_stand_und_domaenen_claude_md(wurzel):
-    rolle(wurzel, "planer", "domaene/etappen.md", "handoff/plan.md")
+    rolle(wurzel, "planer", "domaene/etappen/", "handoff/plan.md")
     ergebnis = kontext("planer", wurzel)
     assert "Stand: " in ergebnis
     assert "DOMAENENREGELN" in ergebnis

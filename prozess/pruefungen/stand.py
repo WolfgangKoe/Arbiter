@@ -1,6 +1,7 @@
 """Hook `SessionStart`: leitet Etappe und Stand des Zyklus ab, eine Zeile. Kein Briefing.
 
-Die aktuelle Etappe ist die erste Überschrift `## Etappe …` in `domaene/etappen.md`.
+Die aktuelle Etappe steht in der nach Namen ersten Datei `domaene/etappen/*.md`: die erste
+Zeile, die mit `# Etappe` beginnt.
 Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`. Plan n gilt erst als
 abgeschlossen, wenn eine Betreffzeile `Freigabe Plan <n>` lautet.
 """
@@ -23,11 +24,11 @@ ABFOLGE = (
 
 
 def etappe(wurzel: Path) -> str:
-    datei = wurzel / "domaene" / "etappen.md"
-    if datei.is_file():
-        for zeile in datei.read_text(encoding="utf-8").splitlines():
-            if zeile.startswith("## Etappe"):
-                return zeile.removeprefix("## ").strip()
+    dateien = sorted((wurzel / "domaene" / "etappen").glob("*.md"))
+    if dateien:
+        for zeile in dateien[0].read_text(encoding="utf-8").splitlines():
+            if zeile.startswith("# Etappe"):
+                return zeile.removeprefix("# ").strip()
     return "Keine Etappe → aus dem Ziel ableiten"
 
 
