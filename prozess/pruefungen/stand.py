@@ -1,6 +1,7 @@
-"""Hook `SessionStart`: leitet den Stand des Zyklus aus `handoff/` ab, eine Zeile.
+"""Hook `SessionStart`: leitet Etappe und Stand des Zyklus ab, eine Zeile. Kein Briefing.
 
-Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`. Kein Briefing.
+Die aktuelle Etappe ist die erste Überschrift `## Etappe …` in `domaene/etappen.md`.
+Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`.
 """
 
 from __future__ import annotations
@@ -18,6 +19,15 @@ ABFOLGE = (
     ("review.md", "Review", "Technikphase"),
     ("retro.md", "Retro", "Prozessphase"),
 )
+
+
+def etappe(wurzel: Path) -> str:
+    datei = wurzel / "domaene" / "etappen.md"
+    if datei.is_file():
+        for zeile in datei.read_text(encoding="utf-8").splitlines():
+            if zeile.startswith("## Etappe"):
+                return zeile.removeprefix("## ").strip()
+    return "Keine Etappe → aus dem Ziel ableiten"
 
 
 def zyklus(datei: Path) -> int | None:
@@ -54,12 +64,11 @@ def uncommittet(wurzel: Path) -> int:
 def stand(wurzel: Path) -> str:
     handoff = wurzel / "handoff"
     teile = [
+        etappe(wurzel),
         phase(handoff),
         f"{offene_anliegen(handoff)} offene Anliegen",
         f"{uncommittet(wurzel)} uncommittete Dateien",
     ]
-    if (wurzel / "VORGEHEN.md").is_file():
-        teile.append("Übergang: Aufbau laut VORGEHEN.md, Abschnitt „Einstieg“")
     return "Stand: " + " · ".join(teile)
 
 

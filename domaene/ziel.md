@@ -10,4 +10,5 @@ Spieler das Denken abzunehmen.
   Kein Gelände, keine Sichtlinien.
 - Die Karte bildet den Spielstand ab, nicht den exakten Tisch.
 - Abstände zieht man auf der Karte, man tippt keine Zahlen ein. Maus und Touch.
-- Regelkonformität vor Komfort: Was nicht erlaubt ist, wird gesperrt.
+- Regelkonformität vor Komfort: Was nicht erlaubt ist, wird gesperrt. Die Spieler können
+  eine Sperre einvernehmlich übergehen; das wird protokolliert.

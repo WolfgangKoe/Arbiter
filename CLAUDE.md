@@ -22,4 +22,4 @@ Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask n
 Datenbank. Akzeptanztests entstehen vor dem Code.
 
 ## Übergang
-Bis das Gerüst steht (Schritt 7), liegen Entscheidungen und Stand in `VORGEHEN.md`.
+Entscheidungen aus dem Aufbau stehen in `VORGEHEN.md`, bis sie an ihren Ort überführt sind.

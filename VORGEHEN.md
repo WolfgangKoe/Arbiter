@@ -5,13 +5,15 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
 
 ## Einstieg für die nächste Sitzung
 
-- **Stand:** Schritte 1–6 erledigt; Schritt 7 begonnen: Phasenmodell und Kontext-/Harness-Regeln
-  entschieden (E38–E49), Harness-Proben gemacht (Ergebnis unten), Minimalgerüst steht:
-  Root-CLAUDE.md, `domaene/ziel.md`, `.claude/settings.json` (E44, E45), Koordinator,
-  Organisationsentwickler, Regelumsetzer, Hooks in `prozess/pruefungen/` (Stand,
-  Schreibgrenze, Bash-Positivliste, je mit Scheiter-Tests). **Nächste Aufgabe:** Eine neue
-  Sitzung startet als Koordinator; er führt den Rest von Schritt 7 mit den Rollen aus.
-  Offen beim Stakeholder: fachlicher Override im Ziel (Empfehlung: erlaubt, protokolliert).
+- **Stand:** Schritte 1–6 erledigt; Minimalgerüst steht: Root-CLAUDE.md, `domaene/ziel.md`,
+  `.claude/settings.json` (E44, E45), Koordinator, Organisationsentwickler, Regelumsetzer,
+  Hooks in `prozess/pruefungen/` (Stand mit Etappe, Schreibgrenze, Bash-Positivliste, je mit
+  Scheiter-Tests). Der Rest von Schritt 7 entsteht entlang des Produkts (E51). **Nächste
+  Aufgabe:** Eine neue Sitzung startet als Koordinator, sieht „Keine Etappe“ und lässt den
+  Organisationsentwickler die Domänenrollen vorschlagen (Planer, Anforderungsautor,
+  Fachkritiker); danach leitet der Planer Etappen aus dem Ziel ab und empfiehlt.
+  Offenes Anliegen: `handoff/anliegen/cspell-markdown-abschalten.md` (wartet auf die
+  Prozessphase).
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
   Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht. Bei
   technischer Bewertung (Architektur, Datenbank, SOLID) aktiv anleiten, mit Beispielen aus dem
@@ -229,6 +231,17 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   E44) → **bleibt Befehl des Stakeholders**; seine vier Blickwinkel (Wiederverwendung,
   Vereinfachung, Effizienz, Flughöhe) werden Prüfliste im Reviewer-Skill.
 
+**Steuerung (Schritt 7)**
+- **E50** Fachlicher Override: Was nicht erlaubt ist, sperrt die App; die Spieler können eine
+  Sperre einvernehmlich übergehen, das wird protokolliert (steht in `domaene/ziel.md`).
+- **E51** Der Stakeholder steuert über Ziele und Freigaben. Der Koordinator hält die
+  Produktentwicklung am Laufen und geht immer vom Ziel aus: Die Domäne leitet Etappen,
+  Anforderungen und Items ab und empfiehlt. Rollen, Skills und Prüfungen entstehen entlang
+  des Produkts, wenn eine Phase sie braucht (E24), nicht vorab. Befunde einer anderen
+  Perspektive warten als Anliegen auf deren Phase, außer sie blockieren das Inkrement.
+  Anlass: In der ersten Koordinator-Sitzung entstand aus einer Editor-Einstellung Prozessarbeit
+  in drei Schritten, während kein Produktschritt in Sicht war.
+
 ## Kontextlandkarte
 
 ```
@@ -430,8 +443,8 @@ DoR und DoD stehen später in `prozess/ablauf.md`, jeder Punkt mit Link auf sein
 | 4 | Rollenmodell | E24–E30; Feinschnitt je Rolle in Schritt 7 | weitgehend erledigt |
 | 5 | Beziehungen | Abschnitt Beziehungen, E33–E35 | erledigt |
 | 6 | Prüfmechanismen | E36, E37, Werkzeugprobe; Konfiguration folgt in Schritt 7 | erledigt |
-| 7 | Repo-Gerüst | E38–E49; git init, Ordner, CLAUDE.mds, Agentendefinitionen, Skills, Hooks, Prüfkonfiguration | begonnen |
-| 8 | Durchstich Nahkampfphase | Anforderung → Akzeptanztest → Code, gemessen | offen |
+| 7 | Repo-Gerüst | E38–E51; Minimalgerüst steht, der Rest entsteht entlang Schritt 8 | weitgehend erledigt |
+| 8 | Erstes Inkrement | Etappe aus dem Ziel (Domäne) → Anforderung → Akzeptanztest → Code, gemessen | als Nächstes |
 | 9 | Migration | Regeltexte, Daten, Mockups, Dashboard, Improve-Skill | offen |
 | 10 | Doku für Menschen | `doku/` nach E32 | offen |
 

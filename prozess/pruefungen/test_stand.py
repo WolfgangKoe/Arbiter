@@ -1,6 +1,6 @@
 import pytest
 
-from stand import phase
+from stand import etappe, phase
 
 
 def handoff_mit(tmp_path, **zyklen):
@@ -28,3 +28,15 @@ def handoff_mit(tmp_path, **zyklen):
 )
 def test_phase_folgt_aus_den_zyklusnummern(tmp_path, zyklen, erwartet):
     assert phase(handoff_mit(tmp_path, **zyklen)) == erwartet
+
+
+def test_etappe_ist_die_erste_etappen_ueberschrift(tmp_path):
+    (tmp_path / "domaene").mkdir()
+    (tmp_path / "domaene" / "etappen.md").write_text(
+        "# Etappen\n\n## Etappe 2 · Nahkampf\nText\n\n## Etappe 3 · Fernkampf\n"
+    )
+    assert etappe(tmp_path) == "Etappe 2 · Nahkampf"
+
+
+def test_ohne_etappe_leitet_die_domaene_sie_aus_dem_ziel_ab(tmp_path):
+    assert etappe(tmp_path) == "Keine Etappe → aus dem Ziel ableiten"
