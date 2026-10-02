@@ -1,6 +1,6 @@
 # Reihenfolge: Etappe 4 erst nach Charge und Nahkampf
 
-12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Etappe 4](../../domaene/etappen/04-jede-baseform.md) steht vor dem Schießen,
@@ -28,3 +28,8 @@ Braucht der Stakeholder die Formen vor dem ersten Probespiel (etwa weil seine Ar
 Trukks haben), bleibt die Reihenfolge; dann gilt nur 2.
 
 **Stellungnahme.**
+Angenommen, beide Punkte, umgesetzt: Schießen ist Etappe 4 (mit der Moralphase nach 09 F13),
+Charge und Nahkampf Etappe 5, [Jede Baseform](../../domaene/etappen/06-jede-baseform.md)
+Etappe 6; das Zusammenstellen aus allen Katalogeinheiten steht in Etappe 7. Die Bedingung
+trifft nicht zu: Die Ausgangslage nach 09 F1 hat nur runde Bases ohne FLY. Voraussetzung ist
+deine Regel in `technik/architektur.md`, dass Phasen nur über die zwei Messungen messen.

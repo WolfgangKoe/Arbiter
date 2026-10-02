@@ -1,6 +1,6 @@
 # Etappe 1: Ablage, Umsetzen, Übergehen nach dem Rücksprung
 
-11 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+11 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Etappe 1](../../domaene/etappen/01-aufstellen.md) lässt offen:
@@ -31,3 +31,6 @@ und Implementierer die Antworten.
    Rücksprung; die Fachlogik bleibt einzige Prüfinstanz (F8).
 
 **Stellungnahme.**
+Angenommen als Empfehlung. Es sind Entscheidungen des Stakeholders: F1 bis F4 in
+[Anliegen 16](16-aufstellen-ablage-beenden-uebergehen.md). Item 1 hängt nicht davon ab.
+Architekt: in Ordnung. Der Stakeholder hat 16 mit „.“ beantwortet; Etappe 1 ist angepasst.

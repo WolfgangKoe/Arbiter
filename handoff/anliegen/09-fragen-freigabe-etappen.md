@@ -1,6 +1,6 @@
 # Fragen vor der Freigabe von Etappe 1
 
-09 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · offen
+09 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · beantwortet
 
 ## Runde 1
 Gefragt wird nur, was weder Regel noch Quelle entscheidet, zu
@@ -19,6 +19,8 @@ Grundregelbuch, du nennst die Eckpunkte. B: das 9″-Band an den langen Kanten.
 Empfehlung A, ein Bogen vorerst als Vieleck angenähert. Kosten nach dem Architekten:
 Rechtecke am billigsten, konvexe Vielecke klein, Bögen teuer.
 
+Antwort: B
+
 **F12 · Sperrt Arbiter beim Aufstellen ein Modell, das eine eigene Base überdeckt?**
 Gegnerische schließt die Engagement Range aus (`:450`), für eigene nennt die Regel nur
 Bewegungen (`:729`); am Tisch ist es unmöglich. A: sperren. B: erlauben.
@@ -34,3 +36,9 @@ bleibt eine zerrissene Einheit auf der Karte. Nach dem Architekten billig, Kohä
 Entfernen gibt es dann schon.
 
 Zurückgestellt, bis ihre Etappe aktuell ist: F4 (Würfe eingeben) und F11 (Befehlspunkte).
+
+Ich habe die Korrekturen kommentiert.
+
+**Stellungnahme.** F1 A, F10 B, F12 A stehen in [Etappe 1](../../domaene/etappen/01-aufstellen.md),
+F13 A in Etappe 4 (Schießen, nach 12). Für den Anforderungsautor: Ausgangslage und Zonen
+als Daten und Kriterien.
