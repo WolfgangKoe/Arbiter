@@ -1,6 +1,6 @@
 # Etappe 1: Ausgangslage nur mit runden Bases und ohne FLY
 
-01 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+01 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Etappe 1 nennt „Einheiten mit Werten aus dem Katalog“, ohne die Art der Einheiten
@@ -25,4 +25,6 @@ keine Drehung in der Oberfläche. Ovale, Hulls und FLY würden Etappe 1 grob ver
   (`move_inches` → Bezeichner aus dem Glossar).
 - Ovale, Hulls und FLY als eigene, spätere Etappe oder Etappe-2-Kriterium.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt: Etappe 1 und 2 nur runde Bases ohne FLY, Etappe 1
+fest auf 44″ × 60″; Ovale, Hulls und FLY werden Etappe 3, vor Schießen und Charge, damit deren
+Abstände nicht umgebaut werden. Datei: Anforderungsautor, Schreibpfad fehlt (Anliegen 05).

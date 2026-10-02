@@ -1,6 +1,6 @@
 # Etappe 2: zwei Kriterien ohne Gegenstück in der Etappe
 
-04 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+04 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.**
@@ -22,4 +22,6 @@ Verwendung umgebaut.
 3. Etappe 2 nennt die Mission, aus der die Aufstellungszonen kommen (Frage 4: Only War aus den
    Grundregeln, `core_rules.txt:2255`); sonst ist „in seiner Aufstellungszone“ ungeregelt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt: Etappe 2 nennt Only War; vernichtete Armee und Befehlspunkte mit
+Command Re-roll stehen beim Schießen (Etappe 4, Frage an den Stakeholder). Nach demselben
+Grund wandert Fall Back zu Charge und Nahkampf: Engagement Range entsteht erst durch den Charge.

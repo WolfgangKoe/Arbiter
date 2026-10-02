@@ -1,6 +1,6 @@
 # Etappe 1: ungeregelte Fälle im Erreicht-Kriterium
 
-02 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+02 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · teils angenommen, Fragen an Stakeholder
 
 ## Runde 1
 **Befund.** Ohne diese Festlegungen ist das Kriterium nicht prüfbar:
@@ -27,4 +27,5 @@ traf Fachlogik, Dienst und Oberfläche.
 4. Minimaler Zugwechsel: „Bewegungsphase beenden“ übergibt an den anderen Spieler.
 5. Entscheidung des Stakeholders, vom Anforderungsautor in Kriterien gefasst.
 
-**Stellungnahme.**
+**Stellungnahme.** 2 und 4 angenommen, in Etappe 1. 1, 3, 5: Fragen an den Stakeholder, Empfehlung
+dein Gegenvorschlag. Nach übergangener Sperre gilt `core_rules.txt:724` (kein Normal Move).
