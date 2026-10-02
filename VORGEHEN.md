@@ -6,13 +6,17 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
 ## Einstieg für die nächste Sitzung
 
 - **Stand:** Schritte 1–6 erledigt; Schritt 7 begonnen: Phasenmodell und Kontext-/Harness-Regeln
-  entschieden (E38–E49), Harness-Proben gemacht (Ergebnis unten). **Nächste Aufgabe:
-  Root-CLAUDE.md im Gespräch entwerfen.**
+  entschieden (E38–E49), Harness-Proben gemacht (Ergebnis unten), Minimalgerüst steht:
+  Root-CLAUDE.md, `domaene/ziel.md`, `.claude/settings.json` (E44, E45), Koordinator,
+  Organisationsentwickler, Regelumsetzer, Hooks in `prozess/pruefungen/` (Stand,
+  Schreibgrenze, Bash-Positivliste, je mit Scheiter-Tests). **Nächste Aufgabe:** Eine neue
+  Sitzung startet als Koordinator; er führt den Rest von Schritt 7 mit den Rollen aus.
+  Offen beim Stakeholder: fachlicher Override im Ziel (Empfehlung: erlaubt, protokolliert).
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
   Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht.
-- **Repo:** `git init` erledigt (main, Identität im Repo, Altordner in `.gitignore`); CLI auf
-  2.1.287 wie VS Code. Offen: GitHub-Remote (Name „Arbiter“ ist durch den alten Prototyp belegt) ·
-  Qualität des Koordinators ohne Claude-Code-Systemprompt im Betrieb beobachten (E45).
+- **Repo:** github.com/WolfgangKoe/Arbiter (öffentlich, main; der alte Prototyp heißt jetzt
+  Arbiter-old). CLI 2.1.287 wie VS Code. Qualität des Koordinators ohne Claude-Code-Systemprompt
+  im Betrieb beobachten (E45). Auto-Memory ist aus (E48).
 - **Altbestand nur lesen:** `Arbiter/`, `ArbiterMap/` (Migrationsquelle, E8).
 
 ## Ziele

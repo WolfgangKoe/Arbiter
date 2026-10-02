@@ -1,0 +1,78 @@
+{
+  "agent": "koordinator",
+  "autoMemoryEnabled": false,
+  "disableClaudeAiConnectors": true,
+  "enableArtifact": false,
+  "includeGitInstructions": false,
+  "env": {
+    "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
+    "CLAUDE_CODE_DISABLE_CRON": "1"
+  },
+  "skillOverrides": {
+    "dataviz": "off",
+    "artifact-design": "off",
+    "artifact-diagramming": "off",
+    "artifact-capabilities": "off",
+    "keybindings-help": "off",
+    "schedule": "off",
+    "claude-api": "off",
+    "plugin-authoring": "off",
+    "code-review": "on",
+    "simplify": "user-invocable-only",
+    "loop": "user-invocable-only",
+    "run": "user-invocable-only",
+    "update-config": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(ls*)",
+      "Bash(python3 prozess/pruefungen/*)",
+      "Bash(python3 -m pytest prozess/pruefungen*)"
+    ],
+    "deny": [
+      "Agent(claude)",
+      "Agent(general-purpose)",
+      "Agent(Explore)",
+      "Agent(Plan)",
+      "Agent(statusline-setup)",
+      "Agent(fork)",
+      "ScheduleWakeup",
+      "ListAgents",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "EnterWorktree",
+      "ExitWorktree",
+      "PushNotification",
+      "RemoteTrigger",
+      "NotebookEdit",
+      "DesignSync",
+      "CronCreate",
+      "CronDelete",
+      "CronList"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/stand.py\"", "timeout": 10}]}
+    ],
+    "PreToolUse": [
+      {"matcher": "Write|Edit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]},
+      {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/bash_positivliste.py\"", "timeout": 10}]}
+    ],
+    "SubagentStart": [
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]}
+    ],
+    "SubagentStop": [
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]}
+    ]
+  }
+}
