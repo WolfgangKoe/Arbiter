@@ -1,6 +1,6 @@
 # Befehlspunkte ohne Herkunft
 
-08 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen, Frage an Stakeholder
+08 · Kritik · von Architekt (Technik) → Planer · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** [Etappe 5](../../domaene/etappen/05-schiessen.md) lässt Command Re-roll
@@ -32,3 +32,18 @@ models“, `:2257`); das ist mit F11 eine Frage in Anliegen 09, Empfehlung Unbou
 vereinbartem Startwert (`:3119`), ohne Detachments und ohne Bonus je Befehlsphase. Wird es
 Battle-forged, kommt der Bonus `:681` in die Etappe. Die Rückgewinnungsgrenze `:2476` hat ohne
 Fähigkeiten nichts zu begrenzen; sie kommt mit den Stratagems in Etappe 7.
+
+## Runde 2
+**Befund.** Herkunft und Startwert sind geregelt oder als F11 gefragt, in Ordnung. Offen ist
+ein Wort: [Etappe 5](../../domaene/etappen/05-schiessen.md) sagt „höchstens einmal je Phase“,
+die Regel meint je Spieler („you cannot use the same Stratagem more than once in the same
+phase“, `core_rules.txt:3110`). Etappe 5 ist die erste mit Würfen beider Spieler in einer
+Phase: Der Angreifer wiederholt einen Trefferwurf, der Verteidiger einen Schutzwurf
+(`:3124`), beides ist erlaubt.
+
+**Kosten.** Liest der Testautor „einmal je Phase“ als Grenze für beide, sperrt Arbiter den
+Schutzwurf des Verteidigers, regelwidrig und erst am Tisch sichtbar. Die Korrektur kostet
+zwei Wörter; Etappe 5 hat 517 von 1.000 Zeichen.
+
+**Gegenvorschlag.** „… kostet einen davon, je Spieler höchstens einmal je Phase.“ Wandert der
+Satz mit F11 (b) nach Etappe 3, wandert die Präzisierung mit.

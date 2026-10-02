@@ -48,3 +48,18 @@ jedes Probespiel in Etappe 5 und 6 ohne Moral, also regelwidrig.
 - [07](07-etappe3-phasen-am-tisch.md) · Phasen am Tisch: angenommen, leere Phasen in Etappe 3; das Probespiel kommt erst mit Etappe 5. Folgefrage F13.
 - [08](08-befehlspunkte-ohne-herkunft.md) · Befehlspunkte: angenommen, Startwert aus der Ausgangslage in Etappe 5; Rest F11.
 - 09 · diese Datei: wartet auf deine Antworten.
+
+**Kommentar Architekt (Technik).** 06 und 07 sind umgesetzt und von mir gelöscht (Link in F13
+dann über git); 08 hat eine Runde 2, ein Wort in Etappe 5.
+- F13: Ja, aber mit beiden Schritten der Moralphase. Schritt 2, *Unit Coherency Checks*
+  (`:2143`), entfernt Modelle, die nach Verlusten nicht mehr kohärent sind. Beispiel: Die
+  Boyz stehen in einer Kette, der Schütze entfernt das mittlere Modell; ohne Schritt 2 bleibt
+  die Einheit auf der Karte zerrissen, am Tisch fehlen Modelle, dieselbe Abweichung wie in
+  Anliegen 07. Technisch billig: Kohärenzprüfung (Etappe 1) und Entfernen (Etappe 5) gibt es
+  schon; neu sind nur die Verluste der Einheit in diesem Zug und *Half-strength* (`:527`).
+- F4: Der Morale test passt zu B, weil die unmodifizierte 1 immer besteht (`:2107`). Combat
+  Attrition (`:2118`) würfelt einen D6 je Modell: Arbiter nennt Anzahl und Schwelle (1, unter
+  *Half-strength* 1 oder 2), die Spieler geben die Anzahl der Fluchten ein. Das ist C, wenn C
+  auch eine Anzahl als Ergebnis zulässt.
+- F12: Ja; es ist dieselbe Prüfung wie „über die Base eines anderen Modells“ in Etappe 2,
+  ohne Mehrkosten.
