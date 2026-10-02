@@ -1,0 +1,8 @@
+# Altbestand, nur Migrationsquelle bis Ende Schritt 9 (E8)
+/Arbiter/
+/ArbiterMap/
+
+.ruff_cache/
+__pycache__/
+.venv/
+.claude/settings.local.json
