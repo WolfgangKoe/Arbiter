@@ -66,14 +66,17 @@
     ],
     "PreToolUse": [
       {"matcher": "Write|Edit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]},
-      {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/bash_positivliste.py\"", "timeout": 10}]}
+      {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/bash_positivliste.py\"", "timeout": 10}]},
+      {"matcher": "SubagentHandback", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schlussantwort.py\"", "timeout": 10}]},
+      {"matcher": "Read", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/lesegrenze.py\"", "timeout": 10}]}
     ],
     "SubagentStart": [
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/rollenkontext.py\"", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]}
     ],
     "SubagentStop": [
-      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]}
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]},
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schlussantwort.py\"", "timeout": 10}]}
     ]
   }
 }

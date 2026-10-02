@@ -5,12 +5,12 @@ import pytest
 from stand import etappe, phase
 
 
-def freigeben(wurzel, *nummern):
+def freigeben(wurzel, *nummern, artefakt="Plan"):
     subprocess.run(["git", "init", "-q"], cwd=wurzel, check=True)
     for nummer in nummern:
         subprocess.run(
             ["git", "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
-             "--allow-empty", "-m", f"Freigabe Plan {nummer}"],
+             "--allow-empty", "-m", f"Freigabe {artefakt} {nummer}"],
             cwd=wurzel, check=True,
         )
 
@@ -33,8 +33,8 @@ def handoff_mit(tmp_path, **zyklen):
         ),
         pytest.param(
             {"plan": 3, "review": 3, "retro": 3},
-            "Zyklus 3 abgeschlossen → Domänenphase, Plan 4",
-            id="nach Retro",
+            "Zyklus 3: Retro 3 wartet auf Kritik und Freigabe → Prozessphase",
+            id="nach Retro, ohne Freigabe",
         ),
     ],
 )
@@ -74,3 +74,12 @@ def test_leerer_etappenordner_ergibt_keine_etappe(tmp_path):
 
 def test_ohne_etappe_leitet_die_domaene_sie_aus_dem_ziel_ab(tmp_path):
     assert etappe(tmp_path) == "Keine Etappe → aus dem Ziel ableiten"
+
+
+def test_nach_freigabe_der_retro_beginnt_der_naechste_zyklus(tmp_path):
+    freigeben(tmp_path, 3)
+    freigeben(tmp_path, 3, artefakt="Retro")
+    assert (
+        phase(handoff_mit(tmp_path, plan=3, review=3, retro=3), tmp_path)
+        == "Zyklus 3 abgeschlossen → Domänenphase, Plan 4"
+    )

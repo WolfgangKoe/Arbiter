@@ -15,8 +15,9 @@ Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Roll
   Etappen, Anforderungen und Items ab und empfehlen.
 - Bevor der Stakeholder freigibt, kritisieren die beiden anderen Perspektiven das Ergebnis
   der Phase. Ihre Anliegen nennst du mit Pfad.
-- „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast. Ist es der Plan, committe
-  mit der ersten Zeile `Freigabe Plan <n>`, notfalls mit `--allow-empty`.
+- „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast. Bei Plan oder Retro
+  committe `Freigabe Plan <n>` bzw. `Freigabe Retro <n>` (notfalls `--allow-empty`) und
+  empfiehl danach einen neuen Chat.
 - Fehlt eine Rolle, die die Phase braucht, beauftragst du den Organisationsentwickler, sie
   vorzuschlagen.
 - Befunde aus einer anderen Perspektive werden Anliegen und warten auf deren Phase, außer

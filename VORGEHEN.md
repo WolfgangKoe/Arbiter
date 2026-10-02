@@ -5,18 +5,13 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
 
 ## Einstieg für die nächste Sitzung
 
-- **Stand:** Schritte 1–6 erledigt; Minimalgerüst steht: Root-CLAUDE.md, `domaene/ziel.md`,
-  `.claude/settings.json` (E44, E45), Koordinator, Organisationsentwickler, Regelumsetzer,
-  Hooks in `prozess/pruefungen/` (Stand mit Etappe, Schreibgrenze, Bash-Positivliste, je mit
-  Scheiter-Tests). Der Rest von Schritt 7 entsteht entlang des Produkts (E51). **Nächste
-  Aufgabe:** Eine neue Sitzung startet als Koordinator, sieht „Keine Etappe“ und lässt den
-  Organisationsentwickler die Rollen der Domänenphase vorschlagen: Planer und
-  Anforderungsautor (Domäne, ausführend), Architekt (Technik; kritisiert die Etappen, arbeitet
-  in der Technikphase). Danach leitet der Planer Etappen aus dem Ziel ab, der Architekt
-  kritisiert, dann Freigabe. Fachkritiker, Testautor, Implementierer, Reviewer folgen mit
-  der Technikphase.
-  Offenes Anliegen: `handoff/anliegen/cspell-markdown-abschalten.md` (wartet auf die
-  Prozessphase).
+- **Stand:** Minimalgerüst steht, Zyklus 1 in der Domänenphase: Etappen abgeleitet und
+  kritisiert (`domaene/etappen/`), Rollen Planer, Anforderungsautor, Architekt eingesetzt.
+  Auswertung der ersten Koordinator-Sitzung → E52–E54. **Nächste Aufgabe (neue
+  Koordinator-Sitzung):** `pytest prozess/pruefungen` ist absichtlich rot (Höchstmaße, E53):
+  Planer kürzt die Etappen 02–07 auf je eine Zeile und schreibt Anliegen 09 im Frageformat
+  neu (E53); Organisationsentwickler setzt E53-Text und E54 um (Skill `anliegen-schreiben`,
+  Inhalte aus VORGEHEN.md nach `prozess/`). Danach beantwortet der Stakeholder 09.
 - **Arbeitsweise mit dem Stakeholder:** Schritt für Schritt; erst im Gespräch entwerfen, dann nach
   Freigabe schreiben; Rückfragen mit Empfehlung; starke Kritik ausdrücklich erwünscht. Bei
   technischer Bewertung (Architektur, Datenbank, SOLID) aktiv anleiten, mit Beispielen aus dem
@@ -244,6 +239,25 @@ Zielstruktur steht. Danach wandert der Inhalt an seine endgültigen Orte, und di
   Perspektive warten als Anliegen auf deren Phase, außer sie blockieren das Inkrement.
   Anlass: In der ersten Koordinator-Sitzung entstand aus einer Editor-Einstellung Prozessarbeit
   in drei Schritten, während kein Produktschritt in Sicht war.
+
+**Auswertung Zyklus 1, erste Koordinator-Sitzung**
+- **E52** Committen ist allein Sache des Koordinators; Rollen nutzen git nur lesend
+  (`bash_positivliste.py`), ein Commit während eines Rollenlaufs wird gemeldet
+  (`schreibgrenze.py`). Übergänge: Technik → Prozess mit Review n, Prozess → Domäne mit
+  `Freigabe Retro <n>` (`stand.py`, `prozess/ablauf.md`). Anlass: Planer und Architekt hatten
+  selbst committet; für Technik- und Prozessphase gab es keinen Auslöser.
+- **E53** Nur die aktuelle Etappe wird ausformuliert (höchstens 1.000 Zeichen), spätere haben
+  eine Zeile (200); Kritik und Fragen betreffen nur die aktuelle Etappe und die Reihenfolge.
+  Fragen an den Stakeholder: je eine Frage mit „?“, Optionen, Empfehlung; „.“ heißt alle
+  Empfehlungen; gefragt wird nur, was weder Regel noch Quelle entscheidet. Höchstmaße prüft
+  `test_hoechstmasse.py`. Anlass: sieben ausformulierte Etappen, Diskussion über Etappe 5,
+  Fragenliste ohne Fragen, F10 war Recherche.
+- **E54** Der Kontext des Koordinators bleibt klein: Schlussantworten höchstens 800 Zeichen
+  (`schlussantwort.py`, `SubagentHandback` in VS Code, `SubagentStop` headless), der
+  Koordinator liest Dateien bis 4.000 Zeichen (`lesegrenze.py`), nach jeder Freigabe ein neuer
+  Chat. VORGEHEN.md lesen die Rollen nicht mehr; was sie brauchen, wandert nach `prozess/`.
+  Anlass: Kontext des Koordinators rund 145.000 Token; Domänenphase bis dahin rund 1,5 Mio.
+  neue Eingabe-Token und 14 Mio. aus dem Cache, ohne Produktcode.
 
 ## Kontextlandkarte
 

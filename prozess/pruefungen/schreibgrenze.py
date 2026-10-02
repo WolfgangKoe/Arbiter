@@ -29,6 +29,12 @@ def geaenderte_pfade(wurzel: Path) -> set[str]:
     return {zeile[3:].split(" -> ")[-1] for zeile in ausgabe.splitlines() if zeile}
 
 
+def kopf(wurzel: Path) -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=wurzel, capture_output=True, text=True, check=False
+    ).stdout.strip()
+
+
 def stand_datei(wurzel: Path, agent_id: str) -> Path:
     return wurzel / ".git" / "arbiter-schreibgrenze" / f"{agent_id}.txt"
 
@@ -59,7 +65,8 @@ def vor_dem_schreiben(eingabe: dict, wurzel: Path) -> dict | None:
 def beim_start(eingabe: dict, wurzel: Path) -> dict:
     datei = stand_datei(wurzel, eingabe["agent_id"])
     datei.parent.mkdir(parents=True, exist_ok=True)
-    datei.write_text("\n".join(sorted(geaenderte_pfade(wurzel))), encoding="utf-8")
+    zeilen = [f"HEAD {kopf(wurzel)}", *sorted(geaenderte_pfade(wurzel))]
+    datei.write_text("\n".join(zeilen), encoding="utf-8")
     muster = schreibpfade(eingabe.get("agent_type") or "", wurzel)
     return {
         "hookSpecificOutput": {
@@ -72,20 +79,32 @@ def beim_start(eingabe: dict, wurzel: Path) -> dict:
 
 def beim_ende(eingabe: dict, wurzel: Path) -> dict | None:
     datei = stand_datei(wurzel, eingabe["agent_id"])
-    vorher = set(datei.read_text(encoding="utf-8").splitlines()) if datei.exists() else set()
+    zeilen = datei.read_text(encoding="utf-8").splitlines() if datei.exists() else []
     datei.unlink(missing_ok=True)
-    muster = schreibpfade(eingabe["agent_type"], wurzel)
+    kopf_vorher = next((z.removeprefix("HEAD ") for z in zeilen if z.startswith("HEAD ")), None)
+    vorher = {z for z in zeilen if not z.startswith("HEAD ")}
+    rolle = eingabe["agent_type"]
+    muster = schreibpfade(rolle, wurzel)
+    meldungen = []
     verstoesse = sorted(
         p for p in geaenderte_pfade(wurzel) - vorher if not darf_schreiben(p, muster)
     )
-    if not verstoesse:
+    if verstoesse:
+        meldungen.append(
+            f"Schreibgrenze verletzt: {rolle} hat außerhalb seiner Schreibpfade geändert: "
+            f"{', '.join(verstoesse)}."
+        )
+    if kopf_vorher is not None and kopf(wurzel) != kopf_vorher:
+        meldungen.append(
+            f"Während {rolle} lief, kam ein Commit hinzu. Hast du ihn nicht selbst gemacht, "
+            f"hat {rolle} committet; das ist dem Koordinator vorbehalten."
+        )
+    if not meldungen:
         return None
     return {
         "hookSpecificOutput": {
             "hookEventName": "SubagentStop",
-            "additionalContext": f"Schreibgrenze verletzt: {eingabe['agent_type']} hat "
-            f"außerhalb seiner Schreibpfade geändert: {', '.join(verstoesse)}. "
-            "Nicht committen, dem Stakeholder melden.",
+            "additionalContext": " ".join(meldungen) + " Nicht committen, dem Stakeholder melden.",
         }
     }
 

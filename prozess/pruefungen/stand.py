@@ -2,8 +2,9 @@
 
 Die aktuelle Etappe steht in der nach Namen ersten Datei `domaene/etappen/*.md`: die erste
 Zeile, die mit `# Etappe` beginnt.
-Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`. Plan n gilt erst als
-abgeschlossen, wenn eine Betreffzeile `Freigabe Plan <n>` lautet.
+Plan, Review und Retro tragen in der ersten Zeile `Zyklus <n>`. Übergänge: Domäne → Technik
+mit dem Commit `Freigabe Plan <n>`, Technik → Prozess mit Review n, Prozess → Domäne mit
+dem Commit `Freigabe Retro <n>`.
 """
 
 from __future__ import annotations
@@ -40,11 +41,11 @@ def zyklus(datei: Path) -> int | None:
     return int(treffer.group(1)) if treffer else None
 
 
-def freigegeben(wurzel: Path, nummer: int) -> bool:
+def freigegeben(wurzel: Path, artefakt: str, nummer: int) -> bool:
     betreffzeilen = subprocess.run(
         ["git", "log", "--format=%s"], cwd=wurzel, capture_output=True, text=True, check=False
     ).stdout.splitlines()
-    return f"Freigabe Plan {nummer}" in betreffzeilen
+    return f"Freigabe {artefakt} {nummer}" in betreffzeilen
 
 
 def phase(handoff: Path, wurzel: Path) -> str:
@@ -52,11 +53,13 @@ def phase(handoff: Path, wurzel: Path) -> str:
     if nummern[0] is None:
         return "Noch kein Zyklus begonnen → Domänenphase, Plan 1"
     aktuell = nummern[0]
-    if not freigegeben(wurzel, aktuell):
+    if not freigegeben(wurzel, "Plan", aktuell):
         return f"Zyklus {aktuell}: Plan {aktuell} wartet auf Kritik und Freigabe → Domänenphase"
     for (_, artefakt, zustaendige_phase), nummer in zip(ABFOLGE[1:], nummern[1:], strict=True):
         if nummer != aktuell:
             return f"Zyklus {aktuell}: {artefakt} {aktuell} fehlt → {zustaendige_phase}"
+    if not freigegeben(wurzel, "Retro", aktuell):
+        return f"Zyklus {aktuell}: Retro {aktuell} wartet auf Kritik und Freigabe → Prozessphase"
     return f"Zyklus {aktuell} abgeschlossen → Domänenphase, Plan {aktuell + 1}"
 
 

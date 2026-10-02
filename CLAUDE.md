@@ -15,7 +15,8 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
   Stellungnahme.
 - Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`,
   nicht in der Schlussantwort. Die Schlussantwort einer Rolle nennt nur Pfade und Status; der
-  Koordinator reicht Pfade weiter, keine Inhalte. Mechanismus: nur Text.
+  Koordinator reicht Pfade weiter, keine Inhalte. Mechanismus:
+  `prozess/pruefungen/schlussantwort.py`, `lesegrenze.py`.
 - Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
 - Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
   Code und im Glossar (`domaene/glossar.md`, per grep).

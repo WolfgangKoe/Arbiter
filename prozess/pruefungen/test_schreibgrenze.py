@@ -99,3 +99,19 @@ def test_bash_aenderung_ausserhalb_wird_beim_ende_gemeldet(wurzel):
     assert "domaene/ziel.md" in meldung
     assert "prozess/ok.md" not in meldung
     assert "schon_vorher.txt" not in meldung
+
+
+def test_commit_einer_rolle_wird_beim_ende_gemeldet(wurzel):
+    def git(*args):
+        subprocess.run(["git", *args], cwd=wurzel, check=True, capture_output=True)
+
+    git("config", "user.email", "probe@example.invalid")
+    git("config", "user.name", "probe")
+    git("commit", "--allow-empty", "-qm", "vorher")
+    rahmen = {"agent_type": "probe", "agent_id": "a2"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    git("commit", "--allow-empty", "-qm", "von der Rolle")
+
+    antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+
+    assert "hat probe committet" in antwort["hookSpecificOutput"]["additionalContext"]
