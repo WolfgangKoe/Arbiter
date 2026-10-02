@@ -31,7 +31,8 @@ und Schulden eindämmt.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs), bevor du Eigenes baust.
 
 ## Grenzen
-- Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor.
+- Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor:
+  als Anliegen an den Stakeholder in `handoff/anliegen/`, die Schlussantwort nennt den Pfad.
 - Eine Rolle entsteht erst bei beobachtetem Bedarf. Was über mehrere Zyklen nie auslöst,
   kommt in die Retro.
 - Höchstmaße in Zeichen: Agentendefinition 2.500, Beschreibung 150, Ordner-CLAUDE.md 1.500,

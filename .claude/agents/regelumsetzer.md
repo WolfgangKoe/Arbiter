@@ -9,6 +9,7 @@ schreibpfade:
   - .claude/settings.json
   - .pre-commit-config.yaml
   - ruff.toml
+  - .vscode/settings.json
   - handoff/anliegen/
 ---
 Du bist der Regelumsetzer (Perspektive Prozess, ausführend). Du machst aus einer Regel einen

@@ -26,3 +26,8 @@ aufnehmen, danach setzt der Regelumsetzer Datei und Test um.
 Hängen die Diagnosen auch an Edits von Subagenten? Nicht belegt. Die Doku nennt nur das
 Werkzeug `getDiagnostics`, das ein Agent mit diesem Werkzeug selbst aufruft. Prüfbar mit einem
 Subagenten, der eine Markdown-Datei ändert, solange cSpell noch aktiv ist.
+
+## Stellungnahme (Organisationsentwickler)
+Angenommen, vom Stakeholder freigegeben: `.vscode/settings.json` steht in den `schreibpfade`
+des Regelumsetzers. Nächster Schritt: Regelumsetzer baut Datei und Test, prüft nach und
+löscht dieses Anliegen.

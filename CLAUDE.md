@@ -11,6 +11,8 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
 ## Arbeitsweise
 - Schreibe nur im Ordner deiner Perspektive, lies alles.
 - Kritik an einem fremden Artefakt wird eine Datei in `handoff/anliegen/`, nie eine Änderung.
+  Kopf: Von <Rolle> an <Rolle> · Runde <n>/3; je Runde Befund, Kosten, Gegenvorschlag,
+  Stellungnahme.
 - Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
 - Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
   Code und im Glossar (`domaene/glossar.md`, per grep).
