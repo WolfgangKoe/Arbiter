@@ -20,4 +20,4 @@ Empfehlung A: Ein Name, der an der Karte hängt, gilt auch für Protokoll und sp
 stehen schon im Code. Nach deiner Antwort kommen die zwei Namen mit Code-Bezeichner ins
 Glossar.
 
-Antwort:
+Antwort: Es ist regeltechnisch falsch, hier konkrete Namen zu vergeben. Die Aufstellungszonen werden durch die Mission vorgegeben (Führe nochmals eine Recherche durch). Die Missionen müssen daher die Namen enthalten. Wir brauchen ggf. eine Klasse Mission oder Spielart (Matched, Open, Crusade), welche Missionen mit Spielart-typischen Parametern enthält, der Name wäre dann ein entsprechendes Objekt. Bitte meine Idee kritisch bewerten!
