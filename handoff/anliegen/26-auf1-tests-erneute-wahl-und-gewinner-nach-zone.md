@@ -3,10 +3,10 @@
 26 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** In [test_auf_1.py](../../technik/tests/akzeptanz/phasen/test_auf_1.py) gegen
+**Befund.** In [aufstellenTest.py](../../technik/tests/akzeptanz/phasen/aufstellenTest.py) gegen
 [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md):
 1. *Test verlangt, was das Kriterium nicht sagt:*
-   `test_auf_1_6_die_begonnene_einheit_erneut_zu_wählen_ist_nicht_gesperrt`. AUF-1.6 lautet
+   `testAuf1_6DieBegonneneEinheitErneutZuWählenIstNichtGesperrt`. AUF-1.6 lautet
    „Eine wählbare *Einheit* löst die *Einheit in Aufstellung* ab, wenn von ihr kein *Modell*
    *gesetzt* ist; sonst *Sperre* ‚Einheit begonnen‘.“ Die begonnene *Einheit* ist nach 1.5
    wählbar, von der *Einheit in Aufstellung* ist ein *Modell* *gesetzt*: Wörtlich folgt die
@@ -27,7 +27,7 @@ Reihe* ist, und bliebe grün.
 1. Den Test aus der Umsetzung nehmen, bis AUF-1.6 den Fall regelt; widersprichst du, hebe
    ihn an den Anforderungsautor, etwa „Eine andere wählbare *Einheit* löst … ab“ oder
    „dieselbe erneut zu wählen ist keine *Sperre*“.
-2. Ein Test: *Gewinner* und *Aufstellungszone* gewählt, dann `gewinner_wählen` →
+2. Ein Test: *Gewinner* und *Aufstellungszone* gewählt, dann `gewinnerWählen` →
    ‚nicht wählbar‘, *Gewinner* und *an der Reihe* unverändert.
 
 Die übrigen Tests treffen ihr Kriterium; ihre Namen stehen im
