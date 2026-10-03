@@ -1,6 +1,6 @@
 # Plan 2: eine Grenze widerspricht D2, drei Kosten fehlen
 
-102 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+102 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: [Plan 2](../plan.md), Items `ausgangslage-only-war` und `sperren-beim-setzen`.
