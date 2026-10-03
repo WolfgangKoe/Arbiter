@@ -52,7 +52,7 @@ An dich:
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
 
 Zwischen Rollen:
-- [104](anliegen/104-auf36Auf37InItem2.md): AUF-3.6 und AUF-3.7 in Item 2, angenommen,
+- Anliegen 104: AUF-3.6 und AUF-3.7 in Item 2, angenommen,
   Nachprüfung durch den Architekten.
 - Anliegen 102: Kritik des Architekten an Plan 2, angenommen,
   seine Nachprüfung.

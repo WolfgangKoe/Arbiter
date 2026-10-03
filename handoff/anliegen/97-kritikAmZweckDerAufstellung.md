@@ -26,18 +26,18 @@ Angenommen bis auf den Verweis auf Code; umgesetzt in
 **Stellungnahme:** Du hast die Anforderung effektiv in drei Teile geschnitten. Damit bin ich einverstanden. An sich könntest du daraus auch drei Dateien machen, um das Zeichenlimit wieder zu reduzieren. Ausgangslage von Only War AUF-2 lässt sich auch verallgemeinern und wäre damit eine eigene Anforderung. Dasselbe trifft auf AUF-3 das Setzen zu. Beim Bewegen dürfen Bases sich ebenfalls nicht überlappen.
 
 **Stellungnahme:**
-Angenommen in der Sache, umgesetzt noch nicht:
-- Drei Dateien: Das Höchstmaß gilt je Anforderung, eine eigene Datei macht AUF-1 nicht
-  kürzer. Die Verallgemeinerung ergibt aber drei Dateien nach den Bereichen aus
-  `domaene/CLAUDE.md`: `spielobjekte.md`, `querschnitt.md`, `phasen/aufstellen.md`.
-- AUF-2 und AUF-3 verallgemeinern: Was jede *Mission* braucht (*Armeen*, *Bases*,
-  *Spielfeld*) und das *Setzen* mit ‚Base überdeckt‘ ziehen aus der *Aufstellung* aus; Zonen
-  und Sperren nur der *Aufstellung* bleiben. Das ändert Kennungen in Item 1, Item 2 und Plan 2
-  und braucht neue Kürzel, beides deine Entscheidung.
-- Bewegen: Die Regel verbietet das Überdecken auf dem ganzen Weg, nicht nur am Ende
-  (`core_rules.txt:729`); das Kriterium kommt mit Etappe 2.
+Angenommen und umgesetzt nach deinen Antworten in Anliegen 105 (F1 A, F2 A, F3 A, git):
+- Drei Dateien nach den Bereichen aus `domaene/CLAUDE.md` (das Höchstmaß gilt je
+  Anforderung, AUF-1 bleibt, wie sie ist):
+  [spielobjekte.md](../../domaene/anforderungen/spielobjekte.md) mit OBJ-1 (*Armeen*,
+  *Bases*, *Spielfeld*, gleich welche *Mission*),
+  [querschnitt.md](../../domaene/anforderungen/querschnitt.md) mit QUE-1 (*Setzen* und
+  ‚Base überdeckt‘) und [aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md) mit
+  dem, was nur die *Aufstellung* von Only War betrifft.
+- AUF-2.1 bis AUF-2.3, AUF-3.1 und AUF-3.3 sind ersetzt. Die Werte aus den YAML-Dateien
+  stehen jetzt in AUF-2.6 und AUF-2.7.
+- Bewegen: Arbiter prüft den gezogenen Weg (`core_rules.txt:729`). Das Kriterium QUE-2 kommt
+  mit den Anforderungen zu Etappe 2.
 
-Schnitt, Kürzel, Zeitpunkt und Weg als Fragen mit Empfehlung in
-[105](105-aufstellenAufteilen.md). Bis zu deinen Antworten bleibt
-[aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md) unverändert, damit Plan 2
-und seine Items gültig bleiben; wartet auf 105.
+Die neuen Kennungen in Item 1, Item 2 und Plan 2 trägt der Planer ein; wartet auf
+[106](106-neueKennungenInItemsUndPlan.md).

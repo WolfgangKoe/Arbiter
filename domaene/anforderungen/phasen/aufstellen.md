@@ -22,21 +22,18 @@ Zweck: Zonenwahl, wer wann aufstellt. Kriterien: [core_rules.txt:2322].
 
 ### AUF-2 · Ausgangslage von Only War
 
-Zweck: Womit die *Aufstellung* beginnt. Werte in [ausgangslage.yaml](../../daten/ausgangslage.yaml) und [onlyWar.yaml](../../daten/onlyWar.yaml), Entscheidungen des Stakeholders zu Etappe 1 (Anliegen 09, F1 A, F10 B, git).
+Zweck: Womit die *Aufstellung* beginnt; woraus *Armeen* und *Spielfeld* bestehen, sagt [OBJ-1](../spielobjekte.md). Werte in [ausgangslage.yaml](../../daten/ausgangslage.yaml) und [onlyWar.yaml](../../daten/onlyWar.yaml), Entscheidungen des Stakeholders zu Etappe 1 (Anliegen 09, F1 A, F10 B, git).
 
-- AUF-2.1 Jeder der zwei *Spieler* führt eine andere der zwei *Armeen* aus `ausgangslage.yaml`.
-- AUF-2.2 Jede *Armee* hat ihre *Einheiten* aus `ausgangslage.yaml`, jede *Einheit* je Eintrag unter `durchmesser` ein *Modell*, dessen runde *Base* diesen *Durchmesser* hat.
-- AUF-2.3 Das *Spielfeld* ist ein Rechteck mit den Seitenlängen aus `onlyWar.yaml`.
 - AUF-2.4 Jede der zwei *Aufstellungszonen* ist das Band des *Spielfelds* mit der *Tiefe* aus `onlyWar.yaml` an einer langen *Spielfeldkante*, die eine an der gegenüberliegenden der anderen.
 - AUF-2.5 In der *Ausgangslage* ist kein *Modell* *gesetzt* und keine *Einheit* *aufgestellt*.
+- AUF-2.6 Die *Ausgangslage* hat die zwei *Armeen* aus `ausgangslage.yaml` mit ihren *Einheiten*, je Eintrag unter `durchmesser` ein *Modell*, dessen *Base* diesen *Durchmesser* hat.
+- AUF-2.7 Das *Spielfeld* der *Ausgangslage* hat die Seitenlängen aus `onlyWar.yaml`.
 
 ### AUF-3 · Sperren beim Setzen
 
-Zweck: Arbiter sperrt jede *Stelle*, an der ein *Modell* nicht stehen darf, und nennt den *Grund*. Gemessen wird der *Abstand* ([core_rules.txt:464]).
+Zweck: Arbiter sperrt beim *Setzen* nach [QUE-1](../querschnitt.md) auch jede *Stelle*, die nur die *Aufstellung* verbietet, und nennt den *Grund*. Gemessen wird der *Abstand* ([core_rules.txt:464]).
 
-- AUF-3.1 *Setzen* bringt ein nicht *gesetztes* *Modell* der *Einheit in Aufstellung* an eine *Stelle*; ohne *Sperre* ist es danach an dieser *Stelle* *gesetzt*.
-- AUF-3.2 Liegt seine *Base* an der *Stelle* nicht *ganz in* der *Aufstellungszone* seines *Spielers*: *Sperre* ‚nicht ganz in der Zone‘ ([core_rules.txt:2322]).
-- AUF-3.3 *Überdeckt* seine *Base* an der *Stelle* die eines anderen *gesetzten* *Modells*: *Sperre* ‚Base überdeckt‘ (Etappe 1, Anliegen 09 F12 A, git).
+- AUF-3.2 Liegt die *Base* des *Modells* an der *Stelle* nicht *ganz in* der *Aufstellungszone* seines *Spielers*: *Sperre* ‚nicht ganz in der Zone‘ ([core_rules.txt:2322]).
 - AUF-3.4 Ist es an der *Stelle* in *Engagement Range* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Engagement Range‘ ([core_rules.txt:450]).
 - AUF-3.6 Ist das *Setzen* nach AUF-1.4 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist ‚nicht in Aufstellung‘.
-- AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft wie in AUF-3.2 bis AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).
+- AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft nach QUE-1.2, AUF-3.2 und AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).
