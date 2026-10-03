@@ -42,3 +42,10 @@ dann in VS Code „Developer: Reload Window“. Probe: Strg+Klick auf `AUF-1.3` 
 `technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py`. Hilft das nicht: Rechtsklick,
 „Gehe zu Definition“, und Fehler aus „Ausgabe“ ➜ „Erweiterungshost“ melden. Nach deiner
 Rückmeldung in 83 folgen Scheiter-Test, `regeln.md` und T2.
+
+Rückmeldung: Ergebnis im Terminal:
+(.venv) wolfgang@wolfgang-GT62VR-6RD:~/Dokumente/Arbiter_Structure$ code --install-extension prozess/pruefungen/sprung/arbiter-sprung.vsix
+Installing extensions...
+Extension 'arbiter-sprung.vsix' was successfully installed.
+(node:368084) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `code --trace-deprecation ...` to show where the warning was created)
