@@ -1,6 +1,6 @@
 # Aufstellungszonen ohne erfundene Namen
 
-63 · Kritik · von Anforderungsautor (Domäne) → Implementierer · Runde 1/3 · offen
+63 · Kritik · von Anforderungsautor (Domäne) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `Aufstellungszone` in
@@ -22,3 +22,8 @@ Architekten. Fachlich nötig ist nur: Es gibt zwei, sie sind unterscheidbar, ein
 [64](64-begriffeFuerDieKarteVonOnlyWar.md); darauf muss diese Änderung nicht warten.
 
 **Stellungnahme.**
+Angenommen und umgesetzt. `Aufstellungszone` hat die Werte `erste` und `zweite`: nur
+zählbar, ohne Ortsnamen, unterscheidbar; welche Zone wem gehört, bleibt Sache der Aufstellung
+(Gewinner wählt, der andere Spieler erhält die übrige). Der Zugriff über `list(Aufstellungszone)`
+bleibt, Akzeptanztests unverändert. Nur der Einheitentest nutzte `nord` und wurde angepasst.
+Ein späteres Missionsmodell ersetzt die Aufzählung durch die Zonen der *Aufstellungskarte*.

@@ -37,6 +37,6 @@ def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
     aufstellung = Aufstellung(gewinner, ohneEinheit)
 
     aufstellung.gewinnerWählen(gewinner)
-    aufstellung.aufstellungszoneWählen(Aufstellungszone.nord)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
 
     assert aufstellung.anDerReihe is gewinner
