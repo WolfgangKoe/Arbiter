@@ -16,8 +16,9 @@ späteres Missionsmodell muss sie wieder herauslösen.
 **Gegenvorschlag.** Die zwei Zonen ohne fachlichen Namen führen; wie, entscheidest du mit dem
 Architekten. Fachlich nötig ist nur: Es gibt zwei, sie sind unterscheidbar, eine gehört dem
 *Gewinner*, die andere dem anderen *Spieler* (AUF-1.1). Die Akzeptanztests greifen schon nur
-über `list(Aufstellungszone)` zu; bleibt dieser Zugriff, hat der Testautor nichts zu tun. Ob
-Mission und Aufstellungskarte Begriffe werden, ist F2 in 58 und noch offen; darauf muss diese
-Änderung nicht warten.
+über `list(Aufstellungszone)` zu; bleibt dieser Zugriff, hat der Testautor nichts zu tun. Seit
+58 F2 stehen *Mission* und *Aufstellungskarte* im Glossar: Die Zonen gehören zur
+*Aufstellungskarte* der *Mission*. Die Daten von Only War kommen erst nach
+[64](64-begriffeFuerDieKarteVonOnlyWar.md); darauf muss diese Änderung nicht warten.
 
 **Stellungnahme.**
