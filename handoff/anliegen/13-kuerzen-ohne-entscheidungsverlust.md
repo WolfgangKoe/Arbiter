@@ -1,6 +1,6 @@
 # Etappen 2 bis 7 kürzen, ohne Entscheidungen zu verlieren
 
-13 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+13 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach E53 schrumpfen die Etappen 2 bis 7 auf je eine Zeile (200 Zeichen,

@@ -72,8 +72,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Höchstmaß: `prozess/kennzahlen.md`; darüber wird die Anforderung geteilt, nicht der Test.
   Prüft: `rueckverfolgung.py` (die Sammeldatei ist rot, sobald ein offenes Item eines
   freigegebenen Plans eine spätere Anforderung der Datei nennt; ebenso eine fehlende
-  Testdatei einer genannten Anforderung und ein Test in der Datei einer fremden
-  Anforderung), `benennung.py`, `hoechstmassTest.py`.
+  Testdatei einer genannten Anforderung, ein Test in der Datei einer fremden Anforderung und
+  Sammel- neben Einzeldatei derselben Anforderung), `benennung.py`, `hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur:
   `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (auch Testname oder `pfad:zeile`).
