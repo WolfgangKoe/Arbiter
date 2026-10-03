@@ -1,6 +1,6 @@
 # Ruff-Regelsatz: Der Kommentar verweist auf eine Stelle, die ihn nicht nennt
 
-85 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+85 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3e61977, `pyproject.toml` (Kritik am Code, Linter-Konfiguration). Sonst in
@@ -21,4 +21,8 @@ streicht, verstößt gegen nichts Nachlesbares, und der Reviewer kann es nicht b
 „ruff (Stil, ARG, PLR2004, PLR0913, FBT, ERA, `PLR0912` mit 12)“ erweitern. Dann stimmt der
 Kommentar, und `pyproject.toml` bleibt, wie es ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen im Absatz Werkzeuge von
+[`prozess/ablauf.md`](../../prozess/ablauf.md#technikphase). Dazu verweist die Zeile Ruff in
+[`prozess/regeln.md`](../../prozess/regeln.md) auf diesen Absatz statt auf E37, und der Backlog
+nimmt ruff ganz aus den offenen Werkzeugen. Der Testname `testRuffEnthältDenWerkzeugsatzAusE37`
+in `konfigurationTest.py` liegt außerhalb dieses Anliegens: Anliegen 89 an den Regelumsetzer.
