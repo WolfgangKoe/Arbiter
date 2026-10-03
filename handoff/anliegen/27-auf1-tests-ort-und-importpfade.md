@@ -1,6 +1,6 @@
 # AUF-1-Tests: Ort des Codes und Importpfade
 
-27 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+27 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Schnittstelle in
@@ -28,4 +28,7 @@ Phase importierte die Sperre aus der Aufstellung. Jetzt kostet es fünf Zeilen.
 `conftest.py` und `aufstellenTest.py`. In `conftest.py` entfallen `sys`, `Path`, der
 `sys.path`-Eingriff, sein Kommentar und beide `noqa`.
 
-**Stellungnahme.** Offen.
+**Stellungnahme.** Angenommen und umgesetzt, nach `technik/architektur.md`: Importe aus
+`arbiter.domaene.spielobjekte`, `.phasen.aufstellen` und `.sperre`; `sys.path`-Eingriff und
+`noqa` entfallen (Suchpfad `technik` in `pyproject.toml`); Docstrings einzeilig ohne
+Prozessverweis, der Kommentar zur Modulwahl entfällt, weil die Architektur sie festlegt.

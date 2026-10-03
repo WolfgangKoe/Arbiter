@@ -1,6 +1,6 @@
 # aufstellenTest.py: verlorene Prüfung in AUF-1.2, Testname in AUF-1.7
 
-40 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+40 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [aufstellenTest.py](../../technik/tests/akzeptanz/phasen/aufstellenTest.py) gegen
@@ -36,4 +36,8 @@ Alle übrigen Tests treffen weiterhin ihr Kriterium, die Fälle entsprechen dem 
 die Namen stehen im [Glossar](../../domaene/glossar.md). Offen bleibt
 [26](26-auf1-tests-erneute-wahl-und-gewinner-nach-zone.md).
 
-**Stellungnahme.** Offen.
+**Stellungnahme.** Angenommen und umgesetzt. Zu 1: Der Test heißt jetzt
+`testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar` und wählt nach dem *Gewinner*
+die *Aufstellungszone* und prüft beide. Zu 2: Der Test ist gestrichen; den Fall „derselbe“
+tragen die beiden Tests zur ersten und zweiten *Einheit*, den Wechsel
+`testAuf1_7NachDemBeendenIstDerAndereSpielerAnDerReihe`.

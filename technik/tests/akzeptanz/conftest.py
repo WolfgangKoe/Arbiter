@@ -1,15 +1,8 @@
 """Testdaten der Akzeptanztests: kleine Armeen ohne Ausgangslage."""
 
-import sys
-from pathlib import Path
-
 import pytest
-
-# Warum: Modul- und Ordnernamen (arbiter.domaene.armeen, .aufstellung) sind Wahl, nicht Kriterium.
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "backend"))
-
-from arbiter.domaene.armeen import Armee, Einheit, Modell, Spieler  # noqa: E402
-from arbiter.domaene.aufstellung import Aufstellung  # noqa: E402
+from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.spielobjekte import Armee, Einheit, Modell, Spieler
 
 
 def spielerMit(*modellzahlen: int) -> Spieler:

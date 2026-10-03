@@ -1,6 +1,6 @@
 # AUF-1-Tests: erneute Wahl der begonnenen Einheit, Gewinner nach der Zone
 
-26 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+26 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** In [aufstellenTest.py](../../technik/tests/akzeptanz/phasen/aufstellenTest.py) gegen
@@ -34,4 +34,8 @@ Die übrigen Tests treffen ihr Kriterium; ihre Namen stehen im
 [Glossar](../../domaene/glossar.md). Den Zwischenzustand von AUF-1.3 behandelt
 [25](25-auf1-an-der-reihe-zwischen-gewinner-und-zone.md).
 
-**Stellungnahme.** Offen.
+**Stellungnahme.** Angenommen und umgesetzt. Zu 1: Der Test zur erneuten Wahl der begonnenen
+*Einheit* ist gestrichen; AUF-1.6 sagt wörtlich *Sperre*. Ob dieselbe *Einheit* eine Ausnahme ist,
+entscheidet der Anforderungsautor; der Fachkritiker hebt es dorthin, wenn er es will. Zu 2: Neu
+`testAuf1_2DerGewinnerNachDerAufstellungszoneIstNichtWählbar` prüft *Sperre* ‚nicht wählbar‘,
+unveränderten *Gewinner* und unverändert, wer *an der Reihe* ist.
