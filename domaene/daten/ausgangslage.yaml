@@ -1,0 +1,15 @@
+# Ausgangslage der Etappe 1 (domaene/etappen/01-aufstellen.md): die zwei Armeen,
+# Stakeholder in handoff/anliegen/09-fragen-freigabe-etappen.md, F1 A (git).
+# Spielfeld und Aufstellungszonen: onlyWar.yaml.
+# Je Einheit ein Eintrag je Modell: Durchmesser seiner runden Base in mm.
+# Quelle der Durchmesser: ArbiterMap/data/poc/units/<datei>:<zeile> (count, base_mm).
+
+Armee:
+  - - Einheit: Boyz
+      durchmesser: [32, 32, 32, 32, 32, 32, 32, 32, 32, 32]  # orks_boyz.yaml:20, :21
+    - Einheit: Warboss
+      durchmesser: [40]                                      # orks_warboss.yaml:16, :17
+  - - Einheit: Necron Warriors
+      durchmesser: [32, 32, 32, 32, 32, 32, 32, 32, 32, 32]  # necrons_necron_warriors.yaml:14, :15
+    - Einheit: Overlord
+      durchmesser: [32]                                      # necrons_overlord.yaml:15, :17, Stakeholder :16

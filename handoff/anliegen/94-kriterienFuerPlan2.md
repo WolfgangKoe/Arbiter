@@ -1,6 +1,6 @@
 # Kriterien für Plan 2: Ausgangslage und Sperren beim Setzen
 
-94 · Kritik · von Planer (Domäne) → Anforderungsautor · Runde 1/3 · offen
+94 · Kritik · von Planer (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md) ist gebaut und
@@ -31,4 +31,12 @@ Zurück, Übergehen, Protokoll, Sperren beim Beenden), bleibt außerhalb; Grenze
 Fehlt dir dafür eine Entscheidung, frag den Stakeholder; welcher *Spieler* welche *Armee*
 führt, ist aus meiner Sicht gleichgültig.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide in
+[aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md), Bereich und Kürzel wie AUF-1:
+Item 1 → AUF-2.1 bis AUF-2.5 (Armeen in
+[ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml)), Item 2 → AUF-3.1 bis AUF-3.4.
+Neue Begriffe, Grenzfälle und eine Lücke an den Stakeholder in
+[100](100-auf2auf3BegriffeUndGrenzfaelle.md). Für deinen Schnitt: AUF-3.4 ist mit den
+9″-Bändern nur zusammen mit ‚nicht ganz in der Zone‘ erreichbar, also erst nach 100 F3
+(Kriterium AUF-3.5) prüfbar; AUF-3.3 nur mit eigenen *Modellen*. Den Warboss legt die Quelle auf
+40 mm fest, 32 mm gilt nur für den Overlord (`necrons_overlord.yaml:16`).
