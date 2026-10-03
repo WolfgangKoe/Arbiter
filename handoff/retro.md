@@ -36,7 +36,7 @@ Ursache: Der Stand kennt Schritt 5 nicht (50), und der Koordinator kann `prozess
 - Koordinator: wer dran ist, steht im Kopf des Anliegens.
 - [Kennzahlen](../prozess/kennzahlen.md): Bedeutung und Reaktion. [Backlog](../prozess/backlog.md):
   Zurückgestelltes aus 22, 31, 38.
-- Domänenmodell (31, Punkt 4): [71](anliegen/71-beziehungenDerFachobjekte.md).
+- Domänenmodell (31, Punkt 4): Beziehungen im Glossar ([Domäne](../domaene/CLAUDE.md)).
 - Nächster Lauf: Abschnitt Anliegen nach `prozess/anliegen.md`, für Koordinator und Rollen.
 
 ## Prozess-Items (Regelumsetzer, in dieser Reihenfolge)

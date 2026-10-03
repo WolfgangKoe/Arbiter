@@ -1,6 +1,6 @@
 # Kritik eines Entwicklers am Altbestand
 
-31 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+31 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 Bearbeitung in der Retro von Zyklus 1.
 
@@ -29,7 +29,7 @@ bleibt offen, ob Prämisse und Skills Korrekturschleifen sparen.
 4. Domänenmodell: Anliegen an den Anforderungsautor, sobald ein Befund es zeigt.
 
 **Stellungnahme.** In der [Retro](../retro.md): 1 als P7, 2 als P8, 3 als F3 in
-[65](65-moderationUndAntworten.md), 4 als [71](71-beziehungenDerFachobjekte.md) an den
-Anforderungsautor, der prüfbare Teil als P9 ([70](70-erfundeneNamenFindetEinePruefung.md)).
-`angenommen` war zu früh gesetzt (Regel in [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)); Punkt 4
-wartet auf 71.
+[65](65-moderationUndAntworten.md), 4 über Anliegen 71 an den
+Anforderungsautor: Beziehungen stehen in der Definition im Glossar, wer festlegt oder ändert
+im Kriterium ([`domaene/CLAUDE.md`](../../domaene/CLAUDE.md), Punkt `glossar.md`); der
+prüfbare Teil als P9 (Anliegen 70).
