@@ -4,7 +4,7 @@ Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 ---|---|---|---
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
-Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers* (`core_rules.txt:305`, `:321`).
+Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
 aufgestellt | deployed | aufgestellt | Zustand einer *Einheit*, für die *Aufstellen der Einheit beenden* gelungen ist (`core_rules.txt:2322`).
 Aufstellen der Einheit beenden | – | aufstellenDerEinheitBeenden | Handlung, mit der die *Spieler* die *Einheit in Aufstellung* abschließen.
 Aufstellung | deploy forces | Aufstellung | Schritt 4 der Mission Only War: Die *Spieler* stellen abwechselnd je eine *Einheit* auf, bis beide alle aufgestellt haben (`core_rules.txt:2322`).

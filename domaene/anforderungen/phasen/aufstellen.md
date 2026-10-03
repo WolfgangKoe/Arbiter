@@ -22,7 +22,7 @@ Zweck: Zonenwahl, wer wann aufstellt. Kriterien: [core_rules.txt:2322].
 
 ### AUF-2 · Ausgangslage von Only War
 
-Zweck: Womit die *Aufstellung* beginnt; woraus *Armeen* und *Spielfeld* bestehen, sagt [OBJ-1](../spielobjekte.md). Werte in [ausgangslage.yaml](../../daten/ausgangslage.yaml) und [onlyWar.yaml](../../daten/onlyWar.yaml), Entscheidungen des Stakeholders zu Etappe 1 (Anliegen 09, F1 A, F10 B, git).
+Zweck: Womit die *Aufstellung* beginnt; wer welche *Armee* führt, sagt [OBJ-1](../spielobjekte.md), woraus sie und das *Spielfeld* bestehen, das [Glossar](../../glossar.md). Werte in [ausgangslage.yaml](../../daten/ausgangslage.yaml) und [onlyWar.yaml](../../daten/onlyWar.yaml), Entscheidungen des Stakeholders zu Etappe 1 (Anliegen 09, F1 A, F10 B, git).
 
 - AUF-2.4 Jede der zwei *Aufstellungszonen* ist das Band des *Spielfelds* mit der *Tiefe* aus `onlyWar.yaml` an einer langen *Spielfeldkante*, die eine an der gegenüberliegenden der anderen.
 - AUF-2.5 In der *Ausgangslage* ist kein *Modell* *gesetzt* und keine *Einheit* *aufgestellt*.

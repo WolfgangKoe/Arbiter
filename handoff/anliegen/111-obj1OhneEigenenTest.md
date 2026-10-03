@@ -37,3 +37,18 @@ Kriterien für ein Verhalten. Oder er erfindet ein Verhalten, damit der Test etw
 Empfehlung A: Heute kommen die Daten nur aus unseren eigenen YAML-Dateien, die die Tests zu
 AUF-2.6 und AUF-2.7 vollständig prüfen. B lohnt sich erst, wenn jemand anderes Armeen
 einspielt. Berührt A die Entscheidung des Stakeholders in 105 F1, fragst du ihn.
+
+**Stellungnahme:**
+Angenommen, Gegenvorschlag A, umgesetzt:
+- In [spielobjekte.md](../../domaene/anforderungen/spielobjekte.md) entfallen OBJ-1.2 bis
+  OBJ-1.4; die Einleitung verweist für den Aufbau von *Armeen*, *Einheiten*, *Modellen* und
+  *Spielfeld* auf das [Glossar](../../domaene/glossar.md). Ebenso der Zweck von AUF-2 in
+  [aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md).
+- Ins Glossar kam, was nur OBJ-1.2 sagte: *Armee* ist „in *Einheiten* gegliedert“
+  (`core_rules.txt:420`). Die übrigen Aussagen standen schon dort.
+- 105 F1 berührt das nicht: Der Stakeholder hat Schnitt und Kürzel freigegeben; die
+  Aussagen gelten weiter, sie stehen nur einmal, im Glossar. Daher keine Frage an ihn.
+- Das Item nennt die Kennungen noch, Umfang: an den Planer,
+  [112](112-obj1NurNochEinKriterium.md).
+
+wartet auf 112
