@@ -14,7 +14,7 @@ entscheidest du; die Umsetzung steht in [114](114-pruefskripteOrdnenUndLesbarMac
   - `rollen/`: agenten, schreibgrenze, lesegrenze, bashPositivliste, schlussantwort,
     rollenkontext, belegung
   - `stand/`: stand, plan, codekritik, kennzahlen, rollenzaehler
-  - `form/`: benennung samt Rückstandsliste, glossar, hoechstmass, komplexitaet,
+  - `form/`: benennung, glossar, hoechstmass, komplexitaet,
     konfiguration, cspell, einstellungen
   - `rueckverfolgung/`: rueckverfolgung, die Spur, `sprung/`
   - `gemeinsam/`: gitAufruf, Ein- und Ausgabe der Hooks, Pfade des Repos

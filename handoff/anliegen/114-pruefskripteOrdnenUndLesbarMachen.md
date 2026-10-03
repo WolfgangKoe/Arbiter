@@ -40,10 +40,15 @@ wenn sich die Reihenfolge ändert.
   Docstrings nach wir.md 8 (nur `# Regel:` und `# Warum:`, Docstring einzeilig, kein TODO
   oder FIXME) und Typaliase in PascalCase (wir.md 1), Geltungsbereich nach wir.md. Den
   Vermerk in wir.md setze ich.
+- D · Rückstand der Benennung löschen: `benennungRueckstand.txt` hat seit Anliegen 66 keinen
+  Eintrag, `benennung.py --rückstand` gibt nichts aus. Weg damit: die Datei, `rückstand`,
+  `rückstandZeilen` und `--rückstand` in `benennung.py`, die zwei Rückstand-Tests in
+  `benennungTest.py`, die Ausnahme in `konfigurationTest.py`, die Erwähnung in `regeln.md`.
+  Neue Altlasten entstehen nicht: Jede neue Datei wird voll geprüft.
 
 Verweise auf die alten Pfade in `CLAUDE.md`, `prozess/ablauf.md` und `.claude/agents/` ziehe
 ich nach, sobald du den Umzug meldest.
 
-Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, die Mechanismen aus C an je einem
+Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die Mechanismen aus C an je einem
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).

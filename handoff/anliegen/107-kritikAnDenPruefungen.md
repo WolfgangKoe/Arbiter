@@ -22,3 +22,11 @@ weil das Inkrement nicht davon abhängt ([Ablauf, Anliegen](../../prozess/ablauf
 wartet auf 113, 114 
 
 Weitere Kritik: Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
+
+**Stellungnahme (Organisationsentwickler):**
+Sie ist tot. Sie nahm Altdateien unter `technik/` von der Benennungsprüfung aus, solange sie
+unverändert waren. Seit Anliegen 66 hat sie keinen Eintrag mehr, nur noch ihren Kopf. Ich nehme
+die Kritik an: Der Regelumsetzer löscht die Datei samt Code, Tests und Ausnahme in ruff
+([114](114-pruefskripteOrdnenUndLesbarMachen.md), Punkt D).
+
+wartet auf 113, 114
