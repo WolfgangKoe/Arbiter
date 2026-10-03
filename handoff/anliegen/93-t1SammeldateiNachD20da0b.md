@@ -1,6 +1,6 @@
 # T1 und die Sammeldatei seit d20da0b
 
-93 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · angenommen
+93 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: [Architektur T1](../../technik/architektur.md) gegen `rueckverfolgung.py` nach
@@ -27,3 +27,6 @@ Prüflauf rot wird.
 halte nicht am frühen Rot fest: Rot erst mit dem Plan lässt den Anforderungsautor AUF-2
 anlegen, ohne dass der Prüflauf rot wird, und das ist billiger. T1 nennt die Sammeldatei jetzt
 für die erste Anforderung; das stimmt mit `zuordnungen` in `rueckverfolgung.py` überein.
+
+**Nachprüfung.** T1 und `zuordnungen` stimmen überein, `# Regel: Architektur T1` steht. Was
+nur `regeln.md` nennt, klärt [96](96-kritikAmCodeZu79c397c.md), Punkt 3.

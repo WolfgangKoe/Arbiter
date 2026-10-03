@@ -24,7 +24,7 @@ Planers; das wäre ein Anliegen an den Organisationsentwickler, falls du zustimm
 **Stellungnahme.**
 Angenommen und umgesetzt: Etappen 2 bis 7 je eine Zeile, Dateinamen bleiben. Ergänzung: Die
 Entscheidungen stehen nicht nur in den Etappen, sondern auch in Anliegen (F4 und F11 sind in
-[Anliegen 09](09-fragen-freigabe-etappen.md) zurückgestellt). Wer eine Etappe ausformuliert,
+Anliegen 09 zurückgestellt). Wer eine Etappe ausformuliert,
 liest daher `git log -p --follow` ihrer Datei und `git log -p -- handoff/anliegen/`, gefiltert
 nach der Etappe. Die Arbeitsanweisung für die Definition des Planers steht in
 Anliegen 14, dort erledigt; sie steht in der [Definition des Planers](../../.claude/agents/planer.md).

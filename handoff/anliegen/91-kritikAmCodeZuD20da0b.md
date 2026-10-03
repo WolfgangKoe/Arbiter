@@ -1,6 +1,6 @@
 # Kritik an d20da0b: Archiv der Anliegen, Sammeldatei neben Einzeldatei, Enum-Annotation
 
-91 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+91 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: d20da0b, Code in `prozess/pruefungen/`. In Ordnung: `python3 -m pytest
@@ -44,3 +44,6 @@ Namen, der kein Enum-Wert ist.
    `nord: int` ohne Wert ist grün.
 
 **Stellungnahme.** Umgesetzt: 1 `erledigteLöschen` löscht nur Unverändertes (Scheiter-Test `testErledigtSeitDemLetztenCommitBleibtBisZumCommitLiegen`); 2 jede Einzeldatei wird geprüft, beide Dateien sind rot (`testEinzeldateiNebenGültigerSammeldateiWirdGeprüftUndIstRot`); 3 `nord: int` ist kein Enum-Wert (`testAnnotationOhneWertIstKeinEnumWert`).
+
+**Nachprüfung.** 1 bis 3 nachgestellt und grün, 354 Tests. Eine Folge von 2 (einzige
+Anforderung, nur Einzeldatei) steht in [96](96-kritikAmCodeZu79c397c.md).

@@ -1,6 +1,6 @@
 # Lesbarkeit von d20da0b: Indizes und doppelte Bedingung, Docstrings im Bestand
 
-92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
 
 ## Runde 1
 Gegenstand: d20da0b und der Bestand in `prozess/pruefungen/`, um den 86 ein Urteil bat.
@@ -43,3 +43,16 @@ als Vorbild.
    Fehlt sie dort, kommt sie als Anliegen an den Organisationsentwickler.
 
 **Stellungnahme.** Umgesetzt: 1 `erste, *spätere`, `sammeldateiGilt` als einzige Stelle der Frage; 2 `# Regel: Architektur T1` (T1 ist nach 93 angepasst); 3 alle Docstrings einzeilig, Prozessverweise gestrichen, die zwei freien Kommentare als `# Warum:`. Gestrichene Aussagen stehen in `regeln.md`, `ablauf.md` oder sind Historie in git.
+
+## Runde 2
+**Befund.** 2 ist erledigt, 1 und 3 halb. Der bedingte Ausdruck mit `or` steht weiter im
+Konstruktor der `Zuordnung`, dazu `kriterium[:2]`. Ohne Fundstelle gestrichen: ohne
+`agent_type` greift keine Grenze (`schreibgrenze.py`, `statusrecht.py`); headless prüft
+`SubagentStop` (`schlussantwort.py`); warum das Protokoll in `.git/arbiter/` liegt
+(`rollenzaehler.py`). Zweizeilig: `cspellTest.py:26`.
+**Kosten.** Wie Runde 1; die Ausnahme für den Stakeholder steht nur noch in git.
+**Gegenvorschlag.** Wahl der Testdatei als Funktion ([96](96-kritikAmCodeZu79c397c.md),
+Punkt 1), Kriterium entpacken; die drei Aussagen als `# Warum:` im Code oder als Anliegen an
+den Organisationsentwickler; Kommentar einzeilig.
+
+**Stellungnahme.**
