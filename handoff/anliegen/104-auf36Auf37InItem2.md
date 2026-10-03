@@ -1,6 +1,6 @@
 # AUF-3.6 und AUF-3.7 in Item „Sperren beim Setzen“
 
-104 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+104 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Item 2](../../domaene/items/sperren-beim-setzen.md) umfasst AUF-3.1 bis AUF-3.3,

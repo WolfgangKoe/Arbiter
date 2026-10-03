@@ -1,59 +1,59 @@
 # Sprung zwischen Kriterium und Test: Klick erproben, behalten oder löschen
 
-83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 2/3 · offen
+83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 3/3 · offen
 
 ## Runde 1
-**Befund.** Aus Anliegen 53, dort erledigt: Der Regelumsetzer hat beide Wege gebaut.
-- Weg B, Befehl: `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.3` gibt das Kriterium
-  und jeden Test als `pfad:zeile` aus; im Terminal von VS Code springt Strg+Klick dorthin.
-- Weg C, VS-Code-Erweiterung in `prozess/pruefungen/sprung/`: macht `AUF-1.3` in
-  `domaene/anforderungen/` und `testAuf1_3…` in `technik/tests/akzeptanz/` zu Links.
-
-**Kosten.** Bleibt C ungeprüft liegen, ist es Code ohne Linter (eslint fehlt) und ohne Test
-des Klicks, den jeder Lauf mitschleppt.
+**Befund.** Aus Anliegen 53: Weg B, der Befehl `python3 prozess/pruefungen/rueckverfolgung.py
+AUF-1.3`, gibt Kriterium und Tests als `pfad:zeile` aus, Strg+Klick im Terminal springt. Weg
+C, eine VS-Code-Erweiterung in `prozess/pruefungen/sprung/`, macht `AUF-1.3` und
+`testAuf1_3…` zu Links.
 
 **Stellungnahme (Stakeholder).** Muss ich VS Code dafür neu starten? Denn aktuell
 funktioniert es nicht.
 
 ## Runde 2
-**Befund.** Nein, dein VS Code musst du nicht neu starten. Die Erweiterung ist nicht
-installiert; sie wirkt nur in einem zweiten Fenster, das der Befehl unten öffnet. Sein Titel
-beginnt mit „[Extension Development Host]“ (deutsch: „[Erweiterungsentwicklungshost]“). In
-deinem gewohnten Fenster passiert beim Klick nichts, das ist erwartet.
+**Befund.** Kein Neustart; die Erweiterung ist nicht installiert und wirkt nur in einem
+zweiten Fenster, das `code --extensionDevelopmentPath=…` öffnen soll.
 
-Ich habe die Erweiterung in einem eigenen VS Code 1.140 ohne andere Erweiterungen gestartet
-und den Link-Anbieter abgefragt: In `aufstellen.md` liefert er 7 Links, `AUF-1.3` zeigt auf
-`aufstellenTest.py` Zeile 133; in `aufstellenTest.py` 39 Links, jeder Test zeigt auf die Zeile
-seines Kriteriums. Die Links stimmen also. Ungeprüft bleibt nur der Klick selbst in deinem
-Fenster mit deinen Erweiterungen.
+**Stellungnahme (Stakeholder).** Das zweite Fenster öffnet sich nicht. Beim Versuch die
+Datei in dem zweiten Fenster zu öffnen schaltet mich auf das erste VS Code Fenster zurück
+ohne in eine Datei zu springen. Es funktioniert damit nicht!
 
-**So prüfst du.** Im Terminal, im Ordner `Arbiter_Structure` (absolute Pfade, damit der
-Befehl nicht vom Arbeitsordner abhängt):
-```
-code --extensionDevelopmentPath="$PWD/prozess/pruefungen/sprung" "$PWD"
-```
-1. Es öffnet sich ein zweites Fenster mit dem Titel oben. Nur dort prüfen.
-2. War so ein Fenster schon offen, dort Strg+Umschalt+P, „Developer: Reload Window“: Die
-   Erweiterung wurde seit Runde 1 geändert, ein offenes Fenster kennt die alte Fassung.
-3. `domaene/anforderungen/phasen/aufstellen.md` öffnen (Quelltext, nicht die Vorschau),
-   Strg gedrückt halten und über `AUF-1.3` fahren: Es wird unterstrichen. Klick; erwartet:
-   `aufstellenTest.py` öffnet sich bei Zeile 133.
-4. Dort Strg+Klick auf `testAuf1_3VorDerWahl…`; erwartet: zurück zu Zeile 9 von
-   `aufstellen.md`. Öffnet sich stattdessen eine kleine Vorschau mit Verweisen, kommt dir die
-   Python-Erweiterung (Pylance) mit „Gehe zu Definition“ zuvor; dann schreib das dazu.
+Ich verstehe ehrlich gesagt auch nicht, warum hierfür ein neues Fenster geöffnet werden muss.
+Mit "Sprung" meinte ich, dass die jeweiligen Dateien smart miteinander verlinkt sind. Das
+machst du doch an anderer Stelle ganz häufig.
 
-**Kosten.** Etwa fünf Minuten.
+## Runde 3
+**Befund.** Das Fenster sprang zurück, weil `Arbiter_Structure` bei dir schon offen ist; ein
+VS Code öffnet einen Ordner nur einmal. Wichtiger: Ich habe dich falsch verstanden. Du willst
+gewöhnliche Links wie in diesen Anliegen, keine Erweiterung. Die habe ich mit
+[T2](../../technik/architektur.md) bisher ausgeschlossen („keine Links in Anforderung oder
+Test“), weil Links auf Zeilen veralten, sobald sich eine Datei ändert.
 
-**Gegenvorschlag.** Wie Runde 1.
+Was ein gewöhnlicher Link leisten kann:
+- Anforderung → Tests: In Markdown springt Strg+Klick, mit `#L…` sogar auf die Zeile, wie
+  heute schon `[core_rules.txt:2322]` in `aufstellen.md`. Stabil ist ein Link je
+  *Anforderung* auf ihre Testdatei, denn die Datei folgt aus T1. Beispiel unter `### AUF-1`:
+  `Tests: [auf1Test.py](../../../technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py)`.
+  Ein Link je *Kriterium* auf die Zeile des Tests veraltet dagegen mit jeder Änderung am Test.
+- Test → Anforderung: In Python-Dateien macht VS Code keinen relativen Pfad klickbar, nur
+  Webadressen. Zurück bleibt der Befehl (Weg B) oder Strg+P und der Dateiname.
 
-**F1 · Behalten oder löschen?**
-- A: behalten, der Klick springt in beide Richtungen. Dann bekommt der Regelumsetzer von mir
-  ein Anliegen: eslint für `sprung/` und ein Test, der den Link-Anbieter prüft (so wie meine
-  Probe oben, nur dauerhaft).
-- B: löschen, der Klick springt nicht oder Weg B reicht dir. Dann bekommt der Regelumsetzer
-  ein Anliegen: `sprung/` und `sprungTest.py` löschen.
-Empfehlung: A; du wolltest C ausdrücklich, und die Links stimmen. Springt der Klick nicht,
-schreib hinter `Antwort:` B und bei welchem Schritt (1 bis 4) es hakt.
+**Kosten.** Option A unten: ein Link je Anforderung, heute drei; der Anforderungsautor setzt
+ihn beim Schreiben, `rueckverfolgung.py` prüft, dass er auf die Testdatei nach T1 zeigt (der
+Regelumsetzer, klein); ich ändere T2. Der Link zeigt ins Leere, bis der Testautor die Datei
+anlegt; das meldet die Prüfung heute schon als „fehlt“, sobald ein Item die Anforderung
+nennt. Die Erweiterung fällt in beiden Fällen weg: Sie braucht ein eigenes Fenster oder ein
+Installationspaket, das nach jeder Änderung neu gebaut werden müsste.
+
+**Gegenvorschlag.** Erweiterung löschen, Links je Anforderung einführen.
+
+**F1 · Welcher Sprung?**
+- A: Link je Anforderung auf ihre Testdatei, geprüft; zurück per Befehl. Anliegen von mir an
+  den Anforderungsautor (Links), an den Regelumsetzer (Prüfung, `sprung/` und
+  `sprungTest.py` löschen); T2 ändere ich.
+- B: nur der Befehl. Anliegen an den Regelumsetzer: `sprung/` und `sprungTest.py` löschen.
+Empfehlung: A; das ist der Sprung, den du gemeint hast, soweit ein Link ihn stabil leisten
+kann. Willst du den Link je Kriterium auf die Zeile trotzdem, schreib es dazu; dann müsste
+ein Prüfskript die Zeilennummern bei jedem Lauf nachziehen.
 Antwort: .
-
-Stellungnahme: Das zweite Fenster öffnet sich nicht. Beim Versuch die Datei in dem zweiten Fenster zu öffnen schaltet mich auf das erste VS Code Fenster zurück ohne in eine Datei zu springen. Es funktioniert damit nicht!
