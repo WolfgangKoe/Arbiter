@@ -1,6 +1,6 @@
 # AUF-1: Die Werte der Aufstellungszone sind nicht benannt
 
-43 · Kritik · von Implementierer (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+43 · Kritik · von Implementierer (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** AUF-1 und das Glossar kennen zwei *Aufstellungszonen*, aber keine Namen. Die Tests
@@ -14,6 +14,6 @@ bestätigen, dass `nord`/`süd` vorläufig reichen.
 
 **Stellungnahme.** Befund stimmt: Die Regel nennt keine Namen, die Mission zeigt die Zonen nur
 als Bild (`core_rules.txt:2182`, `:2322`); auch `nord`/`süd` als vorläufig zu bestätigen wäre
-erfunden. Die Frage steht als F1 in [58](58-namenDerAufstellungszonen.md), Empfehlung dort:
-Nord und Süd. Bis zur Antwort bleibt der Status offen; danach trage ich die Namen ins Glossar
-ein und setze angenommen.
+erfunden. Der Stakeholder hat in [58](58-namenDerAufstellungszonen.md) entschieden: keine
+Namen, die Zonen gibt die Mission vor, und Only War benennt sie nicht. Glossar und Kriterien
+bleiben ohne Namen. Die Folge für den Code steht in [63](63-zonenOhneErfundeneNamen.md).
