@@ -64,9 +64,9 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    Test (`rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
    Stand), Höchstmaße (`hoechstmassTest.py`), Komplexität (`komplexitaetTest.py`), Code →
-   Glossar (`glossar.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
-   über `konfigurationTest.py`. Nur Text: toter Code, Kommentare nach
-   `prozess/praemissen/wir.md`. Glossar → Code ist Urteil.
+   Glossar (`glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
+   (`kommentare.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
+   über `konfigurationTest.py`. Nur Text: toter Code. Glossar → Code ist Urteil.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.

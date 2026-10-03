@@ -8,7 +8,7 @@ Gilt für jeden Code: Produkt (Python und Frontend), Tests, Prüfskripte in
 Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
 
 1. Funktionen, Methoden, Variablen, Parameter und Fixtures in camelCase
-   (`einheitInAufstellungWählen`), Klassen in PascalCase (`Aufstellungszone`).
+   (`einheitInAufstellungWählen`), Klassen und Typaliase in PascalCase (`Aufstellungszone`).
    Mechanismus: `benennung.py`.
 2. Dateinamen in camelCase, ASCII. Bestehende Dateien, die ohnehin gelöscht werden (Etappen,
    Items, Anliegen), werden nicht umbenannt; Anforderungsdateien schon. Mechanismus: `benennung.py`.
@@ -27,7 +27,8 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
    Standardargument (`lambda e=einheit: …`). Mechanismus: nur Text.
 8. Kommentare nur einzeilig als `# Regel: <Fundstelle>` (nicht offensichtlicher
    Regel-Sonderfall) oder `# Warum: …` (nicht offensichtliche technische Entscheidung);
-   Docstrings höchstens einzeilig; kein TODO, FIXME oder Prozessverweis. Mechanismus: nur Text.
+   Docstrings höchstens einzeilig; kein TODO, FIXME oder Prozessverweis. Mechanismus:
+   `kommentare.py` (Python: Form, einzeilig, TODO und FIXME); Prozessverweis: nur Text.
 9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele,
    die sich nur in Daten unterscheiden, als Tabelle oder Katalogdaten; viele mit eigenem
    Verhalten als eigene Typen. Es urteilt der Reviewer. Mechanismus: nur Text; die Schwellen

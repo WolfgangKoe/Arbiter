@@ -29,3 +29,8 @@ geprüfte Regel als Urteil; Kritiker prüfen von Hand, was schon automatisch rot
 
 Erledigt, wenn wir.md 5 und 8 und DoD 2 den Mechanismen entsprechen und die Ausnahme in 1
 vom Stakeholder entschieden ist.
+
+**Stellungnahme.** 2 und 3 umgesetzt: wir.md 1 nennt Typaliase, wir.md 8 und DoD 2 nennen
+`kommentare.py`; nur Text bleiben toter Code und der Prozessverweis, den `kommentare.py` nicht
+prüft. Zu 1: Frage an den Stakeholder in [135](135-koordinatenXundYAlsAusnahme.md); wir.md 5
+folgt seiner Antwort. Wartet auf 135.
