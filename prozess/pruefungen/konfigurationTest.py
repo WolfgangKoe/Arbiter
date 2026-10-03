@@ -16,7 +16,7 @@ def pyproject() -> dict:
     return tomllib.loads((wurzel / "pyproject.toml").read_text(encoding="utf-8"))
 
 
-def testRuffEnthältDenWerkzeugsatzAusE37():
+def testRuffEnthältDenWerkzeugsatzAusDemAblauf():
     ausgewählt = pyproject()["tool"]["ruff"]["lint"]["select"]
     for regel in ("ARG", "PLR2004", "PLR0913", "FBT", "ERA"):
         assert regel in ausgewählt

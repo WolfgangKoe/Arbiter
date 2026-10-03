@@ -1,6 +1,6 @@
 # Ruff-Test nennt E37 statt des Ablaufs
 
-89 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+89 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: `prozess/pruefungen/konfigurationTest.py`, Folge von Anliegen 85.
@@ -18,3 +18,4 @@ Regel nachschlagen will, landet in git.
 mehr findet.
 
 **Stellungnahme.**
+Angenommen. Der Test heißt `testRuffEnthältDenWerkzeugsatzAusDemAblauf`; `git grep E37 -- prozess` findet nichts mehr.
