@@ -1,7 +1,13 @@
+from dataclasses import dataclass
 from enum import Enum
+from fractions import Fraction
 
+from arbiter.domaene import messen
 from arbiter.domaene.sperre import Grund, Sperre
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Spielfeld, Stelle
+
+# Regel: Nahkampfreichweite ist ein Abstand von höchstens 1″ (domaene/glossar.md)
+_nahkampfreichweite = Fraction(1)
 
 
 class Aufstellungszone(Enum):
@@ -9,16 +15,27 @@ class Aufstellungszone(Enum):
     zweite = 2
 
 
+@dataclass(frozen=True, eq=False)
+class Ausgangslage:
+    ersterSpieler: Spieler
+    zweiterSpieler: Spieler
+    spielfeld: Spielfeld
+    # Warum: Tiefe der ersten und der zweiten Aufstellungszone, in der Reihenfolge der Zonen
+    tiefen: tuple[Fraction, Fraction]
+
+
 class Aufstellung:
-    def __init__(self, ersterSpieler: Spieler, zweiterSpieler: Spieler) -> None:
+    def __init__(self, ausgangslage: Ausgangslage) -> None:
+        ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
         if ersterSpieler is zweiterSpieler:
             raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
+        self._ausgangslage = ausgangslage
         self._spieler = (ersterSpieler, zweiterSpieler)
         self._gewinner: Spieler | None = None
         self._einheitInAufstellung: Einheit | None = None
         self._anDerReihe: Spieler | None = None
         self._zoneDesGewinners: Aufstellungszone | None = None
-        self._gesetzt: set[Modell] = set()
+        self._stellen: dict[Modell, Stelle] = {}
         self._aufgestellt: set[Einheit] = set()
 
     @property
@@ -38,7 +55,10 @@ class Aufstellung:
         return self._zoneDesGewinners is not None and self._anDerReihe is None
 
     def gesetzt(self, modell: Modell) -> bool:
-        return modell in self._gesetzt
+        return modell in self._stellen
+
+    def stelle(self, modell: Modell) -> Stelle | None:
+        return self._stellen.get(modell)
 
     def aufgestellt(self, einheit: Einheit) -> bool:
         return einheit in self._aufgestellt
@@ -75,11 +95,14 @@ class Aufstellung:
             raise Sperre(Grund.einheitBegonnen)
         self._einheitInAufstellung = einheit
 
-    def modellSetzen(self, modell: Modell) -> None:
+    def modellSetzen(self, modell: Modell, stelle: Stelle) -> None:
         einheit = self._einheitInAufstellung
         if einheit is None or modell not in einheit.modelle:
             raise Sperre(Grund.nichtInAufstellung)
-        self._gesetzt.add(modell)
+        gründe = self._gründeGegenDieStelle(modell, stelle)
+        if gründe:
+            raise Sperre(*gründe)
+        self._stellen[modell] = stelle
 
     def aufstellenDerEinheitBeenden(self) -> None:
         einheit = self._einheitInAufstellung
@@ -90,6 +113,36 @@ class Aufstellung:
         self._aufgestellt.add(einheit)
         self._einheitInAufstellung = None
         self._anDerReihe = self._nächsterAnDerReihe(spieler)
+
+    def _gründeGegenDieStelle(self, modell: Modell, stelle: Stelle) -> set[Grund]:
+        spieler = self._anDerReihe
+        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        gründe = set()
+        _, länge = self._ausgangslage.spielfeld.seitenlängen
+        zone = self.aufstellungszone(spieler)
+        assert zone is not None  # Warum: Wer an der Reihe ist, hat die Zone nach der Zonenwahl.
+        if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), länge):
+            gründe.add(Grund.nichtGanzInDerZone)
+        for anderes, andereStelle in self._stellen.items():
+            if anderes is modell:
+                continue
+            if messen.überdecken(modell.base, stelle, anderes.base, andereStelle):
+                gründe.add(Grund.baseÜberdeckt)
+            if anderes not in self._modelleVon(spieler) and messen.abstandHöchstens(
+                modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
+            ):
+                gründe.add(Grund.nahkampfreichweite)
+        return gründe
+
+    def _modelleVon(self, spieler: Spieler) -> set[Modell]:
+        return {modell for einheit in spieler.armee.einheiten for modell in einheit.modelle}
+
+    def _grenzenInX(self, zone: Aufstellungszone) -> tuple[Fraction, Fraction]:
+        breite, _ = self._ausgangslage.spielfeld.seitenlängen
+        tiefe = self._ausgangslage.tiefen[list(Aufstellungszone).index(zone)]
+        if zone is Aufstellungszone.erste:
+            return Fraction(0), tiefe
+        return breite - tiefe, breite
 
     def _begonnen(self, einheit: Einheit) -> bool:
         return any(self.gesetzt(modell) for modell in einheit.modelle)

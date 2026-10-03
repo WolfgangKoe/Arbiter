@@ -1,22 +1,32 @@
+from fractions import Fraction
+
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
-from arbiter.domaene.spielobjekte import Armee, Einheit, Modell, Spieler
+from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
+from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld
 
 
 def spielerMitEinerEinheit() -> Spieler:
-    return Spieler(armee=Armee(einheiten=(Einheit(modelle=(Modell(),)),)))
+    modell = Modell(base=Base(durchmesser=32))
+    return Spieler(armee=Armee(einheiten=(Einheit(modelle=(modell,)),)))
+
+
+def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
+    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
+    return Aufstellung(
+        Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, (Fraction(9), Fraction(9)))
+    )
 
 
 def testDerselbeSpielerAlsBeideSpielerIstEineVorbedingungsverletzung():
     spieler = spielerMitEinerEinheit()
 
     with pytest.raises(ValueError):
-        Aufstellung(spieler, spieler)
+        aufstellungVon(spieler, spieler)
 
 
 def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
-    aufstellung = Aufstellung(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+    aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
 
     with pytest.raises(ValueError):
         aufstellung.gewinnerWählen(spielerMitEinerEinheit())
@@ -25,7 +35,7 @@ def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
 
 
 def testDieAufstellungszoneEinesFremdenSpielersIstEineVorbedingungsverletzung():
-    aufstellung = Aufstellung(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+    aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
 
     with pytest.raises(ValueError):
         aufstellung.aufstellungszone(spielerMitEinerEinheit())
@@ -34,7 +44,7 @@ def testDieAufstellungszoneEinesFremdenSpielersIstEineVorbedingungsverletzung():
 def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
     gewinner = spielerMitEinerEinheit()
     ohneEinheit = Spieler(armee=Armee())
-    aufstellung = Aufstellung(gewinner, ohneEinheit)
+    aufstellung = aufstellungVon(gewinner, ohneEinheit)
 
     aufstellung.gewinnerWählen(gewinner)
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)

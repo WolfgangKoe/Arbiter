@@ -4,11 +4,11 @@ from dataclasses import replace
 from fractions import Fraction
 
 import pytest
-from arbiter.katalog.ausgangslage import ausgangslageLaden
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Stelle
+from arbiter.katalog.ausgangslage import ausgangslageLaden
 
 # Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
