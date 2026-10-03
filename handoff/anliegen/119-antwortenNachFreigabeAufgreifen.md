@@ -1,6 +1,6 @@
 # Antworten des Stakeholders nach der Freigabe aufgreifen
 
-119 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+119 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [83](83-sprungErproben.md) blieb nach `Freigabe Plan 2` liegen: Der Stakeholder
@@ -31,5 +31,5 @@ die Freigabe beantwortet; dran ist der Absender. Das deckt auch eine Zeile `Antw
 mehr als „.“, denn die Freigabe beantwortet jede Frage der Vorlage; vor der Freigabe bleibt
 der Stakeholder dran. `eskaliert` bleibt bei ihm: Mit seiner Entscheidung setzt er den Kopf
 selbst (nur er darf `eskaliert` ändern), bis dahin nennt ihn der Stand zu Recht.
-Den Mechanismus mit Scheiter-Tests baut der Regelumsetzer: wartet auf
-[121](121-absenderNachFreigabeDran.md).
+Umgesetzt mit [121](121-absenderNachFreigabeDran.md) (89364ab): `anliegen.py` (`wartetAuf`),
+`gitAufruf.py` (`seitFreigabeUnverändert`), Fälle in `anliegenTest.py`.

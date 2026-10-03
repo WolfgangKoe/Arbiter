@@ -171,7 +171,8 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   `erledigt` selbst ein. Mechanismus: `stand.py`.
 - Ein Anliegen an den Stakeholder mit Status `offen`, das seit der letzten Freigabe
   unverändert ist, hat die Freigabe beantwortet: Dran ist der Absender, er setzt
-  `beantwortet` und arbeitet die Antworten ein. Mechanismus: nur Text bis Anliegen 121.
+  `beantwortet` und arbeitet die Antworten ein. Mechanismus: `anliegen.py` (`wartetAuf`),
+  `gitAufruf.py` (`seitFreigabeUnverändert`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `statusrecht.py` nicht, das Löschen schon. Mechanismus: nur Text.
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
@@ -187,8 +188,7 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
 ## Budget
 Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und
 jede Rolle; der Stand zeigt sie. Die Zahl der Rollenläufe ist weder Budget noch Kennzahl.
-Mechanismus: `belegung.py`; dass der Stand keine Rollenläufe mehr nennt: nur Text bis
-Anliegen 120.
+Mechanismus: `belegung.py`; der Stand nennt keine Rollenläufe (`standTest.py`).
 - Ab 120.000 Token meldet ein Hook; die Rolle beginnt nichts Neues und schließt ab, der
   Koordinator empfiehlt einen neuen Chat.
 - Ab 150.000 Token sperrt ein Hook alles außer Schreiben im eigenen Pfad und der
