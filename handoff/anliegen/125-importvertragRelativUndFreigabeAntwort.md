@@ -1,6 +1,6 @@
 # Importvertrag lässt relative Ausbrüche durch, Freigabe-Antwort kippt bei jeder Änderung
 
-125 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+125 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 89364ab und 1b2a3f9 (Kritik am Code).
@@ -51,3 +51,7 @@ doppelte Pflege, Regelbruch, Wortlaut weicht ab.
    der Ordner existiert.
 5. Docstrings einzeilig, Rest in den Namen; „Anliegen an den Stakeholder“ wie im Ablauf.
 6. Nach Ermessen.
+
+**Stellungnahme.** Alle sechs Punkte umgesetzt, Scheiter-Tests in `importvertragTest.py`
+und `anliegenTest.py`; Einträge in `prozess/regeln.md`. Zu 2: Die Regel in `ablauf.md` ist
+enger als „unverändert“ (gleiche Runde); der Organisationsentwickler passt den Wortlaut an.

@@ -1,11 +1,12 @@
 import pytest
 
 from agenten import projektordner
-from importvertrag import domaeneOrdner, verstöße
+from glossar import domaeneOrdner
+from importvertrag import verstöße
 
 
-def domänendatei(tmp_path, text):
-    datei = tmp_path / domaeneOrdner / "phasen" / "probe.py"
+def domänendatei(tmp_path, text, name="phasen/probe.py"):
+    datei = tmp_path / domaeneOrdner / name
     datei.parent.mkdir(parents=True)
     datei.write_text(text, encoding="utf-8")
 
@@ -27,6 +28,20 @@ def testImportAußerhalbVonStandardbibliothekUndDomäneIstRot(tmp_path, text):
 
 
 @pytest.mark.parametrize(
+    "name, text",
+    [
+        ("sperre.py", "from ..katalog import ausgangslage\n"),
+        ("sperre.py", "from .. import katalog\n"),
+        ("sperre.py", "from ... import x\n"),
+        ("phasen/probe.py", "from ...katalog.ausgangslage import ausgangslageLaden\n"),
+    ],
+)
+def testRelativerImportAusDerDomäneHinausIstRot(tmp_path, name, text):
+    domänendatei(tmp_path, text, name)
+    assert verstöße(tmp_path)
+
+
+@pytest.mark.parametrize(
     "text",
     [
         "from fractions import Fraction\n",
@@ -43,4 +58,5 @@ def testStandardbibliothekUndDomäneSindGrün(tmp_path, text):
 
 
 def testDieDomäneDesReposHältDenVertrag():
+    assert (projektordner() / domaeneOrdner).is_dir()
     assert verstöße(projektordner()) == []

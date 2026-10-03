@@ -5,7 +5,7 @@ from pathlib import Path
 
 from agenten import projektordner
 from anliegen import Anliegen, gelesene, wartetAuf
-from gitAufruf import gitAusgabe
+from gitAufruf import gitAusgabe, letzteFreigabe
 
 
 def alterInTagen(wurzel: Path, anliegen: Anliegen, heute: date) -> int:
@@ -21,8 +21,9 @@ def alterInTagen(wurzel: Path, anliegen: Anliegen, heute: date) -> int:
 def offeneAnliegenJeRolle(wurzel: Path, heute: date) -> dict[str, list[tuple[int, int]]]:
     """Rolle → (Nummer, Alter in Tagen) der Anliegen, bei denen sie dran ist."""
     jeRolle: dict[str, list[tuple[int, int]]] = {}
+    freigabe = letzteFreigabe(wurzel)
     for anliegen in gelesene(wurzel):
-        rolle = wartetAuf(wurzel, anliegen)
+        rolle = wartetAuf(wurzel, anliegen, freigabe)
         if rolle:
             jeRolle.setdefault(rolle, []).append(
                 (anliegen.nummer, alterInTagen(wurzel, anliegen, heute))
@@ -31,8 +32,7 @@ def offeneAnliegenJeRolle(wurzel: Path, heute: date) -> dict[str, list[tuple[int
 
 
 def kennzahlen(wurzel: Path, heute: date) -> str:
-    zeilen = []
-    zeilen.append("Offene Anliegen je Rolle, die dran ist (Nummer, Alter in Tagen)")
+    zeilen = ["Offene Anliegen je Rolle, die dran ist (Nummer, Alter in Tagen)"]
     for rolle, anliegen in sorted(offeneAnliegenJeRolle(wurzel, heute).items()):
         liste = ", ".join(f"{nummer:02d} ({alter} T)" for nummer, alter in sorted(anliegen))
         zeilen.append(f"- {rolle}: {len(anliegen)}: {liste}")

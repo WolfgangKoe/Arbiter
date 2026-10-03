@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from agenten import rollennamen
-from gitAufruf import gitAusgabe, seitFreigabeUnverändert
+from gitAufruf import dateiBeiCommit, gitAusgabe, letzteFreigabe
 
 statusWerte = ("offen", "angenommen", "abgelehnt", "beantwortet", "eskaliert", "erledigt")
 typWerte = ("Kritik", "Fragen", "Anliegen")
@@ -127,13 +127,18 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
     return "Nachprüfung fällig: " + ", ".join(teile)
 
 
-def wartetAuf(wurzel: Path, anliegen: Anliegen) -> str | None:
-    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`; Fragen an den
-    Stakeholder, die seit der letzten Freigabe unverändert sind, hat die Freigabe beantwortet."""
+def beantwortetDurchFreigabe(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> bool:
+    """Ein Anliegen an den Stakeholder, das in der Freigabe schon so offen war (gleiche Runde)."""
+    if freigabe is None or anliegen.empfänger != stakeholder or anliegen.status != "offen":
+        return False
+    damals = kopfAusText(dateiBeiCommit(wurzel, freigabe, anliegen.datei), anliegen.datei)
+    return damals is not None and (damals.status, damals.runde) == ("offen", anliegen.runde)
+
+
+def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | None:
+    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`."""
     if anliegen.status == "offen":
-        beantwortet = anliegen.empfänger == stakeholder and seitFreigabeUnverändert(
-            wurzel, anliegen.datei
-        )
+        beantwortet = beantwortetDurchFreigabe(wurzel, anliegen, freigabe)
         return anliegen.absender if beantwortet else anliegen.empfänger
     if anliegen.status in ("angenommen", "abgelehnt", "beantwortet"):
         return anliegen.absender
@@ -145,8 +150,9 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen) -> str | None:
 def dran(wurzel: Path) -> dict[str, list[int]]:
     """Offene Anliegen je Rolle, die dran ist; `angenommen` steht bei `nachprüfungen`."""
     zuständig: dict[str, list[int]] = {}
+    freigabe = letzteFreigabe(wurzel)
     for anliegen in gelesene(wurzel):
-        rolle = wartetAuf(wurzel, anliegen)
+        rolle = wartetAuf(wurzel, anliegen, freigabe)
         if rolle and anliegen.status != "angenommen":
             zuständig.setdefault(rolle, []).append(anliegen.nummer)
     return zuständig

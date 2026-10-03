@@ -1,24 +1,38 @@
-"""Importvertrag A1 und A2 (`technik/architektur.md`): die Domäne importiert nur die
-Standardbibliothek und sich selbst."""
+"""Importvertrag A1 und A2 (`technik/architektur.md`): die Domäne importiert nur sich selbst."""
 
 import ast
 import sys
 from pathlib import Path
 
 from agenten import projektordner
+from glossar import domaeneOrdner
 
-domaeneOrdner = "technik/arbiter/domaene"
 eigenesPaket = "arbiter.domaene"
 
 
-def importierteModule(baum: ast.AST) -> list[tuple[str, int]]:
-    """Absolute Modulnamen mit Zeile; relative Importe bleiben im Paket und fehlen hier."""
+def paketDerDatei(datei: Path, wurzel: Path) -> list[str]:
+    """Das Paket, in dem die Datei liegt, aus ihrem Pfad unter `technik/`."""
+    return list(datei.parent.relative_to(wurzel / "technik").parts)
+
+
+def aufgelöst(knoten: ast.ImportFrom, paket: list[str]) -> str | None:
+    """Der absolute Modulname eines `from`-Imports; `None`, wenn er über das Paket hinausführt."""
+    if knoten.level == 0:
+        return knoten.module
+    if knoten.level > len(paket):
+        return None
+    ziel = paket[: len(paket) - (knoten.level - 1)]
+    return ".".join([*ziel, *([knoten.module] if knoten.module else [])])
+
+
+def importierteModule(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
+    """Absolute Modulnamen mit Zeile; ein Import über das Paket hinaus heißt `?`."""
     module = []
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Import):
             module += [(alias.name, knoten.lineno) for alias in knoten.names]
-        elif isinstance(knoten, ast.ImportFrom) and knoten.level == 0 and knoten.module:
-            module.append((knoten.module, knoten.lineno))
+        elif isinstance(knoten, ast.ImportFrom):
+            module.append((aufgelöst(knoten, paket) or "?", knoten.lineno))
     return module
 
 
@@ -32,7 +46,7 @@ def verstöße(wurzel: Path) -> list[str]:
     gefunden = []
     for datei in sorted((wurzel / domaeneOrdner).rglob("*.py")):
         baum = ast.parse(datei.read_text(encoding="utf-8"))
-        for modul, zeile in importierteModule(baum):
+        for modul, zeile in importierteModule(baum, paketDerDatei(datei, wurzel)):
             if not erlaubt(modul):
                 pfad = datei.relative_to(wurzel)
                 gefunden.append(

@@ -86,8 +86,9 @@ def testDerSuchpfadEnthältDasProduktAberNichtDiePrüfskripte():
 
 
 def testPyYamlIstLaufzeitAbhängigkeitMitFesterMinorVersion():
-    abhängigkeiten = pyproject().get("project", {}).get("dependencies", [])
+    konfiguration = pyproject()
+    abhängigkeiten = konfiguration.get("project", {}).get("dependencies", [])
     assert any(re.fullmatch(r"PyYAML==\d+\.\d+\.\*", eintrag) for eintrag in abhängigkeiten)
     assert not any(
-        "PyYAML" in eintrag for eintrag in pyproject()["dependency-groups"]["entwicklung"]
+        "PyYAML" in eintrag for eintrag in konfiguration["dependency-groups"]["entwicklung"]
     )

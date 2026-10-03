@@ -158,13 +158,24 @@ def testFragenImFreigabeCommitSindBeimAbsenderDran(tmp_path):
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
-def testFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path):
+def testNeueRundeNachDerFreigabeIstBeimStakeholderDran(tmp_path):
     datei = stakeholderFragen(tmp_path)
     committen(tmp_path, "Freigabe Plan 2")
-    datei.write_text(datei.read_text(encoding="utf-8") + "neu\n", encoding="utf-8")
+    datei.write_text(
+        datei.read_text(encoding="utf-8").replace("Runde 1/3", "Runde 2/3"), encoding="utf-8"
+    )
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
     committen(tmp_path, "Nachgefragt")
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
+
+
+def testNotizOderLinkersatzNachDerFreigabeÄndertNichtsAmDran(tmp_path):
+    datei = stakeholderFragen(tmp_path)
+    committen(tmp_path, "Freigabe Plan 2")
+    datei.write_text(datei.read_text(encoding="utf-8") + "Notiz\n", encoding="utf-8")
+    assert dranBei(tmp_path) == {"Planer": [12]}
+    committen(tmp_path, "Link ersetzt")
+    assert dranBei(tmp_path) == {"Planer": [12]}
 
 
 def testNeueFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path):

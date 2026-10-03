@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from gitAufruf import gitAusgabe
+from gitAufruf import gitAusgabe, letzteFreigabe
 
 kritikerJePfad = (
     ("technik/tests/akzeptanz/", ("Fachkritiker", "Architekt")),
@@ -33,13 +33,10 @@ def geprüfteHashes(betreff: str) -> set[str]:
 
 def commitsSeitDerFreigabe(wurzel: Path) -> list[tuple[str, str]]:
     """Kennung und Betreff, älteste zuerst, ab dem Commit nach der letzten Freigabe."""
-    commits = []
-    for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
-        kennung, _, betreff = zeile.partition(" ")
-        if betreff.startswith("Freigabe "):
-            break
-        commits.append((kennung, betreff))
-    return commits[::-1]
+    freigabe = letzteFreigabe(wurzel)
+    bereich = [f"{freigabe}..HEAD"] if freigabe else []
+    zeilen = gitAusgabe(wurzel, "log", "--format=%H %s", *bereich).splitlines()
+    return [tuple(zeile.split(" ", 1)) for zeile in zeilen][::-1]
 
 
 def ersteFälligeKritik(wurzel: Path) -> tuple[str, str] | None:
