@@ -70,11 +70,13 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   `domaene/anforderungen/phasen/aufstellen.md` → `tests/akzeptanz/phasen/aufstellen/auf1Test.py`.
   Hat die Anforderungsdatei nur eine Anforderung, genügt `tests/akzeptanz/phasen/aufstellenTest.py`.
   Höchstmaß: `prozess/kennzahlen.md`; darüber wird die Anforderung geteilt, nicht der Test.
-  Prüft: `rueckverfolgung.py`, `benennung.py`, bisher nur die Form `<pfad>Test.py`;
-  Teilung und Höchstmaß: [Anliegen 52](../handoff/anliegen/52-akzeptanztestJeAnforderung.md).
+  Prüft: `rueckverfolgung.py` (ab der zweiten Anforderung ist `<pfad>Test.py` rot, ebenso
+  ein Test in der Datei einer fremden Anforderung), `benennung.py`, `hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
-  Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur-Befehl und
-  VS-Code-Versuch: [Anliegen 53](../handoff/anliegen/53-spurKriteriumTest.md).
+  Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur:
+  `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (auch Testname oder `pfad:zeile`).
+  VS-Code-Versuch `prozess/pruefungen/sprung/`, Klick unerprobt:
+  [Anliegen 83](../handoff/anliegen/83-sprungErproben.md).
 - `tests/einheit/` spiegelt `arbiter/`: `tests/einheit/domaene/phasen/aufstellenTest.py`
   zu `arbiter/domaene/phasen/aufstellen.py` (Name offen:
   [Anliegen 28](../handoff/anliegen/28-benennungOffenePunkte.md)). Jeder Ordner dort hat eine `__init__.py`; sonst
