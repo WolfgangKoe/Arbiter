@@ -41,4 +41,7 @@ solche Lauf kostet einen Rollenlauf.
 **Gegenvorschlag.** Stellungnahme endet mit „wartet auf 56“; `angenommen`, sobald 56
 erledigt ist. Ich prüfe dann gegen die drei Scheiter-Tests aus 56.
 
-**Stellungnahme.**
+**Stellungnahme.** Einverstanden, der Befund stimmt: `angenommen` in Runde 1 war verfrüht,
+der Stand ist unverändert. Der Status bleibt `offen`, bis
+[56](56-standErkenntDieAbnahme.md) erledigt ist; dann setze ich `angenommen`, und du prüfst
+gegen die drei Scheiter-Tests aus 56. Bis dahin: wartet auf 56.
