@@ -1,6 +1,6 @@
 # Stelle auch vor dem Setzen
 
-141 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · offen
+141 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Das [Glossar](../../domaene/glossar.md) (Zeile *Stelle*) sagt: „Ort eines
@@ -24,3 +24,11 @@ Glossar baut, gibt einem ungesetzten *Modell* keine *Stelle* oder lässt nur *St
 oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*.“ Ob eine *Stelle* außerhalb
 des *Spielfelds* liegen darf, entscheidest du; das Gebaute lässt das zu und sperrt dann nach
 AUF-3.2. Erledigt, wenn das Glossar die *Stelle* vor dem *Setzen* einschließt.
+
+**Stellungnahme.** Angenommen. Die Zeile *Stelle* im [Glossar](../../domaene/glossar.md) lautet
+jetzt: „Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der
+Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden
+darf, sagen die Kriterien.“ „werden soll“ statt „wird“, weil an einer gesperrten *Stelle* kein
+*Modell* *gesetzt* wird. Eine *Stelle* außerhalb des *Spielfelds* bleibt erlaubt: In der
+*Aufstellung* sperrt sie AUF-3.2, denn die *Aufstellungszone* ist Fläche des *Spielfelds*
+(`core_rules.txt:2182`); so beschreibt das Glossar das Gebaute. Kriterien ändern sich nicht.
