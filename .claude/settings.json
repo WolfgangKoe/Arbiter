@@ -68,11 +68,13 @@
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/belegung.py\"", "timeout": 10}]},
       {"matcher": "Write|Edit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schreibgrenze.py\"", "timeout": 10}]},
       {"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/statusrecht.py\"", "timeout": 10}]},
+      {"matcher": "Write", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/anliegennummer.py\"", "timeout": 10}]},
       {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/bashPositivliste.py\"", "timeout": 10}]},
       {"matcher": "SubagentHandback", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/schlussantwort.py\"", "timeout": 10}]},
       {"matcher": "Read", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/lesegrenze.py\"", "timeout": 10}]}
     ],
     "PostToolUse": [
+      {"matcher": "Agent", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/stand.py\"", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/belegung.py\"", "timeout": 10}]}
     ],
     "SubagentStart": [
