@@ -1,0 +1,16 @@
+# Kennzahlen und Höchstmaße
+
+## Kennzahlen
+Jede Kennzahl nennt Bedeutung, Schwelle und Reaktion. Über der Schwelle ist sie ein Befund
+für die Retro. Mechanismus: nur Text.
+- Rollenläufe je Phase (`rollenzaehler.py`, im Stand): Domäne 8, Technik 10, Prozess 5.
+
+## Höchstmaße
+In Zeichen. Geprüft (`hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,
+Root- und Ordner-CLAUDE.md, Anliegen. Nur Text: Plan, Review, Retro je 4.000; Anforderung,
+Item, Glossarzeile (`domaene/CLAUDE.md`); `technik/architektur.md` 6.000.
+
+Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß sperrt die Prüfung, daraus
+wird ein Item bis zum Kürzungsmaß; bis dahin wächst die Datei nicht. Kürzen heißt aufteilen,
+weil Read die ganze Datei lädt. Code-Modul, Einheits- und Akzeptanztest-Datei 12.000/8.000,
+Anforderungsdatei 12.000/8.000, Backlog je Perspektive 3.000/2.000. Mechanismus: nur Text.

@@ -14,7 +14,8 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
   Kopf, Status und wer dann dran ist: `prozess/ablauf.md` (Anliegen).
 - Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`,
   nicht in der Schlussantwort. Die Schlussantwort einer Rolle nennt nur Pfade und Status; der
-  Koordinator reicht Pfade weiter, keine Inhalte. Mechanismus:
+  Koordinator reicht Pfade weiter, keine Inhalte; er liest Dateien bis 4.000 Zeichen,
+  `git show` nur mit `--stat`. Mechanismus:
   `prozess/pruefungen/schlussantwort.py`, `lesegrenze.py`.
 - Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
 - Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
@@ -27,5 +28,8 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
 Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask noch die
 Datenbank. Akzeptanztests entstehen vor dem Code.
 
-## Übergang
-Entscheidungen aus dem Aufbau stehen in `VORGEHEN.md`, bis sie an ihren Ort überführt sind.
+## Nur lesbar
+`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter/` und `ArbiterMap/` sind für alle
+Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `schreibgrenze.py`,
+`bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
+[Anliegen 38](handoff/anliegen/38-vorgehenAufloesen.md).

@@ -9,16 +9,18 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
 
 1. Funktionen, Methoden, Variablen, Parameter und Fixtures in camelCase
    (`einheitInAufstellungWählen`), Klassen in PascalCase (`Aufstellungszone`).
-   Mechanismus: nur Text.
+   Mechanismus: `benennung.py`.
 2. Dateinamen in camelCase, ASCII. Bestehende Dateien, die ohnehin gelöscht werden (Etappen,
-   Items, Anliegen), werden nicht umbenannt; Anforderungsdateien schon. Mechanismus: nur Text.
+   Items, Anliegen), werden nicht umbenannt; Anforderungsdateien schon. Mechanismus: `benennung.py`.
 3. Der Akzeptanztest zu einer Anforderungsdatei `<anforderung>.md` heißt
    `<anforderung>Test.py`, im gespiegelten Ordner: `domaene/anforderungen/phasen/aufstellen.md`
-   → `technik/tests/akzeptanz/phasen/aufstellenTest.py`. Mechanismus: nur Text.
+   → `technik/tests/akzeptanz/phasen/aufstellenTest.py`. Mechanismus: `benennung.py`,
+   `rueckverfolgung.py`.
 4. Testfunktionen heißen `test<Kürzel><n>_<m><Satz>`, Kriterium AUF-1.4:
-   `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`. Mechanismus: nur Text.
+   `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`. Mechanismus: `benennung.py`,
+   `rueckverfolgung.py`.
 5. Selbst definierte Namen haben mindestens 3 Zeichen; keine einbuchstabigen Namen.
-   Mechanismus: nur Text.
+   Mechanismus: `benennung.py`.
 6. Keine Indizes auf Fachobjekte (`einheiten[0]`): benennen oder entpacken.
    Mechanismus: nur Text.
 7. Keine lambda-Tricks: kein lambda als Hülle um einen Aufruf, keine Bindung per

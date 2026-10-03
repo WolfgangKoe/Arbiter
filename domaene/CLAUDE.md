@@ -22,4 +22,4 @@ Quellen, nur lesen: Regeltexte in `ArbiterMap/reference/rules/` (Fundstelle
 `ArbiterMap/docs/spec/domain_rules.md`) zeigen die Absicht des Stakeholders; das Ziel geht
 vor, ein Widerspruch wird eine Frage.
 
-Höchstmaße: nur Text, bis eine Prüfung sie sperrt.
+Höchstmaße: nur Text, Etappen `hoechstmassTest.py`.
