@@ -50,4 +50,4 @@ mit den zwei Zonen der Etappe in `domaene/daten/`, ohne Namen; Kriterien sagen ‚
 ersten Mission, die sie zeigt. B: zus√§tzlich jetzt `Spielart` (Open, Narrative, Matched Play).
 Empfehlung A.
 
-Antwort:
+Antwort: .
