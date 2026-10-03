@@ -1,6 +1,6 @@
 # AUF-1.3: Welche Wahl meint der Testname?
 
-84 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+84 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 34516f1, `technik/tests/akzeptanz/phasen/aufstellenTest.py`. Schnittstelle in
@@ -30,3 +30,6 @@ Erledigt, wenn die drei Namen sagen, welche Wahl gemeint ist. Verhalten unverän
 nichts; der Test ist grün.
 
 **Stellungnahme.**
+Angenommen. Die drei Namen tragen jetzt die Wörter des Kriteriums wie vorgeschlagen, die
+Hilfsfunktion heißt `nachDerWahlDerAufstellungszone`. Verhalten unverändert, 42 Akzeptanztests
+grün.
