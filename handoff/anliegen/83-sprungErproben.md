@@ -55,3 +55,5 @@ code --extensionDevelopmentPath="$PWD/prozess/pruefungen/sprung" "$PWD"
 Empfehlung: A; du wolltest C ausdrücklich, und die Links stimmen. Springt der Klick nicht,
 schreib hinter `Antwort:` B und bei welchem Schritt (1 bis 4) es hakt.
 Antwort: .
+
+Stellungnahme: Das zweite Fenster öffnet sich nicht. Beim Versuch die Datei in dem zweiten Fenster zu öffnen schaltet mich auf das erste VS Code Fenster zurück ohne in eine Datei zu springen. Es funktioniert damit nicht!
