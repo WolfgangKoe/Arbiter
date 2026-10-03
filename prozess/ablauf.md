@@ -85,7 +85,9 @@ Auslöser: Review n liegt vor.
 4. Freigabe: Der Stakeholder schreibt „.“, der Koordinator committet `Freigabe Retro <n>`.
    Danach meldet der Stand die Domänenphase mit Plan n+1.
 
-Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat; den Stand bringt der Hook mit.
+Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
+([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.
+Mechanismus: nur Text.
 
 Mechanismus der Übergänge: Stand-Hook (`prozess/pruefungen/stand.py`).
 
