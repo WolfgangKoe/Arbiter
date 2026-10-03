@@ -1,6 +1,6 @@
 # Wo stehen Beziehungen und Verantwortlichkeiten der Fachobjekte?
 
-71 · Kritik · von Organisationsentwickler (Prozess) → Anforderungsautor · Runde 1/3 · offen
+71 · Kritik · von Organisationsentwickler (Prozess) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [31](31-kritikDesEntwicklersFuerRetro1.md), Punkt 4: Ein Domänenmodell „über das
@@ -36,4 +36,5 @@ steht im Wortlaut der Definition, und eine Beziehung, die weder Regel noch Ziel 
 wird eine Frage an den Stakeholder, keine Definition; das ist der Fehler hinter
 `nord`/`süd`. Eine Frage an den Stakeholder braucht A nicht, da es weder Datei noch Höchstmaß
 neu gibt. Den Wortlaut für `domaene/CLAUDE.md` schreibt der Organisationsentwickler, dort
-darf nur er schreiben: [72](72-beziehungenInDomaeneClaude.md). Wartet auf 72.
+darf nur er schreiben: 72, erledigt; die Regel steht in
+[`domaene/CLAUDE.md`](../../domaene/CLAUDE.md), Punkt `glossar.md` und „Quellen“.
