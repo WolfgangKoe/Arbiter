@@ -53,4 +53,4 @@ Zur Kenntnis, angenommen und umgesetzt:
 Zwischen Rollen:
 - 15, 17, 18 an den Anforderungsautor: vor der Freigabe.
 - [14](anliegen/14-planer-liest-git-vor-dem-ausformulieren.md) und
-  [20](anliegen/20-antwort-unter-jeder-frage.md) an den Organisationsentwickler: Prozessphase.
+  Anliegen 20 an den Organisationsentwickler: Prozessphase.

@@ -1,6 +1,6 @@
 # Begriffe für die Karte von Only War
 
-64 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+64 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 Nach [58](58-namenDerAufstellungszonen.md) F2 A steht Only War als einzige *Mission* mit den
@@ -19,4 +19,4 @@ Regelzahl). Vorschlag, je mit Regelbegriff:
 Empfehlung: so freigeben. Danach schreibe ich die Daten; die Armeen der Ausgangslage folgen,
 wenn der Planer das Item dazu plant.
 
-Antwort:
+Antwort: .

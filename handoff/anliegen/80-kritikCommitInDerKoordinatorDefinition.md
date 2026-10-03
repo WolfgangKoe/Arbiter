@@ -1,6 +1,6 @@
 # Kritik-Commit in der Koordinator-Definition
 
-80 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+80 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit `Freigabe Retro 1` trägt kein Commit `Kritik <Hash>` im Betreff

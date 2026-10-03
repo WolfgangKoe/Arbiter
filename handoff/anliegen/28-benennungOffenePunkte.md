@@ -1,6 +1,6 @@
 # Benennung: drei offene Punkte
 
-28 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+28 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Deine Entscheidung zur Benennung steht in

@@ -25,7 +25,7 @@ Ursache: Der Stand kennt Schritt 5 nicht (50), und der Koordinator kann `prozess
    Nachprüfung ohne Gegenstand.
 7. Ein Edit an einem Anliegen bringt rund 26.000 Zeichen Rechtschreibmeldungen in den Kontext
    (24, weiter offen).
-8. Kritik des Entwicklers ([31](anliegen/31-kritikDesEntwicklersFuerRetro1.md)): Komplexität ohne
+8. Kritik des Entwicklers (Anliegen 31): Komplexität ohne
    Schwelle; das implizite Domänenmodell zeigt sich an 43, 58, 63.
 
 ## Geändert
