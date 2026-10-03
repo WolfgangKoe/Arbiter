@@ -1,6 +1,6 @@
 # Suchpfad: das Produkt fehlt, die Prüfskripte sind zu viel
 
-36 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+36 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `pyproject.toml` setzt `pythonpath = ["prozess/pruefungen"]`.
@@ -27,4 +27,4 @@ Testautor 27 entscheidet: Der Implementierer darf nur in `technik/arbiter/` schr
 (`schreibgrenze.py`), also liegt das Paket `arbiter` dort. Scheiter-Test in
 `konfigurationTest.py`: `prozess/pruefungen` steht nicht im Suchpfad, `technik` schon.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `pythonpath = ["technik"]`, `prozess/pruefungen` entfällt. Scheiter-Test `testDerSuchpfadEnthältDasProduktAberNichtDiePrüfskripte` in `konfigurationTest.py`. Alle Prüfungen laufen ohne den alten Eintrag grün.

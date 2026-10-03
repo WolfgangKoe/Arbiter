@@ -1,6 +1,6 @@
 # Benennung: Namen, die ein Werkzeug vorgibt
 
-37 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+37 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [wir.md](../../prozess/praemissen/wir.md) sagt: „Namen, die ein Werkzeug
@@ -27,4 +27,4 @@ Code sie braucht: Flask lässt sich ohne vorgegebene Namen einrichten
 (`app.config.from_mapping(SECRET_KEY=…)` statt Großbuchstaben-Attributen, `--app` statt
 `create_app`), dafür reicht die Prüfung, wie sie ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: In `conftest.py` sind `pytest_<hook>`-Funktionen Werkzeugnamen (`benennung.py`). Scheiter-Tests `testPytestHookInConftestIstEinWerkzeugname`, `testPytestHookAußerhalbVonConftestBleibtRot` in `benennungTest.py`. `prozess/pruefungen/conftest.py` nutzt jetzt `pytest_configure`, ohne Nebenwirkung beim Import.

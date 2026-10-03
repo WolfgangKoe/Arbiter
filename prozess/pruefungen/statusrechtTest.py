@@ -49,4 +49,5 @@ def testStakeholderOhneRolleIstNichtBeschränkt(tmp_path):
 def testAndereDateienBleibenUnberührt(tmp_path):
     datei = tmp_path / "notiz.md"
     datei.write_text("a", encoding="utf-8")
-    assert entscheide(schreibung(datei, "planer", old_string="a", new_string="erledigt"), tmp_path) is None
+    eingabe = schreibung(datei, "planer", old_string="a", new_string="erledigt")
+    assert entscheide(eingabe, tmp_path) is None

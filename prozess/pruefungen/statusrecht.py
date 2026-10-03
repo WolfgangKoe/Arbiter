@@ -2,7 +2,7 @@
 
 Die Rolle (`agent_type`) muss der Absender im Kopf sein. Ohne `agent_type` schreibt der
 Stakeholder selbst; dann greift die Sperre nicht. Was eine Rolle per Bash ändert, erfasst
-der Hook nicht ([Anliegen 34](../../handoff/anliegen/34-erledigtNurDurchDenAbsender.md)).
+der Hook nicht (`prozess/ablauf.md#anliegen`).
 """
 
 import json
@@ -20,7 +20,8 @@ def neuerInhalt(werkzeug: str, eingabe: dict, bisher: str) -> str | None:
         alt, neu = eingabe.get("old_string"), eingabe.get("new_string")
         if alt is None or neu is None:
             return None
-        return bisher.replace(alt, neu) if eingabe.get("replace_all") else bisher.replace(alt, neu, 1)
+        anzahl = -1 if eingabe.get("replace_all") else 1
+        return bisher.replace(alt, neu, anzahl)
     return None
 
 
@@ -49,7 +50,8 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
             "permissionDecision": "deny",
             "permissionDecisionReason": (
                 f"Statusrecht: {ziel.name} setzt auf `erledigt` nur der Absender "
-                f"({neu.absender}), nicht {rolle}. Setze `angenommen`, `abgelehnt` oder `beantwortet`."
+                f"({neu.absender}), nicht {rolle}. "
+                "Setze `angenommen`, `abgelehnt` oder `beantwortet`."
             ),
         }
     }

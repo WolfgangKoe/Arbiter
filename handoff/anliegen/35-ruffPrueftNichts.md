@@ -1,6 +1,6 @@
 # Ruff prüft nichts, und der eigene Code wäre rot
 
-35 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+35 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Regel „Ruff nach E37“ in [regeln.md](../../prozess/regeln.md) hat keinen
@@ -40,4 +40,4 @@ englischen Anhang oder ein `noqa`.
    streichen und in `regeln.md` nur das pytest-Gate nennen. Heute nennt `regeln.md` zwei
    Mechanismen, von denen einer nie läuft.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt: Punkt 1 (`dependency-groups`, `ruff==0.16.*`), 2 (`testDasRepoIstRuffSauber`, rot ohne ruff, mit Rückstand aus `benennungRueckstand.txt`), 3 (`src`, N818, lange Zeilen gekürzt, `ARG001` in `conftest.py` behoben). Punkt 4: Der ruff-Hook in `.pre-commit-config.yaml` entfällt, das pytest-Gate deckt ihn ab; die übrigen Hooks laufen nur nach `pre-commit install`. Folge: Ohne ruff im PATH ist das Gate rot, bis der Stakeholder einmal `pip install --group entwicklung` (oder `pip install ruff==0.16.*`) ausführt; mit ruff 0.16.10 sind alle 284 Prüfungen grün. Das braucht eine Entscheidung des Stakeholders.

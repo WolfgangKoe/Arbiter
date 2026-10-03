@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+import benennung
+
 wurzel = Path(__file__).resolve().parents[2]
 ordner = Path(__file__).resolve().parent
 
@@ -48,14 +50,39 @@ def testPreCommitRuftDiePrüfungenAuf():
     assert "prozess/pruefungen/benennung.py" in text
 
 
-@pytest.mark.skipif(shutil.which("ruff") is None, reason="ruff ist nicht installiert")
-def testRuffMeldetEinenVerstoßGegenDenWerkzeugsatz(tmp_path):
-    probe = tmp_path / "probe.py"
-    probe.write_text("def rechnen(erste, zweite, dritte, vierte, fünfte, sechste):\n    return 7\n")
-    ergebnis = subprocess.run(
-        ["ruff", "check", "--config", str(wurzel / "pyproject.toml"), str(probe)],
+def ruffAufrufen(*argumente: str) -> subprocess.CompletedProcess:
+    """Rot, wenn ruff fehlt: `pyproject.toml` nennt es unter `dependency-groups`."""
+    ruff = shutil.which("ruff") or shutil.which("ruff", path=str(wurzel / ".venv" / "bin"))
+    assert ruff, "ruff ist nicht installiert (pyproject.toml, dependency-groups, entwicklung)"
+    return subprocess.run(
+        [ruff, "check", "--no-cache", "--config", str(wurzel / "pyproject.toml"), *argumente],
+        cwd=wurzel,
         capture_output=True,
         text=True,
         check=False,
     )
-    assert ergebnis.returncode != 0
+
+
+def testRuffMeldetEinenVerstoßGegenDenWerkzeugsatz(tmp_path):
+    probe = tmp_path / "probe.py"
+    probe.write_text("def rechnen(erste, zweite, dritte, vierte, fünfte, sechste):\n    return 7\n")
+    assert ruffAufrufen(str(probe)).returncode != 0
+
+
+def testRuffMeldetKeineSperreOhneErrorEndung(tmp_path):
+    probe = tmp_path / "probe.py"
+    probe.write_text("class Sperre(Exception):\n    pass\n")
+    assert ruffAufrufen(str(probe)).returncode == 0
+
+
+def testDasRepoIstRuffSauber():
+    rückstandDateien = sorted(benennung.rückstand(wurzel))
+    ausnahmen = [argument for pfad in rückstandDateien for argument in ("--extend-exclude", pfad)]
+    ergebnis = ruffAufrufen(*ausnahmen, ".")
+    assert ergebnis.returncode == 0, ergebnis.stdout
+
+
+def testDerSuchpfadEnthältDasProduktAberNichtDiePrüfskripte():
+    suchpfad = pyproject()["tool"]["pytest"]["ini_options"]["pythonpath"]
+    assert "technik" in suchpfad
+    assert "prozess/pruefungen" not in suchpfad

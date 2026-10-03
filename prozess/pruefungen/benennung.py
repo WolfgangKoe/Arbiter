@@ -31,6 +31,7 @@ anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 mindestlänge = 3
 ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
+# In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 ausgeschlosseneOrdner = {
     "Arbiter", "ArbiterMap", ".git", "__pycache__", ".venv", ".pytest_cache", ".ruff_cache",
@@ -99,6 +100,7 @@ def quelltextVerstöße(
         for zeile, name, istKlasse in selbstDefinierteNamen(baum)
         if (grund := nameVerstoß(name, istKlasse=istKlasse))
         and not (istTestdatei(dateiname) and name.startswith("test"))
+        and not (dateiname == "conftest.py" and name.startswith("pytest_"))
     ]
     if istTestdatei(dateiname):
         muster = akzeptanzTestName if imAkzeptanzordner else testName

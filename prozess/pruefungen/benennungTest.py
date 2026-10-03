@@ -176,3 +176,14 @@ def testRückstandNimmtKeineDateienAußerhalbVonTechnikAus(tmp_path, monkeypatch
     monkeypatch.setattr(benennung, "rückstandsdatei", liste)
     assert rückstand(tmp_path) == set()
     assert verstöße(tmp_path) != []
+
+
+def testPytestHookInConftestIstEinWerkzeugname():
+    quelltext = "def pytest_configure(config):\n    pass\n"
+    assert grundZu(quelltext, "conftest.py") == []
+
+
+def testPytestHookAußerhalbVonConftestBleibtRot():
+    quelltext = "def pytest_configure(config):\n    pass\n"
+    assert grundZu(quelltext, "modul.py") != []
+    assert grundZu("def pytest_irgendwas(config):\n    pass\n", "conftest.py") == []
