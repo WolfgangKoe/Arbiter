@@ -1,6 +1,6 @@
 # Kritik an a8fbd97: zwei Fassungen von „nennt“, leere Meldung, Docstring, Rest aus 96
 
-101 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+101 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: a8fbd97, Code in `prozess/pruefungen/`. In Ordnung: `python3 -m pytest
@@ -54,3 +54,6 @@ unbemerkt.
 `anforderungUmfasst`; Anforderung ohne Kriterium zählt nicht als fehlend (Vorschlag
 übernommen, Stand-Fixture hat nun ein Kriterium); 2 keine Meldung ohne Kennungstest;
 3 Docstring wie vorgeschlagen; 4 Satz gestrichen. Scheiter-Tests in `rueckverfolgungTest.py`.
+
+**Nachprüfung.** In 957cf7e 1 bis 4 nachgestellt und grün, 353 Tests, ruff und complexipy
+grün. 957cf7e ohne neuen Befund.
