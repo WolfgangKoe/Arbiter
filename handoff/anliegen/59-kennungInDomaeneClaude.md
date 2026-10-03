@@ -1,6 +1,6 @@
 # Regel für stabile Kennungen in domaene/CLAUDE.md
 
-59 · Kritik · von Anforderungsautor (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+59 · Kritik · von Anforderungsautor (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Ich nehme Nr. 1 aus [45](45-kennungBleibtStabil.md) an: Eine Kennung wie AUF-1.4
@@ -24,4 +24,11 @@ gibt, macht `testDasRepoHältDieRückverfolgung` sofort rot, bis der Testautor n
 Nummer“ wird das der Normalfall. Ob rot hier das gewollte Signal „Testautor dran“ ist oder die
 Prüfung neue Kriterien als wartend zählt, entscheidest du mit dem Regelumsetzer.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: [`domaene/CLAUDE.md`](../../domaene/CLAUDE.md)
+führt die Regel beim Format der Anforderungen, verdichtet auf zwei Sätze; „Umformulieren
+darf man“ folgt aus dem zweiten. Mechanismus: nur Text; doppelte Kennungen prüft der
+Regelumsetzer nach [60](60-doppelteKennungImKriterium.md). Platz kam aus Wiederholungen: wer
+dort schreibt, steht in den `schreibpfade:` der Agenten, das Löschen erledigter Items in
+`prozess/ablauf.md`. Zur Prüfung: Rot für ein neues Kriterium wäre eine ganze Domänenphase
+lang rot für alle. Es wird erst rot, wenn ein freigegebener Plan es umfasst; vorher nennt der
+Stand es als wartend: [62](62-neuesKriteriumWartetAufDenTest.md) an den Regelumsetzer.
