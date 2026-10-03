@@ -11,7 +11,8 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
 7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 
-Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage. Gleichzeitig laufen
+Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage, sortiert vom
+Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Gleichzeitig laufen
 nur Rollen, die ausschließlich Anliegen schreiben.
 
 ### DoR (Item bereit)
@@ -97,8 +98,6 @@ Mechanismus: nur Text.
 - UX: erstes Item mit Oberfläche. Schreibt einbaufähige Mockups: statisches HTML mit dem
   echten CSS, ohne JS-Logik, nur Inhalte aus Kriterien oder Katalogdaten, ein Mockup je
   Anforderung, gelöscht nach dem Einbau.
-- Moderation: mehr als 5 offene Anliegen. Liest alle Diskussionen, schlägt vor, schreibt
-  nur in `handoff/`.
 - Prozesskritiker: Prozesskritik fehlt, oder der Organisationsentwickler verteidigt
   wiederholt eigene Regeln.
 - Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der
@@ -129,14 +128,16 @@ Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.cl
 oder Stakeholder, dahinter darf die Perspektive in Klammern stehen. Je Runde Befund, Kosten,
 Gegenvorschlag, Stellungnahme. Mechanismus: `anliegen.py`, `hoechstmassTest.py`.
 Unter jeder Frage an den Stakeholder (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`;
-„.“ heißt, die Empfehlung gilt. Mechanismus: nur Text.
+„.“ heißt, die Empfehlung gilt. Die Freigabe beantwortet jede Frage, die in der
+Freigabevorlage steht: mit der Zeile `Antwort:`, sonst mit der Empfehlung. Mechanismus: nur
+Text.
 
 Status | setzt | danach dran
 ---|---|---
 offen | Absender, beim Anlegen und je neuer Runde | Empfänger: Stellung nehmen oder antworten
 angenommen | Empfänger, nach der Umsetzung | Absender: nachprüfen
 abgelehnt | Empfänger, mit Begründung | Absender: nächste Runde; nach Runde 3 Hebung (Test → Kriterium → Anforderung, Code → Architektur) oder `eskaliert`
-beantwortet | Stakeholder | Absender: Antworten einarbeiten
+beantwortet | Absender, nach der Freigabe | Absender: Antworten einarbeiten
 eskaliert | Absender, nach Runde 3 | Stakeholder
 erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht die Datei
 

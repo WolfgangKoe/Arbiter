@@ -28,6 +28,10 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
 8. Kommentare nur einzeilig als `# Regel: <Fundstelle>` (nicht offensichtlicher
    Regel-Sonderfall) oder `# Warum: …` (nicht offensichtliche technische Entscheidung);
    Docstrings höchstens einzeilig; kein TODO, FIXME oder Prozessverweis. Mechanismus: nur Text.
+9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele,
+   die sich nur in Daten unterscheiden, als Tabelle oder Katalogdaten; viele mit eigenem
+   Verhalten als eigene Typen. Es urteilt der Reviewer. Mechanismus: nur Text; die Schwellen
+   für Verschachtelung und Zahl der Fälle: [Ablauf, DoD](../ablauf.md#dod-item-fertig).
 
 Namen, die ein Werkzeug vorgibt (`conftest.py`, `__init__`, `CLAUDE.md`, Skill-Ordner),
 bleiben. Offen: Konstanten und Enum-Werte, nummerierte Dateinamen, Testdateien zu Modulen

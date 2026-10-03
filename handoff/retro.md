@@ -59,6 +59,8 @@ Danach seine Anliegen: 40, 57, 60, 62, 52, 24, 53.
 1. Vor der Freigabe die Abnahme: Anforderungsautor 25; Testautor testet den Zwischenzustand,
    Fachkritiker prüft den Test; Implementierer 63; Fachkritiker nimmt ab; Planer löscht das
    Item; Reviewer ergänzt Review 1.
-2. Moderation und Fragen an dich: [65](anliegen/65-moderationUndAntworten.md).
+2. Moderation und Fragen an dich: Anliegen 65, umgesetzt als
+   [Moderator](../.claude/agents/moderator.md), [Ablauf, Anliegen](../prozess/ablauf.md#anliegen)
+   und [Prämisse](../prozess/praemissen/wir.md), Punkt 9.
 3. `handoff/kritik-entwickler.md` ist ausgewertet; `VORGEHEN.md` löschbar nach
    [57](anliegen/57-pyprojectOhneVorgehen.md).
