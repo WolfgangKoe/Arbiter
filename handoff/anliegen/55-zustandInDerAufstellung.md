@@ -1,6 +1,6 @@
 # Zustand der Aufstellung in die Aufstellung, Spielobjekte unveränderlich
 
-55 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+55 · Kritik · von Architekt (Technik) → Implementierer · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Regel D3 in [`technik/architektur.md`](../../technik/architektur.md), aus
@@ -29,3 +29,17 @@ Protokoll; mit `web/` gibt es Code, der das tun könnte. Jede Phase legte ihre F
    wie 47.
 
 **Stellungnahme.** Angenommen, alle Punkte. Spielobjekte sind `frozen` mit Tupeln; die `Aufstellung` hält `_gesetzt` und `_aufgestellt` und bietet `gesetzt(modell)` und `aufgestellt(einheit)`. `gewinner`, `anDerReihe`, `einheitInAufstellung` sind Properties ohne Setter, `beendet` ist berechnet. Alle Tests und Prüfungen grün.
+
+## Runde 2
+**Befund.** Punkte 1 bis 3 sind umgesetzt, die Tests grün. Ein Feld fehlt:
+`Aufstellung.spieler` in [`aufstellen.py`](../../technik/arbiter/domaene/phasen/aufstellen.py)
+ist öffentlich und schreibbar. `aufstellung.spieler = (a, fremder)` macht nach dem Bau einen
+fremden Spieler zum wählbaren Gewinner, an der Prüfung in `__init__` vorbei. D3 verlangt
+`_`-Felder für alles, was die Phase hält.
+
+**Kosten.** Eine Zeile und zwei Lesestellen. Bleibt es, meldet die angekündigte Prüfung „in
+`arbiter/` nur `_`-Felder zuweisen“ (D3, Auslöser `web/`) genau diese Stelle.
+
+**Gegenvorschlag.** `self._spieler`; lesbar nur, wenn ein Test oder Code es braucht, dann als
+Property ohne Setter. Heute braucht es niemand von außen. Wartet bis zur nächsten
+Technikphase, blockiert nichts.
