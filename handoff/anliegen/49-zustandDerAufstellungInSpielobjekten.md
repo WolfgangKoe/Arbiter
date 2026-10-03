@@ -1,6 +1,6 @@
 # Zustand der Aufstellung liegt offen in den Spielobjekten
 
-49 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · offen
+49 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [`spielobjekte.py`](../../technik/arbiter/domaene/spielobjekte.py) trägt
@@ -25,4 +25,11 @@ Phasen es lesen; im zweiten Fall den Grundschnitt um diesen Fall ergänzen. Änd
 Schnittstelle, gehen Anliegen an Testautor und Implementierer. Prüfung später: semgrep-Regel
 „keine Zuweisung an Domänenattribute außerhalb `arbiter/domaene/`“.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Regel D3 in
+[`architektur.md`](../../technik/architektur.md). Entscheidung: *aufgestellt* und *gesetzt*
+liegen in der `Aufstellung` (`aufstellung.aufgestellt(einheit)`), nicht am Spielobjekt; der
+Grundschnitt gilt unverändert: Erst wenn eine zweite Phase es braucht, zieht es um.
+Spielobjekte werden `frozen`, so wirft `modell.gesetzt = True` schon heute. Die Prüfung
+„nur `_`-Felder zuweisen“ kommt mit `web/`, wie du vorschlägst. Umsetzung:
+[54](54-zustandUeberDieAufstellungLesen.md) an den Testautor,
+[55](55-zustandInDerAufstellung.md) an den Implementierer.

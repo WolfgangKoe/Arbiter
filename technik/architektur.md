@@ -17,9 +17,8 @@ technik/
 Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Für AUF-1 nur `arbiter/domaene/`.
 
 ## Abhängigkeiten zeigen nach innen
-- **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst: kein
-  Flask, keine Datenbank, nichts aus `web`, `speicher`, `katalog`. Prüft: nur Text;
-  Auslöser: der zweite Ordner unter `arbiter/`, dann ein Importvertrag (import-linter).
+- **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft: nur
+  Text; Auslöser: der zweite Ordner unter `arbiter/`, dann ein Importvertrag (import-linter).
 - **A2** `web`, `speicher` und `katalog` kennen die Domäne, nie umgekehrt. Braucht die
   Domäne Speicherung, beschreibt sie eine Schnittstelle (`typing.Protocol`) in
   `arbiter/domaene/`; `speicher/` setzt sie um, `web/` verdrahtet beides. Prüft: wie A1.
@@ -27,63 +26,65 @@ Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Für AUF-1 nur `arbite
   `domaene/daten/` und importiert in der Datenbank. Prüft: nur Text; Auslöser: erster
   Spielstand, der eine Sitzung überlebt.
 
-Beispiel aus dem Altbestand: `ArbiterMap/backend/app/domain/rule_checks.py` importiert
-nichts außer der eigenen Geometrie; `app/services/` übersetzt Datensätze in `ModelState`,
-bevor die Prüfung sie sieht. So lässt sich die Regel ohne Flask und Datenbank testen.
+Altbestand: `ArbiterMap/backend/app/domain/rule_checks.py` importiert nur die eigene
+Geometrie; `app/services/` übersetzt Datensätze in `ModelState`, bevor die Prüfung sie sieht.
 
 ## Grundschnitt der Domäne
 `arbiter/domaene/` gliedert sich wie `domaene/anforderungen/`:
 - `spielobjekte.py`: `Spieler`, `Armee`, `Einheit`, `Modell` und was mehr als eine Phase
   braucht.
-- `phasen/<phase>.py`: heißt wie die Anforderungsdatei, `phasen/aufstellen.py` zu
-  `domaene/anforderungen/phasen/aufstellen.md`. Was eine Phase einführt, liegt dort, bis
-  eine zweite Phase es braucht; dann zieht es nach `spielobjekte.py`. Darum liegt
-  `Aufstellungszone` heute in `phasen/aufstellen.py`.
+- `phasen/<phase>.py` heißt wie die Anforderungsdatei. Was eine Phase einführt, liegt dort,
+  bis eine zweite Phase es braucht; dann zieht es nach `spielobjekte.py`. Darum liegen
+  `Aufstellungszone`, *aufgestellt* und *gesetzt* in `phasen/aufstellen.py`.
 - `querschnitt/`: Fähigkeiten und Modifikatoren, mit der ersten Anforderung dort.
-- `sperre.py`: `Sperre` und `Grund`; jede Phase sperrt, Übergehen und Protokoll gelten für
-  alle (`domaene/ziel.md`).
+- `sperre.py`: `Sperre` und `Grund`; Übergehen und Protokoll gelten für alle Phasen.
 - `messen.py`: die zwei Messungen (M1), mit dem ersten Abstand.
-- `spielablauf/` gibt es nur unter `tests/akzeptanz/`: Szenarien über mehrere Phasen.
+- `spielablauf/` nur unter `tests/akzeptanz/`: Szenarien über mehrere Phasen.
 
 Ein Modul wird zum Paket, ohne dass sich ein Import ändert. Prüft: die Importe der
 Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 
-Für AUF-1:
-```python
-from arbiter.domaene.spielobjekte import Armee, Einheit, Modell, Spieler
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
-from arbiter.domaene.sperre import Grund, Sperre
-```
-
 ## Regeln im Domänencode
-- **D1** Spielobjekte haben Identität: Vergleich mit `is`, Gleichheit nicht überschrieben
-  (`@dataclass(eq=False)`). Zwei Einheiten mit gleichen Modellen sind verschiedene
-  Einheiten. Prüft: die Akzeptanztests, deren Spieler gleiche Armeen haben
-  (`testAuf1_4EinModellDesGegnersIstNichtInAufstellung`).
-- **D2** Eine Handlung prüft erst alle Sperren, dann ändert sie den Zustand; die `Sperre`
-  fällt vor der ersten Änderung. So kann ein späteres Übergehen dieselbe Prüfung
-  überspringen und protokollieren. Prüft: jeder Akzeptanztest einer Sperre prüft den
-  unveränderten Zustand.
+- **D1** Spielobjekte haben Identität: Vergleich mit `is`, `@dataclass(eq=False)`. Prüft:
+  die Akzeptanztests, deren Spieler gleiche Armeen haben.
+- **D2** Eine Handlung prüft erst alle Sperren, dann ändert sie den Zustand. So kann ein
+  Übergehen dieselbe Prüfung überspringen und protokollieren. Prüft: jeder Akzeptanztest
+  einer Sperre prüft den unveränderten Zustand.
+- **D3** Zustand ändern nur Handlungen. Spielobjekte sind unveränderlich
+  (`@dataclass(frozen=True, eq=False)`, Sammlungen als Tupel). Zustand einer Phase hält die
+  Phase in `_`-Feldern; lesbar über Properties ohne Setter (`aufstellung.anDerReihe`) oder
+  Abfragen nach dem Muster `aufstellung.aufstellungszone(spieler)`:
+  `aufstellung.aufgestellt(einheit)`, `aufstellung.gesetzt(modell)`. Sonst umgeht
+  `modell.gesetzt = True` jede Sperre und jedes Protokoll. Altbestand: `ModelState` in
+  `rule_checks.py` ist `frozen`. Prüft: Python wirft bei der Zuweisung; dass alles so gebaut
+  ist: nur Text; Auslöser: `web/`, dann eine Prüfung „in `arbiter/` nur `_`-Felder zuweisen,
+  Dataclasses der Domäne `frozen`“.
 - **M1** Phasen messen nur über zwei Messungen: Abstand zweier Modelle und Base vollständig
-  in einer Fläche. Die Baseform kennt nur `messen.py`; eine neue Form (Etappe 6) ändert
-  keine Phase. Altbestand: `rule_checks.py` prüft Kohärenz und Engagement Range allein über
-  `is_within_contours`. Prüft: nur Text; Auslöser: erster Abstand (Etappe 2), dann ein
-  Vertragstest je Baseform und ein Importvertrag „`phasen` importiert keine Baseform“.
+  in einer Fläche. Die Baseform kennt nur `messen.py`. Altbestand: `rule_checks.py` prüft
+  Kohärenz und Engagement Range allein über `is_within_contours`. Prüft: nur Text; Auslöser:
+  erster Abstand (Etappe 2), dann ein Vertragstest je Baseform und ein Importvertrag
+  „`phasen` importiert keine Baseform“.
 
 ## Tests
-- `tests/akzeptanz/<pfad>Test.py` spiegelt `domaene/anforderungen/<pfad>.md`. Prüft:
-  `rueckverfolgung.py`, `benennung.py`.
+- **T1** Je Anforderung eine Testdatei im Ordner der Anforderungsdatei: AUF-1 in
+  `domaene/anforderungen/phasen/aufstellen.md` → `tests/akzeptanz/phasen/aufstellen/auf1Test.py`.
+  Hat die Anforderungsdatei nur eine Anforderung, genügt `tests/akzeptanz/phasen/aufstellenTest.py`.
+  Höchstmaß: `prozess/kennzahlen.md`; darüber wird die Anforderung geteilt, nicht der Test.
+  Prüft: `rueckverfolgung.py`, `benennung.py`, bisher nur die Form `<pfad>Test.py`;
+  Teilung und Höchstmaß: [Anliegen 52](../handoff/anliegen/52-akzeptanztestJeAnforderung.md).
+- **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
+  Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur-Befehl und
+  VS-Code-Versuch: [Anliegen 53](../handoff/anliegen/53-spurKriteriumTest.md).
 - `tests/einheit/` spiegelt `arbiter/`: `tests/einheit/domaene/phasen/aufstellenTest.py`
   zu `arbiter/domaene/phasen/aufstellen.py` (Name offen:
-  [Anliegen 28](../handoff/anliegen/28-benennungOffenePunkte.md)). Jeder Ordner unter
-  `tests/einheit/` hat eine `__init__.py`; sonst kollidiert der gleiche Dateiname mit dem
-  Akzeptanztest. Prüft: `python3 -m pytest technik/tests` bricht sonst beim Sammeln ab.
-- Code findet `arbiter` über den Suchpfad `technik` in `pyproject.toml`, ohne
+  [Anliegen 28](../handoff/anliegen/28-benennungOffenePunkte.md)). Jeder Ordner dort hat eine `__init__.py`; sonst
+  kollidiert der Dateiname mit dem Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.
+- `arbiter` liegt über den Suchpfad `technik` in `pyproject.toml` im Pfad, ohne
   `sys.path`-Eingriff. Prüft: `konfigurationTest.py`.
 
 ## Oberfläche
-Auslöser: erstes Item mit Oberfläche. Das Design-System gehört der Technik, die Domäne
-kritisiert es. Eine lebende Komponentenseite (HTML mit dem echten CSS) ist Doku, Vorlage für
-Mockups und Ziel eines Bildschirmtests. Mockups nutzen nur vorhandene Komponenten; Neues geht
-als Anliegen an die Technik. Tot ist eine Komponente, die in keinem Template vorkommt.
-Messbare Gestaltungsregeln (Kontrast, Mindestgrößen) werden Prüfungen.
+Auslöser: erstes Item mit Oberfläche. Das Design-System gehört der Technik. Eine lebende
+Komponentenseite (HTML mit dem echten CSS) ist Doku, Vorlage für Mockups und Ziel eines
+Bildschirmtests. Mockups nutzen nur vorhandene Komponenten; Neues geht als Anliegen an die
+Technik. Tot ist eine Komponente, die in keinem Template vorkommt. Messbare
+Gestaltungsregeln (Kontrast, Mindestgrößen) werden Prüfungen.
