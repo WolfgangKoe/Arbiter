@@ -2,30 +2,35 @@
 
 Inkrement: Änderungen seit `Freigabe Plan 1` (`424afec`) unter `technik/`, Domäne für
 [AUF-1](../domaene/anforderungen/phasen/aufstellen.md) und ihre Akzeptanz- und Einheitstests,
-Stand `b0f06bb`. Item: [Reihenfolge der Aufstellung](../domaene/items/reihenfolge-der-aufstellung.md).
+Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `dc321c1`).
 
 ## DoD
-1. **Erfüllt.** `python3 -m pytest technik/tests`: 45 bestanden.
-2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 288 bestanden
+1. **Erfüllt.** `python3 -m pytest technik/tests`: 46 bestanden.
+2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 282 bestanden
    (Benennung, Rückverfolgung, Höchstmaße, ruff). Nur Text: ein Kommentar nach `wir.md`
    (`# Warum:`), Komplexität gering, Spiegel `arbiter/domaene/phasen/` ↔
-   `tests/einheit/domaene/phasen/` mit Tests, Glossar ↔ Code stimmt für alle kursiven Begriffe.
-3. **Nicht erfüllt.** Das Item liegt noch; es löscht der Planer nach der Abnahme. Die
-   Anforderung beschreibt das gebaute Verhalten bis auf die Namen `nord`/`süd` ohne Quelle:
-   [43](anliegen/43-aufstellungszoneNamen.md), gefragt in [58](anliegen/58-namenDerAufstellungszonen.md).
-4. **Teilweise.** Dieses Review steht. Die fachliche Abnahme (Schritt 5) fehlt; der Stand
-   führt sie nicht: [50](anliegen/50-standUeberspringtFachkritik.md).
+   `tests/einheit/domaene/phasen/` mit Tests, Glossar → Code stimmt für alle kursiven Begriffe.
+   Code → Glossar nicht: [74](anliegen/74-glossarPruefungNachAnliegen63.md).
+3. **Erfüllt.** Das Item ist gelöscht. AUF-1.3 regelt den Zwischenzustand, der Akzeptanztest
+   `testAuf1_3SolangeDieAufstellungszoneOffenIstIstKeinerAnDerReihe` ist grün (Anliegen 25).
+   Die Zonen tragen keine erfundenen Namen mehr: `Aufstellungszone.erste`, `.zweite`
+   (Anliegen 63).
+4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Dass der
+   Stand die Abnahme nicht kennt, bleibt offen: [50](anliegen/50-standUeberspringtFachkritik.md),
+   wartet auf [56](anliegen/56-standErkenntDieAbnahme.md).
 
 ## Code
 Klein, lesbar, nur Standardbibliothek (A1), Identität per `eq=False` (D1), jede Handlung
 sperrt vor der ersten Änderung (D2), Spielobjekte `frozen`, Zustand der Aufstellung in
 `_`-Feldern (D3), fremde Spieler als Vorbedingung (`ValueError`).
 Sperrtests prüfen den unveränderten Zustand. Nichts nachgebaut, nichts ineffizient.
+Seit der Retro geprüft, ohne Befund: `8ac70b7` und `265dac7` (Zonenwerte), `a969610`
+(`pyproject.toml` nur noch `*Test.py`; keine Datei `test_*.py` übrig).
 
 ## Offene Anliegen zur Technik
-- [50](anliegen/50-standUeberspringtFachkritik.md): angenommen, Nachprüfung durch den Reviewer.
+- [74](anliegen/74-glossarPruefungNachAnliegen63.md): an den Organisationsentwickler, offen.
+- [50](anliegen/50-standUeberspringtFachkritik.md): wartet auf 56.
 
 ## Empfehlung
-Kein Befund blockiert AUF-1: Jedes Kriterium ist gebaut und grün getestet. Vor der
-Prozessphase die fachliche Abnahme durch den Fachkritiker holen, dann löscht der Planer das
-Item. Aus diesem Review ist am Code nichts mehr offen.
+DoD für das Item erfüllt, AUF-1 ist abgenommen. Aus diesem Review ist am Code nichts offen.
+74 vor dem Bau von P9 klären, sonst ist die Prüfung im ersten Lauf rot.
