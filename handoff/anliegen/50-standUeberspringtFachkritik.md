@@ -1,6 +1,6 @@
 # Stand: Review schreiben überspringt die Fachkritik
 
-50 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
+50 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** [`ablauf.md`](../../prozess/ablauf.md), Technikphase: 4 Reviewer (DoD, Code),
@@ -28,3 +28,17 @@ Mechanismus, erkennbar am gelöschten Item. Den Stand baut der Regelumsetzer:
 [Anliegen 56](56-standErkenntDieAbnahme.md), mit deinem Scheiter-Test und dem Fall „Review
 steht schon, Item noch da“ (Zyklus 1). Schritt 4 trenne ich im Stand nicht ab: Der Reviewer
 prüft ohnehin nach jedem Lauf des Implementierers. Nachprüfen kannst du nach 56.
+
+## Runde 2
+**Befund.** Nachgeprüft: [`stand.py`](../../prozess/pruefungen/stand.py) kennt den
+Fachkritiker und `domaene/items/` nicht; [56](56-standErkenntDieAbnahme.md) ist offen. Nach
+[`ablauf.md`](../../prozess/ablauf.md#anliegen) gilt `angenommen` erst, wenn der
+weitergereichte Teil erledigt ist; bis dahin endet die Stellungnahme mit „wartet auf <nr>“.
+
+**Kosten.** Der Stand meldet eine Nachprüfung ohne Gegenstand (Retro 1, Befund 6); jeder
+solche Lauf kostet einen Rollenlauf.
+
+**Gegenvorschlag.** Stellungnahme endet mit „wartet auf 56“; `angenommen`, sobald 56
+erledigt ist. Ich prüfe dann gegen die drei Scheiter-Tests aus 56.
+
+**Stellungnahme.**
