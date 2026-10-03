@@ -1,6 +1,6 @@
 # Zustand der Aufstellung in die Aufstellung, Spielobjekte unveränderlich
 
-55 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+55 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Regel D3 in [`technik/architektur.md`](../../technik/architektur.md), aus
@@ -28,4 +28,4 @@ Protokoll; mit `web/` gibt es Code, der das tun könnte. Jede Phase legte ihre F
    ([Anliegen 54](54-zustandUeberDieAufstellungLesen.md)), dann du; am besten im selben Lauf
    wie 47.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle Punkte. Spielobjekte sind `frozen` mit Tupeln; die `Aufstellung` hält `_gesetzt` und `_aufgestellt` und bietet `gesetzt(modell)` und `aufgestellt(einheit)`. `gewinner`, `anDerReihe`, `einheitInAufstellung` sind Properties ohne Setter, `beendet` ist berechnet. Alle Tests und Prüfungen grün.

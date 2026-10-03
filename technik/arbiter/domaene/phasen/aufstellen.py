@@ -11,53 +11,87 @@ class Aufstellungszone(Enum):
 
 class Aufstellung:
     def __init__(self, ersterSpieler: Spieler, zweiterSpieler: Spieler) -> None:
+        if ersterSpieler is zweiterSpieler:
+            raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
         self.spieler = (ersterSpieler, zweiterSpieler)
-        self.gewinner: Spieler | None = None
-        self.einheitInAufstellung: Einheit | None = None
-        self.anDerReihe: Spieler | None = None
-        self.beendet = False
+        self._gewinner: Spieler | None = None
+        self._einheitInAufstellung: Einheit | None = None
+        self._anDerReihe: Spieler | None = None
         self._zoneDesGewinners: Aufstellungszone | None = None
+        self._gesetzt: set[Modell] = set()
+        self._aufgestellt: set[Einheit] = set()
+
+    @property
+    def gewinner(self) -> Spieler | None:
+        return self._gewinner
+
+    @property
+    def einheitInAufstellung(self) -> Einheit | None:
+        return self._einheitInAufstellung
+
+    @property
+    def anDerReihe(self) -> Spieler | None:
+        return self._anDerReihe
+
+    @property
+    def beendet(self) -> bool:
+        return self._zoneDesGewinners is not None and self._anDerReihe is None
+
+    def gesetzt(self, modell: Modell) -> bool:
+        return modell in self._gesetzt
+
+    def aufgestellt(self, einheit: Einheit) -> bool:
+        return einheit in self._aufgestellt
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
-        if self.gewinner is not None:
+        if gewinner not in self.spieler:
+            raise ValueError("Der Gewinner gehört nicht zur Aufstellung")
+        if self._gewinner is not None:
             raise Sperre(Grund.nichtWählbar)
-        self.gewinner = gewinner
+        self._gewinner = gewinner
 
     def aufstellungszoneWählen(self, zone: Aufstellungszone) -> None:
-        if self.gewinner is None or self._zoneDesGewinners is not None:
+        if self._gewinner is None or self._zoneDesGewinners is not None:
             raise Sperre(Grund.nichtWählbar)
         self._zoneDesGewinners = zone
-        self.anDerReihe = self._gegnerVon(self.gewinner)
+        self._anDerReihe = self._nächsterAnDerReihe(self._gewinner)
 
     def aufstellungszone(self, spieler: Spieler) -> Aufstellungszone | None:
         if self._zoneDesGewinners is None:
             return None
-        if spieler is self.gewinner:
+        if spieler is self._gewinner:
             return self._zoneDesGewinners
         return next(zone for zone in Aufstellungszone if zone is not self._zoneDesGewinners)
 
     def einheitInAufstellungWählen(self, einheit: Einheit) -> None:
-        if self.anDerReihe is None or einheit.aufgestellt:
+        if self._anDerReihe is None or self.aufgestellt(einheit):
             raise Sperre(Grund.nichtWählbar)
-        if einheit not in self.anDerReihe.armee.einheiten:
+        if einheit not in self._anDerReihe.armee.einheiten:
             raise Sperre(Grund.nichtWählbar)
-        if self.einheitInAufstellung is not None and self.einheitInAufstellung.begonnen:
+        if self._einheitInAufstellung is not None and self._begonnen(self._einheitInAufstellung):
             raise Sperre(Grund.einheitBegonnen)
-        self.einheitInAufstellung = einheit
+        self._einheitInAufstellung = einheit
 
     def modellSetzen(self, modell: Modell) -> None:
-        einheit = self.einheitInAufstellung
+        einheit = self._einheitInAufstellung
         if einheit is None or modell not in einheit.modelle:
             raise Sperre(Grund.nichtInAufstellung)
-        modell.gesetzt = True
+        self._gesetzt.add(modell)
 
     def aufstellenDerEinheitBeenden(self) -> None:
-        if self.einheitInAufstellung is None or self.anDerReihe is None:
+        einheit = self._einheitInAufstellung
+        spieler = self._anDerReihe
+        if einheit is None or spieler is None:
             raise Sperre(Grund.nichtInAufstellung)
-        self.einheitInAufstellung.aufgestellt = True
-        self.einheitInAufstellung = None
-        self.anDerReihe = self._nächsterAnDerReihe(self.anDerReihe)
-        self.beendet = self.anDerReihe is None
+        self._aufgestellt.add(einheit)
+        self._einheitInAufstellung = None
+        self._anDerReihe = self._nächsterAnDerReihe(spieler)
+
+    def _begonnen(self, einheit: Einheit) -> bool:
+        return any(self.gesetzt(modell) for modell in einheit.modelle)
+
+    def _hatEinheitenZumAufstellen(self, spieler: Spieler) -> bool:
+        return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
 
     def _gegnerVon(self, spieler: Spieler) -> Spieler:
         return next(andere for andere in self.spieler if andere is not spieler)
@@ -65,6 +99,6 @@ class Aufstellung:
     def _nächsterAnDerReihe(self, bisher: Spieler) -> Spieler | None:
         gegner = self._gegnerVon(bisher)
         for kandidat in (gegner, bisher):
-            if kandidat.armee.hatEinheitenZumAufstellen:
+            if self._hatEinheitenZumAufstellen(kandidat):
                 return kandidat
         return None

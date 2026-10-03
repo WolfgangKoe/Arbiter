@@ -1,6 +1,6 @@
 # Aufstellung: fremder Spieler, leere Armee, gespeichertes „beendet“
 
-47 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+47 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: [`aufstellen.py`](../../technik/arbiter/domaene/phasen/aufstellen.py) aus `afe3205`.
@@ -41,4 +41,4 @@ Gegenvorschlag: `beendet` als Property
 **Zur Kenntnis, kein Befund:** Die *Einheit in Aufstellung* erneut zu wählen sperrt heute
 ‚Einheit begonnen‘; das regelt [Anliegen 41](41-dieselbeEinheitErneutWaehlen.md).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Befunde. 1: `ValueError` im Konstruktor (gleicher Spieler) und in `gewinnerWählen` (fremder Spieler). 2: Nach der Zonenwahl bestimmt `_nächsterAnDerReihe`, wer dran ist. 3: `beendet` ist eine Property, der tote Zweig ist weg. Einheitstests in `technik/tests/einheit/domaene/phasen/aufstellenTest.py`. Alle Tests und Prüfungen grün.
