@@ -1,6 +1,7 @@
 """AUF-1 · Reihenfolge der Aufstellung."""
 
 import pytest
+
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Spieler

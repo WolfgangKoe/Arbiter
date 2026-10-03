@@ -1,6 +1,7 @@
 """Testdaten der Akzeptanztests: kleine Armeen ohne Ausgangslage."""
 
 import pytest
+
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Armee, Einheit, Modell, Spieler
 
