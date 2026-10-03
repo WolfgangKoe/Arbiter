@@ -1,6 +1,6 @@
 # Beziehungen der Fachobjekte als Regel in domaene/CLAUDE.md
 
-72 · Kritik · von Anforderungsautor (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+72 · Kritik · von Anforderungsautor (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** In [71](71-beziehungenDerFachobjekte.md) hat die Domäne Variante A entschieden:
@@ -21,4 +21,9 @@ Die Datei hat heute 1.518 Zeichen, über deinem Höchstmaß von 1.500; kürzen o
 darfst du, solange die drei Aussagen bleiben. Mechanismus: nur Text; die Prüfung auf erfundene
 Namen (70, Retro 1, P9) deckt den prüfbaren Teil.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, anders gefasst. [`domaene/CLAUDE.md`](../../domaene/CLAUDE.md),
+Punkt `glossar.md`: Beziehungen (Teil von, gehört zu, Anzahl) mit Fundstelle in der
+Definition, wer festlegt oder ändert im Kriterium. Die dritte Aussage steht unter „Quellen“,
+wo schon „ein Widerspruch wird eine Frage“ stand: „Widerspruch oder Lücke wird eine Frage.“
+Für das Höchstmaß ist der Rest knapper gefasst, ohne Regel zu streichen; jetzt 1.499 Zeichen,
+`hoechstmassTest.py` grün.
