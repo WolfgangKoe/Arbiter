@@ -3,10 +3,6 @@
 ## Kennzahlen
 Jede Kennzahl nennt Bedeutung, Schwelle und Reaktion. Über der Schwelle ist sie ein Befund
 für die Retro. Mechanismus: nur Text.
-- Rollenläufe je Phase (`rollenzaehler.py`, im Stand): Domäne 8, Technik 10, Prozess 5.
-  Bedeutung: Aufwand der Phase, vor allem Nacharbeit und Kritikschleifen. Reaktion darüber:
-  Die Retro sucht die Ursache in git; die Schwelle ändert sich erst, wenn zwei Zyklen
-  dieselbe Ursache ohne Schaden zeigen.
 
 ## Höchstmaße
 In Zeichen. Geprüft (`hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,

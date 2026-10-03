@@ -158,8 +158,10 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   Wäre danach eine weitere Runde nötig, setzt der Absender `eskaliert`; auch eine Hebung
   wählt dann der Stakeholder. Er schreibt seine Entscheidung ins Anliegen: zurück auf
   `Runde 1/3 · offen` oder eine andere Anweisung. Die Runde senkt und `eskaliert` ändert nur
-  er. Mechanismus: `anliegen.py` (Runde höchstens 3, bei `eskaliert` ist der Stakeholder
-  dran); der Rest nur Text bis Anliegen 115.
+  er; mit seiner Entscheidung setzt er auch den Kopf, sonst bleibt er dran. Mechanismus:
+  `anliegen.py` (Runde höchstens 3, bei `eskaliert` ist der Stakeholder dran),
+  `statusrecht.py` (Rollen senken keine Runde, ändern `eskaliert` nicht und setzen in
+  Runde 3/3 nach `abgelehnt` nur `eskaliert` oder `erledigt`).
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
   wenn jenes Anliegen erledigt ist; bis dahin endet seine Stellungnahme mit „wartet auf <nr>“.
   Mechanismus: nur Text.
@@ -167,6 +169,9 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   `statusrecht.py` (Write, Edit).
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt
   `erledigt` selbst ein. Mechanismus: `stand.py`.
+- Ein Anliegen an den Stakeholder mit Status `offen`, das seit der letzten Freigabe
+  unverändert ist, hat die Freigabe beantwortet: Dran ist der Absender, er setzt
+  `beantwortet` und arbeitet die Antworten ein. Mechanismus: nur Text bis Anliegen 121.
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `statusrecht.py` nicht, das Löschen schon. Mechanismus: nur Text.
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
@@ -180,8 +185,10 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   das Inkrement. Mechanismus: nur Text.
 
 ## Budget
-Gemessen wird die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und jede
-Rolle; der Stand zeigt sie. Mechanismus: `belegung.py`.
+Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und
+jede Rolle; der Stand zeigt sie. Die Zahl der Rollenläufe ist weder Budget noch Kennzahl.
+Mechanismus: `belegung.py`; dass der Stand keine Rollenläufe mehr nennt: nur Text bis
+Anliegen 120.
 - Ab 120.000 Token meldet ein Hook; die Rolle beginnt nichts Neues und schließt ab, der
   Koordinator empfiehlt einen neuen Chat.
 - Ab 150.000 Token sperrt ein Hook alles außer Schreiben im eigenen Pfad und der

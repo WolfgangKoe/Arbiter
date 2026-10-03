@@ -23,3 +23,13 @@ das für wichtig, bevor das Inkrement weiter wächst.
 
 Erledigt, wenn ein beantwortetes Anliegen nach der Freigabe den Absender als dran meldet,
 mit Test.
+
+**Stellungnahme.** Erster Vorschlag, enger gefasst. Der zweite scheidet aus: Der Koordinator
+schreibt keine Dateien. Regel in [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen): Ein
+Anliegen an den Stakeholder mit Status `offen`, seit der letzten Freigabe unverändert, hat
+die Freigabe beantwortet; dran ist der Absender. Das deckt auch eine Zeile `Antwort:` mit
+mehr als „.“, denn die Freigabe beantwortet jede Frage der Vorlage; vor der Freigabe bleibt
+der Stakeholder dran. `eskaliert` bleibt bei ihm: Mit seiner Entscheidung setzt er den Kopf
+selbst (nur er darf `eskaliert` ändern), bis dahin nennt ihn der Stand zu Recht.
+Den Mechanismus mit Scheiter-Tests baut der Regelumsetzer: wartet auf
+[121](121-absenderNachFreigabeDran.md).

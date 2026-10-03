@@ -13,14 +13,14 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
 - „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast: Committe
-  `Freigabe <Etappe|Plan|Retro> <n>`, empfiehl einen neuen Chat.
-- Empfiehlst du einen neuen Chat, gib dazu einen Startprompt zum Kopieren, der den nächsten
-  Schritt nennt; ein bloßes „.“ ist dort mehrdeutig.
+  `Freigabe <Etappe|Plan|Retro> <n>`.
+- Einen neuen Chat empfiehlst du nach einer Freigabe oder ab 120.000 Token Belegung, auch
+  deiner; die Zahl der Rollenläufe zählt nicht. Gib dazu einen Startprompt zum Kopieren, der
+  den nächsten Schritt nennt; ein bloßes „.“ ist dort mehrdeutig.
 - Nach jeder Änderung von Code beauftragst du die Kritiker, die der Stand nennt. Ihren Lauf
   committest du als `Kritik <kurze Hashes>`.
 - Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;
   fortsetzen unter 120.000 Token Belegung, sonst neu.
-- Für dich gilt das Budget wie für jede Rolle (`prozess/ablauf.md`, Budget).
 - Fehlt eine Rolle, beauftragst du den Organisationsentwickler, sie vorzuschlagen.
 - Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein
   Briefing: Die Rolle liest selbst.

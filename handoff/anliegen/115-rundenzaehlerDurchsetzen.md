@@ -1,6 +1,6 @@
 # Rundenzähler der Anliegen durchsetzen
 
-115 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+115 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders: Nach Runde 3/3 wird ein Anliegen an ihn eskaliert,
@@ -33,3 +33,8 @@ Erledigt, wenn die drei Fälle gesperrt sind, die Gegenfälle durchgehen und
 `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.** Angenommen wie vorgeschlagen, alle drei Fälle in `statusrecht.py`, Meldung nennt die letzte Runde. Scheiter-Test je Fall und erlaubter Gegenfall in `statusrechtTest.py`. Eintrag in `prozess/regeln.md`; Vermerk in `ablauf.md` setzt der Organisationsentwickler. Das Modul zieht mit 114 um.
+
+**Nachprüfung.** In Ordnung: `rundenVerstoß` sperrt alle drei Fälle, die Gegenfälle gehen
+durch (`statusrechtTest.py`), Eintrag in `prozess/regeln.md` steht, Vermerk in `ablauf.md`
+gesetzt. Der Docstring von `statusrecht.py` nennt nur `erledigt`; das fällt unter die
+Lesbarkeit aus 114.
