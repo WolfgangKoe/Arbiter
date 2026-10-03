@@ -134,6 +134,12 @@ def testAuf1_3VorDerWahlIstKeinerAnDerReihe(aufstellung):
     assert aufstellung.anDerReihe is None
 
 
+def testAuf1_3SolangeDieAufstellungszoneOffenIstIstKeinerAnDerReihe(aufstellung, ersterSpieler):
+    aufstellung.gewinnerWählen(ersterSpieler)
+
+    assert aufstellung.anDerReihe is None
+
+
 def testAuf1_3NachDerWahlIstAnDerReiheWerNichtGewinnerIst(
     aufstellung, ersterSpieler, zweiterSpieler
 ):
