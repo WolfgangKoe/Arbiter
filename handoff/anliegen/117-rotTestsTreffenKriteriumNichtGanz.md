@@ -1,6 +1,6 @@
 # Rote Tests zu AUF-2, AUF-3, QUE-1, OBJ-1 treffen ihr Kriterium nicht ganz
 
-117 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
+117 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nachgerechnet mit Radius 16/25,4″ (32 mm) und den Stellen aus `conftest.py`:
