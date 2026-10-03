@@ -1,0 +1,2838 @@
+﻿
+
+Rules Appendix
+
+
+
+
+
+
+
+Author
+Community
+Data Export
+
+
+
+Settings
+
+Show fluff text
+
+Show Legends and not recommended rules/datasheets
+
+Show Forge World datasheets
+
+Show Specialist Detachments
+
+Show Crusade Rules
+
+Show Armies of Renown
+
+Show Boarding Actions rules
+
+Show non-Boarding Action stratagems
+
+Show base size
+
+Color theme:
+
+
+OS default
+
+Bright
+
+Dark
+
+The Rules
+
+Playing This Game
+Core Rules
+Open Play
+Matched Play
+Narrative Play
+Rules Appendix
+Matched Mission Packs
+Grand Tournament 2021
+Tactical Deployment
+Tempest of War
+War Zone Nachmund: Grand Tournament
+War Zone Nephilim: Grand Tournament
+Arks of Omen: Grand Tournament
+War Zones
+Charadon
+Nachmund
+Octarius
+Crusade Mission Packs
+Amidst the Ashes
+Beyond the Veil
+Catastrophe
+Containment
+Plague Purge
+Wars of Faith
+Boarding Actions
+Boarding Action Rules
+Gallowdark
+The Rock Besieged
+Dark Depths
+Herald of Misery
+Multiplayer Missions
+Others
+Open War
+Eldritch Omens
+Hexfire
+Piety and Pain
+Shadow Throne
+Psychic Awakening
+
+Factions
+
+Imperium
+Adepta Sororitas
+Adeptus Custodes
+Adeptus Mechanicus
+Agents of the Imperium
+Astra Militarum
+Grey Knights
+Imperial Knights
+Rogue Traders
+Space Marines
+Titan Legions
+Chaos
+Chaos Daemons
+Chaos Knights
+Chaos Space Marines
+Death Guard
+Heretic Titan Legions
+Renegades and Heretics
+Thousand Sons
+World Eaters
+Xenos
+Aeldari
+Drukhari
+Genestealer Cults
+Leagues of Votann
+Necrons
+Orks
+T’au Empire
+Tyranids
+Unaligned
+Unaligned
+
+Rules Appendix
+
+Contents
+Books
+RULES TERMS GLOSSARY
+RARE RULES
+Benefits of Cover When not in Terrain
+Ignoring the Benefits of Cover
+Improving the Benefits of Cover
+Units of Psykers
+Manifesting and Denying with non-Psykers
+Shoot Again
+Non-shooting Abilities
+Always Fight First/Last
+Fighting with Individual Models
+Fight Again
+Attacker’s Priority
+Morale Priority
+Resurrected Models
+Explodes
+Desperate Breakout and Rules that Prevent Falling Back
+Manifesting Priority
+Multiple Attacks that Inflict Mortal Wounds
+Scoring Additional Hits
+Stratagems that Gain or Refund CPs
+Moving Through Models
+Attacks That Make Multiple Hit Rolls
+Charging Aircraft
+Disembarking Large Models
+Resolving Abilities when Moving off the Edge of the Battlefield
+Shooting Whilst Embarked on a Transport
+Preventing Reinforcement Units From Setting Up
+Defensive Rules that Apply to Attacks with Specific Characteristics
+Splitting Units with Pre-existing Rules Effects
+Transports and Rules that Count as Remaining Stationary
+Ignoring Wounds Vs Rules that Prevent Models from Ignoring Wounds
+‘If Every Unit in Your Army’ Rules
+At the Start of, During and After Deployment
+Has Access to (Psychic Disciplines)
+Rules That Count As Remaining Stationary
+Psychic Powers that Modify Characteristics and have Additional Effects Based on the Psychic Test
+Preventing/Losing Objective Secured
+Modifying the Command Point Cost of Stratagems
+Rules that Dictate Wound Allocation Order
+Repositioned and Replacement Units
+
+Books
+
+Book
+Kind
+Edition
+Version
+Last update
+
+
+ Core Book update
+
+
+ Core Book update
+Rulebook
+9
+Indomitus 1.7
+January 2023
+
+RULES TERMS GLOSSARY
+This glossary contains a number of terms that you will encounter within Core Book and in supplementary products, such as Codexes. These are intended to provide precise definitions to aid in resolving some of the more complex rules interactions that may arise, and players should feel under no onus to memorise this list.
+Active player:
+ The active player is the player whose turn is currently taking place.
+Advances/Advanced:
+ If a unit makes an
+Advance
+ in its controller’s
+Movement phase
+, until the start of that player’s next
+Command phase
+, that unit, and every model in it, is said to have Advanced.
+Against (an attack):
+ When making an attack, if a
+saving
+
+throw
+ is made, that saving throw is said to be made against that attack.
+Armour saving throw:
+ An armour saving throw is a saving throw made using a model’s
+Save
+ characteristic.
+Army:
+ A player’s army consists of every model in their army roster and any models added to it over the course of the battle.
+Army Faction:
+ An army’s
+Army
+
+Faction
+ is a single Faction keyword shared by every unit in that army.
+Attack:
+ An attack is either a ranged attack or melee attack depending on which type of weapon is used to make it.
+Attack’s characteristics:
+ When resolving an attack made with a weapon, that attack is considered to have the same characteristics and abilities as that weapon. If any changes are made to the characteristics or abilities of an attack, those changes do not apply to the weapon it is made with, nor do they apply to any other attacks made with that weapon.
+Attacker/Attacking unit:
+ When resolving an attack, the model making the attack is the attacker and that model’s unit is the attacking unit.
+Attacking with a weapon:
+ When resolving an attack made with a weapon by a model, that model is said to be attacking with that weapon.
+Aura:
+ A rule that is classified as an aura can affect multiple models or units that meet its criteria and are within a set distance of the model it is on (including that model itself). If a model is within range of multiple auras with the same name, it can only be affected by one of those rules at any one time (see
+Aura
+
+Abilities
+).
+Automatically hit:
+ If an attack automatically hits, the hit roll is automatically successful.
+Automatically passes:
+ See ‘Automatically successful’.
+Automatically successful:
+ If a roll is automatically successful, do not roll any dice. If a hit roll is automatically successful, move straight to the wound roll. If a
+wound
+
+roll
+ is automatically successful, move straight to the allocation of that attack. If a
+Morale
+
+test
+ for a unit is automatically successful, no models flee and
+Combat
+
+Attrition
+
+tests
+ are not taken for that unit. If the Combat Attrition tests taken for a unit are automatically successful, no models flee that unit as a result of those tests. Any rules that take effect on a particular dice result or roll result do not take effect if the roll they refer to is automatically successful.
+Automatically wound:
+ If an attack automatically wounds, the wound roll is automatically successful.
+Battle round:
+ Each
+battle round
+ is made up of two turns, yours and your opponent’s.
+Battle-forged CP bonus:
+ In a player’s
+Command phase
+, if their army is
+Battle-forged
+, they gain 1
+Command
+
+point
+.
+Bearer:
+ The bearer of a weapon, or a Relic that replaces a weapon, is the model that is equipped with it. The bearer of any other piece of wargear, or a Relic that does not replace a weapon, is the model that has it.
+Can Fly:
+ Refers to any model or unit that has the
+FLY
+ keyword.
+Cannot be Affected by Psychic Powers:
+ If a unit cannot be affected by psychic powers, then it cannot be selected as the target for a psychic power, and if they are in range of a psychic power that is an
+aura
+
+ability
+, that aura ability does not apply to that unit. If such a unit is the closest visible enemy unit to a
+PSYKER
+ unit when it manifests
+Smite
+, then that power does nothing. Each time a unit is selected to shoot or fight, if it is under the effects of any psychic powers that would affect its attacks (e.g. a Blessing that increases their Ballistic Skill) then none of those rules apply when resolving attacks that target a unit that cannot be affected by psychic powers.
+Characteristics
+Characteristics
+Improving WS, BS and Sv characteristics:
+ When improving a WS, BS or Sv characteristic, subtract the appropriate amount from the number before the plus sign. For example, improving a WS of 3+ by 1 would result in a WS of 2+.
+Reducing WS, BS and Sv characteristics:
+ When reducing a WS, BS or Sv characteristic, add the appropriate amount to the number before the plus sign. For example, reducing a WS of 3+ by 1 would result in a WS of 4+.
+Improving an AP characteristic:
+ When improving an AP characteristic, subtract the appropriate amount from the characteristic. For example: improving an AP of -1 by 1 would result in an AP of -2; improving an AP of 0 by 1 would result in an AP of -1.
+Reducing an AP characteristic:
+ When reducing an AP characteristic, add the appropriate amount to the characteristic, to a maximum of 0. For example: reducing an AP of -1 by 1 would result in an AP of 0; reducing an AP of 0 by 1 would result in an AP of 0.
+Improving an invulnerable save:
+ When improving an invulnerable save, subtract the appropriate amount from the number before the plus sign. For example, improving an invulnerable save of 3+ by 1 would result in an invulnerable save of 2+.
+Reducing an invulnerable save:
+ When reducing an invulnerable save, add the appropriate amount to the number before the plus sign. For example, reducing an invulnerable save of 3+ by 1 would result in an invulnerable save of 4+.
+Or better (WS, BS, Sv characteristics & invulnerable saves):
+ When referring to the value of a WS, BS or Sv characteristic, or an invulnerable save, a better value is one with a lower number before the plus sign. For example, a WS of 2+ is better than a WS of 3+.
+Or worse (WS, BS, Sv characteristics & invulnerable saves):
+ When referring to the value of a WS, BS or Sv characteristic, or an invulnerable save, a worse value is one with a higher number before the plus sign. For example, a WS of 3+ is worse than a WS of 2+.
+Or better (AP characteristics):
+ When referring to the value of an AP characteristic, a better value is one with a higher number after the minus sign (note an AP of 0 can be considered to be an AP of -0). For example, an AP of -2 is better than an AP of -1, and an AP of -1 is better than an AP of 0.
+Or worse (AP characteristics):
+ When referring to the value of an AP characteristic, a worse value is one with a lower number after the minus sign (note an AP of 0 can be considered to be an AP of -0). For example, an AP of -1 is worse than an AP of -2, and an AP of 0 is worse than an AP of -1.
+
+
+
+Casualties Suffered:
+ When a rule refers to the casualties suffered by a unit, it is referring to the number of models that were destroyed.
+Charging
+Charge Distance:
+ The result of a
+charge
+
+roll
+ is the maximum distance, in inches, each model in the charging unit can move, and is sometimes referred to as the unit’s charge distance.
+Charge move:
+ Move made in the
+Charge phase
+ as part of a
+successful
+
+charge
+.
+Has charged:
+ If a unit makes a
+charge
+
+move
+ in a turn, until the end of that turn, that unit, and every model in it, is said to have charged.
+Has been charged:
+ If a unit was the target of a successful charge during a turn, until the end of that turn, that unit, and every model in it, is said to have been charged.
+Close combat weapon:
+
+Default
+
+melee
+
+weapon
+ that a model is equipped with if it has no other equipped melee weapons.
+Combat Attrition test:
+ Dice roll made for a unit in the
+Morale phase
+ to see how many models
+flee
+ from that unit.
+Considered to be (dice roll}:
+ See ‘Treated as (dice roll)’.
+Consolidation move:
+ 3" move that must end with the model closer to the closest enemy model (see
+Consolidate
+).
+Controller:
+ A unit or model's controller is the player whose army that unit or model is a part of.
+Counts as (dice roll):
+ See ‘Treated as (dice roll)’.
+CP:
+
+Command
+
+point
+.
+D3:
+ To roll a D3, roll one D6. Treat a roll of 1-2 as 1, 3-4 as 2, and 5-6 as 3. Any modifiers or rules that apply to the roll or to the dice result are applied to the final value, after the conversion (see
+Dice
+).
+Damage roll:
+ When determining a random Damage characteristic, the dice roll is called a damage roll.
+Declaring a charge:
+ When a player
+declares
+
+a
+
+charge
+
+with
+
+a
+
+unit
+, that unit is also said to be declaring a charge.
+Deny the Witch test:
+ 2D6 roll made in an attempt to prevent a psychic power from being manifested — must exceed the result of the roll made for that power’s
+Psychic
+
+test
+.
+Detachment:
+ When building a
+Battle-forged army
+, units are organised into
+Detachments
+ using the
+Battlefield Roles
+ shown on their datasheets.
+Detachment Abilities:
+ Detachment abilities are abilities gained by units in a Battle-forged
+KEYWORD
+ Detachment. Detachment abilities are not gained by units in
+Auxiliary Support
+,
+Super-heavy Auxiliary
+ and
+Fortification
+ Detachments.
+Detachment Rules:
+ Detachment rules are ones that are available to a player for having a particular
+KEYWORD
+ Detachment in their army. This keyword will be specified by the Detachment rules in question. Detachment rules can include Detachment abilities, Stratagems, Warlord Traits, Relics, and so on.
+Dice Results
+Dice result:
+ A dice result is the value shown on a single dice, regardless of the number of dice that make up the roll, before any modifiers are applied.
+Roll result:
+ A roll result is the final result of a roll, after any dice that make it up have been added together, before any modifiers are applied.
+Total:
+ A result is the final value of a dice roll after all modifiers have been applied.
+Discard lowest/highest dice result:
+ If multiple rules instruct the player to discard the lowest/highest dice result for a dice roll, the active player decides in what order those rules are resolved, and each of those rules takes effect one after the other.
+Double:
+ When making a dice roll, a double is a roll that includes any two dice of the same result.
+Draw a line:
+ When instructed to draw a line between two points, draw the imaginary straight line, 1mm wide, between those points.
+Eligible target:
+ When a model shoots with a ranged weapon, an eligible target is one that is not within
+Engagement
+
+Range
+ of any units from your army, and has at least one model that is both within that weapon’s range and visible to that model (unless otherwise specified).
+End of the phase:
+ Rules that specify that they take place at the end of a phase only take effect after any other actions that would take place in that phase have been completed. This means that it is not possible for a player to make use of any rules that would take place during a phase once an end of phase rule has taken effect.
+Enemy:
+ An enemy model or unit is one not in your army (see
+Units
+).
+Engagement Range:
+
+Engagement
+
+Range
+ is 1" horizontally and 5" vertically.
+Equipment:
+ A model’s equipment includes all of the weapons it is equipped with and all of the wargear it has.
+Fails to manifest:
+ If a
+PSYKER
+ does not successfully
+manifest
+
+a
+
+psychic
+
+power
+, they are said to have failed to manifest it.
+Fell Back/Fallen Back:
+ If a unit Falls Back in its controller’s
+Movement phase
+, until the start of that player’s next
+Command phase
+, that unit, and every model in it, is said to have
+Fallen
+
+Back
+.
+Fights:
+ When a unit fights, models in that unit
+pile
+
+in
+,
+make attacks
+, and
+consolidate
+.
+Friendly models/friendly units:
+ Two models or units are considered friendly to one another if they are in the same army (see
+Units
+).
+Full wounds remaining:
+ A model has its full wounds remaining if it has the same number of wounds remaining as its
+Wounds
+ characteristic.
+Half-strength:
+ If the number of remaining models in a unit is less than half that unit’s
+Starting Strength
+, that unit is said to be below
+Half-strength
+.
+Heroic Intervention:
+ 3" move that must end with the model closer to the closest enemy model (see
+Performing
+
+a
+
+Heroic
+
+Intervention
+).
+Heroically Intervened:
+ If a unit
+performs
+
+a
+
+Heroic
+
+Intervention
+ in a turn, until the end of that turn, that unit, and every model in it, is said to have Heroically Intervened.
+Highest dice result:
+ If a rule refers to the highest dice result and a dice roll involves multiple dice, if more than one of those dice have the same value, and that value is the highest, the active player selects one of those dice to be the highest dice result.
+Hits:
+ If a hit is scored, the attack is said to have hit.
+Ignoring wounds:
+ If a rule states that a model does not lose a wound, itis classified as ignoring that wound. Each time a model would lose a wound, it cannot make use of more than one rule that would allow them to
+ignore
+
+that
+
+wound
+.
+Immediately:
+ See ‘When’.
+In terrain:
+ A model is in terrain if it is partially on or within a
+terrain feature
+. A unit is in terrain if any model in that unit is partially on or within a terrain feature.
+Increasing the range of an aura:
+ When increasing the range of an
+aura
+, the increase applies only to the initial range of the aura, and not any aura effects that it might bestow on the affected units.
+Inspiring Leader:
+ Warlord Trait available to all
+WARLORDS
+ (see
+Inspiring
+
+Leader
+).
+
+
+
+Invulnerable saving throw:
+ An
+invulnerable
+
+saving
+
+throw
+ is a saving throw made using a model’s invulnerable save instead of its
+Save
+ characteristic.
+Keyword:
+ Units have
+keywords
+ on their
+datasheets
+. If a rule specifies that it applies to a model/unit with a keyword, it only applies to a model/unit that matches that keyword (i.e. has it on its datasheet). Pluralisation of keywords does not affect their ability to be matched.
+Keyword Detachment:
+ A
+KEYWORD
+ Detachment is a
+Detachment
+ in a
+Battle-forged army
+ where every model in that Detachment shares that
+KEYWORD
+, not including any models that specify that they do not prevent a Detachment from gaining its Detachment rules.
+Keywords — comma-separated list:
+ A rule with a comma-separated list of keywords, or two keywords separated by the word ‘or’ (e.g. ‘an
+IMMORTALS
+,
+DEATHMARKS
+ or
+LYCHGUARD
+ unit’) matches a model or unit if any one of those
+keywords
+ matches that model or
+unit
+.
+Keywords — multiples:
+ A rule with multiple adjacent keywords (e.g. ‘an
+AELDARI
+
+GUARDIANS
+ unit’) only matches a model or unit if that model or unit matches each of those
+keywords
+.
+Lowest dice result:
+ If a rule refers to the lowest dice result and a dice roll involves multiple dice, if more than one of those dice have the same value, and that value is the lowest, the active player selects one of those dice to be the lowest dice result.
+Maximum value:
+ If a rule states that a random characteristic or dice roll has its maximum value, determine its value as if each dice that makes up that characteristic or dice roll was rolled and its result had the highest possible dice value (e.g. D3 becomes 3, 2D6 becomes 12 and 3+D3 becomes 6).
+Melee attack:
+ An attack made with a
+melee
+
+weapon
+ is a melee attack.
+Melee weapon:
+ Weapons with a type of Melee are melee weapons.
+Minimum Move:
+ If a model has a Move characteristic that includes two values with an intervening dash, the lower number is its minimum Move characteristic and the higher number is its maximum Move characteristic. A maximum Move characteristic functions the same as a
+normal
+
+Move
+ characteristic. If a model has a minimum Move characteristic, in its controller’s
+Movement phase
+ that model must move at least that distance. If it cannot, and the
+Strategic Reserves
+ rules are not being used, that model is destroyed.
+Minimum value:
+ if a rule states that a random characteristic or dice roll has its minimum value, determine its value as if each dice that makes up that characteristic or dice roll was rolled and its result had the lowest possible dice value (e.g. D6 becomes 1, 2D6 becomes 2 and 3+D3 becomes 4).
+Model destroys a model:
+ A model is considered to have been destroyed by another model when the former is destroyed by an attack made by the latter, as the result of a
+mortal
+
+wound
+ inflicted by a rule that the latter is using, or as the result of any other rule the latter is using that explicitly states that an enemy model is outright destroyed.
+Model destroys a unit:
+ A model is considered to have destroyed a unit when that model destroys the last remaining model in that unit.
+Model’s phase/unit’s phase:
+ When a rule refers to a model’s/unit’s phase, that rule is referring to the relevant phase of that model’s/unit’s controller.
+Model’s type:
+ A model’s type refers to the name of the characteristic profile used by that model.
+Modifying characteristics:
+ Strength, Toughness, Attacks and Leadership characteristics can never be modified below 1. Characteristics with a value of ‘-’ can never be
+modified
+.
+Morale test:
+ Dice roll made in the
+Morale phase
+ for each unit that has suffered casualties that turn. If unsuccessful, results in a
+Combat
+
+Attrition
+
+test
+ for that unit.
+Mortal wounds:
+
+Saving
+
+throws
+ of any kind cannot be made against damage inflicted by
+mortal
+
+wounds
+, although rules that allow models to ignore wounds can be used. Mortal wounds are applied one at a time and are not lost if a model in the unit is destroyed — continue to apply them until they are all resolved or the unit is destroyed.
+Move normally:
+ Rules that refer to move/moves/moving normally are the same thing as making a
+Normal
+
+Move
+, e.g. a rule that states ‘instead of moving this unit normally’ means ‘instead of making a Normal Move with this unit’. If a rule simply tells you to make a move as if it were the
+Movement phase
+, but does not specify what kind of move is being made, it is a Normal Move.
+Moved x" or more:
+ Some rules require a unit to move x" or more, or are triggered when a unit moves x" or more, where x is a specific value listed in the rule itself. In both such cases, it is the displacement between the start and end of the move that is being referred to, and not the total distance moved. For example, in the former case, such a rule requires all parts of every model in the unit to end their move at least x" away from where they started. In the latter case, such a rule is triggered when all parts of every model in the unit have ended a move at least x" away from where they started.
+Nearest:
+ When resolving a rule on a model or unit that refers to the nearest model or unit, measure from the former to the latter.
+Non-
+KEYWORD
+:
+ A rule that specifies a non-
+KEYWORD
+ model or unit applies to a model or unit that does not have that
+KEYWORD
+. For example, if a rule refers to a non-
+VEHICLE
+ unit, then it would only apply to. a unit if that unit did not have the
+VEHICLE
+ keyword.
+Null characteristics:
+ If a model has a Strength or Leadership characteristic of ‘-’ and that characteristic is required to resolve a rule, use the model’s Toughness characteristic instead. Note that the substituted characteristic cannot be
+modified
+.
+Objective marker:
+ 40mm round marker used during certain missions. When measuring the range to an
+objective marker
+, measure to the closest point. A model can never count towards controlling more than one objective marker at the same time.
+Objective Secured:
+ If one player has models with this ability in range of an objective marker and there are no enemy models with this ability in range of that marker, that player controls that marker (see
+Objective
+
+Secured
+).
+Out of coherency:
+ Units that are not in
+unit
+
+coherency
+ in the
+Morale phase
+ are said to be out of coherency.
+Overwatch attack:
+ Shooting attack made by a unit that was the target of a charge, made after all targets of that charge have been declared but before the
+Charge
+
+roll
+ is made. If making a
+hit
+
+roll
+, requires an unmodified roll of 6 to score a successful hit (see
+Overwatch
+).
+Pile-in move:
+ 3" move that must end with the model closer to the closest enemy model (see
+Pile-in
+).
+Psychic test:
+ 2D6 roll made in an attempt to
+manifest
+
+a
+
+psychic
+
+power
+; the result must equal or exceed that power’s
+warp
+
+charge
+ value to be successful.
+Random characteristic:
+ A random characteristic is one that involves a
+dice
+ roll to determine its value, and is determined each time that characteristic is to be used (see
+Modifying Characteristics
+).
+Ranged attack:
+ An attack made with a ranged weapon is considered to be a ranged attack.
+Ranged weapon:
+ Weapons with a type of
+Rapid
+
+Fire
+,
+Assault
+,
+Heavy
+,
+Pistol
+ or
+Grenade
+ are considered to be ranged weapons.
+Re-roll:
+ When re-rolling a dice roll, all of the dice involved in that roll must be re-rolled. A
+dice
+ can never be
+re-rolled
+ more than once.
+Regaining wounds:
+ When a model regains a number of wounds, it regains up to that number of lost wounds. This cannot cause the model to have more wounds remaining than it started the battle with.
+Reinforcement unit:
+ Any unit that starts the battle in a location other than on the battlefield, and is not
+embarked
+ within a
+TRANSPORT
+ unit that does start the battle on the battlefield, is considered to be a Reinforcement unit. Any
+Reinforcement units
+ that have not been set up on the battlefield by the end of the battle count as destroyed.
+Remained Stationary:
+ If a unit
+Remains
+
+Stationary
+ in its controller’s
+Movement phase
+, or its controller has not yet had a Movement phase, then, until such a point as any model in that unit moves for any reason, it is said to have Remained Stationary.
+Removed from play:
+ When a model is removed from play it is taken off the battlefield.
+Resolving an attack:
+ Resolving an attack is the same as making an attack.
+
+
+
+Roll off:
+ Both players roll one D6 — the player with the highest result wins. In the event of a tie, roll again (see
+Roll-offs
+).
+RP:
+
+Requisition
+
+point
+.
+Setting up a Reinforcement unit:
+ When a
+Reinforcement unit
+ is set up on the battlefield in a turn, it cannot make a
+Normal
+
+Move
+,
+Advance
+,
+Fall
+
+Back
+ or
+Remain
+
+Stationary
+ that turn, and counts as having moved.
+Shoots:
+ When a model
+shoots
+ with a weapon, you make a number of attacks with that weapon as defined by its type. When a unit shoots, any or all of the models in that unit can shoot.
+Single target (model):
+ When a model attacks with one or more ranged weapons, if all of the attacks made with those ranged weapons have the same target unit, that model is said to be shooting at a single target.
+Single target (unit):
+ When a unit is chosen to shoot with, if all of the models in that unit that are making attacks shoot at a single target, and that target is the same for all of those models, the chosen unit is said to be shooting at a single target.
+Starting Strength:
+ A unit’s
+Starting Strength
+ is the number of models in it at the point that it is added to your army.
+Successfully manifested:
+ When attempting to
+manifest
+
+a
+
+psychic
+
+power
+, if the
+Psychic
+
+test
+ was successful and there was no successful
+Deny
+
+the
+
+Witch
+
+test
+, then that power is said to be successfully manifested. Resolve its effects.
+Suffered casualties:
+ If a unit has fewer models remaining than its
+Starting Strength
+, it is said to have suffered casualties.
+Suffers damage:
+ If an attack reaches the ‘
+Inflict Damage
+’ step of the attack sequence, the model that the attack was allocated to is said to have suffered damage, even if that model subsequently uses a rule to either ignore the wounds inflicted or it uses a rule that means those wounds are not lost.
+Target:
+ When resolving an attack, the target unit of that attack is also known as the target.
+Target of a charge:
+ When a player
+declares
+
+a
+
+charge
+ with a unit, the target of that charge is said to have been declared as the target of a charge.
+Transport capacity:
+ A
+TRANSPORT
+ model’s
+transport
+
+capacity
+ will specify how many and what types of models can
+embark
+ within it. A unit cannot embark within a
+TRANSPORT
+ model if this would cause that model to exceed this limit.
+Treated as (dice roll}:
+ When a dice result is treated as another value, any rules that would have taken effect as a result of that value had it been rolled will take effect.
+Unit:
+ A group of models from the same
+datasheet
+.
+Unit Characteristics
+Modifying a unit’s characteristic:
+ When a rule
+modifies
+ a unit’s characteristic, it modifies that characteristic for every model in that unit.
+Unit’s Leadership characteristic:
+ This is the value of the highest Leadership characteristic of any of the models in that unit.
+Unit’s Save characteristic:
+ If a rule refers to a unit’s
+Save
+ characteristic, it refers to the most common Save characteristic amongst models in that unit. If two different Save characteristics are equally common amongst models in a unit, that unit’s controller decides which of those characteristics constitutes that unit’s Save characteristic for the purpose of such a rule. When a rule modifies a unit’s Save characteristics, it modifies the Save characteristic of every model in that unit.
+Unit’s type:
+ A unit’s type is the name printed on its
+datasheet
+.
+Unit coherency:
+ The distance within which models in a unit must remain with each other. This is 2" horizontally and 5" vertically. Units must end any kind of move in
+unit
+
+coherency
+.
+Unit destroys a unit:
+ A unit is considered to have destroyed another unit when a model in the former destroys the latter.
+Unit within:
+ A unit is within a specified distance if any model in that unit is
+within that distance
+.
+Unit’s Engagement Range:
+ A unit’s
+Engagement
+
+Range
+ is the area covered by the Engagement Range of all models in that unit.
+Unit’s equipment:
+ When a rule refers to a unit’s equipment, it refers to all of the equipment of the models in that unit.
+Visible:
+ When resolving a rule on a model or unit that refers to a visible model or unit, the latter is visible if it is visible from the perspective of the former.
+VP:
+ Victory point.
+Weapon abilities:
+ Unless otherwise specified, the abilities listed on a weapon’s profile take effect each time an attack is resolved using that weapon profile.
+Weapons Types
+Weapons type:
+ The weapon types are
+Assault
+,
+Heavy
+,
+Pistol
+,
+Rapid
+
+Fire
+, Melee and
+Grenade
+. Each weapon type has different rules associated with it.
+Weapons Type characteristic:
+ A
+weapon’s Type
+ characteristic includes the weapon’s type and, if it is a ranged weapon, the
+number
+
+of
+
+attacks
+ it makes when the bearer shoots with it.
+When:
+ If a rule states that it takes place when a certain trigger occurs, unless otherwise specified, that rule takes effect before any others.
+Whole unit within:
+ A whole unit is within a specified distance if every
+model is within
+ that distance.
+Wholly in terrain:
+ A model is wholly in terrain if it is entirely on or within a
+terrain feature
+. A unit is wholly in terrain if every model in that unit is entirely on or within a terrain feature.
+Wholly within:
+ A model is wholly within a specified distance if every part of its base (or hull) is within that distance. A unit is wholly within if every model in that unit is
+wholly within
+.
+Within:
+ A model is within a specified distance if any part of its base (or hull) is within that distance. A unit is within if any model in that unit is
+within
+. When resolving a rule on a model or unit that refers to a model or unit being within a specified distance, measure the distance from the former to the latter.
+Wounds:
+ If a wound is successful, the attack is said to wound.
+
+
+
+RARE RULES
+The rules in this section describe some of the more uncommon advanced rules, as well as rare situations that arise when one uncommon rule interacts with another, and how to resolve them.
+Benefits of Cover When not in Terrain
+Sometimes a rule will tell you that a model or unit gains the benefit of cover, even while they are not entirely on or in a
+terrain feature
+. If a model or unit is under the effects of such a rule, and that rule does not specify what the benefits of cover are, when resolving an attack that model is assumed to be entirely on or within a terrain feature with the
+Light
+
+Cover
+ terrain trait for all rules purposes. This means that when an attack made with a ranged weapon wounds a model under the effect of this rule, add 1 to the
+saving
+
+throw
+ made against that attack (
+invulnerable
+
+saving
+
+throws
+ are not affected).
+If a model or unit has a rule that only applies while it is receiving the benefits of cover, then that rule will apply while that model or unit is under the effects of any rule that states it gains the benefit of cover even while they are not entirely on or within a terrain feature.
+Benefit of cover even when not in terrain = Light Cover.
++1 to saving throws against ranged weapons.
+Invulnerable saving throws unaffected.
+Ignoring the Benefits of Cover
+Some rules allow a weapon or model to ignore the benefits that a target might otherwise receive from being on or in a
+terrain feature
+.
+If a rule says that the target ‘does not receive the benefit of cover to its
+saving
+
+throw
+’, then, when resolving an attack with that rule, the models in the target unit ignore all benefits received from
+terrain traits
+ that improve its saving throw (e.g.
+Light
+
+Cover
+,
+Heavy
+
+Cover
+).
+If a rule says that the target ‘does not receive the benefits of cover that impose penalties on
+hit
+
+rolls
+’, then, when resolving an attack with that rule, models in the target unit ignore all benefits received from terrain traits that impose penalties on hit rolls (e.g.
+Dense
+
+Cover
+).
+If a rule says that the target unit ‘does not receive the benefit of cover’, without specifying what benefits are ignored, then, when resolving an attack with that rule, models in the target unit ignore all benefits received from all terrain traits, including those that improve its saving throws, impose penalties on hit rolls and so on (e.g. Light Cover, Heavy Cover). Note that rules that say that the target unit ‘does not receive the benefit of cover’ do not enable a model or weapon with that rule to target a unit that would not normally be visible due to
+terrain features
+ with the
+Obscuring
+ trait.
+Does not receive the benefit of cover to saving throws = ignore Light Cover and Heavy Cover.
+Does not receive the benefits of cover that imposes a penalty on hit rolls = ignore Dense Cover.
+Does not receive the benefits of cover = ignore Light Cover, Heavy Cover, Dense Cover etc.
+Improving the Benefits of Cover
+Some models have abilities that improve the bonus a model receives to its
+saving
+
+throw
+ when it is receiving the benefit of cover — for example, ‘add 2 instead of 1 to saving throws for models in this unit while it is receiving the benefit of cover’. If a model or unit with such a rule is receiving the benefits of cover from a terrain feature with the
+Light
+
+Cover
+ or
+Heavy
+
+Cover
+ trait, then this rule is applied as written. If that model or unit is receiving the benefits of cover from any other terrain features with any other
+terrain traits
+, you instead add 1 to its saving throws, in addition to any other benefits of cover that are gained from those terrain features. In either case,
+invulnerable
+
+saves
+ are unaffected.
+Add 2 to saving throws instead of 1 if receiving benefits from Light Cover or Heavy Cover terrain features.
+Add 1 to saving throws if receiving benefits from any other terrain features.
+Units of Psykers
+If a unit has more than one model with the
+PSYKER
+ keyword, you must select one of those models each time its unit attempts to
+manifest
+ or
+deny
+ a psychic power, before you take the
+Psychic
+
+test
+ or
+Deny
+
+the
+
+Witch
+
+test
+. Measure the distance and check visibility using the model you selected.
+Manifesting and Denying with non-Psykers
+Sometimes a rule will allow a model that is not a
+PSYKER
+ to attempt to
+manifest
+ or
+deny
+ a psychic power. When resolving such abilities, it does so exactly as if it were a
+PSYKER
+, and is affected by rules that modify
+Psychic
+
+tests
+ or
+Deny
+
+the
+
+Witch
+
+tests
+, but it is not a
+PSYKER
+ for any other rules purposes.
+Units of
+PSYKERS
+: When attempting to manifest or deny a psychic power, first select one model in the unit to measure range and visibility from.
+
+
+
+Shoot Again
+Some rules allow units (or sometimes models or weapons) to shoot again in the
+Shooting phase
+, or shoot ‘as if it were the Shooting phase’. Such rules cannot be used on a unit unless it is eligible to shoot at the time when that rule is used.
+When a unit shoots again, any models in that unit that have already shot with any of the weapons they are equipped with earlier in that phase can shoot with those weapons one additional time. When a model shoots again, that model can shoot with any weapons it is equipped with that it has already shot with earlier in that phase one additional time. When a model can shoot with a specific weapon again, that model can shoot with it one additional time if it has already shot with it earlier in that phase.
+If a rule allows a unit, model or weapon to shoot again, then it must completely resolve its first shooting attack before resolving the second. This can be at a different target. If a rule is used to make a unit shoot again at the end of the Shooting phase, the phase does not end until after all these rules have been resolved.
+Rules that allow a unit to shoot again can only be used on eligible units.
+Must completely resolve first shooting attack before starting the second.
+Can target different unit(s).
+Shooting phase does not end until after all units that are shooting again have done so.
+Non-shooting Abilities
+Some models and units have abilities that can be used instead of shooting with that model or unit. Such abilities can only be used in your
+Shooting phase
+, but can be used even if your unit has no ranged weapons, or if it
+Advanced
+ or
+Fell
+
+Back
+ this turn, and such abilities can be used even while the unit is within
+Engagement
+
+Range
+ of any enemy units.
+Abilities used ‘instead of shooting’ can be used in your Shooting phase.
+Such abilities can be used even if unit Advanced, Fell Back or is in Engagement Range of enemy.
+Always Fight First/Last
+Some rules allow a unit from your army to always fight first in the
+Fight phase
+, even if they didn't make a
+charge
+
+move
+ this turn. If the enemy has units that have charged, or that have similar rules, then alternate selecting units to fight with from amongst these units, starting with the player whose turn is taking place.
+Similarly, some rules say that a certain unit cannot be selected to fight in the Fight phase until after all other eligible units have done so. If both players have units that cannot fight until after all other units have done so, then the players alternate selecting which of those units to fight with, starting with the player whose turn is taking place.
+If a unit is under the effects of both a rule that always lets it fight first in the Fight phase, and a rule that says it cannot be selected to fight until after all other units have done so, it instead fights as if neither rule is affecting it.
+Note that it doesn’t matter how many rules are affecting a unit that enable it to fight first, or how many rules are affecting it that say it cannot be selected to fight until after all other units have done so – if a unit is under the effects of one or more of both kinds of ability simultaneously, that unit instead fights as if none of those rules are affecting it.
+Note that the
+Counter-offensive
+ Stratagem requires you to select a unit that is eligible to fight. This means that if a unit is under the effects of a rule that says that it is not eligible to fight until after all other eligible units have done so, then unless that unit is also under the effects of a rule that lets it fight first, you will not be able to select that unit to use the Counter-offensive Stratagem.
+Some examples of rules that always allow a unit to strike first include
+Martial Superiority
+ and
+Veil
+
+of
+
+Time
+ (see
+Codex: Space Marines
+),
+Precognitive Strike
+ (see
+Codex: Necrons
+), etc. Also note, as per the core rules, that units that have charged fight first in the Fight phase, and for the purposes of this Rare Rule this is considered to be a rule that lets a unit always strike first.
+Some examples of rules that always make a unit strike last (or say a unit cannot be selected to fight until after all other eligible units have done so) include
+Tempormortis
+ (see
+Codex: Space Marines
+),
+The
+
+Armour
+
+of
+
+Russ
+ (see
+Codex Supplement: Space Wolves
+),
+Obeisance Generators
+ (see
+Codex: Necrons
+), etc.’
+ See also
+Designer’s Commentary
+ on that topic.
+If both players have models that fight first/last, alternate selecting units to fight, starting with player whose turn is taking place.
+If a unit can always fight first but must also fight last, it fights as if not affected by either rule.
+Fighting with Individual Models
+Normally units are selected to fight, but some rules instead specify that only one model in a unit can fight (or can fight again - see below). In these instances, that model is allowed to make a
+pile-in
+
+move
+, but must still be in
+unit
+
+coherency
+ at the end of its move. It then makes a number of attacks with its melee weapons, as specified in the
+Make Close Combat Attacks
+ section of the
+Fight phase
+. Finally, that model can make a
+consolidate
+ move, but must still be in unit coherency at the end of the move.
+Some rules enable an individual model in a unit to fight — such a model piles in, makes close combat attacks, then consolidates.
+Pile-in and consolidate moves must end in unit coherency.
+
+
+
+Fight Again
+Some rules allow units to fight again in the
+Fight phase
+, or fight ‘as if it were the Fight phase’. Such rules cannot be used on a unit unless it is eligible to fight at the time when that rule is used. Remember that a unit is only eligible to fight if it is within
+Engagement
+
+Range
+ of an enemy unit, or if it made a
+charge
+
+move
+ in the same turn. In addition, all the normal targeting rules apply to a unit that is using a rule to fight again (e.g. if the unit made a charge move this turn it can still only target enemy units it declared a charge against or that
+performed
+
+a
+
+Heroic
+
+Intervention
+).
+If a rule allows a unit to fight again, then it will
+pile
+
+in
+,
+make close combat attacks
+ and
+consolidate
+ again. Treat each time a unit is selected to fight as a separate unit being selected to fight for all rules purposes. This means that after it has fought for the first time in a phase, your opponent can choose an eligible unit to fight with before you fight with your unit for a second time (you need not consecutively use both of the unit's opportunities to fight — unless of course there are no other eligible units to select to fight with). If such a unit charged this turn, it will still fight both times before any units that did not charge. Note that any rule that interrupts the normal sequence of who fights first can be used to fight inbetween the unit's first and second fight.
+If a rule is used to make a unit fight again at the end of the Fight phase, and the unit ends its consolidation move within Engagement Range of any enemy units that have not yet been selected to fight during this phase, those units are now eligible units and your opponent can fight with them before the phase ends.
+Rules that allow a unit to fight again can only be used on eligible units.
+Fight again = pile in, make close combat attacks and consolidate again.
+Each time a unit fights again it is treated as a separate unit being selected to fight.
+Fight phase does not end until every unit in Engagement Range that has not yet fought has done so.
+Attacker’s Priority
+While resolving attacks, you'll occasionally find that two rules cannot both apply — for example, when an attacking model with an ability that enables it to always score a successful hit on a 2+ targets a model that has an ability that states it can only be hit on a 6+. When this happens, the attacking model’s rules take precedence.
+If attacking model and target unit have conflicting rules, the attacking model’s rule takes precedence.
+Morale Priority
+While resolving
+Morale
+
+tests
+, you'll occasionally find that two rules are in direct conflict and cannot both apply - for example, when a unit is being simultaneously affected by one rule that says it automatically passes Morale tests and another that says it automatically fails Morale tests. When this happens, rules that say a unit automatically passes a Morale test always take precedence over rules that say a Morale test is automatically failed.
+Similarly, rules that say no models flee from a unit always take precedence over rules that say that a number of additional models flee that unit.
+If a unit is affected by conflicting rules, those that automatically pass Morale tests or cause no models to flee take precedence.
+Resurrected Models
+Some rules resurrect or return models to their unit in the same turn they were
+destroyed
+. For the purposes of
+Morale
+
+tests
+, such models do not count as having been destroyed this turn — exclude them when determining if a unit has to take a Morale test, and when determining what to add to a D6 roll when taking a unit’s Morale test. For the purposes of allocating attacks later during the same phase, such models do not count as having lost any wounds or as already having had any attacks allocated to them this phase.
+Exclude models that were destroyed and returned to a unit in the same turn for Morale test purposes.
+Models that were destroyed and returned to a unit do not count as already having lost wounds/having already had attacks allocated to them during this phase.
+
+
+
+Explodes
+When
+destroyed
+, some models have an ability that gives them a chance to explode (or crash and burn, or lash out with death throes etc.) and inflict
+mortal
+
+wounds
+ on nearby units. If a model has such an ability and is destroyed, then it is always the player controlling that model who rolls to see if it explodes (or similar), and it is always this player who rolls to see if nearby units suffer damage, and if they do, how much damage is inflicted.
+If a model could explode, controlling player rolls the D6.
+If a model explodes when destroyed, controlling player rolls to inflict damage on nearby units.
+Desperate Breakout and Rules that Prevent Falling Back
+Some rules either prevent enemy units from
+falling
+
+back
+, or when a unit is selected to Fall Back, triggers a
+roll-off
+, test or other dice roll that can result in the enemy unit being unable to Fall Back. In either cases, a rule that prevents Falling Back takes precedence over
+Desperate
+
+Breakout
+ Stratagem. This means, in the first case, that using the Stratagem on a unit would not enable it to Fall Back - you would be spending
+CPs
+ only for the chance to destroy some of your own models. In the second case, if the Desperate Breakout stratagem is used on a unit, then after rolling to see if any models in that unit are
+destroyed
+, any roll-off, test or other roll is then triggered and resolved (which may result in the unit not being able to Fall Back). Note that in either case, if a rule prevents a unit from Falling Back, no models in that unit can make (and hence end) a Fall Back move, so no additional models in that unit are destroyed, but the unit the Stratagem was used on will still be unable to do anything else this turn.
+Rules that prevent Falling Back take precedence over the
+Desperate
+
+Breakout
+ Stratagem.
+Manifesting Priority
+While
+manifesting
+ a psychic power, you’ll occasionally find that two rules are in direct conflict and cannot both apply - for example, when one rule says that a psychic power cannot be
+denied
+ and another rule says that a psychic power is denied (or resisted). When this happens, rules that say a psychic power cannot be denied take precedence over rules that say the psychic power is denied.
+If a psychic power is manifested and is affected by conflicting rules regarding whether it can or cannot be denied, rules that say that the psychic power cannot be denied take precedence.
+Multiple Attacks that Inflict Mortal Wounds
+Some attacks can inflict
+mortal
+
+wounds
+ either instead of, or in addition to, the normal damage. If, when a unit is selected to shoot or fight, more than one of its attacks that target an enemy unit have such a rule, all the normal damage inflicted by the attacking unit’s attacks are resolved against that target before any of the mortal wounds are inflicted on it.
+If a unit can make multiple attacks that inflict mortal wounds, all of the normal damage inflicted by all of the attacking unit’s attacks is resolved before any of the mortal wounds are resolved.
+
+
+
+Scoring Additional Hits
+When a model makes an attack, some rules will let that attack score one or more additional hits on a particular
+hit
+
+roll
+ (e.g. ‘each time an attack is made with this weapon, an unmodified hit roll of 6 scores 1 additional hit’). If the attacking model is also benefiting from any other rules that trigger on a particular hit roll (e.g. ‘each time an attack is made with this weapon, an unmodified hit roll of 6 automatically wounds the target’), then only the original attack benefits from those rules. If any additional hits are scored as the result of a particular hit roll, those additional hits are not considered to have been made with any hit roll – they simply hit the target and you must continue the attack sequence for them (i.e. make a
+wound
+
+roll
+).
+If a hit roll scores additional hits, those additional hits do not benefit from any other rule that triggered on the original attack’s hit roll.
+Stratagems that Gain or Refund CPs
+The advanced rules for
+Command
+
+points
+ state that you cannot gain, or have refunded, more than 1 Command point per battle round because of any rules (other than via the exceptions listed
+here
+, such as the
+Battle-forged CP Bonus
+). However, there are a small handful of Stratagems that let players gain or refund several Command points when used (e.g.
+Feeder Tendrils
+ in Codex: Tyranids). So long as such a Stratagem is used during a phase (i.e. it is not used ‘before the battle’ or ‘at the end of a battle round’), the limit of gaining or refunding 1 Command point per battle round does not apply to any Command points gained via Stratagems.
+The limit of gaining or refunding 1 CP per battle round does not apply to any CPs gained via Stratagems that are used during a phase.
+Moving Through Models
+Some models have a rule that enables them to ‘move through/over models’, or ‘move through/over models as if they were not there’. Sometimes such a rule will only apply to specific types of movement (e.g.
+Normal
+
+Moves
+,
+Advance
+
+moves
+,
+charge
+
+moves
+ etc.) while other times it will apply to all types of movement. In any case, when moving a model with such a rule, it can be moved within
+Engagement
+
+Range
+ of enemy models, but it can never finish a move on top of another model, or its base, and it cannot finish a Normal Move, Advance or
+Fall
+
+Back
+ move within Engagement Range of any enemy models, and it can only end a charge move in Engagement Range of units it
+declared
+
+a
+
+charge
+ against that phase).
+Models that can move through/over enemy models can also be moved within Engagement Range of enemy models.
+Models cannot end a move on top of another model.
+Models cannot end a Normal Move, Advance or Fall Back move within Engagement Range of any enemy unit.
+Models can only end a charge move within Engagement Range of enemy units that they declared a charge against that phase.
+Attacks That Make Multiple Hit Rolls
+Some rules, typically weapon abilities, tell you to roll more than one
+hit
+
+roll
+ for each attack made, e.g. ‘each time an attack is made with this weapon, make 2 hit rolls instead of 1’. In these cases, each hit roll is treated as a separate attack that is made against the same target. As such, all normal rules that are triggered by attacks, or that apply to attacks (such as
+re-rolls
+ or modifiers conferred by other rules) apply to each ‘hit roll’. Note that these additional attacks do not themselves result in more hit rolls being made.
+Some rules can generate additional attacks during the attack sequence itself, e.g. ‘after resolving all this model’s attacks, it can make a number of additional attacks against that enemy unit equal to the
+number
+
+of
+
+attacks
+ that did not reach the
+inflict damage
+ step of the attack sequence during that fight.’ In these cases, these additional attacks can never benefit from rules that let you roll more than one hit roll for each attack being made – they can only ever generate one additional hit roll for each attack being made – but all other rules that are triggered by attacks, or that apply to attacks (such as re-rolls or modifiers conferred by other rules) apply to each additional hit roll. In addition, these additional attacks cannot themselves trigger any rules that would generate any further additional attacks.
+If a rule tells you to make more than one
+hit
+
+roll
+ for each attack made, each hit roll is treated as a separate attack made against the same target.
+If a rule generates additional attacks during the attack sequence, those additional attacks never benefit from rules that tell you to make more than one hit roll for each attack made, and they can never themselves generate additional attacks.
+Charging Aircraft
+It is not normally possible to end any kind of move within
+Engagement
+
+Range
+ of an enemy
+AIRCRAFT
+ model. However, many
+AIRCRAFT
+ models have an ability (e.g.
+Airborne
+) that specifically says that they can only be charged by enemy units that can
+FLY
+. Such rules take precedence over those in the Core book, and units that can
+FLY
+ can indeed
+declare
+
+a
+
+charge
+ against an
+AIRCRAFT
+ model, and they can end a charge move within Engagement Range of it.
+Units that can
+FLY
+ can
+declare
+
+a
+
+charge
+ against
+AIRCRAFT
+ models.
+Disembarking Large Models
+Some models are so large that when they are
+disembarking
+ from a
+TRANSPORT
+ model it is not possible to set them up wholly within 3", typically because the disembarking model is itself larger than 3" in all dimensions. In these cases, set such a model up with its base (or hull) within 1" of its
+TRANSPORT
+ model’s base (or hull), and not within
+Engagement
+
+Range
+ of any enemy models.
+If it is impossible to set up a
+disembarking
+ model wholly within 3" of their
+TRANSPORT
+ model because it is too large, set it up within 1" of its
+TRANSPORT
+ model instead.
+
+
+
+Resolving Abilities when Moving off the Edge of the Battlefield
+Some models, typically
+AIRCRAFT
+, have rules that are used after they have finished making a move in the
+Movement phase
+, such as dropping bombs on a unit they have moved over. If a unit has such a rule and it can move off the edge of the battlefield (such as is the case with
+AIRCRAFT
+ when the
+Strategic Reserves
+ rule is being used), then for the purposes of those rules, that unit’s move is considered to have finished when it touches the edge of the battlefield; such rules are then resolved, and the model is then removed from the battlefield.
+If a unit can move off the edge of the battlefield, it can still resolve rules that are triggered at the end of its move before being removed from the battlefield.
+Shooting Whilst Embarked on a Transport
+Some rules, such as Open-topped, enable units to shoot and make ranged attacks even while
+embarked
+ within a
+TRANSPORT
+ model. Each time such an embarked unit is selected to shoot, the following rules apply to it:
+Stratagems
+ cannot be used on that unit in order to affect its attacks, and you cannot use the
+Command
+
+Re-roll
+ Stratagem to affect any dice rolls made for its models’ ranged attacks.
+Measure distances and draw line of sight from any point on the
+TRANSPORT
+ model when models in that unit make the ranged attacks.
+If the
+TRANSPORT
+ model made a
+Normal
+
+Move
+,
+Advanced
+,
+Fell
+
+Back
+ or
+Remained
+
+Stationary
+ this turn, embarked units are considered to have done the same when they make ranged attacks.
+While the
+TRANSPORT
+ model is within
+Engagement
+
+Range
+ of any enemy units, unless the ability that the
+TRANSPORT
+ model has that allows its passengers to shoot whilst embarked states otherwise, then models in embarked units cannot make ranged attacks, except with
+Pistols
+.
+Unless specifically stated otherwise, the embarked unit is not affected by the abilities (including
+aura
+
+abilities
+) of any other unit, even if that unit is also embarked within the same
+TRANSPORT
+ model.
+If the unit was under the effects of a rule when it embarked on the
+TRANSPORT
+ model (such as rules bestowed on it during the
+Command phase
+, by a psychic power or a Stratagem etc.) those rules do not apply to that unit whilst it is embarked.
+Any abilities (including
+Detachment abilities
+) that models in an embarked unit have, or that their weapons have, continue to apply when they make ranged attacks.
+If a restriction applies to the
+TRANSPORT
+ model, that same restriction applies to units embarked within it. For example, if the
+TRANSPORT
+ model is not eligible to shoot with because it has Advanced or
+Fallen
+
+Back
+ this turn, its passengers are not eligible to shoot with.
+If a
+TRANSPORT
+ model is under the effects of an ability which would apply a modifier to a
+hit
+
+roll
+,
+wound
+
+roll
+ or damage roll when making a ranged attack, the same modifier applies each time an embarked model makes a ranged attack.
+Preventing Reinforcement Units From Setting Up
+Some rules prevent
+Reinforcement units
+ from setting up on certain parts of the battlefield e.g. ‘enemy units that are set up on the battlefield as Reinforcements cannot be set up within 12" of this unit.’ Such rules always take precedence over rules that instruct you where you can set up Reinforcement units (e.g. ‘in the
+Reinforcements step
+ of one of your
+Movement phases
+ you can set up this unit anywhere on the battlefield that is more than 9" away from any enemy models’. The only exception is units that are
+arriving from Strategic Reserves
+ that are set up within 1" of their own battlefield edge and wholly within their own deployment zone – in this case, the Strategic Reserves unit can be so set up, despite any rules enemy models have that would otherwise prevent it from being set up.
+Rules that prevent
+Reinforcement units
+ from being set up take precedence over rules that allow Reinforcement units to be set up.
+Does not apply to
+Strategic Reserve
+ units that are set up within 1" on their battlefield edge and within their own deployment zone.
+Defensive Rules that Apply to Attacks with Specific Characteristics
+Some rules only apply against attacks that have a specific characteristic. For example, ‘Each time an attack with an Armour Penetration characteristic of -1 is allocated to a model in this unit, that attack has an Armour Penetration characteristic of 0 instead.’ Each time you determine if such a rule is triggered, and so applies, always use the modified characteristics of that attack at the
+Allocate Attack
+ step of the attack sequence. In the example above, that means that if an attack which originally has an Armour Penetration characteristic of 0, but then is modified by another rule before the Allocate Attack step to be -1, then at the Allocate Attack step it would then trigger the ability and be changed back to 0 instead.
+To determine if a defensive rule applies against an attack, use the modified characteristics of that attack at the
+Allocate Attack
+ step of the attack sequence.
+Splitting Units with Pre-existing Rules Effects
+Some rules enable one unit to split up into two or more smaller units. Each time this happens, any rules that the original unit was being affected by when it split, and which would continue to affect it for a specific duration (from abilities, Stratagems, psychic powers, etc.) continue to affect all of the individual units it split into until such a point as they would normally have no longer applied. For example, if the original unit was within range of an
+aura
+
+ability
+ when it split, any given individual smaller unit would only be affected by that aura ability if it was itself still within range of that ability after the split, whereas if the original unit was being affected by a psychic power that lasted until the end of that turn at the point when it split, all of the smaller individual units would still be affected by it until the end of that turn.
+Rules that affect a unit at the time when it splits into several smaller units continue to apply to all of those smaller units for the duration of that rule.
+Aura
+
+abilities
+ only affect those smaller units whilst they remain within range of that ability.
+Transports and Rules that Count as Remaining Stationary
+Some rules allow a model to count as having
+Remained
+
+Stationary
+, even if that model has moved during its
+Movement phase
+. Even if a
+TRANSPORT
+ model is subject to such a rule, embarked models still cannot
+disembark
+ from that
+TRANSPORT
+ model during the Movement phase if that
+TRANSPORT
+ model has already moved, unless that
+TRANSPORT
+ model (or the models embarked within it) have a rule that explicitly allows them to disembark after the
+TRANSPORT
+ model has moved.
+Units cannot disembark from a
+TRANSPORT
+ model after it has moved, even if that
+TRANSPORT
+ model is under the effects of a rule that lets it count as having Remained Stationary even if it has moved.
+Ignoring Wounds Vs Rules that Prevent Models from Ignoring Wounds
+Some models have a rule that says that they cannot lose more than a specified number of wounds in the same phase/turn/battle round, and that any wounds that would be lost after that point are not lost. Similarly, some models have a rule that reduces damage suffered by a stated amount (e.g.
+Duty Eternal
+). In any of these cases, when such a model is attacked by a weapon or model with a rule that says that enemy models cannot use rules to ignore the wounds it loses, that rule takes precedence over the previous rule, and if that attack inflicts any damage on that model, it loses a number of wounds equal to the Damage characteristic of that attack, even if it has already lost the specified number of wounds already this phase/turn/battle round.
+Rules that say models ‘cannot use rules to ignore the wounds they lose’ take precedence over rules that say that a model cannot lose more than a specified number of wounds in the same phase/turn/battle round, and also take precedence over rules that reduce damage suffered by a stated amount.
+
+
+
+‘If Every Unit in Your Army’ Rules
+Many armies have abilities that only apply if every model in your army has a specific keyword. For example, many units in Codex: Space Marines have the
+Combat Doctrines
+ ability, but this rule only applies if ‘every unit in your army has the Adeptus Astartes keyword’ (with a few listed exceptions). The condition of ‘every unit in your army’ is checked once, after you have selected your army, which happens at the end of the ‘Muster Armies’ step of the mission sequences used in a mission pack, and such rules either apply for the duration of the battle or they don’t. If the condition is satisfied at the end of this step, then those rules will apply throughout the battle, regardless of whether or not new units are added to your army during the battle that might not satisfy this condition. Similarly, if at the end of the ‘Muster Armies’ step, this condition is not satisfied, then it will not apply for the duration of the battle, even if during the battle you suffer casualties to the point where all your remaining units would start to satisfy the condition.
+At the Start of, During and After Deployment
+These terms are commonly used in many rules. We wanted to clarify when each of these happens in the mission sequences that appear in mission packs such as Open Hostility, Eternal War etc.
+At the Start of Deployment:
+ A rule that happens ‘at the start of deployment’, is resolved at the start of the ‘Declare Transports and Reserves’ step of the sequence.
+Combat Squads
+ (see Codex: Space Marines) is an example of just such a rule.
+During Deployment:
+ A rule that happens ‘during deployment’ can happen any time between the start of the ‘Declare Transports and Reserves’ step and the end of the ‘Deploy Armies’ step. The rule itself will provide further details as to exactly when it is used, but typically if the rule lets you set a unit up in a location that is not on the battlefield, it happens during the ‘Declare Transports and Reserves’ step, otherwise it happens during the ‘Deploy Armies’ step.
+Teleport Strike
+ and
+Concealed Positions
+ (see Codex: Space Marines) are examples of just such rules that are resolved at different times; a rule such as
+Teleport Strike
+ allows a unit to set up in a location that is not on the battlefield, and so is resolved in the ‘Declare Transports and Reserves’ step; a rule like
+Concealed Positions
+ triggers ‘when you set this unit up’, which happens in the ‘Deploy Armies’ step.
+After Deployment:
+ These rules, which also include wordings such as ‘after both sides have deployed’, ‘after both sides have finished deploying’ etc. happen in the ‘Resolve Pre-Battle Abilities’ step. The Lord of Deceit Warlord Trait (see Codex: Space Marines) is an example of just such a rule. After all of these rules have been resolved, the players move onto the ‘Begin the Battle’ step, and the first battle round begins (triggering any rules that are used ‘when the first battle round begins’).
+Has Access to (Psychic Disciplines)
+The term ‘has access to’ is sometimes used in rules, typically in conjunction with Relics,
+Warlord
+
+Traits
+ and other upgrades that allow
+PSYKERS
+ to know additional psychic powers. We wanted to clarify exactly what the term ‘has access to’ means.
+If a
+PSYKER
+ unit’s
+datasheet
+ says that it can know psychic powers from one or more psychic disciplines, then that
+PSYKER
+ unit has access to those psychic disciplines.
+If a
+PSYKER
+ unit has the option to know psychic powers from a different discipline
+in addition
+ to the discipline(s) listed on their datasheet, then that
+PSYKER
+ unit has access to that psychic discipline(s) as well.
+If a
+PSYKER
+ unit has the option to know psychic powers from a different discipline
+instead
+ of a discipline listed on their datasheet, then that
+PSYKER
+ unit has access to that psychic discipline instead.
+Example:
+ An army includes two
+DARK
+
+ANGELS
+
+LIBRARIAN
+
+IN
+
+PHOBOS
+
+ARMOUR
+ units. This unit’s datasheet says that each knows
+Smite
+ and two psychic powers from the
+Obscuration discipline
+. As part of a
+DARK
+
+ANGELS
+ Detachment, the player can choose for one, or both to instead know powers from the
+Interromancy discipline
+. The controlling player decides to do so with the first Librarian, but not the second. The first therefore knows powers from the Interromancy discipline and so has access to this discipline. The second knows powers from the Obscuration discipline, and so has access to this discipline. If the first
+PSYKER
+ was also the bearer of the
+Tome
+
+of
+
+Malcador
+, it would know one additional psychic power from the Interromancy discipline, while if the second
+LIBRARIAN
+ had this relic, it would know one additional power from the Obscuration discipline.
+Rules That Count As Remaining Stationary
+Some rules allow a unit to count as having
+Remained
+
+Stationary
+, or count as if it had not moved, even if that unit has moved during its
+Movement phase
+. The following rules apply to these type of rules:
+Such rules, if they apply in the
+Shooting phase
+, mean that a unit is eligible to shoot even if it has
+Advanced
+ or
+Fallen
+
+Back
+ this turn.
+Such rules, if they apply in the Shooting phase, mean that
+INFANTRY
+ models do not suffer the penalty to
+hit
+
+rolls
+ incurred for firing
+Heavy
+
+weapons
+ in the same turn that their unit has moved.
+Such rules, if they apply in the Shooting phase, mean that models do not suffer the penalty to hit rolls incurred for firing
+Assault
+
+weapons
+ in the same turn that their unit has Advanced.
+Such rules, if they apply in the
+Charge phase
+, mean that the unit is eligible to
+declare
+
+a
+
+charge
+ even if it has Advanced or Fallen Back this turn.
+Such rules mean that any other rules (abilities, Stratagems etc.) that are used or triggered when a unit Remains Stationary (e.g. Grinding Advance) can be used/are triggered.
+Even if a
+Reinforcement
+ unit is subject to such a rule, that rule has no effect on that unit in the turn they are set up on the battlefield. This means
+Reinforcement units
+ always count as having moved (i.e. they never count as having Remained Stationary). Remember that this also includes
+Repositioned and Replacement units
+.
+Even if a
+TRANSPORT
+ model is subject to such a rule, embarked models still cannot
+disembark
+ from that
+TRANSPORT
+ during the Movement phase if that
+TRANSPORT
+ has already moved, unless that
+TRANSPORT
+ (or the models embarked within it) have a rule that explicitly allows them to disembark after the
+TRANSPORT
+ has moved (but if a unit does so, it cannot then charge during the same turn).
+If a unit has disembarked from a
+TRANSPORT
+ model, rules which allow that unit to be treated as though it has Remained Stationary have no effect.
+Even if a unit is subject to such a rule, it cannot start an action if it has
+Advanced
+ or
+Fallen
+
+Back
+ this turn, and any action that it is currently performing but has yet to complete will still fail if that unit makes a
+Normal
+
+Move
+,
+Advances
+,
+Falls
+
+Back
+,
+performs
+
+a
+
+Heroic
+
+Intervention
+ or
+declares
+
+a
+
+charge
+.
+Psychic Powers that Modify Characteristics and have Additional Effects Based on the Psychic Test
+A few psychic powers that can modify one or more of a unit’s characteristics also have additional or boosted effects if the
+Psychic
+
+test
+ made to
+manifest
+ them is over a certain value. If that certain value is based on a characteristic that the same psychic power can modify, then the value required is that at the point when the Psychic test is made, not after it has been manifested. For example, imagine a psychic power that, if manifested, reduces an enemy unit’s Leadership characteristic. If that psychic power has an additional effect that inflicts
+mortal
+
+wounds
+ if the Psychic test exceeds the enemy unit’s Leadership characteristic, then the value required for this effect to apply is that of the enemy unit’s Leadership characteristic before it is reduced by this psychic power.
+If a psychic power can modify a characteristic and it has an additional/boosted effect on a given
+Psychic
+
+test
+ result that is determined by comparing it to a characteristic value that the psychic power itself modifies, use the value before it is modified by the psychic power.
+Preventing/Losing Objective Secured
+Some units have the
+Objective
+
+Secured
+ ability, and other rules can bestow the Objective Secured ability onto a unit. A unit can even be under the effects of multiple rules that each bestow a unit with the Objective Secured ability, sometimes granting them additional bonus effects. However, there are also rules that can prevent units from being able to use the Objective Secured ability, or else that say a unit loses the Objective Secured ability.
+While a unit is simultaneously under the effects of one or more rules that give it the Objective Secured ability, and one or more rules that either cause it to lose the Objective Secured ability or prevent it from using the Objective Secured ability, the rules that cause the unit to lose or prevent it from using the Objective Secured ability take precedence, regardless of how many different rules currently apply to the unit that grant it with the Objective Secured ability (e.g. one instance of ‘lose the Objective Secured ability/cannot use the Objective Secured ability’ takes precedence over two or more instances of ‘gains the Objective Secured ability’). Furthermore, if a unit was gaining any additional bonus effects because they gained the Objective Secured ability even though they already had this ability, while under the effects of any rules that cause it to lose or prevent the Objective Secured ability from working, it loses those additional bonuses.
+Note that all of the above also applies to any other ability that is similar in effect to the Objective Secured ability (i.e. any ability that enables a unit to control an
+objective marker
+ it is in range of irrespective of the number of enemy models within range of the same objective marker, e.g. Defenders of Humanity).
+Rules that prevent the
+Objective
+
+Secured
+ ability, or say a unit loses the Objective Secured ability, take precedence over all rules that grant the Objective Secured ability.
+Modifying the Command Point Cost of Stratagems
+Some rules can modify the cost of using certain
+Stratagems
+, either by increasing or decreasing the cost of using a particular Stratagem, or by changing the cost of it to a new value (e.g. 0CP). If a rule instructs you to change the
+Command
+
+point
+ cost of a Stratagem with a specified value, change it to that value before applying any other modifiers that apply from other rules (if any) to the new value. All modifiers to the Command point cost of a Stratagem are cumulative; you must apply division modifiers before applying multiplication modifiers, and before applying addition and then subtraction modifiers. Round any fractions up after applying all modifiers. Regardless of the source, the Command point cost of a Stratagem can never be modified below 0CP.
+All modifiers to the CP cost of a
+Stratagem
+ are cumulative.
+Apply rules that replace the CP cost with a specific value first.
+Apply all other modifiers to the CP cost (if any) in the following order: division, multiplication, addition, then subtraction.
+Round fractions up after applying all modifiers.
+Rules that Dictate Wound Allocation Order
+Some
+CHARACTER
+ units have abilities that dictate which models wounds must be allocated to first (e.g.
+the Silent King
+’s Triarchal Menhirs,
+Saint Celestine
+’s Geminae,
+Chaplain Grimaldus
+’ Servitors, etc.). When such units suffer
+mortal
+
+wounds
+, those mortal wounds are allocated in the same order that attacks are allocated.
+
+
+
+Repositioned and Replacement Units
+Some rules enable units to teleport or else be repositioned and set back up on the battlefield. Other rules enable units to removed from the battlefield and be replaced by a new, full-strength unit, which is then set up on the battlefield. If a rule causes a unit to be removed from the battlefield and subsequently set back up, the following rules apply to it:
+Rules that are triggered by or apply to units that are ‘set up on the battlefield as
+Reinforcements
+’ are also triggered by and apply to that unit when it is set up on the battlefield.
+Models in units that arrived as Reinforcements count as having moved a distance in inches equal to their Move characteristic this
+Movement phase
+. If the unit has a
+minimum Move
+ characteristic, it counts as having moved its maximum Move characteristic.
+The unit cannot make a
+Normal
+
+Move
+,
+Advance
+,
+Fall
+
+Back
+ or
+Remain
+
+Stationary
+ that turn for any reason.
+If that unit was within
+Engagement
+
+Range
+ of an enemy unit when it was removed from the battlefield, it does not count as having Fallen Back when it is set back up on the battlefield.
+If that unit Advanced this battle round, it still counts as having Advanced after it has been set back up on the battlefield.
+Any
+destroyed
+ models in that unit when it is removed are still destroyed when their unit is set back up on the battlefield. If they were destroyed this turn, they still count towards any
+Morale
+
+tests
+ taken this turn.
+Any models in that unit that have lost any wounds do not regain those wounds when they are removed, and will still have lost them when their unit is set back up on the battlefield.
+Any rules that unit was being affected by when it was removed, and which would continue to affect it for a specific duration (from abilities,
+Stratagems
+, psychic powers, etc.) continue to affect that unit until such a point as they would normally have no longer applied. For example, a unit that was within range of an
+aura
+
+ability
+ when it was removed would no longer be affected by that ability if it was set up outside of that aura’s range, whereas a unit that was being affected by a psychic power that lasted until the end of that turn would still be affected by it until the end of that turn.
+If that unit was performing an
+action
+, that action immediately fails.
+Such rules can, if they occur in the
+Movement phase
+, be used on units that arrived as Reinforcements this phase and/or on units that have already been selected to move this phase.
+Note that points 5-8 do not apply to any unit that has been set up because it is replacing a destroyed unit (including units set up via a rule that instructs you to remove a unit then set it back up at its full starting strength). These rules represent new units joining the fight, rather than the existing units being repositioned on the battlefield.
+
+Advance
+
+When a unit makes an Advance, make an Advance roll for the unit by rolling one D6. Add the result in inches to the Move (M) characteristic of each model in that unit until the end of the current phase. Each model in that unit can then move a distance in inches equal to or less than this total, but no model can be moved within
+Engagement Range
+ of enemy models. A unit cannot
+shoot
+ or declare a
+charge
+ in the same turn that it made an Advance.
+Advance
+: Models move up to M+D6".
+Cannot move within Engagement Range of enemy models.
+Units that Advance cannot shoot or charge this turn.
+
+Saving Throw
+
+The player commanding the target unit then makes one saving throw by rolling one D6 and modifying the roll by the Armour Penetration (AP) characteristic of the weapon that the attack was made with. For example, if the weapon has an AP of -1, then 1 is subtracted from the saving throw roll. If the result is equal to, or greater than, the Save (Sv) characteristic of the model the attack was allocated to, then the saving throw is successful and the attack sequence ends. If the result is less than the model’s Save characteristic, then the saving throw fails and the model suffers damage. An unmodified roll of 1 always fails.
+
+Army Faction
+
+In a
+Battle-forged army
+, all of the units in your army - with the exception of those that are
+UNALIGNED
+ — must have at least one Faction keyword in common (e.g.
+IMPERIUM
+ or
+CHAOS
+) even if they are in different
+Detachments
+. If a unit does not have the correct Faction keyword, it cannot be included in your army.
+Army Faction:
+ All units in army must share at least one Faction keyword.
+UNALIGNED
+ units are exempt.
+
+Aura Abilities
+
+Some abilities affect models or units in a given range – these are aura abilities. A model with an aura ability is always within range of its effect. The effects of multiple, identically named aura abilities are not cumulative (i.e. if a unit is within range of two models with the same aura ability, that aura ability only applies to the unit once).
+
+Wound Roll
+
+Each time an attack scores a hit against a target unit, make a wound roll for that attack by rolling one D6 to see if that attack successfully wounds the target. The result required is determined by comparing the attacking weapon’s Strength (S) characteristic with the target’s Toughness (T) characteristic, as shown on the following table:
+WOUND ROLL
+ATTACK’S STRENGTH vs TARGET’S TOUGHNESS
+D6 ROLL REQUIRED
+Is the Strength
+TWICE (or more)
+ than the Toughness?
+2+
+Is the Strength
+GREATER
+ than the Toughness?
+3+
+Is the Strength
+EQUAL
+ to the Toughness?
+4+
+Is the Strength
+LOWER
+ than the Toughness?
+5+
+Is the Strength
+HALF (or less)
+ than the Toughness?
+6+
+If the result of the wound roll is less than the required number, the attack fails and the attack sequence ends. An unmodified wound roll of 6 always successfully wounds the target, and an unmodified wound roll of 1 always fails. A wound roll can never be modified by more than -1 or +1. This means that if, after all the cumulative modifiers to a wound roll have been calculated, the total modifier would be -2 or worse, it is changed to be -1. Similarly, if, after all the cumulative modifiers to a wound roll have been calculated, the total modifier would be +2 or better, it is changed to be +1.
+
+Morale Tests
+
+To take a Morale test, roll one D6 and add the number of models from the unit that have been destroyed this turn. If the result is equal to or less than the highest Leadership (Ld) characteristic in the unit, the Morale test is passed and nothing else happens. An unmodified roll of 1 also always results in a passed Morale test, irrespective of the total result. In any other case, the Morale test is failed, one model flees that unit, and you must then take
+Combat Attrition tests
+ for the remaining models in the unit. You decide which model from your unit flees – that model is removed from play and counts as having been destroyed, but it never triggers any rules that are used when a model is destroyed.
+Morale test
+ = D6 + number of models destroyed this turn.
+Unmodified roll of 1 always a success (no models flee).
+If Morale test exceeds unit’s Ld, one model flees and other models must take Combat Attrition tests.
+
+Combat Attrition Tests
+
+If a unit fails a
+Morale test
+, then after the first model has fled the unit, you must take Combat Attrition tests. To do so, roll one D6 for each remaining model in that unit, subtracting 1 from the result if the unit is below
+Half-strength
+; for each result of 1, one additional model flees that unit. You decide which models from your unit flee – those models are removed from play and count as having been destroyed, but they never trigger any rules that are used when a model is destroyed.
+Combat Attrition tests
+: Roll one D6 for each remaining model in unit; for each 1, one additional model flees.
+Subtract 1 from Combat Attrition tests if unit is below Half-strength.
+
+Command Points
+
+The starting number of CPs each player starts with for Battle-forging their army depends on the size of the battle you are playing. This is usually defined in the mission pack that is being played, but if one is not presented in the mission pack, use the following table. Note that the total
+Power Level
+ is based on the combined power of all the models used in the battle (so the combined Power Level of both your and your opponent's armies). If you are using a game that uses
+points values
+, then the
+points limit
+ is the maximum points limit per side.
+COMMAND POINTS
+BATTLE SIZE
+TOTAL POWER LEVEL
+POINTS LIMIT
+COMMAND POINTS
+Combat Patrol
+Up to 50
+Up to 500
+3
+Incursion
+51-100
+501-1000
+6
+Strike Force
+101-200
+1001-2000
+12
+Onslaught
+201-300
+2001-3000
+18
+Starting number of Command points varies with battle size.
+
+Flying
+
+If a unit’s datasheet has the
+FLY
+ keyword, then when it makes a
+Normal Move
+, an
+Advance
+ or it
+Falls Back
+, its models can be moved across other models (and their bases) as if they were not there, and they can be moved within
+Engagement Range
+ of enemy models. In addition, any vertical distance up and/or down that they make as part of that move is ignored. However, these models cannot finish their move either on top of another model (or its base) or within Engagement Range of any enemy models.
+FLY
+ models can move over other models when they make a Normal Move, an Advance or when they Fall Back.
+FLY
+ models ignore vertical distances when they make a Normal Move, an Advance or when they Fall Back.
+
+Manifesting Psychic Powers
+
+When you select a
+PSYKER
+ unit to manifest psychic powers, you select one psychic power that unit knows and attempt to manifest it. With the exception of
+Smite
+, you cannot attempt to manifest the same psychic power more than once in the same battle round, even with different
+PSYKER
+ units. The same
+PSYKER
+ unit cannot attempt to manifest
+Smite
+ more than once during the same battle round.
+To manifest the psychic power, you must first pass a
+Psychic test
+. The opposing player can then select one of their
+PSYKER
+ units that is within 24" of the
+PSYKER
+ unit attempting to manifest the power and attempt to deny that power before its effects are resolved by passing a
+Deny the Witch test
+.
+So long as the Psychic test was successful and the psychic power was not denied by a successful Deny the Witch test, the psychic power is successfully manifested and its effects, which will be described in the power itself, are then resolved. If the
+PSYKER
+ unit can attempt to manifest more than one psychic power in its Psychic phase, you can then attempt to manifest those, one at a time, as described above. The number of psychic powers each
+PSYKER
+ unit can attempt to manifest in its Psychic phase is listed on its datasheet.
+Select psychic power.
+You cannot select the same psychic power more than once per battle round, unless that power is
+Smite
+.
+Attempt to manifest the psychic power by taking a Psychic test.
+The opponent can attempt to deny the psychic power by taking a Deny the Witch test.
+If successfully manifested, resolve the psychic power’s effects.
+Select another psychic power.
+
+Mortal Wounds
+
+Some attacks inflict mortal wounds – these are so powerful that no armour or force field can withstand their fury. Each mortal wound inflicts 1 point of damage on the target unit, and they are always applied one at a time. Do not make a
+wound roll
+ or
+saving throw
+ (including
+invulnerable saves
+) against a mortal wound – just allocate it as you would any other attack and
+inflict damage
+ to a model in the target unit. Unlike damage inflicted by normal attacks, excess damage from mortal wounds is not lost. Instead, keep allocating damage to another model in the target unit until either all the damage has been allocated or the target unit is destroyed.
+If an attack inflicts mortal wounds in addition to the normal damage, resolve the normal damage first. If an attack inflicts mortal wounds in addition to the normal damage, but the normal damage is subsequently saved, the target unit still suffers the mortal wounds, as described before. If an ability modifies the damage inflicted by a weapon, and that weapon can inflict mortal wounds in addition to the normal damage, the modifier does not apply to any mortal wounds that are inflicted (unless the rule specifically states otherwise).
+Each mortal wound inflicted on a unit causes one model in the unit to lose one wound.
+No saving throws can be made against mortal wounds.
+Mortal wounds inflicted by attacks in addition to normal damage always apply, even if normal damage saved.
+
+Psychic Tests
+
+When a
+PSYKER
+ unit attempts to
+manifest a psychic power
+, you must take a Psychic test for that unit by rolling 2D6. If the total is equal to or greater than that power’s warp charge value, the Psychic test is passed. If you roll a double 1 or a double 6 when taking a Psychic test, that unit immediately suffers
+Perils of the Warp
+.
+Psychic test
+: Passed if 2D6 equals or exceeds psychic power’s warp charge.
+If double 1 or double 6 rolled,
+PSYKER
+ suffers Perils of the Warp.
+
+Smite
+
+Smite
+ has a warp charge value of 5. Add 1 to the warp charge value of this psychic power for each other attempt that has been made to
+manifest
+ this power by a unit from your army in this phase, whether that attempt was successful or not. If manifested, the closest enemy unit within 18" of and visible to the psyker suffers D3
+mortal
+
+wounds
+. If the result of the
+Psychic
+
+test
+ was 11 or more, that unit suffers D6 mortal wounds instead.
+Warp Charge 5
+: A Psychic test of 5+ is required to manifest
+Smite
+.
+Warp charge increases by 1 for each other attempt to manifest
+Smite
+ made in this phase.
+If manifested, closest visible enemy unit in 18" suffers D3 mortal wounds.
+If manifested with a Psychic test result of 11+, enemy instead suffers D6 mortal wounds.
+
+Engagement Range
+
+Engagement Range represents the zone of threat that models present to their enemies. While a model is within 1" horizontally and 5" vertically of an enemy model, those models are within Engagement Range of each other. While two enemy models are within Engagement Range of each other, those models’ units are also within Engagement Range of each other. Models cannot be set up within Engagement Range of enemy models.
+Engagement Range:
+ 1" horizontally + 5" vertically.
+Models cannot be set up within Engagement Range of enemy models.
+
+Charging with a Unit
+
+Once you have chosen an eligible unit to declare a charge with, you must select one or more enemy units within 12" of it as the targets of its charge. The target(s) of this charge do not need to be visible to the charging unit. You then make a charge roll for your unit by rolling 2D6. This is the maximum number of inches each model in the charging unit can now be moved if they can make the charge move. To make a charge move, the unit’s charge roll must be sufficient that it is able to end that move in
+unit coherency
+ and within
+Engagement Range
+ of every unit that was a target of its charge, without moving within Engagement Range of any enemy units that were not a target of its charge. If this is possible, then the charge is successful and the models in the unit make a charge move so as to fulfil the above conditions. If this is impossible, the charge fails and no models in the charging unit move this phase.
+Declare targets of the charge (must be within 12").
+Charge roll = 2D6".
+If insufficient to move charging unit into
+Engagement
+
+Range
+ of all targets, charge fails.
+If charge successful, models make their charge move.
+Cannot make a charge move within Engagement Range of any unit that was not the target of the charge.
+
+Select Weapon
+
+When a model makes a close combat attack, it must do so using a melee weapon (i.e. a weapon that has the ‘Melee’ type). The weapons a model is equipped with are described on its datasheet. If a model is not equipped with any melee weapons, or if it cannot make an attack with any of the melee weapons it is equipped with, then that model makes its attacks using a close combat weapon, which has the following profile:
+WEAPON
+RANGE
+TYPE
+S
+AP
+D
+Close combat weapon
+Melee
+Melee
+User
+0
+1
+If a model has more than one melee weapon, select which it will use before resolving any attacks. If a model has more than one melee weapon and can make several attacks, it can split them between these weapons however you wish – declare which attacks are being made with which weapons before any attacks are resolved. If the selected weapon has more than one profile that you must choose between, you must declare which profile is being used at the same time. Different attacks made with such a weapon can be made using different profiles if you wish.
+If your unit is
+making attacks
+ with more than one melee weapon against a unit, and those weapons have different characteristics profiles, then after you have resolved an attack with one of those weapons you must, if any other weapons with the same characteristics profile are also being used to make attacks against that unit, resolve those attacks before resolving any attacks against the target with a weapon that has a different characteristics profile. Note that all the attacks you have declared are always resolved against the target unit even if, when you come to resolve an individual attack, no models in the target unit remain in range (this can happen because of models being destroyed and removed from the battlefield as the result of resolving other attacks made by the attacking model’s unit first).
+Each close combat attack is made with a melee weapon.
+A model makes attacks using the close combat weapon profile if it has no other melee weapons.
+If a unit attacks with multiple weapons, all attacks made with weapons that have the same profile must be resolved before resolving attacks with the next.
+
+Consolidate
+
+When a unit consolidates, you can move each model in the unit up to 3" – this is a Consolidation move. Each model must finish its Consolidation move closer to the closest enemy model. A model that is already touching an enemy model cannot move, but still counts as having consolidated. Remember that a unit must finish any type of move in
+unit coherency
+.
+Consolidate
+: Move up to 3".
+Must end closer to the closest enemy model.
+
+Fall Back
+
+When a unit Falls Back, each model in that unit can move a distance in inches equal to or less than the Move (M) characteristic shown on its datasheet, and when doing so you can move it within
+Engagement Range
+ of enemy models, but it cannot end its move within Engagement Range of any enemy models – if it cannot do this then it cannot Fall Back. A unit cannot declare a charge in the same turn that it Fell Back. A unit cannot
+shoot
+ or attempt to
+manifest a psychic power
+ in the same turn that it Fell Back unless it is
+TITANIC
+.
+Fall Back
+: Models move up to M".
+Units that Fall Back cannot charge this turn.
+Units that Fall Back cannot shoot or manifest psychic powers this turn unless they are
+TITANIC
+.
+
+Pile In
+
+When a unit piles in, you can move each model in that unit up to 3" – this is a pile-in move. Each model in the unit must finish its pile-in move closer to the closest enemy model. A model that is already touching an enemy model cannot move, but still counts as having piled in. Remember that a unit must finish any type of move in
+unit coherency
+.
+Pile in
+: Move up to 3".
+Must end closer to the closest enemy model.
+
+Performing a Heroic Intervention
+
+When a unit performs a Heroic Intervention, you can move each model in that unit up to 3" – this is a Heroic Intervention move. Each model in the unit must finish its Heroic Intervention move closer to the closest enemy model. Remember that a unit must finish any type of move in
+unit coherency
+.
+Heroic Intervention
+: Move up to 3".
+Must end closer to the closest enemy model.
+
+Ignoring Wounds
+
+Some models have rules that give them a chance to ignore wounds. If a model has more than one such rule, you can only use one of those rules each time the model loses a wound (including wounds lost due to
+mortal wounds
+).
+A model can only use one rule to attempt to ignore each wound suffered.
+
+The Warlord
+
+While mustering your army, you can nominate one model (except a model with the
+FORTIFICATION
+ keyword) to be your Warlord. That model gains the
+WARLORD
+ keyword. If this model is a
+CHARACTER
+, you can also assign a Warlord Trait to it. Note, that more than one model in your army can have a Warlord Trait (e.g. by using
+Stratagems
+), but they are only considered your Warlord for the purpose of that trait.
+
+Inspiring Leader (Warlord Trait, Aura)
+
+Add 1 to the Leadership characteristic of friendly units while they are within 6" of this
+WARLORD
+.
+
+Invulnerable Saves
+
+Some models have an invulnerable save. Each time an attack is allocated to a model with an invulnerable save, you can choose to use either its normal Save (Sv) characteristic or its invulnerable save, but not both. If a model has more than one invulnerable save, it can only use one of them – choose which it will use. If you use a model’s invulnerable save, it is never modified by a weapon’s Armour Penetration value.
+Invulnerable save
+:
+Saving
+
+throw
+ that is never modified by attacking weapon’s AP.
+A model with an invulnerable save can use it instead of its normal Sv.
+
+The
+IMMORTALS
+ keyword is used in the following Necrons datasheets:
+Troops
+Immortals
+The
+DEATHMARKS
+ keyword is used in the following Necrons datasheets:
+Elites
+Deathmarks
+The
+LYCHGUARD
+ keyword is used in the following Necrons datasheets:
+Elites
+Lychguard
+The
+AELDARI
+ and
+GUARDIAN
+ keywords are used in the following Aeldari datasheets:
+Troops
+Guardian Defenders
+Storm Guardians
+Storm Guardians (Legendary)
+Fast Attack
+Windriders
+Heavy Support
+Support Weapons
+Normal Move
+
+When a unit makes a Normal Move, each model in that unit can move a distance in inches equal to or less than the Move (M) characteristic shown on its datasheet, but no model can be moved within
+Engagement Range
+ of enemy models.
+Normal Move:
+ Models move up to M".
+Cannot move within Engagement Range of any enemy models.
+
+Objective Secured
+
+Some units have an ability called
+Objective Secured
+. A player controls an
+objective marker
+ if they have any models with this ability within range of that objective marker, even if there are more enemy models within range of that objective marker. If an enemy model within range of an objective marker also has this ability (or a similar ability), then the objective marker is controlled by the player who has the most models within range of that objective marker as normal.
+Objective Secured
+: Player controls objective marker if any of their models in range have this ability.
+
+Unit Coherency
+
+A unit that has more than one model must be set up and finish any sort of move as a single group, with all models within 2" horizontally and 5" vertically of at least one other model from their unit. While a unit has six or more models, all models must instead be within 2" horizontally and 5" vertically of at least two other models from their unit. This is called unit coherency. If a unit cannot end any kind of move in unit coherency, that move cannot be made. Units are primarily moved in the
+Movement phase
+, but they can also be moved in the
+Charge phase
+ and the
+Fight phase
+.
+Some rules allow you to add models to a unit during the battle; such models must always be set up in unit coherency with the unit they are being added to. Sometimes there will be insufficient room to set up all the models from a unit, or it will not be possible to set up all the models so that they are in unit coherency. When this is the case, any models that cannot be set up are considered to have been destroyed.
+Unit coherency:
+ 2" horizontally + 5" vertically.
+Each model must be in unit coherency with one other model from own unit.
+While unit has 6+ models, each model must be in unit coherency with 2 other models from own unit.
+
+Hit Roll
+
+When a model makes an attack, make one hit roll for that attack by rolling one D6. If the result of the hit roll is equal to or greater than the attacking model’s Ballistic Skill (BS) characteristic (if the attack is being made with a ranged weapon) or its Weapon Skill (WS) characteristic (if the attack is being made with a melee weapon), then that attack scores one hit against the target unit. If not, the attack fails and the attack sequence ends.
+If an attack is made with a weapon that has an ability that says it ‘automatically hits the target’, no hit roll is made – that attack simply scores one hit on the target unit. An unmodified hit roll of 6 always scores a hit, and an unmodified hit roll of 1 always fails. A hit roll can never be modified by more than -1 or +1. This means that if, after all the cumulative modifiers to a hit roll have been calculated, the total modifier would be -2 or worse, it is changed to be -1. Similarly, if, after all the cumulative modifiers to a hit roll have been calculated, the total modifier would be +2 or better, it is changed to be +1.
+
+Overwatch
+
+Certain rules enable units to fire Overwatch at an enemy unit before it can charge. If an enemy unit
+declares a charge
+ that targets one or more units from your army that have such a rule, each of those units can fire Overwatch before the charge roll is made. A unit cannot fire Overwatch if there are any enemy units within
+Engagement Range
+ of it. Overwatch is resolved like a normal
+shooting attack
+ (albeit one resolved in the
+Charge phase
+) and uses all the normal rules, except that an unmodified
+hit roll
+ of 6 is always required for a successful hit roll, irrespective of the firing model’s Ballistic Skill or any hit roll modifiers. In addition, when a model fires Overwatch, it does so at the charging unit. Any rule that states the unit cannot be targeted unless it is the closest target (e.g.
+Look Out, Sir
+) does not apply when firing Overwatch.
+Overwatch
+: Before charge roll made, all charge targets that can fire Overwatch can do so.
+Can never fire Overwatch while enemy units are in Engagement Range.
+When firing Overwatch, shoot with unit, but attacks only hit on unmodified 6s.
+
+RAPID FIRE
+
+Rapid fire weapons are versatile armaments capable of aimed single shots at long range or controlled bursts of fire at close quarters.
+When a model shoots a Rapid Fire weapon, double the
+number of attacks
+ it makes if its target is within half the weapon’s range.
+Double number of attacks made if target is within half range.
+
+ASSAULT
+
+Assault weapons fire so rapidly or indiscriminately that they can be shot from the hip as warriors dash forwards into combat.
+If a unit includes any models equipped with Assault weapons, that unit is still eligible to shoot with in your
+Shooting phase
+ even if it has
+Advanced
+ this turn, but you can only
+resolve attacks
+ using those Assault weapons when you select that unit to shoot with. If a model shoots an Assault weapon in the same turn in which its unit has Advanced, subtract 1 from
+hit rolls
+ when resolving that weapon’s attacks.
+Can be shot even if firing model’s unit Advanced.
+Subtract 1 from hit rolls if the firing model’s unit Advanced.
+
+HEAVY
+
+Heavy weapons are amongst the biggest guns on the battlefield, but they require bracing to fire at full effect and are unwieldy to bring to bear at close quarters.
+When an
+INFANTRY
+ model shoots a Heavy weapon, subtract 1 from the
+hit rolls
+ when resolving that weapon’s attacks if the firing model’s unit has moved for any reason this turn (e.g. it made a
+Normal Move
+ this turn).
+Subtract 1 from hit rolls if firing model is
+INFANTRY
+ and its unit has moved this turn.
+
+PISTOL
+
+Due to their compact size, pistols can even be used in melee to shoot at point-blank range.
+A model can make attacks with a Pistol even when its unit is within
+Engagement Range
+ of enemy units, but it must target an enemy unit that is within Engagement Range of its own unit when it does so. In such circumstances, the model can target an enemy unit even if other friendly units are within Engagement Range of the same enemy unit.
+When a model equipped with both a Pistol and another type of ranged weapon (e.g. a Pistol and a
+Rapid Fire
+ weapon) shoots, it can either shoot with its Pistol(s) or with its other ranged weapons. Choose which it will fire (Pistols or non-Pistols) before selecting targets.
+Can be shot even if firing model’s unit is within Engagement Range of enemy unit.
+Cannot be shot alongside any other type of weapon.
+
+GRENADE
+
+Grenades are handheld explosive devices that a warrior throws at the enemy while their squad mates provide covering fire.
+When a unit shoots, one model that is equipped with a Grenade in that unit can
+resolve attacks
+ with it instead of shooting any other weapons.
+Only one model can use a Grenade when its unit shoots.
+
+Re-rolls
+
+Some rules allow you to re-roll a dice roll, which means you get to roll some or all of the dice again. If a rule allows you to re-roll a dice roll that was made by adding several dice together (2D6, 3D6 etc.) then, unless otherwise stated, you must re-roll all of those dice again. If a rule allows you to re-roll specific dice results, only those dice can be re-rolled. If a rule allows you to re-roll a specific dice result, but the result is obtained by halving a D6 (such as when rolling a D3), you use the value of the halved roll to determine if it can be re-rolled, not the value of the original D6. For example, if a rule states to re-roll results of 1, and you roll a D3, you would re-roll if the D6 rolled a 1 or a 2 (which is then halved to get a D3 value of a 1).
+You can never re-roll a dice more than once, and re-rolls happen before modifiers (if any) are applied. Rules that refer to the value of an ‘unmodified’ dice roll are referring to the dice result after any re-rolls, but before any modifiers are applied.
+Re-roll:
+ Roll dice again.
+Re-rolls are applied before modifiers (if any).
+A dice can never be re-rolled more than once.
+Unmodified dice:
+ Result of roll after re-rolls, but before modifiers (if any).
+
+Embark
+
+If a unit makes a
+Normal Move
+, an
+Advance
+ or it
+Falls Back
+, and every model in that unit ends that move within 3" of a friendly
+TRANSPORT
+ model they can embark within it. A unit cannot embark within a
+TRANSPORT
+ model that is within
+Engagement Range
+ of enemy models, and it cannot embark if it has already
+disembarked
+ from a
+TRANSPORT
+ model in the same phase. Remove the unit from the battlefield and place it to one side – it is now embarked within the model.
+Units cannot normally do anything or be affected in any way while they are embarked. Unless specifically stated, other units’ abilities have no effect on units while they are embarked, and
+Stratagems
+ cannot be used to affect units while they are embarked. For all rules purposes, units that are embarked within a
+TRANSPORT
+ model that has made a Normal Move, Advanced, Fallen Back or Remained Stationary also count as having made the same kind of move that turn.
+Units can embark in a friendly
+TRANSPORT
+ if every model ends a Normal Move, an Advance or a Fall Back within 3" of it.
+A unit cannot embark within a
+TRANSPORT
+ that is within Engagement Range of any enemy models.
+A unit cannot embark and disembark in the same phase.
+Units cannot do anything, or be affected in any way, while they are embarked within a
+TRANSPORT
+.
+
+Remain Stationary
+
+If a unit Remains Stationary, none of its models can be moved for the rest of the phase. Any units from your army that were on the battlefield and were not selected to move in the
+Move Units
+ step of the Movement phase are assumed to have Remained Stationary that phase.
+Remain Stationary
+: Models cannot move this phase.
+
+Roll-offs
+
+Some rules instruct players to roll off. To do so, both players roll one D6, and whoever scores highest wins the roll-off. If there is a tie for the highest roll, make the roll-off again. Neither player is allowed to re-roll or modify any of the D6 when making a roll-off.
+Roll-off:
+ Both players roll a D6 – highest wins.
+Roll again if a tie.
+
+Requisition Points
+
+Requisition points can be used to purchase
+Requisitions
+: these can upgrade your Crusade force, or units within them. Each time you spend a Requisition point, reduce your total by 1. Any Requisition points you do not spend are saved and can be used later. As you play more battles, you can accrue additional Requisition points, but a Crusade force can never have more than 5 (any additional Requisition points acquired beyond this are lost). Each time you play a battle, you will gain 1 Requisition point after that battle has been completed, regardless of the result of the battle itself. You should keep track of how many Requisition points you have on your
+Order of Battle
+.
+The Requisitions you can purchase can be found
+here
+. Each Requisition will tell you when it can be purchased; they can never be purchased during a battle. Unless stated otherwise, there is no limit on the number of Requisitions you can purchase, the number of times you can purchase each Requisition, nor on the combination of Requisitions you can purchase, so long as you have enough Requisition points. If you do not have enough Requisition points to purchase a Requisition, you cannot purchase it.
+Requisitions cost Requisition points to purchase.
+You can never have more than 5 Requisition points.
+Each battle you play earns you 1 Requisition point (win, lose or draw).
+
+Deny the Witch
+
+When a
+PSYKER
+ unit attempts to deny a psychic power, you must take a Deny the Witch test for that unit by rolling 2D6. If the total is greater than the result of the
+Psychic test
+, the Deny the Witch test is passed and the psychic power is denied. Only one attempt can be made to deny a psychic power. If a
+PSYKER
+ unit can attempt to deny more than one psychic power in a
+psychic phase
+, this will be listed on its datasheet.
+Deny the Witch
+: Passed if 2D6 exceeds result of the opposing
+PSYKER
+’s Psychic test.
+Only one attempt can be made to deny each psychic power.
+
+Transport Capacity
+
+All
+TRANSPORT
+ models have a transport capacity listed on their datasheet. This determines how many friendly models, and of what type, can
+embark
+ within them. A model’s transport capacity can never be exceeded.
+Units can start the battle embarked within a
+TRANSPORT
+ instead of being set up separately – declare what units are embarked within a
+TRANSPORT
+ model before you set it up.
+Transport capacity
+: Maximum number of models that can embark within the Transport.
+Units can start the battle embarked in a
+TRANSPORT
+.
+
+Number of Attacks (shooting)
+
+When a model shoots a ranged weapon, it will make a number of attacks. You make one
+hit roll
+ for each attack being made.
+The number of attacks that a model makes with a ranged weapon is equal to the number written on that weapon’s profile after its type. For example, a model shooting an ‘
+Assault 1
+’ weapon can make one attack with that weapon; a model firing a ‘
+Heavy 3
+’ weapon can make three attacks, and so on.
+All of a ranged weapon’s attacks must be made against the same target unit.
+Number of attacks = number after weapon’s type.
+
+Light Cover
+
+When an attack made with a ranged weapon wounds a model that is receiving the benefits of cover from this terrain feature, add 1 to the
+saving throw
+ made against that attack (
+invulnerable saving throws
+ are not affected).
++1 to saving throws against ranged weapons.
+Invulnerable saving throws unaffected.
+
+Heavy Cover
+
+When an attack made with a melee weapon wounds a model that is receiving the benefits of cover from this terrain feature, add 1 to the
+saving throw
+ made against that attack unless the model that the attack is allocated to made a
+charge move
+ this turn (
+invulnerable saving throws
+ are not affected).
++1 to saving throws against melee weapons unless model has made a charge move this turn.
+Invulnerable saving throws unaffected.
+
+Dense Cover
+
+If this terrain feature is at least 3" in height, then subtract 1 from the
+hit roll
+ when resolving an attack with a ranged weapon unless you can draw straight lines, 1mm in thickness, to every part of at least one model’s base (or hull) in the target unit from a single point on the attacking model's base (or hull) without any of those lines passing over or through any part of any terrain feature with this trait. Models that are on or within an
+Area Terrain
+ feature with this trait do not suffer this penalty if the only terrain feature these lines pass over or through is the terrain feature that the attacking model is on or within. Models within 3" of an
+Obstacle
+ terrain feature with this trait do not suffer this penalty if the only terrain feature these lines pass over or through is the terrain feature that the attacking model is within 3" of. The height of a terrain feature is measured from the highest point on that terrain feature.
+Models do not suffer this penalty to their
+hit rolls
+ when making an attack with a ranged weapon that targets an
+AIRCRAFT
+ unit, or a unit that includes any models with a Wounds (W) characteristic of 18 or more, even if this terrain feature is between it and the firing model (note that the reverse is not true).
+Subtract 1 from hit rolls made for ranged weapons if at least 3” tall.
+Does not apply to models that are only shooting through their own terrain feature.
+No penalty when shooting at
+AIRCRAFT
+ and units with W characteristic of 18+.
+
+Obscuring
+
+If this terrain feature is at least 5" in height, then models cannot see through or over this terrain feature. This means that one model is not visible to another if you cannot draw a straight line, 1mm in thickness, between them without it passing through or over any part of this terrain feature. The height of a terrain feature is measured from the highest point on that terrain feature.
+Models that are on or within this terrain feature can see, and can be seen and targeted normally.
+AIRCRAFT
+ models, and models with a Wounds (W) characteristic of 18 or more, are visible and can be targeted even if this terrain feature is in-between it and the firing model (note that the reverse is not true).
+Blocks visibility if at least 5” tall.
+Models on or within can see and be seen normally.
+AIRCRAFT
+ and models with W characteristic of 18+ can be seen normally.
+
+COUNTER-OFFENSIVE
+2CP
+Core Stratagem
+Use this Stratagem after an enemy unit has fought in this turn. Select one of your own eligible units and fight with it next.
+VEIL OF TIME
+The psyker projects his will beyond the regular passage of time, altering the temporal flow to sway the tide of battle.
+Blessing:
+
+Veil of Time
+ has a warp charge value of 6. If manifested, select one friendly
+<
+C
+HAPTER>
+ unit within 18" of this
+PSYKER
+.
+Until the start of your next
+Psychic phase
+, you can re-roll
+Advance
+
+rolls
+ and
+charge
+
+rolls
+ made for that unit.
+Until the start of your next Psychic phase, if that unit starts the
+Fight phase
+ within
+Engagement
+
+Range
+ of an enemy unit, it fights first that phase.
+THE ARMOUR OF RUSS
+This ancient suit of armour exudes an aura of hoarfrost that chills nearby enemies, slowing their movements to a glacial crawl. It is said that during the Second Great Hunt a piece of battle plate was recovered from the Temple of Horus and worked into this armour; some sagas suggest that it formed part of the panoply of none other than the Wolf King himself.
+The bearer has a Save characteristic of 2+ and a 4+
+invulnerable
+
+save
+.
+At the start of the
+Fight phase
+, you can select one enemy unit within
+Engagement
+
+Range
+ of the bearer. That unit is not eligible to fight this phase until after all eligible units from your army have done so.
+DESPERATE BREAKOUT
+2CP
+Core Stratagem
+Use this Stratagem in your
+Movement phase
+. Select one unit from your army that has not been selected to move this phase and which is in
+Engagement Range
+ with at least one enemy unit. Roll one D6 for each model in that unit; for each result of 1, one model in that unit of your choice is destroyed. Assuming that unit was not destroyed, it can now attempt to
+Fall Back
+, and when doing so its models can be moved across enemy models as if they were not there. Any model in that unit that ends its Fall Back move within Engagement Range of any enemy model is destroyed. Assuming the unit is not destroyed, it cannot do anything else this turn (i.e. it cannot attempt to
+manifest psychic powers
+,
+shoot
+,
+declare a charge
+, be selected to fight etc.), even if it has a rule that would allow it to do so after
+Falling Back
+.
+Number of Attacks (melee)
+
+When a model fights, it will make a number of attacks. You make one
+hit roll
+ for each attack being made (see
+Making Attacks
+).
+The number of attacks a model makes is determined by its Attacks (A) characteristic, which can be found on its datasheet. For example, if a model has an A of 2, it can make two attacks.
+Number of attacks made by each model that can fight = A.
+
+Disembark
+
+If a unit starts its
+Movement phase
+
+embarked
+ within a
+TRANSPORT
+ model, that unit can disembark in that phase so long as the model itself has not yet made a
+Normal Move
+, an
+Advance
+ or has
+Fallen Back
+ that phase.
+When a unit disembarks, set it up on the battlefield so that it is wholly within 3" of the
+TRANSPORT
+ model and not within
+Engagement Range
+ of any enemy models.
+Units that disembark can then act normally (move,
+shoot
+,
+charge
+,
+fight
+, etc.) in the remainder of the turn, but its models count as having moved that turn, even if they are not moved further (i.e. they never count as having
+Remained Stationary
+).
+Units that start their Movement phase embarked in a
+TRANSPORT
+ can disembark this phase.
+A unit must disembark before their
+TRANSPORT
+ moves.
+Disembarking units must be set up wholly within 3" of their
+TRANSPORT
+ and not within Engagement Range of any enemy models.
+Units that have disembarked count as having moved this turn.
+
+COMMAND RE-ROLL
+1CP
+Core Stratagem
+Use this Stratagem after you have made a
+hit roll
+, a
+wound roll
+, a damage roll, a
+saving throw
+, an
+Advance roll
+, a
+charge roll
+, a
+Psychic test
+, a
+Deny the Witch test
+ or you have rolled the dice to determine the
+number of attacks
+ made by a weapon. Re-roll that roll, test or saving throw.
+Warlord Traits
+
+Warlord Trait is a bonus that your
+Warlord
+ receives upon being nominated. Such Traits can be found in Codices, Supplements and another Games Workshop publications. Any Warlord can have the
+Inspiring Leader
+ Warlord Trait. Normally, only one Warlord Trait can be given to the Warlord, but there are ways to bypass this restriction (e.g. by using
+Stratagems
+). You can choose a Warlord Trait randomly by rolling a dice, or simply pick one. Note, that
+named characters
+ usually have predetermined Warlord Traits and receive them after being nominated as Warlord.
+
+The
+LIBRARIAN
+ keyword is used in the following Space Marines datasheets:
+HQ
+Librarian
+Librarian in Phobos Armour
+Librarian in Terminator Armour
+Primaris Librarian
+Chief Librarian Mephiston
+Chief Librarian Tigurius
+Codicier Natorian
+Ezekiel
+Librarian Dreadnought
+Njal Stormcaller
+Epistolary Lykandos
+Sevrin Loth
+Chief Librarian Tigurius (Legendary)
+Librarian in Terminator Armour (Legendary)
+Librarian on Bike
+Ahazra Redth
+TOME OF MALCADOR
+Malcador the Sigillite was the trusted aide of the Emperor himself. The most potent Human psyker of the time, the tome he penned on the nature of reality enhances the mind of the reader.
+LIBRARIAN
+ model only. The bearer knows one additional psychic power from any discipline it has access to.
+Characters
+
+Some models have the
+CHARACTER
+ keyword. These models can make
+Heroic Interventions
+ in
+Charge Phase
+ and are not easy targets in the
+Shooting Phase
+ (see
+Look out, Sir
+, rule). If your
+Warlord
+ has the
+CHARACTER
+ keyword he may be able to have a
+Warlord Trait
+ (see Warlord Trait section on model’s faction page).
+Note that
+CHARACTERS
+ cannot use their
+Aura Abilities
+ while
+performing actions
+.
+
+Contents
+Books
+RULES TERMS GLOSSARY
+RARE RULES
+Benefits of Cover When not in Terrain
+Ignoring the Benefits of Cover
+Improving the Benefits of Cover
+Units of Psykers
+Manifesting and Denying with non-Psykers
+Shoot Again
+Non-shooting Abilities
+Always Fight First/Last
+Fighting with Individual Models
+Fight Again
+Attacker’s Priority
+Morale Priority
+Resurrected Models
+Explodes
+Desperate Breakout and Rules that Prevent Falling Back
+Manifesting Priority
+Multiple Attacks that Inflict Mortal Wounds
+Scoring Additional Hits
+Stratagems that Gain or Refund CPs
+Moving Through Models
+Attacks That Make Multiple Hit Rolls
+Charging Aircraft
+Disembarking Large Models
+Resolving Abilities when Moving off the Edge of the Battlefield
+Shooting Whilst Embarked on a Transport
+Preventing Reinforcement Units From Setting Up
+Defensive Rules that Apply to Attacks with Specific Characteristics
+Splitting Units with Pre-existing Rules Effects
+Transports and Rules that Count as Remaining Stationary
+Ignoring Wounds Vs Rules that Prevent Models from Ignoring Wounds
+‘If Every Unit in Your Army’ Rules
+At the Start of, During and After Deployment
+Has Access to (Psychic Disciplines)
+Rules That Count As Remaining Stationary
+Psychic Powers that Modify Characteristics and have Additional Effects Based on the Psychic Test
+Preventing/Losing Objective Secured
+Modifying the Command Point Cost of Stratagems
+Rules that Dictate Wound Allocation Order
+Repositioned and Replacement Units
+
+Disable Ads
+
+E-mail:
+
+
+Pin code:
+
+
+Get pin code
+
+Disable Ads
+
+Boosty
+ subscribers may disable ads:
+
+1. Enter e-mail you have used to login on Boosty.
+
+2. Press
+Get pin code
+ button (if you don’t have it already)
+
+3. Enter pin code.
+
+Note that login database updated once a day. So, if you are a new booster - try tomorrow. And thank you!
+
+© Vyacheslav Maltsev 2013-2023

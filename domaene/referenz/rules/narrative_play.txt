@@ -1,0 +1,4284 @@
+﻿
+
+Narrative Play
+
+
+
+
+
+
+
+Author
+Community
+Data Export
+
+
+
+Settings
+
+Show fluff text
+
+Show Legends and not recommended rules/datasheets
+
+Show Forge World datasheets
+
+Show Specialist Detachments
+
+Show Crusade Rules
+
+Show Armies of Renown
+
+Show Boarding Actions rules
+
+Show non-Boarding Action stratagems
+
+Show base size
+
+Color theme:
+
+
+OS default
+
+Bright
+
+Dark
+
+The Rules
+
+Playing This Game
+Core Rules
+Open Play
+Matched Play
+Narrative Play
+Rules Appendix
+Matched Mission Packs
+Grand Tournament 2021
+Tactical Deployment
+Tempest of War
+War Zone Nachmund: Grand Tournament
+War Zone Nephilim: Grand Tournament
+Arks of Omen: Grand Tournament
+War Zones
+Charadon
+Nachmund
+Octarius
+Crusade Mission Packs
+Amidst the Ashes
+Beyond the Veil
+Catastrophe
+Containment
+Plague Purge
+Wars of Faith
+Boarding Actions
+Boarding Action Rules
+Gallowdark
+The Rock Besieged
+Dark Depths
+Herald of Misery
+Multiplayer Missions
+Others
+Open War
+Eldritch Omens
+Hexfire
+Piety and Pain
+Shadow Throne
+Psychic Awakening
+
+Factions
+
+Imperium
+Adepta Sororitas
+Adeptus Custodes
+Adeptus Mechanicus
+Agents of the Imperium
+Astra Militarum
+Grey Knights
+Imperial Knights
+Rogue Traders
+Space Marines
+Titan Legions
+Chaos
+Chaos Daemons
+Chaos Knights
+Chaos Space Marines
+Death Guard
+Heretic Titan Legions
+Renegades and Heretics
+Thousand Sons
+World Eaters
+Xenos
+Aeldari
+Drukhari
+Genestealer Cults
+Leagues of Votann
+Necrons
+Orks
+T’au Empire
+Tyranids
+Unaligned
+Unaligned
+
+Narrative Play
+
+Narrative play allows you to take the already thematic gaming experience of Warhammer 40,000, and add to this any number of additional storytelling elements. From the simple act of giving names to your characters and units, to creating backstories for the missions you undertake, to creating sprawling campaigns in which individual battles help determine the outcome of a grand saga, the extent to which you take your narrative play games is entirely up to you.
+
+Contents
+Crusade Forces
+Crusade Faction
+Order of Battle
+Battle Tally, Requisition Points and other Information
+Crusade Cards
+Experience
+Combat Tallies
+Requisition Points
+Relics, Warlord Traits and Upgrades
+Named Characters
+Knight Characters
+Requisitions
+Ranks and Battle Honours
+Battle Honours
+Battle Traits
+Weapon Enhancements
+Psychic Fortitudes
+Crusade Relics
+Artificer Relics
+Antiquity Relics
+Legendary Relics
+Out of Action
+Battle Scars
+Selecting a Crusade Army
+Crusade Blessings
+Crusade Appendix
+Split Units
+Combat Squads
+Summoned Units
+Combined Units
+CRUSADE MISSION PACK
+Agendas
+Purge the Enemy
+Assassins
+Priority Target
+Titan Hunter
+King Slayer
+No Mercy, No Respite
+First Strike
+Cull the Hordes
+Reaper
+Battlefield Supremacy
+Sentinel
+Breakthrough
+Survivor
+Shadow Operations
+Secure the Area
+Search for Archeotech
+Deploy Vox-relays
+Recover Mission Archives
+Warpcraft
+Witch Hunter
+Lord of the Warp
+Scry Battle Plans
+Combat Patrol Missions
+
+1-2
+
+Sweep and Clear
+
+3-4
+
+Supply Drop
+
+5-6
+
+Assassinate
+Incursion Missions
+
+1
+
+Supply Cache
+
+2
+
+The Relic
+
+3
+
+Sabotage
+
+4
+
+Recon Patrol
+
+5
+
+The Ritual
+
+6
+
+Behind Enemy Lines
+Strike Force Missions
+
+1
+
+Supplies From Above
+
+2
+
+Narrow the Search
+
+3
+
+Cut Off the Head
+
+4
+
+Retrieval
+
+5
+
+Raze and Ruin
+
+6
+
+Ambush
+Onslaught Missions
+
+1-2
+
+Firestorm
+
+3-4
+
+Grand Assault
+
+5-6
+
+Field of Glory
+
+The term narrative play can apply to many different types of games and styles of play. One of the most common ways of engaging in narrative play is to recreate famous battles found in Codexes, campaign books and Black Library novels, pitting your army and strategies against those of an opponent to see if you can change the course of history. Another is to wage a campaign in which a set group of players fight a series of missions over weeks, months or even years, with individual battles shaping the outcome of a long and bloody war. But perhaps the most flexible, engaging and comprehensive narrative play experience can be found in creating a Crusade force.
+With a Crusade force you can fight any number of battles against any number of different opponents, and from mission to mission you will watch your army grow in size and experience. When you launch your Crusade, your force will be relatively small and inexperienced, but in short order you will shape it into a hardened Imperial battle group, a nightmarish Chaos warband, or a marauding xenos horde. Your units will develop skills that allow them to better slaughter the enemy, your characters will uncover prized relics that they can use in the ongoing war effort, and as your army continues to fight on new fronts, so too will you be assigned more and more warriors to command.
+Each Crusade force is on a personal crusade that you, the commander, can define however you like. What this means is that you don't have to play with the same group of opponents if you don’t want to - any Crusade force can be pitted against any other at any time. Furthermore, when two forces of different levels of experience encounter one another, the Crusade rules provide you the tools to ensure that the battle is not unfairly balanced in either direction.
+Following the Crusade rules you will find the Crusade mission pack. This pack encourages a great range of dynamic and strategic play styles, containing a mixture of missions with balanced deployments and objectives, as well as those in which each army is pursuing entirely different goals. On top of this, each player is able to select specific Agendas that only their army is pursing in battle, leading to endless diversity in the games you will play. Win or lose, your army will learn from each battle, gaining varying amounts of experience which they will carry with them as you continue your crusade.
+
+
+
+Crusade Forces
+In the war-torn future of Warhammer 40,000 there are hard bitten groups of warriors who have battled side by side over countless campaigns. From the close-knit brotherhoods of the Adeptus Astartes to bonded Fire Warriors of the T’au Empire, such companies of fighters have fought together over several campaigns, each new battle teaching the skills and knowledge to help them survive the nightmarish battlefields upon which they must wage war. This section explains how you can muster an army for use in your own campaign, and how the units within it can progress and develop between one battle and the next.
+A Crusade force is one that allows the player to track the development of their army from the greenest of recruits to the most hard-bitten veterans over the course of many battles. The more you play with a Crusade force, the more its units will gain
+experience
+, learn new abilities, acquire long-lost relics and earn
+battle scars
+.
+Crusade forces
+ are designed to be used as part of a personal campaign where you play with and grow your favourite collection from a fledgling force into a powerful army feared across the galaxy, earning new
+battle
+
+honours
+ with every victory (or defeat). Every Crusade force will be different, and the journey each takes will tell a unique story.
+To play with a Crusade force, you will first need to choose a
+Crusade
+
+Faction
+ and then create an
+Order of Battle
+.
+Crusade Faction
+When you start a Crusade force, you must decide what its Crusade Faction will be - this must be one of the following Faction keywords:
+IMPERIUM
+CHAOS
+AELDARI
+TYRANIDS
+ORKS
+NECRONS
+T’AU
+
+EMPIRE
+In a Crusade force, all of the units in your
+Order of Battle
+ (see below), with the exception of those that are
+UNALIGNED
+, must have at least one Faction keyword in common (e.g.
+IMPERIUM
+ or
+CHAOS
+). If a unit does not have the correct Faction keyword, it cannot be included in your Order of Battle.
+Crusade Faction
+: All units in your Crusade force must share this keyword (or be
+UNALIGNED
+).
+Order of Battle
+A player's Order of Battle is primarily a list of all the units that they have as part of their Crusade force. A player’s Order of Battle can consist of any number of units, but you must have a
+Crusade card
+ for each unit and the combined
+Power
+
+Ratings
+ of all the units in your starting Crusading force cannot exceed 50. This is called your Crusade force's Supply Limit, and it can be increased by playing more battles (as explained later). Make a note of each unit's Power Rating on your Order of Battle.
+A unit’s Crusade points is a measure of how many upgrades and bonuses it has accrued while part of your Crusade force — it will typically start at 0 when first included in your Crusade force, but will increase as the unit gains
+experience
+ in battle. Make a note of each unit's current number of Crusade points on your Order of Battle (see
+Crusade
+
+Blessings
+ to find out more about how Crusade points effect your battles).
+You can add new units to your Order of Battle at any time, provided that doing so does not exceed your Crusade force's Supply Limit. Once you have added a unit you cannot change any of its details. This means that you cannot change the number of models in that unit, the wargear they are equipped with, or any of the abilities, Warlord Traits, Relics, psychic powers etc. you have chosen for that unit. Some units have keywords that you must choose for that unit. For example, when taking a unit with the
+<
+C
+HAPTER>
+ keyword you must select which Chapter that unit is, e.g.
+ULTRAMARINES
+. Once you have chosen such a keyword for a unit in your Order of Battle, you cannot change it.
+You can remove units from your Order of Battle at any time, but once you have removed a unit you cannot add it back into your Order of Battle (so any upgrades,
+Battle
+
+Honours
+ etc. they have acquired are lost). Removing a unit from your Order of Battle does not affect your Crusade force's Supply Limit (so removing a unit can potentially leave you with the ability to add a new unit to your Order of Battle).
+Order of Battle
+: List of all the units that are part of your Crusade force.
+Can add or remove units from your Order of Battle at any time.
+Each unit must have a
+Crusade card
+.
+Units cannot be changed once added to your Order of Battle.
+Supply Limit
+: Starts at 50. The combined Power Ratings of all units in your Crusade force must not exceed this.
+Battle Tally, Requisition Points and other Information
+A player s Order of Battle must also have a tally of the number of battles you have played with it, as well as your current number of
+Requisition
+
+points
+ (RPs). When you first start a
+Crusade army
+ and you create an Order of Battle, you will start with 5 RPs. You can also include any other information you want on your Order of Battle, including notable victories or defeats, any vendettas or grudges you feel your army would have, or any additional background that you wish to add to your Crusade force or any of the units within it.
+Battle tally
+: Number of battles you have played using this Crusade force.
+Requisition points
+: Start at 5. Can be spent to use
+Requisitions
+.
+When you first create an Order of Battle, write the name of your Crusade force, its
+Crusade
+
+Faction
+ and your name here.
+Keep a record on your Order of Battle of the number of battles you have played using this Crusade force (your battle tally), and the number of victories it has secured.
+Keep a note on your Order of Battle of the current number of
+Requisition
+
+points
+ (RPs) your Crusade force has available.
+The current Supply Limit of your Crusade force, as well as the combined
+Power
+
+Ratings
+ of all the units in your Crusade force (the Supply Used) are noted down on your Order of Battle.
+Your Order of Battle lists all the units in your Crusade force - for easy reference, make a note of each unit’s Power Rating and the number of
+Crusade points
+ each has acquired here.
+There is space on an Order of Battle for all kinds of narrative information, such as personal goals, notable victories (or defeats), vendettas and more.
+You can use a
+blank Order of Battle
+ to make a photocopy.
+
+
+
+Crusade Cards
+Each time a player adds a unit to their
+Order of Battle
+, the unit’s details must be recorded on a Crusade card. Each unit’s Crusade card details the following:
+What models and how many of each are in the unit.
+What weapons models in that unit are equipped with and what wargear they have.
+The total
+Power
+
+Rating
+ of the unit.
+If the unit has any keywords that must be chosen when that unit is included in your army, its Crusade card must make a note of what are those keywords (e.g.
+<
+M
+ARK
+
+OF
+
+CHAOS>
+,
+<
+L
+EGION>
+,
+<
+C
+HAPTER>
+ etc.).
+If the unit is a
+PSYKER
+, its Crusade card must make a note of which psychic powers it knows.* When you are generating that units powers, you can ignore rules that state the unit must be part of a specific
+Detachment
+ in order to know that power (though all other requisites, such as having the correct keywords, still apply).
+If the unit has any abilities that must, or that can be selected or generated before the battle, your Crusade card must note what those selections are (e.g.
+Litanies of Battle
+,
+Prayers to the Dark Gods
+,
+Powers of the C’tan
+,
+Exarch Powers
+ etc.).*
+If you have used any
+Requisition
+
+points
+ to upgrade the unit, the Crusade card must note all the details of those upgrades. So, if any units have been given a Relic, a Warlord Trait, or have been upgraded via a Stratagem, these must be noted on their unit card*
+Any
+Battle
+
+Honours
+ or
+Battle Scars
+ the unit has.
+The unit’s current number of
+experience points
+ (when adding a unit to your Order of Battle, this will be 0).
+The unit’s
+Combat
+
+tallies
+ (when adding a unit to your Order of Battle, these will be 0).
+The unit’s total number of
+Crusade points
+.
+* Some Warlord Traits, psychic powers, Stratagems and certain other abilities can be selected randomly. It is up to you whether you pick or roll for these when you add the unit to your Order of Battle, but in either case, once determined they cannot later be changed. Make a note of your selection (whether chosen or rolled for randomly) on the units Crusade card.
+Each unit in your army should have a unique name to differentiate it from its peers.
+The unit’s Battlefield Role, Power Rating and equipment are listed on its Crusade card, along with other things you must select (e.g. keywords and psychic powers).
+The number of experience and Crusade points the unit has acquired are noted here.
+Keep a tally of how many enemy units this unit has destroyed (and how) here.
+You can keep track of tallies required during a battle due to Agendas here.
+When a unit acquires enough experience points to be promoted, tick the appropriate box to denote its rank.
+All Battle Honours and Battle Scars that a unit currently has are noted down here.
+You can use a
+blank Crusade card
+ to make a photocopy.
+Experience
+When you add a unit to your
+Order of battle
+, it will start with 0 experience points. Units can gain experience points as follows:
+Battle Experience
+: At the end of a battle, each unit that has a
+Crusade card
+ that was part of your army list for that battle gains 1 experience point.
+Dealers of Death
+: A unit gains 1 experience point for every third enemy unit it has destroyed in total.
+Marked for Greatness
+: At the end of a battle, you can select one unit that has a Crusade card that was part of your army list for that battle; that unit gains 3 experience points. Keep a tally on the unit's Crusade card of how many times it has been Marked for Greatness.
+There are many additional ways in which units can gain experience points, as described in the
+Crusade Mission Pack
+. Keep track of a unit's current experience points total on its Crusade card.
+The following units never gain experience points, and so can never gain
+Battle
+
+Honours
+, however, they also are assumed to pass any
+Out of Action
+ tests they are required to take (no dice is rolled) and so never accrue
+Battle Scars
+. You can mark the Experience Points section of their Crusade card as ‘N/A’ to remind you.
+Named
+
+characters
+SWARMS
+DRONES
+Units with the Fortifications
+Battlefield Role
+Summoned
+
+units
+ (i.e. any unit that is added to your army during a battle)
+Experience points
+: Units start with 0, but gain them during battles.
+Some units never gain experience points (see above}.
+Combat Tallies
+A unit’s
+Crusade card
+ contains space to record all kinds of battle statistics. Each time your unit takes part in a battle, survives a battle, or destroys an enemy unit, make a note of that on the unit’s Crusade card. Units can earn
+experience points
+ from these tallies, as described in
+Crusade Mission Pack
+ section.
+There is also space on each unit's Crusade card to record Agenda tallies during a battle. These are always reset to 0 after each battle. You can find out more about
+Agendas
+ in
+Crusade Mission Pack
+ section.
+Combat tallies
+: Used to record battle Statistics for units during games.
+
+
+
+Requisition Points
+Requisition points can be used to purchase
+Requisitions
+: these can upgrade your Crusade force, or units within them. Each time you spend a Requisition point, reduce your total by 1. Any Requisition points you do not spend are saved and can be used later. As you play more battles, you can accrue additional Requisition points, but a Crusade force can never have more than 5 (any additional Requisition points acquired beyond this are lost). Each time you play a battle, you will gain 1 Requisition point after that battle has been completed, regardless of the result of the battle itself. You should keep track of how many Requisition points you have on your
+Order of Battle
+.
+The Requisitions you can purchase can be found
+here
+. Each Requisition will tell you when it can be purchased; they can never be purchased during a battle. Unless stated otherwise, there is no limit on the number of Requisitions you can purchase, the number of times you can purchase each Requisition, nor on the combination of Requisitions you can purchase, so long as you have enough Requisition points. If you do not have enough Requisition points to purchase a Requisition, you cannot purchase it.
+Requisitions cost Requisition points to purchase.
+You can never have more than 5 Requisition points.
+Each battle you play earns you 1 Requisition point (win, lose or draw).
+Relics, Warlord Traits and Upgrades
+No model in your
+Order of Battle
+ can have a Relic or a Warlord Trait unless you have purchased the appropriate
+Requisition
+. This means that your
+WARLORD
+ does not automatically have a Warlord Trait, and you do not automatically get to give a Relic to one
+CHARACTER
+ in your army.
+There are also several Stratagems, in Codexes and other publications, that can upgrade units before the battle. Examples include Stratagems that enable additional models to have Relics or Warlord Traits, or Stratagems that grant units better Characteristics or abilities. You cannot use any of these Stratagems to upgrade any unit in your Order of Battle unless you have purchased the appropriate Requisition, as described below.
+Not usable unless you have purchased the appropriate Requisition.
+Your Warlord does not have a Warlord Trait.
+No model in your army has a Relic.
+You cannot use Stratagems that upgrade units before the battle.
+Named Characters
+Named characters always have a Warlord Trait, even if they are not your Warlord (in such cases they are only considered to be your Warlord for the purposes of their trait). If a publication lists what a named character's Warlord Trait must be, then it must be this; they have this Warlord Trait even if another model in your
+Order of Battle
+ already has this Warlord Trait, but having this named character in your Order of Battle does not prevent another model in your Order of Battle from having this Warlord Trait.
+Named characters always have a Warlord Trait (even if they are not your
+WARLORD
+).
+Knight Characters
+IMPERIAL
+
+KNIGHT
+ Detachments and
+CHAOS
+
+KNIGHT
+ Detachments both have a Detachment ability (
+Knight Lances
+ and
+Traitoris Lances
+ respectively). The part of this ability that enables a model to gain the
+CHARACTER
+ keyword does not apply to Crusade Armies. The only method by which an
+IMPERIAL
+
+KNIGHT
+ or a
+CHAOS
+
+KNIGHT
+ model can gain the
+CHARACTER
+ keyword is by purchasing the
+Specialist
+
+Reinforcements
+ Requisition when it is added to your
+Order of Battle
+ in order to use either the
+Knight
+
+Baron
+ or
+Tyrannical
+
+Court
+ Stratagems (see
+Codex: Imperial Knights
+ or
+Codex: Chaos Knights
+ respectively). Note, however, that using one of these Stratagems will only result in that model gaining that
+CHARACTER
+ keyword - it will not grant them a Warlord Trait as described on the Stratagem (as per the Specialist Reinforcement Requisition’s rules). To give such a model a Warlord Trait you would have to additionally purchase the
+Warlord
+
+Trait
+ Requisition.
+IMPERIAL
+
+KNIGHT
+ and
+CHAOS
+
+KNIGHT
+ Detachments do not add the
+CHARACTER
+ keyword to models via the Knight Lance or Traitoris Lance abilities.
+Knight Baron and Tyrannical Court Stratagems must be accessed by purchasing a Requisition, and will only give one model the
+CHARACTER
+ keyword.
+
+
+
+Requisitions
+INCREASE SUPPLY LIMIT
+1RP
+Purchase this Requisition at any time. Increase your Crusade force's Supply Limit by 5 Power.
+FRESH RECRUITS
+1RP
+Purchase this Requisition at any time. Select one unit from your
+Order of Battle
+ (excluding
+CHARACTERS
+,
+VEHICLES
+ and
+MONSTERS
+) that has a
+Crusade card
+. You cannot choose a unit that has achieved the Battle-hardened, Heroic or Legendary
+rank
+. Add any number of additional models to this unit (up to the maximum listed on its datasheet) and increase its
+Power
+
+Rating
+ accordingly. If the unit you selected has achieved the Blooded rank, you must increase its
+Crusade points
+ total by 1 if its Power Rating has gone from 10 or less to 11 or more.
+REARM AND RESUPPLY
+1RP
+Purchase this Requisition at any time. Select one unit from your
+Order of Battle
+ (excluding
+CHARACTERS
+) that has a
+Crusade card
+. You can change any wargear options that models in that unit are equipped with as described on that unit’s datasheet, provided that none of those wargear options would change the
+Power
+
+Rating
+ of the unit. You cannot replace a weapon that a model is equipped with if the weapon in question has been upgraded by a
+Weapon Enhancement
+.
+REPAIR AND RECUPERATE
+1RP
+Purchase this Requisition either before or after a battle. Select one
+Crusade card
+ from your
+Order of Battle
+ that has one or more
+Battle Scars
+. Select one of that unit’s Battle Scars and remove it from its Crusade card (remember that for each Battle Scar removed, the unit's
+Crusade points
+ will effectively increase by 1).
+PSYCHIC MEDITATIONS
+1RP
+Purchase this Requisition either before or after a battle. Select one
+PSYKER
+ unit that has a
+Crusade card
+ from your
+Order of Battle
+. You can change what psychic powers that unit knows (make a note of the unit’s new psychic powers on its Crusade card - all the usual rules for
+selecting
+
+psychic
+
+powers
+ apply).
+SPECIALIST REINFORCEMENTS
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a unit to your
+Order of Battle
+. If there is a
+Stratagem
+ that could upgrade this unit to give it either a better characteristic profile and/or abilities, you can use that Stratagem to upgrade that unit for free, even if you would not normally have access to such a Stratagem unless your army includes a specific
+Detachment
+. Make a note of the upgrades afforded by that Stratagem on the unit’s Crusade card, and add 1 to its
+Crusade points
+ total for each
+Command
+
+point
+ that the Stratagem would have cost (so +1 Crusade point if the Stratagem would have cost 1 Command point, +2 Crusade points if it would have cost 2 Command points and so on). This upgrade is permanent, and cannot be removed or changed. You cannot use this Requisition to give a
+CHARACTER
+ a Relic or a Warlord Trait*, and you cannot use Stratagems that upgrade the unit to be part of a
+Specialist Detachment
+.
+WARLORD TRAIT
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a
+CHARACTER
+ unit to your
+Order of Battle
+, or when a
+CHARACTER
+ in your Order of Battle gains a
+rank
+. You can give that
+CHARACTER
+ one Warlord Trait (even if they are not your Warlord - in battle, this
+CHARACTER
+ is only considered your Warlord for the purposes of this trait). This must still be a Warlord Trait it can have; any Warlord can have the Inspiring Leader Warlord Trait (see below). Alternative Warlord Traits can be found in other publications. Make a note of the Warlord Trait on the unit’s Crusade card and add 1 to its
+Crusade points
+ total (+2 instead if the
+CHARACTER
+ is
+TITANIC
+). This Warlord Trait is permanent to this unit, and cannot be removed or changed. No model can have more than one Warlord Trait and the same Warlord Trait cannot be included more than once by any model in your Order of Battle.*
+Inspiring Leader (Warlord Trait, Aura)
+Add 1 to the Leadership characteristic of friendly units while they are within 6" of this
+WARLORD
+.
+RELIC
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a
+CHARACTER
+ unit to your
+Order of Battle
+, or when a
+CHARACTER
+ unit in your Order of Battle gains a
+rank
+. You can give one
+CHARACTER
+ model in that unit one Relic (excluding
+Crusade Relics
+). This must still be a Relic it can have, and it cannot be a Relic that replaces a weapon this
+CHARACTER
+ is equipped with if the weapon in question has been upgraded by a
+Weapon Enhancement
+ or a Crusade Relic (e.g.
+Artificer
+
+Weapon
+). Make a note of the Relic on the unit’s Crusade card and add 1 to its
+Crusade points
+ total (+2 instead if the
+CHARACTER
+ is
+TITANIC
+). This upgrade is permanent to this unit, and cannot be removed or changed. No model can have more than one Relic and the same Relic cannot be included more than once by any model in your Order of Battle.*
+* Please note that if a model with a Warlord Trait and/or Relic is removed from your
+Order of Battle
+, any Warlord Trait and/or Relic that the model had listed on its
+Crusade card
+ are now available to be taken by another
+CHARACTER
+ unit (assuming you use the appropriate Requisition to upgrade it, of course).
+SPACE MARINE SUCCESSOR CHAPTERS AND FIRST FOUNDING CHAPTER RELICS
+There is a Stratagem in some Space Marine Codex supplements that allows a
+CHARACTER
+ from a successor Chapter to have a Relic that would normally only be available to their First Founding Chapter. When using the Relic Requisition to give a
+CHARACTER
+ a Relic, you can effectively use this Stratagem, but if you do you add 2 to that unit’s Crusade points instead of only adding 1, and you cannot have more than one
+CHARACTER
+ in your
+Order of Battle
+ that has a Relic from their First Founding Chapter.
+
+
+
+Ranks and Battle Honours
+If a unit has accrued enough
+experience points
+ it will gain a promotion and go up a rank (from Battle-ready to Blooded, for example). Each time a unit gains a rank, it will gain one Battle Honour; make a note of the unit’s new rank and its Battle Honour on its
+Crusade card
+. You can find out more about Battle Honours below.
+EXPERIENCE
+EXPERIENCE POINTS
+RANK
+BATTLE HONOURS
+0-5
+Battle-ready
+0
+6-15
+Blooded
+1
+16-30
+Battle-hardened
+2
+31-50
+Heroic
+3
+51+
+Legendary
+4
+Once a unit earns enough experience points it will go up in rank.
+Each time a unit goes up in rank, it will gain a Battle Honour.
+Battle Honours
+Units gain one Battle Honour each time they gain a
+rank
+. Sometimes, a unit can gain an additional Battle Honour by other means (such as by winning certain missions). There are several types of Battle Honours that can be bestowed onto a unit:
+Battle Traits
+,
+Psychic Fortitudes
+,
+Weapon Enhancements
+ and
+Crusade Relics
+. Each time a unit gains a Battle Honour, it can select from one of those categories. A unit can never have more than six Battle Honours. Make a note of each Battle Honour a unit has on its
+Crusade card
+.
+Each time a unit gains a Battle Honour you must increase its Crusade points total by 1 (if the unit has a
+Power
+
+Rating
+ of 10 or less) or 2 (if the unit has a Power Rating of 11 or higher).
+There are four types of Battle Honours:
+Battle Traits
+: New skills and abilities.
+Weapon Enhancements
+: Upgrade an item of wargear.
+Psychic Fortitudes
+: Boosts a unit's psychic might.
+Crusade Relic
+: Gain a rare and powerful artefact.
+Each time a unit gains a Battle Honour, increase its Crusade points by:
+1 if unit has a Power Rating of 10 or less.
+2 if unit has a Power Rating of 11 or more.
+Battle Traits
+Battle Traits are skills or upgrades that units have acquired during their years of warfare, and help to give them a vital edge on the battlefield. Each time a unit gains a Battle Trait, roll one D6 and consult the table below to randomly determine what Battle Trait the unit has gained, or choose the Battle Trait that you think tells the best narrative for your unit. A unit can have more than one Battle Trait, but it cannot have the same Battle Trait more than once (if a duplicate result is rolled, roll again until a different result is rolled).
+CHARACTER UNITS
+(Excluding
+VEHICLE
+ and
+MONSTER
+ units)
+D6
+TRAIT
+1
+Swift and Agile
+: Add 1" to this unit’s Move characteristic. In addition, add 1 to
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Heroic Constitution
+: Add 1 to the Wounds characteristic of one
+CHARACTER
+ model in this unit.
+3
+Resilient
+: Roll one D6 each time a
+CHARACTER
+ model in this unit would lose a wound; on a 6, that wound is not lost.
+4
+Deadly Charge
+: Add 1 to the Attacks characteristic of
+CHARACTER
+ models in this unit in the
+Fight phase
+ if this unit made a
+charge
+
+move
+, was charged, or performed a
+Heroic
+
+Intervention
+ this turn.
+5
+Inspiring Hero
+: Add 1 to the Leadership characteristic of friendly units while they are within 6" of a
+CHARACTER
+ model from this unit. In addition, this unit can
+perform
+
+Heroic
+
+Interventions
+ if, after the enemy has made all its
+charge
+
+moves
+, it is within 6" of any enemy units, and it can move up to 6" when doing so.
+6
+Tactical Experience
+: While a
+CHARACTER
+ model from this unit is on the battlefield, roll one D6 each time you spend a CP to use a
+Stratagem
+; on a 6, you immediately regain 1 CP.
+VEHICLE UNITS
+D6
+TRAIT
+1
+Enhanced Engines
+: Add 2" to this unit’s Move characteristic. In addition, add 1 to
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Elite Crew
+: Re-roll
+hit
+
+rolls
+ of 1 when resolving attacks made by
+VEHICLE
+ models in this unit.
+3
+Improved Shielding
+: Add 1 to
+saving
+
+throws
+ made for
+VEHICLE
+ models in this unit against attacks that have an Armour Penetration characteristic of 0 or -1 (
+invulnerable
+
+saving
+
+throws
+ are unaffected).
+4
+Armourbane
+: Re-roll
+wound
+
+rolls
+ of 1 when resolving attacks made by
+VEHICLE
+ models in this unit that target enemy
+VEHICLE
+ or
+MONSTER
+ units.
+5
+Repair Systems
+:
+VEHICLE
+ models in this unit regain 1 lost wound at the start of each of your
+Command phases
+.
+6
+Blessed Hull
+: Roll one D6 each time a
+mortal
+
+wound
+ is allocated to a
+VEHICLE
+ model in this unit; on a 5+ that mortal wound is ignored.
+MONSTER UNITS
+D6
+TRAIT
+1
+Unstoppable
+: Add 2" to this unit’s Move characteristic. In addition, add 1 to
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Apex Predator
+: Re-roll
+hit
+
+rolls
+ of 1 when resolving attacks made by
+MONSTER
+ models in this unit.
+3
+Thickened Hide
+: Add 1 to
+saving
+
+throws
+ made for
+MONSTER
+ models in this unit against attacks that have an Armour Penetration characteristic of 0 or -1 (
+invulnerable
+
+saving
+
+throws
+ are unaffected).
+4
+Frenzied
+: Add 1 to the Attacks characteristic of
+MONSTER
+ models in this unit in the
+Fight phase
+ if this unit made a
+charge
+
+move
+, was charged, or
+performed
+
+a
+
+Heroic
+
+Intervention
+ this turn.
+5
+Regenerates
+:
+MONSTER
+ models in this unit regain 1 lost wound at the start of each of your
+Command phases
+.
+6
+Terrifying
+: Roll two dice when taking a
+Morale
+
+test
+ for an enemy unit within 6" of this unit and discard the lowest result (if both dice results are the same, discard either one of them).
+ANY OTHER UNIT
+D6
+TRAIT
+1
+Fleet of Foot
+: Add 1" to this unit’s Move characteristic. In addition, add 1 to
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Veteran Warriors
+: Re-roll
+hit
+
+rolls
+ of 1 when resolving attacks made by models in this unit.
+3
+Grizzled
+: Roll one D6 each time a model in this unit would lose a wound; on a 6, that wound is not lost.
+4
+Headhunters
+: Add 1 to
+hit
+
+rolls
+ and
+wound
+
+rolls
+ made when resolving attacks with models in this unit that target enemy
+CHARACTER
+ units.
+5
+Cool-headed
+: You can re-roll failed
+Morale
+
+tests
+ taken for this unit. In addition, if a unit declares this unit as the target of their charge, this unit can fire
+Overwatch
+ (and will score hits on unmodified rolls of 5+ instead of 6 when doing so).
+6
+Battle-tested
+: This unit has the
+Objective
+
+Secured
+ ability and can make attacks with ranged weapons while performing an
+Action
+ without that action failing.
+Combat
+
+Attrition
+
+tests
+ taken for this unit are automatically passed while it is within range of an
+objective marker
+.
+
+
+
+Weapon Enhancements
+Weapon Enhancements are upgrades made to a warrior’s armaments that improve their lethality in combat. Each time a unit gains a Weapon Enhancement, you must select one model in that unit (if the unit has a unit champion, such as a Sergeant, you must select that model), then you must select one weapon equipped by that model. You cannot select a weapon that has already been enhanced by this
+Battle
+
+Honour
+, nor can you select a weapon that is a Relic or a Crusade Relic — such artefacts cannot be modified.
+If the weapon you have selected is equipped by a
+TITANIC
+ model, roll one D3 and consult the appropriate table to randomly determine what Weapon Enhancement is gained (i.e. if it is a ranged weapon, roll on the Ranged Weapons table, if it is a melee weapon, roll on the Melee Weapons table). Alternatively, you can choose one Weapon Enhancement that you think tells the best narrative for your unit (if you do, it must be one of the first three options, ie. result 1, 2 or 3).
+If the weapon you have selected is equipped by a
+CHARACTER
+,
+VEHICLE
+ or
+MONSTER
+ model that is not
+TITANIC
+, roll one D6 and consult the appropriate table to randomly determine what Weapon Enhancement is gained. Alternatively, you can choose one Weapon Enhancement that you think tells the best narrative for your unit.
+If the weapon you have selected is equipped by any other model, roll one D6 and one D3 and consult the appropriate table to randomly determine what two Weapon Enhancements are gained (if a duplicate result is rolled, roll both dice again until two different results are rolled). Alternatively, you can choose the two Weapon Enhancement that you think tells the best narrative for your unit (if you do, one of them must be one of the first three options i.e. result 1, 2 or 3).
+If a weapon has more than one profile, the Weapon Enhancement(s) it gains applies to all of that weapon’s profiles. If a weapon has both a ranged and a melee profile (e.g. a burna), you can only select Weapon Enhancements from the Melee Weapons table, but they apply to both of the weapon’s profiles.
+RANGED WEAPONS
+D3/D6
+ENHANCEMENT
+1
+Auto-loader
+: When resolving an attack with this weapon, each unmodified
+hit
+
+roll
+ of 6 scores one additional hit on the target.
+2
+Armour Piercing
+: Improve the weapon’s Armour Penetration characteristic by 1 (e.g. AP 0 becomes AP-1, AP-1 becomes AP-2 and so on).
+3
+High Calibre
+: Add 1 to the weapon’s Strength characteristic.
+4
+Improved Sights
+: When resolving an attack with this weapon, add 1 to the
+hit
+
+roll
+.
+5
+Accelerator
+: Increase the weapon’s Range characteristic by 6". If the weapon has a minimum Range characteristic, this remains unchanged.
+6
+Master-worked
+: Add 1 to the Weapon’s Damage characteristic.
+MELEE WEAPONS
+D3/D6
+ENHANCEMENT
+1
+Heirloom
+: When resolving an attack with this weapon, each unmodified
+hit
+
+roll
+ of 6 scores one additional hit on the target.
+2
+Razor-edged
+: Improve the weapon’s Armour Penetration characteristic by 1 (e.g. AP 0 becomes AP-1, AP-1 becomes AP-2 and so on).
+3
+Brutal
+: Add 1 to the weapon’s Strength characteristic.
+4
+Finely Balanced
+: When resolving an attack with this weapon, add 1 to the
+hit
+
+roll
+.
+5
+Shredder
+: When resolving an attack with this weapon, an unmodified
+wound
+
+roll
+ of 4+ is always successful, irrespective of the target’s Toughness characteristic.
+6
+Fleshbane
+: Add 1 to the Weapon’s Damage characteristic.
+Psychic Fortitudes
+Psychic Fortitudes are otherworldly powers that sorcerers and warp-practitioners gain as they hone and master their psychic skills. Only
+PSYKER
+ units can be given Psychic Fortitudes. Each time a unit gains a Psychic Fortitude, roll one D6 and consult the table below to randomly determine what Psychic Fortitude the unit has gained, or choose the Psychic Fortitude that you think tells the best narrative for your unit. A unit can have more than one Psychic Fortitude, but it cannot have the same Psychic Fortitude more than once (if a duplicate result is rolled, roll again until a different result is rolled).
+PSYCHIC FORTITUDES
+D6
+PSYCHIC FORTITUDE
+1-2
+Psychic Might
+: Add 1 to the number of psychic powers this unit can attempt to
+manifest
+ in your
+Psychic phase
+.
+3-4
+Adamantium Will
+: Add 1 to the number of psychic powers this unit can attempt to
+deny
+ in your opponent's
+Psychic phase
+.
+5-6
+Master of Lore
+: Add 1 to the number of psychic powers this unit knows from one of the disciplines available to them. Write down this new power on the unit’s
+Crusade card
+.
+
+
+
+Crusade Relics
+Crusade Relics are rare items of power that your heroes discover as they quest across the galaxy. Only
+CHARACTER
+ models can gain Crusade Relics. When a model gains a Crusade Relic, simply select the Crusade Relic that you want that model to have (note, however, that some Crusade Relics can only be given to certain models).
+A
+CHARACTER
+ model can have any number of Crusade Relics, but the same Crusade Relic cannot be included in your
+Order of Battle
+ more than once. A
+CHARACTER
+ model can have Crusade Relics even if they have other Relics (from a Codex, for example).
+The Crusade Relics that can be given are listed below. There are three categories of Crusade Relics:
+Artificer Relics
+,
+Antiquity Relics
+ and
+Legendary Relics
+.
+Artificer Relics
+Any
+CHARACTER
+ model can be given an Artificer Relic.
+Artificer Weapon
+Select one weapon that the model is equipped with (excluding a Relic or a weapon that has been enhanced by the Weapon Enhancement
+Battle
+
+Honour
+). Each unmodified
+hit
+
+roll
+ of 6 made for an attack with that weapon inflicts 1
+mortal
+
+wound
+ on the target in addition to the normal damage. Note that this is cumulative with any other mortal wounds inflicted by the weapon.
+Artisan Bionics
+INFANTRY
+,
+CAVALRY
+ or
+BIKER
+ only. Add 1 to the model’s Strength characteristic. In addition, roll one D6 each time this model loses a wound; on a 5+ that wound is not lost.
+Conversion Field
+INFANTRY
+ only. This model has a 4+
+invulnerable
+
+save
+. In addition, each time you roll an unmodified 6 when making a
+saving
+
+throw
+ for this model, the closest enemy unit within 1" suffers 1
+mortal
+
+wound
+.
+Frenzon Injector
+INFANTRY
+,
+CAVALRY
+,
+BIKER
+ or
+MONSTER
+ only. You can re-roll
+Advance
+ and
+charge
+
+rolls
+ made for this model’s unit. In addition, add 1 to this model’s Attacks characteristic during any turn in which its unit made a
+charge
+
+move
+, was charged or
+performed
+
+a
+
+Heroic
+
+Intervention
+.
+Laurels of Victory
+If this model is included in your army list for a battle, you receive 2 bonus
+Command
+
+points
+ to use in that battle. However, if this model is destroyed during the battle, you immediately lose 2 Command points.
+Master-crafted Armour
+Add 1 to armour
+saving
+
+throws
+ made for the bearer. In addition, roll one D6 each time this character suffers a
+mortal
+
+wound
+; on a 6, that mortal wound is ignored.
+Antiquity Relics
+Any Heroic
+CHARACTER
+ model or Legendary
+CHARACTER
+ model can be given an Antiquity Relic. Add 1 to a unit’s total Crusade points for each Antiquity Relic it has - this is in addition to the +1 from gaining a
+Battle
+
+Honour
+, for a total of +2.
+Archeotech Nano-med
+INFANTRY
+ only. The first time this model is destroyed, keep it to one side; at the end of the current phase, roll one D6. On a 2+, set this model back up again, as close as possible to its previous position, with D3 wounds remaining.
+Blackstone Shard Amulet
+This model’s unit can never be targeted or affected by psychic powers in any way, nor can it attempt to
+manifest
+ any psychic powers or perform any
+psychic actions
+.
+Dark Age Displacer Belt
+INFANTRY
+ only. Instead of making a
+Normal
+
+Move
+ or
+Falling
+
+Back
+ in your
+Movement phase
+, this model’s unit can be removed from the battlefield and then set back up on the battlefield, anywhere that is more than 9" from any enemy models.
+Xenotech Digital Lasers
+This model gains the following weapon:
+WEAPON
+RANGE
+TYPE
+S
+AP
+D
+Xenotech Digital Lasers
+Xenotech Digital Lasers
+12"
+Pistol
+
+1
+*
+*
+*
+Abilities:
+ If this weapon hits, the target suffers D3
+mortal
+
+wounds
+.
+Legendary Relics
+Any Legendary
+CHARACTER
+ model can be given a Legendary Relic. In addition, in order to give a model a Legendary Relic, you must also pay 1
+Requisition
+
+point
+ (if you do not have enough Requisition points, you cannot give that model a Legendary Relic). Add an additional 2 to a unit’s total Crusade points for each Legendary Relic a it has - this is in addition to the +1 from gaining a
+Battle
+
+Honour
+, for a total of +3.
+Null-field Disruptor
+Invulnerable
+
+saves
+ cannot be made against attacks made with this model’s melee weapons.
+Vortex Grenade
+This model gains the following weapon:
+WEAPON
+RANGE
+TYPE
+S
+AP
+D
+Vortex grenade
+Vortex grenade
+6"
+Grenade
+
+1
+*
+*
+*
+Abilities:
+ One use only. If this weapon hits, the target suffers 3D3
+mortal
+
+wounds
+ and you roll one D6 for every other unit within 6" of the target unit (roll before any destroyed models are removed); on a 4+ the unit being rolled for suffers D3 mortal wounds as well.
+
+
+
+Out of Action
+After a battle, all models from your army that were destroyed in the battle are restored to your
+Order of Battle
+; any wounds they have lost are likewise regained.  This represents units replenishing their numbers, wounded warriors returning to the fray, and battle tanks being recovered and repaired for their next battle. The only lasting effects are any
+Battle Scars
+ the unit has acquired, as described below.
+After the battle, before you have determined the total number of
+experience points
+ each unit gains, you must first take an Out of Action test for each unit in your army that has a
+Crusade card
+ that was destroyed in that battle. You do not have to test for a unit that was destroyed but was subsequently returned to the battlefield during that battle - only roll for units that are destroyed at the end of the battle.
+To take an Out of Action test, roll one D6 for that unit. On a 2+ the test is passed and nothing happens. On a 1, the test is failed; you must now choose one of the following options for that unit:
+Devastating Blow
+: That unit loses D6 experience points (to a minimum of 0) and cannot gain experience points from this battle from Agendas Achieved, Battle Experience or from being Marked for Greatness (see
+Crusade Mission Pack
+). Update its Crusade card accordingly.
+Battle Scar
+: That unit gains one
+Battle Scar
+ (see below). This must be determined before the players next battle and the unit’s Crusade card must be updated to reflect any and all changes.
+Note that even if a unit loses experience points it does not lose any rank (or any associated
+Battle
+
+Honours
+) it had previously achieved, but neither will that unit be promoted again (and hence gain a Battle Honour) if it subsequently regains these lost experience points.
+Out of Action
+: If a unit is destroyed at the end of the battle, you must take an Out of Action test for it.
+Roll one D6: on a 1, that test is failed. The unit suffers one of the following:
+Devastating Blow
+: Lose D6 experience points and cannot gain any from this battle (except from Dealers of Death).
+Battle Scar
+: Gain one
+Battle Scar
+.
+Battle Scars
+Each time a unit gains a Battle Scar, roll one D6 and consult the table below to randomly determine what Battle Scar the unit has gained, or choose the Battle Scar that you think tells the best narrative for your unit.
+A unit can have more than one Battle Scar, but it cannot have the same Battle Scar more than once (if a duplicate result is rolled, roll again until a different result is rolled). A unit cannot have more than six Battle Scars (if such a unit fails an Out of Action test, you must select the Devastating Blow result for it). Make a note of each Battle Scar a unit has on its Crusade card and subtract 1 from its Crusade points for each Battle Scar it currently has (this can mean a unit has a negative number of Crusade points).
+Subtract 1 from a unit’s Crusade points for each Battle Scar it currently has.
+CHARACTER UNITS
+(Excluding
+VEHICLE
+ and
+MONSTER
+ units)
+D6
+TRAIT
+1
+Lost Leg
+: Subtract 1" from this unit’s Move characteristic. In addition, subtract 1 from
+Advance
+ and
+Charge
+
+rolls
+ made for this unit.
+2
+Blind in one Eye
+: You must re-roll
+hit
+
+rolls
+ of 6 when resolving attacks made by
+CHARACTER
+ models in this unit.
+3
+Deep Scars
+: This unit cannot perform any
+actions
+ or
+psychic actions
+, and it cannot make
+Heroic
+
+Interventions
+.
+4
+Chest Wound
+: Reduce the Wounds characteristic of one
+CHARACTER
+ model in this unit by 1 (to a minimum of 1).
+5
+Deep Concussion
+: You cannot use any
+Stratagems
+ to affect this unit, nor can you use the
+Command
+
+Re-roll
+ Stratagem to affect any dice rolls made for it.
+6
+Loss of Reputation
+: If this unit has any
+aura
+
+abilities
+ on its datasheet, the range of those aura abilities is reduced by 3". If this reduces the range of an aura ability to 0" or less, then the unit loses that aura ability while it has this Battle Scar. If this unit has no aura abilities on its datasheet, then it is unaffected by the aura abilities of any friendly units.
+VEHICLE UNITS
+D6
+TRAIT
+1
+Engine Fault
+: Subtract 2" from this unit’s Move characteristic. In addition, subtract 1 from
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Targeters Cracked
+: You must re-roll
+hit
+
+rolls
+ of 6 when resolving attacks made by a
+VEHICLE
+ model in this unit.
+3
+Weakened Armour
+: Each time this unit is hit by a weapon with a Strength characteristic of 8 or more, this unit suffers 1
+mortal
+
+wound
+ in addition to any normal damage.
+4
+Weapon Damaged
+: Select one weapon equipped by a
+VEHICLE
+ model in this unit (if this unit has any ranged weapons, you must select one of them, and if any of those are
+Heavy
+, then you must select one of them). Subtract 1 from
+hit
+ and
+wound
+
+rolls
+ when resolving attacks with that weapon.
+5
+Angered Machine Spirit
+: You cannot use any
+Stratagems
+ to affect this unit, nor can you use the
+Command
+
+Re-roll
+ Stratagem to affect any dice rolls made for it.
+6
+Vox Comms Destroyed
+: This unit is unaffected by the
+aura
+
+abilities
+ of any friendly units.
+MONSTER UNITS
+D6
+TRAIT
+1
+Crippling Injury
+: Subtract 2" from this unit’s Move characteristic. In addition, subtract 1 from
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Crippled Limb
+: You must re-roll
+hit
+
+rolls
+ of 6 when resolving attacks made by
+MONSTER
+ models in this unit.
+3
+Critical Wound
+: Each time this unit is hit by a weapon with a Strength characteristic of 8 or more, this unit suffers 1
+mortal
+
+wound
+ in addition to any normal damage.
+4
+Tissue Damage
+: Subtract 1 from the Attacks characteristic of one
+MONSTER
+ model in this unit (to a minimum of 1).
+5
+Fractured Skull
+: You cannot use any
+Stratagems
+ to affect this unit, nor can you use the
+Command
+
+Re-roll
+ Stratagem to affect any dice rolls made for it.
+6
+Enraged and Unreasoning
+: If this unit has any
+aura
+
+abilities
+ on its datasheet, the range of those aura abilities is reduced by 3". If this reduces the range of an aura ability to 0" or less, then the unit loses that aura ability while it has this Battle Scar. If this unit has no aura abilities on its datasheet, then it is unaffected by the aura abilities of any friendly units.
+ANY OTHER UNIT
+D6
+TRAIT
+1
+Walking Wounded
+: Subtract 1" from this unit’s Move characteristic. In addition, subtract 1 from
+Advance
+ and
+charge
+
+rolls
+ made for this unit.
+2
+Fatigued
+: This unit cannot control
+objective markers
+. When determining which player controls an objective marker, ignore all models in this unit.
+3
+Battle-weary
+: This unit cannot perform any
+actions
+ or
+psychic actions
+, and it cannot gain more than 1
+experience point
+ at the end of a battle for any reason (any additional experience points gained are lost).
+4
+Shell Shock
+: Subtract 1 from this unit’s Leadership characteristic. In addition, subtract 1 from
+Combat
+
+Attrition
+
+tests
+ taken for this unit.
+5
+Disgraced
+: You cannot use any
+Stratagems
+ to affect this unit, nor can you use the
+Command
+
+Re-roll
+ Stratagem to affect any dice rolls made for it.
+6
+Mark of Shame
+: This unit is unaffected by the
+aura
+
+abilities
+ of any friendly units.
+
+
+
+Selecting a Crusade Army
+Some missions will tell you to muster a Crusade army. To do so, simply select an army from the units listed in your
+Order of Battle
+ — you cannot select units that are not part of your Order of Battle. Unless otherwise instructed, you must muster a Battle-forged Crusade army; this means you must also organise all the units in your army into
+Detachments
+, as described in the
+Battle-forged armies
+ section.
+You will need to record all the details of the army you are using. This is called your
+army roster
+, and can be written down on a piece of paper or recorded digitally, but it must be clear and include the following information:
+What your
+Army
+
+Faction
+ is.
+Which units are in your army. For each unit, you must include that unit's
+Crusade card
+.
+The
+Power
+
+Level
+ of your army. This is the combined
+Power
+
+Ratings
+ of all the units in your army.
+What
+Detachments
+ are included in your army, and which units belong to which Detachment. If your army includes several different Detachments, you may find it helpful to write a separate roster for each Detachment and then write a summary army roster sheet that references your appended Detachment rosters.
+The number of
+Command
+
+points
+ you have.
+The combined Crusade points of all the units in your army (pg 306).
+Which model in your army is your Warlord — this is the model that leads your army. This must be the
+CHARACTER
+ on your army roster with the highest Leadership characteristic, if your army includes one (in a tie, you can choose amongst them which model will be the Warlord). Your Warlord cannot be a model with the Fortifications
+Battlefield Role
+. The model selected to be your Warlord gains the
+WARLORD
+ keyword.
+Players must let their opponent look through their army roster whenever they wish. If possible, we recommend players provide a copy of their army roster for their opponent to read through at their leisure (and if they wish, to keep and add to your growing collection of battles fought).
+Crusade Blessings
+When two Battle-forged Crusade armies battle each other, it is likely that one or the other will be more experienced. To determine this, after players have mustered their armies, both players should compare the combined Crusade points of all the units that are on their
+army rosters
+. If there is a difference, then the player whose army roster has the lower total number of Crusade points gains a number of bonus
+Command
+
+points
+ to use in that battle equal to half the difference (rounding up). This represents high command funnelling additional resources to the underdog to help them combat a more elite foe.
+For example
+: Joel and Ruby have finished mustering their armies. The total number of Crusade points of the units on Joel’s
+army roster
+ is 7. The total number of Crusade points of the units in Ruby's army is 4. Ruby therefore gains 2 bonus
+Command
+
+points
+ to spend on
+Stratagems
+ in the forthcoming battle (because half the difference between 7 and 4, rounded up, is 2).
+Crusade Blessings
+: Both players add up Crusade points of all units on their army roster.
+Player with lowest total gains a number of bonus Command points equal to half the difference.
+
+
+
+Crusade Appendix
+Split Units
+Some units have an ability that instructs you to deploy the unit at the same time, but then treat different models (or groups of models) in that unit as separate units for the duration of the battle. These are referred to as split units. The most common split units are
+VEHICLE
+ squadrons, units of
+MONSTERS
+, or
+T’AU
+
+EMPIRE
+ units that have
+accompanying drones
+, but there are others. If you have any such units in your
+Order of Battle
+ you must fill out a separate
+Crusade card
+ for each model (or group of models) that is treated as a separate unit during the battle - these individual components gain
+experience points
+,
+Battle
+
+Honours
+, take
+Out of Action
+ tests and acquire
+Battle Scars
+ separately. When you make a
+Crusade army
+, if you select this unit to be part of your army list you must include all the separate
+Crusade cards
+ (you cannot, for example, only choose part of the unit).
+Split Units
+: Units that split into multiple independent units during a battle.
+Each individual unit in a split unit must have its own Crusade card and is treated as a separate unit for all Crusade rules.
+Combat Squads
+Units with the
+Combat Squads
+ ability are an exception to the above rule - you only have one
+Crusade card
+ for this unit, even if it chooses to split into combat squads during a battle. If this squad has any
+Battle
+
+Honours
+, both its combat squads count as having those Battle Honours if it chooses to split during the battle. You only need to take an
+Out of Action
+ test for this unit if both its combat squads are destroyed during a battle.
+The Split Units rules do not apply to units with the
+Combat Squads
+ ability.
+Summoned Units
+There are many rules (abilities, psychic powers, Stratagems etc.) that can be used to add units to your army during a battle. These units are only added to your army for the duration of that battle - they are not added to your
+Order of Battle
+. Note that these rules do not apply to units from your Order of Battle that have had models added to them during a battle.
+Summoned Units
+: Units that are added to your army during the battle, and are not permanently added to your Order of Battle.
+Combined Units
+Some units can merge together during a battle via an ability or a
+Stratagem
+ — these are called combined units. If two units merge to form a combined unit, any
+Battle Traits
+ the individual units have cease to apply during that battle unless all units that are part of the combined unit have the same Battle Traits.
+So long as a single model from a combined unit remains alive at the end of the battle, none of the units that made up the combined unit have to take
+Out of Action
+ tests. However, if a combined unit is destroyed during a battle, then you must make an individual Out of Action test for each separate unit that made up the combined unit.
+Every individual unit that makes up a combined unit earns 1
+experience point
+ for taking part in a battle as normal. If a combined unit earns any
+Combat
+
+tallies
+ for units destroyed, or for Agendas achieved, or if a combined unit earns any bonus
+experience points
+ for any reason (such as for achieving an Agenda), those tallies and/or bonus experience points can only be marked on the
+Crusade card
+ of/awarded to one of the units (of your choice) that made up the combined unit.
+Combined Units
+: Units that have merged during battle.
+Combined units cannot use Battle Traits unless all units in the Combined unit have the same Battle Trait.
+Combat tallies for destroyed units are marked on one unit (of your choice] that makes up the combined unit.
+Experience points (other than Battle Experience} can only be gained by one unit (of your choice} that makes up the combined unit.
+Out of Action
+ tests are taken for entire Combined unit, but for each individual unit separately.
+
+
+
+CRUSADE MISSION PACK
+A Crusade battle is waged by following the sequence below:
+1. Select Battle Size
+The players must first select the battle size they wish to play: Combat Patrol, Incursion, Strike Force or Onslaught. The table below gives a rough guide of how long each battle should take.
+BATTLES
+BATTLE SIZE
+BATTLE DURATION
+Combat Patrol
+Up to 1 hour
+Incursion
+Up to 2 hour
+Strike Force
+Up to 3 hour
+Onslaught
+Up to 4 hour
+2. Muster Armies
+Each player must then select a
+Battle-forged army
+. The
+Power
+
+Level
+ of each player's army, and the number of
+Command
+
+points
+ each player starts with when they begin mustering their army, are shown in the table below:
+ARMY
+BATTLE SIZE
+MAXIMUM POWER LEVEL OF EACH ARMY
+COMMAND POINTS
+Combat Patrol
+25
+3
+Incursion
+50
+6
+Strike Force
+100
+12
+Onslaught
+150
+18
+Details of how to Battle-forge an army can be found
+here
+. Details of how to use Power Ratings can be found
+here
+. Details of what information your army roster must contain can be found
+here
+. If you are playing a Combat Patrol battle, the only
+Detachment
+ your army can include is one
+Patrol Detachment
+, unless your
+Army
+
+Faction
+ is
+IMPERIAL
+
+KNIGHTS
+ or
+CHAOS
+
+KNIGHTS
+, in which case the only Detachment your army can include is one
+Super-heavy Detachment
+.
+Select one of your models to be your Warlord (this cannot be a model with the Fortifications
+Battlefield Role
+) and note this on your army roster. This must be the
+CHARACTER
+ in your army with the highest Leadership characteristic, if your army includes one (in a tie, you can choose amongst them which model will be the Warlord). This model gains the
+WARLORD
+ keyword.
+Each player must then provide a copy of the army roster for their opponent to read through.
+3. Determine Mission
+The players determine which mission will be used for the battle; they can choose from the missions for their chosen battle size. This will determine the deployment map that the players use, as well as the specific mission briefing. You can either simply agree with your opponent which you will use, or you can
+roll
+
+off
+, and the winner selects which one to use. Alternatively, you can roll to randomly select a mission using the appropriate table:
+COMBAT PATROL MISSIONS
+D6
+MISSION
+1-2
+Sweep and Clear
+3-4
+Supply Drop
+5-6
+Assassinate
+INCURSION MISSIONS
+D6
+MISSION
+1
+Supply Cache
+2
+The Relic
+3
+Sabotage
+4
+Recon Patrol
+5
+The Ritual
+6
+Behind Enemy Lines
+STRIKE FORCE MISSIONS
+D6
+MISSION
+1
+Supplies From Above
+2
+Narrow the Search
+3
+Cut Off the Head
+4
+Retrieval
+5
+Raze and Ruin
+6
+Ambush
+ONSLAUGHT MISSIONS
+D6
+MISSION
+1-2
+Firestorm
+3-4
+Grand Assault
+5-6
+Field of Glory
+4. Read Mission Briefing
+Each mission has a mission briefing that will detail the mission objectives that award victory points to the players. Some mission briefings also list one or more mission rules that will apply for the duration of the battle. The players should read and familiarise themselves with these before proceeding.
+
+
+
+5. Select Agendas
+Each player then secretly selects
+Agendas
+ for the battle and writes them down. Each can award
+experience points
+ to certain units in that player's army, as described on the Agenda itself. The Agendas that players can choose from can be found
+here
+. The number of Agendas each player chooses depends on the battle size you have selected, as shown in the table below.
+BATTLE SIZE
+AGENDAS
+Combat Patrol
+1
+Incursion
+2
+Strike Force
+3
+Onslaught
+4
+Once both players have selected their Agendas, they reveal their selections to their opponent.
+6. Create the Battlefield
+The players now create the battlefield and set up
+terrain features
+. Missions are played on rectangular battlefields. The size of your battlefield depends on the battle size you have selected, as shown in the table below:
+BATTLEFIELDS
+BATTLE SIZE
+BATTLEFIELD SIZE (Minimum)
+Combat Patrol/Incursion
+44" x 30"
+Strike Force
+44" x 60"
+Onslaught
+44" x 90"
+Unless noted otherwise, when setting up terrain features, use the guidelines noted in the basic rules section (see
+Example Battlefields
+). In these missions, players must use the battlefield terrain rules for
+terrain features
+.
+7. Determine Attacker and Defender
+The players roll off and the winner decides who will be the attacker and who will be the defender.
+8. Place Objective Markers
+The players now set up objective markers on the battlefield. Each mission will instruct the players as to how many
+objective markers
+ should be set up on the battlefield (if any) and how these should be placed. Unless otherwise stated, objective markers can be set up on terrain features so long as the objective marker lies flat on that terrain feature and does not overhang any part of it.
+9. Choose Deployment Zone
+The deployment maps for some missions will tell you which deployment zone is the Attacker’s and which is the Defender’s. If the deployment map does not show this, but instead labels deployment zones as Player A’s or Player B’s, then the Defender now selects one of the deployment zones for their army. Their opponent uses the other deployment zone.
+10. Declare Reserves and Transports
+Unless the mission briefing states otherwise, these missions use the
+Strategic Reserves
+ rules.
+Both players now secretly note down on their army roster which of the units in their army will start the battle in Strategic Reserves, which of their units will start the battle in a location other than the battlefield (if a player has access to any
+Stratagems
+ that enable them to set up units from their army in a location other than the battlefield, they must use such Stratagems now), and which of their units will start the battle embarked within
+TRANSPORT
+ models (they must declare what units are embarked within what models). When both players have done so, they declare their selections to their opponent.
+Unless stated otherwise, no more than half the total number of units in your army can be
+Reserve
+ and/or
+Reinforcement units
+, and the combined Power Ratings of all your Strategic Reserve and Reinforcement units (including those that are embarked within
+TRANSPORT
+ models that are Strategic Reserve and/or Reinforcement units) must be less than half of your army’s Power Level, even if every unit in your army has an ability that would allow them to be set up elsewhere.
+In these missions,
+Reinforcement units
+ can never arrive on the battlefield in the first battle round (but
+Strategic Reserve
+ units can if the mission specifically states so e.g.
+Recon Patrol
+. If during the first battle round, a unit arrives from Strategic Reserves but the mission does not instruct you where to set the unit up, use the rules for battle round 2 to determine where it can be set up). Any Strategic Reserve or Reinforcement unit that has not arrived on the battlefield by the end of the third battle round counts as having been destroyed, as do any units embarked within them (this does not apply to units that are placed into Strategic Reserves after the first battle round has started).
+11. Deploy Armies
+The players alternate setting up their remaining units, one at a time, starting with the Defender. A player's models must be set up wholly within their deployment zone. If one player has finished deploying all their units, their opponent then deploys the remainder of their units.
+If a model from your army is so large that it cannot physically be set up wholly within your deployment zone (i.e. the smallest dimension of that model is greater than the depth of your deployment zone), it must be set up so that it is touching your battlefield edge. In the first battle round, that model's unit cannot do any of the following: make a
+Normal
+
+Move
+,
+Advance
+,
+Fall
+
+Back
+, attempt to
+manifest
+ or
+deny
+ psychic powers, make any attacks with ranged weapons,
+declare
+
+a
+
+charge
+,
+perform
+
+a
+
+Heroic
+
+Intervention
+, perform any
+actions
+ or
+psychic actions
+. Models in such units count as having moved a distance in inches equal to their Move (M) characteristic in their first
+Movement phase
+. If the unit has a
+minimum Move
+ characteristic, it counts as having moved its maximum Move characteristic.
+If both players have units with abilities that allow them to be set up ‘after both armies have deployed’, the players must roll off after all other units have been set up and alternate setting up these units, starting with the winner.
+
+
+
+12. Determine First Turn
+Unless the mission briefing says otherwise, the players roll off and the winner declares whether they will take the first or second turn.
+13. Resolve Pre-battle Abilities
+Players alternate resolving any pre-battle abilities units in their army may have, and resolving any Stratagems that are used before the battle, starting with the player who will take the first turn. Remember that
+Crusade forces
+ can only make use of Stratagems that upgrade units by using
+Requisition
+
+points
+.
+14. Begin the Battle
+The first battle round begins. Players continue to resolve
+battle rounds
+ until the battle ends.
+MISSION OBJECTIVES
+During the battle, players can earn victory points by achieving Mission Objectives, which are described in the mission's mission briefing. Mission objectives can either be ‘End Game or ‘Progressive. End Game mission objectives are scored at the end of the battle. Progressive mission objectives are scored during the battle (exactly when is detailed in the mission objective itself), and can be achieved and hence award victory points several times.
+15. Ending the Battle
+Unless the mission instructs otherwise, the battle ends after five battle rounds have been completed. If one player has no models remaining in their army at the start of their turn, the other player can continue to play out their turns until the battle ends.
+16. Determine Victor
+At the end of the battle, the player with the most victory points is the winner. If players are tied, the battle is a draw.
+Each player can score a maximum of 90 victory points from mission objectives (any excess victory points awarded are discounted). In addition, if every model in a player’s army was painted to a
+Battle Ready
+ standard, that player is awarded a bonus 10 victory points. This gives the player a maximum total score out of 100 victory points.
+The victor of a mission can then claim the victor bonus listed on that mission. If the game is a draw, neither player can claim the bonus.
+17. Update Crusade Cards
+The players must now update their
+Crusade cards
+ for all the units they used in the battle as follows:
+1. Take Out of Action tests
+Take
+Out of Action
+ tests for each unit from their army that was destroyed during the battle, by rolling one D6 for that unit. On a 2+ the test is passed and nothing happens. On a 1, the test is failed; you must now choose one of the following options for that unit:
+a) Devastating Blow
+: That unit loses D6 experience points (to a minimum of 0) and cannot gain any experience points for this battle from Agendas Achieved, Battle Experience or from being Marked for Greatness. Update the unit’s Crusade card accordingly.
+b) Battle Scar
+: That unit gains one
+Battle Scar
+. This must be determined before the player's next battle and the unit's Crusade card must be updated to reflect any and all changes.
+2. Update Experience Points
+Each unit that had a Crusade card that took part in the battle gains experience points as follows (mark on each unit's Crusade card accordingly):
+Battle Experience
+: Each unit that was part of your army list for this battle gains 1 experience point.
+Marked for Greatness
+: Select one unit that was part of your army list for this battle; that unit gains 3 experience points.
+Dealers of Death
+: A unit gains 1 experience point for every third enemy unit it has destroyed in total. If a unit’s ‘enemy units destroyed in total’ combat tally has increased during the battle enough, increase its experience points accordingly.
+Agenda Achieved
+: Any units that achieved
+Agendas
+ during the battle gain experience points as described by those agendas.
+3. Determine Battle Honours
+If any units gain a rank, or otherwise gain any
+Battle
+
+Honours
+, these must be determined before the player's next battle. In any case, all the Crusade cards for these units that took part in the battle and the unit’s Crusade card must be updated to reflect any and all changes.
+4. Update Combat Tallies
+Add 1 to the ‘Battles Played’ tally of each unit that had a Crusade card that took part in the battle. If a unit was not destroyed at the end of the battle, then add 1 to its ‘Battles Survived’ tally. Add all the ‘during battle’ combat tallies you have accrued during the battle to the appropriate ‘in total’
+combat
+
+tallies
+ on the unit's Crusade card.
+18. Update Order of Battle
+Increase your battle tally and
+Requisition
+
+points
+ by 1, and make any notes that you wish to record following your battle. If you wish to add any units to your
+Order of Battle
+, or spend any Requisition points, do so and update your Order of Battle accordingly before your next battle.
+
+
+
+Agendas
+Each Agenda listed below has a category (e.g.
+Purge the Enemy
+,
+Shadow Operations
+ etc.). When you select Agendas, you cannot choose more than one from each category.
+Some Agendas will instruct you to keep a certain tally for your units during the battle. These tallies will then be used after the battle to determine if you achieved certain agendas, and how many
+experience points
+ the units in question earned from them. You can use the ‘Agenda Tallies’ section of each unit’s
+Crusade card
+ to keep track of these tallies - we recommend you make these tallies in pencil so they can be deleted after the game ready for your next battle.
+Purge the Enemy
+Assassins
+Keep an Assassins tally for each unit from your army. Add 1 to a unit's Assassins tally each time it destroys an enemy
+CHARACTER
+ unit. Each unit gains 2
+experience points
+ for every mark on its Assassins tally.
+Priority Target
+Keep a Priority Target tally for each unit from your army. Add 1 to a unit’s Priority Target tally each time it destroys an enemy
+VEHICLE
+ or
+MONSTER
+ unit. Each unit gains 2 experience points for every mark on its Priority Target tally.
+Titan Hunter
+Keep a Titan Hunter tally for each unit from your army. Add 1 to a unit’s Titan Hunter tally each time it destroys an enemy
+TITANIC
+ unit. Each unit gains 4 experience points for every mark on its Titan Hunter tally.
+King Slayer
+If a unit from your army destroyed the enemy
+WARLORD
+ during the battle, that unit gains 3 experience points. A unit does not achieve this agenda if the enemy
+WARLORD
+ is subsequently resurrected by any means. If the enemy
+WARLORD
+ is resurrected but is subsequently destroyed again by another unit from your army, then it is the last unit to have destroyed it that achieves this Agenda.
+No Mercy, No Respite
+First Strike
+Keep a First Strike tally for each unit from your army. Add 1 to a unit’s First Strike tally each time it destroys an enemy unit in the first battle round. Each unit from your army gains a number of
+experience points
+ equal to their First Strike tally.
+Cull the Hordes
+Keep a Cull the Hordes tally for each unit from your army. Add 1 to a unit’s Cull the Hordes tally each time it destroys six or more models in the same phase. Each unit gains a number of experience points equal to their Cull the Hordes tally.
+Reaper
+The unit in your army that has the highest combat tally of enemy units destroyed during the battle earns 2 experience points. If two or more units are tied, you choose which unit achieves this Agenda.
+Battlefield Supremacy
+Sentinel
+At the start of your first
+Command phase
+, select one
+objective marker
+ that is on the battlefield and one unit from your army. That unit gains 4
+experience points
+ after the battle if, at the end of the battle, it is in range of that objective marker and you control that objective marker.
+Breakthrough
+At the end of the battle, select up to three units from your army (excluding
+AIRCRAFT
+) that are wholly within 6" of your opponent’ battlefield edge. Each of these units earns 2 experience points.
+Survivor
+At the start of your first
+Command phase
+, select one unit from your army. That unit gains 2 experience points after the battle if it is not destroyed at the end of the battle, and an additional 2 bonus experience points if it is not below
+Half-strength
+. Units that have only a single model instead gain these bonus experience points if, at the end of the battle, the number of wounds that model has remaining is at least half their Wounds characteristic.
+Shadow Operations
+Secure the Area
+Keep a Secure the Area tally for each unit from your army. Add 1 to a unit’s Secure the Area tally each time it successfully completes the following
+action
+:
+Secure the Area (Action)
+: One
+INFANTRY
+ unit from your army (excluding
+CHARACTERS
+) can start to perform this action at the end of your
+Movement phase
+ if it is within 6" of the centre of the battlefield. The action is completed at the end of your turn.
+Each unit gains a number of
+experience points
+ equal to their Secure the Area tally.
+Search for Archeotech
+Keep a Search for Archeotech tally for each unit from your army. Add 1 to a unit's Search for Archeotech tally each time it successfully completes the following
+action
+:
+Search for Archeotech (Action)
+: One or more
+INFANTRY
+ units from your army that are wholly within your opponent’s deployment zone can start to perform this action at the end of your
+Movement phase
+. The action is completed at the end of your turn.
+Each unit gains 3 experience points if their Search for Archeotech tally is at least 2.
+Deploy Vox-relays
+At the start of the first battle round, but before the first turn begins, select one
+INFANTRY
+ unit from your army. That unit can perform the following
+action
+:
+Deploy Vox-relay (Action)
+: One unit from your army can start to perform this action at the end of your
+Movement phase
+ if it is within range of an
+objective marker
+ that has not already got a Vox-relay deployed on it (see below). The action is completed at the end of your turn. If this action is successfully completed, that objective marker is said to have a Vox-relay deployed on it (the Vox-relay is ‘lost’ if your opponent controls the objective marker at the start of any phase).
+The unit gains 2 experience points for each objective marker on the battlefield that has one of your Vox-relays deployed on it at the end of the battle.
+Recover Mission Archives
+Keep a Recover Mission Archives tally for each unit from your army. Add 1 to a unit's Recover Mission Archives tally each time it successfully completes the following
+action
+:
+Recover Mission Archives (Action)
+: One
+INFANTRY
+,
+CAVALRY
+ or
+BIKER
+ unit from your army can start to perform this action at the end of your
+Movement phase
+ if it is within range of an
+objective marker
+ that has not already been successfully searched by a unit from your army this battle. The action is completed at the end of your next
+Command phase
+ provided the unit performing it is still within range of the same objective marker.
+Roll one D6 at the
+Agenda Achieved
+ step of the game. If the score is equal to or less than the combined total of your units’ Recover Mission Archives tallies, or if the combined tally equals the number of
+objective markers
+ that were set up at the start of the battle, then one unit of your choosing that successfully performed this action gains 6 experience points.
+Warpcraft
+Witch Hunter
+Keep a Witch Hunter tally for each unit from your army. Add 1 to a unit's Witch Hunter tally each time it destroys an enemy
+PSYKER
+ unit (add 3 instead if the destroyed unit was a
+PSYKER
+
+CHARACTER
+).
+Each unit gains a number of
+experience points
+ equal to their Witch Hunter tally.
+Lord of the Warp
+Keep a Lord of the Warp tally for each unit from your army. Add 1 to a unit's Lord of the Warp tally each time it successfully
+manifests
+ a psychic power,
+denies
+ an enemy psychic power or completes a
+psychic action
+. Reset a unit's Lord of the Warp tally to 0 if and when they suffer
+Perils
+
+of
+
+the
+
+Warp
+. The unit from your army that has the highest Lord of the Warp tally gains 2 experience points (unless that unit’s tally is 0, in which case it gains no experience points from this agenda). If two or more units are tied, you select one of them to gain these experience points.
+Scry Battle Plans
+Keep a Scry Battle Plans tally for each
+PSYKER
+ unit from your army. Add 1 to a unit's Scry Battle Plans tally each time it successfully completes the following
+psychic action
+:
+Scry Battle Plans (Psychic Action - Warp Charge 4)
+: One
+PSYKER
+
+CHARACTER
+ unit from your army can attempt to perform this psychic action in your
+Psychic phase
+ if it is within 18" of an enemy
+CHARACTER
+ unit.
+Each unit gains 5 experience points if their Scry Battle Plans tally is at least 2.
+
+
+
+Combat Patrol Missions
+D6
+MISSION
+1-2
+Sweep and Clear
+3-4
+Supply Drop
+5-6
+Assassinate
+Crusade Mission — Combat Patrol
+Sweep and Clear
+ 1-2
+MISSION BRIEFING
+Your patrols have encountered enemy forces approaching your battle lines. It is imperative that you move to intercept them and clear the battlefield of their presence before they can establish a foothold that will extend their own front lines.
+Mission Rules
+Objective Markers
+: The players alternate placing four
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. One objective marker must be placed wholly within each deployment zone, and the other two must be placed wholly within the Centre Ground area shown on the deployment map. Objective markers must be placed more than 6" from any battlefield edge and more than 9" from any other objective marker.
+Secure and Sweep
+: In this mission, if you control an objective marker at the end of your
+Command phase
+, it remains under your control unless your opponent controls it at the end of any subsequent phase, even if you have no models within range of it.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Capture and Control (Progressive)
+: At the end of each player’s Command phase, the player whose turn it is scores 10 victory points for each of the following conditions they satisfy (for a maximum of 30 victory points):
+They control one or more objective markers.
+They control the objective marker in their opponent's deployment zone.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+VICTOR BONUS
+The victor can select two units from their army to be
+Marked for Greatness
+ after the battle, instead of just 1.
+
+
+
+Crusade Mission — Combat Patrol
+Supply Drop
+ 3-4
+MISSION BRIEFING
+Braving the flak batteries of the foe, your best pilots are inbound with supplies to drop to your beleaguered forces. You must race your enemy to the prize, driving them away from the drop coordinates and seizing the supplies as they land.
+Mission Rules
+Objective Markers
+: The players alternate placing three objective markers on the battlefield, one at a time, starting with the Attacker. The first objective marker placed must be wholly within 6" of the centre of the battlefield. The remaining objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 9" from any other objective marker.
+Supplies Incoming
+: At the start of the fourth battle round, the players randomly determine one of the objective markers and remove it from the battlefield. At the start of the fifth battle round, the players randomly determine one of the two remaining objective markers and remove that from the battlefield as well. The remaining objective marker represents the landed supplies.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Secure Landing Sites (Progressive)
+: At the end of each player’s Command phase, the player whose turn it is scores a number of victory points for each objective marker they control, depending on which battle round it is, as shown in the table below:
+BATTLE ROUND
+VICTORY POINTS PER OBJECTIVE CONTROLLED
+2 AND 3
+10
+4
+15
+5
+30
+This mission objective cannot be scored in the first battle round.
+VICTOR BONUS
+The victor of this mission gains 2 Requisition points after this battle, instead of just 1.
+
+
+
+Crusade Mission — Combat Patrol
+Assassinate
+ 5-6
+MISSION BRIEFING
+An army without its commanders is helpless, a beast ready for slaughter. An elite enemy force has been dispatched with the intent of eliminating the enemy command structure as quickly as possible, thereby disrupting the war effort in the area so that rapid gains can be made.
+Mission Rules
+Target Sighted
+: The Defender’s
+WARLORD
+ must be set up wholly within 6" horizontally of the centre of their deployment zone, as shown below. This unit cannot be set up in
+Strategic Reserves
+, nor can it use any rule that allows it to set up elsewhere (whether elsewhere on the battlefield or on a location other than the battlefield). If the Defender’s
+WARLORD
+ is destroyed, the battle ends at the end of the current battle round.
+Restoratives
+: If the Defender’s
+WARLORD
+ is a model with a Wounds characteristic of less than 10, then they have access to Restoratives, and the Defender rolls one D6 each time their Warlord loses a wound; on a 6 that wound is not lost. In addition, if the Defender’s Warlord has Restoratives, then their
+WARLORD
+ regains 1 lost wound at the start of each of the Defender’s turns.
+First Turn
+: The Attacker chooses who gets the first turn in this mission.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Target Wounded (Progressive)
+: The Attacker scores 10 victory points at the end of a battle round if the enemy
+WARLORD
+ lost any wounds during that battle round.
+Target Eliminated (End Game)
+: If the Defender’s
+WARLORD
+ is destroyed at the end of the battle, the Attacker scores 40 victory points.
+No Meek Prey (Progressive)
+: The Defender scores 10 victory points at the end of a battle round if their
+WARLORD
+ destroys any enemy models during that battle round.
+Bloody but Unbowed (End Game)
+: If the Defender’s
+WARLORD
+ is not destroyed at the end of the battle, the Defender scores 50 victory points.
+VICTOR BONUS
+After the battle, the victor can select one unit from their army that has a
+Crusade card
+ (this must be a unit that can gain
+Battle
+
+Honours
+) — that unit gains a
+Battle Trait
+ of your choice (make a note on the unit’s Crusade card and increase its Crusade points accordingly).
+
+
+
+Incursion Missions
+D6
+MISSION
+1
+Supply Cache
+2
+The Relic
+3
+Sabotage
+4
+Recon Patrol
+5
+The Ritual
+6
+Behind Enemy Lines
+Crusade Mission — Incursion
+Supply Cache
+ 1
+MISSION BRIEFING
+Somewhere amidst the smouldering ruins of the battlefield lie the supplies and materiel you so desperately need to push forward to victory. Search the battlefield and seize them before your foe can do so.
+Mission Rules
+Objective Markers
+: The players alternate placing four
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 6" from any other objective marker.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Capture and Control (Progressive)
+: At the end of each player’s
+Command phase
+, the player whose turn it is scores 10 victory points for each of the following conditions they satisfy (for a maximum of 30 victory points):
+They control one or more objective markers.
+They control two or more objective markers.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+VICTOR BONUS
+The victor of this mission gains 2
+Requisition
+
+points
+ after this battle, instead of just 1.
+
+
+
+Crusade Mission — Incursion
+The Relic
+ 2
+MISSION BRIEFING
+Both sides are attempting to recover a valuable relic from the front lines. It might be an ancient artefact, an item of spiritual significance or some other irreplaceable heirloom that must be recovered at any cost. Move with speed and secure the relic to prevent the enemy from either capturing or tampering with the artefact before you can retrieve it.
+Mission Rules
+The Relic
+: The Relic is represented by an
+objective marker
+ that starts the battle in the centre of the battlefield. No
+terrain features
+ can be set up within 6" of the centre of the battlefield. The Relic can be carried if a unit successfully completes the Carry Relic
+action
+ (see below). If this model is destroyed (even if it is subsequently resurrected or returns to the battlefield), place the Relic objective marker as close as possible to the spot where the destroyed model was. While it is carrying the Relic, that model's unit cannot
+embark
+ within a
+TRANSPORT
+, nor can it use any rule that enables it to be removed from the battlefield and set back up again.
+Carry Relic (Action)
+: One
+INFANTRY
+ unit from your army can start to perform this action at the end of their
+Movement phase
+ if it is within 1" of the Relic objective marker. The action is completed at the end of your turn so long as the unit performing it is still within 1" of that objective marker and there are no enemy units (excluding
+AIRCRAFT
+) in
+Engagement
+
+Range
+ of it. If this action is successfully completed, remove the objective marker from the battlefield and select one model in that unit — it is carrying the Relic.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Relic Secured (Progressive)
+: At the end of each player's
+Command phase
+, the player whose turn it is scores 10 victory points if a model from their army is carrying the Relic, or if they control the Relic objective marker.
+Relic Recovered (End Game)
+: At the end of the battle, if a model from a player's army is carrying the Relic, that player scores 60 victory points. If the Relic is not being carried, the player with a model closest to the Relic scores 30 victory points. If both players have models equally close to the relic, then they both score 10 victory points.
+VICTOR BONUS
+After the battle, the victor selects one
+CHARACTER
+ unit from their army that took part in the battle (this must be a
+CHARACTER
+ that can gain
+Battle
+
+Honours
+) and gives that
+CHARACTER
+ one Crusade Relic (all the normal rules and restrictions apply). Make a note on the unit's
+Crusade card
+ and increase its Crusade points accordingly.
+
+
+
+Crusade Mission — Incursion
+Sabotage
+ 3
+MISSION BRIEFING
+The attacker is leading a force on a surprise raid deep into enemy territory. Their mission is to cripple the enemy's supply lines by planting explosives on vital weak points as well as eliminating any sentries guarding them. The defender must protect their supplies at all costs and kill all the saboteurs if possible.
+Mission Rules
+Objective Markers
+: The Defender places four
+objective markers
+ anywhere on the battlefield that are more than 9" from any battlefield edge and more than 9" from any other objective marker.
+Sabotage (Action)
+: One unit from the Attacker s army can start to
+perform this action
+ at the end of their
+Movement phase
+ if it is within 1" of an objective marker. The action is completed at the end of the Attackers turn. If this action is successfully completed, that objective marker is sabotaged and removed from the battlefield.
+First Turn
+: The Attacker chooses who gets the first turn in this mission.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Supplies Destroyed (Progressive)
+: The Attacker scores 20 victory points each time an objective marker is destroyed.
+Supplies Protected (End Game)
+: The Defender scores 20 victory points at the end of the game for each objective marker that is still on the battlefield.
+No Prisoners (Progressive)
+: Score 10 victory points at the end of the battle round if more enemy units than friendly units were destroyed during this battle round.
+VICTOR BONUS
+If the Defender is the victor, then after the battle they can use the
+Increase
+
+Supply
+
+Limit
+ and
+Rearm
+
+and
+
+Resupply
+
+Requisitions
+ once each for free.
+If the Attacker is the victor, they can select one unit from their army (not a
+CHARACTER
+,
+VEHICLE
+ or
+MONSTER
+) that has a
+Crusade card
+ that took part in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) - that unit gains one
+Battle Trait
+ of your choice after the battle (make a note on the unit’s Crusade card and increase its Crusade points accordingly).
+
+
+
+Crusade Mission — Incursion
+Recon Patrol
+ 4
+MISSION BRIEFING
+You have been detailed to conduct vital reconnaissance in no mans land, but enemy patrols are also operating in this area. Additional forces are near at hand should you encounter the foe, but be warned - the enemy have their own reserves.
+Mission Rules
+Objective Markers
+: The players alternate placing four objective markers on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 9" from any other objective marker. No more than one objective marker can be set up within each table quarter.
+Strategic Reserves
+: In this mission, each player must put at least half the number of their units into
+Strategic Reserves
+ at the
+Declare Reserves and Transports
+ step of the game - it does not cost any
+Command
+
+points
+ to place units into Strategic Reserves in this mission. No more than three quarters of the total number of units in your army can be Reserve and/or
+Reinforcement units
+, and the combined
+Power
+
+Ratings
+ of all your Strategic Reserve and Reinforcement units (including those that are embarked within
+TRANSPORTS
+ that are Strategic Reserve and/or Reinforcement units) must be less than three quarters of your army’s
+Power
+
+Level
+, even if every unit in your army has an ability that would allow them to be set up elsewhere.
+In addition, any of these units that wish to arrive and be set up on the battlefield in the first and second
+battle rounds
+ must first pass a Reserve test. This is done by rolling a D6; on a 4+, that unit arrives, otherwise it must remain in Strategic Reserves until the third battle round.
+Recon Sweep (Action)
+: One unit from your army can start to
+perform this action
+ at the start of your
+Movement phase
+ if it is wholly within a table quarter that has not already been reconnoitred by a unit from your army and it is more than 10" from the centre of the battlefield. The action is completed at the end of your turn provided the unit is still wholly within that table quarter; that table quarter is then said to have been reconnoitred by your forces.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Take and Hold (Progressive)
+: At the end of each player’s
+Command phase
+, the player whose turn it is scores 5 victory points for each of the following conditions they satisfy (for a maximum of 15 victory points):
+They control one or more objective markers.
+They control two or more objective markers.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+Reconnoitre (End Game)
+: Each player scores a number of victory points for the number of table quarters that have been reconnoitred by their forces, as shown below:
+TABLE QUARTERS RECONNOITRED
+VICTORY POINTS
+0-1
+0
+2
+5
+3
+15
+4
+45
+VICTOR BONUS
+The victor selects two units from their army to be
+Marked for Greatness
+ after the battle, instead of just 1.
+
+
+
+Crusade Mission — Incursion
+The Ritual
+ 5
+MISSION BRIEFING
+The enemy is in the process of enacting complex rites, such as extracting vital information from an STC device, transmitting vital battle plans, or some other, more esoteric ritual. In any case, the attacker must stop the ritual before it is too late, while the defender must ensure nothing prevents this task from reaching completion.
+Mission Rules
+The Ritual Site
+: The Ritual Site is a circular area, 3" in radius, located in the centre of the Defender’s deployment zone. No
+terrain features
+ can be set up within 3" of the Ritual Site. The Defender’s
+WARLORD
+ must be set up within the Ritual Site, and has a 4+
+invulnerable
+
+save
+ while it is wholly within this site.
+Objective Markers
+: The players alternate placing four objective markers on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 6" from any other objective marker, and more than 6" from the Ritual Site.
+Perform Rites (Action)
+: The Defender’s
+WARLORD
+ can start to
+perform this action
+ at the end of their
+Movement phase
+ if it is within the Ritual Site. The action is completed at the end of your turn so long as the
+WARLORD
+ it is still wholly within the Ritual Site.
+Warp Rites (Psychic Action)
+: The Defender’s
+WARLORD
+ can, if it is a
+PSYKER
+
+CHARACTER
+, attempt to perform the following
+psychic action
+:
+Warp Rites (Psychic Action - Warp Charge 3)
+: One
+PSYKER
+
+CHARACTER
+ from your army can attempt to perform this psychic action in your
+Psychic phase
+ if it is within 9" of the Ritual Site.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Seize Ground (Progressive)
+: At the end of each player's
+Command phase
+, the player whose turn it is scores 10 victory points for each of the following conditions they satisfy (for a maximum of 20 victory points):
+They control two or more objective markers.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+The Ritual (Progressive)
+: The Defender earns 10 victory points each time they successfully complete the Perform Rites or Warp Rites action (see Mission Rules).
+Slay the Warlord (End Game)
+: At the end of the game, the Attacker scores 30 victory points if the enemy
+WARLORD
+ is destroyed.
+VICTOR BONUS
+If the Attacker is the victor, they can select one unit from their army that has a
+Crusade card
+ that took part in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) — after the battle that unit gains a
+Battle Trait
+ of your choice (make a note on the unit's Crusade card and increase its Crusade points accordingly).
+If the Defender is the victor, then after the battle, they can give their
+WARLORD
+ either one
+Battle Trait
+ of their choice, or if it is a
+PSYKER
+, one
+Psychic Fortitude
+ of their choice (your
+WARLORD
+ must be able to gain Battle Honours to gain this bonus) — make a note on the unit’s Crusade card and increase its Crusade points accordingly.
+
+
+
+Crusade Mission — Incursion
+Behind Enemy Lines
+ 6
+MISSION BRIEFING
+Under cover of darkness, both forces are attempting to infiltrate mission specialists past the enemy and behind their front lines while preventing the foe from doing the same. If any of these forces succeed in their mission, they will return as heroes. The area, however, is littered with scramblers, as well as anti-tank and aerial mines, meaning that these specialists will have to negotiate this pass on foot.
+Mission Rules
+Scrambler Fields
+: Units must deploy wholly within their deployment zones, even if they have an ability that allows them to set up elsewhere. If a unit can move after deployment but before the first turn begins, it must end that move wholly within your deployment zone. Any time a unit is set up on the battlefield, either because it is
+arriving from Strategic Reserves
+ or
+Reinforcements
+ or it has been affected by a rule that instructs you to remove the unit and set it back up on the battlefield, it must be set up wholly within your own deployment zone.
+Cover of Darkness
+: When resolving an attack, subtract 1 from the
+hit
+
+roll
+ if the target is more than 18" away from the model making the attack.
+Exfiltration (Action)
+: Any unit from a player's army can start to
+perform this action
+ at the end of their
+Movement phase
+ if every model in that unit is within 6" of their opponent's battlefield edge. Units that were added to your army during the battle cannot attempt this action. The action is completed at the end of your turn.
+If a unit completes this action, remove it from the battlefield — note that it has been exfiltrated from the battlefield and does not count as being destroyed for any reason.
+VEHICLES
+ and units that can
+FLY
+ must complete this action twice in two consecutive
+battle rounds
+ in order to be exfiltrated from the battlefield (they must plot a course through the minefields).
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Line Breaker (Progressive)
+: Score 5 victory points at the end of your turn if two or more units from your army (excluding
+AIRCRAFT
+) are wholly within your opponent's deployment zone.
+Behind Enemy Lines (End Game)
+: Each time a player's unit is exfiltrated from the battlefield, that player earns a number of victory points equal to double that unit's
+Power
+
+Rating
+ (e.g. if a unit with a Power Rating of 10 is exfiltrated from the battlefield, you gain 20 victory points). If the unit is part of a unit that has split into multiple units during the battle, you only receive victory points if every one of those units has been exfiltrated from the battlefield; if any part of the split unit fails to be exfiltrated from the battlefield, no victory points are awarded.
+Hold Them Back (Progressive)
+: Score 5 victory points at the end of the battle round if no enemy units have been exfiltrated from the battlefield in this battle round. You cannot score this mission objective in the fifth battle round.
+VICTOR BONUS
+After the battle, the victor can select one unit from their army that has been exfiltrated from the battlefield in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) - that unit gains one
+Battle Trait
+ of your choice after the battle (make a note on the unit's
+Crusade card
+ and increase its Crusade points accordingly).
+
+
+
+Strike Force Missions
+D6
+MISSION
+1
+Supplies From Above
+2
+Narrow the Search
+3
+Cut Off the Head
+4
+Retrieval
+5
+Raze and Ruin
+6
+Ambush
+Crusade Mission — Strike Force
+Supplies From Above
+ 1
+MISSION BRIEFING
+Valuable supplies are being delivered in slow-fall drop canisters. You must secure the landing sites; they are hard to judge from the ground, so your forces must be ready to react and secure them while driving the enemy away from these locations.
+Mission Rules
+Objective Markers
+: The players alternate placing six
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 9" from any other objective marker.
+Drifting on the Wind
+: At the start of each battle round, one of the players rolls two dice as close to the centre of the battlefield as possible (if a dice lands more than 12" from the centre of the battlefield, roll it again until it lands within 12" of the centre of the battlefield). Draw a straight line between the two dice, from the one with the lowest result to the one with the highest, and move each objective marker, one at a time, D3+3" in the direction shown by this arrow (if the results are the same, there is no wind this battle round and the objective markers do not move). Objective markers can be moved over models, objective markers and
+terrain features
+, but they cannot end the move on top of models or objective markers and they cannot leave the battlefield — if they would, reduce the distance they are moved by the minimum amount necessary.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Capture and Control (Progressive)
+: At the end of each player's
+Command phase
+, the player whose turn it is scores 10 victory points for each of the following conditions they satisfy (for a maximum of 30 victory points):
+They control one or more objective markers.
+They control two or more objective markers.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+VICTOR BONUS
+The victor of this mission gains 2
+Requisition
+
+points
+ after this battle, instead of just 1.
+
+
+
+Crusade Mission — Strike Force
+Narrow the Search
+ 2
+MISSION BRIEFING
+Several ammo stores have been identified in the area, but orbital scanners are still locating a large hidden weapons cache. You must secure the area while they narrow their scans to its exact location, for it is hidden by a disruptive nullfield. The enemy is hunting it too, however, and must be intercepted and destroyed before they can discover its final location.
+Mission Rules
+Objective Markers
+: The players alternate placing four
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge and more than 12" from any other objective marker.
+Search Area
+: At the start of the first battle round, the Search Area is defined by a circle, 18" in radius, centred on the centre of the battlefield. At the start of each battle round thereafter, the size of the Search Area's radius shrinks by 3" (so it has a radius of 15" in the second battle round, a radius of 12" in the third battle round and so on).
+Null Field
+:
+Invulnerable
+
+saving
+
+throws
+ cannot be made for units that are within 12" of the centre of the battlefield.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Take and Hold (Progressive)
+: At the end of each player's
+Command phase
+, the player whose turn it is scores 5 victory points for each of the following conditions they satisfy (for a maximum of 15 victory points):
+They control one or more objective markers.
+They control two or more objective markers
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+Zeroing In (Progressive)
+: At the end of each player's Command phase, the player whose turn it is scores 15 victory points if they control the Search Area. A player controls the Search Area if they have more models within it than their opponent does. For the purposes of this mission objective, each
+VEHICLE
+ or
+MONSTER
+ unit counts as 5 other models and each
+TITANIC
+ unit counts as 10 other models. Note that the Search Area is not an objective marker, so rules such as
+Objective
+
+Secured
+ do not apply when determining which player controls the Search Area.
+VICTOR BONUS
+After the battle, the victor can select one unit from their army that has a
+Crusade card
+ that took part in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) — that unit gains the
+Weapon Enhancement
+ Battle Honour after the battle (make a note on the unit's Crusade card and increase its Crusade points accordingly).
+
+
+
+Crusade Mission — Strike Force
+Cut Off the Head
+ 3
+MISSION BRIEFING
+Your commanders were gathering for a crucial tactical meeting when battle was joined. Your leaders must survive to preserve the information they carry, or else transmit it back to headquarters, while preventing the enemy commanders from doing so.
+Mission Rules
+Objective Markers
+: The players alternate placing one
+objective marker
+ each on the battlefield, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 6" from any battlefield edge, more than 9" from either deployment zone and more than 12" from the other objective marker.
+Intel Points
+: At the start of each player's first
+Command phase
+, that player must allocate 30 Intel points, as evenly as possible, between the
+CHARACTER
+ units in their army, and note this down on their
+army roster
+. If a player’s army has no
+CHARACTERS
+, 10 Intel points are instead allocated to that player’s
+WARLORD
+ unit.
+Transmit Intel (Action)
+: One
+CHARACTER
+ unit from your army that has Intel points allocated to it can start to
+perform this action
+ at the end of your
+Movement phase
+ if it is within range of an objective marker. The action is completed at the end of your next Command phase so long as the unit performing it is still within range of the same objective marker.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Crucial Intel (Progressive)
+: At the end of each player’s Command phase, that player adds up the number of Intel points allocated to units from their army that are currently on the battlefield, or that are currently embarked within a
+TRANSPORT
+ model that is on the battlefield; this is the number of victory points that player scores. This mission objective cannot be scored in the first and second
+battle rounds
+.
+Intel Transmitted (Progressive)
+: You score 10 victory points each time a
+CHARACTER
+ unit from your army successfully completes the Transmit Intel action.
+Intel Lost (Progressive)
+: Each time a unit that had Intel points allocated to it is destroyed, the opposing player gains a number of victory points equal to the Intel points allocated to that unit. This mission objective cannot be scored in the third and subsequent battle rounds.
+VICTOR BONUS
+After the battle, the victor can select one
+CHARACTER
+ unit from their army that had Intel points allocated to it. You can use the
+Warlord
+
+Trait
+ Requisition on that unit for free, even if it has not gained a rank (make a note on the unit’s
+Crusade card
+ and increase its Crusade points accordingly when you do so).
+
+
+
+Crusade Mission — Strike Force
+Retrieval
+ 4
+MISSION BRIEFING
+A trusted ally transporting a rare artefact was wounded behind enemy lines. Before losing consciousness, the courier hid their cargo. The defender must attempt to find the courier and stabilise them - they will be a valuable asset should they be healed to rejoin your forces. The attacker must seek out and interrogate the courier to discover the location of the transported relic.
+Mission Rules
+Objective Markers
+: The players alternate placing six
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere that is wholly within the Attacker’s deployment zone that is more than 6" from any battlefield edge and more than 9" from any other objective marker.
+Search Site (Action)
+: One unit from your army can start to
+perform this action
+ at the end of their
+Movement phase
+ if it is within range of an objective marker. The action is completed at the end of your turn. If this action is successfully completed, roll one D6, adding 1 to the result for every other Search Site action that has been completed (by both players) during the battle. On a 6+, you have discovered the location of the courier; remove all other objective markers from the battlefield. Otherwise, remove the objective marker you have just searched from the battlefield.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Area Searched (Progressive)
+: A player earns 10 victory points each time a unit from their army successfully completes the Search Site action (see above). A player earns 10 bonus victory points if it was a unit from their army that discovered the location of the courier.
+Courier Secured (Progressive)
+: At the end of each player’s
+Command phase
+, the player whose turn it is scores 20 victory points if they control the Courier objective marker.
+VICTOR BONUS
+If the Attacker is the victor, then after the battle, they can select one
+CHARACTER
+ unit from their army that took part in the battle (this must be a
+CHARACTER
+ that can gain
+Battle
+
+Honours
+) and give that
+CHARACTER
+ one Crusade Relic (all the normal rules and restrictions apply). Make a note on the unit’s
+Crusade card
+ and increase its Crusade points accordingly.
+If the Defender is the victor, then after the battle, before the next battle, the victor can add one new
+CHARACTER
+ unit to their
+Order of Battle
+ (if they have sufficient Supply Limit). When they do so, they can (so long as the
+CHARACTER
+ is not a
+named
+
+character
+) use either the
+Warlord
+
+Trait
+,
+Relic
+ or
+Specialist
+
+Reinforcements
+ Requisition on that
+CHARACTER
+ for free. Make a note on the unit's Crusade card and increase its Crusade points accordingly.
+
+
+
+Crusade Mission — Strike Force
+Raze and Ruin
+ 5
+MISSION BRIEFING
+You are fighting for control of key strategic assets scattered throughout this region to secure superior supply lines. However, while seizing these locations is undoubtedly valuable, destroying those crucial to your enemy is more important still, and will likely bring you victory.
+Mission Rules
+Objective Markers
+: The players alternate placing six
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Two objective markers must be placed wholly within the centre ground area (see below) and two objective markers must be placed wholly within each player’s territory (see below). Objective markers must be set up more than 3" from either player’s deployment zone, more than 6" from any battlefield edge and more than 12" from any other objective marker.
+Raze (Action)
+: One unit from your army can start to
+perform this action
+ at the end of your
+Movement phase
+ if it is within range of an objective marker that is in your opponents territory, and no enemy units (excluding
+AIRCRAFT
+) are within range of that objective marker. The action is completed at the end of your turn. If this action is successfully completed, that objective marker is razed and removed from the battlefield.
+MISSION OBJECTIVES
+Victory points are awarded for controlling objective markers, as follows:
+Take and Hold (Progressive)
+: At the end of each player’s
+Command phase
+, the player whose turn is scores 5 victory points for each of the following conditions they satisfy (for a maximum of 15 victory points):
+They control one or more objective markers.
+They control two or more objective markers
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored in the first battle round.
+Demolitions (End Game)
+: At the end of the battle, a player scores 15 victory points if one objective marker was removed from the battlefield due to a successful Raze action performed by a unit from their army during the battle, and 45 victory points if two objective markers were so removed.
+VICTOR BONUS
+After the battle, the victor can use the
+Increase
+
+Supply
+
+Limit
+ Requisition twice, for free.
+
+
+
+Crusade Mission — Strike Force
+Ambush
+ 6
+MISSION BRIEFING
+The attacker's forces aim to catch an enemy convoy in a trap, but their foe is ahead of schedule and not all of the ambusher’ troops are in position. The attacker must choose whether to strike now with the element of surprise, or wait until their full force has arrived.
+Mission Rules
+Hunter, Prey
+: At the
+Declare Reserves and Transports
+ step of the game, the Attacker must first choose whether they will press the attack or if they will wait for additional forces.
+If they press the attack, then at least half the Attacker’s units must start the battle in
+Strategic Reserves
+ (and the combined
+Power
+
+Ratings
+ of all these units must be at least half the
+Power
+
+Level
+ of the army). No more than three quarters of the total number of the Attacker’s units can be Reserve and/or
+Reinforcement units
+ (and the combined Power Ratings of all such units, including those embarked within
+TRANSPORTS
+ that are Strategic Reserve and/or Reinforcement units, must be less than three quarters of the Attacker’s army's power level), even if every unit has an ability that would allow them to be set up elsewhere.
+If the Attacker instead waits for further forces, then they
+Declare Reserves and Transports
+ as normal.
+In either case, the Attacker’s Reserve and Reinforcement units cannot arrive on the battlefield until the third battle round, and it does not cost any
+Command
+
+points
+ to place units in Strategic Reserves in this mission.
+None of the Defender’s units can be set up in Strategic Reserves; all of their units must deploy wholly within their deployment zone, even if they have an ability that allows them to be set up elsewhere.
+On Our Own
+: Units cannot be added to your army during the battle, and units cannot use any rules that enable them to merge into larger units.
+First Turn
+: If the Attacker pressed the attack, they choose who gets the first turn. Otherwise, the Defender chooses who gets the first turn.
+MISSION OBJECTIVES
+No Prisoners (End Game)
+: At the end of the battle, each player adds up the Power Ratings of each of their units that have been destroyed during the battle. Their opponent scores a number of victory points equal to the result.
+If a
+unit
+
+splits
+ during the battle, then for the purposes of this mission objective, divide the unit's original Power Rating as equally as possible between the individual units. The only exception to this are units of
+T’AU
+
+EMPIRE
+
+DRONES
+ that split from a larger unit during the battle — these
+DRONE
+ units are considered to have a Power Rating of 0, and the Power Rating of the unit they split from remains unchanged.
+Slay the Warlord (End Game)
+: Each player scores 10 bonus victory points at the end of the battle if the opponent's
+WARLORD
+ is destroyed.
+VICTOR BONUS
+After the battle, the victor can select one unit from their army that has a
+Crusade card
+ that took part in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) — that unit gains a
+Battle Trait
+ of your choice (make a note on the unit’s Crusade card and increase its Crusade points accordingly).
+
+
+
+Onslaught Missions
+D6
+MISSION
+1-2
+Firestorm
+3-4
+Grand Assault
+5-6
+Field of Glory
+Crusade Mission — Onslaught
+Firestorm
+ 1-2
+MISSION BRIEFING
+The skies glow with fire as a punishing bombardment rains down, and the shattered earth begins to crumble and break apart with the forces unleashed upon it. The battlefield is utterly consumed by war, yet neither side will rest until their foes have been utterly vanquished, their leaders slain and their greatest weapons annihilated.
+Mission Rules
+Firestorm
+: Each player rolls six D6s at the start of their
+Command phase
+. For each roll of 6, they can select one separate enemy unit and inflict D3
+mortal
+
+wounds
+ on it (or 3 mortal wounds if the unit selected is either
+TITANIC
+ or has more than 10 models). You cannot select an enemy unit that contains a
+CHARACTER
+ model with a Wounds characteristic of 9 or less unless there are no other enemy units to select.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Unquestioning Superiority (End Game)
+: At the end of the battle, each player adds up the
+Power
+
+Ratings
+ of each of their units that have been destroyed during the battle, doubling the Power Ratings of
+WARLORD
+,
+CHARACTER
+,
+VEHICLE
+ and
+MONSTER
+ units, and units that have merged during the battle to form larger units. Their opponent scores a number of victory points equal to one third the result (rounding up).
+Remember to add the Power Ratings of any units that were added to your army during the battle but were subsequently destroyed.
+Units that merged during the battle to form larger units are only added to your total if the entire merged unit has been destroyed by the end of the battle, but if it is, add together all the Power Ratings of all the units that made it up (and then double that, as described above).
+If a
+unit
+
+splits
+ during the battle, then for the purposes of this mission objective, divide the unit's original Power Rating as equally as possible between the individual units. The only exception to this are units of
+T’AU
+
+EMPIRE
+
+DRONES
+ that split from a larger unit during the battle — these
+DRONE
+ units are considered to have a Power Rating of 0, and the Power Rating of the unit they split from remains unchanged.
+VICTOR BONUS
+The victor of this mission gains 2
+Requisition
+
+points
+ after this battle, instead of just 1.
+
+
+
+Crusade Mission — Onslaught
+Grand Assault
+ 3-4
+MISSION BRIEFING
+After years of brutal conflict, the opportunity has arisen for one army to strike a decisive blow against its hated foes, and crush the last vestiges of resistance with overwhelming numerical superiority.
+Mission Rules
+Objective Markers
+: The Defender places eight
+objective markers
+, one after the other, anywhere on the battlefield that is more than 9" from any battlefield edge and more than 9" from any other objective marker. No more than four of these objective markers can be set up wholly within the Defender’s deployment zone; the remainder must be set up more than 3" from the Defender’s deployment zone. At the start of the battle, and until they are controlled by the enemy, all the objective markers on the battlefield are controlled by the Defender, even if the Defender has no models within range of them.
+Plant Banner (Action)
+: One or more units from the Attacker’s army can start to
+perform this action
+ at the end of the Attacker’s
+Movement phase
+ if they are within range of an objective marker that does not have one of your banners planted upon it. Each unit from your army that starts to perform this action must be in range of a different objective marker that does not have one of your banners raised upon it (see below). A unit cannot start this action while there are any enemy units (excluding
+AIRCRAFT
+) in range of the same objective marker. The Action is completed at the end of your turn. If this Action is successfully completed, that objective marker is said to have one of your army’s banners planted on it; that objective marker remains under the Attacker’s control for the remainder of the battle, even if the unit that completed this action moves away or is destroyed.
+Sustained Assault
+: At the end of each of the Attackers
+Movement phases
+, the Attacker rolls one D6 for each of their units that has been destroyed by the enemy, adding 1 to the result if that unit has the Troops
+Battlefield Role
+. On a 6+, a unit that is identical to the destroyed unit is added to your army and set up as if it had just arrived from
+Strategic Reserves
+. This replacement unit has no
+Battle
+
+Honours
+,
+Battle Scars
+,
+Relics
+ or
+Warlord Traits
+ — even if the original did. Also note that you must still take an
+Out of Action
+ test for the original unit at the end of the battle, even if its replacement unit is still on the battlefield.
+The Attacker can, at the end of any of their turns, remove any of their units from the battlefield that have a quarter or less of their starting number of models (or, in the case of single-model units, a quarter or less of its starting number of wounds). This unit then counts as having been destroyed for all purposes.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Hold at All Costs (End Game)
+: At the end of the battle, each player scores 15 victory points for each objective marker they control.
+VICTOR BONUS
+After the battle, the victor can select one unit from their army that has a
+Crusade card
+ that took part in the battle (you must select a unit that can gain
+Battle
+
+Honours
+) — that unit gains a
+Battle Trait
+ of your choice (make a note on the unit's Crusade card and increase its Crusade points accordingly).
+
+
+
+Crusade Mission — Onslaught
+Field of Glory
+ 5-6
+MISSION BRIEFING
+You engage the enemy across ground steeped in fire and blood. Littered with sites of tactical import, you must lead your forces from the front and establish dominion over the battlefield at any cost.
+Mission Rules
+Objective Markers
+: The players alternate placing eight
+objective markers
+ on the battlefield, one at a time, starting with the Attacker. Objective markers can be placed anywhere on the battlefield that is more than 9" from any battlefield edge and more than 9" from any other objective marker. At least one objective marker must be placed wholly within each deployment zone.
+MISSION OBJECTIVES
+Victory points are awarded as follows:
+Capture and Control (Progressive)
+: At the end of each players
+Command phase
+, the player whose turn it is scores 5 victory points for each of the following conditions they satisfy (for a maximum of 15 victory points):
+They control one or more objective markers.
+They control two or more objective markers.
+They control more objective markers than their opponent controls.
+This mission objective cannot be scored during the first battle round.
+Lead From the Front (Progressive)
+: At the end of each players turn, that player scores 10 victory points so long as their
+WARLORD
+ is either in
+Engagement
+
+Range
+ with an enemy unit or if it has fulfilled all of the following criteria:
+They are on the battlefield.
+They are not within their own deployment zone.
+They are at least 6" closer to the enemy’s battlefield edge than they were at the start of their turn.
+VICTOR BONUS
+After the battle, the victor’s Warlord gains one
+Battle
+
+Honour
+ of the player’s choice (provided it can gain Battle Honours). Make a note on the unit’s
+Crusade card
+ and increase its Crusade points accordingly.
+
+Battle Honours
+
+Units gain one Battle Honour each time they gain a
+rank
+. Sometimes, a unit can gain an additional Battle Honour by other means (such as by winning certain missions). There are several types of Battle Honours that can be bestowed onto a unit:
+Battle Traits
+,
+Psychic Fortitudes
+,
+Weapon Enhancements
+ and
+Crusade Relics
+. Each time a unit gains a Battle Honour, it can select from one of those categories. A unit can never have more than six Battle Honours. Make a note of each Battle Honour a unit has on its
+Crusade card
+.
+Each time a unit gains a Battle Honour you must increase its Crusade points total by 1 (if the unit has a
+Power Rating
+ of 10 or less) or 2 (if the unit has a Power Rating of 11 or higher).
+There are four types of Battle Honours:
+Battle Traits
+: New skills and abilities.
+Weapon Enhancements
+: Upgrade an item of wargear.
+Psychic Fortitudes
+: Boosts a unit's psychic might.
+Crusade Relic
+: Gain a rare and powerful artefact.
+Each time a unit gains a Battle Honour, increase its Crusade points by:
+1 if unit has a Power Rating of 10 or less.
+2 if unit has a Power Rating of 11 or more.
+
+Crusade Faction
+
+When you start a Crusade force, you must decide what its Crusade Faction will be - this must be one of the following Faction keywords:
+IMPERIUM
+CHAOS
+AELDARI
+TYRANIDS
+ORKS
+NECRONS
+T’AU
+
+EMPIRE
+In a Crusade force, all of the units in your
+Order of Battle
+ (see below), with the exception of those that are
+UNALIGNED
+, must have at least one Faction keyword in common (e.g.
+IMPERIUM
+ or
+CHAOS
+). If a unit does not have the correct Faction keyword, it cannot be included in your Order of Battle.
+Crusade Faction
+: All units in your Crusade force must share this keyword (or be
+UNALIGNED
+).
+
+Power Ratings
+
+Every unit has a Power Rating listed on its
+datasheet
+, and it is a measure of its efficacy on the battlefield. They are designed to give players, at a glance, an idea of how mighty a unit is on the battlefield, irrespective of the weapons its models can be equipped with. They can therefore be used as a quick guide to establish the comparative strength of each army.
+The Power Rating on a datasheet is for a minimum-sized unit. A unit’s Power Rating can be increased if additional models are added to the unit, and occasionally if other options are taken for the unit (such as equipping a unit with jump packs) - in either case the unit's datasheet will make it clear if the Power Rating listed at the top of the datasheet is increased as a result.
+Power Ratings:
+ Quick measure of a unit's efficacy.
+
+Command Points
+
+The starting number of CPs each player starts with for Battle-forging their army depends on the size of the battle you are playing. This is usually defined in the mission pack that is being played, but if one is not presented in the mission pack, use the following table. Note that the total
+Power Level
+ is based on the combined power of all the models used in the battle (so the combined Power Level of both your and your opponent's armies). If you are using a game that uses
+points values
+, then the
+points limit
+ is the maximum points limit per side.
+COMMAND POINTS
+BATTLE SIZE
+TOTAL POWER LEVEL
+POINTS LIMIT
+COMMAND POINTS
+Combat Patrol
+Up to 50
+Up to 500
+3
+Incursion
+51-100
+501-1000
+6
+Strike Force
+101-200
+1001-2000
+12
+Onslaught
+201-300
+2001-3000
+18
+Starting number of Command points varies with battle size.
+
+Crusade Blessings
+
+When two Battle-forged Crusade armies battle each other, it is likely that one or the other will be more experienced. To determine this, after players have mustered their armies, both players should compare the combined Crusade points of all the units that are on their
+army rosters
+. If there is a difference, then the player whose army roster has the lower total number of Crusade points gains a number of bonus
+Command points
+ to use in that battle equal to half the difference (rounding up). This represents high command funnelling additional resources to the underdog to help them combat a more elite foe.
+For example
+: Joel and Ruby have finished mustering their armies. The total number of Crusade points of the units on Joel’s
+army roster
+ is 7. The total number of Crusade points of the units in Ruby's army is 4. Ruby therefore gains 2 bonus
+Command
+
+points
+ to spend on
+Stratagems
+ in the forthcoming battle (because half the difference between 7 and 4, rounded up, is 2).
+Crusade Blessings
+: Both players add up Crusade points of all units on their army roster.
+Player with lowest total gains a number of bonus Command points equal to half the difference.
+
+Requisition Points
+
+Requisition points can be used to purchase
+Requisitions
+: these can upgrade your Crusade force, or units within them. Each time you spend a Requisition point, reduce your total by 1. Any Requisition points you do not spend are saved and can be used later. As you play more battles, you can accrue additional Requisition points, but a Crusade force can never have more than 5 (any additional Requisition points acquired beyond this are lost). Each time you play a battle, you will gain 1 Requisition point after that battle has been completed, regardless of the result of the battle itself. You should keep track of how many Requisition points you have on your
+Order of Battle
+.
+The Requisitions you can purchase can be found
+here
+. Each Requisition will tell you when it can be purchased; they can never be purchased during a battle. Unless stated otherwise, there is no limit on the number of Requisitions you can purchase, the number of times you can purchase each Requisition, nor on the combination of Requisitions you can purchase, so long as you have enough Requisition points. If you do not have enough Requisition points to purchase a Requisition, you cannot purchase it.
+Requisitions cost Requisition points to purchase.
+You can never have more than 5 Requisition points.
+Each battle you play earns you 1 Requisition point (win, lose or draw).
+
+Combat Tallies
+
+A unit’s
+Crusade card
+ contains space to record all kinds of battle statistics. Each time your unit takes part in a battle, survives a battle, or destroys an enemy unit, make a note of that on the unit’s Crusade card. Units can earn
+experience points
+ from these tallies, as described in
+Crusade Mission Pack
+ section.
+There is also space on each unit's Crusade card to record Agenda tallies during a battle. These are always reset to 0 after each battle. You can find out more about
+Agendas
+ in
+Crusade Mission Pack
+ section.
+Combat tallies
+: Used to record battle Statistics for units during games.
+
+Named Characters
+
+Named characters always have a Warlord Trait, even if they are not your Warlord (in such cases they are only considered to be your Warlord for the purposes of their trait). If a publication lists what a named character's Warlord Trait must be, then it must be this; they have this Warlord Trait even if another model in your
+Order of Battle
+ already has this Warlord Trait, but having this named character in your Order of Battle does not prevent another model in your Order of Battle from having this Warlord Trait.
+Named characters always have a Warlord Trait (even if they are not your
+WARLORD
+).
+
+Summoned Units
+
+There are many rules (abilities, psychic powers, Stratagems etc.) that can be used to add units to your army during a battle. These units are only added to your army for the duration of that battle - they are not added to your
+Order of Battle
+. Note that these rules do not apply to units from your Order of Battle that have had models added to them during a battle.
+Summoned Units
+: Units that are added to your army during the battle, and are not permanently added to your Order of Battle.
+
+SPECIALIST REINFORCEMENTS
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a unit to your
+Order of Battle
+. If there is a
+Stratagem
+ that could upgrade this unit to give it either a better characteristic profile and/or abilities, you can use that Stratagem to upgrade that unit for free, even if you would not normally have access to such a Stratagem unless your army includes a specific
+Detachment
+. Make a note of the upgrades afforded by that Stratagem on the unit’s Crusade card, and add 1 to its
+Crusade points
+ total for each
+Command point
+ that the Stratagem would have cost (so +1 Crusade point if the Stratagem would have cost 1 Command point, +2 Crusade points if it would have cost 2 Command points and so on). This upgrade is permanent, and cannot be removed or changed. You cannot use this Requisition to give a
+CHARACTER
+ a Relic or a Warlord Trait*, and you cannot use Stratagems that upgrade the unit to be part of a
+Specialist Detachment
+.
+The
+IMPERIAL
+
+KNIGHTS
+ keyword is used in the following Imperial Knights datasheets:
+Lords of War
+Armiger Helverin
+Armiger Warglaive
+Canis Rex
+Knight Castellan
+Knight Crusader
+Knight Errant
+Knight Gallant
+Knight Paladin
+Knight Preceptor
+Knight Valiant
+Knight Warden
+Acastus Knight Asterius
+Acastus Knight Porphyrion
+Cerastus Knight Acheron
+Cerastus Knight Atrapos
+Cerastus Knight Castigator
+Cerastus Knight Lancer
+Knight Moirax
+Questoris Knight Magaera
+Questoris Knight Styrix
+KNIGHT BARON
+1CP
+Imperial Knights – Requisition Stratagem
+It is a truly glorious day for the Imperium when the Barons of the noble households take to the battlefield, for these storied heroes bring wisdom and strength in equal measure.
+Use this Stratagem before the battle, when you are mustering your army, if your
+WARLORD
+ has the
+IMPERIAL
+
+KNIGHTS
+ keyword. Select one
+IMPERIAL
+
+KNIGHTS
+ model from your army (excluding named characters). That model gains the
+CHARACTER
+ keyword and you must determine one
+Warlord Trait
+ for it (this must be a Warlord Trait it can have); that model is only regarded as your Warlord for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique (if randomly generated, re-roll duplicate results), and you cannot use this Stratagem to give a model two Warlord Traits. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+The
+CHAOS
+
+KNIGHTS
+ keyword is used in the following Chaos Knights datasheets:
+Lords of War
+Knight Abominant
+Knight Desecrator
+Knight Despoiler
+Knight Rampager
+Knight Tyrant
+War Dog Brigand
+War Dog Executioner
+War Dog Huntsman
+War Dog Karnivore
+War Dog Stalker
+Chaos Acastus Knight Asterius
+Chaos Acastus Knight Porphyrion
+Chaos Cerastus Knight Acheron
+Chaos Cerastus Knight Atrapos
+Chaos Cerastus Knight Castigator
+Chaos Cerastus Knight Lancer
+Chaos Questoris Knight Magaera
+Chaos Questoris Knight Styrix
+War Dog Moirax
+TYRANNICAL COURT
+1CP
+Chaos Knights – Requisition Stratagem
+A Tyrannical Court comprises the most hateful and indomitable of Fallen Nobles, feared in equal measure by both their enemies and their allies.
+Use this Stratagem before the battle, when you are mustering your army, if your
+WARLORD
+ has the
+CHAOS
+
+KNIGHTS
+ keyword. Select one
+CHAOS
+
+KNIGHTS
+ model from your army. That model gains the
+CHARACTER
+ keyword and you must determine one
+Warlord Trait
+ for it (this must be a Warlord Trait they could have); that model is only regarded as your
+WARLORD
+ for the purposes of that Warlord Trait. Each Warlord Trait in your army must be unique (if randomly generated, re-roll duplicate results), and you cannot use this Stratagem to give a model two Warlord Traits. You can only use this Stratagem once, unless you are playing a Strike Force battle (in which case, you can use this Stratagem twice) or an Onslaught battle (in which case, you can use this Stratagem three times).
+WARLORD TRAIT
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a
+CHARACTER
+ unit to your
+Order of Battle
+, or when a
+CHARACTER
+ in your Order of Battle gains a
+rank
+. You can give that
+CHARACTER
+ one Warlord Trait (even if they are not your Warlord - in battle, this
+CHARACTER
+ is only considered your Warlord for the purposes of this trait). This must still be a Warlord Trait it can have; any Warlord can have the Inspiring Leader Warlord Trait (see below). Alternative Warlord Traits can be found in other publications. Make a note of the Warlord Trait on the unit’s Crusade card and add 1 to its
+Crusade points
+ total (+2 instead if the
+CHARACTER
+ is
+TITANIC
+). This Warlord Trait is permanent to this unit, and cannot be removed or changed. No model can have more than one Warlord Trait and the same Warlord Trait cannot be included more than once by any model in your Order of Battle.*
+Inspiring Leader (Warlord Trait, Aura)
+Add 1 to the Leadership characteristic of friendly units while they are within 6" of this
+WARLORD
+.
+Psychic Powers
+
+All
+PSYKERS
+ know the
+Smite
+ psychic power. Some know other powers instead of, or in addition to,
+Smite
+ – the unit’s datasheets and other supplementary rules you are using will make it clear which powers each
+PSYKER
+ knows. Each psychic power has a warp charge value – the higher this is, the more difficult it is to
+manifest
+ the psychic power. A
+PSYKER
+ unit generates their powers before the battle.
+All
+PSYKERS
+ know
+Smite
+.
+PSYKERS
+ will know additional psychic powers, as described on their datasheets.
+
+Artificer Weapon
+
+Select one weapon that the model is equipped with (excluding a Relic or a weapon that has been enhanced by the Weapon Enhancement
+Battle Honour
+). Each unmodified
+hit roll
+ of 6 made for an attack with that weapon inflicts 1
+mortal wound
+ on the target in addition to the normal damage. Note that this is cumulative with any other mortal wounds inflicted by the weapon.
+
+Advance
+
+When a unit makes an Advance, make an Advance roll for the unit by rolling one D6. Add the result in inches to the Move (M) characteristic of each model in that unit until the end of the current phase. Each model in that unit can then move a distance in inches equal to or less than this total, but no model can be moved within
+Engagement Range
+ of enemy models. A unit cannot
+shoot
+ or declare a
+charge
+ in the same turn that it made an Advance.
+Advance
+: Models move up to M+D6".
+Cannot move within Engagement Range of enemy models.
+Units that Advance cannot shoot or charge this turn.
+
+Engagement Range
+
+Engagement Range represents the zone of threat that models present to their enemies. While a model is within 1" horizontally and 5" vertically of an enemy model, those models are within Engagement Range of each other. While two enemy models are within Engagement Range of each other, those models’ units are also within Engagement Range of each other. Models cannot be set up within Engagement Range of enemy models.
+Engagement Range:
+ 1" horizontally + 5" vertically.
+Models cannot be set up within Engagement Range of enemy models.
+
+Charging with a Unit
+
+Once you have chosen an eligible unit to declare a charge with, you must select one or more enemy units within 12" of it as the targets of its charge. The target(s) of this charge do not need to be visible to the charging unit. You then make a charge roll for your unit by rolling 2D6. This is the maximum number of inches each model in the charging unit can now be moved if they can make the charge move. To make a charge move, the unit’s charge roll must be sufficient that it is able to end that move in
+unit coherency
+ and within
+Engagement Range
+ of every unit that was a target of its charge, without moving within Engagement Range of any enemy units that were not a target of its charge. If this is possible, then the charge is successful and the models in the unit make a charge move so as to fulfil the above conditions. If this is impossible, the charge fails and no models in the charging unit move this phase.
+Declare targets of the charge (must be within 12").
+Charge roll = 2D6".
+If insufficient to move charging unit into
+Engagement
+
+Range
+ of all targets, charge fails.
+If charge successful, models make their charge move.
+Cannot make a charge move within Engagement Range of any unit that was not the target of the charge.
+
+Performing a Heroic Intervention
+
+When a unit performs a Heroic Intervention, you can move each model in that unit up to 3" – this is a Heroic Intervention move. Each model in the unit must finish its Heroic Intervention move closer to the closest enemy model. Remember that a unit must finish any type of move in
+unit coherency
+.
+Heroic Intervention
+: Move up to 3".
+Must end closer to the closest enemy model.
+
+Hit Roll
+
+When a model makes an attack, make one hit roll for that attack by rolling one D6. If the result of the hit roll is equal to or greater than the attacking model’s Ballistic Skill (BS) characteristic (if the attack is being made with a ranged weapon) or its Weapon Skill (WS) characteristic (if the attack is being made with a melee weapon), then that attack scores one hit against the target unit. If not, the attack fails and the attack sequence ends.
+If an attack is made with a weapon that has an ability that says it ‘automatically hits the target’, no hit roll is made – that attack simply scores one hit on the target unit. An unmodified hit roll of 6 always scores a hit, and an unmodified hit roll of 1 always fails. A hit roll can never be modified by more than -1 or +1. This means that if, after all the cumulative modifiers to a hit roll have been calculated, the total modifier would be -2 or worse, it is changed to be -1. Similarly, if, after all the cumulative modifiers to a hit roll have been calculated, the total modifier would be +2 or better, it is changed to be +1.
+
+Saving Throw
+
+The player commanding the target unit then makes one saving throw by rolling one D6 and modifying the roll by the Armour Penetration (AP) characteristic of the weapon that the attack was made with. For example, if the weapon has an AP of -1, then 1 is subtracted from the saving throw roll. If the result is equal to, or greater than, the Save (Sv) characteristic of the model the attack was allocated to, then the saving throw is successful and the attack sequence ends. If the result is less than the model’s Save characteristic, then the saving throw fails and the model suffers damage. An unmodified roll of 1 always fails.
+
+Invulnerable Saves
+
+Some models have an invulnerable save. Each time an attack is allocated to a model with an invulnerable save, you can choose to use either its normal Save (Sv) characteristic or its invulnerable save, but not both. If a model has more than one invulnerable save, it can only use one of them – choose which it will use. If you use a model’s invulnerable save, it is never modified by a weapon’s Armour Penetration value.
+Invulnerable save
+:
+Saving
+
+throw
+ that is never modified by attacking weapon’s AP.
+A model with an invulnerable save can use it instead of its normal Sv.
+
+Wound Roll
+
+Each time an attack scores a hit against a target unit, make a wound roll for that attack by rolling one D6 to see if that attack successfully wounds the target. The result required is determined by comparing the attacking weapon’s Strength (S) characteristic with the target’s Toughness (T) characteristic, as shown on the following table:
+WOUND ROLL
+ATTACK’S STRENGTH vs TARGET’S TOUGHNESS
+D6 ROLL REQUIRED
+Is the Strength
+TWICE (or more)
+ than the Toughness?
+2+
+Is the Strength
+GREATER
+ than the Toughness?
+3+
+Is the Strength
+EQUAL
+ to the Toughness?
+4+
+Is the Strength
+LOWER
+ than the Toughness?
+5+
+Is the Strength
+HALF (or less)
+ than the Toughness?
+6+
+If the result of the wound roll is less than the required number, the attack fails and the attack sequence ends. An unmodified wound roll of 6 always successfully wounds the target, and an unmodified wound roll of 1 always fails. A wound roll can never be modified by more than -1 or +1. This means that if, after all the cumulative modifiers to a wound roll have been calculated, the total modifier would be -2 or worse, it is changed to be -1. Similarly, if, after all the cumulative modifiers to a wound roll have been calculated, the total modifier would be +2 or better, it is changed to be +1.
+
+Mortal Wounds
+
+Some attacks inflict mortal wounds – these are so powerful that no armour or force field can withstand their fury. Each mortal wound inflicts 1 point of damage on the target unit, and they are always applied one at a time. Do not make a
+wound roll
+ or
+saving throw
+ (including
+invulnerable saves
+) against a mortal wound – just allocate it as you would any other attack and
+inflict damage
+ to a model in the target unit. Unlike damage inflicted by normal attacks, excess damage from mortal wounds is not lost. Instead, keep allocating damage to another model in the target unit until either all the damage has been allocated or the target unit is destroyed.
+If an attack inflicts mortal wounds in addition to the normal damage, resolve the normal damage first. If an attack inflicts mortal wounds in addition to the normal damage, but the normal damage is subsequently saved, the target unit still suffers the mortal wounds, as described before. If an ability modifies the damage inflicted by a weapon, and that weapon can inflict mortal wounds in addition to the normal damage, the modifier does not apply to any mortal wounds that are inflicted (unless the rule specifically states otherwise).
+Each mortal wound inflicted on a unit causes one model in the unit to lose one wound.
+No saving throws can be made against mortal wounds.
+Mortal wounds inflicted by attacks in addition to normal damage always apply, even if normal damage saved.
+
+Morale Tests
+
+To take a Morale test, roll one D6 and add the number of models from the unit that have been destroyed this turn. If the result is equal to or less than the highest Leadership (Ld) characteristic in the unit, the Morale test is passed and nothing else happens. An unmodified roll of 1 also always results in a passed Morale test, irrespective of the total result. In any other case, the Morale test is failed, one model flees that unit, and you must then take
+Combat Attrition tests
+ for the remaining models in the unit. You decide which model from your unit flees – that model is removed from play and counts as having been destroyed, but it never triggers any rules that are used when a model is destroyed.
+Morale test
+ = D6 + number of models destroyed this turn.
+Unmodified roll of 1 always a success (no models flee).
+If Morale test exceeds unit’s Ld, one model flees and other models must take Combat Attrition tests.
+
+Overwatch
+
+Certain rules enable units to fire Overwatch at an enemy unit before it can charge. If an enemy unit
+declares a charge
+ that targets one or more units from your army that have such a rule, each of those units can fire Overwatch before the charge roll is made. A unit cannot fire Overwatch if there are any enemy units within
+Engagement Range
+ of it. Overwatch is resolved like a normal
+shooting attack
+ (albeit one resolved in the
+Charge phase
+) and uses all the normal rules, except that an unmodified
+hit roll
+ of 6 is always required for a successful hit roll, irrespective of the firing model’s Ballistic Skill or any hit roll modifiers. In addition, when a model fires Overwatch, it does so at the charging unit. Any rule that states the unit cannot be targeted unless it is the closest target (e.g.
+Look Out, Sir
+) does not apply when firing Overwatch.
+Overwatch
+: Before charge roll made, all charge targets that can fire Overwatch can do so.
+Can never fire Overwatch while enemy units are in Engagement Range.
+When firing Overwatch, shoot with unit, but attacks only hit on unmodified 6s.
+
+Objective Secured
+
+Some units have an ability called
+Objective Secured
+. A player controls an
+objective marker
+ if they have any models with this ability within range of that objective marker, even if there are more enemy models within range of that objective marker. If an enemy model within range of an objective marker also has this ability (or a similar ability), then the objective marker is controlled by the player who has the most models within range of that objective marker as normal.
+Objective Secured
+: Player controls objective marker if any of their models in range have this ability.
+
+Combat Attrition Tests
+
+If a unit fails a
+Morale test
+, then after the first model has fled the unit, you must take Combat Attrition tests. To do so, roll one D6 for each remaining model in that unit, subtracting 1 from the result if the unit is below
+Half-strength
+; for each result of 1, one additional model flees that unit. You decide which models from your unit flee – those models are removed from play and count as having been destroyed, but they never trigger any rules that are used when a model is destroyed.
+Combat Attrition tests
+: Roll one D6 for each remaining model in unit; for each 1, one additional model flees.
+Subtract 1 from Combat Attrition tests if unit is below Half-strength.
+
+Manifesting Psychic Powers
+
+When you select a
+PSYKER
+ unit to manifest psychic powers, you select one psychic power that unit knows and attempt to manifest it. With the exception of
+Smite
+, you cannot attempt to manifest the same psychic power more than once in the same battle round, even with different
+PSYKER
+ units. The same
+PSYKER
+ unit cannot attempt to manifest
+Smite
+ more than once during the same battle round.
+To manifest the psychic power, you must first pass a
+Psychic test
+. The opposing player can then select one of their
+PSYKER
+ units that is within 24" of the
+PSYKER
+ unit attempting to manifest the power and attempt to deny that power before its effects are resolved by passing a
+Deny the Witch test
+.
+So long as the Psychic test was successful and the psychic power was not denied by a successful Deny the Witch test, the psychic power is successfully manifested and its effects, which will be described in the power itself, are then resolved. If the
+PSYKER
+ unit can attempt to manifest more than one psychic power in its Psychic phase, you can then attempt to manifest those, one at a time, as described above. The number of psychic powers each
+PSYKER
+ unit can attempt to manifest in its Psychic phase is listed on its datasheet.
+Select psychic power.
+You cannot select the same psychic power more than once per battle round, unless that power is
+Smite
+.
+Attempt to manifest the psychic power by taking a Psychic test.
+The opponent can attempt to deny the psychic power by taking a Deny the Witch test.
+If successfully manifested, resolve the psychic power’s effects.
+Select another psychic power.
+
+Deny the Witch
+
+When a
+PSYKER
+ unit attempts to deny a psychic power, you must take a Deny the Witch test for that unit by rolling 2D6. If the total is greater than the result of the
+Psychic test
+, the Deny the Witch test is passed and the psychic power is denied. Only one attempt can be made to deny a psychic power. If a
+PSYKER
+ unit can attempt to deny more than one psychic power in a
+psychic phase
+, this will be listed on its datasheet.
+Deny the Witch
+: Passed if 2D6 exceeds result of the opposing
+PSYKER
+’s Psychic test.
+Only one attempt can be made to deny each psychic power.
+
+Normal Move
+
+When a unit makes a Normal Move, each model in that unit can move a distance in inches equal to or less than the Move (M) characteristic shown on its datasheet, but no model can be moved within
+Engagement Range
+ of enemy models.
+Normal Move:
+ Models move up to M".
+Cannot move within Engagement Range of any enemy models.
+
+Fall Back
+
+When a unit Falls Back, each model in that unit can move a distance in inches equal to or less than the Move (M) characteristic shown on its datasheet, and when doing so you can move it within
+Engagement Range
+ of enemy models, but it cannot end its move within Engagement Range of any enemy models – if it cannot do this then it cannot Fall Back. A unit cannot declare a charge in the same turn that it Fell Back. A unit cannot
+shoot
+ or attempt to
+manifest a psychic power
+ in the same turn that it Fell Back unless it is
+TITANIC
+.
+Fall Back
+: Models move up to M".
+Units that Fall Back cannot charge this turn.
+Units that Fall Back cannot shoot or manifest psychic powers this turn unless they are
+TITANIC
+.
+
+PISTOL
+
+Due to their compact size, pistols can even be used in melee to shoot at point-blank range.
+A model can make attacks with a Pistol even when its unit is within
+Engagement Range
+ of enemy units, but it must target an enemy unit that is within Engagement Range of its own unit when it does so. In such circumstances, the model can target an enemy unit even if other friendly units are within Engagement Range of the same enemy unit.
+When a model equipped with both a Pistol and another type of ranged weapon (e.g. a Pistol and a
+Rapid Fire
+ weapon) shoots, it can either shoot with its Pistol(s) or with its other ranged weapons. Choose which it will fire (Pistols or non-Pistols) before selecting targets.
+Can be shot even if firing model’s unit is within Engagement Range of enemy unit.
+Cannot be shot alongside any other type of weapon.
+
+GRENADE
+
+Grenades are handheld explosive devices that a warrior throws at the enemy while their squad mates provide covering fire.
+When a unit shoots, one model that is equipped with a Grenade in that unit can
+resolve attacks
+ with it instead of shooting any other weapons.
+Only one model can use a Grenade when its unit shoots.
+
+COMMAND RE-ROLL
+1CP
+Core Stratagem
+Use this Stratagem after you have made a
+hit roll
+, a
+wound roll
+, a damage roll, a
+saving throw
+, an
+Advance roll
+, a
+charge roll
+, a
+Psychic test
+, a
+Deny the Witch test
+ or you have rolled the dice to determine the
+number of attacks
+ made by a weapon. Re-roll that roll, test or saving throw.
+Aura Abilities
+
+Some abilities affect models or units in a given range – these are aura abilities. A model with an aura ability is always within range of its effect. The effects of multiple, identically named aura abilities are not cumulative (i.e. if a unit is within range of two models with the same aura ability, that aura ability only applies to the unit once).
+
+HEAVY
+
+Heavy weapons are amongst the biggest guns on the battlefield, but they require bracing to fire at full effect and are unwieldy to bring to bear at close quarters.
+When an
+INFANTRY
+ model shoots a Heavy weapon, subtract 1 from the
+hit rolls
+ when resolving that weapon’s attacks if the firing model’s unit has moved for any reason this turn (e.g. it made a
+Normal Move
+ this turn).
+Subtract 1 from hit rolls if firing model is
+INFANTRY
+ and its unit has moved this turn.
+
+Army Faction
+
+In a
+Battle-forged army
+, all of the units in your army - with the exception of those that are
+UNALIGNED
+ — must have at least one Faction keyword in common (e.g.
+IMPERIUM
+ or
+CHAOS
+) even if they are in different
+Detachments
+. If a unit does not have the correct Faction keyword, it cannot be included in your army.
+Army Faction:
+ All units in army must share at least one Faction keyword.
+UNALIGNED
+ units are exempt.
+
+Power Level
+
+An army's Power Level is a guide to how large and powerful an army is, so an army with a high Power Level is more powerful than one with a low Power Level. You can calculate the Power Level of an army by adding up the individual Power Ratings of every unit contained within it.
+Power Level:
+ Sum of all Power Ratings in army.
+
+Roll-offs
+
+Some rules instruct players to roll off. To do so, both players roll one D6, and whoever scores highest wins the roll-off. If there is a tie for the highest roll, make the roll-off again. Neither player is allowed to re-roll or modify any of the D6 when making a roll-off.
+Roll-off:
+ Both players roll a D6 – highest wins.
+Roll again if a tie.
+
+Perils of the Warp
+
+When a
+PSYKER
+ unit suffers Perils of the Warp, it suffers D3
+mortal wounds
+. If a
+PSYKER
+ unit is destroyed by Perils of the Warp while attempting to
+manifest a psychic power
+, that power automatically fails to manifest. If a
+PSYKER
+ unit is destroyed by Perils of the Warp, then just before removing the last model in that unit, every unit within 6" of it immediately suffers D3 mortal wounds.
+Perils of the Warp
+: The
+PSYKER
+ unit manifesting the power suffers D3 mortal wounds.
+If
+PSYKER
+ unit is destroyed, the psychic power fails to manifest.
+If
+PSYKER
+ unit destroyed, every other unit within 6" suffers D3 mortal wounds.
+
+Embark
+
+If a unit makes a
+Normal Move
+, an
+Advance
+ or it
+Falls Back
+, and every model in that unit ends that move within 3" of a friendly
+TRANSPORT
+ model they can embark within it. A unit cannot embark within a
+TRANSPORT
+ model that is within
+Engagement Range
+ of enemy models, and it cannot embark if it has already
+disembarked
+ from a
+TRANSPORT
+ model in the same phase. Remove the unit from the battlefield and place it to one side – it is now embarked within the model.
+Units cannot normally do anything or be affected in any way while they are embarked. Unless specifically stated, other units’ abilities have no effect on units while they are embarked, and
+Stratagems
+ cannot be used to affect units while they are embarked. For all rules purposes, units that are embarked within a
+TRANSPORT
+ model that has made a Normal Move, Advanced, Fallen Back or Remained Stationary also count as having made the same kind of move that turn.
+Units can embark in a friendly
+TRANSPORT
+ if every model ends a Normal Move, an Advance or a Fall Back within 3" of it.
+A unit cannot embark within a
+TRANSPORT
+ that is within Engagement Range of any enemy models.
+A unit cannot embark and disembark in the same phase.
+Units cannot do anything, or be affected in any way, while they are embarked within a
+TRANSPORT
+.
+
+INCREASE SUPPLY LIMIT
+1RP
+Purchase this Requisition at any time. Increase your Crusade force's Supply Limit by 5 Power.
+REARM AND RESUPPLY
+1RP
+Purchase this Requisition at any time. Select one unit from your
+Order of Battle
+ (excluding
+CHARACTERS
+) that has a
+Crusade card
+. You can change any wargear options that models in that unit are equipped with as described on that unit’s datasheet, provided that none of those wargear options would change the
+Power Rating
+ of the unit. You cannot replace a weapon that a model is equipped with if the weapon in question has been upgraded by a
+Weapon Enhancement
+.
+Flying
+
+If a unit’s datasheet has the
+FLY
+ keyword, then when it makes a
+Normal Move
+, an
+Advance
+ or it
+Falls Back
+, its models can be moved across other models (and their bases) as if they were not there, and they can be moved within
+Engagement Range
+ of enemy models. In addition, any vertical distance up and/or down that they make as part of that move is ignored. However, these models cannot finish their move either on top of another model (or its base) or within Engagement Range of any enemy models.
+FLY
+ models can move over other models when they make a Normal Move, an Advance or when they Fall Back.
+FLY
+ models ignore vertical distances when they make a Normal Move, an Advance or when they Fall Back.
+
+RELIC
+1RP
+Purchase this Requisition when you add a
+Crusade card
+ for a
+CHARACTER
+ unit to your
+Order of Battle
+, or when a
+CHARACTER
+ unit in your Order of Battle gains a
+rank
+. You can give one
+CHARACTER
+ model in that unit one Relic (excluding
+Crusade Relics
+). This must still be a Relic it can have, and it cannot be a Relic that replaces a weapon this
+CHARACTER
+ is equipped with if the weapon in question has been upgraded by a
+Weapon Enhancement
+ or a Crusade Relic (e.g.
+Artificer Weapon
+). Make a note of the Relic on the unit’s Crusade card and add 1 to its
+Crusade points
+ total (+2 instead if the
+CHARACTER
+ is
+TITANIC
+). This upgrade is permanent to this unit, and cannot be removed or changed. No model can have more than one Relic and the same Relic cannot be included more than once by any model in your Order of Battle.*
+Split Units
+
+Some units have an ability that instructs you to deploy the unit at the same time, but then treat different models (or groups of models) in that unit as separate units for the duration of the battle. These are referred to as split units. The most common split units are
+VEHICLE
+ squadrons, units of
+MONSTERS
+, or
+T’AU
+
+EMPIRE
+ units that have
+accompanying drones
+, but there are others. If you have any such units in your
+Order of Battle
+ you must fill out a separate
+Crusade card
+ for each model (or group of models) that is treated as a separate unit during the battle - these individual components gain
+experience points
+,
+Battle Honours
+, take
+Out of Action
+ tests and acquire
+Battle Scars
+ separately. When you make a
+Crusade army
+, if you select this unit to be part of your army list you must include all the separate
+Crusade cards
+ (you cannot, for example, only choose part of the unit).
+Split Units
+: Units that split into multiple independent units during a battle.
+Each individual unit in a split unit must have its own Crusade card and is treated as a separate unit for all Crusade rules.
+
+Contents
+Crusade Forces
+Crusade Faction
+Order of Battle
+Battle Tally, Requisition Points and other Information
+Crusade Cards
+Experience
+Combat Tallies
+Requisition Points
+Relics, Warlord Traits and Upgrades
+Named Characters
+Knight Characters
+Requisitions
+Ranks and Battle Honours
+Battle Honours
+Battle Traits
+Weapon Enhancements
+Psychic Fortitudes
+Crusade Relics
+Artificer Relics
+Antiquity Relics
+Legendary Relics
+Out of Action
+Battle Scars
+Selecting a Crusade Army
+Crusade Blessings
+Crusade Appendix
+Split Units
+Combat Squads
+Summoned Units
+Combined Units
+CRUSADE MISSION PACK
+Agendas
+Purge the Enemy
+Assassins
+Priority Target
+Titan Hunter
+King Slayer
+No Mercy, No Respite
+First Strike
+Cull the Hordes
+Reaper
+Battlefield Supremacy
+Sentinel
+Breakthrough
+Survivor
+Shadow Operations
+Secure the Area
+Search for Archeotech
+Deploy Vox-relays
+Recover Mission Archives
+Warpcraft
+Witch Hunter
+Lord of the Warp
+Scry Battle Plans
+Combat Patrol Missions
+
+1-2
+
+Sweep and Clear
+
+3-4
+
+Supply Drop
+
+5-6
+
+Assassinate
+Incursion Missions
+
+1
+
+Supply Cache
+
+2
+
+The Relic
+
+3
+
+Sabotage
+
+4
+
+Recon Patrol
+
+5
+
+The Ritual
+
+6
+
+Behind Enemy Lines
+Strike Force Missions
+
+1
+
+Supplies From Above
+
+2
+
+Narrow the Search
+
+3
+
+Cut Off the Head
+
+4
+
+Retrieval
+
+5
+
+Raze and Ruin
+
+6
+
+Ambush
+Onslaught Missions
+
+1-2
+
+Firestorm
+
+3-4
+
+Grand Assault
+
+5-6
+
+Field of Glory
+
+Disable Ads
+
+E-mail:
+
+
+Pin code:
+
+
+Get pin code
+
+Disable Ads
+
+Boosty
+ subscribers may disable ads:
+
+1. Enter e-mail you have used to login on Boosty.
+
+2. Press
+Get pin code
+ button (if you don’t have it already)
+
+3. Enter pin code.
+
+Note that login database updated once a day. So, if you are a new booster - try tomorrow. And thank you!
+
+© Vyacheslav Maltsev 2013-2023
