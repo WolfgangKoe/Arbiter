@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gitAufruf import freigabeCommit, gitAusgabe
-from pfade import akzeptanzOrdner
+from pfade import akzeptanzOrdner, etappenOrdner, itemsOrdner
 from plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
 from rueckverfolgung import fehlendeTests, nenntFehlendes
 
@@ -29,7 +29,7 @@ class Etappe(NamedTuple):
 
 
 def aktuelleEtappe(wurzel: Path) -> Etappe | None:
-    dateien = sorted((wurzel / "domaene" / "etappen").glob("*.md"))
+    dateien = sorted((wurzel / etappenOrdner).glob("*.md"))
     if not dateien:
         return None
     for zeile in dateien[0].read_text(encoding="utf-8").splitlines():
@@ -77,7 +77,7 @@ def lage(wurzel: Path) -> Lage:
     freigabePlan = freigabeCommit(wurzel, "Plan", plan)
     if freigabePlan is None and itemsOhneLink(wurzel):
         return Lage(
-            plan, Phase.domänenphase, f"Planer: Items von Plan {plan} als Link auf domaene/items/"
+            plan, Phase.domänenphase, f"Planer: Items von Plan {plan} als Link auf {itemsOrdner}/"
         )
     if freigabePlan is None:
         return Lage(plan, Phase.domänenphase, planOhneFreigabe(wurzel, plan))

@@ -1,6 +1,6 @@
 # Prüfskripte: `pfade.py` nicht vollständig, `lage` dreimal je Test
 
-142 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+142 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: ed4d7e4 (Kritik am Code). `python3 -m pytest prozess/pruefungen` grün, `ruff`
@@ -35,3 +35,10 @@ liest sich schlechter als der Test daneben.
 Erledigt, wenn kein Literal aus 1 außerhalb von `pfade.py` steht (Tests dürfen Dateien
 anlegen, wie `standTest.py` es tut), 2 umgesetzt ist und `python3 -m pytest prozess/pruefungen`
 grün ist.
+
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. 1: `etappenOrdner` und `itemsOrdner`
+stehen in `pfade.py`; `benennung.py`, `hoechstmassTest.py`, `phasenfolge.py` und `plan.py`
+nutzen sie, auch die Meldung „Link auf …/“ und die Linksuche in `plan.py`. Scheiter-Test:
+`pfadeTest.py` findet Literale beider Ordner (Pfad, Segmente, f-String) in jedem Skript
+außer `pfade.py` und den Tests; Docstrings sind ausgenommen. 2: `standTest.py` ruft `lage`
+einmal. Zeile in `prozess/regeln.md`.

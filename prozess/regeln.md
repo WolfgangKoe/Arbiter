@@ -15,6 +15,7 @@ Der Koordinator liest nur kurze Dateien, `git show` nur mit `--stat` oder unter 
 Jeder Hook zeigt auf eine vorhandene, gültige Datei; Reihenfolge beim Umbenennen: neue Datei, Einstellung, alte Datei löschen | `einstellungen.py` | `einstellungenTest.py`
 Ruff nach [Ablauf, Werkzeuge](ablauf.md#technikphase), Namensregeln N802, N803, N806, N815, N816 aus; pytest erkennt `<name>Test.py` | `pyproject.toml` (ruff, `src`, N818 aus, Suchpfad `technik`, `dependency-groups`); `konfigurationTest.py` ruft ruff über das Repo und ist rot, wenn ruff fehlt; `.pre-commit-config.yaml` läuft nur nach `pre-commit install` | `konfigurationTest.py`
 Koordinator: nur Positivliste; Rollen nutzen git nur lesend | `bashPositivliste.py` | `bashPositivlisteTest.py`
+Ordner, die mehrere Prüfungen kennen, stehen nur in `pfade.py` (Anliegen 142) | `pfadeTest.py` (Literale der Ordner `domaene/etappen`, `domaene/items` außerhalb von `pfade.py` sind rot) | `pfadeTest.py`
 Schreibpfade je Rolle | `schreibgrenze.py` | `schreibgrenzeTest.py`
 Schlussantwort höchstens 800 Zeichen | `schlussantwort.py` | `schlussantwortTest.py`
 Stand und Ordner-CLAUDE.md beim Start einer Rolle | `rollenkontext.py` | `rollenkontextTest.py`

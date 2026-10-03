@@ -7,7 +7,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from agenten import projektordner
-from pfade import akzeptanzOrdner, anforderungsOrdner, anliegenOrdner
+from pfade import akzeptanzOrdner, anforderungsOrdner, anliegenOrdner, etappenOrdner, itemsOrdner
 
 camelCase = re.compile(r"^[a-zäöü][a-zA-Z0-9äöüÄÖÜß]*$")
 pascalCase = re.compile(r"^[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
@@ -34,7 +34,7 @@ ausgeschlosseneOrdner = {
     ".pytest_cache",
     ".ruff_cache",
 }
-nummerierteOrdner = ("domaene/etappen", "domaene/items", "handoff")
+nummerierteOrdner = (etappenOrdner, itemsOrdner, "handoff")
 
 
 def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:

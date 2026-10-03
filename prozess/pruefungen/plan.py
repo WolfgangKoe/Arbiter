@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from gitAufruf import freigabeCommit
+from pfade import itemsOrdner
 
 
 def zyklus(datei: Path) -> int | None:
@@ -19,8 +20,8 @@ def offeneItems(wurzel: Path) -> list[str]:
     plan = wurzel / "handoff" / "plan.md"
     if not plan.is_file():
         return []
-    links = re.findall(r"\]\(\.\./domaene/items/([^)#\s]+\.md)", plan.read_text(encoding="utf-8"))
-    return [name for name in links if (wurzel / "domaene" / "items" / name).is_file()]
+    links = re.findall(rf"\]\(\.\./{itemsOrdner}/([^)#\s]+\.md)", plan.read_text(encoding="utf-8"))
+    return [name for name in links if (wurzel / itemsOrdner / name).is_file()]
 
 
 def freigegebenerPlan(wurzel: Path) -> int | None:
@@ -34,7 +35,7 @@ def freigegebenerPlan(wurzel: Path) -> int | None:
 def offeneItemTexte(wurzel: Path) -> list[str]:
     """Texte der offenen Items des Plans."""
     return [
-        (wurzel / "domaene" / "items" / name).read_text(encoding="utf-8")
+        (wurzel / itemsOrdner / name).read_text(encoding="utf-8")
         for name in offeneItems(wurzel)
     ]
 
@@ -46,4 +47,4 @@ def itemsOhneLink(wurzel: Path) -> bool:
         return False
     text = plan.read_text(encoding="utf-8")
     nenntItems = re.search(r"^## Items?\s*$", text, flags=re.MULTILINE) is not None
-    return nenntItems and "](../domaene/items/" not in text
+    return nenntItems and f"](../{itemsOrdner}/" not in text

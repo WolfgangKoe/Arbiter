@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from agenten import kopfzeilen
+from pfade import etappenOrdner
 
 wurzel = Path(__file__).resolve().parents[2]
 
@@ -29,7 +30,7 @@ def überschreitet(datei: Path, grenze: int) -> bool:
 
 
 def fälle():
-    etappen = sorted((wurzel / "domaene" / "etappen").glob("*.md"))
+    etappen = sorted((wurzel / etappenOrdner).glob("*.md"))
     for nummer, datei in enumerate(etappen):
         grenze = aktuelleEtappe if nummer == 0 else spätereEtappe
         yield datei, zeichen(datei), grenze

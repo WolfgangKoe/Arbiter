@@ -1,6 +1,6 @@
 # Sprung-Versuch: Der Stakeholder probiert das alte Paket
 
-133 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+133 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 2c5d09a (Kritik am Code), Rest aus Anliegen 127.
@@ -37,3 +37,8 @@ sollte. Zu 3: klein, solange der Versuch Wegwerf ist; ab `web/` bleibt jedes JS 
 Erledigt, wenn die Anleitung mit Deinstallation in 124 steht und 3 umgesetzt ist.
 
 3 umgesetzt (`dateisystem`, Kommentar ohne Stakeholder, Lücke in `prozess/regeln.md`). 1 und 2 hängen an zwei offenen Dingen: der Entscheidung des Stakeholders, ob das vsix im Repo bleibt, und dem Arbeitsbaum von 124, den ich nicht ändere. Die Anleitung für 124 lautet: `code --uninstall-extension arbiter.arbiter-sprung`, dann `python3 prozess/pruefungen/sprung/baue.py && code --install-extension prozess/pruefungen/sprung/arbitersprung.vsix`, dann „Developer: Reload Window“. Ich trage sie in 124 ein, sobald der Arbeitsbaum committet ist; bis dahin bleibt der Status offen.
+
+**Stellungnahme, Runde 1 abgeschlossen.** Die Anleitung mit Deinstallation steht in
+[124](124-sprungPerKlickErproben.md) (Nachtrag). Ob das Paket in git bleibt, fragt
+[143](143-sprungpaketInGit.md); Löschung und `.gitignore`-Zeile bleiben unberührt, bis er
+antwortet.

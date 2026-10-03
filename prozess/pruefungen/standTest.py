@@ -160,8 +160,9 @@ def testFreigabeDerRetroBeginntDenNächstenZyklus(repo):
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     repo.freigabe("Retro", 1)
-    assert (lage(repo.wurzel).zyklus, lage(repo.wurzel).phase) == (2, "Domänenphase")
-    assert lage(repo.wurzel).schritt.startswith("Planer: Plan 2")
+    aktuelle = lage(repo.wurzel)
+    assert (aktuelle.zyklus, aktuelle.phase) == (2, "Domänenphase")
+    assert aktuelle.schritt.startswith("Planer: Plan 2")
 
 
 def testFreigabeVonPlan12ZähltNichtFürPlan1(repo):
