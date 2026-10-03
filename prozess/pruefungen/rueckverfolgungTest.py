@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from rueckverfolgung import (
+    fehlendeTests,
     getesteKriterien,
     hauptprogramm,
     kriterien,
@@ -320,3 +321,26 @@ def testTestsOhneAnforderungNennenDieKennungen(tmp_path):
     meldungen = verstöße(tmp_path)
     assert len(meldungen) == 1
     assert meldungen[0].endswith("Tests ohne Anforderung: AUF-7.1")
+
+
+def testItemMitNichtVorhandenerKennungMachtDieAnforderungOhneTestdateiNichtUnsichtbar(tmp_path):
+    zweiAnforderungenMitTests(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
+    freigegebenerPlanMitItem(tmp_path, "# Probe\n\nUmfang: AUF-2.9.\n")
+    assert wartende(tmp_path) == ["AUF-2"]
+
+
+def testAnforderungOhneKriteriumIstNichtFehlend(tmp_path):
+    einzigeAnforderung(tmp_path, {})
+    anforderung = tmp_path / "domaene" / "anforderungen" / "phasen" / "aufstellen.md"
+    anforderung.write_text("### AUF-2 · Nur Überschrift\n", encoding="utf-8")
+    assert fehlendeTests(tmp_path, []) == []
+
+
+def testSammeldateiOhneKennungsTestIstOhneAnforderungGrün(tmp_path):
+    anforderung = tmp_path / "domaene" / "anforderungen" / "leer.md"
+    anforderung.parent.mkdir(parents=True)
+    anforderung.write_text("# Leer\n", encoding="utf-8")
+    test = tmp_path / "technik" / "tests" / "akzeptanz" / "leerTest.py"
+    test.parent.mkdir(parents=True)
+    test.write_text("def hilfe(): ...\n", encoding="utf-8")
+    assert verstöße(tmp_path) == []

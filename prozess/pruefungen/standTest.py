@@ -41,7 +41,9 @@ def etappe(repo):
 
 
 def anforderung(repo):
-    repo.datei("domaene/anforderungen/aufstellung.md", "### AU-1 · Modell setzen\n")
+    repo.datei(
+        "domaene/anforderungen/aufstellung.md", "### AU-1 · Modell setzen\n\n- AU-1.1 Eins.\n"
+    )
 
 
 def bisZurFreigabeVonPlan1(repo):

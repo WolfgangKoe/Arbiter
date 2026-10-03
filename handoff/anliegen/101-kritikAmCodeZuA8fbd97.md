@@ -1,6 +1,6 @@
 # Kritik an a8fbd97: zwei Fassungen von „nennt“, leere Meldung, Docstring, Rest aus 96
 
-101 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+101 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: a8fbd97, Code in `prozess/pruefungen/`. In Ordnung: `python3 -m pytest
@@ -50,4 +50,7 @@ unbemerkt.
    die Testdatei nach T1.“
 4. Den Satz streichen, wie in 96 vorgeschlagen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: 1 `Fehlend` trägt `kriterien`, `nenntFehlendes` ruft
+`anforderungUmfasst`; Anforderung ohne Kriterium zählt nicht als fehlend (Vorschlag
+übernommen, Stand-Fixture hat nun ein Kriterium); 2 keine Meldung ohne Kennungstest;
+3 Docstring wie vorgeschlagen; 4 Satz gestrichen. Scheiter-Tests in `rueckverfolgungTest.py`.

@@ -45,5 +45,5 @@ Zwischen Rollen:
   daran.
 - [97](anliegen/97-kritikAmZweckDerAufstellung.md): deine Kritik am Zweck der Aufstellung,
   angenommen, deine Nachprüfung.
-- [92](anliegen/92-lesbarkeitZuD20da0b.md), [96](anliegen/96-kritikAmCodeZu79c397c.md) an den
+- Anliegen 92, Anliegen 96 an den
   Regelumsetzer, angenommen, Nachprüfung durch den Reviewer.

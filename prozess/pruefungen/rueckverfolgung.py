@@ -17,11 +17,10 @@ fundstelle = tuple[str, str, int]  # Art, Pfad, Zeile
 
 
 class Fehlend(NamedTuple):
-    """Ein Kriterium ohne Test oder (ohne `kriterium`) eine Anforderung ohne Testdatei."""
+    """Ein Kriterium ohne Test oder eine Anforderung ohne Testdatei, mit allen ihren Kriterien."""
 
     kennung: str
-    anforderung: anforderungsnummer
-    kriterium: kriteriumsnummer | None
+    kriterien: set[kriteriumsnummer]
 
 
 class Zuordnung(NamedTuple):
@@ -239,8 +238,9 @@ def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: lis
     zugeordnet = zuordnungen(wurzel, anforderungsdatei, itemTexte)
     if sammeldatei.is_file() and not zugeordnet:
         getestet = sorted(getesteKriterien(sammeldatei))
-        gefunden = ", ".join(kennung(kriterium) for kriterium in getestet)
-        meldungen.append(f"{pfadVon(wurzel, sammeldatei)}: Tests ohne Anforderung: {gefunden}")
+        if getestet:
+            gefunden = ", ".join(kennung(kriterium) for kriterium in getestet)
+            meldungen.append(f"{pfadVon(wurzel, sammeldatei)}: Tests ohne Anforderung: {gefunden}")
     elif sammeldatei.is_file() and sammeldatei not in {eintrag.testdatei for eintrag in zugeordnet}:
         meldungen.append(
             f"{pfadVon(wurzel, sammeldatei)}: teilen nach Anforderung, "
@@ -264,28 +264,22 @@ def verstöße(wurzel: Path) -> list[str]:
 
 
 def nenntFehlendes(itemTexte: list[str], fehlend: Fehlend) -> bool:
-    """Ein Itemtext nennt das Kriterium oder die Anforderung (`AUF-1`, auch als `AUF-1.8`)."""
-    if fehlend.kriterium is not None:
-        return umfasst(itemTexte, fehlend.kriterium)
-    kürzel, nummer = fehlend.anforderung
-    return any(re.search(rf"\b{kürzel}-{nummer}(?!\d)", text) for text in itemTexte)
+    return anforderungUmfasst(itemTexte, fehlend.kriterien)
 
 
 def fehlendeTests(wurzel: Path, itemTexte: list[str]) -> list[Fehlend]:
-    """Kriterien ohne Test und Anforderungen ohne Testdatei, unabhängig vom Plan."""
+    """Kriterien ohne Test und Anforderungen ohne Testdatei; die Itemtexte wählen die Testdatei."""
     gefunden = []
     for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
         for zuordnung in zuordnungen(wurzel, anforderungsdatei, itemTexte):
+            if not zuordnung.verlangt:
+                continue
             if not zuordnung.testdatei.is_file():
-                gefunden.append(
-                    Fehlend(anforderungKennung(zuordnung.anforderung), zuordnung.anforderung, None)
-                )
+                kennungDerAnforderung = anforderungKennung(zuordnung.anforderung)
+                gefunden.append(Fehlend(kennungDerAnforderung, zuordnung.verlangt))
                 continue
             fehlend = zuordnung.verlangt - getesteKriterien(zuordnung.testdatei)
-            gefunden += [
-                Fehlend(kennung(kriterium), zuordnung.anforderung, kriterium)
-                for kriterium in sorted(fehlend)
-            ]
+            gefunden += [Fehlend(kennung(kriterium), {kriterium}) for kriterium in sorted(fehlend)]
     return gefunden
 
 
