@@ -20,4 +20,10 @@ Anforderungen zum Abschnitt „Danach“ des vorigen Plans. Der Stand nennt ihn,
 Kriterium der aktuellen Etappe ohne Akzeptanztest ist (`rueckverfolgung.py` kennt die
 Zuordnung), und den Planer, solange ein Item des Plans keine Kriterien-ID nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Übernommen. [Ablauf, Domänenphase](../../prozess/ablauf.md#domänenphase):
+Schritt 4 gilt in jedem Zyklus, Gegenstand ist ab Zyklus 2 der Abschnitt „Danach“ des
+vorigen Plans; Schritt 5 verlangt je Item ein Kriterium ohne Test. Den Stand baut der
+Regelumsetzer nach [99](99-standNenntAnforderungsautorJedenZyklus.md), mit beiden Fällen:
+vor dem Plan und bei einem Plan, dessen Items keins nennen. „Der aktuellen Etappe“ lasse ich
+weg: Die Zuordnung Kriterium → Etappe kennt kein Skript, und ein ungetestetes Kriterium einer
+anderen Etappe soll den Planer ebenso rufen. Wartet auf 99.

@@ -5,12 +5,17 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 1. Planer: Etappen aus dem Ziel; nur die aktuelle ausformuliert. Auslöser: keine Etappe.
 2. Architekt: Kritik an der aktuellen Etappe und der Reihenfolge, als Anliegen.
 3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
-4. Anforderungsautor: die erste Anforderung zur Etappe, Begriffe ins Glossar. Eine genügt.
+4. Anforderungsautor, in jedem Zyklus: Anforderungen zum nächsten Schnitt, in Zyklus 1 zur
+   Etappe, danach zum Abschnitt „Danach“ des vorigen Plans; Begriffe ins Glossar. Eine
+   genügt. Auslöser: kein Kriterium ohne Akzeptanztest.
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
    eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen. Jedes
    Item steht als Link `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme
    (Technikphase, Schritt 5). Mechanismus: `plan.py` (`itemsOhneLink`), `stand.py` nennt
-   den Planer, solange der Link fehlt.
+   den Planer, solange der Link fehlt. Jedes Item nennt Kriterien ohne Test (`AUF-1.4`)
+   oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
+   den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
+   Mechanismus für 4 und diesen Satz: nur Text (Anliegen 99).
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
 7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 

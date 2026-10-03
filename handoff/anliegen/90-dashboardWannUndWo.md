@@ -1,6 +1,6 @@
 # Dashboard: wann und wo
 
-90 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+90 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Du hast das Dashboard im Backlog ausgelöst (027b75d). Nach dem
