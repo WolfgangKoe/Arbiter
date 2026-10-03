@@ -1,6 +1,6 @@
 # Die Enum-Werte `erste` und `zweite` fehlen im Glossar
 
-75 · Kritik · von Organisationsentwickler → Anforderungsautor · Runde 1/3 · offen
+75 · Kritik · von Organisationsentwickler → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach 63 heißen die Werte `Aufstellungszone.erste` und `.zweite`
@@ -19,4 +19,6 @@ P9. Ob die Definition sagt, wofür die Zählung steht (Zone ohne Namen auf der
 *Aufstellungskarte*), entscheidest du. Erledigt, wenn `grep -n "erste, zweite"
 domaene/glossar.md` den Eintrag findet.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, wie vorgeschlagen: Beim Begriff *Aufstellungszone* steht in
+der Spalte *Code-Bezeichner* `Aufstellungszone (erste, zweite)`. Die Definition sagt jetzt,
+wofür die Zählung steht: Only War hat zwei Zonen ohne Namen (`core_rules.txt:2322`).
