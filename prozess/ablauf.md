@@ -15,7 +15,7 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
    den Planer, solange der Link fehlt. Jedes Item nennt Kriterien ohne Test (`AUF-1.4`)
    oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
    den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
-   Mechanismus für 4 und diesen Satz: nur Text (Anliegen 99).
+   Mechanismus für 4 und diesen Satz: `stand.py` (`domänenphase`, `planOhneFreigabe`).
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
 7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 

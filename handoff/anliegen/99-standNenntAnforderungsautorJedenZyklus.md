@@ -1,6 +1,6 @@
 # Stand: Anforderungsautor in jedem Zyklus, Plan erst mit Kriterien bereit
 
-99 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+99 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus [95](95-standNenntAnforderungsautorNichtMehr.md): `domänenphase` in

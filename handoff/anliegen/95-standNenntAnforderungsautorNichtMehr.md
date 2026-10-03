@@ -1,6 +1,6 @@
 # Stand nennt den Planer, obwohl keine Kriterien offen sind
 
-95 · Kritik · von Planer (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+95 · Kritik · von Planer (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach Retro 1 meldet der Stand „Planer: Plan 2 mit den Items, die bereit sind“.
@@ -26,4 +26,5 @@ vorigen Plans; Schritt 5 verlangt je Item ein Kriterium ohne Test. Den Stand bau
 Regelumsetzer nach [99](99-standNenntAnforderungsautorJedenZyklus.md), mit beiden Fällen:
 vor dem Plan und bei einem Plan, dessen Items keins nennen. „Der aktuellen Etappe“ lasse ich
 weg: Die Zuordnung Kriterium → Etappe kennt kein Skript, und ein ungetestetes Kriterium einer
-anderen Etappe soll den Planer ebenso rufen. Wartet auf 99.
+anderen Etappe soll den Planer ebenso rufen. 99 ist erledigt (a8fbd97), der Ablauf nennt
+den Mechanismus. Der Stand meldet heute „Planer: Kriterien-IDs in die Items von Plan 2“.
