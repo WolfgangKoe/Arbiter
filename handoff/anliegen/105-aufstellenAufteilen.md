@@ -1,6 +1,6 @@
 # Aufstellen aufteilen: Spielobjekte, Setzen, Bewegen
 
-105 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+105 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 Aus deiner Stellungnahme in [97](97-kritikAmZweckDerAufstellung.md) zu
