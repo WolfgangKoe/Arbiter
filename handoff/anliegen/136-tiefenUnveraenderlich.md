@@ -1,6 +1,6 @@
 # Ausgangslage.tiefen ist ein veränderliches dict in einem frozen Spielobjekt
 
-136 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+136 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 6566da4 (Kritik am Code), `Ausgangslage.tiefen` in

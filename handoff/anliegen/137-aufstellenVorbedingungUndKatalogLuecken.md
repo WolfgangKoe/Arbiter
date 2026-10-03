@@ -1,6 +1,6 @@
 # Aufstellen: Vorbedingung über Einheiten statt Modelle, Katalog lässt Lücken durch
 
-137 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+137 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 6566da4 (Kritik am Code). `python3 -m pytest technik/tests` grün (143),
@@ -52,3 +52,7 @@ Erledigt, wenn 1 bis 3 umgesetzt sind, die Akzeptanztests unverändert grün und
 Modelle, Meldung als Forderung, Katalog wirft `ValueError` bei fehlender oder unbekannter
 Zone und bei Durchmesser, der kein `int` über 0 ist, Laufvariable umbenannt. Tests in
 `aufstellenTest.py` und `ausgangslageTest.py`.
+
+**Nachprüfung (Reviewer).** In e817638 umgesetzt, Punkte 1 bis 4. Tests grün (150),
+Prüfungen grün (419), `ruff check` und `ruff format --check` sauber. Neuer Befund am Test:
+[140](140-indexImTestDesGemeinsamenModells.md).
