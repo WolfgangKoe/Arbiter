@@ -1,6 +1,6 @@
 # Sprung-Paket: gebaut in git oder vor jeder Installation gebaut
 
-143 · Fragen · von Regelumsetzer → Stakeholder · Runde 1/3 · offen
+143 · Fragen · von Regelumsetzer → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Sprung-Erweiterung ([124](124-sprungPerKlickErproben.md)) besteht aus
@@ -27,3 +27,7 @@ sie sind; der Koordinator committet sie dann.
 
 **F1 · .vsix in git?** Empfehlung: nein, nur Quelle, gebaut mit `baue.py`.
 Antwort: .
+
+**Stellungnahme.** Gegenstandslos: Der Stakeholder hat in [124](124-sprungPerKlickErproben.md)
+entschieden, die Erweiterung nicht zu behalten. Ordner, Paket und `.gitignore`-Zeile sind
+entfernt; die Frage nach dem Paket in git stellt sich nicht mehr. Ich setze `erledigt`.

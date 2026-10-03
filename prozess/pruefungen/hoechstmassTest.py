@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from agenten import kopfzeilen
-from pfade import etappenOrdner
+from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner
 
 wurzel = Path(__file__).resolve().parents[2]
 
@@ -36,12 +36,12 @@ def fälle():
         yield datei, zeichen(datei), grenze
     for datei in sorted((wurzel / ".claude" / "agents").glob("*.md")):
         yield datei, zeichen(datei), agentendefinition
-    for datei in sorted((wurzel / "handoff" / "anliegen").glob("*.md")):
+    for datei in sorted((wurzel / anliegenOrdner).glob("*.md")):
         yield datei, zeichen(datei), anliegen
     moderationsdatei = wurzel / "handoff" / "moderation.md"
     if moderationsdatei.is_file():
         yield moderationsdatei, zeichen(moderationsdatei), moderation
-    for datei in sorted((wurzel / "technik" / "tests" / "akzeptanz").rglob("*Test.py")):
+    for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
         yield datei, zeichen(datei), akzeptanztest
     for ordner in ("domaene", "technik", "prozess"):
         datei = wurzel / ordner / "CLAUDE.md"

@@ -20,7 +20,8 @@ def offeneItems(wurzel: Path) -> list[str]:
     plan = wurzel / "handoff" / "plan.md"
     if not plan.is_file():
         return []
-    links = re.findall(rf"\]\(\.\./{itemsOrdner}/([^)#\s]+\.md)", plan.read_text(encoding="utf-8"))
+    muster = rf"\]\(\.\./{re.escape(itemsOrdner)}/([^)#\s]+\.md)"
+    links = re.findall(muster, plan.read_text(encoding="utf-8"))
     return [name for name in links if (wurzel / itemsOrdner / name).is_file()]
 
 
