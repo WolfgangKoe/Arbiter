@@ -1,6 +1,6 @@
 # Aufstellungszone: die Fläche steht in Kommentaren statt in der Schnittstelle
 
-130 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+130 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code): `messen.ganzIn`, `Ausgangslage.tiefen`,

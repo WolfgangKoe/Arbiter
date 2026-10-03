@@ -60,11 +60,12 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **D2** Eine Handlung prüft erst alle Sperren, dann ändert sie den Zustand; so kann ein
   Übergehen die Prüfung überspringen und protokollieren. Prüft: je Handlung und Grund ein
   Akzeptanztest auf den unveränderten Zustand.
-- **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel. Den
-  Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über Properties ohne Setter
-  (`aufstellung.anDerReihe`) oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
-  `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung; der Rest nur
-  Text; Auslöser: `web/`, dann eine Prüfung „nur `_`-Felder zuweisen, Dataclasses `frozen`“.
+- **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel oder
+  `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
+  Properties ohne Setter (`aufstellung.anDerReihe`) oder Abfragen
+  (`aufstellung.gesetzt(modell)`); sonst umginge `modell.gesetzt = True` jede Sperre. Prüft:
+  Python wirft bei der Zuweisung; der Rest nur Text; Auslöser: `web/`, dann eine Prüfung
+  „nur `_`-Felder zuweisen, Dataclasses `frozen`“.
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
   einer Fläche. Die Baseform kennt nur `messen.py`. Prüft: nur Text; Auslöser: zweite

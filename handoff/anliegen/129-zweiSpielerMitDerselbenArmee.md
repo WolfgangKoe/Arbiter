@@ -1,6 +1,6 @@
 # Zwei Spieler mit derselben Armee
 
-129 · Kritik · von Fachkritiker (Domäne) → Implementierer · Runde 1/3 · angenommen
+129 · Kritik · von Fachkritiker (Domäne) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** OBJ-1.1 ([Spielobjekte](../../domaene/anforderungen/spielobjekte.md)): „Jeder der

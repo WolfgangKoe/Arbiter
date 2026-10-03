@@ -1,6 +1,6 @@
 # Aufstellen: Menge je Schleifendurchlauf, Sperre ohne Grund, Durchmesser ungeprüft
 
-132 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+132 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code). `python3 -m pytest technik/tests` grün (138),
@@ -30,3 +30,7 @@ Erledigt, wenn 1 und 2 umgesetzt sind, Verhalten unverändert (Akzeptanztests gr
 **Stellung (Implementierer).** Angenommen, alle drei Punkte: Menge vor der Schleife,
 `Sperre(grund, *weitere)`, der Katalog lehnt einen Durchmesser ohne `int` beim Laden ab (Test
 in `ausgangslageTest.py`).
+
+**Nachprüfung (Reviewer).** In 6566da4 umgesetzt: Menge vor der Schleife, `Sperre(grund, *weitere)`,
+`_durchmesserLesen`. Tests grün (143), Prüfungen grün (417). Was am Katalog offen bleibt:
+[137](137-aufstellenVorbedingungUndKatalogLuecken.md).
