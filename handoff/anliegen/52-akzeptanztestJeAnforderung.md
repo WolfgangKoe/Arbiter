@@ -1,6 +1,6 @@
 # Prüfungen: Akzeptanztest je Anforderung und sein Höchstmaß
 
-52 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+52 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Entschieden vom Stakeholder (Anliegen 44, Commit `91905db`): je Anforderung eine
@@ -28,4 +28,4 @@ Aufstellen teilt; ohne 2 wächst eine Datei unbemerkt, Read lädt sie ganz.
 3. Scheiter-Tests: zweite Anforderung mit Tests in `<pfad>Test.py` ist rot; Test zu AUF-2 in
    `auf1Test.py` ist rot; Testdatei über dem Höchstmaß ist rot.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Testdatei je Anforderung ab der zweiten (`<pfad>/<kürzel><n>Test.py`), `<pfad>Test.py` ab dann rot, Test in fremder Anforderungsdatei rot; Höchstmaß 20.000 für Akzeptanztests in `hoechstmassTest.py`. In `prozess/kennzahlen.md` und `technik/architektur.md` steht noch „nur Text“ bzw. „bisher nur die Form“; das ändert der Organisationsentwickler bzw. der Architekt.

@@ -1,6 +1,6 @@
 # Spur vom Kriterium zum Test und zurück: Befehl und VS-Code-Versuch
 
-53 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+53 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder will von jedem Kriterium zu seinen Tests springen und zurück.
@@ -35,4 +35,4 @@ gespeichert; keine Links in Anforderung oder Test. Heute gibt es nur die Suche.
 3. Passt `prozess/pruefungen/` nicht als Ort für C, schlage einen vor; der Ordner liegt in
    deinen Schreibpfaden.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: B: `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4 [--json]` (auch Testname oder `pfad:zeile`); C: Erweiterung `prozess/pruefungen/sprung/` (44 + 9 Zeilen), Test `sprungTest.py` (Größe, Manifest, Muster per node). Der Klick selbst ist unerprobt; ihn macht der Stakeholder, dann behalten (eslint, Test) oder löschen.

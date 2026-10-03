@@ -1,6 +1,6 @@
 # cSpell meldet Markdown trotz Einstellung
 
-24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 Bearbeitung in der Prozessphase von Zyklus 1.
 
@@ -17,4 +17,4 @@ der Änderung, in VS-Code-Sitzungen in jeder Phase.
 Einstellung) und einen Scheiter-Test, der die Wirkung zeigt, etwa über die Meldungen, die ein
 `PostToolUse`-Hook nach einem Edit sieht.
 
-**Stellungnahme.**
+**Stellungnahme.** Ursache: `cSpell.enableFiletypes` ist in der Erweiterung 4.9.3 veraltet, der Standard von `cSpell.enabledFileTypes` hat `markdown: true`. Jetzt `"cSpell.enabledFileTypes": {"markdown": false}` in `.vscode/settings.json`, `cspellTest.py` prüft Schlüssel und Fehlen des alten. Die Wirkung beim nächsten Edit einer Markdown-Datei kann ich hier nicht messen; bleibt sie aus, bitte neu öffnen.

@@ -1,6 +1,6 @@
 # Stand: Plan ohne Item-Link überspringt die Abnahme
 
-76 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+76 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [`stand.py`](../../prozess/pruefungen/stand.py) (`offeneItems`) erkennt ein Item
@@ -25,4 +25,4 @@ nicht um die Datei. Scheiter-Tests:
 Eintrag in `prozess/regeln.md`; dann ersetze ich in `ablauf.md`, Domänenphase Schritt 5,
 „nur Text“.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `plan.py` (`itemsOhneLink`) und `stand.py`: Plan mit Abschnitt `## Item(s)` ohne Link auf `domaene/items/` und ohne Freigabe nennt „Planer: Items von Plan n als Link auf domaene/items/“. Scheiter-Tests 1 und 2 in `standTest.py`; Eintrag in `prozess/regeln.md`.

@@ -25,31 +25,52 @@ def complexipyAufrufen(*pfade: str) -> subprocess.CompletedProcess:
     )
 
 
-def testComplexipyMeldetEineTiefVerschachtelteFunktion(tmp_path):
-    probe = tmp_path / "probe.py"
-    probe.write_text(
-        "def suchen(a):\n"
+def funktionMitKomplexität(einfacheFälle: int) -> str:
+    """Kognitive Komplexität 12 plus ein Punkt je einfachem Fall auf oberster Ebene."""
+    return (
+        "def probe(a, b, c, d):\n"
         "    for i in a:\n"
         "        if i:\n"
         "            for j in i:\n"
         "                if j:\n"
-        "                    for k in j:\n"
-        "                        if k:\n"
-        "                            while k:\n"
-        "                                if k > 1:\n"
-        "                                    return 1\n"
-        "    return 0\n"
+        "                    pass\n"
+        "    if c and d:\n"
+        "        pass\n"
+        + "    if b:\n        pass\n" * einfacheFälle
+        + "    return 0\n"
     )
-    assert complexipyAufrufen(str(probe)).returncode != 0
 
 
-def testRuffMeldetEineFunktionMitZuvielenFällen(tmp_path):
-    fälle = "".join(f"    if wert == {zahl}:\n        return {zahl}\n" for zahl in range(13))
+def funktionMitFällen(zahl: int) -> str:
+    return "def probe(wert):\n" + "    if wert:\n        return 1\n" * zahl + "    return 0\n"
+
+
+def complexipyUrteil(tmp_path, einfacheFälle: int) -> subprocess.CompletedProcess:
     probe = tmp_path / "probe.py"
-    probe.write_text(f"def wählen(wert):\n{fälle}    return 0\n")
-    ergebnis = ruffAufrufen("--select", "PLR0912", str(probe))
-    assert ergebnis.returncode != 0
-    assert "PLR0912" in ergebnis.stdout
+    probe.write_text(funktionMitKomplexität(einfacheFälle))
+    return complexipyAufrufen(str(probe))
+
+
+def testComplexipyLässtKomplexität15Zu(tmp_path):
+    assert complexipyUrteil(tmp_path, 3).returncode == 0
+
+
+def testComplexipyMeldetKomplexität16(tmp_path):
+    assert complexipyUrteil(tmp_path, 4).returncode != 0
+
+
+def meldetFälle(tmp_path, zahl: int) -> bool:
+    probe = tmp_path / "probe.py"
+    probe.write_text(funktionMitFällen(zahl))
+    return "PLR0912" in ruffAufrufen(str(probe)).stdout
+
+
+def testRuffLässtZwölfFälleZu(tmp_path):
+    assert not meldetFälle(tmp_path, 12)
+
+
+def testRuffMeldetDreizehnFälle(tmp_path):
+    assert meldetFälle(tmp_path, 13)
 
 
 def testDerCodeLiegtUnterDerKomplexitätsschwelle():

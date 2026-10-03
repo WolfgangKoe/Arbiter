@@ -1,6 +1,6 @@
 # Rückverfolgung: Ein neues Kriterium wartet auf den Test
 
-62 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+62 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Neue Kriterien bekommen die nächste freie Nummer
@@ -26,4 +26,4 @@ Scheiter-Tests:
 
 Die Zeile „Kriterium ↔ Test“ in `prozess/regeln.md` nennt danach, was wartet.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `rueckverfolgung.py` meldet ein Kriterium ohne Test erst als Verstoß, wenn ein offenes Item des Plans mit `Freigabe Plan <n>` es oder seine Anforderung nennt (`plan.py`); vorher nennt der Stand es („wartet auf den Testautor“). Scheiter-Tests 1 bis 3 in `rueckverfolgungTest.py`, `standTest.py`.

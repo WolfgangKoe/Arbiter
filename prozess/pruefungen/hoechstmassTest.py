@@ -15,6 +15,8 @@ beschreibung = 150
 rootClaudeMitZiel = 4000
 ordnerClaude = 1500
 anliegen = 4000
+moderation = 4000
+akzeptanztest = 20000
 rollenordner = wurzel / ".claude" / "agents"
 
 
@@ -35,6 +37,11 @@ def fälle():
         yield datei, zeichen(datei), agentendefinition
     for datei in sorted((wurzel / "handoff" / "anliegen").glob("*.md")):
         yield datei, zeichen(datei), anliegen
+    moderationsdatei = wurzel / "handoff" / "moderation.md"
+    if moderationsdatei.is_file():
+        yield moderationsdatei, zeichen(moderationsdatei), moderation
+    for datei in sorted((wurzel / "technik" / "tests" / "akzeptanz").rglob("*Test.py")):
+        yield datei, zeichen(datei), akzeptanztest
     for ordner in ("domaene", "technik", "prozess"):
         datei = wurzel / ordner / "CLAUDE.md"
         if datei.is_file():
@@ -67,3 +74,15 @@ def testZuLangesAnliegenWärRot(tmp_path):
     zuLang = tmp_path / "99-zuLang.md"
     zuLang.write_text("x" * (anliegen + 1), encoding="utf-8")
     assert überschreitet(zuLang, anliegen)
+
+
+def testZuLangeModerationWärRot(tmp_path):
+    zuLang = tmp_path / "moderation.md"
+    zuLang.write_text("x" * (moderation + 1), encoding="utf-8")
+    assert überschreitet(zuLang, moderation)
+
+
+def testZuLangerAkzeptanztestWärRot(tmp_path):
+    zuLang = tmp_path / "aufstellenTest.py"
+    zuLang.write_text("x" * (akzeptanztest + 1), encoding="utf-8")
+    assert überschreitet(zuLang, akzeptanztest)

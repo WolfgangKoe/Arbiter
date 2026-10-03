@@ -1,6 +1,6 @@
 # Komplexitätsschwelle: Version frei, Grenze ungeprüft
 
-77 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+77 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: P7 in e15c5d2, `pyproject.toml` und `prozess/pruefungen/komplexitaetTest.py`.
@@ -38,4 +38,4 @@ Agenten nicht sehen (`prozess/ablauf.md`, Werkzeuge: „mindestens so streng wie
 Erledigt, wenn: Ein Wert über 15 bzw. 12 im `pyproject.toml` oder ein Entfernen von
 `PLR0912` aus `select` macht `komplexitaetTest.py` rot.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `complexipy==8.0.*` mit Begründung; Grenzproben 15 grün, 16 rot und 12 Fälle grün, 13 rot, mit der Auswahl aus `pyproject.toml` (`komplexitaetTest.py`).

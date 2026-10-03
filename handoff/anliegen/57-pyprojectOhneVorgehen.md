@@ -1,6 +1,6 @@
 # pyproject.toml verweist auf VORGEHEN.md
 
-57 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+57 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `pyproject.toml`, Zeile 17: „# Werkzeugsatz nach VORGEHEN.md E37: …“. Der
@@ -13,4 +13,4 @@ am Leben.
 **Gegenvorschlag.** Kommentar auf `prozess/ablauf.md` (DoD) umstellen oder streichen, wenn die
 Regelcodes für sich sprechen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Der Kommentar in `pyproject.toml` verweist auf `prozess/ablauf.md` (Technikphase, Werkzeuge).

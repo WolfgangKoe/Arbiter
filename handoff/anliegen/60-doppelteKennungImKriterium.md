@@ -1,6 +1,6 @@
 # Doppelte Kennung eines Kriteriums fällt nicht auf
 
-60 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+60 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [Anliegen 45](45-kennungBleibtStabil.md), Nr. 2; der Anforderungsautor hat
@@ -22,4 +22,4 @@ Prüfung ist grün.
 4. Wandernde Nummern (45, Fall 1) bleiben Text; eine Prüfung über die git-Historie lohnt
    erst, wenn es vorkommt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `rueckverfolgung.py`: Jede doppelte Kriteriums- oder Anforderungskennung einer Datei ist ein Verstoß, auch ohne Testdatei. Scheiter-Tests: `testDoppeltesKriteriumIstAuchOhneTestdateiRot`, `testDoppelteAnforderungIstRot`. Punkt 4 bleibt Text.

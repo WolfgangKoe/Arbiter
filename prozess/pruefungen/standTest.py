@@ -229,7 +229,7 @@ def testStandMeldetCodeCommitOhneKritik(repo):
         ["git", "rev-parse", "--short=7", "HEAD"], cwd=repo.wurzel, capture_output=True, text=True
     ).stdout.strip()
     assert f"Kritik am Code fällig: Reviewer ({kennung})" in stand(repo.wurzel)
-    repo.git("commit", "-q", "--allow-empty", "-m", f"Reviewer: Kritik {kennung} ohne Befund")
+    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {kennung} ohne Befund")
     assert "Kritik am Code" not in stand(repo.wurzel)
 
 
@@ -243,3 +243,70 @@ def testDerPostToolUseHookAufAgentMeldetDenStand():
         if eintrag.get("matcher") == "Agent" and "stand.py" in str(eintrag)
     ]
     assert treffer
+
+
+def testStandNenntEinKriteriumOhneTestAlsWartendAufDenTestautor(repo):
+    text = "### AU-1 · A\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n"
+    repo.datei("domaene/anforderungen/aufstellung.md", text)
+    repo.datei("technik/tests/akzeptanz/aufstellungTest.py", "def testAu1_1Eins(): ...\n")
+    assert "AU-1.2 wartet auf den Testautor" in stand(repo.wurzel)
+
+
+def planOhneFreigabe(repo, itemzeile):
+    etappe(repo)
+    repo.freigabe("Etappe", 1)
+    anforderung(repo)
+    repo.datei("handoff/plan.md", f"# Plan · Zyklus 1\n\n## Item\n{itemzeile}\n")
+
+
+def testPlanMitItemOhneLinkVerlangtDenLinkVomPlaner(repo):
+    planOhneFreigabe(repo, "1. *Reihenfolge der Aufstellung*")
+    assert lage(repo.wurzel) == (
+        1,
+        "Domänenphase",
+        "Planer: Items von Plan 1 als Link auf domaene/items/",
+    )
+
+
+def testPlanMitLinkAufEinGelöschtesItemWartetAufKritikUndFreigabe(repo):
+    planOhneFreigabe(repo, "1. [Probe](../domaene/items/probe.md)")
+    assert lage(repo.wurzel) == (
+        1,
+        "Domänenphase",
+        "Plan 1 wartet auf Kritik (Architekt) und Freigabe",
+    )
+
+
+def kurzerHashVon(repo):
+    return subprocess.run(
+        ["git", "rev-parse", "--short=7", "HEAD"], cwd=repo.wurzel, capture_output=True, text=True
+    ).stdout.strip()
+
+
+def testStandNenntAlleKritikerDerGetroffenenPfade(repo):
+    for pfad in ("prozess/pruefungen/probe.py", "pyproject.toml"):
+        (repo.wurzel / pfad).parent.mkdir(parents=True, exist_ok=True)
+        (repo.wurzel / pfad).write_text("x = 1\n", encoding="utf-8")
+    repo.git("add", "-A")
+    repo.git("commit", "-qm", "Regelumsetzer: Probe")
+    assert "Kritik am Code fällig: Reviewer und Architekt" in stand(repo.wurzel)
+
+
+def testEinCodeCommitMitKritikImBetreffWirdTrotzdemGemeldet(repo):
+    repo.datei("technik/arbiter/probe.py", "x = 1\n")
+    erster = kurzerHashVon(repo)
+    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {erster} ohne Befund")
+    (repo.wurzel / "technik/arbiter/probe2.py").write_text("y = 2\n", encoding="utf-8")
+    repo.git("add", "-A")
+    repo.git("commit", "-qm", f"Implementierer: Befund aus Kritik {erster}")
+    zweiter = kurzerHashVon(repo)
+    assert f"Kritik am Code fällig: Reviewer ({zweiter})" in stand(repo.wurzel)
+
+
+def testEinKritikCommitDecktMehrereHashes(repo):
+    repo.datei("technik/arbiter/probe.py", "x = 1\n")
+    erster = kurzerHashVon(repo)
+    repo.datei("technik/arbiter/probe2.py", "y = 2\n")
+    zweiter = kurzerHashVon(repo)
+    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {erster} {zweiter}")
+    assert "Kritik am Code" not in stand(repo.wurzel)

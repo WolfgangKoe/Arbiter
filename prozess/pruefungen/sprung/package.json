@@ -1,0 +1,9 @@
+{
+  "name": "arbiter-sprung",
+  "displayName": "Arbiter: Sprung zwischen Kriterium und Test",
+  "version": "0.0.1",
+  "publisher": "arbiter",
+  "engines": { "vscode": "^1.90.0" },
+  "main": "./extension.js",
+  "activationEvents": ["onLanguage:markdown", "onLanguage:python"]
+}

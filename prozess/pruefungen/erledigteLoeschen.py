@@ -11,6 +11,7 @@ from pathlib import Path
 
 from agenten import istNurLesbar, projektordner
 from anliegen import anliegenDateien, kopfLesen
+from gitAufruf import gitAusgabe
 
 link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
 suchOrdner = ("domaene", "technik", "prozess", "handoff", ".claude", "doku")
@@ -45,11 +46,18 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 
 
 def erledigteLöschen(wurzel: Path) -> list[str]:
-    """Löscht die erledigten Anliegen und nennt deren Dateinamen."""
+    """Löscht die erledigten Anliegen, die git kennt, und nennt deren Dateinamen.
+
+    Eine Datei, die git nicht kennt, bleibt liegen: Sonst bewahrte git ihre Begründung nicht auf
+    und ihre Nummer gälte als frei. Der nächste Lauf nach dem Commit löscht sie.
+    """
     gelöscht: dict[Path, str] = {}
+    bekannt = set(gitAusgabe(wurzel, "ls-files", "--", "handoff/anliegen").splitlines())
     for datei in anliegenDateien(wurzel):
         gelesen = kopfLesen(datei)
-        if gelesen is not None and gelesen.status == "erledigt":
+        if gelesen is None or gelesen.status != "erledigt":
+            continue
+        if datei.relative_to(wurzel).as_posix() in bekannt:
             datei.unlink()
             gelöscht[datei.resolve()] = f"{gelesen.nummer:02d}"
     if gelöscht:

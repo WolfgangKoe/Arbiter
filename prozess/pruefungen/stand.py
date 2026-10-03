@@ -19,26 +19,11 @@ from agenten import projektordner
 from anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from belegung import belegungAusTranskript, punkte, warnschwelle
 from codekritik import fälligeKritikAlsText
-from gitAufruf import gitAusgabe
+from gitAufruf import freigabeCommit, gitAusgabe
+from plan import itemsOhneLink, offeneItems, zyklus
+from rueckverfolgung import wartendeAlsText
 
 rollenlaufKennzahl = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
-
-
-def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
-    """Der Commit mit der Betreffzeile `Freigabe <gegenstand> <nummer>`, sonst `None`."""
-    for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
-        kennung, _, betreff = zeile.partition(" ")
-        if betreff == f"Freigabe {gegenstand} {nummer}":
-            return kennung
-    return None
-
-
-def zyklus(datei: Path) -> int | None:
-    if not datei.is_file():
-        return None
-    ersteZeile = datei.read_text(encoding="utf-8").partition("\n")[0]
-    treffer = re.search(r"Zyklus\s+(\d+)", ersteZeile)
-    return int(treffer.group(1)) if treffer else None
 
 
 def aktuelleEtappe(wurzel: Path) -> tuple[int, str] | None:
@@ -65,18 +50,6 @@ def akzeptanztestsSeit(wurzel: Path, kennung: str) -> bool:
     return bool(gitAusgabe(wurzel, "log", "--format=%H", f"{kennung}..HEAD", "--", pfad))
 
 
-def offeneItems(wurzel: Path) -> list[str]:
-    """Items des Plans: Links aus `handoff/plan.md` auf `domaene/items/<id>.md`.
-
-    Offen ist ein Item, solange seine Datei existiert.
-    """
-    plan = wurzel / "handoff" / "plan.md"
-    if not plan.is_file():
-        return []
-    links = re.findall(r"\]\(\.\./domaene/items/([^)#\s]+\.md)", plan.read_text(encoding="utf-8"))
-    return [name for name in links if (wurzel / "domaene" / "items" / name).is_file()]
-
-
 def domänenphase(wurzel: Path, zyklusNummer: int) -> str:
     etappe = aktuelleEtappe(wurzel)
     if etappe is None:
@@ -98,6 +71,8 @@ def lage(wurzel: Path) -> tuple[int, str, str]:
     if plan is None:
         return 1, "Domänenphase", domänenphase(wurzel, 1)
     freigabePlan = freigabeCommit(wurzel, "Plan", plan)
+    if freigabePlan is None and itemsOhneLink(wurzel):
+        return plan, "Domänenphase", f"Planer: Items von Plan {plan} als Link auf domaene/items/"
     if freigabePlan is None:
         return plan, "Domänenphase", f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
     items = offeneItems(wurzel)
@@ -161,6 +136,7 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
         dranAlsText(wurzel),
         nachprüfungenAlsText(wurzel),
+        wartendeAlsText(wurzel),
         fälligeKritikAlsText(wurzel),
         f"{len(uncommittet)} uncommittete Dateien",
     ]

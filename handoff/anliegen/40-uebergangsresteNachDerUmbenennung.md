@@ -1,6 +1,6 @@
 # Übergangsreste nach der Umbenennung der AUF-1-Tests
 
-40 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+40 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit `test_auf_1.py` `aufstellenTest.py` heißt, gibt es im Repo keine Datei
@@ -18,4 +18,4 @@ neue `test_x.py` würde still gesammelt statt nur von `benennung.py` gemeldet. D
 Einträge aus `benennungRueckstand.txt` löschen. Ob die Datei samt `rückstand()` bleibt, bis
 der nächste Altbestand kommt, entscheidest du. Wartet bis zur Prozessphase, blockiert nichts.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `python_files = ["*Test.py"]` ohne Übergangskommentar, `benennungRueckstand.txt` ohne Einträge (a969610); die Datei samt `rückstand()` bleibt bis zum nächsten Altbestand. Nachprüfen: `pyproject.toml`.
