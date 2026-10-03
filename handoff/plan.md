@@ -50,8 +50,8 @@ An dich:
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben, Runde 3.
 
 Zwischen Rollen:
-- [108](anliegen/108-auf35UndNahkampfreichweiteInPlan2.md),
-  [109](anliegen/109-mehrereGruendeSchonInItem2.md),
-  [110](anliegen/110-zonenbandZuDenSperren.md),
-  [112](anliegen/112-obj1NurNochEinKriterium.md): angenommen und eingearbeitet, Nachprüfung
+- Anliegen 108,
+  Anliegen 109,
+  Anliegen 110,
+  Anliegen 112: angenommen und eingearbeitet, Nachprüfung
   durch Anforderungsautor und Architekt.
