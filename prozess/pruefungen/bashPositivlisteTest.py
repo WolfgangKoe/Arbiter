@@ -81,7 +81,7 @@ def testKoordinatorLiestMitGitShowNurKurzeDateien(repo):
         pytest.param("git status --short && git log --oneline -5", id="lesen"),
         pytest.param("cd /repo; git diff HEAD --stat", id="nach cd"),
         pytest.param("git -C /repo show 4542bd1 --stat", id="mit -C"),
-        pytest.param("rm handoff/anliegen/08-x.md", id="Datei löschen"),
+        pytest.param("rm handoff/x.md", id="Datei löschen"),
         pytest.param('grep -rn "git commit" .', id="Text git commit"),
         pytest.param("cat ArbiterMap/CLAUDE.md VORGEHEN.md", id="nur lesbare Pfade lesen"),
         pytest.param("cp ArbiterMap/README.md technik/alt.md", id="aus ArbiterMap kopieren"),
@@ -135,3 +135,24 @@ def testStakeholderOhneRolleIstFrei():
 def testHeredocTextWirdEntferntAußerFürEineShell():
     assert "git" not in ohneHeredocText("cat > x <<'EOF'\ngit push\nEOF")
     assert "git push" in ohneHeredocText("bash <<EOF\ngit push\nEOF")
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param("echo x >> handoff/anliegen/12-probe.md", id="anhängen"),
+        pytest.param("sed -i s/offen/erledigt/ handoff/anliegen/12-probe.md", id="sed -i"),
+        pytest.param("rm handoff/anliegen/12-probe.md", id="löschen"),
+        pytest.param("cp x.md handoff/anliegen/99-neu.md", id="kopieren"),
+        pytest.param("tee handoff/anliegen/12-probe.md", id="tee"),
+        pytest.param(f"mv x.md {wurzel}/handoff/anliegen/99-neu.md", id="absoluter Pfad"),
+        pytest.param("cat > handoff/anliegen/99-neu.md <<EOF\n# Titel\nEOF", id="Heredoc"),
+    ],
+)
+def testKeineRolleSchreibtAnliegenPerBash(befehl):
+    assert gesperrt(befehl, rolle="regelumsetzer")
+
+
+def testAnliegenLesenPerBashBleibtErlaubt():
+    assert not gesperrt("cat handoff/anliegen/12-probe.md", rolle="regelumsetzer")
+    assert not gesperrt("grep -l offen handoff/anliegen/12-probe.md", rolle="regelumsetzer")

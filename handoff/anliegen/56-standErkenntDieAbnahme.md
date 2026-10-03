@@ -1,6 +1,6 @@
 # Stand: Abnahme vor dem Review
 
-56 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+56 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Anliegen 50](50-standUeberspringtFachkritik.md): Der Stand
@@ -28,4 +28,7 @@ Folge für Zyklus 1: Der Stand meldet wieder die Technikphase, bis der Fachkriti
 und der Planer das Item gelöscht hat. Die Regel trägst du in `prozess/regeln.md` ein; dann
 ersetze ich in `ablauf.md`, Technikphase Schritt 5, „nur Text“.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `stand.py` (`offeneItems`, `lage`) wie
+vorgeschlagen; Scheiter-Tests in `standTest.py`: `testSolangeEinItemOffenIstNenntDerStandDieAbnahmeAuchMitReview`,
+`testGelöschtesItemOhneReviewNenntDenReviewer`, `testGelöschtesItemMitReviewWechseltInDenProzess`.
+Ein Plan ohne Item-Link gilt als ohne offenes Item. Eintrag in `prozess/regeln.md`.

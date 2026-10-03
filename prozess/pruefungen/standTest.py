@@ -1,5 +1,6 @@
 import json
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -99,10 +100,43 @@ def testFreigabeDesPlansWechseltInDieTechnik(repo):
     )
 
 
-def testNachDenAkzeptanztestsIstDerImplementiererDran(repo):
+def planMitItem(repo):
+    etappe(repo)
+    repo.freigabe("Etappe", 1)
+    anforderung(repo)
+    repo.datei("domaene/items/probe.md", "# Probe\n")
+    repo.datei("handoff/plan.md", "# Plan · Zyklus 1\n\n1. [Probe](../domaene/items/probe.md)\n")
+    repo.freigabe("Plan", 1)
+    repo.datei("technik/tests/akzeptanz/auTest.py", "def testAu1_1Probe(): ...\n")
+
+
+def testSolangeEinItemOffenIstNenntDerStandDieAbnahmeAuchMitReview(repo):
+    planMitItem(repo)
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    phase, schritt = lage(repo.wurzel)[1:]
+    assert phase == "Technikphase"
+    assert "Fachkritiker: Abnahme" in schritt
+
+
+def testGelöschtesItemOhneReviewNenntDenReviewer(repo):
+    planMitItem(repo)
+    repo.git("rm", "-q", "domaene/items/probe.md")
+    repo.git("commit", "-qm", "Item gelöscht")
+    assert lage(repo.wurzel) == (1, "Technikphase", "Reviewer: Review 1")
+
+
+def testGelöschtesItemMitReviewWechseltInDenProzess(repo):
+    planMitItem(repo)
+    repo.git("rm", "-q", "domaene/items/probe.md")
+    repo.git("commit", "-qm", "Item gelöscht")
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    assert lage(repo.wurzel) == (1, "Prozessphase", "Organisationsentwickler: Retro 1")
+
+
+def testNachDenAkzeptanztestsOhneItemIstDerReviewerDran(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("technik/tests/akzeptanz/auTest.py", "def testAu1_1Probe(): ...\n")
-    assert lage(repo.wurzel)[2] == "Implementierer, dann Reviewer: Tests grün, Review 1"
+    assert lage(repo.wurzel)[2] == "Reviewer: Review 1"
 
 
 def testReviewWechseltInDenProzess(repo):
@@ -174,3 +208,38 @@ def testStandNenntFälligeNachprüfungenMitRolle(repo):
 def testStandOhneAngenommeneAnliegenNenntKeineNachprüfung(repo):
     anliegen(repo, "13", "offen")
     assert "Nachprüfung" not in stand(repo.wurzel)
+
+
+def testStandNenntJeOffenemAnliegenWerDranIst(repo):
+    anliegen(repo, "12", "offen", absender="Architekt", empfänger="Planer")
+    anliegen(repo, "13", "abgelehnt", absender="Architekt", empfänger="Planer")
+    anliegen(repo, "14", "eskaliert", absender="Architekt", empfänger="Planer")
+    assert "Dran: Architekt (13), Planer (12), Stakeholder (14)" in stand(repo.wurzel)
+
+
+def testWartetAufÄndertNichtsAmDran(repo):
+    kopf = "15 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
+    repo.datei("handoff/anliegen/15-probe.md", f"# Probe\n\n{kopf}\n\nwartet auf 16\n")
+    assert "Dran: Planer (15)" in stand(repo.wurzel)
+
+
+def testStandMeldetCodeCommitOhneKritik(repo):
+    repo.datei("prozess/pruefungen/probe.py", "x = 1\n")
+    kennung = subprocess.run(
+        ["git", "rev-parse", "--short=7", "HEAD"], cwd=repo.wurzel, capture_output=True, text=True
+    ).stdout.strip()
+    assert f"Kritik am Code fällig: Reviewer ({kennung})" in stand(repo.wurzel)
+    repo.git("commit", "-q", "--allow-empty", "-m", f"Reviewer: Kritik {kennung} ohne Befund")
+    assert "Kritik am Code" not in stand(repo.wurzel)
+
+
+def testDerPostToolUseHookAufAgentMeldetDenStand():
+    einstellungen = json.loads(
+        (Path(__file__).parents[2] / ".claude" / "settings.json").read_text(encoding="utf-8")
+    )
+    treffer = [
+        eintrag
+        for eintrag in einstellungen["hooks"]["PostToolUse"]
+        if eintrag.get("matcher") == "Agent" and "stand.py" in str(eintrag)
+    ]
+    assert treffer

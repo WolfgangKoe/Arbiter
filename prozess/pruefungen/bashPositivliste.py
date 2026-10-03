@@ -4,19 +4,22 @@ Berechtigungsregeln reichen nicht: Ohne Write hat ein Agent in der Probe per
 `echo > datei` geschrieben. Für den Koordinator sind Verkettung, Umleitung und
 Befehlsersetzung gesperrt. Committen ist allein Sache des Koordinators; in Zyklus 1 hatten
 Planer und Architekt selbst committet. `git show` darf der Koordinator nur mit `--stat` oder
-für kurze Dateien (`lesegrenze.py`). Rollen ändern nichts, was `agenten.nurLesbar` nennt.
+für kurze Dateien (`lesegrenze.py`). Rollen ändern nichts, was `agenten.nurLesbar` nennt,
+und kein Anliegen: dort gelten nur Write und Edit.
 """
 
 import json
 import re
 import shlex
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 from agenten import istNurLesbar, projektordner
 from lesegrenze import gitShowZulässig
 
 geprüfteRolle = "koordinator"
+anliegenOrdner = "handoff/anliegen/"
 
 erlaubt = (
     "git status",
@@ -38,14 +41,37 @@ trennOperatoren = {";", "&", "&&", "|", "||", "(", ")"}
 umleitungen = {">", ">>", ">|", "&>"}
 
 gitLesend = (
-    "status", "log", "diff", "show", "grep", "ls-files", "ls-tree", "blame",
-    "rev-parse", "shortlog", "cat-file", "describe",
+    "status",
+    "log",
+    "diff",
+    "show",
+    "grep",
+    "ls-files",
+    "ls-tree",
+    "blame",
+    "rev-parse",
+    "shortlog",
+    "cat-file",
+    "describe",
 )
 gitOptionenMitWert = ("-C", "-c", "--git-dir", "--work-tree")
 
 # Befehle, die jedes Pfadargument ändern; bei Kopierbefehlen zählt nur das Ziel.
-ändernAlle = {"rm", "unlink", "shred", "truncate", "touch", "tee", "chmod", "chown", "mkdir",
-              "rmdir", "patch", "dd", "mv"}
+ändernAlle = {
+    "rm",
+    "unlink",
+    "shred",
+    "truncate",
+    "touch",
+    "tee",
+    "chmod",
+    "chown",
+    "mkdir",
+    "rmdir",
+    "patch",
+    "dd",
+    "mv",
+}
 ändernZiel = {"cp", "ln", "rsync", "install"}
 
 
@@ -130,8 +156,12 @@ def gitUnterbefehle(befehl: str) -> list[str]:
     ]
 
 
-def meintNurLesbares(wort: str, wurzel: Path) -> bool:
-    """Ob ein Pfadwort auf einen nur lesbaren Pfad zeigt (relativ, absolut oder mit `..`)."""
+def istAnliegen(relativerPfad: str) -> bool:
+    return relativerPfad.startswith(anliegenOrdner)
+
+
+def meintPfad(wort: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
+    """Ob ein Pfadwort auf einen gesperrten Pfad zeigt (relativ, absolut oder mit `..`)."""
     pfad = wort.split("=", 1)[-1] if wort.startswith(("of=", "--file=")) else wort
     if not pfad or pfad.startswith("-"):
         return False
@@ -140,11 +170,11 @@ def meintNurLesbares(wort: str, wurzel: Path) -> bool:
         relativ = absolut.resolve().relative_to(wurzel.resolve()).as_posix()
     except ValueError:
         return False
-    return istNurLesbar(relativ)
+    return gesperrt(relativ)
 
 
-def ändertNurLesbares(befehl: str, wurzel: Path) -> bool:
-    """Heuristik für Bash: Umleitung, rm, mv, cp (Ziel), sed -i auf einen nur lesbaren Pfad."""
+def ändertPfad(befehl: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
+    """Heuristik für Bash: Umleitung, rm, mv, cp (Ziel), sed -i auf einen gesperrten Pfad."""
     teile = zerlegen(befehl.replace("\n", " ; "))
     if teile is None:
         return False
@@ -156,25 +186,25 @@ def ändertNurLesbares(befehl: str, wurzel: Path) -> bool:
             segmente.append(segment)
         elif teil in umleitungen:
             ziel = teile[stelle + 1] if stelle + 1 < len(teile) else ""
-            if meintNurLesbares(ziel, wurzel):
+            if meintPfad(ziel, wurzel, gesperrt):
                 return True
         else:
             segment.append(teil)
-    return any(segmentÄndert(wörterDesSegments, wurzel) for wörterDesSegments in segmente)
+    return any(segmentÄndert(wörterDesSegments, wurzel, gesperrt) for wörterDesSegments in segmente)
 
 
-def segmentÄndert(segment: list[str], wurzel: Path) -> bool:
+def segmentÄndert(segment: list[str], wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
     if not segment:
         return False
     befehl, *argumente = segment
     name = Path(befehl).name
     pfade = [argument for argument in argumente if not argument.startswith("-")]
     if name in ändernAlle:
-        return any(meintNurLesbares(argument, wurzel) for argument in argumente)
+        return any(meintPfad(argument, wurzel, gesperrt) for argument in argumente)
     if name in ändernZiel:
-        return bool(pfade) and meintNurLesbares(pfade[-1], wurzel)
+        return bool(pfade) and meintPfad(pfade[-1], wurzel, gesperrt)
     if name == "sed" and any(argument.startswith(("-i", "--in-place")) for argument in argumente):
-        return any(meintNurLesbares(argument, wurzel) for argument in pfade)
+        return any(meintPfad(argument, wurzel, gesperrt) for argument in pfade)
     return False
 
 
@@ -203,10 +233,15 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
             "4.000 Zeichen. Andere Arbeit beauftragst du bei einer Rolle."
         )
     befehl = ohneHeredocText(befehl)
-    if ändertNurLesbares(befehl, wurzel):
+    if ändertPfad(befehl, wurzel, istNurLesbar):
         return ablehnen(
             "Dieser Pfad ist nur lesbar, für alle Rollen: VORGEHEN.md, "
             "handoff/kritik-entwickler.md, Arbiter/, ArbiterMap/. Löschen tut nur der Stakeholder."
+        )
+    if ändertPfad(befehl, wurzel, istAnliegen):
+        return ablehnen(
+            "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
+            "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen)."
         )
     schreibend = [name for name in gitUnterbefehle(befehl) if name not in gitLesend]
     if not schreibend:

@@ -1,4 +1,7 @@
-"""Hook `SessionStart`: Stand in einer Zeile, mit dem nächsten Schritt. Kein Briefing.
+"""Hooks `SessionStart` und `PostToolUse` (auf `Agent`): Stand in einer Zeile.
+
+Er nennt den nächsten Schritt, kein Briefing. Nach jedem Rollenlauf meldet derselbe Stand,
+wer dran ist und welche Kritik am Code fällig ist.
 
 Jede Phase ist eine feste Folge von Artefakten; der Stand nennt das erste, das fehlt.
 Übergänge: Domäne → Technik mit dem Commit `Freigabe Plan <n>`, Technik → Prozess mit
@@ -9,21 +12,16 @@ Die aktuelle Etappe ist die nach Namen erste Datei `domaene/etappen/*.md` (`# Et
 
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
 from agenten import projektordner
-from anliegen import anliegenDateien, nachprüfungenAlsText
+from anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from belegung import belegungAusTranskript, punkte, warnschwelle
+from codekritik import fälligeKritikAlsText
+from gitAufruf import gitAusgabe
 
 rollenlaufKennzahl = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
-
-
-def gitAusgabe(wurzel: Path, *argumente: str) -> str:
-    return subprocess.run(
-        ["git", *argumente], cwd=wurzel, capture_output=True, text=True, check=False
-    ).stdout
 
 
 def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
@@ -67,6 +65,18 @@ def akzeptanztestsSeit(wurzel: Path, kennung: str) -> bool:
     return bool(gitAusgabe(wurzel, "log", "--format=%H", f"{kennung}..HEAD", "--", pfad))
 
 
+def offeneItems(wurzel: Path) -> list[str]:
+    """Items des Plans: Links aus `handoff/plan.md` auf `domaene/items/<id>.md`.
+
+    Offen ist ein Item, solange seine Datei existiert.
+    """
+    plan = wurzel / "handoff" / "plan.md"
+    if not plan.is_file():
+        return []
+    links = re.findall(r"\]\(\.\./domaene/items/([^)#\s]+\.md)", plan.read_text(encoding="utf-8"))
+    return [name for name in links if (wurzel / "domaene" / "items" / name).is_file()]
+
+
 def domänenphase(wurzel: Path, zyklusNummer: int) -> str:
     etappe = aktuelleEtappe(wurzel)
     if etappe is None:
@@ -90,10 +100,18 @@ def lage(wurzel: Path) -> tuple[int, str, str]:
     freigabePlan = freigabeCommit(wurzel, "Plan", plan)
     if freigabePlan is None:
         return plan, "Domänenphase", f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
+    items = offeneItems(wurzel)
+    if (items or review != plan) and not akzeptanztestsSeit(wurzel, freigabePlan):
+        return plan, "Technikphase", f"Testautor: Akzeptanztests zu den Items von Plan {plan}"
+    if items:
+        return (
+            plan,
+            "Technikphase",
+            "Implementierer und Reviewer, dann Fachkritiker: Abnahme, "
+            f"Planer löscht das Item (Items von Plan {plan})",
+        )
     if review != plan:
-        if not akzeptanztestsSeit(wurzel, freigabePlan):
-            return plan, "Technikphase", f"Testautor: Akzeptanztests zu den Items von Plan {plan}"
-        return plan, "Technikphase", f"Implementierer, dann Reviewer: Tests grün, Review {plan}"
+        return plan, "Technikphase", f"Reviewer: Review {plan}"
     if retro != plan:
         return plan, "Prozessphase", f"Organisationsentwickler: Retro {plan}"
     if freigabeCommit(wurzel, "Retro", plan) is None:
@@ -141,7 +159,9 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
         belegungsText(transkript),
         kennzahlRollenläufe(wurzel, zyklusNummer, phase),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
+        dranAlsText(wurzel),
         nachprüfungenAlsText(wurzel),
+        fälligeKritikAlsText(wurzel),
         f"{len(uncommittet)} uncommittete Dateien",
     ]
     return "Stand: " + " · ".join(teil for teil in teile if teil)
@@ -154,7 +174,7 @@ if __name__ == "__main__":
         json.dumps(
             {
                 "hookSpecificOutput": {
-                    "hookEventName": "SessionStart",
+                    "hookEventName": eingabe.get("hook_event_name", "SessionStart"),
                     "additionalContext": stand(
                         projektordner(), Path(transkript) if transkript else None
                     ),

@@ -30,7 +30,10 @@ def testKopfWirdGelesen(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
     gelesen = kopfLesen(datei)
     assert (gelesen.nummer, gelesen.typ, gelesen.absender, gelesen.empfänger) == (
-        12, "Kritik", "Architekt", "Planer",
+        12,
+        "Kritik",
+        "Architekt",
+        "Planer",
     )
     assert (gelesen.runde, gelesen.status) == (1, "offen")
 
@@ -75,3 +78,36 @@ def testNachprüfungenNenntenDenAbsenderDerAngenommenenAnliegen(tmp_path):
 def testOhneAngenommeneAnliegenIstDerTextLeer(tmp_path):
     anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
     assert nachprüfungenAlsText(tmp_path) == ""
+
+
+def fragenAnStakeholder(tmp_path, körper, status="offen"):
+    kopf = f"12 · Fragen · von Planer → Stakeholder · Runde 1/3 · {status}"
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+    datei.write_text(f"# Titel\n\n{kopf}\n\n## Runde 1\n{körper}", encoding="utf-8")
+    return datei
+
+
+def testFrageOhneAntwortzeileIstRot(tmp_path):
+    datei = fragenAnStakeholder(
+        tmp_path, "**F1 · Eins.** Text.\n\n**F2 · Zwei.** Text.\nAntwort: .\n"
+    )
+    assert kopfVerstöße(datei, tmp_path) == ["Frage F1 hat keine Zeile `Antwort:`"]
+
+
+def testLetzteFrageOhneAntwortzeileIstRot(tmp_path):
+    datei = fragenAnStakeholder(
+        tmp_path, "**F1 · Eins.** Text.\nAntwort: .\n**F2 · Zwei.** Text.\n"
+    )
+    assert kopfVerstöße(datei, tmp_path) == ["Frage F2 hat keine Zeile `Antwort:`"]
+
+
+def testFragenMitAntwortzeileSindGrün(tmp_path):
+    datei = fragenAnStakeholder(
+        tmp_path, "**F1 · Eins.** Text.\nAntwort: .\n**F2 · Zwei.** T.\nAntwort: B\n"
+    )
+    assert kopfVerstöße(datei, tmp_path) == []
+
+
+def testBeantworteteFragenBrauchenKeineAntwortzeile(tmp_path):
+    datei = fragenAnStakeholder(tmp_path, "**F1 · Eins.** Text.\n", status="beantwortet")
+    assert kopfVerstöße(datei, tmp_path) == []

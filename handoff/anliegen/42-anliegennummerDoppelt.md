@@ -1,6 +1,6 @@
 # Anliegennummer doppelt vergeben
 
-42 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+42 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Fachkritiker und Architekt liefen gleichzeitig und haben beide die Nummer 40
@@ -22,4 +22,8 @@ Anliegen ändern Rollen nur mit Write und Edit, löschen tut nur `erledigteLoesc
    `42-importreiheFolgtDemProdukt.md`, bekommt die nächste freie Nummer, mit Kopfzeile. Das kann nur eine Rolle mit Bash im Prozess oder der Koordinator
    beim Commit; welche, entscheidest du.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt (P3 der Retro 1): `anliegennummer.py` sperrt Write einer
+neuen Datei mit vergebener Nummer und nennt die nächste freie (auch aus git, nie neu
+vergeben); `doppelteNummern` und der Test `testKeinePaarMitDerselbenNummerImRepo` aus deinem
+Gegenvorschlag 1, Scheiter-Tests in `anliegennummerTest.py`. Punkt 2 ist hinfällig: im Repo
+gibt es keine doppelte Nummer mehr.

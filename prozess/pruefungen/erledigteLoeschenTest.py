@@ -33,3 +33,28 @@ def testPrüflaufLöschtErledigteAnliegenVorDemSammeln():
         assert not probe.exists()
     finally:
         probe.unlink(missing_ok=True)
+
+
+def testLinksAufDasGelöschteAnliegenWerdenZuAnliegenNummer(tmp_path):
+    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
+    anliegenAnlegen(tmp_path, "13-andere.md", guterKopf.replace("12 ", "13 "))
+    plan = tmp_path / "handoff" / "plan.md"
+    plan.write_text(
+        "Siehe [die Probe](anliegen/12-probe.md#runde-1) und [andere](anliegen/13-andere.md).\n",
+        encoding="utf-8",
+    )
+    nachbar = tmp_path / "handoff" / "anliegen" / "13-andere.md"
+    nachbar.write_text(nachbar.read_text(encoding="utf-8") + "[x](12-probe.md)\n", encoding="utf-8")
+    erledigteLöschen(tmp_path)
+    assert plan.read_text(encoding="utf-8") == (
+        "Siehe Anliegen 12 und [andere](anliegen/13-andere.md).\n"
+    )
+    assert nachbar.read_text(encoding="utf-8").endswith("Anliegen 12\n")
+
+
+def testLinksAufAndereDateienBleiben(tmp_path):
+    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
+    plan = tmp_path / "handoff" / "plan.md"
+    plan.write_text("[Ablauf](../prozess/ablauf.md) [Web](https://x.de/12-probe.md)\n")
+    erledigteLöschen(tmp_path)
+    assert plan.read_text() == "[Ablauf](../prozess/ablauf.md) [Web](https://x.de/12-probe.md)\n"

@@ -14,11 +14,20 @@ src = ["prozess/pruefungen", "technik"]
 
 [tool.ruff.lint]
 # Werkzeugsatz nach VORGEHEN.md E37: Stil, ARG, PLR2004, PLR0913, FBT, ERA.
-select = ["E", "W", "F", "I", "N", "UP", "B", "ARG", "PLR2004", "PLR0913", "FBT", "ERA"]
+select = ["E", "W", "F", "I", "N", "UP", "B", "ARG", "PLR2004", "PLR0912", "PLR0913", "FBT", "ERA"]
 # Warum: Bezeichner sind camelCase (wir.md), Ausnahmen heißen deutsch ohne „Error“ (N818);
 # die Namensprüfung übernimmt prozess/pruefungen/benennung.py.
 ignore = ["N802", "N803", "N806", "N815", "N816", "N818", "N999"]
 
+[tool.ruff.lint.pylint]
+# Warum: Zahl der Fälle einer Funktion höchstens 12 (prozess/ablauf.md, Werkzeuge); die
+# Verschachtelung begrenzt complexipy.
+max-branches = 12
+
+[tool.complexipy]
+# Warum: Kognitive Komplexität einer Funktion höchstens 15, Verschachtelung zählt mit.
+max-complexity-allowed = 15
+
 [dependency-groups]
 # Warum: ruff mit fester Minor-Version, damit ein Update nicht still neue Regeln bringt.
-entwicklung = ["pytest", "ruff==0.16.*"]
+entwicklung = ["pytest", "ruff==0.16.*", "complexipy"]
