@@ -72,11 +72,11 @@ def testQue1_2EinMillionstelZollZuNahIstGesperrt(aufstellung, einheitInAufstellu
 
 
 def testQue1_2AuchDasModellEinerAufgestelltenEinheitWirdÜberdeckt(
-    aufstellung, einheitNachDemGegner, ersterSpieler, platz
+    aufstellung, einheitNachDemAnderenSpieler, ersterSpieler, platz
 ):
     aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
     aufgestelltesModell, *_ = aufgestellteEinheit.modelle
-    (modell,) = einheitNachDemGegner.modelle
+    (modell,) = einheitNachDemAnderenSpieler.modelle
     stelle = aufstellung.stelle(aufgestelltesModell)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)

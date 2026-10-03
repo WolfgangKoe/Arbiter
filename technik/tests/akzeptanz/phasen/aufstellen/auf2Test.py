@@ -22,14 +22,7 @@ def einheitenDerArmeen(ausgangslage):
     ]
 
 
-def durchmesserJeEinheit(spieler) -> tuple[tuple[int, ...], ...]:
-    return tuple(
-        tuple(modell.base.durchmesser for modell in einheit.modelle)
-        for einheit in spieler.armee.einheiten
-    )
-
-
-def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
+def durchmesserDerArmeen(ausgangslage, durchmesserJeEinheit) -> list[tuple[tuple[int, ...], ...]]:
     return sorted(
         [
             durchmesserJeEinheit(ausgangslage.ersterSpieler),
@@ -114,12 +107,12 @@ def testAuf2_6JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
     assert zahlenDerModelle == [(10, 1), (10, 1)]
 
 
-def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
+def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage, durchmesserJeEinheit):
     # Regel: Durchmesser in mm je Modell, ausgangslage.yaml
     orks = ((32,) * 10, (40,))
     necrons = ((32,) * 10, (32,))
 
-    durchmesser = durchmesserDerArmeen(ausgangslage)
+    durchmesser = durchmesserDerArmeen(ausgangslage, durchmesserJeEinheit)
 
     assert durchmesser == sorted([orks, necrons])
 

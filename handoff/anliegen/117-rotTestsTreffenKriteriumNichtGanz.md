@@ -1,6 +1,6 @@
 # Rote Tests zu AUF-2, AUF-3, QUE-1, OBJ-1 treffen ihr Kriterium nicht ganz
 
-117 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+117 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nachgerechnet mit Radius 16/25,4″ (32 mm) und den Stellen aus `conftest.py`:
@@ -47,4 +47,10 @@ Sonst decken die Tests jedes Kriterium von OBJ-1.1, QUE-1.1, QUE-1.2, AUF-2.4 bi
 AUF-3.2 bis AUF-3.7, ohne über Plan und Kriterien hinauszugehen. Rot sind derzeit alle wegen
 des fehlenden `arbiter.katalog` (Importvertrag des Regelumsetzers), also nicht wegen dieser Fälle.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle sechs Punkte nach Gegenvorschlag umgesetzt:
+1. `zoneDesAnderenSpielers` mit 57 Radien.
+2. Bezug ist das letzte *Modell* der Reihe (Länge 3 Radien), schräg in wachsender Länge.
+3. `überDieKurzeKante` ersetzt durch zwei Tests, `…AmAnfang` und `…AmEnde`.
+4. Fixture `sperrgründe` in `conftest.py`.
+5. `testObj1_1DieZweiArmeenUnterscheidenSichImInhalt` über `durchmesserJeEinheit`, jetzt Fixture in `conftest.py`, von `auf2Test.py` mitgenutzt.
+6. „Gegner“ ersetzt durch „anderer Spieler“ (`einheitNachDemAnderenSpieler`, `stelleBeimAnderenSpieler`).

@@ -84,6 +84,23 @@ def _sperrgründe(handlung, *argumente) -> frozenset[Grund]:
     return sperre.value.gründe
 
 
+def _durchmesserJeEinheit(spieler: Spieler) -> tuple[tuple[int, ...], ...]:
+    return tuple(
+        tuple(modell.base.durchmesser for modell in einheit.modelle)
+        for einheit in spieler.armee.einheiten
+    )
+
+
+@pytest.fixture
+def sperrgründe():
+    return _sperrgründe
+
+
+@pytest.fixture
+def durchmesserJeEinheit():
+    return _durchmesserJeEinheit
+
+
 @pytest.fixture
 def ausgangslage() -> Ausgangslage:
     return ausgangslageLaden()
@@ -169,16 +186,16 @@ def einheitInAufstellung(
 
 
 @pytest.fixture
-def einheitNachDemGegner(
+def einheitNachDemAnderenSpieler(
     aufstellung: Aufstellung, ersterSpieler: Spieler, zweiterSpieler: Spieler, zone
 ) -> Einheit:
     """Beide haben ihre erste Einheit aufgestellt; der erste Spieler hat seine zweite gewählt."""
     andereZone = next(kandidat for kandidat in Aufstellungszone if kandidat is not zone)
     ersteEinheit, zweiteEinheit = ersterSpieler.armee.einheiten
-    gegnerischeEinheit, _ = zweiterSpieler.armee.einheiten
+    einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
     aufstellung.gewinnerWählen(zweiterSpieler)
     aufstellung.aufstellungszoneWählen(andereZone)
     _einheitAufstellen(aufstellung, ersteEinheit)
-    _einheitAufstellen(aufstellung, gegnerischeEinheit)
+    _einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
     aufstellung.einheitInAufstellungWählen(zweiteEinheit)
     return zweiteEinheit

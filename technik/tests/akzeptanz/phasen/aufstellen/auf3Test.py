@@ -8,23 +8,25 @@ from arbiter.domaene.sperre import Grund
 
 # Regel: Breite des Spielfelds 44″, erste Reihe der Testeinheiten 3/2″ tief (conftest.py)
 breiteDesSpielfelds = 44
+längeDerSpielfeldkante = 60
 tiefeDerErstenReihe = Fraction(3, 2)
-# Regel: Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
+# Regel: Das letzte Modell der ersten Einheit des anderen Spielers steht bei Länge 3 Radien,
+# Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
 gerade = (1, 0)
 schräg = (Fraction(3, 5), Fraction(4, 5))
 
 
-def stelleBeimGegner(platz, abstandDerMittelpunkte, richtung):
-    """Eine Stelle, deren Mittelpunkt so weit von der ersten Stelle des Gegners liegt."""
+def stelleBeimAnderenSpieler(platz, abstandDerMittelpunkte, richtung):
+    """Eine Stelle, deren Mittelpunkt so weit vom letzten Modell der ersten Einheit liegt."""
     anteilX, anteilY = richtung
     tiefe = breiteDesSpielfelds - tiefeDerErstenReihe - abstandDerMittelpunkte * anteilX
-    return platz.stelle(tiefe, platz.radius + abstandDerMittelpunkte * anteilY)
+    return platz.stelle(tiefe, 3 * platz.radius + abstandDerMittelpunkte * anteilY)
 
 
 @pytest.mark.parametrize(
     ("tiefeInRadien", "längeInRadien"),
-    [(0, 1), (30, 1), (11, 1), (1, 0)],
-    ids=["überDieSpielfeldkante", "mitteDesSpielfelds", "zoneDesGegners", "überDieKurzeKante"],
+    [(0, 1), (30, 1), (57, 1)],
+    ids=["überDieSpielfeldkante", "mitteDesSpielfelds", "zoneDesAnderenSpielers"],
 )
 def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
     aufstellung, einheitInAufstellung, tiefeInRadien, längeInRadien, platz
@@ -41,17 +43,37 @@ def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
     assert aufstellung.stelle(erstesModell) is None
 
 
+def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(aufstellung, einheitInAufstellung, platz):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(3, platz.radius - platz.millionstel)
+
+    gründe = platz.sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
+
+    assert gründe == {Grund.nichtGanzInDerZone}
+    assert not aufstellung.gesetzt(erstesModell)
+
+
+def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(aufstellung, einheitInAufstellung, platz):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(3, längeDerSpielfeldkante - platz.radius + platz.millionstel)
+
+    gründe = platz.sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
+
+    assert gründe == {Grund.nichtGanzInDerZone}
+    assert not aufstellung.gesetzt(erstesModell)
+
+
 @pytest.mark.parametrize(
     ("abstand", "richtung"),
     [(1, gerade), (1, schräg), (Fraction(1, 2), gerade), (0, gerade), (-Fraction(1, 2), gerade)],
     ids=["einZoll", "einZollSchräg", "halberZoll", "berührend", "überdeckend"],
 )
-def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesGegnersIstGesperrt(
-    aufstellung, einheitNachDemGegner, abstand, richtung, platz
+def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesperrt(
+    aufstellung, einheitNachDemAnderenSpieler, abstand, richtung, platz
 ):
-    (modell,) = einheitNachDemGegner.modelle
+    (modell,) = einheitNachDemAnderenSpieler.modelle
     mittelpunkte = 2 * platz.radius + abstand
-    stelle = stelleBeimGegner(platz, mittelpunkte, richtung)
+    stelle = stelleBeimAnderenSpieler(platz, mittelpunkte, richtung)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
 
@@ -61,11 +83,11 @@ def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesGegnersIstGesperrt(
 
 @pytest.mark.parametrize("richtung", [gerade, schräg], ids=["gerade", "schräg"])
 def testAuf3_4JenseitsVonEinemZollIstNichtInNahkampfreichweite(
-    aufstellung, einheitNachDemGegner, richtung, platz
+    aufstellung, einheitNachDemAnderenSpieler, richtung, platz
 ):
-    (modell,) = einheitNachDemGegner.modelle
+    (modell,) = einheitNachDemAnderenSpieler.modelle
     mittelpunkte = 2 * platz.radius + 1 + platz.millionstel
-    stelle = stelleBeimGegner(platz, mittelpunkte, richtung)
+    stelle = stelleBeimAnderenSpieler(platz, mittelpunkte, richtung)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
 
@@ -96,10 +118,10 @@ def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(aufstellung, einheitInAu
 
 
 def testAuf3_5NichtGanzInDerZoneUndNahkampfreichweiteNenntArbiterBeide(
-    aufstellung, einheitNachDemGegner, platz
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
-    (modell,) = einheitNachDemGegner.modelle
-    stelle = stelleBeimGegner(platz, 2 * platz.radius + Fraction(1, 2), gerade)
+    (modell,) = einheitNachDemAnderenSpieler.modelle
+    stelle = stelleBeimAnderenSpieler(platz, 2 * platz.radius + Fraction(1, 2), gerade)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
 
@@ -107,11 +129,11 @@ def testAuf3_5NichtGanzInDerZoneUndNahkampfreichweiteNenntArbiterBeide(
     assert not aufstellung.gesetzt(modell)
 
 
-def testAuf3_5AufDemModellDesGegnersNenntArbiterAlleDreiGründe(
-    aufstellung, einheitNachDemGegner, platz
+def testAuf3_5AufDemModellDesAnderenSpielersNenntArbiterAlleDreiGründe(
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
-    (modell,) = einheitNachDemGegner.modelle
-    stelle = stelleBeimGegner(platz, 0, gerade)
+    (modell,) = einheitNachDemAnderenSpieler.modelle
+    stelle = stelleBeimAnderenSpieler(platz, 0, gerade)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
 
@@ -130,15 +152,15 @@ def testAuf3_6AußerhalbDerZoneNenntArbiterNurNichtInAufstellung(aufstellung, er
     assert gründe == {Grund.nichtInAufstellung}
 
 
-@pytest.mark.usefixtures("einheitNachDemGegner")
-def testAuf3_6AufDemModellDesGegnersNenntArbiterNurNichtInAufstellung(
+@pytest.mark.usefixtures("einheitNachDemAnderenSpieler")
+def testAuf3_6AufDemModellDesAnderenSpielersNenntArbiterNurNichtInAufstellung(
     aufstellung, ersterSpieler, zweiterSpieler, platz
 ):
     aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
-    gegnerischeEinheit, _ = zweiterSpieler.armee.einheiten
+    einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
     aufgestelltesModell, *_ = aufgestellteEinheit.modelle
-    gegnerischesModell, *_ = gegnerischeEinheit.modelle
-    stelle = aufstellung.stelle(gegnerischesModell)
+    modellDesAnderenSpielers, *_ = einheitDesAnderenSpielers.modelle
+    stelle = aufstellung.stelle(modellDesAnderenSpielers)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, aufgestelltesModell, stelle)
 
@@ -199,12 +221,12 @@ def testAuf3_7NachDemVerlassenDerZoneBleibtDasModellAnSeinerVorigenStelle(
 
 
 def testAuf3_7NachDerNahkampfreichweiteBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, einheitNachDemGegner, platz
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
-    (modell,) = einheitNachDemGegner.modelle
+    (modell,) = einheitNachDemAnderenSpieler.modelle
     vorigeStelle = platz.stelle(6, 20)
     aufstellung.modellSetzen(modell, vorigeStelle)
-    stelle = stelleBeimGegner(platz, 2 * platz.radius + Fraction(1, 2), gerade)
+    stelle = stelleBeimAnderenSpieler(platz, 2 * platz.radius + Fraction(1, 2), gerade)
 
     gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
 

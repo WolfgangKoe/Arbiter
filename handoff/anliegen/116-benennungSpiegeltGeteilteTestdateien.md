@@ -1,6 +1,6 @@
 # benennung.py spiegelt geteilte Testdateien nicht
 
-116 · Kritik · von Testautor (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+116 · Kritik · von Testautor (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Architektur T1 und `rueckverfolgung.py` verlangen je Anforderung eine Testdatei im

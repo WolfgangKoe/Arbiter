@@ -206,19 +206,19 @@ def testAuf1_4EinModellEinerAnderenEinheitIstNichtInAufstellung(
     assert not aufstellung.gesetzt(modellDerAnderenEinheit)
 
 
-def testAuf1_4EinModellDesGegnersIstNichtInAufstellung(
+def testAuf1_4EinModellDesAnderenSpielersIstNichtInAufstellung(
     aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheitInAufstellung, _ = zweiterSpieler.armee.einheiten
-    gegnerischeEinheit, _ = ersterSpieler.armee.einheiten
-    gegnerischesModell, *_ = gegnerischeEinheit.modelle
+    einheitDesAnderenSpielers, _ = ersterSpieler.armee.einheiten
+    modellDesAnderenSpielers, *_ = einheitDesAnderenSpielers.modelle
     aufstellung.einheitInAufstellungWählen(einheitInAufstellung)
 
-    gründe = sperrgründe(aufstellung.modellSetzen, gegnerischesModell, irgendeineStelle)
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDesAnderenSpielers, irgendeineStelle)
 
     assert gründe == {Grund.nichtInAufstellung}
-    assert not aufstellung.gesetzt(gegnerischesModell)
+    assert not aufstellung.gesetzt(modellDesAnderenSpielers)
 
 
 def testAuf1_4OhneEinheitInAufstellungIstBeendenNichtInAufstellung(
@@ -290,9 +290,9 @@ def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     aufgestellteEinheit, _ = zweiterSpieler.armee.einheiten
-    einheitDesGegners, _ = ersterSpieler.armee.einheiten
+    einheitDesAnderenSpielers, _ = ersterSpieler.armee.einheiten
     einheitAufstellen(aufstellung, aufgestellteEinheit)
-    einheitAufstellen(aufstellung, einheitDesGegners)
+    einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
 
     gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, aufgestellteEinheit)
 
@@ -331,12 +331,12 @@ def testAuf1_5GegenEineNichtWählbareEinheitGiltNichtWählbarAuchNachBegonnenerE
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, _ = zweiterSpieler.armee.einheiten
     erstesModell, *_ = begonneneEinheit.modelle
-    einheitDesGegners, _ = ersterSpieler.armee.einheiten
+    einheitDesAnderenSpielers, _ = ersterSpieler.armee.einheiten
     stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, begonneneEinheit)
     aufstellung.einheitInAufstellungWählen(begonneneEinheit)
     aufstellung.modellSetzen(erstesModell, stelle)
 
-    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, einheitDesGegners)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, einheitDesAnderenSpielers)
 
     assert gründe == {Grund.nichtWählbar}
     assert aufstellung.einheitInAufstellung is begonneneEinheit

@@ -15,6 +15,12 @@ def testObj1_1DieZweiSpielerFührenVerschiedeneArmeen(ausgangslage):
     assert ersterSpieler.armee is not zweiterSpieler.armee
 
 
+def testObj1_1DieZweiArmeenUnterscheidenSichImInhalt(ausgangslage, durchmesserJeEinheit):
+    ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
+
+    assert durchmesserJeEinheit(ersterSpieler) != durchmesserJeEinheit(zweiterSpieler)
+
+
 def testObj1_1KeineEinheitGehörtZuBeidenArmeen(ausgangslage):
     ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
 
