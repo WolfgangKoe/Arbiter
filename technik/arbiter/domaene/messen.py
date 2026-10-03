@@ -31,11 +31,14 @@ def abstandHöchstens(
 
 
 def ganzIn(
-    base: Base, stelle: Stelle, grenzenInX: tuple[Fraction, Fraction], länge: Fraction
+    base: Base,
+    stelle: Stelle,
+    grenzenInX: tuple[Fraction, Fraction],
+    grenzenInY: tuple[Fraction, Fraction],
 ) -> bool:
-    """Die Fläche liegt zwischen den Grenzen in x und von 0 bis länge in y."""
     radius = _radiusInZoll(base)
     vonX, bisX = grenzenInX
+    vonY, bisY = grenzenInY
     inX = vonX <= stelle.x - radius and stelle.x + radius <= bisX
-    inY = radius <= stelle.y and stelle.y + radius <= länge
+    inY = vonY <= stelle.y - radius and stelle.y + radius <= bisY
     return inX and inY

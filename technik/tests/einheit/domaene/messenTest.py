@@ -33,13 +33,13 @@ def testDerAbstandIstNichtHöchstensEinZollWennDieRänderWeiterAuseinanderLiegen
 
 
 def testDieBaseLiegtGanzInDenGrenzenWennIhrRandDieFlächeBerührt():
-    grenzen, länge = (Fraction(-5), Fraction(5)), Fraction(10)
+    grenzenInX, grenzenInY = (Fraction(-5), Fraction(5)), (Fraction(0), Fraction(10))
 
-    assert ganzIn(zehnZoll, Stelle(x=Fraction(0), y=Fraction(5)), grenzen, länge)
+    assert ganzIn(zehnZoll, Stelle(x=Fraction(0), y=Fraction(5)), grenzenInX, grenzenInY)
 
 
 def testDieBaseLiegtNichtGanzInDenGrenzenWennSieEinMillionstelHinausragt():
-    grenzen, länge = (Fraction(-5), Fraction(5)), Fraction(10)
+    grenzenInX, grenzenInY = (Fraction(-5), Fraction(5)), (Fraction(0), Fraction(10))
     verschoben = Stelle(x=Fraction(1, 1_000_000), y=Fraction(5))
 
-    assert not ganzIn(zehnZoll, verschoben, grenzen, länge)
+    assert not ganzIn(zehnZoll, verschoben, grenzenInX, grenzenInY)

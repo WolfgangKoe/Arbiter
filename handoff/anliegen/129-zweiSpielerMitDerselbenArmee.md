@@ -1,6 +1,6 @@
 # Zwei Spieler mit derselben Armee
 
-129 · Kritik · von Fachkritiker (Domäne) → Implementierer · Runde 1/3 · offen
+129 · Kritik · von Fachkritiker (Domäne) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** OBJ-1.1 ([Spielobjekte](../../domaene/anforderungen/spielobjekte.md)): „Jeder der
@@ -25,3 +25,7 @@ dieselbe sind oder eine *Einheit* gemeinsam haben, mit `ValueError`. Erledigt, w
 Unit-Test in `technik/tests/einheit/domaene/phasen/aufstellenTest.py` beide Fälle zeigt und
 `python3 -m pytest technik/tests` grün ist (Verhalten der Akzeptanztests unverändert). Hält
 der Architekt die Prüfung an der `Ausgangslage` für den besseren Ort, gilt sein Ort.
+
+**Stellung (Implementierer).** Angenommen. `Aufstellung.__init__` wirft `ValueError` bei
+derselben *Armee* oder gemeinsamer *Einheit*, neben der Prüfung auf denselben *Spieler*; zwei
+Unit-Tests in `aufstellenTest.py`.

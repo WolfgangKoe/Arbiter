@@ -20,8 +20,14 @@ class Ausgangslage:
     ersterSpieler: Spieler
     zweiterSpieler: Spieler
     spielfeld: Spielfeld
-    # Warum: Tiefe der ersten und der zweiten Aufstellungszone, in der Reihenfolge der Zonen
-    tiefen: tuple[Fraction, Fraction]
+    tiefen: dict[Aufstellungszone, Fraction]
+
+
+def _teilenSichArmeeOderEinheit(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> bool:
+    ersteArmee, zweiteArmee = ersterSpieler.armee, zweiterSpieler.armee
+    return ersteArmee is zweiteArmee or any(
+        einheit in zweiteArmee.einheiten for einheit in ersteArmee.einheiten
+    )
 
 
 class Aufstellung:
@@ -29,6 +35,8 @@ class Aufstellung:
         ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
         if ersterSpieler is zweiterSpieler:
             raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
+        if _teilenSichArmeeOderEinheit(ersterSpieler, zweiterSpieler):
+            raise ValueError("Die Spieler führen verschiedene Armeen ohne gemeinsame Einheit")
         self._ausgangslage = ausgangslage
         self._spieler = (ersterSpieler, zweiterSpieler)
         self._gewinner: Spieler | None = None
@@ -121,14 +129,16 @@ class Aufstellung:
         _, länge = self._ausgangslage.spielfeld.seitenlängen
         zone = self.aufstellungszone(spieler)
         assert zone is not None  # Warum: Wer an der Reihe ist, hat die Zone nach der Zonenwahl.
-        if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), länge):
+        grenzenInY = (Fraction(0), länge)
+        if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), grenzenInY):
             gründe.add(Grund.nichtGanzInDerZone)
+        eigene = self._modelleVon(spieler)
         for anderes, andereStelle in self._stellen.items():
             if anderes is modell:
                 continue
             if messen.überdecken(modell.base, stelle, anderes.base, andereStelle):
                 gründe.add(Grund.baseÜberdeckt)
-            if anderes not in self._modelleVon(spieler) and messen.abstandHöchstens(
+            if anderes not in eigene and messen.abstandHöchstens(
                 modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
             ):
                 gründe.add(Grund.nahkampfreichweite)
@@ -139,7 +149,7 @@ class Aufstellung:
 
     def _grenzenInX(self, zone: Aufstellungszone) -> tuple[Fraction, Fraction]:
         breite, _ = self._ausgangslage.spielfeld.seitenlängen
-        tiefe = self._ausgangslage.tiefen[list(Aufstellungszone).index(zone)]
+        tiefe = self._ausgangslage.tiefen[zone]
         if zone is Aufstellungszone.erste:
             return Fraction(0), tiefe
         return breite - tiefe, breite

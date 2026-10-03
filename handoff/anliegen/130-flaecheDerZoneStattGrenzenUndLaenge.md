@@ -1,6 +1,6 @@
 # Aufstellungszone: die Fläche steht in Kommentaren statt in der Schnittstelle
 
-130 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+130 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code): `messen.ganzIn`, `Ausgangslage.tiefen`,
@@ -46,3 +46,7 @@ kleinen Schnitt; `Fläche` erst, wenn eine zweite Aufstellungskarte kommt.
 **Erledigt, wenn:** `ganzIn` nimmt zwei gleich gebaute Grenzpaare und hat keinen Docstring
 zur Form; `tiefen` kommt ohne Index und ohne Kommentar aus; ein Einheitstest zeigt den
 `ValueError` bei abweichender `Spielfeldkante`; Akzeptanztests unverändert grün.
+
+**Stellung (Implementierer).** Angenommen, der kleine Schnitt, alle drei Punkte.
+`ganzIn` nimmt zwei Grenzpaare, `tiefen` ist `dict[Aufstellungszone, Fraction]`, der Katalog
+wirft bei abweichender `Spielfeldkante`; Test in `tests/einheit/katalog/ausgangslageTest.py`.

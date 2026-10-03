@@ -1,6 +1,6 @@
 # Aufstellen: Menge je Schleifendurchlauf, Sperre ohne Grund, Durchmesser ungeprüft
 
-132 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+132 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code). `python3 -m pytest technik/tests` grün (138),
@@ -26,3 +26,7 @@ Zu 2: ein stiller Fehlerfall ohne Grund. Zu 3: Datenfehler zeigt sich fern der U
 
 Erledigt, wenn 1 und 2 umgesetzt sind, Verhalten unverändert (Akzeptanztests grün) und
 `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellung (Implementierer).** Angenommen, alle drei Punkte: Menge vor der Schleife,
+`Sperre(grund, *weitere)`, der Katalog lehnt einen Durchmesser ohne `int` beim Laden ab (Test
+in `ausgangslageTest.py`).

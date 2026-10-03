@@ -14,7 +14,12 @@ def spielerMitEinerEinheit() -> Spieler:
 def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
     spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
     return Aufstellung(
-        Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, (Fraction(9), Fraction(9)))
+        Ausgangslage(
+            ersterSpieler,
+            zweiterSpieler,
+            spielfeld,
+            {zone: Fraction(9) for zone in Aufstellungszone},
+        )
     )
 
 
@@ -50,3 +55,21 @@ def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
 
     assert aufstellung.anDerReihe is gewinner
+
+
+def testZweiSpielerMitDerselbenArmeeSindEineVorbedingungsverletzung():
+    armee = spielerMitEinerEinheit().armee
+
+    with pytest.raises(ValueError):
+        aufstellungVon(Spieler(armee=armee), Spieler(armee=armee))
+
+
+def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
+    gemeinsam = spielerMitEinerEinheit().armee.einheiten
+    eigene, *_ = spielerMitEinerEinheit().armee.einheiten
+
+    with pytest.raises(ValueError):
+        aufstellungVon(
+            Spieler(armee=Armee(einheiten=gemeinsam)),
+            Spieler(armee=Armee(einheiten=(*gemeinsam, eigene))),
+        )

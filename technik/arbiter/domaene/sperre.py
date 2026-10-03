@@ -11,6 +11,7 @@ class Grund(Enum):
 
 
 class Sperre(Exception):
-    def __init__(self, *gründe: Grund) -> None:
+    def __init__(self, grund: Grund, *weitere: Grund) -> None:
+        gründe = (grund, *weitere)
         super().__init__(", ".join(sorted(grund.value for grund in gründe)))
         self.gründe = frozenset(gründe)
