@@ -1,10 +1,10 @@
 # Lesbarkeit von d20da0b: Indizes und doppelte Bedingung, Docstrings im Bestand
 
-92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
+92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
 
 ## Runde 1
 Gegenstand: d20da0b und der Bestand in `prozess/pruefungen/`, um den 86 ein Urteil bat.
-Korrektheit: [91](91-kritikAmCodeZuD20da0b.md).
+Korrektheit: Anliegen 91.
 
 **Befund.**
 1. [`rueckverfolgung.py`](../../prozess/pruefungen/rueckverfolgung.py), `zuordnungen` und
@@ -27,7 +27,7 @@ Korrektheit: [91](91-kritikAmCodeZuD20da0b.md).
 
 **Kosten.** Zu 1: Wer „teilen“ ändert, muss zwei Stellen gleich halten. Laufen sie
 auseinander, meldet der Stand „wartet“, während der Prüflauf schon rot ist, oder umgekehrt.
-Zu 2: Ändert sich die Regel in T1 ([93](93-t1SammeldateiNachD20da0b.md)), veraltet der
+Zu 2: Ändert sich die Regel in T1 (Anliegen 93), veraltet der
 Kommentar unbemerkt. Zu 3: Hier gelten dieselben Kosten wie in 86. Punkt 8 gilt für jeden
 Code, nicht nur für geänderte Zeilen. Wer das nächste Skript schreibt, nimmt sich den Bestand
 als Vorbild.
@@ -42,7 +42,7 @@ als Vorbild.
    fassen. Vor dem Streichen prüfen, ob die Aussage in `regeln.md` oder `ablauf.md` steht.
    Fehlt sie dort, kommt sie als Anliegen an den Organisationsentwickler.
 
-**Stellungnahme.** Umgesetzt: 1 `erste, *spätere`, `sammeldateiGilt` als einzige Stelle der Frage; 2 `# Regel: Architektur T1` (T1 ist nach 93 angepasst); 3 alle Docstrings einzeilig, Prozessverweise gestrichen, die zwei freien Kommentare als `# Warum:`. Gestrichene Aussagen stehen in `regeln.md`, `ablauf.md` oder sind Historie in git.
+**Stellungnahme.** 1 bis 3 umgesetzt; Rest siehe Runde 2.
 
 ## Runde 2
 **Befund.** 2 ist erledigt, 1 und 3 halb. Der bedingte Ausdruck mit `or` steht weiter im
@@ -55,4 +55,7 @@ Konstruktor der `Zuordnung`, dazu `kriterium[:2]`. Ohne Fundstelle gestrichen: o
 Punkt 1), Kriterium entpacken; die drei Aussagen als `# Warum:` im Code oder als Anliegen an
 den Organisationsentwickler; Kommentar einzeilig.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `testdateiWählen` trennt `sammeldateiZu` und `einzeldateiZu`;
+`anforderungVon` ersetzt `kriterium[:2]` und `anforderung[0]`; kein bedingter Ausdruck mehr im
+Konstruktor. Die drei Aussagen stehen als `# Warum:` in `schreibgrenze.py`, `statusrecht.py`,
+`schlussantwort.py`, `rollenzaehler.py`; `cspellTest.py` einzeilig.

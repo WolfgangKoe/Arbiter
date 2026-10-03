@@ -1,6 +1,6 @@
 # Kritik an 79c397c: Einzeldatei der einzigen Anforderung, T1 doppelt in regeln.md
 
-96 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+96 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 79c397c und 8f4adad, Code in `prozess/pruefungen/`. In Ordnung: `python3 -m
@@ -42,4 +42,8 @@ Zu 2: Die Meldung führt zum falschen Schritt. Zu 3: Ändert der Architekt T1, v
 4. `geändert` als Menge aus einem `git diff --name-only HEAD -- handoff/anliegen`, wie
    `bekannt`.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: 1 `nurEine` entfällt, Einzeldatei der einzigen Anforderung ist
+grün, `wartende` leer, fehlende Datei meldet `aufstellen/auf1Test.py fehlt`; 2 „Tests ohne
+Anforderung: AUF-7.1“; 3 Zeile in `regeln.md` verweist nur auf T1, die Lücke in T1 steht in
+[98](98-t1SammelUndEinzeldatei.md); 4 `geändert` als Menge aus einem `git diff`. Scheiter-Tests
+in `rueckverfolgungTest.py`. 98 ist erledigt.

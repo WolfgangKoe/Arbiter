@@ -286,3 +286,37 @@ def testEinzeldateiNebenGültigerSammeldateiWirdGeprüftUndIstRot(tmp_path):
     meldungen = verstöße(tmp_path)
     assert any("neben" in meldung for meldung in meldungen)
     assert any("Test zu AUF-1.9" in meldung for meldung in meldungen)
+
+
+def einzigeAnforderung(wurzel: Path, dateien: dict[str, str]) -> None:
+    anforderung = wurzel / "domaene" / "anforderungen" / "phasen" / "aufstellen.md"
+    anforderung.parent.mkdir(parents=True)
+    anforderung.write_text("### AUF-1 · Reihenfolge\n\n- AUF-1.1 Eins.\n", encoding="utf-8")
+    for name, text in dateien.items():
+        datei = wurzel / "technik" / "tests" / "akzeptanz" / "phasen" / name
+        datei.parent.mkdir(parents=True, exist_ok=True)
+        datei.write_text(text, encoding="utf-8")
+
+
+def testEinzeldateiDerEinzigenAnforderungIstGrünUndNichtWartend(tmp_path):
+    einzigeAnforderung(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
+    assert verstöße(tmp_path) == []
+    assert wartende(tmp_path) == []
+
+
+def testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieEinzeldatei(tmp_path):
+    einzigeAnforderung(tmp_path, {})
+    planMitUmfang(tmp_path, "AUF-1")
+    assert verstöße(tmp_path) == ["technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py fehlt"]
+
+
+def testTestsOhneAnforderungNennenDieKennungen(tmp_path):
+    anforderung = tmp_path / "domaene" / "anforderungen" / "leer.md"
+    anforderung.parent.mkdir(parents=True)
+    anforderung.write_text("# Leer\n", encoding="utf-8")
+    test = tmp_path / "technik" / "tests" / "akzeptanz" / "leerTest.py"
+    test.parent.mkdir(parents=True)
+    test.write_text("def testAuf7_1X(): ...\n", encoding="utf-8")
+    meldungen = verstöße(tmp_path)
+    assert len(meldungen) == 1
+    assert meldungen[0].endswith("Tests ohne Anforderung: AUF-7.1")

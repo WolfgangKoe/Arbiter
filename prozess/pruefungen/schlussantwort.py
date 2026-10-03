@@ -16,6 +16,7 @@ def grund(länge: int) -> str:
 def entscheide(eingabe: dict) -> dict | None:
     if not eingabe.get("agent_type"):
         return None
+    # Warum: Im Headless-Lauf ruft die Rolle `SubagentHandback` nicht auf; dort gilt `SubagentStop`.
     if eingabe.get("hook_event_name") == "SubagentStop":
         bericht = eingabe.get("last_assistant_message") or ""
         if len(bericht) <= höchstlänge or eingabe.get("stop_hook_active"):

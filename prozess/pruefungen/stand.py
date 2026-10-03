@@ -10,8 +10,8 @@ from anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from belegung import belegungAusTranskript, punkte, warnschwelle
 from codekritik import fälligeKritikAlsText
 from gitAufruf import freigabeCommit, gitAusgabe
-from plan import itemsOhneLink, offeneItems, zyklus
-from rueckverfolgung import wartendeAlsText
+from plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
+from rueckverfolgung import fehlendeTests, nenntFehlendes, wartendeAlsText
 
 rollenlaufKennzahl = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
 
@@ -27,14 +27,6 @@ def aktuelleEtappe(wurzel: Path) -> tuple[int, str] | None:
     return None
 
 
-def gibtAnforderungen(wurzel: Path) -> bool:
-    return any(
-        zeile.startswith("### ")
-        for datei in (wurzel / "domaene" / "anforderungen").rglob("*.md")
-        for zeile in datei.read_text(encoding="utf-8").splitlines()
-    )
-
-
 def akzeptanztestsSeit(wurzel: Path, kennung: str) -> bool:
     pfad = "technik/tests/akzeptanz"
     return bool(gitAusgabe(wurzel, "log", "--format=%H", f"{kennung}..HEAD", "--", pfad))
@@ -47,11 +39,22 @@ def domänenphase(wurzel: Path, zyklusNummer: int) -> str:
     nummer, _ = etappe
     if freigabeCommit(wurzel, "Etappe", nummer) is None:
         return f"Etappe {nummer} wartet auf Kritik (Architekt) und Freigabe"
-    if not gibtAnforderungen(wurzel):
-        return f"Anforderungsautor: erste Anforderung zu Etappe {nummer}"
+    if not fehlendeTests(wurzel, []):
+        return f"Anforderungsautor: Anforderungen zu Plan {zyklusNummer}"
     return (
         f"Planer: Plan {zyklusNummer} mit den Items, die bereit sind (eins genügt, höchstens drei)"
     )
+
+
+def planOhneFreigabe(wurzel: Path, plan: int) -> str:
+    """Nächster Schritt für einen Plan mit Links: Kriterien ohne Test müssen in den Items stehen."""
+    fehlende = fehlendeTests(wurzel, [])
+    texte = offeneItemTexte(wurzel)
+    if texte and not fehlende:
+        return f"Anforderungsautor: Kriterien zu den Items von Plan {plan}"
+    if any(not any(nenntFehlendes([text], fehlend) for fehlend in fehlende) for text in texte):
+        return f"Planer: Kriterien-IDs in die Items von Plan {plan}"
+    return f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
 
 
 def lage(wurzel: Path) -> tuple[int, str, str]:
@@ -64,7 +67,7 @@ def lage(wurzel: Path) -> tuple[int, str, str]:
     if freigabePlan is None and itemsOhneLink(wurzel):
         return plan, "Domänenphase", f"Planer: Items von Plan {plan} als Link auf domaene/items/"
     if freigabePlan is None:
-        return plan, "Domänenphase", f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
+        return plan, "Domänenphase", planOhneFreigabe(wurzel, plan)
     items = offeneItems(wurzel)
     if (items or review != plan) and not akzeptanztestsSeit(wurzel, freigabePlan):
         return plan, "Technikphase", f"Testautor: Akzeptanztests zu den Items von Plan {plan}"

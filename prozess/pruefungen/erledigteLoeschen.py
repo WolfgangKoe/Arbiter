@@ -49,12 +49,15 @@ def erledigteLöschen(wurzel: Path) -> list[str]:
             wurzel, "ls-tree", "-r", "--name-only", "HEAD", "--", "handoff/anliegen"
         ).splitlines()
     )
+    geändert = set(
+        gitAusgabe(wurzel, "diff", "--name-only", "HEAD", "--", "handoff/anliegen").splitlines()
+    )
     for datei in anliegenDateien(wurzel):
         gelesen = kopfLesen(datei)
         if gelesen is None or gelesen.status != "erledigt":
             continue
         pfad = datei.relative_to(wurzel).as_posix()
-        if pfad in bekannt and not gitAusgabe(wurzel, "diff", "--name-only", "HEAD", "--", pfad):
+        if pfad in bekannt and pfad not in geändert:
             datei.unlink()
             gelöscht[datei.resolve()] = f"{gelesen.nummer:02d}"
     if gelöscht:

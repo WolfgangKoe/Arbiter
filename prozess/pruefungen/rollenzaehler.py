@@ -13,6 +13,7 @@ def zähle(eingabe: dict, wurzel: Path) -> None:
     if not eingabe.get("agent_type"):
         return
     zyklusNummer, phase, _ = lage(wurzel)
+    # Warum: In `.git/` erzeugt das Protokoll keine Änderung im Arbeitsbaum.
     datei = protokoll(wurzel)
     datei.parent.mkdir(parents=True, exist_ok=True)
     eintrag = {

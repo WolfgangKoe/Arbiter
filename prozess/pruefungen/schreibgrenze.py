@@ -42,6 +42,7 @@ def sperren(grund: str) -> dict:
 
 
 def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
+    # Warum: Ohne `agent_type` spricht die Hauptsitzung, für sie gilt keine Grenze.
     rolle = eingabe.get("agent_type")
     if not rolle or eingabe.get("tool_name") not in schreibwerkzeuge:
         return None

@@ -23,6 +23,5 @@ def testLtexPrüftKeinMarkdown():
 
 
 def testDieVeralteteEinstellungFehltDennSieÜberstimmtDieneue():
-    # Warum: `cSpell.enableFiletypes` ist veraltet; die Erweiterung (4.9.3) führt `markdown: true`
-    # in `cSpell.enabledFileTypes` als Standard, `!markdown` im alten Schlüssel wirkte nicht.
+    # Warum: `!markdown` im veralteten `cSpell.enableFiletypes` wirkte nicht (Erweiterung 4.9.3).
     assert "cSpell.enableFiletypes" not in einstellungen()

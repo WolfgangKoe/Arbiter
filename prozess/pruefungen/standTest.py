@@ -69,7 +69,7 @@ def testEtappeOhneFreigabeWartet(repo):
 def testNachFreigabeDerEtappeIstDieErsteAnforderungDran(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
-    assert lage(repo.wurzel)[2] == "Anforderungsautor: erste Anforderung zu Etappe 1"
+    assert lage(repo.wurzel)[2] == "Anforderungsautor: Anforderungen zu Plan 1"
 
 
 def testEineAnforderungGenügtFürDenPlan(repo):
@@ -310,3 +310,63 @@ def testEinKritikCommitDecktMehrereHashes(repo):
     zweiter = kurzerHashVon(repo)
     repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {erster} {zweiter}")
     assert "Kritik am Code" not in stand(repo.wurzel)
+
+
+def retroFreigegebenMitAnforderung(repo, anforderungstext, testtext):
+    bisZurFreigabeVonPlan1(repo)
+    repo.datei("domaene/anforderungen/aufstellung.md", anforderungstext)
+    if testtext:
+        repo.datei("technik/tests/akzeptanz/aufstellungTest.py", testtext)
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
+    repo.freigabe("Retro", 1)
+
+
+def testNachRetroOhneKriteriumOhneTestIstDerAnforderungsautorDran(repo):
+    retroFreigegebenMitAnforderung(
+        repo, "### AU-1 · A\n\n- AU-1.1 Eins.\n", "def testAu1_1Eins(): ...\n"
+    )
+    assert lage(repo.wurzel)[2] == "Anforderungsautor: Anforderungen zu Plan 2"
+
+
+def testNachRetroMitKriteriumOhneTestIstDerPlanerDran(repo):
+    retroFreigegebenMitAnforderung(
+        repo, "### AU-1 · A\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n", "def testAu1_1Eins(): ...\n"
+    )
+    assert lage(repo.wurzel)[2].startswith("Planer: Plan 2")
+
+
+def planMitItemtext(repo, anforderungstext, testtext, itemtext):
+    etappe(repo)
+    repo.freigabe("Etappe", 1)
+    repo.datei("domaene/anforderungen/aufstellung.md", anforderungstext)
+    repo.datei("technik/tests/akzeptanz/aufstellungTest.py", testtext)
+    repo.datei("domaene/items/probe.md", itemtext)
+    repo.datei("handoff/plan.md", "# Plan · Zyklus 1\n\n1. [Probe](../domaene/items/probe.md)\n")
+
+
+zweiKriterienEinsGetestet = "### AU-1 · A\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n"
+
+
+def testPlanOhneKriteriumOhneTestVerlangtKriterienVomAnforderungsautor(repo):
+    planMitItemtext(
+        repo,
+        "### AU-1 · A\n\n- AU-1.1 Eins.\n",
+        "def testAu1_1Eins(): ...\n",
+        "# Probe\n\nAU-1.\n",
+    )
+    assert lage(repo.wurzel)[2] == "Anforderungsautor: Kriterien zu den Items von Plan 1"
+
+
+def testPlanDessenItemKeinFehlendesKriteriumNenntVerlangtKriterienIdsVomPlaner(repo):
+    planMitItemtext(
+        repo, zweiKriterienEinsGetestet, "def testAu1_1Eins(): ...\n", "# Probe\n\nAU-1.1.\n"
+    )
+    assert lage(repo.wurzel)[2] == "Planer: Kriterien-IDs in die Items von Plan 1"
+
+
+def testPlanDessenItemsEinFehlendesKriteriumNennenWartetAufKritikUndFreigabe(repo):
+    planMitItemtext(
+        repo, zweiKriterienEinsGetestet, "def testAu1_1Eins(): ...\n", "# Probe\n\nAU-1.2.\n"
+    )
+    assert lage(repo.wurzel)[2] == "Plan 1 wartet auf Kritik (Architekt) und Freigabe"
