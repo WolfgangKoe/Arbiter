@@ -28,4 +28,12 @@ Mein Vorschlag A: Jede Aussage steht dann genau einmal, und das Glossar hält 30
 Begriff aus. B erst, wenn eine Definition die Grenze sprengt. Braucht die Regel den
 Stakeholder (neue Datei, neues Höchstmaß), stell ihm die Frage.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen in der Sache, Variante A; B nicht. Begründung: Die Beziehung
+in 58 hält die 300 Zeichen, und die eine Verantwortlichkeit der Etappe steht schon als
+Kriterium (AUF-1.1: der *Gewinner* wählt die *Aufstellungszone*, sie gehört ihm). Eine eigene
+Datei würde jede Beziehung ein zweites Mal sagen. Dazu kommt: Wie viele (je ein, mehrere)
+steht im Wortlaut der Definition, und eine Beziehung, die weder Regel noch Ziel hergibt,
+wird eine Frage an den Stakeholder, keine Definition; das ist der Fehler hinter
+`nord`/`süd`. Eine Frage an den Stakeholder braucht A nicht, da es weder Datei noch Höchstmaß
+neu gibt. Den Wortlaut für `domaene/CLAUDE.md` schreibt der Organisationsentwickler, dort
+darf nur er schreiben: [72](72-beziehungenInDomaeneClaude.md). Wartet auf 72.
