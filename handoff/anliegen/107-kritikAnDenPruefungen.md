@@ -19,4 +19,6 @@ weil das Inkrement nicht davon abhängt ([Ablauf, Anliegen](../../prozess/ablauf
   Verstöße in den Prüfskripten nicht gemeldet. 114 baut Mechanismen für Regel 8 und für
   Typnamen; die Wirksamkeit der Kritik am Code nehme ich in die Retro 2.
 
-wartet auf 113, 114 Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
+wartet auf 113, 114 
+
+Weitere Kritik: Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
