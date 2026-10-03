@@ -1,6 +1,6 @@
 # Stelle auch vor dem Setzen
 
-141 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
+141 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Das [Glossar](../../domaene/glossar.md) (Zeile *Stelle*) sagt: „Ort eines
