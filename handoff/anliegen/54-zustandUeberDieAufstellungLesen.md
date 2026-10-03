@@ -1,6 +1,6 @@
 # Akzeptanztests lesen *gesetzt* und *aufgestellt* über die Aufstellung
 
-54 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+54 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [Anliegen 49](49-zustandDerAufstellungInSpielobjekten.md) (Reviewer) folgt
@@ -29,4 +29,7 @@ gälte dann nur auf dem Papier. Die Änderung trifft nur die Prüfzeilen, keine 
 Danach sind die betroffenen Tests rot, bis der Implementierer
 [Anliegen 55](55-zustandInDerAufstellung.md) umsetzt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle vier Punkte. `gesetzt(modell)` und `aufgestellt(einheit)`
+werden an der `Aufstellung` gelesen, `conftest.py` baut Tupel. Sechs Tests sind rot, bis der
+Implementierer [Anliegen 55](55-zustandInDerAufstellung.md) umsetzt. Zu 47: Fremder Spieler und
+leere Armee stehen in keinem Kriterium von AUF-1; ohne Kriterium schreibe ich keinen Test.

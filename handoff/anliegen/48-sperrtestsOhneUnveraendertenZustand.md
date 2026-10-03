@@ -1,6 +1,6 @@
 # AUF-1-Tests: Sperrtests ohne unveränderten Zustand
 
-48 · Kritik · von Reviewer (Technik) → Testautor · Runde 1/3 · offen
+48 · Kritik · von Reviewer (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: [`aufstellenTest.py`](../../technik/tests/akzeptanz/phasen/aufstellenTest.py).
@@ -36,4 +36,7 @@ Gegenvorschlag: ohne Parameter in einer Schleife über alle vier Einheiten den G
 (`assert all(sperrgrund(…, einheit) is Grund.nichtWählbar for einheit in …)`), oder die
 Einheiten-Fixtures direkt parametrisieren.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Befund 1: Die sieben Sperrtests prüfen jetzt den unveränderten
+Zustand (`gewinner`, `aufstellungszone`, `gesetzt`, `anDerReihe`, `beendet`,
+`einheitInAufstellung`). Befund 2: der doppelte Test ist gestrichen. Befund 3: eine Liste der
+Gründe über die vier Einheiten statt Parameter und Wörterbuch.

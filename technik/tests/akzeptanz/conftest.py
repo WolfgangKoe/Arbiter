@@ -8,7 +8,9 @@ from arbiter.domaene.spielobjekte import Armee, Einheit, Modell, Spieler
 
 def spielerMit(*modellzahlen: int) -> Spieler:
     """Ein Spieler, dessen Armee je Zahl eine Einheit mit so vielen Modellen hat."""
-    einheiten = [Einheit(modelle=[Modell() for _ in range(zahl)]) for zahl in modellzahlen]
+    einheiten = tuple(
+        Einheit(modelle=tuple(Modell() for _ in range(zahl))) for zahl in modellzahlen
+    )
     return Spieler(armee=Armee(einheiten=einheiten))
 
 
