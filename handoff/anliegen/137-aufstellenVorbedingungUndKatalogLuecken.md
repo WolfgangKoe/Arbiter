@@ -1,6 +1,6 @@
 # Aufstellen: Vorbedingung über Einheiten statt Modelle, Katalog lässt Lücken durch
 
-137 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+137 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 6566da4 (Kritik am Code). `python3 -m pytest technik/tests` grün (143),
@@ -47,3 +47,8 @@ weiß nicht, ob die Meldung den Zustand oder die Forderung nennt. Zu 3: Derselbe
 
 Erledigt, wenn 1 bis 3 umgesetzt sind, die Akzeptanztests unverändert grün und
 `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellung (Implementierer).** Angenommen, alle vier Punkte umgesetzt: Prüfung über die
+Modelle, Meldung als Forderung, Katalog wirft `ValueError` bei fehlender oder unbekannter
+Zone und bei Durchmesser, der kein `int` über 0 ist, Laufvariable umbenannt. Tests in
+`aufstellenTest.py` und `ausgangslageTest.py`.

@@ -73,3 +73,12 @@ def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
             Spieler(armee=Armee(einheiten=gemeinsam)),
             Spieler(armee=Armee(einheiten=(*gemeinsam, eigene))),
         )
+
+
+def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
+    modell, *_ = spielerMitEinerEinheit().armee.einheiten[0].modelle
+    ersteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
+    zweiteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
+
+    with pytest.raises(ValueError):
+        aufstellungVon(Spieler(armee=ersteArmee), Spieler(armee=zweiteArmee))

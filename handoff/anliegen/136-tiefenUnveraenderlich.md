@@ -1,6 +1,6 @@
 # Ausgangslage.tiefen ist ein veränderliches dict in einem frozen Spielobjekt
 
-136 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+136 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 6566da4 (Kritik am Code), `Ausgangslage.tiefen` in
@@ -26,3 +26,6 @@ wie bei `Armee.einheiten` schützt dort; hier fehlt dieser Schutz.
 
 **Erledigt, wenn:** der Test grün ist, `tiefen` als `Mapping` annotiert ist und die
 Akzeptanztests unverändert grün sind.
+
+**Stellung (Implementierer).** Angenommen und umgesetzt wie vorgeschlagen; der Test steht in
+`tests/einheit/katalog/ausgangslageTest.py`.

@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
@@ -20,13 +21,16 @@ class Ausgangslage:
     ersterSpieler: Spieler
     zweiterSpieler: Spieler
     spielfeld: Spielfeld
-    tiefen: dict[Aufstellungszone, Fraction]
+    tiefen: Mapping[Aufstellungszone, Fraction]
 
 
-def _teilenSichArmeeOderEinheit(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> bool:
-    ersteArmee, zweiteArmee = ersterSpieler.armee, zweiterSpieler.armee
-    return ersteArmee is zweiteArmee or any(
-        einheit in zweiteArmee.einheiten for einheit in ersteArmee.einheiten
+def _modelleVon(spieler: Spieler) -> set[Modell]:
+    return {modell for einheit in spieler.armee.einheiten for modell in einheit.modelle}
+
+
+def _teilenSichArmeeOderModell(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> bool:
+    return ersterSpieler.armee is zweiterSpieler.armee or not _modelleVon(ersterSpieler).isdisjoint(
+        _modelleVon(zweiterSpieler)
     )
 
 
@@ -35,8 +39,8 @@ class Aufstellung:
         ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
         if ersterSpieler is zweiterSpieler:
             raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
-        if _teilenSichArmeeOderEinheit(ersterSpieler, zweiterSpieler):
-            raise ValueError("Die Spieler führen verschiedene Armeen ohne gemeinsame Einheit")
+        if _teilenSichArmeeOderModell(ersterSpieler, zweiterSpieler):
+            raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
         self._ausgangslage = ausgangslage
         self._spieler = (ersterSpieler, zweiterSpieler)
         self._gewinner: Spieler | None = None
@@ -132,7 +136,7 @@ class Aufstellung:
         grenzenInY = (Fraction(0), länge)
         if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), grenzenInY):
             gründe.add(Grund.nichtGanzInDerZone)
-        eigene = self._modelleVon(spieler)
+        eigene = _modelleVon(spieler)
         for anderes, andereStelle in self._stellen.items():
             if anderes is modell:
                 continue
@@ -143,9 +147,6 @@ class Aufstellung:
             ):
                 gründe.add(Grund.nahkampfreichweite)
         return gründe
-
-    def _modelleVon(self, spieler: Spieler) -> set[Modell]:
-        return {modell for einheit in spieler.armee.einheiten for modell in einheit.modelle}
 
     def _grenzenInX(self, zone: Aufstellungszone) -> tuple[Fraction, Fraction]:
         breite, _ = self._ausgangslage.spielfeld.seitenlängen

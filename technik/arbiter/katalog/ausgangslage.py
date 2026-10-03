@@ -1,5 +1,6 @@
 from fractions import Fraction
 from pathlib import Path
+from types import MappingProxyType
 
 import yaml
 
@@ -16,8 +17,8 @@ def _laden(dateiname: str) -> dict:
 
 def _durchmesserLesen(zahl: object) -> int:
     # Warum: gerechnet wird mit ganzen mm (technik/architektur.md, S2)
-    if not isinstance(zahl, int):
-        raise ValueError(f"Der Durchmesser muss eine ganze Zahl in mm sein: {zahl!r}")
+    if type(zahl) is not int or zahl <= 0:
+        raise ValueError(f"Der Durchmesser muss eine ganze Zahl über 0 in mm sein: {zahl!r}")
     return zahl
 
 
@@ -47,10 +48,14 @@ def ausgangslageAus(ausgangslage: dict, onlyWar: dict) -> Ausgangslage:
         # Regel: Die Zonen liegen an den langen Kanten, entlang der zweiten Seitenlänge (S1)
         if zone["Spielfeldkante"] != länge:
             raise ValueError(f"Die Zone {name} liegt nicht an einer Kante der Länge {länge}")
+        if name not in Aufstellungszone.__members__:
+            raise ValueError(f"Die Aufstellungszone {name} gibt es nicht")
         tiefen[Aufstellungszone[name]] = Fraction(zone["Tiefe"])
+    if set(tiefen) != set(Aufstellungszone):
+        raise ValueError("Jede Aufstellungszone braucht eine Tiefe")
     return Ausgangslage(
         ersterSpieler=Spieler(armee=_armeeLesen(ersteArmee)),
         zweiterSpieler=Spieler(armee=_armeeLesen(zweiteArmee)),
         spielfeld=Spielfeld(seitenlängen=(Fraction(breite), Fraction(länge))),
-        tiefen=tiefen,
+        tiefen=MappingProxyType(tiefen),
     )
