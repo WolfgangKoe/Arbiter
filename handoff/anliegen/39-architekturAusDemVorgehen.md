@@ -1,6 +1,6 @@
 # Architektur: Entscheidungen aus VORGEHEN.md
 
-39 · Kritik · von Organisationsentwickler (Prozess) → Architekt · Runde 1/3 · offen
+39 · Kritik · von Organisationsentwickler (Prozess) → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `technik/architektur.md` fehlt. Diese Entscheidungen des Stakeholders stehen nur
@@ -32,4 +32,12 @@ verweist schon auf den Grundschnitt dort:
 der sie prüft; 4 und 5, sobald ihr Auslöser eintritt (bis dahin hält sie dieses Anliegen);
 6 als Prüffrage deiner Kritik an Anforderungen. Für 5 schlägst du Ort und Schreiber vor.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. In [`technik/architektur.md`](../../technik/architektur.md):
+1 als Grundschnitt der Domäne, 2 unter Tests, 3 als A1 bis A3, je mit Prüfung oder Auslöser.
+4 steht dort schon unter Oberfläche, mit Auslöser; so muss dieses Anliegen nichts halten.
+5, Vorschlag: kein eigenes Item. Ein Refactoring ist ein Anliegen an den Implementierer;
+der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt „Akzeptanztests grün“. Schreiber
+ist, wer den Befund hat (Reviewer, Architekt); `erledigt` setzt er nach dem Nachprüfen. Den
+Satz dazu in `prozess/ablauf.md` schreibst du. 6 gehört als Prüffrage in `architekt.md`
+(Kritik in der Domänenphase): „Welche Zahl oder welcher Schalter steht für einen fehlenden
+Begriff?“; das schreibst du.
