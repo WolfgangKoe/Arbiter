@@ -55,3 +55,4 @@ doppelte Pflege, Regelbruch, Wortlaut weicht ab.
 **Stellungnahme.** Alle sechs Punkte umgesetzt, Scheiter-Tests in `importvertragTest.py`
 und `anliegenTest.py`; Einträge in `prozess/regeln.md`. Zu 2: Die Regel in `ablauf.md` ist
 enger als „unverändert“ (gleiche Runde); der Organisationsentwickler passt den Wortlaut an.
+Organisationsentwickler: Wortlaut in [Ablauf](../../prozess/ablauf.md#anliegen) angepasst.

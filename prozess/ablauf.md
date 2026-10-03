@@ -169,10 +169,11 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   `statusrecht.py` (Write, Edit).
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt
   `erledigt` selbst ein. Mechanismus: `stand.py`.
-- Ein Anliegen an den Stakeholder mit Status `offen`, das seit der letzten Freigabe
-  unverändert ist, hat die Freigabe beantwortet: Dran ist der Absender, er setzt
-  `beantwortet` und arbeitet die Antworten ein. Mechanismus: `anliegen.py` (`wartetAuf`),
-  `gitAufruf.py` (`seitFreigabeUnverändert`).
+- Ein Anliegen an den Stakeholder mit Status `offen`, das im Commit der letzten Freigabe
+  (Betreff `Freigabe …`) schon in derselben Runde `offen` war, hat die Freigabe beantwortet:
+  Dran ist der Absender, er setzt `beantwortet` und arbeitet die Antworten ein. Notizen und
+  ersetzte Links ändern daran nichts, erst eine neue Runde des Absenders. Mechanismus:
+  `anliegen.py` (`beantwortetDurchFreigabe`, `wartetAuf`), `gitAufruf.py` (`letzteFreigabe`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `statusrecht.py` nicht, das Löschen schon. Mechanismus: nur Text.
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
