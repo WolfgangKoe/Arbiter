@@ -1,6 +1,6 @@
 # Prüfskripte: `pfade.py` nicht vollständig, `lage` dreimal je Test
 
-142 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+142 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: ed4d7e4 (Kritik am Code). `python3 -m pytest prozess/pruefungen` grün, `ruff`

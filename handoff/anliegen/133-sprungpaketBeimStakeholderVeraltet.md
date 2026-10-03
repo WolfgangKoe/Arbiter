@@ -1,6 +1,6 @@
 # Sprung-Versuch: Der Stakeholder probiert das alte Paket
 
-133 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+133 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 2c5d09a (Kritik am Code), Rest aus Anliegen 127.
