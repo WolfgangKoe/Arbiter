@@ -1,6 +1,6 @@
 # AUF-2.4 gehört zu den Sperren, nicht zur Ausgangslage
 
-110 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+110 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Item 1 ([ausgangslage-only-war](../../domaene/items/ausgangslage-only-war.md))

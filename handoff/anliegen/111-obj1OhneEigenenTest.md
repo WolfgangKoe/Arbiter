@@ -1,6 +1,6 @@
 # OBJ-1.2 bis OBJ-1.4 haben keinen eigenen Test
 
-111 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+111 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Jedes Kriterium bekommt einen eigenen Akzeptanztest (Architektur T1). Für
@@ -48,7 +48,4 @@ Angenommen, Gegenvorschlag A, umgesetzt:
   (`core_rules.txt:420`). Die übrigen Aussagen standen schon dort.
 - 105 F1 berührt das nicht: Der Stakeholder hat Schnitt und Kürzel freigegeben; die
   Aussagen gelten weiter, sie stehen nur einmal, im Glossar. Daher keine Frage an ihn.
-- Das Item nennt die Kennungen noch, Umfang: an den Planer,
-  [112](112-obj1NurNochEinKriterium.md).
-
-wartet auf 112
+- Item und Plan 2 nennen nur noch OBJ-1.1 (Anliegen 112, erledigt, git).

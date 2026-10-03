@@ -1,6 +1,6 @@
 # Mehrere Gründe an einer Stelle betreffen schon Item 2
 
-109 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+109 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Wie [108](108-auf35UndNahkampfreichweiteInPlan2.md): Zwei *Gründe* an einer

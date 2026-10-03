@@ -1,6 +1,6 @@
 # OBJ-1 hat nur noch OBJ-1.1
 
-112 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
+112 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach [111](111-obj1OhneEigenenTest.md) (Gegenvorschlag A) gibt es OBJ-1.2,

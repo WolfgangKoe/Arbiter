@@ -1,6 +1,6 @@
 # AUF-3.5 und Nahkampfreichweite für Plan 2
 
-108 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
+108 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Antworten aus Anliegen 100 sind eingearbeitet,
