@@ -1,43 +1,38 @@
-"""Testdaten der Akzeptanztests: kleine Armeen, keine Ausgangslage (Plan 1).
-
-Schnittstelle, vom Testautor festgelegt, vom Architekten zu prüfen: Modul- und Ordnernamen
-(`technik/backend`, `arbiter.domaene.armeen`, `.aufstellung`) sind Wahl, nicht Kriterium; zwei
-Aufstellungszone-Werte; Grund NICHT_WÄHLBAR, NICHT_IN_AUFSTELLUNG, EINHEIT_BEGONNEN;
-modell_setzen(modell) ohne Stelle, weil Plan 1 sie nicht prüft.
-"""
+"""Testdaten der Akzeptanztests: kleine Armeen ohne Ausgangslage."""
 
 import sys
 from pathlib import Path
 
 import pytest
 
+# Warum: Modul- und Ordnernamen (arbiter.domaene.armeen, .aufstellung) sind Wahl, nicht Kriterium.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "backend"))
 
 from arbiter.domaene.armeen import Armee, Einheit, Modell, Spieler  # noqa: E402
 from arbiter.domaene.aufstellung import Aufstellung  # noqa: E402
 
 
-def spieler_mit(*modellzahlen: int) -> Spieler:
+def spielerMit(*modellzahlen: int) -> Spieler:
     """Ein Spieler, dessen Armee je Zahl eine Einheit mit so vielen Modellen hat."""
     einheiten = [Einheit(modelle=[Modell() for _ in range(zahl)]) for zahl in modellzahlen]
     return Spieler(armee=Armee(einheiten=einheiten))
 
 
 @pytest.fixture
-def spieler_mit_einheiten():
-    return spieler_mit
+def spielerMitEinheiten():
+    return spielerMit
 
 
 @pytest.fixture
-def a() -> Spieler:
-    return spieler_mit(2, 1)
+def ersterSpieler() -> Spieler:
+    return spielerMit(2, 1)
 
 
 @pytest.fixture
-def b() -> Spieler:
-    return spieler_mit(2, 1)
+def zweiterSpieler() -> Spieler:
+    return spielerMit(2, 1)
 
 
 @pytest.fixture
-def aufstellung(a: Spieler, b: Spieler) -> Aufstellung:
-    return Aufstellung(a, b)
+def aufstellung(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
+    return Aufstellung(ersterSpieler, zweiterSpieler)

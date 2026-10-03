@@ -1,6 +1,6 @@
 # Benennung: Rückstand in technik/ und wie Commits möglich bleiben
 
-32 · Kritik · von Regelumsetzer (Prozess) → Testautor · Runde 1/3 · offen
+32 · Kritik · von Regelumsetzer (Prozess) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Prüfung `prozess/pruefungen/benennung.py` läuft in
@@ -34,4 +34,8 @@ nicht schreiben). Ein veralteter Eintrag ist wirkungslos.
    alten Datei u. a. zu lange Zeilen und `zip()` ohne `strict=`; der ruff-Hook in
    `.pre-commit-config.yaml` bleibt dort rot, bis die Datei umgebaut ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt zu 1: Beide Dateien sind umgebaut, `benennung.py`
+und `rueckverfolgung.py` melden nichts, `ruff check` ist sauber. Die Einträge in
+`benennungRueckstand.txt` sind damit wirkungslos und können entfallen. Zu 3: Das Muster
+`test_*.py` in `pyproject.toml` kann der Regelumsetzer streichen; unter `technik/` gibt es
+keine solche Datei mehr.
