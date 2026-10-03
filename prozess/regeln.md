@@ -16,7 +16,7 @@ Ruff nach [Ablauf, Werkzeuge](ablauf.md#technikphase), Namensregeln N802, N803, 
 Koordinator: nur Positivliste; Rollen nutzen git nur lesend | `bashPositivliste.py` | `bashPositivlisteTest.py`
 Schreibpfade je Rolle | `schreibgrenze.py` | `schreibgrenzeTest.py`
 Schlussantwort höchstens 800 Zeichen | `schlussantwort.py` | `schlussantwortTest.py`
-Stand und Ordner-CLAUDE.md beim Start einer Rolle; Rollenläufe als Kennzahl | `rollenkontext.py`, `rollenzaehler.py` | `rollenkontextTest.py`, `rollenzaehlerTest.py`
+Stand und Ordner-CLAUDE.md beim Start einer Rolle | `rollenkontext.py` | `rollenkontextTest.py`
 Höchstmaße der Dateien, darunter Anliegen und Moderation je 4.000, Akzeptanztest-Datei 20.000 | `hoechstmassTest.py` | `hoechstmassTest.py`
 cSpell und LTeX+ prüfen kein Markdown: `cSpell.enabledFileTypes`, `cSpell.ignorePaths` (`**/*.md`, unabhängig von der Sprache), `ltex.enabled`; Wirkung nur in VS Code messbar | `.vscode/settings.json` | `cspellTest.py`
 [Technikphase, Schritt 5](ablauf.md#technikphase): Abnahme vor Review; offen ist ein Item, solange seine Datei in `domaene/items/` liegt (Anliegen 56) | `stand.py` (`offeneItems`, `lage`) | `standTest.py`
@@ -26,10 +26,12 @@ cSpell und LTeX+ prüfen kein Markdown: `cSpell.enabledFileTypes`, `cSpell.ignor
 [Anliegen](ablauf.md#anliegen): Links auf ein gelöschtes Anliegen werden zu „Anliegen <nr>“ | `erledigteLoeschen.py` (`linksErsetzen`; pre-commit, SubagentStop) | `erledigteLoeschenTest.py`
 [Anliegen](ablauf.md#anliegen): unter jeder Frage an den Stakeholder eine Zeile `Antwort:` (offene Anliegen an ihn; Anliegen 20) | `anliegen.py` (`antwortVerstöße`, über `kopfVerstöße`) | `anliegenTest.py`
 Komplexität: Schwelle 15 (kognitiv, Verschachtelung) und höchstens 12 Fälle je Funktion ([Ablauf, Werkzeuge](ablauf.md#technikphase)); Grenzproben 15 grün, 16 rot, 12 Fälle grün, 13 rot | `pyproject.toml` (`tool.complexipy`, `complexipy==8.0.*`, ruff `PLR0912`, `max-branches`); im Lauf von `python3 -m pytest prozess/pruefungen`, rot, wenn complexipy fehlt | `komplexitaetTest.py`
-[Kennzahlen](kennzahlen.md): Rollenläufe je Phase und Rolle, offene Anliegen je Rolle mit Alter (Aufruf `python3 prozess/pruefungen/kennzahlen.py`, für die Retro) | `kennzahlen.py` | `kennzahlenTest.py`
+[Kennzahlen](kennzahlen.md): offene Anliegen je Rolle mit Alter (Aufruf `python3 prozess/pruefungen/kennzahlen.py`, für die Retro) | `kennzahlen.py` | `kennzahlenTest.py`
 [DoD 2](ablauf.md#technikphase), Code → Glossar: Jede Klasse der Domäne steht im Glossar, jeder Enum-Wert in Klammern hinter seiner Klasse oder als *Grund* in einer Anforderung; Glossar → Code bleibt Urteil | `glossar.py` (im Lauf von `python3 -m pytest prozess/pruefungen`) | `glossarTest.py` (Enum-Wert `nord`, Klasse `Spielfeld`)
-Spur vom Kriterium zum Test und zurück (Anliegen 53): Befehl `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4 [--json]`, VS-Code-Versuch; Klick unerprobt | `rueckverfolgung.py` (`spur`), `sprung/` | `rueckverfolgungTest.py`, `sprungTest.py`
+Spur vom Kriterium zum Test und zurück (Anliegen 53): Befehl `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (Sprung über den Namen, [T2](../technik/architektur.md)) | `rueckverfolgung.py` (`spur`) | `rueckverfolgungTest.py`
 [Ablauf, Domänenphase](ablauf.md#domänenphase): Plan mit Item braucht den Link auf `domaene/items/` (Anliegen 76) | `plan.py` (`itemsOhneLink`), `stand.py` | `standTest.py`
 [Kritik am Code](ablauf.md#kritik-am-code): alle Kritiker der getroffenen Pfade; Kritik ist ein Betreff `Kritik <a> <b>`; der Stand meldet den ersten Code-Commit seit der letzten Freigabe, den keine Kritik nennt | `codekritik.py` | `standTest.py`
 Bekannte Lücke der Bash-Heuristik: `cd <pfad> && rm …` umgeht die Sperre für Anliegen und nur lesbare Pfade | `bashPositivliste.py` | keiner
 [Ablauf, Domänenphase](ablauf.md#domänenphase), Schritte 4 und 5: Anforderungsautor, wenn kein Kriterium ohne Test da ist, sonst Planer; Plan mit Links wartet erst, wenn jedes Item ein Kriterium ohne Test nennt (Anliegen 99) | `stand.py` (`domänenphase`, `planOhneFreigabe`), `rueckverfolgung.py` (`fehlendeTests`) | `standTest.py`
+[Budget](ablauf.md#budget): Der Stand nennt keine Rollenläufe, kein Hook zählt sie (Anliegen 120) | Zähler entfernt (`stand.py`, `kennzahlen.py`, Hook `SubagentStart` ohne Zähler) | `standTest.py` (altes Protokoll liegt, Stand ohne „Rollenläufe“)
+[Anliegen](ablauf.md#anliegen): Fragen an den Stakeholder mit Status `offen`, seit der letzten Freigabe unverändert, sind beantwortet; dran ist der Absender; `eskaliert` bleibt beim Stakeholder (Anliegen 121) | `anliegen.py` (`wartetAuf`, `dran`), `gitAufruf.py` (`jüngsteFreigabe`, `seitFreigabeUnverändert`) | `anliegenTest.py` (vier Fälle und zwei Grenzfälle)

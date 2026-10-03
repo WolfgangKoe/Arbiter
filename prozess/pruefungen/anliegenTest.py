@@ -1,8 +1,16 @@
+import subprocess
 from pathlib import Path
 
 import pytest
 
-from anliegen import anliegenDateien, kopfLesen, kopfVerstöße, nachprüfungen, nachprüfungenAlsText
+from anliegen import (
+    anliegenDateien,
+    dran,
+    kopfLesen,
+    kopfVerstöße,
+    nachprüfungen,
+    nachprüfungenAlsText,
+)
 
 wurzel = Path(__file__).resolve().parents[2]
 guterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
@@ -111,3 +119,68 @@ def testFragenMitAntwortzeileSindGrün(tmp_path):
 def testBeantworteteFragenBrauchenKeineAntwortzeile(tmp_path):
     datei = fragenAnStakeholder(tmp_path, "**F1 · Eins.** Text.\n", status="beantwortet")
     assert kopfVerstöße(datei, tmp_path) == []
+
+
+def gitAufrufen(ordner, *argumente):
+    subprocess.run(
+        ["git", "-c", "user.name=t", "-c", "user.email=t@t", *argumente],
+        cwd=ordner,
+        check=True,
+        capture_output=True,
+    )
+
+
+def stakeholderFragen(tmp_path, status="offen"):
+    gitAufrufen(tmp_path, "init", "-q")
+    kopf = f"12 · Fragen · von Planer → Stakeholder · Runde 1/3 · {status}"
+    return anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+
+
+def committen(tmp_path, betreff):
+    gitAufrufen(tmp_path, "add", "-A")
+    gitAufrufen(tmp_path, "commit", "-q", "--allow-empty", "-m", betreff)
+
+
+def dranBei(tmp_path):
+    return {rolle: nummern for rolle, nummern in dran(tmp_path).items() if nummern == [12]}
+
+
+def testFragenVorDerFreigabeSindBeimAbsenderDran(tmp_path):
+    stakeholderFragen(tmp_path)
+    committen(tmp_path, "Fragen")
+    committen(tmp_path, "Freigabe Plan 2")
+    assert dranBei(tmp_path) == {"Planer": [12]}
+
+
+def testFragenImFreigabeCommitSindBeimAbsenderDran(tmp_path):
+    stakeholderFragen(tmp_path)
+    committen(tmp_path, "Freigabe Retro 3")
+    assert dranBei(tmp_path) == {"Planer": [12]}
+
+
+def testFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path):
+    datei = stakeholderFragen(tmp_path)
+    committen(tmp_path, "Freigabe Plan 2")
+    datei.write_text(datei.read_text(encoding="utf-8") + "neu\n", encoding="utf-8")
+    assert dranBei(tmp_path) == {"Stakeholder": [12]}
+    committen(tmp_path, "Nachgefragt")
+    assert dranBei(tmp_path) == {"Stakeholder": [12]}
+
+
+def testNeueFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path):
+    gitAufrufen(tmp_path, "init", "-q")
+    committen(tmp_path, "Freigabe Plan 2")
+    stakeholderFragen(tmp_path)
+    assert dranBei(tmp_path) == {"Stakeholder": [12]}
+
+
+def testEskaliertVorDerFreigabeBleibtBeimStakeholder(tmp_path):
+    stakeholderFragen(tmp_path, status="eskaliert")
+    committen(tmp_path, "Freigabe Plan 2")
+    assert dranBei(tmp_path) == {"Stakeholder": [12]}
+
+
+def testOhneFreigabeInGitBleibtDerStakeholderDran(tmp_path):
+    stakeholderFragen(tmp_path)
+    committen(tmp_path, "Fragen")
+    assert dranBei(tmp_path) == {"Stakeholder": [12]}

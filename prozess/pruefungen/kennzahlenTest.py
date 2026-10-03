@@ -1,20 +1,9 @@
-import json
 import subprocess
 import sys
 from datetime import date
 
 from anliegenTest import anliegenAnlegen, guterKopf
 from kennzahlen import kennzahlen
-from stand import protokoll
-
-
-def testRollenläufeStehenJePhaseUndRolle(tmp_path):
-    datei = protokoll(tmp_path)
-    datei.parent.mkdir(parents=True)
-    phase = "Zyklus 1 · Technikphase"
-    einträge = [{"phase": phase, "rolle": rolle} for rolle in ("planer", "planer", "architekt")]
-    datei.write_text("\n".join(json.dumps(eintrag) for eintrag in einträge), encoding="utf-8")
-    assert f"- {phase}: 3 (architekt 1, planer 2)" in kennzahlen(tmp_path, date(2026, 1, 1))
 
 
 def testOffeneAnliegenStehenJeRolleMitAlter(tmp_path):
@@ -44,4 +33,4 @@ def testSkriptLäuftImRepo():
         cwd=__file__.rsplit("/prozess/", 1)[0],
     )
     assert ergebnis.returncode == 0
-    assert "Rollenläufe je Phase und Rolle" in ergebnis.stdout
+    assert "Offene Anliegen je Rolle" in ergebnis.stdout

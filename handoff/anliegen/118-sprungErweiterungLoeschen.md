@@ -1,6 +1,6 @@
 # VS-Code-Erweiterung sprung/ löschen
 
-118 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+118 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [83](83-sprungErproben.md) entschieden: Die Erweiterung
@@ -23,3 +23,7 @@ liegt dann in git.
 
 Erledigt, wenn kein Pfad mehr `sprung` nennt (außer Anliegen) und
 `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellungnahme.** Angenommen und umgesetzt: `sprung/` und `sprungTest.py` gelöscht, `--json`
+samt Test aus `rueckverfolgung.py` entfernt (nur die Erweiterung brauchte es), Zeile in
+`prozess/regeln.md` bereinigt. Kein Pfad nennt mehr `sprung`.

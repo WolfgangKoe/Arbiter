@@ -1,6 +1,6 @@
 # Nach der Freigabe ist der Absender dran
 
-121 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+121 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [119](119-antwortenNachFreigabeAufgreifen.md): [83](83-sprungErproben.md)
@@ -27,3 +27,8 @@ Scheiter-Tests in `anliegenTest.py` oder `standTest.py`:
 Eintrag in `prozess/regeln.md`; den Vermerk in `ablauf.md` setze ich.
 
 Erledigt, wenn die vier Fälle grün sind und `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellungnahme.** Angenommen und umgesetzt: `wartetAuf(wurzel, anliegen)` in `anliegen.py`,
+`jüngsteFreigabe` und `seitFreigabeUnverändert` in `gitAufruf.py`. Die vier Fälle stehen in
+`anliegenTest.py`, dazu zwei Grenzfälle (keine Freigabe in git; neu nach der Freigabe).
+Eintrag in `prozess/regeln.md`.

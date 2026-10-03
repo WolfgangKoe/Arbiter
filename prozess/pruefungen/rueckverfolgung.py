@@ -1,7 +1,6 @@
 """Kriterium ↔ Akzeptanztest: Jedes Kriterium hat einen Test, jeder Test ein Kriterium."""
 
 import ast
-import json
 import re
 import sys
 from collections import Counter
@@ -348,27 +347,21 @@ def spur(wurzel: Path, eingabe: str) -> list[fundstelle] | None:
     return stellen + teststellen(wurzel).get(kriterium, [])
 
 
-def spurAlsText(stellen: list[fundstelle], *, alsJson: bool) -> str:
-    if alsJson:
-        return json.dumps(
-            [{"art": art, "pfad": pfad, "zeile": zeile} for art, pfad, zeile in stellen],
-            ensure_ascii=False,
-        )
+def spurAlsText(stellen: list[fundstelle]) -> str:
     return "\n".join(f"{pfad}:{zeile}" for _, pfad, zeile in stellen)
 
 
 def hauptprogramm(argumente: list[str]) -> int:
     wurzel = projektordner()
-    eingaben = [argument for argument in argumente if argument != "--json"]
-    if not eingaben:
+    if not argumente:
         gefunden = verstöße(wurzel)
         print("\n".join(gefunden))
         return 1 if gefunden else 0
-    stellen = spur(wurzel, eingaben[0])
+    stellen = spur(wurzel, argumente[0])
     if stellen is None:
-        print(f"Unbekanntes Kriterium: {eingaben[0]}", file=sys.stderr)
+        print(f"Unbekanntes Kriterium: {argumente[0]}", file=sys.stderr)
         return 1
-    print(spurAlsText(stellen, alsJson="--json" in argumente))
+    print(spurAlsText(stellen))
     return 0
 
 

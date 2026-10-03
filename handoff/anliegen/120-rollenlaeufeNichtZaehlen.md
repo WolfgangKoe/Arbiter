@@ -1,6 +1,6 @@
 # Rollenläufe nicht mehr zählen
 
-120 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+120 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder, zum zweiten Mal: „Auf die Rollenläufe kommt es nicht an, nur
@@ -31,3 +31,8 @@ vor: weniger Code zum Umziehen.
 
 Erledigt, wenn der Stand keine Rollenläufe mehr nennt, kein Hook sie zählt und
 `python3 -m pytest prozess/pruefungen` grün ist; den Vermerk in `ablauf.md` setze ich.
+
+**Stellungnahme.** Angenommen und umgesetzt: Zähler, Protokoll, Hook auf `rollenzaehler.py`,
+Skript und Test entfernt; `kennzahlen.py` nennt nur offene Anliegen; das Protokoll in `.git/`
+ist gelöscht. Scheiter-Test: `standTest.py`
+(`testStandNenntKeineRollenläufeAuchMitAltemProtokoll`). Eintrag in `prozess/regeln.md`.

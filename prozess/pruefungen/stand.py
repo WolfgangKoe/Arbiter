@@ -13,8 +13,6 @@ from gitAufruf import freigabeCommit, gitAusgabe
 from plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
 from rueckverfolgung import fehlendeTests, nenntFehlendes, wartendeAlsText
 
-rollenlaufKennzahl = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
-
 
 def aktuelleEtappe(wurzel: Path) -> tuple[int, str] | None:
     dateien = sorted((wurzel / "domaene" / "etappen").glob("*.md"))
@@ -87,26 +85,6 @@ def lage(wurzel: Path) -> tuple[int, str, str]:
     return plan + 1, "Domänenphase", domänenphase(wurzel, plan + 1)
 
 
-def protokoll(wurzel: Path) -> Path:
-    return wurzel / ".git" / "arbiter" / "rollenlaeufe.jsonl"
-
-
-def rollenläufe(wurzel: Path, schlüssel: str) -> int:
-    datei = protokoll(wurzel)
-    if not datei.is_file():
-        return 0
-    return sum(
-        json.loads(zeile).get("phase") == schlüssel
-        for zeile in datei.read_text(encoding="utf-8").splitlines()
-        if zeile.strip()
-    )
-
-
-def kennzahlRollenläufe(wurzel: Path, zyklusNummer: int, phase: str) -> str:
-    läufe = rollenläufe(wurzel, f"Zyklus {zyklusNummer} · {phase}")
-    return f"Rollenläufe {läufe}/{rollenlaufKennzahl[phase]}"
-
-
 def belegungsText(transkript: Path | None) -> str:
     belegung = belegungAusTranskript(transkript) if transkript else None
     if belegung is None:
@@ -125,7 +103,6 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
         f"Zyklus {zyklusNummer}, {phase}",
         f"Nächster Schritt: {schritt}",
         belegungsText(transkript),
-        kennzahlRollenläufe(wurzel, zyklusNummer, phase),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
         dranAlsText(wurzel),
         nachprüfungenAlsText(wurzel),

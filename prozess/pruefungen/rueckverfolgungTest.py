@@ -1,4 +1,3 @@
-import json
 import subprocess
 from pathlib import Path
 
@@ -229,16 +228,6 @@ def testSpurZuUnbekanntemKriteriumIstEinFehler(tmp_path, eingabe, monkeypatch, c
     assert spur(tmp_path, eingabe) is None
     assert hauptprogramm([eingabe]) == 1
     assert "Unbekanntes Kriterium" in capsys.readouterr().err
-
-
-def testSpurAlsJsonIstEineListeVonObjekten(tmp_path, monkeypatch, capsys):
-    spurProbe(tmp_path)
-    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
-    assert hauptprogramm(["AUF-1.1", "--json"]) == 0
-    assert json.loads(capsys.readouterr().out) == [
-        {"art": "Kriterium", "pfad": kriteriumsPfad, "zeile": 5},
-        {"art": "Test", "pfad": testPfad, "zeile": 1},
-    ]
 
 
 def planMitUmfang(wurzel: Path, umfang: str) -> None:

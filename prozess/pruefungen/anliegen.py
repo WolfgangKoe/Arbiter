@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from agenten import rollennamen
-from gitAufruf import gitAusgabe
+from gitAufruf import gitAusgabe, seitFreigabeUnverändert
 
 statusWerte = ("offen", "angenommen", "abgelehnt", "beantwortet", "eskaliert", "erledigt")
 typWerte = ("Kritik", "Fragen", "Anliegen")
@@ -127,10 +127,14 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
     return "Nachprüfung fällig: " + ", ".join(teile)
 
 
-def wartetAuf(anliegen: Anliegen) -> str | None:
-    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`."""
+def wartetAuf(wurzel: Path, anliegen: Anliegen) -> str | None:
+    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`; Fragen an den
+    Stakeholder, die seit der letzten Freigabe unverändert sind, hat die Freigabe beantwortet."""
     if anliegen.status == "offen":
-        return anliegen.empfänger
+        beantwortet = anliegen.empfänger == stakeholder and seitFreigabeUnverändert(
+            wurzel, anliegen.datei
+        )
+        return anliegen.absender if beantwortet else anliegen.empfänger
     if anliegen.status in ("angenommen", "abgelehnt", "beantwortet"):
         return anliegen.absender
     if anliegen.status == "eskaliert":
@@ -142,7 +146,7 @@ def dran(wurzel: Path) -> dict[str, list[int]]:
     """Offene Anliegen je Rolle, die dran ist; `angenommen` steht bei `nachprüfungen`."""
     zuständig: dict[str, list[int]] = {}
     for anliegen in gelesene(wurzel):
-        rolle = wartetAuf(anliegen)
+        rolle = wartetAuf(wurzel, anliegen)
         if rolle and anliegen.status != "angenommen":
             zuständig.setdefault(rolle, []).append(anliegen.nummer)
     return zuständig

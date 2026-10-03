@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from stand import aktuelleEtappe, lage, protokoll, stand
+from stand import aktuelleEtappe, lage, stand
 
 
 class Repo:
@@ -178,12 +178,12 @@ def testAktuelleEtappeIstDieErsteDateiNachNamen(repo):
     assert aktuelleEtappe(repo.wurzel) == (1, "Etappe 1 · Aufstellen")
 
 
-def testRollenläufeStehenAlsKennzahlImStand(repo):
-    datei = protokoll(repo.wurzel)
+def testStandNenntKeineRollenläufeAuchMitAltemProtokoll(repo):
+    datei = repo.wurzel / ".git" / "arbiter" / "rollenlaeufe.jsonl"
     datei.parent.mkdir(parents=True)
     eintrag = json.dumps({"phase": "Zyklus 1 · Domänenphase", "rolle": "planer"})
     datei.write_text((eintrag + "\n") * 3, encoding="utf-8")
-    assert "Rollenläufe 3/8" in stand(repo.wurzel)
+    assert "Rollenläufe" not in stand(repo.wurzel)
 
 
 def testStandNenntDieBelegungDesTranskripts(repo, tmp_path_factory):

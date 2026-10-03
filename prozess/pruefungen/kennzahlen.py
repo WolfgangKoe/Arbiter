@@ -1,26 +1,11 @@
-"""Kennzahlen für die Retro (`prozess/kennzahlen.md`): Rollenläufe und offene Anliegen."""
+"""Kennzahlen für die Retro (`prozess/kennzahlen.md`): offene Anliegen je Rolle."""
 
-import json
-from collections import Counter
 from datetime import UTC, date, datetime
 from pathlib import Path
 
 from agenten import projektordner
 from anliegen import Anliegen, gelesene, wartetAuf
 from gitAufruf import gitAusgabe
-from stand import protokoll
-
-
-def rollenläufeJePhaseUndRolle(wurzel: Path) -> dict[str, Counter[str]]:
-    datei = protokoll(wurzel)
-    läufe: dict[str, Counter[str]] = {}
-    if not datei.is_file():
-        return läufe
-    for zeile in datei.read_text(encoding="utf-8").splitlines():
-        if zeile.strip():
-            eintrag = json.loads(zeile)
-            läufe.setdefault(eintrag["phase"], Counter())[eintrag["rolle"]] += 1
-    return läufe
 
 
 def alterInTagen(wurzel: Path, anliegen: Anliegen, heute: date) -> int:
@@ -37,7 +22,7 @@ def offeneAnliegenJeRolle(wurzel: Path, heute: date) -> dict[str, list[tuple[int
     """Rolle → (Nummer, Alter in Tagen) der Anliegen, bei denen sie dran ist."""
     jeRolle: dict[str, list[tuple[int, int]]] = {}
     for anliegen in gelesene(wurzel):
-        rolle = wartetAuf(anliegen)
+        rolle = wartetAuf(wurzel, anliegen)
         if rolle:
             jeRolle.setdefault(rolle, []).append(
                 (anliegen.nummer, alterInTagen(wurzel, anliegen, heute))
@@ -46,10 +31,7 @@ def offeneAnliegenJeRolle(wurzel: Path, heute: date) -> dict[str, list[tuple[int
 
 
 def kennzahlen(wurzel: Path, heute: date) -> str:
-    zeilen = ["Rollenläufe je Phase und Rolle"]
-    for phase, rollen in sorted(rollenläufeJePhaseUndRolle(wurzel).items()):
-        verteilung = ", ".join(f"{rolle} {anzahl}" for rolle, anzahl in sorted(rollen.items()))
-        zeilen.append(f"- {phase}: {sum(rollen.values())} ({verteilung})")
+    zeilen = []
     zeilen.append("Offene Anliegen je Rolle, die dran ist (Nummer, Alter in Tagen)")
     for rolle, anliegen in sorted(offeneAnliegenJeRolle(wurzel, heute).items()):
         liste = ", ".join(f"{nummer:02d} ({alter} T)" for nummer, alter in sorted(anliegen))
