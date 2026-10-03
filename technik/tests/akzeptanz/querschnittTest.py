@@ -27,18 +27,19 @@ def testQue1_1OhneSperreIstDasModellDanachAnDerStelleGesetzt(
 
 
 @pytest.mark.parametrize(
-    ("anteilX", "anteilY"),
+    "anteile",
     [(0, 0), (Fraction(1, 2), 0), (0, Fraction(99, 100)), (Fraction(297, 500), Fraction(99, 125))],
     ids=["dieselbeStelle", "halbVersetzt", "knappInDerLänge", "knappSchräg"],
 )
 def testQue1_2ÜberdecktDieBaseDieEinesGesetztenModellsIstSieGesperrt(
-    aufstellung, einheitInAufstellung, anteilX, anteilY, platz
+    aufstellung, einheitInAufstellung, anteile, platz, sperrgründe
 ):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
+    anteilX, anteilY = anteile
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3 + 2 * platz.radius * anteilX, platz.radius + 2 * platz.radius * anteilY)
 
-    gründe = platz.sperrgründe(aufstellung.modellSetzen, zweitesModell, stelle)
+    gründe = sperrgründe(aufstellung.modellSetzen, zweitesModell, stelle)
 
     assert gründe == {Grund.baseÜberdeckt}
     assert not aufstellung.gesetzt(zweitesModell)
@@ -61,25 +62,27 @@ def testQue1_2BerührenSichDieBasesIstDasSetzenNichtGesperrt(
     assert aufstellung.gesetzt(zweitesModell)
 
 
-def testQue1_2EinMillionstelZollZuNahIstGesperrt(aufstellung, einheitInAufstellung, platz):
+def testQue1_2EinMillionstelZollZuNahIstGesperrt(
+    aufstellung, einheitInAufstellung, platz, sperrgründe
+):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3, 3 * platz.radius - platz.millionstel)
 
-    gründe = platz.sperrgründe(aufstellung.modellSetzen, zweitesModell, stelle)
+    gründe = sperrgründe(aufstellung.modellSetzen, zweitesModell, stelle)
 
     assert gründe == {Grund.baseÜberdeckt}
 
 
 def testQue1_2AuchDasModellEinerAufgestelltenEinheitWirdÜberdeckt(
-    aufstellung, einheitNachDemAnderenSpieler, ersterSpieler, platz
+    aufstellung, einheitNachDemAnderenSpieler, ersterSpieler, sperrgründe
 ):
     aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
     aufgestelltesModell, *_ = aufgestellteEinheit.modelle
     (modell,) = einheitNachDemAnderenSpieler.modelle
     stelle = aufstellung.stelle(aufgestelltesModell)
 
-    gründe = platz.sperrgründe(aufstellung.modellSetzen, modell, stelle)
+    gründe = sperrgründe(aufstellung.modellSetzen, modell, stelle)
 
     assert gründe == {Grund.baseÜberdeckt}
     assert not aufstellung.gesetzt(modell)

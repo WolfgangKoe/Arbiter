@@ -5,10 +5,6 @@ from fractions import Fraction
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
 
-# Regel: Tiefe der Aufstellungszonen 9″, Länge der Spielfeldkante 60″ (onlyWar.yaml)
-tiefeDerZone = 9
-längeDerSpielfeldkante = 60
-
 
 def modelleDerArmeen(ausgangslage):
     return [modell for einheit in einheitenDerArmeen(ausgangslage) for modell in einheit.modelle]
@@ -33,7 +29,7 @@ def durchmesserDerArmeen(ausgangslage, durchmesserJeEinheit) -> list[tuple[tuple
 
 def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitInAufstellung, platz):
     erstesModell, _ = einheitInAufstellung.modelle
-    stelle = platz.stelle(tiefeDerZone - platz.radius, 10)
+    stelle = platz.stelle(platz.tiefeDerZone - platz.radius, 10)
 
     aufstellung.modellSetzen(erstesModell, stelle)
 
@@ -41,12 +37,12 @@ def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitIn
 
 
 def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
-    aufstellung, einheitInAufstellung, platz
+    aufstellung, einheitInAufstellung, platz, sperrgründe
 ):
     erstesModell, _ = einheitInAufstellung.modelle
-    stelle = platz.stelle(tiefeDerZone - platz.radius + platz.millionstel, 10)
+    stelle = platz.stelle(platz.tiefeDerZone - platz.radius + platz.millionstel, 10)
 
-    gründe = platz.sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
+    gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
 
     assert gründe == {Grund.nichtGanzInDerZone}
     assert not aufstellung.gesetzt(erstesModell)
@@ -63,7 +59,7 @@ def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(aufstellung, einheitInAufs
 
 def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(aufstellung, einheitInAufstellung, platz):
     erstesModell, _ = einheitInAufstellung.modelle
-    stelle = platz.stelle(platz.radius, längeDerSpielfeldkante - platz.radius)
+    stelle = platz.stelle(platz.radius, platz.längeDerSpielfeldkante - platz.radius)
 
     aufstellung.modellSetzen(erstesModell, stelle)
 

@@ -12,9 +12,10 @@ from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, 
 
 # Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
-# Regel: Spielfeld 44″ × 60″, die erste Aufstellungszone an der Kante x = 0, die zweite an x = 44
-# (onlyWar.yaml); Stelle: Zoll von der Ecke, x entlang der ersten Seitenlänge, y der zweiten
+# Warum: Lage der Zonen, Ursprung und Achsen der Stelle stehen in technik/architektur.md, S1
 breiteDesSpielfelds = 44
+längeDerSpielfeldkante = 60
+tiefeDerZone = 9
 abstandDerReihen = Fraction(5, 2)
 tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
@@ -139,12 +140,21 @@ class Platz:
         self.radius = _radiusInZoll(Modell(base=Base(durchmesser=durchmesserDerTestmodelle)))
         # Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
         self.millionstel = Fraction(1, 1_000_000)
+        self.breiteDesSpielfelds = breiteDesSpielfelds
+        self.längeDerSpielfeldkante = längeDerSpielfeldkante
+        self.tiefeDerZone = tiefeDerZone
+        self.tiefeDerErstenReihe = tiefeDerErstenReihe
 
     def stelle(self, tiefe, länge) -> Stelle:
         return _stelleInZone(self._zone, tiefe, länge)
 
-    def sperrgründe(self, handlung, *argumente) -> frozenset[Grund]:
-        return _sperrgründe(handlung, *argumente)
+    def stelleBeimAnderenSpieler(self, abstandDerMittelpunkte, richtung) -> Stelle:
+        """Eine Stelle, deren Mittelpunkt so weit vom letzten Modell der ersten Einheit liegt."""
+        anteilX, anteilY = richtung
+        tiefe = (
+            self.breiteDesSpielfelds - self.tiefeDerErstenReihe - abstandDerMittelpunkte * anteilX
+        )
+        return self.stelle(tiefe, 3 * self.radius + abstandDerMittelpunkte * anteilY)
 
 
 @pytest.fixture

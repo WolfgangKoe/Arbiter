@@ -1,6 +1,6 @@
 # Akzeptanztests zu Plan 2: Lage der Zonen ohne Quelle, Maße doppelt, zwei Wege zu Gründen
 
-122 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+122 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 7752988 und 283f998, `technik/tests/akzeptanz/`. Die Schnittstelle ist gut: Die
@@ -54,4 +54,7 @@ auf einen Blick, welche Tests dafür zurückgestellt werden müssten.
 
 Verhalten unverändert: Jeder Test prüft danach dasselbe wie vorher.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle Punkte umgesetzt: Einzeiliges `# Warum:` zu S1 (1, 4);
+Maße einmal an `Platz`, dort auch `stelleBeimAnderenSpieler` (2); `Platz.sperrgründe`
+gestrichen, Parameter je Fall als ein Tupel wegen der Grenze von fünf Argumenten (3);
+`…NenntArbiterBaseNahkampfreichweiteUndZone` (5).
