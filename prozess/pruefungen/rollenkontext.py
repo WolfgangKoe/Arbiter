@@ -4,8 +4,6 @@ Die Perspektive ist der oberste Ordner des ersten Schreibpfads (domaene, technik
 Eine Rolle ohne passenden Schreibpfad bekommt keine Ordner-CLAUDE.md.
 """
 
-from __future__ import annotations
-
 import json
 import sys
 from pathlib import Path
@@ -13,13 +11,13 @@ from pathlib import Path
 from agenten import projektordner, schreibpfade
 from stand import stand
 
-PERSPEKTIVEN = ("domaene", "technik", "prozess")
+perspektiven = ("domaene", "technik", "prozess")
 
 
 def perspektive(rolle: str, wurzel: Path) -> str | None:
     muster = schreibpfade(rolle, wurzel)
     oberster = muster[0].split("/")[0] if muster else None
-    return oberster if oberster in PERSPEKTIVEN else None
+    return oberster if oberster in perspektiven else None
 
 
 def kontext(rolle: str, wurzel: Path) -> str:

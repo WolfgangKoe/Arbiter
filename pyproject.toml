@@ -1,0 +1,16 @@
+[tool.pytest.ini_options]
+# Warum: Testdateien heißen `<name>Test.py` (prozess/praemissen/wir.md); `test_*.py` gilt nur,
+# bis der Testautor technik/tests/akzeptanz umbenannt hat (benennung.py meldet den Rest).
+python_files = ["*Test.py", "test_*.py"]
+pythonpath = ["prozess/pruefungen"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["Arbiter", "ArbiterMap"]
+
+[tool.ruff.lint]
+# Werkzeugsatz nach VORGEHEN.md E37: Stil, ARG, PLR2004, PLR0913, FBT, ERA.
+select = ["E", "W", "F", "I", "N", "UP", "B", "ARG", "PLR2004", "PLR0913", "FBT", "ERA"]
+# Warum: Bezeichner sind camelCase (wir.md); die Namensprüfung übernimmt prozess/pruefungen/benennung.py.
+ignore = ["N802", "N803", "N806", "N815", "N816", "N999"]

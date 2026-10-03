@@ -8,7 +8,7 @@ from rollenkontext import kontext
 def rolle(wurzel, name, *pfade):
     ordner = wurzel / ".claude" / "agents"
     ordner.mkdir(parents=True, exist_ok=True)
-    kopf = "".join(f"  - {p}\n" for p in pfade)
+    kopf = "".join(f"  - {pfad}\n" for pfad in pfade)
     (ordner / f"{name}.md").write_text(f"---\nname: {name}\nschreibpfade:\n{kopf}---\nText.\n")
 
 
@@ -22,7 +22,7 @@ def wurzel(tmp_path):
     return tmp_path
 
 
-def test_planer_bekommt_stand_und_domaenen_claude_md(wurzel):
+def testPlanerBekommtStandUndDomänenClaudeMd(wurzel):
     rolle(wurzel, "planer", "domaene/etappen/", "handoff/plan.md")
     ergebnis = kontext("planer", wurzel)
     assert "Stand: " in ergebnis
@@ -30,13 +30,13 @@ def test_planer_bekommt_stand_und_domaenen_claude_md(wurzel):
     assert "PROZESSREGELN" not in ergebnis
 
 
-def test_rolle_ohne_passenden_schreibpfad_bekommt_keine_ordner_claude_md(wurzel):
+def testRolleOhnePassendenSchreibpfadBekommtKeineOrdnerClaudeMd(wurzel):
     rolle(wurzel, "kritiker", "handoff/anliegen/")
     ergebnis = kontext("kritiker", wurzel)
     assert "Stand: " in ergebnis
     assert "REGELN" not in ergebnis
 
 
-def test_rolle_ohne_schreibpfade_bekommt_keine_ordner_claude_md(wurzel):
+def testRolleOhneSchreibpfadeBekommtKeineOrdnerClaudeMd(wurzel):
     rolle(wurzel, "leser")
     assert "REGELN" not in kontext("leser", wurzel)

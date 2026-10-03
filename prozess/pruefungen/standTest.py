@@ -3,7 +3,7 @@ import subprocess
 
 import pytest
 
-from stand import aktuelle_etappe, lage, protokoll, stand
+from stand import aktuelleEtappe, lage, protokoll, stand
 
 
 class Repo:
@@ -14,7 +14,9 @@ class Repo:
     def git(self, *argumente):
         subprocess.run(
             ["git", "-c", "user.name=t", "-c", "user.email=t@t", *argumente],
-            cwd=self.wurzel, check=True, capture_output=True,
+            cwd=self.wurzel,
+            check=True,
+            capture_output=True,
         )
 
     def datei(self, pfad, text):
@@ -41,7 +43,7 @@ def anforderung(repo):
     repo.datei("domaene/anforderungen/aufstellung.md", "### AU-1 · Modell setzen\n")
 
 
-def bis_zur_freigabe_von_plan_1(repo):
+def bisZurFreigabeVonPlan1(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     anforderung(repo)
@@ -49,66 +51,75 @@ def bis_zur_freigabe_von_plan_1(repo):
     repo.freigabe("Plan", 1)
 
 
-def test_ohne_etappe_leitet_der_planer_sie_ab(repo):
+def anliegen(repo, nummer, status, absender="Architekt", empfänger="Planer"):
+    kopf = f"{nummer} · Kritik · von {absender} (Technik) → {empfänger} · Runde 1/3 · {status}"
+    repo.datei(f"handoff/anliegen/{nummer}-probe.md", f"# Probe\n\n{kopf}\n")
+
+
+def testOhneEtappeLeitetDerPlanerSieAb(repo):
     assert lage(repo.wurzel) == (1, "Domänenphase", "Planer: Etappen aus dem Ziel ableiten")
 
 
-def test_etappe_ohne_freigabe_wartet(repo):
+def testEtappeOhneFreigabeWartet(repo):
     etappe(repo)
     assert lage(repo.wurzel)[2] == "Etappe 1 wartet auf Kritik (Architekt) und Freigabe"
 
 
-def test_nach_freigabe_der_etappe_ist_die_erste_anforderung_dran(repo):
+def testNachFreigabeDerEtappeIstDieErsteAnforderungDran(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     assert lage(repo.wurzel)[2] == "Anforderungsautor: erste Anforderung zu Etappe 1"
 
 
-def test_eine_anforderung_genuegt_fuer_den_plan(repo):
+def testEineAnforderungGenügtFürDenPlan(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     anforderung(repo)
     assert lage(repo.wurzel)[2].startswith("Planer: Plan 1 mit den Items, die bereit sind")
 
 
-def test_plan_ohne_freigabe_wartet(repo):
+def testPlanOhneFreigabeWartet(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     anforderung(repo)
     repo.datei("handoff/plan.md", "# Plan · Zyklus 1\n")
     assert lage(repo.wurzel) == (
-        1, "Domänenphase", "Plan 1 wartet auf Kritik (Architekt) und Freigabe"
+        1,
+        "Domänenphase",
+        "Plan 1 wartet auf Kritik (Architekt) und Freigabe",
     )
 
 
-def test_freigabe_des_plans_wechselt_in_die_technik(repo):
-    bis_zur_freigabe_von_plan_1(repo)
+def testFreigabeDesPlansWechseltInDieTechnik(repo):
+    bisZurFreigabeVonPlan1(repo)
     assert lage(repo.wurzel) == (
-        1, "Technikphase", "Testautor: Akzeptanztests zu den Items von Plan 1"
+        1,
+        "Technikphase",
+        "Testautor: Akzeptanztests zu den Items von Plan 1",
     )
 
 
-def test_nach_den_akzeptanztests_ist_der_implementierer_dran(repo):
-    bis_zur_freigabe_von_plan_1(repo)
-    repo.datei("technik/tests/akzeptanz/test_au_1.py", "def test_au_1_1(): ...\n")
+def testNachDenAkzeptanztestsIstDerImplementiererDran(repo):
+    bisZurFreigabeVonPlan1(repo)
+    repo.datei("technik/tests/akzeptanz/auTest.py", "def testAu1_1Probe(): ...\n")
     assert lage(repo.wurzel)[2] == "Implementierer, dann Reviewer: Tests grün, Review 1"
 
 
-def test_review_wechselt_in_den_prozess(repo):
-    bis_zur_freigabe_von_plan_1(repo)
+def testReviewWechseltInDenProzess(repo):
+    bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     assert lage(repo.wurzel) == (1, "Prozessphase", "Organisationsentwickler: Retro 1")
 
 
-def test_retro_ohne_freigabe_wartet(repo):
-    bis_zur_freigabe_von_plan_1(repo)
+def testRetroOhneFreigabeWartet(repo):
+    bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     assert lage(repo.wurzel)[2] == "Retro 1 wartet auf Kritik und Freigabe"
 
 
-def test_freigabe_der_retro_beginnt_den_naechsten_zyklus(repo):
-    bis_zur_freigabe_von_plan_1(repo)
+def testFreigabeDerRetroBeginntDenNächstenZyklus(repo):
+    bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     repo.freigabe("Retro", 1)
@@ -116,7 +127,7 @@ def test_freigabe_der_retro_beginnt_den_naechsten_zyklus(repo):
     assert lage(repo.wurzel)[2].startswith("Planer: Plan 2")
 
 
-def test_freigabe_von_plan_12_zaehlt_nicht_fuer_plan_1(repo):
+def testFreigabeVonPlan12ZähltNichtFürPlan1(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     anforderung(repo)
@@ -125,17 +136,41 @@ def test_freigabe_von_plan_12_zaehlt_nicht_fuer_plan_1(repo):
     assert lage(repo.wurzel)[1] == "Domänenphase"
 
 
-def test_aktuelle_etappe_ist_die_erste_datei_nach_namen(repo):
+def testAktuelleEtappeIstDieErsteDateiNachNamen(repo):
     repo.datei("domaene/etappen/02-bewegen.md", "# Etappe 2 · Bewegen\n")
     repo.datei("domaene/etappen/01-aufstellen.md", "# Etappe 1 · Aufstellen\n")
-    assert aktuelle_etappe(repo.wurzel) == (1, "Etappe 1 · Aufstellen")
+    assert aktuelleEtappe(repo.wurzel) == (1, "Etappe 1 · Aufstellen")
 
 
-def test_budget_steht_im_stand_und_meldet_ueberschreitung(repo):
+def testRollenläufeStehenAlsKennzahlImStand(repo):
     datei = protokoll(repo.wurzel)
     datei.parent.mkdir(parents=True)
     eintrag = json.dumps({"phase": "Zyklus 1 · Domänenphase", "rolle": "planer"})
     datei.write_text((eintrag + "\n") * 3, encoding="utf-8")
-    assert "Budget 3/8 Rollenläufe" in stand(repo.wurzel)
-    datei.write_text((eintrag + "\n") * 9, encoding="utf-8")
-    assert "über Budget (9/8 Rollenläufe)" in stand(repo.wurzel)
+    assert "Rollenläufe 3/8" in stand(repo.wurzel)
+
+
+def testStandNenntDieBelegungDesTranskripts(repo, tmp_path_factory):
+    transkript = tmp_path_factory.mktemp("transkript") / "sitzung.jsonl"
+    nutzung = {"input_tokens": 10, "cache_read_input_tokens": 59_990}
+    transkript.write_text(json.dumps({"message": {"usage": nutzung}}) + "\n", encoding="utf-8")
+    assert "Belegung 60.000/120.000 Token" in stand(repo.wurzel, transkript)
+
+
+def testStandEmpfiehltAbDerWarnschwelleEinenNeuenChat(repo, tmp_path_factory):
+    transkript = tmp_path_factory.mktemp("transkript") / "sitzung.jsonl"
+    nutzung = {"cache_read_input_tokens": 125_000}
+    transkript.write_text(json.dumps({"message": {"usage": nutzung}}) + "\n", encoding="utf-8")
+    assert "neuer Chat empfohlen" in stand(repo.wurzel, transkript)
+
+
+def testStandNenntFälligeNachprüfungenMitRolle(repo):
+    anliegen(repo, "12", "angenommen", absender="Architekt")
+    anliegen(repo, "13", "offen", absender="Architekt")
+    anliegen(repo, "14", "angenommen", absender="Fachkritiker")
+    assert "Nachprüfung fällig: Architekt (12), Fachkritiker (14)" in stand(repo.wurzel)
+
+
+def testStandOhneAngenommeneAnliegenNenntKeineNachprüfung(repo):
+    anliegen(repo, "13", "offen")
+    assert "Nachprüfung" not in stand(repo.wurzel)

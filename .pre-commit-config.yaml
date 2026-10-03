@@ -1,0 +1,26 @@
+repos:
+  - repo: local
+    hooks:
+      - id: erledigteLoeschen
+        name: Erledigte Anliegen löschen
+        entry: python3 prozess/pruefungen/erledigteLoeschen.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: pruefungen
+        name: Prüfungen (Hooks, Benennung, Höchstmaße, Anliegen, Kriterium zu Test)
+        entry: python3 -m pytest prozess/pruefungen -q
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: benennung
+        name: Benennung nach prozess/praemissen/wir.md
+        entry: python3 prozess/pruefungen/benennung.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: ruff
+        name: ruff
+        entry: ruff check
+        language: system
+        types: [python]

@@ -7,8 +7,6 @@ Ein Plan mit einem einzigen Item aus der ersten fertigen Anforderung genügt.
 Die aktuelle Etappe ist die nach Namen erste Datei `domaene/etappen/*.md` (`# Etappe <n> · …`).
 """
 
-from __future__ import annotations
-
 import json
 import re
 import subprocess
@@ -16,19 +14,21 @@ import sys
 from pathlib import Path
 
 from agenten import projektordner
+from anliegen import anliegenDateien, nachprüfungenAlsText
+from belegung import belegungAusTranskript, punkte, warnschwelle
 
-BUDGET = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
+rollenlaufKennzahl = {"Domänenphase": 8, "Technikphase": 10, "Prozessphase": 5}
 
 
-def git(wurzel: Path, *argumente: str) -> str:
+def gitAusgabe(wurzel: Path, *argumente: str) -> str:
     return subprocess.run(
         ["git", *argumente], cwd=wurzel, capture_output=True, text=True, check=False
     ).stdout
 
 
-def freigabe_commit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
+def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
     """Der Commit mit der Betreffzeile `Freigabe <gegenstand> <nummer>`, sonst `None`."""
-    for zeile in git(wurzel, "log", "--format=%H %s").splitlines():
+    for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
         kennung, _, betreff = zeile.partition(" ")
         if betreff == f"Freigabe {gegenstand} {nummer}":
             return kennung
@@ -38,12 +38,12 @@ def freigabe_commit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
 def zyklus(datei: Path) -> int | None:
     if not datei.is_file():
         return None
-    erste_zeile = datei.read_text(encoding="utf-8").partition("\n")[0]
-    treffer = re.search(r"Zyklus\s+(\d+)", erste_zeile)
+    ersteZeile = datei.read_text(encoding="utf-8").partition("\n")[0]
+    treffer = re.search(r"Zyklus\s+(\d+)", ersteZeile)
     return int(treffer.group(1)) if treffer else None
 
 
-def aktuelle_etappe(wurzel: Path) -> tuple[int, str] | None:
+def aktuelleEtappe(wurzel: Path) -> tuple[int, str] | None:
     dateien = sorted((wurzel / "domaene" / "etappen").glob("*.md"))
     if not dateien:
         return None
@@ -54,7 +54,7 @@ def aktuelle_etappe(wurzel: Path) -> tuple[int, str] | None:
     return None
 
 
-def gibt_anforderungen(wurzel: Path) -> bool:
+def gibtAnforderungen(wurzel: Path) -> bool:
     return any(
         zeile.startswith("### ")
         for datei in (wurzel / "domaene" / "anforderungen").rglob("*.md")
@@ -62,21 +62,23 @@ def gibt_anforderungen(wurzel: Path) -> bool:
     )
 
 
-def akzeptanztests_seit(wurzel: Path, kennung: str) -> bool:
+def akzeptanztestsSeit(wurzel: Path, kennung: str) -> bool:
     pfad = "technik/tests/akzeptanz"
-    return bool(git(wurzel, "log", "--format=%H", f"{kennung}..HEAD", "--", pfad))
+    return bool(gitAusgabe(wurzel, "log", "--format=%H", f"{kennung}..HEAD", "--", pfad))
 
 
-def domaenenphase(wurzel: Path, n: int) -> str:
-    etappe = aktuelle_etappe(wurzel)
+def domänenphase(wurzel: Path, zyklusNummer: int) -> str:
+    etappe = aktuelleEtappe(wurzel)
     if etappe is None:
         return "Planer: Etappen aus dem Ziel ableiten"
     nummer, _ = etappe
-    if freigabe_commit(wurzel, "Etappe", nummer) is None:
+    if freigabeCommit(wurzel, "Etappe", nummer) is None:
         return f"Etappe {nummer} wartet auf Kritik (Architekt) und Freigabe"
-    if not gibt_anforderungen(wurzel):
+    if not gibtAnforderungen(wurzel):
         return f"Anforderungsautor: erste Anforderung zu Etappe {nummer}"
-    return f"Planer: Plan {n} mit den Items, die bereit sind (eins genügt, höchstens drei)"
+    return (
+        f"Planer: Plan {zyklusNummer} mit den Items, die bereit sind (eins genügt, höchstens drei)"
+    )
 
 
 def lage(wurzel: Path) -> tuple[int, str, str]:
@@ -84,71 +86,78 @@ def lage(wurzel: Path) -> tuple[int, str, str]:
     handoff = wurzel / "handoff"
     plan, review, retro = (zyklus(handoff / f"{name}.md") for name in ("plan", "review", "retro"))
     if plan is None:
-        return 1, "Domänenphase", domaenenphase(wurzel, 1)
-    freigabe_plan = freigabe_commit(wurzel, "Plan", plan)
-    if freigabe_plan is None:
+        return 1, "Domänenphase", domänenphase(wurzel, 1)
+    freigabePlan = freigabeCommit(wurzel, "Plan", plan)
+    if freigabePlan is None:
         return plan, "Domänenphase", f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
     if review != plan:
-        if not akzeptanztests_seit(wurzel, freigabe_plan):
+        if not akzeptanztestsSeit(wurzel, freigabePlan):
             return plan, "Technikphase", f"Testautor: Akzeptanztests zu den Items von Plan {plan}"
         return plan, "Technikphase", f"Implementierer, dann Reviewer: Tests grün, Review {plan}"
     if retro != plan:
         return plan, "Prozessphase", f"Organisationsentwickler: Retro {plan}"
-    if freigabe_commit(wurzel, "Retro", plan) is None:
+    if freigabeCommit(wurzel, "Retro", plan) is None:
         return plan, "Prozessphase", f"Retro {plan} wartet auf Kritik und Freigabe"
-    return plan + 1, "Domänenphase", domaenenphase(wurzel, plan + 1)
+    return plan + 1, "Domänenphase", domänenphase(wurzel, plan + 1)
 
 
 def protokoll(wurzel: Path) -> Path:
     return wurzel / ".git" / "arbiter" / "rollenlaeufe.jsonl"
 
 
-def rollenlaeufe(wurzel: Path, schluessel: str) -> int:
+def rollenläufe(wurzel: Path, schlüssel: str) -> int:
     datei = protokoll(wurzel)
     if not datei.is_file():
         return 0
     return sum(
-        json.loads(zeile).get("phase") == schluessel
+        json.loads(zeile).get("phase") == schlüssel
         for zeile in datei.read_text(encoding="utf-8").splitlines()
         if zeile.strip()
     )
 
 
-def budget(wurzel: Path, n: int, phase: str) -> str:
-    laeufe, grenze = rollenlaeufe(wurzel, f"Zyklus {n} · {phase}"), BUDGET[phase]
-    if laeufe > grenze:
-        return (
-            f"über Budget ({laeufe}/{grenze} Rollenläufe) → Stakeholder: freigeben, kürzen "
-            "oder verlängern"
-        )
-    return f"Budget {laeufe}/{grenze} Rollenläufe"
+def kennzahlRollenläufe(wurzel: Path, zyklusNummer: int, phase: str) -> str:
+    läufe = rollenläufe(wurzel, f"Zyklus {zyklusNummer} · {phase}")
+    return f"Rollenläufe {läufe}/{rollenlaufKennzahl[phase]}"
 
 
-def stand(wurzel: Path) -> str:
-    n, phase, schritt = lage(wurzel)
-    etappe = aktuelle_etappe(wurzel)
-    ordner = wurzel / "handoff" / "anliegen"
-    anliegen = len(list(ordner.glob("*.md"))) if ordner.is_dir() else 0
-    uncommittet = len([z for z in git(wurzel, "status", "--porcelain").splitlines() if z])
+def belegungsText(transkript: Path | None) -> str:
+    belegung = belegungAusTranskript(transkript) if transkript else None
+    if belegung is None:
+        return ""
+    hinweis = ", neuer Chat empfohlen" if belegung >= warnschwelle else ""
+    return f"Belegung {punkte(belegung)}/{punkte(warnschwelle)} Token{hinweis}"
+
+
+def stand(wurzel: Path, transkript: Path | None = None) -> str:
+    zyklusNummer, phase, schritt = lage(wurzel)
+    etappe = aktuelleEtappe(wurzel)
+    änderungen = gitAusgabe(wurzel, "status", "--porcelain").splitlines()
+    uncommittet = [zeile for zeile in änderungen if zeile]
     teile = [
         etappe[1] if etappe else "Keine Etappe",
-        f"Zyklus {n}, {phase}",
+        f"Zyklus {zyklusNummer}, {phase}",
         f"Nächster Schritt: {schritt}",
-        budget(wurzel, n, phase),
-        f"{anliegen} offene Anliegen",
-        f"{uncommittet} uncommittete Dateien",
+        belegungsText(transkript),
+        kennzahlRollenläufe(wurzel, zyklusNummer, phase),
+        f"{len(anliegenDateien(wurzel))} offene Anliegen",
+        nachprüfungenAlsText(wurzel),
+        f"{len(uncommittet)} uncommittete Dateien",
     ]
-    return "Stand: " + " · ".join(teile)
+    return "Stand: " + " · ".join(teil for teil in teile if teil)
 
 
 if __name__ == "__main__":
-    json.load(sys.stdin)
+    eingabe = json.load(sys.stdin)
+    transkript = eingabe.get("transcript_path")
     print(
         json.dumps(
             {
                 "hookSpecificOutput": {
                     "hookEventName": "SessionStart",
-                    "additionalContext": stand(projektordner()),
+                    "additionalContext": stand(
+                        projektordner(), Path(transkript) if transkript else None
+                    ),
                 }
             },
             ensure_ascii=False,

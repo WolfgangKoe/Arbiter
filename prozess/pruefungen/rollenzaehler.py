@@ -1,27 +1,26 @@
-"""Hook `SubagentStart`: zählt jeden Rollenlauf mit Zyklus und Phase, für das Budget im Stand.
+"""Hook `SubagentStart`: zählt jeden Rollenlauf mit Zyklus und Phase, als Kennzahl im Stand.
 
 Das Protokoll liegt in `.git/arbiter/`, damit es keine Änderung im Arbeitsbaum erzeugt.
 """
 
-from __future__ import annotations
-
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from pathlib import Path
 
 from agenten import projektordner
 from stand import lage, protokoll
 
 
-def zaehle(eingabe: dict, wurzel) -> None:
+def zähle(eingabe: dict, wurzel: Path) -> None:
     if not eingabe.get("agent_type"):
         return
-    n, phase, _ = lage(wurzel)
+    zyklusNummer, phase, _ = lage(wurzel)
     datei = protokoll(wurzel)
     datei.parent.mkdir(parents=True, exist_ok=True)
     eintrag = {
-        "zeit": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "phase": f"Zyklus {n} · {phase}",
+        "zeit": datetime.now(UTC).isoformat(timespec="seconds"),
+        "phase": f"Zyklus {zyklusNummer} · {phase}",
         "rolle": eingabe["agent_type"],
     }
     with datei.open("a", encoding="utf-8") as ziel:
@@ -29,4 +28,4 @@ def zaehle(eingabe: dict, wurzel) -> None:
 
 
 if __name__ == "__main__":
-    zaehle(json.load(sys.stdin), projektordner())
+    zähle(json.load(sys.stdin), projektordner())

@@ -5,17 +5,15 @@ Schlussantworten bis 17.000 Zeichen; der Kontext des Koordinators lief voll. In 
 der Bericht über `SubagentHandback`, headless als letzte Nachricht; dort prüft `SubagentStop`.
 """
 
-from __future__ import annotations
-
 import json
 import sys
 
-HOECHSTLAENGE = 800
+höchstlänge = 800
 
 
-def grund(laenge: int) -> str:
+def grund(länge: int) -> str:
     return (
-        f"Schlussantwort hat {laenge} Zeichen, höchstens {HOECHSTLAENGE}. Inhalte, Fragen und "
+        f"Schlussantwort hat {länge} Zeichen, höchstens {höchstlänge}. Inhalte, Fragen und "
         "Empfehlungen gehören in eine Datei in handoff/; hier nur Status und Pfade."
     )
 
@@ -25,13 +23,13 @@ def entscheide(eingabe: dict) -> dict | None:
         return None
     if eingabe.get("hook_event_name") == "SubagentStop":
         bericht = eingabe.get("last_assistant_message") or ""
-        if len(bericht) <= HOECHSTLAENGE or eingabe.get("stop_hook_active"):
+        if len(bericht) <= höchstlänge or eingabe.get("stop_hook_active"):
             return None
         return {"decision": "block", "reason": grund(len(bericht))}
     if eingabe.get("tool_name") != "SubagentHandback":
         return None
     bericht = (eingabe.get("tool_input") or {}).get("message", "")
-    if len(bericht) <= HOECHSTLAENGE:
+    if len(bericht) <= höchstlänge:
         return None
     return {
         "hookSpecificOutput": {
