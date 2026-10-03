@@ -1,6 +1,6 @@
 # Importvertrag lässt relative Ausbrüche durch, Freigabe-Antwort kippt bei jeder Änderung
 
-125 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+125 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 89364ab und 1b2a3f9 (Kritik am Code).
