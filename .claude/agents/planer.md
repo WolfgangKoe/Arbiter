@@ -23,7 +23,7 @@ Produkt im Einzelnen können muss, beschreibt der Anforderungsautor.
 - Items aus den Kriterien der aktuellen Etappe schneiden. Ein Item passt in einen Zyklus;
   die Reihenfolge begründest du mit Abhängigkeit und Nutzen.
 - Den Plan schreiben: `handoff/plan.md`, erste Zeile `# Plan · Zyklus <n>`, dann Etappe,
-  gewählte Items, deine Empfehlung und Links auf die offenen Anliegen an den Stakeholder,
+  gewählte Items (je ein Link `../domaene/items/<id>.md`), deine Empfehlung und Links auf die offenen Anliegen an den Stakeholder,
   auch auf die Vorschläge des Anforderungsautors. Höchstens 4.000 Zeichen.
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
   um, was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).

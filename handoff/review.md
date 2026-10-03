@@ -17,7 +17,7 @@ Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `
    (Anliegen 63).
 4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Dass der
    Stand die Abnahme nicht kennt, bleibt offen: [50](anliegen/50-standUeberspringtFachkritik.md),
-   wartet auf [56](anliegen/56-standErkenntDieAbnahme.md).
+   wartet auf Anliegen 56.
 
 ## Code
 Klein, lesbar, nur Standardbibliothek (A1), Identität per `eq=False` (D1), jede Handlung

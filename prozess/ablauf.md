@@ -7,7 +7,10 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
 4. Anforderungsautor: die erste Anforderung zur Etappe, Begriffe ins Glossar. Eine genügt.
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
-   eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen.
+   eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen. Jedes
+   Item steht als Link `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme
+   (Technikphase, Schritt 5). Mechanismus: nur Text
+   ([Anliegen 76](../handoff/anliegen/76-planOhneItemLink.md)).
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
 7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 
@@ -41,8 +44,8 @@ Organisationsentwickler sie vor.
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
-   die abgenommenen Items. Mechanismus: nur Text; der Stand soll den Schritt am Item des
-   Plans erkennen ([Anliegen 56](../handoff/anliegen/56-standErkenntDieAbnahme.md)).
+   die abgenommenen Items. Mechanismus: `stand.py` nennt den Schritt, solange ein Item des
+   Plans in `domaene/items/` liegt, auch wenn `review.md` schon Zyklus n trägt.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Danach meldet der
    Stand die Prozessphase; eine Freigabe ist nicht nötig.
 
