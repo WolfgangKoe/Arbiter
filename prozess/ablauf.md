@@ -121,7 +121,7 @@ Code | schreibt | prüft
 
 Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf als
 `Kritik <kurzer Hash>` (notfalls `--allow-empty`); der Stand meldet den ersten Code-Commit
-ohne Kritik. Mechanismus: nur Text.
+ohne Kritik. Mechanismus: `codekritik.py` im Stand.
 
 ## Anliegen
 Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen.

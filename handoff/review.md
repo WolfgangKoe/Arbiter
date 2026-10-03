@@ -15,9 +15,9 @@ Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `
    `testAuf1_3SolangeDieAufstellungszoneOffenIstIstKeinerAnDerReihe` ist grün (Anliegen 25).
    Die Zonen tragen keine erfundenen Namen mehr: `Aufstellungszone.erste`, `.zweite`
    (Anliegen 63).
-4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Dass der
-   Stand die Abnahme nicht kennt, bleibt offen: [50](anliegen/50-standUeberspringtFachkritik.md),
-   wartet auf Anliegen 56.
+4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Den Schritt
+   nennt jetzt der Stand (Anliegen 50); offen ist nur ein Plan ohne Item-Link
+   ([76](anliegen/76-planOhneItemLink.md)).
 
 ## Code
 Klein, lesbar, nur Standardbibliothek (A1), Identität per `eq=False` (D1), jede Handlung
@@ -28,7 +28,8 @@ Seit der Retro geprüft, ohne Befund: `8ac70b7` und `265dac7` (Zonenwerte), `a96
 (`pyproject.toml` nur noch `*Test.py`; keine Datei `test_*.py` übrig).
 
 ## Offene Anliegen zur Technik
-- [50](anliegen/50-standUeberspringtFachkritik.md): wartet auf 56.
+- [79](anliegen/79-kritikCommitsFehlen.md): Kritik-Commits seit Retro 1, an den
+  Organisationsentwickler.
 
 ## Empfehlung
 DoD für das Item erfüllt, AUF-1 ist abgenommen. Aus diesem Review ist am Code nichts offen.
