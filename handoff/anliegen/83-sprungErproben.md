@@ -30,3 +30,5 @@ Strg+Klick auf `testAuf1_3VorDerWahl…`; erwartet: zurück zur Zeile von AUF-1.
 Empfehlung: A; du wolltest C ausdrücklich, und Befehl B, auf dem C aufbaut, läuft. Springt
 der Klick nicht, schreib hinter `Antwort:` B und was passiert ist.
 Antwort: .
+
+Anmerkung: Muss ich VS Code dafür neu starten? Denn aktuell funktioniert es nicht.

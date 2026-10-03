@@ -32,13 +32,13 @@ Budget und Sperre bleiben bei `belegung.py`; die Hooks `subagent_budget.py` und
 **F1 · Wann?** A: jetzt, vor Plan 2. B: als Prozess-Item der Retro 2, nach Review 2.
 Empfehlung A: Retro 2 soll das Dashboard schon nutzen; du hast es angefordert.
 
-Antwort: .
+Antwort: B
 
 **F2 · Recht und Scope.** Der Regelumsetzer bekommt den Schreibpfad `prozess/dashboard/`. Du
 aktivierst das Plugin A: mit Nutzer-Scope (jedes Repo, auch ArbiterMap mit eigenen Hooks),
 B: mit Projekt-Scope (nur hier, `.claude/settings.json`). Empfehlung B: Erst hier erproben;
 Nutzer-Scope, sobald es einen Zyklus lang trägt.
 
-Antwort: .
+Antwort: Siehe Stellungnahme.
 
-**Stellungnahme.**
+**Stellungnahme.** Die Frage verstehe ich nicht ganz. Ich hätte gerne, dass das Dashboard als Datei auf derselben Ebene wie die Ordner prozess/, domaene/ und technik/ liegt. Die Daten und Skripte für das Dashboard können in prozess/dashboard/ liegen. Die HTML darf der Regelumsetzer dennoch bearbeiten. Sie muss bestimmt überarbeitet werden.

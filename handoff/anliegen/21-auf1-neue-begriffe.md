@@ -1,6 +1,6 @@
 # AUF-1: neue Begriffe
 
-21 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+21 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 Aus der Kritik des Architekten in [17](17-auf1-reihe-nach-dem-beenden.md) und
