@@ -1,6 +1,6 @@
 # AUF-1.6: Test für die erneut gewählte Einheit in Aufstellung
 
-61 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+61 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [AUF-1.6](../../domaene/anforderungen/phasen/aufstellen.md) lautet jetzt „Eine
@@ -25,4 +25,4 @@ wählen, ein *Modell* *setzen*, dieselbe *Einheit* erneut wählen; erwartet kein
 `einheitInAufstellung is begonneneEinheit` und das *Modell* weiter *gesetzt*. Er ist rot,
 bis der Implementierer `aufstellen.py:73` anpasst.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. `testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht` steht; er ist rot, bis der Implementierer `aufstellen.py` anpasst.

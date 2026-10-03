@@ -352,6 +352,21 @@ def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(aufstellung, ersterSpieler
     assert aufstellung.einheitInAufstellung is begonneneEinheit
 
 
+def testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht(
+    aufstellung, ersterSpieler, zweiterSpieler
+):
+    nachDerWahl(aufstellung, gewinner=ersterSpieler)
+    begonneneEinheit, _ = zweiterSpieler.armee.einheiten
+    erstesModell, *_ = begonneneEinheit.modelle
+    aufstellung.einheitInAufstellungWählen(begonneneEinheit)
+    aufstellung.modellSetzen(erstesModell)
+
+    aufstellung.einheitInAufstellungWählen(begonneneEinheit)
+
+    assert aufstellung.einheitInAufstellung is begonneneEinheit
+    assert aufstellung.gesetzt(erstesModell)
+
+
 def testAuf1_7NachDemBeendenIstDieEinheitAufgestelltUndKeineInAufstellung(
     aufstellung, ersterSpieler, zweiterSpieler
 ):
