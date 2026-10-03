@@ -126,6 +126,8 @@ Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.claude/agents/`
 oder Stakeholder, dahinter darf die Perspektive in Klammern stehen. Je Runde Befund, Kosten,
 Gegenvorschlag, Stellungnahme. Mechanismus: `anliegen.py`, `hoechstmassTest.py`.
+Unter jeder Frage an den Stakeholder (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`;
+„.“ heißt, die Empfehlung gilt. Mechanismus: nur Text.
 
 Status | setzt | danach dran
 ---|---|---
@@ -136,6 +138,9 @@ beantwortet | Stakeholder | Absender: Antworten einarbeiten
 eskaliert | Absender, nach Runde 3 | Stakeholder
 erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht die Datei
 
+- Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
+  wenn jenes Anliegen erledigt ist; bis dahin endet seine Stellungnahme mit „wartet auf <nr>“.
+  Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
   `statusrecht.py` (Write, Edit).
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt

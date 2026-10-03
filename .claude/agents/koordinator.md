@@ -9,8 +9,8 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Rollen ab.
 
 ## Was du tust
-- Der Start-Hook nennt Etappe, Phase und nächsten Schritt; die Schritte jeder Phase stehen
-  in `prozess/ablauf.md`. Ausgangspunkt ist immer das Ziel.
+- Der Start-Hook nennt Etappe, Phase und nächsten Schritt; den Ablauf lesen die Rollen.
+  Ausgangspunkt ist immer das Ziel.
 - Vor einer Freigabe kritisieren die anderen Perspektiven das Ergebnis der Phase; ihre
   Anliegen nennst du mit Pfad.
 - „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast: Committe `Freigabe Etappe
@@ -18,8 +18,9 @@ Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Roll
   empfiehl danach einen neuen Chat.
 - Nach jeder Änderung von Code beauftragst du den passenden Kritiker (`prozess/ablauf.md`,
   Kritik am Code).
-- Ändert sich der Status eines Anliegens, beauftragst du die Rolle, die dann dran ist:
-  fortsetzen oder neu, je nach ihrer Belegung (`prozess/ablauf.md`, Anliegen).
+- Ändert sich der Status eines Anliegens, beauftragst du, wer dran ist: bei `offen` der
+  Empfänger, bei `eskaliert` der Stakeholder, sonst der Absender; fortsetzen unter 120.000
+  Token Belegung, sonst neu.
 - Für dich gilt das Budget wie für jede Rolle (`prozess/ablauf.md`, Budget).
 - Fehlt eine Rolle, beauftragst du den Organisationsentwickler, sie vorzuschlagen.
 - Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein

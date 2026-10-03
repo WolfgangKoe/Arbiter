@@ -1,6 +1,6 @@
 # Dashboard für alle Repos, Budget am Kontextfenster
 
-22 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+22 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 Bearbeitung in der Retro von Zyklus 1.
 
@@ -49,3 +49,5 @@ Antwort: B, es gehört mir, darf aber von Subagenten aus der Prozess-Sicht bearb
 beginnen, 150.000 Sperre, gleich für Koordinator und Rollen; Messung und Sperre baut der
 Regelumsetzer. Dashboard und Plugin in `Arbiter_Structure/` folgen in der Retro von Zyklus 1;
 darum bleibt der Status offen.
+Retro 1: Das Dashboard steht mit deinen Antworten und einem Auslöser in
+[`prozess/backlog.md`](../../prozess/backlog.md); die Kennzahlen liefert vorerst P8.

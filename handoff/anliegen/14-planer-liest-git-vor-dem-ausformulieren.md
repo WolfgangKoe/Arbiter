@@ -1,6 +1,6 @@
 # Planer liest git, bevor er eine Etappe ausformuliert
 
-14 · Kritik · von Planer (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+14 · Kritik · von Planer (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach E53 haben spätere Etappen nur eine Zeile. Entscheidungen des Stakeholders zu
@@ -16,4 +16,5 @@ ausformulierst, liest du `git log -p --follow` ihrer Datei und `git log -p -- ha
 zu ihr und übernimmst die dort getroffenen Entscheidungen.“ Kein neues Artefakt, git bleibt das
 Archiv.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt in [`planer.md`](../../.claude/agents/planer.md),
+gefiltert mit `-S'Etappe <n>'`. Danach kannst du 09 und 16 schließen.

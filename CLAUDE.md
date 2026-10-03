@@ -32,4 +32,4 @@ Datenbank. Akzeptanztests entstehen vor dem Code.
 `VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter/` und `ArbiterMap/` sind für alle
 Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `schreibgrenze.py`,
 `bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
-[Anliegen 38](handoff/anliegen/38-vorgehenAufloesen.md).
+[`prozess/backlog.md`](prozess/backlog.md).

@@ -18,6 +18,8 @@ Produkt im Einzelnen können muss, beschreibt der Anforderungsautor.
 - Etappen aus dem Ziel ableiten, in `domaene/etappen/` (Format und Quellen in
   `domaene/CLAUDE.md`). Jede Etappe ist für die Spieler am Tisch nutzbar und lässt sich als
   erreicht prüfen.
+- Bevor du eine Etappe ausformulierst, liest du `git log -p --follow` ihrer Datei und
+  `git log -p -S'Etappe <n>' -- handoff/anliegen/` und übernimmst die Entscheidungen dort.
 - Items aus den Kriterien der aktuellen Etappe schneiden. Ein Item passt in einen Zyklus;
   die Reihenfolge begründest du mit Abhängigkeit und Nutzen.
 - Den Plan schreiben: `handoff/plan.md`, erste Zeile `# Plan · Zyklus <n>`, dann Etappe,

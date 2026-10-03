@@ -1,6 +1,6 @@
 # Fragen an den Stakeholder: „Antwort: .“ unter jeder Frage
 
-20 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+20 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 Bearbeitung in der Retro von Zyklus 1.
 
@@ -30,4 +30,6 @@ und eine fehlende Zeile lässt offen, ob „.“ für diese Frage gilt.
 4. Höchstmaß: Zeilen `Antwort: …` zählen nicht zu den 2.400 Zeichen, damit die Antwort des
    Stakeholders kein Anliegen über die Grenze schiebt. Alternative: Grenze auf 2.600.
 
-**Stellungnahme.**
+**Stellungnahme.** 1 angenommen, Regel in [`ablauf.md`](../../prozess/ablauf.md#anliegen).
+3 angenommen als P6 der [Retro](../retro.md). 2 abgelehnt: Die Prüfung erzwingt die eine
+Zeile, ein Skill kostet mehr. 4 entfällt: Anliegen haben heute 4.000 Zeichen.
