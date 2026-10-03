@@ -1,6 +1,6 @@
 # Antworten des Stakeholders nach der Freigabe aufgreifen
 
-119 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+119 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [83](83-sprungErproben.md) blieb nach `Freigabe Plan 2` liegen: Der Stakeholder
@@ -31,5 +31,9 @@ die Freigabe beantwortet; dran ist der Absender. Das deckt auch eine Zeile `Antw
 mehr als „.“, denn die Freigabe beantwortet jede Frage der Vorlage; vor der Freigabe bleibt
 der Stakeholder dran. `eskaliert` bleibt bei ihm: Mit seiner Entscheidung setzt er den Kopf
 selbst (nur er darf `eskaliert` ändern), bis dahin nennt ihn der Stand zu Recht.
-Umgesetzt mit [121](121-absenderNachFreigabeDran.md) (89364ab): `anliegen.py` (`wartetAuf`),
+Umgesetzt mit Anliegen 121 (89364ab): `anliegen.py` (`wartetAuf`),
 `gitAufruf.py` (`seitFreigabeUnverändert`), Fälle in `anliegenTest.py`.
+
+**Nachprüfung.** In Ordnung: 83 meldete nach der Freigabe den Absender. Dass jede spätere
+Änderung der Datei die Antwort kippt, verfolgt
+[125](125-importvertragRelativUndFreigabeAntwort.md), Punkt 2.

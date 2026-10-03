@@ -17,8 +17,8 @@ technik/
 Ein Ordner entsteht mit dem ersten Item, das ihn braucht.
 
 ## Abhängigkeiten zeigen nach innen
-- **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft: nur
-  Text bis [Anliegen 123](../handoff/anliegen/123-importvertragUndYamlAbhaengigkeit.md).
+- **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft:
+  `importvertrag.py`, relative Importe erst nach Anliegen 125.
 - **A2** `web`, `speicher` und `katalog` kennen die Domäne, nie umgekehrt. Braucht die
   Domäne Speicherung, beschreibt sie eine Schnittstelle (`typing.Protocol`) in
   `arbiter/domaene/`; `speicher/` setzt sie um, `web/` verdrahtet beides. Prüft: wie A1.
@@ -58,8 +58,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **D1** Spielobjekte haben Identität: Vergleich mit `is`, `@dataclass(eq=False)`. Werte
   (`Stelle`, `Base`) nach Inhalt. Prüft: Akzeptanztests (gleiche Armeen, `stelle(…) == stelle`).
 - **D2** Eine Handlung prüft erst alle Sperren, dann ändert sie den Zustand; so kann ein
-  Übergehen die Prüfung überspringen und protokollieren. Prüft: jeder Akzeptanztest einer
-  Sperre prüft den unveränderten Zustand.
+  Übergehen die Prüfung überspringen und protokollieren. Prüft: je Handlung und Grund ein
+  Akzeptanztest auf den unveränderten Zustand.
 - **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel. Den
   Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über Properties ohne Setter
   (`aufstellung.anDerReihe`) oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge

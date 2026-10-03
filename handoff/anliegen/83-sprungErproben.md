@@ -31,7 +31,7 @@ Empfehlung: A.
 Antwort: Die Erweiterung kann gelöscht werden. Gibt es keine Möglichkeit eine Art Tag zu setzen, so dass dieser mit der Zeile mitgeht? Software-Entwickler "springen" die ganze Zeit durch das System, weil die geschriebene Methode ja überall gleich heißt. Sowas muss doch einfach gehen.
 
 ## Nach Runde 3
-**Befund.** Löschen gilt: [118](118-sprungErweiterungLoeschen.md) an den Regelumsetzer.
+**Befund.** Löschen gilt: Anliegen 118 an den Regelumsetzer.
 
 Deine Frage: Ja, die Marke gibt es schon. Es ist die Kennung im Namen: `AUF-1.3` im
 Kriterium, `testAuf1_3…` im Test. Sie wandert mit, weil sie in der Zeile steht, nicht auf

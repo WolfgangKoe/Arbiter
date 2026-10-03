@@ -1,6 +1,6 @@
 # Akzeptanztests zu Plan 2: Lage der Zonen ohne Quelle, Maße doppelt, zwei Wege zu Gründen
 
-122 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+122 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 7752988 und 283f998, `technik/tests/akzeptanz/`. Die Schnittstelle ist gut: Die
