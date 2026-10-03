@@ -1,14 +1,4 @@
-"""Hooks `SessionStart` und `PostToolUse` (auf `Agent`): Stand in einer Zeile.
-
-Er nennt den nächsten Schritt, kein Briefing. Nach jedem Rollenlauf meldet derselbe Stand,
-wer dran ist und welche Kritik am Code fällig ist.
-
-Jede Phase ist eine feste Folge von Artefakten; der Stand nennt das erste, das fehlt.
-Übergänge: Domäne → Technik mit dem Commit `Freigabe Plan <n>`, Technik → Prozess mit
-Review n, Prozess → Domäne mit `Freigabe Retro <n>`. Der Trigger für die Technik ist früh:
-Ein Plan mit einem einzigen Item aus der ersten fertigen Anforderung genügt.
-Die aktuelle Etappe ist die nach Namen erste Datei `domaene/etappen/*.md` (`# Etappe <n> · …`).
-"""
+"""Hooks `SessionStart` und `PostToolUse` (auf `Agent`): der Stand in einer Zeile."""
 
 import json
 import re

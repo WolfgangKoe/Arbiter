@@ -1,9 +1,4 @@
-"""Löscht jedes Anliegen mit Status `erledigt`; git ist das Archiv.
-
-Links auf die gelöschte Datei werden zu „Anliegen <nr>“, damit keiner ins Leere zeigt.
-Läuft mit den übrigen Prüfungen: in `.pre-commit-config.yaml` und bei `SubagentStop`.
-Wer den Status setzen darf, prüft `statusrecht.py`.
-"""
+"""Löscht erledigte, committete Anliegen; Links darauf werden zu „Anliegen <nr>“."""
 
 import re
 import sys
@@ -46,13 +41,14 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 
 
 def erledigteLöschen(wurzel: Path) -> list[str]:
-    """Löscht die erledigten Anliegen, die git kennt, und nennt deren Dateinamen.
-
-    Eine Datei, die git nicht kennt, bleibt liegen: Sonst bewahrte git ihre Begründung nicht auf
-    und ihre Nummer gälte als frei. Der nächste Lauf nach dem Commit löscht sie.
-    """
+    """Löscht die erledigten Anliegen, die git im letzten Commit kennt; nennt ihre Dateinamen."""
     gelöscht: dict[Path, str] = {}
-    bekannt = set(gitAusgabe(wurzel, "ls-files", "--", "handoff/anliegen").splitlines())
+    # Warum: `ls-files` nennt den Index; `ls-tree HEAD` nennt, was git sicher bewahrt.
+    bekannt = set(
+        gitAusgabe(
+            wurzel, "ls-tree", "-r", "--name-only", "HEAD", "--", "handoff/anliegen"
+        ).splitlines()
+    )
     for datei in anliegenDateien(wurzel):
         gelesen = kopfLesen(datei)
         if gelesen is None or gelesen.status != "erledigt":

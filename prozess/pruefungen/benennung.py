@@ -34,7 +34,13 @@ werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 ausgeschlosseneOrdner = {
-    "Arbiter", "ArbiterMap", ".git", "__pycache__", ".venv", ".pytest_cache", ".ruff_cache",
+    "Arbiter",
+    "ArbiterMap",
+    ".git",
+    "__pycache__",
+    ".venv",
+    ".pytest_cache",
+    ".ruff_cache",
 }
 nummerierteOrdner = ("domaene/etappen", "domaene/items", "handoff")
 akzeptanzOrdner = "technik/tests/akzeptanz"

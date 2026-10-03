@@ -15,10 +15,7 @@ def zyklus(datei: Path) -> int | None:
 
 
 def offeneItems(wurzel: Path) -> list[str]:
-    """Items des Plans: Links aus `handoff/plan.md` auf `domaene/items/<id>.md`.
-
-    Offen ist ein Item, solange seine Datei existiert.
-    """
+    """Items des Plans (Links in `handoff/plan.md`), deren Datei in `domaene/items/` existiert."""
     plan = wurzel / "handoff" / "plan.md"
     if not plan.is_file():
         return []
@@ -43,10 +40,7 @@ def offeneItemTexte(wurzel: Path) -> list[str]:
 
 
 def itemsOhneLink(wurzel: Path) -> bool:
-    """Der Plan hat einen Abschnitt `## Item(s)`, aber keinen Link auf `domaene/items/`.
-
-    Es geht um die Form, nicht um die Datei: Ein Link auf ein gelöschtes Item zählt.
-    """
+    """Der Plan hat einen Abschnitt `## Item(s)`, aber keinen Link auf `domaene/items/`."""
     plan = wurzel / "handoff" / "plan.md"
     if not plan.is_file():
         return False

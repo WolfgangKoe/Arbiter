@@ -1,6 +1,6 @@
 # cSpell meldet Markdown trotz Einstellung
 
-24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · offen
+24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Ein einziges Edit an `handoff/anliegen/22-…md` brachte am 2026-10-02 rund 25.000
@@ -33,4 +33,4 @@ Liste von Sprachen); `cspellTest.py` prüft den Schlüssel mit, der Eintrag in
 `prozess/regeln.md` nennt beide Erweiterungen. Ein Wechsel auf `de-DE` genügt nicht, auch dann
 landen Meldungen im Kontext. Wirkung prüfe ich beim nächsten Edit an Markdown.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `.vscode/settings.json`: `ltex.enabled: false` und `cSpell.ignorePaths: ["**/*.md"]`; `cspellTest.py` prüft beide Schlüssel, `prozess/regeln.md` nennt beide Erweiterungen. Die Wirkung kann ich hier nicht messen; bleibt sie aus, bitte neu öffnen (siehe 88).

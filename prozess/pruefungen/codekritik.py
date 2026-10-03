@@ -1,11 +1,4 @@
-"""Fällige Kritik am Code (`prozess/ablauf.md`, Kritik am Code), für den Stand.
-
-Ein Commit, der Code ändert, braucht die Kritiker der Tabelle, alle getroffenen. Kritik ist ein
-Commit, dessen Betreff mit `Kritik ` beginnt und die kurzen Hashes der geprüften Commits nennt
-(`Kritik <a> <b>`). Jeder andere Commit, der Code ändert, wird geprüft, auch einer, dessen
-Betreff „Kritik“ enthält. Geprüft werden die Commits seit der letzten Freigabe; der Stand
-meldet den ersten ohne Kritik.
-"""
+"""Fällige Kritik am Code für den Stand."""
 
 import re
 from pathlib import Path

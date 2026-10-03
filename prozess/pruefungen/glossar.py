@@ -1,11 +1,4 @@
-"""Code → Glossar: Was die Domäne an Klassen und Enum-Werten einführt, ist fachlich begründet.
-
-Jede Klasse in `technik/arbiter/domaene/` steht in der Spalte *Code-Bezeichner* von
-`domaene/glossar.md`. Jeder Enum-Wert steht dort in Klammern hinter seiner Klasse,
-etwa `Aufstellungszone (erste, zweite)`, oder sein Text steht als *Grund* ‚…‘ in einer
-Anforderung unter `domaene/anforderungen/`. Methoden und Variablen sind Urteil.
-Regel: Anliegen 70, Retro 1 (P9).
-"""
+"""Code → Glossar: Klassen und Enum-Werte der Domäne stehen im Glossar oder als Grund."""
 
 import ast
 import re
@@ -41,18 +34,28 @@ def gründe(anforderungen: str) -> set[str]:
 
 
 def enumWerte(klasse: ast.ClassDef) -> list[tuple[str, str | None]]:
-    """Name und, falls ein Text, der Wert jedes Enum-Werts der Klasse."""
+    """Name und, falls ein Text, der Wert jedes Enum-Werts der Klasse, auch mit Annotation."""
     werte = []
     for anweisung in klasse.body:
         if isinstance(anweisung, ast.Assign) and isinstance(anweisung.targets[0], ast.Name):
-            inhalt = anweisung.value
-            text = inhalt.value if isinstance(inhalt, ast.Constant) else None
-            werte.append((anweisung.targets[0].id, text if isinstance(text, str) else None))
+            name, inhalt = anweisung.targets[0].id, anweisung.value
+        elif isinstance(anweisung, ast.AnnAssign) and isinstance(anweisung.target, ast.Name):
+            name, inhalt = anweisung.target.id, anweisung.value
+        else:
+            continue
+        text = inhalt.value if isinstance(inhalt, ast.Constant) else None
+        werte.append((name, text if isinstance(text, str) else None))
     return werte
 
 
+def basisName(basis: ast.expr) -> str:
+    if isinstance(basis, ast.Name):
+        return basis.id
+    return basis.attr if isinstance(basis, ast.Attribute) else ""
+
+
 def istEnum(klasse: ast.ClassDef) -> bool:
-    return any(isinstance(basis, ast.Name) and basis.id.endswith("Enum") for basis in klasse.bases)
+    return any(basisName(basis).endswith(("Enum", "Flag")) for basis in klasse.bases)
 
 
 def quelltextVerstöße(

@@ -1,4 +1,4 @@
-// Anliegen 53, Weg C: Kriterium und Test als Links; das Ziel liefert rueckverfolgung.py.
+// Kriterium und Test als Links; das Ziel liefert rueckverfolgung.py.
 // Start ohne Installation: code --extensionDevelopmentPath=prozess/pruefungen/sprung .
 const { execFileSync } = require("child_process");
 const vscode = require("vscode");

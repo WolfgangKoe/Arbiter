@@ -35,9 +35,7 @@ def funktionMitKomplexität(einfacheFälle: int) -> str:
         "                if j:\n"
         "                    pass\n"
         "    if c and d:\n"
-        "        pass\n"
-        + "    if b:\n        pass\n" * einfacheFälle
-        + "    return 0\n"
+        "        pass\n" + "    if b:\n        pass\n" * einfacheFälle + "    return 0\n"
     )
 
 

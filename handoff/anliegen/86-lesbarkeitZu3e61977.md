@@ -1,6 +1,6 @@
 # Lesbarkeit von 3e61977: Prozessverweise im Code, Doppeltes in regeln.md
 
-86 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+86 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3e61977, nur die geänderten Zeilen. Korrektheit: 87.
@@ -43,4 +43,4 @@ Arbeit liegt im Hook nach jedem Rollenlauf.
 3. `freigegebenerPlan` und `offeneItemTexte` einmal je Lauf bestimmen und an `umfasst`
    übergeben, `kriterien()` einmal je Datei.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: 1 Docstrings einzeilig und ohne Verweis in `glossar.py`, `rueckverfolgung.py`, `cspellTest.py`, `codekritik.py`, `erledigteLoeschen.py`, `plan.py`, `stand.py`, `sprung/extension.js`; `# Regel:` bleibt nur, wo eine Fundstelle gilt. Die älteren mehrzeiligen Modul-Docstrings (`schlussantwort.py`, `statusrecht.py`, `benennung.py` u. a.) gehören nicht zu 3e61977 und bleiben; ein Urteil, ob sie fallen, steht beim Reviewer. 2 `prozess/regeln.md`: je Mechanismus eine Zeile, die Zeilen zu cSpell, Komplexität, Kriterium ↔ Test, Höchstmaß und Kritik am Code ersetzt statt ergänzt. 3 `rueckverfolgung.py`: Itemtexte einmal je Lauf (`itemTexteDesFreigegebenenPlans`), `kriterien()` einmal je Datei (`zuordnungen`).

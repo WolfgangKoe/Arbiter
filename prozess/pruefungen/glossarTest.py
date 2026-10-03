@@ -54,3 +54,19 @@ def testEnumWertMitGrundInEinerAnforderungIstGrün():
     quelltext = 'class Einheit(Enum):\n    nichtWählbar = "nicht wählbar"\n'
     assert meldungenZu(quelltext, {"nicht wählbar"}) == []
     assert len(meldungenZu(quelltext)) == 1
+
+
+def testEnumMitAttributAlsBasisWirdGeprüft():
+    quelltext = "class Aufstellungszone(enum.Enum):\n    erste = 1\n    nord = 2\n"
+    assert "Aufstellungszone.nord" in meldungenZu(quelltext)[0]
+
+
+def testFlagUndIntFlagSindEnums():
+    for basis in ("Flag", "IntFlag", "enum.IntFlag"):
+        quelltext = f"class Aufstellungszone({basis}):\n    nord = 2\n"
+        assert len(meldungenZu(quelltext)) == 1
+
+
+def testEnumWertMitAnnotationWirdGeprüft():
+    quelltext = "class Aufstellungszone(Enum):\n    erste = 1\n    nord: int = 2\n"
+    assert "Aufstellungszone.nord" in meldungenZu(quelltext)[0]

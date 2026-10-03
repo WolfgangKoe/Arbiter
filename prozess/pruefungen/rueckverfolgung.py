@@ -1,19 +1,4 @@
-"""Kriterium ↔ Akzeptanztest: Jedes Kriterium hat einen Test, jeder Test ein Kriterium.
-
-Kriterium `- AUF-1.4 …` unter `### AUF-1 · …` in `domaene/anforderungen/<pfad>.md` gehört zu
-`testAuf1_4…`. Der Test steht in `technik/tests/akzeptanz/<pfad>Test.py`, solange die Datei
-nur eine Anforderung hat, sonst je Anforderung in `<pfad>/<kürzel><n>Test.py`, etwa
-`<pfad>/auf1Test.py` (Anliegen 52, Architektur T1). Geprüft wird, wo die Testdatei schon
-existiert; eine Anforderung ohne Testdatei wartet auf den Testautor.
-
-Ein Kriterium ohne Test ist erst rot, wenn ein offenes Item eines freigegebenen Plans es
-nennt (`AUF-1` oder `AUF-1.8`); vorher wartet es auf den Testautor (Anliegen 62). Eine
-Kennung steht in einer Anforderungsdatei nur einmal (Anliegen 60).
-
-Spur (Anliegen 53, Architektur T2): `rueckverfolgung.py AUF-1.4` nennt das Kriterium und jeden
-seiner Tests als `pfad:zeile`; statt der Kennung geht ein Testname oder `pfad:zeile`;
-`--json` liefert eine Liste von Objekten.
-"""
+"""Kriterium ↔ Akzeptanztest: Jedes Kriterium hat einen Test, jeder Test ein Kriterium."""
 
 import ast
 import json
@@ -21,6 +6,7 @@ import re
 import sys
 from collections import Counter
 from pathlib import Path
+from typing import NamedTuple
 
 from agenten import projektordner
 from plan import freigegebenerPlan, offeneItemTexte
@@ -28,6 +14,13 @@ from plan import freigegebenerPlan, offeneItemTexte
 anforderungsnummer = tuple[str, int]
 kriteriumsnummer = tuple[str, int, int]
 fundstelle = tuple[str, str, int]  # Art, Pfad, Zeile
+
+
+class Zuordnung(NamedTuple):
+    anforderung: anforderungsnummer
+    testdatei: Path
+    verlangt: set[kriteriumsnummer]
+
 
 anforderungZeile = re.compile(r"^### ([A-ZÄÖÜ]+)-(\d+)\b")
 kriteriumZeile = re.compile(r"^- ([A-ZÄÖÜ]+)-(\d+)\.(\d+)\b")
@@ -118,11 +111,13 @@ def nennt(text: str, kriterium: kriteriumsnummer) -> bool:
     return re.search(muster, text) is not None
 
 
-def umfasst(wurzel: Path, kriterium: kriteriumsnummer) -> bool:
-    """Ein offenes Item des freigegebenen Plans nennt das Kriterium oder seine Anforderung."""
-    if freigegebenerPlan(wurzel) is None:
-        return False
-    return any(nennt(text, kriterium) for text in offeneItemTexte(wurzel))
+def umfasst(itemTexte: list[str], kriterium: kriteriumsnummer) -> bool:
+    """Ein Itemtext nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
+    return any(nennt(text, kriterium) for text in itemTexte)
+
+
+def itemTexteDesFreigegebenenPlans(wurzel: Path) -> list[str]:
+    return offeneItemTexte(wurzel) if freigegebenerPlan(wurzel) is not None else []
 
 
 def pfadVon(wurzel: Path, datei: Path) -> str:
@@ -130,38 +125,55 @@ def pfadVon(wurzel: Path, datei: Path) -> str:
 
 
 def testdateiVerstöße(
-    wurzel: Path, anforderungsdatei: Path, testdatei: Path, verlangt: set[kriteriumsnummer]
+    wurzel: Path,
+    anforderungsdatei: Path,
+    zuordnung: Zuordnung,
+    itemTexte: list[str],
 ) -> list[str]:
     meldungen = []
-    getestet = getesteKriterien(testdatei)
-    pfad = pfadVon(wurzel, testdatei)
+    getestet = getesteKriterien(zuordnung.testdatei)
+    pfad = pfadVon(wurzel, zuordnung.testdatei)
     meldungen += [
         f"{pfad}: {kennung(kriterium)} hat keinen Test"
-        for kriterium in sorted(verlangt - getestet)
-        if umfasst(wurzel, kriterium)
+        for kriterium in sorted(zuordnung.verlangt - getestet)
+        if umfasst(itemTexte, kriterium)
     ]
     meldungen += [
         f"{pfad}: Test zu {kennung(kriterium)}, das in {pfadVon(wurzel, anforderungsdatei)} "
         "fehlt oder zu einer anderen Anforderung gehört"
-        for kriterium in sorted(getestet - verlangt)
+        for kriterium in sorted(getestet - zuordnung.verlangt)
     ]
     return meldungen
 
 
-def anforderungenMitTestdatei(
-    wurzel: Path, anforderungsdatei: Path
-) -> list[tuple[Path, set[kriteriumsnummer]]]:
-    """Je Anforderung mit vorhandener Testdatei: die Datei und die Kriterien, die sie testet."""
+def anforderungUmfasst(itemTexte: list[str], verlangt: set[kriteriumsnummer]) -> bool:
+    return any(umfasst(itemTexte, kriterium) for kriterium in verlangt)
+
+
+def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[Zuordnung]:
+    """Je Anforderung der Datei die Testdatei, die für sie gilt, und ihre Kriterien."""
+    # Regel: Die Sammeldatei gilt der ersten Anforderung, bis ein Plan eine spätere umfasst.
     anforderungen = anforderungenDerDatei(anforderungsdatei)
-    einzige = len(anforderungen) == 1
-    gefunden = []
-    for anforderung in anforderungen:
-        testdatei = testdateiZu(wurzel, anforderungsdatei, None if einzige else anforderung)
-        if testdatei.is_file():
-            alle = kriterien(anforderungsdatei)
-            verlangt = {kriterium for kriterium in alle if kriterium[:2] == anforderung}
-            gefunden.append((testdatei, verlangt))
-    return gefunden
+    alle = kriterien(anforderungsdatei)
+    verlangt = {
+        anforderung: {kriterium for kriterium in alle if kriterium[:2] == anforderung}
+        for anforderung in anforderungen
+    }
+    sammeldatei = testdateiZu(wurzel, anforderungsdatei, None)
+    spätereUmfasst = any(
+        anforderungUmfasst(itemTexte, verlangt[anforderung]) for anforderung in anforderungen[1:]
+    )
+    gilt = sammeldatei.is_file() and not spätereUmfasst
+    return [
+        Zuordnung(
+            anforderung,
+            sammeldatei
+            if len(anforderungen) == 1 or (gilt and nummer == 0)
+            else testdateiZu(wurzel, anforderungsdatei, anforderung),
+            verlangt[anforderung],
+        )
+        for nummer, anforderung in enumerate(anforderungen)
+    ]
 
 
 def doppelteKennungen(anforderungsdatei: Path) -> list[str]:
@@ -171,37 +183,51 @@ def doppelteKennungen(anforderungsdatei: Path) -> list[str]:
     )
 
 
-def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path) -> list[str]:
+def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[str]:
     pfad = pfadVon(wurzel, anforderungsdatei)
     meldungen = [f"{pfad}: {name} steht zweimal" for name in doppelteKennungen(anforderungsdatei)]
     sammeldatei = testdateiZu(wurzel, anforderungsdatei, None)
-    if len(anforderungenDerDatei(anforderungsdatei)) > 1 and sammeldatei.is_file():
+    zugeordnet = zuordnungen(wurzel, anforderungsdatei, itemTexte)
+    if (
+        len(zugeordnet) > 1
+        and sammeldatei.is_file()
+        and any(anforderungUmfasst(itemTexte, spätere.verlangt) for spätere in zugeordnet[1:])
+    ):
         meldungen.append(
             f"{pfadVon(wurzel, sammeldatei)}: teilen nach Anforderung, "
             f"je Anforderung eine Datei {sammeldatei.stem.removesuffix('Test')}/<kürzel><n>Test.py"
         )
-    for testdatei, verlangt in anforderungenMitTestdatei(wurzel, anforderungsdatei):
-        meldungen += testdateiVerstöße(wurzel, anforderungsdatei, testdatei, verlangt)
+    for zuordnung in zugeordnet:
+        if zuordnung.testdatei.is_file():
+            meldungen += testdateiVerstöße(wurzel, anforderungsdatei, zuordnung, itemTexte)
+        elif anforderungUmfasst(itemTexte, zuordnung.verlangt):
+            meldungen.append(f"{pfadVon(wurzel, zuordnung.testdatei)} fehlt")
     return meldungen
 
 
 def verstöße(wurzel: Path) -> list[str]:
+    itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
     meldungen = []
     for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        meldungen += anforderungsVerstöße(wurzel, anforderungsdatei)
+        meldungen += anforderungsVerstöße(wurzel, anforderungsdatei, itemTexte)
     return meldungen
 
 
 def wartende(wurzel: Path) -> list[str]:
-    """Kriterien ohne Test, deren Testdatei da ist und die kein freigegebener Plan umfasst."""
+    """Kriterien ohne Test, Anforderungen ohne Testdatei, die kein freigegebener Plan umfasst."""
+    itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
     gefunden = []
     for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        for testdatei, verlangt in anforderungenMitTestdatei(wurzel, anforderungsdatei):
-            fehlend = verlangt - getesteKriterien(testdatei)
+        for zuordnung in zuordnungen(wurzel, anforderungsdatei, itemTexte):
+            if not zuordnung.testdatei.is_file():
+                if not anforderungUmfasst(itemTexte, zuordnung.verlangt):
+                    gefunden.append(anforderungKennung(zuordnung.anforderung))
+                continue
+            fehlend = zuordnung.verlangt - getesteKriterien(zuordnung.testdatei)
             gefunden += [
                 kennung(kriterium)
                 for kriterium in sorted(fehlend)
-                if not umfasst(wurzel, kriterium)
+                if not umfasst(itemTexte, kriterium)
             ]
     return gefunden
 

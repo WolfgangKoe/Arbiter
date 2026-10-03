@@ -5,11 +5,12 @@ from anliegenTest import anliegenAnlegen, guterKopf
 from erledigteLoeschen import erledigteLöschen
 
 wurzel = Path(__file__).resolve().parents[2]
+identität = ["-c", "user.name=t", "-c", "user.email=t@t"]
 
 
 def versionieren(ordner: Path) -> None:
-    """Legt in `ordner` ein git-Archiv an und übernimmt alle Dateien, wie ein Commit es täte."""
-    for befehl in (["init", "-q"], ["add", "-A"]):
+    """Legt in `ordner` ein git-Archiv an und committet alle Dateien."""
+    for befehl in (["init", "-q"], ["add", "-A"], [*identität, "commit", "-q", "-m", "Probe"]):
         subprocess.run(["git", *befehl], cwd=ordner, check=True, capture_output=True)
 
 
@@ -68,3 +69,11 @@ def testLinksAufAndereDateienBleiben(tmp_path):
     versionieren(tmp_path)
     erledigteLöschen(tmp_path)
     assert plan.read_text() == "[Ablauf](../prozess/ablauf.md) [Web](https://x.de/12-probe.md)\n"
+
+
+def testNurVorgemerktesErledigtesBleibtLiegen(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
+    assert erledigteLöschen(tmp_path) == []
+    assert datei.exists()

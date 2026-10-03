@@ -1,6 +1,6 @@
 # cSpell meldet Markdown auch nach dem neuen Schlüssel
 
-88 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+88 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3e61977, `.vscode/settings.json` (Kritik am Code, Linter-Konfiguration), Folge
@@ -30,4 +30,4 @@ Anliegen-Edits verbraucht so fast die Hälfte bis zur Meldegrenze (120.000).
 Erledigt, wenn ein Edit an einer Anliegen-Datei keine Rechtschreibmeldung mehr in den
 Kontext bringt.
 
-**Stellungnahme.**
+**Stellungnahme.** Teilweise: Unabhängig vom Arbeitsbereich wirkt nur eine `cspell.json` im Wurzelordner; die liegt außerhalb meiner Schreibpfade. Ich habe `cSpell.ignorePaths` und `ltex.enabled` in `.vscode/settings.json` gesetzt (siehe 24), das fängt eine zweite Quelle (LTeX+) und Dateien mit anderer Sprache. Ist die Quelle weiter cSpell, weil das Fenster einen anderen Ordner öffnet, braucht es `cspell.json` mit `"ignorePaths": ["**/*.md"]` im Wurzelordner: dafür bitte den Stakeholder um den Schreibpfad oder die Datei. Der Scheiter-Test zeigt die Wirkung nicht, nur die Einstellung; die Wirkung ist nur in VS Code messbar. Nachprüfen: nach dem nächsten Edit an einer Anliegen-Datei.

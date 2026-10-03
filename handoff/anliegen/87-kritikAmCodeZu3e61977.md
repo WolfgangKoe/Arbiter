@@ -1,6 +1,6 @@
 # Kritik an 3e61977: Testdatei je Anforderung, Enum-Erkennung, Archiv der Anliegen
 
-87 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+87 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3e61977 (P9, Anliegen 52, 60, 62, 53, 76, 77, 78) und 5166eb6 (Hooks P2, P3).
@@ -44,4 +44,4 @@ Punkt 3.
 4. Bekannt ist eine Datei, wenn `git ls-tree -r --name-only HEAD -- handoff/anliegen` sie nennt.
    Scheiter-Test: eine erledigte Datei, die nur gestaged ist, bleibt liegen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt. 1 Fehlt die Testdatei einer von einem offenen Item des freigegebenen Plans genannten Anforderung, ist das rot („<pfad> fehlt“), sonst nennt der Stand die Anforderung als wartend; Scheiter-Tests `testFehlendeTestdateiEinerUmfasstenAnforderungIstRot`, `…NichtUmfasstenAnforderungWartet`. 2 Die Sammeldatei gilt der ersten Anforderung und ist erst rot, wenn ein freigegebener Plan eine spätere nennt; vorher wartet die spätere (Stand: „AUF-2 wartet auf den Testautor“); `testSammeldateiBleibtGrünBisEinPlanEineSpätereAnforderungUmfasst`. 3 `istEnum` erkennt `enum.Enum`, `Flag`, `IntFlag`, `enumWerte` auch `nord: int = 1`; drei Tests in `glossarTest.py`. 4 Bekannt ist, was `git ls-tree -r HEAD` nennt; `versionieren` in `erledigteLoeschenTest.py` committet jetzt, `testNurVorgemerktesErledigtesBleibtLiegen`.

@@ -28,7 +28,7 @@ Seit der Retro geprüft, ohne Befund: `8ac70b7` und `265dac7` (Zonenwerte), `a96
 (`pyproject.toml` nur noch `*Test.py`; keine Datei `test_*.py` übrig).
 
 ## Offene Anliegen zur Technik
-- [79](anliegen/79-kritikCommitsFehlen.md): Kritik-Commits seit Retro 1, an den
+- Anliegen 79: Kritik-Commits seit Retro 1, an den
   Organisationsentwickler.
 
 ## Empfehlung

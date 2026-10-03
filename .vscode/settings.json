@@ -1,1 +1,5 @@
-{"cSpell.enabledFileTypes": {"markdown": false}}
+{
+  "cSpell.enabledFileTypes": {"markdown": false},
+  "cSpell.ignorePaths": ["**/*.md"],
+  "ltex.enabled": false
+}

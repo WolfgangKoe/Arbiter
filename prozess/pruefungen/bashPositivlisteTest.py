@@ -53,7 +53,7 @@ def testErlaubteBefehleLaufen(befehl):
         pytest.param("git status; touch x", id="Semikolon"),
         pytest.param('git commit -m "$(cat datei)"', id="Befehlsersetzung"),
         pytest.param("git -C ../ArbiterMap status", id="fremdes Repo"),
-        pytest.param("python3 -c 'open(\"x\",\"w\")'", id="beliebiges Python"),
+        pytest.param('python3 -c \'open("x","w")\'', id="beliebiges Python"),
         pytest.param("sed -i s/a/b/ CLAUDE.md", id="nicht gelistet"),
     ],
 )

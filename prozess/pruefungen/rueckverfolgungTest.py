@@ -16,6 +16,7 @@ from rueckverfolgung import (
 wurzel = Path(__file__).resolve().parents[2]
 
 zweiKriterien = 2
+zweiVerstöße = 2
 anforderungstext = """# Aufstellen
 
 ### AUF-1 · Reihenfolge
@@ -179,9 +180,8 @@ def testTestsZuZweiAnforderungenInEinerDateiSindRot(tmp_path):
     zweiAnforderungenMitTests(
         tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\ndef testAuf2_1Zwei(): ...\n"}
     )
-    meldungen = verstöße(tmp_path)
-    assert len(meldungen) == 1
-    assert "teilen nach Anforderung" in meldungen[0]
+    planMitUmfang(tmp_path, "AUF-2")
+    assert "teilen nach Anforderung" in verstöße(tmp_path)[0]
 
 
 def testTestZuAuf2InDerDateiVonAuf1IstRot(tmp_path):
@@ -238,3 +238,38 @@ def testSpurAlsJsonIstEineListeVonObjekten(tmp_path, monkeypatch, capsys):
         {"art": "Kriterium", "pfad": kriteriumsPfad, "zeile": 5},
         {"art": "Test", "pfad": testPfad, "zeile": 1},
     ]
+
+
+def planMitUmfang(wurzel: Path, umfang: str) -> None:
+    freigegebenerPlanMitItem(wurzel, f"# Probe\n\nUmfang: {umfang}.\n")
+
+
+def testFehlendeTestdateiEinerUmfasstenAnforderungIstRot(tmp_path):
+    zweiAnforderungenMitTests(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
+    planMitUmfang(tmp_path, "AUF-2")
+    meldungen = verstöße(tmp_path)
+    assert meldungen == ["technik/tests/akzeptanz/phasen/aufstellen/auf2Test.py fehlt"]
+
+
+def testFehlendeTestdateiEinerNichtUmfasstenAnforderungWartet(tmp_path):
+    zweiAnforderungenMitTests(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
+    assert verstöße(tmp_path) == []
+    assert wartende(tmp_path) == ["AUF-2"]
+
+
+def testSammeldateiBleibtGrünBisEinPlanEineSpätereAnforderungUmfasst(tmp_path):
+    zweiAnforderungenMitTests(tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\n"})
+    assert verstöße(tmp_path) == []
+    assert wartende(tmp_path) == ["AUF-2"]
+    planMitUmfang(tmp_path, "AUF-2")
+    meldungen = verstöße(tmp_path)
+    assert len(meldungen) == zweiVerstöße
+    assert "teilen nach Anforderung" in meldungen[0]
+    assert meldungen[1].endswith("auf2Test.py fehlt")
+
+
+def testSammeldateiMitTestZuAuf2OhnePlanIstRot(tmp_path):
+    zweiAnforderungenMitTests(
+        tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\ndef testAuf2_1Zwei(): ...\n"}
+    )
+    assert "Test zu AUF-2.1" in verstöße(tmp_path)[0]
