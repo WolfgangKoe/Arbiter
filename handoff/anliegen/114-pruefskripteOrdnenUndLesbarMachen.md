@@ -42,14 +42,10 @@ mehreren Modulen; ein Tupel-Index bricht still.
   Docstrings nach wir.md 8 (nur `# Regel:` und `# Warum:`, Docstring einzeilig, kein TODO
   oder FIXME) und Typaliase in PascalCase (wir.md 1), Geltungsbereich nach wir.md. Den
   Vermerk in wir.md setze ich.
-- D · Rückstand der Benennung löschen: `benennungRueckstand.txt` hat seit Anliegen 66 keinen
-  Eintrag, `benennung.py --rückstand` gibt nichts aus. Weg damit: die Datei, `rückstand`,
-  `rückstandZeilen` und `--rückstand` in `benennung.py`, die zwei Rückstand-Tests in
-  `benennungTest.py`, die Ausnahme in `konfigurationTest.py`, die Erwähnung in `regeln.md`.
-  Neue Altlasten entstehen nicht: Jede neue Datei wird voll geprüft.
+- D · erledigt: Rückstand der Benennung gelöscht (Datei, Funktionen, Tests, `regeln.md`).
 
 Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die Mechanismen aus C an je einem
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** D umgesetzt (Datei, Funktionen, Tests, Ausnahme, `regeln.md`). A bis C stehen aus; Status bleibt offen.
+**Stellungnahme.** D und C umgesetzt (`kommentare.py`, PascalCase-Typaliase in `benennung.py`, je mit Scheiter-Test, `regeln.md`); aus B `Fundstelle` als NamedTuple und Aliase in PascalCase. A und B (1, 4 bis 7) stehen aus; A zieht den Pfad der Sprung-Erweiterung um, die der Stakeholder gerade erprobt (124). Status bleibt offen.

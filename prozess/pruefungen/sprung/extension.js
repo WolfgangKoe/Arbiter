@@ -1,11 +1,9 @@
-// Strg+Klick auf ein Kriterium zeigt seine Tests, Strg+Klick auf einen Test springt zum
-// Kriterium. Bei mehreren Zielen zeigt VS Code die Liste.
 const vscode = require("vscode");
 const { kriteriumMuster, testMuster, testsZu, kriteriumZu } = require("./suche");
 
 function alsOrte(stellen) {
-  return stellen.map((s) => new vscode.Location(
-    vscode.Uri.file(s.datei), new vscode.Position(s.zeile, s.spalte)));
+  return stellen.map((stelle) => new vscode.Location(
+    vscode.Uri.file(stelle.datei), new vscode.Position(stelle.zeile, stelle.spalte)));
 }
 
 const anbieter = {

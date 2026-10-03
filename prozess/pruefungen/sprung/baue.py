@@ -1,8 +1,4 @@
-"""Baut `arbiter-sprung.vsix` aus diesem Ordner, nur mit der Standardbibliothek.
-
-Installieren: `code --install-extension prozess/pruefungen/sprung/arbiter-sprung.vsix`,
-danach VS Code neu laden (Befehl „Developer: Reload Window“).
-"""
+"""Baut `arbitersprung.vsix` aus diesem Ordner."""
 
 import json
 import zipfile
@@ -36,7 +32,7 @@ manifest = """<?xml version="1.0" encoding="utf-8"?>
 
 def bauen() -> Path:
     paket = json.loads((ordner / "package.json").read_text(encoding="utf-8"))
-    ziel = ordner / "arbiter-sprung.vsix"
+    ziel = ordner / "arbitersprung.vsix"
     with zipfile.ZipFile(ziel, "w", zipfile.ZIP_DEFLATED) as archiv:
         archiv.writestr("[Content_Types].xml", inhaltstypen)
         archiv.writestr("extension.vsixmanifest", manifest.format(**paket))

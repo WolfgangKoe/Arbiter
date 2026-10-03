@@ -36,7 +36,11 @@ def commitsSeitDerFreigabe(wurzel: Path) -> list[tuple[str, str]]:
     freigabe = letzteFreigabe(wurzel)
     bereich = [f"{freigabe}..HEAD"] if freigabe else []
     zeilen = gitAusgabe(wurzel, "log", "--format=%H %s", *bereich).splitlines()
-    return [tuple(zeile.split(" ", 1)) for zeile in zeilen][::-1]
+    commits = []
+    for zeile in reversed(zeilen):
+        kennung, _, betreff = zeile.partition(" ")
+        commits.append((kennung, betreff))
+    return commits
 
 
 def ersteFälligeKritik(wurzel: Path) -> tuple[str, str] | None:

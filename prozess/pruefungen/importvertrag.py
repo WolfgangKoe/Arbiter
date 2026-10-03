@@ -1,4 +1,4 @@
-"""Importvertrag A1 und A2 (`technik/architektur.md`): die Domäne importiert nur sich selbst."""
+"""Importvertrag A1, A2 (`technik/architektur.md`): nur Standardbibliothek und eigene Domäne."""
 
 import ast
 import sys

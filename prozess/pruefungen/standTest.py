@@ -294,6 +294,12 @@ def testStandNenntAlleKritikerDerGetroffenenPfade(repo):
     assert "Kritik am Code fällig: Reviewer und Architekt" in stand(repo.wurzel)
 
 
+def testCommitOhneBetreffLegtDenStandNichtLahm(repo):
+    repo.datei("technik/arbiter/probe.py", "x = 1\n")
+    repo.git("commit", "-q", "--allow-empty", "--allow-empty-message", "-m", "")
+    assert "Kritik am Code fällig" in stand(repo.wurzel)
+
+
 def testEinCodeCommitMitKritikImBetreffWirdTrotzdemGemeldet(repo):
     repo.datei("technik/arbiter/probe.py", "x = 1\n")
     erster = kurzerHashVon(repo)

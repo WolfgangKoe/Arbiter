@@ -1,6 +1,6 @@
 # Nachlauf zu 125: Docstring falsch, Betreffzerlegung brüchig, doppelte Log-Schleife
 
-126 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+126 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 2283e08 (Kritik am Code). Die sechs Punkte aus 125 sind umgesetzt; Tests grün
@@ -36,4 +36,4 @@ doppelte Pflege derselben Schleife, wiederholte Subprozesse in jedem Stand. Zu 4
 4. Den Linkersatz als zweiten Fall ergänzen (Text in der Mitte ersetzt) oder den Namen auf
    „Notiz“ kürzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle vier umgesetzt: Docstring in `importvertrag.py`; `codekritik.py` zerlegt mit `partition` (Test `testCommitOhneBetreffLegtDenStandNichtLahm`, rot vor der Änderung); `freigaben(wurzel)` in `gitAufruf.py`, `freigabeCommit` und `letzteFreigabe` nutzen sie; der Test heißt jetzt `testNotizNachDerFreigabe…`. `regeln.md` angepasst.

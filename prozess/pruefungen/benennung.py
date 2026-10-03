@@ -18,6 +18,8 @@ geteilterTest = re.compile(r"^(?P<kürzel>[a-z]+)(?P<nummer>\d+)Test\.py$")
 anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 
 mindestlänge = 3
+achsen = {"x", "y"}
+typgenerika = {"tuple", "list", "dict", "set", "frozenset", "Callable", "Literal", "Union"}
 ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
@@ -48,8 +50,50 @@ def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:
     return None
 
 
+def typaliase(baum: ast.AST) -> dict[int, str]:
+    """Zeile und Name der Typaliase auf Modulebene (`Name = tuple[…]`, `type Name = …`)."""
+    gefunden = {}
+    for knoten in getattr(baum, "body", []):
+        if isinstance(knoten, ast.TypeAlias) and isinstance(knoten.name, ast.Name):
+            gefunden[knoten.lineno] = knoten.name.id
+        elif (
+            isinstance(knoten, ast.Assign)
+            and len(knoten.targets) == 1
+            and isinstance(knoten.targets[0], ast.Name)
+            and isinstance(knoten.value, ast.Subscript)
+            and isinstance(knoten.value.value, ast.Name)
+            and knoten.value.value.id in typgenerika
+        ):
+            gefunden[knoten.lineno] = knoten.targets[0].id
+    return gefunden
+
+
+def koordinatenfelder(baum: ast.AST) -> set[tuple[int, str]]:
+    """Zeile und Name der Achsen `x`, `y` als Felder von `Stelle` (Architektur S1)."""
+    felder = set()
+    for klasse in ast.walk(baum):
+        if isinstance(klasse, ast.ClassDef) and klasse.name == "Stelle":
+            felder |= {
+                (feld.lineno, feld.target.id)
+                for feld in klasse.body
+                if isinstance(feld, ast.AnnAssign)
+                and isinstance(feld.target, ast.Name)
+                and feld.target.id in achsen
+            }
+    return felder
+
+
 def selbstDefinierteNamen(baum: ast.AST) -> Iterator[tuple[int, str, bool]]:
     """Zeile, Name und ob es eine Klasse ist, für jeden Namen, den der Code selbst festlegt."""
+    aliase = typaliase(baum)
+    yield from ((zeile, name, True) for zeile, name in aliase.items())
+    achsenfelder = koordinatenfelder(baum)
+    for zeile, name, istKlasse in einzelneNamen(baum):
+        if aliase.get(zeile) != name and (zeile, name) not in achsenfelder:
+            yield zeile, name, istKlasse
+
+
+def einzelneNamen(baum: ast.AST) -> Iterator[tuple[int, str, bool]]:
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.ClassDef):
             yield knoten.lineno, knoten.name, True
@@ -124,11 +168,7 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
 
 
 def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
-    """Ein Akzeptanztest heißt `<anforderung>Test.py` und liegt im Ordner der Anforderung.
-
-    Geteilt heißt er `<kürzel><n>Test.py` im Ordner `<datei>/` und spiegelt die Anforderung
-    `<KÜRZEL>-<n>` in `<datei>.md`.
-    """
+    """Akzeptanztest `<anforderung>Test.py`, geteilt `<kürzel><n>Test.py` im Ordner `<datei>/`."""
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None

@@ -1,9 +1,10 @@
-// Findet Kriterium und Tests in den Dateien selbst, ohne Python und ohne Sprachserver.
+// Warum: Die Suche liest die Dateien selbst, denn Pylance fand beim Stakeholder nichts.
 const fs = require("fs");
 const path = require("path");
 
 const kriteriumMuster = /[A-ZÄÖÜ]+-\d+\.\d+/;
-const testMuster = /test[A-ZÄÖÜ][A-Za-zÄÖÜäöüß]*?\d+_\d+/;
+const testMuster = /test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[\wÄÖÜäöüß]*/;
+const testKriteriumMuster = /^test([A-ZÄÖÜ][a-zäöüß]*)(\d+)_(\d+)/;
 
 function dateien(ordner, endung) {
   if (!fs.existsSync(ordner)) return [];
@@ -14,7 +15,6 @@ function dateien(ordner, endung) {
   });
 }
 
-// Alle Zeilen einer Datei, auf die der Regelausdruck passt: { datei, zeile (ab 0), spalte }.
 function stellen(ordner, endung, muster) {
   const gefunden = [];
   for (const datei of dateien(ordner, endung)) {
@@ -26,7 +26,6 @@ function stellen(ordner, endung, muster) {
   return gefunden;
 }
 
-// AUF-1.3 -> alle `def testAuf1_3…` unter technik/tests/akzeptanz
 function testsZu(wurzel, kriterium) {
   const [, kürzel, anforderung, nummer] = /^([A-ZÄÖÜ]+)-(\d+)\.(\d+)$/.exec(kriterium);
   const name = kürzel[0] + kürzel.slice(1).toLowerCase();
@@ -34,9 +33,8 @@ function testsZu(wurzel, kriterium) {
   return stellen(path.join(wurzel, "technik/tests/akzeptanz"), ".py", muster);
 }
 
-// testAuf1_3Eins -> die Zeile `- AUF-1.3 …` unter domaene/anforderungen
 function kriteriumZu(wurzel, testName) {
-  const [, name, anforderung, nummer] = /^test([A-ZÄÖÜ][A-Za-zÄÖÜäöüß]*?)(\d+)_(\d+)/.exec(testName);
+  const [, name, anforderung, nummer] = testKriteriumMuster.exec(testName);
   const muster = new RegExp(`^- ${name.toUpperCase()}-${anforderung}\\.${nummer}(?!\\d)`);
   return stellen(path.join(wurzel, "domaene/anforderungen"), ".md", muster);
 }

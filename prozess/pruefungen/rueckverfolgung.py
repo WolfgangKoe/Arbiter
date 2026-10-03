@@ -10,22 +10,27 @@ from typing import NamedTuple
 from agenten import projektordner
 from plan import freigegebenerPlan, offeneItemTexte
 
-anforderungsnummer = tuple[str, int]
-kriteriumsnummer = tuple[str, int, int]
-fundstelle = tuple[str, str, int]  # Art, Pfad, Zeile
+Anforderungsnummer = tuple[str, int]
+Kriteriumsnummer = tuple[str, int, int]
+
+
+class Fundstelle(NamedTuple):
+    art: str
+    pfad: str
+    zeile: int
 
 
 class Fehlend(NamedTuple):
     """Ein Kriterium ohne Test oder eine Anforderung ohne Testdatei, mit allen ihren Kriterien."""
 
     kennung: str
-    kriterien: set[kriteriumsnummer]
+    kriterien: set[Kriteriumsnummer]
 
 
 class Zuordnung(NamedTuple):
-    anforderung: anforderungsnummer
+    anforderung: Anforderungsnummer
     testdatei: Path
-    verlangt: set[kriteriumsnummer]
+    verlangt: set[Kriteriumsnummer]
 
 
 anforderungZeile = re.compile(r"^### ([A-ZÄÖÜ]+)-(\d+)\b")
@@ -37,17 +42,17 @@ akzeptanzOrdner = "technik/tests/akzeptanz"
 anforderungsOrdner = "domaene/anforderungen"
 
 
-def kennung(kriterium: kriteriumsnummer) -> str:
+def kennung(kriterium: Kriteriumsnummer) -> str:
     kürzel, hauptnummer, unternummer = kriterium
     return f"{kürzel}-{hauptnummer}.{unternummer}"
 
 
-def anforderungKennung(anforderung: anforderungsnummer) -> str:
+def anforderungKennung(anforderung: Anforderungsnummer) -> str:
     kürzel, nummer = anforderung
     return f"{kürzel}-{nummer}"
 
 
-def anforderungVon(kriterium: kriteriumsnummer) -> anforderungsnummer:
+def anforderungVon(kriterium: Kriteriumsnummer) -> Anforderungsnummer:
     kürzel, hauptnummer, _ = kriterium
     return kürzel, hauptnummer
 
@@ -56,7 +61,7 @@ def zeilen(datei: Path) -> list[str]:
     return datei.read_text(encoding="utf-8").splitlines()
 
 
-def anforderungenMitZeile(anforderungsdatei: Path) -> list[tuple[anforderungsnummer, int]]:
+def anforderungenMitZeile(anforderungsdatei: Path) -> list[tuple[Anforderungsnummer, int]]:
     return [
         ((treffer[1], int(treffer[2])), nummer)
         for nummer, zeile in enumerate(zeilen(anforderungsdatei), 1)
@@ -64,7 +69,7 @@ def anforderungenMitZeile(anforderungsdatei: Path) -> list[tuple[anforderungsnum
     ]
 
 
-def kriterienMitZeile(anforderungsdatei: Path) -> list[tuple[kriteriumsnummer, int]]:
+def kriterienMitZeile(anforderungsdatei: Path) -> list[tuple[Kriteriumsnummer, int]]:
     return [
         ((treffer[1], int(treffer[2]), int(treffer[3])), nummer)
         for nummer, zeile in enumerate(zeilen(anforderungsdatei), 1)
@@ -72,11 +77,11 @@ def kriterienMitZeile(anforderungsdatei: Path) -> list[tuple[kriteriumsnummer, i
     ]
 
 
-def kriterien(anforderungsdatei: Path) -> set[kriteriumsnummer]:
+def kriterien(anforderungsdatei: Path) -> set[Kriteriumsnummer]:
     return {kriterium for kriterium, _ in kriterienMitZeile(anforderungsdatei)}
 
 
-def testsMitZeile(testdatei: Path) -> list[tuple[kriteriumsnummer, int, int]]:
+def testsMitZeile(testdatei: Path) -> list[tuple[Kriteriumsnummer, int, int]]:
     """Kriterium, erste und letzte Zeile jeder Testfunktion mit Kennung im Namen."""
     gefunden = []
     for knoten in ast.walk(ast.parse(testdatei.read_text(encoding="utf-8"))):
@@ -88,7 +93,7 @@ def testsMitZeile(testdatei: Path) -> list[tuple[kriteriumsnummer, int, int]]:
     return gefunden
 
 
-def getesteKriterien(testdatei: Path) -> set[kriteriumsnummer]:
+def getesteKriterien(testdatei: Path) -> set[Kriteriumsnummer]:
     return {kriterium for kriterium, _, _ in testsMitZeile(testdatei)}
 
 
@@ -96,7 +101,7 @@ def doppelte(kennungen: list[str]) -> list[str]:
     return sorted(name for name, anzahl in Counter(kennungen).items() if anzahl > 1)
 
 
-def anforderungenDerDatei(anforderungsdatei: Path) -> list[anforderungsnummer]:
+def anforderungenDerDatei(anforderungsdatei: Path) -> list[Anforderungsnummer]:
     """Die Anforderungen der Datei, auch die, von denen nur Kriterien da sind."""
     gefunden = {anforderung for anforderung, _ in anforderungenMitZeile(anforderungsdatei)}
     gefunden |= {anforderungVon(kriterium) for kriterium in kriterien(anforderungsdatei)}
@@ -108,20 +113,20 @@ def sammeldateiZu(wurzel: Path, anforderungsdatei: Path) -> Path:
     return wurzel / akzeptanzOrdner / pfad.parent / f"{pfad.name}Test.py"
 
 
-def einzeldateiZu(wurzel: Path, anforderungsdatei: Path, anforderung: anforderungsnummer) -> Path:
+def einzeldateiZu(wurzel: Path, anforderungsdatei: Path, anforderung: Anforderungsnummer) -> Path:
     pfad = anforderungsdatei.relative_to(wurzel / anforderungsOrdner).with_suffix("")
     kürzel, nummer = anforderung
     return wurzel / akzeptanzOrdner / pfad / f"{kürzel.lower()}{nummer}Test.py"
 
 
-def nennt(text: str, kriterium: kriteriumsnummer) -> bool:
+def nennt(text: str, kriterium: Kriteriumsnummer) -> bool:
     """Der Text nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     kürzel, haupt, unter = kriterium
     muster = rf"\b{kürzel}-{haupt}(?:\.{unter}(?!\d)|(?!\d)(?!\.\d))"
     return re.search(muster, text) is not None
 
 
-def umfasst(itemTexte: list[str], kriterium: kriteriumsnummer) -> bool:
+def umfasst(itemTexte: list[str], kriterium: Kriteriumsnummer) -> bool:
     """Ein Itemtext nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     return any(nennt(text, kriterium) for text in itemTexte)
 
@@ -156,12 +161,12 @@ def testdateiVerstöße(
     return meldungen
 
 
-def anforderungUmfasst(itemTexte: list[str], verlangt: set[kriteriumsnummer]) -> bool:
+def anforderungUmfasst(itemTexte: list[str], verlangt: set[Kriteriumsnummer]) -> bool:
     return any(umfasst(itemTexte, kriterium) for kriterium in verlangt)
 
 
 def sammeldateiGilt(
-    sammeldatei: Path, spätereVerlangt: list[set[kriteriumsnummer]], itemTexte: list[str]
+    sammeldatei: Path, spätereVerlangt: list[set[Kriteriumsnummer]], itemTexte: list[str]
 ) -> bool:
     """Die Sammeldatei liegt vor, und kein Plan umfasst eine spätere Anforderung."""
     return sammeldatei.is_file() and not any(
@@ -172,7 +177,7 @@ def sammeldateiGilt(
 def testdateiWählen(
     wurzel: Path,
     anforderungsdatei: Path,
-    anforderung: anforderungsnummer,
+    anforderung: Anforderungsnummer,
     *,
     gilt: bool,
 ) -> Path:
@@ -189,7 +194,7 @@ def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> 
     if not anforderungen:
         return []
     erste, *spätere = anforderungen
-    verlangt: dict[anforderungsnummer, set[kriteriumsnummer]] = {
+    verlangt: dict[Anforderungsnummer, set[Kriteriumsnummer]] = {
         anforderung: set() for anforderung in anforderungen
     }
     for kriterium in kriterien(anforderungsdatei):
@@ -297,23 +302,26 @@ def wartendeAlsText(wurzel: Path) -> str:
     return f"{', '.join(gefunden)} wartet auf den Testautor" if gefunden else ""
 
 
-def kriteriumsstellen(wurzel: Path) -> dict[kriteriumsnummer, list[fundstelle]]:
-    stellen: dict[kriteriumsnummer, list[fundstelle]] = {}
+def kriteriumsstellen(wurzel: Path) -> dict[Kriteriumsnummer, list[Fundstelle]]:
+    stellen: dict[Kriteriumsnummer, list[Fundstelle]] = {}
     for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
         for kriterium, zeile in kriterienMitZeile(datei):
-            stellen.setdefault(kriterium, []).append(("Kriterium", pfadVon(wurzel, datei), zeile))
+            stellen.setdefault(kriterium, []).append(
+                Fundstelle("Kriterium", pfadVon(wurzel, datei), zeile)
+            )
     return stellen
 
 
-def teststellen(wurzel: Path) -> dict[kriteriumsnummer, list[fundstelle]]:
-    stellen: dict[kriteriumsnummer, list[fundstelle]] = {}
+def teststellen(wurzel: Path) -> dict[Kriteriumsnummer, list[Fundstelle]]:
+    stellen: dict[Kriteriumsnummer, list[Fundstelle]] = {}
     for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
         for kriterium, zeile, _ in testsMitZeile(datei):
-            stellen.setdefault(kriterium, []).append(("Test", pfadVon(wurzel, datei), zeile))
+            stelle = Fundstelle("Test", pfadVon(wurzel, datei), zeile)
+            stellen.setdefault(kriterium, []).append(stelle)
     return stellen
 
 
-def kriteriumZuStelle(wurzel: Path, pfad: str, zeile: int) -> kriteriumsnummer | None:
+def kriteriumZuStelle(wurzel: Path, pfad: str, zeile: int) -> Kriteriumsnummer | None:
     """Das Kriterium, das in der Zeile der Datei steht oder dessen Testfunktion sie enthält."""
     datei = wurzel / pfad
     if not datei.is_file():
@@ -327,7 +335,7 @@ def kriteriumZuStelle(wurzel: Path, pfad: str, zeile: int) -> kriteriumsnummer |
     )
 
 
-def kriteriumZuEingabe(wurzel: Path, eingabe: str) -> kriteriumsnummer | None:
+def kriteriumZuEingabe(wurzel: Path, eingabe: str) -> Kriteriumsnummer | None:
     treffer = kriteriumKennung.match(eingabe.upper())
     if treffer:
         return treffer[1], int(treffer[2]), int(treffer[3])
@@ -338,7 +346,7 @@ def kriteriumZuEingabe(wurzel: Path, eingabe: str) -> kriteriumsnummer | None:
     return kriteriumZuStelle(wurzel, stelle[1], int(stelle[2])) if stelle else None
 
 
-def spur(wurzel: Path, eingabe: str) -> list[fundstelle] | None:
+def spur(wurzel: Path, eingabe: str) -> list[Fundstelle] | None:
     """Kriterium und seine Tests; `None`, wenn die Eingabe kein bekanntes Kriterium nennt."""
     kriterium = kriteriumZuEingabe(wurzel, eingabe)
     stellen = kriteriumsstellen(wurzel).get(kriterium, []) if kriterium else []
@@ -347,8 +355,8 @@ def spur(wurzel: Path, eingabe: str) -> list[fundstelle] | None:
     return stellen + teststellen(wurzel).get(kriterium, [])
 
 
-def spurAlsText(stellen: list[fundstelle]) -> str:
-    return "\n".join(f"{pfad}:{zeile}" for _, pfad, zeile in stellen)
+def spurAlsText(stellen: list[Fundstelle]) -> str:
+    return "\n".join(f"{stelle.pfad}:{stelle.zeile}" for stelle in stellen)
 
 
 def hauptprogramm(argumente: list[str]) -> int:

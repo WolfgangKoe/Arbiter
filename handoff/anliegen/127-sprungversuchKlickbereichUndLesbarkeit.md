@@ -1,6 +1,6 @@
 # Sprung-Versuch: Klick trifft nur den Anfang des Testnamens
 
-127 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+127 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 047a564 (Kritik am Code, Wegwerf-Versuch zu
@@ -42,4 +42,4 @@ während `rueckverfolgung.py` grün bleibt. Zu 4: Quelle und Paket können ausei
    (`python3 prozess/pruefungen/sprung/baue.py && code --install-extension …`), oder eine
    Probe vergleicht Paket und Quellen.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle vier umgesetzt. 1: `testMuster` deckt den ganzen Bezeichner (`suche.js`); das Paket ist neu gebaut, Version 0.0.3, Name `arbitersprung`. Der Stakeholder muss neu installieren: `python3 prozess/pruefungen/sprung/baue.py && code --install-extension prozess/pruefungen/sprung/arbitersprung.vsix`, dann „Developer: Reload Window“. 2: Docstring einzeilig, Kommentar als `Warum:`, `stelle` statt `s`. 3: `sprung/sucheTest.py` (läuft mit node) prüft für jeden Test aus `rueckverfolgung.py`, dass der Bereich den ganzen Namen deckt und `kriteriumZu` dieselbe Zeile findet; mit dem alten Muster rot. `testKriteriumMuster` in `suche.js` gleicht jetzt dem Python-Muster; eine echte gemeinsame Quelle gibt es nicht. 4: das vsix ist nicht mehr eingecheckt (`.gitignore`). Anliegen 124 nennt noch den alten Pfad `arbiter-sprung.vsix`; dort bin ich nicht dran.

@@ -66,11 +66,26 @@ def testKlassenHeißenInPascalCase():
         pytest.param("with open('x') as f: ...", id="with-Name"),
         pytest.param("class Ort:\n    def __init__(self):\n        self.an_der = 1", id="Attribut"),
         pytest.param("import json as j", id="Alias"),
+        pytest.param("kriteriumsnummer = tuple[str, int]", id="Typalias klein"),
+        pytest.param("type kriteriumsnummer = tuple[str, int]", id="type-Alias klein"),
         pytest.param("try:\n    pass\nexcept ValueError as e:\n    pass", id="except-Name"),
     ],
 )
 def testQuelltextMitSchlechtenNamenIstRot(quelltext):
     assert grundZu(quelltext)
+
+
+def testAchsenXUndYSindFelderVonStelle():
+    assert grundZu("class Stelle:\n    x: int\n    y: int\n") == []
+
+
+def testAchsenAußerhalbVonStelleBleibenRot():
+    assert grundZu("class Ort:\n    x: int\n")
+    assert grundZu("x = 1\n")
+
+
+def testTypaliaseStehenInPascalCase():
+    assert grundZu("Kriteriumsnummer = tuple[str, int]\ntype Zeile = int\n") == []
 
 
 def testQuelltextMitGutenNamenIstGrün():
