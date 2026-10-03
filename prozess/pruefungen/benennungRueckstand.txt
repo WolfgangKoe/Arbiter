@@ -2,5 +2,3 @@
 # Der Eintrag gilt für die unveränderte Datei. Wer sie ändert oder umbenennt, wird voll geprüft;
 # dann ist der Eintrag wirkungslos und kann gelöscht werden. Neue Dateien sind nie ausgenommen.
 # Erzeugen: python3 prozess/pruefungen/benennung.py --rückstand
-27e24a22e4095811 technik/tests/akzeptanz/conftest.py
-9153ef0363a6acf1 technik/tests/akzeptanz/phasen/test_auf_1.py

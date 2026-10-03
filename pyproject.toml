@@ -1,7 +1,6 @@
 [tool.pytest.ini_options]
-# Warum: Testdateien heißen `<name>Test.py` (prozess/praemissen/wir.md); `test_*.py` gilt nur,
-# bis der Testautor technik/tests/akzeptanz umbenannt hat (benennung.py meldet den Rest).
-python_files = ["*Test.py", "test_*.py"]
+# Warum: Testdateien heißen `<name>Test.py` (prozess/praemissen/wir.md).
+python_files = ["*Test.py"]
 # Warum: Das Produkt `arbiter` liegt in technik/. Die Prüfskripte stehen nicht im Suchpfad:
 # pytest stellt den Ordner einer Testdatei ohnehin vorne an, das Produkt soll sie nicht sehen.
 pythonpath = ["technik"]
