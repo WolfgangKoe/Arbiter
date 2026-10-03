@@ -76,7 +76,8 @@ def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
 
 
 def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
-    modell, *_ = spielerMitEinerEinheit().armee.einheiten[0].modelle
+    einheit, *_ = spielerMitEinerEinheit().armee.einheiten
+    modell, *_ = einheit.modelle
     ersteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
     zweiteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
 
