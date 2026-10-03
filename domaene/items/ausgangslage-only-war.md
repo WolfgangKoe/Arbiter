@@ -4,4 +4,4 @@ Umfang: AUF-2.1, AUF-2.2, AUF-2.3, AUF-2.4, AUF-2.5 ([Aufstellen](../anforderung
 
 Warum jetzt: Jede Prüfung einer Stelle braucht Bases, Spielfeld und Zonen.
 
-Abhängigkeit: keine. Reine Fachlogik; Grenzen im [Plan](../../handoff/plan.md).
+Abhängigkeit: keine. Ohne Oberfläche; Kosten und Grenzen im [Plan](../../handoff/plan.md).

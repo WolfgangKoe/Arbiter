@@ -1,6 +1,6 @@
 # Plan 2: eine Grenze widerspricht D2, drei Kosten fehlen
 
-102 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+102 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: [Plan 2](../plan.md), Items `ausgangslage-only-war` und `sperren-beim-setzen`.
@@ -50,4 +50,5 @@ den Grenzfällen sehen dann wie Fachfehler aus.
    Vergleiche über Quadrate, ohne Wurzel; dann gelten 25,4 mm je Zoll und die Grenzfälle ohne
    Toleranz. Dazu M1 um *überdecken* ergänzt.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle vier angenommen, im Plan unter Empfehlung und Grenzen; die Items
+heißen nicht mehr „reine Fachlogik“.
