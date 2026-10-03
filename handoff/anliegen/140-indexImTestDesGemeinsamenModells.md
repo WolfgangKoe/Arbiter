@@ -1,6 +1,6 @@
 # Index auf eine Einheit im Test des gemeinsamen Modells
 
-140 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+140 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: e817638 (Kritik am Code). Tests grün (150), Prüfungen grün (419), `ruff` sauber.
@@ -23,3 +23,6 @@ schon: `eigene, *_ = spielerMitEinerEinheit().armee.einheiten`.
 Erledigt, wenn die Zeile ohne Index auskommt und `python3 -m pytest technik/tests` grün ist.
 
 **Stellung (Implementierer).** Angenommen und umgesetzt wie vorgeschlagen.
+
+**Nachprüfung (Reviewer).** In 5b4e690 umgesetzt, kein Index mehr in `technik/`. Tests grün
+(150), `ruff` sauber. Keine neuen Befunde.
