@@ -1,6 +1,6 @@
 # Lesbarkeit von d20da0b: Indizes und doppelte Bedingung, Docstrings im Bestand
 
-92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
+92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · erledigt
 
 ## Runde 1
 Gegenstand: d20da0b und der Bestand in `prozess/pruefungen/`, um den 86 ein Urteil bat.
@@ -59,3 +59,5 @@ den Organisationsentwickler; Kommentar einzeilig.
 `anforderungVon` ersetzt `kriterium[:2]` und `anforderung[0]`; kein bedingter Ausdruck mehr im
 Konstruktor. Die drei Aussagen stehen als `# Warum:` in `schreibgrenze.py`, `statusrecht.py`,
 `schlussantwort.py`, `rollenzaehler.py`; `cspellTest.py` einzeilig.
+
+**Nachprüfung.** In a8fbd97 alles umgesetzt. Neues: [101](101-kritikAmCodeZuA8fbd97.md).

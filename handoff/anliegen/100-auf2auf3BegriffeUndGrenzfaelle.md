@@ -3,7 +3,7 @@
 100 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
-Für Plan 2 ([94](94-kriterienFuerPlan2.md)) stehen
+Für Plan 2 (Anliegen 94) stehen
 [AUF-2 und AUF-3](../../domaene/anforderungen/phasen/aufstellen.md), die Ausgangslage in
 [ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml), die Begriffe im
 [Glossar](../../domaene/glossar.md). Fundstellen in `core_rules.txt`.
