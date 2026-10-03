@@ -1,12 +1,4 @@
-"""Hook: Belegung des Kontextfensters je Lauf, gleich für den Koordinator und jede Rolle.
-
-Gemessen wird die Belegung der letzten Anfrage im Transkript des Laufs (Eingabe, Cache
-gelesen, Cache geschrieben). `PostToolUse` meldet ab der Warnschwelle einmal, `PreToolUse`
-sperrt ab der Sperrschwelle alles außer Schreiben im eigenen Pfad und der Schlussantwort.
-Beim Koordinator entscheidet der Stakeholder: Er schreibt eine höhere Grenze in
-`.git/arbiter/belegungsgrenze.txt` (freigeben), kürzt oder beginnt einen neuen Chat
-(`prozess/ablauf.md`, Budget; Anliegen 22). Ein Fehler beim Messen sperrt nie.
-"""
+"""Hook: Belegung des Kontextfensters je Lauf, gleich für den Koordinator und jede Rolle."""
 
 import json
 import sys

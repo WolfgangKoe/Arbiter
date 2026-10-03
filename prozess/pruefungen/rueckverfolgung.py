@@ -150,29 +150,39 @@ def anforderungUmfasst(itemTexte: list[str], verlangt: set[kriteriumsnummer]) ->
     return any(umfasst(itemTexte, kriterium) for kriterium in verlangt)
 
 
+def sammeldateiGilt(
+    sammeldatei: Path, spätereVerlangt: list[set[kriteriumsnummer]], itemTexte: list[str]
+) -> bool:
+    """Die Sammeldatei liegt vor, und kein Plan umfasst eine spätere Anforderung."""
+    return sammeldatei.is_file() and not any(
+        anforderungUmfasst(itemTexte, verlangt) for verlangt in spätereVerlangt
+    )
+
+
 def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[Zuordnung]:
     """Je Anforderung der Datei die Testdatei, die für sie gilt, und ihre Kriterien."""
-    # Regel: Die Sammeldatei gilt der ersten Anforderung, bis ein Plan eine spätere umfasst.
+    # Regel: Architektur T1
     anforderungen = anforderungenDerDatei(anforderungsdatei)
+    if not anforderungen:
+        return []
+    erste, *spätere = anforderungen
     alle = kriterien(anforderungsdatei)
     verlangt = {
         anforderung: {kriterium for kriterium in alle if kriterium[:2] == anforderung}
         for anforderung in anforderungen
     }
     sammeldatei = testdateiZu(wurzel, anforderungsdatei, None)
-    spätereUmfasst = any(
-        anforderungUmfasst(itemTexte, verlangt[anforderung]) for anforderung in anforderungen[1:]
-    )
-    gilt = sammeldatei.is_file() and not spätereUmfasst
+    gilt = sammeldateiGilt(sammeldatei, [verlangt[nummer] for nummer in spätere], itemTexte)
+    nurEine = not spätere
     return [
         Zuordnung(
             anforderung,
             sammeldatei
-            if len(anforderungen) == 1 or (gilt and nummer == 0)
+            if anforderung == erste and (gilt or nurEine)
             else testdateiZu(wurzel, anforderungsdatei, anforderung),
             verlangt[anforderung],
         )
-        for nummer, anforderung in enumerate(anforderungen)
+        for anforderung in anforderungen
     ]
 
 
@@ -183,16 +193,27 @@ def doppelteKennungen(anforderungsdatei: Path) -> list[str]:
     )
 
 
+def sammeldateiNebenEinzeldatei(
+    wurzel: Path, anforderungsdatei: Path, zuordnung: Zuordnung, itemTexte: list[str]
+) -> list[str]:
+    """Eine vorhandene Einzeldatei wird geprüft, auch wenn die Sammeldatei gilt."""
+    einzeldatei = testdateiZu(wurzel, anforderungsdatei, zuordnung.anforderung)
+    if not einzeldatei.is_file() or einzeldatei == zuordnung.testdatei:
+        return []
+    meldungen = [
+        f"{pfadVon(wurzel, einzeldatei)}: neben {pfadVon(wurzel, zuordnung.testdatei)}, "
+        "je Anforderung eine Testdatei"
+    ]
+    einzelne = Zuordnung(zuordnung.anforderung, einzeldatei, zuordnung.verlangt)
+    return meldungen + testdateiVerstöße(wurzel, anforderungsdatei, einzelne, itemTexte)
+
+
 def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[str]:
     pfad = pfadVon(wurzel, anforderungsdatei)
     meldungen = [f"{pfad}: {name} steht zweimal" for name in doppelteKennungen(anforderungsdatei)]
     sammeldatei = testdateiZu(wurzel, anforderungsdatei, None)
     zugeordnet = zuordnungen(wurzel, anforderungsdatei, itemTexte)
-    if (
-        len(zugeordnet) > 1
-        and sammeldatei.is_file()
-        and any(anforderungUmfasst(itemTexte, spätere.verlangt) for spätere in zugeordnet[1:])
-    ):
+    if sammeldatei.is_file() and sammeldatei not in {eintrag.testdatei for eintrag in zugeordnet}:
         meldungen.append(
             f"{pfadVon(wurzel, sammeldatei)}: teilen nach Anforderung, "
             f"je Anforderung eine Datei {sammeldatei.stem.removesuffix('Test')}/<kürzel><n>Test.py"
@@ -202,6 +223,7 @@ def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: lis
             meldungen += testdateiVerstöße(wurzel, anforderungsdatei, zuordnung, itemTexte)
         elif anforderungUmfasst(itemTexte, zuordnung.verlangt):
             meldungen.append(f"{pfadVon(wurzel, zuordnung.testdatei)} fehlt")
+        meldungen += sammeldateiNebenEinzeldatei(wurzel, anforderungsdatei, zuordnung, itemTexte)
     return meldungen
 
 

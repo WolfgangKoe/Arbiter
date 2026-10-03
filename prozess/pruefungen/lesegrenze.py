@@ -1,10 +1,4 @@
-"""Der Koordinator liest nur kurze Dateien: Hook `PreToolUse` auf `Read` und `git show`.
-
-Er leitet weiter und liest keine Inhalte; lange Dokumente lesen die Rollen. In Zyklus 1 las er
-zu Beginn die ganze VORGEHEN.md (25.000 Zeichen). `git show` zeigt ohne `--stat` einen
-ganzen Diff; erlaubt ist es mit `--stat` oder für Dateien (`<rev>:<pfad>`) bis zur Höchstlänge.
-Die Bash-Positivliste (`bashPositivliste.py`) ruft `gitShowZulässig` auf.
-"""
+"""Der Koordinator liest nur kurze Dateien: Hook `PreToolUse` auf `Read` und `git show`."""
 
 import json
 import subprocess

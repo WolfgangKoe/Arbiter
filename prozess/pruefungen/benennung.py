@@ -1,15 +1,4 @@
-"""Prüft die Benennung nach `prozess/praemissen/wir.md` und Anliegen 28.
-
-Bezeichner (Funktionen, Parameter, Variablen, Konstanten, Enum-Werte, Fixtures, Attribute von
-`self`) in camelCase, Klassen in PascalCase, mindestens 3 Zeichen. Dateinamen in camelCase,
-ASCII. Akzeptanztests: `<anforderung>Test.py` im gespiegelten Ordner, Testfunktionen
-`test<Kürzel><n>_<m><Satz>`. Anliegen ab Nummer 28: `<nr>-<camelCase>.md`.
-
-Rückstand: Dateien, die vor der Prämisse entstanden und noch nicht umbenannt sind (nur unter
-`technik/`), stehen mit ihrem Fingerabdruck in `benennungRueckstand.txt`. Der Eintrag gilt für
-die unveränderte Datei; wer sie anfasst oder umbenennt, wird vollständig geprüft. Neue Dateien
-sind nie ausgenommen.
-"""
+"""Prüft die Benennung nach `prozess/praemissen/wir.md`."""
 
 import ast
 import hashlib
@@ -31,7 +20,7 @@ anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 mindestlänge = 3
 ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
-# In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
+# Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 ausgeschlosseneOrdner = {
     "Arbiter",

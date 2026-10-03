@@ -1,9 +1,4 @@
-"""Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade.
-
-Inhalte gehören nach `handoff/`, nicht in den Kontext des Koordinators. In Zyklus 1 kamen
-Schlussantworten bis 17.000 Zeichen; der Kontext des Koordinators lief voll. In VS Code kommt
-der Bericht über `SubagentHandback`, headless als letzte Nachricht; dort prüft `SubagentStop`.
-"""
+"""Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade."""
 
 import json
 import sys

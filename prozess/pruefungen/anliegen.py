@@ -58,10 +58,7 @@ antwortZeile = re.compile(r"^Antwort:")
 
 
 def antwortVerstöße(text: str, anliegen: Anliegen) -> list[str]:
-    """Unter jeder Frage an den Stakeholder steht eine Zeile `Antwort:`.
-
-    Gilt für offene Anliegen an den Stakeholder; beantwortete tragen die Antworten schon.
-    """
+    """Unter jeder Frage an den Stakeholder steht eine Zeile `Antwort:`."""
     if anliegen.empfänger != stakeholder or anliegen.status != "offen":
         return []
     verstöße = []
@@ -131,10 +128,7 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
 
 
 def wartetAuf(anliegen: Anliegen) -> str | None:
-    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`.
-
-    Kein Text wie „wartet auf <nr>“ zählt. `angenommen` prüft der Absender nach.
-    """
+    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`."""
     if anliegen.status == "offen":
         return anliegen.empfänger
     if anliegen.status in ("angenommen", "abgelehnt", "beantwortet"):

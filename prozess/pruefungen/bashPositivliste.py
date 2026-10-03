@@ -1,12 +1,4 @@
-"""Hook: Der Koordinator führt nur Befehle aus der Positivliste aus; Rollen nutzen git nur lesend.
-
-Berechtigungsregeln reichen nicht: Ohne Write hat ein Agent in der Probe per
-`echo > datei` geschrieben. Für den Koordinator sind Verkettung, Umleitung und
-Befehlsersetzung gesperrt. Committen ist allein Sache des Koordinators; in Zyklus 1 hatten
-Planer und Architekt selbst committet. `git show` darf der Koordinator nur mit `--stat` oder
-für kurze Dateien (`lesegrenze.py`). Rollen ändern nichts, was `agenten.nurLesbar` nennt,
-und kein Anliegen: dort gelten nur Write und Edit.
-"""
+"""Hook: Der Koordinator führt nur Befehle der Positivliste aus; Rollen nutzen git nur lesend."""
 
 import json
 import re
@@ -56,7 +48,7 @@ gitLesend = (
 )
 gitOptionenMitWert = ("-C", "-c", "--git-dir", "--work-tree")
 
-# Befehle, die jedes Pfadargument ändern; bei Kopierbefehlen zählt nur das Ziel.
+# Warum: Befehle, die jedes Pfadargument ändern; bei Kopierbefehlen zählt nur das Ziel.
 ändernAlle = {
     "rm",
     "unlink",

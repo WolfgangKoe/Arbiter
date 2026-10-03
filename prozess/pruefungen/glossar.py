@@ -39,7 +39,11 @@ def enumWerte(klasse: ast.ClassDef) -> list[tuple[str, str | None]]:
     for anweisung in klasse.body:
         if isinstance(anweisung, ast.Assign) and isinstance(anweisung.targets[0], ast.Name):
             name, inhalt = anweisung.targets[0].id, anweisung.value
-        elif isinstance(anweisung, ast.AnnAssign) and isinstance(anweisung.target, ast.Name):
+        elif (
+            isinstance(anweisung, ast.AnnAssign)
+            and isinstance(anweisung.target, ast.Name)
+            and anweisung.value is not None
+        ):
             name, inhalt = anweisung.target.id, anweisung.value
         else:
             continue

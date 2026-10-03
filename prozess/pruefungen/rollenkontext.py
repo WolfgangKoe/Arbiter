@@ -1,8 +1,4 @@
-"""Hook `SubagentStart`: Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive.
-
-Die Perspektive ist der oberste Ordner des ersten Schreibpfads (domaene, technik, prozess).
-Eine Rolle ohne passenden Schreibpfad bekommt keine Ordner-CLAUDE.md.
-"""
+"""Hook `SubagentStart`: Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive."""
 
 import json
 import sys

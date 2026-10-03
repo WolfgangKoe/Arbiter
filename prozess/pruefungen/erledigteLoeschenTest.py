@@ -77,3 +77,13 @@ def testNurVorgemerktesErledigtesBleibtLiegen(tmp_path):
     subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
     assert erledigteLöschen(tmp_path) == []
     assert datei.exists()
+
+
+def testErledigtSeitDemLetztenCommitBleibtBisZumCommitLiegen(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "angenommen"))
+    versionieren(tmp_path)
+    datei.write_text(datei.read_text().replace("angenommen", "erledigt"), encoding="utf-8")
+    assert erledigteLöschen(tmp_path) == []
+    assert datei.exists()
+    versionieren(tmp_path)
+    assert erledigteLöschen(tmp_path) == ["12-probe.md"]

@@ -273,3 +273,16 @@ def testSammeldateiMitTestZuAuf2OhnePlanIstRot(tmp_path):
         tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\ndef testAuf2_1Zwei(): ...\n"}
     )
     assert "Test zu AUF-2.1" in verstöße(tmp_path)[0]
+
+
+def testEinzeldateiNebenGültigerSammeldateiWirdGeprüftUndIstRot(tmp_path):
+    zweiAnforderungenMitTests(
+        tmp_path,
+        {
+            "aufstellenTest.py": "def testAuf1_1Eins(): ...\n",
+            "aufstellen/auf1Test.py": "def testAuf1_9Falsch(): ...\n",
+        },
+    )
+    meldungen = verstöße(tmp_path)
+    assert any("neben" in meldung for meldung in meldungen)
+    assert any("Test zu AUF-1.9" in meldung for meldung in meldungen)

@@ -1,6 +1,6 @@
 # Lesbarkeit von d20da0b: Indizes und doppelte Bedingung, Docstrings im Bestand
 
-92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+92 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: d20da0b und der Bestand in `prozess/pruefungen/`, um den 86 ein Urteil bat.
@@ -41,3 +41,5 @@ als Vorbild.
 3. Docstrings einzeilig, Prozessverweise und freie Kommentare streichen oder als `# Warum:`
    fassen. Vor dem Streichen prüfen, ob die Aussage in `regeln.md` oder `ablauf.md` steht.
    Fehlt sie dort, kommt sie als Anliegen an den Organisationsentwickler.
+
+**Stellungnahme.** Umgesetzt: 1 `erste, *spätere`, `sammeldateiGilt` als einzige Stelle der Frage; 2 `# Regel: Architektur T1` (T1 ist nach 93 angepasst); 3 alle Docstrings einzeilig, Prozessverweise gestrichen, die zwei freien Kommentare als `# Warum:`. Gestrichene Aussagen stehen in `regeln.md`, `ablauf.md` oder sind Historie in git.

@@ -1,9 +1,4 @@
-"""Prüft `.claude/settings.json`: Jeder Hook zeigt auf ein vorhandenes, lesbares Skript.
-
-Einstellungen wirken sofort in der laufenden Sitzung. Zeigt ein Hook auf eine fehlende Datei,
-ist jeder Werkzeugaufruf aller Rollen blockiert. Darum gilt beim Umbenennen: neue Datei
-anlegen, Einstellung umstellen, alte Datei löschen.
-"""
+"""Prüft `.claude/settings.json`: Jeder Hook zeigt auf ein vorhandenes, lesbares Skript."""
 
 import ast
 import json

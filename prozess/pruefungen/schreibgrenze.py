@@ -1,11 +1,4 @@
-"""Hook: Eine Rolle schreibt nur in ihren Schreibpfaden; manche Pfade sind für alle nur lesbar.
-
-Write/Edit werden vorab gesperrt (`PreToolUse`). Was eine Rolle per Bash ändert, meldet
-`SubagentStop` dem Koordinator, verglichen mit dem git-Stand bei `SubagentStart`. Beim
-Start erfährt die Rolle ihre Schreibpfade, denn den Kopf ihrer Definition sieht sie nicht.
-Ohne `agent_type` arbeitet der Stakeholder selbst; dann greift die Grenze nicht.
-Nur lesbar sind `agenten.nurLesbar` (für Bash: `bashPositivliste.py`).
-"""
+"""Hook: Eine Rolle schreibt nur in ihren Schreibpfaden; manche Pfade sind für alle nur lesbar."""
 
 import json
 import subprocess

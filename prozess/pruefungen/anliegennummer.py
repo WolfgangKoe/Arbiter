@@ -1,8 +1,4 @@
-"""Hook (PreToolUse, Write): Eine neue Anliegen-Datei trägt eine noch nie vergebene Nummer.
-
-Gleichzeitige Läufe vergeben sonst dieselbe Nummer (Anliegen 42). Die Meldung nennt die
-nächste freie Nummer. Bestehende Dateien überschreibt `Write` weiter (neue Runde).
-"""
+"""Hook (PreToolUse, Write): Eine neue Anliegen-Datei trägt eine noch nie vergebene Nummer."""
 
 import json
 import sys

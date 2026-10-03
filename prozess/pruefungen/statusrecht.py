@@ -1,9 +1,4 @@
-"""Hook (PreToolUse, Write und Edit): `erledigt` setzt nur der Absender des Anliegens.
-
-Die Rolle (`agent_type`) muss der Absender im Kopf sein. Ohne `agent_type` schreibt der
-Stakeholder selbst; dann greift die Sperre nicht. Was eine Rolle per Bash ändert, erfasst
-der Hook nicht (`prozess/ablauf.md#anliegen`).
-"""
+"""Hook (PreToolUse, Write und Edit): `erledigt` setzt nur der Absender des Anliegens."""
 
 import json
 import sys

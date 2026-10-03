@@ -41,7 +41,7 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 
 
 def erledigteLöschen(wurzel: Path) -> list[str]:
-    """Löscht die erledigten Anliegen, die git im letzten Commit kennt; nennt ihre Dateinamen."""
+    """Löscht erledigte Anliegen, die unverändert im letzten Commit stehen; nennt die Dateinamen."""
     gelöscht: dict[Path, str] = {}
     # Warum: `ls-files` nennt den Index; `ls-tree HEAD` nennt, was git sicher bewahrt.
     bekannt = set(
@@ -53,7 +53,8 @@ def erledigteLöschen(wurzel: Path) -> list[str]:
         gelesen = kopfLesen(datei)
         if gelesen is None or gelesen.status != "erledigt":
             continue
-        if datei.relative_to(wurzel).as_posix() in bekannt:
+        pfad = datei.relative_to(wurzel).as_posix()
+        if pfad in bekannt and not gitAusgabe(wurzel, "diff", "--name-only", "HEAD", "--", pfad):
             datei.unlink()
             gelöscht[datei.resolve()] = f"{gelesen.nummer:02d}"
     if gelöscht:

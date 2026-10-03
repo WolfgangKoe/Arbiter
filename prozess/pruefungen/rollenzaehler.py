@@ -1,7 +1,4 @@
-"""Hook `SubagentStart`: zählt jeden Rollenlauf mit Zyklus und Phase, als Kennzahl im Stand.
-
-Das Protokoll liegt in `.git/arbiter/`, damit es keine Änderung im Arbeitsbaum erzeugt.
-"""
+"""Hook `SubagentStart`: zählt jeden Rollenlauf mit Zyklus und Phase, als Kennzahl im Stand."""
 
 import json
 import sys

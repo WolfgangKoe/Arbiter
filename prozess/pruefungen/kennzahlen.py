@@ -1,9 +1,4 @@
-"""Kennzahlen für die Retro (`prozess/kennzahlen.md`): Rollenläufe und offene Anliegen.
-
-Aufruf: `python3 prozess/pruefungen/kennzahlen.py`. Rollenläufe je Phase und Rolle aus dem
-Protokoll von `rollenzaehler.py`; offene Anliegen je Rolle, die dran ist, mit Alter in Tagen
-seit dem Anlegen in git.
-"""
+"""Kennzahlen für die Retro (`prozess/kennzahlen.md`): Rollenläufe und offene Anliegen."""
 
 import json
 from collections import Counter
