@@ -40,14 +40,14 @@ Anforderung, die schon Name und Zweck hat. A macht außerdem den Sprung aus
 [Anliegen 46](46-sprungKriteriumUndTest.md) für die Anforderung trivial: `### AUF-1` gehört zu
 genau einer Datei.
 
-Antwort:
+Antwort: .
 
 **F2 · Gilt die Teilung schon vor Review 1?** A: Nein, `aufstellenTest.py` bleibt bis zur
 zweiten Anforderung zu Aufstellen; dann teilt der Testautor. B: Ja, sofort.
 Empfehlung A: Unter A liegt die Datei mit 16.862 zwischen Kürzungs- und Höchstmaß und ist
 erlaubt; eine Umbenennung jetzt kostet einen Testlauf und eine Kritikrunde ohne Gewinn.
 
-Antwort:
+Antwort: A
 
 **Nach deiner Antwort.** Ich passe `technik/architektur.md` (Tests) an. Prämisse 3 und
 `kennzahlen.md` ändert der Organisationsentwickler; der Regelumsetzer erweitert

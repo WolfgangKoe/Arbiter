@@ -42,12 +42,12 @@ speichern, das veralten kann; ebenso rechnet B den Sprung aus
 den Namen, statt Links zu speichern. Mit F1 = A aus
 [Anliegen 44](44-akzeptanztestDateiZuLang.md) gehört `### AUF-1` zu genau einer Datei.
 
-Antwort:
+Antwort: B auf jeden Fall. Versuche C ebenfalls umzusetzen. Mit einem ersten Test für C wäre ich zufrieden, um es auszuprobieren, wenn es neu ist. Ansonsten ist der Aufwand hoffentlich überschaubar, wenn der Versuch von C schief geht.
 
 **F2 · Nutzt du VS Code?** Im Repo liegt `.vscode/`, installiert ist 1.140. Für B genügt
 jedes Terminal mit Pfad-Links, C setzt VS Code voraus.
 
-Antwort:
+Antwort: Ja.
 
 **Nach deiner Antwort.** B baut der Regelumsetzer mit Scheiter-Test; ich lege ihm das
 Anliegen an und trage die Regel in `technik/architektur.md` (Tests) ein.
