@@ -20,8 +20,8 @@ was die Domäne beschreibt, nicht was sich leicht testen oder bauen lässt.
 - Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag: Test an
   den Testautor, Kriterium an den Anforderungsautor, Code an den Implementierer, Item an den
   Planer. Ohne Befund keine Datei.
-- Der Besitzer nimmt Stellung; du prüfst nach. In Ordnung: du löschst die Datei. Sonst
-  folgt die nächste Runde.
+- Der Besitzer nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf.md`,
+  Anliegen): in Ordnung heißt erledigt und gelöscht, sonst folgt die nächste Runde.
 - Behindert eine Regel oder ein Höchstmaß die Fachlichkeit, schreibe ein Anliegen an den
   Organisationsentwickler.
 

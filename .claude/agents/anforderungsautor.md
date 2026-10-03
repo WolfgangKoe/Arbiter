@@ -25,8 +25,8 @@ entscheidet der Planer.
   schlägst du in einem Anliegen an den Stakeholder vor; er gibt sie mit dem Plan frei.
 - Sagen Regeln und Ziel nichts, frage den Stakeholder in einem Anliegen, mit Empfehlung.
   Bis zur Antwort bleibt das Kriterium draußen.
-- Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung; nimmst
-  du an, setze um.
+- Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
+  um, was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).
 
 ## Grenzen
 - Beschreibe, was die Spieler tun und sehen, nicht wie es gebaut ist: kein Flask, keine

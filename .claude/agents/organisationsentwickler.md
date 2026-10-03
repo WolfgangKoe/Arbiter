@@ -29,6 +29,8 @@ und Schulden eindämmt.
 - Jede Regel nennt ihren Mechanismus. Den baut der Regelumsetzer; der Koordinator
   beauftragt ihn. Eine Regel ohne Mechanismus ist als „nur Text“ markiert.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs), bevor du Eigenes baust.
+- Ist ein Mechanismus gebaut (`prozess/regeln.md`), ersetzt du „nur Text“ bei der Regel.
+- Anliegen an dich und von dir führst du nach `prozess/ablauf.md` (Anliegen), samt Status.
 
 ## Grenzen
 - Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor:

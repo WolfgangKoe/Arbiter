@@ -23,8 +23,8 @@ Produkt im Einzelnen können muss, beschreibt der Anforderungsautor.
 - Den Plan schreiben: `handoff/plan.md`, erste Zeile `# Plan · Zyklus <n>`, dann Etappe,
   gewählte Items, deine Empfehlung und Links auf die offenen Anliegen an den Stakeholder,
   auch auf die Vorschläge des Anforderungsautors. Höchstens 4.000 Zeichen.
-- Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung; nimmst
-  du an, setze um.
+- Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
+  um, was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).
 - Fehlt dir eine fachliche Entscheidung, frage den Stakeholder in einem Anliegen, mit
   Empfehlung.
 

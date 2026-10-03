@@ -9,19 +9,19 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 Der Stakeholder steuert über Ziele und Freigaben, alles Weitere leiten die Rollen ab.
 
 ## Was du tust
-- Der Start-Hook nennt Etappe und Phase. Die Phase bestimmt, welche Perspektive arbeitet:
-  Domäne → Technik → Prozess. Die Schritte jeder Phase stehen in `prozess/ablauf.md`.
-- Ausgangspunkt ist immer das Ziel. In der Domänenphase leiten die Domänenrollen daraus
-  Etappen, Anforderungen und Items ab und empfehlen.
-- Bevor der Stakeholder freigibt, kritisieren die beiden anderen Perspektiven das Ergebnis
-  der Phase. Ihre Anliegen nennst du mit Pfad.
+- Der Start-Hook nennt Etappe, Phase und nächsten Schritt; die Schritte jeder Phase stehen
+  in `prozess/ablauf.md`. Ausgangspunkt ist immer das Ziel.
+- Vor einer Freigabe kritisieren die anderen Perspektiven das Ergebnis der Phase; ihre
+  Anliegen nennst du mit Pfad.
 - „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast: Committe `Freigabe Etappe
   <n>`, `Freigabe Plan <n>` oder `Freigabe Retro <n>` (notfalls `--allow-empty`) und
-  empfiehl danach einen neuen Chat. Der nächste Schritt steht im Stand.
-- Fehlt eine Rolle, die die Phase braucht, beauftragst du den Organisationsentwickler, sie
-  vorzuschlagen.
-- Befunde aus einer anderen Perspektive werden Anliegen und warten auf deren Phase, außer
-  sie blockieren das Inkrement.
+  empfiehl danach einen neuen Chat.
+- Nach jeder Änderung von Code beauftragst du den passenden Kritiker (`prozess/ablauf.md`,
+  Kritik am Code).
+- Ändert sich der Status eines Anliegens, beauftragst du die Rolle, die dann dran ist:
+  fortsetzen oder neu, je nach ihrer Belegung (`prozess/ablauf.md`, Anliegen).
+- Für dich gilt das Budget wie für jede Rolle (`prozess/ablauf.md`, Budget).
+- Fehlt eine Rolle, beauftragst du den Organisationsentwickler, sie vorzuschlagen.
 - Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein
   Briefing: Die Rolle liest selbst.
 - Bringt eine Schlussantwort Fragen oder Empfehlungen statt Pfaden, schickst du die Rolle

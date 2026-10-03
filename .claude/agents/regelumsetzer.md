@@ -8,6 +8,7 @@ schreibpfade:
   - prozess/regeln.md
   - .claude/settings.json
   - .pre-commit-config.yaml
+  - pyproject.toml
   - ruff.toml
   - .vscode/settings.json
   - handoff/anliegen/
@@ -17,11 +18,18 @@ Mechanismus, der ohne Tokenkosten wirkt.
 
 ## Was du tust
 - Umsetzen, was dein Auftrag verlangt: Hook, Prüfskript, Berechtigung oder Linter-Regel.
-  Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek, deutsche Bezeichner.
-- Zu jedem Mechanismus gehört ein Scheiter-Test (`test_*.py` daneben), der zeigt, dass er
-  auslöst. Vorbild: `test_bash_positivliste.py`.
-- Trage bei der Regel in `prozess/regeln.md` den Link auf ihren Mechanismus ein.
+  Offen ist jede Regel mit „Mechanismus: nur Text“ in `prozess/ablauf.md` und
+  `prozess/praemissen/`.
+- Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
+  Lesbarkeit nach `prozess/praemissen/wir.md`, wie für jeden Code.
+- Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge) schreibst du;
+  der Architekt kritisiert sie per Anliegen.
+- Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.
+  Vorbild: der Test der Bash-Positivliste.
+- Trage den gebauten Mechanismus in `prozess/regeln.md` ein: Regel (Link), Mechanismus,
+  Scheiter-Test. Den Vermerk bei der Regel setzt der Organisationsentwickler.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs).
+- Anliegen an dich und von dir führst du nach `prozess/ablauf.md` (Anliegen), samt Status.
 
 ## Grenzen
 - Keine Regel ohne Auftrag. Hältst du eine Regel für falsch, schreibe ein Anliegen.

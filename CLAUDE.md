@@ -11,15 +11,15 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
 ## Arbeitsweise
 - Schreibe nur im Ordner deiner Perspektive, lies alles.
 - Kritik an einem fremden Artefakt wird eine Datei in `handoff/anliegen/`, nie eine Änderung.
-  Kopf: Von <Rolle> an <Rolle> · Runde <n>/3; je Runde Befund, Kosten, Gegenvorschlag,
-  Stellungnahme.
+  Kopf, Status und wer dann dran ist: `prozess/ablauf.md` (Anliegen).
 - Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`,
   nicht in der Schlussantwort. Die Schlussantwort einer Rolle nennt nur Pfade und Status; der
   Koordinator reicht Pfade weiter, keine Inhalte. Mechanismus:
   `prozess/pruefungen/schlussantwort.py`, `lesegrenze.py`.
 - Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
 - Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
-  Code und im Glossar (`domaene/glossar.md`, per grep).
+  Code und im Glossar (`domaene/glossar.md`, per grep). Benennung und Lesbarkeit von Code:
+  `prozess/praemissen/wir.md`.
 - Keine Historie in Dateien, git ist das Archiv.
 - Erfinde nichts. Fehlt eine Regel oder Entscheidung, wird daraus ein Anliegen.
 

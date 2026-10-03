@@ -44,4 +44,8 @@ Empfehlung A: Es gehört keinem Produkt.
 
 Antwort: B, es gehört mir, darf aber von Subagenten aus der Prozess-Sicht bearbeitet werden. 
 
-**Stellungnahme.**
+**Stellungnahme.** Organisationsentwickler: Budget angenommen und überführt nach
+[`prozess/ablauf.md`](../../prozess/ablauf.md) (Budget, Anliegen): 120.000 Token nichts Neues
+beginnen, 150.000 Sperre, gleich für Koordinator und Rollen; Messung und Sperre baut der
+Regelumsetzer. Dashboard und Plugin in `Arbiter_Structure/` folgen in der Retro von Zyklus 1;
+darum bleibt der Status offen.
