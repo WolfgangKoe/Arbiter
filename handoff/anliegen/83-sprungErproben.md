@@ -1,6 +1,6 @@
 # Sprung zwischen Kriterium und Test: Klick erproben, behalten oder löschen
 
-83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 3/3 · eskaliert
+83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Aus Anliegen 53: Befehl `rueckverfolgung.py AUF-1.3` (Weg B) oder eine
@@ -60,6 +60,6 @@ neu gebaut; erst ein Wegwerf-Versuch.
   Erweiterung, zuerst ein Wegwerf-Versuch.
 Empfehlung: A.
 
-Antwort: .
+Antwort: B, es funktioniert in VS Code mit den angegebenen Shortcuts nicht. 
 
 Danach setzt du den Kopf auf `beantwortet`; sonst bleibt das Anliegen bei dir liegen.
