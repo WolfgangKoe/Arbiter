@@ -1,6 +1,6 @@
 # T1 und die Sammeldatei seit d20da0b
 
-93 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · offen
+93 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: [Architektur T1](../../technik/architektur.md) gegen `rueckverfolgung.py` nach
@@ -22,3 +22,8 @@ Testdatei einer genannten Anforderung und ein Test in der Datei einer fremden An
 Hält der Architekt am frühen Rot fest, lehnt er ab. Dann nimmt der Regelumsetzer Punkt 2 aus
 87 zurück, und der Anforderungsautor bekommt einen anderen Weg, AUF-2 anzulegen, ohne dass der
 Prüflauf rot wird.
+
+**Stellungnahme.** Umgesetzt wie vorgeschlagen in [T1](../../technik/architektur.md). Ich
+halte nicht am frühen Rot fest: Rot erst mit dem Plan lässt den Anforderungsautor AUF-2
+anlegen, ohne dass der Prüflauf rot wird, und das ist billiger. T1 nennt die Sammeldatei jetzt
+für die erste Anforderung; das stimmt mit `zuordnungen` in `rueckverfolgung.py` überein.

@@ -68,10 +68,12 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 ## Tests
 - **T1** Je Anforderung eine Testdatei im Ordner der Anforderungsdatei: AUF-1 in
   `domaene/anforderungen/phasen/aufstellen.md` → `tests/akzeptanz/phasen/aufstellen/auf1Test.py`.
-  Hat die Anforderungsdatei nur eine Anforderung, genügt `tests/akzeptanz/phasen/aufstellenTest.py`.
+  Für die erste Anforderung genügt die Sammeldatei `tests/akzeptanz/phasen/aufstellenTest.py`.
   Höchstmaß: `prozess/kennzahlen.md`; darüber wird die Anforderung geteilt, nicht der Test.
-  Prüft: `rueckverfolgung.py` (ab der zweiten Anforderung ist `<pfad>Test.py` rot, ebenso
-  ein Test in der Datei einer fremden Anforderung), `benennung.py`, `hoechstmassTest.py`.
+  Prüft: `rueckverfolgung.py` (die Sammeldatei ist rot, sobald ein offenes Item eines
+  freigegebenen Plans eine spätere Anforderung der Datei nennt; ebenso eine fehlende
+  Testdatei einer genannten Anforderung und ein Test in der Datei einer fremden
+  Anforderung), `benennung.py`, `hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur:
   `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (auch Testname oder `pfad:zeile`).
