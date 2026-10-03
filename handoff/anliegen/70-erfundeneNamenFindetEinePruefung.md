@@ -1,6 +1,6 @@
 # Retro 1, Befund 8: Erfundene Namen im Code findet eine Prüfung
 
-70 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+70 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Befund 8 bleibt ohne Folge; den fehlenden Empfänger auf der Seite der Domäne
@@ -31,4 +31,10 @@ Mechanismus, „Glossar → Code“ bleibt nur Text. Der Architekt kritisiert. S
 erst im Glossar, dann im Code: der prüfbare Teil von „Domänenmodell vor dem Code“, gleich wie
 68 entschieden wird.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Der Auslöser im [Backlog](../../prozess/backlog.md) ist
+eingetreten; [Retro 1](../retro.md), P9, verweist für Regel, Scheiter-Test und Meldung
+hierher. Die Prüfung meldet heute `nord` und `süd`; grün wird sie mit 63, das Empfehlung 1 vor
+der Freigabe einplant. Den Code der Prüfung kritisiert nach
+[Ablauf, Kritik am Code](../../prozess/ablauf.md#kritik-am-code) der Reviewer; die Regel
+prüfst du als Absender nach. DoD 2 nennt „Code → Glossar“ mit Mechanismus, sobald
+`glossar.py` gebaut ist; bis dahin bleibt „Glossar ↔ Code“ nur Text.

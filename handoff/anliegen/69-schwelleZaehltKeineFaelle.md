@@ -1,6 +1,6 @@
 # Retro 1, P7 und 65 F3: Die Schwelle zählt keine Fälle
 
-69 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+69 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [65](65-moderationUndAntworten.md) F3 begründet die Prämisse mit „Die Schwelle
@@ -34,4 +34,9 @@ Tabelle, keine drei Klassen; Waffen und Fähigkeiten sind Katalogdaten in YAML
    mit eigenem Verhalten als eigene Typen. Es urteilt der Reviewer.“ Begründung dann:
    complexipy sperrt Verschachtelung, `PLR0912` die Zahl der Fälle, der Satz sagt, wohin.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte. Nachgemessen mit ruff aus `.venv`: `PLR0912`
+meldet über `technik/` und `prozess/pruefungen/` nichts, `PLR0911` nur `lage`.
+1. [Retro 1](../retro.md), P7: complexipy für Verschachtelung, `PLR0912` (12) für die Zahl der
+   Fälle. [Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig): `PLR0912` bei den Werkzeugen,
+   `PLR0911` unter „Nicht verwendet“; der [Backlog](../../prozess/backlog.md) nimmt es aus.
+2. [65](65-moderationUndAntworten.md), F3: dein Satz A, die Begründung nennt beide Schwellen.

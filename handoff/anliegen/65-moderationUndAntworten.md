@@ -34,9 +34,12 @@ Antwort: .
 **F3 · Prämisse „Abstraktion nach Verständlichkeit“?** Aus der
 [Kritik des Entwicklers](../kritik-entwickler.md) ([31](31-kritikDesEntwicklersFuerRetro1.md)).
 A: in `prozess/praemissen/wir.md`: „Die Form folgt der Verständlichkeit: wenige Fälle als
-`if` mit frühem `return`, viele als eigene Typen; es urteilt der Reviewer.“ Die Schwelle misst
-complexipy (Retro 1, P7). B: keine Prämisse, nur die Schwelle.
-Empfehlung A: Die Schwelle sagt, wann umgebaut wird; der Satz, wohin.
+`if` mit frühem `return`; viele, die sich nur in Daten unterscheiden, als Tabelle oder
+Katalogdaten; viele mit eigenem Verhalten als eigene Typen. Es urteilt der Reviewer.“
+B: keine Prämisse, nur die Schwellen.
+Empfehlung A: complexipy sperrt Verschachtelung, ruff `PLR0912` die Zahl der Fälle (Retro 1,
+P7; ein `match` zählt bei complexipy nur einmal, [69](69-schwelleZaehltKeineFaelle.md)); der
+Satz sagt, wohin umgebaut wird.
 
 Antwort: .
 

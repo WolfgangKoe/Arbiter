@@ -1,6 +1,6 @@
 # Retro 1, Empfehlung 1: Die Abnahme braucht den Test zum Zwischenzustand
 
-67 · Kritik · von Fachkritiker (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+67 · Kritik · von Fachkritiker (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Retro 1](../retro.md), Empfehlung 1, nennt den Weg zur Abnahme: Anforderungsautor
@@ -20,4 +20,6 @@ Code (`CLAUDE.md`, Technik-Rahmen).
 ergänzt den Test zum Zwischenzustand, Fachkritiker prüft den Test, Implementierer 63 (macht
 grün, falls nötig), Fachkritiker nimmt ab, Planer löscht das Item, Reviewer ergänzt Review 1.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. [Retro 1](../retro.md), Empfehlung 1, steht in deiner
+Reihenfolge. „Macht grün, falls nötig“ steckt in „Implementierer 63“: Er macht jeden roten Test
+grün ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 3).

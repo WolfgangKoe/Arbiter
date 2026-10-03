@@ -11,8 +11,8 @@ Zurückgestellt, bis ein Befund es auslöst. Was ausgelöst ist, wird ein Prozes
   steht im Verdacht, nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item
   geht mit einem dieser Mängel in die Technikphase.
-- Werkzeuge der DoD ([Ablauf](ablauf.md#dod-item-fertig)) außer complexipy. Auslöser: Review
-  oder Kritik am Code findet, was das Werkzeug meldet.
+- Werkzeuge der DoD ([Ablauf](ablauf.md#dod-item-fertig)) außer complexipy, ruff `PLR0912` und
+  Code → Glossar. Auslöser: Review oder Kritik am Code findet, was das Werkzeug meldet.
 - Skills `anforderung-schreiben`, `regel-nachschlagen`, `improve` (E19, E30). Auslöser: dieselbe
   Kritik an derselben Art Artefakt zweimal.
 

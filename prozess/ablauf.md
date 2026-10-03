@@ -64,11 +64,11 @@ Kommen Mutationstests oder eine Oberfläche hinzu, gelten auch Mutationsschwelle
 geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 
 Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert): mypy oder
-pyright strikt, import-linter, complexipy (Schwelle 15), vulture nur über den Produktcode,
+pyright strikt, import-linter, complexipy (Schwelle 15), ruff `PLR0912` (12), vulture nur über den Produktcode,
 Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
 Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
 wie SonarLint, die Sicht des Stakeholders. Nicht verwendet: radon-Wartbarkeitsindex,
-ruff-McCabe.
+ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
 Auslöser: Review n liegt vor.

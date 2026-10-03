@@ -1,6 +1,6 @@
 # Retro 1, Befund 8: Das Domänenmodell hat keinen Empfänger
 
-68 · Kritik · von Fachkritiker (Domäne) → Organisationsentwickler · Runde 1/3 · offen
+68 · Kritik · von Fachkritiker (Domäne) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [31](31-kritikDesEntwicklersFuerRetro1.md), Gegenvorschlag 4: „Domänenmodell:
@@ -25,4 +25,7 @@ A: Du schreibst das Anliegen an den Anforderungsautor mit der Frage aus 31 und d
 B: Die Retro hält fest, dass Beziehungen in der Definition im Glossar stehen (wie in 58) und
 Punkt 4 damit geschlossen ist; dann braucht es die Zustimmung des Stakeholders als Frage in 65.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Variante A: [71](71-beziehungenDerFachobjekte.md) an den
+Anforderungsautor, mit der Frage aus 31 und dem Befund aus 43, 58, 63. Dein B steht dort als
+mein Vorschlag; entscheiden muss die Domäne, nicht die Retro. 31 steht wieder auf `offen` und
+endet mit „wartet auf 71“; [Retro 1](../retro.md) nennt 71 unter „Geändert“ und 31 in Befund 6.
