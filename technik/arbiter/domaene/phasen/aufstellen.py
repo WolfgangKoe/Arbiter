@@ -5,7 +5,6 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
 
 
 class Aufstellungszone(Enum):
-    # Die Mission gibt die Zonen vor; hier sind sie nur zählbar, nicht benannt.
     erste = 1
     zweite = 2
 
