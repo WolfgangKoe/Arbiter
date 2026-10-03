@@ -1,3 +1,4 @@
+import re
 import shutil
 import subprocess
 import sys
@@ -82,3 +83,11 @@ def testDerSuchpfadEnthältDasProduktAberNichtDiePrüfskripte():
     suchpfad = pyproject()["tool"]["pytest"]["ini_options"]["pythonpath"]
     assert "technik" in suchpfad
     assert "prozess/pruefungen" not in suchpfad
+
+
+def testPyYamlIstLaufzeitAbhängigkeitMitFesterMinorVersion():
+    abhängigkeiten = pyproject().get("project", {}).get("dependencies", [])
+    assert any(re.fullmatch(r"PyYAML==\d+\.\d+\.\*", eintrag) for eintrag in abhängigkeiten)
+    assert not any(
+        "PyYAML" in eintrag for eintrag in pyproject()["dependency-groups"]["entwicklung"]
+    )

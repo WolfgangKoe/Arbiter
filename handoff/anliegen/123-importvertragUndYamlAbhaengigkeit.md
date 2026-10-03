@@ -1,6 +1,6 @@
 # Importvertrag für arbiter.katalog und PyYAML als Abhängigkeit
 
-123 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+123 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 7752988 und 283f998. `technik/tests/akzeptanz/conftest.py` importiert
@@ -40,4 +40,9 @@ auftritt.
 Nach der Umsetzung trage ich den Mechanismus bei A1 und A2 ein und prüfe die Konfiguration
 (`prozess/ablauf.md`, Kritik am Code).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt, ohne import-linter. `importvertrag.py` prüft im
+Lauf von pytest jeden Import unter `technik/arbiter/domaene/` (Standardbibliothek oder
+`arbiter.domaene`, relativ erlaubt). Scheiter-Test `importvertragTest.py`: `import yaml`,
+`arbiter.katalog`, `flask` rot, `fractions` grün. `pyproject.toml` hat `[project]` mit
+`PyYAML==6.0.*` getrennt von `entwicklung`; `konfigurationTest.py` ist rot ohne die Angabe.
+Eintrag in `prozess/regeln.md`.

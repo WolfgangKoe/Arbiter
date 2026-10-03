@@ -28,6 +28,14 @@ max-branches = 12
 # Warum: Kognitive Komplexität einer Funktion höchstens 15, Verschachtelung zählt mit.
 max-complexity-allowed = 15
 
+[project]
+name = "arbiter"
+version = "0"
+requires-python = ">=3.12"
+# Warum: `arbiter.katalog` liest die Ausgangslage aus YAML (technik/architektur.md, A2);
+# feste Minor-Version, damit ein Update nicht still das Leseverhalten ändert.
+dependencies = ["PyYAML==6.0.*"]
+
 [dependency-groups]
 # Warum: ruff und complexipy mit fester Minor-Version, damit ein Update nicht still neue Regeln
 # oder eine andere Zählweise bringt.
