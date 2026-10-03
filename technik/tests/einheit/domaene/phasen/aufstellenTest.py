@@ -24,6 +24,13 @@ def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
     assert aufstellung.gewinner is None
 
 
+def testDieAufstellungszoneEinesFremdenSpielersIstEineVorbedingungsverletzung():
+    aufstellung = Aufstellung(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+
+    with pytest.raises(ValueError):
+        aufstellung.aufstellungszone(spielerMitEinerEinheit())
+
+
 def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
     gewinner = spielerMitEinerEinheit()
     ohneEinheit = Spieler(armee=Armee())

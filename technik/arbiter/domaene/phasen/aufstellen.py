@@ -13,7 +13,7 @@ class Aufstellung:
     def __init__(self, ersterSpieler: Spieler, zweiterSpieler: Spieler) -> None:
         if ersterSpieler is zweiterSpieler:
             raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
-        self.spieler = (ersterSpieler, zweiterSpieler)
+        self._spieler = (ersterSpieler, zweiterSpieler)
         self._gewinner: Spieler | None = None
         self._einheitInAufstellung: Einheit | None = None
         self._anDerReihe: Spieler | None = None
@@ -44,7 +44,7 @@ class Aufstellung:
         return einheit in self._aufgestellt
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
-        if gewinner not in self.spieler:
+        if gewinner not in self._spieler:
             raise ValueError("Der Gewinner gehört nicht zur Aufstellung")
         if self._gewinner is not None:
             raise Sperre(Grund.nichtWählbar)
@@ -57,6 +57,8 @@ class Aufstellung:
         self._anDerReihe = self._nächsterAnDerReihe(self._gewinner)
 
     def aufstellungszone(self, spieler: Spieler) -> Aufstellungszone | None:
+        if spieler not in self._spieler:
+            raise ValueError("Der Spieler gehört nicht zur Aufstellung")
         if self._zoneDesGewinners is None:
             return None
         if spieler is self._gewinner:
@@ -81,8 +83,9 @@ class Aufstellung:
     def aufstellenDerEinheitBeenden(self) -> None:
         einheit = self._einheitInAufstellung
         spieler = self._anDerReihe
-        if einheit is None or spieler is None:
+        if einheit is None:
             raise Sperre(Grund.nichtInAufstellung)
+        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
         self._aufgestellt.add(einheit)
         self._einheitInAufstellung = None
         self._anDerReihe = self._nächsterAnDerReihe(spieler)
@@ -94,7 +97,7 @@ class Aufstellung:
         return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
 
     def _gegnerVon(self, spieler: Spieler) -> Spieler:
-        return next(andere for andere in self.spieler if andere is not spieler)
+        return next(andere for andere in self._spieler if andere is not spieler)
 
     def _nächsterAnDerReihe(self, bisher: Spieler) -> Spieler | None:
         gegner = self._gegnerVon(bisher)

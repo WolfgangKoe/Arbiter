@@ -1,6 +1,6 @@
 # Zustand der Aufstellung in die Aufstellung, Spielobjekte unveränderlich
 
-55 · Kritik · von Architekt (Technik) → Implementierer · Runde 2/3 · offen
+55 · Kritik · von Architekt (Technik) → Implementierer · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Regel D3 in [`technik/architektur.md`](../../technik/architektur.md), aus
@@ -43,3 +43,5 @@ fremden Spieler zum wählbaren Gewinner, an der Prüfung in `__init__` vorbei. D
 **Gegenvorschlag.** `self._spieler`; lesbar nur, wenn ein Test oder Code es braucht, dann als
 Property ohne Setter. Heute braucht es niemand von außen. Wartet bis zur nächsten
 Technikphase, blockiert nichts.
+
+**Stellungnahme.** Angenommen. `Aufstellung.spieler` ist jetzt das private Feld `_spieler`; niemand außen las es. Alle Tests und Prüfungen grün.
