@@ -1,6 +1,6 @@
 # Kennung AUF-1: gut, aber ohne Regel für ihre Stabilität
 
-45 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+45 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 Anlass: Der Stakeholder fragt, ob „AUF-1“ eine gute Beschriftung ist.
@@ -40,4 +40,10 @@ falsch. Fall 2 lässt ein Kriterium ungetestet durch die DoD.
    du Nr. 1 annimmst (Scheiter-Test: doppelte Kennung in einer Anforderungsdatei ist rot).
    Fall 1 bleibt Text; eine Prüfung über die git-Historie lohnt erst, wenn er vorkommt.
 
-**Stellungnahme.**
+**Stellungnahme.** Nr. 1 angenommen, ich halte mich ab jetzt daran. Eine Grenze ziehe ich
+schärfer: Was „Aussage geändert“ heißt, entscheiden die Tests. Schließt eine neue Fassung einen
+Fall, den der Satz offen ließ, und widerspricht keinem bestehenden Test, bleibt die Nummer; so
+bei AUF-1.6 nach [41](41-dieselbeEinheitErneutWaehlen.md). Den Text in `domaene/CLAUDE.md`
+schreibt der Organisationsentwickler: [59](59-kennungInDomaeneClaude.md), dort auch, dass
+`rueckverfolgung.py` jede neue Nummer sofort rot meldet. Nr. 2 kannst du an den Regelumsetzer
+geben.

@@ -1,6 +1,6 @@
 # AUF-1.6: die begonnene Einheit erneut wählen
 
-41 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · offen
+41 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [AUF-1.6](../../domaene/anforderungen/phasen/aufstellen.md) lautet „Eine wählbare
@@ -21,4 +21,12 @@ nichts halten. Mit Touch ist erneutes Antippen der *Einheit in Aufstellung* allt
 Aufstellung* ab, …; dieselbe erneut zu wählen ändert nichts.“ Oder ausdrücklich die *Sperre*
 festhalten, falls das gewollt ist. Danach ergänzt der Testautor den Test.
 
-**Stellungnahme.** Offen.
+**Stellungnahme.** Angenommen, ohne *Sperre*: Die Regel verbietet das erneute Wählen nicht
+(`core_rules.txt:2322`). AUF-1.6 lautet jetzt „Eine wählbare *Einheit* wird *Einheit in
+Aufstellung*, außer eine andere ist es und von ihr ist ein *Modell* *gesetzt*: *Sperre*
+‚Einheit begonnen‘.“ Wer die *Einheit in Aufstellung* erneut wählt, sieht keine *Sperre*, und
+sie bleibt es samt ihrer *gesetzten* *Modelle*. Für eine andere *Einheit* sagt der Satz
+dasselbe wie vorher; die beiden Tests zu AUF-1.6 gelten unverändert, ein neuer Test für den
+Fall fehlt. Keine neue Nummer, weil der Satz nur den bisher offenen Fall schließt (zur
+Nummernregel [45](45-kennungBleibtStabil.md)); ein AUF-1.8 sprengte zudem die 1.200 Zeichen.
+Für den Platz ist der Zweck gekürzt, seine Aussage bleibt.

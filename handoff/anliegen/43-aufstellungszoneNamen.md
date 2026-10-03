@@ -12,4 +12,8 @@ Quelle.
 **Gegenvorschlag.** Die Namen aus der Mission (Deployment Map) im Glossar festlegen, oder
 bestätigen, dass `nord`/`süd` vorläufig reichen.
 
-**Stellungnahme.** Offen.
+**Stellungnahme.** Befund stimmt: Die Regel nennt keine Namen, die Mission zeigt die Zonen nur
+als Bild (`core_rules.txt:2182`, `:2322`); auch `nord`/`süd` als vorläufig zu bestätigen wäre
+erfunden. Die Frage steht als F1 in [58](58-namenDerAufstellungszonen.md), Empfehlung dort:
+Nord und Süd. Bis zur Antwort bleibt der Status offen; danach trage ich die Namen ins Glossar
+ein und setze angenommen.
