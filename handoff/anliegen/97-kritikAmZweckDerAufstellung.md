@@ -22,3 +22,5 @@ Angenommen bis auf den Verweis auf Code; umgesetzt in
   still. Der Weg zum Code führt über die Kriterien-ID: Sie springt zum Akzeptanztest
   ([83](83-sprungErproben.md)), der Test ruft die Klassen auf. Willst du trotzdem einen direkten
   Verweis, setz das Anliegen wieder auf offen.
+
+  Antwort: Du hast die Anforderung effektiv in drei Teile geschnitten. Damit bin ich einverstanden. An sich könntest du daraus auch drei Dateien machen, um das Zeichenlimit wieder zu reduzieren. Ausgangslage von Only War AUF-2 lässt sich auch verallgemeinern und wäre damit eine eigene Anforderung. Dasselbe trifft auf AUF-3 das Setzen zu. Beim Bewegen dürfen Bases sich ebenfalls nicht überlappen.
