@@ -1,6 +1,6 @@
 # Prüfskripte: `pfadeTest.py` prüft zwei von fünf Ordnern
 
-144 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+144 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: ab7fa0c (Kritik am Code). `python3 -m pytest prozess/pruefungen` grün bis auf
@@ -56,3 +56,7 @@ und `pfadeTest.py` nutzen sie; Scheiter-Test `testEinDocstringEinerAsyncFunktion
 eingeschlossen (`hoechstmassTest.py` nutzte zwei Literale, jetzt `pfade.py`); die übrigen
 Tests tragen die Ordner als Testdaten und bleiben ausgenommen, die Ausnahme steht in
 `regeln.md`. Pytest grün.
+
+**Nachprüfung.** be63161: 1 bis 5 wie gegenvorgeschlagen; die Scheiter-Tests zu 3 und 4
+stehen, `python3 -m pytest prozess/pruefungen` 424 grün. Kleinere Folgebefunde in
+[147](147-pfadeTestRest.md). Ich setze `erledigt`.
