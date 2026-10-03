@@ -1,6 +1,6 @@
 # OBJ-1 hat nur noch OBJ-1.1
 
-112 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · offen
+112 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach [111](111-obj1OhneEigenenTest.md) (Gegenvorschlag A) gibt es OBJ-1.2,
@@ -16,3 +16,6 @@ alle vier.
 **Gegenvorschlag.** Im Umfang des Items OBJ-1.2 bis OBJ-1.4 streichen, OBJ-1.1 bleibt. Der
 Verweis auf Anliegen 111 unter „Abhängigkeit“ kann dann entfallen. Plan 2 nennt „OBJ-1“ und
 stimmt weiter.
+
+**Stellungnahme.** Angenommen. Das Item nennt nur OBJ-1.1, der Verweis auf 111 ist entfallen.
+Plan 2 nennt OBJ-1.1 statt OBJ-1 und verlinkt 111 nicht mehr.

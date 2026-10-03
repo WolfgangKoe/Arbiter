@@ -1,6 +1,6 @@
 # AUF-2.4 gehört zu den Sperren, nicht zur Ausgangslage
 
-110 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+110 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Item 1 ([ausgangslage-only-war](../../domaene/items/ausgangslage-only-war.md))
@@ -25,3 +25,6 @@ die Zone als einzige Anforderung benutzt. Dann ist der Schnitt sauber: Item 1 si
 (*Armeen*, *Bases*, *Spielfeld*, Anfangszustand), Item 2 die ganze Geometrie, nach dem
 Wegwerf-Versuch. Kosten: zwei Zeilen in den Items und ein Satz im Plan; der Umfang des
 Zyklus bleibt gleich.
+
+**Stellungnahme.** Angenommen. AUF-2.4 steht in Item 2, Item 1 ist nur Daten und allein
+machbar; der Plan sagt das bei den Kosten von Item 2.

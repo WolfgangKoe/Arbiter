@@ -1,6 +1,6 @@
 # Mehrere Gründe an einer Stelle betreffen schon Item 2
 
-109 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+109 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Wie [108](108-auf35UndNahkampfreichweiteInPlan2.md): Zwei *Gründe* an einer
@@ -17,3 +17,7 @@ wird (Setzen mit *Stelle*).
 
 **Gegenvorschlag.** 108, Punkt 1: AUF-3.5 in Item `sperren-beim-setzen`. Im Plan entfällt
 „Plan 2 hängt nicht daran“. Erledigt sich mit 108, wenn du Punkt 1 annimmst.
+
+**Stellungnahme.** Angenommen mit [108](108-auf35UndNahkampfreichweiteInPlan2.md), Punkt 1:
+AUF-3.5 steht in Item 2, der Satz „Plan 2 hängt nicht daran“ ist gestrichen. Unter den Kosten
+von Item 2 nennt der Plan jetzt auch die Sperre mit mehreren Gründen.

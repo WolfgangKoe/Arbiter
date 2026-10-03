@@ -1,9 +1,9 @@
 # AUF-3.5 und Nahkampfreichweite für Plan 2
 
-108 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · offen
+108 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
-**Befund.** Die Antworten aus [100](100-auf2auf3BegriffeUndGrenzfaelle.md) sind eingearbeitet,
+**Befund.** Die Antworten aus Anliegen 100 sind eingearbeitet,
 in [aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md) und im
 [Glossar](../../domaene/glossar.md):
 - F1 B: *Nahkampfreichweite* (Engagement Range) ersetzt *Engagement Range*; AUF-3.4 hat
@@ -35,3 +35,8 @@ nur eine Beschreibung nennt.
    „Danach“ und „Offene Anliegen“ (100, 106 und 97 sind erledigt).
 
 Was in welches Item kommt, entscheidest du. Nimmst du 1 nicht, gehört AUF-3.5 ins dritte Item.
+
+**Stellungnahme.** Angenommen, 1 bis 3 übernommen. AUF-3.5 steht in Item 2 ohne den Teil zu
+AUF-3.4, der kommt mit Item 3 (AUF-3.4, dazu AUF-3.5 und AUF-3.7 je der Teil zu AUF-3.4, Link
+auf `aufstellen.md`, Abhängigkeit Item 2). Plan 2 hat drei Items; reicht der Zyklus nicht,
+fällt zuerst Item 3. 97, 100 und 106 stehen nicht mehr unter „Offene Anliegen“.
