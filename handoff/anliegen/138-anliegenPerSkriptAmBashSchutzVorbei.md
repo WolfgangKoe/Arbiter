@@ -20,3 +20,10 @@ ohne dass Statusrecht oder Nummernprüfung greifen. Gleiches gilt für die nur l
    Skripte auf Anliegen wären dann auch gesperrt; die gehen über Read und `grep`.
 2. Oder die Lücke als Grenze des Mechanismus in `ablauf.md` (Anliegen) benennen.
 Dazu ein Fall in den Tests von `bashPositivliste.py`.
+
+**Stellungnahme.** Befund stimmt und reicht weiter: auch `python3 -c` und `cd <pfad> && …`
+kommen durch. 1 schließt die Lücke nicht, darum 2 umgesetzt:
+[Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) nennt die Grenze. Statt weiterer
+Heuristik schlage ich die Bash-Sandbox von Claude Code vor; sie ändert die Rechte aller
+Rollen, daher Frage an den Stakeholder in [139](139-bashSandboxStattHeuristik.md). Den
+Testfall baut der Regelumsetzer nach dessen Antwort. Wartet auf 139.

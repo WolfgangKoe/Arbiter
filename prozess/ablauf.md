@@ -175,7 +175,10 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   ersetzte Links ändern daran nichts, erst eine neue Runde des Absenders. Mechanismus:
   `anliegen.py` (`beantwortetDurchFreigabe`, `wartetAuf`), `gitAufruf.py` (`letzteFreigabe`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
-  `statusrecht.py` nicht, das Löschen schon. Mechanismus: nur Text.
+  `statusrecht.py` nicht, das Löschen schon. Mechanismus: `bashPositivliste.py`, eine
+  Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`). Sie erkennt keine Skripte
+  (Heredoc, `python3 -c`) und kein `cd <pfad> && …`; dort, und ebenso für die nur lesbaren
+  Pfade, gilt die Regel als nur Text (Anliegen 138).
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
   `erledigteLoeschen.py`.
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran
