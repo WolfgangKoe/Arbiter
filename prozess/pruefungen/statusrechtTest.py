@@ -51,3 +51,52 @@ def testAndereDateienBleibenUnberührt(tmp_path):
     datei.write_text("a", encoding="utf-8")
     eingabe = schreibung(datei, "planer", old_string="a", new_string="erledigt")
     assert entscheide(eingabe, tmp_path) is None
+
+
+def anliegenInRunde(tmp_path, runde, status):
+    kopf = guterKopf.replace("Runde 1/3 · offen", f"Runde {runde}/3 · {status}")
+    return anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+
+
+def ändere(datei, rolle, alt, neu):
+    return schreibung(datei, rolle, old_string=alt, new_string=neu)
+
+
+def sperre(antwort):
+    return antwort["hookSpecificOutput"]["permissionDecisionReason"]
+
+
+def testRolleDarfDieRundeNichtSenken(tmp_path):
+    datei = anliegenInRunde(tmp_path, 3, "offen")
+    antwort = entscheide(ändere(datei, "planer", "Runde 3/3", "Runde 1/3"), tmp_path)
+    assert "Runde 3/3 ist die letzte" in sperre(antwort)
+
+
+def testRolleDarfDieRundeErhöhen(tmp_path):
+    datei = anliegenInRunde(tmp_path, 1, "abgelehnt")
+    angaben = ändere(datei, "architekt", "Runde 1/3 · abgelehnt", "Runde 2/3 · offen")
+    assert entscheide(angaben, tmp_path) is None
+
+
+def testRolleDarfEskaliertNichtZurücknehmen(tmp_path):
+    datei = anliegenInRunde(tmp_path, 3, "eskaliert")
+    antwort = entscheide(ändere(datei, "architekt", "· eskaliert", "· offen"), tmp_path)
+    assert "Der Stakeholder entscheidet" in sperre(antwort)
+
+
+def testStakeholderDarfEskaliertZurücksetzen(tmp_path):
+    datei = anliegenInRunde(tmp_path, 3, "eskaliert")
+    eingabe = ändere(datei, "architekt", "Runde 3/3 · eskaliert", "Runde 1/3 · offen")
+    del eingabe["agent_type"]
+    assert entscheide(eingabe, tmp_path) is None
+
+
+def testInRunde3AufOffenNachAbgelehntIstGesperrt(tmp_path):
+    datei = anliegenInRunde(tmp_path, 3, "abgelehnt")
+    antwort = entscheide(ändere(datei, "architekt", "· abgelehnt", "· offen"), tmp_path)
+    assert "Runde 3/3 ist die letzte" in sperre(antwort)
+
+
+def testInRunde3VonAbgelehntAufEskaliertIstErlaubt(tmp_path):
+    datei = anliegenInRunde(tmp_path, 3, "abgelehnt")
+    assert entscheide(ändere(datei, "architekt", "· abgelehnt", "· eskaliert"), tmp_path) is None

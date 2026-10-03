@@ -22,17 +22,19 @@ Benennung sind grün; verletzt sind `prozess/praemissen/wir.md` und „Jede Auss
 7. Module mit mehreren Aufgaben: `rueckverfolgung.py` (14.861 Zeichen: Prüfung, Spur,
    Kommandozeile), `stand.py` (Phasenfolge, Rollenläufe, Belegungstext, Hook-Ausgabe).
 
-**Kosten.** Der Stakeholder kann die Mechanismen nicht nachprüfen, die ihn schützen sollen.
-Wer eine Regel ändert, sucht ihre Stelle in mehreren Modulen; ein Tupel-Index bricht still,
-wenn sich die Reihenfolge ändert.
+**Kosten.** Der Stakeholder kann die Mechanismen nicht nachprüfen. Eine Regel steht in
+mehreren Modulen; ein Tupel-Index bricht still.
 
-**Gegenvorschlag.** In der Prozessphase von Zyklus 2, nach den Antworten auf
-[113](113-ordnungDerPruefskripte.md).
-- A · Ordnung nach 113 F1 und F2. Hooks ziehen in der Reihenfolge aus `einstellungen.py` um:
-  neue Datei, Einstellung, alte Datei löschen. Querimporte ohne `sys.path`-Eingriff in jedem
+**Gegenvorschlag.** In der Prozessphase von Zyklus 2.
+- A · Themenordner, Test neben dem Modul (Stakeholder, Anliegen 113): `anliegen/` (anliegen,
+  anliegennummer, statusrecht, erledigteLoeschen), `rollen/` (agenten, schreibgrenze,
+  lesegrenze, bashPositivliste, schlussantwort, rollenkontext, belegung), `stand/` (stand,
+  plan, codekritik, kennzahlen, rollenzaehler), `form/` (benennung, glossar, hoechstmass,
+  komplexitaet, konfiguration, cspell, einstellungen), `rueckverfolgung/` (mit Spur und
+  `sprung/`), `gemeinsam/` (gitAufruf, Hook-Ein- und -Ausgabe, Pfade). Umzug: neue Datei,
+  Einstellung, alte löschen (`einstellungen.py`). Querimporte ohne `sys.path`-Eingriff je
   Skript; den Weg wählst du, der Architekt kritisiert `pyproject.toml`. Scheiter-Test: kein
-  Modul im Wurzelordner außer `conftest.py`. `prozess/regeln.md` gliederst du in Abschnitte je
-  Ordner; sie ist das Inhaltsverzeichnis für den Stakeholder.
+  Modul im Wurzelordner außer `conftest.py`. `prozess/regeln.md` gliederst du je Ordner.
 - B · Lesbarkeit, Verhalten unverändert: 1 bis 7 beheben, etwa mit benannten Typen
   (`Kriterium`, `Lage`), je einem Modul für die Ein- und Ausgabe der Hooks und für die Pfade,
   einem Enum `Phase`; `rueckverfolgung.py` und `stand.py` nach Aufgaben teilen.
@@ -46,9 +48,8 @@ wenn sich die Reihenfolge ändert.
   `benennungTest.py`, die Ausnahme in `konfigurationTest.py`, die Erwähnung in `regeln.md`.
   Neue Altlasten entstehen nicht: Jede neue Datei wird voll geprüft.
 
-Verweise auf die alten Pfade in `CLAUDE.md`, `prozess/ablauf.md` und `.claude/agents/` ziehe
-ich nach, sobald du den Umzug meldest.
-
 Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die Mechanismen aus C an je einem
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
+
+**Stellungnahme.** D umgesetzt (Datei, Funktionen, Tests, Ausnahme, `regeln.md`). A bis C stehen aus; Status bleibt offen.

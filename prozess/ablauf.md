@@ -149,11 +149,17 @@ Status | setzt | danach dran
 ---|---|---
 offen | Absender, beim Anlegen und je neuer Runde | Empfänger: Stellung nehmen oder antworten
 angenommen | Empfänger, nach der Umsetzung | Absender: nachprüfen
-abgelehnt | Empfänger, mit Begründung | Absender: nächste Runde; nach Runde 3 Hebung (Test → Kriterium → Anforderung, Code → Architektur) oder `eskaliert`
+abgelehnt | Empfänger, mit Begründung | Absender: nächste Runde; nach Runde 3 `eskaliert`
 beantwortet | Absender, nach der Freigabe | Absender: Antworten einarbeiten
-eskaliert | Absender, nach Runde 3 | Stakeholder
+eskaliert | Absender, wenn nach Runde 3/3 eine weitere Runde nötig wäre | Stakeholder: entscheidet
 erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht die Datei
 
+- Runde 3/3 ist die letzte: Der Zähler verhindert, dass zwei Rollen endlos diskutieren.
+  Wäre danach eine weitere Runde nötig, setzt der Absender `eskaliert`; auch eine Hebung
+  wählt dann der Stakeholder. Er schreibt seine Entscheidung ins Anliegen: zurück auf
+  `Runde 1/3 · offen` oder eine andere Anweisung. Die Runde senkt und `eskaliert` ändert nur
+  er. Mechanismus: `anliegen.py` (Runde höchstens 3, bei `eskaliert` ist der Stakeholder
+  dran); der Rest nur Text bis Anliegen 115.
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
   wenn jenes Anliegen erledigt ist; bis dahin endet seine Stellungnahme mit „wartet auf <nr>“.
   Mechanismus: nur Text.

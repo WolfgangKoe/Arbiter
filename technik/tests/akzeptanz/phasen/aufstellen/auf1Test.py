@@ -1,12 +1,16 @@
 """AUF-1 · Reihenfolge der Aufstellung."""
 
+from fractions import Fraction
+
 import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
-from arbiter.domaene.sperre import Grund, Sperre
-from arbiter.domaene.spielobjekte import Einheit, Spieler
+from arbiter.domaene.sperre import Grund
+from arbiter.domaene.spielobjekte import Einheit, Spieler, Stelle
 
 ersteZone, zweiteZone = list(Aufstellungszone)
+# Warum: Gesperrt wird vor jeder Prüfung der Stelle (AUF-3.6), welche Stelle ist gleich.
+irgendeineStelle = Stelle(x=Fraction(3, 2), y=Fraction(1))
 
 
 def nachDerWahlDerAufstellungszone(aufstellung: Aufstellung, gewinner: Spieler) -> None:
@@ -14,25 +18,14 @@ def nachDerWahlDerAufstellungszone(aufstellung: Aufstellung, gewinner: Spieler) 
     aufstellung.aufstellungszoneWählen(ersteZone)
 
 
-def einheitAufstellen(aufstellung: Aufstellung, einheit: Einheit) -> None:
-    aufstellung.einheitInAufstellungWählen(einheit)
-    for modell in einheit.modelle:
-        aufstellung.modellSetzen(modell)
-    aufstellung.aufstellenDerEinheitBeenden()
-
-
-def reihenfolgeBeimAufstellen(aufstellung: Aufstellung, einheiten: list[Einheit]) -> list[Spieler]:
+def reihenfolgeBeimAufstellen(
+    aufstellung: Aufstellung, einheiten: list[Einheit], einheitAufstellen
+) -> list[Spieler]:
     reihenfolge = []
     for einheit in einheiten:
         reihenfolge.append(aufstellung.anDerReihe)
         einheitAufstellen(aufstellung, einheit)
     return reihenfolge
-
-
-def sperrgrund(handlung, *argumente) -> Grund:
-    with pytest.raises(Sperre) as sperre:
-        handlung(*argumente)
-    return sperre.value.grund
 
 
 @pytest.mark.parametrize("gewählteZone", list(Aufstellungszone))
@@ -69,16 +62,20 @@ def testAuf1_1GewinnerKannJederDerBeidenSpielerSein(aufstellung, ersterSpieler, 
     assert aufstellung.aufstellungszone(ersterSpieler) == zweiteZone
 
 
-def testAuf1_2DieAufstellungszoneVorDemGewinnerIstNichtWählbar(aufstellung, ersterSpieler):
-    grund = sperrgrund(aufstellung.aufstellungszoneWählen, ersteZone)
+def testAuf1_2DieAufstellungszoneVorDemGewinnerIstNichtWählbar(
+    aufstellung, ersterSpieler, sperrgründe
+):
+    gründe = sperrgründe(aufstellung.aufstellungszoneWählen, ersteZone)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.gewinner is None
     assert aufstellung.aufstellungszone(ersterSpieler) is None
 
 
-def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(aufstellung, ersterSpieler):
-    sperrgrund(aufstellung.aufstellungszoneWählen, ersteZone)
+def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(
+    aufstellung, ersterSpieler, sperrgründe
+):
+    sperrgründe(aufstellung.aufstellungszoneWählen, ersteZone)
     aufstellung.gewinnerWählen(ersterSpieler)
 
     aufstellung.aufstellungszoneWählen(ersteZone)
@@ -87,46 +84,48 @@ def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(aufstellung, 
     assert aufstellung.aufstellungszone(ersterSpieler) == ersteZone
 
 
-def testAuf1_2DerGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_2DerGewinnerEinZweitesMalIstNichtWählbar(
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+):
     aufstellung.gewinnerWählen(ersterSpieler)
 
-    grund = sperrgrund(aufstellung.gewinnerWählen, zweiterSpieler)
+    gründe = sperrgründe(aufstellung.gewinnerWählen, zweiterSpieler)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.gewinner is ersterSpieler
 
 
-def testAuf1_2DerselbeGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler):
+def testAuf1_2DerselbeGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler, sperrgründe):
     aufstellung.gewinnerWählen(ersterSpieler)
 
-    grund = sperrgrund(aufstellung.gewinnerWählen, ersterSpieler)
+    gründe = sperrgründe(aufstellung.gewinnerWählen, ersterSpieler)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.gewinner is ersterSpieler
 
 
 def testAuf1_2DerGewinnerNachDerAufstellungszoneIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
 
-    grund = sperrgrund(aufstellung.gewinnerWählen, zweiterSpieler)
+    gründe = sperrgründe(aufstellung.gewinnerWählen, zweiterSpieler)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.gewinner is ersterSpieler
     assert aufstellung.anDerReihe is zweiterSpieler
 
 
 @pytest.mark.parametrize("zweiteWahl", list(Aufstellungszone))
 def testAuf1_2DieAufstellungszoneEinZweitesMalIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiteWahl
+    aufstellung, ersterSpieler, zweiteWahl, sperrgründe
 ):
     aufstellung.gewinnerWählen(ersterSpieler)
     aufstellung.aufstellungszoneWählen(ersteZone)
 
-    grund = sperrgrund(aufstellung.aufstellungszoneWählen, zweiteWahl)
+    gründe = sperrgründe(aufstellung.aufstellungszoneWählen, zweiteWahl)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.aufstellungszone(ersterSpieler) == ersteZone
 
 
@@ -157,97 +156,100 @@ def testAuf1_3IstDerZweiteSpielerGewinnerIstDerErsteAnDerReihe(
 
 
 def testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, stelleDesErstenModells
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
     erstesModell, *_ = ersteEinheit.modelle
+    stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, ersteEinheit)
     aufstellung.einheitInAufstellungWählen(ersteEinheit)
 
-    aufstellung.modellSetzen(erstesModell)
+    aufstellung.modellSetzen(erstesModell, stelle)
 
     assert aufstellung.gesetzt(erstesModell)
 
 
 def testAuf1_4OhneEinheitInAufstellungIstSetzenNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
     erstesModell, *_ = ersteEinheit.modelle
 
-    grund = sperrgrund(aufstellung.modellSetzen, erstesModell)
+    gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, irgendeineStelle)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf1_4VorDerWahlIstSetzenNichtInAufstellung(aufstellung, ersterSpieler):
+def testAuf1_4VorDerWahlIstSetzenNichtInAufstellung(aufstellung, ersterSpieler, sperrgründe):
     ersteEinheit, _ = ersterSpieler.armee.einheiten
     erstesModell, *_ = ersteEinheit.modelle
 
-    grund = sperrgrund(aufstellung.modellSetzen, erstesModell)
+    gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, irgendeineStelle)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert not aufstellung.gesetzt(erstesModell)
 
 
 def testAuf1_4EinModellEinerAnderenEinheitIstNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheitInAufstellung, andereEinheit = zweiterSpieler.armee.einheiten
     modellDerAnderenEinheit, *_ = andereEinheit.modelle
     aufstellung.einheitInAufstellungWählen(einheitInAufstellung)
 
-    grund = sperrgrund(aufstellung.modellSetzen, modellDerAnderenEinheit)
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, irgendeineStelle)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert not aufstellung.gesetzt(modellDerAnderenEinheit)
 
 
-def testAuf1_4EinModellDesGegnersIstNichtInAufstellung(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_4EinModellDesGegnersIstNichtInAufstellung(
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheitInAufstellung, _ = zweiterSpieler.armee.einheiten
     gegnerischeEinheit, _ = ersterSpieler.armee.einheiten
     gegnerischesModell, *_ = gegnerischeEinheit.modelle
     aufstellung.einheitInAufstellungWählen(einheitInAufstellung)
 
-    grund = sperrgrund(aufstellung.modellSetzen, gegnerischesModell)
+    gründe = sperrgründe(aufstellung.modellSetzen, gegnerischesModell, irgendeineStelle)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert not aufstellung.gesetzt(gegnerischesModell)
 
 
 def testAuf1_4OhneEinheitInAufstellungIstBeendenNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
 
-    grund = sperrgrund(aufstellung.aufstellenDerEinheitBeenden)
+    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert aufstellung.anDerReihe is zweiterSpieler
 
 
-def testAuf1_4VorDerWahlIstBeendenNichtInAufstellung(aufstellung):
-    grund = sperrgrund(aufstellung.aufstellenDerEinheitBeenden)
+def testAuf1_4VorDerWahlIstBeendenNichtInAufstellung(aufstellung, sperrgründe):
+    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert aufstellung.anDerReihe is None
     assert not aufstellung.beendet
 
 
 def testAuf1_4NachDemBeendenGibtEsKeineEinheitZumErneutenBeenden(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
     einheitAufstellen(aufstellung, ersteEinheit)
 
-    grund = sperrgrund(aufstellung.aufstellenDerEinheitBeenden)
+    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
 
-    assert grund is Grund.nichtInAufstellung
+    assert gründe == {Grund.nichtInAufstellung}
     assert aufstellung.anDerReihe is ersterSpieler
 
 
@@ -262,39 +264,45 @@ def testAuf1_5EineNichtAufgestellteEinheitDesSpielersAnDerReiheIstWählbar(
     assert aufstellung.einheitInAufstellung is zweiteEinheit
 
 
-def testAuf1_5VorDerWahlIstKeineEinheitWählbar(aufstellung, ersterSpieler):
+def testAuf1_5VorDerWahlIstKeineEinheitWählbar(aufstellung, ersterSpieler, sperrgründe):
     ersteEinheit, _ = ersterSpieler.armee.einheiten
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, ersteEinheit)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, ersteEinheit)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5EineEinheitDesSpielersNichtAnDerReiheIstNichtWählbar(aufstellung, ersterSpieler):
+def testAuf1_5EineEinheitDesSpielersNichtAnDerReiheIstNichtWählbar(
+    aufstellung, ersterSpieler, sperrgründe
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = ersterSpieler.armee.einheiten
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, ersteEinheit)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, ersteEinheit)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(
+    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     aufgestellteEinheit, _ = zweiterSpieler.armee.einheiten
     einheitDesGegners, _ = ersterSpieler.armee.einheiten
     einheitAufstellen(aufstellung, aufgestellteEinheit)
     einheitAufstellen(aufstellung, einheitDesGegners)
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, aufgestellteEinheit)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, aufgestellteEinheit)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(
+    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheitErster, zweiteEinheitErster = ersterSpieler.armee.einheiten
     ersteEinheitZweiter, zweiteEinheitZweiter = zweiterSpieler.armee.einheiten
@@ -304,7 +312,7 @@ def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(aufstellung, ersterSpiel
     einheitAufstellen(aufstellung, zweiteEinheitErster)
 
     gründe = [
-        sperrgrund(aufstellung.einheitInAufstellungWählen, einheit)
+        sperrgründe(aufstellung.einheitInAufstellungWählen, einheit)
         for einheit in (
             ersteEinheitErster,
             zweiteEinheitErster,
@@ -313,23 +321,24 @@ def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(aufstellung, ersterSpiel
         )
     ]
 
-    assert gründe == [Grund.nichtWählbar] * 4
+    assert gründe == [{Grund.nichtWählbar}] * 4
     assert aufstellung.einheitInAufstellung is None
 
 
 def testAuf1_5GegenEineNichtWählbareEinheitGiltNichtWählbarAuchNachBegonnenerEinheit(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe, stelleDesErstenModells
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, _ = zweiterSpieler.armee.einheiten
     erstesModell, *_ = begonneneEinheit.modelle
     einheitDesGegners, _ = ersterSpieler.armee.einheiten
+    stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, begonneneEinheit)
     aufstellung.einheitInAufstellungWählen(begonneneEinheit)
-    aufstellung.modellSetzen(erstesModell)
+    aufstellung.modellSetzen(erstesModell, stelle)
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, einheitDesGegners)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, einheitDesGegners)
 
-    assert grund is Grund.nichtWählbar
+    assert gründe == {Grund.nichtWählbar}
     assert aufstellung.einheitInAufstellung is begonneneEinheit
 
 
@@ -345,27 +354,31 @@ def testAuf1_6OhneGesetztesModellLöstDieWählbareEinheitDieBisherigeAb(
     assert aufstellung.einheitInAufstellung is wählbareEinheit
 
 
-def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(
+    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe, stelleDesErstenModells
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
     erstesModell, *_ = begonneneEinheit.modelle
+    stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, begonneneEinheit)
     aufstellung.einheitInAufstellungWählen(begonneneEinheit)
-    aufstellung.modellSetzen(erstesModell)
+    aufstellung.modellSetzen(erstesModell, stelle)
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, andereEinheit)
+    gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, andereEinheit)
 
-    assert grund is Grund.einheitBegonnen
+    assert gründe == {Grund.einheitBegonnen}
     assert aufstellung.einheitInAufstellung is begonneneEinheit
 
 
 def testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, stelleDesErstenModells
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, _ = zweiterSpieler.armee.einheiten
     erstesModell, *_ = begonneneEinheit.modelle
+    stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, begonneneEinheit)
     aufstellung.einheitInAufstellungWählen(begonneneEinheit)
-    aufstellung.modellSetzen(erstesModell)
+    aufstellung.modellSetzen(erstesModell, stelle)
 
     aufstellung.einheitInAufstellungWählen(begonneneEinheit)
 
@@ -374,13 +387,13 @@ def testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht(
 
 
 def testAuf1_7NachDemBeendenIstDieEinheitAufgestelltUndKeineInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, stellenDerEinheit
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, zweiteEinheit = zweiterSpieler.armee.einheiten
     aufstellung.einheitInAufstellungWählen(ersteEinheit)
-    for modell in ersteEinheit.modelle:
-        aufstellung.modellSetzen(modell)
+    for modell, stelle in stellenDerEinheit(aufstellung, zweiterSpieler, ersteEinheit):
+        aufstellung.modellSetzen(modell, stelle)
 
     aufstellung.aufstellenDerEinheitBeenden()
 
@@ -390,33 +403,37 @@ def testAuf1_7NachDemBeendenIstDieEinheitAufgestelltUndKeineInAufstellung(
 
 
 def testAuf1_7NachDemBeendenIstDerAndereSpielerAnDerReihe(
-    aufstellung, ersterSpieler, zweiterSpieler
+    aufstellung, ersterSpieler, zweiterSpieler, stellenDerEinheit
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
     aufstellung.einheitInAufstellungWählen(ersteEinheit)
-    for modell in ersteEinheit.modelle:
-        aufstellung.modellSetzen(modell)
+    for modell, stelle in stellenDerEinheit(aufstellung, zweiterSpieler, ersteEinheit):
+        aufstellung.modellSetzen(modell, stelle)
 
     aufstellung.aufstellenDerEinheitBeenden()
 
     assert aufstellung.anDerReihe is ersterSpieler
 
 
-def testAuf1_7DieSpielerStellenAbwechselndAuf(aufstellung, ersterSpieler, zweiterSpieler):
+def testAuf1_7DieSpielerStellenAbwechselndAuf(
+    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen
+):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheitErster, zweiteEinheitErster = ersterSpieler.armee.einheiten
     ersteEinheitZweiter, zweiteEinheitZweiter = zweiterSpieler.armee.einheiten
     einheiten = [ersteEinheitZweiter, ersteEinheitErster, zweiteEinheitZweiter, zweiteEinheitErster]
 
-    reihenfolge = reihenfolgeBeimAufstellen(aufstellung, einheiten)
+    reihenfolge = reihenfolgeBeimAufstellen(aufstellung, einheiten, einheitAufstellen)
 
     assert reihenfolge == [zweiterSpieler, ersterSpieler, zweiterSpieler, ersterSpieler]
 
 
-def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe(spielerMitEinheiten):
-    kleinerSpieler, größererSpieler = spielerMitEinheiten(1), spielerMitEinheiten(1, 1, 1)
-    aufstellung = Aufstellung(kleinerSpieler, größererSpieler)
+def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe(
+    spielerMit, einheitAufstellen, aufstellungVon
+):
+    kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1, 1)
+    aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
     (einheitDesKleineren,) = kleinerSpieler.armee.einheiten
     ersteEinheit, _, _ = größererSpieler.armee.einheiten
@@ -427,9 +444,11 @@ def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe(spielerMitE
     assert aufstellung.anDerReihe is größererSpieler
 
 
-def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe(spielerMitEinheiten):
-    kleinerSpieler, größererSpieler = spielerMitEinheiten(1), spielerMitEinheiten(1, 1, 1)
-    aufstellung = Aufstellung(kleinerSpieler, größererSpieler)
+def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe(
+    spielerMit, einheitAufstellen, aufstellungVon
+):
+    kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1, 1)
+    aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
     (einheitDesKleineren,) = kleinerSpieler.armee.einheiten
     ersteEinheit, zweiteEinheit, _ = größererSpieler.armee.einheiten
@@ -441,9 +460,11 @@ def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe(spielerMit
     assert aufstellung.anDerReihe is größererSpieler
 
 
-def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet(spielerMitEinheiten):
-    kleinerSpieler, größererSpieler = spielerMitEinheiten(1), spielerMitEinheiten(1, 1)
-    aufstellung = Aufstellung(kleinerSpieler, größererSpieler)
+def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet(
+    spielerMit, einheitAufstellen, aufstellungVon
+):
+    kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1)
+    aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
     (einheitDesKleineren,) = kleinerSpieler.armee.einheiten
     ersteEinheit, zweiteEinheit = größererSpieler.armee.einheiten
@@ -457,9 +478,11 @@ def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet(spieler
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_7FehltNochEineEinheitIstDieAufstellungNichtBeendet(spielerMitEinheiten):
-    kleinerSpieler, größererSpieler = spielerMitEinheiten(1), spielerMitEinheiten(1, 1)
-    aufstellung = Aufstellung(kleinerSpieler, größererSpieler)
+def testAuf1_7FehltNochEineEinheitIstDieAufstellungNichtBeendet(
+    spielerMit, einheitAufstellen, aufstellungVon
+):
+    kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1)
+    aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
     (einheitDesKleineren,) = kleinerSpieler.armee.einheiten
     ersteEinheit, _ = größererSpieler.armee.einheiten

@@ -6,8 +6,6 @@ from pathlib import Path
 
 import pytest
 
-import benennung
-
 wurzel = Path(__file__).resolve().parents[2]
 ordner = Path(__file__).resolve().parent
 
@@ -76,9 +74,7 @@ def testRuffMeldetKeineSperreOhneErrorEndung(tmp_path):
 
 
 def testDasRepoIstRuffSauber():
-    rückstandDateien = sorted(benennung.rückstand(wurzel))
-    ausnahmen = [argument for pfad in rückstandDateien for argument in ("--extend-exclude", pfad)]
-    ergebnis = ruffAufrufen(*ausnahmen, ".")
+    ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout
 
 

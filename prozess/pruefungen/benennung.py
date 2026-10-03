@@ -1,7 +1,6 @@
 """Prüft die Benennung nach `prozess/praemissen/wir.md`."""
 
 import ast
-import hashlib
 import re
 import sys
 from collections.abc import Iterator
@@ -15,6 +14,7 @@ testName = re.compile(r"^test[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
 akzeptanzTestName = re.compile(r"^test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
 pythonDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.py$")
 markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
+geteilterTest = re.compile(r"^(?P<kürzel>[a-z]+)(?P<nummer>\d+)Test\.py$")
 anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 
 mindestlänge = 3
@@ -33,7 +33,6 @@ ausgeschlosseneOrdner = {
 }
 nummerierteOrdner = ("domaene/etappen", "domaene/items", "handoff")
 akzeptanzOrdner = "technik/tests/akzeptanz"
-rückstandsdatei = Path(__file__).with_name("benennungRueckstand.txt")
 
 
 def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:
@@ -125,36 +124,31 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
 
 
 def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
-    """Ein Akzeptanztest heißt `<anforderung>Test.py` und liegt im Ordner der Anforderung."""
+    """Ein Akzeptanztest heißt `<anforderung>Test.py` und liegt im Ordner der Anforderung.
+
+    Geteilt heißt er `<kürzel><n>Test.py` im Ordner `<datei>/` und spiegelt die Anforderung
+    `<KÜRZEL>-<n>` in `<datei>.md`.
+    """
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None
     if not pfad.name.endswith("Test.py"):
         return "Akzeptanztest muss `<anforderung>Test.py` heißen"
-    anforderung = wurzel / "domaene" / "anforderungen" / pfad.parent.relative_to(ordner)
-    anforderung = anforderung / f"{pfad.name.removesuffix('Test.py')}.md"
-    if not anforderung.is_file():
-        return f"keine Anforderung {anforderung.relative_to(wurzel).as_posix()} zum Spiegeln"
-    return None
-
-
-def fingerabdruck(datei: Path) -> str:
-    return hashlib.sha256(datei.read_bytes()).hexdigest()[:16]
-
-
-def rückstand(wurzel: Path) -> set[str]:
-    """Pfade unter `technik/`, deren Datei noch unverändert dem Fingerabdruck entspricht."""
-    if not rückstandsdatei.is_file():
-        return set()
-    ausgenommen = set()
-    for zeile in rückstandsdatei.read_text(encoding="utf-8").splitlines():
-        if not zeile.strip() or zeile.startswith("#"):
-            continue
-        abdruck, _, pfad = zeile.partition(" ")
-        datei = wurzel / pfad
-        if pfad.startswith("technik/") and datei.is_file() and fingerabdruck(datei) == abdruck:
-            ausgenommen.add(pfad)
-    return ausgenommen
+    anforderungen = wurzel / "domaene" / "anforderungen"
+    anforderung = (
+        anforderungen / pfad.parent.relative_to(ordner) / f"{pfad.name.removesuffix('Test.py')}.md"
+    )
+    if anforderung.is_file():
+        return None
+    geteilt = geteilterTest.match(pfad.name)
+    gebündelt = anforderungen / pfad.parent.relative_to(ordner).with_suffix(".md")
+    if geteilt and gebündelt.is_file():
+        kennung = f"{geteilt['kürzel'].upper()}-{geteilt['nummer']}"
+        if re.search(rf"^#+ {kennung}\b", gebündelt.read_text(encoding="utf-8"), re.MULTILINE):
+            return None
+        datei = gebündelt.relative_to(wurzel).as_posix()
+        return f"keine Anforderung {kennung} in {datei} zum Spiegeln"
+    return f"keine Anforderung {anforderung.relative_to(wurzel).as_posix()} zum Spiegeln"
 
 
 def geprüfteDateien(wurzel: Path) -> Iterator[Path]:
@@ -179,30 +173,14 @@ def dateiVerstöße(pfad: Path, wurzel: Path) -> list[str]:
 
 
 def verstöße(wurzel: Path) -> list[str]:
-    ausgenommen = rückstand(wurzel)
     meldungen = []
     for pfad in geprüfteDateien(wurzel):
         relativ = pfad.relative_to(wurzel).as_posix()
-        if relativ not in ausgenommen:
-            meldungen += [f"{relativ}: {grund}" for grund in dateiVerstöße(pfad, wurzel)]
+        meldungen += [f"{relativ}: {grund}" for grund in dateiVerstöße(pfad, wurzel)]
     return meldungen
 
 
-def rückstandZeilen(wurzel: Path) -> list[str]:
-    """Die Zeilen für `benennungRueckstand.txt`: alle verstoßenden Dateien unter `technik/`."""
-    zeilen = []
-    for pfad in geprüfteDateien(wurzel):
-        relativ = pfad.relative_to(wurzel).as_posix()
-        if relativ.startswith("technik/") and dateiVerstöße(pfad, wurzel):
-            zeilen.append(f"{fingerabdruck(pfad)} {relativ}")
-    return zeilen
-
-
 if __name__ == "__main__":
-    ordner = projektordner()
-    if "--rückstand" in sys.argv:
-        print("\n".join(rückstandZeilen(ordner)))
-        sys.exit(0)
-    gefunden = verstöße(ordner)
+    gefunden = verstöße(projektordner())
     print("\n".join(gefunden))
     sys.exit(1 if gefunden else 0)

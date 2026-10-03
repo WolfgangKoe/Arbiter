@@ -1,4 +1,0 @@
-# Rückstand der Benennung (benennung.py): Fingerabdruck und Pfad, nur unter technik/.
-# Der Eintrag gilt für die unveränderte Datei. Wer sie ändert oder umbenennt, wird voll geprüft;
-# dann ist der Eintrag wirkungslos und kann gelöscht werden. Neue Dateien sind nie ausgenommen.
-# Erzeugen: python3 prozess/pruefungen/benennung.py --rückstand

@@ -2,13 +2,10 @@ from pathlib import Path
 
 import pytest
 
-import benennung
 from benennung import (
     dateinamenVerstoß,
-    fingerabdruck,
     nameVerstoß,
     quelltextVerstöße,
-    rückstand,
     verstöße,
 )
 
@@ -152,30 +149,25 @@ def testAkzeptanztestOhneSpiegelDerAnforderungIstRot(tmp_path, dateiname):
     assert any(dateiname in meldung for meldung in verstöße(tmp_path))
 
 
-def testRückstandGiltNurFürDieUnveränderteDatei(tmp_path, monkeypatch):
-    datei = aufbau(tmp_path, "test_auf_1.py")
-    liste = tmp_path / "rueckstand.txt"
-    pfad = datei.relative_to(tmp_path).as_posix()
-    liste.write_text(f"{fingerabdruck(datei)} {pfad}\n", encoding="utf-8")
-    monkeypatch.setattr(benennung, "rückstandsdatei", liste)
-    assert pfad in rückstand(tmp_path)
+def aufbauGeteilt(tmp_path, dateiname: str) -> Path:
+    anforderungen = tmp_path / "domaene" / "anforderungen" / "phasen"
+    anforderungen.mkdir(parents=True)
+    (anforderungen / "aufstellen.md").write_text("### AUF-1 · Probe\n", encoding="utf-8")
+    ordner = tmp_path / "technik" / "tests" / "akzeptanz" / "phasen" / "aufstellen"
+    ordner.mkdir(parents=True)
+    datei = ordner / dateiname
+    datei.write_text("def testAuf1_1Probe(): ...\n", encoding="utf-8")
+    return datei
+
+
+def testGeteilterAkzeptanztestZurAnforderungInDerDateiIstGrün(tmp_path):
+    aufbauGeteilt(tmp_path, "auf1Test.py")
     assert verstöße(tmp_path) == []
 
-    datei.write_text(datei.read_text(encoding="utf-8") + "\n# berührt\n", encoding="utf-8")
 
-    assert pfad not in rückstand(tmp_path)
-    assert verstöße(tmp_path) != []
-
-
-def testRückstandNimmtKeineDateienAußerhalbVonTechnikAus(tmp_path, monkeypatch):
-    (tmp_path / "prozess").mkdir()
-    datei = tmp_path / "prozess" / "schlecht_benannt.py"
-    datei.write_text("x_y = 1\n", encoding="utf-8")
-    liste = tmp_path / "rueckstand.txt"
-    liste.write_text(f"{fingerabdruck(datei)} prozess/schlecht_benannt.py\n", encoding="utf-8")
-    monkeypatch.setattr(benennung, "rückstandsdatei", liste)
-    assert rückstand(tmp_path) == set()
-    assert verstöße(tmp_path) != []
+def testGeteilterAkzeptanztestOhneAnforderungInDerDateiIstRot(tmp_path):
+    aufbauGeteilt(tmp_path, "auf2Test.py")
+    assert any("auf2Test.py" in meldung and "AUF-2" in meldung for meldung in verstöße(tmp_path))
 
 
 def testPytestHookInConftestIstEinWerkzeugname():

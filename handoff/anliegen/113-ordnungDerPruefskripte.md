@@ -1,6 +1,6 @@
 # Ordnung der Prüfskripte
 
-113 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+113 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zu [107](107-kritikAnDenPruefungen.md): In `prozess/pruefungen/` liegen 48 Dateien

@@ -1,0 +1,131 @@
+"""AUF-2 · Ausgangslage von Only War."""
+
+from fractions import Fraction
+
+from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.sperre import Grund
+
+# Regel: Tiefe der Aufstellungszonen 9″, Länge der Spielfeldkante 60″ (onlyWar.yaml)
+tiefeDerZone = 9
+längeDerSpielfeldkante = 60
+
+
+def modelleDerArmeen(ausgangslage):
+    return [modell for einheit in einheitenDerArmeen(ausgangslage) for modell in einheit.modelle]
+
+
+def einheitenDerArmeen(ausgangslage):
+    return [
+        einheit
+        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+        for einheit in spieler.armee.einheiten
+    ]
+
+
+def durchmesserJeEinheit(spieler) -> tuple[tuple[int, ...], ...]:
+    return tuple(
+        tuple(modell.base.durchmesser for modell in einheit.modelle)
+        for einheit in spieler.armee.einheiten
+    )
+
+
+def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
+    return sorted(
+        [
+            durchmesserJeEinheit(ausgangslage.ersterSpieler),
+            durchmesserJeEinheit(ausgangslage.zweiterSpieler),
+        ]
+    )
+
+
+def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitInAufstellung, platz):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(tiefeDerZone - platz.radius, 10)
+
+    aufstellung.modellSetzen(erstesModell, stelle)
+
+    assert aufstellung.gesetzt(erstesModell)
+
+
+def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
+    aufstellung, einheitInAufstellung, platz
+):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(tiefeDerZone - platz.radius + platz.millionstel, 10)
+
+    gründe = platz.sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
+
+    assert gründe == {Grund.nichtGanzInDerZone}
+    assert not aufstellung.gesetzt(erstesModell)
+
+
+def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(aufstellung, einheitInAufstellung, platz):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(platz.radius, platz.radius)
+
+    aufstellung.modellSetzen(erstesModell, stelle)
+
+    assert aufstellung.gesetzt(erstesModell)
+
+
+def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(aufstellung, einheitInAufstellung, platz):
+    erstesModell, _ = einheitInAufstellung.modelle
+    stelle = platz.stelle(platz.radius, längeDerSpielfeldkante - platz.radius)
+
+    aufstellung.modellSetzen(erstesModell, stelle)
+
+    assert aufstellung.gesetzt(erstesModell)
+
+
+def testAuf2_5InDerAusgangslageIstKeinModellGesetzt(ausgangslage):
+    aufstellung = Aufstellung(ausgangslage)
+    modelle = modelleDerArmeen(ausgangslage)
+
+    gesetzteModelle = [modell for modell in modelle if aufstellung.gesetzt(modell)]
+
+    assert gesetzteModelle == []
+
+
+def testAuf2_5InDerAusgangslageIstKeineEinheitAufgestellt(ausgangslage):
+    aufstellung = Aufstellung(ausgangslage)
+    einheiten = einheitenDerArmeen(ausgangslage)
+
+    aufgestellteEinheiten = [einheit for einheit in einheiten if aufstellung.aufgestellt(einheit)]
+
+    assert aufgestellteEinheiten == []
+
+
+def testAuf2_6DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
+    einheitenJeArmee = [
+        len(ausgangslage.ersterSpieler.armee.einheiten),
+        len(ausgangslage.zweiterSpieler.armee.einheiten),
+    ]
+
+    assert einheitenJeArmee == [2, 2]
+
+
+def testAuf2_6JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
+    # Regel: je Eintrag unter `durchmesser` in ausgangslage.yaml ein Modell
+    zahlenDerModelle = sorted(
+        tuple(len(einheit.modelle) for einheit in spieler.armee.einheiten)
+        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    )
+
+    assert zahlenDerModelle == [(10, 1), (10, 1)]
+
+
+def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
+    # Regel: Durchmesser in mm je Modell, ausgangslage.yaml
+    orks = ((32,) * 10, (40,))
+    necrons = ((32,) * 10, (32,))
+
+    durchmesser = durchmesserDerArmeen(ausgangslage)
+
+    assert durchmesser == sorted([orks, necrons])
+
+
+def testAuf2_7DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
+    # Regel: Spielfeld 44″ × 60″ (onlyWar.yaml)
+    seitenlängen = ausgangslage.spielfeld.seitenlängen
+
+    assert seitenlängen == (Fraction(44), Fraction(60))
