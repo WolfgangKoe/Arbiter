@@ -1,17 +1,16 @@
 """Hook: Der Koordinator führt nur Befehle der Positivliste aus; Rollen nutzen git nur lesend."""
 
-import json
 import re
 import shlex
-import sys
 from collections.abc import Callable
 from pathlib import Path
 
 from agenten import istNurLesbar, projektordner
+from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from lesegrenze import gitShowZulässig
+from pfade import anliegenOrdner
 
 geprüfteRolle = "koordinator"
-anliegenOrdner = "handoff/anliegen/"
 
 erlaubt = (
     "git status",
@@ -149,7 +148,7 @@ def gitUnterbefehle(befehl: str) -> list[str]:
 
 
 def istAnliegen(relativerPfad: str) -> bool:
-    return relativerPfad.startswith(anliegenOrdner)
+    return relativerPfad.startswith(f"{anliegenOrdner}/")
 
 
 def meintPfad(wort: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
@@ -200,25 +199,15 @@ def segmentÄndert(segment: list[str], wurzel: Path, gesperrt: Callable[[str], b
     return False
 
 
-def ablehnen(grund: str) -> dict:
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": grund,
-        }
-    }
-
-
 def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     rolle = eingabe.get("agent_type")
     if not rolle or eingabe.get("tool_name") != "Bash":
         return None
-    befehl = (eingabe.get("tool_input") or {}).get("command", "")
+    befehl = werkzeugAngaben(eingabe).get("command", "")
     if rolle == geprüfteRolle:
         if istErlaubt(befehl, wurzel):
             return None
-        return ablehnen(
+        return verweigerung(
             "Bash-Positivliste des Koordinators: nur "
             + ", ".join(erlaubt)
             + "; ohne Verkettung und Umleitung; git show nur mit --stat oder für Dateien unter "
@@ -226,25 +215,23 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
         )
     befehl = ohneHeredocText(befehl)
     if ändertPfad(befehl, wurzel, istNurLesbar):
-        return ablehnen(
+        return verweigerung(
             "Dieser Pfad ist nur lesbar, für alle Rollen: VORGEHEN.md, "
             "handoff/kritik-entwickler.md, Arbiter/, ArbiterMap/. Löschen tut nur der Stakeholder."
         )
     if ändertPfad(befehl, wurzel, istAnliegen):
-        return ablehnen(
+        return verweigerung(
             "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
             "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen)."
         )
     schreibend = [name for name in gitUnterbefehle(befehl) if name not in gitLesend]
     if not schreibend:
         return None
-    return ablehnen(
+    return verweigerung(
         f"git {schreibend[0]} ist dem Koordinator vorbehalten; Rollen nutzen git nur lesend "
         f"({', '.join(gitLesend)}). Lösche Dateien mit rm, committet wird vom Koordinator."
     )
 
 
 if __name__ == "__main__":
-    antwort = entscheide(json.load(sys.stdin), projektordner())
-    if antwort:
-        print(json.dumps(antwort, ensure_ascii=False))
+    antwortAusgeben(entscheide(eingabeLesen(), projektordner()))

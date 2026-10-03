@@ -1,6 +1,6 @@
 # ruff sortiert Importe fehlender Module als fremd: arbiter fest als eigenes Paket
 
-131 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+131 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code), `technik/tests/akzeptanz/conftest.py` und
@@ -35,3 +35,5 @@ Dazu eine Probe in `konfigurationTest.py`: eine Datei mit `import pytest`, Leerz
 in `prozess/pruefungen` bleibt es nötig.
 
 **Erledigt, wenn:** die Probe grün ist und `ruff check .` ohne Umsortierung grün bleibt.
+
+`known-first-party = ["arbiter"]` steht in `pyproject.toml`; Probe `testArbiterGiltAuchFürNochFehlendeModuleAlsEigenesPaket` in `konfigurationTest.py` (ohne die Zeile rot). `src` behält beide Einträge: `technik` für die Auflösung vorhandener Module, `prozess/pruefungen` für die Prüfskripte.

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from agenten import projektordner
+from pfade import akzeptanzOrdner, anforderungsOrdner
 from plan import freigegebenerPlan, offeneItemTexte
 
 Anforderungsnummer = tuple[str, int]
@@ -38,8 +39,6 @@ kriteriumZeile = re.compile(r"^- ([A-ZÄÖÜ]+)-(\d+)\.(\d+)\b")
 kriteriumKennung = re.compile(r"^([A-ZÄÖÜ]+)-(\d+)\.(\d+)$")
 testKriterium = re.compile(r"^test([A-ZÄÖÜ][a-zäöüß]*)(\d+)_(\d+)")
 stellenAngabe = re.compile(r"^(.+):(\d+)$")
-akzeptanzOrdner = "technik/tests/akzeptanz"
-anforderungsOrdner = "domaene/anforderungen"
 
 
 def kennung(kriterium: Kriteriumsnummer) -> str:

@@ -1,7 +1,6 @@
 """Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade."""
 
-import json
-import sys
+from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 
 höchstlänge = 800
 
@@ -24,19 +23,11 @@ def entscheide(eingabe: dict) -> dict | None:
         return {"decision": "block", "reason": grund(len(bericht))}
     if eingabe.get("tool_name") != "SubagentHandback":
         return None
-    bericht = (eingabe.get("tool_input") or {}).get("message", "")
+    bericht = werkzeugAngaben(eingabe).get("message", "")
     if len(bericht) <= höchstlänge:
         return None
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": grund(len(bericht)),
-        }
-    }
+    return verweigerung(grund(len(bericht)))
 
 
 if __name__ == "__main__":
-    antwort = entscheide(json.load(sys.stdin))
-    if antwort:
-        print(json.dumps(antwort, ensure_ascii=False))
+    antwortAusgeben(entscheide(eingabeLesen()))

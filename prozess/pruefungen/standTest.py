@@ -4,7 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from stand import aktuelleEtappe, lage, stand
+from phasenfolge import aktuelleEtappe, lage
+from stand import stand
 
 
 class Repo:
@@ -65,20 +66,20 @@ def testOhneEtappeLeitetDerPlanerSieAb(repo):
 
 def testEtappeOhneFreigabeWartet(repo):
     etappe(repo)
-    assert lage(repo.wurzel)[2] == "Etappe 1 wartet auf Kritik (Architekt) und Freigabe"
+    assert lage(repo.wurzel).schritt == "Etappe 1 wartet auf Kritik (Architekt) und Freigabe"
 
 
 def testNachFreigabeDerEtappeIstDieErsteAnforderungDran(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
-    assert lage(repo.wurzel)[2] == "Anforderungsautor: Anforderungen zu Plan 1"
+    assert lage(repo.wurzel).schritt == "Anforderungsautor: Anforderungen zu Plan 1"
 
 
 def testEineAnforderungGenügtFürDenPlan(repo):
     etappe(repo)
     repo.freigabe("Etappe", 1)
     anforderung(repo)
-    assert lage(repo.wurzel)[2].startswith("Planer: Plan 1 mit den Items, die bereit sind")
+    assert lage(repo.wurzel).schritt.startswith("Planer: Plan 1 mit den Items, die bereit sind")
 
 
 def testPlanOhneFreigabeWartet(repo):
@@ -115,9 +116,9 @@ def planMitItem(repo):
 def testSolangeEinItemOffenIstNenntDerStandDieAbnahmeAuchMitReview(repo):
     planMitItem(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
-    phase, schritt = lage(repo.wurzel)[1:]
-    assert phase == "Technikphase"
-    assert "Fachkritiker: Abnahme" in schritt
+    aktuelle = lage(repo.wurzel)
+    assert aktuelle.phase == "Technikphase"
+    assert "Fachkritiker: Abnahme" in aktuelle.schritt
 
 
 def testGelöschtesItemOhneReviewNenntDenReviewer(repo):
@@ -138,7 +139,7 @@ def testGelöschtesItemMitReviewWechseltInDenProzess(repo):
 def testNachDenAkzeptanztestsOhneItemIstDerReviewerDran(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("technik/tests/akzeptanz/auTest.py", "def testAu1_1Probe(): ...\n")
-    assert lage(repo.wurzel)[2] == "Reviewer: Review 1"
+    assert lage(repo.wurzel).schritt == "Reviewer: Review 1"
 
 
 def testReviewWechseltInDenProzess(repo):
@@ -151,7 +152,7 @@ def testRetroOhneFreigabeWartet(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
-    assert lage(repo.wurzel)[2] == "Retro 1 wartet auf Kritik und Freigabe"
+    assert lage(repo.wurzel).schritt == "Retro 1 wartet auf Kritik und Freigabe"
 
 
 def testFreigabeDerRetroBeginntDenNächstenZyklus(repo):
@@ -159,8 +160,8 @@ def testFreigabeDerRetroBeginntDenNächstenZyklus(repo):
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     repo.freigabe("Retro", 1)
-    assert lage(repo.wurzel)[:2] == (2, "Domänenphase")
-    assert lage(repo.wurzel)[2].startswith("Planer: Plan 2")
+    assert (lage(repo.wurzel).zyklus, lage(repo.wurzel).phase) == (2, "Domänenphase")
+    assert lage(repo.wurzel).schritt.startswith("Planer: Plan 2")
 
 
 def testFreigabeVonPlan12ZähltNichtFürPlan1(repo):
@@ -169,7 +170,7 @@ def testFreigabeVonPlan12ZähltNichtFürPlan1(repo):
     anforderung(repo)
     repo.datei("handoff/plan.md", "# Plan · Zyklus 1\n")
     repo.freigabe("Plan", 12)
-    assert lage(repo.wurzel)[1] == "Domänenphase"
+    assert lage(repo.wurzel).phase == "Domänenphase"
 
 
 def testAktuelleEtappeIstDieErsteDateiNachNamen(repo):
@@ -334,14 +335,14 @@ def testNachRetroOhneKriteriumOhneTestIstDerAnforderungsautorDran(repo):
     retroFreigegebenMitAnforderung(
         repo, "### AU-1 · A\n\n- AU-1.1 Eins.\n", "def testAu1_1Eins(): ...\n"
     )
-    assert lage(repo.wurzel)[2] == "Anforderungsautor: Anforderungen zu Plan 2"
+    assert lage(repo.wurzel).schritt == "Anforderungsautor: Anforderungen zu Plan 2"
 
 
 def testNachRetroMitKriteriumOhneTestIstDerPlanerDran(repo):
     retroFreigegebenMitAnforderung(
         repo, "### AU-1 · A\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n", "def testAu1_1Eins(): ...\n"
     )
-    assert lage(repo.wurzel)[2].startswith("Planer: Plan 2")
+    assert lage(repo.wurzel).schritt.startswith("Planer: Plan 2")
 
 
 def planMitItemtext(repo, anforderungstext, testtext, itemtext):
@@ -363,18 +364,18 @@ def testPlanOhneKriteriumOhneTestVerlangtKriterienVomAnforderungsautor(repo):
         "def testAu1_1Eins(): ...\n",
         "# Probe\n\nAU-1.\n",
     )
-    assert lage(repo.wurzel)[2] == "Anforderungsautor: Kriterien zu den Items von Plan 1"
+    assert lage(repo.wurzel).schritt == "Anforderungsautor: Kriterien zu den Items von Plan 1"
 
 
 def testPlanDessenItemKeinFehlendesKriteriumNenntVerlangtKriterienIdsVomPlaner(repo):
     planMitItemtext(
         repo, zweiKriterienEinsGetestet, "def testAu1_1Eins(): ...\n", "# Probe\n\nAU-1.1.\n"
     )
-    assert lage(repo.wurzel)[2] == "Planer: Kriterien-IDs in die Items von Plan 1"
+    assert lage(repo.wurzel).schritt == "Planer: Kriterien-IDs in die Items von Plan 1"
 
 
 def testPlanDessenItemsEinFehlendesKriteriumNennenWartetAufKritikUndFreigabe(repo):
     planMitItemtext(
         repo, zweiKriterienEinsGetestet, "def testAu1_1Eins(): ...\n", "# Probe\n\nAU-1.2.\n"
     )
-    assert lage(repo.wurzel)[2] == "Plan 1 wartet auf Kritik (Architekt) und Freigabe"
+    assert lage(repo.wurzel).schritt == "Plan 1 wartet auf Kritik (Architekt) und Freigabe"

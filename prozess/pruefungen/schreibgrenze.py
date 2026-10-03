@@ -1,11 +1,16 @@
 """Hook: Eine Rolle schreibt nur in ihren Schreibpfaden; manche Pfade sind für alle nur lesbar."""
 
-import json
 import subprocess
-import sys
 from pathlib import Path
 
 from agenten import darfSchreiben, istNurLesbar, nurLesbar, projektordner, schreibpfade
+from hookProtokoll import (
+    antwortAusgeben,
+    eingabeLesen,
+    verweigerung,
+    werkzeugAngaben,
+    zusatzkontext,
+)
 
 schreibwerkzeuge = ("Write", "Edit", "NotebookEdit")
 
@@ -31,28 +36,18 @@ def standDatei(wurzel: Path, agentId: str) -> Path:
     return wurzel / ".git" / "arbiter-schreibgrenze" / f"{agentId}.txt"
 
 
-def sperren(grund: str) -> dict:
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": grund,
-        }
-    }
-
-
 def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
     # Warum: Ohne `agent_type` spricht die Hauptsitzung, für sie gilt keine Grenze.
     rolle = eingabe.get("agent_type")
     if not rolle or eingabe.get("tool_name") not in schreibwerkzeuge:
         return None
-    werkzeug = eingabe.get("tool_input") or {}
+    werkzeug = werkzeugAngaben(eingabe)
     ziel = Path(werkzeug.get("file_path") or werkzeug.get("notebook_path") or "")
     ziel = (wurzel / ziel).resolve() if not ziel.is_absolute() else ziel.resolve()
     if ziel.is_relative_to(wurzel):
         relativ = ziel.relative_to(wurzel).as_posix()
         if istNurLesbar(relativ):
-            return sperren(
+            return verweigerung(
                 f"Schreibgrenze: {relativ} ist nur lesbar, für alle Rollen und den Koordinator. "
                 "Löschen und ändern tut nur der Stakeholder."
             )
@@ -60,7 +55,7 @@ def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
             return None
     else:
         relativ = str(ziel)
-    return sperren(
+    return verweigerung(
         f"Schreibgrenze: {rolle} darf {relativ} nicht schreiben. "
         "Kritik an fremden Artefakten wird ein Anliegen."
     )
@@ -72,14 +67,12 @@ def beimStart(eingabe: dict, wurzel: Path) -> dict:
     zeilen = [f"HEAD {kopf(wurzel)}", *sorted(geänderteDateien(wurzel))]
     datei.write_text("\n".join(zeilen), encoding="utf-8")
     muster = schreibpfade(eingabe.get("agent_type") or "", wurzel)
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "SubagentStart",
-            "additionalContext": "Deine Schreibpfade: "
-            + (", ".join(muster) if muster else "keine, du schreibst nichts")
-            + f". Für alle nur lesbar: {', '.join(nurLesbar)}.",
-        }
-    }
+    return zusatzkontext(
+        "SubagentStart",
+        "Deine Schreibpfade: "
+        + (", ".join(muster) if muster else "keine, du schreibst nichts")
+        + f". Für alle nur lesbar: {', '.join(nurLesbar)}.",
+    )
 
 
 def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
@@ -110,12 +103,9 @@ def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
         )
     if not meldungen:
         return None
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "SubagentStop",
-            "additionalContext": " ".join(meldungen) + " Nicht committen, dem Stakeholder melden.",
-        }
-    }
+    return zusatzkontext(
+        "SubagentStop", " ".join(meldungen) + " Nicht committen, dem Stakeholder melden."
+    )
 
 
 def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
@@ -130,6 +120,4 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
 
 
 if __name__ == "__main__":
-    antwort = entscheide(json.load(sys.stdin), projektordner())
-    if antwort:
-        print(json.dumps(antwort, ensure_ascii=False))
+    antwortAusgeben(entscheide(eingabeLesen(), projektordner()))

@@ -1,11 +1,12 @@
 """Hook (PreToolUse, Write und Edit): `erledigt` setzt nur der Absender des Anliegens."""
 
-import json
 import sys
 from pathlib import Path
 
 from agenten import projektordner
 from anliegen import Anliegen, höchstRunde, kopfAusText
+from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
+from pfade import anliegenOrdner
 
 letzteRunde = "Runde 3/3 ist die letzte; setze `eskaliert`, der Stakeholder entscheidet."
 
@@ -26,13 +27,13 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     # Warum: Ohne `agent_type` spricht die Hauptsitzung, für sie gilt keine Grenze.
     rolle = eingabe.get("agent_type")
     werkzeug = eingabe.get("tool_name")
-    angaben = eingabe.get("tool_input") or {}
+    angaben = werkzeugAngaben(eingabe)
     if not rolle or werkzeug not in ("Write", "Edit") or not angaben.get("file_path"):
         return None
     ziel = Path(angaben["file_path"])
     ziel = ziel if ziel.is_absolute() else wurzel / ziel
     ziel = ziel.resolve()
-    if ziel.parent != (wurzel / "handoff" / "anliegen").resolve() or ziel.suffix != ".md":
+    if ziel.parent != (wurzel / anliegenOrdner).resolve() or ziel.suffix != ".md":
         return None
     bisher = ziel.read_text(encoding="utf-8") if ziel.is_file() else ""
     danach = neuerInhalt(werkzeug, angaben, bisher)
@@ -43,13 +44,7 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     grund = erledigtVerstoß(alt, neu, rolle) or rundenVerstoß(alt, neu)
     if grund is None:
         return None
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": f"Statusrecht: {ziel.name} {grund}",
-        }
-    }
+    return verweigerung(f"Statusrecht: {ziel.name} {grund}")
 
 
 def erledigtVerstoß(alt: Anliegen | None, neu: Anliegen, rolle: str) -> str | None:
@@ -81,7 +76,5 @@ def rundenVerstoß(alt: Anliegen | None, neu: Anliegen) -> str | None:
 
 
 if __name__ == "__main__":
-    antwort = entscheide(json.load(sys.stdin), projektordner())
-    if antwort:
-        print(json.dumps(antwort, ensure_ascii=False))
+    antwortAusgeben(entscheide(eingabeLesen(), projektordner()))
     sys.exit(0)

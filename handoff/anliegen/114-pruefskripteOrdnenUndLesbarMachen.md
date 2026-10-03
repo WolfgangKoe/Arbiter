@@ -3,8 +3,7 @@
 114 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Der Stakeholder findet sich in `prozess/pruefungen/` nicht zurecht und hält die
-Skripte für schwer lesbar ([107](107-kritikAnDenPruefungen.md)). ruff, Komplexität und
+**Befund.** Der Stakeholder findet sich in `prozess/pruefungen/` nicht zurecht ([107](107-kritikAnDenPruefungen.md)). ruff, Komplexität und
 Benennung sind grün; verletzt sind `prozess/praemissen/wir.md` und „Jede Aussage genau einmal“:
 1. Fachobjekte als nackte Tupel, gelesen per Index (wir.md 6): `stand.py` `etappe[1]` und
    `lage` mit `tuple[int, str, str]`; `codekritik.py` `fällig[0]`, `fällig[1]`;
@@ -48,4 +47,4 @@ Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die M
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** D und C umgesetzt (`kommentare.py`, PascalCase-Typaliase in `benennung.py`, je mit Scheiter-Test, `regeln.md`); aus B `Fundstelle` als NamedTuple und Aliase in PascalCase. A und B (1, 4 bis 7) stehen aus; A zieht den Pfad der Sprung-Erweiterung um, die der Stakeholder gerade erprobt (124). Status bleibt offen.
+**Stellungnahme.** D, C erledigt; B teils: Hook-Protokoll in `hookProtokoll.py` (4), Pfade in `pfade.py` (5), `Phase`, `Lage`, `Etappe` in `phasenfolge.py` aus `stand.py` (1, 6, 7), `Fundstelle` (3). Offen: B 1 (`codekritik.py`, `Kriteriumsnummer`), B 7 (`rueckverfolgung.py` teilen), A. A braucht eine Entscheidung: Importe zwischen Ordnern gehen nur über `PYTHONPATH`, `python3 -m` oder `sys.path`; die ersten beiden ändern Hook-Befehle und die Erlaubnisliste, das ich nicht allein ändere. Status offen.

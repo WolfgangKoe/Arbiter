@@ -1,10 +1,9 @@
 """Hook `SubagentStart`: Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive."""
 
-import json
-import sys
 from pathlib import Path
 
 from agenten import projektordner, schreibpfade
+from hookProtokoll import antwortAusgeben, eingabeLesen, zusatzkontext
 from stand import stand
 
 perspektiven = ("domaene", "technik", "prozess")
@@ -26,16 +25,8 @@ def kontext(rolle: str, wurzel: Path) -> str:
 
 
 if __name__ == "__main__":
-    eingabe = json.load(sys.stdin)
+    eingabe = eingabeLesen()
     if eingabe.get("agent_type"):
-        print(
-            json.dumps(
-                {
-                    "hookSpecificOutput": {
-                        "hookEventName": "SubagentStart",
-                        "additionalContext": kontext(eingabe["agent_type"], projektordner()),
-                    }
-                },
-                ensure_ascii=False,
-            )
+        antwortAusgeben(
+            zusatzkontext("SubagentStart", kontext(eingabe["agent_type"], projektordner()))
         )

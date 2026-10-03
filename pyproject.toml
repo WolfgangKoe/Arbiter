@@ -18,6 +18,10 @@ select = ["E", "W", "F", "I", "N", "UP", "B", "ARG", "PLR2004", "PLR0912", "PLR0
 # die Namensprüfung übernimmt prozess/pruefungen/benennung.py.
 ignore = ["N802", "N803", "N806", "N815", "N816", "N818", "N999"]
 
+[tool.ruff.lint.isort]
+# Warum: Akzeptanztests importieren Module, bevor es sie gibt (CLAUDE.md, Technik-Rahmen).
+known-first-party = ["arbiter"]
+
 [tool.ruff.lint.pylint]
 # Warum: Zahl der Fälle einer Funktion höchstens 12 (prozess/ablauf.md, Werkzeuge); die
 # Verschachtelung begrenzt complexipy.

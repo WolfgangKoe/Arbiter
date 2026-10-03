@@ -4,9 +4,10 @@ import re
 from pathlib import Path
 
 from gitAufruf import gitAusgabe, letzteFreigabe
+from pfade import akzeptanzOrdner
 
 kritikerJePfad = (
-    ("technik/tests/akzeptanz/", ("Fachkritiker", "Architekt")),
+    (f"{akzeptanzOrdner}/", ("Fachkritiker", "Architekt")),
     ("technik/arbiter/", ("Reviewer",)),
     ("technik/tests/einheit/", ("Reviewer",)),
     ("prozess/pruefungen/", ("Reviewer",)),

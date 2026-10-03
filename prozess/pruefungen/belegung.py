@@ -1,10 +1,10 @@
 """Hook: Belegung des Kontextfensters je Lauf, gleich für den Koordinator und jede Rolle."""
 
 import json
-import sys
 from pathlib import Path
 
 from agenten import projektordner
+from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, zusatzkontext
 
 warnschwelle = 120_000
 sperrschwelle = 150_000
@@ -72,16 +72,6 @@ def punkte(zahl: int) -> str:
     return f"{zahl:,}".replace(",", ".")
 
 
-def sperren(grund: str) -> dict:
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": grund,
-        }
-    }
-
-
 def vorWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
     if not eingabe.get("agent_type") or eingabe.get("tool_name") in erlaubteWerkzeuge:
         return None
@@ -97,7 +87,9 @@ def vorWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
             "Der Stakeholder entscheidet: freigeben (höhere Grenze in "
             f"{freigabedatei(wurzel).relative_to(wurzel)}), kürzen oder neuer Chat."
         )
-    return sperren(f"Belegung {punkte(belegung)} Token, Sperrschwelle {punkte(grenze)}. {weiter}")
+    return verweigerung(
+        f"Belegung {punkte(belegung)} Token, Sperrschwelle {punkte(grenze)}. {weiter}"
+    )
 
 
 def nachWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
@@ -119,7 +111,7 @@ def nachWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
         f"Belegung {punkte(belegung)} Token, Warnschwelle {punkte(warnschwelle)}. {folge} "
         f"Ab {punkte(sperrschwelle)} sperrt ein Hook alles außer Schreiben im eigenen Pfad."
     )
-    return {"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": text}}
+    return zusatzkontext("PostToolUse", text)
 
 
 def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
@@ -133,8 +125,7 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
 
 if __name__ == "__main__":
     try:
-        antwort = entscheide(json.load(sys.stdin), projektordner())
+        antwort = entscheide(eingabeLesen(), projektordner())
     except Exception:  # Warum: eine Messung, die scheitert, darf keinen Werkzeugaufruf sperren
         antwort = None
-    if antwort:
-        print(json.dumps(antwort, ensure_ascii=False))
+    antwortAusgeben(antwort)

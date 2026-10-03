@@ -74,6 +74,16 @@ def testRuffMeldetKeineSperreOhneErrorEndung(tmp_path):
     assert ruffAufrufen(str(probe)).returncode == 0
 
 
+def testArbiterGiltAuchFürNochFehlendeModuleAlsEigenesPaket(tmp_path):
+    probe = tmp_path / "probe.py"
+    probe.write_text(
+        "import pytest\n\nfrom arbiter.domaene.sperre import Sperre\n"
+        "from arbiter.gibtEsNicht.modul import Ding\n\n\n"
+        "def tun():\n    return pytest, Sperre, Ding\n"
+    )
+    assert ruffAufrufen(str(probe)).returncode == 0
+
+
 def testDasRepoIstRuffSauber():
     ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout

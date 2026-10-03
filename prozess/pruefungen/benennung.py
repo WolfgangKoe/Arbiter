@@ -7,6 +7,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from agenten import projektordner
+from pfade import akzeptanzOrdner, anforderungsOrdner, anliegenOrdner
 
 camelCase = re.compile(r"^[a-zäöü][a-zA-Z0-9äöüÄÖÜß]*$")
 pascalCase = re.compile(r"^[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
@@ -34,7 +35,6 @@ ausgeschlosseneOrdner = {
     ".ruff_cache",
 }
 nummerierteOrdner = ("domaene/etappen", "domaene/items", "handoff")
-akzeptanzOrdner = "technik/tests/akzeptanz"
 
 
 def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:
@@ -156,7 +156,7 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
         return None
     if pfad.suffix == ".py":
         return None if pythonDatei.match(pfad.name) else "Dateiname nicht in camelCase, ASCII"
-    if relativ.startswith("handoff/anliegen/"):
+    if relativ.startswith(f"{anliegenOrdner}/"):
         nummer = pfad.name.partition("-")[0]
         zuPrüfen = nummer.isdigit() and int(nummer) >= ersteBenannteAnliegenNummer
         if zuPrüfen and not anliegenDatei.match(pfad.name):
@@ -174,7 +174,7 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
         return None
     if not pfad.name.endswith("Test.py"):
         return "Akzeptanztest muss `<anforderung>Test.py` heißen"
-    anforderungen = wurzel / "domaene" / "anforderungen"
+    anforderungen = wurzel / anforderungsOrdner
     anforderung = (
         anforderungen / pfad.parent.relative_to(ordner) / f"{pfad.name.removesuffix('Test.py')}.md"
     )

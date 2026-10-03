@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from agenten import projektordner
+from pfade import anforderungsOrdner
 
 bezeichnerZelle = re.compile(r"^(\w+)(?: \(([^)]*)\))?$")
 grundText = re.compile(r"‚([^‘]+)‘")
@@ -89,7 +90,7 @@ def verstöße(wurzel: Path) -> list[str]:
     gründeDerAnforderungen = gründe(
         "\n".join(
             datei.read_text(encoding="utf-8")
-            for datei in (wurzel / "domaene" / "anforderungen").rglob("*.md")
+            for datei in (wurzel / anforderungsOrdner).rglob("*.md")
         )
     )
     meldungen = []

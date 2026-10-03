@@ -6,6 +6,7 @@ from pathlib import Path
 
 from agenten import rollennamen
 from gitAufruf import dateiBeiCommit, gitAusgabe, letzteFreigabe
+from pfade import anliegenOrdner
 
 statusWerte = ("offen", "angenommen", "abgelehnt", "beantwortet", "eskaliert", "erledigt")
 typWerte = ("Kritik", "Fragen", "Anliegen")
@@ -29,7 +30,7 @@ class Anliegen:
 
 
 def anliegenDateien(wurzel: Path) -> list[Path]:
-    return sorted((wurzel / "handoff" / "anliegen").glob("*.md"))
+    return sorted((wurzel / anliegenOrdner).glob("*.md"))
 
 
 def kopfLesen(datei: Path) -> Anliegen | None:
@@ -177,9 +178,7 @@ def nummerAusDateiname(name: str) -> int | None:
 def vergebeneNummern(wurzel: Path) -> set[int]:
     """Nummern der vorhandenen und der in git je angelegten Anliegen; nie neu vergeben."""
     namen = [datei.name for datei in anliegenDateien(wurzel)]
-    verlauf = gitAusgabe(
-        wurzel, "log", "--all", "--name-only", "--format=", "--", "handoff/anliegen"
-    )
+    verlauf = gitAusgabe(wurzel, "log", "--all", "--name-only", "--format=", "--", anliegenOrdner)
     namen += [Path(zeile).name for zeile in verlauf.splitlines()]
     nummern = (nummerAusDateiname(name) for name in namen)
     return {nummer for nummer in nummern if nummer is not None}

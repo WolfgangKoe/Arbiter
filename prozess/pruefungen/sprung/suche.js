@@ -1,5 +1,5 @@
-// Warum: Die Suche liest die Dateien selbst, denn Pylance fand beim Stakeholder nichts.
-const fs = require("fs");
+// Warum: ohne Python und ohne Sprachserver, denn Pylance fand die Ziele nicht.
+const dateisystem = require("fs");
 const path = require("path");
 
 const kriteriumMuster = /[A-ZÄÖÜ]+-\d+\.\d+/;
@@ -7,8 +7,8 @@ const testMuster = /test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[\wÄÖÜäöüß]*/;
 const testKriteriumMuster = /^test([A-ZÄÖÜ][a-zäöüß]*)(\d+)_(\d+)/;
 
 function dateien(ordner, endung) {
-  if (!fs.existsSync(ordner)) return [];
-  return fs.readdirSync(ordner, { withFileTypes: true }).flatMap((eintrag) => {
+  if (!dateisystem.existsSync(ordner)) return [];
+  return dateisystem.readdirSync(ordner, { withFileTypes: true }).flatMap((eintrag) => {
     const pfad = path.join(ordner, eintrag.name);
     if (eintrag.isDirectory()) return eintrag.name === "__pycache__" ? [] : dateien(pfad, endung);
     return pfad.endsWith(endung) ? [pfad] : [];
@@ -18,7 +18,7 @@ function dateien(ordner, endung) {
 function stellen(ordner, endung, muster) {
   const gefunden = [];
   for (const datei of dateien(ordner, endung)) {
-    fs.readFileSync(datei, "utf8").split("\n").forEach((text, zeile) => {
+    dateisystem.readFileSync(datei, "utf8").split("\n").forEach((text, zeile) => {
       const treffer = muster.exec(text);
       if (treffer) gefunden.push({ datei, zeile, spalte: treffer.index });
     });

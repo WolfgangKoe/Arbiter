@@ -7,6 +7,7 @@ from pathlib import Path
 from agenten import istNurLesbar, projektordner
 from anliegen import anliegenDateien, kopfLesen
 from gitAufruf import gitAusgabe
+from pfade import anliegenOrdner
 
 link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
 suchOrdner = ("domaene", "technik", "prozess", "handoff", ".claude", "doku")
@@ -46,11 +47,11 @@ def erledigteLöschen(wurzel: Path) -> list[str]:
     # Warum: `ls-files` nennt den Index; `ls-tree HEAD` nennt, was git sicher bewahrt.
     bekannt = set(
         gitAusgabe(
-            wurzel, "ls-tree", "-r", "--name-only", "HEAD", "--", "handoff/anliegen"
+            wurzel, "ls-tree", "-r", "--name-only", "HEAD", "--", anliegenOrdner
         ).splitlines()
     )
     geändert = set(
-        gitAusgabe(wurzel, "diff", "--name-only", "HEAD", "--", "handoff/anliegen").splitlines()
+        gitAusgabe(wurzel, "diff", "--name-only", "HEAD", "--", anliegenOrdner).splitlines()
     )
     for datei in anliegenDateien(wurzel):
         gelesen = kopfLesen(datei)
