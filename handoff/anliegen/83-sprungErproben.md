@@ -56,4 +56,5 @@ Installationspaket, das nach jeder Änderung neu gebaut werden müsste.
 Empfehlung: A; das ist der Sprung, den du gemeint hast, soweit ein Link ihn stabil leisten
 kann. Willst du den Link je Kriterium auf die Zeile trotzdem, schreib es dazu; dann müsste
 ein Prüfskript die Zeilennummern bei jedem Lauf nachziehen.
-Antwort: .
+
+Antwort: Die Erweiterung kann gelöscht werden. Gibt es keine Möglichkeit eine Art Tag zu setzen, so dass dieser mit der Zeile mitgeht? Software-Entwickler "springen" die ganze Zeit durch das System, weil die geschriebene Methode ja überall gleich heißt. Sowas muss doch einfach gehen.
