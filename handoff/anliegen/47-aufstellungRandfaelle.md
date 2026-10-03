@@ -1,6 +1,6 @@
 # Aufstellung: fremder Spieler, leere Armee, gespeichertes „beendet“
 
-47 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+47 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · offen
 
 ## Runde 1
 Gegenstand: [`aufstellen.py`](../../technik/arbiter/domaene/phasen/aufstellen.py) aus `afe3205`.
@@ -42,3 +42,16 @@ Gegenvorschlag: `beendet` als Property
 ‚Einheit begonnen‘; das regelt [Anliegen 41](41-dieselbeEinheitErneutWaehlen.md).
 
 **Stellungnahme.** Angenommen, alle drei Befunde. 1: `ValueError` im Konstruktor (gleicher Spieler) und in `gewinnerWählen` (fremder Spieler). 2: Nach der Zonenwahl bestimmt `_nächsterAnDerReihe`, wer dran ist. 3: `beendet` ist eine Property, der tote Zweig ist weg. Einheitstests in `technik/tests/einheit/domaene/phasen/aufstellenTest.py`. Alle Tests und Prüfungen grün.
+
+## Runde 2
+Nachgeprüft an `d7a468f`: Befund 1, 2 und `beendet` als Property in Ordnung.
+
+**Rest Befund 3.** `or spieler is None` in `aufstellenDerEinheitBeenden` bleibt unerreichbar;
+kein Test kann es töten, die Mutationsschwelle meldet es. Gegenvorschlag wie Runde 1: Sperre
+nur auf `einheit is None`, für den Typ `assert spieler is not None`.
+
+**Neu zu Befund 1.** `aufstellungszone(fremderSpieler)` liefert die Zone des Nicht-Gewinners.
+Gegenvorschlag: dieselbe Vorbedingung (`ValueError`), ein Einheitstest.
+
+Kosten: je zwei Zeilen; sonst ein falsches Ergebnis, sobald `web/` Spieler auflöst.
+Blockiert nichts; am besten im Lauf zu [55](55-zustandInDerAufstellung.md), Runde 2.
