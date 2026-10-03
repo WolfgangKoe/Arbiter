@@ -1,6 +1,6 @@
 # ruff sortiert Importe fehlender Module als fremd: arbiter fest als eigenes Paket
 
-131 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+131 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 3738e7b (Kritik am Code), `technik/tests/akzeptanz/conftest.py` und
