@@ -1,6 +1,6 @@
 # Nahkampfreichweite beim Setzen
 
-Umfang: AUF-3.4 und das Kriterium zu mehreren Gründen an einer Stelle ([Anliegen 100](../../handoff/anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md), F3).
+Umfang: AUF-3.4, auch beim Umsetzen (AUF-3.7), und das Kriterium zu mehreren Gründen an einer Stelle ([Anliegen 100](../../handoff/anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md), F3).
 
 Warum jetzt: Letzte Sperre beim Setzen in Etappe 1.
 

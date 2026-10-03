@@ -4,7 +4,7 @@ Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
 ## Items
 1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md): AUF-2.1 bis AUF-2.5
-2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): AUF-3.1 bis AUF-3.3, nach Item 1
+2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): AUF-3.1 bis AUF-3.3, AUF-3.6, AUF-3.7, nach Item 1
 
 ## Empfehlung
 Freigeben mit beiden Items. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim Setzen
@@ -29,25 +29,31 @@ Item `nahkampfreichweite-beim-setzen` als drittes auf; sonst führt es Zyklus 3 
 habe ich in Etappe 1 übernommen.
 
 Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
-- Gesetzt wird in Tests nur aus der Ausgangslage; die Ablage als Ort neben der Karte, Umsetzen
-  und Zurücklegen kommen später (Etappe 1, Anliegen 16 F1, F2, git).
-- Mit Sperre bleibt der Zustand unverändert (Architektur D2): Das Modell ist nicht gesetzt.
+- Gesetzt wird in Tests nur aus der Ausgangslage oder von der vorigen Stelle (AUF-3.7); die
+  Ablage als Ort neben der Karte und Zurücklegen kommen später (Etappe 1, Anliegen 16 F1, F2,
+  git).
+- Mit Sperre bleibt der Zustand unverändert (Architektur D2): Das Modell bleibt ungesetzt oder an
+  seiner vorigen Stelle.
   Stehenbleiben mit Grund, „zurück“, „gemeinsam übergehen“ und Protokoll kommen später (16 F4).
 - Akzeptanztests beenden eine Einheit erst, wenn alle ihre Modelle gesetzt sind und die Einheit
   in Kohärenz steht; die Sperren beim Beenden kommen später (16 F3).
 - Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
 
 ## Danach, nach Abhängigkeit
-Nahkampfreichweite beim Setzen (siehe oben) · Ablage, Umsetzen, Zurücklegen und die erste
+Nahkampfreichweite beim Setzen (siehe oben) · Ablage, Zurücklegen und die erste
 Oberfläche: Karte mit Spielfeld und Zonen, Ziehen mit Maus und Touch, dafür UX und Mockup ·
 Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden mit fehlenden Modellen und
 Kohärenz (16 F3). Mit diesen vier ist Etappe 1 erreichbar.
 
 ## Offene Anliegen
 An dich:
+- [105](anliegen/105-aufstellenAufteilen.md): Aufteilung von Aufstellen. Mit F2 A ändern sich
+  die Kennungen beider Items vor der Freigabe; die neuen trage ich nach deiner Antwort ein.
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
 
 Zwischen Rollen:
+- [104](anliegen/104-auf36Auf37InItem2.md): AUF-3.6 und AUF-3.7 in Item 2, angenommen,
+  Nachprüfung durch den Architekten.
 - Anliegen 102: Kritik des Architekten an Plan 2, angenommen,
   seine Nachprüfung.
 - [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md): deine Antworten stehen, der

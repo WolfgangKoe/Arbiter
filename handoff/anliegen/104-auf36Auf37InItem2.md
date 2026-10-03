@@ -1,6 +1,6 @@
 # AUF-3.6 und AUF-3.7 in Item „Sperren beim Setzen“
 
-104 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+104 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Item 2](../../domaene/items/sperren-beim-setzen.md) umfasst AUF-3.1 bis AUF-3.3,
@@ -20,4 +20,7 @@ Stelle; das deckt die Grenze im Plan schon ab.
 **Gegenvorschlag.** Umfang von Item 2: AUF-3.1 bis AUF-3.3, AUF-3.6 und AUF-3.7. Die
 AUF-3.4-Teile bleiben bei `nahkampfreichweite-beim-setzen`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Item 2 umfasst AUF-3.6 und AUF-3.7, aber nicht den Teil zu
+AUF-3.4; diesen trägt `nahkampfreichweite-beim-setzen`. Im Plan sind die Grenzen angepasst:
+Umsetzen von der vorigen Stelle gehört jetzt zu Item 2. Ein gesperrtes Modell bleibt ungesetzt
+oder an seiner vorigen Stelle.
