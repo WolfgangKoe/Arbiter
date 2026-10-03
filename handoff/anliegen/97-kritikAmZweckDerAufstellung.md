@@ -1,6 +1,6 @@
 # Kritik Der Zweck der Anforderung Aufstellung.md ist zu knapp.
 
-97 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+97 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
 
 ## Runde 1
 "Zweck: Reihenfolge von Only War. Alle Kriterien: `core_rules.txt:2322`." 
@@ -23,4 +23,6 @@ Angenommen bis auf den Verweis auf Code; umgesetzt in
   ([83](83-sprungErproben.md)), der Test ruft die Klassen auf. Willst du trotzdem einen direkten
   Verweis, setz das Anliegen wieder auf offen.
 
-  Antwort: Du hast die Anforderung effektiv in drei Teile geschnitten. Damit bin ich einverstanden. An sich könntest du daraus auch drei Dateien machen, um das Zeichenlimit wieder zu reduzieren. Ausgangslage von Only War AUF-2 lässt sich auch verallgemeinern und wäre damit eine eigene Anforderung. Dasselbe trifft auf AUF-3 das Setzen zu. Beim Bewegen dürfen Bases sich ebenfalls nicht überlappen.
+**Stellungnahme:** Du hast die Anforderung effektiv in drei Teile geschnitten. Damit bin ich einverstanden. An sich könntest du daraus auch drei Dateien machen, um das Zeichenlimit wieder zu reduzieren. Ausgangslage von Only War AUF-2 lässt sich auch verallgemeinern und wäre damit eine eigene Anforderung. Dasselbe trifft auf AUF-3 das Setzen zu. Beim Bewegen dürfen Bases sich ebenfalls nicht überlappen.
+
+**Stellungnahme:**
