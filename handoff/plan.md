@@ -7,7 +7,7 @@ Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
    Kriterien von [AUF-1](../domaene/anforderungen/phasen/aufstellen.md).
 
 Mehr ist nicht bereit: AUF-1 ist die einzige Anforderung. Vor der Freigabe arbeitet der
-Anforderungsautor [15](anliegen/15-aufstellen-begriffe-bereich-roll-off.md),
+Anforderungsautor Anliegen 15,
 [17](anliegen/17-auf1-reihe-nach-dem-beenden.md) und
 [18](anliegen/18-auf1-begriffe-und-grund-der-sperre.md) in AUF-1 ein; das Item folgt dieser
 Fassung, auch einem Kriterium für die Wahl des Gewinners des Roll-offs (15 F3).

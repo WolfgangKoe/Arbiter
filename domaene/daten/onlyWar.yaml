@@ -1,0 +1,18 @@
+# Mission Only War, Werte der Etappe 1 (domaene/etappen/01-aufstellen.md).
+# Alle Längen in Zoll (core_rules.txt:464).
+
+Mission: Only War                 # core_rules.txt:2166
+
+Spielfeld: [44, 60]               # rechteckig, core_rules.txt:452; Größe core_rules.txt:2315
+
+# Zwei Aufstellungszonen ohne Namen, nur gezählt (core_rules.txt:2322).
+# Form: je ein Band an einer der zwei langen Spielfeldkanten (60), die eine
+# gegenüber der anderen; keine Regelzahl, Entscheidung des Stakeholders
+# (handoff/anliegen/09-fragen-freigabe-etappen.md, F10 B).
+Aufstellungszone:
+  erste:
+    Spielfeldkante: 60
+    Tiefe: 9
+  zweite:
+    Spielfeldkante: 60
+    Tiefe: 9
