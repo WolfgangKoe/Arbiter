@@ -1,6 +1,6 @@
 # Koordinaten x und y gegen die Namensregel
 
-128 · Anliegen · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+128 · Anliegen · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Akzeptanztests rufen `Stelle(x=…, y=…)` auf (`conftest.py`, `auf1Test.py`);
