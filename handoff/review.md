@@ -10,7 +10,7 @@ Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `
    (Benennung, Rückverfolgung, Höchstmaße, ruff). Nur Text: ein Kommentar nach `wir.md`
    (`# Warum:`), Komplexität gering, Spiegel `arbiter/domaene/phasen/` ↔
    `tests/einheit/domaene/phasen/` mit Tests, Glossar → Code stimmt für alle kursiven Begriffe.
-   Code → Glossar nicht: [74](anliegen/74-glossarPruefungNachAnliegen63.md).
+   Code → Glossar ebenso, mit `Aufstellungszone (erste, zweite)` (Anliegen 74).
 3. **Erfüllt.** Das Item ist gelöscht. AUF-1.3 regelt den Zwischenzustand, der Akzeptanztest
    `testAuf1_3SolangeDieAufstellungszoneOffenIstIstKeinerAnDerReihe` ist grün (Anliegen 25).
    Die Zonen tragen keine erfundenen Namen mehr: `Aufstellungszone.erste`, `.zweite`
@@ -28,9 +28,7 @@ Seit der Retro geprüft, ohne Befund: `8ac70b7` und `265dac7` (Zonenwerte), `a96
 (`pyproject.toml` nur noch `*Test.py`; keine Datei `test_*.py` übrig).
 
 ## Offene Anliegen zur Technik
-- [74](anliegen/74-glossarPruefungNachAnliegen63.md): an den Organisationsentwickler, offen.
 - [50](anliegen/50-standUeberspringtFachkritik.md): wartet auf 56.
 
 ## Empfehlung
 DoD für das Item erfüllt, AUF-1 ist abgenommen. Aus diesem Review ist am Code nichts offen.
-74 vor dem Bau von P9 klären, sonst ist die Prüfung im ersten Lauf rot.
