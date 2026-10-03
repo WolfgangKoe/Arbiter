@@ -1,6 +1,6 @@
 # VS-Code-Erweiterung sprung/ löschen
 
-118 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+118 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [83](83-sprungErproben.md) entschieden: Die Erweiterung

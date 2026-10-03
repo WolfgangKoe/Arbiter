@@ -1,6 +1,6 @@
 # Sprung zwischen Kriterium und Test: Klick erproben, behalten oder löschen
 
-83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · offen
+83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · beantwortet
 
 ## Runde 1
 **Befund.** Aus Anliegen 53: Befehl `rueckverfolgung.py AUF-1.3` (Weg B) oder eine
@@ -62,4 +62,8 @@ Empfehlung: A.
 
 Antwort: B, es funktioniert in VS Code mit den angegebenen Shortcuts nicht. 
 
-Danach setzt du den Kopf auf `beantwortet`; sonst bleibt das Anliegen bei dir liegen.
+## Nach der Antwort zu F2
+**Befund.** B gilt: [124](124-sprungPerKlickErproben.md) an den Regelumsetzer, zuerst ein
+Wegwerf-Versuch, installiert ohne zweites Fenster. Die Erweiterung sucht ihr Ziel selbst und
+hängt nicht an Pylance, über das Strg+T bei dir nichts zeigte. Liegt der Versuch, frage ich
+dich hier, ob der Klick gelingt. Wartet auf 124.
