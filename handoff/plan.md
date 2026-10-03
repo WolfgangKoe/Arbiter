@@ -41,15 +41,20 @@ Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
 - Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
 
 ## Danach, nach Abhängigkeit
-Ablage, Zurücklegen und die erste Oberfläche: Karte mit Spielfeld und Zonen, Ziehen mit Maus
-und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden
+Ablage, Zurücklegen und die erste Oberfläche im Browser, Wunsch des Stakeholders
+([145](anliegen/145-ersteOberflaecheImBrowser.md), Schnitt [146](anliegen/146-schnittDerErstenOberflaeche.md)):
+Karte mit Spielfeld und Zonen, Ziehen mit Maus und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden
 mit fehlenden Modellen und Kohärenz (16 F3). Mit diesen drei ist Etappe 1 erreichbar.
 
 ## Offene Anliegen
 An dich:
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben, Runde 3.
+- [145](anliegen/145-ersteOberflaecheImBrowser.md): erste Oberfläche im Browser, ArbiterMap
+  als Vorbild, Reihenfolge für Plan 3.
 
 Zwischen Rollen:
+- [146](anliegen/146-schnittDerErstenOberflaeche.md): Schnitt der ersten Oberfläche, an den
+  Architekten, vor Plan 3.
 - Anliegen 108,
   Anliegen 109,
   Anliegen 110,
