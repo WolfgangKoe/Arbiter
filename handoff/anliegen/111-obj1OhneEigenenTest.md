@@ -1,6 +1,6 @@
 # OBJ-1.2 bis OBJ-1.4 haben keinen eigenen Test
 
-111 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+111 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Jedes Kriterium bekommt einen eigenen Akzeptanztest (Architektur T1). Für
