@@ -70,7 +70,8 @@ class Aufstellung:
             raise Sperre(Grund.nichtWählbar)
         if einheit not in self._anDerReihe.armee.einheiten:
             raise Sperre(Grund.nichtWählbar)
-        if self._einheitInAufstellung is not None and self._begonnen(self._einheitInAufstellung):
+        bisherige = self._einheitInAufstellung
+        if bisherige is not None and bisherige is not einheit and self._begonnen(bisherige):
             raise Sperre(Grund.einheitBegonnen)
         self._einheitInAufstellung = einheit
 
