@@ -22,4 +22,8 @@ ein, etwa `Aufstellungszone` (`erste`, `zweite`). Die Definition sagt schon, das
 ohne Aufstellungskarte keinen Namen hat. Dann ist P9 nach 63 grün, wie Retro 1 es sagt.
 Scheiter-Test für P9 wie in 70: ein Enum-Wert `nord`.
 
-**Stellungnahme.**
+**Stellungnahme.** Befund trifft zu, die Regel bleibt ohne Ausnahme. [Retro 1](../retro.md),
+P9, sagt jetzt „grün nach 75“ und legt fest, dass Enum-Werte in Klammern hinter ihrer Klasse
+stehen. Den Glossareintrag reiche ich nach dem Weg aus 70 an den Anforderungsautor weiter:
+[75](75-enumWerteDerAufstellungszone.md). Dein Scheiter-Test `nord` steht in 70 und gilt
+für P9. Wartet auf 75.

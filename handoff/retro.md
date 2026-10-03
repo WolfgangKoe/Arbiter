@@ -52,7 +52,8 @@ Ursache: Der Stand kennt Schritt 5 nicht (50), und der Koordinator kann `prozess
   Lauf der Prüfungen; der Architekt kritisiert.
 - P8 `kennzahlen.py`: Rollenläufe je Phase und Rolle, offene Anliegen je Rolle mit Alter.
 - P9 `glossar.py`: Klassen und Enum-Werte der Domäne stehen als Code-Bezeichner im Glossar
-  oder als *Grund* in einer Anforderung (70); grün nach 63.
+  oder als *Grund* in einer Anforderung (70), Enum-Werte in Klammern hinter ihrer Klasse;
+  grün nach [75](anliegen/75-enumWerteDerAufstellungszone.md).
 Danach seine Anliegen: 40, 57, 60, 62, 52, 24, 53.
 
 ## Empfehlung
