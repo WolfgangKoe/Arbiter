@@ -38,3 +38,5 @@ Zweck: Arbiter sperrt jede *Stelle*, an der ein *Modell* nicht stehen darf, und 
 - AUF-3.2 Liegt seine *Base* an der *Stelle* nicht *ganz in* der *Aufstellungszone* seines *Spielers*: *Sperre* ‚nicht ganz in der Zone‘ ([core_rules.txt:2322]).
 - AUF-3.3 *Überdeckt* seine *Base* an der *Stelle* die eines anderen *gesetzten* *Modells*: *Sperre* ‚Base überdeckt‘ (Etappe 1, Anliegen 09 F12 A, git).
 - AUF-3.4 Ist es an der *Stelle* in *Engagement Range* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Engagement Range‘ ([core_rules.txt:450]).
+- AUF-3.6 Ist das *Setzen* nach AUF-1.4 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist ‚nicht in Aufstellung‘.
+- AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft wie in AUF-3.2 bis AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).

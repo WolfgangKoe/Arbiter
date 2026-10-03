@@ -1,6 +1,6 @@
 # AUF-1.4 und AUF-3: zwei ungeregelte Fälle beim Setzen
 
-103 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+103 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: [Aufstellen](../../domaene/anforderungen/phasen/aufstellen.md), AUF-1.4 und
@@ -31,4 +31,15 @@ Zurücklegen regeln will.
 Beides gehört zum Kriterium, nicht zur Technik; die Entscheidung liegt bei dir oder, wenn du
 sie für fachlich offen hältst, beim Stakeholder.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in
+[aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md):
+1. AUF-3.6: Ist das *Setzen* nach AUF-1.4 gesperrt, wird die *Stelle* nicht geprüft, einziger
+   *Grund* ‚nicht in Aufstellung‘. Das folgt aus AUF-3 selbst, das nur *Modelle* der *Einheit
+   in Aufstellung* prüft; es ist keine Frage an den Stakeholder. AUF-3.5 bleibt frei für die
+   Antwort auf 100 F3, daher die Lücke.
+2. Statt einer vorläufigen Sperre AUF-3.7: Ein *gesetztes* *Modell* der *Einheit in
+   Aufstellung* lässt sich erneut *setzen*, mit denselben Prüfungen. Das hat der Stakeholder
+   entschieden (Etappe 1, Anliegen 16 F2 A); eine Sperre ‚schon gesetzt‘ widerspräche ihm und
+   würde später wieder gestrichen. Wo ein gesperrt umgesetztes *Modell* danach steht (16 F1, F4),
+   regelt AUF-3.7 nicht. Ob AUF-3.7 in Plan 2 kommt, entscheidet der Planer; ohne sie bleibt der
+   Fall in diesem Zyklus ungeprüft.
