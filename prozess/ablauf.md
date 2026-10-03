@@ -33,12 +33,15 @@ Organisationsentwickler sie vor.
    Ein bemängelter Test geht nicht in die Umsetzung, bis das Anliegen geklärt ist;
    widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
    Rest läuft weiter. Mechanismus: nur Text.
-3. Implementierer: macht die Tests grün; Refactoring nur aus einem Befund. Nach jedem Lauf
-   prüft der Reviewer (Kritik am Code).
+3. Implementierer: macht die Tests grün. Refactoring nur aus einem Befund, als Anliegen an
+   ihn von dem, der den Befund hat; der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt
+   „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüft der Reviewer (Kritik
+   am Code). Mechanismus: nur Text.
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
-   die abgenommenen Items.
+   die abgenommenen Items. Mechanismus: nur Text; der Stand soll den Schritt am Item des
+   Plans erkennen ([Anliegen 56](../handoff/anliegen/56-standErkenntDieAbnahme.md)).
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Danach meldet der
    Stand die Prozessphase; eine Freigabe ist nicht nötig.
 
@@ -73,8 +76,10 @@ Auslöser: Review n liegt vor.
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
    Prozess-Items nur aus einem Befund. Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
-   Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item.
-   Mechanismus: nur Text.
+   Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine
+   Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
+   darauf; grafisch und kurz, nur Seltenes (Perspektiven, Rollen, Ordner), Rollentabelle und
+   Ordnerbaum per Skript. Mechanismus: nur Text.
 2. Regelumsetzer: Mechanismen zu den Prozess-Items, je mit Scheiter-Test.
 3. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
 4. Freigabe: Der Stakeholder schreibt „.“, der Koordinator committet `Freigabe Retro <n>`.

@@ -1,6 +1,6 @@
 # Stand: Review schreiben überspringt die Fachkritik
 
-50 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+50 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [`ablauf.md`](../../prozess/ablauf.md), Technikphase: 4 Reviewer (DoD, Code),
@@ -22,4 +22,9 @@ vorhanden → Stand nennt den Fachkritiker, nicht die Prozessphase. Alternativ S
 umformulieren, dass das Review vor der Abnahme steht und die Abnahme als offener Punkt in
 die Prozessphase geht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, erster Vorschlag: Die Reihenfolge in `ablauf.md` bleibt,
+Abnahme vor Review; der Stand muss ihr folgen. Schritt 5 nennt dort jetzt „nur Text“ und den
+Mechanismus, erkennbar am gelöschten Item. Den Stand baut der Regelumsetzer:
+[Anliegen 56](56-standErkenntDieAbnahme.md), mit deinem Scheiter-Test und dem Fall „Review
+steht schon, Item noch da“ (Zyklus 1). Schritt 4 trenne ich im Stand nicht ab: Der Reviewer
+prüft ohnehin nach jedem Lauf des Implementierers. Nachprüfen kannst du nach 56.

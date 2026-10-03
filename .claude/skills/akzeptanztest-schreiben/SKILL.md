@@ -7,8 +7,9 @@ description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau
 Benennung nach `prozess/praemissen/wir.md`, Umfang nach `.claude/agents/testautor.md`.
 
 ## Datei
-Eine Testdatei je Anforderungsdatei, im gespiegelten Ordner:
-`domaene/anforderungen/phasen/aufstellen.md` → `technik/tests/akzeptanz/phasen/aufstellenTest.py`.
+Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1: AUF-1 →
+`technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py`. Heute steht AUF-1 als einzige
+Anforderung ihrer Datei in `phasen/aufstellenTest.py`; mit der zweiten wird geteilt.
 Erste Zeile ein einzeiliger Docstring mit Kürzel und Name: `"""AUF-1 · Reihenfolge der Aufstellung."""`.
 Fixtures in `conftest.py` heißen nach dem, was sie sind (`ersterSpieler`), nicht `a`, `b`.
 
@@ -22,7 +23,7 @@ Fixtures in `conftest.py` heißen nach dem, was sie sind (`ersterSpieler`), nich
   keine Schleife über Asserts.
 
 ## Beispiel
-AUF-1.6 aus `technik/tests/akzeptanz/phasen/test_auf_1.py`, nach der Prämisse benannt:
+AUF-1.6 aus `technik/tests/akzeptanz/phasen/aufstellenTest.py`:
 
 ```python
 def sperrgrund(handlung, *argumente) -> Grund:
@@ -33,22 +34,22 @@ def sperrgrund(handlung, *argumente) -> Grund:
 
 def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(aufstellung, ersterSpieler, zweiterSpieler):
     nachDerWahl(aufstellung, gewinner=ersterSpieler)
-    begonnene, andere = zweiterSpieler.armee.einheiten
-    erstesModell, *weitereModelle = begonnene.modelle
-    aufstellung.einheitInAufstellungWählen(begonnene)
+    begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
+    erstesModell, *_ = begonneneEinheit.modelle
+    aufstellung.einheitInAufstellungWählen(begonneneEinheit)
     aufstellung.modellSetzen(erstesModell)
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, andere)
+    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, andereEinheit)
 
-    assert grund is Grund.EINHEIT_BEGONNEN
-    assert aufstellung.einheitInAufstellung is begonnene
+    assert grund is Grund.einheitBegonnen
+    assert aufstellung.einheitInAufstellung is begonneneEinheit
 ```
 
 Gut: Der Name sagt Kriterium und Aussage, die Handlung steht allein, geprüft werden Grund und
 unveränderter Zustand, jedes Fachobjekt hat einen Namen aus dem Glossar.
 
 ## Gegenbeispiel
-AUF-1.5 aus `test_auf_1.py`, wie es dort steht:
+AUF-1.5, wie es nicht stehen soll:
 
 ```python
 def test_auf_1_5_nach_der_aufstellung_ist_keine_einheit_wählbar(aufstellung, a, b):

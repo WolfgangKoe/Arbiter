@@ -12,5 +12,6 @@ Item, Glossarzeile (`domaene/CLAUDE.md`); `technik/architektur.md` 6.000.
 
 Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß sperrt die Prüfung, daraus
 wird ein Item bis zum Kürzungsmaß; bis dahin wächst die Datei nicht. Kürzen heißt aufteilen,
-weil Read die ganze Datei lädt. Code-Modul, Einheits- und Akzeptanztest-Datei 12.000/8.000,
+weil Read die ganze Datei lädt. Code-Modul und Einheitstest-Datei 12.000/8.000,
+Akzeptanztest-Datei 20.000/12.000 (darüber wird die Anforderung geteilt: Architektur, T1),
 Anforderungsdatei 12.000/8.000, Backlog je Perspektive 3.000/2.000. Mechanismus: nur Text.

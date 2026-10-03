@@ -17,9 +17,8 @@ Anforderungsautor (Anforderungen, Glossar, Daten); `ziel.md` ändert nur der Sta
 - `backlog.md`, `items/<id>.md`: Umfang (Kriterien-IDs), warum jetzt, Abhängigkeit, Link auf
   Anliegen; höchstens 400 Zeichen. Ein erledigtes Item wird gelöscht.
 
-Quellen, nur lesen: Regeltexte in `ArbiterMap/reference/rules/` (Fundstelle
-`<datei>:<zeile>`). Alte Spezifikationen (`Arbiter/Arbiter_Specs/*.pdf`,
-`ArbiterMap/docs/spec/domain_rules.md`) zeigen die Absicht des Stakeholders; das Ziel geht
-vor, ein Widerspruch wird eine Frage.
+Quellen, nur lesen: Regeltexte in `referenz/rules/` (Fundstelle `<datei>:<zeile>`). Alte
+Spezifikationen (`referenz/domainRules.md`, `Arbiter/Arbiter_Specs/*.pdf`) zeigen die
+Absicht des Stakeholders; das Ziel geht vor, ein Widerspruch wird eine Frage.
 
 Höchstmaße: nur Text, Etappen `hoechstmassTest.py`.

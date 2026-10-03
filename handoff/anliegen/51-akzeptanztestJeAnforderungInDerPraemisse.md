@@ -1,6 +1,6 @@
 # Prämisse 3 und Kennzahlen: Akzeptanztest je Anforderung
 
-51 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+51 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat entschieden (Anliegen 44, Commit `91905db`, F1 = A, F2 = A):
@@ -29,4 +29,10 @@ schreibt in dieselbe Datei; das Höchstmaß ist heute schon verletzt.
 Mechanismus (Höchstmaß, Zuordnung) baut der Regelumsetzer:
 [Anliegen 52](52-akzeptanztestJeAnforderung.md).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt, ohne zu wiederholen, was T1 sagt:
+1. [`wir.md`](../../prozess/praemissen/wir.md) Nr. 3: je Anforderung eine Datei, Name und
+   Ort nach T1; Mechanismus für die Datei je Anforderung „nur Text“ bis Anliegen 52.
+2. [`kennzahlen.md`](../../prozess/kennzahlen.md): Akzeptanztest-Datei 20.000/12.000,
+   getrennt von Code-Modul und Einheitstest; das Teilen der Anforderung verweist auf T1.
+3. Skill `akzeptanztest-schreiben`, Datei: wie T1, `aufstellenTest.py` als heutige Form;
+   das Beispiel zeigt AUF-1.6, wie es heute in `aufstellenTest.py` steht.

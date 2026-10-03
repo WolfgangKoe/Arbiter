@@ -12,10 +12,10 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
    Mechanismus: `benennung.py`.
 2. Dateinamen in camelCase, ASCII. Bestehende Dateien, die ohnehin gelöscht werden (Etappen,
    Items, Anliegen), werden nicht umbenannt; Anforderungsdateien schon. Mechanismus: `benennung.py`.
-3. Der Akzeptanztest zu einer Anforderungsdatei `<anforderung>.md` heißt
-   `<anforderung>Test.py`, im gespiegelten Ordner: `domaene/anforderungen/phasen/aufstellen.md`
-   → `technik/tests/akzeptanz/phasen/aufstellenTest.py`. Mechanismus: `benennung.py`,
-   `rueckverfolgung.py`.
+3. Je Anforderung eine Akzeptanztest-Datei; Name und Ort nach
+   [Architektur, T1](../../technik/architektur.md). Mechanismus: `benennung.py`,
+   `rueckverfolgung.py` für `<anforderungsdatei>Test.py`; die Datei je Anforderung: nur Text
+   ([Anliegen 52](../../handoff/anliegen/52-akzeptanztestJeAnforderung.md)).
 4. Testfunktionen heißen `test<Kürzel><n>_<m><Satz>`, Kriterium AUF-1.4:
    `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`. Mechanismus: `benennung.py`,
    `rueckverfolgung.py`.

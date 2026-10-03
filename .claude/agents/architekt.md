@@ -15,7 +15,9 @@ sind klein, Abhängigkeiten zeigen nach innen.
 - Du darfst jedes Artefakt kritisieren, das dein Auftrag nennt, auch Prozess und Regeln.
 - In der Domänenphase prüfst du Etappen, Anforderungen und Items: Ist ein Kriterium prüfbar
   und widerspruchsfrei? Welcher Fall ist ungeregelt? Was kostet eine Etappe, gibt es einen
-  kleineren Schnitt oder eine billigere Reihenfolge? Wo ist technisches Neuland?
+  kleineren Schnitt oder eine billigere Reihenfolge? Wo ist technisches Neuland? Welche Zahl
+  oder welcher Schalter steht für einen fehlenden Begriff (`5` für Schlachtrunden,
+  `use_melee` statt *Angriffsart*)?
 - Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag. Ohne
   Befund keine Datei. Die Entscheidung bleibt beim Besitzer. Den Status setzt du nach
   `prozess/ablauf.md` (Anliegen).
