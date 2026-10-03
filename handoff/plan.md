@@ -3,8 +3,10 @@
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
 ## Items
-1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md): AUF-2.1 bis AUF-2.5
-2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): AUF-3.1 bis AUF-3.3, AUF-3.6, AUF-3.7, nach Item 1
+1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md): OBJ-1, AUF-2.4 bis
+   AUF-2.7
+2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): QUE-1.1, QUE-1.2, AUF-3.2,
+   AUF-3.6, AUF-3.7, nach Item 1
 
 ## Empfehlung
 Freigeben mit beiden Items. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim Setzen
@@ -13,10 +15,10 @@ Bewegen, Schießen und Charge aufbauen; prüfen lassen sie sich erst mit Bases u
 Ausgangslage. Reicht der Zyklus nur für eins, kommt Item 1 allein. Beide ohne Oberfläche:
 Nach Zyklus 2 ist noch nichts klickbar.
 
-Der Zyklus ist größer als die zwei Items aussehen (Anliegen 102):
+Der Zyklus ist größer als die zwei Items aussehen (Architekt, Anliegen 102, git):
 - Item 1 liest die Daten der Ausgangslage über `katalog/`, ohne Datenbank; der Regelumsetzer
   baut im selben Zyklus den Importvertrag (Architektur A1).
-- Item 2 ändert die grünen AUF-1-Tests: Setzen mit Stelle, Modelle mit Base.
+- Item 2 ändert die grünen Tests zu AUF-1: Setzen mit Stelle, Modelle mit Base.
 - Item 2 ist technisches Neuland: Vor dem Testautor legt der Architekt nach einem
   Wegwerf-Versuch fest, wie eine Stelle angegeben wird und womit gerechnet wird, damit die
   Grenzfälle aus 100 F2 ohne Toleranz gelten; dazu die Messungen (M1) um *überdecken*.
@@ -32,9 +34,8 @@ Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
 - Gesetzt wird in Tests nur aus der Ausgangslage oder von der vorigen Stelle (AUF-3.7); die
   Ablage als Ort neben der Karte und Zurücklegen kommen später (Etappe 1, Anliegen 16 F1, F2,
   git).
-- Mit Sperre bleibt der Zustand unverändert (Architektur D2): Das Modell bleibt ungesetzt oder an
-  seiner vorigen Stelle.
-  Stehenbleiben mit Grund, „zurück“, „gemeinsam übergehen“ und Protokoll kommen später (16 F4).
+- Mit Sperre bleibt der Zustand unverändert (Architektur D2): Das Modell bleibt ungesetzt
+  oder an seiner vorigen Stelle. Stehenbleiben mit Grund, „zurück“, „gemeinsam übergehen“ und Protokoll kommen später (16 F4).
 - Akzeptanztests beenden eine Einheit erst, wenn alle ihre Modelle gesetzt sind und die Einheit
   in Kohärenz steht; die Sperren beim Beenden kommen später (16 F3).
 - Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
@@ -47,19 +48,13 @@ Kohärenz (16 F3). Mit diesen vier ist Etappe 1 erreichbar.
 
 ## Offene Anliegen
 An dich:
-- [105](anliegen/105-aufstellenAufteilen.md): Aufteilung von Aufstellen. Mit F2 A ändern sich
-  die Kennungen beider Items vor der Freigabe; die neuen trage ich nach deiner Antwort ein.
-- [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
+- [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben, Runde 3.
 
 Zwischen Rollen:
-- Anliegen 104: AUF-3.6 und AUF-3.7 in Item 2, angenommen,
-  Nachprüfung durch den Architekten.
-- Anliegen 102: Kritik des Architekten an Plan 2, angenommen,
-  seine Nachprüfung.
-- [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md): deine Antworten stehen, der
-  Anforderungsautor arbeitet sie ein (Glossar, AUF-3.4, Kriterium zu F3); Plan 2 hängt nicht
-  daran.
 - [97](anliegen/97-kritikAmZweckDerAufstellung.md): deine Kritik am Zweck der Aufstellung,
-  angenommen, deine Nachprüfung.
-- Anliegen 92, Anliegen 96 an den
-  Regelumsetzer, angenommen, Nachprüfung durch den Reviewer.
+  beim Anforderungsautor.
+- [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md): deine Antworten stehen, der
+  Anforderungsautor arbeitet sie ein (Nahkampfreichweite, Kriterium zu F3); Plan 2 hängt nicht
+  daran.
+- [106](anliegen/106-neueKennungenInItemsUndPlan.md): neue Kennungen nach 105 in Items und
+  Plan, angenommen, Nachprüfung durch den Anforderungsautor.

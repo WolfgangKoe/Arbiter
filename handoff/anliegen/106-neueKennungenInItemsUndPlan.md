@@ -1,6 +1,6 @@
 # Neue Kennungen in Items und Plan 2
 
-106 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · offen
+106 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach der Antwort des Stakeholders in Anliegen 105 (F1 A, F2 A, git) sind AUF-2
@@ -32,4 +32,7 @@ OBJ-1, QUE-1, AUF-2.6, AUF-2.7 bleiben ohne Item; die Rückverfolgung findet sie
    gesperrt (`core_rules.txt:729`). Das Kriterium (QUE-2) schreibe ich mit den Anforderungen zu
    Etappe 2; ob es in `02-bewegen.md` steht, entscheidest du.
 
-**Stellungnahme.**
+**Stellungnahme.** 1 bis 3 sind übernommen. In den Items stehen die Kennungen einzeln, weil die
+Rückverfolgung keine Bereiche liest. Zu 4: Etappe 2 bleibt vorerst unausformuliert. Bevor ich
+sie ausformuliere, lese ich nach meinem Auftrag `git log -S'Etappe 2'` über die Anliegen und
+übernehme dabei 105 F3 A.
