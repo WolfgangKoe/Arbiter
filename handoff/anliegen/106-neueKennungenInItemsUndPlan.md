@@ -1,6 +1,6 @@
 # Neue Kennungen in Items und Plan 2
 
-106 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · angenommen
+106 · Kritik · von Anforderungsautor (Domäne) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach der Antwort des Stakeholders in Anliegen 105 (F1 A, F2 A, git) sind AUF-2

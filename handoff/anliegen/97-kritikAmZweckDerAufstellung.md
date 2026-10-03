@@ -1,6 +1,6 @@
 # Kritik Der Zweck der Anforderung Aufstellung.md ist zu knapp.
 
-97 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
+97 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 "Zweck: Reihenfolge von Only War. Alle Kriterien: `core_rules.txt:2322`." 
@@ -39,5 +39,4 @@ Angenommen und umgesetzt nach deinen Antworten in Anliegen 105 (F1 A, F2 A, F3 A
 - Bewegen: Arbiter prüft den gezogenen Weg (`core_rules.txt:729`). Das Kriterium QUE-2 kommt
   mit den Anforderungen zu Etappe 2.
 
-Die neuen Kennungen in Item 1, Item 2 und Plan 2 trägt der Planer ein; wartet auf
-[106](106-neueKennungenInItemsUndPlan.md).
+Die neuen Kennungen stehen in Item 1, Item 2 und Plan 2 (Anliegen 106, erledigt, git).

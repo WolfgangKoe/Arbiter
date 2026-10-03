@@ -34,6 +34,7 @@ Zweck: Womit die *Aufstellung* beginnt; woraus *Armeen* und *Spielfeld* bestehen
 Zweck: Arbiter sperrt beim *Setzen* nach [QUE-1](../querschnitt.md) auch jede *Stelle*, die nur die *Aufstellung* verbietet, und nennt den *Grund*. Gemessen wird der *Abstand* ([core_rules.txt:464]).
 
 - AUF-3.2 Liegt die *Base* des *Modells* an der *Stelle* nicht *ganz in* der *Aufstellungszone* seines *Spielers*: *Sperre* ‚nicht ganz in der Zone‘ ([core_rules.txt:2322]).
-- AUF-3.4 Ist es an der *Stelle* in *Engagement Range* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Engagement Range‘ ([core_rules.txt:450]).
+- AUF-3.4 Ist es an der *Stelle* in *Nahkampfreichweite* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Nahkampfreichweite‘ ([core_rules.txt:450]).
+- AUF-3.5 Sperrt an der *Stelle* mehr als eines von QUE-1.2, AUF-3.2 und AUF-3.4, nennt Arbiter den *Grund* jedes davon (Anliegen 100 F3 A, git).
 - AUF-3.6 Ist das *Setzen* nach AUF-1.4 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist ‚nicht in Aufstellung‘.
 - AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft nach QUE-1.2, AUF-3.2 und AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).

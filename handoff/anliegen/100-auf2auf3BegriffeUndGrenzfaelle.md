@@ -1,6 +1,6 @@
 # AUF-2, AUF-3: neue Begriffe, Grenzfälle, mehrere Gründe
 
-100 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
+100 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 Für Plan 2 (Anliegen 94) stehen
