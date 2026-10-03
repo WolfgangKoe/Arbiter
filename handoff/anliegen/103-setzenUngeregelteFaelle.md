@@ -1,6 +1,6 @@
 # AUF-1.4 und AUF-3: zwei ungeregelte Fälle beim Setzen
 
-103 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · angenommen
+103 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: [Aufstellen](../../domaene/anforderungen/phasen/aufstellen.md), AUF-1.4 und

@@ -13,7 +13,7 @@ Bewegen, Schießen und Charge aufbauen; prüfen lassen sie sich erst mit Bases u
 Ausgangslage. Reicht der Zyklus nur für eins, kommt Item 1 allein. Beide ohne Oberfläche:
 Nach Zyklus 2 ist noch nichts klickbar.
 
-Der Zyklus ist größer als die zwei Items aussehen ([102](anliegen/102-plan2KostenUndGrenzen.md)):
+Der Zyklus ist größer als die zwei Items aussehen (Anliegen 102):
 - Item 1 liest die Daten der Ausgangslage über `katalog/`, ohne Datenbank; der Regelumsetzer
   baut im selben Zyklus den Importvertrag (Architektur A1).
 - Item 2 ändert die grünen AUF-1-Tests: Setzen mit Stelle, Modelle mit Base.
@@ -48,7 +48,7 @@ An dich:
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
 
 Zwischen Rollen:
-- [102](anliegen/102-plan2KostenUndGrenzen.md): Kritik des Architekten an Plan 2, angenommen,
+- Anliegen 102: Kritik des Architekten an Plan 2, angenommen,
   seine Nachprüfung.
 - [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md): deine Antworten stehen, der
   Anforderungsautor arbeitet sie ein (Glossar, AUF-3.4, Kriterium zu F3); Plan 2 hängt nicht
