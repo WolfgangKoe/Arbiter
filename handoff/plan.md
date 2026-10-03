@@ -3,7 +3,7 @@
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
 ## Item
-1. [Reihenfolge der Aufstellung](../domaene/items/reihenfolge-der-aufstellung.md): alle
+1. *Reihenfolge der Aufstellung*, abgenommen: alle
    Kriterien von [AUF-1](../domaene/anforderungen/phasen/aufstellen.md).
 
 Mehr ist nicht bereit: AUF-1 ist die einzige Anforderung. Vor der Freigabe arbeitet der
