@@ -64,4 +64,4 @@ Danach seine Anliegen: 40, 57, 60, 62, 52, 24, 53.
    [Moderator](../.claude/agents/moderator.md), [Ablauf, Anliegen](../prozess/ablauf.md#anliegen)
    und [Prämisse](../prozess/praemissen/wir.md), Punkt 9.
 3. `handoff/kritik-entwickler.md` ist ausgewertet; `VORGEHEN.md` löschbar nach
-   [57](anliegen/57-pyprojectOhneVorgehen.md).
+   Anliegen 57.

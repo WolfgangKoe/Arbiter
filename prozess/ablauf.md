@@ -9,8 +9,8 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
    eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen. Jedes
    Item steht als Link `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme
-   (Technikphase, Schritt 5). Mechanismus: nur Text
-   ([Anliegen 76](../handoff/anliegen/76-planOhneItemLink.md)).
+   (Technikphase, Schritt 5). Mechanismus: `plan.py` (`itemsOhneLink`), `stand.py` nennt
+   den Planer, solange der Link fehlt.
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
 7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
 
@@ -55,11 +55,13 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 ### DoD (Item fertig)
 1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`.
    Mechanismus: nur Text.
-2. Prüfmechanismen grün. Mechanismus: Benennung (`benennung.py`), Kriterium ↔ Test
-   (`rueckverfolgung.py`), Höchstmaße (`hoechstmassTest.py`), alle im Lauf von
-   `python3 -m pytest prozess/pruefungen`, ruff dort über `konfigurationTest.py`. Nur Text:
-   toter Code, Komplexität, Kommentare nach `prozess/praemissen/wir.md`, Spiegel,
-   Glossar ↔ Code.
+2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`benennung.py`), Kriterium ↔
+   Test (`rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
+   rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
+   Stand), Höchstmaße (`hoechstmassTest.py`), Komplexität (`komplexitaetTest.py`), Code →
+   Glossar (`glossar.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
+   über `konfigurationTest.py`. Nur Text: toter Code, Kommentare nach
+   `prozess/praemissen/wir.md`. Glossar → Code ist Urteil.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.
@@ -109,8 +111,8 @@ Mechanismus: nur Text.
 - Testautor auf Opus: Fachkritik oder Mutationstests zeigen wiederholt fehlende Fälle.
 
 ## Kritik am Code
-Nach jeder Änderung von Code (`prozess/praemissen/wir.md`) prüft ihn ein passender Kritiker,
-bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
+Nach jeder Änderung von Code (`prozess/praemissen/wir.md`) prüfen ihn alle Kritiker der
+getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
 
 Code | schreibt | prüft
 ---|---|---
@@ -119,9 +121,11 @@ Code | schreibt | prüft
 `prozess/pruefungen/`, `.claude/settings.json` | Regelumsetzer | Reviewer
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt, Reviewer
 
-Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf als
-`Kritik <kurzer Hash>` (notfalls `--allow-empty`); der Stand meldet den ersten Code-Commit
-ohne Kritik. Mechanismus: `codekritik.py` im Stand.
+Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf, der
+Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
+(`Kritik <a> <b>`, notfalls `--allow-empty`). Jeder andere Commit, der Code ändert, wird
+geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ersten seit der
+letzten Freigabe ohne Kritik. Mechanismus: `codekritik.py` im Stand.
 
 ## Anliegen
 Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen.

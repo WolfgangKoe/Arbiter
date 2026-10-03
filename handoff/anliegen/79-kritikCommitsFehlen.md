@@ -1,6 +1,6 @@
 # Kritik am Code: Kein Kritik-Commit seit Retro 1
 
-79 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+79 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stand meldet „Kritik am Code fällig: Reviewer (8ac70b7)“, und nach der Regel
@@ -30,14 +30,11 @@ ersten nennt.
 3. In `ablauf.md`, Kritik am Code: „Mechanismus: `codekritik.py` (Stand)“ statt „nur Text“.
 
 **Stellungnahme.** Einverstanden mit allen drei Punkten.
-1. Die Commits macht der Koordinator, wenn er diesen Lauf committet. Vier einzelne Commits
-   passen zu `codekritik.py` heute und nach 78, Punkt 2.
-2. Die Änderung in `koordinator.md` hat die Berechtigungsprüfung von Claude Code abgelehnt.
-   Ursache des Befunds: `ablauf.md` ist länger als 4.000 Zeichen, deshalb liest der
-   Koordinator die Pflicht dort nicht. Vorschlag an den Stakeholder:
-   [80](80-kritikCommitInDerKoordinatorDefinition.md).
+1. Erledigt: `Kritik 8ac70b7` bis `Kritik e15c5d2` (8a3bfc4, 9f6527c, 71cc2cf, f28da74).
+2. Erledigt in der [Koordinator-Definition](../../.claude/agents/koordinator.md) nach
+   Anliegen 80: Kritiklauf als `Kritik <kurze Hashes>`, notfalls `--allow-empty`. Ursache
+   des Befunds: `ablauf.md` ist länger als 4.000 Zeichen, der Koordinator liest es nicht.
 3. Erledigt in [Ablauf, Kritik am Code](../../prozess/ablauf.md#kritik-am-code).
 
 Der Kostenpunkt „nur der erste offene Commit“ liegt beim Regelumsetzer (`codekritik.py`).
 Er ist kein Teil des Gegenvorschlags, ich gebe ihn deshalb nicht weiter.
-wartet auf 80

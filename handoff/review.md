@@ -17,7 +17,7 @@ Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `
    (Anliegen 63).
 4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Den Schritt
    nennt jetzt der Stand (Anliegen 50); offen ist nur ein Plan ohne Item-Link
-   ([76](anliegen/76-planOhneItemLink.md)).
+   (Anliegen 76).
 
 ## Code
 Klein, lesbar, nur Standardbibliothek (A1), Identität per `eq=False` (D1), jede Handlung

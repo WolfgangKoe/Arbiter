@@ -79,7 +79,7 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   [Anliegen 83](../handoff/anliegen/83-sprungErproben.md).
 - `tests/einheit/` spiegelt `arbiter/`: `tests/einheit/domaene/phasen/aufstellenTest.py`
   zu `arbiter/domaene/phasen/aufstellen.py` (Name offen:
-  [Anliegen 28](../handoff/anliegen/28-benennungOffenePunkte.md)). Jeder Ordner dort hat eine `__init__.py`; sonst
+  Anliegen 28). Jeder Ordner dort hat eine `__init__.py`; sonst
   kollidiert der Dateiname mit dem Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.
 - `arbiter` liegt über den Suchpfad `technik` in `pyproject.toml` im Pfad, ohne
   `sys.path`-Eingriff. Prüft: `konfigurationTest.py`.

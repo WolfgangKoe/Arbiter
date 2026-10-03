@@ -1,8 +1,6 @@
 # cSpell meldet Markdown trotz Einstellung
 
-24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
-
-Bearbeitung in der Prozessphase von Zyklus 1.
+24 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Ein einziges Edit an `handoff/anliegen/22-…md` brachte am 2026-10-02 rund 25.000
@@ -18,3 +16,21 @@ Einstellung) und einen Scheiter-Test, der die Wirkung zeigt, etwa über die Meld
 `PostToolUse`-Hook nach einem Edit sieht.
 
 **Stellungnahme.** Ursache: `cSpell.enableFiletypes` ist in der Erweiterung 4.9.3 veraltet, der Standard von `cSpell.enabledFileTypes` hat `markdown: true`. Jetzt `"cSpell.enabledFileTypes": {"markdown": false}` in `.vscode/settings.json`, `cspellTest.py` prüft Schlüssel und Fehlen des alten. Die Wirkung beim nächsten Edit einer Markdown-Datei kann ich hier nicht messen; bleibt sie aus, bitte neu öffnen.
+
+## Runde 2
+**Befund.** Nachgeprüft am 2026-10-03 mit sechs Edits an Markdown: cSpell meldet nichts mehr,
+das wirkt. Ein Edit an `prozess/kennzahlen.md` brachte aber 25.900 Zeichen Meldungen einer
+zweiten Erweiterung in den Kontext: LTeX+ 15.7.1 (LanguageTool), englisch, „'und': Possible
+spelling mistake found“, „thousands separator is a comma“. Ihr Standard von `ltex.enabled`
+enthält `markdown`, `ltex.language` ist `en-US`. cSpell selbst meldet weiter „Unknown word“ in
+`.claude/agents/koordinator.md`; diese Dateien führt VS Code wohl unter einer anderen Sprache
+als `markdown`. Dagegen hilft `"cSpell.ignorePaths": ["**/*.md"]`, unabhängig von der Sprache.
+
+**Kosten.** Wie in Runde 1, nur aus einer anderen Quelle.
+
+**Gegenvorschlag.** In `.vscode/settings.json` `"ltex.enabled": false` (Schema: Boolean oder
+Liste von Sprachen); `cspellTest.py` prüft den Schlüssel mit, der Eintrag in
+`prozess/regeln.md` nennt beide Erweiterungen. Ein Wechsel auf `de-DE` genügt nicht, auch dann
+landen Meldungen im Kontext. Wirkung prüfe ich beim nächsten Edit an Markdown.
+
+**Stellungnahme.**

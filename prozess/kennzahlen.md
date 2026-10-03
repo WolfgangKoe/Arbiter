@@ -10,11 +10,13 @@ für die Retro. Mechanismus: nur Text.
 
 ## Höchstmaße
 In Zeichen. Geprüft (`hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,
-Root- und Ordner-CLAUDE.md, Anliegen. Nur Text: Plan, Review, Retro je 4.000; Anforderung,
+Root- und Ordner-CLAUDE.md, Anliegen, `handoff/moderation.md` (4.000), Akzeptanztest-Datei
+(20.000). Nur Text: Plan, Review, Retro je 4.000; Anforderung,
 Item, Glossarzeile (`domaene/CLAUDE.md`); `technik/architektur.md` 6.000.
 
 Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß sperrt die Prüfung, daraus
 wird ein Item bis zum Kürzungsmaß; bis dahin wächst die Datei nicht. Kürzen heißt aufteilen,
 weil Read die ganze Datei lädt. Code-Modul und Einheitstest-Datei 12.000/8.000,
 Akzeptanztest-Datei 20.000/12.000 (darüber wird die Anforderung geteilt: Architektur, T1),
-Anforderungsdatei 12.000/8.000, Backlog je Perspektive 3.000/2.000. Mechanismus: nur Text.
+Anforderungsdatei 12.000/8.000, Backlog je Perspektive 3.000/2.000. Mechanismus: das
+Höchstmaß der Akzeptanztest-Datei prüft `hoechstmassTest.py`, alles andere hier nur Text.

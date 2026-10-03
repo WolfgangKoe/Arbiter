@@ -15,7 +15,7 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
 3. Je Anforderung eine Akzeptanztest-Datei; Name und Ort nach
    [Architektur, T1](../../technik/architektur.md). Mechanismus: `benennung.py`,
    `rueckverfolgung.py` für `<anforderungsdatei>Test.py`; die Datei je Anforderung: nur Text
-   ([Anliegen 52](../../handoff/anliegen/52-akzeptanztestJeAnforderung.md)).
+   (Anliegen 52).
 4. Testfunktionen heißen `test<Kürzel><n>_<m><Satz>`, Kriterium AUF-1.4:
    `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`. Mechanismus: `benennung.py`,
    `rueckverfolgung.py`.
@@ -34,6 +34,7 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
    für Verschachtelung und Zahl der Fälle: [Ablauf, DoD](../ablauf.md#dod-item-fertig).
 
 Namen, die ein Werkzeug vorgibt (`conftest.py`, `__init__`, `CLAUDE.md`, Skill-Ordner),
-bleiben. Offen: Konstanten und Enum-Werte, nummerierte Dateinamen, Testdateien zu Modulen
-([Anliegen 28](../../handoff/anliegen/28-benennungOffenePunkte.md)).
+bleiben. Konstanten und Enum-Werte in camelCase wie Variablen (`Grund.nichtWählbar`).
+Nummerierte Dateien: Nummer, Bindestrich, camelCase (`28-benennungOffenePunkte.md`).
+Testdateien zu einem Modul: `<modul>Test.py`. Mechanismus: `benennung.py`.
 Wie ein Akzeptanztest danach aussieht: Skill `akzeptanztest-schreiben`.

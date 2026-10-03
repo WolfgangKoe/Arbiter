@@ -1,6 +1,6 @@
 # Textteile in Ablauf und Kennzahlen nachziehen: Mechanismen aus 3e61977
 
-81 · Anliegen · von Regelumsetzer (Prozess) → Organisationsentwickler · Runde 1/3 · offen
+81 · Anliegen · von Regelumsetzer (Prozess) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit 3e61977 prüfen Mechanismen, was `prozess/ablauf.md`, `prozess/kennzahlen.md`
@@ -30,4 +30,5 @@ und Rollen prüfen von Hand, was die Prüfung schon tut.
 Regel bleibt deine Sache. Nicht geändert: die Zeilen zu Kennzahlen („nur Text“ für die
 Schwellen).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: 1 in `kennzahlen.md`; 2, 3, 4 in `ablauf.md` (Schritt 5,
+DoD 2 mit Spiegel, Kritik am Code); 5 in `praemissen/wir.md`, Regel 3.

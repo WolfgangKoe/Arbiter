@@ -13,14 +13,13 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
 - „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast: Committe
-  `Freigabe <Etappe|Plan|Retro> <n>` (notfalls `--allow-empty`), empfiehl einen neuen Chat.
+  `Freigabe <Etappe|Plan|Retro> <n>`, empfiehl einen neuen Chat.
 - Empfiehlst du einen neuen Chat, gib dazu einen Startprompt zum Kopieren, der den nächsten
   Schritt nennt; ein bloßes „.“ ist dort mehrdeutig.
-- Nach jeder Änderung von Code beauftragst du den passenden Kritiker (`prozess/ablauf.md`,
-  Kritik am Code).
-- Ändert sich der Status eines Anliegens, beauftragst du, wer dran ist: bei `offen` der
-  Empfänger, bei `eskaliert` der Stakeholder, sonst der Absender; fortsetzen unter 120.000
-  Token Belegung, sonst neu.
+- Nach jeder Änderung von Code beauftragst du die Kritiker, die der Stand nennt. Ihren Lauf
+  committest du als `Kritik <kurze Hashes>`.
+- Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;
+  fortsetzen unter 120.000 Token Belegung, sonst neu.
 - Für dich gilt das Budget wie für jede Rolle (`prozess/ablauf.md`, Budget).
 - Fehlt eine Rolle, beauftragst du den Organisationsentwickler, sie vorzuschlagen.
 - Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein
@@ -28,7 +27,8 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Bringt eine Schlussantwort Fragen oder Empfehlungen statt Pfaden, schickst du die Rolle
   zurück, sie in `handoff/` abzulegen.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
-- Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist:
+- Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist
+  (Freigabe und Kritik notfalls `--allow-empty`):
   Nachricht auf Deutsch, was und warum, letzte Zeile
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Pushe nur auf Wunsch.
 
